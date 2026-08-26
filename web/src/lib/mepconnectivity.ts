@@ -285,6 +285,13 @@ export interface TraceOptions {
    *  sweep_schedule_row's own output shape) — required. No symbols
    *  supplied is a named refusal, not a silent "found nothing." */
   equipmentSymbols: Array<{ id: string; at: Point; label?: string }>;
+  /** Real, already-swept fitting/valve/damper placements — optional.
+   *  Enables gap bridging (see bridgeDanglingGaps below): a drawn gap
+   *  between two dead-end run-ends is bridged ONLY when one of these sits
+   *  in it, never on proximity alone. Omit to disable bridging entirely. */
+  fittingSymbols?: Array<{ at: Point }>;
+  /** Widest gap (feet) a fitting symbol may bridge. Default DEFAULT_BRIDGE_FT. */
+  bridgeFt?: number;
 }
 
 export interface TraceBranch { at: Point; leads_to: string | null; reason?: string }
@@ -303,6 +310,13 @@ export interface TraceResult {
 
 const DEFAULT_MAX_HOPS = 60;
 const DEFAULT_SEED_TOL_FT = 1.0;
+// Provisional — no real MEP corpus has measured this yet (a named open risk
+// in the maturity plan doc), same honesty as buildMepGraph's own
+// DEFAULT_SNAP_FT. Wider than DEFAULT_SNAP_FT on purpose: a single-line
+// schematic run genuinely draws a real gap at a valve/damper (the fitting's
+// own glyph occupies the space), not jitter — but still gated on a real
+// symbol sitting in it, never bridged on proximity alone.
+const DEFAULT_BRIDGE_FT = 2.0;
 
 function nearestNodeWithin(graph: MepGraph, pt: Point, tolPx: number): number | null {
   let best = -1, bestD = Infinity;
@@ -312,6 +326,51 @@ function nearestNodeWithin(graph: MepGraph, pt: Point, tolPx: number): number | 
     if (d < bestD) { bestD = d; best = i; }
   }
   return best >= 0 && bestD <= tolPx ? best : null;
+}
+
+/** Bridge a real drawn gap between two dead-end (degree-1) node endpoints —
+ *  ONLY when a recognized fitting/equipment symbol placement sits in it,
+ *  never on proximity alone (wallnetwork.ts's own never-admit-on-proximity-
+ *  alone discipline, carried over here). Returns a NEW graph — the input is
+ *  never mutated — with synthetic `bridged: true` edges added; system is
+ *  copied from whichever of the two dangling edges is more confidently
+ *  classified (a bridged gap has no linework of its own to classify from).
+ *  A dangling end already at a real junction (degree > 1) is never a
+ *  bridge candidate — only genuine dead ends are. */
+function bridgeDanglingGaps(graph: MepGraph, symbols: Point[], bridgePx: number): MepGraph {
+  if (!symbols.length) return graph;
+  const danglers = graph.nodes.map((n, i) => ({ n, i })).filter((x) => x.n.edges.length === 1);
+  if (danglers.length < 2) return graph;
+  const nodes = graph.nodes.map((n) => ({ x: n.x, y: n.y, edges: n.edges.slice() }));
+  const edges = graph.edges.map((e) => ({ ...e }));
+  const edgeSystemOf = (nodeIdx: number): { system: MepSystemRole; confidence: number } => {
+    const ei = graph.nodes[nodeIdx].edges[0];
+    const e = graph.edges[ei];
+    return { system: e.system, confidence: e.systemConfidence };
+  };
+  for (let a = 0; a < danglers.length; a++) {
+    for (let b = a + 1; b < danglers.length; b++) {
+      const A = danglers[a].n, B = danglers[b].n;
+      const gapLen = Math.hypot(B.x - A.x, B.y - A.y);
+      if (gapLen <= 0 || gapLen > bridgePx) continue;
+      // a fitting symbol must sit ON the gap (within a generous perpendicular
+      // band, but bounded to between the two endpoints, not just "nearby")
+      const onGap = symbols.some((s) => {
+        const t = ((s[0] - A.x) * (B.x - A.x) + (s[1] - A.y) * (B.y - A.y)) / (gapLen * gapLen);
+        if (t < -0.1 || t > 1.1) return false;
+        const px = A.x + t * (B.x - A.x), py = A.y + t * (B.y - A.y);
+        return Math.hypot(s[0] - px, s[1] - py) <= bridgePx * 0.5;
+      });
+      if (!onGap) continue;
+      const sa = edgeSystemOf(danglers[a].i), sb = edgeSystemOf(danglers[b].i);
+      const better = sa.confidence >= sb.confidence ? sa : sb;
+      const ei = edges.length;
+      edges.push({ a: danglers[a].i, b: danglers[b].i, length: gapLen, system: better.system, systemConfidence: better.confidence, bridged: true });
+      nodes[danglers[a].i].edges.push(ei);
+      nodes[danglers[b].i].edges.push(ei);
+    }
+  }
+  return { nodes, edges, layerSignal: graph.layerSignal };
 }
 
 /** Walk the graph from `from`, looking for exactly one reachable equipment
@@ -331,7 +390,14 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
   }
   const ppf = opts.mppf && opts.mppf > 0 ? opts.mppf : PX_PER_FT_GUESS;
   const tolPx = (opts.seedTolFt ?? DEFAULT_SEED_TOL_FT) * ppf;
-  const seed = nearestNodeWithin(graph, from, tolPx);
+
+  // Gap bridging (only when fittingSymbols was supplied) — a NEW graph, the
+  // one actually walked below; the caller's own graph is never mutated.
+  const bridgePx = (opts.bridgeFt ?? DEFAULT_BRIDGE_FT) * ppf;
+  const fittingPts = (opts.fittingSymbols ?? []).map((f) => f.at);
+  const walked = fittingPts.length ? bridgeDanglingGaps(graph, fittingPts, bridgePx) : graph;
+
+  const seed = nearestNodeWithin(walked, from, tolPx);
   if (seed == null) {
     return { status: "refused", layer_signal, confidence: 0, factors: [], reason: "The seed point isn't on any traced linework — click directly on a drawn pipe/duct/conduit line." };
   }
@@ -341,7 +407,7 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
   // simply never appears as reachable — correctly excluded, not an error.
   const equipAtNode = new Map<number, { id: string; at: Point }>();
   for (const eq of opts.equipmentSymbols) {
-    const ni = nearestNodeWithin(graph, eq.at, tolPx);
+    const ni = nearestNodeWithin(walked, eq.at, tolPx);
     if (ni != null && !equipAtNode.has(ni)) equipAtNode.set(ni, eq);
   }
 
@@ -358,8 +424,8 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
     const eq = equipAtNode.get(cur);
     if (eq && cur !== seed) reached.push({ node: cur, ...eq });
     if (d >= maxHops) { hitCap = true; continue; }
-    for (const ei of graph.nodes[cur].edges) {
-      const e = graph.edges[ei];
+    for (const ei of walked.nodes[cur].edges) {
+      const e = walked.edges[ei];
       const next = e.a === cur ? e.b : e.a;
       if (visited.has(next)) continue;
       visited.add(next); parent.set(next, cur); depth.set(next, d + 1);
@@ -373,9 +439,9 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
     while (cur !== undefined) { out.push(cur); cur = parent.get(cur); }
     return out.reverse();
   };
-  const pointsOf = (nodePath: number[]): Point[] => nodePath.map((i) => [graph.nodes[i].x, graph.nodes[i].y]);
+  const pointsOf = (nodePath: number[]): Point[] => nodePath.map((i) => [walked.nodes[i].x, walked.nodes[i].y]);
   const edgeBetween = (a: number, b: number): MepEdge | undefined =>
-    graph.edges.find((e) => (e.a === a && e.b === b) || (e.a === b && e.b === a));
+    walked.edges.find((e) => (e.a === a && e.b === b) || (e.a === b && e.b === a));
 
   const distinctIds = [...new Set(reached.map((r) => r.id))];
 
@@ -395,7 +461,7 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
       if (paths.some((p) => p.nodePath[common] !== node)) break;
     }
     const branchNode = paths[0].nodePath[Math.max(0, common - 1)];
-    const branchAt: Point = [graph.nodes[branchNode].x, graph.nodes[branchNode].y];
+    const branchAt: Point = [walked.nodes[branchNode].x, walked.nodes[branchNode].y];
     return {
       status: "ambiguous", layer_signal, confidence: 0, factors,
       branches: paths.map((p) => ({ at: branchAt, leads_to: p.id })),
@@ -410,14 +476,18 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
     const hops = nodePath.length - 1;
     if (hops > 30) factors.push(`long-trace(${hops} hops)`);
     const systems = new Set<MepSystemRole>();
+    let bridgedHops = 0;
     for (let i = 1; i < nodePath.length; i++) {
       const e = edgeBetween(nodePath[i - 1], nodePath[i]);
       if (e) systems.add(e.system);
+      if (e?.bridged) bridgedHops++;
     }
+    if (bridgedHops > 0) factors.push(`bridged-gap(${bridgedHops})`);
     const system = systems.size === 1 ? [...systems][0] : undefined;
     let confidence = 1;
     if (factors.includes("layer-unclassified")) confidence *= 0.85;
     if (hops > 30) confidence *= 0.9;
+    if (bridgedHops > 0) confidence *= Math.pow(0.9, bridgedHops);
     return {
       status: "reached", layer_signal, confidence, factors,
       path, reachedEquipment: { id: hit.id, at: hit.at },

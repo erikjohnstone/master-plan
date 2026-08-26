@@ -178,3 +178,62 @@ test("traceConnectivity: determinism — the same call twice returns the same re
   const r2 = traceConnectivity(g, [0, 0], opts);
   assert.deepEqual(r1, r2);
 });
+
+// ── junction bridging (MEP_BRIDGE_FT) ───────────────────────────────────
+// A real drawn gap between two dead-end run-ends, bridged ONLY when a real
+// fitting/valve/damper symbol placement sits in it — never on proximity
+// alone (wallnetwork.ts's own never-admit-on-proximity-alone doctrine).
+// mppf/bridgeFt are passed explicitly in every case below so these tests
+// stay correct regardless of future default-tuning (a named open risk in
+// the maturity plan doc), not tied to DEFAULT_BRIDGE_FT's current value.
+
+test("traceConnectivity: a real drawn gap WITH a fitting symbol sitting in it bridges and reaches equipment", () => {
+  // two genuinely disconnected runs, 8 real units apart — a real drawn gap,
+  // not jitter buildMepGraph's own noding would already have closed.
+  const g = graphOf([0, 0, 92, 0, 100, 0, 200, 0]);
+  const r = traceConnectivity(g, [0, 0], {
+    equipmentSymbols: [{ id: "AHU-1", at: [200, 0] }],
+    fittingSymbols: [{ at: [96, 0] }],   // sits right in the middle of the gap
+    mppf: 10, bridgeFt: 1,               // bridgePx = 10 — the 8-unit gap fits
+  });
+  assert.equal(r.status, "reached");
+  assert.equal(r.reachedEquipment?.id, "AHU-1");
+  assert.ok(r.factors.some((f) => f.startsWith("bridged-gap")), "the bridge is disclosed as a factor, not hidden");
+  assert.ok(r.confidence < 1, "a bridged trace must discount confidence, never stay at a flat 1.0");
+});
+
+test("traceConnectivity: the identical gap with NO fitting symbol supplied stays a real dead_end — never bridged on proximity alone", () => {
+  const g = graphOf([0, 0, 92, 0, 100, 0, 200, 0]);
+  const r = traceConnectivity(g, [0, 0], {
+    equipmentSymbols: [{ id: "AHU-1", at: [200, 0] }],
+    mppf: 10, bridgeFt: 1,
+    // no fittingSymbols at all
+  });
+  assert.equal(r.status, "dead_end", "no fitting symbol in the gap means no bridge, regardless of how close the two ends are");
+});
+
+test("traceConnectivity: a gap too WIDE to bridge stays dead_end even with a fitting symbol sitting exactly in it", () => {
+  // gap is 50 real units; bridgePx below is only 10 — a real fitting symbol
+  // in the middle of an overly wide gap must not be bridged just because
+  // it's present; the gap itself has to be plausibly the fitting's own size.
+  const g = graphOf([0, 0, 50, 0, 100, 0, 200, 0]);
+  const r = traceConnectivity(g, [0, 0], {
+    equipmentSymbols: [{ id: "AHU-1", at: [200, 0] }],
+    fittingSymbols: [{ at: [75, 0] }],
+    mppf: 10, bridgeFt: 1,
+  });
+  assert.equal(r.status, "dead_end");
+});
+
+test("traceConnectivity: a fitting symbol sitting well OFF the gap's own line never bridges two unrelated dangling ends", () => {
+  // the symbol is 50 units off to the side of the gap — nowhere near the
+  // drawn linework itself, only spatially "close" in the loose sense
+  // wallnetwork.ts's own doctrine already refuses to trust.
+  const g = graphOf([0, 0, 92, 0, 100, 0, 200, 0]);
+  const r = traceConnectivity(g, [0, 0], {
+    equipmentSymbols: [{ id: "AHU-1", at: [200, 0] }],
+    fittingSymbols: [{ at: [96, 50] }],
+    mppf: 10, bridgeFt: 1,
+  });
+  assert.equal(r.status, "dead_end");
+});
