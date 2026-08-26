@@ -129,6 +129,41 @@ export function scaleReadPrompt(labels) {
   return `This image is the title block region of a construction drawing. Find the stated drawing scale (usually after the word SCALE). Reply with exactly one of the following labels, character for character, or the single word UNKNOWN if no scale is stated. Labels: ${labels.join(" | ")}. Reply with the label only — no other words.`;
 }
 
+/** Vision-assisted symbol classification (maturity plan Phase 3, #HVAC-4) —
+ * for symbols the geometric approach can't confidently place (a genuinely
+ * novel shape, or a raster/scanned sheet with no vector geometry to
+ * fingerprint at all). `names` grounds the model in this project's own
+ * real, hand-authored taxonomy (hvacTaxonomy.ts) instead of an open-ended
+ * "what is this" — a constrained vocabulary the same way scaleReadPrompt
+ * constrains scale answers to real labels, not free text. Always asks for
+ * a stated confidence and a one-sentence visual reason — never a bare
+ * label, matching this project's evidence-citation doctrine everywhere
+ * else (a classification with no reasoning attached is exactly the kind of
+ * unverifiable assertion `confidence.ts`'s own doctrine already refuses
+ * elsewhere in this codebase). */
+export function classifySymbolPrompt(names) {
+  return `This image is a cropped symbol from a construction drawing (HVAC/mechanical/BAS). Classify what this symbol represents. Consider these known real component names: ${names.join(", ")}. If the symbol clearly matches none of them, reply with your own best short name instead of forcing a bad fit. Reply with EXACTLY this JSON object and nothing else — no markdown code fence, no other text: {"classification": "<name>", "confidence": <number 0 to 1>, "reasoning": "<one sentence citing the specific visual features that led to this>"}`;
+}
+
+/** The model's reply -> {classification, confidence, reasoning}, or null if
+ * the reply isn't usable — never a guessed/patched-up shape. Tolerates a
+ * markdown code fence around the JSON (real models wrap it one anyway, this
+ * project's own live check against the configured vision model confirmed),
+ * but does not tolerate a missing field, a confidence outside [0,1], or an
+ * empty reasoning string — those are refused, not silently defaulted. */
+export function parseClassifyResponse(text) {
+  if (typeof text !== "string") return null;
+  const stripped = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
+  let obj;
+  try { obj = JSON.parse(stripped); } catch { return null; }
+  if (!obj || typeof obj !== "object") return null;
+  const { classification, confidence, reasoning } = obj;
+  if (typeof classification !== "string" || !classification.trim()) return null;
+  if (typeof confidence !== "number" || !Number.isFinite(confidence) || confidence < 0 || confidence > 1) return null;
+  if (typeof reasoning !== "string" || !reasoning.trim()) return null;
+  return { classification: classification.trim(), confidence, reasoning: reasoning.trim() };
+}
+
 /** One chat-with-tools turn: system + running messages + tool declarations.
  *  Returns {url, headers, body} (body as an object — the caller stringifies).
  *  Same key/endpoint handling as buildVisionRequest; `messages` and `tools`

@@ -5,6 +5,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   aiConfig, isAiConfigured, aiRequestUrl, buildVisionRequest, parseVisionResponse, scaleReadPrompt,
+  classifySymbolPrompt, parseClassifyResponse,
 } from "../src/lib/ai.js";
 import { scaleFromLabel, STANDARD_SCALES } from "../src/lib/sheets.js";
 
@@ -73,6 +74,42 @@ test("scaleReadPrompt names every label and UNKNOWN", () => {
   const p = scaleReadPrompt(labels);
   for (const l of labels) assert.ok(p.includes(l), `prompt missing ${l}`);
   assert.match(p, /UNKNOWN/);
+});
+
+test("classifySymbolPrompt names every real component name it's given", () => {
+  const names = ["gate valve", "ball valve", "AHU"];
+  const p = classifySymbolPrompt(names);
+  for (const n of names) assert.ok(p.includes(n), `prompt missing ${n}`);
+  assert.match(p, /confidence/i);
+  assert.match(p, /reasoning/i);
+});
+
+test("parseClassifyResponse: a real, live model reply (this project's own configured vision model, verbatim) parses clean", () => {
+  // Captured live against the configured local Cerebras proxy (gemma-4-31b)
+  // classifying a real cropped symbol off the Eglin AFB controls legend —
+  // wrapped in a markdown code fence, which real models do unprompted.
+  const raw = "```json\n{\"classification\": \"control valve\", \"confidence\": 0.95, \"reasoning\": \"The symbol shows a valve body (bowtie shape) paired with a square actuator marked 'M' for motor-driven electric actuation.\"}\n```";
+  const parsed = parseClassifyResponse(raw);
+  assert.deepEqual(parsed, {
+    classification: "control valve",
+    confidence: 0.95,
+    reasoning: "The symbol shows a valve body (bowtie shape) paired with a square actuator marked 'M' for motor-driven electric actuation.",
+  });
+});
+
+test("parseClassifyResponse: bare JSON with no fence also parses", () => {
+  const parsed = parseClassifyResponse('{"classification": "gate valve", "confidence": 0.8, "reasoning": "bowtie shape with a straight stem"}');
+  assert.equal(parsed?.classification, "gate valve");
+});
+
+test("parseClassifyResponse: refuses rather than guesses on a malformed or incomplete reply", () => {
+  assert.equal(parseClassifyResponse("not json at all"), null);
+  assert.equal(parseClassifyResponse("{}"), null);
+  assert.equal(parseClassifyResponse('{"classification": "x", "confidence": 1.5, "reasoning": "y"}'), null, "confidence out of [0,1] range");
+  assert.equal(parseClassifyResponse('{"classification": "x", "confidence": 0.5, "reasoning": ""}'), null, "empty reasoning");
+  assert.equal(parseClassifyResponse('{"classification": "", "confidence": 0.5, "reasoning": "y"}'), null, "empty classification");
+  assert.equal(parseClassifyResponse(null), null);
+  assert.equal(parseClassifyResponse(42), null);
 });
 
 test("scaleFromLabel: exact labels, embedded text, boundaries, ambiguity", () => {

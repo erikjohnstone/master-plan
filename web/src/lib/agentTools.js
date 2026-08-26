@@ -32,6 +32,7 @@
 //     set sheet graph's own table, any kind, even when the sheet isn't open;
 //     works with no open tab at all for that path)
 //   viewRegion(sheet, region): Promise<{ image_data_url, width, height }>
+//   classifySymbol(sheet, region): Promise<{ classification, confidence, reasoning } | { error, raw? }>
 //   oneClick(sheet, x, y): Promise<{ verts_norm, area_sf, perimeter_lf, ... } | { error }>
 //   getConditions(): [{ id, finish_tag, ... }]
 //   createCondition(finish_tag): { id, finish_tag }
@@ -168,6 +169,15 @@ export const AGENT_TOOL_DEFS = [
   {
     name: "view_region",
     description: "Render a region of the sheet as an image and look at it. Use this for scanned sheets, hatched/ambiguous areas, or to visually confirm what a room contains before proposing.",
+    input_schema: {
+      type: "object",
+      properties: { sheet: { type: "string" }, region: REGION_SCHEMA },
+      required: ["sheet", "region"],
+    },
+  },
+  {
+    name: "classify_symbol",
+    description: "Ask the configured vision model what HVAC/BAS component a symbol is — for a symbol the geometric matcher (symbol_sweep) can't confidently place (a genuinely novel shape), or on a raster/scanned sheet with no vector linework to fingerprint at all. Draw region tightly around ONE symbol. Grounded in this project's own real component taxonomy (valve types, dampers, VAV/CAV boxes, AHU/chiller/boiler/pump/fan and similar, sensors) — the model is asked to pick a real name or say so honestly if none fit, never forced into a bad match. Returns {classification, confidence 0-1, reasoning} — a bare label is never returned; a reply missing any of the three, or a confidence outside [0,1], is refused rather than guessed. This is a HYPOTHESIS: corroborate a low-to-mid confidence result against the sheet's own schedule/tag evidence (resolve_tag, sweep_schedule_row) before treating it as fact, the same discipline symbol_sweep's own near-matches already require. Requires a vision model configured in AI settings.",
     input_schema: {
       type: "object",
       properties: { sheet: { type: "string" }, region: REGION_SCHEMA },
@@ -685,6 +695,10 @@ export async function executeAgentTool(ctx, name, args) {
         // image_data_url is lifted into an image block by the loop, never
         // serialized into the text result.
         return { image_data_url: img.image_data_url, width: img.width, height: img.height };
+      }
+      case "classify_symbol": {
+        if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
+        return await ctx.classifySymbol(args.sheet, clampRegion(args.region));
       }
       case "one_click": {
         if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };

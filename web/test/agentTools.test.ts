@@ -27,6 +27,7 @@ function makeCtx(overrides: Record<string, unknown> = {}) {
       rows: [{ finish_tag: "CPT-1", section: "FLOORING", category: "floor", description: "CARPET", manufacturer: "", style: "", spec_color: "", size: "", suggested: true }],
     }),
     viewRegion: async () => ({ image_data_url: "data:image/png;base64,AAAA", width: 100, height: 80 }),
+    classifySymbol: async () => ({ classification: "gate valve", confidence: 0.9, reasoning: "bowtie body with a straight stem" }),
     oneClick: async (sheet: string, x: number, y: number) => {
       calls.oneClick.push([sheet, x, y]);
       return { verts_norm: [[0.1, 0.1], [0.3, 0.1], [0.3, 0.3], [0.1, 0.3]], area_sf: 200, perimeter_lf: 60, seed_norm: [x, y] };
@@ -155,6 +156,35 @@ test("read_schedule: neither path finds anything AND the sheet was never open �
   const { ctx } = makeCtx({ readSchedule: async () => ({ source: "none", rows: [], sheet_open: false }) });
   const out = await executeAgentTool(ctx, "read_schedule", { sheet: "plan.pdf", region: { x0: 0, y0: 0, x1: 0.01, y1: 0.01 } });
   assert.match(out.note, /isn't open on the canvas/);
+});
+
+// classify_symbol (maturity plan Phase 3, #HVAC-4): dispatch-layer tests
+// against a stubbed ctx.classifySymbol — the real prompt/parse plumbing
+// (classifySymbolPrompt/parseClassifyResponse) is unit-tested directly in
+// ai.test.ts; this only exercises executeAgentTool's own gate/pass-through.
+test("classify_symbol: a real classification passes through unchanged", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "classify_symbol", { sheet: "plan.pdf", region: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
+  assert.deepEqual(out, { classification: "gate valve", confidence: 0.9, reasoning: "bowtie body with a straight stem" });
+});
+
+test("classify_symbol: sheet not open on the canvas refuses with a named reason", async () => {
+  const { ctx } = makeCtx({ sheetDims: () => null });
+  const out = await executeAgentTool(ctx, "classify_symbol", { sheet: "plan.pdf", region: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
+  assert.match(out.error, /isn't open on the canvas/);
+});
+
+test("classify_symbol: no vision model configured — the ctx's own refusal passes through, not swallowed", async () => {
+  const { ctx } = makeCtx({ classifySymbol: async () => ({ error: "No vision model configured — open AI settings first." }) });
+  const out = await executeAgentTool(ctx, "classify_symbol", { sheet: "plan.pdf", region: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
+  assert.match(out.error, /No vision model configured/);
+});
+
+test("classify_symbol: a malformed model reply refuses rather than guessing, and surfaces the raw text", async () => {
+  const { ctx } = makeCtx({ classifySymbol: async () => ({ error: "The vision model's reply wasn't in the required shape.", raw: "not json" }) });
+  const out = await executeAgentTool(ctx, "classify_symbol", { sheet: "plan.pdf", region: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
+  assert.match(out.error, /wasn't in the required shape/);
+  assert.equal(out.raw, "not json");
 });
 
 test("propose_shapes: evidence whitelist — junk keys dropped, strings truncated, uncited rejected", async () => {

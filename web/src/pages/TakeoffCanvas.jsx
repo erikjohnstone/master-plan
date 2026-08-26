@@ -130,7 +130,8 @@ import { runAgentLoop } from "../lib/agentLoop.js";
 import { runVoiceCommand, isAgentHandoffTrigger, shouldOfferAgentHandoff } from "../lib/voiceActions";
 import { createVoiceRecognizerClient } from "../lib/voiceRecognizerClient";
 import { startCapture, captureSupported } from "../lib/voiceCapture";
-import { aiConfig, isAiConfigured } from "../lib/ai.js";
+import { aiConfig, isAiConfigured, visionQuery, classifySymbolPrompt, parseClassifyResponse } from "../lib/ai.js";
+import { ALL_COMPONENT_NAMES } from "../lib/hvacTaxonomy.ts";
 import AccountChip from "../components/AccountChip.jsx";
 import PresenceChip from "../components/PresenceChip.jsx";
 import DrawStylePicker from "../components/DrawStylePicker.jsx";
@@ -6163,6 +6164,32 @@ export default function TakeoffCanvas() {
     return { image_data_url, width: bw, height: bh };
   }
 
+  // Vision-assisted symbol classification (maturity plan Phase 3, #HVAC-4) —
+  // for a symbol the geometric approach can't confidently place: a
+  // genuinely novel shape, or a raster/scanned sheet with no vector
+  // geometry to fingerprint at all. Reuses agentViewRegion's own crop
+  // (same render path, same AGENT_VIEW_MAX_EDGE cap) so this tool sees
+  // exactly what view_region would show — no second rendering path to
+  // drift from it. Grounded in hvacTaxonomy.ts's real vocabulary, never a
+  // bare label: a stated confidence and a one-sentence visual reason ride
+  // every real answer, and a reply the model couldn't produce in the
+  // required shape (missing field, out-of-range confidence, empty
+  // reasoning) is refused here, not silently patched into something usable.
+  async function agentClassifySymbol(key, region) {
+    if (!isAiConfigured()) return { error: "No vision model configured — open AI settings first." };
+    const { image_data_url } = await agentViewRegion(key, region);
+    const prompt = classifySymbolPrompt(ALL_COMPONENT_NAMES);
+    let text;
+    try {
+      text = await visionQuery({ imageDataUrl: image_data_url, prompt, maxTokens: 300 });
+    } catch (e) {
+      return { error: `Vision request failed: ${e.message || e}` };
+    }
+    const parsed = parseClassifyResponse(text);
+    if (!parsed) return { error: "The vision model's reply wasn't in the required {classification, confidence, reasoning} shape — refused rather than guessed.", raw: text.slice(0, 500) };
+    return parsed;
+  }
+
   // The one-click engine at an agent-supplied seed — same trigger policy and
   // messages as oneClickAt, WITHOUT touching the interactive proposal state:
   // this probes and returns the ring; committing anything stays behind the gate.
@@ -7315,6 +7342,7 @@ export default function TakeoffCanvas() {
       readSheetText: agentReadSheetText,
       readSchedule: agentReadSchedule,
       viewRegion: agentViewRegion,
+      classifySymbol: agentClassifySymbol,
       oneClick: agentOneClickProbe,
       getConditions: () => agentStateRef.current.conditions.map((c) => ({ id: c.id, finish_tag: c.finish_tag, hatch: c.hatch, waste_pct: c.waste_pct })),
       createCondition: (tag) => { const c = mintCondition(tag); return { id: c.id, finish_tag: c.finish_tag }; },

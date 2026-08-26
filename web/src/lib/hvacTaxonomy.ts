@@ -157,3 +157,14 @@ export const ROW_KEY_CONVENTIONS: Array<{ header: string; observedOn: string }> 
 ];
 
 export const HVAC_TAXONOMY = { VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, ROW_KEY_CONVENTIONS };
+
+/** Every real component name this taxonomy documents, flattened once — the
+ * exact vocabulary classify_symbol (agentClassifySymbol/ai.js's
+ * classifySymbolPrompt) grounds the vision model in, and what
+ * scripts/vision-classify-eval.mjs scores against. One list, shared by the
+ * live tool and its own eval harness, so they can never quietly drift onto
+ * two different vocabularies. ROW_KEY_CONVENTIONS is deliberately excluded
+ * — it names header WORDS (ID/SYMBOL/TAG), not component types. */
+export const ALL_COMPONENT_NAMES = [
+  ...VALVES, ...ACTUATORS, ...DAMPERS, ...AIR_TERMINALS, ...MAJOR_EQUIPMENT, ...SENSORS,
+].map((c) => c.name);
