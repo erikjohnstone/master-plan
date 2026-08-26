@@ -24,7 +24,13 @@
 //   sheetDims(sheet): { w, h } | null   // null = sheet not open on the canvas
 //   detectedLabel(sheet): string | ""   // drawn-scale note read off the page, if any
 //   readSheetText(sheet, region|null): Promise<[{ text, x, y }]>  (normalized coords)
-//   readSchedule(sheet, region): Promise<ScheduleRow[]>
+//   readSchedule(sheet, region): Promise<{ source: "region_parse", rows: ScheduleRow[] }
+//     | { source: "sheet_graph", table: {...}, rows: [{key,cells}], also_overlapping?: [...] }
+//     | { source: "none", rows: [], sheet_open: boolean }>
+//     (cross-phase fix — the read_schedule/sheetgraph bridge: no longer just
+//     a bare ScheduleRow[] — the sheet_graph fallback answers with the whole-
+//     set sheet graph's own table, any kind, even when the sheet isn't open;
+//     works with no open tab at all for that path)
 //   viewRegion(sheet, region): Promise<{ image_data_url, width, height }>
 //   oneClick(sheet, x, y): Promise<{ verts_norm, area_sf, perimeter_lf, ... } | { error }>
 //   getConditions(): [{ id, finish_tag, ... }]
@@ -152,7 +158,7 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "read_schedule",
-    description: "Parse a finish/material schedule table inside a region of a sheet into structured rows (code, description, manufacturer, style, color, size). Draw the region around the table including its CODE / MATERIAL / ... header.",
+    description: "Read a schedule table's rows. Two paths, tried in order, and the result's `source` field says which one answered: (1) region-based parse of a finish/material table (code, description, manufacturer, style, color, size) — draw the region around the table including its CODE / MATERIAL / ... header; this path needs the sheet open as a tab. (2) Falls back to the whole-set sheet graph's own table (ANY kind, including a real MEP `equipment` schedule keyed by ID rather than CODE) when the region overlaps one — works even when the sheet isn't open. Fallback rows come back as {key, cells} (source: \"sheet_graph\"), not the fixed code/description/... shape region-parse returns (source: \"region_parse\") — a real equipment table's columns (VOLTAGE, WATTS, AMPS, ...) don't fit that shape. Note: this tool's region is normalized 0..1; find_schedule/sheet_graph report table regions in sheet PIXELS — don't pass one straight through.",
     input_schema: {
       type: "object",
       properties: { sheet: { type: "string" }, region: REGION_SCHEMA },
@@ -649,10 +655,29 @@ export async function executeAgentTool(ctx, name, args) {
         return { count: items.length, items };
       }
       case "read_schedule": {
-        if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
-        const rows = await ctx.readSchedule(args.sheet, clampRegion(args.region));
-        if (!rows.length) return { rows: [], note: "No schedule table found in that region — draw the region around the table including its CODE / MATERIAL / ... header, or use view_region to look at the area." };
-        return { rows };
+        // No up-front sheetDims gate: that requirement now applies only to
+        // the region-parse path (region_parse below), inside ctx.readSchedule
+        // itself — the sheet_graph fallback works with no tab open at all
+        // (Phase 1's whole-set-awareness parity point).
+        const result = await ctx.readSchedule(args.sheet, clampRegion(args.region));
+        if (result.source === "region_parse") return { source: result.source, rows: result.rows };
+        if (result.source === "sheet_graph") {
+          return {
+            source: result.source, table: result.table, rows: result.rows,
+            note: "The region parse found no CODE/MATERIAL-style finish table there; these rows come from the whole-set sheet graph instead.",
+            ...(result.also_overlapping ? { also_overlapping: result.also_overlapping } : {}),
+          };
+        }
+        // source === "none": nothing on either path. When the sheet was
+        // never open, say so explicitly — otherwise the agent has no way to
+        // tell "your region was wrong" apart from "you never opened this
+        // sheet's region-parse path at all" (Finding, cross-phase fix).
+        return {
+          source: "none", rows: [],
+          note: result.sheet_open
+            ? "No schedule table found in that region — and no whole-table match either. Try find_schedule({kind:\"room\"|\"finish\"|\"equipment\"}) if you don't already know the table's kind, or sheet_graph to see every schedule on this sheet. (If you did mean a finish/material table, draw the region around its CODE / MATERIAL / ... header. Note: regions from find_schedule/sheet_graph are in sheet PIXELS; this tool takes normalized 0..1.)"
+            : `Sheet ${args.sheet} isn't open on the canvas, so only the whole-table fallback ran — and it found no match either. Try find_schedule({kind:"room"|"finish"|"equipment"}) or sheet_graph, or open the sheet as a tab and retry for the region-based parse.`,
+        };
       }
       case "view_region": {
         if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };

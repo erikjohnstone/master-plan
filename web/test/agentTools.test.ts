@@ -22,7 +22,10 @@ function makeCtx(overrides: Record<string, unknown> = {}) {
     uppFor: (k: string) => (k === "plan.pdf" ? 0.02 : null),
     detectedLabel: () => "",
     readSheetText: async () => [{ text: "RM 204", x: 0.4, y: 0.5 }],
-    readSchedule: async () => [{ finish_tag: "CPT-1", section: "FLOORING", category: "floor", description: "CARPET", manufacturer: "", style: "", spec_color: "", size: "", suggested: true }],
+    readSchedule: async () => ({
+      source: "region_parse",
+      rows: [{ finish_tag: "CPT-1", section: "FLOORING", category: "floor", description: "CARPET", manufacturer: "", style: "", spec_color: "", size: "", suggested: true }],
+    }),
     viewRegion: async () => ({ image_data_url: "data:image/png;base64,AAAA", width: 100, height: 80 }),
     oneClick: async (sheet: string, x: number, y: number) => {
       calls.oneClick.push([sheet, x, y]);
@@ -90,6 +93,68 @@ test("one_click scale gate: uncalibrated sheet refuses with the shared gate text
   assert.match(out.error, /^Set the scale for plan\.pdf first — /);   // the MCP gate's opening line
   assert.match(out.error, /detected: 1\/8/);
   assert.equal(calls.oneClick.length, 0);          // the engine never even ran
+});
+
+// read_schedule (cross-phase fix — the read_schedule/sheetgraph bridge):
+// executeAgentTool's own dispatch/shaping layer, exercised against a stubbed
+// ctx.readSchedule — the exact discriminated {source,...} shape agentReadSchedule
+// (TakeoffCanvas.jsx) produces, without needing a real canvas/pdf.js.
+test("read_schedule: region parse non-empty — rows pass through unchanged, source: region_parse", async () => {
+  const { ctx } = makeCtx();   // default stub returns source: "region_parse"
+  const out = await executeAgentTool(ctx, "read_schedule", { sheet: "plan.pdf", region: { x0: 0, y0: 0, x1: 1, y1: 1 } });
+  assert.equal(out.source, "region_parse");
+  assert.equal(out.rows.length, 1);
+  assert.equal(out.rows[0].finish_tag, "CPT-1");
+  assert.equal(out.table, undefined);
+});
+
+test("read_schedule: region parse empty, sheet_graph fallback hits — table metadata present", async () => {
+  const { ctx } = makeCtx({
+    readSchedule: async () => ({
+      source: "sheet_graph",
+      table: { sheet: "plan.pdf", kind: "equipment", title: "ELECTRIC BASEBOARD HEATER SCHEDULE", headers: ["ID", "MANUFACTURER"], region_norm: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 }, coverage: 0.94 },
+      rows: [{ key: "EBB-6", cells: { MANUFACTURER: "QMARK" } }],
+    }),
+  });
+  const out = await executeAgentTool(ctx, "read_schedule", { sheet: "plan.pdf", region: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
+  assert.equal(out.source, "sheet_graph");
+  assert.equal(out.table.title, "ELECTRIC BASEBOARD HEATER SCHEDULE");
+  assert.equal(out.rows[0].key, "EBB-6");
+  assert.match(out.note, /whole-set sheet graph/);
+});
+
+test("read_schedule: neither path finds anything — the note names find_schedule and sheet_graph", async () => {
+  const { ctx } = makeCtx({ readSchedule: async () => ({ source: "none", rows: [], sheet_open: true }) });
+  const out = await executeAgentTool(ctx, "read_schedule", { sheet: "plan.pdf", region: { x0: 0, y0: 0, x1: 0.01, y1: 0.01 } });
+  assert.equal(out.source, "none");
+  assert.deepEqual(out.rows, []);
+  assert.match(out.note, /find_schedule/);
+  assert.match(out.note, /sheet_graph/);
+});
+
+test("read_schedule: sheet not open no longer hard-errors — the fallback still runs (Phase 1 parity)", async () => {
+  // Before this fix, read_schedule refused up front on !ctx.sheetDims(sheet).
+  // Now the gate lives only inside the region-parse path, so a sheet that
+  // isn't open still gets a real answer (or a real, honestly-worded miss)
+  // from the sheet_graph fallback.
+  const { ctx } = makeCtx({
+    sheetDims: () => null,   // sheet not open on the canvas
+    readSchedule: async () => ({
+      source: "sheet_graph",
+      table: { sheet: "other.pdf#3", kind: "finish", title: "FAN SCHEDULE", headers: ["ID", "DESCRIPTION"], region_norm: { x0: 0.2, y0: 0.2, x1: 0.3, y1: 0.3 }, coverage: 0.8 },
+      rows: [{ key: "EF-1", cells: { DESCRIPTION: "PANASONIC" } }],
+    }),
+  });
+  const out = await executeAgentTool(ctx, "read_schedule", { sheet: "other.pdf#3", region: { x0: 0.2, y0: 0.2, x1: 0.3, y1: 0.3 } });
+  assert.equal(out.error, undefined, "no up-front sheetDims gate for read_schedule");
+  assert.equal(out.source, "sheet_graph");
+  assert.equal(out.rows[0].key, "EF-1");
+});
+
+test("read_schedule: neither path finds anything AND the sheet was never open — the note says so", async () => {
+  const { ctx } = makeCtx({ readSchedule: async () => ({ source: "none", rows: [], sheet_open: false }) });
+  const out = await executeAgentTool(ctx, "read_schedule", { sheet: "plan.pdf", region: { x0: 0, y0: 0, x1: 0.01, y1: 0.01 } });
+  assert.match(out.note, /isn't open on the canvas/);
 });
 
 test("propose_shapes: evidence whitelist — junk keys dropped, strings truncated, uncited rejected", async () => {

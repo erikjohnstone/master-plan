@@ -175,6 +175,7 @@ import { computeShapeMetrics, needsMetrics } from "../lib/shapeMetrics.js";
 import { fmtCheckLen, parseLenInput, checkVerdict, M_PER_FT, areaVal, areaUnit, lenVal, lenUnit, calInputToFeet, heightVal, heightUnit, heightInputToFeet, heightStep, dimInputStr, dimLabel } from "../lib/units";
 import * as panelGeom from "../lib/panelGeometry.js";
 import { buildSheetGraph, resolveTag as resolveGraphTag, rowKeyAnswersFor } from "../lib/sheetgraph.ts";
+import { tablesOverlappingRegion, bridgeRows } from "../lib/scheduleBridge.ts";
 
 // Carpet roll width — a run reaching this needs a seam. The live cursor readout
 // turns amber at/past it so the estimator sees where seams fall while tracing.
@@ -4582,16 +4583,31 @@ export default function TakeoffCanvas() {
   // {w,h} at RENDER_SCALE (needed for norm()/clamping the same way a
   // rendered panel's p.img already is) so a caller doesn't need the sheet to
   // be an actual rendered panel to get its dimensions either.
+  // Cheap dims-only path, extracted out of ensureSheetGeometry (cross-phase
+  // fix — the read_schedule/sheetgraph bridge) so a caller that only needs
+  // {w,h} (to normalize a pixel-space table region, e.g.) never pays
+  // ensureSheetGeometry's getOperatorList()/extractVectorGeometry cost. One
+  // dims path, not two: ensureSheetGeometry's own "already there" branch
+  // below calls this instead of duplicating its two sources of "already
+  // there" (this function's own cache, or an actually-open rendered panel).
+  async function ensureSheetDims(key) {
+    const cached = pageDimsRef.current.get(key);
+    if (cached) return cached;
+    const p = agentPanelFor(key);
+    if (p) return { w: p.img.w, h: p.img.h };
+    const { file, page } = parseSheetKey(key);
+    try {
+      const doc = await docFor(file);
+      const pg = await doc.getPage(page);
+      const vt = pg.getViewport({ scale: RENDER_SCALE });
+      const dims = { w: Math.ceil(vt.width), h: Math.ceil(vt.height) };
+      pageDimsRef.current.set(key, dims);
+      return dims;
+    } catch { return null; }
+  }
+
   async function ensureSheetGeometry(key) {
-    if (vectorSegsRef.current.has(key)) {
-      // Two sources of "already there": this function's own cache (a prior
-      // on-demand call), or the ordinary render pipeline (an actually-open
-      // panel, whose dims live on agentStateRef, not pageDimsRef).
-      const cached = pageDimsRef.current.get(key);
-      if (cached) return cached;
-      const p = agentPanelFor(key);
-      return p ? { w: p.img.w, h: p.img.h } : null;
-    }
+    if (vectorSegsRef.current.has(key)) return ensureSheetDims(key);
     const { file, page } = parseSheetKey(key);
     try {
       const doc = await docFor(file);
@@ -6073,9 +6089,53 @@ export default function TakeoffCanvas() {
     }));
   }
 
+  // Cross-phase fix — the read_schedule/sheetgraph bridge. parseSchedule
+  // (scheduleParse.ts) needs a literal CODE header plus a preceding flooring
+  // section header, so it structurally cannot read an MEP equipment
+  // schedule under ANY region (M601's key column is ID, not CODE, and it has
+  // no flooring section rows at all) — confirmed by reading scheduleParse.ts
+  // directly, not assumed from one bad region guess. Two paths, in order:
+  // (1) the region-based CODE/MATERIAL parse, unchanged, requires the sheet
+  //     be open (agentTextTokens needs the rendered panel + pageObj);
+  // (2) the whole-set sheet graph's own tables (ensureAgentGraph, already
+  //     eager per Phase 1) — works with NO tab open, since the fallback only
+  //     needs sheet dims (ensureSheetDims), not a rendered panel.
+  // Returns the raw discriminated data only — no human-readable notes; those
+  // are agentTools.js's job (the pure, testable layer), so the exact note
+  // text is unit-tested there via a stubbed ctx.readSchedule, not only
+  // live-verified here. `source` tells a caller which shape it's holding:
+  // ScheduleRow[] under "region_parse" (exactly today's shape), or
+  // {key,cells} rows under "sheet_graph" (bridgeRows' flat, wire-safe shape
+  // — deliberately NOT mapped into ScheduleRow's fixed 7-flooring-column
+  // shape, which would silently drop VOLTAGE/WATTS/PHASE/AMPS/LENGTH, the
+  // exact columns a real MEP lookup asks for).
   async function agentReadSchedule(key, region) {
-    const { tokens } = await agentTextTokens(key, region);
-    return parseSchedule(tokens);   // vector path only — same parser as Import from schedule
+    const p = agentPanelFor(key);
+    if (p) {
+      const { tokens } = await agentTextTokens(key, region);
+      const rows = parseSchedule(tokens);   // same parser as Import from schedule
+      if (rows.length) return { source: "region_parse", rows };
+    }
+    const g = await ensureAgentGraph();
+    const dims = await ensureSheetDims(key);
+    if (dims) {
+      const hits = tablesOverlappingRegion(g.tables, key, region, dims);
+      if (hits.length) {
+        const best = hits[0];
+        return {
+          source: "sheet_graph",
+          table: {
+            sheet: best.table.sheet, kind: best.table.kind, title: best.table.title?.text ?? null,
+            headers: best.table.headers, region_norm: best.region_norm, coverage: +best.coverage.toFixed(2),
+          },
+          rows: bridgeRows(best.table),
+          ...(hits.length > 1 ? {
+            also_overlapping: hits.slice(1).map((h) => ({ sheet: h.table.sheet, kind: h.table.kind, title: h.table.title?.text ?? null, coverage: +h.coverage.toFixed(2) })),
+          } : {}),
+        };
+      }
+    }
+    return { source: "none", rows: [], sheet_open: !!p };
   }
 
   // Render just the asked-for crop offscreen (the rasterizeRegion idiom) and

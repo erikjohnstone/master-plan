@@ -370,6 +370,15 @@ const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "ID", "MATERIAL", "MANUFACTURE
 // see its row keys defined twice and refuse everything as ambiguous. One
 // incidental airflow-unit token is not a strong enough signal on its own; a
 // real electrical/mechanical rating column is.
+// "RPM" follows the exact same CFM precedent, found live on this same
+// sheet's Fan Schedule header (ID/DESCRIPTION/MANUFACTURER/MODEL/RPM — 5
+// hits, and a bare RPM alone would have made it qualify as "equipment" too,
+// a real duplicate-extraction collision caught before shipping): RPM stays
+// in the vocabulary (a real fan/AHU schedule reports it, and a genuine RPM
+// column still needs to anchor and count toward `minHits`) but leaves
+// `required` — one incidental fan-speed token is not, on its own, strong
+// enough evidence that a table is an equipment schedule rather than a
+// finish/diffuser one that happens to mention it once.
 const EQUIPMENT_HEADERS = ["ID", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "RPM", "ESP"];
 // A header CELL is often a multi-word span ("FLOOR FINISH", "CEILING FINISH")
 // — the vocabulary word inside it names the column.
@@ -452,7 +461,146 @@ function skipSubHeaderContinuation(rows: GraphSpan[][], vocab: string[], from: n
   return i;
 }
 
-function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[], minHits: number, fromIdx = 0): { anchors: Anchor[]; rowIndex: number; dataFrom: number } | null {
+// ── backward co-equal-tier merge (maturity plan Phase 0 follow-up) ─────────
+// An equipment table's key/catalog columns (ID, MANUFACTURER, MODEL…) and
+// its rating columns (VOLTAGE, PHASE, AMPS…) sometimes sit on two SEPARATE
+// header rows that are each too sparse to independently qualify under
+// findHeaderRow's own required-list test — found live on the Bessemer
+// sample's "VARIABLE REFRIGERANT PACKAGED HEAT PUMP" table (HP-1): a bare
+// ID / "MANUFACTURER MODEL NUMBER" row sits directly above a bare CFM/ESP/
+// VOLTAGE/PHASE/AMPS/MOCP row, and neither independently qualifies, so the
+// tier-descent loop above (which only ever looks DOWN) anchors on the lower
+// tier alone, with no usable key column.
+//
+// This is a DIFFERENT shape than the three-tier PARENT-over-CHILD descent
+// above: there, the parent tier carries no usable key column and the child
+// DOES; here, BOTH halves of the key/rating split sit on separate rows and
+// NEITHER carries a usable key column alone. Reach upward only when the
+// settled row has none of the generic catalog words itself, search the
+// exact physical proximity budget parentLabelOver already uses (a genuine
+// split header sits close; a coincidentally-nearby unrelated row does not),
+// and only take a candidate row that could NOT independently qualify as its
+// own header — otherwise this would eat a real, separate table's header.
+const CATALOG_ANCHOR_WORDS = ["ID", "MARK", "CODE", "SYMBOL"];
+
+/** Anchors for a backward-merged tier's own row — like headerHits, but a
+ * span naming MORE than one vocabulary word ("MANUFACTURER MODEL NUMBER")
+ * gets one anchor PER word, each placed at its own proportional offset
+ * within the span rather than all stacked on the span's single center — a
+ * genuinely merged catalog cell spans more than one column, and headerHits/
+ * headerLabel only ever take the FIRST vocabulary word per span (by design
+ * — see headerLabels' own comment), so a plain hit here would swallow every
+ * later cell it names. Scoped to the backward-merge path only (this
+ * function's one caller); every other header path keeps headerHits' one-
+ * anchor-per-span behavior unperturbed. */
+function splitMergedHeaderCells(row: GraphSpan[], vocab: string[]): Anchor[] {
+  const out: Anchor[] = [];
+  const used = new Set<string>();
+  for (const t of row) {
+    const words = headerLabels(t.str, vocab);
+    if (words.length === 0) continue;
+    if (words.length === 1) {
+      if (used.has(words[0])) continue;
+      used.add(words[0]);
+      out.push({ label: words[0], x: t.x + (t.w || 0) / 2 });
+      continue;
+    }
+    const text = norm(t.str);
+    for (const w of words) {
+      if (used.has(w)) continue;
+      used.add(w);
+      const ci = text.indexOf(w);
+      const frac = ci >= 0 ? (ci + w.length / 2) / Math.max(text.length, 1) : 0.5;
+      out.push({ label: w, x: t.x + frac * (t.w || 0) });
+    }
+  }
+  return out;
+}
+
+function mergeBackwardCoEqualTier(
+  rows: GraphSpan[][], vocab: string[], hdrIdx: number,
+  hits: Array<{ label: string; span: GraphSpan }>, required: string[], minHits: number,
+): { anchors: Anchor[]; topIdx: number } | null {
+  if (hits.some((h) => CATALOG_ANCHOR_WORDS.includes(h.label))) return null;   // already has a key column
+  const hs = rows[hdrIdx].map((t) => t.h || 8).sort((a, b) => a - b);
+  const near = Math.max(24, (hs[hs.length >> 1] || 8) * 4);
+  const hy = rowY(rows[hdrIdx]);
+  const floor = Math.max(0, hdrIdx - 8);
+  for (let j = hdrIdx - 1; j >= floor; j--) {
+    if (hy - rowY(rows[j]) > near) break;
+    const h = headerHits(rows[j], vocab);
+    if (!h.some((x) => CATALOG_ANCHOR_WORDS.includes(x.label))) continue;
+    if (qualifies(h, required, minHits)) continue;   // could stand as its own header — not ours to absorb
+    return { anchors: splitMergedHeaderCells(rows[j], vocab), topIdx: j };
+  }
+  return null;
+}
+
+/** Vocabulary hits inside the header's own wrapped/parenthesized continuation
+ * tiers name real columns too ("(MBH)", "(WATTS)") — skipSubHeaderContinuation
+ * correctly recognizes these rows as part of the header block (not data), but
+ * on its own leaves them un-anchored, so the data row below fills those
+ * columns from whatever nearest anchor is left over — see
+ * EQUIPMENT_HEADERS' and skipSubHeaderContinuation's own comments for the
+ * real HP-1 case this was found on. A duplicate parenthesized label ("(MBH)"
+ * appearing twice, for HEATING and COOLING) is disambiguated by the nearest
+ * all-caps, non-vocabulary token above whose own text is UNIQUE within the
+ * search window — a repeated generic sub-label ("CAPACITY", which recurs
+ * under all three of HEATING/COOLING/COIL on the real fixture) cannot itself
+ * disambiguate anything, so only a text that appears exactly once nearby is
+ * eligible; "HEATING"/"COOLING" are exactly that on the real fixture,
+ * verified against the real spans, not invented. No qualifying parent, no
+ * anchor: an unexplained parenthesized fragment never mints a column. */
+function harvestSkippedTierAnchors(rows: GraphSpan[][], vocab: string[], hdrIdx: number, skipEnd: number): Anchor[] {
+  const hits: Array<{ label: string; span: GraphSpan; rowIdx: number }> = [];
+  const counts = new Map<string, number>();
+  for (let i = hdrIdx + 1; i <= skipEnd && i < rows.length; i++) {
+    for (const t of rows[i]) {
+      const w = headerLabel(t.str, vocab);
+      if (!w) continue;
+      hits.push({ label: w, span: t, rowIdx: i });
+      counts.set(w, (counts.get(w) || 0) + 1);
+    }
+  }
+  const out: Anchor[] = [];
+  const used = new Set<string>();
+  for (const h of hits) {
+    let label = h.label;
+    if ((counts.get(h.label) || 0) > 1) {
+      const cx = h.span.x + (h.span.w || 0) / 2;
+      const rowCx = rows[h.rowIdx].map((t) => t.x + (t.w || 0) / 2).sort((a, b) => a - b);
+      const gaps = rowCx.slice(1).map((x, i) => x - rowCx[i]);
+      const halfPitch = gaps.length ? gaps.sort((a, b) => a - b)[gaps.length >> 1] / 2 : 150;
+      const floor = Math.max(0, h.rowIdx - 4);
+      const candCount = new Map<string, number>();
+      const toks: Array<{ text: string; cx: number }> = [];
+      for (let j = floor; j < h.rowIdx; j++) {
+        for (const t of rows[j]) {
+          if (headerLabel(t.str, vocab)) continue;   // must be non-vocabulary
+          const s = norm(t.str);
+          if (!/^[A-Z][A-Z ]*$/.test(s)) continue;    // an all-caps word/phrase
+          candCount.set(s, (candCount.get(s) || 0) + 1);
+          toks.push({ text: s, cx: t.x + (t.w || 0) / 2 });
+        }
+      }
+      let parent: string | null = null;
+      let best = Infinity;
+      for (const t of toks) {
+        if ((candCount.get(t.text) || 0) > 1) continue;   // ambiguous itself — not a real disambiguator
+        const d = Math.abs(t.cx - cx);
+        if (d <= halfPitch && d < best) { best = d; parent = t.text; }
+      }
+      if (!parent) continue;
+      label = `${parent} ${h.label}`;
+    }
+    if (used.has(label)) continue;
+    used.add(label);
+    out.push({ label, x: h.span.x + (h.span.w || 0) / 2 });
+  }
+  return out;
+}
+
+function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[], minHits: number, fromIdx = 0, opts: { equipmentTierMerge?: boolean } = {}): { anchors: Anchor[]; rowIndex: number; dataFrom: number; mergedTopIdx?: number } | null {
   for (let i = fromIdx; i < rows.length; i++) {
     let hits = headerHits(rows[i], vocab);
     if (!qualifies(hits, required, minHits)) continue;
@@ -511,6 +659,22 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
       used.add(label);
       anchors.push({ label, x: h.span.x + (h.span.w || 0) / 2 });
     }
+    // Backward co-equal-tier merge (see mergeBackwardCoEqualTier's own
+    // comment) — only for kinds that opt in (equipment, today). Injected
+    // here, before the minHits check below, so a merged key column counts
+    // toward it like any other anchor.
+    let mergedTopIdx: number | undefined;
+    if (opts.equipmentTierMerge) {
+      const merged = mergeBackwardCoEqualTier(rows, vocab, idx, hits, required, minHits);
+      if (merged) {
+        for (const a of merged.anchors) {
+          if (used.has(a.label)) continue;
+          used.add(a.label);
+          anchors.push(a);
+        }
+        mergedTopIdx = merged.topIdx;
+      }
+    }
     if (anchors.length < minHits) continue;
     // A column that exists ONLY at a parent tier (REMARKS spanning the whole
     // header block) is a real column: keep it when it sits outside every
@@ -528,10 +692,23 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
         }
       }
     }
+    const skipEnd = skipSubHeaderContinuation(rows, vocab, idx);
+    // Parenthesized unit-fragment tiers ("(MBH)", "(WATTS)") name real
+    // columns too — see harvestSkippedTierAnchors' own comment. Same gate as
+    // the backward merge above: both are part of the same equipment-only
+    // tier-topology handling this phase adds.
+    if (opts.equipmentTierMerge) {
+      for (const a of harvestSkippedTierAnchors(rows, vocab, idx, skipEnd)) {
+        if (used.has(a.label)) continue;
+        used.add(a.label);
+        anchors.push(a);
+      }
+    }
     return {
       anchors: subTierAnchors(rows, idx, anchors.sort((a, b) => a.x - b.x), vocab),
       rowIndex: idx,
-      dataFrom: skipSubHeaderContinuation(rows, vocab, idx) + 1,
+      dataFrom: skipEnd + 1,
+      mergedTopIdx,
     };
   }
   return null;
@@ -1183,7 +1360,7 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   const rows = clusterRows(horiz);
   const vocab = kind === "room-finish" ? ROOM_HEADERS : kind === "equipment" ? EQUIPMENT_HEADERS : FINISH_HEADERS;
   const required = kind === "room-finish" ? ["FLOOR", "BASE"]
-    : kind === "equipment" ? ["VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "RPM", "ESP"]
+    : kind === "equipment" ? ["VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "ESP"]
     : ["CODE", "MARK", "SYMBOL", "ID"];
   const minHits = kind === "room-finish" ? 4 : 3;
 
@@ -1194,39 +1371,43 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   let titleFrom: number;          // title hunt walks upward from here
   let rotated = false;
 
-  // Equipment tables split across two independently-non-qualifying tiers
+  // Equipment tables can split across two independently-non-qualifying tiers
   // (a bare ID/MANUFACTURER/MODEL row above a bare VOLTAGE/PHASE/AMPS/MOCP
-  // row, neither tier alone carrying a required-list hit so findHeaderRow's
-  // OWN tier-descent never merges them) anchor on the lower tier alone —
-  // real, found live on the Bessemer sample's "VARIABLE REFRIGERANT PACKAGED
-  // HEAT PUMP" table. A table with no ID column has no usable key column
-  // either (the anchored key becomes whatever sits leftmost of the found
-  // tier — a bare CFM/VOLTAGE number, which correctly fails rowKeyOf's
-  // CODE_RE and drops every row). Recognized here, not fixed: the real fix
-  // is a genuine header-topology merge (reach backward across tiers, not
-  // just descend), a bigger change than this phase's vocabulary work
-  // warrants — refuse the candidate outright (never a real table for THIS
-  // kind's purposes) rather than accept one that can never be looked up by
-  // tag. Deliberately NOT a retry-forward-and-keep-looking: tried that first
-  // and it searched past this candidate into a LATER real table's own
-  // header (Fan Schedule's), which would have re-extracted a table that
-  // already correctly exists under "finish" — a duplicate-row-key collision
-  // worse than the one this whole design exists to prevent. One rejected
-  // candidate here costs only that one table, on this one real sheet — a
-  // known, accepted gap (see the maturity plan's Phase 5 write-up), not a
-  // runtime-disclosed one: there is no graph.notes entry for it today,
-  // deliberately, matching how "DUCTWORK INSULATION SCHEDULE" (a real
-  // table this sheet also carries, invisible to every kind's vocabulary —
-  // a spec-and-thickness genre, not a tag-and-catalog one) is handled: an
-  // honest gap named in the plan doc and in code, not chased into a
-  // runtime signal this phase's scope doesn't call for.
-  let flat = findHeaderRow(rows, vocab, required, minHits, fromIdx);
+  // row, neither tier alone carrying a required-list hit) — real, found live
+  // on the Bessemer sample's "VARIABLE REFRIGERANT PACKAGED HEAT PUMP" table
+  // (HP-1). findHeaderRow's own downward tier-descent never merges these —
+  // it only ever looks down, and neither tier here independently qualifies —
+  // so findHeaderRow's `equipmentTierMerge` option reaches BACKWARD instead,
+  // once the lower tier settles, when it has no usable key column of its own
+  // (see mergeBackwardCoEqualTier's comment for the exact conditions). Kept
+  // equipment-only (not extended to room-finish/finish) deliberately: no
+  // real fixture in this project has a split co-equal header on those kinds
+  // yet, so enabling it there would be untested generalization — exactly the
+  // class of change that caused the MODEL regression the comment above this
+  // one used to describe. A one-line change (`kind === "equipment"` below)
+  // the day a real split-header finish/room-finish table shows up.
+  let flat = findHeaderRow(rows, vocab, required, minHits, fromIdx, { equipmentTierMerge: kind === "equipment" });
+  // The merge above only ever ADDS a key column when one exists nearby on
+  // the sheet — it never invents one. A candidate that still has no ID after
+  // the attempt genuinely has no usable key column (the anchored key would
+  // be whatever sits leftmost of the found tier — a bare CFM/VOLTAGE number,
+  // which correctly fails rowKeyOf's CODE_RE and drops every row), so it is
+  // refused outright rather than accepted as a table that can never be
+  // looked up by tag. Deliberately NOT a retry-forward-and-keep-looking:
+  // tried that first and it searched past a real candidate into a LATER
+  // table's own header, re-extracting a table that already correctly exists
+  // under another kind — a duplicate-row-key collision worse than the one
+  // this whole design exists to prevent.
   if (kind === "equipment" && flat && !flat.anchors.some((a) => a.label === "ID")) flat = null;
   if (flat) {
     anchors = flat.anchors;
     headerSpans = rows[flat.rowIndex];
     dataFrom = flat.dataFrom;
-    titleFrom = flat.rowIndex - 1;
+    // A backward merge moves the real header block's TOP up to the merged
+    // tier (mergedTopIdx) — the title hunt below must walk up from there,
+    // not from the lower (rowIndex) tier alone, or it never looks far enough
+    // up to find the real title.
+    titleFrom = (flat.mergedTopIdx ?? flat.rowIndex) - 1;
   } else {
     // Rotated (quarter-turn) headers are only ever hunted on the FIRST
     // search of a sheet (fromIdx === 0) — `findRotatedHeader` scans `vert`
@@ -1285,6 +1466,26 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   for (let i = titleFrom; i >= 0 && i >= titleFrom - 5 && !title; i--) {
     const hit = rows[i].find((t) => /SCHEDULE/.test(norm(t.str)) && t.x >= x0 && t.x <= x1);
     if (hit) title = { sheet: sheet.key, text: hit.str.trim(), bbox: bboxOf(hit) };
+  }
+  // Fallback: the "…SCHEDULE" pass above found nothing — a table can
+  // genuinely be titled without that word ("VARIABLE REFRIGERANT PACKAGED
+  // HEAT PUMP", found live on the Bessemer sample; only reachable at all
+  // once the backward merge above lets this table extract). Only ever ADDS
+  // a title where one is null today — never second-guesses a real
+  // "…SCHEDULE" match above. A single-span, all-caps, ≥3-word, digit-free
+  // row in the same search window, inside the table's own x-band, is the
+  // honest signal: a real title reads as one run of words with no numbers
+  // in it, unlike a data row or a wrapped unit fragment.
+  if (!title) {
+    for (let i = titleFrom; i >= 0 && i >= titleFrom - 5 && !title; i--) {
+      if (rows[i].length !== 1) continue;
+      const t = rows[i][0];
+      if (t.x < x0 || t.x > x1) continue;
+      const s = norm(t.str);
+      if (!s || /\d/.test(s) || !/^[A-Z][A-Z .,'’&()/-]*$/.test(s)) continue;
+      if (s.split(/\s+/).filter(Boolean).length < 3) continue;
+      title = { sheet: sheet.key, text: t.str.trim(), bbox: bboxOf(t) };
+    }
   }
   const table: ScheduleTable = { kind, sheet: sheet.key, title, headers: anchors.map((a) => a.label), rows: out, region: region!, anchors };
   if (rotated) table.rotated_headers = true;

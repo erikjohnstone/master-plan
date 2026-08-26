@@ -1244,7 +1244,10 @@ test("equipment extraction: zero cross-contamination with the real finish-kind t
   const g = buildSheetGraph([m601]);
   const equipmentTables = g.tables.filter((t) => t.kind === "equipment");
   const finishTables = g.tables.filter((t) => t.kind === "finish");
-  assert.equal(equipmentTables.length, 2, `equipment tables found: ${equipmentTables.map((t) => t.title?.text).join(" | ")}`);
+  // 3, not 2: Electric Wall Heater, Electric Baseboard Heater, and (since the
+  // VRF backward-merge fix) VARIABLE REFRIGERANT PACKAGED HEAT PUMP — see the
+  // dedicated test below for that table's own extraction.
+  assert.equal(equipmentTables.length, 3, `equipment tables found: ${equipmentTables.map((t) => t.title?.text).join(" | ")}`);
   assert.ok(!equipmentTables.some((t) => t.rows.some((r) => ["EF-1", "SR-1", "SR-2", "TG-1", "TG-2"].includes(r.key))), "no finish-kind tag leaked into an equipment table");
   assert.ok(!finishTables.some((t) => t.rows.some((r) => /^EWH-1$|^EBB-\d$/.test(r.key))), "no equipment-kind tag leaked into a finish table");
   // Fan Schedule (bare "(CFM)" hit, deliberately kept out of `required` —
@@ -1264,21 +1267,73 @@ test("equipment extraction: find_schedule's own row-answer path resolves EBB-6 (
   assert.ok(hit, "EBB-6 answers for a row somewhere in the graph");
 });
 
-test("equipment extraction: a table anchored without an ID column (the VRF Heat Pump's split header) is refused, not extracted broken", () => {
+test("equipment extraction: the VRF Heat Pump's split co-equal-tier header merges, and HP-1 extracts with its real values", () => {
   // "VARIABLE REFRIGERANT PACKAGED HEAT PUMP" is real, on this same sheet,
   // and genuinely carries HP-1's electrical/mechanical spec row — but its
-  // header splits across two tiers (a bare ID/MANUFACTURER/MODEL row above
-  // a bare VOLTAGE/PHASE/AMPS/MOCP row) that neither independently qualify,
-  // so findHeaderRow's tier-descent (which only looks DOWN, not up) anchors
-  // on the lower tier alone, with no usable key column. A known, accepted
-  // gap (see EQUIPMENT_HEADERS' and extractTableAt's own comments) — the
-  // real fix is a genuine header-topology merge, out of this phase's scope.
-  // Asserted here as a REFUSAL, not silently: it must not appear at all
-  // (not under any title, not as a stray "undefined"-titled table), and it
-  // must never scan forward into — and corrupt — a real table after it.
+  // header splits across two tiers (a bare ID / "MANUFACTURER MODEL NUMBER"
+  // row above a bare CFM/ESP/VOLTAGE/PHASE/AMPS/MOCP row) that neither
+  // independently qualifies, so findHeaderRow's downward tier-descent (which
+  // only ever looks DOWN) used to anchor on the lower tier alone, with no
+  // usable key column — refused outright (this test used to assert exactly
+  // that refusal). The backward co-equal-tier merge (mergeBackwardCoEqualTier)
+  // now reaches up, merges the two tiers, splits the merged
+  // "MANUFACTURER MODEL NUMBER" cell into its own MANUFACTURER and MODEL
+  // anchors, and anchors the parenthesized "(MBH)"/"(WATTS)" unit-fragment
+  // tiers below the header block — all measured against this real fixture,
+  // not invented.
   const g = buildSheetGraph([m601]);
-  assert.ok(!g.tables.some((t) => t.title?.text === "VARIABLE REFRIGERANT PACKAGED HEAT PUMP"), "the split-header VRF table is not extracted");
-  assert.ok(!g.tables.some((t) => t.kind === "equipment" && t.title == null), "no titleless equipment table was minted from its debris");
+  const vrf = g.tables.find((t) => t.title?.text === "VARIABLE REFRIGERANT PACKAGED HEAT PUMP");
+  assert.ok(vrf, `VRF/Heat Pump table extracted: ${g.tables.filter((t) => t.kind === "equipment").map((t) => t.title?.text).join(" | ")}`);
+  assert.equal(vrf!.kind, "equipment");
+  assert.deepEqual(vrf!.rows.map((r) => r.key), ["HP-1"], "exactly one real row — no 'IN' artifact, no notes-block row");
+  const cells = Object.fromEntries(Object.entries(vrf!.rows[0].cells).map(([k, v]) => [k, v.text]));
+  assert.deepEqual(cells, {
+    ID: "HP-1",
+    MANUFACTURER: "FRIEDRICH",
+    MODEL: "VRP24K75FRBLAA",
+    CFM: "635",
+    ESP: "0.2",
+    "HEATING MBH": "21",
+    "COOLING MBH": "23.4",
+    WATTS: "6888",
+    VOLTAGE: "230",
+    PHASE: "1",
+    AMPS: "40.3",
+    MOCP: "45",
+  });
+});
+
+test("equipment extraction: Fan Schedule does not double-extract as equipment via a bare RPM hit (Finding 1)", () => {
+  // Fan Schedule's own header (ID/DESCRIPTION/MANUFACTURER/MODEL/RPM) hits 5
+  // EQUIPMENT_HEADERS words including a bare RPM — before RPM was pulled out
+  // of `required` (following the exact CFM precedent), this qualified Fan
+  // Schedule as "equipment" too, and it was only ever masked by an accident
+  // of loop-halt ordering: extractTableAt returned null on the (then-refused)
+  // VRF candidate, which stopped extractAllTables' loop before it ever
+  // reached Fan's header. Now that the VRF candidate succeeds (the test
+  // above), that accidental mask is gone — this is a real, standing
+  // regression test, not a restatement of the old behavior.
+  const g = buildSheetGraph([m601]);
+  const equipmentTables = g.tables.filter((t) => t.kind === "equipment");
+  assert.equal(equipmentTables.length, 3, `equipment tables found: ${equipmentTables.map((t) => t.title?.text).join(" | ")}`);
+  assert.ok(!equipmentTables.some((t) => t.title?.text === "FAN SCHEDULE"), "Fan Schedule was not re-extracted under equipment");
+  const fanHits = g.tables.filter((t) => t.title?.text === "FAN SCHEDULE");
+  assert.equal(fanHits.length, 1, "Fan Schedule extracted exactly once across the whole graph");
+  assert.equal(fanHits[0].kind, "finish");
+  assert.deepEqual(fanHits[0].rows.map((r) => r.key), ["EF-1"]);
+});
+
+test("equipment extraction: no equipment table is minted from Fan Schedule's own header region", () => {
+  // The general form of Finding 1's regression, as a standing negative test:
+  // no equipment-kind table's region may overlap Fan Schedule's header
+  // y-band, and none may carry its title.
+  const g = buildSheetGraph([m601]);
   const fan = g.tables.find((t) => t.title?.text === "FAN SCHEDULE")!;
-  assert.deepEqual(fan.rows.map((r) => r.key), ["EF-1"], "Fan Schedule (right after the VRF table on this sheet) stays exactly its one real row");
+  const fanTop = fan.region[1];
+  const equipmentTables = g.tables.filter((t) => t.kind === "equipment");
+  assert.ok(!equipmentTables.some((t) => t.title?.text === "FAN SCHEDULE"), "no equipment table titled FAN SCHEDULE");
+  assert.ok(
+    !equipmentTables.some((t) => t.region[1] <= fanTop && t.region[3] >= fanTop),
+    "no equipment table's region spans Fan Schedule's own header y-band",
+  );
 });
