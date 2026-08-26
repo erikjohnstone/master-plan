@@ -1046,6 +1046,76 @@ export function sweepSymbols(segs: number[], seedRect: [Point, Point], opts: Swe
   };
 }
 
+// ── reference-shape-seeded matching (maturity plan Phase 2, #HVAC-3) ──────
+// Every match above needs a human (or agent) to marquee ONE real instance
+// first, every time, on every sheet. This is the missing "propose a
+// hypothesis without a seed" path — for symbols whose SHAPE is standardized
+// enough across real firms' drawings to be worth a small hand-authored
+// reference fingerprint (see web/src/lib/hvacRefShapes.ts for the actual
+// shapes and the real corpus evidence behind each one; this module stays
+// domain-agnostic, same as fingerprintSymbol/matchSymbol above — it works
+// for any reference shape, HVAC or not).
+//
+// Scale is the real design problem a reference shape has that a marqueed
+// seed never does: a seed comes from the SAME sheet it searches (or a
+// stated seed/target upp ratio, #186 above), but a hand-authored reference
+// shape has no sheet of its own. The established, already-tested precedent
+// (sweepRatio: seed.upp / target.upp — a symbol's PIXEL size scales with
+// the sheet's own real-world scale, not printed-page-size-invariant) is
+// reused here, not re-decided: a reference shape states its own notional
+// real-world size (inches), and the caller supplies the TARGET sheet's own
+// committed upp (feet per image px) to convert it into that sheet's actual
+// pixel space before fingerprinting — never guessed, never searched across
+// scales. No committed scale on the target, no match attempt: refused with
+// a named reason, the same discipline every scale-dependent tool in this
+// codebase already holds to.
+export interface RefShape {
+  /** Human name — carried straight through as the result's own label. */
+  name: string;
+  /** Segments in real-world INCHES (a notional reference size for this
+   * symbol family — flat [ax,ay,bx,by, ...], the same layout `segs` always
+   * uses elsewhere in this module), NOT image px. Converted to the target
+   * sheet's own px space using its committed upp before matching. */
+  segsIn: number[];
+}
+
+export interface LibraryMatch {
+  name: string;
+  result: SymbolMatchResult;
+}
+
+/** Every reference shape in `library`, matched against `segs` — the target
+ * sheet's own vector geometry, in that sheet's own image px. `targetUpp` is
+ * the target sheet's committed feet-per-px (ctx.uppFor's own convention);
+ * null/undefined REFUSES rather than guessing a scale (mirrors matchSymbol's
+ * own no-scale-assumed doctrine, one level up). Each reference shape goes
+ * through the EXACT SAME scoring/refusal machinery matchSymbol already has
+ * — a match is a match, a near-miss is withheld with a reason, nothing is
+ * ever asserted from a weak score. `opts.excludeCenter` is never meaningful
+ * here (a reference shape has no seed instance of its own to shadow) and is
+ * silently ignored if passed. */
+export function matchAgainstLibrary(
+  segs: number[], library: RefShape[], targetUpp: number | null | undefined, opts: MatchOptions = {},
+): LibraryMatch[] {
+  if (!targetUpp) {
+    throw new Error("No committed scale on this sheet — a reference shape's real-world size cannot be converted to this sheet's pixels without one. Set the scale first, or marquee a real instance and use symbol_sweep instead.");
+  }
+  const pxPerIn = 1 / (targetUpp * 12);   // targetUpp: real feet per image px
+  const { excludeCenter: _ignored, ...rest } = opts;
+  const out: LibraryMatch[] = [];
+  for (const ref of library) {
+    const segsPx = ref.segsIn.map((v) => v * pxPerIn);
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (let i = 0; i < segsPx.length; i += 4) {
+      x0 = Math.min(x0, segsPx[i], segsPx[i + 2]); x1 = Math.max(x1, segsPx[i], segsPx[i + 2]);
+      y0 = Math.min(y0, segsPx[i + 1], segsPx[i + 3]); y1 = Math.max(y1, segsPx[i + 1], segsPx[i + 3]);
+    }
+    const fp = fingerprintSymbol(segsPx, [[x0, y0], [x1, y1]]);
+    out.push({ name: ref.name, result: matchSymbol(fp, segs, rest) });
+  }
+  return out;
+}
+
 // ── sweep_schedule_row's engine (maturity plan Phase 3, #HVAC-crossscale) ──
 // A schedule row names a tag, not a symbol — the marker has to be found
 // FROM the tag's own drawn occurrence(s), corroborated before it's trusted,
