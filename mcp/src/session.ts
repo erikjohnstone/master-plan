@@ -38,7 +38,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS }
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc } from "../../web/src/lib/symbolsweep.ts";
 import { labelPlacements, type PlacementLabel } from "../../web/src/lib/symbollabels.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
@@ -2187,20 +2187,10 @@ export class Session {
     return { committed: ids.length, shape_ids: ids, condition: c.finish_tag, ea_total };
   }
 
-  /** The seed→target size ratio for a cross-sheet sweep (#186): seed-sheet
-   * image px per target-sheet image px, which is exactly `upp_seed /
-   * upp_target` — both sheets' own committed scales, no search and no guess.
-   *
-   * `known: false` means at least one of the two sheets has no scale set. The
-   * sweep can still run at 1.0 (same-size drafting is the norm across the plan
-   * sheets of one set) but the caller MUST disclose the assumption, because an
-   * unknown ratio and a zero count together are indistinguishable from "the
-   * symbol isn't there" — the exact silent wrong answer #186 exists to kill. */
-  private sweepRatio(seed: SheetState, target: SheetState): { scale: number; known: boolean } {
-    if (seed.key === target.key) return { scale: 1, known: true };
-    if (seed.upp && target.upp) return { scale: seed.upp / target.upp, known: true };
-    return { scale: 1, known: false };
-  }
+  // sweepRatio (the seed→target size ratio for a cross-sheet sweep, #186) now
+  // lives as a shared pure function in symbolsweep.ts — same math, used by
+  // both this server and the browser's own port (the "canvas and MCP cannot
+  // disagree" doctrine). SheetState's `.upp` is exactly the shape it wants.
 
   /** The refusal that has to fire before a detail-seeded sweep runs blind. A
    * detail, legend, or schedule sheet is drawn at ITS own enlarged scale — a
@@ -2424,7 +2414,7 @@ export class Session {
         skipped.push({ sheet: sh.key, role, reason: "no vector linework (likely a scan) — symbol matching reads the drawn segments" });
         continue;
       }
-      const ratio = this.sweepRatio(s, sh);
+      const ratio = sweepRatio(s, sh);
       const t0 = process.hrtime.bigint();
       let res: SymbolMatchResult;
       try {
@@ -2618,8 +2608,7 @@ export class Session {
         });
       }
     }
-    type Occ = { cx: number; cy: number; h: number; bbox: [number, number, number, number] };
-    const occOf = (sh: SheetState, key: string): Occ[] => {
+    const occOf = (sh: SheetState, key: string): TagOcc[] => {
       if (!sh.spans) sh.spans = textSpans(sh.page);
       return sh.spans
         .filter((sp) => sp.str.trim().toUpperCase() === key)
@@ -2655,56 +2644,25 @@ export class Session {
     // the probe has to cross the same size ratio the real sweep will (#186),
     // or a fingerprint gets rejected as "doesn't recur" for the sole reason
     // that the two plan sheets are drawn at different scales
-    let corro: { sh: SheetState; segs: number[]; occ: Occ[] } | null = null;
+    let corro: { sh: SheetState; segs: number[]; occ: TagOcc[] } | null = null;
     if (withOcc[0].occ.length > 1) corro = { sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.slice(1) };
     else if (withOcc.length > 1) corro = { sh: withOcc[1].sh, segs: (await this.ensureGeometry(withOcc[1].sh)).segs, occ: withOcc[1].occ };
 
-    const cX = (v: number) => Math.max(0, Math.min(v, anchorSheet.widthPx));
-    const cY = (v: number) => Math.max(0, Math.min(v, anchorSheet.heightPx));
-    let fp: SymbolFingerprint | null = null;
-    let anchorRect: [Point, Point] | null = null;
-    let corroborated = false;
-    for (const padK of [1, 2, 3]) {
-      const pad = padK * anchor.h;
-      const rect: [Point, Point] = [
-        [cX(anchor.bbox[0] - pad), cY(anchor.bbox[1] - pad)],
-        [cX(anchor.bbox[2] + pad), cY(anchor.bbox[3] + pad)],
-      ];
-      let cand: SymbolFingerprint;
-      try {
-        cand = fingerprintSymbol(anchorGeo.segs, rect);
-      } catch (e) {
-        // nothing fully inside yet → widen; a region-sized grab → bigger pads only get worse
-        if (e instanceof Error && /region, not one symbol/.test(e.message)) break;
-        continue;
-      }
-      // a degenerate grab is not a marker: one or two short strokes at the tag
-      // are its own underline/leader, which recur at EVERY tagged mark and
-      // "corroborate" trivially — matching on them counts tags' furniture, not
-      // devices. Widen instead; if no pad ever captures real marker geometry,
-      // the refusal below states it.
-      if (cand.segments < 3) continue;
-      if (!corro) { fp = cand; anchorRect = rect; break; }
-      const cr = this.sweepRatio(anchorSheet, corro.sh);
-      let probe: SymbolMatchResult;
-      try {
-        probe = matchSymbol(cand, corro.segs, { ...sweepOpts, ...(cr.scale === 1 ? {} : { scale: cr.scale }) });
-      } catch {
-        // this pad's fingerprint can't survive the trip to the corroborator
-        // (too small once scaled) — a wider pad may; never a hard stop
-        continue;
-      }
-      const pr = (probe.scaled ? probe.scaled.footprint_px : cand.footprint) / 2 + anchor.h;
-      if (corro.occ.some((o) => probe.matches.some((m) => Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= pr))) {
-        fp = cand; anchorRect = rect; corroborated = true;
-        break;
-      }
-    }
-    if (!fp || !anchorRect) {
+    // pad ladder + corroboration — the shared symbolsweep.ts function, so
+    // this server and the browser's own port can never silently disagree.
+    const anchored = corroborateFingerprint(
+      anchorGeo.segs,
+      { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+      anchor,
+      corro ? { segs: corro.segs, occ: corro.occ, ratio: sweepRatio(anchorSheet, corro.sh) } : null,
+      sweepOpts,
+    );
+    if (!anchored) {
       throw new UserError(corro
         ? `Schedule row "${t}" cannot be anchored: the linework around its drawn tag on ${anchorSheet.key} does not recur at the tag's other occurrences — no repeatable marker geometry to fingerprint. Marquee one instance with symbol_sweep instead.`
         : `Schedule row "${t}" cannot be anchored: no fingerprintable marker linework sits around its drawn tag on ${anchorSheet.key}. Marquee one instance with symbol_sweep instead.`);
     }
+    const { fp, anchorRect, corroborated } = anchored;
 
     // 4. the full plan-only sweep + tag corroboration per match.
     // The tag-proximity radius is the marker's footprint AS DRAWN ON THE SHEET
@@ -2712,8 +2670,6 @@ export class Session {
     // marker resized to a 12×-smaller plan has a 12×-smaller footprint, and a
     // radius left at the seed's size would sweep up whatever tag happened to
     // be nearby. Unscaled sheets take the identical radius they always did.
-    const radiusFor = (sc?: { footprint_px: number }): number => (sc ? sc.footprint_px : fp!.footprint) / 2 + anchor.h;
-    const byPos = <T extends { at: Point }>(a: T, b: T): number => a.at[1] - b.at[1] || a.at[0] - b.at[0];
     type CountedMatch = SweepMatch & { tag_at: [number, number, number, number] };
     const perSheet: {
       state: SheetState;
@@ -2727,48 +2683,31 @@ export class Session {
       scale: { scale: number; known: boolean };
       scaled?: NonNullable<SymbolMatchResult["scaled"]>;
     }[] = [];
+    // per-sheet classification — the shared symbolsweep.ts function, so this
+    // server and the browser's own port can never silently disagree.
     for (const { sh, occ } of occBySheet) {
       const g2 = await this.ensureGeometry(sh);
       if (!g2.segs.length) {
         skipped.push({ sheet: sh.key, role: "plan", reason: "no vector linework (likely a scan) — symbol matching reads the drawn segments" });
         continue;
       }
-      const ratio = this.sweepRatio(anchorSheet, sh);
+      const ratio = sweepRatio(anchorSheet, sh);
       const t0 = process.hrtime.bigint();
-      let res: SymbolMatchResult;
+      const sibSpans: { key: string; cx: number; cy: number }[] = [];
+      for (const k of siblings) for (const o of occOf(sh, k)) sibSpans.push({ key: k, cx: o.cx, cy: o.cy });
+      let cls: ReturnType<typeof classifySweepMatches>;
       try {
-        res = matchSymbol(fp, g2.segs, { ...sweepOpts, ...(ratio.scale === 1 ? {} : { scale: ratio.scale }) });
+        cls = classifySweepMatches(t, fp, g2.segs, ratio, occ, sibSpans, anchor.h, sweepOpts);
       } catch (e) {
         skipped.push({ sheet: sh.key, role: "plan", reason: e instanceof Error ? e.message : String(e) });
         continue;
       }
-      const R = radiusFor(res.scaled);
       const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
-      const sibSpans: { key: string; cx: number; cy: number }[] = [];
-      for (const k of siblings) for (const o of occOf(sh, k)) sibSpans.push({ key: k, cx: o.cx, cy: o.cy });
-      const matches: CountedMatch[] = [];
-      const excluded: { at: Point; tag: string }[] = [];
-      const withheld: SweepWithheld[] = [];
-      const matchedOcc = new Set<number>();
-      for (const m of res.matches) {
-        let oi = -1;
-        for (let k = 0; k < occ.length; k++) {
-          if (Math.hypot(m.at[0] - occ[k].cx, m.at[1] - occ[k].cy) <= R) { oi = k; break; }
-        }
-        if (oi >= 0) { matchedOcc.add(oi); matches.push({ ...m, tag_at: occ[oi].bbox }); continue; }
-        const sib = sibSpans.find((sp) => Math.hypot(m.at[0] - sp.cx, m.at[1] - sp.cy) <= R);
-        if (sib) { excluded.push({ at: m.at, tag: sib.key }); continue; }
-        withheld.push({ ...m, reason: `the marker geometry matches but carries no "${t}" tag within its footprint — an unlabeled instance or a shared marker shape; look before counting it` });
-      }
-      for (const w of res.withheld) {
-        const near = occ.some((o) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R);
-        withheld.push(near ? { ...w, reason: `${w.reason} — and the "${t}" tag is drawn beside it` } : w);
-      }
-      matches.sort(byPos); excluded.sort(byPos); withheld.sort(byPos);
-      const text_only = occ
-        .filter((o, k) => !matchedOcc.has(k) && !res.withheld.some((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R))
-        .map((o) => ({ at: [round1(o.cx), round1(o.cy)] as Point }));
-      perSheet.push({ state: sh, matches, withheld, excluded, text_only, candidates: res.candidates, complete: res.complete, elapsed_ms, scale: ratio, ...(res.scaled ? { scaled: res.scaled } : {}) });
+      perSheet.push({
+        state: sh, matches: cls.matches, withheld: cls.withheld, excluded: cls.excluded, text_only: cls.text_only,
+        candidates: cls.candidates, complete: cls.complete, elapsed_ms, scale: ratio,
+        ...(cls.scaled ? { scaled: cls.scaled } : {}),
+      });
     }
 
     // 5. commit — condition minted FROM the row (its key IS the tag), the

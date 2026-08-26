@@ -1045,3 +1045,194 @@ export function sweepSymbols(segs: number[], seedRect: [Point, Point], opts: Swe
     ...(m.lum_gate ? { lum_gate: m.lum_gate } : {}),
   };
 }
+
+// ── sweep_schedule_row's engine (maturity plan Phase 3, #HVAC-crossscale) ──
+// A schedule row names a tag, not a symbol — the marker has to be found
+// FROM the tag's own drawn occurrence(s), corroborated before it's trusted,
+// then swept across a whole plan set that may not be drawn at one scale.
+// This was real, working logic in the MCP server (mcp/src/session.ts) the
+// browser's own port explicitly did NOT carry over (documented in its own
+// code comment) — extracted here so canvas and MCP call the identical
+// pure engine instead of two implementations that can silently drift, the
+// same "canvas and MCP cannot disagree" doctrine fingerprintSymbol/
+// matchSymbol above already keep. Both callers still own everything
+// session-shaped: resolving the row, walking their own sheet list,
+// deciding what to commit. This owns only the geometry.
+
+/** One drawn occurrence of a tag's text on a sheet — the shape both the MCP
+ * server's session.ts and the browser's TakeoffCanvas.jsx already compute
+ * identically from their own span sources, just never shared as one type. */
+export interface TagOcc {
+  cx: number;
+  cy: number;
+  /** The text span's own height, image px — the pad-ladder step size and the
+   * match-radius floor both ride this, never a fixed constant, so a tiny
+   * tag and a huge one both get a proportionate footprint. */
+  h: number;
+  bbox: [number, number, number, number];
+}
+
+/** The seed→target size ratio for a cross-sheet sweep (#186): seed-sheet
+ * image px per target-sheet image px, exactly `upp_seed / upp_target` —
+ * both sheets' own committed scales, no search and no guess.
+ *
+ * `known: false` means at least one of the two sheets has no scale set. The
+ * sweep can still run at 1.0 (same-size drafting is the norm across the
+ * plan sheets of one set) but the caller MUST disclose the assumption: an
+ * unknown ratio and a zero count are otherwise indistinguishable from "the
+ * symbol isn't there" — the exact silent wrong answer #186 exists to kill. */
+export function sweepRatio(seed: { upp: number | null | undefined }, target: { upp: number | null | undefined }): { scale: number; known: boolean } {
+  if (seed === target) return { scale: 1, known: true };
+  if (seed.upp && target.upp) return { scale: seed.upp / target.upp, known: true };
+  return { scale: 1, known: false };
+}
+
+/** A candidate fingerprint degenerate enough to recur at every tagged mark —
+ * a bare underline or leader stroke, not a real device symbol. Matching on
+ * it would count tags' furniture, not devices; widen the pad instead. */
+const MIN_MARKER_SEGMENTS = 3;
+
+/** Step 3 of sweep_schedule_row: anchor a fingerprint on the tag's own drawn
+ * occurrence and corroborate it — recur at a SECOND occurrence — before it
+ * is trusted. A deterministic pad ladder (1×/2×/3× the tag's own text
+ * height) around the tag's bbox, widening until a real marker's worth of
+ * linework (≥3 segments) is captured; each candidate is corroborated by
+ * probing the corroborator's own geometry (resized by `corroRatio` when the
+ * two sheets are drawn at different scales — #186, never searched, always
+ * the caller's own stated ratio) for a match landing on one of the
+ * corroborator's other occurrences of the tag.
+ *
+ * `corro: null` means the tag is drawn exactly once anywhere in the set —
+ * the FIRST pad that captures real marker geometry (≥3 segments) is
+ * accepted uncorroborated (`corroborated: false` in the result), which is
+ * weaker evidence and the caller should disclose it, not silently trust it
+ * the same as a corroborated anchor.
+ *
+ * Returns null when no pad ever produces a fingerprint that's both
+ * non-degenerate AND (when a corroborator exists) recurs there — "no
+ * repeatable marker geometry", the caller's cue to refuse and suggest a
+ * manual symbol_sweep instead of guessing from text alone. */
+export function corroborateFingerprint(
+  anchorSegs: number[],
+  anchorDims: { w: number; h: number },
+  anchor: TagOcc,
+  corro: { segs: number[]; occ: TagOcc[]; ratio: { scale: number; known: boolean } } | null,
+  opts: MatchOptions = {},
+): { fp: SymbolFingerprint; anchorRect: [Point, Point]; corroborated: boolean } | null {
+  const cX = (v: number) => Math.max(0, Math.min(v, anchorDims.w));
+  const cY = (v: number) => Math.max(0, Math.min(v, anchorDims.h));
+  for (const padK of [1, 2, 3]) {
+    const pad = padK * anchor.h;
+    const rect: [Point, Point] = [
+      [cX(anchor.bbox[0] - pad), cY(anchor.bbox[1] - pad)],
+      [cX(anchor.bbox[2] + pad), cY(anchor.bbox[3] + pad)],
+    ];
+    let cand: SymbolFingerprint;
+    try {
+      cand = fingerprintSymbol(anchorSegs, rect);
+    } catch (e) {
+      // nothing fully inside yet → widen; a region-sized grab → bigger pads only get worse
+      if (e instanceof Error && /region, not one symbol/.test(e.message)) break;
+      continue;
+    }
+    if (cand.segments < MIN_MARKER_SEGMENTS) continue;
+    if (!corro) return { fp: cand, anchorRect: rect, corroborated: false };
+    let probe: SymbolMatchResult;
+    try {
+      probe = matchSymbol(cand, corro.segs, { ...opts, ...(corro.ratio.scale === 1 ? {} : { scale: corro.ratio.scale }) });
+    } catch {
+      continue; // this pad's fingerprint can't survive the trip (too small once scaled) — a wider pad may
+    }
+    const pr = (probe.scaled ? probe.scaled.footprint_px : cand.footprint) / 2 + anchor.h;
+    if (corro.occ.some((o) => probe.matches.some((m) => Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= pr))) {
+      return { fp: cand, anchorRect: rect, corroborated: true };
+    }
+  }
+  return null;
+}
+
+export interface SweepSheetMatch extends SweepMatch {
+  /** The tag-text evidence bbox that put this match IN the count — a match
+   * counts only when the row's own tag sits inside its footprint. */
+  tag_at: [number, number, number, number];
+}
+export interface SweepSheetResult {
+  matches: SweepSheetMatch[];
+  /** A matching marker whose footprint carries a SIBLING row's tag, not this
+   * one's — that mark belongs to the sibling, disclosed with which tag. */
+  excluded: Array<{ at: Point; tag: string }>;
+  withheld: SweepWithheld[];
+  /** A drawn occurrence of the tag with no matching marker geometry nearby —
+   * disclosed, never counted: the tag is there, the symbol isn't. */
+  text_only: Array<{ at: Point }>;
+  candidates: { considered: number; dropped: number };
+  complete: boolean;
+  scaled?: NonNullable<SymbolMatchResult["scaled"]>;
+}
+
+/** Step 4 of sweep_schedule_row, for ONE sheet: sweep it for the corroborated
+ * fingerprint (resized by `ratio` when this sheet is drawn at a different
+ * scale than the anchor — #186) and classify every match against this
+ * sheet's own drawn tag occurrences (`occ`) and every SIBLING row's
+ * occurrences (`siblingOcc`, from every OTHER schedule row in the set) —
+ * geometry alone is never identity, because drafting reuses one bubble
+ * shape across many tags. Five outcomes, every one disclosed: a confident
+ * match whose footprint carries this row's own tag COUNTS; a confident
+ * match carrying a sibling's tag is EXCLUDED (named); a confident match
+ * carrying no tag is WITHHELD as a question; matchSymbol's own near-matches
+ * (`res.withheld`, the score-band between scoreLow/scoreHigh) are carried
+ * through as WITHHELD too, with the tag-adjacency noted when one is drawn
+ * beside it; a tag occurrence with no matching geometry nearby at all is
+ * TEXT_ONLY. `tag` is the row's own canonical key, used only to word the
+ * withheld/text_only reasons — it never gates what counts. */
+export function classifySweepMatches(
+  tag: string,
+  fp: SymbolFingerprint,
+  sheetSegs: number[],
+  ratio: { scale: number; known: boolean },
+  occ: TagOcc[],
+  siblingOcc: Array<{ key: string; cx: number; cy: number }>,
+  anchorH: number,
+  opts: MatchOptions = {},
+): SweepSheetResult {
+  const res = matchSymbol(fp, sheetSegs, { ...opts, ...(ratio.scale === 1 ? {} : { scale: ratio.scale }) });
+  const R = (res.scaled ? res.scaled.footprint_px : fp.footprint) / 2 + anchorH;
+  const matches: SweepSheetMatch[] = [];
+  const excluded: Array<{ at: Point; tag: string }> = [];
+  const withheld: SweepWithheld[] = [];
+  const matchedOcc = new Set<number>();
+  for (const m of res.matches) {
+    let oi = -1;
+    for (let k = 0; k < occ.length; k++) {
+      if (Math.hypot(m.at[0] - occ[k].cx, m.at[1] - occ[k].cy) <= R) { oi = k; break; }
+    }
+    if (oi >= 0) { matchedOcc.add(oi); matches.push({ ...m, tag_at: occ[oi].bbox }); continue; }
+    const sib = siblingOcc.find((sp) => Math.hypot(m.at[0] - sp.cx, m.at[1] - sp.cy) <= R);
+    if (sib) { excluded.push({ at: m.at, tag: sib.key }); continue; }
+    withheld.push({ ...m, reason: `the marker geometry matches but carries no "${tag}" tag within its footprint — an unlabeled instance or a shared marker shape; look before counting it` });
+  }
+  // matchSymbol's OWN near-matches (score in [scoreLow, scoreHigh)) — carried
+  // through, not dropped, with the tag-adjacency noted when this row's tag
+  // happens to sit right beside one (a real clue the near-match IS this row's).
+  for (const w of res.withheld) {
+    const near = occ.some((o) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R);
+    withheld.push(near ? { ...w, reason: `${w.reason} — and the "${tag}" tag is drawn beside it` } : w);
+  }
+  const byPos = (a: { at: Point }, b: { at: Point }) => a.at[1] - b.at[1] || a.at[0] - b.at[0];
+  matches.sort(byPos); excluded.sort(byPos); withheld.sort(byPos);
+  // An occurrence sitting at (or right beside) opts.excludeCenter is the
+  // seed's own shadow: matchSymbol suppresses it from res.matches AND
+  // res.withheld before we ever see it (it's already counted — as the seed
+  // — not an unexplained gap), so it must not fall through to text_only.
+  const ex = opts.excludeCenter;
+  const text_only = occ
+    .filter((o, k) => !matchedOcc.has(k)
+      && !res.withheld.some((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R)
+      && !(ex && Math.hypot(o.cx - ex[0], o.cy - ex[1]) <= R))
+    .map((o) => ({ at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10] as Point }));
+  return {
+    matches, excluded, withheld, text_only,
+    candidates: res.candidates, complete: res.complete,
+    ...(res.scaled ? { scaled: res.scaled } : {}),
+  };
+}

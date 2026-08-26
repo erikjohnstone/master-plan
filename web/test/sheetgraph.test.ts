@@ -9,7 +9,8 @@
 //   - schedule sheets never mint phantom room tags.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, roomTags, detailCallouts, revisionOf, type GraphSpan, type SheetSpans, type SheetGraph } from "../src/lib/sheetgraph.ts";
+import { readFileSync } from "node:fs";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, roomTags, detailCallouts, revisionOf, type GraphSpan, type SheetSpans, type SheetGraph } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
@@ -1101,4 +1102,183 @@ test("a header cell naming two vocabulary words gives up the second: ROOM # | RO
   }
   assert.equal(tab.rows.find((r) => r.key === "100")!.cells.FLOOR.text, "SC-1");
   assert.equal(tab.rows.find((r) => r.key === "102")!.cells.BASE.text, "HTB-1");
+});
+
+// ── multi-table-per-sheet (maturity plan Phase 0, #HVAC-boundary) ──────────
+// A dense MEP sheet routinely stacks several schedules in the SAME column
+// grid — a real, common drafting convention, not a one-off. Before this fix,
+// extractTable found at most ONE "finish" table per sheet (the first header
+// row to clear the vocabulary bar); a same-evening attempt to widen the
+// vocabulary so a second table could qualify caused a real regression
+// instead (a manufacturer name from one table misread as a row key of
+// another) — proof the fix had to be a real table BOUNDARY, not a broader
+// net. m601-spans.json is the real, live-captured text (295 spans, at the
+// browser's actual RENDER_SCALE=2.0) off page 8 ("MECHANICAL SCHEDULES") of
+// the real Bessemer sample PDF this project has been testing against all
+// session — not a hand-typed approximation.
+const m601 = JSON.parse(
+  readFileSync(new URL("./fixtures/m601-spans.json", import.meta.url), "utf8"),
+) as SheetSpans;
+
+test("multi-table extraction: two real MEP schedules on the same sheet, same column grid, both found", () => {
+  const tables = extractAllTables(m601, "finish");
+  const titles = tables.map((t) => t.title?.text);
+  assert.ok(titles.includes("DIFFUSER, GRILLE, REGISTER SCHEDULE"), `titles found: ${titles.join(" | ")}`);
+  assert.ok(titles.includes("FAN SCHEDULE"), `titles found: ${titles.join(" | ")}`);
+  // extractAllTables was called for kind "finish" specifically here, so
+  // every result is "finish" by construction — the real equipment-kind
+  // tables this same sheet ALSO carries (Electric Wall/Baseboard Heater
+  // Schedule, Phase 5) live in their own test block below, extracted via
+  // kind "equipment" against the same fixture.
+  assert.ok(tables.every((t) => t.kind === "finish"));
+});
+
+test("multi-table extraction: the real regression case — Diffuser/Grille/Register extracts clean", () => {
+  // This is the exact tag lookup that was broken live earlier tonight
+  // (find_schedule/sweep_schedule_row on "SR-1") and the exact regression
+  // (a later table's stray text shifting this table's own column starts)
+  // caught and reverted before it shipped.
+  const diffuser = extractAllTables(m601, "finish").find((t) => t.title?.text === "DIFFUSER, GRILLE, REGISTER SCHEDULE")!;
+  assert.ok(diffuser, "Diffuser/Grille/Register Schedule is found");
+  assert.deepEqual(diffuser.headers, ["ID", "DESCRIPTION", "MANUFACTURER", "SIZE", "MATERIAL"]);
+  assert.deepEqual(diffuser.rows.map((r) => r.key), ["SR-1", "SR-2", "TG-1", "TG-2"]);
+  assert.equal(diffuser.rows.find((r) => r.key === "SR-1")!.cells.MANUFACTURER.text, "HART AND COOLEY");
+});
+
+test("multi-table extraction: zero cross-contamination between the two tables (the regression, as a standing negative test)", () => {
+  const tables = extractAllTables(m601, "finish");
+  const diffuser = tables.find((t) => t.title?.text === "DIFFUSER, GRILLE, REGISTER SCHEDULE")!;
+  const fan = tables.find((t) => t.title?.text === "FAN SCHEDULE")!;
+  // The manufacturer name that bled across tables in the reverted MODEL
+  // regression — must never appear as a ROW KEY of the wrong table again.
+  assert.ok(!diffuser.rows.some((r) => r.key === "QMARK"), "no stray manufacturer-name row in Diffuser");
+  assert.ok(!fan.rows.some((r) => r.key === "QMARK"), "no stray manufacturer-name row in Fan");
+  // No row of one table carries the other table's real tag.
+  assert.ok(!diffuser.rows.some((r) => r.key === "EF-1"), "Fan's tag did not bleed into Diffuser");
+  assert.ok(!fan.rows.some((r) => ["SR-1", "SR-2", "TG-1", "TG-2"].includes(r.key)), "Diffuser's tags did not bleed into Fan");
+  // The subtler form of the same bug: a shifted (not just a wrong-row)
+  // column start. Diffuser's own MANUFACTURER cell for SR-1 must be its own
+  // real value, not something pulled from Fan's differently-positioned
+  // columns two schedules below.
+  assert.equal(diffuser.rows.find((r) => r.key === "SR-1")!.cells.MANUFACTURER.text, "HART AND COOLEY");
+});
+
+test("multi-table extraction: Fan Schedule's real EF-1 row is present, with no fake 'NUMBER' row from the wrapped sub-header (#HVAC-subheader)", () => {
+  // Fan Schedule has a real 3-tier header ("MODEL" / "NUMBER", "AIR FLOW" /
+  // "(CFM)", "DUCT" / "CONNECTION" / "(IN)") whose middle and bottom tiers
+  // carry ZERO vocabulary words, so findHeaderRow's descent logic (which only
+  // skips a sub-header row it can independently recognize as a header) never
+  // sees them as part of the header. Before the fix, the first of those two
+  // wrapped lines was treated as the first DATA row instead, and its leading
+  // token "NUMBER" passed rowKeyOf's generic code pattern (CODE_RE has no
+  // digit requirement — "CW" and other real MEP tags without digits are
+  // legitimate), minting a false "NUMBER" row. The fix recognizes a wrapped
+  // continuation line by SHAPE instead of vocabulary — tight line-height gap
+  // below the row above, zero vocabulary hits, and no digit anywhere in the
+  // row — and skips it as non-data without needing it to independently
+  // qualify as a header.
+  const fan = extractAllTables(m601, "finish").find((t) => t.title?.text === "FAN SCHEDULE")!;
+  assert.ok(fan, "Fan Schedule is found");
+  // Only 3 of Fan Schedule's real columns (ID/DESCRIPTION/MANUFACTURER) are
+  // in today's flooring-shaped vocabulary — MODEL/AIR FLOW/RPM/DUCT/
+  // ELECTRICAL aren't yet, so their real data (model number, CFM range)
+  // lands in the last recognized column (MANUFACTURER) rather than its own.
+  // Expected given today's vocabulary, not a bug — exactly what maturity
+  // plan Phase 5's dedicated equipment vocabulary exists to fix.
+  const ef1 = fan.rows.find((r) => r.key === "EF-1")!;
+  assert.ok(ef1, "the real EF-1 row is present");
+  assert.match(ef1.cells.DESCRIPTION.text, /PANASONIC/);
+  assert.equal(ef1.cells.MANUFACTURER.text, "FV-0511VKL2 50-80-110");
+  assert.ok(!fan.rows.some((r) => r.key === "NUMBER"), "the wrapped 'MODEL NUMBER' sub-header line must not mint a fake 'NUMBER' row");
+  assert.deepEqual(fan.rows.map((r) => r.key), ["EF-1"], "Fan Schedule has exactly its one real row, nothing minted from the wrapped header");
+});
+
+test("multi-table extraction: the graph carries a row from the SECOND table found on the sheet, not just the first", () => {
+  // sheet_graph/find_schedule/sweep_schedule_row all depend on
+  // buildSheetGraph seeing every table, not just whichever wins a single
+  // slot — this is the actual live-tested capability the maturity plan's
+  // Phase 0 exists for (e.g. resolving "EBB-6" via sweep_schedule_row,
+  // blocked before this fix). resolveTag is the wrong tool to prove this
+  // with directly — it only chains a ROOM tag through a room-finish
+  // schedule (M601 has none), never a bare equipment tag — so this checks
+  // the graph the way sweep_schedule_row's own row lookup actually does:
+  // rowKeyAnswersFor against every "finish" table's rows.
+  const g = buildSheetGraph([m601]);
+  const finishTables = g.tables.filter((t) => t.kind === "finish");
+  const hit = finishTables.flatMap((t) => t.rows).find((r) => rowKeyAnswersFor(r.key, "EF-1"));
+  assert.ok(hit, `EF-1 (Fan Schedule, the second table found) is in the graph: ${finishTables.map((t) => t.title?.text).join(" | ")}`);
+});
+
+// ── Phase 5 (maturity plan): a real "equipment" TableKind, not a
+// FINISH_HEADERS patch. Same real fixture (m601-spans.json) — this sheet's
+// Electric Wall Heater and Electric Baseboard Heater schedules were the
+// exact, real, previously-unreachable targets: EBB-6 specifically was named
+// in Phase 0's own write-up as a case that would stay unresolvable "until
+// Phase 5's equipment vocabulary ships."
+test("equipment extraction: Electric Wall Heater and Electric Baseboard Heater schedules, both found, correctly keyed", () => {
+  const tables = extractAllTables(m601, "equipment");
+  const titles = tables.map((t) => t.title?.text);
+  assert.ok(titles.includes("ELECTRIC WALL HEATER SCHEDULE"), `titles found: ${titles.join(" | ")}`);
+  assert.ok(titles.includes("ELECTRIC BASEBOARD HEATER SCHEDULE"), `titles found: ${titles.join(" | ")}`);
+  assert.ok(tables.every((t) => t.kind === "equipment"));
+
+  const wall = tables.find((t) => t.title?.text === "ELECTRIC WALL HEATER SCHEDULE")!;
+  assert.deepEqual(wall.rows.map((r) => r.key), ["EWH-1"]);
+  assert.equal(wall.rows[0].cells.MANUFACTURER.text, "QMARK");
+  assert.equal(wall.rows[0].cells.VOLTAGE.text, "120");
+
+  const baseboard = tables.find((t) => t.title?.text === "ELECTRIC BASEBOARD HEATER SCHEDULE")!;
+  // EBB-6 specifically: the real, previously-unreachable target this phase
+  // exists for (Phase 0's own write-up named it).
+  assert.deepEqual(baseboard.rows.map((r) => r.key), ["EBB-1", "EBB-2", "EBB-3", "EBB-4", "EBB-5", "EBB-6", "EBB-7", "EBB-8"]);
+  assert.equal(baseboard.rows.find((r) => r.key === "EBB-6")!.cells.MANUFACTURER.text, "QMARK");
+});
+
+test("equipment extraction: zero cross-contamination with the real finish-kind tables on the same sheet", () => {
+  // The exact regression class this whole design exists to prevent, as a
+  // standing negative test: Fan Schedule and Diffuser/Grille/Register both
+  // carry some of EQUIPMENT_HEADERS' generic vocabulary (ID/MANUFACTURER/
+  // MODEL/DESCRIPTION) and Fan's own header carries a bare "(CFM)" — none of
+  // that may pull either table into the equipment pass, and no equipment
+  // row's tag may leak into finish's tables either.
+  const g = buildSheetGraph([m601]);
+  const equipmentTables = g.tables.filter((t) => t.kind === "equipment");
+  const finishTables = g.tables.filter((t) => t.kind === "finish");
+  assert.equal(equipmentTables.length, 2, `equipment tables found: ${equipmentTables.map((t) => t.title?.text).join(" | ")}`);
+  assert.ok(!equipmentTables.some((t) => t.rows.some((r) => ["EF-1", "SR-1", "SR-2", "TG-1", "TG-2"].includes(r.key))), "no finish-kind tag leaked into an equipment table");
+  assert.ok(!finishTables.some((t) => t.rows.some((r) => /^EWH-1$|^EBB-\d$/.test(r.key))), "no equipment-kind tag leaked into a finish table");
+  // Fan Schedule (bare "(CFM)" hit, deliberately kept out of `required` —
+  // see EQUIPMENT_HEADERS' own comment) stays sole "finish", never doubled.
+  const fanHits = g.tables.filter((t) => t.title?.text === "FAN SCHEDULE");
+  assert.equal(fanHits.length, 1, "Fan Schedule extracted exactly once, not once per kind");
+  assert.equal(fanHits[0].kind, "finish");
+});
+
+test("equipment extraction: find_schedule's own row-answer path resolves EBB-6 (sweep_schedule_row's real lookup, not a resolveTag detour)", () => {
+  // Mirrors the Phase 0 test right above it: resolveTag only chains a ROOM
+  // tag through a room-finish schedule (M601 has none) — this exercises the
+  // actual mechanism sweep_schedule_row/find_schedule use, across ALL kinds
+  // at once, the way buildSheetGraph really presents them.
+  const g = buildSheetGraph([m601]);
+  const hit = g.tables.flatMap((t) => t.rows).find((r) => rowKeyAnswersFor(r.key, "EBB-6"));
+  assert.ok(hit, "EBB-6 answers for a row somewhere in the graph");
+});
+
+test("equipment extraction: a table anchored without an ID column (the VRF Heat Pump's split header) is refused, not extracted broken", () => {
+  // "VARIABLE REFRIGERANT PACKAGED HEAT PUMP" is real, on this same sheet,
+  // and genuinely carries HP-1's electrical/mechanical spec row — but its
+  // header splits across two tiers (a bare ID/MANUFACTURER/MODEL row above
+  // a bare VOLTAGE/PHASE/AMPS/MOCP row) that neither independently qualify,
+  // so findHeaderRow's tier-descent (which only looks DOWN, not up) anchors
+  // on the lower tier alone, with no usable key column. A known, accepted
+  // gap (see EQUIPMENT_HEADERS' and extractTableAt's own comments) — the
+  // real fix is a genuine header-topology merge, out of this phase's scope.
+  // Asserted here as a REFUSAL, not silently: it must not appear at all
+  // (not under any title, not as a stray "undefined"-titled table), and it
+  // must never scan forward into — and corrupt — a real table after it.
+  const g = buildSheetGraph([m601]);
+  assert.ok(!g.tables.some((t) => t.title?.text === "VARIABLE REFRIGERANT PACKAGED HEAT PUMP"), "the split-header VRF table is not extracted");
+  assert.ok(!g.tables.some((t) => t.kind === "equipment" && t.title == null), "no titleless equipment table was minted from its debris");
+  const fan = g.tables.find((t) => t.title?.text === "FAN SCHEDULE")!;
+  assert.deepEqual(fan.rows.map((r) => r.key), ["EF-1"], "Fan Schedule (right after the VRF table on this sheet) stays exactly its one real row");
 });

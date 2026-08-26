@@ -269,7 +269,7 @@ const rowY = (r: GraphSpan[]) => r.reduce((s, t) => s + t.y, 0) / r.length;
 // cell keeps its evidence bbox. Two vocabularies ship: the room-finish
 // schedule (rooms → finishes — THE resolution target) and the finish/material
 // schedule (codes → products, scheduleParse's own gate re-stated).
-export type TableKind = "room-finish" | "finish" | "unknown";
+export type TableKind = "room-finish" | "finish" | "equipment" | "unknown";
 export interface TableCell { text: string; bbox: Bbox }
 /** A schedule row. `sheet` is the sheet that CARRIES the row — under a
  * continuation it differs from the table's base sheet, and the row's evidence
@@ -299,7 +299,78 @@ export interface ScheduleTable {
 /** Columns that ARE a surface in their own right — never renamed by a parent. */
 const SURFACE_WORDS = new Set(["FLOOR", "BASE", "WALL", "WALLS", "CEILING", "NORTH", "SOUTH", "EAST", "WEST", "WAINSCOT"]);
 const ROOM_HEADERS = ["ROOM", "NO", "NUMBER", "NAME", "MARK", "LOCATION", "FLOOR", "BASE", "WALL", "WALLS", "NORTH", "SOUTH", "EAST", "WEST", "CEILING", "WAINSCOT", "REMARKS", "CLG", "HT", "HEIGHT", "FINISH", "CASEWORK", "CABINET", "COUNTER", "COUNTERTOP", "BLDG", "BUILDING"];
-const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "MATERIAL", "MANUFACTURER", "PRODUCT", "STYLE", "COLOR", "SIZE", "REMARKS", "DESCRIPTION", "PATTERN", "COMMENTS"];
+// "ID" added alongside CODE/MARK/SYMBOL (#HVAC-1): every MEP equipment
+// schedule checked against a real mechanical bid set (electric heater, fan,
+// diffuser/grille/register, heat pump schedules) keys its rows under "ID",
+// never CODE/MARK/SYMBOL — those are the flooring-schedule convention this
+// vocabulary was originally built for. Still gated by minHits=3 total
+// vocabulary hits, so this alone can't qualify a table — it just stops a
+// real equipment schedule from being invisible to find_schedule/resolve_tag
+// for the one reason that its key column says "ID" instead of "CODE".
+//
+// "MODEL" was tried here too (#HVAC-2, to surface the Electric Baseboard
+// Heater Schedule / EBB-6) and reverted — proven live-unsafe before it ever
+// reached the browser. `extractTable` finds at most ONE "finish" table per
+// sheet (the first header row, in sheet order, whose hit count clears
+// minHits); "MODEL" gave the sheet's EARLIER Electric Wall Heater Schedule a
+// 3rd hit it didn't have before, so it started winning that single slot
+// instead of the Diffuser/Grille/Register Schedule — a real regression on an
+// already-working case, not a net gain. Worse, `bandDataRows`'s main data
+// scan has no lower table-boundary either (only its column-START recovery
+// was fixed for #87/HVAC-2's sibling bug): with the same column grid reused
+// by every schedule on this sheet, Electric Wall Heater's row scan pulled in
+// "QMARK" — a manufacturer name from the UNRELATED Electric Baseboard
+// Heater Schedule two tables below — and read it as one of its own rows,
+// because it happens to sit at the same x as Electric Wall Heater's own key
+// column. Reproduced and confirmed in isolation (Node, not the browser)
+// before touching anything live. Finding EBB-6-style rows needs a real
+// multi-table-per-sheet extraction pass with an actual boundary between
+// successive tables — not a vocabulary tweak — and is tracked as its own
+// follow-up, not bundled into this fix.
+const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "ID", "MATERIAL", "MANUFACTURER", "PRODUCT", "STYLE", "COLOR", "SIZE", "REMARKS", "DESCRIPTION", "PATTERN", "COMMENTS"];
+// A dedicated MEP equipment vocabulary (#HVAC-3/Phase 5) — not a FINISH_HEADERS
+// patch. The comment block above this one is the reason why: "MODEL" alone,
+// added to FINISH_HEADERS to surface the Electric Baseboard Heater Schedule,
+// won a single-table-per-sheet slot away from a real table and let an
+// unrelated table's row bleed into another's scan — a real regression,
+// reverted before it ever shipped. Both root causes are gone now (Phase 0's
+// multi-table extraction + real per-table boundaries), so the fix that was
+// unsafe then is safe now — but it belongs in its OWN vocabulary, not
+// flooring's, because that's what actually stops the next version of the
+// same class of mistake: a word added here can never again make an
+// UNRELATED finish/material table win or lose a slot it shouldn't.
+//
+// Tuned against this project's own real fixture (Bessemer M601, page 8) AND
+// checked against real published MEP schedule conventions, not just the one
+// PDF — searched rather than assumed, since a vocabulary this narrow is easy
+// to accidentally over-fit to a single sample. Electrical rating columns
+// (VOLTAGE/PHASE/AMPS/FLA/MCA/MOCP/KW) and mechanical capacity columns
+// (CFM/GPM/HP/TONS/MBH), plus efficiency (EER/SEER) and coil-performance
+// (EAT/LAT) and fan (RPM/ESP) columns, are all real, standard terms on real
+// equipment schedules — MCA/MOCP/FLA specifically tie to NEC 440/UL 1995
+// motor-circuit sizing, not this project's own invention. Confirmed the
+// Fan Schedule's real header on this same sheet only carries one of these
+// (CFM, see below) — everything else here is genuinely equipment-specific,
+// not incidentally shared with a fan/diffuser/finish schedule's own vocabulary.
+//
+// This project's own fixture supplies the direct, previously-unreachable
+// targets: ELECTRIC WALL HEATER SCHEDULE (ID/MANUFACTURER/MODEL/VOLTAGE/
+// PHASE/WATTS) and ELECTRIC BASEBOARD HEATER SCHEDULE (ID/MANUFACTURER/
+// MODEL/WATTS/LENGTH/VOLTAGE) — EWH-1, EBB-1..6. `required` is deliberately
+// the ELECTRICAL/MECHANICAL rating columns a flooring or diffuser schedule
+// never carries — not ID/MANUFACTURER/MODEL/DESCRIPTION, which are too
+// generic (real finish/material AND equipment schedules both use them) and,
+// on this same sheet, the Fan Schedule and Diffuser/Grille/Register Schedule
+// already legitimately qualify as "finish" on exactly those generic columns.
+// "CFM" is deliberately in the vocabulary but NOT in `required`: the Fan
+// Schedule's header carries one incidental "(CFM)" token, and putting it in
+// `required` would make Fan Schedule ALSO qualify as "equipment" — not a
+// boundary bleed this time, but a straight-up DUPLICATE: the same real table
+// read out twice, under two kinds, so resolve_tag/sweep_schedule_row would
+// see its row keys defined twice and refuse everything as ambiguous. One
+// incidental airflow-unit token is not a strong enough signal on its own; a
+// real electrical/mechanical rating column is.
+const EQUIPMENT_HEADERS = ["ID", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "RPM", "ESP"];
 // A header CELL is often a multi-word span ("FLOOR FINISH", "CEILING FINISH")
 // — the vocabulary word inside it names the column.
 /** A column anchor. `x` is the header's center. A two-tier SUB-column also
@@ -336,8 +407,53 @@ const qualifies = (hits: Array<{ label: string }>, required: string[], minHits: 
   return seen.size >= minHits && required.some((r) => seen.has(r));
 };
 
-function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[], minHits: number): { anchors: Anchor[]; rowIndex: number } | null {
-  for (let i = 0; i < rows.length; i++) {
+/** A real 3-tier header can wrap a merged parent's sub-labels onto their OWN
+ * line below the header ("MODEL" / "NUMBER", "AIR FLOW" / "(CFM)", "DUCT" /
+ * "CONNECTION" / "(IN)" — confirmed live on the Bessemer sample's Fan
+ * Schedule). That line carries ZERO vocabulary hits — "NUMBER", "(CFM)",
+ * "CONNECTION" name nothing in FINISH_HEADERS/ROOM_HEADERS — so the
+ * tier-descent loop above never recognizes it as a header row, and treating
+ * it as the first DATA row is just as wrong: its leading token ("NUMBER")
+ * passes rowKeyOf's generic CODE_RE and mints a fake schedule row. CODE_RE
+ * can't be tightened to require a digit as a shortcut fix — real MEP tags
+ * without one exist ("CW" for cold water) and that would just trade this
+ * false positive for a false negative on those.
+ *
+ * Recognize the wrapped line by SHAPE instead of vocabulary: it sits at a
+ * tight, single-line-height gap below the row above it (a real data row
+ * normally starts after more vertical breathing room than one wrapped label
+ * needs from the next), and it carries no digit anywhere (a real schedule
+ * row's data cells — quantities, model numbers, electrical specs — almost
+ * always do; a fragment like "(CFM)" or "PHASE" never does). Bounded to a
+ * couple of rows: a 3-tier header wraps at most that far.
+ *
+ * Phase 5 correction: a bare vocabulary hit on the next row is still treated
+ * as "this is a real header, not a continuation" — but a hit that is only a
+ * PARENTHESIZED unit fragment is not. Found live on the Bessemer sample's
+ * "VARIABLE REFRIGERANT PACKAGED HEAT PUMP" table: its own 3rd tier reads
+ * "(MBH) (MBH) (WATTS)" — under EQUIPMENT_HEADERS, "MBH" and "WATTS" ARE
+ * real vocabulary words (they have to be, to recognize a genuine "WATTS"
+ * column header elsewhere), so the original zero-hits assumption stops
+ * holding the moment a kind's own vocabulary includes its own unit words.
+ * The distinguishing shape is still there, just one layer down: a real
+ * column header is a bare word ("VOLTAGE", "MODEL"); a wrapped unit is
+ * parenthesized. Only a BARE hit stops the skip now. */
+function skipSubHeaderContinuation(rows: GraphSpan[][], vocab: string[], from: number): number {
+  let i = from;
+  for (let n = 0; n < 3 && i < rows.length - 1; n++) {
+    const cur = rows[i], next = rows[i + 1];
+    const bareHit = headerHits(next, vocab).some((h) => !/^\(.*\)$/.test(h.span.str.trim()));
+    if (bareHit) break;
+    if (next.some((t) => /\d/.test(t.str))) break;
+    const h = cur.reduce((s, t) => s + (t.h || 8), 0) / cur.length;
+    if (rowY(next) - rowY(cur) > h * 2) break;
+    i++;
+  }
+  return i;
+}
+
+function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[], minHits: number, fromIdx = 0): { anchors: Anchor[]; rowIndex: number; dataFrom: number } | null {
+  for (let i = fromIdx; i < rows.length; i++) {
     let hits = headerHits(rows[i], vocab);
     if (!qualifies(hits, required, minHits)) continue;
     // A three-tier header puts PARENTS on top (ROOM | FLOOR | WALLS | CEILING)
@@ -412,7 +528,11 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
         }
       }
     }
-    return { anchors: subTierAnchors(rows, idx, anchors.sort((a, b) => a.x - b.x), vocab), rowIndex: idx };
+    return {
+      anchors: subTierAnchors(rows, idx, anchors.sort((a, b) => a.x - b.x), vocab),
+      rowIndex: idx,
+      dataFrom: skipSubHeaderContinuation(rows, vocab, idx) + 1,
+    };
   }
   return null;
 }
@@ -561,12 +681,24 @@ const nearestAnchor = (x: number, anchors: Anchor[]) => {
 // field-found on a real gym set: a finish legend sitting 300px right of a
 // room schedule bled into every CEILING cell under the generous edge.
 const WIDE_LAST = new Set(["REMARKS", "DESCRIPTION", "NOTES"]);
+// A NAME-keyed table's key column carries a room-TYPE phrase ("PATIENT
+// TOILET ROOMS"), not a short numbered tag — a prose column exactly like
+// REMARKS/DESCRIPTION/NOTES, just leading instead of trailing. The default
+// left margin (half the inter-column gap) is sized for a short header word
+// ("NUMBER") sitting close to short left-aligned data ("3", "134A"); a long
+// phrase starts well to the left of its own centered "NAME" header — found
+// live on this project's own sample: the header centers at x=459.8 but
+// "PATIENT TOILET ROOMS" itself starts at x=342.2, outside the default
+// margin, so its leading token never lands in the key column band at all
+// and a later column's value gets read as the row's key instead.
 function bandLimits(anchors: Anchor[]): { x0: number; x1: number; medGap: number } {
   const gaps = anchors.slice(1).map((a, i) => a.x - anchors[i].x).sort((a, b) => a - b);
   const medGap = gaps.length ? gaps[gaps.length >> 1] : 150;
+  const first = anchors[0];
   const last = anchors[anchors.length - 1];
+  const leftMargin = first.label === "NAME" ? Math.max(300, medGap * 3) : Math.max(80, medGap / 2);
   const rightMargin = WIDE_LAST.has(last.label) ? Math.max(300, medGap * 3) : Math.max(120, medGap);
-  return { x0: anchors[0].x - Math.max(80, medGap / 2), x1: last.x + rightMargin, medGap };
+  return { x0: first.x - leftMargin, x1: last.x + rightMargin, medGap };
 }
 
 // A finish code: scheduleParse's pattern. A schedule ROW key is looser than a
@@ -578,6 +710,23 @@ function bandLimits(anchors: Anchor[]): { x0: number; x1: number; medGap: number
 const CODE_RE = /^[A-Z]{1,4}(-?[A-Z0-9]{1,4})?$/;
 const ROW_KEY_RE = /^\d{1,3}[A-Z]{0,2}$/;
 const QUALIFIED_KEY_RE = /^([A-Z]{1,2})-(\d{1,3}[A-Z]{0,2})$/;
+// A NAME-keyed room-finish sub-table: a real, distinct drafting convention
+// (confirmed live on this project's own sample-finish-plan.pdf, sheet 2's
+// "ROOM FINISH SCHEDULE - PATIENT ROOMS (TYPICAL)") where the table carries
+// NO numbered-room column at all — its key column is headed "NAME" outright
+// and its rows are keyed directly by a room-TYPE phrase ("PATIENT ROOMS",
+// "PATIENT TOILET ROOMS"), not a digit tag. `rowKeyOf` is told this by its
+// caller (bandDataRows, which already knows the table's own anchors) rather
+// than guessing from the string alone — a bare word can't tell a real room
+// name from sheet debris, but "this table's key column IS its NAME column"
+// is a fact about the TABLE, known before any row is read.
+// Letters, digits, spaces and the narrow punctuation a real room-type phrase
+// carries (parenthetical qualifier, ampersand, slash, hyphen) — long enough
+// to read as a phrase, but this alone does not stop unrelated sheet text
+// that happens to land in the column band from qualifying too (a table
+// title fragment, a legend word); see findTableBoundary's own defense
+// against exactly that, on the far side of a wide fallback scan.
+const NAME_KEY_RE = /^[A-Z][A-Z0-9 '&()/-]{2,48}[A-Z0-9)]$/;
 
 export interface ExtractOpts { buildings?: Set<string>; deltas?: DeltaIndex }
 
@@ -591,10 +740,22 @@ export const isNonFinishSchedule = (title: string): boolean => {
   return OTHER_FAMILY_RE.test(u) && !/\b(FINISH|MATERIAL)S?\b/.test(u);
 };
 
-function rowKeyOf(raw: string, kind: "room-finish" | "finish", buildings?: Set<string>): { key: string; building?: string } | null {
+function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", buildings?: Set<string>, nameKeyed = false): { key: string; building?: string } | null {
+  // A NAME-keyed table's key column IS its NAME column — the only sensible
+  // reading of a leading token there is a room-type phrase, not a digit tag
+  // this table has no column for. Spaces are the whole point of a phrase
+  // ("PATIENT ROOMS" vs "PATIENTROOMS"), so this path skips the space-
+  // stripped `kept`/`key` below entirely rather than feeding it through.
+  if (nameKeyed) {
+    const phrase = norm(raw).replace(/\s+/g, " ").trim();
+    return NAME_KEY_RE.test(phrase) ? { key: phrase } : null;
+  }
   const kept = norm(raw).replace(/[^A-Z0-9/-]/g, "");
   const key = kept.replace(/\//g, "");
-  if (kind === "finish") {
+  if (kind === "finish" || kind === "equipment") {
+    // equipment tags (EWH-1, EBB-6, EF-1) are CODE_RE-shaped exactly like a
+    // finish code (CPT-1) — same catalog-tag convention, same row-key logic,
+    // compound-key slash support included ("R1/E1" one device, two services).
     // a compound cell keys one row for several marks — "R1 / E1" is the same
     // device scheduled for two services; keep the slash so the row can answer
     // for each mark on its own (checked first: slash-stripped "R1E1" would
@@ -634,16 +795,33 @@ type ColumnMap = { coord: "left" | "center"; cols: Array<{ start: number; label:
 function columnMapFor(
   rows: GraphSpan[][],
   anchors: Anchor[],
-  cfg: { fromIdx: number; belowY: number },
+  cfg: { fromIdx: number; toIdx?: number; belowY: number },
   x0: number,
   x1: number,
   coord: "left" | "center",
+  isKeyedRow: (row: GraphSpan[]) => boolean,
 ): ColumnMap | null {
   const at = (t: GraphSpan) => (coord === "left" ? t.x : t.x + (t.w || 0) / 2);
   const xs: number[] = [];
   const hs: number[] = [];
-  for (let i = Math.max(cfg.fromIdx, 0); i < rows.length; i++) {
+  const toIdx = cfg.toIdx ?? rows.length;
+  for (let i = Math.max(cfg.fromIdx, 0); i < toIdx; i++) {
     if (rowY(rows[i]) <= cfg.belowY) continue;
+    // Only rows that already read as a real row of THIS table license their
+    // tokens into the column-start recovery. Rows are clustered across the
+    // WHOLE sheet with no notion of where this table ends, so on a dense
+    // sheet that reuses the same column grid for several stacked schedules
+    // (a common drafting convention), a LATER table's header fragments fall
+    // in this table's x-band too — and with no gate here they vote on where
+    // column 0 "really" starts. Found live on a real mechanical schedule
+    // sheet: a VRF Heat Pump table two schedules below shifted the recovered
+    // start ~90px off the Diffuser table's own column, and every one of its
+    // real SR-1..TG-2 rows was then rejected as misaligned. Gating on
+    // "does this row's own key column look like a real key" (the same test
+    // the main loop below uses to accept a row at all) costs nothing on a
+    // normal single-table sheet and can't itself invent a table that isn't
+    // there — it only excludes rows that were never going to be accepted.
+    if (!isKeyedRow(rows[i])) continue;
     for (const t of rows[i]) {
       if (t.x < x0 || t.x > x1 || revisionOf(t.str) != null) continue;
       xs.push(at(t));
@@ -684,9 +862,10 @@ function columnMapFor(
 function columnStarts(
   rows: GraphSpan[][],
   anchors: Anchor[],
-  cfg: { fromIdx: number; belowY: number },
+  cfg: { fromIdx: number; toIdx?: number; belowY: number },
   x0: number,
   x1: number,
+  isKeyedRow: (row: GraphSpan[]) => boolean,
 ): ColumnMap | null {
   // A map has to FIT before it is trusted. A mediocre fit is worse than none:
   // it looks authoritative and quietly merges a column into its neighbour,
@@ -694,8 +873,8 @@ function columnStarts(
   // on real sets, a true alignment scores ~0.82–0.90 and a wrong one ~0.54.
   const FIT_FLOOR = 0.7;
   const fits = (m: ColumnMap | null) => (m && m.score >= FIT_FLOOR ? m : null);
-  const left = fits(columnMapFor(rows, anchors, cfg, x0, x1, "left"));
-  const center = fits(columnMapFor(rows, anchors, cfg, x0, x1, "center"));
+  const left = fits(columnMapFor(rows, anchors, cfg, x0, x1, "left", isKeyedRow));
+  const center = fits(columnMapFor(rows, anchors, cfg, x0, x1, "center", isKeyedRow));
   if (!left) return center;
   if (!center) return left;
   // Left alignment is the common case; centring has to EARN the switch. On a
@@ -707,12 +886,18 @@ function columnStarts(
 function bandDataRows(
   rows: GraphSpan[][],
   anchors: Anchor[],
-  kind: "room-finish" | "finish",
+  kind: "room-finish" | "finish" | "equipment",
   sheetKey: string,
   buildings: Set<string> | undefined,
-  cfg: { fromIdx: number; belowY: number; keyAlign?: { x: number; tol: number }; deltas?: DeltaIndex },
+  cfg: { fromIdx: number; toIdx?: number; belowY: number; keyAlign?: { x: number; tol: number }; deltas?: DeltaIndex },
 ): { out: TableRow[]; region: Bbox | null } {
   const { x0, x1, medGap } = bandLimits(anchors);
+  const toIdx = cfg.toIdx ?? rows.length;
+  // A room-finish table whose key column is itself labeled NAME (anchors are
+  // sorted by x, so index 0 is the key column) has no numbered-room column at
+  // all — see NAME_KEY_RE's comment. Decided once per table, from the
+  // table's own header, not guessed per row.
+  const nameKeyed = kind === "room-finish" && anchors[0]?.label === "NAME";
   // Columns are defined by where the DATA starts, not by where the header
   // sits. Headers are centered over their column; cells are left-aligned in
   // it — so a short cell and a long cell in the same column share a left edge
@@ -720,7 +905,14 @@ function bandDataRows(
   // "PT-1" and "SEE INT. ELEVATIONS" both start at x=2342, and center-banding
   // put the short one in BASE and the long one in WALL. Clustering the left
   // edges recovers the true column starts; the headers only NAME them.
-  const cols = columnStarts(rows, anchors, cfg, x0, x1);
+  // Only rows that already look like a real row of THIS table (their own
+  // leading in-band token reads as a key, same test the main loop below
+  // uses to accept a row) get a vote in that recovery — see columnMapFor.
+  const isKeyedRow = (row: GraphSpan[]): boolean => {
+    const first = row.find((t) => t.x >= x0 && t.x <= x1 && revisionOf(t.str) == null);
+    return !!first && !!rowKeyOf(first.str, kind, buildings, nameKeyed);
+  };
+  const cols = columnStarts(rows, anchors, cfg, x0, x1, isKeyedRow);
   // A key belongs to the key column when it sits nearer that column's start
   // than the next column's — sized from the table's own pitch, not from text
   // height, so a wider key ("139A") or a hair of indent still counts.
@@ -749,7 +941,7 @@ function bandDataRows(
   };
   const orphans: Array<{ toks: GraphSpan[]; y: number }> = [];
   const markers: Array<{ rev: string; span: GraphSpan; drawn?: boolean; tri?: Bbox }> = [];
-  for (let i = Math.max(cfg.fromIdx, 0); i < rows.length; i++) {
+  for (let i = Math.max(cfg.fromIdx, 0); i < toIdx; i++) {
     if (rowY(rows[i]) <= cfg.belowY) continue;
     const banded: GraphSpan[] = [];
     for (const t of rows[i]) {
@@ -764,7 +956,7 @@ function bandDataRows(
       if (t.x >= x0 && t.x <= x1) banded.push(t);
     }
     if (!banded.length) continue;
-    const keyed = rowKeyOf(banded[0].str, kind, buildings);
+    const keyed = rowKeyOf(banded[0].str, kind, buildings, nameKeyed);
     if (!keyed) { orphans.push({ toks: banded, y: rowY(rows[i]) }); continue; }
     // Every row of THIS table starts its key at the key column. Rows are
     // clustered across the whole sheet, so a keyed-looking row belonging to
@@ -832,16 +1024,167 @@ function bandDataRows(
   return { out, region };
 }
 
-/** Extract one kind of table from a sheet's spans. Returns null when the
- * header structure isn't there — never invented rows. Horizontal header rows
- * are tried first; a sheet without one is re-tried against a rotated
- * (quarter-turn) header band. */
-export function extractTable(sheet: SheetSpans, kind: "room-finish" | "finish", opts: ExtractOpts = {}): ScheduleTable | null {
+// A row that would itself qualify as SOME table's header — checked against
+// BOTH vocabularies, not just the kind currently being extracted, because a
+// real sheet mixes room-finish and finish/equipment tables (#HVAC-boundary).
+//
+// Banded to [x0, x1] — the table's OWN column band, the same restriction the
+// title check right below already applies. clusterRows groups purely by Y,
+// with no notion of column: two schedules drafted SIDE BY SIDE (this
+// project's own sample: a room-finish schedule at x~340-2100 and a material
+// schedule at x~2980-4500, both running down the same Y range) routinely
+// merge into ONE row cluster wherever their rows happen to land at the same
+// height. Scanning the row unbanded reads the material schedule's own header
+// ("CODE / MATERIAL / MANUFACTURER…", which clears FINISH_HEADERS easily) as
+// a false boundary sitting inside the room-finish table's FIRST data row —
+// not a later, plausible-looking row, but the very first one, since the two
+// headers happen to land at the same Y. That zeroes the table's data before
+// bandDataRows ever runs, which cascades: extractTableAt returns null, and
+// extractAllTables's loop reads null as "no more tables of this kind here"
+// and stops — losing every OTHER instance of this kind on the sheet too, not
+// just the one that collided. Caught by the real sample-finish-plan.pdf
+// fixture (three room-finish schedules stacked over one shared column grid,
+// beside one material schedule) failing detect_rooms's assign_from_schedule
+// path entirely — the exact kind of regression this function exists to
+// prevent, reintroduced by this function itself before it was banded.
+function looksLikeNewHeader(row: GraphSpan[], x0: number, x1: number): boolean {
+  const banded = row.filter((t) => centerX(t) >= x0 && centerX(t) <= x1);
+  if (qualifies(headerHits(banded, ROOM_HEADERS), ["FLOOR", "BASE"], 4)) return true;
+  if (qualifies(headerHits(banded, FINISH_HEADERS), ["CODE", "MARK", "SYMBOL", "ID"], 3)) return true;
+  if (qualifies(headerHits(banded, EQUIPMENT_HEADERS), ["VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "RPM", "ESP"], 3)) return true;
+  return false;
+}
+// A generous but real cap — never "the rest of the sheet". See the comment
+// on findTableBoundary for why the cap has to exist independently of the
+// header-candidate/title checks, not just as a backstop that never fires.
+const MAX_TABLE_SCAN_ROWS = 60;
+/** Where does the table whose data starts at `dataFrom` END — i.e. the first
+ * row index that belongs to a DIFFERENT table, so bandDataRows's scan (and
+ * columnMapFor's column-start recovery, which shares this bound) stops
+ * before it. On a dense sheet, several schedules routinely share the same
+ * column grid (a real, common MEP drafting convention — this project's own
+ * sample sheet stacks seven), so without a bound a later table's rows read
+ * as more of this one. Two signals, whichever comes first: a row that reads
+ * as a header candidate under EITHER vocabulary (`looksLikeNewHeader` —
+ * checking only the current kind would miss a later table of the OTHER
+ * kind), or a "…SCHEDULE"-style title landing inside this table's own
+ * x-band (the same test `extractTableAt` already uses to find ITS OWN
+ * title, applied forward instead of backward).
+ *
+ * Known, accepted blind spot: a real MEP schedule whose header doesn't clear
+ * either vocabulary's minHits at all (a Fan or VRF Heat Pump schedule, whose
+ * columns are CFM/VOLTAGE/PHASE/WATTS-shaped, not yet in either vocabulary
+ * pre-#HVAC-equipment-kind) and whose title doesn't say "SCHEDULE" either
+ * (confirmed on this project's own real sample: "VARIABLE REFRIGERANT
+ * PACKAGED HEAT PUMP" contains neither word) is invisible to BOTH signals.
+ * That table is simply not found as a table of its own today — expected,
+ * not a bug this function is responsible for — but it must never cause an
+ * EARLIER, already-found table's scan to run unbounded through it. That's
+ * what MAX_TABLE_SCAN_ROWS is for: the cap applies regardless of whether
+ * either signal ever fires, so a vocabulary gap can't silently reopen the
+ * original bug through this exact path.
+ *
+ * `belowY` (rotated headers only — `-Infinity` otherwise): the rotated path
+ * always passes `dataFrom = 0`, an index into the WHOLE sheet's horizontal
+ * rows, not "right after the header" the way the flat path's `dataFrom`
+ * already is — row 0 there is this table's OWN title line, sitting above
+ * the (vertical, not in this row list) header band. Without skipping rows
+ * at or above the band, that title can — and did, caught by the rotated-
+ * header test — read as a false "next table" boundary against itself,
+ * since a table's own title routinely contains "SCHEDULE" and sits inside
+ * its own x-band. Skip anything not actually below the header, same filter
+ * bandDataRows' main scan already applies. */
+function findTableBoundary(rows: GraphSpan[][], dataFrom: number, x0: number, x1: number, belowY = -Infinity): number {
+  const cap = Math.min(rows.length, dataFrom + MAX_TABLE_SCAN_ROWS);
+  for (let i = dataFrom; i < cap; i++) {
+    if (rowY(rows[i]) <= belowY) continue;
+    if (looksLikeNewHeader(rows[i], x0, x1)) return i;
+    if (rows[i].some((t) => /SCHEDULE/.test(norm(t.str)) && centerX(t) >= x0 && centerX(t) <= x1)) return i;
+  }
+  return cap;
+}
+
+/** Recovery for `findTableBoundary`'s own documented blind spot: a scan that
+ * never hit a real stop signal and ran all the way to the cap. That alone
+ * does not mean the table is wrong — a real schedule can legitimately run
+ * long — but it DOES mean the cap, not evidence, decided where the table
+ * ends, so before trusting it this re-walks the same range and asks what the
+ * rows whose leading in-band token actually reads as a key of THIS table
+ * (`rowKeyOf`, the identical test `bandDataRows` uses to accept a row at
+ * all) look like on their own: gaps between successive ones, median, first
+ * gap more than 8× that median — the same generous multiple `bandDataRows`'
+ * own post-hoc trim already uses once IT has rows to compare — ends the
+ * table right there. Confirmed live on this project's own
+ * sample-finish-plan.pdf: a NAME-keyed table (see NAME_KEY_RE) whose two
+ * real rows sit tight against its header (a 26px pitch) has nothing else
+ * that reads as a name-shaped key in its column band until a revision-log
+ * fragment — "REVISION SET 1…", "Description" — 2500+px further down; three
+ * candidates in, the gap to that fragment is ~95× the real pitch, so this
+ * ends the table right after the two real rows, before column recovery ever
+ * sees the revision log and starts folding it into the key column — which is
+ * exactly what happened before this existed: with the revision-log rows
+ * still in scan range, they out-voted the two real rows for where the key
+ * column starts, and the real rows were the ones excluded as misaligned.
+ *
+ * The pace is a RUNNING median of gaps accepted so far, not one fixed number
+ * up front: a single early gap could as easily be a real (if tight or
+ * generous) row pitch as a fluke, and a global median over the whole range
+ * has the opposite problem — one more piece of debris further down (found
+ * live: a title-block "CONSULTANT" label, alone in the column band, ~2200px
+ * past the two real rows) drags the median up enough that the very gap this
+ * function exists to catch slips under its own threshold. Updating the pace
+ * only from gaps already accepted means later debris can never reach back
+ * and change where an earlier one got cut.
+ *
+ * Needs at least 2 keyed candidates to bootstrap a pace at all; with 0 or 1
+ * there is nothing to compare a gap against, so this returns `cap` unchanged
+ * and leaves the decision to bandDataRows' own row-count and column-fit
+ * checks. */
+function findSparseKeyedBoundary(
+  rows: GraphSpan[][],
+  dataFrom: number,
+  cap: number,
+  x0: number,
+  x1: number,
+  belowY: number,
+  kind: "room-finish" | "finish" | "equipment",
+  buildings: Set<string> | undefined,
+  nameKeyed: boolean,
+): number {
+  const candidates: Array<{ i: number; y: number }> = [];
+  for (let i = dataFrom; i < cap; i++) {
+    if (rowY(rows[i]) <= belowY) continue;
+    const first = rows[i].find((t) => t.x >= x0 && t.x <= x1 && revisionOf(t.str) == null);
+    if (!first || !rowKeyOf(first.str, kind, buildings, nameKeyed)) continue;
+    candidates.push({ i, y: rowY(rows[i]) });
+  }
+  if (candidates.length < 2) return cap;
+  const acceptedGaps = [candidates[1].y - candidates[0].y];
+  let pitch = acceptedGaps[0];
+  for (let k = 2; k < candidates.length; k++) {
+    const gap = candidates[k].y - candidates[k - 1].y;
+    if (pitch > 0 && gap > pitch * 8) return candidates[k].i;
+    acceptedGaps.push(gap);
+    acceptedGaps.sort((a, b) => a - b);
+    pitch = acceptedGaps[acceptedGaps.length >> 1];
+  }
+  return cap;
+}
+
+/** The real per-call primitive: find ONE table of `kind`, searching from row
+ * index `fromIdx` onward, and report where it ends (`nextIdx`) so a caller
+ * can resume past it. `extractTable` (below) is the fromIdx=0 single-table
+ * convenience wrapper every existing caller already uses; `extractAllTables`
+ * is the new multi-table loop `buildSheetGraph` uses. Kept as one function
+ * so the two never drift on what "one table" actually means. */
+function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equipment", opts: ExtractOpts, fromIdx: number): { table: ScheduleTable; nextIdx: number } | null {
   const horiz = sheet.spans.filter((s) => !isVertical(s));
   const vert = sheet.spans.filter(isVertical);
   const rows = clusterRows(horiz);
-  const vocab = kind === "room-finish" ? ROOM_HEADERS : FINISH_HEADERS;
-  const required = kind === "room-finish" ? ["FLOOR", "BASE"] : ["CODE", "MARK", "SYMBOL"];
+  const vocab = kind === "room-finish" ? ROOM_HEADERS : kind === "equipment" ? EQUIPMENT_HEADERS : FINISH_HEADERS;
+  const required = kind === "room-finish" ? ["FLOOR", "BASE"]
+    : kind === "equipment" ? ["VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "RPM", "ESP"]
+    : ["CODE", "MARK", "SYMBOL", "ID"];
   const minHits = kind === "room-finish" ? 4 : 3;
 
   let anchors: Anchor[];
@@ -851,13 +1194,46 @@ export function extractTable(sheet: SheetSpans, kind: "room-finish" | "finish", 
   let titleFrom: number;          // title hunt walks upward from here
   let rotated = false;
 
-  const flat = findHeaderRow(rows, vocab, required, minHits);
+  // Equipment tables split across two independently-non-qualifying tiers
+  // (a bare ID/MANUFACTURER/MODEL row above a bare VOLTAGE/PHASE/AMPS/MOCP
+  // row, neither tier alone carrying a required-list hit so findHeaderRow's
+  // OWN tier-descent never merges them) anchor on the lower tier alone —
+  // real, found live on the Bessemer sample's "VARIABLE REFRIGERANT PACKAGED
+  // HEAT PUMP" table. A table with no ID column has no usable key column
+  // either (the anchored key becomes whatever sits leftmost of the found
+  // tier — a bare CFM/VOLTAGE number, which correctly fails rowKeyOf's
+  // CODE_RE and drops every row). Recognized here, not fixed: the real fix
+  // is a genuine header-topology merge (reach backward across tiers, not
+  // just descend), a bigger change than this phase's vocabulary work
+  // warrants — refuse the candidate outright (never a real table for THIS
+  // kind's purposes) rather than accept one that can never be looked up by
+  // tag. Deliberately NOT a retry-forward-and-keep-looking: tried that first
+  // and it searched past this candidate into a LATER real table's own
+  // header (Fan Schedule's), which would have re-extracted a table that
+  // already correctly exists under "finish" — a duplicate-row-key collision
+  // worse than the one this whole design exists to prevent. One rejected
+  // candidate here costs only that one table, on this one real sheet — a
+  // known, accepted gap (see the maturity plan's Phase 5 write-up), not a
+  // runtime-disclosed one: there is no graph.notes entry for it today,
+  // deliberately, matching how "DUCTWORK INSULATION SCHEDULE" (a real
+  // table this sheet also carries, invisible to every kind's vocabulary —
+  // a spec-and-thickness genre, not a tag-and-catalog one) is handled: an
+  // honest gap named in the plan doc and in code, not chased into a
+  // runtime signal this phase's scope doesn't call for.
+  let flat = findHeaderRow(rows, vocab, required, minHits, fromIdx);
+  if (kind === "equipment" && flat && !flat.anchors.some((a) => a.label === "ID")) flat = null;
   if (flat) {
     anchors = flat.anchors;
     headerSpans = rows[flat.rowIndex];
-    dataFrom = flat.rowIndex + 1;
+    dataFrom = flat.dataFrom;
     titleFrom = flat.rowIndex - 1;
   } else {
+    // Rotated (quarter-turn) headers are only ever hunted on the FIRST
+    // search of a sheet (fromIdx === 0) — `findRotatedHeader` scans `vert`
+    // as one flat list with no row-index concept to resume from, and a
+    // second rotated table stacked under a first hasn't been seen on any
+    // real sheet yet. A narrow, named scope limit, not an oversight.
+    if (fromIdx > 0) return null;
     const rot = findRotatedHeader(vert, vocab, required, minHits);
     if (!rot) return null;
     rotated = true;
@@ -880,7 +1256,24 @@ export function extractTable(sheet: SheetSpans, kind: "room-finish" | "finish", 
     if (centerX(t) < hdrBand.x0 || centerX(t) > hdrBand.x1) continue;
     region = region ? merge(region, bboxOf(t)) : bboxOf(t);
   }
-  const banded = bandDataRows(rows, anchors, kind, sheet.key, opts.buildings, { fromIdx: dataFrom, belowY: dataBelowY, deltas: opts.deltas });
+  const cap = Math.min(rows.length, dataFrom + MAX_TABLE_SCAN_ROWS);
+  let toIdx = findTableBoundary(rows, dataFrom, hdrBand.x0, hdrBand.x1, dataBelowY);
+  let banded = bandDataRows(rows, anchors, kind, sheet.key, opts.buildings, { fromIdx: dataFrom, toIdx, belowY: dataBelowY, deltas: opts.deltas });
+  // The wide scan maxed out without ever finding a real stop signal — see
+  // findSparseKeyedBoundary's comment for why that alone (regardless of how
+  // many rows the wide pass came back with — a wrong scan can find rows just
+  // as easily as an empty one, exactly what happened here before this
+  // existed) is reason enough to re-check with a boundary based on the
+  // candidates' OWN pace rather than the cap. Only ever narrows: a tighter
+  // boundary that turns up nothing is discarded in favor of the wide result.
+  if (toIdx >= cap) {
+    const nameKeyed = kind === "room-finish" && anchors[0]?.label === "NAME";
+    const tightIdx = findSparseKeyedBoundary(rows, dataFrom, cap, hdrBand.x0, hdrBand.x1, dataBelowY, kind, opts.buildings, nameKeyed);
+    if (tightIdx < toIdx) {
+      const tightBanded = bandDataRows(rows, anchors, kind, sheet.key, opts.buildings, { fromIdx: dataFrom, toIdx: tightIdx, belowY: dataBelowY, deltas: opts.deltas });
+      if (tightBanded.out.length > 0) { toIdx = tightIdx; banded = tightBanded; }
+    }
+  }
   const out = banded.out;
   if (banded.region) region = region ? merge(region, banded.region) : banded.region;
   if (!out.length) return null;
@@ -895,7 +1288,36 @@ export function extractTable(sheet: SheetSpans, kind: "room-finish" | "finish", 
   }
   const table: ScheduleTable = { kind, sheet: sheet.key, title, headers: anchors.map((a) => a.label), rows: out, region: region!, anchors };
   if (rotated) table.rotated_headers = true;
-  return table;
+  return { table, nextIdx: toIdx };
+}
+
+/** Extract one kind of table from a sheet's spans. Returns null when the
+ * header structure isn't there — never invented rows. Horizontal header rows
+ * are tried first; a sheet without one is re-tried against a rotated
+ * (quarter-turn) header band. Finds only the FIRST table of `kind` on the
+ * sheet — see `extractAllTables` for every table of a kind. */
+export function extractTable(sheet: SheetSpans, kind: "room-finish" | "finish" | "equipment", opts: ExtractOpts = {}): ScheduleTable | null {
+  return extractTableAt(sheet, kind, opts, 0)?.table ?? null;
+}
+
+const MAX_TABLES_PER_SHEET = 20;
+/** Every table of `kind` on a sheet, not just the first — a dense MEP sheet
+ * routinely stacks several schedules in the same column grid (this
+ * project's own sample: seven, on one sheet). Repeatedly finds the next
+ * table past where the previous one's boundary (`findTableBoundary`) said
+ * it ended, capped at MAX_TABLES_PER_SHEET as a sanity backstop, not a
+ * realistic limit. */
+export function extractAllTables(sheet: SheetSpans, kind: "room-finish" | "finish" | "equipment", opts: ExtractOpts = {}): ScheduleTable[] {
+  const out: ScheduleTable[] = [];
+  let fromIdx = 0;
+  for (let n = 0; n < MAX_TABLES_PER_SHEET; n++) {
+    const found = extractTableAt(sheet, kind, opts, fromIdx);
+    if (!found) break;
+    out.push(found.table);
+    if (found.nextIdx <= fromIdx) break; // never loop without forward progress
+    fromIdx = found.nextIdx;
+  }
+  return out;
 }
 
 // ── continuation sheets (#87 phase 2) ───────────────────────────────────────
@@ -1120,28 +1542,30 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   const fragmentKinds = new Map<string, Set<TableKind>>(); // sheet key → kinds extracted there
   for (const s of withText) {
     roles.set(s.key, classifySheetRole(s));
-    for (const kind of ["room-finish", "finish"] as const) {
-      const t = extractTable(s, kind, { buildings, deltas: deltasBySheet.get(s.key) });
-      if (!t) continue;
-      // A DOOR / WINDOW / PARTITION schedule carries a MARK column, so the
-      // finish-table hunt happily reads one as a finish/material schedule —
-      // and then a finish code that collides with a door mark chains to a
-      // door, which is a confidently wrong product in the bid. Field-found on
-      // a real grocery set whose DOOR SCHEDULE extracted as 54 "finish" rows.
-      // Refuse by TITLE, and only when the title does not also say finish or
-      // material: when in doubt the table is kept, and the drop is NAMED.
-      if (kind === "finish" && t.title && isNonFinishSchedule(t.title.text)) {
-        notes.push(`${s.key}: "${t.title.text}" names another schedule family, not a finish/material schedule — its ${t.rows.length} rows are NOT indexed as finish definitions`);
-        continue;
+    for (const kind of ["room-finish", "finish", "equipment"] as const) {
+      // Every table of this kind on the sheet, not just the first — a dense
+      // MEP sheet routinely stacks several (#HVAC-boundary).
+      for (const t of extractAllTables(s, kind, { buildings, deltas: deltasBySheet.get(s.key) })) {
+        // A DOOR / WINDOW / PARTITION schedule carries a MARK column, so the
+        // finish-table hunt happily reads one as a finish/material schedule —
+        // and then a finish code that collides with a door mark chains to a
+        // door, which is a confidently wrong product in the bid. Field-found on
+        // a real grocery set whose DOOR SCHEDULE extracted as 54 "finish" rows.
+        // Refuse by TITLE, and only when the title does not also say finish or
+        // material: when in doubt the table is kept, and the drop is NAMED.
+        if (kind === "finish" && t.title && isNonFinishSchedule(t.title.text)) {
+          notes.push(`${s.key}: "${t.title.text}" names another schedule family, not a finish/material schedule — its ${t.rows.length} rows are NOT indexed as finish definitions`);
+          continue;
+        }
+        // table-level building: its own title first, the sheet's context second
+        const titleB = t.title ? buildingMentions(t.title.text) : [];
+        const b = titleB.length === 1 ? titleB[0] : ctxBySheet.get(s.key);
+        if (b) t.building = b;
+        for (const r of t.rows) if (r.building) buildings.add(r.building);
+        fragments.push(t);
+        if (!fragmentKinds.has(s.key)) fragmentKinds.set(s.key, new Set());
+        fragmentKinds.get(s.key)!.add(kind);
       }
-      // table-level building: its own title first, the sheet's context second
-      const titleB = t.title ? buildingMentions(t.title.text) : [];
-      const b = titleB.length === 1 ? titleB[0] : ctxBySheet.get(s.key);
-      if (b) t.building = b;
-      for (const r of t.rows) if (r.building) buildings.add(r.building);
-      fragments.push(t);
-      if (!fragmentKinds.has(s.key)) fragmentKinds.set(s.key, new Set());
-      fragmentKinds.get(s.key)!.add(kind);
     }
   }
 

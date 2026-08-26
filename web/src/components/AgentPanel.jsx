@@ -20,11 +20,75 @@ const evidenceText = (ev) => {
 };
 
 const LOG_STYLE = { status: "var(--ink-muted)", tool: "var(--cobalt)", text: "var(--ink)", error: "var(--c-danger)" };
+const RUN_STATUS_STYLE = { running: "var(--cobalt)", done: "var(--c-positive)", error: "var(--c-danger)", aborted: "var(--ink-muted)" };
+
+// One tool_calls entry rendered the same shape as the live log — a Run's
+// persisted trace and the streaming view of the run that produced it should
+// never look like two different things to the person reading them.
+const runEventText = (ev) => {
+  if (ev.type === "text") return ev.text;
+  if (ev.type === "tool_start") return `→ ${ev.name}`;
+  if (ev.type === "tool_end") return ev.result?.error ? `✗ ${ev.name}: ${ev.result.error}` : `✓ ${ev.name}`;
+  if (ev.type === "error") return `Error: ${ev.message}`;
+  return "";
+};
+const runEventKind = (ev) => (ev.type === "tool_start" ? "tool" : ev.type === "error" || ev.result?.error ? "error" : ev.type === "text" ? "text" : "status");
+
+const relTime = (ms) => {
+  const d = Date.now() - ms;
+  if (d < 60000) return "just now";
+  if (d < 3600000) return `${Math.round(d / 60000)}m ago`;
+  if (d < 86400000) return `${Math.round(d / 3600000)}h ago`;
+  return new Date(ms).toLocaleDateString();
+};
+
+// Run History — a persisted, reviewable ledger of past goals (maturity plan
+// Phase 2): what was asked, its full tool trace, and how it ended, still
+// there after a reload — unlike the live log above, which is one run's
+// scrollback and is gone the moment the next run starts.
+function RunHistoryList({ runs }) {
+  const [open, setOpen] = useState(() => new Set());
+  const toggle = (id) => setOpen((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  if (!runs.length) return <div style={{ padding: 14, fontSize: 12.5, color: "var(--ink-muted)" }}>No runs yet — goals you run land here once they finish, and stay after a reload.</div>;
+  return (
+    <div style={{ flex: 1, overflow: "auto", minHeight: 0 }}>
+      {runs.map((r) => {
+        const isOpen = open.has(r.id);
+        return (
+          <div key={r.id} style={{ borderBottom: "1px solid var(--ink-faint)" }}>
+            <button onClick={() => toggle(r.id)} style={{ width: "100%", textAlign: "left", display: "flex", alignItems: "flex-start", gap: 8, padding: "8px 12px", border: "none", background: "transparent", cursor: "pointer", font: "inherit" }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", marginTop: 4, flexShrink: 0, background: RUN_STATUS_STYLE[r.status] || "var(--ink-muted)" }} title={r.status} />
+              <span style={{ flex: 1, minWidth: 0 }}>
+                <span style={{ display: "block", fontSize: 12, color: "var(--ink)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: isOpen ? "normal" : "nowrap" }}>{r.goal_text}</span>
+                <span style={{ display: "block", fontSize: 10.5, color: "var(--ink-muted)", marginTop: 1 }}>
+                  {relTime(r.started_at)} · {r.tool_calls.filter((e) => e.type === "tool_start").length} tool call{r.tool_calls.filter((e) => e.type === "tool_start").length === 1 ? "" : "s"}
+                  {r.outcome_summary ? ` · ${r.outcome_summary}` : r.status === "running" ? " · still running" : ""}
+                </span>
+              </span>
+              <Icon name={isOpen ? "chevronDown" : "chevronRight"} size={13} />
+            </button>
+            {isOpen && (
+              <div style={{ padding: "0 12px 10px 26px", fontFamily: "var(--f-mono)", fontSize: 10.5, lineHeight: 1.5 }}>
+                {r.tool_calls.length === 0 && <div style={{ color: "var(--ink-muted)", fontFamily: "inherit" }}>No tool calls recorded.</div>}
+                {r.tool_calls.map((ev, i) => {
+                  const t = runEventText(ev);
+                  if (!t) return null;
+                  return <div key={i} style={{ color: LOG_STYLE[runEventKind(ev)] || "var(--ink)", whiteSpace: "pre-wrap", overflowWrap: "anywhere", marginBottom: 2 }}>{t}</div>;
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function AgentPanel({
   configured, running, log, proposals, condById, sheetLabel, units,
   fmtArea, onRun, onStop, onAccept, onReject, onAcceptAll, onRejectAll,
   onOpenSettings, onClose,
+  runHistory = [], historyOpen = false, onToggleHistory,
 }) {
   const [goal, setGoal] = useState("");
   const logRef = useRef(null);
@@ -41,10 +105,17 @@ export default function AgentPanel({
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 12px", background: "var(--cobalt)", color: "var(--accent-contrast)" }}>
         <Icon name="target" size={15} />
         <strong style={{ flex: 1, fontSize: 12.5 }}>Agent{proposals.length ? ` · ${proposals.length} pending` : ""}</strong>
+        {configured && (
+          <button onClick={onToggleHistory} title={historyOpen ? "Back to the current run" : "Run History — every past goal, its full tool trace, and how it ended (persists across reloads)"} style={{ border: "none", background: historyOpen ? "rgba(255,255,255,0.22)" : "transparent", color: "var(--accent-contrast)", cursor: "pointer", padding: "2px", display: "flex" }}>
+            <Icon name="history" size={14} />
+          </button>
+        )}
         <button onClick={onClose} title="Close panel" style={{ border: "none", background: "transparent", color: "var(--accent-contrast)", fontSize: 16, cursor: "pointer", padding: "0 2px" }}>×</button>
       </div>
 
-      {!configured ? (
+      {configured && historyOpen ? (
+        <RunHistoryList runs={runHistory} />
+      ) : !configured ? (
         // honest empty state — the Contribute-modal pattern: nothing configured,
         // nothing runs, no pretense. Zero network calls until the user brings a key.
         <div style={{ padding: 14, fontSize: 13, lineHeight: 1.6, color: "var(--ink)" }}>

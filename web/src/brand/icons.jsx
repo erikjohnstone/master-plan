@@ -72,6 +72,9 @@ export const icons = {
   sliders: (s) => <I size={s}><path d="M4 7 H 6.8 M11.2 7 H 20" /><path d="M4 17 H 12.8 M17.2 17 H 20" /><circle cx="9" cy="7" r="2.2" /><circle cx="15" cy="17" r="2.2" /></I>,
   // stacked plan sheets in isometric — the PDF layer table (Optional Content Groups)
   layers: (s) => <I size={s}><path d="M12 3 L 21 7.5 L 12 12 L 3 7.5 Z" /><path d="M3 12 L 12 16.5 L 21 12" /><path d="M3 16.5 L 12 21 L 21 16.5" /></I>,
+  // run history — a circular "rewind" arrow around a clock hand: distinct
+  // from `revisions` (a plain clock, already the Revisions panel's glyph)
+  history: (s) => <I size={s}><path d="M4.5 12 a7.5 7.5 0 1 1 2.4 5.5" /><path d="M4.5 12 V 7.3 M4.5 12 H 9.2" /><path d="M12 8.2 V 12.3 L 14.8 14" /></I>,
 };
 
 export function Icon({ name, size = 18 }) {
