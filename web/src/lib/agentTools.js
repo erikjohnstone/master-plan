@@ -330,7 +330,7 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "resolve_tag",
-    description: "Resolve one tag (a room number OR an equipment/schedule mark, e.g. '134' or 'PRV-1') against the sheet graph's tables: returns the schedule row(s) it's defined by, with citations (which sheet, which cell). Refuses with a reason rather than guessing when the tag isn't found, is ambiguous, or the row states nothing usable. Call sheet_graph first if you haven't already this run.",
+    description: "Resolve one tag (a room number OR an equipment/schedule mark, e.g. '134', 'CV-3' for a control valve, or 'VAV-12' for a variable-air-volume box) against the sheet graph's tables: returns the schedule row(s) it's defined by, with citations (which sheet, which cell). Refuses with a reason rather than guessing when the tag isn't found, is ambiguous, or the row states nothing usable. Call sheet_graph first if you haven't already this run.",
     input_schema: {
       type: "object",
       properties: { tag: { type: "string", description: "The tag exactly as drawn/labeled, e.g. 'PRV-1' or '134'." } },
@@ -339,7 +339,7 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "find_schedule",
-    description: "Find schedule table(s) of a given kind across the set — kind: 'room' for a room-finish schedule (numbered rooms → surface finishes), kind: 'finish' for a CODE/MARK/DESCRIPTION/MANUFACTURER-style material/product schedule (flooring, paint, tile — a catalog KEYED BY CODE), kind: 'equipment' for a real MEP equipment schedule (electric heaters, fans, VRF/heat pumps — keyed by an ID tag, distinguished by real electrical/mechanical rating columns: VOLTAGE, PHASE, WATTS, AMPS, MCA, MOCP, CFM, GPM, HP, TONS, EER, EAT, LAT, and similar). Returns each match's sheet, title, row count, and column headers, without needing to know where it is first. Use before read_schedule when you don't already have a region.",
+    description: "Find schedule table(s) of a given kind across the set — kind: 'room' for a room-finish schedule (numbered rooms → surface finishes), kind: 'finish' for a CODE/MARK/DESCRIPTION/MANUFACTURER-style material/product schedule (flooring, paint, tile — a catalog KEYED BY CODE), kind: 'equipment' for a real MEP equipment schedule — AHUs, RTUs, FCUs, chillers, boilers, pumps, fans, VAV/CAV boxes ('VOLUME CONTROL BOX SCHEDULE' on some real sets — the schedule's own title never says VAV, only its row tags do), control/bypass valves, air separators, humidifiers, VRF/heat pumps, electric wall/baseboard heaters — distinguished by real electrical/mechanical/hydronic rating columns: VOLTAGE, PHASE, WATTS, AMPS, MCA, MOCP, CFM, GPM, HP, TONS, EER, EAT, LAT, EWT, LWT, and similar. Keyed by a row-tag column that reads ID, SYMBOL, MARK, or TAG depending on the firm that drew the set — no one word is universal, so don't assume 'ID' when a table's real key column reads differently. Returns each match's sheet, title, row count, and column headers, without needing to know where it is first. Use before read_schedule when you don't already have a region.",
     input_schema: {
       type: "object",
       properties: { kind: { type: "string", description: "'room' (room-finish schedules), 'finish' (material/product schedules), or 'equipment' (MEP equipment schedules)." } },
@@ -373,7 +373,7 @@ export const AGENT_TOOL_DEFS = [
     input_schema: {
       type: "object",
       properties: {
-        tag: { type: "string", description: "The schedule row's key exactly as drawn, e.g. 'PRV-1'." },
+        tag: { type: "string", description: "The schedule row's key exactly as drawn, e.g. 'PRV-1', 'CV-3', or 'VAV-12'." },
         rotations: { type: "boolean", description: "Also match 90/180/270-rotated markers. Default true." },
         mirror: { type: "boolean", description: "Also match mirrored markers. Default true." },
       },

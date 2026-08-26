@@ -379,7 +379,26 @@ const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "ID", "MATERIAL", "MANUFACTURE
 // `required` — one incidental fan-speed token is not, on its own, strong
 // enough evidence that a table is an equipment schedule rather than a
 // finish/diffuser one that happens to mention it once.
-const EQUIPMENT_HEADERS = ["ID", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "RPM", "ESP"];
+// "SYMBOL" and "TAG" (maturity plan Phase 2): real catalog-anchor words,
+// found live on TWO independent real MEP bid sets neither Bessemer nor
+// FINISH_HEADERS's own convention anticipated — Miller Stauffer/Musgrove's
+// entire equipment-schedule family (AHU, boiler, humidifier, fan, coil,
+// control valve, bypass valve — all of it, consistently) keys every row
+// under a column literally headed "SYMBOL", never "ID"; SmithGroup's Eglin
+// AFB set keys its AHU/chiller/boiler/pump/fan/VAV ("Volume Control Box")
+// schedules under "TAG" instead. Neither firm is wrong — there is no single
+// national convention here, exactly this project's own prior research on
+// HVAC symbol standards already found. "SYMBOL" doubles as FINISH_HEADERS'
+// own catalog word too (real finish/diffuser schedules key under it as
+// well) — this does not raise cross-contamination risk beyond what CFM/RPM
+// above already accepted: SYMBOL/TAG alone cannot push a table over
+// `required`'s bar, which stays the rating columns only.
+// "EWT"/"LWT" (Phase 2): entering/leaving WATER temperature, the hydronic-
+// side sibling of EAT/LAT already here — real, found on every hydronic
+// schedule this same corpus turned up (boiler, VAV reheat coil, AHU
+// hydronic coil, control valve schedules), safely as generic as EAT/LAT
+// already proved to be.
+const EQUIPMENT_HEADERS = ["ID", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "RPM", "ESP"];
 // A header CELL is often a multi-word span ("FLOOR FINISH", "CEILING FINISH")
 // — the vocabulary word inside it names the column.
 /** A column anchor. `x` is the header's center. A two-tier SUB-column also
@@ -481,7 +500,7 @@ function skipSubHeaderContinuation(rows: GraphSpan[][], vocab: string[], from: n
 // split header sits close; a coincidentally-nearby unrelated row does not),
 // and only take a candidate row that could NOT independently qualify as its
 // own header — otherwise this would eat a real, separate table's header.
-const CATALOG_ANCHOR_WORDS = ["ID", "MARK", "CODE", "SYMBOL"];
+const CATALOG_ANCHOR_WORDS = ["ID", "MARK", "CODE", "SYMBOL", "TAG"];
 
 /** Anchors for a backward-merged tier's own row — like headerHits, but a
  * span naming MORE than one vocabulary word ("MANUFACTURER MODEL NUMBER")
@@ -1388,17 +1407,20 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // the day a real split-header finish/room-finish table shows up.
   let flat = findHeaderRow(rows, vocab, required, minHits, fromIdx, { equipmentTierMerge: kind === "equipment" });
   // The merge above only ever ADDS a key column when one exists nearby on
-  // the sheet — it never invents one. A candidate that still has no ID after
-  // the attempt genuinely has no usable key column (the anchored key would
-  // be whatever sits leftmost of the found tier — a bare CFM/VOLTAGE number,
-  // which correctly fails rowKeyOf's CODE_RE and drops every row), so it is
-  // refused outright rather than accepted as a table that can never be
-  // looked up by tag. Deliberately NOT a retry-forward-and-keep-looking:
-  // tried that first and it searched past a real candidate into a LATER
-  // table's own header, re-extracting a table that already correctly exists
-  // under another kind — a duplicate-row-key collision worse than the one
-  // this whole design exists to prevent.
-  if (kind === "equipment" && flat && !flat.anchors.some((a) => a.label === "ID")) flat = null;
+  // the sheet — it never invents one. A candidate that still has no catalog
+  // anchor after the attempt genuinely has no usable key column (the
+  // anchored key would be whatever sits leftmost of the found tier — a bare
+  // CFM/VOLTAGE number, which correctly fails rowKeyOf's CODE_RE and drops
+  // every row), so it is refused outright rather than accepted as a table
+  // that can never be looked up by tag. Checked against CATALOG_ANCHOR_WORDS
+  // (ID/MARK/CODE/SYMBOL/TAG), not just literal "ID" — real equipment
+  // schedules key under any of these depending on the firm (see
+  // EQUIPMENT_HEADERS' own SYMBOL/TAG comment). Deliberately NOT a
+  // retry-forward-and-keep-looking: tried that first and it searched past a
+  // real candidate into a LATER table's own header, re-extracting a table
+  // that already correctly exists under another kind — a duplicate-row-key
+  // collision worse than the one this whole design exists to prevent.
+  if (kind === "equipment" && flat && !flat.anchors.some((a) => CATALOG_ANCHOR_WORDS.includes(a.label))) flat = null;
   if (flat) {
     anchors = flat.anchors;
     headerSpans = rows[flat.rowIndex];
