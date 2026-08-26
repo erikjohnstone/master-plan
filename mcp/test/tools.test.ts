@@ -1621,6 +1621,126 @@ test("symbol_sweep precision: a gate valve and a ball valve sharing a bowtie bod
   assert.deepEqual(again.data, gate.data);
 });
 
+// ── trace_connectivity, real end-to-end (maturity plan Phase 4) ─────────
+// The fixture (test/fixtures/mep-plan.pdf, scripts/make-mep-fixture.mjs):
+// five named scenarios from the plan doc's own §5 test strategy, exercised
+// through a REAL PDF load → real pdf.js geometry extraction → real
+// buildMepGraph → real traceConnectivity, not a hand-built segment array
+// (web/test/mepconnectivity.test.ts already covers the module directly;
+// this proves the whole pipeline agrees with it). Coordinates below are the
+// fixture's own PDF pt × 2, y-flipped (image px = pt_x*2, (600-pt_y)*2) —
+// the same transform every other geometry tool in this file already assumes.
+const MEPPLAN = fileURLToPath(new URL("./fixtures/mep-plan.pdf", import.meta.url));
+const MEPKEY = "mep-plan.pdf";
+const SCAN = fileURLToPath(new URL("./fixtures/scanned-plan.pdf", import.meta.url));
+const SCAN_KEY = "scanned-plan.pdf";
+
+test("trace_connectivity: a straight run reaches its one real equipment placement", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [100, 200],
+    equipment: [{ id: "AHU-1", at: [500, 200] }],
+  });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "reached");
+  assert.equal(r.data.reached_equipment.id, "AHU-1");
+  assert.equal(r.data.layer_signal, "none", "this fixture carries no PDF layers, same as the real Bessemer sample");
+});
+
+test("trace_connectivity: a real mid-edge T-branch reaching two different equipment is ambiguous, never picks one", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [100, 400],
+    equipment: [{ id: "VAV-1", at: [500, 400] }, { id: "VAV-2", at: [300, 560] }],
+  });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "ambiguous");
+  const ids = r.data.branches.map((b: any) => b.leads_to).sort();
+  assert.deepEqual(ids, ["VAV-1", "VAV-2"]);
+});
+
+test("trace_connectivity: a real drawn gap bridges through a fitting symbol sitting in it, and stays dead_end without one", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const withFitting = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [100, 800],
+    equipment: [{ id: "AHU-2", at: [520, 800] }],
+    fittings: [{ at: [300, 800] }],
+    bridge_ft: 4,   // the fixture's real drawn gap (40 image px) exceeds the 24px default
+  });
+  assert.equal(withFitting.isError, false);
+  assert.equal(withFitting.data.status, "reached");
+  assert.equal(withFitting.data.reached_equipment.id, "AHU-2");
+  assert.ok(withFitting.data.factors.some((f: string) => f.startsWith("bridged-gap")));
+
+  const withoutFitting = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [100, 800],
+    equipment: [{ id: "AHU-2", at: [520, 800] }],
+    bridge_ft: 4,
+  });
+  assert.equal(withoutFitting.data.status, "dead_end", "no fitting supplied — the identical real gap is never bridged on proximity alone");
+});
+
+test("trace_connectivity: a stub reaching no equipment is a real dead_end, named as ran-out-of-linework", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [100, 1000],
+    equipment: [{ id: "FAR", at: [700, 1000] }],   // nowhere near this run
+  });
+  assert.equal(r.data.status, "dead_end");
+  assert.match(r.data.reason, /ran out of connected linework/i);
+});
+
+// A REAL, DISCLOSED, NOT-YET-SOLVED limitation (maturity plan §6 risk #2 /
+// known-gaps ledger item 22), pinned rather than hidden: JTS's own noding
+// splits two lines at a true interior crossing into a real 4-way junction,
+// so a duct and a pipe that merely cross on the page (different real
+// elevations) trace as CONNECTED. This test locks in that CURRENT behavior
+// — a future fix to #22 changes this assertion, not silently drifts past it.
+test("trace_connectivity: an unrelated crossing (not a real connection) currently traces as ambiguous — a known, disclosed limitation (#22)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [500, 600],
+    equipment: [{ id: "AHU-3", at: [900, 600] }, { id: "PANEL-1", at: [600, 1100] }],
+  });
+  assert.equal(r.data.status, "ambiguous", "current behavior: the crossing is read as a real junction — see #22");
+});
+
+test("trace_connectivity: refuses when no equipment placements are supplied at all", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", { sheet: MEPKEY, from: [100, 200], equipment: [] });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "refused");
+  assert.match(r.data.reason, /sweep the target family first/);
+});
+
+test("trace_connectivity: refuses when the seed point isn't on any traced linework", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [999, 999],
+    equipment: [{ id: "AHU-1", at: [500, 200] }],
+  });
+  assert.equal(r.data.status, "refused");
+  assert.match(r.data.reason, /isn't on any traced linework/);
+});
+
+test("trace_connectivity: refuses on a scanned sheet with no vector linework at all", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SCAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: SCAN_KEY, from: [100, 100],
+    equipment: [{ id: "X", at: [200, 200] }],
+  });
+  assert.equal(r.data.status, "refused");
+  assert.match(r.data.reason, /no traced vector linework/);
+});
+
 // #296 — the seed is installed work in sheet scope. Found in live validation:
 // four × on a plumbing plan with five drains, and the unmarked one was the
 // seed, correctly flagged as a miss by the estimator auditing the render.

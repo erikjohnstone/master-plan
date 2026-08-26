@@ -66,6 +66,7 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // counter-examples, the luminance channel, and label corroboration all live
 // as pure web libs already; this file adds only the gesture and the review.
 import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches } from "../lib/symbolsweep";
+import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib/mepconnectivity.ts";
 import { labelPlacements } from "../lib/symbollabels";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
@@ -878,6 +879,12 @@ export default function TakeoffCanvas() {
   const [layersOpen, setLayersOpen] = useState(false);       // docked Layers panel
   const [layerOverrides, setLayerOverrides] = useState({});  // sheetKey → { ocgId: "include"|"exclude" } — persisted (additive `layer_overrides`)
   const maskCacheRef = useRef(new Map());  // sheetKey → built boundary mask (lazy, dropped on re-render)
+  // trace_connectivity's MEP graph (Phase 4) — sheetKey → MepGraph, cached
+  // like maskCacheRef: buildMepGraph is real, measured work (up to ~30s on a
+  // dense real sheet), so tracing several seeds on one sheet must not pay it
+  // twice. Evicted alongside maskCacheRef on rescale (the noding grid is
+  // feet-true via mppf, same discipline as the vector mask).
+  const mepGraphCacheRef = useRef(new Map());
   const sheetStatsRef = useRef(new Map()); // sheetKey → {segCount, imageFrac} — raster-fallback trigger signals
   const panelSourceDimsRef = useRef(new Map()); // stitchKey → { memberKey: {w,h} } — member dims resolved by the render effect (#161)
   const rasterMaskCacheRef = useRef(new Map()); // sheetKey → Promise<MaskObj|null> — scan-pixel mask (lazy, shared across clicks)
@@ -4262,6 +4269,7 @@ export default function TakeoffCanvas() {
     // failure class the scale pinning exists to remove.
     maskCacheRef.current.delete(key);
     rasterMaskCacheRef.current.delete(key);
+    mepGraphCacheRef.current.delete(key);   // the noding grid is feet-true via mppf, same discipline as the vector mask
     // STRICT panel lookup — the panelByKey wrapper falls back to panels[0], so
     // it can't detect an off-canvas sheet: a future off-canvas caller would
     // silently re-price that sheet's shapes against the wrong panel's bitmap
@@ -6349,6 +6357,65 @@ export default function TakeoffCanvas() {
     };
   }
 
+  // trace_connectivity (maturity plan Phase 4) — which valve belongs to
+  // which equipment, walked through the sheet's own drawn linework. Mirrors
+  // agentSymbolSweep's own shape exactly: normalized 0..1 points in and out
+  // (this tool speaks the agent's own coordinate space, unlike the MCP
+  // server's raw image px), the MEP graph built once per sheet and cached
+  // (mepGraphCacheRef) — buildMepGraph is real, measured work (up to ~30s on
+  // a dense real sheet), so tracing several seeds must not pay it twice.
+  async function agentTraceConnectivity(key, opts = {}) {
+    const p = agentPanelFor(key);
+    if (!p) return { error: `Sheet ${key} isn't rendered yet — try again in a moment.` };
+    const segs = vectorSegsRef.current.get(key);
+    if (!segs || !segs.length) {
+      return { status: "refused", layer_signal: "none", confidence: 0, factors: [], reason: "This sheet has no traced vector linework to walk — check sheet_info.has_vector_linework before tracing." };
+    }
+    const denorm = ([x, y]) => [x * p.img.w, y * p.img.h];
+    const norm = ([x, y]) => [+(x / p.img.w).toFixed(5), +(y / p.img.h).toFixed(5)];
+    let graph = mepGraphCacheRef.current.get(key);
+    if (!graph) {
+      const meta = segMetaRef.current.get(key);
+      const geo = layerGeoRef.current.get(key);
+      const infos = layerInfosRef.current.get(key);
+      const codes = rolesForSheet(key);
+      let excludeSegs;
+      if (codes) {
+        excludeSegs = new Uint8Array(codes.length);
+        for (let i = 0; i < codes.length; i++) {
+          const c = codes[i];
+          if (c === 2 /* finish-pattern */ || c === 3 /* annotation */ || c === 6 /* hidden */) excludeSegs[i] = 1;
+        }
+      }
+      const upp = uppFor(key);
+      graph = buildMepGraph(segs, { meta, layerOf: geo?.layerOf, layers: infos, excludeSegs, mppf: upp ? 1 / upp : 0 });
+      mepGraphCacheRef.current.set(key, graph);
+    }
+    if (!Array.isArray(opts.equipment) || !opts.equipment.length) {
+      return { status: "refused", layer_signal: graph.layerSignal, confidence: 0, factors: [], reason: "No equipment symbols supplied — sweep the target family first (symbol_sweep or sweep_schedule_row), then pass their placements here." };
+    }
+    const upp = uppFor(key);
+    const result = traceMepConnectivity(graph, denorm(opts.from), {
+      equipmentSymbols: opts.equipment.map((e) => ({ id: e.id, at: denorm(e.at), ...(e.label ? { label: e.label } : {}) })),
+      fittingSymbols: opts.fittings?.length ? opts.fittings.map((f) => ({ at: denorm(f.at) })) : undefined,
+      maxHops: opts.maxHops,
+      seedTolFt: opts.seedTolFt,
+      bridgeFt: opts.bridgeFt,
+      mppf: upp ? 1 / upp : 0,
+    });
+    return {
+      status: result.status,
+      ...(result.path ? { path: result.path.map(norm) } : {}),
+      ...(result.reachedEquipment ? { reached_equipment: { id: result.reachedEquipment.id, at: norm(result.reachedEquipment.at) } } : {}),
+      ...(result.branches ? { branches: result.branches.map((b) => ({ at: norm(b.at), leads_to: b.leads_to, ...(b.reason ? { reason: b.reason } : {}) })) } : {}),
+      layer_signal: result.layer_signal,
+      ...(result.system ? { system: result.system } : {}),
+      confidence: result.confidence,
+      factors: result.factors,
+      ...(result.reason ? { reason: result.reason } : {}),
+    };
+  }
+
   function agentListShapes(sheetFilter) {
     // agentStateRef, not the render-scope `shapes` closure — same-run
     // freshness after a prior agentDeleteShapes/agentReassignShapes in this
@@ -7348,6 +7415,7 @@ export default function TakeoffCanvas() {
       createCondition: (tag) => { const c = mintCondition(tag); return { id: c.id, finish_tag: c.finish_tag }; },
       proposeShapes: stageAgentProposals,
       symbolSweep: agentSymbolSweep,
+      traceConnectivity: agentTraceConnectivity,
       listShapes: agentListShapes,
       deleteShapes: agentDeleteShapes,
       reassignShapes: agentReassignShapes,

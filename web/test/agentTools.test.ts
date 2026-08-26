@@ -244,6 +244,45 @@ test("a capability throw becomes an error result (the loop must never crash)", a
   assert.match(out.error, /read_sheet_text failed: text layer exploded/);
 });
 
+// trace_connectivity (maturity plan Phase 4) — executeAgentTool's own
+// dispatch/shaping layer only; buildMepGraph/traceConnectivity's own logic
+// is covered directly by web/test/mepconnectivity.test.ts.
+test("trace_connectivity: sheet not open on the canvas refuses with a named reason", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "trace_connectivity", {
+    sheet: "other.pdf", from_norm: [0.1, 0.1], equipment: [{ id: "AHU-1", at_norm: [0.5, 0.5] }],
+  });
+  assert.match(out.error, /isn't open on the canvas/);
+});
+
+test("trace_connectivity: a malformed from_norm is a named error, not a crash", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "trace_connectivity", {
+    sheet: "plan.pdf", from_norm: [0.1], equipment: [{ id: "AHU-1", at_norm: [0.5, 0.5] }],
+  });
+  assert.match(out.error, /from_norm/);
+});
+
+test("trace_connectivity: a valid call reshapes at_norm → at and passes through to the canvas's own tracer unchanged", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    traceConnectivity: async (sheet: string, opts: unknown) => { calls.push([sheet, opts]); return { status: "reached", reached_equipment: { id: "AHU-1", at: [0.5, 0.5] }, layer_signal: "none", confidence: 0.85, factors: ["layer-unclassified"] }; },
+  });
+  const out = await executeAgentTool(ctx, "trace_connectivity", {
+    sheet: "plan.pdf", from_norm: [0.1, 0.2],
+    equipment: [{ id: "AHU-1", at_norm: [0.5, 0.5] }],
+    fittings: [{ at_norm: [0.3, 0.3] }],
+    bridge_ft: 3,
+  });
+  assert.equal(out.status, "reached");
+  assert.deepEqual(calls[0], ["plan.pdf", {
+    from: [0.1, 0.2],
+    equipment: [{ id: "AHU-1", at: [0.5, 0.5], label: undefined }],
+    fittings: [{ at: [0.3, 0.3] }],
+    maxHops: undefined, seedTolFt: undefined, bridgeFt: 3,
+  }]);
+});
+
 test("pickAgentEvidence: null-safe, array-safe, whitelist-only", () => {
   assert.equal(pickAgentEvidence(null), null);
   assert.equal(pickAgentEvidence([1, 2]), null);

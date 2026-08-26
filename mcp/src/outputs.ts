@@ -807,6 +807,31 @@ export const sweepScheduleRowOutput = {
   warning: z.string().optional().describe("Present when the per-sheet work cap dropped candidates"),
 };
 
+/** trace_connectivity (Phase 4 of the HVAC/BAS maturity plan) — which valve
+ * belongs to which equipment, walked through the sheet's own noded vector
+ * linework. Refusal doctrine matches resolve_tag/sweep_schedule_row: a
+ * status of "refused" always carries `reason`, never a half-populated
+ * success shape. */
+export const traceConnectivityOutput = {
+  status: z.enum(["reached", "ambiguous", "dead_end", "refused"]),
+  path: z.array(z.tuple([z.number(), z.number()])).optional()
+    .describe("reached only — the walked node-by-node path from the seed to the reached equipment, image px"),
+  reached_equipment: z.object({ id: z.string(), at: z.tuple([z.number(), z.number()]) }).optional()
+    .describe("reached only — the one equipment placement a real walked path actually connects to, never picked from proximity"),
+  branches: z.array(z.object({
+    at: z.tuple([z.number(), z.number()]).describe("The real junction where the trace's outcome forked"),
+    leads_to: z.string().nullable(),
+    reason: z.string().optional(),
+  })).optional().describe("ambiguous only — every DIFFERENT equipment reachable from the fork, never narrowed to one; view_sheet at the junction to decide by looking"),
+  layer_signal: z.enum(["none", "weak", "strong"])
+    .describe("Whether the sheet's own PDF layers carried confident MEP-system classification (\"none\" = untagged export, e.g. this project's own Bessemer sample — the tracer still runs, layer-agnostic)"),
+  system: z.enum(["piping", "ductwork", "electrical", "controls", "unknown"]).optional()
+    .describe("reached only, and only when every edge on the walked path agrees — a path crossing systems (a genuine cross-classification, or the sheet's own drafting) omits this rather than guess one"),
+  confidence: z.number().describe("Discounted for every disclosed factor below — never a flat 1.0 on a long trace, a bridged gap, or an unclassified layer"),
+  factors: z.array(z.string()).describe("Disclosed confidence discounts, e.g. \"layer-unclassified\", \"long-trace(42 hops)\", \"bridged-gap(1)\" — matches confidence.ts's own disclosed-factor doctrine"),
+  reason: z.string().optional().describe("dead_end/refused only — why, and what to do about it"),
+};
+
 /** sheet_context (issue #29): vectors + text + hatch families of one region,
  * in one frame. Structured-only by design — the raster stays view_sheet's
  * job, and frame agreement is a contract on the echoed region rect rather

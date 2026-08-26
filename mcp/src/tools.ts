@@ -18,7 +18,7 @@ import {
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
   markVerdictOutput, deleteVerdictOutput,
   sheetGraphOutput, resolveTagOutput, findScheduleOutput, sweepScheduleRowOutput, countMarksOutput,
-  exportDxfOutput,
+  exportDxfOutput, traceConnectivityOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
 import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
@@ -237,6 +237,45 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     mirror: a.mirror,
     tolerancePx: a.tolerance_px,
   })));
+
+  server.registerTool("trace_connectivity", {
+    description: `Which valve belongs to which equipment — traced through the sheet's OWN drawn linework, not proximity. Pass a seed point ON a drawn pipe/duct/conduit line and the equipment placements it might connect to (from your own prior symbol_sweep/sweep_schedule_row results — this tool does not discover symbols itself); the sheet's vector linework is noded into a connectivity graph once (cached per sheet) and walked from the seed. status "reached" names the ONE equipment placement a real walked path actually connects to, with the full path and, when every edge on it agrees, the MEP system (piping/ductwork/electrical/controls). status "ambiguous" fires when a real junction reaches TWO OR MORE different equipment placements within max_hops — every candidate is named with the junction's own coordinates, and NONE is ever picked for you; view_sheet at that junction and decide by looking, the same doctrine symbol_sweep's near-match band already lives by. status "dead_end" distinguishes running out of connected linework (a genuine dead end, OR the run continues off-sheet at a match line this tool has no cross-sheet awareness of) from hitting max_hops (raise it and retry). status "refused" fires with a named reason on: no equipment placements supplied at all, a seed point that isn't ON any traced linework, or a sheet with no vector linework (a scan). Real drawn gaps at a valve/damper symbol are a genuine, common drafting convention (the fitting's own glyph occupies the space) — pass fittings (your own already-swept valve/damper/fitting placements) to bridge a gap, but ONLY when one of those placements geometrically sits IN the gap (never on proximity alone, and never for a gap wider than bridge_ft regardless): a bridged edge is disclosed as a bridged-gap(N) factor and discounts confidence, never presented as an ordinary clean trace. Every result discloses layer_signal — "none" means the sheet's PDF layers carry no confident MEP-system classification (a flattened export with no Optional Content, e.g. this project's own Bessemer sample) and the trace ran layer-agnostic (all non-excluded ink), not "no piping was found." Named, disclosed risks, not solved here: real crossing-vs-connecting duct/pipe ambiguity (different elevations legitimately cross without connecting — no elevation signal exists to tell them apart), and schematic single-line vs. to-scale double-line duct representation (v1 traces whatever linework is drawn). A trace that cleanly follows the WRONG line — a return misread as supply — can score confidently; corroborate against the schedule/tag evidence resolve_tag or sweep_schedule_row already give you before trusting a single trace as the whole story. ${COORDS}`,
+    inputSchema: {
+      sheet: z.string(),
+      from: pointSchema.describe("Seed point (image px) ON the drawn pipe/duct/conduit line to start the trace from"),
+      equipment: z.array(z.object({
+        id: z.string().describe("The equipment's own tag, e.g. 'AHU-1'"),
+        at: pointSchema.describe("Its placement (image px), from your own prior symbol_sweep/sweep_schedule_row result"),
+        label: z.string().optional(),
+      })).default([]).describe("Real, already-swept equipment placements this trace might reach. An empty/omitted list is a NAMED refusal (status: \"refused\"), not a silent 'found nothing' or a protocol-level rejection"),
+      fittings: z.array(z.object({ at: pointSchema })).optional()
+        .describe("Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, but ONLY where one of these sits geometrically in it. Omit to disable bridging entirely"),
+      max_hops: z.number().int().positive().optional().describe("Edge-hops to walk before giving up (default 60)"),
+      seed_tol_ft: z.number().positive().optional().describe("How close (feet) the seed/equipment points must sit to the graph's own linework to count as 'on' it (default 1.0)"),
+      bridge_ft: z.number().positive().optional().describe("Widest real drawn gap (feet) a fitting placement may bridge (default 2.0) — a gap wider than this is never bridged regardless of what sits in it"),
+    },
+    outputSchema: traceConnectivityOutput,
+  }, run("trace_connectivity", async (a) => {
+    const r = await session.traceConnectivity(a.sheet, {
+      from: a.from,
+      equipment: a.equipment,
+      fittings: a.fittings,
+      maxHops: a.max_hops,
+      seedTolFt: a.seed_tol_ft,
+      bridgeFt: a.bridge_ft,
+    });
+    return {
+      status: r.status,
+      ...(r.path ? { path: r.path } : {}),
+      ...(r.reachedEquipment ? { reached_equipment: r.reachedEquipment } : {}),
+      ...(r.branches ? { branches: r.branches } : {}),
+      layer_signal: r.layer_signal,
+      ...(r.system ? { system: r.system } : {}),
+      confidence: r.confidence,
+      factors: r.factors,
+      ...(r.reason ? { reason: r.reason } : {}),
+    };
+  }));
 
   server.registerTool("count_marks", {
     description: `The COUNT TAKEOFF in one deterministic call — no seeds, no model, seconds: census every VALUE-ANNOTATED mark tag on the plan-role sheets, counted per schedule mark, committed as EA markers when asked. The identity rule is the annotated-device drafting pattern: a device is drawn as its mark tag with a value under it ("S1" over "200" — CFM on air devices, GPM on fixtures, a rating on equipment), so a tag WITH a paired value counts, a tag inside a schedule table's own region is a row label (excluded, tallied), and every other occurrence is WITHHELD with a reason and coordinates — a tag amid linework but unvalued may be a real device (view_sheet it), a bare tag is probably a note mention. Marks default to the set's schedule row keys (a compound row "R1 / E1" answers for R1 AND E1; each mark cites its row), or state them: {marks: ["S1","R1"]}. The complement to sweep_schedule_row: THAT tool is for marks drawn ON their marker with no value (finish tags in bubbles) and matches geometry; this one is for annotated devices and needs no fingerprint at all. Refusal-honest: scans refuse (no text layer), a set with no mark-shaped rows refuses unless marks are stated, non-plan sheets are skipped with the role that excused them. commit: true commits every counted occurrence under its mark's own tag — ONE undo step for the whole census, schedule citation on origin. Counts are scale-free (EA) — no set_scale needed. Then AUDIT: view_sheet {overlay: true} where the markers landed, and read every withheld entry — a withheld item you ignore is a hole in the bid. ${COORDS}`,

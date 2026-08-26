@@ -39,6 +39,11 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS }
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
 import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc } from "../../web/src/lib/symbolsweep.ts";
+// MEP connectivity tracing (maturity plan Phase 4) — buildMepGraph reuses
+// this project's own vendored JTS port for robust noding (see the module's
+// own header comment); traceConnectivity is the refusal-honest query, same
+// doctrine as sweep_schedule_row/resolve_tag above.
+import { buildMepGraph, traceConnectivity as traceMepConnectivity, type MepGraph, type TraceResult as MepTraceResult } from "../../web/src/lib/mepconnectivity.ts";
 import { labelPlacements, type PlacementLabel } from "../../web/src/lib/symbollabels.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
@@ -401,6 +406,13 @@ interface SheetState {
   /** the sheet's Optional Content layers (#85), classified — built with geo;
    * [] = no layers survived export (the silent, invisible fallback) */
   layers?: LayerInfo[];
+  /** MEP connectivity graph (Phase 4), built once and cached like `mask` —
+   * buildMepGraph is real, measured work (up to ~30s on a dense real sheet,
+   * a disclosed, not-yet-profiled cost — see the known-gaps ledger), so a
+   * scenario that traces several seeds on the same sheet must not pay it
+   * twice. undefined = not built yet; null = the sheet has zero vector
+   * linework (mirrors `mask`'s own null convention). */
+  mepGraph?: MepGraph | null;
 }
 
 /** sheet_context decimation defaults (issue #29) — declared and stable, never
@@ -1038,6 +1050,7 @@ export class Session {
     if (s.upp !== upp) {
       s.mask = undefined;
       s.rmask = undefined;
+      s.mepGraph = undefined;   // the noding grid is feet-true via mppf, same discipline as the vector mask
     }
     s.upp = upp;
     // the tool reply keeps this session's source vocabulary; the stored value
@@ -2528,6 +2541,68 @@ export class Session {
       ...(notes.length ? { note: notes.join(" ") } : {}),
       ...(capped.length ? { warning: `Work ceiling: candidate placements were dropped un-scored on ${capped.map((p) => p.state.key).join(", ")} — counts there are FLOORS, not totals. The seed's linework is too common there for an exhaustive sweep; tighten the seed rect around more distinctive geometry, or sweep those sheets singly and reconcile the counts.` } : {}),
     };
+  }
+
+  /** The MEP connectivity graph (Phase 4), built once per sheet and cached —
+   * mirrors ensureMask's own by-identity cache exactly, including its null
+   * convention for a sheet with zero vector linework. Annotation and
+   * finish-pattern layer ink is excluded before noding (never traced as a
+   * real run), the same layer-role table buildVectorMask already reads —
+   * this module does not re-derive LayerRole itself, only consumes it. */
+  private async ensureMepGraph(s: SheetState): Promise<MepGraph | null> {
+    if (s.mepGraph === undefined) {
+      const geo = await this.ensureGeometry(s);
+      if (!geo.segs.length) { s.mepGraph = null; return null; }
+      const codes = this.rolesFor(s, geo);
+      let excludeSegs: Uint8Array | undefined;
+      if (codes) {
+        excludeSegs = new Uint8Array(codes.length);
+        for (let i = 0; i < codes.length; i++) {
+          const c = codes[i];
+          if (c === 2 /* finish-pattern */ || c === 3 /* annotation */ || c === 6 /* hidden */) excludeSegs[i] = 1;
+        }
+      }
+      const mppf = s.upp ? 1 / s.upp : 0;
+      s.mepGraph = buildMepGraph(geo.segs, {
+        meta: geo.meta, layerOf: geo.layerOf, layers: s.layers, excludeSegs, mppf,
+      });
+    }
+    return s.mepGraph;
+  }
+
+  /** trace_connectivity (Phase 4) — which valve belongs to which equipment,
+   * traced through the sheet's own drawn linework. Refusal doctrine matches
+   * sweep_schedule_row/resolve_tag exactly: no equipment placements, no
+   * vector linework, or a seed off any traced line all refuse with a named
+   * reason rather than guess. Equipment/fitting placements are NOT
+   * discovered here — the agent supplies them from its own prior
+   * symbol_sweep/sweep_schedule_row results, same division of labor as
+   * every other geometry tool that consumes an already-swept placement. */
+  async traceConnectivity(name: string, opts: {
+    from: Point;
+    equipment: Array<{ id: string; at: Point; label?: string }>;
+    fittings?: Array<{ at: Point }>;
+    maxHops?: number;
+    seedTolFt?: number;
+    bridgeFt?: number;
+  }): Promise<MepTraceResult> {
+    const s = this.sheet(name);
+    const graph = await this.ensureMepGraph(s);
+    if (!graph) {
+      return {
+        status: "refused", layer_signal: "none", confidence: 0, factors: [],
+        reason: "This sheet has no traced vector linework to walk — check sheet_info.has_vector_linework before tracing.",
+      };
+    }
+    const mppf = s.upp ? 1 / s.upp : 0;
+    return traceMepConnectivity(graph, opts.from, {
+      equipmentSymbols: opts.equipment,
+      fittingSymbols: opts.fittings,
+      maxHops: opts.maxHops,
+      seedTolFt: opts.seedTolFt,
+      bridgeFt: opts.bridgeFt,
+      mppf,
+    });
   }
 
   /** sweep_schedule_row (phase 2) — the estimator's story, honored: a

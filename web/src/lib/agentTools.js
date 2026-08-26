@@ -260,6 +260,38 @@ export const AGENT_TOOL_DEFS = [
     },
   },
   {
+    name: "trace_connectivity",
+    description: "Which valve belongs to which equipment — traced through the sheet's OWN drawn linework, not proximity. Pass a seed point ON a drawn pipe/duct/conduit line and the equipment placements it might connect to (from your own prior symbol_sweep/sweep_schedule_row results — this tool does not discover symbols itself); the sheet's vector linework is noded into a connectivity graph once (cached per sheet) and walked from the seed. status 'reached' names the ONE equipment placement a real walked path actually connects to, with the full path and, when every edge on it agrees, the MEP system (piping/ductwork/electrical/controls). status 'ambiguous' fires when a real junction reaches TWO OR MORE different equipment placements within max_hops — every candidate is named with the junction's own coordinates, and NONE is ever picked for you; view_region there and decide by looking. status 'dead_end' distinguishes running out of connected linework (a genuine dead end, or the run continues off-sheet at a match line this tool has no cross-sheet awareness of) from hitting max_hops (raise it and retry). status 'refused' fires with a named reason on: no equipment placements supplied, a seed point not ON any traced linework, or a sheet with no vector linework (a scan). Real drawn gaps at a valve/damper symbol are a genuine drafting convention — pass fittings (your own already-swept valve/damper/fitting placements) to bridge a gap, but ONLY when one sits geometrically IN it (never on proximity alone, never wider than bridge_ft): a bridged edge discloses a bridged-gap(N) factor and discounts confidence. Every result discloses layer_signal — 'none' means the sheet's PDF layers carry no confident MEP-system classification (a flattened export with no Optional Content) and the trace ran layer-agnostic, not 'nothing found'. Named, disclosed risks, not solved here: real crossing-vs-connecting duct/pipe ambiguity (different elevations legitimately cross without connecting), and schematic vs. to-scale double-line duct representation. Corroborate a trace against resolve_tag/sweep_schedule_row before trusting it as the whole story.",
+    input_schema: {
+      type: "object",
+      properties: {
+        sheet: { type: "string" },
+        from_norm: { type: "array", items: { type: "number" }, description: "[x,y] normalized 0..1 — the seed point, ON the drawn pipe/duct/conduit line." },
+        equipment: {
+          type: "array",
+          description: "Real, already-swept equipment placements this trace might reach — required; an empty/omitted list is a named refusal.",
+          items: {
+            type: "object",
+            properties: {
+              id: { type: "string", description: "The equipment's own tag, e.g. 'AHU-1'." },
+              at_norm: { type: "array", items: { type: "number" }, description: "[x,y] normalized 0..1." },
+              label: { type: "string" },
+            },
+          },
+        },
+        fittings: {
+          type: "array",
+          description: "Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, only where one of these sits geometrically in it. Omit to disable bridging entirely.",
+          items: { type: "object", properties: { at_norm: { type: "array", items: { type: "number" } } } },
+        },
+        max_hops: { type: "number", description: "Edge-hops to walk before giving up. Default 60." },
+        seed_tol_ft: { type: "number", description: "How close (feet) the seed/equipment points must sit to the graph's own linework to count as 'on' it. Default 1.0." },
+        bridge_ft: { type: "number", description: "Widest real drawn gap (feet) a fitting placement may bridge. Default 2.0." },
+      },
+      required: ["sheet", "from_norm", "equipment"],
+    },
+  },
+  {
     name: "place_count",
     description: "Stage one count proposal per point (EA — one each) under a condition. Use for manually-located instances a symbol_sweep match, or a one-off you found by reading the sheet — not for area/room measurement (that's one_click). No scale required. Each proposal renders as a dashed marker the estimator accepts or rejects, exactly like propose_shapes.",
     input_schema: {
@@ -725,6 +757,19 @@ export async function executeAgentTool(ctx, name, args) {
           mirror: args.mirror !== false,
           tolerancePx: args.tolerance_px,
           luminanceTolerance: args.luminance_tolerance,
+        });
+      }
+
+      case "trace_connectivity": {
+        if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
+        if (!Array.isArray(args.from_norm) || args.from_norm.length !== 2) return { error: "Pass from_norm as [x,y] normalized 0..1." };
+        return await ctx.traceConnectivity(args.sheet, {
+          from: args.from_norm,
+          equipment: (args.equipment || []).map((e) => ({ id: e.id, at: e.at_norm, label: e.label })),
+          fittings: (args.fittings || []).map((f) => ({ at: f.at_norm })),
+          maxHops: args.max_hops,
+          seedTolFt: args.seed_tol_ft,
+          bridgeFt: args.bridge_ft,
         });
       }
 
