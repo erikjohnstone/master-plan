@@ -1575,6 +1575,52 @@ test("symbol_sweep exclude: a counter-example that separates nothing is refused,
   assert.match(empty.data.error, /must be an instance of what you seeded/);
 });
 
+// ── symbol_sweep precision, real domain shapes (maturity plan Phase 1, #HVAC-1) ──
+// A DIFFERENT precision shape than #259 above, deliberately: there, one shape
+// (a bare square) is a strict SUBSET of the other (the drain), and telling
+// them apart needs an explicit counter-example (`exclude`) — scoring alone
+// can't, because the decoy genuinely IS contained in every real instance.
+// Here, NEITHER symbol is a subset of the other: a real gate valve (bowtie
+// body + a straight rising stem) and a real ball valve (the identical bowtie
+// body + a diagonal lever handle) share 6 of 7 segments and differ in
+// exactly one segment's direction — this tests whether scoring ALONE, with
+// NO counter-example, keeps two close-but-genuinely-different real device
+// types apart. The fixture (test/fixtures/valve-precision.pdf,
+// scripts/make-valve-fixture.mjs): 3 gate valves + 2 ball valves, side by
+// side. Real, measured numbers below — not invented targets.
+const VALVEPLAN = fileURLToPath(new URL("./fixtures/valve-precision.pdf", import.meta.url));
+const VALVEKEY = "valve-precision.pdf";
+const GATE_SEED_RECT = [[190, 876], [260, 936]];   // includes the full stem
+const BALL_SEED_RECT = [[295, 645], [355, 690]];
+
+test("symbol_sweep precision: a gate valve and a ball valve sharing a bowtie body never conflate on score alone (#HVAC-1)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: VALVEPLAN });
+
+  const gate = await call(client, "symbol_sweep", { sheet: VALVEKEY, seed_rect: GATE_SEED_RECT });
+  assert.equal(gate.isError, false);
+  assert.equal(gate.data.seed.segments, 7, "the full gate valve — bowtie (6) + rising stem (1)");
+  assert.equal(gate.data.found, 2, "the two other gate valves; never the two ball valves");
+  assert.ok(gate.data.matches.every((m: any) => m.score === 1));
+  // the ball valves are DISCLOSED, not silently dropped — a real near-miss,
+  // below the commit bar, because the stem-vs-handle segment genuinely differs
+  assert.equal(gate.data.withheld.length, 2, "both ball valve instances, withheld as near-misses");
+  assert.ok(gate.data.withheld.every((w: any) => w.score > 0.75 && w.score < 0.92));
+  assert.equal(gate.data.rejected, undefined, "no counter-example was given — this is scoring alone, not #259's exclude mechanism");
+
+  const ball = await call(client, "symbol_sweep", { sheet: VALVEKEY, seed_rect: BALL_SEED_RECT });
+  assert.equal(ball.isError, false);
+  assert.equal(ball.data.seed.segments, 7, "the full ball valve — the same bowtie (6) + diagonal handle (1)");
+  assert.equal(ball.data.found, 1, "the one other ball valve; never the three gate valves");
+  assert.equal(ball.data.matches[0].score, 1);
+  assert.equal(ball.data.withheld.length, 3, "all three gate valve instances, withheld as near-misses");
+  assert.ok(ball.data.withheld.every((w: any) => w.score > 0.75 && w.score < 0.92));
+
+  // determinism
+  const again = await call(client, "symbol_sweep", { sheet: VALVEKEY, seed_rect: GATE_SEED_RECT });
+  assert.deepEqual(again.data, gate.data);
+});
+
 // #296 — the seed is installed work in sheet scope. Found in live validation:
 // four × on a plumbing plan with five drains, and the unmarked one was the
 // seed, correctly flagged as a miss by the estimator auditing the render.
