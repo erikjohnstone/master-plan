@@ -225,6 +225,34 @@ test("traceConnectivity: a gap too WIDE to bridge stays dead_end even with a fit
   assert.equal(r.status, "dead_end");
 });
 
+// A real gap found live against the real Bessemer corpus, not a synthetic
+// hunch: every fixture case above happens to seed exactly AT a drawn
+// segment's own endpoint (that is how these tests were authored), so an
+// earlier version of traceConnectivity that only matched EXISTING nodes
+// passed every one of them and still refused almost every real seed — an
+// estimator (or an agent) clicking partway along a real duct run, the
+// ordinary realistic gesture, does not click on a vertex. Pinned here so it
+// can never silently regress.
+test("traceConnectivity: a seed clicked partway along a run (not at either endpoint) resolves and reaches equipment", () => {
+  const g = graphOf([0, 0, 300, 0]);
+  const r = traceConnectivity(g, [150, 0], { equipmentSymbols: [{ id: "AHU-1", at: [300, 0] }] });
+  assert.equal(r.status, "reached");
+  assert.equal(r.reachedEquipment?.id, "AHU-1");
+});
+
+test("traceConnectivity: an equipment placement that sits mid-edge (not at a drawn endpoint) is still reachable", () => {
+  const g = graphOf([0, 0, 300, 0]);
+  const r = traceConnectivity(g, [0, 0], { equipmentSymbols: [{ id: "AHU-1", at: [150, 0] }] });
+  assert.equal(r.status, "reached");
+  assert.equal(r.reachedEquipment?.id, "AHU-1");
+});
+
+test("traceConnectivity: a seed a few px off the run's own centerline (within seed_tol_ft) still resolves, not just exact hits", () => {
+  const g = graphOf([0, 0, 300, 0]);
+  const r = traceConnectivity(g, [150, 3], { equipmentSymbols: [{ id: "AHU-1", at: [300, 0] }] });
+  assert.equal(r.status, "reached");
+});
+
 test("traceConnectivity: a fitting symbol sitting well OFF the gap's own line never bridges two unrelated dangling ends", () => {
   // the symbol is 50 units off to the side of the gap — nowhere near the
   // drawn linework itself, only spatially "close" in the loose sense

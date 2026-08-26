@@ -318,14 +318,62 @@ const DEFAULT_SEED_TOL_FT = 1.0;
 // symbol sitting in it, never bridged on proximity alone.
 const DEFAULT_BRIDGE_FT = 2.0;
 
-function nearestNodeWithin(graph: MepGraph, pt: Point, tolPx: number): number | null {
-  let best = -1, bestD = Infinity;
+/** Resolve a real-world seed/equipment point against the graph — an
+ *  existing NODE when one is close enough, or (a real, corpus-found gap —
+ *  see below) a point strictly INSIDE an edge, spliced into a new node on a
+ *  freshly-returned graph copy. Found live against the real Bessemer sample:
+ *  every synthetic fixture case this module was first tested against
+ *  happened to seed exactly AT a drawn segment's own endpoint, so an
+ *  earlier version that only matched existing nodes passed every test and
+ *  still refused almost every real seed — an estimator clicking partway
+ *  along a real duct run (the ordinary, realistic gesture, same as
+ *  one_click's own "click inside a room" doctrine) does not click on a
+ *  vertex. Never mutates the input graph; a caller resolving several points
+ *  in sequence must thread the returned graph into the next call, since a
+ *  second point landing on the same edge must see the first splice. */
+function resolveOnGraph(graph: MepGraph, pt: Point, tolPx: number): { graph: MepGraph; node: number | null } {
+  let bestNode = -1, bestNodeD = Infinity;
   for (let i = 0; i < graph.nodes.length; i++) {
     const n = graph.nodes[i];
     const d = Math.hypot(n.x - pt[0], n.y - pt[1]);
-    if (d < bestD) { bestD = d; best = i; }
+    if (d < bestNodeD) { bestNodeD = d; bestNode = i; }
   }
-  return best >= 0 && bestD <= tolPx ? best : null;
+  let bestEdge = -1, bestEdgeD = Infinity, bestT = 0, bestAt: Point = [0, 0];
+  for (let i = 0; i < graph.edges.length; i++) {
+    const e = graph.edges[i];
+    const a = graph.nodes[e.a], b = graph.nodes[e.b];
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const len2 = dx * dx + dy * dy;
+    if (len2 === 0) continue;
+    let t = ((pt[0] - a.x) * dx + (pt[1] - a.y) * dy) / len2;
+    t = Math.max(0, Math.min(1, t));
+    const px = a.x + t * dx, py = a.y + t * dy;
+    const d = Math.hypot(pt[0] - px, pt[1] - py);
+    if (d < bestEdgeD) { bestEdgeD = d; bestEdge = i; bestT = t; bestAt = [px, py]; }
+  }
+  // an existing node wins ties (never splice a redundant near-duplicate)
+  if (bestNode >= 0 && bestNodeD <= tolPx && bestNodeD <= bestEdgeD + 1e-9) return { graph, node: bestNode };
+  if (bestEdge < 0 || bestEdgeD > tolPx) return { graph, node: null };
+  const e = graph.edges[bestEdge];
+  if (bestT <= 1e-6) return { graph, node: e.a };
+  if (bestT >= 1 - 1e-6) return { graph, node: e.b };
+  // splice: the old edge is left in place but unreferenced by any node's
+  // own edges[] (a cheap tombstone) — BFS only ever walks node.edges, so a
+  // dead edge is simply never reached, with no index to renumber elsewhere.
+  const nodes = graph.nodes.map((n) => ({ ...n, edges: n.edges.slice() }));
+  const edges = graph.edges.map((x) => ({ ...x }));
+  const a = nodes[e.a], b = nodes[e.b];
+  const newIdx = nodes.length;
+  nodes.push({ x: bestAt[0], y: bestAt[1], edges: [] });
+  a.edges = a.edges.filter((ei) => ei !== bestEdge);
+  b.edges = b.edges.filter((ei) => ei !== bestEdge);
+  const ei1 = edges.length;
+  edges.push({ a: e.a, b: newIdx, length: Math.hypot(bestAt[0] - a.x, bestAt[1] - a.y), system: e.system, systemConfidence: e.systemConfidence, ...(e.bridged ? { bridged: true } : {}) });
+  a.edges.push(ei1); nodes[newIdx].edges.push(ei1);
+  const ei2 = edges.length;
+  edges.push({ a: newIdx, b: e.b, length: Math.hypot(b.x - bestAt[0], b.y - bestAt[1]), system: e.system, systemConfidence: e.systemConfidence, ...(e.bridged ? { bridged: true } : {}) });
+  nodes[newIdx].edges.push(ei2); b.edges.push(ei2);
+  return { graph: { nodes, edges, layerSignal: graph.layerSignal }, node: newIdx };
 }
 
 /** Bridge a real drawn gap between two dead-end (degree-1) node endpoints —
@@ -380,6 +428,18 @@ function bridgeDanglingGaps(graph: MepGraph, symbols: Point[], bridgePx: number)
 export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptions): TraceResult {
   const layer_signal = graph.layerSignal;
   const factors: string[] = [];
+  // "layer-unclassified" means more than "the pipe/duct SYSTEM type is
+  // unknown" — found via real corpus testing (known-gaps ledger item 24):
+  // with no PDF layers to exclude by, buildMepGraph has NO way to separate
+  // wall/architectural ink from real MEP linework either (wallnetwork.ts's
+  // own geometric wall-vouching is not yet wired into excludeSegs), so a
+  // "none" graph traces BOTH as one connected network. Measured on real
+  // Bessemer page 6: a seed on a bathroom exhaust fan's own duct riser
+  // "reached" a heat pump 52 hops away — almost certainly walking through
+  // wall linework, not a real duct run. The 0.6 multiplier below (steeper
+  // than an ordinary "we just don't know the system type" case) is a
+  // deliberate response to that real, disclosed finding, not a
+  // recalibration backed by a broader measured sample.
   if (layer_signal === "none") factors.push("layer-unclassified");
 
   if (!opts.equipmentSymbols || !opts.equipmentSymbols.length) {
@@ -395,20 +455,28 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
   // one actually walked below; the caller's own graph is never mutated.
   const bridgePx = (opts.bridgeFt ?? DEFAULT_BRIDGE_FT) * ppf;
   const fittingPts = (opts.fittingSymbols ?? []).map((f) => f.at);
-  const walked = fittingPts.length ? bridgeDanglingGaps(graph, fittingPts, bridgePx) : graph;
+  let walked = fittingPts.length ? bridgeDanglingGaps(graph, fittingPts, bridgePx) : graph;
 
-  const seed = nearestNodeWithin(walked, from, tolPx);
+  // Seed and every equipment placement resolve against the graph in
+  // sequence, each threading the (possibly just-spliced) graph into the
+  // next lookup — see resolveOnGraph's own comment for why this snaps to a
+  // point mid-edge, not only to existing nodes.
+  const seedR = resolveOnGraph(walked, from, tolPx);
+  walked = seedR.graph;
+  const seed = seedR.node;
   if (seed == null) {
     return { status: "refused", layer_signal, confidence: 0, factors: [], reason: "The seed point isn't on any traced linework — click directly on a drawn pipe/duct/conduit line." };
   }
 
-  // equipment placements -> their nearest graph node, within the same
-  // tolerance. An equipment whose placement sits too far from any node
-  // simply never appears as reachable — correctly excluded, not an error.
+  // equipment placements -> their nearest graph node (or a spliced point
+  // along an edge), within the same tolerance. An equipment whose placement
+  // sits too far from any linework simply never appears as reachable —
+  // correctly excluded, not an error.
   const equipAtNode = new Map<number, { id: string; at: Point }>();
   for (const eq of opts.equipmentSymbols) {
-    const ni = nearestNodeWithin(walked, eq.at, tolPx);
-    if (ni != null && !equipAtNode.has(ni)) equipAtNode.set(ni, eq);
+    const r = resolveOnGraph(walked, eq.at, tolPx);
+    walked = r.graph;
+    if (r.node != null && !equipAtNode.has(r.node)) equipAtNode.set(r.node, eq);
   }
 
   const maxHops = opts.maxHops ?? DEFAULT_MAX_HOPS;
@@ -485,7 +553,7 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
     if (bridgedHops > 0) factors.push(`bridged-gap(${bridgedHops})`);
     const system = systems.size === 1 ? [...systems][0] : undefined;
     let confidence = 1;
-    if (factors.includes("layer-unclassified")) confidence *= 0.85;
+    if (factors.includes("layer-unclassified")) confidence *= 0.6;
     if (hops > 30) confidence *= 0.9;
     if (bridgedHops > 0) confidence *= Math.pow(0.9, bridgedHops);
     return {
