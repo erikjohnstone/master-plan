@@ -2355,3 +2355,117 @@ test("reference kind negative control: ordinary numbered notes prose is never mi
   const g = buildSheetGraph([sheet]);
   assert.ok(!g.tables.some((t) => t.kind === "reference"), "ordinary note prose never qualifies as a header row");
 });
+
+// ── column bands: a real 2-column sheet layout defeats table discovery ─────
+// clusterRows is Y-only — it has no idea a sheet can be drafted as two
+// SEPARATE physical column strips of tables side by side (real, common,
+// field-found on itd-d1-lab-mechanical.pdf's own sheets #12/#13/#14: a LEFT
+// stack of tables and a RIGHT stack, each with its own titles/headers/data,
+// at completely different x-ranges). When two such tables' rows happen to
+// land within a few px of each other in y — measured live, a real data row
+// on one side 2px from a real header tier on the other — they glue into ONE
+// clusterRows row spanning both tables' x-ranges, and a real multi-tier
+// header's own tier-merge (the "almost entirely header words" ratio gate)
+// reads that inflated row and refuses to merge, leaving the table stuck on
+// a partial, wrong anchor set (or, on itd-d1-lab's own real sheets, losing
+// the table's kind/key entirely). `bandedSheets` pre-partitions a proven
+// 2-up sheet's spans by x BEFORE clusterRows ever sees them, so each table's
+// own rows cluster in isolation — this fixture mirrors that exact shape
+// with invented tags/text (itd-d1-lab-mechanical.pdf is an external,
+// redistribution-uncertain corpus file per opentakeoff-corpus/sets.json —
+// never embedded verbatim in a committed test).
+const bandSp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
+
+function twoColumnEquipmentFixture(): SheetSpans {
+  // LEFT column: an unrelated descriptive equipment list, many rows (real
+  // 2-up sheets are dense — MIN_ROWS guards against firing on a sparse one).
+  const left: GraphSpan[] = [
+    bandSp("LAB EQUIPMENT LIST", 50, 20),
+    bandSp("ITEM", 0, 60), bandSp("DESCRIPTION", 100, 60), bandSp("VENTS TO", 350, 60),
+  ];
+  const skipY = new Set([250, 270]); // stays clear of the RIGHT table's own header tiers
+  let y = 90;
+  for (let i = 0; i < 12; i++) {
+    while (skipY.has(y)) y += 20;
+    left.push(bandSp(`E-${i + 1}`, 0, y), bandSp(`SOME BENCH DEVICE ${i}`, 100, y), bandSp("ROOM " + (100 + i), 350, y));
+    y += 20;
+  }
+  // Contamination: a LEFT-column data row lands within clusterRows' own
+  // tolerance (0.35·h ≈ 3px at h=8) of the RIGHT table's own lower header
+  // tier (y=270) — the real shape found live (a left-column row 2px from a
+  // right-column header tier on itd-d1-lab-mechanical.pdf#13).
+  left.push(bandSp("BENCH SCALE", 0, 271), bandSp("WEIGHING UNIT", 100, 271), bandSp("SMALL ITEM", 250, 271), bandSp("BENCHTOP UNIT", 350, 271));
+
+  // RIGHT column: a real equipment schedule shape — a 2-tier header (a
+  // narrower upper tier, SYMBOL/VELOCITY/MANUFACTURER, sitting above the
+  // real fuller tier that also carries TYPE/AREA SERVED/REMARKS) — the same
+  // family of shape as SAV's own real header on itd-d1-lab-mechanical.pdf,
+  // needing tier-descent to read as one table.
+  const right: GraphSpan[] = [
+    bandSp("SUPPLY AIR VALVE SCHEDULE", 900, 200),
+    bandSp("SYMBOL", 900, 250), bandSp("VELOCITY", 990, 250), bandSp("MANUFACTURER", 1080, 250),
+    bandSp("SYMBOL", 900, 270), bandSp("AREA SERVED", 985, 270), bandSp("TYPE", 1090, 270), bandSp("VELOCITY", 1160, 270), bandSp("MANUFACTURER", 1250, 270), bandSp("REMARKS", 1360, 270),
+  ];
+  for (let i = 0; i < 6; i++) {
+    const ry = 300 + i * 15;
+    right.push(bandSp(`SAV-${i + 1}`, 900, ry), bandSp("LAB " + (100 + i), 985, ry), bandSp("VAV", 1090, ry), bandSp("500", 1160, ry), bandSp("ACME", 1250, ry), bandSp("1,2", 1360, ry));
+  }
+  return { key: "2col.pdf#1", sheet_number: "M-12", spans: [...left, ...right] };
+}
+
+test("2-column sheet layout: two genuinely separate side-by-side tables both extract cleanly", () => {
+  const sheet = twoColumnEquipmentFixture();
+  const g = buildSheetGraph([sheet]);
+  const sav = g.tables.find((t) => t.rows.some((r) => r.key === "SAV-1"));
+  assert.ok(sav, `SAV-1's table extracted: ${g.tables.map((t) => `${t.kind}:${t.title?.text || ""}`).join(" | ")}`);
+  assert.equal(sav!.kind, "equipment");
+  assert.equal(sav!.title?.text, "SUPPLY AIR VALVE SCHEDULE", "the real title, not a garbled data-cell guess");
+  assert.deepEqual(sav!.rows.map((r) => r.key), ["SAV-1", "SAV-2", "SAV-3", "SAV-4", "SAV-5", "SAV-6"], "exactly the real rows — no spurious 'SYMBOL' row from a misread header tier");
+  assert.deepEqual([...sav!.headers].sort(), ["MANUFACTURER", "REMARKS", "SYMBOL", "TYPE", "VELOCITY"], "the full merged 2-tier header (5 real anchors) — not just the narrower upper tier (3)");
+  const row1 = sav!.rows[0];
+  assert.equal(row1.cells.REMARKS?.text, "1,2", "the lower tier's own REMARKS column survives the merge");
+
+  // the LEFT table's real rows are untouched by the split
+  const leftHits = g.tables.filter((t) => t.rows.some((r) => r.key === "E-1"));
+  assert.ok(leftHits.length >= 1, "the left-column table still extracts too");
+});
+
+test("2-column sheet layout negative control: a real single wide table (NUMBER/NAME far from FLOOR/BASE) is never split", () => {
+  // The real shape a naive x-aware fix broke (field-found on demo/sample-
+  // finish-plan.pdf's own real ROOM FINISH SCHEDULE): ONE logical table
+  // whose identity columns (NUMBER/NAME) sit at a modest x and whose finish
+  // columns (FLOOR/BASE/WALL/CEILING) start well to the right — a genuine,
+  // wide, but ordinary intra-table gap, not a seam between two tables. A
+  // second, real, separate MATERIAL SCHEDULE sits further right still on
+  // the same sheet (also real on sample-finish-plan.pdf#2), giving the
+  // sheet real 2-up-shaped density without this table itself being 2-up.
+  const spans: GraphSpan[] = [
+    bandSp("ROOM FINISH SCHEDULE", 100, 20),
+    bandSp("NUMBER", 0, 60), bandSp("NAME", 120, 60), bandSp("FLOOR", 500, 60), bandSp("BASE", 620, 60), bandSp("WALL", 740, 60), bandSp("CEILING", 860, 60),
+  ];
+  for (let i = 0; i < 12; i++) {
+    const y = 90 + i * 20;
+    spans.push(
+      bandSp(String(100 + i), 0, y), bandSp("ROOM " + i, 120, y),
+      bandSp("VCT-1", 500, y), bandSp("RB-1", 620, y), bandSp("P-1", 740, y), bandSp("ACT-1", 860, y),
+    );
+  }
+  spans.push(bandSp("MATERIAL SCHEDULE", 1300, 20), bandSp("CODE", 1300, 60), bandSp("MATERIAL", 1400, 60), bandSp("MANUFACTURER", 1550, 60), bandSp("COLOR", 1750, 60));
+  for (let i = 0; i < 10; i++) {
+    const y = 90 + i * 20;
+    spans.push(bandSp(`M-${i + 1}`, 1300, y), bandSp("PAINT", 1400, y), bandSp("SHERWIN", 1550, y), bandSp("WHITE", 1750, y));
+  }
+
+  const g = buildSheetGraph([{ key: "wide.pdf#1", sheet_number: "A-101", spans }]);
+  const rf = g.tables.find((t) => t.kind === "room-finish");
+  assert.ok(rf, `room-finish table extracted: ${g.tables.map((t) => t.kind).join(", ")}`);
+  assert.equal(rf!.rows.length, 12, "every real room row present — NUMBER/NAME was never severed from FLOOR/BASE/WALL/CEILING");
+  assert.deepEqual([...rf!.headers].sort(), ["BASE", "CEILING", "FLOOR", "NAME", "NUMBER", "WALL"], "all 6 real columns on one table, not split into a NUMBER/NAME fragment and a FLOOR/BASE fragment");
+  const row0 = rf!.rows.find((r) => r.key === "100")!;
+  assert.equal(row0.cells.FLOOR?.text, "VCT-1");
+  assert.equal(row0.cells.CEILING?.text, "ACT-1");
+
+  const mat = g.tables.find((t) => t.kind === "finish" && t.title?.text === "MATERIAL SCHEDULE");
+  assert.ok(mat, "the real, separate MATERIAL SCHEDULE also extracts, on its own");
+  assert.equal(mat!.rows.length, 10);
+});
