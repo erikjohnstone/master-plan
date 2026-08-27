@@ -1550,19 +1550,62 @@ export interface RedundantRoomView<Id> {
  * across a full floor-plan sheet. */
 const ROOM_ATTRIBUTION_MAX_DIAGONAL_FRAC = 0.2;
 
+/** Shared "collapse a group of same-tag, multi-discipline instances" decision
+ * — keep the discipline with the MOST occurrences in the group (never the
+ * sum, never the fewest — the doctrine both the room-keyed and the
+ * coordinate-keyed grouping below share); ties broken alphabetically for
+ * full determinism. Returns nothing when the group is single-discipline —
+ * there is nothing redundant to collapse. */
+function collapseGroup<Id, A extends { discipline: string | null; sheet: string; id: Id }>(
+  group: A[], describeRoom: (kept: A) => string,
+): RedundantRoomView<Id>[] {
+  const byDisc = new Map<string, A[]>();
+  for (const a of group) {
+    const arr = byDisc.get(a.discipline!);
+    if (arr) arr.push(a); else byDisc.set(a.discipline!, [a]);
+  }
+  if (byDisc.size < 2) return [];
+  let keptDisc = "", keptGroup: A[] = [];
+  for (const [disc, arr] of [...byDisc.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+    if (arr.length > keptGroup.length) { keptDisc = disc; keptGroup = arr; }
+  }
+  const keptSheet = keptGroup[0].sheet;
+  const out: RedundantRoomView<Id>[] = [];
+  for (const [disc, arr] of byDisc) {
+    if (disc === keptDisc) continue;
+    for (const a of arr) out.push({ id: a.id, sheet: a.sheet, room: describeRoom(a), keptDiscipline: keptDisc, keptSheet });
+  }
+  return out;
+}
+
+/** How close (image px, same RENDER_SCALE throughout this pipeline, so a
+ * real cross-sheet px distance is meaningful without a scale conversion) two
+ * cross-discipline matches with NO attributable room must sit to be trusted
+ * as the same physical device redrawn — not a room-sized radius (that would
+ * risk crediting two genuinely different nearby devices), a tight one: real,
+ * measured case (itd-d1-lab-mechanical.pdf's LEF-1, an exhaust fan serving a
+ * building-wide riser with no room number drawn anywhere near it on EITHER
+ * its M2.0 or P3.0 "enlarged" view) sits 9.2px apart. */
+const COORD_ATTRIBUTION_MAX_PX = 40;
+
 export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
   type Attributed = RoomSweepInstance<Id> & { room: RoomCandidate };
   const attributed: Attributed[] = [];
+  const unattributed: RoomSweepInstance<Id>[] = [];
   for (const inst of instances) {
-    if (!inst.discipline || !inst.rooms.length) continue;
-    const maxDist = ROOM_ATTRIBUTION_MAX_DIAGONAL_FRAC * Math.hypot(inst.sheetWidthPx, inst.sheetHeightPx);
+    if (!inst.discipline) continue; // no discipline read at all — never enters either path
     let best: RoomCandidate | null = null, bestD = Infinity;
-    for (const r of inst.rooms) {
-      const cx = (r.bbox[0] + r.bbox[2]) / 2, cy = (r.bbox[1] + r.bbox[3]) / 2;
-      const d = Math.hypot(inst.at[0] - cx, inst.at[1] - cy);
-      if (d < bestD) { bestD = d; best = r; }
+    if (inst.rooms.length) {
+      const maxDist = ROOM_ATTRIBUTION_MAX_DIAGONAL_FRAC * Math.hypot(inst.sheetWidthPx, inst.sheetHeightPx);
+      for (const r of inst.rooms) {
+        const cx = (r.bbox[0] + r.bbox[2]) / 2, cy = (r.bbox[1] + r.bbox[3]) / 2;
+        const d = Math.hypot(inst.at[0] - cx, inst.at[1] - cy);
+        if (d < bestD) { bestD = d; best = r; }
+      }
+      if (!best || bestD > maxDist) best = null;
     }
-    if (best && bestD <= maxDist) attributed.push({ ...inst, room: best });
+    if (best) attributed.push({ ...inst, room: best });
+    else unattributed.push(inst); // no room credited — try coordinate proximity below, never guessed either way
   }
   const byRoom = new Map<string, Attributed[]>();
   for (const a of attributed) {
@@ -1572,30 +1615,35 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   }
   const out: RedundantRoomView<Id>[] = [];
   for (const group of byRoom.values()) {
-    const byDisc = new Map<string, Attributed[]>();
-    for (const a of group) {
-      const arr = byDisc.get(a.discipline!);
-      if (arr) arr.push(a); else byDisc.set(a.discipline!, [a]);
-    }
-    if (byDisc.size < 2) continue; // one discipline only — nothing redundant
-    // keep the discipline with the MOST occurrences in this room (never the
-    // sum across disciplines, never the fewest); ties broken alphabetically
-    // for full determinism.
-    let keptDisc = "", keptGroup: Attributed[] = [];
-    for (const [disc, arr] of [...byDisc.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
-      if (arr.length > keptGroup.length) { keptDisc = disc; keptGroup = arr; }
-    }
-    const keptSheet = keptGroup[0].sheet;
-    for (const [disc, arr] of byDisc) {
-      if (disc === keptDisc) continue;
-      for (const a of arr) {
-        out.push({
-          id: a.id, sheet: a.sheet,
-          room: `${a.room.name ? `${a.room.name} ` : ""}${a.room.tag}`.trim(),
-          keptDiscipline: keptDisc, keptSheet,
-        });
+    out.push(...collapseGroup<Id, Attributed>(group, (a) => `${a.room.name ? `${a.room.name} ` : ""}${a.room.tag}`.trim()));
+  }
+
+  // Coordinate-proximity fallback — ONLY for instances no room could be
+  // credited to at all (never overrides a real room attribution above).
+  // Simple connected-components clustering: two instances within
+  // COORD_ATTRIBUTION_MAX_PX of each other join one cluster (transitively —
+  // A near B near C clusters all three, same as the real drafting case
+  // would produce for a 3+-discipline redraw), then the identical
+  // multi-discipline collapse doctrine applies per cluster.
+  const n = unattributed.length;
+  const parent = Array.from({ length: n }, (_, i) => i);
+  const find = (i: number): number => (parent[i] === i ? i : (parent[i] = find(parent[i])));
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      if (Math.hypot(unattributed[i].at[0] - unattributed[j].at[0], unattributed[i].at[1] - unattributed[j].at[1]) <= COORD_ATTRIBUTION_MAX_PX) {
+        const ri = find(i), rj = find(j);
+        if (ri !== rj) parent[ri] = rj;
       }
     }
+  }
+  const clusters = new Map<number, RoomSweepInstance<Id>[]>();
+  for (let i = 0; i < n; i++) {
+    const r = find(i);
+    const arr = clusters.get(r);
+    if (arr) arr.push(unattributed[i]); else clusters.set(r, [unattributed[i]]);
+  }
+  for (const cluster of clusters.values()) {
+    out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(no room drawn nearby — same-location redraw)"));
   }
   return out;
 }

@@ -278,14 +278,38 @@ test("dedupeCrossDisciplineRoomViews: negative control — same tag, same room, 
   assert.equal(redundant.length, 0, "one discipline drawing the same room twice is a real separate-install signal, never collapsed");
 });
 
-test("dedupeCrossDisciplineRoomViews: no room within a plausible distance — never guesses, never collapses", () => {
-  // ROOM sits far outside the 20%-of-diagonal attribution bound from `at`
+test("dedupeCrossDisciplineRoomViews: no room within a plausible distance, and the marks themselves are far apart too — never guesses, never collapses", () => {
+  // ROOM sits far outside the 20%-of-diagonal attribution bound from `at`,
+  // and the two `at` marks are also >COORD_ATTRIBUTION_MAX_PX apart, so
+  // NEITHER the room-based nor the coordinate-proximity fallback fires —
+  // two real, unrelated marks that just happen to have no nearby room.
   const instances = [
     inst(1, "M3.0", "M", [10, 10], [ROOM]),
-    inst(2, "P4.0", "P", [10, 10], [ROOM]),
+    inst(2, "P4.0", "P", [500, 500], [ROOM]),
   ];
   const redundant = dedupeCrossDisciplineRoomViews(instances);
-  assert.equal(redundant.length, 0, "a room label too far from the mark is never attributed, so nothing collapses");
+  assert.equal(redundant.length, 0, "a room label too far from the mark is never attributed, and the marks are too far apart to be the same device, so nothing collapses");
+});
+
+test("dedupeCrossDisciplineRoomViews: no room nearby, but the marks sit at nearly the same coordinate — coordinate-proximity fallback collapses (real LEF-1 shape, itd-d1-lab-mechanical.pdf: an exhaust fan serving a building-wide riser, no room number drawn near it on either its M2.0 or P3.0 view, marks 9.2px apart)", () => {
+  const instances = [
+    inst(1, "M3.0", "M", [2231.8, 2356.8], [ROOM]),
+    inst(2, "P4.0", "P", [2234.7, 2363.5], [ROOM]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 1, "two cross-discipline marks with no attributable room, sitting within the coordinate-proximity threshold, collapse to one");
+  assert.equal(redundant[0].id, 2);
+  assert.equal(redundant[0].keptDiscipline, "M");
+  assert.equal(redundant[0].keptSheet, "M3.0");
+});
+
+test("dedupeCrossDisciplineRoomViews: no room nearby, marks close but SAME discipline — a real repeat, never collapsed by the coordinate fallback either", () => {
+  const instances = [
+    inst(1, "M3.0", "M", [10, 10], [ROOM]),
+    inst(2, "M3.0", "M", [15, 12], [ROOM]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 0, "same-discipline marks, even at near-identical coordinates, are a real separate-install signal — the coordinate fallback still requires 2+ disciplines, same doctrine as the room-based path");
 });
 
 test("dedupeCrossDisciplineRoomViews: an instance with no known discipline never enters the dedup (never dropped, never a kept anchor)", () => {
