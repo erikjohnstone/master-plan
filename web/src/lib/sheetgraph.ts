@@ -875,7 +875,13 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
 // the run, and each sub-anchor is labelled "<PARENT> <SUB>" ("WALLS N") so
 // the column keeps both halves of its meaning. No parent above, no sub-tier:
 // an unexplained token never mints a column.
-const SUB_LABEL_RE = /^[A-Z0-9][A-Z0-9.\/-]{0,5}$/;
+//
+// %, °, and the two real glyphs a firm draws for "phase" (∅ empty-set, Ø
+// slashed-O — both seen in the real corpus for the same "V/∅" column)
+// widen this past bare alphanumeric codes (accuracy-hardening plan, ledger
+// item 29): a real leaf sub-label routinely carries a unit symbol ("RH%",
+// "V/∅"), not just a bare code like "N"/"E"/"S"/"W".
+const SUB_LABEL_RE = /^[A-Z0-9][A-Z0-9.\/%°∅Ø-]{0,5}$/;
 
 function parentLabelOver(rows: GraphSpan[][], hdrIdx: number, topIdx: number, gx0: number, gx1: number, vocab: string[]): string | null {
   const width = Math.max(Math.min(gx1, gx0 + 4000) - gx0, 1);
@@ -901,6 +907,66 @@ function parentLabelOver(rows: GraphSpan[][], hdrIdx: number, topIdx: number, gx
   return null;
 }
 
+// Like parentLabelOver, but a real parent is not always a vocabulary word —
+// "OUTSIDE AIR" / "ENTERING (AIR)" / "AIR STREAM SYSTEM" / "WATER SYSTEM"
+// name nothing in EQUIPMENT_HEADERS' own vocabulary (accuracy-hardening
+// plan, ledger item 29, real "HUMIDIFIER SCHEDULE" nested twin-column
+// tiers). Vocabulary still wins first, exactly as parentLabelOver alone —
+// a real recognized column word overhead is always the stronger signal —
+// but where that comes up empty across the WHOLE scanned window, a real
+// all-caps phrase whose box actually covers the interval is accepted
+// instead, the same "a real title reads as one run of words" reasoning
+// already used elsewhere in this file (findTableBoundary's own title
+// check) applied one tier up. A SEPARATE function from parentLabelOver,
+// deliberately: that one is also called from findHeaderRow's own
+// ambiguous-duplicate-column path, and widening it there was never
+// measured — kept exactly as it already was, tested, everywhere else.
+const PHRASE_RE = /^[A-Z][A-Z0-9 .,'&()/-]{1,40}$/;
+function parentPhraseOver(rows: GraphSpan[][], hdrIdx: number, floorIdx: number, gx0: number, gx1: number, vocab: string[]): string | null {
+  const width = Math.max(Math.min(gx1, gx0 + 4000) - gx0, 1);
+  const hs = rows[hdrIdx].map((t) => t.h || 8).sort((a, b) => a - b);
+  const near = Math.max(24, (hs[hs.length >> 1] || 8) * 4);
+  const hy = rowY(rows[hdrIdx]);
+  const floor = Math.max(0, floorIdx);
+  let phrase: { text: string; d: number } | null = null;
+  for (let j = hdrIdx - 1; j >= floor; j--) {
+    if (hy - rowY(rows[j]) > near) break;
+    for (const t of rows[j]) {
+      const cx = t.x + (t.w || 0) / 2;
+      const inInterval = cx >= gx0 && cx < gx1;
+      const overlaps = Math.min(t.x + (t.w || 0), gx1) - Math.max(t.x, gx0) > width * 0.3;
+      if (!inInterval && !overlaps) continue;
+      const lbl = headerLabel(t.str, vocab);
+      if (lbl) return lbl;   // a recognized vocabulary parent always wins first
+      const s = norm(t.str);
+      if (!PHRASE_RE.test(s) || /^\(.*\)$/.test(s)) continue;   // a bare unit fragment names nothing
+      const d = (hy - rowY(rows[j])) * 1000 + Math.abs(cx - (gx0 + gx1) / 2);
+      if (!phrase || d < phrase.d) phrase = { text: s, d };
+    }
+  }
+  return phrase?.text ?? null;
+}
+
+function mintSubAnchors(out: Anchor[], used: Set<string>, r: Array<{ t: GraphSpan; parent: string }>, mid: (t: GraphSpan) => number): void {
+  const parent = r[0].parent;
+  // sub-columns under a merged parent are equal-width: the pitch between
+  // their labels IS the column width, so each one's bounds are its center
+  // ± half a pitch. Those bounds are what keep a left-aligned wall code out
+  // of the narrow BASE column next door. A lone, independently-parented
+  // column (no real run to measure a pitch from) stays unbounded, exactly
+  // like any other single-tier anchor.
+  const pitch = r.length > 1
+    ? r.slice(1).map((x, i) => mid(x.t) - mid(r[i].t)).sort((a, b) => a - b)[(r.length - 1) >> 1]
+    : 0;
+  for (const { t } of r) {
+    const label = `${parent} ${norm(t.str)}`;
+    if (used.has(label)) continue;
+    used.add(label);
+    const c = mid(t);
+    out.push(pitch > 0 ? { label, x: c, x0: c - pitch / 2, x1: c + pitch / 2 } : { label, x: c });
+  }
+}
+
 function subTierAnchors(rows: GraphSpan[][], hdrIdx: number, anchors: Anchor[], vocab: string[]): Anchor[] {
   const lo = anchors[0].x, hi = anchors[anchors.length - 1].x;
   const loose = rows[hdrIdx]
@@ -923,22 +989,38 @@ function subTierAnchors(rows: GraphSpan[][], hdrIdx: number, anchors: Anchor[], 
   for (const r of runs) {
     if (r.length < 2) continue;
     const last = r[r.length - 1];
-    const parent = parentLabelOver(rows, hdrIdx, hdrIdx - 2, r[0].x, last.x + (last.w || 0), vocab);
-    if (!parent) continue;
-    // sub-columns under a merged parent are equal-width: the pitch between
-    // their labels IS the column width, so each one's bounds are its center
-    // ± half a pitch. Those bounds are what keep a left-aligned wall code out
-    // of the narrow BASE column next door.
-    const pitch = r.length > 1
-      ? r.slice(1).map((t, i) => mid(t) - mid(r[i])).sort((a, b) => a - b)[(r.length - 1) >> 1]
-      : 0;
-    for (const t of r) {
-      const label = `${parent} ${norm(t.str)}`;
-      if (used.has(label)) continue;
-      used.add(label);
-      const c = mid(t);
-      out.push(pitch > 0 ? { label, x: c, x0: c - pitch / 2, x1: c + pitch / 2 } : { label, x: c });
+    // A recognized VOCABULARY parent over the run's own FULL combined span
+    // is the established, tested signal (WALLS spanning N|E|S|W) — tried
+    // first, exactly as before, and once found, the whole run keeps sharing
+    // it exactly as before: this path is untouched, byte-for-byte the same
+    // decision it always made.
+    const vocabParent = parentLabelOver(rows, hdrIdx, hdrIdx - 2, r[0].x, last.x + (last.w || 0), vocab);
+    if (vocabParent) { mintSubAnchors(out, used, r.map((t) => ({ t, parent: vocabParent })), mid); continue; }
+    // No vocabulary parent covers the whole run — do not guess one for it
+    // (real, found live, ledger item 29: "TEMP." under "OUTSIDE AIR" and
+    // "TEMP." under "ENTERING (AIR)" gap-cluster into one run exactly like
+    // WALLS' N/E/S/W, but they are NOT sub-columns of one merged parent —
+    // each is its own, independently-parented real column, distinguished
+    // only by which real phrase sits directly above EACH token, not by
+    // gap distance, which is identical either way). Re-parent PER TOKEN
+    // instead, with a window sized to reach a real phrase sitting above it
+    // without reaching its neighbour's, then re-group only tokens that
+    // truly share the SAME immediate parent AND sit at normal sub-column
+    // pitch — never activated for a run that already found a vocabulary
+    // parent above, so WALLS' own N/E/S/W behavior is exactly unchanged.
+    const halfPitch = Math.max(24, med / 2);
+    const withParent = r
+      .map((t) => ({ t, parent: parentPhraseOver(rows, hdrIdx, hdrIdx - 8, mid(t) - halfPitch, mid(t) + halfPitch, vocab) }))
+      .filter((x): x is { t: GraphSpan; parent: string } => x.parent != null);
+    if (!withParent.length) continue;   // no parent anywhere — unexplained, no sub-tier, as always
+    const subRuns: Array<typeof withParent> = [[withParent[0]]];
+    for (let i = 1; i < withParent.length; i++) {
+      const prev = withParent[i - 1], cur = withParent[i];
+      const tail = subRuns[subRuns.length - 1];
+      if (cur.parent === prev.parent && mid(cur.t) - mid(prev.t) <= med * 3) tail.push(cur);
+      else subRuns.push([cur]);
     }
+    for (const sr of subRuns) mintSubAnchors(out, used, sr, mid);
   }
   return out.sort((a, b) => a.x - b.x);
 }

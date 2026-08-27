@@ -1625,6 +1625,45 @@ test("equipment extraction: a lone digit-free footnote/legend word never mints a
   assert.ok(keys.includes("PH-1"), "a real, digit-bearing tag is kept even when just as sparse as the noise around it");
 });
 
+test("twin-column tiers: two same-shaped sub-columns under DIFFERENT non-vocabulary parents stay separate, not merged into one corrupted column (ledger item 29, real HUMIDIFIER SCHEDULE)", () => {
+  // Real shape, measured against the real itd-d1-lab-mechanical.pdf#13
+  // "HUMIDIFIER SCHEDULE": two leaf sub-columns both read "TEMP." — one
+  // under "OUTSIDE AIR", one under "ENTERING (AIR)" — real parent phrases
+  // that name nothing in EQUIPMENT_HEADERS' own vocabulary. Before this
+  // fix, subTierAnchors' only signal for "these belong to one merged
+  // parent" was gap distance between adjacent loose tokens — indistinguish-
+  // able from "these are two independent columns that just happen to sit
+  // near each other on the page" when there are only two of them (a single
+  // gap sample can never be bigger than 3× itself). The combined-interval
+  // parent search then found no COVERING vocabulary word for the whole
+  // span and gave up on both, so real AMPS data ("2.7") ended up sharing a
+  // cell with 68 and 74 — someone reading "AMPS: 2.7 68 74" cannot tell
+  // which number is really the amperage.
+  const sched: SheetSpans = {
+    key: "humid.pdf#1", sheet_number: "M13",
+    spans: [
+      sp("HUMIDIFIER SCHEDULE", 100, 20),
+      // parent tier: two real, non-vocabulary phrases naming the two
+      // sub-columns below — not a single merged parent over both
+      sp("OUTSIDE AIR", 480, 50), sp("ENTERING", 600, 50),
+      // leaf tier: real vocabulary anchors (SYMBOL/CFM/MBH/AMPS) plus the
+      // two ambiguous, identically-labelled, non-vocabulary sub-columns
+      sp("SYMBOL", 100, 70), sp("CFM", 200, 70), sp("MBH", 300, 70), sp("AMPS", 400, 70),
+      sp("TEMP.", 480, 70), sp("TEMP.", 600, 70), sp("MANUFACTURER", 750, 70),
+      sp("HUM-1", 100, 95), sp("500", 200, 95), sp("30", 300, 95), sp("2.7", 400, 95),
+      sp("68", 480, 95), sp("74", 600, 95), sp("CAREL", 750, 95),
+    ],
+  };
+  const tab = extractTable(sched, "equipment")!;
+  assert.ok(tab, "the real vocabulary anchors are enough to clear the bar");
+  assert.ok(tab.headers.includes("OUTSIDE AIR TEMP."), `each sub-column keeps its own real parent: ${tab.headers.join(" | ")}`);
+  assert.ok(tab.headers.includes("ENTERING TEMP."), `each sub-column keeps its own real parent: ${tab.headers.join(" | ")}`);
+  const row = tab.rows.find((r) => r.key === "HUM-1")!;
+  assert.equal(row.cells.AMPS.text, "2.7", "the real amperage is never shared with a neighbouring sub-column's own value");
+  assert.equal(row.cells["OUTSIDE AIR TEMP."].text, "68");
+  assert.equal(row.cells["ENTERING TEMP."].text, "74");
+});
+
 test("title-hunt: a real title survives a neighboring table's own unrelated rows sharing its y-band (ledger item 5)", () => {
   // Real bug, found live on itd-d1-lab-mechanical.pdf#13: the real
   // "HUMIDIFIER SCHEDULE" title sits well above its own header, but a
