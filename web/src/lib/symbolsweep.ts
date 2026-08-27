@@ -1439,6 +1439,52 @@ export function classifySweepMatches(
   };
 }
 
+// ── same-tag corroborator discipline gate ───────────────────────────────────
+// sweep_schedule_row: a tag's OTHER occurrence, on a different plan sheet, is
+// only real corroborating evidence for the SAME symbol's own linework when
+// it's a plausible second DRAWN INSTANCE of that symbol — real case found on
+// itd-d1-lab (HUM-1, DFC-1): the tag's only other drawn occurrence anywhere
+// sat on a different trade's own "enlarged" plan of the same room (a
+// plumbing sheet's callout at the unit's water/condensate connection), which
+// by the IDENTICAL doctrine the cross-discipline redundant-view collapse
+// below already establishes is a reference to the SAME single physical
+// device for another trade's own drawing — never a second occurrence of the
+// mechanical symbol's own linework. Requiring it to recur there manufactured
+// a false "linework does not recur" refusal on a tag that was genuinely,
+// correctly, singly installed. `disciplineOfSheetNumber` is the identical
+// first-token-of-the-sheet-number read `dedupeCrossDisciplineRoomViews`'s own
+// caller and layers.ts's DISCIPLINES table already trust — extracted here so
+// both the corroborator gate and the redundant-view collapse share one read,
+// never two that could silently drift.
+export function disciplineOfSheetNumber(sheetNumber: string | null | undefined): string | null {
+  const m = /^[A-Z]{1,3}/.exec((sheetNumber || "").trim().toUpperCase());
+  return m ? m[0] : null;
+}
+
+/** Among same-tag corroborator candidates (already sorted by the caller's
+ * own preference — most occurrences first, ties by sheet order), pick the
+ * first one that shares the anchor sheet's own AIA discipline — real
+ * corroborating evidence, a plausible second drawn instance of the same
+ * symbol. Returns null when the anchor's discipline IS known but no
+ * candidate shares it: the caller's cue to treat the tag as having no
+ * same-tag corroborator at all (same as a tag drawn exactly once anywhere),
+ * falling through to cross-tag/uncorroborated handling rather than refusing
+ * on a cross-discipline reference that was never going to recur. When the
+ * anchor's own discipline can't be read at all (never guessed — no
+ * classifiable sheet number), there is no cross-discipline distinction to
+ * safely draw, so the caller's first candidate is returned unchanged — the
+ * prior any-sheet behavior, exactly as before this gate existed. */
+export function pickSameDisciplineCorroborator<T>(
+  anchorSheetNumber: string | null | undefined,
+  candidates: T[],
+  sheetNumberOf: (c: T) => string | null | undefined,
+): T | null {
+  if (!candidates.length) return null;
+  const anchorDisc = disciplineOfSheetNumber(anchorSheetNumber);
+  if (!anchorDisc) return candidates[0];
+  return candidates.find((c) => disciplineOfSheetNumber(sheetNumberOf(c)) === anchorDisc) ?? null;
+}
+
 // ── cross-discipline redundant room-view dedup ──────────────────────────────
 // A real, common cross-trade drafting convention: two disciplines (mechanical,
 // plumbing, electrical, …) each draw their OWN "enlarged" plan of the SAME

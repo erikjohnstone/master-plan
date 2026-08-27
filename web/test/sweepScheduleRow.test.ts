@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, type Point, type RoomSweepInstance } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type Point, type RoomSweepInstance } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -118,6 +118,53 @@ test("corroborateFingerprint: a bare underline/leader (< 3 segments) at pad 1 is
   const r = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null);
   assert.ok(r);
   assert.ok(r!.fp.segments >= 3, "never fingerprints the degenerate underline alone");
+});
+
+// ── disciplineOfSheetNumber / pickSameDisciplineCorroborator ────────────────
+// The real HUM-1/DFC-1 bug (itd-d1-lab, set 002): each tag's HUMIDIFIER
+// SCHEDULE / DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE table has no
+// sibling row at all (a genuine single-row table), and the tag's only OTHER
+// drawn text occurrence anywhere in the set sat on a different-discipline
+// sheet (a plumbing sheet's own callout at the unit's connection point) —
+// sweep_schedule_row's same-tag corroboration required a whole-shape match
+// to recur THERE, which it structurally never could (a plumbing callout
+// isn't the mechanical symbol's own linework), producing a false "linework
+// does not recur" refusal on a tag confirmed by direct render to be a real,
+// correctly single, drawn instance. These fixtures are synthetic — no
+// set/tag/page from the real corpus — so the fix is proven generic.
+test("disciplineOfSheetNumber: reads the leading AIA letters off a real sheet number", () => {
+  assert.equal(disciplineOfSheetNumber("M3.0"), "M");
+  assert.equal(disciplineOfSheetNumber("P4.0"), "P");
+  assert.equal(disciplineOfSheetNumber("E-101"), "E");
+  assert.equal(disciplineOfSheetNumber("ahu-3"), "AHU", "case-insensitive, up to 3 letters");
+});
+test("disciplineOfSheetNumber: no leading letters, empty, or missing — null, never guessed", () => {
+  assert.equal(disciplineOfSheetNumber("3.0"), null);
+  assert.equal(disciplineOfSheetNumber(""), null);
+  assert.equal(disciplineOfSheetNumber(null), null);
+  assert.equal(disciplineOfSheetNumber(undefined), null);
+});
+
+test("pickSameDisciplineCorroborator: real HUM-1/DFC-1 shape — the only other occurrence is a DIFFERENT discipline, so no corroborator (null), not a false pick", () => {
+  const candidates = [{ sheetNumber: "P4.0" }]; // the plumbing callout — the tag's only other occurrence
+  const pick = pickSameDisciplineCorroborator("M3.0", candidates, (c) => c.sheetNumber);
+  assert.equal(pick, null, "a cross-discipline occurrence must never be trusted as a required same-tag corroborator");
+});
+
+test("pickSameDisciplineCorroborator: a real same-discipline second occurrence IS picked, even when a cross-discipline one is preferred by the caller's own ordering", () => {
+  const candidates = [{ sheetNumber: "P4.0" }, { sheetNumber: "M5.0" }]; // caller's own preference order (occ-count/ord)
+  const pick = pickSameDisciplineCorroborator("M3.0", candidates, (c) => c.sheetNumber);
+  assert.deepEqual(pick, { sheetNumber: "M5.0" }, "skips the cross-discipline candidate for the real same-discipline one");
+});
+
+test("pickSameDisciplineCorroborator: anchor discipline unreadable — falls back to the caller's first candidate unchanged (prior any-sheet behavior)", () => {
+  const candidates = [{ sheetNumber: "P4.0" }, { sheetNumber: "M5.0" }];
+  const pick = pickSameDisciplineCorroborator(null, candidates, (c) => c.sheetNumber);
+  assert.deepEqual(pick, candidates[0], "no cross-discipline distinction can be safely drawn without a known anchor discipline");
+});
+
+test("pickSameDisciplineCorroborator: no candidates at all — null", () => {
+  assert.equal(pickSameDisciplineCorroborator("M3.0", [], (c: { sheetNumber: string }) => c.sheetNumber), null);
 });
 
 // ── classifySweepMatches ─────────────────────────────────────────────────

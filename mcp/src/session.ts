@@ -38,7 +38,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS }
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, dedupeCrossDisciplineRoomViews, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -2972,11 +2972,36 @@ export class Session {
     // the corroborator may live on ANOTHER sheet, so it carries that sheet:
     // the probe has to cross the same size ratio the real sweep will (#186),
     // or a fingerprint gets rejected as "doesn't recur" for the sole reason
-    // that the two plan sheets are drawn at different scales
+    // that the two plan sheets are drawn at different scales.
+    //
+    // A same-tag occurrence on a DIFFERENT-DISCIPLINE sheet is not real
+    // corroborating evidence, though — real case (itd-d1-lab HUM-1, DFC-1):
+    // the tag's only other drawn occurrence sits on that other trade's own
+    // "enlarged" plan of the same room (a plumbing sheet's callout at the
+    // unit's water/condensate connection), which by the IDENTICAL doctrine
+    // already established for the cross-discipline redundant-view collapse
+    // in step 4b below is a reference to the SAME single physical device for
+    // another trade's own drawing — never a second occurrence of the
+    // mechanical symbol's own linework. Requiring it to recur there
+    // manufactures exactly the false "linework does not recur" refusal this
+    // must not create, on a tag that is genuinely, correctly, singly
+    // installed. `pickSameDisciplineCorroborator` (symbolsweep.ts) gates
+    // this: a cross-sheet corroborator is only trusted as a REQUIRED
+    // same-tag corroborator when it shares the anchor's own discipline; when
+    // the anchor's discipline can't be read at all (never guessed), the
+    // prior any-sheet behavior holds unchanged, since there is no
+    // cross-discipline distinction to safely draw. A tag with ONLY
+    // cross-discipline other-occurrences falls through with corro === null,
+    // same as a tag drawn exactly once anywhere — the cross-tag fallback,
+    // and ultimately the disclosed-uncorroborated acceptance, below.
     type Corro = { sh: SheetState; segs: number[]; occ: TagOcc[] };
     let corro: Corro | null = null;
-    if (withOcc[0].occ.length > 1) corro = { sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.slice(1) };
-    else if (withOcc.length > 1) corro = { sh: withOcc[1].sh, segs: (await this.ensureGeometry(withOcc[1].sh)).segs, occ: withOcc[1].occ };
+    if (withOcc[0].occ.length > 1) {
+      corro = { sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.slice(1) };
+    } else if (withOcc.length > 1) {
+      const pick = pickSameDisciplineCorroborator(anchorSheet.sheetNumber, withOcc.slice(1), (e) => e.sh.sheetNumber);
+      if (pick) corro = { sh: pick.sh, segs: (await this.ensureGeometry(pick.sh)).segs, occ: pick.occ };
+    }
 
     // Cross-tag fallback corroborators, tried only when the tag itself has no
     // second occurrence anywhere (corro === null) — the uniquely-tagged family
@@ -3217,11 +3242,8 @@ export class Session {
     // once on each discipline's view of the SAME room is one physical device,
     // not one install per sheet. Never touches a same-discipline repeat (a
     // real separate-install signal) or a match with no confidently-attributed
-    // room (never guessed).
-    const disciplineOf = (sheetNumber: string | null | undefined): string | null => {
-      const m = /^[A-Z]{1,3}/.exec((sheetNumber || "").trim().toUpperCase());
-      return m ? m[0] : null;
-    };
+    // room (never guessed). `disciplineOfSheetNumber` (symbolsweep.ts) is the
+    // same read step 3's same-tag corroborator gate already uses above.
     const roomsBySheet = new Map<string, ReturnType<typeof roomTags>>();
     const roomsFor = (sh: SheetState): ReturnType<typeof roomTags> => {
       let rooms = roomsBySheet.get(sh.key);
@@ -3234,7 +3256,7 @@ export class Session {
     };
     const dedupInstances: RoomSweepInstance<CountedMatch>[] = [];
     for (const ps of perSheet) {
-      const discipline = disciplineOf(ps.state.sheetNumber);
+      const discipline = disciplineOfSheetNumber(ps.state.sheetNumber);
       const rooms = discipline ? roomsFor(ps.state) : [];
       for (const m of ps.matches) {
         dedupInstances.push({
