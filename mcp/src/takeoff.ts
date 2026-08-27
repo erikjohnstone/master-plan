@@ -32,6 +32,7 @@ import { HVAC_TAXONOMY, type HvacComponent } from "../../web/src/lib/hvacTaxonom
 export type FailureType =
   | "TABLE_DISCOVERY_FAILURE"
   | "TABLE_STRUCTURE_FAILURE"
+  | "OCR_FAILURE"
   | "SYMBOL_FALSE_NEGATIVE"
   | "TAG_EXTRACTION_FAILURE"
   | "TAG_NORMALIZATION_FAILURE"
@@ -150,6 +151,23 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
   if (!graph.available) {
     out.failures.push({ type: "TABLE_DISCOVERY_FAILURE", tag: "(whole set)", detail: "No text layer anywhere in this set — sheet graph unavailable." });
     return out;
+  }
+
+  // Real, found live running this pipeline against weld-county-mechanical-
+  // permit.pdf: a "schedule"-role sheet with ZERO extracted tables reads,
+  // on its own, as indistinguishable from "this sheet legitimately has no
+  // schedule" — but `sheetGraph()`'s own existing raster-schedule detector
+  // (rasterScheduleNotes, session.ts) already knows the real difference:
+  // that sheet's own real image-area fraction says the schedule is very
+  // likely pasted in as a picture (or scanned), invisible to text-based
+  // extraction no matter the vocabulary — a real, structural OCR/vision gap,
+  // not a "nothing to find here" case. Surfacing it here so a takeoff run
+  // over a real permit set doesn't silently read as complete when a whole
+  // real schedule was never even reachable.
+  const wire = await session.sheetGraph();
+  for (const note of wire.notes || []) {
+    const m = /^(\S+) is classified as a schedule sheet but 0 tables extracted.*pasted in as a picture/.exec(note);
+    if (m) out.failures.push({ type: "OCR_FAILURE", tag: "(whole sheet)", sheet: m[1], detail: note });
   }
 
   const index = taxonomyPrefixIndex(categories);
