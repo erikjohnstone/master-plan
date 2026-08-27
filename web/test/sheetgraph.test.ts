@@ -785,6 +785,52 @@ test("side-by-side tables: a code-column right edge hugs the table — the legen
   }
 });
 
+// ── WIDE_LAST title-block bleed: field-found on two real mechanical sets ────
+// federal-attachment4-mechanical.pdf#16 (VOLUME CONTROL BOX SCHEDULE) and
+// itd-d1-lab-mechanical.pdf#12 (EXHAUST FAN SCHEDULE) both draw a sheet-
+// corner title block (firm name / address / phone) to the right of the
+// table's own ruled border. bandLimits' generous rightMargin (needed so a
+// genuinely wide REMARKS value still bands) reaches far enough to sweep the
+// title block's own column in on whichever row's y happens to land near one
+// of its text lines — measured real gaps: 617px (federal-attachment4, REMARKS
+// "SDV" vs. "EGLIN AIR FORCE BASE") and 293px (itd-d1-lab), both 15–33× the
+// row's own text height. A genuine wrapped continuation never presents that
+// shape (it starts at the SAME left edge as the first line, never further
+// right of it), so a same-row second token that lands implausibly far right
+// of the cell's own accumulated text is refused rather than merged in.
+const titleBlockSched: SheetSpans = {
+  key: "tblk.pdf#1",
+  sheet_number: "A-610",
+  spans: [
+    sp("ROOM SCHEDULE", 100, 20),
+    sp("NO", 100, 60), sp("NAME", 160, 60), sp("FLOOR", 300, 60), sp("BASE", 400, 60), sp("WALL", 500, 60), sp("REMARKS", 900, 60),
+    // row 601: a clean, narrow real REMARKS value ("SDV" ~ federal-attachment4's own)
+    sp("601", 100, 80), sp("OFFICE", 160, 80), sp("CPT-1", 300, 80), sp("RB-1", 400, 80), sp("P-1", 500, 80), sp("SDV", 700, 80),
+    // the title block, sharing this row's own y — 685px right of "SDV"'s own
+    // end (700 + 3*5 = 715), 30+ text-heights past this fixture's h=8 gate
+    sp("SmithGroup", 1400, 80),
+    // row 602: a genuine two-span remark ("SEE" + "NOTE", split the way a
+    // font-run change can split one printed value into two spans) — the gap
+    // between them is ordinary word-spacing, nowhere near the bleed shape
+    sp("602", 100, 100), sp("LAB", 160, 100), sp("EPX-1", 300, 100), sp("RB-1", 400, 100), sp("P-1", 500, 100),
+    sp("SEE", 700, 100), sp("NOTE", 730, 100),
+  ],
+};
+
+test("WIDE_LAST title-block bleed: a far-off second token in the same row is refused, not merged", () => {
+  const tab = extractTable(titleBlockSched, "room-finish")!;
+  assert.equal(tab.rows.length, 2);
+  const r601 = tab.rows.find((r) => r.key === "601")!;
+  assert.equal(r601.cells.REMARKS?.text, "SDV", "the title block did not bleed into REMARKS");
+  assert.ok(!/SmithGroup/.test(r601.cells.REMARKS!.text), "title-block firm name stays out");
+});
+
+test("WIDE_LAST title-block bleed, negative case: two close spans of the same real value still merge", () => {
+  const tab = extractTable(titleBlockSched, "room-finish")!;
+  const r602 = tab.rows.find((r) => r.key === "602")!;
+  assert.equal(r602.cells.REMARKS?.text, "SEE NOTE", "an ordinary word-spacing gap still merges into one cell");
+});
+
 test("finish tables headed SYMBOL extract and chain — the INTERIOR FINISH SCHEDULE shape", () => {
   // field-found: a real set's finish table is headed SYMBOL | MATERIAL
   // DESCRIPTION | MANUFACTURER | PRODUCT — no CODE/MARK anywhere, so the
