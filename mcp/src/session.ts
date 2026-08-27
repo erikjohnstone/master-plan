@@ -442,8 +442,23 @@ interface SheetState {
    * a disclosed, not-yet-profiled cost — see the known-gaps ledger), so a
    * scenario that traces several seeds on the same sheet must not pay it
    * twice. undefined = not built yet; null = the sheet has zero vector
-   * linework (mirrors `mask`'s own null convention). */
+   * linework (mirrors `mask`'s own null convention) OR buildMepGraph's own
+   * JTS noding failed even after every retry grid (see mepGraphNodingError,
+   * which distinguishes the two null cases for traceConnectivity's own
+   * refusal reason). */
   mepGraph?: MepGraph | null;
+  /** Set alongside a null mepGraph exactly when the null came from a caught
+   * buildMepGraph noding failure (real, corpus-found — a densely hatched
+   * real sheet, e.g. a roof plan's crosshatched insulation crickets, can
+   * defeat JTS's noding even after buildMepGraph's own coarsen-and-retry
+   * mitigation), never from a sheet that legitimately has zero vector
+   * linework. Mirrors the identical, already-shipped fix TakeoffCanvas.jsx's
+   * agentFindLegendSymbols carries for findLegendGlyphs' own use of the same
+   * noding — trace_connectivity itself never got the same treatment until
+   * now, so a real seed on a real dense sheet crashed the whole tool call
+   * (isError:true, a bare JTS coordinate dump, not the tool's own documented
+   * TraceResult shape) instead of a clean, doctrine-consistent refusal. */
+  mepGraphNodingError?: string;
 }
 
 /** sheet_context decimation defaults (issue #29) — declared and stable, never
@@ -1082,6 +1097,7 @@ export class Session {
       s.mask = undefined;
       s.rmask = undefined;
       s.mepGraph = undefined;   // the noding grid is feet-true via mppf, same discipline as the vector mask
+      s.mepGraphNodingError = undefined;   // a rescale changes the noding grid — a prior noding failure at the old grid must not stick after a rebuild that may now succeed
     }
     s.upp = upp;
     // the tool reply keeps this session's source vocabulary; the stored value
@@ -2759,9 +2775,35 @@ export class Session {
           excludeSegs[i] = 1;
         }
       }
-      s.mepGraph = buildMepGraph(geo.segs, {
-        meta: geo.meta, layerOf: geo.layerOf, layers: s.layers, excludeSegs, mppf,
-      });
+      // Real, corpus-found (baker-county-eoc M1.21, a mechanical roof plan):
+      // buildMepGraph's own coarsen-and-retry mitigation (see its header
+      // comment) is a real, measured improvement, not a guarantee — a
+      // densely crosshatched real sheet (this one's roof-insulation
+      // crickets, drawn as thousands of short parallel hatch strokes
+      // crossing the gas-piping run) can still defeat JTS's noding at every
+      // retry grid. Before this fix, that threw straight out of
+      // ensureMepGraph, uncaught — trace_connectivity's own MCP wrapper
+      // (tools.ts's `run`) turned it into an isError:true reply carrying a
+      // raw JTS coordinate dump, NOT the tool's own documented TraceResult
+      // shape (structuredContent didn't even validate against
+      // traceConnectivityOutput). Caught here and folded into the exact
+      // same null-graph convention "zero vector linework" already uses,
+      // with its own distinct reason text (mepGraphNodingError) so
+      // traceConnectivity below never conflates "no linework exists" with
+      // "linework exists but couldn't be reliably noded" — mirrors the
+      // identical, already-shipped fix TakeoffCanvas.jsx's
+      // agentFindLegendSymbols carries for findLegendGlyphs' own use of
+      // this same noding (ledger, "densely-drawn sheet can defeat noding
+      // entirely" comment) — trace_connectivity itself just never got the
+      // same treatment until now.
+      try {
+        s.mepGraph = buildMepGraph(geo.segs, {
+          meta: geo.meta, layerOf: geo.layerOf, layers: s.layers, excludeSegs, mppf,
+        });
+      } catch (e) {
+        s.mepGraph = null;
+        s.mepGraphNodingError = e instanceof Error ? e.message : String(e);
+      }
     }
     return s.mepGraph;
   }
@@ -2787,7 +2829,9 @@ export class Session {
     if (!graph) {
       return {
         status: "refused", layer_signal: "none", confidence: 0, factors: [],
-        reason: "This sheet has no traced vector linework to walk — check sheet_info.has_vector_linework before tracing.",
+        reason: s.mepGraphNodingError
+          ? `This sheet's own linework could not be reliably noded for connectivity tracing (a real, dense-CAD-geometry edge case — e.g. a heavily crosshatched region crossing the run — not missing linework). Try view_sheet on the seed's own region and trace a shorter, less-cluttered run instead.`
+          : "This sheet has no traced vector linework to walk — check sheet_info.has_vector_linework before tracing.",
       };
     }
     const mppf = s.upp ? 1 / s.upp : 0;

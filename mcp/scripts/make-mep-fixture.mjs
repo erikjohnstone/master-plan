@@ -53,6 +53,27 @@
 // make-layered-fixture.mjs, real MEP-system layer names (M-DUCT / P-PIPE) —
 // the "layer_signal: strong" counterpart, proving system-tag attribution
 // survives a real PDF layer round-trip, not just a synthetic segment array.
+//
+// mep-noding-failure.pdf (3000×2000 pt): NOT a hand-composed scenario like
+// the ones above — 11 literal real segments, delta-debug-minimized (ddmin)
+// from the real baker-county-eoc-bidset.pdf corpus set's own sheet #39
+// (M1.21, MECHANICAL - ROOF PLAN: two real RTUs' own gas-piping run,
+// crossing a densely crosshatched roof-insulation cricket), starting from
+// that sheet's full ~35,791 real segments and shrinking while re-testing
+// buildMepGraph after every cut, confirmed still to defeat JTS's own
+// noding (UnaryUnionOp.union) at EVERY one of buildMepGraph's own retry
+// grids (its own coarsen-and-retry mitigation, see mepconnectivity.ts's
+// header comment, is real but not a guarantee). Found live: seeding
+// trace_connectivity on that sheet with no scale set (the PX_PER_FT_GUESS
+// fallback grid) threw straight out of ensureMepGraph, uncaught — an
+// isError:true reply carrying a raw JTS coordinate dump instead of
+// trace_connectivity's own documented TraceResult shape (status:
+// "refused" with a plain-language reason). The 11 segments' own pt values
+// here are those real px coordinates divided by RENDER_SCALE (2) and
+// y-flipped against this fixture's own page height — confirmed by hand
+// (this script's own final line) that the round-trip through a REAL PDF
+// content stream and this project's own pdf.js-based extraction still
+// reproduces the exact same crash, not merely the raw in-memory array.
 import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -164,4 +185,32 @@ function writePdf(out, content, { w, h, ocgObjects, ocProperties, resources } = 
     "<< /Type /OCG /Name (P-PIPE) >>",
   ];
   writePdf(join(FIXTURES, "mep-layered-plan.pdf"), content, { w: 400, h: 300, ocProperties, resources, ocgObjects });
+}
+
+// ── mep-noding-failure.pdf (real, ddmin-minimized corpus segments) ──────
+// See this script's own header comment above for full provenance. Every
+// coordinate below is a real image-px value read off baker-county-eoc-
+// bidset.pdf#39 (M1.21), divided by RENDER_SCALE (2) to recover the PDF's
+// own pt space — the y-flip back into PDF's bottom-up convention happens
+// in toPt() below, against THIS fixture's own PAGE_H_PT (chosen only to
+// keep every recovered y positive, unrelated to the real sheet's own
+// height).
+{
+  const PAGE_W_PT = 3000, PAGE_H_PT = 2000;
+  const realPx = [
+    [1008.6702999999998, 2551.37652, 1611.7951799999996, 2551.37652],
+    [1008.6702999999998, 2713.53614, 1611.7951799999996, 2713.53614],
+    [1763.0690399999999, 2260.66662, 1776.77002, 2260.66662],
+    [1776.77002, 1913.8432, 1776.77002, 2602.36462],
+    [1476.8968599999998, 2726.70582, 1485.9056399999997, 2726.70582],
+    [1539.9588799999997, 2546.5285, 1530.9499599999997, 2546.5285],
+    [1546.4809599999999, 2534.5168400000002, 1369.3065199999999, 2906.88306],
+    [1847.4689999999998, 2202.31464, 1570.5045799999998, 2486.46906],
+    [4957.86842, 357.0760399999999, 4951.2173, 360.98144],
+    [4948.16724, 362.1539399999999, 4954.09962, 359.53685999999993],
+    [4954.09962, 359.53685999999993, 4959.260759999999, 355.9607000000001],
+  ];
+  const toPt = ([x1, y1, x2, y2]) => [x1 / 2, PAGE_H_PT - y1 / 2, x2 / 2, PAGE_H_PT - y2 / 2];
+  const content = ["0.5 w", ...realPx.map((s) => seg(...toPt(s)))].join("\n");
+  writePdf(join(FIXTURES, "mep-noding-failure.pdf"), content, { w: PAGE_W_PT, h: PAGE_H_PT });
 }

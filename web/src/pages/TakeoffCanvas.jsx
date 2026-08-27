@@ -6557,8 +6557,30 @@ export default function TakeoffCanvas() {
           excludeSegs[i] = 1;
         }
       }
-      graph = buildMepGraph(segs, { meta, layerOf: geo?.layerOf, layers: infos, excludeSegs, mppf });
+      // Real, corpus-found (mcp/src/session.ts's ensureMepGraph, port —
+      // baker-county-eoc's own M1.21 mechanical roof plan): buildMepGraph's
+      // own coarsen-and-retry mitigation (see its header comment) is a real,
+      // measured improvement, not a guarantee — a densely crosshatched real
+      // sheet (that one's roof-insulation crickets, drawn as thousands of
+      // short parallel hatch strokes crossing the gas-piping run) can still
+      // defeat JTS's noding at every retry grid. Before this fix, that threw
+      // straight out of this function, uncaught, into whatever caught it far
+      // upstream — never trace_connectivity's own documented TraceResult
+      // shape. Caught here the same way agentFindLegendSymbols already
+      // catches the identical findLegendGlyphs noding failure just above
+      // (this function's own header references that fix, ledger item 32-
+      // adjacent, but never actually got it here) — a sentinel object is
+      // cached so a sheet that can't be noded doesn't pay noding's real cost
+      // (up to ~30s) again on every subsequent trace call against it.
+      try {
+        graph = buildMepGraph(segs, { meta, layerOf: geo?.layerOf, layers: infos, excludeSegs, mppf });
+      } catch (e) {
+        graph = { nodingError: String((e && e.message) || e) };
+      }
       mepGraphCacheRef.current.set(key, graph);
+    }
+    if (graph.nodingError) {
+      return { status: "refused", layer_signal: "none", confidence: 0, factors: [], reason: "This sheet's own linework could not be reliably noded for connectivity tracing (a real, dense-CAD-geometry edge case — e.g. a heavily crosshatched region crossing the run — not missing linework). Try view_region on the seed's own area and trace a shorter, less-cluttered run instead." };
     }
     if (!Array.isArray(opts.equipment) || !opts.equipment.length) {
       return { status: "refused", layer_signal: graph.layerSignal, confidence: 0, factors: [], reason: "No equipment symbols supplied — sweep the target family first (symbol_sweep or sweep_schedule_row), then pass their placements here." };
