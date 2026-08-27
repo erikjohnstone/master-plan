@@ -549,7 +549,40 @@ const EQUIPMENT_HEADERS = ["ID", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESC
 // 88344c9) for the new kind.
 const ROOM_FINISH_REQUIRED = ["FLOOR", "BASE"];
 const FINISH_REQUIRED = ["CODE", "MARK", "SYMBOL", "ID"];
-const EQUIPMENT_REQUIRED = ["VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "ESP", "AIRFLOW", "VELOCITY", "FPM"];
+// "EQUIPMENT" joined `required` itself (real, found live: itd-d1-lab-
+// mechanical.pdf#14's own "MECHANICAL SPECIALTY EQUIPMENT SCHEDULE" —
+// AS-1/ET-1/FM-1/PF-1, real installed devices, real rows). This table's own
+// real column HEADERS are SYMBOL/EQUIPMENT DESCRIPTION/SYSTEM SERVED/
+// DESCRIPTION/MANUFACTURER AND MODEL — every real electrical/mechanical
+// rating spec (the "80 GPM"/"1.0 FT-H2O"/"7.8 GALLON" numbers this vocabulary
+// otherwise anchors on) sits inside the free-text DESCRIPTION cell's own
+// paragraph, never heading its own column, so `required`'s existing rating-
+// word bar (VOLTAGE/GPM/HP/…) can never fire — a structurally different,
+// genuinely sparser real equipment-schedule shape than every other table
+// this vocabulary was built against, not a shortcut around the bar.
+// "EQUIPMENT" itself was already vocabulary (EQUIPMENT_HEADERS, added for
+// the Canopy Hood Schedule's incidental "...ABOVE OPERATING EQUIPMENT"
+// phrase) but never `required` — promoting it is safe on the SAME real-
+// evidence standard CFM/RPM were deliberately kept OUT on: searched every
+// real "SYMBOL/TAG/ID/MARK …-keyed" schedule header across this project's
+// entire external corpus (bessemer, itd-d1-lab, federal-attachment4,
+// baker-county-eoc, weld-county, tarrant-county — every real header row
+// rendered/verified this session, not assumed) for a bare "EQUIPMENT"
+// column word. It appears on exactly ONE other real header in the whole
+// corpus (the Canopy Hood Schedule's own bare "EQUIPMENT" column, itd-d1-
+// lab#12) — itself already independently equipment-kind via AIRFLOW/
+// VELOCITY, so promoting EQUIPMENT changes nothing there. It appears on
+// ZERO real finish-kind tables (Bessemer's Diffuser/Fan/Plumbing-Fixture
+// schedules, D-1 Lab's own Diffuser/Grille/Sound-Attenuator/Penthouse/
+// Louver schedules, Baker County's Luminaire schedule — none carry the
+// word) — unlike CFM/RPM, which a real Fan Schedule DOES carry incidentally
+// and which stay out of `required` for exactly that reason. A table
+// literally naming its own row "EQUIPMENT" (as opposed to incidentally
+// mentioning the word in running prose) is real, self-describing, cross-
+// firm-generalizable evidence, the same class of signal CATALOG_ANCHOR_
+// WORDS' own SYMBOL/TAG entries already rest on — not this one corpus's own
+// invented vocabulary.
+const EQUIPMENT_REQUIRED = ["VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "ESP", "AIRFLOW", "VELOCITY", "FPM", "EQUIPMENT"];
 const ROOM_FINISH_MIN_HITS = 4;
 const OTHER_KIND_MIN_HITS = 3;
 // A header CELL is often a multi-word span ("FLOOR FINISH", "CEILING FINISH")
