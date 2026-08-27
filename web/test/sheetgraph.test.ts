@@ -1799,6 +1799,62 @@ test("anchorRadii: REMARKS/DESCRIPTION/NAME keep their own deliberately wide rea
   assert.match(row.cells.REMARKS.text, /LONG WRAPPED REMARK/, "REMARKS' own deliberately wide gap is never capped");
 });
 
+test("bandLimits: a genuine median for an even gap count, not always the upper-middle one (real itd-d1-lab-mechanical.pdf#14 SOUND ATTENUATOR SCHEDULE — SA-1 keyed SILENCER)", () => {
+  // Real shape, measured against the real itd-d1-lab-mechanical.pdf#14
+  // "SOUND ATTENUATOR SCHEDULE": only 3 of its 21 real leaf columns clear
+  // FINISH_HEADERS (SYMBOL/MANUFACTURER/REMARKS), so the two anchor gaps
+  // are hugely lopsided — SYMBOL→MANUFACTURER spans 18 real, un-modeled
+  // columns (1740px), MANUFACTURER→REMARKS spans none (278px, the table's
+  // own real "nothing un-modeled here" baseline). `bandLimits`' old
+  // `gaps[gaps.length >> 1]` picked index 1 of the 2-element sorted gap
+  // array — the LARGER gap — as "medGap" every time a table has exactly 2
+  // gaps (3 anchors), never a real median. That inflated `leftMargin`
+  // (`medGap / 2`) enough that the table's own x0 boundary reached past a
+  // NEIGHBOURING table's unrelated column (the Electric Heater Schedule's
+  // own REMARKS "1 , 3 , 5", sitting at a coincidentally near-identical y)
+  // and let it into this table's row band. Landing left of the real SA-1
+  // tag in x-order, it became the row's leading token; since it isn't
+  // key-shaped, the WHOLE real row read as an orphan and re-merged under
+  // the table's own "DUCT" row (this fixture's stand-in for the real
+  // table's own wrapped-TYPE-cell "SILENCER" — a stray CODE_RE-shaped
+  // word from an unrecognized neighbour column), corrupting BOTH the row's
+  // key and its SYMBOL cell. Scaled-down gaps below mirror the real
+  // table's own ratio (~6.3:1) exactly.
+  const sched: SheetSpans = {
+    key: "sa.pdf#1", sheet_number: "M14",
+    spans: [
+      sp("SOUND ATTENUATOR SCHEDULE", 100, 10),
+      sp("SYMBOL", 0, 40), sp("MANUFACTURER", 700, 40), sp("REMARKS", 820, 40),
+      // the table's own wrapped, unrecognized TYPE cell — a stray
+      // CODE_RE-shaped word close enough to SYMBOL to be credited to it
+      // (real stand-in: "SILENCER", the 2nd line of "DUCT SILENCER")
+      sp("DUCT", 50, 70),
+      // a NEIGHBOURING table's own unrelated column value, sitting at the
+      // real data row's own y — real stand-in: the Electric Heater
+      // Schedule's own REMARKS "1 , 3 , 5", which independently fails
+      // rowKeyOf (spaces/commas) and so cannot mint its own row
+      sp("1 , 3 , 5", -150, 80),
+      // the real data row: SA-1's own tag, sitting well within a properly
+      // (not anomalously) sized left margin of SYMBOL
+      sp("SA-1", 0, 80), sp("ACOUSTICO", 700, 80), sp("1,2", 820, 80),
+    ],
+  };
+  const tab = extractTable(sched, "finish")!;
+  assert.ok(tab, "the real vocabulary anchors are enough to clear the bar");
+  const keys = tab.rows.map((r) => r.key);
+  assert.ok(keys.includes("SA-1"), `SA-1 keys its own row rather than being swallowed as an orphan: ${keys.join(",")}`);
+  assert.ok(!keys.includes("SILENCER") && keys.every((k) => !/SA-1/.test(k) || k === "SA-1"), `no row is keyed by the neighbouring table's stray token or a merge of it with SA-1: ${keys.join(",")}`);
+  const row = tab.rows.find((r) => r.key === "SA-1")!;
+  assert.equal(row.cells.SYMBOL.text, "SA-1", "SYMBOL holds only SA-1's own tag, not the wrapped TYPE cell's word merged onto it");
+  assert.equal(row.cells.MANUFACTURER.text, "ACOUSTICO");
+  assert.equal(row.cells.REMARKS.text, "1,2");
+  // the table's own wrapped TYPE-cell noise still mints its own row (a
+  // separate, disclosed, pre-existing limitation — finish-kind tables get
+  // no digit-free garbage-row filter) but must stay UNMERGED with SA-1's
+  const ductRow = tab.rows.find((r) => r.key === "DUCT");
+  if (ductRow) assert.equal(ductRow.cells.SYMBOL?.text, "DUCT", "the stray TYPE-wrap word is never joined with SA-1's own real data");
+});
+
 test("extractAllTables: a real table whose own header/boundary is found but every row filters as garbage does not stop the scan of the REST of the sheet (real itd-d1-lab-mechanical.pdf#13 regression)", () => {
   // Real, found live through the Agent UI, same demo-loop session as the
   // twin-column-tier fix above: on the real itd-d1-lab-mechanical.pdf#13,
