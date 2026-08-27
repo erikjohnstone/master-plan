@@ -479,11 +479,46 @@ const headerLabels = (s: string, vocab: string[]): string[] => {
   return out;
 };
 
+// A real, found-live false-positive: baker-county-eoc's own sheet #27 draws a
+// free-text FINISH LEGEND (ACCESSORIES/BASE & TRIM/CEILING/FLOORING/WALLS —
+// per-material spec prose, "STYLE: LVT", "COLLECTION: iD LATITUDE STONE &
+// CONCRETE", "MANUFACTURER: ALTRO TEGULIS", "COLOR: ...", "SKU: ...") beside
+// the sheet's own real ROOM FINISH SCHEDULE. That legend's field-label prose
+// uses the SAME words FINISH_HEADERS needs to recognize a real schedule
+// column (STYLE/COLOR/SIZE/MANUFACTURER/MATERIAL/PRODUCT/PATTERN/ID…) — an
+// inherent vocabulary overlap a real material schedule and a real material
+// LEGEND both have, unlike prior title/row bleed fixes. Row-clustering
+// (clusterRows, y-coincidence, the same mechanism ledger item 5 already
+// diagnosed for title-hunt) glommed several unrelated legend entries onto one
+// row, and `qualifies()` (3+ distinct hits) fired on it as if it were a real
+// header, extracting a 5-row garbage "finish" table with a blank title (no
+// real title exists to find — this was never a table) whose cells bled real
+// ROOM FINISH SCHEDULE text in from the adjacent, correctly-extracting table
+// ("109 IDF RF-2 110 UTILITIES RF-2" measured live inside a bogus
+// MANUFACTURER cell).
+//
+// The narrow, precise signal that separates the two, confirmed against every
+// real header row measured this session (room-finish's own NUMBER/ROOM NAME/
+// FLOOR FINISH/.../COUNTERTOPS; DIFFUSER-GRILLE's TYPE/DESCRIPTION/MOUNTING/
+// .../MANUFACTURER SERIES; PLUMBING FIXTURE's MARK/DESCRIPTION/MAKE AND
+// MODEL/REMARKS): a genuine header CELL is always just the column's own
+// name — never a colon followed by that column's own VALUE fused into the
+// same span. The legend's own field-label prose draws exactly that shape
+// ("COLLECTION: iD LATITUDE STONE & CONCRETE", "MANUFACTURER: ALTRO
+// TEGULIS") — a colon with real trailing content is field-label:value prose,
+// not a column name. A bare trailing colon with nothing after it ("STYLE:",
+// "REMARKS:" — the latter's own trailing-footnote convention is already
+// handled elsewhere, item 29) is left alone; only "label: value" is rejected,
+// keeping this scoped to the one real shape measured, not a blanket ban on
+// any header cell that happens to carry a colon.
+const LABEL_VALUE_COLON_RE = /:\s*\S/;
+
 /** The vocabulary labels a row carries, in x order (duplicates kept — two
  * columns can both be headed FINISH, one under FLOOR and one under CEILING). */
 function headerHits(row: GraphSpan[], vocab: string[]): Array<{ label: string; span: GraphSpan }> {
   const out: Array<{ label: string; span: GraphSpan }> = [];
   for (const t of row) {
+    if (LABEL_VALUE_COLON_RE.test(t.str)) continue;
     const w = headerLabel(t.str, vocab);
     if (w) out.push({ label: w, span: t });
   }
