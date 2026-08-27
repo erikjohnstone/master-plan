@@ -1999,6 +1999,36 @@ test("trace_connectivity: refuses on a scanned sheet with no vector linework at 
   assert.match(r.data.reason, /no traced vector linework/);
 });
 
+// ── NODING FAILURE (real, corpus-found: baker-county-eoc-bidset.pdf#39, a
+// mechanical roof plan) ──────────────────────────────────────────────────
+// The fixture (test/fixtures/mep-noding-failure.pdf, scripts/make-mep-
+// fixture.mjs) carries 11 literal real segments, ddmin-minimized from the
+// real sheet's own ~35,791, confirmed to defeat JTS's noding at every one
+// of buildMepGraph's own retry grids — see web/test/mepconnectivity.test.ts
+// for the same shape pinned directly at the buildMepGraph level. Before
+// this session's fix, ensureMepGraph let that throw straight out uncaught:
+// tools.ts's own `run` wrapper turned it into an isError:true reply
+// carrying a raw JTS coordinate dump, NOT trace_connectivity's own
+// documented TraceResult shape (structuredContent didn't even validate
+// against traceConnectivityOutput). Confirmed BOTH ways directly (not
+// assumed): stashing this session's own session.ts fix and re-running this
+// exact fixture reproduces the uncaught throw; restoring the fix turns it
+// into a clean, doctrine-consistent "refused".
+const MEPNODEFAIL = fileURLToPath(new URL("./fixtures/mep-noding-failure.pdf", import.meta.url));
+const MEPNODEFAIL_KEY = "mep-noding-failure.pdf";
+
+test("trace_connectivity: a sheet whose linework defeats JTS noding at every retry grid refuses cleanly, never throws (real corpus find)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPNODEFAIL });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPNODEFAIL_KEY, from: [1500, 2551],
+    equipment: [{ id: "X", at: [1600, 2551] }],
+  });
+  assert.equal(r.isError, false, "a noding failure is a named refusal, not a protocol-level error");
+  assert.equal(r.data.status, "refused");
+  assert.match(r.data.reason, /could not be reliably noded/);
+});
+
 // ── WALL CONFLATION (accuracy-hardening plan Phase 2, ledger item 24) ───────
 // A real, closed wall rectangle at the sheet's own heaviest pen, with two
 // ordinary-weight duct stubs each touching it at a real mid-edge T-junction

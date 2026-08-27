@@ -73,6 +73,42 @@ test("buildMepGraph: an exact reversed-duplicate segment (a real CAD 'double str
   assert.equal(g.nodes.length, 2);
 });
 
+test("buildMepGraph: a real, densely crosshatched sheet can defeat JTS's noding at EVERY retry grid, not just the first — a genuine, disclosed throw, not a bug in buildMepGraph itself", () => {
+  // 11 literal real image-px segments, delta-debug-minimized (ddmin) from
+  // the real baker-county-eoc-bidset.pdf corpus set's own sheet #39 (M1.21,
+  // MECHANICAL - ROOF PLAN) — two real RTUs' own gas-piping run crossing a
+  // densely crosshatched roof-insulation cricket, ~35,791 real segments on
+  // the full sheet shrunk down to this while re-testing buildMepGraph after
+  // every cut. Confirmed live (not assumed) that this exact shape still
+  // defeats JTS's own noding (UnaryUnionOp.union) at every one of
+  // buildMepGraph's own retry grids (1.8/5.4/16.2/48.6px, the
+  // PX_PER_FT_GUESS-derived defaults for a sheet with no scale set) —
+  // buildMepGraph's own coarsen-and-retry mitigation is real, measured
+  // work, but never a guarantee. This is the module deliberately doing what
+  // its own header comment says it should ("refuse loudly rather than
+  // return a silently-degraded graph") — the real bug this pins is one
+  // layer up: mcp/src/session.ts's ensureMepGraph and TakeoffCanvas.jsx's
+  // agentTraceConnectivity both used to let this throw straight out
+  // uncaught (an isError:true / bare error reply, not trace_connectivity's
+  // own documented TraceResult shape) — see mcp/test/tools.test.ts's own
+  // "noding failure" test and the mep-noding-failure.pdf fixture
+  // (mcp/scripts/make-mep-fixture.mjs) for the end-to-end, now-fixed path.
+  const segs = [
+    1008.6702999999998, 2551.37652, 1611.7951799999996, 2551.37652,
+    1008.6702999999998, 2713.53614, 1611.7951799999996, 2713.53614,
+    1763.0690399999999, 2260.66662, 1776.77002, 2260.66662,
+    1776.77002, 1913.8432, 1776.77002, 2602.36462,
+    1476.8968599999998, 2726.70582, 1485.9056399999997, 2726.70582,
+    1539.9588799999997, 2546.5285, 1530.9499599999997, 2546.5285,
+    1546.4809599999999, 2534.5168400000002, 1369.3065199999999, 2906.88306,
+    1847.4689999999998, 2202.31464, 1570.5045799999998, 2486.46906,
+    4957.86842, 357.0760399999999, 4951.2173, 360.98144,
+    4948.16724, 362.1539399999999, 4954.09962, 359.53685999999993,
+    4954.09962, 359.53685999999993, 4959.260759999999, 355.9607000000001,
+  ];
+  assert.throws(() => buildMepGraph(segs, {}), /could not be reliably noded/);
+});
+
 test("buildMepGraph: an empty sheet (no segments) returns an empty graph, not a throw", () => {
   const g = buildMepGraph([], {});
   assert.deepEqual(g, { nodes: [], edges: [], layerSignal: "none" });
