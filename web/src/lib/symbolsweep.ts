@@ -1180,6 +1180,69 @@ export interface TagOcc {
   bbox: [number, number, number, number];
 }
 
+/** A minimal positioned text span — the shape both sweep_schedule_row's own
+ * occOf (MCP session.ts and the browser's TakeoffCanvas.jsx) already carry;
+ * kept local so this module never has to import either side's own richer
+ * span type. */
+export interface FlatSpan { str: string; x0: number; y0: number; x1: number; y1: number }
+
+/** sweep_schedule_row's own tag-occurrence match (`occOf` in both
+ * session.ts and TakeoffCanvas.jsx) requires the FULL tag text to appear as
+ * ONE literal span — but a real drawn tag is routinely split across
+ * MULTIPLE runs, and the split shape itself varies by firm: measured live,
+ * the real Bessemer sample draws "SR-1" as three same-row adjacent runs
+ * ("SR", "-", "1"), while a real itd-d1-lab hexagon tag bubble draws "EF-1"
+ * as TWO runs stacked on separate lines ("EF" over "1"), with no hyphen run
+ * anywhere at all. Both real shapes defeated occOf's own exact-match
+ * before this fix, and — confirmed live — this is the actual reason
+ * sweep_schedule_row refuses "not drawn on any plan sheet" for tags that
+ * ARE genuinely drawn (SR-1/SR-2/TG-1/TG-2 on Bessemer; the entire real
+ * equipment tag set on itd-d1-lab).
+ *
+ * This is a FALLBACK, tried only when the exact single-span match already
+ * found nothing — it can only ever ADD a way to succeed, never change an
+ * already-passing case. Starting from a span whose own text is a real
+ * (hyphen-insensitive) PREFIX of the key, it extends a bounded chain
+ * (same-row adjacent, or the next line directly below — the two real
+ * shapes measured) until the accumulated text exactly reconstructs the key
+ * (hyphen-insensitive) or the chain runs out — never a sheet-wide text
+ * search, never a fuzzy match. */
+export function fragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
+  const stripHy = (s: string) => s.replace(/-/g, "");
+  const targetStripped = stripHy(key);
+  if (!targetStripped) return [];
+  const upper = (s: string) => s.trim().toUpperCase();
+  const starts = spans.filter((sp) => {
+    const t = upper(sp.str);
+    return t.length > 0 && t.length < key.length && targetStripped.startsWith(stripHy(t));
+  });
+  const out: TagOcc[] = [];
+  for (const start of starts) {
+    let text = upper(start.str);
+    let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
+    let cur = start;
+    let ok = stripHy(text) === targetStripped;
+    for (let guard = 0; !ok && stripHy(text).length < targetStripped.length && guard < 4; guard++) {
+      const h = Math.max(cur.y1 - cur.y0, 6);
+      const next = spans.find((sp) => {
+        if (sp === cur) return false;
+        const sameRow = Math.abs(sp.y0 - cur.y0) < h * 0.4 && sp.x0 >= cur.x0 - 1 && sp.x0 - cur.x1 < h * 1.5;
+        const nextLine = Math.abs(sp.y0 - cur.y1) < h * 0.6 && Math.abs((sp.x0 + sp.x1) / 2 - (cur.x0 + cur.x1) / 2) < h * 1.5;
+        return sameRow || nextLine;
+      });
+      if (!next) break;
+      const candidate = text + upper(next.str);
+      if (!targetStripped.startsWith(stripHy(candidate))) break;
+      text = candidate;
+      x0 = Math.min(x0, next.x0); y0 = Math.min(y0, next.y0); x1 = Math.max(x1, next.x1); y1 = Math.max(y1, next.y1);
+      cur = next;
+      ok = stripHy(text) === targetStripped;
+    }
+    if (ok) out.push({ cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, h: Math.max(y1 - y0, 6), bbox: [x0, y0, x1, y1] });
+  }
+  return out;
+}
+
 /** The seed→target size ratio for a cross-sheet sweep (#186): seed-sheet
  * image px per target-sheet image px, exactly `upp_seed / upp_target` —
  * both sheets' own committed scales, no search and no guess.

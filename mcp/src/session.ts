@@ -38,7 +38,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS }
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -61,7 +61,7 @@ import { findLegendGlyphs, type LegendSpan } from "../../web/src/lib/legendlearn
 // CFM-driven physical size — see inlinemotif.ts's own header comment for the
 // full real measurement). fingerprintInlineMotif/sweepInlineMotif match on
 // the hatch fill's own real-world size/pitch instead of exact segment count.
-import { fingerprintInlineMotif, sweepInlineMotif } from "../../web/src/lib/inlinemotif.ts";
+import { fingerprintInlineMotif, sweepInlineMotif, corroborateInlineMotif, classifyInlineMotifMatches, type InlineMotifFingerprint } from "../../web/src/lib/inlinemotif.ts";
 // MEP connectivity tracing (maturity plan Phase 4) — buildMepGraph reuses
 // this project's own vendored JTS port for robust noding (see the module's
 // own header comment); traceConnectivity is the refusal-honest query, same
@@ -2841,10 +2841,15 @@ export class Session {
     }
     const occOf = (sh: SheetState, key: string): TagOcc[] => {
       if (!sh.spans) sh.spans = textSpans(sh.page);
-      return sh.spans
+      const exact = sh.spans
         .filter((sp) => sp.str.trim().toUpperCase() === key)
-        .map((sp) => ({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number] }))
-        .sort((a, b) => a.cy - b.cy || a.cx - b.cx);
+        .map((sp) => ({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number] }));
+      // Fallback only — a real drawn tag routinely splits across multiple
+      // text runs (see fragmentedTagOcc's own header comment for the two
+      // real, different-shaped cases this was found against), and never
+      // fires when the exact single-span match already found something.
+      const occ = exact.length ? exact : fragmentedTagOcc(sh.spans, key);
+      return occ.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
     };
     const occBySheet = planSheets.map((sh) => ({ sh, occ: occOf(sh, t) }));
     const totalOcc = occBySheet.reduce((n, e) => n + e.occ.length, 0);
@@ -2888,12 +2893,37 @@ export class Session {
       corro ? { segs: corro.segs, occ: corro.occ, ratio: sweepRatio(anchorSheet, corro.sh) } : null,
       sweepOpts,
     );
-    if (!anchored) {
+    // Fallback: a register/grille mark (or similar hatch-filled fixture) has
+    // no independent whole-shape perimeter, so corroborateFingerprint's own
+    // exact-segment recurrence check routinely fails for it even though the
+    // tag IS genuinely, repeatedly drawn — confirmed live (accuracy-
+    // hardening plan Phase 4/6): real siblings of the same symbol type
+    // score only ~76-77% against each other under matchSymbol's own 92%
+    // bar, because the fixture's own real-world SIZE differs by rating, not
+    // drafting noise. Tried ONLY when the whole-shape path already failed —
+    // this can only ever ADD a way to succeed, never change an
+    // already-passing case's own behavior or scoring.
+    let fp: SymbolFingerprint | undefined;
+    let inlineFp: InlineMotifFingerprint | undefined;
+    let anchorRect: [Point, Point] | undefined;
+    let corroborated = false;
+    if (anchored) {
+      fp = anchored.fp; anchorRect = anchored.anchorRect; corroborated = anchored.corroborated;
+    } else {
+      const inlineAnchored = corroborateInlineMotif(
+        anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+        anchor, anchorSheet.upp,
+        corro ? { segs: corro.segs, meta: (await this.ensureGeometry(corro.sh)).meta, occ: corro.occ, upp: corro.sh.upp } : null,
+      );
+      if (inlineAnchored) {
+        inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
+      }
+    }
+    if (!fp && !inlineFp) {
       throw new UserError(corro
-        ? `Schedule row "${t}" cannot be anchored: the linework around its drawn tag on ${anchorSheet.key} does not recur at the tag's other occurrences — no repeatable marker geometry to fingerprint. Marquee one instance with symbol_sweep instead.`
+        ? `Schedule row "${t}" cannot be anchored: the linework around its drawn tag on ${anchorSheet.key} does not recur at the tag's other occurrences — no repeatable marker geometry to fingerprint (tried both a whole-shape match and a hatch-fill size/pitch match). Marquee one instance with symbol_sweep instead.`
         : `Schedule row "${t}" cannot be anchored: no fingerprintable marker linework sits around its drawn tag on ${anchorSheet.key}. Marquee one instance with symbol_sweep instead.`);
     }
-    const { fp, anchorRect, corroborated } = anchored;
 
     // 4. the full plan-only sweep + tag corroboration per match.
     // The tag-proximity radius is the marker's footprint AS DRAWN ON THE SHEET
@@ -2926,18 +2956,40 @@ export class Session {
       const t0 = process.hrtime.bigint();
       const sibSpans: { key: string; cx: number; cy: number }[] = [];
       for (const k of siblings) for (const o of occOf(sh, k)) sibSpans.push({ key: k, cx: o.cx, cy: o.cy });
-      let cls: ReturnType<typeof classifySweepMatches>;
-      try {
-        cls = classifySweepMatches(t, fp, g2.segs, ratio, occ, sibSpans, anchor.h, sweepOpts);
-      } catch (e) {
-        skipped.push({ sheet: sh.key, role: "plan", reason: e instanceof Error ? e.message : String(e) });
-        continue;
+      let matches: CountedMatch[], withheld: SweepWithheld[], excluded: { at: Point; tag: string }[],
+        text_only: { at: Point }[], candidates: { considered: number; dropped: number }, complete: boolean,
+        scaled: SymbolMatchResult["scaled"];
+      if (fp) {
+        let cls: ReturnType<typeof classifySweepMatches>;
+        try {
+          cls = classifySweepMatches(t, fp, g2.segs, ratio, occ, sibSpans, anchor.h, sweepOpts);
+        } catch (e) {
+          skipped.push({ sheet: sh.key, role: "plan", reason: e instanceof Error ? e.message : String(e) });
+          continue;
+        }
+        ({ matches, withheld, excluded, text_only, candidates, complete, scaled } = cls);
+      } else {
+        // inline-motif fallback path (register/grille hatch fill) — see the
+        // corroborateInlineMotif branch above for why this runs instead.
+        const inlineRes = sweepInlineMotif(inlineFp!, g2.segs, g2.meta, sh.upp);
+        const icls = classifyInlineMotifMatches(t, inlineRes, occ, sibSpans, anchor.h);
+        // adapted into the whole-shape CountedMatch/SweepWithheld shape so the
+        // commit/notes/aggregation code below stays untouched either way —
+        // size_score standing in for score, rotation/mirrored not meaningful
+        // for a hatch-fill match (no rigid shape to rotate/mirror).
+        matches = icls.matches.map((m) => ({ at: m.at, score: m.size_score, rotation: 0, mirrored: false, tag_at: m.tag_at }));
+        withheld = icls.withheld.map((w) => ({ at: w.at, score: w.size_score, rotation: 0, mirrored: false, reason: w.reason }));
+        excluded = icls.excluded;
+        text_only = icls.text_only;
+        candidates = { considered: icls.candidates_considered, dropped: 0 };
+        complete = icls.complete;
+        scaled = undefined;
       }
       const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
       perSheet.push({
-        state: sh, matches: cls.matches, withheld: cls.withheld, excluded: cls.excluded, text_only: cls.text_only,
-        candidates: cls.candidates, complete: cls.complete, elapsed_ms, scale: ratio,
-        ...(cls.scaled ? { scaled: cls.scaled } : {}),
+        state: sh, matches, withheld, excluded, text_only,
+        candidates, complete, elapsed_ms, scale: ratio,
+        ...(scaled ? { scaled } : {}),
       });
     }
 
@@ -2975,6 +3027,7 @@ export class Session {
     const capped = perSheet.filter((p) => p.candidates.dropped > 0);
     const notes: string[] = [];
     if (!corroborated) notes.push(`The tag "${t}" is drawn ${totalOcc === 1 ? "exactly once" : "too sparsely to cross-check"} — the fingerprint could not corroborate at a second occurrence; audit the matches with view_sheet before trusting the count.`);
+    if (inlineFp) notes.push(`No whole-shape marker recurs around this tag's own drawn text, so this anchored on the surrounding hatch fill's own real-world size/pitch instead (the register/grille fallback) — score is a size closeness, not a segment match; audit with view_sheet before trusting the count.`);
     if (opts.commit && !found) notes.push("commit requested but nothing cleared the bar — no shapes were committed.");
     // #186, same disclosure discipline as symbol_sweep: a ratio the count
     // depends on is stated, and an assumed ratio over an empty sheet is named
@@ -2999,9 +3052,13 @@ export class Session {
       anchor: {
         sheet: anchorSheet.key,
         at: [round1(anchor.cx), round1(anchor.cy)],
-        rect: [round1(anchorRect[0][0]), round1(anchorRect[0][1]), round1(anchorRect[1][0]), round1(anchorRect[1][1])],
-        segments: fp.segments,
-        length_px: round1(fp.totalLen),
+        rect: [round1(anchorRect![0][0]), round1(anchorRect![0][1]), round1(anchorRect![1][0]), round1(anchorRect![1][1])],
+        // inline-motif fallback has no rigid whole-shape perimeter to count
+        // segments/length on — `segments` reports the hatch cluster's own
+        // member-stroke count instead, `length_px` its own pitch, so the
+        // field is never a fabricated whole-shape number for this mode.
+        segments: fp ? fp.segments : inlineFp!.members,
+        length_px: round1(fp ? fp.totalLen : inlineFp!.pitchPx),
         corroborated,
         occurrences: totalOcc,
       },

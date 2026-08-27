@@ -3,7 +3,7 @@
 // tolerance behavior, decoy rejection, determinism, and the reported work cap.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, type Point } from "../src/lib/symbolsweep.ts";
+import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, fragmentedTagOcc, type Point, type FlatSpan } from "../src/lib/symbolsweep.ts";
 
 // The test symbol — deliberately ASYMMETRIC under every rotation and mirror:
 // a 20×20 square, ONE diagonal, and a stub off the right side. Local coords,
@@ -289,6 +289,41 @@ test("#186 refusals: a symbol that shrinks inside tolerance, a ratio no sheet pa
   assert.throws(() => matchSymbol(fp, plan, { scale: Number.NaN }), /positive, finite/);
   assert.throws(() => matchSymbol(fp, plan, { scale: 2, excludeCenter: fp.center }), /means nothing on a target sheet/,
     "the seed's own location is a SOURCE-sheet point");
+});
+
+// fragmentedTagOcc (accuracy-hardening plan, this pass) — a real drawn tag
+// routinely splits across multiple pdf.js text runs. Two real, DIFFERENT-
+// SHAPED cases found this session motivate this: Bessemer draws "SR-1" as
+// three same-row adjacent spans ("SR","-","1"); itd-d1-lab draws "EF-1" as
+// two spans stacked on separate lines inside a hexagon bubble ("EF" over
+// "1", no hyphen run at all). Both defeat an exact single-span match.
+test("fragmentedTagOcc: Bessemer's own same-row 3-span split (\"SR\",\"-\",\"1\")", () => {
+  const spans: FlatSpan[] = [
+    { str: "SR", x0: 100, y0: 200, x1: 112, y1: 206 },
+    { str: "-", x0: 112, y0: 200, x1: 115, y1: 206 },
+    { str: "1", x0: 115, y0: 200, x1: 120, y1: 206 },
+  ];
+  const occ = fragmentedTagOcc(spans, "SR-1");
+  assert.equal(occ.length, 1, "the three runs reconstruct into exactly one occurrence, not three or zero");
+  assert.deepEqual(occ[0].bbox, [100, 200, 120, 206], "bbox spans the full reconstructed run");
+});
+
+test("fragmentedTagOcc: itd-d1-lab's own stacked 2-span split (\"EF\" over \"1\", no hyphen)", () => {
+  const spans: FlatSpan[] = [
+    { str: "EF", x0: 50, y0: 100, x1: 64, y1: 112 },
+    { str: "1", x0: 52, y0: 112, x1: 58, y1: 124 },
+  ];
+  const occ = fragmentedTagOcc(spans, "EF-1");
+  assert.equal(occ.length, 1, "a hyphen-insensitive, direction-agnostic chase finds the vertically-stacked run");
+  assert.deepEqual(occ[0].bbox, [50, 100, 64, 124]);
+});
+
+test("fragmentedTagOcc: no false match when the tag simply isn't drawn", () => {
+  const spans: FlatSpan[] = [
+    { str: "EF", x0: 50, y0: 100, x1: 64, y1: 112 },
+    { str: "2", x0: 52, y0: 112, x1: 58, y1: 124 },
+  ];
+  assert.equal(fragmentedTagOcc(spans, "EF-1").length, 0, "EF+2 must never satisfy a search for EF-1");
 });
 
 test("seed diagnostics: centroid and total length are the fingerprint's own", () => {
