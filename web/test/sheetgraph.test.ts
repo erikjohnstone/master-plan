@@ -2052,3 +2052,112 @@ test("a free-text FINISH LEGEND never mints a phantom finish table (real baker-c
   assert.equal(rf!.rows.length, 1);
   assert.equal(rf!.rows[0].cells.FLOOR?.text, "CPT-1");
 });
+
+// ── ledger item 63: a real LUMINAIRE SCHEDULE, TYPE-keyed ───────────────────
+test("a real LUMINAIRE SCHEDULE (TYPE-keyed, no ID/MARK/CODE/SYMBOL/TAG column) extracts deterministically, no cross-row bleed (ledger item 63, real baker-county-eoc#59)", () => {
+  // Real bug, found live on baker-county-eoc-bidset.pdf#59: a genuine 13-
+  // column electrical/lighting schedule (TYPE/DESCRIPTION/MOUNTING/CCT-CRI/
+  // WATTS/DELIVERED LUMENS/DRIVER/DIMMING/VOLTAGE/LENS-RELECTOR-BEAM/FINISH/
+  // MANUFACTURER SERIES/NOTES) had NO deterministic find_schedule/
+  // read_schedule support at all — no ID/MARK/CODE/SYMBOL/TAG column exists
+  // on this table; every real row keys under "TYPE" instead (E1, E2, P1,
+  // R1-R3, S1, S3, V1, X1), a real, standard MEP row-key convention this
+  // vocabulary had no representative for. A live agent fell back to
+  // manually assembling the table from raw text and got ONE cell wrong this
+  // way: V1's own MANUFACTURER SERIES misread as X1's ("LITHONIA LIGHTING -
+  // EDGR SERIES" instead of V1's own real "EUREKA - MOONRISE SERIES") —
+  // confirmed by direct render. Mirrors the real shape at reduced scale:
+  // same 13 headers, same 10 real row keys in sheet order, V1 and X1
+  // adjacent (the exact real cross-row-bleed shape) with DIFFERENT real
+  // MANUFACTURER SERIES values, plus a "SHEET NOTES" side panel (a lettered
+  // paragraph block, real prose, not this table's data) sitting close right
+  // of the table — the real title-block-adjacent shape that motivated
+  // excluding "NOTES" from WIDE_LAST for this table.
+  const hdrY = 20;
+  const cols: Array<[string, number]> = [
+    ["TYPE", 100], ["DESCRIPTION", 250], ["MOUNTING", 550], ["CCT / CRI", 700],
+    ["WATTS", 830], ["DELIVERED LUMENS", 930], ["DRIVER", 1100], ["DIMMING", 1260],
+    ["VOLTAGE", 1400], ["LENS / RELECTOR / BEAM", 1520], ["FINISH", 1780],
+    ["MANUFACTURER SERIES", 1900], ["NOTES", 2150],
+  ];
+  const header = [sp("LUMINAIRE SCHEDULE", 1000, 0), ...cols.map(([label, x]) => sp(label, x, hdrY))];
+  type Row = { key: string; desc: string; mounting: string; mfr: string };
+  const rows: Row[] = [
+    { key: "E1", desc: "IP65 ARCHITECTURAL WEDGE WALL PACK LED LUMINAIRE", mounting: "WALL", mfr: "LITHONIA LIGHTING - WDGE2 SERIES" },
+    { key: "E2", desc: "IP65 4 IN ROUND DOWNLIGHT LED LUMINAIRE", mounting: "RECESSED", mfr: "GOTHAM - IVO SERIES" },
+    { key: "P1", desc: "8 FT DIRECT INDIRECT LINEAR LED LUMINAIRE", mounting: "PENDANT AIRCRAFT CABLE", mfr: "FLUXWERX - PROFILE SERIES" },
+    { key: "R1", desc: "2X4 EDGE LIT TROFFER LED LUMINAIRE", mounting: "RECESSED", mfr: "FLUXWERX - INBOX 2X4 SERIES" },
+    { key: "R2", desc: "4 IN ROUND DOWNLIGHT LED LUMINAIRE", mounting: "RECESSED", mfr: "GOTHAM - EVO SERIES" },
+    { key: "R3", desc: "DEADFRONT RATED 4 IN ROUND DOWNLIGHT LED LUMINAIRE", mounting: "RECESSED", mfr: "GOTHAM - EVO SERIES" },
+    { key: "S1", desc: "LENGHTS PER DRAWINGS LED STRIP LIGHT", mounting: "SURFACE", mfr: "LITHONIA LIGHTING - ZL1D SERIES" },
+    { key: "S3", desc: "4 FT EDGE LIT LINEAR LED LUMINAIRE", mounting: "SURFACE", mfr: "FLUXWERX - PROFILE SERIES" },
+    // V1 then X1, adjacent — the exact real shape the cross-row bleed was
+    // found on, each with its OWN, DIFFERENT real MANUFACTURER SERIES value
+    { key: "V1", desc: "NOMINAL 24 IN LINEAR VANITY LIGHT LED LUMINAIRE", mounting: "WALL", mfr: "EUREKA - MOONRISE SERIES" },
+    { key: "X1", desc: "SINGLE FACE EXIT SIGN", mounting: "RECESSED", mfr: "LITHONIA LIGHTING - EDGR SERIES" },
+  ];
+  const dataSpans = rows.flatMap((r, i) => {
+    const y = hdrY + 25 * (i + 1);
+    return [
+      sp(r.key, 100, y), sp(r.desc, 250, y), sp(r.mounting, 550, y), sp("3500K LED, 80+ CRI", 700, y),
+      sp("10W", 830, y), sp("2900 LM", 930, y), sp("INTEGRAL ELECTRONIC", 1100, y), sp("0-10V TO 10%", 1260, y),
+      sp("UNV", 1400, y), sp("FROSTED LENS", 1520, y), sp("STANDARD PER ARCHITECT", 1780, y), sp(r.mfr, 1900, y),
+    ];
+  });
+  // the real "SHEET NOTES" side panel: a lettered paragraph block sitting
+  // close right of the table's own NOTES column, real prose, never this
+  // table's data — spans the whole row range the way the real one does
+  const sheetNotes = rows.flatMap((_, i) => {
+    const y = hdrY + 25 * (i + 1);
+    return [sp(`${String.fromCharCode(65 + i)}.`, 2450, y), sp("PROVIDE INFRASTRUCTURE AS REQUIRED FOR EMERGENCY POWER COMPATIBILITY", 2480, y)];
+  });
+  const sheet: SheetSpans = { key: "luminaire.pdf#59", sheet_number: "E6.01", spans: [...header, ...dataSpans, ...sheetNotes] };
+
+  const tab = extractTable(sheet, "equipment");
+  assert.ok(tab, "the real LUMINAIRE SCHEDULE qualifies as an equipment table once TYPE anchors its key column");
+  assert.equal(tab!.title?.text, "LUMINAIRE SCHEDULE");
+  assert.equal(tab!.headers[0], "TYPE", "TYPE is the table's own leftmost, key column");
+  assert.equal(tab!.rows.length, 10, `all 10 real rows extract: ${tab!.rows.map((r) => r.key).join(", ")}`);
+  assert.deepEqual(tab!.rows.map((r) => r.key), rows.map((r) => r.key), "every row keys under its own real TYPE code, in sheet order");
+  // the core regression: V1 and X1 sit ADJACENT and must each answer for
+  // their OWN real MANUFACTURER SERIES value, never each other's
+  const v1 = tab!.rows.find((r) => r.key === "V1")!;
+  const x1 = tab!.rows.find((r) => r.key === "X1")!;
+  assert.equal(v1.cells.MANUFACTURER.text, "EUREKA - MOONRISE SERIES", "V1 answers for its OWN manufacturer series, not X1's");
+  assert.equal(x1.cells.MANUFACTURER.text, "LITHONIA LIGHTING - EDGR SERIES", "X1 answers for its OWN manufacturer series, not V1's");
+  // the SHEET NOTES side panel must never bleed into the row nearest it —
+  // if it did, MANUFACTURER (the column just left of NOTES) would be the
+  // first casualty of a mis-bounded right edge
+  for (const r of tab!.rows) {
+    assert.ok(!r.cells.MANUFACTURER.text.includes("PROVIDE INFRASTRUCTURE"), `${r.key}'s MANUFACTURER cell must stay clean of the sheet-notes panel: ${r.cells.MANUFACTURER.text}`);
+  }
+});
+
+test("a \"FAN TYPE\" qualifier column never masquerades as a table's own key column (ledger item 63 regression guard, real federal-attachment4#14)", () => {
+  // A first attempt at the LUMINAIRE SCHEDULE fix put "TYPE" directly in
+  // CATALOG_ANCHOR_WORDS — and broke a real, already-working table:
+  // federal-attachment4-mechanical.pdf#14's own "AIR HANDLING UNIT FAN
+  // SCHEDULE" carries a real "FAN TYPE" column (a QUALIFIER on the fan;
+  // TAG is its real key column) that anchors as bare "TYPE" once TYPE joins
+  // EQUIPMENT_HEADERS' own vocabulary — with TYPE also in CATALOG_ANCHOR_
+  // WORDS, mergeBackwardCoEqualTier read that qualifier as "this row
+  // already has its own key column" and the real table was lost outright.
+  // Mirrors the real shape: TAG-keyed, a "FAN TYPE" column sitting to the
+  // RIGHT of TAG (never leading it) — the real table must still extract,
+  // keyed under TAG, with its own real TYPE column correctly anchored too.
+  const sheet: SheetSpans = {
+    key: "fan.pdf#14", sheet_number: "M7.1",
+    spans: [
+      sp("AIR HANDLING UNIT FAN SCHEDULE", 100, 0),
+      sp("TAG", 100, 30), sp("FAN TYPE", 300, 30), sp("RPM", 500, 30), sp("VOLTAGE", 650, 30), sp("PHASE", 800, 30), sp("REMARKS", 950, 30),
+      sp("RF-1", 100, 55), sp("CENTRIFUGAL PLENUM", 300, 55), sp("1750", 500, 55), sp("460", 650, 55), sp("3", 800, 55), sp("ROOF", 950, 55),
+      sp("RF-2", 100, 80), sp("CENTRIFUGAL PLENUM", 300, 80), sp("1750", 500, 80), sp("460", 650, 80), sp("3", 800, 80), sp("ROOF", 950, 80),
+    ],
+  };
+  const tab = extractTable(sheet, "equipment");
+  assert.ok(tab, "the real TAG-keyed table must still extract with a FAN TYPE qualifier column present");
+  assert.equal(tab!.headers[0], "TAG", "TAG stays the table's own leftmost, key column — TYPE is a qualifier, never the key");
+  assert.equal(tab!.rows.length, 2);
+  assert.equal(tab!.rows[0].key, "RF-1");
+  assert.equal(tab!.rows[0].cells.TYPE?.text, "CENTRIFUGAL PLENUM", "the qualifier's own column still anchors and reads correctly");
+});
