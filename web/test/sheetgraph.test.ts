@@ -2195,3 +2195,163 @@ test("a \"FAN TYPE\" qualifier column never masquerades as a table's own key col
   assert.equal(tab!.rows[0].key, "RF-1");
   assert.equal(tab!.rows[0].cells.TYPE?.text, "CENTRIFUGAL PLENUM", "the qualifier's own column still anchors and reads correctly");
 });
+
+// ── the structural "reference" kind (full-coverage-standard work) ──────────
+// Real-corpus-derived: every span below is bessemer-mechanical-bidset.pdf#8's
+// own real DUCTWORK INSULATION SCHEDULE (x, y, str, and per-token width all
+// taken directly from a real pdf.js text-span dump of the real PDF, shifted
+// by a constant offset for readable coordinates — never invented proportions)
+// — the exact real table this session's own reconnaissance named as the
+// concrete, measured gap: a 3-column, 5-physical-line-wrapped-header table
+// keyed by SYSTEM TYPE, with no per-instance drawn-symbol tag and none of
+// ROOM_HEADERS'/FINISH_HEADERS'/EQUIPMENT_HEADERS' vocabulary words. `rh`
+// mirrors this file's own `sp()` convention but with an explicit height (19px
+// — this real table's own measured span height, not the default 8px other
+// fixtures use) and explicit width (also real, measured) so the h-scaled
+// thresholds throughout this pass (expandGenericHeaderBlock's tier-gap cap,
+// clusterGenericColumns' column tolerance, bandGenericDataRows' orphan-fold
+// radius and new-row gap floor) are exercised at their real, intended scale.
+const rh = (str: string, x: number, y: number, w: number): GraphSpan => ({ str, x, y, w, h: 19 });
+const REF_TABLE_SPANS: GraphSpan[] = [
+  rh("DUCTWORK INSULATION SCHEDULE", 153, 41, 342),
+  rh("INSULATION OR", 815, 76, 148),
+  rh("INSULATION", 665, 87, 115),
+  rh("SYSTEM TYPE", 153, 98, 132), rh("LINER", 861, 98, 57),
+  rh("TYPE", 698, 109, 49),
+  rh("THICKNESS", 835, 120, 109),
+  rh("SUPPLY DUCTS (EXTERNALLY INSULATED)", 153, 173, 393), rh("D-1, D-2, D-6", 666, 173, 112), rh("1-1/2\"", 864, 173, 49),
+  rh("EXHAUST DUCTS WITHIN 10 FEET OF EXTERIOR", 153, 199, 441),
+  rh("D-1, D-2", 687, 210, 70), rh("1\"", 880, 210, 17),
+  rh("OPENINGS", 153, 220, 99),
+];
+// A ruled horizontal rule right under the header block, spanning well past
+// 60% of the table's own column width — the real, measured "genuinely
+// boxed" signal (see hasNearbyRuledLine's own comment); every real table
+// this pass targets in the corpus is drawn boxed.
+const REF_TABLE_RULE = [150, 140, 1030, 140];
+
+test("reference kind: a real, vocabulary-free schedule table extracts correctly (real bessemer M601 coordinates)", () => {
+  const sheet: SheetSpans = {
+    key: "ref.pdf#1", sheet_number: "M601",
+    spans: REF_TABLE_SPANS,
+    segs: REF_TABLE_RULE,
+  };
+  const g = buildSheetGraph([sheet]);
+  assert.equal(classifySheetRole(sheet).role, "schedule", "the table's own title reads as a real schedule-sheet title");
+  const tab = g.tables.find((t) => t.kind === "reference");
+  assert.ok(tab, "a real, wrapped, vocabulary-free header must extract as a reference table");
+  assert.deepEqual(tab!.headers, ["SYSTEM TYPE", "INSULATION TYPE", "INSULATION OR LINER THICKNESS"],
+    "a multi-tier wrapped header's own fragments join into the real printed column names");
+  assert.equal(tab!.rows.length, 2);
+  const [r1, r2] = tab!.rows;
+  assert.equal(r1.key, "SUPPLY DUCTS (EXTERNALLY INSULATED)");
+  assert.equal(r1.cells["INSULATION TYPE"]?.text, "D-1, D-2, D-6");
+  assert.equal(r1.cells["INSULATION OR LINER THICKNESS"]?.text, "1-1/2\"");
+  // the real, hard case this table exists to prove: the row's own KEY
+  // column wraps to a 2nd physical line ("OPENINGS") that lands back at the
+  // SAME x as any genuine new row's own leading token would — correctly
+  // read as this row's own continuation, not a phantom 3rd row, and in the
+  // real reading order (not fold order).
+  assert.equal(r2.key, "EXHAUST DUCTS WITHIN 10 FEET OF EXTERIOR");
+  assert.equal(r2.cells["SYSTEM TYPE"]?.text, "EXHAUST DUCTS WITHIN 10 FEET OF EXTERIOR OPENINGS");
+  assert.equal(r2.cells["INSULATION TYPE"]?.text, "D-1, D-2");
+  assert.equal(r2.cells["INSULATION OR LINER THICKNESS"]?.text, "1\"");
+});
+
+test("reference kind: scoped to schedule-role sheets — the identical real table on a PLAN sheet is not extracted", () => {
+  // Same real spans, but the sheet's own title now reads as a plan, not a
+  // schedule — a real, disclosed scope limit (see the design comment above
+  // extractAllTables), not an oversight: false-positive risk concentrates
+  // on plan sheets (title blocks, dimension strings, general-notes lists),
+  // and no real corpus example of this table shape drawn on a plan sheet
+  // was found.
+  const spans = [rh("MECHANICAL - LEVEL 1 PLAN", 153, 0, 300), ...REF_TABLE_SPANS.slice(1)];
+  const sheet: SheetSpans = { key: "ref.pdf#2", sheet_number: "M101", spans, segs: REF_TABLE_RULE };
+  assert.equal(classifySheetRole(sheet).role, "plan");
+  const g = buildSheetGraph([sheet]);
+  assert.ok(!g.tables.some((t) => t.kind === "reference"), "a plan-role sheet is out of this pass's own declared scope");
+});
+
+test("reference kind: refuses without a real nearby ruled border (segs supplied, none present)", () => {
+  // The identical real header+data shape, but the sheet's own vector
+  // segments carry nothing near the table at all — real, found live: this
+  // was NOT the shape's own DEFAULT — segs are what this table actually
+  // has (see the positive test above); this asserts the gate is genuinely
+  // load-bearing (removed here) rather than a no-op that always passes.
+  const sheet: SheetSpans = {
+    key: "ref.pdf#3", sheet_number: "M601",
+    spans: REF_TABLE_SPANS,
+    segs: [4000, 4000, 4100, 4000], // present, but nowhere near this table
+  };
+  const g = buildSheetGraph([sheet]);
+  assert.ok(!g.tables.some((t) => t.kind === "reference"), "no real ruled border nearby — refused, not guessed");
+});
+
+test("reference kind: skips a header block that already qualifies under an existing vocabulary", () => {
+  // Real, corpus-found bug this guards against (see the design comment
+  // above extractAllTables): a genuine EQUIPMENT_HEADERS-vocabulary table
+  // (ID/MANUFACTURER/MODEL/VOLTAGE/PHASE/WATTS/AMPS) is ALSO short/caps/
+  // columnar, so this pass's own structural signals alone would happily
+  // re-find it — risking a cross-kind-dedup coin-flip silently replacing
+  // the working equipment-kind extraction. Real bessemer coordinates
+  // (ELECTRIC WALL HEATER SCHEDULE) — this table must extract ONLY as
+  // "equipment", never additionally as "reference".
+  const spans: GraphSpan[] = [
+    rh("ELECTRIC WALL HEATER SCHEDULE", 0, 0, 345),
+    rh("ID", 0, 35, 20), rh("MANUFACTURER", 143, 35, 160), rh("MODEL", 319, 35, 68), rh("VOLTAGE", 486, 35, 91), rh("PHASE", 643, 35, 65), rh("WATTS", 785, 35, 67), rh("AMPS", 936, 35, 54),
+    rh("EWH-1", 0, 87, 60), rh("QMARK", 143, 87, 69), rh("CZ15112T", 319, 87, 89), rh("120", 486, 87, 32), rh("1", 643, 87, 10), rh("750", 785, 87, 31), rh("6.3", 936, 87, 26),
+  ];
+  const sheet: SheetSpans = { key: "ref.pdf#4", sheet_number: "M601", spans, segs: [0, 30, 1000, 30] };
+  const g = buildSheetGraph([sheet]);
+  const kinds = g.tables.filter((t) => t.title?.text === "ELECTRIC WALL HEATER SCHEDULE").map((t) => t.kind);
+  assert.deepEqual(kinds, ["equipment"], "a vocabulary already explains this table — never re-extracted as \"reference\" too");
+});
+
+test("reference kind negative control: an ABBREVIATIONS-style list of independent rows is not mistaken for one wrapped header", () => {
+  // The real, adversarial failure mode this pass's own design has to
+  // defend against without a word list to lean on (see
+  // MAX_GENERIC_COLUMN_DEPTH's own comment): a real legend/abbreviations
+  // block — one short CODE + one short DEFINITION per physical line, SEVEN+
+  // independent rows sharing the same two x-positions — is structurally
+  // indistinguishable, line by line, from a real wrapped multi-tier header
+  // (every row: 2 short, ALL-CAPS, digit-free cells). No ruled border
+  // nearby either (a real, common convention for this kind of side list).
+  const rows = [
+    ["AFF", "ABOVE FINISHED FLOOR"], ["CFM", "CUBIC FEET PER MINUTE"], ["DIA", "DIAMETER"],
+    ["EA", "EACH"], ["FT", "FEET"], ["GPM", "GALLONS PER MINUTE"], ["MAX", "MAXIMUM"],
+    ["MIN", "MINIMUM"], ["TYP", "TYPICAL"],
+  ];
+  // Titled to read as role "schedule" (not "legend" — a bare "ABBREVIATIONS"
+  // title alone matches this file's OWN legend-cover-sheet signal instead,
+  // which would exclude it from this pass by role-scoping alone and weaken
+  // the point: this negative control exists to prove the STRUCTURAL defense
+  // (MAX_GENERIC_COLUMN_DEPTH) works even on a schedule-role sheet, not to
+  // lean on role-scoping doing the job instead).
+  const spans: GraphSpan[] = [rh("ABBREVIATIONS SCHEDULE", 0, 0, 260)];
+  rows.forEach(([code, def], i) => {
+    spans.push(rh(code, 0, 30 + i * 20, code.length * 8), rh(def, 120, 30 + i * 20, def.length * 8));
+  });
+  const sheet: SheetSpans = { key: "ref.pdf#5", sheet_number: "M601", spans };
+  assert.equal(classifySheetRole(sheet).role, "schedule", "titled to read as a real schedule-role sheet");
+  const g = buildSheetGraph([sheet]);
+  assert.ok(!g.tables.some((t) => t.kind === "reference"), "a real list of independent rows is never mistaken for one wrapped header");
+});
+
+test("reference kind negative control: ordinary numbered notes prose is never mistaken for a table", () => {
+  // Real drafting convention (confirmed live, bessemer sheet #6's own
+  // GENERAL NOTES/KEYNOTES): a numbered note is a bullet marker span PLUS
+  // one long sentence span — never 2+ short, columnar cells — so this
+  // pass's own shape test (isGenericHeaderRow's 2+-short-cell floor)
+  // already refuses it on its own; asserted directly so a future change to
+  // that shape test is caught here, not just inferred from the corpus
+  // sweep passing.
+  const spans: GraphSpan[] = [
+    rh("GENERAL NOTES", 0, 0, 200),
+    rh("1.", 0, 30, 15), rh("COORDINATE INSTALLATION WITH ELECTRICAL CONTRACTOR.", 25, 30, 520),
+    rh("2.", 0, 55, 15), rh("PROVIDE WITH LINE VOLTAGE THERMOSTAT LOCATED ABOVE HEATER.", 25, 55, 560),
+    rh("3.", 0, 80, 15), rh("INSTALL PER MANUFACTURER'S REQUIREMENTS.", 25, 80, 410),
+  ];
+  const sheet: SheetSpans = { key: "ref.pdf#6", sheet_number: "M601", spans: [rh("FAN SCHEDULE", 0, -40, 200), ...spans] };
+  const g = buildSheetGraph([sheet]);
+  assert.ok(!g.tables.some((t) => t.kind === "reference"), "ordinary note prose never qualifies as a header row");
+});
