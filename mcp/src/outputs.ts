@@ -833,7 +833,10 @@ export const sweepScheduleRowOutput = {
     rect: z.array(z.number()).length(4).describe("The fingerprint rect actually used [x0, y0, x1, y1] — the pad ladder's winning step"),
     segments: z.number().int().describe("Vector segments in the marker fingerprint"),
     length_px: z.number(),
-    corroborated: z.boolean().describe("true = the fingerprint recurred at a second tag occurrence before being trusted; false = the tag is drawn too sparsely to cross-check (see note)"),
+    corroborated: z.boolean().describe("true = the fingerprint recurred at a second tag occurrence (or, see corroborated_via, a sibling tag's own occurrence) before being trusted; false = the tag is drawn too sparsely to cross-check (see note)"),
+    corroborated_via: z.enum(["same_tag", "sibling_tag"]).optional()
+      .describe("Present only when corroborated is true. 'same_tag' = the tag's OWN second occurrence reproduced the fingerprint (the strong case). 'sibling_tag' = the tag is drawn exactly once, so a DIFFERENT row's own occurrence in the same schedule table reproduced it instead (corroborated_tag names which) — real evidence that the two marks share a symbol family, but weaker than a same-tag recurrence; audit before trusting the count"),
+    corroborated_tag: z.string().optional().describe("Present only when corroborated_via is 'sibling_tag' — the sibling row's tag whose own drawn occurrence corroborated this fingerprint"),
     occurrences: z.number().int().describe("Drawn occurrences of the tag across all plan sheets"),
   }),
   found: z.number().int().describe("Matches carrying the row's own tag — the honest count, across every plan sheet"),

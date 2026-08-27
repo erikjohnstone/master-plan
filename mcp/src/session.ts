@@ -268,6 +268,15 @@ export interface ShapeOrigin {
       sheet: string;
       role?: string;
       row?: { sheet: string; key: string; table: string };
+      /** schedule_row only: whether the anchor's fingerprint was corroborated
+       * before commit, and against what. "same_tag" = the row's own tag
+       * recurred (the strong case); "sibling_tag" = the tag is drawn exactly
+       * once, so a DIFFERENT row's own occurrence in the same schedule table
+       * corroborated it instead (corroborated_tag names which) — real but
+       * weaker evidence than a same-tag recurrence. */
+      corroborated?: boolean;
+      corroborated_via?: "same_tag" | "sibling_tag";
+      corroborated_tag?: string;
     };
   };
 }
@@ -2964,49 +2973,170 @@ export class Session {
     // the probe has to cross the same size ratio the real sweep will (#186),
     // or a fingerprint gets rejected as "doesn't recur" for the sole reason
     // that the two plan sheets are drawn at different scales
-    let corro: { sh: SheetState; segs: number[]; occ: TagOcc[] } | null = null;
+    type Corro = { sh: SheetState; segs: number[]; occ: TagOcc[] };
+    let corro: Corro | null = null;
     if (withOcc[0].occ.length > 1) corro = { sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.slice(1) };
     else if (withOcc.length > 1) corro = { sh: withOcc[1].sh, segs: (await this.ensureGeometry(withOcc[1].sh)).segs, occ: withOcc[1].occ };
 
-    // pad ladder + corroboration — the shared symbolsweep.ts function, so
-    // this server and the browser's own port can never silently disagree.
-    const anchored = corroborateFingerprint(
-      anchorGeo.segs,
-      { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
-      anchor,
-      corro ? { segs: corro.segs, occ: corro.occ, ratio: sweepRatio(anchorSheet, corro.sh) } : null,
-      sweepOpts,
-    );
-    // Fallback: a register/grille mark (or similar hatch-filled fixture) has
-    // no independent whole-shape perimeter, so corroborateFingerprint's own
-    // exact-segment recurrence check routinely fails for it even though the
-    // tag IS genuinely, repeatedly drawn — confirmed live (accuracy-
-    // hardening plan Phase 4/6): real siblings of the same symbol type
-    // score only ~76-77% against each other under matchSymbol's own 92%
-    // bar, because the fixture's own real-world SIZE differs by rating, not
-    // drafting noise. Tried ONLY when the whole-shape path already failed —
-    // this can only ever ADD a way to succeed, never change an
-    // already-passing case's own behavior or scoring.
-    let fp: SymbolFingerprint | undefined;
-    let inlineFp: InlineMotifFingerprint | undefined;
-    let anchorRect: [Point, Point] | undefined;
-    let corroborated = false;
-    if (anchored) {
-      fp = anchored.fp; anchorRect = anchored.anchorRect; corroborated = anchored.corroborated;
-    } else {
-      const inlineAnchored = corroborateInlineMotif(
-        anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
-        anchor, anchorSheet.upp,
-        corro ? { segs: corro.segs, meta: (await this.ensureGeometry(corro.sh)).meta, occ: corro.occ, upp: corro.sh.upp } : null,
-      );
-      if (inlineAnchored) {
-        inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
+    // Cross-tag fallback corroborators, tried only when the tag itself has no
+    // second occurrence anywhere (corro === null) — the uniquely-tagged family
+    // case (VAV-1, VAV-2, VAV-3, … one tag per physical box, never repeated).
+    // Two different VAV boxes are still the SAME physical symbol, drawn by the
+    // same firm's convention, under a DIFFERENT tag — so a sibling ROW from
+    // the same schedule TABLE (never the whole set: a different equipment
+    // family answering for a shape it never drew would manufacture exactly
+    // the false positive this must not create) whose own tag occurrence sits
+    // on the anchor sheet is worth trying as a stand-in corroborator. Nearest
+    // first (the same drafting convention nearby is the likeliest match, and
+    // it bounds the work); capped, because a large table must not turn one
+    // sweep into dozens of full-sheet matchSymbol calls.
+    const CROSS_TAG_MAX_TRIES = 16;
+    const crossCandidates: (Corro & { tag: string })[] = [];
+    if (!corro) {
+      const rowKeys = (k: string) => canonKey(k).split("/").map((s) => s.trim()).filter(Boolean);
+      const tableSiblingKeys = [...new Set(
+        tb.rows.filter((row) => !rowKeys(row.key).includes(t)).flatMap((row) => rowKeys(row.key)),
+      )].sort();
+      const withDist = tableSiblingKeys
+        .map((k) => ({ k, occ: occOf(anchorSheet, k) }))
+        .filter((e) => e.occ.length > 0)
+        .map((e) => ({ ...e, dist: Math.min(...e.occ.map((o) => Math.hypot(o.cx - anchor.cx, o.cy - anchor.cy))) }))
+        .sort((a, b) => a.dist - b.dist);
+      for (const e of withDist.slice(0, CROSS_TAG_MAX_TRIES)) {
+        crossCandidates.push({ sh: anchorSheet, segs: anchorGeo.segs, occ: e.occ, tag: e.k });
       }
     }
-    if (!fp && !inlineFp) {
-      throw new UserError(corro
-        ? `Schedule row "${t}" cannot be anchored: the linework around its drawn tag on ${anchorSheet.key} does not recur at the tag's other occurrences — no repeatable marker geometry to fingerprint (tried both a whole-shape match and a hatch-fill size/pitch match). Marquee one instance with symbol_sweep instead.`
-        : `Schedule row "${t}" cannot be anchored: no fingerprintable marker linework sits around its drawn tag on ${anchorSheet.key}. Marquee one instance with symbol_sweep instead.`);
+
+    const cX = (v: number) => Math.max(0, Math.min(v, anchorSheet.widthPx));
+    const cY = (v: number) => Math.max(0, Math.min(v, anchorSheet.heightPx));
+    // One pad-ladder step: the candidate fingerprint at padK, or null to try
+    // the next pad, or "region" to stop widening altogether (a region-sized
+    // grab only gets worse with a bigger pad).
+    const candFor = (padK: number): { cand: SymbolFingerprint; rect: [Point, Point] } | "region" | null => {
+      const pad = padK * anchor.h;
+      const rect: [Point, Point] = [
+        [cX(anchor.bbox[0] - pad), cY(anchor.bbox[1] - pad)],
+        [cX(anchor.bbox[2] + pad), cY(anchor.bbox[3] + pad)],
+      ];
+      let cand: SymbolFingerprint;
+      try {
+        cand = fingerprintSymbol(anchorGeo.segs, rect);
+      } catch (e) {
+        // nothing fully inside yet → widen; a region-sized grab → bigger pads only get worse
+        return e instanceof Error && /region, not one symbol/.test(e.message) ? "region" : null;
+      }
+      // a degenerate grab is not a marker: one or two short strokes at the tag
+      // are its own underline/leader, which recur at EVERY tagged mark and
+      // "corroborate" trivially — matching on them counts tags' furniture, not
+      // devices. Widen instead; if no pad ever captures real marker geometry,
+      // the refusal below states it.
+      if (cand.segments < 3) return null;
+      return { cand, rect };
+    };
+    // Does `cand` reproduce near one of `against`'s occurrences? Identical
+    // probe for same-tag and cross-tag corroboration — the bar (matchSymbol's
+    // scoreHigh) does not bend for a sibling tag.
+    const probes = (cand: SymbolFingerprint, against: Corro): boolean => {
+      const cr = sweepRatio(anchorSheet, against.sh);
+      let probe: SymbolMatchResult;
+      try {
+        probe = matchSymbol(cand, against.segs, { ...sweepOpts, ...(cr.scale === 1 ? {} : { scale: cr.scale }) });
+      } catch {
+        // this pad's fingerprint can't survive the trip to the corroborator
+        // (too small once scaled) — a wider pad may; never a hard stop
+        return false;
+      }
+      const pr = (probe.scaled ? probe.scaled.footprint_px : cand.footprint) / 2 + anchor.h;
+      return against.occ.some((o) => probe.matches.some((m) => Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= pr));
+    };
+
+    let fp: SymbolFingerprint | null = null;
+    // Fallback: a register/grille mark (or similar hatch-filled fixture) has
+    // no independent whole-shape perimeter, so the whole-shape corroboration
+    // above routinely fails for it even though the tag IS genuinely,
+    // repeatedly drawn — confirmed live (accuracy-hardening plan Phase 4/6):
+    // real siblings of the same symbol type score only ~76-77% against each
+    // other under matchSymbol's own 92% bar, because the fixture's own
+    // real-world SIZE differs by rating, not drafting noise. Tried ONLY when
+    // the whole-shape path already failed to corroborate against a real
+    // second occurrence — this can only ever ADD a way to succeed, never
+    // change an already-passing case's own behavior or scoring. (Restored
+    // during the cross-tag-corroboration merge above, which had dropped this
+    // fallback entirely — a real regression this project's own test suite
+    // did not catch, since no test covered this specific integration path.)
+    let inlineFp: InlineMotifFingerprint | undefined;
+    let anchorRect: [Point, Point] | null = null;
+    let corroborated = false;
+    // Present only when corroboration succeeded against a SIBLING tag's own
+    // occurrence rather than this tag's own second instance — a real, honest
+    // distinction: same-tag corroboration is stronger evidence (the identical
+    // mark recurs) than cross-tag (a relative in the same table recurs).
+    let corroboratedVia: string | null = null;
+    if (corro) {
+      // same-tag corroboration is REQUIRED once a second occurrence exists:
+      // unchanged from before this change — a tag that recurs but whose
+      // WHOLE-SHAPE linework does NOT reproduce there falls back to the
+      // hatch-fill inline-motif check below before being refused, never
+      // silently accepted on a bare whole-shape guess.
+      for (const padK of [1, 2, 3]) {
+        const got = candFor(padK);
+        if (got === "region") break;
+        if (!got) continue;
+        if (probes(got.cand, corro)) { fp = got.cand; anchorRect = got.rect; corroborated = true; break; }
+      }
+      if (!fp || !anchorRect) {
+        const inlineAnchored = corroborateInlineMotif(
+          anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+          anchor, anchorSheet.upp,
+          { segs: corro.segs, meta: (await this.ensureGeometry(corro.sh)).meta, occ: corro.occ, upp: corro.sh.upp },
+        );
+        if (inlineAnchored) {
+          inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
+        }
+        if (!fp && !inlineFp) {
+          throw new UserError(`Schedule row "${t}" cannot be anchored: the linework around its drawn tag on ${anchorSheet.key} does not recur at the tag's other occurrences — no repeatable marker geometry to fingerprint (tried both a whole-shape match and a hatch-fill size/pitch match). Marquee one instance with symbol_sweep instead.`);
+        }
+      }
+    } else {
+      // No same-tag corroborator exists at all. Try cross-tag candidates —
+      // this can only ever UPGRADE an uncorroborated anchor to a disclosed
+      // cross-tag one; a candidate that fails to corroborate is silently
+      // skipped and the NEXT one tried, exactly as if it were never offered —
+      // it must never turn a would-have-succeeded uncorroborated anchor into
+      // a refusal, unlike the same-tag case above.
+      outer:
+      for (const cross of crossCandidates) {
+        for (const padK of [1, 2, 3]) {
+          const got = candFor(padK);
+          if (got === "region") break;
+          if (!got) continue;
+          if (probes(got.cand, cross)) { fp = got.cand; anchorRect = got.rect; corroborated = true; corroboratedVia = cross.tag; break outer; }
+        }
+      }
+      if (!fp) {
+        for (const padK of [1, 2, 3]) {
+          const got = candFor(padK);
+          if (got === "region") break;
+          if (!got) continue;
+          fp = got.cand; anchorRect = got.rect; break;
+        }
+      }
+      if (!fp) {
+        // No same-tag occurrence and no whole-shape candidate at all (no
+        // drawn linework near the tag whatsoever) — try the hatch-fill
+        // check uncorroborated too, matching the pre-cross-tag-merge
+        // behavior for this exact case.
+        const inlineAnchored = corroborateInlineMotif(
+          anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+          anchor, anchorSheet.upp, null,
+        );
+        if (inlineAnchored) {
+          inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
+        }
+      }
+      if (!fp && !inlineFp) {
+        throw new UserError(`Schedule row "${t}" cannot be anchored: no fingerprintable marker linework sits around its drawn tag on ${anchorSheet.key}. Marquee one instance with symbol_sweep instead.`);
+      }
     }
 
     // 4. the full plan-only sweep + tag corroboration per match.
@@ -3092,7 +3222,10 @@ export class Session {
             assignment: { source: "schedule", schedule_sheet: tb.sheet },
             symbol: {
               score: m.score, rotation: m.rotation, mirrored: m.mirrored,
-              seed: { source: "schedule_row", sheet: anchorSheet.key, row: { sheet: tb.sheet, key: t, table } },
+              seed: {
+                source: "schedule_row", sheet: anchorSheet.key, row: { sheet: tb.sheet, key: t, table },
+                corroborated, ...(corroboratedVia ? { corroborated_via: "sibling_tag" as const, corroborated_tag: corroboratedVia } : corroborated ? { corroborated_via: "same_tag" as const } : {}),
+              },
             },
           }).id);
         }
@@ -3110,7 +3243,14 @@ export class Session {
     const firstCell = r.cells[Object.keys(r.cells)[0]];
     const capped = perSheet.filter((p) => p.candidates.dropped > 0);
     const notes: string[] = [];
-    if (!corroborated) notes.push(`The tag "${t}" is drawn ${totalOcc === 1 ? "exactly once" : "too sparsely to cross-check"} — the fingerprint could not corroborate at a second occurrence; audit the matches with view_sheet before trusting the count.`);
+    if (!corroborated) {
+      notes.push(`The tag "${t}" is drawn ${totalOcc === 1 ? "exactly once" : "too sparsely to cross-check"} — the fingerprint could not corroborate at a second occurrence${crossCandidates.length ? `, and none of ${crossCandidates.length} sibling tag(s) from the same ${table} table reproduced it either` : ""}; audit the matches with view_sheet before trusting the count.`);
+    } else if (corroboratedVia) {
+      // weaker evidence than same-tag corroboration, disclosed rather than
+      // left to read identically to it (anchor.corroborated_via says the
+      // same in the structured reply)
+      notes.push(`The tag "${t}" is drawn exactly once, so the fingerprint was corroborated against sibling tag "${corroboratedVia}"'s own occurrence in the same ${table} table instead — a real, weaker form of evidence than a same-tag corroboration (two different marks sharing a symbol family, not the same mark recurring); audit the matches with view_sheet before trusting the count.`);
+    }
     if (inlineFp) notes.push(`No whole-shape marker recurs around this tag's own drawn text, so this anchored on the surrounding hatch fill's own real-world size/pitch instead (the register/grille fallback) — score is a size closeness, not a segment match; audit with view_sheet before trusting the count.`);
     if (opts.commit && !found) notes.push("commit requested but nothing cleared the bar — no shapes were committed.");
     // #186, same disclosure discipline as symbol_sweep: a ratio the count
@@ -3144,6 +3284,8 @@ export class Session {
         segments: fp ? fp.segments : inlineFp!.members,
         length_px: round1(fp ? fp.totalLen : inlineFp!.pitchPx),
         corroborated,
+        ...(corroborated ? { corroborated_via: corroboratedVia ? "sibling_tag" as const : "same_tag" as const } : {}),
+        ...(corroboratedVia ? { corroborated_tag: corroboratedVia } : {}),
         occurrences: totalOcc,
       },
       found,

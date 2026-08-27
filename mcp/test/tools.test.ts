@@ -7,11 +7,13 @@ import { fileURLToPath } from "node:url";
 import { mkdtemp, copyFile, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { z } from "zod";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { buildServer } from "../server.ts";
 import { Session, sanitizeApprovals } from "../src/session.ts";
 import { openPdf, positionedText } from "../src/pdf.ts";
+import { sweepScheduleRowOutput } from "../src/outputs.ts";
 // the canvas's own tally — the same function the marked-set cover prints from
 import { approvalTally } from "../../web/src/lib/approvals.js";
 // the rules engine's own mask builder — the #207 test plants a synthetic
@@ -2808,6 +2810,85 @@ test("sweep_schedule_row refusals: unanchorable row, unknown row, ambiguous key 
   assert.equal((await call(client, "takeoff_summary")).data.conditions.length, 0);
 });
 
+// ── sweep_schedule_row cross-tag corroboration: the uniquely-tagged family
+// (VAV-1, VAV-2, VAV-3, … one tag per physical box, never repeated) has no
+// same-tag sibling occurrence to corroborate against — a sibling ROW from the
+// SAME schedule table whose own tag occurrence carries the same fingerprint
+// stands in instead, disclosed as weaker evidence than same-tag recurrence.
+// The fixture (test/fixtures/symbol-uniqtags.pdf, scripts/make-symbol-fixture.mjs):
+// a MECHANICAL PLAN with THREE marks, each tag drawn exactly once — VAV-1 and
+// VAV-2 share the SAME diamond marker shape (two different boxes, one firm's
+// convention); VAV-3 is a genuinely different TRIANGLE marker family in the
+// SAME VAV SCHEDULE table — the negative control.
+const SYMUNIQ = fileURLToPath(new URL("./fixtures/symbol-uniqtags.pdf", import.meta.url));
+
+test("sweep_schedule_row cross-tag corroboration: a uniquely-tagged pair corroborates against EACH OTHER's own occurrence, disclosed as sibling_tag", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SYMUNIQ });
+
+  const v1 = await call(client, "sweep_schedule_row", { tag: "VAV-1" });
+  assert.equal(v1.isError, false);
+  assert.equal(v1.data.anchor.occurrences, 1, "VAV-1 is drawn exactly once — no same-tag sibling to corroborate against");
+  assert.equal(v1.data.anchor.corroborated, true, "VAV-2's own occurrence — the same diamond shape family — stood in");
+  assert.equal(v1.data.anchor.corroborated_via, "sibling_tag");
+  assert.equal(v1.data.anchor.corroborated_tag, "VAV-2");
+  assert.equal(v1.data.found, 1);
+  assert.match(v1.data.note, /corroborated against sibling tag "VAV-2"/);
+  assert.match(v1.data.note, /weaker.*than a same-tag corroboration/);
+
+  // symmetric: VAV-2 corroborates against VAV-1's own occurrence
+  const v2 = await call(client, "sweep_schedule_row", { tag: "VAV-2" });
+  assert.equal(v2.isError, false);
+  assert.equal(v2.data.anchor.corroborated, true);
+  assert.equal(v2.data.anchor.corroborated_via, "sibling_tag");
+  assert.equal(v2.data.anchor.corroborated_tag, "VAV-1");
+  assert.equal(v2.data.found, 1);
+
+  // schema round-trip: the new fields are declared, nothing stripped
+  const parsed = z.object(sweepScheduleRowOutput).parse(v1.data);
+  assert.deepEqual(parsed, v1.data);
+
+  // commit carries the corroboration kind through into provenance
+  const committed = await call(client, "sweep_schedule_row", { tag: "VAV-1", commit: true });
+  assert.equal(committed.data.committed, 1);
+  const payload = await call(client, "export_takeoff", {});
+  const shp = payload.data.shapes.find((s: any) => s.condition_id === payload.data.conditions.find((c: any) => c.finish_tag === "VAV-1").id);
+  assert.equal(shp.origin.symbol.seed.corroborated, true);
+  assert.equal(shp.origin.symbol.seed.corroborated_via, "sibling_tag");
+  assert.equal(shp.origin.symbol.seed.corroborated_tag, "VAV-2");
+});
+
+test("sweep_schedule_row cross-tag corroboration negative control: a genuinely different shape family never false-positives, and the anchor still succeeds uncorroborated", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SYMUNIQ });
+
+  // VAV-3 is a triangle marker; its schedule siblings VAV-1/VAV-2 are diamond
+  // markers. Cross-tag corroboration must be TRIED (both are in the same
+  // table) and must NOT fire — the shapes genuinely do not reproduce each
+  // other — and the anchor must still succeed (uncorroborated), exactly as it
+  // did before this feature existed for the no-corroborator-at-all case.
+  const v3 = await call(client, "sweep_schedule_row", { tag: "VAV-3" });
+  assert.equal(v3.isError, false, "a failed cross-tag attempt must never turn a would-have-succeeded uncorroborated anchor into a refusal");
+  assert.equal(v3.data.anchor.occurrences, 1);
+  assert.equal(v3.data.anchor.corroborated, false);
+  assert.equal(v3.data.anchor.corroborated_via, undefined);
+  assert.equal(v3.data.anchor.corroborated_tag, undefined);
+  assert.equal(v3.data.anchor.segments, 3, "the triangle's own linework, not the diamonds'");
+  assert.equal(v3.data.found, 1, "VAV-3's own marker is still found — corroboration failing does not block the count");
+  assert.match(v3.data.note, /drawn exactly once/);
+  assert.match(v3.data.note, /none of 2 sibling tag\(s\)/, "both table siblings were tried and neither reproduced it");
+
+  // and the reverse: neither VAV-1 nor VAV-2 may ever be corroborated BY the
+  // triangle — already pinned above (each corroborates against the OTHER
+  // diamond, never against VAV-3), asserted again here for the negative case
+  // to stand on its own without relying on try order
+  const v1 = await call(client, "sweep_schedule_row", { tag: "VAV-1" });
+  assert.notEqual(v1.data.anchor.corroborated_tag, "VAV-3");
+
+  // schema round-trip on the uncorroborated reply too
+  const parsed = z.object(sweepScheduleRowOutput).parse(v3.data);
+  assert.deepEqual(parsed, v3.data);
+});
 
 // ── count_marks: the deterministic census ────────────────────────────────────
 // The fixture (test/fixtures/annotated-set.pdf, scripts/make-symbol-fixture.mjs):
