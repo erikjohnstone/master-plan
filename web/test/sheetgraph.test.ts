@@ -75,6 +75,32 @@ test("sheet roles classify from what the sheet SAYS, with evidence", () => {
   assert.deepEqual({ r: mBare.role, weak: mBare.confidence < 0.5 }, { r: "plan", weak: true });
 });
 
+test("sheet roles: a real \"<DISCIPLINE> - LEVEL N PLAN\" title (baker-county-eoc's own real story-numbering convention) classifies plan, not unknown", () => {
+  // Real, found live: this firm titles its floor plans "MECHANICAL - LEVEL 1
+  // PLAN"/"PLUMBING - LEVEL 1 PLAN"/"ELECTRICAL LIGHTING - LEVEL 1 PLAN" (one
+  // combined text run each) — no discipline word sits directly adjacent to
+  // "PLAN" the way the base `\s+PLAN` pattern expects, so all 4 real sheets
+  // classified `unknown` before this fix.
+  const hvac = classifySheetRole({ key: "a", sheet_number: "M401", spans: [sp("MECHANICAL - LEVEL 1 PLAN", 100, 700)] });
+  assert.equal(hvac.role, "plan");
+  assert.ok(hvac.confidence >= 0.8);
+  const elec = classifySheetRole({ key: "b", sheet_number: "E401", spans: [sp("ELECTRICAL LIGHTING - LEVEL 1 PLAN", 100, 700)] });
+  assert.equal(elec.role, "plan");
+  // a real corpus-wide regression this fix's own FIRST attempt introduced,
+  // caught via a before/after role diff, not assumed safe: loosening the
+  // base pattern's own required `\s+PLAN` down to `\s*PLAN` also matched a
+  // one-word "FLOORPLAN" that has nothing to do with this fix — the real
+  // fix is a SEPARATE alternative, and the base case's own required space
+  // must stay exactly as strict as it always was.
+  const noSpace = classifySheetRole({ key: "c", sheet_number: "A-999", spans: [sp("CENTER FLOORPLAN.", 100, 700)] });
+  assert.notEqual(noSpace.role, "plan", "a one-word FLOORPLAN (no space) must not classify as plan via this pattern");
+  // and a bare "LEVEL N PLAN" with no discipline word must still correctly
+  // fail — the whole point of requiring the discipline word adjacent to the
+  // "- LEVEL N" infix, not floating free anywhere in the title
+  const bareLevel = classifySheetRole({ key: "d", sheet_number: "A-999", spans: [sp("KEY PLAN", 100, 700), sp("LEVEL 1 PLAN", 200, 700)] });
+  assert.notEqual(bareLevel.role, "plan", "no discipline word adjacent to LEVEL N PLAN — must not classify as plan via this pattern");
+});
+
 test("a compound schedule-row key answers for each of its marks", () => {
   assert.equal(rowKeyAnswersFor("R1/E1", "R1"), true);
   assert.equal(rowKeyAnswersFor("R1/E1", "E1"), true);

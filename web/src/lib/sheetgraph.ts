@@ -59,8 +59,22 @@ const SCHEDULE_TITLE_RE = /^[A-Z][A-Z ()/&.'’-]* SCHEDULE( *[-–] *[A-Z0-9 ()
 const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   { re: /DEMOLITION\s+PLAN|DEMO\s+PLAN/, role: "demolition", conf: 0.9 },
   // every discipline draws plans, not just finishes — an M-sheet's "SECOND
-  // FLOOR DUCTWORK PLAN" is as much a plan title as an A-sheet's finish plan
-  { re: /(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\s+PLAN\b/, role: "plan", conf: 0.85 },
+  // FLOOR DUCTWORK PLAN" is as much a plan title as an A-sheet's finish plan.
+  // An optional "- LEVEL N " infix (real, found live on baker-county-eoc's
+  // own real HVAC/plumbing/electrical floor plans — sheets #38/#45/#54/#55,
+  // each titled, as one single text run, "<DISCIPLINE> - LEVEL 1 PLAN": a
+  // real, consistent story-numbering convention this firm uses across every
+  // discipline, missed entirely by the plain `\s+PLAN` tail since no
+  // discipline word sits directly adjacent to "PLAN" itself. A SEPARATE
+  // alternative, not a loosened shared tail — a first attempt collapsed the
+  // base case's own required `\s+` down to `\s*`, which silently ALSO
+  // started matching a one-word "FLOORPLAN" (no space at all) that has
+  // nothing to do with this fix; caught via a real corpus-wide before/after
+  // role diff, not assumed safe. Deliberately narrow here too —
+  // `-\s*LEVEL\s+\d+\s*`, not a generic `.*` gap — so this can't bridge an
+  // unrelated word into a false plan match; "KEY PLAN"/bare "LEVEL 1 PLAN"
+  // (no discipline word) still correctly fail to match, unaffected.
+  { re: /(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\s+PLAN\b|(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\s*-\s*LEVEL\s+\d+\s+PLAN\b/, role: "plan", conf: 0.85 },
   { re: SCHEDULE_TITLE_RE, role: "schedule", conf: 0.85 },
   { re: /SCHEDULE/, role: "schedule", conf: 0.5 },
   { re: /LEGEND/, role: "legend", conf: 0.5 },
