@@ -101,6 +101,39 @@ test("sheet roles: a real \"<DISCIPLINE> - LEVEL N PLAN\" title (baker-county-eo
   assert.notEqual(bareLevel.role, "plan", "no discipline word adjacent to LEVEL N PLAN — must not classify as plan via this pattern");
 });
 
+test("sheet roles: a real SHEET INDEX cover page is never misattributed as one of the sheet types it lists (ledger, later session)", () => {
+  // Real, found live on baker-county-eoc's own sheet #36, discovered
+  // immediately after the LEVEL-N-PLAN fix above: a real "MECHANICAL SHEET
+  // INDEX" cover page PRINTS every other real sheet's own title as its own
+  // table of contents ("MECHANICAL SHEET INDEX / MECHANICAL LEGEND /
+  // MECHANICAL - LEVEL 1 PLAN / MECHANICAL - ROOF PLAN / ..." all as real
+  // spans on the SAME page) — once "LEVEL N PLAN" started matching too, this
+  // page had TWO distinct "plan"-role hits at equal confidence, and the
+  // tie-break (first in document order) reported the INDEX page itself as
+  // "MECHANICAL - LEVEL 1 PLAN", the wrong sheet's own title. Corpus-wide
+  // sweep after the fix found this is a REAL, RECURRING pattern, not a
+  // one-off — the same shape hit baker-county-eoc's own general-notes cover
+  // (was "demolition"), 3 more of its own per-discipline index pages (were
+  // "plan"), and weld-county-permit's own "MECHANICAL DRAWING INDEX" cover
+  // (was "plan") — every one of them a real, PRE-EXISTING misclassification
+  // (latent even before tonight's LEVEL-N-PLAN fix, just newly exposed by
+  // it), not a regression this test's own fix introduces.
+  const idx = classifySheetRole({
+    key: "e", sheet_number: "M001",
+    spans: [
+      sp("MECHANICAL SHEET INDEX", 100, 100),
+      sp("MECHANICAL LEGEND", 100, 200),
+      sp("MECHANICAL - LEVEL 1 PLAN", 100, 300),
+      sp("MECHANICAL - ROOF PLAN", 100, 400),
+    ],
+  });
+  assert.notEqual(idx.role, "plan", "an index page listing other sheets' titles must not itself classify as one of them");
+  assert.equal(idx.evidence?.text, "MECHANICAL SHEET INDEX", "the index page's own real title is the evidence, not a listed sheet's");
+  // a genuine real plan sheet with no index text anywhere is unaffected
+  const real = classifySheetRole({ key: "f", sheet_number: "M101", spans: [sp("MECHANICAL - LEVEL 1 PLAN", 100, 700)] });
+  assert.equal(real.role, "plan");
+});
+
 test("a compound schedule-row key answers for each of its marks", () => {
   assert.equal(rowKeyAnswersFor("R1/E1", "R1"), true);
   assert.equal(rowKeyAnswersFor("R1/E1", "E1"), true);

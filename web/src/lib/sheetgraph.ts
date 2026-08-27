@@ -57,6 +57,20 @@ const isVertical = (s: GraphSpan): boolean =>
 // pdf.js maps a Type1 quoteright there), so every CONT'D pattern accepts both.
 const SCHEDULE_TITLE_RE = /^[A-Z][A-Z ()/&.'’-]* SCHEDULE( *[-–] *[A-Z0-9 ()/&.'’-]+)?( *\(?(?:CONTINUATION|CONTINUED|CONT['’]?D?)\.?\)?)?$/;
 const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
+  // Real, found live (baker-county-eoc's own sheet #36, immediately after the
+  // "- LEVEL N PLAN" fix above started matching MORE titles): a SHEET INDEX
+  // page literally PRINTS every other real sheet's own title as its table of
+  // contents ("MECHANICAL SHEET INDEX / MECHANICAL LEGEND / MECHANICAL -
+  // LEVEL 1 PLAN / MECHANICAL - ROOF PLAN / ..." all as real spans on the
+  // SAME index sheet) — once "LEVEL N PLAN" started matching too, this one
+  // sheet had TWO distinct real "plan"-role hits at equal confidence, and the
+  // tie-break (first in document order) happened to pick the wrong one,
+  // reporting the index sheet itself as "MECHANICAL - LEVEL 1 PLAN". This
+  // signal is checked FIRST (highest confidence, always wins the sort) so an
+  // index page's own real "___ SHEET INDEX" title is what gets reported for
+  // it, honestly as role "unknown" (an index isn't a plan/schedule/legend/
+  // etc. itself) — not silently misattributed to one of the sheets it lists.
+  { re: /SHEET\s+INDEX|DRAWING\s+INDEX|INDEX\s+OF\s+DRAWINGS/, role: "unknown", conf: 0.95 },
   { re: /DEMOLITION\s+PLAN|DEMO\s+PLAN/, role: "demolition", conf: 0.9 },
   // every discipline draws plans, not just finishes — an M-sheet's "SECOND
   // FLOOR DUCTWORK PLAN" is as much a plan title as an A-sheet's finish plan.
