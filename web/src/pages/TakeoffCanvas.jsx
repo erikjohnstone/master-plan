@@ -6638,6 +6638,22 @@ export default function TakeoffCanvas() {
   // same shapes, so an agent reasoning about this looks identical whether
   // it's driving the browser or an external MCP client.
   const wireBox = (b) => ({ x0: +b[0].toFixed(1), y0: +b[1].toFixed(1), x1: +b[2].toFixed(1), y1: +b[3].toFixed(1) });
+  // Normalized (0..1) sibling of wireBox, for sheet_graph/find_schedule's
+  // own `region` field specifically (accuracy-hardening plan Phase 5,
+  // ledger item 3): every OTHER agent-facing region (view_region,
+  // classify_symbol, symbol_sweep's seed_rect_norm, one_click's x/y) is
+  // already normalized — sheet_graph/find_schedule's own raw-image-px
+  // region was the one outlier, confirmed live to cost an agent 6 wasted
+  // read_schedule retries chaining a find_schedule region straight through.
+  // `dims` may be missing for a sheet nothing has indexed yet (a real,
+  // narrow edge case — ensureAgentGraph always indexes first, so this only
+  // fires if a table's own region math ever runs ahead of that) — falls
+  // back to the RAW px box with a stated reason rather than silently
+  // dividing by an unknown width/height.
+  const wireBoxNorm = (b, dims) => {
+    if (!dims || !(dims.w > 0) || !(dims.h > 0)) return { ...wireBox(b), unnormalized: true };
+    return { x0: +(b[0] / dims.w).toFixed(5), y0: +(b[1] / dims.h).toFixed(5), x1: +(b[2] / dims.w).toFixed(5), y1: +(b[3] / dims.h).toFixed(5) };
+  };
   const wireEvidence = (e) => ({ sheet: e.sheet, text: e.text, bbox: wireBox(e.bbox) });
   const wireRoom = (r) => ({
     tag: r.tag, name: r.name, sheet: r.sheet, bbox: wireBox(r.bbox),
@@ -6691,6 +6707,12 @@ export default function TakeoffCanvas() {
 
   async function agentSheetGraph() {
     const g = await ensureAgentGraph();
+    // One dims lookup per sheet (ensureSheetDims resolves even a
+    // never-rendered sheet lazily, from the PDF page's own viewport — see
+    // its own comment), reused across every table on that sheet rather than
+    // re-awaited per table.
+    const dimsBySheet = new Map();
+    for (const s of g.sheets) dimsBySheet.set(s.key, await ensureSheetDims(s.key));
     return {
       available: g.available,
       sheets: g.sheets.map((s) => ({
@@ -6698,7 +6720,7 @@ export default function TakeoffCanvas() {
         ...(s.evidence ? { evidence: wireEvidence(s.evidence) } : {}),
         ...(s.building ? { building: s.building } : {}),
         schedules: s.schedules.map((t) => ({
-          kind: t.kind, title: t.title, rows: t.rows, region: wireBox(t.region),
+          kind: t.kind, title: t.title, rows: t.rows, region: wireBoxNorm(t.region, dimsBySheet.get(s.key)),
           ...(t.continues ? { continues: t.continues } : {}),
         })),
       })),
@@ -6739,10 +6761,12 @@ export default function TakeoffCanvas() {
       const found = g.tables.map((t) => `${t.kind} on ${t.sheet}`).join(" | ");
       return { matches: [], note: `No ${JSON.stringify(kind)} schedule found. Found: ${found || "no schedules at all"}.` };
     }
+    const dimsBySheet = new Map();
+    for (const t of hits) if (!dimsBySheet.has(t.sheet)) dimsBySheet.set(t.sheet, await ensureSheetDims(t.sheet));
     return {
       matches: hits.map((t) => ({
         sheet: t.sheet, kind: t.kind, title: t.title?.text || "", rows: t.rows.length,
-        headers: t.headers, region: wireBox(t.region),
+        headers: t.headers, region: wireBoxNorm(t.region, dimsBySheet.get(t.sheet)),
         ...(t.building ? { building: t.building } : {}),
       })),
     };
