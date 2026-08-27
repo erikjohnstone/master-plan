@@ -18,6 +18,7 @@ const KEYS = {
   apiKey: "opentakeoff_ai_key",
   model: "opentakeoff_ai_model",
   provider: "opentakeoff_ai_provider",
+  visionModel: "opentakeoff_ai_vision_model",
 };
 
 const env = (name) => (import.meta.env && import.meta.env[name]) || "";
@@ -31,13 +32,33 @@ function readKey(k, envName) {
 }
 
 /** Current config. provider: "openai" (OpenAI-style — the default; local
- *  runtimes speak it) | "anthropic" (Anthropic-style). */
+ *  runtimes speak it) | "anthropic" (Anthropic-style).
+ *
+ *  `visionModel` (real, later addition): the model used SPECIFICALLY for
+ *  reading an image (view_region crops) — separate from `model`, the one
+ *  driving the agent loop's own tool-calling and final narration. Real,
+ *  live-observed reason this split exists at all: asked to trace a duct's
+ *  connectivity, the single configured model (a smaller, vision-capable one,
+ *  chosen so it CAN read plan crops at all) sometimes overrode its own
+ *  tool's honest "no connection found" with a guess from eyeballing a
+ *  view_region screenshot — even with explicit, forceful prompt rules
+ *  against exactly that, confirmed by direct live re-testing, not assumed.
+ *  Routing images through a SEPARATE, narrowly-scoped vision call (see
+ *  `describeImageForAgent` below) means the model actually driving the loop
+ *  and writing the final answer never has raw pixels in its own context to
+ *  be tempted by — it only ever sees the vision model's own literal
+ *  description, threaded in exactly like any other tool result. Defaults to
+ *  `model` when unset, so a single-model setup (today's default) behaves
+ *  identically to before this existed — this is additive, not a forced
+ *  change to anyone's existing config. */
 export function aiConfig() {
+  const model = readKey("model", "VITE_AI_MODEL");
   return {
     endpoint: readKey("endpoint", "VITE_AI_ENDPOINT"),
     apiKey: readKey("apiKey", "VITE_AI_KEY"),
-    model: readKey("model", "VITE_AI_MODEL"),
+    model,
     provider: readKey("provider", "VITE_AI_PROVIDER") || "openai",
+    visionModel: readKey("visionModel", "VITE_AI_VISION_MODEL") || model,
   };
 }
 
@@ -47,9 +68,9 @@ export function isAiConfigured() {
   return !!(c.endpoint && c.model);
 }
 
-export function saveAiConfig({ endpoint, apiKey, model, provider }) {
+export function saveAiConfig({ endpoint, apiKey, model, provider, visionModel }) {
   try {
-    for (const [k, v] of [["endpoint", endpoint], ["apiKey", apiKey], ["model", model], ["provider", provider]]) {
+    for (const [k, v] of [["endpoint", endpoint], ["apiKey", apiKey], ["model", model], ["provider", provider], ["visionModel", visionModel]]) {
       if (v) localStorage.setItem(KEYS[k], v);
       else localStorage.removeItem(KEYS[k]);
     }
@@ -196,16 +217,19 @@ export function buildChatRequest(cfg, { system, messages, tools, maxTokens = 409
 // ── the seam every AI consumer goes through ─────────────────────────────────
 
 /** Send one vision query to the user's configured endpoint. Throws with a
- *  plain-language message on any failure. */
-export async function visionQuery({ imageDataUrl, prompt, maxTokens = 100 }) {
-  const cfg = aiConfig();
-  if (!isAiConfigured()) throw new Error("AI isn't configured — open AI settings first.");
+ *  plain-language message on any failure. `cfgOverride`/`fetchFn` are
+ *  injectable (tests, and `describeImageForAgent` below, which needs the
+ *  VISION model, not the orchestrator model) — default to the live
+ *  `aiConfig()` and the global `fetch` exactly as before. */
+export async function visionQuery({ imageDataUrl, prompt, maxTokens = 100, cfg: cfgOverride, fetchFn }) {
+  const cfg = cfgOverride || aiConfig();
+  if (!(cfg.endpoint && cfg.model)) throw new Error("AI isn't configured — open AI settings first.");
   const { url, headers, body } = buildVisionRequest(cfg, { imageDataUrl, prompt, maxTokens });
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), 30000);
   let res;
   try {
-    res = await fetch(url, { method: "POST", headers, body: JSON.stringify(body), signal: ctl.signal });
+    res = await (fetchFn || fetch)(url, { method: "POST", headers, body: JSON.stringify(body), signal: ctl.signal });
   } catch (e) {
     throw new Error(e?.name === "AbortError"
       ? "The endpoint took more than 30 seconds — check the model is loaded."
@@ -217,6 +241,31 @@ export async function visionQuery({ imageDataUrl, prompt, maxTokens = 100 }) {
   const text = parseVisionResponse(cfg.provider, await res.json().catch(() => null));
   if (text == null) throw new Error("The endpoint replied, but not with text.");
   return text;
+}
+
+/** Deliberately literal: describe only what's visible, never a conclusion.
+ * The whole point of routing images through their own isolated call (see
+ * `aiConfig()`'s own `visionModel` comment) is that the model driving the
+ * loop never gets tempted to reason from raw pixels — so THIS prompt must
+ * not invite the vision model to draw conclusions either, just report what
+ * it can literally see, the same discipline `scaleReadPrompt`/
+ * `classifySymbolPrompt` already hold elsewhere in this file. */
+export function describeImagePrompt() {
+  return "This image is a cropped region of a construction drawing (HVAC/mechanical/BAS plan). Describe ONLY what is literally visible: any text, tags, or labels you can read exactly as printed, and the linework/symbols present (shape, how many, roughly where). Do NOT infer meaning, connections, totals, or conclusions beyond what's directly visible — if you're not sure a mark is a specific symbol, say so instead of guessing. Be factual and literal, 2-4 sentences.";
+}
+
+/** The agent loop's own image-to-text seam (real, later addition — see
+ * `aiConfig()`'s own `visionModel` comment for why this exists at all).
+ * Runs the SAME transport as `visionQuery`, just always against the
+ * configured VISION model, never whatever model is driving the loop. Throws
+ * the same plain-language errors on failure — the caller (`agentLoop.js`)
+ * catches this and degrades to the OLD raw-image path for that one result,
+ * but emits a real status event disclosing the degradation rather than
+ * failing silently either way (see the call site's own comment). */
+export async function describeImageForAgent({ imageDataUrl, cfg, fetchFn }) {
+  const base = cfg || aiConfig();
+  const visionCfg = { ...base, model: base.visionModel || base.model };
+  return visionQuery({ imageDataUrl, prompt: describeImagePrompt(), maxTokens: 300, cfg: visionCfg, fetchFn });
 }
 
 /** Send one chat-with-tools request (the agent loop's transport). Same

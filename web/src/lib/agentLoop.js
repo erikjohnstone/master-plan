@@ -17,7 +17,7 @@
 // onEvent + a terminal {status: "error" | "aborted" | "max_iterations"} —
 // the canvas renders status, it never crashes.
 
-import { chatWithTools } from "./ai.js";
+import { chatWithTools, describeImageForAgent } from "./ai.js";
 
 export const MAX_AGENT_ITERATIONS = 24;
 
@@ -207,6 +207,25 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
         out = { error: `Tool ${call.name} failed: ${String((e && e.message) || e)}` };
       }
       if (out == null || typeof out !== "object") out = { result: out ?? null };
+      // Vision-as-a-tool (real, later addition — see aiConfig()'s own
+      // visionModel comment): route any raw image through an ISOLATED,
+      // narrowly-scoped vision call instead of injecting the pixels
+      // straight into the loop's own ongoing conversation. The model
+      // driving the loop and writing the final answer never gets to "just
+      // look and see" — it only ever gets the vision model's own literal,
+      // factual description, threaded in exactly like any other tool
+      // result. Degrades honestly on failure: falls back to the OLD raw-
+      // image path (never silently loses the ability to look), but emits a
+      // real status event disclosing the degradation rather than hiding it.
+      if (out.image_data_url) {
+        try {
+          const description = await describeImageForAgent({ imageDataUrl: out.image_data_url, cfg, fetchFn });
+          const { image_data_url: _img, ...rest } = out;
+          out = { ...rest, visual_description: description };
+        } catch (e) {
+          emit({ type: "text", text: `[Vision routing degraded — the vision model call failed (${String((e && e.message) || e)}), falling back to the raw image for this one result.]` });
+        }
+      }
       if (call.name === "trace_connectivity" && !call.argsError) {
         connectivityCalls++;
         // A "reached" whose target sits right where the seed started is the
