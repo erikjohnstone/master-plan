@@ -1,0 +1,47 @@
+%PDF-1.5
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 800 800] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 481 >>
+stream
+1 w
+40 40 720 720 re S
+BT /F1 16 Tf 300 760 Td (MECHANICAL LEGEND) Tj ET
+0.5 w
+100 700 m 111.75 700 l S
+111.75 700 m 111.75 688.25 l S
+111.75 688.25 m 100 688.25 l S
+100 688.25 m 100 700 l S
+105.88 688.25 m 105.88 676.95 l S
+97.13 682.9 m 97.13 671.05 l S
+97.13 682.9 m 114.63 671.05 l S
+114.63 671.05 m 114.63 682.9 l S
+114.63 682.9 m 97.13 671.05 l S
+BT /F1 12 Tf 170 685 Td (2) Tj ET
+BT /F1 12 Tf 181.5 685 Td (-) Tj ET
+BT /F1 12 Tf 188 685 Td (WAY ELECTRIC CONTROL VALVE) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000773 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+843
+%%EOF

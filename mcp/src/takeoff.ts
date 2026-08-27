@@ -82,8 +82,16 @@ export interface TakeoffItem {
   /** Present only for source: "legend_symbol" — the real legend sheet and
    * caption text this item's synthetic tag was derived from, so a reader
    * can go look at the row this came from instead of trusting the
-   * normalized tag alone. */
-  legend?: { sheet: string; caption: string };
+   * normalized tag alone. `at` is the glyph's OWN center on that legend
+   * sheet (find_legend_symbols' own detected rect, never estimated) —
+   * populated unconditionally, including on a "refused"/"error" item: the
+   * legend DEFINITION's own location is real, always-available data
+   * regardless of whether its whole-set installed count could be verified,
+   * so a REFUSED_NO_SCALE item still hands back a real place to go look,
+   * not just an opaque wall (this session's own disclosure-quality pass —
+   * see buildLegendTakeoff's header comment for why the count itself stays
+   * refused rather than guessed). */
+  legend?: { sheet: string; caption: string; at: [number, number] };
 }
 
 /** One real "reference"-kind table's raw extracted data (full-coverage-
@@ -514,6 +522,13 @@ export async function buildLegendTakeoff(session: Session, opts: { categories?: 
       result.stats.glyphs_matched++;
 
       const tag = `LEGEND:${g.caption.toUpperCase().replace(/[^A-Z0-9]+/g, "_").replace(/^_+|_+$/g, "")}`;
+      // The glyph's OWN location on the legend sheet — real, always-known
+      // (find_legend_symbols' own detected rect), independent of whether the
+      // whole-set installed count below can be verified. Populated
+      // unconditionally so a REFUSED_NO_SCALE item still hands back a real
+      // "go look here" pointer to the definition, not just an opaque wall
+      // (see TakeoffItem.legend's own doc comment).
+      const glyphAt: [number, number] = [Math.round((g.rect[0] + g.rect[2]) / 2 * 10) / 10, Math.round((g.rect[1] + g.rect[3]) / 2 * 10) / 10];
       const item: TakeoffItem = {
         tag,
         equipment_type: match.equipment_type,
@@ -526,12 +541,31 @@ export async function buildLegendTakeoff(session: Session, opts: { categories?: 
         corroborated: false,
         status: "error",
         source: "legend_symbol",
-        legend: { sheet: sheetKey, caption: g.caption },
+        legend: { sheet: sheetKey, caption: g.caption, at: glyphAt },
       };
 
-      if (scaleGap.includes(sheetKey) || planSheetKeys.some((k) => scaleGap.includes(k))) {
+      const seedIsGap = scaleGap.includes(sheetKey);
+      const planGapAlso = planSheetKeys.filter((k) => scaleGap.includes(k));
+      if (seedIsGap || planGapAlso.length) {
         item.status = "refused";
-        item.reason = `This legend sheet (or a plan sheet in the set) carries no real-world scale, detected or committed — a set-wide sweep seeded from a legend glyph refuses rather than guess the size ratio between the legend's own icon and its real drawn size on the plans (session.ts's requireCrossScale). No corpus-specific ratio was assumed. A human needs to set_scale (label/upp/calibrate) on: ${scaleGap.join(", ")}.`;
+        // Named, precise about WHICH sheet(s) are the real gap — never a
+        // blanket "(or a plan sheet in the set)" hedge when only one side is
+        // actually missing. A seed-sheet gap gets an extra, honest caveat:
+        // this project's own real corpus evidence (this session's direct
+        // render + text sweep of itd-d1-lab-mechanical.pdf's own legend
+        // sheets, and an empirical same-ratio-assumed test that produced
+        // thousands of garbage matches) is that a legend/controls-legend
+        // sheet routinely carries NO real-world scale by DESIGN — a
+        // schematic symbol-key chart, not a to-scale drawing of the device
+        // — so this is frequently a permanent limitation for this glyph,
+        // not merely an unset value a human can always fill in.
+        const parts: string[] = [];
+        if (seedIsGap) parts.push(`the legend sheet itself (${sheetKey})`);
+        if (planGapAlso.length) parts.push(`plan sheet(s) in the set (${planGapAlso.join(", ")})`);
+        item.reason = `No committed real-world scale on ${parts.join(" and ")} — a set-wide sweep seeded from a legend glyph refuses rather than guess the size ratio between the legend's own icon and its real drawn size on the plans (session.ts's requireCrossScale). No corpus-specific ratio was assumed.` +
+          (seedIsGap
+            ? ` Note: a legend/symbol-key sheet frequently carries no real-world scale at all BY DESIGN (a schematic reference chart, not a scaled drawing) — set_scale may not be answerable here even by a human, in which case this glyph's whole-set count is a genuine, permanent limitation, not a pending fix. The glyph itself is real and located at ${sheetKey} (${glyphAt[0]}, ${glyphAt[1]}) even though its installed count could not be verified.`
+            : ` A human can set_scale (label/upp/calibrate) on: ${planGapAlso.join(", ")}.`);
         result.stats.refused++;
         result.failures.push({ type: "REFUSED_NO_SCALE", tag, sheet: sheetKey, detail: item.reason });
         result.items.push(item);
