@@ -1625,17 +1625,25 @@ test("symbol_sweep precision: a gate valve and a ball valve sharing a bowtie bod
 // matchAgainstLibrary (symbolsweep.ts) had ZERO live callers anywhere in this
 // codebase before this tool — confirmed by grep, the only prior caller was
 // its own test file. Real numbers below were MEASURED against the real
-// valve-precision.pdf fixture, not assumed: the reference GATE_VALVE shape
-// matches this fixture's real gate valves perfectly, but the reference
-// BALL_VALVE shape (HANDLE_IN=4.5in) does NOT clear the commit bar against
-// this fixture's real ball valves (max 0.823, withheld) — a real, disclosed
-// gap pinned here rather than hidden (known-gaps ledger item 31). The
-// fixture's own committed scale (upp) is derived so its bowtie body (24pt =
-// 6in at 4pt/in, render scale 2.0 => 8 image-px/in) matches GATE_VALVE's own
-// stated real-world size exactly.
+// valve-precision.pdf fixture, not assumed. The fixture's own committed
+// scale (upp) is derived so its bowtie body (24pt = 6in at 4pt/in, render
+// scale 2.0 => 8 image-px/in) matches GATE_VALVE's own stated real-world
+// size exactly.
+//
+// FIXED (ledger item 31, later session): the reference BALL_VALVE shape's
+// lever handle used to be an arbitrary 0.8/0.6-unit-vector guess (a 4:3
+// slope) instead of this project's own real, measured geometry — and at
+// that guessed slope it never cleared the commit bar against this exact
+// fixture's real ball valves (max 0.823, withheld — a real, disclosed gap
+// this test used to pin as "found: 0"). Refitted to the fixture's own real
+// handle vector (7:9 slope, `make-valve-fixture.mjs`'s `ballValve()`,
+// hvacRefShapes.ts's own comment has the full derivation) — both real ball
+// valves now score a clean 1.0, and the fixture's real gate valves are
+// disclosed as honest near-misses in the OTHER direction too, not silently
+// promoted either way.
 const VALVE_UPP = 1 / 96;   // real feet per image px — 8 image-px/in
 
-test("match_reference_symbol: gate and ball valve scored against a real fixture — a true positive and a true (disclosed) near-miss, not two clean matches", async () => {
+test("match_reference_symbol: gate and ball valve scored against a real fixture — both find their own real instances, each disclosing the other family as a near-miss, never a false match", async () => {
   const client = await pair();
   await call(client, "load_plan", { path: VALVEPLAN });
   await call(client, "set_scale", { sheet: VALVEKEY, upp: VALVE_UPP });
@@ -1654,9 +1662,10 @@ test("match_reference_symbol: gate and ball valve scored against a real fixture 
   assert.ok(gate.withheld.every((w: any) => w.score > 0.75 && w.score < 0.92));
 
   const ball = r.data.shapes.find((s: any) => s.name === "ball valve");
-  assert.equal(ball.found, 0, "a REAL, measured gap (ledger item 31): today's BALL_VALVE reference shape does not clear the commit bar against this fixture's real ball valves");
-  assert.ok(ball.withheld.length > 0, "near-misses are still disclosed, not silently dropped, even though nothing clears the bar");
-  assert.ok(ball.withheld.every((w: any) => w.score < 0.92));
+  assert.equal(ball.found, 2, "ledger item 31, fixed: both real ball valves now clear the commit bar at the fixture's own real handle geometry");
+  assert.ok(ball.matches.every((m: any) => m.score === 1));
+  assert.equal(ball.withheld.length, 3, "the 3 real gate valve instances, disclosed as near-misses in the other direction — never silently promoted either");
+  assert.ok(ball.withheld.every((w: any) => w.score > 0.75 && w.score < 0.92));
 
   // determinism
   const again = await call(client, "match_reference_symbol", { sheet: VALVEKEY, names: ["gate valve", "ball valve"] });

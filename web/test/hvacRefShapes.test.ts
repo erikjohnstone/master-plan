@@ -9,6 +9,22 @@
 // making the handle clearly, measurably longer (see hvacRefShapes.ts's own
 // comment). The tests below pin the corrected, measured behavior so that
 // regression can't creep back in unnoticed.
+//
+// A SECOND real bug (ledger item 31, accuracy-hardening plan, later
+// session): the fix above picked its own longer handle via an arbitrary
+// 0.8/0.6 unit-vector guess (a 4:3 slope), hand-duplicated into THIS file's
+// own local `gateAt`/`ballAt` fixture instead of drawn from BALL_VALVE's own
+// segsIn — a tautological self-test that could never catch the guess being
+// wrong, since the same wrong slope was baked into both sides of the
+// comparison. Measured against the project's own most rigorously-tested
+// REAL fixture (`mcp/scripts/make-valve-fixture.mjs`'s `ballValve()`, a real
+// 7:9 slope, not 4:3), that guess scored only 0.823 — a real, disclosed,
+// silent gap this synthetic test could never have shown. Fixed by drawing
+// this file's own synthetic instances directly FROM the shapes' real
+// segsIn (`drawRef`, already used below for the control-valve family, for
+// exactly this reason — "never a second, hand-typed copy of its geometry
+// that could silently drift out of sync") instead of a second hand-typed
+// duplicate.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { matchAgainstLibrary, type RefShape } from "../src/lib/symbolsweep.ts";
@@ -23,20 +39,15 @@ import { GATE_VALVE, BALL_VALVE, CONTROL_VALVE_2WAY_ELECTRIC, CONTROL_VALVE_3WAY
 const UPP = 1 / 96;
 const PX_PER_IN = 1 / (UPP * 12);   // = 8
 
-function bowtiePx(px: number, py: number, w: number, h: number): number[] {
-  const hw = w / 2;
-  return [
-    px + 0, py + 0, px + hw, py + h / 2,
-    px + hw, py + h / 2, px + 0, py + h,
-    px + 0, py + h, px + 0, py + 0,
-    px + w, py + 0, px + hw, py + h / 2,
-    px + hw, py + h / 2, px + w, py + h,
-    px + w, py + h, px + w, py + 0,
-  ];
+function drawRef(ref: RefShape, px: number, py: number, pxPerIn: number): number[] {
+  const out: number[] = [];
+  for (let i = 0; i < ref.segsIn.length; i += 4) {
+    out.push(px + ref.segsIn[i] * pxPerIn, py + ref.segsIn[i + 1] * pxPerIn, px + ref.segsIn[i + 2] * pxPerIn, py + ref.segsIn[i + 3] * pxPerIn);
+  }
+  return out;
 }
-const W = 6 * PX_PER_IN, H = 3.5 * PX_PER_IN, STEM = 3.25 * PX_PER_IN, HANDLE = 4.5 * PX_PER_IN;
-const gateAt = (px: number, py: number) => [...bowtiePx(px, py, W, H), px + W / 2, py + H / 2, px + W / 2, py + H / 2 - STEM];
-const ballAt = (px: number, py: number) => [...bowtiePx(px, py, W, H), px + W / 2, py + H / 2, px + W / 2 + HANDLE * 0.8, py + H / 2 - HANDLE * 0.6];
+const gateAt = (px: number, py: number) => drawRef(GATE_VALVE, px, py, PX_PER_IN);
+const ballAt = (px: number, py: number) => drawRef(BALL_VALVE, px, py, PX_PER_IN);
 
 const segs = [...gateAt(100, 100), ...gateAt(300, 100), ...ballAt(200, 300)];
 
@@ -86,15 +97,9 @@ test("HVAC_REF_SHAPES: every entry has a name and non-empty real-world-inch geom
 // STRICT-SUPERSET precision case: CONTROL_VALVE_3WAY_ELECTRIC's own body is
 // CONTROL_VALVE_2WAY_ELECTRIC's IDENTICAL body plus one real extra leg,
 // never a decoy that differs by angle alone. Draws each synthetic instance
-// directly FROM the shape's own real segsIn (never a second, hand-typed
-// copy of its geometry that could silently drift out of sync).
-function drawRef(ref: RefShape, px: number, py: number, pxPerIn: number): number[] {
-  const out: number[] = [];
-  for (let i = 0; i < ref.segsIn.length; i += 4) {
-    out.push(px + ref.segsIn[i] * pxPerIn, py + ref.segsIn[i + 1] * pxPerIn, px + ref.segsIn[i + 2] * pxPerIn, py + ref.segsIn[i + 3] * pxPerIn);
-  }
-  return out;
-}
+// directly FROM the shape's own real segsIn (`drawRef`, defined above —
+// never a second, hand-typed copy of its geometry that could silently drift
+// out of sync).
 const CV_PX_PER_IN = 10;
 const cvSegs = [
   ...drawRef(CONTROL_VALVE_2WAY_ELECTRIC, 0, 0, CV_PX_PER_IN),

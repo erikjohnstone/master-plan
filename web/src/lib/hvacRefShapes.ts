@@ -25,20 +25,27 @@ import type { RefShape } from "./symbolsweep.ts";
 
 const BODY_W_IN = 6, BODY_H_IN = 3.5;   // the bowtie's own bounding box, estimated
 const STEM_IN = 3.25;                   // gate valve's straight rising stem
-// Ball valve's lever handle is drawn clearly LONGER than a gate valve's stem
-// in real schematic convention (a real, plausible distinction — not merely
-// a different angle at the same length). This matters more than it looks:
-// an earlier version of this file gave the handle nearly the SAME length as
-// STEM_IN (only the angle differed) — real, measured against
-// matchAgainstLibrary itself (see hvacRefShapes.test.ts), that version
-// scored a false MATCH (1.0) against a bare gate valve at this library's
-// real-world scale (6in body → 8px/in on a typical committed sheet scale):
-// a ~0.13in length difference is under 2px at that scale, inside the
-// matcher's own tolerance. Length alone, not angle alone, has to carry the
-// distinction at small real-world print sizes — the same lesson
-// confidence.ts's own "a small shape is thin evidence" doctrine already
-// states elsewhere in this codebase, now measured here too.
-const HANDLE_IN = 4.5;
+// Ball valve's lever handle (ledger item 31, accuracy-hardening plan):
+// this project's OWN most rigorously-tested fixture (`mcp/scripts/
+// make-valve-fixture.mjs`'s `ballValve()`) draws the handle as a real,
+// precise vector — apex to (dx=+7pt, dy=-9pt) at the fixture's own 4pt/in
+// scale (confirmed against `bowtie()`'s 24pt body width / BODY_W_IN=6in and
+// `gateValve()`'s 13pt stem / STEM_IN=3.25in, both exactly 4pt/in too) — a
+// real ≈2.85in handle at a real 7:9 (dx:dy) slope. A PRIOR version of this
+// constant (HANDLE_IN=4.5, decomposed via an arbitrary 0.8/0.6 unit-vector
+// guess — a 4:3 slope, not this real fixture's own 7:9) scored a real,
+// measured 0.823 (withheld, under the 0.92 commit bar) against EVERY real
+// ball valve in this exact fixture, at every rotation — found and disclosed,
+// not fixed, in the same session that shipped `match_reference_symbol`. An
+// even EARLIER version (mentioned below) gave the handle nearly the SAME
+// LENGTH as the gate valve's own stem and false-matched a bare gate valve at
+// 1.0 — so length alone, not angle alone, has to carry the distinction at
+// small real-world print sizes (confidence.ts's own "a small shape is thin
+// evidence" doctrine). Using the real fixture's own measured vector
+// directly, instead of a third guessed decomposition, is the actual fix:
+// no more inventing a slope this project already has real ground truth for.
+const HANDLE_DX_IN = 1.75;   // 7pt / 4pt-per-in
+const HANDLE_DY_IN = -2.25;  // -9pt / 4pt-per-in (y-up local coords)
 
 const bowtieIn = (): number[] => {
   const w = BODY_W_IN, h = BODY_H_IN, hw = w / 2;
@@ -66,7 +73,7 @@ export const GATE_VALVE: RefShape = {
  * matchSymbol's scoring keeps apart without a counter-example (#HVAC-1). */
 export const BALL_VALVE: RefShape = {
   name: "ball valve",
-  segsIn: [...bowtieIn(), BODY_W_IN / 2, BODY_H_IN / 2, BODY_W_IN / 2 + HANDLE_IN * 0.8, BODY_H_IN / 2 - HANDLE_IN * 0.6],
+  segsIn: [...bowtieIn(), BODY_W_IN / 2, BODY_H_IN / 2, BODY_W_IN / 2 + HANDLE_DX_IN, BODY_H_IN / 2 + HANDLE_DY_IN],
 };
 
 // ── BAS control-valve family (accuracy-hardening plan Phase 1) ───────────
