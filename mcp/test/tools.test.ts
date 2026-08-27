@@ -1621,6 +1621,84 @@ test("symbol_sweep precision: a gate valve and a ball valve sharing a bowtie bod
   assert.deepEqual(again.data, gate.data);
 });
 
+// ── match_reference_symbol, real end-to-end (accuracy-hardening plan Phase 0) ──
+// matchAgainstLibrary (symbolsweep.ts) had ZERO live callers anywhere in this
+// codebase before this tool — confirmed by grep, the only prior caller was
+// its own test file. Real numbers below were MEASURED against the real
+// valve-precision.pdf fixture, not assumed: the reference GATE_VALVE shape
+// matches this fixture's real gate valves perfectly, but the reference
+// BALL_VALVE shape (HANDLE_IN=4.5in) does NOT clear the commit bar against
+// this fixture's real ball valves (max 0.823, withheld) — a real, disclosed
+// gap pinned here rather than hidden (known-gaps ledger item 31). The
+// fixture's own committed scale (upp) is derived so its bowtie body (24pt =
+// 6in at 4pt/in, render scale 2.0 => 8 image-px/in) matches GATE_VALVE's own
+// stated real-world size exactly.
+const VALVE_UPP = 1 / 96;   // real feet per image px — 8 image-px/in
+
+test("match_reference_symbol: the whole library scored against a real fixture — a true positive and a true (disclosed) near-miss, not two clean matches", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: VALVEPLAN });
+  await call(client, "set_scale", { sheet: VALVEKEY, upp: VALVE_UPP });
+
+  const r = await call(client, "match_reference_symbol", { sheet: VALVEKEY });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.shapes.length, 2, "gate valve and ball valve — the whole current library");
+
+  const gate = r.data.shapes.find((s: any) => s.name === "gate valve");
+  assert.equal(gate.found, 3, "all 3 real gate valves in the fixture, at the reference shape's own real-world size");
+  assert.ok(gate.matches.every((m: any) => m.score === 1));
+  assert.equal(gate.withheld.length, 2, "the 2 real ball valve instances, disclosed as near-misses, never silently promoted");
+  assert.ok(gate.withheld.every((w: any) => w.score > 0.75 && w.score < 0.92));
+
+  const ball = r.data.shapes.find((s: any) => s.name === "ball valve");
+  assert.equal(ball.found, 0, "a REAL, measured gap (ledger item 31): today's BALL_VALVE reference shape does not clear the commit bar against this fixture's real ball valves");
+  assert.ok(ball.withheld.length > 0, "near-misses are still disclosed, not silently dropped, even though nothing clears the bar");
+  assert.ok(ball.withheld.every((w: any) => w.score < 0.92));
+
+  // determinism
+  const again = await call(client, "match_reference_symbol", { sheet: VALVEKEY });
+  assert.deepEqual(again.data, r.data);
+});
+
+test("match_reference_symbol: names filters to just the requested shape(s)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: VALVEPLAN });
+  await call(client, "set_scale", { sheet: VALVEKEY, upp: VALVE_UPP });
+
+  const r = await call(client, "match_reference_symbol", { sheet: VALVEKEY, names: ["Gate Valve"] });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.shapes.length, 1);
+  assert.equal(r.data.shapes[0].name, "gate valve");
+  assert.equal(r.data.shapes[0].found, 3);
+});
+
+test("match_reference_symbol: an unknown shape name is a named error, not a silent empty result", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: VALVEPLAN });
+  await call(client, "set_scale", { sheet: VALVEKEY, upp: VALVE_UPP });
+
+  const r = await call(client, "match_reference_symbol", { sheet: VALVEKEY, names: ["butterfly valve"] });
+  assert.equal(r.isError, true);
+  assert.match(r.data.error ?? JSON.stringify(r.data), /No reference shape named/);
+});
+
+test("match_reference_symbol: refuses with a named reason when the sheet has no committed scale", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: VALVEPLAN });
+  const r = await call(client, "match_reference_symbol", { sheet: VALVEKEY });
+  assert.equal(r.isError, true);
+  assert.match(r.data.error ?? JSON.stringify(r.data), /No committed scale/);
+});
+
+test("match_reference_symbol: refuses on a sheet with no vector linework at all", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SCAN });
+  await call(client, "set_scale", { sheet: SCAN_KEY, upp: VALVE_UPP });
+  const r = await call(client, "match_reference_symbol", { sheet: SCAN_KEY });
+  assert.equal(r.isError, true);
+  assert.match(r.data.error ?? JSON.stringify(r.data), /no vector linework/);
+});
+
 // ── trace_connectivity, real end-to-end (maturity plan Phase 4) ─────────
 // The fixture (test/fixtures/mep-plan.pdf, scripts/make-mep-fixture.mjs):
 // five named scenarios from the plan doc's own §5 test strategy, exercised

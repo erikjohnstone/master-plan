@@ -244,6 +244,25 @@ test("a capability throw becomes an error result (the loop must never crash)", a
   assert.match(out.error, /read_sheet_text failed: text layer exploded/);
 });
 
+// match_reference_symbol (accuracy-hardening plan Phase 0) — executeAgentTool's
+// own dispatch/shaping layer only; matchAgainstLibrary's own logic is covered
+// directly by mcp/test/tools.test.ts's real end-to-end tests.
+test("match_reference_symbol: sheet not open on the canvas refuses with a named reason", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "match_reference_symbol", { sheet: "other.pdf" });
+  assert.match(out.error, /isn't open on the canvas/);
+});
+
+test("match_reference_symbol: a valid call passes names through and returns the ctx's own result unchanged", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    matchReferenceSymbol: async (sheet: string, opts: unknown) => { calls.push([sheet, opts]); return { shapes: [{ name: "gate valve", found: 2, matches: [], withheld: [], complete: true }] }; },
+  });
+  const out = await executeAgentTool(ctx, "match_reference_symbol", { sheet: "plan.pdf", names: ["gate valve"] });
+  assert.equal(out.shapes[0].name, "gate valve");
+  assert.deepEqual(calls[0], ["plan.pdf", { names: ["gate valve"] }]);
+});
+
 // trace_connectivity (maturity plan Phase 4) — executeAgentTool's own
 // dispatch/shaping layer only; buildMepGraph/traceConnectivity's own logic
 // is covered directly by web/test/mepconnectivity.test.ts.

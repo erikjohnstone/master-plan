@@ -65,8 +65,12 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // The Symbol tool (#264) — the canvas face for the sweep engine. The engine,
 // counter-examples, the luminance channel, and label corroboration all live
 // as pure web libs already; this file adds only the gesture and the review.
-import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches } from "../lib/symbolsweep";
+import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary } from "../lib/symbolsweep";
 import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib/mepconnectivity.ts";
+// Accuracy-hardening plan Phase 0 — matchAgainstLibrary had zero live callers
+// anywhere in this codebase before this tool (grep-confirmed; the only prior
+// caller was its own test file).
+import { HVAC_REF_SHAPES } from "../lib/hvacRefShapes.ts";
 import { labelPlacements } from "../lib/symbollabels";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
@@ -6357,6 +6361,47 @@ export default function TakeoffCanvas() {
     };
   }
 
+  // match_reference_symbol (accuracy-hardening plan Phase 0) — identify a
+  // drawn HVAC/BAS component by shape alone, no marquee: every shape in
+  // HVAC_REF_SHAPES matched against this sheet's own linework at its own
+  // committed scale. Mirrors agentSymbolSweep's own shape (normalized 0..1
+  // out, per-shape matches/withheld exactly like a symbol_sweep result).
+  async function agentMatchReferenceSymbol(key, opts = {}) {
+    const p = agentPanelFor(key);
+    if (!p) return { error: `Sheet ${key} isn't rendered yet — try again in a moment.` };
+    const segs = vectorSegsRef.current.get(key);
+    if (!segs || !segs.length) return { error: "This sheet has no vector linework (likely a scan) — reference-shape matching reads drawn segments. Try view_region to look at it instead." };
+    // agentUpp, not the render-scope uppFor — same-run freshness after a
+    // set_scale call earlier THIS run (see agentTakeoffSummary's own comment
+    // for the established pattern; found live, via this tool's own first
+    // real verification, that agentTraceConnectivity had the identical bug —
+    // both fixed together, ledger item 32).
+    const upp = agentUpp(key);
+    let library = HVAC_REF_SHAPES;
+    if (opts.names?.length) {
+      const wanted = new Set(opts.names.map((n) => n.trim().toLowerCase()));
+      library = HVAC_REF_SHAPES.filter((r) => wanted.has(r.name.toLowerCase()));
+      if (!library.length) return { error: `No reference shape named any of ${JSON.stringify(opts.names)} — known shapes: ${HVAC_REF_SHAPES.map((r) => r.name).join(", ")}.` };
+    }
+    const lum = segLumRef.current.get(key);
+    let results;
+    try {
+      results = matchAgainstLibrary(segs, library, upp, lum ? { lum } : {});
+    } catch (e) {
+      return { error: String((e && e.message) || e) };
+    }
+    const norm = ([x, y]) => [+(x / p.img.w).toFixed(5), +(y / p.img.h).toFixed(5)];
+    return {
+      shapes: results.map((r) => ({
+        name: r.name,
+        found: r.result.matches.length,
+        matches: r.result.matches.map((m) => ({ at: norm(m.at), score: m.score, rotation: m.rotation, mirrored: m.mirrored })),
+        withheld: r.result.withheld.map((w) => ({ at: norm(w.at), score: w.score, rotation: w.rotation, mirrored: w.mirrored, reason: "near-match — look before trusting (0.75-0.92 band)" })),
+        complete: r.result.complete,
+      })),
+    };
+  }
+
   // trace_connectivity (maturity plan Phase 4) — which valve belongs to
   // which equipment, walked through the sheet's own drawn linework. Mirrors
   // agentSymbolSweep's own shape exactly: normalized 0..1 points in and out
@@ -6387,14 +6432,20 @@ export default function TakeoffCanvas() {
           if (c === 2 /* finish-pattern */ || c === 3 /* annotation */ || c === 6 /* hidden */) excludeSegs[i] = 1;
         }
       }
-      const upp = uppFor(key);
+      // agentUpp, not the render-scope uppFor — a set_scale call earlier in
+      // THIS SAME agent run left the render-scope `scales` closure stale
+      // (found live, via match_reference_symbol's own first real
+      // verification, ledger item 32): a scale set moments ago in the same
+      // run read back as unset here, silently falling back to mppf: 0 and
+      // caching the graph under the WRONG scale for the rest of the run.
+      const upp = agentUpp(key);
       graph = buildMepGraph(segs, { meta, layerOf: geo?.layerOf, layers: infos, excludeSegs, mppf: upp ? 1 / upp : 0 });
       mepGraphCacheRef.current.set(key, graph);
     }
     if (!Array.isArray(opts.equipment) || !opts.equipment.length) {
       return { status: "refused", layer_signal: graph.layerSignal, confidence: 0, factors: [], reason: "No equipment symbols supplied — sweep the target family first (symbol_sweep or sweep_schedule_row), then pass their placements here." };
     }
-    const upp = uppFor(key);
+    const upp = agentUpp(key);
     const result = traceMepConnectivity(graph, denorm(opts.from), {
       equipmentSymbols: opts.equipment.map((e) => ({ id: e.id, at: denorm(e.at), ...(e.label ? { label: e.label } : {}) })),
       fittingSymbols: opts.fittings?.length ? opts.fittings.map((f) => ({ at: denorm(f.at) })) : undefined,
@@ -7415,6 +7466,7 @@ export default function TakeoffCanvas() {
       createCondition: (tag) => { const c = mintCondition(tag); return { id: c.id, finish_tag: c.finish_tag }; },
       proposeShapes: stageAgentProposals,
       symbolSweep: agentSymbolSweep,
+      matchReferenceSymbol: agentMatchReferenceSymbol,
       traceConnectivity: agentTraceConnectivity,
       listShapes: agentListShapes,
       deleteShapes: agentDeleteShapes,

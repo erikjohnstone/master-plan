@@ -38,7 +38,13 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS }
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc } from "../../web/src/lib/symbolsweep.ts";
+// Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
+// (hand-digitized real HVAC valve/damper geometry) had a real engine
+// (matchAgainstLibrary above) with ZERO live callers anywhere in this
+// codebase before this tool — confirmed by grep, the only prior caller was
+// its own test file. This wires it in.
+import { HVAC_REF_SHAPES } from "../../web/src/lib/hvacRefShapes.ts";
 // MEP connectivity tracing (maturity plan Phase 4) — buildMepGraph reuses
 // this project's own vendored JTS port for robust noding (see the module's
 // own header comment); traceConnectivity is the refusal-honest query, same
@@ -2540,6 +2546,48 @@ export class Session {
       ...(committed ?? {}),
       ...(notes.length ? { note: notes.join(" ") } : {}),
       ...(capped.length ? { warning: `Work ceiling: candidate placements were dropped un-scored on ${capped.map((p) => p.state.key).join(", ")} — counts there are FLOORS, not totals. The seed's linework is too common there for an exhaustive sweep; tighten the seed rect around more distinctive geometry, or sweep those sheets singly and reconcile the counts.` } : {}),
+    };
+  }
+
+  /** match_reference_symbol (accuracy-hardening plan Phase 0) — the
+   * deterministic reference-shape library, given a real, callable entry
+   * point for the first time. Every shape in `HVAC_REF_SHAPES` (hand-
+   * digitized real HVAC geometry, never scraped) is matched against this
+   * sheet's own drawn linework, at this sheet's own committed real-world
+   * scale — matchAgainstLibrary's own refusal (no committed scale) is
+   * never bypassed, only relayed as a UserError. `names` restricts which
+   * library shapes to check; omit to check all of them. */
+  async matchReferenceSymbol(name: string, opts: { names?: string[] } = {}) {
+    const s = this.sheet(name);
+    const geo = await this.ensureGeometry(s);
+    if (!geo.segs.length) {
+      throw new UserError("This sheet has no vector linework (likely a scan) — reference-shape matching reads the drawn segments; raster fallback not yet available in the MCP server.");
+    }
+    let library = HVAC_REF_SHAPES;
+    if (opts.names?.length) {
+      const wanted = new Set(opts.names.map((n) => n.trim().toLowerCase()));
+      library = HVAC_REF_SHAPES.filter((r) => wanted.has(r.name.toLowerCase()));
+      if (!library.length) {
+        throw new UserError(`No reference shape named any of ${JSON.stringify(opts.names)} — known shapes: ${HVAC_REF_SHAPES.map((r) => r.name).join(", ")}.`);
+      }
+    }
+    let results: ReturnType<typeof matchAgainstLibrary>;
+    try {
+      results = matchAgainstLibrary(geo.segs, library, s.upp, { lum: geo.lum });
+    } catch (e) {
+      // matchAgainstLibrary's own refusal (no committed scale) — relayed,
+      // never bypassed or silently defaulted.
+      throw new UserError(e instanceof Error ? e.message : String(e));
+    }
+    return {
+      sheet: s.key,
+      shapes: results.map((r) => ({
+        name: r.name,
+        found: r.result.matches.length,
+        matches: r.result.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])] as [number, number], score: m.score, rotation: m.rotation, mirrored: m.mirrored })),
+        withheld: r.result.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])] as [number, number], score: w.score, rotation: w.rotation, mirrored: w.mirrored, reason: w.reason })),
+        complete: r.result.complete,
+      })),
     };
   }
 

@@ -285,6 +285,22 @@ export const symbolSweepOutput = {
   warning: z.string().optional().describe("Present when the work cap dropped candidates — what a tighter seed rect would recover"),
 };
 
+/** match_reference_symbol (accuracy-hardening plan Phase 0) — the
+ * deterministic reference-shape library (hand-digitized real HVAC valve/
+ * damper geometry, hvacRefShapes.ts), matched against a sheet's own drawn
+ * linework at its own committed scale. No seed rect: every library shape is
+ * checked against the whole sheet in one call. */
+export const matchReferenceSymbolOutput = {
+  sheet: z.string(),
+  shapes: z.array(z.object({
+    name: z.string().describe("The reference shape's own name, e.g. \"gate valve\""),
+    found: z.number().int().describe("Placements that cleared the commit bar (score ≥ 0.92)"),
+    matches: z.array(z.object(sweepPlacement)).describe("Deterministic reading order (y, then x)"),
+    withheld: z.array(z.object({ ...sweepPlacement, reason: z.string() })).describe("Near-matches in the [0.75, 0.92) band — a question to LOOK at (view_sheet), never silently dropped and never silently promoted"),
+    complete: z.boolean().describe("True when every proposed placement for this shape was scored — false means found is a FLOOR, not a total"),
+  })).describe("One entry per checked reference shape, in library order"),
+};
+
 export const measureLineOutput = {
   length_lf: z.number(),
   npts: z.number().int(),

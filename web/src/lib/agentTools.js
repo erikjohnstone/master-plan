@@ -292,6 +292,18 @@ export const AGENT_TOOL_DEFS = [
     },
   },
   {
+    name: "match_reference_symbol",
+    description: "Identify a drawn HVAC/BAS component by SHAPE alone — no seed, no marquee: every symbol in this project's own hand-digitized reference library (real valve/damper geometry, never scraped from any dataset) is matched against this sheet's own drawn linework, at this sheet's own committed real-world scale. Deterministic geometry, exactly like symbol_sweep's own engine (same fingerprint/score/rotation-mirror machinery) — never vision, never a guess. Each library shape reports its own found/matches/withheld exactly like a symbol_sweep result: score >= 0.92 is a match, the 0.75-0.92 band comes back withheld with a reason (a near-match is a question you answer by LOOKING, view_region at its `at`), never silently dropped and never silently promoted. Needs a committed scale — a reference shape has no sheet of its own, so its real-world size can only be converted to THIS sheet's pixels via its own upp; no scale set, no match attempt, refused with a named reason. names restricts which library shapes to check (case-insensitive); omit to check the WHOLE library in one call. The library is deliberately small and grows only when a shape has real corpus evidence behind it — a shape not yet in the library will never appear in the reply, so an empty/all-zero result does not mean 'nothing here,' only 'nothing in today's library.' Corroborate any match against the sheet's own schedule/tag evidence (resolve_tag, sweep_schedule_row) before trusting it as identification rather than a shape hypothesis.",
+    input_schema: {
+      type: "object",
+      properties: {
+        sheet: { type: "string" },
+        names: { type: "array", items: { type: "string" }, description: 'Restrict to these library shapes by name (case-insensitive), e.g. ["gate valve", "ball valve"]. Omit to check every shape in the library.' },
+      },
+      required: ["sheet"],
+    },
+  },
+  {
     name: "place_count",
     description: "Stage one count proposal per point (EA — one each) under a condition. Use for manually-located instances a symbol_sweep match, or a one-off you found by reading the sheet — not for area/room measurement (that's one_click). No scale required. Each proposal renders as a dashed marker the estimator accepts or rejects, exactly like propose_shapes.",
     input_schema: {
@@ -771,6 +783,11 @@ export async function executeAgentTool(ctx, name, args) {
           seedTolFt: args.seed_tol_ft,
           bridgeFt: args.bridge_ft,
         });
+      }
+
+      case "match_reference_symbol": {
+        if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
+        return await ctx.matchReferenceSymbol(args.sheet, { names: args.names });
       }
 
       case "place_count": {
