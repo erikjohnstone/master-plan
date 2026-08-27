@@ -164,16 +164,13 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
       const canon = tag.toUpperCase().replace(/\s+/g, "");
       if (seenTags.has(canon)) continue; // a compound "R1/E1" key answers once, not once per mark — sweep_schedule_row itself dedupes marks; this dedupes the OUTER loop only
       seenTags.add(canon);
-      out.stats.schedule_rows_total++;
 
-      if (categories) {
-        const cls = classifyTag(tag, taxonomyPrefixIndex(null));
-        if (!cls || !categories.includes(cls.category)) continue; // out of this run's own declared scope — not a failure, just not requested
-      }
+      const cls = classifyTag(tag, index.length ? index : taxonomyPrefixIndex(null));
+      if (categories && (!cls || !categories.includes(cls.category))) continue; // out of this run's own declared scope — not a failure, just not requested; not counted in stats either
+      out.stats.schedule_rows_total++;
 
       const cellsRaw: Record<string, string> = {};
       for (const [label, cell] of Object.entries(row.cells || {})) if (cell?.text) cellsRaw[label] = cell.text;
-      const cls = classifyTag(tag, index.length ? index : taxonomyPrefixIndex(null));
 
       const item: TakeoffItem = {
         tag,
