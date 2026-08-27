@@ -3475,6 +3475,34 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     }
   }
 
+  // pass 2c — a "reference"-kind row that collides, by real row key, with an
+  // established finish/equipment/room-finish row ANYWHERE else in the graph
+  // is dropped as noise, not kept as a genuine second row. Real, found live
+  // (project-level takeoff pipeline, itd-d1-lab-mechanical.pdf): the
+  // structural "reference" heuristic (already disclosed as noisy outside
+  // bessemer — see extractAllReferenceTables' own header) picked up a
+  // garbled data blob on an UNRELATED sheet (#15, a genuinely different
+  // AHU-1 spec table) whose own cell text happened to start with "HUM-1" —
+  // a real, correctly-keyed HUMIDIFIER SCHEDULE row that already exists,
+  // cleanly, on sheet #13. `rowKeyAnswersFor` matches across every table in
+  // the graph regardless of kind, so this collision surfaced downstream as a
+  // real "2 schedule rows carry this key" ambiguity for a tag that only has
+  // ONE real row. The vocabulary-anchored kinds (finish/equipment/room-
+  // finish) are the more reliable source for any key they've already
+  // established — "reference" never gets to introduce a duplicate of it.
+  {
+    const nonReferenceKeys = new Set<string>();
+    for (const t of tables) if (t.kind !== "reference") for (const r of t.rows) nonReferenceKeys.add(norm(r.key));
+    for (const t of tables) {
+      if (t.kind !== "reference") continue;
+      const dropped = t.rows.filter((r) => nonReferenceKeys.has(norm(r.key)));
+      if (dropped.length) {
+        t.rows = t.rows.filter((r) => !nonReferenceKeys.has(norm(r.key)));
+        notes.push(`${t.sheet}: "reference" table's own row key(s) ${dropped.map((r) => r.key).join(", ")} collide with an already-established finish/equipment/room-finish row elsewhere in the set — dropped as noise, not kept as a duplicate.`);
+      }
+    }
+  }
+
   // pass 3 — room tags (full building vocabulary known) + callouts. Room tags
   // read off PLAN-role sheets AND unknowns — a schedule sheet's room-number
   // column must not mint phantom rooms, so schedule/legend sheets contribute
