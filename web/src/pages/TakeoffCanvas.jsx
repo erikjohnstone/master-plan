@@ -4648,10 +4648,17 @@ export default function TakeoffCanvas() {
       const dims = { w: Math.ceil(vt.width), h: Math.ceil(vt.height) };
       pageDimsRef.current.set(key, dims);
       const ol = await pg.getOperatorList();
-      const { segs, meta, lum } = extractVectorGeometry(ol, vt.transform, pdfjsLib.OPS);
+      const { segs, meta, lum, imageArea } = extractVectorGeometry(ol, vt.transform, pdfjsLib.OPS);
       vectorSegsRef.current.set(key, segs);
       segMetaRef.current.set(key, meta);
       if (lum) segLumRef.current.set(key, lum);
+      // raster-fallback trigger signals (same fields the open-panel path
+      // already sets) — this lazy, never-opened-as-a-tab path used to
+      // compute imageArea and throw it away, leaving sheetStatsRef unset for
+      // any sheet an agent tool touches without a human ever opening it.
+      if (!sheetStatsRef.current.has(key)) {
+        sheetStatsRef.current.set(key, { segCount: segs.length >> 2, imageFrac: Math.min(1, imageArea / (dims.w * dims.h)) });
+      }
       return dims;
     } catch { return null; }
   }
@@ -6705,6 +6712,33 @@ export default function TakeoffCanvas() {
     return agentGraphCacheRef.current;
   }
 
+  // Accuracy-hardening plan (ledger item 42), ported from mcp/src/session.ts's
+  // identical rasterScheduleNotes for tool parity: a schedule-role sheet with
+  // ZERO extracted tables reads as indistinguishable from "legitimately has
+  // none" — real corpus evidence (weld-county-permit) showed this can instead
+  // mean the table content is a pasted-in raster image, invisible to
+  // text-based extraction no matter the vocabulary. Reuses the SAME
+  // imageFrac/RASTER_MIN_IMG_FRAC signal classify_symbol/symbol_sweep's own
+  // raster fallback already computes — ensureSheetGeometry now captures it
+  // even for a sheet no human ever opened as a panel. Scoped to the exact
+  // rare case that matters (schedule role, 0 tables) so a normal set pays
+  // nothing extra; best-effort — a geometry failure here must never take
+  // sheet_graph's own real output down with it.
+  async function rasterScheduleNotes(g) {
+    const notes = [];
+    for (const s of g.sheets) {
+      if (s.role !== "schedule" || s.schedules.length > 0) continue;
+      try {
+        const dims = await ensureSheetGeometry(s.key);
+        const stats = sheetStatsRef.current.get(s.key);
+        if (dims && stats && stats.imageFrac >= RASTER_MIN_IMG_FRAC) {
+          notes.push(`${s.key} is classified as a schedule sheet but 0 tables extracted from it, and ${Math.round(stats.imageFrac * 100)}% of its own area is embedded raster image content — its schedule data is very likely pasted in as a picture (or scanned), invisible to text-based extraction no matter the vocabulary. view_sheet to confirm; classify_symbol may still find shapes there, but table rows will not extract.`);
+        }
+      } catch { /* diagnostic only */ }
+    }
+    return notes;
+  }
+
   async function agentSheetGraph() {
     const g = await ensureAgentGraph();
     // One dims lookup per sheet (ensureSheetDims resolves even a
@@ -6713,6 +6747,8 @@ export default function TakeoffCanvas() {
     // re-awaited per table.
     const dimsBySheet = new Map();
     for (const s of g.sheets) dimsBySheet.set(s.key, await ensureSheetDims(s.key));
+    const rasterNotes = await rasterScheduleNotes(g);
+    const notes = rasterNotes.length ? [...g.notes, ...rasterNotes] : g.notes;
     return {
       available: g.available,
       sheets: g.sheets.map((s) => ({
@@ -6727,7 +6763,7 @@ export default function TakeoffCanvas() {
       rooms: g.rooms.map(wireRoom),
       ...(g.unmatched_tags.length ? { unmatched_tags: g.unmatched_tags.map((u) => ({ tag: u.tag, sheet: u.sheet, bbox: wireBox(u.bbox), reason: u.reason })) } : {}),
       ...(g.buildings.length ? { buildings: g.buildings } : {}),
-      ...(g.notes.length ? { notes: g.notes } : {}),
+      ...(notes.length ? { notes } : {}),
       counts: { rooms: g.rooms.length, unmatched_tags: g.unmatched_tags.length, schedules: g.tables.length, callouts: g.callouts.length },
     };
   }
