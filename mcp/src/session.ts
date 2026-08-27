@@ -2633,7 +2633,26 @@ export class Session {
     }
     if (!s.spans) s.spans = textSpans(s.page);
     const spans: LegendSpan[] = s.spans.map((sp) => ({ text: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1 }));
-    const glyphs = findLegendGlyphs(geo.segs, spans);
+    // Real, found-live bug (accuracy-hardening plan, this session): this
+    // reuses buildMepGraph's own JTS noding purely for connectivity (see
+    // legendlearn.ts's own header comment), and a real, densely-drawn sheet
+    // can defeat noding entirely even after buildMepGraph's own internal
+    // retry-at-coarser-grid mitigation (ledger item 18) — confirmed live on
+    // federal-mech's own sheet #2 legend. Before this fix, that TopologyException
+    // propagated straight out of this tool as a raw, MEP-connectivity-flavored
+    // error with no relation to "legend glyph detection" from the caller's own
+    // perspective. Legend-glyph clustering is a convenience layer over
+    // symbol_sweep's own already-tested marquee workflow, not a correctness-
+    // critical trace — degrading to "none detected, with an honest reason"
+    // here is strictly safer than crashing the whole tool over it.
+    let glyphs: ReturnType<typeof findLegendGlyphs>;
+    let nodingFailed = false;
+    try {
+      glyphs = findLegendGlyphs(geo.segs, spans);
+    } catch {
+      glyphs = [];
+      nodingFailed = true;
+    }
     return {
       sheet: s.key,
       glyphs: glyphs.map((g) => ({
@@ -2641,7 +2660,11 @@ export class Session {
         rect: [round1(g.rect[0][0]), round1(g.rect[0][1]), round1(g.rect[1][0]), round1(g.rect[1][1])] as [number, number, number, number],
         segments: g.segments,
       })),
-      ...(!glyphs.length ? { note: "No (glyph, caption) row pairs were detected on this sheet — it may not be a legend, or its rows may not fit this detector's own compact-glyph/adjacent-caption assumptions. This is not an error: a sheet with no real legend falls back to the ordinary symbol_sweep workflow (marquee one real occurrence anywhere and sweep from it)." } : {}),
+      ...(!glyphs.length ? {
+        note: nodingFailed
+          ? "This sheet's own linework could not be reliably noded for glyph clustering (a real, dense-CAD-geometry edge case, not a missing legend) — no glyphs detected as a result. Marquee one instance directly with symbol_sweep instead."
+          : "No (glyph, caption) row pairs were detected on this sheet — it may not be a legend, or its rows may not fit this detector's own compact-glyph/adjacent-caption assumptions. This is not an error: a sheet with no real legend falls back to the ordinary symbol_sweep workflow (marquee one real occurrence anywhere and sweep from it).",
+      } : {}),
     };
   }
 
