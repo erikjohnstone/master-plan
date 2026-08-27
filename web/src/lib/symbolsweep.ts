@@ -1372,12 +1372,43 @@ export function classifySweepMatches(
   const excluded: Array<{ at: Point; tag: string }> = [];
   const withheld: SweepWithheld[] = [];
   const matchedOcc = new Set<number>();
+  // Pass 1: find every match's nearest occurrence (if any) within R, without
+  // committing yet. One real drawn instance has exactly one leader/tag — two
+  // raw match centroids both landing within R of the SAME single occurrence
+  // is never two physical devices sharing one label, it is the marker's own
+  // nearby furniture (a leader-line stub, a text underline) independently
+  // clearing the score bar right next to itself and getting read as a second
+  // hit. Same doctrine matchSymbol's own shadow-suppression comment already
+  // states for the excludeCenter case ("two REAL instances can never sit
+  // within half a symbol diagonal of each other without physically
+  // overlapping") — applied here at the occurrence-claiming step so it also
+  // catches the case where BOTH centroids sit far enough apart to survive
+  // mergeR, but still both point at one tag (issue: sweep_schedule_row
+  // false-doubled EWH-1/EBB-8 on the bessemer set — see takeoff-eval.mjs).
+  const claims: Array<{ m: SweepMatch; oi: number }> = [];
+  const unclaimed: SweepMatch[] = [];
   for (const m of res.matches) {
     let oi = -1;
     for (let k = 0; k < occ.length; k++) {
       if (Math.hypot(m.at[0] - occ[k].cx, m.at[1] - occ[k].cy) <= R) { oi = k; break; }
     }
-    if (oi >= 0) { matchedOcc.add(oi); matches.push({ ...m, tag_at: occ[oi].bbox }); continue; }
+    if (oi >= 0) claims.push({ m, oi }); else unclaimed.push(m);
+  }
+  // Best-scoring claim per occurrence wins (ties broken by reading order —
+  // res.matches already arrives position-sorted, so the first claim seen for
+  // a tied score is the earliest); every other claim on that same occurrence
+  // is a real, disclosed question, not a silently dropped or silently
+  // double-counted match.
+  const bestForOcc = new Map<number, SweepMatch>();
+  for (const { m, oi } of claims) {
+    const cur = bestForOcc.get(oi);
+    if (!cur || m.score > cur.score) bestForOcc.set(oi, m);
+  }
+  for (const { m, oi } of claims) {
+    if (bestForOcc.get(oi) === m) { matchedOcc.add(oi); matches.push({ ...m, tag_at: occ[oi].bbox }); continue; }
+    withheld.push({ ...m, reason: `the marker geometry matches near the "${tag}" tag, but a closer/better-scoring match already claims this same occurrence — most likely this instance's own leader-line or label furniture read a second time, not a second device; look before counting it` });
+  }
+  for (const m of unclaimed) {
     const sib = siblingOcc.find((sp) => Math.hypot(m.at[0] - sp.cx, m.at[1] - sp.cy) <= R);
     if (sib) { excluded.push({ at: m.at, tag: sib.key }); continue; }
     withheld.push({ ...m, reason: `the marker geometry matches but carries no "${tag}" tag within its footprint — an unlabeled instance or a shared marker shape; look before counting it` });
