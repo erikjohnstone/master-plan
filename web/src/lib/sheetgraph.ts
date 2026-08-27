@@ -2475,6 +2475,52 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     }
   }
 
+  // cross-kind duplicate collapse (project-level takeoff pipeline, this
+  // session): the SAME physical table can independently qualify under MORE
+  // THAN ONE kind's own vocabulary — real, found live running the new
+  // takeoff pipeline against itd-d1-lab-mechanical.pdf#13's own real
+  // "BYPASS CONTROL VALVE SCHEDULE": its real headers (SYMBOL/SIZE/
+  // MANUFACTURER/REMARKS) clear FINISH_HEADERS' own bar, while its FULL
+  // real headers (those plus GPM/TYPE) separately clear EQUIPMENT_HEADERS'
+  // — so pass 1's own per-kind loop above extracts the IDENTICAL drawn
+  // table TWICE, once under each kind, both with the same real BCV-1 row at
+  // the same real bbox. Nothing downstream ever expected two fragments for
+  // one physical table: sweep_schedule_row's own row-key lookup throws a
+  // genuine "ambiguous: 2 rows carry this key" for a table that only has
+  // ONE real row. Collapse same-sheet, same-title, overlapping-region
+  // fragments from DIFFERENT kinds down to the richer extraction (more
+  // headers recognized, more cells actually populated) — never a guess,
+  // since a fuller read of the same real cells strictly dominates a partial
+  // one drawn from those same cells. Two fragments of the SAME kind on one
+  // sheet are a different, real, legitimate shape (a dense sheet genuinely
+  // stacking two distinct schedules of one kind) and are left untouched.
+  {
+    const byTitleSheet = new Map<string, ScheduleTable[]>();
+    for (const f of fragments) {
+      if (!f.title) continue;
+      const k = `${f.sheet}::${norm(f.title.text)}`;
+      if (!byTitleSheet.has(k)) byTitleSheet.set(k, []);
+      byTitleSheet.get(k)!.push(f);
+    }
+    const overlaps = (a: ScheduleTable, b: ScheduleTable) =>
+      a.region[0] < b.region[2] && b.region[0] < a.region[2] && a.region[1] < b.region[3] && b.region[1] < a.region[3];
+    const richness = (t: ScheduleTable) => t.headers.length * 1000 + t.rows.reduce((n, r) => n + Object.keys(r.cells).length, 0);
+    const drop = new Set<ScheduleTable>();
+    for (const group of byTitleSheet.values()) {
+      if (group.length < 2 || new Set(group.map((g) => g.kind)).size < 2) continue;
+      for (let i = 0; i < group.length; i++) {
+        for (let j = i + 1; j < group.length; j++) {
+          if (drop.has(group[i]) || drop.has(group[j]) || !overlaps(group[i], group[j])) continue;
+          drop.add(richness(group[i]) >= richness(group[j]) ? group[j] : group[i]);
+        }
+      }
+    }
+    if (drop.size) {
+      notes.push(`${[...drop].map((t) => `${t.sheet}: "${t.title!.text}" (${t.kind}, ${t.rows.length} rows)`).join("; ")} — collapsed as a duplicate cross-kind extraction of a richer table already kept under a different kind.`);
+      for (let i = fragments.length - 1; i >= 0; i--) if (drop.has(fragments[i])) fragments.splice(i, 1);
+    }
+  }
+
   // pass 2 — merge continuations (header repeated), in sheet order
   const tables: ScheduleTable[] = [];
   for (const f of fragments) {

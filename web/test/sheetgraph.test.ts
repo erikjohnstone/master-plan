@@ -1822,6 +1822,40 @@ test("anchorRadii: an anomalously wide anchor gap refuses a real un-modeled neig
   }
 });
 
+test("buildSheetGraph: a table qualifying under BOTH finish and equipment vocabularies extracts once, not twice (real regression, itd-d1-lab-mechanical.pdf#13's BYPASS CONTROL VALVE SCHEDULE)", () => {
+  // Real, found live running the new project-level takeoff pipeline: this
+  // exact table's real headers (SYMBOL/SIZE/MANUFACTURER/REMARKS) clear
+  // FINISH_HEADERS' own bar on their own, while the FULLER real header set
+  // (those plus GPM) separately clears EQUIPMENT_HEADERS' — so buildSheetGraph's
+  // own pass-1 per-kind loop extracted the SAME physical table twice, once
+  // under each kind, both with the same real BCV-1 row. Nothing downstream
+  // expected two fragments for one table: sweep_schedule_row's row-key
+  // lookup threw a genuine "ambiguous: 2 rows carry this key" for a table
+  // that only has ONE real row. Same fixture as the anchorRadii test above
+  // (same real gap ratios), run through buildSheetGraph (not extractTable
+  // directly) so the cross-kind duplication actually reproduces.
+  const sched: SheetSpans = {
+    key: "bcv.pdf#1", sheet_number: "M13",
+    spans: [
+      sp("BYPASS CONTROL VALVE SCHEDULE", 100, 20),
+      sp("SYMBOL", 0, 50), sp("GPM", 340, 50), sp("SIZE", 540, 50), sp("MANUFACTURER", 730, 50), sp("REMARKS", 830, 50),
+      sp("BCV-1", 0, 80),
+      sp("HEATING-SYS", 110, 80), sp("PRESS-IND", 200, 80), sp("WATER", 280, 80),
+      sp("25", 340, 80),
+      sp("19-110", 420, 80),
+      sp("2.0", 540, 80),
+      sp("ACME", 730, 80),
+      sp("1,2,3", 830, 80),
+    ],
+  };
+  const g = buildSheetGraph([sched]);
+  const hits = g.tables.filter((t) => t.rows.some((r) => r.key === "BCV-1"));
+  assert.equal(hits.length, 1, `exactly one table should carry BCV-1, found ${hits.length} (${hits.map((t) => t.kind).join(", ")}) — a real row-key collision, not a legitimate second table`);
+  assert.equal(hits[0].kind, "equipment", "the richer (more headers, more populated cells) extraction wins, not whichever kind happened to run first");
+  const row = hits[0].rows.find((r) => r.key === "BCV-1")!;
+  assert.equal(row.cells.GPM.text, "25", "the richer equipment-kind row's own real GPM value survives the collapse");
+});
+
 test("anchorRadii: REMARKS/DESCRIPTION/NAME keep their own deliberately wide reach — never capped by this mechanism (real regression, wide REMARKS test)", () => {
   // The exact real shape that broke on a first version of this fix: a
   // genuinely wide gap to a WIDE_LAST column (REMARKS/DESCRIPTION/NOTES) or

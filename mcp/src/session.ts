@@ -4234,6 +4234,15 @@ export class Session {
     return notes;
   }
 
+  /** Raw internal graph (full table rows/cells, not `sheetGraph()`'s own
+   * wire-summarized counts) — for internal, same-package orchestration only
+   * (takeoff.ts's project-level pipeline). Not a new capability: every
+   * field here is already what `sheetGraph()`/`sweepScheduleRow()` read
+   * internally, just not otherwise reachable outside this class. */
+  async graphForPipeline(): Promise<SheetGraph> {
+    return this.ensureGraph();
+  }
+
   async sheetGraph() {
     const g = await this.ensureGraph();
     const rasterNotes = await this.rasterScheduleNotes(g);
