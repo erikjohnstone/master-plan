@@ -1812,6 +1812,79 @@ test("equipment extraction: a lone digit-free footnote/legend word never mints a
   assert.ok(keys.includes("PH-1"), "a real, digit-bearing tag is kept even when just as sparse as the noise around it");
 });
 
+test("EQUIPMENT_REQUIRED: a real equipment schedule whose rating spec sits in free text, not its own column header, still qualifies as equipment (real MECHANICAL SPECIALTY EQUIPMENT SCHEDULE, AS-1/ET-1/FM-1/PF-1)", () => {
+  // Real, found live on itd-d1-lab-mechanical.pdf#14: this table's own real
+  // headers are SYMBOL/EQUIPMENT DESCRIPTION/SYSTEM SERVED/DESCRIPTION/
+  // MANUFACTURER AND MODEL — no VOLTAGE/GPM/HP/etc. column exists at all;
+  // the real rating numbers ("DESIGN FLOW IS 80 GPM WITH A DESIGN PD OF 1.0
+  // FT-H2O.") sit inside the free-text DESCRIPTION cell's own paragraph,
+  // never heading a column of their own. Before "EQUIPMENT" joined
+  // `required`, this table's only path to qualifying as equipment-kind was
+  // a rating-word COLUMN HEADER that this table structurally never has, so
+  // it fell back to finish-kind (SYMBOL/DESCRIPTION/MANUFACTURER also
+  // clears FINISH_REQUIRED) and was silently skipped by buildPlanSetTakeoff
+  // (kind !== "equipment"). The fix: "EQUIPMENT" itself, already vocabulary,
+  // promoted to `required` — the table's own "EQUIPMENT DESCRIPTION" column
+  // is real, self-describing evidence of an equipment schedule that
+  // generalizes past this one corpus (see EQUIPMENT_REQUIRED's own comment
+  // for the corpus-wide check that no real finish-kind table anywhere in
+  // this project's evidence base carries the word).
+  const sched: SheetSpans = {
+    key: "msc.pdf#1", sheet_number: "M6.2",
+    spans: [
+      sp("MECHANICAL SPECIALTY EQUIPMENT SCHEDULE", 100, 20),
+      sp("SYMBOL", 100, 50), sp("EQUIPMENT DESCRIPTION", 220, 50), sp("SYSTEM SERVED", 420, 50), sp("DESCRIPTION", 600, 50), sp("MANUFACTURER AND MODEL", 900, 50),
+      sp("AS-1", 100, 75), sp("AIR SEDIMENT SEPARATOR", 220, 75), sp("HOT WATER LOOP", 420, 75), sp("DESIGN FLOW IS 80 GPM WITH A DESIGN PD OF 1.0 FT-H2O.", 600, 75), sp("B & G MODEL SRS-3F", 900, 75),
+      sp("ET-1", 100, 100), sp("EXPANSION TANK", 220, 100), sp("HOT WATER LOOP", 420, 100), sp("7.8 GALLON CAPACITY, ACCEPTANCE 6.3 GALLONS.", 600, 100), sp("B & G MODEL D-15", 900, 100),
+      sp("FM-1", 100, 125), sp("FLOW METER", 220, 125), sp("HOT WATER LOOP", 420, 125), sp("HYDRONIC FLOW METER", 600, 125), sp("ONICON MODEL F-3500", 900, 125),
+      sp("PF-1", 100, 150), sp("POT FEEDER", 220, 150), sp("HOT WATER LOOP", 420, 150), sp("CHEMICAL POT FEEDER", 600, 150), sp("AXIOM MODEL CPF-5", 900, 150),
+    ],
+  };
+  const tab = extractTable(sched, "equipment");
+  assert.ok(tab, "a sparse SYMBOL/EQUIPMENT DESCRIPTION/.../MANUFACTURER header, with EQUIPMENT itself as a real column word, is enough to clear the equipment bar");
+  assert.deepEqual(tab!.rows.map((r) => r.key), ["AS-1", "ET-1", "FM-1", "PF-1"]);
+  assert.ok(tab!.headers.includes("EQUIPMENT"), `EQUIPMENT itself is a real, anchored column: ${tab!.headers.join(", ")}`);
+
+  // The whole-graph builder must resolve the resulting cross-kind collision
+  // (this same sparse header also clears FINISH_REQUIRED's own bar) in
+  // favor of the richer equipment-kind read — not silently keep both, and
+  // not silently keep only the poorer finish-kind one.
+  const graph = buildSheetGraph([sched]);
+  assert.equal(graph.tables.length, 1, "the cross-kind collision collapses to ONE logical table");
+  assert.equal(graph.tables[0].kind, "equipment", "equipment-kind (4 real headers) wins over finish-kind (3) as the richer read");
+});
+
+test("EQUIPMENT_REQUIRED: a real finish/material table with the SAME sparse SYMBOL/MANUFACTURER/REMARKS shape stays finish-kind — EQUIPMENT alone never flips it (negative control)", () => {
+  // The direct negative control for the fix above: a genuinely non-
+  // equipment schedule (real itd-d1-lab-mechanical.pdf#14's own SOUND
+  // ATTENUATOR SCHEDULE — the exact sparse SYMBOL/MANUFACTURER/REMARKS
+  // shape a real finish/material schedule and a real sparse equipment
+  // schedule can both legitimately have) whose title and header never
+  // mention "EQUIPMENT" at all must NOT be pulled over the equipment bar
+  // just because it independently carries 3+ FINISH/EQUIPMENT_HEADERS-
+  // shared vocabulary words (SYMBOL/MANUFACTURER/REMARKS, all real words
+  // both vocabularies recognize). The fix is scoped to the literal word
+  // "EQUIPMENT" appearing as its own real column — a table that never
+  // carries that word has no path through the new `required` entry.
+  const sched: SheetSpans = {
+    key: "attenuator.pdf#1", sheet_number: "M6.3",
+    spans: [
+      sp("SOUND ATTENUATOR SCHEDULE", 100, 20),
+      sp("SYMBOL", 100, 50), sp("MANUFACTURER", 220, 50), sp("REMARKS", 400, 50),
+      sp("SA-1", 100, 75), sp("VIBRO-ACOUSTICS SILENCER", 220, 75), sp("1,2", 400, 75),
+    ],
+  };
+  const tab = extractTable(sched, "equipment");
+  assert.equal(tab, null, "no bare EQUIPMENT column, no CATALOG_ANCHOR_WORDS rating word — a real sound attenuator schedule never qualifies as equipment-kind");
+  const tabF = extractTable(sched, "finish");
+  assert.ok(tabF, "the same real table still reads correctly as finish-kind");
+  assert.deepEqual(tabF!.rows.map((r) => r.key), ["SA-1"]);
+
+  const graph = buildSheetGraph([sched]);
+  assert.equal(graph.tables.length, 1);
+  assert.equal(graph.tables[0].kind, "finish", "stays finish-kind — EQUIPMENT's own promotion to `required` never flips an unrelated sparse table");
+});
+
 test("twin-column tiers: two same-shaped sub-columns under DIFFERENT non-vocabulary parents stay separate, not merged into one corrupted column (ledger item 29, real HUMIDIFIER SCHEDULE)", () => {
   // Real shape, measured against the real itd-d1-lab-mechanical.pdf#13
   // "HUMIDIFIER SCHEDULE": two leaf sub-columns both read "TEMP." — one
