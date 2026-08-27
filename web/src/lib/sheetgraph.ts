@@ -2408,6 +2408,24 @@ function expandGenericHeaderBlock(rows: GraphSpan[][], anchorIdx: number): Gener
 }
 
 const GENERIC_COLUMN_GAP_FACTOR = 5;
+// A real wrapped column header accumulates a HANDFUL of its own fragments
+// (this corpus's deepest real example, INSULATION OR LINER THICKNESS: 3) —
+// a cluster with many more tokens than that is not a wrapped label at all,
+// it is the SAME x-position repeating across many INDEPENDENT physical
+// rows, the real shape of a legend/abbreviations list ("AFF" / "CFM" / …,
+// one per line, each row its own complete code+definition pair) rather
+// than one header wrapping. Caught live, adversarially, before this
+// shipped: expandGenericHeaderBlock's own multi-token-row absorption (no
+// width cap — only single-token continuation lines are width-capped) has
+// no bound on how many INDEPENDENT rows of a genuine 2-column list it will
+// swallow as "more header tiers" before its own MAX_GENERIC_HEADER_LINES
+// cap kicks in — past that cap, the list's own REMAINING rows read as
+// ordinary data rows (multi-token, so bandGenericDataRows' own new-row gap
+// floor never even applies) and the whole list extracts as a fake table.
+// This is the real, decisive structural signal that separates the two
+// shapes — checked here, once, rather than trying to patch every
+// downstream consumer of a bad column set.
+const MAX_GENERIC_COLUMN_DEPTH = 4;
 /** Column anchors from a header BLOCK's own tokens, vocabulary-free: single-
  * linkage x-proximity clustering (sort by center-x, start a new cluster when
  * the gap exceeds tol) over the WHOLE block's tokens at once — deliberately
@@ -2423,7 +2441,11 @@ const GENERIC_COLUMN_GAP_FACTOR = 5;
  * measured on this corpus (26-46px) sit well under it, real inter-column
  * gaps (163-512px) well over. Each cluster's label is its own tokens' text,
  * ordered top-to-bottom then left-to-right and space-joined — "INSULATION"
- * + "TYPE" becomes "INSULATION TYPE", matching the real printed header. */
+ * + "TYPE" becomes "INSULATION TYPE", matching the real printed header.
+ * Returns [] (never a partial/wrong read) when any cluster is too deep —
+ * see MAX_GENERIC_COLUMN_DEPTH's own comment; the caller reads an empty
+ * result the same way it reads "fewer than 2 columns", refusing the whole
+ * candidate. */
 function clusterGenericColumns(tokens: GraphSpan[]): Anchor[] {
   if (!tokens.length) return [];
   const heights = tokens.map((t) => t.h || 8).sort((a, b) => a - b);
@@ -2436,6 +2458,7 @@ function clusterGenericColumns(tokens: GraphSpan[]): Anchor[] {
     if (last && centerX(t) - centerX(last[last.length - 1]) <= tol) last.push(t);
     else clusters.push([t]);
   }
+  if (clusters.some((c) => c.length > MAX_GENERIC_COLUMN_DEPTH)) return [];
   const out: Anchor[] = [];
   const used = new Set<string>();
   for (const c of clusters) {
