@@ -366,7 +366,15 @@ const rowY = (r: GraphSpan[]) => r.reduce((s, t) => s + t.y, 0) / r.length;
 // cell keeps its evidence bbox. Two vocabularies ship: the room-finish
 // schedule (rooms → finishes — THE resolution target) and the finish/material
 // schedule (codes → products, scheduleParse's own gate re-stated).
-export type TableKind = "room-finish" | "finish" | "equipment" | "unknown";
+// "reference" (this session's own full-coverage-standard work): a FOURTH
+// kind for real schedule/reference/calculation tables whose header words are
+// NOT in any fixed vocabulary — see the "structural (vocabulary-free)
+// reference/calculation tables" section below, right after extractAllTables,
+// for the full design rationale and the real bug-shaped edge cases that
+// shaped it (bessemer M601's own DUCTWORK INSULATION SCHEDULE / DUCTWORK
+// INSULATION TYPE SCHEDULE — real, keyed by SYSTEM TYPE / INSULATION TYPE,
+// no per-instance drawn-symbol tag at all).
+export type TableKind = "room-finish" | "finish" | "equipment" | "reference" | "unknown";
 export interface TableCell { text: string; bbox: Bbox }
 /** A schedule row. `sheet` is the sheet that CARRIES the row — under a
  * continuation it differs from the table's base sheet, and the row's evidence
@@ -532,6 +540,18 @@ const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "ID", "MATERIAL", "MANUFACTURE
 // in STRING order, and "LUMENS" alone is both sufficient (the cell still
 // resolves to one anchor) and lower-risk than adding a generic English word.
 const EQUIPMENT_HEADERS = ["ID", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "RPM", "ESP", "EQUIPMENT", "VELOCITY", "AIRFLOW", "SIZE", "FPM", "LENGTH", "TYPE", "MOUNTING", "CCT", "CRI", "DRIVER", "DIMMING", "LENS", "FINISH", "NOTES", "LUMENS"];
+// Hoisted out of extractTableAt (module-level, not a local) so the
+// structural "reference" pass (below extractAllTables) can check "would
+// THIS candidate header already qualify under an EXISTING vocabulary" off
+// the exact same single source of truth extractTableAt itself uses — a
+// duplicated literal here would drift the day either changes, silently
+// reopening the cross-kind-duplicate-extraction class of bug (commit
+// 88344c9) for the new kind.
+const ROOM_FINISH_REQUIRED = ["FLOOR", "BASE"];
+const FINISH_REQUIRED = ["CODE", "MARK", "SYMBOL", "ID"];
+const EQUIPMENT_REQUIRED = ["VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "ESP", "AIRFLOW", "VELOCITY", "FPM"];
+const ROOM_FINISH_MIN_HITS = 4;
+const OTHER_KIND_MIN_HITS = 3;
 // A header CELL is often a multi-word span ("FLOOR FINISH", "CEILING FINISH")
 // — the vocabulary word inside it names the column.
 /** A column anchor. `x` is the header's center. A two-tier SUB-column also
@@ -1334,6 +1354,14 @@ function anchorRadii(anchors: Anchor[]): Map<string, Radius> {
 // as item 57's SmithGroup precedent, not reachable by widening this set
 // back (that reopens the exact bleed this avoids).
 const WIDE_LAST = new Set(["REMARKS", "DESCRIPTION"]);
+// Module-scope (not a bandDataRows-local closure) so bandGenericDataRows
+// (the structural "reference" kind, below extractAllTables) can reuse it
+// verbatim — a WIDE_LAST cell that already holds real text and is about to
+// absorb a SECOND, far-off token is refused rather than merged; see
+// bandDataRows' own historical comment (ledger item, two real mechanical
+// sets) for the full real-bleed story this guards against.
+const farFromCell = (label: string, t: GraphSpan, existing: TableCell | undefined): boolean =>
+  !!existing && WIDE_LAST.has(label) && t.x - existing.bbox[2] > Math.max(80, (t.h || 8) * 8);
 // A NAME-keyed table's key column carries a room-TYPE phrase ("PATIENT
 // TOILET ROOMS"), not a short numbered tag — a prose column exactly like
 // REMARKS/DESCRIPTION/NOTES, just leading instead of trailing. The default
@@ -1651,8 +1679,6 @@ function bandDataRows(
   // was 293px and 617px — 15–33× the row's own text height. A gap that wide
   // is never a second word of the same value; it is refused, not merged, so
   // the cell keeps only the token nearest its own real column start.
-  const farFromCell = (label: string, t: GraphSpan, existing: TableCell | undefined): boolean =>
-    !!existing && WIDE_LAST.has(label) && t.x - existing.bbox[2] > Math.max(80, (t.h || 8) * 8);
   const add = (row: TableRow, toks: GraphSpan[]) => {
     for (const t of toks) {
       const label = columnOf(t);
@@ -1982,10 +2008,10 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // vocabulary. EWT/LWT added alongside EAT/LAT (their hydronic sibling,
   // already required) — an oversight when EWT/LWT joined the vocabulary,
   // caught while touching this list for the same real reason.
-  const required = kind === "room-finish" ? ["FLOOR", "BASE"]
-    : kind === "equipment" ? ["VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "ESP", "AIRFLOW", "VELOCITY", "FPM"]
-    : ["CODE", "MARK", "SYMBOL", "ID"];
-  const minHits = kind === "room-finish" ? 4 : 3;
+  const required = kind === "room-finish" ? ROOM_FINISH_REQUIRED
+    : kind === "equipment" ? EQUIPMENT_REQUIRED
+    : FINISH_REQUIRED;
+  const minHits = kind === "room-finish" ? ROOM_FINISH_MIN_HITS : OTHER_KIND_MIN_HITS;
 
   let anchors: Anchor[];
   let headerSpans: GraphSpan[];
@@ -2226,6 +2252,548 @@ export function extractAllTables(sheet: SheetSpans, kind: "room-finish" | "finis
   return out;
 }
 
+// ── structural (vocabulary-free) reference/calculation tables ──────────────
+// The three kinds above all gate a header row on a FIXED vocabulary of
+// expected column words. Real, found live (full-coverage-standard work, this
+// session): bessemer M601's own DUCTWORK INSULATION SCHEDULE (SYSTEM TYPE /
+// INSULATION TYPE / INSULATION OR LINER THICKNESS) and DUCTWORK INSULATION
+// TYPE SCHEDULE (INSULATION TYPE / DESCRIPTION) name NONE of ROOM_HEADERS'/
+// FINISH_HEADERS'/EQUIPMENT_HEADERS' words and have no per-instance drawn-
+// symbol tag at all — real reference/calculation tables, keyed by SYSTEM
+// TYPE or INSULATION TYPE rather than a tag a symbol_sweep could ever chase.
+// The user's own stated goal — "pull ANY INFORMATION out of these sets" —
+// means a fixed word list will always miss the next firm's own vocabulary,
+// so this kind is detected STRUCTURALLY: a real ruled/bordered header row of
+// short, ALL-CAPS, digit-free cells, sitting close to real data rows that
+// band to the same columns, is a table regardless of what words its headers
+// use. Named "reference" (not "unknown") — these tables are real, their data
+// is real and captured, they just answer a different question than a
+// per-instance-tagged equipment schedule does.
+//
+// A hard, real design question, not hand-waved: how does a vocabulary-free
+// "is this a header row" test avoid false-positiving on ordinary prose, a
+// keynote/note-block list, or a title block — the exact failure modes
+// isNonFinishSchedule/the garbage-row filtering above were built to prevent
+// for the OTHER three kinds, none of which had to solve this without a word
+// list to lean on? Three structural signals, all measured against this real
+// corpus (sheetgraph.test.ts's own negative-control fixtures + the corpus-
+// wide sweep — see the comment on `hasNearbyRuledLine`):
+//   1. Shape — a real header row is SEVERAL short (<=60 char), ALL-CAPS,
+//      digit-free, non-prose cells on one line (headerToken/headerRow below)
+//      — never a single continuous sentence (real running prose in this
+//      project's own text-extraction pipeline coalesces into ONE span per
+//      line; REFERENCE_RE's lead-in words and LABEL_VALUE_COLON_RE's
+//      "label: value" field-prose shape, both already proven live for the
+//      OTHER three kinds' own false-positive defenses, are reused as-is).
+//   2. A real ruled border nearby — this sheet's own vector segments
+//      (SheetSpans.segs), when supplied: every real table this pass targets
+//      in the corpus is drawn boxed (confirmed by direct render); an
+//      ordinary note/keynote list carries no such rule. See
+//      `hasNearbyRuledLine`.
+//   3. Repeated column alignment — the header's own columns must actually
+//      explain 1+ real DATA rows below (bandGenericDataRows) with a genuine
+//      minimum-population floor; a header-shaped row with nothing real
+//      below it is refused, exactly like extractTableAt's own
+//      `table: null, nextIdx` convention for the other three kinds.
+// Scoped to schedule-ROLE sheets only (buildSheetGraph's own existing
+// per-sheet role classification) — every real instance found in this corpus
+// lives on a schedule sheet, and a plan sheet (dense with title-block text,
+// dimension strings, general-notes lists) is exactly where this heuristic's
+// false-positive risk concentrates. A reference table drawn on a plan sheet
+// is a real, disclosed scope limit this pass will not find — not assumed to
+// not exist, just not chased without real corpus evidence it happens.
+//
+// A THIRD real bessemer M601 table this session's own standing mandate named
+// — "VENTILATION CALCULATION SCHEDULE" — is a genuinely DIFFERENT, real
+// blocker, confirmed by direct investigation (not assumed): the whole 8-page
+// document's own pdf.js text content carries ZERO spans anywhere in that
+// table's region, and a tight render-region zoom (10x native page
+// resolution) shows crisp, non-pixelated glyph edges — its text was
+// authored as vector glyph OUTLINES (filled paths), not encoded characters,
+// so pdf.js's text layer has nothing there at all. No amount of header-
+// detection logic — vocabulary-gated or the structural pass below — can see
+// a table with zero text spans; this is a real OCR/vision-only gap (closer
+// to session.ts's own existing raster-schedule disclosure, rasterScheduleNotes,
+// than to anything this file's span-based machinery can close) and is
+// deliberately left named rather than forced. See mcp/test or the session
+// report for how this was confirmed.
+const MAX_GENERIC_HEADER_LINES = 6;
+const GENERIC_MAX_TOKEN_LEN = 60;
+
+/** A single header CELL, vocabulary-free: short, real letters, drafting
+ * CAPS (this project's own convention — real running prose in this
+ * extraction pipeline is lower/mixed-case or coalesces to one long span),
+ * not a "SEE ALSO…"-style reference lead-in, not "label: value" field prose
+ * (both already proven real false-positive defenses for the other three
+ * kinds, reused verbatim). Digit-freeness is checked by the row test below,
+ * not here — harvestSkippedTierAnchors' own real precedent (a table's
+ * columns can legitimately be walked with parenthesized DIGIT-bearing unit
+ * fragments) means a single token containing a digit is not on its own
+ * disqualifying; a header ROW's own digit-freeness (checked once, together)
+ * is the real, corpus-measured signal — see isGenericHeaderRow. */
+function isGenericHeaderToken(raw: string): boolean {
+  const s = (raw || "").trim();
+  if (!s || s.length > GENERIC_MAX_TOKEN_LEN) return false;
+  if (/[a-z]/.test(s)) return false;
+  if (!/[A-Z]/.test(s)) return false;
+  if (REFERENCE_RE.test(norm(s))) return false;
+  if (LABEL_VALUE_COLON_RE.test(s)) return false;
+  return true;
+}
+/** A header-shaped ROW: 2+ real cells (a lone single-span line is a title or
+ * a note, never a header on its own — every real header measured in this
+ * corpus has 2+ columns), every one shape-qualified AND digit-free. Real
+ * header labels in this corpus never carry a digit; real DATA rows
+ * routinely do (a tag, an ASTM spec number, a dimension) — checked once per
+ * row (not per token) so a row that mixes a clean label with a digit-
+ * bearing value (the exact shape of this table's own real data rows) is
+ * never mistaken for more header. */
+function isGenericHeaderRow(row: GraphSpan[]): boolean {
+  const toks = row.filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null);
+  if (toks.length < 2) return false;
+  return toks.every((t) => isGenericHeaderToken(t.str) && !/\d/.test(t.str));
+}
+
+interface GenericHeaderBlock { top: number; bottom: number; tokens: GraphSpan[] }
+
+/** A real header is routinely wrapped over several physical lines (bessemer's
+ * own DUCTWORK INSULATION SCHEDULE: 5 lines — "INSULATION OR" / "INSULATION"
+ * / "SYSTEM TYPE" + "LINER" / "TYPE" / "THICKNESS"), and the tier that first
+ * clears the 2-cell bar (isGenericHeaderRow) is not always the block's own
+ * TOP tier — real, measured: "SYSTEM TYPE"+"LINER" both sit on the SAME
+ * physical line, one row below "INSULATION"/"INSULATION OR" (its column's
+ * own parent words). Expands BOTH directions from that anchor row, one
+ * physical line at a time, while each candidate line: is itself shape-
+ * qualified + digit-free (a lone wrapped word, "TYPE", is a valid single-
+ * token continuation — isGenericHeaderRow's own 2-cell floor does not apply
+ * here, only the per-token shape+digit tests do), sits within 2x the
+ * anchor row's own median cell height of the block's current edge (a title
+ * sitting one line above a real header can measure a smaller physical gap
+ * than that — real, measured live: 34.8px vs this table's own header-
+ * internal gaps of 10.9-22.6px — so this alone is not the whole guard), and
+ * — the real title-vs-header-tier discriminator — is NOT a single token
+ * wider than 2x the anchor row's own median cell width (a real column's own
+ * wrapped tier is a short 1-2-word fragment; a real title is one long
+ * multi-word run spanning close to the whole table's width — measured live,
+ * 342px vs this table's own 57-148px continuation tiers). */
+function expandGenericHeaderBlock(rows: GraphSpan[][], anchorIdx: number): GenericHeaderBlock {
+  const anchorToks = rows[anchorIdx].filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null);
+  const widths = anchorToks.map((t) => t.w || 8).sort((a, b) => a - b);
+  const medW = widths[widths.length >> 1] || 8;
+  const heights = anchorToks.map((t) => t.h || 8).sort((a, b) => a - b);
+  const medH = heights[heights.length >> 1] || 8;
+  const widthCap = Math.max(160, medW * 2);
+  const rowOk = (r: GraphSpan[]): boolean => {
+    const toks = r.filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null);
+    if (!toks.length) return false;
+    if (!toks.every((t) => isGenericHeaderToken(t.str) && !/\d/.test(t.str))) return false;
+    if (toks.length === 1 && (toks[0].w || 0) > widthCap) return false;
+    return true;
+  };
+  let top = anchorIdx, bottom = anchorIdx;
+  for (let n = 0; n < MAX_GENERIC_HEADER_LINES && top > 0; n++) {
+    const cand = rows[top - 1];
+    if (!rowOk(cand)) break;
+    if (rowY(rows[top]) - rowY(cand) > medH * 2) break;
+    top--;
+  }
+  for (let n = 0; n < MAX_GENERIC_HEADER_LINES && bottom < rows.length - 1; n++) {
+    const cand = rows[bottom + 1];
+    if (!rowOk(cand)) break;
+    if (rowY(cand) - rowY(rows[bottom]) > medH * 2) break;
+    bottom++;
+  }
+  const tokens = rows.slice(top, bottom + 1).flat().filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null);
+  return { top, bottom, tokens };
+}
+
+const GENERIC_COLUMN_GAP_FACTOR = 5;
+/** Column anchors from a header BLOCK's own tokens, vocabulary-free: single-
+ * linkage x-proximity clustering (sort by center-x, start a new cluster when
+ * the gap exceeds tol) over the WHOLE block's tokens at once — deliberately
+ * NOT an incremental "does this new line attach to what's collected so far"
+ * walk (tried first, reverted): a column's own wrapped tiers can straddle
+ * the anchor row on EITHER side ("INSULATION" above, "TYPE" below, both
+ * belonging to the same "INSULATION TYPE" column split by the anchor row
+ * sitting between them) and an incremental, order-dependent walk misses the
+ * transitive link. A one-shot clustering pass has no such ordering
+ * dependency. `tol` is derived from the block's own median cell height (the
+ * same h-scaled-constant idiom this file already uses throughout, e.g.
+ * anchorRadii/parentLabelOver's own `near`) — real intra-column gaps
+ * measured on this corpus (26-46px) sit well under it, real inter-column
+ * gaps (163-512px) well over. Each cluster's label is its own tokens' text,
+ * ordered top-to-bottom then left-to-right and space-joined — "INSULATION"
+ * + "TYPE" becomes "INSULATION TYPE", matching the real printed header. */
+function clusterGenericColumns(tokens: GraphSpan[]): Anchor[] {
+  if (!tokens.length) return [];
+  const heights = tokens.map((t) => t.h || 8).sort((a, b) => a - b);
+  const h = heights[heights.length >> 1] || 8;
+  const tol = Math.max(60, h * GENERIC_COLUMN_GAP_FACTOR);
+  const sorted = tokens.slice().sort((a, b) => centerX(a) - centerX(b));
+  const clusters: GraphSpan[][] = [];
+  for (const t of sorted) {
+    const last = clusters[clusters.length - 1];
+    if (last && centerX(t) - centerX(last[last.length - 1]) <= tol) last.push(t);
+    else clusters.push([t]);
+  }
+  const out: Anchor[] = [];
+  const used = new Set<string>();
+  for (const c of clusters) {
+    const ordered = c.slice().sort((a, b) => a.y - b.y || a.x - b.x);
+    const label = ordered.map((t) => norm(t.str)).join(" ").replace(/\s+/g, " ").trim();
+    if (!label) continue;
+    let final = label, i = 2;
+    while (used.has(final)) final = `${label} (${i++})`;
+    used.add(final);
+    const cx = c.reduce((s, t) => s + centerX(t), 0) / c.length;
+    out.push({ label: final, x: cx });
+  }
+  return out.sort((a, b) => a.x - b.x);
+}
+
+/** A horizontal rule spanning most of the header block's own width, sitting
+ * close to it (real design signal #2, the mandate's own suggestion) — the
+ * structural "this is a genuinely ruled/boxed table, not a note block"
+ * check: every real table this pass targets in the corpus is drawn boxed
+ * (direct render, bessemer M601), while an ordinary GENERAL NOTES/KEYNOTES
+ * list on a real plan sheet is not (measured live: raw nearby-segment COUNT
+ * is a noisy, unreliable signal on a dense plan sheet — incidental drawing
+ * linework routinely sits near a notes block purely by proximity — but a
+ * genuinely WIDE horizontal rule spanning the block's own column width is
+ * not incidental clutter). `segs` absent (a text-only caller) skips this
+ * gate entirely rather than refuse — the same graceful-degradation posture
+ * this file already takes elsewhere; the shape + repeated-column-alignment
+ * signals still apply on their own. */
+function hasNearbyRuledLine(segs: ArrayLike<number> | undefined, x0: number, x1: number, y0: number, y1: number): boolean {
+  if (!segs || !segs.length) return true;
+  const width = x1 - x0;
+  if (!(width > 0)) return false;
+  const pad = Math.max(20, y1 - y0);
+  const nSeg = Math.floor(segs.length / 4);
+  for (let i = 0; i < nSeg; i++) {
+    const sx0 = segs[i * 4], sy0 = segs[i * 4 + 1], sx1 = segs[i * 4 + 2], sy1 = segs[i * 4 + 3];
+    if (Math.abs(sy1 - sy0) > 2) continue;
+    const my = (sy0 + sy1) / 2;
+    if (my < y0 - pad || my > y1 + pad) continue;
+    const overlap = Math.min(sx1, x1) - Math.max(sx0, x0);
+    if (overlap >= width * 0.6) return true;
+  }
+  return false;
+}
+
+/** Does `row`, banded to [x0,x1], look like the START of some OTHER table —
+ * the generic analog of looksLikeNewHeader, reused as this pass's own table-
+ * boundary stop signal so an earlier reference table's data scan can never
+ * run into a LATER table's own header (real, measured: bessemer M601 stacks
+ * DUCTWORK INSULATION SCHEDULE directly above the ELECTRIC WALL HEATER
+ * SCHEDULE in an overlapping x-band). */
+// Tested on the row's OWN full token set, not pre-banded to [x0,x1] — real,
+// corpus-found bug: a LATER stacked table's own header can have HALF its
+// columns sit outside an EARLIER table's (narrower) x-band (real, measured:
+// DUCTWORK INSULATION TYPE SCHEDULE's own "INSULATION"/"DESCRIPTION" header,
+// banded to DUCTWORK INSULATION SCHEDULE's own x-band, loses "INSULATION"
+// entirely and the lone surviving "DESCRIPTION" token fails the 2+-cell
+// header-row bar) — so a pre-banded test misses it, and the earlier table's
+// own data scan runs straight into the later table's real rows, merging two
+// distinct tables into one. Testing the FULL row for header-shape first,
+// then requiring only that SOME token of it lands inside this table's own
+// x-band, catches this — a real DATA row of the table being scanned never
+// trips it (every one measured contains a digit somewhere and fails
+// isGenericHeaderRow's own digit-free requirement, or is a lone single-
+// token wrapped continuation line and fails its 2+-cell floor).
+function looksLikeGenericNewHeader(row: GraphSpan[], x0: number, x1: number): boolean {
+  if (!isGenericHeaderRow(row)) return false;
+  return row.some((t) => t.str && t.str.trim() && revisionOf(t.str) == null && centerX(t) >= x0 && centerX(t) <= x1);
+}
+
+function findGenericTableBoundary(rows: GraphSpan[][], dataFrom: number, x0: number, x1: number): number {
+  const cap = Math.min(rows.length, dataFrom + MAX_TABLE_SCAN_ROWS);
+  for (let i = dataFrom; i < cap; i++) {
+    if (looksLikeGenericNewHeader(rows[i], x0, x1)) return i;
+  }
+  return cap;
+}
+
+// A generous, vocabulary-free row-key shape: any real short phrase or code
+// (letters/digits/space and the narrow punctuation a real SYSTEM TYPE/
+// INSULATION TYPE key column carries in this corpus — parens, comma, slash,
+// hyphen, quote-mark for inch-marks). Not CODE_RE/NAME_KEY_RE (both typed
+// to the other three kinds' own real conventions) — a reference table's key
+// column has no single known shape across firms (a short code, "D-1", or a
+// long phrase, "SUPPLY DUCTS (EXTERNALLY INSULATED)", both real, same
+// corpus, same session).
+const GENERIC_KEY_RE = /^[A-Z0-9][A-Z0-9 .,'"&()/%°∅Ø:+-]{0,99}$/;
+
+function genericRowKeyOf(raw: string, headerLabels: Set<string>): string | null {
+  const s = (raw || "").trim();
+  if (!s || s.length > 100) return null;
+  const u = norm(s).replace(/\s+/g, " ");
+  if (REFERENCE_RE.test(u)) return null;
+  if (headerLabels.has(u)) return null;
+  if (!GENERIC_KEY_RE.test(u)) return null;
+  return s;
+}
+
+/** Data-row banding for the structural "reference" kind — reuses this
+ * file's own generic column-banding primitives (bandLimits/nearestAnchor/
+ * anchorRadii/farFromCell's shape, all already Anchor[]-typed with zero
+ * vocabulary coupling) rather than duplicating them, but keeps its OWN row-
+ * acceptance/orphan-fold logic: the other three kinds' key values never wrap
+ * across physical lines, so bandDataRows never had to solve "a candidate
+ * key-column-aligned LINE might be a genuine new row, or it might be the
+ * SAME row's own key cell wrapping back to the column's left edge on its
+ * 2nd physical line" — real, measured live on DUCTWORK INSULATION SCHEDULE's
+ * own EXHAUST DUCTS row: "EXHAUST DUCTS WITHIN 10 FEET OF EXTERIOR" wraps to
+ * a 2nd line, "OPENINGS", which lands back at the SAME key-column x as any
+ * genuine new row's own leading token would.
+ *
+ * The real, corpus-measured discriminator (not a hand-picked constant): the
+ * table's OWN median physical-line-to-line gap, computed once from EVERY
+ * consecutive row-cluster in the scanned range (not just keyed ones) — a
+ * wrapped cell's own internal line pitch (10-11px, measured) is reliably
+ * tighter than a genuine row-to-row gap (25.7px, measured) on the SAME real
+ * table, even though the table has only 2-3 real rows total (too few to
+ * trust a `findSparseKeyedBoundary`-style running pace over KEYED rows
+ * alone). A single-token candidate line is accepted as a genuine new row
+ * only when its own gap since the previous accepted row is at least 2x that
+ * median-line-gap baseline (or when it carries 2+ cells of its own, or is
+ * the table's first row) — a real new row's own leading line, in both real
+ * target tables measured, clears this; a wrapped continuation line does
+ * not. A candidate that fails this check is not dropped — it is queued as
+ * an ORPHAN and folds into the nearest already-accepted row exactly like
+ * any other orphan below, so its text still lands in the right cell. */
+function bandGenericDataRows(
+  rows: GraphSpan[][], anchors: Anchor[], sheetKey: string,
+  cfg: { fromIdx: number; toIdx: number },
+): { out: TableRow[]; region: Bbox | null } {
+  const { x0, x1 } = bandLimits(anchors);
+  const headerLabelSet = new Set(anchors.map((a) => norm(a.label)));
+  // No anchorRadii here, deliberately — that mechanism (built for the other
+  // three kinds) assumes a column's real data sits close to its own
+  // HEADER's x-position, with only WIDE_LAST/NAME columns earning a wide
+  // reach. A reference table's own KEY column routinely holds a long phrase
+  // (real, measured: SYSTEM TYPE's "SUPPLY DUCTS (EXTERNALLY INSULATED)"
+  // sits 130px from its own short "SYSTEM TYPE" header word's center,
+  // farther than anchorRadii's own inflation cap allows) — capping it wrongly
+  // dropped the key column's own text entirely, a real, corpus-found bug.
+  // Every OTHER real defense here (keyColX alignment, the min-population
+  // floor) already guards against a genuinely un-modeled column's data
+  // bleeding into an unrelated cell, so this pass does not need radii's own
+  // narrower protection on top.
+  const keyColX = anchors[0].x;
+  const keyTol = anchors.length > 1 ? Math.max(40, (anchors[1].x - anchors[0].x) / 2) : 60;
+
+  // The table's own median PHYSICAL line-to-line gap — restricted to rows
+  // that actually carry a token in this table's own [x0,x1] band (real,
+  // corpus-found bug: the unrestricted whole-sheet gap set is badly diluted
+  // by unrelated debris between this table's real data and the next real
+  // stop signal — bessemer's own DUCTWORK INSULATION SCHEDULE scans past a
+  // revision-triangle row, a different table's title, and its header before
+  // reaching the real ELECTRIC WALL HEATER SCHEDULE stop, none of them
+  // relevant to THIS table's own real line pitch). In-band-only keeps the
+  // baseline a real measure of this table's own content density.
+  const inBandY: number[] = [];
+  for (let i = cfg.fromIdx; i < cfg.toIdx; i++) {
+    if (rows[i].some((t) => centerX(t) >= x0 && centerX(t) <= x1)) inBandY.push(rowY(rows[i]));
+  }
+  const lineGaps: number[] = [];
+  for (let i = 1; i < inBandY.length; i++) {
+    const g = inBandY[i] - inBandY[i - 1];
+    if (g > 0) lineGaps.push(g);
+  }
+  lineGaps.sort((a, b) => a - b);
+  const medianLineGap = lineGaps.length ? lineGaps[(lineGaps.length - 1) >> 1] : 0;
+  const newRowGapFloor = medianLineGap > 0 ? medianLineGap * 2 : 0;
+
+  const out: TableRow[] = [];
+  const outY: number[] = [];
+  let region: Bbox | null = null;
+  // Raw contributing tokens per (row, label) — kept separate from
+  // `row.cells` until every add() (both the row's own initial banding AND
+  // every later orphan-fold) has run, then joined in real (y, x) reading
+  // order. Real, corpus-found bug this fixes: a reference table's KEY
+  // column can wrap with the row's own key line sitting in the MIDDLE of a
+  // multi-line cell (DUCTWORK INSULATION TYPE SCHEDULE's own D-1: its
+  // DESCRIPTION cell's 1st physical line sits ABOVE the row's own D-1 key
+  // line, its 3rd BELOW) — orphan-folding runs as a whole separate pass
+  // AFTER the main scan, so simple append-as-you-go concatenation (the
+  // other three kinds' own bandDataRows convention, safe there because
+  // their key values never wrap) put the row's own initial fragment first
+  // and every folded orphan after it regardless of which physically came
+  // first on the sheet, scrambling real spec-description text.
+  const cellToks = new Map<TableRow, Map<string, GraphSpan[]>>();
+  const add = (row: TableRow, toks: GraphSpan[]) => {
+    let byLabel = cellToks.get(row);
+    if (!byLabel) cellToks.set(row, (byLabel = new Map()));
+    for (const t of toks) {
+      const label = nearestAnchor(centerX(t), anchors);
+      if (label == null) continue;
+      const existing = byLabel.get(label);
+      const lastBbox = existing?.length ? bboxOf(existing[existing.length - 1]) : undefined;
+      if (farFromCell(label, t, lastBbox ? { text: "", bbox: lastBbox } : undefined)) continue;
+      if (existing) existing.push(t); else byLabel.set(label, [t]);
+      region = region ? merge(region, bboxOf(t)) : bboxOf(t);
+    }
+  };
+  const orphans: Array<{ toks: GraphSpan[]; y: number }> = [];
+  for (let i = cfg.fromIdx; i < cfg.toIdx; i++) {
+    const banded = rows[i].filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null && t.x >= x0 && t.x <= x1);
+    if (!banded.length) continue;
+    if (Math.abs(centerX(banded[0]) - keyColX) > keyTol) { orphans.push({ toks: banded, y: rowY(rows[i]) }); continue; }
+    const key = genericRowKeyOf(banded[0].str, headerLabelSet);
+    if (!key) { orphans.push({ toks: banded, y: rowY(rows[i]) }); continue; }
+    const gapOk = !out.length || banded.length >= 2 || !newRowGapFloor || (rowY(rows[i]) - outY[outY.length - 1]) >= newRowGapFloor;
+    if (!gapOk) { orphans.push({ toks: banded, y: rowY(rows[i]) }); continue; }
+    const row: TableRow = { key, sheet: sheetKey, cells: {} };
+    add(row, banded);
+    out.push(row);
+    outY.push(rowY(rows[i]));
+  }
+
+  // Orphan fold: a reference table's cells routinely wrap 2-3 physical lines
+  // deep (real ASTM spec prose) — a wider radius than the other three
+  // kinds' own typically-short cell values need, based on the scanned
+  // range's own median cell height rather than a (often thin, 2-3-row)
+  // sample's row pitch, which the other three kinds' bandDataRows leans on
+  // instead. Real, measured live: DUCTWORK INSULATION TYPE SCHEDULE's own
+  // D-6 row folds a continuation line 59.3px away — comfortably inside this
+  // radius, comfortably outside anything that would reach an unrelated
+  // table's own content.
+  const allH = rows.slice(cfg.fromIdx, cfg.toIdx).flat().map((t) => t.h || 8).sort((a, b) => a - b);
+  const h = allH.length ? allH[allH.length >> 1] : 8;
+  const gaps = outY.slice(1).map((y, idx) => y - outY[idx]).filter((d) => d > 0).sort((a, b) => a - b);
+  const pitch = gaps.length ? gaps[(gaps.length - 1) >> 1] : 0;
+  const radius = Math.max(pitch * 0.6, h * 4);
+  const nearest = (y: number): { i: number; d: number } => {
+    let bi = -1, bd = Infinity;
+    outY.forEach((ry, idx) => { const d = Math.abs(y - ry); if (d < bd) { bd = d; bi = idx; } });
+    return { i: bi, d: bd };
+  };
+  for (const o of orphans) {
+    const { i, d } = nearest(o.y);
+    if (i < 0 || d > radius) continue;
+    add(out[i], o.toks);
+  }
+
+  // Finalize: every cell's tokens (main scan + every folded orphan) are now
+  // collected — join each cell in real reading order (top-to-bottom, then
+  // left-to-right within a line), not fold order. See cellToks' own comment.
+  for (const row of out) {
+    const byLabel = cellToks.get(row);
+    if (!byLabel) continue;
+    for (const [label, toks] of byLabel) {
+      const ordered = toks.slice().sort((a, b) => a.y - b.y || a.x - b.x);
+      let bbox = bboxOf(ordered[0]);
+      for (const t of ordered.slice(1)) bbox = merge(bbox, bboxOf(t));
+      row.cells[label] = { text: ordered.map((t) => t.str.trim()).join(" "), bbox };
+    }
+  }
+
+  // Minimum-population floor: the vocabulary-free version of the SAME real
+  // signal equipment-kind tables already use (bandDataRows' own comment,
+  // ledger item 29) — a real reference-table row populates a strong
+  // majority of the table's own real columns (both real target tables:
+  // full population); a stray title/note/other-table fragment that happens
+  // to key-shape-match and key-column-align populates only its own one
+  // cell. The real final backstop that keeps this whole pass safe even when
+  // an earlier gate (keyColX alignment, the new-row gap floor) admits a
+  // candidate it should not have — see this file's own corpus-wide sweep
+  // for the real adversarial case this caught (a stacked LATER table's own
+  // title/header text landing inside an EARLIER reference table's x-band).
+  const minCells = Math.max(2, Math.ceil(anchors.length / 2));
+  for (let i = out.length - 1; i >= 0; i--) {
+    if (Object.keys(out[i].cells).length < minCells) { out.splice(i, 1); outY.splice(i, 1); }
+  }
+  return { out, region };
+}
+
+/** The structural "reference" kind's own per-call primitive — mirrors
+ * extractTableAt's shape (find ONE table from `fromIdx`, report `nextIdx` so
+ * a caller can resume past it) but with zero vocabulary threading: no
+ * `kind`/`vocab`/`required` parameters, since there is nothing to gate a
+ * header on besides the structural signals above. */
+function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number): { table: ScheduleTable | null; nextIdx: number } | null {
+  const horiz = sheet.spans.filter((s) => !isVertical(s));
+  const rows = clusterRows(horiz);
+  for (let i = fromIdx; i < rows.length; i++) {
+    if (!isGenericHeaderRow(rows[i])) continue;
+    const block = expandGenericHeaderBlock(rows, i);
+    // Skip a block that ALREADY qualifies under an existing vocabulary — a
+    // real, corpus-found bug this guards against: bessemer's own ELECTRIC
+    // WALL HEATER SCHEDULE (ID/MANUFACTURER/MODEL/VOLTAGE/PHASE/WATTS/AMPS)
+    // is genuinely SHORT/CAPS/columnar too, so this pass's own structural
+    // signals alone happily re-find it — and the cross-kind dedup pass in
+    // buildSheetGraph, built for exactly this shape of collision, picks
+    // whichever fragment is RICHER by raw cell count, a coin-flip that let
+    // this pass's own (buggy, at the time) extraction win and silently
+    // replace the equipment-kind table `buildPlanSetTakeoff`'s whole
+    // pipeline scopes on — a real regression risk to every already-working
+    // tag. Checked against the SAME required-words+minHits bar
+    // extractTableAt itself uses for each of the other three kinds (the
+    // hoisted ROOM_FINISH_REQUIRED/FINISH_REQUIRED/EQUIPMENT_REQUIRED
+    // consts, single source of truth) — a table a vocabulary already
+    // explains is that vocabulary's table, never re-extracted here.
+    const alreadyVocab = rows.slice(block.top, block.bottom + 1).some((r) =>
+      qualifies(headerHits(r, ROOM_HEADERS), ROOM_FINISH_REQUIRED, ROOM_FINISH_MIN_HITS)
+      || qualifies(headerHits(r, FINISH_HEADERS), FINISH_REQUIRED, OTHER_KIND_MIN_HITS)
+      || qualifies(headerHits(r, EQUIPMENT_HEADERS), EQUIPMENT_REQUIRED, OTHER_KIND_MIN_HITS));
+    if (alreadyVocab) continue;
+    const anchors = clusterGenericColumns(block.tokens);
+    if (anchors.length < 2) continue;
+    const { x0, x1 } = bandLimits(anchors);
+    const hdrY0 = Math.min(...block.tokens.map((t) => t.y));
+    const hdrY1 = Math.max(...block.tokens.map((t) => t.y + (t.h || 0)));
+    if (!hasNearbyRuledLine(sheet.segs, x0, x1, hdrY0, hdrY1)) continue;
+    const dataFrom = block.bottom + 1;
+    const toIdx = findGenericTableBoundary(rows, dataFrom, x0, x1);
+    const banded = bandGenericDataRows(rows, anchors, sheet.key, { fromIdx: dataFrom, toIdx });
+    if (!banded.out.length) return { table: null, nextIdx: toIdx };
+
+    // Title hunt: the same "nearest single-span, all-caps, digit-free,
+    // 2+-word run above the header, in its own x-band" fallback signal
+    // extractTableAt's own title hunt already uses (there, only reached
+    // once no "…SCHEDULE" title is found — reused directly here since a
+    // structural table has no vocabulary-anchored title search of its own
+    // to try first).
+    let title: Evidence | null = null;
+    for (let k = block.top - 1, budget = 5; k >= 0 && budget > 0 && !title; k--) {
+      const inBand = rows[k].filter((t) => centerX(t) >= x0 && centerX(t) <= x1);
+      if (!inBand.length) continue;
+      budget--;
+      if (inBand.length !== 1) continue;
+      const t = inBand[0];
+      const s = norm(t.str);
+      if (!s || /\d/.test(s) || !/^[A-Z][A-Z .,'’&()/-]*$/.test(s)) continue;
+      if (s.split(/\s+/).filter(Boolean).length < 2) continue;
+      title = { sheet: sheet.key, text: t.str.trim(), bbox: bboxOf(t) };
+    }
+
+    let region: Bbox | null = banded.region;
+    for (const t of block.tokens) region = region ? merge(region, bboxOf(t)) : bboxOf(t);
+    const table: ScheduleTable = {
+      kind: "reference", sheet: sheet.key, title,
+      headers: anchors.map((a) => a.label), rows: banded.out, region: region!, anchors,
+    };
+    return { table, nextIdx: toIdx };
+  }
+  return null;
+}
+
+/** Every structural "reference" table on a sheet — mirrors extractAllTables'
+ * own repeat-from-nextIdx loop. */
+export function extractAllReferenceTables(sheet: SheetSpans): ScheduleTable[] {
+  const out: ScheduleTable[] = [];
+  let fromIdx = 0;
+  for (let n = 0; n < MAX_TABLES_PER_SHEET; n++) {
+    const found = extractReferenceTableAt(sheet, fromIdx);
+    if (!found) break;
+    if (found.table) out.push(found.table);
+    if (found.nextIdx <= fromIdx) break;
+    fromIdx = found.nextIdx;
+  }
+  return out;
+}
+
 // ── continuation sheets (#87 phase 2) ───────────────────────────────────────
 // "ROOM FINISH SCHEDULE — CONT'D" is not a second schedule: it is the SAME
 // table whose rows ran off the sheet. Fragments merge into one logical table
@@ -2269,7 +2837,12 @@ function mergeContinuation(base: ScheduleTable, frag: ScheduleTable): void {
  * lines up; adopting misaligned columns would caption cells with the wrong
  * headers, which is worse than refusing. */
 function adoptContinuationRows(sheet: SheetSpans, titleSpan: GraphSpan, base: ScheduleTable, buildings: Set<string>, deltas?: DeltaIndex): ScheduleTable | null {
-  if (!base.anchors?.length || base.kind === "unknown") return null;
+  // "reference" (the structural kind, above extractAllTables) has its own,
+  // separate row-acceptance/orphan-fold logic (bandGenericDataRows) — not
+  // wired into this header-less-continuation path; a header-less
+  // continuation of a reference table is real, disclosed, out of THIS
+  // task's scope (no real corpus example found), same refusal as "unknown".
+  if (!base.anchors?.length || base.kind === "unknown" || base.kind === "reference") return null;
   const rows = clusterRows(sheet.spans.filter((s) => !isVertical(s)));
   const { medGap } = bandLimits(base.anchors);
   const keyTol = Math.max(40, medGap / 2);
@@ -2447,7 +3020,21 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   const fragments: ScheduleTable[] = [];
   const fragmentKinds = new Map<string, Set<TableKind>>(); // sheet key → kinds extracted there
   for (const s of withText) {
-    roles.set(s.key, classifySheetRole(s));
+    const role = classifySheetRole(s);
+    roles.set(s.key, role);
+    // Structural "reference" tables (see the section above extractAllTables)
+    // — scoped to schedule-role sheets only, a real, disclosed scope limit
+    // named in that section's own comment, not an oversight.
+    if (role.role === "schedule") {
+      for (const t of extractAllReferenceTables(s)) {
+        const titleB = t.title ? buildingMentions(t.title.text) : [];
+        const b = titleB.length === 1 ? titleB[0] : ctxBySheet.get(s.key);
+        if (b) t.building = b;
+        fragments.push(t);
+        if (!fragmentKinds.has(s.key)) fragmentKinds.set(s.key, new Set());
+        fragmentKinds.get(s.key)!.add("reference");
+      }
+    }
     for (const kind of ["room-finish", "finish", "equipment"] as const) {
       // Every table of this kind on the sheet, not just the first — a dense
       // MEP sheet routinely stacks several (#HVAC-boundary).
