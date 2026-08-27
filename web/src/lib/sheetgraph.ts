@@ -71,6 +71,68 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   // it, honestly as role "unknown" (an index isn't a plan/schedule/legend/
   // etc. itself) — not silently misattributed to one of the sheets it lists.
   { re: /SHEET\s+INDEX|DRAWING\s+INDEX|INDEX\s+OF\s+DRAWINGS/, role: "unknown", conf: 0.95 },
+  // Real, found live (tarrant-county-mechanical's own real sheet #1, no `#N`
+  // suffix — the set's first page): a real ABBREVIATIONS/SYMBOLS/LINE TYPES/
+  // VALVES AND FITTINGS legend-and-glossary cover sheet produced NO signal
+  // at all under the OLD signal set — none of those real box titles contain
+  // "LEGEND", "SCHEDULE", or a discipline+PLAN phrase — while a small
+  // callout-symbol-legend ENTRY on the SAME sheet ("ELEVATION NUMBER",
+  // "DRAWING/DETAIL NUMBER" — reference-symbol definitions, not the sheet's
+  // own real content) accidentally satisfied the generic ELEVATION/DETAIL
+  // signals below, so the sheet reported role "elevation" off a stray
+  // legend-entry mention instead of its own real title. Confirmed by direct
+  // render (`view_sheet`): the sheet's own real, single-line title reads
+  // "MECHANICAL SYMBOLS AND ABBREVIATIONS", beside real boxes titled
+  // ABBREVIATIONS / SYMBOLS / LINE TYPES / VALVES AND FITTINGS — no plan,
+  // schedule, or elevation content anywhere on it. Fixed with a new signal
+  // recognizing a legend/glossary box's own real title — an optional single
+  // leading qualifier word (MECHANICAL/CONTROL/REFERENCE/…) plus
+  // ABBREVIATIONS or SYMBOLS (either order, "X AND Y"), or the fixed
+  // phrases LINE TYPES / VALVES AND FITTINGS. Deliberately anchored to the
+  // WHOLE span (not a substring) and capped at ONE leading word —
+  // "MECHANICAL FLOOR PLAN SYMBOLS" (a real, DIFFERENT legend-box title
+  // found live on federal-attachment4-mechanical.pdf's own sheet #1, three
+  // leading words) does NOT match, left alone rather than risk bridging an
+  // unrelated "PLAN" match into this signal's own territory.
+  //
+  // TWO real problems found and fixed in this signal via the required
+  // corpus-wide before/after sweep before shipping, not assumed safe:
+  //   1. A first version also accepted bare "LEGEND" itself — REVERTED:
+  //      "LEGEND" alone is far too generic (a small "MATERIAL LEGEND"/
+  //      "KEYNOTE LEGEND" annotation box is common on an ordinary REAL
+  //      elevation/plan sheet too, not just a legend cover sheet —
+  //      baker-county-eoc-bidset.pdf#16, a real 4-view "EXTERIOR ELEVATIONS"
+  //      sheet with its own small "MATERIAL LEGEND"/"KEYNOTE LEGEND" side
+  //      boxes, wrongly flipped from role "elevation" to "legend"). The
+  //      existing bare `/LEGEND/` substring signal below (conf 0.5,
+  //      unchanged) still catches genuine LEGEND-titled sheets without this
+  //      signal's own priority overriding real content.
+  //   2. Confidence 0.8 (a first shipped value) was caught by the FULL MCP
+  //      test suite, not the corpus sweep — `sample-finish-plan.pdf`'s real
+  //      floor PLAN (AF101) carries its OWN small corner "ROOM FINISH
+  //      LEGEND & ABBREVIATIONS" reference box beside genuine plan content,
+  //      and the schedule sheet behind it carries an identical small
+  //      "ABBREVIATIONS" box of its own — a single such box is a common,
+  //      legitimate, MINOR feature of an ordinary real plan/schedule sheet,
+  //      not proof the whole sheet IS a legend. At 0.8 this signal beat the
+  //      dissent threshold (best.conf - 0.1) against BOTH sheets' own real
+  //      0.85-confidence plan/schedule titles, halving them to 0.425 and
+  //      breaking `conformance.test.ts`'s "rooms come from the plan sheet
+  //      only" assertion (a schedule-corroborated room's sheet attribution
+  //      reads the schedule sheet's own role/confidence). Retuned to 0.72:
+  //      still strictly above every wrong/weak signal this fix targets
+  //      (elevation 0.7, detail 0.6, generic schedule/legend 0.5) without
+  //      dissenting against — or ever outranking — a real, confidently
+  //      classified 0.85 plan/schedule title anywhere in the corpus or this
+  //      fixture (dissent needs conf >= best.conf - 0.1 = 0.75; 0.72 < 0.75).
+  //      A side effect of the 0.8 value — federal-attachment4-mechanical.pdf's
+  //      own sheet #1 (also a real legend cover sheet, mislabeled "plan" off
+  //      a "MECHANICAL FLOOR PLAN SYMBOLS" box title, a DIFFERENT real,
+  //      out-of-scope bug) losing confidence via dissent from 0.85 to
+  //      0.425 without changing role — no longer happens at 0.72; that
+  //      sheet is deliberately left untouched, matching this fix's real
+  //      scope.
+  { re: /^(?:[A-Z]+\s+)?(?:ABBREVIATIONS|SYMBOLS)(?:\s+AND\s+(?:ABBREVIATIONS|SYMBOLS))?$|^LINE\s+TYPES$|^VALVES\s+AND\s+FITTINGS$/, role: "legend", conf: 0.72 },
   { re: /DEMOLITION\s+PLAN|DEMO\s+PLAN/, role: "demolition", conf: 0.9 },
   // every discipline draws plans, not just finishes — an M-sheet's "SECOND
   // FLOOR DUCTWORK PLAN" is as much a plan title as an A-sheet's finish plan.
@@ -92,7 +154,14 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   { re: SCHEDULE_TITLE_RE, role: "schedule", conf: 0.85 },
   { re: /SCHEDULE/, role: "schedule", conf: 0.5 },
   { re: /LEGEND/, role: "legend", conf: 0.5 },
-  { re: /ELEVATIONS?\b/, role: "elevation", conf: 0.7 },
+  // A trailing "NUMBER" turns this into a reference-symbol legend ENTRY
+  // ("ELEVATION NUMBER" — the callout label defining what an elevation
+  // marker's number means, found live on tarrant-county-mechanical.pdf's own
+  // sheet #1 legend box) rather than a real elevation-sheet title ("BUILDING
+  // ELEVATIONS", "EXTERIOR ELEVATIONS - NORTH") — no real elevation sheet
+  // title in the corpus was found drafted as "ELEVATION NUMBER" itself, so
+  // this exclusion is narrow and additive, not a loosened match elsewhere.
+  { re: /ELEVATIONS?\b(?!\s+NUMBER)/, role: "elevation", conf: 0.7 },
   { re: /DETAILS?\b|SECTIONS?\b/, role: "detail", conf: 0.6 },
 ];
 // Running-text references are not titles: "SEE FINISH PLAN FOR ADDITIONAL
