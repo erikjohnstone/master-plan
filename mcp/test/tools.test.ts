@@ -1749,6 +1749,64 @@ test("match_reference_symbol: 2-way vs 3-way electric control valve — a real s
   assert.deepEqual(again.data, r.data);
 });
 
+// ── find_legend_symbols, real end-to-end (accuracy-hardening plan Phase 1,
+// pivoted from a fixed reference-shape library after an explicit ask: "are
+// we learning symbols as we go, or scanning the legend once?"). The
+// fixture (test/fixtures/legend-plan.pdf, scripts/make-legend-fixture.mjs)
+// deliberately mirrors real quirks found live against the real Eglin AFB
+// legend (federal-attachment4-mechanical.pdf#17, this project's own
+// federal-mech corpus set — corpus PDFs never enter this repo): a real
+// T-junction glyph (stem lands mid-edge, its own "bowtie" is two full
+// crossing diagonals with no endpoint at the visual center), a caption
+// split into several real text runs, a caption WRAPPED across two lines, a
+// long column-divider rule that must never read as a glyph, and two
+// independent (glyph, caption) rows on one sheet.
+const LEGENDPLAN = fileURLToPath(new URL("./fixtures/legend-plan.pdf", import.meta.url));
+const LEGENDKEY = "legend-plan.pdf";
+
+test("find_legend_symbols: real T-junction glyphs, split/wrapped captions, and a column divider — all handled correctly end to end", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: LEGENDPLAN });
+
+  const r = await call(client, "find_legend_symbols", { sheet: LEGENDKEY });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.glyphs.length, 3, "the 2 control-valve rows + the 1 damper row — never the divider, never the orphan KW/KILOWATTS pair");
+
+  const byCaption = Object.fromEntries(r.data.glyphs.map((g: any) => [g.caption, g]));
+  assert.ok(byCaption["2 - WAY ELECTRIC CONTROL VALVE"], "a caption split into several real text runs, merged correctly");
+  assert.ok(byCaption["2-WAY CONTROL VALVE WITH INTEGRAL THERMOSTAT"], "a caption WRAPPED across two physical lines, merged correctly");
+  assert.ok(byCaption["PARALLEL BLADE DAMPER"], "a second, independent glyph family, correctly found and labeled");
+
+  // every rect is real, image-px, and directly usable as symbol_sweep's
+  // own seed_rect — feed one straight through and confirm it actually works
+  const cv = byCaption["2 - WAY ELECTRIC CONTROL VALVE"];
+  const swept = await call(client, "symbol_sweep", { sheet: LEGENDKEY, seed_rect: [[cv.rect[0], cv.rect[1]], [cv.rect[2], cv.rect[3]]] });
+  assert.equal(swept.isError, false, "the detected rect is a real, valid seed_rect — no manual marqueeing needed");
+
+  // determinism
+  const again = await call(client, "find_legend_symbols", { sheet: LEGENDKEY });
+  assert.deepEqual(again.data, r.data);
+});
+
+test("find_legend_symbols: refuses on a sheet with no vector linework at all", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SCAN });
+  const r = await call(client, "find_legend_symbols", { sheet: SCAN_KEY });
+  assert.equal(r.isError, true);
+  assert.match(r.data.error ?? JSON.stringify(r.data), /no vector linework/);
+});
+
+test("find_legend_symbols: a sheet with real linework but nothing legend-shaped returns an honest empty result with a note, not an error", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: VALVEPLAN });
+  const r = await call(client, "find_legend_symbols", { sheet: VALVEKEY });
+  assert.equal(r.isError, false);
+  // the valve-precision fixture's own gate/ball valves have NO nearby
+  // caption text at all, so nothing pairs — an honest empty result
+  assert.equal(r.data.glyphs.length, 0);
+  assert.ok(r.data.note && /no real legend falls back to the ordinary symbol_sweep/.test(r.data.note));
+});
+
 // ── trace_connectivity, real end-to-end (maturity plan Phase 4) ─────────
 // The fixture (test/fixtures/mep-plan.pdf, scripts/make-mep-fixture.mjs):
 // five named scenarios from the plan doc's own §5 test strategy, exercised

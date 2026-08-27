@@ -89,7 +89,13 @@ export const BALL_VALVE: RefShape = {
 // proportionally from the real, measured PDF geometry at that one
 // assumption — the PROPORTIONS are real and measured directly off the
 // sheet; only the absolute inch scale is estimated, and named as one here.
-const MBOX_PT = 23.5;       // the real M-box's own drawn side, PDF pt
+// Real, measured PROPORTIONS — read via mcp Session.sheetContext, which
+// reports coordinates at RENDER_SCALE 2.0 (image px), not raw PDF points;
+// the literal below is that image-px reading (real PDF pt would be half),
+// carried through unchanged since only the RATIOS between these numbers are
+// asserted as real and measured — the absolute MBOX_IN estimate above is
+// already disclosed as arbitrary regardless of which unit this literal is.
+const MBOX_PT = 23.5;       // the real M-box's own drawn side, image px (at RENDER_SCALE 2.0) — see note above
 const MBOX_IN = 4;          // disclosed estimate
 const PT_IN = MBOX_IN / MBOX_PT;
 const pt = (v: number) => +(v * PT_IN).toFixed(3);

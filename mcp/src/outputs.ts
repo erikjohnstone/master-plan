@@ -301,6 +301,22 @@ export const matchReferenceSymbolOutput = {
   })).describe("One entry per checked reference shape, in library order"),
 };
 
+/** find_legend_symbols (accuracy-hardening plan Phase 1) — auto-detect
+ * every (glyph, caption) row on a legend sheet. No fixed library, nothing
+ * hand-digitized: real vector segments clustered (real-junction-aware) and
+ * paired with each row's own real caption text. Each `rect` feeds straight
+ * into symbol_sweep's own `seed_rect` (scope: "set") — this tool only
+ * detects, it never sweeps. */
+export const findLegendSymbolsOutput = {
+  sheet: z.string(),
+  glyphs: z.array(z.object({
+    caption: z.string().describe("The row's own caption, exactly as drawn (whitespace-normalized)"),
+    rect: z.tuple([z.number(), z.number(), z.number(), z.number()]).describe("[x0, y0, x1, y1], image px — feed straight into symbol_sweep's own seed_rect"),
+    segments: z.number().int().describe("Real linework inside the glyph's own bbox — informational only, a rough proxy for how much ink is here"),
+  })).describe("One entry per detected (glyph, caption) row, in no particular order"),
+  note: z.string().optional().describe("Present when nothing was detected — not necessarily an error: a sheet with no real legend falls back to the ordinary symbol_sweep workflow"),
+};
+
 export const measureLineOutput = {
   length_lf: z.number(),
   npts: z.number().int(),

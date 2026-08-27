@@ -304,6 +304,15 @@ export const AGENT_TOOL_DEFS = [
     },
   },
   {
+    name: "find_legend_symbols",
+    description: "Auto-detect every (glyph, caption) row on a legend sheet — no fixed library, nothing hand-digitized. There is no single national HVAC symbol standard; every firm keeps its own house legend, so a bigger fixed reference-shape library never scales to every job's own conventions. This tool does the opposite: it clusters THIS sheet's own real vector segments into compact glyphs (real-junction-aware — a real glyph's own actuator box and valve body routinely connect only at a T-junction or a mid-segment crossing, never just clean endpoint-to-endpoint) and pairs each one with its own real caption text drawn beside it. It does NOT sweep or identify anything on the plan sheets itself — feed each result's rect_norm straight into symbol_sweep's own seed_rect_norm (scope: 'set') exactly as if you had marqueed it by hand, one call per row you actually want to search for; you choose which rows to sweep, never all of them automatically. Call sheet_graph first to find the real legend sheet(s) — this tool clusters whatever sheet it's pointed at, sheet-role-agnostic by design. An empty result (with a note) is not an error: a job with no legend sheet simply falls back to the ordinary symbol_sweep workflow — marquee one real occurrence anywhere in the field and sweep from it.",
+    input_schema: {
+      type: "object",
+      properties: { sheet: { type: "string" } },
+      required: ["sheet"],
+    },
+  },
+  {
     name: "place_count",
     description: "Stage one count proposal per point (EA — one each) under a condition. Use for manually-located instances a symbol_sweep match, or a one-off you found by reading the sheet — not for area/room measurement (that's one_click). No scale required. Each proposal renders as a dashed marker the estimator accepts or rejects, exactly like propose_shapes.",
     input_schema: {
@@ -788,6 +797,11 @@ export async function executeAgentTool(ctx, name, args) {
       case "match_reference_symbol": {
         if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
         return await ctx.matchReferenceSymbol(args.sheet, { names: args.names });
+      }
+
+      case "find_legend_symbols": {
+        if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
+        return await ctx.findLegendSymbols(args.sheet);
       }
 
       case "place_count": {

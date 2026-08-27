@@ -71,6 +71,12 @@ import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib
 // anywhere in this codebase before this tool (grep-confirmed; the only prior
 // caller was its own test file).
 import { HVAC_REF_SHAPES } from "../lib/hvacRefShapes.ts";
+// Accuracy-hardening plan Phase 1, pivoted after an explicit ask: "are we
+// learning symbols as we go, or scanning the legend once?" — no single
+// national HVAC symbol standard exists, so a bigger fixed reference-shape
+// library never scales to every firm's own house legend. findLegendGlyphs
+// auto-detects a job's own legend rows instead of requiring one.
+import { findLegendGlyphs } from "../lib/legendlearn.ts";
 import { labelPlacements } from "../lib/symbollabels";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
@@ -6402,6 +6408,27 @@ export default function TakeoffCanvas() {
     };
   }
 
+  // find_legend_symbols (accuracy-hardening plan Phase 1) — auto-detect
+  // every (glyph, caption) row on a legend sheet: no fixed library, no
+  // marqueeing. Mirrors agentSymbolSweep's own shape (normalized 0..1 out);
+  // returns rects meant to be fed straight into agentSymbolSweep's own
+  // seed_rect_norm, one call per row an agent actually chooses to sweep —
+  // this tool only detects, it never sweeps anything itself.
+  async function agentFindLegendSymbols(key) {
+    const p = agentPanelFor(key);
+    if (!p) return { error: `Sheet ${key} isn't rendered yet — try again in a moment.` };
+    const segs = vectorSegsRef.current.get(key);
+    if (!segs || !segs.length) return { error: "This sheet has no vector linework (likely a scan) — legend-glyph detection reads drawn segments. Try view_region to look at it instead." };
+    const rawSpans = await ensureTextSpans(key);
+    const spans = rawSpans.map((s) => ({ text: s.str, x0: s.x0, y0: s.y0, x1: s.x1, y1: s.y1 }));
+    const glyphs = findLegendGlyphs(segs, spans);
+    const norm = ([x, y]) => [+(x / p.img.w).toFixed(5), +(y / p.img.h).toFixed(5)];
+    return {
+      glyphs: glyphs.map((g) => ({ caption: g.caption, rect_norm: [...norm(g.rect[0]), ...norm(g.rect[1])], segments: g.segments })),
+      ...(!glyphs.length ? { note: "No (glyph, caption) row pairs were detected on this sheet — it may not be a legend, or its rows may not fit this detector's own compact-glyph/adjacent-caption assumptions. This is not an error: a sheet with no real legend falls back to the ordinary symbol_sweep workflow (marquee one real occurrence anywhere and sweep from it)." } : {}),
+    };
+  }
+
   // trace_connectivity (maturity plan Phase 4) — which valve belongs to
   // which equipment, walked through the sheet's own drawn linework. Mirrors
   // agentSymbolSweep's own shape exactly: normalized 0..1 points in and out
@@ -7467,6 +7494,7 @@ export default function TakeoffCanvas() {
       proposeShapes: stageAgentProposals,
       symbolSweep: agentSymbolSweep,
       matchReferenceSymbol: agentMatchReferenceSymbol,
+      findLegendSymbols: agentFindLegendSymbols,
       traceConnectivity: agentTraceConnectivity,
       listShapes: agentListShapes,
       deleteShapes: agentDeleteShapes,

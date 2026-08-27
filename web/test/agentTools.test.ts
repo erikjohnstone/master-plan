@@ -263,6 +263,26 @@ test("match_reference_symbol: a valid call passes names through and returns the 
   assert.deepEqual(calls[0], ["plan.pdf", { names: ["gate valve"] }]);
 });
 
+// find_legend_symbols (accuracy-hardening plan Phase 1) — executeAgentTool's
+// own dispatch/shaping layer only; findLegendGlyphs' own logic is covered
+// directly by web/test/legendlearn.test.ts and mcp/test/tools.test.ts's real
+// end-to-end tests.
+test("find_legend_symbols: sheet not open on the canvas refuses with a named reason", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "find_legend_symbols", { sheet: "other.pdf" });
+  assert.match(out.error, /isn't open on the canvas/);
+});
+
+test("find_legend_symbols: a valid call passes through to the canvas's own detector unchanged", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    findLegendSymbols: async (sheet: string) => { calls.push(sheet); return { glyphs: [{ caption: "GATE VALVE", rect_norm: [0.1, 0.1, 0.2, 0.2], segments: 7 }] }; },
+  });
+  const out = await executeAgentTool(ctx, "find_legend_symbols", { sheet: "plan.pdf" });
+  assert.equal(out.glyphs[0].caption, "GATE VALVE");
+  assert.deepEqual(calls, ["plan.pdf"]);
+});
+
 // trace_connectivity (maturity plan Phase 4) — executeAgentTool's own
 // dispatch/shaping layer only; buildMepGraph/traceConnectivity's own logic
 // is covered directly by web/test/mepconnectivity.test.ts.

@@ -45,6 +45,15 @@ import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio
 // codebase before this tool — confirmed by grep, the only prior caller was
 // its own test file. This wires it in.
 import { HVAC_REF_SHAPES } from "../../web/src/lib/hvacRefShapes.ts";
+// Accuracy-hardening plan Phase 1 (pivoted after an explicit ask: "are we
+// learning symbols as we go, or scanning the legend once?") — no single
+// national HVAC symbol standard exists, so a bigger FIXED reference-shape
+// library never scales to every firm's own house legend. findLegendGlyphs
+// does the new work only (cluster a legend sheet's own vector segments into
+// compact glyphs, pair each with its own caption); the caller feeds each
+// result straight into symbol_sweep (scope: "set") exactly as if a human
+// had marqueed it — the already-tested sweep engine is reused untouched.
+import { findLegendGlyphs, type LegendSpan } from "../../web/src/lib/legendlearn.ts";
 // MEP connectivity tracing (maturity plan Phase 4) — buildMepGraph reuses
 // this project's own vendored JTS port for robust noding (see the module's
 // own header comment); traceConnectivity is the refusal-honest query, same
@@ -2588,6 +2597,35 @@ export class Session {
         withheld: r.result.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])] as [number, number], score: w.score, rotation: w.rotation, mirrored: w.mirrored, reason: w.reason })),
         complete: r.result.complete,
       })),
+    };
+  }
+
+  /** find_legend_symbols (accuracy-hardening plan Phase 1) — auto-detect
+   * every (glyph, caption) row on a legend sheet, real vector geometry
+   * clustered and paired with its own real caption text, no marqueeing.
+   * Each result's `rect` feeds straight into symbol_sweep's own seed_rect
+   * (scope: "set") — this tool does the detection only, never sweeps
+   * itself, so the already-tested cross-scale/refusal machinery in
+   * symbol_sweep is reused untouched, not duplicated. Sheet-role-agnostic
+   * by design: call sheet_graph first to find the real legend sheet(s);
+   * this tool clusters whatever sheet it's pointed at. */
+  async findLegendGlyphs(name: string) {
+    const s = this.sheet(name);
+    const geo = await this.ensureGeometry(s);
+    if (!geo.segs.length) {
+      throw new UserError("This sheet has no vector linework (likely a scan) — legend-glyph detection reads drawn segments; raster fallback not yet available in the MCP server.");
+    }
+    if (!s.spans) s.spans = textSpans(s.page);
+    const spans: LegendSpan[] = s.spans.map((sp) => ({ text: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1 }));
+    const glyphs = findLegendGlyphs(geo.segs, spans);
+    return {
+      sheet: s.key,
+      glyphs: glyphs.map((g) => ({
+        caption: g.caption,
+        rect: [round1(g.rect[0][0]), round1(g.rect[0][1]), round1(g.rect[1][0]), round1(g.rect[1][1])] as [number, number, number, number],
+        segments: g.segments,
+      })),
+      ...(!glyphs.length ? { note: "No (glyph, caption) row pairs were detected on this sheet — it may not be a legend, or its rows may not fit this detector's own compact-glyph/adjacent-caption assumptions. This is not an error: a sheet with no real legend falls back to the ordinary symbol_sweep workflow (marquee one real occurrence anywhere and sweep from it)." } : {}),
     };
   }
 
