@@ -365,3 +365,73 @@ for (const off of lblOffsets) lblPdf += `${String(off).padStart(10, "0")} 00000 
 lblPdf += `trailer\n<< /Size ${lblObjects.length + 1} /Root 1 0 R >>\nstartxref\n${lblXrefAt}\n%%EOF\n`;
 writeFileSync(OUT_LBL, lblPdf, "latin1");
 console.log(`wrote ${OUT_LBL} (${lblPdf.length} bytes)`);
+
+// ── symbol-uniqtags.pdf — the cross-tag corroboration fixture ────────────────
+// The uniquely-tagged-family case sweep_schedule_row's same-tag corroborator
+// cannot serve: a MECHANICAL PLAN sheet + a VAV SCHEDULE sheet, three marks,
+// each tag drawn EXACTLY ONCE (never repeating):
+//   VAV-1  (150,400)  diamond marker — the SAME bubble shape as VAV-2's own
+//                      (two different boxes, one firm's drafting convention)
+//   VAV-2  (400,400)  diamond marker — VAV-1's cross-tag corroborator and
+//                      vice versa: neither repeats its OWN tag, but each
+//                      other's occurrence reproduces the fingerprint
+//   VAV-3  (275,200)  a TRIANGLE marker — a genuinely different shape family
+//                      in the SAME schedule table. The negative control:
+//                      cross-tag corroboration must never fire between VAV-3
+//                      and VAV-1/VAV-2 — the shapes just don't reproduce.
+function triangleMarker(tag, [cx, cy]) {
+  const pts = [[cx, cy - 12], [cx - 12, cy + 8], [cx + 12, cy + 8]];
+  const out = [];
+  for (let i = 0; i < 3; i++) {
+    const a = pts[i], b = pts[(i + 1) % 3];
+    out.push(`${fmt(a[0])} ${fmt(a[1])} m ${fmt(b[0])} ${fmt(b[1])} l S`);
+  }
+  return [...out, ...(tag ? [tagText(tag, [cx, cy])] : [])];
+}
+
+const OUT_UNIQ = join(FIXTURES, "symbol-uniqtags.pdf");
+const UNIQ_PAGES = [
+  // page 1 — MECHANICAL PLAN (plan role)
+  [
+    title("MECHANICAL PLAN"),
+    "1 w",
+    "30 30 552 552 re S",
+    "0.5 w",
+    ...marker("VAV-1", [150, 400]),
+    ...marker("VAV-2", [400, 400]),
+    ...triangleMarker("VAV-3", [275, 200]),
+  ],
+  // page 2 — VAV SCHEDULE (schedule role): three rows, one per unique tag
+  [
+    title("VAV SCHEDULE"),
+    cell("MARK", 60, 540), cell("MATERIAL", 200, 540), cell("DESCRIPTION", 400, 540),
+    cell("VAV-1", 60, 515), cell("ALUMINUM", 200, 515), cell("SINGLE DUCT VAV", 400, 515),
+    cell("VAV-2", 60, 490), cell("ALUMINUM", 200, 490), cell("SINGLE DUCT VAV", 400, 490),
+    cell("VAV-3", 60, 465), cell("ALUMINUM", 200, 465), cell("SINGLE DUCT VAV", 400, 465),
+  ],
+];
+
+const uniqObjects = [
+  `<< /Type /Catalog /Pages 2 0 R >>`,
+  `<< /Type /Pages /Kids [${UNIQ_PAGES.map((_, i) => `${4 + i * 2} 0 R`).join(" ")}] /Count ${UNIQ_PAGES.length} >>`,
+  `<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>`,
+];
+for (let i = 0; i < UNIQ_PAGES.length; i++) {
+  const stream = UNIQ_PAGES[i].join("\n");
+  uniqObjects.push(
+    `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents ${5 + i * 2} 0 R /Resources << /Font << /F1 3 0 R >> >> >>`,
+    `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`,
+  );
+}
+let uniqPdf = "%PDF-1.5\n";
+const uniqOffsets = [];
+uniqObjects.forEach((body, i) => {
+  uniqOffsets.push(uniqPdf.length);
+  uniqPdf += `${i + 1} 0 obj\n${body}\nendobj\n`;
+});
+const uniqXrefAt = uniqPdf.length;
+uniqPdf += `xref\n0 ${uniqObjects.length + 1}\n0000000000 65535 f \n`;
+for (const off of uniqOffsets) uniqPdf += `${String(off).padStart(10, "0")} 00000 n \n`;
+uniqPdf += `trailer\n<< /Size ${uniqObjects.length + 1} /Root 1 0 R >>\nstartxref\n${uniqXrefAt}\n%%EOF\n`;
+writeFileSync(OUT_UNIQ, uniqPdf, "latin1");
+console.log(`wrote ${OUT_UNIQ} (${uniqPdf.length} bytes)`);
