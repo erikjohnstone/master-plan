@@ -1649,7 +1649,7 @@ function findSparseKeyedBoundary(
  * convenience wrapper every existing caller already uses; `extractAllTables`
  * is the new multi-table loop `buildSheetGraph` uses. Kept as one function
  * so the two never drift on what "one table" actually means. */
-function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equipment", opts: ExtractOpts, fromIdx: number): { table: ScheduleTable; nextIdx: number } | null {
+function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equipment", opts: ExtractOpts, fromIdx: number): { table: ScheduleTable | null; nextIdx: number } | null {
   const horiz = sheet.spans.filter((s) => !isVertical(s));
   const vert = sheet.spans.filter(isVertical);
   const rows = clusterRows(horiz);
@@ -1764,7 +1764,20 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   }
   const out = banded.out;
   if (banded.region) region = region ? merge(region, banded.region) : banded.region;
-  if (!out.length) return null;
+  // A real header WAS found and a real boundary WAS computed — but every
+  // candidate row inside it turned out to be garbage once filtered (real,
+  // found live: itd-d1-lab-mechanical.pdf#13's own "LAB EXHAUST FAN
+  // SCHEDULE" candidate — a genuinely mis-bounded, non-real table whose
+  // only two "rows", keyed "FAN"/"REMARKS", are both digit-free noise; the
+  // relative garbage-row filter above correctly empties it). This is NOT
+  // the same as "no header exists here at all" (findHeaderRow's own null,
+  // still returned above) — returning a bare `null` here made
+  // extractAllTables' own loop (which treats `!found` as "end of sheet")
+  // stop scanning the ENTIRE REST of the sheet, silently dropping a real
+  // table (the real "BYPASS CONTROL VALVE SCHEDULE") that sat right after
+  // this empty one. `table: null` with a real `nextIdx` tells the caller
+  // to skip this one candidate and keep scanning, not stop.
+  if (!out.length) return { table: null, nextIdx: toIdx };
   const { x0, x1 } = bandLimits(anchors);
   // the table's title: the nearest "… SCHEDULE" span above the header WITHIN
   // the table's own x-band — on a dense sheet the neighbouring table's title
@@ -1844,7 +1857,11 @@ export function extractAllTables(sheet: SheetSpans, kind: "room-finish" | "finis
   for (let n = 0; n < MAX_TABLES_PER_SHEET; n++) {
     const found = extractTableAt(sheet, kind, opts, fromIdx);
     if (!found) break;
-    out.push(found.table);
+    // A real header/boundary was found but every row inside it was
+    // filtered as garbage (extractTableAt's own `table: null` case, see its
+    // comment) — skip this one candidate and keep scanning the rest of the
+    // sheet, rather than stopping as if nothing more were there.
+    if (found.table) out.push(found.table);
     if (found.nextIdx <= fromIdx) break; // never loop without forward progress
     fromIdx = found.nextIdx;
   }

@@ -1664,6 +1664,55 @@ test("twin-column tiers: two same-shaped sub-columns under DIFFERENT non-vocabul
   assert.equal(row.cells["ENTERING TEMP."].text, "74");
 });
 
+test("extractAllTables: a real table whose own header/boundary is found but every row filters as garbage does not stop the scan of the REST of the sheet (real itd-d1-lab-mechanical.pdf#13 regression)", () => {
+  // Real, found live through the Agent UI, same demo-loop session as the
+  // twin-column-tier fix above: on the real itd-d1-lab-mechanical.pdf#13,
+  // a genuine header/boundary was found for a "LAB EXHAUST FAN SCHEDULE"
+  // candidate whose only two real "rows" are both digit-free noise (keyed
+  // "FAN"/"REMARKS", no real device). The digit-free garbage-row filter
+  // (ledger item 29/53) correctly empties that candidate down to zero real
+  // rows — but `extractTableAt` used to signal that with a bare `null`,
+  // indistinguishable from "no header exists here at all", so
+  // `extractAllTables`'s own loop (`if (!found) break`) stopped scanning
+  // the ENTIRE REST of the sheet, silently dropping the real "BYPASS
+  // CONTROL VALVE SCHEDULE" that sat right after it. Real, measured
+  // corpus-wide effect of the fix: itd-d1-lab-mechanical.pdf alone went
+  // from 10 real tables/35 rows to 16 tables/70 rows — three whole real
+  // schedules (DIFFUSER, SOUND ATTENUATOR, PENTHOUSE) were being silently
+  // dropped this same way elsewhere on the same set. Every OTHER real
+  // corpus set (bessemer, federal-mech, weld-county, tarrant-county,
+  // baker-county-eoc) measured byte-for-byte unchanged (checked directly
+  // via `git stash`, not assumed).
+  const sched: SheetSpans = {
+    key: "gap.pdf#1", sheet_number: "M13",
+    spans: [
+      // table 1 — real, findable (ESP is a real qualifying/`required` word;
+      // CFM alone would not independently qualify this header at all)
+      sp("EXHAUST FAN SCHEDULE", 100, 20),
+      sp("SYMBOL", 100, 50), sp("CFM", 200, 50), sp("ESP", 300, 50), sp("MANUFACTURER", 400, 50), sp("REMARKS", 550, 50),
+      sp("EF-1", 100, 75), sp("245", 200, 75), sp("0.375", 300, 75), sp("COOK", 400, 75), sp("1,2", 550, 75),
+      // table 2 — a genuine header/boundary, but BOTH candidate rows are
+      // digit-free noise (mirrors the real "FAN"/"REMARKS" shape exactly):
+      // this must empty to zero rows, not swallow the rest of the sheet
+      sp("BYPASS CONTROL VALVE SCHEDULE", 100, 130),
+      sp("SYMBOL", 100, 160), sp("GPM", 200, 160), sp("SIZE", 300, 160), sp("REMARKS", 500, 160),
+      sp("FAN", 100, 185),
+      sp("REMARKS:", 100, 210),
+      // table 3 — real, must still be found even though table 2 emptied out
+      sp("AIR COMPRESSOR SCHEDULE", 100, 260),
+      sp("SYMBOL", 100, 290), sp("GPM", 200, 290), sp("SIZE", 300, 290), sp("REMARKS", 500, 290),
+      sp("AC-1", 100, 315), sp("500", 200, 315), sp("6\"", 300, 315), sp("1", 500, 315),
+    ],
+  };
+  const tabs = extractAllTables(sched, "equipment");
+  const titles = tabs.map((t) => t.title?.text);
+  assert.ok(titles.includes("EXHAUST FAN SCHEDULE"), `table 1 survives: ${titles.join(" | ")}`);
+  assert.ok(titles.includes("AIR COMPRESSOR SCHEDULE"), `table 3, AFTER the all-garbage table 2, must still be found — this is the real regression: ${titles.join(" | ")}`);
+  assert.ok(!titles.includes("BYPASS CONTROL VALVE SCHEDULE"), "table 2's own all-garbage candidate correctly produces NO table, not a fake empty one");
+  const ac1 = tabs.find((t) => t.title?.text === "AIR COMPRESSOR SCHEDULE")!.rows.find((r) => r.key === "AC-1");
+  assert.equal(ac1?.cells.GPM.text, "500");
+});
+
 test("equipment extraction: a digit-free garbage row with MORE than one populated cell is still dropped (ledger item 29, real AIR COMPRESSOR SCHEDULE)", () => {
   // Real shape, found live on itd-d1-lab-mechanical.pdf#28: the original
   // fix for this ledger item only ever dropped a 1-cell digit-free garbage
