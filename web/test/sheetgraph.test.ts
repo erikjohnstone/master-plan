@@ -892,6 +892,21 @@ test("isNonFinishSchedule: other families refuse, anything naming FINISH or MATE
   }
 });
 
+test("isNonFinishSchedule: real MEP-equipment families refuse too (ledger item 28) — but FAN is deliberately excluded", () => {
+  // BOILER/HUMIDIFIER/COIL/CHILLER/PUMP/AHU/VAV: real, found live on
+  // itd-d1-lab's own "CONDENSING HOT WATER BOILER SCHEDULE" — a genuine MEP
+  // equipment table whose header also independently clears FINISH_HEADERS'
+  // own vocabulary. "FAN" is a REAL, CAUGHT near-miss, not a hypothetical
+  // one: adding it here broke this project's own committed regression test
+  // the moment it was tried — the real Bessemer sample's own "FAN SCHEDULE"
+  // is a legitimate finish-kind table (diffuser/grille/register), not an
+  // HVAC fan-equipment one, and the word alone can't tell the two apart.
+  for (const t of ["CONDENSING HOT WATER BOILER SCHEDULE", "HUMIDIFIER SCHEDULE", "HOT WATER REHEAT COIL SCHEDULE", "CHILLER SCHEDULE", "CONDENSATE PUMP SCHEDULE", "AHU SCHEDULE", "VAV SCHEDULE"]) {
+    assert.equal(isNonFinishSchedule(t), true, t);
+  }
+  assert.equal(isNonFinishSchedule("FAN SCHEDULE"), false, "FAN stays out of the guard on purpose — see this test's own comment");
+});
+
 test("a DOOR SCHEDULE never becomes a finish table — and the drop is NAMED", () => {
   const doorSheet: SheetSpans = {
     key: "door.pdf#1",
@@ -1232,6 +1247,13 @@ test("equipment extraction: Electric Wall Heater and Electric Baseboard Heater s
   // exists for (Phase 0's own write-up named it).
   assert.deepEqual(baseboard.rows.map((r) => r.key), ["EBB-1", "EBB-2", "EBB-3", "EBB-4", "EBB-5", "EBB-6", "EBB-7", "EBB-8"]);
   assert.equal(baseboard.rows.find((r) => r.key === "EBB-6")!.cells.MANUFACTURER.text, "QMARK");
+  // Accuracy-hardening plan Phase 3, ledger item 4: EBB-6's own VOLTAGE cell
+  // used to read `"4'-0\" 240"`, not a clean `"240"` — LENGTH wasn't in
+  // EQUIPMENT_HEADERS' vocabulary, so its data (the real 4'-0" fixture
+  // length) had nowhere to anchor and bled into the nearest column instead.
+  // Every EBB row's own LENGTH now gets its own real column.
+  assert.equal(baseboard.rows.find((r) => r.key === "EBB-6")!.cells.VOLTAGE.text, "240", "LENGTH's own anchor stops the fixture length from bleeding into VOLTAGE");
+  assert.equal(baseboard.rows.find((r) => r.key === "EBB-6")!.cells.LENGTH.text, "4'-0\"");
 });
 
 test("equipment extraction: zero cross-contamination with the real finish-kind tables on the same sheet", () => {
@@ -1336,4 +1358,110 @@ test("equipment extraction: no equipment table is minted from Fan Schedule's own
     !equipmentTables.some((t) => t.region[1] <= fanTop && t.region[3] >= fanTop),
     "no equipment table's region spans Fan Schedule's own header y-band",
   );
+});
+
+// ── accuracy-hardening plan Phase 3 (ledger items 6/7) ──────────────────────
+test("headerLabels: a real dotted abbreviation (\"E.S.P\") resolves to its vocabulary word, not three lone letters", () => {
+  // Found live on the real federal-mech AHU Unit Schedule's own header —
+  // splitting on every non-letter character used to shatter "E.S.P" into
+  // "E"/"S"/"P", never the vocabulary word "ESP", so a real AHU/RTU schedule
+  // whose only rating-list hit is its own E.S.P column could never qualify.
+  const sched: SheetSpans = {
+    key: "esp.pdf#1", sheet_number: "M7.1",
+    spans: [
+      sp("AIR HANDLING UNIT SCHEDULE", 100, 20),
+      sp("ID", 100, 50), sp("MANUFACTURER", 200, 50), sp("MODEL", 350, 50), sp("E.S.P", 450, 50), sp("REMARKS", 550, 50),
+      sp("AHU-1", 100, 75), sp("DAIKIN", 200, 75), sp("CACICAH", 350, 75), sp("5.00", 450, 75), sp("NOTE", 550, 75),
+    ],
+  };
+  const tab = extractTable(sched, "equipment");
+  assert.ok(tab, "the table qualifies once E.S.P resolves to ESP");
+  assert.ok(tab!.headers.includes("ESP"), `headers: ${tab!.headers.join(" | ")}`);
+  assert.equal(tab!.rows[0].cells.ESP.text, "5.00");
+});
+
+test("headerLabels: an ordinary trailing abbreviation period (\"NO.\") is left alone, never merged into its neighbor", () => {
+  // The acronym-dot strip is deliberately narrow — only a dot strictly
+  // between two LONE letters collapses. "NO." (O preceded by N, not its own
+  // isolated letter) must still tokenize as NO, exactly as before.
+  const sched: SheetSpans = {
+    key: "noperiod.pdf#1", sheet_number: "M7.1",
+    spans: [
+      sp("SCHEDULE", 100, 20),
+      sp("ID", 100, 50), sp("MODEL NO.", 250, 50), sp("MANUFACTURER", 450, 50), sp("VOLTAGE", 600, 50),
+      sp("A-1", 100, 75), sp("2544", 250, 75), sp("QMARK", 450, 75), sp("120", 600, 75),
+    ],
+  };
+  const tab = extractTable(sched, "equipment");
+  assert.ok(tab, "MODEL NO. still resolves to MODEL, unaffected by the acronym-dot fix");
+  assert.equal(tab!.rows[0].cells.MODEL.text, "2544");
+});
+
+test("EQUIPMENT_HEADERS: AIRFLOW/VELOCITY carry real qualifying weight (not just vocabulary), the way a Canopy Hood Schedule needs", () => {
+  // Real, found live on itd-d1-lab's own Canopy Hood Schedule: its header's
+  // ONLY required-list hits are AIRFLOW and VELOCITY — every other word
+  // (SYMBOL/LOCATION/SERVES/EQUIPMENT/REMARKS) is vocabulary but not
+  // `required`, exactly like CFM. Unlike CFM (deliberately excluded,
+  // too generic), AIRFLOW/VELOCITY/FPM are specific enough to carry the
+  // rating bar themselves.
+  const sched: SheetSpans = {
+    key: "canopy.pdf#1", sheet_number: "M6.1",
+    spans: [
+      sp("CANOPY HOOD SCHEDULE", 100, 20),
+      sp("SYMBOL", 100, 50), sp("LOCATION", 200, 50), sp("AIRFLOW", 440, 50), sp("VELOCITY", 560, 50), sp("EQUIPMENT", 680, 50), sp("REMARKS", 820, 50),
+      sp("CH-1", 100, 75), sp("LAB 131", 200, 75), sp("1800", 440, 75), sp("100", 560, 75), sp("HOOD-1", 680, 75), sp("NOTE", 820, 75),
+    ],
+  };
+  const tab = extractTable(sched, "equipment");
+  assert.ok(tab, "AIRFLOW/VELOCITY alone are enough to clear the rating bar");
+  assert.equal(tab!.rows[0].key, "CH-1");
+  assert.equal(tab!.rows[0].cells.AIRFLOW.text, "1800");
+  assert.equal(tab!.rows[0].cells.VELOCITY.text, "100");
+});
+
+test("tier-descent: a leaf tier diluted by parenthesized unit fragments still descends into when it introduces the table's own catalog anchor (ledger item 6, VOLUME CONTROL BOX SCHEDULE)", () => {
+  // Real shape, measured against the real federal-mech corpus: a parent
+  // tier (EAT/LAT/EWT/LWT) independently qualifies, and a real leaf tier
+  // below it ALSO independently qualifies (TAG/GPM/MANUFACTURER/MODEL/
+  // REMARKS) and carries the table's only catalog anchor (TAG) — but the
+  // leaf's own ratio (5 hits out of 11 tokens, diluted by real
+  // parenthesized unit fragments like "(°F)"/"(NC)"/"(BTU/HR)") falls under
+  // the ordinary 0.6 descent bar. Before this fix, the scan settled on the
+  // PARENT tier alone, found no catalog anchor there, and the equipment-
+  // only hard gate discarded the whole table. After it: the leaf's own
+  // independent qualification + its new catalog anchor is accepted as
+  // stronger evidence than the ratio, AND the parent tier's own EAT/LAT/
+  // EWT/LWT anchors are correctly recovered (not silently dropped as
+  // "already covered" merely for sitting inside the leaf anchors' overall
+  // x-envelope) since none of them sit close to an actual leaf anchor.
+  const sched: SheetSpans = {
+    key: "vav.pdf#1", sheet_number: "M7.2",
+    spans: [
+      sp("VOLUME CONTROL BOX SCHEDULE", 100, 20),
+      // parent tier — independently qualifies (EAT is required)
+      sp("EAT", 200, 45), sp("LAT", 260, 45), sp("EWT", 320, 45), sp("LWT", 380, 45),
+      // leaf tier — independently qualifies too (GPM is required), diluted
+      // by real bare unit fragments at the SAME x as their parent label
+      sp("TAG", 100, 60),
+      sp("(°F)", 200, 60), sp("(°F)", 260, 60), sp("(°F)", 320, 60), sp("(°F)", 380, 60),
+      sp("(GPM)", 440, 60), sp("(BTU/HR)", 500, 60),
+      sp("MANUFACTURER", 560, 60), sp("MODEL", 660, 60), sp("REMARKS", 760, 60),
+      // one real data row
+      sp("VAV-1", 100, 85),
+      sp("55", 200, 85), sp("95", 260, 85), sp("140", 320, 85), sp("110", 380, 85),
+      sp("1.1", 440, 85), sp("15400", 500, 85),
+      sp("PRICE", 560, 85), sp("SDV", 660, 85), sp("NOTE", 760, 85),
+    ],
+  };
+  const tab = extractTable(sched, "equipment");
+  assert.ok(tab, "the leaf tier's own catalog anchor (TAG) is enough to accept the table despite the low ratio");
+  assert.deepEqual(tab!.rows.map((r) => r.key), ["VAV-1"]);
+  const cells = tab!.rows[0].cells;
+  assert.equal(cells.TAG.text, "VAV-1", "TAG's own column bands its own value, not glued to a neighbor");
+  assert.equal(cells.EAT.text, "55", "the parent tier's EAT anchor is recovered, not dropped as merely inside the leaf's x-envelope");
+  assert.equal(cells.LAT.text, "95");
+  assert.equal(cells.EWT.text, "140");
+  assert.equal(cells.LWT.text, "110");
+  assert.equal(cells.MANUFACTURER.text, "PRICE");
+  assert.equal(cells.MODEL.text, "SDV");
 });

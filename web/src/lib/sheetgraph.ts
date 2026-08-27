@@ -398,7 +398,18 @@ const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "ID", "MATERIAL", "MANUFACTURE
 // schedule this same corpus turned up (boiler, VAV reheat coil, AHU
 // hydronic coil, control valve schedules), safely as generic as EAT/LAT
 // already proved to be.
-const EQUIPMENT_HEADERS = ["ID", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "RPM", "ESP"];
+// "EQUIPMENT"/"VELOCITY"/"AIRFLOW"/"SIZE"/"FPM" (accuracy-hardening plan
+// Phase 3, ledger items 6/7): real words seen live on the Canopy Hood
+// Schedule's own header (`itd-d1-lab-mechanical.pdf#12` — "EXHAUST AIRFLOW
+// (CFM)", "CAPTURE VELOCITY (FPM)", "EXHAUST OUTLET SIZE", "...ABOVE
+// OPERATING EQUIPMENT"), confirmed by rendering the real sheet directly.
+// "LENGTH" (ledger item 4): EBB-6's own VOLTAGE cell reads `"4'-0\" 240"`,
+// not a clean `"240"` — LENGTH wasn't anchored to any column, so its data
+// bled into the nearest anchored one. Vocab only, never `required` (a
+// dimension word this generic, unguarded, would over-trigger equipment
+// qualification on unrelated tables); no collision with ROOM_HEADERS'
+// vocabulary (checked — it has no "LENGTH" token of its own).
+const EQUIPMENT_HEADERS = ["ID", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "RPM", "ESP", "EQUIPMENT", "VELOCITY", "AIRFLOW", "SIZE", "FPM", "LENGTH"];
 // A header CELL is often a multi-word span ("FLOOR FINISH", "CEILING FINISH")
 // — the vocabulary word inside it names the column.
 /** A column anchor. `x` is the header's center. A two-tier SUB-column also
@@ -414,9 +425,20 @@ const headerLabel = (s: string, vocab: string[]): string | null => headerLabels(
  * ROOM — so the anchor builder falls through to the next word when the first
  * is already taken. Without that, the NAME column loses its anchor and the
  * room name merges into the finish column beside it. */
+// A real drawn abbreviation dots every letter ("E.S.P", confirmed live on
+// the federal-mech AHU Unit Schedule's own header) — splitting on every
+// non-letter character shatters that into "E"/"S"/"P", never the vocabulary
+// word "ESP" (accuracy-hardening plan Phase 3, ledger item 6). Strip ONLY a
+// dot sitting strictly between two lone letters (an acronym contraction),
+// never an ordinary trailing abbreviation period ("NO.") — the lookbehind/
+// lookahead both require a word-boundary immediately outside the letter, so
+// "NO." (O preceded by N, no boundary) is left alone while "E.S.P" (every
+// letter isolated by dots) collapses to "ESP".
+const ACRONYM_DOT_RE = /(?<=\b[A-Z])\.(?=[A-Z]\b)/g;
 const headerLabels = (s: string, vocab: string[]): string[] => {
   const out: string[] = [];
-  for (const w of norm(s).split(/[^A-Z]+/)) if (w && vocab.includes(w) && !out.includes(w)) out.push(w);
+  const collapsed = norm(s).replace(ACRONYM_DOT_RE, "");
+  for (const w of collapsed.split(/[^A-Z]+/)) if (w && vocab.includes(w) && !out.includes(w)) out.push(w);
   return out;
 };
 
@@ -641,7 +663,35 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
         // few by accident — a material schedule's "VINYL WALL BASE" hits WALL
         // and BASE — and descending into one shifts every column by a row.
         const ratio = h.length / Math.max(1, rows[j].length);
-        if (qualifies(h, required, minHits) && h.length > hits.length && ratio >= 0.6) { next = j; break; }
+        // Real, found live (ledger item 6, VOLUME CONTROL BOX SCHEDULE, 53
+        // real rows): a real leaf tier can independently qualify AND carry
+        // the table's own catalog anchor (TAG), yet still fail the ratio
+        // bar — its own row is legitimately dense with parenthesized unit
+        // fragments ("(°F)"×4, "(GPM)", "(BTU/HR)") that dilute the hit
+        // ratio well under 0.6 without making the row any less a real
+        // header. `qualifies()` already carries the real weight of "is
+        // this a header, not a data row" (both minHits AND a required
+        // rating word); the ratio bar was always a SECOND, extra safety
+        // net on top of that, not the only gate — so when the deeper row
+        // both qualifies AND introduces the table's catalog anchor for the
+        // first time, that is strictly stronger evidence than the ratio
+        // itself, and the ratio requirement is waived for exactly that
+        // case. A random data row accidentally containing a bare TAG/ID/
+        // MARK/CODE/SYMBOL token (on top of already, separately,
+        // satisfying the independent qualify() bar) is not a realistic
+        // accidental collision this loosens meaningfully. NOTE: the real
+        // VOLUME CONTROL BOX SCHEDULE this unblocks still bands several of
+        // its own OTHER columns imperfectly (glob cells where a column's
+        // header is entirely non-vocabulary text, e.g. "MIN INLET SP
+        // I.W.G.") — a real, PRE-EXISTING class of limitation confirmed
+        // (via git stash) already present on tables that extracted fine
+        // before this session (e.g. itd-d1-lab's own EXHAUST FAN SCHEDULE,
+        // whose LOCATION/AREA-SERVED columns glob identically) — not a
+        // regression this fix introduces, and not attempted to be solved
+        // here; a real per-column (not per-row) anchor model is the actual
+        // fix, named as its own future item, not this one's job.
+        const introducesAnchor = h.some((x) => CATALOG_ANCHOR_WORDS.includes(x.label) && !hits.some((y) => y.label === x.label));
+        if (qualifies(h, required, minHits) && h.length > hits.length && (ratio >= 0.6 || introducesAnchor)) { next = j; break; }
       }
       if (next < 0) break;
       idx = next;
@@ -699,12 +749,38 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
     // header block) is a real column: keep it when it sits outside every
     // descended anchor's reach, drop it when it is merely a parent naming
     // columns that are already anchored below it.
+    //
+    // "already anchored below it" used to mean "falls anywhere inside the
+    // overall [lo,hi] envelope of the descended tier's own anchors" — real,
+    // found live (ledger item 6, VOLUME CONTROL BOX SCHEDULE): that's too
+    // coarse. A leaf tier can independently qualify (TAG/MANUFACTURER/
+    // MODEL/REMARKS bare hits) while several of its OWN cells directly
+    // below a parent-tier rating label are bare UNIT fragments ("(°F)",
+    // matching no vocabulary word at all) — those columns sit well inside
+    // the envelope but have NO anchor of their own at the descended tier,
+    // and the coarse range check silently dropped the parent's own label
+    // (EAT/LAT/EWT/LWT) for them, leaving the column nameless. Fixed by
+    // checking real proximity to an ACTUAL anchor, rather than mere
+    // envelope membership. Deliberately the TIGHTEST observed gap, not the
+    // median (harvestSkippedTierAnchors' own disambiguation radius, which
+    // solves a different problem — a duplicate label's PARENT, not "is
+    // this a distinct column at all" — and stays untouched here): a real
+    // leaf tier's own anchors (TAG/MANUFACTURER/…) are often sparse and
+    // widely spaced, while the parent tier's own columns being recovered
+    // (EAT/LAT/EWT/LWT) can sit much MORE tightly packed than that —
+    // a half-of-median radius derived from the sparse tier would then
+    // wrongly swallow the parent tier's own immediate neighbors into each
+    // other. Half of the tightest real gap already observed is the more
+    // conservative choice: still enough to catch a genuine duplicate, far
+    // less likely to merge two real, adjacent, distinct columns.
     if (idx > i) {
-      const lo = Math.min(...anchors.map((a) => a.x)), hi = Math.max(...anchors.map((a) => a.x));
+      const sortedAx = anchors.map((a) => a.x).sort((a, b) => a - b);
+      const gaps = sortedAx.slice(1).map((x, k) => x - sortedAx[k]);
+      const halfPitch = gaps.length ? Math.min(...gaps) / 2 : 150;
       for (let j = i; j < idx; j++) {
         for (const h of headerHits(rows[j], vocab)) {
           const cx = h.span.x + (h.span.w || 0) / 2;
-          if (cx >= lo && cx <= hi) continue;
+          if (anchors.some((a) => Math.abs(a.x - cx) <= halfPitch)) continue;
           if (used.has(h.label)) continue;
           used.add(h.label);
           anchors.push({ label: h.label, x: cx });
@@ -930,7 +1006,22 @@ export interface ExtractOpts { buildings?: Set<string>; deltas?: DeltaIndex }
 // MARK/DESCRIPTION column shape. A title naming one of these is refused as a
 // finish table — unless it ALSO says FINISH or MATERIAL, in which case the
 // safe reading is to keep it and let the caller look.
-const OTHER_FAMILY_RE = /\b(DOOR|WINDOW|PARTITION|EQUIPMENT|HARDWARE|LOUVER|SIGNAGE|LIGHTING|LUMINAIRE|PLUMBING|MECHANICAL|ELECTRICAL|STOREFRONT|GLAZING|CASEWORK|MILLWORK|APPLIANCE)S?\b/;
+//
+// BOILER/HUMIDIFIER/COIL/CHILLER/PUMP/AHU/VAV (accuracy-hardening plan
+// Phase 3, ledger item 28): real, found live on itd-d1-lab's own
+// "CONDENSING HOT WATER BOILER SCHEDULE" — a genuine MEP equipment table
+// whose header (SYMBOL/MANUFACTURER/REMARKS) ALSO independently clears
+// FINISH_HEADERS' own vocabulary, so it was captured under `finish` only
+// and never reached `equipment` at all. This guard was written for
+// architectural families (doors/windows/casework) and had zero MEP-
+// equipment words in it, so every MEP equipment table sharing that same
+// generic ID/SYMBOL/MANUFACTURER/REMARKS shape sailed through unchecked.
+// "FAN" deliberately NOT added here — real regression, caught by this
+// project's own committed test suite: the real Bessemer sample's own "FAN
+// SCHEDULE" is a legitimate finish-kind table (diffuser/grille/register),
+// not an HVAC fan-equipment one, and "FAN" alone is too generic a word to
+// tell the two apart by title text alone.
+const OTHER_FAMILY_RE = /\b(DOOR|WINDOW|PARTITION|EQUIPMENT|HARDWARE|LOUVER|SIGNAGE|LIGHTING|LUMINAIRE|PLUMBING|MECHANICAL|ELECTRICAL|STOREFRONT|GLAZING|CASEWORK|MILLWORK|APPLIANCE|BOILER|HUMIDIFIER|COIL|CHILLER|PUMP|AHU|VAV)S?\b/;
 export const isNonFinishSchedule = (title: string): boolean => {
   const u = norm(title);
   return OTHER_FAMILY_RE.test(u) && !/\b(FINISH|MATERIAL)S?\b/.test(u);
@@ -1378,8 +1469,17 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   const vert = sheet.spans.filter(isVertical);
   const rows = clusterRows(horiz);
   const vocab = kind === "room-finish" ? ROOM_HEADERS : kind === "equipment" ? EQUIPMENT_HEADERS : FINISH_HEADERS;
+  // AIRFLOW/VELOCITY/FPM (Phase 3, ledger items 6/7): real, HVAC-specific
+  // rating words seen live on the Canopy Hood Schedule's own header
+  // ("EXHAUST AIRFLOW (CFM)", "CAPTURE VELOCITY (FPM)") — unlike CFM (kept
+  // OUT of `required` on purpose, too generic across unrelated tables),
+  // these three don't show up outside a real air-moving-equipment schedule,
+  // so they're safe additions to the RATING bar itself, not just the
+  // vocabulary. EWT/LWT added alongside EAT/LAT (their hydronic sibling,
+  // already required) — an oversight when EWT/LWT joined the vocabulary,
+  // caught while touching this list for the same real reason.
   const required = kind === "room-finish" ? ["FLOOR", "BASE"]
-    : kind === "equipment" ? ["VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "ESP"]
+    : kind === "equipment" ? ["VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "ESP", "AIRFLOW", "VELOCITY", "FPM"]
     : ["CODE", "MARK", "SYMBOL", "ID"];
   const minHits = kind === "room-finish" ? 4 : 3;
 
