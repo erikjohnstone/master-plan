@@ -3121,6 +3121,30 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
       for (let i = 0; i < group.length; i++) {
         for (let j = i + 1; j < group.length; j++) {
           if (drop.has(group[i]) || drop.has(group[j]) || !overlaps(group[i], group[j])) continue;
+          // "reference" (the structural, vocabulary-free kind, this
+          // session) NEVER wins this tie-break against one of the other
+          // three — real, corpus-found regression this guards against
+          // (itd-d1-lab-mechanical.pdf#12's own real, already-correctly-
+          // extracting "ELECTRONIC EXHAUST VALVE" finish-kind table, 6 real
+          // SN-1..SN-5/REMARKS rows): a dense, real MEP sheet's own header
+          // can be tiered/scattered enough that NO single physical row
+          // independently clears an existing vocabulary's own bar (the
+          // "already qualifies" skip above extractReferenceTableAt never
+          // fires), so this pass's own structural signals alone can still
+          // re-find the SAME real table — but read it far more poorly (a
+          // 1-row, garbled-header fragment measured live) than the
+          // vocabulary-anchored extraction already did. Raw richness alone
+          // let that poorer read win purely by coincidentally counting more
+          // header words, silently deleting a real, working table. The
+          // other three kinds are mutually battle-tested against each
+          // other (this file's own existing corpus-wide sweep, this
+          // session and prior); "reference" is new and unproven relative to
+          // them, so it only ever LOSES a collision against an established
+          // kind, never wins one — richness still decides between two
+          // fragments of the SAME kind (both "reference", or the existing
+          // three-way case), exactly as before.
+          const iRef = group[i].kind === "reference", jRef = group[j].kind === "reference";
+          if (iRef !== jRef) { drop.add(iRef ? group[i] : group[j]); continue; }
           drop.add(richness(group[i]) >= richness(group[j]) ? group[j] : group[i]);
         }
       }
