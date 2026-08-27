@@ -18,6 +18,7 @@
 // the canvas renders status, it never crashes.
 
 import { chatWithTools, describeImageForAgent } from "./ai.js";
+import { runVerifiers } from "./agentVerifiers.js";
 
 export const MAX_AGENT_ITERATIONS = 24;
 
@@ -151,17 +152,13 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
   const messages = [{ role: "user", content: goal }];
   let iterations = 0;
   const aborted = () => { emit({ type: "aborted" }); return { status: /** @type {const} */ ("aborted"), iterations }; };
-  // Deterministic honesty backstop for trace_connectivity (real, live-observed
-  // failure: a vision-capable model narrating a view_region image sometimes
-  // names a connection/tag its own tools never confirmed, even when the
-  // system prompt explicitly forbids it — prompting alone did not reliably
-  // hold this pattern out, confirmed by direct live re-testing before this
-  // was added). Tracked deterministically in code, not left to the model's
-  // own wording: if every trace_connectivity call this run returned
-  // dead_end/refused (never a real "reached"), the final answer gets an
-  // appended, code-generated fact the model cannot omit or soften.
-  let connectivityCalls = 0;
-  let connectivityEverReached = false;
+  // Deterministic honesty backstop, generalized (see agentVerifiers.js's own
+  // header for the real, live-observed history this comes from): every real
+  // tool call this run makes is logged here, across every loop iteration,
+  // so `runVerifiers` can check the WHOLE run's evidence — not just prompt
+  // rules the model can choose to ignore — before the final answer is shown.
+  /** @type {Array<{ id: string, name: string, args: unknown, out: unknown }>} */
+  const callLog = [];
 
   for (; iterations < maxIterations; iterations++) {
     if (signal?.aborted) return aborted();
@@ -185,9 +182,9 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     // to "done" instead and it silently never appeared anywhere). The
     // append MUST happen here, before this emit, on the LAST turn only.
     let displayText = turn.text;
-    if (!turn.toolCalls.length && connectivityCalls > 0 && !connectivityEverReached) {
-      const note = "\n\n[Automated check: every trace_connectivity call in this run returned dead_end or refused — no connection was confirmed by any tool. Any equipment, register, or tag name mentioned above beyond that fact is an unverified visual guess, not a tool-confirmed result.]";
-      displayText = (displayText || "") + note;
+    if (!turn.toolCalls.length) {
+      const notes = runVerifiers(callLog);
+      if (notes.length) displayText = `${displayText || ""}\n\n${notes.join("\n\n")}`;
     }
     if (displayText) emit({ type: "text", text: displayText });
     // echo the assistant turn back verbatim so tool_use ids / tool_calls pair up
@@ -226,21 +223,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
           emit({ type: "text", text: `[Vision routing degraded — the vision model call failed (${String((e && e.message) || e)}), falling back to the raw image for this one result.]` });
         }
       }
-      if (call.name === "trace_connectivity" && !call.argsError) {
-        connectivityCalls++;
-        // A "reached" whose target sits right where the seed started is the
-        // seed trivially re-finding the equipment it was seeded AT, not a
-        // real connection to something else — real, observed live: the
-        // model routinely seeds from_norm at the equipment's own position,
-        // which the tracer trivially "reaches" in 0-2 hops. Only a
-        // meaningfully distant reach (not the seed's own starting point)
-        // counts as a genuine connection for the honesty backstop below.
-        const fromN = Array.isArray(call.args?.from_norm) ? call.args.from_norm : null;
-        const reachedAt = out?.reached_equipment?.at;
-        const trivialSelfReach = fromN && Array.isArray(reachedAt)
-          && Math.hypot(reachedAt[0] - fromN[0], reachedAt[1] - fromN[1]) < 0.02;
-        if (out && out.status === "reached" && !trivialSelfReach) connectivityEverReached = true;
-      }
+      if (!call.argsError) callLog.push({ id: call.id, name: call.name, args: call.args, out });
       emit({ type: "tool_end", name: call.name, result: out });
       results.push({ call, out });
     }
