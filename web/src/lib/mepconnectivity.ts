@@ -430,16 +430,21 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
   const factors: string[] = [];
   // "layer-unclassified" means more than "the pipe/duct SYSTEM type is
   // unknown" — found via real corpus testing (known-gaps ledger item 24):
-  // with no PDF layers to exclude by, buildMepGraph has NO way to separate
-  // wall/architectural ink from real MEP linework either (wallnetwork.ts's
-  // own geometric wall-vouching is not yet wired into excludeSegs), so a
-  // "none" graph traces BOTH as one connected network. Measured on real
-  // Bessemer page 6: a seed on a bathroom exhaust fan's own duct riser
-  // "reached" a heat pump 52 hops away — almost certainly walking through
-  // wall linework, not a real duct run. The 0.6 multiplier below (steeper
-  // than an ordinary "we just don't know the system type" case) is a
-  // deliberate response to that real, disclosed finding, not a
-  // recalibration backed by a broader measured sample.
+  // with no PDF layers to exclude by, buildMepGraph on its own has no way to
+  // separate wall/architectural ink from real MEP linework. Measured on real
+  // Bessemer page 6 before the fix: a seed on a bathroom exhaust fan's own
+  // duct riser "reached" a heat pump 52 hops away — almost certainly walking
+  // through wall linework, not a real duct run. Both real callers
+  // (mcp/src/session.ts's ensureMepGraph, TakeoffCanvas.jsx's
+  // agentTraceConnectivity) now fold wallnetwork.ts's own geometric
+  // (layer-independent) wall-vouching into excludeSegs whenever layerSignal
+  // isn't "strong" (accuracy-hardening plan Phase 2), which is the real fix
+  // for that failure mode — the 0.6 multiplier below stays anyway, since
+  // this module has no way to see from `graph` alone whether a given caller
+  // actually wired that exclusion in, and the vouching itself is a
+  // real-but-imperfect heuristic (not every wall face carries the junction
+  // evidence it needs to be vouched), so "layer-unclassified" still means a
+  // measurably less certain trace, not a solved one.
   if (layer_signal === "none") factors.push("layer-unclassified");
 
   if (!opts.equipmentSymbols || !opts.equipmentSymbols.length) {

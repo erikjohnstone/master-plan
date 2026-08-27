@@ -59,6 +59,14 @@ import { findLegendGlyphs, type LegendSpan } from "../../web/src/lib/legendlearn
 // own header comment); traceConnectivity is the refusal-honest query, same
 // doctrine as sweep_schedule_row/resolve_tag above.
 import { buildMepGraph, traceConnectivity as traceMepConnectivity, type MepGraph, type TraceResult as MepTraceResult } from "../../web/src/lib/mepconnectivity.ts";
+import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
+// Accuracy plan Phase 2 — on an unlayered/weakly-layered sheet, a layer-role
+// exclusion alone can't tell architectural wall ink apart from real MEP
+// linework (there's no layer to exclude by). networkWallSegs is
+// wallnetwork.ts's own geometric (layer-independent) wall-vouching, reused
+// here exactly as netroom.js's room detector already uses it, as a fallback
+// exclusion source for ensureMepGraph below.
+import { networkWallSegs } from "../../web/src/lib/wallnetwork.ts";
 import { labelPlacements, type PlacementLabel } from "../../web/src/lib/symbollabels.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
@@ -2649,6 +2657,23 @@ export class Session {
         }
       }
       const mppf = s.upp ? 1 / s.upp : 0;
+      // Phase 2 (accuracy hardening): on none/weak MEP layer signal, layer
+      // roles alone cannot separate architectural wall ink from real MEP
+      // linework — the confirmed real failure mode (a seed on an exhaust
+      // fan's own duct riser "reaching" an unrelated heat pump 52 hops away
+      // through wall ink). Fall back to wallnetwork.ts's own geometric,
+      // layer-independent wall-vouching and fold anything it vouches for
+      // into the same exclusion mask, never overriding a strong layer
+      // signal that already knows better.
+      const layerSignal = mepLayerSignal(s.layers, geo.layerOf);
+      if (layerSignal !== "strong") {
+        const vouched = networkWallSegs(geo.segs, geo.meta, 1, mppf);
+        for (let i = 0; i < vouched.length; i++) {
+          if (!vouched[i]) continue;
+          if (!excludeSegs) excludeSegs = new Uint8Array(vouched.length);
+          excludeSegs[i] = 1;
+        }
+      }
       s.mepGraph = buildMepGraph(geo.segs, {
         meta: geo.meta, layerOf: geo.layerOf, layers: s.layers, excludeSegs, mppf,
       });

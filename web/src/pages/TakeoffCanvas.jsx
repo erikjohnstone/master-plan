@@ -67,6 +67,14 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // as pure web libs already; this file adds only the gesture and the review.
 import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary } from "../lib/symbolsweep";
 import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib/mepconnectivity.ts";
+import { mepLayerSignal } from "../lib/mepsystems.ts";
+// Accuracy-hardening plan Phase 2 — on an unlayered/weakly-layered sheet, a
+// layer-role exclusion alone can't tell architectural wall ink apart from
+// real MEP linework (there's no layer to exclude by). networkWallSegs is
+// wallnetwork.ts's own geometric (layer-independent) wall-vouching, reused
+// here exactly as netroom.js's room detector already uses it, as a fallback
+// exclusion source for agentTraceConnectivity below.
+import { networkWallSegs } from "../lib/wallnetwork.ts";
 // Accuracy-hardening plan Phase 0 — matchAgainstLibrary had zero live callers
 // anywhere in this codebase before this tool (grep-confirmed; the only prior
 // caller was its own test file).
@@ -6466,7 +6474,26 @@ export default function TakeoffCanvas() {
       // run read back as unset here, silently falling back to mppf: 0 and
       // caching the graph under the WRONG scale for the rest of the run.
       const upp = agentUpp(key);
-      graph = buildMepGraph(segs, { meta, layerOf: geo?.layerOf, layers: infos, excludeSegs, mppf: upp ? 1 / upp : 0 });
+      const mppf = upp ? 1 / upp : 0;
+      // Phase 2 (accuracy hardening): on none/weak MEP layer signal, layer
+      // roles alone cannot separate architectural wall ink from real MEP
+      // linework — the confirmed real failure mode (a seed on an exhaust
+      // fan's own duct riser "reaching" an unrelated heat pump 52 hops away
+      // through wall ink, identical bug to mcp/src/session.ts's
+      // ensureMepGraph, fixed there the same way). Fall back to
+      // wallnetwork.ts's own geometric, layer-independent wall-vouching and
+      // fold anything it vouches for into the same exclusion mask, never
+      // overriding a strong layer signal that already knows better.
+      const layerSignal = mepLayerSignal(infos, geo?.layerOf);
+      if (layerSignal !== "strong") {
+        const vouched = networkWallSegs(segs, meta || null, 1, mppf);
+        for (let i = 0; i < vouched.length; i++) {
+          if (!vouched[i]) continue;
+          if (!excludeSegs) excludeSegs = new Uint8Array(vouched.length);
+          excludeSegs[i] = 1;
+        }
+      }
+      graph = buildMepGraph(segs, { meta, layerOf: geo?.layerOf, layers: infos, excludeSegs, mppf });
       mepGraphCacheRef.current.set(key, graph);
     }
     if (!Array.isArray(opts.equipment) || !opts.equipment.length) {

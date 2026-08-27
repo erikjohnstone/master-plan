@@ -31,6 +31,23 @@
 //                          signal to tell the two cases apart. The fixture
 //                          pins the CURRENT behavior so a future fix to #22
 //                          changes an asserted number here, not a silent one.
+//   WALL CONFLATION        a real, closed 150×100pt wall rectangle drawn at
+//   (x=550-700, y=350-450) the sheet's own heaviest pen (1w, same tier as
+//                          the border) — the accuracy-hardening plan's own
+//                          Phase 2 case. Two ordinary-weight duct stubs
+//                          (0.5w) each touch the wall at a real mid-edge
+//                          T-junction (top and bottom), with one equipment
+//                          placement at each stub's own far end. On an
+//                          unlayered sheet, before Phase 2's fix, the ONLY
+//                          path between the two stubs was straight through
+//                          the wall's own 4 edges — a real, measured false
+//                          "reached" (mirroring the real Bessemer EF-1 case,
+//                          known-gaps ledger item 24). After the fix
+//                          (wallnetwork.ts's own geometric wall-vouching
+//                          folded into excludeSegs whenever layerSignal
+//                          isn't "strong"), the wall is excluded and each
+//                          stub reaches only its own equipment, correctly
+//                          dead-ending toward the other one.
 //
 // mep-layered-plan.pdf (400×300 pt): the same OCG BDC/EMC technique as
 // make-layered-fixture.mjs, real MEP-system layer names (M-DUCT / P-PIPE) —
@@ -104,6 +121,20 @@ function writePdf(out, content, { w, h, ocgObjects, ocProperties, resources } = 
     // NOT-YET-SOLVED limitation, pinned here on purpose)
     seg(300, 450, 300, 50),
     seg(250, 300, 450, 300),
+    // WALL CONFLATION (accuracy-hardening plan Phase 2) — a real, closed
+    // wall rectangle at the sheet's own heaviest pen (1w, same tier as the
+    // border), with two ordinary-weight (0.5w) duct stubs each touching it
+    // at a real mid-edge T-junction — top wall at (625,350), bottom wall at
+    // (625,450). EQ-TOP sits at the top stub's own far end (625,300),
+    // EQ-BOTTOM at the bottom stub's own far end (625,500). Before Phase
+    // 2's fix, seeding on either stub reached the OTHER stub's equipment
+    // straight through the wall's own 4 edges; after it, the wall is
+    // excluded and each stub dead-ends toward the other.
+    "1 w",
+    "550 350 150 100 re S",
+    "0.5 w",
+    seg(625, 350, 625, 300),   // top stub — EQ-TOP at its far end
+    seg(625, 450, 625, 500),   // bottom stub — EQ-BOTTOM at its far end
   ].join("\n");
 
   writePdf(join(FIXTURES, "mep-plan.pdf"), content, { w: PAGE_W, h: PAGE_H });

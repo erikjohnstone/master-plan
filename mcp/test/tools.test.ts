@@ -1809,7 +1809,8 @@ test("find_legend_symbols: a sheet with real linework but nothing legend-shaped 
 
 // ── trace_connectivity, real end-to-end (maturity plan Phase 4) ─────────
 // The fixture (test/fixtures/mep-plan.pdf, scripts/make-mep-fixture.mjs):
-// five named scenarios from the plan doc's own §5 test strategy, exercised
+// six named scenarios (five from the maturity plan's own §5 test strategy,
+// plus the accuracy-hardening plan's Phase 2 WALL CONFLATION case), exercised
 // through a REAL PDF load → real pdf.js geometry extraction → real
 // buildMepGraph → real traceConnectivity, not a hand-built segment array
 // (web/test/mepconnectivity.test.ts already covers the module directly;
@@ -1925,6 +1926,49 @@ test("trace_connectivity: refuses on a scanned sheet with no vector linework at 
   });
   assert.equal(r.data.status, "refused");
   assert.match(r.data.reason, /no traced vector linework/);
+});
+
+// ── WALL CONFLATION (accuracy-hardening plan Phase 2, ledger item 24) ───────
+// A real, closed wall rectangle at the sheet's own heaviest pen, with two
+// ordinary-weight duct stubs each touching it at a real mid-edge T-junction
+// — the exact real Bessemer EF-1 failure shape, reproduced deterministically.
+// Confirmed BOTH ways directly (not assumed): stashing this session's own
+// session.ts fix and re-running this exact scenario reproduces the false
+// "reached" through the wall's own 4 edges (6 hops, confidence 0.6) on both
+// wrong-side seeds; restoring the fix turns both into a real dead_end.
+test("trace_connectivity: a real wall between two duct stubs is excluded on an unlayered sheet — no false reach through wall ink (#24)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [1250, 550],   // top stub, its own midpoint
+    equipment: [{ id: "EQ-BOTTOM", at: [1250, 200] }],   // only the WRONG side supplied
+  });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "dead_end", "before the Phase 2 fix this falsely reached EQ-BOTTOM straight through the wall's own 4 edges");
+  assert.equal(r.data.layer_signal, "none");
+});
+
+test("trace_connectivity: the same wall-adjacent stub still correctly reaches its OWN equipment — exclusion doesn't overreach", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [1250, 550],
+    equipment: [{ id: "EQ-TOP", at: [1250, 600] }],   // the stub's own real equipment
+  });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "reached");
+  assert.equal(r.data.reached_equipment.id, "EQ-TOP");
+});
+
+test("trace_connectivity: the mirror-image seed (bottom stub, top equipment) is equally excluded", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [1250, 250],   // bottom stub, its own midpoint
+    equipment: [{ id: "EQ-TOP", at: [1250, 600] }],
+  });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "dead_end");
 });
 
 // #296 — the seed is installed work in sheet scope. Found in live validation:
