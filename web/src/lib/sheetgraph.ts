@@ -839,10 +839,64 @@ function harvestSkippedTierAnchors(rows: GraphSpan[][], vocab: string[], hdrIdx:
   return out;
 }
 
+/** A row can carry enough DISTINCT header vocabulary to read as a real
+ * header line (SYMBOL/MANUFACTURER/REMARKS/…) while its own REQUIRED rating
+ * word sits alone on a thin, parenthesized-unit tier just below it, never
+ * co-occurring with any of the row's other header words. Real, corpus-found
+ * (itd-d1-lab-mechanical.pdf#13's own "CONTROL VALVE SCHEDULE (HOT WATER
+ * REHEAT COILS)": SYMBOL/AREA SERVED/VALVE TYPE/OPERATION/FLUID/MANUFACTURER
+ * AND MODEL/REMARKS all sit on ONE line — 4 distinct EQUIPMENT_HEADERS hits,
+ * clearing minHits — but GPM (the table's only EQUIPMENT_REQUIRED word)
+ * never appears on that line, only two tiers down as bare "(GPM)" units
+ * with nothing else in EQUIPMENT_HEADERS' vocabulary beside it. Under the
+ * OLD single-row qualify() gate that table's equipment-kind header was
+ * invisible outright — found only under FINISH_HEADERS (whose required list
+ * is satisfied by the bare SYMBOL alone), then correctly discarded there by
+ * isNonFinishSchedule ("COIL" in the title), losing the table completely.
+ *
+ * Deliberately reuses skipSubHeaderContinuation's OWN walk verbatim (same
+ * three conditions: no BARE vocabulary hit on the next row, no digit
+ * anywhere in it, gap no more than 2x the current row's own average cell
+ * height) rather than a fresh distance heuristic — that walk is the file's
+ * own already-proven test for "is the NEXT row still part of THIS header
+ * block's own continuation, or something else" (it already gates
+ * `dataFrom`). A first version of this fix used a standalone `near`-px
+ * radius instead and reached into an unrelated NEIGHBORING table's own
+ * header on a dense sheet — real regression, caught by this file's own
+ * standing test suite (bessemer's "Fan Schedule does not double-extract...
+ * via a bare RPM hit", Finding 1): Fan Schedule's bare ID/DESCRIPTION/
+ * MANUFACTURER/MODEL/RPM row sits close enough, by raw px, to a genuine
+ * EQUIPMENT_REQUIRED word on the Diffuser/Grille/Register table right next
+ * to it that the loose radius credited it as "nearby" even though the two
+ * are unrelated tables, not tiers of one header. The continuation walk does
+ * not have this problem: a genuinely unrelated neighboring table's header
+ * row is either a BARE vocabulary hit (a real header of its OWN, not a
+ * wrapped unit line) or separated by more than a header-tier-scale gap, so
+ * it stops the walk before ever reaching it. This only ever RELAXES the
+ * `required` half of qualifies() — a row still needs minHits of its OWN
+ * bare vocabulary before this is even consulted, so a random data row or
+ * neighboring table can't manufacture a header out of nothing. */
+function nearbyRequiredHit(rows: GraphSpan[][], vocab: string[], required: string[], from: number): boolean {
+  let i = from;
+  for (let n = 0; n < 3 && i < rows.length - 1; n++) {
+    const cur = rows[i], next = rows[i + 1];
+    const bareHit = headerHits(next, vocab).some((h) => !/^\(.*\)$/.test(h.span.str.trim()));
+    if (bareHit) break;
+    if (next.some((t) => /\d/.test(t.str))) break;
+    const h = cur.reduce((s, t) => s + (t.h || 8), 0) / cur.length;
+    if (rowY(next) - rowY(cur) > h * 2) break;
+    if (headerHits(next, vocab).some((x) => required.includes(x.label))) return true;
+    i++;
+  }
+  return false;
+}
+
 function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[], minHits: number, fromIdx = 0, opts: { equipmentTierMerge?: boolean } = {}): { anchors: Anchor[]; rowIndex: number; dataFrom: number; mergedTopIdx?: number } | null {
   for (let i = fromIdx; i < rows.length; i++) {
     let hits = headerHits(rows[i], vocab);
-    if (!qualifies(hits, required, minHits)) continue;
+    const seen = new Set(hits.map((h) => h.label));
+    const ownQualifies = seen.size >= minHits && required.some((r) => seen.has(r));
+    if (!ownQualifies && !(seen.size >= minHits && nearbyRequiredHit(rows, vocab, required, i))) continue;
     // A three-tier header puts PARENTS on top (ROOM | FLOOR | WALLS | CEILING)
     // and the real columns underneath (MARK | LOCATION | FINISH | BASE |
     // NORTH | …). The parent row carries enough vocabulary to look like the
