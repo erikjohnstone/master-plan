@@ -6985,9 +6985,16 @@ export default function TakeoffCanvas() {
           const h = Math.max(sp.y1 - sp.y0, 6);
           if (regions.some((r) => cx >= r[0] && cx <= r[2] && cy >= r[1] && cy <= r[3])) { excludedInTables++; continue; }
           const at = [+(cx / p.img.w).toFixed(5), +(cy / p.img.h).toFixed(5)];
+          // Two real pairing shapes — see mcp/src/session.ts's countMarks for
+          // the full real-corpus measurement (kept in lockstep, tool-parity):
+          // a value stacked BELOW the tag, or a value beside it on the SAME
+          // baseline in a two-cell box row ("CD-1 | 85", real, found live on
+          // the baker-county-eoc corpus through this very agent).
           const paired = values.find((v) =>
-            Math.abs((v.x0 + v.x1) / 2 - cx) <= Math.max(sp.x1 - sp.x0, 1.5 * h) &&
-            v.y0 >= sp.y1 - 0.4 * h && v.y0 <= sp.y1 + 2.4 * h);
+            (Math.abs((v.x0 + v.x1) / 2 - cx) <= Math.max(sp.x1 - sp.x0, 1.5 * h) &&
+             v.y0 >= sp.y1 - 0.4 * h && v.y0 <= sp.y1 + 2.4 * h) ||
+            (Math.abs(v.y0 - sp.y0) <= 0.3 * h &&
+             v.x0 >= sp.x1 - 0.2 * h && v.x0 - sp.x1 <= 1.5 * h));
           if (paired) {
             rec.counted.push({ at, value: paired.str.trim(), sheet: p.key });
             counts[m] = (counts[m] || 0) + 1;
