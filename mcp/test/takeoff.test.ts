@@ -18,6 +18,7 @@ import { buildPlanSetTakeoff, buildLegendTakeoff, classifyLegendCaption } from "
 
 const DEMO = fileURLToPath(new URL("../../demo/sample-plan.pdf", import.meta.url));
 const LEGENDPLAN = fileURLToPath(new URL("./fixtures/legend-plan.pdf", import.meta.url));
+const SCALEGAP = fileURLToPath(new URL("./fixtures/legend-scale-gap.pdf", import.meta.url));
 
 // ── classifyLegendCaption (pure) ────────────────────────────────────────────
 
@@ -115,4 +116,55 @@ test("buildLegendTakeoff: a single-sheet fixture with no classifiable plan-role 
   const r = await buildLegendTakeoff(s, { categories: ["valve", "actuator", "damper"] });
   assert.deepEqual(r.legend_sheets_seen, []);
   assert.deepEqual(r.items, []);
+});
+
+// This session's own investigation (SET 002, itd-d1-lab-mechanical.pdf):
+// the real corpus's 20 REFUSED_NO_SCALE legend items are refused because
+// the LEGEND SHEET ITSELF carries no real-world scale, detected or
+// committed — every one of the set's 10 real plan-role sheets already has
+// a usable detected title-block scale (confirmed directly, this session's
+// own probe script), so the gap is never the "some plan sheet lacks scale"
+// half of the old blanket check. An empirical test (temporarily bypassing
+// the scale gate to sweep at an assumed 1:1 ratio) confirmed this refusal
+// is load-bearing, not over-conservative: several legend glyphs came back
+// with thousands of obviously-false "matches" (10000+, one over 26000
+// total instances across the set) once the true size ratio was assumed
+// away — real, direct evidence a legend glyph's own drawn size is NOT a
+// reliable stand-in for its real installed size, so REFUSED_NO_SCALE is
+// correct here, not a bug to route around. legend-scale-gap.pdf
+// (make-legend-scale-gap-fixture.mjs) reproduces the exact real shape of
+// this in-repo: one legend-role sheet, one real detectable glyph, no scale
+// note anywhere on the page, no plan-role sheet in the set at all — so the
+// refusal is driven purely by the seed sheet's own gap, same as the real
+// corpus finding.
+test("buildLegendTakeoff: a legend sheet with no real-world scale anywhere REFUSES the glyph (REFUSED_NO_SCALE), but still discloses its real classification and its own on-sheet location — not an opaque wall", async () => {
+  const s = new Session();
+  await s.loadPlan(SCALEGAP);
+  const r = await buildLegendTakeoff(s, { categories: ["valve", "actuator", "damper"] });
+  assert.equal(r.legend_sheets_seen.length, 1);
+  assert.equal(r.legend_sheets_seen[0].glyphs_detected, 1);
+  assert.equal(r.items.length, 1);
+  const item = r.items[0];
+  assert.equal(item.status, "refused");
+  assert.equal(item.quantity, 0);
+  assert.equal(item.source, "legend_symbol");
+  // The real classification survives the refusal — a reader gets a named
+  // equipment type/category even though the count could not be verified.
+  assert.equal(item.equipment_type, "2-way electric control valve");
+  assert.equal(item.category, "valve");
+  // The glyph's own real on-sheet location is disclosed unconditionally —
+  // a real "go look here" pointer, never fabricated, never omitted just
+  // because the whole-set count itself was refused.
+  assert.ok(item.legend, "a legend_symbol item always carries its legend provenance");
+  assert.equal(item.legend!.sheet, "legend-scale-gap.pdf");
+  assert.ok(Array.isArray(item.legend!.at) && item.legend!.at.length === 2, "legend.at is a real [x,y] center, not omitted on a refusal");
+  const [ax, ay] = item.legend!.at;
+  assert.ok(Number.isFinite(ax) && Number.isFinite(ay) && ax > 0 && ay > 0, `legend.at should be a real coordinate, got ${JSON.stringify(item.legend!.at)}`);
+  // The reason names the ACTUAL sheet that's missing scale (the legend
+  // sheet itself, by key) rather than a blanket "(or a plan sheet in the
+  // set)" hedge when no plan sheet is even in scope here.
+  assert.match(item.reason!, /legend-scale-gap\.pdf/);
+  assert.match(item.reason!, /schematic/i);
+  assert.equal(r.failures.length, 1);
+  assert.equal(r.failures[0].type, "REFUSED_NO_SCALE");
 });
