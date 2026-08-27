@@ -1465,3 +1465,37 @@ test("tier-descent: a leaf tier diluted by parenthesized unit fragments still de
   assert.equal(cells.MANUFACTURER.text, "PRICE");
   assert.equal(cells.MODEL.text, "SDV");
 });
+
+test("equipment extraction: a lone digit-free footnote/legend word never mints a garbage row, but an equally sparse real tag row survives (ledger item 29)", () => {
+  // Real shape, measured against the real itd-d1-lab corpus (Exhaust Fan/
+  // Electric Heater/Bypass Control Valve/AC schedules): a schedule's own
+  // trailing "REMARKS:" footnote-legend label survives as its OWN
+  // one-populated-cell garbage row (row key "REMARKS", the same shape a
+  // stray sub-header word or a title-block/revision-log fragment also
+  // takes there). But a real tag can be JUST as sparse in its own right —
+  // found live as "PH-1", a real portable-heater tag bled in from some
+  // OTHER, unrecognized schedule, landing as a lone orphan with no other
+  // cell data of its own — and must never be discarded the same way. The
+  // fix keys off whether the row's OWN key carries a digit, not cell count
+  // alone, so a real digit-bearing tag survives no matter how sparse it is.
+  const sched: SheetSpans = {
+    key: "efan.pdf#1", sheet_number: "M6.2",
+    spans: [
+      sp("EXHAUST FAN SCHEDULE", 100, 20),
+      sp("SYMBOL", 100, 50), sp("CFM", 200, 50), sp("ESP", 300, 50), sp("MANUFACTURER", 400, 50), sp("REMARKS", 600, 50),
+      sp("EF-1", 100, 125), sp("245", 200, 125), sp("0.375", 300, 125), sp("COOK", 400, 125), sp("1,2", 600, 125),
+      sp("EF-2", 100, 150), sp("245", 200, 150), sp("0.375", 300, 150), sp("COOK", 400, 150), sp("1,2", 600, 150),
+      // the schedule's own trailing footnote/legend header — digit-free,
+      // exactly one cell of its own
+      sp("REMARKS:", 100, 200),
+      // a real, digit-bearing tag, just as sparse (also exactly one cell)
+      sp("PH-1", 100, 225),
+    ],
+  };
+  const tab = extractTable(sched, "equipment");
+  assert.ok(tab, "the real EF rows are enough to clear the bar");
+  const keys = tab!.rows.map((r) => r.key);
+  assert.ok(!keys.includes("REMARKS"), `the trailing digit-free "REMARKS:" footnote label must not mint a row: ${keys.join(",")}`);
+  assert.ok(keys.includes("EF-1") && keys.includes("EF-2"), "the real EF rows are untouched");
+  assert.ok(keys.includes("PH-1"), "a real, digit-bearing tag is kept even when just as sparse as the noise around it");
+});

@@ -1301,6 +1301,39 @@ function bandDataRows(
     const ebox = m.tri ? merge(bboxOf(m.span), m.tri) : bboxOf(m.span);
     out[i].revision = { rev: m.rev, source: { sheet: sheetKey, text: m.span.str.trim(), bbox: ebox }, ...(m.drawn ? { drawn: true } : {}) };
   }
+  // A candidate row with only ONE populated column, on a genuinely
+  // multi-column `equipment` table, is USUALLY noise, not a real row —
+  // ledger item 29 (accuracy-hardening plan): a stray sub-header word that
+  // isn't in EQUIPMENT_HEADERS' own vocabulary ("RPM", a second header line
+  // under "ESP" naming the same physical column), a title-block/revision-
+  // log fragment interleaved mid-table ("No. Description Date"), and a
+  // schedule's own trailing "REMARKS:" footnote-legend label all measured,
+  // on the real itd-d1-lab corpus, as their OWN one-cell garbage row.
+  // BUT: a real tag from a DIFFERENT, unrecognized schedule table can also
+  // bleed in as a lone, badly-mis-columned orphan row (found live: a real
+  // "PH-1 EQUIPMENT T01 TIERED" — a genuine tag from some OTHER portable-
+  // heater schedule this pass never found its own header for — landed as a
+  // 1-cell row inside the Electric Heater Schedule's own REMARKS column).
+  // Cell count alone can't tell these apart; every garbage example measured
+  // has a DIGIT-FREE key (RPM/NO/REMARKS/WATER/CITY-SOFTENED/FAN/GPM/
+  // PRESSURE/SYMBOL/IN/DUCT/SILENCER/HIGHWALL/SUPPORT/SCROLL/TOTAL/CFM),
+  // while every real tag measured, in this table or bled in from another,
+  // carries one (EF-1, PH-1, CH-1, …) — the same real-MEP-tag shape
+  // CATALOG_ANCHOR_WORDS/rowKeyOf already lean on elsewhere. So: only a
+  // 1-cell row whose key ALSO carries no digit is dropped — a real,
+  // sparsely-extracted tagged row (even one that landed here by mistake)
+  // is never silently discarded, only the digit-free noise is. Scoped
+  // narrowly to the exact shape this was found on (`equipment` kind, >=4
+  // real columns, evaluated AFTER orphan-folding so a row that only looked
+  // sparse before its own continuation text merged in is never caught) — a
+  // sparse room-finish row (FLOOR filled, BASE/WALL legitimately blank) is
+  // a real, different, unrelated case this must never touch, and a
+  // `finish`-kind schedule can legitimately have very few columns at all.
+  if (kind === "equipment" && anchors.length >= 4) {
+    for (let i = out.length - 1; i >= 0; i--) {
+      if (Object.keys(out[i].cells).length < 2 && !/\d/.test(out[i].key)) { out.splice(i, 1); outY.splice(i, 1); }
+    }
+  }
   // row-level building off the BLDG/BUILDING column, where the key itself
   // did not carry one
   for (const row of out) {
