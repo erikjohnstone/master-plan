@@ -86,6 +86,26 @@ export interface TakeoffItem {
   legend?: { sheet: string; caption: string };
 }
 
+/** One real "reference"-kind table's raw extracted data (full-coverage-
+ * standard work: sheetgraph.ts's own structural, vocabulary-free fourth
+ * table kind — SYSTEM TYPE/INSULATION TYPE-keyed spec/calculation tables,
+ * not equipment schedules). No `quantity`/`drawing_locations`: these tables
+ * have no per-instance drawn-symbol tag at all — a sweep_schedule_row call
+ * would have nothing to chase (no schedule row here ever answers for a
+ * SYMBOL/ID/TAG a plan sheet draws). The row is captured verbatim instead,
+ * so the real data ("D-1 → ASTM C1290, TYPE III, ...") is still reachable —
+ * "pull ANY INFORMATION out of these sets", not just tag counts. */
+export interface ReferenceTableRow {
+  key: string;
+  cells: Record<string, string>;
+}
+export interface ReferenceTable {
+  sheet: string;
+  title: string | null;
+  headers: string[];
+  rows: ReferenceTableRow[];
+}
+
 export interface PlanSetTakeoff {
   set_files: string[];
   family_filter: string[] | null;      // hvacTaxonomy category names this run was scoped to, or null for all
@@ -97,6 +117,14 @@ export interface PlanSetTakeoff {
    * on the sheet vs. a shape a matcher recognized), and collapsing them
    * into one list would hide which is which — see TakeoffItem.source. */
   legend_items: TakeoffItem[];
+  /** kind: "reference" tables' own raw extracted data — see ReferenceTable's
+   * own doc comment for why this is a THIRD, separate array rather than
+   * merged into `items`/`legend_items`: neither a per-instance drawn
+   * quantity nor a legend-glyph match applies here at all, a structurally
+   * different shape from both, same "never silently blend different-
+   * confidence/different-shape data into one list" doctrine already
+   * established for those two this session. */
+  reference_tables: ReferenceTable[];
   failures: TakeoffFailure[];
   tables_seen: Array<{ sheet: string; kind: string; title: string | null; rows: number }>;
   legend_sheets_seen: Array<{ sheet: string; glyphs_detected: number }>;
@@ -182,6 +210,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
     family_filter: categories,
     items: [],
     legend_items: [],
+    reference_tables: [],
     failures: [],
     tables_seen: [],
     legend_sheets_seen: [],
@@ -215,6 +244,22 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
 
   for (const tb of graph.tables) {
     out.tables_seen.push({ sheet: tb.sheet, kind: tb.kind, title: tb.title?.text ?? null, rows: tb.rows.length });
+    // "reference"-kind tables (full-coverage-standard work) have no per-
+    // instance drawn-symbol tag at all — nothing for sweep_schedule_row to
+    // chase — so their raw data is captured verbatim into its own array
+    // instead of walking the equipment tag-sweep loop below, matching
+    // ReferenceTable's own doc comment.
+    if (tb.kind === "reference") {
+      out.reference_tables.push({
+        sheet: tb.sheet, title: tb.title?.text ?? null, headers: tb.headers,
+        rows: tb.rows.map((row) => {
+          const cells: Record<string, string> = {};
+          for (const [label, cell] of Object.entries(row.cells || {})) if (cell?.text) cells[label] = cell.text;
+          return { key: row.key, cells };
+        }),
+      });
+      continue;
+    }
     if (tb.kind !== "equipment") continue; // this pipeline's own scope, matching hvacTaxonomy's scheduleKind convention
     for (const row of tb.rows) {
       const tag = (row.key || "").trim();
