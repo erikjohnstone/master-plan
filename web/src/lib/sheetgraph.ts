@@ -506,7 +506,32 @@ const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "ID", "MATERIAL", "MANUFACTURE
 // dimension word this generic, unguarded, would over-trigger equipment
 // qualification on unrelated tables); no collision with ROOM_HEADERS'
 // vocabulary (checked — it has no "LENGTH" token of its own).
-const EQUIPMENT_HEADERS = ["ID", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "RPM", "ESP", "EQUIPMENT", "VELOCITY", "AIRFLOW", "SIZE", "FPM", "LENGTH"];
+// "TYPE"/"MOUNTING"/"CCT"/"CRI"/"DRIVER"/"DIMMING"/"LENS"/"FINISH"/"NOTES"/
+// "LUMENS" (ledger item 63): a real LUMINAIRE SCHEDULE (baker-county-eoc-
+// bidset.pdf#59 — TYPE/DESCRIPTION/MOUNTING/CCT-CRI/WATTS/DELIVERED LUMENS/
+// DRIVER/DIMMING/VOLTAGE/LENS-RELECTOR-BEAM/FINISH/MANUFACTURER SERIES/
+// NOTES, confirmed by direct render) had zero deterministic support: WATTS/
+// VOLTAGE/DESCRIPTION/MANUFACTURER already cleared `required`+minHits, but
+// every OTHER real column had no anchor of its own and would have bled into
+// whichever anchored column sat nearest — exactly the cross-row corruption
+// class this vocabulary exists to prevent (a live agent manually assembling
+// this same table by hand already got one cell wrong this way: V1's own
+// MANUFACTURER SERIES misread as X1's). CCT/CRI/DRIVER/DIMMING/LENS/LUMENS
+// are lighting-specific terms with no plausible collision elsewhere in this
+// vocabulary's domain (mechanical/electrical/plumbing equipment schedules
+// never carry a light driver, a dimming protocol, or a lens). MOUNTING and
+// FINISH are real, generic MEP terms (a diffuser's or a fixture's mounting
+// type; a device's finish) — vocab only, not `required`, so neither can by
+// itself tip an unrelated table into qualifying; FINISH already exists in
+// ROOM_HEADERS with no cross-contamination (the SYMBOL precedent above).
+// NOTES is `bandLimits`' own WIDE_LAST label already — this is the missing
+// other half, giving a table with a literal "NOTES" header (rather than
+// "REMARKS") its own anchored column instead of losing it to REMARKS'
+// nearest-neighbor guess. "DELIVERED LUMENS" needs no separate "DELIVERED"
+// entry: headerLabel takes the first vocabulary word found in the cell text
+// in STRING order, and "LUMENS" alone is both sufficient (the cell still
+// resolves to one anchor) and lower-risk than adding a generic English word.
+const EQUIPMENT_HEADERS = ["ID", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "RPM", "ESP", "EQUIPMENT", "VELOCITY", "AIRFLOW", "SIZE", "FPM", "LENGTH", "TYPE", "MOUNTING", "CCT", "CRI", "DRIVER", "DIMMING", "LENS", "FINISH", "NOTES", "LUMENS"];
 // A header CELL is often a multi-word span ("FLOOR FINISH", "CEILING FINISH")
 // — the vocabulary word inside it names the column.
 /** A column anchor. `x` is the header's center. A two-tier SUB-column also
@@ -663,6 +688,18 @@ function skipSubHeaderContinuation(rows: GraphSpan[][], vocab: string[], from: n
 // split header sits close; a coincidentally-nearby unrelated row does not),
 // and only take a candidate row that could NOT independently qualify as its
 // own header — otherwise this would eat a real, separate table's header.
+// "TYPE" (a real, standard MEP row-key convention — see the bareLeadingType
+// check in extractTableAt, ledger item 63) is deliberately NOT a member of
+// this list: unlike ID/MARK/CODE/SYMBOL/TAG, "TYPE" is just as commonly a
+// QUALIFIER inside some OTHER column's own compound header ("FAN TYPE",
+// "VALVE TYPE") as it is a genuine key column on its own — adding it here
+// widened "already has a key column" to those qualifiers too and lost a
+// real table (federal-attachment4-mechanical.pdf#14's own "AIR HANDLING
+// UNIT FAN SCHEDULE", keyed under TAG; its "FAN TYPE" column anchors as
+// bare "TYPE" and tripped this exact gate). extractTableAt's own final gate
+// recognizes a genuinely TYPE-keyed table (baker-county-eoc-bidset.pdf#59's
+// LUMINAIRE SCHEDULE) a different, position-based way instead — see its
+// bareLeadingType comment for the real reasoning.
 const CATALOG_ANCHOR_WORDS = ["ID", "MARK", "CODE", "SYMBOL", "TAG"];
 
 /** Anchors for a backward-merged tier's own row — like headerHits, but a
@@ -1270,11 +1307,33 @@ function anchorRadii(anchors: Anchor[]): Map<string, Radius> {
 // a neighbouring table's header can share the y-band, and its x-range must
 // not leak in. Left margin is generous (data cells sit left of a centered
 // header). The RIGHT edge depends on what the last column IS: a prose column
-// (REMARKS / DESCRIPTION / NOTES) earns three median gaps so a wide wrapped
-// remark stays in; a code column (CEILING, WALL, COLOR) hugs its anchor —
-// field-found on a real gym set: a finish legend sitting 300px right of a
-// room schedule bled into every CEILING cell under the generous edge.
-const WIDE_LAST = new Set(["REMARKS", "DESCRIPTION", "NOTES"]);
+// (REMARKS / DESCRIPTION) earns three median gaps so a wide wrapped remark
+// stays in; a code column (CEILING, WALL, COLOR) hugs its anchor — field-
+// found on a real gym set: a finish legend sitting 300px right of a room
+// schedule bled into every CEILING cell under the generous edge.
+// "NOTES" is deliberately NOT in this set (ledger item 63), unlike REMARKS/
+// DESCRIPTION: no vocabulary anywhere in this file could produce an anchor
+// literally labeled "NOTES" before EQUIPMENT_HEADERS gained the word for the
+// real LUMINAIRE SCHEDULE fix, so this omission changes no table that
+// extracts correctly today — it is scoped purely to the table that motivated
+// it. Found live on that exact table: baker-county-eoc-bidset.pdf#59's own
+// "SHEET NOTES" side panel (a lettered A–J paragraph block, itself genuine
+// prose, NOT this table's data) sits close enough right of the LUMINAIRE
+// SCHEDULE's own NOTES column that the generous three-median-gap margin
+// swept the whole panel into every row's NOTES cell — confirmed by direct
+// render, and confirmed this omission alone is load-bearing: reinstating
+// "NOTES" here (even with farFromCell, below, and anchorRadii's own distance
+// cap both already active) reopens the same full bleed, because both of
+// those guard a column ONCE something already occupies it — the initial
+// token admitted into an empty NOTES cell is ungated by either. Combined
+// with those two, real NOTES text now reads cleanly on every row that has
+// any (P1, S1, V1, measured against the render) with no sheet-notes text
+// bleeding in anywhere — this is no longer the partial residual it was
+// before those two landed; a future genuinely WIDE wrapped NOTES column
+// sitting close to unrelated prose is the remaining named edge, same class
+// as item 57's SmithGroup precedent, not reachable by widening this set
+// back (that reopens the exact bleed this avoids).
+const WIDE_LAST = new Set(["REMARKS", "DESCRIPTION"]);
 // A NAME-keyed table's key column carries a room-TYPE phrase ("PATIENT
 // TOILET ROOMS"), not a short numbered tag — a prose column exactly like
 // REMARKS/DESCRIPTION/NOTES, just leading instead of trailing. The default
@@ -1725,10 +1784,25 @@ function bandDataRows(
   // filled, BASE/WALL legitimately blank) is a real, different, unrelated
   // case this must never touch, and a `finish`-kind schedule can
   // legitimately have very few columns at all.
+  // "TYPE" (ledger item 63) widened this exact garbage class it wasn't sized
+  // for: the same real "SYMBOL"/"REMARKS"/"TOTAL"-keyed noise this comment
+  // already names picked up ITS OWN "TYPE" cell too (the unrelated content
+  // block's own stray "AIR HANDLING UNIT ( AHU-1…" text partially column-
+  // maps into TYPE), pushing a 4-cell noise row that used to clear the
+  // relative floor's OWN safe side up to 5 — exactly `minCells` at
+  // anchors.length=10, no longer under it. The key itself is the honest,
+  // narrower signal the relative-count heuristic was always standing in
+  // for: a row whose OWN key is literally a vocabulary word (SYMBOL, TYPE,
+  // REMARKS, …) is a legend/label fragment, never a real device tag — no
+  // real schedule anywhere in this corpus keys a row under the bare name of
+  // one of its own columns. Checked first, then the existing relative-count
+  // floor for every OTHER digit-free noise shape.
   if (kind === "equipment" && anchors.length >= 4) {
     const minCells = Math.max(2, anchors.length / 2);
+    const anchorLabels = new Set(anchors.map((a) => a.label));
     for (let i = out.length - 1; i >= 0; i--) {
-      if (Object.keys(out[i].cells).length < minCells && !/\d/.test(out[i].key)) { out.splice(i, 1); outY.splice(i, 1); }
+      const keyIsOwnColumn = anchorLabels.has(norm(out[i].key));
+      if ((keyIsOwnColumn || Object.keys(out[i].cells).length < minCells) && !/\d/.test(out[i].key)) { out.splice(i, 1); outY.splice(i, 1); }
     }
   }
   // row-level building off the BLDG/BUILDING column, where the key itself
@@ -1950,7 +2024,46 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // real candidate into a LATER table's own header, re-extracting a table
   // that already correctly exists under another kind — a duplicate-row-key
   // collision worse than the one this whole design exists to prevent.
-  if (kind === "equipment" && flat && !flat.anchors.some((a) => CATALOG_ANCHOR_WORDS.includes(a.label))) flat = null;
+  // "TYPE" (ledger item 63) is deliberately NOT a member of CATALOG_ANCHOR_
+  // WORDS itself — real, found live: federal-attachment4-mechanical.pdf#14's
+  // own "AIR HANDLING UNIT FAN SCHEDULE" carries a real "FAN TYPE" column
+  // (a QUALIFIER, TAG is its real key column) that anchors as bare "TYPE"
+  // (headerLabel only keeps the vocabulary word, dropping "FAN"), and a
+  // first attempt putting "TYPE" in CATALOG_ANCHOR_WORDS made
+  // mergeBackwardCoEqualTier wrongly read that qualifier as "this row
+  // already has its own key column," losing the table entirely — confirmed
+  // by direct extraction, reverted. The real, standalone convention (a
+  // LUMINAIRE SCHEDULE keying E1/R1-R3/S1/S3/V1/X1 under a column literally
+  // headed "TYPE", found live on baker-county-eoc-bidset.pdf#59) is
+  // distinguished the same way ID/MARK/CODE/SYMBOL/TAG always are on a real
+  // schedule: it is the row's OWN LEFTMOST anchor — a qualifier like "FAN
+  // TYPE"/"VALVE TYPE" never leads a real schedule's column order, its own
+  // real key column (TAG, MARK, …) does. Checked against the anchors array
+  // (already sorted by x), not the vocabulary list, so this never widens
+  // what mergeBackwardCoEqualTier/introducesAnchor treat as "already has a
+  // key column" elsewhere — those keep reading exactly CATALOG_ANCHOR_WORDS,
+  // unchanged, so fed14's own qualifier "TYPE" still cannot suppress a real
+  // backward merge on some OTHER table the way it did before this fix.
+  // Leftmost alone still isn't enough on a genuinely broken read:
+  // federal-attachment4-mechanical.pdf#15's own "GRILLE, REGISTER, AND
+  // DIFFUSER SCHEDULE" (a real, deep 4-tier merged header this project has
+  // never successfully parsed — MARK is its real key column, not in
+  // EQUIPMENT_HEADERS' own vocabulary at all) also settles on a row with a
+  // stray bare "TYPE" leftmost, at a 0.75 hit ratio, once the real tier-
+  // descent gets defeated by the merge's own depth — found live, extracting
+  // two garbage rows keyed "CFM"/"FLORIDA", neither a real mark. Ratio alone
+  // (findHeaderRow's own "almost ENTIRELY header words" >= 0.6 test,
+  // restated here since this check runs after it has already returned)
+  // doesn't separate them either — 0.75 clears 0.6 comfortably. Anchor
+  // COUNT is what actually does: a real bare-TYPE header recovers MANY real
+  // columns (the luminaire schedule: 13, measured); this bad settle
+  // recovers 4. The threshold sits well below the real luminaire schedule's
+  // own 13 and well above this bad settle's 4, leaving real margin either
+  // way — a genuinely rich real schedule header vs. a shallow partial read
+  // of a table this vocabulary was never going to fully parse.
+  const bareLeadingType = flat && flat.anchors[0]?.label === "TYPE" && flat.anchors.length >= 8
+    && headerHits(rows[flat.rowIndex], vocab).length / Math.max(1, rows[flat.rowIndex].length) >= 0.6;
+  if (kind === "equipment" && flat && !flat.anchors.some((a) => CATALOG_ANCHOR_WORDS.includes(a.label)) && !bareLeadingType) flat = null;
   if (flat) {
     anchors = flat.anchors;
     headerSpans = rows[flat.rowIndex];
