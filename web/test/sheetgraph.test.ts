@@ -1775,3 +1775,43 @@ test("title-hunt: a real title survives a neighboring table's own unrelated rows
   assert.ok(tab, "the real header still qualifies");
   assert.equal(tab!.title?.text, "HUMIDIFIER SCHEDULE", `title-hunt must not settle for one of the unrelated LEFT table's own row fragments: got ${JSON.stringify(tab!.title)}`);
 });
+
+test("a free-text FINISH LEGEND never mints a phantom finish table (real baker-county-eoc#27)", () => {
+  // Real bug, found live on baker-county-eoc-bidset.pdf#27: a real ROOM
+  // FINISH SCHEDULE sits beside the sheet's own free-text finish LEGEND
+  // (ACCESSORIES/BASE & TRIM/CEILING/FLOORING/WALLS — per-material spec
+  // prose like "STYLE: LVT", "COLLECTION: iD LATITUDE STONE & CONCRETE",
+  // "MANUFACTURER: ALTRO TEGULIS"). That legend's own field-label prose uses
+  // the SAME words FINISH_HEADERS needs to recognize a real schedule column
+  // (STYLE/MANUFACTURER/ID/COLOR/...), and row-clustering glommed several
+  // unrelated legend entries sharing a y-band into one row — `qualifies()`
+  // fired on it as a real header, extracting a 5-row garbage "finish" table
+  // with a blank title (there never was a real title — this was never a
+  // table) whose cells bled the real ROOM FINISH SCHEDULE's own text in from
+  // next door. Mirrors the exact real shape: a legend "row" fusing a bare
+  // "STYLE:" label with two "label: value" prose spans and an unrelated
+  // trailing sentence, at a y untouched by the real room-finish table.
+  const sheet: SheetSpans = {
+    key: "legend.pdf#1", sheet_number: "A631",
+    spans: [
+      sp("ROOM FINISH SCHEDULE", 1000, 10),
+      sp("NO", 1000, 40), sp("NAME", 1100, 40), sp("FLOOR", 1200, 40), sp("BASE", 1300, 40),
+      sp("100", 1000, 60), sp("OFFICE", 1100, 60), sp("CPT-1", 1200, 60), sp("RB-1", 1300, 60),
+      // the free-text finish legend, unrelated material entries glommed onto one row by y-coincidence
+      sp("STYLE:", 100, 200),
+      sp("COLLECTION: iD LATITUDE STONE & CONCRETE", 200, 200),
+      sp("MANUFACTURER: ALTRO TEGULIS", 500, 200),
+      sp("HARDBOARD, PARTICLEBOARD, FIBER REINFORCED GYPSUM, FIBER", 800, 200),
+      // a second legend "row" below it — a bare section label, real prose,
+      // not schedule data, but pre-fix its digit-free word alone passes
+      // rowKeyOf's CODE_RE and mints a phantom keyed row (real, measured:
+      // this exact word — "CEILING" — was one of the real garbage keys)
+      sp("CEILING", 100, 220),
+    ],
+  };
+  assert.equal(extractTable(sheet, "finish"), null, "the legend prose must never qualify as a finish table header");
+  const rf = extractTable(sheet, "room-finish");
+  assert.ok(rf, "the real, unrelated room-finish table is untouched by the fix");
+  assert.equal(rf!.rows.length, 1);
+  assert.equal(rf!.rows[0].cells.FLOOR?.text, "CPT-1");
+});
