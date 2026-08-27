@@ -2827,3 +2827,33 @@ test("count_marks: tags drawn ON their marker with no value are sweep_schedule_r
   assert.ok(t1.withheld.length >= 3, "every plan-sheet T1 occurrence is disclosed as a question");
   assert.ok(t1.withheld.every((w: any) => /amid linework|bare tag/.test(w.reason)));
 });
+
+// accuracy-hardening plan (ledger item 42): a schedule-role sheet with ZERO
+// extracted tables reads today as indistinguishable from "this sheet
+// legitimately has none" — real corpus evidence (weld-county-permit) showed
+// this can instead mean the table content is a pasted-in RASTER IMAGE, not
+// real text, which sheetgraph.ts's vocabulary/column model could never read
+// no matter how it's tuned. Real, deterministic fixture (not the external,
+// uncommitted corpus) locking in the fix: page 1 is a normal plan-role sheet
+// with real text (irrelevant to this test beyond giving ensureGraph a plan to
+// work with); page 2 is titled "EQUIPMENT SCHEDULE" (role: schedule) but
+// carries only that one real text run plus a large embedded raster image
+// (62.5% of the page) — the same real shape confirmed on weld-county-permit's
+// own #2/#3 sheets via their own pdf.js operator list.
+const RASTER_SCHED = fileURLToPath(new URL("./fixtures/raster-schedule.pdf", import.meta.url));
+const RASTER_SCHED_KEY = "raster-schedule.pdf";
+
+test("sheet_graph: a schedule-role sheet with 0 tables AND heavy embedded raster image area is named, not silently reported as empty", async () => {
+  const c = await pair();
+  await call(c, "load_plan", { path: RASTER_SCHED });
+  const r = await call(c, "sheet_graph", {});
+  assert.equal(r.isError, false, JSON.stringify(r.data).slice(0, 300));
+  const sched = r.data.sheets.find((s: any) => s.sheet === `${RASTER_SCHED_KEY}#2`);
+  assert.equal(sched.role, "schedule");
+  assert.equal(sched.schedules.length, 0, "no real table text exists for sheetgraph.ts to find");
+  assert.ok(r.data.notes?.some((n: string) => n.includes(`${RASTER_SCHED_KEY}#2`) && /raster image/.test(n) && /63%|62%/.test(n)),
+    `expected a raster-coverage note naming the sheet: ${JSON.stringify(r.data.notes)}`);
+  // the plan-role sheet (real text, no embedded image) must never trip it
+  assert.ok(!r.data.notes?.some((n: string) => n.startsWith(RASTER_SCHED_KEY) && !n.includes("#2")),
+    "a normal plan sheet must never be flagged");
+});

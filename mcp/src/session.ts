@@ -4117,8 +4117,43 @@ export class Session {
     };
   }
 
+  /** Real, confirmed finding (accuracy-hardening plan, this session): a
+   * schedule-role sheet that extracted ZERO tables reads today as
+   * indistinguishable from "this sheet legitimately has none" — but on the
+   * real `weld-county-permit` corpus set, its own two densest schedule
+   * sheets carry almost no real text at all because their tables are
+   * literally embedded RASTER IMAGES pasted onto an otherwise-vector CAD
+   * sheet (confirmed via the sheet's own pdf.js operator list: real
+   * `paintImageXObject` calls placed exactly where the visible tables sit),
+   * not a vocabulary/column-model gap sheetgraph.ts could ever close. The
+   * signal to catch this already exists and is already correct — the same
+   * `imageArea`/`rasterPolicy` machinery `classify_symbol`/`symbol_sweep`'s
+   * own raster fallback already uses (confirmed: this real sheet already
+   * scores 50%/30% image coverage, both well past `RASTER_MIN_IMG_FRAC`) —
+   * it was simply never consulted from this reporting path. Scoped narrowly
+   * to the exact rare case that matters (a schedule-role sheet with zero
+   * extracted tables) so a normal set's own sheetGraph() call pays nothing
+   * extra; best-effort only — a geometry failure here must never take
+   * sheet_graph's own real output down with it. */
+  private async rasterScheduleNotes(g: SheetGraph): Promise<string[]> {
+    const notes: string[] = [];
+    for (const s of g.sheets) {
+      if (s.role !== "schedule" || s.schedules.length > 0) continue;
+      try {
+        const sheetState = this.sheet(s.key);
+        const geo = await this.ensureGeometry(sheetState);
+        if (this.rasterPolicy(sheetState, geo).rasterEligible) {
+          notes.push(`${s.key} is classified as a schedule sheet but 0 tables extracted from it, and ${Math.round((geo.imageArea / (sheetState.widthPx * sheetState.heightPx)) * 100)}% of its own area is embedded raster image content — its schedule data is very likely pasted in as a picture (or scanned), invisible to text-based extraction no matter the vocabulary. view_sheet to confirm; classify_symbol may still find shapes there, but table rows will not extract.`);
+        }
+      } catch { /* diagnostic only */ }
+    }
+    return notes;
+  }
+
   async sheetGraph() {
     const g = await this.ensureGraph();
+    const rasterNotes = await this.rasterScheduleNotes(g);
+    const notes = rasterNotes.length ? [...g.notes, ...rasterNotes] : g.notes;
     return {
       available: g.available,
       sheets: g.sheets.map((s) => ({
@@ -4143,7 +4178,7 @@ export class Session {
       callouts: g.callouts.map((c) => ({ detail: c.detail, target_sheet: c.target_sheet, sheet: c.sheet, bbox: Session.wireBox(c.bbox) })),
       ...(g.buildings.length ? { buildings: g.buildings } : {}),
       ...(g.revisions.length ? { revisions: g.revisions.map((r) => ({ rev: r.rev, sheet: r.sheet, bbox: Session.wireBox(r.bbox), ...(r.drawn ? { drawn: true } : {}) })) } : {}),
-      ...(g.notes.length ? { notes: g.notes } : {}),
+      ...(notes.length ? { notes } : {}),
       counts: { rooms: g.rooms.length, unmatched_tags: g.unmatched_tags.length, schedules: g.tables.length, callouts: g.callouts.length },
     };
   }
