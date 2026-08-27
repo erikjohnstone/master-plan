@@ -1103,6 +1103,8 @@ export function matchAgainstLibrary(
   const pxPerIn = 1 / (targetUpp * 12);   // targetUpp: real feet per image px
   const { excludeCenter: _ignored, ...rest } = opts;
   const out: LibraryMatch[] = [];
+  const footprints: number[] = [];   // parallel to `out` — each shape's own bbox diagonal, px
+  const segCounts: number[] = [];    // parallel to `out` — each shape's own segment count
   for (const ref of library) {
     const segsPx = ref.segsIn.map((v) => v * pxPerIn);
     let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
@@ -1112,6 +1114,42 @@ export function matchAgainstLibrary(
     }
     const fp = fingerprintSymbol(segsPx, [[x0, y0], [x1, y1]]);
     out.push({ name: ref.name, result: matchSymbol(fp, segs, rest) });
+    footprints.push(fp.footprint);
+    segCounts.push(fp.segments);
+  }
+  // Cross-shape disambiguation (#259's own class of problem, in a library
+  // with no marqueed sheet to draw a counter-example on): a reference shape
+  // that is a literal SUBSET of another library shape (real, measured case:
+  // a 2-way control valve's own body is exactly a 3-way's body minus its
+  // third leg) scores a clean 1.0 match wherever the LARGER shape is
+  // actually drawn — extra ink around a smaller seed never lowers its own
+  // score. Demoted here, not in matchSymbol itself: only meaningful when
+  // multiple library shapes are compared in the same call. A strictly
+  // smaller shape's match is demoted to withheld whenever a strictly LARGER
+  // shape (more segments) has its own CLEAN MATCH (never its withheld —a
+  // withheld near-miss is the larger shape's own honest "this isn't me",
+  // real evidence a location is the SMALLER shape, not grounds to doubt
+  // it; using withheld here was a real, measured bug caught before this
+  // shipped, see the git history) within the smaller shape's own footprint
+  // of the same point — never silently dropped, always naming which
+  // larger shape did it.
+  for (let i = 0; i < out.length; i++) {
+    for (let j = 0; j < out.length; j++) {
+      if (i === j || segCounts[i] >= segCounts[j]) continue;
+      const smaller = out[i], larger = out[j];
+      if (!larger.result.matches.length) continue;
+      const tol = footprints[i];
+      const kept: SweepMatch[] = [];
+      for (const m of smaller.result.matches) {
+        const hit = larger.result.matches.find((lm) => Math.hypot(lm.at[0] - m.at[0], lm.at[1] - m.at[1]) <= tol);
+        if (hit) {
+          smaller.result.withheld.push({ ...m, reason: `a larger reference shape ("${larger.name}") also matches this same location — this instance is very likely a "${larger.name}", not a "${smaller.name}"; view_sheet here and confirm before trusting either` });
+        } else {
+          kept.push(m);
+        }
+      }
+      smaller.result.matches = kept;
+    }
   }
   return out;
 }

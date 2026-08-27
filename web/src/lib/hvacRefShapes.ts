@@ -69,9 +69,84 @@ export const BALL_VALVE: RefShape = {
   segsIn: [...bowtieIn(), BODY_W_IN / 2, BODY_H_IN / 2, BODY_W_IN / 2 + HANDLE_IN * 0.8, BODY_H_IN / 2 - HANDLE_IN * 0.6],
 };
 
+// ── BAS control-valve family (accuracy-hardening plan Phase 1) ───────────
+// Real, MEASURED geometry — read directly off the real PDF's own vector
+// segments (mcp Session.sheetContext against
+// federal-attachment4-mechanical.pdf#17, the SmithGroup "MECHANICAL
+// CONTROLS - LEGEND" sheet M8.1, already part of this project's own
+// federal-mech corpus set), not eyeballed from a raster crop and not
+// scraped from any symbol library. A GENUINELY DIFFERENT drafting
+// convention from GATE_VALVE/BALL_VALVE above, confirmed by reading the
+// real segments: this family draws its valve-body "bowtie" as two
+// VERTICALS plus two crossing DIAGONALS (4 segments), not two solid
+// triangle outlines (6 segments) — visually similar (an hourglass),
+// topologically different, so a fingerprint built from one convention does
+// NOT reliably match how a sheet drawn in the other actually renders it.
+//
+// Real-world size is a disclosed ESTIMATE, same caveat as GATE_VALVE/
+// BALL_VALVE above: the motor-actuator box is assumed 4in per side (a
+// plausible annotation size), and every other measurement is scaled
+// proportionally from the real, measured PDF geometry at that one
+// assumption — the PROPORTIONS are real and measured directly off the
+// sheet; only the absolute inch scale is estimated, and named as one here.
+const MBOX_PT = 23.5;       // the real M-box's own drawn side, PDF pt
+const MBOX_IN = 4;          // disclosed estimate
+const PT_IN = MBOX_IN / MBOX_PT;
+const pt = (v: number) => +(v * PT_IN).toFixed(3);
+
+/** The motor-actuator box + its connecting stem down to the valve-body
+ * diamond's own center — shared by every 2-way/3-way electric control
+ * valve variant below. Local origin: the M-box's own top-left corner,
+ * y down (image-px convention). Real measured pt values: box 23.5×23.5,
+ * stem from box-bottom (y=23.5) to the diamond's own center (y=46.1). */
+const controlValveMAndStem = (): number[] => [
+  0, 0, MBOX_PT, 0,
+  MBOX_PT, 0, MBOX_PT, MBOX_PT,
+  MBOX_PT, MBOX_PT, 0, MBOX_PT,
+  0, MBOX_PT, 0, 0,
+  MBOX_PT / 2, MBOX_PT, MBOX_PT / 2, 46.1,
+].map(pt);
+
+/** The valve-body diamond itself — two verticals + two crossing diagonals
+ * (the real, measured segment topology; see the family comment above),
+ * centered on the stem's own end point. Real measured pt values: half-width
+ * 17.5 (x -5.8..29.2 relative to the M-box's left edge), y 34.2..57.9. */
+const controlValveDiamond = (): number[] => [
+  -5.8, 34.2, -5.8, 57.9,
+  -5.8, 34.2, 29.2, 57.9,
+  29.2, 57.9, 29.2, 34.2,
+  29.2, 34.2, -5.8, 57.9,
+].map(pt);
+
+/** 2-way electric control valve: M-box + stem + the bare diamond — the
+ * simplest member of this family, real and measured. */
+export const CONTROL_VALVE_2WAY_ELECTRIC: RefShape = {
+  name: "2-way electric control valve",
+  segsIn: [...controlValveMAndStem(), ...controlValveDiamond()],
+};
+
+/** 3-way electric control valve: the IDENTICAL 2-way body plus a real,
+ * measured THIRD leg — a downward-pointing triangle from the diamond's own
+ * center — a genuine geometric distinction the real Eglin AFB legend
+ * draws, not merely a different caption on the same shape. This is
+ * deliberately a real STRICT-SUPERSET precision case (2-way's own segments
+ * are a subset of 3-way's) — see hvacRefShapes.test.ts for whether scoring
+ * alone keeps a 2-way instance from over-matching a 3-way's own extra leg,
+ * the same #259-class question the original symbol-plan.pdf fixture was
+ * built to answer for a different shape family. Real measured pt values:
+ * the third leg spreads from the diamond's own center (11.75, 46.1) out to
+ * (0, 63.6) and (23.5, 63.6). */
+export const CONTROL_VALVE_3WAY_ELECTRIC: RefShape = {
+  name: "3-way electric control valve",
+  segsIn: [
+    ...controlValveMAndStem(), ...controlValveDiamond(),
+    ...[MBOX_PT / 2, 46.1, 0, 63.6, 0, 63.6, MBOX_PT, 63.6, MBOX_PT, 63.6, MBOX_PT / 2, 46.1].map(pt),
+  ],
+};
+
 /** Every reference shape this library currently ships — deliberately small.
  * Extend this array (and add a matching, real-corpus-cited entry in
  * hvacTaxonomy.ts's VALVES/DAMPERS lists) only when a NEW shape has real
  * evidence behind it, the same discipline every entry above already
  * follows — never speculative pre-population "for completeness." */
-export const HVAC_REF_SHAPES: RefShape[] = [GATE_VALVE, BALL_VALVE];
+export const HVAC_REF_SHAPES: RefShape[] = [GATE_VALVE, BALL_VALVE, CONTROL_VALVE_2WAY_ELECTRIC, CONTROL_VALVE_3WAY_ELECTRIC];

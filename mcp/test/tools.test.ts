@@ -1635,14 +1635,17 @@ test("symbol_sweep precision: a gate valve and a ball valve sharing a bowtie bod
 // stated real-world size exactly.
 const VALVE_UPP = 1 / 96;   // real feet per image px — 8 image-px/in
 
-test("match_reference_symbol: the whole library scored against a real fixture — a true positive and a true (disclosed) near-miss, not two clean matches", async () => {
+test("match_reference_symbol: gate and ball valve scored against a real fixture — a true positive and a true (disclosed) near-miss, not two clean matches", async () => {
   const client = await pair();
   await call(client, "load_plan", { path: VALVEPLAN });
   await call(client, "set_scale", { sheet: VALVEKEY, upp: VALVE_UPP });
 
-  const r = await call(client, "match_reference_symbol", { sheet: VALVEKEY });
+  // names-filtered, not the whole library — this fixture only draws gate/ball
+  // valves, and the library grows over time (Phase 1); pinning to these two
+  // keeps this test stable as more shapes are added.
+  const r = await call(client, "match_reference_symbol", { sheet: VALVEKEY, names: ["gate valve", "ball valve"] });
   assert.equal(r.isError, false);
-  assert.equal(r.data.shapes.length, 2, "gate valve and ball valve — the whole current library");
+  assert.equal(r.data.shapes.length, 2, "gate valve and ball valve — exactly the two requested");
 
   const gate = r.data.shapes.find((s: any) => s.name === "gate valve");
   assert.equal(gate.found, 3, "all 3 real gate valves in the fixture, at the reference shape's own real-world size");
@@ -1656,7 +1659,7 @@ test("match_reference_symbol: the whole library scored against a real fixture �
   assert.ok(ball.withheld.every((w: any) => w.score < 0.92));
 
   // determinism
-  const again = await call(client, "match_reference_symbol", { sheet: VALVEKEY });
+  const again = await call(client, "match_reference_symbol", { sheet: VALVEKEY, names: ["gate valve", "ball valve"] });
   assert.deepEqual(again.data, r.data);
 });
 
@@ -1697,6 +1700,53 @@ test("match_reference_symbol: refuses on a sheet with no vector linework at all"
   const r = await call(client, "match_reference_symbol", { sheet: SCAN_KEY });
   assert.equal(r.isError, true);
   assert.match(r.data.error ?? JSON.stringify(r.data), /no vector linework/);
+});
+
+// ── match_reference_symbol: the BAS control-valve family (accuracy-
+// hardening plan Phase 1) — a REAL strict-superset precision case, #259's
+// own class of problem in a new shape family. The fixture
+// (test/fixtures/control-valve-precision.pdf,
+// scripts/make-control-valve-fixture.mjs) draws 3 real 2-way electric
+// control valves and 2 real 3-way electric control valves at the EXACT
+// geometry measured off the real Eglin AFB legend
+// (federal-attachment4-mechanical.pdf#17) — the 3-way's own body is the
+// 2-way's IDENTICAL body plus one real, measured extra leg, never a decoy
+// that merely differs in angle. Real numbers below were MEASURED (this
+// project's own doctrine), including a real bug caught and fixed before
+// it shipped: matchAgainstLibrary's own first cross-shape disambiguation
+// attempt compared a smaller shape's matches against a LARGER shape's
+// withheld candidates too — which wrongly demoted every real 2-way
+// instance (found dropped to 0), since a larger shape's own withheld
+// near-miss is exactly the larger shape's own honest "this isn't me," not
+// grounds to doubt a smaller shape's clean match. Fixed to compare only
+// against the larger shape's own CLEAN matches (known-gaps ledger item 33).
+const CVPLAN = fileURLToPath(new URL("./fixtures/control-valve-precision.pdf", import.meta.url));
+const CVKEY = "control-valve-precision.pdf";
+const CV_UPP = 1 / 141;   // matches hvacRefShapes.ts's own MBOX_IN/MBOX_PT scale exactly
+
+test("match_reference_symbol: 2-way vs 3-way electric control valve — a real strict-superset case, never conflated (#HVAC-5)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: CVPLAN });
+  await call(client, "set_scale", { sheet: CVKEY, upp: CV_UPP });
+
+  const r = await call(client, "match_reference_symbol", { sheet: CVKEY, names: ["2-way electric control valve", "3-way electric control valve"] });
+  assert.equal(r.isError, false);
+
+  const two = r.data.shapes.find((s: any) => s.name === "2-way electric control valve");
+  assert.equal(two.found, 3, "the 3 real 2-way instances — never the 2 real 3-way instances too, despite 2-way's body being a literal subset of 3-way's");
+  assert.ok(two.matches.every((m: any) => m.score === 1));
+  assert.equal(two.withheld.length, 2, "the 2 real 3-way instances, demoted from a false clean match to a disclosed withheld — never silently kept as a 2-way match");
+  assert.ok(two.withheld.every((w: any) => /larger reference shape/.test(w.reason) && /3-way electric control valve/.test(w.reason)));
+
+  const three = r.data.shapes.find((s: any) => s.name === "3-way electric control valve");
+  assert.equal(three.found, 2, "the 2 real 3-way instances");
+  assert.ok(three.matches.every((m: any) => m.score === 1));
+  assert.equal(three.withheld.length, 3, "the 3 real 2-way instances, honestly withheld by 3-way's OWN scoring (missing the third leg) — real evidence, not a proximity guess");
+  assert.ok(three.withheld.every((w: any) => w.score > 0.75 && w.score < 0.92 && !/larger reference shape/.test(w.reason)));
+
+  // determinism
+  const again = await call(client, "match_reference_symbol", { sheet: CVKEY, names: ["2-way electric control valve", "3-way electric control valve"] });
+  assert.deepEqual(again.data, r.data);
 });
 
 // ── trace_connectivity, real end-to-end (maturity plan Phase 4) ─────────

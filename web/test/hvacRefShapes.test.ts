@@ -11,8 +11,8 @@
 // regression can't creep back in unnoticed.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { matchAgainstLibrary } from "../src/lib/symbolsweep.ts";
-import { GATE_VALVE, BALL_VALVE, HVAC_REF_SHAPES } from "../src/lib/hvacRefShapes.ts";
+import { matchAgainstLibrary, type RefShape } from "../src/lib/symbolsweep.ts";
+import { GATE_VALVE, BALL_VALVE, CONTROL_VALVE_2WAY_ELECTRIC, CONTROL_VALVE_3WAY_ELECTRIC, HVAC_REF_SHAPES } from "../src/lib/hvacRefShapes.ts";
 
 // A target "sheet" at a known, committed scale (1 ft real-world per 96 image
 // px — an arbitrary but fixed convention, chosen only so the real-world-inch
@@ -78,4 +78,51 @@ test("HVAC_REF_SHAPES: every entry has a name and non-empty real-world-inch geom
     assert.ok(ref.name.trim().length > 0);
     assert.ok(ref.segsIn.length > 0 && ref.segsIn.length % 4 === 0);
   }
+});
+
+// ── BAS control-valve family (accuracy-hardening plan Phase 1) ───────────
+// Real, MEASURED geometry off the Eglin AFB legend (see hvacRefShapes.ts's
+// own header comment for the exact sheet/region) — a real, deliberate
+// STRICT-SUPERSET precision case: CONTROL_VALVE_3WAY_ELECTRIC's own body is
+// CONTROL_VALVE_2WAY_ELECTRIC's IDENTICAL body plus one real extra leg,
+// never a decoy that differs by angle alone. Draws each synthetic instance
+// directly FROM the shape's own real segsIn (never a second, hand-typed
+// copy of its geometry that could silently drift out of sync).
+function drawRef(ref: RefShape, px: number, py: number, pxPerIn: number): number[] {
+  const out: number[] = [];
+  for (let i = 0; i < ref.segsIn.length; i += 4) {
+    out.push(px + ref.segsIn[i] * pxPerIn, py + ref.segsIn[i + 1] * pxPerIn, px + ref.segsIn[i + 2] * pxPerIn, py + ref.segsIn[i + 3] * pxPerIn);
+  }
+  return out;
+}
+const CV_PX_PER_IN = 10;
+const cvSegs = [
+  ...drawRef(CONTROL_VALVE_2WAY_ELECTRIC, 0, 0, CV_PX_PER_IN),
+  ...drawRef(CONTROL_VALVE_2WAY_ELECTRIC, 200, 0, CV_PX_PER_IN),
+  ...drawRef(CONTROL_VALVE_2WAY_ELECTRIC, 400, 0, CV_PX_PER_IN),
+  ...drawRef(CONTROL_VALVE_3WAY_ELECTRIC, 100, 300, CV_PX_PER_IN),
+  ...drawRef(CONTROL_VALVE_3WAY_ELECTRIC, 300, 300, CV_PX_PER_IN),
+];
+
+test("matchAgainstLibrary: 2-way electric control valve finds only its own 3 real instances — never the 2 real 3-way instances too, despite being a literal subset of them (#HVAC-5)", () => {
+  const results = matchAgainstLibrary(cvSegs, [CONTROL_VALVE_2WAY_ELECTRIC, CONTROL_VALVE_3WAY_ELECTRIC], 1 / (CV_PX_PER_IN * 12));
+  const two = results.find((r) => r.name === "2-way electric control valve")!;
+  assert.equal(two.result.matches.length, 3);
+  assert.ok(two.result.matches.every((m) => m.score === 1));
+  assert.equal(two.result.withheld.length, 2, "the 2 real 3-way instances, demoted from a false clean match — see matchAgainstLibrary's own cross-shape disambiguation");
+  assert.ok(two.result.withheld.every((w) => /larger reference shape/.test(w.reason) && /3-way electric control valve/.test(w.reason)));
+});
+
+test("matchAgainstLibrary: 3-way electric control valve finds only its own 2 real instances, honestly withholding the 3 real 2-way instances (missing the third leg)", () => {
+  const results = matchAgainstLibrary(cvSegs, [CONTROL_VALVE_2WAY_ELECTRIC, CONTROL_VALVE_3WAY_ELECTRIC], 1 / (CV_PX_PER_IN * 12));
+  const three = results.find((r) => r.name === "3-way electric control valve")!;
+  assert.equal(three.result.matches.length, 2);
+  assert.ok(three.result.matches.every((m) => m.score === 1));
+  assert.equal(three.result.withheld.length, 3, "the 3 real 2-way instances — real evidence (a genuine near-miss score), not a proximity guess");
+  assert.ok(three.result.withheld.every((w) => w.score > 0.75 && w.score < 0.92 && !/larger reference shape/.test(w.reason)));
+});
+
+test("matchAgainstLibrary: checking 2-way ALONE (without 3-way in the same call) has no shape to disambiguate against, and honestly over-matches — the cross-shape fix only helps when both shapes are checked together", () => {
+  const [two] = matchAgainstLibrary(cvSegs, [CONTROL_VALVE_2WAY_ELECTRIC], 1 / (CV_PX_PER_IN * 12));
+  assert.equal(two.result.matches.length, 5, "a real, disclosed limitation: with no 3-way shape in this call to compare against, all 5 instances (2-way AND 3-way alike) score a clean subset match");
 });
