@@ -1642,9 +1642,29 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // the table's title: the nearest "… SCHEDULE" span above the header WITHIN
   // the table's own x-band — on a dense sheet the neighbouring table's title
   // shares the y-band and must not label this one
+  //
+  // The lookback budget (5) is spent only on rows that actually have a span
+  // in THIS table's own x-band (ledger item 5, real bug found on
+  // itd-d1-lab-mechanical.pdf#13's real "HUMIDIFIER SCHEDULE"): `rows` is
+  // built sheet-WIDE, so on a dense sheet with a second table sitting to the
+  // LEFT (here, the real "CONDENSING HOT WATER BOILER SCHEDULE" on the same
+  // sheet), that other table's own sub-header/data rows interleave into the
+  // SAME row indices between this table's real title and its header, purely
+  // by y-coincidence, unrelated to this table's own x-band entirely. A raw
+  // row-INDEX cap burns its whole budget on THOSE unrelated rows and never
+  // reaches the real title 3 rows further up in x — confirmed exactly this
+  // way, real numbers, not guessed: the real title sits 5 rows above the
+  // header counting only rows with content in this table's own x-band, but
+  // 8+ rows above it counting the sheet's full row list. Skipping (not
+  // charging budget for) any row with nothing in [x0,x1] fixes this without
+  // loosening the cap itself — a genuinely unrelated title still can't drift
+  // in from 5+ REAL rows away within this table's own column band.
   let title: Evidence | null = null;
-  for (let i = titleFrom; i >= 0 && i >= titleFrom - 5 && !title; i--) {
-    const hit = rows[i].find((t) => /SCHEDULE/.test(norm(t.str)) && t.x >= x0 && t.x <= x1);
+  for (let i = titleFrom, budget = 5; i >= 0 && budget > 0 && !title; i--) {
+    const inBand = rows[i].filter((t) => t.x >= x0 && t.x <= x1);
+    if (!inBand.length) continue;
+    budget--;
+    const hit = inBand.find((t) => /SCHEDULE/.test(norm(t.str)));
     if (hit) title = { sheet: sheet.key, text: hit.str.trim(), bbox: bboxOf(hit) };
   }
   // Fallback: the "…SCHEDULE" pass above found nothing — a table can
@@ -1655,12 +1675,15 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // "…SCHEDULE" match above. A single-span, all-caps, ≥3-word, digit-free
   // row in the same search window, inside the table's own x-band, is the
   // honest signal: a real title reads as one run of words with no numbers
-  // in it, unlike a data row or a wrapped unit fragment.
+  // in it, unlike a data row or a wrapped unit fragment. Same content-aware
+  // budget as the primary pass above, for the same real reason.
   if (!title) {
-    for (let i = titleFrom; i >= 0 && i >= titleFrom - 5 && !title; i--) {
-      if (rows[i].length !== 1) continue;
-      const t = rows[i][0];
-      if (t.x < x0 || t.x > x1) continue;
+    for (let i = titleFrom, budget = 5; i >= 0 && budget > 0 && !title; i--) {
+      const inBand = rows[i].filter((t) => t.x >= x0 && t.x <= x1);
+      if (!inBand.length) continue;
+      budget--;
+      if (inBand.length !== 1) continue;
+      const t = inBand[0];
       const s = norm(t.str);
       if (!s || /\d/.test(s) || !/^[A-Z][A-Z .,'’&()/-]*$/.test(s)) continue;
       if (s.split(/\s+/).filter(Boolean).length < 3) continue;

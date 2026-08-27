@@ -1565,3 +1565,34 @@ test("equipment extraction: a lone digit-free footnote/legend word never mints a
   assert.ok(keys.includes("EF-1") && keys.includes("EF-2"), "the real EF rows are untouched");
   assert.ok(keys.includes("PH-1"), "a real, digit-bearing tag is kept even when just as sparse as the noise around it");
 });
+
+test("title-hunt: a real title survives a neighboring table's own unrelated rows sharing its y-band (ledger item 5)", () => {
+  // Real bug, found live on itd-d1-lab-mechanical.pdf#13: the real
+  // "HUMIDIFIER SCHEDULE" title sits well above its own header, but a
+  // SEPARATE "CONDENSING HOT WATER BOILER SCHEDULE" table sits to the LEFT
+  // on the same sheet, and its own sub-header/data rows land at nearly the
+  // same y-values, purely by coincidence — each becomes its own row index in
+  // the sheet-wide `rows` array. A raw row-INDEX lookback cap burns its
+  // whole budget on those unrelated LEFT-side rows and never reaches the
+  // real title. Mirrors the real shape: 6 unrelated rows (a different
+  // table's own header/unit/data fragments, all at x=100, well outside this
+  // table's own column band) sit between the real title and this table's
+  // own header — enough to exhaust the old 5-row raw cap, but every one of
+  // them has nothing in this table's own x-band, so the fixed, content-aware
+  // budget skips them for free and still reaches the real title.
+  const sched: SheetSpans = {
+    key: "humidifier.pdf#1", sheet_number: "M6.2",
+    spans: [
+      sp("HUMIDIFIER SCHEDULE", 600, 10),
+      // the unrelated LEFT table's own rows, sharing y-bands with nothing of
+      // this table's own — each a distinct row, none in [x0,x1] below
+      sp("STEAM", 100, 20), sp("GAS", 100, 30), sp("ELECTRIC", 100, 40),
+      sp("(°F)", 100, 50), sp("CAPACITY", 100, 60), sp("B-1", 100, 70),
+      sp("SYMBOL", 600, 100), sp("MBH", 700, 100), sp("AMPS", 800, 100), sp("CFM", 900, 100), sp("MANUFACTURER", 1000, 100), sp("MODEL", 1150, 100), sp("REMARKS", 1300, 100),
+      sp("HUM-1", 600, 125), sp("30", 700, 125), sp("5", 800, 125), sp("200", 900, 125), sp("AAON", 1000, 125), sp("XYZ", 1150, 125), sp("1,2", 1300, 125),
+    ],
+  };
+  const tab = extractTable(sched, "equipment");
+  assert.ok(tab, "the real header still qualifies");
+  assert.equal(tab!.title?.text, "HUMIDIFIER SCHEDULE", `title-hunt must not settle for one of the unrelated LEFT table's own row fragments: got ${JSON.stringify(tab!.title)}`);
+});
