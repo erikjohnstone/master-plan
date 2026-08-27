@@ -125,6 +125,13 @@ function classifyError(message: string): FailureType {
   if (/no schedule row ".*" in the set/i.test(message)) return "TABLE_MATCH_FAILURE";
   if (/ambiguous:.*schedule rows carry the key/i.test(message)) return "AMBIGUOUS_ROW_KEY";
   if (/cannot be geometrically anchored/i.test(message)) return "SYMBOL_FALSE_NEGATIVE";
+  // A different real refusal shape (found live, baker-county-eoc-bidset.pdf's
+  // real LUMINAIRE SCHEDULE, tags R1/X1): the tag TEXT is drawn, but the
+  // linework around it doesn't recur at its other occurrence(s) — no
+  // repeatable marker geometry to fingerprint. Distinct wording from "not
+  // drawn at all" above, but the same real outcome for a takeoff: a symbol
+  // this pipeline could not confirm, not a crash.
+  if (/cannot be anchored:.*does not recur|no fingerprintable marker linework/i.test(message)) return "SYMBOL_FALSE_NEGATIVE";
   if (/no vector linework/i.test(message)) return "REFUSED_NO_LINEWORK";
   if (/no text layer/i.test(message)) return "TABLE_DISCOVERY_FAILURE";
   return "UNCLASSIFIED";
