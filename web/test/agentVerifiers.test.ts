@@ -73,7 +73,7 @@ test("both verifiers can fire together in one run, independently", () => {
 });
 
 test("the registry itself declares exactly the tools this session has real evidence for — a deliberate, named list, not a guess", () => {
-  assert.deepEqual(AGENT_VERIFIERS.map((v) => v.tool), ["trace_connectivity", "count_marks", "read_schedule"]);
+  assert.deepEqual(AGENT_VERIFIERS.map((v) => v.tool), ["trace_connectivity", "count_marks", "read_schedule", "sweep_schedule_row"]);
 });
 
 // ── read_schedule row-key disclosure ────────────────────────────────────────
@@ -110,6 +110,43 @@ test("read_schedule: multiple calls/tables merge their real row keys, deduplicat
 test("read_schedule: no rows array on the result (a refusal/no-match shape) — no note, nothing safe to disclose", () => {
   const callLog = [{ id: "1", name: "read_schedule", args: {}, out: { note: "sheet not open" } }];
   assert.deepEqual(runVerifiers(callLog), []);
+});
+
+// ── sweep_schedule_row real-match disclosure ────────────────────────────────
+// Real, live-observed: asked to sweep EBB-1 (a real, already-corroborated
+// bessemer device), the model's own final answer claimed "found = 0... no
+// confirmed instances" while the SAME tool call it had just received
+// returned a real `total_found: 1` with a concrete anchor position —
+// re-running the identical call moments later, no code change, correctly
+// summarized the same real data. A misreading, not a tool defect.
+test("sweep_schedule_row: a real non-zero total_found is always disclosed, with its anchor", () => {
+  const callLog = [
+    {
+      id: "1", name: "sweep_schedule_row", args: { tag: "EBB-1" },
+      out: { tag: "EBB-1", total_found: 1, anchor: { sheet: "bessemer-mechanical-bidset.pdf#6", at: [2435.9, 1031.1] } },
+    },
+  ];
+  const notes = runVerifiers(callLog);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /EBB-1/);
+  assert.match(notes[0], /total_found=1/);
+  assert.match(notes[0], /2435\.9/);
+});
+
+test("sweep_schedule_row: a real total_found of 0 — no note, nothing to correct", () => {
+  const callLog = [{ id: "1", name: "sweep_schedule_row", args: { tag: "ZZ9" }, out: { tag: "ZZ9", total_found: 0 } }];
+  assert.deepEqual(runVerifiers(callLog), []);
+});
+
+test("sweep_schedule_row: multiple real matches across calls all get disclosed, each with its own tag", () => {
+  const callLog = [
+    { id: "1", name: "sweep_schedule_row", args: { tag: "EBB-1" }, out: { tag: "EBB-1", total_found: 1, anchor: { at: [100, 200] } } },
+    { id: "2", name: "sweep_schedule_row", args: { tag: "EBB-2" }, out: { tag: "EBB-2", total_found: 2, anchor: { at: [300, 400] } } },
+  ];
+  const notes = runVerifiers(callLog);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /EBB-1/);
+  assert.match(notes[0], /EBB-2/);
 });
 
 // ── aggregate-completeness gate ─────────────────────────────────────────────

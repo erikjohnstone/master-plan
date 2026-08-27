@@ -84,6 +84,33 @@ function checkScheduleRowKeys(calls) {
   return `[Automated check: read_schedule's own real row keys this run were: ${keys.join(", ")}. A column HEADER name (e.g. "SYMBOL", "REMARKS") is not a row key — only the keys listed here identify an actual row.]`;
 }
 
+/** sweep_schedule_row: real, found live (accuracy-hardening plan, this same
+ * demo session) — asked to sweep EBB-1 (a real, corroborated bessemer
+ * device already proven live in an earlier demo this session), the model's
+ * own final answer claimed "found = 0 real matches... no confirmed
+ * instances", directly contradicting the tool's own returned
+ * `total_found: 1` with a real, concrete anchor `at` position in the SAME
+ * tool result it had just received — a real misreading, not a tool defect
+ * (re-running the identical call moments later, with no code change,
+ * correctly summarized the same real data). The same "never parse the
+ * model's prose, just always state ground truth" doctrine as every other
+ * verifier here: discloses the tool's own real `total_found`/anchor
+ * whenever it's non-zero, so a false "not found" claim sits right next to
+ * the deterministic fact that contradicts it. */
+function checkSweepScheduleRow(calls) {
+  const found = [];
+  for (const { args, out } of calls) {
+    const n = out?.total_found;
+    if (typeof n === "number" && n > 0) {
+      const tag = args?.tag || out?.tag || "?";
+      const at = Array.isArray(out?.anchor?.at) ? ` at ${JSON.stringify(out.anchor.at)}` : "";
+      found.push(`${tag}: total_found=${n}${at}`);
+    }
+  }
+  if (!found.length) return null;
+  return `[Automated check: sweep_schedule_row returned a real, non-zero total_found for: ${found.join("; ")}. Do not report these as "not found" or "0 confirmed" — a real match exists per the tool's own output.]`;
+}
+
 /** The registry — one entry per tool with a known real honesty risk.
  * Adding protection for a NEW tool is a one-line addition here, not a new
  * hand-written backstop wired into the loop itself. */
@@ -91,6 +118,7 @@ export const AGENT_VERIFIERS = [
   { tool: "trace_connectivity", check: checkTraceConnectivity },
   { tool: "count_marks", check: checkCountMarks },
   { tool: "read_schedule", check: checkScheduleRowKeys },
+  { tool: "sweep_schedule_row", check: checkSweepScheduleRow },
 ];
 
 /** A real word for "the estimator is asking for a whole-set/whole-building
