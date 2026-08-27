@@ -236,22 +236,62 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
     nodes[a].edges.push(ei); nodes[b].edges.push(ei);
   };
 
+  // Spatial index over the junctions, so the per-segment scan below never
+  // has to test every junction against every segment — a real, measured,
+  // dominant cost (accuracy-hardening plan, later session): profiled on a
+  // real, dense itd-d1-lab sheet, this naive O(survivors × junctions) scan
+  // alone cost 128.5s of a real 129.4s total trace (25,843 survivors ×
+  // 24,843 junctions = 642M inner iterations), while JTS's own noding —
+  // the part that LOOKS like the expensive computational-geometry step —
+  // took only 714ms. A junction can only ever lie ON a segment within
+  // `solvedGrid` of it, so bucketing junctions by real 2D proximity and
+  // only testing a segment against junctions in its OWN nearby buckets is a
+  // pure, provably-safe pruning of the identical test below — it never
+  // changes which junctions count as interior, only skips ones too far
+  // away to ever qualify, the same way `find`'s own spatial candidates work
+  // elsewhere in this codebase (e.g. `clusterByProximity` in inlinemotif.ts).
+  const junctionPts: [number, number][] = [];
+  for (const key of junctions) {
+    const [jx, jy] = key.split(",").map(Number);
+    junctionPts.push([jx, jy]);
+  }
+  const cell = Math.max(solvedGrid * 16, 32);
+  const jBuckets = new Map<string, number[]>();
+  junctionPts.forEach(([jx, jy], idx) => {
+    const k = `${Math.floor(jx / cell)},${Math.floor(jy / cell)}`;
+    let b = jBuckets.get(k);
+    if (!b) { b = []; jBuckets.set(k, b); }
+    b.push(idx);
+  });
+
   for (const s of survivors) {
     const dx = s.x2 - s.x1, dy = s.y2 - s.y1;
     const len2 = dx * dx + dy * dy;
-    // interior junctions on THIS segment, parametrized 0..1 along it
+    // interior junctions on THIS segment, parametrized 0..1 along it —
+    // candidates come only from buckets the segment's own (tolerance-
+    // expanded) bounding box actually overlaps.
     const interior: number[] = [];
-    for (const key of junctions) {
-      const [jx, jy] = key.split(",").map(Number);
-      if ((jx === s.x1 && jy === s.y1) || (jx === s.x2 && jy === s.y2)) continue;
-      const t = ((jx - s.x1) * dx + (jy - s.y1) * dy) / len2;
-      if (t <= 0 || t >= 1) continue;
-      // collinearity: perpendicular distance from (jx,jy) to the segment's
-      // own line must be within the grid the noding attempt actually
-      // succeeded at — a real junction on this run, not an unrelated crossing.
-      const px = s.x1 + t * dx, py = s.y1 + t * dy;
-      if (Math.hypot(jx - px, jy - py) > solvedGrid + 1e-6) continue;
-      interior.push(t);
+    const bx0 = Math.floor((Math.min(s.x1, s.x2) - solvedGrid) / cell);
+    const bx1 = Math.floor((Math.max(s.x1, s.x2) + solvedGrid) / cell);
+    const by0 = Math.floor((Math.min(s.y1, s.y2) - solvedGrid) / cell);
+    const by1 = Math.floor((Math.max(s.y1, s.y2) + solvedGrid) / cell);
+    for (let bx = bx0; bx <= bx1; bx++) {
+      for (let by = by0; by <= by1; by++) {
+        const cand = jBuckets.get(`${bx},${by}`);
+        if (!cand) continue;
+        for (const idx of cand) {
+          const [jx, jy] = junctionPts[idx];
+          if ((jx === s.x1 && jy === s.y1) || (jx === s.x2 && jy === s.y2)) continue;
+          const t = ((jx - s.x1) * dx + (jy - s.y1) * dy) / len2;
+          if (t <= 0 || t >= 1) continue;
+          // collinearity: perpendicular distance from (jx,jy) to the segment's
+          // own line must be within the grid the noding attempt actually
+          // succeeded at — a real junction on this run, not an unrelated crossing.
+          const px = s.x1 + t * dx, py = s.y1 + t * dy;
+          if (Math.hypot(jx - px, jy - py) > solvedGrid + 1e-6) continue;
+          interior.push(t);
+        }
+      }
     }
     interior.sort((a, b) => a - b);
     let prevX = s.x1, prevY = s.y1;

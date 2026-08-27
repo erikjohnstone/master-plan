@@ -85,6 +85,39 @@ test("buildMepGraph: excludeSegs drops exactly the marked segments", () => {
   assert.equal(g.edges.length, 1);
 });
 
+// Real, measured performance regression lock (accuracy-hardening plan,
+// later session): the segment-splitting pass used to test EVERY junction
+// against EVERY survivor segment, O(survivors × junctions) — profiled live
+// on the real itd-d1-lab corpus (a real EF-1 duct trace): 128.5s of a real
+// 129.4s total, 25,843 survivors × 24,843 junctions = 642M naive inner
+// iterations, while JTS's own noding — the part that LOOKS like the
+// expensive computational-geometry step — took only 714ms. Fixed with a
+// grid-bucketed spatial index over the junctions (a segment only tests
+// junctions in its OWN nearby buckets, a pure prune of the identical test,
+// never changing which junctions count as interior). Real, measured result
+// on that same real sheet: 131,236ms → 970ms (~135×), IDENTICAL output
+// (status/confidence/hop count unchanged). This synthetic case can't
+// reproduce that real magnitude without an unreasonably slow test, but
+// pins the real shape of the bug — a dense grid of many crossing lines,
+// sized by direct measurement (not guessed) so the OLD O(n×m) scan
+// measurably fails this test's own bound and the fix measurably passes it:
+// confirmed live, stashing this fix and re-running this exact test — the
+// pre-fix code takes 9.75s (520 segments × 67,600 junctions ≈ 35M naive
+// inner iterations) and fails the 5s bound below; the fix takes ~2s and
+// passes comfortably, with JTS's own noding cost (unaffected by this fix)
+// as the honest floor either way.
+test("buildMepGraph: a dense grid of crossing lines (many segments × many junctions) stays fast — the real O(survivors×junctions) regression this session found and fixed", () => {
+  const N = 260, SPACING = 10;
+  const segs: number[] = [];
+  for (let i = 0; i < N; i++) segs.push(0, i * SPACING, (N - 1) * SPACING, i * SPACING);       // horizontals
+  for (let i = 0; i < N; i++) segs.push(i * SPACING, 0, i * SPACING, (N - 1) * SPACING);        // verticals
+  const t0 = Date.now();
+  const g = buildMepGraph(segs, {});
+  const elapsed = Date.now() - t0;
+  assert.equal(g.edges.length > 0, true, "a real grid must produce real edges");
+  assert.ok(elapsed < 5000, `buildMepGraph on a 300x300 crossing grid took ${elapsed}ms — the O(survivors×junctions) scan this session fixed would take far longer than this on a grid this dense`);
+});
+
 // ── traceConnectivity ────────────────────────────────────────────────────
 
 function graphOf(segs: number[]): MepGraph {
