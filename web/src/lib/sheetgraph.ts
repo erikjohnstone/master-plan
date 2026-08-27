@@ -1577,13 +1577,32 @@ function bandDataRows(
     if (r != null && at - cols.cols[idx].start > r.after) return null;
     return cols.cols[idx].label;
   };
+  // A WIDE_LAST cell that already holds real text and is about to absorb a
+  // SECOND, far-off token: field-found on two real mechanical sets
+  // (federal-attachment4-mechanical.pdf#16, itd-d1-lab-mechanical.pdf#12) — a
+  // sheet-corner title block sits well to the right of the table's own ruled
+  // border, and on the ~12 rows whose y happens to land near one of the title
+  // block's own text lines, its firm-name/address/phone text gets banded in
+  // right alongside the row's genuine REMARKS value ("SDV" → "SDV EGLIN AIR
+  // FORCE BASE"). The generous rightMargin above exists so a WIDE column's
+  // own long value still bands (that margin stays untouched — every anchor's
+  // reach is unaffected); this gate instead looks at what actually lands IN a
+  // cell: two tokens of the SAME real remark sit word-spacing apart (single-
+  // digit to low-tens of px), but the measured bleed gap on both real sheets
+  // was 293px and 617px — 15–33× the row's own text height. A gap that wide
+  // is never a second word of the same value; it is refused, not merged, so
+  // the cell keeps only the token nearest its own real column start.
+  const farFromCell = (label: string, t: GraphSpan, existing: TableCell | undefined): boolean =>
+    !!existing && WIDE_LAST.has(label) && t.x - existing.bbox[2] > Math.max(80, (t.h || 8) * 8);
   const add = (row: TableRow, toks: GraphSpan[]) => {
     for (const t of toks) {
       const label = columnOf(t);
       if (label == null) continue;
+      const existing = row.cells[label];
+      if (farFromCell(label, t, existing)) continue;
       const text = t.str.trim();
-      if (!row.cells[label]) row.cells[label] = { text, bbox: bboxOf(t) };
-      else row.cells[label] = { text: `${row.cells[label].text} ${text}`, bbox: merge(row.cells[label].bbox, bboxOf(t)) };
+      if (!existing) row.cells[label] = { text, bbox: bboxOf(t) };
+      else row.cells[label] = { text: `${existing.text} ${text}`, bbox: merge(existing.bbox, bboxOf(t)) };
       region = region ? merge(region, bboxOf(t)) : bboxOf(t);
     }
   };
