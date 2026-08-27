@@ -73,7 +73,43 @@ test("both verifiers can fire together in one run, independently", () => {
 });
 
 test("the registry itself declares exactly the tools this session has real evidence for — a deliberate, named list, not a guess", () => {
-  assert.deepEqual(AGENT_VERIFIERS.map((v) => v.tool), ["trace_connectivity", "count_marks"]);
+  assert.deepEqual(AGENT_VERIFIERS.map((v) => v.tool), ["trace_connectivity", "count_marks", "read_schedule"]);
+});
+
+// ── read_schedule row-key disclosure ────────────────────────────────────────
+// Real, live-observed: asked whether the real AIR COMPRESSOR SCHEDULE
+// (exactly one real row, keyed "AC-1") contains a row keyed "SYMBOL" (a real
+// COLUMN header on that same table, not a row key), the model answered
+// "yes" — conflating the row-key COLUMN's own name with an actual row key.
+test("read_schedule: a real table's row keys are always disclosed, distinct from its column headers", () => {
+  const callLog = [
+    {
+      id: "1", name: "read_schedule", args: {},
+      out: { table: { headers: ["SYMBOL", "REMARKS"], rows: [{ key: "AC-1", cells: {} }] } },
+    },
+  ];
+  const notes = runVerifiers(callLog);
+  assert.equal(notes.length, 1);
+  const keyList = notes[0].match(/row keys this run were: ([^.]+)\./)?.[1] ?? "";
+  assert.match(keyList, /AC-1/);
+  assert.ok(!keyList.includes("SYMBOL"), `the disclosed KEY LIST must never include a column header name as if it were a real row key: ${keyList}`);
+});
+
+test("read_schedule: multiple calls/tables merge their real row keys, deduplicated", () => {
+  const callLog = [
+    { id: "1", name: "read_schedule", args: {}, out: { table: { headers: [], rows: [{ key: "EF-1" }, { key: "EF-2" }] } } },
+    { id: "2", name: "read_schedule", args: {}, out: { table: { headers: [], rows: [{ key: "EF-1" }] } } },
+  ];
+  const notes = runVerifiers(callLog);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /EF-1/);
+  assert.match(notes[0], /EF-2/);
+  assert.equal((notes[0].match(/EF-1/g) || []).length, 1, "a repeated real key is listed once, not duplicated");
+});
+
+test("read_schedule: no rows array on the result (a refusal/no-match shape) — no note, nothing safe to disclose", () => {
+  const callLog = [{ id: "1", name: "read_schedule", args: {}, out: { note: "sheet not open" } }];
+  assert.deepEqual(runVerifiers(callLog), []);
 });
 
 // ── aggregate-completeness gate ─────────────────────────────────────────────

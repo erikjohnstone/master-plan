@@ -63,12 +63,34 @@ function checkCountMarks(calls) {
   return `[Automated check: count_marks returned a confirmed count of 0 for: ${[...unconfirmed].join(", ")}. Any specific non-zero number stated above for these is not from count_marks — treat it as an unverified visual estimate, not a tool-confirmed count.]`;
 }
 
+/** read_schedule: real, found live (accuracy-hardening plan, this same demo
+ * session) — asked "does this schedule contain a ROW keyed 'REMARKS' or
+ * 'SYMBOL'?" (both real COLUMN headers on the real AIR COMPRESSOR SCHEDULE,
+ * itd-d1-lab-mechanical.pdf#28, which has exactly one real row, keyed
+ * "AC-1"), the model answered "yes" — reasoning that the row-KEY COLUMN is
+ * itself named "SYMBOL", therefore a row must be KEYED "SYMBOL". `headers`
+ * (column names) and `rows[].key` (one specific row's own key) are two
+ * different real fields in the SAME tool result; a prompt rule alone
+ * (agentSystemPrompt) narrowed but did not close this — the model still
+ * slipped on the harder, unhinted phrasing. Same doctrine as every other
+ * verifier here: don't try to parse or catch the specific wrong sentence,
+ * just always disclose the real, tool-confirmed row keys so a false claim
+ * about row-key membership sits right next to the deterministic truth. */
+function checkScheduleRowKeys(calls) {
+  const tables = calls.map((c) => c.out?.table).filter((t) => t && Array.isArray(t.rows));
+  if (!tables.length) return null;
+  const keys = [...new Set(tables.flatMap((t) => t.rows.map((r) => r?.key).filter((k) => typeof k === "string")))];
+  if (!keys.length) return null;
+  return `[Automated check: read_schedule's own real row keys this run were: ${keys.join(", ")}. A column HEADER name (e.g. "SYMBOL", "REMARKS") is not a row key — only the keys listed here identify an actual row.]`;
+}
+
 /** The registry — one entry per tool with a known real honesty risk.
  * Adding protection for a NEW tool is a one-line addition here, not a new
  * hand-written backstop wired into the loop itself. */
 export const AGENT_VERIFIERS = [
   { tool: "trace_connectivity", check: checkTraceConnectivity },
   { tool: "count_marks", check: checkCountMarks },
+  { tool: "read_schedule", check: checkScheduleRowKeys },
 ];
 
 /** A real word for "the estimator is asking for a whole-set/whole-building
