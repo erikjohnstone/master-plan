@@ -1358,14 +1358,22 @@ test("multi-table extraction: Fan Schedule's real EF-1 row is present, with no f
   assert.ok(fan, "Fan Schedule is found");
   // Only 3 of Fan Schedule's real columns (ID/DESCRIPTION/MANUFACTURER) are
   // in today's flooring-shaped vocabulary — MODEL/AIR FLOW/RPM/DUCT/
-  // ELECTRICAL aren't yet, so their real data (model number, CFM range)
-  // lands in the last recognized column (MANUFACTURER) rather than its own.
-  // Expected given today's vocabulary, not a bug — exactly what maturity
-  // plan Phase 5's dedicated equipment vocabulary exists to fix.
+  // ELECTRICAL aren't yet. MANUFACTURER's own gap to DESCRIPTION (its only
+  // real neighbour) is anomalously wide relative to the table's own
+  // baseline column pitch — the real, un-modeled MODEL/AIR FLOW columns are
+  // hiding in it — so anchorRadii (ledger item 57) now refuses to credit
+  // their real model-number/CFM data to MANUFACTURER rather than crediting
+  // it: no more silent cross-column corruption, but also no real
+  // manufacturer value survives for this row (this fixture's own MANUFACTURER
+  // header cell has no separate data token of its own at all — the source
+  // PDF merges "PANASONIC" straight into the wide DESCRIPTION span instead,
+  // confirmed by this fixture's own spans). Fixed by a dedicated equipment
+  // vocabulary remains the real fix for recovering MODEL/AIR FLOW as their
+  // own columns — Phase 5's own scope, unchanged by this.
   const ef1 = fan.rows.find((r) => r.key === "EF-1")!;
   assert.ok(ef1, "the real EF-1 row is present");
   assert.match(ef1.cells.DESCRIPTION.text, /PANASONIC/);
-  assert.equal(ef1.cells.MANUFACTURER.text, "FV-0511VKL2 50-80-110");
+  assert.equal(ef1.cells.MANUFACTURER, undefined, "withheld, not guessed — MODEL/AIR FLOW's real data no longer corrupts MANUFACTURER");
   assert.ok(!fan.rows.some((r) => r.key === "NUMBER"), "the wrapped 'MODEL NUMBER' sub-header line must not mint a fake 'NUMBER' row");
   assert.deepEqual(fan.rows.map((r) => r.key), ["EF-1"], "Fan Schedule has exactly its one real row, nothing minted from the wrapped header");
 });
@@ -1723,6 +1731,72 @@ test("twin-column tiers: two same-shaped sub-columns under DIFFERENT non-vocabul
   assert.equal(row.cells.AMPS.text, "2.7", "the real amperage is never shared with a neighbouring sub-column's own value");
   assert.equal(row.cells["OUTSIDE AIR TEMP."].text, "68");
   assert.equal(row.cells["ENTERING TEMP."].text, "74");
+});
+
+test("anchorRadii: an anomalously wide anchor gap refuses a real un-modeled neighbour's data instead of crediting it (ledger item 57, real BYPASS CONTROL VALVE SCHEDULE)", () => {
+  // Real shape, measured against the real itd-d1-lab-mechanical.pdf#13
+  // "BYPASS CONTROL VALVE SCHEDULE": 5 of its 13 real leaf columns (SERVES,
+  // VALVE TYPE, OPERATION, FLUID, FLOW RANGE (GPM)) have no representative
+  // in EQUIPMENT_HEADERS, so their real data bled into whichever recognized
+  // anchor sat nearest — real, measured, BCV-1's own GPM cell read "100%
+  // WATER 25 19-110 2.7 INDEPENDENT MODULATING" (six real values from five
+  // different real columns). Gap ratios below mirror the real table's own
+  // (SYMBOL→GPM 854px, GPM→SIZE 504px, SIZE→MANUFACTURER 431px,
+  // MANUFACTURER→REMARKS 225px — the last pair the table's own real
+  // "nothing un-modeled here" baseline), scaled down for a readable fixture.
+  const sched: SheetSpans = {
+    key: "bcv.pdf#1", sheet_number: "M13",
+    spans: [
+      sp("BYPASS CONTROL VALVE SCHEDULE", 100, 20),
+      sp("SYMBOL", 0, 50), sp("GPM", 340, 50), sp("SIZE", 540, 50), sp("MANUFACTURER", 730, 50), sp("REMARKS", 830, 50),
+      // the real row: SYMBOL and GPM's own real value sit AT their anchors;
+      // SERVES/VALVE TYPE/FLUID/FLOW RANGE have no anchor of their own and
+      // sit in the wide, un-modeled gaps between SYMBOL/GPM/SIZE
+      sp("BCV-1", 0, 80),
+      sp("HEATING-SYS", 110, 80), sp("PRESS-IND", 200, 80), sp("WATER", 280, 80),
+      sp("25", 340, 80),
+      sp("19-110", 420, 80),
+      sp("2.0", 540, 80),
+      sp("ACME", 730, 80),
+      sp("1,2,3", 830, 80),
+    ],
+  };
+  const tab = extractTable(sched, "equipment")!;
+  assert.ok(tab, "the real vocabulary anchors are enough to clear the bar");
+  const row = tab.rows.find((r) => r.key === "BCV-1")!;
+  assert.equal(row.cells.SYMBOL.text, "BCV-1", "SYMBOL keeps its own value, not SERVES' bled-in text");
+  assert.equal(row.cells.GPM.text, "25", "GPM keeps its own real value, not FLUID/FLOW RANGE's bled-in text");
+  assert.equal(row.cells.SIZE.text, "2.0", "SIZE keeps its own real value, un-polluted");
+  assert.equal(row.cells.MANUFACTURER.text, "ACME");
+  assert.equal(row.cells.REMARKS.text, "1,2,3");
+  // the un-modeled columns' own real data is withheld, not silently dropped
+  // from evidence AND not corrupting a neighbour — it simply names no cell
+  for (const c of Object.values(row.cells)) {
+    assert.ok(!/HEATING-SYS|PRESS-IND|WATER|19-110/.test(c.text), `no un-modeled column's data bled into ${JSON.stringify(c.text)}`);
+  }
+});
+
+test("anchorRadii: REMARKS/DESCRIPTION/NAME keep their own deliberately wide reach — never capped by this mechanism (real regression, wide REMARKS test)", () => {
+  // The exact real shape that broke on a first version of this fix: a
+  // genuinely wide gap to a WIDE_LAST column (REMARKS/DESCRIPTION/NOTES) or
+  // a NAME key column is deliberate, existing behavior (bandLimits' own
+  // rightMargin/leftMargin) — not a hidden un-modeled column. This must
+  // never be capped by anchorRadii; the dedicated "wide REMARKS" test above
+  // in this file already pins the full real shape end to end — this is a
+  // narrower, minimal repro of just the anchorRadii interaction.
+  const sched: SheetSpans = {
+    key: "wide2.pdf#1", sheet_number: "M14",
+    spans: [
+      sp("SOME SCHEDULE", 100, 10),
+      sp("SYMBOL", 0, 40), sp("SIZE", 60, 40), sp("REMARKS", 500, 40),
+      sp("EF-1", 0, 70), sp("10IN", 60, 70),
+      rsp("A LONG WRAPPED REMARK THAT SITS FAR RIGHT OF THE OTHER COLUMNS", 500, 74),
+    ],
+  };
+  const tab = extractTable(sched, "finish")!;
+  assert.ok(tab, "the table is found");
+  const row = tab.rows.find((r) => r.key === "EF-1")!;
+  assert.match(row.cells.REMARKS.text, /LONG WRAPPED REMARK/, "REMARKS' own deliberately wide gap is never capped");
 });
 
 test("extractAllTables: a real table whose own header/boundary is found but every row filters as garbage does not stop the scan of the REST of the sheet (real itd-d1-lab-mechanical.pdf#13 regression)", () => {

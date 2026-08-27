@@ -1168,7 +1168,27 @@ function findRotatedHeader(vert: GraphSpan[], vocab: string[], required: string[
 // of knowing a sub-column's edges. Everything else bands to the nearest
 // UNBOUNDED header center, so a narrow BASE column keeps its own cell and
 // never inherits the wall code drawn just past its rule line.
-const nearestAnchor = (x: number, anchors: Anchor[]) => {
+//
+// Refuse-over-guess for the UNBOUNDED case too (accuracy-hardening plan,
+// ledger item 57): when two adjacent anchors sit anomalously far apart
+// relative to the table's OWN tightest confirmed column, real un-modeled
+// columns are almost certainly hiding between them, and their real data has
+// nowhere honest to land — nearest-anchor crammed it into whichever
+// recognized anchor was closer regardless of how far, real, found live, on
+// BYPASS CONTROL VALVE SCHEDULE (itd-d1-lab-mechanical.pdf#13): 5 of its 13
+// real leaf columns (SERVES, VALVE TYPE, OPERATION, FLUID, FLOW RANGE
+// (GPM)) have no representative in EQUIPMENT_HEADERS, and BCV-1's own GPM
+// cell read "100% WATER 25 19-110 2.7 INDEPENDENT MODULATING" — six real
+// values from five different real columns, only one of which (25) actually
+// belongs there. A first attempt at this widened EQUIPMENT_HEADERS itself
+// to name those columns and was reverted: it regressed table-BOUNDARY
+// detection on this exact sheet (4 real tables found dropped to 2), because
+// vocabulary feeds header-row QUALIFICATION, not just column banding. This
+// fix touches neither vocabulary nor header-row detection — anchorRadii
+// (below) only tightens how far an ALREADY-anchored column may reach once
+// its own neighbour gap proves anomalous, so a normal, fully-vocabularied
+// table (every gap close to the table's own baseline) is never touched.
+const nearestAnchor = (x: number, anchors: Anchor[], radii?: Map<string, Radius>): string | null => {
   let inside: Anchor | null = null;
   for (const a of anchors) {
     if (a.x0 == null || a.x1 == null || x < a.x0 || x > a.x1) continue;
@@ -1176,12 +1196,75 @@ const nearestAnchor = (x: number, anchors: Anchor[]) => {
   }
   if (inside) return inside.label;
   let best: Anchor | null = null;
+  let bestD = Infinity;
   for (const a of anchors) {
     if (a.x0 != null) continue;
-    if (!best || Math.abs(a.x - x) < Math.abs(best.x - x)) best = a;
+    const d = Math.abs(a.x - x);
+    if (d < bestD) { bestD = d; best = a; }
   }
-  return (best ?? anchors[0]).label;
+  if (!best) return anchors[0].label;
+  const r = radii?.get(best.label);
+  // anomalously far — withheld, not guessed. Which SIDE of the anchor a
+  // token sits on decides which cap applies — see anchorRadii's own comment
+  // for why this has to be a per-side reach, not one symmetric radius.
+  if (r != null && bestD > (x < best.x ? r.before : r.after)) return null;
+  return best.label;
 };
+
+/** Per-anchor reach, in px, on each side of its own center: how far a token
+ * may sit before it and still be credited to it. */
+type Radius = { before: number; after: number };
+// The reach, per side, per label: half the table's own SMALLEST unbounded-
+// anchor gap, but only on a side whose OWN neighbour gap is well past that
+// baseline (or has no neighbour at all — the table's own edge is not proof
+// nothing real lies past it either). The smallest gap is never invented —
+// every real table measured this session keeps at least one pair of
+// adjacent anchors with nothing un-modeled between them (BCV's own
+// MANUFACTURER→REMARKS, for instance), so it is a real, observed "one
+// recognized column's normal span" for THIS table, not a guessed constant.
+//
+// PER SIDE, not one symmetric radius per anchor: real, found live — Fan
+// Schedule's own MANUFACTURER anchor has a hugely inflated gap on its LEFT
+// (DESCRIPTION, swallowing the real, un-modeled MODEL/AIR FLOW columns) but
+// a perfectly normal gap on its RIGHT (nothing beyond it) — min(left,right)
+// reads that as "not inflated" and the real MODEL NUMBER/CFM data kept
+// bleeding in from the left. Symmetric on BCV's own GPM/SIZE only because
+// both anchors there happen to sit between two other inflated gaps; Fan
+// Schedule is the case that proves it has to be asymmetric in general.
+//
+// Needs at least 3 unbounded anchors (2 gaps) to mean anything; sub-tier
+// BOUNDED anchors (x0/x1 already set — WALLS N/E/S/W) are excluded
+// entirely, both from the baseline and from ever being capped — they
+// already claim exactly their own width and this mechanism has nothing to
+// add there.
+const GAP_INFLATION_RATIO = 1.6;
+const RADIUS_FACTOR = 0.5;
+function anchorRadii(anchors: Anchor[]): Map<string, Radius> {
+  const radii = new Map<string, Radius>();
+  const unbounded = anchors.filter((a) => a.x0 == null).sort((a, b) => a.x - b.x);
+  if (unbounded.length < 3) return radii;
+  const gaps = unbounded.slice(1).map((a, i) => a.x - unbounded[i].x).filter((g) => g > 0);
+  if (!gaps.length) return radii;
+  const baseline = Math.min(...gaps);
+  if (!(baseline > 0)) return radii;
+  const cap = baseline * RADIUS_FACTOR;
+  for (let i = 0; i < unbounded.length; i++) {
+    // A deliberately wide gap is not always a hidden column: REMARKS /
+    // DESCRIPTION / NOTES (WIDE_LAST, below) and a NAME key column both
+    // EARN a wide margin by this file's own design (bandLimits' own
+    // rightMargin/leftMargin) — a genuine wrapped remark or a long room-
+    // type phrase, not un-modeled neighbours. Capping those here would
+    // fight that existing, deliberate behavior (real regression, caught by
+    // this file's own "wide REMARKS" test before this shipped).
+    if (WIDE_LAST.has(unbounded[i].label) || unbounded[i].label === "NAME") continue;
+    const left = i > 0 ? unbounded[i].x - unbounded[i - 1].x : Infinity;
+    const right = i < unbounded.length - 1 ? unbounded[i + 1].x - unbounded[i].x : Infinity;
+    const before = left > baseline * GAP_INFLATION_RATIO ? cap : Infinity;
+    const after = right > baseline * GAP_INFLATION_RATIO ? cap : Infinity;
+    if (before < Infinity || after < Infinity) radii.set(unbounded[i].label, { before, after });
+  }
+  return radii;
+}
 
 // The ANCHORS bound the table, not the whole clustered row — on a dense sheet
 // a neighbouring table's header can share the y-band, and its x-range must
@@ -1443,22 +1526,34 @@ function bandDataRows(
   // than the next column's — sized from the table's own pitch, not from text
   // height, so a wider key ("139A") or a hair of indent still counts.
   const keyTol = cols && cols.cols.length > 1 ? Math.max(8, (cols.cols[1].start - cols.cols[0].start) * 0.5) : 40;
+  // Anomalously-wide anchor gaps mean real, un-modeled columns are hiding —
+  // see nearestAnchor/anchorRadii's own comments. Computed once per table,
+  // reused by BOTH binning paths below so a big table (real column starts
+  // recovered from its own data) and a sparse one (falling back to the
+  // header's own anchor centers) refuse the same way.
+  const radii = anchorRadii(anchors);
   const out: TableRow[] = [];
   const outY: number[] = [];
   let region: Bbox | null = null;
   /** Which column a token belongs to: its LEFT edge against the data-derived
    * column starts when those were recoverable, else the old nearest-anchor
-   * reading of its center. */
-  const columnOf = (t: GraphSpan): string => {
-    if (!cols) return nearestAnchor(centerX(t), anchors);
+   * reading of its center. Null: the token sits far enough past an
+   * anomalously-wide column's own baseline width that crediting it here
+   * would corrupt a real neighbour's cell with a real, different column's
+   * data — withheld rather than guessed (ledger item 57). */
+  const columnOf = (t: GraphSpan): string | null => {
+    if (!cols) return nearestAnchor(centerX(t), anchors, radii);
     const at = cols.coord === "left" ? t.x : centerX(t);
-    let label = cols.cols[0].label;
-    for (const c of cols.cols) { if (at + 1 >= c.start) label = c.label; else break; }
-    return label;
+    let idx = 0;
+    for (let i = 0; i < cols.cols.length; i++) { if (at + 1 >= cols.cols[i].start) idx = i; else break; }
+    const r = radii.get(cols.cols[idx].label);
+    if (r != null && at - cols.cols[idx].start > r.after) return null;
+    return cols.cols[idx].label;
   };
   const add = (row: TableRow, toks: GraphSpan[]) => {
     for (const t of toks) {
       const label = columnOf(t);
+      if (label == null) continue;
       const text = t.str.trim();
       if (!row.cells[label]) row.cells[label] = { text, bbox: bboxOf(t) };
       else row.cells[label] = { text: `${row.cells[label].text} ${text}`, bbox: merge(row.cells[label].bbox, bboxOf(t)) };
