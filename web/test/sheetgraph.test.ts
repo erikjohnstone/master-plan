@@ -1397,6 +1397,30 @@ test("headerLabels: an ordinary trailing abbreviation period (\"NO.\") is left a
   assert.equal(tab!.rows[0].cells.MODEL.text, "2544");
 });
 
+test("headerLabels: a real drafting typo (\"CEILIING FINISH\", a doubled I) still resolves to CEILING, not a silent anchor collision with NORTH", () => {
+  // Found live on the real Baker County EOC corpus set's own "ROOM FINISH
+  // SCHEDULE" (sheet #27): the drafter's own header literally reads
+  // "CEILIING FINISH". Before this fix, "CEILIING" matched no vocabulary
+  // word at all, so that column's own real anchor was never introduced —
+  // its cells silently landed under the nearest OTHER already-used anchor
+  // (measured directly: a real, wrong "NORTH" re-use, since NORTH's own
+  // anchor sits at a similar column position two ticks over). All 13 real
+  // rows on that sheet had their own real CEILING FINISH value (GYP-1/
+  // ACT-1) mislabeled as if it were a second "NORTH" reading.
+  const sched: SheetSpans = {
+    key: "typo.pdf#1", sheet_number: "A-601",
+    spans: [
+      sp("ROOM FINISH SCHEDULE", 100, 20),
+      sp("NUMBER", 100, 50), sp("ROOM", 200, 50), sp("FLOOR", 350, 50), sp("BASE", 450, 50), sp("NORTH", 550, 50), sp("CEILIING FINISH", 700, 50),
+      sp("100", 100, 75), sp("VESTIBULE", 200, 75), sp("RF-1", 350, 75), sp("WB-1", 450, 75), sp("P-2", 550, 75), sp("GYP-1", 700, 75),
+    ],
+  };
+  const tab = extractTable(sched, "room-finish")!;
+  assert.ok(tab.headers.includes("CEILING"), `the typo'd header must still resolve to CEILING: ${tab.headers.join(" | ")}`);
+  assert.equal(tab.rows[0].cells.CEILING.text, "GYP-1", "the real ceiling value lands in its own real column, not merged into NORTH");
+  assert.equal(tab.rows[0].cells.NORTH.text, "P-2", "NORTH keeps its own real value, never overwritten by the ceiling reading");
+});
+
 test("EQUIPMENT_HEADERS: AIRFLOW/VELOCITY carry real qualifying weight (not just vocabulary), the way a Canopy Hood Schedule needs", () => {
   // Real, found live on itd-d1-lab's own Canopy Hood Schedule: its header's
   // ONLY required-list hits are AIRFLOW and VELOCITY — every other word

@@ -435,9 +435,18 @@ const headerLabel = (s: string, vocab: string[]): string | null => headerLabels(
 // "NO." (O preceded by N, no boundary) is left alone while "E.S.P" (every
 // letter isolated by dots) collapses to "ESP".
 const ACRONYM_DOT_RE = /(?<=\b[A-Z])\.(?=[A-Z]\b)/g;
+// A real drawn header carries its own drafting typo (found live: Baker
+// County EOC's own real "ROOM FINISH SCHEDULE" prints "CEILIING FINISH",
+// a doubled I) — the doubled letter defeats an exact vocabulary match
+// entirely, so that column's own real anchor silently falls back to
+// whatever the nearest OTHER already-used anchor happens to be (measured:
+// its cells landed under a re-used "NORTH" label, not its own real
+// "CEILING" one). Narrowly targeted at this ONE confirmed real typo — not
+// a general fuzzy-match/typo-tolerance pass, which risks merging two
+// genuinely different vocabulary words that happen to share letters.
 const headerLabels = (s: string, vocab: string[]): string[] => {
   const out: string[] = [];
-  const collapsed = norm(s).replace(ACRONYM_DOT_RE, "");
+  const collapsed = norm(s).replace(ACRONYM_DOT_RE, "").replace(/\bCEILIING\b/g, "CEILING");
   for (const w of collapsed.split(/[^A-Z]+/)) if (w && vocab.includes(w) && !out.includes(w)) out.push(w);
   return out;
 };
