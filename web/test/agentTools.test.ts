@@ -283,6 +283,28 @@ test("find_legend_symbols: a valid call passes through to the canvas's own detec
   assert.deepEqual(calls, ["plan.pdf"]);
 });
 
+// sweep_inline_motif (accuracy-hardening plan Phase 4) — executeAgentTool's
+// own dispatch/shaping layer only; fingerprintInlineMotif/sweepInlineMotif's
+// own logic is covered directly by web/test/inlinemotif.test.ts and
+// mcp/test/tools.test.ts's real end-to-end tests.
+test("sweep_inline_motif: sheet not open on the canvas refuses with a named reason", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "sweep_inline_motif", { sheet: "other.pdf", seed_rect_norm: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
+  assert.match(out.error, /isn't open on the canvas/);
+});
+
+test("sweep_inline_motif: a valid call passes the clamped region through to the canvas's own sweep unchanged", async () => {
+  const calls: [string, unknown][] = [];
+  const { ctx } = makeCtx({
+    sweepInlineMotif: async (sheet: string, rect: unknown) => { calls.push([sheet, rect]); return { found: 1, matches: [{ at: [0.3, 0.3], w_ft: 1.1, h_ft: 0.8, size_score: 0.9 }], withheld: [], candidates_considered: 2 }; },
+  });
+  const out = await executeAgentTool(ctx, "sweep_inline_motif", { sheet: "plan.pdf", seed_rect_norm: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
+  assert.equal(out.found, 1);
+  assert.equal(out.matches[0].size_score, 0.9);
+  assert.deepEqual(calls[0][0], "plan.pdf");
+  assert.deepEqual(calls[0][1], { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 });
+});
+
 // trace_connectivity (maturity plan Phase 4) — executeAgentTool's own
 // dispatch/shaping layer only; buildMepGraph/traceConnectivity's own logic
 // is covered directly by web/test/mepconnectivity.test.ts.

@@ -317,6 +317,31 @@ export const findLegendSymbolsOutput = {
   note: z.string().optional().describe("Present when nothing was detected — not necessarily an error: a sheet with no real legend falls back to the ordinary symbol_sweep workflow"),
 };
 
+/** sweep_inline_motif (accuracy-hardening plan Phase 4) — a register/grille
+ * mark embedded within a tapered duct run, matched on its own hatch fill's
+ * real-world size/pitch rather than exact whole-shape segment count (see
+ * inlinemotif.ts's own header comment for the real, measured reason a
+ * whole-shape fingerprint under-scores real siblings of the same symbol). */
+const inlineMotifPlacement = {
+  at: z.tuple([z.number(), z.number()]).describe("Center, image px"),
+  w_ft: z.number().nullable().describe("Real-world width, when a scale is committed on this sheet — null otherwise"),
+  h_ft: z.number().nullable().describe("Real-world height, when a scale is committed — null otherwise"),
+  size_score: z.number().describe("How closely this candidate's real-world size matches the seed's, 0-1 (1 = identical)"),
+};
+export const sweepInlineMotifOutput = {
+  sheet: z.string(),
+  seed: z.object({
+    rect: z.tuple([z.number(), z.number(), z.number(), z.number()]).describe("The seed's own detected hatch-fill bbox, image px — may differ from the seed_rect you marqueed (tight around the fill itself)"),
+    w_ft: z.number().nullable(), h_ft: z.number().nullable(),
+    w_px: z.number(), h_px: z.number(),
+  }),
+  found: z.number().int().describe("Placements whose real-world size matched the seed's within tolerance"),
+  matches: z.array(z.object(inlineMotifPlacement)).describe("Deterministic reading order (y, then x)"),
+  withheld: z.array(z.object({ ...inlineMotifPlacement, reason: z.string() })).describe("Real-world size is in the loosely-off band — a question to LOOK at, never silently dropped or promoted"),
+  candidates_considered: z.number().int().describe("Compact, densely-hatched candidate regions considered sheet-wide before size filtering"),
+  note: z.string().optional().describe("Present when no scale is committed on this sheet — sizes were compared in image px only"),
+};
+
 export const measureLineOutput = {
   length_lf: z.number(),
   npts: z.number().int(),

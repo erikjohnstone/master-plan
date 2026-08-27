@@ -313,6 +313,18 @@ export const AGENT_TOOL_DEFS = [
     },
   },
   {
+    name: "sweep_inline_motif",
+    description: "Sweep for a register/grille mark that is embedded WITHIN a duct run, not drawn as its own standalone block — symbol_sweep's own whole-shape fingerprint measurably under-scores this shape (real, measured: two real siblings of the same symbol type score only ~76-77% against each other, under the 92% commit bar) because a real register/grille's own physical SIZE genuinely differs by CFM rating — a bigger airflow rating is drawn as a visibly bigger hatched box, not drafting noise. This tool matches on the hatch fill's own real-world size and pitch instead of exact segment count: marquee a REGISTER/GRILLE'S OWN HATCHED FILL as tightly as you can (not the whole duct run feeding it) and every other compact, densely-hatched region on the sheet whose real-world size is close to the seed's gets swept, at any of the seed's own 90-degree rotations (a duct run turning a corner keeps the same relative hatch angle). found/matches/withheld follow symbol_sweep's own doctrine: a real-world size within tolerance of the seed's is a match, a loosely-off size comes back withheld with a reason (a question to look at, never silently dropped or promoted), nothing asserted from shape alone. Needs a committed scale for the size tolerance to mean anything across different real fixture sizes — without one, sizes are compared in image px only (disclosed via a note), same-sheet-only. This tool detects only — it does not corroborate against a schedule row's own tag; use resolve_tag or read a schedule to confirm which specific tag a match belongs to.",
+    input_schema: {
+      type: "object",
+      properties: {
+        sheet: { type: "string" },
+        seed_rect_norm: { ...REGION_SCHEMA, description: "Marquee tightly around the register/grille's own hatched fill, normalized 0..1 — not the duct run feeding it." },
+      },
+      required: ["sheet", "seed_rect_norm"],
+    },
+  },
+  {
     name: "place_count",
     description: "Stage one count proposal per point (EA — one each) under a condition. Use for manually-located instances a symbol_sweep match, or a one-off you found by reading the sheet — not for area/room measurement (that's one_click). No scale required. Each proposal renders as a dashed marker the estimator accepts or rejects, exactly like propose_shapes.",
     input_schema: {
@@ -802,6 +814,11 @@ export async function executeAgentTool(ctx, name, args) {
       case "find_legend_symbols": {
         if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
         return await ctx.findLegendSymbols(args.sheet);
+      }
+
+      case "sweep_inline_motif": {
+        if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
+        return await ctx.sweepInlineMotif(args.sheet, clampRegion(args.seed_rect_norm));
       }
 
       case "place_count": {

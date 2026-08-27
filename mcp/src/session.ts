@@ -54,6 +54,14 @@ import { HVAC_REF_SHAPES } from "../../web/src/lib/hvacRefShapes.ts";
 // result straight into symbol_sweep (scope: "set") exactly as if a human
 // had marqueed it — the already-tested sweep engine is reused untouched.
 import { findLegendGlyphs, type LegendSpan } from "../../web/src/lib/legendlearn.ts";
+// Accuracy-hardening plan Phase 4 — a register/grille mark embedded within a
+// tapered duct run has no independent whole-shape perimeter of its own
+// (symbolsweep.ts's own matchSymbol whole-shape fingerprint measurably
+// under-scores real siblings of the SAME real symbol drawn at a different
+// CFM-driven physical size — see inlinemotif.ts's own header comment for the
+// full real measurement). fingerprintInlineMotif/sweepInlineMotif match on
+// the hatch fill's own real-world size/pitch instead of exact segment count.
+import { fingerprintInlineMotif, sweepInlineMotif } from "../../web/src/lib/inlinemotif.ts";
 // MEP connectivity tracing (maturity plan Phase 4) — buildMepGraph reuses
 // this project's own vendored JTS port for robust noding (see the module's
 // own header comment); traceConnectivity is the refusal-honest query, same
@@ -2634,6 +2642,43 @@ export class Session {
         segments: g.segments,
       })),
       ...(!glyphs.length ? { note: "No (glyph, caption) row pairs were detected on this sheet — it may not be a legend, or its rows may not fit this detector's own compact-glyph/adjacent-caption assumptions. This is not an error: a sheet with no real legend falls back to the ordinary symbol_sweep workflow (marquee one real occurrence anywhere and sweep from it)." } : {}),
+    };
+  }
+
+  /** sweep_inline_motif (accuracy-hardening plan Phase 4) — a real, measured
+   * answer to the "SR-1/SR-2/TG-1/TG-2 don't anchor" gap the maturity plan
+   * named: a register/grille mark drawn as a tapered duct terminus has no
+   * independent whole-shape perimeter (two of its "sides" are literally the
+   * tail of the same long duct-wall stroke feeding it), and — measured
+   * live, not assumed — its own real-world SIZE genuinely differs by CFM
+   * rating, so symbol_sweep's exact-segment whole-shape fingerprint
+   * under-scores real siblings of the same symbol type (~76-77%, under the
+   * 92% commit bar). This sweeps on the hatch fill's own real-world size
+   * and pitch instead — same seed-rect gesture as symbol_sweep, same
+   * found/matches/withheld disclosure shape, sheet scope only (no "set"
+   * scope yet — a real, named limitation, not silently assumed away). */
+  async sweepInlineMotif(name: string, opts: { seedRect: [Point, Point] }) {
+    const s = this.sheet(name);
+    const geo = await this.ensureGeometry(s);
+    if (!geo.segs.length) {
+      throw new UserError("This sheet has no vector linework (likely a scan) — inline-motif matching reads the drawn hatch fill; raster fallback not yet available in the MCP server.");
+    }
+    const fp = fingerprintInlineMotif(geo.segs, geo.meta, opts.seedRect, s.upp ?? null);
+    if (!fp) {
+      throw new UserError("No hatch-filled region was found inside this seed rect — this tool anchors on a compact, densely-hatched box (a register/grille's own fill), not an ordinary line-only symbol; marquee tighter around the hatched fill itself, or use symbol_sweep for a non-hatched marker.");
+    }
+    const res = sweepInlineMotif(fp, geo.segs, geo.meta, s.upp ?? null, { excludeCenter: fp.center, excludeR: Math.max(fp.widthPx, fp.heightPx) });
+    return {
+      sheet: s.key,
+      seed: {
+        rect: [round1(fp.rect[0][0]), round1(fp.rect[0][1]), round1(fp.rect[1][0]), round1(fp.rect[1][1])] as [number, number, number, number],
+        w_ft: fp.widthFt, h_ft: fp.heightFt, w_px: round1(fp.widthPx), h_px: round1(fp.heightPx),
+      },
+      found: res.matches.length,
+      matches: res.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])] as [number, number], w_ft: m.w_ft, h_ft: m.h_ft, size_score: m.size_score })),
+      withheld: res.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])] as [number, number], w_ft: w.w_ft, h_ft: w.h_ft, size_score: w.size_score, reason: w.reason })),
+      candidates_considered: res.candidates_considered,
+      ...(s.upp ? {} : { note: "No scale committed on this sheet — sizes are compared in image px only. set_scale first for a real-world tolerance that generalizes; an image-px-only comparison is a same-sheet, same-print-scale assumption." }),
     };
   }
 

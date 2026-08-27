@@ -1807,6 +1807,68 @@ test("find_legend_symbols: a sheet with real linework but nothing legend-shaped 
   assert.ok(r.data.note && /no real legend falls back to the ordinary symbol_sweep/.test(r.data.note));
 });
 
+// ── sweep_inline_motif, real end-to-end (accuracy-hardening plan Phase 4) ──
+// The fixture (test/fixtures/inline-motif-plan.pdf,
+// scripts/make-inline-motif-fixture.mjs) mirrors the real shape found live
+// against the real Bessemer sample: a register/grille mark's own identifying
+// feature is a COMPACT, densely-hatched box, and real siblings of the SAME
+// symbol type are drawn at genuinely different real-world sizes (measured
+// live: symbol_sweep's own whole-shape matchSymbol scores two real siblings
+// at only ~76-77%, under the 92% commit bar, because the box itself is a
+// different real size, not drafting noise). SEED and SIBLING here are the
+// same motif at a 70% linear scale; NOISE is a same-signature scrap far too
+// small to be real fill; DECOY is a big same-signature hatch region at a
+// genuinely different real-world size (a floor/wall texture, not a
+// register) that must be excluded by size, not just found-and-ignored.
+const INLINEPLAN = fileURLToPath(new URL("./fixtures/inline-motif-plan.pdf", import.meta.url));
+const INLINEKEY = "inline-motif-plan.pdf";
+// SEED box: pt x[100,130] y[460,500] -> image px x[200,260], y[(600-500)*2,(600-460)*2]
+const INLINE_SEED_RECT: [[number, number], [number, number]] = [[200, 200], [260, 280]];
+
+test("sweep_inline_motif: finds the real sibling at a different physical size, excludes the noise scrap and the same-signature decoy by real-world size", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: INLINEPLAN });
+  await call(client, "set_scale", { sheet: INLINEKEY, upp: 1 / 40 });
+  const r = await call(client, "sweep_inline_motif", { sheet: INLINEKEY, seed_rect: INLINE_SEED_RECT });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.found, 1, "exactly the sibling — never the noise scrap, never the decoy");
+  const m = r.data.matches[0];
+  assert.ok(Math.abs(m.w_ft - 1.05) < 0.05 && Math.abs(m.h_ft - 1.368) < 0.05, `sibling's real 70%-scale size: ${JSON.stringify(m)}`);
+  assert.ok(m.size_score > 0.5 && m.size_score <= 1, `a real, meaningful score, not a bare pass/fail: ${m.size_score}`);
+  assert.equal(r.data.withheld.length, 0);
+  assert.ok(!("note" in r.data), "a committed scale means no image-px-only fallback note");
+
+  // determinism
+  const again = await call(client, "sweep_inline_motif", { sheet: INLINEKEY, seed_rect: INLINE_SEED_RECT });
+  assert.deepEqual(again.data, r.data);
+});
+
+test("sweep_inline_motif: no scale committed — sizes compared in image px only, honestly disclosed", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: INLINEPLAN });
+  const r = await call(client, "sweep_inline_motif", { sheet: INLINEKEY, seed_rect: INLINE_SEED_RECT });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.found, 1, "still finds the real sibling on px-only comparison alone");
+  assert.equal(r.data.matches[0].w_ft, null);
+  assert.match(r.data.note ?? "", /No scale committed.*image px only/s);
+});
+
+test("sweep_inline_motif: refuses when the seed rect has no hatch fill inside it", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: INLINEPLAN });
+  const r = await call(client, "sweep_inline_motif", { sheet: INLINEKEY, seed_rect: [[0, 0], [20, 20]] });
+  assert.equal(r.isError, true);
+  assert.match(r.data.error ?? JSON.stringify(r.data), /No hatch-filled region/);
+});
+
+test("sweep_inline_motif: refuses on a scanned sheet with no vector linework at all", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SCAN });
+  const r = await call(client, "sweep_inline_motif", { sheet: SCAN_KEY, seed_rect: [[0, 0], [20, 20]] });
+  assert.equal(r.isError, true);
+  assert.match(r.data.error ?? JSON.stringify(r.data), /no vector linework/);
+});
+
 // ── trace_connectivity, real end-to-end (maturity plan Phase 4) ─────────
 // The fixture (test/fixtures/mep-plan.pdf, scripts/make-mep-fixture.mjs):
 // six named scenarios (five from the maturity plan's own §5 test strategy,

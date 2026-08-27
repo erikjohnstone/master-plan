@@ -85,6 +85,11 @@ import { HVAC_REF_SHAPES } from "../lib/hvacRefShapes.ts";
 // library never scales to every firm's own house legend. findLegendGlyphs
 // auto-detects a job's own legend rows instead of requiring one.
 import { findLegendGlyphs } from "../lib/legendlearn.ts";
+// Accuracy-hardening plan Phase 4 — a register/grille mark embedded within a
+// tapered duct run has no independent whole-shape perimeter of its own; see
+// inlinemotif.ts's own header comment for the real, measured reason
+// symbol_sweep's whole-shape fingerprint under-scores real siblings of it.
+import { fingerprintInlineMotif, sweepInlineMotif } from "../lib/inlinemotif.ts";
 import { labelPlacements } from "../lib/symbollabels";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
@@ -6437,6 +6442,38 @@ export default function TakeoffCanvas() {
     };
   }
 
+  // sweep_inline_motif (accuracy-hardening plan Phase 4) — a register/grille
+  // mark embedded within a duct run, matched on its own hatch fill's
+  // real-world size/pitch rather than exact whole-shape segment count (see
+  // inlinemotif.ts's own header comment for the real, measured reason
+  // symbol_sweep's whole-shape fingerprint under-scores real siblings of
+  // it). Mirrors agentSymbolSweep's own shape exactly (rectNorm in, matches/
+  // withheld normalized 0..1 out).
+  async function agentSweepInlineMotif(key, rectNorm) {
+    const p = agentPanelFor(key);
+    if (!p) return { error: `Sheet ${key} isn't rendered yet — try again in a moment.` };
+    const segs = vectorSegsRef.current.get(key);
+    if (!segs || !segs.length) return { error: "This sheet has no vector linework (likely a scan) — inline-motif matching reads the drawn hatch fill. Try view_region to look at it instead." };
+    const meta = segMetaRef.current.get(key);
+    const upp = agentUpp(key);
+    const rect = [
+      [rectNorm.x0 * p.img.w, rectNorm.y0 * p.img.h],
+      [rectNorm.x1 * p.img.w, rectNorm.y1 * p.img.h],
+    ];
+    const fp = fingerprintInlineMotif(segs, meta, rect, upp || null);
+    if (!fp) return { error: "No hatch-filled region was found inside this seed rect — this tool anchors on a compact, densely-hatched box (a register/grille's own fill), not an ordinary line-only symbol. Marquee tighter around the hatched fill itself, or use symbol_sweep for a non-hatched marker." };
+    const res = sweepInlineMotif(fp, segs, meta, upp || null, { excludeCenter: fp.center, excludeR: Math.max(fp.widthPx, fp.heightPx) });
+    const norm = ([x, y]) => [+(x / p.img.w).toFixed(5), +(y / p.img.h).toFixed(5)];
+    return {
+      seed: { rect_norm: [...norm(fp.rect[0]), ...norm(fp.rect[1])], w_ft: fp.widthFt, h_ft: fp.heightFt },
+      found: res.matches.length,
+      matches: res.matches.map((m) => ({ at: norm(m.at), w_ft: m.w_ft, h_ft: m.h_ft, size_score: m.size_score })),
+      withheld: res.withheld.map((w) => ({ at: norm(w.at), w_ft: w.w_ft, h_ft: w.h_ft, size_score: w.size_score, reason: w.reason })),
+      candidates_considered: res.candidates_considered,
+      ...(upp ? {} : { note: "No scale committed on this sheet — sizes were compared in image px only. set_scale first for a real-world tolerance that generalizes." }),
+    };
+  }
+
   // trace_connectivity (maturity plan Phase 4) — which valve belongs to
   // which equipment, walked through the sheet's own drawn linework. Mirrors
   // agentSymbolSweep's own shape exactly: normalized 0..1 points in and out
@@ -7522,6 +7559,7 @@ export default function TakeoffCanvas() {
       symbolSweep: agentSymbolSweep,
       matchReferenceSymbol: agentMatchReferenceSymbol,
       findLegendSymbols: agentFindLegendSymbols,
+      sweepInlineMotif: agentSweepInlineMotif,
       traceConnectivity: agentTraceConnectivity,
       listShapes: agentListShapes,
       deleteShapes: agentDeleteShapes,
