@@ -133,9 +133,12 @@ test("sweep_schedule_row: a real non-zero total_found is always disclosed, with 
   assert.match(notes[0], /2435\.9/);
 });
 
-test("sweep_schedule_row: a real total_found of 0 — no note, nothing to correct", () => {
+test("sweep_schedule_row: a real total_found of 0 — still discloses the tag as NOT confirmed (the exact real family-completeness gap this exists to close)", () => {
   const callLog = [{ id: "1", name: "sweep_schedule_row", args: { tag: "ZZ9" }, out: { tag: "ZZ9", total_found: 0 } }];
-  assert.deepEqual(runVerifiers(callLog), []);
+  const notes = runVerifiers(callLog);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /NOT confirmed/);
+  assert.match(notes[0], /ZZ9/);
 });
 
 test("sweep_schedule_row: multiple real matches across calls all get disclosed, each with its own tag", () => {
@@ -147,6 +150,39 @@ test("sweep_schedule_row: multiple real matches across calls all get disclosed, 
   assert.equal(notes.length, 1);
   assert.match(notes[0], /EBB-1/);
   assert.match(notes[0], /EBB-2/);
+});
+
+// Real, live-observed (stress-testing the fix above, same session): asked
+// to find/cite/count a whole real family ("every EBB heater"), the model
+// called sweep_schedule_row for only 2 of 8 real schedule rows, then wrote
+// a table CLAIMING all 8 were "located on the plan sheet... via sweep" — a
+// real fabrication for the other 6, which a fresh call moments later
+// correctly refused (genuinely not drawn on any plan sheet). The ORIGINAL
+// version of this check (disclosing only confirmed tags) would have let
+// that false "all 8 located" framing sit next to a note that reads as
+// additive, not exhaustive — this pins the fix: the full attempted set is
+// always named, so anything outside it is unmistakably unverified.
+test("sweep_schedule_row: a partial family sweep never lets an unchecked tag look verified (real EBB-1..8 fabrication case)", () => {
+  const callLog = [
+    { id: "1", name: "sweep_schedule_row", args: { tag: "EBB-1" }, out: { tag: "EBB-1", total_found: 1, anchor: { at: [2435.9, 1031.1] } } },
+    { id: "2", name: "sweep_schedule_row", args: { tag: "EBB-2" }, out: { tag: "EBB-2", total_found: 1, anchor: { at: [2525.9, 1473.4] } } },
+    // EBB-3..8 deliberately absent — never called this run, matching the real fabrication case exactly
+  ];
+  const notes = runVerifiers(callLog);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /exactly these tags, and no others: EBB-1, EBB-2/, `must name the FULL attempted set, not just the confirmed ones: ${notes[0]}`);
+  assert.ok(!notes[0].includes("EBB-3"), "a tag never swept this run must never appear as if it were checked");
+  assert.match(notes[0], /never checked by this tool this run/);
+});
+
+test("sweep_schedule_row: a real refusal (geometrically-unanchorable tag) is named as NOT confirmed, distinct from a genuine match", () => {
+  const callLog = [
+    { id: "1", name: "sweep_schedule_row", args: { tag: "EBB-5" }, out: { error: "Schedule row \"EBB-5\" cannot be geometrically anchored — its tag is not drawn on any plan sheet." } },
+  ];
+  const notes = runVerifiers(callLog);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /NOT confirmed/);
+  assert.match(notes[0], /EBB-5/);
 });
 
 // ── aggregate-completeness gate ─────────────────────────────────────────────

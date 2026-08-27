@@ -98,17 +98,42 @@ function checkScheduleRowKeys(calls) {
  * whenever it's non-zero, so a false "not found" claim sits right next to
  * the deterministic fact that contradicts it. */
 function checkSweepScheduleRow(calls) {
-  const found = [];
+  // Real, found live the SAME session as the fix above, stress-testing the
+  // fix itself: asked to find/cite/count a whole real family ("every EBB
+  // heater"), the model called sweep_schedule_row for only 2 of 8 real
+  // schedule rows (EBB-1, EBB-2), then wrote a table CLAIMING all 8 were
+  // "located on the plan sheet... via sweep" — a real, unambiguous
+  // fabrication for the other 6, which a fresh call in the SAME session
+  // moments later correctly refused (genuinely not drawn on any plan
+  // sheet, exactly matching this project's own real, previously-
+  // established finding for this exact device family). Disclosing only
+  // the CONFIRMED tags (the original version of this check) leaves the
+  // false "all N located" framing sitting right next to a note that's
+  // easy to read as additive rather than exhaustive — so this now names
+  // the FULL set of tags actually swept this run, split confirmed vs.
+  // not, with an explicit "no other tag was checked" line, so a claim
+  // about ANY tag outside that set is unmistakably unverified this run.
+  const confirmed = [];
+  const notConfirmed = [];
+  const seen = new Set();
   for (const { args, out } of calls) {
+    const tag = args?.tag || out?.tag;
+    if (typeof tag !== "string" || seen.has(tag)) continue;
+    seen.add(tag);
     const n = out?.total_found;
     if (typeof n === "number" && n > 0) {
-      const tag = args?.tag || out?.tag || "?";
       const at = Array.isArray(out?.anchor?.at) ? ` at ${JSON.stringify(out.anchor.at)}` : "";
-      found.push(`${tag}: total_found=${n}${at}`);
+      confirmed.push(`${tag} (total_found=${n}${at})`);
+    } else {
+      notConfirmed.push(tag);
     }
   }
-  if (!found.length) return null;
-  return `[Automated check: sweep_schedule_row returned a real, non-zero total_found for: ${found.join("; ")}. Do not report these as "not found" or "0 confirmed" — a real match exists per the tool's own output.]`;
+  if (!seen.size) return null;
+  const parts = [`[Automated check: sweep_schedule_row was called this run for exactly these tags, and no others: ${[...seen].join(", ")}.`];
+  if (confirmed.length) parts.push(` Confirmed with a real match: ${confirmed.join("; ")}.`);
+  if (notConfirmed.length) parts.push(` NOT confirmed (refused, errored, or a real 0 total_found): ${notConfirmed.join(", ")} — do not report these as located/found.`);
+  parts.push(` Any tag from the same family not listed here was never checked by this tool this run — its plan-sheet placement is unverified, regardless of what the answer above claims.]`);
+  return parts.join("");
 }
 
 /** The registry — one entry per tool with a known real honesty risk.
