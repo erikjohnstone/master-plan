@@ -48,7 +48,20 @@ export interface MepEdge {
    *  graph is built) — never set by buildMepGraph itself. */
   bridged?: boolean;
 }
-export interface MepGraph { nodes: MepNode[]; edges: MepEdge[]; layerSignal: LayerSignal; }
+export interface MepGraph {
+  nodes: MepNode[]; edges: MepEdge[]; layerSignal: LayerSignal;
+  /** The junction-snap grid (px) noding actually SUCCEEDED at — see the
+   *  coarsen-and-retry comment below. Starts at DEFAULT_SNAP_FT * ppf but a
+   *  dense real sheet can force a much coarser retry grid to get a graph at
+   *  all; every node/edge coordinate in that graph is then only accurate to
+   *  within this many px of the sheet's own real drawn ink. traceConnectivity
+   *  reads this back as a seed/equipment resolution tolerance FLOOR (see its
+   *  own header comment) — a fixed seedTolFt sized for the fine grid would
+   *  otherwise falsely refuse a seed sitting exactly on real linework whose
+   *  own coordinates the coarse retry grid has since shifted further away
+   *  than that fixed tolerance allows. */
+  quantGridPx: number;
+}
 
 // Mirrors wallnetwork.ts's own SEG_CLIP bit exactly — invisible ink is
 // never a real run there and isn't one here either. Kept as a literal
@@ -211,7 +224,7 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
   if (!solved) {
     throw new Error(`This sheet's linework could not be reliably noded for connectivity tracing (JTS noding failed at every retry grid up to ${gridAttempts[gridAttempts.length - 1].toFixed(2)}px) — the underlying error: ${lastErr instanceof Error ? lastErr.message : String(lastErr)}`);
   }
-  if (!survivors.length) return { nodes: [], edges: [], layerSignal };
+  if (!survivors.length) return { nodes: [], edges: [], layerSignal, quantGridPx: solvedGrid };
 
   // ── split each ORIGINAL segment at every junction that lies strictly
   //    inside it — never at its own two endpoints, which are already nodes ──
@@ -303,7 +316,7 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
     addEdge(prevX, prevY, s.x2, s.y2, s.segIdx);
   }
 
-  return { nodes, edges, layerSignal };
+  return { nodes, edges, layerSignal, quantGridPx: solvedGrid };
 }
 
 // ── the tracing query ────────────────────────────────────────────────────
@@ -413,7 +426,7 @@ function resolveOnGraph(graph: MepGraph, pt: Point, tolPx: number): { graph: Mep
   const ei2 = edges.length;
   edges.push({ a: newIdx, b: e.b, length: Math.hypot(b.x - bestAt[0], b.y - bestAt[1]), system: e.system, systemConfidence: e.systemConfidence, ...(e.bridged ? { bridged: true } : {}) });
   nodes[newIdx].edges.push(ei2); b.edges.push(ei2);
-  return { graph: { nodes, edges, layerSignal: graph.layerSignal }, node: newIdx };
+  return { graph: { nodes, edges, layerSignal: graph.layerSignal, quantGridPx: graph.quantGridPx }, node: newIdx };
 }
 
 /** Bridge a real drawn gap between two dead-end (degree-1) node endpoints —
@@ -458,7 +471,7 @@ function bridgeDanglingGaps(graph: MepGraph, symbols: Point[], bridgePx: number)
       nodes[danglers[b].i].edges.push(ei);
     }
   }
-  return { nodes, edges, layerSignal: graph.layerSignal };
+  return { nodes, edges, layerSignal: graph.layerSignal, quantGridPx: graph.quantGridPx };
 }
 
 /** Walk the graph from `from`, looking for exactly one reachable equipment
@@ -494,7 +507,25 @@ export function traceConnectivity(graph: MepGraph, from: Point, opts: TraceOptio
     return { status: "refused", layer_signal, confidence: 0, factors: [], reason: "This sheet has no traced vector linework to walk — check sheet_info.has_vector_linework before tracing." };
   }
   const ppf = opts.mppf && opts.mppf > 0 ? opts.mppf : PX_PER_FT_GUESS;
-  const tolPx = (opts.seedTolFt ?? DEFAULT_SEED_TOL_FT) * ppf;
+  // Real, corpus-found (itd-d1-lab-mechanical.pdf#7, a boiler-room hydronic
+  // schematic): buildMepGraph's own coarsen-and-retry (see its header
+  // comment) succeeded only at its coarsest retry grid (48.6px here, 27x the
+  // fine 1.8px grid every synthetic fixture and every other real sheet
+  // tested so far happened to node at) — every node/edge coordinate in the
+  // resulting graph is then only accurate to within that many px of the
+  // sheet's own real drawn ink, since quantizeSurvivors rounds every
+  // endpoint to the nearest multiple of it. A fixed seedTolFt (12px at the
+  // PX_PER_FT_GUESS fallback) sized for the fine grid is provably too tight
+  // once the grid itself has coarsened past it: measured directly, a seed
+  // placed exactly on this sheet's own drawn HWR main (image px [700,
+  // 1688.9]) refused "isn't on any traced linework" even though the real
+  // line is there — buildMepGraph quantized it away to (777.6, 1701), 12.4px
+  // beyond the fixed tolerance. The graph's own quantGridPx is the correct,
+  // measured floor: a point can legitimately be off by up to that amount
+  // from ordinary quantization alone, independent of whatever seedTolFt the
+  // caller asked for, so the tolerance actually used is never allowed
+  // narrower than the grid that produced the graph being searched.
+  const tolPx = Math.max((opts.seedTolFt ?? DEFAULT_SEED_TOL_FT) * ppf, graph.quantGridPx);
 
   // Gap bridging (only when fittingSymbols was supplied) — a NEW graph, the
   // one actually walked below; the caller's own graph is never mutated.
