@@ -134,6 +134,67 @@ test("sheet roles: a real SHEET INDEX cover page is never misattributed as one o
   assert.equal(real.role, "plan");
 });
 
+test("sheet roles: a real ABBREVIATIONS/SYMBOLS/LINE TYPES/VALVES AND FITTINGS legend cover sheet classifies legend, not elevation off a stray callout-legend entry (ledger item 58, later session)", () => {
+  // Real, found live on tarrant-county-mechanical.pdf's own real sheet #1
+  // (no `#N` suffix — the set's first page, no `sets.json` entry needed):
+  // its ABBREVIATIONS/SYMBOLS/LINE TYPES/VALVES AND FITTINGS legend boxes
+  // produced NO signal at all under the old signal set, while a small
+  // reference-symbol-legend ENTRY on the same sheet ("ELEVATION NUMBER" —
+  // the callout label defining what an elevation marker's number means, NOT
+  // the sheet's own real content) satisfied the generic `/ELEVATIONS?\b/`
+  // signal, so the real sheet reported role "elevation" off a stray
+  // legend-entry mention instead of its own real title.
+  const legend = classifySheetRole({
+    key: "tarrant-county-mechanical.pdf", sheet_number: "1M001",
+    spans: [
+      sp("MECHANICAL SYMBOLS AND ABBREVIATIONS", 2006, 97),
+      sp("ABBREVIATIONS", 1785, 176),
+      sp("SYMBOLS", 2844, 947),
+      sp("LINE TYPES", 1830, 1400),
+      sp("VALVES AND FITTINGS", 2725, 1400),
+      // the stray callout-legend entries that used to win
+      sp("ELEVATION NUMBER", 2784, 591),
+      sp("DRAWING/DETAIL NUMBER", 2735, 303),
+      sp("DRAWING/DETAIL REFERENCE", 2652, 176),
+    ],
+  });
+  assert.equal(legend.role, "legend");
+  assert.equal(legend.confidence, 0.72, "no dissent — every other real hit on this sheet is a weaker, wrong callout-legend-entry match");
+  assert.equal(legend.evidence?.text, "MECHANICAL SYMBOLS AND ABBREVIATIONS", "the sheet's own real title — first among the tied-confidence legend hits in document order");
+
+  // a real ELEVATION-titled sheet's own small "MATERIAL LEGEND"/"KEYNOTE
+  // LEGEND" annotation box (common on an ordinary plan/elevation sheet, NOT
+  // proof the whole sheet is a legend cover) must not steal the role — a
+  // first version of this fix accepted bare "LEGEND" and got this wrong
+  // live on baker-county-eoc-bidset.pdf#16, a real 4-view "EXTERIOR
+  // ELEVATIONS" sheet, caught via the required corpus-wide sweep.
+  const elevation = classifySheetRole({
+    key: "baker#16", sheet_number: "A301",
+    spans: [
+      sp("EXTERIOR ELEVATIONS", 100, 100),
+      sp("NORTH BUILDING ELEVATION", 100, 200),
+      sp("SOUTH BUILDING ELEVATION", 100, 300),
+      sp("MATERIAL LEGEND", 4022, 801),
+      sp("KEYNOTE LEGEND", 4022, 900),
+    ],
+  });
+  assert.equal(elevation.role, "elevation", "a small MATERIAL/KEYNOTE LEGEND side box must not turn a real elevation sheet into a legend cover sheet");
+
+  // a real PLAN sheet's own small corner "ABBREVIATIONS" reference box
+  // (common — many real plan sheets carry one) must not dissent against the
+  // sheet's own strong, correct "plan" title — a first shipped confidence
+  // (0.8) for the new legend signal broke exactly this case live in
+  // `mcp/test/conformance.test.ts` (`sample-finish-plan.pdf`'s own real
+  // AF101 floor plan carries a small "ROOM FINISH LEGEND & ABBREVIATIONS"
+  // corner box), caught by the FULL test suite, not the corpus sweep.
+  const planWithCornerBox = classifySheetRole({
+    key: "af101", sheet_number: "AF101",
+    spans: [sp("FIRST FLOOR FINISH PLAN", 300, 900), sp("ABBREVIATIONS", 5135, 299)],
+  });
+  assert.equal(planWithCornerBox.role, "plan");
+  assert.equal(planWithCornerBox.confidence, 0.85, "a lone corner ABBREVIATIONS box must not halve a real plan title's own confidence");
+});
+
 test("a compound schedule-row key answers for each of its marks", () => {
   assert.equal(rowKeyAnswersFor("R1/E1", "R1"), true);
   assert.equal(rowKeyAnswersFor("R1/E1", "E1"), true);
