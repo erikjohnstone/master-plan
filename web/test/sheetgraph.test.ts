@@ -1664,6 +1664,38 @@ test("twin-column tiers: two same-shaped sub-columns under DIFFERENT non-vocabul
   assert.equal(row.cells["ENTERING TEMP."].text, "74");
 });
 
+test("equipment extraction: a digit-free garbage row with MORE than one populated cell is still dropped (ledger item 29, real AIR COMPRESSOR SCHEDULE)", () => {
+  // Real shape, found live on itd-d1-lab-mechanical.pdf#28: the original
+  // fix for this ledger item only ever dropped a 1-cell digit-free garbage
+  // row. On the real corpus, a completely unrelated content block on the
+  // same sheet (a plumbing-calculations summary, a gas-sizing chart) bled
+  // in as its OWN 2-4-cell garbage rows keyed "REMARKS"/"SYMBOL"/"TOTAL" —
+  // digit-free exactly like the already-known garbage shape, but with
+  // enough stray cells to sail past the old 1-cell floor. The real AC-1
+  // row (7 of 9 real columns populated below) must survive regardless.
+  const sched: SheetSpans = {
+    key: "aircomp.pdf#1", sheet_number: "P6.0",
+    spans: [
+      sp("AIR COMPRESSOR SCHEDULE", 100, 20),
+      sp("SYMBOL", 100, 50), sp("HP", 200, 50), sp("RPM", 300, 50), sp("MANUFACTURER", 400, 50), sp("MODEL", 550, 50), sp("REMARKS", 700, 50),
+      // the real row: 6 of 6 real columns populated
+      sp("AC-1", 100, 75), sp("7.5", 200, 75), sp("3530", 300, 75), sp("GARDNER DENVER", 400, 75), sp("BENVS15D-Q", 550, 75), sp("1,2", 700, 75),
+      // three real garbage rows bled in from an unrelated block on the same
+      // sheet — digit-free keys, 2 cells each (under half of this fixture's
+      // own 6 real columns, mirroring the real corpus's under-half ratio),
+      // all well past the old 1-cell-only floor
+      sp("REMARKS:", 100, 110), sp("APPROVED ALTERNATE MANUFACTURERS", 200, 110),
+      sp("SYMBOL", 100, 135), sp("PLUMBING CALCULATIONS", 400, 135),
+      sp("TOTAL", 100, 160), sp("2,262.5", 200, 160),
+    ],
+  };
+  const tab = extractTable(sched, "equipment")!;
+  assert.ok(tab, "the real AC-1 row alone is enough to clear the bar");
+  const keys = tab!.rows.map((r) => r.key);
+  assert.deepEqual(keys, ["AC-1"], `every digit-free multi-cell garbage row must be dropped, real row kept: ${keys.join(",")}`);
+  assert.equal(tab.rows[0].cells.MANUFACTURER.text, "GARDNER DENVER");
+});
+
 test("title-hunt: a real title survives a neighboring table's own unrelated rows sharing its y-band (ledger item 5)", () => {
   // Real bug, found live on itd-d1-lab-mechanical.pdf#13: the real
   // "HUMIDIFIER SCHEDULE" title sits well above its own header, but a
