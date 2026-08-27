@@ -2553,6 +2553,18 @@ function genericRowKeyOf(raw: string, headerLabels: Set<string>): string | null 
   const u = norm(s).replace(/\s+/g, " ");
   if (REFERENCE_RE.test(u)) return null;
   if (headerLabels.has(u)) return null;
+  // The SAME real false-positive shape headerHits already guards against
+  // for the finish kind (LABEL_VALUE_COLON_RE's own comment: a real
+  // free-text FINISH LEGEND's field-label prose, "MANUFACTURER: ALTRO
+  // TEGULIS", "COLOR: MOON ROCK 29") — corpus-found live on this exact
+  // pass too (baker-county-eoc-bidset.pdf#27's own real FINISH LEGEND,
+  // sitting beside the real ROOM FINISH SCHEDULE that vocabulary guard was
+  // built for): a genuine reference-table row key is never a "label:
+  // value" fragment. GENERIC_KEY_RE's own colon allowance exists for a
+  // genuine WITHIN-CELL value shape ("1'-6\":", a real dimension) — this
+  // is checked separately, on the KEY specifically, so that allowance
+  // stays intact for non-key cells.
+  if (LABEL_VALUE_COLON_RE.test(s)) return null;
   if (!GENERIC_KEY_RE.test(u)) return null;
   return s;
 }
