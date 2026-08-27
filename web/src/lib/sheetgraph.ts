@@ -1287,7 +1287,34 @@ const WIDE_LAST = new Set(["REMARKS", "DESCRIPTION", "NOTES"]);
 // and a later column's value gets read as the row's key instead.
 function bandLimits(anchors: Anchor[]): { x0: number; x1: number; medGap: number } {
   const gaps = anchors.slice(1).map((a, i) => a.x - anchors[i].x).sort((a, b) => a - b);
-  const medGap = gaps.length ? gaps[gaps.length >> 1] : 150;
+  // A genuine median, not always the upper-middle element: `gaps.length >> 1`
+  // is the correct middle index for an ODD gap count, but for an EVEN count
+  // it always lands on the UPPER of the two middle gaps — for the most
+  // common even case, exactly 2 gaps (a 3-anchor table), that means ALWAYS
+  // the larger of the two, never an actual median. A `finish`-kind table
+  // whose anchors skip many real, unrecognized columns hits this every
+  // time — real, found live on itd-d1-lab-mechanical.pdf#14's SOUND
+  // ATTENUATOR SCHEDULE (3 anchors: SYMBOL/MANUFACTURER/REMARKS, spanning
+  // 21 real leaf columns): gaps [277.6, 1740.1] "medGap'd" to 1740.1 (the
+  // larger), inflating leftMargin (`medGap / 2`) enough that a neighbouring
+  // table's own unrelated REMARKS token ("1 , 3 , 5", the Electric Heater
+  // Schedule's column, sitting at a coincidentally near-identical y) fell
+  // inside this table's own x0 boundary — landing left of the real SA-1 tag
+  // in x-order and becoming the row's leading token. Since that token isn't
+  // key-shaped, the entire real data row read as an orphan and re-merged
+  // under whatever garbage-keyed row sat nearest by y ("SILENCER", the
+  // table's own wrapped 2nd line of a TYPE cell that independently passes
+  // CODE_RE as a bogus row of its own) — SA-1 never became its own row, let
+  // alone keyed correctly. Fixed: the LOWER of the two middle gaps for an
+  // even count (`(gaps.length - 1) >> 1`) — identical index, and so
+  // identical behavior, for an odd count (the two formulas coincide there),
+  // and always a REAL gap the table's own anchors actually contain, never
+  // an averaged/synthetic value that isn't. Real, measured fix: leftMargin
+  // drops to 138.8 (half the real, smaller SYMBOL-adjacent gap), moving x0
+  // from 1797.5 to 2528.7 — past the stray token's x=2468.2, so it never
+  // enters this table's row band at all, and SA-1's own row now keys and
+  // bands correctly (see sheetgraph.test.ts).
+  const medGap = gaps.length ? gaps[(gaps.length - 1) >> 1] : 150;
   const first = anchors[0];
   const last = anchors[anchors.length - 1];
   const leftMargin = first.label === "NAME" ? Math.max(300, medGap * 3) : Math.max(80, medGap / 2);
