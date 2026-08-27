@@ -1576,6 +1576,78 @@ test("equipment extraction: no equipment table is minted from Fan Schedule's own
   );
 });
 
+// ── set-002 CV-1..9 bug: a header row can qualify with its own REQUIRED word
+// sitting on a separate, thin, parenthesized-unit tier just below it ────────
+test("equipment extraction: a header row with enough distinct vocabulary carries its own REQUIRED rating word on a thin parenthesized-unit tier just below it, not co-occurring on the same line (real regression, itd-d1-lab-mechanical.pdf#13's CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS))", () => {
+  // Real, traced root cause: this table's own header line (SYMBOL/AREA
+  // SERVED/VALVE TYPE/OPERATION/FLUID/MANUFACTURER AND MODEL/REMARKS) clears
+  // EQUIPMENT_HEADERS' minHits bar on its own — 4 distinct hits (SYMBOL,
+  // TYPE, MANUFACTURER, REMARKS) — but carries NONE of EQUIPMENT_REQUIRED's
+  // words. The table's only real EQUIPMENT_REQUIRED word, GPM, sits two
+  // tiers down as a bare "(GPM)" unit fragment with nothing else in
+  // EQUIPMENT_HEADERS' vocabulary beside it. Under the OLD single-row
+  // qualify() gate this candidate row never qualified at all, so
+  // findHeaderRow never even started its own multi-tier descent for this
+  // table under "equipment" — it only ever extracted under FINISH_HEADERS
+  // (whose required list is satisfied by the bare SYMBOL alone), where
+  // isNonFinishSchedule then correctly discarded it (title says "COILS"),
+  // losing the table completely. NOT a continuation/title-collision bug —
+  // isContinuationTitle requires a literal CONT'D/CONTINUATION/CONTINUED
+  // suffix, and this table's title has none.
+  const sched: SheetSpans = {
+    key: "cv.pdf#1", sheet_number: "M13",
+    spans: [
+      sp("CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)", 100, 10),
+      sp("SYMBOL", 0, 40), sp("VALVE TYPE", 200, 40), sp("MANUFACTURER", 400, 40), sp("REMARKS", 600, 40),
+      sp("(GPM)", 200, 52),
+      sp("CV-1", 0, 90), sp("2-WAY", 200, 90), sp("ACME", 400, 90), sp("1,2", 600, 90),
+      sp("CV-2", 0, 110), sp("2-WAY", 200, 110), sp("ACME", 400, 110), sp("1,2", 600, 110),
+    ],
+  };
+  const tables = extractAllTables(sched, "equipment");
+  assert.equal(tables.length, 1, `exactly one equipment table extracted, found: ${tables.map((t) => t.title?.text).join(" | ")}`);
+  assert.equal(tables[0].title?.text, "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)");
+  assert.deepEqual(tables[0].rows.map((r) => r.key), ["CV-1", "CV-2"]);
+
+  // The SAME title, run through the finish-kind vocabulary alone (its own
+  // real bare SYMBOL/MANUFACTURER/REMARKS clear FINISH_HEADERS' bar): a real
+  // sibling table in this exact bug's own corpus regression sweep
+  // (CONDENSING HOT WATER BOILER SCHEDULE) is titled with a word
+  // isNonFinishSchedule refuses, so buildSheetGraph must keep the
+  // EQUIPMENT extraction as the table's only surviving copy, not silently
+  // lose it to that refusal the way it did before this fix.
+  const g = buildSheetGraph([sched]);
+  const hit = g.tables.find((t) => t.rows.some((r) => r.key === "CV-1"));
+  assert.ok(hit, "CV-1 survives buildSheetGraph's own finish/equipment passes");
+  assert.equal(hit!.kind, "equipment");
+});
+
+test("equipment extraction: a bare vocabulary hit on the very next row reads as a NEW header, never borrowed as a nearby required-word source (negative control, the real Fan/Diffuser adjacency shape, Finding 1)", () => {
+  // The exact real shape that broke on a first version of this fix: a loose
+  // pixel-radius test credited FAN SCHEDULE's own bare ID/DESCRIPTION/
+  // MANUFACTURER/MODEL/RPM header row with a REQUIRED word (VOLTAGE/AMPS/…)
+  // that actually belonged to a genuinely different, adjacent table right
+  // next to it on the same dense sheet. The fix mirrors
+  // skipSubHeaderContinuation's own real continuation test instead: a BARE
+  // vocabulary hit on the next row reads as that row's OWN new header, not
+  // a wrapped unit tier of the row above — stopping the borrow immediately.
+  const sched: SheetSpans = {
+    key: "fan2.pdf#1", sheet_number: "M14",
+    spans: [
+      sp("FAN SCHEDULE", 100, 10),
+      sp("ID", 0, 40), sp("DESCRIPTION", 100, 40), sp("MANUFACTURER", 300, 40), sp("MODEL", 500, 40), sp("RPM", 650, 40),
+      // a genuinely different, adjacent table's own bare header sits right
+      // below, tight gap, no data row between — must not be credited as
+      // FAN SCHEDULE's own nearby required word
+      sp("VOLTAGE PHASE SCHEDULE", 100, 60),
+      sp("VOLTAGE", 0, 80), sp("PHASE", 200, 80),
+      sp("208", 0, 100), sp("1", 200, 100),
+    ],
+  };
+  const tables = extractAllTables(sched, "equipment");
+  assert.ok(!tables.some((t) => t.title?.text === "FAN SCHEDULE"), "Fan Schedule not pulled into equipment kind by a neighboring table's own bare required word");
+});
+
 // ── accuracy-hardening plan Phase 3 (ledger items 6/7) ──────────────────────
 test("headerLabels: a real dotted abbreviation (\"E.S.P\") resolves to its vocabulary word, not three lone letters", () => {
   // Found live on the real federal-mech AHU Unit Schedule's own header —
