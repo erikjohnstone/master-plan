@@ -183,7 +183,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     // append MUST happen here, before this emit, on the LAST turn only.
     let displayText = turn.text;
     if (!turn.toolCalls.length) {
-      const notes = runVerifiers(callLog);
+      const notes = runVerifiers(callLog, goal);
       if (notes.length) displayText = `${displayText || ""}\n\n${notes.join("\n\n")}`;
     }
     if (displayText) emit({ type: "text", text: displayText });

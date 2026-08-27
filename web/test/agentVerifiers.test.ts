@@ -75,3 +75,55 @@ test("both verifiers can fire together in one run, independently", () => {
 test("the registry itself declares exactly the tools this session has real evidence for — a deliberate, named list, not a guess", () => {
   assert.deepEqual(AGENT_VERIFIERS.map((v) => v.tool), ["trace_connectivity", "count_marks"]);
 });
+
+// ── aggregate-completeness gate ─────────────────────────────────────────────
+// Real, live-observed: asked for "the total installed cooling capacity for
+// the entire building", the model checked exactly ONE piece of equipment
+// (correctly grounded, correctly cited) but presented that single value AS
+// the building-wide total, with no disclosure it hadn't verified there
+// weren't others on any of the set's other real schedule sheets.
+const sheetGraphCall = (scheduleSheetKeys: string[]) => ({
+  id: "g1", name: "sheet_graph", args: {},
+  out: { available: true, sheets: scheduleSheetKeys.map((sheet) => ({ sheet, role: "schedule" })) },
+});
+
+test("aggregate completeness: a real 'total for the building' goal, only one of several real schedule sheets checked — a note fires", () => {
+  const callLog = [
+    sheetGraphCall(["set.pdf#8", "set.pdf#14", "set.pdf#20"]),
+    { id: "r1", name: "read_schedule", args: { sheet: "set.pdf#8" }, out: { table: { sheet: "set.pdf#8" } } },
+  ];
+  const notes = runVerifiers(callLog, "What is the total installed cooling capacity for the entire building?");
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /3 real schedule sheets/);
+  assert.match(notes[0], /only 1 was queried/);
+});
+
+test("aggregate completeness: the same goal, but two+ real schedule sheets genuinely checked — no note", () => {
+  const callLog = [
+    sheetGraphCall(["set.pdf#8", "set.pdf#14"]),
+    { id: "r1", name: "read_schedule", args: { sheet: "set.pdf#8" }, out: {} },
+    { id: "r2", name: "read_schedule", args: { sheet: "set.pdf#14" }, out: {} },
+  ];
+  assert.deepEqual(runVerifiers(callLog, "What is the total cooling capacity for the entire building?"), []);
+});
+
+test("aggregate completeness: a non-aggregate goal never triggers the gate, even with a sparse check", () => {
+  const callLog = [
+    sheetGraphCall(["set.pdf#8", "set.pdf#14", "set.pdf#20"]),
+    { id: "r1", name: "read_schedule", args: { sheet: "set.pdf#8" }, out: {} },
+  ];
+  assert.deepEqual(runVerifiers(callLog, "What is HP-1's real cooling capacity, from the schedule?"), []);
+});
+
+test("aggregate completeness: an aggregate goal but sheet_graph was never called — no note (nothing safe to compare against)", () => {
+  const callLog = [{ id: "r1", name: "read_schedule", args: { sheet: "set.pdf#8" }, out: {} }];
+  assert.deepEqual(runVerifiers(callLog, "What is the total cooling capacity for the entire building?"), []);
+});
+
+test("aggregate completeness: only one real schedule sheet exists in the whole set — nothing to miss, no note even with one checked", () => {
+  const callLog = [
+    sheetGraphCall(["set.pdf#8"]),
+    { id: "r1", name: "read_schedule", args: { sheet: "set.pdf#8" }, out: {} },
+  ];
+  assert.deepEqual(runVerifiers(callLog, "What is the total cooling capacity for the entire building?"), []);
+});

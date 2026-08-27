@@ -71,12 +71,52 @@ export const AGENT_VERIFIERS = [
   { tool: "count_marks", check: checkCountMarks },
 ];
 
+/** A real word for "the estimator is asking for a whole-set/whole-building
+ * number", not exhaustive — deliberately narrow, common real phrasings
+ * ("total", "how many", "every", "all", "sum", "combined") rather than an
+ * attempt at full natural-language intent detection. False negatives (a
+ * real aggregate goal phrased unusually) just mean no extra caveat fires —
+ * safe by construction, never a false claim of completeness either way. */
+const AGGREGATE_GOAL_RE = /\btotal(s)?\b|\bhow many\b|\bevery\b|\ball\b|\bsum\b|\bcombined\b|\baggregate\b|\bentire\b/i;
+
+/** Completeness gate for aggregate-shaped goals (real, live-observed:
+ * asked for "the total installed cooling capacity for the entire
+ * building", the model checked exactly ONE piece of equipment (correctly
+ * grounded, correctly cited) but presented that single value AS the
+ * building-wide total with no disclosure it hadn't verified there weren't
+ * others — the honest-sounding "1.95 tons" hid a real, unstated scope gap).
+ * Deliberately conservative: only fires when the goal LOOKS aggregate-
+ * shaped AND `sheet_graph` was actually called (so we know the real
+ * candidate sheet count) AND fewer than 2 distinct sheets were ever queried
+ * by a schedule/count-reading tool — a real single-sheet answer to a
+ * whole-building question is exactly the shape that needs a caveat; a
+ * goal that never looked aggregate-shaped, or one where multiple sheets
+ * were genuinely checked, is left alone rather than over-warned. */
+function checkAggregateCompleteness(callLog, goal) {
+  if (!AGGREGATE_GOAL_RE.test(goal || "")) return null;
+  const graphCall = callLog.find((c) => c.name === "sheet_graph" && c.out && Array.isArray(c.out.sheets));
+  if (!graphCall) return null; // no real sheet inventory to compare against — nothing safe to say
+  const scheduleSheets = new Set(graphCall.out.sheets.filter((s) => s?.role === "schedule").map((s) => s.sheet));
+  const readerTools = new Set(["read_schedule", "find_schedule", "sweep_schedule_row", "count_marks"]);
+  const sheetsQueried = new Set();
+  for (const c of callLog) {
+    if (!readerTools.has(c.name)) continue;
+    const sheet = c.args?.sheet || c.out?.table?.sheet || c.out?.row?.sheet;
+    if (sheet) sheetsQueried.add(sheet);
+  }
+  if (scheduleSheets.size <= 1) return null; // only one real schedule sheet exists — nothing to miss
+  if (sheetsQueried.size >= 2) return null; // genuinely checked more than one sheet — not the observed failure shape
+  return `[Automated check: this goal looks like it's asking for a total/aggregate, sheet_graph reported ${scheduleSheets.size} real schedule sheets in this set, but only ${sheetsQueried.size} was queried by a schedule-reading tool this run. Any total stated above may not reflect the whole set — confirm what was actually checked before treating it as complete.]`;
+}
+
 /** Run every registered verifier against the full run's own call log —
  * `callLog`: Array<{ id, name, args, out }>, every tool call made this run,
- * across every loop iteration (not just the current one). Returns the
- * disclosure notes to append, in registry order; empty when nothing to
- * disclose. Pure — no I/O, easy to unit-test directly. */
-export function runVerifiers(callLog) {
+ * across every loop iteration (not just the current one). `goal` is the
+ * estimator's own original goal text, needed only by the completeness
+ * gate above. Returns the disclosure notes to append, in registry order;
+ * empty when nothing to disclose. Pure — no I/O, easy to unit-test
+ * directly. */
+export function runVerifiers(callLog, goal) {
   const notes = [];
   for (const { tool, check } of AGENT_VERIFIERS) {
     const calls = callLog.filter((c) => c.name === tool);
@@ -84,5 +124,7 @@ export function runVerifiers(callLog) {
     const note = check(calls);
     if (note) notes.push(note);
   }
+  const completeness = checkAggregateCompleteness(callLog, goal);
+  if (completeness) notes.push(completeness);
   return notes;
 }
