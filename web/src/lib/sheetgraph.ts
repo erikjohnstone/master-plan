@@ -3000,6 +3000,274 @@ export function detailCallouts(sheet: SheetSpans): DetailCallout[] {
   return out;
 }
 
+// ── column bands (2-column/side-by-side sheet layout) ───────────────────────
+// clusterRows (and everything downstream of it) is Y-only: it has no idea a
+// sheet can be drafted as two physically SEPARATE strips of tables side by
+// side (a real, common convention on a dense schedule sheet — itd-d1-lab's
+// own sheets #12/#13/#14 each carry a LEFT stack of tables and a RIGHT stack,
+// each with its own titles/headers/data, at completely different x-ranges).
+// When two such tables' ROWS happen to land within a few px of each other in
+// y — measured live: GEV-7's data row and BP-1's data row 2px apart — they
+// glue into ONE clusterRows row spanning both tables' x-ranges, and that
+// single row is what findHeaderRow reads when hunting for a header: the
+// unrelated content inflates a header candidate's own token count enough to
+// defeat the "almost entirely header words" ratio gate a real multi-tier
+// header's tier-descent depends on, so tables that should extract cleanly
+// come back garbled, misclassified under the wrong kind, or missing rows.
+//
+// The fix does NOT touch clusterRows itself — every existing row/orphan/
+// marker/title/boundary heuristic downstream of it keeps working exactly as
+// designed, just fed a narrower span list. Instead, a sheet's spans are
+// PRE-PARTITIONED by x into column bands, each run through the existing,
+// unmodified extraction pipeline independently, before clusterRows ever
+// merges anything across them.
+//
+// The hard part (named directly in the accuracy-hardening plan): telling a
+// real seam between two SEPARATE tables apart from an ordinary gap INSIDE
+// one table's own column layout — a wide gap between a room-finish table's
+// NAME column and its FLOOR FINISH column is real and must never split that
+// table in two (confirmed live: doing so naively collapses
+// demo/sample-finish-plan.pdf's own real ROOM FINISH SCHEDULE — the NUMBER/
+// NAME half loses its FLOOR/BASE vocabulary and no longer qualifies as a
+// header at all, while the FLOOR-FINISH/BASE-FINISH half qualifies
+// vocabulary-wise but its own leftmost column is finish-code DATA, not a
+// digit-shaped room key, so bandDataRows correctly keys zero rows there
+// either — the table is just gone). The distinguishing signal used here is
+// exactly that data point: a genuine second table's own key column, read
+// alone, still resolves through the SAME required-vocabulary+minHits header
+// gate AND the SAME rowKeyOf-gated data banding every kind already uses — a
+// column-fragment of ONE table never does, because half a table's columns
+// were never a complete, independently keyable table to begin with. So a
+// candidate geometric gap is only ever treated as a real seam once each side
+// is PROVEN, by literally running the unmodified extraction pipeline against
+// it alone, to produce a real table on its own — never assumed from
+// geometry.
+type Seam = { x0: number; x1: number };
+
+/** Candidate seams: x-corridors that sit empty (no span box, padded a few px)
+ * across almost every y-band that carries any content at all. A real page
+ * seam between two independently-drafted column strips is empty EVERYWHERE
+ * (nothing is ever drawn in a firm's own inter-table margin); an ordinary
+ * gap between two columns of ONE table is only empty for the rows THAT table
+ * occupies, a small fraction of a dense sheet's full height, and gets
+ * crossed by data spilling wide on at least a few of them. Geometry alone
+ * cannot fully tell these apart (both can locally look "mostly empty") — that
+ * is exactly why every candidate this returns is still proven, not trusted,
+ * by validateSeam below before it is ever used to split anything. */
+function columnBandCandidates(spans: GraphSpan[]): Seam[] {
+  const XBUCKET = 10;    // x-bucket width (px)
+  const PAD = 4;         // padding around each span's own box (antialiasing/kerning slack)
+  const EMPTY_FRAC = 0.9; // an x-bucket must be occupied in <= 10% of content ROWS to count as "empty"
+  const MIN_GAP = 100;    // minimum contiguous empty width to name a seam at all
+  // A real 2-up drafted sheet stacks DOZENS of rows across its column strips;
+  // a small table (real or a unit-test fixture) can look "sparse" purely for
+  // having few rows to sample, where almost any gap reads as "always empty"
+  // by having no counter-evidence — measured live, a real single small table
+  // (a handful of rows) produced a false seam right through its own un-
+  // modeled middle columns this way. Below this floor, there simply isn't
+  // enough row evidence for the emptiness statistic to mean anything, so no
+  // candidate is proposed at all — the whole-sheet path runs unchanged.
+  const MIN_ROWS = 10;
+
+  const toks = spans.filter((t) => t.str && t.str.trim());
+  if (toks.length < 4) return [];
+  const minX = Math.min(...toks.map((t) => t.x));
+  const maxX = Math.max(...toks.map((t) => t.x + (t.w || 0)));
+  if (maxX - minX < MIN_GAP * 3) return []; // too narrow a sheet region for a real 2-up split
+
+  // Real rows, the same shape clusterRows itself produces (Y-only, exactly
+  // as broken/contaminated as the bug this exists to fix on a genuine 2-up
+  // sheet) — good enough here: this is only a DENSITY measurement (how many
+  // independent y-bands carry content), not a structural read, and the
+  // contamination this whole mechanism exists to prevent doesn't change how
+  // many rows there are, only what ends up in them.
+  const rows = clusterRows(toks);
+  if (rows.length < MIN_ROWS) return [];
+
+  const nXB = Math.max(1, Math.ceil((maxX - minX) / XBUCKET));
+  const occCount = new Array(nXB).fill(0);
+  const contentBins = rows.length;
+  for (const list of rows) {
+    const occ = new Array(nXB).fill(false);
+    for (const t of list) {
+      const b0 = Math.max(0, Math.floor((t.x - PAD - minX) / XBUCKET));
+      const b1 = Math.min(nXB - 1, Math.floor((t.x + (t.w || 0) + PAD - minX) / XBUCKET));
+      for (let b = b0; b <= b1; b++) occ[b] = true;
+    }
+    for (let b = 0; b < nXB; b++) if (occ[b]) occCount[b]++;
+  }
+
+  const emptyThresh = contentBins * (1 - EMPTY_FRAC);
+  const seams: Seam[] = [];
+  let runStart = -1;
+  for (let b = 0; b < nXB; b++) {
+    const isEmpty = occCount[b] <= emptyThresh;
+    if (isEmpty && runStart < 0) runStart = b;
+    if (!isEmpty && runStart >= 0) {
+      const x0 = minX + runStart * XBUCKET, x1 = minX + b * XBUCKET;
+      if (x1 - x0 >= MIN_GAP) seams.push({ x0, x1 });
+      runStart = -1;
+    }
+  }
+  if (runStart >= 0) {
+    const x0 = minX + runStart * XBUCKET, x1 = minX + nXB * XBUCKET;
+    if (x1 - x0 >= MIN_GAP && x1 < maxX - 1) seams.push({ x0, x1 });
+  }
+  // interior only — a "seam" touching the sheet's own leading/trailing edge
+  // is just margin, not a divide between two content regions
+  return seams.filter((s) => s.x0 > minX + 1 && s.x1 < maxX - 1);
+}
+
+/** Does this span list, alone, produce at least one real extracted table
+ * (any of the three vocabulary kinds, or the structural "reference" kind)?
+ * The proof a seam's own side is a genuine, independent table — not a
+ * column-fragment of one that spans across the seam. */
+function sideHasRealTable(spans: GraphSpan[], sheetKey: string, opts: ExtractOpts): boolean {
+  if (spans.length < 4) return false;
+  const probe: SheetSpans = { key: sheetKey, spans };
+  for (const kind of ["room-finish", "finish", "equipment"] as const) {
+    if (extractTable(probe, kind, opts)) return true;
+  }
+  return extractAllReferenceTables(probe).length > 0;
+}
+
+/** Every real row KEY a TITLED table extracts today — the ground truth a
+ * candidate seam is judged against. A dense multi-table sheet's title/
+ * vocabulary content is far too abundant to use "does each side have SOME
+ * title/header of its own" as the bar: measured live, a genuine single
+ * table's title (HUMIDIFIER SCHEDULE) sits entirely on ONE side of a false
+ * candidate seam through its own middle, but the SHEET as a whole carries so
+ * many OTHER real tables that both sides still had a title and a real
+ * extractable table of their OWN regardless — the false seam passed anyway.
+ * Row keys close that gap: they are the actual, per-table proof of what a
+ * real table resolves to, so comparing the WHOLE sheet's own key set against
+ * the split's is a direct measure of whether the split lost something real.
+ *
+ * Restricted to TITLED tables of the three vocabulary kinds — deliberately
+ * excluding both a titleless fragment (an equipment/finish read with no
+ * title at all is already, on the unsplit sheet, exactly the kind of
+ * contamination-shaped partial read this whole mechanism exists to clean
+ * up, not a real table worth protecting) and the structural "reference"
+ * kind entirely (vocabulary-free by design, so it is the read MOST prone to
+ * inventing a plausible-looking "key" — "MIN.", "12"", a stray fragment —
+ * out of exactly the cross-table contamination a real seam is supposed to
+ * remove; measured live, comparing reference-kind keys made every real seam
+ * candidate look "lossy" against garbage the fix was correctly discarding).
+ *
+ * Further restricted to keys carrying a digit. Even a titled equipment/
+ * finish table's own row-banding is not perfect on today's un-fixed engine —
+ * a stray un-modeled column word (REMARKS, CFM, FAN, NO, PRESSURE, E) can
+ * itself key a garbage row on the WHOLE, unsplit sheet — and comparing
+ * against those non-digit artifacts made every real candidate look lossy
+ * against noise the split had no way to reproduce (it was never a real key
+ * to begin with). A real device tag or finish/room code always carries at
+ * least one digit (SAV-1, HUM-1, VCT-1, 134, 3A); this is the same shape
+ * rowKeyOf itself already requires (ROW_KEY_RE/CODE_RE), applied here as a
+ * coarse noise filter before two extractions are ever compared.
+ *
+ * Value: the row's own populated CELL COUNT, not just its bare existence.
+ * A seam landing inside one real table's OWN header (not between two
+ * tables at all — real, measured live on a synthetic 2-tier equipment
+ * fixture: a seam opened in the gap between a narrow upper tier and the
+ * fuller lower tier's own trailing columns) can strip real columns off
+ * every row while leaving every row's KEY untouched, since the key sits to
+ * the LEFT of the sheared columns and the row-existence check alone never
+ * notices the loss. Comparing cell counts catches exactly this — a row
+ * that still exists but reads back thinner than it did on the unsplit
+ * sheet is real data loss, the same class of harm as losing the row
+ * outright. */
+function extractedKeys(sheet: SheetSpans, opts: ExtractOpts): Map<string, number> {
+  const out = new Map<string, number>();
+  for (const kind of ["room-finish", "finish", "equipment"] as const) {
+    for (const t of extractAllTables(sheet, kind, opts)) {
+      if (!t.title?.text.trim()) continue;
+      // The table's own COLUMN count (headers.length), not each row's own
+      // populated-cell count. A real row's populated-cell count varies row
+      // to row even in a perfectly correct table (a column legitimately
+      // blank for one row is not "lost"), and comparing it directly flagged
+      // the REAL good seam on itd-d1-lab-mechanical.pdf#13 as "lossy" —
+      // BCV-1/D-4 each read one fewer populated cell after the split, not
+      // because a column was severed, but because the UNSPLIT baseline's
+      // own row had picked up one spurious cell from cross-table
+      // contamination in the first place (the exact thing a real seam is
+      // supposed to remove). The table's own header/column COUNT is stable
+      // against that noise while still catching the real harm (a seam that
+      // severs a table's own columns changes ITS header count, not any one
+      // row's populated-cell tally) — this is exactly what caught the
+      // synthetic 2-tier fixture case a per-row cell count could not:
+      // there, headers.length itself dropped (5 → 3) when the seam cut
+      // through the header.
+      const n = t.headers.length;
+      for (const r of t.rows) {
+        if (!/\d/.test(r.key)) continue;
+        const cur = out.get(r.key);
+        if (cur == null || n > cur) out.set(r.key, n);
+      }
+    }
+  }
+  return out;
+}
+
+const MAX_COLUMN_BANDS = 6;
+
+/** The sheet's spans, split into independently-processed column bands when a
+ * real 2-(or more-)up layout is proven present — else `[sheet]` unchanged,
+ * the identical object, so a sheet with no such layout runs through the
+ * exact same single whole-sheet path as before this existed. Each candidate
+ * geometric seam is proven independently, two ways, both required:
+ *   1. splitting the FULL sheet at that seam alone must not LOSE any row key
+ *      the UNSPLIT sheet already extracts today (extractedKeys) — a real
+ *      seam only ever ADDS tables the contaminated whole-sheet read could
+ *      not see (SAV/GEV never appear in the unsplit key set at all — the
+ *      contamination this whole mechanism targets keeps them out), while a
+ *      false seam through one real table's own middle (HUMIDIFIER SCHEDULE)
+ *      loses that table's own key the moment its columns are severed. This
+ *      is checked against real extraction output, not geometry or title
+ *      text, specifically because a contaminated whole-sheet table can
+ *      carry a real title while its own anchors/cells already sweep in
+ *      tokens from both sides of a real seam — proving nothing on its own;
+ *   2. splitting the FULL sheet at that seam alone must leave BOTH sides
+ *      still producing a real table on their own (sideHasRealTable) — a
+ *      genuine second table on each side, not empty space.
+ * An unproven seam is simply dropped — the region it would have carved out
+ * just stays merged with its neighbour, exactly as if this pass did not
+ * exist for it, so a false candidate never has a chance to corrupt
+ * anything. */
+export function bandedSheets(sheet: SheetSpans, opts: ExtractOpts): SheetSpans[] {
+  const horiz = sheet.spans.filter((s) => !isVertical(s));
+  const candidates = columnBandCandidates(horiz).slice(0, MAX_COLUMN_BANDS + 2);
+  if (!candidates.length) return [sheet];
+
+  const baselineKeys = extractedKeys(sheet, opts);
+  const kept: Seam[] = [];
+  for (const seam of candidates) {
+    const left = sheet.spans.filter((s) => centerX(s) < seam.x0);
+    const right = sheet.spans.filter((s) => centerX(s) > seam.x1);
+    if (!sideHasRealTable(left, sheet.key, opts) || !sideHasRealTable(right, sheet.key, opts)) continue;
+    const leftSheet: SheetSpans = { key: sheet.key, sheet_number: sheet.sheet_number, spans: left, ...(sheet.segs ? { segs: sheet.segs } : {}) };
+    const rightSheet: SheetSpans = { key: sheet.key, sheet_number: sheet.sheet_number, spans: right, ...(sheet.segs ? { segs: sheet.segs } : {}) };
+    const splitLeft = extractedKeys(leftSheet, opts);
+    const splitRight = extractedKeys(rightSheet, opts);
+    const splitCount = (k: string) => Math.max(splitLeft.get(k) ?? 0, splitRight.get(k) ?? 0);
+    let lostAny = false;
+    for (const [k, n] of baselineKeys) if (splitCount(k) < n) { lostAny = true; break; }
+    if (!lostAny) kept.push(seam);
+  }
+  if (!kept.length) return [sheet];
+  kept.sort((a, b) => a.x0 - b.x0);
+
+  const bounds = [-Infinity, ...kept.flatMap((s) => [s.x0, s.x1]).sort((a, b) => a - b), Infinity];
+  // bounds pairs up as (-Inf, s1.x0), (s1.x0, s1.x1) [the seam gap itself,
+  // always empty by construction — contributes nothing], (s1.x1, s2.x0), …
+  const bands: SheetSpans[] = [];
+  for (let i = 0; i + 1 < bounds.length; i += 2) {
+    const [x0, x1] = [bounds[i], bounds[i + 1]];
+    const bandSpans = sheet.spans.filter((s) => { const cx = centerX(s); return cx >= x0 && cx < x1; });
+    if (bandSpans.length) bands.push({ key: sheet.key, sheet_number: sheet.sheet_number, spans: bandSpans, ...(sheet.segs ? { segs: sheet.segs } : {}) });
+  }
+  return bands.length > 1 ? bands.slice(0, MAX_COLUMN_BANDS) : [sheet];
+}
+
 // ── the graph ───────────────────────────────────────────────────────────────
 export interface SheetGraphSchedule { kind: TableKind; title: string; rows: number; region: Bbox; continues?: string; rotated_headers?: boolean }
 export interface SheetGraphSheet { key: string; role: SheetRole; confidence: number; evidence: Evidence | null; building?: string; schedules: SheetGraphSchedule[] }
@@ -3057,11 +3325,17 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   for (const s of withText) {
     const role = classifySheetRole(s);
     roles.set(s.key, role);
+    // A real 2-(or more-)up sheet layout is split into independently-
+    // processed column bands here — see bandedSheets' own comment. A sheet
+    // with no proven such layout gets back `[s]`, the same object, so every
+    // extraction call below runs on the exact same whole-sheet span list as
+    // before this existed.
+    const bands = bandedSheets(s, { buildings, deltas: deltasBySheet.get(s.key) });
     // Structural "reference" tables (see the section above extractAllTables)
     // — scoped to schedule-role sheets only, a real, disclosed scope limit
     // named in that section's own comment, not an oversight.
     if (role.role === "schedule") {
-      for (const t of extractAllReferenceTables(s)) {
+      for (const bs of bands) for (const t of extractAllReferenceTables(bs)) {
         const titleB = t.title ? buildingMentions(t.title.text) : [];
         const b = titleB.length === 1 ? titleB[0] : ctxBySheet.get(s.key);
         if (b) t.building = b;
@@ -3072,8 +3346,8 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     }
     for (const kind of ["room-finish", "finish", "equipment"] as const) {
       // Every table of this kind on the sheet, not just the first — a dense
-      // MEP sheet routinely stacks several (#HVAC-boundary).
-      for (const t of extractAllTables(s, kind, { buildings, deltas: deltasBySheet.get(s.key) })) {
+      // MEP sheet routinely stacks several (#HVAC-boundary), now per band too.
+      for (const bs of bands) for (const t of extractAllTables(bs, kind, { buildings, deltas: deltasBySheet.get(s.key) })) {
         // A DOOR / WINDOW / PARTITION schedule carries a MARK column, so the
         // finish-table hunt happily reads one as a finish/material schedule —
         // and then a finish code that collides with a door mark chains to a
