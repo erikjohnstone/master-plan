@@ -50,20 +50,20 @@ export interface LegendGlyph {
   segments: number;
 }
 
-/** Connected components of `segs`, real-junction-aware (T-junctions, mid-edge
- * touches, crossings) via buildMepGraph's own robust noding — a real glyph is
- * one connected cluster of strokes; a component whose own bbox is a long
- * straight run (a table rule/column divider, not a symbol) is filtered out by
- * the caller via `looksLikeGlyph` below, not here. */
-function clusterSegments(segs: number[]): Array<{ x0: number; y0: number; x1: number; y1: number; edges: number }> {
-  if (!segs.length) return [];
-  const graph = buildMepGraph(segs, {});
-  const n = graph.nodes.length;
+/** Connected components of a node/edge set (real-junction-aware, via
+ * `buildMepGraph`'s own noding) restricted to the given edge list — shared by
+ * both the first, whole-sheet pass and the second, grid-stripped pass below,
+ * so the two can never silently disagree on how a component's own bbox/edge
+ * count is computed. */
+function componentsOf(
+  nodes: Array<{ x: number; y: number }>, edges: Array<{ a: number; b: number }>,
+): Array<{ x0: number; y0: number; x1: number; y1: number; edges: number }> {
+  const n = nodes.length;
   if (!n) return [];
   const parent = Array.from({ length: n }, (_, i) => i);
   const find = (i: number): number => { while (parent[i] !== i) { parent[i] = parent[parent[i]]; i = parent[i]; } return i; };
   const union = (a: number, b: number) => { const ra = find(a), rb = find(b); if (ra !== rb) parent[ra] = rb; };
-  for (const e of graph.edges) union(e.a, e.b);
+  for (const e of edges) union(e.a, e.b);
   const groups = new Map<number, { nodeIdxs: number[]; edgeCount: number }>();
   for (let i = 0; i < n; i++) {
     const r = find(i);
@@ -71,16 +71,66 @@ function clusterSegments(segs: number[]): Array<{ x0: number; y0: number; x1: nu
     if (!g) { g = { nodeIdxs: [], edgeCount: 0 }; groups.set(r, g); }
     g.nodeIdxs.push(i);
   }
-  for (const e of graph.edges) groups.get(find(e.a))!.edgeCount++;
+  for (const e of edges) groups.get(find(e.a))!.edgeCount++;
   return [...groups.values()].map((g) => {
     let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
     for (const i of g.nodeIdxs) {
-      const nd = graph.nodes[i];
+      const nd = nodes[i];
       x0 = Math.min(x0, nd.x); x1 = Math.max(x1, nd.x);
       y0 = Math.min(y0, nd.y); y1 = Math.max(y1, nd.y);
     }
     return { x0, y0, x1, y1, edges: g.edgeCount };
   });
+}
+
+/** Connected components of `segs`, real-junction-aware (T-junctions, mid-edge
+ * touches, crossings) via buildMepGraph's own robust noding — a real glyph is
+ * one connected cluster of strokes; a component whose own bbox is a long
+ * straight run (a table rule/column divider, not a symbol) is filtered out by
+ * the caller via `looksLikeGlyph` below, not here.
+ *
+ * SECOND PASS, additive only (accuracy-hardening plan, ledger item 44): a
+ * real, BORDERED symbol/description table (found live: itd-d1-lab's own
+ * "CONTROLS LEGEND" — three ruled tables, ~22 real rows) draws its own
+ * ruled grid (outer border, column divider, per-row rules) as linework that
+ * routinely TOUCHES a cell's own icon, so the first pass's connectivity
+ * clustering fuses the WHOLE table — every icon plus the entire grid — into
+ * one giant component that `looksLikeGlyph` correctly rejects as "not a
+ * compact glyph," discarding every real row inside it. Measured directly on
+ * that exact real table before writing this: its own edge-length
+ * distribution is sharply BIMODAL — 32 short edges (43-100px, real glyph
+ * strokes and short cell rules) and 25 long ones (300px+: a column divider,
+ * row-height rules, the ~758px outer border), with a clean, empty gap from
+ * ~100px to ~300px between them — not a close call needing a delicate
+ * threshold. So: any component that fails `looksLikeGlyph` (too big) gets
+ * ONE retry — strip every edge at least `gridLineMinPx` long (a real
+ * multiple of the seed glyph's own bound, sized well inside that measured
+ * gap) and re-run connectivity on what's left, restricted to that
+ * component's own original nodes only. Each resulting sub-component is
+ * returned as an ADDITIONAL candidate alongside the originals — this can
+ * only ever recover rows from a component that was already being discarded
+ * whole; an already-compact, already-accepted glyph is never touched. */
+function clusterSegments(
+  segs: number[], maxGlyphDimPx: number,
+): Array<{ x0: number; y0: number; x1: number; y1: number; edges: number }> {
+  if (!segs.length) return [];
+  const graph = buildMepGraph(segs, {});
+  if (!graph.nodes.length) return [];
+  const first = componentsOf(graph.nodes, graph.edges);
+  // sized well inside the measured real gap (~100-300px on the real table
+  // this was found against) — a multiple of the caller's own glyph bound,
+  // not an independent magic number.
+  const gridLineMinPx = maxGlyphDimPx * 2;
+  const recovered: Array<{ x0: number; y0: number; x1: number; y1: number; edges: number }> = [];
+  for (const c of first) {
+    if (looksLikeGlyph(c, c.edges, maxGlyphDimPx)) continue;   // already usable — no retry needed
+    const inBox = new Set<number>();
+    graph.nodes.forEach((nd, i) => { if (nd.x >= c.x0 && nd.x <= c.x1 && nd.y >= c.y0 && nd.y <= c.y1) inBox.add(i); });
+    const strippedEdges = graph.edges.filter((e) => e.length < gridLineMinPx && inBox.has(e.a) && inBox.has(e.b));
+    if (!strippedEdges.length) continue;
+    for (const sub of componentsOf(graph.nodes, strippedEdges)) if (sub.edges > 0) recovered.push(sub);
+  }
+  return [...first, ...recovered];
 }
 
 /** Is this cluster shaped like a real, compact drafting glyph rather than a
@@ -200,19 +250,24 @@ function mergeWrappedCaptions(lines: LegendSpan[], maxLineGapPx: number, maxInde
  * caption's own left edge may sit from its glyph's own right edge (same
  * row) before they're considered unrelated — real, measured legend layouts
  * (Eglin AFB) leave a real gap of ~90px between an icon and its own
- * caption at this sheet's own resolution, well short of the next column
- * over, so the default here is generous but not unbounded. */
+ * caption at this sheet's own resolution; a real, DIFFERENT bordered-table
+ * legend (itd-d1-lab's own "CONTROLS LEGEND," ledger item 44) measured
+ * wider — a real 124-138px gap between a recovered SYMBOL-column icon and
+ * its own DESCRIPTION-column caption, because the two columns themselves
+ * sit further apart — so the default widens to comfortably cover both real,
+ * measured layouts rather than the one the module was first validated
+ * against; still bounded well short of a genuinely unrelated column over. */
 export function findLegendGlyphs(
   segs: number[], rawSpans: LegendSpan[],
   opts: { maxGlyphDimPx?: number; maxCaptionGapPx?: number; captionMergeGapPx?: number; maxWrapGapPx?: number; maxWrapIndentPx?: number } = {},
 ): LegendGlyph[] {
   const maxGlyphDimPx = opts.maxGlyphDimPx ?? 80;
-  const maxCaptionGapPx = opts.maxCaptionGapPx ?? 120;
+  const maxCaptionGapPx = opts.maxCaptionGapPx ?? 150;
   if (!segs.length || !rawSpans.length) return [];
   const lines = mergeCaptionLines(rawSpans, opts.captionMergeGapPx ?? 3);
   const spans = mergeWrappedCaptions(lines, opts.maxWrapGapPx ?? 8, opts.maxWrapIndentPx ?? 5);
 
-  const clusters = clusterSegments(segs);
+  const clusters = clusterSegments(segs, maxGlyphDimPx);
   const candidates: { rect: [Point, Point]; segments: number }[] = [];
   for (const c of clusters) {
     if (!looksLikeGlyph(c, c.edges, maxGlyphDimPx)) continue;

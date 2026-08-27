@@ -144,3 +144,62 @@ test("findLegendGlyphs: a glyph too big to be a compact symbol (exceeds maxGlyph
   const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 20 });   // smaller than the real glyph's own ~74px height
   assert.equal(glyphs.length, 0);
 });
+
+// Real, found-live bug (accuracy-hardening plan, later session, ledger item
+// 44): a BORDERED SYMBOL/DESCRIPTION table (a real, GENUINE, different real
+// legend layout than the loose Eglin AFB one above — itd-d1-lab's own
+// "CONTROLS LEGEND") draws its own ruled grid (outer border, column
+// divider, per-row rules) as linework that routinely TOUCHES each row's own
+// icon, so first-pass connectivity clustering fuses the WHOLE table into
+// one giant component `looksLikeGlyph` correctly rejects as "too big" —
+// discarding every real row inside it, not just the touching one. Measured
+// directly against that real table before writing the fix: its own real
+// edge-length distribution is sharply bimodal (short glyph/cell-rule edges
+// at 43-100px, long grid edges at 300px+, a clean empty gap between) — not
+// a close call needing a delicate threshold. The recovered icon's own real
+// gap to its caption also measured wider than the Eglin AFB legend's own
+// ~90px (a real 124-138px, because the two columns themselves sit further
+// apart), motivating maxCaptionGapPx's own default widening from 120→150.
+test("findLegendGlyphs: a bordered SYMBOL/DESCRIPTION table (icons touching the ruled grid) recovers each real row, the grid itself is never read as a glyph", () => {
+  // 800×800 table, TWO columns (SYMBOL | DESCRIPTION), no row divider — each
+  // icon's own stem touches the column divider at a different height, and
+  // the divider's own NODED fragments between touch points (JTS splits a
+  // rule wherever another rule/stem crosses it) must stay well past
+  // gridLineMinPx (160 at the module's own default maxGlyphDimPx=80) or the
+  // "grid" itself stays chained together through its own short fragments —
+  // a real failure mode hit tried first with a smaller/row-divided table,
+  // where several crossings landed close enough to leave sub-160 fragments
+  // and the divider never broke; sized here so the shortest fragment
+  // (top border to first stem) is a comfortable 195px, not a near miss.
+  const TABLE: number[][] = [
+    seg(100, 100, 900, 100), seg(900, 100, 900, 900), seg(900, 900, 100, 900), seg(100, 900, 100, 100),
+    seg(500, 100, 500, 900),   // SYMBOL | DESCRIPTION column divider
+  ];
+  // row 1 icon: a compact 30×30 box with a short STEM reaching out to touch
+  // the column divider at a real T-junction (mid-edge, not a shared corner
+  // or a collinear overlap) — the same real touching shape
+  // controlValveGlyph's own stem/actuator-box already uses successfully.
+  const ICON1: number[][] = [
+    seg(440, 280, 470, 280), seg(470, 280, 470, 310), seg(470, 310, 440, 310), seg(440, 310, 440, 280),
+    seg(470, 295, 500, 295),   // stem to the column divider's own mid-edge
+  ];
+  // row 2 icon: same shape, same real T-junction touch, far enough below
+  // row 1 that the divider fragment BETWEEN them also clears gridLineMinPx
+  const ICON2: number[][] = [
+    seg(440, 680, 470, 680), seg(470, 680, 470, 710), seg(470, 710, 440, 710), seg(440, 710, 440, 680),
+    seg(470, 695, 500, 695),
+  ];
+  const segs = flat([...TABLE, ...ICON1, ...ICON2]);
+  const spans: LegendSpan[] = [
+    { text: "DESCRIPTION", x0: 510, y0: 105, x1: 570, y1: 120 },    // the column header itself — never a false row
+    { text: "ANALOG INPUT", x0: 620, y0: 285, x1: 700, y1: 305 },   // real gap to ICON1's own x1=500: 120px
+    { text: "DIGITAL INPUT", x0: 620, y0: 685, x1: 700, y1: 705 },  // real gap to ICON2's own x1=500: 120px
+  ];
+  const glyphs = findLegendGlyphs(segs, spans);   // module defaults: maxGlyphDimPx=80, maxCaptionGapPx=150
+  const byCaption = Object.fromEntries(glyphs.map((g) => [g.caption, g]));
+  assert.ok(byCaption["ANALOG INPUT"], `expected ANALOG INPUT among: ${glyphs.map((g) => g.caption).join(", ")}`);
+  assert.ok(byCaption["DIGITAL INPUT"], `expected DIGITAL INPUT among: ${glyphs.map((g) => g.caption).join(", ")}`);
+  assert.ok(!byCaption["DESCRIPTION"], "the column header itself must never be read as a labeled row");
+  // recovered rects sit at the real icon, not the whole fused table
+  assert.ok(byCaption["ANALOG INPUT"].rect[1][0] - byCaption["ANALOG INPUT"].rect[0][0] <= 80, "recovered rect is icon-sized, not table-sized");
+});
