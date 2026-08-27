@@ -21,6 +21,7 @@ const item = (over: Partial<TakeoffItem>): TakeoffItem => ({
   siblings_excluded: [],
   corroborated: false,
   status: "resolved",
+  source: "schedule_row",
   ...over,
 });
 

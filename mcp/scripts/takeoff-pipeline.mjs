@@ -46,6 +46,24 @@ for (const it of result.items) {
   console.log(`  ${it.tag.padEnd(10)} ${(it.equipment_type || "(unclassified)").padEnd(28)} ${loc}`);
 }
 
+// Legend-derived pass (untagged valves/dampers/actuators — no schedule row
+// names these; a whole-set symbol_sweep off a detected legend glyph is
+// their only real source) — reported as its OWN section, never folded into
+// the tagged counts above: the two are structurally different confidence
+// levels (a tag an estimator can read on the sheet vs. a shape a matcher
+// recognized), and merging them would hide which is which.
+console.log(`\n═ legend-derived (untagged glyph sweep) ═`);
+console.log(`legend/controls-legend sheets found: ${result.legend_sheets_seen.length}${result.legend_sheets_seen.length ? " (" + result.legend_sheets_seen.map((s) => `${s.sheet}: ${s.glyphs_detected} glyphs`).join(", ") + ")" : ""}`);
+console.log(`glyphs matching the in-scope taxonomy: ${result.legend_stats.glyphs_matched} of ${result.legend_stats.glyphs_seen} detected`);
+console.log(`resolved: ${result.legend_stats.resolved}  refused: ${result.legend_stats.refused}  errored: ${result.legend_stats.errored}`);
+console.log(`total real drawn instances found (legend-derived, UNCORROBORATED by any tag): ${result.legend_stats.total_drawn_instances}\n`);
+
+for (const it of result.legend_items) {
+  const loc = it.status === "resolved" ? `qty=${it.quantity}${it.corroborated ? "" : " (single/uncorroborated)"}` : `${it.status}: ${it.reason?.slice(0, 90)}`;
+  const amb = it.siblings_excluded.length ? ` [ambiguous vs: ${it.siblings_excluded.join(" / ")}]` : "";
+  console.log(`  ${it.tag.padEnd(40)} ${(it.equipment_type || `(category: ${it.category})`).padEnd(28)}${amb} ${loc}`);
+}
+
 if (result.failures.length) {
   console.log(`\n═ failures (${result.failures.length}) ═`);
   const byType = new Map();
