@@ -1014,6 +1014,48 @@ test("three-tier headers: the LOWEST tier defines the columns, the tiers above N
   assert.equal(res.finishes.find((f) => f.surface === "BASE")!.code, "WB-1");
 });
 
+test("three-tier headers: a direction column drawn as ONE combined span (\"FINISH - EAST\") still resolves to EAST, not a generic parent-tier label", () => {
+  // Real, found live on Baker County EOC's own real "ROOM FINISH SCHEDULE"
+  // (ledger item 10): NORTH/SOUTH/WEST each split their own tier-3 label
+  // across TWO spans ("FINISH -" then the bare direction word) — but EAST
+  // alone draws them as ONE combined run, "FINISH - EAST". headerHits' own
+  // first-vocab-word-per-span pick surfaces only "FINISH" for that one
+  // span, and since "FINISH" repeats (a real second FINISH sits under
+  // CEILING too, same as the FLOOR FINISH/CEILING FINISH case above), the
+  // ambiguous-label path used to walk up to an unrelated, too-generic
+  // parent-tier label ("WALLS") that happens to sit centred over EAST's
+  // own x-position — real, measured: every one of 13 real rows had its own
+  // real EAST value mislabeled under "WALLS FINISH" before this fix.
+  const sched: SheetSpans = {
+    key: "eastcombined.pdf#1", sheet_number: "A-627",
+    spans: [
+      sp("ROOM FINISH SCHEDULE", 100, 20),
+      // tier 1 — WALLS sits centred over EAST's own column, same real shape
+      { str: "WALLS", x: 620, y: 45, w: 60, h: 8 },
+      { str: "CEILING", x: 840, y: 45, w: 70, h: 8 },
+      // tier 2 — NORTH/SOUTH each get their own separate "FINISH -" parent;
+      // EAST gets none, because its own tier-3 span already carries it
+      sp("FINISH -", 520, 58), sp("FINISH -", 720, 58),
+      // tier 3 — the real columns (FLOOR/BASE are required to qualify this
+      // as a room-finish table at all, same as every other real key here).
+      // NORTH/SOUTH are bare direction words; EAST is the one real,
+      // combined "FINISH - EAST" run.
+      sp("NUMBER", 100, 70), sp("FLOOR", 250, 70), sp("BASE", 380, 70),
+      sp("NORTH", 520, 70), sp("FINISH - EAST", 620, 70), sp("SOUTH", 720, 70), sp("FINISH", 840, 70),
+      sp("100", 100, 95), sp("RF-1", 250, 95), sp("WB-1", 380, 95),
+      sp("P-1", 520, 95), sp("P-2", 620, 95), sp("P-3", 720, 95), sp("GYP-1", 840, 95),
+    ],
+  };
+  const tab = extractTable(sched, "room-finish")!;
+  assert.ok(tab, "the table extracts at all");
+  assert.ok(tab.headers.includes("EAST"), `EAST must resolve on its own, not fold into a generic parent label: ${tab.headers.join(" | ")}`);
+  assert.ok(!tab.headers.includes("WALLS FINISH"), "the real bug this pins: EAST must never be silently renamed to its unrelated parent tier's own generic label");
+  const r = tab.rows[0];
+  assert.equal(r.cells.NORTH.text, "P-1");
+  assert.equal(r.cells.EAST.text, "P-2", "EAST's own real value lands in its own real column");
+  assert.equal(r.cells.SOUTH.text, "P-3");
+});
+
 test("a table ends where its rows stop — a legend far below is not extra rows", () => {
   const sched: SheetSpans = {
     key: "end.pdf#1", sheet_number: "A-622",

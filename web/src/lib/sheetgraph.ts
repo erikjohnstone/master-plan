@@ -719,9 +719,25 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
     for (let j = 0; j < hits.length; j++) {
       const h = hits[j];
       let label = h.label;
-      // An ambiguous label takes its parent's name first (two FINISH columns
-      // become FLOOR FINISH and CEILING FINISH) …
+      // An ambiguous label prefers a MORE SPECIFIC word from its own SAME
+      // span first, before ever guessing at a parent — real, found live
+      // (Baker County EOC's own Room Finish Schedule): every OTHER
+      // direction column splits "FINISH -" and its own direction word into
+      // two separate spans, but one (EAST) draws them as a single combined
+      // run "FINISH - EAST". `headerHits`' own first-vocab-word-per-span
+      // pick surfaces only "FINISH" for that span, so "EAST" — sitting
+      // right there in the same run — would otherwise be invisible past
+      // this point, sending the label down the parent-lookup path below
+      // and landing on an unrelated, too-generic parent-tier word ("WALLS")
+      // instead of the real, already-present, more specific one.
       if (dup.has(h.label) && !SURFACE_WORDS.has(h.label)) {
+        const sameSpanWords = headerLabels(h.span.str, vocab);
+        const specific = sameSpanWords.find((w) => w !== h.label && SURFACE_WORDS.has(w) && !used.has(w));
+        if (specific) label = specific;
+      }
+      // An ambiguous label takes its parent's name next (two FINISH columns
+      // become FLOOR FINISH and CEILING FINISH) …
+      if (dup.has(h.label) && !SURFACE_WORDS.has(h.label) && label === h.label) {
         const hi = j + 1 < hits.length ? hits[j + 1].span.x : Infinity;
         const parent = parentLabelOver(rows, idx, i, h.span.x, hi, vocab);
         if (parent && parent !== h.label) label = `${parent} ${h.label}`;
