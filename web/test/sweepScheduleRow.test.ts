@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, type Point } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, type Point, type RoomSweepInstance } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -182,4 +182,84 @@ test("classifySweepMatches: cross-scale sweep — the fingerprint is resized per
   assert.equal(r.matches.length, 1, "found only because the ratio resized the seed before matching");
   assert.ok(r.scaled, "a non-1 ratio discloses what it cost (#186)");
   assert.equal(r.scaled!.ratio, 12);
+});
+
+// ── dedupeCrossDisciplineRoomViews ──────────────────────────────────────────
+// The real AC-1 bug (itd-d1-lab-mechanical.pdf#7/#25, set 002): the SAME
+// physical unit drawn on an M-series AND a P-series "enlarged" plan of the
+// SAME room reads as two installs unless something recognizes the two
+// occurrences as one redrawn device, not two. These fixtures are synthetic —
+// no set/tag/page from the real corpus — so the function is proven generic.
+const ROOM = { tag: "120", name: "MECH", bbox: [1000, 1000, 1040, 1020] as [number, number, number, number] };
+const OTHER_ROOM = { tag: "130", name: "ELEC", bbox: [4000, 3000, 4040, 3020] as [number, number, number, number] };
+const NEAR_ROOM = [1010, 1010] as Point; // well inside ROOM's bbox
+const SHEET_W = 5000, SHEET_H = 4000;
+function inst(id: number, sheet: string, discipline: string | null, at: Point, rooms: typeof ROOM[]): RoomSweepInstance<number> {
+  return { id, sheet, discipline, at, rooms, sheetWidthPx: SHEET_W, sheetHeightPx: SHEET_H };
+}
+
+test("dedupeCrossDisciplineRoomViews: same tag, same room, two different-discipline sheets — collapses to one (the real AC-1 shape)", () => {
+  const instances = [
+    inst(1, "M3.0", "M", NEAR_ROOM, [ROOM]),
+    inst(2, "P4.0", "P", NEAR_ROOM, [ROOM]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 1, "exactly one of the two collapses");
+  // disciplines tie at 1 match each — alphabetically-first ("M") wins the keep
+  assert.equal(redundant[0].id, 2);
+  assert.equal(redundant[0].sheet, "P4.0");
+  assert.equal(redundant[0].keptDiscipline, "M");
+  assert.equal(redundant[0].keptSheet, "M3.0");
+  assert.match(redundant[0].room, /120/);
+});
+
+test("dedupeCrossDisciplineRoomViews: negative control — same tag, DIFFERENT rooms, different disciplines — both real, both kept", () => {
+  const instances = [
+    inst(1, "M3.0", "M", [1010, 1010], [ROOM]),
+    inst(2, "P4.0", "P", [4010, 3010], [OTHER_ROOM]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 0, "two genuinely distinct installs in two different rooms must never collapse");
+});
+
+test("dedupeCrossDisciplineRoomViews: negative control — same tag, same room, SAME discipline — a real repeat within one trade, not a redundant view", () => {
+  const instances = [
+    inst(1, "M3.0", "M", [1005, 1005], [ROOM]),
+    inst(2, "M3.0", "M", [1030, 1015], [ROOM]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 0, "one discipline drawing the same room twice is a real separate-install signal, never collapsed");
+});
+
+test("dedupeCrossDisciplineRoomViews: no room within a plausible distance — never guesses, never collapses", () => {
+  // ROOM sits far outside the 20%-of-diagonal attribution bound from `at`
+  const instances = [
+    inst(1, "M3.0", "M", [10, 10], [ROOM]),
+    inst(2, "P4.0", "P", [10, 10], [ROOM]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 0, "a room label too far from the mark is never attributed, so nothing collapses");
+});
+
+test("dedupeCrossDisciplineRoomViews: an instance with no known discipline never enters the dedup (never dropped, never a kept anchor)", () => {
+  const instances = [
+    inst(1, "M3.0", "M", NEAR_ROOM, [ROOM]),
+    inst(2, "UNKNOWN", null, NEAR_ROOM, [ROOM]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 0, "only one known discipline present (the unattributed instance sits out) — nothing to collapse against");
+});
+
+test("dedupeCrossDisciplineRoomViews: three disciplines drawing the same room — keeps the LARGEST single-discipline count, never the sum", () => {
+  const instances = [
+    inst(1, "M3.0", "M", [1005, 1005], [ROOM]),
+    inst(2, "M3.0", "M", [1030, 1015], [ROOM]), // M draws 2 real units in this room
+    inst(3, "P4.0", "P", NEAR_ROOM, [ROOM]),
+    inst(4, "E2.0", "E", NEAR_ROOM, [ROOM]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 2, "P's and E's single redrawn views both collapse; M's real 2 units are untouched");
+  const ids = redundant.map((r) => r.id).sort();
+  assert.deepEqual(ids, [3, 4]);
+  for (const r of redundant) assert.equal(r.keptDiscipline, "M");
 });

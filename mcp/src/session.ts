@@ -8,7 +8,7 @@ import path from "node:path";
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, type SheetGraph, type SheetSpans, type Bbox } from "../../web/src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, type SheetGraph, type SheetSpans, type Bbox } from "../../web/src/lib/sheetgraph.ts";
 import { UserError, round1, round2 } from "./format.ts";
 // Condition twins — the inheritance rule, shared with the canvas so a headless session and
 // the app can never disagree about what a twin holds (web/test/variants.test.ts).
@@ -38,7 +38,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS }
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, dedupeCrossDisciplineRoomViews, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -3157,6 +3157,7 @@ export class Session {
       elapsed_ms: number;
       scale: { scale: number; known: boolean };
       scaled?: NonNullable<SymbolMatchResult["scaled"]>;
+      redundant_view: (CountedMatch & { room: string; kept_sheet: string })[];
     }[] = [];
     // per-sheet classification — the shared symbolsweep.ts function, so this
     // server and the browser's own port can never silently disagree.
@@ -3203,8 +3204,57 @@ export class Session {
       perSheet.push({
         state: sh, matches, withheld, excluded, text_only,
         candidates, complete, elapsed_ms, scale: ratio,
+        redundant_view: [],
         ...(scaled ? { scaled } : {}),
       });
+    }
+
+    // 4b. cross-discipline redundant room-view collapse — a real, generic
+    // drafting convention (see symbolsweep.ts's dedupeCrossDisciplineRoomViews
+    // for the full doctrine): two different disciplines each drawing their
+    // OWN "enlarged" plan of the SAME physical room redraw whatever equipment
+    // sits in it for their own trade's reference, so the SAME tag matched
+    // once on each discipline's view of the SAME room is one physical device,
+    // not one install per sheet. Never touches a same-discipline repeat (a
+    // real separate-install signal) or a match with no confidently-attributed
+    // room (never guessed).
+    const disciplineOf = (sheetNumber: string | null | undefined): string | null => {
+      const m = /^[A-Z]{1,3}/.exec((sheetNumber || "").trim().toUpperCase());
+      return m ? m[0] : null;
+    };
+    const roomsBySheet = new Map<string, ReturnType<typeof roomTags>>();
+    const roomsFor = (sh: SheetState): ReturnType<typeof roomTags> => {
+      let rooms = roomsBySheet.get(sh.key);
+      if (!rooms) {
+        const spans = (sh.spans ?? []).map((sp) => ({ str: sp.str, x: sp.x0, y: sp.y0, w: sp.x1 - sp.x0, h: sp.y1 - sp.y0, ...(sp.rot ? { rot: sp.rot } : {}) }));
+        rooms = roomTags({ key: sh.key, sheet_number: sh.sheetNumber, spans });
+        roomsBySheet.set(sh.key, rooms);
+      }
+      return rooms;
+    };
+    const dedupInstances: RoomSweepInstance<CountedMatch>[] = [];
+    for (const ps of perSheet) {
+      const discipline = disciplineOf(ps.state.sheetNumber);
+      const rooms = discipline ? roomsFor(ps.state) : [];
+      for (const m of ps.matches) {
+        dedupInstances.push({
+          id: m, sheet: ps.state.key, discipline, at: m.at,
+          rooms, sheetWidthPx: ps.state.widthPx, sheetHeightPx: ps.state.heightPx,
+        });
+      }
+    }
+    const redundant = dedupeCrossDisciplineRoomViews(dedupInstances);
+    if (redundant.length) {
+      const redundantSet = new Map<CountedMatch, RedundantRoomView<CountedMatch>>(redundant.map((r) => [r.id, r]));
+      for (const ps of perSheet) {
+        const keep: CountedMatch[] = [];
+        for (const m of ps.matches) {
+          const r = redundantSet.get(m);
+          if (r) ps.redundant_view.push({ ...m, room: r.room, kept_sheet: r.keptSheet });
+          else keep.push(m);
+        }
+        ps.matches = keep;
+      }
     }
 
     // 5. commit — condition minted FROM the row (its key IS the tag), the
@@ -3264,6 +3314,10 @@ export class Session {
     if (rowAssumed.length) {
       notes.push(`${rowAssumed.map((p) => p.state.key).join(", ")} found nothing and were swept at 1:1 — no scale is set on ${anchorSheet.key} or on them, so a different drawn scale there is a live explanation for the zero. set_scale on both ends to rule it out.`);
     }
+    const rowRedundant = perSheet.filter((p) => p.redundant_view.length);
+    if (rowRedundant.length) {
+      notes.push(`${rowRedundant.map((p) => `${p.redundant_view.length} on ${p.state.key}`).join(", ")} withheld from the count as a cross-discipline REDUNDANT VIEW — the same "${t}" mark, in the same drawn room, on a different-discipline sheet's own "enlarged" plan of that room (the SAME physical device redrawn for another trade's reference, not a second install); audit with view_sheet before trusting this.`);
+    }
     return {
       tag: t,
       row: {
@@ -3301,6 +3355,12 @@ export class Session {
         elapsed_ms: p.elapsed_ms,
         ...(p.scaled ? { scaled: p.scaled } : {}),
         ...(p.scale.known ? {} : { scale_assumed: `no scale set on ${anchorSheet.key} or this sheet — swept at 1:1` }),
+        ...(p.redundant_view.length ? {
+          redundant_view: p.redundant_view.map((m) => ({
+            at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored,
+            tag_at: Session.wireBox(m.tag_at), room: m.room, kept_sheet: m.kept_sheet,
+          })),
+        } : {}),
       })),
       complete: perSheet.every((p) => p.complete),
       skipped,

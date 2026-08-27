@@ -1438,3 +1438,118 @@ export function classifySweepMatches(
     ...(res.scaled ? { scaled: res.scaled } : {}),
   };
 }
+
+// ── cross-discipline redundant room-view dedup ──────────────────────────────
+// A real, common cross-trade drafting convention: two disciplines (mechanical,
+// plumbing, electrical, …) each draw their OWN "enlarged" plan of the SAME
+// physical room, redrawing whatever equipment sits in it for their own
+// trade's reference. A schedule row's tag drawn once on each discipline's
+// enlarged view of the SAME room is the SAME physical device, not one
+// install per sheet — sweep_schedule_row's per-sheet fingerprint search has
+// no way to know that on its own, since each sheet's tag occurrence
+// independently clears the match bar on its own linework. This is a GENERIC
+// pattern (any tag, any set that uses this convention), not specific to any
+// one project, sheet, or tag — no filename/page/tag is named here.
+//
+// The signal used: the two occurrences sit in the SAME named/numbered room
+// (via the existing room-tag reader, sheetgraph.ts's roomTags — the identical
+// "digit(s) drawn near a bubble" pattern already trusted for room-finish
+// takeoffs) on sheets whose OWN title-block sheet numbers carry DIFFERENT AIA
+// discipline prefixes (M/P/E/… the standard "M3.0"/"P4.0" convention, read
+// the same first-token-of-the-sheet-number way layers.ts's DISCIPLINES table
+// reads a CAD layer name). Two genuinely SEPARATE installed units sharing one
+// tag would ordinarily sit in different rooms — that is what makes them
+// separate installs — so "same room, same tag, different discipline" is a
+// narrow, specific shape, not a general "trust the first count" heuristic.
+//
+// Never applied when: the sheets share a discipline (a real repeat on the
+// SAME trade's own drawing is a genuine separate-install signal, not a
+// redrawn reference — left alone); no room can be confidently attributed to
+// an occurrence (never guessed — see maxDist below); or only one discipline
+// is represented in a room (nothing to collapse against). The kept count for
+// a duplicated room is the LARGEST single-discipline count seen there — never
+// the SUM (double/triple-counts the redundant views, the actual AC-1 bug)
+// and never the smallest (a partial crop that only shows some of a room's
+// real units must never silently undercut a fuller sibling view).
+export interface RoomCandidate { tag: string; name: string; bbox: [number, number, number, number] }
+export interface RoomSweepInstance<Id> {
+  id: Id;
+  sheet: string;
+  /** Leading AIA discipline letters off the sheet's own title-block sheet
+   *  number ("M3.0" → "M"); null when no sheet number was read — an
+   *  attribution never guessed, so the instance never enters the dedup. */
+  discipline: string | null;
+  at: Point;
+  /** This occurrence's own sheet's rooms (sheetgraph.ts's roomTags output)
+   *  and its full page size, so "nearest room" can be bounded to a plausible
+   *  fraction of the sheet rather than ever crediting a room that merely
+   *  happens to be the closest number ON A SHEET with no room genuinely near
+   *  the mark (an unrelated title-block digit or grid bubble, e.g.). */
+  rooms: RoomCandidate[];
+  sheetWidthPx: number;
+  sheetHeightPx: number;
+}
+export interface RedundantRoomView<Id> {
+  id: Id;
+  sheet: string;
+  room: string;
+  /** The discipline (and one of its sheets) whose count this duplicates. */
+  keptDiscipline: string;
+  keptSheet: string;
+}
+/** Fraction of the sheet's own diagonal a room's label must sit within to be
+ * credited to a nearby occurrence — generous enough for a real "enlarged"
+ * partial-sheet plan (which crops tightly around the one room it shows),
+ * tight enough to reject an unrelated title-block/revision digit clear
+ * across a full floor-plan sheet. */
+const ROOM_ATTRIBUTION_MAX_DIAGONAL_FRAC = 0.2;
+
+export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
+  type Attributed = RoomSweepInstance<Id> & { room: RoomCandidate };
+  const attributed: Attributed[] = [];
+  for (const inst of instances) {
+    if (!inst.discipline || !inst.rooms.length) continue;
+    const maxDist = ROOM_ATTRIBUTION_MAX_DIAGONAL_FRAC * Math.hypot(inst.sheetWidthPx, inst.sheetHeightPx);
+    let best: RoomCandidate | null = null, bestD = Infinity;
+    for (const r of inst.rooms) {
+      const cx = (r.bbox[0] + r.bbox[2]) / 2, cy = (r.bbox[1] + r.bbox[3]) / 2;
+      const d = Math.hypot(inst.at[0] - cx, inst.at[1] - cy);
+      if (d < bestD) { bestD = d; best = r; }
+    }
+    if (best && bestD <= maxDist) attributed.push({ ...inst, room: best });
+  }
+  const byRoom = new Map<string, Attributed[]>();
+  for (const a of attributed) {
+    const key = `${a.room.tag.trim().toUpperCase()}|${a.room.name.trim().toUpperCase()}`;
+    const arr = byRoom.get(key);
+    if (arr) arr.push(a); else byRoom.set(key, [a]);
+  }
+  const out: RedundantRoomView<Id>[] = [];
+  for (const group of byRoom.values()) {
+    const byDisc = new Map<string, Attributed[]>();
+    for (const a of group) {
+      const arr = byDisc.get(a.discipline!);
+      if (arr) arr.push(a); else byDisc.set(a.discipline!, [a]);
+    }
+    if (byDisc.size < 2) continue; // one discipline only — nothing redundant
+    // keep the discipline with the MOST occurrences in this room (never the
+    // sum across disciplines, never the fewest); ties broken alphabetically
+    // for full determinism.
+    let keptDisc = "", keptGroup: Attributed[] = [];
+    for (const [disc, arr] of [...byDisc.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+      if (arr.length > keptGroup.length) { keptDisc = disc; keptGroup = arr; }
+    }
+    const keptSheet = keptGroup[0].sheet;
+    for (const [disc, arr] of byDisc) {
+      if (disc === keptDisc) continue;
+      for (const a of arr) {
+        out.push({
+          id: a.id, sheet: a.sheet,
+          room: `${a.room.name ? `${a.room.name} ` : ""}${a.room.tag}`.trim(),
+          keptDiscipline: keptDisc, keptSheet,
+        });
+      }
+    }
+  }
+  return out;
+}
