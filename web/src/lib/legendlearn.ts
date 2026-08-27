@@ -112,10 +112,10 @@ function componentsOf(
  * whole; an already-compact, already-accepted glyph is never touched. */
 function clusterSegments(
   segs: number[], maxGlyphDimPx: number,
-): Array<{ x0: number; y0: number; x1: number; y1: number; edges: number }> {
-  if (!segs.length) return [];
+): { components: Array<{ x0: number; y0: number; x1: number; y1: number; edges: number }>; gridPx: number } {
+  if (!segs.length) return { components: [], gridPx: 0 };
   const graph = buildMepGraph(segs, {});
-  if (!graph.nodes.length) return [];
+  if (!graph.nodes.length) return { components: [], gridPx: graph.quantGridPx };
   const first = componentsOf(graph.nodes, graph.edges);
   // sized well inside the measured real gap (~100-300px on the real table
   // this was found against) — a multiple of the caller's own glyph bound,
@@ -130,7 +130,7 @@ function clusterSegments(
     if (!strippedEdges.length) continue;
     for (const sub of componentsOf(graph.nodes, strippedEdges)) if (sub.edges > 0) recovered.push(sub);
   }
-  return [...first, ...recovered];
+  return { components: [...first, ...recovered], gridPx: graph.quantGridPx };
 }
 
 /** Is this cluster shaped like a real, compact drafting glyph rather than a
@@ -267,11 +267,30 @@ export function findLegendGlyphs(
   const lines = mergeCaptionLines(rawSpans, opts.captionMergeGapPx ?? 3);
   const spans = mergeWrappedCaptions(lines, opts.maxWrapGapPx ?? 8, opts.maxWrapIndentPx ?? 5);
 
-  const clusters = clusterSegments(segs, maxGlyphDimPx);
+  const { components: clusters, gridPx } = clusterSegments(segs, maxGlyphDimPx);
+  // Real, measured bug (accuracy-hardening plan, this session): a cluster's
+  // bbox here is built from buildMepGraph's own NODED node coordinates,
+  // which are quantized to its solved snap grid (quantGridPx) before
+  // noding ever runs — so the bbox can sit up to half a grid cell inside
+  // where the glyph's own RAW drawn segments truly end. Measured live
+  // against itd-d1-lab-mechanical.pdf#16's real "CONTROLS LEGEND": the
+  // opposed-blade-damper glyph's real blade strokes end at y=878.16,
+  // quantized to y=878.4 at this sheet's unscaled 1.8px grid. A zero-margin
+  // rect built straight from that quantized bbox, fed into symbol_sweep's
+  // own fingerprintSymbol (which requires BOTH endpoints strictly inside
+  // the rect, by design — see symbolsweep.ts), kept only 1 of the glyph's
+  // real 6 segments — a near-empty "fingerprint" that then matched almost
+  // any lone stroke on a plan sheet at score 1.0 rather than corroborating
+  // or refusing. Padding by half the grid that ACTUALLY produced this
+  // bbox (never a fixed guessed px count — the retry ladder can coarsen
+  // this grid on a dense real sheet, and the pad has to coarsen with it)
+  // closes this without touching fingerprintSymbol's own, separately
+  // correct "strictly inside" contract.
+  const pad = gridPx / 2;
   const candidates: { rect: [Point, Point]; segments: number }[] = [];
   for (const c of clusters) {
     if (!looksLikeGlyph(c, c.edges, maxGlyphDimPx)) continue;
-    candidates.push({ rect: [[c.x0, c.y0], [c.x1, c.y1]], segments: c.edges });
+    candidates.push({ rect: [[c.x0 - pad, c.y0 - pad], [c.x1 + pad, c.y1 + pad]], segments: c.edges });
   }
 
   // Pair each candidate with the nearest caption to its RIGHT, same row

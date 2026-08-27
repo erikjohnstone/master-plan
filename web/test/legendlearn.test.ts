@@ -26,6 +26,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { findLegendGlyphs, type LegendSpan } from "../src/lib/legendlearn.ts";
+import { fingerprintSymbol } from "../src/lib/symbolsweep.ts";
 
 const seg = (ax: number, ay: number, bx: number, by: number) => [ax, ay, bx, by];
 const flat = (segs: number[][]): number[] => segs.flat();
@@ -202,4 +203,34 @@ test("findLegendGlyphs: a bordered SYMBOL/DESCRIPTION table (icons touching the 
   assert.ok(!byCaption["DESCRIPTION"], "the column header itself must never be read as a labeled row");
   // recovered rects sit at the real icon, not the whole fused table
   assert.ok(byCaption["ANALOG INPUT"].rect[1][0] - byCaption["ANALOG INPUT"].rect[0][0] <= 80, "recovered rect is icon-sized, not table-sized");
+});
+
+// Real, MEASURED bug (accuracy-hardening plan, this session, found running
+// the pipeline against itd-d1-lab-mechanical.pdf#16's real "CONTROLS
+// LEGEND"): a cluster's own bbox here is built from buildMepGraph's own
+// NODED node coordinates, which are quantized to its solved snap grid
+// (mepconnectivity.ts's quantGridPx, 1.8px at this module's default
+// unscaled call) BEFORE noding ever runs — so the bbox can land up to half
+// a grid cell inside where the glyph's own RAW drawn segments truly end.
+// Measured live: the real opposed-blade-damper glyph's blade strokes ended
+// at y=878.16; the quantized bbox reported y0=878.4 — a zero-margin rect
+// built from that, fed straight into symbol_sweep's own fingerprintSymbol
+// (which requires BOTH endpoints strictly inside the rect, by design), kept
+// only 1 of the glyph's real 6 segments — a near-empty, false fingerprint.
+// This is the exact real cross-module contract legendlearn.ts's own header
+// comment promises ("the caller feeds each result straight into
+// symbol_sweep's own seed_rect... exactly as if a human had marqueed it")
+// — so the regression is asserted at that contract, not an internal detail:
+// EVERY raw segment belonging to a detected glyph must survive the trip
+// through fingerprintSymbol using the glyph's own reported rect, for any
+// glyph position, not only ones lucky enough to land on exact grid
+// multiples (100 and 100+24=124 do not, by construction here).
+test("findLegendGlyphs: the returned rect captures the WHOLE glyph when fed into symbol_sweep's own fingerprintSymbol — never clipped by the noding grid's own coordinate quantization", () => {
+  const rawSegs = controlValveGlyph(100, 100);
+  const segs = flat(rawSegs);
+  const spans: LegendSpan[] = [{ text: "2-WAY ELECTRIC CONTROL VALVE", x0: 200, y0: 150, x1: 400, y1: 170 }];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 120 });
+  assert.equal(glyphs.length, 1);
+  const fp = fingerprintSymbol(segs, glyphs[0].rect);
+  assert.equal(fp.segments, rawSegs.length, `expected all ${rawSegs.length} real glyph segments to survive fingerprintSymbol via the detected rect, got ${fp.segments} — the rect is clipping real linework the noding grid quantized away from the raw coordinates`);
 });
