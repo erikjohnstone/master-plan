@@ -2009,14 +2009,22 @@ export class Session {
    *
    * The identity rule is the annotated-device drafting pattern: a device is
    * drawn with its mark tag and a value under it ("S1" over "200" — CFM, GPM,
-   * a fixture count). Tag text WITH a paired value counts; a tag inside a
-   * schedule table's own region is a row label and is excluded; everything
-   * else is WITHHELD with a reason and coordinates — a tag amid linework but
-   * unvalued may be a real device (look), a bare tag is probably a note. A
-   * mark drawn ON its marker with no value is sweep_schedule_row's family,
-   * not this one. Refusal-honest throughout: scans refuse (no text layer),
-   * a set with no mark-shaped schedule rows refuses unless the marks are
-   * stated, and non-plan sheets are skipped with the role that excused them. */
+   * a fixture count) OR beside it in a two-cell box row ("CD-1 | 85" — real,
+   * found live on the baker-county-eoc corpus: a boxed callout with a size
+   * on its own top row and TAG/VALUE side by side on the row below, same
+   * baseline, real MEASURED gap ~1.1x the text height on every instance
+   * checked). Both are real, common drafting conventions, not a guess —
+   * every previously-live-observed "withheld" real device on this exact
+   * corpus turned out to be this second, horizontal shape once rendered and
+   * looked at directly, not a genuinely unvalued tag. Tag text WITH a paired
+   * value (either direction) counts; a tag inside a schedule table's own
+   * region is a row label and is excluded; everything else is WITHHELD with
+   * a reason and coordinates — a tag amid linework but unvalued may be a
+   * real device (look), a bare tag is probably a note. A mark drawn ON its
+   * marker with no value is sweep_schedule_row's family, not this one.
+   * Refusal-honest throughout: scans refuse (no text layer), a set with no
+   * mark-shaped schedule rows refuses unless the marks are stated, and
+   * non-plan sheets are skipped with the role that excused them. */
   async countMarks(opts: { marks?: string[]; commit?: boolean } = {}) {
     const graph = await this.ensureGraph();
     if (!graph.available) {
@@ -2096,9 +2104,18 @@ export class Session {
           const cx = (sp.x0 + sp.x1) / 2, cy = (sp.y0 + sp.y1) / 2;
           const h = Math.max(sp.y1 - sp.y0, 6);
           if (regions.some((r) => cx >= r[0] && cx <= r[2] && cy >= r[1] && cy <= r[3])) { excludedInTables++; continue; }
+          // Two real, distinct pairing shapes (see the function's own header
+          // comment): a value stacked BELOW the tag, or a value beside it on
+          // the SAME baseline in a two-cell box row ("CD-1 | 85" — real,
+          // measured on the baker-county-eoc corpus: y0 identical to the
+          // pixel on every real instance checked, gap ~1.1x the text height
+          // — 1.5h is a real, generous-but-bounded margin over that, not a
+          // guess).
           const paired = values.find((v) =>
-            Math.abs((v.x0 + v.x1) / 2 - cx) <= Math.max(sp.x1 - sp.x0, 1.5 * h) &&
-            v.y0 >= sp.y1 - 0.4 * h && v.y0 <= sp.y1 + 2.4 * h);
+            (Math.abs((v.x0 + v.x1) / 2 - cx) <= Math.max(sp.x1 - sp.x0, 1.5 * h) &&
+             v.y0 >= sp.y1 - 0.4 * h && v.y0 <= sp.y1 + 2.4 * h) ||
+            (Math.abs(v.y0 - sp.y0) <= 0.3 * h &&
+             v.x0 >= sp.x1 - 0.2 * h && v.x0 - sp.x1 <= 1.5 * h));
           if (paired) {
             rec.counted.push({ at: [round1(cx), round1(cy)], value: paired.str.trim(), sheet: sh.key });
             counts[m] = (counts[m] || 0) + 1;

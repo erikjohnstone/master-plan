@@ -2826,6 +2826,22 @@ test("count_marks: value-paired tags count, residue withheld with reasons, rows 
   assert.equal(zz.data.marks[0].count, 0);
 });
 
+test("count_marks: a tag and its value SIDE BY SIDE on the same baseline pairs too, not only stacked (accuracy-hardening plan, real baker-county-eoc corpus shape)", async () => {
+  // Real, found live through the actual Agent UI: baker-county-eoc's own
+  // real "CD-1"/"RG-1" register callouts draw the tag and its CFM value in
+  // a two-cell box row, side by side — count_marks originally only ever
+  // paired a value drawn BELOW the tag and withheld every one of these as
+  // "no paired value", even though a real value sat right beside it.
+  const c = await pair();
+  await call(c, "load_plan", { path: ANNSET });
+  const r = await call(c, "count_marks", { marks: ["CD-1"] });
+  assert.equal(r.isError, false, JSON.stringify(r.data).slice(0, 300));
+  const cd1 = r.data.marks[0];
+  assert.equal(cd1.count, 1, "the side-by-side box-row pairing must count, not withhold");
+  assert.equal(cd1.occurrences[0].value, "85");
+  assert.equal(cd1.withheld.length, 0);
+});
+
 test("count_marks: tags drawn ON their marker with no value are sweep_schedule_row's family — all withheld here", async () => {
   const c = await pair();
   await call(c, "load_plan", { path: SYMSET });

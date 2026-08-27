@@ -270,6 +270,18 @@ const annotated = (tag, value, [x, y]) => [
   `BT /F1 10 Tf ${fmt(x)} ${fmt(y)} Td (${tag}) Tj ET`,
   `BT /F1 10 Tf ${fmt(x)} ${fmt(y - 12)} Td (${value}) Tj ET`,
 ];
+/** The SECOND real annotated-device convention (accuracy-hardening plan,
+ * later autonomous demo-loop session): a boxed callout with the tag and its
+ * value SIDE BY SIDE on the same baseline, not stacked — real, found live
+ * and measured on the baker-county-eoc corpus's own real "CD-1 | 85" boxes
+ * (same y0 to the pixel, gap ~1.1x the text height on every real instance
+ * checked). `gap` mirrors that real measured ratio at this fixture's own
+ * 10pt font (~19px tall glyphs on the real corpus vs. this fixture's 10pt
+ * text — proportioned, not copied verbatim). */
+const annotatedSide = (tag, value, [x, y]) => [
+  `BT /F1 10 Tf ${fmt(x)} ${fmt(y)} Td (${tag}) Tj ET`,
+  `BT /F1 10 Tf ${fmt(x + tag.length * 6 + 8)} ${fmt(y)} Td (${value}) Tj ET`,
+];
 
 const ANN_PAGES = [
   [
@@ -283,6 +295,8 @@ const ANN_PAGES = [
     ...place(SYMBOL, [440, 430]), ...annotated("S1", "175", [410, 440]),
     // one R1 return, same pattern
     ...place(SQUARE_ONLY, [300, 300]), ...annotated("R1", "1150", [270, 310]),
+    // one CD-1 diffuser, the SIDE-BY-SIDE box-row convention (not stacked)
+    ...place(SQUARE_ONLY, [180, 250]), ...annotatedSide("CD-1", "85", [140, 270]),
     // residue 1: a tag amid device linework but with NO value — withheld, look
     ...place(SYMBOL, [430, 120]), `BT /F1 10 Tf 425 145 Td (S1) Tj ET`,
     // residue 2: a bare tag — no value, no linework — a note mention
