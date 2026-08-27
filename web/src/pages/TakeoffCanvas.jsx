@@ -1987,14 +1987,34 @@ export default function TakeoffCanvas() {
         const str = (it.str || "");
         if (!str.trim()) continue;
         const t = pdfjsLib.Util.transform(vt, it.transform);
-        // Same math as ensureTextSpans (below) and the MCP's own textSpans,
-        // deliberately — three independent extraction paths (this one, the
-        // per-panel one, and MCP's) must never quietly disagree on where a
-        // span sits.
+        // Same math as ensureTextSpans (below) and the MCP's own textSpans —
+        // three independent extraction paths (this one, the per-panel one,
+        // and MCP's) must never quietly disagree on where a span sits. This
+        // was NOT actually true until now: the old x0=t[4]/y0=t[5]-h/x1=t[4]+w
+        // /y1=t[5] formula silently assumed unrotated text (glyph runs left
+        // to right, ascent straight up) and was wrong for any real rotated
+        // text run — a vertical title-block stamp, a rotated north arrow
+        // label. Found live: a real 270°-rotated address block
+        // ("D-1 Testing Laboratory / 600 W Prairie Ave / Coeur d'Alene, ID
+        // 83814", itd-d1-lab-mechanical.pdf#12) collapsed to a squashed,
+        // wrongly-positioned box that happened to land inside the EXHAUST
+        // FAN SCHEDULE's own EF-1 row band, bleeding the whole address into
+        // EF-1's REMARKS cell — reproduced with the browser's own real
+        // cached spans fed straight into buildSheetGraph, confirmed absent
+        // when the SAME sheet is read through MCP's rotation-aware
+        // textSpans() instead. Ported that projection (4 corners along the
+        // run/ascent directions, then min/max) so a rotated run gets its
+        // real bounding box instead of a horizontal-text guess.
         const vs = Math.hypot(vt[0], vt[1]) || 2;
         const w = (it.width || 0) * vs;
         const h = (it.height || 0) * vs || Math.hypot(t[2], t[3]);
-        spans.push({ str, x0: t[4], y0: t[5] - h, x1: t[4] + w, y1: t[5] });
+        const dn = Math.hypot(t[0], t[1]) || 1;
+        const un = Math.hypot(t[2], t[3]) || 1;
+        const dx = t[0] / dn, dy = t[1] / dn;   // along the run
+        const ux = t[2] / un, uy = t[3] / un;   // glyph ascent
+        const xs = [t[4], t[4] + w * dx, t[4] + h * ux, t[4] + w * dx + h * ux];
+        const ys = [t[5], t[5] + w * dy, t[5] + h * uy, t[5] + w * dy + h * uy];
+        spans.push({ str, x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) });
       }
       wholeSetSpansRef.current.set(key, spans);
       saveSheetSpans(key, rev, spans);
@@ -4592,11 +4612,20 @@ export default function TakeoffCanvas() {
           // scale by the VIEWPORT alone, never the composed norm (which folds
           // the font size in a second time and inflates every box ~10×; found
           // live when a 12 px tag grew a 440 px adjacency and labeled the
-          // wrong diamond). Same math as the MCP's textSpans, deliberately.
+          // wrong diamond). Same math as the MCP's textSpans and
+          // indexOneSheet (above) — including the rotation-aware corner
+          // projection (see indexOneSheet's own comment for the real,
+          // live-found rotated-title-block bug this fixes).
           const vs = Math.hypot(vt[0], vt[1]) || 2;
           const w = (it.width || 0) * vs;
           const h = (it.height || 0) * vs || Math.hypot(t[2], t[3]);
-          spans.push({ str, x0: t[4], y0: t[5] - h, x1: t[4] + w, y1: t[5] });
+          const dn = Math.hypot(t[0], t[1]) || 1;
+          const un = Math.hypot(t[2], t[3]) || 1;
+          const dx = t[0] / dn, dy = t[1] / dn;
+          const ux = t[2] / un, uy = t[3] / un;
+          const xs = [t[4], t[4] + w * dx, t[4] + h * ux, t[4] + w * dx + h * ux];
+          const ys = [t[5], t[5] + w * dy, t[5] + h * uy, t[5] + w * dy + h * uy];
+          spans.push({ str, x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) });
         }
       }
     } catch { /* no text layer — labels simply stay absent */ }
