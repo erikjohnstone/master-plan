@@ -111,7 +111,7 @@ test("buildMepGraph: a real, densely crosshatched sheet can defeat JTS's noding 
 
 test("buildMepGraph: an empty sheet (no segments) returns an empty graph, not a throw", () => {
   const g = buildMepGraph([], {});
-  assert.deepEqual(g, { nodes: [], edges: [], layerSignal: "none" });
+  assert.deepEqual(g, { nodes: [], edges: [], layerSignal: "none", quantGridPx: 1.7999999999999998 });
 });
 
 test("buildMepGraph: excludeSegs drops exactly the marked segments", () => {
@@ -320,6 +320,38 @@ test("traceConnectivity: a seed a few px off the run's own centerline (within se
   const g = graphOf([0, 0, 300, 0]);
   const r = traceConnectivity(g, [150, 3], { equipmentSymbols: [{ id: "AHU-1", at: [300, 0] }] });
   assert.equal(r.status, "reached");
+});
+
+test("traceConnectivity: seed/equipment resolution tolerance is floored at the graph's own quantGridPx — a coarse retry-grid solve must not out-tolerance a seed sitting on real, if quantized-away, linework", () => {
+  // Real, found live against itd-d1-lab-mechanical.pdf#7 (a boiler-room
+  // hydronic schematic): buildMepGraph's own coarsen-and-retry (see its
+  // header comment) succeeded only at its coarsest retry grid, 48.6px (27x
+  // the fine 1.8px grid every fixture and every other real sheet tested this
+  // session happened to node at) — every node/edge coordinate in the graph
+  // is then only accurate to within that many px of the sheet's own real
+  // ink, since quantizeSurvivors rounds every endpoint to the nearest
+  // multiple of the grid that actually solved. A fixed seedTolFt (12px at
+  // the PX_PER_FT_GUESS fallback used here) sized for the fine grid is
+  // provably too tight once the grid itself has coarsened past it: a real
+  // seed placed exactly on the sheet's own drawn HWR main (image px [700,
+  // 1688.9]) refused "isn't on any traced linework" pre-fix, even though the
+  // real line is there — buildMepGraph had quantized it away to (777.6,
+  // 1701), 12.4px beyond the fixed tolerance. Reproduced here with a
+  // synthetic graph whose quantGridPx is set to the same order of magnitude
+  // as the real coarse-grid case, rather than coercing JTS into failing at
+  // specific grids (not deterministic to author as a small fixture).
+  const base = graphOf([0, 0, 300, 0]);
+  const seed: [number, number] = [150, 25];   // 25px off the line — inside a 40px coarse grid, outside the 12px default
+  const opts = { equipmentSymbols: [{ id: "AHU-1", at: [300, 0] as [number, number] }] };
+
+  const fine = { ...base, quantGridPx: 1.8 };
+  const rFine = traceConnectivity(fine, seed, opts);
+  assert.equal(rFine.status, "refused", "at the fine grid's own tolerance, 25px off the line is genuinely too far");
+
+  const coarse = { ...base, quantGridPx: 40 };
+  const rCoarse = traceConnectivity(coarse, seed, opts);
+  assert.equal(rCoarse.status, "reached", "once the graph itself only solved at a 40px grid, the same seed must resolve — its own coordinates could legitimately have shifted that far");
+  assert.equal(rCoarse.reachedEquipment?.id, "AHU-1");
 });
 
 test("traceConnectivity: a fitting symbol sitting well OFF the gap's own line never bridges two unrelated dangling ends", () => {
