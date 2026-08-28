@@ -2501,6 +2501,62 @@ test("reference kind negative control: ordinary numbered notes prose is never mi
   assert.ok(!g.tables.some((t) => t.kind === "reference"), "ordinary note prose never qualifies as a header row");
 });
 
+test("reference kind negative control: a single real data row never qualifies — a real table's own grid must repeat", () => {
+  // Real, corpus-found bug (itd-d1-lab-mechanical.pdf#21, confirmed by
+  // direct render — see sheetgraph.ts's own comment above the
+  // `banded.out.length < 2` gate): none of the earlier structural signals
+  // (header shape, nearby ruled line, per-row population floor) actually
+  // test that the candidate's grid REPEATS — only that it looks table-
+  // shaped for exactly one line. Same real header+rule as the positive test
+  // above, but with only the FIRST of its two real data rows present: a
+  // genuine table minus one row is still exactly the shape a coincidental
+  // one-off (a control-schematic's scattered instrument callouts happening
+  // to align under a header-shaped line) can produce — this is the
+  // structural line the fix draws, tested directly against the same real
+  // fixture the positive 2-row test above uses.
+  const oneRowSpans = REF_TABLE_SPANS.filter((s) => !/^(D-1, D-2$|1"$|EXHAUST DUCTS|OPENINGS)/.test(s.str));
+  const sheet: SheetSpans = {
+    key: "ref.pdf#7", sheet_number: "M601",
+    spans: oneRowSpans,
+    segs: REF_TABLE_RULE,
+  };
+  const g = buildSheetGraph([sheet]);
+  assert.ok(!g.tables.some((t) => t.kind === "reference"), "one real data row proves no repeating grid — refused, not guessed");
+});
+
+test("reference kind negative control: a control-schematic's scattered instrument callouts are not a table (itd-d1-lab-mechanical.pdf#21 bug shape)", () => {
+  // The real bug's own shape, reproduced with invented text/coordinates
+  // (itd-d1-lab-mechanical.pdf is an external, redistribution-uncertain
+  // corpus file per opentakeoff-corpus/sets.json — never embedded verbatim
+  // in a committed test, same discipline as the column-band fixture below).
+  // A control schematic draws several short, ALL-CAPS, digit-free
+  // instrument/point callout labels (bubble tags, leader labels) scattered
+  // around its own linework — by coincidence, one line of them
+  // (isGenericHeaderRow's own 2+-short-cell shape test) sits above one more
+  // line of equally scattered labels/values that happen to key-column-align
+  // and populate a majority of the "columns" (bandGenericDataRows' own
+  // minCells floor), and the schematic's own dense duct/pipe/box linework
+  // happens to supply a nearby wide rule (hasNearbyRuledLine) purely by
+  // proximity — every earlier gate passes for this ONE coincidental line,
+  // exactly like the real corpus find.
+  const spans: GraphSpan[] = [
+    rh("CONTROL SCHEMATIC NOTES", 0, -40, 300),
+    rh("TT H", 0, 0, 60), rh("SUPPLY AIR VALVE", 200, 0, 160), rh("EXHAUST AIR VALVE", 500, 0, 170), rh("DI", 800, 0, 20),
+    rh("C AIR", 0, 40, 55), rh("CONTROLLER", 200, 40, 95), rh("SNORKEL", 500, 40, 70),
+  ];
+  const sheet: SheetSpans = {
+    key: "ref.pdf#8", sheet_number: "M6.5",
+    spans,
+    // Dense, incidental schematic linework near the "header" — a duct/pipe
+    // run spanning well past 60% of the candidate block's own width, the
+    // same real shape a genuine table's own ruled border has.
+    segs: [0, -10, 900, -10],
+  };
+  const g = buildSheetGraph([sheet]);
+  assert.ok(!g.tables.some((t) => t.kind === "reference"),
+    "one line of scattered schematic callouts, however table-shaped, is never a real table without a repeating grid");
+});
+
 // ── column bands: a real 2-column sheet layout defeats table discovery ─────
 // clusterRows is Y-only — it has no idea a sheet can be drafted as two
 // SEPARATE physical column strips of tables side by side (real, common,
