@@ -2566,9 +2566,16 @@ test("2-column sheet layout: two genuinely separate side-by-side tables both ext
   assert.equal(sav!.kind, "equipment");
   assert.equal(sav!.title?.text, "SUPPLY AIR VALVE SCHEDULE", "the real title, not a garbled data-cell guess");
   assert.deepEqual(sav!.rows.map((r) => r.key), ["SAV-1", "SAV-2", "SAV-3", "SAV-4", "SAV-5", "SAV-6"], "exactly the real rows — no spurious 'SYMBOL' row from a misread header tier");
-  assert.deepEqual([...sav!.headers].sort(), ["MANUFACTURER", "REMARKS", "SYMBOL", "TYPE", "VELOCITY"], "the full merged 2-tier header (5 real anchors) — not just the narrower upper tier (3)");
+  // SERVED joined EQUIPMENT_HEADERS (full-coverage audit of itd-d1-lab-
+  // mechanical.pdf's own real HOT WATER REHEAT COIL/CONTROL VALVE/EXHAUST
+  // FAN/ELECTRIC HEATER schedules — every one of them was silently dropping
+  // its own real "AREA SERVED" column outright) — this fixture's lower tier
+  // deliberately includes AREA SERVED to exercise a real 6-anchor header, not
+  // the 5 it used to fall back to when that column had no vocabulary at all.
+  assert.deepEqual([...sav!.headers].sort(), ["MANUFACTURER", "REMARKS", "SERVED", "SYMBOL", "TYPE", "VELOCITY"], "the full merged 2-tier header (6 real anchors, AREA SERVED included) — not just the narrower upper tier (3)");
   const row1 = sav!.rows[0];
   assert.equal(row1.cells.REMARKS?.text, "1,2", "the lower tier's own REMARKS column survives the merge");
+  assert.equal(row1.cells.SERVED?.text, "LAB 100", "AREA SERVED's own real data lands under SERVED, not lost or bled into a neighbor");
 
   // the LEFT table's real rows are untouched by the split
   const leftHits = g.tables.filter((t) => t.rows.some((r) => r.key === "E-1"));
