@@ -3151,7 +3151,23 @@ function bandGenericDataRows(
     outY.forEach((ry, idx) => { const d = Math.abs(y - ry); if (d < bd) { bd = d; bi = idx; } });
     return { i: bi, d: bd };
   };
+  // A lone ALL-CAPS phrase ending in a bare colon ("OPERATING MODE:",
+  // "COOLING MODE OF OPERATION:") is a SECTION heading, not a wrapped
+  // continuation of the row above's own key value — real, corpus-found:
+  // itd-d1-lab-mechanical.pdf#20's own real 4-row table narrowly (44.6px
+  // vs a 45.6px new-row-gap floor) fails to seat "OPERATING MODE:" as its
+  // own row, making it an orphan instead, and its 45.1px distance to the
+  // table's own last real row sits comfortably inside `radius` — silently
+  // appending "OPERATING MODE:" onto that row's real key text ("RESIDENCY
+  // LAB 131" becomes "RESIDENCY LAB 131 OPERATING MODE:"). A real wrapped
+  // continuation (the D-6 case this radius exists for) reads as ordinary
+  // running text; a bare "LABEL:" fragment with nothing after the colon
+  // never is — excluding that one shape leaves every real continuation
+  // fold untouched.
+  const isSectionHeading = (toks: GraphSpan[]): boolean =>
+    toks.length === 1 && /^[A-Z][A-Z0-9 .,'"&()/%°∅Ø-]*:$/.test(norm(toks[0].str));
   for (const o of orphans) {
+    if (isSectionHeading(o.toks)) continue;
     const { i, d } = nearest(o.y);
     if (i < 0 || d > radius) continue;
     add(out[i], o.toks);
@@ -3194,9 +3210,12 @@ function bandGenericDataRows(
  * a caller can resume past it) but with zero vocabulary threading: no
  * `kind`/`vocab`/`required` parameters, since there is nothing to gate a
  * header on besides the structural signals above. */
-function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number): { table: ScheduleTable | null; nextIdx: number } | null {
+function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?: SheetSpans): { table: ScheduleTable | null; nextIdx: number } | null {
   const horiz = sheet.spans.filter((s) => !isVertical(s));
   const rows = clusterRows(horiz);
+  // Lazy — only built the one time a candidate's own upward title-hunt
+  // comes up empty and a downward big-font search is actually attempted.
+  let fullRows: GraphSpan[][] | null = null;
   for (let i = fromIdx; i < rows.length; i++) {
     if (!isGenericHeaderRow(rows[i])) continue;
     const block = expandGenericHeaderBlock(rows, i);
@@ -3231,23 +3250,120 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number): { table: S
     const banded = bandGenericDataRows(rows, anchors, sheet.key, { fromIdx: dataFrom, toIdx });
     if (!banded.out.length) return { table: null, nextIdx: toIdx };
 
-    // Title hunt: the same "nearest single-span, all-caps, digit-free,
-    // 2+-word run above the header, in its own x-band" fallback signal
-    // extractTableAt's own title hunt already uses (there, only reached
-    // once no "…SCHEDULE" title is found — reused directly here since a
-    // structural table has no vocabulary-anchored title search of its own
-    // to try first).
+    // Title hunt.
+    //
+    // No "…SCHEDULE"-style vocabulary anchor exists for a structural
+    // reference table, so this starts from the same "nearest single-span,
+    // all-caps, digit-free, 2+-word run, in the header's own x-band"
+    // fallback signal extractTableAt's own title hunt uses as its LAST
+    // resort. That signal alone is not enough on a sheet whose body text is
+    // itself typed in dense all-caps prose (a real drafting convention —
+    // "SEQUENCE OF OPERATION" specs, corpus-found on
+    // itd-d1-lab-mechanical.pdf#20): every wrapped prose LINE above the
+    // table is ALSO a single-span, digit-free, multi-word, all-caps run, so
+    // the plain shape test can't tell a genuine caption from an ordinary
+    // sentence fragment — it grabbed "PERIOD UPON A SIGNAL FROM AN OVERRIDE
+    // BUTTON LOCATED ON THE SPACE TEMPERATURE SENSOR." (real, live) instead
+    // of the table's own real caption, "LAB VENTILATION WITH MULTIPLE HOODS
+    // SYSTEM SEQUENCE OF OPERATION" — which, on this drafting convention,
+    // doesn't even sit above the header: it sits BELOW the whole
+    // prose+table+"OPERATING MODE:" block, immediately before the
+    // schematic diagram it introduces.
+    //
+    // The one signal that reliably tells a genuine caption from ordinary
+    // body prose in EITHER position: font size. Every real caption measured
+    // in this corpus renders at ~2.5x the header row's own token height
+    // (the sheet's own body-text height, since a genuine header is body-
+    // sized); an ordinary prose sentence, even a lone all-caps run with no
+    // digits, never is. Checked first, nearer side first (upward, matching
+    // every other kind's own title-above-header convention) — downward is
+    // only tried once upward comes up empty, starting past this table's own
+    // data (`toIdx`) and bounded to the same scan budget the data search
+    // itself uses, so it can reach a caption sitting past a long
+    // "OPERATING MODE:" prose tail without wandering past a LATER table's
+    // own header into unrelated territory. Only once both big-font passes
+    // fail does this drop to the plain shape-only signal, upward only,
+    // exactly as before — a sheet where that heuristic already finds the
+    // right title (no big-font caption to prefer) is unaffected.
+    const hdrHeights = block.tokens.map((t) => t.h || 8).sort((a, b) => a - b);
+    const hdrH = hdrHeights[hdrHeights.length >> 1] || 8;
+    const BIG_FONT_RATIO = 1.6;
+    const isTitleShaped = (t: GraphSpan): boolean => {
+      const s = norm(t.str);
+      if (!s || /\d/.test(s) || !/^[A-Z][A-Z .,'’&()/-]*$/.test(s)) return false;
+      return s.split(/\s+/).filter(Boolean).length >= 2;
+    };
+    // A genuine big-font caption routinely reads WIDER than the table it
+    // captions (real, measured: "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM
+    // SEQUENCE OF OPERATION" spans x 578-2154, well past this table's own
+    // ~360-1160 column band) — a centerX-containment test (the existing
+    // fallback's own, kept as-is below) would miss it entirely. Interval
+    // OVERLAP with the table's own x-band is the right test here: still
+    // anchored to this table's own columns (an unrelated caption sitting
+    // entirely outside [x0,x1] still can't drift in), but tolerant of a
+    // caption that starts in-band and simply runs on past the table's own
+    // right edge.
+    const overlapsBand = (t: GraphSpan): boolean => t.x <= x1 && t.x + (t.w || 0) >= x0;
     let title: Evidence | null = null;
     for (let k = block.top - 1, budget = 5; k >= 0 && budget > 0 && !title; k--) {
-      const inBand = rows[k].filter((t) => centerX(t) >= x0 && centerX(t) <= x1);
+      const inBand = rows[k].filter(overlapsBand);
       if (!inBand.length) continue;
       budget--;
-      if (inBand.length !== 1) continue;
-      const t = inBand[0];
-      const s = norm(t.str);
-      if (!s || /\d/.test(s) || !/^[A-Z][A-Z .,'’&()/-]*$/.test(s)) continue;
-      if (s.split(/\s+/).filter(Boolean).length < 2) continue;
-      title = { sheet: sheet.key, text: t.str.trim(), bbox: bboxOf(t) };
+      if (inBand.length !== 1 || !isTitleShaped(inBand[0]) || (inBand[0].h || 8) < hdrH * BIG_FONT_RATIO) continue;
+      title = { sheet: sheet.key, text: inBand[0].str.trim(), bbox: bboxOf(inBand[0]) };
+    }
+    // The downward pass reads the ORIGINAL, un-banded sheet (`fullSheet`,
+    // when the caller has it — buildSheetGraph's real extraction call always
+    // does; only the internal band-vs-split probes in bandedSheets itself
+    // don't, and neither pass matters there since its own candidates get
+    // discarded) rather than this call's own (possibly column-banded)
+    // `rows`. Real, corpus-found reason: a caption wide enough to run on
+    // past its own table's right edge (see `overlapsBand`'s own comment)
+    // routinely has its CENTER sitting in the seam bandedSheets cuts
+    // between two side-by-side tables — bandedSheets' own band-membership
+    // test is centerX-only, so that caption's span is dropped from BOTH
+    // resulting bands entirely, even though it starts well inside this
+    // table's own column. Re-reading the unsplit sheet for this one lookup
+    // (bounded, below, to a short window past this table's own data — never
+    // a wholesale return to unbanded extraction) recovers it without
+    // reopening the banding decision itself. Y-bounded rather than row-
+    // index-bounded, since `fullRows`' own indices don't correspond to
+    // `rows`' (a different, wider span set clusters into a different row
+    // count) — `toIdx`'s row-granularity budget carries over as a Y
+    // distance via the header's own row pitch instead.
+    if (!title && fullSheet) {
+      const dataY1 = banded.region ? banded.region[3] : hdrY1;
+      const maxY = dataY1 + MAX_TABLE_SCAN_ROWS * Math.max(hdrH * 1.5, 12);
+      if (!fullRows) fullRows = clusterRows(fullSheet.spans.filter((s) => !isVertical(s)));
+      for (const r of fullRows) {
+        if (rowY(r) <= dataY1) continue;
+        if (rowY(r) > maxY) break;
+        const inBand = r.filter(overlapsBand);
+        if (!inBand.length) continue;
+        // "New header" stop-signal, tested on the in-band tokens ALONE, not
+        // `r`'s full (unbanded) token set the way looksLikeGenericNewHeader
+        // itself tests it: `r` here comes from the deliberately un-banded
+        // `fullRows`, so it routinely fuses this table's own content with
+        // whatever sits at a similar Y on the OTHER side of the page (real,
+        // corpus-found: both this sheet's own "OPERATING MODE:" labels, one
+        // per table half, sit close enough in Y to cluster into ONE row —
+        // testing that fused row's full, cross-page token set would stop
+        // the scan on this table's OWN content before it ever reaches the
+        // real caption).
+        if (inBand.length >= 2 && isGenericHeaderRow(inBand)) break;
+        if (inBand.length !== 1 || !isTitleShaped(inBand[0]) || (inBand[0].h || 8) < hdrH * BIG_FONT_RATIO) continue;
+        title = { sheet: sheet.key, text: inBand[0].str.trim(), bbox: bboxOf(inBand[0]) };
+        break;
+      }
+    }
+    if (!title) {
+      for (let k = block.top - 1, budget = 5; k >= 0 && budget > 0 && !title; k--) {
+        const inBand = rows[k].filter((t) => centerX(t) >= x0 && centerX(t) <= x1);
+        if (!inBand.length) continue;
+        budget--;
+        if (inBand.length !== 1 || !isTitleShaped(inBand[0])) continue;
+        title = { sheet: sheet.key, text: inBand[0].str.trim(), bbox: bboxOf(inBand[0]) };
+      }
     }
 
     let region: Bbox | null = banded.region;
@@ -3262,12 +3378,14 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number): { table: S
 }
 
 /** Every structural "reference" table on a sheet — mirrors extractAllTables'
- * own repeat-from-nextIdx loop. */
-export function extractAllReferenceTables(sheet: SheetSpans): ScheduleTable[] {
+ * own repeat-from-nextIdx loop. `fullSheet`, when given, is the pre-banding
+ * whole sheet `sheet` was cut from — see extractReferenceTableAt's own
+ * title-hunt comment for why the title search alone still wants it. */
+export function extractAllReferenceTables(sheet: SheetSpans, fullSheet?: SheetSpans): ScheduleTable[] {
   const out: ScheduleTable[] = [];
   let fromIdx = 0;
   for (let n = 0; n < MAX_TABLES_PER_SHEET; n++) {
-    const found = extractReferenceTableAt(sheet, fromIdx);
+    const found = extractReferenceTableAt(sheet, fromIdx, fullSheet);
     if (!found) break;
     if (found.table) out.push(found.table);
     if (found.nextIdx <= fromIdx) break;
@@ -3813,7 +3931,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     // — scoped to schedule-role sheets only, a real, disclosed scope limit
     // named in that section's own comment, not an oversight.
     if (role.role === "schedule") {
-      for (const bs of bands) for (const t of extractAllReferenceTables(bs)) {
+      for (const bs of bands) for (const t of extractAllReferenceTables(bs, s)) {
         const titleB = t.title ? buildingMentions(t.title.text) : [];
         const b = titleB.length === 1 ? titleB[0] : ctxBySheet.get(s.key);
         if (b) t.building = b;
