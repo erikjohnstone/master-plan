@@ -1399,8 +1399,16 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
         anchors.push(a);
       }
     }
+    let finalAnchors = subTierAnchors(rows, idx, anchors.sort((a, b) => a.x - b.x), vocab);
+    // See harvestGeometricSubTiers' own comment: a deep, wide equipment
+    // header's own sub-tier labels can sit many real rows below `idx`,
+    // never on `idx` itself — additive only, same equipment-only gate every
+    // other multi-tier mechanism in this file already uses.
+    if (opts.equipmentTierMerge) {
+      finalAnchors = harvestGeometricSubTiers(rows, vocab, idx + 1, finalAnchors);
+    }
     return {
-      anchors: subTierAnchors(rows, idx, anchors.sort((a, b) => a.x - b.x), vocab),
+      anchors: finalAnchors,
       rowIndex: idx,
       dataFrom: skipEnd + 1,
       mergedTopIdx,
@@ -1572,6 +1580,151 @@ function subTierAnchors(rows: GraphSpan[][], hdrIdx: number, anchors: Anchor[], 
   return out.sort((a, b) => a.x - b.x);
 }
 
+// ── deep multi-tier sub-columns, geometry-only (itd-d1-lab-mechanical.pdf#15's
+// own AIR HANDLING UNIT SCHEDULE) ────────────────────────────────────────────
+// subTierAnchors above recovers a sub-tier living on the SAME physical row as
+// the header's own settled `idx` (WALLS' N/E/S/W). A real, wide, DEEPLY
+// wrapped equipment header instead spreads its sub-tier labels onto a
+// DIFFERENT physical row than `idx` entirely — several genuine tiers further
+// down (AIRFLOW (CFM)'s own DESIGN/ACTUAL, CAPACITY (MBH)'s own SENSIBLE/
+// TOTAL or INPUT/OUTPUT, E.A.T.(°F)/L.A.T.(°F)'s own D.B./W.B., PRE-FILTER/
+// FINAL FILTER's own EFF./DEPTH — all real, confirmed live against the
+// rendered sheet, none carrying a single vocabulary word of their own) —
+// while `idx` itself stays correctly anchored on the row that names the
+// table's own key columns (SYMBOL/TYPE/AREA SERVED/REMARKS). subTierAnchors
+// never looks past `rows[idx]`, so every one of these real leaf columns is
+// invisible outright: neither this file's vocabulary-hit machinery (the row
+// carries none) nor subTierAnchors (wrong row) ever sees them, and the lone
+// parent anchor left standing (AIRFLOW, CAPACITY→MBH, EAT, LAT, …) silently
+// absorbs only ONE of its two-plus real children's values at the data row —
+// the other simply vanishes from `resolve_tag`/takeoff, a wrong number in
+// the bid, not a cosmetic gap.
+//
+// The fix is purely geometric and purely ADDITIVE: walk every row below
+// `idx` that carries ZERO vocabulary hits of its own (a row the rest of this
+// file's machinery already recognizes and handles is left completely alone —
+// this only ever fills the one blind spot nothing else sees) and repeat
+// subTierAnchors' own established run/parent logic on it, one row at a time.
+//
+// Deliberately NOT a call to subTierAnchors itself: subTierAnchors' first
+// move — a single vocabulary parent covering the run's WHOLE combined
+// span — is safe on a row with only ONE plausible vocabulary candidate
+// nearby (WALLS), but this deep-header shape routinely places TWO DIFFERENT,
+// each independently real, vocabulary anchors close enough together (EAT and
+// LAT, ~130px apart) that their D.B./W.B. children's combined run spuriously
+// "covers" both — the whole-run try would credit the WRONG one (whichever
+// vocabulary word its scan reaches first) to every token in the run,
+// silently dropping the other's real children as duplicate-label collisions.
+// Per-token resolution (parentPhraseOver alone — it already tries a
+// vocabulary parent first, phrase second, exactly subTierAnchors' own
+// fallback) sidesteps this: each token's own tight window sees only the ONE
+// real parent actually sitting above IT.
+//
+// Bounded three ways, all reused from established signals elsewhere in this
+// file rather than invented fresh: `looksLikeDeepDataRow` (a real data row is
+// overwhelmingly numeric-shaped; a wrapped header label tier never is) is a
+// hard stop so this can never mis-read actual row data as more header text;
+// a tight row-to-row Y proximity gate (skipSubHeaderContinuation's own
+// established "still the same header block" scale) keeps the walk from
+// wandering into an unrelated table below; and a row-count cap. A ROW that
+// itself carries a vocabulary hit (SYMBOL/TAG/TYPE/…) is skipped, not a stop
+// — real tables wrap a catalog-anchor-bearing sub-label (itd-d1-lab's own
+// two-line "UNIT" / "TAG") between two genuine sub-tier rows, and stopping
+// there would cut the walk off before ever reaching tiers still further down.
+//
+// A last guard: a candidate token within one column-pitch of an anchor that
+// ALREADY exists (from this pass or any earlier one) never mints a new
+// anchor — a bare unit-fragment or footnote annotation sitting geometrically
+// near an already-real column (this table's own "REMARK 2"/"MERV 8" footnote
+// markers, printed inside header cells) must never manufacture a phantom
+// duplicate column instead of being silently, correctly ignored.
+const DEEP_SUB_LABEL_RE = /^[A-Z0-9][A-Z0-9.\/%°∅Ø-]{0,10}$/;
+const DATA_VALUE_RE = /^[\d][\d,.\/ "%-]*$/;
+function looksLikeDeepDataRow(row: GraphSpan[]): boolean {
+  const numeric = row.filter((t) => DATA_VALUE_RE.test(t.str.trim())).length;
+  return numeric >= 2 || numeric >= Math.ceil(row.length * 0.3);
+}
+function harvestGeometricSubTiers(rows: GraphSpan[][], vocab: string[], startIdx: number, anchors: Anchor[]): Anchor[] {
+  let out = anchors.slice();
+  const MAX_ROWS = 15;
+  for (let ri = startIdx, n = 0; ri < rows.length && n < MAX_ROWS; ri++, n++) {
+    if (looksLikeDeepDataRow(rows[ri])) break;
+    if (ri > startIdx) {
+      const prev = rows[ri - 1];
+      const h = prev.reduce((s, t) => s + (t.h || 8), 0) / Math.max(1, prev.length);
+      if (rowY(rows[ri]) - rowY(prev) > h * 3) break;
+    }
+    // A BARE vocabulary hit means a real header row of its own — the rest of
+    // this file already handles it, skip. A hit that is only a
+    // parenthesized unit fragment ("(FPM)", "(W.C.)") does not: this exact
+    // deep header wraps real unit fragments onto the SAME physical row as
+    // its own un-vocabularied sub-labels (DESIGN/ACTUAL sit beside a bare
+    // "(FPM)" from a neighboring column's own unit tier) — the same bare-
+    // vs-parenthesized distinction skipSubHeaderContinuation/nearbyRequiredHit
+    // already established elsewhere in this file, reused verbatim.
+    if (headerHits(rows[ri], vocab).some((h) => !/^\(.*\)$/.test(h.span.str.trim()))) continue;
+    const lo = out[0].x, hi = out[out.length - 1].x;
+    const mid = (t: GraphSpan) => t.x + (t.w || 0) / 2;
+    const loose = rows[ri]
+      // A bare digit (the "2" in a wrapped "(FT²)" superscript, split into
+      // its own token by the tokenizer) matches the character class but
+      // names no column of its own — a real sub-label always carries at
+      // least one letter.
+      .filter((t) => !headerLabel(t.str, vocab) && DEEP_SUB_LABEL_RE.test(norm(t.str)) && /[A-Z]/.test(t.str))
+      .filter((t) => mid(t) > lo && mid(t) < hi)
+      .sort((a, b) => a.x - b.x);
+    // A genuine deep sub-tier row is DENSE — many real 2-way (or more) splits
+    // packed across the table's width (this table's own row: 16 tokens, 7
+    // real pairs). A row with only a handful of loose tokens is far more
+    // likely a couple of ordinary WRAPPED CONTINUATION WORDS from unrelated
+    // neighboring multi-line labels ("UNIT" / "AIR" / "COIL", themselves
+    // fragments of "UNIT TAG" and "COIL AIR P.D." two rows apart) than a
+    // real sub-column tier — those have no reliable shape signal to
+    // distinguish from the real thing, so density is the gate instead.
+    if (loose.length < 4) continue;
+    const gaps = loose.slice(1).map((t, i) => mid(t) - mid(loose[i])).sort((a, b) => a - b);
+    const med = gaps[gaps.length >> 1] || 1;
+    const halfPitch = Math.min(Math.max(24, med / 2), 300);
+    const used = new Set(out.map((a) => a.label));
+    const withParent = loose
+      .map((t) => ({ t, parent: parentPhraseOver(rows, ri, ri - 8, mid(t) - halfPitch, mid(t) + halfPitch, vocab) }))
+      .filter((x): x is { t: GraphSpan; parent: string } => x.parent != null);
+    if (!withParent.length) continue;
+    const subRuns: Array<typeof withParent> = [[withParent[0]]];
+    for (let i = 1; i < withParent.length; i++) {
+      const prev = withParent[i - 1], cur = withParent[i];
+      const tail = subRuns[subRuns.length - 1];
+      if (cur.parent === prev.parent && mid(cur.t) - mid(prev.t) <= med * 3) tail.push(cur);
+      else subRuns.push([cur]);
+    }
+    for (const sr of subRuns) {
+      // A genuine sub-tier is a real GROUP — 2 or more siblings under the
+      // SAME resolved parent. A lone token that resolved to a parent no
+      // sibling shares is exactly the false-positive shape above (an
+      // isolated fragment nearest, by bare distance, to some unrelated
+      // phrase) — never mint a column for it.
+      if (sr.length < 2) continue;
+      // "Already covered" must stay MUCH tighter than the parent-search
+      // window: a real 2-way split's own children sit, BY CONSTRUCTION, at
+      // roughly ±halfPitch from their parent's own (centered) bare anchor —
+      // using halfPitch here would reject exactly the real children this
+      // function exists to recover (confirmed live: MBH/EAT/LAT's own
+      // already-existing bare anchors sit almost exactly BETWEEN their real
+      // SENSIBLE/TOTAL, D.B./W.B. children, well within one halfPitch of
+      // both). A real duplicate — a footnote number sitting geometrically
+      // inside an already-real column ("REMARK 2" under SUPPLY FAN TYPE,
+      // "MERV 8" under an EFF. column) sits far tighter than that, close to
+      // the anchor's own exact center — a small fixed radius (independent of
+      // this row's own, possibly wide, local pitch) is the right test.
+      const DUP_TOL = 20;
+      const filtered = sr.filter((x) => !out.some((a) => Math.abs(a.x - mid(x.t)) <= DUP_TOL));
+      if (filtered.length < 2) continue;
+      mintSubAnchors(out, used, filtered, mid);
+    }
+  }
+  return out.sort((a, b) => a.x - b.x);
+}
+
 // Rotated headers (#87 phase 2): column labels written at 90° stack each word
 // in a tall, narrow box, so y-row clustering never assembles them into a
 // header row — the anchor hunt above goes blind. Vertical spans get their own
@@ -1702,7 +1855,36 @@ function anchorRadii(anchors: Anchor[]): Map<string, Radius> {
     if (WIDE_LAST.has(unbounded[i].label) || unbounded[i].label === "NAME") continue;
     const left = i > 0 ? unbounded[i].x - unbounded[i - 1].x : Infinity;
     const right = i < unbounded.length - 1 ? unbounded[i + 1].x - unbounded[i].x : Infinity;
-    const before = left > baseline * GAP_INFLATION_RATIO ? cap : Infinity;
+    // A wide MERGED column's own LEFT gap is exactly as "anomalous" by this
+    // function's own baseline test as a genuine hidden neighbour's gap would
+    // be — nothing here distinguishes "un-modeled column hiding in the gap"
+    // (the real BCV/Fan-Schedule regression this function exists for) from
+    // "this anchor's own header cell is simply wide, so its left-aligned
+    // data legitimately starts well left of its centered header" (the exact
+    // isWideMidAnchor shape, above). Only reachable for a MULTI-row table
+    // whose real column-start recovery (columnMapFor) never runs — a
+    // single/sparse-row table falls straight to this function's own
+    // nearestAnchor fallback instead, with no other guard in between. Real,
+    // found live on itd-d1-lab-mechanical.pdf#14's own DUCTLESS SPLIT HIGH
+    // WALL COOLING UNIT SCHEDULE and SPLIT SYSTEM AIR CONDITIONING UNIT
+    // SCHEDULE (each exactly one real data row: DFC-1, F-1): "MANUFACTURER
+    // AND MODEL" sits between a tightly-packed numeric tier (SEER V/Ø, gap
+    // ~72px) and REMARKS, its own gap-to-REMARKS scoring ~4.6x the table's
+    // real median (isWideMidAnchor's own 3.5x bar, already proven safe by
+    // the EH-1..9 fix) — the SAME real anchor shape columnMapFor's true-
+    // nearest binding already exempts (isWideMidAnchor, above) when it DOES
+    // run, just never consulted here. Every real row's own MANUFACTURER
+    // value starts well left of its header center (e.g. "CARRIER FAN COIL
+    // MODEL 40MHH24" at distance ~196px, more than 5x this table's own
+    // ~36px cap) and was withheld outright, not merged or truncated —
+    // confirmed by direct render. Scoped to the LEFT side only: a genuine
+    // hidden column bleeding in from the RIGHT (this function's own real
+    // motivating BCV/Fan-Schedule cases) is untouched, since neither of
+    // those anchors' own gap-to-NEXT ever scores anywhere near 3.5x their
+    // table's median (measured: ~1.0–1.05x) — isWideMidAnchor's own
+    // right-side-only test cannot mistake one for the other.
+    const wideMidLeft = isWideMidAnchor(anchors, unbounded[i]);
+    const before = left > baseline * GAP_INFLATION_RATIO && !wideMidLeft ? cap : Infinity;
     const after = right > baseline * GAP_INFLATION_RATIO ? cap : Infinity;
     if (before < Infinity || after < Infinity) radii.set(unbounded[i].label, { before, after });
   }
