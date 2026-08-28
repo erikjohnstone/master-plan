@@ -3313,7 +3313,36 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     const dataFrom = block.bottom + 1;
     const toIdx = findGenericTableBoundary(rows, dataFrom, x0, x1, anchors);
     const banded = bandGenericDataRows(rows, anchors, sheet.key, { fromIdx: dataFrom, toIdx });
-    if (!banded.out.length) return { table: null, nextIdx: toIdx };
+    // A real table's own grid REPEATS — that is the one structural claim
+    // none of the signals above (shape, nearby rule, population floor) ever
+    // actually tests. A control-schematic's scattered instrument/point
+    // callouts (DI/AI/TT bubbles, valve tags, "TO BUILDING AUTOMATION
+    // SYSTEM" leader labels) routinely satisfy every earlier gate BY
+    // COINCIDENCE for exactly one line: 2+ short ALL-CAPS diagram labels
+    // happen to sit at the same clustered row-y (isGenericHeaderRow), the
+    // diagram's own duct/pipe/box linework happens to span 60%+ of that
+    // local x-band nearby (hasNearbyRuledLine — schematics are DENSE with
+    // ruled lines, unlike the notes/keynote prose that signal was built to
+    // reject), and the single line of bubble/box labels below it happens to
+    // populate a majority of the "columns" (bandGenericDataRows' minCells
+    // floor) — corpus-found live on itd-d1-lab-mechanical.pdf#21's own
+    // ELECTRIC UNIT HEATER CONTROL SCHEMATIC (confirmed by direct render:
+    // "TT H"/"SUPPLY AIR VALVE"/"DI"/"AI" are scattered callout labels
+    // beside a piping schematic, not table headers) and its neighboring
+    // NOTES box (whose trailing prose line, "…TRANSFORMERS FOR THE
+    // LABORATORY HOOD CONTROL SYSTEM.", read as a fake title over more
+    // scattered schematic tags — HWR/HWS/CSR/sensor labels). Neither
+    // produces a SECOND real data row, because there is no real row/column
+    // grid underneath to produce one — it is one-off coincidental
+    // x-alignment, not a repeating structure. Every real reference table
+    // measured in this corpus (bessemer's own DUCTWORK INSULATION SCHEDULE:
+    // 2 rows; DUCTWORK INSULATION TYPE SCHEDULE: 3 rows; itd-d1-lab's own
+    // real ROOF DRAIN/LAVATORY SHIELD/ELECTRONIC EXHAUST VALVE tables: 4-13
+    // rows) clears this trivially — a genuine table proves its own grid by
+    // repeating at least once; this is the generic, vocabulary-free
+    // discriminator the mandate above asked for, not a corpus-specific
+    // title/tag hack.
+    if (banded.out.length < 2) return { table: null, nextIdx: toIdx };
 
     // Title hunt.
     //
