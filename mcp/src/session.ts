@@ -8,8 +8,50 @@ import path from "node:path";
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, type SheetGraph, type SheetSpans, type Bbox } from "../../web/src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, type SheetGraph, type SheetSpans, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
+
+/** Overlap fraction relative to the SMALLER of the two boxes — robust to
+ * one extraction's own region being tighter/looser than the other's (ODL's
+ * own table bbox vs this file's own geometric band need not agree pixel-
+ * for-pixel to clearly be "the same real table"). */
+function bboxOverlapRatio(a: Bbox, b: Bbox): number {
+  const ix0 = Math.max(a[0], b[0]), iy0 = Math.max(a[1], b[1]);
+  const ix1 = Math.min(a[2], b[2]), iy1 = Math.min(a[3], b[3]);
+  const iw = Math.max(0, ix1 - ix0), ih = Math.max(0, iy1 - iy0);
+  const inter = iw * ih;
+  if (!inter) return 0;
+  const areaA = Math.max(1, (a[2] - a[0]) * (a[3] - a[1]));
+  const areaB = Math.max(1, (b[2] - b[0]) * (b[3] - b[1]));
+  return inter / Math.min(areaA, areaB);
+}
+
+/** Finds an existing table on the SAME sheet whose region substantially
+ * overlaps `region` — the ODL-enhancement pass's own match-the-same-real-
+ * table signal (region overlap, not title text: a real table with no
+ * distinct title row would title-match nothing and get wrongly appended as
+ * a duplicate — see enhanceTablesWithODL's own comment). */
+function matchByRegionOverlap(tables: ScheduleTable[], sheetKey: string, region: Bbox): number {
+  let best = -1, bestRatio = 0.4; // the bar itself, not just a running max — no match under 40% overlap
+  for (let i = 0; i < tables.length; i++) {
+    if (tables[i].sheet !== sheetKey) continue;
+    const r = bboxOverlapRatio(tables[i].region, region);
+    if (r > bestRatio) { bestRatio = r; best = i; }
+  }
+  return best;
+}
+
+/** How many rows share a key with at least one other row — a real schedule
+ * never legitimately repeats an unqualified key, so any rise in this count
+ * from one extraction of the same table to another is real evidence of a
+ * misparse (a row split/duplicated), not real data. */
+function duplicateKeyCount(t: ScheduleTable): number {
+  const seen = new Map<string, number>();
+  for (const r of t.rows) seen.set(r.key, (seen.get(r.key) || 0) + 1);
+  let dupes = 0;
+  for (const n of seen.values()) if (n > 1) dupes += n - 1;
+  return dupes;
+}
 import { UserError, round1, round2 } from "./format.ts";
 // Condition twins — the inheritance rule, shared with the canvas so a headless session and
 // the app can never disagree about what a twin holds (web/test/variants.test.ts).
@@ -4562,7 +4604,6 @@ export class Session {
     }
     if (!byPdf.size) return;
     const buildingsSet = new Set(g.buildings);
-    const normTitle = (s: string) => (s || "").trim().toUpperCase().replace(/\s+/g, " ");
     const touchedSheets = new Set<string>();
     let recovered = 0, added = 0, odlErrors = 0;
     for (const entry of byPdf.values()) {
@@ -4586,16 +4627,47 @@ export class Session {
           continue; // one malformed table must never take the whole pass down
         }
         if (!built) continue;
-        const bt = normTitle(built.title?.text || "");
-        const existingIdx = bt ? g.tables.findIndex((t) => t.sheet === sheetKey && normTitle(t.title?.text || "") === bt) : -1;
+        // Match against an EXISTING geometric table on the same sheet by
+        // REGION OVERLAP, not title text — a real title-less table (this
+        // fixture's own real "FINISH SCHEDULE" caption sits ABOVE the
+        // table's own bounding box, never merged into ODL's row 1, unlike
+        // AHU-1's own colspan-title row) would otherwise title-match
+        // nothing and get appended as a spurious DUPLICATE of a table
+        // that's already there — a real bug this reconciliation caught
+        // live against the mcp test suite's own symbol-set.pdf fixture.
+        const existingIdx = matchByRegionOverlap(g.tables, sheetKey, built.region);
         if (existingIdx >= 0) {
-          const a = tableCompleteness(g.tables[existingIdx]), b = tableCompleteness(built);
-          if (b.headers > a.headers || (b.headers === a.headers && b.cells > a.cells)) {
+          const existing = g.tables[existingIdx];
+          const a = tableCompleteness(existing), b = tableCompleteness(built);
+          const aDupes = duplicateKeyCount(existing), bDupes = duplicateKeyCount(built);
+          // Never adopt a candidate that introduces MORE internally
+          // ambiguous (duplicate, undifferentiated) row keys than the one
+          // it would replace — a real schedule never legitimately repeats
+          // an unqualified key, so a rise in duplicates is real evidence of
+          // a misparse, regardless of which extraction produced it. Pure
+          // evidence-based reconciliation either way: neither source is
+          // favored, the SAME bar applies no matter which one is currently
+          // in `g.tables`.
+          if (bDupes <= aDupes && (b.headers > a.headers || (b.headers === a.headers && b.cells > a.cells))) {
             g.tables[existingIdx] = built;
             touchedSheets.add(sheetKey);
             recovered++;
           }
         } else {
+          // No existing alternative to compare against, so nothing to
+          // reconcile against — appended as-is. A FEW rows sharing one
+          // generic, un-numbered tag (a real "PLUMBING FIXTURE SCHEDULE"
+          // convention measured live: two distinct grade-cleanout variants
+          // both marked bare "GCO", no suffix) is real, legitimate schedule
+          // data, not a misparse to filter out here — the EXISTING,
+          // already-tested "Ambiguous: N schedule rows carry the key…"
+          // refusal downstream (rowKeyOf/resolveTag/sweepScheduleRow) is
+          // already the correct, honest response to a genuine duplicate
+          // mark, and doing that filtering a second time at extraction only
+          // risks discarding an otherwise real, mostly-unique-keyed table
+          // wholesale over one or two rows (measured live: a first version
+          // of this gate silently dropped a real 35-row schedule entirely
+          // over its own 2 real "GCO" rows).
           g.tables.push(built);
           touchedSheets.add(sheetKey);
           added++;

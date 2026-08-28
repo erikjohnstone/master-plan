@@ -6727,7 +6727,10 @@ export function scheduleTableFromODL(
       if (txt) colLabel[c] = colLabel[c] ? `${colLabel[c]} ${txt}` : txt;
     }
   }
-  const headers = colLabel.map((l, i) => l || `COL${i + 1}`);
+  // Uppercased, matching this file's own convention everywhere else (every
+  // vocab constant, norm(), every geometrically-built header) — ODL's own
+  // paragraph text preserves the PDF's original mixed case ("Number").
+  const headers = colLabel.map((l, i) => (l || `COL${i + 1}`).toUpperCase());
 
   // Kind classification — the SAME vocabulary bar the rest of this file
   // uses (headerLabel/EQUIPMENT_HEADERS/FINISH_HEADERS/ROOM_HEADERS),
@@ -6744,6 +6747,26 @@ export function scheduleTableFromODL(
   if (kind === "unknown") return null;
   const titleText = titleCell ? odlCellText(titleCell) : "";
   if (kind === "finish" && titleText && isNonFinishSchedule(titleText)) return null;
+
+  // room-finish only: resolveTag/floorTagFor look up a row's surface cells
+  // by EXACT canonical word ("FLOOR", "NORTH"…, surfaceRank/SURFACE_WORDS)
+  // — a real column whose compound label reads "FLOOR FINISH" or "WALL
+  // FINISH NORTH" carries the real value under the wrong key otherwise
+  // (measured live: sample-finish-plan.pdf's own real FLOOR FINISH column
+  // silently stopped resolving any room until this normalization existed).
+  // The LAST surface word in the phrase wins when more than one appears —
+  // "WALL FINISH NORTH" must collapse to "NORTH" (the actually
+  // distinguishing word across 4 sibling columns), not the shared parent
+  // "WALL", exactly matching this file's own geometric extractor's
+  // established bare-word convention for the same real column shape.
+  if (kind === "room-finish") {
+    for (let c = 0; c < headers.length; c++) {
+      const words = headers[c].split(/\s+/);
+      for (let w = words.length - 1; w >= 0; w--) {
+        if (SURFACE_WORDS.has(words[w])) { headers[c] = words[w]; break; }
+      }
+    }
+  }
 
   const keyColIdx = headers.findIndex((h) => /^(SYMBOL|TAG|ID|MARK|CODE)$/.test(norm(h)));
   const rows: TableRow[] = [];
