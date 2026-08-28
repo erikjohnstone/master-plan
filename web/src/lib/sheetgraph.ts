@@ -1836,6 +1836,16 @@ function bandLimits(anchors: Anchor[]): { x0: number; x1: number; medGap: number
 // names (opts.buildings) — otherwise a stray finish code ("P-2") banding to
 // the key column would mint a phantom building.
 const CODE_RE = /^[A-Z]{1,4}(-?[A-Z0-9]{1,4})?$/;
+// Every recognized column-header word, across all three vocabularies —
+// a real device/finish tag is never itself the bare name of some table's
+// column (the same axiom bandDataRows' own keyIsOwnColumn check already
+// leans on — see its comment below — generalized here to run BEFORE a
+// phantom row is ever minted, and across EVERY vocabulary, not just the
+// current table's own kind: a stray fragment of an unconsumed deeper header
+// tier just as often carries a DIFFERENT kind's vocabulary word ("CFM" is
+// EQUIPMENT_HEADERS-only, yet bled into a real `finish`-kind DIFFUSER
+// SCHEDULE's own row-key column below).
+const ALL_HEADER_WORDS = new Set<string>([...ROOM_HEADERS, ...FINISH_HEADERS, ...EQUIPMENT_HEADERS]);
 const ROW_KEY_RE = /^\d{1,3}[A-Z]{0,2}$/;
 const QUALIFIED_KEY_RE = /^([A-Z]{1,2})-(\d{1,3}[A-Z]{0,2})$/;
 // A NAME-keyed room-finish sub-table: a real, distinct drafting convention
@@ -2497,6 +2507,98 @@ function bandDataRows(
     if (!banded.length) continue;
     const keyed = rowKeyOf(banded[0].str, kind, buildings, nameKeyed);
     if (!keyed) { orphans.push({ toks: banded, y: rowY(rows[i]) }); continue; }
+    // CODE_RE's digit-free branch (letters only, optionally hyphenated, ≤8
+    // chars total) is shaped exactly like an ordinary short English phrase —
+    // "CFM", "MAXIMUM", "SILENCER" all pass it just as easily as a real bare
+    // abbreviation ("CW", cold water) would; its digit-bearing branch is
+    // fooled the same way when a plain word is immediately followed by a
+    // number with no delimiter ("ROOM130" from a wrapped "…/ ROOM 130"
+    // room-name continuation, itd-d1-lab-mechanical.pdf#12's own SNORKEL
+    // HOOD/valve schedules). This file's OWN standing axiom, stated
+    // repeatedly elsewhere (rowKeyOf's own CODE_RE comment; extractedKeys'
+    // "a real device tag or finish/room code always carries at least one
+    // digit"): a genuine catalog tag in this corpus is never bare letters
+    // alone. Every digit-free CODE_RE match that isn't this table's own
+    // established header/anchor name is therefore treated the same way —
+    // folded into an ORPHAN instead of minting its own phantom row — rather
+    // than dropped outright the way the post-hoc keyIsOwnColumn/minCells
+    // filters below do, which heads off the STEALING failure mode those can
+    // only clean up after the fact. Two real, corpus-found shapes this
+    // catches:
+    //   - a stray header-vocabulary fragment ("CFM" bled from EQUIPMENT_
+    //     HEADERS into a `finish`-kind DIFFUSER SCHEDULE's own D-1 row,
+    //     which wraps "CFM 6"Ø" onto a 2nd line — unguarded, "CFM" mints its
+    //     own row and carries off D-1's real SIZE/REMARKS with it);
+    //   - a wrapped MANUFACTURER name that happens to be hyphenated
+    //     (itd-d1-lab-mechanical.pdf#12's own CANOPY HOOD SCHEDULE: CH-1's
+    //     own "CAR-MON CUSTOM MODEL" manufacturer cell wraps "CAR-MON" onto
+    //     its own line, digit-free and CODE_RE-hyphen-shaped exactly like a
+    //     real tag; unguarded, it mints a phantom "CAR-MON" row that then
+    //     WINS the orphan-fold race for CH-1's own preceding wrapped
+    //     "(2) NCAT OVENS…" SERVES line — sitting closer to it than CH-1's
+    //     own real key row does — stealing that line from CH-1 for good).
+    // Deliberately excludes a word that IS one of THIS table's own anchors
+    // (keyIsOwnColumn's exact shape): that case already has a real row of
+    // its own to compare against there, cell-for-cell, downstream — turning
+    // it into an orphan here instead risks it grafting onto some OTHER nearby
+    // row by y-proximity alone before that comparison ever runs (real
+    // regression, caught live: a fixture's own digit-free "SYMBOL"/"TOTAL"
+    // noise rows, meant to vanish independently, instead padded each
+    // other's cell counts past the survival floor once routed through the
+    // orphan-fold radius).
+    //
+    // The digit-BEARING branch stays narrower (vocabulary-word PREFIX only,
+    // via ALL_HEADER_WORDS) rather than this same blanket rule — a real tag
+    // routinely IS bare letters-plus-digits with no delimiter (EF1-shaped,
+    // even if this corpus's own convention favors a hyphen), so treating
+    // every digit-bearing match as suspect would misfire on real tags; only
+    // the specific "ordinary word directly fused to a number" shape
+    // (ROOM130) is a safe, narrow catch there.
+    if ((kind === "finish" || kind === "equipment") && !anchors.some((a) => a.label === keyed.key)) {
+      const hasDigit = /\d/.test(keyed.key);
+      let isHeaderFragment = false;
+      if (!hasDigit) {
+        isHeaderFragment = true;
+      } else if (!keyed.key.includes("-")) {
+        const prefix = keyed.key.match(/^[A-Z]+/)?.[0] ?? "";
+        isHeaderFragment = prefix.length >= 3 && ALL_HEADER_WORDS.has(prefix);
+      }
+      if (isHeaderFragment) {
+        // For the DIGIT-FREE branch specifically, orphan-folding is only
+        // ever a RECOVERY — it exists to rescue real sibling data this same
+        // physical line also carries (CFM's own line also carries "6X6"/a
+        // real REMARKS value, real data that belongs to the row above),
+        // never to give the fragment itself somewhere to land. A fragment
+        // with no such sibling — alone on its own line, or accompanied only
+        // by other header-fragment words with no digit anywhere — has
+        // nothing worth recovering, and orphan-folding it anyway just
+        // trades one failure mode for another: real, corpus-found
+        // (itd-d1-lab-mechanical.pdf#14's own SOUND ATTENUATOR SCHEDULE) —
+        // "DUCT" (SA-1's own wrapped TYPE-cell continuation, alone on its
+        // own line, no recognized TYPE anchor to receive it) sits close
+        // enough to SYMBOL's own column that orphan-folding merged it
+        // straight into SA-1's real tag, "DUCT SA-1" — while itd-d1-lab-
+        // mechanical.pdf#12's own CANOPY HOOD SCHEDULE's "CAR-MON" (CH-1's
+        // own wrapped MANUFACTURER-cell continuation, likewise alone) needs
+        // no orphan slot of its own at all — the actual fix there is only
+        // ever keeping it from minting its OWN phantom row and hijacking
+        // the orphan-fold TARGET the real "(2) NCAT OVENS…" line above it
+        // needs. Digit-bearing siblings are the honest signal: real data
+        // (a size, a quantity, a remark number) almost always carries one;
+        // another bare header-fragment word never does.
+        //
+        // The digit-BEARING branch (ROOM130-shaped) skips this extra gate —
+        // its own key already carries a digit (the real room number itself,
+        // ledger evidence enough on its own), and a real wrapped
+        // continuation there can legitimately be an all-letters phrase with
+        // no digit of its own at all (real, corpus-found: itd-d1-lab-
+        // mechanical.pdf#12's own SEV table wraps "ROOM 130" onto "ELECTRONIC
+        // EXHAUST VALVE", its own TYPE cell's real continuation, digit-free).
+        const hasSalvageableSibling = !hasDigit ? banded.some((t) => t !== banded[0] && /\d/.test(t.str)) : true;
+        if (hasSalvageableSibling) orphans.push({ toks: banded, y: rowY(rows[i]) });
+        continue;
+      }
+    }
     // Every row of THIS table starts its key at the key column. Rows are
     // clustered across the whole sheet, so a keyed-looking row belonging to
     // something else — a legend, a room tag drawn beside the schedule —
@@ -2632,7 +2734,30 @@ function bandDataRows(
     const keyIsOwnColumn = anchors.some((a) => a.label === norm(out[i].key));
     if (keyIsOwnColumn && !/\d/.test(out[i].key)) { out.splice(i, 1); outY.splice(i, 1); }
   }
-  if (kind === "equipment" && anchors.length >= 4) {
+  // Widened from `kind === "equipment" && anchors.length >= 4` (real,
+  // corpus-found: itd-d1-lab-mechanical.pdf#13's own LAB EXHAUST FAN
+  // SCHEDULE and #14's own SOUND ATTENUATOR/PENTHOUSE SCHEDULEs). Both gaps
+  // in the old scoping let real noise through:
+  //   - anchors.length >= 4 assumed a real deep multi-tier header always
+  //     recovers at least 4 anchors: LAB EXHAUST FAN SCHEDULE's real header
+  //     is FOUR tiers deep (SYMBOL/AREA SERVED/UNIT TYPE/…/MANUFACTURER AND
+  //     MODEL/REMARKS over BLOWER→CFM→DESIGN|ACTUAL, MAXIMUM RPM, #OF FANS,
+  //     ELECTRICAL→HP PER FAN, V/Ø…) but only 3 of its real columns
+  //     (SYMBOL/MANUFACTURER/REMARKS) are in today's vocabulary — every
+  //     unconsumed deeper tier word (RPM/DESIGN/FAN/ACTUAL…) fell through
+  //     as its own digit-free 0-cell phantom row, ungoverned.
+  //   - `kind === "equipment"` excluded `finish` entirely: SOUND ATTENUATOR
+  //     SCHEDULE (3 anchors of 21 real leaf columns) and PENTHOUSE SCHEDULE
+  //     both bled the same shape of digit-free, near-empty header-fragment
+  //     rows (FPM/LENGTH/WIDTH IN/DUCT/SILENCER; "AREA (ft²)" split into its
+  //     own row) with no filter running on them at all.
+  // Safe to widen both ways: the digit-free guard already stands — and a
+  // real `room-finish` row is NEVER digit-free (its key is a room NUMBER),
+  // so the sparse-FLOOR-row case this floor was originally kept narrow to
+  // protect is untouched regardless of kind or anchor count. Lowered to
+  // >=3 rather than removed outright: a genuinely 1-2-anchor table is too
+  // sparse for "under half the real columns populated" to mean anything.
+  if (anchors.length >= 3) {
     const minCells = Math.max(2, anchors.length / 2);
     for (let i = out.length - 1; i >= 0; i--) {
       if (Object.keys(out[i].cells).length < minCells && !/\d/.test(out[i].key)) { out.splice(i, 1); outY.splice(i, 1); }
