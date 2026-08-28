@@ -81,6 +81,25 @@ const SIZE_TOL_FRAC = 1.2;
  * hatch within ~15%; an unrelated texture is either a wildly different
  * pitch or (per MIN_FILL_MEMBERS/size) already excluded by then anyway. */
 const PITCH_TOL_FRAC = 0.35;
+/** A real fill region sits LOCAL to the rect that found it — "nearest
+ * cluster to the rect's own center" (fingerprintInlineMotif, below) is only
+ * a safe rule when every candidate cluster is roughly rect-sized to begin
+ * with. sweep_schedule_row's own caller (corroborateInlineMotif,
+ * mcp/src/session.ts) grows this rect around a tag's drawn text with NO
+ * marqueed shape to bound it — unlike sweep_inline_motif's own tight,
+ * human-marqueed seed_rect — so "nearest to center" can walk clean past the
+ * rect's own bounds into an unrelated, much larger hatch region that merely
+ * happens to share this family's (angle, pitch) signature. Measured live
+ * against a real HVAC sheet (itd-d1-lab-mechanical.pdf, tag "B-2"): a
+ * search rect ~192x228px around the tag's own text found — and accepted —
+ * an 800+px-tall wall/insulation cross-hatch field this way (684 members,
+ * nowhere near a compact register/grille), because that field's pitch
+ * coincidentally matched and its bbox happened to sit nearest the rect's
+ * center. A real register's own cluster is on the order of the rect that
+ * finds it, never many times larger — this bounds the ratio directly,
+ * rather than trying to characterize "wall hatch" by shape (which a
+ * legitimately large real register must not be penalized for). */
+const MAX_CLUSTER_TO_RECT_FRAC = 2.5;
 
 export interface InlineMotifFingerprint {
   /** Hatch angle, folded to [0, 90) — rotation-normalized (a duct run's own
@@ -196,6 +215,15 @@ const angleDist90 = (a: number, b: number): number => { const d = Math.abs(foldA
  * hatch regions that happen to share a drafting pitch). */
 export function fingerprintInlineMotif(
   segs: number[], meta: Uint8Array, seedRect: [Point, Point], upp: number | null,
+  // The reference size for MAX_CLUSTER_TO_RECT_FRAC, below — defaults to
+  // seedRect's own size (sweep_inline_motif's direct, human-marqueed rect:
+  // the rect IS the right reference). corroborateInlineMotif's own pad
+  // ladder (mcp/src/session.ts's sweep_schedule_row) widens seedRect at
+  // every retry, though, and a reference that widens WITH it would let the
+  // exact same oversized cluster pass at a later, bigger padK after being
+  // correctly rejected at a smaller one — so that caller pins this to its
+  // ladder's own smallest rect instead of letting it float.
+  maxClusterRef?: { w: number; h: number },
 ): InlineMotifFingerprint | null {
   const families = hatchFamilies(segs, meta);
   const rx0 = Math.min(seedRect[0][0], seedRect[1][0]), rx1 = Math.max(seedRect[0][0], seedRect[1][0]);
@@ -222,6 +250,12 @@ export function fingerprintInlineMotif(
   }
   if (!seedCluster || seedCluster.members < 4) return null;
   const w = seedCluster.x1 - seedCluster.x0, h = seedCluster.y1 - seedCluster.y0;
+  const refW = maxClusterRef ? maxClusterRef.w : rx1 - rx0, refH = maxClusterRef ? maxClusterRef.h : ry1 - ry0;
+  // reject a cluster that dwarfs the reference size (see
+  // MAX_CLUSTER_TO_RECT_FRAC above) — an unrelated, far-larger hatch field
+  // caught only because its bbox happened to sit nearest the rect's center,
+  // never a real local fixture the search was actually anchored around.
+  if (w > MAX_CLUSTER_TO_RECT_FRAC * Math.max(refW, 1) || h > MAX_CLUSTER_TO_RECT_FRAC * Math.max(refH, 1)) return null;
   return {
     angleMod90: foldAngle90(best.family.angle_deg),
     pitchPx: best.family.pitch_px,
@@ -359,13 +393,21 @@ export function corroborateInlineMotif(
 ): { fp: InlineMotifFingerprint; anchorRect: [Point, Point]; corroborated: boolean } | null {
   const cX = (v: number) => Math.max(0, Math.min(v, anchorDims.w));
   const cY = (v: number) => Math.max(0, Math.min(v, anchorDims.h));
-  for (const padK of [2, 4, 6]) {
+  // MAX_CLUSTER_TO_RECT_FRAC's own reference size is pinned to this ladder's
+  // SMALLEST (first, padK=2) rect and reused at every wider padK — a
+  // reference that instead floated with each retry's own widening rect
+  // would let the identical oversized cluster that padK=2 correctly
+  // rejected pass anyway once padK=6 made the rect big enough to outgrow
+  // it, silently undoing the rejection rather than upholding it.
+  const rectAt = (padK: number): [Point, Point] => {
     const pad = padK * anchor.h;
-    const rect: [Point, Point] = [
-      [cX(anchor.bbox[0] - pad), cY(anchor.bbox[1] - pad)],
-      [cX(anchor.bbox[2] + pad), cY(anchor.bbox[3] + pad)],
-    ];
-    const cand = fingerprintInlineMotif(anchorSegs, anchorMeta, rect, anchorUpp);
+    return [[cX(anchor.bbox[0] - pad), cY(anchor.bbox[1] - pad)], [cX(anchor.bbox[2] + pad), cY(anchor.bbox[3] + pad)]];
+  };
+  const refRect = rectAt(2);
+  const clusterRef = { w: refRect[1][0] - refRect[0][0], h: refRect[1][1] - refRect[0][1] };
+  for (const padK of [2, 4, 6]) {
+    const rect = rectAt(padK);
+    const cand = fingerprintInlineMotif(anchorSegs, anchorMeta, rect, anchorUpp, clusterRef);
     if (!cand) continue;
     if (!corro) return { fp: cand, anchorRect: rect, corroborated: false };
     const probe = sweepInlineMotif(cand, corro.segs, corro.meta, corro.upp);
