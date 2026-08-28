@@ -2809,10 +2809,65 @@ function looksLikeGenericNewHeader(row: GraphSpan[], x0: number, x1: number): bo
   return row.some((t) => t.str && t.str.trim() && revisionOf(t.str) == null && centerX(t) >= x0 && centerX(t) <= x1);
 }
 
-function findGenericTableBoundary(rows: GraphSpan[][], dataFrom: number, x0: number, x1: number): number {
+/** The KEY column's own x-position and tolerance, derived once from the
+ * anchor set — the same formula bandGenericDataRows already used inline,
+ * hoisted so findGenericTableBoundary's own boundary check (below) can test
+ * the identical key-column band rather than drifting out of sync with it. */
+function keyColumnBand(anchors: Anchor[]): { x: number; tol: number } {
+  const x = anchors[0].x;
+  const tol = anchors.length > 1 ? Math.max(40, (anchors[1].x - anchors[0].x) / 2) : 60;
+  return { x, tol };
+}
+
+// A bare numbered/lettered OUTLINE marker — "1.", "2.1.", "2.1.1.", "a.",
+// "A.", "1)" — the leading glyph run of an ENUMERATED PROSE list (a real,
+// corpus-found drafting convention: a "SEQUENCE OF OPERATION" or "REMARKS"
+// specification block, its numbering column visually left-aligned the exact
+// same way a real table's key column is), never a real reference-table row
+// key in this corpus. Every real key measured here is drawn from a firm's
+// own tag/code vocabulary (D-1, S-1, RP-2 — always letter(s)+HYPHEN+digit,
+// never bare digits) or a short noun phrase (SUPPLY DUCTS (EXTERNALLY
+// INSULATED), ASPHALT LAB 117) — never a bare counting token with no hyphen
+// and no other word. Real, corpus-found false positive this catches:
+// itd-d1-lab-mechanical.pdf's own dense, columned SEQUENCE OF OPERATION
+// prose (sheets #20/#21) is laid out as a numbered/lettered outline, one
+// physical PDF text span per marker ("1." as its own separate run from the
+// sentence that follows it) — genericRowKeyOf's own shape regex (built to
+// admit a real key's parens/digits/hyphens) happily accepted a bare "1." or
+// "a." as a "key", and the row's own long sentence-fragment text banded into
+// the nearest data column exactly like a real row would, mining dozens of
+// fake "table rows" (and, worse, fake whole TABLES with every row so keyed)
+// out of running prose. Checked ONLY at the row's own KEY-COLUMN position
+// (keyColumnBand — the same band bandGenericDataRows itself keys new rows
+// against) — a real data CELL mid-sentence that happens to reference "1)"
+// as an option number, sitting in some OTHER column, must never trip this.
+const GENERIC_OUTLINE_MARKER_RE = /^(\d{1,2}(\.\d{1,2}){0,3}\.?|[A-Za-z]\.|\d{1,2}\))$/;
+
+function isGenericOutlineMarkerRow(row: GraphSpan[], keyColX: number, keyTol: number): boolean {
+  const toks = row.filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null);
+  if (!toks.length) return false;
+  const first = toks[0];
+  if (Math.abs(centerX(first) - keyColX) > keyTol) return false;
+  return GENERIC_OUTLINE_MARKER_RE.test(norm(first.str));
+}
+
+function findGenericTableBoundary(rows: GraphSpan[][], dataFrom: number, x0: number, x1: number, anchors: Anchor[]): number {
   const cap = Math.min(rows.length, dataFrom + MAX_TABLE_SCAN_ROWS);
+  const { x: keyColX, tol: keyTol } = keyColumnBand(anchors);
   for (let i = dataFrom; i < cap; i++) {
     if (looksLikeGenericNewHeader(rows[i], x0, x1)) return i;
+    // An outline-marker row (see GENERIC_OUTLINE_MARKER_RE) is not merely
+    // skipped/orphan-folded like an ordinary shape-rejected key — it is
+    // treated as the real end of THIS table, the same way a later table's
+    // own header is: real Sequence-of-Operation/Remarks prose runs for many
+    // physical lines after its first marker, and letting the scan continue
+    // past it (as a plain reject-and-continue) leaves every later prose line
+    // free to still orphan-fold into the last real accepted row, or to
+    // re-qualify as its own new row if it happens to re-align — corpus-found
+    // live on itd-d1-lab-mechanical.pdf#20's own real small valve table,
+    // whose data scan ran straight into the sheet's own prose block below it
+    // before this check existed.
+    if (isGenericOutlineMarkerRow(rows[i], keyColX, keyTol)) return i;
   }
   return cap;
 }
@@ -2895,8 +2950,7 @@ function bandGenericDataRows(
   // floor) already guards against a genuinely un-modeled column's data
   // bleeding into an unrelated cell, so this pass does not need radii's own
   // narrower protection on top.
-  const keyColX = anchors[0].x;
-  const keyTol = anchors.length > 1 ? Math.max(40, (anchors[1].x - anchors[0].x) / 2) : 60;
+  const { x: keyColX, tol: keyTol } = keyColumnBand(anchors);
 
   // The table's own median PHYSICAL line-to-line gap — restricted to rows
   // that actually carry a token in this table's own [x0,x1] band (real,
@@ -3060,7 +3114,7 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number): { table: S
     const hdrY1 = Math.max(...block.tokens.map((t) => t.y + (t.h || 0)));
     if (!hasNearbyRuledLine(sheet.segs, x0, x1, hdrY0, hdrY1)) continue;
     const dataFrom = block.bottom + 1;
-    const toIdx = findGenericTableBoundary(rows, dataFrom, x0, x1);
+    const toIdx = findGenericTableBoundary(rows, dataFrom, x0, x1, anchors);
     const banded = bandGenericDataRows(rows, anchors, sheet.key, { fromIdx: dataFrom, toIdx });
     if (!banded.out.length) return { table: null, nextIdx: toIdx };
 
