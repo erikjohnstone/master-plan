@@ -2079,7 +2079,7 @@ function columnMapFor(
   const maxN = Math.max(...clusters.map((c) => c.n));
   const kept = clusters.filter((c) => c.n >= Math.max(2, maxN * 0.25));
   if (kept.length < anchors.length) return null;
-  const byLabel = new Map<string, number>();
+  const byLabel = new Map<string, { start: number; n: number }>();
   for (const c of kept) {
     // The anchor whose header CENTER sits TRUE NEAREST this recovered
     // column's own start — not merely the first one at or right of it. A
@@ -2119,10 +2119,42 @@ function columnMapFor(
     }
     if (!own) continue;
     const cur = byLabel.get(own.label);
-    if (cur == null || c.start < cur) byLabel.set(own.label, c.start);
+    if (cur == null || c.start < cur.start) { byLabel.set(own.label, { start: c.start, n: c.n }); continue; }
+    // This cluster LOST the true-nearest collision to an anchor some
+    // earlier (further-left) cluster already claimed — real, found live
+    // (baker-county-eoc-bidset.pdf#27's own ROOM FINISH SCHEDULE): ROOM's
+    // real data-start sits nearer NUMBER's own header than ROOM's own
+    // header is, purely because ROOM's centered header sits unusually far
+    // right of ROOM's own left-aligned data (long room-name values —
+    // the exact same real shape this function's own NAME-keyed exemption
+    // above already exists for, just not spelled "NAME" here). Losing that
+    // fight to NUMBER should not cost ROOM its column outright: falling
+    // back to this cluster's own plain "at or right" pick (the rule this
+    // file used for every anchor before the true-nearest fix) recovers it —
+    // but ONLY when this cluster carries FULL, near-every-row support
+    // (close to `maxN`, the table's own dominant per-column row count),
+    // not merely a coincidental handful of stray points. Real regression
+    // this guard exists for (caught by this file's own LUMINAIRE SCHEDULE
+    // test): under CENTER alignment, ten rows' own varying-length
+    // MANUFACTURER SERIES values split into three EQUAL-sized (n=3 each)
+    // sub-clusters purely by coincidental text-length similarity — losing
+    // a collision to a same-size sibling is meaningless evidence, and
+    // rescuing one to the entirely dataless NOTES anchor fabricates a
+    // column that was never really there. The real ROOM case carries n
+    // equal to `maxN` itself (every one of the table's own rows), a
+    // completely different order of evidence — requiring near-maxN
+    // support (matching the `kept` filter's own maxN-relative philosophy
+    // above, just a stricter bar since a rescue is a riskier move than
+    // mere inclusion) keeps ROOM while refusing every equal-strength
+    // fragment. Every anchor that does NOT lose a collision (the true-
+    // nearest fix's own real motivating case, AREA SERVED/SAV-1) is
+    // untouched either way.
+    if (atOrRight && atOrRight.label !== own.label && !byLabel.has(atOrRight.label) && c.n >= maxN * 0.75) {
+      byLabel.set(atOrRight.label, { start: c.start, n: c.n });
+    }
   }
   if (byLabel.size !== anchors.length) return null;
-  const cols = [...byLabel.entries()].map(([label, start]) => ({ label, start })).sort((a, b) => a.start - b.start);
+  const cols = [...byLabel.entries()].map(([label, v]) => ({ label, start: v.start })).sort((a, b) => a.start - b.start);
   if (cols.map((c) => c.label).join("|") !== anchors.map((a) => a.label).join("|")) return null;
   // how well this alignment explains the data: the share of tokens sitting on
   // a column start rather than scattered between them
@@ -2214,6 +2246,52 @@ function bandDataRows(
     if (r != null && at - cols.cols[idx].start > r.after) return null;
     return cols.cols[idx].label;
   };
+  // The x where the NEXT real column (after `label`, in the table's own
+  // left-to-right column order) starts — from the data-derived column map
+  // when one was recovered, else the header's own anchor order. Null past
+  // the table's own last column (nothing to bleed into).
+  const nextColumnAfter = (label: string): { label: string; x: number } | null => {
+    const ordered = cols ? cols.cols.map((c) => ({ label: c.label, x: c.start })) : [...anchors].sort((a, b) => a.x - b.x);
+    const idx = ordered.findIndex((c) => c.label === label);
+    return idx >= 0 && idx + 1 < ordered.length ? ordered[idx + 1] : null;
+  };
+  // A single DATA token whose own right edge runs well past the NEXT real
+  // column's own start is not one wide value in `label`'s column — it is
+  // TWO (or more) real columns' worth of text sharing one PDF text run.
+  // Real, found live on baker-county-eoc-bidset.pdf#27's own ROOM FINISH
+  // SCHEDULE: room 100's SOUTH and WEST finish codes, "STOREFRONT" and
+  // "P-1", are ONE text object in the source PDF — "STOREFRONT" (a real
+  // glazing/wall-type name, unusually long against this column's own
+  // ~30px baseline width on every OTHER row) runs right through WEST's own
+  // column before the row's next genuine value even starts, so WEST's cell
+  // comes up entirely empty and SOUTH reads "STOREFRONT P-1". Split on
+  // whitespace and place each word at its own proportional x offset within
+  // the token's bbox — the same character-fraction technique
+  // splitMergedHeaderCells already uses for a merged HEADER cell, applied
+  // here to a merged DATA cell instead — then let each word re-enter
+  // `columnOf` on its own. A genuine single wrapped value ("SEE INT.
+  // ELEVATIONS") never actually reaches past a real neighbour column's own
+  // start this way (checked below, before ever splitting) and bands as one
+  // cell, unperturbed; WIDE_LAST/NAME columns are exempted outright — those
+  // EARN a wide reach by this file's own design (bandLimits' own
+  // rightMargin/leftMargin) and a long value there is never overflow.
+  const splitOverflowWords = (t: GraphSpan): GraphSpan[] => {
+    const text = t.str;
+    const words = text.trim().split(/\s+/).filter(Boolean);
+    if (words.length < 2) return [t];
+    const w = t.w || 0;
+    const out: GraphSpan[] = [];
+    let charPos = 0;
+    for (const word of words) {
+      const ci = text.indexOf(word, charPos);
+      const start = ci >= 0 ? ci : charPos;
+      charPos = start + word.length;
+      const frac0 = start / Math.max(text.length, 1);
+      const frac1 = (start + word.length) / Math.max(text.length, 1);
+      out.push({ str: word, x: t.x + frac0 * w, y: t.y, w: (frac1 - frac0) * w, h: t.h });
+    }
+    return out;
+  };
   // A WIDE_LAST cell that already holds real text and is about to absorb a
   // SECOND, far-off token: field-found on two real mechanical sets
   // (federal-attachment4-mechanical.pdf#16, itd-d1-lab-mechanical.pdf#12) — a
@@ -2229,16 +2307,47 @@ function bandDataRows(
   // was 293px and 617px — 15–33× the row's own text height. A gap that wide
   // is never a second word of the same value; it is refused, not merged, so
   // the cell keeps only the token nearest its own real column start.
+  const addOne = (row: TableRow, t: GraphSpan, label: string) => {
+    const existing = row.cells[label];
+    if (farFromCell(label, t, existing)) return;
+    const text = t.str.trim();
+    if (!existing) row.cells[label] = { text, bbox: bboxOf(t) };
+    else row.cells[label] = { text: `${existing.text} ${text}`, bbox: merge(existing.bbox, bboxOf(t)) };
+    region = region ? merge(region, bboxOf(t)) : bboxOf(t);
+  };
   const add = (row: TableRow, toks: GraphSpan[]) => {
     for (const t of toks) {
       const label = columnOf(t);
       if (label == null) continue;
-      const existing = row.cells[label];
-      if (farFromCell(label, t, existing)) continue;
-      const text = t.str.trim();
-      if (!existing) row.cells[label] = { text, bbox: bboxOf(t) };
-      else row.cells[label] = { text: `${existing.text} ${text}`, bbox: merge(existing.bbox, bboxOf(t)) };
-      region = region ? merge(region, bboxOf(t)) : bboxOf(t);
+      if (!WIDE_LAST.has(label) && label !== "NAME") {
+        const next = nextColumnAfter(label);
+        if (next != null && t.x + (t.w || 0) > next.x) {
+          const words = splitOverflowWords(t);
+          // Only actually split when a trailing word's own estimated
+          // position really lands at (or close to) the next column's start
+          // — an ordinary wide single value whose bbox merely runs a little
+          // long (measurement slack, not a second column's worth of text)
+          // never clears this, and is left to band as one cell below. The
+          // small tolerance (a fraction of the table's own column pitch)
+          // absorbs per-character width estimation error — splitOverflowWords
+          // assumes each character claims an equal share of the token's own
+          // bbox width, which is only ever approximate against a real
+          // proportional font (measured live: "STOREFRONT P-1" — 10 wide
+          // capital letters vs. a narrow "P-1" — placed the trailing word's
+          // estimate 6.9px short of its real column start). Once a split is
+          // confirmed, each word is placed by the SAME tolerance-adjusted
+          // boundary, not re-derived through columnOf — that function's own
+          // idx search has no such tolerance, and the very estimation error
+          // splitTol exists to absorb would otherwise strand the trailing
+          // word back on `label` a second time.
+          const splitTol = Math.max(10, medGap * 0.2);
+          if (words.length > 1 && words[words.length - 1].x >= next.x - splitTol) {
+            for (const word of words) addOne(row, word, word.x >= next.x - splitTol ? next.label : label);
+            continue;
+          }
+        }
+      }
+      addOne(row, t, label);
     }
   };
   const orphans: Array<{ toks: GraphSpan[]; y: number }> = [];
