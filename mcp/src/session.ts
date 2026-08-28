@@ -8,7 +8,8 @@ import path from "node:path";
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, type SheetGraph, type SheetSpans, type Bbox } from "../../web/src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, type SheetGraph, type SheetSpans, type Bbox } from "../../web/src/lib/sheetgraph.ts";
+import { runOpenDataLoaderPages } from "./opendataloader.ts";
 import { UserError, round1, round2 } from "./format.ts";
 // Condition twins — the inheritance rule, shared with the canvas so a headless session and
 // the app can never disagree about what a twin holds (web/test/variants.test.ts).
@@ -4528,8 +4529,83 @@ export class Session {
       }
       this.graph = buildSheetGraph(inputs);
       if (skippedHeavy) this.graph.notes.push(`drawn-delta hunt skipped on ${skippedHeavy} sheet(s) — the set's linework exceeded the vector budget; text revision markers (Δ2 / REV 2) were still read everywhere`);
+      await this.enhanceTablesWithODL(this.graph);
     }
     return this.graph;
+  }
+
+  /** Cross-checks every schedule-role sheet's tables against
+   * OpenDataLoader-PDF's own independent, deterministic table-structure
+   * detection (mcp/src/opendataloader.ts) and keeps whichever extraction of
+   * each real table is more COMPLETE — never a fixed preference for either
+   * source (this file's own geometric heuristics, or ODL), purely the
+   * evidence: more recovered headers wins, a header-count tie is broken by
+   * more populated cells (tableCompleteness). Runs ONCE per source PDF (one
+   * `--pages "3,7,15"` call covering every schedule sheet in that document)
+   * to keep the real per-call JVM cost affordable on a large set. Best-
+   * effort only: no Java runtime, a scanned/uncooperative PDF, or any per-
+   * table parse error silently leaves the existing geometric result in
+   * place — this pass can only ever IMPROVE g.tables, never take it down. */
+  private async enhanceTablesWithODL(g: SheetGraph): Promise<void> {
+    const scheduleSheets = g.sheets.filter((s) => s.role === "schedule");
+    if (!scheduleSheets.length) return;
+    const byPdf = new Map<string, { path: string; pages: number[]; sheetByPage: Map<number, string> }>();
+    for (const sh of scheduleSheets) {
+      const base = this.fileFor(sh.key);
+      const doc = this.docs.get(base);
+      const state = this.sheets.get(sh.key);
+      if (!doc || !state) continue;
+      let entry = byPdf.get(doc.path);
+      if (!entry) { entry = { path: doc.path, pages: [], sheetByPage: new Map() }; byPdf.set(doc.path, entry); }
+      entry.pages.push(state.pageNum);
+      entry.sheetByPage.set(state.pageNum, sh.key);
+    }
+    if (!byPdf.size) return;
+    const buildingsSet = new Set(g.buildings);
+    const normTitle = (s: string) => (s || "").trim().toUpperCase().replace(/\s+/g, " ");
+    const touchedSheets = new Set<string>();
+    let recovered = 0, added = 0, odlErrors = 0;
+    for (const entry of byPdf.values()) {
+      let result;
+      try {
+        result = await runOpenDataLoaderPages(entry.path, entry.pages);
+      } catch {
+        odlErrors++;
+        continue;
+      }
+      if (result.error) { odlErrors++; continue; }
+      for (const odlTable of result.tables) {
+        const sheetKey = entry.sheetByPage.get(odlTable["page number"]);
+        if (!sheetKey) continue;
+        const state = this.sheets.get(sheetKey);
+        if (!state) continue;
+        let built;
+        try {
+          built = scheduleTableFromODL(odlTable, sheetKey, state.page.viewport.transform, { buildings: buildingsSet });
+        } catch {
+          continue; // one malformed table must never take the whole pass down
+        }
+        if (!built) continue;
+        const bt = normTitle(built.title?.text || "");
+        const existingIdx = bt ? g.tables.findIndex((t) => t.sheet === sheetKey && normTitle(t.title?.text || "") === bt) : -1;
+        if (existingIdx >= 0) {
+          const a = tableCompleteness(g.tables[existingIdx]), b = tableCompleteness(built);
+          if (b.headers > a.headers || (b.headers === a.headers && b.cells > a.cells)) {
+            g.tables[existingIdx] = built;
+            touchedSheets.add(sheetKey);
+            recovered++;
+          }
+        } else {
+          g.tables.push(built);
+          touchedSheets.add(sheetKey);
+          added++;
+        }
+      }
+    }
+    if (touchedSheets.size) syncSheetSchedules(g, touchedSheets);
+    if (recovered || added) {
+      g.notes.push(`OpenDataLoader-PDF cross-check: ${recovered} table(s) replaced with a more complete extraction, ${added} table(s) recovered that the geometric pass missed entirely (${touchedSheets.size} sheet(s) affected).`);
+    }
   }
 
   private static wireBox(b: [number, number, number, number]) {

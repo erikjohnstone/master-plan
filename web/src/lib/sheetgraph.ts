@@ -6502,3 +6502,272 @@ export function resolveTag(graph: SheetGraph, tag: string): ResolveResult {
   if (room?.revision && !revs.some((v) => v.rev === room.revision!.rev)) revs.push(room.revision);
   return { status: "resolved", tag: t, room, ...(chosen.building ? { building: chosen.building } : {}), finishes, sources, ...(revs.length ? { revisions: revs } : {}) };
 }
+
+// ═══════════════════════════════════════════════════════════════════════
+// OpenDataLoader-PDF grid adapter (2026-08-28)
+// ═══════════════════════════════════════════════════════════════════════
+// OpenDataLoader-PDF (github.com/opendataloader-project/opendataloader-pdf,
+// Apache-2.0) is a deterministic, rule-based table-structure detector that
+// reads a PDF's own embedded vector text/geometry directly (no OCR, no
+// rasterization) and returns real row/column/rowspan/colspan structure.
+// Brought in after this file's own hand-rolled geometric header-tier-merging
+// heuristics (mergeOrMintSubAnchors/genuineParentOver/subTierAnchors/etc.
+// above) hit real, disclosed diminishing returns on the corpus's hardest
+// tables — most concretely, itd-d1-lab-mechanical.pdf#15's own 47-column,
+// 3-header-tier AIR HANDLING UNIT SCHEDULE, where ODL correctly binds every
+// column (including MANUFACTURER AND MODEL = "DAIKIN DPSA040") that an
+// entire night's worth of iterative geometric fixes still could not reach.
+//
+// This adapter takes ODL's own already-correct grid (real row/col spans) and
+// maps it onto this project's OWN ScheduleTable/TableRow/Anchor types and
+// OWN domain logic (kind classification via ROOM_HEADERS/FINISH_HEADERS/
+// EQUIPMENT_HEADERS, rowKeyOf) — it does NOT reimplement or replace any of
+// that domain logic, only the structural header/column-boundary-detection
+// layer above, which was always the weakest, most corpus-fragile part of
+// this file. mcp/src/opendataloader.ts owns actually RUNNING the ODL CLI and
+// handing this pure function its parsed JSON; nothing here touches a
+// filesystem or a child process, so it stays usable from the browser too if
+// a caller ever gets ODL's JSON output some other way.
+
+export interface ODLParagraph { type: string; content?: string; kids?: ODLParagraph[] }
+export interface ODLTableCell {
+  type: "table cell";
+  id: number;
+  "page number": number;
+  "bounding box": number[];
+  "row number": number;
+  "column number": number;
+  "row span": number;
+  "column span": number;
+  kids: ODLParagraph[];
+}
+export interface ODLTableRow { type: "table row"; "row number": number; id: number; cells: ODLTableCell[] }
+export interface ODLTable {
+  type: "table";
+  id: number;
+  "page number": number;
+  "bounding box": number[];
+  "number of rows": number;
+  "number of columns": number;
+  rows: ODLTableRow[];
+}
+
+function odlCellText(cell: ODLTableCell): string {
+  const parts: string[] = [];
+  const walk = (n: ODLParagraph) => {
+    if (n.content) parts.push(n.content.trim());
+    for (const k of n.kids || []) walk(k);
+  };
+  for (const k of cell.kids || []) walk(k);
+  return parts.filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
+}
+
+/** ODL reports every bounding box in the PDF's own native user-space points
+ * (x right, y UP from the page's bottom-left) — confirmed by direct
+ * measurement against this project's own `textSpans()` output for the same
+ * title span on the same real page (itd-d1-lab-mechanical.pdf#15: x matched
+ * to within 0.05px, y within ~8px of a ~40px-tall glyph box — the residual
+ * is font-metric convention, not a coordinate-system mismatch). This
+ * project's own GraphSpan/Bbox space is pdf.js's own viewport-transformed
+ * image-px (RENDER_SCALE=2, origin top-left, y DOWN) — the exact 6-element
+ * affine `pageViewportTransform` (pdf.js's `viewport.transform`, the SAME
+ * matrix `textSpans()` itself composes against `it.transform`) converts one
+ * space to the other correctly regardless of page rotation, unlike a fixed
+ * "(pageHeightPt - y) * 2" shortcut which only holds at rotate=0. */
+function odlBboxToProjectSpace(b: number[], pageViewportTransform: number[]): Bbox {
+  const [a, bb, c, d, e, f] = pageViewportTransform;
+  const pt = (x: number, y: number): [number, number] => [a * x + c * y + e, bb * x + d * y + f];
+  const corners = [pt(b[0], b[1]), pt(b[2], b[1]), pt(b[0], b[3]), pt(b[2], b[3])];
+  const xs = corners.map((p) => p[0]), ys = corners.map((p) => p[1]);
+  return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
+}
+
+const ALL_HEADER_WORDS_ARR = [...ALL_HEADER_WORDS];
+
+/** Build one ScheduleTable straight from ODL's own detected grid. Returns
+ * null when the table doesn't look like a recognized schedule shape at all
+ * (kind classification fails to qualify) or carries no real keyed data rows
+ * — never a guess, the same refusal discipline as the rest of this file. */
+export function scheduleTableFromODL(
+  t: ODLTable,
+  sheetKey: string,
+  pageViewportTransform: number[],
+  opts: { buildings?: Set<string> } = {},
+): ScheduleTable | null {
+  const R = t["number of rows"], C = t["number of columns"];
+  if (R < 2 || C < 2) return null;
+
+  // Expand rowspan/colspan into a full grid of cell references so a later
+  // pass can walk "the cell occupying (row,col)" without re-deriving spans.
+  const grid: (ODLTableCell | null)[][] = Array.from({ length: R }, () => new Array(C).fill(null));
+  for (const row of t.rows) {
+    for (const cell of row.cells) {
+      const r0 = cell["row number"] - 1, c0 = cell["column number"] - 1;
+      const rs = Math.max(1, cell["row span"] || 1), cs = Math.max(1, cell["column span"] || 1);
+      for (let r = r0; r < Math.min(R, r0 + rs); r++)
+        for (let c = c0; c < Math.min(C, c0 + cs); c++)
+          if (r >= 0 && c >= 0) grid[r][c] = cell;
+    }
+  }
+
+  // A lone cell spanning (almost) every column on the very first row is the
+  // table's own printed TITLE, not a header tier — confirmed the real shape
+  // ODL itself produces (AHU-1's own row 1: one cell, colspan 47/47).
+  let titleCell: ODLTableCell | null = null;
+  let bodyStart = 0;
+  const row0 = t.rows[0];
+  if (row0 && row0.cells.length === 1 && (row0.cells[0]["column span"] || 1) >= C - 1) {
+    titleCell = row0.cells[0];
+    bodyStart = 1;
+  }
+
+  // Header block: consecutive rows whose OWN cells (excluding ones only
+  // present via a rowspan continuation from above) are either a genuine
+  // multi-column/row GROUP (span>1 on either axis — can never occur in a
+  // real per-item data row, where every column is its own independent
+  // value), OR simply don't yet cover every column with a fresh cell of
+  // their own — a still-partial tier (AHU-1's own real 3rd tier:
+  // "DESIGN"/"ACTUAL"/"SENSIBLE"/"TOTAL"/… only supplies 16 of 47 columns,
+  // the rest still inherited via rowspan from the tier above) is
+  // STRUCTURALLY IMPOSSIBLE for a genuine per-item data row, which always
+  // states its own value in every column — a much more general and more
+  // reliable signal than trying to vocabulary-match short, corpus-specific
+  // sub-tier words like "DESIGN"/"ACTUAL"/"D.B."/"W.B." that name nothing
+  // in ROOM/FINISH/EQUIPMENT_HEADERS at all (measured live: an earlier
+  // vocabulary-only version of this check wrongly treated AHU-1's own real
+  // 3rd header tier as its first data row, producing a phantom "SYMBOL"-
+  // keyed row and silently losing every 3rd-tier column's own sub-label).
+  // Vocabulary is used ONLY where structure is genuinely ambiguous — a
+  // FULL-COVERAGE, ungrouped row at the very FIRST header candidate
+  // position, which looks identical (by coverage alone) to a real single-
+  // tier header with no sub-columns and to a real data row alike.
+  let headerEnd = bodyStart;
+  for (let r = bodyStart; r < R; r++) {
+    const ownCells = new Set<ODLTableCell>();
+    for (let c = 0; c < C; c++) {
+      const cell = grid[r][c];
+      if (cell && cell["row number"] - 1 === r) ownCells.add(cell);
+    }
+    if (!ownCells.size) { headerEnd = r + 1; continue; } // fully blank spacer row
+    const grouped = [...ownCells].some((cl) => (cl["column span"] || 1) > 1 || (cl["row span"] || 1) > 1);
+    const fullCoverage = ownCells.size >= C;
+    if (grouped || !fullCoverage) { headerEnd = r + 1; continue; }
+    if (r === bodyStart) {
+      const texts = [...ownCells].map(odlCellText).filter(Boolean);
+      const vocabHits = texts.filter((s) => headerLabels(s, ALL_HEADER_WORDS_ARR).length > 0).length;
+      if (texts.length && vocabHits / texts.length >= 0.4) { headerEnd = r + 1; continue; }
+    }
+    break; // first real data row
+  }
+  if (headerEnd <= bodyStart) return null;
+
+  // Compound per-column header label: concatenate each header row's OWN
+  // cell text for that column top-to-bottom, deduping a cell that continues
+  // purely via rowspan (same cell reference re-seen at the row below) so a
+  // 3-row-tall "SYMBOL" cell contributes its text exactly once.
+  const colLabel: string[] = new Array(C).fill("");
+  const lastSeen: (ODLTableCell | null)[] = new Array(C).fill(null);
+  for (let r = bodyStart; r < headerEnd; r++) {
+    for (let c = 0; c < C; c++) {
+      const cell = grid[r][c];
+      if (!cell || cell === lastSeen[c]) continue;
+      lastSeen[c] = cell;
+      const txt = odlCellText(cell);
+      if (txt) colLabel[c] = colLabel[c] ? `${colLabel[c]} ${txt}` : txt;
+    }
+  }
+  const headers = colLabel.map((l, i) => l || `COL${i + 1}`);
+
+  // Kind classification — the SAME vocabulary bar the rest of this file
+  // uses (headerLabel/EQUIPMENT_HEADERS/FINISH_HEADERS/ROOM_HEADERS),
+  // applied to ODL's own flattened compound labels instead of a geometric
+  // band. Ties favor the more specific vocab (equipment, then room, then
+  // finish) since a real equipment schedule's words are a proper superset
+  // risk onto FINISH_HEADERS (MODEL/MANUFACTURER/REMARKS overlap both).
+  const hitCount = (vocab: string[]) => headers.filter((h) => headerLabel(h, vocab)).length;
+  const eqHits = hitCount(EQUIPMENT_HEADERS), rmHits = hitCount(ROOM_HEADERS), finHits = hitCount(FINISH_HEADERS);
+  let kind: TableKind = "unknown";
+  if (eqHits >= 3 && eqHits >= rmHits && eqHits >= finHits) kind = "equipment";
+  else if (rmHits >= 3 && rmHits > finHits) kind = "room-finish";
+  else if (finHits >= 3) kind = "finish";
+  if (kind === "unknown") return null;
+  const titleText = titleCell ? odlCellText(titleCell) : "";
+  if (kind === "finish" && titleText && isNonFinishSchedule(titleText)) return null;
+
+  const keyColIdx = headers.findIndex((h) => /^(SYMBOL|TAG|ID|MARK|CODE)$/.test(norm(h)));
+  const rows: TableRow[] = [];
+  for (let r = headerEnd; r < R; r++) {
+    const seen = new Set<ODLTableCell>();
+    const rowCellRef: (ODLTableCell | null)[] = new Array(C).fill(null);
+    for (let c = 0; c < C; c++) {
+      const cell = grid[r][c];
+      if (!cell || seen.has(cell)) continue;
+      seen.add(cell);
+      rowCellRef[c] = cell;
+    }
+    const texts = new Array(C).fill("");
+    for (let c = 0; c < C; c++) if (grid[r][c]) texts[c] = odlCellText(grid[r][c]!);
+    if (texts.every((s: string) => !s.trim())) continue; // blank spacer row
+    const rawKey = texts[keyColIdx >= 0 ? keyColIdx : 0] || "";
+    const keyRes = rowKeyOf(rawKey, kind === "room-finish" ? "room-finish" : kind === "equipment" ? "equipment" : "finish", opts.buildings);
+    if (!keyRes) continue; // no recognizable row key — refuse rather than mint a fake row
+    const cells: Record<string, TableCell> = {};
+    for (let c = 0; c < C; c++) {
+      if (!texts[c]) continue;
+      const srcCell = grid[r][c];
+      const bbox = srcCell ? odlBboxToProjectSpace(srcCell["bounding box"], pageViewportTransform) : odlBboxToProjectSpace(t["bounding box"], pageViewportTransform);
+      cells[headers[c]] = { text: texts[c], bbox };
+    }
+    rows.push({ key: keyRes.key, sheet: sheetKey, ...(keyRes.building ? { building: keyRes.building } : {}), cells });
+  }
+  if (!rows.length) return null;
+
+  const region = odlBboxToProjectSpace(t["bounding box"], pageViewportTransform);
+  return {
+    kind,
+    sheet: sheetKey,
+    title: titleCell ? { sheet: sheetKey, text: titleText, bbox: odlBboxToProjectSpace(titleCell["bounding box"], pageViewportTransform) } : null,
+    headers,
+    rows,
+    region,
+  };
+}
+
+/** Total non-empty cells across a table's rows — the plainest, most
+ * source-neutral "how much did this extraction actually recover" signal.
+ * Used together with headers.length so a caller (mcp/src/session.ts's ODL
+ * enhancement pass) can pick whichever of two candidate extractions of the
+ * SAME real table is more complete, WITHOUT favoring either source by
+ * construction — pure evidence, same bar either extraction must clear. */
+export function tableCompleteness(t: ScheduleTable): { headers: number; cells: number } {
+  let cells = 0;
+  for (const r of t.rows) for (const c of Object.values(r.cells)) if (c.text.trim()) cells++;
+  return { headers: t.headers.length, cells };
+}
+
+/** Rebuilds `g.sheets[i].schedules` for the given sheet keys from the
+ * CURRENT `g.tables` — the exact projection `buildSheetGraph` itself uses
+ * at graph-build time, exposed so a caller that mutates `g.tables` after
+ * the fact (an ODL-enhancement pass, run post-hoc since it's async and
+ * `buildSheetGraph` itself is not) can keep the per-sheet summary honest
+ * without duplicating this derivation. */
+export function syncSheetSchedules(g: SheetGraph, sheetKeys: Iterable<string>): void {
+  const want = new Set(sheetKeys);
+  for (const s of g.sheets) {
+    if (!want.has(s.key)) continue;
+    const schedules: SheetGraphSchedule[] = [];
+    for (const t of g.tables) {
+      const parts: TablePart[] = t.parts ?? [{ sheet: t.sheet, title: t.title?.text || "", rows: t.rows.length, region: t.region, ...(t.rotated_headers ? { rotated_headers: true } : {}) }];
+      for (let i = 0; i < parts.length; i++) {
+        const p = parts[i];
+        if (p.sheet !== s.key) continue;
+        schedules.push({
+          kind: t.kind, title: p.title || t.title?.text || "", rows: p.rows, region: p.region,
+          ...(i > 0 ? { continues: t.sheet } : {}),
+          ...(p.rotated_headers ? { rotated_headers: true } : {}),
+        });
+      }
+    }
+    s.schedules = schedules;
+  }
+}

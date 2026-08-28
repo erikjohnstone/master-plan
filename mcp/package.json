@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
+    "@opendataloader/pdf": "^2.5.5",
     "@turf/boolean-contains": "^7.4.0",
     "@turf/boolean-overlap": "^7.4.0",
     "@turf/difference": "^7.4.0",
