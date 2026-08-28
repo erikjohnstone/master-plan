@@ -3806,6 +3806,53 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     }
   }
 
+  // pass 2d — self-referential orphan-bleed collapse: bandDataRows's own
+  // "never drop a digit-keyed orphan row" rule (see its header comment,
+  // ledger item 29) exists so a real tag with NO other home is never
+  // silently lost — a genuine, if badly-columned, sighting beats none at
+  // all. That defense stops being the right call once the same tag turns
+  // out to have a REAL home elsewhere: real, found live on
+  // itd-d1-lab-mechanical.pdf#14, AFTER this session's own header-detection
+  // work let its real "PENTHOUSE SCHEDULE" (SYMBOL/SIZE/MINIMUM FREE
+  // FINISH/REMARKS, 4 real columns) qualify on its own — the same sheet's
+  // unrelated "ELECTRIC HEATER SCHEDULE" still carries the stray 1-cell
+  // "REMARKS: PH-1" row bandDataRows's orphan-fold grabbed from the
+  // Penthouse table's own SYMBOL cell (identical bbox) back when Penthouse
+  // had no header of its own to claim it. Two real rows for one real tag,
+  // downstream (sweep_schedule_row) reads as a false "2 rows carry this
+  // key" ambiguity. The orphan's tell is narrow and specific, not just
+  // "thin": its ENTIRE cell content, normalized, restates nothing but its
+  // own key — no independent column value survived the bleed at all — and
+  // a genuinely richer (2+ populated cells) same-keyed row exists
+  // elsewhere in the graph. A real sparse row (a legitimately blank BASE/
+  // WALL, a room reused across buildings) always carries at least one cell
+  // whose text is NOT simply its own key restated, so this never touches
+  // that case; and a tag whose only sightings are ALL this same bare-key
+  // shape is left alone too — dropping every copy would recreate the exact
+  // silent loss the orphan-keep rule exists to prevent.
+  {
+    const byKey = new Map<string, { t: ScheduleTable; r: TableRow }[]>();
+    for (const t of tables) for (const r of t.rows) {
+      const k = norm(r.key);
+      if (!byKey.has(k)) byKey.set(k, []);
+      byKey.get(k)!.push({ t, r });
+    }
+    for (const [key, entries] of byKey) {
+      if (entries.length < 2) continue;
+      const isBareEcho = (r: TableRow) => {
+        const vals = Object.values(r.cells);
+        return vals.length > 0 && vals.every((c) => norm(c.text) === key);
+      };
+      const hasRicherTwin = entries.some((e) => Object.keys(e.r.cells).length >= 2);
+      if (!hasRicherTwin) continue;
+      for (const e of entries) {
+        if (!isBareEcho(e.r)) continue;
+        e.t.rows = e.t.rows.filter((r) => r !== e.r);
+        notes.push(`${e.t.sheet}: "${e.t.title?.text || e.t.kind}" row "${e.r.key}" collapsed as a self-referential orphan bleed of a richer same-keyed row already established elsewhere in the set.`);
+      }
+    }
+  }
+
   // pass 3 — room tags (full building vocabulary known) + callouts. Room tags
   // read off PLAN-role sheets AND unknowns — a schedule sheet's room-number
   // column must not mint phantom rooms, so schedule/legend sheets contribute
