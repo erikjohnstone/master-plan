@@ -1717,9 +1717,50 @@ function subTierAnchors(rows: GraphSpan[][], hdrIdx: number, anchors: Anchor[], 
       if (cur.parent === prev.parent && mid(cur.t) - mid(prev.t) <= med * 3) tail.push(cur);
       else subRuns.push([cur]);
     }
-    for (const sr of subRuns) mintSubAnchors(out, used, sr, mid);
+    for (const sr of subRuns) mergeOrMintSubAnchors(out, used, sr, mid);
   }
   return out.sort((a, b) => a.x - b.x);
+}
+
+// A per-token sub-tier candidate (above) can resolve to a position an
+// EARLIER pass already anchored — real, corpus-found on THIS exact table:
+// mergeForwardCoEqualTier already minted a bare "CFM" (a recognized
+// EQUIPMENT_HEADERS word) from MIN. O.S.A.'s own real THIRD tier before
+// subTierAnchors ever runs, since that tier independently carries enough
+// vocabulary hits of its own to qualify as a co-equal tier in its own
+// right. subTierAnchors then resolves the SAME token's real two-tier
+// parent ("MIN." over "O.S.A.") from geometry alone, with no idea a bare
+// anchor already sits almost exactly on top of it — mintSubAnchors (the
+// plain version) would just push a second, near-duplicate anchor 2px away,
+// which is silently WORSE than a plain miss: anchorRadii's own baseline
+// (the smallest real gap between any two anchors on the table) reads that
+// 2px gap as "the table's own tightest confirmed column pitch" and caps
+// every other anchor's own reach to half of it — confirmed live, this
+// exact near-duplicate alone collapsed nearly every other column's own
+// binding radius to ~1px, silently dropping MANUFACTURER/MODEL's real data
+// ("DAIKIN DPSA040") across the whole rest of the row. The real fix: when
+// a candidate's own position already matches an EXISTING anchor (the same
+// tight, fixed radius harvestGeometricSubTiers' own DUP_TOL already
+// establishes as "same column, not a neighbour"), that existing anchor
+// already has the real DATA bound to it (it was minted first, and data
+// binding runs after every anchor pass completes) — renaming it in place
+// to carry the fuller "MIN. O.S.A. CFM" label keeps that data AND the
+// fuller name, instead of stranding the data under a bare "CFM" while an
+// empty, dataless "MIN. O.S.A." duplicate sits uselessly beside it.
+function mergeOrMintSubAnchors(out: Anchor[], used: Set<string>, r: Array<{ t: GraphSpan; parent: string }>, mid: (t: GraphSpan) => number): void {
+  const DUP_TOL = 20;
+  const remaining: typeof r = [];
+  for (const x of r) {
+    const cx = mid(x.t);
+    const hit = out.find((a) => Math.abs(a.x - cx) <= DUP_TOL);
+    if (!hit) { remaining.push(x); continue; }
+    const fuller = `${x.parent} ${norm(x.t.str)} ${hit.label}`;
+    if (hit.label === fuller || used.has(fuller)) continue;   // already named this way, or the fuller name collides
+    used.delete(hit.label);
+    used.add(fuller);
+    hit.label = fuller;
+  }
+  if (remaining.length) mintSubAnchors(out, used, remaining, mid);
 }
 
 // ── deep multi-tier sub-columns, geometry-only (itd-d1-lab-mechanical.pdf#15's
@@ -1796,31 +1837,86 @@ function harvestGeometricSubTiers(rows: GraphSpan[][], vocab: string[], startIdx
       const h = prev.reduce((s, t) => s + (t.h || 8), 0) / Math.max(1, prev.length);
       if (rowY(rows[ri]) - rowY(prev) > h * 3) break;
     }
-    // A BARE vocabulary hit means a real header row of its own — the rest of
-    // this file already handles it, skip. A hit that is only a
-    // parenthesized unit fragment ("(FPM)", "(W.C.)") does not: this exact
-    // deep header wraps real unit fragments onto the SAME physical row as
-    // its own un-vocabularied sub-labels (DESIGN/ACTUAL sit beside a bare
-    // "(FPM)" from a neighboring column's own unit tier) — the same bare-
-    // vs-parenthesized distinction skipSubHeaderContinuation/nearbyRequiredHit
-    // already established elsewhere in this file, reused verbatim.
+    // A row carrying a bare CATALOG_ANCHOR_WORD (SYMBOL/TAG/ID/MARK) is
+    // SKIPPED, not a stop — this exact table wraps a catalog-anchor-bearing
+    // sub-label ("UNIT" / "TAG", itself a real fragment of "COIL AIR P.D." /
+    // "UNIT TAG") BETWEEN two genuine sub-tier rows; stopping there (tried
+    // first, a `break`) cuts the walk off before ever reaching the real
+    // DESIGN/ACTUAL/SENSIBLE/TOTAL/D.B./W.B./EFF./DEPTH tier still further
+    // down, silently un-splitting every one of THOSE already-correct sub-
+    // columns back to their bare parents (a real regression, caught by this
+    // file's own AHU-1 direct-render check) — `continue` only skips that one
+    // row and keeps the walk going, which is all this ever needed.
     //
-    // NOTE: narrowing this to skip only on a CATALOG_ANCHOR_WORDS hit (so a
-    // row like "AIRFLOW (CFM) | CAPACITY (MBH) | … | MODEL" — real
-    // vocabulary words already consumed elsewhere as PARENTS, sitting beside
-    // genuinely un-recovered bare labels of its own, CFM/MODEL — could still
-    // be mined) was tried and reverted: it also frees OTHER, already-correct
-    // bare tokens on that same row (FINNED/FINNED/FACE/FACE/PRE-FILTER/
-    // FINAL FILTER) to be re-grouped into WRONG runs under this function's
-    // own generic run-splitting, actively breaking PRE-FILTER/FINAL FILTER's
-    // own already-correct EFF./DEPTH sub-columns (real, confirmed live on
-    // this exact table). Recovering CFM/MODEL needs a real per-TOKEN
-    // "already spoken for" test this file does not have yet, not a coarser
-    // row-level gate — left as a disclosed, separate gap rather than traded
-    // for a regression on columns that work today.
-    if (headerHits(rows[ri], vocab).some((h) => !/^\(.*\)$/.test(h.span.str.trim()))) continue;
-    const lo = out[0].x, hi = out[out.length - 1].x;
+    // An ORDINARY vocabulary hit (ESP/HP/RPM/CFM/MCA…) does not even reach
+    // this check: it is never a reason to skip the row at all. This exact
+    // deep header packs already-claimed vocabulary words onto the SAME
+    // physical row as genuinely un-recovered bare labels of its own — real,
+    // corpus-found (itd-d1-lab-mechanical.pdf#15's own AIR HANDLING UNIT
+    // SCHEDULE: "…MCA | MROPD | V/PH" sits on one row — MCA is already a
+    // real anchor from this table's own vocabulary, MROPD and this table's
+    // SECOND V/PH are not, and never will be if the whole row is refused the
+    // moment MCA is seen). A whole-row skip on ANY vocab hit (the original
+    // gate here) was tried narrowed to CATALOG_ANCHOR_WORDS alone once
+    // before and reverted: without the per-TOKEN "already spoken for" test
+    // below, narrowing the row gate alone also freed OTHER, already-correct
+    // bare tokens on an unrelated row (PRE-FILTER/FINAL FILTER's own bare
+    // group labels) to be re-grouped into WRONG runs by this function's own
+    // generic run-splitting, breaking PRE-FILTER/FINAL FILTER's own already-
+    // correct EFF./DEPTH sub-columns. The real fix is per-TOKEN, not row-
+    // level: a bare candidate whose own x already falls inside an EXISTING
+    // BOUNDED anchor's own resolved [x0,x1] span (PRE-FILTER EFF./PRE-FILTER
+    // DEPTH already claim that whole interval, by construction, from an
+    // earlier real 2-way split) is already spoken for and excluded below —
+    // MROPD/V/PH/MODEL's own positions fall inside no existing anchor's
+    // resolved span at all, so they stay eligible.
+    if (headerHits(rows[ri], vocab).some((h) => CATALOG_ANCHOR_WORDS.includes(h.label))) continue;
+    // `rows` clusters by a CHAINED running-mean y-tolerance (clusterRows):
+    // several genuinely DIFFERENT physical printed lines, each individually
+    // within tolerance of the one before it, can chain-merge into ONE
+    // logical "row" here even though the first and last line in the chain
+    // sit well apart. Real, corpus-found on THIS exact table: the physical
+    // lines for "MAX FACE / AIR" (a PRE-FILTER/FINAL FILTER face-velocity
+    // fragment), "PRE-FILTER" / "FINAL FILTER" (their own group-label row)
+    // and "CFM | RATING | (LBS)" (MIN. O.S.A./AHRI EER/OPERATING WEIGHT's
+    // own third tier) chain-merge into one row spanning ~13px — the row
+    // this function's own row-to-row Y-gate (above) never catches, because
+    // that gate only ever measures gaps BETWEEN two already-clustered rows,
+    // not the internal spread WITHIN one. Once merged, "PRE-FILTER"/"FINAL
+    // FILTER" are indistinguishable, by this function's own generic run-
+    // splitting, from a genuine loose leaf tier — and because this row is
+    // walked BEFORE the real DESIGN/ACTUAL/…/EFF./DEPTH tier two rows down,
+    // minting from it first steals PRE-FILTER EFF./DEPTH's own x-position
+    // before the real tier ever gets there, so the per-TOKEN "already
+    // spoken for" test below (which only sees anchors that already exist)
+    // never has anything to reject it with. A genuine single-tier row's own
+    // internal y-spread is glyph-jitter only, a small fraction of its own
+    // token height; a chain-merged row's is not — refusing to mint from a
+    // row whose own spread already exceeds half its own median token height
+    // costs nothing on a real single-tier row (every one measured on this
+    // table sits under 5px against an ~19px token height) and keeps this
+    // function out of a row it cannot safely read at all.
+    const rowYs = rows[ri].map((t) => t.y);
+    const rowHs = rows[ri].map((t) => t.h || 8).sort((a, b) => a - b);
+    const rowMedH = rowHs[rowHs.length >> 1] || 8;
+    if (Math.max(...rowYs) - Math.min(...rowYs) > rowMedH * 0.5) continue;
+    // NOT out[0].x/out[out.length-1].x: `out` is appended to (mintSubAnchors,
+    // below) without being re-sorted mid-walk, so once an earlier row in
+    // THIS SAME walk mints anything, the newly-pushed anchor sits at the
+    // array's END regardless of its own x — real, found live on THIS exact
+    // table: once FINNED HEIGHT/WIDTH and FACE AREA/VEL. mint from an
+    // earlier row, `out[out.length-1].x` becomes FACE VEL.'s own x (~3153)
+    // instead of the table's true rightmost anchor (REMARKS, ~4432) — every
+    // later row's own real tokens sitting further right (PRE-FILTER EFF./
+    // DEPTH, FINAL FILTER EFF./DEPTH, ~3270–3557) then fail `mid(t) < hi`
+    // and silently never enter `loose` at all. A genuine min/max over every
+    // anchor's own x is order-independent and costs nothing when `out`
+    // happens to already be sorted (the common case elsewhere in this file).
+    const xs = out.map((a) => a.x);
+    const lo = Math.min(...xs), hi = Math.max(...xs);
     const mid = (t: GraphSpan) => t.x + (t.w || 0) / 2;
+    const alreadyClaimed = (t: GraphSpan): boolean =>
+      out.some((a) => a.x0 != null && a.x1 != null && mid(t) >= a.x0 && mid(t) <= a.x1);
     const loose = rows[ri]
       // A bare digit (the "2" in a wrapped "(FT²)" superscript, split into
       // its own token by the tokenizer) matches the character class but
@@ -1828,6 +1924,7 @@ function harvestGeometricSubTiers(rows: GraphSpan[][], vocab: string[], startIdx
       // least one letter.
       .filter((t) => !headerLabel(t.str, vocab) && DEEP_SUB_LABEL_RE.test(norm(t.str)) && /[A-Z]/.test(t.str))
       .filter((t) => mid(t) > lo && mid(t) < hi)
+      .filter((t) => !alreadyClaimed(t))
       .sort((a, b) => a.x - b.x);
     // A genuine deep sub-tier row is DENSE — many real 2-way (or more) splits
     // packed across the table's width (this table's own row: 16 tokens, 7
@@ -2166,7 +2263,11 @@ function harvestBareVocabLeafTiers(rows: GraphSpan[][], vocab: string[], topIdx:
     }
     const hits = headerHits(rows[ri], vocab);
     if (hits.some((h) => CATALOG_ANCHOR_WORDS.includes(h.label))) break;
-    const lo = out[0].x, hi = out[out.length - 1].x;
+    // NOT out[0].x/out[out.length-1].x — see harvestGeometricSubTiers' own
+    // identical fix for the real regression an unsorted `out` (appended to
+    // mid-walk, never re-sorted until this function returns) causes here.
+    const xs = out.map((a) => a.x);
+    const lo = Math.min(...xs), hi = Math.max(...xs);
     const mid = (t: GraphSpan) => t.x + (t.w || 0) / 2;
     // A leaf tier's own real siblings are not always UNIFORMLY vocabulary
     // ("MOTOR" → HP/RPM, both vocab) or uniformly not ("VALVE OUTLET" →
