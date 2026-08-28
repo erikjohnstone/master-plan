@@ -2250,6 +2250,36 @@ function bandDataRows(
     if (r != null && at - cols.cols[idx].start > r.after) return null;
     return cols.cols[idx].label;
   };
+  // The SAME lookup as columnOf, but WITHOUT anchorRadii's anomalous-gap cap
+  // — the column a token would map to if only its position against the
+  // recovered column starts mattered. Used below to recognize a genuine
+  // same-row CONTINUATION of a cell this row's own already-accepted text
+  // already occupies, which anchorRadii's cap was never meant to catch (its
+  // own job is refusing a token that drifted far from the COLUMN's start —
+  // ledger item 57 — not a token sitting right next to text this exact cell
+  // already holds).
+  const rawColumnOf = (t: GraphSpan): string | null => {
+    if (!cols) return nearestAnchor(centerX(t), anchors);
+    const at = cols.coord === "left" ? t.x : centerX(t);
+    let idx = 0;
+    for (let i = 0; i < cols.cols.length; i++) { if (at + 1 >= cols.cols[i].start) idx = i; else break; }
+    return cols.cols[idx].label;
+  };
+  // Ordinary word-spacing ONLY — real, measured on itd-d1-lab-mechanical.
+  // pdf's own CONTROL VALVE SCHEDULE: AREA SERVED's real trailing cross-
+  // reference ("SAV-1") sits 9.5px past the room name's own end, at a real
+  // text height of 18.9. Deliberately tight, tighter than farFromCell's own
+  // FAR threshold (`max(80, h*8)`) and tighter than a first attempt at this
+  // fix (`max(30, h*3)`) — real regression, caught by this file's own
+  // "Diffuser/Grille/Register" multi-table test (a real Bessemer fixture):
+  // at that same text height, a genuinely DIFFERENT column's own value
+  // ("631", a SIZE cell two columns over with no anchor of its own) sits
+  // 32.5px past a real MANUFACTURER value's end — comfortably inside the
+  // first attempt's h*3=56.7px budget, wrongly admitted as if it were a
+  // continuation of the MANUFACTURER cell it merely raw-maps nearest to.
+  // Tightened so the true 9.5px case still clears (h*1 = 18.9) while the
+  // false 32.5px one does not, with real margin on both sides.
+  const CONTINUATION_GAP_MAX = (h: number) => Math.max(12, h);
   // A WIDE_LAST cell that already holds real text and is about to absorb a
   // SECOND, far-off token: field-found on two real mechanical sets
   // (federal-attachment4-mechanical.pdf#16, itd-d1-lab-mechanical.pdf#12) — a
@@ -2265,16 +2295,78 @@ function bandDataRows(
   // was 293px and 617px — 15–33× the row's own text height. A gap that wide
   // is never a second word of the same value; it is refused, not merged, so
   // the cell keeps only the token nearest its own real column start.
+  // A multi-line wrapped cell's constituent lines don't always arrive in
+  // top-to-bottom order. The row's own KEYED line (the one carrying the
+  // schedule tag, e.g. "CV-1") is whichever PHYSICAL line the tag happens to
+  // sit on — often the MIDDLE line of a 3-line wrap, not the top one — and
+  // it is always `add`ed FIRST (during the main loop, below). Every OTHER
+  // line of that same wrapped cell is an unkeyed "orphan" row, folded in
+  // afterward by the separate orphans pass (further below) in whatever order
+  // it appears across the WHOLE table, not "lines above the keyed row first,
+  // in the right position" — so a fragment ABOVE the keyed line can land
+  // AFTER it in the joined text. Real, found live on itd-d1-lab-mechanical.
+  // pdf's CONTROL VALVE SCHEDULE: VALVE TYPE's real 3-line value reads
+  // "PRESSURE INDEPENDENT / FIELD ADJUSTABLE CONTROL / VALVE W/ 100%
+  // AUTHORITY" top to bottom, but the middle line carries the row's own key
+  // and is added first — the joined cell read "FIELD ADJUSTABLE CONTROL
+  // PRESSURE INDEPENDENT VALVE W/ 100% AUTHORITY" instead. Fixed by tracking
+  // every contributing token's own position and re-deriving each multi-
+  // fragment cell's text in true (y, then x) order once all fragments — the
+  // keyed line's own and every orphan's — are in, rather than trusting
+  // whatever order they happened to arrive in.
+  type Frag = { text: string; y: number; x0: number; x1: number };
+  const fragmentsByRow = new Map<TableRow, Map<string, Frag[]>>();
+  // Same physical printed LINE, by this table's own row pitch — deliberately
+  // tighter than CONTINUATION_GAP_MAX's own x-gap budget below: this only
+  // asks "is there already-accepted text from THIS SAME line", never "is
+  // there accepted text somewhere in this cell's multi-line span" (a wide,
+  // multi-line-already-merged cell's OWN accumulated bbox can span hundreds
+  // of px vertically and horizontally across totally different physical
+  // lines — comparing a new token against that whole union, tried first,
+  // wrongly re-admitted a genuinely DIFFERENT, un-modeled column's data:
+  // OPERATION's own "MODULATING"/"2-WAY" values, which have no anchor of
+  // their own and so raw-map to the neighboring VALVE TYPE column, sat close
+  // enough to VALVE TYPE's own wide 3-line-merged bbox to pass a bbox-based
+  // check even though they share no line with any of VALVE TYPE's real
+  // fragments).
   const add = (row: TableRow, toks: GraphSpan[]) => {
     for (const t of toks) {
-      const label = columnOf(t);
-      if (label == null) continue;
+      let label = columnOf(t);
+      if (label == null) {
+        // Refused by anchorRadii's own anomalous-gap cap. Before giving up,
+        // check the ONE case that cap was never meant to catch: this exact
+        // token sits ordinary word-spacing distance past ALREADY-ACCEPTED
+        // text from the SAME physical line, in a cell rawColumnOf agrees it
+        // belongs to — a genuine continuation of a value already accepted on
+        // that line, not a foreign token that merely lands nearest this
+        // column's recovered start. Real, found live on itd-d1-lab-
+        // mechanical.pdf's own AREA/SUPPLY VALVE SERVED columns (CONTROL
+        // VALVE / HOT WATER REHEAT COIL SCHEDULEs): a trailing diffuser
+        // cross-reference ("SAV-1") sits ~9px past the room name's own end
+        // — plain word-spacing, same line — but far past the SERVED
+        // column's own recovered start (that column legitimately needs room
+        // for a full room name, dragging its anchorRadii cap tight relative
+        // to this table's own much narrower numeric columns) — every SERVED
+        // cell silently lost its own trailing cross-reference tag.
+        const raw = rawColumnOf(t);
+        const rawFrags = raw ? fragmentsByRow.get(row)?.get(raw) : undefined;
+        const lineTol = Math.max(3, (t.h || 8) * 0.5);
+        const sameLine = rawFrags?.filter((f) => Math.abs(f.y - t.y) <= lineTol) ?? [];
+        const rightMost = sameLine.length ? Math.max(...sameLine.map((f) => f.x1)) : null;
+        if (raw && rightMost != null && t.x - rightMost <= CONTINUATION_GAP_MAX(t.h || 8)) label = raw;
+        else continue;
+      }
       const existing = row.cells[label];
       if (farFromCell(label, t, existing)) continue;
       const text = t.str.trim();
       if (!existing) row.cells[label] = { text, bbox: bboxOf(t) };
       else row.cells[label] = { text: `${existing.text} ${text}`, bbox: merge(existing.bbox, bboxOf(t)) };
       region = region ? merge(region, bboxOf(t)) : bboxOf(t);
+      let byLabel = fragmentsByRow.get(row);
+      if (!byLabel) fragmentsByRow.set(row, (byLabel = new Map()));
+      let frags = byLabel.get(label);
+      if (!frags) byLabel.set(label, (frags = []));
+      frags.push({ text, y: t.y, x0: t.x, x1: t.x + (t.w || 0) });
     }
   };
   const orphans: Array<{ toks: GraphSpan[]; y: number }> = [];
@@ -2443,6 +2535,22 @@ function bandDataRows(
     if (row.building) continue;
     const cellB = norm(row.cells.BLDG?.text || row.cells.BUILDING?.text || "");
     if (DESIGNATOR_RE.test(cellB)) row.building = cellB;
+  }
+  // Re-derive every multi-fragment cell's text in true (y, then x) order —
+  // see `add`'s own comment on `fragmentsByRow` above. Only touches cells
+  // that actually received 2+ fragments; an ordinary single-token cell's
+  // text is already correct and untouched.
+  for (const row of out) {
+    const byLabel = fragmentsByRow.get(row);
+    if (!byLabel) continue;
+    for (const [label, frags] of byLabel) {
+      if (frags.length < 2) continue;
+      const cell = row.cells[label];
+      if (!cell) continue;
+      const sorted = [...frags].sort((a, b) => a.y - b.y || a.x0 - b.x0);
+      const joined = sorted.map((f) => f.text).join(" ");
+      if (joined !== cell.text) row.cells[label] = { text: joined, bbox: cell.bbox };
+    }
   }
   return { out, region };
 }
