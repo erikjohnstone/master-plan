@@ -6833,6 +6833,74 @@ function odlBboxToProjectSpace(b: number[], pageViewportTransform: number[]): Bb
 
 const ALL_HEADER_WORDS_ARR = [...ALL_HEADER_WORDS];
 
+/** ODL reports its row/column grid in the PDF's own native (page-rotation-
+ * oblivious) content-stream order. `odlBboxToProjectSpace` (above) already
+ * corrects every cell's own GEOMETRY for the page's `/Rotate`, but a real
+ * schedule table that is ALSO drawn fully sideways in that native space —
+ * every one of its own cells, header labels AND data alike, not merely a
+ * header tier (this file's already-handled `rotated_headers` case, which
+ * only ever rotates the LABEL text over otherwise-horizontal data) — comes
+ * back from ODL with its per-item axis and per-attribute axis genuinely
+ * swapped relative to what the rest of this function assumes (row = one
+ * item, column = one attribute, title = row 1's own lone cell spanning
+ * nearly every column). Real, confirmed shape (bldg5406-hvac-demo's own
+ * M-601 AIR TERMINAL BOX SCHEDULE, VAV-1..9, TRANE/VCEF): ODL reports the
+ * title as ONE cell at row 1, its own column, with ROW SPAN ≈ the table's
+ * full row count — column span 1 — the exact transpose of the ordinary
+ * "row 1, one cell, column span ≈ full column count" shape. Rotating the
+ * whole grid 90° (not a plain mirror-transpose — the title must land back
+ * at new row 1, not the far row, so the row axis is reversed while the
+ * column axis is not) lets the rest of this function's already-proven
+ * header/data logic run completely unchanged against it. Cell BOUNDING
+ * BOXES are left untouched (`odlBboxToProjectSpace` maps them by geometry
+ * alone, never by row/column label), so no other output is affected. */
+function rotateODLTable90(t: ODLTable): ODLTable {
+  const oldC = t["number of columns"];
+  const byRow = new Map<number, ODLTableCell[]>();
+  for (const row of t.rows) {
+    for (const cell of row.cells) {
+      const rs = cell["row span"] || 1, cs = cell["column span"] || 1;
+      const newRowNumber = oldC - cell["column number"] - cs + 2;
+      const rotated: ODLTableCell = {
+        ...cell,
+        "row number": newRowNumber,
+        "column number": cell["row number"],
+        "row span": cs,
+        "column span": rs,
+      };
+      const list = byRow.get(newRowNumber);
+      if (list) list.push(rotated); else byRow.set(newRowNumber, [rotated]);
+    }
+  }
+  const rows: ODLTableRow[] = [...byRow.entries()]
+    .sort((a, b) => a[0] - b[0])
+    .map(([rowNumber, cells]) => ({
+      type: "table row" as const,
+      "row number": rowNumber,
+      id: -1,
+      cells: cells.sort((a, b) => a["column number"] - b["column number"]),
+    }));
+  return { ...t, "number of rows": oldC, "number of columns": t["number of rows"], rows };
+}
+
+/** True when row 1 carries a single cell (almost) spanning every ROW instead
+ * of every column — see `rotateODLTable90`'s own comment for the real shape
+ * this catches. Requires at least one OTHER row-1 cell with an ordinary
+ * (<=1) row span, so a real single-tier header row (every cell rowSpan 1,
+ * nothing to compare against) or a normal multi-row title check (row 1 has
+ * only the one cell — handled by the existing colSpan check below) never
+ * matches here; the two checks are mutually exclusive by construction. The
+ * >= 4 row floor keeps this off small tables where an ordinary multi-tier
+ * header cell's own rowSpan could coincidentally reach "almost every row." */
+function hasRowOrientedTitle(t: ODLTable, numRows: number): boolean {
+  if (numRows < 4) return false;
+  const row1 = t.rows.find((r) => r["row number"] === 1);
+  if (!row1 || row1.cells.length < 2) return false;
+  const longSpan = row1.cells.filter((c) => (c["row span"] || 1) >= numRows - 1 && (c["column span"] || 1) === 1);
+  const shortSpan = row1.cells.filter((c) => (c["row span"] || 1) <= 1);
+  return longSpan.length === 1 && shortSpan.length >= 1;
+}
+
 /** Build one ScheduleTable straight from ODL's own detected grid. Returns
  * null when the table doesn't look like a recognized schedule shape at all
  * (kind classification fails to qualify) or carries no real keyed data rows
@@ -6843,8 +6911,9 @@ export function scheduleTableFromODL(
   pageViewportTransform: number[],
   opts: { buildings?: Set<string> } = {},
 ): ScheduleTable | null {
+  if (t["number of rows"] < 2 || t["number of columns"] < 2) return null;
+  if (hasRowOrientedTitle(t, t["number of rows"])) t = rotateODLTable90(t);
   const R = t["number of rows"], C = t["number of columns"];
-  if (R < 2 || C < 2) return null;
 
   // Expand rowspan/colspan into a full grid of cell references so a later
   // pass can walk "the cell occupying (row,col)" without re-deriving spans.
