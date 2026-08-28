@@ -2247,6 +2247,61 @@ const numOf = (key: string): string => key.match(QUALIFIED_KEY_RE)?.[2] ?? key;
 
 const centerX = (t: GraphSpan) => t.x + (t.w || 0) / 2;
 
+// columnMapFor's true-nearest collision rule (below) has one job: bind a
+// recovered data-cluster to the anchor whose header it actually belongs
+// under, even when that cluster's own centered header sits a fair distance
+// away (ROOM/NUMBER's real shape, ledger item — a long room name pulls
+// ROOM's own data left, past NUMBER's header). But distance alone cannot
+// tell that real collision apart from a SECOND, entirely different real
+// shape: a genuine, un-vocabularied LEAF sub-column (no EQUIPMENT_HEADERS
+// word of its own — e.g. a bare "AMPS"/"STAGES"/duct-connection-size tier
+// that never independently qualified as its own anchor) whose own real data
+// simply happens to sit nearer some OTHER, already-named anchor by raw
+// distance than that anchor's own true column is wide. Real, found live on
+// itd-d1-lab-mechanical.pdf's EXHAUST FAN SCHEDULE: an unrecognized AMPS-like
+// leaf column's own value ("2.5") sits nearest MANUFACTURER's header purely
+// by proximity, and true-nearest happily reassigns MANUFACTURER's own slot
+// to it — the real manufacturer name is then dropped outright (falls outside
+// MANUFACTURER's own capped reach once anchorRadii's cap is checked), not
+// merged or truncated. Same root cause via the RESCUE path too (below): a
+// leaf cluster that loses its own (wrong) true-nearest pick can still get
+// rescued into an unclaimed anchor label it merely sits closer to.
+//
+// The two real shapes are told apart by what sits ABOVE the losing cluster,
+// not by how far away it reaches: ROOM's own header cell IS one of this
+// table's real anchors (just not the one true-nearest happened to pick);
+// a genuine leaf sub-column's own header is NOT any anchor at all — it is a
+// real, drawn header cell with no vocabulary word in EQUIPMENT_HEADERS/
+// FINISH_HEADERS/ROOM_HEADERS to name it, sitting in the "no-man's-land"
+// between two real anchors' own header centers. So: a raw header-row token
+// whose own center sits farther than half this table's own tightest
+// inter-anchor pitch from EVERY real anchor is a genuine orphan — proof this
+// table draws a real, distinct column here that vocabulary never named.
+// A cluster whose OWN nearest header (orphan or anchor) is an orphan closer
+// than the anchor collision picked is that orphan column's own data, and
+// must never be allowed to steal (or be rescued into) a NAMED anchor's slot
+// — its data simply has nowhere labeled to go, same as any other column this
+// project's vocabulary has not yet learned (withheld, not guessed, the same
+// discipline nearestAnchor's own radius cap already applies elsewhere).
+// Geometric only (never a word list), so it generalizes to any table shape,
+// not just the one sheet that first exposed it. Purely additive: a table
+// with no headerSpans (adoptContinuationRows' headerless-continuation path)
+// or no orphan tokens at all gets an empty list and this never fires,
+// identical to the pre-fix behavior.
+function orphanHeaderXs(headerSpans: GraphSpan[] | undefined, anchors: Anchor[]): number[] {
+  if (!headerSpans?.length || anchors.length < 2) return [];
+  const gaps = anchors.slice(1).map((a, i) => a.x - anchors[i].x).filter((g) => g > 0);
+  if (!gaps.length) return [];
+  const tol = Math.min(...gaps) / 2;
+  const out: number[] = [];
+  for (const t of headerSpans) {
+    if (t.str.replace(/[^A-Za-z]/g, "").length < 2) continue; // punctuation/digit-only: not a real header word
+    const cx = centerX(t);
+    if (!anchors.some((a) => Math.abs(a.x - cx) <= tol)) out.push(cx);
+  }
+  return out;
+}
+
 /** Column starts read off the DATA, plus WHICH edge of a token to band by.
  * Some schedules left-align their cells and some centre them; the alignment
  * is a property of the sheet, not something to assume. Both are tried and the
@@ -2264,6 +2319,7 @@ function columnMapFor(
   x1: number,
   coord: "left" | "center",
   isKeyedRow: (row: GraphSpan[]) => boolean,
+  orphanXs: number[] = [],
 ): ColumnMap | null {
   const at = (t: GraphSpan) => (coord === "left" ? t.x : t.x + (t.w || 0) / 2);
   const xs: number[] = [];
@@ -2305,6 +2361,31 @@ function columnMapFor(
   const maxN = Math.max(...clusters.map((c) => c.n));
   const kept = clusters.filter((c) => c.n >= Math.max(2, maxN * 0.25));
   if (kept.length < anchors.length) return null;
+  // Which of THESE clusters is a genuine orphan leaf column's own real data
+  // — see orphanHeaderXs' own comment for the two real shapes this tells
+  // apart. Deliberately NOT "any cluster nearer an orphan than its own
+  // anchor pick": an anchor's rightful data routinely sits far from its own
+  // centered header by this file's own design (WIDE_LAST/isWideMidAnchor,
+  // above) — comparing raw distance against EVERY orphan on the sheet
+  // falsely disqualified a real MANUFACTURER cluster merely because some
+  // OTHER, unrelated orphan (OPERATING WEIGHT) happened to sit closer to it
+  // than MANUFACTURER's own far-off header did (real, found live: itd-d1-
+  // lab-mechanical.pdf's EXHAUST FAN SCHEDULE — "COOK MODEL GC-148" is
+  // EF-1's real manufacturer name, correctly nearer MANUFACTURER than any
+  // other ANCHOR, but nearer OPERATING WEIGHT's own orphan header than
+  // MANUFACTURER's). Each orphan claims only the ONE cluster that is its
+  // OWN true-nearest match — WEIGHT's own real data ("15") wins that
+  // pairing outright (distance ~0.1 vs "COOK MODEL"'s ~161), so WEIGHT
+  // never disqualifies the real manufacturer cluster at all; SONES'
+  // own real data ("2.5") is an equally exact match (~10.5), so SONES DOES
+  // correctly claim it, keeping it out of MANUFACTURER's reach.
+  const orphanClaimed = new Set<number>();
+  for (const ox of orphanXs) {
+    let best: { start: number; n: number } | null = null;
+    let bestD = Infinity;
+    for (const c of kept) { const d = Math.abs(c.start - ox); if (d < bestD) { bestD = d; best = c; } }
+    if (best) orphanClaimed.add(best.start);
+  }
   const byLabel = new Map<string, { start: number; n: number }>();
   for (const c of kept) {
     // The anchor whose header CENTER sits TRUE NEAREST this recovered
@@ -2346,6 +2427,18 @@ function columnMapFor(
       }
     }
     if (!own) continue;
+    // This cluster IS a genuine, un-vocabularied leaf column's own real data
+    // (orphanClaimed, above) — not a misaligned reach of `own`'s. Refuse it
+    // a place in ANY named anchor's slot (neither the direct claim below nor
+    // the rescue fallback further down): both paths exist to recover a real
+    // anchor's OWN data from a genuine collision (ROOM/NUMBER, atOrRight
+    // rescue, below) — this is a different real shape, an entirely
+    // different column's data that happens to sit nearest a named anchor by
+    // coincidence, and crediting it anywhere here is exactly the theft this
+    // guards against (real, found live: itd-d1-lab-mechanical.pdf's EXHAUST
+    // FAN SCHEDULE — an un-vocabularied SONES leaf column's own "2.5" reads
+    // into MANUFACTURER, and the real manufacturer name is dropped).
+    if (orphanClaimed.has(c.start)) continue;
     const cur = byLabel.get(own.label);
     if (cur == null || c.start < cur.start) { byLabel.set(own.label, { start: c.start, n: c.n }); continue; }
     // This cluster LOST the true-nearest collision to an anchor some
@@ -2399,6 +2492,7 @@ function columnStarts(
   x0: number,
   x1: number,
   isKeyedRow: (row: GraphSpan[]) => boolean,
+  orphanXs: number[] = [],
 ): ColumnMap | null {
   // A map has to FIT before it is trusted. A mediocre fit is worse than none:
   // it looks authoritative and quietly merges a column into its neighbour,
@@ -2406,8 +2500,8 @@ function columnStarts(
   // on real sets, a true alignment scores ~0.82–0.90 and a wrong one ~0.54.
   const FIT_FLOOR = 0.7;
   const fits = (m: ColumnMap | null) => (m && m.score >= FIT_FLOOR ? m : null);
-  const left = fits(columnMapFor(rows, anchors, cfg, x0, x1, "left", isKeyedRow));
-  const center = fits(columnMapFor(rows, anchors, cfg, x0, x1, "center", isKeyedRow));
+  const left = fits(columnMapFor(rows, anchors, cfg, x0, x1, "left", isKeyedRow, orphanXs));
+  const center = fits(columnMapFor(rows, anchors, cfg, x0, x1, "center", isKeyedRow, orphanXs));
   if (!left) return center;
   if (!center) return left;
   // Left alignment is the common case; centring has to EARN the switch. On a
@@ -2422,10 +2516,11 @@ function bandDataRows(
   kind: "room-finish" | "finish" | "equipment",
   sheetKey: string,
   buildings: Set<string> | undefined,
-  cfg: { fromIdx: number; toIdx?: number; belowY: number; keyAlign?: { x: number; tol: number }; deltas?: DeltaIndex },
+  cfg: { fromIdx: number; toIdx?: number; belowY: number; keyAlign?: { x: number; tol: number }; deltas?: DeltaIndex; headerSpans?: GraphSpan[] },
 ): { out: TableRow[]; region: Bbox | null } {
   const { x0, x1, medGap } = bandLimits(anchors);
   const toIdx = cfg.toIdx ?? rows.length;
+  const orphanXs = orphanHeaderXs(cfg.headerSpans, anchors);
   // A room-finish table whose key column is itself labeled NAME (anchors are
   // sorted by x, so index 0 is the key column) has no numbered-room column at
   // all — see NAME_KEY_RE's comment. Decided once per table, from the
@@ -2445,7 +2540,7 @@ function bandDataRows(
     const first = row.find((t) => t.x >= x0 && t.x <= x1 && revisionOf(t.str) == null);
     return !!first && !!rowKeyOf(first.str, kind, buildings, nameKeyed);
   };
-  const cols = columnStarts(rows, anchors, cfg, x0, x1, isKeyedRow);
+  const cols = columnStarts(rows, anchors, cfg, x0, x1, isKeyedRow, orphanXs);
   // A key belongs to the key column when it sits nearer that column's start
   // than the next column's — sized from the table's own pitch, not from text
   // height, so a wider key ("139A") or a hair of indent still counts.
@@ -3258,9 +3353,49 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
     if (centerX(t) < hdrBand.x0 || centerX(t) > hdrBand.x1) continue;
     region = region ? merge(region, bboxOf(t)) : bboxOf(t);
   }
+  // Deep multi-tier headers (a real, found-live shape: BLOWER/ELECTRICAL/
+  // MAXIMUM/SONES/OPERATING WEIGHT tiers on itd-d1-lab-mechanical.pdf's own
+  // EXHAUST FAN SCHEDULE, or EWT/LWT/CAPACITY-INPUT-MBH/CAPACITY-OUTPUT-MBH
+  // on its own CONDENSING HOT WATER BOILER SCHEDULE) don't all live in
+  // `headerSpans` alone — tier-descent (findHeaderRow, above) keeps only the
+  // DEEPEST qualifying row as `rowIndex`, and its own "parent tier" harvest
+  // loop only reaches rows already known to sit between two established
+  // indices, missing whatever tiers a co-equal-tier merge or sub-tier
+  // harvest separately reached without ever assembling one combined span
+  // list. orphanHeaderXs (above) needs the FULL raw header block — every
+  // real, un-vocabularied leaf column's own header cell included, not just
+  // the one row that happened to independently qualify — so walk UPWARD
+  // from the row that qualified while the y-gap between consecutive rows
+  // stays tier-tight (the identical shape test skipSubHeaderContinuation
+  // already uses walking DOWNWARD, mirrored: real tiers on both tables
+  // measured sit 0–25px apart, while the real TITLE sits 80+px above the
+  // header block — comfortably past the h*2 stop, so a title's own prose
+  // never joins this scan and can never masquerade as an orphan leaf
+  // column). Bounded additionally by this table's own x-band (the same
+  // hdrBand the region above already trusts) so a crowded sheet's
+  // neighboring content (a stacked table's remarks) never bleeds in either.
+  // Rotated headers are a separate, narrower path (`headerSpans` is already
+  // its own full flat span list there) and are left untouched.
+  const fullHeaderSpans: GraphSpan[] = flat
+    ? (() => {
+        const out: GraphSpan[] = [];
+        let top = flat.rowIndex;
+        for (let n = 0; n < 15 && top > 0; n++) {
+          const cur = rows[top], prev = rows[top - 1];
+          const h = cur.reduce((s, t) => s + (t.h || 8), 0) / Math.max(1, cur.length);
+          if (rowY(cur) - rowY(prev) > h * 2) break;
+          top--;
+        }
+        top = Math.min(top, flat.mergedTopIdx ?? flat.rowIndex);
+        for (let ri = top; ri < dataFrom && ri < rows.length; ri++) {
+          for (const t of rows[ri]) { if (centerX(t) >= hdrBand.x0 && centerX(t) <= hdrBand.x1) out.push(t); }
+        }
+        return out;
+      })()
+    : headerSpans;
   const cap = Math.min(rows.length, dataFrom + MAX_TABLE_SCAN_ROWS);
   let toIdx = findTableBoundary(rows, dataFrom, hdrBand.x0, hdrBand.x1, dataBelowY);
-  let banded = bandDataRows(rows, anchors, kind, sheet.key, opts.buildings, { fromIdx: dataFrom, toIdx, belowY: dataBelowY, deltas: opts.deltas });
+  let banded = bandDataRows(rows, anchors, kind, sheet.key, opts.buildings, { fromIdx: dataFrom, toIdx, belowY: dataBelowY, deltas: opts.deltas, headerSpans: fullHeaderSpans });
   // The wide scan maxed out without ever finding a real stop signal — see
   // findSparseKeyedBoundary's comment for why that alone (regardless of how
   // many rows the wide pass came back with — a wrong scan can find rows just
@@ -3272,7 +3407,7 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
     const nameKeyed = kind === "room-finish" && anchors[0]?.label === "NAME";
     const tightIdx = findSparseKeyedBoundary(rows, dataFrom, cap, hdrBand.x0, hdrBand.x1, dataBelowY, kind, opts.buildings, nameKeyed);
     if (tightIdx < toIdx) {
-      const tightBanded = bandDataRows(rows, anchors, kind, sheet.key, opts.buildings, { fromIdx: dataFrom, toIdx: tightIdx, belowY: dataBelowY, deltas: opts.deltas });
+      const tightBanded = bandDataRows(rows, anchors, kind, sheet.key, opts.buildings, { fromIdx: dataFrom, toIdx: tightIdx, belowY: dataBelowY, deltas: opts.deltas, headerSpans: fullHeaderSpans });
       if (tightBanded.out.length > 0) { toIdx = tightIdx; banded = tightBanded; }
     }
   }
