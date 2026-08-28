@@ -40,6 +40,17 @@ import type { MaskObj, OpList, OpsTable } from "./oneclick";
 // ── trigger policy (consumed by the canvas; exported for tests) ─────────────
 export const RASTER_MIN_IMG_FRAC = 0.10; // placed-image area ≥ this fraction of the sheet ⇒ raster-eligible
 export const RASTER_MIN_SEGS = 500;      // fewer vector segs than this ⇒ the vector mask can't bound rooms
+// A SINGLE placed image's own area ≥ this fraction of the sheet ⇒ "big enough
+// to plausibly BE a pasted table/schedule", not a title-block logo/stamp/
+// north-arrow. Deliberately much lower than RASTER_MIN_IMG_FRAC — that one
+// answers "is nearly this WHOLE sheet a scan", this one answers "is there one
+// unusually large picture somewhere on an otherwise-vector sheet". Calibrated
+// against real, measured evidence from a real AutoCAD-plotted permit set: its
+// title-block logos/PE-stamp images each measured well under 0.5% of the
+// sheet, while a genuine small schedule table pasted as a picture in a plan
+// sheet's corner (not a scan of the whole sheet) measured ~4% — a >10x gap on
+// both sides of this floor. See VectorGeometry.maxImageArea (oneclick.ts).
+export const RASTER_SOLO_IMG_MIN_FRAC = 0.01;
 
 // ── binarization ────────────────────────────────────────────────────────────
 export const RASTER_T = 0.15;      // Bradley: ink iff g < (1 − T) × local mean

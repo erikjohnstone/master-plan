@@ -72,7 +72,7 @@ import { traceConfidence, floodSignals, type ConfidenceInput } from "../../web/s
 // The canvas's raster-mask engine (#154), imported as-is — the scanned-sheet
 // fallback is the SAME Bradley-threshold module the canvas floods with, so an
 // agent's raster trace and a click's raster trace can never binarize differently.
-import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS } from "../../web/src/lib/rastermask.ts";
+import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, RASTER_SOLO_IMG_MIN_FRAC } from "../../web/src/lib/rastermask.ts";
 // floodAtSeed is the ONE flood entry point every non-canvas surface measures
 // through (RFC #60 / PR #179, audit A6): floodRegionSealed with the sheet's own
 // scale-derived arguments — seal radii up to a door width, door-swing wedge
@@ -4740,12 +4740,30 @@ export class Session {
   private async rasterScheduleNotes(g: SheetGraph): Promise<string[]> {
     const notes: string[] = [];
     for (const s of g.sheets) {
-      if (s.role !== "schedule" || s.schedules.length > 0) continue;
+      if (s.schedules.length > 0) continue;
       try {
         const sheetState = this.sheet(s.key);
         const geo = await this.ensureGeometry(sheetState);
-        if (this.rasterPolicy(sheetState, geo).rasterEligible) {
-          notes.push(`${s.key} is classified as a schedule sheet but 0 tables extracted from it, and ${Math.round((geo.imageArea / (sheetState.widthPx * sheetState.heightPx)) * 100)}% of its own area is embedded raster image content — its schedule data is very likely pasted in as a picture (or scanned), invisible to text-based extraction no matter the vocabulary. view_sheet to confirm; classify_symbol may still find shapes there, but table rows will not extract.`);
+        const sheetArea = sheetState.widthPx * sheetState.heightPx;
+        if (s.role === "schedule" && this.rasterPolicy(sheetState, geo).rasterEligible) {
+          notes.push(`${s.key} is classified as a schedule sheet but 0 tables extracted from it, and ${Math.round((geo.imageArea / sheetArea) * 100)}% of its own area is embedded raster image content — its schedule data is very likely pasted in as a picture (or scanned), invisible to text-based extraction no matter the vocabulary. view_sheet to confirm; classify_symbol may still find shapes there, but table rows will not extract.`);
+        } else if (sheetArea > 0 && (geo.maxImageArea ?? 0) / sheetArea >= RASTER_SOLO_IMG_MIN_FRAC) {
+          // Real, general construction-document convention this catches that
+          // the check above cannot (it fires on a whole-sheet-scan fraction,
+          // and only on schedule-role sheets): a SMALL equipment/reference
+          // sub-schedule pasted directly onto a plan (or other non-schedule-
+          // role) sheet as one picture, rather than collected on its own
+          // dedicated schedule sheet — far too small a fraction of that
+          // sheet's own total area to ever clear rasterPolicy's whole-sheet
+          // bar, and never reached above because plan-role sheets aren't
+          // schedule-role. `maxImageArea` (a SINGLE placed image's own area,
+          // never a sum — see its own comment in oneclick.ts) is what tells
+          // "one unusually large picture" apart from a sheet that merely
+          // carries several small incidental images (title-block logo, PE
+          // stamp, north arrow) whose combined area could otherwise read as
+          // "some raster content" without any one of them being big enough
+          // to plausibly BE a table.
+          notes.push(`${s.key} (role: ${s.role}) extracted 0 tables but carries a single embedded picture covering ${Math.round((geo.maxImageArea! / sheetArea) * 100)}% of its own area — real sets sometimes paste a small schedule/table directly onto a plan (or other) sheet as an image rather than as real text, instead of collecting it on its own dedicated schedule sheet; that picture may be exactly such a table, invisible to text-based extraction no matter the vocabulary. view_sheet to confirm.`);
         }
       } catch { /* diagnostic only */ }
     }
