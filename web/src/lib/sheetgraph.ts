@@ -604,7 +604,22 @@ const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "ID", "MATERIAL", "MANUFACTURE
 // vocabulary. Deliberately NOT added to `required`: a table naming its rating
 // columns already clears required's own bar, and SERVED alone should never
 // tip an unrelated table into qualifying.
-const EQUIPMENT_HEADERS = ["ID", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "RPM", "ESP", "EQUIPMENT", "VELOCITY", "AIRFLOW", "SIZE", "FPM", "LENGTH", "TYPE", "MOUNTING", "CCT", "CRI", "DRIVER", "DIMMING", "LENS", "FINISH", "NOTES", "LUMENS", "SERVED"];
+// PRESSURE: shared with FINISH_HEADERS (a glazing/storefront schedule's own
+// wind-pressure rating column), but just as real and common on the
+// equipment side — a diffuser/grille's MAX SOUND PRESSURE (dBA) column, a
+// fan/AHU's STATIC PRESSURE, a pump/boiler's OPERATING PRESSURE. Without it
+// here, a small equipment schedule whose only other recognized columns are
+// the words this file's own comment already documents as shared across both
+// vocabularies (MANUFACTURER/MODEL/DESCRIPTION/REMARKS/LOCATION) loses the
+// eqHits>=finHits tie purely because FINISH_HEADERS had one more shared word
+// than EQUIPMENT_HEADERS did — measured live: baker-county-eoc-bidset.pdf's
+// own real DIFFUSER-GRILLE SCHEDULE (EQUIP NO/LOCATION/SERVICE/MANUFACTURER/
+// MODEL/DESCRIPTION/MAX SOUND PRESSURE (dBA)/REMARKS) fell to "finish"-kind
+// on this exact tie, invisible to buildPlanSetTakeoff's own equipment-only
+// scope even after its rows extracted correctly. Restores the tie-break
+// this file's own kind-classification comment already documents as the
+// intended behavior ("ties favor the more specific vocab, equipment").
+const EQUIPMENT_HEADERS = ["ID", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "RPM", "ESP", "EQUIPMENT", "VELOCITY", "AIRFLOW", "SIZE", "FPM", "LENGTH", "TYPE", "MOUNTING", "CCT", "CRI", "DRIVER", "DIMMING", "LENS", "FINISH", "NOTES", "LUMENS", "SERVED", "PRESSURE"];
 // Hoisted out of extractTableAt (module-level, not a local) so the
 // structural "reference" pass (below extractAllTables) can check "would
 // THIS candidate header already qualify under an EXISTING vocabulary" off
@@ -6716,10 +6731,39 @@ export function scheduleTableFromODL(
   // 3rd header tier as its first data row, producing a phantom "SYMBOL"-
   // keyed row and silently losing every 3rd-tier column's own sub-label).
   // Vocabulary is used ONLY where structure is genuinely ambiguous — a
-  // FULL-COVERAGE, ungrouped row at the very FIRST header candidate
-  // position, which looks identical (by coverage alone) to a real single-
-  // tier header with no sub-columns and to a real data row alike.
+  // FULL-COVERAGE, ungrouped row at the FIRST header-candidate position
+  // reached, which looks identical (by coverage alone) to a real single-
+  // tier header with no sub-columns and to a real data row alike. "First
+  // candidate reached" is NOT the same as "row bodyStart": a wide caption/
+  // notes row (single cell, colspan across nearly every column — same real
+  // shape as the title row, see the column-labeling loop below) can sit
+  // between the title and the real header row, correctly extending
+  // headerEnd via the grouped branch below without itself ever being a
+  // header candidate — but that left the genuine single-tier header row
+  // that follows it landing at r > bodyStart, where the old `r ===
+  // bodyStart` gate never re-fired, so it fell straight through to `break`
+  // and was misread as the first DATA row instead: headers came back as
+  // bare "COL1"/"COL2"/… placeholders, `kind` classification saw zero
+  // vocabulary hits, and the whole table was dropped. Real, measured shape
+  // on baker-county-eoc-bidset.pdf#41: DIFFUSER-GRILLE SCHEDULE and SPLIT
+  // SYSTEM CONDENSING UNIT SCHEDULE both carry exactly this "title, then a
+  // wide REMARKS/notes caption, then the real header row" layout, and both
+  // were silently dropped whole (never appearing in `g.tables` at all)
+  // until this fix restored their real header row to view. DIFFUSER-GRILLE
+  // SCHEDULE now correctly extracts and classifies (equipment-kind, CD-1/
+  // RG-1/EG-1 rows). SPLIT SYSTEM CONDENSING UNIT SCHEDULE's header row now
+  // correctly extends headerEnd too, but stays undiscovered for a SEPARATE,
+  // deeper reason this fix does not touch: ODL's own text layer returns
+  // literally zero characters (`kids: []`) for that table's entire real 2nd
+  // header tier (columns 6-17, confirmed against the raw ODL JSON) — a
+  // genuine upstream extraction loss, not a labeling-order bug, so its
+  // surviving 5 real column labels (EQUIP NO/LOCATION/SERVICE/MANUFACTURER/
+  // MODEL) alone never clear any kind's vocabulary bar. `headerCandidateChecked`
+  // tracks "have we already reached the first non-blank, non-grouped,
+  // full-coverage row" regardless of its own row index, so the same
+  // one-shot vocab tie-break applies wherever that row actually lands.
   let headerEnd = bodyStart;
+  let headerCandidateChecked = false;
   for (let r = bodyStart; r < R; r++) {
     const ownCells = new Set<ODLTableCell>();
     for (let c = 0; c < C; c++) {
@@ -6730,7 +6774,8 @@ export function scheduleTableFromODL(
     const grouped = [...ownCells].some((cl) => (cl["column span"] || 1) > 1 || (cl["row span"] || 1) > 1);
     const fullCoverage = ownCells.size >= C;
     if (grouped || !fullCoverage) { headerEnd = r + 1; continue; }
-    if (r === bodyStart) {
+    if (!headerCandidateChecked) {
+      headerCandidateChecked = true;
       const texts = [...ownCells].map(odlCellText).filter(Boolean);
       const vocabHits = texts.filter((s) => headerLabels(s, ALL_HEADER_WORDS_ARR).length > 0).length;
       if (texts.length && vocabHits / texts.length >= 0.4) { headerEnd = r + 1; continue; }
@@ -6808,6 +6853,36 @@ export function scheduleTableFromODL(
   if (kind === "unknown") return null;
   const titleText = titleCell ? odlCellText(titleCell) : "";
   if (kind === "finish" && titleText && isNonFinishSchedule(titleText)) return null;
+
+  // A real, standard cross-firm MEP title — "…CONNECTION SCHEDULE" (electrical
+  // OR mechanical) — names a table that cross-REFERENCES equipment tags a
+  // DEDICATED per-category schedule already defines elsewhere (a diffuser
+  // schedule, a condensing-unit schedule, …), carrying only hookup data
+  // (LOCATION/VOLTAGE/VA/MCA/MOCP/CIRCUIT NUMBER), never a catalog identity
+  // column of its own — structurally this file's own vocabulary-free
+  // "reference" kind (sheetgraph.ts's fourth table kind), not a second,
+  // competing definition of the same equipment. Left classified "equipment",
+  // every tag it cross-references becomes a real SECOND schedule row for
+  // that same key — measured live, this exact regression, on baker-county-
+  // eoc-bidset.pdf#60's own real MECHANICAL EQUIPMENT CONNECTION SCHEDULE:
+  // once its header row started clearing the vocabulary bar (the headerEnd
+  // fix above), RTU-1/RTU-2/ERV-01/FCU-1/FCU-2/EWH-1/EWH-2 — every one of
+  // them already uniquely, correctly resolved via their own dedicated
+  // schedule — started throwing a real "N schedule rows carry the key"
+  // ambiguity against themselves. MODEL/MANUFACTURER absence is the
+  // discriminator, deliberately narrower than "no DESCRIPTION-ish word
+  // anywhere" — a real cross-reference row routinely carries its own plain-
+  // language "EQUIPMENT DESCRIPTION" column (this exact table's own real
+  // header) naming WHICH equipment it hooks up, without that making it a
+  // catalog definition. MODEL and MANUFACTURER specifically are what a
+  // genuine per-item catalog schedule always states for its own row to mean
+  // anything (an actual purchasable product); a pure connection cross-
+  // reference never does, regardless of how descriptive its other prose
+  // columns read.
+  if (kind === "equipment" && /\bCONNECTION\b/.test(titleText) &&
+      !headers.some((h) => headerLabel(h, ["MODEL", "MANUFACTURER"]))) {
+    kind = "reference";
+  }
 
   // room-finish only: resolveTag/floorTagFor look up a row's surface cells
   // by EXACT canonical word ("FLOOR", "NORTH"…, surfaceRank/SURFACE_WORDS)

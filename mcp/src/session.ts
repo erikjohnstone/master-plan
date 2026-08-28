@@ -4683,6 +4683,41 @@ export class Session {
             touchedSheets.add(sheetKey);
             recovered++;
           }
+        } else if (built.kind === "reference") {
+          // "reference"-kind rows get the SAME collision guard buildSheetGraph's
+          // own pass 2c already applies (sheetgraph.ts: "a 'reference'-kind row
+          // that collides, by real row key, with an established finish/
+          // equipment/room-finish row ANYWHERE else in the graph is dropped as
+          // noise") — but pass 2c only ever runs INSIDE buildSheetGraph, before
+          // this post-hoc ODL pass exists, so a reference table ODL recovers
+          // here would otherwise skip that guard entirely. A real cross-
+          // reference/connection schedule (scheduleTableFromODL's own
+          // CONNECTION-title reclassification, above) names tags a DEDICATED
+          // per-category schedule already defines — left unfiltered, sweeping
+          // any one of those tags hits sweepScheduleRow's own real "N schedule
+          // rows carry the key" ambiguity against its own already-correct
+          // resolution. Measured live: baker-county-eoc-bidset.pdf#60's own
+          // MECHANICAL EQUIPMENT CONNECTION SCHEDULE, recovered by the same
+          // session's headerEnd fix, cross-references RTU-1/RTU-2/ERV-01/
+          // FCU-1/FCU-2/EWH-1/EWH-2 — every one already uniquely resolved via
+          // its own dedicated schedule elsewhere on the same sheet.
+          // Same normalization sheetgraph.ts's own pass 2c uses for this exact
+          // comparison (its own module-private `norm`, not exported) —
+          // trim+uppercase, no whitespace collapse, kept identical on purpose.
+          const keyNorm = (k: string) => (k || "").trim().toUpperCase();
+          const established = new Set<string>();
+          for (const t of g.tables) if (t.kind !== "reference") for (const r of t.rows) established.add(keyNorm(r.key));
+          const kept = built.rows.filter((r) => !established.has(keyNorm(r.key)));
+          if (kept.length) {
+            built.rows = kept;
+            g.tables.push(built);
+            touchedSheets.add(sheetKey);
+            added++;
+          }
+          // else: EVERY row collided with an already-established tag — this
+          // table added nothing this graph doesn't already know, so it's
+          // simply not appended (never a silent data loss: every one of its
+          // tags already has a real, resolvable row elsewhere).
         } else {
           // No existing alternative to compare against, so nothing to
           // reconcile against — appended as-is. A FEW rows sharing one
