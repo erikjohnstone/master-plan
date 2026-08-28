@@ -22,8 +22,12 @@ function makeCtx(overrides: Record<string, unknown> = {}) {
     uppFor: (k: string) => (k === "plan.pdf" ? 0.02 : null),
     detectedLabel: () => "",
     readSheetText: async () => [{ text: "RM 204", x: 0.4, y: 0.5 }],
-    readSchedule: async () => [{ finish_tag: "CPT-1", section: "FLOORING", category: "floor", description: "CARPET", manufacturer: "", style: "", spec_color: "", size: "", suggested: true }],
+    readSchedule: async () => ({
+      source: "region_parse",
+      rows: [{ finish_tag: "CPT-1", section: "FLOORING", category: "floor", description: "CARPET", manufacturer: "", style: "", spec_color: "", size: "", suggested: true }],
+    }),
     viewRegion: async () => ({ image_data_url: "data:image/png;base64,AAAA", width: 100, height: 80 }),
+    classifySymbol: async () => ({ classification: "gate valve", confidence: 0.9, reasoning: "bowtie body with a straight stem" }),
     oneClick: async (sheet: string, x: number, y: number) => {
       calls.oneClick.push([sheet, x, y]);
       return { verts_norm: [[0.1, 0.1], [0.3, 0.1], [0.3, 0.3], [0.1, 0.3]], area_sf: 200, perimeter_lf: 60, seed_norm: [x, y] };
@@ -92,6 +96,97 @@ test("one_click scale gate: uncalibrated sheet refuses with the shared gate text
   assert.equal(calls.oneClick.length, 0);          // the engine never even ran
 });
 
+// read_schedule (cross-phase fix — the read_schedule/sheetgraph bridge):
+// executeAgentTool's own dispatch/shaping layer, exercised against a stubbed
+// ctx.readSchedule — the exact discriminated {source,...} shape agentReadSchedule
+// (TakeoffCanvas.jsx) produces, without needing a real canvas/pdf.js.
+test("read_schedule: region parse non-empty — rows pass through unchanged, source: region_parse", async () => {
+  const { ctx } = makeCtx();   // default stub returns source: "region_parse"
+  const out = await executeAgentTool(ctx, "read_schedule", { sheet: "plan.pdf", region: { x0: 0, y0: 0, x1: 1, y1: 1 } });
+  assert.equal(out.source, "region_parse");
+  assert.equal(out.rows.length, 1);
+  assert.equal(out.rows[0].finish_tag, "CPT-1");
+  assert.equal(out.table, undefined);
+});
+
+test("read_schedule: region parse empty, sheet_graph fallback hits — table metadata present", async () => {
+  const { ctx } = makeCtx({
+    readSchedule: async () => ({
+      source: "sheet_graph",
+      table: { sheet: "plan.pdf", kind: "equipment", title: "ELECTRIC BASEBOARD HEATER SCHEDULE", headers: ["ID", "MANUFACTURER"], region_norm: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 }, coverage: 0.94 },
+      rows: [{ key: "EBB-6", cells: { MANUFACTURER: "QMARK" } }],
+    }),
+  });
+  const out = await executeAgentTool(ctx, "read_schedule", { sheet: "plan.pdf", region: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
+  assert.equal(out.source, "sheet_graph");
+  assert.equal(out.table.title, "ELECTRIC BASEBOARD HEATER SCHEDULE");
+  assert.equal(out.rows[0].key, "EBB-6");
+  assert.match(out.note, /whole-set sheet graph/);
+});
+
+test("read_schedule: neither path finds anything — the note names find_schedule and sheet_graph", async () => {
+  const { ctx } = makeCtx({ readSchedule: async () => ({ source: "none", rows: [], sheet_open: true }) });
+  const out = await executeAgentTool(ctx, "read_schedule", { sheet: "plan.pdf", region: { x0: 0, y0: 0, x1: 0.01, y1: 0.01 } });
+  assert.equal(out.source, "none");
+  assert.deepEqual(out.rows, []);
+  assert.match(out.note, /find_schedule/);
+  assert.match(out.note, /sheet_graph/);
+});
+
+test("read_schedule: sheet not open no longer hard-errors — the fallback still runs (Phase 1 parity)", async () => {
+  // Before this fix, read_schedule refused up front on !ctx.sheetDims(sheet).
+  // Now the gate lives only inside the region-parse path, so a sheet that
+  // isn't open still gets a real answer (or a real, honestly-worded miss)
+  // from the sheet_graph fallback.
+  const { ctx } = makeCtx({
+    sheetDims: () => null,   // sheet not open on the canvas
+    readSchedule: async () => ({
+      source: "sheet_graph",
+      table: { sheet: "other.pdf#3", kind: "finish", title: "FAN SCHEDULE", headers: ["ID", "DESCRIPTION"], region_norm: { x0: 0.2, y0: 0.2, x1: 0.3, y1: 0.3 }, coverage: 0.8 },
+      rows: [{ key: "EF-1", cells: { DESCRIPTION: "PANASONIC" } }],
+    }),
+  });
+  const out = await executeAgentTool(ctx, "read_schedule", { sheet: "other.pdf#3", region: { x0: 0.2, y0: 0.2, x1: 0.3, y1: 0.3 } });
+  assert.equal(out.error, undefined, "no up-front sheetDims gate for read_schedule");
+  assert.equal(out.source, "sheet_graph");
+  assert.equal(out.rows[0].key, "EF-1");
+});
+
+test("read_schedule: neither path finds anything AND the sheet was never open — the note says so", async () => {
+  const { ctx } = makeCtx({ readSchedule: async () => ({ source: "none", rows: [], sheet_open: false }) });
+  const out = await executeAgentTool(ctx, "read_schedule", { sheet: "plan.pdf", region: { x0: 0, y0: 0, x1: 0.01, y1: 0.01 } });
+  assert.match(out.note, /isn't open on the canvas/);
+});
+
+// classify_symbol (maturity plan Phase 3, #HVAC-4): dispatch-layer tests
+// against a stubbed ctx.classifySymbol — the real prompt/parse plumbing
+// (classifySymbolPrompt/parseClassifyResponse) is unit-tested directly in
+// ai.test.ts; this only exercises executeAgentTool's own gate/pass-through.
+test("classify_symbol: a real classification passes through unchanged", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "classify_symbol", { sheet: "plan.pdf", region: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
+  assert.deepEqual(out, { classification: "gate valve", confidence: 0.9, reasoning: "bowtie body with a straight stem" });
+});
+
+test("classify_symbol: sheet not open on the canvas refuses with a named reason", async () => {
+  const { ctx } = makeCtx({ sheetDims: () => null });
+  const out = await executeAgentTool(ctx, "classify_symbol", { sheet: "plan.pdf", region: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
+  assert.match(out.error, /isn't open on the canvas/);
+});
+
+test("classify_symbol: no vision model configured — the ctx's own refusal passes through, not swallowed", async () => {
+  const { ctx } = makeCtx({ classifySymbol: async () => ({ error: "No vision model configured — open AI settings first." }) });
+  const out = await executeAgentTool(ctx, "classify_symbol", { sheet: "plan.pdf", region: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
+  assert.match(out.error, /No vision model configured/);
+});
+
+test("classify_symbol: a malformed model reply refuses rather than guessing, and surfaces the raw text", async () => {
+  const { ctx } = makeCtx({ classifySymbol: async () => ({ error: "The vision model's reply wasn't in the required shape.", raw: "not json" }) });
+  const out = await executeAgentTool(ctx, "classify_symbol", { sheet: "plan.pdf", region: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
+  assert.match(out.error, /wasn't in the required shape/);
+  assert.equal(out.raw, "not json");
+});
+
 test("propose_shapes: evidence whitelist — junk keys dropped, strings truncated, uncited rejected", async () => {
   const { ctx, calls } = makeCtx();
   const long = "X".repeat(500);
@@ -147,6 +242,106 @@ test("a capability throw becomes an error result (the loop must never crash)", a
   const { ctx } = makeCtx({ readSheetText: async () => { throw new Error("text layer exploded"); } });
   const out = await executeAgentTool(ctx, "read_sheet_text", { sheet: "plan.pdf" });
   assert.match(out.error, /read_sheet_text failed: text layer exploded/);
+});
+
+// match_reference_symbol (accuracy-hardening plan Phase 0) — executeAgentTool's
+// own dispatch/shaping layer only; matchAgainstLibrary's own logic is covered
+// directly by mcp/test/tools.test.ts's real end-to-end tests.
+test("match_reference_symbol: sheet not open on the canvas refuses with a named reason", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "match_reference_symbol", { sheet: "other.pdf" });
+  assert.match(out.error, /isn't open on the canvas/);
+});
+
+test("match_reference_symbol: a valid call passes names through and returns the ctx's own result unchanged", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    matchReferenceSymbol: async (sheet: string, opts: unknown) => { calls.push([sheet, opts]); return { shapes: [{ name: "gate valve", found: 2, matches: [], withheld: [], complete: true }] }; },
+  });
+  const out = await executeAgentTool(ctx, "match_reference_symbol", { sheet: "plan.pdf", names: ["gate valve"] });
+  assert.equal(out.shapes[0].name, "gate valve");
+  assert.deepEqual(calls[0], ["plan.pdf", { names: ["gate valve"] }]);
+});
+
+// find_legend_symbols (accuracy-hardening plan Phase 1) — executeAgentTool's
+// own dispatch/shaping layer only; findLegendGlyphs' own logic is covered
+// directly by web/test/legendlearn.test.ts and mcp/test/tools.test.ts's real
+// end-to-end tests.
+test("find_legend_symbols: sheet not open on the canvas refuses with a named reason", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "find_legend_symbols", { sheet: "other.pdf" });
+  assert.match(out.error, /isn't open on the canvas/);
+});
+
+test("find_legend_symbols: a valid call passes through to the canvas's own detector unchanged", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    findLegendSymbols: async (sheet: string) => { calls.push(sheet); return { glyphs: [{ caption: "GATE VALVE", rect_norm: [0.1, 0.1, 0.2, 0.2], segments: 7 }] }; },
+  });
+  const out = await executeAgentTool(ctx, "find_legend_symbols", { sheet: "plan.pdf" });
+  assert.equal(out.glyphs[0].caption, "GATE VALVE");
+  assert.deepEqual(calls, ["plan.pdf"]);
+});
+
+// sweep_inline_motif (accuracy-hardening plan Phase 4) — executeAgentTool's
+// own dispatch/shaping layer only; fingerprintInlineMotif/sweepInlineMotif's
+// own logic is covered directly by web/test/inlinemotif.test.ts and
+// mcp/test/tools.test.ts's real end-to-end tests.
+test("sweep_inline_motif: sheet not open on the canvas refuses with a named reason", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "sweep_inline_motif", { sheet: "other.pdf", seed_rect_norm: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
+  assert.match(out.error, /isn't open on the canvas/);
+});
+
+test("sweep_inline_motif: a valid call passes the clamped region through to the canvas's own sweep unchanged", async () => {
+  const calls: [string, unknown][] = [];
+  const { ctx } = makeCtx({
+    sweepInlineMotif: async (sheet: string, rect: unknown) => { calls.push([sheet, rect]); return { found: 1, matches: [{ at: [0.3, 0.3], w_ft: 1.1, h_ft: 0.8, size_score: 0.9 }], withheld: [], candidates_considered: 2 }; },
+  });
+  const out = await executeAgentTool(ctx, "sweep_inline_motif", { sheet: "plan.pdf", seed_rect_norm: { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 } });
+  assert.equal(out.found, 1);
+  assert.equal(out.matches[0].size_score, 0.9);
+  assert.deepEqual(calls[0][0], "plan.pdf");
+  assert.deepEqual(calls[0][1], { x0: 0.1, y0: 0.1, x1: 0.2, y1: 0.2 });
+});
+
+// trace_connectivity (maturity plan Phase 4) — executeAgentTool's own
+// dispatch/shaping layer only; buildMepGraph/traceConnectivity's own logic
+// is covered directly by web/test/mepconnectivity.test.ts.
+test("trace_connectivity: sheet not open on the canvas refuses with a named reason", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "trace_connectivity", {
+    sheet: "other.pdf", from_norm: [0.1, 0.1], equipment: [{ id: "AHU-1", at_norm: [0.5, 0.5] }],
+  });
+  assert.match(out.error, /isn't open on the canvas/);
+});
+
+test("trace_connectivity: a malformed from_norm is a named error, not a crash", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "trace_connectivity", {
+    sheet: "plan.pdf", from_norm: [0.1], equipment: [{ id: "AHU-1", at_norm: [0.5, 0.5] }],
+  });
+  assert.match(out.error, /from_norm/);
+});
+
+test("trace_connectivity: a valid call reshapes at_norm → at and passes through to the canvas's own tracer unchanged", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    traceConnectivity: async (sheet: string, opts: unknown) => { calls.push([sheet, opts]); return { status: "reached", reached_equipment: { id: "AHU-1", at: [0.5, 0.5] }, layer_signal: "none", confidence: 0.85, factors: ["layer-unclassified"] }; },
+  });
+  const out = await executeAgentTool(ctx, "trace_connectivity", {
+    sheet: "plan.pdf", from_norm: [0.1, 0.2],
+    equipment: [{ id: "AHU-1", at_norm: [0.5, 0.5] }],
+    fittings: [{ at_norm: [0.3, 0.3] }],
+    bridge_ft: 3,
+  });
+  assert.equal(out.status, "reached");
+  assert.deepEqual(calls[0], ["plan.pdf", {
+    from: [0.1, 0.2],
+    equipment: [{ id: "AHU-1", at: [0.5, 0.5], label: undefined }],
+    fittings: [{ at: [0.3, 0.3] }],
+    maxHops: undefined, seedTolFt: undefined, bridgeFt: 3,
+  }]);
 });
 
 test("pickAgentEvidence: null-safe, array-safe, whitelist-only", () => {

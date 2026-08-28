@@ -80,3 +80,17 @@ keys/<id>.tags.csv   tag,is_room           is_room ∈ 1 | 0
 A blank `code` means the schedule states none there, and the parser must not invent one. A room the schedule lists **twice** with different finishes cannot go in a key at all—there is no single right answer, and refusing is the correct behavior; leave it out of the cell key and keep it in the tags key.
 
 Every fix in this lane ships with a fixture in `web/test/sheetgraph.test.ts` that reproduces the real failure. Fixtures are vendor-neutral by house rule: invented codes and `VENDOR-A`-style names, never a real manufacturer.
+
+## A third metric: row-to-symbol linking (HVAC/BAS maturity plan, Phase 1)
+
+Cell accuracy and tag classification both ask "did the text/table reasoning get the right answer." Neither asks whether a real schedule-row tag is actually **findable as drawn geometry** on a plan sheet — the question `sweep_schedule_row` exists to answer, and a genuinely different failure mode than a wrong cell.
+
+```
+keys/<id>.rowsym.csv   tag,expect_status,note   expect_status ∈ resolved | refused
+```
+
+`expect_status` is authored by rendering the real sheet and looking at it — never by trusting `sweep_schedule_row`'s own output as its own ground truth (that would measure nothing, the same lesson the cell/tag keys already state). `resolved` means "a human confirmed a real device symbol is drawn here"; if the tool then refuses, that is scored as a real miss, not folded into the key. A `refused`-expected row (nothing drawn at all) is not scored either way — refusing correctly is table stakes, not a metric input.
+
+First real result (`bessemer`, 2026-08-26): **73.3% recall (11/15)**. The 4 misses are real and named, not noise: `SR-1`/`SR-2`/`TG-1`/`TG-2` (registers/transfer grilles) ARE drawn — confirmed by rendering the sheet — but as a hatched mark drawn INLINE with the ductwork itself, not a standalone isolated glyph like the electric heaters' rectangle-plus-leader-line convention. Today's geometric fingerprint approach anchors a standalone symbol cleanly and does not yet isolate one that's structurally part of a longer duct polyline — a real, disclosed gap for the symbol-taxonomy/reference-fingerprint work, not a scoring artifact.
+
+The corpus this session added 3 more real sets (`itd-d1-lab`, `federal-mech`, `weld-county-permit` — chosen for real drawn-valve diversity, VAV/AHU density, and RTU coverage respectively) plus one synthetically-flattened raster variant of a real sheet (`itd-d1-lab-raster`, via `mcp/scripts/make-corpus-raster-variant.mjs`) — see the corpus's own `README.md` for exactly how each was sourced and its redistribution caveats. None of the 3 new real sets has a cell/tag/rowsym key yet; they report a real, honest "no key yet" rather than a score.

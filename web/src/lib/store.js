@@ -6,7 +6,18 @@
 // interface is all the canvas needs, so a hosted backend can be dropped in later
 // by implementing the same shape (see `apiStore` stub at the bottom).
 //
-//   listSheets()              -> [{ name }]                (the loaded plan PDFs)
+//   listSheets()              -> [{ name, rev? }]           (the loaded plan PDFs;
+//                                                             `rev` is localStore-only —
+//                                                             CO-1's per-file revision
+//                                                             counter, read by textIndex.js
+//                                                             to invalidate its cache on a
+//                                                             genuine content change without
+//                                                             re-hashing bytes. A backend
+//                                                             that can't supply it (cloudStore
+//                                                             today) omits the field; callers
+//                                                             must treat a missing rev as
+//                                                             "always a cache miss," never as
+//                                                             an error.)
 //   loadPdfData(name)         -> Uint8Array                (bytes for pdf.js)
 //   loadAnnotations()         -> { conditions, shapes, ... }
 //   saveAnnotations(payload)  -> Promise<void>
@@ -189,12 +200,38 @@ async function sha256Hex(bytes) {
 }
 
 export const localStore = {
+  // `rev` (CO-1's per-file revision counter) rides along for callers that
+  // need to tell "this file's bytes are unchanged since I last looked" from
+  // "this is new or different" WITHOUT re-hashing or re-reading a byte of
+  // content — the text index (textIndex.js) is exactly that caller. A
+  // cursor, not getAll(), on purpose: getAll() would structurally clone
+  // every file's FULL bytes into memory simultaneously just to read one
+  // small field off each record, which is the wrong cost model for a call
+  // meant to run on every plan-set load, including large ones. A cursor
+  // still deserializes one record's bytes per step, but only one at a time
+  // — `v.bytes` is never referenced here, so each one is eligible for GC as
+  // soon as the cursor moves past it, not held for the life of the call.
   async listSheets() {
-    const names = await withDb((db) => tx(db, PDF_STORE, "readonly", (os) => os.getAllKeys()));
-    // preserve insertion order (IndexedDB getAllKeys sorts by key; we keep the
+    const recs = await withDb((db) => new Promise((resolve, reject) => {
+      const t = db.transaction(PDF_STORE, "readonly");
+      const os = t.objectStore(PDF_STORE);
+      const out = [];
+      const req = os.openCursor();
+      req.onsuccess = () => {
+        const cur = req.result;
+        if (!cur) return;
+        const v = cur.value;
+        out.push({ name: v.name, rev: v.rev || 1 });
+        cur.continue();
+      };
+      t.oncomplete = () => resolve(out);
+      t.onerror = () => reject(t.error);
+      t.onabort = () => reject(t.error);
+    }));
+    // preserve insertion order (IndexedDB cursors walk key order; we keep the
     // saved order from annotations.sheet_tabs at the canvas layer, so name-sort
     // here is fine for the gallery)
-    return (names || []).map((name) => ({ name }));
+    return recs;
   },
 
   async loadPdfData(name) {
@@ -475,6 +512,24 @@ export async function metaDeletePrefix(prefix) {
     const req = os.openKeyCursor(IDBKeyRange.bound(prefix, prefix + "\uffff", false, true));
     req.onsuccess = () => { const c = req.result; if (c) { os.delete(c.primaryKey); n++; c.continue(); } };
     t.oncomplete = () => resolve(n);
+    t.onerror = () => reject(t.error);
+    t.onabort = () => reject(t.error);
+  }));
+}
+/** Every {key, value} whose key starts with `prefix` \u2014 the read-side mirror
+ *  of metaDeletePrefix, same bound-range prefix scan. Introduced for
+ *  runHistory.js (maturity plan Phase 2): listing persisted Agent runs
+ *  without a second, redundant index. @param {string} prefix
+ *  @returns {Promise<Array<{key: string, value: any}>>} */
+export async function metaListPrefix(prefix) {
+  if (!prefix) return [];
+  return withDb((db) => new Promise((resolve, reject) => {
+    const t = db.transaction(META_STORE, "readonly");
+    const os = t.objectStore(META_STORE);
+    const out = [];
+    const req = os.openCursor(IDBKeyRange.bound(prefix, prefix + "\uffff", false, true));
+    req.onsuccess = () => { const c = req.result; if (c) { out.push({ key: c.primaryKey, value: c.value }); c.continue(); } };
+    t.oncomplete = () => resolve(out);
     t.onerror = () => reject(t.error);
     t.onabort = () => reject(t.error);
   }));

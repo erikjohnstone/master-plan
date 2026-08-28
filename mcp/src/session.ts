@@ -8,7 +8,50 @@ import path from "node:path";
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, type SheetGraph, type SheetSpans, type Bbox } from "../../web/src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, type SheetGraph, type SheetSpans, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
+import { runOpenDataLoaderPages } from "./opendataloader.ts";
+
+/** Overlap fraction relative to the SMALLER of the two boxes — robust to
+ * one extraction's own region being tighter/looser than the other's (ODL's
+ * own table bbox vs this file's own geometric band need not agree pixel-
+ * for-pixel to clearly be "the same real table"). */
+function bboxOverlapRatio(a: Bbox, b: Bbox): number {
+  const ix0 = Math.max(a[0], b[0]), iy0 = Math.max(a[1], b[1]);
+  const ix1 = Math.min(a[2], b[2]), iy1 = Math.min(a[3], b[3]);
+  const iw = Math.max(0, ix1 - ix0), ih = Math.max(0, iy1 - iy0);
+  const inter = iw * ih;
+  if (!inter) return 0;
+  const areaA = Math.max(1, (a[2] - a[0]) * (a[3] - a[1]));
+  const areaB = Math.max(1, (b[2] - b[0]) * (b[3] - b[1]));
+  return inter / Math.min(areaA, areaB);
+}
+
+/** Finds an existing table on the SAME sheet whose region substantially
+ * overlaps `region` — the ODL-enhancement pass's own match-the-same-real-
+ * table signal (region overlap, not title text: a real table with no
+ * distinct title row would title-match nothing and get wrongly appended as
+ * a duplicate — see enhanceTablesWithODL's own comment). */
+function matchByRegionOverlap(tables: ScheduleTable[], sheetKey: string, region: Bbox): number {
+  let best = -1, bestRatio = 0.4; // the bar itself, not just a running max — no match under 40% overlap
+  for (let i = 0; i < tables.length; i++) {
+    if (tables[i].sheet !== sheetKey) continue;
+    const r = bboxOverlapRatio(tables[i].region, region);
+    if (r > bestRatio) { bestRatio = r; best = i; }
+  }
+  return best;
+}
+
+/** How many rows share a key with at least one other row — a real schedule
+ * never legitimately repeats an unqualified key, so any rise in this count
+ * from one extraction of the same table to another is real evidence of a
+ * misparse (a row split/duplicated), not real data. */
+function duplicateKeyCount(t: ScheduleTable): number {
+  const seen = new Map<string, number>();
+  for (const r of t.rows) seen.set(r.key, (seen.get(r.key) || 0) + 1);
+  let dupes = 0;
+  for (const n of seen.values()) if (n > 1) dupes += n - 1;
+  return dupes;
+}
 import { UserError, round1, round2 } from "./format.ts";
 // Condition twins — the inheritance rule, shared with the canvas so a headless session and
 // the app can never disagree about what a twin holds (web/test/variants.test.ts).
@@ -29,7 +72,7 @@ import { traceConfidence, floodSignals, type ConfidenceInput } from "../../web/s
 // The canvas's raster-mask engine (#154), imported as-is — the scanned-sheet
 // fallback is the SAME Bradley-threshold module the canvas floods with, so an
 // agent's raster trace and a click's raster trace can never binarize differently.
-import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS } from "../../web/src/lib/rastermask.ts";
+import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, RASTER_SOLO_IMG_MIN_FRAC } from "../../web/src/lib/rastermask.ts";
 // floodAtSeed is the ONE flood entry point every non-canvas surface measures
 // through (RFC #60 / PR #179, audit A6): floodRegionSealed with the sheet's own
 // scale-derived arguments — seal radii up to a door width, door-swing wedge
@@ -38,7 +81,43 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS }
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView } from "../../web/src/lib/symbolsweep.ts";
+// Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
+// (hand-digitized real HVAC valve/damper geometry) had a real engine
+// (matchAgainstLibrary above) with ZERO live callers anywhere in this
+// codebase before this tool — confirmed by grep, the only prior caller was
+// its own test file. This wires it in.
+import { HVAC_REF_SHAPES } from "../../web/src/lib/hvacRefShapes.ts";
+// Accuracy-hardening plan Phase 1 (pivoted after an explicit ask: "are we
+// learning symbols as we go, or scanning the legend once?") — no single
+// national HVAC symbol standard exists, so a bigger FIXED reference-shape
+// library never scales to every firm's own house legend. findLegendGlyphs
+// does the new work only (cluster a legend sheet's own vector segments into
+// compact glyphs, pair each with its own caption); the caller feeds each
+// result straight into symbol_sweep (scope: "set") exactly as if a human
+// had marqueed it — the already-tested sweep engine is reused untouched.
+import { findLegendGlyphs, type LegendSpan } from "../../web/src/lib/legendlearn.ts";
+// Accuracy-hardening plan Phase 4 — a register/grille mark embedded within a
+// tapered duct run has no independent whole-shape perimeter of its own
+// (symbolsweep.ts's own matchSymbol whole-shape fingerprint measurably
+// under-scores real siblings of the SAME real symbol drawn at a different
+// CFM-driven physical size — see inlinemotif.ts's own header comment for the
+// full real measurement). fingerprintInlineMotif/sweepInlineMotif match on
+// the hatch fill's own real-world size/pitch instead of exact segment count.
+import { fingerprintInlineMotif, sweepInlineMotif, corroborateInlineMotif, classifyInlineMotifMatches, type InlineMotifFingerprint } from "../../web/src/lib/inlinemotif.ts";
+// MEP connectivity tracing (maturity plan Phase 4) — buildMepGraph reuses
+// this project's own vendored JTS port for robust noding (see the module's
+// own header comment); traceConnectivity is the refusal-honest query, same
+// doctrine as sweep_schedule_row/resolve_tag above.
+import { buildMepGraph, traceConnectivity as traceMepConnectivity, type MepGraph, type TraceResult as MepTraceResult } from "../../web/src/lib/mepconnectivity.ts";
+import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
+// Accuracy plan Phase 2 — on an unlayered/weakly-layered sheet, a layer-role
+// exclusion alone can't tell architectural wall ink apart from real MEP
+// linework (there's no layer to exclude by). networkWallSegs is
+// wallnetwork.ts's own geometric (layer-independent) wall-vouching, reused
+// here exactly as netroom.js's room detector already uses it, as a fallback
+// exclusion source for ensureMepGraph below.
+import { networkWallSegs } from "../../web/src/lib/wallnetwork.ts";
 import { labelPlacements, type PlacementLabel } from "../../web/src/lib/symbollabels.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
@@ -232,6 +311,15 @@ export interface ShapeOrigin {
       sheet: string;
       role?: string;
       row?: { sheet: string; key: string; table: string };
+      /** schedule_row only: whether the anchor's fingerprint was corroborated
+       * before commit, and against what. "same_tag" = the row's own tag
+       * recurred (the strong case); "sibling_tag" = the tag is drawn exactly
+       * once, so a DIFFERENT row's own occurrence in the same schedule table
+       * corroborated it instead (corroborated_tag names which) — real but
+       * weaker evidence than a same-tag recurrence. */
+      corroborated?: boolean;
+      corroborated_via?: "same_tag" | "sibling_tag";
+      corroborated_tag?: string;
     };
   };
 }
@@ -401,6 +489,28 @@ interface SheetState {
   /** the sheet's Optional Content layers (#85), classified — built with geo;
    * [] = no layers survived export (the silent, invisible fallback) */
   layers?: LayerInfo[];
+  /** MEP connectivity graph (Phase 4), built once and cached like `mask` —
+   * buildMepGraph is real, measured work (up to ~30s on a dense real sheet,
+   * a disclosed, not-yet-profiled cost — see the known-gaps ledger), so a
+   * scenario that traces several seeds on the same sheet must not pay it
+   * twice. undefined = not built yet; null = the sheet has zero vector
+   * linework (mirrors `mask`'s own null convention) OR buildMepGraph's own
+   * JTS noding failed even after every retry grid (see mepGraphNodingError,
+   * which distinguishes the two null cases for traceConnectivity's own
+   * refusal reason). */
+  mepGraph?: MepGraph | null;
+  /** Set alongside a null mepGraph exactly when the null came from a caught
+   * buildMepGraph noding failure (real, corpus-found — a densely hatched
+   * real sheet, e.g. a roof plan's crosshatched insulation crickets, can
+   * defeat JTS's noding even after buildMepGraph's own coarsen-and-retry
+   * mitigation), never from a sheet that legitimately has zero vector
+   * linework. Mirrors the identical, already-shipped fix TakeoffCanvas.jsx's
+   * agentFindLegendSymbols carries for findLegendGlyphs' own use of the same
+   * noding — trace_connectivity itself never got the same treatment until
+   * now, so a real seed on a real dense sheet crashed the whole tool call
+   * (isError:true, a bare JTS coordinate dump, not the tool's own documented
+   * TraceResult shape) instead of a clean, doctrine-consistent refusal. */
+  mepGraphNodingError?: string;
 }
 
 /** sheet_context decimation defaults (issue #29) — declared and stable, never
@@ -1038,6 +1148,8 @@ export class Session {
     if (s.upp !== upp) {
       s.mask = undefined;
       s.rmask = undefined;
+      s.mepGraph = undefined;   // the noding grid is feet-true via mppf, same discipline as the vector mask
+      s.mepGraphNodingError = undefined;   // a rescale changes the noding grid — a prior noding failure at the old grid must not stick after a rebuild that may now succeed
     }
     s.upp = upp;
     // the tool reply keeps this session's source vocabulary; the stored value
@@ -1965,14 +2077,22 @@ export class Session {
    *
    * The identity rule is the annotated-device drafting pattern: a device is
    * drawn with its mark tag and a value under it ("S1" over "200" — CFM, GPM,
-   * a fixture count). Tag text WITH a paired value counts; a tag inside a
-   * schedule table's own region is a row label and is excluded; everything
-   * else is WITHHELD with a reason and coordinates — a tag amid linework but
-   * unvalued may be a real device (look), a bare tag is probably a note. A
-   * mark drawn ON its marker with no value is sweep_schedule_row's family,
-   * not this one. Refusal-honest throughout: scans refuse (no text layer),
-   * a set with no mark-shaped schedule rows refuses unless the marks are
-   * stated, and non-plan sheets are skipped with the role that excused them. */
+   * a fixture count) OR beside it in a two-cell box row ("CD-1 | 85" — real,
+   * found live on the baker-county-eoc corpus: a boxed callout with a size
+   * on its own top row and TAG/VALUE side by side on the row below, same
+   * baseline, real MEASURED gap ~1.1x the text height on every instance
+   * checked). Both are real, common drafting conventions, not a guess —
+   * every previously-live-observed "withheld" real device on this exact
+   * corpus turned out to be this second, horizontal shape once rendered and
+   * looked at directly, not a genuinely unvalued tag. Tag text WITH a paired
+   * value (either direction) counts; a tag inside a schedule table's own
+   * region is a row label and is excluded; everything else is WITHHELD with
+   * a reason and coordinates — a tag amid linework but unvalued may be a
+   * real device (look), a bare tag is probably a note. A mark drawn ON its
+   * marker with no value is sweep_schedule_row's family, not this one.
+   * Refusal-honest throughout: scans refuse (no text layer), a set with no
+   * mark-shaped schedule rows refuses unless the marks are stated, and
+   * non-plan sheets are skipped with the role that excused them. */
   async countMarks(opts: { marks?: string[]; commit?: boolean } = {}) {
     const graph = await this.ensureGraph();
     if (!graph.available) {
@@ -2052,9 +2172,18 @@ export class Session {
           const cx = (sp.x0 + sp.x1) / 2, cy = (sp.y0 + sp.y1) / 2;
           const h = Math.max(sp.y1 - sp.y0, 6);
           if (regions.some((r) => cx >= r[0] && cx <= r[2] && cy >= r[1] && cy <= r[3])) { excludedInTables++; continue; }
+          // Two real, distinct pairing shapes (see the function's own header
+          // comment): a value stacked BELOW the tag, or a value beside it on
+          // the SAME baseline in a two-cell box row ("CD-1 | 85" — real,
+          // measured on the baker-county-eoc corpus: y0 identical to the
+          // pixel on every real instance checked, gap ~1.1x the text height
+          // — 1.5h is a real, generous-but-bounded margin over that, not a
+          // guess).
           const paired = values.find((v) =>
-            Math.abs((v.x0 + v.x1) / 2 - cx) <= Math.max(sp.x1 - sp.x0, 1.5 * h) &&
-            v.y0 >= sp.y1 - 0.4 * h && v.y0 <= sp.y1 + 2.4 * h);
+            (Math.abs((v.x0 + v.x1) / 2 - cx) <= Math.max(sp.x1 - sp.x0, 1.5 * h) &&
+             v.y0 >= sp.y1 - 0.4 * h && v.y0 <= sp.y1 + 2.4 * h) ||
+            (Math.abs(v.y0 - sp.y0) <= 0.3 * h &&
+             v.x0 >= sp.x1 - 0.2 * h && v.x0 - sp.x1 <= 1.5 * h));
           if (paired) {
             rec.counted.push({ at: [round1(cx), round1(cy)], value: paired.str.trim(), sheet: sh.key });
             counts[m] = (counts[m] || 0) + 1;
@@ -2187,20 +2316,10 @@ export class Session {
     return { committed: ids.length, shape_ids: ids, condition: c.finish_tag, ea_total };
   }
 
-  /** The seed→target size ratio for a cross-sheet sweep (#186): seed-sheet
-   * image px per target-sheet image px, which is exactly `upp_seed /
-   * upp_target` — both sheets' own committed scales, no search and no guess.
-   *
-   * `known: false` means at least one of the two sheets has no scale set. The
-   * sweep can still run at 1.0 (same-size drafting is the norm across the plan
-   * sheets of one set) but the caller MUST disclose the assumption, because an
-   * unknown ratio and a zero count together are indistinguishable from "the
-   * symbol isn't there" — the exact silent wrong answer #186 exists to kill. */
-  private sweepRatio(seed: SheetState, target: SheetState): { scale: number; known: boolean } {
-    if (seed.key === target.key) return { scale: 1, known: true };
-    if (seed.upp && target.upp) return { scale: seed.upp / target.upp, known: true };
-    return { scale: 1, known: false };
-  }
+  // sweepRatio (the seed→target size ratio for a cross-sheet sweep, #186) now
+  // lives as a shared pure function in symbolsweep.ts — same math, used by
+  // both this server and the browser's own port (the "canvas and MCP cannot
+  // disagree" doctrine). SheetState's `.upp` is exactly the shape it wants.
 
   /** The refusal that has to fire before a detail-seeded sweep runs blind. A
    * detail, legend, or schedule sheet is drawn at ITS own enlarged scale — a
@@ -2430,7 +2549,7 @@ export class Session {
         skipped.push({ sheet: sh.key, role, reason: "no vector linework (likely a scan) — symbol matching reads the drawn segments" });
         continue;
       }
-      const ratio = this.sweepRatio(s, sh);
+      const ratio = sweepRatio(s, sh);
       const t0 = process.hrtime.bigint();
       let res: SymbolMatchResult;
       try {
@@ -2546,6 +2665,244 @@ export class Session {
     };
   }
 
+  /** match_reference_symbol (accuracy-hardening plan Phase 0) — the
+   * deterministic reference-shape library, given a real, callable entry
+   * point for the first time. Every shape in `HVAC_REF_SHAPES` (hand-
+   * digitized real HVAC geometry, never scraped) is matched against this
+   * sheet's own drawn linework, at this sheet's own committed real-world
+   * scale — matchAgainstLibrary's own refusal (no committed scale) is
+   * never bypassed, only relayed as a UserError. `names` restricts which
+   * library shapes to check; omit to check all of them. */
+  async matchReferenceSymbol(name: string, opts: { names?: string[] } = {}) {
+    const s = this.sheet(name);
+    const geo = await this.ensureGeometry(s);
+    if (!geo.segs.length) {
+      throw new UserError("This sheet has no vector linework (likely a scan) — reference-shape matching reads the drawn segments; raster fallback not yet available in the MCP server.");
+    }
+    let library = HVAC_REF_SHAPES;
+    if (opts.names?.length) {
+      const wanted = new Set(opts.names.map((n) => n.trim().toLowerCase()));
+      library = HVAC_REF_SHAPES.filter((r) => wanted.has(r.name.toLowerCase()));
+      if (!library.length) {
+        throw new UserError(`No reference shape named any of ${JSON.stringify(opts.names)} — known shapes: ${HVAC_REF_SHAPES.map((r) => r.name).join(", ")}.`);
+      }
+    }
+    let results: ReturnType<typeof matchAgainstLibrary>;
+    try {
+      results = matchAgainstLibrary(geo.segs, library, s.upp, { lum: geo.lum });
+    } catch (e) {
+      // matchAgainstLibrary's own refusal (no committed scale) — relayed,
+      // never bypassed or silently defaulted.
+      throw new UserError(e instanceof Error ? e.message : String(e));
+    }
+    return {
+      sheet: s.key,
+      shapes: results.map((r) => ({
+        name: r.name,
+        found: r.result.matches.length,
+        matches: r.result.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])] as [number, number], score: m.score, rotation: m.rotation, mirrored: m.mirrored })),
+        withheld: r.result.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])] as [number, number], score: w.score, rotation: w.rotation, mirrored: w.mirrored, reason: w.reason })),
+        complete: r.result.complete,
+      })),
+    };
+  }
+
+  /** find_legend_symbols (accuracy-hardening plan Phase 1) — auto-detect
+   * every (glyph, caption) row on a legend sheet, real vector geometry
+   * clustered and paired with its own real caption text, no marqueeing.
+   * Each result's `rect` feeds straight into symbol_sweep's own seed_rect
+   * (scope: "set") — this tool does the detection only, never sweeps
+   * itself, so the already-tested cross-scale/refusal machinery in
+   * symbol_sweep is reused untouched, not duplicated. Sheet-role-agnostic
+   * by design: call sheet_graph first to find the real legend sheet(s);
+   * this tool clusters whatever sheet it's pointed at. */
+  async findLegendGlyphs(name: string) {
+    const s = this.sheet(name);
+    const geo = await this.ensureGeometry(s);
+    if (!geo.segs.length) {
+      throw new UserError("This sheet has no vector linework (likely a scan) — legend-glyph detection reads drawn segments; raster fallback not yet available in the MCP server.");
+    }
+    if (!s.spans) s.spans = textSpans(s.page);
+    const spans: LegendSpan[] = s.spans.map((sp) => ({ text: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1 }));
+    // Real, found-live bug (accuracy-hardening plan, this session): this
+    // reuses buildMepGraph's own JTS noding purely for connectivity (see
+    // legendlearn.ts's own header comment), and a real, densely-drawn sheet
+    // can defeat noding entirely even after buildMepGraph's own internal
+    // retry-at-coarser-grid mitigation (ledger item 18) — confirmed live on
+    // federal-mech's own sheet #2 legend. Before this fix, that TopologyException
+    // propagated straight out of this tool as a raw, MEP-connectivity-flavored
+    // error with no relation to "legend glyph detection" from the caller's own
+    // perspective. Legend-glyph clustering is a convenience layer over
+    // symbol_sweep's own already-tested marquee workflow, not a correctness-
+    // critical trace — degrading to "none detected, with an honest reason"
+    // here is strictly safer than crashing the whole tool over it.
+    let glyphs: ReturnType<typeof findLegendGlyphs>;
+    let nodingFailed = false;
+    try {
+      glyphs = findLegendGlyphs(geo.segs, spans);
+    } catch {
+      glyphs = [];
+      nodingFailed = true;
+    }
+    return {
+      sheet: s.key,
+      glyphs: glyphs.map((g) => ({
+        caption: g.caption,
+        rect: [round1(g.rect[0][0]), round1(g.rect[0][1]), round1(g.rect[1][0]), round1(g.rect[1][1])] as [number, number, number, number],
+        segments: g.segments,
+      })),
+      ...(!glyphs.length ? {
+        note: nodingFailed
+          ? "This sheet's own linework could not be reliably noded for glyph clustering (a real, dense-CAD-geometry edge case, not a missing legend) — no glyphs detected as a result. Marquee one instance directly with symbol_sweep instead."
+          : "No (glyph, caption) row pairs were detected on this sheet — it may not be a legend, or its rows may not fit this detector's own compact-glyph/adjacent-caption assumptions. This is not an error: a sheet with no real legend falls back to the ordinary symbol_sweep workflow (marquee one real occurrence anywhere and sweep from it).",
+      } : {}),
+    };
+  }
+
+  /** sweep_inline_motif (accuracy-hardening plan Phase 4) — a real, measured
+   * answer to the "SR-1/SR-2/TG-1/TG-2 don't anchor" gap the maturity plan
+   * named: a register/grille mark drawn as a tapered duct terminus has no
+   * independent whole-shape perimeter (two of its "sides" are literally the
+   * tail of the same long duct-wall stroke feeding it), and — measured
+   * live, not assumed — its own real-world SIZE genuinely differs by CFM
+   * rating, so symbol_sweep's exact-segment whole-shape fingerprint
+   * under-scores real siblings of the same symbol type (~76-77%, under the
+   * 92% commit bar). This sweeps on the hatch fill's own real-world size
+   * and pitch instead — same seed-rect gesture as symbol_sweep, same
+   * found/matches/withheld disclosure shape, sheet scope only (no "set"
+   * scope yet — a real, named limitation, not silently assumed away). */
+  async sweepInlineMotif(name: string, opts: { seedRect: [Point, Point] }) {
+    const s = this.sheet(name);
+    const geo = await this.ensureGeometry(s);
+    if (!geo.segs.length) {
+      throw new UserError("This sheet has no vector linework (likely a scan) — inline-motif matching reads the drawn hatch fill; raster fallback not yet available in the MCP server.");
+    }
+    const fp = fingerprintInlineMotif(geo.segs, geo.meta, opts.seedRect, s.upp ?? null);
+    if (!fp) {
+      throw new UserError("No hatch-filled region was found inside this seed rect — this tool anchors on a compact, densely-hatched box (a register/grille's own fill), not an ordinary line-only symbol; marquee tighter around the hatched fill itself, or use symbol_sweep for a non-hatched marker.");
+    }
+    const res = sweepInlineMotif(fp, geo.segs, geo.meta, s.upp ?? null, { excludeCenter: fp.center, excludeR: Math.max(fp.widthPx, fp.heightPx) });
+    return {
+      sheet: s.key,
+      seed: {
+        rect: [round1(fp.rect[0][0]), round1(fp.rect[0][1]), round1(fp.rect[1][0]), round1(fp.rect[1][1])] as [number, number, number, number],
+        w_ft: fp.widthFt, h_ft: fp.heightFt, w_px: round1(fp.widthPx), h_px: round1(fp.heightPx),
+      },
+      found: res.matches.length,
+      matches: res.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])] as [number, number], w_ft: m.w_ft, h_ft: m.h_ft, size_score: m.size_score })),
+      withheld: res.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])] as [number, number], w_ft: w.w_ft, h_ft: w.h_ft, size_score: w.size_score, reason: w.reason })),
+      candidates_considered: res.candidates_considered,
+      ...(s.upp ? {} : { note: "No scale committed on this sheet — sizes are compared in image px only. set_scale first for a real-world tolerance that generalizes; an image-px-only comparison is a same-sheet, same-print-scale assumption." }),
+    };
+  }
+
+  /** The MEP connectivity graph (Phase 4), built once per sheet and cached —
+   * mirrors ensureMask's own by-identity cache exactly, including its null
+   * convention for a sheet with zero vector linework. Annotation and
+   * finish-pattern layer ink is excluded before noding (never traced as a
+   * real run), the same layer-role table buildVectorMask already reads —
+   * this module does not re-derive LayerRole itself, only consumes it. */
+  private async ensureMepGraph(s: SheetState): Promise<MepGraph | null> {
+    if (s.mepGraph === undefined) {
+      const geo = await this.ensureGeometry(s);
+      if (!geo.segs.length) { s.mepGraph = null; return null; }
+      const codes = this.rolesFor(s, geo);
+      let excludeSegs: Uint8Array | undefined;
+      if (codes) {
+        excludeSegs = new Uint8Array(codes.length);
+        for (let i = 0; i < codes.length; i++) {
+          const c = codes[i];
+          if (c === 2 /* finish-pattern */ || c === 3 /* annotation */ || c === 6 /* hidden */) excludeSegs[i] = 1;
+        }
+      }
+      const mppf = s.upp ? 1 / s.upp : 0;
+      // Phase 2 (accuracy hardening): on none/weak MEP layer signal, layer
+      // roles alone cannot separate architectural wall ink from real MEP
+      // linework — the confirmed real failure mode (a seed on an exhaust
+      // fan's own duct riser "reaching" an unrelated heat pump 52 hops away
+      // through wall ink). Fall back to wallnetwork.ts's own geometric,
+      // layer-independent wall-vouching and fold anything it vouches for
+      // into the same exclusion mask, never overriding a strong layer
+      // signal that already knows better.
+      const layerSignal = mepLayerSignal(s.layers, geo.layerOf);
+      if (layerSignal !== "strong") {
+        const vouched = networkWallSegs(geo.segs, geo.meta, 1, mppf);
+        for (let i = 0; i < vouched.length; i++) {
+          if (!vouched[i]) continue;
+          if (!excludeSegs) excludeSegs = new Uint8Array(vouched.length);
+          excludeSegs[i] = 1;
+        }
+      }
+      // Real, corpus-found (baker-county-eoc M1.21, a mechanical roof plan):
+      // buildMepGraph's own coarsen-and-retry mitigation (see its header
+      // comment) is a real, measured improvement, not a guarantee — a
+      // densely crosshatched real sheet (this one's roof-insulation
+      // crickets, drawn as thousands of short parallel hatch strokes
+      // crossing the gas-piping run) can still defeat JTS's noding at every
+      // retry grid. Before this fix, that threw straight out of
+      // ensureMepGraph, uncaught — trace_connectivity's own MCP wrapper
+      // (tools.ts's `run`) turned it into an isError:true reply carrying a
+      // raw JTS coordinate dump, NOT the tool's own documented TraceResult
+      // shape (structuredContent didn't even validate against
+      // traceConnectivityOutput). Caught here and folded into the exact
+      // same null-graph convention "zero vector linework" already uses,
+      // with its own distinct reason text (mepGraphNodingError) so
+      // traceConnectivity below never conflates "no linework exists" with
+      // "linework exists but couldn't be reliably noded" — mirrors the
+      // identical, already-shipped fix TakeoffCanvas.jsx's
+      // agentFindLegendSymbols carries for findLegendGlyphs' own use of
+      // this same noding (ledger, "densely-drawn sheet can defeat noding
+      // entirely" comment) — trace_connectivity itself just never got the
+      // same treatment until now.
+      try {
+        s.mepGraph = buildMepGraph(geo.segs, {
+          meta: geo.meta, layerOf: geo.layerOf, layers: s.layers, excludeSegs, mppf,
+        });
+      } catch (e) {
+        s.mepGraph = null;
+        s.mepGraphNodingError = e instanceof Error ? e.message : String(e);
+      }
+    }
+    return s.mepGraph;
+  }
+
+  /** trace_connectivity (Phase 4) — which valve belongs to which equipment,
+   * traced through the sheet's own drawn linework. Refusal doctrine matches
+   * sweep_schedule_row/resolve_tag exactly: no equipment placements, no
+   * vector linework, or a seed off any traced line all refuse with a named
+   * reason rather than guess. Equipment/fitting placements are NOT
+   * discovered here — the agent supplies them from its own prior
+   * symbol_sweep/sweep_schedule_row results, same division of labor as
+   * every other geometry tool that consumes an already-swept placement. */
+  async traceConnectivity(name: string, opts: {
+    from: Point;
+    equipment: Array<{ id: string; at: Point; label?: string }>;
+    fittings?: Array<{ at: Point }>;
+    maxHops?: number;
+    seedTolFt?: number;
+    bridgeFt?: number;
+  }): Promise<MepTraceResult> {
+    const s = this.sheet(name);
+    const graph = await this.ensureMepGraph(s);
+    if (!graph) {
+      return {
+        status: "refused", layer_signal: "none", confidence: 0, factors: [],
+        reason: s.mepGraphNodingError
+          ? `This sheet's own linework could not be reliably noded for connectivity tracing (a real, dense-CAD-geometry edge case — e.g. a heavily crosshatched region crossing the run — not missing linework). Try view_sheet on the seed's own region and trace a shorter, less-cluttered run instead.`
+          : "This sheet has no traced vector linework to walk — check sheet_info.has_vector_linework before tracing.",
+      };
+    }
+    const mppf = s.upp ? 1 / s.upp : 0;
+    return traceMepConnectivity(graph, opts.from, {
+      equipmentSymbols: opts.equipment,
+      fittingSymbols: opts.fittings,
+      maxHops: opts.maxHops,
+      seedTolFt: opts.seedTolFt,
+      bridgeFt: opts.bridgeFt,
+      mppf,
+    });
+  }
+
   /** sweep_schedule_row (phase 2) — the estimator's story, honored: a
    * transition type sometimes exists only as a schedule row plus tag markers
    * scattered across the plan sheets. Given the ROW's key, this mints the
@@ -2624,13 +2981,17 @@ export class Session {
         });
       }
     }
-    type Occ = { cx: number; cy: number; h: number; bbox: [number, number, number, number] };
-    const occOf = (sh: SheetState, key: string): Occ[] => {
+    const occOf = (sh: SheetState, key: string): TagOcc[] => {
       if (!sh.spans) sh.spans = textSpans(sh.page);
-      return sh.spans
+      const exact = sh.spans
         .filter((sp) => sp.str.trim().toUpperCase() === key)
-        .map((sp) => ({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number] }))
-        .sort((a, b) => a.cy - b.cy || a.cx - b.cx);
+        .map((sp) => ({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number] }));
+      // Fallback only — a real drawn tag routinely splits across multiple
+      // text runs (see fragmentedTagOcc's own header comment for the two
+      // real, different-shaped cases this was found against), and never
+      // fires when the exact single-span match already found something.
+      const occ = exact.length ? exact : fragmentedTagOcc(sh.spans, key);
+      return occ.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
     };
     const occBySheet = planSheets.map((sh) => ({ sh, occ: occOf(sh, t) }));
     const totalOcc = occBySheet.reduce((n, e) => n + e.occ.length, 0);
@@ -2645,7 +3006,12 @@ export class Session {
     const withOcc = occBySheet.filter((e) => e.occ.length > 0)
       .sort((a, b) => b.occ.length - a.occ.length || a.sh.ord - b.sh.ord);
     const anchorSheet = withOcc[0].sh;
-    const anchor = withOcc[0].occ[0];
+    // Reassigned only by the same-sheet uncorroborated fallback below (Tier
+    // 2), and only after every corroboration attempt against the ORIGINAL
+    // anchor has been exhausted — `candFor`/`probes` close over this
+    // binding, so a reassignment is picked up by their next call with no
+    // other plumbing needed.
+    let anchor = withOcc[0].occ[0];
     const anchorGeo = await this.ensureGeometry(anchorSheet);
     if (!anchorGeo.segs.length) {
       throw new UserError(`${anchorSheet.key} carries the tag "${t}" but no vector linework — the marker cannot be fingerprinted on a scan.`);
@@ -2660,17 +3026,101 @@ export class Session {
     // the corroborator may live on ANOTHER sheet, so it carries that sheet:
     // the probe has to cross the same size ratio the real sweep will (#186),
     // or a fingerprint gets rejected as "doesn't recur" for the sole reason
-    // that the two plan sheets are drawn at different scales
-    let corro: { sh: SheetState; segs: number[]; occ: Occ[] } | null = null;
-    if (withOcc[0].occ.length > 1) corro = { sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.slice(1) };
-    else if (withOcc.length > 1) corro = { sh: withOcc[1].sh, segs: (await this.ensureGeometry(withOcc[1].sh)).segs, occ: withOcc[1].occ };
+    // that the two plan sheets are drawn at different scales.
+    //
+    // A same-tag occurrence on a DIFFERENT-DISCIPLINE sheet is not real
+    // corroborating evidence, though — real case (itd-d1-lab HUM-1, DFC-1):
+    // the tag's only other drawn occurrence sits on that other trade's own
+    // "enlarged" plan of the same room (a plumbing sheet's callout at the
+    // unit's water/condensate connection), which by the IDENTICAL doctrine
+    // already established for the cross-discipline redundant-view collapse
+    // in step 4b below is a reference to the SAME single physical device for
+    // another trade's own drawing — never a second occurrence of the
+    // mechanical symbol's own linework. Requiring it to recur there
+    // manufactures exactly the false "linework does not recur" refusal this
+    // must not create, on a tag that is genuinely, correctly, singly
+    // installed. `pickSameDisciplineCorroborator` (symbolsweep.ts) gates
+    // this: a cross-sheet corroborator is only trusted as a REQUIRED
+    // same-tag corroborator when it shares the anchor's own discipline; when
+    // the anchor's discipline can't be read at all (never guessed), the
+    // prior any-sheet behavior holds unchanged, since there is no
+    // cross-discipline distinction to safely draw.
+    //
+    // A tag can ALSO be drawn on its own anchor sheet in more than one
+    // real, physically incompatible CONVENTION — real case (itd-d1-lab
+    // B-1/B-2): the same equipment appears once in a piping SCHEMATIC
+    // (a standardized diagram icon, not to scale) and once on the to-scale
+    // ENLARGED PLAN (a leader-line tag column pointing at the real
+    // equipment footprint). Both are genuine drawn occurrences of the tag on
+    // the anchor sheet, so the same-sheet branch above always fires — but
+    // whichever occurrence sorts first (reading order) becomes `anchor` and
+    // the other becomes the ONLY same-sheet corroborator tried, and a
+    // schematic icon can never recur as a to-scale plan symbol (or vice
+    // versa) no matter how the pad ladder widens: it is a different, real
+    // drawing convention, not a detection failure. Requiring that single
+    // same-sheet pairing to succeed manufactures the exact same false
+    // "linework does not recur" refusal the discipline gate above already
+    // exists to prevent — so same-sheet corroboration is tried FIRST (as
+    // before, unchanged for every tag with only one same-sheet pairing to
+    // try), and same-discipline occurrences on OTHER sheets are always
+    // APPENDED as further fallback candidates, tried in order, only when an
+    // earlier candidate fails to corroborate at every pad level — this can
+    // only ever ADD a way to succeed; the first candidate that already
+    // passed keeps passing exactly as before.
+    type Corro = { sh: SheetState; segs: number[]; occ: TagOcc[] };
+    const corroCandidates: Corro[] = [];
+    if (withOcc[0].occ.length > 1) {
+      corroCandidates.push({ sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.slice(1) });
+    }
+    if (withOcc.length > 1) {
+      const anchorDisc = disciplineOfSheetNumber(anchorSheet.sheetNumber);
+      const rest = withOcc.slice(1);
+      // unchanged filter: same discipline only when the anchor's own
+      // discipline is readable at all; every other sheet with an occurrence
+      // otherwise (the prior any-sheet behavior) — just as an ORDERED LIST
+      // of fallback tries now, not a single pick.
+      const pool = anchorDisc ? rest.filter((e) => disciplineOfSheetNumber(e.sh.sheetNumber) === anchorDisc) : rest;
+      for (const e of pool) {
+        corroCandidates.push({ sh: e.sh, segs: (await this.ensureGeometry(e.sh)).segs, occ: e.occ });
+      }
+    }
+
+    // Cross-tag fallback corroborators, tried only when the tag itself has no
+    // second occurrence anywhere (corroCandidates is empty) — the
+    // uniquely-tagged family case (VAV-1, VAV-2, VAV-3, … one tag per
+    // physical box, never repeated). Two different VAV boxes are still the
+    // SAME physical symbol, drawn by the same firm's convention, under a
+    // DIFFERENT tag — so a sibling ROW from the same schedule TABLE (never
+    // the whole set: a different equipment family answering for a shape it
+    // never drew would manufacture exactly the false positive this must not
+    // create) whose own tag occurrence sits on the anchor sheet is worth
+    // trying as a stand-in corroborator. Nearest first (the same drafting
+    // convention nearby is the likeliest match, and it bounds the work);
+    // capped, because a large table must not turn one sweep into dozens of
+    // full-sheet matchSymbol calls.
+    const CROSS_TAG_MAX_TRIES = 16;
+    const crossCandidates: (Corro & { tag: string })[] = [];
+    if (!corroCandidates.length) {
+      const rowKeys = (k: string) => canonKey(k).split("/").map((s) => s.trim()).filter(Boolean);
+      const tableSiblingKeys = [...new Set(
+        tb.rows.filter((row) => !rowKeys(row.key).includes(t)).flatMap((row) => rowKeys(row.key)),
+      )].sort();
+      const withDist = tableSiblingKeys
+        .map((k) => ({ k, occ: occOf(anchorSheet, k) }))
+        .filter((e) => e.occ.length > 0)
+        .map((e) => ({ ...e, dist: Math.min(...e.occ.map((o) => Math.hypot(o.cx - anchor.cx, o.cy - anchor.cy))) }))
+        .sort((a, b) => a.dist - b.dist);
+      for (const e of withDist.slice(0, CROSS_TAG_MAX_TRIES)) {
+        crossCandidates.push({ sh: anchorSheet, segs: anchorGeo.segs, occ: e.occ, tag: e.k });
+      }
+    }
 
     const cX = (v: number) => Math.max(0, Math.min(v, anchorSheet.widthPx));
     const cY = (v: number) => Math.max(0, Math.min(v, anchorSheet.heightPx));
-    let fp: SymbolFingerprint | null = null;
-    let anchorRect: [Point, Point] | null = null;
-    let corroborated = false;
-    for (const padK of [1, 2, 3]) {
+    // One pad-ladder step: the candidate fingerprint at padK, or null to try
+    // the next pad, or "region" to stop widening altogether (a region-sized
+    // grab only gets worse with a bigger pad).
+    const candFor = (padK: number): { cand: SymbolFingerprint; rect: [Point, Point] } | "region" | null => {
       const pad = padK * anchor.h;
       const rect: [Point, Point] = [
         [cX(anchor.bbox[0] - pad), cY(anchor.bbox[1] - pad)],
@@ -2681,36 +3131,233 @@ export class Session {
         cand = fingerprintSymbol(anchorGeo.segs, rect);
       } catch (e) {
         // nothing fully inside yet → widen; a region-sized grab → bigger pads only get worse
-        if (e instanceof Error && /region, not one symbol/.test(e.message)) break;
-        continue;
+        return e instanceof Error && /region, not one symbol/.test(e.message) ? "region" : null;
       }
       // a degenerate grab is not a marker: one or two short strokes at the tag
       // are its own underline/leader, which recur at EVERY tagged mark and
       // "corroborate" trivially — matching on them counts tags' furniture, not
       // devices. Widen instead; if no pad ever captures real marker geometry,
       // the refusal below states it.
-      if (cand.segments < 3) continue;
-      if (!corro) { fp = cand; anchorRect = rect; break; }
-      const cr = this.sweepRatio(anchorSheet, corro.sh);
+      if (cand.segments < 3) return null;
+      return { cand, rect };
+    };
+    // Does `cand` reproduce near one of `against`'s occurrences? Identical
+    // probe for same-tag and cross-tag corroboration — the bar (matchSymbol's
+    // scoreHigh) does not bend for a sibling tag.
+    const probes = (cand: SymbolFingerprint, against: Corro): boolean => {
+      const cr = sweepRatio(anchorSheet, against.sh);
       let probe: SymbolMatchResult;
       try {
-        probe = matchSymbol(cand, corro.segs, { ...sweepOpts, ...(cr.scale === 1 ? {} : { scale: cr.scale }) });
+        probe = matchSymbol(cand, against.segs, { ...sweepOpts, ...(cr.scale === 1 ? {} : { scale: cr.scale }) });
       } catch {
         // this pad's fingerprint can't survive the trip to the corroborator
         // (too small once scaled) — a wider pad may; never a hard stop
-        continue;
+        return false;
       }
       const pr = (probe.scaled ? probe.scaled.footprint_px : cand.footprint) / 2 + anchor.h;
-      if (corro.occ.some((o) => probe.matches.some((m) => Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= pr))) {
-        fp = cand; anchorRect = rect; corroborated = true;
-        break;
+      return against.occ.some((o) => probe.matches.some((m) => Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= pr));
+    };
+
+    let fp: SymbolFingerprint | null = null;
+    // Fallback: a register/grille mark (or similar hatch-filled fixture) has
+    // no independent whole-shape perimeter, so the whole-shape corroboration
+    // above routinely fails for it even though the tag IS genuinely,
+    // repeatedly drawn — confirmed live (accuracy-hardening plan Phase 4/6):
+    // real siblings of the same symbol type score only ~76-77% against each
+    // other under matchSymbol's own 92% bar, because the fixture's own
+    // real-world SIZE differs by rating, not drafting noise. Tried ONLY when
+    // the whole-shape path already failed to corroborate against a real
+    // second occurrence — this can only ever ADD a way to succeed, never
+    // change an already-passing case's own behavior or scoring. (Restored
+    // during the cross-tag-corroboration merge above, which had dropped this
+    // fallback entirely — a real regression this project's own test suite
+    // did not catch, since no test covered this specific integration path.)
+    let inlineFp: InlineMotifFingerprint | undefined;
+    let anchorRect: [Point, Point] | null = null;
+    let corroborated = false;
+    // Present only when corroboration succeeded against a SIBLING tag's own
+    // occurrence rather than this tag's own second instance — a real, honest
+    // distinction: same-tag corroboration is stronger evidence (the identical
+    // mark recurs) than cross-tag (a relative in the same table recurs).
+    let corroboratedVia: string | null = null;
+    if (corroCandidates.length) {
+      // same-tag corroboration is REQUIRED once a second occurrence exists:
+      // unchanged from before this change for the common case (exactly one
+      // same-tag candidate to try) — a tag that recurs but whose WHOLE-SHAPE
+      // linework does NOT reproduce there falls back to the hatch-fill
+      // inline-motif check before being refused, never silently accepted on
+      // a bare whole-shape guess. When more than one candidate exists (a
+      // same-sheet pairing PLUS same-discipline occurrences on other
+      // sheets), each is tried in turn — most-trusted (same-sheet) first —
+      // and a later candidate is only reached once every earlier one has
+      // failed at every pad level, whole-shape AND hatch-fill; the first
+      // candidate that already passed today keeps passing exactly as
+      // before, so this can only ever ADD a way to succeed.
+      outerSameTag:
+      for (const cand of corroCandidates) {
+        for (const padK of [1, 2, 3]) {
+          const got = candFor(padK);
+          if (got === "region") break;
+          if (!got) continue;
+          if (probes(got.cand, cand)) { fp = got.cand; anchorRect = got.rect; corroborated = true; break outerSameTag; }
+        }
+      }
+      if (!fp || !anchorRect) {
+        for (const cand of corroCandidates) {
+          const inlineAnchored = corroborateInlineMotif(
+            anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+            anchor, anchorSheet.upp,
+            { segs: cand.segs, meta: (await this.ensureGeometry(cand.sh)).meta, occ: cand.occ, upp: cand.sh.upp },
+          );
+          if (inlineAnchored) {
+            inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
+            break;
+          }
+        }
+        // TIER 2: NOTHING corroborated the original anchor — not one
+        // candidate, under either detector. Real case (itd-d1-lab
+        // B-1/B-2): the anchor SHEET draws the SAME physical unit twice in
+        // two real, physically incompatible conventions — an NTS piping
+        // SCHEMATIC icon and a to-scale ENLARGED PLAN symbol (a leader-line
+        // tag column) — and a schematic icon can never recur as a to-scale
+        // plan symbol, or vice versa, no matter how far the pad widens or
+        // which of the two is tried as "anchor" first: it is a real
+        // drawing-convention mismatch, not a detection failure. Demanding a
+        // recurrence between them manufactures exactly the false "linework
+        // does not recur" refusal the discipline gate above already exists
+        // to prevent for the cross-SHEET case — this is its same-SHEET
+        // twin. Once every corroboration attempt is exhausted, fall through
+        // to the SAME disclosed, weaker "uncorroborated" acceptance already
+        // used below for a tag drawn exactly once anywhere: try the tag's
+        // OTHER occurrences on this same anchor sheet, in reading order, as
+        // the anchor instead — uncorroborated, never silently promoted to
+        // "corroborated" (the caller's own !corroborated disclosure below
+        // fires exactly as it does for the single-occurrence case). This
+        // can only ever ADD a way to succeed: the original anchor already
+        // exhausted every real candidate above.
+        //
+        // The identical drawing-convention mismatch recurs a THIRD way —
+        // real case (itd-d1-lab HC-1..HC-9): a mechanical device that
+        // touches two systems (a duct-mounted hydronic heating coil) gets
+        // ONE occurrence on the discipline's own duct-side "HVAC FLOOR
+        // PLAN" sheet (a leader-line tag next to the in-duct coil icon) and
+        // a SEPARATE single occurrence on that SAME discipline's own
+        // piping-side "HYDRONIC FLOOR PLAN" sheet (a leader-line tag next
+        // to a totally different valve/union icon at the coil's water
+        // connection) — both real, both mechanical (so disciplineOfSheetNumber
+        // never excludes the pairing), yet the two icons can never recur as
+        // each other, for the exact same reason a schematic can never recur
+        // as a to-scale plan. Unlike B-1/B-2, this is cross-SHEET with only
+        // ONE occurrence on EACH sheet, so `withOcc[0].occ` (the anchor
+        // sheet's own occurrence list) never has a second entry to
+        // reassign to — the `> 1` gate below existed only to skip a
+        // redundant re-try, but it also skips the one entry that IS present
+        // whenever the anchor sheet has exactly one occurrence, which is
+        // exactly the case that needs this same fallback. Occurrence count
+        // is irrelevant to whether the ORIGINAL anchor's own fingerprint is
+        // real; it is the identical uncorroborated acceptance already
+        // granted to a tag drawn exactly once anywhere (below), just
+        // reached from the "drawn more than once, but every corroborator
+        // is a different convention" side instead. Still can only ever ADD
+        // a way to succeed — every real candidate is already exhausted by
+        // this point.
+        if (!fp && !inlineFp) {
+          for (const altAnchor of withOcc[0].occ) {
+            anchor = altAnchor;
+            for (const padK of [1, 2, 3]) {
+              const got = candFor(padK);
+              if (got === "region") break;
+              if (!got) continue;
+              fp = got.cand; anchorRect = got.rect; corroborated = false;
+              break;
+            }
+            if (fp) break;
+          }
+          if (!fp) {
+            for (const altAnchor of withOcc[0].occ) {
+              anchor = altAnchor;
+              const inlineAnchored = corroborateInlineMotif(
+                anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+                anchor, anchorSheet.upp, null,
+              );
+              if (inlineAnchored) {
+                inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
+                break;
+              }
+            }
+          }
+        }
+        if (!fp && !inlineFp) {
+          anchor = withOcc[0].occ[0]; // restore for a clean error state
+          const triedNote = corroCandidates.length > 1 ? ` (tried ${corroCandidates.length} of its other occurrences)` : "";
+          throw new UserError(`Schedule row "${t}" cannot be anchored: the linework around its drawn tag on ${anchorSheet.key} does not recur at the tag's other occurrences${triedNote} — no repeatable marker geometry to fingerprint (tried both a whole-shape match and a hatch-fill size/pitch match). Marquee one instance with symbol_sweep instead.`);
+        }
+      }
+    } else {
+      // No same-tag corroborator exists at all. Try cross-tag candidates —
+      // this can only ever UPGRADE an uncorroborated anchor to a disclosed
+      // cross-tag one; a candidate that fails to corroborate is silently
+      // skipped and the NEXT one tried, exactly as if it were never offered —
+      // it must never turn a would-have-succeeded uncorroborated anchor into
+      // a refusal, unlike the same-tag case above.
+      outer:
+      for (const cross of crossCandidates) {
+        for (const padK of [1, 2, 3]) {
+          const got = candFor(padK);
+          if (got === "region") break;
+          if (!got) continue;
+          if (probes(got.cand, cross)) { fp = got.cand; anchorRect = got.rect; corroborated = true; corroboratedVia = cross.tag; break outer; }
+        }
+      }
+      if (!fp) {
+        for (const padK of [1, 2, 3]) {
+          const got = candFor(padK);
+          if (got === "region") break;
+          if (!got) continue;
+          fp = got.cand; anchorRect = got.rect; break;
+        }
+      }
+      if (!fp) {
+        // No same-tag occurrence and no whole-shape candidate at all (no
+        // drawn linework near the tag whatsoever) — try the hatch-fill
+        // check uncorroborated too, matching the pre-cross-tag-merge
+        // behavior for this exact case.
+        const inlineAnchored = corroborateInlineMotif(
+          anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+          anchor, anchorSheet.upp, null,
+        );
+        if (inlineAnchored) {
+          inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
+        }
+      }
+      if (!fp && !inlineFp) {
+        throw new UserError(`Schedule row "${t}" cannot be anchored: no fingerprintable marker linework sits around its drawn tag on ${anchorSheet.key}. Marquee one instance with symbol_sweep instead.`);
       }
     }
-    if (!fp || !anchorRect) {
-      throw new UserError(corro
-        ? `Schedule row "${t}" cannot be anchored: the linework around its drawn tag on ${anchorSheet.key} does not recur at the tag's other occurrences — no repeatable marker geometry to fingerprint. Marquee one instance with symbol_sweep instead.`
-        : `Schedule row "${t}" cannot be anchored: no fingerprintable marker linework sits around its drawn tag on ${anchorSheet.key}. Marquee one instance with symbol_sweep instead.`);
-    }
+
+    // classifySweepMatches' own occurrence-claim radius (R = footprint/2 +
+    // anchorH) assumes a match's centroid sits close to the TAG TEXT it
+    // claims — true when the pad ladder widens enough to capture a symbol
+    // whose own ink surrounds its label, but real, corpus-found (federal-
+    // attachment4-mechanical.pdf, 13 real VAV boxes): the pad ladder stops
+    // at the SMALLEST pad that still corroborates (fewest segments, not the
+    // most complete shape), and a real box glyph drawn OFF to one side of
+    // its own tag text — a real, firm-specific convention, not noise — then
+    // has a geometric centroid measurably farther from the tag than that
+    // small footprint's own radius covers. The result: even the ANCHOR's
+    // OWN occurrence, on its OWN sheet, reads as text_only — matchSymbol
+    // correctly re-finds the identical ink it was built from (self-matching
+    // at fp.center with score 1), just outside the radius classifySweep-
+    // Matches uses to credit it to the tag that produced it. `fp.center` is
+    // matchSymbol's own report of where THIS exact fingerprint's self-match
+    // lands, so the true distance from the tag to its own symbol is already
+    // known by construction, not guessed — flooring anchorH at that
+    // measured offset can only ever ADD coverage (it never shrinks the
+    // existing footprint/anchorH radius) and is bounded by the same modest,
+    // real search the pad ladder already performed to find this geometry in
+    // the first place.
+    const selfOffset = fp ? Math.hypot(fp.center[0] - anchor.cx, fp.center[1] - anchor.cy) : 0;
+    const anchorHForSweep = Math.max(anchor.h, selfOffset);
 
     // 4. the full plan-only sweep + tag corroboration per match.
     // The tag-proximity radius is the marker's footprint AS DRAWN ON THE SHEET
@@ -2718,8 +3365,6 @@ export class Session {
     // marker resized to a 12×-smaller plan has a 12×-smaller footprint, and a
     // radius left at the seed's size would sweep up whatever tag happened to
     // be nearby. Unscaled sheets take the identical radius they always did.
-    const radiusFor = (sc?: { footprint_px: number }): number => (sc ? sc.footprint_px : fp!.footprint) / 2 + anchor.h;
-    const byPos = <T extends { at: Point }>(a: T, b: T): number => a.at[1] - b.at[1] || a.at[0] - b.at[0];
     type CountedMatch = SweepMatch & { tag_at: [number, number, number, number] };
     const perSheet: {
       state: SheetState;
@@ -2732,49 +3377,101 @@ export class Session {
       elapsed_ms: number;
       scale: { scale: number; known: boolean };
       scaled?: NonNullable<SymbolMatchResult["scaled"]>;
+      redundant_view: (CountedMatch & { room: string; kept_sheet: string })[];
     }[] = [];
+    // per-sheet classification — the shared symbolsweep.ts function, so this
+    // server and the browser's own port can never silently disagree.
     for (const { sh, occ } of occBySheet) {
       const g2 = await this.ensureGeometry(sh);
       if (!g2.segs.length) {
         skipped.push({ sheet: sh.key, role: "plan", reason: "no vector linework (likely a scan) — symbol matching reads the drawn segments" });
         continue;
       }
-      const ratio = this.sweepRatio(anchorSheet, sh);
+      const ratio = sweepRatio(anchorSheet, sh);
       const t0 = process.hrtime.bigint();
-      let res: SymbolMatchResult;
-      try {
-        res = matchSymbol(fp, g2.segs, { ...sweepOpts, ...(ratio.scale === 1 ? {} : { scale: ratio.scale }) });
-      } catch (e) {
-        skipped.push({ sheet: sh.key, role: "plan", reason: e instanceof Error ? e.message : String(e) });
-        continue;
-      }
-      const R = radiusFor(res.scaled);
-      const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
       const sibSpans: { key: string; cx: number; cy: number }[] = [];
       for (const k of siblings) for (const o of occOf(sh, k)) sibSpans.push({ key: k, cx: o.cx, cy: o.cy });
-      const matches: CountedMatch[] = [];
-      const excluded: { at: Point; tag: string }[] = [];
-      const withheld: SweepWithheld[] = [];
-      const matchedOcc = new Set<number>();
-      for (const m of res.matches) {
-        let oi = -1;
-        for (let k = 0; k < occ.length; k++) {
-          if (Math.hypot(m.at[0] - occ[k].cx, m.at[1] - occ[k].cy) <= R) { oi = k; break; }
+      let matches: CountedMatch[], withheld: SweepWithheld[], excluded: { at: Point; tag: string }[],
+        text_only: { at: Point }[], candidates: { considered: number; dropped: number }, complete: boolean,
+        scaled: SymbolMatchResult["scaled"];
+      if (fp) {
+        let cls: ReturnType<typeof classifySweepMatches>;
+        try {
+          cls = classifySweepMatches(t, fp, g2.segs, ratio, occ, sibSpans, anchorHForSweep, sweepOpts);
+        } catch (e) {
+          skipped.push({ sheet: sh.key, role: "plan", reason: e instanceof Error ? e.message : String(e) });
+          continue;
         }
-        if (oi >= 0) { matchedOcc.add(oi); matches.push({ ...m, tag_at: occ[oi].bbox }); continue; }
-        const sib = sibSpans.find((sp) => Math.hypot(m.at[0] - sp.cx, m.at[1] - sp.cy) <= R);
-        if (sib) { excluded.push({ at: m.at, tag: sib.key }); continue; }
-        withheld.push({ ...m, reason: `the marker geometry matches but carries no "${t}" tag within its footprint — an unlabeled instance or a shared marker shape; look before counting it` });
+        ({ matches, withheld, excluded, text_only, candidates, complete, scaled } = cls);
+      } else {
+        // inline-motif fallback path (register/grille hatch fill) — see the
+        // corroborateInlineMotif branch above for why this runs instead.
+        const inlineRes = sweepInlineMotif(inlineFp!, g2.segs, g2.meta, sh.upp);
+        const icls = classifyInlineMotifMatches(t, inlineRes, occ, sibSpans, anchor.h);
+        // adapted into the whole-shape CountedMatch/SweepWithheld shape so the
+        // commit/notes/aggregation code below stays untouched either way —
+        // size_score standing in for score, rotation/mirrored not meaningful
+        // for a hatch-fill match (no rigid shape to rotate/mirror).
+        matches = icls.matches.map((m) => ({ at: m.at, score: m.size_score, rotation: 0, mirrored: false, tag_at: m.tag_at }));
+        withheld = icls.withheld.map((w) => ({ at: w.at, score: w.size_score, rotation: 0, mirrored: false, reason: w.reason }));
+        excluded = icls.excluded;
+        text_only = icls.text_only;
+        candidates = { considered: icls.candidates_considered, dropped: 0 };
+        complete = icls.complete;
+        scaled = undefined;
       }
-      for (const w of res.withheld) {
-        const near = occ.some((o) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R);
-        withheld.push(near ? { ...w, reason: `${w.reason} — and the "${t}" tag is drawn beside it` } : w);
+      const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
+      perSheet.push({
+        state: sh, matches, withheld, excluded, text_only,
+        candidates, complete, elapsed_ms, scale: ratio,
+        redundant_view: [],
+        ...(scaled ? { scaled } : {}),
+      });
+    }
+
+    // 4b. cross-discipline redundant room-view collapse — a real, generic
+    // drafting convention (see symbolsweep.ts's dedupeCrossDisciplineRoomViews
+    // for the full doctrine): two different disciplines each drawing their
+    // OWN "enlarged" plan of the SAME physical room redraw whatever equipment
+    // sits in it for their own trade's reference, so the SAME tag matched
+    // once on each discipline's view of the SAME room is one physical device,
+    // not one install per sheet. Never touches a same-discipline repeat (a
+    // real separate-install signal) or a match with no confidently-attributed
+    // room (never guessed). `disciplineOfSheetNumber` (symbolsweep.ts) is the
+    // same read step 3's same-tag corroborator gate already uses above.
+    const roomsBySheet = new Map<string, ReturnType<typeof roomTags>>();
+    const roomsFor = (sh: SheetState): ReturnType<typeof roomTags> => {
+      let rooms = roomsBySheet.get(sh.key);
+      if (!rooms) {
+        const spans = (sh.spans ?? []).map((sp) => ({ str: sp.str, x: sp.x0, y: sp.y0, w: sp.x1 - sp.x0, h: sp.y1 - sp.y0, ...(sp.rot ? { rot: sp.rot } : {}) }));
+        rooms = roomTags({ key: sh.key, sheet_number: sh.sheetNumber, spans });
+        roomsBySheet.set(sh.key, rooms);
       }
-      matches.sort(byPos); excluded.sort(byPos); withheld.sort(byPos);
-      const text_only = occ
-        .filter((o, k) => !matchedOcc.has(k) && !res.withheld.some((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R))
-        .map((o) => ({ at: [round1(o.cx), round1(o.cy)] as Point }));
-      perSheet.push({ state: sh, matches, withheld, excluded, text_only, candidates: res.candidates, complete: res.complete, elapsed_ms, scale: ratio, ...(res.scaled ? { scaled: res.scaled } : {}) });
+      return rooms;
+    };
+    const dedupInstances: RoomSweepInstance<CountedMatch>[] = [];
+    for (const ps of perSheet) {
+      const discipline = disciplineOfSheetNumber(ps.state.sheetNumber);
+      const rooms = discipline ? roomsFor(ps.state) : [];
+      for (const m of ps.matches) {
+        dedupInstances.push({
+          id: m, sheet: ps.state.key, discipline, at: m.at,
+          rooms, sheetWidthPx: ps.state.widthPx, sheetHeightPx: ps.state.heightPx,
+        });
+      }
+    }
+    const redundant = dedupeCrossDisciplineRoomViews(dedupInstances);
+    if (redundant.length) {
+      const redundantSet = new Map<CountedMatch, RedundantRoomView<CountedMatch>>(redundant.map((r) => [r.id, r]));
+      for (const ps of perSheet) {
+        const keep: CountedMatch[] = [];
+        for (const m of ps.matches) {
+          const r = redundantSet.get(m);
+          if (r) ps.redundant_view.push({ ...m, room: r.room, kept_sheet: r.keptSheet });
+          else keep.push(m);
+        }
+        ps.matches = keep;
+      }
     }
 
     // 5. commit — condition minted FROM the row (its key IS the tag), the
@@ -2792,7 +3489,10 @@ export class Session {
             assignment: { source: "schedule", schedule_sheet: tb.sheet },
             symbol: {
               score: m.score, rotation: m.rotation, mirrored: m.mirrored,
-              seed: { source: "schedule_row", sheet: anchorSheet.key, row: { sheet: tb.sheet, key: t, table } },
+              seed: {
+                source: "schedule_row", sheet: anchorSheet.key, row: { sheet: tb.sheet, key: t, table },
+                corroborated, ...(corroboratedVia ? { corroborated_via: "sibling_tag" as const, corroborated_tag: corroboratedVia } : corroborated ? { corroborated_via: "same_tag" as const } : {}),
+              },
             },
           }).id);
         }
@@ -2810,7 +3510,15 @@ export class Session {
     const firstCell = r.cells[Object.keys(r.cells)[0]];
     const capped = perSheet.filter((p) => p.candidates.dropped > 0);
     const notes: string[] = [];
-    if (!corroborated) notes.push(`The tag "${t}" is drawn ${totalOcc === 1 ? "exactly once" : "too sparsely to cross-check"} — the fingerprint could not corroborate at a second occurrence; audit the matches with view_sheet before trusting the count.`);
+    if (!corroborated) {
+      notes.push(`The tag "${t}" is drawn ${totalOcc === 1 ? "exactly once" : "too sparsely to cross-check"} — the fingerprint could not corroborate at a second occurrence${crossCandidates.length ? `, and none of ${crossCandidates.length} sibling tag(s) from the same ${table} table reproduced it either` : ""}; audit the matches with view_sheet before trusting the count.`);
+    } else if (corroboratedVia) {
+      // weaker evidence than same-tag corroboration, disclosed rather than
+      // left to read identically to it (anchor.corroborated_via says the
+      // same in the structured reply)
+      notes.push(`The tag "${t}" is drawn exactly once, so the fingerprint was corroborated against sibling tag "${corroboratedVia}"'s own occurrence in the same ${table} table instead — a real, weaker form of evidence than a same-tag corroboration (two different marks sharing a symbol family, not the same mark recurring); audit the matches with view_sheet before trusting the count.`);
+    }
+    if (inlineFp) notes.push(`No whole-shape marker recurs around this tag's own drawn text, so this anchored on the surrounding hatch fill's own real-world size/pitch instead (the register/grille fallback) — score is a size closeness, not a segment match; audit with view_sheet before trusting the count.`);
     if (opts.commit && !found) notes.push("commit requested but nothing cleared the bar — no shapes were committed.");
     // #186, same disclosure discipline as symbol_sweep: a ratio the count
     // depends on is stated, and an assumed ratio over an empty sheet is named
@@ -2822,6 +3530,10 @@ export class Session {
     const rowAssumed = perSheet.filter((p) => !p.scale.known && !p.matches.length);
     if (rowAssumed.length) {
       notes.push(`${rowAssumed.map((p) => p.state.key).join(", ")} found nothing and were swept at 1:1 — no scale is set on ${anchorSheet.key} or on them, so a different drawn scale there is a live explanation for the zero. set_scale on both ends to rule it out.`);
+    }
+    const rowRedundant = perSheet.filter((p) => p.redundant_view.length);
+    if (rowRedundant.length) {
+      notes.push(`${rowRedundant.map((p) => `${p.redundant_view.length} on ${p.state.key}`).join(", ")} withheld from the count as a cross-discipline REDUNDANT VIEW — the same "${t}" mark, in the same drawn room, on a different-discipline sheet's own "enlarged" plan of that room (the SAME physical device redrawn for another trade's reference, not a second install); audit with view_sheet before trusting this.`);
     }
     return {
       tag: t,
@@ -2835,10 +3547,16 @@ export class Session {
       anchor: {
         sheet: anchorSheet.key,
         at: [round1(anchor.cx), round1(anchor.cy)],
-        rect: [round1(anchorRect[0][0]), round1(anchorRect[0][1]), round1(anchorRect[1][0]), round1(anchorRect[1][1])],
-        segments: fp.segments,
-        length_px: round1(fp.totalLen),
+        rect: [round1(anchorRect![0][0]), round1(anchorRect![0][1]), round1(anchorRect![1][0]), round1(anchorRect![1][1])],
+        // inline-motif fallback has no rigid whole-shape perimeter to count
+        // segments/length on — `segments` reports the hatch cluster's own
+        // member-stroke count instead, `length_px` its own pitch, so the
+        // field is never a fabricated whole-shape number for this mode.
+        segments: fp ? fp.segments : inlineFp!.members,
+        length_px: round1(fp ? fp.totalLen : inlineFp!.pitchPx),
         corroborated,
+        ...(corroborated ? { corroborated_via: corroboratedVia ? "sibling_tag" as const : "same_tag" as const } : {}),
+        ...(corroboratedVia ? { corroborated_tag: corroboratedVia } : {}),
         occurrences: totalOcc,
       },
       found,
@@ -2854,6 +3572,12 @@ export class Session {
         elapsed_ms: p.elapsed_ms,
         ...(p.scaled ? { scaled: p.scaled } : {}),
         ...(p.scale.known ? {} : { scale_assumed: `no scale set on ${anchorSheet.key} or this sheet — swept at 1:1` }),
+        ...(p.redundant_view.length ? {
+          redundant_view: p.redundant_view.map((m) => ({
+            at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored,
+            tag_at: Session.wireBox(m.tag_at), room: m.room, kept_sheet: m.kept_sheet,
+          })),
+        } : {}),
       })),
       complete: perSheet.every((p) => p.complete),
       skipped,
@@ -3877,8 +4601,113 @@ export class Session {
       }
       this.graph = buildSheetGraph(inputs);
       if (skippedHeavy) this.graph.notes.push(`drawn-delta hunt skipped on ${skippedHeavy} sheet(s) — the set's linework exceeded the vector budget; text revision markers (Δ2 / REV 2) were still read everywhere`);
+      await this.enhanceTablesWithODL(this.graph);
     }
     return this.graph;
+  }
+
+  /** Cross-checks every schedule-role sheet's tables against
+   * OpenDataLoader-PDF's own independent, deterministic table-structure
+   * detection (mcp/src/opendataloader.ts) and keeps whichever extraction of
+   * each real table is more COMPLETE — never a fixed preference for either
+   * source (this file's own geometric heuristics, or ODL), purely the
+   * evidence: more recovered headers wins, a header-count tie is broken by
+   * more populated cells (tableCompleteness). Runs ONCE per source PDF (one
+   * `--pages "3,7,15"` call covering every schedule sheet in that document)
+   * to keep the real per-call JVM cost affordable on a large set. Best-
+   * effort only: no Java runtime, a scanned/uncooperative PDF, or any per-
+   * table parse error silently leaves the existing geometric result in
+   * place — this pass can only ever IMPROVE g.tables, never take it down. */
+  private async enhanceTablesWithODL(g: SheetGraph): Promise<void> {
+    const scheduleSheets = g.sheets.filter((s) => s.role === "schedule");
+    if (!scheduleSheets.length) return;
+    const byPdf = new Map<string, { path: string; pages: number[]; sheetByPage: Map<number, string> }>();
+    for (const sh of scheduleSheets) {
+      const base = this.fileFor(sh.key);
+      const doc = this.docs.get(base);
+      const state = this.sheets.get(sh.key);
+      if (!doc || !state) continue;
+      let entry = byPdf.get(doc.path);
+      if (!entry) { entry = { path: doc.path, pages: [], sheetByPage: new Map() }; byPdf.set(doc.path, entry); }
+      entry.pages.push(state.pageNum);
+      entry.sheetByPage.set(state.pageNum, sh.key);
+    }
+    if (!byPdf.size) return;
+    const buildingsSet = new Set(g.buildings);
+    const touchedSheets = new Set<string>();
+    let recovered = 0, added = 0, odlErrors = 0;
+    for (const entry of byPdf.values()) {
+      let result;
+      try {
+        result = await runOpenDataLoaderPages(entry.path, entry.pages);
+      } catch {
+        odlErrors++;
+        continue;
+      }
+      if (result.error) { odlErrors++; continue; }
+      for (const odlTable of result.tables) {
+        const sheetKey = entry.sheetByPage.get(odlTable["page number"]);
+        if (!sheetKey) continue;
+        const state = this.sheets.get(sheetKey);
+        if (!state) continue;
+        let built;
+        try {
+          built = scheduleTableFromODL(odlTable, sheetKey, state.page.viewport.transform, { buildings: buildingsSet });
+        } catch {
+          continue; // one malformed table must never take the whole pass down
+        }
+        if (!built) continue;
+        // Match against an EXISTING geometric table on the same sheet by
+        // REGION OVERLAP, not title text — a real title-less table (this
+        // fixture's own real "FINISH SCHEDULE" caption sits ABOVE the
+        // table's own bounding box, never merged into ODL's row 1, unlike
+        // AHU-1's own colspan-title row) would otherwise title-match
+        // nothing and get appended as a spurious DUPLICATE of a table
+        // that's already there — a real bug this reconciliation caught
+        // live against the mcp test suite's own symbol-set.pdf fixture.
+        const existingIdx = matchByRegionOverlap(g.tables, sheetKey, built.region);
+        if (existingIdx >= 0) {
+          const existing = g.tables[existingIdx];
+          const a = tableCompleteness(existing), b = tableCompleteness(built);
+          const aDupes = duplicateKeyCount(existing), bDupes = duplicateKeyCount(built);
+          // Never adopt a candidate that introduces MORE internally
+          // ambiguous (duplicate, undifferentiated) row keys than the one
+          // it would replace — a real schedule never legitimately repeats
+          // an unqualified key, so a rise in duplicates is real evidence of
+          // a misparse, regardless of which extraction produced it. Pure
+          // evidence-based reconciliation either way: neither source is
+          // favored, the SAME bar applies no matter which one is currently
+          // in `g.tables`.
+          if (bDupes <= aDupes && (b.headers > a.headers || (b.headers === a.headers && b.cells > a.cells))) {
+            g.tables[existingIdx] = built;
+            touchedSheets.add(sheetKey);
+            recovered++;
+          }
+        } else {
+          // No existing alternative to compare against, so nothing to
+          // reconcile against — appended as-is. A FEW rows sharing one
+          // generic, un-numbered tag (a real "PLUMBING FIXTURE SCHEDULE"
+          // convention measured live: two distinct grade-cleanout variants
+          // both marked bare "GCO", no suffix) is real, legitimate schedule
+          // data, not a misparse to filter out here — the EXISTING,
+          // already-tested "Ambiguous: N schedule rows carry the key…"
+          // refusal downstream (rowKeyOf/resolveTag/sweepScheduleRow) is
+          // already the correct, honest response to a genuine duplicate
+          // mark, and doing that filtering a second time at extraction only
+          // risks discarding an otherwise real, mostly-unique-keyed table
+          // wholesale over one or two rows (measured live: a first version
+          // of this gate silently dropped a real 35-row schedule entirely
+          // over its own 2 real "GCO" rows).
+          g.tables.push(built);
+          touchedSheets.add(sheetKey);
+          added++;
+        }
+      }
+    }
+    if (touchedSheets.size) syncSheetSchedules(g, touchedSheets);
+    if (recovered || added) {
+      g.notes.push(`OpenDataLoader-PDF cross-check: ${recovered} table(s) replaced with a more complete extraction, ${added} table(s) recovered that the geometric pass missed entirely (${touchedSheets.size} sheet(s) affected).`);
+    }
   }
 
   private static wireBox(b: [number, number, number, number]) {
@@ -3896,8 +4725,70 @@ export class Session {
     };
   }
 
+  /** Real, confirmed finding (accuracy-hardening plan, this session): a
+   * schedule-role sheet that extracted ZERO tables reads today as
+   * indistinguishable from "this sheet legitimately has none" — but on the
+   * real `weld-county-permit` corpus set, its own two densest schedule
+   * sheets carry almost no real text at all because their tables are
+   * literally embedded RASTER IMAGES pasted onto an otherwise-vector CAD
+   * sheet (confirmed via the sheet's own pdf.js operator list: real
+   * `paintImageXObject` calls placed exactly where the visible tables sit),
+   * not a vocabulary/column-model gap sheetgraph.ts could ever close. The
+   * signal to catch this already exists and is already correct — the same
+   * `imageArea`/`rasterPolicy` machinery `classify_symbol`/`symbol_sweep`'s
+   * own raster fallback already uses (confirmed: this real sheet already
+   * scores 50%/30% image coverage, both well past `RASTER_MIN_IMG_FRAC`) —
+   * it was simply never consulted from this reporting path. Scoped narrowly
+   * to the exact rare case that matters (a schedule-role sheet with zero
+   * extracted tables) so a normal set's own sheetGraph() call pays nothing
+   * extra; best-effort only — a geometry failure here must never take
+   * sheet_graph's own real output down with it. */
+  private async rasterScheduleNotes(g: SheetGraph): Promise<string[]> {
+    const notes: string[] = [];
+    for (const s of g.sheets) {
+      if (s.schedules.length > 0) continue;
+      try {
+        const sheetState = this.sheet(s.key);
+        const geo = await this.ensureGeometry(sheetState);
+        const sheetArea = sheetState.widthPx * sheetState.heightPx;
+        if (s.role === "schedule" && this.rasterPolicy(sheetState, geo).rasterEligible) {
+          notes.push(`${s.key} is classified as a schedule sheet but 0 tables extracted from it, and ${Math.round((geo.imageArea / sheetArea) * 100)}% of its own area is embedded raster image content — its schedule data is very likely pasted in as a picture (or scanned), invisible to text-based extraction no matter the vocabulary. view_sheet to confirm; classify_symbol may still find shapes there, but table rows will not extract.`);
+        } else if (sheetArea > 0 && (geo.maxImageArea ?? 0) / sheetArea >= RASTER_SOLO_IMG_MIN_FRAC) {
+          // Real, general construction-document convention this catches that
+          // the check above cannot (it fires on a whole-sheet-scan fraction,
+          // and only on schedule-role sheets): a SMALL equipment/reference
+          // sub-schedule pasted directly onto a plan (or other non-schedule-
+          // role) sheet as one picture, rather than collected on its own
+          // dedicated schedule sheet — far too small a fraction of that
+          // sheet's own total area to ever clear rasterPolicy's whole-sheet
+          // bar, and never reached above because plan-role sheets aren't
+          // schedule-role. `maxImageArea` (a SINGLE placed image's own area,
+          // never a sum — see its own comment in oneclick.ts) is what tells
+          // "one unusually large picture" apart from a sheet that merely
+          // carries several small incidental images (title-block logo, PE
+          // stamp, north arrow) whose combined area could otherwise read as
+          // "some raster content" without any one of them being big enough
+          // to plausibly BE a table.
+          notes.push(`${s.key} (role: ${s.role}) extracted 0 tables but carries a single embedded picture covering ${Math.round((geo.maxImageArea! / sheetArea) * 100)}% of its own area — real sets sometimes paste a small schedule/table directly onto a plan (or other) sheet as an image rather than as real text, instead of collecting it on its own dedicated schedule sheet; that picture may be exactly such a table, invisible to text-based extraction no matter the vocabulary. view_sheet to confirm.`);
+        }
+      } catch { /* diagnostic only */ }
+    }
+    return notes;
+  }
+
+  /** Raw internal graph (full table rows/cells, not `sheetGraph()`'s own
+   * wire-summarized counts) — for internal, same-package orchestration only
+   * (takeoff.ts's project-level pipeline). Not a new capability: every
+   * field here is already what `sheetGraph()`/`sweepScheduleRow()` read
+   * internally, just not otherwise reachable outside this class. */
+  async graphForPipeline(): Promise<SheetGraph> {
+    return this.ensureGraph();
+  }
+
   async sheetGraph() {
     const g = await this.ensureGraph();
+    const rasterNotes = await this.rasterScheduleNotes(g);
+    const notes = rasterNotes.length ? [...g.notes, ...rasterNotes] : g.notes;
     return {
       available: g.available,
       sheets: g.sheets.map((s) => ({
@@ -3922,7 +4813,7 @@ export class Session {
       callouts: g.callouts.map((c) => ({ detail: c.detail, target_sheet: c.target_sheet, sheet: c.sheet, bbox: Session.wireBox(c.bbox) })),
       ...(g.buildings.length ? { buildings: g.buildings } : {}),
       ...(g.revisions.length ? { revisions: g.revisions.map((r) => ({ rev: r.rev, sheet: r.sheet, bbox: Session.wireBox(r.bbox), ...(r.drawn ? { drawn: true } : {}) })) } : {}),
-      ...(g.notes.length ? { notes: g.notes } : {}),
+      ...(notes.length ? { notes } : {}),
       counts: { rooms: g.rooms.length, unmatched_tags: g.unmatched_tags.length, schedules: g.tables.length, callouts: g.callouts.length },
     };
   }

@@ -7,11 +7,13 @@ import { fileURLToPath } from "node:url";
 import { mkdtemp, copyFile, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { z } from "zod";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { buildServer } from "../server.ts";
 import { Session, sanitizeApprovals } from "../src/session.ts";
 import { openPdf, positionedText } from "../src/pdf.ts";
+import { sweepScheduleRowOutput } from "../src/outputs.ts";
 // the canvas's own tally — the same function the marked-set cover prints from
 import { approvalTally } from "../../web/src/lib/approvals.js";
 // the rules engine's own mask builder — the #207 test plants a synthetic
@@ -1575,6 +1577,503 @@ test("symbol_sweep exclude: a counter-example that separates nothing is refused,
   assert.match(empty.data.error, /must be an instance of what you seeded/);
 });
 
+// ── symbol_sweep precision, real domain shapes (maturity plan Phase 1, #HVAC-1) ──
+// A DIFFERENT precision shape than #259 above, deliberately: there, one shape
+// (a bare square) is a strict SUBSET of the other (the drain), and telling
+// them apart needs an explicit counter-example (`exclude`) — scoring alone
+// can't, because the decoy genuinely IS contained in every real instance.
+// Here, NEITHER symbol is a subset of the other: a real gate valve (bowtie
+// body + a straight rising stem) and a real ball valve (the identical bowtie
+// body + a diagonal lever handle) share 6 of 7 segments and differ in
+// exactly one segment's direction — this tests whether scoring ALONE, with
+// NO counter-example, keeps two close-but-genuinely-different real device
+// types apart. The fixture (test/fixtures/valve-precision.pdf,
+// scripts/make-valve-fixture.mjs): 3 gate valves + 2 ball valves, side by
+// side. Real, measured numbers below — not invented targets.
+const VALVEPLAN = fileURLToPath(new URL("./fixtures/valve-precision.pdf", import.meta.url));
+const VALVEKEY = "valve-precision.pdf";
+const GATE_SEED_RECT = [[190, 876], [260, 936]];   // includes the full stem
+const BALL_SEED_RECT = [[295, 645], [355, 690]];
+
+test("symbol_sweep precision: a gate valve and a ball valve sharing a bowtie body never conflate on score alone (#HVAC-1)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: VALVEPLAN });
+
+  const gate = await call(client, "symbol_sweep", { sheet: VALVEKEY, seed_rect: GATE_SEED_RECT });
+  assert.equal(gate.isError, false);
+  assert.equal(gate.data.seed.segments, 7, "the full gate valve — bowtie (6) + rising stem (1)");
+  assert.equal(gate.data.found, 2, "the two other gate valves; never the two ball valves");
+  assert.ok(gate.data.matches.every((m: any) => m.score === 1));
+  // the ball valves are DISCLOSED, not silently dropped — a real near-miss,
+  // below the commit bar, because the stem-vs-handle segment genuinely differs
+  assert.equal(gate.data.withheld.length, 2, "both ball valve instances, withheld as near-misses");
+  assert.ok(gate.data.withheld.every((w: any) => w.score > 0.75 && w.score < 0.92));
+  assert.equal(gate.data.rejected, undefined, "no counter-example was given — this is scoring alone, not #259's exclude mechanism");
+
+  const ball = await call(client, "symbol_sweep", { sheet: VALVEKEY, seed_rect: BALL_SEED_RECT });
+  assert.equal(ball.isError, false);
+  assert.equal(ball.data.seed.segments, 7, "the full ball valve — the same bowtie (6) + diagonal handle (1)");
+  assert.equal(ball.data.found, 1, "the one other ball valve; never the three gate valves");
+  assert.equal(ball.data.matches[0].score, 1);
+  assert.equal(ball.data.withheld.length, 3, "all three gate valve instances, withheld as near-misses");
+  assert.ok(ball.data.withheld.every((w: any) => w.score > 0.75 && w.score < 0.92));
+
+  // determinism
+  const again = await call(client, "symbol_sweep", { sheet: VALVEKEY, seed_rect: GATE_SEED_RECT });
+  assert.deepEqual(again.data, gate.data);
+});
+
+// ── match_reference_symbol, real end-to-end (accuracy-hardening plan Phase 0) ──
+// matchAgainstLibrary (symbolsweep.ts) had ZERO live callers anywhere in this
+// codebase before this tool — confirmed by grep, the only prior caller was
+// its own test file. Real numbers below were MEASURED against the real
+// valve-precision.pdf fixture, not assumed. The fixture's own committed
+// scale (upp) is derived so its bowtie body (24pt = 6in at 4pt/in, render
+// scale 2.0 => 8 image-px/in) matches GATE_VALVE's own stated real-world
+// size exactly.
+//
+// FIXED (ledger item 31, later session): the reference BALL_VALVE shape's
+// lever handle used to be an arbitrary 0.8/0.6-unit-vector guess (a 4:3
+// slope) instead of this project's own real, measured geometry — and at
+// that guessed slope it never cleared the commit bar against this exact
+// fixture's real ball valves (max 0.823, withheld — a real, disclosed gap
+// this test used to pin as "found: 0"). Refitted to the fixture's own real
+// handle vector (7:9 slope, `make-valve-fixture.mjs`'s `ballValve()`,
+// hvacRefShapes.ts's own comment has the full derivation) — both real ball
+// valves now score a clean 1.0, and the fixture's real gate valves are
+// disclosed as honest near-misses in the OTHER direction too, not silently
+// promoted either way.
+const VALVE_UPP = 1 / 96;   // real feet per image px — 8 image-px/in
+
+test("match_reference_symbol: gate and ball valve scored against a real fixture — both find their own real instances, each disclosing the other family as a near-miss, never a false match", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: VALVEPLAN });
+  await call(client, "set_scale", { sheet: VALVEKEY, upp: VALVE_UPP });
+
+  // names-filtered, not the whole library — this fixture only draws gate/ball
+  // valves, and the library grows over time (Phase 1); pinning to these two
+  // keeps this test stable as more shapes are added.
+  const r = await call(client, "match_reference_symbol", { sheet: VALVEKEY, names: ["gate valve", "ball valve"] });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.shapes.length, 2, "gate valve and ball valve — exactly the two requested");
+
+  const gate = r.data.shapes.find((s: any) => s.name === "gate valve");
+  assert.equal(gate.found, 3, "all 3 real gate valves in the fixture, at the reference shape's own real-world size");
+  assert.ok(gate.matches.every((m: any) => m.score === 1));
+  assert.equal(gate.withheld.length, 2, "the 2 real ball valve instances, disclosed as near-misses, never silently promoted");
+  assert.ok(gate.withheld.every((w: any) => w.score > 0.75 && w.score < 0.92));
+
+  const ball = r.data.shapes.find((s: any) => s.name === "ball valve");
+  assert.equal(ball.found, 2, "ledger item 31, fixed: both real ball valves now clear the commit bar at the fixture's own real handle geometry");
+  assert.ok(ball.matches.every((m: any) => m.score === 1));
+  assert.equal(ball.withheld.length, 3, "the 3 real gate valve instances, disclosed as near-misses in the other direction — never silently promoted either");
+  assert.ok(ball.withheld.every((w: any) => w.score > 0.75 && w.score < 0.92));
+
+  // determinism
+  const again = await call(client, "match_reference_symbol", { sheet: VALVEKEY, names: ["gate valve", "ball valve"] });
+  assert.deepEqual(again.data, r.data);
+});
+
+test("match_reference_symbol: names filters to just the requested shape(s)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: VALVEPLAN });
+  await call(client, "set_scale", { sheet: VALVEKEY, upp: VALVE_UPP });
+
+  const r = await call(client, "match_reference_symbol", { sheet: VALVEKEY, names: ["Gate Valve"] });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.shapes.length, 1);
+  assert.equal(r.data.shapes[0].name, "gate valve");
+  assert.equal(r.data.shapes[0].found, 3);
+});
+
+test("match_reference_symbol: an unknown shape name is a named error, not a silent empty result", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: VALVEPLAN });
+  await call(client, "set_scale", { sheet: VALVEKEY, upp: VALVE_UPP });
+
+  const r = await call(client, "match_reference_symbol", { sheet: VALVEKEY, names: ["butterfly valve"] });
+  assert.equal(r.isError, true);
+  assert.match(r.data.error ?? JSON.stringify(r.data), /No reference shape named/);
+});
+
+test("match_reference_symbol: refuses with a named reason when the sheet has no committed scale", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: VALVEPLAN });
+  const r = await call(client, "match_reference_symbol", { sheet: VALVEKEY });
+  assert.equal(r.isError, true);
+  assert.match(r.data.error ?? JSON.stringify(r.data), /No committed scale/);
+});
+
+test("match_reference_symbol: refuses on a sheet with no vector linework at all", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SCAN });
+  await call(client, "set_scale", { sheet: SCAN_KEY, upp: VALVE_UPP });
+  const r = await call(client, "match_reference_symbol", { sheet: SCAN_KEY });
+  assert.equal(r.isError, true);
+  assert.match(r.data.error ?? JSON.stringify(r.data), /no vector linework/);
+});
+
+// ── match_reference_symbol: the BAS control-valve family (accuracy-
+// hardening plan Phase 1) — a REAL strict-superset precision case, #259's
+// own class of problem in a new shape family. The fixture
+// (test/fixtures/control-valve-precision.pdf,
+// scripts/make-control-valve-fixture.mjs) draws 3 real 2-way electric
+// control valves and 2 real 3-way electric control valves at the EXACT
+// geometry measured off the real Eglin AFB legend
+// (federal-attachment4-mechanical.pdf#17) — the 3-way's own body is the
+// 2-way's IDENTICAL body plus one real, measured extra leg, never a decoy
+// that merely differs in angle. Real numbers below were MEASURED (this
+// project's own doctrine), including a real bug caught and fixed before
+// it shipped: matchAgainstLibrary's own first cross-shape disambiguation
+// attempt compared a smaller shape's matches against a LARGER shape's
+// withheld candidates too — which wrongly demoted every real 2-way
+// instance (found dropped to 0), since a larger shape's own withheld
+// near-miss is exactly the larger shape's own honest "this isn't me," not
+// grounds to doubt a smaller shape's clean match. Fixed to compare only
+// against the larger shape's own CLEAN matches (known-gaps ledger item 33).
+const CVPLAN = fileURLToPath(new URL("./fixtures/control-valve-precision.pdf", import.meta.url));
+const CVKEY = "control-valve-precision.pdf";
+const CV_UPP = 1 / 141;   // matches hvacRefShapes.ts's own MBOX_IN/MBOX_PT scale exactly
+
+test("match_reference_symbol: 2-way vs 3-way electric control valve — a real strict-superset case, never conflated (#HVAC-5)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: CVPLAN });
+  await call(client, "set_scale", { sheet: CVKEY, upp: CV_UPP });
+
+  const r = await call(client, "match_reference_symbol", { sheet: CVKEY, names: ["2-way electric control valve", "3-way electric control valve"] });
+  assert.equal(r.isError, false);
+
+  const two = r.data.shapes.find((s: any) => s.name === "2-way electric control valve");
+  assert.equal(two.found, 3, "the 3 real 2-way instances — never the 2 real 3-way instances too, despite 2-way's body being a literal subset of 3-way's");
+  assert.ok(two.matches.every((m: any) => m.score === 1));
+  assert.equal(two.withheld.length, 2, "the 2 real 3-way instances, demoted from a false clean match to a disclosed withheld — never silently kept as a 2-way match");
+  assert.ok(two.withheld.every((w: any) => /larger reference shape/.test(w.reason) && /3-way electric control valve/.test(w.reason)));
+
+  const three = r.data.shapes.find((s: any) => s.name === "3-way electric control valve");
+  assert.equal(three.found, 2, "the 2 real 3-way instances");
+  assert.ok(three.matches.every((m: any) => m.score === 1));
+  assert.equal(three.withheld.length, 3, "the 3 real 2-way instances, honestly withheld by 3-way's OWN scoring (missing the third leg) — real evidence, not a proximity guess");
+  assert.ok(three.withheld.every((w: any) => w.score > 0.75 && w.score < 0.92 && !/larger reference shape/.test(w.reason)));
+
+  // determinism
+  const again = await call(client, "match_reference_symbol", { sheet: CVKEY, names: ["2-way electric control valve", "3-way electric control valve"] });
+  assert.deepEqual(again.data, r.data);
+});
+
+// ── find_legend_symbols, real end-to-end (accuracy-hardening plan Phase 1,
+// pivoted from a fixed reference-shape library after an explicit ask: "are
+// we learning symbols as we go, or scanning the legend once?"). The
+// fixture (test/fixtures/legend-plan.pdf, scripts/make-legend-fixture.mjs)
+// deliberately mirrors real quirks found live against the real Eglin AFB
+// legend (federal-attachment4-mechanical.pdf#17, this project's own
+// federal-mech corpus set — corpus PDFs never enter this repo): a real
+// T-junction glyph (stem lands mid-edge, its own "bowtie" is two full
+// crossing diagonals with no endpoint at the visual center), a caption
+// split into several real text runs, a caption WRAPPED across two lines, a
+// long column-divider rule that must never read as a glyph, and two
+// independent (glyph, caption) rows on one sheet.
+const LEGENDPLAN = fileURLToPath(new URL("./fixtures/legend-plan.pdf", import.meta.url));
+const LEGENDKEY = "legend-plan.pdf";
+
+test("find_legend_symbols: real T-junction glyphs, split/wrapped captions, and a column divider — all handled correctly end to end", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: LEGENDPLAN });
+
+  const r = await call(client, "find_legend_symbols", { sheet: LEGENDKEY });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.glyphs.length, 3, "the 2 control-valve rows + the 1 damper row — never the divider, never the orphan KW/KILOWATTS pair");
+
+  const byCaption = Object.fromEntries(r.data.glyphs.map((g: any) => [g.caption, g]));
+  assert.ok(byCaption["2 - WAY ELECTRIC CONTROL VALVE"], "a caption split into several real text runs, merged correctly");
+  assert.ok(byCaption["2-WAY CONTROL VALVE WITH INTEGRAL THERMOSTAT"], "a caption WRAPPED across two physical lines, merged correctly");
+  assert.ok(byCaption["PARALLEL BLADE DAMPER"], "a second, independent glyph family, correctly found and labeled");
+
+  // every rect is real, image-px, and directly usable as symbol_sweep's
+  // own seed_rect — feed one straight through and confirm it actually works
+  const cv = byCaption["2 - WAY ELECTRIC CONTROL VALVE"];
+  const swept = await call(client, "symbol_sweep", { sheet: LEGENDKEY, seed_rect: [[cv.rect[0], cv.rect[1]], [cv.rect[2], cv.rect[3]]] });
+  assert.equal(swept.isError, false, "the detected rect is a real, valid seed_rect — no manual marqueeing needed");
+
+  // determinism
+  const again = await call(client, "find_legend_symbols", { sheet: LEGENDKEY });
+  assert.deepEqual(again.data, r.data);
+});
+
+test("find_legend_symbols: refuses on a sheet with no vector linework at all", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SCAN });
+  const r = await call(client, "find_legend_symbols", { sheet: SCAN_KEY });
+  assert.equal(r.isError, true);
+  assert.match(r.data.error ?? JSON.stringify(r.data), /no vector linework/);
+});
+
+test("find_legend_symbols: a sheet with real linework but nothing legend-shaped returns an honest empty result with a note, not an error", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: VALVEPLAN });
+  const r = await call(client, "find_legend_symbols", { sheet: VALVEKEY });
+  assert.equal(r.isError, false);
+  // the valve-precision fixture's own gate/ball valves have NO nearby
+  // caption text at all, so nothing pairs — an honest empty result
+  assert.equal(r.data.glyphs.length, 0);
+  assert.ok(r.data.note && /no real legend falls back to the ordinary symbol_sweep/.test(r.data.note));
+});
+
+// ── sweep_inline_motif, real end-to-end (accuracy-hardening plan Phase 4) ──
+// The fixture (test/fixtures/inline-motif-plan.pdf,
+// scripts/make-inline-motif-fixture.mjs) mirrors the real shape found live
+// against the real Bessemer sample: a register/grille mark's own identifying
+// feature is a COMPACT, densely-hatched box, and real siblings of the SAME
+// symbol type are drawn at genuinely different real-world sizes (measured
+// live: symbol_sweep's own whole-shape matchSymbol scores two real siblings
+// at only ~76-77%, under the 92% commit bar, because the box itself is a
+// different real size, not drafting noise). SEED and SIBLING here are the
+// same motif at a 70% linear scale; NOISE is a same-signature scrap far too
+// small to be real fill; DECOY is a big same-signature hatch region at a
+// genuinely different real-world size (a floor/wall texture, not a
+// register) that must be excluded by size, not just found-and-ignored.
+const INLINEPLAN = fileURLToPath(new URL("./fixtures/inline-motif-plan.pdf", import.meta.url));
+const INLINEKEY = "inline-motif-plan.pdf";
+// SEED box: pt x[100,130] y[460,500] -> image px x[200,260], y[(600-500)*2,(600-460)*2]
+const INLINE_SEED_RECT: [[number, number], [number, number]] = [[200, 200], [260, 280]];
+
+test("sweep_inline_motif: finds the real sibling at a different physical size, excludes the noise scrap and the same-signature decoy by real-world size", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: INLINEPLAN });
+  await call(client, "set_scale", { sheet: INLINEKEY, upp: 1 / 40 });
+  const r = await call(client, "sweep_inline_motif", { sheet: INLINEKEY, seed_rect: INLINE_SEED_RECT });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.found, 1, "exactly the sibling — never the noise scrap, never the decoy");
+  const m = r.data.matches[0];
+  assert.ok(Math.abs(m.w_ft - 1.05) < 0.05 && Math.abs(m.h_ft - 1.368) < 0.05, `sibling's real 70%-scale size: ${JSON.stringify(m)}`);
+  assert.ok(m.size_score > 0.5 && m.size_score <= 1, `a real, meaningful score, not a bare pass/fail: ${m.size_score}`);
+  assert.equal(r.data.withheld.length, 0);
+  assert.ok(!("note" in r.data), "a committed scale means no image-px-only fallback note");
+
+  // determinism
+  const again = await call(client, "sweep_inline_motif", { sheet: INLINEKEY, seed_rect: INLINE_SEED_RECT });
+  assert.deepEqual(again.data, r.data);
+});
+
+test("sweep_inline_motif: no scale committed — sizes compared in image px only, honestly disclosed", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: INLINEPLAN });
+  const r = await call(client, "sweep_inline_motif", { sheet: INLINEKEY, seed_rect: INLINE_SEED_RECT });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.found, 1, "still finds the real sibling on px-only comparison alone");
+  assert.equal(r.data.matches[0].w_ft, null);
+  assert.match(r.data.note ?? "", /No scale committed.*image px only/s);
+});
+
+test("sweep_inline_motif: refuses when the seed rect has no hatch fill inside it", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: INLINEPLAN });
+  const r = await call(client, "sweep_inline_motif", { sheet: INLINEKEY, seed_rect: [[0, 0], [20, 20]] });
+  assert.equal(r.isError, true);
+  assert.match(r.data.error ?? JSON.stringify(r.data), /No hatch-filled region/);
+});
+
+test("sweep_inline_motif: refuses on a scanned sheet with no vector linework at all", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SCAN });
+  const r = await call(client, "sweep_inline_motif", { sheet: SCAN_KEY, seed_rect: [[0, 0], [20, 20]] });
+  assert.equal(r.isError, true);
+  assert.match(r.data.error ?? JSON.stringify(r.data), /no vector linework/);
+});
+
+// ── trace_connectivity, real end-to-end (maturity plan Phase 4) ─────────
+// The fixture (test/fixtures/mep-plan.pdf, scripts/make-mep-fixture.mjs):
+// six named scenarios (five from the maturity plan's own §5 test strategy,
+// plus the accuracy-hardening plan's Phase 2 WALL CONFLATION case), exercised
+// through a REAL PDF load → real pdf.js geometry extraction → real
+// buildMepGraph → real traceConnectivity, not a hand-built segment array
+// (web/test/mepconnectivity.test.ts already covers the module directly;
+// this proves the whole pipeline agrees with it). Coordinates below are the
+// fixture's own PDF pt × 2, y-flipped (image px = pt_x*2, (600-pt_y)*2) —
+// the same transform every other geometry tool in this file already assumes.
+const MEPPLAN = fileURLToPath(new URL("./fixtures/mep-plan.pdf", import.meta.url));
+const MEPKEY = "mep-plan.pdf";
+const SCAN = fileURLToPath(new URL("./fixtures/scanned-plan.pdf", import.meta.url));
+const SCAN_KEY = "scanned-plan.pdf";
+
+test("trace_connectivity: a straight run reaches its one real equipment placement", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [100, 200],
+    equipment: [{ id: "AHU-1", at: [500, 200] }],
+  });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "reached");
+  assert.equal(r.data.reached_equipment.id, "AHU-1");
+  assert.equal(r.data.layer_signal, "none", "this fixture carries no PDF layers, same as the real Bessemer sample");
+});
+
+test("trace_connectivity: a real mid-edge T-branch reaching two different equipment is ambiguous, never picks one", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [100, 400],
+    equipment: [{ id: "VAV-1", at: [500, 400] }, { id: "VAV-2", at: [300, 560] }],
+  });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "ambiguous");
+  const ids = r.data.branches.map((b: any) => b.leads_to).sort();
+  assert.deepEqual(ids, ["VAV-1", "VAV-2"]);
+});
+
+test("trace_connectivity: a real drawn gap bridges through a fitting symbol sitting in it, and stays dead_end without one", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const withFitting = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [100, 800],
+    equipment: [{ id: "AHU-2", at: [520, 800] }],
+    fittings: [{ at: [300, 800] }],
+    bridge_ft: 4,   // the fixture's real drawn gap (40 image px) exceeds the 24px default
+  });
+  assert.equal(withFitting.isError, false);
+  assert.equal(withFitting.data.status, "reached");
+  assert.equal(withFitting.data.reached_equipment.id, "AHU-2");
+  assert.ok(withFitting.data.factors.some((f: string) => f.startsWith("bridged-gap")));
+
+  const withoutFitting = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [100, 800],
+    equipment: [{ id: "AHU-2", at: [520, 800] }],
+    bridge_ft: 4,
+  });
+  assert.equal(withoutFitting.data.status, "dead_end", "no fitting supplied — the identical real gap is never bridged on proximity alone");
+});
+
+test("trace_connectivity: a stub reaching no equipment is a real dead_end, named as ran-out-of-linework", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [100, 1000],
+    equipment: [{ id: "FAR", at: [700, 1000] }],   // nowhere near this run
+  });
+  assert.equal(r.data.status, "dead_end");
+  assert.match(r.data.reason, /ran out of connected linework/i);
+});
+
+// A REAL, DISCLOSED, NOT-YET-SOLVED limitation (maturity plan §6 risk #2 /
+// known-gaps ledger item 22), pinned rather than hidden: JTS's own noding
+// splits two lines at a true interior crossing into a real 4-way junction,
+// so a duct and a pipe that merely cross on the page (different real
+// elevations) trace as CONNECTED. This test locks in that CURRENT behavior
+// — a future fix to #22 changes this assertion, not silently drifts past it.
+test("trace_connectivity: an unrelated crossing (not a real connection) currently traces as ambiguous — a known, disclosed limitation (#22)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [500, 600],
+    equipment: [{ id: "AHU-3", at: [900, 600] }, { id: "PANEL-1", at: [600, 1100] }],
+  });
+  assert.equal(r.data.status, "ambiguous", "current behavior: the crossing is read as a real junction — see #22");
+});
+
+test("trace_connectivity: refuses when no equipment placements are supplied at all", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", { sheet: MEPKEY, from: [100, 200], equipment: [] });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "refused");
+  assert.match(r.data.reason, /sweep the target family first/);
+});
+
+test("trace_connectivity: refuses when the seed point isn't on any traced linework", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [999, 999],
+    equipment: [{ id: "AHU-1", at: [500, 200] }],
+  });
+  assert.equal(r.data.status, "refused");
+  assert.match(r.data.reason, /isn't on any traced linework/);
+});
+
+test("trace_connectivity: refuses on a scanned sheet with no vector linework at all", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SCAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: SCAN_KEY, from: [100, 100],
+    equipment: [{ id: "X", at: [200, 200] }],
+  });
+  assert.equal(r.data.status, "refused");
+  assert.match(r.data.reason, /no traced vector linework/);
+});
+
+// ── NODING FAILURE (real, corpus-found: baker-county-eoc-bidset.pdf#39, a
+// mechanical roof plan) ──────────────────────────────────────────────────
+// The fixture (test/fixtures/mep-noding-failure.pdf, scripts/make-mep-
+// fixture.mjs) carries 11 literal real segments, ddmin-minimized from the
+// real sheet's own ~35,791, confirmed to defeat JTS's noding at every one
+// of buildMepGraph's own retry grids — see web/test/mepconnectivity.test.ts
+// for the same shape pinned directly at the buildMepGraph level. Before
+// this session's fix, ensureMepGraph let that throw straight out uncaught:
+// tools.ts's own `run` wrapper turned it into an isError:true reply
+// carrying a raw JTS coordinate dump, NOT trace_connectivity's own
+// documented TraceResult shape (structuredContent didn't even validate
+// against traceConnectivityOutput). Confirmed BOTH ways directly (not
+// assumed): stashing this session's own session.ts fix and re-running this
+// exact fixture reproduces the uncaught throw; restoring the fix turns it
+// into a clean, doctrine-consistent "refused".
+const MEPNODEFAIL = fileURLToPath(new URL("./fixtures/mep-noding-failure.pdf", import.meta.url));
+const MEPNODEFAIL_KEY = "mep-noding-failure.pdf";
+
+test("trace_connectivity: a sheet whose linework defeats JTS noding at every retry grid refuses cleanly, never throws (real corpus find)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPNODEFAIL });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPNODEFAIL_KEY, from: [1500, 2551],
+    equipment: [{ id: "X", at: [1600, 2551] }],
+  });
+  assert.equal(r.isError, false, "a noding failure is a named refusal, not a protocol-level error");
+  assert.equal(r.data.status, "refused");
+  assert.match(r.data.reason, /could not be reliably noded/);
+});
+
+// ── WALL CONFLATION (accuracy-hardening plan Phase 2, ledger item 24) ───────
+// A real, closed wall rectangle at the sheet's own heaviest pen, with two
+// ordinary-weight duct stubs each touching it at a real mid-edge T-junction
+// — the exact real Bessemer EF-1 failure shape, reproduced deterministically.
+// Confirmed BOTH ways directly (not assumed): stashing this session's own
+// session.ts fix and re-running this exact scenario reproduces the false
+// "reached" through the wall's own 4 edges (6 hops, confidence 0.6) on both
+// wrong-side seeds; restoring the fix turns both into a real dead_end.
+test("trace_connectivity: a real wall between two duct stubs is excluded on an unlayered sheet — no false reach through wall ink (#24)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [1250, 550],   // top stub, its own midpoint
+    equipment: [{ id: "EQ-BOTTOM", at: [1250, 200] }],   // only the WRONG side supplied
+  });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "dead_end", "before the Phase 2 fix this falsely reached EQ-BOTTOM straight through the wall's own 4 edges");
+  assert.equal(r.data.layer_signal, "none");
+});
+
+test("trace_connectivity: the same wall-adjacent stub still correctly reaches its OWN equipment — exclusion doesn't overreach", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [1250, 550],
+    equipment: [{ id: "EQ-TOP", at: [1250, 600] }],   // the stub's own real equipment
+  });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "reached");
+  assert.equal(r.data.reached_equipment.id, "EQ-TOP");
+});
+
+test("trace_connectivity: the mirror-image seed (bottom stub, top equipment) is equally excluded", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MEPPLAN });
+  const r = await call(client, "trace_connectivity", {
+    sheet: MEPKEY, from: [1250, 250],   // bottom stub, its own midpoint
+    equipment: [{ id: "EQ-TOP", at: [1250, 600] }],
+  });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.status, "dead_end");
+});
+
 // #296 — the seed is installed work in sheet scope. Found in live validation:
 // four × on a plumbing plan with five drains, and the unmarked one was the
 // seed, correctly flagged as a miss by the estimator auditing the render.
@@ -2311,6 +2810,118 @@ test("sweep_schedule_row refusals: unanchorable row, unknown row, ambiguous key 
   assert.equal((await call(client, "takeoff_summary")).data.conditions.length, 0);
 });
 
+// ── sweep_schedule_row same-sheet multi-convention: a real bug (itd-d1-lab
+// B-1/B-2, "leader-line tag column" investigation) — a tag drawn TWICE on
+// its own anchor sheet in two REAL, physically incompatible drafting
+// conventions (a piping schematic's own small icon; a to-scale plan
+// symbol). Same-tag corroboration was REQUIRED between the two, but a
+// schematic icon can never recur as a to-scale plan symbol (or vice versa)
+// no matter how far the pad widens — a real drawing-convention mismatch,
+// not a detection failure — so the tag refused ("linework does not recur")
+// even though it is genuinely, singly installed and plainly visible on the
+// sheet. Fixed: once every corroboration attempt is exhausted, fall
+// through to the SAME disclosed "uncorroborated" acceptance already used
+// for a tag drawn exactly once anywhere, trying the tag's OTHER same-sheet
+// occurrences as the anchor instead.
+// Fixture (test/fixtures/schedule-row-multiconvention.pdf,
+// scripts/make-scheduledrow-multiconvention-fixture.mjs): a MECHANICAL
+// PLAN with tag "M-1" drawn twice — a 3-segment triangle (the "schematic"
+// stand-in) and an unrelated 5-segment house shape (the "to-scale plan"
+// stand-in) — neither marker recurs anywhere else on the sheet, and a
+// FINISH SCHEDULE table names the row.
+const MULTICONV = fileURLToPath(new URL("./fixtures/schedule-row-multiconvention.pdf", import.meta.url));
+test("sweep_schedule_row: a tag drawn twice in two real, incompatible conventions on its own anchor sheet resolves uncorroborated instead of refusing", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MULTICONV });
+
+  const r = await call(client, "sweep_schedule_row", { tag: "M-1" });
+  assert.equal(r.isError, false, r.data?.error);
+  assert.equal(r.data.found, 1, "the one real, singly-installed instance is counted, not refused");
+  assert.equal(r.data.anchor.occurrences, 2, "both real drawn occurrences were seen");
+  assert.equal(r.data.anchor.corroborated, false, "honestly disclosed as weaker evidence, never silently promoted");
+  assert.match(r.data.note, /too sparsely to cross-check|drawn exactly once/,
+    "the standard uncorroborated-evidence disclosure fires, same as a singly-drawn tag");
+});
+
+// ── sweep_schedule_row cross-tag corroboration: the uniquely-tagged family
+// (VAV-1, VAV-2, VAV-3, … one tag per physical box, never repeated) has no
+// same-tag sibling occurrence to corroborate against — a sibling ROW from the
+// SAME schedule table whose own tag occurrence carries the same fingerprint
+// stands in instead, disclosed as weaker evidence than same-tag recurrence.
+// The fixture (test/fixtures/symbol-uniqtags.pdf, scripts/make-symbol-fixture.mjs):
+// a MECHANICAL PLAN with THREE marks, each tag drawn exactly once — VAV-1 and
+// VAV-2 share the SAME diamond marker shape (two different boxes, one firm's
+// convention); VAV-3 is a genuinely different TRIANGLE marker family in the
+// SAME VAV SCHEDULE table — the negative control.
+const SYMUNIQ = fileURLToPath(new URL("./fixtures/symbol-uniqtags.pdf", import.meta.url));
+
+test("sweep_schedule_row cross-tag corroboration: a uniquely-tagged pair corroborates against EACH OTHER's own occurrence, disclosed as sibling_tag", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SYMUNIQ });
+
+  const v1 = await call(client, "sweep_schedule_row", { tag: "VAV-1" });
+  assert.equal(v1.isError, false);
+  assert.equal(v1.data.anchor.occurrences, 1, "VAV-1 is drawn exactly once — no same-tag sibling to corroborate against");
+  assert.equal(v1.data.anchor.corroborated, true, "VAV-2's own occurrence — the same diamond shape family — stood in");
+  assert.equal(v1.data.anchor.corroborated_via, "sibling_tag");
+  assert.equal(v1.data.anchor.corroborated_tag, "VAV-2");
+  assert.equal(v1.data.found, 1);
+  assert.match(v1.data.note, /corroborated against sibling tag "VAV-2"/);
+  assert.match(v1.data.note, /weaker.*than a same-tag corroboration/);
+
+  // symmetric: VAV-2 corroborates against VAV-1's own occurrence
+  const v2 = await call(client, "sweep_schedule_row", { tag: "VAV-2" });
+  assert.equal(v2.isError, false);
+  assert.equal(v2.data.anchor.corroborated, true);
+  assert.equal(v2.data.anchor.corroborated_via, "sibling_tag");
+  assert.equal(v2.data.anchor.corroborated_tag, "VAV-1");
+  assert.equal(v2.data.found, 1);
+
+  // schema round-trip: the new fields are declared, nothing stripped
+  const parsed = z.object(sweepScheduleRowOutput).parse(v1.data);
+  assert.deepEqual(parsed, v1.data);
+
+  // commit carries the corroboration kind through into provenance
+  const committed = await call(client, "sweep_schedule_row", { tag: "VAV-1", commit: true });
+  assert.equal(committed.data.committed, 1);
+  const payload = await call(client, "export_takeoff", {});
+  const shp = payload.data.shapes.find((s: any) => s.condition_id === payload.data.conditions.find((c: any) => c.finish_tag === "VAV-1").id);
+  assert.equal(shp.origin.symbol.seed.corroborated, true);
+  assert.equal(shp.origin.symbol.seed.corroborated_via, "sibling_tag");
+  assert.equal(shp.origin.symbol.seed.corroborated_tag, "VAV-2");
+});
+
+test("sweep_schedule_row cross-tag corroboration negative control: a genuinely different shape family never false-positives, and the anchor still succeeds uncorroborated", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SYMUNIQ });
+
+  // VAV-3 is a triangle marker; its schedule siblings VAV-1/VAV-2 are diamond
+  // markers. Cross-tag corroboration must be TRIED (both are in the same
+  // table) and must NOT fire — the shapes genuinely do not reproduce each
+  // other — and the anchor must still succeed (uncorroborated), exactly as it
+  // did before this feature existed for the no-corroborator-at-all case.
+  const v3 = await call(client, "sweep_schedule_row", { tag: "VAV-3" });
+  assert.equal(v3.isError, false, "a failed cross-tag attempt must never turn a would-have-succeeded uncorroborated anchor into a refusal");
+  assert.equal(v3.data.anchor.occurrences, 1);
+  assert.equal(v3.data.anchor.corroborated, false);
+  assert.equal(v3.data.anchor.corroborated_via, undefined);
+  assert.equal(v3.data.anchor.corroborated_tag, undefined);
+  assert.equal(v3.data.anchor.segments, 3, "the triangle's own linework, not the diamonds'");
+  assert.equal(v3.data.found, 1, "VAV-3's own marker is still found — corroboration failing does not block the count");
+  assert.match(v3.data.note, /drawn exactly once/);
+  assert.match(v3.data.note, /none of 2 sibling tag\(s\)/, "both table siblings were tried and neither reproduced it");
+
+  // and the reverse: neither VAV-1 nor VAV-2 may ever be corroborated BY the
+  // triangle — already pinned above (each corroborates against the OTHER
+  // diamond, never against VAV-3), asserted again here for the negative case
+  // to stand on its own without relying on try order
+  const v1 = await call(client, "sweep_schedule_row", { tag: "VAV-1" });
+  assert.notEqual(v1.data.anchor.corroborated_tag, "VAV-3");
+
+  // schema round-trip on the uncorroborated reply too
+  const parsed = z.object(sweepScheduleRowOutput).parse(v3.data);
+  assert.deepEqual(parsed, v3.data);
+});
 
 // ── count_marks: the deterministic census ────────────────────────────────────
 // The fixture (test/fixtures/annotated-set.pdf, scripts/make-symbol-fixture.mjs):
@@ -2359,6 +2970,22 @@ test("count_marks: value-paired tags count, residue withheld with reasons, rows 
   assert.equal(zz.data.marks[0].count, 0);
 });
 
+test("count_marks: a tag and its value SIDE BY SIDE on the same baseline pairs too, not only stacked (accuracy-hardening plan, real baker-county-eoc corpus shape)", async () => {
+  // Real, found live through the actual Agent UI: baker-county-eoc's own
+  // real "CD-1"/"RG-1" register callouts draw the tag and its CFM value in
+  // a two-cell box row, side by side — count_marks originally only ever
+  // paired a value drawn BELOW the tag and withheld every one of these as
+  // "no paired value", even though a real value sat right beside it.
+  const c = await pair();
+  await call(c, "load_plan", { path: ANNSET });
+  const r = await call(c, "count_marks", { marks: ["CD-1"] });
+  assert.equal(r.isError, false, JSON.stringify(r.data).slice(0, 300));
+  const cd1 = r.data.marks[0];
+  assert.equal(cd1.count, 1, "the side-by-side box-row pairing must count, not withhold");
+  assert.equal(cd1.occurrences[0].value, "85");
+  assert.equal(cd1.withheld.length, 0);
+});
+
 test("count_marks: tags drawn ON their marker with no value are sweep_schedule_row's family — all withheld here", async () => {
   const c = await pair();
   await call(c, "load_plan", { path: SYMSET });
@@ -2388,4 +3015,34 @@ test("symbol_sweep variant_guard: whole-symbol mode demotes the richer drains a 
   // manual mode still wins: guard + counter-example behaves like #259
   const both = await call(client, "symbol_sweep", { sheet: SYMKEY, seed_rect: SQUARE_RECT, variant_guard: true, exclude: [SEED_RECT] });
   assert.equal(both.data.found, 1, "negatives take over — identical to the #259 sweep");
+});
+
+// accuracy-hardening plan (ledger item 42): a schedule-role sheet with ZERO
+// extracted tables reads today as indistinguishable from "this sheet
+// legitimately has none" — real corpus evidence (weld-county-permit) showed
+// this can instead mean the table content is a pasted-in RASTER IMAGE, not
+// real text, which sheetgraph.ts's vocabulary/column model could never read
+// no matter how it's tuned. Real, deterministic fixture (not the external,
+// uncommitted corpus) locking in the fix: page 1 is a normal plan-role sheet
+// with real text (irrelevant to this test beyond giving ensureGraph a plan to
+// work with); page 2 is titled "EQUIPMENT SCHEDULE" (role: schedule) but
+// carries only that one real text run plus a large embedded raster image
+// (62.5% of the page) — the same real shape confirmed on weld-county-permit's
+// own #2/#3 sheets via their own pdf.js operator list.
+const RASTER_SCHED = fileURLToPath(new URL("./fixtures/raster-schedule.pdf", import.meta.url));
+const RASTER_SCHED_KEY = "raster-schedule.pdf";
+
+test("sheet_graph: a schedule-role sheet with 0 tables AND heavy embedded raster image area is named, not silently reported as empty", async () => {
+  const c = await pair();
+  await call(c, "load_plan", { path: RASTER_SCHED });
+  const r = await call(c, "sheet_graph", {});
+  assert.equal(r.isError, false, JSON.stringify(r.data).slice(0, 300));
+  const sched = r.data.sheets.find((s: any) => s.sheet === `${RASTER_SCHED_KEY}#2`);
+  assert.equal(sched.role, "schedule");
+  assert.equal(sched.schedules.length, 0, "no real table text exists for sheetgraph.ts to find");
+  assert.ok(r.data.notes?.some((n: string) => n.includes(`${RASTER_SCHED_KEY}#2`) && /raster image/.test(n) && /63%|62%/.test(n)),
+    `expected a raster-coverage note naming the sheet: ${JSON.stringify(r.data.notes)}`);
+  // the plan-role sheet (real text, no embedded image) must never trip it
+  assert.ok(!r.data.notes?.some((n: string) => n.startsWith(RASTER_SCHED_KEY) && !n.includes("#2")),
+    "a normal plan sheet must never be flagged");
 });

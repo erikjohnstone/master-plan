@@ -1166,3 +1166,642 @@ export function sweepSymbols(segs: number[], seedRect: [Point, Point], opts: Swe
     ...(m.lum_gate ? { lum_gate: m.lum_gate } : {}),
   };
 }
+
+// ── reference-shape-seeded matching (maturity plan Phase 2, #HVAC-3) ──────
+// Every match above needs a human (or agent) to marquee ONE real instance
+// first, every time, on every sheet. This is the missing "propose a
+// hypothesis without a seed" path — for symbols whose SHAPE is standardized
+// enough across real firms' drawings to be worth a small hand-authored
+// reference fingerprint (see web/src/lib/hvacRefShapes.ts for the actual
+// shapes and the real corpus evidence behind each one; this module stays
+// domain-agnostic, same as fingerprintSymbol/matchSymbol above — it works
+// for any reference shape, HVAC or not).
+//
+// Scale is the real design problem a reference shape has that a marqueed
+// seed never does: a seed comes from the SAME sheet it searches (or a
+// stated seed/target upp ratio, #186 above), but a hand-authored reference
+// shape has no sheet of its own. The established, already-tested precedent
+// (sweepRatio: seed.upp / target.upp — a symbol's PIXEL size scales with
+// the sheet's own real-world scale, not printed-page-size-invariant) is
+// reused here, not re-decided: a reference shape states its own notional
+// real-world size (inches), and the caller supplies the TARGET sheet's own
+// committed upp (feet per image px) to convert it into that sheet's actual
+// pixel space before fingerprinting — never guessed, never searched across
+// scales. No committed scale on the target, no match attempt: refused with
+// a named reason, the same discipline every scale-dependent tool in this
+// codebase already holds to.
+export interface RefShape {
+  /** Human name — carried straight through as the result's own label. */
+  name: string;
+  /** Segments in real-world INCHES (a notional reference size for this
+   * symbol family — flat [ax,ay,bx,by, ...], the same layout `segs` always
+   * uses elsewhere in this module), NOT image px. Converted to the target
+   * sheet's own px space using its committed upp before matching. */
+  segsIn: number[];
+}
+
+export interface LibraryMatch {
+  name: string;
+  result: SymbolMatchResult;
+}
+
+/** Every reference shape in `library`, matched against `segs` — the target
+ * sheet's own vector geometry, in that sheet's own image px. `targetUpp` is
+ * the target sheet's committed feet-per-px (ctx.uppFor's own convention);
+ * null/undefined REFUSES rather than guessing a scale (mirrors matchSymbol's
+ * own no-scale-assumed doctrine, one level up). Each reference shape goes
+ * through the EXACT SAME scoring/refusal machinery matchSymbol already has
+ * — a match is a match, a near-miss is withheld with a reason, nothing is
+ * ever asserted from a weak score. `opts.excludeCenter` is never meaningful
+ * here (a reference shape has no seed instance of its own to shadow) and is
+ * silently ignored if passed. */
+export function matchAgainstLibrary(
+  segs: number[], library: RefShape[], targetUpp: number | null | undefined, opts: MatchOptions = {},
+): LibraryMatch[] {
+  if (!targetUpp) {
+    throw new Error("No committed scale on this sheet — a reference shape's real-world size cannot be converted to this sheet's pixels without one. Set the scale first, or marquee a real instance and use symbol_sweep instead.");
+  }
+  const pxPerIn = 1 / (targetUpp * 12);   // targetUpp: real feet per image px
+  const { excludeCenter: _ignored, ...rest } = opts;
+  const out: LibraryMatch[] = [];
+  const footprints: number[] = [];   // parallel to `out` — each shape's own bbox diagonal, px
+  const segCounts: number[] = [];    // parallel to `out` — each shape's own segment count
+  for (const ref of library) {
+    const segsPx = ref.segsIn.map((v) => v * pxPerIn);
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (let i = 0; i < segsPx.length; i += 4) {
+      x0 = Math.min(x0, segsPx[i], segsPx[i + 2]); x1 = Math.max(x1, segsPx[i], segsPx[i + 2]);
+      y0 = Math.min(y0, segsPx[i + 1], segsPx[i + 3]); y1 = Math.max(y1, segsPx[i + 1], segsPx[i + 3]);
+    }
+    const fp = fingerprintSymbol(segsPx, [[x0, y0], [x1, y1]]);
+    out.push({ name: ref.name, result: matchSymbol(fp, segs, rest) });
+    footprints.push(fp.footprint);
+    segCounts.push(fp.segments);
+  }
+  // Cross-shape disambiguation (#259's own class of problem, in a library
+  // with no marqueed sheet to draw a counter-example on): a reference shape
+  // that is a literal SUBSET of another library shape (real, measured case:
+  // a 2-way control valve's own body is exactly a 3-way's body minus its
+  // third leg) scores a clean 1.0 match wherever the LARGER shape is
+  // actually drawn — extra ink around a smaller seed never lowers its own
+  // score. Demoted here, not in matchSymbol itself: only meaningful when
+  // multiple library shapes are compared in the same call. A strictly
+  // smaller shape's match is demoted to withheld whenever a strictly LARGER
+  // shape (more segments) has its own CLEAN MATCH (never its withheld —a
+  // withheld near-miss is the larger shape's own honest "this isn't me",
+  // real evidence a location is the SMALLER shape, not grounds to doubt
+  // it; using withheld here was a real, measured bug caught before this
+  // shipped, see the git history) within the smaller shape's own footprint
+  // of the same point — never silently dropped, always naming which
+  // larger shape did it.
+  for (let i = 0; i < out.length; i++) {
+    for (let j = 0; j < out.length; j++) {
+      if (i === j || segCounts[i] >= segCounts[j]) continue;
+      const smaller = out[i], larger = out[j];
+      if (!larger.result.matches.length) continue;
+      const tol = footprints[i];
+      const kept: SweepMatch[] = [];
+      for (const m of smaller.result.matches) {
+        const hit = larger.result.matches.find((lm) => Math.hypot(lm.at[0] - m.at[0], lm.at[1] - m.at[1]) <= tol);
+        if (hit) {
+          smaller.result.withheld.push({ ...m, reason: `a larger reference shape ("${larger.name}") also matches this same location — this instance is very likely a "${larger.name}", not a "${smaller.name}"; view_sheet here and confirm before trusting either` });
+        } else {
+          kept.push(m);
+        }
+      }
+      smaller.result.matches = kept;
+    }
+  }
+  return out;
+}
+
+// ── sweep_schedule_row's engine (maturity plan Phase 3, #HVAC-crossscale) ──
+// A schedule row names a tag, not a symbol — the marker has to be found
+// FROM the tag's own drawn occurrence(s), corroborated before it's trusted,
+// then swept across a whole plan set that may not be drawn at one scale.
+// This was real, working logic in the MCP server (mcp/src/session.ts) the
+// browser's own port explicitly did NOT carry over (documented in its own
+// code comment) — extracted here so canvas and MCP call the identical
+// pure engine instead of two implementations that can silently drift, the
+// same "canvas and MCP cannot disagree" doctrine fingerprintSymbol/
+// matchSymbol above already keep. Both callers still own everything
+// session-shaped: resolving the row, walking their own sheet list,
+// deciding what to commit. This owns only the geometry.
+
+/** One drawn occurrence of a tag's text on a sheet — the shape both the MCP
+ * server's session.ts and the browser's TakeoffCanvas.jsx already compute
+ * identically from their own span sources, just never shared as one type. */
+export interface TagOcc {
+  cx: number;
+  cy: number;
+  /** The text span's own height, image px — the pad-ladder step size and the
+   * match-radius floor both ride this, never a fixed constant, so a tiny
+   * tag and a huge one both get a proportionate footprint. */
+  h: number;
+  bbox: [number, number, number, number];
+}
+
+/** A minimal positioned text span — the shape both sweep_schedule_row's own
+ * occOf (MCP session.ts and the browser's TakeoffCanvas.jsx) already carry;
+ * kept local so this module never has to import either side's own richer
+ * span type. */
+export interface FlatSpan { str: string; x0: number; y0: number; x1: number; y1: number }
+
+/** sweep_schedule_row's own tag-occurrence match (`occOf` in both
+ * session.ts and TakeoffCanvas.jsx) requires the FULL tag text to appear as
+ * ONE literal span — but a real drawn tag is routinely split across
+ * MULTIPLE runs, and the split shape itself varies by firm: measured live,
+ * the real Bessemer sample draws "SR-1" as three same-row adjacent runs
+ * ("SR", "-", "1"), while a real itd-d1-lab hexagon tag bubble draws "EF-1"
+ * as TWO runs stacked on separate lines ("EF" over "1"), with no hyphen run
+ * anywhere at all. Both real shapes defeated occOf's own exact-match
+ * before this fix, and — confirmed live — this is the actual reason
+ * sweep_schedule_row refuses "not drawn on any plan sheet" for tags that
+ * ARE genuinely drawn (SR-1/SR-2/TG-1/TG-2 on Bessemer; the entire real
+ * equipment tag set on itd-d1-lab).
+ *
+ * This is a FALLBACK, tried only when the exact single-span match already
+ * found nothing — it can only ever ADD a way to succeed, never change an
+ * already-passing case. Starting from a span whose own text is a real
+ * (hyphen-insensitive) PREFIX of the key, it extends a bounded chain
+ * (same-row adjacent, or the next line directly below — the two real
+ * shapes measured) until the accumulated text exactly reconstructs the key
+ * (hyphen-insensitive) or the chain runs out — never a sheet-wide text
+ * search, never a fuzzy match. */
+export function fragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
+  const stripHy = (s: string) => s.replace(/-/g, "");
+  const targetStripped = stripHy(key);
+  if (!targetStripped) return [];
+  const upper = (s: string) => s.trim().toUpperCase();
+  const starts = spans.filter((sp) => {
+    const t = upper(sp.str);
+    return t.length > 0 && t.length < key.length && targetStripped.startsWith(stripHy(t));
+  });
+  const out: TagOcc[] = [];
+  for (const start of starts) {
+    let text = upper(start.str);
+    let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
+    let cur = start;
+    let ok = stripHy(text) === targetStripped;
+    for (let guard = 0; !ok && stripHy(text).length < targetStripped.length && guard < 4; guard++) {
+      const h = Math.max(cur.y1 - cur.y0, 6);
+      const next = spans.find((sp) => {
+        if (sp === cur) return false;
+        const sameRow = Math.abs(sp.y0 - cur.y0) < h * 0.4 && sp.x0 >= cur.x0 - 1 && sp.x0 - cur.x1 < h * 1.5;
+        const nextLine = Math.abs(sp.y0 - cur.y1) < h * 0.6 && Math.abs((sp.x0 + sp.x1) / 2 - (cur.x0 + cur.x1) / 2) < h * 1.5;
+        return sameRow || nextLine;
+      });
+      if (!next) break;
+      const candidate = text + upper(next.str);
+      if (!targetStripped.startsWith(stripHy(candidate))) break;
+      text = candidate;
+      x0 = Math.min(x0, next.x0); y0 = Math.min(y0, next.y0); x1 = Math.max(x1, next.x1); y1 = Math.max(y1, next.y1);
+      cur = next;
+      ok = stripHy(text) === targetStripped;
+    }
+    if (ok) out.push({ cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, h: Math.max(y1 - y0, 6), bbox: [x0, y0, x1, y1] });
+  }
+  return out;
+}
+
+/** The seed→target size ratio for a cross-sheet sweep (#186): seed-sheet
+ * image px per target-sheet image px, exactly `upp_seed / upp_target` —
+ * both sheets' own committed scales, no search and no guess.
+ *
+ * `known: false` means at least one of the two sheets has no scale set. The
+ * sweep can still run at 1.0 (same-size drafting is the norm across the
+ * plan sheets of one set) but the caller MUST disclose the assumption: an
+ * unknown ratio and a zero count are otherwise indistinguishable from "the
+ * symbol isn't there" — the exact silent wrong answer #186 exists to kill. */
+export function sweepRatio(seed: { upp: number | null | undefined }, target: { upp: number | null | undefined }): { scale: number; known: boolean } {
+  if (seed === target) return { scale: 1, known: true };
+  if (seed.upp && target.upp) return { scale: seed.upp / target.upp, known: true };
+  return { scale: 1, known: false };
+}
+
+/** A candidate fingerprint degenerate enough to recur at every tagged mark —
+ * a bare underline or leader stroke, not a real device symbol. Matching on
+ * it would count tags' furniture, not devices; widen the pad instead. */
+const MIN_MARKER_SEGMENTS = 3;
+
+/** Step 3 of sweep_schedule_row: anchor a fingerprint on the tag's own drawn
+ * occurrence and corroborate it — recur at a SECOND occurrence — before it
+ * is trusted. A deterministic pad ladder (1×/2×/3× the tag's own text
+ * height) around the tag's bbox, widening until a real marker's worth of
+ * linework (≥3 segments) is captured; each candidate is corroborated by
+ * probing the corroborator's own geometry (resized by `corroRatio` when the
+ * two sheets are drawn at different scales — #186, never searched, always
+ * the caller's own stated ratio) for a match landing on one of the
+ * corroborator's other occurrences of the tag.
+ *
+ * `corro: null` means the tag is drawn exactly once anywhere in the set —
+ * the FIRST pad that captures real marker geometry (≥3 segments) is
+ * accepted uncorroborated (`corroborated: false` in the result), which is
+ * weaker evidence and the caller should disclose it, not silently trust it
+ * the same as a corroborated anchor.
+ *
+ * Returns null when no pad ever produces a fingerprint that's both
+ * non-degenerate AND (when a corroborator exists) recurs there — "no
+ * repeatable marker geometry", the caller's cue to refuse and suggest a
+ * manual symbol_sweep instead of guessing from text alone. */
+export function corroborateFingerprint(
+  anchorSegs: number[],
+  anchorDims: { w: number; h: number },
+  anchor: TagOcc,
+  corro: { segs: number[]; occ: TagOcc[]; ratio: { scale: number; known: boolean } } | null,
+  opts: MatchOptions = {},
+): { fp: SymbolFingerprint; anchorRect: [Point, Point]; corroborated: boolean } | null {
+  const cX = (v: number) => Math.max(0, Math.min(v, anchorDims.w));
+  const cY = (v: number) => Math.max(0, Math.min(v, anchorDims.h));
+  for (const padK of [1, 2, 3]) {
+    const pad = padK * anchor.h;
+    const rect: [Point, Point] = [
+      [cX(anchor.bbox[0] - pad), cY(anchor.bbox[1] - pad)],
+      [cX(anchor.bbox[2] + pad), cY(anchor.bbox[3] + pad)],
+    ];
+    let cand: SymbolFingerprint;
+    try {
+      cand = fingerprintSymbol(anchorSegs, rect);
+    } catch (e) {
+      // nothing fully inside yet → widen; a region-sized grab → bigger pads only get worse
+      if (e instanceof Error && /region, not one symbol/.test(e.message)) break;
+      continue;
+    }
+    if (cand.segments < MIN_MARKER_SEGMENTS) continue;
+    if (!corro) return { fp: cand, anchorRect: rect, corroborated: false };
+    let probe: SymbolMatchResult;
+    try {
+      probe = matchSymbol(cand, corro.segs, { ...opts, ...(corro.ratio.scale === 1 ? {} : { scale: corro.ratio.scale }) });
+    } catch {
+      continue; // this pad's fingerprint can't survive the trip (too small once scaled) — a wider pad may
+    }
+    const pr = (probe.scaled ? probe.scaled.footprint_px : cand.footprint) / 2 + anchor.h;
+    if (corro.occ.some((o) => probe.matches.some((m) => Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= pr))) {
+      return { fp: cand, anchorRect: rect, corroborated: true };
+    }
+  }
+  return null;
+}
+
+export interface SweepSheetMatch extends SweepMatch {
+  /** The tag-text evidence bbox that put this match IN the count — a match
+   * counts only when the row's own tag sits inside its footprint. */
+  tag_at: [number, number, number, number];
+}
+export interface SweepSheetResult {
+  matches: SweepSheetMatch[];
+  /** A matching marker whose footprint carries a SIBLING row's tag, not this
+   * one's — that mark belongs to the sibling, disclosed with which tag. */
+  excluded: Array<{ at: Point; tag: string }>;
+  withheld: SweepWithheld[];
+  /** A drawn occurrence of the tag with no matching marker geometry nearby —
+   * disclosed, never counted: the tag is there, the symbol isn't. */
+  text_only: Array<{ at: Point }>;
+  candidates: { considered: number; dropped: number };
+  complete: boolean;
+  scaled?: NonNullable<SymbolMatchResult["scaled"]>;
+}
+
+/** Step 4 of sweep_schedule_row, for ONE sheet: sweep it for the corroborated
+ * fingerprint (resized by `ratio` when this sheet is drawn at a different
+ * scale than the anchor — #186) and classify every match against this
+ * sheet's own drawn tag occurrences (`occ`) and every SIBLING row's
+ * occurrences (`siblingOcc`, from every OTHER schedule row in the set) —
+ * geometry alone is never identity, because drafting reuses one bubble
+ * shape across many tags. Five outcomes, every one disclosed: a confident
+ * match whose footprint carries this row's own tag COUNTS; a confident
+ * match carrying a sibling's tag is EXCLUDED (named); a confident match
+ * carrying no tag is WITHHELD as a question; matchSymbol's own near-matches
+ * (`res.withheld`, the score-band between scoreLow/scoreHigh) are carried
+ * through as WITHHELD too, with the tag-adjacency noted when one is drawn
+ * beside it; a tag occurrence with no matching geometry nearby at all is
+ * TEXT_ONLY. `tag` is the row's own canonical key, used only to word the
+ * withheld/text_only reasons — it never gates what counts. */
+export function classifySweepMatches(
+  tag: string,
+  fp: SymbolFingerprint,
+  sheetSegs: number[],
+  ratio: { scale: number; known: boolean },
+  occ: TagOcc[],
+  siblingOcc: Array<{ key: string; cx: number; cy: number }>,
+  anchorH: number,
+  opts: MatchOptions = {},
+): SweepSheetResult {
+  const res = matchSymbol(fp, sheetSegs, { ...opts, ...(ratio.scale === 1 ? {} : { scale: ratio.scale }) });
+  const R = (res.scaled ? res.scaled.footprint_px : fp.footprint) / 2 + anchorH;
+  const matches: SweepSheetMatch[] = [];
+  const excluded: Array<{ at: Point; tag: string }> = [];
+  const withheld: SweepWithheld[] = [];
+  const matchedOcc = new Set<number>();
+  // Pass 1: find every match's nearest occurrence (if any) within R, without
+  // committing yet. One real drawn instance has exactly one leader/tag — two
+  // raw match centroids both landing within R of the SAME single occurrence
+  // is never two physical devices sharing one label, it is the marker's own
+  // nearby furniture (a leader-line stub, a text underline) independently
+  // clearing the score bar right next to itself and getting read as a second
+  // hit. Same doctrine matchSymbol's own shadow-suppression comment already
+  // states for the excludeCenter case ("two REAL instances can never sit
+  // within half a symbol diagonal of each other without physically
+  // overlapping") — applied here at the occurrence-claiming step so it also
+  // catches the case where BOTH centroids sit far enough apart to survive
+  // mergeR, but still both point at one tag (issue: sweep_schedule_row
+  // false-doubled EWH-1/EBB-8 on the bessemer set — see takeoff-eval.mjs).
+  const claims: Array<{ m: SweepMatch; oi: number }> = [];
+  const unclaimed: SweepMatch[] = [];
+  for (const m of res.matches) {
+    let oi = -1;
+    for (let k = 0; k < occ.length; k++) {
+      if (Math.hypot(m.at[0] - occ[k].cx, m.at[1] - occ[k].cy) <= R) { oi = k; break; }
+    }
+    if (oi >= 0) claims.push({ m, oi }); else unclaimed.push(m);
+  }
+  // Best-scoring claim per occurrence wins (ties broken by reading order —
+  // res.matches already arrives position-sorted, so the first claim seen for
+  // a tied score is the earliest); every other claim on that same occurrence
+  // is a real, disclosed question, not a silently dropped or silently
+  // double-counted match.
+  const bestForOcc = new Map<number, SweepMatch>();
+  for (const { m, oi } of claims) {
+    const cur = bestForOcc.get(oi);
+    if (!cur || m.score > cur.score) bestForOcc.set(oi, m);
+  }
+  for (const { m, oi } of claims) {
+    if (bestForOcc.get(oi) === m) { matchedOcc.add(oi); matches.push({ ...m, tag_at: occ[oi].bbox }); continue; }
+    withheld.push({ ...m, reason: `the marker geometry matches near the "${tag}" tag, but a closer/better-scoring match already claims this same occurrence — most likely this instance's own leader-line or label furniture read a second time, not a second device; look before counting it` });
+  }
+  for (const m of unclaimed) {
+    const sib = siblingOcc.find((sp) => Math.hypot(m.at[0] - sp.cx, m.at[1] - sp.cy) <= R);
+    if (sib) { excluded.push({ at: m.at, tag: sib.key }); continue; }
+    withheld.push({ ...m, reason: `the marker geometry matches but carries no "${tag}" tag within its footprint — an unlabeled instance or a shared marker shape; look before counting it` });
+  }
+  // matchSymbol's OWN near-matches (score in [scoreLow, scoreHigh)) — carried
+  // through, not dropped, with the tag-adjacency noted when this row's tag
+  // happens to sit right beside one (a real clue the near-match IS this row's).
+  for (const w of res.withheld) {
+    const near = occ.some((o) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R);
+    withheld.push(near ? { ...w, reason: `${w.reason} — and the "${tag}" tag is drawn beside it` } : w);
+  }
+  const byPos = (a: { at: Point }, b: { at: Point }) => a.at[1] - b.at[1] || a.at[0] - b.at[0];
+  matches.sort(byPos); excluded.sort(byPos); withheld.sort(byPos);
+  // An occurrence sitting at (or right beside) opts.excludeCenter is the
+  // seed's own shadow: matchSymbol suppresses it from res.matches AND
+  // res.withheld before we ever see it (it's already counted — as the seed
+  // — not an unexplained gap), so it must not fall through to text_only.
+  const ex = opts.excludeCenter;
+  const text_only = occ
+    .filter((o, k) => !matchedOcc.has(k)
+      && !res.withheld.some((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R)
+      && !(ex && Math.hypot(o.cx - ex[0], o.cy - ex[1]) <= R))
+    .map((o) => ({ at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10] as Point }));
+  return {
+    matches, excluded, withheld, text_only,
+    candidates: res.candidates, complete: res.complete,
+    ...(res.scaled ? { scaled: res.scaled } : {}),
+  };
+}
+
+// ── same-tag corroborator discipline gate ───────────────────────────────────
+// sweep_schedule_row: a tag's OTHER occurrence, on a different plan sheet, is
+// only real corroborating evidence for the SAME symbol's own linework when
+// it's a plausible second DRAWN INSTANCE of that symbol — real case found on
+// itd-d1-lab (HUM-1, DFC-1): the tag's only other drawn occurrence anywhere
+// sat on a different trade's own "enlarged" plan of the same room (a
+// plumbing sheet's callout at the unit's water/condensate connection), which
+// by the IDENTICAL doctrine the cross-discipline redundant-view collapse
+// below already establishes is a reference to the SAME single physical
+// device for another trade's own drawing — never a second occurrence of the
+// mechanical symbol's own linework. Requiring it to recur there manufactured
+// a false "linework does not recur" refusal on a tag that was genuinely,
+// correctly, singly installed. `disciplineOfSheetNumber` is the identical
+// first-token-of-the-sheet-number read `dedupeCrossDisciplineRoomViews`'s own
+// caller and layers.ts's DISCIPLINES table already trust — extracted here so
+// both the corroborator gate and the redundant-view collapse share one read,
+// never two that could silently drift.
+export function disciplineOfSheetNumber(sheetNumber: string | null | undefined): string | null {
+  const m = /^[A-Z]{1,3}/.exec((sheetNumber || "").trim().toUpperCase());
+  return m ? m[0] : null;
+}
+
+/** Among same-tag corroborator candidates (already sorted by the caller's
+ * own preference — most occurrences first, ties by sheet order), pick the
+ * first one that shares the anchor sheet's own AIA discipline — real
+ * corroborating evidence, a plausible second drawn instance of the same
+ * symbol. Returns null when the anchor's discipline IS known but no
+ * candidate shares it: the caller's cue to treat the tag as having no
+ * same-tag corroborator at all (same as a tag drawn exactly once anywhere),
+ * falling through to cross-tag/uncorroborated handling rather than refusing
+ * on a cross-discipline reference that was never going to recur. When the
+ * anchor's own discipline can't be read at all (never guessed — no
+ * classifiable sheet number), there is no cross-discipline distinction to
+ * safely draw, so the caller's first candidate is returned unchanged — the
+ * prior any-sheet behavior, exactly as before this gate existed. */
+export function pickSameDisciplineCorroborator<T>(
+  anchorSheetNumber: string | null | undefined,
+  candidates: T[],
+  sheetNumberOf: (c: T) => string | null | undefined,
+): T | null {
+  if (!candidates.length) return null;
+  const anchorDisc = disciplineOfSheetNumber(anchorSheetNumber);
+  if (!anchorDisc) return candidates[0];
+  return candidates.find((c) => disciplineOfSheetNumber(sheetNumberOf(c)) === anchorDisc) ?? null;
+}
+
+// ── cross-sheet redundant room-view dedup ───────────────────────────────────
+// A real, common drafting convention: two DIFFERENT SHEETS each draw their
+// OWN "enlarged"/purpose-specific plan of the SAME physical room, redrawing
+// whatever equipment sits in it for that sheet's own reference. A schedule
+// row's tag drawn once on each sheet's own view of the SAME room is the SAME
+// physical device, not one install per sheet — sweep_schedule_row's
+// per-sheet fingerprint search has no way to know that on its own, since
+// each sheet's tag occurrence independently clears the match bar on its own
+// linework. This is a GENERIC pattern (any tag, any set that uses this
+// convention), not specific to any one project, sheet, or tag — no
+// filename/page/tag is named here. Two shapes of it are both real,
+// confirmed corpus cases: CROSS-discipline (the original AC-1 bug — an
+// M-series sheet and a P-series sheet both redrawing one physical device)
+// and SAME-discipline-different-sheet (itd-d1-lab-mechanical.pdf's WC-1/
+// S-2/US-2: P1.0 "PLUMBING FOUNDATION PLAN" underground rough-in and P2.0
+// "PLUMBING FLOOR PLAN" above-floor fixture layout both redraw the SAME
+// physical fixture at near-pixel-identical page coordinates) — collapseGroup
+// (below) groups by SHEET, a strict generalization of grouping by discipline
+// that catches both shapes identically; see its own comment for why this is
+// provably backward-compatible with every discipline-keyed case.
+//
+// The signal used: the two occurrences sit in the SAME named/numbered room
+// (via the existing room-tag reader, sheetgraph.ts's roomTags — the identical
+// "digit(s) drawn near a bubble" pattern already trusted for room-finish
+// takeoffs). `discipline` (M/P/E/… the standard "M3.0"/"P4.0" convention,
+// read the same first-token-of-the-sheet-number way layers.ts's DISCIPLINES
+// table reads a CAD layer name) is still required to be READABLE at all
+// before an instance enters dedup — an instance on a sheet with no
+// classifiable AIA-style sheet number is never guessed into this — but is no
+// longer itself the collapse key. Two genuinely SEPARATE installed units
+// sharing one tag would ordinarily sit in different rooms — that is what
+// makes them separate installs — so "same room, same tag, different sheet"
+// is a narrow, specific shape, not a general "trust the first count"
+// heuristic.
+//
+// Never applied when: the two occurrences share a SHEET (a real repeat on
+// one sheet's own drawing is a genuine separate-install signal, not a
+// redrawn reference — left alone); no room can be confidently attributed to
+// an occurrence (never guessed — see maxDist below); or only one sheet
+// is represented in a room (nothing to collapse against). The kept count for
+// a duplicated room is the LARGEST single-sheet count seen there — never
+// the SUM (double/triple-counts the redundant views, the actual AC-1 bug)
+// and never the smallest (a partial crop that only shows some of a room's
+// real units must never silently undercut a fuller sibling view).
+export interface RoomCandidate { tag: string; name: string; bbox: [number, number, number, number] }
+export interface RoomSweepInstance<Id> {
+  id: Id;
+  sheet: string;
+  /** Leading AIA discipline letters off the sheet's own title-block sheet
+   *  number ("M3.0" → "M"); null when no sheet number was read — an
+   *  attribution never guessed, so the instance never enters the dedup. */
+  discipline: string | null;
+  at: Point;
+  /** This occurrence's own sheet's rooms (sheetgraph.ts's roomTags output)
+   *  and its full page size, so "nearest room" can be bounded to a plausible
+   *  fraction of the sheet rather than ever crediting a room that merely
+   *  happens to be the closest number ON A SHEET with no room genuinely near
+   *  the mark (an unrelated title-block digit or grid bubble, e.g.). */
+  rooms: RoomCandidate[];
+  sheetWidthPx: number;
+  sheetHeightPx: number;
+}
+export interface RedundantRoomView<Id> {
+  id: Id;
+  sheet: string;
+  room: string;
+  /** The discipline (and one of its sheets) whose count this duplicates. */
+  keptDiscipline: string;
+  keptSheet: string;
+}
+/** Fraction of the sheet's own diagonal a room's label must sit within to be
+ * credited to a nearby occurrence — generous enough for a real "enlarged"
+ * partial-sheet plan (which crops tightly around the one room it shows),
+ * tight enough to reject an unrelated title-block/revision digit clear
+ * across a full floor-plan sheet. */
+const ROOM_ATTRIBUTION_MAX_DIAGONAL_FRAC = 0.2;
+
+/** Shared "collapse a group of same-tag, multi-SHEET instances" decision —
+ * keep the SHEET with the MOST occurrences in the group (never the sum,
+ * never the fewest — the doctrine both the room-keyed and the
+ * coordinate-keyed grouping below share); ties broken alphabetically by
+ * sheet for full determinism. Returns nothing when the group is
+ * single-sheet — a real repeat WITHIN one sheet's own drawing is a genuine
+ * separate-install signal, never collapsed (test: "same tag, same room,
+ * SAME discipline — a real repeat within one trade").
+ *
+ * Grouped by SHEET, not by discipline (2026-08-28, itd-d1-lab-mechanical.pdf
+ * WC-1/S-2/US-2 shape): discipline was the original, narrower proxy this was
+ * built against (the real AC-1 bug — an M-series sheet and a P-series sheet
+ * both redrawing one physical device for their own trade's reference), but
+ * the SAME redundant-view pattern also occurs WITHIN one discipline — real,
+ * measured case: itd-d1-lab-mechanical.pdf's P1.0 "PLUMBING FOUNDATION PLAN"
+ * (underground waste/vent rough-in coordination) and P2.0 "PLUMBING FLOOR
+ * PLAN" (above-floor domestic water) both draw the SAME physical fixture
+ * (WC-1 in "Rest. 102") at near-pixel-identical page coordinates (~7px
+ * apart, RENDER_SCALE=2) — two different-PURPOSE plumbing plans of the
+ * identical footprint, not two installed toilets. `discipline` remains the
+ * ELIGIBILITY gate one level up (an instance with no readable AIA discipline
+ * still never enters dedup at all — unchanged), but the actual collapse
+ * key is the sheet itself, a strict generalization: every existing
+ * cross-discipline case already had each discipline confined to its own
+ * single sheet, so grouping by sheet reproduces every prior result exactly
+ * (verified: all pre-existing dedupeCrossDisciplineRoomViews tests pass
+ * unchanged) while additionally catching this same-discipline,
+ * different-sheet shape the discipline-keyed grouping structurally could
+ * not see. `keptDiscipline` is still reported (read off the kept sheet's own
+ * instances) so callers/tests that care which TRADE view survived keep
+ * working unchanged. */
+function collapseGroup<Id, A extends { discipline: string | null; sheet: string; id: Id }>(
+  group: A[], describeRoom: (kept: A) => string,
+): RedundantRoomView<Id>[] {
+  const bySheet = new Map<string, A[]>();
+  for (const a of group) {
+    const arr = bySheet.get(a.sheet);
+    if (arr) arr.push(a); else bySheet.set(a.sheet, [a]);
+  }
+  if (bySheet.size < 2) return [];
+  let keptSheet = "", keptGroup: A[] = [];
+  for (const [sheet, arr] of [...bySheet.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+    if (arr.length > keptGroup.length) { keptSheet = sheet; keptGroup = arr; }
+  }
+  const keptDisc = keptGroup[0].discipline!;
+  const out: RedundantRoomView<Id>[] = [];
+  for (const [sheet, arr] of bySheet) {
+    if (sheet === keptSheet) continue;
+    for (const a of arr) out.push({ id: a.id, sheet: a.sheet, room: describeRoom(a), keptDiscipline: keptDisc, keptSheet });
+  }
+  return out;
+}
+
+/** How close (image px, same RENDER_SCALE throughout this pipeline, so a
+ * real cross-sheet px distance is meaningful without a scale conversion) two
+ * cross-discipline matches with NO attributable room must sit to be trusted
+ * as the same physical device redrawn — not a room-sized radius (that would
+ * risk crediting two genuinely different nearby devices), a tight one: real,
+ * measured case (itd-d1-lab-mechanical.pdf's LEF-1, an exhaust fan serving a
+ * building-wide riser with no room number drawn anywhere near it on EITHER
+ * its M2.0 or P3.0 "enlarged" view) sits 9.2px apart. */
+const COORD_ATTRIBUTION_MAX_PX = 40;
+
+export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
+  type Attributed = RoomSweepInstance<Id> & { room: RoomCandidate };
+  const attributed: Attributed[] = [];
+  const unattributed: RoomSweepInstance<Id>[] = [];
+  for (const inst of instances) {
+    if (!inst.discipline) continue; // no discipline read at all — never enters either path
+    let best: RoomCandidate | null = null, bestD = Infinity;
+    if (inst.rooms.length) {
+      const maxDist = ROOM_ATTRIBUTION_MAX_DIAGONAL_FRAC * Math.hypot(inst.sheetWidthPx, inst.sheetHeightPx);
+      for (const r of inst.rooms) {
+        const cx = (r.bbox[0] + r.bbox[2]) / 2, cy = (r.bbox[1] + r.bbox[3]) / 2;
+        const d = Math.hypot(inst.at[0] - cx, inst.at[1] - cy);
+        if (d < bestD) { bestD = d; best = r; }
+      }
+      if (!best || bestD > maxDist) best = null;
+    }
+    if (best) attributed.push({ ...inst, room: best });
+    else unattributed.push(inst); // no room credited — try coordinate proximity below, never guessed either way
+  }
+  const byRoom = new Map<string, Attributed[]>();
+  for (const a of attributed) {
+    const key = `${a.room.tag.trim().toUpperCase()}|${a.room.name.trim().toUpperCase()}`;
+    const arr = byRoom.get(key);
+    if (arr) arr.push(a); else byRoom.set(key, [a]);
+  }
+  const out: RedundantRoomView<Id>[] = [];
+  for (const group of byRoom.values()) {
+    out.push(...collapseGroup<Id, Attributed>(group, (a) => `${a.room.name ? `${a.room.name} ` : ""}${a.room.tag}`.trim()));
+  }
+
+  // Coordinate-proximity fallback — ONLY for instances no room could be
+  // credited to at all (never overrides a real room attribution above).
+  // Simple connected-components clustering: two instances within
+  // COORD_ATTRIBUTION_MAX_PX of each other join one cluster (transitively —
+  // A near B near C clusters all three, same as the real drafting case
+  // would produce for a 3+-discipline redraw), then the identical
+  // multi-discipline collapse doctrine applies per cluster.
+  const n = unattributed.length;
+  const parent = Array.from({ length: n }, (_, i) => i);
+  const find = (i: number): number => (parent[i] === i ? i : (parent[i] = find(parent[i])));
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      if (Math.hypot(unattributed[i].at[0] - unattributed[j].at[0], unattributed[i].at[1] - unattributed[j].at[1]) <= COORD_ATTRIBUTION_MAX_PX) {
+        const ri = find(i), rj = find(j);
+        if (ri !== rj) parent[ri] = rj;
+      }
+    }
+  }
+  const clusters = new Map<number, RoomSweepInstance<Id>[]>();
+  for (let i = 0; i < n; i++) {
+    const r = find(i);
+    const arr = clusters.get(r);
+    if (arr) arr.push(unattributed[i]); else clusters.set(r, [unattributed[i]]);
+  }
+  for (const cluster of clusters.values()) {
+    out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(no room drawn nearby — same-location redraw)"));
+  }
+  return out;
+}

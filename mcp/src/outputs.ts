@@ -286,6 +286,63 @@ export const symbolSweepOutput = {
   warning: z.string().optional().describe("Present when the work cap dropped candidates — what a tighter seed rect would recover"),
 };
 
+/** match_reference_symbol (accuracy-hardening plan Phase 0) — the
+ * deterministic reference-shape library (hand-digitized real HVAC valve/
+ * damper geometry, hvacRefShapes.ts), matched against a sheet's own drawn
+ * linework at its own committed scale. No seed rect: every library shape is
+ * checked against the whole sheet in one call. */
+export const matchReferenceSymbolOutput = {
+  sheet: z.string(),
+  shapes: z.array(z.object({
+    name: z.string().describe("The reference shape's own name, e.g. \"gate valve\""),
+    found: z.number().int().describe("Placements that cleared the commit bar (score ≥ 0.92)"),
+    matches: z.array(z.object(sweepPlacement)).describe("Deterministic reading order (y, then x)"),
+    withheld: z.array(z.object({ ...sweepPlacement, reason: z.string() })).describe("Near-matches in the [0.75, 0.92) band — a question to LOOK at (view_sheet), never silently dropped and never silently promoted"),
+    complete: z.boolean().describe("True when every proposed placement for this shape was scored — false means found is a FLOOR, not a total"),
+  })).describe("One entry per checked reference shape, in library order"),
+};
+
+/** find_legend_symbols (accuracy-hardening plan Phase 1) — auto-detect
+ * every (glyph, caption) row on a legend sheet. No fixed library, nothing
+ * hand-digitized: real vector segments clustered (real-junction-aware) and
+ * paired with each row's own real caption text. Each `rect` feeds straight
+ * into symbol_sweep's own `seed_rect` (scope: "set") — this tool only
+ * detects, it never sweeps. */
+export const findLegendSymbolsOutput = {
+  sheet: z.string(),
+  glyphs: z.array(z.object({
+    caption: z.string().describe("The row's own caption, exactly as drawn (whitespace-normalized)"),
+    rect: z.tuple([z.number(), z.number(), z.number(), z.number()]).describe("[x0, y0, x1, y1], image px — feed straight into symbol_sweep's own seed_rect"),
+    segments: z.number().int().describe("Real linework inside the glyph's own bbox — informational only, a rough proxy for how much ink is here"),
+  })).describe("One entry per detected (glyph, caption) row, in no particular order"),
+  note: z.string().optional().describe("Present when nothing was detected — not necessarily an error: a sheet with no real legend falls back to the ordinary symbol_sweep workflow"),
+};
+
+/** sweep_inline_motif (accuracy-hardening plan Phase 4) — a register/grille
+ * mark embedded within a tapered duct run, matched on its own hatch fill's
+ * real-world size/pitch rather than exact whole-shape segment count (see
+ * inlinemotif.ts's own header comment for the real, measured reason a
+ * whole-shape fingerprint under-scores real siblings of the same symbol). */
+const inlineMotifPlacement = {
+  at: z.tuple([z.number(), z.number()]).describe("Center, image px"),
+  w_ft: z.number().nullable().describe("Real-world width, when a scale is committed on this sheet — null otherwise"),
+  h_ft: z.number().nullable().describe("Real-world height, when a scale is committed — null otherwise"),
+  size_score: z.number().describe("How closely this candidate's real-world size matches the seed's, 0-1 (1 = identical)"),
+};
+export const sweepInlineMotifOutput = {
+  sheet: z.string(),
+  seed: z.object({
+    rect: z.tuple([z.number(), z.number(), z.number(), z.number()]).describe("The seed's own detected hatch-fill bbox, image px — may differ from the seed_rect you marqueed (tight around the fill itself)"),
+    w_ft: z.number().nullable(), h_ft: z.number().nullable(),
+    w_px: z.number(), h_px: z.number(),
+  }),
+  found: z.number().int().describe("Placements whose real-world size matched the seed's within tolerance"),
+  matches: z.array(z.object(inlineMotifPlacement)).describe("Deterministic reading order (y, then x)"),
+  withheld: z.array(z.object({ ...inlineMotifPlacement, reason: z.string() })).describe("Real-world size is in the loosely-off band — a question to LOOK at, never silently dropped or promoted"),
+  candidates_considered: z.number().int().describe("Compact, densely-hatched candidate regions considered sheet-wide before size filtering"),
+  note: z.string().optional().describe("Present when no scale is committed on this sheet — sizes were compared in image px only"),
+};
+
 export const measureLineOutput = {
   length_lf: z.number(),
   npts: z.number().int(),
@@ -777,7 +834,10 @@ export const sweepScheduleRowOutput = {
     rect: z.array(z.number()).length(4).describe("The fingerprint rect actually used [x0, y0, x1, y1] — the pad ladder's winning step"),
     segments: z.number().int().describe("Vector segments in the marker fingerprint"),
     length_px: z.number(),
-    corroborated: z.boolean().describe("true = the fingerprint recurred at a second tag occurrence before being trusted; false = the tag is drawn too sparsely to cross-check (see note)"),
+    corroborated: z.boolean().describe("true = the fingerprint recurred at a second tag occurrence (or, see corroborated_via, a sibling tag's own occurrence) before being trusted; false = the tag is drawn too sparsely to cross-check (see note)"),
+    corroborated_via: z.enum(["same_tag", "sibling_tag"]).optional()
+      .describe("Present only when corroborated is true. 'same_tag' = the tag's OWN second occurrence reproduced the fingerprint (the strong case). 'sibling_tag' = the tag is drawn exactly once, so a DIFFERENT row's own occurrence in the same schedule table reproduced it instead (corroborated_tag names which) — real evidence that the two marks share a symbol family, but weaker than a same-tag recurrence; audit before trusting the count"),
+    corroborated_tag: z.string().optional().describe("Present only when corroborated_via is 'sibling_tag' — the sibling row's tag whose own drawn occurrence corroborated this fingerprint"),
     occurrences: z.number().int().describe("Drawn occurrences of the tag across all plan sheets"),
   }),
   found: z.number().int().describe("Matches carrying the row's own tag — the honest count, across every plan sheet"),
@@ -796,6 +856,8 @@ export const sweepScheduleRowOutput = {
     elapsed_ms: z.number().describe("Wall-clock for this sheet's sweep"),
     scaled: sweepScaled.optional(),
     scale_assumed: sweepScaleAssumed.optional(),
+    redundant_view: z.array(z.object({ ...rowSweepPlacement, tag_at: wireBox, room: z.string(), kept_sheet: z.string() }))
+      .optional().describe("A match that WOULD have counted, but sits in the SAME drawn room as an already-counted match on a DIFFERENT-discipline sheet's own 'enlarged' plan of that room — a real, common cross-trade drafting convention (mechanical and plumbing each draw their own enlarged view of a shared mechanical room, redrawing the SAME physical device for their own trade's reference). Withheld from `found`/`matches` as the same physical unit, not a second install; `kept_sheet` names the sheet whose match this duplicates. Audit with view_sheet before trusting it as redundant rather than a real second unit."),
   })).describe("One entry per swept PLAN-role sheet, load order"),
   complete: z.boolean().describe("True when every proposed placement was scored on every swept sheet — false means at least one sheet's count is a FLOOR, not a total (#261)"),
   skipped: z.array(z.object({ sheet: z.string(), role: z.string(), reason: z.string() }))
@@ -806,6 +868,31 @@ export const sweepScheduleRowOutput = {
   ea_total: z.number().optional(),
   note: z.string().optional(),
   warning: z.string().optional().describe("Present when the per-sheet work cap dropped candidates"),
+};
+
+/** trace_connectivity (Phase 4 of the HVAC/BAS maturity plan) — which valve
+ * belongs to which equipment, walked through the sheet's own noded vector
+ * linework. Refusal doctrine matches resolve_tag/sweep_schedule_row: a
+ * status of "refused" always carries `reason`, never a half-populated
+ * success shape. */
+export const traceConnectivityOutput = {
+  status: z.enum(["reached", "ambiguous", "dead_end", "refused"]),
+  path: z.array(z.tuple([z.number(), z.number()])).optional()
+    .describe("reached only — the walked node-by-node path from the seed to the reached equipment, image px"),
+  reached_equipment: z.object({ id: z.string(), at: z.tuple([z.number(), z.number()]) }).optional()
+    .describe("reached only — the one equipment placement a real walked path actually connects to, never picked from proximity"),
+  branches: z.array(z.object({
+    at: z.tuple([z.number(), z.number()]).describe("The real junction where the trace's outcome forked"),
+    leads_to: z.string().nullable(),
+    reason: z.string().optional(),
+  })).optional().describe("ambiguous only — every DIFFERENT equipment reachable from the fork, never narrowed to one; view_sheet at the junction to decide by looking"),
+  layer_signal: z.enum(["none", "weak", "strong"])
+    .describe("Whether the sheet's own PDF layers carried confident MEP-system classification (\"none\" = untagged export, e.g. this project's own Bessemer sample — the tracer still runs, layer-agnostic)"),
+  system: z.enum(["piping", "ductwork", "electrical", "controls", "unknown"]).optional()
+    .describe("reached only, and only when every edge on the walked path agrees — a path crossing systems (a genuine cross-classification, or the sheet's own drafting) omits this rather than guess one"),
+  confidence: z.number().describe("Discounted for every disclosed factor below — never a flat 1.0 on a long trace, a bridged gap, or an unclassified layer"),
+  factors: z.array(z.string()).describe("Disclosed confidence discounts, e.g. \"layer-unclassified\", \"long-trace(42 hops)\", \"bridged-gap(1)\" — matches confidence.ts's own disclosed-factor doctrine"),
+  reason: z.string().optional().describe("dead_end/refused only — why, and what to do about it"),
 };
 
 /** sheet_context (issue #29): vectors + text + hatch families of one region,

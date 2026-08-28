@@ -17,7 +17,8 @@
 // onEvent + a terminal {status: "error" | "aborted" | "max_iterations"} —
 // the canvas renders status, it never crashes.
 
-import { chatWithTools } from "./ai.js";
+import { chatWithTools, describeImageForAgent } from "./ai.js";
+import { runVerifiers } from "./agentVerifiers.js";
 
 export const MAX_AGENT_ITERATIONS = 24;
 
@@ -32,6 +33,14 @@ export function agentSystemPrompt() {
     "- NEVER assume a scale. If a sheet has no scale set, report that (the tool refusal tells you) and stop work on that sheet — the estimator must calibrate it.",
     "- Every proposal MUST cite evidence: the schedule row tag and/or the exact matched text token (a room tag or schedule cell) and/or the one_click seed. propose_shapes rejects uncited shapes.",
     "- You stage proposals only. A human reviews every shape at the accept gate; nothing you do commits a takeoff.",
+    "",
+    "Hard rules for connectivity, symbol, and schedule tools (trace_connectivity, symbol_sweep, match_reference_symbol, find_legend_symbols, sweep_inline_motif, sweep_schedule_row, resolve_tag, read_schedule, find_schedule):",
+    "- A tool's own returned status is the ONLY source of truth for what it found — never a screenshot, a view_region image, or your own visual impression of the linework. If trace_connectivity returns status:\"dead_end\" or status:\"refused\", or a match's confidence is 0 or below the tool's own commit bar, your answer MUST say plainly that no connection/match was found — even if a screenshot looks like it might show one. Do not name equipment, a register, or a connection that no tool call actually returned. If you want to double-check a dead_end, call the tool again from a different seed point or say you can't confirm — never substitute a visual guess for the tool's own answer.",
+    "- THIS RULE OVERRIDES YOUR OWN JUDGMENT — it exists precisely because your visual read of a plan is NOT reliable enough to trust over a dead_end, no exceptions, ever: it is FORBIDDEN to write any sentence shaped like \"while the trace returned dead_end/no match, the plan/image clearly shows...\" or \"visually, it appears to connect to...\" or to name ANY equipment/register/grille tag as a target of a connection after a dead_end/refused/zero-confidence result, REGARDLESS of what you think you see in a view_region image. A dead_end/refused result means your answer is \"no connection found\" and NOTHING ELSE — not a softened version, not a visually-corroborated version, not a caveat followed by a claim anyway. If you catch yourself about to write \"clearly shows\" or \"appears to\" right after describing a dead_end, delete that sentence — it is exactly the mistake this rule exists to stop, not a reasonable exception to it.",
+    "- If every trace_connectivity attempt for a piece of equipment came back dead_end/refused, your ENTIRE final answer about that equipment's connectivity must literally be, word for word (you may add which seed points you tried before this sentence, nothing after it): \"The connectivity trace did not find a path from <equipment id> to any other identified equipment on this sheet.\" Do not add a \"visually\", \"it appears\", \"likely\", or any tag name after that sentence — the sentence above is the complete, final word on the connectivity question, not an opening for further speculation. Anything you think you notice in a view_region image about POSSIBLE targets is not evidence and must not be written down anywhere in your answer.",
+    "- NEVER report an aggregate, sum, or \"total for the building/set\" unless you have checked every relevant row across every relevant sheet AND say so. If you only checked one piece of equipment, your answer must say exactly what you checked (\"the only unit I found was X, on sheet Y — I have not verified there are no others\") and must not present that single value as a whole-building total. When in doubt about completeness, refuse to give a total and say what would need to be checked next.",
+    "- Every factual claim about a connection, a symbol match, or a schedule value must trace back to a specific tool call's own returned data in this run — if you can't point to which tool call produced a fact, don't state it.",
+    "- read_schedule/find_schedule return two DIFFERENT kinds of name and they are never interchangeable: `headers` names the table's own COLUMNS (e.g. \"SYMBOL\", \"REMARKS\" as column labels), while each entry in `rows` has its own `key` naming that ONE ROW (e.g. \"AC-1\"). A word appearing in `headers` does NOT mean a row exists with that word as its key — check `rows[].key` directly, never infer a row's existence from a column name alone.",
     "",
     "Working method: list_sheets first. Read the finish schedule (read_schedule) or the sheet text (read_sheet_text) to ground WHAT to take off; use view_region to look at scanned or ambiguous areas. Match or create conditions, measure rooms with one_click, then stage propose_shapes with evidence. Then summarize what you proposed and what you could not do, and stop. If you are blocked (no scale, sheet not open, nothing matches), say so plainly and stop rather than guessing.",
   ].join("\n");
@@ -144,6 +153,13 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
   const messages = [{ role: "user", content: goal }];
   let iterations = 0;
   const aborted = () => { emit({ type: "aborted" }); return { status: /** @type {const} */ ("aborted"), iterations }; };
+  // Deterministic honesty backstop, generalized (see agentVerifiers.js's own
+  // header for the real, live-observed history this comes from): every real
+  // tool call this run makes is logged here, across every loop iteration,
+  // so `runVerifiers` can check the WHOLE run's evidence — not just prompt
+  // rules the model can choose to ignore — before the final answer is shown.
+  /** @type {Array<{ id: string, name: string, args: unknown, out: unknown }>} */
+  const callLog = [];
 
   for (; iterations < maxIterations; iterations++) {
     if (signal?.aborted) return aborted();
@@ -161,12 +177,22 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       emit({ type: "error", message: turn.error });
       return { status: "error", message: turn.error, iterations };
     }
-    if (turn.text) emit({ type: "text", text: turn.text });
+    // The UI's own onEvent handler renders the "text" event's payload as the
+    // visible answer — the later "done" event's own text is NOT displayed
+    // (confirmed live: an earlier version of this backstop attached the note
+    // to "done" instead and it silently never appeared anywhere). The
+    // append MUST happen here, before this emit, on the LAST turn only.
+    let displayText = turn.text;
+    if (!turn.toolCalls.length) {
+      const notes = runVerifiers(callLog, goal);
+      if (notes.length) displayText = `${displayText || ""}\n\n${notes.join("\n\n")}`;
+    }
+    if (displayText) emit({ type: "text", text: displayText });
     // echo the assistant turn back verbatim so tool_use ids / tool_calls pair up
     messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
     if (!turn.toolCalls.length) {
-      emit({ type: "done", text: turn.text });
-      return { status: "done", text: turn.text, iterations: iterations + 1 };
+      emit({ type: "done", text: displayText });
+      return { status: "done", text: displayText, iterations: iterations + 1 };
     }
     const results = [];
     for (const call of turn.toolCalls) {
@@ -179,6 +205,26 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
         out = { error: `Tool ${call.name} failed: ${String((e && e.message) || e)}` };
       }
       if (out == null || typeof out !== "object") out = { result: out ?? null };
+      // Vision-as-a-tool (real, later addition — see aiConfig()'s own
+      // visionModel comment): route any raw image through an ISOLATED,
+      // narrowly-scoped vision call instead of injecting the pixels
+      // straight into the loop's own ongoing conversation. The model
+      // driving the loop and writing the final answer never gets to "just
+      // look and see" — it only ever gets the vision model's own literal,
+      // factual description, threaded in exactly like any other tool
+      // result. Degrades honestly on failure: falls back to the OLD raw-
+      // image path (never silently loses the ability to look), but emits a
+      // real status event disclosing the degradation rather than hiding it.
+      if (out.image_data_url) {
+        try {
+          const description = await describeImageForAgent({ imageDataUrl: out.image_data_url, cfg, fetchFn });
+          const { image_data_url: _img, ...rest } = out;
+          out = { ...rest, visual_description: description };
+        } catch (e) {
+          emit({ type: "text", text: `[Vision routing degraded — the vision model call failed (${String((e && e.message) || e)}), falling back to the raw image for this one result.]` });
+        }
+      }
+      if (!call.argsError) callLog.push({ id: call.id, name: call.name, args: call.args, out });
       emit({ type: "tool_end", name: call.name, result: out });
       results.push({ call, out });
     }

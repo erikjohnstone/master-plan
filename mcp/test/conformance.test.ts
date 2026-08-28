@@ -561,11 +561,51 @@ test("sheet graph (#87): index, resolve with citations, refusal with reasons, fi
   assert.match(missing.reason, /no schedule row for 999/);
 
   const found = await callOk(client, "find_schedule", { kind: "room finish" });
-  // 29, verified against the sheet: the key column carries exactly 29 room
-  // numbers. The old floor of 30 was counting rows the extractor invented.
-  assert.equal(found.matches[0].rows, 29, "every row of the schedule, and none that is not one");
-  assert.match(found.matches[0].title, /ROOM FINISH SCHEDULE/);
-  assert.ok(found.matches[0].region.x1 > found.matches[0].region.x0, "the region is viewable");
+  // #HVAC-boundary: the sheet draws THREE distinctly-titled room finish
+  // schedules stacked over the same column grid (BASEMENT, FIRST FLOOR,
+  // PATIENT ROOMS (TYPICAL)) — before the table-boundary fix, the extractor
+  // had no notion of "where a table ends" and silently walked from the first
+  // header straight through the second table's rows as if they were more
+  // data of the first, landing on a single merged 29-row blob (BASEMENT's 6
+  // real rows + FIRST FLOOR's 23) by that scan's own accidental stopping
+  // point — not by recognizing three separate tables. find_schedule now
+  // reports each one on its own, which is the more honest answer: a region
+  // that claims to show "the room finish schedule" must not silently span
+  // two differently-titled tables glued together.
+  assert.equal(found.matches.length, 3, `three distinctly-titled room finish schedules, not one merged blob: ${found.matches.map((m: any) => m.title).join(" | ")}`);
+  const basement = found.matches.find((m: any) => /BASEMENT/.test(m.title));
+  const firstFloor = found.matches.find((m: any) => /FIRST FLOOR/.test(m.title));
+  assert.equal(basement.rows, 6);
+  assert.equal(firstFloor.rows, 23);
+  // 29, verified against the sheet: the key column carries exactly 29 real
+  // room numbers, split 6 + 23 across these two number-keyed tables.
+  assert.equal(basement.rows + firstFloor.rows, 29, "every real room row across the two number-keyed tables, and none that is not one");
+  for (const m of found.matches) {
+    assert.match(m.title, /ROOM FINISH SCHEDULE/);
+    assert.ok(m.region.x1 > m.region.x0, "the region is viewable");
+  }
+  // The third table — "PATIENT ROOMS (TYPICAL)" — has no NUMBER column at
+  // all: it's a genuine, distinct drafting convention where the key column
+  // is itself the NAME column, and its rows are keyed by a room-TYPE phrase
+  // ("PATIENT ROOMS", "PATIENT TOILET ROOMS") rather than a digit tag. That
+  // used to defeat two things at once: rowKeyOf's key-format test only knew
+  // the numbered-room convention (so the two real rows never qualified as
+  // rows at all), and — because the table then never independently produced
+  // a boundary signal for itself — findTableBoundary's scan fell back to its
+  // generous cap and picked up unrelated debris far down the page (a
+  // title-block digit run, then a revision-log fragment) as spurious rows in
+  // its place. Both are fixed now: rowKeyOf accepts a NAME-format key when
+  // the table's own header says its key column IS "NAME", and a table whose
+  // wide fallback scan never hit a real stop signal is re-walked for the
+  // first abnormal gap between candidates that actually read as keys of
+  // this table — which lands right after the two real rows, before the
+  // debris ever gets a vote in where the key column starts.
+  const patientRooms = found.matches.find((m: any) => /PATIENT ROOMS/.test(m.title));
+  assert.equal(patientRooms.rows, 2, "both real NAME-keyed rows, none of the debris that used to stand in for them");
+  assert.ok(!patientRooms.headers.includes("NUMBER"), "this table's own header has no numbered-room column — NAME is the key");
+  // the region bounds just the two real rows (y≈1520–1592), not the ~2600px
+  // of unrelated sheet the old fallback boundary used to sweep in
+  assert.ok(patientRooms.region.y1 - patientRooms.region.y0 < 200, `region should hug the two real rows, not reach for debris: ${JSON.stringify(patientRooms.region)}`);
   assert.match(await callErr(client, "find_schedule", { kind: "door" }), /No "door" schedule found .* Found: /);
 });
 

@@ -46,6 +46,11 @@ test("anthropic-style: scripted tool_use → tools execute → results pair up i
       ],
       stop_reason: "tool_use",
     },
+    // the vision-routing seam's own isolated call for "look"'s image (real,
+    // later addition — see ai.js's own aiConfig()/describeImageForAgent
+    // comments): a SEPARATE request, in between the two main loop turns,
+    // never the raw image reaching the model driving the loop.
+    { content: [{ type: "text", text: "A duct riser with a tagged register nearby." }], stop_reason: "end_turn" },
     anthropicDone("All staged."),
   ]);
   const executed: Array<[string, unknown]> = [];
@@ -68,20 +73,59 @@ test("anthropic-style: scripted tool_use → tools execute → results pair up i
   assert.equal(requests[0].system, agentSystemPrompt());
   assert.deepEqual(requests[0].messages, [{ role: "user", content: "take off the carpet" }]);
   assert.deepEqual(requests[0].tools.map((t: any) => t.name), ["probe", "look"]);
-  // request 2: assistant echo + BOTH results in one user message, ids paired
-  const msgs = requests[1].messages;
+  // request 2 is the ISOLATED vision call (no tools, no system contract,
+  // no shared conversation history) — the model driving the loop never
+  // sees this request at all.
+  assert.equal(requests[1].tools, undefined);
+  // request 3 (the loop's own next turn): assistant echo + BOTH results in
+  // one user message, ids paired — "look"'s own result now carries the
+  // vision model's own literal TEXT description, never the raw image.
+  const msgs = requests[2].messages;
   assert.equal(msgs.length, 3);
   assert.equal(msgs[1].role, "assistant");
   const results = msgs[2].content;
   assert.equal(msgs[2].role, "user");
   assert.deepEqual(results.map((r: any) => r.tool_use_id), ["toolu_1", "toolu_2"]);
   assert.match(results[0].content[0].text, /"found":2/);
-  // the image result rides as a real image block, never serialized into text
-  assert.equal(results[1].content[0].type, "image");
-  assert.equal(results[1].content[0].source.data, "QUJD");
-  assert.ok(!JSON.stringify(results[1].content.filter((b: any) => b.type === "text")).includes("base64"));
+  // the image result is NEVER an image block anymore — it's the vision
+  // model's own described text, and the raw base64 never reaches this turn
+  assert.equal(results[1].content.length, 1);
+  assert.equal(results[1].content[0].type, "text");
+  assert.match(results[1].content[0].text, /A duct riser with a tagged register nearby\./);
+  assert.ok(!JSON.stringify(results[1].content).includes("QUJD"), "the raw base64 image data must never reach the loop's own conversation");
   // streaming status: text → tool_start/tool_end ×2 → final text → done
+  // (the isolated vision call for "look" happens INSIDE that tool's own
+  // tool_start/tool_end pair — it emits no separate event of its own on
+  // the success path, only on the disclosed-degradation path)
   assert.deepEqual(events.map((e) => e.type), ["text", "tool_start", "tool_end", "tool_start", "tool_end", "text", "done"]);
+});
+
+test("vision routing degrades honestly, with a disclosed event, when the isolated vision call itself fails — never silently", async () => {
+  const requests: any[] = [];
+  let call = 0;
+  const fn = async (_url: string, init: { body: string }) => {
+    requests.push(JSON.parse(init.body));
+    call++;
+    if (call === 1) return resp({ content: [{ type: "tool_use", id: "toolu_1", name: "look", input: {} }], stop_reason: "tool_use" });
+    if (call === 2) return { ok: false, status: 500, json: async () => ({}) }; // the isolated vision call itself fails
+    return resp(anthropicDone("Done despite the degraded look."));
+  };
+  const events: any[] = [];
+  const res = await runAgentLoop({
+    cfg: CFG_A, goal: "look at it", tools: TOOLS,
+    execute: () => ({ image_data_url: "data:image/png;base64,QUJD", width: 10, height: 10 }),
+    onEvent: (ev) => events.push(ev),
+    fetchFn: fn as any,
+  });
+  assert.equal(res.status, "done");
+  // the raw image still reaches the model's next turn — a real, working
+  // fallback, not a lost capability — but disclosed via a real text event,
+  // never silently
+  const degradeEvents = events.filter((e) => e.type === "text" && /Vision routing degraded/.test(e.text || ""));
+  assert.equal(degradeEvents.length, 1);
+  const msgs = requests[2].messages;
+  const results = msgs[msgs.length - 1].content;
+  assert.equal(results[0].content[0].type, "image", "the OLD raw-image path is the real fallback, not a dropped tool result");
 });
 
 test("openai-style: function calling round-trip with role:tool results", async () => {

@@ -18,6 +18,7 @@ const KEYS = {
   apiKey: "opentakeoff_ai_key",
   model: "opentakeoff_ai_model",
   provider: "opentakeoff_ai_provider",
+  visionModel: "opentakeoff_ai_vision_model",
 };
 
 const env = (name) => (import.meta.env && import.meta.env[name]) || "";
@@ -31,13 +32,33 @@ function readKey(k, envName) {
 }
 
 /** Current config. provider: "openai" (OpenAI-style — the default; local
- *  runtimes speak it) | "anthropic" (Anthropic-style). */
+ *  runtimes speak it) | "anthropic" (Anthropic-style).
+ *
+ *  `visionModel` (real, later addition): the model used SPECIFICALLY for
+ *  reading an image (view_region crops) — separate from `model`, the one
+ *  driving the agent loop's own tool-calling and final narration. Real,
+ *  live-observed reason this split exists at all: asked to trace a duct's
+ *  connectivity, the single configured model (a smaller, vision-capable one,
+ *  chosen so it CAN read plan crops at all) sometimes overrode its own
+ *  tool's honest "no connection found" with a guess from eyeballing a
+ *  view_region screenshot — even with explicit, forceful prompt rules
+ *  against exactly that, confirmed by direct live re-testing, not assumed.
+ *  Routing images through a SEPARATE, narrowly-scoped vision call (see
+ *  `describeImageForAgent` below) means the model actually driving the loop
+ *  and writing the final answer never has raw pixels in its own context to
+ *  be tempted by — it only ever sees the vision model's own literal
+ *  description, threaded in exactly like any other tool result. Defaults to
+ *  `model` when unset, so a single-model setup (today's default) behaves
+ *  identically to before this existed — this is additive, not a forced
+ *  change to anyone's existing config. */
 export function aiConfig() {
+  const model = readKey("model", "VITE_AI_MODEL");
   return {
     endpoint: readKey("endpoint", "VITE_AI_ENDPOINT"),
     apiKey: readKey("apiKey", "VITE_AI_KEY"),
-    model: readKey("model", "VITE_AI_MODEL"),
+    model,
     provider: readKey("provider", "VITE_AI_PROVIDER") || "openai",
+    visionModel: readKey("visionModel", "VITE_AI_VISION_MODEL") || model,
   };
 }
 
@@ -47,9 +68,9 @@ export function isAiConfigured() {
   return !!(c.endpoint && c.model);
 }
 
-export function saveAiConfig({ endpoint, apiKey, model, provider }) {
+export function saveAiConfig({ endpoint, apiKey, model, provider, visionModel }) {
   try {
-    for (const [k, v] of [["endpoint", endpoint], ["apiKey", apiKey], ["model", model], ["provider", provider]]) {
+    for (const [k, v] of [["endpoint", endpoint], ["apiKey", apiKey], ["model", model], ["provider", provider], ["visionModel", visionModel]]) {
       if (v) localStorage.setItem(KEYS[k], v);
       else localStorage.removeItem(KEYS[k]);
     }
@@ -129,6 +150,41 @@ export function scaleReadPrompt(labels) {
   return `This image is the title block region of a construction drawing. Find the stated drawing scale (usually after the word SCALE). Reply with exactly one of the following labels, character for character, or the single word UNKNOWN if no scale is stated. Labels: ${labels.join(" | ")}. Reply with the label only — no other words.`;
 }
 
+/** Vision-assisted symbol classification (maturity plan Phase 3, #HVAC-4) —
+ * for symbols the geometric approach can't confidently place (a genuinely
+ * novel shape, or a raster/scanned sheet with no vector geometry to
+ * fingerprint at all). `names` grounds the model in this project's own
+ * real, hand-authored taxonomy (hvacTaxonomy.ts) instead of an open-ended
+ * "what is this" — a constrained vocabulary the same way scaleReadPrompt
+ * constrains scale answers to real labels, not free text. Always asks for
+ * a stated confidence and a one-sentence visual reason — never a bare
+ * label, matching this project's evidence-citation doctrine everywhere
+ * else (a classification with no reasoning attached is exactly the kind of
+ * unverifiable assertion `confidence.ts`'s own doctrine already refuses
+ * elsewhere in this codebase). */
+export function classifySymbolPrompt(names) {
+  return `This image is a cropped symbol from a construction drawing (HVAC/mechanical/BAS). Classify what this symbol represents. Consider these known real component names: ${names.join(", ")}. If the symbol clearly matches none of them, reply with your own best short name instead of forcing a bad fit. Reply with EXACTLY this JSON object and nothing else — no markdown code fence, no other text: {"classification": "<name>", "confidence": <number 0 to 1>, "reasoning": "<one sentence citing the specific visual features that led to this>"}`;
+}
+
+/** The model's reply -> {classification, confidence, reasoning}, or null if
+ * the reply isn't usable — never a guessed/patched-up shape. Tolerates a
+ * markdown code fence around the JSON (real models wrap it one anyway, this
+ * project's own live check against the configured vision model confirmed),
+ * but does not tolerate a missing field, a confidence outside [0,1], or an
+ * empty reasoning string — those are refused, not silently defaulted. */
+export function parseClassifyResponse(text) {
+  if (typeof text !== "string") return null;
+  const stripped = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
+  let obj;
+  try { obj = JSON.parse(stripped); } catch { return null; }
+  if (!obj || typeof obj !== "object") return null;
+  const { classification, confidence, reasoning } = obj;
+  if (typeof classification !== "string" || !classification.trim()) return null;
+  if (typeof confidence !== "number" || !Number.isFinite(confidence) || confidence < 0 || confidence > 1) return null;
+  if (typeof reasoning !== "string" || !reasoning.trim()) return null;
+  return { classification: classification.trim(), confidence, reasoning: reasoning.trim() };
+}
+
 /** One chat-with-tools turn: system + running messages + tool declarations.
  *  Returns {url, headers, body} (body as an object — the caller stringifies).
  *  Same key/endpoint handling as buildVisionRequest; `messages` and `tools`
@@ -161,16 +217,19 @@ export function buildChatRequest(cfg, { system, messages, tools, maxTokens = 409
 // ── the seam every AI consumer goes through ─────────────────────────────────
 
 /** Send one vision query to the user's configured endpoint. Throws with a
- *  plain-language message on any failure. */
-export async function visionQuery({ imageDataUrl, prompt, maxTokens = 100 }) {
-  const cfg = aiConfig();
-  if (!isAiConfigured()) throw new Error("AI isn't configured — open AI settings first.");
+ *  plain-language message on any failure. `cfgOverride`/`fetchFn` are
+ *  injectable (tests, and `describeImageForAgent` below, which needs the
+ *  VISION model, not the orchestrator model) — default to the live
+ *  `aiConfig()` and the global `fetch` exactly as before. */
+export async function visionQuery({ imageDataUrl, prompt, maxTokens = 100, cfg: cfgOverride, fetchFn }) {
+  const cfg = cfgOverride || aiConfig();
+  if (!(cfg.endpoint && cfg.model)) throw new Error("AI isn't configured — open AI settings first.");
   const { url, headers, body } = buildVisionRequest(cfg, { imageDataUrl, prompt, maxTokens });
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), 30000);
   let res;
   try {
-    res = await fetch(url, { method: "POST", headers, body: JSON.stringify(body), signal: ctl.signal });
+    res = await (fetchFn || fetch)(url, { method: "POST", headers, body: JSON.stringify(body), signal: ctl.signal });
   } catch (e) {
     throw new Error(e?.name === "AbortError"
       ? "The endpoint took more than 30 seconds — check the model is loaded."
@@ -182,6 +241,31 @@ export async function visionQuery({ imageDataUrl, prompt, maxTokens = 100 }) {
   const text = parseVisionResponse(cfg.provider, await res.json().catch(() => null));
   if (text == null) throw new Error("The endpoint replied, but not with text.");
   return text;
+}
+
+/** Deliberately literal: describe only what's visible, never a conclusion.
+ * The whole point of routing images through their own isolated call (see
+ * `aiConfig()`'s own `visionModel` comment) is that the model driving the
+ * loop never gets tempted to reason from raw pixels — so THIS prompt must
+ * not invite the vision model to draw conclusions either, just report what
+ * it can literally see, the same discipline `scaleReadPrompt`/
+ * `classifySymbolPrompt` already hold elsewhere in this file. */
+export function describeImagePrompt() {
+  return "This image is a cropped region of a construction drawing (HVAC/mechanical/BAS plan). Describe ONLY what is literally visible: any text, tags, or labels you can read exactly as printed, and the linework/symbols present (shape, how many, roughly where). Do NOT infer meaning, connections, totals, or conclusions beyond what's directly visible — if you're not sure a mark is a specific symbol, say so instead of guessing. Be factual and literal, 2-4 sentences.";
+}
+
+/** The agent loop's own image-to-text seam (real, later addition — see
+ * `aiConfig()`'s own `visionModel` comment for why this exists at all).
+ * Runs the SAME transport as `visionQuery`, just always against the
+ * configured VISION model, never whatever model is driving the loop. Throws
+ * the same plain-language errors on failure — the caller (`agentLoop.js`)
+ * catches this and degrades to the OLD raw-image path for that one result,
+ * but emits a real status event disclosing the degradation rather than
+ * failing silently either way (see the call site's own comment). */
+export async function describeImageForAgent({ imageDataUrl, cfg, fetchFn }) {
+  const base = cfg || aiConfig();
+  const visionCfg = { ...base, model: base.visionModel || base.model };
+  return visionQuery({ imageDataUrl, prompt: describeImagePrompt(), maxTokens: 300, cfg: visionCfg, fetchFn });
 }
 
 /** Send one chat-with-tools request (the agent loop's transport). Same

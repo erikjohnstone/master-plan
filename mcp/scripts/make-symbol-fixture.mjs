@@ -270,6 +270,18 @@ const annotated = (tag, value, [x, y]) => [
   `BT /F1 10 Tf ${fmt(x)} ${fmt(y)} Td (${tag}) Tj ET`,
   `BT /F1 10 Tf ${fmt(x)} ${fmt(y - 12)} Td (${value}) Tj ET`,
 ];
+/** The SECOND real annotated-device convention (accuracy-hardening plan,
+ * later autonomous demo-loop session): a boxed callout with the tag and its
+ * value SIDE BY SIDE on the same baseline, not stacked — real, found live
+ * and measured on the baker-county-eoc corpus's own real "CD-1 | 85" boxes
+ * (same y0 to the pixel, gap ~1.1x the text height on every real instance
+ * checked). `gap` mirrors that real measured ratio at this fixture's own
+ * 10pt font (~19px tall glyphs on the real corpus vs. this fixture's 10pt
+ * text — proportioned, not copied verbatim). */
+const annotatedSide = (tag, value, [x, y]) => [
+  `BT /F1 10 Tf ${fmt(x)} ${fmt(y)} Td (${tag}) Tj ET`,
+  `BT /F1 10 Tf ${fmt(x + tag.length * 6 + 8)} ${fmt(y)} Td (${value}) Tj ET`,
+];
 
 const ANN_PAGES = [
   [
@@ -283,6 +295,8 @@ const ANN_PAGES = [
     ...place(SYMBOL, [440, 430]), ...annotated("S1", "175", [410, 440]),
     // one R1 return, same pattern
     ...place(SQUARE_ONLY, [300, 300]), ...annotated("R1", "1150", [270, 310]),
+    // one CD-1 diffuser, the SIDE-BY-SIDE box-row convention (not stacked)
+    ...place(SQUARE_ONLY, [180, 250]), ...annotatedSide("CD-1", "85", [140, 270]),
     // residue 1: a tag amid device linework but with NO value — withheld, look
     ...place(SYMBOL, [430, 120]), `BT /F1 10 Tf 425 145 Td (S1) Tj ET`,
     // residue 2: a bare tag — no value, no linework — a note mention
@@ -365,3 +379,84 @@ for (const off of lblOffsets) lblPdf += `${String(off).padStart(10, "0")} 00000 
 lblPdf += `trailer\n<< /Size ${lblObjects.length + 1} /Root 1 0 R >>\nstartxref\n${lblXrefAt}\n%%EOF\n`;
 writeFileSync(OUT_LBL, lblPdf, "latin1");
 console.log(`wrote ${OUT_LBL} (${lblPdf.length} bytes)`);
+
+// ── symbol-uniqtags.pdf — the cross-tag corroboration fixture ────────────────
+// The uniquely-tagged-family case sweep_schedule_row's same-tag corroborator
+// cannot serve: a MECHANICAL PLAN sheet + a VAV SCHEDULE sheet, three marks,
+// each tag drawn EXACTLY ONCE (never repeating):
+//   VAV-1  (150,400)  diamond marker — the SAME bubble shape as VAV-2's own
+//                      (two different boxes, one firm's drafting convention)
+//   VAV-2  (400,400)  diamond marker — VAV-1's cross-tag corroborator and
+//                      vice versa: neither repeats its OWN tag, but each
+//                      other's occurrence reproduces the fingerprint
+//   VAV-3  (275,200)  a TRIANGLE marker — a genuinely different shape family
+//                      in the SAME schedule table. The negative control:
+//                      cross-tag corroboration must never fire between VAV-3
+//                      and VAV-1/VAV-2 — the shapes just don't reproduce.
+function triangleMarker(tag, [cx, cy]) {
+  const pts = [[cx, cy - 12], [cx - 12, cy + 8], [cx + 12, cy + 8]];
+  const out = [];
+  for (let i = 0; i < 3; i++) {
+    const a = pts[i], b = pts[(i + 1) % 3];
+    out.push(`${fmt(a[0])} ${fmt(a[1])} m ${fmt(b[0])} ${fmt(b[1])} l S`);
+  }
+  return [...out, ...(tag ? [tagText(tag, [cx, cy])] : [])];
+}
+
+const OUT_UNIQ = join(FIXTURES, "symbol-uniqtags.pdf");
+const UNIQ_PAGES = [
+  // page 1 — MECHANICAL PLAN (plan role)
+  [
+    title("MECHANICAL PLAN"),
+    "1 w",
+    "30 30 552 552 re S",
+    "0.5 w",
+    ...marker("VAV-1", [150, 400]),
+    ...marker("VAV-2", [400, 400]),
+    ...triangleMarker("VAV-3", [275, 200]),
+  ],
+  // page 2 — VAV SCHEDULE (schedule role): three rows, one per unique tag.
+  // Real equipment-shaped headers (SYMBOL/CFM/ESP), matching this project's
+  // own real corpus VAV schedule shape exactly (federal-mech's real VAV
+  // table: SYMBOL/CFM/ESP/HP columns) — not a bare finish-style MARK/
+  // MATERIAL/DESCRIPTION layout. That MARK-keyed version of this fixture
+  // genuinely extracted ZERO tables: `extractTableAt`'s equipment-kind
+  // qualification needs BOTH minHits(3) from EQUIPMENT_HEADERS AND at least
+  // one hit from its own narrower rating-word `required` list (VOLTAGE/
+  // PHASE/WATTS/.../ESP/AIRFLOW/...) — MARK/MATERIAL/DESCRIPTION clears
+  // neither list, and finish-kind separately excludes "VAV SCHEDULE" by
+  // title (isNonFinishSchedule's own VAV-family guard). SYMBOL/CFM/ESP
+  // clears both bars (ESP is in EQUIPMENT_HEADERS AND `required`).
+  [
+    title("VAV SCHEDULE"),
+    cell("SYMBOL", 60, 540), cell("CFM", 200, 540), cell("ESP", 400, 540),
+    cell("VAV-1", 60, 515), cell("400", 200, 515), cell("0.5", 400, 515),
+    cell("VAV-2", 60, 490), cell("400", 200, 490), cell("0.5", 400, 490),
+    cell("VAV-3", 60, 465), cell("400", 200, 465), cell("0.5", 400, 465),
+  ],
+];
+
+const uniqObjects = [
+  `<< /Type /Catalog /Pages 2 0 R >>`,
+  `<< /Type /Pages /Kids [${UNIQ_PAGES.map((_, i) => `${4 + i * 2} 0 R`).join(" ")}] /Count ${UNIQ_PAGES.length} >>`,
+  `<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>`,
+];
+for (let i = 0; i < UNIQ_PAGES.length; i++) {
+  const stream = UNIQ_PAGES[i].join("\n");
+  uniqObjects.push(
+    `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents ${5 + i * 2} 0 R /Resources << /Font << /F1 3 0 R >> >> >>`,
+    `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`,
+  );
+}
+let uniqPdf = "%PDF-1.5\n";
+const uniqOffsets = [];
+uniqObjects.forEach((body, i) => {
+  uniqOffsets.push(uniqPdf.length);
+  uniqPdf += `${i + 1} 0 obj\n${body}\nendobj\n`;
+});
+const uniqXrefAt = uniqPdf.length;
+uniqPdf += `xref\n0 ${uniqObjects.length + 1}\n0000000000 65535 f \n`;
+for (const off of uniqOffsets) uniqPdf += `${String(off).padStart(10, "0")} 00000 n \n`;
+uniqPdf += `trailer\n<< /Size ${uniqObjects.length + 1} /Root 1 0 R >>\nstartxref\n${uniqXrefAt}\n%%EOF\n`;
+writeFileSync(OUT_UNIQ, uniqPdf, "latin1");
+console.log(`wrote ${OUT_UNIQ} (${uniqPdf.length} bytes)`);

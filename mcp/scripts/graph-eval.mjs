@@ -169,7 +169,44 @@ async function evalSet(set) {
     out.cell = { tp, fp, fn, precision: p, recall: r, f1: f1(p, r) };
   }
 
-  if (!cellKey && !tagKey) out.unlabelled = true;
+  // ── metric 3: row-to-symbol linking (maturity plan Phase 1, #HVAC-2) ──
+  // A different question than cell accuracy above: given a real schedule-row
+  // tag, does sweep_schedule_row actually find it DRAWN on a plan sheet —
+  // geometrically, not just resolve the row's text? Key format: tag,
+  // expect_status (resolved|refused), independently authored by rendering
+  // the real sheet and looking at it (never from this tool's own output —
+  // see the corpus README for exactly how each key was built). `resolved`
+  // means "a human confirmed a real device symbol is drawn here"; a refusal
+  // where the key expects `resolved` is a REAL miss (today's matcher doesn't
+  // anchor it), not a key error — that is precisely the number this metric
+  // exists to surface, not paper over.
+  const rowSymKey = readCsv(join(corpus, "keys", `${set.id}.rowsym.csv`));
+  if (rowSymKey) {
+    let tp = 0, fp = 0, fn = 0;
+    for (const row of rowSymKey) {
+      const tag = (row.tag || "").trim();
+      const expect = (row.expect_status || "").trim();
+      let status;
+      try {
+        const r = await s.sweepScheduleRow(tag, {});
+        status = (r.found ?? 0) > 0 ? "resolved" : "refused";
+      } catch {
+        status = "refused";   // sweepScheduleRow throws UserError on any refusal path
+      }
+      if (status === expect) {
+        if (expect === "resolved") tp++;
+        // a correctly-expected refusal is not a hit to count toward recall —
+        // it just isn't a miss either; only score the "should be findable" side
+      } else if (expect === "resolved" && status === "refused") {
+        fn++; out.misses.push({ kind: "rowsym-missed", tag, note: row.note });
+      } else {
+        fp++; out.misses.push({ kind: "rowsym-unexpected-resolve", tag, note: row.note });
+      }
+    }
+    out.rowsym = { tp, fp, fn, recall: tp / Math.max(1, tp + fn) };
+  }
+
+  if (!cellKey && !tagKey && !rowSymKey) out.unlabelled = true;
   return out;
 }
 
@@ -189,25 +226,29 @@ say("╔════════════════════════
 say("║ SHEET GRAPH — scored against real sets");
 say("╚══════════════════════════════════════════════════════════════════════════");
 say("");
-say("set                        cell P    cell R   cell F1     tag P    tag R   reported");
-say("────────────────────────────────────────────────────────────────────────────────────");
-const agg = { ctp: 0, cfp: 0, cfn: 0, ttp: 0, tfp: 0, tfn: 0 };
+say("set                        cell P    cell R   cell F1     tag P    tag R   reported  rowsym R");
+say("────────────────────────────────────────────────────────────────────────────────────────────");
+const agg = { ctp: 0, cfp: 0, cfn: 0, ttp: 0, tfp: 0, tfn: 0, rtp: 0, rfp: 0, rfn: 0 };
 for (const r of results) {
   if (r.error) { say(`${r.id.padEnd(26)} ERROR: ${r.error.slice(0, 60)}`); continue; }
   if (r.unlabelled) { say(`${r.id.padEnd(26)} (no key yet)  reported ${r.reported}`); continue; }
-  const c = r.cell, t = r.tag;
+  const c = r.cell, t = r.tag, rs = r.rowsym;
   if (c) { agg.ctp += c.tp; agg.cfp += c.fp; agg.cfn += c.fn; }
   if (t) { agg.ttp += t.tp; agg.tfp += t.fp; agg.tfn += t.fn; }
+  if (rs) { agg.rtp += rs.tp; agg.rfp += rs.fp; agg.rfn += rs.fn; }
   say(`${r.id.padEnd(26)}${c ? pct(c.precision) + "   " + pct(c.recall) + "   " + pct(c.f1) : "    —        —        —   "}`
-    + `${t ? "  " + pct(t.precision) + "   " + pct(t.recall) : "      —        —"}   ${String(r.reported).padStart(5)}`);
+    + `${t ? "  " + pct(t.precision) + "   " + pct(t.recall) : "      —        —"}   ${String(r.reported).padStart(5)}`
+    + `     ${rs ? pct(rs.recall) : "    —"}`);
 }
-say("────────────────────────────────────────────────────────────────────────────────────");
+say("────────────────────────────────────────────────────────────────────────────────────────────");
 const cP = agg.ctp / Math.max(1, agg.ctp + agg.cfp), cR = agg.ctp / Math.max(1, agg.ctp + agg.cfn);
 const tP = agg.ttp / Math.max(1, agg.ttp + agg.tfp), tR = agg.ttp / Math.max(1, agg.ttp + agg.tfn);
-say(`${"CORPUS".padEnd(26)}${pct(cP)}   ${pct(cR)}   ${pct(f1(cP, cR))}  ${pct(tP)}   ${pct(tR)}`);
+const rR = agg.rtp / Math.max(1, agg.rtp + agg.rfn);
+say(`${"CORPUS".padEnd(26)}${pct(cP)}   ${pct(cR)}   ${pct(f1(cP, cR))}  ${pct(tP)}   ${pct(tR)}              ${pct(rR)}`);
 say("");
-say(`cells  ${agg.ctp} right · ${agg.cfp} wrong · ${agg.cfn} missed`);
-say(`tags   ${agg.ttp} real · ${agg.tfp} not-rooms reported · ${agg.tfn} real rooms missed`);
+say(`cells   ${agg.ctp} right · ${agg.cfp} wrong · ${agg.cfn} missed`);
+say(`tags    ${agg.ttp} real · ${agg.tfp} not-rooms reported · ${agg.tfn} real rooms missed`);
+say(`rowsym  ${agg.rtp} found on the plan as expected · ${agg.rfp} unexpectedly resolved · ${agg.rfn} real drawn symbols NOT anchored by sweep_schedule_row`);
 say("");
 
 // worst bins first — this is what the next fix should attack

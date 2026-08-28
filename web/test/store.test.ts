@@ -287,7 +287,10 @@ test("v1->v3 upgrade preserves pdfs + annotations, and snapshots work after", as
 
   // Store methods open at DB_VERSION 3 — onupgradeneeded contains-guards
   // must add only the missing stores (snapshots, pdf_revs) and leave v1 data intact.
-  assert.deepEqual(await store.listSheets(), [{ name: "plan-a.pdf" }]);
+  // The seeded v1 record predates CO-1's rev field entirely — listSheets()
+  // reads a legacy record's absent rev as 1, the same "no revision history
+  // yet" default addPdf itself uses for a pre-v3 record on first re-drop.
+  assert.deepEqual(await store.listSheets(), [{ name: "plan-a.pdf", rev: 1 }]);
   assert.deepEqual(await store.loadAnnotations(), ann);
   assert.deepEqual(await store.loadPdfData("plan-a.pdf"), new Uint8Array([37, 80, 68, 70, 45]));
 

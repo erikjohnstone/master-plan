@@ -18,7 +18,7 @@ import {
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
   markVerdictOutput, deleteVerdictOutput,
   sheetGraphOutput, resolveTagOutput, findScheduleOutput, sweepScheduleRowOutput, countMarksOutput,
-  exportDxfOutput,
+  exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
 import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
@@ -223,10 +223,36 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     commitSeed: a.commit_seed,
   })));
 
+  server.registerTool("match_reference_symbol", {
+    description: `Identify a drawn HVAC/BAS component by SHAPE alone — no seed, no marquee: every symbol in this project's own hand-digitized reference library (real valve/damper geometry, never scraped from any dataset — see hvacRefShapes.ts) is matched against this sheet's own drawn linework, at this sheet's own committed real-world scale. Deterministic geometry, exactly like symbol_sweep's own engine (same fingerprint/score/rotation-mirror machinery) — never vision, never a guess. Each library shape reports its own found/matches/withheld exactly like a symbol_sweep result: score ≥ 0.92 is a match, the 0.75–0.92 band comes back withheld with a reason (a near-match is a question you answer by LOOKING, view_sheet at its \`at\`), never silently dropped and never silently promoted. Needs a committed scale — a reference shape has no sheet of its own, so its real-world size (stated in inches) can only be converted to THIS sheet's pixels via its own upp; no scale set, no match attempt, refused with a named reason (set_scale first, or marquee a real instance and use symbol_sweep instead if the shape isn't in the library yet). names restricts which library shapes to check (case-insensitive, e.g. ["gate valve"]); omit to check the WHOLE library in one call — PREFER omitting it: some library shapes are a real, deliberate geometric SUBSET of another (a 2-way control valve's own body is a 3-way's identical body minus one leg), and matching them side by side in the SAME call is what lets a smaller shape's own false subset-match get disambiguated against the larger one automatically (disclosed as withheld, naming which larger shape it really is) — filtering to just the smaller shape alone loses that protection and can report a false clean match. The library is deliberately small and grows only when a shape has real corpus evidence behind it (see hvacTaxonomy.ts) — a shape not yet in the library will never appear in the reply, so an empty/all-zero result does not mean "nothing here," only "nothing in today's library." Corroborate any match against the sheet's own schedule/tag evidence (resolve_tag, sweep_schedule_row) before trusting it as identification rather than a shape hypothesis. ${COORDS}`,
+    inputSchema: {
+      sheet: z.string(),
+      names: z.array(z.string()).optional().describe('Restrict to these library shapes by name (case-insensitive), e.g. ["gate valve", "ball valve"]. Omit to check every shape in the library.'),
+    },
+    outputSchema: matchReferenceSymbolOutput,
+  }, run("match_reference_symbol", (a) => session.matchReferenceSymbol(a.sheet, { names: a.names })));
+
+  server.registerTool("find_legend_symbols", {
+    description: `Auto-detect every (glyph, caption) row on a legend sheet — no fixed library, nothing hand-digitized. There is no single national HVAC symbol standard; every firm keeps its own house legend, so a bigger fixed reference-shape library never scales to every job's own conventions. This tool does the opposite: it clusters THIS sheet's own real vector segments into compact glyphs (real-junction-aware — a real glyph's own actuator box and valve body routinely connect only at a T-junction or a mid-segment crossing, never just clean endpoint-to-endpoint, so naive endpoint clustering silently fragments them; this tool nodes the real geometry properly first) and pairs each one with its own real caption text drawn beside it. It does NOT sweep or identify anything on the plan sheets itself. Call sheet_graph first to find candidate sheets — but do NOT filter to role: "legend" alone: a real, rich, 149-row symbol legend was found live titled "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE" and correctly classified role: "schedule" (that IS what the sheet calls itself), never "legend" — every "schedule"-role sheet whose own title suggests a symbol/point/device reference (POINT FUNCTION, SYMBOL, ABBREVIATION, LEGEND itself) is worth trying too; this tool clusters whatever sheet it's pointed at, sheet-role-agnostic by design, so pointing it at a plan sheet by mistake just returns nothing useful rather than erroring — trying an extra candidate sheet costs nothing but a call. A legend/BMS-schedule sheet is drawn at its OWN scale, almost never a stated one (it is a stylized symbol index, not a to-scale drawing) — feeding a result's \`rect\` straight into symbol_sweep's own seed_rect (scope: "set") will very likely REFUSE for exactly that reason (#186's cross-scale-ratio check has nothing to compute a ratio from). The real, working path: use each row's own caption plus view_sheet as a VISUAL reference for what to look for, then marquee one real instance actually DRAWN ON A PLAN SHEET (which IS at a stated, real scale) and sweep from that seed instead — the legend tells you what it looks like, the plan gives you a scaled seed to search with. An empty result (with a note) is not an error: a job with no legend sheet, or a legend this detector's own compact-glyph/adjacent-caption assumptions don't fit, simply falls back to the ordinary symbol_sweep workflow — marquee one real occurrence anywhere in the field and sweep from it, exactly as always. ${COORDS}`,
+    inputSchema: {
+      sheet: z.string(),
+    },
+    outputSchema: findLegendSymbolsOutput,
+  }, run("find_legend_symbols", (a) => session.findLegendGlyphs(a.sheet)));
+
+  server.registerTool("sweep_inline_motif", {
+    description: `Sweep for a register/grille mark that is embedded WITHIN a duct run, not drawn as its own standalone block — symbol_sweep's own whole-shape fingerprint measurably under-scores this shape (real, measured: two real siblings of the same symbol type score only ~76-77% against each other, under the 92% commit bar) because a real register/grille's own physical SIZE genuinely differs by CFM rating — a bigger airflow rating is drawn as a visibly bigger hatched box, not drafting noise. This tool matches on the hatch fill's own real-world size and pitch instead of exact segment count: marquee a REGISTER/GRILLE'S OWN HATCHED FILL as tightly as you can (not the whole duct run feeding it) and every other compact, densely-hatched region on the sheet whose real-world size is close to the seed's gets swept, at any of the seed's own 90-degree rotations (a duct run turning a corner keeps the same relative hatch angle). found/matches/withheld follow symbol_sweep's own doctrine exactly: a real-world size within tolerance of the seed's is a match, a loosely-off size comes back withheld with a reason (a question to look at, never silently dropped or promoted), and nothing is ever asserted from shape alone. Needs a committed scale for the size tolerance to mean anything across different real fixture sizes — without one, sizes are compared in image px only, disclosed via a note, same-sheet-only. Sheet scope only today (no "set" scope yet) — sweep each sheet separately. This tool detects only; it does not corroborate against a schedule row's own tag the way sweep_schedule_row does — resolve_tag/read a schedule to confirm which specific tag a match belongs to. ${COORDS}`,
+    inputSchema: {
+      sheet: z.string(),
+      seed_rect: z.tuple([pointSchema, pointSchema]).describe("Marquee tightly around the register/grille's own hatched fill — two opposite corners, image px"),
+    },
+    outputSchema: sweepInlineMotifOutput,
+  }, run("sweep_inline_motif", (a) => session.sweepInlineMotif(a.sheet, { seedRect: a.seed_rect })));
+
   server.registerTool("sweep_schedule_row", {
     description: `Take off a schedule row's mark from the row itself — the estimator's own gesture: a transition type sometimes exists only as a schedule row plus tag markers scattered across the plan sheets, and this tool mints the condition FROM the row and finds every occurrence. Pass the row's key (e.g. 'T1') and the tool (1) reads the row from the set's schedule tables (the sheet_graph/find_schedule machinery — the row is the condition's cited source), (2) anchors a geometric fingerprint on the marker the tag is DRAWN as on a plan sheet (a deterministic pad ladder around the tag text; where the tag occurs more than once the fingerprint must recur at a second occurrence before it is trusted — \`anchor.corroborated\`), and (3) sweeps every PLAN-role sheet for it. The count is geometry AND text agreeing: drafting reuses one bubble shape across many marks, so a match counts ONLY when the row's own tag sits within the marker footprint (its bbox rides the match as \`tag_at\` evidence); a match labeled with a SIBLING row's tag is excluded and says whose it is, an unlabeled match is withheld as a question, and a tag drawn with no matching marker is disclosed as text_only. REFUSAL over guessing, with the reason and the fix: no such row; the same key in two tables (ambiguous); a tag drawn on no plan sheet; no repeatable marker linework around the tag — a fingerprint is never guessed from text alone (the fallback is always: marquee one instance with symbol_sweep). commit: true commits the counted matches as EA markers under the row's own key — one undo step for the whole set-wide sweep, every marker carrying origin.assignment {source: "schedule"} plus the anchor and row citation on origin.symbol.seed. The COUNT is scale-free (EA), but matching is not: where the anchor sheet and a target sheet both carry a scale, the marker is resized by their exact ratio before matching (\`scaled\` per sheet), and where one does not, the sweep runs at 1:1 and discloses it (\`scale_assumed\`) rather than reporting a confident zero. After committing, LOOK: view_sheet {overlay: true} over each swept sheet. ${COORDS}`,
     inputSchema: {
-      tag: z.string().min(1).describe("The schedule row's key exactly as drawn, e.g. 'T1', 'TR-2' — it becomes the condition tag on commit"),
+      tag: z.string().min(1).describe("The schedule row's key exactly as drawn, e.g. 'T1', 'TR-2', 'CV-3', 'VAV-12' — it becomes the condition tag on commit"),
       commit: z.boolean().default(false).describe("Commit every counted match as one EA count marker (excluded/withheld/text_only never commit)"),
       rotations: z.boolean().default(true).describe("Also match 90/180/270-rotated markers"),
       mirror: z.boolean().default(true).describe("Also match mirrored markers"),
@@ -239,6 +265,45 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     mirror: a.mirror,
     tolerancePx: a.tolerance_px,
   })));
+
+  server.registerTool("trace_connectivity", {
+    description: `Which valve belongs to which equipment — traced through the sheet's OWN drawn linework, not proximity. Pass a seed point ON a drawn pipe/duct/conduit line and the equipment placements it might connect to (from your own prior symbol_sweep/sweep_schedule_row results — this tool does not discover symbols itself); the sheet's vector linework is noded into a connectivity graph once (cached per sheet) and walked from the seed. status "reached" names the ONE equipment placement a real walked path actually connects to, with the full path and, when every edge on it agrees, the MEP system (piping/ductwork/electrical/controls). status "ambiguous" fires when a real junction reaches TWO OR MORE different equipment placements within max_hops — every candidate is named with the junction's own coordinates, and NONE is ever picked for you; view_sheet at that junction and decide by looking, the same doctrine symbol_sweep's near-match band already lives by. status "dead_end" distinguishes running out of connected linework (a genuine dead end, OR the run continues off-sheet at a match line this tool has no cross-sheet awareness of) from hitting max_hops (raise it and retry). status "refused" fires with a named reason on: no equipment placements supplied at all, a seed point that isn't ON any traced linework, or a sheet with no vector linework (a scan). Real drawn gaps at a valve/damper symbol are a genuine, common drafting convention (the fitting's own glyph occupies the space) — pass fittings (your own already-swept valve/damper/fitting placements) to bridge a gap, but ONLY when one of those placements geometrically sits IN the gap (never on proximity alone, and never for a gap wider than bridge_ft regardless): a bridged edge is disclosed as a bridged-gap(N) factor and discounts confidence, never presented as an ordinary clean trace. Every result discloses layer_signal — "none" means more than "the system type is unclassified": with no PDF layers to exclude by (a flattened export with no Optional Content, e.g. this project's own Bessemer sample), the trace has NO way to separate wall/architectural ink from real MEP linework either, and can walk through walls as if they were pipe/duct — measured live: a residential exhaust fan's own duct riser traced 52 hops to an unrelated heat pump, almost certainly through wall linework, not a real connection. A long "reached" result (see the long-trace(N) factor) under layer_signal "none" deserves real skepticism, not just a routine discount. Named, disclosed risks, not solved here: real crossing-vs-connecting duct/pipe ambiguity (different elevations legitimately cross without connecting — no elevation signal exists to tell them apart), and schematic single-line vs. to-scale double-line duct representation (v1 traces whatever linework is drawn). A trace that cleanly follows the WRONG line — a return misread as supply — can score confidently; corroborate against the schedule/tag evidence resolve_tag or sweep_schedule_row already give you before trusting a single trace as the whole story. ${COORDS}`,
+    inputSchema: {
+      sheet: z.string(),
+      from: pointSchema.describe("Seed point (image px) ON the drawn pipe/duct/conduit line to start the trace from"),
+      equipment: z.array(z.object({
+        id: z.string().describe("The equipment's own tag, e.g. 'AHU-1'"),
+        at: pointSchema.describe("Its placement (image px), from your own prior symbol_sweep/sweep_schedule_row result"),
+        label: z.string().optional(),
+      })).default([]).describe("Real, already-swept equipment placements this trace might reach. An empty/omitted list is a NAMED refusal (status: \"refused\"), not a silent 'found nothing' or a protocol-level rejection"),
+      fittings: z.array(z.object({ at: pointSchema })).optional()
+        .describe("Real, already-swept valve/damper/fitting placements (optional) — enables bridging a real drawn gap, but ONLY where one of these sits geometrically in it. Omit to disable bridging entirely"),
+      max_hops: z.number().int().positive().optional().describe("Edge-hops to walk before giving up (default 60)"),
+      seed_tol_ft: z.number().positive().optional().describe("How close (feet) the seed/equipment points must sit to the graph's own linework to count as 'on' it (default 1.0)"),
+      bridge_ft: z.number().positive().optional().describe("Widest real drawn gap (feet) a fitting placement may bridge (default 2.0) — a gap wider than this is never bridged regardless of what sits in it"),
+    },
+    outputSchema: traceConnectivityOutput,
+  }, run("trace_connectivity", async (a) => {
+    const r = await session.traceConnectivity(a.sheet, {
+      from: a.from,
+      equipment: a.equipment,
+      fittings: a.fittings,
+      maxHops: a.max_hops,
+      seedTolFt: a.seed_tol_ft,
+      bridgeFt: a.bridge_ft,
+    });
+    return {
+      status: r.status,
+      ...(r.path ? { path: r.path } : {}),
+      ...(r.reachedEquipment ? { reached_equipment: r.reachedEquipment } : {}),
+      ...(r.branches ? { branches: r.branches } : {}),
+      layer_signal: r.layer_signal,
+      ...(r.system ? { system: r.system } : {}),
+      confidence: r.confidence,
+      factors: r.factors,
+      ...(r.reason ? { reason: r.reason } : {}),
+    };
+  }));
 
   server.registerTool("count_marks", {
     description: `The COUNT TAKEOFF in one deterministic call — no seeds, no model, seconds: census every VALUE-ANNOTATED mark tag on the plan-role sheets, counted per schedule mark, committed as EA markers when asked. The identity rule is the annotated-device drafting pattern: a device is drawn as its mark tag with a value under it ("S1" over "200" — CFM on air devices, GPM on fixtures, a rating on equipment), so a tag WITH a paired value counts, a tag inside a schedule table's own region is a row label (excluded, tallied), and every other occurrence is WITHHELD with a reason and coordinates — a tag amid linework but unvalued may be a real device (view_sheet it), a bare tag is probably a note mention. Marks default to the set's schedule row keys (a compound row "R1 / E1" answers for R1 AND E1; each mark cites its row), or state them: {marks: ["S1","R1"]}. The complement to sweep_schedule_row: THAT tool is for marks drawn ON their marker with no value (finish tags in bubbles) and matches geometry; this one is for annotated devices and needs no fingerprint at all. Refusal-honest: scans refuse (no text layer), a set with no mark-shaped rows refuses unless marks are stated, non-plan sheets are skipped with the role that excused them. commit: true commits every counted occurrence under its mark's own tag — ONE undo step for the whole census, schedule citation on origin. Counts are scale-free (EA) — no set_scale needed. Then AUDIT: view_sheet {overlay: true} where the markers landed, and read every withheld entry — a withheld item you ignore is a hole in the bid. ${COORDS}`,
@@ -494,8 +559,8 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   }, run("resolve_tag", ({ tag }) => session.resolveRoomTag(tag)));
 
   server.registerTool("find_schedule", {
-    description: `Locate a schedule table in the set (#87): pass a kind ("room finish", "material"/"finish") and get every matching table's sheet, title, headers, TOTAL row count, and REGION — sized for a view_sheet look or a read_sheet_text pull of exactly the table. A schedule continued across sheets is ONE match whose "parts" list every fragment (base first) with its own viewable region; tables read through rotated headers say so; a table answering for one building carries "building"; a table with delta/REV-marked rows says how many in "revised_rows". Errors with what WAS found when the asked-for kind isn't in the set. ${COORDS}`,
-    inputSchema: { kind: z.string().describe('"room finish" (rooms → surface finishes) or "finish"/"material" (codes → products)') },
+    description: `Locate a schedule table in the set (#87): pass a kind ("room finish", "material"/"finish", or "equipment") and get every matching table's sheet, title, headers, TOTAL row count, and REGION — sized for a view_sheet look or a read_sheet_text pull of exactly the table. "equipment" (Phase 5) is a real, dedicated MEP kind — AHUs, RTUs, FCUs, chillers, boilers, pumps, fans, VAV/CAV boxes ("VOLUME CONTROL BOX SCHEDULE" on some real sets — the title never says VAV, only the row tags do), control/bypass valves, air separators, humidifiers, VRF/heat pumps, electric heaters and similar, distinguished by real electrical/mechanical/hydronic rating columns (VOLTAGE, PHASE, WATTS, AMPS, MCA, MOCP, CFM, GPM, HP, TONS, EER, EAT, LAT, EWT, LWT, and similar) — not a workaround inside "finish"'s own flooring-shaped vocabulary. The row-tag column reads ID, SYMBOL, MARK, or TAG depending on which firm drew the set — no one word is universal. A schedule continued across sheets is ONE match whose "parts" list every fragment (base first) with its own viewable region; tables read through rotated headers say so; a table answering for one building carries "building"; a table with delta/REV-marked rows says how many in "revised_rows". Errors with what WAS found when the asked-for kind isn't in the set. ${COORDS}`,
+    inputSchema: { kind: z.string().describe('"room finish" (rooms → surface finishes), "finish"/"material" (codes → products), or "equipment" (MEP equipment schedules)') },
     outputSchema: findScheduleOutput,
   }, run("find_schedule", ({ kind }) => session.findSchedule(kind)));
 

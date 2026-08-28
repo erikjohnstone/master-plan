@@ -46,6 +46,16 @@ export default function AiSettings({ onClose }) {
               className="field-input" style={{ marginTop: 4 }} />
           </label>
           <label style={{ display: "block", margin: "6px 0" }}>
+            <span className="field-label">Vision model (optional — leave blank to use the same model above)</span>
+            <input value={cfg.visionModel === cfg.model ? "" : cfg.visionModel} onChange={set("visionModel")} placeholder="defaults to the model above"
+              className="field-input" style={{ marginTop: 4 }} />
+          </label>
+          <p style={{ background: "var(--paper-shadow)", padding: "8px 10px", fontSize: 12.5, marginTop: 4 }}>
+            The Agent panel now routes every plan-crop image through THIS model, in its own isolated call —
+            the model above never sees raw pixels, only its literal description. Set this separately from a
+            bigger/faster model above if the model above isn't vision-capable.
+          </p>
+          <label style={{ display: "block", margin: "6px 0" }}>
             <span className="field-label">API key (leave blank for local runtimes)</span>
             <input type="password" value={cfg.apiKey} onChange={set("apiKey")} placeholder="stored in this browser only"
               className="field-input" style={{ marginTop: 4 }} />
