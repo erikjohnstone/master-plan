@@ -820,6 +820,30 @@ function skipSubHeaderContinuation(rows: GraphSpan[][], vocab: string[], from: n
 // bareLeadingType comment for the real reasoning.
 const CATALOG_ANCHOR_WORDS = ["ID", "MARK", "CODE", "SYMBOL", "TAG"];
 
+/** True when a header IS a bare catalog-anchor word (after `norm`) — the
+ * row's OWN identity column, the same catalog-anchor bar every
+ * equipment-kind table already keys off of. */
+export function isBareAnchorHeader(header: string | null | undefined): boolean {
+  return CATALOG_ANCHOR_WORDS.includes(norm(header || ""));
+}
+
+/** True when a header carries a catalog-anchor word ALONGSIDE another word
+ * ("UNIT MARK", "VALVE MARK") rather than standing alone — a QUALIFIED
+ * anchor names a cross-reference to some OTHER row's own mark (whichever
+ * unit the qualifying word points at), not this row's own identity. Same
+ * real distinction extractTableAt's own bareLeadingType comment already
+ * draws for "TYPE" vs "FAN TYPE"/"VALVE TYPE" (a qualifier is just as
+ * often folded into someone else's compound header as it is a genuine key
+ * column on its own) — generalized here for sweepScheduleRow's own
+ * primary-row-vs-accessory-row question (a schedule row ABOUT this tag's
+ * own device vs. a row ABOUT some other device that happens to serve it). */
+export function isQualifiedAnchorHeader(header: string | null | undefined): boolean {
+  const h = norm(header || "");
+  if (!h || CATALOG_ANCHOR_WORDS.includes(h)) return false;
+  const toks = h.split(/\s+/).filter(Boolean);
+  return toks.length > 1 && toks.some((t) => CATALOG_ANCHOR_WORDS.includes(t));
+}
+
 /** Anchors for a backward-merged tier's own row — like headerHits, but a
  * span naming MORE than one vocabulary word ("MANUFACTURER MODEL NUMBER")
  * gets one anchor PER word, each placed at its own proportional offset
