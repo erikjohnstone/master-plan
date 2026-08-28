@@ -1796,6 +1796,57 @@ function subTierAnchors(rows: GraphSpan[][], hdrIdx: number, anchors: Anchor[], 
       : r
         .map((t) => ({ t, parent: parentPhraseOver(rows, hdrIdx, hdrIdx - 8, mid(t) - Math.max(24, med / 2), mid(t) + Math.max(24, med / 2), vocab) }))
         .filter((x): x is { t: GraphSpan; parent: string } => x.parent != null);
+    // A run-of-two member with NO genuine parent ABOVE it is not always
+    // "unexplained" the way a 3+ run's leftover is: a degenerate 2-token run
+    // is, by construction (see the DUCT/WEIGHT comment above), sometimes just
+    // two independent, un-related, standalone leaf columns that happen to
+    // share one physical row — never a real family needing a parent at all
+    // (itd-d1-lab-mechanical.pdf#14's own real PENTHOUSE SCHEDULE: "TYPE" and
+    // "FINISH" gap-cluster into one run exactly like DUCT/WEIGHT, but neither
+    // has any real parent anywhere on the sheet — FINISH's own nearest
+    // candidate, MINIMUM FREE AREA (ft2)'s wrapped header, is a real,
+    // independent, ADJACENT column, not a parent, and sits 100px clear of
+    // it — confirmed by direct render, correctly refused by genuineParentOver
+    // same as MOUNTING PLATFORM is for DUCT/WEIGHT). Such a member mints
+    // itself, using its own printed text as the label — never a guess, never
+    // a borrowed neighbour's parent — the same standalone treatment a lone
+    // loose token with no partner at all already gets one tier up
+    // (`loose.length < 2` returns early, unmerged).
+    //
+    // But genuineParentOver only ever searches UPWARD (a real parent always
+    // sits above its child on every table this file already handles) — so a
+    // member whose OWN real continuation instead wraps onto the row BELOW
+    // hdrIdx (real, found live, m601's own DIFFUSER/GRILLE/REGISTER SCHEDULE:
+    // "MODEL" with "NUMBER" directly beneath it, one real two-line header,
+    // "MOUNTING"/"FRAME" and "NECK SIZE"/"(IN)" the same shape alongside it)
+    // would wrongly mint itself standalone as the FIRST HALF of a real
+    // compound header, worse than the silent drop this whole file already
+    // gives that shape everywhere else (no code here reads a continuation
+    // below hdrIdx at all — a real, separate, larger gap, same class as
+    // AREA SERVED/NUMBER OF TIERS/THROAT SIZE going untouched above). Refuse
+    // to promote a member with a genuine (real, tight) neighbour directly
+    // below it — it stays exactly as silent as it already was, never worse.
+    // Scoped to r.length===2 only: a 3+ run already has real outlier
+    // protection from the median-gap split above, so a 3+ leftover with no
+    // parent stays genuinely unexplained, as before — and none of this
+    // touches table QUALIFICATION (minHits/vocab), only a column already
+    // inside an already-qualified table, so it carries none of a vocabulary
+    // change's corpus-wide collapse/tie-break risk (tried first, live, and
+    // reverted after a real spurious table appeared elsewhere in the corpus).
+    if (r.length === 2) {
+      const resolved = new Set(withParent.map((x) => x.t));
+      const below = rows[hdrIdx + 1] || [];
+      const boxGap = (a: GraphSpan, b: GraphSpan) => Math.max(0, a.x - (b.x + (b.w || 0)), b.x - (a.x + (a.w || 0)));
+      const hasContinuationBelow = (t: GraphSpan) => below.some((c) => boxGap(t, c) <= GENUINE_OVERLAP_TOL);
+      for (const t of r) {
+        if (resolved.has(t)) continue;
+        if (hasContinuationBelow(t)) continue;
+        const label = norm(t.str);
+        if (used.has(label)) continue;
+        used.add(label);
+        out.push({ label, x: mid(t) });
+      }
+    }
     if (!withParent.length) continue;   // no parent anywhere — unexplained, no sub-tier, as always
     const subRuns: Array<typeof withParent> = [[withParent[0]]];
     for (let i = 1; i < withParent.length; i++) {
