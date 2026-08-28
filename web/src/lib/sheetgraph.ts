@@ -808,6 +808,147 @@ function mergeBackwardCoEqualTier(
   return null;
 }
 
+/** Forward co-equal-tier merge — the natural complement to
+ * mergeBackwardCoEqualTier, for the OTHER real multi-tier shape found live
+ * (AHU-1's own AIR HANDLING UNIT SCHEDULE, itd-d1-lab-mechanical.pdf#15): a
+ * single, uncontested table whose real header wraps across MANY consecutive
+ * physical tiers, each one independently qualifying on its own and each
+ * naming a DIFFERENT slice of the real column set — SUPPLY FAN's own TYPE/
+ * ESP/TSP/HP/RPM sits on one physical line, DX COOLING COIL's own CAPACITY/
+ * EAT/LAT sits on the line just above it, MIN O.S.A./AHRI EER/OPERATING
+ * WEIGHT sit on lines above THAT — rather than one tier being a strict
+ * superset of the last. findHeaderRow's own descent loop above assumes the
+ * OPPOSITE shape: a deeper tier REPLACES a shallower one. Real columns from
+ * every tier must UNION, not replace — a genuinely different merge shape
+ * than either the descent loop or the backward merge above.
+ *
+ * Bounded the same way every other tier-merge helper in this file already
+ * reasons about "still the same header block": step-to-step proximity (a
+ * tight, real single-line-height gap) and a hard stop the instant a row
+ * carries a digit (skipSubHeaderContinuation's own established signal).
+ *
+ * Returns the last row index it actually ABSORBED as a real, independently-
+ * qualifying tier — not merely the last row it looked at within the
+ * proximity budget. This distinction is load-bearing: a row inside the
+ * budget that does NOT independently qualify (a bare group-label row like
+ * "SUPPLY FAN", or — real regression, caught live on bessemer's HP-1 table —
+ * a wrapped parenthesized-unit continuation tier like "(MBH) (MBH) (WATTS)",
+ * which skipSubHeaderContinuation/harvestSkippedTierAnchors below are the
+ * established mechanism for reading) must be left exactly where it was for
+ * that downstream mechanism to still find it. An earlier version returned
+ * the last row merely WALKED PAST (qualifying or not) — findHeaderRow's own
+ * skipEnd/harvestSkippedTierAnchors calls then resumed scanning ONE ROW TOO
+ * LATE, silently skipping over the very row harvestSkippedTierAnchors exists
+ * to read, and HP-1 lost its HEATING MBH/COOLING MBH columns outright. The
+ * walk itself still advances through a non-qualifying row (so a real group-
+ * label line between two genuine tiers doesn't stop the search early) — only
+ * the RETURNED resume point is held back to the last genuinely-absorbed row.
+ *
+ * A row that carries its OWN catalog/key word (SYMBOL/MARK/ID/TAG/CODE — the
+ * same CATALOG_ANCHOR_WORDS mergeBackwardCoEqualTier already gates on) is a
+ * SEPARATE table's own header row, not a further tier of THIS one — this
+ * table's own key column was already established back at the originally
+ * settled row (or via the backward merge above), and a real continuation
+ * tier never reintroduces it. A hard stop here, not a `continue`: once a
+ * real neighboring table's own header is reached, nothing genuine for THIS
+ * table lies beyond it either.
+ *
+ * NOT a defense, on its own, against two independently-drafted tables
+ * sharing a Y-band on an unsplit 2-up sheet (their rows can interleave into
+ * the SAME row-cluster with no separate foreign row, and no reintroduced
+ * catalog word, to catch) — real, found live on itd-d1-lab-mechanical.
+ * pdf#13. That shape is handled at the caller (findHeaderRow, via
+ * ExtractOpts' own `noForwardTierMerge`), not here: this function's own
+ * per-row signals (proximity, digit, catalog word) are real and worth
+ * keeping for the single-table case they DO correctly bound, but a genuinely
+ * MIXED row defeats all three at once (real, small, per-row hits; no digit;
+ * tight gap) with no further local signal left to tell it apart — see
+ * `noForwardTierMerge`'s own comment for why the real fix is scoping WHEN
+ * this merge runs at all, not adding a fourth local heuristic here. */
+function mergeForwardCoEqualTier(
+  rows: GraphSpan[][], vocab: string[], topIdx: number, fromIdx: number,
+  anchors: Anchor[], used: Set<string>, required: string[], minHits: number,
+): number {
+  let last = fromIdx;
+  let consumed = fromIdx;
+  for (let j = fromIdx + 1; j < rows.length; j++) {
+    const h = rows[last].reduce((s, t) => s + (t.h || 8), 0) / Math.max(1, rows[last].length);
+    if (rowY(rows[j]) - rowY(rows[last]) > h * 2) break;
+    if (rows[j].some((t) => /\d/.test(t.str))) break;
+    const hits = headerHits(rows[j], vocab);
+    if (hits.some((x) => CATALOG_ANCHOR_WORDS.includes(x.label))) break;
+    if (qualifies(hits, required, minHits)) {
+      for (const hh of hits) {
+        let label = hh.label;
+        if (used.has(label)) {
+          // A duplicate LEAF label here (a second "CFM", "MBH", "TYPE") needs
+          // its own equipment sub-system's GROUP name to disambiguate — see
+          // nearestGroupLabelAbove's own comment for why parentLabelOver
+          // (vocabulary-only) can't serve here. The candidate window is
+          // capped at topIdx (never wanders into rows AT or below it): rows
+          // from topIdx down are SIBLING leaf/qualifying tiers, not group
+          // tiers — confirmed live, a wrong guess otherwise.
+          const cx = hh.span.x + (hh.span.w || 0) / 2;
+          const parent = nearestGroupLabelAbove(rows, vocab, topIdx, cx);
+          if (parent) label = `${parent} ${hh.label}`;
+        }
+        if (used.has(label)) continue;
+        used.add(label);
+        anchors.push({ label, x: hh.span.x + (hh.span.w || 0) / 2 });
+      }
+      consumed = j;
+    }
+    last = j;
+  }
+  return consumed;
+}
+
+/** Nearest all-caps, NON-vocabulary text ABOVE `ceilIdx` that is itself
+ * UNIQUE within a real PHYSICAL PROXIMITY budget — mergeForwardCoEqualTier's
+ * own group-label disambiguator. The budget itself reuses
+ * mergeBackwardCoEqualTier's own established "still the same header block"
+ * distance, not a fresh guess — searching by ROW COUNT (or worse, from the
+ * whole sheet's own row 0) risks wandering into a totally unrelated block: a
+ * real, found-live false match on this exact fixture, where an unbounded
+ * upward scan reached all the way past the group tier to the TABLE'S OWN
+ * TITLE row and used that as a "parent" instead, simply because the title
+ * text was closer in x than the real group label happened to be for one
+ * specific duplicate. A repeated candidate ("CAPACITY", recurring under
+ * several real sub-systems) cannot itself disambiguate anything, so only a
+ * text that appears exactly once in the budget is eligible. Closest by
+ * horizontal distance wins among the unique candidates — no x pitch cutoff,
+ * because a real equipment GROUP title routinely spans much wider than the
+ * single sub-column pitch its own leaf labels sit at (measured live: "GAS
+ * HEATING COIL" spans ~600px over columns spaced ~80px apart) — an unrelated
+ * candidate is already excluded by needing to be unique in the (now tight)
+ * budget, not by an arbitrary x distance bound. */
+function nearestGroupLabelAbove(rows: GraphSpan[][], vocab: string[], ceilIdx: number, cx: number): string | null {
+  const hs = rows[ceilIdx].map((t) => t.h || 8).sort((a, b) => a - b);
+  const near = Math.max(24, (hs[hs.length >> 1] || 8) * 4);
+  const hy = rowY(rows[ceilIdx]);
+  const floor = Math.max(0, ceilIdx - 8);
+  const candCount = new Map<string, number>();
+  const toks: Array<{ text: string; cx: number }> = [];
+  for (let j = ceilIdx - 1; j >= floor; j--) {
+    if (hy - rowY(rows[j]) > near) break;
+    for (const t of rows[j]) {
+      if (headerLabel(t.str, vocab)) continue;   // must be non-vocabulary
+      const s = norm(t.str);
+      if (s.length < 2 || !/^[A-Z][A-Z0-9 /&.'-]*$/.test(s)) continue;
+      candCount.set(s, (candCount.get(s) || 0) + 1);
+      toks.push({ text: s, cx: t.x + (t.w || 0) / 2 });
+    }
+  }
+  let parent: string | null = null;
+  let best = Infinity;
+  for (const t of toks) {
+    if ((candCount.get(t.text) || 0) > 1) continue;   // ambiguous itself — not a real disambiguator
+    const d = Math.abs(t.cx - cx);
+    if (d < best) { best = d; parent = t.text; }
+  }
+  return parent;
+}
+
 /** Vocabulary hits inside the header's own wrapped/parenthesized continuation
  * tiers name real columns too ("(MBH)", "(WATTS)") — skipSubHeaderContinuation
  * correctly recognizes these rows as part of the header block (not data), but
@@ -924,7 +1065,7 @@ function nearbyRequiredHit(rows: GraphSpan[][], vocab: string[], required: strin
   return false;
 }
 
-function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[], minHits: number, fromIdx = 0, opts: { equipmentTierMerge?: boolean } = {}): { anchors: Anchor[]; rowIndex: number; dataFrom: number; mergedTopIdx?: number } | null {
+function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[], minHits: number, fromIdx = 0, opts: { equipmentTierMerge?: boolean; forwardTierMerge?: boolean } = {}): { anchors: Anchor[]; rowIndex: number; dataFrom: number; mergedTopIdx?: number } | null {
   for (let i = fromIdx; i < rows.length; i++) {
     let hits = headerHits(rows[i], vocab);
     const seen = new Set(hits.map((h) => h.label));
@@ -1045,6 +1186,21 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
         mergedTopIdx = merged.topIdx;
       }
     }
+    // Forward co-equal-tier merge (see mergeForwardCoEqualTier's own
+    // comment) — a SEPARATE opt-in from the backward merge above
+    // (`forwardTierMerge`, defaulting to on when equipmentTierMerge is on):
+    // bandedSheets' own seam probing turns this one off specifically (see
+    // ExtractOpts' own `noForwardTierMerge` comment) while leaving the
+    // already-safe backward merge/harvest untouched. Runs after the backward
+    // merge so a backward-merged key column is already present when later
+    // tiers' duplicate labels look for it, and returns the last row it
+    // actually ABSORBED, so the skip/continuation scan below resumes from
+    // real header material it consumed rather than re-walking (or, worse,
+    // skipping past) rows it left untouched.
+    let mergedForwardIdx = idx;
+    if (opts.equipmentTierMerge && opts.forwardTierMerge !== false) {
+      mergedForwardIdx = mergeForwardCoEqualTier(rows, vocab, i, idx, anchors, used, required, minHits);
+    }
     if (anchors.length < minHits) continue;
     // A column that exists ONLY at a parent tier (REMARKS spanning the whole
     // header block) is a real column: keep it when it sits outside every
@@ -1088,13 +1244,13 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
         }
       }
     }
-    const skipEnd = skipSubHeaderContinuation(rows, vocab, idx);
+    const skipEnd = skipSubHeaderContinuation(rows, vocab, mergedForwardIdx);
     // Parenthesized unit-fragment tiers ("(MBH)", "(WATTS)") name real
     // columns too — see harvestSkippedTierAnchors' own comment. Same gate as
     // the backward merge above: both are part of the same equipment-only
     // tier-topology handling this phase adds.
     if (opts.equipmentTierMerge) {
-      for (const a of harvestSkippedTierAnchors(rows, vocab, idx, skipEnd)) {
+      for (const a of harvestSkippedTierAnchors(rows, vocab, mergedForwardIdx, skipEnd)) {
         if (used.has(a.label)) continue;
         used.add(a.label);
         anchors.push(a);
@@ -1523,7 +1679,44 @@ const QUALIFIED_KEY_RE = /^([A-Z]{1,2})-(\d{1,3}[A-Z]{0,2})$/;
 // against exactly that, on the far side of a wide fallback scan.
 const NAME_KEY_RE = /^[A-Z][A-Z0-9 '&()/-]{2,48}[A-Z0-9)]$/;
 
-export interface ExtractOpts { buildings?: Set<string>; deltas?: DeltaIndex }
+/** `noForwardTierMerge`: internal-only — set by bandedSheets' own seam
+ * probing (below), never by a real, final extraction pass. mergeForwardCo-
+ * EqualTier (see its own comment) unions labels across many physical tiers
+ * deliberately tolerantly — exactly right for a real, single, uncontested
+ * table, but on an unsplit 2-up sheet it can also union in hits from a
+ * neighboring, independently-drafted table whose own row happens to
+ * interleave into the same row-cluster (real, found live on itd-d1-lab-
+ * mechanical.pdf#13: the coil schedule's own row shared physical space with
+ * the neighboring fan schedule's own RPM/SIZE), inflating that table's own
+ * header COUNT past what a correctly-split read achieves. extractedKeys
+ * (below) uses header count as its own proxy for "did a candidate split
+ * sever this table's real columns" — real and well-justified for the shape
+ * it was built for, but an inflated, contaminated unsplit count reverses its
+ * meaning: the "split lost columns" check fires on a table that gained
+ * nothing but contamination, and a real, necessary split gets rejected
+ * outright (losing CONTROL VALVE SCHEDULE and HC-8/HC-9 entirely, confirmed
+ * live). The contamination itself is NOT something forward merge invents —
+ * traced live, the same row-level mixing already exists in the settled
+ * header row's own construction with forward merge turned off entirely —
+ * but forward merge is what pushes an already-contaminated candidate across
+ * the "titled, real-looking table" line where it previously fell short
+ * (stayed untitled, so extractedKeys never counted it and the correct split
+ * won by default); no local, per-row signal inside mergeForwardCoEqualTier
+ * can tell that shape apart from AHU-1's own genuine multi-tier table
+ * without reaching for whole-sheet column-density statistics that in turn
+ * false-positive on AHU-1's own sparse, wide, single real table (tried,
+ * confirmed live) — so the fix is scoping WHEN the merge runs, not adding a
+ * fourth per-row heuristic to it.
+ *
+ * Scoped OFF for bandedSheets' own internal probing only (both the unsplit
+ * baseline and every candidate split side, so the comparison stays apples-
+ * to-apples) — the real, final extraction pass (buildSheetGraph's own calls)
+ * never sets it, so AHU-1's own real 25-column table is delivered in full.
+ * AHU-1's OWN protection during probing no longer depends on forward merge
+ * at all: sideHasRealTable's fix (see its own comment) closes that gap
+ * directly, by refusing to let a vocabulary-free "reference" read alone
+ * count as proof a candidate seam's own side holds a real table. */
+export interface ExtractOpts { buildings?: Set<string>; deltas?: DeltaIndex; noForwardTierMerge?: boolean }
 
 // Schedule families that are NOT finish/material schedules but share the
 // MARK/DESCRIPTION column shape. A title naming one of these is refused as a
@@ -2122,7 +2315,7 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // class of change that caused the MODEL regression the comment above this
   // one used to describe. A one-line change (`kind === "equipment"` below)
   // the day a real split-header finish/room-finish table shows up.
-  let flat = findHeaderRow(rows, vocab, required, minHits, fromIdx, { equipmentTierMerge: kind === "equipment" });
+  let flat = findHeaderRow(rows, vocab, required, minHits, fromIdx, { equipmentTierMerge: kind === "equipment", forwardTierMerge: !opts.noForwardTierMerge });
   // The merge above only ever ADDS a key column when one exists nearby on
   // the sheet — it never invents one. A candidate that still has no catalog
   // anchor after the attempt genuinely has no usable key column (the
@@ -3208,14 +3401,31 @@ function columnBandCandidates(spans: GraphSpan[]): Seam[] {
 /** Does this span list, alone, produce at least one real extracted table
  * (any of the three vocabulary kinds, or the structural "reference" kind)?
  * The proof a seam's own side is a genuine, independent table — not a
- * column-fragment of one that spans across the seam. */
+ * column-fragment of one that spans across the seam.
+ *
+ * A "reference" match (vocabulary-free by design) is real, corroborating
+ * evidence ONLY when it is substantial: a genuine TITLE of its own, and more
+ * than a single row — the same two signals a human would use to tell "a
+ * real, separate list" from "a stray fragment of contamination." Both are
+ * needed; a legitimate, small reference table (LAB EQUIPMENT LIST, this
+ * file's own test fixture) clears both easily, while a false seam's own
+ * severed leftovers (real, found live on itd-d1-lab-mechanical.pdf#13's own
+ * AIR HANDLING UNIT SCHEDULE sheet — a false seam sliced straight through
+ * that ONE real, wide table's own middle, severing its title/leading
+ * columns from the rest) read either as an untitled 1-3-row scrap, or a
+ * real-looking title with only a single stray row — never both a title AND
+ * real row count together. Without this, that untitled/thin fragment alone
+ * was enough to let an obviously-bad seam through this gate; a real
+ * reference-only split still gets caught downstream anyway: extractedKeys
+ * never credits a reference-kind key, so `lostAny` sees nothing to protect
+ * on that seam either way — this only narrows what counts as evidence HERE. */
 function sideHasRealTable(spans: GraphSpan[], sheetKey: string, opts: ExtractOpts): boolean {
   if (spans.length < 4) return false;
   const probe: SheetSpans = { key: sheetKey, spans };
   for (const kind of ["room-finish", "finish", "equipment"] as const) {
     if (extractTable(probe, kind, opts)) return true;
   }
-  return extractAllReferenceTables(probe).length > 0;
+  return extractAllReferenceTables(probe).some((t) => !!t.title?.text.trim() && t.rows.length > 1);
 }
 
 /** Every real row KEY a TITLED table extracts today — the ground truth a
@@ -3325,16 +3535,22 @@ export function bandedSheets(sheet: SheetSpans, opts: ExtractOpts): SheetSpans[]
   const candidates = columnBandCandidates(horiz).slice(0, MAX_COLUMN_BANDS + 2);
   if (!candidates.length) return [sheet];
 
-  const baselineKeys = extractedKeys(sheet, opts);
+  // Forward tier-merge stays OFF for every probe in this function (see
+  // ExtractOpts' own `noForwardTierMerge` comment) — both the unsplit
+  // baseline and every candidate split side get it, so the header-count
+  // comparison below stays apples-to-apples; the real, final extraction
+  // pass (buildSheetGraph's own calls) never sets it.
+  const probeOpts: ExtractOpts = { ...opts, noForwardTierMerge: true };
+  const baselineKeys = extractedKeys(sheet, probeOpts);
   const kept: Seam[] = [];
   for (const seam of candidates) {
     const left = sheet.spans.filter((s) => centerX(s) < seam.x0);
     const right = sheet.spans.filter((s) => centerX(s) > seam.x1);
-    if (!sideHasRealTable(left, sheet.key, opts) || !sideHasRealTable(right, sheet.key, opts)) continue;
+    if (!sideHasRealTable(left, sheet.key, probeOpts) || !sideHasRealTable(right, sheet.key, probeOpts)) continue;
     const leftSheet: SheetSpans = { key: sheet.key, sheet_number: sheet.sheet_number, spans: left, ...(sheet.segs ? { segs: sheet.segs } : {}) };
     const rightSheet: SheetSpans = { key: sheet.key, sheet_number: sheet.sheet_number, spans: right, ...(sheet.segs ? { segs: sheet.segs } : {}) };
-    const splitLeft = extractedKeys(leftSheet, opts);
-    const splitRight = extractedKeys(rightSheet, opts);
+    const splitLeft = extractedKeys(leftSheet, probeOpts);
+    const splitRight = extractedKeys(rightSheet, probeOpts);
     const splitCount = (k: string) => Math.max(splitLeft.get(k) ?? 0, splitRight.get(k) ?? 0);
     let lostAny = false;
     for (const [k, n] of baselineKeys) if (splitCount(k) < n) { lostAny = true; break; }
