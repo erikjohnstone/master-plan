@@ -1748,6 +1748,40 @@ const WIDE_LAST = new Set(["REMARKS", "DESCRIPTION"]);
 // sets) for the full real-bleed story this guards against.
 const farFromCell = (label: string, t: GraphSpan, existing: TableCell | undefined): boolean =>
   !!existing && WIDE_LAST.has(label) && t.x - existing.bbox[2] > Math.max(80, (t.h || 8) * 8);
+// A wide MERGED column can sit in the MIDDLE of a table, not only at its end
+// (WIDE_LAST, above) — a real, generic drafting shape found live on itd-d1-
+// lab-mechanical.pdf's ELECTRIC HEATER SCHEDULE: "MANUFACTURER AND MODEL"
+// reserves a far wider span than its narrow numeric neighbors (KW, STEPS,
+// V/Ø, AMPS — each ~90px apart), so its own real data ("MARKEL MODEL 3420
+// SERIES") starts well left of its own centered header — closer to AMPS'
+// anchor (distance ~75) than to its own (distance ~231). columnMapFor's
+// true-nearest binding (above) mistakes that proximity for a genuine
+// misalignment and reassigns the whole column to AMPS, where it is then
+// silently discarded (AMPS' real numeric value already owns that cell) —
+// every EH-1..EH-9 MANUFACTURER cell was dropped outright, not merged or
+// truncated. Detected purely geometrically, from the anchors' own x-spacing
+// on THIS table — never a label vocabulary — so it generalizes to any
+// similarly wide merged column, not just this one sheet's own convention.
+// Deliberately conservative (3.5x the table's own median inter-anchor gap):
+// on this table MANUFACTURER's own gap-to-next scores ~4.4x median, clear of
+// the threshold, while every ordinary column (including this same table's
+// own TYPE anchor, which sits closer to its neighbor's true-nearest binding
+// and must NOT be exempted — that binding is itself the fix for a distinct,
+// already-shipped regression on itd-d1-lab's CONTROL VALVE SCHEDULE) scores
+// under 2.2x. Anchors with too few neighbors to establish a meaningful
+// "typical" spacing (fewer than 3 gaps) are left alone.
+const WIDE_MID_RATIO = 3.5;
+function isWideMidAnchor(anchors: Anchor[], anchor: Anchor): boolean {
+  const idx = anchors.indexOf(anchor);
+  if (idx < 0 || idx >= anchors.length - 1) return false; // last anchor: WIDE_LAST/bandLimits already own that case
+  const gaps = anchors.slice(1).map((a, i) => a.x - anchors[i].x).filter((g) => g > 0);
+  if (gaps.length < 3) return false;
+  gaps.sort((a, b) => a - b);
+  const median = gaps[(gaps.length - 1) >> 1];
+  if (!(median > 0)) return false;
+  const ownGap = anchors[idx + 1].x - anchor.x;
+  return ownGap > median * WIDE_MID_RATIO;
+}
 // A NAME-keyed table's key column carries a room-TYPE phrase ("PATIENT
 // TOILET ROOMS"), not a short numbered tag — a prose column exactly like
 // REMARKS/DESCRIPTION/NOTES, just leading instead of trailing. The default
@@ -2079,7 +2113,7 @@ function columnMapFor(
   const maxN = Math.max(...clusters.map((c) => c.n));
   const kept = clusters.filter((c) => c.n >= Math.max(2, maxN * 0.25));
   if (kept.length < anchors.length) return null;
-  const byLabel = new Map<string, number>();
+  const byLabel = new Map<string, { start: number; n: number }>();
   for (const c of kept) {
     // The anchor whose header CENTER sits TRUE NEAREST this recovered
     // column's own start — not merely the first one at or right of it. A
@@ -2106,11 +2140,13 @@ function columnMapFor(
     // anchor one column over — true-nearest alone reassigned "SDV" to WALL
     // and REMARKS lost its column outright. Kept to plain "at or right" for
     // exactly this anchor shape; every ordinary, normal-width anchor still
-    // gets the true-nearest fix above.
+    // gets the true-nearest fix above. A wide anchor in the MIDDLE of a
+    // table (isWideMidAnchor, above) earns the identical exemption for the
+    // identical reason — same shape, just not confined to the last column.
     let atOrRight: Anchor | null = null;
     for (const a of anchors) { if (a.x >= c.start) { atOrRight = a; break; } }
     let own: Anchor | null = atOrRight;
-    if (!atOrRight || !(WIDE_LAST.has(atOrRight.label) || atOrRight.label === "NAME")) {
+    if (!atOrRight || !(WIDE_LAST.has(atOrRight.label) || atOrRight.label === "NAME" || isWideMidAnchor(anchors, atOrRight))) {
       let bestD = atOrRight ? Math.abs(atOrRight.x - c.start) : Infinity;
       for (const a of anchors) {
         const d = Math.abs(a.x - c.start);
@@ -2119,10 +2155,42 @@ function columnMapFor(
     }
     if (!own) continue;
     const cur = byLabel.get(own.label);
-    if (cur == null || c.start < cur) byLabel.set(own.label, c.start);
+    if (cur == null || c.start < cur.start) { byLabel.set(own.label, { start: c.start, n: c.n }); continue; }
+    // This cluster LOST the true-nearest collision to an anchor some
+    // earlier (further-left) cluster already claimed — real, found live
+    // (baker-county-eoc-bidset.pdf#27's own ROOM FINISH SCHEDULE): ROOM's
+    // real data-start sits nearer NUMBER's own header than ROOM's own
+    // header is, purely because ROOM's centered header sits unusually far
+    // right of ROOM's own left-aligned data (long room-name values —
+    // the exact same real shape this function's own NAME-keyed exemption
+    // above already exists for, just not spelled "NAME" here). Losing that
+    // fight to NUMBER should not cost ROOM its column outright: falling
+    // back to this cluster's own plain "at or right" pick (the rule this
+    // file used for every anchor before the true-nearest fix) recovers it —
+    // but ONLY when this cluster carries FULL, near-every-row support
+    // (close to `maxN`, the table's own dominant per-column row count),
+    // not merely a coincidental handful of stray points. Real regression
+    // this guard exists for (caught by this file's own LUMINAIRE SCHEDULE
+    // test): under CENTER alignment, ten rows' own varying-length
+    // MANUFACTURER SERIES values split into three EQUAL-sized (n=3 each)
+    // sub-clusters purely by coincidental text-length similarity — losing
+    // a collision to a same-size sibling is meaningless evidence, and
+    // rescuing one to the entirely dataless NOTES anchor fabricates a
+    // column that was never really there. The real ROOM case carries n
+    // equal to `maxN` itself (every one of the table's own rows), a
+    // completely different order of evidence — requiring near-maxN
+    // support (matching the `kept` filter's own maxN-relative philosophy
+    // above, just a stricter bar since a rescue is a riskier move than
+    // mere inclusion) keeps ROOM while refusing every equal-strength
+    // fragment. Every anchor that does NOT lose a collision (the true-
+    // nearest fix's own real motivating case, AREA SERVED/SAV-1) is
+    // untouched either way.
+    if (atOrRight && atOrRight.label !== own.label && !byLabel.has(atOrRight.label) && c.n >= maxN * 0.75) {
+      byLabel.set(atOrRight.label, { start: c.start, n: c.n });
+    }
   }
   if (byLabel.size !== anchors.length) return null;
-  const cols = [...byLabel.entries()].map(([label, start]) => ({ label, start })).sort((a, b) => a.start - b.start);
+  const cols = [...byLabel.entries()].map(([label, v]) => ({ label, start: v.start })).sort((a, b) => a.start - b.start);
   if (cols.map((c) => c.label).join("|") !== anchors.map((a) => a.label).join("|")) return null;
   // how well this alignment explains the data: the share of tokens sitting on
   // a column start rather than scattered between them
@@ -2214,6 +2282,82 @@ function bandDataRows(
     if (r != null && at - cols.cols[idx].start > r.after) return null;
     return cols.cols[idx].label;
   };
+  // The x where the NEXT real column (after `label`, in the table's own
+  // left-to-right column order) starts — from the data-derived column map
+  // when one was recovered, else the header's own anchor order. Null past
+  // the table's own last column (nothing to bleed into).
+  const nextColumnAfter = (label: string): { label: string; x: number } | null => {
+    const ordered = cols ? cols.cols.map((c) => ({ label: c.label, x: c.start })) : [...anchors].sort((a, b) => a.x - b.x);
+    const idx = ordered.findIndex((c) => c.label === label);
+    return idx >= 0 && idx + 1 < ordered.length ? ordered[idx + 1] : null;
+  };
+  // A single DATA token whose own right edge runs well past the NEXT real
+  // column's own start is not one wide value in `label`'s column — it is
+  // TWO (or more) real columns' worth of text sharing one PDF text run.
+  // Real, found live on baker-county-eoc-bidset.pdf#27's own ROOM FINISH
+  // SCHEDULE: room 100's SOUTH and WEST finish codes, "STOREFRONT" and
+  // "P-1", are ONE text object in the source PDF — "STOREFRONT" (a real
+  // glazing/wall-type name, unusually long against this column's own
+  // ~30px baseline width on every OTHER row) runs right through WEST's own
+  // column before the row's next genuine value even starts, so WEST's cell
+  // comes up entirely empty and SOUTH reads "STOREFRONT P-1". Split on
+  // whitespace and place each word at its own proportional x offset within
+  // the token's bbox — the same character-fraction technique
+  // splitMergedHeaderCells already uses for a merged HEADER cell, applied
+  // here to a merged DATA cell instead — then let each word re-enter
+  // `columnOf` on its own. A genuine single wrapped value ("SEE INT.
+  // ELEVATIONS") never actually reaches past a real neighbour column's own
+  // start this way (checked below, before ever splitting) and bands as one
+  // cell, unperturbed; WIDE_LAST/NAME columns are exempted outright — those
+  // EARN a wide reach by this file's own design (bandLimits' own
+  // rightMargin/leftMargin) and a long value there is never overflow.
+  const splitOverflowWords = (t: GraphSpan): GraphSpan[] => {
+    const text = t.str;
+    const words = text.trim().split(/\s+/).filter(Boolean);
+    if (words.length < 2) return [t];
+    const w = t.w || 0;
+    const out: GraphSpan[] = [];
+    let charPos = 0;
+    for (const word of words) {
+      const ci = text.indexOf(word, charPos);
+      const start = ci >= 0 ? ci : charPos;
+      charPos = start + word.length;
+      const frac0 = start / Math.max(text.length, 1);
+      const frac1 = (start + word.length) / Math.max(text.length, 1);
+      out.push({ str: word, x: t.x + frac0 * w, y: t.y, w: (frac1 - frac0) * w, h: t.h });
+    }
+    return out;
+  };
+  // The SAME lookup as columnOf, but WITHOUT anchorRadii's anomalous-gap cap
+  // — the column a token would map to if only its position against the
+  // recovered column starts mattered. Used below to recognize a genuine
+  // same-row CONTINUATION of a cell this row's own already-accepted text
+  // already occupies, which anchorRadii's cap was never meant to catch (its
+  // own job is refusing a token that drifted far from the COLUMN's start —
+  // ledger item 57 — not a token sitting right next to text this exact cell
+  // already holds).
+  const rawColumnOf = (t: GraphSpan): string | null => {
+    if (!cols) return nearestAnchor(centerX(t), anchors);
+    const at = cols.coord === "left" ? t.x : centerX(t);
+    let idx = 0;
+    for (let i = 0; i < cols.cols.length; i++) { if (at + 1 >= cols.cols[i].start) idx = i; else break; }
+    return cols.cols[idx].label;
+  };
+  // Ordinary word-spacing ONLY — real, measured on itd-d1-lab-mechanical.
+  // pdf's own CONTROL VALVE SCHEDULE: AREA SERVED's real trailing cross-
+  // reference ("SAV-1") sits 9.5px past the room name's own end, at a real
+  // text height of 18.9. Deliberately tight, tighter than farFromCell's own
+  // FAR threshold (`max(80, h*8)`) and tighter than a first attempt at this
+  // fix (`max(30, h*3)`) — real regression, caught by this file's own
+  // "Diffuser/Grille/Register" multi-table test (a real Bessemer fixture):
+  // at that same text height, a genuinely DIFFERENT column's own value
+  // ("631", a SIZE cell two columns over with no anchor of its own) sits
+  // 32.5px past a real MANUFACTURER value's end — comfortably inside the
+  // first attempt's h*3=56.7px budget, wrongly admitted as if it were a
+  // continuation of the MANUFACTURER cell it merely raw-maps nearest to.
+  // Tightened so the true 9.5px case still clears (h*1 = 18.9) while the
+  // false 32.5px one does not, with real margin on both sides.
+  const CONTINUATION_GAP_MAX = (h: number) => Math.max(12, h);
   // A WIDE_LAST cell that already holds real text and is about to absorb a
   // SECOND, far-off token: field-found on two real mechanical sets
   // (federal-attachment4-mechanical.pdf#16, itd-d1-lab-mechanical.pdf#12) — a
@@ -2229,16 +2373,109 @@ function bandDataRows(
   // was 293px and 617px — 15–33× the row's own text height. A gap that wide
   // is never a second word of the same value; it is refused, not merged, so
   // the cell keeps only the token nearest its own real column start.
+  // A multi-line wrapped cell's constituent lines don't always arrive in
+  // top-to-bottom order. The row's own KEYED line (the one carrying the
+  // schedule tag, e.g. "CV-1") is whichever PHYSICAL line the tag happens to
+  // sit on — often the MIDDLE line of a 3-line wrap, not the top one — and
+  // it is always `add`ed FIRST (during the main loop, below). Every OTHER
+  // line of that same wrapped cell is an unkeyed "orphan" row, folded in
+  // afterward by the separate orphans pass (further below) in whatever order
+  // it appears across the WHOLE table, not "lines above the keyed row first,
+  // in the right position" — so a fragment ABOVE the keyed line can land
+  // AFTER it in the joined text. Real, found live on itd-d1-lab-mechanical.
+  // pdf's CONTROL VALVE SCHEDULE: VALVE TYPE's real 3-line value reads
+  // "PRESSURE INDEPENDENT / FIELD ADJUSTABLE CONTROL / VALVE W/ 100%
+  // AUTHORITY" top to bottom, but the middle line carries the row's own key
+  // and is added first — the joined cell read "FIELD ADJUSTABLE CONTROL
+  // PRESSURE INDEPENDENT VALVE W/ 100% AUTHORITY" instead. Fixed by tracking
+  // every contributing token's own position and re-deriving each multi-
+  // fragment cell's text in true (y, then x) order once all fragments — the
+  // keyed line's own and every orphan's — are in, rather than trusting
+  // whatever order they happened to arrive in.
+  type Frag = { text: string; y: number; x0: number; x1: number };
+  const fragmentsByRow = new Map<TableRow, Map<string, Frag[]>>();
+  // Same physical printed LINE, by this table's own row pitch — deliberately
+  // tighter than CONTINUATION_GAP_MAX's own x-gap budget below: this only
+  // asks "is there already-accepted text from THIS SAME line", never "is
+  // there accepted text somewhere in this cell's multi-line span" (a wide,
+  // multi-line-already-merged cell's OWN accumulated bbox can span hundreds
+  // of px vertically and horizontally across totally different physical
+  // lines — comparing a new token against that whole union, tried first,
+  // wrongly re-admitted a genuinely DIFFERENT, un-modeled column's data:
+  // OPERATION's own "MODULATING"/"2-WAY" values, which have no anchor of
+  // their own and so raw-map to the neighboring VALVE TYPE column, sat close
+  // enough to VALVE TYPE's own wide 3-line-merged bbox to pass a bbox-based
+  // check even though they share no line with any of VALVE TYPE's real
+  // fragments).
+  const addOne = (row: TableRow, t: GraphSpan, label: string) => {
+    const existing = row.cells[label];
+    if (farFromCell(label, t, existing)) return;
+    const text = t.str.trim();
+    if (!existing) row.cells[label] = { text, bbox: bboxOf(t) };
+    else row.cells[label] = { text: `${existing.text} ${text}`, bbox: merge(existing.bbox, bboxOf(t)) };
+    region = region ? merge(region, bboxOf(t)) : bboxOf(t);
+    let byLabel = fragmentsByRow.get(row);
+    if (!byLabel) fragmentsByRow.set(row, (byLabel = new Map()));
+    let frags = byLabel.get(label);
+    if (!frags) byLabel.set(label, (frags = []));
+    frags.push({ text, y: t.y, x0: t.x, x1: t.x + (t.w || 0) });
+  };
   const add = (row: TableRow, toks: GraphSpan[]) => {
     for (const t of toks) {
-      const label = columnOf(t);
-      if (label == null) continue;
-      const existing = row.cells[label];
-      if (farFromCell(label, t, existing)) continue;
-      const text = t.str.trim();
-      if (!existing) row.cells[label] = { text, bbox: bboxOf(t) };
-      else row.cells[label] = { text: `${existing.text} ${text}`, bbox: merge(existing.bbox, bboxOf(t)) };
-      region = region ? merge(region, bboxOf(t)) : bboxOf(t);
+      let label = columnOf(t);
+      if (label == null) {
+        // Refused by anchorRadii's own anomalous-gap cap. Before giving up,
+        // check the ONE case that cap was never meant to catch: this exact
+        // token sits ordinary word-spacing distance past ALREADY-ACCEPTED
+        // text from the SAME physical line, in a cell rawColumnOf agrees it
+        // belongs to — a genuine continuation of a value already accepted on
+        // that line, not a foreign token that merely lands nearest this
+        // column's recovered start. Real, found live on itd-d1-lab-
+        // mechanical.pdf's own AREA/SUPPLY VALVE SERVED columns (CONTROL
+        // VALVE / HOT WATER REHEAT COIL SCHEDULEs): a trailing diffuser
+        // cross-reference ("SAV-1") sits ~9px past the room name's own end
+        // — plain word-spacing, same line — but far past the SERVED
+        // column's own recovered start (that column legitimately needs room
+        // for a full room name, dragging its anchorRadii cap tight relative
+        // to this table's own much narrower numeric columns) — every SERVED
+        // cell silently lost its own trailing cross-reference tag.
+        const raw = rawColumnOf(t);
+        const rawFrags = raw ? fragmentsByRow.get(row)?.get(raw) : undefined;
+        const lineTol = Math.max(3, (t.h || 8) * 0.5);
+        const sameLine = rawFrags?.filter((f) => Math.abs(f.y - t.y) <= lineTol) ?? [];
+        const rightMost = sameLine.length ? Math.max(...sameLine.map((f) => f.x1)) : null;
+        if (raw && rightMost != null && t.x - rightMost <= CONTINUATION_GAP_MAX(t.h || 8)) label = raw;
+        else continue;
+      }
+      if (!WIDE_LAST.has(label) && label !== "NAME") {
+        const next = nextColumnAfter(label);
+        if (next != null && t.x + (t.w || 0) > next.x) {
+          const words = splitOverflowWords(t);
+          // Only actually split when a trailing word's own estimated
+          // position really lands at (or close to) the next column's start
+          // — an ordinary wide single value whose bbox merely runs a little
+          // long (measurement slack, not a second column's worth of text)
+          // never clears this, and is left to band as one cell below. The
+          // small tolerance (a fraction of the table's own column pitch)
+          // absorbs per-character width estimation error — splitOverflowWords
+          // assumes each character claims an equal share of the token's own
+          // bbox width, which is only ever approximate against a real
+          // proportional font (measured live: "STOREFRONT P-1" — 10 wide
+          // capital letters vs. a narrow "P-1" — placed the trailing word's
+          // estimate 6.9px short of its real column start). Once a split is
+          // confirmed, each word is placed by the SAME tolerance-adjusted
+          // boundary, not re-derived through columnOf — that function's own
+          // idx search has no such tolerance, and the very estimation error
+          // splitTol exists to absorb would otherwise strand the trailing
+          // word back on `label` a second time.
+          const splitTol = Math.max(10, medGap * 0.2);
+          if (words.length > 1 && words[words.length - 1].x >= next.x - splitTol) {
+            for (const word of words) addOne(row, word, word.x >= next.x - splitTol ? next.label : label);
+            continue;
+          }
+        }
+      }
+      addOne(row, t, label);
     }
   };
   const orphans: Array<{ toks: GraphSpan[]; y: number }> = [];
@@ -2407,6 +2644,22 @@ function bandDataRows(
     if (row.building) continue;
     const cellB = norm(row.cells.BLDG?.text || row.cells.BUILDING?.text || "");
     if (DESIGNATOR_RE.test(cellB)) row.building = cellB;
+  }
+  // Re-derive every multi-fragment cell's text in true (y, then x) order —
+  // see `add`'s own comment on `fragmentsByRow` above. Only touches cells
+  // that actually received 2+ fragments; an ordinary single-token cell's
+  // text is already correct and untouched.
+  for (const row of out) {
+    const byLabel = fragmentsByRow.get(row);
+    if (!byLabel) continue;
+    for (const [label, frags] of byLabel) {
+      if (frags.length < 2) continue;
+      const cell = row.cells[label];
+      if (!cell) continue;
+      const sorted = [...frags].sort((a, b) => a.y - b.y || a.x0 - b.x0);
+      const joined = sorted.map((f) => f.text).join(" ");
+      if (joined !== cell.text) row.cells[label] = { text: joined, bbox: cell.bbox };
+    }
   }
   return { out, region };
 }
