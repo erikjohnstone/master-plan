@@ -1078,7 +1078,13 @@ function harvestSkippedTierAnchors(rows: GraphSpan[][], vocab: string[], hdrIdx:
       const cx = h.span.x + (h.span.w || 0) / 2;
       const rowCx = rows[h.rowIdx].map((t) => t.x + (t.w || 0) / 2).sort((a, b) => a - b);
       const gaps = rowCx.slice(1).map((x, i) => x - rowCx[i]);
-      const halfPitch = gaps.length ? gaps.sort((a, b) => a - b)[gaps.length >> 1] / 2 : 150;
+      // Genuine median, not always the upper-middle element — see bandLimits'
+      // own comment for the full real-corpus regression this exact idiom
+      // (`gaps.length >> 1`) causes for the most common even case, exactly 2
+      // gaps: it always lands on the LARGER of the two, an outlier neighbor
+      // gap masquerading as "typical pitch" and inflating this radius far
+      // past any real disambiguation distance.
+      const halfPitch = gaps.length ? gaps.sort((a, b) => a - b)[(gaps.length - 1) >> 1] / 2 : 150;
       const floor = Math.max(0, h.rowIdx - 4);
       const candCount = new Map<string, number>();
       const toks: Array<{ text: string; cx: number }> = [];
@@ -1574,8 +1580,26 @@ function subTierAnchors(rows: GraphSpan[][], hdrIdx: number, anchors: Anchor[], 
     .sort((a, b) => a.x - b.x);
   if (loose.length < 2) return anchors;
   const mid = (t: GraphSpan) => t.x + (t.w || 0) / 2;
+  // Genuine median, not always the upper-middle element — see bandLimits'
+  // own comment for the full real-corpus regression this exact idiom
+  // (`gaps.length >> 1`) causes for the most common even case, exactly 2
+  // gaps: it always lands on the LARGER of the two, an outlier neighbor gap
+  // masquerading as "typical pitch". Real, corpus-found live on itd-d1-lab-
+  // mechanical.pdf#15's own AIR HANDLING UNIT SCHEDULE: a lone unrelated
+  // token (COIL, a DX/DEHUMIDIFICATION COOLING COIL fragment) sits ~1073px
+  // from a genuine, tight, 160px-apart O.S.A./WEIGHT pair — the old idiom
+  // "median'd" to 1073 (COIL's own outlier gap), 3x-ing to a 3219px run-
+  // continuation radius that swallowed COIL into the SAME run as O.S.A./
+  // WEIGHT, and separately inflated `halfPitch` (below) to 536.5px — wide
+  // enough that parentPhraseOver's per-token search reached clean past
+  // O.S.A./WEIGHT's own true, well-aligned parents (MIN./OPERATING, two
+  // real tiers up) into an unrelated, poorly-aligned neighbor column's own
+  // label (MANUFACTURER AND) one tier closer, which parentPhraseOver's
+  // row-distance-first scoring then preferred over the far-better-aligned
+  // real parent. Fixed the same way bandLimits was: the LOWER of the two
+  // middle gaps for an even count.
   const gaps = loose.slice(1).map((t, i) => mid(t) - mid(loose[i])).sort((a, b) => a - b);
-  const med = gaps[gaps.length >> 1] || 1;
+  const med = gaps[(gaps.length - 1) >> 1] || 1;
   const runs: GraphSpan[][] = [];
   let run: GraphSpan[] = [loose[0]];
   for (let i = 1; i < loose.length; i++) {
@@ -1706,6 +1730,20 @@ function harvestGeometricSubTiers(rows: GraphSpan[][], vocab: string[], startIdx
     // "(FPM)" from a neighboring column's own unit tier) — the same bare-
     // vs-parenthesized distinction skipSubHeaderContinuation/nearbyRequiredHit
     // already established elsewhere in this file, reused verbatim.
+    //
+    // NOTE: narrowing this to skip only on a CATALOG_ANCHOR_WORDS hit (so a
+    // row like "AIRFLOW (CFM) | CAPACITY (MBH) | … | MODEL" — real
+    // vocabulary words already consumed elsewhere as PARENTS, sitting beside
+    // genuinely un-recovered bare labels of its own, CFM/MODEL — could still
+    // be mined) was tried and reverted: it also frees OTHER, already-correct
+    // bare tokens on that same row (FINNED/FINNED/FACE/FACE/PRE-FILTER/
+    // FINAL FILTER) to be re-grouped into WRONG runs under this function's
+    // own generic run-splitting, actively breaking PRE-FILTER/FINAL FILTER's
+    // own already-correct EFF./DEPTH sub-columns (real, confirmed live on
+    // this exact table). Recovering CFM/MODEL needs a real per-TOKEN
+    // "already spoken for" test this file does not have yet, not a coarser
+    // row-level gate — left as a disclosed, separate gap rather than traded
+    // for a regression on columns that work today.
     if (headerHits(rows[ri], vocab).some((h) => !/^\(.*\)$/.test(h.span.str.trim()))) continue;
     const lo = out[0].x, hi = out[out.length - 1].x;
     const mid = (t: GraphSpan) => t.x + (t.w || 0) / 2;
@@ -1727,7 +1765,10 @@ function harvestGeometricSubTiers(rows: GraphSpan[][], vocab: string[], startIdx
     // distinguish from the real thing, so density is the gate instead.
     if (loose.length < 4) continue;
     const gaps = loose.slice(1).map((t, i) => mid(t) - mid(loose[i])).sort((a, b) => a - b);
-    const med = gaps[gaps.length >> 1] || 1;
+    // Genuine median, not always the upper-middle element — see bandLimits'
+    // and subTierAnchors' own comments for the real regression this exact
+    // idiom causes on an even gap count.
+    const med = gaps[(gaps.length - 1) >> 1] || 1;
     const halfPitch = Math.min(Math.max(24, med / 2), 300);
     const used = new Set(out.map((a) => a.label));
     const withParent = loose
