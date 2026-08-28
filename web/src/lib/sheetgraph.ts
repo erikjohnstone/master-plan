@@ -1550,6 +1550,30 @@ export const isNonFinishSchedule = (title: string): boolean => {
   return OTHER_FAMILY_RE.test(u) && !/\b(FINISH|MATERIAL)S?\b/.test(u);
 };
 
+// The NARROW subset of OTHER_FAMILY_RE that names a real MEP mechanical-
+// equipment family, not an architectural one — real, found live (itd-d1-lab-
+// mechanical.pdf#12's own "PUMP SCHEDULE": BP-1/BP-2/HWP-1/HWP-2, real
+// pumps with real GPM/HP/RPM data). isNonFinishSchedule's own DOOR SCHEDULE
+// test requires an architectural family (DOOR/WINDOW/PARTITION/HARDWARE/
+// LOUVER/SIGNAGE/STOREFRONT/GLAZING/CASEWORK/MILLWORK) to vanish from the
+// graph ENTIRELY — those are genuinely out of this pipeline's own MEP scope,
+// and isNonFinishSchedule's drop-and-note is exactly correct for them. But a
+// real mechanical/plumbing EQUIPMENT family (PUMP/BOILER/HUMIDIFIER/COIL/
+// CHILLER/AHU/VAV/APPLIANCE) is squarely IN scope — dropping it outright
+// loses real device data whenever its own header is too fragmented to
+// independently clear EQUIPMENT_HEADERS' own vocabulary bar (see the PUMP
+// SCHEDULE case: GPM/HP land bare, each alone on its own tier, never
+// co-occurring with SYMBOL the way CONTROL VALVE SCHEDULE's own bare "(GPM)"
+// unit fragment did). PLUMBING/MECHANICAL/ELECTRICAL/LIGHTING/LUMINAIRE are
+// deliberately left OUT of this narrower list — those words are broad enough
+// to title a real non-tag-schedule (a panel schedule, a general note block)
+// that isn't safe to blanket-reclassify as a device-tag equipment table on
+// title text alone; a genuine luminaire/lighting schedule already qualifies
+// as equipment-kind directly on its own real merits (see the TYPE-keyed
+// LUMINAIRE SCHEDULE test) without needing this fallback at all.
+const MEP_EQUIPMENT_FAMILY_RE = /\b(PUMP|BOILER|HUMIDIFIER|COIL|CHILLER|AHU|VAV|EQUIPMENT|APPLIANCE)S?\b/;
+export const isMepEquipmentSchedule = (title: string): boolean => MEP_EQUIPMENT_FAMILY_RE.test(norm(title));
+
 function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", buildings?: Set<string>, nameKeyed = false): { key: string; building?: string } | null {
   // A NAME-keyed table's key column IS its NAME column — the only sensible
   // reading of a leading token there is a room-type phrase, not a digit tag
@@ -3409,6 +3433,14 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   const roles = new Map<string, ReturnType<typeof classifySheetRole>>();
   const fragments: ScheduleTable[] = [];
   const fragmentKinds = new Map<string, Set<TableKind>>(); // sheet key → kinds extracted there
+  // Tables reclassified finish→equipment (isMepEquipmentSchedule, below) —
+  // tracked by identity so the cross-kind dedup pass still treats one as
+  // competing against a genuine, independently-found equipment-kind
+  // extraction of the SAME physical table, even though both now report
+  // kind "equipment": that dedup only fires when a group spans >= 2 DISTINCT
+  // kinds, and two reclassified-to-equipment fragments no longer look
+  // distinct without this.
+  const reclassified = new Set<ScheduleTable>();
   for (const s of withText) {
     const role = classifySheetRole(s);
     roles.set(s.key, role);
@@ -3443,8 +3475,18 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
         // Refuse by TITLE, and only when the title does not also say finish or
         // material: when in doubt the table is kept, and the drop is NAMED.
         if (kind === "finish" && t.title && isNonFinishSchedule(t.title.text)) {
-          notes.push(`${s.key}: "${t.title.text}" names another schedule family, not a finish/material schedule — its ${t.rows.length} rows are NOT indexed as finish definitions`);
-          continue;
+          // A real MEP-equipment family (PUMP/BOILER/HUMIDIFIER/COIL/
+          // CHILLER/AHU/VAV/APPLIANCE) is reclassified, not dropped — see
+          // isMepEquipmentSchedule's own comment. An architectural family
+          // (DOOR/WINDOW/…) still vanishes entirely, exactly as before.
+          if (isMepEquipmentSchedule(t.title.text)) {
+            notes.push(`${s.key}: "${t.title.text}" names a real MEP-equipment family, not a finish/material schedule — reclassified as equipment-kind rather than dropped (its own header never independently cleared EQUIPMENT_HEADERS' vocabulary bar).`);
+            t.kind = "equipment";
+            reclassified.add(t);
+          } else {
+            notes.push(`${s.key}: "${t.title.text}" names another schedule family, not a finish/material schedule — its ${t.rows.length} rows are NOT indexed as finish definitions`);
+            continue;
+          }
         }
         // table-level building: its own title first, the sheet's context second
         const titleB = t.title ? buildingMentions(t.title.text) : [];
@@ -3453,7 +3495,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
         for (const r of t.rows) if (r.building) buildings.add(r.building);
         fragments.push(t);
         if (!fragmentKinds.has(s.key)) fragmentKinds.set(s.key, new Set());
-        fragmentKinds.get(s.key)!.add(kind);
+        fragmentKinds.get(s.key)!.add(t.kind);
       }
     }
   }
@@ -3488,9 +3530,15 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     const overlaps = (a: ScheduleTable, b: ScheduleTable) =>
       a.region[0] < b.region[2] && b.region[0] < a.region[2] && a.region[1] < b.region[3] && b.region[1] < a.region[3];
     const richness = (t: ScheduleTable) => t.headers.length * 1000 + t.rows.reduce((n, r) => n + Object.keys(r.cells).length, 0);
+    // A reclassified (finish→equipment) fragment must still register as
+    // DISTINCT from a genuine equipment-kind extraction of the same table
+    // for the purposes of this grouping check — both now carry the same
+    // real `.kind`, but they came from different vocabularies and one is
+    // typically the poorer read (see MEP_EQUIPMENT_FAMILY_RE's own comment).
+    const dedupKind = (t: ScheduleTable) => (reclassified.has(t) ? "finish" : t.kind);
     const drop = new Set<ScheduleTable>();
     for (const group of byTitleSheet.values()) {
-      if (group.length < 2 || new Set(group.map((g) => g.kind)).size < 2) continue;
+      if (group.length < 2 || new Set(group.map(dedupKind)).size < 2) continue;
       for (let i = 0; i < group.length; i++) {
         for (let j = i + 1; j < group.length; j++) {
           if (drop.has(group[i]) || drop.has(group[j]) || !overlaps(group[i], group[j])) continue;
