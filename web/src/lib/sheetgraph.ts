@@ -1554,6 +1554,41 @@ function parentPhraseOver(rows: GraphSpan[][], hdrIdx: number, floorIdx: number,
   return phrase?.text ?? null;
 }
 
+// A real parent for ONE specific token, found by genuine GEOMETRIC overlap
+// between the candidate's own printed box and the token's own box (a small,
+// fixed, kerning-scale tolerance for a near-touching pair) — never by mere
+// distance-to-centre. parentLabelOver/parentPhraseOver's own windowed search
+// is the established, tested signal everywhere a window can be sized off
+// something trustworthy (a genuinely narrow column's own span, or a run's
+// own internal gaps once median-based splitting has already bounded it) —
+// but subTierAnchors' own degenerate two-token run (see its own comment)
+// gives no trustworthy window at all, and a wide one there reaches straight
+// past the true absence of a parent into an unrelated neighbour's own real
+// column. Same vocabulary-first, phrase-second precedence as parentPhraseOver.
+const GENUINE_OVERLAP_TOL = 20;
+function genuineParentOver(rows: GraphSpan[][], hdrIdx: number, topIdx: number, t: GraphSpan, vocab: string[]): string | null {
+  const boxGap = (a: GraphSpan, b: GraphSpan) => Math.max(0, a.x - (b.x + (b.w || 0)), b.x - (a.x + (a.w || 0)));
+  const hs = rows[hdrIdx].map((x) => x.h || 8).sort((a, b) => a - b);
+  const near = Math.max(24, (hs[hs.length >> 1] || 8) * 4);
+  const hy = rowY(rows[hdrIdx]);
+  const floorIdx = Math.max(0, Math.min(topIdx, hdrIdx - 8));
+  let phrase: { text: string; d: number } | null = null;
+  for (let j = hdrIdx - 1; j >= floorIdx; j--) {
+    if (hy - rowY(rows[j]) > near) break;
+    for (const cand of rows[j]) {
+      const gap = boxGap(t, cand);
+      if (gap > GENUINE_OVERLAP_TOL) continue;
+      const lbl = headerLabel(cand.str, vocab);
+      if (lbl) return lbl;   // a recognized vocabulary parent always wins first, nearest row first
+      const s = norm(cand.str);
+      if (!PHRASE_RE.test(s) || /^\(.*\)$/.test(s)) continue;
+      const d = (hy - rowY(rows[j])) * 1000 + gap;
+      if (!phrase || d < phrase.d) phrase = { text: s, d };
+    }
+  }
+  return phrase?.text ?? null;
+}
+
 function mintSubAnchors(out: Anchor[], used: Set<string>, r: Array<{ t: GraphSpan; parent: string }>, mid: (t: GraphSpan) => number): void {
   const parent = r[0].parent;
   // sub-columns under a merged parent are equal-width: the pitch between
@@ -1618,8 +1653,50 @@ function subTierAnchors(rows: GraphSpan[][], hdrIdx: number, anchors: Anchor[], 
     // is the established, tested signal (WALLS spanning N|E|S|W) — tried
     // first, exactly as before, and once found, the whole run keeps sharing
     // it exactly as before: this path is untouched, byte-for-byte the same
-    // decision it always made.
-    const vocabParent = parentLabelOver(rows, hdrIdx, hdrIdx - 2, r[0].x, last.x + (last.w || 0), vocab);
+    // decision it always made, for every run of THREE OR MORE loose tokens
+    // (the median-gap run-splitting above already gives those real outlier
+    // protection: an unrelated token more than med*3 away never joins the
+    // run in the first place).
+    let vocabParent = parentLabelOver(rows, hdrIdx, hdrIdx - 2, r[0].x, last.x + (last.w || 0), vocab);
+    // A run of EXACTLY two loose tokens gets NONE of that protection — one
+    // gap has nothing "typical" to be an outlier relative to, so two utterly
+    // unrelated tokens that happen to land on the same physical row (real,
+    // found live, itd-d1-lab-mechanical.pdf#12's own SNORKEL HOOD SCHEDULE:
+    // "DUCT" and "WEIGHT", each one line of its OWN separate, single-column
+    // wrapped title — "MIN. EXHAUST DUCT VELOCITY (FPM)" and "OPERATING
+    // WEIGHT (LBS)" — land ~700px apart with nothing between them) always
+    // form one "run" by construction. parentLabelOver's own wide combined-
+    // span window then happily accepts a real but narrow and genuinely
+    // unrelated parent phrase sitting anywhere in that gap ("MOUNTING
+    // PLATFORM", a real column of its own) purely because its centre falls
+    // inside it, wrongly welding two independent single-value columns into
+    // "MOUNTING DUCT"/"MOUNTING WEIGHT". Confirmed by direct render against
+    // the real PDF (not assumed from code): MOUNTING PLATFORM genuinely
+    // parents a real WALL|CEILING sub-pair elsewhere on this exact table
+    // (recovered correctly, by a different function) — it parents nothing
+    // near DUCT or WEIGHT.
+    //
+    // Guarded HERE, narrowly, rather than inside parentLabelOver itself:
+    // that function is also called from findHeaderRow's own ambiguous-
+    // duplicate-column path with a completely different interval shape (a
+    // genuinely narrow column's own span, not a wide multi-token run), and
+    // is the established, tested, corpus-wide signal every OTHER already-
+    // correct run in the corpus relies on — untouched here, along with its
+    // r.length>=3 use just above (real outlier protection already applies
+    // there). The bar for a 2-token run instead: `genuineParentOver` (see
+    // its own comment) — a real GEOMETRIC overlap between the candidate
+    // parent's own printed box and EACH member's own box, not mere
+    // proximity-by-distance (which cannot distinguish "this narrow label
+    // really sits over both of us" from "this is just the nearest label to
+    // each of us separately"). MOUNTING PLATFORM's own box (1535–1705)
+    // truly contains WALL (1545–1587) and CEILING (1643–1704) — real
+    // overlap — but sits 379px clear of DUCT and 46px clear of WEIGHT — no
+    // overlap at all, correctly refused.
+    if (vocabParent && r.length === 2) {
+      const p0 = genuineParentOver(rows, hdrIdx, hdrIdx - 2, r[0], vocab);
+      const p1 = genuineParentOver(rows, hdrIdx, hdrIdx - 2, r[1], vocab);
+      if (p0 !== vocabParent || p1 !== vocabParent) vocabParent = null;
+    }
     if (vocabParent) { mintSubAnchors(out, used, r.map((t) => ({ t, parent: vocabParent })), mid); continue; }
     // No vocabulary parent covers the whole run — do not guess one for it
     // (real, found live, ledger item 29: "TEMP." under "OUTSIDE AIR" and
@@ -1633,10 +1710,20 @@ function subTierAnchors(rows: GraphSpan[][], hdrIdx: number, anchors: Anchor[], 
     // truly share the SAME immediate parent AND sit at normal sub-column
     // pitch — never activated for a run that already found a vocabulary
     // parent above, so WALLS' own N/E/S/W behavior is exactly unchanged.
-    const halfPitch = Math.max(24, med / 2);
-    const withParent = r
-      .map((t) => ({ t, parent: parentPhraseOver(rows, hdrIdx, hdrIdx - 8, mid(t) - halfPitch, mid(t) + halfPitch, vocab) }))
-      .filter((x): x is { t: GraphSpan; parent: string } => x.parent != null);
+    //
+    // A run of exactly two, here too, gets the same real-overlap bar
+    // instead of a distance window sized off its own (possibly huge, e.g.
+    // DUCT/WEIGHT's own ~700px gap) internal spacing — see the identical
+    // reasoning above. A run of three or more keeps the original distance-
+    // windowed parentPhraseOver search unchanged (median-gap run-splitting
+    // already bounds it).
+    const withParent = r.length === 2
+      ? r
+        .map((t) => ({ t, parent: genuineParentOver(rows, hdrIdx, hdrIdx - 8, t, vocab) }))
+        .filter((x): x is { t: GraphSpan; parent: string } => x.parent != null)
+      : r
+        .map((t) => ({ t, parent: parentPhraseOver(rows, hdrIdx, hdrIdx - 8, mid(t) - Math.max(24, med / 2), mid(t) + Math.max(24, med / 2), vocab) }))
+        .filter((x): x is { t: GraphSpan; parent: string } => x.parent != null);
     if (!withParent.length) continue;   // no parent anywhere — unexplained, no sub-tier, as always
     const subRuns: Array<typeof withParent> = [[withParent[0]]];
     for (let i = 1; i < withParent.length; i++) {
