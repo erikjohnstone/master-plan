@@ -3186,7 +3186,33 @@ export class Session {
         // fires exactly as it does for the single-occurrence case). This
         // can only ever ADD a way to succeed: the original anchor already
         // exhausted every real candidate above.
-        if (!fp && !inlineFp && withOcc[0].occ.length > 1) {
+        //
+        // The identical drawing-convention mismatch recurs a THIRD way —
+        // real case (itd-d1-lab HC-1..HC-9): a mechanical device that
+        // touches two systems (a duct-mounted hydronic heating coil) gets
+        // ONE occurrence on the discipline's own duct-side "HVAC FLOOR
+        // PLAN" sheet (a leader-line tag next to the in-duct coil icon) and
+        // a SEPARATE single occurrence on that SAME discipline's own
+        // piping-side "HYDRONIC FLOOR PLAN" sheet (a leader-line tag next
+        // to a totally different valve/union icon at the coil's water
+        // connection) — both real, both mechanical (so disciplineOfSheetNumber
+        // never excludes the pairing), yet the two icons can never recur as
+        // each other, for the exact same reason a schematic can never recur
+        // as a to-scale plan. Unlike B-1/B-2, this is cross-SHEET with only
+        // ONE occurrence on EACH sheet, so `withOcc[0].occ` (the anchor
+        // sheet's own occurrence list) never has a second entry to
+        // reassign to — the `> 1` gate below existed only to skip a
+        // redundant re-try, but it also skips the one entry that IS present
+        // whenever the anchor sheet has exactly one occurrence, which is
+        // exactly the case that needs this same fallback. Occurrence count
+        // is irrelevant to whether the ORIGINAL anchor's own fingerprint is
+        // real; it is the identical uncorroborated acceptance already
+        // granted to a tag drawn exactly once anywhere (below), just
+        // reached from the "drawn more than once, but every corroborator
+        // is a different convention" side instead. Still can only ever ADD
+        // a way to succeed — every real candidate is already exhausted by
+        // this point.
+        if (!fp && !inlineFp) {
           for (const altAnchor of withOcc[0].occ) {
             anchor = altAnchor;
             for (const padK of [1, 2, 3]) {
