@@ -166,7 +166,21 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
 ];
 // Running-text references are not titles: "SEE FINISH PLAN FOR ADDITIONAL
 // INFORMATION" in a remark cell must never make a schedule sheet a plan.
-const REFERENCE_RE = /^(SEE|REFER|PER|NOTED|AS SHOWN)\b|REFER TO/;
+//
+// The bare "PER" lead-in needs its own, narrower trigger than SEE/REFER/
+// NOTED/AS SHOWN: those four never start a legitimate short header
+// fragment, but "PER" does — real, corpus-found (federal-attachment4-
+// mechanical.pdf#14's own AIR HANDLING UNIT HYDRONIC COIL SCHEDULE header
+// wraps "MAX FINS PER INCH" onto its own tier, leaving a bare "PER INCH"
+// continuation cell) — "PER <UNIT>" (PER INCH/FOOT/HOUR/MINUTE/SF/UNIT…) is
+// a standard 2-word engineering column-header fragment, not a cross-
+// reference note. Every real "PER …" reference note actually measured in
+// this project (PER SPEC SECTION 09, PER MANUFACTURER'S REQUIREMENTS) runs
+// 3+ words — a real note names a document/party/section, never stops at
+// one bare unit word — so the PER branch alone is widened to require 2+
+// words after PER, leaving SEE/REFER/NOTED/AS SHOWN/"REFER TO" (each
+// already safe at their original, shorter reach) unchanged.
+const REFERENCE_RE = /^(SEE|REFER|NOTED|AS SHOWN)\b|REFER TO|^PER\b(?:\s+\S+){2,}/;
 
 export function classifySheetRole(sheet: SheetSpans): { role: SheetRole; confidence: number; evidence: Evidence | null } {
   const hits: Array<{ role: SheetRole; conf: number; span: GraphSpan }> = [];
@@ -4836,7 +4850,7 @@ const MAX_GENERIC_COLUMN_DEPTH = 4;
  * see MAX_GENERIC_COLUMN_DEPTH's own comment; the caller reads an empty
  * result the same way it reads "fewer than 2 columns", refusing the whole
  * candidate. */
-function clusterGenericColumns(tokens: GraphSpan[]): Anchor[] {
+function clusterGenericColumnsOnce(tokens: GraphSpan[]): Anchor[] | null {
   if (!tokens.length) return [];
   const heights = tokens.map((t) => t.h || 8).sort((a, b) => a - b);
   const h = heights[heights.length >> 1] || 8;
@@ -4848,7 +4862,7 @@ function clusterGenericColumns(tokens: GraphSpan[]): Anchor[] {
     if (last && centerX(t) - centerX(last[last.length - 1]) <= tol) last.push(t);
     else clusters.push([t]);
   }
-  if (clusters.some((c) => c.length > MAX_GENERIC_COLUMN_DEPTH)) return [];
+  if (clusters.some((c) => c.length > MAX_GENERIC_COLUMN_DEPTH)) return null;
   const out: Anchor[] = [];
   const used = new Set<string>();
   for (const c of clusters) {
@@ -4862,6 +4876,52 @@ function clusterGenericColumns(tokens: GraphSpan[]): Anchor[] {
     out.push({ label: final, x: cx });
   }
   return out.sort((a, b) => a.x - b.x);
+}
+
+// A group-spanning header cell (real, common MEP-schedule convention: "COIL
+// SIZE DATA" over LENGTH/HEIGHT, "WATERSIDE DATA" over EWT/LWT/FLOW/WATER
+// MAX PD, all corpus-found on federal-attachment4-mechanical.pdf#14's own
+// AIR HANDLING UNIT HYDRONIC COIL SCHEDULE) sits, by drafting convention,
+// on its OWN tier ABOVE the several narrower leaf columns it names, roughly
+// CENTERED over them. Left in the same single-linkage pass as its own leaf
+// children, its centerX lands near the MIDPOINT between two adjacent leaf
+// columns — close enough to bridge clusters that the leaf columns' own
+// pitch alone would have kept correctly separate (measured live: a real
+// per-column pitch of 144 units against this table's own tol of ~126 keeps
+// every ordinary adjacent pair apart, but a spanning label's own half-gap
+// to each neighboring cluster is roughly HALF that pitch — well under tol
+// on both sides at once). A 4-column-wide spanning label centers between
+// its own 2nd and 3rd columns and can bridge THOSE into one over-deep
+// chain (real, measured: WATERSIDE DATA bridged [LWT,°F] to [FLOW,GPM],
+// tripping MAX_GENERIC_COLUMN_DEPTH and discarding the whole header).
+const GENERIC_SPAN_WIDTH_RATIO = 1.6;
+function clusterGenericColumns(tokens: GraphSpan[]): Anchor[] {
+  const primary = clusterGenericColumnsOnce(tokens);
+  if (primary) return primary;
+  // Retried ONLY when the plain pass already hit the depth cap — every
+  // block that clustered cleanly before is completely unaffected (same
+  // tokens, same clusters, same output). A genuine legend/abbreviations
+  // list (the depth cap's own original target) has no wide top-tier
+  // spanning label to drop, so the retry changes nothing there either and
+  // correctly still returns [] below.
+  if (!tokens.length) return [];
+  const minY = Math.min(...tokens.map((t) => t.y));
+  const heights = tokens.map((t) => t.h || 8).sort((a, b) => a - b);
+  const h = heights[heights.length >> 1] || 8;
+  const widths = tokens.map((t) => t.w || 8).sort((a, b) => a - b);
+  const medW = widths[widths.length >> 1] || 8;
+  // "Topmost tier" (within one line-height of the block's own minimum Y) —
+  // every real spanning label measured in this corpus sits on the block's
+  // own top tier, never sharing a physical line with the leaf columns it
+  // would otherwise bridge. A standalone wide LEAF column (a real, if
+  // unusual, single long header word with no group affiliation) normally
+  // sits on the SAME tier as its own short siblings, so it is untouched by
+  // this check; only a token BOTH unusually wide AND isolated on the
+  // topmost tier is treated as a spanning label to drop from the retry.
+  const isSpanning = (t: GraphSpan) => t.y - minY <= h * 0.6 && (t.w || 0) > medW * GENERIC_SPAN_WIDTH_RATIO;
+  const leaves = tokens.filter((t) => !isSpanning(t));
+  if (leaves.length === tokens.length) return [];   // nothing to drop — same failure either way
+  return clusterGenericColumnsOnce(leaves) ?? [];
 }
 
 /** A horizontal rule spanning most of the header block's own width, sitting
@@ -5245,10 +5305,31 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     // hoisted ROOM_FINISH_REQUIRED/FINISH_REQUIRED/EQUIPMENT_REQUIRED
     // consts, single source of truth) — a table a vocabulary already
     // explains is that vocabulary's table, never re-extracted here.
+    // Equipment vocabulary alone is not proof the equipment-kind pass will
+    // actually claim this block — extractTableAt refuses ANY candidate that
+    // has no catalog-anchor column (ID/MARK/CODE/SYMBOL/TAG: see its own
+    // comment on CATALOG_ANCHOR_WORDS) even when the rating tier alone
+    // clears EQUIPMENT_REQUIRED's bar, because an unkeyable table can never
+    // be looked up by tag. EAT/LAT/EWT/LWT/GPM/CFM/MBH are common, genuinely
+    // cross-schedule HVAC rating words (real, corpus-found: a bare
+    // TYPE-keyed coil-bank rating tier with no TAG/MFR/MODEL row of its own
+    // anywhere on the sheet) — qualifying under EQUIPMENT_REQUIRED on rating
+    // vocabulary alone is not, on its own, evidence a catalog-anchor column
+    // exists anywhere in this block. Without this check, alreadyVocab was
+    // skipping the reference-kind pass's own extraction on the strength of a
+    // vocabulary match the equipment-kind pass was simultaneously refusing
+    // for lack of a key column — the table landed in neither pass's output.
+    // Finish-kind is unaffected: FINISH_REQUIRED (CODE/MARK/SYMBOL/ID) IS
+    // itself exactly CATALOG_ANCHOR_WORDS minus TAG, so a finish-vocabulary
+    // qualification is already, by construction, a catalog-anchor hit.
+    const equipmentQualifies = rows.slice(block.top, block.bottom + 1)
+      .some((r) => qualifies(headerHits(r, EQUIPMENT_HEADERS), EQUIPMENT_REQUIRED, OTHER_KIND_MIN_HITS));
+    const blockHasCatalogAnchor = equipmentQualifies
+      && headerHits(block.tokens, EQUIPMENT_HEADERS).some((h) => CATALOG_ANCHOR_WORDS.includes(h.label));
     const alreadyVocab = rows.slice(block.top, block.bottom + 1).some((r) =>
       qualifies(headerHits(r, ROOM_HEADERS), ROOM_FINISH_REQUIRED, ROOM_FINISH_MIN_HITS)
-      || qualifies(headerHits(r, FINISH_HEADERS), FINISH_REQUIRED, OTHER_KIND_MIN_HITS)
-      || qualifies(headerHits(r, EQUIPMENT_HEADERS), EQUIPMENT_REQUIRED, OTHER_KIND_MIN_HITS));
+      || qualifies(headerHits(r, FINISH_HEADERS), FINISH_REQUIRED, OTHER_KIND_MIN_HITS))
+      || blockHasCatalogAnchor;
     if (alreadyVocab) continue;
     const anchors = clusterGenericColumns(block.tokens);
     if (anchors.length < 2) continue;
