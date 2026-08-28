@@ -6716,9 +6716,30 @@ export function scheduleTableFromODL(
   // cell text for that column top-to-bottom, deduping a cell that continues
   // purely via rowspan (same cell reference re-seen at the row below) so a
   // 3-row-tall "SYMBOL" cell contributes its text exactly once.
+  //
+  // A row inside the header block can ALSO be a second wide caption/notes
+  // row — not just row `bodyStart` (the ONLY position the title check
+  // above looks at) — a real, general CAD convention: a numbered REMARKS
+  // note or a code-citation caption ("MINIMUM VENTILATION RATES FROM TABLE
+  // 403.3.1.1, 2022 OREGON MECHANICAL SPECIALTY CODE…") sitting between
+  // the real title and the real column headers, or directly above them.
+  // Structurally it's the exact same shape as the title row (one cell,
+  // colspan across nearly every column) — measured live on
+  // baker-county-eoc-bidset.pdf#41/#48: without this check, that ONE
+  // sentence gets prepended to EVERY real column's own label ("…REMARKS:
+  // EQUIP NO", "…REMARKS: LOCATION", …), making every header useless for
+  // lookup. Skip such a row's text from column-labeling — it already
+  // counted toward headerEnd above (correctly: it is not a real data row
+  // either), it simply contributes no per-column label.
   const colLabel: string[] = new Array(C).fill("");
   const lastSeen: (ODLTableCell | null)[] = new Array(C).fill(null);
   for (let r = bodyStart; r < headerEnd; r++) {
+    const ownCellsHere = new Set<ODLTableCell>();
+    for (let c = 0; c < C; c++) {
+      const cell = grid[r][c];
+      if (cell && cell["row number"] - 1 === r) ownCellsHere.add(cell);
+    }
+    if (ownCellsHere.size === 1 && [...ownCellsHere][0]["column span"] >= C - 1) continue;
     for (let c = 0; c < C; c++) {
       const cell = grid[r][c];
       if (!cell || cell === lastSeen[c]) continue;
