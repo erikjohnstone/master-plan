@@ -1450,6 +1450,8 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
     // other multi-tier mechanism in this file already uses.
     if (opts.equipmentTierMerge) {
       finalAnchors = harvestGeometricSubTiers(rows, vocab, idx + 1, finalAnchors);
+      finalAnchors = harvestBareVocabLeafTiers(rows, vocab, Math.max(0, idx - 20), idx + 1, finalAnchors);
+      finalAnchors = harvestBareVocabAboveTiers(rows, vocab, idx, finalAnchors);
     }
     return {
       anchors: finalAnchors,
@@ -1764,6 +1766,177 @@ function harvestGeometricSubTiers(rows: GraphSpan[][], vocab: string[], startIdx
       const filtered = sr.filter((x) => !out.some((a) => Math.abs(a.x - mid(x.t)) <= DUP_TOL));
       if (filtered.length < 2) continue;
       mintSubAnchors(out, used, filtered, mid);
+    }
+  }
+  return out.sort((a, b) => a.x - b.x);
+}
+
+/** A below-idx row whose OWN tokens are real vocabulary words (HP/RPM under
+ * a "MOTOR" group; SIZE under a "VALVE OUTLET" group) is exactly the shape
+ * harvestGeometricSubTiers' own comment assumes "the rest of this file
+ * already handles" — untrue for a genuinely SMALL (2-3 column) leaf tier:
+ * real, corpus-found live, itd-d1-lab-mechanical.pdf#12's own PUMP SCHEDULE
+ * ("MOTOR" spanning HP/RPM/V/Ø, several real tiers below the settled
+ * SYMBOL/AREA SERVED/TYPE row) and its own PRESSURE INDEPENDENT …VALVE
+ * SCHEDULEs ("VALVE OUTLET" spanning QUANTITY/SIZE). Nothing else in this
+ * file ever claims these: the main tier-descent only ever looks at ONE row
+ * (`idx`); mergeForwardCoEqualTier requires the WHOLE row to independently
+ * qualify (a real rating word + minHits — a bare 2-3-token leaf tier never
+ * clears that bar on its own); harvestGeometricSubTiers is gated OFF
+ * entirely by ANY bare vocabulary hit, by design, for a different real case
+ * (a genuinely unrelated table's own header one tier below) — and its own
+ * density floor (>= 4 loose tokens, calibrated for ambiguous NON-vocabulary
+ * fragments) is the wrong bar for a 2-3-token tier where every token is
+ * ALREADY independently real, recognized vocabulary, not a guess.
+ *
+ * Deliberately a separate, narrower pass rather than a relaxation of
+ * harvestGeometricSubTiers itself: that function's existing behavior is
+ * exercised by real, already-passing tables today, and loosening its own
+ * density/vocab gates in place risks changing what it already does for
+ * every one of them. This only ever ADDS a column nothing above already
+ * covers, gated the same two ways real, established callers in this file
+ * already use for the identical reason: a bare CATALOG_ANCHOR_WORD
+ * (SYMBOL/TAG/ID/MARK) in the row is always a different table's own header,
+ * a hard stop (mergeForwardCoEqualTier's own signal); and only >= 2 tokens
+ * sharing the SAME real parent above ever mint anything (a lone token
+ * resolving to a parent no sibling shares is the exact same false-positive
+ * shape subTierAnchors/harvestGeometricSubTiers already guard against). */
+/** Like parentPhraseOver, but walks row-by-row with a PER-STEP gap
+ * tolerance (the same "still one header block" scale used throughout this
+ * file — skipSubHeaderContinuation, harvestGeometricSubTiers' own downward
+ * walk) instead of one fixed total-distance budget. parentPhraseOver's own
+ * `near` bound is calibrated for reaching one or two tiers up and is too
+ * tight to tunnel all the way through a genuinely DEEP header (5-7 tightly-
+ * packed tiers in under 100px — real, corpus-found, itd-d1-lab-mechanical
+ * .pdf#12's own PUMP SCHEDULE and PRESSURE INDEPENDENT …VALVE SCHEDULEs) —
+ * a leaf tier several real rows below its own group parent would never
+ * reach it through a single fixed-distance cap even though every
+ * intervening row-to-row gap is individually perfectly ordinary. */
+function chainedParentAbove(rows: GraphSpan[][], fromRi: number, topIdx: number, gx0: number, gx1: number, vocab: string[]): string | null {
+  const width = Math.max(gx1 - gx0, 1);
+  let cur = fromRi;
+  let best: { text: string; d: number } | null = null;
+  for (let steps = 0; steps < 10 && cur > topIdx; steps++) {
+    const j = cur - 1;
+    if (j < topIdx) break;
+    const h = rows[cur].reduce((s, t) => s + (t.h || 8), 0) / Math.max(1, rows[cur].length);
+    if (rowY(rows[cur]) - rowY(rows[j]) > h * 3) break;
+    for (const t of rows[j]) {
+      const cx = t.x + (t.w || 0) / 2;
+      const inInterval = cx >= gx0 && cx < gx1;
+      const overlaps = Math.min(t.x + (t.w || 0), gx1) - Math.max(t.x, gx0) > width * 0.3;
+      if (!inInterval && !overlaps) continue;
+      const lbl = headerLabel(t.str, vocab);
+      if (lbl) return lbl;
+      const s = norm(t.str);
+      if (!PHRASE_RE.test(s) || /^\(.*\)$/.test(s)) continue;
+      const d = (rowY(rows[cur]) - rowY(rows[j])) * 1000 + Math.abs(cx - (gx0 + gx1) / 2);
+      if (!best || d < best.d) best = { text: s, d };
+    }
+    cur = j;
+  }
+  return best?.text ?? null;
+}
+
+/** The envelope loop above (`if (idx > i) { … }`, inside findHeaderRow
+ * proper) picks up a parent-tier row's own bare vocabulary hits (EWT/LWT
+ * sitting one tier above SYMBOL/AREA SERVED — real, corpus-found: itd-d1-
+ * lab-mechanical.pdf#13's own CONDENSING HOT WATER BOILER SCHEDULE) — but
+ * ONLY across the `i..idx-1` window a real tier-descent actually walked
+ * through. When the settled header row IS `i` itself — no descent, because
+ * a bare required word was found via nearbyRequiredHitWide reaching
+ * BACKWARD instead (precisely the real shape that mechanism exists for) —
+ * that window is empty and the very column that let this table qualify as
+ * equipment-kind at all never becomes an anchor. Chain-walks upward the
+ * same bounded way harvestBareVocabLeafTiers walks downward — a real
+ * column word a genuine few tight tiers above `idx`, not just one row up —
+ * and mints each hit as its OWN bare anchor (no parent prefix): unlike
+ * harvestBareVocabLeafTiers' own leaf children (HP/RPM under MOTOR), a real
+ * vocabulary word here is already fully self-descriptive on its own. */
+function harvestBareVocabAboveTiers(rows: GraphSpan[][], vocab: string[], idx: number, anchors: Anchor[]): Anchor[] {
+  const out = anchors.slice();
+  const used = new Set(out.map((a) => a.label));
+  const lo = out[0].x, hi = out[out.length - 1].x;
+  const mid = (t: GraphSpan) => t.x + (t.w || 0) / 2;
+  const MAX_ROWS = 6;
+  for (let ri = idx - 1, n = 0; ri >= 0 && n < MAX_ROWS; ri--, n++) {
+    if (looksLikeDeepDataRow(rows[ri])) break;
+    const below = rows[ri + 1];
+    const h = below.reduce((s, t) => s + (t.h || 8), 0) / Math.max(1, below.length);
+    if (rowY(below) - rowY(rows[ri]) > h * 3) break;
+    const hits = headerHits(rows[ri], vocab);
+    if (hits.some((hh) => CATALOG_ANCHOR_WORDS.includes(hh.label))) break;
+    for (const hh of hits) {
+      if (/^\(.*\)$/.test(hh.span.str.trim())) continue;
+      if (used.has(hh.label)) continue;
+      const cx = mid(hh.span);
+      if (cx <= lo || cx >= hi) continue;
+      if (out.some((a) => Math.abs(a.x - cx) <= 20)) continue;
+      used.add(hh.label);
+      out.push({ label: hh.label, x: cx });
+    }
+  }
+  return out.sort((a, b) => a.x - b.x);
+}
+
+function harvestBareVocabLeafTiers(rows: GraphSpan[][], vocab: string[], topIdx: number, startIdx: number, anchors: Anchor[]): Anchor[] {
+  let out = anchors.slice();
+  const MAX_ROWS = 6;
+  for (let ri = startIdx, n = 0; ri < rows.length && n < MAX_ROWS; ri++, n++) {
+    if (looksLikeDeepDataRow(rows[ri])) break;
+    if (ri > startIdx) {
+      const prev = rows[ri - 1];
+      const h = prev.reduce((s, t) => s + (t.h || 8), 0) / Math.max(1, prev.length);
+      if (rowY(rows[ri]) - rowY(prev) > h * 3) break;
+    }
+    const hits = headerHits(rows[ri], vocab);
+    if (hits.some((h) => CATALOG_ANCHOR_WORDS.includes(h.label))) break;
+    const lo = out[0].x, hi = out[out.length - 1].x;
+    const mid = (t: GraphSpan) => t.x + (t.w || 0) / 2;
+    // A leaf tier's own real siblings are not always UNIFORMLY vocabulary
+    // ("MOTOR" → HP/RPM, both vocab) or uniformly not ("VALVE OUTLET" →
+    // QUANTITY, not vocab, next to SIZE, which is) — real, corpus-found:
+    // the SAME "…VALVE SCHEDULE" family mixes both in the ONE row. Each
+    // token's own label is its resolved vocabulary word when it has one,
+    // else its own raw (short, all-caps-shaped) text — the identical
+    // fallback headerHits/mintSubAnchors already use elsewhere in this
+    // file, just applied per-token instead of gating the whole row on it.
+    const candidates: Array<{ t: GraphSpan; label: string }> = [];
+    for (const t of rows[ri]) {
+      if (mid(t) <= lo || mid(t) >= hi) continue;
+      const vocabLbl = headerLabel(t.str, vocab);
+      if (vocabLbl) {
+        if (!/^\(.*\)$/.test(t.str.trim())) candidates.push({ t, label: vocabLbl });
+        continue;
+      }
+      if (DEEP_SUB_LABEL_RE.test(norm(t.str)) && /[A-Z]/.test(t.str)) candidates.push({ t, label: norm(t.str) });
+    }
+    candidates.sort((a, b) => mid(a.t) - mid(b.t));
+    if (candidates.length < 2) continue;
+    const gaps = candidates.slice(1).map((c, i) => mid(c.t) - mid(candidates[i].t)).sort((a, b) => a - b);
+    const med = gaps[gaps.length >> 1] || 1;
+    const halfPitch = Math.min(Math.max(24, med / 2), 300);
+    const withParent = candidates
+      .map((c) => ({ ...c, parent: chainedParentAbove(rows, ri, topIdx, mid(c.t) - halfPitch, mid(c.t) + halfPitch, vocab) }))
+      .filter((x): x is { t: GraphSpan; label: string; parent: string } => x.parent != null);
+    if (!withParent.length) continue;
+    const byParent = new Map<string, typeof withParent>();
+    for (const w of withParent) {
+      if (!byParent.has(w.parent)) byParent.set(w.parent, []);
+      byParent.get(w.parent)!.push(w);
+    }
+    const DUP_TOL = 20;
+    const used = new Set(out.map((a) => a.label));
+    for (const group of byParent.values()) {
+      if (group.length < 2) continue;
+      const filtered = group.filter((x) => !out.some((a) => Math.abs(a.x - mid(x.t)) <= DUP_TOL));
+      if (filtered.length < 2) continue;
+      for (const { t, label, parent } of filtered) {
+        const full = `${parent} ${label}`;
+        if (used.has(full)) continue;
+        used.add(full);
+        out.push({ label: full, x: mid(t) });
+      }
     }
   }
   return out.sort((a, b) => a.x - b.x);
