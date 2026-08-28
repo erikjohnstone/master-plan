@@ -101,6 +101,31 @@ test("sheet roles: a real \"<DISCIPLINE> - LEVEL N PLAN\" title (baker-county-eo
   assert.notEqual(bareLevel.role, "plan", "no discipline word adjacent to LEVEL N PLAN — must not classify as plan via this pattern");
 });
 
+test("sheet roles: an ENLARGED/PARTIAL qualifier between the level number and PLAN still classifies plan (baker-county-eoc's own real sheet #47)", () => {
+  // Real, found live: this same set's own sheet #47 (P4.01) titles itself,
+  // as one single text run, "PLUMBING - LEVEL 1 ENLARGED PLAN" — the base
+  // "- LEVEL N PLAN" pattern above requires PLAN to sit directly after the
+  // level digit, so this real plan sheet classified role "unknown" ("no
+  // classifiable title text"), silently excluding every equipment tag drawn
+  // on it from every sweep_schedule_row count (HB-1, FD-1, MS-1, EWC-1,
+  // WH-1, ET-1, ...) — three separately-diagnosed-looking symptoms that were
+  // really this one gap. "ENLARGED PLAN"/"PARTIAL PLAN" are standard,
+  // generic AEC drafting vocabulary, not this firm's own naming.
+  const enlarged = classifySheetRole({ key: "f", sheet_number: "P401", spans: [sp("PLUMBING - LEVEL 1 ENLARGED PLAN", 100, 700)] });
+  assert.equal(enlarged.role, "plan");
+  assert.ok(enlarged.confidence >= 0.8);
+  const partial = classifySheetRole({ key: "g", sheet_number: "M401", spans: [sp("MECHANICAL - LEVEL 2 PARTIAL PLAN", 100, 700)] });
+  assert.equal(partial.role, "plan");
+  // an unrelated qualifier word must still correctly fail — this widening is
+  // two specific, named words, not a generic gap that bridges anything in
+  // between the level number and PLAN. ("REFLECTED CEILING PLAN" is not a
+  // useful negative control here — it already, correctly, matches the base
+  // discipline-word-adjacent-to-PLAN alternative via "CEILING...PLAN", a
+  // real, legitimate plan title unrelated to this fix.)
+  const other = classifySheetRole({ key: "h", sheet_number: "M401", spans: [sp("MECHANICAL - LEVEL 1 PRELIMINARY PLAN", 100, 700)] });
+  assert.notEqual(other.role, "plan", "an unrelated qualifier word must not classify as plan via this widened pattern");
+});
+
 test("sheet roles: a real SHEET INDEX cover page is never misattributed as one of the sheet types it lists (ledger, later session)", () => {
   // Real, found live on baker-county-eoc's own sheet #36, discovered
   // immediately after the LEVEL-N-PLAN fix above: a real "MECHANICAL SHEET

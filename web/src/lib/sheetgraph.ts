@@ -150,7 +150,29 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   // `-\s*LEVEL\s+\d+\s*`, not a generic `.*` gap — so this can't bridge an
   // unrelated word into a false plan match; "KEY PLAN"/bare "LEVEL 1 PLAN"
   // (no discipline word) still correctly fail to match, unaffected.
-  { re: /(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\s+PLAN\b|(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\s*-\s*LEVEL\s+\d+\s+PLAN\b/, role: "plan", conf: 0.85 },
+  //
+  // An optional ENLARGED/PARTIAL qualifier between the level number and
+  // "PLAN" (real, found live: this same set's own sheet #47, title
+  // "PLUMBING - LEVEL 1 ENLARGED PLAN" — a real Plumbing plan sheet, not a
+  // detail or schedule, that was scoring role "unknown" with zero hits
+  // because the base "- LEVEL N PLAN" alternative requires "PLAN" to sit
+  // directly after the level digit). "ENLARGED PLAN"/"PARTIAL PLAN" are
+  // standard, generic AEC drafting vocabulary for a zoomed-in segment of a
+  // larger level plan — not this firm's own naming, not baker-county-
+  // specific — so this widening generalizes, it doesn't special-case one
+  // sheet. Every real, downstream consequence of a plan sheet reading as
+  // "unknown" is severe (every equipment tag drawn on it becomes invisible
+  // to sweep_schedule_row: its role is never "plan", so its occurrences are
+  // silently skipped, same code path as a genuine detail/schedule sheet) —
+  // this sheet #47 case alone was the true root cause behind three
+  // separately-diagnosed-looking symptoms (FD-1 refusing with "not drawn on
+  // any plan sheet" even though it's real and tagged there three times; a
+  // real single HB-1 on this sheet never being swept at all; MS-1/EWC-1/
+  // WH-1/ET-1 all sharing the identical fate) — one general regex gap, not
+  // four separate bugs. Still narrow: only these two named qualifiers, still
+  // anchored to `LEVEL\s+\d+`, so "KEY PLAN" and a bare "LEVEL 1 PLAN" (no
+  // discipline word) are unaffected, exactly as before.
+  { re: /(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\s+PLAN\b|(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\s*-\s*LEVEL\s+\d+\s+(?:ENLARGED\s+|PARTIAL\s+)?PLAN\b/, role: "plan", conf: 0.85 },
   { re: SCHEDULE_TITLE_RE, role: "schedule", conf: 0.85 },
   { re: /SCHEDULE/, role: "schedule", conf: 0.5 },
   { re: /LEGEND/, role: "legend", conf: 0.5 },
