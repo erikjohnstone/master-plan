@@ -3209,6 +3209,59 @@ function looksLikeNewHeader(row: GraphSpan[], x0: number, x1: number): boolean {
 // on findTableBoundary for why the cap has to exist independently of the
 // header-candidate/title checks, not just as a backstop that never fires.
 const MAX_TABLE_SCAN_ROWS = 60;
+// A vocab-kind table's own forward scan (findTableBoundary, below) gets a
+// MUCH bigger budget than MAX_TABLE_SCAN_ROWS's plain row-cluster count —
+// see vocabScanCapIdx's own comment for why counting row-CLUSTERS at all is
+// the wrong unit for a verbose real schedule, and why 60 of them, even
+// converted to Y-distance, is still too tight for a real, long one. This
+// constant is deliberately its OWN number, not a multiple of
+// MAX_TABLE_SCAN_ROWS applied in code — findGenericTableBoundary (the
+// "reference"-kind path) and the rotated-header title hunt's own `maxY`
+// keep using the original 60-row-cluster budget entirely unchanged; only
+// the vocab-kind (room-finish/finish/equipment) scan below is widened.
+const VOCAB_TABLE_SCAN_LINES = 200;
+/** Row-index cap for a vocab-kind table's forward scan (findTableBoundary /
+ * findSparseKeyedBoundary), expressed as a Y-DISTANCE budget
+ * (VOCAB_TABLE_SCAN_LINES real line-heights) rather than a fixed row-
+ * CLUSTER count. clusterRows breaks every wrapped text LINE into its own
+ * row-cluster, not every schedule ROW — a compact one-line-per-row schedule
+ * and a verbose one wrapping 3-5 lines per row both look like "N rows" in
+ * cluster-count terms, but the verbose one covers only a fraction of the
+ * real table in that same row-count budget. Real, corpus-found: itd-d1-lab-
+ * mechanical.pdf#28's own "PLUMBING FIXTURE SCHEDULE" wraps most of its ~30
+ * real rows across 3-5 lines each (long FIXTURE DESCRIPTION/MANUFACTURER
+ * prose) — a 60-row-CLUSTER cap reached row 13 (FS-3) and stopped there,
+ * with the remaining ~17 real rows (LS-1, RD-1, …) left with no table of
+ * their own to belong to, bleeding out as their own spurious "reference"-
+ * kind fragments once nothing else claimed that ink (droppedNamedTables'
+ * own containment check — see its comment — only suppresses a reference
+ * fragment sitting INSIDE the real table's own extracted region, and a
+ * region truncated at row 13 doesn't reach rows 14+ at all). Measuring the
+ * budget in Y instead of row-clusters — the exact technique this file's own
+ * rotated-header title hunt already uses, see its `maxY` comment — costs a
+ * compact, single-line-per-row schedule nothing (N lines of Y ≈ N row-
+ * clusters there, the two are numerically the same) while letting a verbose
+ * one reach its own real last row before the cap does, not before the
+ * first few rows are even done wrapping. `lineHeight` is the table's own
+ * header line height (the same real proxy for "one wrapped line" the
+ * rotated-header path already uses) — never text height in the abstract,
+ * always THIS table's own drawn scale. */
+function vocabScanCapIdx(rows: GraphSpan[][], fromIdx: number, belowY: number, lineHeight: number): number {
+  const from = Math.max(fromIdx, 0);
+  let startY: number | null = null;
+  for (let i = from; i < rows.length; i++) {
+    if (rowY(rows[i]) <= belowY) continue;
+    startY = rowY(rows[i]);
+    break;
+  }
+  if (startY == null) return rows.length;
+  const maxY = startY + VOCAB_TABLE_SCAN_LINES * Math.max(lineHeight * 1.5, 12);
+  for (let i = from; i < rows.length; i++) {
+    if (rowY(rows[i]) <= belowY) continue;
+    if (rowY(rows[i]) > maxY) return i;
+  }
+  return rows.length;
+}
 /** Where does the table whose data starts at `dataFrom` END — i.e. the first
  * row index that belongs to a DIFFERENT table, so bandDataRows's scan (and
  * columnMapFor's column-start recovery, which shares this bound) stops
@@ -3245,8 +3298,8 @@ const MAX_TABLE_SCAN_ROWS = 60;
  * since a table's own title routinely contains "SCHEDULE" and sits inside
  * its own x-band. Skip anything not actually below the header, same filter
  * bandDataRows' main scan already applies. */
-function findTableBoundary(rows: GraphSpan[][], dataFrom: number, x0: number, x1: number, belowY = -Infinity): number {
-  const cap = Math.min(rows.length, dataFrom + MAX_TABLE_SCAN_ROWS);
+function findTableBoundary(rows: GraphSpan[][], dataFrom: number, x0: number, x1: number, belowY = -Infinity, lineHeight = 12): number {
+  const cap = vocabScanCapIdx(rows, dataFrom, belowY, lineHeight);
   for (let i = dataFrom; i < cap; i++) {
     if (rowY(rows[i]) <= belowY) continue;
     if (looksLikeNewHeader(rows[i], x0, x1)) return i;
@@ -3502,8 +3555,15 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
         return out;
       })()
     : headerSpans;
-  const cap = Math.min(rows.length, dataFrom + MAX_TABLE_SCAN_ROWS);
-  let toIdx = findTableBoundary(rows, dataFrom, hdrBand.x0, hdrBand.x1, dataBelowY);
+  // The table's own real line height — the same drawn-scale proxy the
+  // rotated-header title hunt already uses for its own Y-distance budget —
+  // not an abstract text-height constant. Drives vocabScanCapIdx below so a
+  // table whose real rows wrap across several lines each gets a scan budget
+  // that actually reaches its own last row (see vocabScanCapIdx's comment).
+  const hdrLineHeights = headerSpans.map((t) => t.h || 8).sort((a, b) => a - b);
+  const hdrLineH = hdrLineHeights[hdrLineHeights.length >> 1] || 8;
+  const cap = vocabScanCapIdx(rows, dataFrom, dataBelowY, hdrLineH);
+  let toIdx = findTableBoundary(rows, dataFrom, hdrBand.x0, hdrBand.x1, dataBelowY, hdrLineH);
   let banded = bandDataRows(rows, anchors, kind, sheet.key, opts.buildings, { fromIdx: dataFrom, toIdx, belowY: dataBelowY, deltas: opts.deltas, headerSpans: fullHeaderSpans });
   // The wide scan maxed out without ever finding a real stop signal — see
   // findSparseKeyedBoundary's comment for why that alone (regardless of how
@@ -4942,11 +5002,52 @@ function sideHasRealTable(spans: GraphSpan[], sheetKey: string, opts: ExtractOpt
  * that still exists but reads back thinner than it did on the unsplit
  * sheet is real data loss, the same class of harm as losing the row
  * outright. */
-function extractedKeys(sheet: SheetSpans, opts: ExtractOpts): Map<string, number> {
+function extractedKeys(sheet: SheetSpans, opts: ExtractOpts, seam?: Seam): Map<string, number> {
   const out = new Map<string, number>();
   for (const kind of ["room-finish", "finish", "equipment"] as const) {
     for (const t of extractAllTables(sheet, kind, opts)) {
       if (!t.title?.text.trim()) continue;
+      // A title drawn a SECOND time elsewhere on this same sheet, at the
+      // same header height but on the OTHER side of the very seam under
+      // test, is not decoration — it is the sheet's own proof that THIS
+      // candidate seam runs between two genuine, independent instances of a
+      // dual-column-strip layout (corpus-found: itd-d1-lab-mechanical.pdf
+      // #28's "PLUMBING FIXTURE SCHEDULE", drawn once above each of two
+      // physically separate column groups that continue ONE schedule's row
+      // sequence, D-1..WCO on the left strip, WH-1..WS-1 on the right).
+      // Read unsplit, both header rows sit at the same Y and get merged
+      // into ONE row by the same Y-only clustering every kind already uses,
+      // so this table's OWN headers.length is inflated by exactly the
+      // cross-strip contamination that seam is supposed to remove — not a
+      // genuine measure of either strip's real column count (measured
+      // live: the unsplit read reads 5 columns off the merged row; the
+      // correct LEFT-alone split reads only 3, its own honest count).
+      // Crediting the inflated count made the correct split look "lossy"
+      // against a bar neither strip, read alone, ever actually cleared, so
+      // `!lostAny` failed for every candidate seam and the sheet stayed
+      // unsplit — the same two real rows (LS-1 "LAVATORY SHIELD", RD-1
+      // "ROOF DRAIN") kept bleeding out as their own spurious "reference"-
+      // kind fragments instead of being read as the ordinary rows of the
+      // real schedule they are.
+      //   Gating this on the SEAM under test (not a blanket exclusion of
+      // every duplicate-titled table from every candidate) matters: this
+      // same sheet also carries a false candidate seam through the LEFT
+      // strip's own middle (between its FIXTURE DESCRIPTION and CONNECTION
+      // SIZE columns) — a blanket exclusion would strip this table's real
+      // protection there too and let that false seam sever its own columns
+      // unchallenged. Requiring the duplicate to sit strictly on the far
+      // side of THIS seam (one occurrence left of x0, the other right of
+      // x1) means only the one seam actually responsible for the merge
+      // loses this table's credit; every other candidate still measures
+      // against its full, real bar.
+      const titleText = norm(t.title.text);
+      const titleX = t.title.bbox[0], titleY = t.title.bbox[1];
+      const hasDuplicateAcrossSeam = !!seam && sheet.spans.some((sp) => {
+        if (norm(sp.str) !== titleText) return false;
+        if (Math.abs(sp.y - titleY) >= 50) return false;
+        return (titleX < seam.x0 && sp.x > seam.x1) || (titleX > seam.x1 && sp.x < seam.x0);
+      });
+      if (hasDuplicateAcrossSeam) continue;
       // The table's own COLUMN count (headers.length), not each row's own
       // populated-cell count. A real row's populated-cell count varies row
       // to row even in a perfectly correct table (a column legitimately
@@ -5042,9 +5143,16 @@ export function bandedSheets(sheet: SheetSpans, opts: ExtractOpts): SheetSpans[]
   // comparison below stays apples-to-apples; the real, final extraction
   // pass (buildSheetGraph's own calls) never sets it.
   const probeOpts: ExtractOpts = { ...opts, noForwardTierMerge: true };
-  const baselineKeys = extractedKeys(sheet, probeOpts);
   const kept: Seam[] = [];
   for (const seam of candidates) {
+    // baselineKeys is recomputed PER SEAM (not once for the whole sheet)
+    // specifically so the duplicate-title exclusion inside extractedKeys can
+    // be gated to this one seam — see its own comment for why a blanket,
+    // seam-independent exclusion is unsafe on a sheet that carries both a
+    // real dual-strip title (this seam) and a false candidate through one
+    // strip's own middle (a different seam, still needing this table's real
+    // protection).
+    const baselineKeys = extractedKeys(sheet, probeOpts, seam);
     const left = sheet.spans.filter((s) => centerX(s) < seam.x0);
     const right = sheet.spans.filter((s) => centerX(s) > seam.x1);
     if (!sideHasRealTable(left, sheet.key, probeOpts) || !sideHasRealTable(right, sheet.key, probeOpts)) continue;
@@ -5377,10 +5485,35 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     }
     const drop = new Set<ScheduleTable>();
     for (const [sheetKey, group] of bySheet) {
-      const claimers = group.filter((t) => t.kind !== "reference").concat(droppedBySheet.get(sheetKey) ?? []);
-      if (!claimers.length) continue;
+      const realClaimers = group.filter((t) => t.kind !== "reference");
+      const dropped = droppedBySheet.get(sheetKey) ?? [];
+      if (!realClaimers.length && !dropped.length) continue;
       for (const t of group) {
-        if (t.kind === "reference" && !drop.has(t) && claimers.some((c) => contains(c.region, t.region))) drop.add(t);
+        if (t.kind !== "reference" || drop.has(t)) continue;
+        if (realClaimers.some((c) => contains(c.region, t.region))) { drop.add(t); continue; }
+        // A DROPPED named table's own region is held to a looser bar here
+        // (10%, not 2%) than an already-extracted, kept table's region —
+        // real, measured live: itd-d1-lab-mechanical.pdf#28's own dropped
+        // "PLUMBING FIXTURE SCHEDULE" (real, but named-and-dropped by
+        // isNonFinishSchedule — see droppedNamedTables' own comment) reads
+        // its rightmost MANUFACTURER/MODEL/DESCRIPTION column's own true
+        // width conservatively — that column's own recovered data-column
+        // edge sits at whatever the SHORTEST wrapped cell text in that
+        // vocab-kind read happened to reach, not the widest — while its two
+        // real, spurious "reference"-kind leaks of the SAME table's own
+        // rows ("LAVATORY SHIELD"/4 rows, "ROOF DRAIN"/13 rows, both real
+        // rows of that same table, never a second one) are read by a
+        // DIFFERENT extractor pass with no such column model, so their own
+        // bbox runs a bit further right, out to that column's real drawn
+        // width — measured live, 93.2%/93.5% contained, both short of the
+        // 98% bar a genuinely separate table essentially never reaches. A
+        // dropped table was never trusted to have a clean column model to
+        // begin with (that's WHY it was dropped — its own header never
+        // independently cleared a real kind's vocabulary bar), so a modest
+        // extra margin here costs nothing a real, independent table would
+        // ever need to clear (an unrelated table sitting merely NEAR a
+        // dropped one's edge is nowhere close to 90% contained in it).
+        if (dropped.some((c) => contains(c.region, t.region, 0.1))) drop.add(t);
       }
     }
     if (drop.size) {
