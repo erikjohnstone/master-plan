@@ -1248,7 +1248,7 @@ function nearbyRequiredHitWide(rows: GraphSpan[][], vocab: string[], required: s
   return false;
 }
 
-function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[], minHits: number, fromIdx = 0, opts: { equipmentTierMerge?: boolean; forwardTierMerge?: boolean } = {}): { anchors: Anchor[]; rowIndex: number; dataFrom: number; mergedTopIdx?: number } | null {
+function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[], minHits: number, fromIdx = 0, opts: { equipmentTierMerge?: boolean; forwardTierMerge?: boolean; numericSubHeaderHarvest?: boolean } = {}): { anchors: Anchor[]; rowIndex: number; dataFrom: number; mergedTopIdx?: number } | null {
   for (let i = fromIdx; i < rows.length; i++) {
     let hits = headerHits(rows[i], vocab);
     const seen = new Set(hits.map((h) => h.label));
@@ -1450,6 +1450,33 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
     // other multi-tier mechanism in this file already uses.
     if (opts.equipmentTierMerge) {
       finalAnchors = harvestGeometricSubTiers(rows, vocab, idx + 1, finalAnchors);
+    }
+    // See harvestNumericSubHeaders' own comment: a real, deliberately
+    // finish-kind table (SOUND ATTENUATOR SCHEDULE, itd-d1-lab-mechanical.pdf
+    // #14 — ground-truth-confirmed finish-kind, not a misclassification) can
+    // carry a bare row of numeric-only sub-headers (OCTAVE BAND FREQUENCY's
+    // own 63/125/…/8000) that reads, to every other heuristic in this file,
+    // exactly like an ordinary data row. Geometry-only — adds no word to
+    // FINISH_HEADERS/EQUIPMENT_HEADERS (that path was tried for this same
+    // table's OTHER missing columns, TYPE/AREA/WEIGHT specifically, and
+    // reverted after a real corpus-wide sweep caught it silently rewriting
+    // an UNRELATED table's own read elsewhere — see FINISH_HEADERS' own
+    // comment) — and additionally refused outright on any table that also
+    // looks like real powered MEP-equipment (looksLikePoweredEquipmentBlock,
+    // below), the same real signal hasPoweredEquipmentColumns already uses
+    // for the identical SA-1-vs-LEF-1 discrimination problem: a passive duct
+    // fitting carries no motor/electrical nameplate vocabulary at all, a
+    // real powered MEP-equipment schedule always does. Equipment-kind is
+    // excluded entirely (not merely discriminated) — it already has its own
+    // established, separately-gated multi-tier machinery. Never room-finish
+    // either, same reasoning. (A companion mechanism recovering this same
+    // table's own LETTER-bearing missing columns — TYPE, AIRFLOW, MAXIMUM
+    // FACE VELOCITY, LENGTH/WIDTH/HEIGHT, FACE AREA, WEIGHT — was built and
+    // tried here too, and is NOT shipped: see harvestNumericSubHeaders' own
+    // comment for the real corpus-wide damage it caused and why it was
+    // pulled rather than narrowed further under time pressure.)
+    if (opts.numericSubHeaderHarvest && !looksLikePoweredEquipmentBlock(rows, Math.max(0, idx - 8), skipEnd, finalAnchors)) {
+      finalAnchors = harvestNumericSubHeaders(rows, vocab, idx, skipEnd, finalAnchors);
     }
     return {
       anchors: finalAnchors,
@@ -1764,6 +1791,168 @@ function harvestGeometricSubTiers(rows: GraphSpan[][], vocab: string[], startIdx
       const filtered = sr.filter((x) => !out.some((a) => Math.abs(a.x - mid(x.t)) <= DUP_TOL));
       if (filtered.length < 2) continue;
       mintSubAnchors(out, used, filtered, mid);
+    }
+  }
+  return out.sort((a, b) => a.x - b.x);
+}
+
+// ── numeric-only sub-header discrimination gate (itd-d1-lab-mechanical.pdf
+// #14's own SOUND ATTENUATOR SCHEDULE) ──────────────────────────────────────
+// Used to gate harvestNumericSubHeaders below (its own comment has the real
+// motivating shape — OCTAVE BAND FREQUENCY's own bare 63/125/…/8000 numeric
+// sub-columns). Same real signal `hasPoweredEquipmentColumns` already uses
+// for the identical SA-1-vs-LEF-1 discrimination problem (see that
+// function's own comment): a passive duct fitting carries no motor/
+// electrical nameplate vocabulary at all, a real powered MEP-equipment
+// schedule always does. Reimplemented directly against `rows` (rather than
+// calling hasPoweredEquipmentColumns itself) because no ScheduleTable/region
+// exists yet at this point in extraction — this runs during header/anchor
+// discovery, before a table object is ever built. Scoped to THIS table's own
+// X span (its own already-found anchors) for the same reason
+// harvestNumericSubHeaders' own comment gives: `rows` clusters by Y alone,
+// sheet-wide, so an unrelated real powered-equipment table sitting at a
+// similar header height (confirmed live: this sheet's own Electric Heater
+// Schedule overlaps SOUND ATTENUATOR SCHEDULE's own row range in Y) would
+// otherwise leak its own real KW/AMPS/HP words in and wrongly refuse a
+// genuinely passive table.
+//
+// A companion mechanism was also tried here — an "orphan leaf column"
+// harvester recovering this table's own LETTER-bearing un-vocabularied
+// columns (TYPE, AIRFLOW, MAXIMUM FACE VELOCITY, LENGTH/WIDTH/HEIGHT, FACE
+// AREA, WEIGHT — every real column this table has besides the numeric
+// octave bands) the same way this one recovers the numeric ones. It DID
+// recover SOUND ATTENUATOR SCHEDULE's own columns correctly, several rounds
+// of narrowing deep (X-scoping against cross-table Y-band bleed, a tight
+// fixed same-column radius, a leaf-row symmetry-check bypass, this same
+// powered-equipment refusal) — but the full corpus-wide mandatory sweep
+// still caught it: it silently added wrong extra columns to a real,
+// hand-verified DIFFUSER/GRILLE/REGISTER SCHEDULE fixture (bessemer) via the
+// exact "same column grid, stacked schedules" cross-table bleed this file's
+// own established machinery already guards against elsewhere, AND it
+// dropped 21 real equipment tags from itd-d1-lab's own takeoff-eval
+// (CH-1..4, HUM-1, SAV-1..9, SN-1..5, HC-8/9 — confirmed by isolating it:
+// removing just this one harvester, keeping the numeric one below,
+// restored itd-d1-lab to its real 100.0%). A letter-bearing token has no
+// signature nearly as narrow as a monotonic-doubling numeric run — every
+// attempt at a tighter geometric gate for it ran back into the same
+// "genuine new column" vs. "neighboring table's own real header word"
+// ambiguity. Left unattempted rather than shipped unsafe: SOUND ATTENUATOR
+// SCHEDULE's own TYPE/AIRFLOW/VELOCITY/LENGTH/WIDTH/HEIGHT/FACE AREA/WEIGHT
+// columns remain unrecovered (still folded into whichever named anchor
+// nearest-anchor banding happens to pick), a real, honestly disclosed gap —
+// not this project's silent one.
+function looksLikePoweredEquipmentBlock(rows: GraphSpan[][], fromIdx: number, toIdx: number, anchors: Anchor[]): boolean {
+  const ax = anchors.map((a) => a.x).sort((a, b) => a - b);
+  const gaps0 = ax.slice(1).map((x, i) => x - ax[i]).filter((g) => g > 0);
+  const baseline0 = gaps0.length ? Math.min(...gaps0) : 0;
+  const x0 = ax.length ? ax[0] - baseline0 : -Infinity;
+  const x1 = ax.length ? ax[ax.length - 1] + baseline0 : Infinity;
+  const hits = new Set<string>();
+  for (let ri = fromIdx; ri <= toIdx && ri < rows.length; ri++) {
+    const scoped = rows[ri].filter((t) => centerX(t) >= x0 && centerX(t) <= x1);
+    for (const h of headerHits(scoped, POWERED_EQUIPMENT_REQUIRED)) hits.add(h.label);
+  }
+  // A single hit is enough to refuse here — a LOWER bar than
+  // hasPoweredEquipmentColumns' own >=2 (that function decides whether to
+  // RECLASSIFY a whole table finish→equipment, where one stray word is a
+  // realistic false positive worth guarding against). This function decides
+  // something with a much lower failure cost the OTHER way: real, found
+  // live (itd-d1-lab's own BYPASS CONTROL VALVE SCHEDULE, ledger item 57) —
+  // a table whose finish-kind read already independently qualifies AND
+  // whose equipment-kind read ALSO independently qualifies (both real,
+  // legitimate reads of the same physical table) needs only ONE bare
+  // EQUIPMENT_REQUIRED word (GPM alone) sitting on finish's own settled
+  // header row to reach equipment's own richness and win their tie-break —
+  // the exact FINISH_HEADERS-comment hazard, reproduced through a single
+  // word. Refusing on any single hit costs nothing on a genuinely passive
+  // table (confirmed live: SOUND ATTENUATOR SCHEDULE's own real header
+  // carries zero POWERED_EQUIPMENT_REQUIRED words, not even one).
+  return hits.size >= 1;
+}
+// ── numeric-only sub-header leaf columns, geometry-only (itd-d1-lab-
+// mechanical.pdf#14's own SOUND ATTENUATOR SCHEDULE, OCTAVE BAND FREQUENCY
+// (HZ) → 63/125/250/500/1000/2000/4000/8000) ────────────────────────────────
+// A bare row of octave-band numbers reads, to every OTHER heuristic in this
+// file, EXACTLY like an ordinary data row:
+// looksLikeDeepDataRow's own numeric-shape test cannot tell "63 | 125 | 250 |
+// 500 | 1000 | 2000 | 4000 | 8000" apart from a real row of measurements by
+// shape alone. What DOES tell them apart, confirmed against this table's own
+// real data row (SA-1: "13,000 | 2,500 | 84 | 58 | 22 | - | 0.22 | - | 11 |
+// 18 | 28 | 30 | 36 | 26 | 22 | 14 | …"): real HVAC data values in this
+// corpus are heterogeneous — commas, decimals, dashes, mixed magnitudes — a
+// genuine octave-band header is a clean, monotonically DOUBLING sequence of
+// bare small integers (each roughly 2x the one before, the actual acoustic
+// octave-band convention: 63,125,250,500,1000,2000,4000,8000), a shape no
+// real measurement row in this corpus's own data happens to share. Requires
+// >=3 to rule out a coincidental 2-value pair, and refuses a row that also
+// carries the table's own real key-shaped token (CODE_RE) — a genuine data
+// row always does, a header row never does. Never guesses a label: only
+// mints when parentPhraseOver resolves a REAL phrase or vocabulary word
+// already sitting above the numbers (here, "OCTAVE BAND FREQUENCY", read
+// off the sheet's own text, not hardcoded) — an unexplained numeric run
+// never becomes a column.
+const BARE_INT_RE = /^\d{1,5}$/;
+function harvestNumericSubHeaders(rows: GraphSpan[][], vocab: string[], idx: number, endIdx: number, anchors: Anchor[]): Anchor[] {
+  const out = anchors.slice();
+  const used = new Set(anchors.map((a) => a.label));
+  // `rows` clusters spans by Y ALONE, sheet-wide — a second, unrelated table
+  // sitting side-by-side at nearly the same Y band could otherwise leak its
+  // own tokens into this walk. Scoped to this table's own established X
+  // span before ever looking for a doubling run.
+  const ax = anchors.map((a) => a.x).sort((a, b) => a - b);
+  const gaps0 = ax.slice(1).map((x, i) => x - ax[i]).filter((g) => g > 0);
+  const baseline0 = gaps0.length ? Math.min(...gaps0) : 0;
+  const x0Table = ax.length ? ax[0] - baseline0 : -Infinity;
+  const x1Table = ax.length ? ax[ax.length - 1] + baseline0 : Infinity;
+  // Deliberately NOT capped at `endIdx` — skipSubHeaderContinuation's own
+  // pre-existing boundary (computed by logic this fix must never alter)
+  // stops SHORT of exactly this row shape: a row mixing ONE real lettered
+  // leaf ("WIDTH (IN)") with several bare numbers reads, to that boundary
+  // logic, like the start of real data. This walk instead uses its own
+  // independent bounds: a row-count cap and a stop at the table's own real
+  // data row.
+  const MAX_ROWS = 15;
+  const keyX = ax[0];
+  for (let ri = idx + 1, n = 0; ri < rows.length && n < MAX_ROWS; ri++, n++) {
+    // The table's own real data row carries its real tag AT the key
+    // column's own position — checked there specifically, not against every
+    // token on the row: CODE_RE's own loose shape (1-4 letters, optional
+    // -alnum suffix) matches plenty of ordinary header text by coincidence
+    // ("WIDTH (IN)" strips to "WIDTHIN", a real match) that carries no key
+    // meaning at all, sitting nowhere near the table's own key column.
+    const hasKeyTag = rows[ri].some((t) => Math.abs(centerX(t) - keyX) <= 20 && CODE_RE.test(norm(t.str).replace(/[^A-Z0-9/-]/g, "")));
+    if (hasKeyTag) break;
+    const nums = rows[ri]
+      .filter((t) => BARE_INT_RE.test(t.str.trim()))
+      .filter((t) => centerX(t) >= x0Table && centerX(t) <= x1Table)
+      .sort((a, b) => a.x - b.x);
+    if (nums.length < 3) continue;
+    const vals = nums.map((t) => parseInt(t.str.trim(), 10));
+    let shapeOk = true;
+    for (let k = 1; k < vals.length && shapeOk; k++) {
+      const ratio = vals[k] / vals[k - 1];
+      if (vals[k] <= vals[k - 1] || ratio < 1.6 || ratio > 2.5) shapeOk = false;
+    }
+    if (!shapeOk) continue;
+    const last = nums[nums.length - 1];
+    const parent = parentPhraseOver(rows, ri, idx, nums[0].x, last.x + (last.w || 0), vocab);
+    if (!parent) continue;
+    // Defensive: if some earlier anchor already carries this exact resolved
+    // parent phrase as its own bare (dataless) label, it is superseded by
+    // the real numbered children below and removed — never left standing as
+    // a redundant, empty duplicate column that would only crowd the real
+    // numbered children out during banding.
+    for (let k = out.length - 1; k >= 0; k--) {
+      if (out[k].label === parent || out[k].label.endsWith(` ${parent}`)) {
+        used.delete(out[k].label);
+        out.splice(k, 1);
+      }
+    }
+    for (const t of nums) {
+      const label = `${parent} ${t.str.trim()}`;
+      if (used.has(label)) continue;
+      used.add(label);
+      out.push({ label, x: t.x + (t.w || 0) / 2 });
     }
   }
   return out.sort((a, b) => a.x - b.x);
@@ -3422,7 +3611,7 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // class of change that caused the MODEL regression the comment above this
   // one used to describe. A one-line change (`kind === "equipment"` below)
   // the day a real split-header finish/room-finish table shows up.
-  let flat = findHeaderRow(rows, vocab, required, minHits, fromIdx, { equipmentTierMerge: kind === "equipment", forwardTierMerge: !opts.noForwardTierMerge });
+  let flat = findHeaderRow(rows, vocab, required, minHits, fromIdx, { equipmentTierMerge: kind === "equipment", forwardTierMerge: !opts.noForwardTierMerge, numericSubHeaderHarvest: kind === "finish" });
   // The merge above only ever ADDS a key column when one exists nearby on
   // the sheet — it never invents one. A candidate that still has no catalog
   // anchor after the attempt genuinely has no usable key column (the
