@@ -203,6 +203,31 @@ function classifyError(message: string): FailureType {
   return "UNCLASSIFIED";
 }
 
+/** Auto-commit scale ONLY from each sheet's own detected title-block note
+ * (session.setScale's `use_detected` — never a guessed or corpus-specific
+ * value) wherever it isn't already set — the same thing an agent would do
+ * by hand after reading a cross-scale refusal message. Shared by both
+ * takeoff passes below (originally lived only in buildLegendTakeoff) so a
+ * sheet's own detected scale gets committed identically wherever either
+ * pass needs it, rather than one pass silently doing this and the other
+ * not. Returns the keys that could NOT be resolved (no committed scale and
+ * either no detected note or the commit itself failed) — callers that gate
+ * on scale (buildLegendTakeoff) use this to refuse honestly per-sheet;
+ * callers that don't hard-gate on scale (buildPlanSetTakeoff's own
+ * sweep_schedule_row pass, which stays permissive plan-to-plan) call this
+ * purely so any cross-sheet ratio math downstream sees a real committed
+ * scale instead of an unset one, and can ignore the return value. */
+async function commitDetectedScale(session: Session, keys: Iterable<string>): Promise<string[]> {
+  const scaleGap: string[] = [];
+  for (const key of new Set(keys)) {
+    const info = await session.sheetInfo(key);
+    if (info.scale_set) continue;
+    if (!info.detected_scale) { scaleGap.push(key); continue; }
+    try { session.setScale(key, { use_detected: true }); } catch { scaleGap.push(key); }
+  }
+  return scaleGap;
+}
+
 /** Build a full project-level takeoff for every equipment-kind schedule row
  * across the WHOLE already-loaded set, optionally scoped to specific
  * hvacTaxonomy categories (e.g. ["valve","actuator","damper"] per this
@@ -246,6 +271,28 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
     const m = /^(\S+) is classified as a schedule sheet but 0 tables extracted.*pasted in as a picture/.exec(note);
     if (m) out.failures.push({ type: "OCR_FAILURE", tag: "(whole sheet)", sheet: m[1], detail: note });
   }
+
+  // Real gap this pipeline shipped with: sweep_schedule_row's own cross-
+  // sheet corroboration/matching (session.ts) reads each plan sheet's real
+  // committed scale (`.upp`) to ratio a fingerprint from the anchor sheet
+  // onto a DIFFERENT plan sheet drawn at a different real scale — plan-to-
+  // plan sweeps stay permissive rather than hard-refuse when scale is
+  // missing (requireCrossScale's own doc comment), but "permissive" means
+  // "assumes 1:1", which is silently wrong whenever two plan sheets in the
+  // set are genuinely drawn at different scales (this corpus's own
+  // itd-d1-lab-mechanical.pdf has plan sheets at both 3/16"=1'-0" and
+  // 3/8"=1'-0"). buildLegendTakeoff already committed each sheet's own
+  // detected title-block scale for exactly this reason, but only ran as
+  // this function's OWN second pass, AFTER the equipment loop below had
+  // already swept every schedule row against unscaled sheets — too late to
+  // help its own results. Committing up front, before the loop, fixes the
+  // ordering without duplicating the logic (shared commitDetectedScale
+  // above). Scoped to this pass's OWN real sheet need — plan sheets only,
+  // since sweep_schedule_row's occurrences and corroboration never read a
+  // legend/detail/schedule sheet's geometry — not a copy of
+  // buildLegendTakeoff's legend+plan set.
+  const planSheetKeysForScale = graph.sheets.filter((s) => s.role === "plan").map((s) => s.key);
+  await commitDetectedScale(session, planSheetKeysForScale);
 
   const index = taxonomyPrefixIndex(categories);
   const seenTags = new Set<string>();
@@ -484,17 +531,14 @@ export async function buildLegendTakeoff(session: Session, opts: { categories?: 
   const legendSheetKeys = graph.sheets.filter((s) => s.role === "legend").map((s) => s.key);
   const planSheetKeys = graph.sheets.filter((s) => s.role === "plan").map((s) => s.key);
 
-  // Auto-commit scale ONLY from each sheet's own detected title-block note
-  // (session.setScale's `use_detected` — never a guessed or corpus-specific
-  // value) wherever it isn't already set — the same thing an agent would do
-  // by hand after reading symbolSweep's own cross-scale refusal message.
-  const scaleGap: string[] = [];
-  for (const key of new Set([...legendSheetKeys, ...planSheetKeys])) {
-    const info = await session.sheetInfo(key);
-    if (info.scale_set) continue;
-    if (!info.detected_scale) { scaleGap.push(key); continue; }
-    try { session.setScale(key, { use_detected: true }); } catch { scaleGap.push(key); }
-  }
+  // Auto-commit scale ONLY from each sheet's own detected title-block note —
+  // shared with buildPlanSetTakeoff's own pass (commitDetectedScale above),
+  // which now does the identical commit for its own plan-sheet need before
+  // this function even runs; calling it again here for legendSheetKeys ∪
+  // planSheetKeys is a no-op on any sheet already resolved (info.scale_set
+  // check inside), and is what actually resolves the legend sheets, which
+  // the plan-only pass never touches.
+  const scaleGap = await commitDetectedScale(session, [...legendSheetKeys, ...planSheetKeys]);
 
   const seenTags = new Set<string>();
 
