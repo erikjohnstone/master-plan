@@ -1764,6 +1764,30 @@ export const isNonFinishSchedule = (title: string): boolean => {
   return OTHER_FAMILY_RE.test(u) && !/\b(FINISH|MATERIAL)S?\b/.test(u);
 };
 
+// The NARROW subset of OTHER_FAMILY_RE that names a real MEP mechanical-
+// equipment family, not an architectural one — real, found live (itd-d1-lab-
+// mechanical.pdf#12's own "PUMP SCHEDULE": BP-1/BP-2/HWP-1/HWP-2, real
+// pumps with real GPM/HP/RPM data). isNonFinishSchedule's own DOOR SCHEDULE
+// test requires an architectural family (DOOR/WINDOW/PARTITION/HARDWARE/
+// LOUVER/SIGNAGE/STOREFRONT/GLAZING/CASEWORK/MILLWORK) to vanish from the
+// graph ENTIRELY — those are genuinely out of this pipeline's own MEP scope,
+// and isNonFinishSchedule's drop-and-note is exactly correct for them. But a
+// real mechanical/plumbing EQUIPMENT family (PUMP/BOILER/HUMIDIFIER/COIL/
+// CHILLER/AHU/VAV/APPLIANCE) is squarely IN scope — dropping it outright
+// loses real device data whenever its own header is too fragmented to
+// independently clear EQUIPMENT_HEADERS' own vocabulary bar (see the PUMP
+// SCHEDULE case: GPM/HP land bare, each alone on its own tier, never
+// co-occurring with SYMBOL the way CONTROL VALVE SCHEDULE's own bare "(GPM)"
+// unit fragment did). PLUMBING/MECHANICAL/ELECTRICAL/LIGHTING/LUMINAIRE are
+// deliberately left OUT of this narrower list — those words are broad enough
+// to title a real non-tag-schedule (a panel schedule, a general note block)
+// that isn't safe to blanket-reclassify as a device-tag equipment table on
+// title text alone; a genuine luminaire/lighting schedule already qualifies
+// as equipment-kind directly on its own real merits (see the TYPE-keyed
+// LUMINAIRE SCHEDULE test) without needing this fallback at all.
+const MEP_EQUIPMENT_FAMILY_RE = /\b(PUMP|BOILER|HUMIDIFIER|COIL|CHILLER|AHU|VAV|EQUIPMENT|APPLIANCE)S?\b/;
+export const isMepEquipmentSchedule = (title: string): boolean => MEP_EQUIPMENT_FAMILY_RE.test(norm(title));
+
 function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", buildings?: Set<string>, nameKeyed = false): { key: string; building?: string } | null {
   // A NAME-keyed table's key column IS its NAME column — the only sensible
   // reading of a leading token there is a room-type phrase, not a digit tag
@@ -2830,10 +2854,65 @@ function looksLikeGenericNewHeader(row: GraphSpan[], x0: number, x1: number): bo
   return row.some((t) => t.str && t.str.trim() && revisionOf(t.str) == null && centerX(t) >= x0 && centerX(t) <= x1);
 }
 
-function findGenericTableBoundary(rows: GraphSpan[][], dataFrom: number, x0: number, x1: number): number {
+/** The KEY column's own x-position and tolerance, derived once from the
+ * anchor set — the same formula bandGenericDataRows already used inline,
+ * hoisted so findGenericTableBoundary's own boundary check (below) can test
+ * the identical key-column band rather than drifting out of sync with it. */
+function keyColumnBand(anchors: Anchor[]): { x: number; tol: number } {
+  const x = anchors[0].x;
+  const tol = anchors.length > 1 ? Math.max(40, (anchors[1].x - anchors[0].x) / 2) : 60;
+  return { x, tol };
+}
+
+// A bare numbered/lettered OUTLINE marker — "1.", "2.1.", "2.1.1.", "a.",
+// "A.", "1)" — the leading glyph run of an ENUMERATED PROSE list (a real,
+// corpus-found drafting convention: a "SEQUENCE OF OPERATION" or "REMARKS"
+// specification block, its numbering column visually left-aligned the exact
+// same way a real table's key column is), never a real reference-table row
+// key in this corpus. Every real key measured here is drawn from a firm's
+// own tag/code vocabulary (D-1, S-1, RP-2 — always letter(s)+HYPHEN+digit,
+// never bare digits) or a short noun phrase (SUPPLY DUCTS (EXTERNALLY
+// INSULATED), ASPHALT LAB 117) — never a bare counting token with no hyphen
+// and no other word. Real, corpus-found false positive this catches:
+// itd-d1-lab-mechanical.pdf's own dense, columned SEQUENCE OF OPERATION
+// prose (sheets #20/#21) is laid out as a numbered/lettered outline, one
+// physical PDF text span per marker ("1." as its own separate run from the
+// sentence that follows it) — genericRowKeyOf's own shape regex (built to
+// admit a real key's parens/digits/hyphens) happily accepted a bare "1." or
+// "a." as a "key", and the row's own long sentence-fragment text banded into
+// the nearest data column exactly like a real row would, mining dozens of
+// fake "table rows" (and, worse, fake whole TABLES with every row so keyed)
+// out of running prose. Checked ONLY at the row's own KEY-COLUMN position
+// (keyColumnBand — the same band bandGenericDataRows itself keys new rows
+// against) — a real data CELL mid-sentence that happens to reference "1)"
+// as an option number, sitting in some OTHER column, must never trip this.
+const GENERIC_OUTLINE_MARKER_RE = /^(\d{1,2}(\.\d{1,2}){0,3}\.?|[A-Za-z]\.|\d{1,2}\))$/;
+
+function isGenericOutlineMarkerRow(row: GraphSpan[], keyColX: number, keyTol: number): boolean {
+  const toks = row.filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null);
+  if (!toks.length) return false;
+  const first = toks[0];
+  if (Math.abs(centerX(first) - keyColX) > keyTol) return false;
+  return GENERIC_OUTLINE_MARKER_RE.test(norm(first.str));
+}
+
+function findGenericTableBoundary(rows: GraphSpan[][], dataFrom: number, x0: number, x1: number, anchors: Anchor[]): number {
   const cap = Math.min(rows.length, dataFrom + MAX_TABLE_SCAN_ROWS);
+  const { x: keyColX, tol: keyTol } = keyColumnBand(anchors);
   for (let i = dataFrom; i < cap; i++) {
     if (looksLikeGenericNewHeader(rows[i], x0, x1)) return i;
+    // An outline-marker row (see GENERIC_OUTLINE_MARKER_RE) is not merely
+    // skipped/orphan-folded like an ordinary shape-rejected key — it is
+    // treated as the real end of THIS table, the same way a later table's
+    // own header is: real Sequence-of-Operation/Remarks prose runs for many
+    // physical lines after its first marker, and letting the scan continue
+    // past it (as a plain reject-and-continue) leaves every later prose line
+    // free to still orphan-fold into the last real accepted row, or to
+    // re-qualify as its own new row if it happens to re-align — corpus-found
+    // live on itd-d1-lab-mechanical.pdf#20's own real small valve table,
+    // whose data scan ran straight into the sheet's own prose block below it
+    // before this check existed.
+    if (isGenericOutlineMarkerRow(rows[i], keyColX, keyTol)) return i;
   }
   return cap;
 }
@@ -2916,8 +2995,7 @@ function bandGenericDataRows(
   // floor) already guards against a genuinely un-modeled column's data
   // bleeding into an unrelated cell, so this pass does not need radii's own
   // narrower protection on top.
-  const keyColX = anchors[0].x;
-  const keyTol = anchors.length > 1 ? Math.max(40, (anchors[1].x - anchors[0].x) / 2) : 60;
+  const { x: keyColX, tol: keyTol } = keyColumnBand(anchors);
 
   // The table's own median PHYSICAL line-to-line gap — restricted to rows
   // that actually carry a token in this table's own [x0,x1] band (real,
@@ -3081,7 +3159,7 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number): { table: S
     const hdrY1 = Math.max(...block.tokens.map((t) => t.y + (t.h || 0)));
     if (!hasNearbyRuledLine(sheet.segs, x0, x1, hdrY0, hdrY1)) continue;
     const dataFrom = block.bottom + 1;
-    const toIdx = findGenericTableBoundary(rows, dataFrom, x0, x1);
+    const toIdx = findGenericTableBoundary(rows, dataFrom, x0, x1, anchors);
     const banded = bandGenericDataRows(rows, anchors, sheet.key, { fromIdx: dataFrom, toIdx });
     if (!banded.out.length) return { table: null, nextIdx: toIdx };
 
@@ -3646,6 +3724,14 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   const roles = new Map<string, ReturnType<typeof classifySheetRole>>();
   const fragments: ScheduleTable[] = [];
   const fragmentKinds = new Map<string, Set<TableKind>>(); // sheet key → kinds extracted there
+  // Tables reclassified finish→equipment (isMepEquipmentSchedule, below) —
+  // tracked by identity so the cross-kind dedup pass still treats one as
+  // competing against a genuine, independently-found equipment-kind
+  // extraction of the SAME physical table, even though both now report
+  // kind "equipment": that dedup only fires when a group spans >= 2 DISTINCT
+  // kinds, and two reclassified-to-equipment fragments no longer look
+  // distinct without this.
+  const reclassified = new Set<ScheduleTable>();
   for (const s of withText) {
     const role = classifySheetRole(s);
     roles.set(s.key, role);
@@ -3680,8 +3766,18 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
         // Refuse by TITLE, and only when the title does not also say finish or
         // material: when in doubt the table is kept, and the drop is NAMED.
         if (kind === "finish" && t.title && isNonFinishSchedule(t.title.text)) {
-          notes.push(`${s.key}: "${t.title.text}" names another schedule family, not a finish/material schedule — its ${t.rows.length} rows are NOT indexed as finish definitions`);
-          continue;
+          // A real MEP-equipment family (PUMP/BOILER/HUMIDIFIER/COIL/
+          // CHILLER/AHU/VAV/APPLIANCE) is reclassified, not dropped — see
+          // isMepEquipmentSchedule's own comment. An architectural family
+          // (DOOR/WINDOW/…) still vanishes entirely, exactly as before.
+          if (isMepEquipmentSchedule(t.title.text)) {
+            notes.push(`${s.key}: "${t.title.text}" names a real MEP-equipment family, not a finish/material schedule — reclassified as equipment-kind rather than dropped (its own header never independently cleared EQUIPMENT_HEADERS' vocabulary bar).`);
+            t.kind = "equipment";
+            reclassified.add(t);
+          } else {
+            notes.push(`${s.key}: "${t.title.text}" names another schedule family, not a finish/material schedule — its ${t.rows.length} rows are NOT indexed as finish definitions`);
+            continue;
+          }
         }
         // table-level building: its own title first, the sheet's context second
         const titleB = t.title ? buildingMentions(t.title.text) : [];
@@ -3690,7 +3786,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
         for (const r of t.rows) if (r.building) buildings.add(r.building);
         fragments.push(t);
         if (!fragmentKinds.has(s.key)) fragmentKinds.set(s.key, new Set());
-        fragmentKinds.get(s.key)!.add(kind);
+        fragmentKinds.get(s.key)!.add(t.kind);
       }
     }
   }
@@ -3725,9 +3821,15 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     const overlaps = (a: ScheduleTable, b: ScheduleTable) =>
       a.region[0] < b.region[2] && b.region[0] < a.region[2] && a.region[1] < b.region[3] && b.region[1] < a.region[3];
     const richness = (t: ScheduleTable) => t.headers.length * 1000 + t.rows.reduce((n, r) => n + Object.keys(r.cells).length, 0);
+    // A reclassified (finish→equipment) fragment must still register as
+    // DISTINCT from a genuine equipment-kind extraction of the same table
+    // for the purposes of this grouping check — both now carry the same
+    // real `.kind`, but they came from different vocabularies and one is
+    // typically the poorer read (see MEP_EQUIPMENT_FAMILY_RE's own comment).
+    const dedupKind = (t: ScheduleTable) => (reclassified.has(t) ? "finish" : t.kind);
     const drop = new Set<ScheduleTable>();
     for (const group of byTitleSheet.values()) {
-      if (group.length < 2 || new Set(group.map((g) => g.kind)).size < 2) continue;
+      if (group.length < 2 || new Set(group.map(dedupKind)).size < 2) continue;
       for (let i = 0; i < group.length; i++) {
         for (let j = i + 1; j < group.length; j++) {
           if (drop.has(group[i]) || drop.has(group[j]) || !overlaps(group[i], group[j])) continue;
