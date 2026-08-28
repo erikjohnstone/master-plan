@@ -822,7 +822,46 @@ const qualifies = (hits: Array<{ label: string }>, required: string[], minHits: 
  * holding the moment a kind's own vocabulary includes its own unit words.
  * The distinguishing shape is still there, just one layer down: a real
  * column header is a bare word ("VOLTAGE", "MODEL"); a wrapped unit is
- * parenthesized. Only a BARE hit stops the skip now. */
+ * parenthesized. Only a BARE hit stops the skip now.
+ *
+ * DISCLOSED, NOT FIXED (federal-mech CH-1, sheet #14's own CHILLER SCHEDULE
+ * (ELECTRIC AIR-COOLED) — the real, precise reason table DISCOVERY reaching
+ * this candidate, per the headerQualifies comment above extractTableAt,
+ * still never recovers it): the "bounded to a couple of rows" assumption
+ * this function's own header comment states outright is violated by this
+ * ONE real table, measured directly against the live PDF. Its real header is
+ * NINE physical lines below the title (clusterRows count, RENDER_SCALE=2
+ * image-px), FIVE of them below the TAG-bearing anchor row this function
+ * starts scanning from — not the "couple" this function is designed for —
+ * and at least three of those five deep sub-tier rows carry a BARE (non-
+ * parenthesized) leaf label that is ALSO a top-level EQUIPMENT_HEADERS word
+ * on its own merits: "TONS" (leaf of "MINIMUM NET COOLING CAPACITY
+ * (TONS)"), "GPM" (leaf of "DESIGN WATER FLOW"), "TYPE"/"VOLTAGE"/"PHASE"
+ * (leaves of "STARTER TYPE"/"MAX KW AT VOLTAGE"/"PHASE"). Each one trips
+ * this function's own bareHit stop on the FIRST sub-tier row it looks at,
+ * so `dataFrom` lands 3-4 real header lines early, on a still-header row —
+ * confirmed directly (runtime trace): every candidate anchor set this table
+ * ever builds passes the equipment catalog-anchor gate (TAG is real and
+ * present), so headerQualifies never rejects it, yet the row `dataFrom`
+ * points at is never the real data row, so zero valid keyed rows are ever
+ * read and the whole table is silently dropped as empty — invisible even to
+ * the vocabulary-free "reference" fallback below (its own header block, at
+ * 9 raw lines, exceeds MAX_GENERIC_HEADER_LINES=6 too). Separately,
+ * harvestGeometricSubTiers (called after this function, from `idx + 1`,
+ * MAX_ROWS=15) DOES walk deep enough to mine real anchors from those same
+ * sub-tier rows — but `dataFrom` is computed HERE, earlier, and independent
+ * of what that harvest actually consumes, so a fuller anchor set changes
+ * nothing about where the data scan starts. A real fix needs `dataFrom` to
+ * track how far the anchor harvest actually walked (monotonic-extend only,
+ * never earlier than this function's own value, to avoid moving any
+ * already-correct table's boundary backward) rather than being computed
+ * independently and first. NOT attempted this session: this function and
+ * harvestGeometricSubTiers are the shared spine of EVERY equipment-kind
+ * table in the corpus, and this exact file already has a direct precedent
+ * (harvestGeometricSubTiers' own comment, "orphan leaf column harvester")
+ * of a locally-correct deep-tier extension being reverted after a full
+ * corpus sweep caught it silently breaking a different real table elsewhere
+ * — real, disclosed corpus-wide risk, not a narrow one-line change. */
 function skipSubHeaderContinuation(rows: GraphSpan[][], vocab: string[], from: number): number {
   let i = from;
   for (let n = 0; n < 3 && i < rows.length - 1; n++) {
