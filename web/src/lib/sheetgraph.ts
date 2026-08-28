@@ -1702,7 +1702,36 @@ function anchorRadii(anchors: Anchor[]): Map<string, Radius> {
     if (WIDE_LAST.has(unbounded[i].label) || unbounded[i].label === "NAME") continue;
     const left = i > 0 ? unbounded[i].x - unbounded[i - 1].x : Infinity;
     const right = i < unbounded.length - 1 ? unbounded[i + 1].x - unbounded[i].x : Infinity;
-    const before = left > baseline * GAP_INFLATION_RATIO ? cap : Infinity;
+    // A wide MERGED column's own LEFT gap is exactly as "anomalous" by this
+    // function's own baseline test as a genuine hidden neighbour's gap would
+    // be — nothing here distinguishes "un-modeled column hiding in the gap"
+    // (the real BCV/Fan-Schedule regression this function exists for) from
+    // "this anchor's own header cell is simply wide, so its left-aligned
+    // data legitimately starts well left of its centered header" (the exact
+    // isWideMidAnchor shape, above). Only reachable for a MULTI-row table
+    // whose real column-start recovery (columnMapFor) never runs — a
+    // single/sparse-row table falls straight to this function's own
+    // nearestAnchor fallback instead, with no other guard in between. Real,
+    // found live on itd-d1-lab-mechanical.pdf#14's own DUCTLESS SPLIT HIGH
+    // WALL COOLING UNIT SCHEDULE and SPLIT SYSTEM AIR CONDITIONING UNIT
+    // SCHEDULE (each exactly one real data row: DFC-1, F-1): "MANUFACTURER
+    // AND MODEL" sits between a tightly-packed numeric tier (SEER V/Ø, gap
+    // ~72px) and REMARKS, its own gap-to-REMARKS scoring ~4.6x the table's
+    // real median (isWideMidAnchor's own 3.5x bar, already proven safe by
+    // the EH-1..9 fix) — the SAME real anchor shape columnMapFor's true-
+    // nearest binding already exempts (isWideMidAnchor, above) when it DOES
+    // run, just never consulted here. Every real row's own MANUFACTURER
+    // value starts well left of its header center (e.g. "CARRIER FAN COIL
+    // MODEL 40MHH24" at distance ~196px, more than 5x this table's own
+    // ~36px cap) and was withheld outright, not merged or truncated —
+    // confirmed by direct render. Scoped to the LEFT side only: a genuine
+    // hidden column bleeding in from the RIGHT (this function's own real
+    // motivating BCV/Fan-Schedule cases) is untouched, since neither of
+    // those anchors' own gap-to-NEXT ever scores anywhere near 3.5x their
+    // table's median (measured: ~1.0–1.05x) — isWideMidAnchor's own
+    // right-side-only test cannot mistake one for the other.
+    const wideMidLeft = isWideMidAnchor(anchors, unbounded[i]);
+    const before = left > baseline * GAP_INFLATION_RATIO && !wideMidLeft ? cap : Infinity;
     const after = right > baseline * GAP_INFLATION_RATIO ? cap : Infinity;
     if (before < Infinity || after < Infinity) radii.set(unbounded[i].label, { before, after });
   }
