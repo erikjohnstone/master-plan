@@ -6740,9 +6740,22 @@ export function scheduleTableFromODL(
   // risk onto FINISH_HEADERS (MODEL/MANUFACTURER/REMARKS overlap both).
   const hitCount = (vocab: string[]) => headers.filter((h) => headerLabel(h, vocab)).length;
   const eqHits = hitCount(EQUIPMENT_HEADERS), rmHits = hitCount(ROOM_HEADERS), finHits = hitCount(FINISH_HEADERS);
+  // room-finish needs real SURFACE columns, not just ROOM_HEADERS' own
+  // generic words — a real DOOR SCHEDULE ("…FROM ROOM"/"…TO ROOM"/"DOOR
+  // IDENTITY FINISH"/"FRAME IDENTITY FINISH"/"HT"/"REMARKS") clears
+  // rmHits>=3 on incidental vocabulary alone with zero real surface columns
+  // of its own, and — critically — often carries the SAME numeric key
+  // ("101") as a real room, so misclassifying it doesn't just add a junk
+  // table, it collides with the real room-finish row and corrupts it
+  // (measured live: baker-county-eoc-bidset.pdf's own real "ROOM 101"
+  // FLOOR cell silently went from "RF-1" to unresolved this exact way). A
+  // real room-finish table always has multiple actual surface columns
+  // (FLOOR/BASE/WALL/CEILING/compass directions) by construction; a door
+  // schedule's own FINISH columns never carry one.
+  const surfaceHits = headers.filter((h) => h.split(/\s+/).some((w) => SURFACE_WORDS.has(w))).length;
   let kind: TableKind = "unknown";
   if (eqHits >= 3 && eqHits >= rmHits && eqHits >= finHits) kind = "equipment";
-  else if (rmHits >= 3 && rmHits > finHits) kind = "room-finish";
+  else if (rmHits >= 3 && rmHits > finHits && surfaceHits >= 2) kind = "room-finish";
   else if (finHits >= 3) kind = "finish";
   if (kind === "unknown") return null;
   const titleText = titleCell ? odlCellText(titleCell) : "";
