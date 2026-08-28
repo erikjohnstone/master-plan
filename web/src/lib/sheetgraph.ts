@@ -1748,6 +1748,40 @@ const WIDE_LAST = new Set(["REMARKS", "DESCRIPTION"]);
 // sets) for the full real-bleed story this guards against.
 const farFromCell = (label: string, t: GraphSpan, existing: TableCell | undefined): boolean =>
   !!existing && WIDE_LAST.has(label) && t.x - existing.bbox[2] > Math.max(80, (t.h || 8) * 8);
+// A wide MERGED column can sit in the MIDDLE of a table, not only at its end
+// (WIDE_LAST, above) — a real, generic drafting shape found live on itd-d1-
+// lab-mechanical.pdf's ELECTRIC HEATER SCHEDULE: "MANUFACTURER AND MODEL"
+// reserves a far wider span than its narrow numeric neighbors (KW, STEPS,
+// V/Ø, AMPS — each ~90px apart), so its own real data ("MARKEL MODEL 3420
+// SERIES") starts well left of its own centered header — closer to AMPS'
+// anchor (distance ~75) than to its own (distance ~231). columnMapFor's
+// true-nearest binding (above) mistakes that proximity for a genuine
+// misalignment and reassigns the whole column to AMPS, where it is then
+// silently discarded (AMPS' real numeric value already owns that cell) —
+// every EH-1..EH-9 MANUFACTURER cell was dropped outright, not merged or
+// truncated. Detected purely geometrically, from the anchors' own x-spacing
+// on THIS table — never a label vocabulary — so it generalizes to any
+// similarly wide merged column, not just this one sheet's own convention.
+// Deliberately conservative (3.5x the table's own median inter-anchor gap):
+// on this table MANUFACTURER's own gap-to-next scores ~4.4x median, clear of
+// the threshold, while every ordinary column (including this same table's
+// own TYPE anchor, which sits closer to its neighbor's true-nearest binding
+// and must NOT be exempted — that binding is itself the fix for a distinct,
+// already-shipped regression on itd-d1-lab's CONTROL VALVE SCHEDULE) scores
+// under 2.2x. Anchors with too few neighbors to establish a meaningful
+// "typical" spacing (fewer than 3 gaps) are left alone.
+const WIDE_MID_RATIO = 3.5;
+function isWideMidAnchor(anchors: Anchor[], anchor: Anchor): boolean {
+  const idx = anchors.indexOf(anchor);
+  if (idx < 0 || idx >= anchors.length - 1) return false; // last anchor: WIDE_LAST/bandLimits already own that case
+  const gaps = anchors.slice(1).map((a, i) => a.x - anchors[i].x).filter((g) => g > 0);
+  if (gaps.length < 3) return false;
+  gaps.sort((a, b) => a - b);
+  const median = gaps[(gaps.length - 1) >> 1];
+  if (!(median > 0)) return false;
+  const ownGap = anchors[idx + 1].x - anchor.x;
+  return ownGap > median * WIDE_MID_RATIO;
+}
 // A NAME-keyed table's key column carries a room-TYPE phrase ("PATIENT
 // TOILET ROOMS"), not a short numbered tag — a prose column exactly like
 // REMARKS/DESCRIPTION/NOTES, just leading instead of trailing. The default
@@ -2106,11 +2140,13 @@ function columnMapFor(
     // anchor one column over — true-nearest alone reassigned "SDV" to WALL
     // and REMARKS lost its column outright. Kept to plain "at or right" for
     // exactly this anchor shape; every ordinary, normal-width anchor still
-    // gets the true-nearest fix above.
+    // gets the true-nearest fix above. A wide anchor in the MIDDLE of a
+    // table (isWideMidAnchor, above) earns the identical exemption for the
+    // identical reason — same shape, just not confined to the last column.
     let atOrRight: Anchor | null = null;
     for (const a of anchors) { if (a.x >= c.start) { atOrRight = a; break; } }
     let own: Anchor | null = atOrRight;
-    if (!atOrRight || !(WIDE_LAST.has(atOrRight.label) || atOrRight.label === "NAME")) {
+    if (!atOrRight || !(WIDE_LAST.has(atOrRight.label) || atOrRight.label === "NAME" || isWideMidAnchor(anchors, atOrRight))) {
       let bestD = atOrRight ? Math.abs(atOrRight.x - c.start) : Infinity;
       for (const a of anchors) {
         const d = Math.abs(a.x - c.start);
