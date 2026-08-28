@@ -3115,14 +3115,14 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // the table's own x-band — on a dense sheet the neighbouring table's title
   // shares the y-band and must not label this one
   //
-  // The lookback budget (5) is spent only on rows that actually have a span
-  // in THIS table's own x-band (ledger item 5, real bug found on
-  // itd-d1-lab-mechanical.pdf#13's real "HUMIDIFIER SCHEDULE"): `rows` is
-  // built sheet-WIDE, so on a dense sheet with a second table sitting to the
-  // LEFT (here, the real "CONDENSING HOT WATER BOILER SCHEDULE" on the same
-  // sheet), that other table's own sub-header/data rows interleave into the
-  // SAME row indices between this table's real title and its header, purely
-  // by y-coincidence, unrelated to this table's own x-band entirely. A raw
+  // The lookback budget is spent only on rows that actually have a span in
+  // THIS table's own x-band (ledger item 5, real bug found on itd-d1-lab-
+  // mechanical.pdf#13's real "HUMIDIFIER SCHEDULE"): `rows` is built sheet-
+  // WIDE, so on a dense sheet with a second table sitting to the LEFT (here,
+  // the real "CONDENSING HOT WATER BOILER SCHEDULE" on the same sheet), that
+  // other table's own sub-header/data rows interleave into the SAME row
+  // indices between this table's real title and its header, purely by
+  // y-coincidence, unrelated to this table's own x-band entirely. A raw
   // row-INDEX cap burns its whole budget on THOSE unrelated rows and never
   // reaches the real title 3 rows further up in x — confirmed exactly this
   // way, real numbers, not guessed: the real title sits 5 rows above the
@@ -3130,25 +3130,99 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // 8+ rows above it counting the sheet's full row list. Skipping (not
   // charging budget for) any row with nothing in [x0,x1] fixes this without
   // loosening the cap itself — a genuinely unrelated title still can't drift
-  // in from 5+ REAL rows away within this table's own column band.
+  // in from this many REAL rows away within this table's own column band.
+  //
+  // Widened from 5 to 20 (real, corpus-found: itd-d1-lab-mechanical.pdf#12's
+  // own "PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE", "…GENERAL EXHAUST
+  // VALVE SCHEDULE" and "…SNORKEL EXHAUST VALVE SCHEDULE" tables). Each is a
+  // genuinely deep multi-tier header — VALVE INLET→QUANTITY|SIZE, MINIMUM
+  // DUCT VELOCITY (FPM), VALVE AIRFLOWS→MIN|MAX, VALVE AIRFLOW RANGE→MIN|MAX,
+  // PRESSURE DROP (IN. W.C.)→MIN|MAX, INSTALLED POSITION, MANUFACTURER AND
+  // MODEL — that findHeaderRow's own tier-descent settles on only the bottom
+  // (SYMBOL/AREA SERVED/TYPE/REMARKS) tier for, well below where its own real
+  // vocabulary anchors: none of VALVE/QUANTITY/SIZE/DUCT/PRESSURE/INSTALLED/
+  // POSITION are in EQUIPMENT_HEADERS, so every one of those tiers' physical
+  // sub-rows counts as its own in-band, non-title row against the budget —
+  // measured directly against the real sheet, 9 real in-band rows separate
+  // the settled anchor row from the real title, comfortably clearing the old
+  // budget of 5. Still nowhere near "a genuinely unrelated title 20 real rows
+  // away" territory the original design meant to guard against; the primary
+  // pass below only ever takes a "…SCHEDULE" hit, and the FIRST (nearest)
+  // one at that, so a second real schedule's own title sitting somewhere in
+  // this wider window would only ever be reached if it were closer than this
+  // table's own — never a wrong, distant grab.
+  // Widened lookback, STAGE 1 (real, corpus-found: itd-d1-lab-mechanical.
+  // pdf#12's own "PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE",
+  // "…GENERAL EXHAUST VALVE SCHEDULE" and "…SNORKEL EXHAUST VALVE SCHEDULE"
+  // tables, #13's own "DIFFUSER SCHEDULE"). Each is a genuinely deep multi-
+  // tier header — VALVE INLET→QUANTITY|SIZE, MINIMUM DUCT VELOCITY (FPM),
+  // VALVE AIRFLOWS→MIN|MAX, PRESSURE DROP (IN. W.C.)→MIN|MAX, NECK/RUNOUT,
+  // INSTALLED POSITION, MANUFACTURER AND MODEL — that findHeaderRow's own
+  // tier-descent settles on only the bottom tier for, well below where its
+  // own real vocabulary anchors: none of VALVE/QUANTITY/SIZE/DUCT/PRESSURE/
+  // NECK/RUNOUT/INSTALLED/POSITION are in EQUIPMENT_HEADERS, so every one of
+  // those tiers' physical sub-rows counts as its own in-band, non-title row
+  // against the ORIGINAL budget of 5 — measured directly against the real
+  // sheet, 9 real in-band rows separate the settled anchor row from the
+  // real title.
+  //
+  // The plain "nearest single-span/‘…SCHEDULE' row wins" rule this widened
+  // reach would naturally want is NOT safe on its own here: real, corpus-
+  // found regressions caught by this file's own test suite, both directions.
+  //   - bessemer-mechanical-bidset.pdf#8's own "VARIABLE REFRIGERANT
+  //     PACKAGED HEAT PUMP" table: its real title carries no "SCHEDULE"
+  //     word, so a widened "…SCHEDULE"-only search walks straight past it
+  //     (silently skipping every non-matching row) to a wholly UNRELATED,
+  //     much farther table's own "DIFFUSER, GRILLE, REGISTER SCHEDULE" and
+  //     wrongly takes that instead.
+  //   - itd-d1-lab-mechanical.pdf#13's own "DIFFUSER SCHEDULE"/"RETURN &
+  //     EXHAUST GRILLE SCHEDULE": a widened "nearest ANY single-span shape
+  //     wins" search instead grabs "NECK / RUNOUT" — a real wrapped sub-
+  //     header fragment shared by both tables, sitting BETWEEN each one's
+  //     own real title and its settled anchor row, that happens to pass the
+  //     fallback shape test (3 "words" once split on the slash) — before
+  //     the walk ever reaches either table's own real, but farther, title.
+  // The real discriminator, measured against every genuine caption in this
+  // corpus: font size. A real title/caption consistently renders at ~2x a
+  // header row's own token height (same signal the structural "reference"
+  // kind's own title hunt already leans on, below); an ordinary sub-header
+  // fragment, however title-shaped it happens to look, never does. So the
+  // widened reach ONLY ever takes a match at BIG font — nearest first, either
+  // signal — falling through to the ORIGINAL, unwidened (budget 5, "…
+  // SCHEDULE" first, then fallback shape) two-pass search when nothing big
+  // qualifies, exactly the proven-safe prior behavior for a table whose own
+  // real title is normal-sized (VARIABLE REFRIGERANT PACKAGED HEAT PUMP)
+  // or close enough to be found within 5 anyway.
+  const TITLE_LOOKBACK_BUDGET = 20;
+  const hdrHeights2 = headerSpans.map((t) => t.h || 8).sort((a, b) => a - b);
+  const hdrH2 = hdrHeights2[hdrHeights2.length >> 1] || 8;
+  const BIG_FONT_RATIO2 = 1.6;
   let title: Evidence | null = null;
-  for (let i = titleFrom, budget = 5; i >= 0 && budget > 0 && !title; i--) {
+  for (let i = titleFrom, budget = TITLE_LOOKBACK_BUDGET; i >= 0 && budget > 0 && !title; i--) {
     const inBand = rows[i].filter((t) => t.x >= x0 && t.x <= x1);
     if (!inBand.length) continue;
     budget--;
-    const hit = inBand.find((t) => /SCHEDULE/.test(norm(t.str)));
-    if (hit) title = { sheet: sheet.key, text: hit.str.trim(), bbox: bboxOf(hit) };
+    const hit = inBand.find((t) => /SCHEDULE/.test(norm(t.str)) && (t.h || 8) >= hdrH2 * BIG_FONT_RATIO2);
+    if (hit) { title = { sheet: sheet.key, text: hit.str.trim(), bbox: bboxOf(hit) }; break; }
+    if (inBand.length !== 1) continue;
+    const t = inBand[0];
+    if ((t.h || 8) < hdrH2 * BIG_FONT_RATIO2) continue;
+    const s = norm(t.str);
+    if (!s || /\d/.test(s) || !/^[A-Z][A-Z .,'’&()/-]*$/.test(s)) continue;
+    if (s.split(/\s+/).filter(Boolean).length < 3) continue;
+    title = { sheet: sheet.key, text: t.str.trim(), bbox: bboxOf(t) };
   }
-  // Fallback: the "…SCHEDULE" pass above found nothing — a table can
-  // genuinely be titled without that word ("VARIABLE REFRIGERANT PACKAGED
-  // HEAT PUMP", found live on the Bessemer sample; only reachable at all
-  // once the backward merge above lets this table extract). Only ever ADDS
-  // a title where one is null today — never second-guesses a real
-  // "…SCHEDULE" match above. A single-span, all-caps, ≥3-word, digit-free
-  // row in the same search window, inside the table's own x-band, is the
-  // honest signal: a real title reads as one run of words with no numbers
-  // in it, unlike a data row or a wrapped unit fragment. Same content-aware
-  // budget as the primary pass above, for the same real reason.
+  // STAGE 2 — the original, unwidened search, untouched: exactly the prior
+  // proven-safe behavior for a table whose own real title is normal-sized.
+  if (!title) {
+    for (let i = titleFrom, budget = 5; i >= 0 && budget > 0 && !title; i--) {
+      const inBand = rows[i].filter((t) => t.x >= x0 && t.x <= x1);
+      if (!inBand.length) continue;
+      budget--;
+      const hit = inBand.find((t) => /SCHEDULE/.test(norm(t.str)));
+      if (hit) title = { sheet: sheet.key, text: hit.str.trim(), bbox: bboxOf(hit) };
+    }
+  }
   if (!title) {
     for (let i = titleFrom, budget = 5; i >= 0 && budget > 0 && !title; i--) {
       const inBand = rows[i].filter((t) => t.x >= x0 && t.x <= x1);
@@ -4464,8 +4538,40 @@ function extractedKeys(sheet: SheetSpans, opts: ExtractOpts): Map<string, number
       // there, headers.length itself dropped (5 → 3) when the seam cut
       // through the header.
       const n = t.headers.length;
+      // A row whose own tag-prefix doesn't match this SAME table's own
+      // majority tag family is not a real row of this table at all — it is
+      // exactly the cross-column contamination this whole seam-scoring
+      // mechanism exists to detect (real, corpus-found: itd-d1-lab-
+      // mechanical.pdf#12's own unsplit-sheet "CANOPY HOOD SCHEDULE" read —
+      // CH-1..CH-4 are its real rows, but its own boundary detection also
+      // swept in "SAV-3"/"SAV-5" from the neighbouring, disjoint
+      // "…SUPPLY VALVE SCHEDULE" table two columns over). Before this table
+      // gained a real title, extractedKeys' own title gate above silently
+      // excluded it from baselineKeys entirely, so this contamination never
+      // reached the comparison; once title-hunt got deep enough to find it,
+      // the bled-in "SAV-3"/"SAV-5" keys started outscoring (dominant
+      // header count "SAV-3"=7 from the polluted read) every GOOD split's
+      // own honest read of the real SAV table two columns over, so
+      // `!lostAny` failed for EVERY candidate seam and the correct split was
+      // never taken at all — SAV never separately extracted again. Majority-
+      // prefix (the tag letters before the first digit) is the same real,
+      // structural signal a genuine schedule already guarantees on its own
+      // (every row of ONE real table shares ONE tag family — CH-1..CH-4,
+      // never CH-1/SAV-3 mixed) — a minority prefix, by construction, can
+      // only be contamination bled in from elsewhere, never this table's own
+      // real data.
+      const prefixOf = (k: string): string => k.match(/^[A-Z]+/)?.[0] ?? "";
+      const prefixCounts = new Map<string, number>();
       for (const r of t.rows) {
         if (!/\d/.test(r.key)) continue;
+        const p = prefixOf(r.key);
+        prefixCounts.set(p, (prefixCounts.get(p) ?? 0) + 1);
+      }
+      let majorityPrefix = "", majorityCount = 0;
+      for (const [p, c] of prefixCounts) if (c > majorityCount) { majorityPrefix = p; majorityCount = c; }
+      for (const r of t.rows) {
+        if (!/\d/.test(r.key)) continue;
+        if (prefixOf(r.key) !== majorityPrefix) continue;
         const cur = out.get(r.key);
         if (cur == null || n > cur) out.set(r.key, n);
       }
