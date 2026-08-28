@@ -3867,6 +3867,60 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     }
   }
 
+  // pass 1c — region-containment collapse for "reference" fragments whose
+  // own bogus title defeats the title-matched dedup just above: real,
+  // corpus-found (itd-d1-lab-mechanical.pdf#12's own SNORKEL HOOD SCHEDULE,
+  // a finish-kind table extractAllTables already extracts correctly under
+  // its real title). extractReferenceTableAt's own structural header-shape
+  // detector (isGenericHeaderRow/expandGenericHeaderBlock, above) can mistake
+  // a repeated, short, all-caps DATA cell deep inside that table's own body
+  // (SNORKEL HOOD SCHEDULE's EXHAUST VALVE column wraps "DUST / HEAT" the
+  // same way in every row) for a header row of a SEPARATE table — and its
+  // own alreadyVocab guard (see that function's header comment) only re-
+  // checks THAT narrow local candidate block against the three vocabularies,
+  // never the real header row several rows above, so it does not fire. The
+  // fallback title hunt then latches onto the nearest unrelated single-span
+  // caption ("DUST /"), which never matches the real table's title
+  // ("SNORKEL HOOD SCHEDULE") — so the title-matched dedup above never even
+  // groups the two fragments together to compare them. This pass is
+  // title-independent and purely geometric: a "reference" fragment whose own
+  // region sits (almost) entirely inside a non-reference fragment's region
+  // on the SAME sheet is that already-extracted table's own ink, never a
+  // second real table — same "reference never wins" principle the
+  // title-matched pass above already applies, keyed on containment instead
+  // of title equality so a garbled title can no longer hide the collision.
+  // Deliberately NOT a general overlap test: two real, independent tables
+  // that happen to sit close together on a dense sheet must not collide here
+  // — only near-total containment (>= 98% of the reference fragment's own
+  // area) counts, which a legitimate standalone table essentially never is.
+  {
+    const contains = (outer: Bbox, inner: Bbox, tol = 0.02): boolean => {
+      const areaInner = Math.max(0, inner[2] - inner[0]) * Math.max(0, inner[3] - inner[1]);
+      if (areaInner <= 0) return false;
+      const ix0 = Math.max(outer[0], inner[0]), iy0 = Math.max(outer[1], inner[1]);
+      const ix1 = Math.min(outer[2], inner[2]), iy1 = Math.min(outer[3], inner[3]);
+      const iw = Math.max(0, ix1 - ix0), ih = Math.max(0, iy1 - iy0);
+      return (iw * ih) / areaInner >= 1 - tol;
+    };
+    const bySheet = new Map<string, ScheduleTable[]>();
+    for (const f of fragments) {
+      if (!bySheet.has(f.sheet)) bySheet.set(f.sheet, []);
+      bySheet.get(f.sheet)!.push(f);
+    }
+    const drop = new Set<ScheduleTable>();
+    for (const group of bySheet.values()) {
+      const claimers = group.filter((t) => t.kind !== "reference");
+      if (!claimers.length) continue;
+      for (const t of group) {
+        if (t.kind === "reference" && !drop.has(t) && claimers.some((c) => contains(c.region, t.region))) drop.add(t);
+      }
+    }
+    if (drop.size) {
+      notes.push(`${[...drop].map((t) => `${t.sheet}: "${t.title?.text ?? "(untitled)"}" (reference, ${t.rows.length} rows)`).join("; ")} — collapsed: region lies inside an already-extracted finish/equipment/room-finish table on the same sheet.`);
+      for (let i = fragments.length - 1; i >= 0; i--) if (drop.has(fragments[i])) fragments.splice(i, 1);
+    }
+  }
+
   // pass 2 — merge continuations (header repeated), in sheet order
   const tables: ScheduleTable[] = [];
   for (const f of fragments) {
