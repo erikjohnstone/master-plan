@@ -4980,7 +4980,31 @@ export class Session {
    * find_text call per fragment, or read_sheet_text over a region to see the
    * whole thing at once — this tool doesn't merge runs into lines. Reuses the
    * bbox spans sheet_context lazily builds (same cache, same textSpans()
-   * call), so calling both on one sheet costs the extraction once. */
+   * call), so calling both on one sheet costs the extraction once.
+   *
+   * INVESTIGATED DEAD END, worth recording so it isn't re-chased: a tag can
+   * be legible and clearly drawn on the sheet yet produce ZERO hits here —
+   * not fragmented (fragmentedTagOcc's problem), not rotated (textSpans
+   * already carries `rot`), not a font/encoding substitution (checked via
+   * the raw pdf.js item codepoints). Confirmed live on a real sheet where a
+   * handful of tags sat among many correctly-extracted siblings drawn with
+   * the identical font and style: pdf.js's own textContent had NO item at
+   * all there (not even a garbled or empty one), the page's operator list
+   * had no more showText calls than the tags that DID extract accounted
+   * for, and there were zero marked-content ranges and zero image
+   * XObjects near the ink. The only remaining explanation is that those
+   * specific tags were drawn as raw vector path geometry (stroke/fill
+   * ops tracing the letterforms directly — the classic result of
+   * "explode text to polylines" in CAD authoring, applied to a handful of
+   * tags but not their siblings) rather than with the font's text-showing
+   * operator at all. There is no text-layer fix for this: the string
+   * genuinely isn't encoded as text anywhere in the PDF, so no amount of
+   * run-stitching, rotation-awareness, or codepoint-decoding can recover
+   * it — only OCR against the rendered raster, or vector glyph-shape
+   * recognition, could, and neither is what this tool does. Treat a
+   * stubborn zero-hit search on a visually-confirmed tag as a candidate
+   * for this, not a fragmentation bug, once fragmentedTagOcc's shapes and
+   * a `rot`-aware search have both already been tried. */
   findText(name: string, q: string, opts: { region?: { x0: number; y0: number; x1: number; y1: number }; limit?: number } = {}) {
     const query = q.trim();
     if (!query) throw new UserError("q must be a non-empty string.");
