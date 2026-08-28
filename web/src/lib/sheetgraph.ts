@@ -1955,7 +1955,12 @@ function harvestBareVocabLeafTiers(rows: GraphSpan[][], vocab: string[], topIdx:
     candidates.sort((a, b) => mid(a.t) - mid(b.t));
     if (candidates.length < 2) continue;
     const gaps = candidates.slice(1).map((c, i) => mid(c.t) - mid(candidates[i].t)).sort((a, b) => a - b);
-    const med = gaps[gaps.length >> 1] || 1;
+    // Genuine median, not always the upper-middle element — see bandLimits'
+    // and subTierAnchors' own comment: `gaps.length >> 1` lands on the
+    // LARGER of exactly two gaps (the common case, 3 candidates), an
+    // outlier neighbor gap masquerading as "typical pitch" that inflates
+    // this radius far past any real disambiguation distance.
+    const med = gaps[(gaps.length - 1) >> 1] || 1;
     const halfPitch = Math.min(Math.max(24, med / 2), 300);
     const withParent = candidates
       .map((c) => ({ ...c, parent: chainedParentAbove(rows, ri, topIdx, mid(c.t) - halfPitch, mid(c.t) + halfPitch, vocab) }))
