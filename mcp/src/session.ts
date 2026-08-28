@@ -3329,6 +3329,30 @@ export class Session {
       }
     }
 
+    // classifySweepMatches' own occurrence-claim radius (R = footprint/2 +
+    // anchorH) assumes a match's centroid sits close to the TAG TEXT it
+    // claims — true when the pad ladder widens enough to capture a symbol
+    // whose own ink surrounds its label, but real, corpus-found (federal-
+    // attachment4-mechanical.pdf, 13 real VAV boxes): the pad ladder stops
+    // at the SMALLEST pad that still corroborates (fewest segments, not the
+    // most complete shape), and a real box glyph drawn OFF to one side of
+    // its own tag text — a real, firm-specific convention, not noise — then
+    // has a geometric centroid measurably farther from the tag than that
+    // small footprint's own radius covers. The result: even the ANCHOR's
+    // OWN occurrence, on its OWN sheet, reads as text_only — matchSymbol
+    // correctly re-finds the identical ink it was built from (self-matching
+    // at fp.center with score 1), just outside the radius classifySweep-
+    // Matches uses to credit it to the tag that produced it. `fp.center` is
+    // matchSymbol's own report of where THIS exact fingerprint's self-match
+    // lands, so the true distance from the tag to its own symbol is already
+    // known by construction, not guessed — flooring anchorH at that
+    // measured offset can only ever ADD coverage (it never shrinks the
+    // existing footprint/anchorH radius) and is bounded by the same modest,
+    // real search the pad ladder already performed to find this geometry in
+    // the first place.
+    const selfOffset = fp ? Math.hypot(fp.center[0] - anchor.cx, fp.center[1] - anchor.cy) : 0;
+    const anchorHForSweep = Math.max(anchor.h, selfOffset);
+
     // 4. the full plan-only sweep + tag corroboration per match.
     // The tag-proximity radius is the marker's footprint AS DRAWN ON THE SHEET
     // being read, so it rides the size ratio with the fingerprint (#186): a
@@ -3367,7 +3391,7 @@ export class Session {
       if (fp) {
         let cls: ReturnType<typeof classifySweepMatches>;
         try {
-          cls = classifySweepMatches(t, fp, g2.segs, ratio, occ, sibSpans, anchor.h, sweepOpts);
+          cls = classifySweepMatches(t, fp, g2.segs, ratio, occ, sibSpans, anchorHForSweep, sweepOpts);
         } catch (e) {
           skipped.push({ sheet: sh.key, role: "plan", reason: e instanceof Error ? e.message : String(e) });
           continue;

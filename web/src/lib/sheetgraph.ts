@@ -5966,12 +5966,39 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     // named in that section's own comment, not an oversight.
     if (role.role === "schedule") {
       for (const bs of bands) for (const t of extractAllReferenceTables(bs, s)) {
+        // A structural "reference" read can be the ONLY successful
+        // extraction of a genuine MEP-equipment schedule whose own required
+        // rating word (GPM/EWT/LWT/…) never independently co-occurs with its
+        // own TAG/MANUFACTURER/MODEL anchor row — real, corpus-found
+        // (federal-attachment4-mechanical.pdf's own "HOT WATER CONDENSING
+        // BOILER SCHEDULE": its real EWT/LWT rating tier sits two rows below
+        // its own TAG/LOCATION/TYPE/MANUFACTURER/MODEL/REMARKS anchor row, a
+        // shape nearbyRequiredHit's own bare-hit early break and
+        // nearbyRequiredHitWide's backward-only reach both correctly refuse
+        // — see their own comments — so the row-based hunt never
+        // independently qualifies this table under EITHER finish or
+        // equipment vocabulary; it only reaches the graph at all via this
+        // vocabulary-free structural reader, landing as reference-kind and
+        // staying invisible to the equipment-kind-only takeoff pipeline).
+        // Same title-family gate as the finish→equipment reclassification
+        // below (isMepEquipmentSchedule), reached from the OTHER direction —
+        // a table that never independently qualified under ANY kind's row-
+        // vocabulary at all, rather than one that qualified under the wrong
+        // one — plus the same real-catalog-anchor requirement every other
+        // equipment-kind path in this file already enforces (a table with no
+        // TAG/MARK/CODE/SYMBOL/ID column has no real key column an estimator
+        // or symbol_sweep can chase, so a title match alone is not enough).
+        if (t.title && isMepEquipmentSchedule(t.title.text) && t.headers.some((h) => CATALOG_ANCHOR_WORDS.includes(norm(h)))) {
+          notes.push(`${s.key}: "${t.title.text}" names a real MEP-equipment family but never independently cleared any kind's own row-vocabulary bar (its required rating word never co-occurs with its own anchor row) — reclassified from a structural reference read to equipment-kind.`);
+          t.kind = "equipment";
+          reclassified.add(t);
+        }
         const titleB = t.title ? buildingMentions(t.title.text) : [];
         const b = titleB.length === 1 ? titleB[0] : ctxBySheet.get(s.key);
         if (b) t.building = b;
         fragments.push(t);
         if (!fragmentKinds.has(s.key)) fragmentKinds.set(s.key, new Set());
-        fragmentKinds.get(s.key)!.add("reference");
+        fragmentKinds.get(s.key)!.add(t.kind);
       }
     }
     for (const kind of ["room-finish", "finish", "equipment"] as const) {
