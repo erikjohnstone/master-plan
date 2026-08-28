@@ -7163,8 +7163,28 @@ export function scheduleTableFromODL(
   if (eqHits >= 3 && eqHits >= rmHits && eqHits >= finHits) kind = "equipment";
   else if (rmHits >= 3 && rmHits > finHits && surfaceHits >= 2) kind = "room-finish";
   else if (finHits >= 3) kind = "finish";
-  if (kind === "unknown") return null;
   const titleText = titleCell ? odlCellText(titleCell) : "";
+  // Unlike the geometric extractor (which has its own vocabulary-free
+  // structural "reference" pass, above extractAllTables), this function had
+  // no equivalent fallback: a real ODL-detected table whose header words
+  // simply don't name equipment/room/finish (a DEHUMIDIFIER SCHEDULE's own
+  // "% RH"/"CAPACITY PINTS/HR", a FAN SOUND POWER LEVEL SCHEDULE's own
+  // octave-band columns "62.5"/"125"/"250"…) cleared none of the three
+  // vocab bars and was silently discarded whole — even with a real printed
+  // title and a real structural header row already confirmed by the
+  // headerEnd logic above. Measured live: navfac-cherry-point-atc-
+  // mechanical.pdf#44 carries exactly these two real schedules; ODL
+  // segments and titles both correctly (confirmed against its own raw
+  // JSON), but they never reached `g.tables` at all. Falling back to the
+  // same "reference" kind the geometric pass already trusts elsewhere —
+  // gated on a REAL title (never promote an anonymous/untitled ODL blob,
+  // which is far likelier to be a misdetected border or a merge artifact
+  // than a genuine schedule) — recovers them the same general way, with no
+  // new vocabulary or corpus-specific carve-out.
+  if (kind === "unknown") {
+    if (!titleText.trim()) return null;
+    kind = "reference";
+  }
   if (kind === "finish" && titleText && isNonFinishSchedule(titleText)) return null;
 
   // A real, standard cross-firm MEP title — "…CONNECTION SCHEDULE" (electrical

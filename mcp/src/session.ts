@@ -4681,6 +4681,20 @@ export class Session {
     const buildingsSet = new Set(g.buildings);
     const touchedSheets = new Set<string>();
     let recovered = 0, added = 0, odlErrors = 0;
+    // "reference"-kind candidates with no existing region to replace are
+    // NOT resolved inline — see the deferred pass below, after this loop —
+    // because whether one of their rows collides with an "established" tag
+    // depends on the FINAL state of every OTHER table this same pass adds
+    // or replaces, and ODL's own tree-walk order across a multi-page CLI
+    // call is not that order. Measured live: navfac-cherry-point-atc-
+    // mechanical.pdf#47 carries both a real FAN SCHEDULE (EF-M1's own
+    // authoritative row) and a FAN SOUND POWER LEVEL SCHEDULE that merely
+    // cross-references EF-M1 — when ODL happened to return the sound-power
+    // table before the fan schedule, EF-M1 wasn't "established" yet at the
+    // moment the sound-power table's own collision guard ran, so it kept a
+    // row it should have dropped, planting a second, spurious EF-M1 row
+    // that broke resolveTag's own single-row assumption downstream.
+    const deferredReference: ScheduleTable[] = [];
     for (const entry of byPdf.values()) {
       let result;
       try {
@@ -4723,7 +4737,47 @@ export class Session {
           // evidence-based reconciliation either way: neither source is
           // favored, the SAME bar applies no matter which one is currently
           // in `g.tables`.
-          if (bDupes <= aDupes && (b.headers > a.headers || (b.headers === a.headers && b.cells > a.cells))) {
+          //
+          // Two real gaps in the plain "more headers, or tied headers with
+          // more cells" bar, both measured live on navfac-cherry-point-atc-
+          // mechanical.pdf#42/#44:
+          //
+          // 1. An untitled ("reference", title: null) existing table is, by
+          //    this file's OWN classification, the weakest possible read —
+          //    no title recognized, no vocabulary matched. It is also
+          //    exactly the shape a wrongly-merged pair of adjacent tables
+          //    takes (two real tables' worth of columns counted as one,
+          //    which can easily out-count either real piece alone on raw
+          //    header count). #42's real PUMP SCHEDULE and BOILER SCHEDULE
+          //    sit side by side; the geometric pass merged them into one
+          //    untitled 16-header blob, and ODL's own correct, separately-
+          //    titled PUMP SCHEDULE (13 headers) and BOILER SCHEDULE (10
+          //    headers) each individually lost the raw header-count
+          //    compare to that merged blob, locking the merge in
+          //    permanently. A titled, vocabulary-classified ODL candidate
+          //    should never be blocked by an anonymous blob's inflated
+          //    column count.
+          // 2. On an EXACT completeness tie, the existing table won by
+          //    default (`>` not `>=`) even when the candidate's `kind` is
+          //    strictly more specific — #44's real AIR SEPARATOR SCHEDULE:
+          //    geometric pass got the title right but the kind wrong
+          //    ("reference"); ODL's own read ties it 7 headers/12 cells
+          //    exactly but correctly classifies "equipment". Vocabulary-
+          //    free "reference" is already this file's own least-specific,
+          //    last-resort kind (see the classification comment above,
+          //    "ties favor the more specific vocab … reference" is the
+          //    residual fourth) — a real tie should resolve toward the
+          //    more specific read, not freeze on whichever happened to be
+          //    extracted first.
+          const existingAnonymous = existing.kind === "reference" && !existing.title;
+          const candidateIdentified = built.kind !== "reference" || !!built.title;
+          const shouldReplace =
+            bDupes <= aDupes &&
+            (b.headers > a.headers ||
+              (b.headers === a.headers && b.cells > a.cells) ||
+              (b.headers === a.headers && b.cells === a.cells && existing.kind === "reference" && built.kind !== "reference") ||
+              (existingAnonymous && candidateIdentified));
+          if (shouldReplace) {
             g.tables[existingIdx] = built;
             touchedSheets.add(sheetKey);
             recovered++;
@@ -4749,20 +4803,11 @@ export class Session {
           // Same normalization sheetgraph.ts's own pass 2c uses for this exact
           // comparison (its own module-private `norm`, not exported) —
           // trim+uppercase, no whitespace collapse, kept identical on purpose.
-          const keyNorm = (k: string) => (k || "").trim().toUpperCase();
-          const established = new Set<string>();
-          for (const t of g.tables) if (t.kind !== "reference") for (const r of t.rows) established.add(keyNorm(r.key));
-          const kept = built.rows.filter((r) => !established.has(keyNorm(r.key)));
-          if (kept.length) {
-            built.rows = kept;
-            g.tables.push(built);
-            touchedSheets.add(sheetKey);
-            added++;
-          }
-          // else: EVERY row collided with an already-established tag — this
-          // table added nothing this graph doesn't already know, so it's
-          // simply not appended (never a silent data loss: every one of its
-          // tags already has a real, resolvable row elsewhere).
+          // The actual collision check runs later, in the deferred pass
+          // below, once every table this whole ODL cross-check will ever
+          // add or replace is already in `g.tables` — see that pass's own
+          // comment for why "later" instead of "now" matters here.
+          deferredReference.push(built);
         } else {
           // No existing alternative to compare against, so nothing to
           // reconcile against — appended as-is. A FEW rows sharing one
@@ -4782,6 +4827,30 @@ export class Session {
           touchedSheets.add(sheetKey);
           added++;
         }
+      }
+    }
+    // Deferred "reference"-kind collision guard (see the push site's own
+    // comment above): computed ONCE, now that every non-reference table
+    // this whole cross-check pass will ever add or replace already sits in
+    // `g.tables` — so a cross-reference table's own row order relative to
+    // its authoritative counterpart, wherever ODL happened to place each
+    // in its own output, can never change the outcome.
+    if (deferredReference.length) {
+      const keyNorm = (k: string) => (k || "").trim().toUpperCase();
+      const established = new Set<string>();
+      for (const t of g.tables) if (t.kind !== "reference") for (const r of t.rows) established.add(keyNorm(r.key));
+      for (const built of deferredReference) {
+        const kept = built.rows.filter((r) => !established.has(keyNorm(r.key)));
+        if (kept.length) {
+          built.rows = kept;
+          g.tables.push(built);
+          touchedSheets.add(built.sheet);
+          added++;
+        }
+        // else: EVERY row collided with an already-established tag — this
+        // table added nothing this graph doesn't already know, so it's
+        // simply not appended (never a silent data loss: every one of its
+        // tags already has a real, resolvable row elsewhere).
       }
     }
     if (touchedSheets.size) syncSheetSchedules(g, touchedSheets);
