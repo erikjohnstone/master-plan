@@ -2332,16 +2332,56 @@ const centerX = (t: GraphSpan) => t.x + (t.w || 0) / 2;
 // with no headerSpans (adoptContinuationRows' headerless-continuation path)
 // or no orphan tokens at all gets an empty list and this never fires,
 // identical to the pre-fix behavior.
+// A genuine leaf orphan is not the only real header token that can sit
+// farther than `tol` from every anchor: a real PARENT/GROUP-tier label
+// (found live: baker-county-eoc-bidset.pdf#27's own ROOM FINISH SCHEDULE —
+// "FLOOR", the tier-1 parent over both "FLOOR FINISH" and "BASE FINISH")
+// sits almost exactly MIDWAY between the two already-recognized anchors it
+// groups, purely by drafting convention (a spanning label centers itself
+// over its own children). Treating that midpoint token as its own orphan
+// leaf let it "claim" BASE's own real data cluster ("WB-1", the nearest
+// real cluster to that midpoint) purely by coincidental proximity — the
+// EXACT theft this file exists to stop, just aimed at a real anchor's own
+// rightful data instead of a genuine leaf's.
+//
+// Flanking-midpoint symmetry alone over-corrects, though: itd-d1-lab-
+// mechanical.pdf's own CONDENSING HOT WATER BOILER SCHEDULE has a REAL
+// "CAPACITY" tier-1 parent (over "CAPACITY INPUT MBH"/"CAPACITY OUTPUT
+// MBH", both of which — unlike FLOOR's own two children — never
+// independently recovered anchors of their own) that ALSO scores as
+// near-midpoint (0.81) yet is exactly what has to keep claiming "265"/"285"
+// to stop them stealing MANUFACTURER. The real tell is the width of the gap
+// it sits inside: FLOOR's own flanking pair (FLOOR, BASE) sit at this
+// table's ordinary column pitch (1.08x the baseline gap) — an unremarkable
+// pair with nothing hiding between them, so a token centered between them
+// really is just their shared parent label. CAPACITY's own flanking pair
+// (GPM, MANUFACTURER) sit at 4.2x baseline — anomalously wide, this file's
+// own established signal (GAP_INFLATION_RATIO, anchorRadii's own comment)
+// that real, un-modeled columns are hiding in the gap — so a token there
+// failing the symmetry test is NOT proof it is a mere parent label; there
+// is real room for it to be a genuine leaf of its own. The symmetry check
+// only ever REJECTS a candidate, so it is scoped to ordinary-width flanking
+// pairs, where a near-midpoint reading is unambiguous.
+const ORPHAN_ASYMMETRY_RATIO = 0.7;
 function orphanHeaderXs(headerSpans: GraphSpan[] | undefined, anchors: Anchor[]): number[] {
   if (!headerSpans?.length || anchors.length < 2) return [];
   const gaps = anchors.slice(1).map((a, i) => a.x - anchors[i].x).filter((g) => g > 0);
   if (!gaps.length) return [];
-  const tol = Math.min(...gaps) / 2;
+  const baseline = Math.min(...gaps);
+  const tol = baseline / 2;
+  const sorted = [...anchors].sort((a, b) => a.x - b.x);
   const out: number[] = [];
   for (const t of headerSpans) {
     if (t.str.replace(/[^A-Za-z]/g, "").length < 2) continue; // punctuation/digit-only: not a real header word
     const cx = centerX(t);
-    if (!anchors.some((a) => Math.abs(a.x - cx) <= tol)) out.push(cx);
+    if (anchors.some((a) => Math.abs(a.x - cx) <= tol)) continue;
+    let left: Anchor | null = null, right: Anchor | null = null;
+    for (const a of sorted) { if (a.x <= cx) left = a; else { right = a; break; } }
+    if (left && right && right.x - left.x <= baseline * GAP_INFLATION_RATIO) {
+      const dL = cx - left.x, dR = right.x - cx;
+      if (Math.min(dL, dR) / Math.max(dL, dR) >= ORPHAN_ASYMMETRY_RATIO) continue; // an ordinary-width flanking pair, sitting near their shared midpoint: a parent/group label, not its own leaf column
+    }
+    out.push(cx);
   }
   return out;
 }
