@@ -1086,12 +1086,104 @@ function nearbyRequiredHit(rows: GraphSpan[][], vocab: string[], required: strin
   return false;
 }
 
+/** A wider fallback for the same question `nearbyRequiredHit` asks — real,
+ * corpus-found gap: a genuinely DEEP multi-tier equipment header (itd-d1-
+ * lab-mechanical.pdf#12's own "PRESSURE INDEPENDENT GENERAL EXHAUST VALVE
+ * SCHEDULE"/GEV-1..7, "…SNORKEL EXHAUST VALVE SCHEDULE"/SEV-1..5, "SNORKEL
+ * HOOD SCHEDULE"/SN-1..5) can carry its own REQUIRED rating word (AIRFLOW,
+ * VELOCITY, FPM) several REAL tiers away from the row that anchors its
+ * SYMBOL/TYPE/MANUFACTURER/REMARKS columns — sometimes ABOVE the anchor
+ * (a parent-tier rating label), not only below — with genuinely OTHER
+ * header-shaped tiers in between (MANUFACTURER, "AND MODEL" wrapping to its
+ * own bare MODEL hit, VALVE, RANGE, …), not bare unit fragments.
+ * `nearbyRequiredHit`'s own one-direction, 3-row window, built to stay
+ * narrow specifically by breaking on ANY bare vocabulary hit (see its own
+ * comment — the Fan/Diffuser regression that shape prevents), breaks on the
+ * very first such real tier and never reaches the required word at all.
+ *
+ * This widens the reach — more rows, plus the catalog-word/title stops
+ * below — but stays BACKWARD-ONLY, deliberately, not the symmetric both-
+ * directions walk a first version of this fix tried. Real, corpus-found
+ * live testing that version against this file's own standing regression
+ * suite: a genuine multi-tier equipment header's REQUIRED word can sit
+ * either above OR below its anchor row (GEV's own AIRFLOW sits above; the
+ * real "LAB EXHAUST FAN SCHEDULE"'s own ESP sits below) — but Bessemer's
+ * own real "FAN SCHEDULE" (a legitimate finish-kind diffuser/grille/
+ * register table, not HVAC fan equipment — see isNonFinishSchedule's own
+ * "FAN" comment) carries an EQUALLY real, EQUALLY-shaped electrical rating
+ * tier (VOLTS/PHASE/WATTS) a few rows BELOW its own anchor too. Structurally
+ * these are the SAME shape — a real multi-tier header, its required word a
+ * genuine tier away, no catalog word or digit in between — so no per-row
+ * signal this function can see distinguishes "GEV's own real AIRFLOW tier"
+ * from "Fan Schedule's own real WATTS tier" in the forward direction; only
+ * the DOMAIN FACT that Bessemer's Fan Schedule specifically must stay
+ * finish-kind (a business rule, not a shape difference) tells them apart,
+ * and that fact lives in the standing test, not in any header geometry.
+ * Restricting to backward-only is what actually keeps that regression
+ * fixed: Fan Schedule's own title sits directly ABOVE its anchor (blocked
+ * by the SCHEDULE-word stop before the walk ever reaches anything), while
+ * its own problem tier sits below — a forward walk reaches it, a backward
+ * one never does. The real cost: a real table whose OWN required word sits
+ * only forward of its anchor (LAB EXHAUST FAN SCHEDULE/LEF-1, confirmed
+ * live) stays unrecovered by this function — a genuine, disclosed, named
+ * gap, not an oversight; see LEF-1's own resolution note.
+ *
+ * The ONE signal that DOES still apply, kept from the first version: the
+ * Fan Schedule row that originally broke a looser pixel-radius attempt
+ * carried "ID", a CATALOG_ANCHOR_WORD, IN ITS OWN ROW — a real, DIFFERENT
+ * table's header always (re)introduces its own key column, and a genuine
+ * continuation tier of the SAME header never does (mergeForwardCoEqualTier
+ * already leans on exactly this same signal, proven live, to walk a
+ * multi-tier equipment header this far already — this reuses its identical
+ * three bounds: tight gap ≤ 2x the walking row's own average cell height,
+ * no digit anywhere in the row, hard stop on a bare CATALOG_ANCHOR_WORD).
+ * Gated to equipment-kind tables only (the same `opts.equipmentTierMerge`
+ * scope every other multi-tier equipment mechanism in this file already
+ * uses) — room-finish/finish headers have no real corpus case needing this
+ * reach, so widening their own qualification bar stays untested,
+ * unwarranted generalization. Only ever consulted as a FALLBACK, after both
+ * `ownQualifies` and `nearbyRequiredHit` have already failed — purely
+ * additive, never narrows what already qualifies today. */
+function nearbyRequiredHitWide(rows: GraphSpan[][], vocab: string[], required: string[], from: number): boolean {
+  for (const dir of [-1]) {
+    let i = from;
+    for (let n = 0; n < 6; n++) {
+      const j = i + dir;
+      if (j < 0 || j >= rows.length) break;
+      const cur = rows[i], next = rows[j];
+      const h = cur.reduce((s, t) => s + (t.h || 8), 0) / Math.max(1, cur.length);
+      if (Math.abs(rowY(next) - rowY(cur)) > h * 2) break;
+      if (next.some((t) => /\d/.test(t.str))) break;
+      // A real title ("…SCHEDULE") is this file's own, already-proven,
+      // table-boundary signal (findTableBoundary/findGenericTableBoundary
+      // both stop on it) — a DIFFERENT table's own title sitting one tier
+      // away is a strong "this is not my own header block" tell even when
+      // that title's text happens to also contain a bare vocabulary word
+      // (real, corpus-found regression this guards, alongside the catalog-
+      // word stop below: a synthetic "VOLTAGE PHASE SCHEDULE" title sitting
+      // right under an unrelated Fan Schedule's own header reads "VOLTAGE"
+      // as a bare EQUIPMENT_REQUIRED hit with no catalog word anywhere on
+      // that same line — the catalog-word stop alone does not catch it).
+      if (next.some((t) => /SCHEDULE/.test(norm(t.str)))) break;
+      const hits = headerHits(next, vocab);
+      if (hits.some((x) => CATALOG_ANCHOR_WORDS.includes(x.label))) break;
+      if (hits.some((x) => required.includes(x.label))) return true;
+      i = j;
+    }
+  }
+  return false;
+}
+
 function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[], minHits: number, fromIdx = 0, opts: { equipmentTierMerge?: boolean; forwardTierMerge?: boolean } = {}): { anchors: Anchor[]; rowIndex: number; dataFrom: number; mergedTopIdx?: number } | null {
   for (let i = fromIdx; i < rows.length; i++) {
     let hits = headerHits(rows[i], vocab);
     const seen = new Set(hits.map((h) => h.label));
     const ownQualifies = seen.size >= minHits && required.some((r) => seen.has(r));
-    if (!ownQualifies && !(seen.size >= minHits && nearbyRequiredHit(rows, vocab, required, i))) continue;
+    if (
+      !ownQualifies
+      && !(seen.size >= minHits && nearbyRequiredHit(rows, vocab, required, i))
+      && !(opts.equipmentTierMerge && seen.size >= minHits && nearbyRequiredHitWide(rows, vocab, required, i))
+    ) continue;
     // A three-tier header puts PARENTS on top (ROOM | FLOOR | WALLS | CEILING)
     // and the real columns underneath (MARK | LOCATION | FINISH | BASE |
     // NORTH | …). The parent row carries enough vocabulary to look like the
@@ -2148,12 +2240,32 @@ function bandDataRows(
   // real schedule anywhere in this corpus keys a row under the bare name of
   // one of its own columns. Checked first, then the existing relative-count
   // floor for every OTHER digit-free noise shape.
+  // `keyIsOwnColumn` on its own — "no real schedule anywhere in this corpus
+  // keys a row under the bare name of one of its own columns" (this
+  // function's own comment above, right where this check was first added)
+  // — is a kind-agnostic truth, not something specific to the equipment-kind
+  // shape the surrounding `minCells` relative-count floor was tuned and
+  // tested against. Real, corpus-found live on THIS exact table under
+  // `finish` kind (itd-d1-lab-mechanical.pdf#12's own SNORKEL HOOD
+  // SCHEDULE): a trailing "REMARKS:" footnote-legend label bled in as its
+  // own digit-free, self-titled row (key "REMARKS", one of the table's own
+  // 5 real header labels) — finish kind never ran the check above at all,
+  // so that garbage row survived, inflated the finish-kind fragment's own
+  // cross-kind "richness" score by exactly one populated cell, and won the
+  // cross-kind duplicate-collapse tie-break (buildSheetGraph, below) against
+  // the correctly-read, richer equipment-kind extraction of the SAME real
+  // table by that single point. Applied to every kind, unconditionally — the
+  // `minCells` floor right after stays scoped exactly as before (equipment
+  // only, >=4 anchors), untouched, so nothing tuned for that narrower shape
+  // changes for any kind that already passes today.
+  for (let i = out.length - 1; i >= 0; i--) {
+    const keyIsOwnColumn = anchors.some((a) => a.label === norm(out[i].key));
+    if (keyIsOwnColumn && !/\d/.test(out[i].key)) { out.splice(i, 1); outY.splice(i, 1); }
+  }
   if (kind === "equipment" && anchors.length >= 4) {
     const minCells = Math.max(2, anchors.length / 2);
-    const anchorLabels = new Set(anchors.map((a) => a.label));
     for (let i = out.length - 1; i >= 0; i--) {
-      const keyIsOwnColumn = anchorLabels.has(norm(out[i].key));
-      if ((keyIsOwnColumn || Object.keys(out[i].cells).length < minCells) && !/\d/.test(out[i].key)) { out.splice(i, 1); outY.splice(i, 1); }
+      if (Object.keys(out[i].cells).length < minCells && !/\d/.test(out[i].key)) { out.splice(i, 1); outY.splice(i, 1); }
     }
   }
   // row-level building off the BLDG/BUILDING column, where the key itself
@@ -2554,6 +2666,92 @@ export function extractTable(sheet: SheetSpans, kind: "room-finish" | "finish" |
 }
 
 const MAX_TABLES_PER_SHEET = 20;
+const MAX_SIDE_TABLES_PER_WINDOW = 4;
+/** A second (or third…) real table can sit SIDE BY SIDE with one just found
+ * here, sharing the EXACT row-index window it consumed — real, corpus-found
+ * on itd-d1-lab-mechanical.pdf: sheet M5.0's own "PRESSURE INDEPENDENT
+ * SNORKEL EXHAUST VALVE SCHEDULE" (key SEV-1..5) sits beside that same
+ * sheet's "EXHAUST FAN SCHEDULE" (key EF-1..6), and separately its
+ * "PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE" (GEV-1..7) shares a
+ * header row with unrelated content further up the same column; sheet
+ * M5.2's split-system furnace/condensing-unit table (key F-1) sits beside
+ * that sheet's own ductless-split table (DFC-1/DCU-1), their header TIERS
+ * genuinely interleaved row-by-row at the same y (confirmed directly:
+ * "TOTAL"/"SENSIBLE"/"INPUT"/"OUTPUT", the furnace table's own header tier,
+ * and the ductless table's own DFC-1 DATA row, land at the same clustered
+ * row). `extractAllTables`'s own `fromIdx` is a plain row-index cursor with
+ * no x-range concept — once a table is found, EVERY row index inside the
+ * window it consumed is gone for good, even a row whose only real content
+ * sits at a completely different x position the found table never actually
+ * used. `bandedSheets`' own whole-sheet gap detection can't rescue this
+ * either: the seam between two such schedules is LOCAL to one y-range, not
+ * valid page-wide (the same x-range routinely carries other, wide tables
+ * elsewhere on the sheet).
+ *
+ * This is the recovery pass, run once per table `extractAllTables` finds:
+ * with that table's own x-band (`bandLimits` over its anchors — the exact
+ * band its header/data extraction already treated as "mine") masked out of
+ * the sheet's spans, retry the SAME window. Anything the mask left behind
+ * is, by construction, content the found table never touched — so a header
+ * hiding at the same row indices but a disjoint x-range can now be reached.
+ *
+ * `fromY`, not `fromIdx`: removing a whole x-band's worth of spans SHEET-
+ * WIDE (not just within the found table's own row window — a column this
+ * wide routinely carries other, unrelated rows far up or down the sheet)
+ * changes how many rows `clusterRows` produces overall, so the ORIGINAL
+ * row-index this table's own search resumed from no longer names the same
+ * row (or any row at all) once the mask has run — real, corpus-found
+ * live: itd-d1-lab-mechanical.pdf#14's own furnace/condensing-unit table
+ * (key F-1) sits at a y that the unmasked sheet reaches around row-index
+ * 111, but masking out the ductless-split table's own wide column collapses
+ * enough unrelated rows sheet-wide that row-index 60 (where the search
+ * should logically resume) no longer exists in the masked row list at
+ * all — silently finding nothing, not because F-1 wasn't there, but
+ * because the index pointing at it was never valid in the masked space to
+ * begin with. Re-deriving the masked list's own starting row from a real Y
+ * position (the first masked row at or after `fromY`) is index-count-
+ * agnostic and always lands on the right row regardless of how much the
+ * mask removed elsewhere on the sheet.
+ *
+ * Purely additive, never a source of duplicate tables: the retry only
+ * accepts a candidate whose own header row sits STRICTLY BEFORE
+ * `boundaryY` — the y-position `extractAllTables`' own next iteration will
+ * resume scanning from on the UNMASKED sheet. A header at or past that line
+ * is already reachable by the ordinary forward scan on its own next
+ * iteration; taking it here too would duplicate it. Recurses (bounded by
+ * MAX_SIDE_TABLES_PER_WINDOW) so a third table sharing the same window is
+ * also reachable, masking every x-band already recovered so far. */
+function extractSideTables(
+  sheet: SheetSpans,
+  kind: "room-finish" | "finish" | "equipment",
+  opts: ExtractOpts,
+  fromY: number,
+  boundaryY: number,
+  excludeBands: Array<{ x0: number; x1: number }>,
+): ScheduleTable[] {
+  if (excludeBands.length > MAX_SIDE_TABLES_PER_WINDOW) return [];
+  const masked: SheetSpans = {
+    ...sheet,
+    spans: sheet.spans.filter((t) => {
+      if (isVertical(t)) return true; // rotated headers: untouched, out of scope here
+      const cx = centerX(t);
+      return !excludeBands.some((b) => cx >= b.x0 && cx <= b.x1);
+    }),
+  };
+  const maskedRows = clusterRows(masked.spans.filter((t) => !isVertical(t)));
+  const maskedFromIdx = maskedRows.findIndex((r) => rowY(r) >= fromY - 0.5);
+  if (maskedFromIdx < 0) return [];
+  const found = extractTableAt(masked, kind, opts, maskedFromIdx);
+  if (!found || !found.table || !found.table.anchors) return [];
+  // The candidate's own header must have actually sat inside the window the
+  // already-found table just consumed — not somewhere further down the
+  // sheet the ordinary forward scan will reach on its own, later, unmasked.
+  if (found.table.region[1] >= boundaryY) return [];
+  const band = bandLimits(found.table.anchors);
+  const rest = extractSideTables(sheet, kind, opts, fromY, boundaryY, [...excludeBands, { x0: band.x0, x1: band.x1 }]);
+  return [found.table, ...rest];
+}
+
 /** Every table of `kind` on a sheet, not just the first — a dense MEP sheet
  * routinely stacks several schedules in the same column grid (this
  * project's own sample: seven, on one sheet). Repeatedly finds the next
@@ -2570,7 +2768,21 @@ export function extractAllTables(sheet: SheetSpans, kind: "room-finish" | "finis
     // filtered as garbage (extractTableAt's own `table: null` case, see its
     // comment) — skip this one candidate and keep scanning the rest of the
     // sheet, rather than stopping as if nothing more were there.
-    if (found.table) out.push(found.table);
+    if (found.table) {
+      out.push(found.table);
+      // See extractSideTables' own comment: a second table can hide in the
+      // exact row-index window this one just consumed, at a disjoint
+      // x-range. `boundaryY` is where the ordinary forward scan resumes on
+      // the UNMASKED sheet — the retry may only recover a table whose own
+      // header sits strictly before it.
+      if (found.table.anchors) {
+        const rows = clusterRows(sheet.spans.filter((t) => !isVertical(t)));
+        const fromY = fromIdx < rows.length ? rowY(rows[fromIdx]) : Infinity;
+        const boundaryY = found.nextIdx < rows.length ? rowY(rows[found.nextIdx]) : Infinity;
+        const band = bandLimits(found.table.anchors);
+        out.push(...extractSideTables(sheet, kind, opts, fromY, boundaryY, [{ x0: band.x0, x1: band.x1 }]));
+      }
+    }
     if (found.nextIdx <= fromIdx) break; // never loop without forward progress
     fromIdx = found.nextIdx;
   }
@@ -3857,7 +4069,33 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
           // three-way case), exactly as before.
           const iRef = group[i].kind === "reference", jRef = group[j].kind === "reference";
           if (iRef !== jRef) { drop.add(iRef ? group[i] : group[j]); continue; }
-          drop.add(richness(group[i]) >= richness(group[j]) ? group[j] : group[i]);
+          const ri = richness(group[i]), rj = richness(group[j]);
+          // A GENUINE tie (not just "no clear winner" — the exact same
+          // header count AND cell count) between a `finish` and an
+          // `equipment` read of the SAME physical table is real, corpus-
+          // found live (itd-d1-lab-mechanical.pdf#12's own SNORKEL HOOD
+          // SCHEDULE, both reads 5 headers / 25 cells once the garbage-row
+          // fix above stopped inflating the finish-kind read by one stray
+          // cell): the OLD `>=` comparison always kept group[i] on a tie,
+          // silently deciding by kind-loop ORDER (`["room-finish", "finish",
+          // "equipment"]` — finish is tried, and so pushed into `fragments`,
+          // before equipment ever runs) rather than by which kind actually
+          // fits the real table better. An equipment-kind read that ties
+          // richness with a finish-kind read of the same table did not get
+          // there by accident — it independently cleared EQUIPMENT_HEADERS'
+          // own required-rating vocabulary bar (VOLTAGE/AMPS/GPM/AIRFLOW/…),
+          // real evidence this is a genuine MEP device schedule, the same
+          // real signal isMepEquipmentSchedule's own title-based finish→
+          // equipment reclassification above already acts on — so on an
+          // exact tie specifically, equipment wins over finish/room-finish,
+          // never the reverse. A non-tied richness gap still decides
+          // exactly as before either direction; this only ever resolves the
+          // otherwise-arbitrary equal case.
+          if (ri === rj) {
+            const iEq = group[i].kind === "equipment", jEq = group[j].kind === "equipment";
+            if (iEq !== jEq) { drop.add(iEq ? group[j] : group[i]); continue; }
+          }
+          drop.add(ri >= rj ? group[j] : group[i]);
         }
       }
     }
