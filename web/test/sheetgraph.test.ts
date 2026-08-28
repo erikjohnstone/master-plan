@@ -1709,6 +1709,77 @@ test("headerLabels: a real drafting typo (\"CEILIING FINISH\", a doubled I) stil
   assert.equal(tab.rows[0].cells.NORTH.text, "P-2", "NORTH keeps its own real value, never overwritten by the ceiling reading");
 });
 
+test("columnMapFor: a losing true-nearest collision falls back to its own 'at or right' pick when it carries full support (real baker-county-eoc#27 ROOM FINISH SCHEDULE)", () => {
+  // Real bug, found live on baker-county-eoc-bidset.pdf#27: ROOM's own
+  // header sits centered well right of ROOM's own left-aligned data (long
+  // room-name values, "SECURE VESTIBULE" and similar) — far enough that
+  // ROOM's real data-start measures NEARER to NUMBER's own header than to
+  // ROOM's own. columnMapFor's true-nearest anchor logic (added for the
+  // AREA SERVED/SAV-1 fix) reassigned ROOM's entire, fully-populated
+  // column to NUMBER, colliding with NUMBER's own already-claimed cluster
+  // — the losing cluster was silently dropped, and ROOM never appears in
+  // ANY row's cells at all (not merely a wrong value: entirely missing).
+  const hdrY = 20;
+  const header = [
+    sp("ROOM FINISH SCHEDULE", 100, 0),
+    sp("NUMBER", 120, hdrY), sp("ROOM", 550, hdrY), sp("FLOOR", 720, hdrY), sp("BASE", 870, hdrY),
+  ];
+  const rows = [
+    { key: "100", room: "SECURE VESTIBULE", floor: "RF-1", base: "WB-1" },
+    { key: "101", room: "OFFICE", floor: "CPT-1", base: "WB-1" },
+    { key: "102", room: "CORRIDOR", floor: "CPT-1", base: "WB-1" },
+  ];
+  const dataSpans = rows.flatMap((r, i) => {
+    const y = hdrY + 30 * (i + 1);
+    return [sp(r.key, 100, y), sp(r.room, 300, y), sp(r.floor, 700, y), sp(r.base, 850, y)];
+  });
+  const sheet: SheetSpans = { key: "roomcollision.pdf#1", sheet_number: "A-601", spans: [...header, ...dataSpans] };
+  const tab = extractTable(sheet, "room-finish")!;
+  assert.ok(tab, "the table still extracts");
+  for (const r of rows) {
+    const row = tab.rows.find((x) => x.key === r.key)!;
+    assert.ok(row, `row ${r.key} extracts`);
+    assert.equal(row.cells.ROOM?.text, r.room, `row ${r.key}'s ROOM column recovers, not silently dropped`);
+    assert.equal(row.cells.NUMBER?.text, r.key, `row ${r.key}'s own NUMBER is unaffected by the rescue`);
+  }
+});
+
+test("bandDataRows: a single DATA token straddling two real columns splits at the boundary (real baker-county-eoc#27 room 100, STOREFRONT/P-1)", () => {
+  // Real bug, found live on baker-county-eoc-bidset.pdf#27's own ROOM
+  // FINISH SCHEDULE: room 100's SOUTH and WEST finish codes, "STOREFRONT"
+  // and "P-1", are ONE PDF text run (the drafter's own long glazing-type
+  // name, "STOREFRONT", ran right through WEST's own column before the
+  // row's next real value even starts) — SOUTH read "STOREFRONT P-1" and
+  // WEST came up entirely empty.
+  const hdrY = 20;
+  const header = [
+    sp("ROOM FINISH SCHEDULE", 100, 0),
+    sp("NUMBER", 120, hdrY), sp("FLOOR", 270, hdrY), sp("SOUTH", 420, hdrY), sp("WEST", 480, hdrY),
+  ];
+  const rows: Array<{ key: string; floor: string; merged?: string; south?: string; west?: string }> = [
+    { key: "100", floor: "RF-1", merged: "STOREFRONT P-1" },
+    { key: "101", floor: "CPT-1", south: "P-1", west: "P-1" },
+    { key: "102", floor: "CPT-1", south: "P-1", west: "P-2" },
+  ];
+  const dataSpans = rows.flatMap((r, i) => {
+    const y = hdrY + 30 * (i + 1);
+    const out = [sp(r.key, 100, y), sp(r.floor, 250, y)];
+    if (r.merged) out.push(sp(r.merged, 400, y));
+    else { out.push(sp(r.south!, 400, y)); out.push(sp(r.west!, 460, y)); }
+    return out;
+  });
+  const sheet: SheetSpans = { key: "overflow.pdf#1", sheet_number: "A-601", spans: [...header, ...dataSpans] };
+  const tab = extractTable(sheet, "room-finish")!;
+  assert.ok(tab, "the table still extracts");
+  const r100 = tab.rows.find((r) => r.key === "100")!;
+  assert.equal(r100.cells.SOUTH?.text, "STOREFRONT", "SOUTH keeps only its own real word, not the merged run");
+  assert.equal(r100.cells.WEST?.text, "P-1", "WEST recovers its own real word, not left empty");
+  // ordinary, genuinely separate rows must be unaffected by the split logic
+  const r101 = tab.rows.find((r) => r.key === "101")!;
+  assert.equal(r101.cells.SOUTH?.text, "P-1");
+  assert.equal(r101.cells.WEST?.text, "P-1");
+});
+
 test("EQUIPMENT_HEADERS: AIRFLOW/VELOCITY carry real qualifying weight (not just vocabulary), the way a Canopy Hood Schedule needs", () => {
   // Real, found live on itd-d1-lab's own Canopy Hood Schedule: its header's
   // ONLY required-list hits are AIRFLOW and VELOCITY — every other word
