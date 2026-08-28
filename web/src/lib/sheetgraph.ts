@@ -799,12 +799,42 @@ function splitMergedHeaderCells(row: GraphSpan[], vocab: string[]): Anchor[] {
       continue;
     }
     const text = norm(t.str);
-    for (const w of words) {
-      if (used.has(w)) continue;
-      used.add(w);
-      const ci = text.indexOf(w);
-      const frac = ci >= 0 ? (ci + w.length / 2) / Math.max(text.length, 1) : 0.5;
-      out.push({ label: w, x: t.x + frac * (t.w || 0) });
+    // "X AND Y" — a real connective-joined phrase ("MANUFACTURER AND MODEL",
+    // itd-d1-lab-mechanical.pdf's own EXHAUST FAN/ELECTRIC HEATER SCHEDULEs)
+    // — names ONE real column, not two: unlike this function's own
+    // motivating case above ("MANUFACTURER MODEL NUMBER", Bessemer's real
+    // HP-1 — no connective, two genuinely distinct real values, MANUFACTURER
+    // "FRIEDRICH" next to MODEL "VRP24K75FRBLAA"), a bare "AND" sitting
+    // between two vocabulary words is drafting shorthand for a single
+    // combined field ("COOK MODEL GC-148" as one whole cell). Splitting it
+    // the same way HP-1 needs mints a phantom second column with no data of
+    // its own: the real data then needs an impossible second cluster to
+    // complete a column map, and column-of's own nearest-anchor fallback
+    // measures it against an anchor position dragged toward the (nonexistent)
+    // second column — refusing it outright as an anomalously-wide gap from
+    // unrelated columns nearby (see anchorRadii). Scoped to literally " AND "
+    // sitting between the two words' own text positions, nothing looser.
+    const groups: string[][] = [[words[0]]];
+    let scanFrom = 0;
+    for (let k = 1; k < words.length; k++) {
+      const prevWord = words[k - 1];
+      const prevAt = text.indexOf(prevWord, scanFrom);
+      const wordAt = text.indexOf(words[k], prevAt + prevWord.length);
+      const between = prevAt >= 0 && wordAt >= 0 ? text.slice(prevAt + prevWord.length, wordAt).trim() : "";
+      if (between === "AND") groups[groups.length - 1].push(words[k]);
+      else groups.push([words[k]]);
+      scanFrom = prevAt >= 0 ? prevAt + prevWord.length : scanFrom;
+    }
+    for (const g of groups) {
+      const label = g[0];
+      if (used.has(label)) continue;
+      used.add(label);
+      const first = text.indexOf(g[0]);
+      const last = text.indexOf(g[g.length - 1], first);
+      const frac = first >= 0 && last >= 0
+        ? (first + last + g[g.length - 1].length) / 2 / Math.max(text.length, 1)
+        : 0.5;
+      out.push({ label, x: t.x + frac * (t.w || 0) });
     }
   }
   return out;
@@ -1959,7 +1989,42 @@ function columnMapFor(
   if (kept.length < anchors.length) return null;
   const byLabel = new Map<string, number>();
   for (const c of kept) {
-    const own = anchors.find((a) => a.x >= c.start);
+    // The anchor whose header CENTER sits TRUE NEAREST this recovered
+    // column's own start — not merely the first one at or right of it. A
+    // column's real data-start commonly sits a little LEFT of its own
+    // header center (a real drafting-tolerance / wrapping-offset case: a
+    // secondary token inside a wide cell clusters at its own consistent x,
+    // short of the NEXT column's anchor but past this column's own). "At or
+    // right" alone skips straight past this column's true anchor to the
+    // next, further-right one, binding the column to the WRONG header and
+    // cascading the mislabel into every column after it — real, found live
+    // on itd-d1-lab-mechanical.pdf's CONTROL VALVE SCHEDULE (AREA SERVED's
+    // own wrapped "SAV-1" sub-token pulled into VALVE TYPE).
+    //
+    // EXCEPT when the plain "at or right" pick is itself a WIDE_LAST/NAME
+    // anchor (REMARKS, DESCRIPTION, a NAME key column) — those EARN a wide
+    // left margin by this file's own design (bandLimits' own rightMargin/
+    // leftMargin, anchorRadii's own matching exemption): a real value in
+    // one of THOSE columns routinely starts far left of its own centered
+    // header, which is exactly what true-nearest cannot tell apart from a
+    // genuinely different, ordinary anchor sitting closer by coincidence.
+    // Real, found live (regression caught by this file's own "WIDE_LAST
+    // title-block bleed" test): a REMARKS anchor centered well right of a
+    // short real value ("SDV") is FARTHER from it than the ordinary WALL
+    // anchor one column over — true-nearest alone reassigned "SDV" to WALL
+    // and REMARKS lost its column outright. Kept to plain "at or right" for
+    // exactly this anchor shape; every ordinary, normal-width anchor still
+    // gets the true-nearest fix above.
+    let atOrRight: Anchor | null = null;
+    for (const a of anchors) { if (a.x >= c.start) { atOrRight = a; break; } }
+    let own: Anchor | null = atOrRight;
+    if (!atOrRight || !(WIDE_LAST.has(atOrRight.label) || atOrRight.label === "NAME")) {
+      let bestD = atOrRight ? Math.abs(atOrRight.x - c.start) : Infinity;
+      for (const a of anchors) {
+        const d = Math.abs(a.x - c.start);
+        if (d < bestD || (d === bestD && a.x >= c.start)) { bestD = d; own = a; }
+      }
+    }
     if (!own) continue;
     const cur = byLabel.get(own.label);
     if (cur == null || c.start < cur) byLabel.set(own.label, c.start);
