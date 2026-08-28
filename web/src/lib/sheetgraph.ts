@@ -1767,6 +1767,74 @@ export const isNonFinishSchedule = (title: string): boolean => {
 const MEP_EQUIPMENT_FAMILY_RE = /\b(PUMP|BOILER|HUMIDIFIER|COIL|CHILLER|AHU|VAV|EQUIPMENT|APPLIANCE)S?\b/;
 export const isMepEquipmentSchedule = (title: string): boolean => MEP_EQUIPMENT_FAMILY_RE.test(norm(title));
 
+// A real MEP-equipment family can hide behind a title that names NO
+// recognizable family at all, so isMepEquipmentSchedule's own title check
+// never gets a chance to run — real, found live (itd-d1-lab-mechanical.pdf's
+// own "LAB EXHAUST FAN SCHEDULE", LEF-1: a real powered lab exhaust fan,
+// CFM/ESP/RPM/HP/ELECTRICAL V/Ø/# OF FANS/SONES, none of which is DOOR/
+// WINDOW/PARTITION/…/PUMP/BOILER/…/APPLIANCE, so isNonFinishSchedule(title)
+// is false and this table never even reaches the reclassify-or-drop branch
+// below — it just stays finish-kind with SYMBOL/MANUFACTURER/REMARKS as its
+// only recognized columns). The real header data IS present on the sheet —
+// six fragmented sub-tiers packed into ~110px, the same "2-column gap"
+// header-tiering corruption also seen on this corpus's PUMP/COIL schedules
+// — just never merged into t.headers by the tier-walk above.
+//
+// Deepening that walk to reach it was tried and rejected: the SAME wider
+// reach also exposes "SOUND ATTENUATOR SCHEDULE"'s (SA-1) own AIRFLOW/
+// VELOCITY/FPM columns one tier further up — and SA-1 is a real,
+// deliberately finish-kind table per this corpus's own hand-verified key
+// (keys/itd-d1-lab.takeoff.csv's own header comment lists it explicitly,
+// alongside diffuser/grille/penthouse/louver, as real but finish-kind under
+// this project's own scheduleKind convention, same as bessemer's diffuser/
+// grille/fan schedules). Rendering and reading both real tables directly
+// (never trusting the pipeline's own extraction as its own ground truth)
+// confirms SA-1's header is structurally near-identical to LEF-1's/SN-1..5's
+// in airflow/velocity/pressure-drop vocabulary alone — AIRFLOW, VELOCITY,
+// FPM, and pressure-drop-in-inches-W.C. all appear on BOTH a real sound
+// attenuator schedule and a real fan/snorkel-hood schedule, because both are
+// duct-mounted devices something moves air through. That vocabulary cannot
+// discriminate them safely at any reach depth.
+//
+// What DOES discriminate them, confirmed the same way: real motor/
+// electrical NAMEPLATE data — VOLTAGE/PHASE/WATTS/KW/AMPS/FLA/MCA/MOCP/GPM/
+// HP/TONS/MBH/EER/SEER/EAT/LAT/EWT/LWT/ESP (EQUIPMENT_REQUIRED's own list,
+// minus AIRFLOW/VELOCITY/FPM/EQUIPMENT — the four words a passive duct
+// fitting can also legitimately carry). A silencer, diffuser, grille, or
+// louver has no motor, no shaft speed, no voltage/phase, no electrical draw
+// at all — this vocabulary describes power a device CONSUMES or PRODUCES,
+// not air it merely passes through. Confirmed live: SA-1's own real header
+// (rendered off itd-d1-lab-mechanical.pdf#14) carries none of it; bessemer's
+// own real, legitimately finish-kind "FAN SCHEDULE" (a bathroom exhaust fan,
+// ID/DESCRIPTION/MANUFACTURER/MODEL NUMBER only, no nameplate data at all)
+// carries none either. SN-1..5's own "SNORKEL HOOD SCHEDULE" is a real,
+// confirmed miss THIS fix does NOT reach — a snorkel hood is itself passive
+// (an extraction arm and duct, no motor of its own), so its real header
+// carries no nameplate vocabulary either, and no safe generic signal
+// distinguishing it from SA-1 was found; forcing one would mean keying off
+// corpus-specific proper nouns ("SNORKEL", "EXTRACTION ARM"), exactly the
+// hardcoding this project's own standing rules forbid.
+//
+// Scoped to the table's OWN region (the band's own spans, not the whole
+// sheet) so a dense sheet's unrelated neighboring table can't bleed a stray
+// nameplate word in — the exact failure mode nearbyRequiredHit's own
+// Finding-1 comment names for a looser radius. Requires >=2 distinct hits,
+// not one, for the same reason: a single stray word surviving inside one
+// table's own region by accident is a realistic risk on a dense sheet; two
+// independent nameplate words landing there together is not.
+const POWERED_EQUIPMENT_REQUIRED = EQUIPMENT_REQUIRED.filter((w) => !["AIRFLOW", "VELOCITY", "FPM", "EQUIPMENT"].includes(w));
+export function hasPoweredEquipmentColumns(spans: GraphSpan[], table: ScheduleTable): boolean {
+  const [x0, y0, x1, y1] = table.region;
+  const hits = new Set<string>();
+  for (const sp of spans) {
+    const cx = sp.x + (sp.w || 0) / 2;
+    const cy = sp.y + (sp.h || 0) / 2;
+    if (cx < x0 || cx > x1 || cy < y0 || cy > y1) continue;
+    for (const w of headerLabels(sp.str, POWERED_EQUIPMENT_REQUIRED)) hits.add(w);
+  }
+  return hits.size >= 2;
+}
+
 function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", buildings?: Set<string>, nameKeyed = false): { key: string; building?: string } | null {
   // A NAME-keyed table's key column IS its NAME column — the only sensible
   // reading of a leading token there is a room-type phrase, not a digit tag
@@ -3757,6 +3825,16 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
             notes.push(`${s.key}: "${t.title.text}" names another schedule family, not a finish/material schedule — its ${t.rows.length} rows are NOT indexed as finish definitions`);
             continue;
           }
+        } else if (kind === "finish" && t.title && hasPoweredEquipmentColumns(bs.spans, t)) {
+          // isNonFinishSchedule's own title check never triggered above (this
+          // table's title names no recognizable OTHER_FAMILY_RE family at
+          // all), but its own region carries real motor/electrical nameplate
+          // vocabulary regardless of what its title says — see
+          // hasPoweredEquipmentColumns' own comment for why that vocabulary,
+          // not title text, is the safe discriminator here.
+          notes.push(`${s.key}: "${t.title.text}" carries real motor/electrical nameplate data (VOLTAGE/PHASE/AMPS/HP/ESP/…) inside its own header region, not just a finish/material schedule's own vocabulary — reclassified as equipment-kind (its title alone named no recognizable equipment family, so isMepEquipmentSchedule's own title check never applied).`);
+          t.kind = "equipment";
+          reclassified.add(t);
         }
         // table-level building: its own title first, the sheet's context second
         const titleB = t.title ? buildingMentions(t.title.text) : [];
