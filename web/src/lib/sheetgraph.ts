@@ -4216,6 +4216,24 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   const roles = new Map<string, ReturnType<typeof classifySheetRole>>();
   const fragments: ScheduleTable[] = [];
   const fragmentKinds = new Map<string, Set<TableKind>>(); // sheet key → kinds extracted there
+  // A real, TITLED schedule dropped outright by isNonFinishSchedule below
+  // (an architectural/out-of-scope family, or an in-scope family whose own
+  // header never independently cleared EQUIPMENT_HEADERS' bar) is still a
+  // real table occupying real ink on the sheet — just not one this pipeline
+  // indexes anywhere. Tracked here (region/title only, never pushed to
+  // `fragments`, so it changes NOTHING about finish/equipment/tag-sweep
+  // output) purely so pass 1c below can use its real region as a "reference"-
+  // kind claimer too: a structural, vocabulary-free "reference" read that
+  // lands (almost entirely) inside a real, named, but deliberately-dropped
+  // schedule's own region is that dropped schedule's own ink bleeding through
+  // as garbage — a bogus title/columns lifted from data prose deep inside it
+  // (real, found live: itd-d1-lab-mechanical.pdf#28's own real "PLUMBING
+  // FIXTURE SCHEDULE" — dropped here since "PLUMBING" alone is deliberately
+  // not safe to blanket-reclassify as equipment, see isMepEquipmentSchedule's
+  // own comment — otherwise left 3 garbled "reference" fragments with titles
+  // ripped from its own row prose, "LAVATORY SHIELD"/"ROOF DRAIN", never a
+  // second real table), never a genuine second, independent table.
+  const droppedNamedTables: ScheduleTable[] = [];
   // Tables reclassified finish→equipment (isMepEquipmentSchedule, below) —
   // tracked by identity so the cross-kind dedup pass still treats one as
   // competing against a genuine, independently-found equipment-kind
@@ -4268,6 +4286,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
             reclassified.add(t);
           } else {
             notes.push(`${s.key}: "${t.title.text}" names another schedule family, not a finish/material schedule — its ${t.rows.length} rows are NOT indexed as finish definitions`);
+            droppedNamedTables.push(t);
             continue;
           }
         } else if (kind === "finish" && t.title && hasPoweredEquipmentColumns(bs.spans, t)) {
@@ -4435,9 +4454,20 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
       if (!bySheet.has(f.sheet)) bySheet.set(f.sheet, []);
       bySheet.get(f.sheet)!.push(f);
     }
+    // droppedNamedTables' own region counts as a claimer too (see its own
+    // comment above) — grouped by sheet the same way, kept OUT of `bySheet`
+    // itself so it can never be iterated as a droppable/reclassifiable
+    // member (it is not, and never was, in `fragments`), only consulted as
+    // extra evidence for what a "reference" fragment's own region collides
+    // with.
+    const droppedBySheet = new Map<string, ScheduleTable[]>();
+    for (const d of droppedNamedTables) {
+      if (!droppedBySheet.has(d.sheet)) droppedBySheet.set(d.sheet, []);
+      droppedBySheet.get(d.sheet)!.push(d);
+    }
     const drop = new Set<ScheduleTable>();
-    for (const group of bySheet.values()) {
-      const claimers = group.filter((t) => t.kind !== "reference");
+    for (const [sheetKey, group] of bySheet) {
+      const claimers = group.filter((t) => t.kind !== "reference").concat(droppedBySheet.get(sheetKey) ?? []);
       if (!claimers.length) continue;
       for (const t of group) {
         if (t.kind === "reference" && !drop.has(t) && claimers.some((c) => contains(c.region, t.region))) drop.add(t);
