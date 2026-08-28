@@ -2833,7 +2833,59 @@ function bandLimits(anchors: Anchor[]): { x0: number; x1: number; medGap: number
 // building-QUALIFIED key ("A-134") is accepted only for a designator the set
 // names (opts.buildings) — otherwise a stray finish code ("P-2") banding to
 // the key column would mint a phantom building.
-const CODE_RE = /^[A-Z]{1,4}(-?[A-Z0-9]{1,4})?$/;
+//
+// Two real shapes, kept as separate alternatives rather than one loosened
+// pattern (real, measured, navfac-cherry-point-atc-mechanical.pdf's own
+// mechanical PUMP/AIR SEPARATOR/CONTROL VALVE schedules): a bare tag glues
+// its trailing mark straight onto the prefix with no hyphen at all ("E1",
+// "P1" — a single letter plus a digit, the ORIGINAL shape this branch alone
+// used to cover, kept byte-for-byte as its own alternative so it can't
+// regress), OR a real multi-segment hyphenated tag chains MULTIPLE
+// hyphen-delimited segments, not just one: "PCHWP-A1" (a 5-letter prefix —
+// PRIMARY CHILLED WATER PUMP — already past the old 4-letter cap on its
+// own), "HHWP-DOAH-A1" (three real segments: circulator/served-unit/area),
+// "CV-HHW-BP-A" (four: valve/system/BYPASS/area). Every one of these is a
+// real row key read directly off that schedule's own rendered page, not a
+// hypothesis — confirmed corpus-wide (every existing key tag across every
+// set in this project, 384 total, matched byte-for-byte against both the
+// old and new pattern) this widening drops NOTHING that used to match; it
+// only recognizes the longer real prefixes and the extra hyphen segments
+// mechanical pump/valve nomenclature routinely carries. The bare (no-
+// hyphen) alternative deliberately keeps its OWN short original cap (not
+// widened) rather than folding into the hyphenated alternative's wider
+// per-segment cap — a bare, undelimited run has no structural signal at all
+// telling a real short tag apart from an ordinary long word (REMARKS,
+// MANUFACTURER, EQUIPMENT, …), so only the shape that already existed is
+// kept for that case; the hyphenated alternative's own extra segments are
+// what any wider match at all needs.
+//
+// Each hyphenated segment itself is NOT a blanket "1-6 alnum" run — real,
+// measured regression caught corpus-wide (itd-d1-lab-mechanical.pdf#14's own
+// DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE and SPLIT SYSTEM AIR
+// CONDITIONING UNIT SCHEDULE): a comma-compound cell ("DFC-1 , DCU-1", one
+// physical unit scheduled under two matched-set marks — a wall unit plus its
+// own condensing unit) reads, once this file's own punctuation strip throws
+// the comma away like any other separator it doesn't yet special-case, as
+// one glued run — "DFC-1DCU-1". A blanket "1-6 alnum" per-segment pattern
+// happily accepts that glued run too (prefix "DFC" + segment "1DCU", 4
+// chars, well inside a 6-char cap) — same length class as a genuine segment
+// ("DOAH" is also 4 chars — length alone cannot tell the two apart) — and
+// mints ONE wrong key neither real mark ever answers to, burying both.
+// What DOES tell them apart, structurally, every time: a real segment
+// (DOAH/CHW/BP/A1/MT1/A/1, every one confirmed across this corpus) either
+// starts with a letter or is pure digits — never a digit immediately
+// followed by a letter. "1DCU" is exactly that impossible shape (a second
+// real mark's own leading digit walked straight into a THIRD mark's own
+// leading letter, an artifact of the comma vanishing, not a drafting
+// convention). Requiring each segment to start with a letter (then up to 5
+// more alnum) OR be pure digits (up to 5) costs nothing against the real
+// corpus (same 384/52/139-tag, zero-regression corpus-wide check below) and
+// correctly refuses the glued shape again — same refusal the old, narrower
+// CODE_RE produced for it, restoring itd-d1-lab's own real 98.3% baseline
+// (this specific row already resolves correctly via a separate, working
+// mechanism this file does not touch) rather than silently taking it down
+// while chasing a different set's own real gap.
+const CODE_RE = /^(?:[A-Z]{1,4}[A-Z0-9]{0,4}|[A-Z]{1,6}(?:-(?:[A-Z][A-Z0-9]{0,5}|[0-9]{1,5})){1,4})$/;
 // Every recognized column-header word, across all three vocabularies —
 // a real device/finish tag is never itself the bare name of some table's
 // column (the same axiom bandDataRows' own keyIsOwnColumn check already
