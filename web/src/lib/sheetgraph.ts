@@ -4966,7 +4966,21 @@ function findGenericTableBoundary(rows: GraphSpan[][], dataFrom: number, x0: num
 // column has no single known shape across firms (a short code, "D-1", or a
 // long phrase, "SUPPLY DUCTS (EXTERNALLY INSULATED)", both real, same
 // corpus, same session).
-const GENERIC_KEY_RE = /^[A-Z0-9][A-Z0-9 .,'"&()/%°∅Ø:+-]{0,99}$/;
+//
+// "$" and "#" are both admitted (first-char and body) alongside the rest —
+// real, corpus-found (baker-county-eoc's own LIGHTING CONTROL STATIONS
+// table, sheet E6.01): a lighting-control zone/override designation is
+// routinely tag-prefixed "$OS"/"$OSD"/"$LVA"/"$LVB"/"$LVC" or suffixed
+// "$LV#", a real firm convention, not this corpus's own invention. Before
+// this, EVERY one of those 6 real row keys failed this shape (the bare
+// "$"/"#" glyph sat outside the allowed class entirely), so the row-key
+// column read as blank on every physical line of that table — the scan
+// then fell back to whatever OTHER column's own short value happened to
+// key-shape-match and column-align instead ("ALL"/"a"/"b", the ZONES
+// CONTROLLED column's own values), corrupting the table's real row
+// identity into duplicate, non-designation keys. Purely additive — a
+// string that already matched still matches identically.
+const GENERIC_KEY_RE = /^[A-Z0-9$#][A-Z0-9 .,'"&()/%°∅Ø:+$#-]{0,99}$/;
 
 function genericRowKeyOf(raw: string, headerLabels: Set<string>): string | null {
   const s = (raw || "").trim();
