@@ -539,7 +539,28 @@ const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "ID", "MATERIAL", "MANUFACTURE
 // entry: headerLabel takes the first vocabulary word found in the cell text
 // in STRING order, and "LUMENS" alone is both sufficient (the cell still
 // resolves to one anchor) and lower-risk than adding a generic English word.
-const EQUIPMENT_HEADERS = ["ID", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "RPM", "ESP", "EQUIPMENT", "VELOCITY", "AIRFLOW", "SIZE", "FPM", "LENGTH", "TYPE", "MOUNTING", "CCT", "CRI", "DRIVER", "DIMMING", "LENS", "FINISH", "NOTES", "LUMENS"];
+//
+// SERVED: a full-coverage audit of itd-d1-lab-mechanical.pdf's own already-
+// PASSING equipment tables (direct render vs. extracted cells, not code
+// inspection — HOT WATER REHEAT COIL SCHEDULE, CONTROL VALVE SCHEDULE (HOT
+// WATER REHEAT COILS), EXHAUST FAN SCHEDULE, ELECTRIC HEATER SCHEDULE, sheet
+// #12-14) found a single real column — "AREA SERVED" / "AREA / SUPPLY VALVE
+// SERVED" — missing outright from EVERY one of them: the room/space a piece
+// of equipment serves, arguably the single most requested field for a real
+// takeoff. None of AREA_SERVED's own words were in ANY vocabulary here
+// (EQUIPMENT_HEADERS nor FINISH_HEADERS nor ROOM_HEADERS), so the column
+// never anchored at all and its data was silently dropped (not merged
+// elsewhere — confirmed against the raw header spans: the real "AREA /
+// SUPPLY VALVE SERVED" header token sits well clear of every other real
+// column's own anchor). "SERVED" alone (not "AREA", which risks colliding
+// with unrelated "FLOOR AREA"/"SQ FT" prose elsewhere in a real set) is a
+// standard, cross-firm MEP schedule term ("AREA SERVED", "ROOM SERVED",
+// "SPACE SERVED", "ZONE SERVED" all end in it) — same evidence bar as
+// EQUIPMENT/NOTES/MOUNTING above, not this one document's own invented
+// vocabulary. Deliberately NOT added to `required`: a table naming its rating
+// columns already clears required's own bar, and SERVED alone should never
+// tip an unrelated table into qualifying.
+const EQUIPMENT_HEADERS = ["ID", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "RPM", "ESP", "EQUIPMENT", "VELOCITY", "AIRFLOW", "SIZE", "FPM", "LENGTH", "TYPE", "MOUNTING", "CCT", "CRI", "DRIVER", "DIMMING", "LENS", "FINISH", "NOTES", "LUMENS", "SERVED"];
 // Hoisted out of extractTableAt (module-level, not a local) so the
 // structural "reference" pass (below extractAllTables) can check "would
 // THIS candidate header already qualify under an EXISTING vocabulary" off
