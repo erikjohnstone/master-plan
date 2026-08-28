@@ -8,7 +8,7 @@ import path from "node:path";
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, type SheetGraph, type SheetSpans, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isBareAnchorHeader, isQualifiedAnchorHeader, type SheetGraph, type SheetSpans, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
@@ -2946,13 +2946,57 @@ export class Session {
     // return vs exhaust service): that row ANSWERS for each mark, and the
     // sweep runs on the mark as drawn on the plans, not the compound key.
     const canonKey = (k: string) => (k || "").trim().toUpperCase().replace(/\s+/g, "");
-    const rowHits = graph.tables.flatMap((tb) => tb.rows.filter((r) => rowKeyAnswersFor(r.key, t)).map((r) => ({ tb, r })));
+    let rowHits = graph.tables.flatMap((tb) => tb.rows.filter((r) => rowKeyAnswersFor(r.key, t)).map((r) => ({ tb, r })));
     if (!rowHits.length) {
       const found = graph.tables.map((x) => {
         const keys = x.rows.map((row) => row.key).slice(0, 12).join(", ");
         return `${x.kind} on ${x.sheet} (${x.rows.length} rows: ${keys}${x.rows.length > 12 ? ", …" : ""})`;
       }).join(" | ");
       throw new UserError(`No schedule row "${t}" in the set — tables found: ${found || "none"}. Check the tag as drawn (find_schedule shows each table's region), or merge the schedule sheet in with load_plan.`);
+    }
+    // Accessory-row narrowing: a collision is not always 2 competing
+    // definitions of the SAME device. A primary equipment schedule's own
+    // row (its OWN key column bare — "MARK"/"TAG"/"SYMBOL"/…, the generic
+    // catalog-anchor vocabulary every equipment-kind table already keys
+    // off of) can share its mark with an accessory-schedule row that names
+    // a DIFFERENT real, separately-scheduled device serving THIS one (a
+    // real case: CHW/HHW CONTROL VALVE SCHEDULE keys its own row under
+    // "UNIT MARK" — a cross-reference to the AHU/FCU/VAV it serves, while
+    // that row's OWN device identity lives in its own "VALVE MARK" column
+    // instead). The accessory row is not a competing claim on the tag —
+    // it never carries its own bare anchor column; it QUALIFIES one
+    // ("UNIT MARK", "VALVE MARK" — an anchor word plus another word, same
+    // real distinction extractTableAt's own bareLeadingType comment draws
+    // between "TYPE" and "FAN TYPE"/"VALVE TYPE").
+    //
+    // This narrows ONLY when the collision has EXACTLY one row whose own
+    // key column is a bare anchor and EVERY OTHER colliding row's key
+    // column is a QUALIFIED variant of an anchor word — never when two or
+    // more rows are each bare-anchor-keyed (two real, separate devices
+    // both making a primary claim — e.g. ET-1 on itd-d1-lab: a real
+    // specialty-equipment device and a real plumbing fixture, BOTH keyed
+    // bare "SYMBOL", correctly stays refused below) and never when any
+    // other row's key-column role can't be determined at all. Conservative
+    // by construction: anything short of this exact shape falls straight
+    // through to the unchanged ambiguity refusal.
+    let accessoryNote: string | null = null;
+    if (rowHits.length > 1) {
+      const keyHeaderFor = (tb: ScheduleTable, row: { key: string; cells: Record<string, { text: string }> }): string | null => {
+        for (const h of tb.headers) {
+          const c = row.cells[h];
+          if (c && canonKey(c.text) === canonKey(row.key)) return h;
+        }
+        return null;
+      };
+      const withHeader = rowHits.map((h) => ({ ...h, keyHeader: keyHeaderFor(h.tb, h.r) }));
+      const bare = withHeader.filter((h) => isBareAnchorHeader(h.keyHeader));
+      const rest = withHeader.filter((h) => !isBareAnchorHeader(h.keyHeader));
+      const allRestQualified = rest.length > 0 && rest.every((h) => isQualifiedAnchorHeader(h.keyHeader));
+      if (bare.length === 1 && allRestQualified) {
+        const excludedDesc = rest.map((h) => `"${h.tb.title?.text || `${h.tb.kind} schedule`}" (keyed "${h.keyHeader}", a cross-reference — not this tag's own device)`).join(", ");
+        accessoryNote = `${rest.length} accessory schedule row${rest.length === 1 ? "" : "s"} also carr${rest.length === 1 ? "ies" : "y"} the key "${t}" and were excluded, not counted as competing ambiguity: ${excludedDesc}.`;
+        rowHits = [bare[0]];
+      }
     }
     if (rowHits.length > 1) {
       throw new UserError(`Ambiguous: ${rowHits.length} schedule rows carry the key "${t}" — the same mark defined twice cannot seed one sweep. Marquee the marker yourself with symbol_sweep.`);
@@ -3510,6 +3554,7 @@ export class Session {
     const firstCell = r.cells[Object.keys(r.cells)[0]];
     const capped = perSheet.filter((p) => p.candidates.dropped > 0);
     const notes: string[] = [];
+    if (accessoryNote) notes.push(accessoryNote);
     if (!corroborated) {
       notes.push(`The tag "${t}" is drawn ${totalOcc === 1 ? "exactly once" : "too sparsely to cross-check"} — the fingerprint could not corroborate at a second occurrence${crossCandidates.length ? `, and none of ${crossCandidates.length} sibling tag(s) from the same ${table} table reproduced it either` : ""}; audit the matches with view_sheet before trusting the count.`);
     } else if (corroboratedVia) {
