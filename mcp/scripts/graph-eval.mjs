@@ -33,10 +33,20 @@
 //
 import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { spawn } from "node:child_process";
+import pLimit from "p-limit";
 import { Session } from "../src/session.ts";
 
-const [corpusDir, ...only] = process.argv.slice(2).filter((a) => !a.startsWith("--"));
+const [corpusDir, ...only] = process.argv.slice(2).filter((a) => !a.startsWith("--") && a !== "--single-json");
 const writeReport = process.argv.includes("--report");
+// --single-json <setId>: internal mode, see takeoff-eval.mjs's own identical
+// mechanism for the full rationale (real per-set CPU-bound work needs real
+// OS-level parallelism — a child process per set — not just promise
+// concurrency in one process).
+const singleJsonIdx = process.argv.indexOf("--single-json");
+const singleJsonSetId = singleJsonIdx >= 0 ? process.argv[singleJsonIdx + 1] : null;
+const CONCURRENCY = Number(process.env.OPENTAKEOFF_EVAL_CONCURRENCY) || 3;
 if (!corpusDir) {
   console.error("usage: node --import tsx scripts/graph-eval.mjs <corpus-dir> [setId ...] [--report]");
   process.exit(2);
@@ -210,14 +220,37 @@ async function evalSet(set) {
   return out;
 }
 
+if (singleJsonSetId) {
+  const set = spec.sets.find((s) => s.id === singleJsonSetId);
+  if (!set) { console.error(`unknown set id: ${singleJsonSetId}`); process.exit(2); }
+  let result;
+  try { result = await evalSet(set); }
+  catch (e) { result = { id: set.id, gc: set.gc, project: set.project, error: String(e.message || e) }; }
+  process.stdout.write(JSON.stringify(result));
+  process.exit(0);
+}
+
 // ── report ──────────────────────────────────────────────────────────────────
 const wanted = spec.sets.filter((s) => !only.length || only.includes(s.id));
-const results = [];
-for (const set of wanted) {
-  process.stderr.write(`· ${set.id} …\n`);
-  try { results.push(await evalSet(set)); }
-  catch (e) { results.push({ id: set.id, gc: set.gc, project: set.project, error: String(e.message || e) }); }
+const thisScript = fileURLToPath(import.meta.url);
+const limit = pLimit(CONCURRENCY);
+
+function evalSetInChildProcess(set) {
+  return new Promise((res) => {
+    process.stderr.write(`· ${set.id} …\n`);
+    const child = spawn(process.execPath, ["--import", "tsx", thisScript, corpus, "--single-json", set.id], { stdio: ["ignore", "pipe", "inherit"] });
+    let out = "";
+    child.stdout.on("data", (d) => { out += d; });
+    child.on("close", (code) => {
+      if (code !== 0 || !out.trim()) { res({ id: set.id, gc: set.gc, project: set.project, error: `child process exited ${code} with no result` }); return; }
+      try { res(JSON.parse(out)); }
+      catch (e) { res({ id: set.id, gc: set.gc, project: set.project, error: `bad child JSON: ${String(e.message || e)}` }); }
+    });
+    child.on("error", (e) => res({ id: set.id, gc: set.gc, project: set.project, error: String(e.message || e) }));
+  });
 }
+
+const results = await Promise.all(wanted.map((set) => limit(() => evalSetInChildProcess(set))));
 
 const lines = [];
 const say = (l = "") => { lines.push(l); console.log(l); };
