@@ -7,11 +7,54 @@
 // stays usable outside Node (the browser) if a caller ever gets ODL's JSON
 // some other way.
 import { convert } from "@opendataloader/pdf";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { mkdtemp, readFile, rm, stat } from "node:fs/promises";
+import { tmpdir, homedir } from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import cacache from "cacache";
 import type { ODLTable } from "../../web/src/lib/sheetgraph.ts";
+
+// Disk cache for ODL's own JSON output, keyed by (resolved PDF path, its own
+// mtime+size, the exact page set requested, and the extraction method) —
+// content-addressable via `cacache` (the same library `npm` itself uses for
+// its real package cache under real concurrent installs), so multiple
+// worker processes reading/writing the SAME cache dir at once is safe: each
+// distinct key writes its own file, no shared-JSON-blob last-write-wins
+// race like a single-file cache (flat-cache et al.) would have here.
+//
+// Why this exists: every eval script invocation (takeoff-eval.mjs,
+// reference-eval.mjs, graph-eval.mjs) is its own fresh Node process, so
+// Session.ensureGraph()'s in-memory `this.graph` memoization — real and
+// correct within one process — buys nothing across runs. Without this, the
+// SAME unchanged PDF gets its JVM re-spawned and OpenDataLoader's own
+// table-clustering algorithm re-run from scratch on every single eval
+// invocation, for every set, forever. Measured before this fix: navfac-
+// cherry-point-atc-mechanical.pdf (75 sheets) alone cost 12+ real minutes
+// per full-corpus eval run — paid dozens of times over one session by
+// multiple concurrent workers plus the coordinator's own re-verification
+// passes. A cache hit here returns in single-digit milliseconds.
+//
+// Deliberately NOT scoped to any one corpus or caller — general to any PDF
+// this module is ever asked to process (a real production Session load, a
+// corpus eval script, a worker's own diagnostic run), never corpus-specific
+// per this project's own standing rule against baking corpus specifics into
+// production code. Lives in a standard OS cache location, not inside any
+// project or corpus directory.
+const CACHE_VERSION = "cluster-v1";
+const CACHE_DIR = path.join(process.env.XDG_CACHE_HOME || path.join(homedir(), ".cache"), "opentakeoff-odl");
+
+async function odlCacheKey(pdfPath: string, pages: number[]): Promise<string | null> {
+  let st;
+  try {
+    st = await stat(pdfPath);
+  } catch {
+    return null; // unreadable path — let the real convert() call below produce the real error
+  }
+  const sorted = [...new Set(pages)].sort((a, b) => a - b).join(",");
+  const raw = `${CACHE_VERSION}|${path.resolve(pdfPath)}|${st.mtimeMs}|${st.size}|${sorted}`;
+  return createHash("sha256").update(raw).digest("hex");
+}
 
 // @opendataloader/pdf's own convert() spawns the literal string "java" on
 // whatever PATH the current Node process has (dist/index.js: `spawn("java",
@@ -92,6 +135,16 @@ export interface ODLRunResult { tables: ODLTable[]; error?: string }
  * of this project already holds to. */
 export async function runOpenDataLoaderPages(pdfPath: string, pages: number[]): Promise<ODLRunResult> {
   if (!pages.length) return { tables: [] };
+  const cacheKey = await odlCacheKey(pdfPath, pages);
+  if (cacheKey) {
+    try {
+      const hit = await cacache.get(CACHE_DIR, cacheKey);
+      return JSON.parse(hit.data.toString("utf8"));
+    } catch {
+      // no cache entry (or a corrupt/unreadable one) — fall through to a
+      // real run below, exactly as if caching didn't exist.
+    }
+  }
   if (!ensureJavaAvailable()) return { tables: [], error: "no Java 11+ runtime found on PATH" };
   let outDir: string | null = null;
   try {
@@ -117,7 +170,9 @@ export async function runOpenDataLoaderPages(pdfPath: string, pages: number[]): 
       }
     };
     walk(raw);
-    return { tables };
+    const result: ODLRunResult = { tables };
+    if (cacheKey) await cacache.put(CACHE_DIR, cacheKey, JSON.stringify(result)).catch(() => {});
+    return result;
   } catch (err) {
     return { tables: [], error: err instanceof Error ? err.message : String(err) };
   } finally {
