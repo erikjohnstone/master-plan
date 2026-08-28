@@ -1363,9 +1363,18 @@ test("multi-table extraction: the real regression case — Diffuser/Grille/Regis
   // caught and reverted before it shipped.
   const diffuser = extractAllTables(m601, "finish").find((t) => t.title?.text === "DIFFUSER, GRILLE, REGISTER SCHEDULE")!;
   assert.ok(diffuser, "Diffuser/Grille/Register Schedule is found");
-  assert.deepEqual(diffuser.headers, ["ID", "DESCRIPTION", "MANUFACTURER", "SIZE", "MATERIAL"]);
+  // THROW (real, standalone, single-line — "3-WAY" on SR-1, a genuine
+  // diffuser throw-pattern spec) is now recovered too (subTierAnchors'
+  // degenerate-2-token-run fallback: a run member with no genuine parent
+  // ABOVE it, and no continuation directly below it either, mints itself
+  // rather than vanishing — same fix PENTHOUSE SCHEDULE's own TYPE/FINISH
+  // needed). MODEL (whose real continuation, "NUMBER", wraps onto the row
+  // BELOW the header row — a shape this fallback deliberately refuses to
+  // guess at, see its own comment) stays exactly as invisible as before.
+  assert.deepEqual(diffuser.headers, ["ID", "DESCRIPTION", "MANUFACTURER", "SIZE", "THROW", "MATERIAL"]);
   assert.deepEqual(diffuser.rows.map((r) => r.key), ["SR-1", "SR-2", "TG-1", "TG-2"]);
   assert.equal(diffuser.rows.find((r) => r.key === "SR-1")!.cells.MANUFACTURER.text, "HART AND COOLEY");
+  assert.equal(diffuser.rows.find((r) => r.key === "SR-1")!.cells.THROW.text, "3-WAY");
 });
 
 test("multi-table extraction: zero cross-contamination between the two tables (the regression, as a standing negative test)", () => {
