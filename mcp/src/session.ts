@@ -2957,7 +2957,12 @@ export class Session {
     const withOcc = occBySheet.filter((e) => e.occ.length > 0)
       .sort((a, b) => b.occ.length - a.occ.length || a.sh.ord - b.sh.ord);
     const anchorSheet = withOcc[0].sh;
-    const anchor = withOcc[0].occ[0];
+    // Reassigned only by the same-sheet uncorroborated fallback below (Tier
+    // 2), and only after every corroboration attempt against the ORIGINAL
+    // anchor has been exhausted — `candFor`/`probes` close over this
+    // binding, so a reassignment is picked up by their next call with no
+    // other plumbing needed.
+    let anchor = withOcc[0].occ[0];
     const anchorGeo = await this.ensureGeometry(anchorSheet);
     if (!anchorGeo.segs.length) {
       throw new UserError(`${anchorSheet.key} carries the tag "${t}" but no vector linework — the marker cannot be fingerprinted on a scan.`);
@@ -2990,34 +2995,63 @@ export class Session {
     // same-tag corroborator when it shares the anchor's own discipline; when
     // the anchor's discipline can't be read at all (never guessed), the
     // prior any-sheet behavior holds unchanged, since there is no
-    // cross-discipline distinction to safely draw. A tag with ONLY
-    // cross-discipline other-occurrences falls through with corro === null,
-    // same as a tag drawn exactly once anywhere — the cross-tag fallback,
-    // and ultimately the disclosed-uncorroborated acceptance, below.
+    // cross-discipline distinction to safely draw.
+    //
+    // A tag can ALSO be drawn on its own anchor sheet in more than one
+    // real, physically incompatible CONVENTION — real case (itd-d1-lab
+    // B-1/B-2): the same equipment appears once in a piping SCHEMATIC
+    // (a standardized diagram icon, not to scale) and once on the to-scale
+    // ENLARGED PLAN (a leader-line tag column pointing at the real
+    // equipment footprint). Both are genuine drawn occurrences of the tag on
+    // the anchor sheet, so the same-sheet branch above always fires — but
+    // whichever occurrence sorts first (reading order) becomes `anchor` and
+    // the other becomes the ONLY same-sheet corroborator tried, and a
+    // schematic icon can never recur as a to-scale plan symbol (or vice
+    // versa) no matter how the pad ladder widens: it is a different, real
+    // drawing convention, not a detection failure. Requiring that single
+    // same-sheet pairing to succeed manufactures the exact same false
+    // "linework does not recur" refusal the discipline gate above already
+    // exists to prevent — so same-sheet corroboration is tried FIRST (as
+    // before, unchanged for every tag with only one same-sheet pairing to
+    // try), and same-discipline occurrences on OTHER sheets are always
+    // APPENDED as further fallback candidates, tried in order, only when an
+    // earlier candidate fails to corroborate at every pad level — this can
+    // only ever ADD a way to succeed; the first candidate that already
+    // passed keeps passing exactly as before.
     type Corro = { sh: SheetState; segs: number[]; occ: TagOcc[] };
-    let corro: Corro | null = null;
+    const corroCandidates: Corro[] = [];
     if (withOcc[0].occ.length > 1) {
-      corro = { sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.slice(1) };
-    } else if (withOcc.length > 1) {
-      const pick = pickSameDisciplineCorroborator(anchorSheet.sheetNumber, withOcc.slice(1), (e) => e.sh.sheetNumber);
-      if (pick) corro = { sh: pick.sh, segs: (await this.ensureGeometry(pick.sh)).segs, occ: pick.occ };
+      corroCandidates.push({ sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.slice(1) });
+    }
+    if (withOcc.length > 1) {
+      const anchorDisc = disciplineOfSheetNumber(anchorSheet.sheetNumber);
+      const rest = withOcc.slice(1);
+      // unchanged filter: same discipline only when the anchor's own
+      // discipline is readable at all; every other sheet with an occurrence
+      // otherwise (the prior any-sheet behavior) — just as an ORDERED LIST
+      // of fallback tries now, not a single pick.
+      const pool = anchorDisc ? rest.filter((e) => disciplineOfSheetNumber(e.sh.sheetNumber) === anchorDisc) : rest;
+      for (const e of pool) {
+        corroCandidates.push({ sh: e.sh, segs: (await this.ensureGeometry(e.sh)).segs, occ: e.occ });
+      }
     }
 
     // Cross-tag fallback corroborators, tried only when the tag itself has no
-    // second occurrence anywhere (corro === null) — the uniquely-tagged family
-    // case (VAV-1, VAV-2, VAV-3, … one tag per physical box, never repeated).
-    // Two different VAV boxes are still the SAME physical symbol, drawn by the
-    // same firm's convention, under a DIFFERENT tag — so a sibling ROW from
-    // the same schedule TABLE (never the whole set: a different equipment
-    // family answering for a shape it never drew would manufacture exactly
-    // the false positive this must not create) whose own tag occurrence sits
-    // on the anchor sheet is worth trying as a stand-in corroborator. Nearest
-    // first (the same drafting convention nearby is the likeliest match, and
-    // it bounds the work); capped, because a large table must not turn one
-    // sweep into dozens of full-sheet matchSymbol calls.
+    // second occurrence anywhere (corroCandidates is empty) — the
+    // uniquely-tagged family case (VAV-1, VAV-2, VAV-3, … one tag per
+    // physical box, never repeated). Two different VAV boxes are still the
+    // SAME physical symbol, drawn by the same firm's convention, under a
+    // DIFFERENT tag — so a sibling ROW from the same schedule TABLE (never
+    // the whole set: a different equipment family answering for a shape it
+    // never drew would manufacture exactly the false positive this must not
+    // create) whose own tag occurrence sits on the anchor sheet is worth
+    // trying as a stand-in corroborator. Nearest first (the same drafting
+    // convention nearby is the likeliest match, and it bounds the work);
+    // capped, because a large table must not turn one sweep into dozens of
+    // full-sheet matchSymbol calls.
     const CROSS_TAG_MAX_TRIES = 16;
     const crossCandidates: (Corro & { tag: string })[] = [];
-    if (!corro) {
+    if (!corroCandidates.length) {
       const rowKeys = (k: string) => canonKey(k).split("/").map((s) => s.trim()).filter(Boolean);
       const tableSiblingKeys = [...new Set(
         tb.rows.filter((row) => !rowKeys(row.key).includes(t)).flatMap((row) => rowKeys(row.key)),
@@ -3097,29 +3131,91 @@ export class Session {
     // distinction: same-tag corroboration is stronger evidence (the identical
     // mark recurs) than cross-tag (a relative in the same table recurs).
     let corroboratedVia: string | null = null;
-    if (corro) {
+    if (corroCandidates.length) {
       // same-tag corroboration is REQUIRED once a second occurrence exists:
-      // unchanged from before this change — a tag that recurs but whose
-      // WHOLE-SHAPE linework does NOT reproduce there falls back to the
-      // hatch-fill inline-motif check below before being refused, never
-      // silently accepted on a bare whole-shape guess.
-      for (const padK of [1, 2, 3]) {
-        const got = candFor(padK);
-        if (got === "region") break;
-        if (!got) continue;
-        if (probes(got.cand, corro)) { fp = got.cand; anchorRect = got.rect; corroborated = true; break; }
+      // unchanged from before this change for the common case (exactly one
+      // same-tag candidate to try) — a tag that recurs but whose WHOLE-SHAPE
+      // linework does NOT reproduce there falls back to the hatch-fill
+      // inline-motif check before being refused, never silently accepted on
+      // a bare whole-shape guess. When more than one candidate exists (a
+      // same-sheet pairing PLUS same-discipline occurrences on other
+      // sheets), each is tried in turn — most-trusted (same-sheet) first —
+      // and a later candidate is only reached once every earlier one has
+      // failed at every pad level, whole-shape AND hatch-fill; the first
+      // candidate that already passed today keeps passing exactly as
+      // before, so this can only ever ADD a way to succeed.
+      outerSameTag:
+      for (const cand of corroCandidates) {
+        for (const padK of [1, 2, 3]) {
+          const got = candFor(padK);
+          if (got === "region") break;
+          if (!got) continue;
+          if (probes(got.cand, cand)) { fp = got.cand; anchorRect = got.rect; corroborated = true; break outerSameTag; }
+        }
       }
       if (!fp || !anchorRect) {
-        const inlineAnchored = corroborateInlineMotif(
-          anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
-          anchor, anchorSheet.upp,
-          { segs: corro.segs, meta: (await this.ensureGeometry(corro.sh)).meta, occ: corro.occ, upp: corro.sh.upp },
-        );
-        if (inlineAnchored) {
-          inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
+        for (const cand of corroCandidates) {
+          const inlineAnchored = corroborateInlineMotif(
+            anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+            anchor, anchorSheet.upp,
+            { segs: cand.segs, meta: (await this.ensureGeometry(cand.sh)).meta, occ: cand.occ, upp: cand.sh.upp },
+          );
+          if (inlineAnchored) {
+            inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
+            break;
+          }
+        }
+        // TIER 2: NOTHING corroborated the original anchor — not one
+        // candidate, under either detector. Real case (itd-d1-lab
+        // B-1/B-2): the anchor SHEET draws the SAME physical unit twice in
+        // two real, physically incompatible conventions — an NTS piping
+        // SCHEMATIC icon and a to-scale ENLARGED PLAN symbol (a leader-line
+        // tag column) — and a schematic icon can never recur as a to-scale
+        // plan symbol, or vice versa, no matter how far the pad widens or
+        // which of the two is tried as "anchor" first: it is a real
+        // drawing-convention mismatch, not a detection failure. Demanding a
+        // recurrence between them manufactures exactly the false "linework
+        // does not recur" refusal the discipline gate above already exists
+        // to prevent for the cross-SHEET case — this is its same-SHEET
+        // twin. Once every corroboration attempt is exhausted, fall through
+        // to the SAME disclosed, weaker "uncorroborated" acceptance already
+        // used below for a tag drawn exactly once anywhere: try the tag's
+        // OTHER occurrences on this same anchor sheet, in reading order, as
+        // the anchor instead — uncorroborated, never silently promoted to
+        // "corroborated" (the caller's own !corroborated disclosure below
+        // fires exactly as it does for the single-occurrence case). This
+        // can only ever ADD a way to succeed: the original anchor already
+        // exhausted every real candidate above.
+        if (!fp && !inlineFp && withOcc[0].occ.length > 1) {
+          for (const altAnchor of withOcc[0].occ) {
+            anchor = altAnchor;
+            for (const padK of [1, 2, 3]) {
+              const got = candFor(padK);
+              if (got === "region") break;
+              if (!got) continue;
+              fp = got.cand; anchorRect = got.rect; corroborated = false;
+              break;
+            }
+            if (fp) break;
+          }
+          if (!fp) {
+            for (const altAnchor of withOcc[0].occ) {
+              anchor = altAnchor;
+              const inlineAnchored = corroborateInlineMotif(
+                anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+                anchor, anchorSheet.upp, null,
+              );
+              if (inlineAnchored) {
+                inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
+                break;
+              }
+            }
+          }
         }
         if (!fp && !inlineFp) {
-          throw new UserError(`Schedule row "${t}" cannot be anchored: the linework around its drawn tag on ${anchorSheet.key} does not recur at the tag's other occurrences — no repeatable marker geometry to fingerprint (tried both a whole-shape match and a hatch-fill size/pitch match). Marquee one instance with symbol_sweep instead.`);
+          anchor = withOcc[0].occ[0]; // restore for a clean error state
+          const triedNote = corroCandidates.length > 1 ? ` (tried ${corroCandidates.length} of its other occurrences)` : "";
+          throw new UserError(`Schedule row "${t}" cannot be anchored: the linework around its drawn tag on ${anchorSheet.key} does not recur at the tag's other occurrences${triedNote} — no repeatable marker geometry to fingerprint (tried both a whole-shape match and a hatch-fill size/pitch match). Marquee one instance with symbol_sweep instead.`);
         }
       }
     } else {

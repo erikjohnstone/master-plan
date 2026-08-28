@@ -2810,6 +2810,39 @@ test("sweep_schedule_row refusals: unanchorable row, unknown row, ambiguous key 
   assert.equal((await call(client, "takeoff_summary")).data.conditions.length, 0);
 });
 
+// ── sweep_schedule_row same-sheet multi-convention: a real bug (itd-d1-lab
+// B-1/B-2, "leader-line tag column" investigation) — a tag drawn TWICE on
+// its own anchor sheet in two REAL, physically incompatible drafting
+// conventions (a piping schematic's own small icon; a to-scale plan
+// symbol). Same-tag corroboration was REQUIRED between the two, but a
+// schematic icon can never recur as a to-scale plan symbol (or vice versa)
+// no matter how far the pad widens — a real drawing-convention mismatch,
+// not a detection failure — so the tag refused ("linework does not recur")
+// even though it is genuinely, singly installed and plainly visible on the
+// sheet. Fixed: once every corroboration attempt is exhausted, fall
+// through to the SAME disclosed "uncorroborated" acceptance already used
+// for a tag drawn exactly once anywhere, trying the tag's OTHER same-sheet
+// occurrences as the anchor instead.
+// Fixture (test/fixtures/schedule-row-multiconvention.pdf,
+// scripts/make-scheduledrow-multiconvention-fixture.mjs): a MECHANICAL
+// PLAN with tag "M-1" drawn twice — a 3-segment triangle (the "schematic"
+// stand-in) and an unrelated 5-segment house shape (the "to-scale plan"
+// stand-in) — neither marker recurs anywhere else on the sheet, and a
+// FINISH SCHEDULE table names the row.
+const MULTICONV = fileURLToPath(new URL("./fixtures/schedule-row-multiconvention.pdf", import.meta.url));
+test("sweep_schedule_row: a tag drawn twice in two real, incompatible conventions on its own anchor sheet resolves uncorroborated instead of refusing", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: MULTICONV });
+
+  const r = await call(client, "sweep_schedule_row", { tag: "M-1" });
+  assert.equal(r.isError, false, r.data?.error);
+  assert.equal(r.data.found, 1, "the one real, singly-installed instance is counted, not refused");
+  assert.equal(r.data.anchor.occurrences, 2, "both real drawn occurrences were seen");
+  assert.equal(r.data.anchor.corroborated, false, "honestly disclosed as weaker evidence, never silently promoted");
+  assert.match(r.data.note, /too sparsely to cross-check|drawn exactly once/,
+    "the standard uncorroborated-evidence disclosure fires, same as a singly-drawn tag");
+});
+
 // ── sweep_schedule_row cross-tag corroboration: the uniquely-tagged family
 // (VAV-1, VAV-2, VAV-3, … one tag per physical box, never repeated) has no
 // same-tag sibling occurrence to corroborate against — a sibling ROW from the
