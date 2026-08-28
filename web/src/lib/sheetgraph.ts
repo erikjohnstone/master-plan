@@ -1223,7 +1223,52 @@ function nearbyRequiredHit(rows: GraphSpan[][], vocab: string[], required: strin
  * reach, so widening their own qualification bar stays untested,
  * unwarranted generalization. Only ever consulted as a FALLBACK, after both
  * `ownQualifies` and `nearbyRequiredHit` have already failed — purely
- * additive, never narrows what already qualifies today. */
+ * additive, never narrows what already qualifies today.
+ *
+ * RE-INVESTIGATED, live, this session: whether POWERED_EQUIPMENT_REQUIRED
+ * (added later than this function — the vocabulary that DOES safely tell a
+ * genuinely powered device from a passive duct fitting, see
+ * hasPoweredEquipmentColumns' own comment) could let a forward variant reach
+ * LAB EXHAUST FAN SCHEDULE's ESP and PUMP SCHEDULE's own GPM/HP without
+ * re-breaking the Bessemer Fan Schedule regression above. It cannot — this
+ * was ACTUALLY BUILT and run against this file's own live regression suite,
+ * not assumed. First re-confirmed, directly rendering both real tables off
+ * their own real PDFs (not trusting either this comment or an prior task
+ * description of them): Bessemer's own real "FAN SCHEDULE" row (EF-1, a
+ * genuine powered "BATHROOM EXHAUST FAN W/ LIGHT") carries a real
+ * ELECTRICAL/VOLTS/PHASE/WATTS tier a couple of real physical lines below
+ * its own anchor row — this is NOT a hypothetical; the nameplate data is as
+ * real and as genuinely powered as LAB EXHAUST FAN SCHEDULE's own ESP/HP or
+ * PUMP SCHEDULE's own GPM/HP. Gating the forward walk to
+ * POWERED_EQUIPMENT_REQUIRED only (excluding AIRFLOW/VELOCITY/FPM/EQUIPMENT)
+ * still credits Bessemer's own real PHASE/WATTS hit, because PHASE and WATTS
+ * are themselves powered-nameplate words — the SAME vocabulary a genuine
+ * lab exhaust fan or pump legitimately carries. A distance/reach-based
+ * narrowing fails the opposite way, also confirmed by actually running it:
+ * Bessemer's own real PHASE hit sits CLOSER to its anchor (one real physical
+ * line down) than either LAB EXHAUST FAN SCHEDULE's ESP or PUMP SCHEDULE's
+ * own GPM/HP (several real lines down, past its own SONES/CFM/weight
+ * sub-tiers) — capping the walk short enough to exclude Bessemer excludes
+ * both real target tables first; there is no reach depth that includes one
+ * and excludes the other. This is not a shape gap a sharper geometric or
+ * vocabulary signal could still close: Bessemer's own EF-1 is factually a
+ * real powered device with real nameplate data, structurally identical in
+ * every measurable way to LAB EXHAUST FAN SCHEDULE's LEF-1 — the corpus's
+ * own ground-truth key (bessemer.takeoff.csv's own header comment) settles
+ * FAN SCHEDULE as finish-kind purely "under this project's own scheduleKind
+ * convention," a declared classification choice, not a claim about the
+ * physical device or its drafting. A convention carries no row geometry to
+ * detect. LAB EXHAUST FAN SCHEDULE and PUMP SCHEDULE both already reach
+ * equipment-kind today regardless — LEF-1 via hasPoweredEquipmentColumns'
+ * own region-wide nameplate scan (not this row-adjacency function at all),
+ * PUMP SCHEDULE via isMepEquipmentSchedule's own title match (bare "PUMP") —
+ * so the real, still-open gap this function's own forward reach would have
+ * closed is narrower than kind alone: PUMP/LAB EXHAUST FAN SCHEDULE's own
+ * DEEPER header columns (CFM/ESP/HP/TYPE/SERVED, not just SYMBOL/
+ * MANUFACTURER/REMARKS) stay unrecovered, the same disclosed gap this
+ * function's own header names above — confirmed still real, still without a
+ * safe fix, after this session's own genuine, repeated, empirically-tested
+ * attempt, not a first guess left untried. */
 function nearbyRequiredHitWide(rows: GraphSpan[][], vocab: string[], required: string[], from: number): boolean {
   for (const dir of [-1]) {
     let i = from;
