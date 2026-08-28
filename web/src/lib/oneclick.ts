@@ -87,7 +87,7 @@ export interface TextMark { x: number; y: number; w: number; h: number }
  *  keeps hand-built geometry (rastermask, tests) and stitched composites
  *  working unchanged. */
 export interface InkContext { subpaths?: SubPath[] | null; texts?: TextMark[] | null; dimTexts?: DimTextMark[] | null }
-export interface VectorGeometry { points: Point[]; segs: number[]; meta: Uint8Array; imageArea: number; lum?: Uint8Array; layerOf?: Int32Array; layerIds?: string[]; subpaths?: SubPath[]; }
+export interface VectorGeometry { points: Point[]; segs: number[]; meta: Uint8Array; imageArea: number; maxImageArea: number; lum?: Uint8Array; layerOf?: Int32Array; layerIds?: string[]; subpaths?: SubPath[]; }
 export interface MaskObj { mask: Uint8Array; mw: number; mh: number; ws: number; softCount: number; mppf?: number; }  // mppf: mask px per foot (0/absent = scale unknown)
 export interface RegionResult { region: Uint8Array; mw: number; mh: number; ws: number; count?: number; }
 export type FloodResult =
@@ -369,6 +369,18 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
     if (b[1] < sp.y0) sp.y0 = b[1]; if (b[1] > sp.y1) sp.y1 = b[1];
   };
   let imageArea = 0;
+  // The single LARGEST individually-placed image's own area (never a sum
+  // across repeated/grouped instances — see each site below) — a real logo/
+  // stamp/north-arrow in a title block measures a tiny fraction of a sheet;
+  // a schedule/table pasted in as a picture (found live: a real AutoCAD-
+  // plotted permit set's own small quick-reference schedule dropped bottom-
+  // corner of an otherwise-vector PLAN sheet, not a schedule-role sheet at
+  // all) is a single image an order of magnitude bigger than any of that
+  // same sheet's other incidental images. `imageArea` alone (a whole-sheet
+  // SUM) can't tell "one big pasted table" apart from "a dozen tiny stamps"
+  // — this does, and is what lets a consumer flag a locally-pasted raster
+  // table even on a sheet where images are a small fraction of total area.
+  let maxImageArea = 0;
   let m = transform.slice();
   let lw = 1;                          // graphics-state line width (user space)
   // graphics-state STROKE luminance (#260). PDF's initial stroke color is
@@ -458,7 +470,9 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
       // the placed rect — |det m| is its device-px area. Summed per sheet, it
       // flags scan wrappers / photo underlays (a plan-area scan covers most of
       // the sheet; logos and stamps are ≪ 2%).
-      imageArea += Math.abs(m[0] * m[3] - m[1] * m[2]);
+      const a = Math.abs(m[0] * m[3] - m[1] * m[2]);
+      imageArea += a;
+      if (a > maxImageArea) maxImageArea = a;
     }
     else if (fn === OPS.paintImageXObjectRepeat) {
       // pdf.js FOLDS a run of identical placements into one op — no per-instance
@@ -468,14 +482,18 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
       // instanceCount array. Area = |det ambient| × |scaleX·scaleY| × count.
       const [, scaleX, scaleY, positions] = args;
       const count = positions ? positions.length >> 1 : 0;
-      imageArea += Math.abs(m[0] * m[3] - m[1] * m[2]) * Math.abs(scaleX * scaleY) * count;
+      const per = Math.abs(m[0] * m[3] - m[1] * m[2]) * Math.abs(scaleX * scaleY);
+      imageArea += per * count;
+      if (per > maxImageArea) maxImageArea = per; // per-INSTANCE, never the batch sum — a run of small repeated tiles must not read as one big pasted table
     }
     else if (fn === OPS.paintImageMaskXObjectRepeat) {
       // args: [objId, a, b, c, d, positions] — a..d are the per-instance local
       // transform's 2×2 (folded the same way as the repeat op above).
       const [, ra, rb, rc, rd, positions] = args;
       const count = positions ? positions.length >> 1 : 0;
-      imageArea += Math.abs(m[0] * m[3] - m[1] * m[2]) * Math.abs(ra * rd - rb * rc) * count;
+      const per = Math.abs(m[0] * m[3] - m[1] * m[2]) * Math.abs(ra * rd - rb * rc);
+      imageArea += per * count;
+      if (per > maxImageArea) maxImageArea = per;
     }
     else if (fn === OPS.paintImageMaskXObjectGroup) {
       // args: [images] — each images[k].transform is that instance's own local
@@ -484,7 +502,11 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
       const ctmDet = Math.abs(m[0] * m[3] - m[1] * m[2]);
       for (const im of args[0] || []) {
         const t = im && im.transform;
-        if (t) imageArea += ctmDet * Math.abs(t[0] * t[3] - t[1] * t[2]);
+        if (t) {
+          const a2 = ctmDet * Math.abs(t[0] * t[3] - t[1] * t[2]);
+          imageArea += a2;
+          if (a2 > maxImageArea) maxImageArea = a2;
+        }
       }
     }
     else if (fn === OPS.paintInlineImageXObjectGroup) {
@@ -493,7 +515,11 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
       const ctmDet = Math.abs(m[0] * m[3] - m[1] * m[2]);
       for (const mp of args[1] || []) {
         const t = mp && mp.transform;
-        if (t) imageArea += ctmDet * Math.abs(t[0] * t[3] - t[1] * t[2]);
+        if (t) {
+          const a2 = ctmDet * Math.abs(t[0] * t[3] - t[1] * t[2]);
+          imageArea += a2;
+          if (a2 > maxImageArea) maxImageArea = a2;
+        }
       }
     }
     else if (fn === OPS.constructPath) {
@@ -543,7 +569,7 @@ export function extractVectorGeometry(opList: OpList, transform: number[], OPS: 
   sealSub();
   const meta = Uint8Array.from(metaArr);
   markPolylineArcs(segs, meta);
-  return { points, segs, meta, imageArea, lum: Uint8Array.from(lumArr), layerOf: Int32Array.from(layerOfArr), layerIds, subpaths };
+  return { points, segs, meta, imageArea, maxImageArea, lum: Uint8Array.from(lumArr), layerOf: Int32Array.from(layerOfArr), layerIds, subpaths };
 }
 
 // ── 1b. polyline arc detection ─────────────────────────────────────────────
