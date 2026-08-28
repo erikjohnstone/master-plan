@@ -312,6 +312,37 @@ test("dedupeCrossDisciplineRoomViews: no room nearby, marks close but SAME disci
   assert.equal(redundant.length, 0, "same-discipline marks, even at near-identical coordinates, are a real separate-install signal — the coordinate fallback still requires 2+ disciplines, same doctrine as the room-based path");
 });
 
+test("dedupeCrossDisciplineRoomViews: same tag, same room, SAME discipline but two DIFFERENT SHEETS — collapses (real itd-d1-lab-mechanical.pdf WC-1 shape: P1.0 'PLUMBING FOUNDATION PLAN' and P2.0 'PLUMBING FLOOR PLAN', both discipline 'P', both redrawing the same physical water closet in 'Rest. 102')", () => {
+  const instances = [
+    inst(1, "P1.0", "P", [1005, 1005], [ROOM]),
+    inst(2, "P2.0", "P", NEAR_ROOM, [ROOM]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 1, "one sheet's redrawn view collapses even though both share a discipline");
+  assert.equal(redundant[0].keptDiscipline, "P", "the kept view's own discipline is still reported correctly");
+  assert.match(redundant[0].room, /120/);
+});
+
+test("dedupeCrossDisciplineRoomViews: negative control — same tag, same discipline, different sheets, but DIFFERENT rooms — never collapses (two real, distinct installs, e.g. two different floors using the same room-numbering)", () => {
+  const instances = [
+    inst(1, "P1.0", "P", [1010, 1010], [ROOM]),
+    inst(2, "P2.0", "P", [4010, 3010], [OTHER_ROOM]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 0, "two genuinely distinct installs in two different rooms must never collapse, even on same-discipline sheets");
+});
+
+test("dedupeCrossDisciplineRoomViews: no room nearby, marks close, SAME discipline but DIFFERENT sheets — coordinate-proximity fallback now collapses too (the WC-1 shape without a readable room label)", () => {
+  const instances = [
+    inst(1, "P1.0", "P", [2231.8, 2356.8], [ROOM]),
+    inst(2, "P2.0", "P", [2234.7, 2363.5], [ROOM]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 1, "same-discipline marks on two different sheets, within the coordinate-proximity threshold, collapse to one");
+  assert.equal(redundant[0].keptDiscipline, "P");
+  assert.equal(redundant[0].keptSheet, "P1.0");
+});
+
 test("dedupeCrossDisciplineRoomViews: an instance with no known discipline never enters the dedup (never dropped, never a kept anchor)", () => {
   const instances = [
     inst(1, "M3.0", "M", NEAR_ROOM, [ROOM]),

@@ -1485,35 +1485,47 @@ export function pickSameDisciplineCorroborator<T>(
   return candidates.find((c) => disciplineOfSheetNumber(sheetNumberOf(c)) === anchorDisc) ?? null;
 }
 
-// ── cross-discipline redundant room-view dedup ──────────────────────────────
-// A real, common cross-trade drafting convention: two disciplines (mechanical,
-// plumbing, electrical, …) each draw their OWN "enlarged" plan of the SAME
-// physical room, redrawing whatever equipment sits in it for their own
-// trade's reference. A schedule row's tag drawn once on each discipline's
-// enlarged view of the SAME room is the SAME physical device, not one
-// install per sheet — sweep_schedule_row's per-sheet fingerprint search has
-// no way to know that on its own, since each sheet's tag occurrence
-// independently clears the match bar on its own linework. This is a GENERIC
-// pattern (any tag, any set that uses this convention), not specific to any
-// one project, sheet, or tag — no filename/page/tag is named here.
+// ── cross-sheet redundant room-view dedup ───────────────────────────────────
+// A real, common drafting convention: two DIFFERENT SHEETS each draw their
+// OWN "enlarged"/purpose-specific plan of the SAME physical room, redrawing
+// whatever equipment sits in it for that sheet's own reference. A schedule
+// row's tag drawn once on each sheet's own view of the SAME room is the SAME
+// physical device, not one install per sheet — sweep_schedule_row's
+// per-sheet fingerprint search has no way to know that on its own, since
+// each sheet's tag occurrence independently clears the match bar on its own
+// linework. This is a GENERIC pattern (any tag, any set that uses this
+// convention), not specific to any one project, sheet, or tag — no
+// filename/page/tag is named here. Two shapes of it are both real,
+// confirmed corpus cases: CROSS-discipline (the original AC-1 bug — an
+// M-series sheet and a P-series sheet both redrawing one physical device)
+// and SAME-discipline-different-sheet (itd-d1-lab-mechanical.pdf's WC-1/
+// S-2/US-2: P1.0 "PLUMBING FOUNDATION PLAN" underground rough-in and P2.0
+// "PLUMBING FLOOR PLAN" above-floor fixture layout both redraw the SAME
+// physical fixture at near-pixel-identical page coordinates) — collapseGroup
+// (below) groups by SHEET, a strict generalization of grouping by discipline
+// that catches both shapes identically; see its own comment for why this is
+// provably backward-compatible with every discipline-keyed case.
 //
 // The signal used: the two occurrences sit in the SAME named/numbered room
 // (via the existing room-tag reader, sheetgraph.ts's roomTags — the identical
 // "digit(s) drawn near a bubble" pattern already trusted for room-finish
-// takeoffs) on sheets whose OWN title-block sheet numbers carry DIFFERENT AIA
-// discipline prefixes (M/P/E/… the standard "M3.0"/"P4.0" convention, read
-// the same first-token-of-the-sheet-number way layers.ts's DISCIPLINES table
-// reads a CAD layer name). Two genuinely SEPARATE installed units sharing one
-// tag would ordinarily sit in different rooms — that is what makes them
-// separate installs — so "same room, same tag, different discipline" is a
-// narrow, specific shape, not a general "trust the first count" heuristic.
+// takeoffs). `discipline` (M/P/E/… the standard "M3.0"/"P4.0" convention,
+// read the same first-token-of-the-sheet-number way layers.ts's DISCIPLINES
+// table reads a CAD layer name) is still required to be READABLE at all
+// before an instance enters dedup — an instance on a sheet with no
+// classifiable AIA-style sheet number is never guessed into this — but is no
+// longer itself the collapse key. Two genuinely SEPARATE installed units
+// sharing one tag would ordinarily sit in different rooms — that is what
+// makes them separate installs — so "same room, same tag, different sheet"
+// is a narrow, specific shape, not a general "trust the first count"
+// heuristic.
 //
-// Never applied when: the sheets share a discipline (a real repeat on the
-// SAME trade's own drawing is a genuine separate-install signal, not a
+// Never applied when: the two occurrences share a SHEET (a real repeat on
+// one sheet's own drawing is a genuine separate-install signal, not a
 // redrawn reference — left alone); no room can be confidently attributed to
-// an occurrence (never guessed — see maxDist below); or only one discipline
+// an occurrence (never guessed — see maxDist below); or only one sheet
 // is represented in a room (nothing to collapse against). The kept count for
-// a duplicated room is the LARGEST single-discipline count seen there — never
+// a duplicated room is the LARGEST single-sheet count seen there — never
 // the SUM (double/triple-counts the redundant views, the actual AC-1 bug)
 // and never the smallest (a partial crop that only shows some of a room's
 // real units must never silently undercut a fuller sibling view).
@@ -1550,29 +1562,54 @@ export interface RedundantRoomView<Id> {
  * across a full floor-plan sheet. */
 const ROOM_ATTRIBUTION_MAX_DIAGONAL_FRAC = 0.2;
 
-/** Shared "collapse a group of same-tag, multi-discipline instances" decision
- * — keep the discipline with the MOST occurrences in the group (never the
- * sum, never the fewest — the doctrine both the room-keyed and the
- * coordinate-keyed grouping below share); ties broken alphabetically for
- * full determinism. Returns nothing when the group is single-discipline —
- * there is nothing redundant to collapse. */
+/** Shared "collapse a group of same-tag, multi-SHEET instances" decision —
+ * keep the SHEET with the MOST occurrences in the group (never the sum,
+ * never the fewest — the doctrine both the room-keyed and the
+ * coordinate-keyed grouping below share); ties broken alphabetically by
+ * sheet for full determinism. Returns nothing when the group is
+ * single-sheet — a real repeat WITHIN one sheet's own drawing is a genuine
+ * separate-install signal, never collapsed (test: "same tag, same room,
+ * SAME discipline — a real repeat within one trade").
+ *
+ * Grouped by SHEET, not by discipline (2026-08-28, itd-d1-lab-mechanical.pdf
+ * WC-1/S-2/US-2 shape): discipline was the original, narrower proxy this was
+ * built against (the real AC-1 bug — an M-series sheet and a P-series sheet
+ * both redrawing one physical device for their own trade's reference), but
+ * the SAME redundant-view pattern also occurs WITHIN one discipline — real,
+ * measured case: itd-d1-lab-mechanical.pdf's P1.0 "PLUMBING FOUNDATION PLAN"
+ * (underground waste/vent rough-in coordination) and P2.0 "PLUMBING FLOOR
+ * PLAN" (above-floor domestic water) both draw the SAME physical fixture
+ * (WC-1 in "Rest. 102") at near-pixel-identical page coordinates (~7px
+ * apart, RENDER_SCALE=2) — two different-PURPOSE plumbing plans of the
+ * identical footprint, not two installed toilets. `discipline` remains the
+ * ELIGIBILITY gate one level up (an instance with no readable AIA discipline
+ * still never enters dedup at all — unchanged), but the actual collapse
+ * key is the sheet itself, a strict generalization: every existing
+ * cross-discipline case already had each discipline confined to its own
+ * single sheet, so grouping by sheet reproduces every prior result exactly
+ * (verified: all pre-existing dedupeCrossDisciplineRoomViews tests pass
+ * unchanged) while additionally catching this same-discipline,
+ * different-sheet shape the discipline-keyed grouping structurally could
+ * not see. `keptDiscipline` is still reported (read off the kept sheet's own
+ * instances) so callers/tests that care which TRADE view survived keep
+ * working unchanged. */
 function collapseGroup<Id, A extends { discipline: string | null; sheet: string; id: Id }>(
   group: A[], describeRoom: (kept: A) => string,
 ): RedundantRoomView<Id>[] {
-  const byDisc = new Map<string, A[]>();
+  const bySheet = new Map<string, A[]>();
   for (const a of group) {
-    const arr = byDisc.get(a.discipline!);
-    if (arr) arr.push(a); else byDisc.set(a.discipline!, [a]);
+    const arr = bySheet.get(a.sheet);
+    if (arr) arr.push(a); else bySheet.set(a.sheet, [a]);
   }
-  if (byDisc.size < 2) return [];
-  let keptDisc = "", keptGroup: A[] = [];
-  for (const [disc, arr] of [...byDisc.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
-    if (arr.length > keptGroup.length) { keptDisc = disc; keptGroup = arr; }
+  if (bySheet.size < 2) return [];
+  let keptSheet = "", keptGroup: A[] = [];
+  for (const [sheet, arr] of [...bySheet.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+    if (arr.length > keptGroup.length) { keptSheet = sheet; keptGroup = arr; }
   }
-  const keptSheet = keptGroup[0].sheet;
+  const keptDisc = keptGroup[0].discipline!;
   const out: RedundantRoomView<Id>[] = [];
-  for (const [disc, arr] of byDisc) {
-    if (disc === keptDisc) continue;
+  for (const [sheet, arr] of bySheet) {
+    if (sheet === keptSheet) continue;
     for (const a of arr) out.push({ id: a.id, sheet: a.sheet, room: describeRoom(a), keptDiscipline: keptDisc, keptSheet });
   }
   return out;
