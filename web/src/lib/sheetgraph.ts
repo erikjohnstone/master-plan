@@ -2500,8 +2500,33 @@ function columnMapFor(
     // gets the true-nearest fix above. A wide anchor in the MIDDLE of a
     // table (isWideMidAnchor, above) earns the identical exemption for the
     // identical reason — same shape, just not confined to the last column.
+    // The same +1 boundary fudge columnOf itself uses (`at + 1 >= ...`,
+    // below) against sub-pixel rounding noise between a cluster's own
+    // measured start and its true anchor's x. Without it, a real, found-live
+    // case (itd-d1-lab-mechanical.pdf#14's own ELECTRIC HEATER SCHEDULE,
+    // CENTER-coordinate pass): ELECTRICAL V/Ø's own data-center cluster
+    // (1585.20) sits a mere 0.1px right of its own anchor (1585.1) — an inch
+    // of rounding, not a real gap — so the strict `>=` skips straight past
+    // ELECTRICAL V/Ø to AMPS as "at or right". Ordinarily the true-nearest
+    // loop just below self-corrects that (V/Ø sits 0.1px away vs AMPS' own
+    // 90px), but AMPS happens to ALSO test true under isWideMidAnchor here —
+    // not because AMPS' own data is wide, but because AMPS' own gap to ITS
+    // next neighbor (MANUFACTURER, a genuinely wide column) is inflated by
+    // MANUFACTURER's OWN width, a borrowed property with nothing to do with
+    // AMPS itself. That flips the exemption on and skips true-nearest
+    // entirely, so the whole ELECTRICAL V/Ø cluster is wrongly folded into
+    // AMPS — collapsing two real columns into one, which fails this
+    // function's own byLabel.size === anchors.length check outright and
+    // discards the ENTIRE center-mode column map (a perfect, every-row-
+    // center-justified fit for this table) in favor of the LEFT-mode
+    // fallback, which reads this table's real center-justified SERVED/TYPE
+    // data as fragmented, unrepresentative left-start clusters — the real
+    // cause of EH-1/EH-2/EH-3/EH-5's own missing SERVED cells and EH-5's own
+    // missing TYPE cell. The 1px fudge alone routes the 1585.20 cluster to
+    // its own true anchor (ELECTRICAL V/Ø, x=1585.1) exactly as intended, so
+    // the downstream isWideMidAnchor cascade is never even reached.
     let atOrRight: Anchor | null = null;
-    for (const a of anchors) { if (a.x >= c.start) { atOrRight = a; break; } }
+    for (const a of anchors) { if (a.x + 1 >= c.start) { atOrRight = a; break; } }
     let own: Anchor | null = atOrRight;
     if (!atOrRight || !(WIDE_LAST.has(atOrRight.label) || atOrRight.label === "NAME" || isWideMidAnchor(anchors, atOrRight))) {
       let bestD = atOrRight ? Math.abs(atOrRight.x - c.start) : Infinity;
