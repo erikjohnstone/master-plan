@@ -1299,7 +1299,27 @@ function nearbyRequiredHitWide(rows: GraphSpan[][], vocab: string[], required: s
   return false;
 }
 
-function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[], minHits: number, fromIdx = 0, opts: { equipmentTierMerge?: boolean; forwardTierMerge?: boolean; numericSubHeaderHarvest?: boolean } = {}): { anchors: Anchor[]; rowIndex: number; dataFrom: number; mergedTopIdx?: number } | null {
+function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[], minHits: number, fromIdx = 0, opts: {
+  equipmentTierMerge?: boolean; forwardTierMerge?: boolean; numericSubHeaderHarvest?: boolean;
+  /** Extra per-candidate gate (equipment's own catalog-anchor bar today —
+   * see extractTableAt's own comment on CATALOG_ANCHOR_WORDS): when this
+   * rejects a fully-built candidate, the OUTER loop keeps scanning forward
+   * for the NEXT header-shaped row rather than stopping dead — unlike the
+   * discarded "wrapper retries findHeaderRow again with a bumped fromIdx"
+   * approach the code once tried and reverted (see extractTableAt's own
+   * comment for exactly why that regressed), this reuses the SAME
+   * validated tier-descent/anchor-construction pass already trusted for
+   * every OTHER row in this loop — it never grabs a partial/unvalidated
+   * read, it just doesn't stop looking the moment ONE candidate turns out
+   * to be a real table this kind can't key (a bare-TYPE/no-catalog-anchor
+   * schedule sitting BEFORE a real, well-anchored one on the same sheet —
+   * measured live: federal-attachment4-mechanical.pdf#14's own untitled
+   * AIR HANDLING UNIT HYDRONIC COIL SCHEDULE, keyed by bare "TYPE"
+   * [CHWC/HWC], sits directly above a real, TAG-keyed CHILLER SCHEDULE and
+   * AIR SEPARATOR SCHEDULE — both previously never reached at all, table
+   * DISCOVERY silently stopping at the first unkeyable candidate). */
+  headerQualifies?: (anchors: Anchor[], rowIndex: number) => boolean;
+} = {}): { anchors: Anchor[]; rowIndex: number; dataFrom: number; mergedTopIdx?: number } | null {
   for (let i = fromIdx; i < rows.length; i++) {
     let hits = headerHits(rows[i], vocab);
     const seen = new Set(hits.map((h) => h.label));
@@ -1531,6 +1551,13 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
     if (opts.numericSubHeaderHarvest && !looksLikePoweredEquipmentBlock(rows, Math.max(0, idx - 8), skipEnd, finalAnchors)) {
       finalAnchors = harvestNumericSubHeaders(rows, vocab, idx, skipEnd, finalAnchors);
     }
+    // A fully-built candidate that fails the caller's own gate (equipment's
+    // catalog-anchor bar) is a REAL table this kind genuinely cannot key —
+    // correctly refused, same as ever — but refusing it must not end the
+    // whole scan: resume from the very next row rather than returning, so a
+    // later, properly-anchored table on the same sheet still gets found. See
+    // headerQualifies' own comment above for the real fixture this recovers.
+    if (opts.headerQualifies && !opts.headerQualifies(finalAnchors, idx)) continue;
     return {
       anchors: finalAnchors,
       rowIndex: idx,
@@ -4114,8 +4141,7 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // class of change that caused the MODEL regression the comment above this
   // one used to describe. A one-line change (`kind === "equipment"` below)
   // the day a real split-header finish/room-finish table shows up.
-  let flat = findHeaderRow(rows, vocab, required, minHits, fromIdx, { equipmentTierMerge: kind === "equipment", forwardTierMerge: !opts.noForwardTierMerge, numericSubHeaderHarvest: kind === "finish" });
-  // The merge above only ever ADDS a key column when one exists nearby on
+  // The merge below only ever ADDS a key column when one exists nearby on
   // the sheet — it never invents one. A candidate that still has no catalog
   // anchor after the attempt genuinely has no usable key column (the
   // anchored key would be whatever sits leftmost of the found tier — a bare
@@ -4124,11 +4150,29 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // that can never be looked up by tag. Checked against CATALOG_ANCHOR_WORDS
   // (ID/MARK/CODE/SYMBOL/TAG), not just literal "ID" — real equipment
   // schedules key under any of these depending on the firm (see
-  // EQUIPMENT_HEADERS' own SYMBOL/TAG comment). Deliberately NOT a
-  // retry-forward-and-keep-looking: tried that first and it searched past a
-  // real candidate into a LATER table's own header, re-extracting a table
-  // that already correctly exists under another kind — a duplicate-row-key
-  // collision worse than the one this whole design exists to prevent.
+  // EQUIPMENT_HEADERS' own SYMBOL/TAG comment).
+  //
+  // Refusing a candidate must not end the WHOLE scan, though — a real,
+  // unkeyable equipment-shaped table (this sheet's own untitled AIR
+  // HANDLING UNIT HYDRONIC COIL SCHEDULE, keyed by bare "TYPE" —
+  // CHWC/HWC — with no TAG/MARK/ID/SYMBOL/CODE column at all) can sit
+  // directly BEFORE a real, properly TAG-keyed one later on the same sheet
+  // (federal-attachment4-mechanical.pdf#14's own CHILLER SCHEDULE and AIR
+  // SEPARATOR SCHEDULE, found live: table DISCOVERY itself — not kind
+  // classification — was silently stopping at the first unkeyable
+  // candidate and never reaching either). Passed into findHeaderRow as
+  // `headerQualifies` so a rejection resumes its OWN internal forward scan
+  // (the same validated tier-descent/anchor pass every other row already
+  // goes through) rather than being a separate, cruder wrapper that retries
+  // with a manually bumped fromIdx: an earlier attempt at exactly that
+  // shape — call findHeaderRow again from scratch a few rows further on —
+  // is what searched past a real candidate into a LATER table's own
+  // header and re-extracted a table that already correctly exists under
+  // another kind, a duplicate-row-key collision worse than the one this
+  // whole design exists to prevent. Reusing findHeaderRow's own loop avoids
+  // that: every candidate, first or tenth, is built and validated by the
+  // exact same code path, so a genuinely bad partial read is rejected by
+  // the SAME bar regardless of how many prior candidates were skipped.
   // "TYPE" (ledger item 63) is deliberately NOT a member of CATALOG_ANCHOR_
   // WORDS itself — real, found live: federal-attachment4-mechanical.pdf#14's
   // own "AIR HANDLING UNIT FAN SCHEDULE" carries a real "FAN TYPE" column
@@ -4166,9 +4210,16 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // own 13 and well above this bad settle's 4, leaving real margin either
   // way — a genuinely rich real schedule header vs. a shallow partial read
   // of a table this vocabulary was never going to fully parse.
-  const bareLeadingType = flat && flat.anchors[0]?.label === "TYPE" && flat.anchors.length >= 8
-    && headerHits(rows[flat.rowIndex], vocab).length / Math.max(1, rows[flat.rowIndex].length) >= 0.6;
-  if (kind === "equipment" && flat && !flat.anchors.some((a) => CATALOG_ANCHOR_WORDS.includes(a.label)) && !bareLeadingType) flat = null;
+  const equipmentHeaderQualifies = (candAnchors: Anchor[], rowIndex: number): boolean => {
+    if (candAnchors.some((a) => CATALOG_ANCHOR_WORDS.includes(a.label))) return true;
+    const bareLeadingType = candAnchors[0]?.label === "TYPE" && candAnchors.length >= 8
+      && headerHits(rows[rowIndex], vocab).length / Math.max(1, rows[rowIndex].length) >= 0.6;
+    return bareLeadingType;
+  };
+  let flat = findHeaderRow(rows, vocab, required, minHits, fromIdx, {
+    equipmentTierMerge: kind === "equipment", forwardTierMerge: !opts.noForwardTierMerge, numericSubHeaderHarvest: kind === "finish",
+    headerQualifies: kind === "equipment" ? equipmentHeaderQualifies : undefined,
+  });
   if (flat) {
     anchors = flat.anchors;
     headerSpans = rows[flat.rowIndex];
