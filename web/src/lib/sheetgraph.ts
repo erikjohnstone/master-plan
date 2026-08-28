@@ -432,7 +432,51 @@ const ROOM_HEADERS = ["ROOM", "NO", "NUMBER", "NAME", "MARK", "LOCATION", "FLOOR
 // multi-table-per-sheet extraction pass with an actual boundary between
 // successive tables — not a vocabulary tweak — and is tracked as its own
 // follow-up, not bundled into this fix.
-const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "ID", "MATERIAL", "MANUFACTURER", "PRODUCT", "STYLE", "COLOR", "SIZE", "REMARKS", "DESCRIPTION", "PATTERN", "COMMENTS"];
+// LOCATION/PRESSURE (itd-d1-lab's own SOUND ATTENUATOR SCHEDULE, SA-1): a
+// real, deliberately finish-kind table (ground-truth-confirmed, not a
+// misclassification — it carries no motor/electrical vocabulary and a prior
+// session already tried and correctly rejected reclassifying it to
+// equipment) whose own header row carries real, standalone leaf-column
+// words this vocabulary had no entry for at all: LOCATION, and "MAXIMUM
+// PRESSURE DROP" 's own PRESSURE. Both sit BARE on the table's own already-
+// qualifying header row (same row as SYMBOL/MANUFACTURER/REMARKS) — a pure
+// vocabulary gap, not a geometric one: no new anchor-recovery code needed,
+// `headerHits` already finds them the moment the words exist here.
+//
+// TYPE, AREA, and WEIGHT were ALSO real, bare, standalone words on this same
+// header row (TYPE for the DUCT SILENCER column, AREA for "FACE AREA (SQ
+// FT)", WEIGHT for the "WEIGHT (LBS)" column one tier up) and were tried
+// here too — each one individually REVERTED after a real, corpus-wide
+// before/after sweep (extractAllTables() over every set: bessemer,
+// itd-d1-lab, federal-mech, weld-county, baker-county-eoc, tarrant-county)
+// caught real collateral damage on OTHER, already-correct tables elsewhere
+// in the corpus. The mechanism, traced live: this file runs BOTH the
+// finish-kind AND equipment-kind extraction passes over every sheet, and a
+// title-based reclassification (isMepEquipmentSchedule) relabels a
+// finish-vocabulary read of a real MEP-equipment-family table (PUMP/BOILER/
+// HUMIDIFIER/…) as equipment-kind while keeping the ANCHORS that finish's
+// own (cruder, non-tier-merged) reading found for it. The cross-kind
+// richness collapse further down this file then picks whichever of the two
+// independent reads (native equipment-kind vs. reclassified finish-kind) is
+// richer — and breaks an EXACT tie toward whichever was pushed first, which
+// is always the finish-kind read (finish is tried before equipment in the
+// kind loop). Adding TYPE let finish's own read of itd-d1-lab's real PUMP
+// SCHEDULE (sheet #12) reach the SAME header/cell count as its correct,
+// native equipment-kind read — and WON the tie, replacing real columns
+// (SUCTION DUTY, SUCTION WEIGHT) with wrong ones (TRIPLE DUTY, OPERATING
+// WEIGHT) neither of which are what the sheet actually says. AREA did the
+// same to the PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE (9 real
+// columns collapsed to 4) and minted an outright garbage reference-kind
+// table besides; WEIGHT alone reached the same PUMP SCHEDULE plus a
+// spurious column on the LAB EXHAUST FAN SCHEDULE. LOCATION and PRESSURE do
+// not: neither word appears anywhere in this corpus positioned to lift
+// another table's finish-kind read up to its equipment-kind read's own
+// richness, confirmed by the same real corpus-wide sweep showing zero
+// change anywhere outside this one table. Any FUTURE word added here needs
+// the same real before/after sweep — this collapse/tie-break interaction is
+// a standing hazard for this vocabulary generally, not specific to any one
+// word.
+const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "ID", "MATERIAL", "MANUFACTURER", "PRODUCT", "STYLE", "COLOR", "SIZE", "REMARKS", "DESCRIPTION", "PATTERN", "COMMENTS", "LOCATION", "PRESSURE"];
 // A dedicated MEP equipment vocabulary (#HVAC-3/Phase 5) — not a FINISH_HEADERS
 // patch. The comment block above this one is the reason why: "MODEL" alone,
 // added to FINISH_HEADERS to surface the Electric Baseboard Heater Schedule,
