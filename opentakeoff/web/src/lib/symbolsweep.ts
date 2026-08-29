@@ -1641,7 +1641,7 @@ export function deepHyphenChainTagOcc(spans: FlatSpan[], key: string): TagOcc[] 
   const out: TagOcc[] = [];
   const starts = spans.filter((sp) => {
     const t = upper(sp.str);
-    return t.length > 0 && t.length < key.length && targetStripped.startsWith(stripHy(t));
+    return stripHy(t).length > 0 && t.length < key.length && targetStripped.startsWith(stripHy(t));
   });
   for (const start of starts) {
     let text = upper(start.str);
