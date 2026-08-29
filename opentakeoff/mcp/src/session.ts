@@ -3342,6 +3342,11 @@ export class Session {
         ? [{ sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.filter((o) => o !== candAnchor) }]
         : [];
     const corroCandidates: Corro[] = [...sameSheetCorroFor(anchor), ...crossSheetCorro];
+    const airDeviceTable = /\b(?:DIFFUSER|GRILLE|REGISTER)\b/i.test(table);
+    const compoundRankingOcc = /\bLUMINAIRE\b/i.test(table)
+      ? compoundTagOcc(anchorSheet.spans || [], t)
+      : [];
+    const rankingOcc = compoundRankingOcc.length >= 4 ? compoundRankingOcc : withOcc[0].occ;
 
     // Cross-tag fallback corroborators, tried only when the tag itself has no
     // second occurrence anywhere (corroCandidates is empty) — the
@@ -3491,7 +3496,7 @@ export class Session {
       // exact tag they claim. This is intentionally not the old "most raw
       // matches wins" heuristic: generic fragments lose the tie to a shape
       // with the same tag coverage and fewer unrelated geometric hits.
-      const rankByTagClaims = withOcc[0].occ.length >= 4;
+      const rankByTagClaims = airDeviceTable || compoundRankingOcc.length >= 4;
       type RankedFingerprint = {
         fp: SymbolFingerprint;
         rect: [Point, Point];
@@ -3501,7 +3506,7 @@ export class Session {
       let best: RankedFingerprint | null = null;
       let firstPassing: RankedFingerprint | null = null;
       outerSameTag:
-      for (const candAnchor of withOcc[0].occ) {
+      for (const candAnchor of (rankByTagClaims ? rankingOcc : withOcc[0].occ)) {
         anchor = candAnchor;
         const candidatesForAnchor = candAnchor === withOcc[0].occ[0]
           ? corroCandidates
@@ -3522,7 +3527,7 @@ export class Session {
             try {
               result = matchSymbol(got.cand, anchorGeo.segs, {
                 ...sweepOpts,
-                candidateRegions: withOcc[0].occ.map((o) => ({ center: [o.cx, o.cy] as Point, radius })),
+                candidateRegions: rankingOcc.map((o) => ({ center: [o.cx, o.cy] as Point, radius })),
               });
             } catch {
               continue;
@@ -3530,8 +3535,8 @@ export class Session {
             const claimed = new Set<number>();
             for (const match of result.matches) {
               let bestIdx = -1, bestDist = Infinity;
-              for (let i = 0; i < withOcc[0].occ.length; i++) {
-                const o = withOcc[0].occ[i];
+              for (let i = 0; i < rankingOcc.length; i++) {
+                const o = rankingOcc[i];
                 const d = Math.hypot(match.at[0] - o.cx, match.at[1] - o.cy);
                 if (d < bestDist) { bestDist = d; bestIdx = i; }
               }
@@ -3549,21 +3554,11 @@ export class Session {
           }
         }
       }
-      // Coverage ranking is safe for variable-size air-device schedules, or
-      // for a high-cardinality luminaire family only when the winning shape
-      // has perfect tag precision and improves the first passing candidate by
-      // more than 3x. That ten-occurrence quorum is direct repeated-family
-      // evidence, not raw geometric popularity. Below it, repeated views and
-      // leader labels remain indistinguishable (the ITD fixture regressions
-      // caught by the corpus gate), so preserve first-success behavior.
-      const airDeviceTable = /\b(?:DIFFUSER|GRILLE|REGISTER)\b/i.test(table);
-      const highConfidenceLuminaire = !!best && !!firstPassing
-        && /\bLUMINAIRE\b/i.test(table)
-        && best.coverage.claimed >= 10
-        && best.coverage.rawMatches === best.coverage.claimed
-        && best.coverage.claimed > firstPassing.coverage.claimed * 3;
-      const selected = best && (airDeviceTable || highConfidenceLuminaire)
-        ? best : firstPassing;
+      // Compound circuit labels ("R1/C-11", "R1/INV-2") are direct
+      // luminaire-instance evidence, unlike a bare repeated tag. Rank only
+      // against those spans (or the separately established variable-size
+      // air-device family); every other table preserves first-success.
+      const selected = rankByTagClaims && best ? best : firstPassing;
       if (selected) {
         fp = selected.fp;
         anchorRect = selected.rect;
