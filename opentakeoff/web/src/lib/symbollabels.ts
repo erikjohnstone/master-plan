@@ -19,6 +19,7 @@
 // demotes a placement: a label is disclosure, and the judgement stays with
 // the estimator.
 import type { Point } from "./oneclick.ts";
+import { isEquipTag, joinHyphenatedTags } from "./equiptags.ts";
 
 export interface LabelSpan { str: string; x0: number; y0: number; x1: number; y1: number }
 
@@ -40,8 +41,9 @@ export interface PlacementLabel {
 export const LABEL_TOKEN_RE = /^[A-Z]{1,4}-?\d{0,3}[A-Z]?$/;
 
 export function labelTokens(spans: LabelSpan[]): LabelSpan[] {
-  return spans.filter((s) => {
+  return joinHyphenatedTags(spans).filter((s) => {
     const t = s.str.trim();
+    if (isEquipTag(t)) return true;
     return t.length <= 6 && LABEL_TOKEN_RE.test(t) && /[A-Z]/.test(t);
   });
 }

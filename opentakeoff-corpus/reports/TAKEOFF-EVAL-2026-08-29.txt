@@ -4,9 +4,123 @@
 
 set                        tags   exact    Σ|Δqty|   missing   false-add
 ──────────────────────────────────────────────────────────────────────────
-baker-county-eoc             40    35.0%        91         2           0
+bessemer                     10   100.0%         0         0           0
+itd-d1-lab                  116    98.3%         3         0           0
+federal-mech                 83    92.8%         6         1          18
+navfac-cherry-point-atc     215    78.1%        64         1           2
+bldg5406-hvac-demo           23    43.5%        13        10           0
+baker-county-eoc             40    62.5%        80         0           0
+itd-d1-lab-raster            28     0.0%        64        28           0
 ──────────────────────────────────────────────────────────────────────────
-CORPUS                       40    35.0%        91         2           0
+CORPUS                      515    78.4%       230        40          20
+
+── itd-d1-lab — real mismatches ──
+  US-2       expected=3  actual=5  Δ=+2  status=resolved
+  WC-1       expected=2  actual=3  Δ=+1  status=resolved
+
+── federal-mech — real mismatches ──
+  AHU-1      expected=1  actual=2  Δ=+1  status=resolved
+  CH-1       expected=1  actual=0  Δ=-1  status=not_in_output
+  AS-1       expected=1  actual=2  Δ=+1  status=resolved
+  CWP-1      expected=1  actual=2  Δ=+1  status=resolved
+  CWP-2      expected=1  actual=2  Δ=+1  status=resolved
+  HWP-2      expected=1  actual=2  Δ=+1  status=resolved
+  CH-1       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  CU-1       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  CU-2       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  CU-3       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  CU-4       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  CU-5       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  CU-6       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  EV-1       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  EV-2       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  EV-3       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  EV-4       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  EV-5       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  EV-6       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  UH-1       FALSELY ADDED — qty=2, type=Unit heater — electric wall / baseboard, the key never mentions this tag
+  UH-2       FALSELY ADDED — qty=2, type=Unit heater — electric wall / baseboard, the key never mentions this tag
+  S-1        FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  S-2        FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  FTR-1      FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  FTR-2      FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+
+── navfac-cherry-point-atc — real mismatches ──
+  TG-5       expected=7  actual=1  Δ=-6  status=resolved
+  DOAH-T1    expected=1  actual=5  Δ=+4  status=resolved
+  DOAH-A2    expected=1  actual=4  Δ=+3  status=resolved
+  LD-1       expected=6  actual=3  Δ=-3  status=resolved
+  FCU-A10    expected=1  actual=3  Δ=+2  status=resolved
+  FCU-M3     expected=1  actual=3  Δ=+2  status=resolved
+  LD-3       expected=3  actual=1  Δ=-2  status=resolved
+  RG-12      expected=3  actual=1  Δ=-2  status=resolved
+  TG-4       expected=3  actual=1  Δ=-2  status=resolved
+  AHU-A1     expected=1  actual=2  Δ=+1  status=resolved
+  AHU-A2     expected=1  actual=2  Δ=+1  status=resolved
+  AHU-M1     expected=1  actual=2  Δ=+1  status=resolved
+  AHU-T1B    expected=1  actual=2  Δ=+1  status=resolved
+  B-M1       expected=1  actual=2  Δ=+1  status=resolved
+  B-M2       expected=1  actual=2  Δ=+1  status=resolved
+  B-T1       expected=1  actual=2  Δ=+1  status=resolved
+  PCHWP-A1   expected=1  actual=2  Δ=+1  status=resolved
+  PCHWP-A2   expected=1  actual=0  Δ=-1  status=resolved
+  PHHWP-A1   expected=1  actual=2  Δ=+1  status=resolved
+  PCHWP-MT1  expected=1  actual=0  Δ=-1  status=refused
+  SCHWP-M1   expected=1  actual=0  Δ=-1  status=refused
+  PHHWP-M2   expected=1  actual=2  Δ=+1  status=resolved
+  SHHWP-M1   expected=1  actual=0  Δ=-1  status=refused
+  SHHWP-M2   expected=1  actual=0  Δ=-1  status=refused
+  HRHWP-MT1  expected=1  actual=0  Δ=-1  status=refused
+  FCU-A7     expected=1  actual=2  Δ=+1  status=resolved
+  FCU-A9     expected=1  actual=2  Δ=+1  status=resolved
+  FCU-T15    expected=1  actual=2  Δ=+1  status=resolved
+  FCU-T5A    expected=1  actual=2  Δ=+1  status=resolved
+  FCU-T8     expected=1  actual=2  Δ=+1  status=resolved
+  DH-A5      expected=1  actual=2  Δ=+1  status=resolved
+  DH-T1      expected=1  actual=2  Δ=+1  status=resolved
+  DH-T2      expected=1  actual=2  Δ=+1  status=resolved
+  UH-A3      expected=1  actual=2  Δ=+1  status=resolved
+  CUH-T1     expected=1  actual=0  Δ=-1  status=refused
+  CUH-T2     expected=1  actual=0  Δ=-1  status=refused
+  CV-HHW-BP-A expected=1  actual=0  Δ=-1  status=not_in_output
+  CV-CHW-BP-T expected=1  actual=0  Δ=-1  status=refused
+  FCU-T5B    expected=1  actual=2  Δ=+1  status=resolved
+  FCU-T7A    expected=1  actual=2  Δ=+1  status=resolved
+  FCU-T7B    expected=1  actual=2  Δ=+1  status=resolved
+  FCU-T9     expected=1  actual=2  Δ=+1  status=resolved
+  FCU-T10    expected=1  actual=2  Δ=+1  status=resolved
+  FCU-T14    expected=1  actual=2  Δ=+1  status=resolved
+  H-M4       expected=1  actual=2  Δ=+1  status=resolved
+  EG-4       expected=2  actual=1  Δ=-1  status=resolved
+  HHWC-DOAH-T1 expected=1  actual=2  Δ=+1  status=resolved
+  CV-HHW-BP-A MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  DS-AHU-T1-RA FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  DS-AHU-T1-SA FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+
+── bldg5406-hvac-demo — real mismatches ──
+  AHU-1      expected=1  actual=2  Δ=+1  status=resolved
+  ET-1       expected=1  actual=0  Δ=-1  status=not_in_output
+  EF-2       expected=1  actual=0  Δ=-1  status=refused
+  EF-3       expected=1  actual=0  Δ=-1  status=refused
+  VAV-1      expected=1  actual=0  Δ=-1  status=not_in_output
+  VAV-2      expected=1  actual=0  Δ=-1  status=not_in_output
+  VAV-3      expected=1  actual=0  Δ=-1  status=not_in_output
+  VAV-4      expected=1  actual=0  Δ=-1  status=not_in_output
+  VAV-5      expected=1  actual=0  Δ=-1  status=not_in_output
+  VAV-6      expected=1  actual=0  Δ=-1  status=not_in_output
+  VAV-7      expected=1  actual=0  Δ=-1  status=not_in_output
+  VAV-8      expected=1  actual=0  Δ=-1  status=not_in_output
+  VAV-9      expected=1  actual=0  Δ=-1  status=not_in_output
+  ET-1       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  VAV-1      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  VAV-2      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  VAV-3      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  VAV-4      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  VAV-5      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  VAV-6      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  VAV-7      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  VAV-8      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  VAV-9      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
 
 ── baker-county-eoc — real mismatches ──
   R1         expected=23  actual=3  Δ=-20  status=resolved
@@ -21,23 +135,70 @@ CORPUS                       40    35.0%        91         2           0
   E1         expected=7  actual=5  Δ=-2  status=resolved
   S3         expected=4  actual=2  Δ=-2  status=resolved
   V1         expected=3  actual=1  Δ=-2  status=resolved
-  RTU-1      expected=1  actual=0  Δ=-1  status=error
-  RTU-2      expected=1  actual=0  Δ=-1  status=error
-  CU-1       expected=1  actual=0  Δ=-1  status=error
-  CU-2       expected=1  actual=0  Δ=-1  status=error
-  EF-1       expected=1  actual=0  Δ=-1  status=error
-  ERV-01     expected=1  actual=0  Δ=-1  status=error
-  FCU-1      expected=1  actual=0  Δ=-1  status=error
-  FCU-2      expected=1  actual=0  Δ=-1  status=error
-  EWH-1      expected=1  actual=0  Δ=-1  status=error
-  EWH-2      expected=1  actual=0  Δ=-1  status=error
   RG-1       expected=7  actual=6  Δ=-1  status=resolved
   HB-2       expected=2  actual=1  Δ=-1  status=resolved
-  WH-1       expected=1  actual=0  Δ=-1  status=error
   P1         expected=5  actual=4  Δ=-1  status=resolved
-  EAC-1      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
-  EAC-2      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+
+── itd-d1-lab-raster — real mismatches ──
+  EQ10       expected=6  actual=0  Δ=-6  status=not_in_output
+  EQ19       expected=6  actual=0  Δ=-6  status=not_in_output
+  EQ2        expected=4  actual=0  Δ=-4  status=not_in_output
+  EQ6        expected=4  actual=0  Δ=-4  status=not_in_output
+  EQ18       expected=4  actual=0  Δ=-4  status=not_in_output
+  EQ27       expected=4  actual=0  Δ=-4  status=not_in_output
+  EQ12       expected=3  actual=0  Δ=-3  status=not_in_output
+  EQ15       expected=3  actual=0  Δ=-3  status=not_in_output
+  EQ16       expected=3  actual=0  Δ=-3  status=not_in_output
+  EQ20       expected=3  actual=0  Δ=-3  status=not_in_output
+  EQ23       expected=3  actual=0  Δ=-3  status=not_in_output
+  EQ1        expected=2  actual=0  Δ=-2  status=not_in_output
+  EQ3        expected=2  actual=0  Δ=-2  status=not_in_output
+  EQ22       expected=2  actual=0  Δ=-2  status=not_in_output
+  EQ25       expected=2  actual=0  Δ=-2  status=not_in_output
+  EQ4        expected=1  actual=0  Δ=-1  status=not_in_output
+  EQ5        expected=1  actual=0  Δ=-1  status=not_in_output
+  EQ7        expected=1  actual=0  Δ=-1  status=not_in_output
+  EQ8        expected=1  actual=0  Δ=-1  status=not_in_output
+  EQ9        expected=1  actual=0  Δ=-1  status=not_in_output
+  EQ11       expected=1  actual=0  Δ=-1  status=not_in_output
+  EQ13       expected=1  actual=0  Δ=-1  status=not_in_output
+  EQ14       expected=1  actual=0  Δ=-1  status=not_in_output
+  EQ21       expected=1  actual=0  Δ=-1  status=not_in_output
+  EQ24       expected=1  actual=0  Δ=-1  status=not_in_output
+  EQ26       expected=1  actual=0  Δ=-1  status=not_in_output
+  EQ28       expected=1  actual=0  Δ=-1  status=not_in_output
+  EQ29       expected=1  actual=0  Δ=-1  status=not_in_output
+  EQ1        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ2        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ3        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ4        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ5        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ6        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ7        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ8        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ9        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ10       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ11       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ12       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ13       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ14       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ15       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ16       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ18       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ19       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ20       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ21       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ22       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ23       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ24       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ25       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ26       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ27       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ28       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EQ29       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
 
 ── failure-type breakdown (TakeoffFailure[], every set) ──
-    13×  AMBIGUOUS_ROW_KEY
-     2×  REFUSED_NO_SCALE
+    47×  SYMBOL_FALSE_NEGATIVE
+    40×  REFUSED_NO_SCALE
+    24×  AMBIGUOUS_ROW_KEY
+     1×  TABLE_DISCOVERY_FAILURE

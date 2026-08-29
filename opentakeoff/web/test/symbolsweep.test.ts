@@ -3,7 +3,7 @@
 // tolerance behavior, decoy rejection, determinism, and the reported work cap.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, fragmentedTagOcc, deepHyphenChainTagOcc, type Point, type FlatSpan } from "../src/lib/symbolsweep.ts";
+import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, type Point, type FlatSpan } from "../src/lib/symbolsweep.ts";
 
 // The test symbol — deliberately ASYMMETRIC under every rotation and mirror:
 // a 20×20 square, ONE diagonal, and a stub off the right side. Local coords,
@@ -324,6 +324,49 @@ test("fragmentedTagOcc: no false match when the tag simply isn't drawn", () => {
     { str: "2", x0: 52, y0: 112, x1: 58, y1: 124 },
   ];
   assert.equal(fragmentedTagOcc(spans, "EF-1").length, 0, "EF+2 must never satisfy a search for EF-1");
+});
+
+// compoundTagOcc — a single span LONGER than the key, the schedule's own
+// bare key with a circuit/panel/inverter reference appended in the SAME
+// PDF text run ("R1 /C-11", "E1/C-2"). A dotted numeric suffix is a sheet
+// number ("P1.01", "S3.1"), not a compound instance of that short key —
+// matching those lets a structural/title-block sheet steal sweep_schedule_row's
+// own most-occs anchor.
+test("compoundTagOcc: circuit-label remainder with space or slash delimiter counts", () => {
+  const spans: FlatSpan[] = [
+    { str: "R1 /C-11", x0: 10, y0: 20, x1: 80, y1: 30 },
+    { str: "E1/C-2", x0: 10, y0: 40, x1: 60, y1: 50 },
+    { str: "P1 /INV-2", x0: 10, y0: 60, x1: 90, y1: 70 },
+  ];
+  assert.equal(compoundTagOcc(spans, "R1").length, 1);
+  assert.equal(compoundTagOcc(spans, "E1").length, 1);
+  assert.equal(compoundTagOcc(spans, "P1").length, 1);
+});
+
+test("compoundTagOcc: a dotted numeric sheet number is not a compound instance of the short key", () => {
+  const spans: FlatSpan[] = [
+    { str: "S3.1", x0: 10, y0: 20, x1: 40, y1: 30 },
+    { str: "S3.0", x0: 50, y0: 20, x1: 80, y1: 30 },
+    { str: "P1.01", x0: 10, y0: 40, x1: 60, y1: 50 },
+    { str: "P1.21", x0: 10, y0: 60, x1: 60, y1: 70 },
+    { str: "S3 /C-11", x0: 10, y0: 80, x1: 80, y1: 90 },
+    { str: "P1 /C-11", x0: 10, y0: 100, x1: 80, y1: 110 },
+  ];
+  const s3 = compoundTagOcc(spans, "S3");
+  assert.equal(s3.length, 1, "S3.1/S3.0 are sheet numbers; only S3 /C-11 counts");
+  assert.equal(s3[0].bbox[1], 80);
+  const p1 = compoundTagOcc(spans, "P1");
+  assert.equal(p1.length, 1, "P1.01/P1.21 are sheet numbers; only P1 /C-11 counts");
+  assert.equal(p1[0].bbox[1], 100);
+});
+
+test("compoundTagOcc: still refuses R10/R1A as a match for R1", () => {
+  const spans: FlatSpan[] = [
+    { str: "R10 /C-11", x0: 10, y0: 20, x1: 80, y1: 30 },
+    { str: "R1A", x0: 10, y0: 40, x1: 40, y1: 50 },
+    { str: "R1", x0: 10, y0: 60, x1: 30, y1: 70 },
+  ];
+  assert.equal(compoundTagOcc(spans, "R1").length, 0, "exact-length and alnum-continuation spans are never compound");
 });
 
 // deepHyphenChainTagOcc — a THIRD tier, after exact/compound AND

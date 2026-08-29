@@ -1315,9 +1315,12 @@ export interface FlatSpan { str: string; x0: number; y0: number; x1: number; y1:
  * (23 of them; occOf's own exact match sees none, since none is bare "R1",
  * and fragmentedTagOcc's join-fragments search can never fire either, since
  * a starting fragment there must be SHORTER than the key). A real token
- * boundary is required right after the key (anything but a letter/digit,
- * including end-of-string) so "R1" can never absorb "R10" or "R1A" — a
- * different, real, separately-scheduled tag.
+ * boundary is required right after the key so "R1" can never absorb "R10"
+ * or "R1A". The remainder must then start with "/" or whitespace — the
+ * measured compound-label delimiter ("R1 /C-11", "E1/C-2") — so a dotted
+ * numeric sheet number ("P1.01", "S3.1", "M1.21") is never a compound
+ * instance of the short key. Matching those let a structural or title-block
+ * sheet steal sweep_schedule_row's own most-occs anchor.
  *
  * Unlike fragmentedTagOcc's own join search (which risks stitching
  * unrelated short spans together, and so stays gated to "only when the
@@ -1338,7 +1341,18 @@ export function compoundTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   for (const sp of spans) {
     const t = upper(sp.str);
     if (t.length <= keyUpper.length || !t.startsWith(keyUpper)) continue;
-    if (/[A-Z0-9]/.test(t[keyUpper.length])) continue;
+    const rest = t.slice(keyUpper.length);
+    // Token boundary so "R1" never absorbs "R10" or "R1A".
+    if (/[A-Z0-9]/.test(rest[0])) continue;
+    // A compound instance continues with a delimiter then more text in the
+    // SAME run — circuit/panel/inverter labels ("R1 /C-11", "E1/C-2"). A
+    // dotted numeric suffix is a sheet number ("P1.01", "S3.1", "M1.21"),
+    // not this key's instance. Without this, a short luminaire/fixture key
+    // matches every "S3.1"/"P1.01" title-block or structural sheet number
+    // on the set, and the plan sheet with the MOST such false hits becomes
+    // sweep_schedule_row's own anchor (most-occs wins) — fingerprinting
+    // title-block/grid furniture instead of the real device.
+    if (!/^[\s/]/.test(rest)) continue;
     out.push({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] });
   }
   return out;
