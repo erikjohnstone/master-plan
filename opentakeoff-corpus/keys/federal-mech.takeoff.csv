@@ -9,17 +9,18 @@
 # real schedules this session independently re-confirmed by rendering the
 # actual sheets, not by trusting the taxonomy file's own prose.
 #
-# HOW EVERY NUMBER BELOW WAS VERIFIED (2026-08-28): buildPlanSetTakeoff
+# HOW EVERY NUMBER BELOW WAS VERIFIED (2026-08-28; pipeline status refreshed
+# by an independent full-corpus run on 2026-08-29): buildPlanSetTakeoff
 # (categories=all) gave a first-pass candidate list, but NOTHING below was
 # copy-pasted from it — every row was independently checked either by
 # Session.viewSheet render (schedule sheets #14/#15/#16 rendered whole and
 # read by eye; VAV floor plan sheet #6 individually cropped at 2-4x zoom
 # per tag) or by Session.findText sweeps across ALL 24 sheets (never
 # same-sheet-only — this corpus already knows that risk misses real
-# cross-sheet instances, e.g. bessemer's EBB-5). Every VAV tag the pipeline
-# itself reported quantity=0 for (13 of them) was individually cropped and
-# visually confirmed anyway, not trusted from the pipeline's own refusal —
-# see the dedicated note below; a representative additional ~20 of the
+# cross-sheet instances, e.g. bessemer's EBB-5). Thirteen VAV tags that an
+# earlier pipeline revision reported at quantity=0 were individually cropped
+# and visually confirmed anyway, not trusted from the pipeline's own refusal
+# — see the historical finding below; a representative additional ~20 of the
 # pipeline's own quantity=1 VAV tags were also independently visually
 # spot-checked in the course of touring the floor plan (not itemized here
 # one by one — same "not individually re-cropped" discipline bessemer's and
@@ -27,22 +28,18 @@
 # already-partially-verified drafting convention).
 #
 # ══════════════════════════════════════════════════════════════════════════
-# FINDING #1 (dominant, real, disclosed — NOT fixed this session): sweep_
-# schedule_row currently reports quantity=0 for 13 of the 58 real VAV boxes
-# on this set (VAV-11,15,19,20,21,23,27,33,35,38,42,49,52) even though EVERY
-# ONE was individually rendered this session and shows the exact same real
-# rectangle-glyph-plus-adjacent-tag-text convention as every other VAV box
-# on the sheet — a real, disclosed detection gap, not an absent symbol. This
-# is the SAME root cause federal-mech.rowsym.csv's own pre-existing VAV-20
-# entry already named ("its own shape scores under the 92% commit bar at
-# its own location, and it has no second occurrence to corroborate
-# against") — this session found 12 MORE real instances of the identical
-# gap by actually rendering every tag the pipeline itself flagged as
-# quantity=0, rather than trusting that refusal. expected_quantity=1 for
-# every one of these 13 below (the real, literal drawn count), not the
-# pipeline's own current 0 — this is exactly the kind of real, valuable
-# miss this key exists to surface, per this initiative's own standing
-# mandate; not tuned away.
+# HISTORICAL FINDING #1 (closed in the current tree): an earlier pipeline
+# revision reported quantity=0 for 13 of the 58 real VAV boxes on this set
+# (VAV-11,15,19,20,21,23,27,33,35,38,42,49,52), even though every one was
+# individually rendered and showed the same real rectangle-glyph-plus-
+# adjacent-tag-text convention as the other VAV boxes. The current pipeline's
+# general self-offset claim-radius floor and same-table sibling-tag
+# corroboration recover all 13 without lowering the 0.92 commit bar.
+# An independent full-corpus run on 2026-08-29 confirms all 58 VAV rows exact
+# at quantity=1; federal-mech's six remaining takeoff mismatches are all
+# non-VAV. Keep this history because it records why these 13 were visually
+# verified instead of trusting the earlier refusal, but do not cite it as a
+# current ceiling.
 #
 # FINDING #2 (dominant, real, disclosed — NOT fixed this session, much
 # bigger in scope than #1): sheets #14 and #15 (M7.1/M7.2, "MECHANICAL
@@ -202,48 +199,48 @@ VAV-7,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pd
 VAV-8,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
 VAV-9,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-33 render crop, top-left, labeled 'AV-9' where the leading V is cropped). Pipeline quantity=1, corroborated, matches."
 VAV-10,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1 (pre-existing federal-mech.rowsym.csv confirmation). Pipeline quantity=1, matches."
-VAV-11,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1, this session): visually confirmed sheet #6 — real rectangle-glyph box symbol directly beside NEUROLOGIST/EXAM corridor C300, same convention as every other VAV box. Pipeline currently reports quantity=0 (status 'resolved' but 0 instances) — a real, disclosed detection gap, not an absent symbol. expected_quantity=1."
+VAV-11,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed sheet #6 — real rectangle-glyph box symbol directly beside NEUROLOGIST/EXAM corridor C300, same convention as every other VAV box. Current pipeline quantity=1; the earlier quantity=0 miss is closed by the general self-offset/sibling-corroboration path."
 VAV-12,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly beside VAV-11's own render crop, same corridor). Pipeline quantity=1, matches."
 VAV-13,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
 VAV-14,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
-VAV-15,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, CORR-1 C302-1 near STAFF TLT 318. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-15,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed sheet #6 — real box symbol, CORR-1 C302-1 near STAFF TLT 318. Current pipeline quantity=1; historical quantity=0 miss closed."
 VAV-16,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
 VAV-17,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
 VAV-18,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
-VAV-19,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, SOIL UTIL 322 near HOUSE KEEPING 320. Pipeline currently reports quantity=0. expected_quantity=1."
-VAV-20,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS — the pre-existing federal-mech.rowsym.csv entry this whole finding started from ('today's tool reports 0 found here even though the symbol IS real and drawn'). Re-confirmed this session: real box symbol, TREATMENT IPMC 346 area, directly beside VAV-22. expected_quantity=1."
-VAV-21,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, CORR C304, directly beside VAV-22 and VAV-23. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-19,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed sheet #6 — real box symbol, SOIL UTIL 322 near HOUSE KEEPING 320. Current pipeline quantity=1; historical quantity=0 miss closed."
+VAV-20,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"The pre-existing federal-mech.rowsym.csv entry that surfaced the historical miss. Re-confirmed: real box symbol, TREATMENT IPMC 346 area, directly beside VAV-22. Current pipeline quantity=1; historical quantity=0 miss closed."
+VAV-21,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed sheet #6 — real box symbol, CORR C304, directly beside VAV-22 and VAV-23. Current pipeline quantity=1; historical quantity=0 miss closed."
 VAV-22,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in both the VAV-20 and VAV-21 render crops). Pipeline quantity=1, matches."
-VAV-23,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, CORR C304 near PAT TLT 340. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-23,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed sheet #6 — real box symbol, CORR C304 near PAT TLT 340. Current pipeline quantity=1; historical quantity=0 miss closed."
 VAV-24,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
 VAV-25,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
 VAV-26,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
-VAV-27,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, CORR C303 directly beside VAV-29 (ALCOVE/STORAGE C303.1). Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-27,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed sheet #6 — real box symbol, CORR C303 directly beside VAV-29 (ALCOVE/STORAGE C303.1). Current pipeline quantity=1; historical quantity=0 miss closed."
 VAV-28,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
 VAV-29,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-27 render crop): real box symbol, ALCOVE/STORAGE C303.1. Pipeline quantity=1, corroborated, matches."
 VAV-30,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
 VAV-31,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
 VAV-32,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
-VAV-33,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol (drawn rotated 90 degrees from the usual orientation, same glyph), PUBLIC WAITING C101 near CHAPLIN 301. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-33,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed sheet #6 — real box symbol (drawn rotated 90 degrees from the usual orientation, same glyph), PUBLIC WAITING C101 near CHAPLIN 301. Current pipeline quantity=1; historical quantity=0 miss closed."
 VAV-34,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-35 render crop). Pipeline quantity=1, matches."
-VAV-35,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol near a 2-way control valve (M219) on the hot-water branch. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-35,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed sheet #6 — real box symbol near a 2-way control valve (M219) on the hot-water branch. Current pipeline quantity=1; historical quantity=0 miss closed."
 VAV-36,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-35 render crop, top-left). Pipeline quantity=1, matches."
 VAV-37,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-38 render crop, left edge, labeled '37' where the leading VAV- is cropped). Pipeline quantity=1, matches."
-VAV-38,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, CLASSROOM 103.1. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-38,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed sheet #6 — real box symbol, CLASSROOM 103.1. Current pipeline quantity=1; historical quantity=0 miss closed."
 VAV-39,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-42 render crop): real box symbol, near NCOIC/ADMIN 109. Pipeline quantity=1, corroborated, matches."
 VAV-40,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
 VAV-41,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
-VAV-42,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol (rotated), directly beside VAV-39, near CORR C102. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-42,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed sheet #6 — real box symbol (rotated), directly beside VAV-39, near CORR C102. Current pipeline quantity=1; historical quantity=0 miss closed."
 VAV-43,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
 VAV-44,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
 VAV-45,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
 VAV-46,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-35 render crop, bottom-right). Pipeline quantity=1, corroborated, matches."
 VAV-47,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
 VAV-48,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
-VAV-49,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, CORR C200 near MULTI-STATION TREATMENT RM 217, directly beside VAV-50. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-49,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed sheet #6 — real box symbol, CORR C200 near MULTI-STATION TREATMENT RM 217, directly beside VAV-50. Current pipeline quantity=1; historical quantity=0 miss closed."
 VAV-50,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-49 render crop). Pipeline quantity=1, corroborated, matches."
 VAV-51,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
-VAV-52,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, SPEECH THERAPY 210, directly beside a real CP-3/EV-3 pair in CORR C201/C202. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-52,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed sheet #6 — real box symbol, SPEECH THERAPY 210, directly beside a real CP-3/EV-3 pair in CORR C201/C202. Current pipeline quantity=1; historical quantity=0 miss closed."
 VAV-53,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
 VAV-54,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
 VAV-55,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
