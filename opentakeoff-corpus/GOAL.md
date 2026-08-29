@@ -24,6 +24,13 @@ remaining deterministic accuracy gaps, driving every applicable metric toward
 on raster or structurally unextractable inputs remains correct behavior rather
 than a score to manipulate. OCR and vision remain out of scope.
 
+**Evaluation cadence:** do not run a corpus evaluation after every individual
+fix. Work in batches of approximately three highest-impact, non-overlapping
+accuracy fixes, using focused unit tests and typechecks while implementing,
+then run one full corpus evaluation to measure the combined batch and detect
+cross-set regressions. If a focused test exposes a defect before the batch is
+complete, fix it immediately; the full scorer remains the batch-level gate.
+
 This file is the durable, single source of truth for "where are we and
 why" on this effort — write here, not just in chat, so a fresh session
 (or a fresh person) can pick this up without re-deriving it.
