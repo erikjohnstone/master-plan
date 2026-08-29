@@ -1966,6 +1966,32 @@ export function dedupeAlignedSameSheetViews<Id>(
   if (instances.length < 2 || landmarks.length < 8) return [];
 
   type Axis = "vertical" | "horizontal";
+  const captionKind = (text: string): "duct" | "pipe" | null =>
+    /\bDUCT\b/i.test(text) ? "duct" : /\b(?:PIPE|PIPING)\b/i.test(text) ? "pipe" : null;
+  const captionStem = (text: string): string =>
+    text.toUpperCase().replace(/\b(?:DUCT|PIPE|PIPING)\b/g, "").replace(/[^A-Z0-9]+/g, " ").trim();
+  let captionPair: [TaggedViewCaption, TaggedViewCaption] | null = null;
+  for (const first of captions) {
+    for (const second of captions) {
+      if (first === second
+        || !/\bENLARGED\s+PLANS?\b/i.test(first.text)
+        || !/\bENLARGED\s+PLANS?\b/i.test(second.text)
+        || captionKind(first.text) === null
+        || captionKind(second.text) === null
+        || captionKind(first.text) === captionKind(second.text)
+        || captionStem(first.text) !== captionStem(second.text)) continue;
+      captionPair = [first, second];
+      break;
+    }
+    if (captionPair) break;
+  }
+  const captionAxis: Axis | null = captionPair
+    ? Math.abs(captionPair[0].at[0] - captionPair[1].at[0]) >= Math.abs(captionPair[0].at[1] - captionPair[1].at[1])
+      ? "vertical" : "horizontal"
+    : null;
+  const splitFor = (axis: Axis): number => captionPair && captionAxis === axis
+    ? ((axis === "vertical" ? captionPair[0].at[0] + captionPair[1].at[0] : captionPair[0].at[1] + captionPair[1].at[1]) / 2)
+    : (axis === "vertical" ? sheetWidthPx / 2 : sheetHeightPx / 2);
   const support = (axis: Axis): { aligned: number; paired: number } => {
     const byTag = new Map<string, TaggedViewLandmark[]>();
     for (const landmark of landmarks) {
@@ -1973,7 +1999,7 @@ export function dedupeAlignedSameSheetViews<Id>(
       const group = byTag.get(tag);
       if (group) group.push(landmark); else byTag.set(tag, [landmark]);
     }
-    const split = axis === "vertical" ? sheetWidthPx / 2 : sheetHeightPx / 2;
+    const split = splitFor(axis);
     const orthogonalTolerance = (axis === "vertical" ? sheetHeightPx : sheetWidthPx) * 0.03;
     let aligned = 0, paired = 0;
     for (const group of byTag.values()) {
@@ -1992,25 +2018,10 @@ export function dedupeAlignedSameSheetViews<Id>(
 
   const verticalSupport = support("vertical");
   const horizontalSupport = support("horizontal");
-  const axis: Axis = verticalSupport.aligned >= horizontalSupport.aligned ? "vertical" : "horizontal";
+  const axis: Axis = captionAxis ?? (verticalSupport.aligned >= horizontalSupport.aligned ? "vertical" : "horizontal");
   const evidence = axis === "vertical" ? verticalSupport : horizontalSupport;
-  const split = axis === "vertical" ? sheetWidthPx / 2 : sheetHeightPx / 2;
-  const captionKind = (text: string): "duct" | "pipe" | null =>
-    /\bDUCT\b/i.test(text) ? "duct" : /\b(?:PIPE|PIPING)\b/i.test(text) ? "pipe" : null;
-  const captionStem = (text: string): string =>
-    text.toUpperCase().replace(/\b(?:DUCT|PIPE|PIPING)\b/g, "").replace(/[^A-Z0-9]+/g, " ").trim();
-  const pairedSystemCaptions = captions.some((first) => captions.some((second) =>
-    first !== second
-    && (axis === "vertical" ? first.at[0] : first.at[1]) < split
-    && (axis === "vertical" ? second.at[0] : second.at[1]) >= split
-    && /\bENLARGED\s+PLANS?\b/i.test(first.text)
-    && /\bENLARGED\s+PLANS?\b/i.test(second.text)
-    && captionKind(first.text) !== null
-    && captionKind(second.text) !== null
-    && captionKind(first.text) !== captionKind(second.text)
-    && captionStem(first.text) === captionStem(second.text)
-  ));
-  if (evidence.aligned < 4 && !(pairedSystemCaptions && evidence.paired >= 4 && evidence.aligned >= 2)) return [];
+  const split = splitFor(axis);
+  if (evidence.aligned < 4 && !(captionPair && evidence.paired >= 4 && evidence.aligned >= 2)) return [];
 
   const first = instances.filter((p) => (axis === "vertical" ? p.at[0] : p.at[1]) < split);
   const second = instances.filter((p) => (axis === "vertical" ? p.at[0] : p.at[1]) >= split);

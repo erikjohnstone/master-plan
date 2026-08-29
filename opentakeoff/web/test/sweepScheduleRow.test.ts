@@ -420,11 +420,11 @@ test("dedupeAlignedSameSheetViews: paired duct/pipe enlarged-plan captions admit
     { text: "MECHANICAL DUCT ENLARGED PLAN - MECH RM", at: [250, 600] as Point },
     { text: "MECHANICAL PIPE ENLARGED PLAN - MECH RM", at: [750, 600] as Point },
   ];
-  assert.deepEqual(dedupeAlignedSameSheetViews(instances, landmarks, 1000, 800, captions), ["right"]);
+  assert.deepEqual(dedupeAlignedSameSheetViews(instances, landmarks, 2000, 800, captions), ["right"]);
   assert.deepEqual(dedupeAlignedSameSheetViews(
     instances,
     landmarks,
-    1000,
+    2000,
     800,
     captions.map((caption) => ({ ...caption, text: caption.text.replace(/DUCT|PIPE/, "DUCT") })),
   ), []);
