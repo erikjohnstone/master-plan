@@ -73,6 +73,17 @@ const projectTakeoffStats = {
   total_drawn_instances: z.number(),
 };
 
+const extractedTable = z.object({
+  sheet: z.string(),
+  kind: z.string().optional(),
+  title: z.string().nullable(),
+  headers: z.array(z.string()),
+  rows: z.array(z.object({
+    key: z.string(),
+    cells: z.record(z.string(), z.string()),
+  })),
+}).passthrough();
+
 /** Complete production query surface for an unattended plan-set takeoff. */
 export const projectTakeoffOutput = {
   set_files: z.array(z.string()),
@@ -80,16 +91,24 @@ export const projectTakeoffOutput = {
   equipment_type_filter: z.array(z.string()).nullable(),
   items: z.array(projectTakeoffItem),
   legend_items: z.array(projectTakeoffItem),
-  reference_tables: z.array(z.unknown()),
-  extracted_tables: z.array(z.unknown()),
+  reference_tables: z.array(extractedTable),
+  extracted_tables: z.array(extractedTable),
   failures: z.array(z.object({
     type: z.string(),
     tag: z.string(),
     sheet: z.string().optional(),
     detail: z.string(),
   })),
-  tables_seen: z.array(z.unknown()),
-  legend_sheets_seen: z.array(z.unknown()),
+  tables_seen: z.array(z.object({
+    sheet: z.string(),
+    kind: z.string(),
+    title: z.string().nullable(),
+    rows: z.number().int(),
+  })),
+  legend_sheets_seen: z.array(z.object({
+    sheet: z.string(),
+    glyphs_detected: z.number().int(),
+  })),
   stats: z.object(projectTakeoffStats),
   legend_stats: z.object({
     glyphs_seen: z.number().int(),
