@@ -231,6 +231,74 @@ test("classifySweepMatches: cross-scale sweep — the fingerprint is resized per
   assert.equal(r.scaled!.ratio, 12);
 });
 
+test("classifySweepMatches: two close same-tag labels each keep the match nearest them, not whichever occurrence sorts first", () => {
+  // Real undercount shape: two labeled instances sit inside one footprint
+  // of each other. First-in-array claiming billed both matches to the
+  // earlier occurrence and left the later one text_only, even though each
+  // match's own nearest tag was a different real instance.
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const a: Point = [400, 400];
+  const b: Point = [400, 455];
+  const sheetSegs = place([{ at: [100, 100] }, { at: a }, { at: b }]);
+  const occ = [tagNear([100, 100]), tagNear(a), tagNear(b)];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, { excludeCenter: cf.fp.center });
+  assert.equal(r.matches.length, 2, "each labeled instance counts once");
+  assert.equal(r.text_only.length, 0, "neither close tag is left as bare text");
+});
+
+test("classifySweepMatches: a near-bar withheld match that carries this row's own unclaimed tag COUNTS", () => {
+  // The unlabeled commit bar withholds a size/hatch variant (score in
+  // [scoreLow, scoreHigh)). When this row's own tag is drawn at that
+  // still-unclaimed occurrence, the tag is the identity — counting it is
+  // not guessing unlabeled geometry. scoreHigh is raised past 1 so an
+  // otherwise-identical second instance falls in the withheld band; the
+  // promotion, not a lower bar, is what must recover it.
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const sheetSegs = place([{ at: [100, 100] }, { at: [400, 400] }]);
+  const occ = [tagNear([100, 100]), tagNear([400, 400])];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {
+    excludeCenter: cf.fp.center,
+    scoreHigh: 1.01,
+  });
+  assert.equal(r.matches.length, 1, "the labeled near-bar instance is promoted, not left withheld");
+  assert.deepEqual(r.matches[0].tag_at, occ[1].bbox);
+  assert.equal(r.text_only.length, 0);
+});
+
+test("classifySweepMatches: a near-bar withheld match with NO own tag stays withheld", () => {
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const sheetSegs = place([{ at: [100, 100] }, { at: [400, 400] }]);
+  const occ = [tagNear([100, 100])];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {
+    excludeCenter: cf.fp.center,
+    scoreHigh: 1.01,
+  });
+  assert.equal(r.matches.length, 0);
+  assert.ok(r.withheld.length >= 1, "unlabeled near-bar geometry stays a disclosed question");
+});
+
+test("classifySweepMatches: a near-bar withheld match carrying a SIBLING's tag is excluded, not promoted", () => {
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const sheetSegs = place([{ at: [100, 100] }, { at: [400, 400] }]);
+  const occ = [tagNear([100, 100])];
+  const siblingOcc = [{ key: "T2", cx: 400 - 15, cy: 400 + 10 }];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, siblingOcc, anchor.h, {
+    excludeCenter: cf.fp.center,
+    scoreHigh: 1.01,
+  });
+  assert.equal(r.matches.length, 0);
+  assert.equal(r.excluded.length, 1);
+  assert.equal(r.excluded[0].tag, "T2");
+});
+
 // ── dedupeCrossDisciplineRoomViews ──────────────────────────────────────────
 // The real AC-1 bug (itd-d1-lab-mechanical.pdf#7/#25, set 002): the SAME
 // physical unit drawn on an M-series AND a P-series "enlarged" plan of the
