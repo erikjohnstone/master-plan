@@ -5,7 +5,14 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 ## 2026-08-29 — same-sheet dual-view overcount
 
 ### Fixed
-- **A tag drawn once per titled viewport on one plan sheet is one install.** Complementary views of the same room on a single sheet (a duct-layer plan beside a piping-layer plan, two section cuts) each redraw and retag the same equipment; `sweep_schedule_row` previously counted every viewport that cleared the fingerprint bar. Same-sheet matches now collapse when they sit in different titled viewports whose space key agrees (view-type words stripped). Two units inside one viewport, or two viewports of different rooms/levels, stay separate. No project, sheet, or tag names.
+- **A tag drawn once per titled viewport on one plan sheet is one install.** Complementary views of the same room on a single sheet (a duct-layer plan beside a piping-layer plan, two section cuts) each redraw and retag the same equipment; `sweep_schedule_row` previously counted every viewport that cleared the fingerprint bar. Same-sheet matches now collapse when they sit in different titled viewports whose space key agrees (view-type words stripped). Two units inside one viewport, or two viewports of different rooms/levels, stay separate. No project, sheet, or tag names. **opentakeoff-mcp 0.9.68** (three surfaces).
+
+## 2026-08-29 — rotated hyphen joins; work notes are not instances
+
+### Fixed
+- **A 90/180/270° hyphenated mark joins along its run.** CAD often stacks `SHHWP` + `-` + `M1` (or a seven-glyph `CV-CHW-BP-T`) as vertical glyph runs; the shared join only walked +X and compared axis-aligned box height, so a long word and its hyphen never met. The +X walk still runs first over every span (a quarter-turn note between two same-row fragments still interrupts). Rotated leftovers then join along the run with em-sized baselines. Adjacent rotated columns stay split. The text layer (`textSpans`) is the join site — not a second pass inside `extractTable` / `buildSheetGraph`.
+- **A work-note sentence is not a compound instance.** `compoundTagOcc` still accepts a circuit/panel remainder (`R1 /C-11`). A span that continues into English (`CUH-T1 ON FLOOR 3; …`) no longer seeds `sweep_schedule_row`.
+- **`smoke:dist` resolves `jsts`.** `session.ts` already imports the web engine's MEP graph (`mepconnectivity.ts`), which uses the same JTS port the canvas vendors. esbuild leaves that import external, so the published server now lists `jsts` next to the other engine deps. **opentakeoff-mcp 0.9.67** (three surfaces).
 
 ## 2026-08-29 — multi-hyphen equipment tags
 

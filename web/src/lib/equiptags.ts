@@ -79,14 +79,58 @@ function mergeBoxes<T extends TagBox>(run: T[]): T {
   };
 }
 
-/**
- * CAD exports often split one drawn tag into glyph runs — "PCHWP-MT1" arrives
- * as "PCHWP" + "-" + "MT1". Join adjacent fragments on the same baseline
- * whose concatenation IS an equipment tag. A join that is not a tag is never
- * emitted, so joining can only add candidates, never hide a real span.
- */
-export function joinHyphenatedTags<T extends TagBox>(spans: T[]): T[] {
-  const items = spans.filter((s) => piece(s));
+/** True when the run is off the +X axis enough that same-row / +X-gap
+ * joining cannot see its own next glyph. 0° (and near-0 title-block drift)
+ * keeps the original left-to-right walk; 90/180/270 use the along-run walk. */
+function isRotatedRun(rot?: number): boolean {
+  const r = (((rot || 0) % 360) + 360) % 360;
+  return r >= 45 && r < 315;
+}
+
+function fontPx(s: TagBox): number {
+  const r = (((s.rot || 0) % 360) + 360) % 360;
+  const w = Math.max(s.x1 - s.x0, 1);
+  const h = Math.max(s.y1 - s.y0, 1);
+  // Perpendicular to the run = em size. 90/270: AA width; 0/180: AA height.
+  return (r >= 45 && r < 135) || (r >= 225 && r < 315) ? w : h;
+}
+
+function runVec(rot?: number): [number, number] {
+  const r = ((((rot || 0) % 360) + 360) % 360) * Math.PI / 180;
+  return [Math.cos(r), Math.sin(r)];
+}
+
+function alongSpan(s: TagBox, rdx: number, rdy: number): { lo: number; hi: number } {
+  const xs = [s.x0, s.x1, s.x0, s.x1];
+  const ys = [s.y0, s.y0, s.y1, s.y1];
+  let lo = Infinity, hi = -Infinity;
+  for (let i = 0; i < 4; i++) {
+    const p = xs[i] * rdx + ys[i] * rdy;
+    if (p < lo) lo = p;
+    if (p > hi) hi = p;
+  }
+  return { lo, hi };
+}
+
+function sameBaselineRot(a: TagBox, b: TagBox): boolean {
+  const f = Math.max(fontPx(a), fontPx(b));
+  const r = (((a.rot || 0) % 360) + 360) % 360;
+  const vertical = (r >= 45 && r < 135) || (r >= 225 && r < 315);
+  const d = vertical
+    ? Math.abs((a.x0 + a.x1) / 2 - (b.x0 + b.x1) / 2)
+    : Math.abs((a.y0 + a.y1) / 2 - (b.y0 + b.y1) / 2);
+  return d <= f * EQUIP_JOIN_ROW_K;
+}
+
+function similarFont(a: TagBox, b: TagBox): boolean {
+  const fa = fontPx(a), fb = fontPx(b);
+  return Math.max(fa, fb) <= 2 * Math.min(fa, fb);
+}
+
+/** Unrotated (+X) walk — the original algorithm, kept byte-identical so a
+ * 270° neighbor sitting between two +X fragments in y-order cannot reshuffle
+ * a case that already joined. */
+function joinAlongX<T extends TagBox>(items: T[]): T[] {
   if (items.length < 2) return items;
   const ordered = [...items].sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
   const out: T[] = [];
@@ -117,7 +161,98 @@ export function joinHyphenatedTags<T extends TagBox>(spans: T[]): T[] {
       used.add(i);
     }
   }
-  return out.sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
+  return out;
+}
+
+/** Rotated walk: same hyphen-connector + isEquipTag gate, but neighbor
+ * picking is along the run (90/180/270) and same-baseline is perpendicular
+ * to it. Letter-led starts first so a hyphen fragment visited earlier
+ * cannot steal the connector from its own prefix. Adjacent columns of the
+ * same rotated tag family stay split — baseline distance is the em, not
+ * the (much longer) AA height of the word. */
+function alongLo(s: TagBox): number {
+  const [rdx, rdy] = runVec(s.rot);
+  return alongSpan(s, rdx, rdy).lo;
+}
+
+function joinAlongRun<T extends TagBox>(items: T[]): T[] {
+  if (items.length < 2) return items;
+  const used = new Set<number>();
+  const out: T[] = [];
+  // Letter-led first so a hyphen never opens a chain; then reading order
+  // (smallest along-run projection) so the prefix is tried before a
+  // letter-led suffix ("M1", "T") that cannot grow in +run.
+  const starts = items.map((_, i) => i).sort((a, b) => {
+    const la = /^[A-Za-z]/.test(piece(items[a])) ? 0 : 1;
+    const lb = /^[A-Za-z]/.test(piece(items[b])) ? 0 : 1;
+    if (la !== lb) return la - lb;
+    return alongLo(items[a]) - alongLo(items[b]);
+  });
+  for (const i of starts) {
+    if (used.has(i)) continue;
+    const chain = [i];
+    let concat = piece(items[i]);
+    let bestAt = 0;
+    for (let hop = 0; hop < EQUIP_JOIN_MAX_FRAGS; hop++) {
+      const prev = items[chain[chain.length - 1]];
+      const rot = prev.rot || 0;
+      const [rdx, rdy] = runVec(rot);
+      const prevA = alongSpan(prev, rdx, rdy);
+      const f = fontPx(prev);
+      let pick = -1, pickGap = Infinity;
+      for (let j = 0; j < items.length; j++) {
+        if (used.has(j) || chain.includes(j)) continue;
+        const next = items[j];
+        if ((next.rot || 0) !== rot) continue;
+        if (!sameBaselineRot(prev, next) || !similarFont(prev, next)) continue;
+        const nxt = piece(next);
+        if (!(concat.endsWith("-") || nxt.startsWith("-"))) continue;
+        const nextA = alongSpan(next, rdx, rdy);
+        const gap = nextA.lo - prevA.hi;
+        if (gap > f * EQUIP_JOIN_GAP_K || gap < -f * 0.25) continue;
+        if (gap < pickGap) { pickGap = gap; pick = j; }
+      }
+      if (pick < 0) break;
+      concat += piece(items[pick]);
+      chain.push(pick);
+      if (isEquipTag(concat)) bestAt = chain.length - 1;
+    }
+    if (bestAt > 0) {
+      out.push(mergeBoxes(chain.slice(0, bestAt + 1).map((k) => items[k])));
+      for (const k of chain.slice(0, bestAt + 1)) used.add(k);
+    }
+    // A failed start is not consumed — it may be a letter-led suffix
+    // ("M1") that the real prefix still needs to claim.
+  }
+  for (let i = 0; i < items.length; i++) {
+    if (!used.has(i)) out.push(items[i]);
+  }
+  return out;
+}
+
+/**
+ * CAD exports often split one drawn tag into glyph runs — "PCHWP-MT1" arrives
+ * as "PCHWP" + "-" + "MT1", and a 270° stack arrives as the same pieces
+ * along the run instead of +X. Join adjacent fragments on the same baseline
+ * whose concatenation IS an equipment tag. A join that is not a tag is never
+ * emitted, so joining can only add candidates, never hide a real span.
+ */
+export function joinHyphenatedTags<T extends TagBox>(spans: T[]): T[] {
+  const items = spans.filter((s) => piece(s));
+  if (items.length < 2) return items;
+  // +X walk first, over the FULL list — a rotated note whose y0 sits
+  // between two same-row fragments must still interrupt (dense schematics
+  // otherwise glue every "TP"+"-"+"2" on the sheet). Rotated leftovers
+  // that the +X walk cannot see then join along their run.
+  const afterX = joinAlongX(items);
+  const leftoverRot: T[] = [];
+  const kept: T[] = [];
+  for (const s of afterX) {
+    if (isRotatedRun(s.rot) && !isEquipTag(piece(s))) leftoverRot.push(s);
+    else kept.push(s);
+  }
+  const rotated = leftoverRot.length >= 2 ? joinAlongRun(leftoverRot) : leftoverRot;
+  return [...kept, ...rotated].sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
 }
 
 /** GraphSpan-shaped cousin (x/y/w/h) — same join, same class.

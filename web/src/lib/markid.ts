@@ -84,6 +84,21 @@ export function dedupeMarks(marks: readonly string[]): string[] {
   return out;
 }
 
+/** After a '/' or whitespace delimiter, the remainder must be another
+ * short mark (circuit/panel/inverter — "C-11", "INV-2"), not a sentence.
+ * A work note that merely mentions the key ("CUH-T1 ON FLOOR 3; …") is
+ * not a drawn instance. */
+export function compoundRemainderIsLabel(rest: string): boolean {
+  if (!/^[\/\s]/.test(rest)) return false;
+  const more = rest.replace(/^[\/\s]+/, "");
+  if (!more || /^\.\d/.test(more)) return false;
+  const first = more.split(/[\s/;,]+/)[0] || "";
+  // Circuit/panel/inverter remainders carry a digit or hyphen ("C-11",
+  // "INV-2"). A bare English word ("ON", "FOR") is a work note that
+  // mentions the key, not a drawn instance.
+  return /^[A-Z][A-Z0-9/-]{0,15}$/.test(first) && /[0-9-]/.test(first);
+}
+
 /** A compound instance: the scheduled key, then '/' or whitespace, then
  * more text in the SAME run ("R1 /C-11", "R1/C-11", "R1 C-11").
  *
@@ -107,10 +122,7 @@ export function compoundTagOcc(have: string, want: string): boolean {
   if (i >= raw.length) return false;
   const rest = raw.slice(i);
   if (/^\.\d/.test(rest)) return false;
-  if (!/^[\/\s]/.test(rest)) return false;
-  const more = rest.replace(/^[\/\s]+/, "");
-  if (/^\.\d/.test(more)) return false;
-  return /[A-Z0-9]/.test(more);
+  return compoundRemainderIsLabel(rest);
 }
 
 /** Does the drawn text `have` uniquely answer for scheduled mark `want`,
