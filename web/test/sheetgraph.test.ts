@@ -84,6 +84,21 @@ test("a compound schedule-row key answers for each of its marks", () => {
   assert.equal(rowKeyAnswersFor("S1", "S"), false);
 });
 
+test("a hyphenated mark and its unhyphenated twin are the same row key", () => {
+  assert.equal(rowKeyAnswersFor("P-1", "P1"), true);
+  assert.equal(rowKeyAnswersFor("P1", "P-1"), true);
+  assert.equal(rowKeyAnswersFor("US-2", "US2"), true);
+  assert.equal(rowKeyAnswersFor("WH-1", "WH 1"), true);
+  assert.equal(rowKeyAnswersFor("R-1 / E-1", "R1"), true);
+  assert.equal(rowKeyAnswersFor("R-1 / E-1", "E1"), true);
+  assert.equal(rowKeyAnswersFor("P10", "P1"), false);
+  assert.equal(rowKeyAnswersFor("P-10", "P-1"), false);
+  assert.equal(rowKeyAnswersFor("US-21", "US-2"), false);
+  assert.equal(rowKeyAnswersFor("P1A", "P1"), false);
+  assert.equal(rowKeyAnswersFor("ET-1", "ET"), false);
+  assert.equal(rowKeyAnswersFor("ET-2", "ET"), false);
+});
+
 test("table extraction: header anchors, evidence per cell, titles found above", () => {
   const rf = extractTable(schedSheet, "room-finish")!;
   assert.equal(rf.rows.length, 3);

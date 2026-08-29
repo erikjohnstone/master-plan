@@ -22,6 +22,7 @@
 
 import { ROOM_LABEL_RE } from "./detectRooms";
 import { isEquipTag, joinGraphSpans } from "./equiptags";
+import { markKey } from "./markid";
 
 /** rot: text rotation in degrees, clockwise in device space (y down). Absent
  * or 0 = horizontal; 90/270 = a quarter-turn — the rotated-header case. When
@@ -645,12 +646,19 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish", buildings?: Set<s
   return null;
 }
 
-/** Does a schedule-row key answer for a mark? Exact, or one of a compound
- * key's slash-separated parts ("R1/E1" answers for "R1" and for "E1"). */
+/** Does a schedule-row key answer for a mark? Exact (hyphen/space are
+ * drafting variation — "P-1" answers for "P1"), or one of a compound
+ * key's slash-separated parts ("R1/E1" answers for "R1" and for "E1").
+ * A longer mark that merely starts with the want never answers: "P10"
+ * is not "P1". Shared-bare / prefix resolution is pickMarkHits' job —
+ * a row lookup that auto-assigned "ET" to "ET-1" would hide a genuine
+ * ambiguity behind a confident citation. */
 export const rowKeyAnswersFor = (key: string, want: string): boolean => {
-  const c = norm(key).replace(/\s+/g, "");
-  const w = norm(want).replace(/\s+/g, "");
-  return c === w || c.split("/").filter(Boolean).includes(w);
+  const compact = norm(key).replace(/\s+/g, "");
+  const w = markKey(want);
+  if (!w) return false;
+  if (markKey(compact) === w) return true;
+  return compact.split("/").filter(Boolean).some((p) => markKey(p) === w);
 };
 
 /** The number part of a row key — "A-134" and "134" both answer for 134. */
