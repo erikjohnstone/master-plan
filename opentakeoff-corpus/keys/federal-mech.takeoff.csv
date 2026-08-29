@@ -76,23 +76,43 @@
 # TANK SCHEDULE/ET-1,2, DX FAN COIL UNIT SCHEDULE/EV-1..6, UNIT HEATER
 # SCHEDULE/UH-1,2, SILENCER SCHEDULE/S-1,2, FIN TUBE RADIATION SCHEDULE/
 # FTR-1,1B,2,2B, ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE/ALP-1,2,3) — all
-# real, all visually confirmed to exist this session, all EXCEPT the
-# louvered-penthouse one either entirely undiscovered or badly garbled (the
-# condensing-unit and expansion-tank tables both extract with every real row
-# COLLAPSED onto one colliding row_key, since their row_key builder reads a
-# generic spec column — REFRIGERANT/TYPE — instead of each table's own real
-# leftmost TAG column). This second sheet's own tags (FCU-1, CU-1..6,
-# ET-1/2, EV-1..6, UH-1/2, S-1/2, FTR-1/1B/2/2B) are DELIBERATELY NOT
-# included as scored rows below — a real, disclosed scope decision, not a
-# silent omission: this session confirmed they are real and exist (direct
-# render, sheet #15) but did not indpendently verify each one's own real
-# plan-sheet drawn location/quantity the way every row below WAS verified,
-# given session time — the same "out of scope, not silently dropped"
-# discipline bessemer's and itd-d1-lab's own keys already use for their own
-# finish-kind exclusions. A future session extending this key should start
-# there; the root cause (this whole sheet pair's table-discovery/title-hunt/
-# kind-classification gap) is already precisely named above, so it does not
-# need re-discovering.
+# real, all visually confirmed to exist this session. At key-authoring time
+# the condensing-unit and expansion-tank tables extracted with every real
+# row COLLAPSED onto one colliding row_key (REFRIGERANT/TYPE instead of the
+# leftmost TAG column), so CU/EV/UH/S/FTR were left out of the scored rows
+# as a disclosed scope decision, not a silent omission.
+#
+# FINDING #3 (2026-08-29, independently verified — NOT a lookup-table
+# false-add): those same sheet-#15 catalogs now extract as equipment-kind
+# with their real TAG keys (AIR-COOLED CONDENSING UNIT SCHEDULE → CU-1..6,
+# DX FAN COIL UNIT SCHEDULE → EV-1..6, UNIT HEATER SCHEDULE (HOT WATER) →
+# UH-1/2, SILENCER SCHEDULE → S-1/2, FIN TUBE RADIATION SCHEDULE → FTR-1/2).
+# Each title fails isReferenceOrSpecTable / isReferenceCrossTable (they
+# name a purchasable product and carry MODEL/MANUFACTURER). takeoff-eval
+# therefore listed them as FALSELY ADDED only because this key had deferred
+# them — the same "key was just incomplete" shape already seen on navfac.
+# Plan-sheet locations were independently confirmed this session via
+# Session.findText across all 24 sheets (exact-token hits only, so "S-1"
+# does not claim "AS-1"):
+#   - CU-1..6: one plan hit each on sheet #5 (roof), plus two schedule-sheet
+#     hits on #15 (TAG column + the paired EV row's SYSTEM cell).
+#   - EV-1..6: one hit each on sheet #4 and sheet #6 at near-identical
+#     coordinates (companion duct/pipe pair — same convention this file's
+#     own CP-1..6 notes already established) plus the #15 schedule row.
+#     EV-1/CP-1 in ELEC 330 and EV-5/CP-5, EV-6/CP-6 in STORAGE/KILN 338.1
+#     were already visually confirmed in this file's CP- rows.
+#   - S-1/S-2: one hit each on sheet #7 (mechanical room) plus #15.
+#   - FTR-1/FTR-2: one hit each on sheet #6 plus #15. FTR-1B/FTR-2B also
+#     exist as exact text on #6 and #15 but the pipeline currently emits
+#     only FTR-1/FTR-2 (two keyed rows) — 1B/2B stay deferred, not scored
+#     as MISSING under a four-row assumption we did not re-render.
+#   - UH-1/UH-2: mechanical-room multi-view (sheet #7 duct+pipe side by
+#     side, #8/#9 sections) plus UH-1 also on sheet #2. expected_quantity=1
+#     (one installed unit each) per this file's own "redundant view is not
+#     a second install" doctrine; the pipeline currently reports quantity=2
+#     — the same disclosed multi-view overcount as CWP-1/CWP-2.
+# CU/EV/UH/S/FTR-1/FTR-2 are therefore SCORED below. Still deferred (real,
+# not silently dropped): FCU-1, ET-1/2, ALP-1/2/3, FTR-1B/FTR-2B.
 #
 # NEITHER finding above was fixed this session — each is a deep, sheet-
 # layout-specific table-discovery/classification gap (not a narrow, obvious,
@@ -162,9 +182,9 @@
 #     project's own scheduleKind convention, same exclusion bessemer's own
 #     SR-1/SR-2/TG-1/TG-2 and itd-d1-lab's own D-x/L-x/SA-1 already
 #     establish; out of buildPlanSetTakeoff's declared scope.
-#   - FCU-1, CU-1..6, ET-1/2, EV-1..6, UH-1/2, S-1/2, FTR-1/1B/2/2B,
-#     ALP-1/2/3 — see FINDING #2 above (real, sheet #15, deliberately
-#     deferred this session).
+#   - FCU-1, ET-1/2, ALP-1/2/3, FTR-1B/FTR-2B — see FINDING #3 above
+#     (real, sheet #15, still deferred). CU-1..6, EV-1..6, UH-1/2, S-1/2,
+#     FTR-1/FTR-2 are now scored.
 #
 tag,equipment_type,expected_quantity,sheets,notes
 AHU-1,Air handling unit (AHU),1,federal-attachment4-mechanical.pdf#7,"AIR HANDLING UNIT SCHEDULE (sheet #14). Real single unit, MECH ROOM — visually confirmed on sheet #7 (both the duct-plan and piping-plan views) and sheet #8 (all 4 section views); pipeline already correctly reports quantity=1 despite the tag being text-findable in every one of those views, so its own fingerprint match is not fooled by the multi-view-redundancy pattern the way B-1/B-2/AS-1/AS-2 below would be if their table were even reached. Pipeline quantity=1, matches."
@@ -250,3 +270,21 @@ VAV-55,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.p
 VAV-56,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
 VAV-57,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
 VAV-58,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1 (the highest-numbered real VAV tag on this set, per hvacTaxonomy.ts's own pre-existing note: 'VOLUME CONTROL BOX SCHEDULE schedules VAV-1 through VAV-58'). Pipeline quantity=1, matches."
+CU-1,Condensing unit,1,federal-attachment4-mechanical.pdf#5,"AIR-COOLED CONDENSING UNIT SCHEDULE (sheet #15), DAIKIN RK24NMVJU, TYPE=AIR COOLED, 2 TON. FINDING #3: exact find_text hit once on sheet #5 (roof plan) and twice on #15 (schedule TAG + paired EV-1 SYSTEM). One installed roof unit. Not a lookup/cross-ref row."
+CU-2,Condensing unit,1,federal-attachment4-mechanical.pdf#5,"Same schedule as CU-1. Exact find_text: one hit on sheet #5, two on #15. One installed roof unit."
+CU-3,Condensing unit,1,federal-attachment4-mechanical.pdf#5,"Same schedule as CU-1. Exact find_text: one hit on sheet #5, two on #15. One installed roof unit."
+CU-4,Condensing unit,1,federal-attachment4-mechanical.pdf#5,"Same schedule as CU-1. Exact find_text: one hit on sheet #5, two on #15. One installed roof unit."
+CU-5,Condensing unit,1,federal-attachment4-mechanical.pdf#5,"Same schedule as CU-1. Exact find_text: one hit on sheet #5, two on #15. One installed roof unit."
+CU-6,Condensing unit,1,federal-attachment4-mechanical.pdf#5,"Same schedule as CU-1. Exact find_text: one hit on sheet #5, two on #15. One installed roof unit."
+EV-1,DX fan coil unit,1,federal-attachment4-mechanical.pdf#6,"DX FAN COIL UNIT SCHEDULE (sheet #15), SYSTEM=CU-1, DAIKIN FTK24NMVJU, DX-WALL MOUNTED. Exact find_text on sheets #4 and #6 at near-identical coordinates (companion duct/pipe pair) plus #15. Already seen beside CP-1 in ELEC 330 (this file's CP-1 note). One installed unit."
+EV-2,DX fan coil unit,1,federal-attachment4-mechanical.pdf#6,"Same schedule, SYSTEM=CU-2. Exact find_text on #4/#6/#15. Companion-sheet convention, one installed unit."
+EV-3,DX fan coil unit,1,federal-attachment4-mechanical.pdf#6,"Same schedule, SYSTEM=CU-3. Exact find_text on #4/#6/#15. Already seen beside CP-3 / VAV-52 (this file's CP-3 and VAV-52 notes). One installed unit."
+EV-4,DX fan coil unit,1,federal-attachment4-mechanical.pdf#6,"Same schedule, SYSTEM=CU-4. Exact find_text on #4/#6/#15. Companion-sheet convention, one installed unit."
+EV-5,DX fan coil unit,1,federal-attachment4-mechanical.pdf#6,"Same schedule, SYSTEM=CU-5. Exact find_text on #4/#6/#15. Already seen beside CP-5 in STORAGE/KILN 338.1 (this file's CP-5 note). One installed unit."
+EV-6,DX fan coil unit,1,federal-attachment4-mechanical.pdf#6,"Same schedule, SYSTEM=CU-6. Exact find_text on #4/#6/#15. Already seen beside CP-6 in STORAGE/KILN 338.1 (this file's CP-6 note). One installed unit."
+UH-1,Unit heater — electric wall / baseboard,1,federal-attachment4-mechanical.pdf#7,"UNIT HEATER SCHEDULE (HOT WATER) (sheet #15). Mechanical-room multi-view: exact find_text on #2 (×2), #7 (×2 duct+pipe), #8, #9, plus #15. One installed unit; pipeline currently reports quantity=2 (same disclosed multi-view overcount as CWP-1/CWP-2)."
+UH-2,Unit heater — electric wall / baseboard,1,federal-attachment4-mechanical.pdf#7,"Same schedule as UH-1. Exact find_text on #7 (×2), #8, #9, plus #15. One installed unit; pipeline currently reports quantity=2."
+S-1,Silencer,1,federal-attachment4-mechanical.pdf#7,"SILENCER SCHEDULE (sheet #15). Exact find_text once on sheet #7 (mechanical room) and once on #15. One installed unit."
+S-2,Silencer,1,federal-attachment4-mechanical.pdf#7,"Same schedule as S-1. Exact find_text once on sheet #7 and once on #15. One installed unit."
+FTR-1,Fin tube radiation,1,federal-attachment4-mechanical.pdf#6,"FIN TUBE RADIATION SCHEDULE (sheet #15). Exact find_text once on sheet #6 and once on #15. One installed run. Sibling marks FTR-1B/FTR-2B exist as text but are not separate pipeline rows today — see FINDING #3."
+FTR-2,Fin tube radiation,1,federal-attachment4-mechanical.pdf#6,"Same schedule as FTR-1. Exact find_text once on sheet #6 and once on #15. One installed run."
