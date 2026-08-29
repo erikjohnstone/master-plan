@@ -119,11 +119,11 @@ async function evalSet(set) {
   return cachedEvalResult(
     `takeoff:${evaluationFast ? "focused" : "full"}`,
     [
-      join(corpus, "sets.json"),
       ...files,
       join(corpus, "keys", `${set.id}.takeoff.csv`),
       join(corpus, "keys", `${set.id}.reference.csv`),
     ],
+    [JSON.stringify(set)],
     () => evalSetUncached(set),
   );
 }

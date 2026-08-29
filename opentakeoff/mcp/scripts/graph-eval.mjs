@@ -228,12 +228,12 @@ async function evalSet(set) {
   return cachedEvalResult(
     `graph:${evaluationFast ? "focused" : "full"}`,
     [
-      join(corpus, "sets.json"),
       ...files,
       join(corpus, "keys", `${set.id}.csv`),
       join(corpus, "keys", `${set.id}.tags.csv`),
       join(corpus, "keys", `${set.id}.rowsym.csv`),
     ],
+    [JSON.stringify(set)],
     () => evalSetUncached(set),
   );
 }

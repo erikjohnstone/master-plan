@@ -68,20 +68,22 @@ async function inputDigest(paths) {
 
 /** Content-addressed cache for complete per-set scorer results.
  *
- * The key includes every deterministic engine/evaluator source file plus
- * every PDF and authored key consumed by the set. Therefore a code, drawing,
- * or expected-answer edit forces a real recomputation; repeated validation of
- * the same revision returns immediately. Set OPENTAKEOFF_EVAL_NO_CACHE=1 for
- * explicit cold-path benchmarks/equivalence checks.
+ * The key includes every deterministic engine/evaluator source file, the
+ * selected set's own manifest entry, and every PDF/authored key consumed by
+ * that set. Adding an unrelated corpus set therefore leaves every existing
+ * entry hot; a relevant code, drawing, manifest, or answer-key edit forces a
+ * real recomputation. Set OPENTAKEOFF_EVAL_NO_CACHE=1 for explicit cold-path
+ * benchmarks/equivalence checks.
  */
-export async function cachedEvalResult(namespace, inputPaths, compute) {
+export async function cachedEvalResult(namespace, inputPaths, identityValues, compute) {
   if (process.env.OPENTAKEOFF_EVAL_NO_CACHE === "1") return compute();
-  const key = createHash("sha256")
+  const keyHash = createHash("sha256")
     .update(CACHE_VERSION)
     .update(namespace)
     .update(await sourceDigest())
-    .update(await inputDigest(inputPaths))
-    .digest("hex");
+    .update(await inputDigest(inputPaths));
+  for (const value of identityValues) keyHash.update(value);
+  const key = keyHash.digest("hex");
   try {
     const hit = await cacache.get(CACHE_DIR, key);
     return JSON.parse(hit.data.toString("utf8"));
