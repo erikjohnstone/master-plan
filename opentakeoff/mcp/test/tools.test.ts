@@ -2923,6 +2923,56 @@ test("sweep_schedule_row cross-tag corroboration negative control: a genuinely d
   assert.deepEqual(parsed, v3.data);
 });
 
+// ── sweep_schedule_row: a marker drawn OFF TO ONE SIDE of its own tag ─────────
+// The fixture (test/fixtures/symbol-offset.pdf, scripts/make-symbol-fixture.mjs)
+// reproduces the real, corpus-found regime the `selfOffset` claim-radius floor
+// exists for (federal-attachment4-mechanical.pdf's 13 VAV boxes): a small box
+// glyph drawn ~22pt beside its own "BX-1" tag text, not centered on it. The
+// pad ladder anchors from the tag and stops at the smallest pad that captures
+// the box, so the box's own centroid lands FARTHER from the tag than
+// classifySweepMatches' default claim radius (footprint/2 + tag-text height)
+// reaches. Without the floor, even the anchor's OWN box reads as text_only and
+// the tag counts ZERO though its symbol is plainly drawn once; the floor lifts
+// anchorH to the measured self-offset (matchSymbol's own fp.center self-match)
+// so the tag is credited for the very ink its fingerprint was built from.
+// (Verified against this fixture: disabling the floor drops `found` to 0 and
+// surfaces the box as text_only at the tag — the exact pre-fix VAV behavior.)
+const SYMOFFSET = fileURLToPath(new URL("./fixtures/symbol-offset.pdf", import.meta.url));
+
+test("sweep_schedule_row: a marker drawn offset from its own tag is still counted (self-offset claim radius)", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SYMOFFSET });
+
+  const r = await call(client, "sweep_schedule_row", { tag: "BX-1" });
+  assert.equal(r.isError, false);
+
+  // drawn exactly once, no same-tag or cross-tag corroborator (its two schedule
+  // siblings are not drawn on the plan) — the uncorroborated-anchor path the
+  // real VAV boxes also take
+  assert.equal(r.data.anchor.occurrences, 1);
+  assert.equal(r.data.anchor.corroborated, false);
+  assert.equal(r.data.anchor.corroborated_via, undefined);
+
+  // the count: its one real drawn box, credited to the tag despite the offset
+  assert.equal(r.data.found, 1, "the offset-drawn box is counted, not lost to text_only");
+  const p = r.data.sheets.find((x: any) => x.sheet === "symbol-offset.pdf");
+  assert.equal(p.found, 1);
+  assert.equal(p.text_only.length, 0, "the anchor's own occurrence is a MATCH, never disclosed as text-only");
+
+  // and it really is offset: the counted match's centroid sits more than a full
+  // tag-text height away from the tag it carries — a genuine leader-less offset,
+  // not a symbol wrapped around its own label
+  const m = p.matches[0];
+  const tagCx = (m.tag_at.x0 + m.tag_at.x1) / 2, tagCy = (m.tag_at.y0 + m.tag_at.y1) / 2;
+  const offset = Math.hypot(m.at[0] - tagCx, m.at[1] - tagCy);
+  const tagHeight = m.tag_at.y1 - m.tag_at.y0;
+  assert.ok(offset > tagHeight,
+    `the box (offset ${offset.toFixed(1)}px from its tag) is drawn to one side, not centered — the regime the self-offset claim-radius floor recovers`);
+
+  const parsed = z.object(sweepScheduleRowOutput).parse(r.data);
+  assert.deepEqual(parsed, r.data);
+});
+
 // ── count_marks: the deterministic census ────────────────────────────────────
 // The fixture (test/fixtures/annotated-set.pdf, scripts/make-symbol-fixture.mjs):
 // a DUCTWORK PLAN carrying three value-annotated S1 devices + one R1, a tag

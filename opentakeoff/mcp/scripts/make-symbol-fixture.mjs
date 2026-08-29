@@ -460,3 +460,87 @@ for (const off of uniqOffsets) uniqPdf += `${String(off).padStart(10, "0")} 0000
 uniqPdf += `trailer\n<< /Size ${uniqObjects.length + 1} /Root 1 0 R >>\nstartxref\n${uniqXrefAt}\n%%EOF\n`;
 writeFileSync(OUT_UNIQ, uniqPdf, "latin1");
 console.log(`wrote ${OUT_UNIQ} (${uniqPdf.length} bytes)`);
+
+// ── symbol-offset.pdf — the self-offset marker fixture ───────────────────────
+// The real, corpus-found case sweep_schedule_row's `selfOffset` floor exists
+// for (federal-attachment4-mechanical.pdf's 13 VAV boxes): a firm draws the
+// device glyph OFF TO ONE SIDE of its own tag text, not centered on it. The
+// pad ladder anchors the fingerprint from the tag and stops at the SMALLEST
+// pad that still captures the glyph, so the glyph's own centroid can land
+// farther from the tag than classifySweepMatches' default claim radius
+// (footprint/2 + tag-text height) reaches — and then even the ANCHOR's OWN
+// occurrence reads as text_only and the tag counts ZERO, though its symbol is
+// plainly drawn. session.ts floors the claim radius' anchorH at the measured
+// self-offset (matchSymbol's own fp.center self-match report) so the tag gets
+// credit for the very ink its fingerprint was built from. This fixture pins
+// that: WITHOUT the floor BX-1 counts 0 (its glyph is text_only); WITH it,
+// BX-1 counts its one real drawn box.
+//
+// Geometry is deliberate — a SMALL 12pt box (footprint ≈ 34 px, so a small
+// claim radius) whose centroid sits ~22 pt (≈ 44 px at render 2.0) from a
+// LARGE 14pt tag text (a wide pad reach, so the pad still captures the box):
+// the offset clears footprint/2 + text-height, the exact regime the 13 real
+// VAV boxes fall in. Drawn exactly once, so there is no same-tag corroborator
+// and the uncorroborated-anchor path (the one the real VAVs also take) runs.
+const OUT_OFFSET = join(FIXTURES, "symbol-offset.pdf");
+/** A small box glyph — 12pt square, its own compact marker (no leader). */
+function offsetBox([cx, cy]) {
+  const h = 6;
+  const pts = [[cx - h, cy - h], [cx + h, cy - h], [cx + h, cy + h], [cx - h, cy + h]];
+  const out = [];
+  for (let i = 0; i < 4; i++) {
+    const a = pts[i], b = pts[(i + 1) % 4];
+    out.push(`${fmt(a[0])} ${fmt(a[1])} m ${fmt(b[0])} ${fmt(b[1])} l S`);
+  }
+  return out;
+}
+/** Tag text at a stated font size, left-anchored at (x,y). */
+const bigTag = (tag, [x, y], size = 14) => `BT /F1 ${size} Tf ${fmt(x)} ${fmt(y)} Td (${tag}) Tj ET`;
+
+const OFFSET_PAGES = [
+  // page 1 — MECHANICAL PLAN (plan role): one BX-1 box, its tag drawn ~22pt to
+  // the RIGHT of the box (never centered on it — the whole point).
+  [
+    title("MECHANICAL PLAN"),
+    "1 w",
+    "30 30 552 552 re S",
+    "0.5 w",
+    ...offsetBox([200, 400]),
+    bigTag("BX-1", [214, 396]),   // tag text starts ~14pt right of the box's right edge
+  ],
+  // page 2 — TERMINAL BOX SCHEDULE (schedule role): BX-1 plus two siblings that
+  // are NOT drawn on the plan, so there is no cross-tag corroborator either —
+  // the anchor stands uncorroborated, exactly the real VAV regime.
+  [
+    title("TERMINAL BOX SCHEDULE"),
+    cell("SYMBOL", 60, 540), cell("CFM", 200, 540), cell("ESP", 400, 540),
+    cell("BX-1", 60, 515), cell("400", 200, 515), cell("0.5", 400, 515),
+    cell("BX-2", 60, 490), cell("400", 200, 490), cell("0.5", 400, 490),
+    cell("BX-3", 60, 465), cell("400", 200, 465), cell("0.5", 400, 465),
+  ],
+];
+
+const offsetObjects = [
+  `<< /Type /Catalog /Pages 2 0 R >>`,
+  `<< /Type /Pages /Kids [${OFFSET_PAGES.map((_, i) => `${4 + i * 2} 0 R`).join(" ")}] /Count ${OFFSET_PAGES.length} >>`,
+  `<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>`,
+];
+for (let i = 0; i < OFFSET_PAGES.length; i++) {
+  const stream = OFFSET_PAGES[i].join("\n");
+  offsetObjects.push(
+    `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 612] /Contents ${5 + i * 2} 0 R /Resources << /Font << /F1 3 0 R >> >> >>`,
+    `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`,
+  );
+}
+let offsetPdf = "%PDF-1.5\n";
+const offsetOffsets = [];
+offsetObjects.forEach((body, i) => {
+  offsetOffsets.push(offsetPdf.length);
+  offsetPdf += `${i + 1} 0 obj\n${body}\nendobj\n`;
+});
+const offsetXrefAt = offsetPdf.length;
+offsetPdf += `xref\n0 ${offsetObjects.length + 1}\n0000000000 65535 f \n`;
+for (const off of offsetOffsets) offsetPdf += `${String(off).padStart(10, "0")} 00000 n \n`;
+offsetPdf += `trailer\n<< /Size ${offsetObjects.length + 1} /Root 1 0 R >>\nstartxref\n${offsetXrefAt}\n%%EOF\n`;
+writeFileSync(OUT_OFFSET, offsetPdf, "latin1");
+console.log(`wrote ${OUT_OFFSET} (${offsetPdf.length} bytes)`);
