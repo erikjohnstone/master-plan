@@ -1728,6 +1728,25 @@ test("equipment extraction: a bare vocabulary hit on the very next row reads as 
   assert.ok(!tables.some((t) => t.title?.text === "FAN SCHEDULE"), "Fan Schedule not pulled into equipment kind by a neighboring table's own bare required word");
 });
 
+test("equipment extraction: data starts after every consumed deep header tier", () => {
+  const sched: SheetSpans = {
+    key: "deep-chiller.pdf#1", sheet_number: "M7.1",
+    spans: [
+      sp("CHILLER SCHEDULE (ELECTRIC AIR-COOLED)", 100, 10),
+      sp("TAG", 0, 40), sp("TYPE", 180, 40), sp("MANUFACTURER", 360, 40), sp("REMARKS", 760, 40),
+      sp("MINIMUM", 100, 50), sp("DESIGN", 260, 50), sp("STARTER", 500, 50), sp("MAXIMUM", 640, 50),
+      sp("NET", 100, 60), sp("WATER", 260, 60), sp("TYPE", 500, 60), sp("KW", 640, 60),
+      sp("COOLING", 100, 70), sp("FLOW", 260, 70), sp("VOLTAGE", 500, 70), sp("PHASE", 640, 70),
+      sp("TONS", 100, 80), sp("GPM", 260, 80),
+      sp("CH-1", 0, 110), sp("AIR COOLED", 180, 110), sp("128.5", 260, 110), sp("ACME", 360, 110), sp("460", 500, 110), sp("3", 640, 110), sp("1", 760, 110),
+    ],
+  };
+  const table = extractAllTables(sched, "equipment").find((candidate) => candidate.rows.some((row) => row.key === "CH-1"));
+  assert.ok(table, "the real keyed row is reached after five deep sub-header lines");
+  assert.equal(table!.title?.text, "CHILLER SCHEDULE (ELECTRIC AIR-COOLED)");
+  assert.deepEqual(table!.rows.map((row) => row.key), ["CH-1"]);
+});
+
 // ── accuracy-hardening plan Phase 3 (ledger items 6/7) ──────────────────────
 test("headerLabels: a real dotted abbreviation (\"E.S.P\") resolves to its vocabulary word, not three lone letters", () => {
   // Found live on the real federal-mech AHU Unit Schedule's own header —

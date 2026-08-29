@@ -1692,12 +1692,15 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
       }
     }
     let finalAnchors = subTierAnchors(rows, idx, anchors.sort((a, b) => a.x - b.x), vocab);
+    let deepDataFrom = skipEnd + 1;
     // See harvestGeometricSubTiers' own comment: a deep, wide equipment
     // header's own sub-tier labels can sit many real rows below `idx`,
     // never on `idx` itself — additive only, same equipment-only gate every
     // other multi-tier mechanism in this file already uses.
     if (opts.equipmentTierMerge) {
-      finalAnchors = harvestGeometricSubTiers(rows, vocab, idx + 1, finalAnchors);
+      const deep = harvestGeometricSubTiers(rows, vocab, idx + 1, finalAnchors);
+      finalAnchors = deep.anchors;
+      deepDataFrom = Math.max(deepDataFrom, deep.dataFrom);
       finalAnchors = harvestBareVocabLeafTiers(rows, vocab, Math.max(0, idx - 20), idx + 1, finalAnchors);
       finalAnchors = harvestBareVocabAboveTiers(rows, vocab, idx, finalAnchors);
     }
@@ -1738,7 +1741,7 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
     return {
       anchors: finalAnchors,
       rowIndex: idx,
-      dataFrom: skipEnd + 1,
+      dataFrom: deepDataFrom,
       mergedTopIdx,
     };
   }
@@ -2169,8 +2172,14 @@ function looksLikeDeepDataRow(row: GraphSpan[]): boolean {
   const numeric = row.filter((t) => DATA_VALUE_RE.test(t.str.trim())).length;
   return numeric >= 2 || numeric >= Math.ceil(row.length * 0.3);
 }
-function harvestGeometricSubTiers(rows: GraphSpan[][], vocab: string[], startIdx: number, anchors: Anchor[]): Anchor[] {
+function harvestGeometricSubTiers(
+  rows: GraphSpan[][],
+  vocab: string[],
+  startIdx: number,
+  anchors: Anchor[],
+): { anchors: Anchor[]; dataFrom: number } {
   let out = anchors.slice();
+  let dataFrom = startIdx;
   const MAX_ROWS = 15;
   for (let ri = startIdx, n = 0; ri < rows.length && n < MAX_ROWS; ri++, n++) {
     if (looksLikeDeepDataRow(rows[ri])) break;
@@ -2179,6 +2188,7 @@ function harvestGeometricSubTiers(rows: GraphSpan[][], vocab: string[], startIdx
       const h = prev.reduce((s, t) => s + (t.h || 8), 0) / Math.max(1, prev.length);
       if (rowY(rows[ri]) - rowY(prev) > h * 3) break;
     }
+    dataFrom = ri + 1;
     // A row carrying a bare CATALOG_ANCHOR_WORD (SYMBOL/TAG/ID/MARK) is
     // SKIPPED, not a stop — this exact table wraps a catalog-anchor-bearing
     // sub-label ("UNIT" / "TAG", itself a real fragment of "COIL AIR P.D." /
@@ -2320,7 +2330,7 @@ function harvestGeometricSubTiers(rows: GraphSpan[][], vocab: string[], startIdx
       mintSubAnchors(out, used, filtered, mid);
     }
   }
-  return out.sort((a, b) => a.x - b.x);
+  return { anchors: out.sort((a, b) => a.x - b.x), dataFrom };
 }
 
 // ── numeric-only sub-header discrimination gate (itd-d1-lab-mechanical.pdf
