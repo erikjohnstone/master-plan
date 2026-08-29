@@ -40,6 +40,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS }
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
 import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative } from "../../web/src/lib/symbolsweep.ts";
 import { labelPlacements, type PlacementLabel } from "../../web/src/lib/symbollabels.ts";
+import { isEquipTag } from "../../web/src/lib/equiptags.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
 // Real polygon boolean subtraction (#137/#206) — the canvas's own module, so a
@@ -1980,6 +1981,7 @@ export class Session {
     }
     const canon = (k: string) => (k || "").trim().toUpperCase().replace(/\s+/g, "");
     const MARK_RE = /^[A-Z]{1,3}-?\d{1,3}[A-Z]?$/;
+    const isMark = (k: string) => MARK_RE.test(k) || isEquipTag(k);
 
     // mark vocabulary: stated, or read off the schedule tables' row keys —
     // a compound key ("R1 / E1") contributes each of its marks
@@ -1997,7 +1999,7 @@ export class Session {
     if (opts.marks?.length) {
       marks = [...new Set(opts.marks.map(canon).filter(Boolean))];
     } else {
-      marks = [...rowCite.keys()].filter((k) => MARK_RE.test(k)).sort();
+      marks = [...rowCite.keys()].filter((k) => isMark(k)).sort();
       if (!marks.length) {
         throw new UserError('No mark-shaped schedule row keys in the set to census — state the marks yourself: count_marks { marks: ["S1", "R1"] }.');
       }

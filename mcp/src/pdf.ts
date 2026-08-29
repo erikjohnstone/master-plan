@@ -7,6 +7,7 @@ import path from "node:path";
 import * as pdfjs from "pdfjs-dist";
 import type { OpList, OpsTable } from "../../web/src/lib/oneclick.ts";
 import { RENDER_SCALE } from "../../web/src/lib/sheets.ts";
+import { joinHyphenatedTags } from "../../web/src/lib/equiptags.ts";
 
 const requireHere = createRequire(import.meta.url);
 const PDFJS_ROOT = path.dirname(requireHere.resolve("pdfjs-dist/package.json"));
@@ -257,5 +258,5 @@ export function textSpans(ph: PageHandle): TextSpan[] {
       ...(rot ? { rot } : {}),
     });
   }
-  return out;
+  return joinHyphenatedTags(out);
 }

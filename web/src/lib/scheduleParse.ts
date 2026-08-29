@@ -8,6 +8,8 @@
 // the canvas instantiates. Kept here (not in the canvas) so the column math is
 // testable — the sheets.ts / oneclick.ts precedent.
 
+import { isEquipTag, joinHyphenatedTags } from "./equiptags.ts";
+
 export type Token = { str: string; x: number; y: number; h: number };
 
 export type Category = "floor" | "base" | "wall" | "transition" | "ceiling" | "other";
@@ -49,6 +51,7 @@ type Column = (typeof COLUMNS)[number];
 // ACT-1, PLAM-2, RES-W), or a lone letter (C = concrete sealer). Section words
 // are caps too, so the caller checks those first.
 const CODE_RE = /^[A-Z]{1,4}(-[A-Z0-9]{1,4})?$/;
+const isCode = (s: string) => CODE_RE.test(s) || isEquipTag(s);
 
 const norm = (s: string) => (s || "").trim().toUpperCase();
 const sectionKey = (s: string) => norm(s).replace(/[^A-Z]/g, "");
@@ -108,7 +111,11 @@ function columnFor(x: number, anchors: { col: Column; x: number }[]): Column {
  * "no schedule detected here" rather than inventing rows.
  */
 export function parseSchedule(tokens: Token[]): ScheduleRow[] {
-  const rows = clusterRows(tokens);
+  const joinedToks: Token[] = joinHyphenatedTags(tokens.map((t) => {
+    const w = Math.max((t.str || "").length * 0.62 * (t.h || 8), (t.h || 8) * 0.4);
+    return { ...t, x0: t.x, y0: t.y, x1: t.x + w, y1: t.y + (t.h || 8) };
+  })).map((b) => ({ str: b.str, x: b.x0, y: b.y0, h: b.y1 - b.y0 }));
+  const rows = clusterRows(joinedToks);
   const anchors = findAnchors(rows);
   if (!anchors) return [];
 
@@ -122,7 +129,7 @@ export function parseSchedule(tokens: Token[]): ScheduleRow[] {
     if (SECTION_CATEGORY[key] && joined.length < 24) { section = key; continue; }
     // data rows need a section and a code-shaped first cell
     const codeTok = norm(first.str).replace(/[^A-Z0-9-]/g, "");
-    if (!section || !CODE_RE.test(codeTok)) continue;
+    if (!section || !isCode(codeTok)) continue;
 
     const cells: Record<Column, string[]> = { CODE: [], MATERIAL: [], MANUFACTURER: [], STYLE: [], COLOR: [], SIZE: [], REMARKS: [] };
     for (const t of r) cells[columnFor(cx(t), anchors)].push(t.str.trim());
