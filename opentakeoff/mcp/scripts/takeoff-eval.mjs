@@ -40,6 +40,7 @@
 import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { resolveSetFiles } from "./corpusFiles.mjs";
+import { cachedEvalResult } from "./evalCache.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import pLimit from "p-limit";
@@ -87,7 +88,7 @@ const spec = JSON.parse(readFileSync(join(corpus, "sets.json"), "utf8"));
 
 const pct = (n) => (n * 100).toFixed(1).padStart(5) + "%";
 
-async function evalSet(set) {
+async function evalSetUncached(set) {
   const takeoffKeyPath = join(corpus, "keys", `${set.id}.takeoff.csv`);
   const referenceKeyPath = join(corpus, "keys", `${set.id}.reference.csv`);
   const hasTakeoffKey = existsSync(takeoffKeyPath);
@@ -111,6 +112,20 @@ async function evalSet(set) {
     ? scoreReference(takeoff.reference_tables, parseReferenceKeyCsv(readFileSync(referenceKeyPath, "utf8")))
     : null;
   return { id: set.id, gc: set.gc, project: set.project, score, reference, unlabelled: !hasTakeoffKey };
+}
+
+async function evalSet(set) {
+  const files = resolveSetFiles(corpus, spec, set);
+  return cachedEvalResult(
+    `takeoff:${evaluationFast ? "focused" : "full"}`,
+    [
+      join(corpus, "sets.json"),
+      ...files,
+      join(corpus, "keys", `${set.id}.takeoff.csv`),
+      join(corpus, "keys", `${set.id}.reference.csv`),
+    ],
+    () => evalSetUncached(set),
+  );
 }
 
 // Internal single-set worker mode — runs in its own child process, prints

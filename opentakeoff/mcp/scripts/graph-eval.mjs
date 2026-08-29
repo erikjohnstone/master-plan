@@ -34,6 +34,7 @@
 import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { resolveSetFiles } from "./corpusFiles.mjs";
+import { cachedEvalResult } from "./evalCache.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import pLimit from "p-limit";
@@ -111,7 +112,7 @@ const pct = (n) => (n * 100).toFixed(1).padStart(5) + "%";
 const f1 = (p, r) => (p + r ? (2 * p * r) / (p + r) : 0);
 
 // ── run one set ─────────────────────────────────────────────────────────────
-async function evalSet(set) {
+async function evalSetUncached(set) {
   const s = new Session();
   const files = resolveSetFiles(corpus, spec, set);
   for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
@@ -220,6 +221,21 @@ async function evalSet(set) {
 
   if (!cellKey && !tagKey && !rowSymKey) out.unlabelled = true;
   return out;
+}
+
+async function evalSet(set) {
+  const files = resolveSetFiles(corpus, spec, set);
+  return cachedEvalResult(
+    `graph:${evaluationFast ? "focused" : "full"}`,
+    [
+      join(corpus, "sets.json"),
+      ...files,
+      join(corpus, "keys", `${set.id}.csv`),
+      join(corpus, "keys", `${set.id}.tags.csv`),
+      join(corpus, "keys", `${set.id}.rowsym.csv`),
+    ],
+    () => evalSetUncached(set),
+  );
 }
 
 if (singleJsonSetId) {

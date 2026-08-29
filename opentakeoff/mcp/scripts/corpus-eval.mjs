@@ -38,8 +38,13 @@ function run(label, script, scriptArgs) {
 
 const started = performance.now();
 try {
-  await run("takeoff + reference", "takeoff-eval.mjs", [...args, "--with-reference"]);
-  await run("sheet graph", "graph-eval.mjs", args.filter((arg) => arg !== "--with-reference"));
+  // Both scorers are independent readers. Run them together so the default
+  // two-worker fan-out in each script fills all four CPU cores instead of
+  // leaving half the machine idle and paying the two passes serially.
+  await Promise.all([
+    run("takeoff + reference", "takeoff-eval.mjs", [...args, "--with-reference"]),
+    run("sheet graph", "graph-eval.mjs", args.filter((arg) => arg !== "--with-reference")),
+  ]);
   console.error(`\n=== complete corpus evaluation finished in ${((performance.now() - started) / 1000).toFixed(1)}s ===`);
 } catch (error) {
   console.error(error instanceof Error ? error.message : String(error));
