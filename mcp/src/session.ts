@@ -40,6 +40,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS }
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
 import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative } from "../../web/src/lib/symbolsweep.ts";
 import { labelPlacements, type PlacementLabel } from "../../web/src/lib/symbollabels.ts";
+import { pickMarkHits, dedupeMarks, marksEqual, markKey } from "../../web/src/lib/markid.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
 // Real polygon boolean subtraction (#137/#206) — the canvas's own module, so a
@@ -1995,9 +1996,9 @@ export class Session {
     }
     let marks: string[];
     if (opts.marks?.length) {
-      marks = [...new Set(opts.marks.map(canon).filter(Boolean))];
+      marks = dedupeMarks(opts.marks);
     } else {
-      marks = [...rowCite.keys()].filter((k) => MARK_RE.test(k)).sort();
+      marks = dedupeMarks([...rowCite.keys()].filter((k) => MARK_RE.test(k))).sort();
       if (!marks.length) {
         throw new UserError('No mark-shaped schedule row keys in the set to census — state the marks yourself: count_marks { marks: ["S1", "R1"] }.');
       }
@@ -2047,21 +2048,19 @@ export class Session {
       let segs: ArrayLike<number> | null = null; // lazy — only withheld occurrences look at linework
       for (const m of marks) {
         const rec = perMark.get(m)!;
-        for (const sp of sh.spans) {
-          if (canon(sp.str) !== m) continue;
-          const cx = (sp.x0 + sp.x1) / 2, cy = (sp.y0 + sp.y1) / 2;
-          const h = Math.max(sp.y1 - sp.y0, 6);
+        for (const hit of pickMarkHits(sh.spans, m, marks)) {
+          const { cx, cy, h } = hit;
           if (regions.some((r) => cx >= r[0] && cx <= r[2] && cy >= r[1] && cy <= r[3])) { excludedInTables++; continue; }
           const paired = values.find((v) =>
-            Math.abs((v.x0 + v.x1) / 2 - cx) <= Math.max(sp.x1 - sp.x0, 1.5 * h) &&
-            v.y0 >= sp.y1 - 0.4 * h && v.y0 <= sp.y1 + 2.4 * h);
+            Math.abs((v.x0 + v.x1) / 2 - cx) <= Math.max(hit.bbox[2] - hit.bbox[0], 1.5 * h) &&
+            v.y0 >= hit.bbox[3] - 0.4 * h && v.y0 <= hit.bbox[3] + 2.4 * h);
           if (paired) {
             rec.counted.push({ at: [round1(cx), round1(cy)], value: paired.str.trim(), sheet: sh.key });
             counts[m] = (counts[m] || 0) + 1;
           } else {
             if (segs === null) segs = (await this.ensureGeometry(sh)).segs;
             const pad = 2.5 * h;
-            const bx0 = sp.x0 - pad, by0 = sp.y0 - pad, bx1 = sp.x1 + pad, by1 = sp.y1 + pad;
+            const bx0 = hit.bbox[0] - pad, by0 = hit.bbox[1] - pad, bx1 = hit.bbox[2] + pad, by1 = hit.bbox[3] + pad;
             let n = 0;
             for (let i = 0; i + 3 < segs.length && n < 3; i += 4) {
               if (segs[i] >= bx0 && segs[i] <= bx1 && segs[i + 1] >= by0 && segs[i + 1] <= by1 &&
@@ -2087,7 +2086,7 @@ export class Session {
       for (const m of marks) {
         const rec = perMark.get(m)!;
         if (!rec.counted.length) continue;
-        const cite = rowCite.get(m);
+        const cite = rowCite.get(m) ?? [...rowCite.entries()].find(([k]) => marksEqual(k, m))?.[1];
         let n = 0;
         for (const occ of rec.counted) {
           this.commit(this.sheet(occ.sheet), m, "count", [occ.at], { count: 1 }, {
@@ -2110,7 +2109,7 @@ export class Session {
     return {
       marks: marks.map((m) => {
         const rec = perMark.get(m)!;
-        const cite = rowCite.get(m);
+        const cite = rowCite.get(m) ?? [...rowCite.entries()].find(([k]) => marksEqual(k, m))?.[1];
         const c = cap(rec.counted, 150);
         const w = cap(rec.withheld, 60);
         return {
@@ -2604,7 +2603,8 @@ export class Session {
     // sibling keys span EVERY table in the set, not just the row's own: a
     // marker labeled with any other schedule key is that mark's instance, and
     // disclosing it as "excluded, labeled 135" beats calling it unlabeled
-    const siblings = [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(row.key).split("/").filter(Boolean))))].filter((k) => k !== t).sort();
+    const allKeys = [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(row.key).split("/").filter(Boolean))))];
+    const siblings = allKeys.filter((k) => markKey(k) !== markKey(t)).sort();
     const table = tb.title?.text || `${tb.kind} schedule`;
 
     // 2. plan-role sheets, and every drawn occurrence of the tag on them
@@ -2627,10 +2627,8 @@ export class Session {
     type Occ = { cx: number; cy: number; h: number; bbox: [number, number, number, number] };
     const occOf = (sh: SheetState, key: string): Occ[] => {
       if (!sh.spans) sh.spans = textSpans(sh.page);
-      return sh.spans
-        .filter((sp) => sp.str.trim().toUpperCase() === key)
-        .map((sp) => ({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number] }))
-        .sort((a, b) => a.cy - b.cy || a.cx - b.cx);
+      return pickMarkHits(sh.spans, key, allKeys)
+        .map((h) => ({ cx: h.cx, cy: h.cy, h: h.h, bbox: h.bbox }));
     };
     const occBySheet = planSheets.map((sh) => ({ sh, occ: occOf(sh, t) }));
     const totalOcc = occBySheet.reduce((n, e) => n + e.occ.length, 0);

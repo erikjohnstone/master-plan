@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-29 — mark identity: short-mark overcount and twin-alias double-count
+
+### Fixed
+- **Short marks no longer harvest their longer neighbors, and hyphen twins no longer double-count.** `P-1` and `P1` (and `P 1`) are one mark; two alias spellings sitting on one device collapse to one instance. `P1` never claims `P10` / `P11` / `P1A`. A letter-only family name several qualified siblings could own (`ET` next to `ET-1` and `ET-2`) stays unresolved — never auto-assigned to the first match. Shared helper `lib/markid.ts`, used by `count_marks`, `sweep_schedule_row`, and schedule-row lookup.
+
 ## 2026-08-28 — richer variants are named, and variant_guard makes them questions
 
 ### Added
