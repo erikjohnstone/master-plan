@@ -1709,7 +1709,10 @@ export function familySuffixTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   const candidates = spans.filter((span) => {
     if (normalize(span.str) !== suffix) return false;
     const h = Math.max(span.y1 - span.y0, 1);
-    if (h < medianH * 0.6 || h > medianH * 1.6) return false;
+    // A CAD font can outline the missing prefix at a different rotation,
+    // leaving the searchable suffix with roughly half the sibling run's
+    // reported axis-aligned height.
+    if (h < medianH * 0.4 || h > medianH * 1.6) return false;
     const cx = (span.x0 + span.x1) / 2, cy = (span.y0 + span.y1) / 2;
     const nearby = siblings.filter(({ span: sibling }) => {
       const sx = (sibling.x0 + sibling.x1) / 2, sy = (sibling.y0 + sibling.y1) / 2;
