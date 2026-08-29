@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type Point, type RoomSweepInstance } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, type Point, type RoomSweepInstance, type SheetViewport } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -241,8 +241,8 @@ const ROOM = { tag: "120", name: "MECH", bbox: [1000, 1000, 1040, 1020] as [numb
 const OTHER_ROOM = { tag: "130", name: "ELEC", bbox: [4000, 3000, 4040, 3020] as [number, number, number, number] };
 const NEAR_ROOM = [1010, 1010] as Point; // well inside ROOM's bbox
 const SHEET_W = 5000, SHEET_H = 4000;
-function inst(id: number, sheet: string, discipline: string | null, at: Point, rooms: typeof ROOM[]): RoomSweepInstance<number> {
-  return { id, sheet, discipline, at, rooms, sheetWidthPx: SHEET_W, sheetHeightPx: SHEET_H };
+function inst(id: number, sheet: string, discipline: string | null, at: Point, rooms: typeof ROOM[], viewports?: SheetViewport[]): RoomSweepInstance<number> {
+  return { id, sheet, discipline, at, rooms, sheetWidthPx: SHEET_W, sheetHeightPx: SHEET_H, ...(viewports ? { viewports } : {}) };
 }
 
 test("dedupeCrossDisciplineRoomViews: same tag, same room, two different-discipline sheets — collapses to one (the real AC-1 shape)", () => {
@@ -364,4 +364,97 @@ test("dedupeCrossDisciplineRoomViews: three disciplines drawing the same room �
   const ids = redundant.map((r) => r.id).sort();
   assert.deepEqual(ids, [3, 4]);
   for (const r of redundant) assert.equal(r.keptDiscipline, "M");
+});
+
+// ── same-sheet titled viewports (duct plan | piping plan of one room) ─────
+
+const DUCT_TITLE = "MECHANICAL ROOM ENLARGED DUCT PLAN";
+const PIPE_TITLE = "MECHANICAL ROOM ENLARGED PIPING PLAN";
+const DUAL_VIEWS: SheetViewport[] = [
+  { title: DUCT_TITLE, spaceKey: viewportSpaceKey(DUCT_TITLE), at: [1000, 3200] },
+  { title: PIPE_TITLE, spaceKey: viewportSpaceKey(PIPE_TITLE), at: [3200, 3200] },
+];
+
+test("viewportSpaceKey: complementary views of one room compare equal; different rooms/levels stay distinct", () => {
+  assert.equal(viewportSpaceKey(DUCT_TITLE), viewportSpaceKey(PIPE_TITLE));
+  assert.equal(viewportSpaceKey("MECHANICAL ROOM SECTION 1"), viewportSpaceKey("MECHANICAL ROOM SECTION 3"));
+  assert.notEqual(viewportSpaceKey("LEVEL 1 PLAN"), viewportSpaceKey("LEVEL 2 PLAN"));
+  assert.notEqual(viewportSpaceKey("ROOM 151 ENLARGED DUCT PLAN"), viewportSpaceKey("ROOM 202 ENLARGED DUCT PLAN"));
+});
+
+test("isViewportTitle / detectSheetViewports: accepts paired room-plan titles, rejects notes and a lone whole-sheet title", () => {
+  assert.equal(isViewportTitle(DUCT_TITLE), true);
+  assert.equal(isViewportTitle(PIPE_TITLE), true);
+  assert.equal(isViewportTitle("MECHANICAL ROOM SECTION 1"), true);
+  assert.equal(isViewportTitle("PROVIDE VOLUME DAMPERS ON ALL DUCT TAKEOFFS SERVING"), false);
+  assert.equal(isViewportTitle("AND DUCT PLANS"), false);
+  assert.equal(isViewportTitle("PLAN"), false);
+  const dual = detectSheetViewports([
+    { str: DUCT_TITLE, x: 800, y: 3180, w: 400, h: 24 },
+    { str: PIPE_TITLE, x: 3000, y: 3180, w: 440, h: 24 },
+    { str: "PROVIDE DUCT PRESSURE READING PORTS BEFORE AND AFTER", x: 5000, y: 350, w: 500, h: 16 },
+  ]);
+  assert.equal(dual.length, 2);
+  assert.equal(dual[0].spaceKey, dual[1].spaceKey);
+  const single = detectSheetViewports([
+    { str: "FIRST FLOOR MECHANICAL PLAN", x: 2000, y: 3800, w: 400, h: 24 },
+  ]);
+  assert.equal(single.length, 0, "a single whole-sheet plan title is not a dual-view");
+  // Title-block reprint of the same caption is still one viewport.
+  const reprint = detectSheetViewports([
+    { str: "FIRST FLOOR MECHANICAL PLAN", x: 1600, y: 3100, w: 400, h: 24 },
+    { str: "FIRST FLOOR MECHANICAL PLAN", x: 4800, y: 2400, w: 400, h: 24 },
+  ]);
+  assert.equal(reprint.length, 0, "the same title printed twice (drawing + title block) is not a dual-view");
+  const aliasReprint = detectSheetViewports([
+    { str: "MTRACON - MECHANICAL DUCTWORK ROOF PLAN", x: 4700, y: 2360, w: 400, h: 24 },
+    { str: "MTRACON - MECHANICAL DUCT ROOF PLAN", x: 770, y: 2770, w: 400, h: 24 },
+  ]);
+  assert.equal(aliasReprint.length, 0, "DUCT vs DUCTWORK is a title-block wording alias, not two views");
+  assert.equal(isViewportTitle("INDICATED ON THE FLOOR PLAN"), false);
+  assert.equal(isViewportTitle("MECHANICAL ROOF PLAN FOR CONTINUATION."), false);
+});
+
+test("dedupeCrossDisciplineRoomViews: same tag, same sheet, two titled viewports of the same room — collapses (duct plan | piping plan)", () => {
+  const instances = [
+    inst(1, "M4.1", "M", [1200, 1300], [ROOM], DUAL_VIEWS),
+    inst(2, "M4.1", "M", [3400, 1310], [ROOM], DUAL_VIEWS),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 1, "the piping-plan redraw collapses; one install remains");
+  assert.equal(redundant[0].sheet, "M4.1");
+  assert.equal(redundant[0].keptSheet, "M4.1");
+});
+
+test("dedupeCrossDisciplineRoomViews: same tag, same sheet, two matches in ONE viewport — still a real repeat, never collapsed", () => {
+  const instances = [
+    inst(1, "M4.1", "M", [1100, 1300], [ROOM], DUAL_VIEWS),
+    inst(2, "M4.1", "M", [1300, 1500], [ROOM], DUAL_VIEWS),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 0, "both marks nearest the same view title — two real units on one drawing");
+});
+
+test("dedupeCrossDisciplineRoomViews: same tag, same sheet, two viewports of DIFFERENT spaces — never collapsed", () => {
+  const views: SheetViewport[] = [
+    { title: "LEVEL 1 MECHANICAL PLAN", spaceKey: viewportSpaceKey("LEVEL 1 MECHANICAL PLAN"), at: [1000, 2000] },
+    { title: "LEVEL 2 MECHANICAL PLAN", spaceKey: viewportSpaceKey("LEVEL 2 MECHANICAL PLAN"), at: [3500, 2000] },
+  ];
+  assert.notEqual(views[0].spaceKey, views[1].spaceKey);
+  const instances = [
+    inst(1, "M2.1", "M", [1200, 1500], [ROOM], views),
+    inst(2, "M2.1", "M", [3600, 1500], [OTHER_ROOM], views),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 0, "two floors on one sheet are two installs even if the tag string matches");
+});
+
+test("dedupeCrossDisciplineRoomViews: same-sheet viewport collapse does not require a room bubble (enlarged room IS the sheet)", () => {
+  const elsewhere = [{ tag: "999", name: "ELSEWHERE", bbox: [4800, 3800, 4840, 3820] as [number, number, number, number] }];
+  const noRoom = [
+    inst(1, "M4.1", "M", [1200, 1300], elsewhere, DUAL_VIEWS),
+    inst(2, "M4.1", "M", [3400, 1310], elsewhere, DUAL_VIEWS),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(noRoom);
+  assert.equal(redundant.length, 1, "viewport path fires even when no room number is near either mark");
 });

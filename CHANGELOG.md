@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-29 — same-sheet dual-view overcount
+
+### Fixed
+- **A tag drawn once per titled viewport on one plan sheet is one install.** Complementary views of the same room on a single sheet (a duct-layer plan beside a piping-layer plan, two section cuts) each redraw and retag the same equipment; `sweep_schedule_row` previously counted every viewport that cleared the fingerprint bar. Same-sheet matches now collapse when they sit in different titled viewports whose space key agrees (view-type words stripped). Two units inside one viewport, or two viewports of different rooms/levels, stay separate. No project, sheet, or tag names. **opentakeoff-mcp 0.9.68** (three surfaces).
+
 ## 2026-08-29 — rotated hyphen joins; work notes are not instances
 
 ### Fixed

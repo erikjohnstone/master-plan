@@ -119,7 +119,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, detectSheetViewports, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type SheetViewport } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -3678,34 +3678,50 @@ export class Session {
       });
     }
 
-    // 4b. cross-discipline redundant room-view collapse — a real, generic
-    // drafting convention (see symbolsweep.ts's dedupeCrossDisciplineRoomViews
-    // for the full doctrine): two different disciplines each drawing their
-    // OWN "enlarged" plan of the SAME physical room redraw whatever equipment
-    // sits in it for their own trade's reference, so the SAME tag matched
-    // once on each discipline's view of the SAME room is one physical device,
-    // not one install per sheet. Never touches a same-discipline repeat (a
-    // real separate-install signal) or a match with no confidently-attributed
-    // room (never guessed). `disciplineOfSheetNumber` (symbolsweep.ts) is the
-    // same read step 3's same-tag corroborator gate already uses above.
+    // 4b. redundant-view collapse — a real, generic drafting convention
+    // (see symbolsweep.ts's dedupeCrossDisciplineRoomViews for the full
+    // doctrine): the SAME tag matched on two views of the SAME physical
+    // room is one install, not one per view. Covers (i) another sheet's
+    // enlarged/purpose-specific plan of that room and (ii) another titled
+    // viewport on this same sheet (duct plan | piping plan, a second
+    // section cut). Never touches a real repeat inside one viewport (that
+    // stays a separate-install signal) or a match with no confidently-
+    // attributed room on the cross-sheet path (never guessed). Same-sheet
+    // viewport collapse uses view titles, not room bubbles. `disciplineOfSheetNumber`
+    // (symbolsweep.ts) is the same read step 3's same-tag corroborator gate
+    // already uses above.
     const roomsBySheet = new Map<string, ReturnType<typeof roomTags>>();
+    const viewportsBySheet = new Map<string, SheetViewport[]>();
+    const spansFor = (sh: SheetState) => {
+      if (!sh.spans) sh.spans = textSpans(sh.page);
+      return (sh.spans ?? []).map((sp) => ({ str: sp.str, x: sp.x0, y: sp.y0, w: sp.x1 - sp.x0, h: sp.y1 - sp.y0, ...(sp.rot ? { rot: sp.rot } : {}) }));
+    };
     const roomsFor = (sh: SheetState): ReturnType<typeof roomTags> => {
       let rooms = roomsBySheet.get(sh.key);
       if (!rooms) {
-        const spans = (sh.spans ?? []).map((sp) => ({ str: sp.str, x: sp.x0, y: sp.y0, w: sp.x1 - sp.x0, h: sp.y1 - sp.y0, ...(sp.rot ? { rot: sp.rot } : {}) }));
-        rooms = roomTags({ key: sh.key, sheet_number: sh.sheetNumber, spans });
+        rooms = roomTags({ key: sh.key, sheet_number: sh.sheetNumber, spans: spansFor(sh) });
         roomsBySheet.set(sh.key, rooms);
       }
       return rooms;
+    };
+    const viewportsFor = (sh: SheetState): SheetViewport[] => {
+      let vps = viewportsBySheet.get(sh.key);
+      if (!vps) {
+        vps = detectSheetViewports(spansFor(sh));
+        viewportsBySheet.set(sh.key, vps);
+      }
+      return vps;
     };
     const dedupInstances: RoomSweepInstance<CountedMatch>[] = [];
     for (const ps of perSheet) {
       const discipline = disciplineOfSheetNumber(ps.state.sheetNumber);
       const rooms = discipline ? roomsFor(ps.state) : [];
+      const viewports = discipline ? viewportsFor(ps.state) : [];
       for (const m of ps.matches) {
         dedupInstances.push({
           id: m, sheet: ps.state.key, discipline, at: m.at,
           rooms, sheetWidthPx: ps.state.widthPx, sheetHeightPx: ps.state.heightPx,
+          viewports,
         });
       }
     }
@@ -3783,7 +3799,7 @@ export class Session {
     }
     const rowRedundant = perSheet.filter((p) => p.redundant_view.length);
     if (rowRedundant.length) {
-      notes.push(`${rowRedundant.map((p) => `${p.redundant_view.length} on ${p.state.key}`).join(", ")} withheld from the count as a cross-discipline REDUNDANT VIEW — the same "${t}" mark, in the same drawn room, on a different-discipline sheet's own "enlarged" plan of that room (the SAME physical device redrawn for another trade's reference, not a second install); audit with view_sheet before trusting this.`);
+      notes.push(`${rowRedundant.map((p) => `${p.redundant_view.length} on ${p.state.key}`).join(", ")} withheld from the count as a REDUNDANT VIEW — the same "${t}" mark redrawn for another view of the same physical device (another sheet's enlarged plan of the same room, or another titled viewport on this sheet — a duct plan beside a piping plan, a second section cut), not a second install; audit with view_sheet before trusting this.`);
     }
     return {
       tag: t,
