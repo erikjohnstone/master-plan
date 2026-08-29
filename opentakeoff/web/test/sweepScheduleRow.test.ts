@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, prefersTagClaimCoverage, typicalCountMultiplier, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, prefersTagClaimCoverage, typicalCountMultiplier, splitHyphenTagOcc, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -479,4 +479,15 @@ test("typicalCountMultiplier reads only an adjacent aligned TYP count", () => {
   assert.equal(typicalCountMultiplier(spans, [100, 100, 133, 119]), 8);
   assert.equal(typicalCountMultiplier(spans, [400, 100, 433, 119]), 1);
   assert.equal(typicalCountMultiplier([{ str: "TYP NOTE", x0: 100, y0: 130, x1: 160, y1: 149 }], [100, 100, 133, 119]), 1);
+});
+
+test("splitHyphenTagOcc recovers an exact adjacent two-run tag without fuzzy joining", () => {
+  const spans = [
+    { str: "SCHWP", x0: 100, y0: 200, x1: 160, y1: 220 },
+    { str: "M1", x0: 176, y0: 200, x1: 196, y1: 220 },
+    { str: "M2", x0: 400, y0: 200, x1: 420, y1: 220 },
+  ];
+  assert.equal(splitHyphenTagOcc(spans, "SCHWP-M1").length, 1);
+  assert.equal(splitHyphenTagOcc(spans, "SCHWP-M2").length, 0);
+  assert.equal(splitHyphenTagOcc(spans, "SCHWP-M1-X").length, 0);
 });

@@ -1468,6 +1468,37 @@ export function compoundTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   return out;
 }
 
+/**
+ * Recover the common two-run form of a one-hyphen tag when the PDF omits
+ * the printed hyphen from text extraction ("SCHWP" + "M1"). Both sides
+ * must exactly equal the key's two components and sit adjacently on one
+ * baseline; this never performs a fuzzy prefix chain.
+ */
+export function splitHyphenTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
+  const parts = key.trim().toUpperCase().split("-");
+  if (parts.length !== 2 || parts.some((part) => !part)) return [];
+  const upper = (value: string) => value.trim().toUpperCase();
+  const out: TagOcc[] = [];
+  for (const left of spans.filter((span) => upper(span.str) === parts[0])) {
+    const h = Math.max(left.y1 - left.y0, 6);
+    const right = spans
+      .filter((span) =>
+        upper(span.str) === parts[1]
+        && Math.abs(span.y0 - left.y0) <= h * 0.4
+        && span.x0 >= left.x1 - 1
+        && span.x0 - left.x1 <= h * 2)
+      .sort((a, b) => a.x0 - b.x0)[0];
+    if (!right) continue;
+    out.push({
+      cx: (left.x0 + right.x1) / 2,
+      cy: (Math.min(left.y0, right.y0) + Math.max(left.y1, right.y1)) / 2,
+      h: Math.max(left.y1, right.y1) - Math.min(left.y0, right.y0),
+      bbox: [left.x0, Math.min(left.y0, right.y0), right.x1, Math.max(left.y1, right.y1)],
+    });
+  }
+  return out;
+}
+
 /** sweep_schedule_row's own tag-occurrence match (`occOf` in both
  * session.ts and TakeoffCanvas.jsx) requires the FULL tag text to appear as
  * ONE literal span — but a real drawn tag is routinely split across

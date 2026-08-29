@@ -119,7 +119,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, typicalCountMultiplier, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, prefersTagClaimCoverage, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, splitHyphenTagOcc, deepHyphenChainTagOcc, compoundTagOcc, typicalCountMultiplier, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, prefersTagClaimCoverage, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -2970,10 +2970,13 @@ export class Session {
         bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number],
       }));
     const merged = [...exact, ...compoundTagOcc(sh.spans, key)];
+    const splitHyphen = splitHyphenTagOcc(sh.spans, key);
     const fragmented = fragmentedTagOcc(sh.spans, key);
     const occurrences = merged.length
       ? merged
-      : (fragmented.length ? fragmented : deepHyphenChainTagOcc(sh.spans, key));
+      : (splitHyphen.length ? splitHyphen
+        : fragmented.length ? fragmented
+          : deepHyphenChainTagOcc(sh.spans, key));
     occurrences.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
     byKey.set(key, occurrences);
     return occurrences;
