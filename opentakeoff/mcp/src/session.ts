@@ -3905,6 +3905,29 @@ export class Session {
             !matches.some((m) => Math.hypot(m.at[0] - entry.at[0], m.at[1] - entry.at[1]) <= anchor.h * 2));
         }
       }
+      // Air-device plans commonly print the schedule key beside every
+      // diffuser/grille/register while varying the drawn neck/face size,
+      // which makes one rigid perimeter fingerprint intrinsically partial.
+      // A large family-wide population on this plan proves that explicit
+      // tag placement convention; supplement only this row's own labels.
+      if (airDeviceTable) {
+        const familyTagCount = tableSiblingKeys.reduce((sum, key) => sum + occOf(sh, key).length, 0);
+        if (familyTagCount >= 10) {
+          for (const tagged of occ) {
+            const alreadyClaimed = matches.some((match) => {
+              const box = match.tag_at;
+              return Math.hypot((box[0] + box[2]) / 2 - tagged.cx, (box[1] + box[3]) / 2 - tagged.cy) <= 1;
+            });
+            if (alreadyClaimed) continue;
+            matches.push({
+              at: [tagged.cx, tagged.cy], score: 1, rotation: 0, mirrored: false,
+              tag_at: tagged.bbox, text_counted: true,
+            });
+          }
+          text_only = text_only.filter((entry) =>
+            !occ.some((tagged) => Math.hypot(tagged.cx - entry.at[0], tagged.cy - entry.at[1]) <= anchor.h * 2));
+        }
+      }
       const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
       perSheet.push({
         state: sh, matches, withheld, excluded, text_only,
@@ -4044,7 +4067,7 @@ export class Session {
     const multiplied = perSheet.flatMap((p) => p.matches.filter((m) => (m.multiplier ?? 1) > 1));
     if (multiplied.length) notes.push(`${multiplied.length} drawn callout(s) carry explicit TYP multipliers; their printed quantities were applied to the installed count.`);
     const textCounted = perSheet.flatMap((p) => p.matches.filter((m) => m.text_counted));
-    if (textCounted.length) notes.push(`${textCounted.length} additional compound luminaire labels were counted directly under a family-wide quorum; each explicit tag/circuit label represents one drawn fixture.`);
+    if (textCounted.length) notes.push(`${textCounted.length} additional explicit placement labels were counted directly under a family-wide quorum.`);
     if (opts.commit && !found) notes.push("commit requested but nothing cleared the bar — no shapes were committed.");
     // #186, same disclosure discipline as symbol_sweep: a ratio the count
     // depends on is stated, and an assumed ratio over an empty sheet is named
@@ -4089,7 +4112,7 @@ export class Session {
       sheets: perSheet.map((p) => ({
         sheet: p.state.key,
         found: p.matches.reduce((sum, match) => sum + (match.multiplier ?? 1), 0),
-        matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, tag_at: Session.wireBox(m.tag_at), ...(m.multiplier ? { multiplier: m.multiplier } : {}), ...(m.text_counted ? { counted_from: "compound_label" as const } : {}) })),
+        matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, tag_at: Session.wireBox(m.tag_at), ...(m.multiplier ? { multiplier: m.multiplier } : {}), ...(m.text_counted ? { counted_from: "explicit_label" as const } : {}) })),
         withheld: p.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, reason: w.reason })),
         excluded: p.excluded.map((e) => ({ at: [round1(e.at[0]), round1(e.at[1])], tag: e.tag })),
         text_only: p.text_only,
