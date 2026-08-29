@@ -3492,13 +3492,14 @@ export class Session {
       // matches wins" heuristic: generic fragments lose the tie to a shape
       // with the same tag coverage and fewer unrelated geometric hits.
       const rankByTagClaims = withOcc[0].occ.length >= 4;
-      let best: {
+      type RankedFingerprint = {
         fp: SymbolFingerprint;
         rect: [Point, Point];
         anchor: TagOcc;
         coverage: TagClaimCoverage;
-      } | null = null;
-      let firstPassing: typeof best = null;
+      };
+      let best: RankedFingerprint | null = null;
+      let firstPassing: RankedFingerprint | null = null;
       outerSameTag:
       for (const candAnchor of withOcc[0].occ) {
         anchor = candAnchor;
@@ -3548,16 +3549,20 @@ export class Session {
           }
         }
       }
-      // Selecting by coverage is safe when the best real shape itself
-      // rejects at least one drawn tag occurrence (direct evidence that it
-      // distinguishes device marks from repeated labels), or for the
-      // variable-size air-device schedules whose geometry-specific inline
-      // path follows the same domain gate. Otherwise preserve the original
-      // first-success result: every tag occurrence matching a candidate is
-      // exactly the ambiguous repeated-view/leader-label shape that made the
-      // old raw-popularity heuristic overcount plumbing fixtures.
+      // Coverage ranking is safe for variable-size air-device schedules, or
+      // for a high-cardinality luminaire family only when the winning shape
+      // has perfect tag precision and improves the first passing candidate by
+      // more than 3x. That ten-occurrence quorum is direct repeated-family
+      // evidence, not raw geometric popularity. Below it, repeated views and
+      // leader labels remain indistinguishable (the ITD fixture regressions
+      // caught by the corpus gate), so preserve first-success behavior.
       const airDeviceTable = /\b(?:DIFFUSER|GRILLE|REGISTER)\b/i.test(table);
-      const selected = best && (airDeviceTable || best.coverage.claimed < withOcc[0].occ.length)
+      const highConfidenceLuminaire = !!best && !!firstPassing
+        && /\bLUMINAIRE\b/i.test(table)
+        && best.coverage.claimed >= 10
+        && best.coverage.rawMatches === best.coverage.claimed
+        && best.coverage.claimed > firstPassing.coverage.claimed * 3;
+      const selected = best && (airDeviceTable || highConfidenceLuminaire)
         ? best : firstPassing;
       if (selected) {
         fp = selected.fp;
