@@ -1953,17 +1953,19 @@ function dedupeSameSheetViewports<Id>(instances: RoomSweepInstance<Id>[]): Redun
 // that catches both shapes identically; see its own comment for why this is
 // provably backward-compatible with every discipline-keyed case.
 //
-// The signal used: the two occurrences sit at nearly the SAME page
-// coordinate (see COORD_ATTRIBUTION_MAX_PX). Same-footprint plan sheets
-// (a foundation plan and a floor plan of the identical building, an M-series
-// and a P-series enlarged view of the same room) redraw the same device
-// within a few tens of pixels; two genuinely SEPARATE installed units
-// sharing a tag sit much farther apart. Room attribution is still computed
-// (callers/tests read `room` on the result) but is no longer the collapse
-// KEY — a room label read on only one of the two sheets (sparse roomTags
-// on one plan, nothing on its sibling) used to strand a pair across the
-// attributed / unattributed pools, and a shared room name on two far-apart
-// marks used to collapse two real installs into one.
+// The primary signal: the two occurrences sit at nearly the SAME page
+// coordinate (see COORD_ATTRIBUTION_MAX_PX), attributed and unattributed
+// in one pool. Same-footprint plan sheets (a foundation plan and a floor
+// plan of the identical building) redraw the same device within a few tens
+// of pixels; two genuinely SEPARATE installed units sharing a tag sit much
+// farther apart — even when they share a room name. A room label read on
+// only one of the two sheets no longer strands the pair.
+//
+// Cross-discipline room fallback: an M-series and a P-series enlarged view
+// of the SAME room often crop differently, so the same device misses the
+// coordinate threshold. Room credit then collapses the pair — but ONLY
+// when two AIA disciplines are present. Same-discipline leftovers in one
+// room (two real fixtures on P1.0 vs P2.0, 200px apart) stay independent.
 //
 // `discipline` (M/P/E/… the standard "M3.0"/"P4.0" convention, read the
 // same first-token-of-the-sheet-number way layers.ts's DISCIPLINES table
@@ -1974,11 +1976,14 @@ function dedupeSameSheetViewports<Id>(instances: RoomSweepInstance<Id>[]): Redun
 //
 // Never applied when: the two occurrences share a SHEET *and* the same
 // titled viewport (a real repeat on one drawing is a genuine separate-
-// install signal — left alone); or the marks are farther apart than
-// COORD_ATTRIBUTION_MAX_PX (two real installs, even in the same named
-// room). SAME-sheet complementary viewports of one space (a duct plan
-// beside a piping plan, two section cuts of one room) are the exception
-// — see detectSheetViewports and the viewport path at the end of
+// install signal — left alone); or leftover same-discipline marks sit
+// farther than COORD_ATTRIBUTION_MAX_PX (two real installs that happen
+// to share a room name). Cross-discipline leftovers in the same named
+// room still collapse — enlarged M vs P views often crop the page
+// differently, so the same device misses the coordinate threshold.
+// SAME-sheet complementary viewports of one space (a duct plan beside
+// a piping plan, two section cuts of one room) are the exception — see
+// detectSheetViewports and the viewport path at the end of
 // dedupeCrossDisciplineRoomViews. The kept count for a duplicated
 // cluster is the LARGEST single-sheet count seen there — never the SUM
 // (double/triple-counts the redundant views, the actual AC-1 bug) and
@@ -2135,8 +2140,32 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
     ? `${a.room.name ? `${a.room.name} ` : ""}${a.room.tag}`.trim()
     : "(no room drawn nearby — same-location redraw)";
   const out: RedundantRoomView<Id>[] = [];
+  const clustered = new Set<Eligible>();
   for (const cluster of clusters.values()) {
-    out.push(...collapseGroup<Id, Eligible>(cluster, describe));
+    const dropped = collapseGroup<Id, Eligible>(cluster, describe);
+    if (dropped.length) {
+      out.push(...dropped);
+      for (const c of cluster) clustered.add(c); // whole cluster consumed — kept + dropped
+    }
+  }
+
+  // Cross-discipline room fallback: an M-series and a P-series enlarged
+  // view of the SAME room often crop the page differently, so the same
+  // device does not land inside COORD_ATTRIBUTION_MAX_PX. Room credit is
+  // the only remaining signal — but ONLY when two AIA disciplines are
+  // present. Same-discipline leftovers in one room (two real fixtures on
+  // P1.0 vs P2.0, 200px apart, both near "Janitor") must never collapse.
+  const leftover = eligible.filter((e) => !clustered.has(e) && e.room);
+  const byRoom = new Map<string, Eligible[]>();
+  for (const a of leftover) {
+    const key = `${a.room!.tag.trim().toUpperCase()}|${a.room!.name.trim().toUpperCase()}`;
+    const arr = byRoom.get(key);
+    if (arr) arr.push(a); else byRoom.set(key, [a]);
+  }
+  for (const group of byRoom.values()) {
+    const discs = new Set(group.map((g) => g.discipline));
+    if (discs.size < 2) continue;
+    out.push(...collapseGroup<Id, Eligible>(group, describe));
   }
 
   // Same-sheet complementary viewports of one space (duct plan | piping
@@ -2146,9 +2175,9 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   // same-sheet "real repeat" gate. Ids already collapsed above are skipped
   // so a cross-sheet room collapse plus a same-sheet viewport collapse
   // cannot report the same match twice.
-  const already = new Set(out.map((r) => r.id));
+  const alreadyDropped = new Set(out.map((r) => r.id));
   for (const r of dedupeSameSheetViewports(instances)) {
-    if (!already.has(r.id)) out.push(r);
+    if (!alreadyDropped.has(r.id)) out.push(r);
   }
   return out;
 }

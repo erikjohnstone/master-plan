@@ -393,6 +393,21 @@ test("dedupeCrossDisciplineRoomViews: same room name, different sheets, marks fa
   assert.equal(redundant.length, 0, "same room, 200px apart, two sheets: two real fixtures, never collapsed");
 });
 
+test("dedupeCrossDisciplineRoomViews: same room, far coordinates, CROSS-discipline — still collapses (enlarged M vs P views of one room, different page crops)", () => {
+  // Each sheet crops the same physical room to a different page origin, so
+  // the room label (same tag + name) sits near that sheet's own mark — not
+  // at one shared bbox that would fail the other crop's attribution pad.
+  const roomOnM = { tag: "120", name: "MECH", bbox: [780, 580, 820, 620] as [number, number, number, number] };
+  const roomOnP = { tag: "120", name: "MECH", bbox: [2380, 1780, 2420, 1820] as [number, number, number, number] };
+  const instances = [
+    inst(1, "M3.0", "M", [800, 600], [roomOnM]),
+    inst(2, "P4.0", "P", [2400, 1800], [roomOnP]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 1, "cross-discipline same-room pair collapses even when page crops differ");
+  assert.equal(redundant[0].keptDiscipline, "M");
+});
+
 // ── same-sheet titled viewports (duct plan | piping plan of one room) ─────
 
 const DUCT_TITLE = "MECHANICAL ROOM ENLARGED DUCT PLAN";
