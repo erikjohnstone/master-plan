@@ -1733,7 +1733,7 @@ test("equipment extraction: data starts after every consumed deep header tier", 
     key: "deep-chiller.pdf#1", sheet_number: "M7.1",
     spans: [
       sp("CHILLER SCHEDULE (ELECTRIC AIR-COOLED)", 100, 10),
-      sp("TAG", 0, 40), sp("TYPE", 180, 40), sp("MANUFACTURER", 360, 40), sp("REMARKS", 760, 40),
+      sp("TAG", 0, 40), sp("TYPE", 180, 40), sp("GPM", 260, 40), sp("MANUFACTURER", 360, 40), sp("REMARKS", 760, 40),
       sp("MINIMUM", 100, 50), sp("DESIGN", 260, 50), sp("STARTER", 500, 50), sp("MAXIMUM", 640, 50),
       sp("NET", 100, 60), sp("WATER", 260, 60), sp("TYPE", 500, 60), sp("KW", 640, 60),
       sp("COOLING", 100, 70), sp("FLOW", 260, 70), sp("VOLTAGE", 500, 70), sp("PHASE", 640, 70),
