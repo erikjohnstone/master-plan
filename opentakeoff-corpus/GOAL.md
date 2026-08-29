@@ -64,7 +64,13 @@ actually good at this job," not a vanity number.
 
 **"100% on the corpus" specifically means, per set, on all three metrics
 in §2, simultaneously — a set that's 100% on takeoff but only 60% on
-reference isn't done.** And even 100% on the corpus is a proxy, not the
+reference isn't done. It also requires the actual demo workflow to be
+production-ready: an agent can ask for information from any extractable table
+or request a trade/equipment takeoff (for example, "do a butterfly valve
+takeoff") and receive deterministic quantities, locations, source cells, and
+citations through the production API. A scorer that reaches 100% while an
+unkeyed table or real workflow remains inaccessible is not complete. And even
+100% on the corpus is a proxy, not the
 actual finish line — the actual finish line is the pipeline holding up
 against a *new* real set it's never seen, which is exactly why every fix
 in this project is required to be general (see §4) rather than tuned to
