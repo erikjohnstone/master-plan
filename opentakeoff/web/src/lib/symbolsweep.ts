@@ -2024,7 +2024,7 @@ export function prefersTagClaimCoverage(candidate: TagClaimCoverage, current: Ta
  */
 export function isIndividuallyMarkedEquipmentSchedule(title: string): boolean {
   const squashed = title.toUpperCase().replace(/[^A-Z0-9]/g, "");
-  return /(?:AIRHANDLING|DEDICATEDOUTSIDEAIR|FANCOIL|ENERGYRECOVERY|ROOFTOP|CONDENSINGUNIT|HEATPUMP|PUMP|BOILER|CHILLER|UNITHEATER|DEHUMIDIFIER|EXHAUSTFAN)/.test(squashed)
+  return /(?:AIRHANDLING|DEDICATEDOUT(?:SIDE|DOOR)AIR|FANCOIL|ENERGYRECOVERY|ROOFTOP|CONDENSINGUNIT|HEATPUMP|PUMP|BOILER|CHILLER|UNITHEATER|DEHUMIDIFIER|EXHAUSTFAN)/.test(squashed)
     && !/(?:DIFFUSER|GRILLE|REGISTER|FIXTURE|LUMINAIRE)/.test(squashed);
 }
 
