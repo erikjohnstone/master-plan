@@ -79,8 +79,7 @@ Takeoff by set:
     contending with the concurrently-run MCP suite, then passed alone in
     2.86 seconds.
 - Second three-fix accuracy batch, independently verified forced-cold on
-  2026-08-29 at commit `6cc9094` plus the compound-label correction in
-  `3391f71` (47.0 seconds):
+  2026-08-29 at commit `3164146` (46.5 seconds):
   - Takeoff improved again, 420/515 → 425/515 exact (81.6% → 82.5%);
     quantity delta fell 211 → 179 and missing tags fell 39 → 38.
   - Federal expected-tag accuracy reached 83/83 (100%): deep header-tier
@@ -105,6 +104,12 @@ Takeoff by set:
     structurally proven compound-label quorum and diffuser/grille/register
     families; the corrected gate restores ITD to 114/116 (98.3%) and
     Bessemer to 10/10.
+  - The complete web suite then exposed three sparse-first-row regressions
+    from the initial deep-tier boundary. The accepted boundary stops at the
+    first leading digit-bearing equipment key; focused regressions pass,
+    followed by the complete web suite (1,898 pass / 3 intentional skips),
+    MCP suite (246/246), both typechecks, and the byte-identical corrected
+    corpus result above.
   - Graph row-symbol recall improved 94.2% → 95.0% (Federal now 100%);
     reference metrics remain 116/129.
 
