@@ -343,6 +343,15 @@ test("dedupeCrossDisciplineRoomViews: no room nearby, marks close, SAME discipli
   assert.equal(redundant[0].keptSheet, "P1.0");
 });
 
+test("dedupeCrossDisciplineRoomViews: asymmetric room attribution still collapses a tight redraw pair", () => {
+  const room = { tag: "102", name: "RESTROOM", bbox: [90, 90, 110, 110] as [number, number, number, number] };
+  const instances: RoomSweepInstance<number>[] = [
+    { id: 1, sheet: "set.pdf#1", discipline: "P", at: [100, 100], rooms: [room], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+    { id: 2, sheet: "set.pdf#2", discipline: "P", at: [112, 106], rooms: [], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+  ];
+  assert.deepEqual(dedupeCrossDisciplineRoomViews(instances).map((entry) => entry.id), [2]);
+});
+
 test("dedupeCrossDisciplineRoomViews: an instance with no known discipline never enters the dedup (never dropped, never a kept anchor)", () => {
   const instances = [
     inst(1, "M3.0", "M", NEAR_ROOM, [ROOM]),

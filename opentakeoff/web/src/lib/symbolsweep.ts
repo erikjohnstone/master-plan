@@ -2216,6 +2216,41 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
     out.push(...collapseGroup<Id, Attributed>(group, (a) => `${a.room.name ? `${a.room.name} ` : ""}${a.room.tag}`.trim()));
   }
 
+  // Asymmetric attribution fallback: one drawing can carry a readable room
+  // label while its registered counterpart omits it. A tight same-location
+  // cross-sheet pair is still the same redraw; requiring both sides to be
+  // either attributed or unattributed strands exactly this mixed case.
+  const roomRedundant = new Set(out.map((entry) => entry.id));
+  const mixed = [
+    ...attributed.filter((entry) => !roomRedundant.has(entry.id)),
+    ...unattributed,
+  ];
+  const mixedParent = Array.from({ length: mixed.length }, (_, i) => i);
+  const mixedRoot = (i: number): number =>
+    mixedParent[i] === i ? i : (mixedParent[i] = mixedRoot(mixedParent[i]));
+  const attributedIds = new Set(attributed.map((entry) => entry.id));
+  for (let i = 0; i < mixed.length; i++) {
+    for (let j = i + 1; j < mixed.length; j++) {
+      if (mixed[i].sheet === mixed[j].sheet
+        || attributedIds.has(mixed[i].id) === attributedIds.has(mixed[j].id)
+        || Math.hypot(mixed[i].at[0] - mixed[j].at[0], mixed[i].at[1] - mixed[j].at[1]) > COORD_ATTRIBUTION_MAX_PX) continue;
+      const ri = mixedRoot(i), rj = mixedRoot(j);
+      if (ri !== rj) mixedParent[ri] = rj;
+    }
+  }
+  const mixedClusters = new Map<number, RoomSweepInstance<Id>[]>();
+  for (let i = 0; i < mixed.length; i++) {
+    const r = mixedRoot(i);
+    const arr = mixedClusters.get(r);
+    if (arr) arr.push(mixed[i]); else mixedClusters.set(r, [mixed[i]]);
+  }
+  const mixedHandled = new Set<Id>();
+  for (const cluster of mixedClusters.values()) {
+    if (cluster.length < 2) continue;
+    cluster.forEach((entry) => mixedHandled.add(entry.id));
+    out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(one view has no readable room — same-location redraw)"));
+  }
+
   // Coordinate-proximity fallback — ONLY for instances no room could be
   // credited to at all (never overrides a real room attribution above).
   // Simple connected-components clustering: two instances within
@@ -2223,12 +2258,13 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   // A near B near C clusters all three, same as the real drafting case
   // would produce for a 3+-discipline redraw), then the identical
   // multi-discipline collapse doctrine applies per cluster.
-  const n = unattributed.length;
+  const proximityCandidates = unattributed.filter((entry) => !mixedHandled.has(entry.id));
+  const n = proximityCandidates.length;
   const parent = Array.from({ length: n }, (_, i) => i);
   const find = (i: number): number => (parent[i] === i ? i : (parent[i] = find(parent[i])));
   for (let i = 0; i < n; i++) {
     for (let j = i + 1; j < n; j++) {
-      if (Math.hypot(unattributed[i].at[0] - unattributed[j].at[0], unattributed[i].at[1] - unattributed[j].at[1]) <= COORD_ATTRIBUTION_MAX_PX) {
+      if (Math.hypot(proximityCandidates[i].at[0] - proximityCandidates[j].at[0], proximityCandidates[i].at[1] - proximityCandidates[j].at[1]) <= COORD_ATTRIBUTION_MAX_PX) {
         const ri = find(i), rj = find(j);
         if (ri !== rj) parent[ri] = rj;
       }
@@ -2238,7 +2274,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   for (let i = 0; i < n; i++) {
     const r = find(i);
     const arr = clusters.get(r);
-    if (arr) arr.push(unattributed[i]); else clusters.set(r, [unattributed[i]]);
+    if (arr) arr.push(proximityCandidates[i]); else clusters.set(r, [proximityCandidates[i]]);
   }
   for (const cluster of clusters.values()) {
     out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(no room drawn nearby — same-location redraw)"));
