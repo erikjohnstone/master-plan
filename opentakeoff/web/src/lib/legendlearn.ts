@@ -16,21 +16,11 @@
 // reusing that tool's own cross-scale ratio (#186) and refusal doctrine
 // untouched. Pure, no PDF/DOM — segments and spans in, glyph/caption pairs
 // out.
-// Connectivity reuses buildMepGraph's own robust JTS noding (mepconnectivity.ts,
-// maturity plan Phase 4) — NOT a naive endpoint-to-endpoint union-find. Found
-// live, against this exact real legend: a glyph's own actuator box connects to
-// its valve body by a STEM whose own endpoint lands on the MIDDLE of the box's
-// bottom edge (a real T-junction), and the "bowtie" itself is drawn as two
-// full corner-to-corner diagonals whose crossing point is the shape's visual
-// center — nowhere a segment's own endpoint sits. A first, naive version of
-// this module (endpoint-proximity clustering only) silently split every such
-// glyph into 2-3 disconnected fragments, each independently paired with a
-// caption — never caught by any synthetic fixture, only by testing against
-// this real, messy sheet. buildMepGraph already solves exactly this class of
-// problem (real CAD linework: T-junctions, mid-edge touches, near-coincident
-// duplicates) via JTS's UnaryUnionOp; reused here purely for its noding,
-// never for anything MEP-specific (no layers, no system classification).
-import { buildMepGraph } from "./mepconnectivity.ts";
+// Connectivity must recognize crossings and T-junctions, not merely shared
+// endpoints. Legend learning only needs connected-component bounds, however;
+// constructing a complete JTS overlay graph here used to dominate cold corpus
+// evaluation. The local spatially indexed segment union below preserves those
+// junction semantics without manufacturing every noded sub-edge.
 
 export type Point = [number, number];
 
@@ -50,41 +40,8 @@ export interface LegendGlyph {
   segments: number;
 }
 
-/** Connected components of a node/edge set (real-junction-aware, via
- * `buildMepGraph`'s own noding) restricted to the given edge list — shared by
- * both the first, whole-sheet pass and the second, grid-stripped pass below,
- * so the two can never silently disagree on how a component's own bbox/edge
- * count is computed. */
-function componentsOf(
-  nodes: Array<{ x: number; y: number }>, edges: Array<{ a: number; b: number }>,
-): Array<{ x0: number; y0: number; x1: number; y1: number; edges: number }> {
-  const n = nodes.length;
-  if (!n) return [];
-  const parent = Array.from({ length: n }, (_, i) => i);
-  const find = (i: number): number => { while (parent[i] !== i) { parent[i] = parent[parent[i]]; i = parent[i]; } return i; };
-  const union = (a: number, b: number) => { const ra = find(a), rb = find(b); if (ra !== rb) parent[ra] = rb; };
-  for (const e of edges) union(e.a, e.b);
-  const groups = new Map<number, { nodeIdxs: number[]; edgeCount: number }>();
-  for (let i = 0; i < n; i++) {
-    const r = find(i);
-    let g = groups.get(r);
-    if (!g) { g = { nodeIdxs: [], edgeCount: 0 }; groups.set(r, g); }
-    g.nodeIdxs.push(i);
-  }
-  for (const e of edges) groups.get(find(e.a))!.edgeCount++;
-  return [...groups.values()].map((g) => {
-    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
-    for (const i of g.nodeIdxs) {
-      const nd = nodes[i];
-      x0 = Math.min(x0, nd.x); x1 = Math.max(x1, nd.x);
-      y0 = Math.min(y0, nd.y); y1 = Math.max(y1, nd.y);
-    }
-    return { x0, y0, x1, y1, edges: g.edgeCount };
-  });
-}
-
 /** Connected components of `segs`, real-junction-aware (T-junctions, mid-edge
- * touches, crossings) via buildMepGraph's own robust noding — a real glyph is
+ * touches, crossings) — a real glyph is
  * one connected cluster of strokes; a component whose own bbox is a long
  * straight run (a table rule/column divider, not a symbol) is filtered out by
  * the caller via `looksLikeGlyph` below, not here.
@@ -120,16 +77,79 @@ function clusterSegments(
   // guaranteed to be rejected. Remove that impossible ink before noding;
   // every segment that could fit a returned glyph is preserved.
   const gridLineMinPx = maxGlyphDimPx * 2;
-  const glyphScaleSegs: number[] = [];
+  const gridPx = 1.8;
+  const quantize = (v: number) => Math.round(v / gridPx) * gridPx;
+  type Seg = { ax: number; ay: number; bx: number; by: number; x0: number; y0: number; x1: number; y1: number };
+  const strokes: Seg[] = [];
   for (let i = 0; i < segs.length; i += 4) {
     if (Math.hypot(segs[i + 2] - segs[i], segs[i + 3] - segs[i + 1]) < gridLineMinPx) {
-      glyphScaleSegs.push(segs[i], segs[i + 1], segs[i + 2], segs[i + 3]);
+      const ax = quantize(segs[i]), ay = quantize(segs[i + 1]);
+      const bx = quantize(segs[i + 2]), by = quantize(segs[i + 3]);
+      if (ax === bx && ay === by) continue;
+      strokes.push({ ax, ay, bx, by, x0: Math.min(ax, bx), y0: Math.min(ay, by), x1: Math.max(ax, bx), y1: Math.max(ay, by) });
     }
   }
-  const graph = buildMepGraph(glyphScaleSegs, {});
-  if (!graph.nodes.length) return { components: [], gridPx: graph.quantGridPx };
-  const first = componentsOf(graph.nodes, graph.edges);
-  return { components: first, gridPx: graph.quantGridPx };
+  if (!strokes.length) return { components: [], gridPx };
+
+  const parent = Array.from({ length: strokes.length }, (_, i) => i);
+  const find = (i: number): number => {
+    while (parent[i] !== i) { parent[i] = parent[parent[i]]; i = parent[i]; }
+    return i;
+  };
+  const union = (a: number, b: number) => {
+    const ra = find(a), rb = find(b);
+    if (ra !== rb) parent[ra] = rb;
+  };
+  const orient = (ax: number, ay: number, bx: number, by: number, cx: number, cy: number) =>
+    (bx - ax) * (cy - ay) - (by - ay) * (cx - ax);
+  const intersects = (a: Seg, b: Seg): boolean => {
+    if (a.x1 < b.x0 || b.x1 < a.x0 || a.y1 < b.y0 || b.y1 < a.y0) return false;
+    const o1 = orient(a.ax, a.ay, a.bx, a.by, b.ax, b.ay);
+    const o2 = orient(a.ax, a.ay, a.bx, a.by, b.bx, b.by);
+    const o3 = orient(b.ax, b.ay, b.bx, b.by, a.ax, a.ay);
+    const o4 = orient(b.ax, b.ay, b.bx, b.by, a.bx, a.by);
+    return ((o1 === 0 || o2 === 0 || Math.sign(o1) !== Math.sign(o2))
+      && (o3 === 0 || o4 === 0 || Math.sign(o3) !== Math.sign(o4)));
+  };
+
+  // Each retained stroke is shorter than 2*maxGlyphDimPx, so indexing its
+  // bbox into maxGlyphDimPx cells keeps candidate pairs local and bounded.
+  const cell = Math.max(1, maxGlyphDimPx);
+  const buckets = new Map<string, number[]>();
+  for (let i = 0; i < strokes.length; i++) {
+    const s = strokes[i];
+    const candidates = new Set<number>();
+    for (let gx = Math.floor(s.x0 / cell); gx <= Math.floor(s.x1 / cell); gx++) {
+      for (let gy = Math.floor(s.y0 / cell); gy <= Math.floor(s.y1 / cell); gy++) {
+        const key = `${gx},${gy}`;
+        for (const j of buckets.get(key) || []) candidates.add(j);
+      }
+    }
+    for (const j of candidates) if (intersects(s, strokes[j])) union(i, j);
+    for (let gx = Math.floor(s.x0 / cell); gx <= Math.floor(s.x1 / cell); gx++) {
+      for (let gy = Math.floor(s.y0 / cell); gy <= Math.floor(s.y1 / cell); gy++) {
+        const key = `${gx},${gy}`;
+        const bucket = buckets.get(key);
+        if (bucket) bucket.push(i);
+        else buckets.set(key, [i]);
+      }
+    }
+  }
+
+  const groups = new Map<number, { x0: number; y0: number; x1: number; y1: number; edges: number }>();
+  for (let i = 0; i < strokes.length; i++) {
+    const s = strokes[i];
+    const root = find(i);
+    const group = groups.get(root);
+    if (group) {
+      group.x0 = Math.min(group.x0, s.x0); group.y0 = Math.min(group.y0, s.y0);
+      group.x1 = Math.max(group.x1, s.x1); group.y1 = Math.max(group.y1, s.y1);
+      group.edges++;
+    } else {
+      groups.set(root, { x0: s.x0, y0: s.y0, x1: s.x1, y1: s.y1, edges: 1 });
+    }
+  }
+  return { components: [...groups.values()], gridPx };
 }
 
 /** Is this cluster shaped like a real, compact drafting glyph rather than a
