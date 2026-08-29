@@ -422,6 +422,34 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
     // the general lettered-twin-unit shape, not a navfac-cherry-point literal.
     const isTwinAlias = [...seenTags].some((s) => s.startsWith(canon) && /^[A-Z]$/.test(s.slice(canon.length)));
     if (isTwinAlias) continue;
+    // Concatenated sibling-pair alias guard — the same "a redundant listing
+    // is not a new install" doctrine as the lettered-twin guard above, one
+    // structural step more general. Real, corpus-found: a VIBRATION
+    // ISOLATION / FAN SOUND POWER SCHEDULE (both reference-kind) routinely
+    // lists a redundant PAIR under a SINGLE combined mark that literally
+    // concatenates the two real siblings' suffixes onto their shared family
+    // base — navfac-cherry-point-atc-mechanical.pdf's own "PCHWP-A1A2"
+    // (= PCHWP-A1 + PCHWP-A2), "CRAH-M1AM1B", "AHU-T1AT1B", "CH-MT1MT2".
+    // The pair is not a THIRD physical device, and BOTH siblings already own
+    // their own real equipment-schedule row (already in seenTags). Detected
+    // purely structurally, no project-specific string: canon equals
+    // BASE+SUF1+SUF2 for two DISTINCT already-seen tags that share the same
+    // BASE (the text up to and including their last '-'). Only ever fires
+    // when both real siblings were already resolved, so it can never drop a
+    // tag that has no other home in the takeoff. (Before this guard, these
+    // combined marks were swept and honestly refused — harmless to every
+    // score, but pure diagnostic noise for a row that is never a real
+    // standalone device.)
+    const isConcatSiblingPair = [...seenTags].some((s1) => {
+      if (!canon.startsWith(s1)) return false;
+      const rest = canon.slice(s1.length);
+      if (!rest) return false;
+      const dash = s1.lastIndexOf("-");
+      if (dash < 0 || dash + 1 >= s1.length) return false; // s1 must have a real suffix after its base
+      const s2 = s1.slice(0, dash + 1) + rest;
+      return s2 !== s1 && seenTags.has(s2);
+    });
+    if (isConcatSiblingPair) continue;
     seenTags.add(canon);
     await resolveRow(tb, row, tag, cls);
   }
