@@ -89,7 +89,7 @@ function componentsOf(
  * straight run (a table rule/column divider, not a symbol) is filtered out by
  * the caller via `looksLikeGlyph` below, not here.
  *
- * SECOND PASS, additive only (accuracy-hardening plan, ledger item 44): a
+ * GRID STRIPPING (accuracy-hardening plan, ledger item 44): a
  * real, BORDERED symbol/description table (found live: itd-d1-lab's own
  * "CONTROLS LEGEND" — three ruled tables, ~22 real rows) draws its own
  * ruled grid (outer border, column divider, per-row rules) as linework that
@@ -102,35 +102,34 @@ function componentsOf(
  * strokes and short cell rules) and 25 long ones (300px+: a column divider,
  * row-height rules, the ~758px outer border), with a clean, empty gap from
  * ~100px to ~300px between them — not a close call needing a delicate
- * threshold. So: any component that fails `looksLikeGlyph` (too big) gets
- * ONE retry — strip every edge at least `gridLineMinPx` long (a real
- * multiple of the seed glyph's own bound, sized well inside that measured
- * gap) and re-run connectivity on what's left, restricted to that
- * component's own original nodes only. Each resulting sub-component is
- * returned as an ADDITIONAL candidate alongside the originals — this can
- * only ever recover rows from a component that was already being discarded
- * whole; an already-compact, already-accepted glyph is never touched. */
+ * threshold. Strip every edge at least `gridLineMinPx` long (a real multiple
+ * of the seed glyph's own bound, sized well inside that measured gap) before
+ * connectivity. Such an edge cannot fit inside any bbox the caller can
+ * accept as a glyph, so it is impossible output rather than evidence.
+ * Removing it before JTS also prevents the ruled table from forcing a
+ * whole-sheet snap-overlay operation merely to reject those edges later. */
 function clusterSegments(
   segs: number[], maxGlyphDimPx: number,
 ): { components: Array<{ x0: number; y0: number; x1: number; y1: number; edges: number }>; gridPx: number } {
   if (!segs.length) return { components: [], gridPx: 0 };
-  const graph = buildMepGraph(segs, {});
+  // A segment at least twice the maximum allowed glyph dimension cannot be
+  // part of any component this function can return as a glyph. These are the
+  // table borders/dividers that the old second pass removed only AFTER
+  // feeding the entire ruled sheet through JTS noding. On a real Federal
+  // legend that made GeometrySnapper spend tens of seconds intersecting ink
+  // guaranteed to be rejected. Remove that impossible ink before noding;
+  // every segment that could fit a returned glyph is preserved.
+  const gridLineMinPx = maxGlyphDimPx * 2;
+  const glyphScaleSegs: number[] = [];
+  for (let i = 0; i < segs.length; i += 4) {
+    if (Math.hypot(segs[i + 2] - segs[i], segs[i + 3] - segs[i + 1]) < gridLineMinPx) {
+      glyphScaleSegs.push(segs[i], segs[i + 1], segs[i + 2], segs[i + 3]);
+    }
+  }
+  const graph = buildMepGraph(glyphScaleSegs, {});
   if (!graph.nodes.length) return { components: [], gridPx: graph.quantGridPx };
   const first = componentsOf(graph.nodes, graph.edges);
-  // sized well inside the measured real gap (~100-300px on the real table
-  // this was found against) — a multiple of the caller's own glyph bound,
-  // not an independent magic number.
-  const gridLineMinPx = maxGlyphDimPx * 2;
-  const recovered: Array<{ x0: number; y0: number; x1: number; y1: number; edges: number }> = [];
-  for (const c of first) {
-    if (looksLikeGlyph(c, c.edges, maxGlyphDimPx)) continue;   // already usable — no retry needed
-    const inBox = new Set<number>();
-    graph.nodes.forEach((nd, i) => { if (nd.x >= c.x0 && nd.x <= c.x1 && nd.y >= c.y0 && nd.y <= c.y1) inBox.add(i); });
-    const strippedEdges = graph.edges.filter((e) => e.length < gridLineMinPx && inBox.has(e.a) && inBox.has(e.b));
-    if (!strippedEdges.length) continue;
-    for (const sub of componentsOf(graph.nodes, strippedEdges)) if (sub.edges > 0) recovered.push(sub);
-  }
-  return { components: [...first, ...recovered], gridPx: graph.quantGridPx };
+  return { components: first, gridPx: graph.quantGridPx };
 }
 
 /** Is this cluster shaped like a real, compact drafting glyph rather than a
