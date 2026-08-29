@@ -629,10 +629,11 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish", buildings?: Set<s
  * a row lookup that auto-assigned "ET" to "ET-1" would hide a genuine
  * ambiguity behind a confident citation. */
 export const rowKeyAnswersFor = (key: string, want: string): boolean => {
-  const parts = norm(key).replace(/\s+/g, "").split("/").filter(Boolean);
+  const compact = norm(key).replace(/\s+/g, "");
   const w = markKey(want);
   if (!w) return false;
-  return parts.some((p) => markKey(p) === w);
+  if (markKey(compact) === w) return true;
+  return compact.split("/").filter(Boolean).some((p) => markKey(p) === w);
 };
 
 /** The number part of a row key — "A-134" and "134" both answer for 134. */
