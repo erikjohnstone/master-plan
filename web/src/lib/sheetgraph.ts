@@ -3095,20 +3095,26 @@ export const isNonFinishSchedule = (title: string): boolean => {
 // LOUVER/SIGNAGE/STOREFRONT/GLAZING/CASEWORK/MILLWORK) to vanish from the
 // graph ENTIRELY — those are genuinely out of this pipeline's own MEP scope,
 // and isNonFinishSchedule's drop-and-note is exactly correct for them. But a
-// real mechanical/plumbing EQUIPMENT family (PUMP/BOILER/HUMIDIFIER/COIL/
-// CHILLER/AHU/VAV/APPLIANCE) is squarely IN scope — dropping it outright
-// loses real device data whenever its own header is too fragmented to
-// independently clear EQUIPMENT_HEADERS' own vocabulary bar (see the PUMP
-// SCHEDULE case: GPM/HP land bare, each alone on its own tier, never
-// co-occurring with SYMBOL the way CONTROL VALVE SCHEDULE's own bare "(GPM)"
-// unit fragment did). PLUMBING/MECHANICAL/ELECTRICAL/LIGHTING/LUMINAIRE are
-// deliberately left OUT of this narrower list — those words are broad enough
-// to title a real non-tag-schedule (a panel schedule, a general note block)
-// that isn't safe to blanket-reclassify as a device-tag equipment table on
-// title text alone; a genuine luminaire/lighting schedule already qualifies
-// as equipment-kind directly on its own real merits (see the TYPE-keyed
-// LUMINAIRE SCHEDULE test) without needing this fallback at all.
-const MEP_EQUIPMENT_FAMILY_RE = /\b(PUMP|BOILER|HUMIDIFIER|COIL|CHILLER|AHU|VAV|EQUIPMENT|APPLIANCE)S?\b/;
+// real mechanical/plumbing EQUIPMENT family (PUMP/BOILER/HUMIDIFIER/
+// DEHUMIDIFIER/COIL/CHILLER/AHU/VAV/APPLIANCE) is squarely IN scope —
+// dropping it outright loses real device data whenever its own header is too
+// fragmented to independently clear EQUIPMENT_HEADERS' own vocabulary bar
+// (see the PUMP SCHEDULE case: GPM/HP land bare, each alone on its own tier,
+// never co-occurring with SYMBOL the way CONTROL VALVE SCHEDULE's own bare
+// "(GPM)" unit fragment did). PLUMBING/MECHANICAL/ELECTRICAL/LIGHTING/
+// LUMINAIRE are deliberately left OUT of this narrower list — those words
+// are broad enough to title a real non-tag-schedule (a panel schedule, a
+// general note block) that isn't safe to blanket-reclassify as a device-tag
+// equipment table on title text alone; a genuine luminaire/lighting schedule
+// already qualifies as equipment-kind directly on its own real merits (see
+// the TYPE-keyed LUMINAIRE SCHEDULE test) without needing this fallback at
+// all. DEHUMIDIFIER is its own alternative, not covered by HUMIDIFIER's
+// \b...\b word-boundary match: "DEHUMIDIFIER" is one unbroken token, so
+// \bHUMIDIFIER\b never matches inside it (real, found live — see
+// scheduleTableFromODL's own DEHUMIDIFIER SCHEDULE comment below, where this
+// exact gap left navfac-cherry-point-atc-mechanical.pdf#44's own real
+// DH-A1..DH-A6 dehumidifiers undiscovered by the whole pipeline).
+const MEP_EQUIPMENT_FAMILY_RE = /\b(PUMP|BOILER|HUMIDIFIER|DEHUMIDIFIER|COIL|CHILLER|AHU|VAV|EQUIPMENT|APPLIANCE)S?\b/;
 export const isMepEquipmentSchedule = (title: string): boolean => MEP_EQUIPMENT_FAMILY_RE.test(norm(title));
 
 // A real MEP-equipment family can hide behind a title that names NO
@@ -7285,7 +7291,30 @@ export function scheduleTableFromODL(
   // new vocabulary or corpus-specific carve-out.
   if (kind === "unknown") {
     if (!titleText.trim()) return null;
-    kind = "reference";
+    // Same title-family gate as the geometric extractor's own finish→
+    // equipment reclassification (isMepEquipmentSchedule, above extractAllTables),
+    // reached from the OTHER direction — a table that never independently
+    // qualified under ANY kind's row-vocabulary at all, rather than one that
+    // qualified under the wrong one — plus the same real-catalog-anchor
+    // requirement every other equipment-kind path in this file already
+    // enforces (a table with no TAG/MARK/CODE/SYMBOL/ID column has no real
+    // key column an estimator or symbol_sweep can chase, so a title match
+    // alone is not enough). Without this, a genuine per-instance MEP device
+    // schedule whose title plainly names a recognized equipment family (a
+    // DEHUMIDIFIER SCHEDULE's own real DH-A1..DH-A6 tags) fell into the
+    // generic, vocabulary-free "reference" kind below and stayed invisible
+    // to buildPlanSetTakeoff's own equipment-kind-only takeoff loop — real,
+    // measured live: navfac-cherry-point-atc-mechanical.pdf#44's own
+    // DEHUMIDIFIER SCHEDULE (MARK/°F DB/% RH/CAPACITY PINTS/HR/FLA/V/PH/HZ —
+    // none of which clears EQUIPMENT_HEADERS' own vocabulary bar) was
+    // exactly this case, while this same corpus's own two OTHER real
+    // DEHUMIDIFIER SCHEDULE tables (sheets #47/#49, DH-M*/DH-T*) already
+    // carry one extra recognized column (TYPE MARK / SENSIBLE MBH) that
+    // clears the bar on its own — this promotion only ever fires for the
+    // narrower case those two already skip.
+    kind = (isMepEquipmentSchedule(titleText) && headers.some((h) => CATALOG_ANCHOR_WORDS.includes(norm(h))))
+      ? "equipment"
+      : "reference";
   }
   if (kind === "finish" && titleText && isNonFinishSchedule(titleText)) return null;
 
