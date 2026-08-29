@@ -388,11 +388,28 @@ export function drawnDeltaMarkers(spans: GraphSpan[], segs: ArrayLike<number>): 
     }
     if (near.length < 3 || near.length > 60) continue;      // dense hatch → refuse, never guess
     const tol = Math.max(2, h * 0.35);
+    const tol2 = tol * tol;
     let best: Bbox | null = null;
     let bestArea = Infinity;
     const P = (i: number, end: 0 | 1): [number, number] => [segs[i * 4 + end * 2], segs[i * 4 + 1 + end * 2]];
-    const close = (a: [number, number], b: [number, number]) => Math.hypot(a[0] - b[0], a[1] - b[1]) <= tol;
+    const close = (a: [number, number], b: [number, number]) => {
+      const dx = a[0] - b[0], dy = a[1] - b[1];
+      return dx * dx + dy * dy <= tol2;
+    };
+    // A triangle requires every pair of its three segments to share a corner.
+    // Precompute that sparse adjacency once: dense digit neighbourhoods used
+    // to pay eight endpoint orientations for every O(n³) triple even though
+    // almost all segment pairs were nowhere near one another.
+    const adjacent: boolean[][] = Array.from({ length: near.length }, () => Array(near.length).fill(false));
+    for (let a = 0; a < near.length; a++) {
+      for (let b = a + 1; b < near.length; b++) {
+        const a0 = P(near[a], 0), a1 = P(near[a], 1);
+        const b0 = P(near[b], 0), b1 = P(near[b], 1);
+        adjacent[a][b] = adjacent[b][a] = close(a0, b0) || close(a0, b1) || close(a1, b0) || close(a1, b1);
+      }
+    }
     for (let a = 0; a < near.length; a++) for (let b = a + 1; b < near.length; b++) for (let c = b + 1; c < near.length; c++) {
+      if (!adjacent[a][b] || !adjacent[b][c] || !adjacent[c][a]) continue;
       // a 3-cycle: each segment's ends pair corner-to-corner with the other two
       for (const fa of [0, 1] as const) for (const fb of [0, 1] as const) for (const fc of [0, 1] as const) {
         const [a0, a1] = [P(near[a], fa), P(near[a], (1 - fa) as 0 | 1)];
