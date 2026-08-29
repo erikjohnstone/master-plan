@@ -3933,10 +3933,13 @@ export class Session {
             !occ.some((tagged) => Math.hypot(tagged.cx - entry.at[0], tagged.cy - entry.at[1]) <= anchor.h * 2));
         }
       }
-      // Repeatable plumbing-fixture type marks use the same explicit-label
-      // convention as air devices. Require a smaller but still repeating
-      // family quorum because roof plans are naturally sparse.
-      if (/\b(?:PLUMBING FIXTURE|ROOF DRAIN|FLOOR DRAIN)\b/i.test(table)) {
+      // Roof plans commonly label drain placements directly while listing
+      // them in a general plumbing-fixture schedule. Keep this deliberately
+      // narrower than all plumbing fixtures: foundation/floor plans often
+      // redraw the same fixture across views.
+      const roofDrainPlacement = /^RD(?:-|$)/i.test(t)
+        && (sh.spans || []).some((span) => /\bROOF\s+PLAN\b/i.test(span.str));
+      if (roofDrainPlacement) {
         const familyTagCount = tableSiblingKeys.reduce((sum, key) => sum + occOf(sh, key).length, 0);
         if (familyTagCount >= 4) {
           for (const tagged of occ) {
