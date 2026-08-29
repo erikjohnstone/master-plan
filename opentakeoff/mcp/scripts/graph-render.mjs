@@ -10,6 +10,7 @@
 // bands so the type stays legible; plan sheets render whole.
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { resolveSetFiles } from "./corpusFiles.mjs";
 import { Session } from "../src/session.ts";
 
 const args = process.argv.slice(2);
@@ -28,7 +29,8 @@ const outDir = join(corpus, "renders");
 mkdirSync(outDir, { recursive: true });
 
 const s = new Session();
-for (let i = 0; i < set.files.length; i++) await s.loadPlan(join(set.root ?? spec.root, set.files[i]), { merge: i > 0 });
+const files = resolveSetFiles(corpus, spec, set);
+for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
 const g = await s.sheetGraph();
 
 const sheetOf = (key) => s.sheet(key);

@@ -33,6 +33,7 @@
 //
 import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { resolveSetFiles } from "./corpusFiles.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import pLimit from "p-limit";
@@ -111,7 +112,7 @@ const f1 = (p, r) => (p + r ? (2 * p * r) / (p + r) : 0);
 // ── run one set ─────────────────────────────────────────────────────────────
 async function evalSet(set) {
   const s = new Session();
-  const files = set.files.map((f) => join(set.root ?? spec.root, f));
+  const files = resolveSetFiles(corpus, spec, set);
   for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
   const g = await s.sheetGraph();
 

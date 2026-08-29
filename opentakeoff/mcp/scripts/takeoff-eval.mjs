@@ -39,6 +39,7 @@
 // pipeline output; this script is just the corpus-walking CLI shell around it.
 import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { resolveSetFiles } from "./corpusFiles.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import pLimit from "p-limit";
@@ -82,7 +83,7 @@ async function evalSet(set) {
   const key = parseTakeoffKeyCsv(readFileSync(keyPath, "utf8"));
 
   const s = new Session();
-  const files = set.files.map((f) => join(set.root ?? spec.root, f));
+  const files = resolveSetFiles(corpus, spec, set);
   for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
   const takeoff = await buildPlanSetTakeoff(s, { categories: null }); // "all" — the key is authored against the full real equipment-kind scope, not a partial run
 

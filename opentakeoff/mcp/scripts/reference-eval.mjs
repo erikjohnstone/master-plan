@@ -17,6 +17,7 @@
 // reference table's own column set differs firm to firm.
 import { readFileSync, existsSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { resolveSetFiles } from "./corpusFiles.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import pLimit from "p-limit";
@@ -102,7 +103,7 @@ async function evalSet(set) {
   const key = parseReferenceKeyCsv(readFileSync(keyPath, "utf8"));
 
   const s = new Session();
-  const files = set.files.map((f) => join(set.root ?? spec.root, f));
+  const files = resolveSetFiles(corpus, spec, set);
   for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
   const takeoff = await buildPlanSetTakeoff(s, { categories: null });
 
