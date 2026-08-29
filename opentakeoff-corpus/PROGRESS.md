@@ -32,21 +32,21 @@ Takeoff by set:
 - Portable corpus PDF resolution for cloud, CI, and alternate checkout roots.
 - Federal VAV key notes corrected after independently confirming all 58 VAV
   tags resolve in the current pipeline.
+- Combined corpus evaluator reuses one takeoff pipeline pass for both takeoff
+  and reference scoring. Full-corpus metrics were byte-for-byte unchanged;
+  wall time fell from 3,875 seconds to 1,887 seconds (51.3% faster).
+- Sparse tank schedules survive concatenated PDF-extractor titles and are
+  promoted consistently on the ODL path. Building 5406 improved from 10/23
+  (43.5%) to 11/23 (47.8%); missing tags fell from 10 to 9 and quantity delta
+  from 13 to 12. Bessemer remained 100.0% and ITD remained 98.3%.
 
 ## Verification in progress
 
-- Combined corpus evaluator: reuse the expensive takeoff pass for reference
-  scoring, then run graph scoring separately. This must preserve every metric
-  while reducing the previous three-pass wall time.
 - Federal VAV offset regression fixture from worker commit `bb0c5f1`; inspect,
   reproduce its fail-without-fix proof, and run focused tests before accepting.
 
 ## Local implementation queue
 
-- Recover and independently verify the failed worker's general Building 5406
-  `ET-1` schedule-discovery patch. Provisional worker evidence reports a
-  43.5% to 47.8% improvement, but its synthetic test and ITD negative control
-  were incomplete when the cloud state failed.
 - General same-device multi-view deduplication with legitimate repeated-device
   negative controls.
 - General reference-table extraction accuracy.
