@@ -3169,12 +3169,23 @@ export class Session {
       rowHits = collapsed;
     }
     if (rowHits.length > 1) {
+      const qualifiedQualifier = (header: string | null): string | null =>
+        (header || "").toUpperCase().split(/\s+/)
+          .find((word) => !["ID", "MARK", "CODE", "SYMBOL", "TAG"].includes(word)) ?? null;
       const keyHeaderFor = (tb: ScheduleTable, row: { key: string; cells: Record<string, { text: string }> }): string | null => {
-        for (const h of tb.headers) {
-          const c = row.cells[h];
-          if (c && canonKey(c.text) === canonKey(row.key)) return h;
-        }
-        return null;
+        const matching = tb.headers.filter((header) => {
+          const cell = row.cells[header];
+          return cell && canonKey(cell.text) === canonKey(row.key);
+        });
+        // Some device schedules repeat the exact same mark in both the
+        // served-equipment reference and the device's own identity column
+        // (UNIT MARK = VALVE MARK). Preserve the row once, but anchor its
+        // role to the header whose qualifier names the schedule itself.
+        const title = (tb.title?.text || "").toUpperCase();
+        return matching.find((header) => {
+          const qualifier = qualifiedQualifier(header);
+          return qualifier != null && title.includes(qualifier);
+        }) ?? matching[0] ?? null;
       };
       const withHeader = rowHits.map((h) => ({ ...h, keyHeader: keyHeaderFor(h.tb, h.r) }));
       // A row is this tag's OWN device definition only when BOTH real
@@ -3233,8 +3244,7 @@ export class Session {
         // SCHEDULE, while "UNIT MARK" there is a cross-reference. A
         // qualified anchor is primary when its qualifier names the table's
         // own product family, not equipment served by that product.
-        const qualifier = (h.keyHeader || "").toUpperCase().split(/\s+/)
-          .find((word) => !["ID", "MARK", "CODE", "SYMBOL", "TAG"].includes(word));
+        const qualifier = qualifiedQualifier(h.keyHeader);
         return !!qualifier && (h.tb.title?.text || "").toUpperCase().includes(qualifier);
       };
       const candidates = withHeader.filter(isCandidate);
