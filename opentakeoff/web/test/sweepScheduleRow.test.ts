@@ -352,12 +352,22 @@ test("dedupeCrossDisciplineRoomViews: asymmetric room attribution still collapse
   assert.deepEqual(dedupeCrossDisciplineRoomViews(instances).map((entry) => entry.id), [2]);
 });
 
-test("dedupeCrossDisciplineRoomViews: sub-30px registration overrides contradictory incidental room reads", () => {
+test("dedupeCrossDisciplineRoomViews: two sub-30px pairs override contradictory incidental room reads", () => {
   const instances: RoomSweepInstance<number>[] = [
     { id: 1, sheet: "set.pdf#1", discipline: "P", at: [100, 100], rooms: [{ tag: "102", name: "", bbox: [95, 95, 105, 105] }], sheetWidthPx: 5000, sheetHeightPx: 5000 },
     { id: 2, sheet: "set.pdf#2", discipline: "P", at: [118, 108], rooms: [{ tag: "103", name: "", bbox: [113, 103, 123, 113] }], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+    { id: 3, sheet: "set.pdf#1", discipline: "P", at: [500, 500], rooms: [{ tag: "104", name: "", bbox: [495, 495, 505, 505] }], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+    { id: 4, sheet: "set.pdf#2", discipline: "P", at: [512, 508], rooms: [{ tag: "105", name: "", bbox: [507, 503, 517, 513] }], sheetWidthPx: 5000, sheetHeightPx: 5000 },
   ];
-  assert.deepEqual(dedupeCrossDisciplineRoomViews(instances).map((entry) => entry.id), [2]);
+  assert.deepEqual(dedupeCrossDisciplineRoomViews(instances).map((entry) => entry.id), [2, 4]);
+});
+
+test("dedupeCrossDisciplineRoomViews: one tight coincidence across different rooms is not registration", () => {
+  const instances: RoomSweepInstance<number>[] = [
+    { id: 1, sheet: "set.pdf#1", discipline: "M", at: [100, 100], rooms: [{ tag: "101", name: "", bbox: [95, 95, 105, 105] }], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+    { id: 2, sheet: "set.pdf#2", discipline: "M", at: [112, 106], rooms: [{ tag: "201", name: "", bbox: [107, 101, 117, 111] }], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+  ];
+  assert.deepEqual(dedupeCrossDisciplineRoomViews(instances), []);
 });
 
 test("dedupeCrossDisciplineRoomViews: an instance with no known discipline never enters the dedup (never dropped, never a kept anchor)", () => {

@@ -2191,6 +2191,16 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   type Attributed = RoomSweepInstance<Id> & { room: RoomCandidate };
   const attributed: Attributed[] = [];
   const unattributed: RoomSweepInstance<Id>[] = [];
+  const sheetPair = (a: string, b: string): string => a < b ? `${a}\0${b}` : `${b}\0${a}`;
+  const tightPairCounts = new Map<string, number>();
+  for (let i = 0; i < instances.length; i++) {
+    for (let j = i + 1; j < instances.length; j++) {
+      if (instances[i].sheet === instances[j].sheet
+        || Math.hypot(instances[i].at[0] - instances[j].at[0], instances[i].at[1] - instances[j].at[1]) > 30) continue;
+      const key = sheetPair(instances[i].sheet, instances[j].sheet);
+      tightPairCounts.set(key, (tightPairCounts.get(key) || 0) + 1);
+    }
+  }
   for (const inst of instances) {
     if (!inst.discipline) continue; // no discipline read at all — never enters either path
     let best: RoomCandidate | null = null, bestD = Infinity;
@@ -2235,10 +2245,12 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
       const distance = Math.hypot(mixed[i].at[0] - mixed[j].at[0], mixed[i].at[1] - mixed[j].at[1]);
       const asymmetric = attributedIds.has(mixed[i].id) !== attributedIds.has(mixed[j].id);
       // Extremely tight registration overrides contradictory nearest-room
-      // reads: adjacent plan sheets can redraw one fixture within 30 px
-      // while incidental nearby room text differs between views.
+      // reads only when another pair independently registers the same two
+      // sheets. One coincidentally aligned device on different floors is
+      // not enough evidence that the drawings are redundant overlays.
+      const registeredPair = (tightPairCounts.get(sheetPair(mixed[i].sheet, mixed[j].sheet)) || 0) >= 2;
       if (mixed[i].sheet === mixed[j].sheet
-        || !(distance <= 30 || (asymmetric && distance <= COORD_ATTRIBUTION_MAX_PX))) continue;
+        || !((distance <= 30 && registeredPair) || (asymmetric && distance <= COORD_ATTRIBUTION_MAX_PX))) continue;
       const ri = mixedRoot(i), rj = mixedRoot(j);
       if (ri !== rj) mixedParent[ri] = rj;
     }
