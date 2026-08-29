@@ -2023,8 +2023,9 @@ export function prefersTagClaimCoverage(candidate: TagClaimCoverage, current: Ta
  * plan/section/detail references to the same scheduled unit.
  */
 export function isIndividuallyMarkedEquipmentSchedule(title: string): boolean {
-  return /\b(?:AIR HANDLING|DEDICATED OUTSIDE AIR|FAN COIL|ENERGY RECOVERY|ROOFTOP|CONDENSING UNIT|HEAT PUMP|PUMP|BOILER|CHILLER|UNIT HEATER|DEHUMIDIFIER|EXHAUST FAN)\b/i.test(title)
-    && !/\b(?:DIFFUSER|GRILLE|REGISTER|FIXTURE|LUMINAIRE)\b/i.test(title);
+  const squashed = title.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  return /(?:AIRHANDLING|DEDICATEDOUTSIDEAIR|FANCOIL|ENERGYRECOVERY|ROOFTOP|CONDENSINGUNIT|HEATPUMP|PUMP|BOILER|CHILLER|UNITHEATER|DEHUMIDIFIER|EXHAUSTFAN)/.test(squashed)
+    && !/(?:DIFFUSER|GRILLE|REGISTER|FIXTURE|LUMINAIRE)/.test(squashed);
 }
 
 /**

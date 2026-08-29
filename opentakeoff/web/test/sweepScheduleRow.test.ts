@@ -519,6 +519,7 @@ test("splitHyphenTagOcc recovers an exact adjacent two-run tag without fuzzy joi
 
 test("individually marked equipment schedules exclude repeatable type-symbol schedules", () => {
   assert.equal(isIndividuallyMarkedEquipmentSchedule("FAN COIL UNIT SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("AIRHANDLINGUNITSCHEDULE"), true);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("SECONDARY CHILLED WATER PUMP SCHEDULE"), true);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("GRILLE, REGISTER, AND DIFFUSER SCHEDULE"), false);
   assert.equal(isIndividuallyMarkedEquipmentSchedule("PLUMBING FIXTURE SCHEDULE"), false);
