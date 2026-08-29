@@ -3087,6 +3087,22 @@ export const isNonFinishSchedule = (title: string): boolean => {
   return OTHER_FAMILY_RE.test(u) && !/\b(FINISH|MATERIAL)S?\b/.test(u);
 };
 
+// Lookup tables that share a MARK/CODE column with finish/room-finish
+// schedules — a CROSS-REFERENCE, SPECIFICATION INDEX, or POINTS LIST.
+// extractTable still reads the shape; buildSheetGraph must not index the
+// rows as takeoff instances. Running-text "REFER TO SPEC" is not a title
+// (REFERENCE_RE). A title that ALSO names FINISH or MATERIAL is a product
+// table, kept — when in doubt, keep and let the caller look.
+const REF_SPEC_FAMILY_RE = /\b(?:CROSS[-\s]*REF(?:ERENCE)?S?|X-?REFS?|(?:EQUIPMENT|DRAWING|SHEET|DETAIL)\s+INDEX|SPECIFICATION(?:S)?(?:\s+(?:INDEX|TABLE|SCHEDULE))?|SPEC\s+(?:INDEX|TABLE|SCHEDULE|SECTIONS?)|POINTS?\s+(?:LIST|SCHEDULE)|(?:DDC|BAS)\s+POINTS?|REFERENCE(?:S)?\s+(?:TABLE|SCHEDULE|LIST|INDEX))\b/;
+export const isReferenceOrSpecTable = (title: string): boolean => {
+  const u = norm(title);
+  if (REFERENCE_RE.test(u)) return false;
+  if (!REF_SPEC_FAMILY_RE.test(u)) return false;
+  if (/\b(FINISH|MATERIAL)S?\b/.test(u) && !/\b(?:CROSS[-\s]*REF|X-?REF)\b/.test(u)) return false;
+  return true;
+};
+
+
 // The NARROW subset of OTHER_FAMILY_RE that names a real MEP mechanical-
 // equipment family, not an architectural one — real, found live (itd-d1-lab-
 // mechanical.pdf#12's own "PUMP SCHEDULE": BP-1/BP-2/HWP-1/HWP-2, real
@@ -4691,7 +4707,7 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
     const inBand = rows[i].filter((t) => t.x >= x0 && t.x <= x1);
     if (!inBand.length) continue;
     budget--;
-    const hit = inBand.find((t) => /SCHEDULE/.test(norm(t.str)) && (t.h || 8) >= hdrH2 * BIG_FONT_RATIO2);
+    const hit = inBand.find((t) => (/SCHEDULE/.test(norm(t.str)) || isReferenceOrSpecTable(t.str)) && (t.h || 8) >= hdrH2 * BIG_FONT_RATIO2);
     if (hit) { title = { sheet: sheet.key, text: hit.str.trim(), bbox: bboxOf(hit) }; break; }
     if (inBand.length !== 1) continue;
     const t = inBand[0];
@@ -4708,7 +4724,7 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
       const inBand = rows[i].filter((t) => t.x >= x0 && t.x <= x1);
       if (!inBand.length) continue;
       budget--;
-      const hit = inBand.find((t) => /SCHEDULE/.test(norm(t.str)));
+      const hit = inBand.find((t) => /SCHEDULE/.test(norm(t.str)) || isReferenceOrSpecTable(t.str));
       if (hit) title = { sheet: sheet.key, text: hit.str.trim(), bbox: bboxOf(hit) };
     }
   }
@@ -6397,6 +6413,11 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
       // Every table of this kind on the sheet, not just the first — a dense
       // MEP sheet routinely stacks several (#HVAC-boundary), now per band too.
       for (const bs of bands) for (const t of extractAllTables(bs, kind, { buildings, deltas: deltasBySheet.get(s.key) })) {
+        if (t.title && isReferenceOrSpecTable(t.title.text)) {
+          notes.push(`${s.key}: "${t.title.text}" is a reference/cross-reference/specification table, not an instance schedule — its ${t.rows.length} rows are NOT indexed as takeoff instance tags`);
+          droppedNamedTables.push(t);
+          continue;
+        }
         // A DOOR / WINDOW / PARTITION schedule carries a MARK column, so the
         // finish-table hunt happily reads one as a finish/material schedule —
         // and then a finish code that collides with a door mark chains to a
@@ -6776,7 +6797,10 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     const suppresses = (role.role === "schedule" || role.role === "legend" || role.role === "elevation" || role.role === "detail") && role.confidence >= 0.6;
     if (!suppresses) {
       const ctxB = ctxBySheet.get(s.key);
+      const banned = droppedNamedTables.filter((d) => d.sheet === s.key).map((d) => d.region);
       for (const r of roomTags(s, { buildings, exclude: sheetNumbers, deltas: deltasBySheet.get(s.key) })) {
+        const cx = (r.bbox[0] + r.bbox[2]) / 2, cy = (r.bbox[1] + r.bbox[3]) / 2;
+        if (banned.some((b) => cx >= b[0] && cy >= b[1] && cx <= b[2] && cy <= b[3])) continue;
         if (r.building == null && ctxB) r.building = ctxB;
         found.push(r);
       }
