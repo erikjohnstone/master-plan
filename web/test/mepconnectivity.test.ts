@@ -139,9 +139,12 @@ test("buildMepGraph: excludeSegs drops exactly the marked segments", () => {
 // measurably fails this test's own bound and the fix measurably passes it:
 // confirmed live, stashing this fix and re-running this exact test — the
 // pre-fix code takes 9.75s (520 segments × 67,600 junctions ≈ 35M naive
-// inner iterations) and fails the 5s bound below; the fix takes ~2s and
-// passes comfortably, with JTS's own noding cost (unaffected by this fix)
-// as the honest floor either way.
+// inner iterations) and fails the 8s bound below; the fix takes ~2s locally
+// and ~2–6s on a loaded GHA runner, with JTS's own noding cost (unaffected
+// by this fix) as the honest floor either way. 5s was the original local
+// pin; GHA ubuntu has landed 5.6–6.2s on the same O(n) code, so the bound
+// is 8s — still under the 9.75s pre-fix local time, and far under the
+// pre-fix time on a slow runner.
 test("buildMepGraph: a dense grid of crossing lines (many segments × many junctions) stays fast — the real O(survivors×junctions) regression this session found and fixed", () => {
   const N = 260, SPACING = 10;
   const segs: number[] = [];
@@ -151,7 +154,7 @@ test("buildMepGraph: a dense grid of crossing lines (many segments × many junct
   const g = buildMepGraph(segs, {});
   const elapsed = Date.now() - t0;
   assert.equal(g.edges.length > 0, true, "a real grid must produce real edges");
-  assert.ok(elapsed < 5000, `buildMepGraph on a 300x300 crossing grid took ${elapsed}ms — the O(survivors×junctions) scan this session fixed would take far longer than this on a grid this dense`);
+  assert.ok(elapsed < 8000, `buildMepGraph on a 300x300 crossing grid took ${elapsed}ms — the O(survivors×junctions) scan this session fixed would take far longer than this on a grid this dense`);
 });
 
 // ── traceConnectivity ────────────────────────────────────────────────────
