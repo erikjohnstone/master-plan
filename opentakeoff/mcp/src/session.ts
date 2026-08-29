@@ -3498,6 +3498,7 @@ export class Session {
         anchor: TagOcc;
         coverage: TagClaimCoverage;
       } | null = null;
+      let firstPassing: typeof best = null;
       outerSameTag:
       for (const candAnchor of withOcc[0].occ) {
         anchor = candAnchor;
@@ -3540,16 +3541,28 @@ export class Session {
               rawMatches: result.matches.length,
               segments: got.cand.segments,
             };
+            if (!firstPassing) firstPassing = { fp: got.cand, rect: got.rect, anchor: candAnchor, coverage };
             if (prefersTagClaimCoverage(coverage, best?.coverage ?? null)) {
               best = { fp: got.cand, rect: got.rect, anchor: candAnchor, coverage };
             }
           }
         }
       }
-      if (best) {
-        fp = best.fp;
-        anchorRect = best.rect;
-        anchor = best.anchor;
+      // Selecting by coverage is safe when the best real shape itself
+      // rejects at least one drawn tag occurrence (direct evidence that it
+      // distinguishes device marks from repeated labels), or for the
+      // variable-size air-device schedules whose geometry-specific inline
+      // path follows the same domain gate. Otherwise preserve the original
+      // first-success result: every tag occurrence matching a candidate is
+      // exactly the ambiguous repeated-view/leader-label shape that made the
+      // old raw-popularity heuristic overcount plumbing fixtures.
+      const airDeviceTable = /\b(?:DIFFUSER|GRILLE|REGISTER)\b/i.test(table);
+      const selected = best && (airDeviceTable || best.coverage.claimed < withOcc[0].occ.length)
+        ? best : firstPassing;
+      if (selected) {
+        fp = selected.fp;
+        anchorRect = selected.rect;
+        anchor = selected.anchor;
         corroborated = true;
       }
       // No whole-shape corroboration anywhere — restore the default anchor
