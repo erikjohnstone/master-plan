@@ -1605,8 +1605,10 @@ export function corroborateFingerprint(
  * best withhelds. The seed (`excludeCenter`) counts as that one
  * confident instance — matchSymbol hid it, but it is already in the
  * takeoff. The seed occurrence itself is not a leftover — it is already
- * counted. A single leftover labeled near-miss stays withheld: that is
- * the typical schematic-versus-plan extra, not a sibling cluster.
+ * counted. Extra labels (or a withheld) sitting inside R of an already-
+ * counted instance are the same device, not sibling copies. A single
+ * leftover labeled near-miss stays withheld: that is the typical
+ * schematic-versus-plan extra, not a sibling cluster.
  */
 function promoteLabeledNearMisses(
   leftover: SweepWithheld[],
@@ -1617,13 +1619,21 @@ function promoteLabeledNearMisses(
   R: number,
   excludeCenter?: Point,
 ): void {
+  const countedAt: Point[] = matches.map((m) => m.at);
+  if (excludeCenter) countedAt.push(excludeCenter);
+  const within = (x: number, y: number, p: Point) => Math.hypot(x - p[0], y - p[1]) <= R;
+  const besideCounted = (x: number, y: number) => countedAt.some((p) => within(x, y, p));
   const leftoverOcc = occ
     .map((o, i) => ({ o, i }))
-    .filter(({ o, i }) => !matchedOcc.has(i)
-      && !(excludeCenter && Math.hypot(o.cx - excludeCenter[0], o.cy - excludeCenter[1]) <= R));
-  const labeledLeftovers = leftoverOcc.filter(({ o }) =>
-    leftover.some((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R),
-  );
+    .filter(({ o, i }) => !matchedOcc.has(i) && !besideCounted(o.cx, o.cy));
+  const labeledLeftovers = leftoverOcc.filter(({ o }) => {
+    const nearW = leftover.filter((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R);
+    if (!nearW.length) return false;
+    // A withheld that also sits on an already-counted instance is that
+    // instance's own furniture, not a second install.
+    if (nearW.some((w) => besideCounted(w.at[0], w.at[1]))) return false;
+    return true;
+  });
   const confident = matches.length + (excludeCenter ? 1 : 0);
   if (confident !== 1 || labeledLeftovers.length < 2) {
     for (const w of leftover) withheld.push(w);
@@ -1691,9 +1701,12 @@ export interface SweepSheetResult {
  * fingerprint cleared the bar at the seed and missed it at the siblings
  * by hatch/size, not identity). A single leftover labeled near-miss is
  * left withheld: that is the schematic-vs-plan dual-convention shape,
- * not a second install. A match is claimed against the NEAREST
- * occurrence within R, never the first-in-array one. `tag` is the row's
- * own canonical key, used only to word the withheld/text_only reasons. */
+ * not a second install. Matches closer than half a symbol diagonal
+ * collapse to the better score before any tag is claimed — two real
+ * instances cannot sit that close without overlapping. A match is
+ * claimed against the NEAREST occurrence within R, never the first-in-
+ * array one. `tag` is the row's own canonical key, used only to word
+ * the withheld/text_only reasons. */
 export function classifySweepMatches(
   tag: string,
   fp: SymbolFingerprint,
@@ -1723,9 +1736,25 @@ export function classifySweepMatches(
   // catches the case where BOTH centroids sit far enough apart to survive
   // mergeR, but still both point at one tag (issue: sweep_schedule_row
   // false-doubled EWH-1/EBB-8 on the bessemer set — see takeoff-eval.mjs).
+  // Two real instances cannot sit within half a symbol diagonal without
+  // overlapping (matchSymbol's own suppressR doctrine). matchSymbol applies
+  // that to withhelds-near-matches and to excludeCenter, but two placements
+  // that both clear the commit bar still both arrive here — and
+  // sweep_schedule_row does not pass excludeCenter, so the seed's own
+  // near-shadow is one of them. Collapse to the better score before
+  // claiming tags; the loser is a disclosed question, not a second install.
+  const suppressR = (res.scaled ? res.scaled.footprint_px : fp.footprint) / 2;
+  const physical: SweepMatch[] = [];
+  for (const m of [...res.matches].sort((a, b) => b.score - a.score || a.at[1] - b.at[1] || a.at[0] - b.at[0])) {
+    if (physical.some((p) => Math.hypot(p.at[0] - m.at[0], p.at[1] - m.at[1]) <= suppressR)) {
+      withheld.push({ ...m, reason: `the marker geometry matches within half a symbol of an already-counted instance — two real instances cannot sit that close without overlapping; most likely this instance's own linework read a second time, not a second device; look before counting it` });
+      continue;
+    }
+    physical.push(m);
+  }
   const claims: Array<{ m: SweepMatch; oi: number }> = [];
   const unclaimed: SweepMatch[] = [];
-  for (const m of res.matches) {
+  for (const m of physical) {
     let oi = -1, bestD = Infinity;
     for (let k = 0; k < occ.length; k++) {
       const d = Math.hypot(m.at[0] - occ[k].cx, m.at[1] - occ[k].cy);

@@ -231,6 +231,21 @@ test("classifySweepMatches: cross-scale sweep — the fingerprint is resized per
   assert.equal(r.scaled!.ratio, 12);
 });
 
+test("classifySweepMatches: two matches closer than half a symbol diagonal collapse to one", () => {
+  // Same-device dual convention: two tags, two high-score centroids inside
+  // one footprint. Nearest-claim would bill each tag; they overlap, so only
+  // the better score counts.
+  const anchorSegs = place([{ at: [200, 200] }]);
+  const anchor = tagNear([200, 200]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const near: Point = [212, 200];
+  const sheetSegs = place([{ at: [200, 200] }, { at: near }]);
+  const occ = [tagNear([200, 200]), tagNear(near)];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
+  assert.equal(r.matches.length, 1, "overlapping matches are one device");
+  assert.ok(r.withheld.some((w) => /half a symbol/.test(w.reason)), "the shadow is a disclosed question");
+});
+
 test("classifySweepMatches: two close same-tag labels each keep the match nearest them, not whichever occurrence sorts first", () => {
   // Real undercount shape: two labeled instances sit inside one footprint
   // of each other. First-in-array claiming billed both matches to the
@@ -283,6 +298,24 @@ test("classifySweepMatches: the seed occurrence does not count as a leftover in 
   });
   assert.equal(r.matches.length, 0, "seed + one nearby leftover is not a family of two leftovers");
   assert.ok(r.withheld.length >= 1, "the leftover stays a disclosed question");
+});
+
+test("classifySweepMatches: extra labels beside the counted instance are not a family", () => {
+  // Two leftover tags sharing one near-bar withheld next to the seed —
+  // schedule text + a leader on the same device. That is not two sibling
+  // copies. scoreHigh past 1 puts the extra geometry in the withheld band.
+  const anchorSegs = place([{ at: [200, 200] }]);
+  const anchor = tagNear([200, 200]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const extra: Point = [248, 200];
+  const sheetSegs = place([{ at: [200, 200] }, { at: extra }]);
+  const occ = [tagNear([200, 200]), tagNear(extra), tagNear([248, 230])];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {
+    excludeCenter: cf.fp.center,
+    scoreHigh: 1.01,
+  });
+  assert.equal(r.matches.length, 0, "labels on the counted instance do not promote a family");
+  assert.ok(r.withheld.length >= 1);
 });
 
 test("classifySweepMatches: two leftover labeled near-bar matches on a one-instance sheet COUNT", () => {
