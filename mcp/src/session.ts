@@ -3187,10 +3187,11 @@ export class Session {
     // only ever ADD a way to succeed; the first candidate that already
     // passed keeps passing exactly as before.
     type Corro = { sh: SheetState; segs: number[]; occ: TagOcc[] };
-    const corroCandidates: Corro[] = [];
-    if (withOcc[0].occ.length > 1) {
-      corroCandidates.push({ sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.slice(1) });
-    }
+    // Cross-sheet same-tag corroborators — same-discipline plan sheets that
+    // also carry this tag. Independent of which occurrence on the ANCHOR
+    // sheet ends up tried as anchor below (sameSheetCorroFor), so this is
+    // computed once, not per candidate anchor.
+    const crossSheetCorro: Corro[] = [];
     if (withOcc.length > 1) {
       const anchorDisc = disciplineOfSheetNumber(anchorSheet.sheetNumber);
       const rest = withOcc.slice(1);
@@ -3200,9 +3201,18 @@ export class Session {
       // of fallback tries now, not a single pick.
       const pool = anchorDisc ? rest.filter((e) => disciplineOfSheetNumber(e.sh.sheetNumber) === anchorDisc) : rest;
       for (const e of pool) {
-        corroCandidates.push({ sh: e.sh, segs: (await this.ensureGeometry(e.sh)).segs, occ: e.occ });
+        crossSheetCorro.push({ sh: e.sh, segs: (await this.ensureGeometry(e.sh)).segs, occ: e.occ });
       }
     }
+    // Same-sheet corroborators for a GIVEN candidate anchor occurrence —
+    // every OTHER occurrence on the anchor sheet, parameterized so the
+    // same-tag corroboration loop below can try every occurrence in turn as
+    // the anchor, not just the first in reading order (see its own comment).
+    const sameSheetCorroFor = (candAnchor: TagOcc): Corro[] =>
+      withOcc[0].occ.length > 1
+        ? [{ sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.filter((o) => o !== candAnchor) }]
+        : [];
+    const corroCandidates: Corro[] = [...sameSheetCorroFor(anchor), ...crossSheetCorro];
 
     // Cross-tag fallback corroborators, tried only when the tag itself has no
     // second occurrence anywhere (corroCandidates is empty) — the
@@ -3312,15 +3322,54 @@ export class Session {
       // failed at every pad level, whole-shape AND hatch-fill; the first
       // candidate that already passed today keeps passing exactly as
       // before, so this can only ever ADD a way to succeed.
+      // Tried across EVERY occurrence as a candidate anchor in turn (reading
+      // order), not just the first — real case, baker-county-eoc-bidset.
+      // pdf#54's own "R1": the FIRST occurrence's own pad ladder sits next
+      // to unrelated linework (a door-swing arc), so every candidate built
+      // from it mixes that arc's own ink into the fingerprint and never
+      // scores high enough to corroborate anywhere, even though the tag's
+      // real, repeating device icon (the same rectangle+dot 22 other
+      // instances also carry) genuinely recurs — trying the NEXT occurrence
+      // as anchor instead finds a clean capture with no unrelated linework
+      // nearby, which corroborates immediately (confirmed live: anchor #0
+      // and #1 find zero corroborating matches at any pad; anchor #2 finds
+      // 2 real corroborating siblings on the first pad tried).
+      //
+      // This is NOT the reverted "best-generalizing candidate" mechanism
+      // (commit 6eee55b, backed out in d982172): that heuristic tried every
+      // occurrence and kept whichever candidate matched the MOST siblings,
+      // which let a promiscuous, over-generic candidate outscore a precise
+      // one (itd-d1-lab's US-1 regression). This stops at the FIRST
+      // anchor/pad/corroborator triple that clears matchSymbol's own
+      // scoreHigh bar — the identical stop-at-first-success rule the padK
+      // ladder already uses one level down, just extended to the anchor
+      // choice too — so it can only ever ADD a way to find REAL,
+      // threshold-passing corroboration that the first occurrence alone
+      // happened to miss; it never scores or compares candidates against
+      // each other. A tag drawn exactly once per sheet (withOcc[0].occ.length
+      // === 1, e.g. itd-d1-lab's own US-1) has exactly one anchor to try
+      // here, so this is a no-op for it — unchanged from before this loop
+      // existed.
       outerSameTag:
-      for (const cand of corroCandidates) {
-        for (const padK of [1, 2, 3]) {
-          const got = candFor(padK);
-          if (got === "region") break;
-          if (!got) continue;
-          if (probes(got.cand, cand)) { fp = got.cand; anchorRect = got.rect; corroborated = true; break outerSameTag; }
+      for (const candAnchor of withOcc[0].occ) {
+        anchor = candAnchor;
+        const candidatesForAnchor = candAnchor === withOcc[0].occ[0]
+          ? corroCandidates
+          : [...sameSheetCorroFor(candAnchor), ...crossSheetCorro];
+        for (const cand of candidatesForAnchor) {
+          for (const padK of [1, 2, 3]) {
+            const got = candFor(padK);
+            if (got === "region") break;
+            if (!got) continue;
+            if (probes(got.cand, cand)) { fp = got.cand; anchorRect = got.rect; corroborated = true; break outerSameTag; }
+          }
         }
       }
+      // No whole-shape corroboration anywhere — restore the default anchor
+      // so every fallback below (inline-motif retry, TIER 2) runs exactly
+      // as it did before this loop existed; each of those has its own
+      // reading-order walk over withOcc[0].occ and sets `anchor` fresh.
+      if (!fp) anchor = withOcc[0].occ[0];
       if (!fp || !anchorRect) {
         for (const cand of corroCandidates) {
           const inlineAnchored = corroborateInlineMotif(
