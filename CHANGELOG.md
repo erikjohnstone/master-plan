@@ -9,6 +9,13 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 - **Overlapping matches collapse to one.** Two centroids closer than half a symbol diagonal, or a different square-symmetry transform just outside that bar (a few px of eccentricity, capped so a large fingerprint cannot swallow a real rotated sibling), are the same ink; the better score counts and the shadow is a disclosed question.
 - **A same-convention labeled family no longer dies on the unlabeled commit bar.** When a sheet already has exactly one confident instance (including the seed) and two or more leftover own-tag occurrences each sit next to a near-bar withheld — and those leftovers are not extra labels on the counted instance — those siblings count. A single leftover labeled near-miss stays a disclosed question — that is the schematic-versus-plan extra, not a second install.
 
+## 2026-08-29 — rotated hyphen joins; work notes are not instances
+
+### Fixed
+- **A 90/180/270° hyphenated mark joins along its run.** CAD often stacks `SHHWP` + `-` + `M1` (or a seven-glyph `CV-CHW-BP-T`) as vertical glyph runs; the shared join only walked +X and compared axis-aligned box height, so a long word and its hyphen never met. The +X walk still runs first over every span (a quarter-turn note between two same-row fragments still interrupts). Rotated leftovers then join along the run with em-sized baselines. Adjacent rotated columns stay split. The text layer (`textSpans`) is the join site — not a second pass inside `extractTable` / `buildSheetGraph`.
+- **A work-note sentence is not a compound instance.** `compoundTagOcc` still accepts a circuit/panel remainder (`R1 /C-11`). A span that continues into English (`CUH-T1 ON FLOOR 3; …`) no longer seeds `sweep_schedule_row`.
+- **`smoke:dist` resolves `jsts`.** `session.ts` already imports the web engine's MEP graph (`mepconnectivity.ts`), which uses the same JTS port the canvas vendors. esbuild leaves that import external, so the published server now lists `jsts` next to the other engine deps. **opentakeoff-mcp 0.9.67** (three surfaces).
+
 ## 2026-08-29 — multi-hyphen equipment tags
 
 ### Fixed

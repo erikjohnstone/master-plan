@@ -67,6 +67,8 @@
 //
 // sweepSymbols composes the two on one sheet, unchanged.
 
+import { compoundRemainderIsLabel } from "./markid.ts";
+
 export type Point = [number, number];
 
 export interface SweepOptions {
@@ -1352,7 +1354,7 @@ export function compoundTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
     // on the set, and the plan sheet with the MOST such false hits becomes
     // sweep_schedule_row's own anchor (most-occs wins) — fingerprinting
     // title-block/grid furniture instead of the real device.
-    if (!/^[\s/]/.test(rest)) continue;
+    if (!compoundRemainderIsLabel(rest)) continue;
     out.push({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] });
   }
   return out;

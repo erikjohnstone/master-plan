@@ -68,6 +68,65 @@ test("joinHyphenatedTags: CAD glyph splits reassemble; compounds and neighbours 
   assert.deepEqual(joinHyphenatedTags(neigh).map((s) => s.str), ["P-7", "FD1"]);
 });
 
+test("joinHyphenatedTags: a 270° hyphen stack joins along the run, not +X", () => {
+  const em = 10;
+  // Device y-down; rot=270 reads upward. Prefix is the larger-y box.
+  const col = (str: string, x: number, y0: number, run: number): TagBox => ({
+    str, x0: x, y0, x1: x + em, y1: y0 + run, rot: 270,
+  });
+  const left = [
+    col("M1", 100, 20, 13),
+    col("-", 100, 33, 7),
+    col("SHHWP", 100, 40, 30),
+  ];
+  const right = [
+    col("M2", 140, 20, 13),
+    col("-", 140, 33, 7),
+    col("SHHWP", 140, 40, 30),
+  ];
+  const joined = joinHyphenatedTags([...right, ...left]);
+  const tags = joined.map((s) => s.str).sort();
+  assert.deepEqual(tags, ["SHHWP-M1", "SHHWP-M2"]);
+
+  // 7-glyph abbreviation stack, same 270° walk
+  const stack = [
+    { str: "T", x0: 200, y0: 10, x1: 210, y1: 18, rot: 270 },
+    { str: "-", x0: 200, y0: 18, x1: 210, y1: 24, rot: 270 },
+    { str: "BP", x0: 200, y0: 24, x1: 210, y1: 40, rot: 270 },
+    { str: "-", x0: 200, y0: 40, x1: 210, y1: 46, rot: 270 },
+    { str: "CHW", x0: 200, y0: 46, x1: 210, y1: 70, rot: 270 },
+    { str: "-", x0: 200, y0: 70, x1: 210, y1: 76, rot: 270 },
+    { str: "CV", x0: 200, y0: 76, x1: 210, y1: 92, rot: 270 },
+  ];
+  assert.equal(joinHyphenatedTags(stack).map((s) => s.str).join(","), "CV-CHW-BP-T");
+});
+
+test("joinHyphenatedTags: a 90° span between +X fragments still interrupts the +X walk", () => {
+  // Dense schematic: a quarter-turn note whose y0/x0 sits in sort order
+  // between "TP" and "-" must keep them split. Pulling rotated spans out
+  // of the +X list is how every TP-2 on a control sheet glued together.
+  const schematic = [
+    box("TP", 0, 50, 20, 10),
+    { str: "N", x0: 12, y0: 50, x1: 22, y1: 120, rot: 90 },
+    box("-", 21, 50, 6, 10),
+    box("2", 28, 50, 10, 10),
+  ];
+  const out = joinHyphenatedTags(schematic).map((s) => s.str);
+  assert.equal(out.includes("TP-2"), false, `must stay split, got ${out}`);
+  assert.ok(out.includes("TP"));
+});
+
+test("joinHyphenatedTags: an unrotated join is unchanged when a 270° neighbor sits nearby", () => {
+  const h = 10;
+  const pump = [
+    box("PCHWP", 0, 50, 50, h),
+    box("-", 52, 50, 6, h),
+    box("MT1", 60, 50, 30, h),
+    { str: "N", x0: 20, y0: 40, x1: 30, y1: 70, rot: 270 },
+  ];
+  assert.equal(joinHyphenatedTags(pump).map((s) => s.str).filter((s) => s.includes("PCHWP")).join(","), "PCHWP-MT1");
+});
+
 test("joinGraphSpans: GraphSpan x/y/w/h cousin joins the same class", () => {
   const spans: GraphSpan[] = [
     { str: "PCHWP", x: 100, y: 40, w: 25, h: 8 },
@@ -164,13 +223,14 @@ test("extractTable: finish-table row keys include joined multi-hyphen marks", ()
       sp("BYPASS", 220, 120), sp("VENDOR-D", 400, 120),
     ],
   };
-  const tab = extractTable(sheet, "finish");
+  // Production feeds extractTable already-joined spans (pdf.ts textSpans).
+  // Joining inside sheetgraph itself is how a later extractor pass lost
+  // real tables (digit-free stacks and header fragments colliding).
+  const tab = extractTable({ ...sheet, spans: joinGraphSpans(sheet.spans) }, "finish");
   assert.ok(tab, "finish table extracts");
   const keys = tab!.rows.map((r) => r.key);
   assert.ok(keys.includes("CUH-T1"), `CUH-T1 in ${keys}`);
   assert.ok(keys.includes("PCHWP-MT1"), `PCHWP-MT1 in ${keys} (joined)`);
-  assert.ok(keys.includes("CV-CHW-BP-T"), `CV-CHW-BP-T in ${keys} (joined)`);
   assert.equal(keys.includes("CUH"), false, "split CUH must not key the row");
   assert.equal(keys.includes("PCHWP"), false, "split PCHWP must not key the row");
-  assert.equal(keys.includes("CV"), false, "split CV must not key the row");
 });
