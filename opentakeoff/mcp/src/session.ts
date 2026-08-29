@@ -3347,6 +3347,7 @@ export class Session {
     // first in reading order. Deterministic throughout.
     const withOcc = occBySheet.filter((e) => e.occ.length > 0)
       .sort((a, b) => b.occ.length - a.occ.length || a.sh.ord - b.sh.ord);
+    const individuallyMarked = isIndividuallyMarkedEquipmentSchedule(table);
     const anchorSheet = withOcc[0].sh;
     // Reassigned only by the same-sheet uncorroborated fallback below (Tier
     // 2), and only after every corroboration attempt against the ORIGINAL
@@ -3355,7 +3356,7 @@ export class Session {
     // other plumbing needed.
     let anchor = withOcc[0].occ[0];
     const anchorGeo = await this.ensureGeometry(anchorSheet);
-    if (!anchorGeo.segs.length) {
+    if (!anchorGeo.segs.length && !individuallyMarked) {
       throw new UserError(`${anchorSheet.key} carries the tag "${t}" but no vector linework — the marker cannot be fingerprinted on a scan.`);
     }
     const sweepOpts: SweepOptions = {
@@ -3814,9 +3815,13 @@ export class Session {
           inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
         }
       }
-      if (!fp && !inlineFp) {
+      if (!fp && !inlineFp && !individuallyMarked) {
         throw new UserError(`Schedule row "${t}" cannot be anchored: no fingerprintable marker linework sits around its drawn tag on ${anchorSheet.key}. Marquee one instance with symbol_sweep instead.`);
       }
+    }
+    const explicitLabelAnchor = !fp && !inlineFp && individuallyMarked;
+    if (explicitLabelAnchor) {
+      anchorRect = [[anchor.bbox[0], anchor.bbox[1]], [anchor.bbox[2], anchor.bbox[3]]];
     }
 
     // classifySweepMatches' own occurrence-claim radius (R = footprint/2 +
@@ -3897,6 +3902,19 @@ export class Session {
       if (opts.evaluationFast && !occ.length) {
         perSheet.push({
           state: sh, matches: [], withheld: [], excluded: [], text_only: [],
+          candidates: { considered: 0, dropped: 0 }, complete: true,
+          elapsed_ms: 0, scale: sweepRatio(anchorSheet, sh), redundant_view: [],
+        });
+        continue;
+      }
+      if (explicitLabelAnchor) {
+        perSheet.push({
+          state: sh,
+          matches: occ.map((tagged) => ({
+            at: [tagged.cx, tagged.cy], score: 1, rotation: 0, mirrored: false,
+            tag_at: tagged.bbox, text_counted: true,
+          })),
+          withheld: [], excluded: [], text_only: [],
           candidates: { considered: 0, dropped: 0 }, complete: true,
           elapsed_ms: 0, scale: sweepRatio(anchorSheet, sh), redundant_view: [],
         });
@@ -4138,7 +4156,7 @@ export class Session {
     // An individually numbered equipment schedule names one physical unit
     // per mark. The same mark repeated across plan/section/detail views is
     // reference duplication, unlike diffuser/fixture/luminaire type marks.
-    if (isIndividuallyMarkedEquipmentSchedule(table)) {
+    if (individuallyMarked) {
       const all = perSheet.flatMap((sheet) => sheet.matches.map((match) => ({ sheet, match })));
       if (all.length > 1) {
         const kept = all.slice().sort((a, b) =>
@@ -4251,8 +4269,8 @@ export class Session {
         // segments/length on — `segments` reports the hatch cluster's own
         // member-stroke count instead, `length_px` its own pitch, so the
         // field is never a fabricated whole-shape number for this mode.
-        segments: fp ? fp.segments : inlineFp!.members,
-        length_px: round1(fp ? fp.totalLen : inlineFp!.pitchPx),
+        segments: fp ? fp.segments : inlineFp ? inlineFp.members : 0,
+        length_px: round1(fp ? fp.totalLen : inlineFp ? inlineFp.pitchPx : 0),
         corroborated,
         ...(corroborated ? { corroborated_via: corroboratedVia ? "sibling_tag" as const : "same_tag" as const } : {}),
         ...(corroboratedVia ? { corroborated_tag: corroboratedVia } : {}),
