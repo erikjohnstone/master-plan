@@ -486,13 +486,18 @@ export function scaleFingerprint(fp: SymbolFingerprint, k: number): SymbolFinger
  * to their length-weighted centroid. Throws the same instructive refusals
  * sweepSymbols always has (empty marquee, region-sized marquee). */
 export function fingerprintSymbol(segs: number[], seedRect: [Point, Point], lum?: Uint8Array): SymbolFingerprint {
-  const n = segs.length >> 2;
   const rx0 = Math.min(seedRect[0][0], seedRect[1][0]), rx1 = Math.max(seedRect[0][0], seedRect[1][0]);
   const ry0 = Math.min(seedRect[0][1], seedRect[1][1]), ry1 = Math.max(seedRect[0][1], seedRect[1][1]);
 
   const inside = (x: number, y: number): boolean => x >= rx0 && x <= rx1 && y >= ry0 && y <= ry1;
   const seedIdx: number[] = [];
-  for (let i = 0; i < n; i++) {
+  // A fully-contained segment necessarily has an endpoint in one of the
+  // rectangle's endpoint-index cells. Query that immutable sheet index
+  // instead of rescanning 100k+ segments for every pad/anchor attempt in a
+  // schedule-row evaluation. Sort to retain the original segment-order
+  // fingerprint exactly.
+  const candidates = [...sheetMatchIndex(segs, SWEEP_TOL_PX).grid.nearRect(rx0, ry0, rx1, ry1)].sort((a, b) => a - b);
+  for (const i of candidates) {
     if (inside(segs[i * 4], segs[i * 4 + 1]) && inside(segs[i * 4 + 2], segs[i * 4 + 3]) && segLen(segs, i) >= MIN_SEG_LEN) {
       seedIdx.push(i);
     }
@@ -849,6 +854,17 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       )) regionSegments.add(i);
     }
   }
+  let focusedLenBucket: Map<number, number[]> | null = null;
+  if (regionSegments) {
+    focusedLenBucket = new Map<number, number[]>();
+    for (const i of regionSegments) {
+      const bucket = Math.round(lengths[i]);
+      const entries = focusedLenBucket.get(bucket);
+      if (entries) entries.push(i);
+      else focusedLenBucket.set(bucket, [i]);
+    }
+  }
+  const activeLenBucket = focusedLenBucket ?? lenBucket;
   const insideRequestedRegion = (x: number, y: number): boolean =>
     !regions?.length || regions.some((r) => {
       const dx = x - r.center[0], dy = y - r.center[1];
@@ -859,9 +875,9 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     // can stretch/shrink the drawn length by up to 2·tol)
     const out: number[] = [];
     for (let b = Math.floor(L - 2 * tol); b <= Math.ceil(L + 2 * tol); b++) {
-      const a = lenBucket.get(b);
+      const a = activeLenBucket.get(b);
       if (a) for (const i of a) {
-        if ((!regionSegments || regionSegments.has(i)) && Math.abs(lengths[i] - L) <= 2 * tol) out.push(i);
+        if (Math.abs(lengths[i] - L) <= 2 * tol) out.push(i);
       }
     }
     return out;
