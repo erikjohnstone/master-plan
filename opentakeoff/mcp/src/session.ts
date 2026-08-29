@@ -3190,6 +3190,8 @@ export class Session {
     // split-system pair's two component marks are each the row's OWN
     // identity, not another row's competing tag.
     const ownMarks = new Set(canonKey(r.key).split("/").map((s) => s.trim()).filter(Boolean));
+    const tableSiblingKeys = [...new Set(tb.rows.flatMap((row) =>
+      canonKey(row.key).split("/").map((s) => s.trim()).filter(Boolean)))];
     // sibling keys span EVERY table in the set, not just the row's own: a
     // marker labeled with any other schedule key is that mark's instance, and
     // disclosing it as "excluded, labeled 135" beats calling it unlabeled
@@ -3867,7 +3869,7 @@ export class Session {
       // a large family-wide quorum of independently tagged luminaires; this
       // excludes isolated schedule notes and ordinary prefix collisions.
       if (/\bLUMINAIRE\b/i.test(table)) {
-        const familyCompoundCount = siblings.reduce((sum, key) =>
+        const familyCompoundCount = tableSiblingKeys.reduce((sum, key) =>
           sum + compoundTagOcc(sh.spans || [], key).length, 0);
         if (familyCompoundCount >= 10) {
           const claimed = new Set(matches.map((m) => m.tag_at.join(",")));
