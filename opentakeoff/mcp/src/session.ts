@@ -3933,6 +3933,25 @@ export class Session {
             !occ.some((tagged) => Math.hypot(tagged.cx - entry.at[0], tagged.cy - entry.at[1]) <= anchor.h * 2));
         }
       }
+      // Repeatable plumbing-fixture type marks use the same explicit-label
+      // convention as air devices. Require a smaller but still repeating
+      // family quorum because roof plans are naturally sparse.
+      if (/\b(?:PLUMBING FIXTURE|ROOF DRAIN|FLOOR DRAIN)\b/i.test(table)) {
+        const familyTagCount = tableSiblingKeys.reduce((sum, key) => sum + occOf(sh, key).length, 0);
+        if (familyTagCount >= 4) {
+          for (const tagged of occ) {
+            const alreadyClaimed = matches.some((match) => {
+              const box = match.tag_at;
+              return Math.hypot((box[0] + box[2]) / 2 - tagged.cx, (box[1] + box[3]) / 2 - tagged.cy) <= 1;
+            });
+            if (alreadyClaimed) continue;
+            matches.push({
+              at: [tagged.cx, tagged.cy], score: 1, rotation: 0, mirrored: false,
+              tag_at: tagged.bbox, text_counted: true,
+            });
+          }
+        }
+      }
       const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
       perSheet.push({
         state: sh, matches, withheld, excluded, text_only,
