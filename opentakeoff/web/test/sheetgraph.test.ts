@@ -1072,7 +1072,7 @@ test("a lone unexplained token never mints a column — the sub-tier needs a par
 // MATERIAL | COMMENTS) extracted as 54 "finish" rows, so a finish code
 // colliding with a door mark would chain to a DOOR — a confidently wrong
 // product in the bid. Refused by title, and the drop is named.
-import { isNonFinishSchedule } from "../src/lib/sheetgraph.ts";
+import { isNonFinishSchedule, isReferenceOrSpecTable } from "../src/lib/sheetgraph.ts";
 
 test("isNonFinishSchedule: other families refuse, anything naming FINISH or MATERIAL is kept", () => {
   for (const t of ["DOOR SCHEDULE", "DOOR AND WINDOW SCHEDULE", "PARTITION SCHEDULE", "EQUIPMENT SCHEDULE", "LIGHTING SCHEDULE"]) {
@@ -1124,6 +1124,93 @@ test("a DOOR SCHEDULE never becomes a finish table — and the drop is NAMED", (
   assert.equal(floor.code, "CPT-1");
   assert.equal(floor.definition?.cells.MATERIAL, "CARPET TILE", "chained to the material schedule, never to the door schedule");
   assert.equal(floor.definition?.cells.MANUFACTURER, "VENDOR-A");
+});
+
+// ── reference / cross-ref / spec tables: not instance schedules ────────────
+// Same MARK|DESCRIPTION|MATERIAL shape as a finish table. Indexing one as
+// finish made sweep_schedule_row count every lookup row as installed work,
+// and a numbered cell on a plan sheet minted a second instance tag for a
+// bubble the sheet already carried.
+test("isReferenceOrSpecTable: lookup tables refuse, finish/material specs and instance schedules are kept", () => {
+  for (const title of [
+    "EQUIPMENT CROSS REFERENCE",
+    "CROSS-REFERENCE TABLE",
+    "SPECIFICATION INDEX",
+    "SPECIFICATIONS",
+    "POINTS LIST",
+    "DDC POINTS SCHEDULE",
+    "BAS POINTS LIST",
+    "REFERENCE TABLE",
+  ]) {
+    assert.equal(isReferenceOrSpecTable(title), true, title);
+  }
+  for (const title of [
+    "ROOM FINISH SCHEDULE",
+    "MATERIAL SCHEDULE",
+    "FINISH SPECIFICATION",
+    "MATERIAL SPECIFICATION",
+    "AIR-COOLED CONDENSING UNIT SCHEDULE",
+    "UNIT HEATER SCHEDULE (HOT WATER)",
+    "REFER TO SPECIFICATIONS",
+    "SEE SPEC SECTION 233723",
+  ]) {
+    assert.equal(isReferenceOrSpecTable(title), false, `${title} must be kept — instance/product tables and running-text notes are not lookup captions`);
+  }
+});
+
+test("a CROSS-REFERENCE / SPECIFICATION table never becomes a finish table — and does not mint instance tags", () => {
+  const xref: SheetSpans = {
+    key: "xref.pdf#0",
+    sheet_number: "M-701",
+    spans: [
+      sp("EQUIPMENT CROSS REFERENCE", 100, 20),
+      sp("MARK", 100, 60), sp("DESCRIPTION", 220, 60), sp("MATERIAL", 420, 60), sp("COMMENTS", 580, 60),
+      sp("CU-1", 100, 80), sp("CONDENSING UNIT", 220, 80), sp("DX", 420, 80), sp("ROOF", 580, 80),
+      sp("EV-1", 100, 100), sp("DX FAN COIL", 220, 100), sp("DX", 420, 100), sp("ELEC 350", 580, 100),
+      sp("UH-1", 100, 120), sp("UNIT HEATER", 220, 120), sp("HW", 420, 120), sp("VESTIBULE", 580, 120),
+    ],
+  };
+  const plan: SheetSpans = {
+    key: "xref.pdf#1",
+    sheet_number: "M-101",
+    spans: [
+      sp("FIRST FLOOR HVAC PLAN", 300, 900),
+      sp("SPECIFICATION INDEX", 100, 20),
+      sp("NO", 100, 60), sp("NAME", 180, 60), sp("FLOOR", 320, 60), sp("BASE", 420, 60), sp("WALL", 520, 60),
+      sp("201", 100, 80), sp("SEE SPEC", 180, 80), sp("N/A", 320, 80), sp("N/A", 420, 80), sp("N/A", 520, 80),
+      sp("202", 100, 100), sp("SEE SPEC", 180, 100), sp("N/A", 320, 100), sp("N/A", 420, 100), sp("N/A", 520, 100),
+      sp("MECH ROOM", 10, 500), sp("201", 14, 512),
+    ],
+  };
+  const sched: SheetSpans = {
+    key: "xref.pdf#2",
+    sheet_number: "A-601",
+    spans: [
+      sp("ROOM FINISH SCHEDULE", 100, 40),
+      sp("NO", 100, 60), sp("NAME", 160, 60), sp("FLOOR", 300, 60), sp("BASE", 400, 60), sp("WALL", 500, 60),
+      sp("201", 100, 80), sp("MECH ROOM", 160, 80), sp("SC-1", 300, 80), sp("RB-1", 400, 80), sp("P-1", 500, 80),
+    ],
+  };
+  const rawFin = extractTable(xref, "finish")!;
+  assert.deepEqual(rawFin.rows.map((r) => r.key).sort(), ["CU-1", "EV-1", "UH-1"]);
+  assert.equal(rawFin.title?.text, "EQUIPMENT CROSS REFERENCE");
+  const rawIdx = extractTable(plan, "room-finish")!;
+  assert.ok(rawIdx.rows.some((r) => r.key === "201"), "raw reader still sees the spec-index 201 row");
+  assert.equal(rawIdx.title?.text, "SPECIFICATION INDEX");
+  const g = buildSheetGraph([xref, plan, sched]);
+  assert.ok(!g.tables.some((tab) => /CROSS\s*REF/i.test(tab.title?.text || "")), "no cross-reference among the indexed tables");
+  assert.ok(!g.tables.some((tab) => /SPECIFICATION INDEX/i.test(tab.title?.text || "")), "no specification index among the indexed tables");
+  assert.ok(!g.tables.some((tab) => tab.kind === "finish" && tab.rows.some((r) => /^(CU|EV|UH)-/.test(r.key))), "lookup marks are not finish-table instance keys");
+  assert.ok(g.notes.some((n) => /CROSS REFERENCE/.test(n) && /NOT indexed/.test(n)), `cross-ref drop is named: ${g.notes.join(" | ")}`);
+  assert.ok(g.notes.some((n) => /SPECIFICATION INDEX/.test(n) && /NOT indexed/.test(n)), `spec-index drop is named: ${g.notes.join(" | ")}`);
+  assert.deepEqual(g.rooms.map((r) => r.tag).sort(), ["201"]);
+  assert.equal(g.rooms.filter((r) => r.tag === "201").length, 1, "the spec-index 201 cell is not a second instance tag");
+  assert.equal(g.rooms[0].bbox[1] >= 500, true, "the surviving 201 is the plan bubble, not the table cell");
+  const res = resolveTag(g, "201");
+  assert.equal(res.status, "resolved");
+  if (res.status !== "resolved") return;
+  const fl = res.finishes.find((f) => f.surface === "FLOOR")!;
+  assert.equal(fl.code, "SC-1", "room 201 chains to the finish schedule, never the lookup row");
 });
 
 // ═════════════════════════════════════════════════════════════════════════════
