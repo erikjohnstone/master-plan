@@ -8,7 +8,7 @@ import path from "node:path";
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isBareAnchorHeader, isQualifiedAnchorHeader, type SheetGraph, type SheetSpans, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, type SheetGraph, type SheetSpans, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
@@ -2990,10 +2990,10 @@ export class Session {
       };
       const withHeader = rowHits.map((h) => ({ ...h, keyHeader: keyHeaderFor(h.tb, h.r) }));
       // A row is this tag's OWN device definition only when BOTH real
-      // accessory signals clear it: its own key column must be a BARE
-      // anchor word (not qualified — "UNIT MARK"/"VALVE MARK" name a cross-
-      // reference to some OTHER row's own mark, never this row's own
-      // identity — see isQualifiedAnchorHeader's own comment) AND its table
+      // accessory signals clear it: its own key column must NOT be a
+      // QUALIFIED anchor ("UNIT MARK"/"VALVE MARK" name a cross-reference
+      // to some OTHER row's own mark, never this row's own identity — see
+      // isQualifiedAnchorHeader's own comment) AND its table
       // must not be "reference"-kind (a real cross-reference/spec table —
       // extractTableAt's own CONNECTION/CALCULATION check, and
       // scheduleTableFromODL's structural fallback, both demote exactly
@@ -3020,7 +3020,25 @@ export class Session {
       // and a real plumbing fixture, BOTH bare "SYMBOL" and non-reference,
       // correctly stays refused below) or when every colliding row is
       // itself excluded (no real device row survives to seed the sweep).
-      const isCandidate = (h: (typeof withHeader)[number]) => isBareAnchorHeader(h.keyHeader) && h.tb.kind !== "reference";
+      //
+      // Uses !isQualifiedAnchorHeader, NOT isBareAnchorHeader — real,
+      // confirmed regression found live: isBareAnchorHeader and
+      // isQualifiedAnchorHeader are NOT strict complements. A header can be
+      // NEITHER (baker-county-eoc-bidset.pdf#41's own "EQUIP NO" — not a
+      // bare CATALOG_ANCHOR_WORDS hit, and no token of it is either, so it's
+      // not "qualified" by that check's own definition either). Requiring
+      // isBareAnchorHeader specifically broke RTU-1/EWH-1/CU-1/CU-2/ERV-01/
+      // FCU-1/FCU-2/WH-1 — real rows whose own equipment schedule keys under
+      // "EQUIP NO" (not a bare CATALOG_ANCHOR_WORDS hit) collided with a real
+      // NATURAL GAS CALCULATION reference table also keying "TAG"; neither
+      // row passed the AND-of-both-signals bar, so 10 previously-exact tags
+      // silently became "2 schedule rows carry the key" ambiguity errors —
+      // baker-county-eoc dropped from 60.0% to 37.5% before this was caught.
+      // !isQualifiedAnchorHeader correctly treats "neither" the same as
+      // "bare" (this row's own header names no OTHER row's mark, so it is
+      // not disqualified on word-shape grounds) while still excluding a
+      // genuinely QUALIFIED header exactly as before.
+      const isCandidate = (h: (typeof withHeader)[number]) => !isQualifiedAnchorHeader(h.keyHeader) && h.tb.kind !== "reference";
       const candidates = withHeader.filter(isCandidate);
       const accessory = withHeader.filter((h) => !isCandidate(h));
       if (candidates.length === 1 && accessory.length > 0) {
