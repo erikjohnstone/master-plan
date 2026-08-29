@@ -3082,9 +3082,20 @@ export interface ExtractOpts { buildings?: Set<string>; deltas?: DeltaIndex; noF
 // not an HVAC fan-equipment one, and "FAN" alone is too generic a word to
 // tell the two apart by title text alone.
 const OTHER_FAMILY_RE = /\b(DOOR|WINDOW|PARTITION|EQUIPMENT|HARDWARE|LOUVER|SIGNAGE|LIGHTING|LUMINAIRE|PLUMBING|MECHANICAL|ELECTRICAL|STOREFRONT|GLAZING|CASEWORK|MILLWORK|APPLIANCE|BOILER|HUMIDIFIER|COIL|CHILLER|PUMP|AHU|VAV)S?\b/;
+
+/** A tank schedule is an MEP equipment schedule even when a PDF extractor
+ * collapses its title into one token. `TANKSCHEDULE` is the stable structural
+ * signal; relying on the words before it would make ordinary extraction
+ * damage in "EXPANSION AND COMPRESSION" unnecessarily fatal. */
+function isTankScheduleTitle(title: string): boolean {
+  const u = norm(title);
+  if (/\bTANKS?\b/.test(u) && /\b(SCHEDULE|EXPANSION|COMPRESSION)\b/.test(u)) return true;
+  return /TANKS?SCHEDULE/.test(u.replace(/[^A-Z0-9]+/g, ""));
+}
+
 export const isNonFinishSchedule = (title: string): boolean => {
   const u = norm(title);
-  return OTHER_FAMILY_RE.test(u) && !/\b(FINISH|MATERIAL)S?\b/.test(u);
+  return (OTHER_FAMILY_RE.test(u) || isTankScheduleTitle(title)) && !/\b(FINISH|MATERIAL)S?\b/.test(u);
 };
 
 // The NARROW subset of OTHER_FAMILY_RE that names a real MEP mechanical-
@@ -3115,7 +3126,8 @@ export const isNonFinishSchedule = (title: string): boolean => {
 // exact gap left navfac-cherry-point-atc-mechanical.pdf#44's own real
 // DH-A1..DH-A6 dehumidifiers undiscovered by the whole pipeline).
 const MEP_EQUIPMENT_FAMILY_RE = /\b(PUMP|BOILER|HUMIDIFIER|DEHUMIDIFIER|COIL|CHILLER|AHU|VAV|EQUIPMENT|APPLIANCE)S?\b/;
-export const isMepEquipmentSchedule = (title: string): boolean => MEP_EQUIPMENT_FAMILY_RE.test(norm(title));
+export const isMepEquipmentSchedule = (title: string): boolean =>
+  MEP_EQUIPMENT_FAMILY_RE.test(norm(title)) || isTankScheduleTitle(title);
 
 // A real, standard cross-firm MEP title — "…CONNECTION SCHEDULE", "…
 // CALCULATION…", or "…ISOLATION SCHEDULE" — names a table that cross-
@@ -7362,7 +7374,14 @@ export function scheduleTableFromODL(
       ? "equipment"
       : "reference";
   }
-  if (kind === "finish" && titleText && isNonFinishSchedule(titleText)) return null;
+  if (kind === "finish" && titleText && isNonFinishSchedule(titleText)) {
+    // Match the geometric extractor's finish→equipment recovery above.
+    // Sparse catalog schedules can clear the generic finish header bar while
+    // missing the equipment rating-word bar; dropping them here makes the ODL
+    // path less capable than the same table's geometric path.
+    if (isMepEquipmentSchedule(titleText)) kind = "equipment";
+    else return null;
+  }
 
   // A real, standard cross-firm MEP title — "…CONNECTION SCHEDULE" (electrical
   // OR mechanical) — names a table that cross-REFERENCES equipment tags a

@@ -1072,7 +1072,7 @@ test("a lone unexplained token never mints a column — the sub-tier needs a par
 // MATERIAL | COMMENTS) extracted as 54 "finish" rows, so a finish code
 // colliding with a door mark would chain to a DOOR — a confidently wrong
 // product in the bid. Refused by title, and the drop is named.
-import { isNonFinishSchedule } from "../src/lib/sheetgraph.ts";
+import { isMepEquipmentSchedule, isNonFinishSchedule } from "../src/lib/sheetgraph.ts";
 
 test("isNonFinishSchedule: other families refuse, anything naming FINISH or MATERIAL is kept", () => {
   for (const t of ["DOOR SCHEDULE", "DOOR AND WINDOW SCHEDULE", "PARTITION SCHEDULE", "EQUIPMENT SCHEDULE", "LIGHTING SCHEDULE"]) {
@@ -1092,10 +1092,35 @@ test("isNonFinishSchedule: real MEP-equipment families refuse too (ledger item 2
   // the moment it was tried — the real Bessemer sample's own "FAN SCHEDULE"
   // is a legitimate finish-kind table (diffuser/grille/register), not an
   // HVAC fan-equipment one, and the word alone can't tell the two apart.
-  for (const t of ["CONDENSING HOT WATER BOILER SCHEDULE", "HUMIDIFIER SCHEDULE", "HOT WATER REHEAT COIL SCHEDULE", "CHILLER SCHEDULE", "CONDENSATE PUMP SCHEDULE", "AHU SCHEDULE", "VAV SCHEDULE"]) {
+  for (const t of ["CONDENSING HOT WATER BOILER SCHEDULE", "HUMIDIFIER SCHEDULE", "HOT WATER REHEAT COIL SCHEDULE", "CHILLER SCHEDULE", "CONDENSATE PUMP SCHEDULE", "AHU SCHEDULE", "VAV SCHEDULE", "EXPANSION AND COMPRESSION TANK SCHEDULE"]) {
     assert.equal(isNonFinishSchedule(t), true, t);
   }
   assert.equal(isNonFinishSchedule("FAN SCHEDULE"), false, "FAN stays out of the guard on purpose — see this test's own comment");
+});
+
+test("tank schedule classification survives a concatenated extracted title", () => {
+  assert.equal(isMepEquipmentSchedule("EXPANSION AND COMPRESSION TANK SCHEDULE"), true);
+  assert.equal(isMepEquipmentSchedule("EPANSIONANDCOPRESSIONTANKSCHEDULE"), true);
+  assert.equal(isNonFinishSchedule("EPANSIONANDCOPRESSIONTANKSCHEDULE"), true);
+  assert.equal(isMepEquipmentSchedule("TANK MATERIAL SCHEDULE"), true, "equipment-family classification is independent of finish/material exclusion");
+  assert.equal(isNonFinishSchedule("TANK MATERIAL SCHEDULE"), false, "an explicit MATERIAL title remains protected");
+});
+
+test("finish→equipment reclassification keeps a sparse tank schedule in the graph", () => {
+  const sched: SheetSpans = {
+    key: "tank.pdf#1",
+    sheet_number: "M-602",
+    spans: [
+      sp("EXPANSION AND COMPRESSION TANK SCHEDULE", 100, 20),
+      sp("MARK", 100, 50), sp("SERVICE", 220, 50), sp("MANUFACTURER", 380, 50), sp("MODEL", 540, 50), sp("REMARKS", 680, 50),
+      sp("ET-1", 100, 75), sp("CHILLED WATER", 220, 75), sp("WESSELS", 380, 75), sp("NLA-35", 540, 75), sp("1,2", 680, 75),
+    ],
+  };
+  const graph = buildSheetGraph([sched]);
+  const tank = graph.tables.find((table) => table.rows.some((row) => row.key === "ET-1"));
+  assert.ok(tank, "ET-1 row survives finish-family exclusion");
+  assert.equal(tank.kind, "equipment");
+  assert.ok(graph.notes.some((note) => /EXPANSION AND COMPRESSION TANK SCHEDULE/.test(note) && /reclassified as equipment-kind/.test(note)));
 });
 
 test("a DOOR SCHEDULE never becomes a finish table — and the drop is NAMED", () => {
