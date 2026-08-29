@@ -115,21 +115,23 @@ the whole deterministic (non-LLM) claim.
 ## 3. Current real state, per set, per metric
 
 **The numbers below are the latest independently verified forced-cold
-full-corpus gate**, run 2026-08-29 against commit `b1c1082` in 45.9 seconds.
+full-corpus gate**, run 2026-08-29 against commit `a372424` in 53.5 seconds.
 
 | Set | takeoff-eval | reference-eval | graph-eval (rowsym) | Status |
 |---|---|---|---|---|
 | **bessemer** | **100.0%** (10/10) | **100.0%** (12/12) | rowsym 100.0% | Expected-tag takeoff and reference closed. |
-| **itd-d1-lab** | **98.3%** (114/116) | **100.0%** (34/34) | rowsym 100.0% | US-2 and WC-1 remain small overcounts. |
+| **itd-d1-lab** | **100.0%** (116/116) | **100.0%** (34/34) | rowsym 100.0% | Closed. Tight cross-sheet registration removes plumbing plan/foundation redraws without collapsing distinct locations. |
 | **federal-mech** | **100.0%** (83/83) | **100.0%** (31/31) | rowsym 100.0% | Expected tags closed; 19 extracted real schedule rows remain pending false-add key audit. |
-| **navfac-cherry-point-atc** | **90.2%** (194/215) | **90.3%** (28/31) | rowsym 100.0% | Remaining vector/text-backed gaps center on pump/valve refusals and a few air-device undercounts. |
-| **baker-county-eoc** | **85.0%** (34/40) | **100.0%** (21/21) | rowsym 100.0% | Exit-sign labels, RG-1, and the final reference mismatch closed in the latest batch. |
+| **navfac-cherry-point-atc** | **93.5%** (201/215) | **100.0%** (31/31) | rowsym 100.0% | Remaining vector/text-backed gaps center on pump/valve refusals and a few air-device undercounts. |
+| **baker-county-eoc** | **87.5%** (35/40) | **100.0%** (21/21) | rowsym 100.0% | Roof drains are closed; five vector-backed fixture/luminaire deltas remain. |
 | **bldg5406-hvac-demo** | **47.8%** (11/23) | 0/0 vacuous | rowsym 64.7% | Most remaining misses use exploded vector letterforms; see §7. |
 | **itd-d1-lab-raster** | 0.0% (correct — see below) | 0/0 cells, vacuous | rowsym 0.0% (vacuous — all-refused key) | **This 0% is the CORRECT, expected answer, not a failure.** This set is a synthetically-rasterized (zero vector text) version of itd-d1-lab's own M1.0 sheet, built specifically to prove the pipeline *refuses cleanly* on a scanned page instead of crashing or inventing data. Confirmed: every real code path refuses honestly, no crashes. This is what "100%" looks like for a raster set under this project's own honesty rules — it will only ever change if OCR is added. |
 
-**Current corpus aggregate:** takeoff 446/515 exact (86.6%), quantity delta
-114; reference 126/129 exact (97.7%); graph 91/91 cells exact and 95.7%
-row-symbol recall. Per-set closure remains the goal (§1).
+**Current corpus aggregate:** takeoff 456/515 exact (88.5%), quantity delta
+101; excluding the intentional raster refusal set, takeoff is 456/487 exact
+(93.6%) with quantity delta 37. Reference is 129/129 exact (100%); graph is
+91/91 cells exact and 95.7% row-symbol recall. Per-set closure remains the
+goal (§1).
 
 ---
 
@@ -268,9 +270,10 @@ that discloses its real limits.
 
 ## 8. Immediate next steps (as of this file's writing)
 
-1. Start the next five-fix batch from the verified 86.6% takeoff, 97.7%
-   reference, and 95.7% graph baseline.
-2. Prioritize NAVFAC repeated views/air devices, Baker's remaining
-   vector-backed deltas, and the seven graph row-symbol misses.
+1. Start the next five-fix batch from the verified 88.5% takeoff (93.6%
+   excluding the intentional raster refusal set), 100% reference, and 95.7%
+   graph baseline.
+2. Prioritize NAVFAC air-device/pump gaps, Baker's five remaining
+   vector-backed deltas, and Building 5406's six graph row-symbol misses.
 3. Continue directly in the coordinator VM. Do not dispatch workers or
    subagents.

@@ -143,22 +143,43 @@ Takeoff by set:
     printed MCA `33.0`; reference improved 125/129 → 126/129 (97.7%).
   - Graph remains 91/91 cells exact and row-symbol recall improves
     95.0% → 95.7%; NAVFAC reaches 100% row-symbol recall.
+- Third five-fix accuracy batch, independently verified forced-cold on
+  2026-08-29 at commit `a372424` (53.5 seconds):
+  - Takeoff improved 446/515 → 456/515 exact (86.6% → 88.5%); excluding
+    the intentional raster refusal set, the applicable result is 456/487
+    (93.6%) with quantity delta 37.
+  - Long-family stacked pump tags recover when PDF text extraction separates
+    the alphanumeric suffix above or below its family stem.
+  - Repeated appearances of individually numbered equipment marks across
+    plans/details collapse to one scheduled unit. NAVFAC reaches 201/215.
+  - The production query surface now exposes raw cells for every extracted
+    table kind, not only tag-free reference tables. Reference reaches
+    129/129 (100%) without a second PDF-processing pass.
+  - Roof-drain labels on explicit roof plans count directly under a repeated
+    family quorum; Baker `RD-1` reaches 4/4.
+  - Tight cross-sheet registration overrides missing or incidental
+    contradictory nearest-room text. ITD `US-2` and `WC-1` now close and the
+    set reaches 116/116 (100%) while the distinct `SS-1` pair remains 2/2.
+  - The first gate exposed an over-broad plumbing-label implementation that
+    overcounted ITD. It was rejected, narrowed to roof drains, and the full
+    gate was rerun before acceptance.
+  - Reference is 100%; graph remains 91/91 cells exact and 95.7% row-symbol
+    recall.
 
 ## Verification in progress
 
-- Start the next five-fix accuracy batch from the current 86.6% takeoff,
-  126/129 reference, and 95.7% graph baseline.
+- Start the next five-fix accuracy batch from the current 88.5% takeoff
+  (93.6% applicable), 129/129 reference, and 95.7% graph baseline.
 
 ## Local implementation queue
 
-- NAVFAC's remaining aligned-view overcounts and air-device undercounts are
-  now the largest vector/text-backed quantity gap.
-- Baker's remaining deterministic gaps are `X1`, `RD-1`, `HB-1`, `E1`,
-  `RG-1`, `HB-2`, `P1`, and `V1`.
-- Reference has four remaining cells: three correctly extracted NAVFAC
-  equipment-schedule cells are not surfaced through the reference-table
-  output shape, and Baker's authored `RTU-01` MCA expected value conflicts
-  with the extracted schedule (`33.0`; `45 A` appears under MOCP).
+- NAVFAC's remaining air-device undercounts and pump/valve refusals are the
+  largest vector/text-backed quantity gap.
+- Baker's remaining deterministic gaps are `HB-1`, `E1`, `HB-2`, `P1`, and
+  `V1`.
+- Building 5406's exploded-letterform VAV rows account for all six graph
+  row-symbol misses.
+- Reference extraction is closed at 129/129.
 
 Cloud dispatch and all subagent dispatch are prohibited by the user's
 2026-08-29 instruction. The coordinator VM is the only execution path.
