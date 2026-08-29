@@ -4024,13 +4024,14 @@ export class Session {
             !occ.some((tagged) => Math.hypot(tagged.cx - entry.at[0], tagged.cy - entry.at[1]) <= anchor.h * 2));
         }
       }
-      // Roof plans commonly label drain placements directly while listing
-      // them in a general plumbing-fixture schedule. Keep this deliberately
-      // narrower than all plumbing fixtures: foundation/floor plans often
-      // redraw the same fixture across views.
-      const roofDrainPlacement = /^RD(?:-|$)/i.test(t)
+      // Roof plans commonly label drain and freeze-proof hose-bibb
+      // placements directly while listing them in a general plumbing-
+      // fixture schedule. Keep this deliberately narrower than all plumbing
+      // fixtures: foundation/floor plans often redraw the same fixture
+      // across views.
+      const roofFixturePlacement = /^(?:RD|HB)(?:-|$)/i.test(t)
         && (sh.spans || []).some((span) => /\bROOF\s+PLAN\b/i.test(span.str));
-      if (roofDrainPlacement) {
+      if (roofFixturePlacement) {
         const familyTagCount = tableSiblingKeys.reduce((sum, key) => sum + occOf(sh, key).length, 0);
         if (familyTagCount >= 4) {
           for (const tagged of occ) {
