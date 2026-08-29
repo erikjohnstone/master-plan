@@ -3117,6 +3117,39 @@ export const isNonFinishSchedule = (title: string): boolean => {
 const MEP_EQUIPMENT_FAMILY_RE = /\b(PUMP|BOILER|HUMIDIFIER|DEHUMIDIFIER|COIL|CHILLER|AHU|VAV|EQUIPMENT|APPLIANCE)S?\b/;
 export const isMepEquipmentSchedule = (title: string): boolean => MEP_EQUIPMENT_FAMILY_RE.test(norm(title));
 
+// A real, standard cross-firm MEP title — "…CONNECTION SCHEDULE", "…
+// CALCULATION…", or "…ISOLATION SCHEDULE" — names a table that cross-
+// REFERENCES equipment tags a DEDICATED per-category schedule already
+// defines elsewhere (a pump schedule, an AHU schedule, …), carrying only
+// installation/spec data about equipment defined elsewhere (hookup info,
+// a derived load number, a vibration-isolator selection), never a catalog
+// identity column of its own — structurally the vocabulary-free "reference"
+// kind, not a second, competing definition of the same equipment. Left
+// classified "equipment" (its own bare MARK/TAG/SYMBOL key column and a
+// few EQUIPMENT_HEADERS-vocabulary hits are entirely enough to qualify it
+// on both bars sweepScheduleRow's own accessory-narrowing checks), every
+// tag it cross-references becomes a real SECOND schedule row for that same
+// key — real, corpus-found: navfac-cherry-point-atc-mechanical.pdf's own
+// VIBRATION ISOLATION SCHEDULE (MARK/BASE TYPE/ISOLATOR TYPE/MINIMUM
+// DEFLECTION) keys a bare "MARK" = "AHU-M1", a SECOND bare-anchor candidate
+// alongside the real AIR HANDLING UNIT SCHEDULE's own AHU-M1 row — with TWO
+// bare-anchor rows now competing, sweepScheduleRow's own accessory-
+// narrowing (which requires EXACTLY one bare-anchor survivor) correctly
+// declines to fire, and a real, resolvable 3-way collision (this table, the
+// CHW CONTROL VALVE SCHEDULE's qualified "UNIT MARK" row, and the FAN SOUND
+// POWER LEVEL SCHEDULE's reference-kind row) stands as an unresolved 4-way
+// "ambiguous" refusal. MODEL/MANUFACTURER absence is the same discriminator
+// mcp/src/session.ts's OWN scheduleTableFromODL CONNECTION/CALCULATION
+// check already established (see that function's own comment): a genuine
+// per-item catalog schedule always states what a real purchasable product
+// is; a pure spec/cross-reference row about equipment defined elsewhere
+// never does, regardless of how much real rating data its other columns
+// carry — so a genuine "ISOLATION VALVE SCHEDULE" naming real purchasable
+// valves (MODEL/MANUFACTURER present) is never caught by this.
+const REFERENCE_CROSS_TABLE_RE = /\b(CONNECTION|CALCULATION|ISOLATION)\b/;
+export const isReferenceCrossTable = (title: string, headers: string[]): boolean =>
+  REFERENCE_CROSS_TABLE_RE.test(norm(title)) && !headers.some((h) => headerLabel(h, ["MODEL", "MANUFACTURER"]));
+
 // A real MEP-equipment family can hide behind a title that names NO
 // recognizable family at all, so isMepEquipmentSchedule's own title check
 // never gets a chance to run — real, found live (itd-d1-lab-mechanical.pdf's
@@ -6386,6 +6419,19 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
           notes.push(`${s.key}: "${t.title.text}" carries real motor/electrical nameplate data (VOLTAGE/PHASE/AMPS/HP/ESP/…) inside its own header region, not just a finish/material schedule's own vocabulary — reclassified as equipment-kind (its title alone named no recognizable equipment family, so isMepEquipmentSchedule's own title check never applied).`);
           t.kind = "equipment";
           reclassified.add(t);
+        } else if (kind === "equipment" && t.title && isReferenceCrossTable(t.title.text, t.headers)) {
+          // A cross-reference/spec table about equipment defined elsewhere
+          // (VIBRATION ISOLATION SCHEDULE, a CONNECTION or CALCULATION
+          // table) qualified equipment-kind on real EQUIPMENT_HEADERS hits
+          // plus a bare MARK/TAG/SYMBOL key column — same shape as a genuine
+          // per-item catalog schedule, but it names no catalog identity of
+          // its own (no MODEL/MANUFACTURER). Left equipment-kind, its bare-
+          // anchor row becomes a second real candidate definition for a tag
+          // a dedicated schedule already defines, defeating sweepScheduleRow's
+          // own accessory-narrowing (which only fires with EXACTLY one
+          // bare-anchor survivor) — see isReferenceCrossTable's own comment.
+          notes.push(`${s.key}: "${t.title.text}" names a cross-reference/spec table about equipment defined elsewhere (no MODEL/MANUFACTURER column of its own) — reclassified as reference-kind so its own bare key column never competes as a second device definition.`);
+          t.kind = "reference";
         }
         // table-level building: its own title first, the sheet's context second
         const titleB = t.title ? buildingMentions(t.title.text) : [];
@@ -7352,8 +7398,17 @@ export function scheduleTableFromODL(
   // MODEL/MANUFACTURER anywhere) cross-references RTU-1/RTU-2 by their real
   // tag and, left "equipment", throws the exact same self-ambiguity this
   // CONNECTION check already exists to prevent.
-  if (kind === "equipment" && /\b(CONNECTION|CALCULATION)\b/.test(titleText) &&
-      !headers.some((h) => headerLabel(h, ["MODEL", "MANUFACTURER"]))) {
+  // ISOLATION joins CONNECTION/CALCULATION on the exact same MODEL/
+  // MANUFACTURER-absence gate via the shared isReferenceCrossTable helper
+  // (see its own comment) — a "…ISOLATION SCHEDULE" title (a vibration-
+  // isolator selection table) is the same cross-reference/spec shape,
+  // real, corpus-found: navfac-cherry-point-atc-mechanical.pdf's own
+  // VIBRATION ISOLATION SCHEDULE, recovered via this ODL adapter path,
+  // keys a bare MARK = "AHU-M1" and, left "equipment", competed as a
+  // second bare-anchor candidate against the real AIR HANDLING UNIT
+  // SCHEDULE row, defeating sweepScheduleRow's own accessory-narrowing
+  // (which only fires with EXACTLY one bare-anchor survivor).
+  if (kind === "equipment" && isReferenceCrossTable(titleText, headers)) {
     kind = "reference";
   }
 
