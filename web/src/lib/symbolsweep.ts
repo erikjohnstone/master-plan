@@ -1604,7 +1604,8 @@ export function corroborateFingerprint(
  * (same-sheet sibling copies of the counted geometry), promote those
  * best withhelds. The seed (`excludeCenter`) counts as that one
  * confident instance — matchSymbol hid it, but it is already in the
- * takeoff. A single leftover labeled near-miss stays withheld: that is
+ * takeoff. The seed occurrence itself is not a leftover — it is already
+ * counted. A single leftover labeled near-miss stays withheld: that is
  * the typical schematic-versus-plan extra, not a sibling cluster.
  */
 function promoteLabeledNearMisses(
@@ -1618,7 +1619,8 @@ function promoteLabeledNearMisses(
 ): void {
   const leftoverOcc = occ
     .map((o, i) => ({ o, i }))
-    .filter(({ i }) => !matchedOcc.has(i));
+    .filter(({ o, i }) => !matchedOcc.has(i)
+      && !(excludeCenter && Math.hypot(o.cx - excludeCenter[0], o.cy - excludeCenter[1]) <= R));
   const labeledLeftovers = leftoverOcc.filter(({ o }) =>
     leftover.some((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R),
   );
@@ -1632,6 +1634,7 @@ function promoteLabeledNearMisses(
     let best: SweepWithheld | null = null;
     let bestD = Infinity;
     for (const w of leftover) {
+      if (claimed.has(w)) continue;
       const d = Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy);
       if (d <= R && d < bestD) {
         best = w;
@@ -1682,7 +1685,8 @@ export interface SweepSheetResult {
  * through as WITHHELD too, with the tag-adjacency noted when one is drawn
  * beside it — except when this sheet already has exactly one confident
  * counted instance (a committed match, or the seed that `excludeCenter`
- * hid) and two or more still-unclaimed same-tag occurrences each sit
+ * hid — the seed occurrence itself is not a leftover) and two or more
+ * still-unclaimed same-tag occurrences each sit
  * next to a near-bar withheld (a labeled same-convention family whose
  * fingerprint cleared the bar at the seed and missed it at the siblings
  * by hatch/size, not identity). A single leftover labeled near-miss is

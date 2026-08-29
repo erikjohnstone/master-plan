@@ -266,6 +266,25 @@ test("classifySweepMatches: a single leftover labeled near-bar match stays withh
   assert.ok(r.withheld.some((w) => w.reason.includes("tag is drawn beside it")), "the leftover stays a disclosed question");
 });
 
+test("classifySweepMatches: the seed occurrence does not count as a leftover in the family rule", () => {
+  // Same-sheet extra sitting close enough that its withheld is also
+  // within R of the seed tag. Treating the seed's own tag as leftover #2
+  // would promote that one extra (the schematic/cross-ref shape). The
+  // seed is already counted — it is not a leftover.
+  const anchorSegs = place([{ at: [200, 200] }]);
+  const anchor = tagNear([200, 200]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const extra: Point = [250, 200];
+  const sheetSegs = place([{ at: [200, 200] }, { at: extra }]);
+  const occ = [tagNear([200, 200]), tagNear(extra)];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {
+    excludeCenter: cf.fp.center,
+    scoreHigh: 1.01,
+  });
+  assert.equal(r.matches.length, 0, "seed + one nearby leftover is not a family of two leftovers");
+  assert.ok(r.withheld.length >= 1, "the leftover stays a disclosed question");
+});
+
 test("classifySweepMatches: two leftover labeled near-bar matches on a one-instance sheet COUNT", () => {
   // Same-convention siblings of the seed: the fingerprint cleared the bar
   // once and missed it twice by hatch/size, each leftover still carrying
