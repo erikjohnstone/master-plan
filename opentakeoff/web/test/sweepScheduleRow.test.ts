@@ -408,6 +408,28 @@ test("dedupeAlignedSameSheetViews: fewer than four aligned tag pairs is insuffic
   assert.deepEqual(redundant, [], "weak symmetry on a normal plan cannot erase a real installation");
 });
 
+test("dedupeAlignedSameSheetViews: paired duct/pipe enlarged-plan captions admit four paired tags with two aligned", () => {
+  const landmarks: TaggedViewLandmark[] = [
+    { tag: "B-1", at: [100, 100] }, { tag: "B-1", at: [600, 390] },
+    { tag: "B-2", at: [120, 200] }, { tag: "B-2", at: [620, 202] },
+    { tag: "DH-1", at: [140, 300] }, { tag: "DH-1", at: [640, 300] },
+    { tag: "FCU-1", at: [160, 400] }, { tag: "FCU-1", at: [660, 510] },
+  ];
+  const instances = [{ id: "left", at: [150, 300] as Point }, { id: "right", at: [650, 300] as Point }];
+  const captions = [
+    { text: "MECHANICAL DUCT ENLARGED PLAN - MECH RM", at: [250, 600] as Point },
+    { text: "MECHANICAL PIPE ENLARGED PLAN - MECH RM", at: [750, 600] as Point },
+  ];
+  assert.deepEqual(dedupeAlignedSameSheetViews(instances, landmarks, 1000, 800, captions), ["right"]);
+  assert.deepEqual(dedupeAlignedSameSheetViews(
+    instances,
+    landmarks,
+    1000,
+    800,
+    captions.map((caption) => ({ ...caption, text: caption.text.replace(/DUCT|PIPE/, "DUCT") })),
+  ), []);
+});
+
 test("dedupeAlignedSameSheetViews: horizontal stacked views retain the larger view count", () => {
   const landmarks: TaggedViewLandmark[] = ["AHU-1", "P-1", "P-2", "AS-1"].flatMap((tag, i) => [
     { tag, at: [600 + i * 100, 500] as Point },

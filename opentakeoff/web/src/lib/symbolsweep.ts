@@ -1918,6 +1918,11 @@ export interface TaggedViewLandmark {
   at: Point;
 }
 
+export interface TaggedViewCaption {
+  text: string;
+  at: Point;
+}
+
 export interface TagClaimCoverage {
   claimed: number;
   rawMatches: number;
@@ -1956,11 +1961,12 @@ export function dedupeAlignedSameSheetViews<Id>(
   landmarks: TaggedViewLandmark[],
   sheetWidthPx: number,
   sheetHeightPx: number,
+  captions: TaggedViewCaption[] = [],
 ): Id[] {
   if (instances.length < 2 || landmarks.length < 8) return [];
 
   type Axis = "vertical" | "horizontal";
-  const support = (axis: Axis): number => {
+  const support = (axis: Axis): { aligned: number; paired: number } => {
     const byTag = new Map<string, TaggedViewLandmark[]>();
     for (const landmark of landmarks) {
       const tag = landmark.tag.trim().toUpperCase();
@@ -1969,26 +1975,43 @@ export function dedupeAlignedSameSheetViews<Id>(
     }
     const split = axis === "vertical" ? sheetWidthPx / 2 : sheetHeightPx / 2;
     const orthogonalTolerance = (axis === "vertical" ? sheetHeightPx : sheetWidthPx) * 0.03;
-    let count = 0;
+    let aligned = 0, paired = 0;
     for (const group of byTag.values()) {
       const first = group.filter((p) => (axis === "vertical" ? p.at[0] : p.at[1]) < split);
       const second = group.filter((p) => (axis === "vertical" ? p.at[0] : p.at[1]) >= split);
       if (first.length !== 1 || second.length !== 1) continue;
+      paired++;
       const orthogonalDelta = Math.abs(
         (axis === "vertical" ? first[0].at[1] : first[0].at[0])
         - (axis === "vertical" ? second[0].at[1] : second[0].at[0]),
       );
-      if (orthogonalDelta <= orthogonalTolerance) count++;
+      if (orthogonalDelta <= orthogonalTolerance) aligned++;
     }
-    return count;
+    return { aligned, paired };
   };
 
   const verticalSupport = support("vertical");
   const horizontalSupport = support("horizontal");
-  const axis: Axis = verticalSupport >= horizontalSupport ? "vertical" : "horizontal";
-  if (Math.max(verticalSupport, horizontalSupport) < 4) return [];
-
+  const axis: Axis = verticalSupport.aligned >= horizontalSupport.aligned ? "vertical" : "horizontal";
+  const evidence = axis === "vertical" ? verticalSupport : horizontalSupport;
   const split = axis === "vertical" ? sheetWidthPx / 2 : sheetHeightPx / 2;
+  const captionKind = (text: string): "duct" | "pipe" | null =>
+    /\bDUCT\b/i.test(text) ? "duct" : /\b(?:PIPE|PIPING)\b/i.test(text) ? "pipe" : null;
+  const captionStem = (text: string): string =>
+    text.toUpperCase().replace(/\b(?:DUCT|PIPE|PIPING)\b/g, "").replace(/[^A-Z0-9]+/g, " ").trim();
+  const pairedSystemCaptions = captions.some((first) => captions.some((second) =>
+    first !== second
+    && (axis === "vertical" ? first.at[0] : first.at[1]) < split
+    && (axis === "vertical" ? second.at[0] : second.at[1]) >= split
+    && /\bENLARGED\s+PLANS?\b/i.test(first.text)
+    && /\bENLARGED\s+PLANS?\b/i.test(second.text)
+    && captionKind(first.text) !== null
+    && captionKind(second.text) !== null
+    && captionKind(first.text) !== captionKind(second.text)
+    && captionStem(first.text) === captionStem(second.text)
+  ));
+  if (evidence.aligned < 4 && !(pairedSystemCaptions && evidence.paired >= 4 && evidence.aligned >= 2)) return [];
+
   const first = instances.filter((p) => (axis === "vertical" ? p.at[0] : p.at[1]) < split);
   const second = instances.filter((p) => (axis === "vertical" ? p.at[0] : p.at[1]) >= split);
   if (!first.length || !second.length) return [];
