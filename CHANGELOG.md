@@ -6,7 +6,8 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
 ### Fixed
 - **`sweep_schedule_row` claims the nearest same-tag occurrence, not the first in array order.** Two real labels sitting inside one footprint of each other used to bill both matches to whichever tag sorted first and leave the later one `text_only`.
-- **A same-convention labeled family no longer dies on the unlabeled commit bar.** When a sheet already has exactly one confident instance (including the seed) and two or more leftover own-tag occurrences each sit next to a near-bar withheld, those siblings count. A single leftover labeled near-miss stays a disclosed question — that is the schematic-versus-plan extra, not a second install.
+- **Overlapping matches collapse to one.** Two centroids closer than half a symbol diagonal are the same ink (matchSymbol's own overlap doctrine); the better score counts and the shadow is a disclosed question. Nearest-claim alone would have billed a stacked schematic/plan pair as two installs.
+- **A same-convention labeled family no longer dies on the unlabeled commit bar.** When a sheet already has exactly one confident instance (including the seed) and two or more leftover own-tag occurrences each sit next to a near-bar withheld — and those leftovers are not extra labels on the counted instance — those siblings count. A single leftover labeled near-miss stays a disclosed question — that is the schematic-versus-plan extra, not a second install.
 
 ## 2026-08-29 — multi-hyphen equipment tags
 
