@@ -3776,7 +3776,7 @@ export class Session {
     // marker resized to a 12×-smaller plan has a 12×-smaller footprint, and a
     // radius left at the seed's size would sweep up whatever tag happened to
     // be nearby. Unscaled sheets take the identical radius they always did.
-    type CountedMatch = SweepMatch & { tag_at: [number, number, number, number]; multiplier?: number };
+    type CountedMatch = SweepMatch & { tag_at: [number, number, number, number]; multiplier?: number; text_counted?: boolean };
     const perSheet: {
       state: SheetState;
       matches: CountedMatch[];
@@ -3861,6 +3861,32 @@ export class Session {
         candidates = { considered: icls.candidates_considered, dropped: 0 };
         complete = icls.complete;
         scaled = undefined;
+      }
+      // Compound luminaire labels ("R2/C-11", "S1/INV-3") are themselves
+      // explicit instance marks. Trust them only when the same plan carries
+      // a large family-wide quorum of independently tagged luminaires; this
+      // excludes isolated schedule notes and ordinary prefix collisions.
+      if (/\bLUMINAIRE\b/i.test(table)) {
+        const familyCompoundCount = siblings.reduce((sum, key) =>
+          sum + compoundTagOcc(sh.spans || [], key).length, 0);
+        if (familyCompoundCount >= 10) {
+          const claimed = new Set(matches.map((m) => m.tag_at.join(",")));
+          for (const tagged of compoundTagOcc(sh.spans || [], t)) {
+            const key = tagged.bbox.join(",");
+            if (claimed.has(key)) continue;
+            claimed.add(key);
+            matches.push({
+              at: [tagged.cx, tagged.cy],
+              score: 1,
+              rotation: 0,
+              mirrored: false,
+              tag_at: tagged.bbox,
+              text_counted: true,
+            });
+          }
+          text_only = text_only.filter((entry) =>
+            !matches.some((m) => Math.hypot(m.at[0] - entry.at[0], m.at[1] - entry.at[1]) <= anchor.h * 2));
+        }
       }
       const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
       perSheet.push({
@@ -4000,6 +4026,8 @@ export class Session {
     if (supplementalInlineFp) notes.push(`Whole-shape matches were preserved and a separately corroborated hatch-size/pitch motif supplemented only this tag's still-unclaimed drawn occurrences; each occurrence contributes at most one count.`);
     const multiplied = perSheet.flatMap((p) => p.matches.filter((m) => (m.multiplier ?? 1) > 1));
     if (multiplied.length) notes.push(`${multiplied.length} drawn callout(s) carry explicit TYP multipliers; their printed quantities were applied to the installed count.`);
+    const textCounted = perSheet.flatMap((p) => p.matches.filter((m) => m.text_counted));
+    if (textCounted.length) notes.push(`${textCounted.length} additional compound luminaire labels were counted directly under a family-wide quorum; each explicit tag/circuit label represents one drawn fixture.`);
     if (opts.commit && !found) notes.push("commit requested but nothing cleared the bar — no shapes were committed.");
     // #186, same disclosure discipline as symbol_sweep: a ratio the count
     // depends on is stated, and an assumed ratio over an empty sheet is named
@@ -4044,7 +4072,7 @@ export class Session {
       sheets: perSheet.map((p) => ({
         sheet: p.state.key,
         found: p.matches.reduce((sum, match) => sum + (match.multiplier ?? 1), 0),
-        matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, tag_at: Session.wireBox(m.tag_at), ...(m.multiplier ? { multiplier: m.multiplier } : {}) })),
+        matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, tag_at: Session.wireBox(m.tag_at), ...(m.multiplier ? { multiplier: m.multiplier } : {}), ...(m.text_counted ? { counted_from: "compound_label" as const } : {}) })),
         withheld: p.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, reason: w.reason })),
         excluded: p.excluded.map((e) => ({ at: [round1(e.at[0]), round1(e.at[1])], tag: e.tag })),
         text_only: p.text_only,
