@@ -369,6 +369,15 @@ test("compoundTagOcc: still refuses R10/R1A as a match for R1", () => {
   assert.equal(compoundTagOcc(spans, "R1").length, 0, "exact-length and alnum-continuation spans are never compound");
 });
 
+test("compoundTagOcc: a work-note sentence that mentions the key is not an instance", () => {
+  const spans: FlatSpan[] = [
+    { str: "CUH-T1 ON FLOOR 3; CUH-T2 ON FLOOR 5.", x0: 10, y0: 20, x1: 400, y1: 30 },
+    { str: "R1 /C-11", x0: 10, y0: 40, x1: 80, y1: 50 },
+  ];
+  assert.equal(compoundTagOcc(spans, "CUH-T1").length, 0);
+  assert.equal(compoundTagOcc(spans, "R1").length, 1);
+});
+
 // deepHyphenChainTagOcc — a THIRD tier, after exact/compound AND
 // fragmentedTagOcc, for a real shape past fragmentedTagOcc's own 4-hop
 // budget: navfac-cherry-point-atc draws "CV-CHW-BP-M" as SEVEN same-row
