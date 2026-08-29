@@ -2183,6 +2183,13 @@ function harvestGeometricSubTiers(
   const MAX_ROWS = 15;
   for (let ri = startIdx, n = 0; ri < rows.length && n < MAX_ROWS; ri++, n++) {
     if (looksLikeDeepDataRow(rows[ri])) break;
+    const leading = [...rows[ri]].sort((a, b) => a.x - b.x)[0];
+    const leadingKey = leading ? rowKeyOf(leading.str, "equipment") : null;
+    // A real digit-bearing equipment key is a definitive data boundary even
+    // when the rest of its sparse row contains too little numeric content
+    // for looksLikeDeepDataRow (AS-1/E1/AHU-1 fixture shapes). Deep header
+    // labels may be bare words, but they do not lead with a catalog tag.
+    if (leadingKey && /\d/.test(leadingKey.key)) break;
     if (ri > startIdx) {
       const prev = rows[ri - 1];
       const h = prev.reduce((s, t) => s + (t.h || 8), 0) / Math.max(1, prev.length);
