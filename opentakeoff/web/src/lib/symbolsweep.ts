@@ -2269,6 +2269,12 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
         if (d < bestD) { bestD = d; best = r; }
       }
       if (!best || bestD > maxDist) best = null;
+      // A bare one/two-digit token with no room name is weak enough to be a
+      // keynote, detail number, or duct size. It must not collapse two
+      // different plan sheets merely because both nearest-token reads happen
+      // to say "12"; named rooms and conventional 3+ digit room tags retain
+      // the existing attribution path.
+      if (best && !best.name.trim() && /^\d{1,2}$/.test(best.tag.trim())) best = null;
     }
     if (best) attributed.push({ ...inst, room: best });
     else unattributed.push(inst); // no room credited — try coordinate proximity below, never guessed either way

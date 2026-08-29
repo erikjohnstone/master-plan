@@ -269,6 +269,16 @@ test("dedupeCrossDisciplineRoomViews: negative control — same tag, DIFFERENT r
   assert.equal(redundant.length, 0, "two genuinely distinct installs in two different rooms must never collapse");
 });
 
+test("dedupeCrossDisciplineRoomViews: unnamed two-digit tokens do not prove a shared room", () => {
+  const weak = { tag: "12", name: "", bbox: [990, 990, 1030, 1010] as [number, number, number, number] };
+  const instances = [
+    inst(1, "M1.0", "M", [1000, 1000], [weak]),
+    inst(2, "M2.0", "M", [1400, 1200], [weak]),
+  ];
+  assert.equal(dedupeCrossDisciplineRoomViews(instances).length, 0,
+    "the same nearby detail/size numeral on two sheets is not room-registration evidence");
+});
+
 test("dedupeCrossDisciplineRoomViews: negative control — same tag, same room, SAME discipline — a real repeat within one trade, not a redundant view", () => {
   const instances = [
     inst(1, "M3.0", "M", [1005, 1005], [ROOM]),
