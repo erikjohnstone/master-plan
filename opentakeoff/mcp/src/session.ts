@@ -3030,6 +3030,12 @@ export class Session {
     rotations?: boolean;
     mirror?: boolean;
     tolerancePx?: number;
+    /** Internal corpus-evaluation mode. A scored schedule-row placement can
+     * only count when it claims this row's own tag occurrence, so constrain
+     * geometric candidate generation to those exact claim windows. The MCP
+     * tool never sets this: interactive calls retain complete whole-sheet
+     * withheld/excluded disclosure. */
+    evaluationFast?: boolean;
   } = {}) {
     let t = (tag || "").trim().toUpperCase().replace(/\s+/g, "");
     if (!t) throw new UserError('Pass a schedule-row tag as drawn, e.g. sweep_schedule_row { tag: "T1" }.');
@@ -3157,7 +3163,9 @@ export class Session {
     // sibling keys span EVERY table in the set, not just the row's own: a
     // marker labeled with any other schedule key is that mark's instance, and
     // disclosing it as "excluded, labeled 135" beats calling it unlabeled
-    const siblings = [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(row.key).split("/").filter(Boolean))))].filter((k) => !ownMarks.has(k)).sort();
+    const siblings = opts.evaluationFast
+      ? []
+      : [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(row.key).split("/").filter(Boolean))))].filter((k) => !ownMarks.has(k)).sort();
     const table = tb.title?.text || `${tb.kind} schedule`;
 
     // 2. plan-role sheets, and every drawn occurrence of the tag on them
@@ -3368,7 +3376,14 @@ export class Session {
       const cr = sweepRatio(anchorSheet, against.sh);
       let probe: SymbolMatchResult;
       try {
-        probe = matchSymbol(cand, against.segs, { ...sweepOpts, ...(cr.scale === 1 ? {} : { scale: cr.scale }) });
+        const radius = cand.footprint * cr.scale / 2 + anchor.h;
+        probe = matchSymbol(cand, against.segs, {
+          ...sweepOpts,
+          ...(cr.scale === 1 ? {} : { scale: cr.scale }),
+          ...(opts.evaluationFast ? {
+            candidateRegions: against.occ.map((o) => ({ center: [o.cx, o.cy] as Point, radius })),
+          } : {}),
+        });
       } catch {
         // this pad's fingerprint can't survive the trip to the corroborator
         // (too small once scaled) — a wider pad may; never a hard stop
@@ -3658,6 +3673,14 @@ export class Session {
     // per-sheet classification — the shared symbolsweep.ts function, so this
     // server and the browser's own port can never silently disagree.
     for (const { sh, occ } of occBySheet) {
+      if (opts.evaluationFast && !occ.length) {
+        perSheet.push({
+          state: sh, matches: [], withheld: [], excluded: [], text_only: [],
+          candidates: { considered: 0, dropped: 0 }, complete: true,
+          elapsed_ms: 0, scale: sweepRatio(anchorSheet, sh), redundant_view: [],
+        });
+        continue;
+      }
       const g2 = await this.ensureGeometry(sh);
       if (!g2.segs.length) {
         skipped.push({ sheet: sh.key, role: "plan", reason: "no vector linework (likely a scan) — symbol matching reads the drawn segments" });
@@ -3673,7 +3696,13 @@ export class Session {
       if (fp) {
         let cls: ReturnType<typeof classifySweepMatches>;
         try {
-          cls = classifySweepMatches(t, fp, g2.segs, ratio, occ, sibSpans, anchorHForSweep, sweepOpts);
+          const radius = fp.footprint * ratio.scale / 2 + anchorHForSweep;
+          cls = classifySweepMatches(t, fp, g2.segs, ratio, occ, sibSpans, anchorHForSweep, {
+            ...sweepOpts,
+            ...(opts.evaluationFast ? {
+              candidateRegions: occ.map((o) => ({ center: [o.cx, o.cy] as Point, radius })),
+            } : {}),
+          });
         } catch (e) {
           skipped.push({ sheet: sh.key, role: "plan", reason: e instanceof Error ? e.message : String(e) });
           continue;

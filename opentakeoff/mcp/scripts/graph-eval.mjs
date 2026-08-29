@@ -199,7 +199,7 @@ async function evalSet(set) {
       const expect = (row.expect_status || "").trim();
       let status;
       try {
-        const r = await s.sweepScheduleRow(tag, {});
+        const r = await s.sweepScheduleRow(tag, { evaluationFast: true });
         status = (r.found ?? 0) > 0 ? "resolved" : "refused";
       } catch {
         status = "refused";   // sweepScheduleRow throws UserError on any refusal path

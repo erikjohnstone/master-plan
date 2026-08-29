@@ -426,6 +426,16 @@ export interface MatchOptions extends SweepOptions {
    * whose footprint carries more than this fraction of unmatched extra
    * linework demotes to withheld with the variant reason. */
   extraMax?: number;
+  /** Optional exact search windows for callers whose result can only use
+   * placements near known points (schedule-row evaluation is one such
+   * caller: a counted marker must claim that row's own drawn tag).
+   *
+   * This is a work bound, not a scoring heuristic. Candidate centroids
+   * outside every window are omitted before scoring; candidates inside are
+   * generated and scored identically to an unrestricted sweep. Normal
+   * interactive symbol_sweep calls leave this unset and retain the complete
+   * whole-sheet search. */
+  candidateRegions?: Array<{ center: Point; radius: number }>;
 }
 
 /** A fingerprint resized by a stated ratio, for matching against a sheet drawn
@@ -818,13 +828,41 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   // Sheet-wide immutable indexes are shared across every schedule-row sweep
   // in this document; see sheetMatchIndex's lifetime and tolerance contract.
   const { lengths, lenBucket, grid } = sheetMatchIndex(segs, tol);
+  const regions = opts.candidateRegions?.filter((r) =>
+    Number.isFinite(r.center[0]) && Number.isFinite(r.center[1]) && Number.isFinite(r.radius) && r.radius >= 0);
+  // If a candidate centroid is inside a requested region, every one of its
+  // anchor endpoints must be inside this expanded box. Querying the endpoint
+  // index up front avoids walking the sheet-wide length bucket for every
+  // anchor while remaining complete for all centroids the caller requested.
+  let regionSegments: Set<number> | null = null;
+  if (regions?.length) {
+    regionSegments = new Set<number>();
+    let maxRelRadius = 0;
+    for (const r of rel) {
+      maxRelRadius = Math.max(maxRelRadius, Math.hypot(r[0], r[1]), Math.hypot(r[2], r[3]));
+    }
+    for (const region of regions) {
+      const reach = region.radius + maxRelRadius + 2 * tol;
+      for (const i of grid.nearRect(
+        region.center[0] - reach, region.center[1] - reach,
+        region.center[0] + reach, region.center[1] + reach,
+      )) regionSegments.add(i);
+    }
+  }
+  const insideRequestedRegion = (x: number, y: number): boolean =>
+    !regions?.length || regions.some((r) => {
+      const dx = x - r.center[0], dy = y - r.center[1];
+      return dx * dx + dy * dy <= r.radius * r.radius;
+    });
   const bucketBand = (L: number): number[] => {
     // every sheet segment with |len − L| ≤ 2·tol (both endpoints off by tol
     // can stretch/shrink the drawn length by up to 2·tol)
     const out: number[] = [];
     for (let b = Math.floor(L - 2 * tol); b <= Math.ceil(L + 2 * tol); b++) {
       const a = lenBucket.get(b);
-      if (a) for (const i of a) if (Math.abs(lengths[i] - L) <= 2 * tol) out.push(i);
+      if (a) for (const i of a) {
+        if ((!regionSegments || regionSegments.has(i)) && Math.abs(lengths[i] - L) <= 2 * tol) out.push(i);
+      }
     }
     return out;
   };
@@ -862,6 +900,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
           const c2x = qx - bx, c2y = qy - by;
           if (Math.abs(c1x - c2x) > 2 * tol || Math.abs(c1y - c2y) > 2 * tol) continue;
           const tx = (c1x + c2x) / 2, ty = (c1y + c2y) / 2;
+          if (!insideRequestedRegion(tx, ty)) continue;
           const key = `${xi}:${Math.round(tx / quant)}:${Math.round(ty / quant)}`;
           if (seen.has(key)) continue;
           seen.add(key);

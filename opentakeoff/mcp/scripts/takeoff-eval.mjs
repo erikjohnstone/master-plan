@@ -95,7 +95,10 @@ async function evalSet(set) {
   const s = new Session();
   const files = resolveSetFiles(corpus, spec, set);
   for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
-  const takeoff = await buildPlanSetTakeoff(s, { categories: null }); // "all" — the key is authored against the full real equipment-kind scope, not a partial run
+  const takeoff = await buildPlanSetTakeoff(s, {
+    categories: null,
+    evaluationFast: true,
+  }); // "all" — scorer only needs row-tag-claimed placements; whole-sheet unlabeled disclosure is intentionally omitted
 
   const score = hasTakeoffKey
     ? scoreTakeoff(takeoff, parseTakeoffKeyCsv(readFileSync(takeoffKeyPath, "utf8")))

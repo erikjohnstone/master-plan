@@ -236,7 +236,12 @@ async function commitDetectedScale(session: Session, keys: Iterable<string>): Pr
  * LLM involved — every real decision was already made by sheetgraph.ts's
  * extraction and sweep_schedule_row's corroboration; this only walks and
  * assembles. */
-export async function buildPlanSetTakeoff(session: Session, opts: { categories?: string[] | null } = {}): Promise<PlanSetTakeoff> {
+export async function buildPlanSetTakeoff(session: Session, opts: {
+  categories?: string[] | null;
+  /** Corpus scorer optimization: preserve counted row-tag matches while
+   * omitting whole-sheet unlabeled/other-tag disclosure that no metric reads. */
+  evaluationFast?: boolean;
+} = {}): Promise<PlanSetTakeoff> {
   const categories = opts.categories ?? null;
   const graph = await session.graphForPipeline();
   const out: PlanSetTakeoff = {
@@ -323,7 +328,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
     };
 
     try {
-      const r = await session.sweepScheduleRow(tag, { commit: false });
+      const r = await session.sweepScheduleRow(tag, { commit: false, evaluationFast: opts.evaluationFast });
       item.quantity = r.found ?? 0;
       item.drawing_locations = (r.sheets || []).flatMap((ps: any) =>
         (ps.matches || []).map((m: any) => ({ sheet: ps.sheet, at: m.at as [number, number] })));

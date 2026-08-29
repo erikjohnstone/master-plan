@@ -66,6 +66,21 @@ test("a grid of identical clusters: exact count, seed excluded, deterministic or
   assert.deepEqual(again, r, "same input, same result, byte for byte");
 });
 
+test("candidate regions preserve in-window scores while pruning whole-sheet work", () => {
+  const placements = Array.from({ length: 80 }, (_, i) => ({ at: [(i % 20) * 100, Math.floor(i / 20) * 100] as Point }));
+  const segs = place(placements);
+  const fp = fingerprintSymbol(segs, RECT);
+  const full = matchSymbol(fp, segs);
+  const target = full.matches.find((m) => m.at[0] > 900 && m.at[0] < 1100 && m.at[1] > 90 && m.at[1] < 210);
+  assert.ok(target);
+
+  const radius = 5;
+  const focused = matchSymbol(fp, segs, { candidateRegions: [{ center: target.at, radius }] });
+  assert.deepEqual(focused.matches, [target], "the in-window placement is scored identically");
+  assert.equal(focused.withheld.length, 0);
+  assert.ok(focused.candidates.considered < full.candidates.considered / 20, "irrelevant whole-sheet proposals are never scored");
+});
+
 test("rotated and mirrored copies: found when enabled, ignored when disabled", () => {
   const segs = place([
     { at: [0, 0] },
