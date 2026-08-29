@@ -4046,18 +4046,9 @@ export class Session {
       }
       // An exact plan label for an individually numbered schedule mark is
       // itself placement evidence even when surrounding linework is too
-      // sparse or variable to fingerprint. This also covers one globally
-      // unique, equipment-kind plan occurrence of a specific alphanumeric
-      // mark (pump/control-valve/unit-heater schedules do not always put
-      // "UNIT" in their title). Repeatable type marks stay on their stricter
-      // family-specific paths above.
-      const uniqueSpecificEquipmentLabel = tb.kind === "equipment"
-        && occ.length === 1
-        && /[A-Z]/.test(t)
-        && /\d/.test(t)
-        && t.length >= 4;
-      if ((isIndividuallyMarkedEquipmentSchedule(table) || uniqueSpecificEquipmentLabel)
-          && !matches.length && occ.length) {
+      // sparse or variable to fingerprint. Repeatable type marks stay on
+      // their stricter family-specific paths above.
+      if (isIndividuallyMarkedEquipmentSchedule(table) && !matches.length && occ.length) {
         const tagged = occ[0];
         matches.push({
           at: [tagged.cx, tagged.cy], score: 1, rotation: 0, mirrored: false,
