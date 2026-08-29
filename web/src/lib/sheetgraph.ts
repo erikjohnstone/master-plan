@@ -7159,8 +7159,25 @@ export function scheduleTableFromODL(
   // (FLOOR/BASE/WALL/CEILING/compass directions) by construction; a door
   // schedule's own FINISH columns never carry one.
   const surfaceHits = headers.filter((h) => h.split(/\s+/).some((w) => SURFACE_WORDS.has(w))).length;
+  // A real per-item catalog schedule (MANUFACTURER + MODEL together — the
+  // SAME decisive pair this function's own CONNECTION/CALCULATION reference-
+  // demotion below already trusts to mean "an actual purchasable product")
+  // can legitimately clear only 2 EQUIPMENT_HEADERS hits when its OTHER real
+  // columns are a multi-row ODL header the compound-label flattener above
+  // couldn't resolve to named text (falling back to "COL6"/"COL7"/…, so
+  // their real vocabulary never reaches hitCount at all) — measured live:
+  // baker-county-eoc-bidset.pdf#41's own SPLIT SYSTEM CONDENSING UNIT
+  // SCHEDULE and ELECTRIC WATER HEATER SCHEDULE (EQUIP NO/LOCATION/SERVICE/
+  // MANUFACTURER/MODEL + a dozen unlabeled capacity columns) both fell one
+  // hit short of the generic eqHits>=3 bar and silently landed "reference"
+  // instead of "equipment" — invisible to buildPlanSetTakeoff's own
+  // equipment loop entirely (CU-1/CU-2/WH-1 never attempted). Narrow and
+  // local to this ODL classification only — never widens EQUIPMENT_HEADERS
+  // itself, so the geometric extractor's own unrelated gates are untouched.
+  const hasCatalogIdentity = headers.some((h) => headerLabel(h, EQUIPMENT_HEADERS) === "MANUFACTURER")
+    && headers.some((h) => headerLabel(h, EQUIPMENT_HEADERS) === "MODEL");
   let kind: TableKind = "unknown";
-  if (eqHits >= 3 && eqHits >= rmHits && eqHits >= finHits) kind = "equipment";
+  if ((eqHits >= 3 || (hasCatalogIdentity && eqHits >= 2)) && eqHits >= rmHits && eqHits >= finHits) kind = "equipment";
   else if (rmHits >= 3 && rmHits > finHits && surfaceHits >= 2) kind = "room-finish";
   else if (finHits >= 3) kind = "finish";
   const titleText = titleCell ? odlCellText(titleCell) : "";
@@ -7212,7 +7229,16 @@ export function scheduleTableFromODL(
   // anything (an actual purchasable product); a pure connection cross-
   // reference never does, regardless of how descriptive its other prose
   // columns read.
-  if (kind === "equipment" && /\bCONNECTION\b/.test(titleText) &&
+  //
+  // CALCULATION joins CONNECTION on the same real MODEL/MANUFACTURER-absence
+  // gate — a "…CALCULATION…" title (load calc, gas-demand calc, …) names a
+  // DERIVED/computed table, not a catalog: measured live, baker-county-eoc-
+  // bidset.pdf#41's own NATURAL GAS CALCULATION table (TAG/DESCRIPTION/BTU
+  // PER FIXTURE/TOTAL MBH — TAG+DESCRIPTION+MBH alone clear eqHits>=3, no
+  // MODEL/MANUFACTURER anywhere) cross-references RTU-1/RTU-2 by their real
+  // tag and, left "equipment", throws the exact same self-ambiguity this
+  // CONNECTION check already exists to prevent.
+  if (kind === "equipment" && /\b(CONNECTION|CALCULATION)\b/.test(titleText) &&
       !headers.some((h) => headerLabel(h, ["MODEL", "MANUFACTURER"]))) {
     kind = "reference";
   }
