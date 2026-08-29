@@ -2018,6 +2018,16 @@ export function prefersTagClaimCoverage(candidate: TagClaimCoverage, current: Ta
 }
 
 /**
+ * Schedules whose marks identify individually numbered equipment rather
+ * than repeatable type symbols. Repeated appearances of one such mark are
+ * plan/section/detail references to the same scheduled unit.
+ */
+export function isIndividuallyMarkedEquipmentSchedule(title: string): boolean {
+  return /\b(?:AIR HANDLING|DEDICATED OUTSIDE AIR|FAN COIL|ENERGY RECOVERY|ROOFTOP|CONDENSING UNIT|HEAT PUMP|PUMP|BOILER|CHILLER|UNIT HEATER|DEHUMIDIFIER|EXHAUST FAN)\b/i.test(title)
+    && !/\b(?:DIFFUSER|GRILLE|REGISTER|FIXTURE|LUMINAIRE)\b/i.test(title);
+}
+
+/**
  * Collapse repeated plan views drawn side-by-side on one sheet.
  *
  * Room attribution cannot distinguish these because both views may omit room

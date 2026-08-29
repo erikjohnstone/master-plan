@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, prefersTagClaimCoverage, typicalCountMultiplier, splitHyphenTagOcc, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, prefersTagClaimCoverage, typicalCountMultiplier, splitHyphenTagOcc, isIndividuallyMarkedEquipmentSchedule, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -498,4 +498,12 @@ test("splitHyphenTagOcc recovers an exact adjacent two-run tag without fuzzy joi
     { str: "M2", x0: 100, y0: 160, x1: 120, y1: 180 },
     { str: "SHHWP", x0: 80, y0: 190, x1: 140, y1: 210 },
   ], "SHHWP-M2").length, 1, "a rotated pump tag may extract its suffix immediately above the family stem");
+});
+
+test("individually marked equipment schedules exclude repeatable type-symbol schedules", () => {
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("FAN COIL UNIT SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("SECONDARY CHILLED WATER PUMP SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("GRILLE, REGISTER, AND DIFFUSER SCHEDULE"), false);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("PLUMBING FIXTURE SCHEDULE"), false);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("LUMINAIRE SCHEDULE"), false);
 });
