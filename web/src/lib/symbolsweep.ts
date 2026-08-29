@@ -1953,33 +1953,37 @@ function dedupeSameSheetViewports<Id>(instances: RoomSweepInstance<Id>[]): Redun
 // that catches both shapes identically; see its own comment for why this is
 // provably backward-compatible with every discipline-keyed case.
 //
-// The signal used: the two occurrences sit in the SAME named/numbered room
-// (via the existing room-tag reader, sheetgraph.ts's roomTags — the identical
-// "digit(s) drawn near a bubble" pattern already trusted for room-finish
-// takeoffs). `discipline` (M/P/E/… the standard "M3.0"/"P4.0" convention,
-// read the same first-token-of-the-sheet-number way layers.ts's DISCIPLINES
-// table reads a CAD layer name) is still required to be READABLE at all
-// before an instance enters dedup — an instance on a sheet with no
-// classifiable AIA-style sheet number is never guessed into this — but is no
-// longer itself the collapse key. Two genuinely SEPARATE installed units
-// sharing one tag would ordinarily sit in different rooms — that is what
-// makes them separate installs — so "same room, same tag, different sheet"
-// is a narrow, specific shape, not a general "trust the first count"
-// heuristic.
+// The signal used: the two occurrences sit at nearly the SAME page
+// coordinate (see COORD_ATTRIBUTION_MAX_PX). Same-footprint plan sheets
+// (a foundation plan and a floor plan of the identical building, an M-series
+// and a P-series enlarged view of the same room) redraw the same device
+// within a few tens of pixels; two genuinely SEPARATE installed units
+// sharing a tag sit much farther apart. Room attribution is still computed
+// (callers/tests read `room` on the result) but is no longer the collapse
+// KEY — a room label read on only one of the two sheets (sparse roomTags
+// on one plan, nothing on its sibling) used to strand a pair across the
+// attributed / unattributed pools, and a shared room name on two far-apart
+// marks used to collapse two real installs into one.
+//
+// `discipline` (M/P/E/… the standard "M3.0"/"P4.0" convention, read the
+// same first-token-of-the-sheet-number way layers.ts's DISCIPLINES table
+// reads a CAD layer name) is still required to be READABLE at all before
+// an instance enters dedup — an instance on a sheet with no classifiable
+// AIA-style sheet number is never guessed into this — but is no longer
+// itself the collapse key.
 //
 // Never applied when: the two occurrences share a SHEET *and* the same
 // titled viewport (a real repeat on one drawing is a genuine separate-
-// install signal — left alone); no room can be confidently attributed to
-// an occurrence (never guessed — see maxDist below); or only one sheet
-// is represented in a room (nothing to collapse against). SAME-sheet
-// complementary viewports of one space (a duct plan beside a piping plan,
-// two section cuts of one room) are the exception — see detectSheetViewports
-// and the viewport path at the end of dedupeCrossDisciplineRoomViews. The
-// kept count for a duplicated room is the LARGEST single-sheet count seen
-// there — never the SUM (double/triple-counts the redundant views, the
-// actual AC-1 bug) and never the smallest (a partial crop that only shows
-// some of a room's real units must never silently undercut a fuller sibling
-// view).
+// install signal — left alone); or the marks are farther apart than
+// COORD_ATTRIBUTION_MAX_PX (two real installs, even in the same named
+// room). SAME-sheet complementary viewports of one space (a duct plan
+// beside a piping plan, two section cuts of one room) are the exception
+// — see detectSheetViewports and the viewport path at the end of
+// dedupeCrossDisciplineRoomViews. The kept count for a duplicated
+// cluster is the LARGEST single-sheet count seen there — never the SUM
+// (double/triple-counts the redundant views, the actual AC-1 bug) and
+// never the smallest (a partial crop that only shows some of a room's
+// real units must never silently undercut a fuller sibling view).
 export interface RoomCandidate { tag: string; name: string; bbox: [number, number, number, number] }
 export interface RoomSweepInstance<Id> {
   id: Id;
@@ -2082,11 +2086,10 @@ function collapseGroup<Id, A extends { discipline: string | null; sheet: string;
 const COORD_ATTRIBUTION_MAX_PX = 40;
 
 export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
-  type Attributed = RoomSweepInstance<Id> & { room: RoomCandidate };
-  const attributed: Attributed[] = [];
-  const unattributed: RoomSweepInstance<Id>[] = [];
+  type Eligible = RoomSweepInstance<Id> & { room: RoomCandidate | null };
+  const eligible: Eligible[] = [];
   for (const inst of instances) {
-    if (!inst.discipline) continue; // no discipline read at all — never enters either path
+    if (!inst.discipline) continue; // no discipline read at all — never enters
     let best: RoomCandidate | null = null, bestD = Infinity;
     if (inst.rooms.length) {
       const maxDist = ROOM_ATTRIBUTION_MAX_DIAGONAL_FRAC * Math.hypot(inst.sheetWidthPx, inst.sheetHeightPx);
@@ -2097,46 +2100,43 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
       }
       if (!best || bestD > maxDist) best = null;
     }
-    if (best) attributed.push({ ...inst, room: best });
-    else unattributed.push(inst); // no room credited — try coordinate proximity below, never guessed either way
-  }
-  const byRoom = new Map<string, Attributed[]>();
-  for (const a of attributed) {
-    const key = `${a.room.tag.trim().toUpperCase()}|${a.room.name.trim().toUpperCase()}`;
-    const arr = byRoom.get(key);
-    if (arr) arr.push(a); else byRoom.set(key, [a]);
-  }
-  const out: RedundantRoomView<Id>[] = [];
-  for (const group of byRoom.values()) {
-    out.push(...collapseGroup<Id, Attributed>(group, (a) => `${a.room.name ? `${a.room.name} ` : ""}${a.room.tag}`.trim()));
+    eligible.push({ ...inst, room: best });
   }
 
-  // Coordinate-proximity fallback — ONLY for instances no room could be
-  // credited to at all (never overrides a real room attribution above).
-  // Simple connected-components clustering: two instances within
-  // COORD_ATTRIBUTION_MAX_PX of each other join one cluster (transitively —
-  // A near B near C clusters all three, same as the real drafting case
-  // would produce for a 3+-discipline redraw), then the identical
-  // multi-discipline collapse doctrine applies per cluster.
-  const n = unattributed.length;
+  // Coordinate clustering over EVERY eligible instance — attributed and
+  // unattributed in ONE pool. A prior split (room-group first, coordinate
+  // fallback only for leftovers) dropped two real cases:
+  //   1. One side of a cross-sheet pair got a room, the other did not
+  //      (sparse roomTags) — the pair never met, so a 6–30px redraw
+  //      survived as two installs.
+  //   2. Two far-apart installs shared a room name (or the same distant
+  //      room bubble cleared the generous diagonal pad on both sheets) —
+  //      whole-room collapse then deleted a real second fixture.
+  // Same-coordinate redraws of one device still cluster; same-room marks
+  // farther than COORD_ATTRIBUTION_MAX_PX do not.
+  const n = eligible.length;
   const parent = Array.from({ length: n }, (_, i) => i);
   const find = (i: number): number => (parent[i] === i ? i : (parent[i] = find(parent[i])));
   for (let i = 0; i < n; i++) {
     for (let j = i + 1; j < n; j++) {
-      if (Math.hypot(unattributed[i].at[0] - unattributed[j].at[0], unattributed[i].at[1] - unattributed[j].at[1]) <= COORD_ATTRIBUTION_MAX_PX) {
+      if (Math.hypot(eligible[i].at[0] - eligible[j].at[0], eligible[i].at[1] - eligible[j].at[1]) <= COORD_ATTRIBUTION_MAX_PX) {
         const ri = find(i), rj = find(j);
         if (ri !== rj) parent[ri] = rj;
       }
     }
   }
-  const clusters = new Map<number, RoomSweepInstance<Id>[]>();
+  const clusters = new Map<number, Eligible[]>();
   for (let i = 0; i < n; i++) {
     const r = find(i);
     const arr = clusters.get(r);
-    if (arr) arr.push(unattributed[i]); else clusters.set(r, [unattributed[i]]);
+    if (arr) arr.push(eligible[i]); else clusters.set(r, [eligible[i]]);
   }
+  const describe = (a: Eligible) => a.room
+    ? `${a.room.name ? `${a.room.name} ` : ""}${a.room.tag}`.trim()
+    : "(no room drawn nearby — same-location redraw)";
+  const out: RedundantRoomView<Id>[] = [];
   for (const cluster of clusters.values()) {
-    out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(no room drawn nearby — same-location redraw)"));
+    out.push(...collapseGroup<Id, Eligible>(cluster, describe));
   }
 
   // Same-sheet complementary viewports of one space (duct plan | piping

@@ -3681,15 +3681,17 @@ export class Session {
     // 4b. redundant-view collapse — a real, generic drafting convention
     // (see symbolsweep.ts's dedupeCrossDisciplineRoomViews for the full
     // doctrine): the SAME tag matched on two views of the SAME physical
-    // room is one install, not one per view. Covers (i) another sheet's
-    // enlarged/purpose-specific plan of that room and (ii) another titled
-    // viewport on this same sheet (duct plan | piping plan, a second
-    // section cut). Never touches a real repeat inside one viewport (that
-    // stays a separate-install signal) or a match with no confidently-
-    // attributed room on the cross-sheet path (never guessed). Same-sheet
-    // viewport collapse uses view titles, not room bubbles. `disciplineOfSheetNumber`
-    // (symbolsweep.ts) is the same read step 3's same-tag corroborator gate
-    // already uses above.
+    // device is one install, not one per view. Covers (i) another sheet's
+    // redraw at nearly the same page coordinate (a foundation plan + a
+    // floor plan of the identical footprint, or an M-series and a P-series
+    // enlarged view) and (ii) another titled viewport on this same sheet
+    // (duct plan | piping plan, a second section cut). Never touches a
+    // same-sheet repeat inside one viewport (that stays a separate-install
+    // signal) or a pair farther apart than COORD_ATTRIBUTION_MAX_PX on the
+    // cross-sheet path (two real installs, even when they share a room
+    // name). Same-sheet viewport collapse uses view titles, not room
+    // bubbles. `disciplineOfSheetNumber` (symbolsweep.ts) is the same read
+    // step 3's same-tag corroborator gate already uses above.
     const roomsBySheet = new Map<string, ReturnType<typeof roomTags>>();
     const viewportsBySheet = new Map<string, SheetViewport[]>();
     const spansFor = (sh: SheetState) => {

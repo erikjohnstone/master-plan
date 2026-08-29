@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-29 — redundant-view collapse is pairwise by coordinate
+
+### Fixed
+- **Cross-sheet redraws collapse only when the marks sit at the same page coordinate.** `dedupeCrossDisciplineRoomViews` used to group by attributed room first and only then fall back to coordinate proximity for leftovers. A pair with a room bubble on one sheet and none on the other never met (two installs for one device). Two real fixtures that merely shared a room name (or the same distant bubble on a full-sheet diagonal pad) collapsed into one. Eligible marks now cluster together by `COORD_ATTRIBUTION_MAX_PX` regardless of room credit; a same-sheet repeat is still never collapsed. Room labels remain on the result for disclosure.
+
 ## 2026-08-29 — same-sheet dual-view overcount
 
 ### Fixed
