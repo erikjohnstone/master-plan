@@ -78,11 +78,40 @@ Takeoff by set:
     performance gate; the gate exceeded its wall-time threshold only when
     contending with the concurrently-run MCP suite, then passed alone in
     2.86 seconds.
+- Second three-fix accuracy batch, independently verified forced-cold on
+  2026-08-29 at commit `6cc9094` plus the compound-label correction in
+  `3391f71` (47.0 seconds):
+  - Takeoff improved again, 420/515 → 425/515 exact (81.6% → 82.5%);
+    quantity delta fell 211 → 179 and missing tags fell 39 → 38.
+  - Federal expected-tag accuracy reached 83/83 (100%): deep header-tier
+    harvesting now advances the data boundary through every consumed tier,
+    exposing the real one-row CHILLER SCHEDULE and resolving `CH-1`.
+    The same extraction exposed one additional real scheduled/drawn `FCU-1`
+    absent from the authored key, so false-add accounting is 19 pending key
+    audit rather than silently suppressing a real row.
+  - NAVFAC improved 178/215 → 181/215 exact (82.8% → 84.2%). Matched
+    DUCT/PIPE enlarged-plan captions now define an off-center viewport split
+    and corroborate weaker landmark alignment; `FCU-T15`, `B-T1`, and `DH-T1`
+    each resolve from two redundant views to one.
+  - Baker improved 25/40 → 26/40 exact and quantity delta fell 80 → 54.
+    For a luminaire family dominated by 10+ single-span compound circuit
+    labels, fingerprint candidates are ranked against those direct placement
+    labels rather than unrelated bare text: `R1` now resolves 23/23.
+    Variable-size air-device ranking also improves `CD-1` from 3 to 9, while
+    its two `TYP N` multipliers remain unresolved (expected 21).
+  - The first full gate of this batch exposed broad ranking regressions
+    (`TD-1`, `TP-2`, `FS-1`, `HB-2`, `US-1`, and others). Two intermediate
+    gates were rejected. The accepted implementation limits ranking to the
+    structurally proven compound-label quorum and diffuser/grille/register
+    families; the corrected gate restores ITD to 114/116 (98.3%) and
+    Bessemer to 10/10.
+  - Graph row-symbol recall improved 94.2% → 95.0% (Federal now 100%);
+    reference metrics remain 116/129.
 
 ## Verification in progress
 
-- Start the next three-fix accuracy batch from the current 81.6% takeoff,
-  116/129 reference, and 94.2% graph baseline.
+- Start the next three-fix accuracy batch from the current 82.5% takeoff,
+  116/129 reference, and 95.0% graph baseline.
 
 ## Local implementation queue
 
