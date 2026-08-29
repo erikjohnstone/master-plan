@@ -4046,6 +4046,32 @@ export class Session {
           }
         }
       }
+      // A dedicated plumbing plan can carry several exact labels for one
+      // fixture type even when size/rotation variants prevent one rigid
+      // fingerprint from clearing every instance. Supplement only after
+      // geometry proves at least one instance, all occurrences live on this
+      // one sheet (no plan/detail duplication), and at least two exact marks
+      // establish a repeatable type rather than a note.
+      const plumbingFixturePlacement = /\bPLUMBING\s+FIXTURE\b/i.test(table)
+        && (sh.spans || []).some((span) => /\bPLUMBING\b.*\bPLAN\b/i.test(span.str))
+        && occ.length >= 2
+        && totalOcc === occ.length
+        && matches.length >= 1;
+      if (plumbingFixturePlacement) {
+        for (const tagged of occ) {
+          const alreadyClaimed = matches.some((match) => {
+            const box = match.tag_at;
+            return Math.hypot((box[0] + box[2]) / 2 - tagged.cx, (box[1] + box[3]) / 2 - tagged.cy) <= 1;
+          });
+          if (alreadyClaimed) continue;
+          matches.push({
+            at: [tagged.cx, tagged.cy], score: 1, rotation: 0, mirrored: false,
+            tag_at: tagged.bbox, text_counted: true,
+          });
+        }
+        text_only = text_only.filter((entry) =>
+          !occ.some((tagged) => Math.hypot(tagged.cx - entry.at[0], tagged.cy - entry.at[1]) <= anchor.h * 2));
+      }
       // An exact plan label for an individually numbered schedule mark is
       // itself placement evidence even when surrounding linework is too
       // sparse or variable to fingerprint. Repeatable type marks stay on
