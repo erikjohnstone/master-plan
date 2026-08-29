@@ -3872,11 +3872,12 @@ export class Session {
         const familyCompoundCount = tableSiblingKeys.reduce((sum, key) =>
           sum + compoundTagOcc(sh.spans || [], key).length, 0);
         if (familyCompoundCount >= 10) {
-          const claimed = new Set(matches.map((m) => m.tag_at.join(",")));
           for (const tagged of compoundTagOcc(sh.spans || [], t)) {
-            const key = tagged.bbox.join(",");
-            if (claimed.has(key)) continue;
-            claimed.add(key);
+            const alreadyClaimed = matches.some((match) => {
+              const box = match.tag_at;
+              return Math.hypot((box[0] + box[2]) / 2 - tagged.cx, (box[1] + box[3]) / 2 - tagged.cy) <= 1;
+            });
+            if (alreadyClaimed) continue;
             matches.push({
               at: [tagged.cx, tagged.cy],
               score: 1,
