@@ -119,7 +119,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, prefersTagClaimCoverage, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, typicalCountMultiplier, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, prefersTagClaimCoverage, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -3776,7 +3776,7 @@ export class Session {
     // marker resized to a 12×-smaller plan has a 12×-smaller footprint, and a
     // radius left at the seed's size would sweep up whatever tag happened to
     // be nearby. Unscaled sheets take the identical radius they always did.
-    type CountedMatch = SweepMatch & { tag_at: [number, number, number, number] };
+    type CountedMatch = SweepMatch & { tag_at: [number, number, number, number]; multiplier?: number };
     const perSheet: {
       state: SheetState;
       matches: CountedMatch[];
@@ -3940,15 +3940,26 @@ export class Session {
       }
     }
 
+    // A callout may explicitly represent several identical installs ("TYP
+    // 8"). Preserve one geometric marker while applying that printed
+    // quantity; proximity and alignment gates live in the pure helper.
+    for (const ps of perSheet) {
+      for (const match of ps.matches) {
+        const multiplier = typicalCountMultiplier(ps.state.spans || [], match.tag_at);
+        if (multiplier > 1) match.multiplier = multiplier;
+      }
+    }
+
     // 5. commit — condition minted FROM the row (its key IS the tag), the
     // schedule verdict and the seed citation on every marker, one undo step
-    const found = perSheet.reduce((n, p) => n + p.matches.length, 0);
+    const found = perSheet.reduce((n, p) =>
+      n + p.matches.reduce((sum, match) => sum + (match.multiplier ?? 1), 0), 0);
     let committed: { committed: number; shape_ids: string[]; condition: string; ea_total: number } | undefined;
     if (opts.commit && found) {
       const ids: string[] = [];
       for (const ps of perSheet) {
         for (const m of ps.matches) {
-          ids.push(this.commit(ps.state, t, "count", [m.at], { count: 1 }, {
+          ids.push(this.commit(ps.state, t, "count", [m.at], { count: m.multiplier ?? 1 }, {
             method: "symbol_sweep",
             actor: "agent",
             reviewed: false,
@@ -3987,6 +3998,8 @@ export class Session {
     }
     if (inlineFp) notes.push(`No whole-shape marker recurs around this tag's own drawn text, so this anchored on the surrounding hatch fill's own real-world size/pitch instead (the register/grille fallback) — score is a size closeness, not a segment match; audit with view_sheet before trusting the count.`);
     if (supplementalInlineFp) notes.push(`Whole-shape matches were preserved and a separately corroborated hatch-size/pitch motif supplemented only this tag's still-unclaimed drawn occurrences; each occurrence contributes at most one count.`);
+    const multiplied = perSheet.flatMap((p) => p.matches.filter((m) => (m.multiplier ?? 1) > 1));
+    if (multiplied.length) notes.push(`${multiplied.length} drawn callout(s) carry explicit TYP multipliers; their printed quantities were applied to the installed count.`);
     if (opts.commit && !found) notes.push("commit requested but nothing cleared the bar — no shapes were committed.");
     // #186, same disclosure discipline as symbol_sweep: a ratio the count
     // depends on is stated, and an assumed ratio over an empty sheet is named
@@ -4030,8 +4043,8 @@ export class Session {
       found,
       sheets: perSheet.map((p) => ({
         sheet: p.state.key,
-        found: p.matches.length,
-        matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, tag_at: Session.wireBox(m.tag_at) })),
+        found: p.matches.reduce((sum, match) => sum + (match.multiplier ?? 1), 0),
+        matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, tag_at: Session.wireBox(m.tag_at), ...(m.multiplier ? { multiplier: m.multiplier } : {}) })),
         withheld: p.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, reason: w.reason })),
         excluded: p.excluded.map((e) => ({ at: [round1(e.at[0]), round1(e.at[1])], tag: e.tag })),
         text_only: p.text_only,

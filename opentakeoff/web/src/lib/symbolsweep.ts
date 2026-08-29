@@ -1402,6 +1402,35 @@ export interface TagOcc {
  * span type. */
 export interface FlatSpan { str: string; x0: number; y0: number; x1: number; y1: number }
 
+/**
+ * Read an explicit drafting multiplier attached to one tag callout.
+ * "TYP 8" means the tagged symbol represents eight installed instances.
+ * The annotation must be a standalone span immediately above or below the
+ * tag and horizontally aligned with it; unrelated plan notes are ignored.
+ */
+export function typicalCountMultiplier(
+  spans: FlatSpan[],
+  tagBox: [number, number, number, number],
+): number {
+  const [x0, y0, x1, y1] = tagBox;
+  const tagCx = (x0 + x1) / 2;
+  const tagH = Math.max(1, y1 - y0);
+  for (const span of spans) {
+    const match = span.str.trim().match(/^TYP(?:ICAL)?\.?\s*(?:X\s*)?(\d{1,3})$/i);
+    if (!match) continue;
+    const count = Number(match[1]);
+    if (!Number.isInteger(count) || count < 2 || count > 100) continue;
+    const spanCx = (span.x0 + span.x1) / 2;
+    const spanH = Math.max(1, span.y1 - span.y0);
+    const verticalGap = Math.max(0, span.y0 - y1, y0 - span.y1);
+    const horizontalOverlap = Math.min(x1, span.x1) - Math.max(x0, span.x0);
+    const aligned = horizontalOverlap >= 0
+      || Math.abs(spanCx - tagCx) <= Math.max(x1 - x0, span.x1 - span.x0) * 0.75;
+    if (aligned && verticalGap <= Math.max(tagH, spanH) * 1.5) return count;
+  }
+  return 1;
+}
+
 /** A single span LONGER than the key — the schedule's own bare key with more
  * text appended in the SAME PDF text run (a circuit/panel reference, an
  * inverter tag, …), never split across separate spans at all. Real,

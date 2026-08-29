@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, prefersTagClaimCoverage, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, prefersTagClaimCoverage, typicalCountMultiplier, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -457,4 +457,14 @@ test("prefersTagClaimCoverage ranks exact-tag coverage before raw geometric popu
     { claimed: 8, rawMatches: 8, segments: 40 },
     { claimed: 8, rawMatches: 8, segments: 20 },
   ), true);
+});
+
+test("typicalCountMultiplier reads only an adjacent aligned TYP count", () => {
+  const spans = [
+    { str: "TYP 8", x0: 100, y0: 130, x1: 144, y1: 149 },
+    { str: "TYP 50", x0: 700, y0: 130, x1: 760, y1: 149 },
+  ];
+  assert.equal(typicalCountMultiplier(spans, [100, 100, 133, 119]), 8);
+  assert.equal(typicalCountMultiplier(spans, [400, 100, 433, 119]), 1);
+  assert.equal(typicalCountMultiplier([{ str: "TYP NOTE", x0: 100, y0: 130, x1: 160, y1: 149 }], [100, 100, 133, 119]), 1);
 });
