@@ -2989,37 +2989,47 @@ export class Session {
         return null;
       };
       const withHeader = rowHits.map((h) => ({ ...h, keyHeader: keyHeaderFor(h.tb, h.r) }));
-      const bare = withHeader.filter((h) => isBareAnchorHeader(h.keyHeader));
-      const rest = withHeader.filter((h) => !isBareAnchorHeader(h.keyHeader));
-      const allRestQualified = rest.length > 0 && rest.every((h) => isQualifiedAnchorHeader(h.keyHeader));
-      if (bare.length === 1 && allRestQualified) {
-        const excludedDesc = rest.map((h) => `"${h.tb.title?.text || `${h.tb.kind} schedule`}" (keyed "${h.keyHeader}", a cross-reference — not this tag's own device)`).join(", ");
-        accessoryNote = `${rest.length} accessory schedule row${rest.length === 1 ? "" : "s"} also carr${rest.length === 1 ? "ies" : "y"} the key "${t}" and were excluded, not counted as competing ambiguity: ${excludedDesc}.`;
-        rowHits = [bare[0]];
-      }
-    }
-    // Kind-based accessory narrowing — the word-shape (bare/qualified) tier
-    // above misses a real, common shape: a cross-reference table can key its
-    // OWN row under a bare catalog-anchor word too (baker-county-eoc-bidset.
-    // pdf#60's own MECHANICAL EQUIPMENT CONNECTION SCHEDULE keys "NO." —
-    // bare by every word-shape test — while genuinely being a hookup
-    // cross-reference for a device a DIFFERENT dedicated schedule defines).
-    // `kind` already carries this exact real/cross-reference distinction —
-    // extractTableAt's own CONNECTION/CALCULATION check above demotes
-    // exactly these tables to "reference" for exactly this reason — so when
-    // the collision is EXACTLY one non-"reference" row against one-or-more
-    // "reference" rows, the non-"reference" row is the real catalog
-    // definition and the "reference" rows are the accessory cross-
-    // references. Never narrows two non-"reference" rows against each
-    // other (two real, separate devices genuinely sharing a mark) or two
-    // "reference" rows against each other — both stay genuinely ambiguous.
-    if (rowHits.length > 1) {
-      const nonRef = rowHits.filter((h) => h.tb.kind !== "reference");
-      const ref = rowHits.filter((h) => h.tb.kind === "reference");
-      if (nonRef.length === 1 && ref.length === rowHits.length - 1 && ref.length > 0) {
-        const excludedDesc = ref.map((h) => `"${h.tb.title?.text || `${h.tb.kind} schedule`}" (reference-kind, a cross-reference — not this tag's own device)`).join(", ");
-        accessoryNote = `${ref.length} accessory schedule row${ref.length === 1 ? "" : "s"} also carr${ref.length === 1 ? "ies" : "y"} the key "${t}" and were excluded, not counted as competing ambiguity: ${excludedDesc}.`;
-        rowHits = nonRef;
+      // A row is this tag's OWN device definition only when BOTH real
+      // accessory signals clear it: its own key column must be a BARE
+      // anchor word (not qualified — "UNIT MARK"/"VALVE MARK" name a cross-
+      // reference to some OTHER row's own mark, never this row's own
+      // identity — see isQualifiedAnchorHeader's own comment) AND its table
+      // must not be "reference"-kind (a real cross-reference/spec table —
+      // extractTableAt's own CONNECTION/CALCULATION check, and
+      // scheduleTableFromODL's structural fallback, both demote exactly
+      // these tables to "reference" for this same reason; baker-county-eoc-
+      // bidset.pdf#60's own MECHANICAL EQUIPMENT CONNECTION SCHEDULE keys
+      // "NO." — bare by the word-shape test alone — while genuinely being a
+      // hookup cross-reference).
+      //
+      // Both signals are combined in ONE pass, not run as two independent
+      // one-shot checks each requiring exactly one non-excluded survivor:
+      // a real device schedule can collide with TWO DIFFERENT accessory
+      // tables at once, each caught by a DIFFERENT one of the two signals.
+      // Real, corpus-found (navfac-cherry-point-atc-mechanical.pdf's own
+      // AHU-A1/AHU-A2): a CHW CONTROL VALVE SCHEDULE row keyed "UNIT MARK"
+      // (qualified) AND a FAN SOUND POWER LEVEL SCHEDULE row keyed bare
+      // "MARK" but reference-kind are BOTH real accessory rows for the
+      // SAME real AHU-A1/AHU-A2 device — with two accessory rows caught by
+      // two DIFFERENT signals, neither old one-shot pass ever saw exactly
+      // one excluded row, so neither fired and a real, resolvable 3-way
+      // "ambiguity" stood unresolved (status=error, "3 schedule rows carry
+      // the key"). Never narrows when more than one row independently
+      // clears BOTH bars (two real, separate devices genuinely sharing a
+      // mark — e.g. ET-1 on itd-d1-lab: a real specialty-equipment device
+      // and a real plumbing fixture, BOTH bare "SYMBOL" and non-reference,
+      // correctly stays refused below) or when every colliding row is
+      // itself excluded (no real device row survives to seed the sweep).
+      const isCandidate = (h: (typeof withHeader)[number]) => isBareAnchorHeader(h.keyHeader) && h.tb.kind !== "reference";
+      const candidates = withHeader.filter(isCandidate);
+      const accessory = withHeader.filter((h) => !isCandidate(h));
+      if (candidates.length === 1 && accessory.length > 0) {
+        const excludedDesc = accessory.map((h) => {
+          const qualifier = h.tb.kind === "reference" ? "reference-kind" : `keyed "${h.keyHeader}"`;
+          return `"${h.tb.title?.text || `${h.tb.kind} schedule`}" (${qualifier}, a cross-reference — not this tag's own device)`;
+        }).join(", ");
+        accessoryNote = `${accessory.length} accessory schedule row${accessory.length === 1 ? "" : "s"} also carr${accessory.length === 1 ? "ies" : "y"} the key "${t}" and were excluded, not counted as competing ambiguity: ${excludedDesc}.`;
+        rowHits = [candidates[0]];
       }
     }
     if (rowHits.length > 1) {
