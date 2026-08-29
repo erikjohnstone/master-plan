@@ -165,11 +165,37 @@ Takeoff by set:
     gate was rerun before acceptance.
   - Reference is 100%; graph remains 91/91 cells exact and 95.7% row-symbol
     recall.
+- Fourth five-fix accuracy batch, independently verified forced-cold on
+  2026-08-29 at commit `48338a1` (55.3 seconds):
+  - Takeoff improved 456/515 → 467/515 exact (88.5% → 90.7%); excluding
+    the intentional raster refusal set, applicable takeoff improved
+    93.6% → 95.9% and quantity delta fell 37 → 25.
+  - Entire quarter-turned equipment tables now normalize into the ordinary
+    multi-table extractor and map every cell citation back into source-sheet
+    coordinates. Building 5406's nine-row AIR TERMINAL BOX SCHEDULE is now
+    queryable and eight text-backed VAV takeoffs resolve.
+  - MARK-keyed equipment headers, multipart numbered schedule sections, and
+    concatenated extracted titles are handled without creating duplicate
+    device definitions.
+  - Exact plan labels can count individually numbered equipment when the
+    surrounding symbol linework is not fingerprintable; repeatable type marks
+    remain on their stricter family paths.
+  - Cross-extractor table reads reconcile by exact sheet/title/key-set
+    identity, keeping the more complete cells. Device-qualified identity
+    columns such as VALVE MARK remain primary on valve schedules while UNIT
+    MARK remains an accessory cross-reference.
+  - Cross-sheet coordinate dedup now requires a second registered pair before
+    overriding contradictory room reads, preventing coincidental alignment
+    across different floors while retaining ITD's proven overlays.
+  - Reference remains 129/129 (100%). Graph row-symbol recall improves
+    95.7% → 97.8%; cells remain 91/91 exact.
+  - Full regression suites pass: web 1,907/1,907 (3 intentional skips), MCP
+    247/247, and both typechecks.
 
 ## Verification in progress
 
-- Start the next five-fix accuracy batch from the current 88.5% takeoff
-  (93.6% applicable), 129/129 reference, and 95.7% graph baseline.
+- Start the next five-fix accuracy batch from the current 90.7% takeoff
+  (95.9% applicable), 129/129 reference, and 97.8% graph baseline.
 
 ## Local implementation queue
 
@@ -177,8 +203,8 @@ Takeoff by set:
   largest vector/text-backed quantity gap.
 - Baker's remaining deterministic gaps are `HB-1`, `E1`, `HB-2`, `P1`, and
   `V1`.
-- Building 5406's exploded-letterform VAV rows account for all six graph
-  row-symbol misses.
+- Building 5406's exploded/missing-text VAV-6, EF-2, and EF-3 labels account
+  for all three graph row-symbol misses.
 - Reference extraction is closed at 129/129.
 
 Cloud dispatch and all subagent dispatch are prohibited by the user's
