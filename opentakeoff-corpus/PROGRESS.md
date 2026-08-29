@@ -112,21 +112,36 @@ Takeoff by set:
     corpus result above.
   - Graph row-symbol recall improved 94.2% → 95.0% (Federal now 100%);
     reference metrics remain 116/129.
+- First five-fix accuracy batch, independently verified forced-cold on
+  2026-08-29 at commit `7977639` (53.5 seconds):
+  - Takeoff improved 425/515 → 431/515 exact (82.5% → 83.7%); quantity
+    delta fell 179 → 140. Baker improved 26/40 → 32/40 (65.0% → 80.0%).
+  - Explicit adjacent `TYP N` multipliers now contribute their printed
+    installed quantity. Baker `CD-1` resolves exactly 21.
+  - A family-wide quorum of compound luminaire/circuit labels makes those
+    labels direct instance evidence and excludes ambiguous bare short-code
+    collisions outside that proven convention. `E2`, `R2`, `S1`, and `S3`
+    now resolve exactly.
+  - Reference improved 116/129 → 125/129 exact (89.9% → 96.9%). Literal
+    inch marks survive CSV parsing, three stale NAVFAC point-list keys were
+    corrected, and Baker control-station subrows now band correctly.
+  - Graph remains 91/91 cells exact and 95.0% row-symbol recall.
 
 ## Verification in progress
 
-- Start the next five-fix accuracy batch from the current 82.5% takeoff,
-  116/129 reference, and 95.0% graph baseline.
+- Start the next five-fix accuracy batch from the current 83.7% takeoff,
+  125/129 reference, and 95.0% graph baseline.
 
 ## Local implementation queue
 
-- Baker's large variable-size symbol misses (`R1`, `CD-1`, `R2`, `S1`) remain
-  the largest quantity gap; the accepted inline supplement did not change
-  Baker and must not be widened beyond evidence.
-- NAVFAC's remaining multi-view and air-device deltas, then Building 5406's
-  vector-only table/symbol misses.
-- Federal `CH-1` table discovery and the two literal inch-mark reference
-  mismatches.
+- NAVFAC's remaining aligned-view overcounts and air-device undercounts are
+  now the largest vector/text-backed quantity gap.
+- Baker's remaining deterministic gaps are `X1`, `RD-1`, `HB-1`, `E1`,
+  `RG-1`, `HB-2`, `P1`, and `V1`.
+- Reference has four remaining cells: three correctly extracted NAVFAC
+  equipment-schedule cells are not surfaced through the reference-table
+  output shape, and Baker's authored `RTU-01` MCA expected value conflicts
+  with the extracted schedule (`33.0`; `45 A` appears under MOCP).
 
 Cloud dispatch and all subagent dispatch are prohibited by the user's
 2026-08-29 instruction. The coordinator VM is the only execution path.
@@ -146,5 +161,6 @@ Cloud dispatch and all subagent dispatch are prohibited by the user's
 
 Select five non-overlapping fixes from the current evaluator output, using
 focused diagnostics between changes and one full corpus gate after the batch.
-Prioritize Baker's variable-size symbol family, NAVFAC's remaining repeated
-views, and Federal `CH-1`; preserve the current exact sets and refusal behavior.
+Prioritize NAVFAC repeated views and air devices, Baker's remaining
+vector-backed deltas, and graph row-symbol misses; preserve exact sets and
+honest refusal behavior.

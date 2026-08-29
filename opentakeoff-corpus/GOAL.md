@@ -111,26 +111,22 @@ the whole deterministic (non-LLM) claim.
 
 ## 3. Current real state, per set, per metric
 
-**Takeoff-eval numbers below are the last independently-verified full-corpus
-run this session** (mcp/scripts/takeoff-eval.mjs, run against commit
-`56d79bf` — see §6 for exactly how "independently verified" is defined).
-Reference-eval and graph-eval numbers are per-set, from whenever they were
-last actually run this session (noted). Anything not re-verified since a
-later merge is flagged.
+**The numbers below are the latest independently verified forced-cold
+full-corpus gate**, run 2026-08-29 against commit `7977639` in 53.5 seconds.
 
 | Set | takeoff-eval | reference-eval | graph-eval (rowsym) | Status |
 |---|---|---|---|---|
-| **bessemer** | **100.0%** (10/10 tags) | 100.0% | recall 86.7% (13/15) | **Closed** — the original pinned demo set, first to reach 100% on takeoff. SR-1/TG-1 remain a disclosed, unchased inline-motif miss on rowsym specifically. |
-| **itd-d1-lab** | **98.3%** (114/116) | 100.0% | not recently re-run | 2 disclosed exact deltas: US-2 (expected 3, actual 5), WC-1 (expected 2, actual 3) — real, small overcounts, not chased further. ET-1 correctly refuses (genuine ambiguity — two real, separate devices legitimately share a bare mark; this must NEVER resolve). |
-| **federal-mech** | **92.8%** (77/83 exact by last full run) | 87.1% (27/31 cells) | not recently re-run | CH-1 is a **confirmed genuine dead end** (see §7) — precisely root-caused, deliberately not fixed. A bank of 18 "falsely added" tags (CU-1..6/EV-1..6/UH-1/2/S-1/2/FTR-1/2) was being investigated by a worker (likely the SAME "key was just incomplete" shape found twice already on navfac) when the session was interrupted — **PENDING, not confirmed landed.** |
-| **navfac-cherry-point-atc** | **79.9%** (159/199 exact by last full run) | 80.6% (25/31 cells) | not recently re-run | The single biggest real-progress story tonight: started at 46.1% baseline, climbed via multiple real root-cause fixes (see §6). Real remaining gaps: a residual pump/valve family (PCHWP-MT1, SCHWP-M1, SHHWP-M1/M2, HRHWP-MT1, CUH-T1/T2, CV-CHW-BP-T, CV-HHW-BP-A) still refused/missing — a worker was re-diagnosing these when interrupted, **PENDING**. |
-| **baker-county-eoc** | **62.5%** (25/40 exact) | 76.2% (16/21 cells) | room-finish cell/tag: pinned 100%/100%/100%, must never regress | R1/CD-1 undercount **precisely diagnosed as two real, structural, hard limitations** (not bugs to patch) — see §7. EAC-1/EAC-2/EF-1 fixed earlier tonight. |
-| **bldg5406-hvac-demo** | **43.5%** (10/23 exact) | not recently re-run | not recently re-run | AC-1/ACCU-1 fixed tonight. VAV-1..9/ET-1/EF-2/EF-3 (10 of the 13 remaining misses) are a **confirmed genuine dead end** (see §7) — this set's ceiling is well below 100% until/unless OCR is added, which is explicitly out of scope right now. A worker was auditing its reference-eval/graph-eval numbers when interrupted, **PENDING**. |
+| **bessemer** | **100.0%** (10/10) | **100.0%** (12/12) | rowsym 100.0% | Expected-tag takeoff and reference closed. |
+| **itd-d1-lab** | **98.3%** (114/116) | **100.0%** (34/34) | rowsym 100.0% | US-2 and WC-1 remain small overcounts. |
+| **federal-mech** | **100.0%** (83/83) | **100.0%** (31/31) | rowsym 100.0% | Expected tags closed; 19 extracted real schedule rows remain pending false-add key audit. |
+| **navfac-cherry-point-atc** | **84.2%** (181/215) | **90.3%** (28/31) | rowsym 95.8% | Largest remaining vector/text-backed gap: repeated views, air devices, and pump/valve refusals. |
+| **baker-county-eoc** | **80.0%** (32/40) | **95.2%** (20/21) | rowsym 100.0% | CD-1 and four compound-luminaire families closed in the latest batch. |
+| **bldg5406-hvac-demo** | **47.8%** (11/23) | 0/0 vacuous | rowsym 64.7% | Most remaining misses use exploded vector letterforms; see §7. |
 | **itd-d1-lab-raster** | 0.0% (correct — see below) | 0/0 cells, vacuous | rowsym 0.0% (vacuous — all-refused key) | **This 0% is the CORRECT, expected answer, not a failure.** This set is a synthetically-rasterized (zero vector text) version of itd-d1-lab's own M1.0 sheet, built specifically to prove the pipeline *refuses cleanly* on a scanned page instead of crashing or inventing data. Confirmed: every real code path refuses honestly, no crashes. This is what "100%" looks like for a raster set under this project's own honesty rules — it will only ever change if OCR is added. |
 
-**Corpus-wide aggregate (takeoff-eval only, last full run):** 355/471 tags
-exact ≈ 75% blended, but this single number is explicitly not the goal —
-per-set numbers above are (§1).
+**Current corpus aggregate:** takeoff 431/515 exact (83.7%), quantity delta
+140; reference 125/129 exact (96.9%); graph 91/91 cells exact and 95.0%
+row-symbol recall. Per-set closure remains the goal (§1).
 
 ---
 
@@ -257,30 +253,10 @@ that discloses its real limits.
   deliberately narrow, already-measured, mediocre fallback — not the
   mechanism this project leans on). This caps bldg5406 well under 100%
   until/unless that decision changes.
-- **federal-mech's CH-1.** A `dataFrom` header-boundary miscomputation in
-  `skipSubHeaderContinuation` (`web/src/lib/sheetgraph.ts`), on a real
-  9-line-deep header — precisely root-caused, with an exact fix
-  identified. Deliberately NOT shipped: an analogous fix was already
-  tried once, and a full corpus sweep caught it silently dropping 21 real
-  tags on a *different* table elsewhere in the corpus. This is disclosed,
-  in-code, as a named future task, not something being worked around.
-- **baker-county-eoc's R1/CD-1 undercount.** Two separate, precisely
-  diagnosed structural limits, not a bug: (a) R1's whole-shape
-  corroboration pads outward from the tag *text's* own bounding box, not
-  the device symbol's real, offset drawn location (a real leader-label
-  drafting convention no fixed pad multiple cleanly reaches — confirmed
-  by rendering the exact padded capture region and seeing it truncate the
-  real symbol); (b) CD-1's real drawn-instance ceiling is 9, not the
-  key's literal 21, because 2 of 9 real callouts carry an explicit
-  "TYP N" multiplier this pipeline has no text-parsing logic for at all —
-  and even against that lower ceiling, whole-shape matching plateaus at
-  an already-documented ~76-82% register/diffuser hatch-fill scoring
-  ceiling (real-world size variance), with the pipeline's own
-  purpose-built inline-motif fallback never reached because whole-shape
-  happens to succeed first, by chance, on 2 of 9 real siblings. A
-  narrowly-scoped idea (supplement, never replace, whole-shape misses
-  with an inline-motif pass) was identified as promising but explicitly
-  NOT attempted without being able to fully verify it's safe first.
+- **Resolved former ceilings.** Federal CH-1 now extracts after safe deep-
+  header boundary recovery. Baker R1 resolves through compound-label
+  ranking, and CD-1 resolves 21/21 through explicit `TYP N` multipliers.
+  These are no longer ceilings and remain regression-protected.
 - **itd-d1-lab-raster.** By design (see §3's own row) — this is the
   system's own honest raster-refusal path being exercised on purpose, not
   a gap to close. It only moves if OCR is added.
@@ -289,20 +265,9 @@ that discloses its real limits.
 
 ## 8. Immediate next steps (as of this file's writing)
 
-1. **Resolve the interrupted-session state honestly** before trusting any
-   further number: the last full corpus takeoff-eval run that completed
-   was against commit `56d79bf`; the 3 workers dispatched right after it
-   (federal-mech's falsely-added bank, bldg5406's reference/graph audit,
-   navfac's remaining pump refusals) and a follow-up full-corpus eval were
-   all in flight when the session was interrupted, with **no completion
-   record** — their real work may still exist in their own worktrees
-   (`.claude/worktrees/agent-{aaa168d...,a36eeff...,aa72f41d...}`) and
-   should be checked directly (`git status --short` / `git diff --stat`
-   in each) before assuming anything landed or was lost.
-2. Re-run a full, fresh corpus-wide eval (all 3 scripts) once system load
-   has genuinely settled (it was severely elevated — 16-22 — from a
-   post-reboot Spotlight re-index at the moment this file was written,
-   unrelated to this project's own processes) to get a clean, current
-   baseline before dispatching new work.
-3. Continue directly in the coordinator VM on the biggest measured gap.
-   Do not dispatch worker agents or subagents.
+1. Start the next five-fix batch from the verified 83.7% takeoff, 96.9%
+   reference, and 95.0% graph baseline.
+2. Prioritize NAVFAC repeated views/air devices, Baker's remaining
+   vector-backed deltas, and the seven graph row-symbol misses.
+3. Continue directly in the coordinator VM. Do not dispatch workers or
+   subagents.
