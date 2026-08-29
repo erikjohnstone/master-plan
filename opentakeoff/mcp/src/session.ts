@@ -3792,6 +3792,14 @@ export class Session {
       scaled?: NonNullable<SymbolMatchResult["scaled"]>;
       redundant_view: (CountedMatch & { room: string; kept_sheet: string })[];
     }[] = [];
+    const luminaireCompoundSheets = /\bLUMINAIRE\b/i.test(table)
+      ? new Set(planSheets.filter((sheet) =>
+          tableSiblingKeys.reduce((sum, key) =>
+            sum + compoundTagOcc(sheet.spans || [], key).length, 0) >= 10)
+        .map((sheet) => sheet.key))
+      : new Set<string>();
+    const tagUsesCompoundConvention = luminaireCompoundSheets.size > 0
+      && planSheets.some((sheet) => compoundTagOcc(sheet.spans || [], t).length > 0);
     // per-sheet classification — the shared symbolsweep.ts function, so this
     // server and the browser's own port can never silently disagree.
     for (const { sh, occ } of occBySheet) {
@@ -3868,7 +3876,13 @@ export class Session {
       // explicit instance marks. Trust them only when the same plan carries
       // a large family-wide quorum of independently tagged luminaires; this
       // excludes isolated schedule notes and ordinary prefix collisions.
-      if (/\bLUMINAIRE\b/i.test(table)) {
+      if (tagUsesCompoundConvention && !luminaireCompoundSheets.has(sh.key)) {
+        // A short luminaire code such as S3 can independently label a
+        // non-lighting device on another plan. Once this set proves its
+        // fixture convention with a compound-label quorum, bare matches on
+        // sheets outside that convention are ambiguous collisions.
+        matches = [];
+      } else if (/\bLUMINAIRE\b/i.test(table)) {
         const familyCompoundCount = tableSiblingKeys.reduce((sum, key) =>
           sum + compoundTagOcc(sh.spans || [], key).length, 0);
         if (familyCompoundCount >= 10) {
