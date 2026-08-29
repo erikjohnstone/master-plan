@@ -3,7 +3,7 @@
 // tolerance behavior, decoy rejection, determinism, and the reported work cap.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, fragmentedTagOcc, deepHyphenChainTagOcc, type Point, type FlatSpan } from "../src/lib/symbolsweep.ts";
+import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, fragmentedTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, type Point, type FlatSpan } from "../src/lib/symbolsweep.ts";
 
 // The test symbol — deliberately ASYMMETRIC under every rotation and mirror:
 // a 20×20 square, ONE diagonal, and a stub off the right side. Local coords,
@@ -413,6 +413,32 @@ test("deepHyphenChainTagOcc: no false match when the multi-hyphen tag simply isn
     { str: "HHW", x0: 124, y0: 200, x1: 140, y1: 206 },
   ];
   assert.equal(deepHyphenChainTagOcc(spans, "CV-CHW-BP-M").length, 0, "CV-HHW must never satisfy a search for CV-CHW-BP-M");
+});
+
+test("familySuffixTagOcc: four complete siblings recover one nearby outlined-prefix suffix", () => {
+  const spans: FlatSpan[] = [
+    ...["1", "2", "3", "4", "5"].map((n, index) => ({
+      str: `VAV-${n}`, x0: 100 + index * 40, y0: 100 + (index % 2) * 30,
+      x1: 130 + index * 40, y1: 110 + (index % 2) * 30,
+    })),
+    { str: "6", x0: 210, y0: 150, x1: 216, y1: 160 },
+    { str: "6", x0: 900, y0: 900, x1: 906, y1: 910 },
+  ];
+  const occ = familySuffixTagOcc(spans, "VAV-6");
+  assert.equal(occ.length, 1);
+  assert.deepEqual(occ[0].bbox, [210, 150, 216, 160]);
+});
+
+test("familySuffixTagOcc: ambiguous nearby bare suffixes remain unresolved", () => {
+  const spans: FlatSpan[] = [
+    ...["1", "2", "3", "4"].map((n, index) => ({
+      str: `VAV-${n}`, x0: 100 + index * 40, y0: 100,
+      x1: 130 + index * 40, y1: 110,
+    })),
+    { str: "6", x0: 150, y0: 140, x1: 156, y1: 150 },
+    { str: "6", x0: 190, y0: 140, x1: 196, y1: 150 },
+  ];
+  assert.equal(familySuffixTagOcc(spans, "VAV-6").length, 0);
 });
 
 test("seed diagnostics: centroid and total length are the fingerprint's own", () => {

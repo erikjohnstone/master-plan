@@ -1684,6 +1684,49 @@ export function deepHyphenChainTagOcc(spans: FlatSpan[], key: string): TagOcc[] 
   return out;
 }
 
+/**
+ * Recover a tag whose family prefix was emitted as vector outlines while its
+ * suffix remained searchable text. This is deliberately family-corroborated:
+ * at least four distinct complete sibling tags must establish the local
+ * convention, and exactly one same-sized bare suffix must sit near two of
+ * those siblings. A page's ordinary detail/dimension numeral cannot satisfy
+ * that shape by itself.
+ */
+export function familySuffixTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
+  const target = key.trim().toUpperCase().replace(/\s+/g, "");
+  const match = target.match(/^([A-Z][A-Z0-9-]*-)(\d+[A-Z]?)$/);
+  if (!match) return [];
+  const [, stem, suffix] = match;
+  const normalize = (text: string) => text.trim().toUpperCase().replace(/\s+/g, "");
+  const siblingPattern = new RegExp(`^${stem.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(\\d+[A-Z]?)$`);
+  const siblings = spans.flatMap((span) => {
+    const sibling = normalize(span.str).match(siblingPattern);
+    return sibling && sibling[1] !== suffix ? [{ span, suffix: sibling[1] }] : [];
+  });
+  if (new Set(siblings.map((entry) => entry.suffix)).size < 4) return [];
+  const heights = siblings.map(({ span }) => Math.max(span.y1 - span.y0, 1)).sort((a, b) => a - b);
+  const medianH = heights[Math.floor(heights.length / 2)];
+  const candidates = spans.filter((span) => {
+    if (normalize(span.str) !== suffix) return false;
+    const h = Math.max(span.y1 - span.y0, 1);
+    if (h < medianH * 0.6 || h > medianH * 1.6) return false;
+    const cx = (span.x0 + span.x1) / 2, cy = (span.y0 + span.y1) / 2;
+    const nearby = siblings.filter(({ span: sibling }) => {
+      const sx = (sibling.x0 + sibling.x1) / 2, sy = (sibling.y0 + sibling.y1) / 2;
+      return Math.hypot(cx - sx, cy - sy) <= medianH * 25;
+    });
+    return nearby.length >= 2;
+  });
+  if (candidates.length !== 1) return [];
+  const span = candidates[0];
+  return [{
+    cx: (span.x0 + span.x1) / 2,
+    cy: (span.y0 + span.y1) / 2,
+    h: Math.max(span.y1 - span.y0, 6),
+    bbox: [span.x0, span.y0, span.x1, span.y1],
+  }];
+}
+
 /** The seed→target size ratio for a cross-sheet sweep (#186): seed-sheet
  * image px per target-sheet image px, exactly `upp_seed / upp_target` —
  * both sheets' own committed scales, no search and no guess.
