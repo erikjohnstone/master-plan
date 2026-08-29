@@ -54,23 +54,48 @@ Takeoff by set:
   `OPENTAKEOFF_EVAL_NO_CACHE=1` forces cold recomputation and
   `OPENTAKEOFF_EVAL_FULL_SWEEP=1` restores the complete production search for
   equivalence checks.
+- First three-fix accuracy batch, independently verified forced-cold on
+  2026-08-29 at commit `4f8a85c` (43.6 seconds):
+  - Takeoff improved from the post-tank 405/515 (78.6%) to 420/515 (81.6%);
+    quantity delta fell from 229 to 211 with missing/false-add counts unchanged
+    at 39/20. Federal improved 77/83 → 82/83 and NAVFAC 168/215 → 178/215;
+    ITD remained 114/116 and Bessemer remained 10/10.
+  - Reference extraction improved from 114/129 to 116/129 exact. Federal's
+    stranded `FT. H2O` header tier now promotes into the column name and both
+    hydronic pressure-drop values score; all previously-exact cells remain
+    exact.
+  - Aligned same-sheet repeated views collapse only after four distinct
+    schedule-tag landmark pairs establish registration. Repeated instances
+    inside one view and fewer-than-four-pair controls remain untouched.
+  - A separately corroborated inline hatch motif may supplement, never
+    replace, whole-shape matches only for diffuser/grille/register schedules
+    and only at still-unclaimed occurrences of that exact tag. The first
+    corpus gate caught an over-broad version adding three ITD plumbing
+    overcounts; schedule-family scoping removed all three before acceptance.
+  - Graph metrics remain unchanged: 91/91 cells exact and 94.2% row-symbol
+    recall. Web and MCP typechecks pass; MCP tests pass 246/246. The full web
+    suite passes 1,897 functional tests plus its isolated dense-grid
+    performance gate; the gate exceeded its wall-time threshold only when
+    contending with the concurrently-run MCP suite, then passed alone in
+    2.86 seconds.
 
 ## Verification in progress
 
-- Lower the 105.6-second forced-cold path with reusable PDF/geometry artifacts;
-  the normal coding loop is already below the 30-second requirement.
+- Start the next three-fix accuracy batch from the current 81.6% takeoff,
+  116/129 reference, and 94.2% graph baseline.
 
 ## Local implementation queue
 
-- General same-device multi-view deduplication with legitimate repeated-device
-  negative controls.
-- General reference-table extraction accuracy.
-- Federal false-adds, Baker misses, and NAVFAC pump/valve handling.
+- Baker's large variable-size symbol misses (`R1`, `CD-1`, `R2`, `S1`) remain
+  the largest quantity gap; the accepted inline supplement did not change
+  Baker and must not be widened beyond evidence.
+- NAVFAC's remaining multi-view and air-device deltas, then Building 5406's
+  vector-only table/symbol misses.
+- Federal `CH-1` table discovery and the two literal inch-mark reference
+  mismatches.
 
-Cloud dispatch is paused per the user's 2026-08-29 instruction after all three
-initial Composer workers failed at the cloud-state layer. The coordinator VM
-is the critical path. Any output returned by workers already in flight remains
-provisional and may be used only after independent local verification.
+Cloud dispatch and all subagent dispatch are prohibited by the user's
+2026-08-29 instruction. The coordinator VM is the only execution path.
 
 ## Rejected or deferred approaches
 
@@ -85,8 +110,7 @@ provisional and may be used only after independent local verification.
 
 ## Next queue
 
-After the recovered Building 5406 patch is verified, select the highest
-measured non-overlapping defect from fresh evaluator output. Known candidates
-include Federal `CH-1` single-row/multi-tier schedule discovery, multi-view
-overcounts, and remaining safe tag/table normalization failures. Continue
-locally until the goal or a demonstrated ceiling is reached.
+Select three non-overlapping fixes from the current evaluator output, using
+focused diagnostics between changes and one full corpus gate after the batch.
+Prioritize Baker's variable-size symbol family, NAVFAC's remaining repeated
+views, and Federal `CH-1`; preserve the current exact sets and refusal behavior.
