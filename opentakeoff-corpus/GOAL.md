@@ -16,11 +16,13 @@ that was already running when this policy was recorded is not part of the
 critical path, and its output must not be integrated. This policy supersedes
 the historical coordinator/worker descriptions retained later in this file.
 
-The immediate priority is a complete full-corpus evaluation in 30 seconds or
-less, both cold and warm, without weakening regression detection, changing
-scored semantics, or compromising accuracy. After that gate is proven, proceed
-directly to general multi-view deduplication and the highest-impact remaining
-deterministic gaps. OCR and vision remain out of scope.
+The user accepted the verified approximately 80-second forced-cold corpus
+runtime on 2026-08-29; evaluator speed is no longer the priority. Proceed
+directly to general multi-view deduplication and then the highest-impact
+remaining deterministic accuracy gaps, driving every applicable metric toward
+100%. Never trade accuracy or regression sensitivity for speed. Honest refusal
+on raster or structurally unextractable inputs remains correct behavior rather
+than a score to manipulate. OCR and vision remain out of scope.
 
 This file is the durable, single source of truth for "where are we and
 why" on this effort — write here, not just in chat, so a fresh session
