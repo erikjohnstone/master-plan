@@ -30,6 +30,9 @@ accuracy fixes, using focused unit tests and typechecks while implementing,
 then run one full corpus evaluation to measure the combined batch and detect
 cross-set regressions. If a focused test exposes a defect before the batch is
 complete, fix it immediately; the full scorer remains the batch-level gate.
+After every evaluation—focused set or full corpus—report the measured result
+to the user immediately. Full-corpus reports must always include all three
+current metrics (takeoff, reference, and graph), never only the metric changed.
 
 This file is the durable, single source of truth for "where are we and
 why" on this effort — write here, not just in chat, so a fresh session

@@ -36,6 +36,9 @@ For accuracy-equivalence investigation, restore production's complete
 whole-sheet symbol search with `OPENTAKEOFF_EVAL_FULL_SWEEP=1`. Never weaken
 keys, thresholds, or metric semantics to improve runtime. The evaluator-only
 focused path may omit candidates solely when the scorer cannot count them.
+Report every focused or full evaluation result to the user immediately after
+it completes. A full-corpus report always states takeoff, reference, and graph
+metrics together, including regressions—not just the targeted metric.
 
 ## Shipping — the required steps, every change
 
