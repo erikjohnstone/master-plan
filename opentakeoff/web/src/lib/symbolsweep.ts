@@ -1548,7 +1548,6 @@ export function fragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
     let text = upper(start.str);
     let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
     let cur = start;
-    const used = new Set<FlatSpan>([start]);
     let ok = stripHy(text) === targetStripped;
     for (let guard = 0; !ok && stripHy(text).length < targetStripped.length && guard < 4; guard++) {
       const h = Math.max(cur.y1 - cur.y0, 6);
@@ -1648,6 +1647,7 @@ export function deepHyphenChainTagOcc(spans: FlatSpan[], key: string): TagOcc[] 
     let text = upper(start.str);
     let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
     let cur = start;
+    const used = new Set<FlatSpan>([start]);
     let ok = stripHy(text) === targetStripped;
     for (let guard = 0; !ok && stripHy(text).length < targetStripped.length && guard < HOP_BUDGET; guard++) {
       const h = Math.max(cur.y1 - cur.y0, 6);
