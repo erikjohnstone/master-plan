@@ -1489,10 +1489,18 @@ export function splitHyphenTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
     const right = spans
       .filter((span) =>
         upper(span.str) === parts[1]
-        && Math.abs(span.y0 - left.y0) <= h * 0.4
-        && span.x0 >= left.x1 - 1
-        && span.x0 - left.x1 <= h * 2)
-      .sort((a, b) => a.x0 - b.x0)[0];
+        && (
+          (Math.abs(span.y0 - left.y0) <= h * 0.4
+            && span.x0 >= left.x1 - 1
+            && span.x0 - left.x1 <= h * 2)
+          // Rotated/stacked pump tags often extract the unit suffix on the
+          // line immediately above or below the long family stem.
+          || (Math.abs((span.x0 + span.x1) / 2 - (left.x0 + left.x1) / 2) <= h * 4
+            && Math.max(0, span.y0 - left.y1, left.y0 - span.y1) <= h * 2)
+        ))
+      .sort((a, b) =>
+        Math.hypot(a.x0 - left.x1, a.y0 - left.y0)
+        - Math.hypot(b.x0 - left.x1, b.y0 - left.y0))[0];
     if (!right) continue;
     out.push({
       cx: (left.x0 + right.x1) / 2,

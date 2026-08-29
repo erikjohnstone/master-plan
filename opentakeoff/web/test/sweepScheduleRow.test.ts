@@ -494,4 +494,8 @@ test("splitHyphenTagOcc recovers an exact adjacent two-run tag without fuzzy joi
     { str: "TP", x0: 100, y0: 200, x1: 120, y1: 220 },
     { str: "2", x0: 125, y0: 200, x1: 135, y1: 220 },
   ], "TP-2").length, 0, "short plumbing tags stay on the existing conservative fragment path");
+  assert.equal(splitHyphenTagOcc([
+    { str: "M2", x0: 100, y0: 160, x1: 120, y1: 180 },
+    { str: "SHHWP", x0: 80, y0: 190, x1: 140, y1: 210 },
+  ], "SHHWP-M2").length, 1, "a rotated pump tag may extract its suffix immediately above the family stem");
 });
