@@ -79,6 +79,40 @@ function matchByKeySet(tables: ScheduleTable[], sheetKey: string, built: Schedul
   return -1;
 }
 
+/** Collapse equivalent primary-table reads after all extractors have run.
+ * Region matching can pair an oversized geometric box with the wrong nearby
+ * ODL table before exact keys are consulted; same sheet + normalized title +
+ * exact key set identifies the duplicate without conflating accessory
+ * reference tables or complementary numbered schedule sections. */
+function collapseEquivalentPrimaryTables(tables: ScheduleTable[]): number {
+  const seen = new Map<string, number>();
+  const remove = new Set<number>();
+  for (let i = 0; i < tables.length; i++) {
+    const table = tables[i];
+    if (table.kind === "reference" || !table.title || !table.rows.length) continue;
+    const keys = [...new Set(table.rows.map((row) => row.key))].sort();
+    if (keys.length !== table.rows.length) continue;
+    const title = table.title.text.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    const identity = `${table.sheet}\0${title}\0${keys.join("\0")}`;
+    const prior = seen.get(identity);
+    if (prior == null) {
+      seen.set(identity, i);
+      continue;
+    }
+    const a = tableCompleteness(tables[prior]), b = tableCompleteness(table);
+    if (b.headers > a.headers || (b.headers === a.headers && b.cells > a.cells)) {
+      remove.add(prior);
+      seen.set(identity, i);
+    } else {
+      remove.add(i);
+    }
+  }
+  if (!remove.size) return 0;
+  const kept = tables.filter((_, index) => !remove.has(index));
+  tables.splice(0, tables.length, ...kept);
+  return remove.size;
+}
+
 /** How many rows share a key with at least one other row — a real schedule
  * never legitimately repeats an unqualified key, so any rise in this count
  * from one extraction of the same table to another is real evidence of a
@@ -5410,6 +5444,10 @@ export class Session {
           added++;
         }
       }
+    }
+    const equivalentCollapsed = collapseEquivalentPrimaryTables(g.tables);
+    if (equivalentCollapsed) {
+      g.notes.push(`${equivalentCollapsed} duplicate primary table read(s) from independent extractors were collapsed by exact sheet/title/key-set identity.`);
     }
     if (touchedSheets.size) syncSheetSchedules(g, touchedSheets);
     if (recovered || added) {
