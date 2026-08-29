@@ -5458,8 +5458,22 @@ function bandGenericDataRows(
   const add = (row: TableRow, toks: GraphSpan[]) => {
     let byLabel = cellToks.get(row);
     if (!byLabel) cellToks.set(row, (byLabel = new Map()));
+    const buttonAnchor = anchors.find((a) => /\bBUTTON\s+(?:NUMBER|NO\.?|#)\b/.test(a.label));
+    const functionAnchor = anchors.find((a) => /\bFUNCTION\b/.test(a.label));
+    const buttonNumber = buttonAnchor && toks.find((t) =>
+      /^\d+$/.test(t.str.trim()) && nearestAnchor(centerX(t), anchors) === buttonAnchor.label);
     for (const t of toks) {
-      const label = nearestAnchor(centerX(t), anchors);
+      let label = nearestAnchor(centerX(t), anchors);
+      // Wide, left-aligned FUNCTION cells can begin close enough to a
+      // narrow preceding BUTTON NUMBER header that center-based banding
+      // assigns the phrase to the number column. The row's own standalone
+      // button integer proves the narrow column; a later letter-bearing
+      // token belongs to the explicitly-present FUNCTION column.
+      if (buttonAnchor && functionAnchor && buttonNumber
+        && label === buttonAnchor.label && /[A-Z]/i.test(t.str)
+        && t.x >= buttonNumber.x + buttonNumber.w) {
+        label = functionAnchor.label;
+      }
       if (label == null) continue;
       const existing = byLabel.get(label);
       const lastBbox = existing?.length ? bboxOf(existing[existing.length - 1]) : undefined;
@@ -5517,8 +5531,14 @@ function bandGenericDataRows(
   // fold untouched.
   const isSectionHeading = (toks: GraphSpan[]): boolean =>
     toks.length === 1 && /^[A-Z][A-Z0-9 .,'"&()/%°∅Ø-]*:$/.test(norm(toks[0].str));
+  const isUnkeyedButtonSubrow = (toks: GraphSpan[]): boolean => {
+    const button = anchors.find((a) => /\bBUTTON\s+(?:NUMBER|NO\.?|#)\b/.test(a.label));
+    if (!button) return false;
+    return toks.some((t) => /^\d+$/.test(t.str.trim()) && nearestAnchor(centerX(t), anchors) === button.label)
+      && toks.filter((t) => nearestAnchor(centerX(t), anchors) !== anchors[0].label).length >= 2;
+  };
   for (const o of orphans) {
-    if (isSectionHeading(o.toks)) continue;
+    if (isSectionHeading(o.toks) || isUnkeyedButtonSubrow(o.toks)) continue;
     const { i, d } = nearest(o.y);
     if (i < 0 || d > radius) continue;
     add(out[i], o.toks);

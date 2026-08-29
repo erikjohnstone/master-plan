@@ -2573,6 +2573,32 @@ test("reference kind: a real, vocabulary-free schedule table extracts correctly 
   assert.equal(r2.cells["INSULATION OR LINER THICKNESS"]?.text, "1\"");
 });
 
+test("reference kind: button subrows do not corrupt their spanning control-station row", () => {
+  const spans: GraphSpan[] = [
+    rh("LIGHTING CONTROL STATIONS", 0, 0, 280),
+    rh("CONTROL STATION", 0, 35, 150), rh("ZONES", 250, 35, 60), rh("BUTTON", 480, 35, 70),
+    rh("DESIGNATION", 20, 55, 110), rh("CONTROLLED", 230, 55, 100), rh("NUMBER", 480, 55, 75),
+    rh("FUNCTION", 710, 55, 100), rh("LABEL", 950, 55, 60), rh("NOTES", 1080, 55, 60),
+    rh("$OS", 0, 90, 35), rh("ALL", 250, 90, 35), rh("1", 500, 90, 10),
+    // Deliberately starts well left of the centered FUNCTION header, exactly
+    // like the real wide, left-aligned column.
+    rh("ALL ON", 555, 90, 90), rh("ON", 950, 90, 30),
+    // The merged designation cell spans this second physical button row.
+    rh("2", 500, 115, 10), rh("ALL OFF", 555, 115, 100), rh("OFF", 950, 115, 35),
+    rh("$OSD", 0, 145, 45), rh("ALL", 250, 145, 35), rh("1", 500, 145, 10),
+    rh("ALL ON/HOLD DIM UP", 555, 145, 220), rh("UP", 950, 145, 30),
+  ];
+  const sheet: SheetSpans = {
+    key: "controls.pdf#1", sheet_number: "E601", spans,
+    segs: [0, 75, 1140, 75],
+  };
+  const tab = buildSheetGraph([sheet]).tables.find((t) => t.title?.text === "LIGHTING CONTROL STATIONS");
+  assert.ok(tab);
+  const os = tab!.rows.find((row) => row.key === "$OS");
+  assert.equal(os?.cells["BUTTON NUMBER"]?.text, "1");
+  assert.equal(os?.cells.FUNCTION?.text, "ALL ON");
+});
+
 test("reference kind: scoped to schedule-role sheets — the identical real table on a PLAN sheet is not extracted", () => {
   // Same real spans, but the sheet's own title now reads as a plan, not a
   // schedule — a real, disclosed scope limit (see the design comment above
