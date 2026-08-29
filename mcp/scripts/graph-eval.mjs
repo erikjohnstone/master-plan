@@ -46,7 +46,7 @@ const writeReport = process.argv.includes("--report");
 // concurrency in one process).
 const singleJsonIdx = process.argv.indexOf("--single-json");
 const singleJsonSetId = singleJsonIdx >= 0 ? process.argv[singleJsonIdx + 1] : null;
-const CONCURRENCY = Number(process.env.OPENTAKEOFF_EVAL_CONCURRENCY) || 3;
+const CONCURRENCY = Number(process.env.OPENTAKEOFF_EVAL_CONCURRENCY) || 2;
 if (!corpusDir) {
   console.error("usage: node --import tsx scripts/graph-eval.mjs <corpus-dir> [setId ...] [--report]");
   process.exit(2);

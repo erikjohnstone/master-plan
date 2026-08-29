@@ -66,7 +66,7 @@ const singleJsonSetId = singleJsonIdx >= 0 ? process.argv[singleJsonIdx + 1] : n
 // project's own load-average safety mandate on an 8-core machine that may
 // already have other agent workers running. Override via
 // OPENTAKEOFF_EVAL_CONCURRENCY if a caller has real headroom to spend.
-const CONCURRENCY = Number(process.env.OPENTAKEOFF_EVAL_CONCURRENCY) || 3;
+const CONCURRENCY = Number(process.env.OPENTAKEOFF_EVAL_CONCURRENCY) || 2;
 if (!corpusDir) {
   console.error("usage: node --import tsx scripts/takeoff-eval.mjs <corpus-dir> [setId ...] [--report]");
   process.exit(2);
