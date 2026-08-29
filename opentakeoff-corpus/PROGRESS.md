@@ -211,11 +211,32 @@ Takeoff by set:
     97.8% → 98.6%; cells remain 91/91 exact.
   - Full regression suites pass: web 1,909/1,909 (3 intentional skips), MCP
     247/247, and both typechecks.
+- Sixth accuracy/completeness batch, independently verified forced-cold on
+  2026-08-29 at commit `7678a53` (55.4 seconds):
+  - Takeoff now covers 534 keyed tags and scores 492/534 exact (92.1%);
+    excluding the intentional raster refusal set, applicable takeoff is
+    492/506 (97.2%) with quantity delta 17.
+  - Federal's narrow 83-row key was audited against all positive project
+    results and expanded with 19 independently scheduled and plan-located
+    units (FCU, condensing units, DX fan coils, unit heaters, silencers, and
+    fin-tube radiation). The expanded 102-row set remains 100% exact with
+    zero false additions.
+  - The taxonomy now names the observed CU-, EV-, CUH-, and FTR- equipment
+    families instead of returning null classifications for real schedule
+    rows.
+  - Baker's HB-1 and E1 keys were corrected after full-sheet text/coordinate
+    audits disproved two incomplete crop-based counts. Baker improves
+    87.5% → 92.5%.
+  - A broad plumbing-label supplementation attempt was rejected after the
+    gate exposed ITD overcounts; it was fully reverted. The corrected gate
+    restores ITD to 116/116.
+  - Reference remains 129/129 (100%); graph remains 91/91 cells exact and
+    98.6% row-symbol recall.
 
 ## Verification in progress
 
-- Start the next five-fix accuracy batch from the current 91.5% takeoff
-  (96.7% applicable), 129/129 reference, and 98.6% graph baseline.
+- Start the next five-fix accuracy batch from the current 92.1% takeoff
+  (97.2% applicable), 129/129 reference, and 98.6% graph baseline.
 
 ## Local implementation queue
 
