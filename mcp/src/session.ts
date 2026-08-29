@@ -2998,6 +2998,30 @@ export class Session {
         rowHits = [bare[0]];
       }
     }
+    // Kind-based accessory narrowing — the word-shape (bare/qualified) tier
+    // above misses a real, common shape: a cross-reference table can key its
+    // OWN row under a bare catalog-anchor word too (baker-county-eoc-bidset.
+    // pdf#60's own MECHANICAL EQUIPMENT CONNECTION SCHEDULE keys "NO." —
+    // bare by every word-shape test — while genuinely being a hookup
+    // cross-reference for a device a DIFFERENT dedicated schedule defines).
+    // `kind` already carries this exact real/cross-reference distinction —
+    // extractTableAt's own CONNECTION/CALCULATION check above demotes
+    // exactly these tables to "reference" for exactly this reason — so when
+    // the collision is EXACTLY one non-"reference" row against one-or-more
+    // "reference" rows, the non-"reference" row is the real catalog
+    // definition and the "reference" rows are the accessory cross-
+    // references. Never narrows two non-"reference" rows against each
+    // other (two real, separate devices genuinely sharing a mark) or two
+    // "reference" rows against each other — both stay genuinely ambiguous.
+    if (rowHits.length > 1) {
+      const nonRef = rowHits.filter((h) => h.tb.kind !== "reference");
+      const ref = rowHits.filter((h) => h.tb.kind === "reference");
+      if (nonRef.length === 1 && ref.length === rowHits.length - 1 && ref.length > 0) {
+        const excludedDesc = ref.map((h) => `"${h.tb.title?.text || `${h.tb.kind} schedule`}" (reference-kind, a cross-reference — not this tag's own device)`).join(", ");
+        accessoryNote = `${ref.length} accessory schedule row${ref.length === 1 ? "" : "s"} also carr${ref.length === 1 ? "ies" : "y"} the key "${t}" and were excluded, not counted as competing ambiguity: ${excludedDesc}.`;
+        rowHits = nonRef;
+      }
+    }
     if (rowHits.length > 1) {
       throw new UserError(`Ambiguous: ${rowHits.length} schedule rows carry the key "${t}" — the same mark defined twice cannot seed one sweep. Marquee the marker yourself with symbol_sweep.`);
     }
@@ -4681,20 +4705,17 @@ export class Session {
     const buildingsSet = new Set(g.buildings);
     const touchedSheets = new Set<string>();
     let recovered = 0, added = 0, odlErrors = 0;
-    // "reference"-kind candidates with no existing region to replace are
-    // NOT resolved inline — see the deferred pass below, after this loop —
-    // because whether one of their rows collides with an "established" tag
-    // depends on the FINAL state of every OTHER table this same pass adds
-    // or replaces, and ODL's own tree-walk order across a multi-page CLI
-    // call is not that order. Measured live: navfac-cherry-point-atc-
-    // mechanical.pdf#47 carries both a real FAN SCHEDULE (EF-M1's own
-    // authoritative row) and a FAN SOUND POWER LEVEL SCHEDULE that merely
-    // cross-references EF-M1 — when ODL happened to return the sound-power
-    // table before the fan schedule, EF-M1 wasn't "established" yet at the
-    // moment the sound-power table's own collision guard ran, so it kept a
-    // row it should have dropped, planting a second, spurious EF-M1 row
-    // that broke resolveTag's own single-row assumption downstream.
-    const deferredReference: ScheduleTable[] = [];
+    // "reference"-kind candidates (a real cross-reference/connection/calc
+    // table, per scheduleTableFromODL's own CONNECTION/CALCULATION check)
+    // no longer get a deferred, order-dependent "drop rows that collide
+    // with an established tag" pass here — see the push site's own comment
+    // below for why that used to run, and why it was a real regression
+    // (baker-county-eoc-bidset.pdf#60's own MECHANICAL EQUIPMENT CONNECTION
+    // SCHEDULE lost its own real CU-1/WH-1/ERV-01/RTU-01 rows wholesale).
+    // sweepScheduleRow's own query-time kind-based accessory narrowing
+    // handles the ambiguity this used to guard against instead, so every
+    // reference-kind candidate is simply appended in the SAME loop pass
+    // that finds it, same as any other newly-recovered table.
     for (const entry of byPdf.values()) {
       let result;
       try {
@@ -4783,31 +4804,28 @@ export class Session {
             recovered++;
           }
         } else if (built.kind === "reference") {
-          // "reference"-kind rows get the SAME collision guard buildSheetGraph's
-          // own pass 2c already applies (sheetgraph.ts: "a 'reference'-kind row
-          // that collides, by real row key, with an established finish/
-          // equipment/room-finish row ANYWHERE else in the graph is dropped as
-          // noise") — but pass 2c only ever runs INSIDE buildSheetGraph, before
-          // this post-hoc ODL pass exists, so a reference table ODL recovers
-          // here would otherwise skip that guard entirely. A real cross-
-          // reference/connection schedule (scheduleTableFromODL's own
-          // CONNECTION-title reclassification, above) names tags a DEDICATED
-          // per-category schedule already defines — left unfiltered, sweeping
-          // any one of those tags hits sweepScheduleRow's own real "N schedule
-          // rows carry the key" ambiguity against its own already-correct
-          // resolution. Measured live: baker-county-eoc-bidset.pdf#60's own
-          // MECHANICAL EQUIPMENT CONNECTION SCHEDULE, recovered by the same
-          // session's headerEnd fix, cross-references RTU-1/RTU-2/ERV-01/
-          // FCU-1/FCU-2/EWH-1/EWH-2 — every one already uniquely resolved via
-          // its own dedicated schedule elsewhere on the same sheet.
-          // Same normalization sheetgraph.ts's own pass 2c uses for this exact
-          // comparison (its own module-private `norm`, not exported) —
-          // trim+uppercase, no whitespace collapse, kept identical on purpose.
-          // The actual collision check runs later, in the deferred pass
-          // below, once every table this whole ODL cross-check will ever
-          // add or replace is already in `g.tables` — see that pass's own
-          // comment for why "later" instead of "now" matters here.
-          deferredReference.push(built);
+          // A DELIBERATE, evidence-based "reference" classification
+          // (scheduleTableFromODL's own CONNECTION/CALCULATION title check,
+          // gated on MODEL/MANUFACTURER absence) names a REAL cross-
+          // reference/connection/calc table, not probable noise — its own
+          // rows carry real, independently-useful data a dedicated catalog
+          // schedule elsewhere does NOT restate (baker-county-eoc-bidset.
+          // pdf#60's own MECHANICAL EQUIPMENT CONNECTION SCHEDULE: VA/MCA/
+          // MOCP/CIRCUIT NUMBER for CU-1/WH-1/…, scored on its own by
+          // reference-eval). An earlier version of this pass dropped any row
+          // whose key was already "established" elsewhere, on the theory a
+          // repeated key added nothing new — real, measured regression: that
+          // deleted this exact table's own CU-1/WH-1/ERV-01/RTU-01 rows
+          // wholesale (real electrical hookup data with no other home in the
+          // graph at all), not just excused a name collision. sweepScheduleRow's
+          // own kind-based accessory-narrowing tier (mcp/src/session.ts) now
+          // resolves the SAME "N schedule rows carry the key" ambiguity this
+          // used to prevent — non-destructively, at query time, preferring a
+          // non-"reference" row over a "reference" one — so this table is
+          // simply kept whole, same as any other newly-recovered table.
+          g.tables.push(built);
+          touchedSheets.add(sheetKey);
+          added++;
         } else {
           // No existing alternative to compare against, so nothing to
           // reconcile against — appended as-is. A FEW rows sharing one
@@ -4827,30 +4845,6 @@ export class Session {
           touchedSheets.add(sheetKey);
           added++;
         }
-      }
-    }
-    // Deferred "reference"-kind collision guard (see the push site's own
-    // comment above): computed ONCE, now that every non-reference table
-    // this whole cross-check pass will ever add or replace already sits in
-    // `g.tables` — so a cross-reference table's own row order relative to
-    // its authoritative counterpart, wherever ODL happened to place each
-    // in its own output, can never change the outcome.
-    if (deferredReference.length) {
-      const keyNorm = (k: string) => (k || "").trim().toUpperCase();
-      const established = new Set<string>();
-      for (const t of g.tables) if (t.kind !== "reference") for (const r of t.rows) established.add(keyNorm(r.key));
-      for (const built of deferredReference) {
-        const kept = built.rows.filter((r) => !established.has(keyNorm(r.key)));
-        if (kept.length) {
-          built.rows = kept;
-          g.tables.push(built);
-          touchedSheets.add(built.sheet);
-          added++;
-        }
-        // else: EVERY row collided with an already-established tag — this
-        // table added nothing this graph doesn't already know, so it's
-        // simply not appended (never a silent data loss: every one of its
-        // tags already has a real, resolvable row elsewhere).
       }
     }
     if (touchedSheets.size) syncSheetSchedules(g, touchedSheets);
