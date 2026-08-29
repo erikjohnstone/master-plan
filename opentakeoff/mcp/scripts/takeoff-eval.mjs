@@ -109,7 +109,7 @@ async function evalSetUncached(set) {
     ? scoreTakeoff(takeoff, parseTakeoffKeyCsv(readFileSync(takeoffKeyPath, "utf8")))
     : null;
   const reference = hasReferenceKey
-    ? scoreReference(takeoff.reference_tables, parseReferenceKeyCsv(readFileSync(referenceKeyPath, "utf8")))
+    ? scoreReference(takeoff.extracted_tables, parseReferenceKeyCsv(readFileSync(referenceKeyPath, "utf8")))
     : null;
   return { id: set.id, gc: set.gc, project: set.project, score, reference, unlabelled: !hasTakeoffKey };
 }

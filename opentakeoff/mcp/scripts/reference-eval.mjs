@@ -52,7 +52,7 @@ async function evalSet(set) {
   for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
   const takeoff = await buildPlanSetTakeoff(s, { categories: null });
 
-  return { id: set.id, score: scoreReference(takeoff.reference_tables, key) };
+  return { id: set.id, score: scoreReference(takeoff.extracted_tables, key) };
 }
 
 if (singleJsonSetId) {

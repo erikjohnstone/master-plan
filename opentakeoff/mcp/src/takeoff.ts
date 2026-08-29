@@ -114,6 +114,9 @@ export interface ReferenceTable {
   headers: string[];
   rows: ReferenceTableRow[];
 }
+export interface ExtractedTable extends ReferenceTable {
+  kind: string;
+}
 
 export interface PlanSetTakeoff {
   set_files: string[];
@@ -134,6 +137,8 @@ export interface PlanSetTakeoff {
    * confidence/different-shape data into one list" doctrine already
    * established for those two this session. */
   reference_tables: ReferenceTable[];
+  /** Complete deterministic table-query surface across every extracted kind. */
+  extracted_tables: ExtractedTable[];
   failures: TakeoffFailure[];
   tables_seen: Array<{ sheet: string; kind: string; title: string | null; rows: number }>;
   legend_sheets_seen: Array<{ sheet: string; glyphs_detected: number }>;
@@ -250,6 +255,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
     items: [],
     legend_items: [],
     reference_tables: [],
+    extracted_tables: [],
     failures: [],
     tables_seen: [],
     legend_sheets_seen: [],
@@ -373,15 +379,20 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
 
   for (const tb of graph.tables) {
     out.tables_seen.push({ sheet: tb.sheet, kind: tb.kind, title: tb.title?.text ?? null, rows: tb.rows.length });
+    const extracted: ExtractedTable = {
+      sheet: tb.sheet,
+      kind: tb.kind,
+      title: tb.title?.text ?? null,
+      headers: tb.headers,
+      rows: tb.rows.map((row) => {
+        const cells: Record<string, string> = {};
+        for (const [label, cell] of Object.entries(row.cells || {})) if (cell?.text) cells[label] = cell.text;
+        return { key: row.key, cells };
+      }),
+    };
+    out.extracted_tables.push(extracted);
     if (tb.kind === "reference") {
-      out.reference_tables.push({
-        sheet: tb.sheet, title: tb.title?.text ?? null, headers: tb.headers,
-        rows: tb.rows.map((row) => {
-          const cells: Record<string, string> = {};
-          for (const [label, cell] of Object.entries(row.cells || {})) if (cell?.text) cells[label] = cell.text;
-          return { key: row.key, cells };
-        }),
-      });
+      out.reference_tables.push(extracted);
       for (const row of tb.rows) {
         const tag = (row.key || "").trim();
         if (!tag) continue;
