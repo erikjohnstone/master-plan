@@ -81,7 +81,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -3054,11 +3054,22 @@ export class Session {
       const exact = sh.spans
         .filter((sp) => sp.str.trim().toUpperCase() === key)
         .map((sp) => ({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number] }));
-      // Fallback only — a real drawn tag routinely splits across multiple
-      // text runs (see fragmentedTagOcc's own header comment for the two
-      // real, different-shaped cases this was found against), and never
-      // fires when the exact single-span match already found something.
-      const occ = exact.length ? exact : fragmentedTagOcc(sh.spans, key);
+      // compoundTagOcc's own single-span compound labels ("R1 /C-11") can
+      // never coincide with an exact match's own span (equality vs.
+      // strictly-longer), so it's merged in ALONGSIDE exact unconditionally
+      // — a sheet can legitimately carry both a bare, unrelated coincidental
+      // occurrence of the key elsewhere AND this row's own real compound-
+      // labeled instances (baker-county-eoc-bidset.pdf#54's own "P1": one
+      // bare span plus three real "P1 /C-11"-style compound spans — see
+      // compoundTagOcc's own header comment).
+      const merged = [...exact, ...compoundTagOcc(sh.spans, key)];
+      // Fallback only — a real drawn tag ALSO, separately, routinely splits
+      // across multiple SHORTER text runs (see fragmentedTagOcc's own header
+      // comment for the two real, different-shaped cases this was found
+      // against), and never fires when exact/compound already found
+      // something — its own join-fragments search risks stitching unrelated
+      // short spans together, so it stays the more conservative last resort.
+      const occ = merged.length ? merged : fragmentedTagOcc(sh.spans, key);
       return occ.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
     };
     const occBySheet = planSheets.map((sh) => ({ sh, occ: occOf(sh, t) }));
@@ -3330,29 +3341,72 @@ export class Session {
         // a way to succeed — every real candidate is already exhausted by
         // this point.
         if (!fp && !inlineFp) {
-          for (const altAnchor of withOcc[0].occ) {
+          // Try BOTH fallback shapes, across up to CAND_CAP of this row's
+          // own occurrences each (same reading-order search as before, just
+          // no longer stopping at the FIRST occurrence that clears candFor's
+          // bare segments>=3 floor) — then prefer whichever candidate
+          // actually explains more of this row's OWN other drawn
+          // occurrences when swept against the anchor sheet's own geometry
+          // right now: a cheap self-check against positions occOf already
+          // trusts, never a guess. Two real reasons the FIRST occurrence
+          // tried is routinely a bad representative, both confirmed live
+          // against this same corpus: (1) a register/grille's real siblings
+          // routinely score only ~76-77% against each other under
+          // matchSymbol's 92% whole-shape bar (corroborateInlineMotif's own
+          // header comment) — low enough that TIER 1 correctly refused to
+          // call it corroborated, yet a whole-shape candidate built from ONE
+          // such occurrence still trivially clears the segments>=3 floor;
+          // (2) even a rigid, genuinely-repeated icon (baker-county-eoc-
+          // bidset.pdf#54's own 2x4 troffer luminaires, drawn as an exact
+          // grid) can pad-ladder onto a fingerprint that accidentally also
+          // captures unique nearby context (an adjacent duct run, a wall) at
+          // ONE grid cell — a fingerprint indistinguishable from a real
+          // marker by segments>=3 alone, but which then fails to recur
+          // ANYWHERE else on the sheet, not even as a near-miss. Every
+          // candidate this tries is independently valid by the SAME
+          // unchanged pad-ladder rule already used everywhere else in this
+          // function; this only changes WHICH of several valid candidates is
+          // kept, by measuring which one actually generalizes. The first
+          // candidate is always included in the pool, so when only one
+          // occurrence yields a candidate, or every candidate explains the
+          // same count (most commonly 0, none generalizing), the original
+          // first-found choice stands unchanged — this can only ever swap in
+          // a demonstrably BETTER candidate, never a worse one.
+          const CAND_CAP = 6;
+          const recoveryCount = (test: (o: TagOcc) => boolean) => withOcc[0].occ.filter(test).length;
+          let bestWs: { cand: SymbolFingerprint; rect: [Point, Point]; from: TagOcc; n: number } | null = null;
+          for (const altAnchor of withOcc[0].occ.slice(0, CAND_CAP)) {
+            // already explains every OTHER occurrence — no candidate can score higher
+            if (bestWs && bestWs.n >= withOcc[0].occ.length - 1) break;
             anchor = altAnchor;
             for (const padK of [1, 2, 3]) {
               const got = candFor(padK);
               if (got === "region") break;
               if (!got) continue;
-              fp = got.cand; anchorRect = got.rect; corroborated = false;
+              const probe = matchSymbol(got.cand, anchorGeo.segs, sweepOpts);
+              const R = got.cand.footprint / 2 + altAnchor.h;
+              const n = recoveryCount((o) => probe.matches.some((m) => Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= R));
+              if (!bestWs || n > bestWs.n) bestWs = { cand: got.cand, rect: got.rect, from: altAnchor, n };
               break;
             }
-            if (fp) break;
           }
-          if (!fp) {
-            for (const altAnchor of withOcc[0].occ) {
-              anchor = altAnchor;
-              const inlineAnchored = corroborateInlineMotif(
-                anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
-                anchor, anchorSheet.upp, null,
-              );
-              if (inlineAnchored) {
-                inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
-                break;
-              }
-            }
+          let bestIl: { fp: InlineMotifFingerprint; rect: [Point, Point]; from: TagOcc; n: number } | null = null;
+          for (const altAnchor of withOcc[0].occ.slice(0, CAND_CAP)) {
+            anchor = altAnchor;
+            const inlineAnchored = corroborateInlineMotif(
+              anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+              anchor, anchorSheet.upp, null,
+            );
+            if (!inlineAnchored) continue;
+            const probe = sweepInlineMotif(inlineAnchored.fp, anchorGeo.segs, anchorGeo.meta, anchorSheet.upp);
+            const R = Math.max(inlineAnchored.fp.widthPx, inlineAnchored.fp.heightPx) / 2 + altAnchor.h;
+            const n = recoveryCount((o) => probe.matches.some((m) => Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= R));
+            if (!bestIl || n > bestIl.n) bestIl = { fp: inlineAnchored.fp, rect: inlineAnchored.anchorRect, from: altAnchor, n };
+          }
+          if (bestIl && (!bestWs || bestIl.n > bestWs.n)) {
+            anchor = bestIl.from; inlineFp = bestIl.fp; anchorRect = bestIl.rect; corroborated = false;
+          } else if (bestWs) {
+            anchor = bestWs.from; fp = bestWs.cand; anchorRect = bestWs.rect; corroborated = false;
           }
         }
         if (!fp && !inlineFp) {
