@@ -2231,9 +2231,13 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   const attributedIds = new Set(attributed.map((entry) => entry.id));
   for (let i = 0; i < mixed.length; i++) {
     for (let j = i + 1; j < mixed.length; j++) {
+      const distance = Math.hypot(mixed[i].at[0] - mixed[j].at[0], mixed[i].at[1] - mixed[j].at[1]);
+      const asymmetric = attributedIds.has(mixed[i].id) !== attributedIds.has(mixed[j].id);
+      // Extremely tight registration overrides contradictory nearest-room
+      // reads: adjacent plan sheets can redraw one fixture within 30 px
+      // while incidental nearby room text differs between views.
       if (mixed[i].sheet === mixed[j].sheet
-        || attributedIds.has(mixed[i].id) === attributedIds.has(mixed[j].id)
-        || Math.hypot(mixed[i].at[0] - mixed[j].at[0], mixed[i].at[1] - mixed[j].at[1]) > COORD_ATTRIBUTION_MAX_PX) continue;
+        || !(distance <= 30 || (asymmetric && distance <= COORD_ATTRIBUTION_MAX_PX))) continue;
       const ri = mixedRoot(i), rj = mixedRoot(j);
       if (ri !== rj) mixedParent[ri] = rj;
     }

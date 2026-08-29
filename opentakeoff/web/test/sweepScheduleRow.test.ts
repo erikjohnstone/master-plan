@@ -352,6 +352,14 @@ test("dedupeCrossDisciplineRoomViews: asymmetric room attribution still collapse
   assert.deepEqual(dedupeCrossDisciplineRoomViews(instances).map((entry) => entry.id), [2]);
 });
 
+test("dedupeCrossDisciplineRoomViews: sub-30px registration overrides contradictory incidental room reads", () => {
+  const instances: RoomSweepInstance<number>[] = [
+    { id: 1, sheet: "set.pdf#1", discipline: "P", at: [100, 100], rooms: [{ tag: "102", name: "", bbox: [95, 95, 105, 105] }], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+    { id: 2, sheet: "set.pdf#2", discipline: "P", at: [118, 108], rooms: [{ tag: "103", name: "", bbox: [113, 103, 123, 113] }], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+  ];
+  assert.deepEqual(dedupeCrossDisciplineRoomViews(instances).map((entry) => entry.id), [2]);
+});
+
 test("dedupeCrossDisciplineRoomViews: an instance with no known discipline never enters the dedup (never dropped, never a kept anchor)", () => {
   const instances = [
     inst(1, "M3.0", "M", NEAR_ROOM, [ROOM]),
