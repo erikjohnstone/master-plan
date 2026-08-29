@@ -65,7 +65,7 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // The Symbol tool (#264) — the canvas face for the sweep engine. The engine,
 // counter-examples, the luminance channel, and label corroboration all live
 // as pure web libs already; this file adds only the gesture and the review.
-import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, compoundTagOcc } from "../lib/symbolsweep";
+import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc } from "../lib/symbolsweep";
 import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib/mepconnectivity.ts";
 import { mepLayerSignal } from "../lib/mepsystems.ts";
 // Accuracy-hardening plan Phase 2 — on an unlayered/weakly-layered sheet, a
@@ -7166,7 +7166,12 @@ export default function TakeoffCanvas() {
       // comment for the two real, different-shaped cases this was found
       // against), and never fires when exact/compound already found
       // something.
-      const occ = merged.length ? merged : fragmentedTagOcc(spans, mark);
+      const fragmented = fragmentedTagOcc(spans, mark);
+      // Third tier — mirrors mcp/src/session.ts's identical fix: a SEPARATE
+      // deeper same-row chain (deepHyphenChainTagOcc's own header comment),
+      // never invoked unless fragmentedTagOcc's own unmodified search
+      // already found nothing.
+      const occ = merged.length ? merged : (fragmented.length ? fragmented : deepHyphenChainTagOcc(spans, mark));
       return occ.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
     }
 

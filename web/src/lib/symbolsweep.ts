@@ -1402,6 +1402,109 @@ export function fragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   return out;
 }
 
+/** A SEPARATE, DEEPER same-row fragment chain for a real shape
+ * fragmentedTagOcc's own 4-hop, first-array-order chain cannot reach: a
+ * multi-segment hyphenated abbreviation tag split across SIX or more
+ * same-row runs. Real, confirmed live — navfac-cherry-point-atc's own
+ * pump/valve tag set draws "CV-CHW-BP-M" as SEVEN separate same-row runs
+ * ("CV","-","CHW","-","BP","-","M", six hops) and "SHHWP-M1"/"SCHWP-M1"-
+ * style pump tags as three ("SHHWP","-","M1", two hops) — both past what
+ * fragmentedTagOcc's own conservative budget (chosen for the two originally
+ * -measured shapes: Bessemer's 3-run "SR-1", itd-d1-lab's 2-run stacked
+ * "EF-1") was ever sized for.
+ *
+ * This is deliberately its OWN function, never a parameter on
+ * fragmentedTagOcc's own loop, and never invoked unless fragmentedTagOcc's
+ * own (unmodified) search ALREADY found nothing — occOf's own third
+ * fallback tier, after exact/compound AND fragmentedTagOcc. Two real,
+ * measured dangers this owns instead of fragmentedTagOcc, kept OUT of that
+ * shared function entirely:
+ *
+ * 1. Simply raising fragmentedTagOcc's own hop budget is safe on its own
+ *    (measured: zero raw-match change across itd-d1-lab-mechanical.pdf's
+ *    entire real 29-sheet set, 110 real tags × 29 sheets, hop budget 4
+ *    through 20, first-array-order selection unchanged) — the real danger
+ *    is touching fragmentedTagOcc's own CANDIDATE-SELECTION step. Even a
+ *    well-motivated "prefer same-row, nearest by distance" reselection
+ *    (this function's own algorithm) measurably reshuffles which real
+ *    physical instance's fragments get linked to which chain on
+ *    itd-d1-lab's own densely-packed plumbing sheets (#22/#23/#25 — a
+ *    dozen-plus real, independently-tagged fixtures within a few hundred
+ *    px of each other): TP-2 alone went from 15 to 23 raw candidate
+ *    matches, with 15 other (tag, sheet) pairs changing and one brand-new
+ *    false completion (LS-1, a real cross-sheet redundant-view risk
+ *    documented live against WC-1/US-2 on this exact sheet pair). A prior
+ *    attempt at this exact fix (2026-08-28) applied a nearest-not-first
+ *    reselection directly to fragmentedTagOcc itself and, even in its most
+ *    conservative form, silently regressed itd-d1-lab (98.3% -> 93.1%
+ *    exact) — correctly reverted rather than shipped.
+ * 2. This function's own nearest-by-distance reselection is therefore never
+ *    allowed anywhere NEAR fragmentedTagOcc's own call graph or itd-d1-
+ *    lab's own tag vocabulary: every real tag in every one of this
+ *    project's real corpus keys (itd-d1-lab, bessemer, federal-mech,
+ *    baker-county-eoc, bldg5406-hvac-demo) has zero or one hyphen — never
+ *    two — so gating this function to keys with >=2 hyphens (a real,
+ *    general property of the tag's OWN naming convention, not a
+ *    corpus-specific hardcode) makes it STRUCTURALLY inapplicable to any
+ *    of those real tags, not merely empirically safe: it can never even be
+ *    reached for a 0- or 1-hyphen key, regardless of what fragmentedTagOcc
+ *    finds or fails to find. Confirmed live: with this gate, this function
+ *    produces zero matches anywhere in itd-d1-lab-mechanical.pdf's real
+ *    29-sheet set for any of its 110 real keys (none has >=2 hyphens) —
+ *    the gate closes before this function's own search logic ever runs,
+ *    not merely because fragmentedTagOcc happens to already succeed there.
+ *
+ * SAME-ROW ONLY (no next-line jump — that stacked-bubble shape is
+ * fragmentedTagOcc's own nextLine branch's territory, already handled),
+ * nearest-by-x-distance among same-row candidates (the real disambiguator
+ * PDF content-stream order structurally can't be: CV-CHW-BP-M's own real
+ * "CV" start has a coincidental word — "AS", part of unrelated nearby duct
+ * text — positioned directly below it that the content stream happens to
+ * list BEFORE the correct same-row "-" neighbor; first-array-order picks
+ * the wrong one and the chain breaks at hop 0). Hop budget sized to the
+ * deepest real shape measured (CV-CHW-BP-M's six hops) with headroom. */
+export function deepHyphenChainTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
+  if ((key.match(/-/g) ?? []).length < 2) return []; // structural gate — see header
+  const HOP_BUDGET = 10;
+  const stripHy = (s: string) => s.replace(/-/g, "");
+  const targetStripped = stripHy(key);
+  if (!targetStripped) return [];
+  const upper = (s: string) => s.trim().toUpperCase();
+  const out: TagOcc[] = [];
+  const starts = spans.filter((sp) => {
+    const t = upper(sp.str);
+    return t.length > 0 && t.length < key.length && targetStripped.startsWith(stripHy(t));
+  });
+  for (const start of starts) {
+    let text = upper(start.str);
+    let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
+    let cur = start;
+    let ok = stripHy(text) === targetStripped;
+    for (let guard = 0; !ok && stripHy(text).length < targetStripped.length && guard < HOP_BUDGET; guard++) {
+      const h = Math.max(cur.y1 - cur.y0, 6);
+      let next: FlatSpan | null = null, bestD = Infinity;
+      for (const sp of spans) {
+        if (sp === cur) continue;
+        const sameRow = Math.abs(sp.y0 - cur.y0) < h * 0.4 && sp.x0 >= cur.x0 - 1 && sp.x0 - cur.x1 < h * 1.5;
+        if (!sameRow) continue;
+        const dx = (sp.x0 + sp.x1) / 2 - (cur.x0 + cur.x1) / 2;
+        const dy = (sp.y0 + sp.y1) / 2 - (cur.y0 + cur.y1) / 2;
+        const d = dx * dx + dy * dy;
+        if (d < bestD) { bestD = d; next = sp; }
+      }
+      if (!next) break;
+      const candidate = text + upper(next.str);
+      if (!targetStripped.startsWith(stripHy(candidate))) break;
+      text = candidate;
+      x0 = Math.min(x0, next.x0); y0 = Math.min(y0, next.y0); x1 = Math.max(x1, next.x1); y1 = Math.max(y1, next.y1);
+      cur = next;
+      ok = stripHy(text) === targetStripped;
+    }
+    if (ok) out.push({ cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, h: Math.max(y1 - y0, 6), bbox: [x0, y0, x1, y1] });
+  }
+  return out;
+}
+
 /** The seed→target size ratio for a cross-sheet sweep (#186): seed-sheet
  * image px per target-sheet image px, exactly `upp_seed / upp_target` —
  * both sheets' own committed scales, no search and no guess.

@@ -3,7 +3,7 @@
 // tolerance behavior, decoy rejection, determinism, and the reported work cap.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, fragmentedTagOcc, type Point, type FlatSpan } from "../src/lib/symbolsweep.ts";
+import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, fragmentedTagOcc, deepHyphenChainTagOcc, type Point, type FlatSpan } from "../src/lib/symbolsweep.ts";
 
 // The test symbol — deliberately ASYMMETRIC under every rotation and mirror:
 // a 20×20 square, ONE diagonal, and a stub off the right side. Local coords,
@@ -324,6 +324,64 @@ test("fragmentedTagOcc: no false match when the tag simply isn't drawn", () => {
     { str: "2", x0: 52, y0: 112, x1: 58, y1: 124 },
   ];
   assert.equal(fragmentedTagOcc(spans, "EF-1").length, 0, "EF+2 must never satisfy a search for EF-1");
+});
+
+// deepHyphenChainTagOcc — a THIRD tier, after exact/compound AND
+// fragmentedTagOcc, for a real shape past fragmentedTagOcc's own 4-hop
+// budget: navfac-cherry-point-atc draws "CV-CHW-BP-M" as SEVEN same-row
+// runs. Never touches fragmentedTagOcc itself — see its own header comment
+// for why (a prior fix that touched fragmentedTagOcc's shared candidate-
+// selection step regressed itd-d1-lab even in its most conservative form).
+test("deepHyphenChainTagOcc: navfac's own 7-run same-row split (\"CV\",\"-\",\"CHW\",\"-\",\"BP\",\"-\",\"M\")", () => {
+  const spans: FlatSpan[] = [
+    { str: "CV", x0: 100, y0: 200, x1: 120, y1: 206 },
+    { str: "-", x0: 120, y0: 200, x1: 124, y1: 206 },
+    { str: "CHW", x0: 124, y0: 200, x1: 140, y1: 206 },
+    { str: "-", x0: 140, y0: 200, x1: 144, y1: 206 },
+    { str: "BP", x0: 144, y0: 200, x1: 156, y1: 206 },
+    { str: "-", x0: 156, y0: 200, x1: 160, y1: 206 },
+    { str: "M", x0: 160, y0: 200, x1: 168, y1: 206 },
+  ];
+  const occ = deepHyphenChainTagOcc(spans, "CV-CHW-BP-M");
+  assert.equal(occ.length, 1, "the seven same-row runs reconstruct into exactly one occurrence");
+  assert.deepEqual(occ[0].bbox, [100, 200, 168, 206]);
+});
+
+test("deepHyphenChainTagOcc: a coincidental word positioned below the start, listed earlier in the spans array, must not derail the same-row chain (the real CV-CHW-BP-M \"AS\" distractor)", () => {
+  const spans: FlatSpan[] = [
+    // "AS" sits directly below "CV" and appears FIRST in array order — a
+    // first-array-order pick (fragmentedTagOcc's own doctrine) would grab
+    // it and break the chain; nearest-by-x-distance among SAME-ROW
+    // candidates only must skip it (it is not same-row at all).
+    { str: "AS", x0: 100, y0: 210, x1: 116, y1: 216 },
+    { str: "CV", x0: 100, y0: 200, x1: 120, y1: 206 },
+    { str: "-", x0: 120, y0: 200, x1: 124, y1: 206 },
+    { str: "CHW", x0: 124, y0: 200, x1: 140, y1: 206 },
+    { str: "-", x0: 140, y0: 200, x1: 144, y1: 206 },
+    { str: "BP", x0: 144, y0: 200, x1: 156, y1: 206 },
+    { str: "-", x0: 156, y0: 200, x1: 160, y1: 206 },
+    { str: "M", x0: 160, y0: 200, x1: 168, y1: 206 },
+  ];
+  const occ = deepHyphenChainTagOcc(spans, "CV-CHW-BP-M");
+  assert.equal(occ.length, 1, "the same-row chain still resolves despite the below-row distractor appearing earlier in array order");
+});
+
+test("deepHyphenChainTagOcc: structurally gated to keys with >=2 hyphens — a single-hyphen key never reaches this function's own search at all", () => {
+  const spans: FlatSpan[] = [
+    { str: "US", x0: 100, y0: 200, x1: 112, y1: 206 },
+    { str: "-", x0: 112, y0: 200, x1: 115, y1: 206 },
+    { str: "1", x0: 115, y0: 200, x1: 120, y1: 206 },
+  ];
+  assert.equal(deepHyphenChainTagOcc(spans, "US-1").length, 0, "a 1-hyphen key (itd-d1-lab's own real tag shape) is gated off unconditionally, regardless of whether spans would otherwise reconstruct it");
+});
+
+test("deepHyphenChainTagOcc: no false match when the multi-hyphen tag simply isn't drawn", () => {
+  const spans: FlatSpan[] = [
+    { str: "CV", x0: 100, y0: 200, x1: 120, y1: 206 },
+    { str: "-", x0: 120, y0: 200, x1: 124, y1: 206 },
+    { str: "HHW", x0: 124, y0: 200, x1: 140, y1: 206 },
+  ];
+  assert.equal(deepHyphenChainTagOcc(spans, "CV-CHW-BP-M").length, 0, "CV-HHW must never satisfy a search for CV-CHW-BP-M");
 });
 
 test("seed diagnostics: centroid and total length are the fingerprint's own", () => {
