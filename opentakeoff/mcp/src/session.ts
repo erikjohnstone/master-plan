@@ -3226,7 +3226,17 @@ export class Session {
       // "bare" (this row's own header names no OTHER row's mark, so it is
       // not disqualified on word-shape grounds) while still excluding a
       // genuinely QUALIFIED header exactly as before.
-      const isCandidate = (h: (typeof withHeader)[number]) => !isQualifiedAnchorHeader(h.keyHeader) && h.tb.kind !== "reference";
+      const isCandidate = (h: (typeof withHeader)[number]) => {
+        if (h.tb.kind === "reference") return false;
+        if (!isQualifiedAnchorHeader(h.keyHeader)) return true;
+        // "VALVE MARK" is the device identity on a CONTROL VALVE
+        // SCHEDULE, while "UNIT MARK" there is a cross-reference. A
+        // qualified anchor is primary when its qualifier names the table's
+        // own product family, not equipment served by that product.
+        const qualifier = (h.keyHeader || "").toUpperCase().split(/\s+/)
+          .find((word) => !["ID", "MARK", "CODE", "SYMBOL", "TAG"].includes(word));
+        return !!qualifier && (h.tb.title?.text || "").toUpperCase().includes(qualifier);
+      };
       const candidates = withHeader.filter(isCandidate);
       const accessory = withHeader.filter((h) => !isCandidate(h));
       if (candidates.length === 1 && accessory.length > 0) {
