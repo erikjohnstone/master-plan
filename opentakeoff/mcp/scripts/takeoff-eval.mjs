@@ -50,6 +50,10 @@ import { parseReferenceKeyCsv, scoreReference } from "../src/referenceEval.ts";
 
 const [corpusDir, ...only] = process.argv.slice(2).filter((a) => !a.startsWith("--") && a !== "--single-json");
 const writeReport = process.argv.includes("--report");
+// Escape hatch used by equivalence benchmarks: the default scorer searches
+// only row-tag claim windows, while this restores production's complete
+// whole-sheet disclosure path for an A/B metric comparison.
+const evaluationFast = process.env.OPENTAKEOFF_EVAL_FULL_SWEEP !== "1";
 // Reuse the already-built PlanSetTakeoff to score reference tables too.
 // This replaces an entire second PDF/session/pipeline pass in the normal
 // all-metrics development loop while leaving the standalone reference
@@ -97,7 +101,7 @@ async function evalSet(set) {
   for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
   const takeoff = await buildPlanSetTakeoff(s, {
     categories: null,
-    evaluationFast: true,
+    evaluationFast,
   }); // "all" — scorer only needs row-tag-claimed placements; whole-sheet unlabeled disclosure is intentionally omitted
 
   const score = hasTakeoffKey

@@ -41,6 +41,7 @@ import { Session } from "../src/session.ts";
 
 const [corpusDir, ...only] = process.argv.slice(2).filter((a) => !a.startsWith("--") && a !== "--single-json");
 const writeReport = process.argv.includes("--report");
+const evaluationFast = process.env.OPENTAKEOFF_EVAL_FULL_SWEEP !== "1";
 // --single-json <setId>: internal mode, see takeoff-eval.mjs's own identical
 // mechanism for the full rationale (real per-set CPU-bound work needs real
 // OS-level parallelism — a child process per set — not just promise
@@ -199,7 +200,7 @@ async function evalSet(set) {
       const expect = (row.expect_status || "").trim();
       let status;
       try {
-        const r = await s.sweepScheduleRow(tag, { evaluationFast: true });
+        const r = await s.sweepScheduleRow(tag, { evaluationFast });
         status = (r.found ?? 0) > 0 ? "resolved" : "refused";
       } catch {
         status = "refused";   // sweepScheduleRow throws UserError on any refusal path
