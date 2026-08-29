@@ -8,18 +8,17 @@ continues to govern implementation and verification inside `opentakeoff/`.
 
 When working autonomously toward the corpus goal:
 
-1. Keep available isolated cloud-worker slots assigned to non-overlapping,
-   implementation-first tasks chosen from the highest-impact measured gaps.
-2. Use Composer 2.5 Fast for workers unless the user explicitly changes the
-   worker model. The coordinator remains responsible for higher-reasoning
-   review, integration, and final verification.
-3. Refill a worker slot when its result returns. Do not allow an investigation
-   that finds a stale or unsafe premise to stall the queue; dispatch the next
-   measurable gap.
-4. While cloud workers are active, maintain a recurring two-minute health
-   check against their backend lifecycle state. Immediately replace workers
-   in `ERROR`; do not rely only on delayed completion notifications or the
-   last progress message visible in the UI.
+1. Keep implementation, testing, and integration on the coordinator VM as the
+   critical path. Do not dispatch cloud workers unless the user explicitly
+   re-enables them; repeated cloud-state failures made them negative expected
+   value for the current run.
+2. If cloud workers are re-enabled, use Composer 2.5 Fast unless the user
+   explicitly changes the model. Assign only short, isolated, non-overlapping
+   tasks; never make their output a dependency of coordinator progress.
+3. While authorized cloud workers are active, maintain a recurring two-minute
+   health check against their backend lifecycle state. Immediately account for
+   workers in `ERROR`; do not rely only on delayed completion notifications or
+   the last progress message visible in the UI.
 5. Independently reproduce and verify every worker result before integrating
    it. Require exact before/after metrics, focused regression tests, and
    negative controls. A worker's claim is evidence to check, not proof.

@@ -41,17 +41,21 @@ Takeoff by set:
 - Federal VAV offset regression fixture from worker commit `bb0c5f1`; inspect,
   reproduce its fail-without-fix proof, and run focused tests before accepting.
 
-## Active implementation tracks
+## Local implementation queue
 
+- Recover and independently verify the failed worker's general Building 5406
+  `ET-1` schedule-discovery patch. Provisional worker evidence reports a
+  43.5% to 47.8% improvement, but its synthetic test and ITD negative control
+  were incomplete when the cloud state failed.
 - General same-device multi-view deduplication with legitimate repeated-device
   negative controls.
 - General reference-table extraction accuracy.
-- Highest-value remaining deterministic scored gap outside active work.
-- Separately launched tracks cover Federal false-adds, Baker misses, and NAVFAC
-  pump/valve handling.
+- Federal false-adds, Baker misses, and NAVFAC pump/valve handling.
 
-Workers are provisional. Integrate only after coordinator review and
-independent evaluation.
+Cloud dispatch is paused per the user's 2026-08-29 instruction after all three
+initial Composer workers failed at the cloud-state layer. The coordinator VM
+is the critical path. Any output returned by workers already in flight remains
+provisional and may be used only after independent local verification.
 
 ## Rejected or deferred approaches
 
@@ -66,8 +70,8 @@ independent evaluation.
 
 ## Next queue
 
-After active tracks return, select the highest measured non-overlapping defect
-from fresh evaluator output. Known candidates include Federal `CH-1`
-single-row/multi-tier schedule discovery and remaining safe tag/table
-normalization failures. Refill every available Composer 2.5 Fast cloud-worker
-slot until the goal or a demonstrated ceiling is reached.
+After the recovered Building 5406 patch is verified, select the highest
+measured non-overlapping defect from fresh evaluator output. Known candidates
+include Federal `CH-1` single-row/multi-tier schedule discovery, multi-view
+overcounts, and remaining safe tag/table normalization failures. Continue
+locally until the goal or a demonstrated ceiling is reached.
