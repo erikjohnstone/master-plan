@@ -1918,6 +1918,24 @@ export interface TaggedViewLandmark {
   at: Point;
 }
 
+export interface TagClaimCoverage {
+  claimed: number;
+  rawMatches: number;
+  segments: number;
+}
+
+/**
+ * Rank fingerprints by evidence tied to the requested tag, not by generic
+ * geometric hit count. More distinct claimed tag occurrences wins; equal
+ * coverage prefers fewer unclaimed geometric hits, then the richer shape.
+ */
+export function prefersTagClaimCoverage(candidate: TagClaimCoverage, current: TagClaimCoverage | null): boolean {
+  if (!current) return true;
+  if (candidate.claimed !== current.claimed) return candidate.claimed > current.claimed;
+  if (candidate.rawMatches !== current.rawMatches) return candidate.rawMatches < current.rawMatches;
+  return candidate.segments > current.segments;
+}
+
 /**
  * Collapse repeated plan views drawn side-by-side on one sheet.
  *

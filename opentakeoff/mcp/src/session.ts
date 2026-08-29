@@ -119,7 +119,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, prefersTagClaimCoverage, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -3486,6 +3486,18 @@ export class Session {
       // === 1, e.g. itd-d1-lab's own US-1) has exactly one anchor to try
       // here, so this is a no-op for it — unchanged from before this loop
       // existed.
+      // Four or more same-sheet occurrences provide enough evidence to rank
+      // candidate fingerprints by how many DISTINCT occurrences of this
+      // exact tag they claim. This is intentionally not the old "most raw
+      // matches wins" heuristic: generic fragments lose the tie to a shape
+      // with the same tag coverage and fewer unrelated geometric hits.
+      const rankByTagClaims = withOcc[0].occ.length >= 4;
+      let best: {
+        fp: SymbolFingerprint;
+        rect: [Point, Point];
+        anchor: TagOcc;
+        coverage: TagClaimCoverage;
+      } | null = null;
       outerSameTag:
       for (const candAnchor of withOcc[0].occ) {
         anchor = candAnchor;
@@ -3497,9 +3509,48 @@ export class Session {
             const got = candFor(padK);
             if (got === "region") break;
             if (!got) continue;
-            if (probes(got.cand, cand)) { fp = got.cand; anchorRect = got.rect; corroborated = true; break outerSameTag; }
+            if (!probes(got.cand, cand)) continue;
+            if (!rankByTagClaims) {
+              fp = got.cand; anchorRect = got.rect; corroborated = true;
+              break outerSameTag;
+            }
+            const selfOffset = Math.hypot(got.cand.center[0] - candAnchor.cx, got.cand.center[1] - candAnchor.cy);
+            const radius = got.cand.footprint / 2 + Math.max(candAnchor.h, selfOffset);
+            let result: SymbolMatchResult;
+            try {
+              result = matchSymbol(got.cand, anchorGeo.segs, {
+                ...sweepOpts,
+                candidateRegions: withOcc[0].occ.map((o) => ({ center: [o.cx, o.cy] as Point, radius })),
+              });
+            } catch {
+              continue;
+            }
+            const claimed = new Set<number>();
+            for (const match of result.matches) {
+              let bestIdx = -1, bestDist = Infinity;
+              for (let i = 0; i < withOcc[0].occ.length; i++) {
+                const o = withOcc[0].occ[i];
+                const d = Math.hypot(match.at[0] - o.cx, match.at[1] - o.cy);
+                if (d < bestDist) { bestDist = d; bestIdx = i; }
+              }
+              if (bestIdx >= 0 && bestDist <= radius) claimed.add(bestIdx);
+            }
+            const coverage: TagClaimCoverage = {
+              claimed: claimed.size,
+              rawMatches: result.matches.length,
+              segments: got.cand.segments,
+            };
+            if (prefersTagClaimCoverage(coverage, best?.coverage ?? null)) {
+              best = { fp: got.cand, rect: got.rect, anchor: candAnchor, coverage };
+            }
           }
         }
+      }
+      if (best) {
+        fp = best.fp;
+        anchorRect = best.rect;
+        anchor = best.anchor;
+        corroborated = true;
       }
       // No whole-shape corroboration anywhere — restore the default anchor
       // so every fallback below (inline-motif retry, TIER 2) runs exactly

@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, prefersTagClaimCoverage, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -420,4 +420,19 @@ test("dedupeAlignedSameSheetViews: horizontal stacked views retain the larger vi
     5000,
   );
   assert.deepEqual(redundant, [3], "the fuller top view's two real instances win over the partial bottom redraw");
+});
+
+test("prefersTagClaimCoverage ranks exact-tag coverage before raw geometric popularity", () => {
+  assert.equal(prefersTagClaimCoverage(
+    { claimed: 8, rawMatches: 8, segments: 20 },
+    { claimed: 7, rawMatches: 3, segments: 40 },
+  ), true);
+  assert.equal(prefersTagClaimCoverage(
+    { claimed: 8, rawMatches: 12, segments: 40 },
+    { claimed: 8, rawMatches: 8, segments: 20 },
+  ), false);
+  assert.equal(prefersTagClaimCoverage(
+    { claimed: 8, rawMatches: 8, segments: 40 },
+    { claimed: 8, rawMatches: 8, segments: 20 },
+  ), true);
 });
