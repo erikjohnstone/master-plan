@@ -110,7 +110,7 @@ Takeoff by set:
 
 ## Verification in progress
 
-- Start the next three-fix accuracy batch from the current 82.5% takeoff,
+- Start the next five-fix accuracy batch from the current 82.5% takeoff,
   116/129 reference, and 95.0% graph baseline.
 
 ## Local implementation queue
@@ -139,7 +139,7 @@ Cloud dispatch and all subagent dispatch are prohibited by the user's
 
 ## Next queue
 
-Select three non-overlapping fixes from the current evaluator output, using
+Select five non-overlapping fixes from the current evaluator output, using
 focused diagnostics between changes and one full corpus gate after the batch.
 Prioritize Baker's variable-size symbol family, NAVFAC's remaining repeated
 views, and Federal `CH-1`; preserve the current exact sets and refusal behavior.
