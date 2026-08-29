@@ -120,6 +120,32 @@ export const projectTakeoffOutput = {
   }),
 };
 
+const sourceBox = z.tuple([z.number(), z.number(), z.number(), z.number()]);
+
+export const queryTableOutput = {
+  query: z.object({
+    title: z.string().nullable(),
+    row_key: z.string().nullable(),
+    column: z.string().nullable(),
+  }),
+  count: z.number().int(),
+  truncated: z.boolean(),
+  matches: z.array(z.object({
+    sheet: z.string(),
+    kind: z.string(),
+    title: z.object({ text: z.string(), bbox: sourceBox }).nullable(),
+    region: sourceBox,
+    headers: z.array(z.string()),
+    row: z.object({
+      key: z.string(),
+      cells: z.record(z.string(), z.object({
+        text: z.string(),
+        bbox: sourceBox,
+      })),
+    }),
+  })),
+};
+
 export const sheetInfoOutput = {
   ...sheetSummary,
   seg_count: z.number().int().describe("Vector segment count"),

@@ -17,7 +17,7 @@ import {
   exportMarkedPdfOutput, listShapesOutput, deriveBaseOutput, deriveTransitionsOutput, importTakeoffOutput, applyRulesOutput, cutOutOutput,
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
   markVerdictOutput, deleteVerdictOutput,
-  sheetGraphOutput, resolveTagOutput, findScheduleOutput, projectTakeoffOutput, sweepScheduleRowOutput, countMarksOutput,
+  sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
@@ -27,6 +27,7 @@ import { buildPlanSetTakeoff } from "./takeoff.ts";
 import {
   VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
 } from "../../web/src/lib/hvacTaxonomy.ts";
+import { rowKeyAnswersFor } from "../../web/src/lib/sheetgraph.ts";
 
 // The coordinate contract, stated on every tool so any agent reading any one
 // description knows the space it is working in.
@@ -567,6 +568,52 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     inputSchema: { kind: z.string().describe('"room finish" (rooms → surface finishes), "finish"/"material" (codes → products), or "equipment" (MEP equipment schedules)') },
     outputSchema: findScheduleOutput,
   }, run("find_schedule", ({ kind }) => session.findSchedule(kind)));
+
+  server.registerTool("query_table", {
+    description: `Query actual extracted table cells across the loaded plan set, with source coordinates on every answer. Use title for a case-insensitive table-title substring, row_key for an exact schedule mark/key (compound rows such as R1/E1 answer for either mark), and column for a case-insensitive header substring; combine filters to narrow the result. At least one filter is required. Every returned table region, title, and cell carries its source-sheet bbox so the answer can be audited with view_sheet. This reads all deterministic table kinds—not only reference tables and not only equipment schedules—and never invokes an LLM. ${COORDS}`,
+    inputSchema: {
+      title: z.string().min(1).optional().describe('Table-title substring, e.g. "CONTROL VALVE SCHEDULE"'),
+      row_key: z.string().min(1).optional().describe('Exact row key/mark, e.g. "CV-HHW-BP-M" or "RTU-01"'),
+      column: z.string().min(1).optional().describe('Header substring; only matching columns are returned, e.g. "MCA"'),
+      limit: z.number().int().min(1).max(1000).default(100).describe("Maximum matching rows returned"),
+    },
+    outputSchema: queryTableOutput,
+  }, run("query_table", async ({ title, row_key, column, limit }) => {
+    if (!title && !row_key && !column) throw new UserError("Pass at least one of title, row_key, or column.");
+    const graph = await session.graphForPipeline();
+    const titleNeedle = title?.trim().toUpperCase();
+    const rowNeedle = row_key?.trim().toUpperCase().replace(/\s+/g, "");
+    const columnNeedle = column?.trim().toUpperCase();
+    const all = graph.tables.flatMap((table) => {
+      if (titleNeedle && !(table.title?.text || "").toUpperCase().includes(titleNeedle)) return [];
+      const selectedHeaders = columnNeedle
+        ? table.headers.filter((header) => header.toUpperCase().includes(columnNeedle))
+        : table.headers;
+      if (columnNeedle && !selectedHeaders.length) return [];
+      return table.rows.flatMap((row) => {
+        if (rowNeedle && !rowKeyAnswersFor(row.key, rowNeedle)) return [];
+        const cells = Object.fromEntries(selectedHeaders.flatMap((header) => {
+          const cell = row.cells[header];
+          return cell?.text ? [[header, { text: cell.text, bbox: cell.bbox }]] : [];
+        }));
+        if (columnNeedle && !Object.keys(cells).length) return [];
+        return [{
+          sheet: table.sheet,
+          kind: table.kind,
+          title: table.title ? { text: table.title.text, bbox: table.title.bbox } : null,
+          region: table.region,
+          headers: selectedHeaders,
+          row: { key: row.key, cells },
+        }];
+      });
+    });
+    return {
+      query: { title: title ?? null, row_key: row_key ?? null, column: column ?? null },
+      count: all.length,
+      truncated: all.length > limit,
+      matches: all.slice(0, limit),
+    };
+  }));
 
   server.registerTool("project_takeoff", {
     description: `Run the complete deterministic takeoff across every loaded plan and schedule in one call. This is the production answer to requests such as "do a butterfly valve takeoff": pass equipment_types:["Butterfly valve"] for an exact taxonomy subtype, categories:["valve"] for the entire trade family, or omit both for all recognized equipment. The reply includes every schedule row and extracted table cell, installed quantities, drawing coordinates, source schedule coordinates, explicit failures/refusals, and separate tagged-row versus untagged-legend results. It never estimates quantity from a schedule row: installed counts come only from corroborated plan labels/geometry, and structurally unavailable evidence returns a typed refusal. Load every file in the bid set first with load_plan + merge:true. This is read-only; it does not commit canvas shapes. ${COORDS}`,
