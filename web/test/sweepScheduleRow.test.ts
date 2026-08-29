@@ -243,7 +243,21 @@ test("classifySweepMatches: two matches closer than half a symbol diagonal colla
   const occ = [tagNear([200, 200]), tagNear(near)];
   const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
   assert.equal(r.matches.length, 1, "overlapping matches are one device");
-  assert.ok(r.withheld.some((w) => /half a symbol/.test(w.reason)), "the shadow is a disclosed question");
+  assert.ok(r.withheld.some((w) => /within a symbol/.test(w.reason)), "the shadow is a disclosed question");
+});
+
+test("classifySweepMatches: a different-transform match inside one footprint is a symmetry shadow, not a second install", () => {
+  // The seed read under 180°+mirror lands a second centroid just outside
+  // half-diagonal (eccentricity). Same-transform siblings at that distance
+  // stay two installs; a different transform is the same ink.
+  const anchorSegs = place([{ at: [200, 200] }]);
+  const anchor = tagNear([200, 200]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const shifted: Point = [200, 232];
+  const sheetSegs = place([{ at: [200, 200] }, { at: shifted, rot: 180, mir: true }]);
+  const occ = [tagNear([200, 200]), tagNear(shifted)];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
+  assert.equal(r.matches.length, 1, "a symmetry shadow does not count as a second device");
 });
 
 test("classifySweepMatches: two close same-tag labels each keep the match nearest them, not whichever occurrence sorts first", () => {

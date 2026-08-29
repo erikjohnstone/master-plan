@@ -1701,9 +1701,9 @@ export interface SweepSheetResult {
  * fingerprint cleared the bar at the seed and missed it at the siblings
  * by hatch/size, not identity). A single leftover labeled near-miss is
  * left withheld: that is the schematic-vs-plan dual-convention shape,
- * not a second install. Matches closer than half a symbol diagonal
- * collapse to the better score before any tag is claimed — two real
- * instances cannot sit that close without overlapping. A match is
+ * not a second install. Matches closer than half a symbol diagonal,
+ * or a different square-symmetry transform inside one footprint,
+ * collapse to the better score before any tag is claimed. A match is
  * claimed against the NEAREST occurrence within R, never the first-in-
  * array one. `tag` is the row's own canonical key, used only to word
  * the withheld/text_only reasons. */
@@ -1743,11 +1743,21 @@ export function classifySweepMatches(
   // sweep_schedule_row does not pass excludeCenter, so the seed's own
   // near-shadow is one of them. Collapse to the better score before
   // claiming tags; the loser is a disclosed question, not a second install.
-  const suppressR = (res.scaled ? res.scaled.footprint_px : fp.footprint) / 2;
+  const footprint = res.scaled ? res.scaled.footprint_px : fp.footprint;
+  const overlapR = footprint / 2;
   const physical: SweepMatch[] = [];
   for (const m of [...res.matches].sort((a, b) => b.score - a.score || a.at[1] - b.at[1] || a.at[0] - b.at[0])) {
-    if (physical.some((p) => Math.hypot(p.at[0] - m.at[0], p.at[1] - m.at[1]) <= suppressR)) {
-      withheld.push({ ...m, reason: `the marker geometry matches within half a symbol of an already-counted instance — two real instances cannot sit that close without overlapping; most likely this instance's own linework read a second time, not a second device; look before counting it` });
+    const shadow = physical.find((p) => {
+      const d = Math.hypot(p.at[0] - m.at[0], p.at[1] - m.at[1]);
+      if (d <= overlapR) return true;
+      // Same ink under a different square-symmetry transform, centroid
+      // shifted by the seed's eccentricity (matchSymbol's own shadow
+      // comment). A second real stamp of the same transform is kept —
+      // that is two installs, even when they sit just outside overlapR.
+      return d <= footprint && (p.rotation !== m.rotation || p.mirrored !== m.mirrored);
+    });
+    if (shadow) {
+      withheld.push({ ...m, reason: `the marker geometry matches within a symbol of an already-counted instance — two real instances cannot sit that close without overlapping; most likely this instance's own linework read under a second transform, not a second device; look before counting it` });
       continue;
     }
     physical.push(m);
