@@ -5,7 +5,7 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 ## 2026-08-29 — rotated hyphen joins; work notes are not instances
 
 ### Fixed
-- **A 90/180/270° hyphenated mark joins along its run.** CAD often stacks `SHHWP` + `-` + `M1` (or a seven-glyph `CV-CHW-BP-T`) as vertical glyph runs; the shared join only walked +X and compared axis-aligned box height, so a long word and its hyphen never met. Rotated fragments now join on the same baseline (perpendicular to the run) with em-sized gaps; the unrotated walk is unchanged. Adjacent rotated columns stay split. The text layer (`textSpans`) is the join site — not a second pass inside `extractTable` / `buildSheetGraph`.
+- **A 90/180/270° hyphenated mark joins along its run.** CAD often stacks `SHHWP` + `-` + `M1` (or a seven-glyph `CV-CHW-BP-T`) as vertical glyph runs; the shared join only walked +X and compared axis-aligned box height, so a long word and its hyphen never met. The +X walk still runs first over every span (a quarter-turn note between two same-row fragments still interrupts). Rotated leftovers then join along the run with em-sized baselines. Adjacent rotated columns stay split. The text layer (`textSpans`) is the join site — not a second pass inside `extractTable` / `buildSheetGraph`.
 - **A work-note sentence is not a compound instance.** `compoundTagOcc` still accepts a circuit/panel remainder (`R1 /C-11`). A span that continues into English (`CUH-T1 ON FLOOR 3; …`) no longer seeds `sweep_schedule_row`.
 
 ## 2026-08-29 — multi-hyphen equipment tags
