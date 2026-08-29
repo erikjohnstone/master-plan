@@ -119,7 +119,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -3140,7 +3140,15 @@ export class Session {
       // against), and never fires when exact/compound already found
       // something — its own join-fragments search risks stitching unrelated
       // short spans together, so it stays the more conservative last resort.
-      const occ = merged.length ? merged : fragmentedTagOcc(sh.spans, key);
+      // Third tier, after exact/compound AND fragmentedTagOcc: a SEPARATE
+      // deeper same-row chain (deepHyphenChainTagOcc's own header comment)
+      // for a real shape fragmentedTagOcc's own 4-hop budget can't reach —
+      // never invoked unless fragmentedTagOcc's own unmodified search
+      // already found nothing, and structurally gated to >=2-hyphen keys
+      // (no real tag in this project's own corpus keys has one), so it can
+      // never touch a case fragmentedTagOcc itself already resolves.
+      const fragmented = fragmentedTagOcc(sh.spans, key);
+      const occ = merged.length ? merged : (fragmented.length ? fragmented : deepHyphenChainTagOcc(sh.spans, key));
       return occ.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
     };
     // Compound-key geometric fallback — a real, general bug distinct from
