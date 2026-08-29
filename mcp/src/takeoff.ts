@@ -404,6 +404,24 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
   for (const { tb, row, tag, cls } of deferredReferenceRows) {
     const canon = tag.toUpperCase().replace(/\s+/g, "");
     if (seenTags.has(canon)) continue; // a real "equipment"-kind schedule elsewhere already answered for this exact tag — never shadow or double-count it
+    // Bare-vs-suffixed twin/triplet guard — real, corpus-found (navfac-
+    // cherry-point-atc-mechanical.pdf's own AHU-T1/AHU-T1A/AHU-T1B): a
+    // reference-kind table (a FAN SOUND POWER LEVEL SCHEDULE, here) routinely
+    // shares identical performance data across a redundant pair/triplet of
+    // real units and prints ONE row for it under the bare mark ("AHU-T1")
+    // rather than repeating the row once per suffixed unit — while the real
+    // primary equipment schedule elsewhere already lists each unit under its
+    // OWN letter-suffixed tag ("AHU-T1A", "AHU-T1B"). That bare row is not a
+    // THIRD physical asset; resolving it as its own new tag double-counts
+    // the same already-seen equipment under a second, generic name. Detected
+    // the same way MEP drafters actually draw the convention — this bare
+    // tag is a strict prefix of an already-resolved tag whose ONLY remaining
+    // suffix is a single letter (A, B, C, …) — never a digit (a genuinely
+    // different tag, "AHU-1" vs "AHU-10") and never more than one character
+    // (also a genuinely different tag). No project-specific string: this is
+    // the general lettered-twin-unit shape, not a navfac-cherry-point literal.
+    const isTwinAlias = [...seenTags].some((s) => s.startsWith(canon) && /^[A-Z]$/.test(s.slice(canon.length)));
+    if (isTwinAlias) continue;
     seenTags.add(canon);
     await resolveRow(tb, row, tag, cls);
   }
