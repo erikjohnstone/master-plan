@@ -1548,6 +1548,7 @@ export function fragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
     let text = upper(start.str);
     let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
     let cur = start;
+    const used = new Set<FlatSpan>([start]);
     let ok = stripHy(text) === targetStripped;
     for (let guard = 0; !ok && stripHy(text).length < targetStripped.length && guard < 4; guard++) {
       const h = Math.max(cur.y1 - cur.y0, 6);
@@ -1652,9 +1653,14 @@ export function deepHyphenChainTagOcc(spans: FlatSpan[], key: string): TagOcc[] 
       const h = Math.max(cur.y1 - cur.y0, 6);
       let next: FlatSpan | null = null, bestD = Infinity;
       for (const sp of spans) {
-        if (sp === cur) continue;
+        if (used.has(sp)) continue;
+        const candidate = text + upper(sp.str);
+        if (!targetStripped.startsWith(stripHy(candidate))) continue;
         const sameRow = Math.abs(sp.y0 - cur.y0) < h * 0.4 && sp.x0 >= cur.x0 - 1 && sp.x0 - cur.x1 < h * 1.5;
-        if (!sameRow) continue;
+        const sameColumn = Math.abs(sp.x0 - cur.x0) < h * 0.4
+          && ((sp.y1 <= cur.y1 + 1 && cur.y0 - sp.y1 < h * 1.5)
+            || (sp.y0 >= cur.y0 - 1 && sp.y0 - cur.y1 < h * 1.5));
+        if (!sameRow && !sameColumn) continue;
         const dx = (sp.x0 + sp.x1) / 2 - (cur.x0 + cur.x1) / 2;
         const dy = (sp.y0 + sp.y1) / 2 - (cur.y0 + cur.y1) / 2;
         const d = dx * dx + dy * dy;
@@ -1662,13 +1668,18 @@ export function deepHyphenChainTagOcc(spans: FlatSpan[], key: string): TagOcc[] 
       }
       if (!next) break;
       const candidate = text + upper(next.str);
-      if (!targetStripped.startsWith(stripHy(candidate))) break;
       text = candidate;
       x0 = Math.min(x0, next.x0); y0 = Math.min(y0, next.y0); x1 = Math.max(x1, next.x1); y1 = Math.max(y1, next.y1);
       cur = next;
+      used.add(next);
       ok = stripHy(text) === targetStripped;
     }
-    if (ok) out.push({ cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, h: Math.max(y1 - y0, 6), bbox: [x0, y0, x1, y1] });
+    if (ok) out.push({
+      cx: (x0 + x1) / 2,
+      cy: (y0 + y1) / 2,
+      h: Math.max(Math.min(x1 - x0, y1 - y0), 6),
+      bbox: [x0, y0, x1, y1],
+    });
   }
   return out;
 }

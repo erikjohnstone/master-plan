@@ -362,6 +362,22 @@ test("deepHyphenChainTagOcc: navfac's own 7-run same-row split (\"CV\",\"-\",\"C
   assert.deepEqual(occ[0].bbox, [100, 200, 168, 206]);
 });
 
+test("deepHyphenChainTagOcc: quarter-turned seven-run labels chain vertically", () => {
+  const spans: FlatSpan[] = [
+    { str: "CV", x0: 200, y0: 170, x1: 206, y1: 190 },
+    { str: "-", x0: 200, y0: 164, x1: 206, y1: 170 },
+    { str: "CHW", x0: 200, y0: 144, x1: 206, y1: 164 },
+    { str: "-", x0: 200, y0: 138, x1: 206, y1: 144 },
+    { str: "BP", x0: 200, y0: 124, x1: 206, y1: 138 },
+    { str: "-", x0: 200, y0: 118, x1: 206, y1: 124 },
+    { str: "T", x0: 200, y0: 110, x1: 206, y1: 118 },
+  ];
+  const occ = deepHyphenChainTagOcc(spans, "CV-CHW-BP-T");
+  assert.equal(occ.length, 1);
+  assert.deepEqual(occ[0].bbox, [200, 110, 206, 190]);
+  assert.equal(occ[0].h, 6, "rotated text uses glyph thickness, not the full label length");
+});
+
 test("deepHyphenChainTagOcc: a coincidental word positioned below the start, listed earlier in the spans array, must not derail the same-row chain (the real CV-CHW-BP-M \"AS\" distractor)", () => {
   const spans: FlatSpan[] = [
     // "AS" sits directly below "CV" and appears FIRST in array order — a
