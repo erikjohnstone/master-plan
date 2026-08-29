@@ -248,13 +248,11 @@ test("classifySweepMatches: two close same-tag labels each keep the match neares
   assert.equal(r.text_only.length, 0, "neither close tag is left as bare text");
 });
 
-test("classifySweepMatches: a near-bar withheld match that carries this row's own unclaimed tag COUNTS", () => {
-  // The unlabeled commit bar withholds a size/hatch variant (score in
-  // [scoreLow, scoreHigh)). When this row's own tag is drawn at that
-  // still-unclaimed occurrence, the tag is the identity — counting it is
-  // not guessing unlabeled geometry. scoreHigh is raised past 1 so an
-  // otherwise-identical second instance falls in the withheld band; the
-  // promotion, not a lower bar, is what must recover it.
+test("classifySweepMatches: a single leftover labeled near-bar match stays withheld", () => {
+  // One leftover tagged near-miss is the schematic-versus-plan extra, not
+  // a sibling cluster. scoreHigh is raised past 1 so an otherwise-identical
+  // second instance falls in the withheld band; the tight family rule, not
+  // a lower bar, is what must leave it a question.
   const anchorSegs = place([{ at: [100, 100] }]);
   const anchor = tagNear([100, 100]);
   const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
@@ -264,8 +262,28 @@ test("classifySweepMatches: a near-bar withheld match that carries this row's ow
     excludeCenter: cf.fp.center,
     scoreHigh: 1.01,
   });
-  assert.equal(r.matches.length, 1, "the labeled near-bar instance is promoted, not left withheld");
-  assert.deepEqual(r.matches[0].tag_at, occ[1].bbox);
+  assert.equal(r.matches.length, 0, "one leftover labeled near-miss is not a family");
+  assert.ok(r.withheld.some((w) => w.reason.includes("tag is drawn beside it")), "the leftover stays a disclosed question");
+});
+
+test("classifySweepMatches: two leftover labeled near-bar matches on a one-instance sheet COUNT", () => {
+  // Same-convention siblings of the seed: the fingerprint cleared the bar
+  // once and missed it twice by hatch/size, each leftover still carrying
+  // this row's own tag. That cluster is the family exception.
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const a: Point = [400, 400];
+  const b: Point = [700, 400];
+  const sheetSegs = place([{ at: [100, 100] }, { at: a }, { at: b }]);
+  const occ = [tagNear([100, 100]), tagNear(a), tagNear(b)];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {
+    excludeCenter: cf.fp.center,
+    scoreHigh: 1.01,
+  });
+  assert.equal(r.matches.length, 2, "the labeled family is promoted, not left withheld");
+  const tags = r.matches.map((m) => m.tag_at).sort();
+  assert.deepEqual(tags, [occ[1].bbox, occ[2].bbox].sort());
   assert.equal(r.text_only.length, 0);
 });
 

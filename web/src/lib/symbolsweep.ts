@@ -1598,6 +1598,57 @@ export function corroborateFingerprint(
   return null;
 }
 
+/**
+ * When a sheet already has exactly one confident counted instance and
+ * several leftover own-tag occurrences each have a near-bar withheld
+ * (same-sheet sibling copies of the counted geometry), promote those
+ * best withhelds. The seed (`excludeCenter`) counts as that one
+ * confident instance — matchSymbol hid it, but it is already in the
+ * takeoff. A single leftover labeled near-miss stays withheld: that is
+ * the typical schematic-versus-plan extra, not a sibling cluster.
+ */
+function promoteLabeledNearMisses(
+  leftover: SweepWithheld[],
+  occ: TagOcc[],
+  matchedOcc: Set<number>,
+  matches: SweepSheetMatch[],
+  withheld: SweepWithheld[],
+  R: number,
+  excludeCenter?: Point,
+): void {
+  const leftoverOcc = occ
+    .map((o, i) => ({ o, i }))
+    .filter(({ i }) => !matchedOcc.has(i));
+  const labeledLeftovers = leftoverOcc.filter(({ o }) =>
+    leftover.some((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R),
+  );
+  const confident = matches.length + (excludeCenter ? 1 : 0);
+  if (confident !== 1 || labeledLeftovers.length < 2) {
+    for (const w of leftover) withheld.push(w);
+    return;
+  }
+  const claimed = new Set<SweepWithheld>();
+  for (const { o, i } of leftoverOcc) {
+    let best: SweepWithheld | null = null;
+    let bestD = Infinity;
+    for (const w of leftover) {
+      const d = Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy);
+      if (d <= R && d < bestD) {
+        best = w;
+        bestD = d;
+      }
+    }
+    if (best) {
+      matches.push({ ...best, tag_at: occ[i].bbox });
+      matchedOcc.add(i);
+      claimed.add(best);
+    }
+  }
+  for (const w of leftover) {
+    if (!claimed.has(w)) withheld.push(w);
+  }
+}
+
 export interface SweepSheetMatch extends SweepMatch {
   /** The tag-text evidence bbox that put this match IN the count — a match
    * counts only when the row's own tag sits inside its footprint. */
@@ -1627,17 +1678,18 @@ export interface SweepSheetResult {
  * match whose footprint carries this row's own tag COUNTS; a confident
  * match carrying a sibling's tag is EXCLUDED (named); a confident match
  * carrying no tag is WITHHELD as a question; matchSymbol's own near-matches
- * (`res.withheld`, the score-band between scoreLow/scoreHigh) COUNT when
- * they sit on this row's own still-unclaimed tag (the tag is the identity;
- * the unlabeled commit bar does not get to overrule a label that is
- * actually drawn there) and otherwise stay WITHHELD, or EXCLUDED if a
- * sibling owns them; a tag occurrence with no matching geometry nearby at
- * all is TEXT_ONLY. A match is claimed against the NEAREST occurrence
- * within R, never the first-in-array one — two real tags sitting inside
- * one footprint of each other would otherwise both be billed to whichever
- * occurrence happens to sort first, leaving the other TEXT_ONLY.
- * `tag` is the row's own canonical key, used only to word the
- * withheld/text_only reasons — it never gates what counts. */
+ * (`res.withheld`, the score-band between scoreLow/scoreHigh) are carried
+ * through as WITHHELD too, with the tag-adjacency noted when one is drawn
+ * beside it — except when this sheet already has exactly one confident
+ * counted instance (a committed match, or the seed that `excludeCenter`
+ * hid) and two or more still-unclaimed same-tag occurrences each sit
+ * next to a near-bar withheld (a labeled same-convention family whose
+ * fingerprint cleared the bar at the seed and missed it at the siblings
+ * by hatch/size, not identity). A single leftover labeled near-miss is
+ * left withheld: that is the schematic-vs-plan dual-convention shape,
+ * not a second install. A match is claimed against the NEAREST
+ * occurrence within R, never the first-in-array one. `tag` is the row's
+ * own canonical key, used only to word the withheld/text_only reasons. */
 export function classifySweepMatches(
   tag: string,
   fp: SymbolFingerprint,
@@ -1696,43 +1748,20 @@ export function classifySweepMatches(
     if (sib) { excluded.push({ at: m.at, tag: sib.key }); continue; }
     withheld.push({ ...m, reason: `the marker geometry matches but carries no "${tag}" tag within its footprint — an unlabeled instance or a shared marker shape; look before counting it` });
   }
-  // matchSymbol's OWN near-matches (score in [scoreLow, scoreHigh)). The
-  // unlabeled commit bar withholds these as "likely a variant" — correct
-  // when the geometry is the only evidence. When this row's own tag is
-  // drawn at that same unclaimed occurrence, the tag IS the identity and
-  // the near-bar score is just a size/hatch variant of a labeled instance.
-  // Promote the best such near-match per still-unclaimed occurrence (same
-  // one-claim-per-tag rule as the confident pass). A near-match with no
-  // own-tag stays withheld, or is excluded if a sibling owns it.
-  const withheldClaims: Array<{ w: SweepMatch; oi: number }> = [];
+  // matchSymbol's OWN near-matches (score in [scoreLow, scoreHigh)).
+  // Default: stay withheld, with tag-adjacency noted. Promotion is a
+  // narrow, labeled-family exception — see promoteLabeledNearMisses.
+  const leftoverWithheld: SweepWithheld[] = [];
   for (const w of res.withheld) {
-    let oi = -1, bestD = Infinity;
-    for (let k = 0; k < occ.length; k++) {
-      if (matchedOcc.has(k)) continue;
-      const d = Math.hypot(w.at[0] - occ[k].cx, w.at[1] - occ[k].cy);
-      if (d <= R && d < bestD) { bestD = d; oi = k; }
-    }
-    if (oi >= 0) withheldClaims.push({ w, oi });
-    else {
-      const sib = siblingOcc.find((sp) => Math.hypot(w.at[0] - sp.cx, w.at[1] - sp.cy) <= R);
-      if (sib) { excluded.push({ at: w.at, tag: sib.key }); continue; }
-      const near = occ.some((o) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R);
-      withheld.push(near ? { ...w, reason: `${w.reason} — and the "${tag}" tag is drawn beside it` } : w);
-    }
-  }
-  const bestWithheldForOcc = new Map<number, SweepMatch>();
-  for (const { w, oi } of withheldClaims) {
-    const cur = bestWithheldForOcc.get(oi);
-    if (!cur || w.score > cur.score) bestWithheldForOcc.set(oi, w);
-  }
-  for (const { w, oi } of withheldClaims) {
-    if (bestWithheldForOcc.get(oi) === w) {
-      matchedOcc.add(oi);
-      matches.push({ ...w, tag_at: occ[oi].bbox });
+    const sib = siblingOcc.find((sp) => Math.hypot(w.at[0] - sp.cx, w.at[1] - sp.cy) <= R);
+    if (sib && !occ.some((o) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R)) {
+      excluded.push({ at: w.at, tag: sib.key });
       continue;
     }
-    withheld.push({ ...w, reason: `the marker geometry matches near the "${tag}" tag, but a closer/better-scoring match already claims this same occurrence — most likely this instance's own leader-line or label furniture read a second time, not a second device; look before counting it` });
+    const near = occ.some((o) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R);
+    leftoverWithheld.push(near ? { ...w, reason: `${w.reason} — and the "${tag}" tag is drawn beside it` } : w);
   }
+  promoteLabeledNearMisses(leftoverWithheld, occ, matchedOcc, matches, withheld, R, opts.excludeCenter);
   const byPos = (a: { at: Point }, b: { at: Point }) => a.at[1] - b.at[1] || a.at[0] - b.at[0];
   matches.sort(byPos); excluded.sort(byPos); withheld.sort(byPos);
   // An occurrence sitting at (or right beside) opts.excludeCenter is the
