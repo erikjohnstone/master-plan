@@ -232,11 +232,31 @@ Takeoff by set:
     restores ITD to 116/116.
   - Reference remains 129/129 (100%); graph remains 91/91 cells exact and
     98.6% row-symbol recall.
+- Seventh five-fix accuracy batch, independently verified forced-cold on
+  2026-08-29 at commit `362bc9c` (56.4 seconds):
+  - Takeoff improves 492/534 → 495/534 exact (92.1% → 92.7%); excluding the
+    intentional raster refusal set, applicable takeoff improves 97.2% →
+    97.8% and quantity delta falls 17 → 14.
+  - Exact roof-plan hose-bibb placements now share the existing conservative
+    roof-drain path, gated on the graph-classified sheet title rather than
+    incidental note text. Baker HB-2 closes while ITD controls stay exact.
+  - A 0.90–0.92 air-device geometry match can commit only when the row's own
+    exact tag sits beside it. Unlabeled variants remain withheld.
+  - Unnamed one/two-digit tokens no longer count as room registration
+    evidence across sheets. This prevents a detail numeral from collapsing
+    two real `RG-12` placements.
+  - Inline and whole-symbol candidates claiming the same exact tag bbox are
+    reduced to one strongest claim. This closes the `RG-11` overcount.
+  - NAVFAC improves 95.8% → 96.7%; Baker improves 92.5% → 95.0%.
+  - The stale AC-1/ACCU-1 refusal expectation now records the production
+    compound-key resolver; graph has zero unexpected resolutions.
+  - Full regressions pass: web 1,910/1,910 (3 intentional skips), MCP
+    247/247, and MCP typecheck.
 
 ## Verification in progress
 
-- Start the next five-fix accuracy batch from the current 92.1% takeoff
-  (97.2% applicable), 129/129 reference, and 98.6% graph baseline.
+- Start the next five-fix accuracy batch from the current 92.7% takeoff
+  (97.8% applicable), 129/129 reference, and 98.6% graph baseline.
 
 ## Local implementation queue
 
