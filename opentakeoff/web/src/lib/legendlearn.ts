@@ -153,10 +153,11 @@ function looksLikeGlyph(bbox: { x0: number; y0: number; x1: number; y1: number }
  * A returned glyph is at most maxGlyphDimPx wide/high, sits to a caption's
  * left within maxCaptionGapPx, and overlaps that caption's row after the
  * pairing pass's half-height expansion. The boxes below are deliberately
- * wider than those exact limits. Any segment of any pairable glyph has both
- * endpoints inside one such box; everything else is guaranteed dead work for
- * this function. A coarse box grid keeps the filter linear on 80k-segment
- * plan/legend hybrids.
+ * wider than those exact limits. Any segment contributing to a pairable
+ * glyph intersects one such box; intersection (not endpoint containment)
+ * preserves a longer stem that JTS splits at a mid-edge glyph junction.
+ * Everything else is guaranteed dead work for this function. A coarse box
+ * grid keeps the filter linear on 80k-segment plan/legend hybrids.
  */
 function segmentsNearCaptions(
   segs: number[], spans: LegendSpan[], maxGlyphDimPx: number, maxCaptionGapPx: number,
@@ -183,12 +184,17 @@ function segmentsNearCaptions(
   const out: number[] = [];
   for (let i = 0; i < segs.length; i += 4) {
     const ax = segs[i], ay = segs[i + 1], bx = segs[i + 2], by = segs[i + 3];
-    const mx = (ax + bx) / 2, my = (ay + by) / 2;
-    const candidates = grid.get(`${Math.floor(mx / CELL)},${Math.floor(my / CELL)}`) || [];
-    if (candidates.some((j) => {
+    const sx0 = Math.min(ax, bx), sx1 = Math.max(ax, bx);
+    const sy0 = Math.min(ay, by), sy1 = Math.max(ay, by);
+    const candidates = new Set<number>();
+    for (let gx = Math.floor(sx0 / CELL); gx <= Math.floor(sx1 / CELL); gx++) {
+      for (let gy = Math.floor(sy0 / CELL); gy <= Math.floor(sy1 / CELL); gy++) {
+        for (const j of grid.get(`${gx},${gy}`) || []) candidates.add(j);
+      }
+    }
+    if ([...candidates].some((j) => {
       const b = boxes[j];
-      return ax >= b.x0 && ax <= b.x1 && ay >= b.y0 && ay <= b.y1
-        && bx >= b.x0 && bx <= b.x1 && by >= b.y0 && by <= b.y1;
+      return sx0 <= b.x1 && sx1 >= b.x0 && sy0 <= b.y1 && sy1 >= b.y0;
     })) out.push(ax, ay, bx, by);
   }
   return out;
