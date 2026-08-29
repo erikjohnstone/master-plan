@@ -3680,6 +3680,27 @@ export class Session {
     const selfOffset = fp ? Math.hypot(fp.center[0] - anchor.cx, fp.center[1] - anchor.cy) : 0;
     const anchorHForSweep = Math.max(anchor.h, selfOffset);
 
+    // A whole-shape match can succeed for only the few siblings whose exact
+    // perimeter happens to share the anchor's physical size while missing
+    // the rest of a variable-size register/diffuser family. Do not replace
+    // those strong matches. Independently derive a hatch motif and require it
+    // to corroborate at another occurrence; if successful, it may supplement
+    // only still-unclaimed occurrences of this exact tag below.
+    let supplementalInlineFp: InlineMotifFingerprint | undefined;
+    if (fp && corroCandidates.length) {
+      for (const cand of corroCandidates) {
+        const inline = corroborateInlineMotif(
+          anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+          anchor, anchorSheet.upp,
+          { segs: cand.segs, meta: (await this.ensureGeometry(cand.sh)).meta, occ: cand.occ, upp: cand.sh.upp },
+        );
+        if (inline?.corroborated) {
+          supplementalInlineFp = inline.fp;
+          break;
+        }
+      }
+    }
+
     // 4. the full plan-only sweep + tag corroboration per match.
     // The tag-proximity radius is the marker's footprint AS DRAWN ON THE SHEET
     // being read, so it rides the size ratio with the fingerprint (#186): a
@@ -3738,6 +3759,23 @@ export class Session {
           continue;
         }
         ({ matches, withheld, excluded, text_only, candidates, complete, scaled } = cls);
+        if (supplementalInlineFp && text_only.length) {
+          const inlineRes = sweepInlineMotif(supplementalInlineFp, g2.segs, g2.meta, sh.upp);
+          const supplement = classifyInlineMotifMatches(t, inlineRes, occ, sibSpans, anchor.h);
+          const claimed = new Set(matches.map((m) => m.tag_at.join(",")));
+          for (const m of supplement.matches) {
+            const key = m.tag_at.join(",");
+            if (claimed.has(key)) continue; // one installed count per tag occurrence
+            claimed.add(key);
+            matches.push({ at: m.at, score: m.size_score, rotation: 0, mirrored: false, tag_at: m.tag_at });
+          }
+          text_only = text_only.filter((entry) =>
+            !supplement.matches.some((m) => Math.hypot(m.at[0] - entry.at[0], m.at[1] - entry.at[1]) <= Math.max(m.w_px, m.h_px) / 2 + anchor.h));
+          candidates = {
+            considered: candidates.considered + supplement.candidates_considered,
+            dropped: candidates.dropped,
+          };
+        }
       } else {
         // inline-motif fallback path (register/grille hatch fill) — see the
         // corroborateInlineMotif branch above for why this runs instead.
@@ -3873,6 +3911,7 @@ export class Session {
       notes.push(`The tag "${t}" is drawn exactly once, so the fingerprint was corroborated against sibling tag "${corroboratedVia}"'s own occurrence in the same ${table} table instead — a real, weaker form of evidence than a same-tag corroboration (two different marks sharing a symbol family, not the same mark recurring); audit the matches with view_sheet before trusting the count.`);
     }
     if (inlineFp) notes.push(`No whole-shape marker recurs around this tag's own drawn text, so this anchored on the surrounding hatch fill's own real-world size/pitch instead (the register/grille fallback) — score is a size closeness, not a segment match; audit with view_sheet before trusting the count.`);
+    if (supplementalInlineFp) notes.push(`Whole-shape matches were preserved and a separately corroborated hatch-size/pitch motif supplemented only this tag's still-unclaimed drawn occurrences; each occurrence contributes at most one count.`);
     if (opts.commit && !found) notes.push("commit requested but nothing cleared the bar — no shapes were committed.");
     // #186, same disclosure discipline as symbol_sweep: a ratio the count
     // depends on is stated, and an assumed ratio over an empty sheet is named
