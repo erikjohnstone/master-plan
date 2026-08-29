@@ -4087,6 +4087,21 @@ export class Session {
         text_only = text_only.filter((entry) =>
           Math.hypot(tagged.cx - entry.at[0], tagged.cy - entry.at[1]) > anchor.h * 2);
       }
+      // Every counted match must claim one distinct tag occurrence. Inline
+      // motif variants can produce two nearby geometry candidates for the
+      // same literal label; keep the strongest claim instead of counting the
+      // label twice.
+      const byClaim = new Map<string, CountedMatch>();
+      for (const match of matches) {
+        const key = match.tag_at.join(",");
+        const prior = byClaim.get(key);
+        if (!prior
+          || (match.multiplier ?? 1) > (prior.multiplier ?? 1)
+          || ((match.multiplier ?? 1) === (prior.multiplier ?? 1) && match.score > prior.score)) {
+          byClaim.set(key, match);
+        }
+      }
+      matches = [...byClaim.values()];
       const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
       perSheet.push({
         state: sh, matches, withheld, excluded, text_only,
