@@ -5633,6 +5633,8 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     // discriminator the mandate above asked for, not a corpus-specific
     // title/tag hack.
     if (banded.out.length < 2) return { table: null, nextIdx: toIdx };
+    const promotedHeaders = promoteLeadingEngineeringUnits(anchors.map((a) => a.label), banded.out);
+    for (let i = 0; i < anchors.length; i++) anchors[i].label = promotedHeaders[i];
 
     // Title hunt.
     //

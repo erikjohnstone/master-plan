@@ -3687,7 +3687,7 @@ export class Session {
     // to corroborate at another occurrence; if successful, it may supplement
     // only still-unclaimed occurrences of this exact tag below.
     let supplementalInlineFp: InlineMotifFingerprint | undefined;
-    if (fp && corroCandidates.length) {
+    if (fp && corroCandidates.length && /\b(?:DIFFUSER|GRILLE|REGISTER)\b/i.test(table)) {
       for (const cand of corroCandidates) {
         const inline = corroborateInlineMotif(
           anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
