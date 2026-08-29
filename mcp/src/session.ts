@@ -2936,7 +2936,7 @@ export class Session {
     mirror?: boolean;
     tolerancePx?: number;
   } = {}) {
-    const t = (tag || "").trim().toUpperCase().replace(/\s+/g, "");
+    let t = (tag || "").trim().toUpperCase().replace(/\s+/g, "");
     if (!t) throw new UserError('Pass a schedule-row tag as drawn, e.g. sweep_schedule_row { tag: "T1" }.');
     const graph = await this.ensureGraph();
     if (!graph.available) throw new UserError("This set has no text layer (a scan) — the sheet graph is unavailable, so schedule rows cannot be read.");
@@ -3026,10 +3026,15 @@ export class Session {
       throw new UserError(`Ambiguous: ${rowHits.length} schedule rows carry the key "${t}" — the same mark defined twice cannot seed one sweep. Marquee the marker yourself with symbol_sweep.`);
     }
     const { tb, r } = rowHits[0];
+    // This row's own mark(s) — split on "/" so a compound row key ("AC-1/
+    // ACCU-1", "R1/E1") is never mistaken for a SIBLING of itself below: a
+    // split-system pair's two component marks are each the row's OWN
+    // identity, not another row's competing tag.
+    const ownMarks = new Set(canonKey(r.key).split("/").map((s) => s.trim()).filter(Boolean));
     // sibling keys span EVERY table in the set, not just the row's own: a
     // marker labeled with any other schedule key is that mark's instance, and
     // disclosing it as "excluded, labeled 135" beats calling it unlabeled
-    const siblings = [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(row.key).split("/").filter(Boolean))))].filter((k) => k !== t).sort();
+    const siblings = [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(row.key).split("/").filter(Boolean))))].filter((k) => !ownMarks.has(k)).sort();
     const table = tb.title?.text || `${tb.kind} schedule`;
 
     // 2. plan-role sheets, and every drawn occurrence of the tag on them
@@ -3061,10 +3066,35 @@ export class Session {
       const occ = exact.length ? exact : fragmentedTagOcc(sh.spans, key);
       return occ.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
     };
+    // Compound-key geometric fallback — a real, general bug distinct from
+    // the row-LOOKUP layer above (rowKeyAnswersFor already resolves a
+    // compound key like "AC-1/ACCU-1" or "R1/E1" fine): the literal joined
+    // string is never what's drawn on the plan. Each mark is its own,
+    // separately-drawn tag (confirmed live, bldg5406-hvac-demo sheet #2:
+    // "AC-1" tags the indoor wall-mounted unit, "ACCU-1" separately tags
+    // the outdoor condensing unit on its pad — both real, both findable,
+    // neither ever drawn as the joined "AC-1/ACCU-1" string). Try the
+    // literal compound first (never change behavior for a set that DOES
+    // draw the joined string as one tag, and this is a no-op for every
+    // ordinary single-mark tag), then fall back to each of the row's own
+    // marks in turn, adopting the first one actually drawn on a plan sheet
+    // as the geometric search key for the rest of this sweep — every
+    // downstream step (fingerprinting, corroboration, match classification,
+    // the committed condition's own tag) then runs on that ONE real drawn
+    // mark, exactly as an un-compound sweep_schedule_row call already would.
+    if (ownMarks.size > 1) {
+      const hasOcc = (key: string) => planSheets.some((sh) => occOf(sh, key).length > 0);
+      if (!hasOcc(t)) {
+        for (const mark of ownMarks) {
+          if (hasOcc(mark)) { t = mark; break; }
+        }
+      }
+    }
     const occBySheet = planSheets.map((sh) => ({ sh, occ: occOf(sh, t) }));
     const totalOcc = occBySheet.reduce((n, e) => n + e.occ.length, 0);
     if (!totalOcc) {
-      throw new UserError(`Schedule row "${t}" (${table} on ${tb.sheet}) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: "set"}.`);
+      const markNote = ownMarks.size > 1 ? ` Tried every mark of this compound key (${[...ownMarks].join(", ")}) — none is drawn on any plan sheet.` : "";
+      throw new UserError(`Schedule row "${t}" (${table} on ${tb.sheet}) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone.${markNote} If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: "set"}.`);
     }
 
     // 3. anchor + pad ladder + corroboration. Anchor sheet = the plan sheet
