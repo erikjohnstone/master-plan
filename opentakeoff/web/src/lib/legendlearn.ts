@@ -147,6 +147,53 @@ function looksLikeGlyph(bbox: { x0: number; y0: number; x1: number; y1: number }
   return true;
 }
 
+/** Keep only linework that could geometrically belong to a glyph which the
+ * pairing pass below can return for one of the known captions.
+ *
+ * A returned glyph is at most maxGlyphDimPx wide/high, sits to a caption's
+ * left within maxCaptionGapPx, and overlaps that caption's row after the
+ * pairing pass's half-height expansion. The boxes below are deliberately
+ * wider than those exact limits. Any segment of any pairable glyph has both
+ * endpoints inside one such box; everything else is guaranteed dead work for
+ * this function. A coarse box grid keeps the filter linear on 80k-segment
+ * plan/legend hybrids.
+ */
+function segmentsNearCaptions(
+  segs: number[], spans: LegendSpan[], maxGlyphDimPx: number, maxCaptionGapPx: number,
+): number[] {
+  const boxes = spans.map((s) => ({
+    x0: s.x0 - maxCaptionGapPx - maxGlyphDimPx,
+    x1: s.x0,
+    y0: s.y0 - maxGlyphDimPx * 1.5,
+    y1: s.y1 + maxGlyphDimPx * 1.5,
+  }));
+  const CELL = 256;
+  const grid = new Map<string, number[]>();
+  for (let i = 0; i < boxes.length; i++) {
+    const b = boxes[i];
+    for (let gx = Math.floor(b.x0 / CELL); gx <= Math.floor(b.x1 / CELL); gx++) {
+      for (let gy = Math.floor(b.y0 / CELL); gy <= Math.floor(b.y1 / CELL); gy++) {
+        const key = `${gx},${gy}`;
+        const entries = grid.get(key);
+        if (entries) entries.push(i);
+        else grid.set(key, [i]);
+      }
+    }
+  }
+  const out: number[] = [];
+  for (let i = 0; i < segs.length; i += 4) {
+    const ax = segs[i], ay = segs[i + 1], bx = segs[i + 2], by = segs[i + 3];
+    const mx = (ax + bx) / 2, my = (ay + by) / 2;
+    const candidates = grid.get(`${Math.floor(mx / CELL)},${Math.floor(my / CELL)}`) || [];
+    if (candidates.some((j) => {
+      const b = boxes[j];
+      return ax >= b.x0 && ax <= b.x1 && ay >= b.y0 && ay <= b.y1
+        && bx >= b.x0 && bx <= b.x1 && by >= b.y0 && by <= b.y1;
+    })) out.push(ax, ay, bx, by);
+  }
+  return out;
+}
+
 /** A real caption is routinely drawn as SEVERAL separate text runs on one
  * line, not one string — confirmed live against the real Eglin AFB legend:
  * "2-WAY ELECTRIC CONTROL VALVE" arrives as three runs, "2" + "-" + "WAY
@@ -266,7 +313,8 @@ export function findLegendGlyphs(
   const lines = mergeCaptionLines(rawSpans, opts.captionMergeGapPx ?? 3);
   const spans = mergeWrappedCaptions(lines, opts.maxWrapGapPx ?? 8, opts.maxWrapIndentPx ?? 5);
 
-  const { components: clusters, gridPx } = clusterSegments(segs, maxGlyphDimPx);
+  const relevantSegs = segmentsNearCaptions(segs, spans, maxGlyphDimPx, maxCaptionGapPx);
+  const { components: clusters, gridPx } = clusterSegments(relevantSegs, maxGlyphDimPx);
   // Real, measured bug (accuracy-hardening plan, this session): a cluster's
   // bbox here is built from buildMepGraph's own NODED node coordinates,
   // which are quantized to its solved snap grid (quantGridPx) before
