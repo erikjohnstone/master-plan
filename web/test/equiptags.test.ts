@@ -101,6 +101,21 @@ test("joinHyphenatedTags: a 270° hyphen stack joins along the run, not +X", () 
   assert.equal(joinHyphenatedTags(stack).map((s) => s.str).join(","), "CV-CHW-BP-T");
 });
 
+test("joinHyphenatedTags: a 90° span between +X fragments still interrupts the +X walk", () => {
+  // Dense schematic: a quarter-turn note whose y0/x0 sits in sort order
+  // between "TP" and "-" must keep them split. Pulling rotated spans out
+  // of the +X list is how every TP-2 on a control sheet glued together.
+  const schematic = [
+    box("TP", 0, 50, 20, 10),
+    { str: "N", x0: 12, y0: 50, x1: 22, y1: 120, rot: 90 },
+    box("-", 21, 50, 6, 10),
+    box("2", 28, 50, 10, 10),
+  ];
+  const out = joinHyphenatedTags(schematic).map((s) => s.str);
+  assert.equal(out.includes("TP-2"), false, `must stay split, got ${out}`);
+  assert.ok(out.includes("TP"));
+});
+
 test("joinHyphenatedTags: an unrotated join is unchanged when a 270° neighbor sits nearby", () => {
   const h = 10;
   const pump = [

@@ -240,10 +240,19 @@ function joinAlongRun<T extends TagBox>(items: T[]): T[] {
 export function joinHyphenatedTags<T extends TagBox>(spans: T[]): T[] {
   const items = spans.filter((s) => piece(s));
   if (items.length < 2) return items;
-  const axis: T[] = [];
-  const rotated: T[] = [];
-  for (const s of items) (isRotatedRun(s.rot) ? rotated : axis).push(s);
-  return [...joinAlongX(axis), ...joinAlongRun(rotated)].sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
+  // +X walk first, over the FULL list — a rotated note whose y0 sits
+  // between two same-row fragments must still interrupt (dense schematics
+  // otherwise glue every "TP"+"-"+"2" on the sheet). Rotated leftovers
+  // that the +X walk cannot see then join along their run.
+  const afterX = joinAlongX(items);
+  const leftoverRot: T[] = [];
+  const kept: T[] = [];
+  for (const s of afterX) {
+    if (isRotatedRun(s.rot) && !isEquipTag(piece(s))) leftoverRot.push(s);
+    else kept.push(s);
+  }
+  const rotated = leftoverRot.length >= 2 ? joinAlongRun(leftoverRot) : leftoverRot;
+  return [...kept, ...rotated].sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
 }
 
 /** GraphSpan-shaped cousin (x/y/w/h) — same join, same class.
