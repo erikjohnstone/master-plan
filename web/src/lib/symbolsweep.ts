@@ -1307,6 +1307,43 @@ export interface TagOcc {
  * span type. */
 export interface FlatSpan { str: string; x0: number; y0: number; x1: number; y1: number }
 
+/** A single span LONGER than the key — the schedule's own bare key with more
+ * text appended in the SAME PDF text run (a circuit/panel reference, an
+ * inverter tag, …), never split across separate spans at all. Real,
+ * confirmed live — baker-county-eoc-bidset.pdf#54's own LUMINAIRE plan draws
+ * every "R1" fixture as ONE PDF text run reading "R1 /C-11", "R1 /INV-2", …
+ * (23 of them; occOf's own exact match sees none, since none is bare "R1",
+ * and fragmentedTagOcc's join-fragments search can never fire either, since
+ * a starting fragment there must be SHORTER than the key). A real token
+ * boundary is required right after the key (anything but a letter/digit,
+ * including end-of-string) so "R1" can never absorb "R10" or "R1A" — a
+ * different, real, separately-scheduled tag.
+ *
+ * Unlike fragmentedTagOcc's own join search (which risks stitching
+ * unrelated short spans together, and so stays gated to "only when the
+ * exact match found nothing"), a match here is a single already-complete
+ * span — it can never coincide with an exact match's own span (that
+ * requires equality, this requires strictly-longer), so `occOf` merges this
+ * in ALONGSIDE the exact match unconditionally: a sheet can legitimately
+ * carry both a bare, unrelated coincidental "R1" elsewhere AND this row's
+ * own real compound-labeled instances, and both are real occurrences of
+ * whatever anchors on this sheet right now (baker-county-eoc-bidset.pdf#54's
+ * own "P1" — one bare span plus three "P1 /C-11"-style compound spans, all
+ * four real). */
+export function compoundTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
+  const upper = (s: string) => s.trim().toUpperCase();
+  const keyUpper = upper(key);
+  if (!keyUpper) return [];
+  const out: TagOcc[] = [];
+  for (const sp of spans) {
+    const t = upper(sp.str);
+    if (t.length <= keyUpper.length || !t.startsWith(keyUpper)) continue;
+    if (/[A-Z0-9]/.test(t[keyUpper.length])) continue;
+    out.push({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] });
+  }
+  return out;
+}
+
 /** sweep_schedule_row's own tag-occurrence match (`occOf` in both
  * session.ts and TakeoffCanvas.jsx) requires the FULL tag text to appear as
  * ONE literal span — but a real drawn tag is routinely split across
@@ -1320,12 +1357,13 @@ export interface FlatSpan { str: string; x0: number; y0: number; x1: number; y1:
  * ARE genuinely drawn (SR-1/SR-2/TG-1/TG-2 on Bessemer; the entire real
  * equipment tag set on itd-d1-lab).
  *
- * This is a FALLBACK, tried only when the exact single-span match already
- * found nothing — it can only ever ADD a way to succeed, never change an
- * already-passing case. Starting from a span whose own text is a real
- * (hyphen-insensitive) PREFIX of the key, it extends a bounded chain
- * (same-row adjacent, or the next line directly below — the two real
- * shapes measured) until the accumulated text exactly reconstructs the key
+ * This is a FALLBACK, tried only when the exact single-span match (and
+ * compoundTagOcc above, occOf's own doctrine) already found nothing — it
+ * can only ever ADD a way to succeed, never change an already-passing case.
+ * Starting from a span whose own text is a real (hyphen-insensitive) PREFIX
+ * of the key and SHORTER than it, it extends a bounded chain (same-row
+ * adjacent, or the next line directly below — the two real shapes measured)
+ * until the accumulated text exactly reconstructs the key
  * (hyphen-insensitive) or the chain runs out — never a sheet-wide text
  * search, never a fuzzy match. */
 export function fragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
@@ -1333,11 +1371,11 @@ export function fragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   const targetStripped = stripHy(key);
   if (!targetStripped) return [];
   const upper = (s: string) => s.trim().toUpperCase();
+  const out: TagOcc[] = [];
   const starts = spans.filter((sp) => {
     const t = upper(sp.str);
     return t.length > 0 && t.length < key.length && targetStripped.startsWith(stripHy(t));
   });
-  const out: TagOcc[] = [];
   for (const start of starts) {
     let text = upper(start.str);
     let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
