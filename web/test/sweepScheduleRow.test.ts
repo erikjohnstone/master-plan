@@ -253,7 +253,7 @@ test("classifySweepMatches: a different-transform match inside one footprint is 
   const anchorSegs = place([{ at: [200, 200] }]);
   const anchor = tagNear([200, 200]);
   const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
-  const shifted: Point = [200, 232];
+  const shifted: Point = [200, 226];
   const sheetSegs = place([{ at: [200, 200] }, { at: shifted, rot: 180, mir: true }]);
   const occ = [tagNear([200, 200]), tagNear(shifted)];
   const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});

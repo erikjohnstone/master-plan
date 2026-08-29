@@ -1751,10 +1751,12 @@ export function classifySweepMatches(
       const d = Math.hypot(p.at[0] - m.at[0], p.at[1] - m.at[1]);
       if (d <= overlapR) return true;
       // Same ink under a different square-symmetry transform, centroid
-      // shifted by the seed's eccentricity (matchSymbol's own shadow
-      // comment). A second real stamp of the same transform is kept —
-      // that is two installs, even when they sit just outside overlapR.
-      return d <= footprint && (p.rotation !== m.rotation || p.mirrored !== m.mirrored);
+      // shifted by a few px of eccentricity (matchSymbol's own shadow
+      // comment). Cap the extra radius — a large fingerprint (leader +
+      // fixture) must not swallow a real rotated sibling a room away.
+      // Same-transform stamps just outside overlapR stay two installs.
+      const shadowR = overlapR + Math.max(8, 0.05 * footprint);
+      return d <= shadowR && (p.rotation !== m.rotation || p.mirrored !== m.mirrored);
     });
     if (shadow) {
       withheld.push({ ...m, reason: `the marker geometry matches within a symbol of an already-counted instance — two real instances cannot sit that close without overlapping; most likely this instance's own linework read under a second transform, not a second device; look before counting it` });
