@@ -21,7 +21,6 @@
 // serves (sheet_context.text.spans).
 
 import { ROOM_LABEL_RE } from "./detectRooms";
-import { isEquipTag, joinGraphSpans } from "./equiptags";
 
 /** rot: text rotation in degrees, clockwise in device space (y down). Absent
  * or 0 = horizontal; 90/270 = a quarter-turn — the rotated-header case. When
@@ -2994,7 +2993,6 @@ function bandLimits(anchors: Anchor[]): { x0: number; x1: number; medGap: number
 // mechanism this file does not touch) rather than silently taking it down
 // while chasing a different set's own real gap.
 const CODE_RE = /^(?:[A-Z]{1,4}[A-Z0-9]{0,4}|[A-Z]{1,6}(?:-(?:[A-Z][A-Z0-9]{0,5}|[0-9]{1,5})){1,4})$/;
-const isFinishKey = (s: string) => CODE_RE.test(s) || isEquipTag(s);
 // Every recognized column-header word, across all three vocabularies —
 // a real device/finish tag is never itself the bare name of some table's
 // column (the same axiom bandDataRows' own keyIsOwnColumn check already
@@ -3266,8 +3264,8 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
     // for each mark on its own (checked first: slash-stripped "R1E1" would
     // otherwise pass CODE_RE and bury the compound)
     const parts = kept.split("/").filter(Boolean);
-    if (parts.length > 1 && parts.every((p) => isFinishKey(p))) return { key: parts.join("/") };
-    return isFinishKey(key) ? { key } : null;
+    if (parts.length > 1 && parts.every((p) => CODE_RE.test(p))) return { key: parts.join("/") };
+    return CODE_RE.test(key) ? { key } : null;
   }
   if (ROW_KEY_RE.test(key)) return { key };
   const q = key.match(QUALIFIED_KEY_RE);
@@ -3941,11 +3939,7 @@ function bandDataRows(
       const hasDigit = /\d/.test(keyed.key);
       let isHeaderFragment = false;
       if (!hasDigit) {
-        // Abbreviation-stack equipment tags (CV-CHW-BP-T class: three or
-        // more short hyphen segments) are catalog keys without a digit.
-        // isEquipTag already refuses two-segment English ("CAR-MON") and
-        // bare words ("CFM", "DUCT") — those stay fragments.
-        isHeaderFragment = !isEquipTag(keyed.key);
+        isHeaderFragment = true;
       } else if (!keyed.key.includes("-")) {
         const prefix = keyed.key.match(/^[A-Z]+/)?.[0] ?? "";
         isHeaderFragment = prefix.length >= 3 && ALL_HEADER_WORDS.has(prefix);
@@ -4758,7 +4752,7 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
  * (quarter-turn) header band. Finds only the FIRST table of `kind` on the
  * sheet — see `extractAllTables` for every table of a kind. */
 export function extractTable(sheet: SheetSpans, kind: "room-finish" | "finish" | "equipment", opts: ExtractOpts = {}): ScheduleTable | null {
-  return extractTableAt({ ...sheet, spans: joinGraphSpans(sheet.spans) }, kind, opts, 0)?.table ?? null;
+  return extractTableAt(sheet, kind, opts, 0)?.table ?? null;
 }
 
 const MAX_TABLES_PER_SHEET = 20;
@@ -4855,7 +4849,6 @@ function extractSideTables(
  * it ended, capped at MAX_TABLES_PER_SHEET as a sanity backstop, not a
  * realistic limit. */
 export function extractAllTables(sheet: SheetSpans, kind: "room-finish" | "finish" | "equipment", opts: ExtractOpts = {}): ScheduleTable[] {
-  sheet = { ...sheet, spans: joinGraphSpans(sheet.spans) };
   const out: ScheduleTable[] = [];
   let fromIdx = 0;
   for (let n = 0; n < MAX_TABLES_PER_SHEET; n++) {
@@ -6303,7 +6296,6 @@ export interface SheetGraph {
 }
 
 export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
-  sheets = sheets.map((s) => ({ ...s, spans: joinGraphSpans(s.spans) }));
   const withText = sheets.filter((s) => s.spans.length > 0);
   if (!withText.length) return { available: false, sheets: [], rooms: [], unmatched_tags: [], tables: [], callouts: [], buildings: [], revisions: [], notes: [] };
   const notes: string[] = [];
