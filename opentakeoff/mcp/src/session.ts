@@ -3964,7 +3964,7 @@ export class Session {
       const rooms = discipline ? this.roomTagsOnSheet(ps.state) : [];
       for (const m of ps.matches) {
         dedupInstances.push({
-          id: m, sheet: ps.state.key, discipline, at: m.at,
+          id: m, sheet: ps.state.key, sheetNumber: ps.state.sheetNumber, discipline, at: m.at,
           rooms, sheetWidthPx: ps.state.widthPx, sheetHeightPx: ps.state.heightPx,
         });
       }

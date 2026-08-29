@@ -366,6 +366,18 @@ test("dedupeCrossDisciplineRoomViews: three disciplines drawing the same room â€
   for (const r of redundant) assert.equal(r.keptDiscipline, "M");
 });
 
+test("dedupeCrossDisciplineRoomViews: paired AIA discipline-overlay sheets register by suffix and position", () => {
+  const instances: RoomSweepInstance<number>[] = [
+    { id: 1, sheet: "set.pdf#14", sheetNumber: "MH121", discipline: "MH", at: [900, 1650], rooms: [], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+    { id: 2, sheet: "set.pdf#23", sheetNumber: "MP121", discipline: "MP", at: [828, 1428], rooms: [], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+  ];
+  assert.deepEqual(dedupeCrossDisciplineRoomViews(instances).map((entry) => entry.id), [2]);
+  assert.deepEqual(dedupeCrossDisciplineRoomViews([
+    instances[0],
+    { ...instances[1], id: 3, at: [3000, 3000] },
+  ]), [], "a shared numeric suffix without coordinate registration is insufficient");
+});
+
 test("dedupeAlignedSameSheetViews: aligned side-by-side system plans collapse one redrawn instance", () => {
   const landmarks: TaggedViewLandmark[] = ["AHU-1", "P-1", "P-2", "AS-1"].flatMap((tag, i) => [
     { tag, at: [500 + i * 40, 600 + i * 100] as Point },

@@ -1919,6 +1919,9 @@ export interface RoomCandidate { tag: string; name: string; bbox: [number, numbe
 export interface RoomSweepInstance<Id> {
   id: Id;
   sheet: string;
+  /** Full title-block sheet number, when available. Paired discipline
+   * overlays commonly share its numeric view suffix (MH121 / MP121). */
+  sheetNumber?: string | null;
   /** Leading AIA discipline letters off the sheet's own title-block sheet
    *  number ("M3.0" → "M"); null when no sheet number was read — an
    *  attribution never guessed, so the instance never enters the dedup. */
@@ -2185,6 +2188,57 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   }
   for (const cluster of clusters.values()) {
     out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(no room drawn nearby — same-location redraw)"));
+  }
+
+  // Paired discipline-overlay fallback. AIA sheet series commonly preserve
+  // the numeric plan/view identity while changing only the discipline
+  // letters (MH121 / MP121). When the same tag also lands within 5% of the
+  // page diagonal on those paired sheets, registration is stronger than a
+  // missing or noisy room label. This is not a suffix-only collapse.
+  const alreadyRedundant = new Set(out.map((entry) => entry.id));
+  const viewStem = (sheetNumber: string | null | undefined): string | null => {
+    const m = /^[A-Z]{1,3}[- ]?(.+)$/.exec((sheetNumber || "").trim().toUpperCase());
+    return m?.[1]?.replace(/[^A-Z0-9]/g, "") || null;
+  };
+  const byViewStem = new Map<string, RoomSweepInstance<Id>[]>();
+  for (const inst of instances) {
+    if (!inst.discipline || alreadyRedundant.has(inst.id)) continue;
+    const stem = viewStem(inst.sheetNumber);
+    if (!stem) continue;
+    const arr = byViewStem.get(stem);
+    if (arr) arr.push(inst); else byViewStem.set(stem, [inst]);
+  }
+  for (const group of byViewStem.values()) {
+    if (new Set(group.map((entry) => entry.sheet)).size < 2) continue;
+    const parent = Array.from({ length: group.length }, (_, i) => i);
+    const root = (i: number): number => parent[i] === i ? i : (parent[i] = root(parent[i]));
+    for (let i = 0; i < group.length; i++) {
+      for (let j = i + 1; j < group.length; j++) {
+        if (group[i].sheet === group[j].sheet) continue;
+        const maxDist = Math.min(
+          Math.hypot(group[i].sheetWidthPx, group[i].sheetHeightPx),
+          Math.hypot(group[j].sheetWidthPx, group[j].sheetHeightPx),
+        ) * 0.05;
+        if (Math.hypot(group[i].at[0] - group[j].at[0], group[i].at[1] - group[j].at[1]) > maxDist) continue;
+        const ri = root(i), rj = root(j);
+        if (ri !== rj) parent[ri] = rj;
+      }
+    }
+    const registered = new Map<number, RoomSweepInstance<Id>[]>();
+    for (let i = 0; i < group.length; i++) {
+      const r = root(i);
+      const arr = registered.get(r);
+      if (arr) arr.push(group[i]); else registered.set(r, [group[i]]);
+    }
+    for (const cluster of registered.values()) {
+      const collapsed = collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(paired discipline-overlay sheets)");
+      for (const entry of collapsed) {
+        if (!alreadyRedundant.has(entry.id)) {
+          alreadyRedundant.add(entry.id);
+          out.push(entry);
+        }
+      }
+    }
   }
   return out;
 }
