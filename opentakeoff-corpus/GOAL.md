@@ -121,22 +121,22 @@ the whole deterministic (non-LLM) claim.
 ## 3. Current real state, per set, per metric
 
 **The numbers below are the latest independently verified forced-cold
-full-corpus gate**, run 2026-08-29 against commit `48338a1` in 55.3 seconds.
+full-corpus gate**, run 2026-08-29 against commit `a3f8c20` in 55.6 seconds.
 
 | Set | takeoff-eval | reference-eval | graph-eval (rowsym) | Status |
 |---|---|---|---|---|
 | **bessemer** | **100.0%** (10/10) | **100.0%** (12/12) | rowsym 100.0% | Expected-tag takeoff and reference closed. |
 | **itd-d1-lab** | **100.0%** (116/116) | **100.0%** (34/34) | rowsym 100.0% | Closed. Tight cross-sheet registration removes plumbing plan/foundation redraws without collapsing distinct locations. |
 | **federal-mech** | **100.0%** (83/83) | **100.0%** (31/31) | rowsym 100.0% | Expected tags closed; 19 extracted real schedule rows remain pending false-add key audit. |
-| **navfac-cherry-point-atc** | **94.4%** (203/215) | **100.0%** (31/31) | rowsym 100.0% | Remaining vector/text-backed gaps center on pump/valve refusals and a few air-device undercounts. |
+| **navfac-cherry-point-atc** | **95.8%** (206/215) | **100.0%** (31/31) | rowsym 100.0% | Remaining gaps center on schedule-only equipment without plan evidence and a few air-device undercounts. |
 | **baker-county-eoc** | **87.5%** (35/40) | **100.0%** (21/21) | rowsym 100.0% | Roof drains are closed; five vector-backed fixture/luminaire deltas remain. |
-| **bldg5406-hvac-demo** | **87.0%** (20/23) | 0/0 vacuous | rowsym 82.4% | The full quarter-turned VAV schedule is queryable; the three remaining plan labels use exploded/missing text. |
+| **bldg5406-hvac-demo** | **91.3%** (21/23) | 0/0 vacuous | rowsym 88.2% | The full quarter-turned VAV schedule is queryable; the two remaining fan labels have neither a searchable family prefix nor suffix. |
 | **itd-d1-lab-raster** | 0.0% (correct — see below) | 0/0 cells, vacuous | rowsym 0.0% (vacuous — all-refused key) | **This 0% is the CORRECT, expected answer, not a failure.** This set is a synthetically-rasterized (zero vector text) version of itd-d1-lab's own M1.0 sheet, built specifically to prove the pipeline *refuses cleanly* on a scanned page instead of crashing or inventing data. Confirmed: every real code path refuses honestly, no crashes. This is what "100%" looks like for a raster set under this project's own honesty rules — it will only ever change if OCR is added. |
 
-**Current corpus aggregate:** takeoff 467/515 exact (90.7%), quantity delta
-89; excluding the intentional raster refusal set, takeoff is 467/487 exact
-(95.9%) with quantity delta 25. Reference is 129/129 exact (100%); graph is
-91/91 cells exact and 97.8% row-symbol recall. Per-set closure remains the
+**Current corpus aggregate:** takeoff 471/515 exact (91.5%), quantity delta
+85; excluding the intentional raster refusal set, takeoff is 471/487 exact
+(96.7%) with quantity delta 21. Reference is 129/129 exact (100%); graph is
+91/91 cells exact and 98.6% row-symbol recall. Per-set closure remains the
 goal (§1).
 
 ---
@@ -250,20 +250,15 @@ Being honest about these here is itself part of the goal (§1) — a system
 that silently claims 100% by ignoring what it can't do is worse than one
 that discloses its real limits.
 
-- **bldg5406-hvac-demo's VAV-1..9 / ET-1 / EF-2 / EF-3.** Confirmed live,
-  directly, via pdf.js operator-list + text-content inspection: these
-  specific tags are drawn as raw vector path geometry (stroke/fill ops
-  tracing the letterforms directly — "explode text to polylines," a real
-  CAD-authoring convention some firms use for a handful of tags) —
-  the string is not encoded as text *anywhere* in the PDF. No amount of
-  run-stitching, rotation-awareness, or codepoint-decoding can recover
-  it; only OCR against the rendered raster, or vector glyph-shape
-  recognition, could — and this project has explicitly decided **no
-  further investment in OCR/vision right now** (a prior planning phase
-  already scoped `classify_symbol`, vision-assisted matching, as a
-  deliberately narrow, already-measured, mediocre fallback — not the
-  mechanism this project leans on). This caps bldg5406 well under 100%
-  until/unless that decision changes.
+- **bldg5406-hvac-demo's EF-2 / EF-3.** Confirmed live via pdf.js
+  operator-list + text-content inspection: these two tags are drawn entirely
+  as raw vector-path letterforms ("explode text to polylines"). Neither the
+  family prefix nor suffix is encoded as text anywhere in the PDF, so
+  deterministic run stitching cannot recover them. VAV-6 was previously
+  grouped into this ceiling, but its suffix remained searchable and is now
+  safely recovered from a local quorum of eight complete sibling VAV tags.
+  EF-2/EF-3 require OCR, vector glyph recognition, or a separate
+  schedule/service-to-room association proof; none is silently guessed.
 - **Resolved former ceilings.** Federal CH-1 now extracts after safe deep-
   header boundary recovery. Baker R1 resolves through compound-label
   ranking, and CD-1 resolves 21/21 through explicit `TYP N` multipliers.
@@ -276,8 +271,8 @@ that discloses its real limits.
 
 ## 8. Immediate next steps (as of this file's writing)
 
-1. Start the next five-fix batch from the verified 90.7% takeoff (95.9%
-   excluding the intentional raster refusal set), 100% reference, and 97.8%
+1. Start the next five-fix batch from the verified 91.5% takeoff (96.7%
+   excluding the intentional raster refusal set), 100% reference, and 98.6%
    graph baseline.
 2. Prioritize NAVFAC air-device/pump gaps, Baker's five remaining
    vector-backed deltas, and Building 5406's six graph row-symbol misses.

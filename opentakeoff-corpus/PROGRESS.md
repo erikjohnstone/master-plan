@@ -191,11 +191,31 @@ Takeoff by set:
     95.7% → 97.8%; cells remain 91/91 exact.
   - Full regression suites pass: web 1,907/1,907 (3 intentional skips), MCP
     247/247, and both typechecks.
+- Fifth five-fix accuracy/API batch, independently verified forced-cold on
+  2026-08-29 at commit `a3f8c20` (55.6 seconds):
+  - Takeoff improved 467/515 → 471/515 exact (90.7% → 91.5%); excluding
+    the intentional raster refusal set, applicable takeoff improved
+    95.9% → 96.7% and quantity delta fell 25 → 21.
+  - The unattended project walker now follows the same uniquely-proven
+    one-digit plan/schedule alias as the direct row sweep.
+  - Multi-run tag recovery now supports quarter-turned chains while rejecting
+    punctuation-only starts and preserving the horizontal negative controls.
+  - A missing vector-outlined family prefix can recover from one bare suffix
+    only when four distinct complete siblings establish the local convention,
+    two sit near the suffix, and no second candidate competes. This closes
+    Building 5406 VAV-6 without admitting ordinary plan numerals.
+  - Production MCP now exposes `project_takeoff` for complete loaded-set
+    takeoffs and `query_table` for arbitrary title/row/header queries. The
+    latter returns the exact source sheet and bounding box for every cell.
+  - Reference remains 129/129 (100%). Graph row-symbol recall improves
+    97.8% → 98.6%; cells remain 91/91 exact.
+  - Full regression suites pass: web 1,909/1,909 (3 intentional skips), MCP
+    247/247, and both typechecks.
 
 ## Verification in progress
 
-- Start the next five-fix accuracy batch from the current 90.7% takeoff
-  (95.9% applicable), 129/129 reference, and 97.8% graph baseline.
+- Start the next five-fix accuracy batch from the current 91.5% takeoff
+  (96.7% applicable), 129/129 reference, and 98.6% graph baseline.
 
 ## Local implementation queue
 
@@ -203,8 +223,8 @@ Takeoff by set:
   largest vector/text-backed quantity gap.
 - Baker's remaining deterministic gaps are `HB-1`, `E1`, `HB-2`, `P1`, and
   `V1`.
-- Building 5406's exploded/missing-text VAV-6, EF-2, and EF-3 labels account
-  for all three graph row-symbol misses.
+- Building 5406's fully exploded EF-2 and EF-3 labels account for both graph
+  row-symbol misses; VAV-6 is now recovered from its surviving suffix.
 - Reference extraction is closed at 129/129.
 
 Cloud dispatch and all subagent dispatch are prohibited by the user's
