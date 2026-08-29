@@ -2575,6 +2575,7 @@ test("reference kind: a real, vocabulary-free schedule table extracts correctly 
 
 test("reference kind: button subrows do not corrupt their spanning control-station row", () => {
   const spans: GraphSpan[] = [
+    rh("ELECTRICAL SCHEDULES", 900, -60, 220),
     rh("LIGHTING CONTROL STATIONS", 0, 0, 280),
     rh("CONTROL STATION", 0, 35, 150), rh("ZONES", 250, 35, 60), rh("BUTTON", 480, 35, 70),
     rh("DESIGNATION", 20, 55, 110), rh("CONTROLLED", 230, 55, 100), rh("NUMBER", 480, 55, 75),
