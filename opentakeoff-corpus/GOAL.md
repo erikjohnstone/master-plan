@@ -7,6 +7,21 @@ work already merged to git is intact and reflected below; anything still
 in-flight at the moment of interruption is marked PENDING/UNVERIFIED, not
 claimed as done).
 
+## Current execution policy (supersedes older worker references below)
+
+As explicitly directed on 2026-08-29, this goal is **coordinator-only**.
+Do not dispatch worker agents or subagents. The coordinator implements,
+tests, profiles, and verifies changes directly in this Cloud VM. Any worker
+that was already running when this policy was recorded is not part of the
+critical path, and its output must not be integrated. This policy supersedes
+the historical coordinator/worker descriptions retained later in this file.
+
+The immediate priority is a complete full-corpus evaluation in 30 seconds or
+less, both cold and warm, without weakening regression detection, changing
+scored semantics, or compromising accuracy. After that gate is proven, proceed
+directly to general multi-view deduplication and the highest-impact remaining
+deterministic gaps. OCR and vision remain out of scope.
+
 This file is the durable, single source of truth for "where are we and
 why" on this effort — write here, not just in chat, so a fresh session
 (or a fresh person) can pick this up without re-deriving it.
@@ -112,10 +127,10 @@ per-set numbers above are (§1).
 
 ## 4. How this has actually been getting built (method, not just outcome)
 
-- **Coordinator/worker model.** One coordinating session (this one) plus
-  up to 3 concurrent background workers (`Agent` tool, `isolation: "worktree"`,
-  each in its own git worktree/branch), always targeting real, disclosed
-  gaps — never busywork. A hard, explicit standing rule tonight: **never
+- **Historical coordinator/worker model (retired).** Earlier work used one
+  coordinating session plus background workers. That model is no longer
+  authorized; the current coordinator-only policy at the top of this file
+  controls all future work. The enduring engineering rule is: **never
   hardcode corpus specifics (a filename, a tag, a sheet number) into
   production code** (`mcp/src`, `web/src/lib`). Every fix has to be a
   general, real-world-shape-driven rule, because the actual goal (§1) is
@@ -280,5 +295,5 @@ that discloses its real limits.
    post-reboot Spotlight re-index at the moment this file was written,
    unrelated to this project's own processes) to get a clean, current
    baseline before dispatching new work.
-3. Resume the standing "always 3 concurrent workers, always the biggest
-   real remaining gap first" model from there, per §4's own discipline.
+3. Continue directly in the coordinator VM on the biggest measured gap.
+   Do not dispatch worker agents or subagents.
