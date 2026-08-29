@@ -3146,7 +3146,16 @@ export const isMepEquipmentSchedule = (title: string): boolean => MEP_EQUIPMENT_
 // never does, regardless of how much real rating data its other columns
 // carry — so a genuine "ISOLATION VALVE SCHEDULE" naming real purchasable
 // valves (MODEL/MANUFACTURER present) is never caught by this.
-const REFERENCE_CROSS_TABLE_RE = /\b(CONNECTION|CALCULATION|ISOLATION)\b/;
+// OUTSIDE AIR joins CONNECTION/CALCULATION/ISOLATION: a "REQUIRED
+// OUTSIDE AIR FLOW RATE" (or IMC ventilation-rate) table is a DERIVED
+// calc that cross-references equipment tags a dedicated catalog
+// schedule already defines, carrying only CFM/occupancy arithmetic,
+// never MODEL/MANUFACTURER. Left "equipment", its leading-zero keys
+// (RTU-01 vs the catalog's RTU-1) and its ERV-01 row compete as a
+// second definition of the same units. A genuine outdoor-air UNIT
+// catalog ("OUTSIDE AIR UNIT SCHEDULE") always states MODEL/
+// MANUFACTURER and is not caught.
+const REFERENCE_CROSS_TABLE_RE = /\b(CONNECTION|CALCULATION|ISOLATION|OUTSIDE AIR)\b/;
 export const isReferenceCrossTable = (title: string, headers: string[]): boolean =>
   REFERENCE_CROSS_TABLE_RE.test(norm(title)) && !headers.some((h) => headerLabel(h, ["MODEL", "MANUFACTURER"]));
 
@@ -7311,8 +7320,16 @@ export function scheduleTableFromODL(
   // equipment loop entirely (CU-1/CU-2/WH-1 never attempted). Narrow and
   // local to this ODL classification only — never widens EQUIPMENT_HEADERS
   // itself, so the geometric extractor's own unrelated gates are untouched.
+  // SERIES is the HVAC "basis of design" equivalent of MODEL — a real
+  // catalog schedule names the purchasable product as MANUFACTURER +
+  // SERIES when it has no separate MODEL column ("BASIS OF DESIGN
+  // MANUFACTURER" / "BASIS OF DESIGN SERIES"). Never added to
+  // EQUIPMENT_HEADERS itself (that vocabulary's own standing hazard —
+  // see the TYPE/AREA/WEIGHT revert comment): this is local to the ODL
+  // catalog-identity pair, the same place MODEL is already trusted.
   const hasCatalogIdentity = headers.some((h) => headerLabel(h, EQUIPMENT_HEADERS) === "MANUFACTURER")
-    && headers.some((h) => headerLabel(h, EQUIPMENT_HEADERS) === "MODEL");
+    && (headers.some((h) => headerLabel(h, EQUIPMENT_HEADERS) === "MODEL")
+      || headers.some((h) => /\bSERIES\b/.test(norm(h))));
   let kind: TableKind = "unknown";
   if ((eqHits >= 3 || (hasCatalogIdentity && eqHits >= 2)) && eqHits >= rmHits && eqHits >= finHits) kind = "equipment";
   else if (rmHits >= 3 && rmHits > finHits && surfaceHits >= 2) kind = "room-finish";
