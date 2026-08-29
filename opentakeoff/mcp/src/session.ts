@@ -3340,11 +3340,6 @@ export class Session {
       const markNote = ownMarks.size > 1 ? ` Tried every mark of this compound key (${[...ownMarks].join(", ")}) — none is drawn on any plan sheet.` : "";
       throw new UserError(`Schedule row "${t}" (${table} on ${tb.sheet}) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone.${markNote} If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: "set"}.`);
     }
-    const globallyUniqueSpecificEquipmentLabel = tb.kind === "equipment"
-      && totalOcc === 1
-      && /[A-Z]/.test(t)
-      && /\d/.test(t)
-      && t.length >= 4;
 
     // 3. anchor + pad ladder + corroboration. Anchor sheet = the plan sheet
     // with the MOST occurrences (ord breaks ties) so corroboration can run on
@@ -3360,7 +3355,7 @@ export class Session {
     // other plumbing needed.
     let anchor = withOcc[0].occ[0];
     const anchorGeo = await this.ensureGeometry(anchorSheet);
-    if (!anchorGeo.segs.length && !globallyUniqueSpecificEquipmentLabel) {
+    if (!anchorGeo.segs.length) {
       throw new UserError(`${anchorSheet.key} carries the tag "${t}" but no vector linework — the marker cannot be fingerprinted on a scan.`);
     }
     const sweepOpts: SweepOptions = {
@@ -3819,7 +3814,7 @@ export class Session {
           inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
         }
       }
-      if (!fp && !inlineFp && !globallyUniqueSpecificEquipmentLabel) {
+      if (!fp && !inlineFp) {
         throw new UserError(`Schedule row "${t}" cannot be anchored: no fingerprintable marker linework sits around its drawn tag on ${anchorSheet.key}. Marquee one instance with symbol_sweep instead.`);
       }
     }
@@ -3902,20 +3897,6 @@ export class Session {
       if (opts.evaluationFast && !occ.length) {
         perSheet.push({
           state: sh, matches: [], withheld: [], excluded: [], text_only: [],
-          candidates: { considered: 0, dropped: 0 }, complete: true,
-          elapsed_ms: 0, scale: sweepRatio(anchorSheet, sh), redundant_view: [],
-        });
-        continue;
-      }
-      if (globallyUniqueSpecificEquipmentLabel) {
-        const tagged = occ[0];
-        perSheet.push({
-          state: sh,
-          matches: tagged ? [{
-            at: [tagged.cx, tagged.cy], score: 1, rotation: 0, mirrored: false,
-            tag_at: tagged.bbox, text_counted: true,
-          }] : [],
-          withheld: [], excluded: [], text_only: [],
           candidates: { considered: 0, dropped: 0 }, complete: true,
           elapsed_ms: 0, scale: sweepRatio(anchorSheet, sh), redundant_view: [],
         });
