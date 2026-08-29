@@ -4936,6 +4936,45 @@ export function extractAllTables(sheet: SheetSpans, kind: "room-finish" | "finis
   return out;
 }
 
+/** Extract equipment schedules drawn as an entire quarter-turned table.
+ * Rotating only vertical text into a temporary coordinate space lets the
+ * normal multi-table extractor retain all of its header, boundary, and
+ * refusal rules. Evidence boxes are mapped back to the source sheet. */
+export function extractAllQuarterTurnedTables(
+  sheet: SheetSpans,
+  opts: ExtractOpts = {},
+): ScheduleTable[] {
+  const vertical = sheet.spans.filter(isVertical);
+  if (vertical.length < 8) return [];
+  const pivot = Math.max(...vertical.map((span) => span.x + (span.w || 0)));
+  const turned: SheetSpans = {
+    key: sheet.key,
+    sheet_number: sheet.sheet_number,
+    spans: vertical.map((span) => ({
+      str: span.str,
+      x: span.y,
+      y: pivot - span.x - (span.w || 0),
+      w: span.h || 0,
+      h: span.w || 0,
+      rot: 0,
+    })),
+  };
+  const restore = ([x0, y0, x1, y1]: Bbox): Bbox =>
+    [pivot - y1, x0, pivot - y0, x1];
+  return extractAllTables(turned, "equipment", opts).map((table) => ({
+    ...table,
+    rotated_headers: true,
+    anchors: undefined,
+    region: restore(table.region),
+    title: table.title ? { ...table.title, bbox: restore(table.title.bbox) } : null,
+    rows: table.rows.map((row) => ({
+      ...row,
+      cells: Object.fromEntries(Object.entries(row.cells).map(([label, cell]) =>
+        [label, { ...cell, bbox: restore(cell.bbox) }])),
+    })),
+  }));
+}
+
 // ── structural (vocabulary-free) reference/calculation tables ──────────────
 // The three kinds above all gate a header row on a FIXED vocabulary of
 // expected column words. Real, found live (full-coverage-standard work, this
@@ -6491,7 +6530,11 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     for (const kind of ["room-finish", "finish", "equipment"] as const) {
       // Every table of this kind on the sheet, not just the first — a dense
       // MEP sheet routinely stacks several (#HVAC-boundary), now per band too.
-      for (const bs of bands) for (const t of extractAllTables(bs, kind, { buildings, deltas: deltasBySheet.get(s.key) })) {
+      for (const bs of bands) {
+        const extractOpts = { buildings, deltas: deltasBySheet.get(s.key) };
+        const found = extractAllTables(bs, kind, extractOpts);
+        if (kind === "equipment") found.push(...extractAllQuarterTurnedTables(bs, extractOpts));
+        for (const t of found) {
         // A DOOR / WINDOW / PARTITION schedule carries a MARK column, so the
         // finish-table hunt happily reads one as a finish/material schedule —
         // and then a finish code that collides with a door mark chains to a
@@ -6545,6 +6588,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
         fragments.push(t);
         if (!fragmentKinds.has(s.key)) fragmentKinds.set(s.key, new Set());
         fragmentKinds.get(s.key)!.add(t.kind);
+      }
       }
     }
   }

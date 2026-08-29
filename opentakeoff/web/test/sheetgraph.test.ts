@@ -10,7 +10,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, roomTags, detailCallouts, revisionOf, promoteLeadingEngineeringUnits, type GraphSpan, type SheetSpans, type SheetGraph, type TableRow } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, promoteLeadingEngineeringUnits, type GraphSpan, type SheetSpans, type SheetGraph, type TableRow } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
@@ -481,6 +481,30 @@ test("rotated headers: a quarter-turn header band still anchors the table", () =
   if (res.status === "resolved") {
     assert.equal(res.finishes.find((f) => f.surface === "FLOOR")!.definition?.cells.MANUFACTURER, "EXAMPLECO");
   }
+});
+
+test("an entire quarter-turned equipment schedule is normalized and mapped back", () => {
+  const vertical = (str: string, rowX: number, columnY: number): GraphSpan =>
+    ({ str, x: rowX, y: columnY, w: 8, h: Math.max(12, str.length * 5), rot: 90 });
+  const sheet: SheetSpans = {
+    key: "quarter-turned.pdf#1",
+    spans: [
+      vertical("AIR TERMINAL BOX SCHEDULE", 340, 20),
+      vertical("TAG", 300, 20), vertical("MODEL", 300, 160),
+      vertical("VOLTAGE", 300, 260), vertical("GPM", 300, 340),
+      vertical("VAV-1", 280, 20), vertical("VCEF", 280, 160),
+      vertical("120", 280, 260), vertical("10", 280, 340),
+      vertical("VAV-2", 260, 20), vertical("VCEF", 260, 160),
+      vertical("120", 260, 260), vertical("20", 260, 340),
+    ],
+  };
+  const table = extractAllQuarterTurnedTables(sheet)[0];
+  assert.ok(table);
+  assert.equal(table.title?.text, "AIR TERMINAL BOX SCHEDULE");
+  assert.deepEqual(table.rows.map((row) => row.key), ["VAV-1", "VAV-2"]);
+  assert.equal(table.rows[1].cells.GPM.text, "20");
+  assert.ok(table.rows[0].cells.MODEL.bbox[0] < table.rows[0].cells.MODEL.bbox[2],
+    "restored evidence is a valid source-space box");
 });
 
 // ── multi-building keys: room 134 in Building A ≠ 134 in Building B ─────────
