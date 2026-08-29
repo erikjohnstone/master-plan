@@ -158,6 +158,12 @@ test("compoundTagOcc: any other non-alnum remainder is not a compound hit", () =
   assert.equal(compoundTagOcc("R1 /...", "R1"), false);
 });
 
+test("compoundTagOcc: a work-note sentence is not a compound instance", () => {
+  assert.equal(compoundTagOcc("CUH-T1 ON FLOOR 3; CUH-T2 ON FLOOR 5.", "CUH-T1"), false);
+  assert.equal(compoundTagOcc("SEE CUH-T1 FOR LOCATION", "CUH-T1"), false);
+  assert.equal(compoundTagOcc("R1 /C-11", "R1"), true, "circuit remainder still counts");
+});
+
 test("spanAnswersFor / pickMarkHits: a compound run counts as the leading key", () => {
   const vocab = ["R1", "C-11", "S3"];
   assert.equal(spanAnswersFor("R1 /C-11", "R1", vocab), true);

@@ -100,13 +100,14 @@ test("edit_shape: an edit that changes nothing still refuses, and names label am
 test("undo_last restores a label exactly — set and cleared alike", async () => {
   const s = await swept();
   const id = s.shapes[0].id;
+  const original = s.shapes[0].label;
   s.editShape(id, { label: "OFFICE 101" });
   s.undoLast(1);
-  assert.equal(s.shapes.find((x) => x.id === id)?.label, "101", "the edit op snapshots the whole shape");
+  assert.equal(s.shapes.find((x) => x.id === id)?.label, original, "the edit op snapshots the whole shape");
   s.editShape(id, { label: "" });
   assert.ok(!("label" in s.shapes.find((x) => x.id === id)!));
   s.undoLast(1);
-  assert.equal(s.shapes.find((x) => x.id === id)?.label, "101", "a cleared label comes back too");
+  assert.equal(s.shapes.find((x) => x.id === id)?.label, original, "a cleared label comes back too");
 });
 
 test("edit_shape: reviewed work is still ink — a label is not a loophole", async () => {
