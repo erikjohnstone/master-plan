@@ -1,0 +1,75 @@
+# baker-county-eoc.reference.csv — ground-truth key for the "reference"-kind
+# table extraction path (sheetgraph.ts's structural, vocabulary-free fourth
+# table kind) — companion to baker-county-eoc.takeoff.csv, same discipline:
+# rendered and read by eye directly, never trusted from the pipeline's own
+# extraction. Scored by mcp/scripts/reference-eval.mjs.
+#
+# NOTE on scope vs. the existing keys/baker-county-eoc.csv room-finish key:
+# that file is a DIFFERENT key format (room,surface,code), consumed by
+# graph-eval.mjs's own cell metric, and already scores 100.0%/100.0%/100.0%
+# against the real ROOM FINISH SCHEDULE (sheet #27) — it is NOT extended or
+# duplicated here. This file is for the OTHER real "reference"-kind tables
+# reachable through buildPlanSetTakeoff's own reference_tables[] output,
+# which is a structurally different path (TAG/mark-keyed cross-reference
+# tables, not room/surface finish tables).
+#
+# HOW EVERY VALUE BELOW WAS VERIFIED (2026-08-28): Session.viewSheet full-
+# page renders of sheets #59 (E6.01) and #60 (E6.02), plus targeted high-
+# zoom region crops of each table below, read directly against the real
+# PDF — never assumed from the pipeline's own reference_tables[] dump.
+#
+# SCOPE / REAL FINDING: this session swept every table the pipeline's own
+# categories=all run reported as reference-kind or otherwise structurally
+# reference-shaped (sheet #4's 4 tables, sheet #59's LIGHTING CONTROL
+# STATIONS, sheet #60's MECHANICAL EQUIPMENT CONNECTION SCHEDULE). UNLIKE
+# federal-mech, this set currently has NO clean, real reference-kind
+# extraction to use as a positive case — every one of the above either (a)
+# is a genuine prose/notes block mis-triggering the structural table
+# detector (sheet #4's "CODE REVIEW" and "LIFE SAFETY LEGEND" blocks — not
+# scored here, they carry no real tabular ground truth to check against),
+# or (b) extracts with real, disclosed row-key/cell corruption (see FINDING
+# below). This file picks the 2 real, most useful cases:
+#
+#   1. MECHANICAL EQUIPMENT CONNECTION SCHEDULE (sheet #60/E6.02) — a real,
+#      clean, TAG-keyed reference table (11 real rows: CU-1, CU-2, EF-01,
+#      ERV-01, EWH-1, EWH-2, FCU-1, FCU-2, RTU-01, RTU-02, WH-1) that is
+#      currently NOT DISCOVERED AT ALL by buildPlanSetTakeoff (absent from
+#      tables_seen and reference_tables both, in a full categories=all run)
+#      — a real, disclosed table-discovery gap, same shape as federal-
+#      mech's own AIR HANDLING UNIT HYDRONIC COIL SCHEDULE finding. Scores
+#      0/N below. NOTE: sheet #60 is an ELECTRICAL sheet (E6.02) carrying a
+#      MECHANICAL-titled table — plausible this table's total non-discovery
+#      traces to sheet-role/discipline scoping, not investigated further
+#      this session.
+#
+#   2. LIGHTING CONTROL STATIONS (sheet #59/E6.01) — a real table that IS
+#      discovered (present in reference_tables), but with real, disclosed
+#      row-key corruption: the 6 real CONTROL STATION DESIGNATION values
+#      ($OS, $OSD, $LV#, $LVA, $LVB, $LVC) are each a merged cell spanning 2
+#      button-number sub-rows in the real table; the pipeline's own current
+#      row-splitting instead produces keys "ALL"/"a"/"a"/"b"/"b" (duplicate,
+#      non-designation keys) — so a key written with the REAL designation as
+#      row_key (below) will score every cell a miss, which is exactly the
+#      real, honest signal: the real row identity is not being recovered.
+sheet,table_title,row_key,column,expected_value
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,CU-1,LOCATION,ROOFTOP
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,CU-1,VA,1602
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,CU-1,MCA,7.7
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,CU-1,MOCP,15 A
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,CU-1,VOLTAGE,208
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,EF-01,LOCATION,ROOFTOP
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,EF-01,VA,60
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,EF-01,MOCP,20 A
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,ERV-01,LOCATION,CALL CENTER 109
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,ERV-01,VA,360
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,RTU-01,VA,11880
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,RTU-01,MCA,45 A
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,RTU-01,CIRCUIT NUMBER,"C - 29,31,33"
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,WH-1,LOCATION,JANITOR 107
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,WH-1,VA,6000
+baker-county-eoc-bidset.pdf#59,LIGHTING CONTROL STATIONS,$OS,BUTTON NUMBER,1
+baker-county-eoc-bidset.pdf#59,LIGHTING CONTROL STATIONS,$OS,FUNCTION,ALL ON
+baker-county-eoc-bidset.pdf#59,LIGHTING CONTROL STATIONS,$OSD,FUNCTION,ALL ON/HOLD DIM UP
+baker-county-eoc-bidset.pdf#59,LIGHTING CONTROL STATIONS,$LVA,FUNCTION,ALL ON
+baker-county-eoc-bidset.pdf#59,LIGHTING CONTROL STATIONS,$LVB,FUNCTION,ALL ON/HOLD DIM UP
+baker-county-eoc-bidset.pdf#59,LIGHTING CONTROL STATIONS,$LVC,FUNCTION,ALL ON

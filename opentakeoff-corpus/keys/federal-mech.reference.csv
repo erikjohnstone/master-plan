@@ -1,0 +1,99 @@
+# federal-mech.reference.csv — ground-truth key for the "reference"-kind
+# table extraction path (sheetgraph.ts's structural, vocabulary-free fourth
+# table kind) — companion to federal-mech.takeoff.csv, same discipline:
+# rendered and read by eye directly, never trusted from the pipeline's own
+# extraction. Scored by mcp/scripts/reference-eval.mjs.
+#
+# HOW EVERY VALUE BELOW WAS VERIFIED (2026-08-28): Session.viewSheet full-
+# page renders of sheets #14/#15 (M7.1/M7.2, "MECHANICAL SCHEDULES"), plus a
+# targeted high-zoom Session.viewSheet region crop of each table below, read
+# directly against the real PDF — never assumed from the pipeline's own
+# reference_tables[] dump. `table_title`/`row_key` below deliberately use
+# the PIPELINE's own reported label for each ROW below THAT SCORES (same
+# convention itd-d1-lab.reference.csv's own header already establishes,
+# since that is what reference-eval.mjs's own (sheet,title,row_key) lookup
+# indexes by) — the real drawn title/labelling is quoted in prose instead
+# where it differs, so the mapping from real table to pipeline label stays
+# checkable.
+#
+# SCOPE: this session found roughly a DOZEN real "reference"-adjacent
+# tables across sheets #14/#15 (see federal-mech.takeoff.csv's own header
+# for the full inventory — most of them are actually equipment-kind by
+# design, misclassified as reference-kind, and are named as MISSING there
+# instead, not here). This file picks TWO real cases specifically chosen to
+# be representative of the two real outcomes this path currently produces
+# on this set, not an exhaustive sweep of every reference-shaped table:
+#
+#   1. ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE (sheet #15) — the ONE
+#      table on either schedule sheet that extracts CLEANLY today: correct
+#      title, correct per-row TAG-keyed row_key, correct cells. A real
+#      POSITIVE case (this whole session's dominant finding is negative
+#      ones — this one is included specifically so this key is not only a
+#      list of gaps).
+#   2. AIR HANDLING UNIT HYDRONIC COIL SCHEDULE (sheet #14) — a real,
+#      genuinely reference-kind-by-design table (TYPE-keyed CHWC/HWC rows,
+#      no per-instance drawn-symbol tag of its own — the coil bank lives
+#      inside AHU-1, it is not separately tagged on any plan sheet) that is
+#      currently NOT DISCOVERED AT ALL (absent from tables_seen and from
+#      reference_tables both) — a real, disclosed gap, scores 0/17 below.
+#
+# NOT included below (real, confirmed, deliberately not scored — same
+# "disclosed in prose, not chased into a scored row" discipline
+# itd-d1-lab.reference.csv's own header already uses for its P6.0 2-up
+# fragments):
+#   - The untitled PUMP SCHEDULE (sheet #14, CP-1..6/CWP-1,2/HWP-1,2/
+#     HWRP-1) and the "AIR CAPACITY"-mistitled GENERAL FAN SCHEDULE (sheet
+#     #14, EF-1..4): both real, both currently reachable via
+#     reference_tables[] (misclassified reference-kind — see
+#     federal-mech.takeoff.csv's own FINDING #2), but semantically real
+#     EQUIPMENT-kind schedules with real per-instance drawn tags — already
+#     scored under federal-mech.takeoff.csv instead of double-counted here.
+#   - AIR-COOLED CONDENSING UNIT SCHEDULE and EXPANSION TANK SCHEDULE
+#     (sheet #15): both real, both extract into reference_tables[] today,
+#     but BOTH have a real row_key-collision bug — the row_key builder
+#     reads a generic spec column (REFRIGERANT for the condensing-unit
+#     table; a TYPE value, "BLADDER", for the expansion-tank table) instead
+#     of each table's own real leftmost TAG column (CU-1..6 / ET-1,2
+#     respectively). Confirmed directly by render: CU-1..6 are 6 real,
+#     distinct rows (all "ROOF", all Daikin RK24NMVJU units) that all
+#     collapse onto ONE colliding pipeline row_key ("R410A"), so only the
+#     LAST-committed row's cells are even reachable — a (sheet,title,
+#     row_key) key can score at most one of the six real rows meaningfully,
+#     which would misrepresent this as a small, single-row gap rather than
+#     the real 6-row collision it is. The expansion-tank table's own title
+#     is ALSO wrong (extracts as "IMEG Corporation", a nearby consultant
+#     name, not "EXPANSION TANK SCHEDULE"). Both real, both disclosed here
+#     in prose rather than forced into a misleading scored row.
+#
+sheet,table_title,row_key,column,expected_value
+federal-attachment4-mechanical.pdf#15,ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE,ALP-1,SYSTEM,AHU-1
+federal-attachment4-mechanical.pdf#15,ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE,ALP-1,LOCATION,ROOF
+federal-attachment4-mechanical.pdf#15,ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE,ALP-1,DESIGN AIR FLOW CFM,25000
+federal-attachment4-mechanical.pdf#15,ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE,ALP-1,MAXIMUM AIR PD I.W.G,0.10
+federal-attachment4-mechanical.pdf#15,ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE,ALP-1,MANUFACTURER,RUSKIN
+federal-attachment4-mechanical.pdf#15,ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE,ALP-1,MODEL,PHB637HDXD
+federal-attachment4-mechanical.pdf#15,ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE,ALP-2,SYSTEM,AHU-1
+federal-attachment4-mechanical.pdf#15,ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE,ALP-2,DESIGN AIR FLOW CFM,18500
+federal-attachment4-mechanical.pdf#15,ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE,ALP-2,MODEL,PHB637HDXD
+federal-attachment4-mechanical.pdf#15,ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE,ALP-3,SYSTEM,AHU-1
+federal-attachment4-mechanical.pdf#15,ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE,ALP-3,DESIGN AIR FLOW CFM,1000
+federal-attachment4-mechanical.pdf#15,ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE,ALP-3,MODEL,PHB637HDXD
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,CHWC,SYSTEM,AHU-1
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,CHWC,DESIGN AIR FLOW CFM,25000
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,CHWC,CAPACITY MBH,1267
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,CHWC,QUANTITY OF COILS IN BANK,2
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,CHWC,LENGTH,107"
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,CHWC,HEIGHT,33"
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,CHWC,EWT °F,44
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,CHWC,LWT °F,54
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,CHWC,FLOW GPM,252.20
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,CHWC,WATER MAX PD FT. H2O,16.60
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,HWC,SYSTEM,AHU-1
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,HWC,DESIGN AIR FLOW CFM,21000
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,HWC,CAPACITY MBH,476
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,HWC,MIN ROWS,1
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,HWC,MAXIMUM FACE VELOCITY,606
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,HWC,EWT °F,140
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,HWC,LWT °F,109
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,HWC,FLOW GPM,30.60
+federal-attachment4-mechanical.pdf#14,AIR HANDLING UNIT HYDRONIC COIL SCHEDULE,HWC,WATER MAX PD FT. H2O,10.00

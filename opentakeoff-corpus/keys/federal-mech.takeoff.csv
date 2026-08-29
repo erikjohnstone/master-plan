@@ -1,0 +1,252 @@
+# federal-mech.takeoff.csv — ground-truth key for mcp/scripts/takeoff-eval.mjs
+#
+# Set: federal-attachment4-mechanical.pdf — a 24-sheet federal-facility
+# mechanical bid set (NICoE "Building XX", Eglin Air Force Base, FL —
+# SmithGroup MEP/FP Engineering, real title-block text confirmed directly
+# off the rendered sheets this session, not assumed from the corpus
+# filename). This is the SAME real project hvacTaxonomy.ts's own comments
+# already cite repeatedly as "the Eglin AFB set" — those comments describe
+# real schedules this session independently re-confirmed by rendering the
+# actual sheets, not by trusting the taxonomy file's own prose.
+#
+# HOW EVERY NUMBER BELOW WAS VERIFIED (2026-08-28): buildPlanSetTakeoff
+# (categories=all) gave a first-pass candidate list, but NOTHING below was
+# copy-pasted from it — every row was independently checked either by
+# Session.viewSheet render (schedule sheets #14/#15/#16 rendered whole and
+# read by eye; VAV floor plan sheet #6 individually cropped at 2-4x zoom
+# per tag) or by Session.findText sweeps across ALL 24 sheets (never
+# same-sheet-only — this corpus already knows that risk misses real
+# cross-sheet instances, e.g. bessemer's EBB-5). Every VAV tag the pipeline
+# itself reported quantity=0 for (13 of them) was individually cropped and
+# visually confirmed anyway, not trusted from the pipeline's own refusal —
+# see the dedicated note below; a representative additional ~20 of the
+# pipeline's own quantity=1 VAV tags were also independently visually
+# spot-checked in the course of touring the floor plan (not itemized here
+# one by one — same "not individually re-cropped" discipline bessemer's and
+# itd-d1-lab's own keys already establish for a consistently-repeating,
+# already-partially-verified drafting convention).
+#
+# ══════════════════════════════════════════════════════════════════════════
+# FINDING #1 (dominant, real, disclosed — NOT fixed this session): sweep_
+# schedule_row currently reports quantity=0 for 13 of the 58 real VAV boxes
+# on this set (VAV-11,15,19,20,21,23,27,33,35,38,42,49,52) even though EVERY
+# ONE was individually rendered this session and shows the exact same real
+# rectangle-glyph-plus-adjacent-tag-text convention as every other VAV box
+# on the sheet — a real, disclosed detection gap, not an absent symbol. This
+# is the SAME root cause federal-mech.rowsym.csv's own pre-existing VAV-20
+# entry already named ("its own shape scores under the 92% commit bar at
+# its own location, and it has no second occurrence to corroborate
+# against") — this session found 12 MORE real instances of the identical
+# gap by actually rendering every tag the pipeline itself flagged as
+# quantity=0, rather than trusting that refusal. expected_quantity=1 for
+# every one of these 13 below (the real, literal drawn count), not the
+# pipeline's own current 0 — this is exactly the kind of real, valuable
+# miss this key exists to surface, per this initiative's own standing
+# mandate; not tuned away.
+#
+# FINDING #2 (dominant, real, disclosed — NOT fixed this session, much
+# bigger in scope than #1): sheets #14 and #15 (M7.1/M7.2, "MECHANICAL
+# SCHEDULES") together carry roughly a DOZEN real, distinct, TAG-keyed
+# equipment schedules. Direct render of both sheets this session found:
+#   - AIR HANDLING UNIT SCHEDULE (AHU-1) and AIR HANDLING UNIT FAN SCHEDULE
+#     (RF-1/RF-2/SF-1/SF-2) — CORRECTLY found today (equipment-kind,
+#     in `items[]`) — these two are the only equipment-kind schedule tables
+#     on either sheet that extract as equipment-kind today.
+#   - HOT WATER CONDENSING BOILER SCHEDULE (B-1, B-2) and the PUMP SCHEDULE
+#     (CP-1..6, CWP-1/2, HWP-1/2, HWRP-1) — found, but MISCLASSIFIED as
+#     "reference"-kind rather than "equipment"-kind (both schedule
+#     families are declared scheduleKind:"equipment" in hvacTaxonomy.ts
+#     itself — a real runtime header-vocabulary-match gap, not a taxonomy
+#     gap) — so buildPlanSetTakeoff's own equipment loop never attempts
+#     sweep_schedule_row for any of these 12 real tags at all; their raw
+#     cell data instead sits inert in reference_tables[]. The pump table's
+#     own real title ("PUMP SCHEDULE", clearly printed above it) is ALSO
+#     independently lost (extracts with title:null).
+#   - CHILLER SCHEDULE (ELECTRIC AIR-COOLED) (CH-1) and AIR SEPARATOR
+#     SCHEDULE (AS-1, AS-2) — NOT FOUND AT ALL — not in tables_seen, not in
+#     reference_tables, nothing: buildPlanSetTakeoff's own table walk never
+#     sees these two real tables exist on sheet #14.
+#   - GENERAL FAN SCHEDULE (EF-1..4, real roof-mounted general exhaust
+#     fans) — found, but with the WRONG title ("AIR CAPACITY" — a real
+#     2-column sub-header the title-hunt grabbed instead of the real
+#     table's own title one tier up) AND misclassified reference-kind for
+#     the same reason as the boiler/pump schedules above.
+# Sheet #15 (M7.2) carries a further ~8 real schedules (HOT WATER FAN COIL
+# UNIT SCHEDULE/FCU-1, AIR-COOLED CONDENSING UNIT SCHEDULE/CU-1..6, EXPANSION
+# TANK SCHEDULE/ET-1,2, DX FAN COIL UNIT SCHEDULE/EV-1..6, UNIT HEATER
+# SCHEDULE/UH-1,2, SILENCER SCHEDULE/S-1,2, FIN TUBE RADIATION SCHEDULE/
+# FTR-1,1B,2,2B, ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE/ALP-1,2,3) — all
+# real, all visually confirmed to exist this session, all EXCEPT the
+# louvered-penthouse one either entirely undiscovered or badly garbled (the
+# condensing-unit and expansion-tank tables both extract with every real row
+# COLLAPSED onto one colliding row_key, since their row_key builder reads a
+# generic spec column — REFRIGERANT/TYPE — instead of each table's own real
+# leftmost TAG column). This second sheet's own tags (FCU-1, CU-1..6,
+# ET-1/2, EV-1..6, UH-1/2, S-1/2, FTR-1/1B/2/2B) are DELIBERATELY NOT
+# included as scored rows below — a real, disclosed scope decision, not a
+# silent omission: this session confirmed they are real and exist (direct
+# render, sheet #15) but did not indpendently verify each one's own real
+# plan-sheet drawn location/quantity the way every row below WAS verified,
+# given session time — the same "out of scope, not silently dropped"
+# discipline bessemer's and itd-d1-lab's own keys already use for their own
+# finish-kind exclusions. A future session extending this key should start
+# there; the root cause (this whole sheet pair's table-discovery/title-hunt/
+# kind-classification gap) is already precisely named above, so it does not
+# need re-discovering.
+#
+# NEITHER finding above was fixed this session — each is a deep, sheet-
+# layout-specific table-discovery/classification gap (not a narrow, obvious,
+# low-risk one-line fix), and this corpus's own standing rule is to name a
+# real gap rather than ship an unproven, corpus-wide-risk change under time
+# pressure (see itd-d1-lab.takeoff.csv's own header for the precedent: a
+# real fix was built, caught regressing a real fixture, and reverted rather
+# than shipped).
+#
+# REAL, CONFIRMED "SAME PHYSICAL UNIT, MULTIPLE VIEWS" CONVENTION (this
+# session's own third finding, informing every non-VAV expected_quantity
+# below): sheet #7 (M4.1, "MECHANICAL ROOM ENLARGED PIPING AND DUCT PLANS")
+# draws the ENTIRE mechanical room TWICE side by side — once as a duct-layer
+# plan, once as a piping-layer plan — and sheet #8 (M4.2, "MECHANICAL ROOM
+# SECTIONS") draws the SAME room a further FOUR times as elevation/section
+# cuts. Every mechanical-room tag (B-1, B-2, AS-1, AS-2, CWP-1, CWP-2,
+# HWP-1, HWP-2, HWRP-1, UH-1, UH-2, ET-1, ET-2, S-1, S-2) is genuinely
+# text-findable 2-6 times across these two sheets alone, confirmed by direct
+# render to be the SAME one real installed unit shown from a different
+# orthographic view each time, never a second physical instance (the same
+# "a redundant view is not a second install" doctrine itd-d1-lab's own AC-1/
+# dedupeCrossDisciplineRoomViews fix already established — this is a NEW,
+# same-discipline/same-sheet variant of that pattern, not yet covered by
+# that fix's own cross-discipline-only gate). CP-1..6 (condensate pumps)
+# show an analogous pattern one level up: each is independently, individually
+# roomed (ELEC 330/COMM 348/COMM 226/ELEC 111/STORAGE-KILN 338.1 x2 — a real
+# distinct physical location per tag, confirmed by direct render of CP-1
+# next to a real "EV-1" DX fan coil box in ELEC 330, and CP-5/CP-6 as two
+# separate real boxes in the same STORAGE/KILN 338.1 room, matching the
+# schedule's own LOCATION column exactly), but each tag's OWN single real
+# symbol is independently re-drawn on a companion sheet pair too (sheet #4
+# and sheet #6 carry the identical tag at near-identical coordinates for
+# every CP- tag checked). expected_quantity below is the real INSTALLED
+# count (1 per tag, matching itd-d1-lab's own literal-physical-unit
+# doctrine for AC-1), not the raw text-occurrence count. This is stated
+# once, here, rather than repeated in every row's own note.
+#
+# DIRECTLY TESTED, NOT JUST SPECULATED (Session.sweepScheduleRow called
+# directly against each tag this session, independent of buildPlanSetTakeoff'''s
+# own kind-gated loop): the multi-view-redundancy pattern above does NOT, in
+# practice, make sweep_schedule_row over-count most of these tags -- called
+# directly, AHU-1, B-1, B-2, HWP-1, HWRP-1, CP-1, CP-3, CP-5, EF-1, EF-3 all
+# correctly return found=1 today despite the redundant views. The one real,
+# disclosed exception found this session: CWP-1 and CWP-2 BOTH return
+# found=2 when queried directly -- a real, specific, NOT root-caused anomaly
+# (every sibling pump tag on the identical sheet layout returns found=1) --
+# named here rather than silently smoothed over. See federal-mech.rowsym.csv
+# for the exact found= values this claim rests on. This means FINDING #2'''s
+# real, practical effect today is almost entirely "buildPlanSetTakeoff'''s own
+# equipment loop never calls sweep_schedule_row for these tags at all"
+# (a pure table-kind-classification gap), not "the underlying sweep itself
+# would over-count if it were reached" -- CWP-1/CWP-2 being the one disclosed
+# counterexample.
+# ══════════════════════════════════════════════════════════════════════════
+#
+# NOT included below (real, confirmed, deliberately out of scope, not a
+# silent drop):
+#   - "SUITE100": a spurious row inside the VOLUME CONTROL BOX SCHEDULE's
+#     own extraction — confirmed via find_text this session to be a
+#     fragment of SmithGroup's own title-block address ("1700 New York Ave,
+#     Suite 100") bleeding into the table's row-clustering, not a real
+#     schedule row or equipment tag. Correctly refused by the pipeline
+#     today (no real tag to sweep) — same root-cause family as itd-d1-lab's
+#     own disclosed PH-1/garbage-row collision, not re-litigated here.
+#   - The GRILLE, REGISTER, AND DIFFUSER SCHEDULE (S1-x/S2-x/S4-1/R1-x/
+#     R3-x/E1-x, MARK-keyed, sheet #15) — real, but "finish"-kind per this
+#     project's own scheduleKind convention, same exclusion bessemer's own
+#     SR-1/SR-2/TG-1/TG-2 and itd-d1-lab's own D-x/L-x/SA-1 already
+#     establish; out of buildPlanSetTakeoff's declared scope.
+#   - FCU-1, CU-1..6, ET-1/2, EV-1..6, UH-1/2, S-1/2, FTR-1/1B/2/2B,
+#     ALP-1/2/3 — see FINDING #2 above (real, sheet #15, deliberately
+#     deferred this session).
+#
+tag,equipment_type,expected_quantity,sheets,notes
+AHU-1,Air handling unit (AHU),1,federal-attachment4-mechanical.pdf#7,"AIR HANDLING UNIT SCHEDULE (sheet #14). Real single unit, MECH ROOM — visually confirmed on sheet #7 (both the duct-plan and piping-plan views) and sheet #8 (all 4 section views); pipeline already correctly reports quantity=1 despite the tag being text-findable in every one of those views, so its own fingerprint match is not fooled by the multi-view-redundancy pattern the way B-1/B-2/AS-1/AS-2 below would be if their table were even reached. Pipeline quantity=1, matches."
+RF-1,Fan (exhaust / supply / return / general),0,federal-attachment4-mechanical.pdf#14,"AIR HANDLING UNIT FAN SCHEDULE row (sheet #14), AHU-1's own return fan. Confirmed refused correctly: this tag's own text is never drawn on any plan sheet anywhere in the 24-sheet set (full find_text sweep) — only the parent AHU-1 tag is drawn; the individual RF-1/RF-2/SF-1/SF-2 sub-fans inside it are never separately tagged on the floor plan. Real, correct refusal, not a pipeline miss."
+RF-2,Fan (exhaust / supply / return / general),0,federal-attachment4-mechanical.pdf#14,"Same real reason as RF-1 — AHU-1-internal fan sub-row, no drawn tag of its own anywhere on the plan."
+SF-1,Fan (exhaust / supply / return / general),0,federal-attachment4-mechanical.pdf#14,"Same real reason as RF-1 — AHU-1-internal fan sub-row, no drawn tag of its own anywhere on the plan."
+SF-2,Fan (exhaust / supply / return / general),0,federal-attachment4-mechanical.pdf#14,"Same real reason as RF-1 — AHU-1-internal fan sub-row, no drawn tag of its own anywhere on the plan."
+CH-1,Chiller,1,federal-attachment4-mechanical.pdf#6,"CHILLER SCHEDULE (ELECTRIC AIR-COOLED), sheet #14 — real row, UTILITY ENCLOSURE location. Visually confirmed sheet #6: one real distinct twin-compressor-glyph chiller symbol with the tag directly beside it. FINDING #2: this whole schedule table is currently undiscovered by buildPlanSetTakeoff (not in tables_seen at all) — scores as MISSING, a real, disclosed gap."
+B-1,Boiler,1,federal-attachment4-mechanical.pdf#7,"HOT WATER CONDENSING BOILER SCHEDULE (sheet #14) — real row, MECHANICAL ROOM. Visually confirmed sheets #7 (both views) and #8 (2 of the 4 sections) — one real physical boiler, the multi-view-redundancy convention documented in this file's own header. FINDING #2: this table currently extracts as reference-kind, not equipment-kind — B-1 never reaches buildPlanSetTakeoff's own equipment sweep at all; scores as MISSING."
+B-2,Boiler,1,federal-attachment4-mechanical.pdf#7,"Same schedule/room/finding as B-1 — a second, real, separately-tagged boiler in the same mechanical room. Scores as MISSING for the same reason as B-1."
+AS-1,Air separator,1,federal-attachment4-mechanical.pdf#7,"AIR SEPARATOR SCHEDULE (sheet #14) — real row, CHILLED WATER system, MECHANICAL ROOM. Visually confirmed sheets #7/#8, same multi-view convention. FINDING #2: this whole schedule table is currently undiscovered entirely (not in tables_seen) — scores as MISSING."
+AS-2,Air separator,1,federal-attachment4-mechanical.pdf#7,"Same schedule/room/finding as AS-1 — HEATING HOT WATER system's own separate air separator. Scores as MISSING for the same reason as AS-1."
+CWP-1,Pump,1,federal-attachment4-mechanical.pdf#7,"Real pump-schedule row (sheet #14, untitled table — real title 'PUMP SCHEDULE' lost to the title-hunt, FINDING #2), SYSTEM=CHILLED WATER, MECHANICAL ROOM. Visually confirmed sheets #7/#8. Note: hvacTaxonomy.ts's own Pump entry currently lists 'CHWP-' for chilled-water pumps — this real drawing's own tag is 'CWP-', a real, disclosed taxonomy-prefix mismatch (harmless to this key's own scoring, since equipment_type is not scored, but worth naming). Scores as MISSING (table misclassified reference-kind, FINDING #2)."
+CWP-2,Pump,1,federal-attachment4-mechanical.pdf#7,"Same schedule/room/finding as CWP-1 — second chilled-water pump. Scores as MISSING for the same reason as CWP-1."
+HWP-1,Pump,1,federal-attachment4-mechanical.pdf#7,"Same pump schedule, SYSTEM=HOT WATER, MECHANICAL ROOM. Visually confirmed sheets #7/#8. Scores as MISSING (FINDING #2)."
+HWP-2,Pump,1,federal-attachment4-mechanical.pdf#7,"Same schedule/room/finding as HWP-1 — second hot-water pump. Scores as MISSING for the same reason as HWP-1."
+HWRP-1,Pump,1,federal-attachment4-mechanical.pdf#7,"Same pump schedule, SYSTEM=AHU-1 (hot-water reheat pump), MECHANICAL ROOM. Visually confirmed sheets #7/#8. Scores as MISSING (FINDING #2)."
+CP-1,Pump,1,federal-attachment4-mechanical.pdf#6,"Condensate pump, real pump-schedule row, LOCATION=ELEC 350 (schedule) / visually confirmed as ELEC 330 on sheet #6's own room label directly beside the real drawn box symbol, next to a real 'EV-1' DX fan coil box. Independently drawn again at near-identical coordinates on sheet #4 (same real unit, companion duct/pipe sheet pair — see this file's own header convention note). Scores as MISSING (table misclassified reference-kind, FINDING #2)."
+CP-2,Pump,1,federal-attachment4-mechanical.pdf#4,"Condensate pump, LOCATION=COMM 348 (schedule). Real find_text hit confirmed on both sheet #4 and sheet #6 at matching coordinates (companion-sheet convention, not individually re-cropped — same family as CP-1, CP-5, CP-6, which WERE individually rendered this session). Scores as MISSING (FINDING #2)."
+CP-3,Pump,1,federal-attachment4-mechanical.pdf#6,"Condensate pump, LOCATION=COMM 226 (schedule). Visually confirmed incidentally in the same render crop used for VAV-52 (sheet #6): a real 'CP-3'+'EV-3' box pair beside SPEECH THERAPY 210. Scores as MISSING (FINDING #2)."
+CP-4,Pump,1,federal-attachment4-mechanical.pdf#4,"Condensate pump, LOCATION=ELEC 111 (schedule). Real find_text hit confirmed on both sheet #4 and sheet #6 at matching coordinates — not individually re-cropped (same family as CP-1/CP-3/CP-5/CP-6). Scores as MISSING (FINDING #2)."
+CP-5,Pump,1,federal-attachment4-mechanical.pdf#4,"Condensate pump, LOCATION=STORAGE/KILN 338.1 (schedule). Visually confirmed sheet #4: real box symbol directly beside a real 'EV-5' DX fan coil box, room label '338.1' matching the schedule exactly. Scores as MISSING (FINDING #2)."
+CP-6,Pump,1,federal-attachment4-mechanical.pdf#4,"Condensate pump, second unit in STORAGE/KILN 338.1 (schedule) — a real, separately-tagged second pump in the same room as CP-5. Visually confirmed sheet #4: real box symbol beside a real 'EV-6' DX fan coil box. Scores as MISSING (FINDING #2)."
+EF-1,Fan (exhaust / supply / return / general),1,federal-attachment4-mechanical.pdf#4,"GENERAL FAN SCHEDULE row (sheet #14, real title lost to a 2-column sub-header 'AIR CAPACITY', FINDING #2), AREA SERVED=TREATMENT ROOMS-BOTTOM, LOCATION=ROOF. Real find_text hits on sheets #4 and #5 (companion duct/pipe sheet pair, one real unit) plus sheet #24 (a controls-schematic cross-reference, not a second physical instance). Scores as MISSING (table misclassified reference-kind, FINDING #2)."
+EF-2,Fan (exhaust / supply / return / general),1,federal-attachment4-mechanical.pdf#4,"Same schedule, AREA SERVED=TREATMENT ROOMS-TOP, LOCATION=ROOF. Real find_text hits sheets #4/#5 only (no controls cross-reference this time). Scores as MISSING (FINDING #2)."
+EF-3,Fan (exhaust / supply / return / general),1,federal-attachment4-mechanical.pdf#4,"Same schedule, AREA SERVED=ADMIN/GYM, LOCATION=ROOF. Real find_text hits sheets #4/#5/#7. Scores as MISSING (FINDING #2)."
+EF-4,Fan (exhaust / supply / return / general),1,federal-attachment4-mechanical.pdf#5,"Same schedule, AREA SERVED=MECH ROOM, LOCATION=ROOF. Real find_text hits sheets #5/#8/#24 (#24 a controls cross-reference). Scores as MISSING (FINDING #2)."
+VAV-1,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"VOLUME CONTROL BOX SCHEDULE (sheet #16), 58 real rows (VAV-1..58) — this whole schedule's own title never uses the word 'VAV', only the row tags do (hvacTaxonomy.ts's own pre-existing note on this exact set). Visually confirmed sheet #6: standalone rectangle-glyph symbol with the tag directly beside it (no leader line — matches this file's own pre-existing VAV-1/5/7/10/20 confirmations in federal-mech.rowsym.csv). Pipeline quantity=1, corroborated, matches."
+VAV-2,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-3,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly beside VAV-15's own render crop): real box symbol, PAIN MD 316 area. Pipeline quantity=1, matches."
+VAV-4,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly beside VAV-11's own render crop): real box symbol, CORRIDOR C300. Pipeline quantity=1, matches."
+VAV-5,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1 (pre-existing federal-mech.rowsym.csv confirmation). Pipeline quantity=1, corroborated, matches."
+VAV-6,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-7,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1 (pre-existing federal-mech.rowsym.csv confirmation). Pipeline quantity=1, corroborated, matches."
+VAV-8,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-9,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-33 render crop, top-left, labeled 'AV-9' where the leading V is cropped). Pipeline quantity=1, corroborated, matches."
+VAV-10,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1 (pre-existing federal-mech.rowsym.csv confirmation). Pipeline quantity=1, matches."
+VAV-11,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1, this session): visually confirmed sheet #6 — real rectangle-glyph box symbol directly beside NEUROLOGIST/EXAM corridor C300, same convention as every other VAV box. Pipeline currently reports quantity=0 (status 'resolved' but 0 instances) — a real, disclosed detection gap, not an absent symbol. expected_quantity=1."
+VAV-12,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly beside VAV-11's own render crop, same corridor). Pipeline quantity=1, matches."
+VAV-13,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-14,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
+VAV-15,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, CORR-1 C302-1 near STAFF TLT 318. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-16,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
+VAV-17,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
+VAV-18,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-19,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, SOIL UTIL 322 near HOUSE KEEPING 320. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-20,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS — the pre-existing federal-mech.rowsym.csv entry this whole finding started from ('today's tool reports 0 found here even though the symbol IS real and drawn'). Re-confirmed this session: real box symbol, TREATMENT IPMC 346 area, directly beside VAV-22. expected_quantity=1."
+VAV-21,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, CORR C304, directly beside VAV-22 and VAV-23. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-22,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in both the VAV-20 and VAV-21 render crops). Pipeline quantity=1, matches."
+VAV-23,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, CORR C304 near PAT TLT 340. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-24,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-25,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-26,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-27,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, CORR C303 directly beside VAV-29 (ALCOVE/STORAGE C303.1). Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-28,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
+VAV-29,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-27 render crop): real box symbol, ALCOVE/STORAGE C303.1. Pipeline quantity=1, corroborated, matches."
+VAV-30,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-31,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
+VAV-32,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-33,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol (drawn rotated 90 degrees from the usual orientation, same glyph), PUBLIC WAITING C101 near CHAPLIN 301. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-34,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-35 render crop). Pipeline quantity=1, matches."
+VAV-35,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol near a 2-way control valve (M219) on the hot-water branch. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-36,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-35 render crop, top-left). Pipeline quantity=1, matches."
+VAV-37,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-38 render crop, left edge, labeled '37' where the leading VAV- is cropped). Pipeline quantity=1, matches."
+VAV-38,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, CLASSROOM 103.1. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-39,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-42 render crop): real box symbol, near NCOIC/ADMIN 109. Pipeline quantity=1, corroborated, matches."
+VAV-40,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-41,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-42,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol (rotated), directly beside VAV-39, near CORR C102. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-43,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-44,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
+VAV-45,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
+VAV-46,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-35 render crop, bottom-right). Pipeline quantity=1, corroborated, matches."
+VAV-47,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
+VAV-48,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-49,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, CORR C200 near MULTI-STATION TREATMENT RM 217, directly beside VAV-50. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-50,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Visually confirmed this session (seen directly in the VAV-49 render crop). Pipeline quantity=1, corroborated, matches."
+VAV-51,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
+VAV-52,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"REAL PIPELINE MISS (FINDING #1): visually confirmed sheet #6 — real box symbol, SPEECH THERAPY 210, directly beside a real CP-3/EV-3 pair in CORR C201/C202. Pipeline currently reports quantity=0. expected_quantity=1."
+VAV-53,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-54,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
+VAV-55,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, matches."
+VAV-56,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-57,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1. Pipeline quantity=1, corroborated, matches."
+VAV-58,VAV box (variable air volume terminal),1,federal-attachment4-mechanical.pdf#6,"Same real convention as VAV-1 (the highest-numbered real VAV tag on this set, per hvacTaxonomy.ts's own pre-existing note: 'VOLUME CONTROL BOX SCHEDULE schedules VAV-1 through VAV-58'). Pipeline quantity=1, matches."

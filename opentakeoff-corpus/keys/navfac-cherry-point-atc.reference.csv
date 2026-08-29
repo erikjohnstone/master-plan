@@ -1,0 +1,150 @@
+# navfac-cherry-point-atc.reference.csv — ground-truth key for the
+# "reference"-kind table extraction path (sheetgraph.ts's structural,
+# vocabulary-free fourth table kind). Companion to
+# navfac-cherry-point-atc.takeoff.csv, same discipline: every value below
+# was read directly off a Session.viewSheet full-page render of the real
+# sheet, never trusted from the pipeline's own reference_tables[] dump.
+# Scored by mcp/scripts/reference-eval.mjs. table_title/row_key below use
+# the PIPELINE's own reported label for rows that DO score (same convention
+# federal-mech.reference.csv's own header already establishes, since that
+# is what reference-eval.mjs's (sheet,title,row_key) lookup indexes by);
+# for rows this session found to be a real, disclosed coverage/classification
+# GAP, the real/correct column names are used instead (MISSING either way,
+# so the exact column name does not change the score — using the true name
+# keeps the key itself honest and legible).
+#
+# THREE REAL TABLE FAMILIES COVERED, chosen to show BOTH a clean real
+# extraction AND real, disclosed gaps — not cherry-picked for a flattering
+# score:
+#
+# 1. PIPING CONSTRUCTION SCHEDULE (sheet #43/M-602) — a real, CORRECTLY
+#    reference-kind-classified table (4 rows, clean columns). Every cell
+#    below is a genuine exact match — included so this key isn't ALL gaps.
+#
+# 2. POINTS LIST DOAH-TI (sheet #64/MI730) — the real DOAH-T1 BAS/DDC point
+#    list (MARK/DESCRIPTION/ALARM/TREND), the "BAS/DDC points" content this
+#    corpus entry was specifically added for. Directly counted on the real
+#    render: 34 real points (13 AI + 4 AO + 13 BI + 4 BO).
+#
+#    2026-08-29 RE-VERIFIED at commit 88aa8dd: an earlier version of this key
+#    (2026-08-28) recorded this table as an ~80% coverage gap (only AI01-
+#    AI07 captured) plus a garbled merged "ALARM TREND" cell on AI07. Direct
+#    re-extraction at the CURRENT commit (mcp/scratch-cherry-points.mjs,
+#    graphForPipeline() against the real PDF) shows that description is
+#    STALE, not current-pipeline reality: the pipeline now extracts this
+#    table CLEANLY and COMPLETELY — kind="reference", headers exactly
+#    ["MARK","DESCRIPTION","ALARM","TREND"] (never merged), all 34 rows
+#    (AI01-AI13, AO01-AO04, BI01-BI13, BO01-BO04), every ALARM/TREND value
+#    checked below matching the real render exactly, including AI07 "TOA
+#    HUMIDITY" (ALARM=Yes/TREND=Yes, no garbling). Whatever fixed this
+#    (nothing in this task's own diff — likely one of the several sheetgraph
+#    reference/ODL fixes merged into main between the earlier key's authoring
+#    and 88aa8dd, e.g. b2208a4 "ODL cross-check: reference-kind fallback + 3
+#    real collision-guard fixes (navfac Area A)") already resolved the real
+#    extraction gap this row family was added to track.
+#
+#    The reason these 11 cells STILL scored 0/11 (MISSING/mismatch) before
+#    this fix was a SEPARATE bug — in this key file, not production code: the
+#    row_key values below were the DESCRIPTION text ("UOA RELATIVE
+#    HUMIDITY", …) but the pipeline's real row.key is the MARK ("AI01", …) —
+#    reference-eval.mjs's byRow lookup is keyed on the pipeline's own
+#    row.key, so every lookup missed regardless of whether the cell was
+#    actually extracted. Compounding that, 7 of the 11 rows named a single
+#    merged column "ALARM TREND" with a space-joined value ("No Yes") — the
+#    real headers are two SEPARATE columns, "ALARM" and "TREND", so that
+#    column name could never match even with the right row_key. Both are
+#    fixed below: row_key is now the real MARK, and every merged "ALARM
+#    TREND" row is split into its own "ALARM" and "TREND" cell rows —
+#    doubling the 7 merged rows to 14, plus the 4 already-single-column rows
+#    unchanged in shape (just re-keyed), for 18 real, now-matching cells.
+#
+# 3. POINTS LIST AHU-T1A/T1B (sheet #65/MI731) — the real ATCT AHU point
+#    list, ~62 real points (21 AI + 7 AO + 26 BI + 8 BO) directly counted
+#    off the render. NOT independently re-verified in the 2026-08-29 pass
+#    above (out of that task's own explicit scope, which named only POINTS
+#    LIST DOAH-TI and the chiller schedule) — the original 2026-08-28
+#    finding is carried forward as-is: the pipeline's own reference_tables[]
+#    for this sheet then extracted only 3 garbled, meaningless rows (keys
+#    "M","AI07","AO03" with columns "NC"/"NC (2)" that do not correspond to
+#    this table's real MARK/DESCRIPTION/ALARM/TREND structure at all). Given
+#    #2 above turned out stale, this may ALSO now be stale — flagged here
+#    rather than assumed. The 3 rows below use the REAL correct data (not
+#    the pipeline's garbled keys, which the original session declined to
+#    reverse-engineer/game a coincidental match against).
+#
+# ALSO: AIR COOLED CHILLER SCHEDULE (sheet #44/M-603, CH-A1/CH-A2 — the
+# same real table navfac-cherry-point-atc.takeoff.csv's own equipment rows
+# already visually confirm).
+#
+#    2026-08-29 RE-VERIFIED at commit 88aa8dd: direct re-extraction confirms
+#    this table's OWN extraction is complete and correct — headers include
+#    CAPACITY (TONS)/EWT (°F)/LWT (°F)/GPM/… with exact matching values for
+#    both CH-A1 and CH-A2 (56.0/55.4/45/128.5, matching the real render). The
+#    table title "AIR COOLED CHILLER SCHEDULE" contains "CHILLER", which
+#    matches sheetgraph.ts's MEP_EQUIPMENT_FAMILY_RE (isMepEquipmentSchedule)
+#    — correctly, deliberately classifying it kind="equipment" straight out
+#    of the equipment-vocabulary row pass (EQUIPMENT_HEADERS already lists
+#    MARK/CAPACITY.../TONS/EWT/GPM, so the equipment-kind extractor reads
+#    this table natively, not via some fallback reclassification). This is
+#    the CORRECT classification for a real chiller schedule, not a bug.
+#
+#    mcp/src/takeoff.ts only pushes kind==="reference" tables into
+#    reference_tables[] (the array reference-eval.mjs's scorer reads) — by
+#    explicit, well-reasoned design (see ReferenceTable's own doc comment
+#    and buildPlanSetTakeoff's deferredReferenceRows comment): a per-instance
+#    tagged equipment row and a tag-free reference-table row are two
+#    structurally different shapes that are deliberately never blended into
+#    one array. An equipment-kind table's full row (every header, every
+#    cell — CAPACITY/EWT/GPM included) IS captured, verbatim, but into
+#    items[].schedule_row via the tag-sweep pass, not reference_tables[].
+#    (The earlier 2026-08-28 note that "equipment-kind tables currently
+#    surface tag+quantity only, never their own real cell-level spec data"
+#    was itself imprecise on this point — schedule_row already carries every
+#    column; it's just a different output array than reference_tables[].)
+#
+#    Widening reference_tables[] to also include equipment-kind tables' raw
+#    cells (or widening reference-eval.mjs's scorer to also check
+#    items[].schedule_row) was considered and REJECTED as an unsafe, corpus-
+#    wide architecture change for a single-corpus-entry metric bump: it would
+#    blend two deliberately-separate-shape arrays (contradicting their own
+#    documented rationale) and reference-eval.mjs's own header explicitly
+#    forbids "improving" the scorer to inflate a run. This is a genuine dead
+#    end for the reference-eval metric specifically, by correct design, not
+#    an extraction bug — every cell below still scores MISSING for that
+#    reason, honestly.
+#
+# NOT tuned to 100% — see AHU-T1A/T1B (family #3) and the chiller cells
+# above for the two real, disclosed reasons some cells still score
+# MISSING/mismatch.
+sheet,table_title,row_key,column,expected_value
+navfac-cherry-point-atc-mechanical.pdf#43,PIPING CONSTRUCTION SCHEDULE,CHILLED WATER,MATERIAL,"TYPE L COPPER, SCHEDULE 40 STEEL"
+navfac-cherry-point-atc-mechanical.pdf#43,PIPING CONSTRUCTION SCHEDULE,CHILLED WATER,INSULATION,"CELLULAR GLASS, POLYISOCYANURATE"
+navfac-cherry-point-atc-mechanical.pdf#43,PIPING CONSTRUCTION SCHEDULE,CHILLED WATER,INSULATION JACKET,SEE SPECIFICATION SECTION 23 07 00
+navfac-cherry-point-atc-mechanical.pdf#43,PIPING CONSTRUCTION SCHEDULE,BURIED CHILLED WATER,MATERIAL,BURIED FACTORY-PREFABRICATED PREINSULATED WATER PIPING
+navfac-cherry-point-atc-mechanical.pdf#43,PIPING CONSTRUCTION SCHEDULE,CONDENSATE DRAIN,INSULATION,FLEXIBLE ELASTOMERIC
+navfac-cherry-point-atc-mechanical.pdf#43,PIPING CONSTRUCTION SCHEDULE,HEATING HOT WATER,MATERIAL,"TYPE L COPPER, SCHEDULE 40 STEEL"
+navfac-cherry-point-atc-mechanical.pdf#43,PIPING CONSTRUCTION SCHEDULE,HEATING HOT WATER,INSULATION,MINERAL FIBER
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI01,ALARM,No
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI01,TREND,Yes
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI02,ALARM,No
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI02,TREND,Yes
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI03,ALARM,No
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI03,TREND,Yes
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI04,ALARM,No
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI04,TREND,Yes
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI05,ALARM,Yes
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI05,TREND,Yes
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI06,ALARM,No
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI06,TREND,Yes
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI07,ALARM,Yes
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI07,TREND,Yes
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI08,ALARM,Yes
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AO01,ALARM,No
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,BI01,ALARM,Yes
+navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,BO04,ALARM,No
+navfac-cherry-point-atc-mechanical.pdf#65,,AHU-T1B HW VALVE POSITION (FEEDBACK),ALARM,No
+navfac-cherry-point-atc-mechanical.pdf#65,,MIN OA AIRFLOW,ALARM,Yes
+navfac-cherry-point-atc-mechanical.pdf#65,,AHU-T1A FREEZESTAT,ALARM,Yes
+navfac-cherry-point-atc-mechanical.pdf#44,AIR COOLED CHILLER SCHEDULE,CH-A1,CAPACITY (TONS),56.0
+navfac-cherry-point-atc-mechanical.pdf#44,AIR COOLED CHILLER SCHEDULE,CH-A1,EWT (°F),55.4
+navfac-cherry-point-atc-mechanical.pdf#44,AIR COOLED CHILLER SCHEDULE,CH-A2,GPM,128.5

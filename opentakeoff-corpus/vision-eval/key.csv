@@ -1,0 +1,6 @@
+crop,expected,note
+a_2way_electric,2-way electric control valve,"caption read directly off the Eglin AFB legend (federal-attachment4-mechanical.pdf#17), cropped OUT of the image sent to the model"
+b_3way_electric,3-way electric control valve,"same legend, next row down"
+c_butterfly_electric,butterfly valve electric actuator,"same legend"
+d_ball_electric,segmented ball valve electric actuator,"same legend"
+e_3way_pneumatic_1,3-way pneumatic control valve,"same legend"

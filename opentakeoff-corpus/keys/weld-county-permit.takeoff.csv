@@ -1,0 +1,141 @@
+# weld-county-permit.takeoff.csv — ground-truth key for mcp/scripts/takeoff-eval.mjs
+#
+# Set: weld-county-mechanical-permit.pdf — an 8-sheet AutoCAD-plotted
+# mechanical PERMIT set for "WELD COUNTY CRIME LAB STORAGE BUILDING", 2329
+# 115th Ave, Greeley, CO (Robert Shreve & Main Building Architects / G2
+# Consulting Engineers, drawing set G2CE#2019086, PE stamp Greg J. Peterson
+# #38512, dated 01/24/2020 "PERMIT SET") — real title-block text confirmed
+# directly off the rendered sheets this session. Sheet index (M0.0's own
+# drawing index, confirmed against the real page order): #1=M0.0 (index/
+# legend/notes), #2=M0.1 (Mechanical Schedules), #3=M0.2 (Mechanical
+# Schedules), #4=M0.3 (Mechanical Diagrams), #5=M0.4 (Mechanical Diagrams),
+# #6=M0.5 (Mechanical Specifications — also carries a real DUCT SCHEDULE +
+# INSULATION SCHEDULE), #7=M1.0 (Main Floor Plan - Mechanical), #8=M2.0
+# (Roof Plan - Mechanical).
+#
+# HOW EVERY NUMBER BELOW WAS VERIFIED (2026-08-26/28): buildPlanSetTakeoff
+# (categories=all) gave a first-pass candidate list — it returned ZERO
+# equipment-kind items (see FINDING #1 below) — so NOTHING below could be
+# copy-pasted from it; every row was independently found and counted by
+# rendering the real sheets (Session.viewSheet, targeted region crops at
+# 1.5-10x zoom) and cross-checked with Session.findText sweeps across ALL 8
+# sheets (never same-sheet-only). Every drawn hexagon/box tag glyph below
+# was visually read directly off the rendered PNG, not inferred from
+# find_text hits alone (find_text's own hyphenated-tag query, e.g. "RTU-1",
+# frequently returns 0 on the plan sheets themselves because the real
+# hexagon tag glyph is drawn as TWO separate text spans, "RTU" then "1" on
+# the next line — find_text is fragment-aware but does not bridge that
+# split; only a rendered-image read confirms the real glyph).
+#
+# ══════════════════════════════════════════════════════════════════════════
+# FINDING #1 (dominant, real, disclosed — NOT fixable by any text-based
+# extractor, confirmed via this sheet's own pdf.js operator list showing
+# real paintImageXObject calls exactly where the visible tables sit): sheets
+# #2 (M0.1) and #3 (M0.2) — this set's ONLY two sheets carrying real
+# EQUIPMENT-kind schedules (ROOFTOP PACKAGE UNIT SCHEDULE, INFRA-RED TUBE
+# HEATER SCHEDULE, GAS FIRED UNIT HEATER SCHEDULE, BUILDING AIR BALANCE
+# SCHEDULE, SPLIT SYSTEM INDOOR UNIT SCHEDULE, SPLIT CONDENSING UNIT
+# SCHEDULE, DIFFUSER/GRILLE SCHEDULE on #2; FAN SCHEDULE, ELECTRIC HEATER
+# SCHEDULE, SINGLE DUCT VAV BOX SCHEDULE on #3) — are BOTH raster-embedded
+# images pasted onto an otherwise-vector CAD sheet, not real vector text.
+# Confirmed two independent ways this session: (a) Session.findText for
+# every schedule term (RTU, TRANE, EF-4, GC-128, COOK, VESTIBULE, QMARK,
+# TITUS, DESV, ...) returns count=0 on BOTH sheets despite the rendered PNG
+# looking perfectly crisp at 3-10x zoom (a high-DPI embedded raster scan
+# renders crisply — crispness is not evidence of real vector text); (b)
+# sheetInfo's own OCR_FAILURE finding already flags both sheets ("50%"/"30%
+# of its own area is embedded raster image content"). NET EFFECT: every
+# real equipment schedule row on this entire 8-sheet set is currently
+# UNREACHABLE by buildPlanSetTakeoff — tables_seen shows only 2 tables, both
+# on sheet #6, both reference-kind (DUCT SCHEDULE, INSULATION SCHEDULE, see
+# weld-county-permit.reference.csv) — zero equipment-kind tables at all.
+# This is the SAME disclosed raster limitation already named for this set
+# before this session began (mcp/src/session.ts's rasterScheduleNotes), now
+# independently re-confirmed and precisely localized to sheets #2/#3 by this
+# session's own findText sweep — and it is MORE severe than a "some rows
+# missing" gap: because ALL of this set's equipment schedules happen to live
+# on exactly these two raster sheets, buildPlanSetTakeoff resolves NONE of
+# the real, drawn equipment below — every row in this key is expected to
+# score MISSING, not because it isn't really drawn (every one of them was
+# independently visually confirmed on the plan/roof sheets, sheets #7/#8,
+# which ARE real vector content) but because the schedule ROW that would
+# let sweep_schedule_row anchor a tag to a drawn symbol is entirely
+# unreadable. A correct, expected, maximally-severe instance of the known
+# limitation — not a bug for this session to chase.
+#
+# FINDING #2 (real, disclosed, taxonomy-only — not fixed this session):
+# hvacTaxonomy.ts currently has no entry at all for three real equipment
+# families this set schedules and draws: condensing units (tag prefix
+# "CU-"), split-system indoor units tagged "AC-" (the existing "Ductless
+# split system" entry has an empty tagPrefixes list), and infra-red tube
+# heaters (tag prefix "IRH-"). Also, this set's terminal reheat boxes are
+# tagged "RTU1-1-H".."RTU1-6" (per-RTU-system numbering, no "-H" suffix on
+# the CV box) — never the bare "VAV-" prefix hvacTaxonomy.ts's own
+# air_terminal entry expects, so even a working equipment-table extractor
+# would not classify these via that entry's tagPrefixes today. Named here so
+# equipment_type below can be honest about the mismatch; not fixed (a
+# taxonomy edit needs no set-specific hardcoding rule, but is out of this
+# session's scope given FINDING #1 already blocks any of these from
+# reaching classification in practice on this set).
+#
+# FINDING #3 (real, disclosed, NOT fixed this session — confirmed directly
+# by calling Session.sweepScheduleRow, not inferred): the six RTU1-x-H /
+# RTU1-6 rows are NOT missing for the raster reason FINDING #1 names — their
+# own LOCAL VAV BOX SCHEDULE sits directly on sheet #7 (the floor plan
+# itself) as real, ordinary vector text, confirmed independently findable
+# via find_text. Calling sweep_schedule_row("RTU1-1-H") directly throws "No
+# schedule row \"RTU1-1-H\" in the set — tables found: reference on ...#6
+# (8 rows...) | reference on ...#6 (10 rows...)" — i.e. table discovery
+# (sheetGraph) never even sees this small table at all; only the two DUCT
+# SCHEDULE/INSULATION SCHEDULE tables on sheet #6 are found anywhere in the
+# whole 8-sheet set. A real, THIRD distinct root cause (table discovery
+# scope, not raster OCR and not geometry-anchoring) — plausibly because
+# table-hunting is scoped to schedule-role sheets and this table lives on a
+# plan-role sheet instead, though that scoping rule itself was not traced
+# further this session. Named precisely here rather than folded into
+# FINDING #1's raster explanation, which does not apply to these six rows.
+#
+# EF-9 (Building Air Balance Schedule, sheet #2, 400 CFM "FUME HOOD" row) is
+# the one real, deliberate expected_quantity=0 below: exhaustively swept via
+# find_text across all 8 sheets (both "EF-9" and "EF 9") and via a full
+# visual tour of the roof plan (#8, where EF-6/EF-7/EF-10 — its siblings —
+# are all real, individually hexagon-tagged) with zero hits/sightings. A
+# real, correct refusal: EF-9 is scheduled but never separately drawn/tagged
+# anywhere on this set's plan sheets (EF-10, the OTHER real fume-hood fan
+# on the same schedule line pair, IS drawn — see its own row below — so this
+# is not a blanket "fume hood fans are never drawn" pattern, just this one
+# real tag).
+#
+# Diffuser/grille/register tags (A-G on sheet #2's own DIFFUSER, GRILLE AND
+# REGISTER SCHEDULE) are deliberately NOT itemized below — same convention
+# bessemer.takeoff.csv already establishes: these are catalog TYPE tags
+# repeated at dozens of individual locations throughout the floor plan, not
+# individually-scheduled equipment instances with their own row.
+#
+tag,equipment_type,expected_quantity,sheets,notes
+RTU-1,Rooftop unit (RTU),1,weld-county-mechanical-permit.pdf#8,"ROOFTOP PACKAGE UNIT SCHEDULE (sheet #2, raster — see FINDING #1): TRANE OAGD120A4, ROOF, OFFICE, VAV/CV=VAV. Visually confirmed on the roof plan (sheet #8): one real, large 3-fan rooftop unit graphic with an adjacent hexagon tag reading 'RTU / 1', at column line ~5-6, row C. Real drawn quantity = 1. Pipeline resolves 0 items at all (FINDING #1) — scores MISSING."
+RTU-2,Rooftop unit (RTU),1,weld-county-mechanical-permit.pdf#8,"ROOFTOP PACKAGE UNIT SCHEDULE (sheet #2, raster): TRANE YHC060F4, ROOF, STORAGE, VAV/CV=CV. Visually confirmed on the roof plan (sheet #8): one real single-fan rooftop unit graphic with hexagon tag 'RTU / 2', directly below RTU-1 at the same column. Real drawn quantity = 1. Scores MISSING (FINDING #1)."
+RTU-3,Rooftop unit (RTU),1,weld-county-mechanical-permit.pdf#8,"ROOFTOP PACKAGE UNIT SCHEDULE (sheet #2, raster): TRANE OABD036E4, ROOF, VAULT #1 & #2, VAV/CV=CV. Visually confirmed on the roof plan (sheet #8): one real single-fan rooftop unit graphic with hexagon tag 'RTU / 3', above RTU-1 at the same column, row E-F. Real drawn quantity = 1. Scores MISSING (FINDING #1)."
+CU-1,Condensing unit,1,weld-county-mechanical-permit.pdf#8,"SPLIT CONDENSING UNIT SCHEDULE (sheet #2, raster): MITSUBISHI PUY-A24NHA4, ROOF, serves AC-1. Visually confirmed on the roof plan (sheet #8): one real hexagon tag 'CU / 1' beside a rectangular equipment-pad outline, roughly mid-sheet. Real drawn quantity = 1. Not yet in hvacTaxonomy.ts under a 'CU-' prefix (FINDING #2). Scores MISSING (FINDING #1)."
+AC-1,Split system indoor unit,1,weld-county-mechanical-permit.pdf#7,"SPLIT SYSTEM INDOOR UNIT SCHEDULE (sheet #2, raster): MITSUBISHI PKA-A24KA4, IT ROOM 133, wall mounted. Visually confirmed on the floor plan (sheet #7): one real hexagon tag 'AC / 1' plus its own thermostat ('T') symbol and the vertical wall-mounted unit outline, IT room 133 near grid 4/F. Real drawn quantity = 1. Not yet in hvacTaxonomy.ts under an 'AC-' prefix (FINDING #2). Scores MISSING (FINDING #1)."
+IRH-1,Infrared tube heater,1,weld-county-mechanical-permit.pdf#7,"INFRA-RED TUBE HEATER SCHEDULE (sheet #2, raster): SCHWANK S100-80, GARAGE 131, 20'-0"" length. Visually confirmed on the floor plan (sheet #7): one real hexagon tag 'IRH / 1' with its own thermostat symbol, Garage 131 near grid 6, row D. Real drawn quantity = 1. Not yet in hvacTaxonomy.ts (FINDING #2). Scores MISSING (FINDING #1)."
+IRH-2,Infrared tube heater,1,weld-county-mechanical-permit.pdf#7,"INFRA-RED TUBE HEATER SCHEDULE (sheet #2, raster): SCHWANK S100-80, GARAGE 131, 30'-0"" length. Visually confirmed on the floor plan (sheet #7): one real hexagon tag 'IRH / 2' directly below IRH-1's own hexagon in the same garage, plus a separate thermostat ('T') callout lower in the room (same unit's own control point, not a second physical heater). Real drawn quantity = 1. Scores MISSING (FINDING #1)."
+UH-1,Unit heater — electric wall / baseboard,1,weld-county-mechanical-permit.pdf#7,"GAS FIRED UNIT HEATER SCHEDULE (sheet #2, raster): REZNOR UDAS76, GARAGE 119, ceiling mounted. Visually confirmed on the floor plan (sheet #7): one real hexagon tag 'UH / 1' with a CO/NO2/T sensor cluster beside it, near Hall 113 / Garage 119. Real drawn quantity = 1. Note: this is a GAS-fired unit heater, not electric — hvacTaxonomy.ts's 'UH-' entry is filed under its electric-wall/baseboard family, a real, pre-existing taxonomy label mismatch (not introduced this session). Scores MISSING (FINDING #1)."
+EWH-1,Unit heater — electric wall / baseboard,1,weld-county-mechanical-permit.pdf#7,"ELECTRIC HEATER SCHEDULE (sheet #3, raster): QMARK AWH4408F, VESTIBULE 101, wall mounted, 4kW. Visually confirmed on the floor plan (sheet #7): one real hexagon tag 'EWH / 1' beside Vestibule 101, near work-note diffuser 'A' 6x6/50. Real drawn quantity = 1. Scores MISSING (FINDING #1)."
+EWH-2,Unit heater — electric wall / baseboard,1,weld-county-mechanical-permit.pdf#7,"ELECTRIC HEATER SCHEDULE (sheet #3, raster): QMARK AWH4408F, VESTIBULE 117, wall mounted, 4kW. Visually confirmed on the floor plan (sheet #7): one real hexagon tag 'EWH / 2' near Hall 115 / Vestibule 117. Real drawn quantity = 1. Scores MISSING (FINDING #1)."
+EF-1,Fan (exhaust / supply / return / general),1,weld-county-mechanical-permit.pdf#7,"FAN SCHEDULE (sheet #3, raster): COOK GC-128, UNISEX RR 104, ceiling mounted, 70 CFM. Visually confirmed on the floor plan (sheet #7): one real hexagon tag 'EF / 1' near Unisex RR 104, with a gray motorized-damper icon beside it (work note 17). Real drawn quantity = 1. Scores MISSING (FINDING #1)."
+EF-2,Fan (exhaust / supply / return / general),1,weld-county-mechanical-permit.pdf#7,"FAN SCHEDULE (sheet #3, raster): COOK GC-148, UNISEX RR 116, ceiling mounted, 140 CFM. Visually confirmed on the floor plan (sheet #7): one real hexagon tag 'EF / 2' immediately above the EF-1 hexagon in the same cluster near Unisex RR 104/116. Real drawn quantity = 1. Scores MISSING (FINDING #1)."
+EF-3,Fan (exhaust / supply / return / general),1,weld-county-mechanical-permit.pdf#7,"FAN SCHEDULE (sheet #3, raster): COOK GC-148, UNISEX RR 123, ceiling mounted, 140 CFM. Visually confirmed on the floor plan (sheet #7): one real hexagon tag 'EF / 3' near Unisex RR 123, beside a '6x6/100' diffuser callout and an '8""Ø' duct. Real drawn quantity = 1. Scores MISSING (FINDING #1)."
+EF-4,Fan (exhaust / supply / return / general),1,weld-county-mechanical-permit.pdf#7,"FAN SCHEDULE (sheet #3, raster): COOK 10XW40D17EC, WEST WALL GARAGE 119, wall mounted (propeller), 550 CFM. Visually confirmed on the floor plan (sheet #7): one real hexagon tag 'EF / 4' on the south exterior wall (grid row A) directly below Garage 119, beside a motorized-damper 'M' box and work notes 17/11 — located precisely via find_text('EF') span-position sweep, not by eyeballing alone (the tag sits well south of the room label itself). Real drawn quantity = 1. Scores MISSING (FINDING #1)."
+EF-5,Fan (exhaust / supply / return / general),1,weld-county-mechanical-permit.pdf#7,"FAN SCHEDULE (sheet #3, raster): COOK 14XW32D17EC, WEST WALL GARAGE 131, wall mounted (propeller), 1720 CFM. Visually confirmed on the floor plan (sheet #7): one real hexagon tag 'EF / 5' on the south exterior wall (grid row A) directly below Garage 131, same convention/discovery method as EF-4. Real drawn quantity = 1. Scores MISSING (FINDING #1)."
+EF-6,Fan (exhaust / supply / return / general),1,weld-county-mechanical-permit.pdf#8,"FAN SCHEDULE (sheet #3, raster): COOK 101C17DEC, ROOF, VAULT #1 AND #2, 800 CFM. Visually confirmed on the roof plan (sheet #8): one real hexagon tag 'EF / 6' with an adjacent roof-cap circle icon and '12x12 DN' duct callout. Real drawn quantity = 1. Scores MISSING (FINDING #1)."
+EF-7,Fan (exhaust / supply / return / general),1,weld-county-mechanical-permit.pdf#8,"FAN SCHEDULE (sheet #3, raster): COOK 90C17DEC, ROOF, DRY ROOMS, 600 CFM. Visually confirmed on the roof plan (sheet #8): one real hexagon tag 'EF / 7' with an adjacent roof-cap square icon and '12x10 DN' duct callout. Real drawn quantity = 1. Scores MISSING (FINDING #1)."
+EF-8,Fan (exhaust / supply / return / general),1,weld-county-mechanical-permit.pdf#7,"FAN SCHEDULE (sheet #3, raster): COOK GC-128, MECH/JAN 109, ceiling mounted, 80 CFM. Visually confirmed on the floor plan (sheet #7): one real hexagon tag 'EF / 8' near Mech/Jan 109, beside a 'DWH' (domestic water heater, plumbing-scope, not itemized here) callout. Real drawn quantity = 1. Scores MISSING (FINDING #1)."
+EF-9,Fan (exhaust / supply / return / general),0,weld-county-mechanical-permit.pdf#2,"BUILDING AIR BALANCE SCHEDULE (sheet #2, raster) lists 'EF-9 (FUME HOOD)', 400 CFM OA — a real scheduled tag. Confirmed refused correctly: exhaustive find_text sweep for 'EF-9'/'EF 9' across all 8 sheets returns 0 hits, and a full visual tour of the roof plan (sheet #8) — where its schedule-sibling EF-10 IS drawn with its own hexagon — shows no second EF hexagon anywhere near EF-10's own location or elsewhere on the roof. A real, correct refusal: EF-9 is scheduled but genuinely never separately drawn/tagged on this set's plan sheets, not a pipeline miss."
+EF-10,Fan (exhaust / supply / return / general),1,weld-county-mechanical-permit.pdf#8,"BUILDING AIR BALANCE SCHEDULE (sheet #2, raster) lists 'EF-10 (FUME HOOD)', 300 CFM OA — NOT present in the 8-row FAN SCHEDULE table (sheet #3), only in the air-balance summary (a real, disclosed cross-schedule split, same family as EF-9 above). Visually confirmed on the roof plan (sheet #8): one real hexagon tag 'EF / 10' with an adjacent roof-cap square icon and '10x8 DN' duct callout — the exact digits '10' individually re-confirmed at 9.6x zoom to rule out misreading as 'EF-9'. Real drawn quantity = 1. Scores MISSING (FINDING #1)."
+RTU1-1-H,Terminal reheat box (VAV-equivalent),1,weld-county-mechanical-permit.pdf#7,"LOCAL VAV BOX SCHEDULE (sheet #7 itself, real vector — this small quick-reference table lives ON the floor plan sheet, unlike the raster M0.1/M0.2 schedules): 8"" inlet, 3.5 kW electric heat, 600 CFM max cooling. Visually confirmed on the floor plan (sheet #7): one real box-outline tag reading 'RTU1-1-H' near grid 2-3, Receiving/Packaging 111 area. Real drawn quantity = 1. Tag convention is 'RTU1-x-H' (per-RTU-system numbering), not the bare 'VAV-' prefix hvacTaxonomy.ts's air_terminal entry expects (FINDING #2). Scores MISSING (FINDING #1 does not apply to this specific table — it IS real vector text — but buildPlanSetTakeoff never reached it: 0 equipment-kind tables seen at all this session)."
+RTU1-2-H,Terminal reheat box (VAV-equivalent),1,weld-county-mechanical-permit.pdf#7,"LOCAL VAV BOX SCHEDULE (sheet #7): 8"" inlet, 2.5 kW, 450 CFM max cooling. Visually confirmed on the floor plan (sheet #7): one real box-outline tag 'RTU1-2-H' near Mech 103/Examination Room 102. Real drawn quantity = 1. Scores MISSING (table never reached — see RTU1-1-H's own note)."
+RTU1-3-H,Terminal reheat box (VAV-equivalent),1,weld-county-mechanical-permit.pdf#7,"LOCAL VAV BOX SCHEDULE (sheet #7): 6"" inlet, 2 kW, 330 CFM max cooling. Visually confirmed on the floor plan (sheet #7): one real box-outline tag 'RTU1-3-H' near Dry Room 113/114. Real drawn quantity = 1. Scores MISSING (table never reached)."
+RTU1-4-H,Terminal reheat box (VAV-equivalent),1,weld-county-mechanical-permit.pdf#7,"LOCAL VAV BOX SCHEDULE (sheet #7): 12"" inlet, 6 kW, 1100 CFM max cooling — the largest of the six local boxes. Visually confirmed on the floor plan (sheet #7): one real box-outline tag 'RTU1-4-H' near Rolling Storage 125. Real drawn quantity = 1. Scores MISSING (table never reached)."
+RTU1-5-H,Terminal reheat box (VAV-equivalent),1,weld-county-mechanical-permit.pdf#7,"LOCAL VAV BOX SCHEDULE (sheet #7): 8"" inlet, 2.5 kW, 450 CFM max cooling. Visually confirmed on the floor plan (sheet #7): one real box-outline tag 'RTU1-5-H' near Cataloging 110/Moveable Table 108. Real drawn quantity = 1. Scores MISSING (table never reached)."
+RTU1-6,Terminal reheat box (VAV-equivalent),1,weld-county-mechanical-permit.pdf#7,"LOCAL VAV BOX SCHEDULE (sheet #7): 6"" inlet, N/A electric heat (CV box, no reheat — the one row of six without a '-H' suffix), 350 CFM max cooling. Visually confirmed on the floor plan (sheet #7): one real box-outline tag 'RTU1-6' near Hall 122/Elec 120, and a second 'RTU1-6' text callout (thermostat/zone reference) near Hall 121 — find_text itself independently corroborates 2 hits for this exact string on sheet #7. Real drawn quantity = 1 physical box (the second hit is its own zone/thermostat reference, same convention as IRH-2's own second callout above, not a second physical box). Scores MISSING (table never reached)."

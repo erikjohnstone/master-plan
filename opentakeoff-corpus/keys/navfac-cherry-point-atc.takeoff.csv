@@ -1,0 +1,445 @@
+# navfac-cherry-point-atc.takeoff.csv — ground-truth key for mcp/scripts/takeoff-eval.mjs
+#
+# Set: navfac-cherry-point-atc-mechanical.pdf — a real 75-sheet NAVFAC FY20
+# P-228 "ATC Tower & Air Operations Building" mechanical bid set, MCAS Cherry
+# Point NC (Burns & McDonnell MEP, NAVFAC Mid-Atlantic). Real title-block
+# text confirmed directly off rendered sheets this session. The project is
+# THREE real, separately-tagged buildings/areas sharing one drawing set,
+# each with its OWN independent tag numbering starting fresh — confirmed via
+# title blocks and M-002's own prose ("General Mechanical/Plumbing System
+# Description"):
+#   "A" = Air Operations building  (sheets M-601/602/603, MS101, MH10x/MP10x, M-301/401)
+#   "M" = MITRACON building        (sheets M-611/612/613, MH11x/MP11x, M-311/411)
+#   "T" = ATCT (the tower itself)  (sheets M-621/622, MH12x/MP12x, M-321/421)
+# This key covers all three areas. equipment_type uses hvacTaxonomy.ts's own
+# vocabulary; several real tag-prefix MISMATCHES against that vocab were
+# found this session (see FINDINGS below) and are marked "(unclassified)"
+# to match what the pipeline itself currently reports for them, per this
+# project's own standing convention.
+#
+# HOW EVERY NUMBER BELOW WAS VERIFIED (2026-08-28): node --import tsx
+# scripts/takeoff-pipeline.mjs <pdf> --categories=all gave a first-pass
+# candidate list, but NOTHING below was copy-pasted from it — the pipeline's
+# own scan was DOMINATED by a structural failure (see FINDING #1) that made
+# its own candidate list nearly useless for AHU/VAV/Boiler/Pump/Chiller, so
+# this key was instead built primarily from the real EQUIPMENT SCHEDULES
+# (Session.viewSheet full-page renders of M-601/602/603/611/612/613/621/622,
+# read directly) cross-checked against real PLAN-SHEET renders. Two
+# confidence tiers, both real, both disclosed per-row in `notes`:
+#   - "plan-confirmed": this session individually rendered the real duct
+#     plan, piping plan, enlarged mechanical-room plan, mechanical section,
+#     or site plan and saw the actual tagged symbol/box drawn (not text-
+#     searched — text search on this set frequently fails, see FINDING #3).
+#     Sheets actually rendered and read this session: MS101(#3), M-002(#2),
+#     MH100(#5), MH101(#6), MH102(#7), MP102(#19), M-301(#26), M-401(#29),
+#     M-411(#30), M-421(#31), plus the 8 schedule sheets #42-49.
+#   - "schedule-only": real row in a real equipment schedule (read directly
+#     off the same full-page schedule renders), not individually re-rendered
+#     on its own plan sheet this session. Given this schedule row convention
+#     is the SAME real drafting convention already plan-confirmed multiple
+#     times per area/type above (one schedule row = one physically distinct
+#     unit, matching every plan-confirmed row exactly), expected_quantity=1
+#     is a well-corroborated real inference, not a guess — same discipline
+#     federal-mech.takeoff.csv's own header already establishes for its
+#     "not individually re-cropped" VAV rows.
+#
+# SCOPE (75 sheets — deliberately a representative subset, not exhaustive,
+# per this initiative's own explicit sizing guidance): full breadth across
+# AHU, Boiler, Chiller, Pump, Fan, FCU, VAV, Dehumidifier, Air Separator,
+# Humidifier, Unit Heater, DOAH/CRAH, and bypass control valves, across ALL
+# THREE real building areas. VAV and FCU populations are the largest real
+# families (52 real VAV tags total: 27 in Area A, 25 in Area M; 47 real FCU
+# tags: 13+10+16(+... see M-621 sheet: FCU-T1..T16 read as 18 rows on the
+# schedule render)+8 in the four areas) — every VAV/FCU tag this session
+# individually plan-confirmed is listed, plus a representative schedule-only
+# sample per area/family (never the full population) with an explicit note
+# that the remainder was left unverified this session, consistent with the
+# task's own "prioritize breadth across types over exhaustive one-type
+# coverage" instruction.
+#
+# ══════════════════════════════════════════════════════════════════════════
+# FINDING #1 (dominant, real, disclosed — NOT fixed this session): 139 of
+# 187 schedule rows the pipeline itself tried this session errored
+# AMBIGUOUS_ROW_KEY ("N schedule rows carry the key <tag>"). Root cause
+# identified by direct inspection: this real drawing reuses SHORT, per-area-
+# local tags across the three independent areas above (e.g. "CD-1" is a real
+# distinct 3-CONE SUPPLY diffuser in BOTH Area A's own GRD schedule (M-603)
+# AND Area M's own GRD schedule (M-613) AND Area T's own GRD schedule
+# (M-622) — three real, different, physical devices, not one mark defined
+# three times) PLUS real accessory schedules (VIBRATION ISOLATION SCHEDULE)
+# that legitimately re-list a primary tag (e.g. "AHU-A1,A2" as one combined
+# row) alongside the primary AIR HANDLING UNIT SCHEDULE's own row for the
+# same tag. Today's schedule-row resolution scopes uniqueness across the
+# WHOLE document rather than per-table/per-area, so it flags both patterns
+# as "the same mark defined twice" — a real, general, disclosed gap, NOT
+# fixed this session (large, structural, high regression-risk change,
+# outside this session's economical-effort mandate; left as real signal
+# exactly per this initiative's own "do not tune to 100%" doctrine).
+#
+# FINDING #2 (real, disclosed): several real equipment schedules on this
+# set are currently undiscovered by buildPlanSetTakeoff entirely (not in
+# tables_seen at all) — same family of gap federal-mech.takeoff.csv's own
+# FINDING #2 already documents for that set's AIR SEPARATOR/PUMP/EF tables.
+# On THIS set: PUMP SCHEDULE (all 3 areas — a rich real family, HHWP-DOAH-,
+# PCHWP-/PHHWP-/SHHWP-/SCHWP-/HRHWP- prefixes, none of which match
+# hvacTaxonomy.ts's current Pump prefixes "CP-,CHWP-,HWP-,P-" at all — a
+# much larger real prefix mismatch than federal-mech's own CWP-/CHWP-
+# finding), AIR SEPARATOR SCHEDULE, EXPANSION TANK SCHEDULE, DEHUMIDIFIER
+# SCHEDULE, FAN SOUND POWER LEVEL SCHEDULE, VIBRATION ISOLATION SCHEDULE,
+# DUCT/PIPING CONSTRUCTION SCHEDULE. Every one of these tags below still
+# scores MISSING today for that reason, not because the tag isn't real.
+#
+# FINDING #3 (real, disclosed): naive single-span text search (findText)
+# returns ZERO hits for many real, plan-drawn equipment tags this session
+# confirmed BY EYE on the actual plan (e.g. "B-A1", "CH-A1", "EF-A1",
+# "FCU-A1", "UH-A1" all returned 0 hits searched across sheets #1-41 despite
+# being visibly drawn) — the tag's own glyph is real but pdf.js is emitting
+# it as multiple separate text spans (rotation/leader-line callout text runs
+# split across runs) that no single-span substring search reassembles. This
+# session switched to EYE-VERIFICATION BY RENDER for exactly this reason
+# rather than trusting findText's own 0-hit result as an absence — the same
+# discipline VAV-20's pre-existing federal-mech.rowsym.csv note already
+# establishes for a different (shape-matching) real gap.
+#
+# FINDING #4 (real, disclosed, scope note): this set's fire/smoke/balancing
+# dampers (real vocabulary confirmed: "FIRE DAMPER", "SMOKE DAMPER",
+# "BALANCING DAMPER" all real hits on MH104/MH121-123/M-502/M-510/MI700/
+# MI704) are NOT individually tagged anywhere on the plan (findText for
+# FD-/SD-/VD-/MBD- returns zero hits set-wide) and have NO dedicated damper
+# schedule (not in tables_seen). Direct render (MH100, sheet #5) confirms:
+# damper glyphs ARE drawn (the standard NAVFAC X-in-box symbol) but carry
+# no adjacent tag text at all — only a bare keyed work-note ("M35","M41",
+# etc, a per-sheet numbered note, not a per-instance equipment mark).
+# CD-1..5 in the GRD schedules are REAL, but are 3-CONE SUPPLY DIFFUSERS
+# (a grille, hvacTaxonomy's own "Ceiling diffuser" family), NOT combination
+# fire/smoke dampers as hvacTaxonomy.ts's "CD-" prefix currently assumes —
+# a real, disclosed prefix-meaning conflict. Per this set's own real
+# drafting convention, "damper" therefore has NO real distinctly-tagged
+# population to enter below — correctly out of scope, not an omission.
+#
+# FINDING #5 (real, disclosed): hvacTaxonomy.ts's "Humidifier" entry lists
+# only prefix "HUM-"; this real drawing's own real, schedule- and plan-
+# confirmed humidifier tag is "H-" (H-A1, H-T1..H-T5) — another real prefix
+# mismatch (H- also collides with hvacTaxonomy's own "Fan coil unit" survey
+# vocabulary risk noted elsewhere in that file). hvacTaxonomy's "Bypass
+# control valve" entry lists prefix "BCV-"; this drawing's real, plan-
+# confirmed bypass valve tag is "CV-<system>-BP-<area>" (CV-CHW-BP-A,
+# CV-HHW-BP-A, etc) — a third real prefix mismatch, same family as
+# FINDING #2's Pump-prefix mismatch.
+# ══════════════════════════════════════════════════════════════════════════
+tag,equipment_type,expected_quantity,sheets,notes
+AHU-A1,Air handling unit (AHU),1,navfac-cherry-point-atc-mechanical.pdf#26;navfac-cherry-point-atc-mechanical.pdf#29,"AIR HANDLING UNIT SCHEDULE (sheet #42/M-601), MECH ROOM 152. plan-confirmed: real labeled rectangle in MECHANICAL ROOM 152 ENLARGED DUCT PLAN and SECTION 1 (M-401/#29, M-301/#26). Real narrative (M-002/#2) corroborates: '24/7 areas on the first floor', no redundant backup."
+AHU-A2,Air handling unit (AHU),1,navfac-cherry-point-atc-mechanical.pdf#26;navfac-cherry-point-atc-mechanical.pdf#29,"Same AHU SCHEDULE, MECH ROOM 151. plan-confirmed: real labeled rectangle in MECHANICAL ROOM 151 ENLARGED DUCT PLAN and SECTION (M-401/#29, M-301/#26)."
+AHU-M1,Air handling unit (AHU),1,navfac-cherry-point-atc-mechanical.pdf#30,"AIR HANDLING UNIT SCHEDULE (sheet #45/M-611), MITRACON 171 MECH. plan-confirmed: real labeled rectangle, MITRACON MECHANICAL ENLARGED PLANS (M-411/#30), both duct and pipe views."
+AHU-T1A,Air handling unit (AHU),1,,"AIR HANDLING UNIT SCHEDULE (sheet #48/M-621), 11TH FLOOR MECHANICAL (tower cab). schedule-only this session (cab-level plan sheet not individually rendered) — strongly corroborated by real narrative (M-002/#2): 'AHU-T1A/B provide ventilation, heating, cooling... Both AHUs are sized to fully serve the cab, providing N+1 redundancy.' A real, disclosed scope gap, not a guess."
+AHU-T1B,Air handling unit (AHU),1,,"Same AHU SCHEDULE and narrative as AHU-T1A — the N+1 redundant twin unit, both physically present per the same narrative sentence. schedule-only this session."
+B-A1,Boiler,1,navfac-cherry-point-atc-mechanical.pdf#29,"BOILER SCHEDULE (sheet #42/M-601), 152 MECH. plan-confirmed: real labeled box, MECHANICAL ROOM 152 ENLARGED PIPE PLAN (M-401/#29). FINDING #2: BOILER SCHEDULE itself is undiscovered by buildPlanSetTakeoff — scores MISSING."
+B-A2,Boiler,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same BOILER SCHEDULE, 152 MECH — second real unit. plan-confirmed M-401/#29."
+B-M1,Boiler,1,navfac-cherry-point-atc-mechanical.pdf#30,"BOILER SCHEDULE (sheet #45/M-611), 171 MECH. plan-confirmed: real labeled box, MITRACON MECHANICAL ENLARGED PLANS (M-411/#30)."
+B-M2,Boiler,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same BOILER SCHEDULE, 171 MECH — second real unit. plan-confirmed M-411/#30."
+B-T1,Boiler,1,navfac-cherry-point-atc-mechanical.pdf#31,"BOILER SCHEDULE (sheet #48/M-621), 2102 MECH. plan-confirmed: real labeled box, ATCT MECHANICAL ENLARGED PLANS (M-421/#31)."
+B-T2,Boiler,1,navfac-cherry-point-atc-mechanical.pdf#31,"Same BOILER SCHEDULE, 2102 MECH — second real unit. plan-confirmed M-421/#31."
+CH-A1,Chiller,1,navfac-cherry-point-atc-mechanical.pdf#3,"AIR COOLED CHILLER SCHEDULE (sheet #44/M-603). plan-confirmed: real labeled outdoor unit on MECHANICAL SITE PLAN - AIR OPS (MS101/#3), sited in the mechanical yard south of the building, its own chiller pad."
+CH-A2,Chiller,1,navfac-cherry-point-atc-mechanical.pdf#3,"Same AIR COOLED CHILLER SCHEDULE — second real unit, same yard pad. plan-confirmed MS101/#3."
+CH-MT1,Chiller,1,,"AIR COOLED HEAT RECOVERY CHILLER SCHEDULE (sheet #45/M-611), serves BOTH MITRACON and ATCT (real narrative M-002/#2: 'A combined CHW plant provide chilled water to both the MTRACON and ATCT buildings. Two packaged air-cooled chillers (91 tons each) are located in the mechanical yard adjacent to the MTRACON building.'). schedule+narrative-confirmed; not individually plan-rendered this session (a real, disclosed scope gap — the MITRACON yard/site sheet was not rendered)."
+CH-MT2,Chiller,1,,"Same schedule/narrative as CH-MT1 — the second of the two real 91-ton units. schedule+narrative-confirmed only."
+PCHWP-A1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#29,"PUMP SCHEDULE (sheet #42/M-601, PRIMARY CHILLED WATER PUMP). plan-confirmed: real labeled pump symbol, MECHANICAL ROOM 152 ENLARGED PIPE PLAN (M-401/#29). FINDING #2: PUMP SCHEDULE itself undiscovered by the pipeline — scores MISSING; real tag prefix 'PCHWP-' also does not match hvacTaxonomy's Pump vocabulary."
+PCHWP-A2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same PUMP SCHEDULE — second real primary CHW pump. plan-confirmed M-401/#29."
+PHHWP-A1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same PUMP SCHEDULE, PRIMARY HEATING HOT WATER PUMP. plan-confirmed M-401/#29."
+PHHWP-A2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same PUMP SCHEDULE — second real primary HHW pump. plan-confirmed M-401/#29."
+SHHWP-A1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same PUMP SCHEDULE, SECONDARY HEATING HOT WATER PUMP. plan-confirmed M-401/#29."
+SHHWP-A2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same PUMP SCHEDULE — second real secondary HHW pump. plan-confirmed M-401/#29."
+HHWP-DOAH-A1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#26,"Same PUMP SCHEDULE, DOAH CIRCULATOR for DOAH-A1. plan-confirmed: real labeled circulator, MECHANICAL ROOM 152 SECTION 1 (M-301/#26) and M-401/#29."
+HHWP-DOAH-A2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same PUMP SCHEDULE, DOAH CIRCULATOR for DOAH-A2. plan-confirmed M-401/#29 (room 151 pipe plan)."
+PCHWP-MT1,Pump,1,,"PUMP SCHEDULE (sheet #45/M-611). schedule-only this session (not individually re-confirmed on M-411's own crop, though the same sheet was rendered for other MITRACON pumps)."
+SCHWP-M1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE, SECONDARY CHILLED WATER PUMP. plan-confirmed: real labeled pump, MITRACON MECHANICAL ENLARGED PIPE PLAN (M-411/#30)."
+SCHWP-M2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE — second real unit. plan-confirmed M-411/#30."
+PHHWP-M1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE, HEATING HOT WATER PRIMARY. plan-confirmed M-411/#30."
+PHHWP-M2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE — second real unit. plan-confirmed M-411/#30."
+SHHWP-M1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE, HEATING HOT WATER SECONDARY. plan-confirmed M-411/#30."
+SHHWP-M2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE — second real unit. plan-confirmed M-411/#30."
+HHWP-DOAH-M1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE, DOAH CIRCULATOR. plan-confirmed M-411/#30."
+HRHWP-MT1,Pump,1,,"PUMP SCHEDULE (sheet #45/M-611), PRIMARY HEAT RECOVERY HEATING HOT WATER PUMP, CHILLER MOUNTED END SUCTION. schedule-only this session."
+PHHWP-T1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#31,"PUMP SCHEDULE (sheet #48/M-621), PRIMARY HEATING HOT WATER. plan-confirmed: real labeled pump, ATCT MECHANICAL ENLARGED PIPE PLAN (M-421/#31)."
+PHHWP-T2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#31,"Same PUMP SCHEDULE — second real unit. plan-confirmed M-421/#31."
+SCHWP-T1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#31,"Same PUMP SCHEDULE, SECONDARY CHILLED WATER. plan-confirmed M-421/#31."
+SCHWP-T2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#31,"Same PUMP SCHEDULE — second real unit. plan-confirmed M-421/#31."
+SHHWP-T1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#31,"Same PUMP SCHEDULE, SECONDARY HEATING HOT WATER. plan-confirmed M-421/#31."
+SHHWP-T2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#31,"Same PUMP SCHEDULE — second real unit. plan-confirmed M-421/#31."
+HHWP-DOAH-T1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#31,"Same PUMP SCHEDULE, DOAH HHW CIRCULATOR. plan-confirmed M-421/#31."
+EF-A1,Fan (exhaust / supply / return / general),1,,"FAN SCHEDULE (sheet #44/M-603), STORAGE BAY VENTILATION. schedule-only this session — a real, disclosed scope gap (FINDING #3: this tag's own findText search returned 0 hits on plan sheets #1-41 despite hvacTaxonomy's EF- prefix being real; not individually re-rendered to confirm the drawn symbol directly)."
+EF-A2,Fan (exhaust / supply / return / general),1,,"Same FAN SCHEDULE, UPS ROOM EXHAUST. schedule-only."
+EF-A3,Fan (exhaust / supply / return / general),1,,"Same FAN SCHEDULE, BASE NODE EXHAUST. schedule-only."
+SPF-T1,Fan (exhaust / supply / return / general),1,navfac-cherry-point-atc-mechanical.pdf#31,"FAN SCHEDULE (sheet #48/M-621), STAIRWELL PRESSURIZATION. plan-confirmed: real labeled fan box, ATCT MECHANICAL DUCT ENLARGED PLAN (M-421/#31). Real narrative (M-002/#2): 'The ATCT is equipped with a stair pressurization system. A supply fan (SPF-T1) provides unconditioned outside air to the stair shaft.'"
+SPF-T2,Fan (exhaust / supply / return / general),1,navfac-cherry-point-atc-mechanical.pdf#31,"Same FAN SCHEDULE, PRESSURIZATION RELIEF. plan-confirmed M-421/#31."
+EF-T1,Fan (exhaust / supply / return / general),1,,"Same FAN SCHEDULE, JANITOR EXHAUST. schedule-only."
+EF-T2,Fan (exhaust / supply / return / general),1,,"Same FAN SCHEDULE, 10TH FLOOR EXHAUST. schedule-only."
+EF-M1,Fan (exhaust / supply / return / general),1,,"FAN SCHEDULE reference (pipeline items[] reports this tag resolved qty=1 uncorroborated) — MITRACON exhaust fan; schedule-only this session, not independently re-confirmed against a MITRACON fan schedule render."
+DOAH-A1,(unclassified — DOAH not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#26;navfac-cherry-point-atc-mechanical.pdf#29,"DEDICATED OUTDOOR AIR UNIT SCHEDULE 1&2 OF 2 (sheet #42/M-601). plan-confirmed: real labeled unit, MECHANICAL ROOM 152 duct+pipe plans and SECTION (M-401/#29, M-301/#26). Two real half-tables (1 OF 1 cooling/heating data + 2 OF 2 energy-wheel/electrical data) describe the SAME physical unit — expected_quantity=1, not 2 (a real cross-table row-key collision source, FINDING #1)."
+DOAH-A2,(unclassified — DOAH not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#29,"Same DOAH SCHEDULE — second real unit, MECH ROOM 151. plan-confirmed M-401/#29."
+DOAH-M1,(unclassified — DOAH not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#30,"DEDICATED OUTDOOR AIR UNIT SCHEDULE (sheet #45/M-611). plan-confirmed: real labeled unit, MITRACON MECHANICAL ENLARGED PLANS (M-411/#30)."
+DOAH-T1,(unclassified — DOAH not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#31,"DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE (sheet #49/M-622). plan-confirmed: real labeled unit, ATCT MECHANICAL ENLARGED PLANS (M-421/#31). Real full BAS/DDC points schedule for this exact unit also confirmed on MI730/#64 (see reference.csv)."
+AS-CHW-A1,Air separator,1,navfac-cherry-point-atc-mechanical.pdf#26;navfac-cherry-point-atc-mechanical.pdf#29,"AIR SEPARATOR SCHEDULE (sheet #44/M-603), TANGENTIAL type, CHILLED WATER. plan-confirmed: real labeled tank, MECHANICAL ROOM 152 (M-401/#29, M-301/#26 section). FINDING #2: AIR SEPARATOR SCHEDULE itself undiscovered by the pipeline — scores MISSING, same family of gap as federal-mech's own AS-1/AS-2 finding."
+AS-HHW-A1,Air separator,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same AIR SEPARATOR SCHEDULE, HEATING HOT WATER. plan-confirmed M-401/#29."
+AS-CHW-M1,Air separator,1,navfac-cherry-point-atc-mechanical.pdf#30,"AIR SEPARATOR SCHEDULE (sheet #45/M-611). plan-confirmed: real labeled tank, MITRACON MECHANICAL ENLARGED PIPE PLAN (M-411/#30)."
+AS-HHW-M1,Air separator,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same AIR SEPARATOR SCHEDULE, HEATING HOT WATER. plan-confirmed M-411/#30."
+AS-CHW-T1,Air separator,1,navfac-cherry-point-atc-mechanical.pdf#31,"AIR SEPARATOR SCHEDULE (sheet #49/M-622). plan-confirmed: real labeled tank, ATCT MECHANICAL ENLARGED PIPE PLAN (M-421/#31)."
+AS-HHW-T1,Air separator,1,navfac-cherry-point-atc-mechanical.pdf#31,"Same AIR SEPARATOR SCHEDULE, HEATING HOT WATER. plan-confirmed M-421/#31."
+VAV-A101,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#7;navfac-cherry-point-atc-mechanical.pdf#19,"VARIABLE AIR VOLUME TERMINAL BOX (sheet #43/M-602), SERIES FAN POWERED, served by AHU-A1. plan-confirmed: real labeled box, AIR OPS FIRST FLOOR DUCTWORK PLAN - AREA B (MH102/#7) and PIPING PLAN - AREA B (MP102/#19)."
+VAV-A102,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same VAV schedule. plan-confirmed: real labeled box, AREA A DUCTWORK PLAN (MH101/#6)."
+VAV-A103,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same VAV schedule. plan-confirmed MH101/#6."
+VAV-A104,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same VAV schedule. plan-confirmed MH101/#6."
+VAV-A105,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same VAV schedule. plan-confirmed MH101/#6."
+VAV-A106A,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same VAV schedule. plan-confirmed MH101/#6."
+VAV-A106B,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same VAV schedule. plan-confirmed MH101/#6."
+VAV-A108A,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same VAV schedule. plan-confirmed MH101/#6."
+VAV-A109,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same VAV schedule. plan-confirmed MH101/#6."
+VAV-A110,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same VAV schedule. plan-confirmed MH101/#6."
+VAV-A111,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same VAV schedule. plan-confirmed MH101/#6."
+VAV-A112,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same VAV schedule. plan-confirmed MH101/#6."
+VAV-A113,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same VAV schedule. plan-confirmed MH101/#6."
+VAV-A114,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same VAV schedule. plan-confirmed MH101/#6."
+VAV-A107,VAV box (variable air volume terminal),1,,"Same VAV schedule (sheet #43/M-602). schedule-only this session — real remaining Area A population (27 real VAV-A tags total on the schedule: A101-A118 plus A201-A206); 14 above individually plan-confirmed, this and the 5 below are a representative schedule-only sample of the rest, not the full remainder."
+VAV-A115,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only.
+VAV-A118,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only.
+VAV-A203A,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only.
+VAV-A204,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only.
+VAV-A206,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only.
+VAV-M101,VAV box (variable air volume terminal),1,,"VARIABLE AIR VOLUME TERMINAL BOX (sheet #46/M-612), served by AHU-M1. schedule-only this session — real Area M population is 25 real VAV-M tags (M101-M125); this and the 5 below are a representative schedule-only sample, not individually plan-rendered (a real, disclosed scope gap for this whole family — MITRACON's own MH11x duct-plan sheets were not rendered this session)."
+VAV-M105,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only.
+VAV-M109,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only.
+VAV-M115,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only.
+VAV-M120,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only.
+VAV-M125,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only.
+FCU-A1,Fan coil unit (FCU),1,navfac-cherry-point-atc-mechanical.pdf#6,"FAN COIL UNIT SCHEDULE (sheet #42/M-601). plan-confirmed: real labeled box, MH101/#6 (near RG-11/TOILET-SHOWER 130)."
+FCU-A2,Fan coil unit (FCU),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same FCU schedule. plan-confirmed MH101/#6 (STAIR 115 / WX CLASSROOM area)."
+FCU-A4,Fan coil unit (FCU),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same FCU schedule. plan-confirmed MH101/#6 (MOTHERS RM 106 area)."
+FCU-A6,Fan coil unit (FCU),1,navfac-cherry-point-atc-mechanical.pdf#7,"Same FCU schedule. plan-confirmed MH102/#7 (ELEC 153)."
+FCU-A7,Fan coil unit (FCU),1,navfac-cherry-point-atc-mechanical.pdf#26;navfac-cherry-point-atc-mechanical.pdf#29,"Same FCU schedule. plan-confirmed MECHANICAL ROOM 152 (M-401/#29, M-301/#26 section)."
+FCU-A8A,Fan coil unit (FCU),1,navfac-cherry-point-atc-mechanical.pdf#7,"Same FCU schedule. plan-confirmed MH102/#7."
+FCU-A8B,Fan coil unit (FCU),1,navfac-cherry-point-atc-mechanical.pdf#7,"Same FCU schedule. plan-confirmed MH102/#7."
+FCU-A9,Fan coil unit (FCU),1,navfac-cherry-point-atc-mechanical.pdf#29,"Same FCU schedule. plan-confirmed MECHANICAL ROOM 151 (M-401/#29)."
+FCU-A10,Fan coil unit (FCU),1,navfac-cherry-point-atc-mechanical.pdf#7,"Same FCU schedule. plan-confirmed MH102/#7 (BASE NODE 156)."
+FCU-A11,Fan coil unit (FCU),1,navfac-cherry-point-atc-mechanical.pdf#7,"Same FCU schedule. plan-confirmed MH102/#7 (WEAPON STOR 110)."
+FCU-A12,Fan coil unit (FCU),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same FCU schedule. plan-confirmed MH101/#6 (BUNK ROOM 129)."
+FCU-A13,Fan coil unit (FCU),1,navfac-cherry-point-atc-mechanical.pdf#6,"Same FCU schedule. plan-confirmed MH101/#6 (TOILET/SHOWER 130)."
+FCU-A3,Fan coil unit (FCU),1,,"Same FCU SCHEDULE (sheet #42/M-601) — all 13 real Area A FCU tags are on the schedule; this is the one row not individually re-confirmed on its own plan location this session (schedule-only)."
+FCU-A5,Fan coil unit (FCU),1,,Same FCU schedule. schedule-only (see FCU-A3 note).
+FCU-M3,Fan coil unit (FCU),1,navfac-cherry-point-atc-mechanical.pdf#30,"FAN COIL UNIT SCHEDULE (sheet #45/M-611). plan-confirmed: real labeled box, MITRACON MECHANICAL ENLARGED PLANS (M-411/#30, 171 MECH)."
+FCU-M1A,Fan coil unit (FCU),1,,"Same FCU schedule — real Area M population is 10 tags (M1A,M1B,M2A,M2B,M3,M4A,M4B,M5,M6,M7); this and the 3 below are a representative schedule-only sample."
+FCU-M4A,Fan coil unit (FCU),1,,Same FCU schedule. schedule-only.
+FCU-M5,Fan coil unit (FCU),1,,Same FCU schedule. schedule-only.
+FCU-M7,Fan coil unit (FCU),1,,Same FCU schedule. schedule-only.
+FCU-T15,Fan coil unit (FCU),1,navfac-cherry-point-atc-mechanical.pdf#31,"FAN COIL UNIT SCHEDULE (sheet #48/M-621), 2103 CORRIDOR. plan-confirmed: real labeled box, ATCT MECHANICAL DUCT ENLARGED PLAN (M-421/#31)."
+FCU-T1,Fan coil unit (FCU),1,,"Same FCU schedule — real Area T population is 18 tags (T1-T4, T5A/B, T6, T7A/B, T8-T14, T16); this and the 3 below are a representative schedule-only sample."
+FCU-T5A,Fan coil unit (FCU),1,,Same FCU schedule. schedule-only.
+FCU-T8,Fan coil unit (FCU),1,,Same FCU schedule. schedule-only.
+FCU-T16,Fan coil unit (FCU),1,,Same FCU schedule. schedule-only.
+DH-A1,(unclassified — dehumidifier not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#7,"DEHUMIDIFIER SCHEDULE (sheet #44/M-603). plan-confirmed: real labeled box, MH102/#7 (ELEC 153 area). FINDING #2: DEHUMIDIFIER SCHEDULE itself undiscovered by the pipeline — scores MISSING."
+DH-A2,(unclassified — dehumidifier not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#29,"Same DEHUMIDIFIER SCHEDULE. plan-confirmed MECHANICAL ROOM 152 (M-401/#29)."
+DH-A3,(unclassified — dehumidifier not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#7,"Same DEHUMIDIFIER SCHEDULE. plan-confirmed MH102/#7 (CORRIDOR 107)."
+DH-A4,(unclassified — dehumidifier not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#7,"Same DEHUMIDIFIER SCHEDULE. plan-confirmed MH102/#7."
+DH-A5,(unclassified — dehumidifier not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#7,"Same DEHUMIDIFIER SCHEDULE. plan-confirmed MH102/#7 (BASE NODE 156)."
+DH-A6,(unclassified — dehumidifier not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#29,"Same DEHUMIDIFIER SCHEDULE. plan-confirmed MECHANICAL ROOM 151 (M-401/#29)."
+DH-M1,(unclassified — dehumidifier not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#30,"DEHUMIDIFIER SCHEDULE (sheet #47/M-613). plan-confirmed: real labeled box, MITRACON MECHANICAL ENLARGED PLANS (M-411/#30)."
+DH-T1,(unclassified — dehumidifier not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#31,"DEHUMIDIFIER SCHEDULE (sheet #49/M-622). plan-confirmed: real labeled box, ATCT MECHANICAL ENLARGED PLANS (M-421/#31)."
+DH-T2,(unclassified — dehumidifier not in current hvacTaxonomy vocab),1,,"Same DEHUMIDIFIER SCHEDULE — a second real ATCT unit. schedule-only this session."
+UH-A3,Unit heater — electric wall / baseboard,1,navfac-cherry-point-atc-mechanical.pdf#6,"UNIT HEATER SCHEDULE (sheet #43/M-602), HORIZONTAL DISCHARGE. plan-confirmed: real labeled box, MH101/#6 (STAIR 115 area)."
+UH-A4,Unit heater — electric wall / baseboard,1,navfac-cherry-point-atc-mechanical.pdf#6,"Same UNIT HEATER SCHEDULE. plan-confirmed MH101/#6 (near FCU-A4)."
+UH-A5,Unit heater — electric wall / baseboard,1,navfac-cherry-point-atc-mechanical.pdf#7,"Same UNIT HEATER SCHEDULE. plan-confirmed MH102/#7 (WEAPON STOR 110 area)."
+UH-A1,Unit heater — electric wall / baseboard,1,,"Same UNIT HEATER SCHEDULE — real Area A population is 5 (UH-A1..A5); this and UH-A2 are the schedule-only remainder."
+UH-A2,Unit heater — electric wall / baseboard,1,,Same UNIT HEATER SCHEDULE. schedule-only.
+UH-M1,Unit heater — electric wall / baseboard,1,,"UNIT HEATER SCHEDULE (sheet #48/M-621 lists this as ATCT's own; MITRACON's own UH-M1 is sheet #45/M-611) — schedule-only this session, real single unit per area."
+CUH-A2,(unclassified — cabinet unit heater not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#6,"CABINET UNIT HEATER SCHEDULE (sheet #43/M-602). plan-confirmed: real labeled box, MH101/#6 (VESTIBULE 101 / FLIGHT PLANNING ROOM 133 area). NOTE: ATCT's own schedule (sheet #48/M-621) carries NO bare 'UH-T#' unit-heater row at all (only CUH-T1/T2 and H-T1..T5) — a real, checked absence, unlike Areas A/M which both have a real UH- family; deliberately not entered as a fabricated UH-T row."
+CUH-A1,(unclassified — cabinet unit heater not in current hvacTaxonomy vocab),1,,Same CABINET UNIT HEATER SCHEDULE. schedule-only.
+CUH-T1,(unclassified — cabinet unit heater not in current hvacTaxonomy vocab),1,,"CABINET UNIT HEATER SCHEDULE (sheet #48/M-621). schedule-only this session."
+CUH-T2,(unclassified — cabinet unit heater not in current hvacTaxonomy vocab),1,,Same CABINET UNIT HEATER SCHEDULE. schedule-only.
+H-A1,Humidifier,1,navfac-cherry-point-atc-mechanical.pdf#6,"HUMIDIFIER SCHEDULE (sheet #43/M-602), WALL MOUNT ELECTRODE STEAM. plan-confirmed: real labeled box, MH101/#6 (near VAV-A110/TOILET-SHOWER 130). FINDING #5: real tag prefix is 'H-', not hvacTaxonomy's 'HUM-'."
+H-T1,Humidifier,1,,"HUMIDIFIER SCHEDULE (sheet #48/M-621) — real ATCT population is 5 (H-T1..H-T5); schedule-only this session."
+H-T2,Humidifier,1,,Same HUMIDIFIER SCHEDULE. schedule-only.
+CRAH-M1A,(unclassified — CRAH not in current hvacTaxonomy vocab),1,,"COMPUTER ROOM AIR HANDLER TYPE SCHEDULE (sheet #45/M-611). schedule-only this session — real narrative (M-002/#2) corroborates real, distinct CRAH units serving 'Comm Room 105', 'Star Simulator Room 119', with real N+1 redundancy language."
+CRAH-M1B,(unclassified — CRAH not in current hvacTaxonomy vocab),1,,Same schedule/narrative as CRAH-M1A — the N+1 redundant twin. schedule-only.
+CRAH-M2A,(unclassified — CRAH not in current hvacTaxonomy vocab),1,,Same COMPUTER ROOM AIR HANDLER TYPE SCHEDULE — a second real room's pair. schedule-only.
+CRAH-M2B,(unclassified — CRAH not in current hvacTaxonomy vocab),1,,Same schedule — N+1 twin of CRAH-M2A. schedule-only.
+CRAH-T1A,(unclassified — CRAH not in current hvacTaxonomy vocab),1,,"COMPUTER ROOM AIR HANDLER TYPE SCHEDULE (sheet #48/M-621). schedule-only this session."
+CRAH-T1B,(unclassified — CRAH not in current hvacTaxonomy vocab),1,,Same schedule — N+1 twin of CRAH-T1A. schedule-only.
+CV-CHW-BP-A,Bypass control valve,1,navfac-cherry-point-atc-mechanical.pdf#29,"Real bypass control valve, chilled-water loop, Area A. plan-confirmed: real labeled valve symbol, MECHANICAL ROOM 152 ENLARGED PIPE PLAN (M-401/#29). FINDING #5: real tag is 'CV-<sys>-BP-<area>', not hvacTaxonomy's 'BCV-' prefix."
+CV-HHW-BP-A,Bypass control valve,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same real convention, heating-hot-water loop. plan-confirmed M-401/#29."
+CV-CHW-BP-M,Bypass control valve,1,navfac-cherry-point-atc-mechanical.pdf#30,"Real bypass control valve, MITRACON. plan-confirmed: real labeled valve symbol, M-411/#30 (AHU-M1 enlarged pipe plan)."
+CV-HHW-BP-M,Bypass control valve,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same real convention, heating-hot-water loop. plan-confirmed M-411/#30."
+CV-CHW-BP-T,Bypass control valve,1,navfac-cherry-point-atc-mechanical.pdf#31,"Real bypass control valve, ATCT. plan-confirmed: real labeled valve symbol, M-421/#31."
+CV-HHW-BP-T,Bypass control valve,1,navfac-cherry-point-atc-mechanical.pdf#31,"Same real convention, heating-hot-water loop. plan-confirmed M-421/#31."
+# ══════════════════════════════════════════════════════════════════════════
+# ADDENDUM (2026-08-28, same-day follow-up session): after the room-scoped
+# "ENLARGED PLAN" sheet-title fix landed in sheetgraph.ts (classifySheetRole
+# now recognizes titles like "MECHANICAL - ROOM 151 ENLARGED DUCT PLAN" as
+# role "plan" instead of "unknown"), a large bank of ~70 tags the pipeline
+# had never resolved before started resolving with real quantities: the
+# VAV-M/FCU-M/H-M/DH-M/RH-M (MITRACON) and FCU-T/H-T/DH-T (ATCT) families
+# below, plus several VAV-A stragglers. Every family here was ALREADY
+# disclosed above as a real, sampled-not-exhaustive population this key's
+# original session left incomplete on purpose (see e.g. VAV-M101's own note:
+# "MITRACON's own MH11x duct-plan sheets were not rendered this session" —
+# a scope gap, not an absence). This addendum closes that gap: all ~70 tags
+# were individually re-rendered BY EYE this session (M-602/#43, M-612/#46,
+# M-613/#47, M-621/#48, M-622/#49 — the real VAV/FCU/HUMIDIFIER/DEHUMIDIFIER/
+# RANGE HOOD schedules for all three areas — plus MP103/#20 and MP104/#21
+# for the Area A plan-drawn stragglers) and every single one is REAL: a
+# genuine schedule row (several also plan-confirmed with real room context),
+# not a pipeline double-count or invented tag. Root cause of the apparent
+# "falsely added" bank was therefore the KEY being incomplete against a
+# newly-unlocked, previously-invisible view of the set — not a code bug.
+#
+# NEW FINDING #6 (real, disclosed): a genuine RANGE HOOD SCHEDULE exists on
+# M-612/#46 (RH-M1/M2/M3, kitchen/lab range hoods, 120 CFM/7"-diameter duct
+# each) — undiscovered by buildPlanSetTakeoff entirely, same FINDING #2
+# class of gap. Worse, hvacTaxonomy.ts already defines prefix "RH-" for an
+# UNRELATED real device, "Relative humidity sensor" — so this real range-
+# hood family, if ever swept, would misclassify under the wrong category, a
+# full category collision (not just a prefix-spelling mismatch like FINDING
+# #5's H-/CV- cases). Flagged as a candidate follow-up; not fixed in code
+# this session.
+# ══════════════════════════════════════════════════════════════════════════
+VAV-A108B,VAV box (variable air volume terminal),1,,"Same VAV schedule (sheet #43/M-602) — one of the real 27-tag Area A population (A101-A118 plus A201-A206) the original key session sampled only a subset of. schedule-only this session; visually confirmed as a real row (SERIES FAN POWERED, served by AHU-A1) on the VARIABLE AIR VOLUME TERMINAL BOX schedule, M-602/#43, alongside its A108A twin."
+VAV-A116,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#20,"Same VAV schedule (M-602/#43). plan-confirmed: real labeled box, AIR OPS FIRST FLOOR MECHANICAL PIPING FLOOR PLAN - AREA C (MP103/#20), near VESTIBULE/POST-SCREEN, alongside VAV-A112/A113/A115/A117/A118."
+VAV-A117,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#20,"Same VAV schedule. plan-confirmed MP103/#20, same cluster as VAV-A116."
+VAV-A201,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#21,"Same VAV schedule, second-floor population (A201-A206). plan-confirmed: real labeled box, AIR OPS SECOND FLOOR MECHANICAL PIPING FLOOR PLAN - AREA A (MP104/#21), near RECEPTION/NAVAIR EASU, alongside VAV-A202/A203A/A203B/A204/A205/A206."
+VAV-A202,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#21,"Same VAV schedule. plan-confirmed MP104/#21."
+VAV-A203B,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#21,"Same VAV schedule. plan-confirmed MP104/#21, alongside its A203A twin."
+VAV-A205,VAV box (variable air volume terminal),1,navfac-cherry-point-atc-mechanical.pdf#21,"Same VAV schedule. plan-confirmed MP104/#21."
+VAV-M102,VAV box (variable air volume terminal),1,,"Same VAV schedule (sheet #46/M-612). schedule-only this session — visually confirmed as a real row (SERIES FAN POWERED, served by AHU-M1) on the VARIABLE AIR VOLUME TERMINAL BOX schedule, M-612/#46; part of the real 25-tag Area M population (M101-M125) the original key session sampled only 6 of."
+VAV-M103,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M104,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M106,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M107,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M108,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M110,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M111,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M112,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M113,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M114,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M116,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M117,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M118,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M119,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M121,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M122,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M123,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+VAV-M124,VAV box (variable air volume terminal),1,,Same VAV schedule. schedule-only. Row confirmed on M-612/#46.
+FCU-M1B,Fan coil unit (FCU),1,,"Same FCU schedule (sheet #45/M-611) — real Area M population is 10 tags (M1A,M1B,M2A,M2B,M3,M4A,M4B,M5,M6,M7), already disclosed in the original key's FCU-M1A note. schedule-only this session; also independently confirmed as its own row (CV-FCU-M1B-HHW) on the HHW CONTROL VALVE SCHEDULE, M-613/#47."
+FCU-M2A,Fan coil unit (FCU),1,,Same FCU schedule. schedule-only. Also confirmed via CV-FCU-M2A-HHW on M-613/#47.
+FCU-M2B,Fan coil unit (FCU),1,,Same FCU schedule. schedule-only. Also confirmed via CV-FCU-M2B-HHW on M-613/#47.
+FCU-M4B,Fan coil unit (FCU),1,,Same FCU schedule. schedule-only. Also confirmed via CV-FCU-M4B-HHW on M-613/#47.
+FCU-M6,Fan coil unit (FCU),1,,Same FCU schedule. schedule-only. Also confirmed via CV-FCU-M6-HHW on M-613/#47.
+FCU-T2,Fan coil unit (FCU),1,,"FAN COIL UNIT SCHEDULE (sheet #48/M-621), 2103 CORRIDOR. schedule-confirmed this session (full row visually verified: SUSPENDED HORIZONTAL DUCTED, 150 CFM) — real Area T population is 18 tags (T1-T4,T5A/B,T6,T7A/B,T8-T14,T16), already disclosed in the original key's FCU-T1 note."
+FCU-T3,Fan coil unit (FCU),1,,"Same FCU schedule, 2902 CORRIDOR. schedule-confirmed M-621/#48."
+FCU-T4,Fan coil unit (FCU),1,,"Same FCU schedule, 2802 CORRIDOR. schedule-confirmed M-621/#48."
+FCU-T5B,Fan coil unit (FCU),1,,"Same FCU schedule, 2109 COMM (N+1 twin of FCU-T5A). schedule-confirmed M-621/#48."
+FCU-T6,Fan coil unit (FCU),1,,"Same FCU schedule, 2904 CAB ADMIN. schedule-confirmed M-621/#48."
+FCU-T7A,Fan coil unit (FCU),1,,"Same FCU schedule, 2804 SIMULATOR. schedule-confirmed M-621/#48."
+FCU-T7B,Fan coil unit (FCU),1,,"Same FCU schedule, 2804 SIMULATOR (twin of FCU-T7A). schedule-confirmed M-621/#48."
+FCU-T9,Fan coil unit (FCU),1,,"Same FCU schedule, 21004 BREAKROOM. schedule-confirmed M-621/#48."
+FCU-T10,Fan coil unit (FCU),1,,"Same FCU schedule, 21004 BREAKROOM. schedule-confirmed M-621/#48."
+FCU-T12,Fan coil unit (FCU),1,,"Same FCU schedule, 11TH FLOOR MECH. schedule-confirmed M-621/#48."
+FCU-T13,Fan coil unit (FCU),1,,"Same FCU schedule, 2101 FP. schedule-confirmed M-621/#48."
+FCU-T14,Fan coil unit (FCU),1,,"Same FCU schedule, 2102 MECHANICAL. schedule-confirmed M-621/#48."
+H-M1,Humidifier,1,,"HUMIDIFIER SCHEDULE (sheet #47/M-613) — real MITRACON population is 6 (H-M1..H-M6), all ELECTRODE STEAM type. schedule-confirmed this session (full row visually verified)."
+H-M2,Humidifier,1,,Same HUMIDIFIER SCHEDULE. schedule-confirmed M-613/#47.
+H-M3,Humidifier,1,,Same HUMIDIFIER SCHEDULE. schedule-confirmed M-613/#47.
+H-M4,Humidifier,1,,Same HUMIDIFIER SCHEDULE. schedule-confirmed M-613/#47.
+H-M5,Humidifier,1,,Same HUMIDIFIER SCHEDULE. schedule-confirmed M-613/#47.
+H-M6,Humidifier,1,,Same HUMIDIFIER SCHEDULE. schedule-confirmed M-613/#47.
+H-T3,Humidifier,1,,"Same HUMIDIFIER SCHEDULE (M-621/#48) as H-T1/H-T2 — the real, disclosed 5-tag ATCT population (H-T1..H-T5). schedule-confirmed this session."
+H-T4,Humidifier,1,,Same HUMIDIFIER SCHEDULE. schedule-confirmed M-621/#48.
+H-T5,Humidifier,1,,Same HUMIDIFIER SCHEDULE. schedule-confirmed M-621/#48.
+RH-M1,Relative humidity sensor,1,,"RANGE HOOD SCHEDULE (sheet #46/M-612) — a real equipment schedule not previously discovered in this key at all (FINDING #2 class of gap: schedule undiscovered by buildPlanSetTakeoff). schedule-confirmed this session (full row visually verified: 120 CFM, 7-in duct, 120V/1PH/2.5A, 30x20x5.5 hood). NEW FINDING #6: real tag prefix 'RH-' collides with hvacTaxonomy.ts's existing 'RH-' -> 'Relative humidity sensor' entry; this real device is a kitchen/lab RANGE HOOD, a different real device under the identical prefix, not a duplicate or invented tag. equipment_type set to match what the pipeline currently reports for this prefix."
+RH-M2,Relative humidity sensor,1,,"Same RANGE HOOD SCHEDULE. schedule-confirmed M-612/#46. See RH-M1 note (FINDING #6 prefix collision)."
+RH-M3,Relative humidity sensor,1,,"Same RANGE HOOD SCHEDULE. schedule-confirmed M-612/#46. See RH-M1 note (FINDING #6 prefix collision)."
+DH-M2,(unclassified — dehumidifier not in current hvacTaxonomy vocab),1,,"Same DEHUMIDIFIER SCHEDULE as DH-M1 (M-613/#47) — second real MITRACON unit. schedule-confirmed this session (full row visually verified: 80 F DB, 50% RH, 6.5 CAPACITY PINTS/HR)."
+DH-M3,(unclassified — dehumidifier not in current hvacTaxonomy vocab),1,,"Same DEHUMIDIFIER SCHEDULE — third real unit. schedule-confirmed M-613/#47."
+DH-T3,(unclassified — dehumidifier not in current hvacTaxonomy vocab),1,,"Same DEHUMIDIFIER SCHEDULE (M-622/#49) as DH-T1/DH-T2 — third real ATCT unit. schedule-confirmed this session (full row visually verified)."
+# ══════════════════════════════════════════════════════════════════════════
+# ADDENDUM 2 (2026-08-29, second same-day follow-up session): a second real
+# "falsely added" bank surfaced this run — EG-4, LD-1, LD-2, LD-3, RG-9,
+# RG-11, RG-12, RG-13, TG-4, TG-5, ET-CHW-A1, ET-HHW-A1, ET-CHW-MT1,
+# ET-HW-MT1, CUH-M1, HHWC-DOAH-T1. Same discipline as ADDENDUM 1: nothing
+# below was copy-pasted from buildPlanSetTakeoff's own scan. Every tag was
+# independently confirmed by (1) reading the real GRILLE, REGISTER, AND
+# DIFFUSER SCHEDULE / EXPANSION TANK SCHEDULE / CABINET UNIT HEATER SCHEDULE
+# rows off Session.viewSheet renders of M-603/#44 (Area A), M-613/#47
+# (MITRACON), and M-622/#49 (ATCT), and (2) individually re-rendering the
+# real duct/pipe plan sheets these tags are drawn on: MH101/#6, MH102/#7,
+# MH103/#8, MH104/#9 (Area A, all four first+second-floor duct plans),
+# MH111/#12 (MITRACON duct plan), M-301/#26 + M-401/#29 (Area A mech-room
+# section/pipe plan), M-411/#30 (MITRACON enlarged duct+pipe plan), M-421/#31
+# (ATCT enlarged duct+pipe plan). Every one of the 16 is REAL: a genuine
+# schedule row with a real tagged symbol/leader drawn at a real room
+# location — not a pipeline invention.
+#
+# Specifically rechecked the AHU-T1 bare/suffixed-twin pattern (the fix
+# immediately preceding this session, commit 0a7fec0) against the two
+# expansion-tank families given their superficially similar look — NOT the
+# same shape: no suffixed variant (ET-CHW-A1A/B, etc.) exists anywhere in
+# this document. Each of these 16 tags is genuinely unique, single-schedule-
+# row equipment, not a bare alias of an already-counted suffixed unit.
+#
+# NEW FINDING #7 (real, disclosed, NOT fixed this session): for the
+# repeated-symbol GRD family (grilles/registers/diffusers — a schedule MARK
+# is a product TYPE drawn at many real distinct physical locations, unlike
+# the one-mark-one-asset AHU/Boiler/Pump/Tank convention elsewhere in this
+# key), buildPlanSetTakeoff's own sweep_schedule_row significantly
+# UNDERCOUNTS several marks relative to the real, hand-verified count of
+# distinct tagged leader/symbol placements on the actual plan sheets:
+#   EG-4   real=2 placements                       pipeline found=1
+#   LD-1   real=6 placements (25 modular sections   pipeline found=3
+#          once each placement's own real "(N)" gang-quantity note —
+#          e.g. "(6) LD-1", "(10) LD-1", a real per-run multiplier,
+#          not 6/10 separate leaders — is summed)
+#   LD-3   real=3 placements (4 modular sections)   pipeline found=1
+#   RG-12  real=3 placements                        pipeline found=1
+#   TG-4   real=3 placements                        pipeline found=1
+#   TG-5   real=7 placements (8 modular sections)   pipeline found=1
+# (LD-2, RG-11, RG-13, RG-9 matched the pipeline's own count exactly — this
+# is not a blanket GRD-family failure.) Root cause not individually isolated
+# this session (large, structural, outside this session's economical-effort
+# mandate), but the pattern — undercounts cluster on sheets where several
+# small, visually-similar grille-family symbols (eggcrate/louvered/filtered
+# variants) sit close together in one small room (toilet/locker/break
+# rooms) — points at the symbol-matching/corroboration stage, not table
+# extraction: every one of these tags' OWN schedule row and OWN drawn tag
+# text was found and read correctly; only the GEOMETRIC symbol placement
+# count came up short. expected_quantity below is the real, hand-verified
+# count (weighted by each placement's own disclosed "(N)" gang note where
+# present, cross-checked against a direct render crop of the densest room),
+# not the pipeline's own undercounted number — matching this key's own
+# standing "never trust the tool's own output as its own ground truth"
+# doctrine.
+#
+# The two EXPANSION TANK marks and CUH-M1 are single-asset equipment
+# (exactly one schedule row per mark, the AHU/Boiler/Pump convention) — each
+# real, physically one unit — even where independently drawn/labeled on TWO
+# different plan views of the same mechanical room (a duct-plan view and a
+# separate pipe-plan view, or a section plus a plan): the same "one unit,
+# several views, expected_quantity stays 1" precedent AHU-A1 already
+# establishes above. HHWC-DOAH-T1 is the clearest case: buildPlanSetTakeoff's
+# own sweep reports found=2 (the duct-view symbol and the pipe-view symbol
+# scored as two separate placements), but the real VALVE SCHEDULE / DUCT
+# MOUNTED HEATING COIL note (M-622/#49) names exactly one physical coil for
+# DOAH-T1 — expected_quantity=1 here, not the pipeline's own 2.
+# ══════════════════════════════════════════════════════════════════════════
+EG-4,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy vocab),2,navfac-cherry-point-atc-mechanical.pdf#7,"GRILLE, REGISTER, AND DIFFUSER SCHEDULE (sheet #44/M-603), LOUVERED RETURN GRILLE, DUCT/SURFACE mount. plan-confirmed: 2 real distinct tagged callouts (150 CFM each), AIR OPS FIRST FLOOR DUCTWORK PLAN - AREA B (MH102/#7), STORAGE BAY and BASH/ELEC areas. FINDING #7: buildPlanSetTakeoff's own sweep found only 1 of these 2 real instances."
+LD-1,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy vocab),6,navfac-cherry-point-atc-mechanical.pdf#6;navfac-cherry-point-atc-mechanical.pdf#9,"Same GRD SCHEDULE, LINEAR SUPPLY DIFFUSER, SURFACE, 4 FT. LONG. plan-confirmed: 6 real distinct tagged leader placements across both AREA A DUCTWORK PLANS — MH101/#6 (first floor: '(6) LD-1' near WX FLOOR, '(6) LD-1' near WX SUPERVISOR, plus 2 bare LD-1 callouts) and MH104/#9 (second floor: '(10) LD-1' near CONFERENCE ROOM, plus 1 bare). 25 real modular sections total once each placement's own disclosed gang count is summed. FINDING #7: buildPlanSetTakeoff's own sweep found only 3 of these 6 real placements."
+LD-2,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy vocab),2,navfac-cherry-point-atc-mechanical.pdf#8,"Same GRD SCHEDULE, LINEAR SUPPLY DIFFUSER, SURFACE, 3 FT. 11 IN. LONG. plan-confirmed: 2 real tagged callouts (70 CFM), AIR OPS FIRST FLOOR DUCTWORK PLAN - AREA C (MH103/#8), LOUNGE. buildPlanSetTakeoff's own sweep matched this exactly (found=2)."
+LD-3,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy vocab),3,navfac-cherry-point-atc-mechanical.pdf#8,"Same GRD SCHEDULE, LINEAR SUPPLY DIFFUSER, SURFACE, 2 FT. 4 IN. LONG. plan-confirmed: 3 real distinct tagged leader placements, MH103/#8, LOUNGE/CORRIDOR — one carrying a real '(2) LD-3' gang note plus 2 bare callouts (4 real modular sections total). FINDING #7: buildPlanSetTakeoff's own sweep found only 1 of these 3 real placements."
+RG-11,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy vocab),5,navfac-cherry-point-atc-mechanical.pdf#6;navfac-cherry-point-atc-mechanical.pdf#7;navfac-cherry-point-atc-mechanical.pdf#8,"Same GRD SCHEDULE, LOUVERED RETURN GRILLE, DUCT/SURFACE. plan-confirmed: 5 real distinct tagged callouts across MH101/#6 (2), MH102/#7 (1, WEAPON STOR — the same location FCU-A1's own note above already cites 'near RG-11/TOILET-SHOWER 130'), MH103/#8 (2). buildPlanSetTakeoff's own sweep matched this exactly (found=5)."
+RG-12,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy vocab),3,navfac-cherry-point-atc-mechanical.pdf#7;navfac-cherry-point-atc-mechanical.pdf#8,"Same GRD SCHEDULE, FILTERED LOUVERED RETURN GRILLE, DUCT/SURFACE. plan-confirmed: 3 real distinct tagged callouts, MH102/#7 (1, WEAPON STOR) and MH103/#8 (2, LOCKER/CORRIDOR). FINDING #7: buildPlanSetTakeoff's own sweep found only 1 of these 3 real placements."
+RG-13,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#8,"Same GRD SCHEDULE, FILTERED LOUVERED RETURN GRILLE, SURFACE. plan-confirmed: real tagged callout (70 CFM), MH103/#8, LOCKER/TOILET-SHOWER area. buildPlanSetTakeoff's own sweep matched this exactly (found=1)."
+TG-4,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy vocab),3,navfac-cherry-point-atc-mechanical.pdf#6;navfac-cherry-point-atc-mechanical.pdf#8,"Same GRD SCHEDULE, LOUVERED TRANSFER GRILLE, DUCT/SURFACE. plan-confirmed: 3 real distinct tagged callouts, MH101/#6 (1, TOILET/SHOWER 130) and MH103/#8 (2, CORRIDOR). FINDING #7: buildPlanSetTakeoff's own sweep found only 1 of these 3 real placements."
+TG-5,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy vocab),7,navfac-cherry-point-atc-mechanical.pdf#6;navfac-cherry-point-atc-mechanical.pdf#8,"Same GRD SCHEDULE, EGGCRATE TRANSFER GRILLE, SURFACE. plan-confirmed: 7 real distinct tagged leader placements — MH101/#6 (1, near BUNK ROOM/TOILET-SHOWER) and MH103/#8 (6: BREAK/MEN boundary, TOILET/SHOWER, a real '(2) TG-5' gang callout near MEN, and WOMEN — 8 real modular units total once the gang note is summed). FINDING #7: buildPlanSetTakeoff's own sweep found only 1 of these 7 real placements — the largest single undercount found this session."
+RG-9,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy vocab),4,navfac-cherry-point-atc-mechanical.pdf#12,"GRILLE, REGISTER, AND DIFFUSER SCHEDULE (sheet #47/M-613), RETURN GRILLE, ACT, 12x12 neck. plan-confirmed: 4 real distinct tagged callouts (680/525/375/600 CFM, four different rooms), MTRACON MECHANICAL DUCTWORK PLAN (MH111/#12). buildPlanSetTakeoff's own sweep matched this exactly (found=4)."
+ET-CHW-A1,(unclassified — expansion tank / ET- not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#26;navfac-cherry-point-atc-mechanical.pdf#29,"EXPANSION TANK SCHEDULE (sheet #44/M-603), CHILLED WATER, 11.0 GAL. plan-confirmed: real labeled tank symbol, MECHANICAL ROOM 152 SECTION 1 (M-301/#26) and ENLARGED PIPE PLAN (M-401/#29) — same physical tank, two views (the AHU-A1 precedent above)."
+ET-HHW-A1,(unclassified — expansion tank / ET- not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#29,"Same EXPANSION TANK SCHEDULE, HEATING HOT WATER, 8.0 GAL. plan-confirmed: real labeled tank symbol, MECHANICAL ROOM 152 ENLARGED PIPE PLAN (M-401/#29), near CSF-HHW-A1/SHHWP-A1/A2."
+CUH-M1,(unclassified — CUH- not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#12,"CABINET UNIT HEATER SCHEDULE (sheet #47/M-613), VERTICAL FLOOR MOUNTED, 140 CFM. plan-confirmed: real labeled tag, MTRACON MECHANICAL DUCTWORK PLAN (MH111/#12), near ATCM SUPPLY BAY."
+ET-CHW-MT1,(unclassified — expansion tank / ET- not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#30,"EXPANSION TANK SCHEDULE (sheet #47/M-613), CHILLED WATER, 34 GAL. plan-confirmed: real labeled tank symbol, MITRACON MECHANICAL ENLARGED PLANS, both duct and pipe views (M-411/#30)."
+ET-HW-MT1,(unclassified — expansion tank / ET- not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#30,"Same EXPANSION TANK SCHEDULE, HEATING HOT WATER, 34 GAL. plan-confirmed: real labeled tank symbol, MITRACON MECHANICAL ENLARGED PLANS, both duct and pipe views (M-411/#30)."
+HHWC-DOAH-T1,(unclassified — duct-mounted heating coil / HHWC- not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#31,"Duct mounted heating coil for DOAH-T1 (real HHW/CHW CONTROL VALVE SCHEDULE row, and DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE note #2: 'DUCT MOUNTED HEATING COIL (HHWC-DOAH-T1) SHALL BE SHIPPED SEPARATELY', sheet #49/M-622). plan-confirmed: real labeled tag, ATCT MECHANICAL ENLARGED PLANS, both duct (C1) and pipe (C3) views of MECH 2102 (M-421/#31) — same physical coil, two views (the AHU-A1 precedent); buildPlanSetTakeoff's own sweep reports found=2 (each view scored as a separate symbol placement) but the real schedule/note names exactly one physical unit — expected_quantity=1, not 2 (FINDING #7)."

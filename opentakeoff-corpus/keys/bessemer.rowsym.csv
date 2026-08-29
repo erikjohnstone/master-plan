@@ -1,0 +1,16 @@
+tag,expect_status,note
+EWH-1,resolved,visually confirmed page 6 - standalone rectangle symbol, solid leader line
+EBB-1,resolved,visually confirmed page 6 - elongated rectangle symbol, dashed leader line (same convention as EBB-2/EBB-3 below)
+EBB-2,resolved,visually confirmed page 6 - elongated rectangle symbol, dashed leader line
+EBB-3,resolved,visually confirmed page 6 - elongated rectangle symbol, dashed leader line
+EBB-4,resolved,same visually-confirmed convention as EBB-1..3 - not individually re-cropped
+EBB-5,resolved,same visually-confirmed convention as EBB-1..3 - not individually re-cropped
+EBB-6,resolved,same visually-confirmed convention as EBB-1..3 - not individually re-cropped
+EBB-7,resolved,same visually-confirmed convention as EBB-1..3 - not individually re-cropped
+EBB-8,resolved,same visually-confirmed convention as EBB-1..3 - not individually re-cropped
+EF-1,resolved,same standalone-symbol convention family as EWH-1 - not individually re-cropped
+HP-1,resolved,resolves via MCP whole-file load (no active-tab dependency) - a real drawn instance, page 6
+SR-1,resolved,visually confirmed page 6 - real hatched register mark drawn INLINE with ductwork (not a standalone glyph) - today's geometric matcher does not anchor it; a real, disclosed miss, not "nothing drawn"
+SR-2,resolved,same inline-duct-hatch convention as SR-1 - visually present on page 6, same repeating unit layout
+TG-1,resolved,visually confirmed page 6 - real hatched transfer-grille mark drawn INLINE with ductwork, with a directional arrow - same real-but-unanchored gap as SR-1
+TG-2,resolved,same inline-duct-hatch convention as TG-1 - visually present on page 6, same repeating unit layout

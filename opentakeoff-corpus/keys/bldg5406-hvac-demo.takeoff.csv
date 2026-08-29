@@ -1,0 +1,128 @@
+# bldg5406-hvac-demo.takeoff.csv — ground-truth key for mcp/scripts/takeoff-eval.mjs
+#
+# Set: bldg5406-hvac-demo-mechanical.pdf — a 20 real-vector-text-sheet
+# federal solicitation attachment, Building 5406, "RFR NDI LAB, FAC 5406",
+# DAVIS-MONTHAN AFB, ARIZONA (real title-block text confirmed directly off
+# the rendered sheets this session — an apparent radiography/NDI lab
+# facility: real room names FILM PROCCESING, FILM INTERPRETATION AND FILE,
+# RADIATION CONTROL, LIGHT TRAP, SPECTROMETRIC OIL ANALYSIS are all directly
+# visible on sheet #2's own floor plan). The 20-sheet PDF actually spans TWO
+# disciplines merged into one file: sheets #1-12 are M-series (mechanical/
+# HVAC — MD-101 demo plan, M-101 new-work floor plan, M-501 details, M-601/
+# M-602 MECHANICAL SCHEDULES, sheets #8-11 DDC controls sequences, #12
+# controls legend) and sheets #13-20 are P-series (plumbing — PD-101 demo,
+# P-101 floor plan, P-501/P-502 details/schedules), confirmed directly by
+# each sheet's own title-block CAD path text (e.g. "...SheetFiles\M-501
+# MECHANICAL DETAILS.dwg" on sheet #3, "...SheetFiles\P-101 - PLUMBING FLOOR
+# PLAN.dwg" on sheet #14). THIS KEY IS SCOPED TO THE MECHANICAL/HVAC
+# DISCIPLINE ONLY (sheets #1-12) — same "out of scope, not silently
+# dropped" discipline federal-mech.takeoff.csv's own GRILLE/REGISTER/
+# DIFFUSER exclusion and bessemer/itd-d1-lab's own finish-kind exclusions
+# already establish. The plumbing sheets carry their own real equipment
+# (EWH-1 electric water heater, a domestic-water ET-1 expansion tank — a
+# REAL TAG COLLISION with the mechanical discipline's own chilled-water
+# ET-1 below, two different physical units at two different locations
+# sharing one tag string across disciplines, confirmed by direct render of
+# both) — deliberately not scored here.
+#
+# HOW EVERY NUMBER BELOW WAS VERIFIED (2026-08-28): buildPlanSetTakeoff
+# (categories=all) gave a first-pass candidate list (10 resolved of 13
+# in-scope schedule rows), but NOTHING below was copy-pasted from it — every
+# row was independently checked by direct high-resolution region renders of
+# sheet #2 (M-101, "MECHANICAL HVAC FLOOR PLAN" — the ONLY sheet in this set
+# carrying real new-work equipment symbols) and sheet #6 (M-601, "MECHANICAL
+# SCHEDULES" — carries the AIR TERMINAL BOX SCHEDULE, FAN SCHEDULE, PACKAGED
+# AIR COOLED CHILLER SCHEDULE, AIR HANDLING UNIT SCHEDULE, SPLIT SYSTEM AIR
+# CONDITIONING UNITS table) and sheet #7 (M-602, carries the untitled PUMP
+# SCHEDULE, AIR SEPARATOR SCHEDULE, LOUVER SCHEDULE, EXPANSION AND
+# COMPRESSION TANK SCHEDULE, GRILLE/REGISTER/DIFFUSER SCHEDULE), plus
+# Session.findText sweeps of every tag across ALL 20 sheets (never
+# same-sheet-only). Sheet #1 (MD-101, "MECHANICAL HVAC DEMOLITION FLOOR
+# PLAN") was directly rendered and confirmed to carry ONLY hatched
+# to-be-demolished existing ductwork/piping — no real new-work equipment
+# tags of the kind scored below, so it contributes zero rows here (a real,
+# confirmed absence, not an unchecked sheet).
+#
+# ══════════════════════════════════════════════════════════════════════════
+# FINDING #1 (dominant, real, disclosed — the set's own known, NOT-fixed
+# residual per this initiative's standing note): the AIR TERMINAL BOX
+# SCHEDULE (sheet #6, real title directly confirmed by find_text, 9 real
+# rows VAV-1 through VAV-9, all TRANE/VCEF) is not in tables_seen AT ALL —
+# not merely cell-garbled, the WHOLE TABLE is undiscovered by
+# buildPlanSetTakeoff's table walk (confirmed via graphForPipeline().tables:
+# only 9 tables total on this set, none titled anything containing "AIR
+# TERMINAL" or "VAV"). Every one of the 9 real rows was independently read
+# directly off a high-resolution region render of the table (MARK,
+# MANUFACTURER/MODEL, INLET DIA., REGULATOR SET CFM, MIN. CFM, REHEAT MBH,
+# ELECTRIC HEATER KW, VOLTS/PH/HZ, CONTROLS, MAX NC, REMARKS columns all
+# fully legible) — this is the disclosed "cells lost to an ODL upstream
+# text-space-dropping bug on very-small-font rotated text" gap named in
+# this session's own task brief; not re-diagnosed further per that brief's
+# own instruction (a real, correctly-left-unfixed third-party tool
+# limitation). Because the table is undiscovered, sweepScheduleRow(tag)
+# throws "No schedule row ... in the set" for every VAV-N tag — a total
+# table-discovery failure, not a symbol-matching failure, confirmed by
+# direct sweepScheduleRow() calls this session.
+#
+# FINDING #2 (NEW this session, real, disclosed, NOT fixed): a SEPARATE,
+# narrower text-layer gap from Finding #1 — three real, plan-drawn equipment
+# tags (VAV-6, EF-2, EF-3) are visually confirmed on sheet #2 (same
+# standalone-box/inline-fan-glyph-plus-adjacent-tag-text convention as every
+# sibling tag around them — VAV-6 directly rendered beside VAV-4/VAV-5 in
+# the same duct run; EF-3 directly rendered in room 102 "FILM PROCCESING";
+# EF-2 directly rendered near AC-1/ACCU-1 in the SPECTROMETRIC OIL ANALYSIS
+# area) but Session.findText finds ZERO hits for their exact tag string
+# anywhere on sheet #2, even though every sibling tag (VAV-1/2/3/4/5/7/8/9,
+# EF-1/4/5) IS findable at that same sheet. Root cause not diagnosed (out of
+# this session's scope per the task brief's own "don't re-investigate unless
+# genuinely new evidence" instruction for the known ODL gap — this is a
+# DIFFERENT, newly-found gap, but equally not chased into pdf.js/text-layer
+# internals given session time). Real, practical effect: EF-2 and EF-3 both
+# throw "cannot be geometrically anchored" from sweepScheduleRow (the
+# FANSCHEDULE table IS discovered correctly — a lighter failure than Finding
+# #1 — but the anchor step depends on the same text layer that misses these
+# three tags). VAV-6 additionally inherits Finding #1's total-table-
+# discovery failure. expected_quantity=1 for all three below regardless —
+# the real, literal drawn count — not the pipeline's own current refusal.
+# ══════════════════════════════════════════════════════════════════════════
+#
+# NOT included below (real, confirmed, deliberately out of scope, not a
+# silent drop):
+#   - The GRILLE, REGISTER AND DIFFUSER SCHEDULE (CDA/CDB/CDC/SRA/RRA/RRB/
+#     ERA, MARK-keyed, sheet #7) — real, "finish"-kind per this project's
+#     own scheduleKind convention (confirmed: extracts kind="finish" today),
+#     same exclusion bessemer's own SR-1/SR-2/TG-1/TG-2 and federal-mech's
+#     own S1-x/S2-x/etc already establish; every diffuser/register/grille
+#     tag (CDA, CDB 50/60/80/130/160/185/215/230/265/etc., SRA, RRA, RRB,
+#     ERA — dozens of real drawn instances, each a distinct CFM-suffixed
+#     variant per room) is visually confirmed real on sheet #2 but out of
+#     buildPlanSetTakeoff's declared equipment scope.
+#   - EWH-1 (electric water heater) and the domestic-water ET-1 — both
+#     real, both P-series (plumbing) sheets, out of this HVAC-scoped key
+#     (see this file's own header note on the two-discipline PDF and the
+#     real ET-1 tag collision).
+#
+tag,equipment_type,expected_quantity,sheets,notes
+AHU-1,Air handling unit (AHU),1,bldg5406-hvac-demo-mechanical.pdf#2,"AIR HANDLING UNIT SCHEDULE (sheet #6), real single unit, MECHANICAL 113A (AREA SERVICED=BUILDING, TRANE/UCCAB10C0). Visually confirmed sheet #2: one real, large packaged-unit symbol in the mechanical room, tag 'AHU-1' printed directly on it; the tag is ALSO findable a second time on the same sheet as part of the duct callout '36X16 RETURN DUCT DOWN TO AHU-1' pointing at the same physical unit — a duct-routing label, not a second install (same 'a second occurrence is a label, not a second unit' discipline federal-mech's own AHU-1/CWP-1 multi-view note establishes). sweepScheduleRow('AHU-1') returns found=1 today — a real positive, pipeline already correct."
+CH-1,Chiller,1,bldg5406-hvac-demo-mechanical.pdf#2,"PACKAGED AIR COOLED CHILLER SCHEDULE (sheet #6), real single unit, TRANE/CGAM20, 20 tons. Visually confirmed sheet #2: real rectangular chiller symbol at the building's south exterior, tag 'CH-1' directly beside it; also referenced (not re-drawn) in the chiller controls sequence text on sheet #8. sweepScheduleRow('CH-1') returns found=1 today — a real positive."
+AC-1/ACCU-1,Split system air conditioning unit (unclassified — no dedicated hvacTaxonomy split-system category today),1,bldg5406-hvac-demo-mechanical.pdf#2,"SPLIT SYSTEM AIR CONDITIONING UNITS table (sheet #6), real single system, MITSUBISHI/PKA-A24FA (indoor) + PUY-A24NHA (outdoor), one schedule row keyed 'AC-1/ACCU-1'. Visually confirmed sheet #2: 'AC-1' tags the wall-mounted indoor unit near a 10-inch round duct elbow; 'ACCU-1' separately tags the outdoor condensing unit near an equipment pad, both real, both findable exactly once — one real installed system, two component tags (same convention as an AHU's indoor/outdoor split). buildPlanSetTakeoff reports this row 'refused: cannot be geometrically anchored' — the row IS discovered (SPLITSYSTEMAIRCONDITIONINGUNITS table extracts correctly with 1 row) but the compound 'AC-1/ACCU-1' row_key doesn't geometrically match either of the two real, separately-drawn single tags — a real, disclosed compound-tag anchoring gap, not a missing symbol."
+CWP-1,Pump,1,bldg5406-hvac-demo-mechanical.pdf#2,"Untitled PUMP SCHEDULE (sheet #7, real title 'PUMP SCHEDULE' lost to the title-hunt — same real family of loss federal-mech's own untitled pump schedule already established), SERVICE=CHILLED WATER, BELL AND GOSSETT/1.5X1.5X7C. Visually confirmed sheet #2: real inline-centrifugal pump glyph in the mechanical room, tag 'CWP-1' on its own leader line (drawn immediately adjacent to CWP-2's own symbol — a close duplex pump pair, not a shared symbol: each tag independently text-findable at its own coordinates). sweepScheduleRow('CWP-1') returns found=1 today — a real positive."
+CWP-2,Pump,1,bldg5406-hvac-demo-mechanical.pdf#2,"Same untitled PUMP SCHEDULE, SERVICE=CHILLED WATER, second real distinct pump (schedule EFF.(%) cell garbled to '1750551' — a real cell-parsing defect on this specific row, see this set's own reference.csv for the same finding scored at cell level). Visually confirmed sheet #2: real pump glyph immediately beside CWP-1's own, independently tagged. sweepScheduleRow('CWP-2') returns found=1 today — a real positive."
+AS-1,Air separator,1,bldg5406-hvac-demo-mechanical.pdf#2,"AIR SEPARATOR SCHEDULE (sheet #7), real single unit, SERVICE=CHILLED WATER, BELL AND GOSSETT/R-2N. Visually confirmed sheet #2: real small air-separator symbol in the mechanical room directly beside VAV-9 and ET-1. sweepScheduleRow('AS-1') returns found=1 today — a real positive."
+ET-1,Expansion tank (unclassified — no dedicated hvacTaxonomy expansion-tank category today),1,bldg5406-hvac-demo-mechanical.pdf#2,"EXPANSION AND COMPRESSION TANK SCHEDULE (sheet #7, extracts kind='finish' today — a real classification gap, this table is genuinely equipment-kind by design, same family as federal-mech's own boiler/pump misclassification finding), real single unit, SERVICE=CHILLED WATER, WESSELS/NLA-35. Visually confirmed sheet #2: real small tank symbol in the mechanical room directly beside AS-1. NOTE: this tag string collides with a SEPARATE, real domestic-water ET-1 on the plumbing sheets (P-series, #14/#17/#18/#19) — a different physical unit at a different location; this row scores ONLY the mechanical/chilled-water ET-1 (sheet #2), the HVAC-in-scope one. sweepScheduleRow('ET-1') returns found=1 today (real positive) — though note it cannot distinguish which of the two same-named real tags across disciplines it anchored to; both happen to resolve to a real, single, correctly-quantified physical unit on their own respective sheet, so this ambiguity is disclosed but does not currently corrupt either count."
+EF-1,Fan (exhaust / supply / return / general),1,bldg5406-hvac-demo-mechanical.pdf#2,"FAN SCHEDULE (sheet #6), real single unit, SERVICE=RESTROOMS, GREENHECK/CW-080-VG, QTY column reads 1. Visually confirmed sheet #2: real inline/centrifugal fan glyph in the mechanical room, tag directly beside it. sweepScheduleRow('EF-1') returns found=1 today — a real positive."
+EF-2,Fan (exhaust / supply / return / general),1,bldg5406-hvac-demo-mechanical.pdf#2,"REAL PIPELINE MISS (Finding #2, NEW this session): FAN SCHEDULE row, SERVICE=SPECTROMETRIC OIL ANALYSIS, GREENHECK/CWB-099-4, QTY=1. Visually confirmed sheet #2: real fan glyph near AC-1/ACCU-1 in the SPECTROMETRIC OIL ANALYSIS area, tag 'EF-2' clearly printed on the drawing — but find_text returns ZERO hits for 'EF-2' anywhere on sheet #2 (a real, disclosed text-layer gap, NOT an absent symbol). sweepScheduleRow('EF-2') currently throws 'cannot be geometrically anchored'. expected_quantity=1 (the real, literal drawn count)."
+EF-3,Fan (exhaust / supply / return / general),1,bldg5406-hvac-demo-mechanical.pdf#2,"REAL PIPELINE MISS (Finding #2, NEW this session): FAN SCHEDULE row, SERVICE=FILM PROCESSING (drawn on sheet as 'FILM PROCCESING', a real title-block typo — this session's own find_text initially missed the room via the correctly-spelled query before finding the real drawn spelling), GREENHECK/CWB-099-4, QTY=1. Visually confirmed sheet #2: real inline fan glyph in room 102 'FILM PROCCESING', tag 'EF-3' clearly printed directly beside it — but find_text returns ZERO hits for 'EF-3' anywhere on sheet #2, same real text-layer gap as EF-2/VAV-6. sweepScheduleRow('EF-3') currently throws 'cannot be geometrically anchored'. expected_quantity=1."
+EF-4,Fan (exhaust / supply / return / general),1,bldg5406-hvac-demo-mechanical.pdf#2,"FAN SCHEDULE row, SERVICE=MECHANICAL 113A, GREENHECK/CW-070-VG, QTY=1. Visually confirmed sheet #2: real fan glyph in the mechanical room, tag directly beside it. sweepScheduleRow('EF-4') returns found=1 today — a real positive."
+EF-5,Fan (exhaust / supply / return / general),1,bldg5406-hvac-demo-mechanical.pdf#2,"FAN SCHEDULE row, SERVICE=SPECTROMETRIC OIL ANALYSIS, SUNCOURT/DB204P (a small in-line duct booster fan, distinct model family from EF-1..4), QTY=1. Visually confirmed sheet #2: real small in-line fan glyph near AC-1/ACCU-1/EF-2, tag directly beside it. sweepScheduleRow('EF-5') returns found=1 today — a real positive."
+L-1,Louver (unclassified — no dedicated hvacTaxonomy louver category today),1,bldg5406-hvac-demo-mechanical.pdf#2,"LOUVER SCHEDULE (sheet #7), real single unit, LOCATION=MECH ROOM 113A, TYPE=INTAKE, GREENHECK/ESD-635, AIRFLOW 200 CFM, SIZE 12X22 — all values matched exactly against the real plan callout on sheet #2 ('200 CFM / 12X22 LOUVER / 0.67 FT² F.A.', directly beside tag 'L-1'). sweepScheduleRow('L-1') returns found=1 today — a real positive."
+L-2,Louver (unclassified — no dedicated hvacTaxonomy louver category today),1,bldg5406-hvac-demo-mechanical.pdf#2,"LOUVER SCHEDULE, second real unit, LOCATION=MECH ROOM 113A, TYPE=INTAKE, GREENHECK/ESD-635. NOTE: the schedule row's own MATERIAL/SIZE/AIRFLOW cells are real but garbled by the pipeline's own extraction ('WALLALUM.1,29040' / 'X22' — see this set's own reference.csv for the cell-level finding); the REAL plan callout on sheet #2 reads clean: '1290 CFM / 40X22 LOUVER / 2.69 FT² F.A.', directly beside tag 'L-2'. sweepScheduleRow('L-2') returns found=1 today — a real positive despite the cell-extraction garbling (geometric anchoring only needs the tag text, not the cell values)."
+VAV-1,VAV box (variable air volume terminal),1,bldg5406-hvac-demo-mechanical.pdf#2,"AIR TERMINAL BOX SCHEDULE (sheet #6, real title confirmed by find_text; whole table undiscovered by the pipeline — Finding #1), MARK VAV-1, TRANE/VCEF, INLET DIA 14in, REGULATOR SET CFM 2170 (the largest box on this schedule). Visually confirmed sheet #2: real standalone rectangle-glyph box symbol, HALLWAY near BENCH STOCK 109, tag directly beside it (no leader line, same convention as federal-mech's own VAV boxes). sweepScheduleRow('VAV-1') throws 'No schedule row ... in the set' — a real, disclosed total table-discovery miss (Finding #1), not an absent symbol."
+VAV-2,VAV box (variable air volume terminal),1,bldg5406-hvac-demo-mechanical.pdf#2,"AIR TERMINAL BOX SCHEDULE, MARK VAV-2, TRANE/VCEF, INLET DIA 9in, REGULATOR SET CFM 360. Visually confirmed sheet #2: real box symbol, RADIATION CONTROL 103 / LIGHT TRAP 104 area, tag directly beside it. sweepScheduleRow('VAV-2') throws the same real Finding #1 miss as VAV-1."
+VAV-3,VAV box (variable air volume terminal),1,bldg5406-hvac-demo-mechanical.pdf#2,"AIR TERMINAL BOX SCHEDULE, MARK VAV-3, TRANE/VCEF, INLET DIA 9in, REGULATOR SET CFM 320. Visually confirmed sheet #2: real box symbol, FILM PROCCESING 102, directly beside VAV-2 in the same render crop. sweepScheduleRow('VAV-3') throws the same real Finding #1 miss."
+VAV-4,VAV box (variable air volume terminal),1,bldg5406-hvac-demo-mechanical.pdf#2,"AIR TERMINAL BOX SCHEDULE, MARK VAV-4, TRANE/VCEF, INLET DIA 8in, REGULATOR SET CFM 320. Visually confirmed sheet #2: real box symbol, OFFICE 107, directly beside VAV-5/VAV-6 in the same render crop. sweepScheduleRow('VAV-4') throws the same real Finding #1 miss."
+VAV-5,VAV box (variable air volume terminal),1,bldg5406-hvac-demo-mechanical.pdf#2,"AIR TERMINAL BOX SCHEDULE, MARK VAV-5, TRANE/VCEF, INLET DIA 8in, REGULATOR SET CFM 460. Visually confirmed sheet #2: real box symbol directly beside VAV-4/VAV-6 in the same render crop. sweepScheduleRow('VAV-5') throws the same real Finding #1 miss."
+VAV-6,VAV box (variable air volume terminal),1,bldg5406-hvac-demo-mechanical.pdf#2,"REAL PIPELINE MISS, DOUBLE GAP (Finding #1 AND Finding #2, NEW this session): AIR TERMINAL BOX SCHEDULE, MARK VAV-6, TRANE/VCEF, INLET DIA 9in, REGULATOR SET CFM 430. Visually confirmed sheet #2: real box symbol directly beside VAV-4/VAV-5, tag 'VAV-6' clearly printed on the drawing in the identical convention as every sibling VAV — but find_text returns ZERO hits for 'VAV-6' anywhere on sheet #2 (Finding #2's text-layer gap), IN ADDITION to the whole-table-undiscovered gap every other VAV-N tag already has (Finding #1). expected_quantity=1 (the real, literal drawn count)."
+VAV-7,VAV box (variable air volume terminal),1,bldg5406-hvac-demo-mechanical.pdf#2,"AIR TERMINAL BOX SCHEDULE, MARK VAV-7, TRANE/VCEF, INLET DIA 4in, REGULATOR SET CFM 130. Visually confirmed sheet #2: real box symbol, near BENCH STOCK 109 / CDA 80, directly beside VAV-8 in the same render crop. sweepScheduleRow('VAV-7') throws the same real Finding #1 miss."
+VAV-8,VAV box (variable air volume terminal),1,bldg5406-hvac-demo-mechanical.pdf#2,"AIR TERMINAL BOX SCHEDULE, MARK VAV-8, TRANE/VCEF, INLET DIA 8in, REGULATOR SET CFM 400. Visually confirmed sheet #2: real box symbol, near SPECTROMETRIC OIL ANALYSIS 110, directly beside VAV-7 in the same render crop. sweepScheduleRow('VAV-8') throws the same real Finding #1 miss."
+VAV-9,VAV box (variable air volume terminal),1,bldg5406-hvac-demo-mechanical.pdf#2,"AIR TERMINAL BOX SCHEDULE, MARK VAV-9, TRANE/VCEF, INLET DIA 4in, REGULATOR SET CFM 85 (tied with VAV-7 for smallest box on this schedule). Visually confirmed sheet #2: real box symbol in the mechanical room directly beside AS-1/ET-1. sweepScheduleRow('VAV-9') throws the same real Finding #1 miss."

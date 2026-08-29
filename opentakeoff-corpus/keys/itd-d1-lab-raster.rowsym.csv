@@ -1,0 +1,6 @@
+tag,expect_status,note
+EH-1,refused,Hexagon tag EH/1 with leader arrow to a real electric-heater glyph just outside Nucular Gauge Storage 128 - visually confirmed on itd-d1-lab-raster.pdf at 300dpi this session - sweepScheduleRow throws the 'no text layer' refusal for this tag
+EH-2,refused,Hexagon tag EH/2 immediately right of EH-1 - same leader-arrow convention and same real glyph family - visually confirmed at 300dpi this session - sweepScheduleRow throws the 'no text layer' refusal for this tag
+EH-6,refused,Hexagon tag EH/6 with leader arrows to a real electric-heater glyph in the Electrical 116 room - visually confirmed at 300dpi this session - sweepScheduleRow throws the 'no text layer' refusal for this tag
+D-2,refused,Diffuser callout block D-2 / 315 / 10-inch duct with an x2 quantity note near Residency Noise Room 130 - real duct-boot glyph with directional arrows - visually confirmed at 300dpi this session - sweepScheduleRow throws the 'no text layer' refusal for this tag
+L-2,refused,Hexagon tag L/2 (louver) with leader line to a real louver glyph at the far-left building edge - circled keyed-note 4 beside it matches KEYED NOTES item 4 (install louver 9 feet AFF) - visually confirmed at 300dpi this session - sweepScheduleRow throws the 'no text layer' refusal for this tag

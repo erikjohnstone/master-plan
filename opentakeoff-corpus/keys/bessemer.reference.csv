@@ -1,0 +1,54 @@
+# bessemer.reference.csv — ground-truth key for the "reference"-kind table
+# extraction path (sheetgraph.ts's structural, vocabulary-free fourth table
+# kind, full-coverage-standard work) — companion to bessemer.takeoff.csv,
+# same discipline: rendered and read by eye directly, never trusted from the
+# pipeline's own extraction. Scored by mcp/scripts/reference-eval.mjs.
+#
+# Scope: both real "reference"-kind tables on bessemer-mechanical-bidset.pdf#8
+# (M601) — DUCTWORK INSULATION SCHEDULE (2 rows, SYSTEM-TYPE-keyed) and
+# DUCTWORK INSULATION TYPE SCHEDULE (3 rows, INSULATION-TYPE-keyed). Neither
+# has a per-instance drawn-symbol tag — real reference/calculation tables, out
+# of buildPlanSetTakeoff's tag-sweep scope by design (see ReferenceTable's own
+# doc comment in mcp/src/takeoff.ts) — this key exists to verify the RAW DATA
+# these tables extract, not a drawn quantity.
+#
+# HOW EVERY VALUE BELOW WAS VERIFIED (2026-08-27): mcp/src/pdf.ts's own
+# openPdf/textSpans against the real PDF directly (Node harness, not the
+# pipeline's own output trusted as its own ground truth), cross-checked
+# against a direct high-resolution render of page 8 (renderPng, renderRegionPng
+# up to 10x native page resolution) — both tables' real ruled borders, header
+# words, and every cell's real text confirmed by eye against the rendered
+# image, not assumed from the text dump alone.
+#
+# A REAL, PRECISELY-NAMED GAP disclosed here, not chased further: the
+# standing mandate's own reconnaissance named a THIRD table on this same
+# sheet, "VENTILATION CALCULATION SCHEDULE" (room/bedroom-count-keyed
+# ventilation-rate data, ASHRAE-62.2-shaped headers). It IS real and IS
+# visibly drawn on this sheet (confirmed by direct render, top-left of page
+# 8) — but it carries ZERO extractable PDF text spans anywhere in its own
+# region (confirmed: a full 8-page text-span sweep for "VENTILATION"/
+# "BEDROOM"/etc. found nothing there; a 10x-native-resolution render-region
+# zoom shows crisp, non-pixelated glyph edges, ruling out a simple raster-
+# image misclassification). Its text was authored as vector glyph OUTLINES
+# (filled paths), not encoded characters — pdf.js's own text layer has
+# nothing there at all, so no text/span-based extraction (vocabulary-gated OR
+# this file's own structural pass) can ever see it. This is a real OCR/
+# vision-only gap, out of THIS key's and this extraction path's scope — NOT
+# included below, and not silently assumed absent either.
+#
+# Format: one row per (table row x column) cell -- long format, since each
+# real table's own column set differs and this keeps the key trivially
+# diffable against the pipeline's own reference_tables[].rows[].cells.
+sheet,table_title,row_key,column,expected_value
+bessemer-mechanical-bidset.pdf#8,DUCTWORK INSULATION SCHEDULE,SUPPLY DUCTS (EXTERNALLY INSULATED),SYSTEM TYPE,SUPPLY DUCTS (EXTERNALLY INSULATED)
+bessemer-mechanical-bidset.pdf#8,DUCTWORK INSULATION SCHEDULE,SUPPLY DUCTS (EXTERNALLY INSULATED),INSULATION TYPE,"D-1, D-2, D-6"
+bessemer-mechanical-bidset.pdf#8,DUCTWORK INSULATION SCHEDULE,SUPPLY DUCTS (EXTERNALLY INSULATED),INSULATION OR LINER THICKNESS,"1-1/2"""
+bessemer-mechanical-bidset.pdf#8,DUCTWORK INSULATION SCHEDULE,EXHAUST DUCTS WITHIN 10 FEET OF EXTERIOR,SYSTEM TYPE,EXHAUST DUCTS WITHIN 10 FEET OF EXTERIOR OPENINGS
+bessemer-mechanical-bidset.pdf#8,DUCTWORK INSULATION SCHEDULE,EXHAUST DUCTS WITHIN 10 FEET OF EXTERIOR,INSULATION TYPE,"D-1, D-2"
+bessemer-mechanical-bidset.pdf#8,DUCTWORK INSULATION SCHEDULE,EXHAUST DUCTS WITHIN 10 FEET OF EXTERIOR,INSULATION OR LINER THICKNESS,"1"""
+bessemer-mechanical-bidset.pdf#8,DUCTWORK INSULATION TYPE SCHEDULE,D-1,INSULATION TYPE,D-1
+bessemer-mechanical-bidset.pdf#8,DUCTWORK INSULATION TYPE SCHEDULE,D-1,DESCRIPTION,"ASTM C1290, TYPE III, FLEXIBLE GLASS FIBER, COMMERCIAL GRADE WITH FACTORY APPLIED REINFORCED FOIL JACKET MEETING ASTM C1136, TYPE II, MAX. OPERATING TEMPERATURE: 250 DEG. F, DENSITY: 1.5 LBS/CU FT."
+bessemer-mechanical-bidset.pdf#8,DUCTWORK INSULATION TYPE SCHEDULE,D-2,INSULATION TYPE,D-2
+bessemer-mechanical-bidset.pdf#8,DUCTWORK INSULATION TYPE SCHEDULE,D-2,DESCRIPTION,"ASTM C612, TYPE IA OR IB, RIGID GLASS FIBER, WITH FACTORY APPLIED ALL SERVICE FACING MEETING ASTM C1136, TYPE II, DENSITY: 6.0 LBS/CU FT."
+bessemer-mechanical-bidset.pdf#8,DUCTWORK INSULATION TYPE SCHEDULE,D-6,INSULATION TYPE,D-6
+bessemer-mechanical-bidset.pdf#8,DUCTWORK INSULATION TYPE SCHEDULE,D-6,DESCRIPTION,"ASTM C534, TYPE II, FLEXIBLE, CLOSED CELL ELASTOMERIC INSULATION, SHEET, SERVICE TEMPERATURE RANGE: MINUS 58 TO 180 DEG F."

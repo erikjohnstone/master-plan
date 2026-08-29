@@ -1,0 +1,106 @@
+# bessemer.takeoff.csv — ground-truth key for mcp/scripts/takeoff-eval.mjs
+#
+# Scope: every "equipment"-kind schedule row sheetGraph() finds in
+# bessemer-mechanical-bidset.pdf (confirmed by dumping Session.graphForPipeline()
+# directly this session): EWH-1, EBB-1..EBB-8, HP-1 — 10 rows, 3 schedule
+# tables, all on sheet #8 (M601). No other equipment-kind row exists in this
+# set; SR-1/SR-2/TG-1/TG-2 (DIFFUSER, GRILLE, REGISTER SCHEDULE) and EF-1 (FAN
+# SCHEDULE) are real schedule rows too but classify as "finish"-kind tables
+# under this project's own scheduleKind convention, out of buildPlanSetTakeoff's
+# declared scope — see mcp/src/takeoff.ts's own header comment. They already
+# have real coverage in bessemer.rowsym.csv; this file does not re-litigate them.
+#
+# HOW EVERY NUMBER BELOW WAS VERIFIED (2026-08-27): find_text (Session.findText)
+# located every real text occurrence of each tag across ALL 8 sheets first
+# (never trusted as ground truth by itself — a text hit is a candidate, not a
+# count), then EVERY resulting candidate was rendered with Session.viewSheet
+# at high zoom (3.6x-12.9x) and looked at directly, tag by tag, no exceptions:
+#   EWH-1  sheet #6 region [3400,1550]-[3750,1800]  — 1 symbol
+#   EBB-1  sheet #6 region [2100,750]-[3400,2000]    — 1 symbol (wide crop)
+#   EBB-2  sheet #6 region [2350,1350]-[2750,1600]   — 1 symbol
+#   EBB-3  sheet #6 region [2250,1700]-[2650,1950]   — 1 symbol
+#   EBB-4  sheet #6 region [2350,2500]-[2750,2750]   — 1 symbol
+#   EBB-5  sheet #7 region [2650,1100]-[3050,1350]   — 1 symbol
+#   EBB-6  sheet #7 region [2750,1480]-[3150,1730]   — 1 symbol
+#   EBB-7  sheet #7 region [2650,1850]-[3050,2100]   — 1 symbol
+#   EBB-8  sheet #7 region [2650,2650]-[3150,3000]   — 1 symbol
+#   HP-1   sheet #6 region [2100,950]-[2500,1250]    — 1 symbol
+# Every tag's own text label was found EXACTLY ONCE across the whole 8-sheet
+# set (once on its plan sheet, once in the M601 schedule on sheet #8 — never
+# on sheets #1-5 or #8's plan area) — find_text itself is exhaustive across
+# all 8 sheets, so this is real full-set coverage, not a same-sheet-only check
+# (the standing risk this project already caught once live: EBB-5 turned out
+# to be drawn on sheet #7, not #6 — a single-sheet-scoped check would have
+# missed it; that same full-8-sheet sweep is what this key is built from).
+# EWH-1 is drawn ABOVE the "BATH" label in ADA unit 102 (sheet #6); EBB-1..4
+# and HP-1 are drawn across unit 103 / the shared MECHANICAL-LAUNDRY core on
+# the FIRST FLOOR plan (M101, sheet #6: BEDROOM 1/2, LIVING ROOM, KITCHEN,
+# HALLWAY, ENTRY of units 101/102/103/104); EBB-5..8 are drawn down the
+# shared MECHANICAL/LAUNDRY/stairwell corridor on the SECOND FLOOR plan
+# (M102, sheet #7, serving units 105-108). Every symbol above is the SAME
+# double-outlined-rectangle-with-leader-line convention bessemer.rowsym.csv
+# already documented for EWH-1/EBB-1..3.
+#
+# REAL AMBIGUITY, disclosed rather than resolved by guessing (sheet #6's own
+# GENERAL NOTES, read directly off the rendered page, not inferred):
+#   "1. UNIT 103 MECHANICAL LAYOUT IS TYPICAL OF ALL UNITS EXCEPT ADA UNIT 102."
+#   "4. HP-1 IS TYPICAL OF ALL UNITS."
+# This is an 8-unit building (4 first-floor + 4 second-floor, confirmed via
+# UNIT 101-108 room labels across sheets #6/#7) but the mechanical layout is
+# drawn out ONLY for unit 103 (typical) and unit 102 (the ADA exception) —
+# units 101/104 on sheet #6 show bare wall outlines with NO duct/register/
+# heater annotation at all, and NO per-unit HP-1/EWH-1/EBB-1..4 equivalent
+# is separately drawn anywhere for units 105-108 on sheet #7 either (that
+# sheet only carries the shared-corridor EBB-5..8 run). Read literally, the
+# real INSTALLED count implied by "typical of all units" could be higher
+# than what is actually drawn (e.g. one HP-1 + one EWH-1 per unit × 8 units).
+# expected_quantity below is deliberately the LITERAL DRAWN count only — the
+# same "every genuine drawn instance, not inferred" discipline this whole
+# pipeline is built on (schedule rows list TYPES, plan sheets are the only
+# real source of quantity; a general note is not a plan sheet symbol) — so
+# takeoff-eval.mjs's numbers describe what sweep_schedule_row can actually
+# anchor and count, not a project-manager's bid-quantity extrapolation. Any
+# consumer of this key that wants "typical of all units" applied needs to
+# do that multiplication itself, explicitly, on top of this key — never
+# silently inside the eval scorer.
+#
+# ONE REAL PIPELINE BUG FOUND AND FIXED THIS SESSION (see commit history for
+# the full writeup): buildPlanSetTakeoff originally reported EWH-1 and EBB-8
+# at qty=2 each (12 total instead of the real 10) — both confirmed FALSE by
+# the renders above, only ONE symbol is drawn for each. Root cause was in
+# web/src/lib/symbolsweep.ts's classifySweepMatches(): when a single-
+# occurrence, uncorroborated tag's fingerprint ended up built from linework
+# near the tag's own text (a leader-line stub / underline, close to but not
+# the real equipment glyph — corroborateFingerprint has no cross-check
+# available when a tag is drawn only once anywhere in the set), matchSymbol
+# could legitimately find that small shape recurring right next to itself,
+# and classifySweepMatches counted BOTH hits as separate matches because they
+# both merely needed to fall within R of *a* tag occurrence, not each claim a
+# *distinct* one. Confirmed directly: marks-overlay renders of both counted
+# match centers landed on the bare leader line and the tag's own underline
+# for EWH-1 (49px apart, sheet #6), and on/around the tag's own underline for
+# EBB-8 (6.5px apart, sheet #7) — never on the real drawn heater rectangle.
+# FIXED: classifySweepMatches now claims at most one match per tag occurrence
+# (best-scoring wins; any other match landing on an already-claimed
+# occurrence is withheld with a named reason instead of silently counted) —
+# the same "two real instances can never sit this close without physically
+# overlapping" doctrine matchSymbol's own shadow-suppression comment already
+# states, applied at the occurrence-claiming step. All 70 existing
+# symbolsweep/sweepScheduleRow/sweepCoalesce/sweepNegative/symbolLabels/
+# agentVerifiers tests still pass unchanged, and the wider corpus's own
+# graph-eval (rowsym 86.7% bessemer, 82.9% corpus-wide) and mep-trace-eval
+# numbers are bit-for-bit identical before/after — this is a real fix, not a
+# corpus-wide behavior change. takeoff-eval.mjs now scores this key at a
+# genuinely earned 100.0% exact-match (0 tags different, was 80.0%/Σ|Δqty|=2
+# before the fix) — see the commit for the exact diff.
+tag,equipment_type,expected_quantity,sheets,notes
+EWH-1,Electric wall heater,1,bessemer-mechanical-bidset.pdf#6,"Real MANUFACTURER=QMARK MODEL=CZ15112T WATTS=750 VOLTAGE=120 PHASE=1 AMPS=6.3 (M601 schedule, sheet #8). Drawn once: ADA unit 102's BATH, wall-mounted rectangle symbol with a solid leader line down from the wall cap to the tag (visually confirmed, see header). PIPELINE BUG (found and fixed this session): buildPlanSetTakeoff previously reported quantity=2 — both of its two drawing_locations ([3545.8,1646.6] and [3544.6,1696.1]) were directly marks-overlay-rendered and landed on the bare leader line / the tag's own underline, not on the real symbol — a false double-count from classifySweepMatches letting two matches both claim the same single tag occurrence. Fixed in web/src/lib/symbolsweep.ts (see file header); now correctly reports quantity=1."
+EBB-1,Electric baseboard heater,1,bessemer-mechanical-bidset.pdf#6,"Real MANUFACTURER=QMARK MODEL=25426 WATTS=500 LENGTH=2'-6"" VOLTAGE=240 PHASE=1 AMPS=2.1 (M601 schedule, sheet #8). Drawn once, inside the shared MECHANICAL closet next to HP-1 (elongated double-outline rectangle, dashed leader line — same convention as bessemer.rowsym.csv's own EBB-1 entry). Pipeline quantity=1, matches."
+EBB-2,Electric baseboard heater,1,bessemer-mechanical-bidset.pdf#6,"Real MANUFACTURER=QMARK MODEL=2544 WATTS=1000 LENGTH=4'-0"" VOLTAGE=240 PHASE=1 AMPS=4.2 (M601 schedule, sheet #8). Drawn once, LAUNDRY ROOM wall between unit 103 and unit 102, elongated double-outline rectangle, dashed leader line. Pipeline quantity=1, matches."
+EBB-3,Electric baseboard heater,1,bessemer-mechanical-bidset.pdf#6,"Real MANUFACTURER=QMARK MODEL=2544 WATTS=1000 LENGTH=4'-0"" VOLTAGE=240 PHASE=1 AMPS=4.2 (M601 schedule, sheet #8) — same model/rating as EBB-2, a different schedule row/tag per the set's own convention (one row per physical location, not per distinct product). Drawn once, on the wall at the HALLWAY/laundry threshold. Pipeline quantity=1, matches."
+EBB-4,Electric baseboard heater,1,bessemer-mechanical-bidset.pdf#6,"Real MANUFACTURER=QMARK MODEL=2546 WATTS=1500 LENGTH=6'-0"" VOLTAGE=240 PHASE=1 AMPS=6.3 (M601 schedule, sheet #8). Drawn once, ENTRY hallway wall (units 101/104 side). Pipeline quantity=1, matches."
+EBB-5,Electric baseboard heater,1,bessemer-mechanical-bidset.pdf#7,"Real MANUFACTURER=QMARK MODEL=25426 WATTS=500 LENGTH=2'-6"" VOLTAGE=240 PHASE=1 AMPS=2.1 (M601 schedule, sheet #8). Drawn once, second-floor MECHANICAL closet (M102, sheet #7) — genuinely on sheet #7, NOT sheet #6 (the exact real cross-sheet case this project already caught live; re-confirmed independently here). Pipeline quantity=1, matches."
+EBB-6,Electric baseboard heater,1,bessemer-mechanical-bidset.pdf#7,"Real MANUFACTURER=QMARK MODEL=2544 WATTS=1000 LENGTH=4'-0"" VOLTAGE=240 PHASE=1 AMPS=4.2 (M601 schedule, sheet #8). Drawn once, second-floor LAUNDRY ROOM wall (M102, sheet #7). Pipeline quantity=1, matches."
+EBB-7,Electric baseboard heater,1,bessemer-mechanical-bidset.pdf#7,"Real MANUFACTURER=QMARK MODEL=2544 WATTS=1000 LENGTH=4'-0"" VOLTAGE=240 PHASE=1 AMPS=4.2 (M601 schedule, sheet #8). Drawn once, second-floor stairwell/corridor wall (M102, sheet #7). Pipeline quantity=1, matches."
+EBB-8,Electric baseboard heater,1,bessemer-mechanical-bidset.pdf#7,"Real MANUFACTURER=QMARK MODEL=2544 WATTS=1000 LENGTH=4'-0"" VOLTAGE=240 PHASE=1 AMPS=4.2 (M601 schedule, sheet #8). Drawn once, second-floor ENTRY wall near UNIT 105 (M102, sheet #7). PIPELINE BUG (found and fixed this session): buildPlanSetTakeoff previously reported quantity=2 — both drawing_locations ([2881.1,2835] and [2881.1,2841.5], only ~6.5px apart) were directly marks-overlay-rendered and landed on the single real symbol's own underline/leader-line cluster, not two distinct devices — same false-double-count root cause as EWH-1 above. Fixed in web/src/lib/symbolsweep.ts (see file header); now correctly reports quantity=1."
+HP-1,VRF / heat pump,1,bessemer-mechanical-bidset.pdf#6,"Real MANUFACTURER=FRIEDRICH MODEL=VRP24K75FRBLAA CFM=635 ESP=0.2 HEATING MBH=21 COOLING MBH=23.4 WATTS=6888 VOLTAGE=230 PHASE=1 AMPS=40.3 MOCP=45 (M601 schedule, sheet #8). Drawn once, shared MECHANICAL closet, distinctive wall-cap-fed unit box with an X-braced duct connection (visually distinct symbol, see header render). General note 4 on sheet #6 ('HP-1 IS TYPICAL OF ALL UNITS') is a REAL, disclosed ambiguity about whether 8 physical units exist building-wide — see the file header. expected_quantity here is the literal drawn count (1), matching the pipeline's own quantity=1 result."

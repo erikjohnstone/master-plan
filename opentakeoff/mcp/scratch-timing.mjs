@@ -1,0 +1,14 @@
+import { Session } from "./src/session.ts";
+const t0 = Date.now();
+const s = new Session();
+await s.loadPlan("/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus/raw/navfac-cherry-point-atc-mechanical.pdf");
+const t1 = Date.now();
+console.log(`loadPlan: ${t1 - t0}ms`);
+const g = await s.sheetGraph();
+const t2 = Date.now();
+console.log(`sheetGraph: ${t2 - t1}ms`);
+import { buildPlanSetTakeoff } from "./src/takeoff.ts";
+const tk = await buildPlanSetTakeoff(s, { categories: null });
+const t3 = Date.now();
+console.log(`buildPlanSetTakeoff: ${t3 - t2}ms`);
+console.log(`TOTAL: ${t3 - t0}ms`);

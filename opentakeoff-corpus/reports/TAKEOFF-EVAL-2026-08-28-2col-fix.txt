@@ -1,0 +1,99 @@
+· itd-d1-lab …
+╔══════════════════════════════════════════════════════════════════════════
+║ PROJECT-LEVEL TAKEOFF — scored against real sets
+╚══════════════════════════════════════════════════════════════════════════
+
+set                        tags   exact    Σ|Δqty|   missing   false-add
+──────────────────────────────────────────────────────────────────────────
+itd-d1-lab                   80    46.3%        43        38           0
+──────────────────────────────────────────────────────────────────────────
+CORPUS                       80    46.3%        43        38           0
+
+── itd-d1-lab — real mismatches ──
+  HUM-1      expected=1  actual=0  Δ=-1  status=error
+  DFC-1      expected=1  actual=0  Δ=-1  status=refused
+  AC-1       expected=1  actual=2  Δ=+1  status=resolved
+  SAV-2      expected=1  actual=0  Δ=-1  status=error
+  SAV-4      expected=1  actual=0  Δ=-1  status=error
+  SAV-5      expected=1  actual=0  Δ=-1  status=error
+  GEV-1      expected=1  actual=0  Δ=-1  status=not_in_output
+  GEV-2      expected=1  actual=0  Δ=-1  status=not_in_output
+  GEV-3      expected=1  actual=0  Δ=-1  status=not_in_output
+  GEV-4      expected=1  actual=0  Δ=-1  status=not_in_output
+  GEV-5      expected=1  actual=0  Δ=-1  status=not_in_output
+  GEV-6      expected=1  actual=0  Δ=-1  status=not_in_output
+  GEV-7      expected=1  actual=0  Δ=-1  status=not_in_output
+  SEV-1      expected=1  actual=0  Δ=-1  status=not_in_output
+  SEV-2      expected=1  actual=0  Δ=-1  status=not_in_output
+  SEV-3      expected=1  actual=0  Δ=-1  status=not_in_output
+  SEV-4      expected=1  actual=0  Δ=-1  status=not_in_output
+  SEV-5      expected=1  actual=0  Δ=-1  status=not_in_output
+  SN-1       expected=1  actual=0  Δ=-1  status=not_in_output
+  SN-2       expected=1  actual=0  Δ=-1  status=not_in_output
+  SN-3       expected=1  actual=0  Δ=-1  status=not_in_output
+  SN-4       expected=1  actual=0  Δ=-1  status=not_in_output
+  SN-5       expected=1  actual=0  Δ=-1  status=not_in_output
+  BP-1       expected=1  actual=0  Δ=-1  status=not_in_output
+  BP-2       expected=1  actual=0  Δ=-1  status=not_in_output
+  HC-1       expected=1  actual=0  Δ=-1  status=refused
+  HC-2       expected=1  actual=0  Δ=-1  status=refused
+  HC-3       expected=1  actual=0  Δ=-1  status=refused
+  HC-4       expected=1  actual=0  Δ=-1  status=refused
+  HC-5       expected=1  actual=0  Δ=-1  status=refused
+  HC-6       expected=1  actual=0  Δ=-1  status=refused
+  HC-7       expected=1  actual=0  Δ=-1  status=refused
+  HC-8       expected=1  actual=0  Δ=-1  status=refused
+  HC-9       expected=1  actual=0  Δ=-1  status=refused
+  B-1        expected=1  actual=0  Δ=-1  status=not_in_output
+  B-2        expected=1  actual=0  Δ=-1  status=not_in_output
+  LEF-1      expected=1  actual=0  Δ=-1  status=not_in_output
+  AS-1       expected=1  actual=0  Δ=-1  status=not_in_output
+  ET-1       expected=1  actual=0  Δ=-1  status=not_in_output
+  FM-1       expected=1  actual=0  Δ=-1  status=not_in_output
+  PF-1       expected=1  actual=0  Δ=-1  status=not_in_output
+  F-1        expected=1  actual=0  Δ=-1  status=not_in_output
+  AHU-1      expected=1  actual=0  Δ=-1  status=refused
+  GEV-1      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  GEV-2      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  GEV-3      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  GEV-4      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  GEV-5      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  GEV-6      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  GEV-7      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  SEV-1      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  SEV-2      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  SEV-3      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  SEV-4      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  SEV-5      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  SN-1       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  SN-2       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  SN-3       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  SN-4       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  SN-5       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  BP-1       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  BP-2       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  HWP-1      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  HWP-2      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  CV-1       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  CV-2       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  CV-3       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  CV-4       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  CV-5       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  CV-6       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  CV-7       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  CV-8       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  CV-9       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  B-1        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  B-2        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  LEF-1      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  AS-1       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  ET-1       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  FM-1       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  PF-1       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  F-1        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+
+── failure-type breakdown (TakeoffFailure[], every set) ──
+    25×  REFUSED_NO_SCALE
+    12×  SYMBOL_FALSE_NEGATIVE
+     5×  AMBIGUOUS_ROW_KEY
+

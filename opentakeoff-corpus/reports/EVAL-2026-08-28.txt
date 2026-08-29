@@ -1,0 +1,23 @@
+╔══════════════════════════════════════════════════════════════════════════
+║ SHEET GRAPH — scored against real sets
+╚══════════════════════════════════════════════════════════════════════════
+
+set                        cell P    cell R   cell F1     tag P    tag R   reported  rowsym R
+────────────────────────────────────────────────────────────────────────────────────────────
+federal-mech                  —        —        —         —        —      83      50.0%
+────────────────────────────────────────────────────────────────────────────────────────────
+CORPUS                      0.0%     0.0%     0.0%    0.0%     0.0%               50.0%
+
+cells   0 right · 0 wrong · 0 missed
+tags    0 real · 0 not-rooms reported · 0 real rooms missed
+rowsym  16 found on the plan as expected · 0 unexpectedly resolved · 16 real drawn symbols NOT anchored by sweep_schedule_row
+
+── failure bins, worst first ──
+   16×  rowsym-missed
+         federal-mech  VAV-20
+         federal-mech  VAV-11
+         federal-mech  VAV-15
+         federal-mech  VAV-19
+         federal-mech  VAV-21
+         federal-mech  VAV-23
+         … and 10 more

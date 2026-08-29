@@ -1,0 +1,5273 @@
+// One-document session state: the loaded plan, per-sheet scale + lazy geometry
+// caches, and the in-memory takeoff (conditions + shapes). All coordinates are
+// image px at RENDER_SCALE = 2.0 (PDF pt × 2, origin top-left, y down) — the
+// browser canvas's native space. Shapes and conditions are field-identical to
+// what the canvas commits (web/src/pages/TakeoffCanvas.jsx), so an exported
+// takeoff round-trips into the app.
+import path from "node:path";
+import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
+import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
+import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, type SheetGraph, type SheetSpans, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
+import { runOpenDataLoaderPages } from "./opendataloader.ts";
+
+/** Overlap fraction relative to the SMALLER of the two boxes — robust to
+ * one extraction's own region being tighter/looser than the other's (ODL's
+ * own table bbox vs this file's own geometric band need not agree pixel-
+ * for-pixel to clearly be "the same real table"). */
+function bboxOverlapRatio(a: Bbox, b: Bbox): number {
+  const ix0 = Math.max(a[0], b[0]), iy0 = Math.max(a[1], b[1]);
+  const ix1 = Math.min(a[2], b[2]), iy1 = Math.min(a[3], b[3]);
+  const iw = Math.max(0, ix1 - ix0), ih = Math.max(0, iy1 - iy0);
+  const inter = iw * ih;
+  if (!inter) return 0;
+  const areaA = Math.max(1, (a[2] - a[0]) * (a[3] - a[1]));
+  const areaB = Math.max(1, (b[2] - b[0]) * (b[3] - b[1]));
+  return inter / Math.min(areaA, areaB);
+}
+
+/** Finds an existing table on the SAME sheet whose region substantially
+ * overlaps `region` — the ODL-enhancement pass's own match-the-same-real-
+ * table signal (region overlap, not title text: a real table with no
+ * distinct title row would title-match nothing and get wrongly appended as
+ * a duplicate — see enhanceTablesWithODL's own comment). */
+function matchByRegionOverlap(tables: ScheduleTable[], sheetKey: string, region: Bbox): number {
+  let best = -1, bestRatio = 0.4; // the bar itself, not just a running max — no match under 40% overlap
+  for (let i = 0; i < tables.length; i++) {
+    if (tables[i].sheet !== sheetKey) continue;
+    const r = bboxOverlapRatio(tables[i].region, region);
+    if (r > bestRatio) { bestRatio = r; best = i; }
+  }
+  return best;
+}
+
+/** Fallback for matchByRegionOverlap when two independent extractions of the
+ * SAME real table land on wildly different bounding boxes, so region overlap
+ * alone never crosses the 40% bar even though both reads are unmistakably
+ * the same real table — real, corpus-found shape: baker-county-eoc-bidset.
+ * pdf#41's own FAN SCHEDULE. The geometric pass's own region for it merges in
+ * a neighboring table's columns (its bbox stretches across both tables'
+ * combined width), landing far from ODL's own tightly-bounded read of just
+ * the real Fan Schedule box — under 40% overlap, so matchByRegionOverlap
+ * alone missed it and both extractions stood side by side in `g.tables`,
+ * both keyed "EF-1", turning a real, resolvable schedule row into a
+ * permanent "Ambiguous: 2 schedule rows carry the key" error downstream.
+ * Their ROW KEYS still agree exactly, though, which region overlap can't see
+ * but this can. Deliberately narrow: EXACT key-set equality only (not
+ * "mostly overlaps" — a coincidental shared tag between two genuinely
+ * different tables is exactly what sweep_schedule_row's own accessory-
+ * narrowing / ambiguity refusal already exists to handle), same sheet only,
+ * and never against a "reference"-kind table on either side — a real cross-
+ * reference/connection/calc table sharing one real device's tag with its own
+ * primary schedule is a genuine, DIFFERENT real table (baker-county-eoc-
+ * bidset.pdf#60's own MECHANICAL EQUIPMENT CONNECTION SCHEDULE), never the
+ * same table mis-bounded, and must stay a separate table for that same
+ * accessory-narrowing tier to correctly exclude. */
+function matchByKeySet(tables: ScheduleTable[], sheetKey: string, built: ScheduleTable): number {
+  if (built.kind === "reference" || !built.rows.length) return -1;
+  const builtKeys = new Set(built.rows.map((r) => r.key));
+  if (builtKeys.size !== built.rows.length) return -1; // built itself already has a duplicate key — not a clean set to match against
+  for (let i = 0; i < tables.length; i++) {
+    const t = tables[i];
+    if (t.sheet !== sheetKey || t.kind === "reference" || t.rows.length !== builtKeys.size) continue;
+    const tKeys = new Set(t.rows.map((r) => r.key));
+    if (tKeys.size !== builtKeys.size) continue;
+    let allMatch = true;
+    for (const k of builtKeys) if (!tKeys.has(k)) { allMatch = false; break; }
+    if (allMatch) return i;
+  }
+  return -1;
+}
+
+/** How many rows share a key with at least one other row — a real schedule
+ * never legitimately repeats an unqualified key, so any rise in this count
+ * from one extraction of the same table to another is real evidence of a
+ * misparse (a row split/duplicated), not real data. */
+function duplicateKeyCount(t: ScheduleTable): number {
+  const seen = new Map<string, number>();
+  for (const r of t.rows) seen.set(r.key, (seen.get(r.key) || 0) + 1);
+  let dupes = 0;
+  for (const n of seen.values()) if (n > 1) dupes += n - 1;
+  return dupes;
+}
+import { UserError, round1, round2 } from "./format.ts";
+// Condition twins — the inheritance rule, shared with the canvas so a headless session and
+// the app can never disagree about what a twin holds (web/test/variants.test.ts).
+import { mintTwin, splitFromFamily, variantTag, propagateRowAdd, propagateRowPatch, propagateRowRemove,
+         markRowLocal, dropRowLocal, type VariantCond, type VariantRow } from "../../web/src/lib/variants.ts";
+import { STANDARD_SCALES, RENDER_SCALE, detectScale, extractSheetNumber, type DetectedScale } from "../../web/src/lib/sheets.ts";
+import { buildSheetDxf, type DxfBuild } from "../../web/src/lib/dxf.ts";
+import {
+  extractVectorGeometry, buildMask, traceRegion, snapVertices, ringArea,
+  hatchFamilies, MASK_MAX_DIM, SENS_BALANCED, type FloodResult, type MaskObj, type VectorGeometry, type Point, type HatchFamily,
+} from "../../web/src/lib/oneclick.ts";
+// The trace-confidence module (RFC #60 item D) — the engine's own account of a
+// flood scored 0–1 with named factors. floodSignals is THE adapter from a
+// FloodResult (audit A2: hand-listing the signal fields at call sites is how a
+// signal the engine emits goes silently inert), and every flood this server
+// commits or reports goes through it exactly once, in commit()'s central stamp.
+import { traceConfidence, floodSignals, type ConfidenceInput } from "../../web/src/lib/confidence.ts";
+// The canvas's raster-mask engine (#154), imported as-is — the scanned-sheet
+// fallback is the SAME Bradley-threshold module the canvas floods with, so an
+// agent's raster trace and a click's raster trace can never binarize differently.
+import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, RASTER_SOLO_IMG_MIN_FRAC } from "../../web/src/lib/rastermask.ts";
+// floodAtSeed is the ONE flood entry point every non-canvas surface measures
+// through (RFC #60 / PR #179, audit A6): floodRegionSealed with the sheet's own
+// scale-derived arguments — seal radii up to a door width, door-swing wedge
+// inclusion, the feet-true minimum-passage rule — exactly what the canvas
+// passes at a One-Click. This server used to call the raw floodRegion on
+// scale-unpinned masks here, so an MCP trace and a canvas click at the same
+// seed measured DIFFERENT square footage under the same origin.method.
+import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView } from "../../web/src/lib/symbolsweep.ts";
+// Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
+// (hand-digitized real HVAC valve/damper geometry) had a real engine
+// (matchAgainstLibrary above) with ZERO live callers anywhere in this
+// codebase before this tool — confirmed by grep, the only prior caller was
+// its own test file. This wires it in.
+import { HVAC_REF_SHAPES } from "../../web/src/lib/hvacRefShapes.ts";
+// Accuracy-hardening plan Phase 1 (pivoted after an explicit ask: "are we
+// learning symbols as we go, or scanning the legend once?") — no single
+// national HVAC symbol standard exists, so a bigger FIXED reference-shape
+// library never scales to every firm's own house legend. findLegendGlyphs
+// does the new work only (cluster a legend sheet's own vector segments into
+// compact glyphs, pair each with its own caption); the caller feeds each
+// result straight into symbol_sweep (scope: "set") exactly as if a human
+// had marqueed it — the already-tested sweep engine is reused untouched.
+import { findLegendGlyphs, type LegendSpan } from "../../web/src/lib/legendlearn.ts";
+// Accuracy-hardening plan Phase 4 — a register/grille mark embedded within a
+// tapered duct run has no independent whole-shape perimeter of its own
+// (symbolsweep.ts's own matchSymbol whole-shape fingerprint measurably
+// under-scores real siblings of the SAME real symbol drawn at a different
+// CFM-driven physical size — see inlinemotif.ts's own header comment for the
+// full real measurement). fingerprintInlineMotif/sweepInlineMotif match on
+// the hatch fill's own real-world size/pitch instead of exact segment count.
+import { fingerprintInlineMotif, sweepInlineMotif, corroborateInlineMotif, classifyInlineMotifMatches, type InlineMotifFingerprint } from "../../web/src/lib/inlinemotif.ts";
+// MEP connectivity tracing (maturity plan Phase 4) — buildMepGraph reuses
+// this project's own vendored JTS port for robust noding (see the module's
+// own header comment); traceConnectivity is the refusal-honest query, same
+// doctrine as sweep_schedule_row/resolve_tag above.
+import { buildMepGraph, traceConnectivity as traceMepConnectivity, type MepGraph, type TraceResult as MepTraceResult } from "../../web/src/lib/mepconnectivity.ts";
+import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
+// Accuracy plan Phase 2 — on an unlayered/weakly-layered sheet, a layer-role
+// exclusion alone can't tell architectural wall ink apart from real MEP
+// linework (there's no layer to exclude by). networkWallSegs is
+// wallnetwork.ts's own geometric (layer-independent) wall-vouching, reused
+// here exactly as netroom.js's room detector already uses it, as a fallback
+// exclusion source for ensureMepGraph below.
+import { networkWallSegs } from "../../web/src/lib/wallnetwork.ts";
+import { labelPlacements, type PlacementLabel } from "../../web/src/lib/symbollabels.ts";
+import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
+import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
+// Real polygon boolean subtraction (#137/#206) — the canvas's own module, so a
+// headless cut and the app's Eraser can never disagree about what a hole holds.
+import { subtractCutout, recomposeCutouts, ringFullyInside, cutRun } from "../../web/src/lib/cutout.js";
+// Correction rules (#88 / #207) — the canvas's own pure module, imported as-is
+// (the approvals/totals precedent): apply_rules re-runs an imported rule with
+// the exact predicate engine the canvas's Preview→Apply runs, so a headless
+// session and the app can never disagree about what a rule matches.
+import { applyRuleToProject, type Rule, type RuleShape, type SheetRuleData } from "../../web/src/lib/rules.ts";
+// The approvals family (#176) — the canvas's own pure module, imported as-is
+// (the markedset.js/importTakeoff.js precedent), so a verdict this server
+// mints and a seal the canvas mints share ONE implementation of minting,
+// load-gating, and exact-restore inverses.
+import { sanitizeApprovals as sanitizeApprovalsJs, applyApprovalCommand as applyApprovalCommandJs } from "../../web/src/lib/approvals.js";
+import { conditionTotals, grandTotals, sheetTotals, reportJson } from "../../web/src/lib/totals.js";
+import { hasRollSetup, mintRollSetup, computeRollTakeoff, rollReportRows, seamLfByShape } from "../../web/src/lib/rollTakeoff.js";
+import { gridPxPerFoot, drawGrid, drawShapes, drawMarks, type Ctx2D, type ToCanvas, type ViewMarks } from "./view.ts";
+
+// Copied from the canvas (web/src/pages/TakeoffCanvas.jsx) so conditions and
+// snap behavior minted here are identical to the browser's. PALETTE/HATCH_IDS
+// are user data — never re-theme them.
+const SNAP_CELL = 24; // snap-grid bucket, raster px
+const SNAP_TOL = 7;   // one-click vertex-snap tolerance, image px
+const PALETTE = ["#c96442", "#2f7d54", "#2563eb", "#9333ea", "#b8860b", "#0d9488", "#be185d", "#1f2937", "#dc2626", "#0891b2"];
+// (2026-07: dropped a drifted "fleur" entry that never existed in this app's
+// HATCHES, restoring "dots", and appended the signal-set ids.)
+const HATCH_IDS = ["solid", "diag", "diag2", "cross", "diagdense", "horiz", "vert", "grid", "brick", "plank", "herring", "basket", "checker", "wave", "dots", "speckle", "iso", "honeycomb", "scan", "plus", "circuit", "topo", "woodgrain", "chevron", "pinwheel", "harlequin", "hexagon", "penny", "octagondot", "fleur", "concrete"];
+// uid mirrors web/src/lib/provenance.js mintUuid: crypto.randomUUID is a
+// global in Node 20+, with the same non-secure-context fallback the browser
+// build carries so the two sides mint identically-shaped ids.
+const mintUuid = (): string =>
+  (globalThis.crypto && typeof globalThis.crypto.randomUUID === "function")
+    ? globalThis.crypto.randomUUID()
+    : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+const uid = (p: string): string => `${p}-${mintUuid()}`;
+// mirrors web/src/lib/provenance.js nowIso — a twin is born now, not when its parent was
+const nowIso = (): string => new Date().toISOString();
+
+export const ANN_SCHEMA = "opentakeoff.takeoff_canvas.v1"; // web/src/lib/store.js
+
+export type MeasureRole = "floor_area" | "deduct" | "linear" | "surface_area" | "count";
+
+/** Supporting-materials row (field-identical to the canvas's addMaterial —
+ * web/src/pages/TakeoffCanvas.jsx). Quantity is deterministic: basis ÷ per,
+ * rounded up to whole purchase units unless round:false (totals.js). basis
+ * "area" reads the condition's total SF, "linear" its LF, "count" its EA. */
+export interface MaterialRow {
+  id: string;
+  name: string;
+  per: number;
+  /** Which of the condition's totals this row divides. "seam_lf" is the
+   * FIGURED roll-layout seam length (weld rod, seam tape — where two cuts meet
+   * on the floor), not a share of the perimeter: it reads 0 until the
+   * condition carries a roll_setup and has committed floor shapes to lay out,
+   * which is the honest answer rather than a guess. */
+  basis: "area" | "linear" | "count" | "seam_lf";
+  unit: string;
+  round: boolean;
+  note?: string;
+}
+
+export interface Condition {
+  id: string;
+  finish_tag: string;
+  color: string;
+  fill: string;
+  hatch: string;
+  multiplier: number;
+  waste_pct: number;
+  /** Wall height in feet — the canvas's H knob; surface_area = traced LF × this. */
+  height_ft?: number;
+  /** Roll-goods opt-in (#136): presence of a usable setup is what makes the
+   * condition roll goods — material class + the packing engine's spec fields,
+   * exactly the object the canvas persists (web/src/lib/rollTakeoff.js). */
+  roll_setup?: Record<string, unknown>;
+  materials: MaterialRow[];
+}
+
+/** Shape provenance (contribution.v2 vocabulary — mirrors the canvas +
+ * web/src/lib/provenance.js). Truthfulness rules: `actor` is omitted for a
+ * human at the canvas and "agent" for MCP/automation; `reviewed` is true ONLY
+ * after a human affirmed the shape at an explicit review gate — this server
+ * has no such gate, so everything it commits is reviewed: false. */
+export interface ShapeOrigin {
+  method: "manual" | "one_click_v1" | "agent_v1" | "symbol_sweep" | "rule_v1" | "cutout_v1";
+  /** Omitted = human. "agent" = the shape was produced by MCP/automation.
+   * "rule" = minted by a correction rule's deterministic re-run (#88/#207) —
+   * the canvas's own third actor, kept distinct so capture and the marked-set
+   * split can tell a taught rule from a fresh agent guess. */
+  actor?: "agent" | "rule";
+  /** A human affirmed this shape at an explicit review gate. */
+  reviewed?: boolean;
+  /** one_click: the flood-fill seed, normalized to sheet dims. */
+  seed_norm?: [number, number];
+  hatch_filtered?: true;
+  /** one_click: the seal ladder bridged a drafting pinhole this many px wide
+   * to close the region (engine `gapBridged` — canvas parity: the rescue rides
+   * provenance rather than passing itself off as a clean fill). */
+  gap_bridged_px?: number;
+  /** one_click (RFC #60 item D): the trace scored 0–1 from the engine's own
+   * signals — sealed openings, door wedges, the minimum-passage rule, hatch
+   * escalation tier, raster boundary, mask coarseness, implausible size. A
+   * review PRIORITIZER, never a verification: 1.0 means every signal came
+   * back clean, not that the trace is right. Stamped centrally in commit()
+   * from the flood evidence, so no flood commit path can ship unscored. */
+  confidence?: number;
+  /** The named factors behind a sub-1.0 confidence (confidence.ts vocabulary,
+   * e.g. "sealed-opening(10% synthetic boundary)") — absent when none fired. */
+  confidence_factors?: string[];
+  /** one_click (RFC #60): the seal ladder closed a genuine OPENING this many
+   * mask px wide (a doorway-scale gap, distinct from gap_bridged_px's
+   * pinhole rescue) — the synthetic boundary share deducts confidence. */
+  gap_sealed_px?: number;
+  /** one_click (RFC #60): the feet-true minimum-passage rule ran at this
+   * dilation radius AND changed the answer — present only with
+   * min_pass_delta, the fraction of the verbatim flood it removed. */
+  min_pass_px?: number;
+  min_pass_delta?: number;
+  /** one_click (RFC #60): arc-cluster wedges annexed into the region under
+   * grow-but-verify — the count of doorways whose swing was included. */
+  door_wedges?: number;
+  /** one_click (RFC #60 / audit F7g): of those wedges, how many were a CLOSED
+   * ring's interior (round column, callout bubble) rather than a door swing —
+   * annexed floor the operator may want as a deduct instead. */
+  ring_interiors?: number;
+  /** one_click (#85): the flood ran against a mask whose boundary was STATED
+   * by the sheet's PDF layers (visible boundary/structure roles present) —
+   * categorically stronger evidence than a pitch-heuristic boundary. */
+  layer_bounded?: true;
+  raster_traced?: true;
+  fill_sensitivity?: number;
+  /** A linear shape derived from committed floor shapes rather than traced.
+   *
+   * derive_base (#148): from ONE room's perimeter — the source, the gross
+   * figure, and the openings the agent STATED (its claim to make; the tool
+   * never guesses doors).
+   *
+   * derive_transitions (#202): from where TWO rooms meet — both parents, the
+   * two finish tags, and the measured gap. `case` is always "butt" on a
+   * committed shape: a wall-separated run is a question, and questions do not
+   * become shapes. */
+  derived?:
+    | { from_shape_id: string; gross_lf: number; openings_lf: number }
+    | { between_shape_ids: string[]; between: string[]; case: "butt"; gap_in: number };
+  /** rule_v1 (#88/#207): the correction rule that minted this deduct, the
+   * estimator's seed correction it re-ran, and the room it landed in — the
+   * same three-way citation the canvas's Apply stamps. */
+  rule_id?: string;
+  seed_shape_id?: string;
+  container_shape_id?: string;
+  /** cutout_v1 (#137/#206): the parent this deduct cut, and the parent's
+   * frozen pre-cut snapshot — the same durable pair the canvas stamps
+   * (resolveCutout), so delete can revert the cut after the journal is gone. */
+  cuts_shape_id?: string;
+  parent_prev?: CutoutParentPrev;
+  /** Where the shape's finish ASSIGNMENT came from (0.9.18): "schedule" =
+   * resolved from the room's own schedule row (room_tag / surface /
+   * schedule_sheet carry the citation), "asserted" = the agent chose the tag
+   * itself. Stamped centrally in commit(), so no agent commit path can ship
+   * without a verdict; human canvas commits carry nothing, mirroring the
+   * `actor` convention. */
+  assignment?: { source: "schedule" | "asserted"; room_tag?: string; surface?: string; schedule_sheet?: string };
+  /** Machine's original trace, frozen on first human edit (provenance.js). */
+  proposed_verts_norm?: [number, number][];
+  edited?: boolean;
+  edited_before_create?: boolean;
+  copied?: boolean;
+  /** Per-kind tally of human corrections (provenance.js). */
+  edits?: Record<string, number>;
+  /** How many times the AGENT revised its own shape (edit_shape). Deliberately
+   * separate from `edited`/`edits`, which mean "a human corrected the machine"
+   * — a machine correcting itself is a different event, and merging the two
+   * would corrupt the correction signal the capture layer grades on. */
+  agent_edits?: number;
+  /** symbol_sweep: how this count marker matched the seed exemplar — the
+   * evidence that made it a commit (score against the commit bar, and the
+   * symmetry-group element it matched under). Phase 2 adds `seed`, WHERE the
+   * fingerprint came from: "instance" = an example marqueed on a plan sheet
+   * (phase 1's contract); "detail_sheet" = marqueed on a non-plan reference
+   * sheet (its role recorded — that sheet defines the symbol and is excluded
+   * from counting); "schedule_row" = anchored from a schedule row's drawn tag,
+   * with the row citation riding along. */
+  symbol?: {
+    score: number;
+    rotation: number;
+    mirrored: boolean;
+    seed?: {
+      source: "instance" | "detail_sheet" | "schedule_row";
+      sheet: string;
+      role?: string;
+      row?: { sheet: string; key: string; table: string };
+      /** schedule_row only: whether the anchor's fingerprint was corroborated
+       * before commit, and against what. "same_tag" = the row's own tag
+       * recurred (the strong case); "sibling_tag" = the tag is drawn exactly
+       * once, so a DIFFERENT row's own occurrence in the same schedule table
+       * corroborated it instead (corroborated_tag names which) — real but
+       * weaker evidence than a same-tag recurrence. */
+      corroborated?: boolean;
+      corroborated_via?: "same_tag" | "sibling_tag";
+      corroborated_tag?: string;
+    };
+  };
+}
+
+export interface Shape {
+  id: string;
+  sheet_id: string;
+  condition_id: string;
+  measure_role: MeasureRole;
+  verts_norm: [number, number][];
+  /** count shapes carry {count} alone (canvas commitCount) — recompute skips
+   * them, so they never grow area fields; every other role carries both. */
+  computed: { area_sf?: number; perimeter_lf?: number; count?: number };
+  /** surface_area only: the height this shape was quantified at (canvas
+   * commitSurface snapshots the condition's H onto the shape). */
+  height_ft?: number;
+  /** The room (or phase, or area) this shape belongs to — the canvas's
+   * per-shape label (#112, web/src/lib/shapeLabels.js), which is what the
+   * Report groups by and what the workbook's floor × room tab reads. Optional
+   * because a shape without one is legitimate ("unlabeled" is a real bucket);
+   * absent, never "". detect_rooms stamps the room number it traced from, so a
+   * batch detection arrives already sliced by room instead of as one
+   * undifferentiated pile of square feet. */
+  label?: string;
+  /** cut_out (#137/#206): a floor_area parent's reconciled hole rings — the
+   * REAL geometry the boolean subtract produced, netted into `computed` at
+   * cut time. Same field the canvas stores (shapeCommands' cutout). */
+  verts_norm_holes?: [number, number][][];
+  /** cut_out (#137/#206): set on a deduct that was reconciled INTO a parent
+   * as a real hole — totals.js skips it (the parent's computed already nets
+   * the hole), and delete restores the parent it cut. */
+  cuts_shape_id?: string;
+  origin?: ShapeOrigin;
+}
+
+/** The frozen pre-cut snapshot of a cutout parent (canvas resolveCutout's
+ * parent_prev) — durable on the deduct's origin, read back by delete. */
+export interface CutoutParentPrev {
+  verts_norm: [number, number][];
+  verts_norm_holes?: [number, number][][];
+  computed?: Shape["computed"];
+}
+
+/** An annotation — a note ABOUT the work, never a measurement of it.
+ *
+ *  Field-identical to the canvas's markup (web/src/pages/TakeoffCanvas.jsx), so
+ *  what an agent writes here loads in the app unchanged and vice versa. Coords
+ *  are NORMALIZED 0..1 of the sheet, matching shapes' verts_norm — the tools
+ *  take image px and convert at the boundary, which is the same contract every
+ *  other tool honours.
+ *
+ *  condition_id is what makes an annotation part of a scope rather than a
+ *  floating note: it takes that condition's colour on canvas and in the marked
+ *  set, and travels with it into the report (#112). "" means unattached, which
+ *  is a legitimate state — a note about the sheet, not about a finish. */
+export interface Markup {
+  id: string;
+  sheet_id: string;
+  type: "cloud" | "text" | "callout" | "highlight" | "arrow" | "bubble" | "dimension";
+  text: string;
+  condition_id: string;
+  rfi_id: string;
+  at?: [number, number];
+  target?: [number, number];
+  rect?: [[number, number], [number, number]];
+  /** arrow + dimension: the two endpoints, normalized like at/target. */
+  from?: [number, number];
+  to?: [number, number];
+  /** bubble: radius normalized to sheet WIDTH (the canvas/marked-set frame —
+   * uniform scale off width keeps the circle round on any page). */
+  r?: number;
+  /** dimension: the measured length in real feet, snapshotted at annotate
+   * time from the sheet scale — the renderers (canvas, marked set) draw the
+   * label from this, so neither needs scale plumbing of its own. */
+  len_ft?: number;
+  created_at?: string;
+}
+
+/** An approval-family record (web/src/lib/approvals.js, PR #176) — the record
+ *  of a VERDICT, its own family beside shapes and markups. Two actors, one
+ *  hard line: "estimator" is the human's APPROVED ring, minted only by the
+ *  canvas's Approve tool — NO path through this server can produce one;
+ *  "agent" is the AGENT diamond, the machine's pencil-signature on its own
+ *  work, and the only actor mark_verdict is capable of writing. Rides the
+ *  annotations payload additively (`approvals`), so it round-trips through
+ *  export_takeoff/import_takeoff and the app's own saves unchanged. */
+export interface Approval {
+  id: string;
+  actor: "estimator" | "agent";
+  /** ISO-8601 mint time — optional on the type because the canvas load gate
+   * (sanitizeApprovals) doesn't require it of imported records; everything
+   * minted here carries it. */
+  ts?: string;
+  sheet_id: string;
+  /** Render anchor, normalized to the sheet (the markup convention). The
+   * glyph ALWAYS draws here, so a later shape delete never orphans it. */
+  at: [number, number];
+  /** Present when the verdict targets a committed shape — provenance (WHAT
+   * was marked), never where it draws. */
+  shape_id?: string;
+  /** The agent's optional short note. Unknown fields pass the canvas load
+   * gate verbatim, so it survives every round-trip. */
+  text?: string;
+}
+
+/** The pure apply's command vocabulary (approvals.js) — what the journal
+ * stores as the exact-restore inverse of a verdict mutation. */
+export type ApprovalCommand =
+  | { type: "add"; approvals: (Omit<Approval, "id"> & { id?: string })[]; restore?: boolean; at?: number[] }
+  | { type: "delete"; ids: string[] };
+
+// untyped canvas JS — typed facades state the contract at the boundary
+// (the marked.ts/importing.ts convention)
+export const sanitizeApprovals = sanitizeApprovalsJs as unknown as (raw: unknown) => Approval[];
+const applyApprovalCommand = applyApprovalCommandJs as unknown as
+  (approvals: Approval[], cmd: ApprovalCommand) => { approvals: Approval[]; inverse: ApprovalCommand };
+
+/** What a flood commit path hands commit() so the central provenance stamp
+ * (floodStamp) can score and record it — scalars only, never the region
+ * bitmap (see floodEvidence). */
+interface FloodEvidence {
+  signals: Omit<ConfidenceInput, "areaSF">;
+  raster: boolean;
+  gapBridged?: number;
+  ringWedges?: number;
+}
+
+interface SheetState {
+  key: string;
+  /** 1-based position in load order across ALL documents — what addresses
+   * resources (#152: pageNum collides across files; ord never does, and for a
+   * single document ord === pageNum so existing URIs are unchanged). */
+  ord: number;
+  pageNum: number;
+  widthPt: number;
+  heightPt: number;
+  widthPx: number;
+  heightPx: number;
+  sheetNumber: string | null;
+  detected: DetectedScale | null;
+  /** real feet per image px at RENDER_SCALE; null until set_scale */
+  upp: number | null;
+  /** how the scale was set — report provenance (export_report scale_source),
+   * canvas vocabulary: "standard" | "upp" | "calibrated" | "detected" */
+  scaleSource?: string;
+  /** scale gate — agent proposes, human confirms. set_scale is the AGENT
+   * surface, so a scale set here is false until a human confirms it in the
+   * canvas (the flag rides export/import). undefined = confirmed: a human's
+   * own canvas act, or a payload that predates the flag. */
+  scaleConfirmed?: boolean;
+  text: { str: string; x: number; y: number }[];
+  page: PageHandle;
+  // lazy per-sheet caches (built once, reused by identity)
+  geo?: VectorGeometry;
+  snap?: ReturnType<typeof buildSnapGrid>;
+  /** undefined = not built yet; null = sheet has zero vector segments (a scan) */
+  mask?: MaskObj | null;
+  /** raster-fallback mask (#154): the sheet's rendered pixels thresholded by
+   * rastermask.ts — built on first raster-path flood, cached like `mask` */
+  rmask?: MaskObj;
+  /** rendered-page PNG at IMAGE_MAX_EDGE, built on first resource read */
+  png?: Uint8Array;
+  /** hatch-family instances (image px), built with geo on first sheet_context */
+  hatch?: HatchFamily[];
+  /** text as bbox spans (image px), built on first sheet_context */
+  spans?: TextSpan[];
+  /** the sheet's Optional Content layers (#85), classified — built with geo;
+   * [] = no layers survived export (the silent, invisible fallback) */
+  layers?: LayerInfo[];
+  /** MEP connectivity graph (Phase 4), built once and cached like `mask` —
+   * buildMepGraph is real, measured work (up to ~30s on a dense real sheet,
+   * a disclosed, not-yet-profiled cost — see the known-gaps ledger), so a
+   * scenario that traces several seeds on the same sheet must not pay it
+   * twice. undefined = not built yet; null = the sheet has zero vector
+   * linework (mirrors `mask`'s own null convention) OR buildMepGraph's own
+   * JTS noding failed even after every retry grid (see mepGraphNodingError,
+   * which distinguishes the two null cases for traceConnectivity's own
+   * refusal reason). */
+  mepGraph?: MepGraph | null;
+  /** Set alongside a null mepGraph exactly when the null came from a caught
+   * buildMepGraph noding failure (real, corpus-found — a densely hatched
+   * real sheet, e.g. a roof plan's crosshatched insulation crickets, can
+   * defeat JTS's noding even after buildMepGraph's own coarsen-and-retry
+   * mitigation), never from a sheet that legitimately has zero vector
+   * linework. Mirrors the identical, already-shipped fix TakeoffCanvas.jsx's
+   * agentFindLegendSymbols carries for findLegendGlyphs' own use of the same
+   * noding — trace_connectivity itself never got the same treatment until
+   * now, so a real seed on a real dense sheet crashed the whole tool call
+   * (isError:true, a bare JTS coordinate dump, not the tool's own documented
+   * TraceResult shape) instead of a clean, doctrine-consistent refusal. */
+  mepGraphNodingError?: string;
+}
+
+/** sheet_context decimation defaults (issue #29) — declared and stable, never
+ * adaptive: an agent that receives a silently-truncated geometry set measures
+ * confidently and is wrong, so every reply carries the counts. */
+export const CONTEXT_MIN_LEN_PX = 2.0;   // one PDF point at render scale 2.0 — below any pen width
+export const CONTEXT_MAX_SEGMENTS = 4000; // cap, applied longest-first (walls survive, hatch strokes go)
+export const CONTEXT_MAX_SEGMENTS_CEIL = 20000;
+
+/** Does the segment intersect the axis-aligned rect? Liang–Barsky boolean —
+ * endpoints untouched, this is a KEEP test, never a clip-and-rewrite. */
+function segIntersectsRect(x1: number, y1: number, x2: number, y2: number, r: { x0: number; y0: number; x1: number; y1: number }): boolean {
+  if (Math.max(x1, x2) < r.x0 || Math.min(x1, x2) > r.x1 || Math.max(y1, y2) < r.y0 || Math.min(y1, y2) > r.y1) return false;
+  const dx = x2 - x1, dy = y2 - y1;
+  let t0 = 0, t1 = 1;
+  for (const [p, q] of [[-dx, x1 - r.x0], [dx, r.x1 - x1], [-dy, y1 - r.y0], [dy, r.y1 - y1]] as [number, number][]) {
+    if (p === 0) { if (q < 0) return false; continue; }
+    const t = q / p;
+    if (p < 0) { if (t > t1) return false; if (t > t0) t0 = t; }
+    else { if (t < t0) return false; if (t < t1) t1 = t; }
+  }
+  return true;
+}
+
+const rectsOverlap = (a: [number, number, number, number], r: { x0: number; y0: number; x1: number; y1: number }): boolean =>
+  a[0] <= r.x1 && a[2] >= r.x0 && a[1] <= r.y1 && a[3] >= r.y0;
+
+/** Resource images cap their long edge here: the largest edge the mainstream
+ * vision models take without downscaling — these renders exist to be looked at
+ * by agents, so this is the native resolution of that audience. */
+export const IMAGE_MAX_EDGE = 1568;
+
+/** view_sheet's long-edge budget: small enough to stream comfortably, large
+ * enough that a tight crop resolves dimension strings. */
+export const VIEW_MIN_PX = 200;
+export const VIEW_DEFAULT_PX = 1400;
+export const VIEW_MAX_PX = 2000;
+
+export interface SheetSummary {
+  sheet: string;
+  page: number;
+  width_pt: number;
+  height_pt: number;
+  width_px: number;
+  height_px: number;
+  sheet_number?: string;
+  detected_scale?: string;
+}
+
+/** Bounded gesture history, not an archive — mirrors the canvas's UNDO_CAP. */
+export const UNDO_CAP = 100;
+
+/** The agent-scoped command journal. Every mutation this server performs
+ * records one entry carrying enough state to invert it exactly: a commit
+ * removes by id, an edit restores the pre-edit shape verbatim, a delete
+ * re-inserts at the recorded index. Undo is a true inverse, never an
+ * approximation, so an agent that overshot can step back instead of
+ * re-deriving a whole sheet.
+ *
+ * Scope, stated precisely: this is the MCP session's OWN history. It is not
+ * the browser canvas's undo stack, nothing is shared between them, and
+ * load_plan clears it along with the shapes its entries refer to.
+ *
+ * One entry per TOOL CALL, not per shape — undoing a detect_rooms sweep that
+ * committed 18 rooms takes back the sweep, which is the gesture the agent
+ * actually made. */
+export type JournalPayload =
+  | { op: "commit"; tool: string; ids: string[] }
+  | { op: "edit"; tool: string; before: Shape }
+  | { op: "delete"; tool: string; removed: { shape: Shape; index: number }[] }
+  | { op: "materials"; tool: string; condition_id: string; before: MaterialRow[]; dropped_before?: string[];
+      family?: { condition_id: string; before: MaterialRow[]; dropped_before?: string[] }[] }
+  | { op: "condition"; tool: string; condition_id: string; before: { waste_pct: number; multiplier: number; height_ft?: number; roll_setup?: Record<string, unknown> } }
+  | { op: "duplicate_condition"; tool: string; condition_id: string; parent_id: string; parent_had_family: boolean }
+  | { op: "split_condition"; tool: string; condition_id: string; before: { variant_of?: string; materials?: unknown; materials_dropped?: string[] } }
+  | { op: "approval"; tool: string; inverse: ApprovalCommand }
+  // cut_out (#206): one entry per cut — undo removes the deduct AND restores
+  // the parent's pre-cut snapshot together, the canvas's one-gesture rule
+  | { op: "cutout"; tool: string; deduct_id: string; parent_id: string; parent_prev: CutoutParentPrev }
+  // deleting a reconciled deduct (#206): undo re-seats the deduct at its index
+  // and puts the parent's cut state back — the inverse of the revert
+  | { op: "cutout_restore"; tool: string; removed: { shape: Shape; index: number }; parent_id: string; parent_after: CutoutParentPrev }
+  // cut_out on an open RUN: the run keeps its id and takes what survives; the
+  // far side of a middle cut lands as its own shape. Undo puts the run back
+  // whole and unmints the far side, one gesture like every cut
+  | { op: "runcut"; tool: string; target_id: string; target_prev: CutoutParentPrev; minted_ids: string[] };
+
+export type JournalEntry = JournalPayload & { seq: number };
+
+const sheetSummary = (s: SheetState): SheetSummary => ({
+  sheet: s.key,
+  page: s.pageNum,
+  width_pt: s.widthPt,
+  height_pt: s.heightPt,
+  width_px: s.widthPx,
+  height_px: s.heightPx,
+  ...(s.sheetNumber ? { sheet_number: s.sheetNumber } : {}),
+  ...(s.detected ? { detected_scale: s.detected.label } : {}),
+});
+
+export class Session {
+  file: string | null = null;
+  /** Absolute path of the PRIMARY (first-loaded) plan — the marked set's
+   * default output lands beside it; per-file paths live in `docs`. */
+  filePath: string | null = null;
+  /** The working document set (#152), by basename — one entry per load_plan,
+   * several under merge: true. Source paths ride along for byte re-reads. */
+  private docs = new Map<string, { doc: DocHandle; path: string }>();
+  private nextOrd = 1;
+  private sheets = new Map<string, SheetState>();
+  conditions: Condition[] = [];
+  markups: Markup[] = [];
+  shapes: Shape[] = [];
+  /** Approval-family records (#176) — estimator seals arrive only by import;
+   * agent verdicts mint through markVerdict and nothing else. */
+  approvals: Approval[] = [];
+  /** The last assign-from-schedule run's unresolved rooms (0.9.18) — what the
+   * marked-set cover discloses as withheld. Replaced per assign run, cleared
+   * with the rest of the session on a non-merge load_plan. Seeds ride
+   * normalized so the export-time staleness drop can test them against
+   * committed rings in verts_norm space. */
+  scheduleWithheld: { sheet_id: string; label: string; reason: string; seed_norm: [number, number] }[] = [];
+  /** Correction rules (#207) — imported from a canvas takeoff file, never
+   * minted here (a rule IS an estimator's correction by definition; minting
+   * stays behind the canvas's human Preview→Apply gate). apply_rules re-runs
+   * them; applied_to mirrors the canvas's audit-trail semantics. */
+  rules: Rule[] = [];
+
+  /** Newest-last. Capped at UNDO_CAP; the oldest entry falls off the front. */
+  private journal: JournalEntry[] = [];
+  private seq = 0;
+  /** Ids minted by commit() since the last flush — one tool call may commit
+   * many shapes (detect_rooms), and they journal as a single reversible step. */
+  private pendingCommits: string[] = [];
+
+  private record(entry: JournalPayload): void {
+    this.journal.push({ ...entry, seq: ++this.seq });
+    if (this.journal.length > UNDO_CAP) this.journal.shift();
+  }
+
+  /** Journal whatever commit() minted during this tool call, as one entry.
+   * A call that committed nothing records nothing — undo steps over reads. */
+  private flushCommits(tool: string): void {
+    if (!this.pendingCommits.length) return;
+    this.record({ op: "commit", tool, ids: this.pendingCommits });
+    this.pendingCommits = [];
+  }
+
+  /** load_plan (#152): without merge, replaces the whole session — every doc
+   * destroyed, ALL state (scales, caches, conditions, shapes) cleared. With
+   * merge: true, ADDS a document to the working set — a bid set is plans +
+   * schedule + addenda, not one PDF — keeping every scale, condition, and
+   * shape already in the session. Sheet keys already carry file names
+   * (plan.pdf, plan.pdf#2), so two documents never collide; loading the SAME
+   * file again under merge is refused (an addendum is a new file — reloading
+   * one in place is a replace-the-session decision, not a merge). */
+  async loadPlan(filePath: string, opts: { merge?: boolean } = {}) {
+    const base = path.basename(filePath);
+    const merging = !!opts.merge && this.docs.size > 0;   // merge into empty = plain first load
+    if (!merging) {
+      for (const d of this.docs.values()) await d.doc.destroy().catch(() => {});
+      this.docs.clear();
+      this.sheets.clear();
+      this.conditions = [];
+      this.shapes = [];
+      this.markups = [];
+      this.approvals = [];
+      this.file = null;
+      this.filePath = null;
+      this.nextOrd = 1;
+      this.scheduleWithheld = [];
+      this.rules = [];
+      // the journal's entries reference shapes that no longer exist — undoing
+      // across a document swap would be a lie, so the history goes with them
+      this.journal = [];
+      this.pendingCommits = [];
+    } else if (this.docs.has(base)) {
+      throw new UserError(`${base} is already loaded — merge adds NEW documents. To reload it, call load_plan without merge (replaces the whole session).`);
+    }
+    this.graph = null;   // the sheet graph (#87) indexes the OLD document set
+
+    const doc = await openPdf(filePath);
+    const resolved = path.resolve(filePath);
+    this.docs.set(base, { doc, path: resolved });
+    if (!this.file) { this.file = base; this.filePath = resolved; }
+    const added: SheetSummary[] = [];
+    for (let n = 1; n <= doc.numPages; n++) {
+      const ph = await doc.page(n);
+      // sheet-key codec: page 1 = bare file name, pages 2+ = "name#page"
+      // (parseSheetKey in web/src/lib/sheets.ts is the inverse)
+      const key = n === 1 ? base : `${base}#${n}`;
+      const state: SheetState = {
+        key,
+        ord: this.nextOrd++,
+        pageNum: n,
+        widthPt: ph.widthPt,
+        heightPt: ph.heightPt,
+        widthPx: ph.viewport.width,
+        heightPx: ph.viewport.height,
+        sheetNumber: extractSheetNumber(ph.textContent, ph.viewport),
+        detected: detectScale(ph.textContent, ph.viewport),
+        upp: null,
+        text: positionedText(ph),
+        page: ph,
+      };
+      this.sheets.set(key, state);
+      added.push(sheetSummary(state));
+    }
+    return {
+      file: base,
+      files: this.files,
+      page_count: this.sheets.size,
+      sheets: [...this.sheets.values()].map(sheetSummary),
+      note: merging
+        ? `Merged ${base} into the working set (${added.length} sheet${added.length === 1 ? "" : "s"} added) — every prior scale, condition, and shape kept. The sheet graph now spans ${this.docs.size} documents.`
+        : "Replaced the previous session — all prior scales, conditions, and shapes were cleared.",
+    };
+  }
+
+  /** Every loaded document's basename, load order. */
+  get files(): string[] {
+    return [...this.docs.keys()];
+  }
+
+  /** The file (basename) a sheet key belongs to — the key codec's inverse. */
+  fileFor(sheetKey: string): string {
+    return sheetKey.split("#")[0];
+  }
+
+  /** Absolute source path for a loaded file — the marked set re-reads bytes. */
+  pathFor(file: string): string | null {
+    return this.docs.get(file)?.path ?? null;
+  }
+
+  sheet(name: string): SheetState {
+    if (!this.docs.size) throw new UserError("No plan loaded — call load_plan first.");
+    const hit = this.sheets.get(name);
+    if (hit) return hit;
+    // convenience: accept the title-block sheet number (e.g. "A-101") too
+    const wanted = name.toUpperCase().replace(/\s+/g, "");
+    for (const s of this.sheets.values()) if (s.sheetNumber === wanted) return s;
+    throw new UserError(`Unknown sheet "${name}" — loaded sheets: ${[...this.sheets.keys()].join(", ")}.`);
+  }
+
+  /** Like sheet(), but null for an unknown key — import adoption iterates
+   * merged rows that may reference files this document doesn't have. */
+  sheetOrNull(name: string): SheetState | null {
+    return this.sheets.get(name) ?? null;
+  }
+
+  /** Journal an externally-assembled commit gesture (import_takeoff) as one
+   * reversible step — the same entry shape commit()+flushCommits() writes. */
+  journalCommit(tool: string, ids: string[]): void {
+    this.record({ op: "commit", tool, ids });
+  }
+
+  /** Resource-URI addressing: 1-based position in load order across every
+   * loaded document (=== page number for a single-document session). */
+  sheetForPage(ord: number): SheetState {
+    if (!this.docs.size) throw new UserError("No plan loaded — call load_plan first.");
+    const hit = this.sheetList()[ord - 1];
+    if (!hit) throw new UserError(`No sheet ${ord} — the working set has sheets 1–${this.sheets.size}.`);
+    return hit;
+  }
+
+  /** Every loaded sheet, in page order — [] before any plan loads. */
+  sheetList(): SheetState[] {
+    return [...this.sheets.values()].sort((a, b) => a.ord - b.ord);
+  }
+
+  /** The takeoff://sheets index payload — cheap (no geometry is built). */
+  index() {
+    if (!this.docs.size) {
+      return { file: null, page_count: 0, sheets: [], hint: "No plan loaded — call the load_plan tool with a PDF path, then list resources again." };
+    }
+    return {
+      file: this.file,
+      files: this.files,
+      page_count: this.sheets.size,
+      sheets: this.sheetList().map((s) => ({
+        ...sheetSummary(s),
+        ord: s.ord,
+        scale_set: s.upp != null,
+        shape_count: this.shapes.filter((x) => x.sheet_id === s.key).length,
+      })),
+    };
+  }
+
+  /** Rendered-page PNG, long edge capped at IMAGE_MAX_EDGE (never above the
+   * canvas-native RENDER_SCALE), cached per sheet until the next load_plan. */
+  async renderSheetPng(ord: number): Promise<Uint8Array> {
+    const s = this.sheetForPage(ord);
+    if (!s.png) {
+      const scale = Math.min(RENDER_SCALE, IMAGE_MAX_EDGE / Math.max(s.widthPt, s.heightPt));
+      s.png = await s.page.renderPng(scale);
+    }
+    return s.png;
+  }
+
+  /** view_sheet: render a sheet (or an image-px crop of it) to PNG, with an
+   * optional committed-shapes overlay and calibrated measuring grid. The grid
+   * draws under the overlay, both in canvas space after the page rasterizes. */
+  async viewSheet(name: string, opts: { region?: { x0: number; y0: number; x1: number; y1: number }; px?: number; overlay?: boolean; grid?: string; marks?: ViewMarks }) {
+    const s = this.sheet(name);
+    const px = Math.max(VIEW_MIN_PX, Math.min(VIEW_MAX_PX, Math.round(opts.px ?? VIEW_DEFAULT_PX)));
+    const clampX = (v: number) => Math.max(0, Math.min(v, s.widthPx));
+    const clampY = (v: number) => Math.max(0, Math.min(v, s.heightPx));
+    const r = opts.region
+      ? { x0: clampX(opts.region.x0), y0: clampY(opts.region.y0), x1: clampX(opts.region.x1), y1: clampY(opts.region.y1) }
+      : { x0: 0, y0: 0, x1: s.widthPx, y1: s.heightPx };
+    if (!(r.x1 - r.x0 >= 1 && r.y1 - r.y0 >= 1)) {
+      throw new UserError(`Empty view region — need x1 > x0 and y1 > y0 in image px inside the sheet (${s.widthPx} × ${s.heightPx}).`);
+    }
+    const ppf = gridPxPerFoot(opts.grid, s.upp);
+    const sheetShapes = this.shapes.filter((x) => x.sheet_id === s.key);
+    let marksDrawn = 0;
+    const { png, width, height, zoom } = await s.page.renderRegionPng(r, px, (ctx, toCanvas) => {
+      if (ppf) drawGrid(ctx as Ctx2D, toCanvas as ToCanvas, r, ppf);
+      if (opts.overlay) drawShapes(ctx as Ctx2D, toCanvas as ToCanvas, sheetShapes, s.widthPx, s.heightPx, px);
+      // #297 — disclosure marks: what the reply names, the picture shows
+      if (opts.marks) marksDrawn = drawMarks(ctx as Ctx2D, toCanvas as ToCanvas, opts.marks, px);
+    });
+    return {
+      png,
+      meta: {
+        sheet: s.key,
+        page: s.pageNum,
+        sheet_px: [s.widthPx, s.heightPx],
+        region: [round1(r.x0), round1(r.y0), round1(r.x1), round1(r.y1)],
+        img_px: [width, height],
+        zoom: +zoom.toFixed(4),
+        overlay: !!opts.overlay,
+        ...(opts.overlay ? { shapes_drawn: sheetShapes.length } : {}),
+        ...(opts.marks ? { marks_drawn: marksDrawn } : {}),
+        grid_px_per_foot: ppf ? round2(ppf) : 0,
+      },
+    };
+  }
+
+  /** sheet_context (issue #29): the classified vectors, the positioned text,
+   * and the hatch-family instances of ONE region, in ONE frame — image px,
+   * the space every other tool already speaks. There is deliberately no
+   * transform in this method: everything below is a containment test against
+   * a rect, so frame agreement with view_sheet is a contract on the echoed
+   * region, not on a second renderer.
+   *
+   * Decimation is declared and ordered (issue #29 design comment): clip to
+   * region → drop segments shorter than min_len_px → cap at max_segments
+   * LONGEST-FIRST (walls are long, hatch strokes are short — truncation
+   * degrades toward structure). Whole segments drop with their meta intact;
+   * nothing is simplified or merged, because these are CLASSIFIED segments
+   * and a merge would silently rewrite the classification. The counts ride
+   * on every reply, truncated or not. */
+  async sheetContext(name: string, opts: { region?: { x0: number; y0: number; x1: number; y1: number }; min_len_px?: number; max_segments?: number }) {
+    const s = this.sheet(name);
+    const clampX = (v: number) => Math.max(0, Math.min(v, s.widthPx));
+    const clampY = (v: number) => Math.max(0, Math.min(v, s.heightPx));
+    const r = opts.region
+      ? { x0: clampX(opts.region.x0), y0: clampY(opts.region.y0), x1: clampX(opts.region.x1), y1: clampY(opts.region.y1) }
+      : { x0: 0, y0: 0, x1: s.widthPx, y1: s.heightPx };
+    if (!(r.x1 - r.x0 >= 1 && r.y1 - r.y0 >= 1)) {
+      throw new UserError(`Empty context region — need x1 > x0 and y1 > y0 in image px inside the sheet (${s.widthPx} × ${s.heightPx}).`);
+    }
+    const minLen = opts.min_len_px ?? CONTEXT_MIN_LEN_PX;
+    const cap = opts.max_segments ?? CONTEXT_MAX_SEGMENTS;
+
+    const geo = await this.ensureGeometry(s);
+    const hasVectors = geo.segs.length > 0;
+    if (!s.hatch) s.hatch = hasVectors ? hatchFamilies(geo.segs, geo.meta) : [];
+    if (!s.spans) s.spans = textSpans(s.page);
+
+    // family membership index → id, for the per-segment annotation
+    const famBySeg = new Map<number, string>();
+    for (const f of s.hatch) for (const i of f.memberIdx) famBySeg.set(i, f.id);
+
+    // 1. clip to region (keep test, endpoints untouched)
+    const inRegion: { i: number; len: number }[] = [];
+    const nSeg = geo.segs.length >> 2;
+    for (let i = 0; i < nSeg; i++) {
+      const x1 = geo.segs[i * 4], y1 = geo.segs[i * 4 + 1], x2 = geo.segs[i * 4 + 2], y2 = geo.segs[i * 4 + 3];
+      if (segIntersectsRect(x1, y1, x2, y2, r)) inRegion.push({ i, len: Math.hypot(x2 - x1, y2 - y1) });
+    }
+    // 2. drop invisible ink
+    const visible = inRegion.filter((e) => e.len >= minLen);
+    const droppedShort = inRegion.length - visible.length;
+    // 3. cap, longest-first
+    let kept = visible;
+    let droppedCap = 0;
+    if (visible.length > cap) {
+      kept = visible.slice().sort((a, b) => b.len - a.len).slice(0, cap);
+      droppedCap = visible.length - cap;
+    }
+
+    const segments: number[][] = [], metaOut: number[] = [], family: (string | null)[] = [];
+    for (const { i } of kept) {
+      segments.push([
+        round1(geo.segs[i * 4]), round1(geo.segs[i * 4 + 1]),
+        round1(geo.segs[i * 4 + 2]), round1(geo.segs[i * 4 + 3]),
+      ]);
+      metaOut.push(geo.meta[i]);
+      family.push(famBySeg.get(i) ?? null);
+    }
+
+    const spans = s.spans.filter((sp) => sp.x0 <= r.x1 && sp.x1 >= r.x0 && sp.y0 <= r.y1 && sp.y1 >= r.y0);
+    const keptIdx = new Set(kept.map((k) => k.i));
+    const families = s.hatch
+      .filter((f) => rectsOverlap(f.bbox, r))
+      .map(({ memberIdx, ...f }) => ({
+        ...f,
+        segments_in_region: memberIdx.reduce((acc, i) => acc + (keptIdx.has(i) ? 1 : 0), 0),
+      }));
+
+    return {
+      sheet: s.key,
+      page: s.pageNum,
+      sheet_px: [s.widthPx, s.heightPx],
+      region: [round1(r.x0), round1(r.y0), round1(r.x1), round1(r.y1)],
+      has_vector_linework: hasVectors,
+      vectors: {
+        segments, meta: metaOut, family,
+        kept: kept.length,
+        total_in_region: inRegion.length,
+        truncated: droppedShort + droppedCap > 0,
+        dropped: { short: droppedShort, cap: droppedCap },
+        ...(droppedCap > 0 ? { note: `Region exceeds max_segments — the ${droppedCap} SHORTEST segments were dropped, so structure (walls) survives and fill (hatch) goes first. Narrow the region or raise max_segments for the full set.` } : {}),
+      },
+      text: { spans, count: spans.length },
+      hatch: { families, count: families.length },
+    };
+  }
+
+  private async ensureGeometry(s: SheetState): Promise<VectorGeometry> {
+    if (!s.geo) {
+      const opList = await s.page.operatorList();
+      s.geo = extractVectorGeometry(opList, s.page.viewport.transform, OPS);
+      s.snap = buildSnapGrid(s.geo.points, SNAP_CELL);
+      // classify this sheet's Optional Content layers (#85): the doc declares
+      // id → (name, default visibility); the geometry attributes segments; the
+      // pure normalizer states each layer's ROLE. Only layers that actually
+      // own segments on this sheet are reported — an empty table is the
+      // unlayered case and every consumer falls through to the heuristics.
+      const layerIds = s.geo.layerIds || [];
+      if (layerIds.length && this.docs.size) {
+        const owner = this.docs.get(this.fileFor(s.key));
+        const byId = new Map(owner ? (await owner.doc.layers()).map((g) => [g.id, g] as const) : []);
+        const counts = new Map<number, number>();
+        const lo = s.geo.layerOf;
+        if (lo) for (let i = 0; i < lo.length; i++) if (lo[i] >= 0) counts.set(lo[i], (counts.get(lo[i]) || 0) + 1);
+        s.layers = layerIds.map((id, k) => {
+          const g = byId.get(id);
+          const name = g?.name || "";
+          const { role, confidence } = classifyLayerName(name);
+          return { id, name, role, confidence, visible: g ? g.visible : true, seg_count: counts.get(k) || 0 };
+        });
+      } else {
+        s.layers = [];
+      }
+    }
+    return s.geo;
+  }
+
+  /** Per-layer role codes for buildMask (#85), with optional include/exclude
+   * OVERRIDES (by layer name or id, case-insensitive): include forces hard
+   * boundary, exclude drops the layer outright — the agent's judgment beats
+   * the table's. Unknown names error with the sheet's actual layer list
+   * (resolve-or-error, never a silent no-op). */
+  private rolesFor(s: SheetState, geo: VectorGeometry, layersOpt?: { include?: string[]; exclude?: string[] }): Uint8Array | null {
+    const infos = s.layers || [];
+    if (!infos.length || !geo.layerIds?.length) {
+      if (layersOpt && (layersOpt.include?.length || layersOpt.exclude?.length)) {
+        throw new UserError(`${s.key} has no PDF layers (no Optional Content survived export) — layers.include/exclude can't apply here.`);
+      }
+      return null;
+    }
+    const infoById = new Map(infos.map((l) => [l.id, { role: l.role, visible: l.visible }]));
+    if (layersOpt) {
+      const resolve = (ref: string): LayerInfo => {
+        const needle = ref.trim().toLowerCase();
+        const hit = infos.find((l) => l.id.toLowerCase() === needle || l.name.toLowerCase() === needle);
+        if (!hit) throw new UserError(`No layer ${JSON.stringify(ref)} on ${s.key}. Layers: ${infos.map((l) => l.name || l.id).join(" | ")}`);
+        return hit;
+      };
+      for (const ref of layersOpt.include || []) { const l = resolve(ref); infoById.set(l.id, { role: "boundary", visible: true }); }
+      for (const ref of layersOpt.exclude || []) { const l = resolve(ref); infoById.set(l.id, { role: l.role, visible: false }); }
+    }
+    return segRoles(geo.layerOf, layerRoleCodes(geo.layerIds, infoById));
+  }
+
+  /** The vector mask, built through buildMask's FULL scale-pinned signature
+   * (RFC #60 / PR #179 — the canvas's ensureMask, verbatim in intent):
+   * `pxPerFt` (the sheet scale as image px per foot) rides INTO the mask, so
+   * the hatch pitch cap, the seal radii, door-wedge caps and the minimum-
+   * passage rule are all feet-true through `mask.mppf` instead of guessing in
+   * raster px; the `page` pin (audit A1/F3) makes the working grid a property
+   * of the SHEET in points, never of a render. This server renders at the
+   * canvas BASELINE (RENDER_SCALE) always, so renderScale === baseScale and
+   * basePxPerFt === pxPerFt — the one degenerate case where the pin and the
+   * legacy reconstruction agree bit-for-bit. */
+  private buildVectorMask(s: SheetState, geo: VectorGeometry, layersOpt?: { include?: string[]; exclude?: string[] }): MaskObj | null {
+    if (!geo.segs.length) return null;
+    const pxPerFt = s.upp ? 1 / s.upp : 0;
+    return buildMask(geo.segs, s.widthPx, s.heightPx, MASK_MAX_DIM, geo.meta, pxPerFt, pxPerFt,
+      { pageW: s.widthPt, pageH: s.heightPt, renderScale: RENDER_SCALE, baseScale: RENDER_SCALE },
+      this.rolesFor(s, geo, layersOpt));
+  }
+
+  /** v1 masks come from the sheet's vector linework only; a scanned sheet
+   * (zero segments) is null here and the measuring tools fall back to
+   * ensureRasterMask (#154). Layer roles (#85) ride in as the stated
+   * short-circuit; an unlayered sheet builds the identical pre-#85 mask.
+   * The cached mask BAKES THE SCALE IN (mppf) — set_scale evicts it. */
+  async ensureMask(name: string): Promise<MaskObj | null> {
+    const s = this.sheet(name);
+    if (s.mask === undefined) {
+      const geo = await this.ensureGeometry(s);
+      s.mask = this.buildVectorMask(s, geo);
+    }
+    return s.mask;
+  }
+
+  /** The mask honoring per-call layer overrides — a fresh build when overrides
+   * are given (never cached: the default mask stays authoritative), the cached
+   * default otherwise. */
+  async maskWithLayers(name: string, layersOpt?: { include?: string[]; exclude?: string[] }): Promise<MaskObj | null> {
+    if (!layersOpt || (!layersOpt.include?.length && !layersOpt.exclude?.length)) return this.ensureMask(name);
+    const s = this.sheet(name);
+    const geo = await this.ensureGeometry(s);
+    return this.buildVectorMask(s, geo, layersOpt);
+  }
+
+  /** The raster-fallback mask (#154): a dedicated render of the sheet at mask
+   * scale (the view_sheet machinery — pdf.ts + @napi-rs/canvas), thresholded
+   * by the canvas's own rastermask engine into the same MaskObj shape
+   * buildMask emits, so the sealed flood (floodAtSeed) and traceRegion run
+   * unchanged on scans. It carries NO mppf of its own (pixels cannot know
+   * the sheet scale), so flood call sites pass mask px per foot explicitly —
+   * ws / upp, the canvas's own raster-path convention — and set_scale evicts
+   * this cache alongside the vector mask. Where the optional native canvas
+   * never installed, renderRgba throws its plain install-hint Error and the
+   * tool reply carries it — a stated inability, never a guessed polygon. */
+  private async ensureRasterMask(s: SheetState): Promise<MaskObj> {
+    if (!s.rmask) {
+      const ws = Math.min(1, MASK_MAX_DIM / Math.max(s.widthPx, s.heightPx, 1));
+      const mw = Math.max(2, Math.ceil(s.widthPx * ws));
+      const mh = Math.max(2, Math.ceil(s.heightPx * ws));
+      const rgba = await s.page.renderRgba(RENDER_SCALE * ws, mw, mh);
+      s.rmask = buildRasterMask(rgba, mw, mh, ws);
+    }
+    return s.rmask;
+  }
+
+  /** The canvas's trigger policy (#154), verbatim (TakeoffCanvas.jsx /
+   * rastermask.ts constants): raster-ELIGIBLE = placed-image area covers
+   * ≥ RASTER_MIN_IMG_FRAC of the sheet (a scan wrapper or photo underlay);
+   * vector-VIABLE = enough segments that the vector mask can bound rooms.
+   * Vector is exact and always wins where it works — a pure-vector sheet
+   * never touches pixels; a scan wrapper with near-zero linework runs raster
+   * primary; a mixed sheet retries on pixels only after the vector flood
+   * fails. */
+  private rasterPolicy(s: SheetState, geo: VectorGeometry): { rasterEligible: boolean; vectorViable: boolean } {
+    const sheetArea = s.widthPx * s.heightPx;
+    return {
+      rasterEligible: sheetArea > 0 && geo.imageArea / sheetArea >= RASTER_MIN_IMG_FRAC,
+      vectorViable: (geo.segs.length >> 2) >= RASTER_MIN_SEGS,
+    };
+  }
+
+  /** Layer overrides (#85) name PDF Optional Content — scan pixels carry
+   * none, so a raster-path call that stated them is refused rather than
+   * silently no-opped (the rolesFor resolve-or-error doctrine). */
+  private refuseLayersOnRaster(layersOpt?: { include?: string[]; exclude?: string[] }): void {
+    if (layersOpt && (layersOpt.include?.length || layersOpt.exclude?.length)) {
+      throw new UserError("Layer overrides can't apply here — this flood runs on the sheet's rendered pixels (raster fallback), and scan ink carries no PDF layers. Retry without layers.");
+    }
+  }
+
+  async sheetInfo(name: string) {
+    const s = this.sheet(name);
+    const geo = await this.ensureGeometry(s);
+    return {
+      ...sheetSummary(s),
+      seg_count: geo.segs.length >> 2,
+      has_vector_linework: geo.segs.length > 0,
+      scale_set: s.upp != null,
+      ...(s.upp != null ? { upp: s.upp } : {}),
+      ...(s.detected?.multi ? { multiple_scales: true as const } : {}),
+      shape_count: this.shapes.filter((x) => x.sheet_id === s.key).length,
+      // the sheet's PDF layer table (#85) — always emitted; [] = no Optional
+      // Content survived export and every engine path runs the heuristics
+      layers: (s.layers || []).map((l) => ({ id: l.id, name: l.name, role: l.role, confidence: l.confidence, visible: l.visible, seg_count: l.seg_count })),
+    };
+  }
+
+  private scaleGate(s: SheetState): string {
+    return `Set the scale for ${s.key} first — use set_scale${s.detected ? ` (detected: ${s.detected.label})` : ""}.`;
+  }
+
+  setScale(name: string, mode: { label?: string; upp?: number; calibrate?: { p1: [number, number]; p2: [number, number]; feet: number }; use_detected?: boolean }) {
+    const s = this.sheet(name);
+    let upp: number;
+    let label: string | undefined;
+    let source: string;
+    if (mode.label !== undefined) {
+      const sc = STANDARD_SCALES.find((x) => x.label === mode.label);
+      if (!sc) throw new UserError(`Unknown scale label ${JSON.stringify(mode.label)}. Valid labels: ${STANDARD_SCALES.map((x) => x.label).join(" | ")}`);
+      upp = sc.upp;
+      label = sc.label;
+      source = "label";
+    } else if (mode.upp !== undefined) {
+      if (!(mode.upp > 0)) throw new UserError("upp must be a positive number (real feet per image px at render scale 2.0).");
+      upp = mode.upp;
+      source = "upp";
+    } else if (mode.calibrate !== undefined) {
+      const { p1, p2, feet } = mode.calibrate;
+      const px = Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+      if (!(px > 0)) throw new UserError("Calibration points are identical — click two points along a known dimension.");
+      if (!(feet > 0)) throw new UserError("Calibration feet must be positive.");
+      upp = feet / px;
+      source = "calibrate";
+    } else if (mode.use_detected) {
+      if (!s.detected) throw new UserError(`No detected scale for ${s.key} — read the title block with read_sheet_text, or calibrate from a known dimension.`);
+      upp = s.detected.upp;
+      label = s.detected.label;
+      source = "detected";
+    } else {
+      throw new UserError("Provide exactly one of: label, upp, calibrate, use_detected.");
+    }
+    // Mask-cache eviction on recalibration — canvas parity (rescaleSheet):
+    // the vector mask bakes the scale in (its hatch-pitch cap, seal radii,
+    // wedge caps and minimum-passage rule are feet-true via mppf), so a mask
+    // built against the old calibration is exactly the failure class the
+    // scale pinning exists to remove. The raster mask is evicted too, the
+    // same call the canvas makes; geometry, snap grid and rendered PNGs are
+    // scale-free and stay. Re-picking the identical scale evicts nothing.
+    if (s.upp !== upp) {
+      s.mask = undefined;
+      s.rmask = undefined;
+      s.mepGraph = undefined;   // the noding grid is feet-true via mppf, same discipline as the vector mask
+      s.mepGraphNodingError = undefined;   // a rescale changes the noding grid — a prior noding failure at the old grid must not stick after a rebuild that may now succeed
+    }
+    s.upp = upp;
+    // the tool reply keeps this session's source vocabulary; the stored value
+    // uses the canvas's report vocabulary so export_report's scale_source
+    // reads the same as an app-side report.v1
+    s.scaleSource = source === "label" ? "standard" : source === "calibrate" ? "calibrated" : source;
+    // Scale gate: this is the agent surface, so the scale lands UNCONFIRMED —
+    // quantities still flow (the gate is a flag, never a refusal), but every
+    // scaled reply carries the caveat and the canvas asks the estimator to
+    // confirm. Only a human act (canvas scale UI) clears it.
+    s.scaleConfirmed = false;
+    return {
+      sheet: s.key, upp, ...(label ? { label } : {}), source, confirmed: false,
+      // #153 — several DISTINCT scale notes on one sheet means enlarged plans
+      // or details are likely; region measurements will warn when a
+      // disagreeing note sits inside them, but say it up front too
+      ...(s.detected?.multi ? { warning: "This sheet carries MULTIPLE distinct scale notes — enlarged plans/details likely. Measurements inside a viewport whose note disagrees with this scale will carry a warning; calibrate or re-set_scale before trusting them." } : {}),
+    };
+  }
+
+  /** Mixed-scale check (#153): does the measured region carry a scale note
+   * that DISAGREES with the scale these quantities were figured at? Runs the
+   * sheet-level detector on a region-filtered text set — same detector, no
+   * second regex. Returns the warning to ride the reply, or undefined. */
+  private scaleWarningFor(s: SheetState, ptsPx: Point[]): string | undefined {
+    if (s.upp == null || !ptsPx.length) return undefined;
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const [x, y] of ptsPx) {
+      x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y);
+    }
+    const region = expandForScaleNotes({ x0, y0, x1, y1 });
+    const adoptedLabel = s.detected && Math.abs(s.detected.upp - s.upp) / s.upp <= 1e-6 ? s.detected.label : undefined;
+    // (scale gate: the unconfirmed flag deliberately does NOT ride every
+    // measure reply — the agent set the scale itself, so repeating it per
+    // quantity is noise. It surfaces where the numbers cross a boundary:
+    // set_scale's confirmed:false, takeoff_summary's scale_unconfirmed, the
+    // export/report scale_confirmed, and the canvas's confirm affordance.)
+    return mixedScaleWarning(textItemsInRegion(s.page, region), s.page.viewport, s.upp, adoptedLabel);
+  }
+
+  private conditionFor(tag: string): Condition {
+    let c = this.conditions.find((x) => x.finish_tag === tag);
+    if (!c) {
+      // field-identical to the canvas's addCondition, palette rotation included
+      const lc = PALETTE[this.conditions.length % PALETTE.length];
+      c = {
+        id: uid("cnd"),
+        finish_tag: tag,
+        color: lc,
+        fill: lc,
+        hatch: HATCH_IDS[1 + (this.conditions.length % (HATCH_IDS.length - 1))],
+        multiplier: 1,
+        waste_pct: 0,
+        materials: [],
+      };
+      this.conditions.push(c);
+    }
+    return c;
+  }
+
+  /** Slim flood evidence — the engine result's SCALAR signals, harvested the
+   * moment the flood returns so a batch sweep never pins N mask-sized region
+   * bitmaps just to score confidence at commit time. `signals` goes through
+   * floodSignals, THE adapter (audit A2: hand-listed signal fields are how an
+   * engine emission goes silently inert); gapBridged/ringWedges ride beside
+   * it because they are provenance the adapter does not carry. */
+  private static floodEvidence(f: Extract<FloodResult, { status: "ok" }>, raster: boolean, mppf: number): FloodEvidence {
+    return {
+      signals: floodSignals(f, { raster, mppf }),
+      raster,
+      ...(f.gapBridged ? { gapBridged: f.gapBridged } : {}),
+      ...(f.ringWedges ? { ringWedges: f.ringWedges } : {}),
+    };
+  }
+
+  /** THE flood → provenance mapping (the canvas Create gate's field set,
+   * TakeoffCanvas commitOneClickRegions). One function, spread into the
+   * committed origin by commit() and into the tool reply by the flood call
+   * sites, so the two surfaces cannot drift and no site hand-lists fields. */
+  private static floodStamp(ev: FloodEvidence, areaSF?: number): Partial<ShapeOrigin> {
+    const conf = traceConfidence({ ...ev.signals, areaSF });
+    const sig = ev.signals;
+    return {
+      confidence: conf.score,
+      ...(conf.factors.length ? { confidence_factors: conf.factors } : {}),
+      ...(sig.hatchFiltered ? { hatch_filtered: true as const } : {}),
+      ...(sig.sealedPx ? { gap_sealed_px: sig.sealedPx } : {}),
+      ...(ev.gapBridged ? { gap_bridged_px: ev.gapBridged } : {}),
+      // min-pass fields ride only when the rule CHANGED the answer — the
+      // canvas convention (minPassDelta gates minPassPx)
+      ...(sig.minPassDelta ? { min_pass_px: sig.minPassPx || 0, min_pass_delta: sig.minPassDelta } : {}),
+      ...(sig.wedges ? { door_wedges: sig.wedges } : {}),
+      ...(ev.ringWedges ? { ring_interiors: ev.ringWedges } : {}),
+      ...(ev.raster ? { raster_traced: true as const } : {}),
+    };
+  }
+
+  private commit(s: SheetState, tag: string, role: MeasureRole, vertsPx: Point[], computed: Shape["computed"], origin?: Shape["origin"], flood?: FloodEvidence): Shape {
+    // Flood provenance + confidence (RFC #60) stamp HERE, exactly where the
+    // assignment provenance already stamps: a commit path that hands over its
+    // flood evidence gets the full engine account — confidence, sealed
+    // openings, door wedges, min-passage — minted onto origin centrally, so
+    // no flood commit path can ship an unscored shape.
+    if (origin && flood) origin = { ...origin, ...Session.floodStamp(flood, computed.area_sf) };
+    // assignment provenance (0.9.18) defaults HERE, not at the seven call
+    // sites: an agent commit that stated no source asserted the tag itself,
+    // and stamping centrally means no future commit path can ship unstamped.
+    if (origin?.actor === "agent" && !origin.assignment) origin = { ...origin, assignment: { source: "asserted" } };
+    const c = this.conditionFor(tag);
+    const shape: Shape = {
+      id: uid("shp"),
+      sheet_id: s.key,
+      condition_id: c.id,
+      measure_role: role,
+      verts_norm: vertsPx.map(([x, y]) => [x / s.widthPx, y / s.heightPx]),
+      computed,
+      ...(origin ? { origin } : {}),
+    };
+    this.shapes.push(shape);
+    this.pendingCommits.push(shape.id);
+    return shape;
+  }
+
+  async oneClick(name: string, x: number, y: number, opts: { condition?: string; role: "floor_area" | "deduct"; returnVerts: boolean; sensitivity?: number; layers?: { include?: string[]; exclude?: string[] } }) {
+    const s = this.sheet(name);
+    // Trigger policy — canvas parity (#154, see rasterPolicy): vector first
+    // wherever it can work, raster only where it can't; the vector path below
+    // is byte-identical to the pre-#154 behavior on any pure-vector sheet.
+    const { rasterEligible, vectorViable } = this.rasterPolicy(s, await this.ensureGeometry(s));
+    let f: Extract<FloodResult, { status: "ok" }> | null = null;
+    let raster = false;
+    if (!rasterEligible || vectorViable) {
+      const mask = await this.maskWithLayers(name, opts.layers);
+      if (!mask && !rasterEligible) throw new UserError("This sheet has no vector linework and no scan image to flood — nothing here bounds a region. Trace the space with measure_polygon instead.");
+      if (mask) {
+        // the sealed engine with the sheet's own feet-true arguments — the
+        // mask carries mppf (buildVectorMask baked the scale in), so
+        // floodAtSeed derives the same seal radii / wedge cap / min-passage
+        // radius the canvas computes at a click; scale unset degrades to the
+        // documented scale-blind fallbacks (a weaker measurement, and the
+        // px-only preview reply already says so)
+        const r = floodAtSeed(mask, x, y, opts.sensitivity ?? SENS_BALANCED);
+        if (r.status === "ok") f = r;
+        else if (!rasterEligible) {
+          if (r.status === "leak") throw new UserError("That space isn't enclosed on the plan linework — the fill spilled through a gap or opening.");
+          throw new UserError("Landed in dense linework (hatching or text).");
+        }
+      }
+    }
+    if (!f) {
+      // Raster fallback (#154): flood the sheet's rendered pixels with the
+      // canvas's own engine. The raster mask is single-tier (softCount 0), so
+      // the flood's hatch escalation — and the sensitivity knob with it — is
+      // structurally inert here; the default sensitivity rides along. Gap
+      // sealing, door wedges and the min-passage rule still apply — faded
+      // scan lines are the raster path's own flavor of open doorway — and
+      // because buildRasterMask cannot know the sheet scale, mask px per
+      // foot is passed explicitly (ws / upp), exactly as the canvas does.
+      this.refuseLayersOnRaster(opts.layers);
+      const rmask = await this.ensureRasterMask(s);
+      const r = floodAtSeed(rmask, x, y, SENS_BALANCED, s.upp ? rmask.ws / s.upp : 0);
+      if (r.status === "leak") throw new UserError("That space isn't enclosed on the scan — the fill escaped through a gap (faded line or open doorway). Seed a more enclosed spot, or trace it with measure_polygon.");
+      if (r.status !== "ok") throw new UserError("Landed on dense scan ink (text or hatching). Seed an open spot inside the room.");
+      f = r;
+      raster = true;
+    }
+    // scalar evidence for the reply and the commit stamp — mppf explicit for
+    // the raster path (its MaskObj carries none; audit A2's silent-miss case)
+    const ev = Session.floodEvidence(f, raster, s.upp ? f.ws / s.upp : 0);
+    // Raster trace differences, canvas parity: a looser RDP eps (scan
+    // contours wobble) and NO vertex snapping — a scan has no true endpoints,
+    // and pulling room corners onto the title block's few vector endpoints
+    // would corrupt the ring.
+    const ring = raster
+      ? traceRegion(f, RASTER_RDP_EPS)
+      : snapVertices(traceRegion(f), (px, py, d) => (s.snap ? nearestSnap(s.snap, px, py, d) : null), SNAP_TOL);
+    if (ring.length < 3) throw new UserError("Couldn't trace that space into a polygon.");
+    const areaPx2 = ringArea(ring);
+    const perimPx = closedMetrics(ring).perim;
+    if (s.upp == null) {
+      // preview only — px quantities, never committed without a scale. The
+      // engine account (confidence + factors) still rides: signals are
+      // signals, though the size deduction can't fire without real units.
+      return {
+        status: "ok" as const,
+        nverts: ring.length,
+        ...Session.floodStamp(ev),
+        ...(opts.returnVerts ? { verts: ring.map(([vx, vy]) => [round1(vx), round1(vy)]) } : {}),
+        area_px2: round1(areaPx2),
+        perimeter_px: round1(perimPx),
+        warning: `No scale set for ${s.key} — quantities unavailable. Call set_scale${s.detected ? ` (detected: ${s.detected.label})` : ""}.`,
+      };
+    }
+    const upp = s.upp;
+    const area_sf = round2(areaPx2 * upp * upp);
+    const perimeter_lf = round2(perimPx * upp);
+    // the reply wears the same stamp commit() mints onto origin — one mapping
+    // (floodStamp), two surfaces, no drift. Present = disclosed both ways:
+    // raster_traced says pixels bounded this trace, gap_sealed_px says the
+    // boundary is partly synthetic, confidence says how clean the signals ran.
+    const common = {
+      status: "ok" as const,
+      nverts: ring.length,
+      ...Session.floodStamp(ev, area_sf),
+      ...(opts.returnVerts ? { verts: ring.map(([vx, vy]) => [round1(vx), round1(vy)]) } : {}),
+    };
+    let shape_id: string | undefined;
+    if (opts.condition) {
+      // actor + reviewed: false — this is a machine-proposed trace no human
+      // has affirmed; only an explicit human review gate may set reviewed.
+      // Flood provenance (hatch/seal/wedge/min-pass/raster + confidence)
+      // stamps centrally in commit() from `ev` — nothing hand-listed here.
+      shape_id = this.commit(s, opts.condition, opts.role, ring, { area_sf, perimeter_lf }, {
+        method: "one_click_v1",
+        actor: "agent",
+        seed_norm: [x / s.widthPx, y / s.heightPx],
+        reviewed: false,
+        // #85 — a trace bounded by DECLARED boundary layers is categorically
+        // stronger evidence than one bounded by a pitch heuristic (vector
+        // path only: the raster mask never saw the layer table)
+        ...(!raster && (s.layers || []).some((l) => l.visible && (l.role === "boundary" || l.role === "structure")) ? { layer_bounded: true as const } : {}),
+        // canvas-parity provenance: a non-default fill sensitivity is part of
+        // how the shape was made (ShapeOrigin.fill_sensitivity) — vector path
+        // only; the knob is inert on a single-tier raster mask
+        ...(!raster && opts.sensitivity !== undefined && opts.sensitivity !== SENS_BALANCED ? { fill_sensitivity: opts.sensitivity } : {}),
+      }, ev).id;
+    }
+    this.flushCommits("one_click");
+    const mixed = this.scaleWarningFor(s, ring);
+    return { ...common, area_sf, perimeter_lf, ...(shape_id ? { shape_id } : {}), ...(mixed ? { warning: mixed } : {}) };
+  }
+
+  /** Batch room detection: read every room-number label off the sheet's text
+   *  layer, seed the existing One-Click flood at each, and trace/commit
+   *  exactly like oneClick — just N of them from one call instead of N
+   *  reasoning-heavy round-trips. Same contract as oneClick: no scale → a
+   *  px-only preview per room; no condition → nothing commits (a review
+   *  pass, not a proposal-acceptance gate — this server has none).
+   *
+   *  Withholding — nothing is committed until it survives all three, and the
+   *  batch NEVER silently drops work: every withheld seed is counted and
+   *  reasoned in `withheld`, because a room the tool knows it skipped is a
+   *  question the caller can ask, while a room it skipped silently is a hole
+   *  in a bid.
+   *    1. degenerate — traced to fewer than 3 vertices.
+   *    2. duplicate — two labels flooding one region (a room tagged twice, or
+   *       a legend number landing in the same space) trace to an identical
+   *       ring. Committing both double-counts the area with no signal, which
+   *       is the worst failure mode an estimating tool has. One region commits
+   *       once; the collapsed labels ride along on `merged_labels`.
+   *    3. bubble — plans draw room numbers inside little boxes, and a seed at
+   *       the label floods the label's own BUBBLE: fully enclosed, traces
+   *       clean at label size, and is not a room (found live: 25 of 26). Each
+   *       label runs a SEED LADDER (anchor first, then label-height offsets)
+   *       and bubble rings are rejected scale-free (ring bbox ≈ label bbox) —
+   *       so the guard holds even before any scale is set. A label whose
+   *       every clean flood was its bubble counts here.
+   *    4. implausible — enclosed, clean, non-bubble, and still smaller than
+   *       `minAreaSf` (default 5 SF — smaller than any real finished space; a
+   *       broom closet is ~10 SF): a door swing or wall cavity. Only applied
+   *       once a scale exists, since without one there is no real area to
+   *       judge and nothing commits anyway. */
+  async detectRooms(name: string, opts: { condition?: string; role: "floor_area" | "deduct"; returnVerts: boolean; minAreaSf?: number; sensitivity?: number; layers?: { include?: string[]; exclude?: string[] }; assignFromSchedule?: boolean }) {
+    const s = this.sheet(name);
+    // assign-from-schedule (0.9.18): each detected room commits under the
+    // FLOOR finish its OWN schedule row states, and rooms the schedule cannot
+    // answer for are withheld into `unresolved[]` instead of committed under a
+    // guess. The mode exists to COMMIT, so the whole-set preflights refuse up
+    // front — before a single flood; per-room failures stay per-room below.
+    const assign = !!opts.assignFromSchedule;
+    let graph: SheetGraph | null = null;
+    if (assign) {
+      if (s.upp == null) throw new UserError(this.scaleGate(s));   // no silent px-only preview wearing a success reply
+      graph = await this.ensureGraph();
+      if (!graph.available) throw new UserError("This set has no text layer (a scan) — the sheet graph is unavailable, not empty.");
+      if (!graph.tables.some((t) => t.kind === "room-finish")) {
+        throw new UserError("No room-finish schedule in the working set — load_plan the schedule sheet with merge: true, or pass condition to commit every room under one tag.");
+      }
+    }
+    // Mask resolution (#154) — one mask for the whole sweep, canvas trigger
+    // policy (rasterPolicy): vector wherever it can bound rooms, raster only
+    // where it can't (an OCR'd scan has a text layer to seed from but no
+    // linework to flood). Deliberately NO per-seed vector→raster retry: a
+    // batch that mixed boundary sources within one sweep would commit rings
+    // whose provenance disagrees on what bounded them.
+    const geo = await this.ensureGeometry(s);
+    const { rasterEligible, vectorViable } = this.rasterPolicy(s, geo);
+    let mask: MaskObj | null = null;
+    let raster = false;
+    if (!rasterEligible || vectorViable) mask = await this.maskWithLayers(name, opts.layers);
+    if (!mask) {
+      if (!rasterEligible) throw new UserError("This sheet has no vector linework and no scan image to flood — nothing here bounds a region. Trace rooms with measure_polygon instead.");
+      this.refuseLayersOnRaster(opts.layers);
+      mask = await this.ensureRasterMask(s);
+      raster = true;
+    }
+    const minAreaSf = opts.minAreaSf ?? 5;
+    if (!s.spans) s.spans = textSpans(s.page);
+    // labels with BBOXES: same tokenization as roomLabelSeeds, but the ladder
+    // and the bubble test need the label's box, not just its anchor
+    const labels: { str: string; bbox: LabelBBox }[] = [];
+    for (const sp of s.spans) {
+      const num = (sp.str || "").trim().split(/\s+/).find((tok) => ROOM_LABEL_RE.test(tok));
+      if (num) labels.push({ str: num, bbox: sp });
+    }
+
+    // Trace every label first (ladder + bubble guard per label). Nothing
+    // commits in this pass — withholding has to be decided across the whole
+    // batch (dedupe needs to see every ring).
+    const withheld = { degenerate: 0, duplicate: 0, bubble: 0, implausible: 0, unresolved: 0 };
+    const unresolved: { label: string; reason: string; area_sf: number; perimeter_lf: number; seed: [number, number] }[] = [];
+    type Cand = { label: string; ring: Point[]; areaPx2: number; perimPx: number; seed: readonly [number, number] | number[]; ev: FloodEvidence; merged: string[] };
+    const byRing = new Map<string, Cand>();
+    const order: Cand[] = [];
+    // one mask, one mppf for the whole sweep — the raster mask carries no
+    // scale of its own (buildRasterMask cannot know it), so mask px per foot
+    // is passed explicitly there, exactly as oneClick does
+    const sweepMppf = raster ? (s.upp ? mask.ws / s.upp : 0) : (mask.mppf || 0);
+    for (const lb of labels) {
+      let ring: Point[] | null = null, ev: FloodEvidence | null = null, seed: [number, number] | null = null;
+      let sawBubble = false, sawDegenerate = false;
+      for (const probe of seedLadderPx(lb.bbox)) {
+        // the sealed engine at each ladder rung — floodAtSeed, the ONE entry
+        // point every non-canvas surface floods through (web detectRooms.ts),
+        // so a batch detection and a canvas click at the same seed can never
+        // measure different square footage again
+        const f = floodAtSeed(mask, probe[0], probe[1], opts.sensitivity ?? SENS_BALANCED, sweepMppf);
+        if (f.status !== "ok") continue;
+        // raster trace differences mirror oneClick (#154): looser eps, no snap
+        const r = raster
+          ? traceRegion(f, RASTER_RDP_EPS)
+          : snapVertices(traceRegion(f), (px, py, d) => (s.snap ? nearestSnap(s.snap, px, py, d) : null), SNAP_TOL);
+        if (r.length < 3) { sawDegenerate = true; continue; }
+        if (isLabelBubblePx(r as [number, number][], lb.bbox)) { sawBubble = true; continue; }
+        // harvest the scalar evidence now; the region bitmap goes with `f`
+        ring = r; ev = Session.floodEvidence(f, raster, sweepMppf); seed = probe;
+        break;
+      }
+      if (!ring || !ev || !seed) {
+        if (sawBubble) withheld.bubble++;            // only its own bubble ever flooded clean
+        else if (sawDegenerate) withheld.degenerate++;
+        // a label with no clean flood at any probe simply isn't counted as a
+        // seed that traced — same as the historical single-seed gate
+        continue;
+      }
+      const key = ring.map(([x, y]) => `${Math.round(x)},${Math.round(y)}`).join(";");
+      const seen = byRing.get(key);
+      if (seen) { seen.merged.push(lb.str); withheld.duplicate++; continue; }
+      const cand: Cand = {
+        label: lb.str, ring, areaPx2: ringArea(ring), perimPx: closedMetrics(ring).perim,
+        seed, ev, merged: [],
+      };
+      byRing.set(key, cand);
+      order.push(cand);
+    }
+
+    const upp = s.upp;
+    const rooms = order
+      .map((c) => {
+        if (upp == null) {
+          // px-only preview — the engine account still rides (see oneClick)
+          return {
+            label: c.label,
+            nverts: c.ring.length,
+            ...(c.merged.length ? { merged_labels: c.merged } : {}),
+            ...Session.floodStamp(c.ev),
+            ...(opts.returnVerts ? { verts: c.ring.map(([vx, vy]) => [round1(vx), round1(vy)]) } : {}),
+            area_px2: round1(c.areaPx2), perimeter_px: round1(c.perimPx),
+          };
+        }
+        const area_sf = round2(c.areaPx2 * upp * upp);
+        if (area_sf < minAreaSf) { withheld.implausible++; return null; }
+        const perimeter_lf = round2(c.perimPx * upp);
+        // the same stamp commit() mints onto origin (floodStamp — confidence,
+        // sealed openings, door wedges, min-passage, raster), per room
+        const common = {
+          label: c.label,
+          nverts: c.ring.length,
+          ...(c.merged.length ? { merged_labels: c.merged } : {}),
+          ...Session.floodStamp(c.ev, area_sf),
+          ...(opts.returnVerts ? { verts: c.ring.map(([vx, vy]) => [round1(vx), round1(vy)]) } : {}),
+        };
+        // schedule resolution runs AFTER the geometric gates: a bubble is
+        // reported as a bubble, and an unresolved room still reports its real
+        // area — withheld, never dropped, with the seed that turns "ask the
+        // estimator" into "one_click here" once they answer.
+        let tag = opts.condition;
+        let assignment: ShapeOrigin["assignment"];
+        if (assign) {
+          const hit = this.floorTagFor(graph!, c.label);
+          if ("reason" in hit) {
+            withheld.unresolved++;
+            unresolved.push({ label: c.label, reason: hit.reason, area_sf, perimeter_lf, seed: [round1(c.seed[0]), round1(c.seed[1])] });
+            return null;
+          }
+          tag = hit.tag;
+          assignment = { source: "schedule", room_tag: c.label, surface: "FLOOR", schedule_sheet: hit.sheet };
+        }
+        let shape_id: string | undefined;
+        if (tag) {
+          // flood provenance + confidence stamp centrally in commit() from
+          // the harvested evidence — nothing hand-listed here (audit A2)
+          const shape = this.commit(s, tag, opts.role, c.ring, { area_sf, perimeter_lf }, {
+            method: "one_click_v1",
+            actor: "agent",
+            seed_norm: [c.seed[0] / s.widthPx, c.seed[1] / s.heightPx],
+            reviewed: false,
+            ...(assignment ? { assignment } : {}),
+          }, c.ev);
+          // The room number this ring was traced FROM becomes the shape's
+          // label — the same field the canvas's room/phase grouping reads. A
+          // sweep that knows it flooded room 134 and then reports 40 anonymous
+          // areas has thrown away the one thing that makes the total auditable
+          // room by room, and no downstream reader can recover it.
+          shape.label = c.label;
+          shape_id = shape.id;
+        }
+        return { ...common, area_sf, perimeter_lf, ...(shape_id ? { shape_id, condition: tag } : {}) };
+      })
+      .filter((r): r is NonNullable<typeof r> => r !== null);
+
+    this.flushCommits("detect_rooms"); // the whole sweep is one reversible step
+    // each assign run REPLACES the disclosure state: the marked set reports
+    // the latest sweep's unresolved rooms, and only those (export-time
+    // staleness drops any the agent has since committed by hand)
+    if (assign) {
+      this.scheduleWithheld = unresolved.map((u) => ({
+        sheet_id: s.key, label: u.label, reason: u.reason,
+        seed_norm: [u.seed[0] / s.widthPx, u.seed[1] / s.heightPx] as [number, number],
+      }));
+    }
+    const withheldTotal = withheld.degenerate + withheld.duplicate + withheld.bubble + withheld.implausible + withheld.unresolved;
+    return {
+      detected: rooms.length,
+      rooms,
+      withheld: {
+        total: withheldTotal,
+        ...withheld,
+        ...(upp != null ? { min_area_sf: minAreaSf } : {}),
+      },
+      // assign mode always states the answer, empty array included: [] is the
+      // positive claim "every detected room resolved against its own row"
+      ...(assign ? { unresolved } : {}),
+      ...(s.detected?.multi ? { multiple_scales: true as const } : {}),
+      ...(withheldTotal
+        ? { note: `${withheldTotal} seed(s) withheld — ${withheld.duplicate} duplicate region(s), ${withheld.bubble} label-bubble(s), ${withheld.implausible} under ${minAreaSf} SF, ${withheld.degenerate} untraceable${assign ? `, ${withheld.unresolved} unresolved against the schedule (see unresolved[])` : ""}.` }
+        : {}),
+      ...(s.upp == null ? { warning: `No scale set for ${s.key} — quantities unavailable. Call set_scale${s.detected ? ` (detected: ${s.detected.label})` : ""}.` } : {}),
+    };
+  }
+
+  measurePolygon(name: string, verts: Point[], opts: { condition?: string; role: "floor_area" | "deduct" }) {
+    const s = this.sheet(name);
+    if (s.upp == null) throw new UserError(this.scaleGate(s));
+    const met = closedMetrics(verts);
+    const area_sf = round2(met.area * s.upp * s.upp);
+    const perimeter_lf = round2(met.perim * s.upp);
+    let shape_id: string | undefined;
+    // agent-supplied coordinates are a hand trace by a machine hand: manual
+    // method, agent actor — and never reviewed (no human affirmed anything).
+    if (opts.condition) shape_id = this.commit(s, opts.condition, opts.role, verts, { area_sf, perimeter_lf }, { method: "manual", actor: "agent" }).id;
+    this.flushCommits("measure_polygon");
+    const mixed = this.scaleWarningFor(s, verts);
+    return { area_sf, perimeter_lf, nverts: verts.length, ...(shape_id ? { shape_id } : {}), ...(mixed ? { warning: mixed } : {}) };
+  }
+
+  measureLine(name: string, pts: Point[], opts: { condition?: string }) {
+    const s = this.sheet(name);
+    if (s.upp == null) throw new UserError(this.scaleGate(s));
+    const length_lf = round2(openLen(pts) * s.upp);
+    let shape_id: string | undefined;
+    // area_sf stays 0 — the canvas only mints border SF when the condition has a thickness
+    if (opts.condition) shape_id = this.commit(s, opts.condition, "linear", pts, { area_sf: 0, perimeter_lf: length_lf }, { method: "manual", actor: "agent" }).id;
+    this.flushCommits("measure_line");
+    return { length_lf, npts: pts.length, ...(shape_id ? { shape_id } : {}) };
+  }
+
+  /** Surface Area — the canvas's Surface tool (commitSurface): an OPEN run
+   * traced along the wall in plan view, quantified as traced LF × height.
+   * Height lives on the CONDITION (the canvas's H knob); an explicit height_ft
+   * here writes that knob first, exactly like typing H before tracing — and
+   * that write journals as its own condition step, so undo stays exact.
+   * The refusal path mints nothing: no height, no condition side effects. */
+  measureSurface(name: string, pts: Point[], opts: { condition: string; height_ft?: number }) {
+    const s = this.sheet(name);
+    if (s.upp == null) throw new UserError(this.scaleGate(s));
+    const existing = this.conditions.find((x) => x.finish_tag === opts.condition);
+    const h = opts.height_ft ?? (Number(existing?.height_ft) || 0);
+    if (!(h > 0)) {
+      throw new UserError(`Set a height for ${opts.condition} first — Surface Area = traced LF × height. Pass height_ft on this call, or set it with edit_condition.`);
+    }
+    const c = this.conditionFor(opts.condition);
+    if (opts.height_ft !== undefined && c.height_ft !== opts.height_ft) {
+      this.record({ op: "condition", tool: "measure_surface", condition_id: c.id, before: { waste_pct: c.waste_pct, multiplier: c.multiplier, height_ft: c.height_ft } });
+      c.height_ft = opts.height_ft;
+    }
+    const LF = openLen(pts) * s.upp;
+    const shape = this.commit(s, opts.condition, "surface_area", pts, { area_sf: round2(LF * h), perimeter_lf: round2(LF) }, { method: "manual", actor: "agent" });
+    shape.height_ft = h;
+    this.flushCommits("measure_surface");
+    return { condition: c.finish_tag, height_ft: h, length_lf: round2(LF), area_sf: round2(LF * h), npts: pts.length, shape_id: shape.id };
+  }
+
+  /** derive_base (#148): the estimator's most mechanical derivation — wall
+   * base LF = room perimeter − stated door openings — minted as committed
+   * linear shapes from the floor shapes an agent (or detect_rooms) already
+   * traced. Every committed floor shape carries its perimeter; the openings
+   * stay the CALLER'S stated claim per room (it can see the doors in
+   * view_sheet) — refusal over guessing, and the claim rides provenance.
+   * Geometry: each base shape re-uses its source ring CLOSED (ring + the
+   * first vertex again) so the run traces the whole room boundary on the
+   * canvas and in the marked set. NOTE: quantities are assigned at derive
+   * time (net of openings); a later edit_shape re-measure of the polyline is
+   * the gross boundary again — the openings deduction lives here and in
+   * origin.derived, not in the geometry. */
+  deriveBase(opts: { source_condition: string; condition: string; openings?: { shape_id: string; lf: number }[] }) {
+    const src = this.conditions.find((x) => x.finish_tag === opts.source_condition);
+    if (!src) {
+      throw new UserError(`No condition ${JSON.stringify(opts.source_condition)} — tags: ${this.conditions.map((x) => x.finish_tag).join(", ") || "(none)"}.`);
+    }
+    if (opts.condition === opts.source_condition) {
+      throw new UserError("Base must land on its OWN condition (e.g. 'RB-1') — deriving onto the source would add its perimeter to the same tag's LF.");
+    }
+    const floors = this.shapes.filter((x) => x.condition_id === src.id && x.measure_role === "floor_area");
+    if (!floors.length) {
+      throw new UserError(`${src.finish_tag} has no floor_area shapes to derive from — commit rooms first (one_click / detect_rooms).`);
+    }
+    const byShape = new Map<string, number>();
+    for (const [i, o] of (opts.openings ?? []).entries()) {
+      const hit = floors.find((f) => f.id === o.shape_id);
+      if (!hit) throw new UserError(`openings[${i}]: ${JSON.stringify(o.shape_id)} is not a floor_area shape of ${src.finish_tag} — list_shapes for real ids.`);
+      if (!(o.lf >= 0)) throw new UserError(`openings[${i}]: lf must be >= 0.`);
+      byShape.set(o.shape_id, (byShape.get(o.shape_id) ?? 0) + o.lf);
+    }
+    // validate every net BEFORE committing anything — all-or-nothing
+    for (const f of floors) {
+      const open = byShape.get(f.id) ?? 0;
+      const gross = f.computed.perimeter_lf ?? 0;
+      if (open >= gross) {
+        throw new UserError(`Shape ${f.id}: stated openings (${round2(open)} LF) meet or exceed its perimeter (${round2(gross)} LF) — nothing would remain.`);
+      }
+    }
+    const rooms = floors.map((f) => {
+      const s = this.sheet(f.sheet_id);
+      const gross = f.computed.perimeter_lf ?? 0;
+      const open = byShape.get(f.id) ?? 0;
+      const net = round2(gross - open);
+      const ringPx: Point[] = f.verts_norm.map(([x, y]) => [x * s.widthPx, y * s.heightPx]);
+      const shape = this.commit(s, opts.condition, "linear", [...ringPx, ringPx[0]], { area_sf: 0, perimeter_lf: net }, {
+        method: "agent_v1",
+        actor: "agent",
+        reviewed: false,
+        derived: { from_shape_id: f.id, gross_lf: round2(gross), openings_lf: round2(open) },
+      });
+      return { source_shape_id: f.id, base_shape_id: shape.id, sheet: f.sheet_id, gross_lf: round2(gross), openings_lf: round2(open), net_lf: net };
+    });
+    this.flushCommits("derive_base");
+    return {
+      condition: opts.condition,
+      source_condition: src.finish_tag,
+      rooms,
+      committed: rooms.length,
+      total_lf: round2(rooms.reduce((n, r) => n + r.net_lf, 0)),
+      note: "Base runs trace each room's boundary; openings are your stated claim, recorded on origin.derived. Verify with view_sheet overlay:true.",
+    };
+  }
+
+  /** apply_rules (#207): re-run the correction rules an estimator taught the
+   * canvas (#88). Rules arrive with import_takeoff — they are never minted
+   * here, because a rule IS an estimator's correction by definition and the
+   * v1 predicate's known label-box false-positive stays safe behind the
+   * canvas's human Preview→Apply gate. Evaluation is the same pure rules.ts
+   * engine the canvas Preview runs; the commit is the one batch the canvas's
+   * Apply makes (ONE journal entry, undo_last takes it all back). Everything
+   * lands reviewed: false — this server has no review gate — and the reply's
+   * per-rule disclosure IS the preview an agent gets. Idempotent by
+   * construction: the engine drops any candidate an existing deduct already
+   * covers, and rule N's mints are rule N+1's dedup targets, exactly like
+   * consecutive Applies on the canvas. */
+  async applyRules(opts: { sheet?: string } = {}) {
+    if (!this.rules.length) {
+      throw new UserError("No rules in this session — rules ride import_takeoff from a canvas file (an estimator's taught corrections, #88). Minting new rules is the canvas's job; this verb only re-runs what a human already taught.");
+    }
+    const activeCondIds = new Set(this.rules.filter((r) => r.active).map((r) => r.seed_condition_id));
+    const sheetKeys = opts.sheet
+      ? [this.sheet(opts.sheet).key]
+      : [...new Set(this.shapes
+          .filter((x) => x.measure_role === "floor_area" && activeCondIds.has(x.condition_id))
+          .map((x) => x.sheet_id))];
+    const skipped_sheets: { sheet_id: string; reason: "no_scale" | "no_vector_mask" }[] = [];
+    const sheetData = new Map<string, SheetRuleData>();
+    for (const key of sheetKeys) {
+      const s = this.sheet(key);
+      if (!(s.upp && s.upp > 0)) { skipped_sheets.push({ sheet_id: key, reason: "no_scale" }); continue; }
+      const mask = await this.ensureMask(key);
+      if (!mask) { skipped_sheets.push({ sheet_id: key, reason: "no_vector_mask" }); continue; }
+      sheetData.set(key, { mask, upp: s.upp, imgW: s.widthPx, imgH: s.heightPx });
+    }
+    const rulesOut: { rule_id: string; label: string; condition: string; produced: number; shape_ids: string[]; deduct_sf: number }[] = [];
+    const skipped_rules: { rule_id: string; label: string; reason: "inactive" | "condition_not_in_session" }[] = [];
+    for (const rule of this.rules) {
+      if (!rule.active) { skipped_rules.push({ rule_id: rule.id, label: rule.label, reason: "inactive" }); continue; }
+      const cond = this.conditions.find((c) => c.id === rule.seed_condition_id);
+      if (!cond) { skipped_rules.push({ rule_id: rule.id, label: rule.label, reason: "condition_not_in_session" }); continue; }
+      const candidates = applyRuleToProject(rule, this.shapes as RuleShape[], sheetData);
+      const ids: string[] = [];
+      let sf = 0;
+      for (const cand of candidates) {
+        const d = sheetData.get(cand.sheet_id)!;
+        const vertsPx: Point[] = cand.verts_norm.map(([nx, ny]) => [nx * d.imgW, ny * d.imgH]);
+        const shape = this.commit(this.sheet(cand.sheet_id), cond.finish_tag, "deduct", vertsPx,
+          { area_sf: cand.area_sf, perimeter_lf: round2(closedMetrics(vertsPx).perim * d.upp) }, {
+            method: "rule_v1",
+            actor: "rule",
+            reviewed: false,
+            rule_id: rule.id,
+            seed_shape_id: rule.seed_shape_id,
+            container_shape_id: cand.container_shape_id,
+          });
+        ids.push(shape.id);
+        sf += cand.area_sf;
+      }
+      // canvas semantics (applyStagedRule): the audit trail is the LAST run's
+      // mints — a re-run that produced nothing leaves the prior trail standing
+      if (ids.length) rule.applied_to = ids;
+      rulesOut.push({ rule_id: rule.id, label: rule.label, condition: cond.finish_tag, produced: ids.length, shape_ids: ids, deduct_sf: round2(sf) });
+    }
+    this.flushCommits("apply_rules");
+    const committed = rulesOut.reduce((n, r) => n + r.produced, 0);
+    return {
+      rules: rulesOut,
+      committed,
+      total_deduct_sf: round2(rulesOut.reduce((n, r) => n + r.deduct_sf, 0)),
+      skipped_rules,
+      skipped_sheets,
+      note: committed
+        ? "One batch, one undo step, everything reviewed: false — this disclosure is your preview; verify with view_sheet overlay:true. Re-running is idempotent: anything a deduct already covers is dropped by the engine."
+        : "No new candidates — every match is already covered by an existing deduct (re-running is idempotent by construction), or the rules' rooms are not on the evaluated sheets.",
+    };
+  }
+
+  /** cut_out (#206): a REAL hole, reconciled the way the canvas cuts one
+   * (#137) — the same lib/cutout.js boolean subtract, so a headless session
+   * and the app can never disagree about what a hole holds. The parent's
+   * outer ring + existing holes minus the new ring lands back on the parent
+   * (verts_norm_holes + netted computed); the deduct commits carrying
+   * cuts_shape_id, so totals.js skips it (set subtraction — N cuts compose,
+   * overlap never double-deducts). One journal entry: undo_last restores
+   * parent and hole together. Refusal over guessing: a cut not FULLY inside
+   * the parent refuses (the canvas's edge-clip is a canvas affordance), and
+   * a subtract that erases or splits the parent refuses whole. */
+  cutOut(opts: { parent_shape_id: string; verts: Point[] }) {
+    const parent = this.shapes.find((x) => x.id === opts.parent_shape_id);
+    if (!parent) throw new UserError(`No shape with id ${JSON.stringify(opts.parent_shape_id)} — list_shapes for real ids.`);
+    if (parent.measure_role === "surface_area" || parent.measure_role === "linear") return this.cutRunOut(parent, opts.verts);
+    if (parent.measure_role !== "floor_area") {
+      throw new UserError(`cut_out subtracts from an area or clips a run — ${parent.id} is ${parent.measure_role}. A count marker has nothing to cut: delete_shape it.`);
+    }
+    if (parent.origin?.reviewed === true) {
+      throw new UserError(`Shape ${parent.id} was affirmed by a human — reviewed work is ink, and cutting a hole in it would mutate what the estimator signed. Commit an independent deduct with measure_polygon instead.`);
+    }
+    const s = this.sheet(parent.sheet_id);
+    if (s.upp == null) throw new UserError(this.scaleGate(s));
+    if (opts.verts.length < 3) throw new UserError(`A cut needs at least 3 vertices — got ${opts.verts.length}.`);
+    const upp = s.upp;
+    const toPx = (ring: [number, number][]): Point[] => ring.map(([nx, ny]) => [nx * s.widthPx, ny * s.heightPx]);
+    const toNorm = (ring: number[][]): [number, number][] => ring.map(([x, y]) => [x / s.widthPx, y / s.heightPx]);
+    const outerPx = toPx(parent.verts_norm);
+    if (!ringFullyInside(outerPx, opts.verts)) {
+      throw new UserError("The cut is not fully inside the parent's outer ring. The canvas resolves an edge-crossing cut as a boundary clip; over the wire the rule is refusal-over-guessing — reshape the parent with edit_shape, or commit an independent deduct with measure_polygon.");
+    }
+    const holesPx = (parent.verts_norm_holes ?? []).map(toPx);
+    const r = subtractCutout(outerPx, holesPx, opts.verts);
+    if (!r) {
+      throw new UserError("The subtract degenerates — this cut would erase the parent or split it into disjoint pieces. That is a re-trace decision, not a hole: measure_polygon the pieces as their own rooms.");
+    }
+    const parentPrev: CutoutParentPrev = {
+      verts_norm: parent.verts_norm.map((v) => [...v] as [number, number]),
+      ...(parent.verts_norm_holes ? { verts_norm_holes: parent.verts_norm_holes.map((h) => h.map((v) => [...v] as [number, number])) } : {}),
+      ...(parent.computed ? { computed: { ...parent.computed } } : {}),
+    };
+    const met = closedMetrics(opts.verts);
+    const deduct: Shape = {
+      id: uid("shp"),
+      sheet_id: s.key,
+      condition_id: parent.condition_id,
+      measure_role: "deduct",
+      verts_norm: opts.verts.map(([x, y]) => [x / s.widthPx, y / s.heightPx] as [number, number]),
+      // face value for the hover label — totals skip it, the parent nets it
+      computed: { area_sf: round2(met.area * upp * upp), perimeter_lf: round2(met.perim * upp) },
+      cuts_shape_id: parent.id,
+      origin: { method: "cutout_v1", actor: "agent", reviewed: false, cuts_shape_id: parent.id, parent_prev: parentPrev },
+    };
+    const prevNet = parentPrev.computed?.area_sf ?? 0;
+    parent.verts_norm = toNorm(r.outer);
+    parent.verts_norm_holes = r.holes.map(toNorm);
+    parent.computed = { area_sf: round2(r.area * upp * upp), perimeter_lf: round2(r.perim * upp) };
+    this.shapes.push(deduct);
+    this.record({ op: "cutout", tool: "cut_out", deduct_id: deduct.id, parent_id: parent.id, parent_prev: parentPrev });
+    return {
+      deduct_shape_id: deduct.id,
+      parent_shape_id: parent.id,
+      hole_sf: round2(Math.max(0, prevNet - (parent.computed.area_sf ?? 0))),
+      parent_net: { area_sf: parent.computed.area_sf ?? 0, perimeter_lf: parent.computed.perimeter_lf ?? 0 },
+      holes: parent.verts_norm_holes.length,
+      note: "The parent's computed nets the hole for real (boolean subtract, not arithmetic) — overlap with an earlier cut never double-deducts. One undo step restores parent and hole together; deleting the deduct later reverts the cut too.",
+    };
+  }
+
+  /** cut_out on an OPEN RUN — wall tile (surface_area) and base/transitions
+   * (linear) are polylines traced in plan, not polygons, so the ring CLIPS
+   * them instead of subtracting: what falls outside the ring survives, and a
+   * cut through the middle leaves the far side as its own shape. Quantities
+   * ride the surviving length, which is exact for both roles — wall SF is
+   * LF × height, a border's SF is LF × thickness. No deduct receipt is minted:
+   * there is no area for one to sit on, and totals would count it against the
+   * FLOOR, which is the bug that made this necessary. Refusal over guessing
+   * stays: a ring that misses, that swallows the run whole, or that lands on a
+   * curved run (whose verts are control points, not the line) refuses and says
+   * what to do instead. */
+  private cutRunOut(parent: Shape, verts: Point[]) {
+    if (parent.origin?.reviewed === true) {
+      throw new UserError(`Shape ${parent.id} was affirmed by a human — reviewed work is ink, and clipping it would mutate what the estimator signed.`);
+    }
+    if ((parent as { curved?: boolean }).curved) {
+      throw new UserError(`Shape ${parent.id} is a curved run — its vertices are control points, not the line itself, so clipping them would move the curve. Reshape it with edit_shape.`);
+    }
+    const s = this.sheet(parent.sheet_id);
+    if (s.upp == null) throw new UserError(this.scaleGate(s));
+    if (verts.length < 3) throw new UserError(`A cut needs at least 3 vertices — got ${verts.length}.`);
+    const upp = s.upp;
+    const runPx: Point[] = parent.verts_norm.map(([nx, ny]) => [nx * s.widthPx, ny * s.heightPx]);
+    const r = cutRun(runPx, verts);
+    if (!r) {
+      throw new UserError(`The cut does not cross ${parent.id} — nothing came off it. view_sheet the run's coordinates and place the ring over the stretch you mean to remove.`);
+    }
+    if (r.kind === "erased") {
+      throw new UserError(`That ring covers the whole of ${parent.id}. Removing a run outright is delete_shape, not a cut.`);
+    }
+    const target_prev: CutoutParentPrev = {
+      verts_norm: parent.verts_norm.map((v) => [...v] as [number, number]),
+      ...(parent.computed ? { computed: { ...parent.computed } } : {}),
+    };
+    const wasLf = parent.computed?.perimeter_lf ?? 0;
+    const wasSf = parent.computed?.area_sf ?? 0;
+    const qty = (lenPx: number) => {
+      const lf = round2(lenPx * upp);
+      const k = wasLf > 0 ? lf / wasLf : 0;
+      return { area_sf: round2(wasSf * k), perimeter_lf: lf };
+    };
+    const toNorm = (run: number[][]): [number, number][] => run.map(([x, y]) => [x / s.widthPx, y / s.heightPx]);
+    const survivors = r.runs ?? [];
+    const [head, ...rest] = survivors;
+    if (!head) throw new UserError(`That ring covers the whole of ${parent.id}. Removing a run outright is delete_shape, not a cut.`);
+    parent.verts_norm = toNorm(head);
+    parent.computed = qty(openLen(head));
+    const minted: Shape[] = rest.map((piece) => ({
+      ...structuredClone(parent),
+      id: uid("shp"),
+      verts_norm: toNorm(piece),
+      computed: qty(openLen(piece)),
+    }));
+    this.shapes.push(...minted);
+    this.record({ op: "runcut", tool: "cut_out", target_id: parent.id, target_prev, minted_ids: minted.map((m) => m.id) });
+    const pieces = [parent, ...minted].map((x) => ({ shape_id: x.id, lf: x.computed.perimeter_lf ?? 0, sf: x.computed.area_sf ?? 0 }));
+    return {
+      shape_id: parent.id,
+      measure_role: parent.measure_role,
+      pieces,
+      removed_lf: round2(Math.max(0, wasLf - pieces.reduce((n, p) => n + p.lf, 0))),
+      removed_sf: round2(Math.max(0, wasSf - pieces.reduce((n, p) => n + p.sf, 0))),
+      note: minted.length
+        ? `The cut fell inside the run, so it comes back in ${pieces.length} pieces — same condition, same height, each measured on its own. One undo_last puts the run back whole.`
+        : "The run keeps its id and its condition; only its length (and the SF that rides on it) changed. One undo_last puts it back whole.",
+    };
+  }
+
+  /** The canvas's cutoutParentPrevSans, ported verbatim in spirit (#206 —
+   * "the canvas's answer is the spec"): rebuilding a multi-cut parent after
+   * ONE cut is deleted starts from the chain's EARLIEST pristine snapshot and
+   * re-subtracts every survivor in commit order. Null when the rebuild can't
+   * be trusted — the caller falls back to a plain delete that leaves the cut
+   * baked in, never reverts over survivors. */
+  private cutoutParentPrevSans(doomed: Shape): CutoutParentPrev | null {
+    const chain = this.shapes.filter((x) => x.cuts_shape_id === doomed.cuts_shape_id && x.origin?.parent_prev);
+    const rest = chain.filter((x) => x.id !== doomed.id);
+    if (!rest.length) return doomed.origin!.parent_prev!;
+    const parent = this.shapes.find((x) => x.id === doomed.cuts_shape_id)!;
+    const s = this.sheet(parent.sheet_id);
+    if (s.upp == null) return null;
+    const upp = s.upp;
+    const px = (ring: [number, number][]): Point[] => ring.map(([nx, ny]) => [nx * s.widthPx, ny * s.heightPx]);
+    const base = chain[0].origin!.parent_prev!;
+    const r = recomposeCutouts(px(base.verts_norm), (base.verts_norm_holes ?? []).map(px), rest.map((x) => px(x.verts_norm)));
+    if (!r) return null;
+    const norm = (ring: number[][]): [number, number][] => ring.map(([x, y]) => [x / s.widthPx, y / s.heightPx]);
+    return {
+      verts_norm: norm(r.outer),
+      ...(r.holes.length ? { verts_norm_holes: r.holes.map(norm) } : {}),
+      computed: { area_sf: round2(r.area * upp * upp), perimeter_lf: round2(r.perim * upp) },
+    };
+  }
+
+  /** Write a cutout snapshot back onto a parent — the one place the restore
+   * shape is defined, used by undo and by delete's revert. */
+  private static restoreCutoutSnapshot(p: Shape, snap: CutoutParentPrev): void {
+    p.verts_norm = snap.verts_norm.map((v) => [...v] as [number, number]);
+    if (snap.verts_norm_holes) p.verts_norm_holes = snap.verts_norm_holes.map((h) => h.map((v) => [...v] as [number, number]));
+    else delete p.verts_norm_holes;
+    if (snap.computed) p.computed = { ...snap.computed };
+  }
+
+  /** Mint the transition where two finishes meet (#202) — the derivation that
+   * follows derive_base, and the one an estimator draws by hand on every job.
+   *
+   * The geometry lives in web/src/lib/transitions.ts, and its headline is that
+   * flood-traced rooms DO NOT SHARE EDGES: a partition puts four to eight
+   * inches between two rings, so what is actually there is proximity, in two
+   * flavours that mean different things. A BUTT JOINT (the rings run together
+   * inside one open space) is the transition, and commits. A WALL-SEPARATED run
+   * means the rooms are adjacent across a partition — the transition there is a
+   * threshold in the DOORWAY, and nothing in the trace record says where the
+   * doorway is: the flood engine seals openings and reports only how much
+   * boundary it synthesised, never where. Committing thirty-four feet of
+   * threshold because two rooms share thirty-four feet of wall would be a wrong
+   * bid with a machine's confidence behind it, so those come back in
+   * `withheld` — length, gap, and a point to look at — as questions.
+   *
+   * All-or-nothing like derive_base: unknown tags, a transition landing on
+   * either source tag, or an unscaled sheet refuses the whole call before
+   * anything commits. The sweep is ONE journal gesture. */
+  deriveTransitions(opts: { condition_a: string; condition_b: string; condition: string; max_gap_in?: number; min_run_in?: number }) {
+    const findCond = (tag: string) => {
+      const c = this.conditions.find((x) => x.finish_tag === tag);
+      if (!c) throw new UserError(`No condition ${JSON.stringify(tag)} — tags: ${this.conditions.map((x) => x.finish_tag).join(", ") || "(none)"}.`);
+      return c;
+    };
+    const a = findCond(opts.condition_a), b = findCond(opts.condition_b);
+    if (a.id === b.id) throw new UserError("condition_a and condition_b must be different finishes — a tag does not transition to itself.");
+    if (opts.condition === a.finish_tag || opts.condition === b.finish_tag) {
+      throw new UserError(`The transition must land on its OWN tag (e.g. 'T-1') — committing onto ${opts.condition} would add its LF to one of the finishes it separates.`);
+    }
+    const maxGapIn = opts.max_gap_in ?? 12;
+    const minRunIn = opts.min_run_in ?? 12;
+    if (!(maxGapIn > 0)) throw new UserError("max_gap_in must be > 0.");
+    if (!(minRunIn > 0)) throw new UserError("min_run_in must be > 0.");
+
+    const floors = (c: typeof a) => this.shapes.filter((x) => x.condition_id === c.id && x.measure_role === "floor_area");
+    const fa = floors(a), fb = floors(b);
+    for (const [tag, list] of [[a.finish_tag, fa], [b.finish_tag, fb]] as const) {
+      if (!list.length) throw new UserError(`${tag} has no floor_area shapes to derive from — commit rooms first (one_click / detect_rooms).`);
+    }
+    // a run is only measurable in FEET, so every sheet in play needs its scale
+    // before anything is compared — the derive_base refusal, one step earlier
+    const sheetsInPlay = [...new Set([...fa, ...fb].map((s) => s.sheet_id))];
+    for (const key of sheetsInPlay) {
+      const s = this.sheet(key);
+      if (s.upp == null) throw new UserError(`${key} has no scale — a transition is a real length, so set_scale first (${this.scaleGate(s)})`);
+    }
+
+    // the sheet/pair sweep, the sampling opts and the butt-vs-wall decision are
+    // deriveTransitionRuns' — one orchestration, driven by the canvas and this
+    // verb alike (the #208 fold). This side keeps the store: refusals above,
+    // the journal commit below, and the wire rows the schema promises.
+    const frames = new Map<string, SheetFrame>();
+    for (const key of sheetsInPlay) {
+      const s = this.sheet(key);
+      frames.set(key, { widthPx: s.widthPx, heightPx: s.heightPx, upp: s.upp! });
+    }
+    const src = (sh: typeof fa[number]): TransitionSourceShape => ({ id: sh.id, sheet_id: sh.sheet_id, verts_norm: sh.verts_norm });
+    const derived = deriveTransitionRuns(
+      { tag: a.finish_tag, shapes: fa.map(src) },
+      { tag: b.finish_tag, shapes: fb.map(src) },
+      frames,
+      { max_gap_in: maxGapIn, min_run_in: minRunIn },
+    );
+
+    const committed: any[] = [], withheld: any[] = [];
+    for (const w of derived.withheld) {
+      withheld.push({
+        sheet: w.sheet_id, between_shape_ids: w.between_shape_ids, length_lf: w.length_lf, gap_in: w.gap_in, at: w.at,
+        reason: "wall_separated",
+        detail: `${a.finish_tag} and ${b.finish_tag} run ${w.length_lf} LF apart across ${w.gap_in}" of wall — adjacent rooms, not a butt joint. If a door opens here the transition is a threshold at the door, which this cannot see.`,
+      });
+    }
+    for (const r of derived.runs) {
+      const s = this.sheet(r.sheet_id);
+      const pathPx = r.verts_norm.map(([x, y]) => [x * s.widthPx, y * s.heightPx] as Point);
+      const shape = this.commit(s, opts.condition, "linear", pathPx, { area_sf: 0, perimeter_lf: r.length_lf }, {
+        method: "agent_v1",
+        actor: "agent",
+        reviewed: false,
+        derived: { between_shape_ids: r.between_shape_ids, between: [a.finish_tag, b.finish_tag], case: "butt", gap_in: r.gap_in },
+      });
+      committed.push({ sheet: r.sheet_id, between_shape_ids: r.between_shape_ids, length_lf: r.length_lf, gap_in: r.gap_in, at: r.at, shape_id: shape.id });
+    }
+    if (committed.length) this.flushCommits("derive_transitions");
+    return {
+      condition: opts.condition,
+      between: [a.finish_tag, b.finish_tag],
+      committed: committed.length,
+      total_lf: round2(committed.reduce((n, r) => n + r.length_lf, 0)),
+      runs: committed,
+      withheld,
+      withheld_lf: round2(withheld.reduce((n, r) => n + r.length_lf, 0)),
+      note: withheld.length
+        ? `${withheld.length} run(s) are adjacency ACROSS A WALL, not a butt joint — the transition there is a threshold in the doorway, and the trace record does not say where the doorway is. view_sheet each \`at\` and place them with measure_line / place_count.`
+        : "Every run was a butt joint inside one open space. Verify with view_sheet overlay:true before trusting the total.",
+    };
+  }
+
+  /** Count markers — the canvas's Count tool (commitCount): one point, one EA,
+   * computed {count: 1}, NO scale required (EA is scale-free; the canvas's
+   * recompute skips count shapes for the same reason). One shape per point,
+   * the whole call one journal gesture — undoing a placement sweep is one step,
+   * matching detect_rooms.
+   *
+   * `origins` (optional, aligned with points) lets a derived tool commit
+   * through this same path while telling the truth about the method —
+   * symbol_sweep stamps `{method: "symbol_sweep", …, symbol: {score, …}}` per
+   * marker; a bare place_count stays exactly the manual agent gesture it is. */
+  /** count_marks — the deterministic census, the whole count takeoff in ONE
+   * call: every VALUE-ANNOTATED mark tag on the plan sheets, counted per
+   * schedule mark, committed as EA markers, residue disclosed.
+   *
+   * The identity rule is the annotated-device drafting pattern: a device is
+   * drawn with its mark tag and a value under it ("S1" over "200" — CFM, GPM,
+   * a fixture count) OR beside it in a two-cell box row ("CD-1 | 85" — real,
+   * found live on the baker-county-eoc corpus: a boxed callout with a size
+   * on its own top row and TAG/VALUE side by side on the row below, same
+   * baseline, real MEASURED gap ~1.1x the text height on every instance
+   * checked). Both are real, common drafting conventions, not a guess —
+   * every previously-live-observed "withheld" real device on this exact
+   * corpus turned out to be this second, horizontal shape once rendered and
+   * looked at directly, not a genuinely unvalued tag. Tag text WITH a paired
+   * value (either direction) counts; a tag inside a schedule table's own
+   * region is a row label and is excluded; everything else is WITHHELD with
+   * a reason and coordinates — a tag amid linework but unvalued may be a
+   * real device (look), a bare tag is probably a note. A mark drawn ON its
+   * marker with no value is sweep_schedule_row's family, not this one.
+   * Refusal-honest throughout: scans refuse (no text layer), a set with no
+   * mark-shaped schedule rows refuses unless the marks are stated, and
+   * non-plan sheets are skipped with the role that excused them. */
+  async countMarks(opts: { marks?: string[]; commit?: boolean } = {}) {
+    const graph = await this.ensureGraph();
+    if (!graph.available) {
+      throw new UserError("This set has no text layer (a scan) — the census reads drawn tag text, so it cannot run. Marquee one device with symbol_sweep instead.");
+    }
+    const canon = (k: string) => (k || "").trim().toUpperCase().replace(/\s+/g, "");
+    const MARK_RE = /^[A-Z]{1,3}-?\d{1,3}[A-Z]?$/;
+
+    // mark vocabulary: stated, or read off the schedule tables' row keys —
+    // a compound key ("R1 / E1") contributes each of its marks
+    type RowCite = { sheet: string; key: string; table: string };
+    const rowCite = new Map<string, RowCite>();
+    for (const tb of graph.tables) {
+      const table = tb.title?.text || `${tb.kind} schedule`;
+      for (const row of tb.rows) {
+        for (const part of canon(row.key).split("/").filter(Boolean)) {
+          if (!rowCite.has(part)) rowCite.set(part, { sheet: tb.sheet, key: row.key, table });
+        }
+      }
+    }
+    let marks: string[];
+    if (opts.marks?.length) {
+      marks = [...new Set(opts.marks.map(canon).filter(Boolean))];
+    } else {
+      marks = [...rowCite.keys()].filter((k) => MARK_RE.test(k)).sort();
+      if (!marks.length) {
+        throw new UserError('No mark-shaped schedule row keys in the set to census — state the marks yourself: count_marks { marks: ["S1", "R1"] }.');
+      }
+    }
+
+    // plan-role sheets only (the sheet graph decides), skips disclosed
+    const roleOf = new Map(graph.sheets.map((g) => [g.key, g.role] as const));
+    const skipped: { sheet: string; role: string; reason: string }[] = [];
+    const planSheets: SheetState[] = [];
+    for (const sh of this.sheetList()) {
+      const role = roleOf.get(sh.key) ?? "unknown";
+      if (role === "plan") planSheets.push(sh);
+      else {
+        skipped.push({
+          sheet: sh.key, role,
+          reason: role === "unknown"
+            ? "role unknown (no classifiable title text) — tags here are not censused"
+            : `a ${role} sheet — tags here are reference text, never installed work`,
+        });
+      }
+    }
+    if (!planSheets.length) {
+      throw new UserError("No plan-role sheet in the set — the census counts installed work, and every sheet classified as schedule/legend/detail/unknown. sheet_graph shows each sheet's role and evidence.");
+    }
+
+    // a tag inside a schedule table's own region is that table's row label
+    const tableRegions = new Map<string, Bbox[]>();
+    for (const tb of graph.tables) {
+      const arr = tableRegions.get(tb.sheet) ?? [];
+      arr.push(tb.region);
+      tableRegions.set(tb.sheet, arr);
+    }
+
+    const VAL_RE = /^[0-9][0-9,]{0,6}$/;
+    type Hit = { at: Point; value: string; sheet: string };
+    type WithheldOcc = { at: Point; sheet: string; reason: string };
+    const perMark = new Map<string, { counted: Hit[]; withheld: WithheldOcc[] }>();
+    for (const m of marks) perMark.set(m, { counted: [], withheld: [] });
+    let excludedInTables = 0;
+    const perSheetRows: { sheet: string; counts: Record<string, number> }[] = [];
+
+    for (const sh of planSheets) {
+      if (!sh.spans) sh.spans = textSpans(sh.page);
+      const regions = tableRegions.get(sh.key) ?? [];
+      const values = sh.spans.filter((sp) => VAL_RE.test(sp.str.trim()));
+      const counts: Record<string, number> = {};
+      let segs: ArrayLike<number> | null = null; // lazy — only withheld occurrences look at linework
+      for (const m of marks) {
+        const rec = perMark.get(m)!;
+        for (const sp of sh.spans) {
+          if (canon(sp.str) !== m) continue;
+          const cx = (sp.x0 + sp.x1) / 2, cy = (sp.y0 + sp.y1) / 2;
+          const h = Math.max(sp.y1 - sp.y0, 6);
+          if (regions.some((r) => cx >= r[0] && cx <= r[2] && cy >= r[1] && cy <= r[3])) { excludedInTables++; continue; }
+          // Two real, distinct pairing shapes (see the function's own header
+          // comment): a value stacked BELOW the tag, or a value beside it on
+          // the SAME baseline in a two-cell box row ("CD-1 | 85" — real,
+          // measured on the baker-county-eoc corpus: y0 identical to the
+          // pixel on every real instance checked, gap ~1.1x the text height
+          // — 1.5h is a real, generous-but-bounded margin over that, not a
+          // guess).
+          const paired = values.find((v) =>
+            (Math.abs((v.x0 + v.x1) / 2 - cx) <= Math.max(sp.x1 - sp.x0, 1.5 * h) &&
+             v.y0 >= sp.y1 - 0.4 * h && v.y0 <= sp.y1 + 2.4 * h) ||
+            (Math.abs(v.y0 - sp.y0) <= 0.3 * h &&
+             v.x0 >= sp.x1 - 0.2 * h && v.x0 - sp.x1 <= 1.5 * h));
+          if (paired) {
+            rec.counted.push({ at: [round1(cx), round1(cy)], value: paired.str.trim(), sheet: sh.key });
+            counts[m] = (counts[m] || 0) + 1;
+          } else {
+            if (segs === null) segs = (await this.ensureGeometry(sh)).segs;
+            const pad = 2.5 * h;
+            const bx0 = sp.x0 - pad, by0 = sp.y0 - pad, bx1 = sp.x1 + pad, by1 = sp.y1 + pad;
+            let n = 0;
+            for (let i = 0; i + 3 < segs.length && n < 3; i += 4) {
+              if (segs[i] >= bx0 && segs[i] <= bx1 && segs[i + 1] >= by0 && segs[i + 1] <= by1 &&
+                  segs[i + 2] >= bx0 && segs[i + 2] <= bx1 && segs[i + 3] >= by0 && segs[i + 3] <= by1) n++;
+            }
+            rec.withheld.push({
+              at: [round1(cx), round1(cy)], sheet: sh.key,
+              reason: n >= 3
+                ? "tag amid linework but no paired value — may be a device labeled without one, or a legend/detail reference; look before counting it"
+                : "bare tag text — no paired value, no adjacent linework; likely a note mention, not an instance",
+            });
+          }
+        }
+      }
+      perSheetRows.push({ sheet: sh.key, counts });
+    }
+
+    // commit — every counted occurrence as one EA marker under its mark's own
+    // tag, the schedule citation on origin where a row answers for the mark;
+    // the WHOLE census is one undo step
+    const committedByMark: Record<string, { committed: number; ea_total: number }> = {};
+    if (opts.commit) {
+      for (const m of marks) {
+        const rec = perMark.get(m)!;
+        if (!rec.counted.length) continue;
+        const cite = rowCite.get(m);
+        let n = 0;
+        for (const occ of rec.counted) {
+          this.commit(this.sheet(occ.sheet), m, "count", [occ.at], { count: 1 }, {
+            method: "manual", actor: "agent", reviewed: false,
+            ...(cite ? { assignment: { source: "schedule", schedule_sheet: cite.sheet } } : {}),
+          });
+          n++;
+        }
+        const c = this.conditions.find((x) => x.finish_tag === m)!;
+        const ea_total = this.shapes
+          .filter((x) => x.condition_id === c.id && x.measure_role === "count")
+          .reduce((t2, x) => t2 + (x.computed.count || 1), 0);
+        committedByMark[m] = { committed: n, ea_total };
+      }
+      if (Object.keys(committedByMark).length) this.flushCommits("count_marks");
+    }
+
+    const cap = <T,>(a: T[], n: number): { list: T[]; elided: number } =>
+      a.length > n ? { list: a.slice(0, n), elided: a.length - n } : { list: a, elided: 0 };
+    return {
+      marks: marks.map((m) => {
+        const rec = perMark.get(m)!;
+        const cite = rowCite.get(m);
+        const c = cap(rec.counted, 150);
+        const w = cap(rec.withheld, 60);
+        return {
+          mark: m,
+          count: rec.counted.length,
+          ...(cite ? { row: cite } : { unscheduled: true }),
+          occurrences: c.list,
+          ...(c.elided ? { occurrences_elided: c.elided } : {}),
+          withheld: w.list,
+          ...(w.elided ? { withheld_elided: w.elided } : {}),
+          ...(committedByMark[m] ? { committed: committedByMark[m] } : {}),
+        };
+      }),
+      total: [...perMark.values()].reduce((n, r) => n + r.counted.length, 0),
+      per_sheet: perSheetRows,
+      ...(excludedInTables ? { excluded_in_tables: excludedInTables } : {}),
+      skipped,
+      complete: true,
+    };
+  }
+
+  /** #308 — resolve the drawing's own tag for a sweep's placements. Pure
+   * resolution lives in web/src/lib/symbollabels.ts (shared with the canvas
+   * Symbol tool, #264); this just lines the answers back up with the rows
+   * they belong to. */
+  private sweepLabels(spans: TextSpan[], geo: { segs: number[]; lum?: Uint8Array }, seedCenter: Point | null, matches: SweepMatch[], withheld: SweepWithheld[]) {
+    const centers: Point[] = [...(seedCenter ? [seedCenter as Point] : []), ...matches.map((m) => m.at), ...withheld.map((w) => w.at)];
+    const named = labelPlacements(centers, spans, geo.segs, geo.lum);
+    const off = seedCenter ? 1 : 0;
+    return {
+      seed: seedCenter ? named[0] : null,
+      matches: named.slice(off, off + matches.length),
+      withheld: named.slice(off + matches.length),
+    };
+  }
+
+  private static labelFields(l: PlacementLabel | null | undefined): { label?: string; label_via?: "adjacent" | "leader" } {
+    return l ? { label: l.label, label_via: l.via } : {};
+  }
+
+  /** The label findings worth a sentence, in both directions (#308): a match
+   * with no label in a labeled family is a shape-only count to look at; a
+   * withheld row carrying the seed's own tag is the drawing vouching for it;
+   * a withheld row carrying a different tag is a sibling fixture, answered. */
+  private static sweepLabelNote(lbl: { seed: PlacementLabel | null; matches: (PlacementLabel | null)[]; withheld: (PlacementLabel | null)[] }): string | null {
+    const parts: string[] = [];
+    const seedTag = lbl.seed?.label;
+    const anyLabeled = !!seedTag || lbl.matches.some(Boolean);
+    const unlabeledMatches = lbl.matches.filter((l) => !l).length;
+    if (anyLabeled && unlabeledMatches) {
+      parts.push(`${unlabeledMatches} committed match(es) carry NO label while this family is labeled${seedTag ? ` (the seed reads "${seedTag}")` : ""} — counted on shape alone; view_sheet them before trusting the total.`);
+    }
+    if (seedTag) {
+      const diffMatches = [...new Set(lbl.matches.filter((l): l is PlacementLabel => !!l && l.label !== seedTag).map((l) => l.label))];
+      if (diffMatches.length) parts.push(`Committed match(es) the drawing names differently (${diffMatches.join(", ")}) — the geometry matched but the tag disagrees; check they belong in this count, or exclude one as a counter-example.`);
+      const same = lbl.withheld.filter((l) => l && l.label === seedTag).length;
+      const others = [...new Set(lbl.withheld.filter((l): l is PlacementLabel => !!l && l.label !== seedTag).map((l) => l.label))];
+      if (same) parts.push(`${same} withheld placement(s) carry the seed's own tag "${seedTag}" — the drawing says they are real; look, then place_count.`);
+      if (others.length) parts.push(`Withheld placements the drawing names differently (${others.join(", ")}) are sibling fixtures, not missed counts.`);
+    }
+    return parts.length ? parts.join(" ") : null;
+  }
+
+  placeCount(name: string, points: Point[], opts: { condition: string; origins?: ShapeOrigin[]; tool?: string }) {
+    const s = this.sheet(name);
+    const ids = points.map(([x, y], i) =>
+      this.commit(s, opts.condition, "count", [[x, y]], { count: 1 },
+        opts.origins?.[i] ? { ...opts.origins[i] } : { method: "manual", actor: "agent" }).id);
+    this.flushCommits(opts.tool ?? "place_count");
+    const c = this.conditions.find((x) => x.finish_tag === opts.condition)!;
+    const ea_total = this.shapes
+      .filter((x) => x.condition_id === c.id && x.measure_role === "count")
+      .reduce((n, x) => n + (x.computed.count || 1), 0);
+    return { committed: ids.length, shape_ids: ids, condition: c.finish_tag, ea_total };
+  }
+
+  // sweepRatio (the seed→target size ratio for a cross-sheet sweep, #186) now
+  // lives as a shared pure function in symbolsweep.ts — same math, used by
+  // both this server and the browser's own port (the "canvas and MCP cannot
+  // disagree" doctrine). SheetState's `.upp` is exactly the shape it wants.
+
+  /** The refusal that has to fire before a detail-seeded sweep runs blind. A
+   * detail, legend, or schedule sheet is drawn at ITS own enlarged scale — a
+   * 1-1/2" = 1'-0" detail against a 1/8" plan is 12× — so sweeping it against
+   * the plans without the ratio searches for a symbol twelve times too large
+   * and reports a confident zero. Plan-to-plan is different and stays
+   * permissive: one set's plan sheets are drawn at one scale nearly always,
+   * and requiring set_scale there would break sweeps that work today. */
+  private requireCrossScale(seed: SheetState, seedRole: string, targets: SheetState[]): void {
+    if (seedRole === "plan") return;
+    const seen = new Set<string>();
+    const missing = [seed, ...targets].filter((sh) => !sh.upp && !seen.has(sh.key) && (seen.add(sh.key), true));
+    if (!missing.length) return;
+    const names = missing.map((sh) => sh.key);
+    throw new UserError(
+      `The seed sits on a ${seedRole} sheet (${seed.key}), which is drawn at its own enlarged scale — matching it against the plans needs BOTH scales stated, and ${names.length === 1 ? `${names[0]} has none` : `these have none: ${names.join(", ")}`}. ` +
+      `Sweeping without the ratio would search the plans for a symbol several times too large and report a confident zero, so it refuses instead. ` +
+      `Run set_scale on ${names.join(", ")} first${missing.some((sh) => sh.detected) ? ` (detected: ${missing.filter((sh) => sh.detected).map((sh) => `${sh.key} → ${sh.detected!.label}`).join(", ")})` : ""}, or marquee an instance drawn on a plan sheet itself and sweep with scope 'sheet'.`,
+    );
+  }
+
+  /** symbol_sweep — every placement of ONE example symbol, from the linework.
+   * The engine is pure (web/src/lib/symbolsweep.ts): fingerprint the seed
+   * rect's segments, propose placements by constellation anchoring under the
+   * square symmetry group, score each as the length-weighted fraction of seed
+   * segments reproduced within tolerance. This method is the plumbing plus
+   * the wire shapes: rect clamping, the scan refusal, and the commit path —
+   * match centers through the placeCount path (ONE undo step, EA scale-free),
+   * origins telling the truth (`method: "symbol_sweep"`, per-match
+   * score/transform), withheld placements NEVER committed.
+   *
+   * scope "set" (phase 2) sweeps the whole working set, restricted to
+   * PLAN-role sheets by the sheet graph: a symbol instance drawn in a detail,
+   * legend, or schedule is a reference drawing, not installed work, and must
+   * never count itself. The seed rect may sit on ANY sheet — marqueeing the
+   * assembly on a detail sheet is the estimator's own gesture — and a
+   * non-plan seed sheet serves as the fingerprint SOURCE while staying
+   * excluded from counting. Every excluded sheet is disclosed in `skipped`
+   * with its role and reason; per-sheet results carry their own match /
+   * withheld / cap accounting plus wall-clock elapsed_ms. The whole set-wide
+   * commit is ONE undo step: the gesture the agent made was "sweep the set",
+   * and taking it back should not require one undo per sheet. */
+  async symbolSweep(name: string, opts: {
+    seedRect: [Point, Point];
+    condition?: string;
+    commit?: boolean;
+    scope?: "sheet" | "set";
+    rotations?: boolean;
+    mirror?: boolean;
+    tolerancePx?: number;
+    variantGuard?: boolean;
+    exclude?: [Point, Point][];
+    luminanceTolerance?: number;
+    commitSeed?: boolean;
+  }) {
+    const s = this.sheet(name);
+    const scope = opts.scope ?? "sheet";
+    if (opts.commit && !opts.condition) {
+      throw new UserError("commit: true needs a condition — the finish tag the match markers count under (e.g. 'FD-1').");
+    }
+    // #296 — the seed is installed work in sheet scope, and the count that
+    // quietly excluded it read as a miss on a visual audit (four × on a plan
+    // with five drains). commit_seed opts it into the same batch; anywhere
+    // else it is a mistake worth naming.
+    if (opts.commitSeed && !opts.commit) {
+      throw new UserError("commit_seed: true needs commit: true — the seed joins the same one-undo-step batch as the matches.");
+    }
+    if (opts.commitSeed && scope === "set") {
+      throw new UserError("commit_seed applies to sheet scope only — in a set-wide sweep the seed may sit on a detail or legend sheet, where it is a reference drawing. If the seed instance is installed work, place_count it on its sheet explicitly.");
+    }
+    const geo = await this.ensureGeometry(s);
+    if (!geo.segs.length) {
+      throw new UserError("This sheet has no vector linework (likely a scan) — symbol matching reads the drawn segments; raster fallback not yet available in the MCP server.");
+    }
+    const clampX = (v: number) => Math.max(0, Math.min(v, s.widthPx));
+    const clampY = (v: number) => Math.max(0, Math.min(v, s.heightPx));
+    const rect: [Point, Point] = [
+      [clampX(opts.seedRect[0][0]), clampY(opts.seedRect[0][1])],
+      [clampX(opts.seedRect[1][0]), clampY(opts.seedRect[1][1])],
+    ];
+    if (!(Math.abs(rect[1][0] - rect[0][0]) >= 1 && Math.abs(rect[1][1] - rect[0][1]) >= 1)) {
+      throw new UserError(`Empty seed rect — need two distinct corners in image px inside the sheet (${s.widthPx} × ${s.heightPx}).`);
+    }
+    const sweepOpts: SweepOptions = {
+      rotations: opts.rotations ?? true,
+      mirror: opts.mirror ?? true,
+      tolPx: opts.tolerancePx ?? SWEEP_TOL_PX,
+      // whole-symbol mode: richer-variant placements demote to withheld;
+      // stands down inside the engine when negatives are in play. NOT wired
+      // for sweep_schedule_row — tag-text corroboration already discriminates
+      // variants there, and its matches still carry the `extra` disclosure.
+      ...(opts.variantGuard ? { variantGuard: true } : {}),
+      // #260 — the stated stroke-luminance gate. The tolerance travels in the
+      // shared opts; the CHANNEL is per target sheet, passed at each match.
+      ...(typeof opts.luminanceTolerance === "number" ? { lumTol: opts.luminanceTolerance } : {}),
+    };
+    let fp: SymbolFingerprint;
+    try {
+      fp = fingerprintSymbol(geo.segs, rect, geo.lum);
+    } catch (e) {
+      // the engine's refusals (empty marquee, region-sized marquee) are
+      // user-facing instructions, not crashes
+      throw new UserError(e instanceof Error ? e.message : String(e));
+    }
+    // #259 — counter-examples, read ONCE on the seed sheet. They travel with
+    // the fingerprint the same way it does: the engine resizes them by the
+    // same stated ratio on a cross-scale sheet, so "not this one" means the
+    // same thing on every sheet swept.
+    const negatives: SymbolNegative[] = [];
+    for (let i = 0; i < (opts.exclude ?? []).length; i++) {
+      const er = opts.exclude![i];
+      const nr: [Point, Point] = [
+        [clampX(er[0][0]), clampY(er[0][1])],
+        [clampX(er[1][0]), clampY(er[1][1])],
+      ];
+      const neg = buildNegative(fp, geo.segs, nr, sweepOpts);
+      if (!neg) {
+        // A negative that reads as nothing is worse than no negative: the
+        // estimator believes they excluded something. Refuse with the two
+        // reasons it can happen, in the marquee's own terms.
+        throw new UserError(`Counter-example ${i + 1} holds nothing that separates it from the seed. Either the seed symbol is not drawn inside that rect — a negative must be an instance of what you seeded PLUS whatever makes it not the one you mean — or the rect holds the very same symbol with nothing extra, which would reject every real match. Marquee the lookalike itself (the flush variant with its box, the keynote with its letter), or the empty position whose background line a real instance would break.`);
+      }
+      negatives.push(neg);
+    }
+
+    const seedOut = {
+      sheet: s.key,
+      segments: fp.segments,
+      center: [round1(fp.center[0]), round1(fp.center[1])] as [number, number],
+      rect: [round1(rect[0][0]), round1(rect[0][1]), round1(rect[1][0]), round1(rect[1][1])],
+      length_px: round1(fp.totalLen),
+    };
+
+    if (scope === "sheet") {
+      const res = matchSymbol(fp, geo.segs, { ...sweepOpts, lum: geo.lum, excludeCenter: fp.center, ...(negatives.length ? { negatives } : {}) });
+      // #308 — the drawing's own names. For a labeled family the sheet says
+      // what each placement IS (a tag written beside it, or connected by a
+      // leader); resolved as disclosure on every row, never a recount.
+      if (!s.spans) s.spans = textSpans(s.page);
+      const lbl = this.sweepLabels(s.spans, geo, fp.center, res.matches, res.withheld);
+      let committed: { committed: number; shape_ids: string[]; condition: string; ea_total: number } | undefined;
+      if (opts.commit && (res.matches.length || opts.commitSeed)) {
+        // #296 — commit_seed puts the seed instance first in the SAME batch:
+        // one undo step covers the whole gesture, seed included.
+        const points = [...(opts.commitSeed ? [fp.center] : []), ...res.matches.map((m) => m.at)];
+        const seedOrigin = {
+          method: "symbol_sweep" as const,
+          actor: "agent" as const,
+          reviewed: false,
+          symbol: { score: 1, rotation: 0, mirrored: false, seed: { source: "instance" as const, sheet: s.key } },
+        };
+        committed = this.placeCount(name, points, {
+          condition: opts.condition!,
+          tool: "symbol_sweep",
+          origins: [...(opts.commitSeed ? [seedOrigin] : []), ...res.matches.map((m) => ({
+            method: "symbol_sweep" as const,
+            actor: "agent" as const,
+            reviewed: false,
+            symbol: { score: m.score, rotation: m.rotation, mirrored: m.mirrored, seed: { source: "instance" as const, sheet: s.key } },
+          }))],
+        });
+      }
+      const labelNote = Session.sweepLabelNote(lbl);
+      return {
+        scope,
+        found: res.matches.length,
+        matches: res.matches.map((m, i) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.extra !== undefined ? { extra: m.extra } : {}), ...Session.labelFields(lbl.matches[i]) })),
+        withheld: res.withheld.map((w, i) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.extra !== undefined ? { extra: w.extra } : {}), ...Session.labelFields(lbl.withheld[i]), reason: w.reason })),
+        seed: { ...seedOut, ...Session.labelFields(lbl.seed) },
+        ...(res.rejected.length ? { rejected: res.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
+        ...(res.negatives ? { negatives: res.negatives.filter((n) => !!n).map((n) => ({ mode: n!.mode, segments: n!.segments, center: [round1(n!.center[0]), round1(n!.center[1])] as [number, number] })) } : {}),
+        ...(res.lum_gate ? { lum_gate: res.lum_gate } : {}),
+        candidates: res.candidates,
+        complete: res.complete,
+        ...(committed ? {
+          committed: committed.committed,
+          shape_ids: committed.shape_ids,
+          condition: committed.condition,
+          ea_total: committed.ea_total,
+          ...(opts.commitSeed ? { seed_committed: true } : {}),
+        } : {}),
+        ...((): { note?: string } => {
+          const parts: string[] = [];
+          if (opts.commit && !res.matches.length && !opts.commitSeed) parts.push("commit requested but nothing cleared the bar — no shapes were committed.");
+          // #296 — a count that excludes something the estimator can see must
+          // say so: the seed is almost always installed work in sheet scope.
+          if (committed && !opts.commitSeed) parts.push(`The seed instance at (${round1(fp.center[0])}, ${round1(fp.center[1])}) is NOT in this count — if it is installed work, re-run with commit_seed: true or place_count it.`);
+          if (labelNote) parts.push(labelNote);
+          return parts.length ? { note: parts.join(" ") } : {};
+        })(),
+        ...(res.candidates.dropped > 0 ? { warning: `Work ceiling: ${res.candidates.dropped} candidate placement(s) were never scored — this count is a FLOOR, not a total. The seed's linework is too common on this sheet for an exhaustive sweep; tighten the seed rect around more distinctive geometry, or sweep a region at a time and reconcile the counts.` } : {}),
+      };
+    }
+
+    // ── scope "set" ────────────────────────────────────────────────────────
+    const graph = await this.ensureGraph();
+    if (!graph.available) {
+      throw new UserError("This set has no text layer, so sheet ROLES are unknown — a set-wide sweep counts PLAN sheets only, and it will not guess which sheets those are. Sweep each sheet explicitly with scope 'sheet'.");
+    }
+    const roleOf = new Map(graph.sheets.map((g) => [g.key, g.role] as const));
+    const seedRole = roleOf.get(s.key) ?? "unknown";
+    const seedSource: "instance" | "detail_sheet" = seedRole === "plan" ? "instance" : "detail_sheet";
+
+    // #186: the scale gate fires BEFORE any sweeping, over the plan sheets the
+    // sweep is actually going to touch — a refusal after ten sheets of blind
+    // matching would be a slow way to say the same thing.
+    this.requireCrossScale(s, seedRole, this.sheetList().filter((sh) => (roleOf.get(sh.key) ?? "unknown") === "plan"));
+
+    const perSheet: { state: SheetState; matches: SweepMatch[]; withheld: SweepWithheld[]; rejected: SweepRejected[]; candidates: { considered: number; dropped: number }; complete: boolean; elapsed_ms: number; scale: { scale: number; known: boolean }; scaled?: NonNullable<SymbolMatchResult["scaled"]>; lum_gate?: NonNullable<SymbolMatchResult["lum_gate"]>; labels: { seed: PlacementLabel | null; matches: (PlacementLabel | null)[]; withheld: (PlacementLabel | null)[] } }[] = [];
+    const skipped: { sheet: string; role: string; reason: string }[] = [];
+    for (const sh of this.sheetList()) {
+      const role = roleOf.get(sh.key) ?? "unknown";
+      if (role !== "plan") {
+        skipped.push({
+          sheet: sh.key,
+          role,
+          reason: sh.key === s.key
+            ? `the seed source — a symbol drawn on a ${role} sheet defines the fingerprint but is a reference drawing, never installed work`
+            : role === "unknown"
+              ? "role unknown (no classifiable title text) — sweep it explicitly with scope 'sheet' if it is a plan"
+              : `a ${role} sheet — symbol instances here are reference drawings, not installed work`,
+        });
+        continue;
+      }
+      const g2 = await this.ensureGeometry(sh);
+      if (!g2.segs.length) {
+        skipped.push({ sheet: sh.key, role, reason: "no vector linework (likely a scan) — symbol matching reads the drawn segments" });
+        continue;
+      }
+      const ratio = sweepRatio(s, sh);
+      const t0 = process.hrtime.bigint();
+      let res: SymbolMatchResult;
+      try {
+        res = matchSymbol(fp, g2.segs, {
+          ...sweepOpts,
+          lum: g2.lum,
+          ...(ratio.scale === 1 ? {} : { scale: ratio.scale }),
+          ...(sh.key === s.key ? { excludeCenter: fp.center } : {}),
+          ...(negatives.length ? { negatives } : {}),
+        });
+      } catch (e) {
+        // the engine's scale refusals (symbol shrinks inside tolerance, ratio
+        // out of band) are instructions about THIS sheet, not a dead sweep —
+        // disclose and keep going, so one impossible pairing doesn't cost the
+        // estimator the sheets that were fine
+        skipped.push({ sheet: sh.key, role, reason: e instanceof Error ? e.message : String(e) });
+        continue;
+      }
+      const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
+      // #308 — each target sheet's own text names its own placements
+      if (!sh.spans) sh.spans = textSpans(sh.page);
+      const labels = this.sweepLabels(sh.spans, g2, null, res.matches, res.withheld);
+      perSheet.push({ state: sh, ...res, elapsed_ms, scale: ratio, labels });
+    }
+
+    const found = perSheet.reduce((n, p) => n + p.matches.length, 0);
+    let committed: { committed: number; shape_ids: string[]; condition: string; ea_total: number } | undefined;
+    if (opts.commit && found) {
+      const ids: string[] = [];
+      for (const ps of perSheet) {
+        for (const m of ps.matches) {
+          ids.push(this.commit(ps.state, opts.condition!, "count", [m.at], { count: 1 }, {
+            method: "symbol_sweep",
+            actor: "agent",
+            reviewed: false,
+            symbol: { score: m.score, rotation: m.rotation, mirrored: m.mirrored, seed: { source: seedSource, sheet: s.key, role: seedRole } },
+          }).id);
+        }
+      }
+      this.flushCommits("symbol_sweep");
+      const c = this.conditions.find((x) => x.finish_tag === opts.condition)!;
+      const ea_total = this.shapes
+        .filter((x) => x.condition_id === c.id && x.measure_role === "count")
+        .reduce((n, x) => n + (x.computed.count || 1), 0);
+      committed = { committed: ids.length, shape_ids: ids, condition: c.finish_tag, ea_total };
+    }
+
+    const capped = perSheet.filter((p) => p.candidates.dropped > 0);
+    const notes: string[] = [];
+    if (!perSheet.length) notes.push("No plan-role sheet in the set was sweepable — nothing was counted; skipped[] says why, sheet by sheet.");
+    if (opts.commit && !found) notes.push("commit requested but nothing cleared the bar on any plan sheet — no shapes were committed.");
+    // #186 disclosure. A ratio that was APPLIED is reported because the count
+    // depends on it; a ratio that was ASSUMED is reported harder when the
+    // sweep came back empty, because that pairing — unknown scale, zero found
+    // — is precisely the confident-zero this issue was filed about.
+    const rescaled = perSheet.filter((p) => p.scaled);
+    const assumed = perSheet.filter((p) => !p.scale.known);
+    if (rescaled.length) {
+      notes.push(`Size ratio applied from the sheets' own scales: ${rescaled.map((p) => `${p.state.key} ×${p.scaled!.ratio}`).join(", ")} — the seed was resized to each target sheet before matching, never scale-searched.`);
+      const thinned = rescaled.filter((p) => p.scaled!.sub_pixel_dropped > 0);
+      if (thinned.length) {
+        notes.push(`Scaling down cost detail: ${thinned.map((p) => `${p.state.key} dropped ${p.scaled!.sub_pixel_dropped} sub-pixel segment(s)`).join(", ")} — scores there are a fraction of the linework that survived the trip, not of the whole seed.`);
+      }
+    }
+    if (assumed.length) {
+      const empty = assumed.filter((p) => !p.matches.length).map((p) => p.state.key);
+      notes.push(
+        `Swept at 1:1 on ${assumed.map((p) => p.state.key).join(", ")} — no scale is set on the seed sheet or on those, so the true size ratio is unknown and same-size drafting was assumed.` +
+        (empty.length ? ` ${empty.join(", ")} found nothing, and an unstated ratio is a live explanation for that: if any of those sheets is drawn at a different scale than ${s.key}, the search was for a wrong-sized symbol. set_scale on both ends turns this from an assumption into arithmetic.` : ""),
+      );
+    }
+    const rejectedTotal = perSheet.reduce((n, p) => n + p.rejected.length, 0);
+    if (rejectedTotal) {
+      notes.push(`${rejectedTotal} placement(s) the geometry accepted were rejected by your counter-example(s) and are NOT in found — each is named per sheet in rejected[] with what it saw. Look before accepting the exclusion: place_count reinstates one by hand.`);
+    }
+    const lumRejectedTotal = perSheet.reduce((n, p) => n + (p.lum_gate?.rejected ?? 0), 0);
+    if (lumRejectedTotal) {
+      notes.push(`${lumRejectedTotal} placement(s) the geometry would have committed were pulled under the bar by your stated luminance tolerance — each is named per sheet in lum_gate.at. Look before trusting the gate: a symbol somebody redrew in a different pen fails it honestly.`);
+    }
+    // #308 — the seed's tag from its own sheet, and one aggregate label note
+    if (!s.spans) s.spans = textSpans(s.page);
+    const seedLbl = this.sweepLabels(s.spans, geo, fp.center, [], []).seed;
+    const labelNote = Session.sweepLabelNote({
+      seed: seedLbl,
+      matches: perSheet.flatMap((p) => p.labels.matches),
+      withheld: perSheet.flatMap((p) => p.labels.withheld),
+    });
+    if (labelNote) notes.push(labelNote);
+    return {
+      scope,
+      found,
+      seed: { ...seedOut, role: seedRole, ...Session.labelFields(seedLbl) },
+      ...(rejectedTotal ? { rejected_total: rejectedTotal } : {}),
+      ...(negatives.length ? { negatives: negatives.map((n) => ({ mode: n.mode, segments: n.rel.length, center: [round1(n.center[0]), round1(n.center[1])] as [number, number] })) } : {}),
+      sheets: perSheet.map((p) => ({
+        sheet: p.state.key,
+        found: p.matches.length,
+        matches: p.matches.map((m, i) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.extra !== undefined ? { extra: m.extra } : {}), ...Session.labelFields(p.labels.matches[i]) })),
+        withheld: p.withheld.map((w, i) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.extra !== undefined ? { extra: w.extra } : {}), ...Session.labelFields(p.labels.withheld[i]), reason: w.reason })),
+        ...(p.rejected.length ? { rejected: p.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
+        ...(p.lum_gate ? { lum_gate: p.lum_gate } : {}),
+        candidates: p.candidates,
+        complete: p.complete,
+        elapsed_ms: p.elapsed_ms,
+        ...(p.scaled ? { scaled: p.scaled } : {}),
+        ...(p.scale.known ? {} : { scale_assumed: "no scale set on the seed sheet or this one — swept at 1:1" }),
+      })),
+      complete: perSheet.every((p) => p.complete),
+      skipped,
+      ...(committed ?? {}),
+      ...(notes.length ? { note: notes.join(" ") } : {}),
+      ...(capped.length ? { warning: `Work ceiling: candidate placements were dropped un-scored on ${capped.map((p) => p.state.key).join(", ")} — counts there are FLOORS, not totals. The seed's linework is too common there for an exhaustive sweep; tighten the seed rect around more distinctive geometry, or sweep those sheets singly and reconcile the counts.` } : {}),
+    };
+  }
+
+  /** match_reference_symbol (accuracy-hardening plan Phase 0) — the
+   * deterministic reference-shape library, given a real, callable entry
+   * point for the first time. Every shape in `HVAC_REF_SHAPES` (hand-
+   * digitized real HVAC geometry, never scraped) is matched against this
+   * sheet's own drawn linework, at this sheet's own committed real-world
+   * scale — matchAgainstLibrary's own refusal (no committed scale) is
+   * never bypassed, only relayed as a UserError. `names` restricts which
+   * library shapes to check; omit to check all of them. */
+  async matchReferenceSymbol(name: string, opts: { names?: string[] } = {}) {
+    const s = this.sheet(name);
+    const geo = await this.ensureGeometry(s);
+    if (!geo.segs.length) {
+      throw new UserError("This sheet has no vector linework (likely a scan) — reference-shape matching reads the drawn segments; raster fallback not yet available in the MCP server.");
+    }
+    let library = HVAC_REF_SHAPES;
+    if (opts.names?.length) {
+      const wanted = new Set(opts.names.map((n) => n.trim().toLowerCase()));
+      library = HVAC_REF_SHAPES.filter((r) => wanted.has(r.name.toLowerCase()));
+      if (!library.length) {
+        throw new UserError(`No reference shape named any of ${JSON.stringify(opts.names)} — known shapes: ${HVAC_REF_SHAPES.map((r) => r.name).join(", ")}.`);
+      }
+    }
+    let results: ReturnType<typeof matchAgainstLibrary>;
+    try {
+      results = matchAgainstLibrary(geo.segs, library, s.upp, { lum: geo.lum });
+    } catch (e) {
+      // matchAgainstLibrary's own refusal (no committed scale) — relayed,
+      // never bypassed or silently defaulted.
+      throw new UserError(e instanceof Error ? e.message : String(e));
+    }
+    return {
+      sheet: s.key,
+      shapes: results.map((r) => ({
+        name: r.name,
+        found: r.result.matches.length,
+        matches: r.result.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])] as [number, number], score: m.score, rotation: m.rotation, mirrored: m.mirrored })),
+        withheld: r.result.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])] as [number, number], score: w.score, rotation: w.rotation, mirrored: w.mirrored, reason: w.reason })),
+        complete: r.result.complete,
+      })),
+    };
+  }
+
+  /** find_legend_symbols (accuracy-hardening plan Phase 1) — auto-detect
+   * every (glyph, caption) row on a legend sheet, real vector geometry
+   * clustered and paired with its own real caption text, no marqueeing.
+   * Each result's `rect` feeds straight into symbol_sweep's own seed_rect
+   * (scope: "set") — this tool does the detection only, never sweeps
+   * itself, so the already-tested cross-scale/refusal machinery in
+   * symbol_sweep is reused untouched, not duplicated. Sheet-role-agnostic
+   * by design: call sheet_graph first to find the real legend sheet(s);
+   * this tool clusters whatever sheet it's pointed at. */
+  async findLegendGlyphs(name: string) {
+    const s = this.sheet(name);
+    const geo = await this.ensureGeometry(s);
+    if (!geo.segs.length) {
+      throw new UserError("This sheet has no vector linework (likely a scan) — legend-glyph detection reads drawn segments; raster fallback not yet available in the MCP server.");
+    }
+    if (!s.spans) s.spans = textSpans(s.page);
+    const spans: LegendSpan[] = s.spans.map((sp) => ({ text: sp.str, x0: sp.x0, y0: sp.y0, x1: sp.x1, y1: sp.y1 }));
+    // Real, found-live bug (accuracy-hardening plan, this session): this
+    // reuses buildMepGraph's own JTS noding purely for connectivity (see
+    // legendlearn.ts's own header comment), and a real, densely-drawn sheet
+    // can defeat noding entirely even after buildMepGraph's own internal
+    // retry-at-coarser-grid mitigation (ledger item 18) — confirmed live on
+    // federal-mech's own sheet #2 legend. Before this fix, that TopologyException
+    // propagated straight out of this tool as a raw, MEP-connectivity-flavored
+    // error with no relation to "legend glyph detection" from the caller's own
+    // perspective. Legend-glyph clustering is a convenience layer over
+    // symbol_sweep's own already-tested marquee workflow, not a correctness-
+    // critical trace — degrading to "none detected, with an honest reason"
+    // here is strictly safer than crashing the whole tool over it.
+    let glyphs: ReturnType<typeof findLegendGlyphs>;
+    let nodingFailed = false;
+    try {
+      glyphs = findLegendGlyphs(geo.segs, spans);
+    } catch {
+      glyphs = [];
+      nodingFailed = true;
+    }
+    return {
+      sheet: s.key,
+      glyphs: glyphs.map((g) => ({
+        caption: g.caption,
+        rect: [round1(g.rect[0][0]), round1(g.rect[0][1]), round1(g.rect[1][0]), round1(g.rect[1][1])] as [number, number, number, number],
+        segments: g.segments,
+      })),
+      ...(!glyphs.length ? {
+        note: nodingFailed
+          ? "This sheet's own linework could not be reliably noded for glyph clustering (a real, dense-CAD-geometry edge case, not a missing legend) — no glyphs detected as a result. Marquee one instance directly with symbol_sweep instead."
+          : "No (glyph, caption) row pairs were detected on this sheet — it may not be a legend, or its rows may not fit this detector's own compact-glyph/adjacent-caption assumptions. This is not an error: a sheet with no real legend falls back to the ordinary symbol_sweep workflow (marquee one real occurrence anywhere and sweep from it).",
+      } : {}),
+    };
+  }
+
+  /** sweep_inline_motif (accuracy-hardening plan Phase 4) — a real, measured
+   * answer to the "SR-1/SR-2/TG-1/TG-2 don't anchor" gap the maturity plan
+   * named: a register/grille mark drawn as a tapered duct terminus has no
+   * independent whole-shape perimeter (two of its "sides" are literally the
+   * tail of the same long duct-wall stroke feeding it), and — measured
+   * live, not assumed — its own real-world SIZE genuinely differs by CFM
+   * rating, so symbol_sweep's exact-segment whole-shape fingerprint
+   * under-scores real siblings of the same symbol type (~76-77%, under the
+   * 92% commit bar). This sweeps on the hatch fill's own real-world size
+   * and pitch instead — same seed-rect gesture as symbol_sweep, same
+   * found/matches/withheld disclosure shape, sheet scope only (no "set"
+   * scope yet — a real, named limitation, not silently assumed away). */
+  async sweepInlineMotif(name: string, opts: { seedRect: [Point, Point] }) {
+    const s = this.sheet(name);
+    const geo = await this.ensureGeometry(s);
+    if (!geo.segs.length) {
+      throw new UserError("This sheet has no vector linework (likely a scan) — inline-motif matching reads the drawn hatch fill; raster fallback not yet available in the MCP server.");
+    }
+    const fp = fingerprintInlineMotif(geo.segs, geo.meta, opts.seedRect, s.upp ?? null);
+    if (!fp) {
+      throw new UserError("No hatch-filled region was found inside this seed rect — this tool anchors on a compact, densely-hatched box (a register/grille's own fill), not an ordinary line-only symbol; marquee tighter around the hatched fill itself, or use symbol_sweep for a non-hatched marker.");
+    }
+    const res = sweepInlineMotif(fp, geo.segs, geo.meta, s.upp ?? null, { excludeCenter: fp.center, excludeR: Math.max(fp.widthPx, fp.heightPx) });
+    return {
+      sheet: s.key,
+      seed: {
+        rect: [round1(fp.rect[0][0]), round1(fp.rect[0][1]), round1(fp.rect[1][0]), round1(fp.rect[1][1])] as [number, number, number, number],
+        w_ft: fp.widthFt, h_ft: fp.heightFt, w_px: round1(fp.widthPx), h_px: round1(fp.heightPx),
+      },
+      found: res.matches.length,
+      matches: res.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])] as [number, number], w_ft: m.w_ft, h_ft: m.h_ft, size_score: m.size_score })),
+      withheld: res.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])] as [number, number], w_ft: w.w_ft, h_ft: w.h_ft, size_score: w.size_score, reason: w.reason })),
+      candidates_considered: res.candidates_considered,
+      ...(s.upp ? {} : { note: "No scale committed on this sheet — sizes are compared in image px only. set_scale first for a real-world tolerance that generalizes; an image-px-only comparison is a same-sheet, same-print-scale assumption." }),
+    };
+  }
+
+  /** The MEP connectivity graph (Phase 4), built once per sheet and cached —
+   * mirrors ensureMask's own by-identity cache exactly, including its null
+   * convention for a sheet with zero vector linework. Annotation and
+   * finish-pattern layer ink is excluded before noding (never traced as a
+   * real run), the same layer-role table buildVectorMask already reads —
+   * this module does not re-derive LayerRole itself, only consumes it. */
+  private async ensureMepGraph(s: SheetState): Promise<MepGraph | null> {
+    if (s.mepGraph === undefined) {
+      const geo = await this.ensureGeometry(s);
+      if (!geo.segs.length) { s.mepGraph = null; return null; }
+      const codes = this.rolesFor(s, geo);
+      let excludeSegs: Uint8Array | undefined;
+      if (codes) {
+        excludeSegs = new Uint8Array(codes.length);
+        for (let i = 0; i < codes.length; i++) {
+          const c = codes[i];
+          if (c === 2 /* finish-pattern */ || c === 3 /* annotation */ || c === 6 /* hidden */) excludeSegs[i] = 1;
+        }
+      }
+      const mppf = s.upp ? 1 / s.upp : 0;
+      // Phase 2 (accuracy hardening): on none/weak MEP layer signal, layer
+      // roles alone cannot separate architectural wall ink from real MEP
+      // linework — the confirmed real failure mode (a seed on an exhaust
+      // fan's own duct riser "reaching" an unrelated heat pump 52 hops away
+      // through wall ink). Fall back to wallnetwork.ts's own geometric,
+      // layer-independent wall-vouching and fold anything it vouches for
+      // into the same exclusion mask, never overriding a strong layer
+      // signal that already knows better.
+      const layerSignal = mepLayerSignal(s.layers, geo.layerOf);
+      if (layerSignal !== "strong") {
+        const vouched = networkWallSegs(geo.segs, geo.meta, 1, mppf);
+        for (let i = 0; i < vouched.length; i++) {
+          if (!vouched[i]) continue;
+          if (!excludeSegs) excludeSegs = new Uint8Array(vouched.length);
+          excludeSegs[i] = 1;
+        }
+      }
+      // Real, corpus-found (baker-county-eoc M1.21, a mechanical roof plan):
+      // buildMepGraph's own coarsen-and-retry mitigation (see its header
+      // comment) is a real, measured improvement, not a guarantee — a
+      // densely crosshatched real sheet (this one's roof-insulation
+      // crickets, drawn as thousands of short parallel hatch strokes
+      // crossing the gas-piping run) can still defeat JTS's noding at every
+      // retry grid. Before this fix, that threw straight out of
+      // ensureMepGraph, uncaught — trace_connectivity's own MCP wrapper
+      // (tools.ts's `run`) turned it into an isError:true reply carrying a
+      // raw JTS coordinate dump, NOT the tool's own documented TraceResult
+      // shape (structuredContent didn't even validate against
+      // traceConnectivityOutput). Caught here and folded into the exact
+      // same null-graph convention "zero vector linework" already uses,
+      // with its own distinct reason text (mepGraphNodingError) so
+      // traceConnectivity below never conflates "no linework exists" with
+      // "linework exists but couldn't be reliably noded" — mirrors the
+      // identical, already-shipped fix TakeoffCanvas.jsx's
+      // agentFindLegendSymbols carries for findLegendGlyphs' own use of
+      // this same noding (ledger, "densely-drawn sheet can defeat noding
+      // entirely" comment) — trace_connectivity itself just never got the
+      // same treatment until now.
+      try {
+        s.mepGraph = buildMepGraph(geo.segs, {
+          meta: geo.meta, layerOf: geo.layerOf, layers: s.layers, excludeSegs, mppf,
+        });
+      } catch (e) {
+        s.mepGraph = null;
+        s.mepGraphNodingError = e instanceof Error ? e.message : String(e);
+      }
+    }
+    return s.mepGraph;
+  }
+
+  /** trace_connectivity (Phase 4) — which valve belongs to which equipment,
+   * traced through the sheet's own drawn linework. Refusal doctrine matches
+   * sweep_schedule_row/resolve_tag exactly: no equipment placements, no
+   * vector linework, or a seed off any traced line all refuse with a named
+   * reason rather than guess. Equipment/fitting placements are NOT
+   * discovered here — the agent supplies them from its own prior
+   * symbol_sweep/sweep_schedule_row results, same division of labor as
+   * every other geometry tool that consumes an already-swept placement. */
+  async traceConnectivity(name: string, opts: {
+    from: Point;
+    equipment: Array<{ id: string; at: Point; label?: string }>;
+    fittings?: Array<{ at: Point }>;
+    maxHops?: number;
+    seedTolFt?: number;
+    bridgeFt?: number;
+  }): Promise<MepTraceResult> {
+    const s = this.sheet(name);
+    const graph = await this.ensureMepGraph(s);
+    if (!graph) {
+      return {
+        status: "refused", layer_signal: "none", confidence: 0, factors: [],
+        reason: s.mepGraphNodingError
+          ? `This sheet's own linework could not be reliably noded for connectivity tracing (a real, dense-CAD-geometry edge case — e.g. a heavily crosshatched region crossing the run — not missing linework). Try view_sheet on the seed's own region and trace a shorter, less-cluttered run instead.`
+          : "This sheet has no traced vector linework to walk — check sheet_info.has_vector_linework before tracing.",
+      };
+    }
+    const mppf = s.upp ? 1 / s.upp : 0;
+    return traceMepConnectivity(graph, opts.from, {
+      equipmentSymbols: opts.equipment,
+      fittingSymbols: opts.fittings,
+      maxHops: opts.maxHops,
+      seedTolFt: opts.seedTolFt,
+      bridgeFt: opts.bridgeFt,
+      mppf,
+    });
+  }
+
+  /** sweep_schedule_row (phase 2) — the estimator's story, honored: a
+   * transition type sometimes exists only as a schedule row plus tag markers
+   * scattered across the plan sheets. Given the ROW's key, this mints the
+   * condition FROM the row (the assign-from-schedule vocabulary: the tag is
+   * the schedule's claim, `origin.assignment {source: "schedule"}` with the
+   * citation) and sweeps every plan sheet for the marker the tag is drawn as.
+   *
+   * THE CONTRACT, stated precisely — refusal-honest, never text-to-geometry
+   * guessing:
+   *   1. The row must exist in a schedule table the sheet graph extracted
+   *      (one row — a key defined twice across tables is ambiguous, refused).
+   *   2. The tag must be DRAWN on at least one plan-role sheet. A row whose
+   *      tag appears nowhere on the plans cannot be geometrically anchored,
+   *      and a fingerprint is NEVER guessed from text alone — refused, with
+   *      the fix (marquee an instance with symbol_sweep).
+   *   3. The fingerprint is the linework around the tag's own drawn
+   *      occurrence (a deterministic pad ladder around the text bbox), and
+   *      where the tag occurs more than once it must CORROBORATE — recur at
+   *      a second occurrence — before it is trusted. No repeatable marker
+   *      geometry → refused.
+   *   4. A geometric match COUNTS only when the row's own tag text sits
+   *      within the marker's footprint — drafting reuses one bubble shape
+   *      across many tags, so geometry alone is not identity. A match
+   *      carrying a SIBLING row's tag is excluded (disclosed with the tag it
+   *      carries); a match carrying no tag is withheld as a question; a tag
+   *      occurrence with no matching geometry is disclosed as text_only.
+   * Commit is ONE undo step for the whole set-wide sweep. */
+  async sweepScheduleRow(tag: string, opts: {
+    commit?: boolean;
+    rotations?: boolean;
+    mirror?: boolean;
+    tolerancePx?: number;
+  } = {}) {
+    let t = (tag || "").trim().toUpperCase().replace(/\s+/g, "");
+    if (!t) throw new UserError('Pass a schedule-row tag as drawn, e.g. sweep_schedule_row { tag: "T1" }.');
+    const graph = await this.ensureGraph();
+    if (!graph.available) throw new UserError("This set has no text layer (a scan) — the sheet graph is unavailable, so schedule rows cannot be read.");
+
+    // 1. the row — the same tables resolve_tag / find_schedule read. A
+    // schedule often keys one row for several marks ("R1 / E1" — same device,
+    // return vs exhaust service): that row ANSWERS for each mark, and the
+    // sweep runs on the mark as drawn on the plans, not the compound key.
+    const canonKey = (k: string) => (k || "").trim().toUpperCase().replace(/\s+/g, "");
+    let rowHits = graph.tables.flatMap((tb) => tb.rows.filter((r) => rowKeyAnswersFor(r.key, t)).map((r) => ({ tb, r })));
+    if (!rowHits.length) {
+      const found = graph.tables.map((x) => {
+        const keys = x.rows.map((row) => row.key).slice(0, 12).join(", ");
+        return `${x.kind} on ${x.sheet} (${x.rows.length} rows: ${keys}${x.rows.length > 12 ? ", …" : ""})`;
+      }).join(" | ");
+      throw new UserError(`No schedule row "${t}" in the set — tables found: ${found || "none"}. Check the tag as drawn (find_schedule shows each table's region), or merge the schedule sheet in with load_plan.`);
+    }
+    // Accessory-row narrowing: a collision is not always 2 competing
+    // definitions of the SAME device. A primary equipment schedule's own
+    // row (its OWN key column bare — "MARK"/"TAG"/"SYMBOL"/…, the generic
+    // catalog-anchor vocabulary every equipment-kind table already keys
+    // off of) can share its mark with an accessory-schedule row that names
+    // a DIFFERENT real, separately-scheduled device serving THIS one (a
+    // real case: CHW/HHW CONTROL VALVE SCHEDULE keys its own row under
+    // "UNIT MARK" — a cross-reference to the AHU/FCU/VAV it serves, while
+    // that row's OWN device identity lives in its own "VALVE MARK" column
+    // instead). The accessory row is not a competing claim on the tag —
+    // it never carries its own bare anchor column; it QUALIFIES one
+    // ("UNIT MARK", "VALVE MARK" — an anchor word plus another word, same
+    // real distinction extractTableAt's own bareLeadingType comment draws
+    // between "TYPE" and "FAN TYPE"/"VALVE TYPE").
+    //
+    // This narrows ONLY when the collision has EXACTLY one row whose own
+    // key column is a bare anchor and EVERY OTHER colliding row's key
+    // column is a QUALIFIED variant of an anchor word — never when two or
+    // more rows are each bare-anchor-keyed (two real, separate devices
+    // both making a primary claim — e.g. ET-1 on itd-d1-lab: a real
+    // specialty-equipment device and a real plumbing fixture, BOTH keyed
+    // bare "SYMBOL", correctly stays refused below) and never when any
+    // other row's key-column role can't be determined at all. Conservative
+    // by construction: anything short of this exact shape falls straight
+    // through to the unchanged ambiguity refusal.
+    let accessoryNote: string | null = null;
+    if (rowHits.length > 1) {
+      const keyHeaderFor = (tb: ScheduleTable, row: { key: string; cells: Record<string, { text: string }> }): string | null => {
+        for (const h of tb.headers) {
+          const c = row.cells[h];
+          if (c && canonKey(c.text) === canonKey(row.key)) return h;
+        }
+        return null;
+      };
+      const withHeader = rowHits.map((h) => ({ ...h, keyHeader: keyHeaderFor(h.tb, h.r) }));
+      // A row is this tag's OWN device definition only when BOTH real
+      // accessory signals clear it: its own key column must NOT be a
+      // QUALIFIED anchor ("UNIT MARK"/"VALVE MARK" name a cross-reference
+      // to some OTHER row's own mark, never this row's own identity — see
+      // isQualifiedAnchorHeader's own comment) AND its table
+      // must not be "reference"-kind (a real cross-reference/spec table —
+      // extractTableAt's own CONNECTION/CALCULATION check, and
+      // scheduleTableFromODL's structural fallback, both demote exactly
+      // these tables to "reference" for this same reason; baker-county-eoc-
+      // bidset.pdf#60's own MECHANICAL EQUIPMENT CONNECTION SCHEDULE keys
+      // "NO." — bare by the word-shape test alone — while genuinely being a
+      // hookup cross-reference).
+      //
+      // Both signals are combined in ONE pass, not run as two independent
+      // one-shot checks each requiring exactly one non-excluded survivor:
+      // a real device schedule can collide with TWO DIFFERENT accessory
+      // tables at once, each caught by a DIFFERENT one of the two signals.
+      // Real, corpus-found (navfac-cherry-point-atc-mechanical.pdf's own
+      // AHU-A1/AHU-A2): a CHW CONTROL VALVE SCHEDULE row keyed "UNIT MARK"
+      // (qualified) AND a FAN SOUND POWER LEVEL SCHEDULE row keyed bare
+      // "MARK" but reference-kind are BOTH real accessory rows for the
+      // SAME real AHU-A1/AHU-A2 device — with two accessory rows caught by
+      // two DIFFERENT signals, neither old one-shot pass ever saw exactly
+      // one excluded row, so neither fired and a real, resolvable 3-way
+      // "ambiguity" stood unresolved (status=error, "3 schedule rows carry
+      // the key"). Never narrows when more than one row independently
+      // clears BOTH bars (two real, separate devices genuinely sharing a
+      // mark — e.g. ET-1 on itd-d1-lab: a real specialty-equipment device
+      // and a real plumbing fixture, BOTH bare "SYMBOL" and non-reference,
+      // correctly stays refused below) or when every colliding row is
+      // itself excluded (no real device row survives to seed the sweep).
+      //
+      // Uses !isQualifiedAnchorHeader, NOT isBareAnchorHeader — real,
+      // confirmed regression found live: isBareAnchorHeader and
+      // isQualifiedAnchorHeader are NOT strict complements. A header can be
+      // NEITHER (baker-county-eoc-bidset.pdf#41's own "EQUIP NO" — not a
+      // bare CATALOG_ANCHOR_WORDS hit, and no token of it is either, so it's
+      // not "qualified" by that check's own definition either). Requiring
+      // isBareAnchorHeader specifically broke RTU-1/EWH-1/CU-1/CU-2/ERV-01/
+      // FCU-1/FCU-2/WH-1 — real rows whose own equipment schedule keys under
+      // "EQUIP NO" (not a bare CATALOG_ANCHOR_WORDS hit) collided with a real
+      // NATURAL GAS CALCULATION reference table also keying "TAG"; neither
+      // row passed the AND-of-both-signals bar, so 10 previously-exact tags
+      // silently became "2 schedule rows carry the key" ambiguity errors —
+      // baker-county-eoc dropped from 60.0% to 37.5% before this was caught.
+      // !isQualifiedAnchorHeader correctly treats "neither" the same as
+      // "bare" (this row's own header names no OTHER row's mark, so it is
+      // not disqualified on word-shape grounds) while still excluding a
+      // genuinely QUALIFIED header exactly as before.
+      const isCandidate = (h: (typeof withHeader)[number]) => !isQualifiedAnchorHeader(h.keyHeader) && h.tb.kind !== "reference";
+      const candidates = withHeader.filter(isCandidate);
+      const accessory = withHeader.filter((h) => !isCandidate(h));
+      if (candidates.length === 1 && accessory.length > 0) {
+        const excludedDesc = accessory.map((h) => {
+          const qualifier = h.tb.kind === "reference" ? "reference-kind" : `keyed "${h.keyHeader}"`;
+          return `"${h.tb.title?.text || `${h.tb.kind} schedule`}" (${qualifier}, a cross-reference — not this tag's own device)`;
+        }).join(", ");
+        accessoryNote = `${accessory.length} accessory schedule row${accessory.length === 1 ? "" : "s"} also carr${accessory.length === 1 ? "ies" : "y"} the key "${t}" and were excluded, not counted as competing ambiguity: ${excludedDesc}.`;
+        rowHits = [candidates[0]];
+      }
+    }
+    if (rowHits.length > 1) {
+      throw new UserError(`Ambiguous: ${rowHits.length} schedule rows carry the key "${t}" — the same mark defined twice cannot seed one sweep. Marquee the marker yourself with symbol_sweep.`);
+    }
+    const { tb, r } = rowHits[0];
+    // This row's own mark(s) — split on "/" so a compound row key ("AC-1/
+    // ACCU-1", "R1/E1") is never mistaken for a SIBLING of itself below: a
+    // split-system pair's two component marks are each the row's OWN
+    // identity, not another row's competing tag.
+    const ownMarks = new Set(canonKey(r.key).split("/").map((s) => s.trim()).filter(Boolean));
+    // sibling keys span EVERY table in the set, not just the row's own: a
+    // marker labeled with any other schedule key is that mark's instance, and
+    // disclosing it as "excluded, labeled 135" beats calling it unlabeled
+    const siblings = [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(row.key).split("/").filter(Boolean))))].filter((k) => !ownMarks.has(k)).sort();
+    const table = tb.title?.text || `${tb.kind} schedule`;
+
+    // 2. plan-role sheets, and every drawn occurrence of the tag on them
+    const roleOf = new Map(graph.sheets.map((g) => [g.key, g.role] as const));
+    const skipped: { sheet: string; role: string; reason: string }[] = [];
+    const planSheets: SheetState[] = [];
+    for (const sh of this.sheetList()) {
+      const role = roleOf.get(sh.key) ?? "unknown";
+      if (role === "plan") planSheets.push(sh);
+      else {
+        skipped.push({
+          sheet: sh.key,
+          role,
+          reason: role === "unknown"
+            ? "role unknown (no classifiable title text) — instances here are not counted"
+            : `a ${role} sheet — the tag's instances here are reference drawings, never installed work`,
+        });
+      }
+    }
+    const occOf = (sh: SheetState, key: string): TagOcc[] => {
+      if (!sh.spans) sh.spans = textSpans(sh.page);
+      const exact = sh.spans
+        .filter((sp) => sp.str.trim().toUpperCase() === key)
+        .map((sp) => ({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number] }));
+      // compoundTagOcc's own single-span compound labels ("R1 /C-11") can
+      // never coincide with an exact match's own span (equality vs.
+      // strictly-longer), so it's merged in ALONGSIDE exact unconditionally
+      // — a sheet can legitimately carry both a bare, unrelated coincidental
+      // occurrence of the key elsewhere AND this row's own real compound-
+      // labeled instances (baker-county-eoc-bidset.pdf#54's own "P1": one
+      // bare span plus three real "P1 /C-11"-style compound spans — see
+      // compoundTagOcc's own header comment).
+      const merged = [...exact, ...compoundTagOcc(sh.spans, key)];
+      // Fallback only — a real drawn tag ALSO, separately, routinely splits
+      // across multiple SHORTER text runs (see fragmentedTagOcc's own header
+      // comment for the two real, different-shaped cases this was found
+      // against), and never fires when exact/compound already found
+      // something — its own join-fragments search risks stitching unrelated
+      // short spans together, so it stays the more conservative last resort.
+      // Third tier, after exact/compound AND fragmentedTagOcc: a SEPARATE
+      // deeper same-row chain (deepHyphenChainTagOcc's own header comment)
+      // for a real shape fragmentedTagOcc's own 4-hop budget can't reach —
+      // never invoked unless fragmentedTagOcc's own unmodified search
+      // already found nothing, and structurally gated to >=2-hyphen keys
+      // (no real tag in this project's own corpus keys has one), so it can
+      // never touch a case fragmentedTagOcc itself already resolves.
+      const fragmented = fragmentedTagOcc(sh.spans, key);
+      const occ = merged.length ? merged : (fragmented.length ? fragmented : deepHyphenChainTagOcc(sh.spans, key));
+      return occ.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
+    };
+    // Compound-key geometric fallback — a real, general bug distinct from
+    // the row-LOOKUP layer above (rowKeyAnswersFor already resolves a
+    // compound key like "AC-1/ACCU-1" or "R1/E1" fine): the literal joined
+    // string is never what's drawn on the plan. Each mark is its own,
+    // separately-drawn tag (confirmed live, bldg5406-hvac-demo sheet #2:
+    // "AC-1" tags the indoor wall-mounted unit, "ACCU-1" separately tags
+    // the outdoor condensing unit on its pad — both real, both findable,
+    // neither ever drawn as the joined "AC-1/ACCU-1" string). Try the
+    // literal compound first (never change behavior for a set that DOES
+    // draw the joined string as one tag, and this is a no-op for every
+    // ordinary single-mark tag), then fall back to each of the row's own
+    // marks in turn, adopting the first one actually drawn on a plan sheet
+    // as the geometric search key for the rest of this sweep — every
+    // downstream step (fingerprinting, corroboration, match classification,
+    // the committed condition's own tag) then runs on that ONE real drawn
+    // mark, exactly as an un-compound sweep_schedule_row call already would.
+    if (ownMarks.size > 1) {
+      const hasOcc = (key: string) => planSheets.some((sh) => occOf(sh, key).length > 0);
+      if (!hasOcc(t)) {
+        for (const mark of ownMarks) {
+          if (hasOcc(mark)) { t = mark; break; }
+        }
+      }
+    }
+    const occBySheet = planSheets.map((sh) => ({ sh, occ: occOf(sh, t) }));
+    const totalOcc = occBySheet.reduce((n, e) => n + e.occ.length, 0);
+    if (!totalOcc) {
+      const markNote = ownMarks.size > 1 ? ` Tried every mark of this compound key (${[...ownMarks].join(", ")}) — none is drawn on any plan sheet.` : "";
+      throw new UserError(`Schedule row "${t}" (${table} on ${tb.sheet}) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone.${markNote} If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: "set"}.`);
+    }
+
+    // 3. anchor + pad ladder + corroboration. Anchor sheet = the plan sheet
+    // with the MOST occurrences (ord breaks ties) so corroboration can run on
+    // the anchor's own sheet whenever the set allows it; anchor occurrence =
+    // first in reading order. Deterministic throughout.
+    const withOcc = occBySheet.filter((e) => e.occ.length > 0)
+      .sort((a, b) => b.occ.length - a.occ.length || a.sh.ord - b.sh.ord);
+    const anchorSheet = withOcc[0].sh;
+    // Reassigned only by the same-sheet uncorroborated fallback below (Tier
+    // 2), and only after every corroboration attempt against the ORIGINAL
+    // anchor has been exhausted — `candFor`/`probes` close over this
+    // binding, so a reassignment is picked up by their next call with no
+    // other plumbing needed.
+    let anchor = withOcc[0].occ[0];
+    const anchorGeo = await this.ensureGeometry(anchorSheet);
+    if (!anchorGeo.segs.length) {
+      throw new UserError(`${anchorSheet.key} carries the tag "${t}" but no vector linework — the marker cannot be fingerprinted on a scan.`);
+    }
+    const sweepOpts: SweepOptions = {
+      rotations: opts.rotations ?? true,
+      mirror: opts.mirror ?? true,
+      tolPx: opts.tolerancePx ?? SWEEP_TOL_PX,
+    };
+    // corroborators: the tag's OTHER occurrences — same sheet when it has
+    // them, else the next sheet that does; a tag drawn exactly once has none
+    // the corroborator may live on ANOTHER sheet, so it carries that sheet:
+    // the probe has to cross the same size ratio the real sweep will (#186),
+    // or a fingerprint gets rejected as "doesn't recur" for the sole reason
+    // that the two plan sheets are drawn at different scales.
+    //
+    // A same-tag occurrence on a DIFFERENT-DISCIPLINE sheet is not real
+    // corroborating evidence, though — real case (itd-d1-lab HUM-1, DFC-1):
+    // the tag's only other drawn occurrence sits on that other trade's own
+    // "enlarged" plan of the same room (a plumbing sheet's callout at the
+    // unit's water/condensate connection), which by the IDENTICAL doctrine
+    // already established for the cross-discipline redundant-view collapse
+    // in step 4b below is a reference to the SAME single physical device for
+    // another trade's own drawing — never a second occurrence of the
+    // mechanical symbol's own linework. Requiring it to recur there
+    // manufactures exactly the false "linework does not recur" refusal this
+    // must not create, on a tag that is genuinely, correctly, singly
+    // installed. `pickSameDisciplineCorroborator` (symbolsweep.ts) gates
+    // this: a cross-sheet corroborator is only trusted as a REQUIRED
+    // same-tag corroborator when it shares the anchor's own discipline; when
+    // the anchor's discipline can't be read at all (never guessed), the
+    // prior any-sheet behavior holds unchanged, since there is no
+    // cross-discipline distinction to safely draw.
+    //
+    // A tag can ALSO be drawn on its own anchor sheet in more than one
+    // real, physically incompatible CONVENTION — real case (itd-d1-lab
+    // B-1/B-2): the same equipment appears once in a piping SCHEMATIC
+    // (a standardized diagram icon, not to scale) and once on the to-scale
+    // ENLARGED PLAN (a leader-line tag column pointing at the real
+    // equipment footprint). Both are genuine drawn occurrences of the tag on
+    // the anchor sheet, so the same-sheet branch above always fires — but
+    // whichever occurrence sorts first (reading order) becomes `anchor` and
+    // the other becomes the ONLY same-sheet corroborator tried, and a
+    // schematic icon can never recur as a to-scale plan symbol (or vice
+    // versa) no matter how the pad ladder widens: it is a different, real
+    // drawing convention, not a detection failure. Requiring that single
+    // same-sheet pairing to succeed manufactures the exact same false
+    // "linework does not recur" refusal the discipline gate above already
+    // exists to prevent — so same-sheet corroboration is tried FIRST (as
+    // before, unchanged for every tag with only one same-sheet pairing to
+    // try), and same-discipline occurrences on OTHER sheets are always
+    // APPENDED as further fallback candidates, tried in order, only when an
+    // earlier candidate fails to corroborate at every pad level — this can
+    // only ever ADD a way to succeed; the first candidate that already
+    // passed keeps passing exactly as before.
+    type Corro = { sh: SheetState; segs: number[]; occ: TagOcc[] };
+    // Cross-sheet same-tag corroborators — same-discipline plan sheets that
+    // also carry this tag. Independent of which occurrence on the ANCHOR
+    // sheet ends up tried as anchor below (sameSheetCorroFor), so this is
+    // computed once, not per candidate anchor.
+    const crossSheetCorro: Corro[] = [];
+    if (withOcc.length > 1) {
+      const anchorDisc = disciplineOfSheetNumber(anchorSheet.sheetNumber);
+      const rest = withOcc.slice(1);
+      // unchanged filter: same discipline only when the anchor's own
+      // discipline is readable at all; every other sheet with an occurrence
+      // otherwise (the prior any-sheet behavior) — just as an ORDERED LIST
+      // of fallback tries now, not a single pick.
+      const pool = anchorDisc ? rest.filter((e) => disciplineOfSheetNumber(e.sh.sheetNumber) === anchorDisc) : rest;
+      for (const e of pool) {
+        crossSheetCorro.push({ sh: e.sh, segs: (await this.ensureGeometry(e.sh)).segs, occ: e.occ });
+      }
+    }
+    // Same-sheet corroborators for a GIVEN candidate anchor occurrence —
+    // every OTHER occurrence on the anchor sheet, parameterized so the
+    // same-tag corroboration loop below can try every occurrence in turn as
+    // the anchor, not just the first in reading order (see its own comment).
+    const sameSheetCorroFor = (candAnchor: TagOcc): Corro[] =>
+      withOcc[0].occ.length > 1
+        ? [{ sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.filter((o) => o !== candAnchor) }]
+        : [];
+    const corroCandidates: Corro[] = [...sameSheetCorroFor(anchor), ...crossSheetCorro];
+
+    // Cross-tag fallback corroborators, tried only when the tag itself has no
+    // second occurrence anywhere (corroCandidates is empty) — the
+    // uniquely-tagged family case (VAV-1, VAV-2, VAV-3, … one tag per
+    // physical box, never repeated). Two different VAV boxes are still the
+    // SAME physical symbol, drawn by the same firm's convention, under a
+    // DIFFERENT tag — so a sibling ROW from the same schedule TABLE (never
+    // the whole set: a different equipment family answering for a shape it
+    // never drew would manufacture exactly the false positive this must not
+    // create) whose own tag occurrence sits on the anchor sheet is worth
+    // trying as a stand-in corroborator. Nearest first (the same drafting
+    // convention nearby is the likeliest match, and it bounds the work);
+    // capped, because a large table must not turn one sweep into dozens of
+    // full-sheet matchSymbol calls.
+    const CROSS_TAG_MAX_TRIES = 16;
+    const crossCandidates: (Corro & { tag: string })[] = [];
+    if (!corroCandidates.length) {
+      const rowKeys = (k: string) => canonKey(k).split("/").map((s) => s.trim()).filter(Boolean);
+      const tableSiblingKeys = [...new Set(
+        tb.rows.filter((row) => !rowKeys(row.key).includes(t)).flatMap((row) => rowKeys(row.key)),
+      )].sort();
+      const withDist = tableSiblingKeys
+        .map((k) => ({ k, occ: occOf(anchorSheet, k) }))
+        .filter((e) => e.occ.length > 0)
+        .map((e) => ({ ...e, dist: Math.min(...e.occ.map((o) => Math.hypot(o.cx - anchor.cx, o.cy - anchor.cy))) }))
+        .sort((a, b) => a.dist - b.dist);
+      for (const e of withDist.slice(0, CROSS_TAG_MAX_TRIES)) {
+        crossCandidates.push({ sh: anchorSheet, segs: anchorGeo.segs, occ: e.occ, tag: e.k });
+      }
+    }
+
+    const cX = (v: number) => Math.max(0, Math.min(v, anchorSheet.widthPx));
+    const cY = (v: number) => Math.max(0, Math.min(v, anchorSheet.heightPx));
+    // One pad-ladder step: the candidate fingerprint at padK, or null to try
+    // the next pad, or "region" to stop widening altogether (a region-sized
+    // grab only gets worse with a bigger pad).
+    const candFor = (padK: number): { cand: SymbolFingerprint; rect: [Point, Point] } | "region" | null => {
+      const pad = padK * anchor.h;
+      const rect: [Point, Point] = [
+        [cX(anchor.bbox[0] - pad), cY(anchor.bbox[1] - pad)],
+        [cX(anchor.bbox[2] + pad), cY(anchor.bbox[3] + pad)],
+      ];
+      let cand: SymbolFingerprint;
+      try {
+        cand = fingerprintSymbol(anchorGeo.segs, rect);
+      } catch (e) {
+        // nothing fully inside yet → widen; a region-sized grab → bigger pads only get worse
+        return e instanceof Error && /region, not one symbol/.test(e.message) ? "region" : null;
+      }
+      // a degenerate grab is not a marker: one or two short strokes at the tag
+      // are its own underline/leader, which recur at EVERY tagged mark and
+      // "corroborate" trivially — matching on them counts tags' furniture, not
+      // devices. Widen instead; if no pad ever captures real marker geometry,
+      // the refusal below states it.
+      if (cand.segments < 3) return null;
+      return { cand, rect };
+    };
+    // Does `cand` reproduce near one of `against`'s occurrences? Identical
+    // probe for same-tag and cross-tag corroboration — the bar (matchSymbol's
+    // scoreHigh) does not bend for a sibling tag.
+    const probes = (cand: SymbolFingerprint, against: Corro): boolean => {
+      const cr = sweepRatio(anchorSheet, against.sh);
+      let probe: SymbolMatchResult;
+      try {
+        probe = matchSymbol(cand, against.segs, { ...sweepOpts, ...(cr.scale === 1 ? {} : { scale: cr.scale }) });
+      } catch {
+        // this pad's fingerprint can't survive the trip to the corroborator
+        // (too small once scaled) — a wider pad may; never a hard stop
+        return false;
+      }
+      const pr = (probe.scaled ? probe.scaled.footprint_px : cand.footprint) / 2 + anchor.h;
+      return against.occ.some((o) => probe.matches.some((m) => Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= pr));
+    };
+
+    let fp: SymbolFingerprint | null = null;
+    // Fallback: a register/grille mark (or similar hatch-filled fixture) has
+    // no independent whole-shape perimeter, so the whole-shape corroboration
+    // above routinely fails for it even though the tag IS genuinely,
+    // repeatedly drawn — confirmed live (accuracy-hardening plan Phase 4/6):
+    // real siblings of the same symbol type score only ~76-77% against each
+    // other under matchSymbol's own 92% bar, because the fixture's own
+    // real-world SIZE differs by rating, not drafting noise. Tried ONLY when
+    // the whole-shape path already failed to corroborate against a real
+    // second occurrence — this can only ever ADD a way to succeed, never
+    // change an already-passing case's own behavior or scoring. (Restored
+    // during the cross-tag-corroboration merge above, which had dropped this
+    // fallback entirely — a real regression this project's own test suite
+    // did not catch, since no test covered this specific integration path.)
+    let inlineFp: InlineMotifFingerprint | undefined;
+    let anchorRect: [Point, Point] | null = null;
+    let corroborated = false;
+    // Present only when corroboration succeeded against a SIBLING tag's own
+    // occurrence rather than this tag's own second instance — a real, honest
+    // distinction: same-tag corroboration is stronger evidence (the identical
+    // mark recurs) than cross-tag (a relative in the same table recurs).
+    let corroboratedVia: string | null = null;
+    if (corroCandidates.length) {
+      // same-tag corroboration is REQUIRED once a second occurrence exists:
+      // unchanged from before this change for the common case (exactly one
+      // same-tag candidate to try) — a tag that recurs but whose WHOLE-SHAPE
+      // linework does NOT reproduce there falls back to the hatch-fill
+      // inline-motif check before being refused, never silently accepted on
+      // a bare whole-shape guess. When more than one candidate exists (a
+      // same-sheet pairing PLUS same-discipline occurrences on other
+      // sheets), each is tried in turn — most-trusted (same-sheet) first —
+      // and a later candidate is only reached once every earlier one has
+      // failed at every pad level, whole-shape AND hatch-fill; the first
+      // candidate that already passed today keeps passing exactly as
+      // before, so this can only ever ADD a way to succeed.
+      // Tried across EVERY occurrence as a candidate anchor in turn (reading
+      // order), not just the first — real case, baker-county-eoc-bidset.
+      // pdf#54's own "R1": the FIRST occurrence's own pad ladder sits next
+      // to unrelated linework (a door-swing arc), so every candidate built
+      // from it mixes that arc's own ink into the fingerprint and never
+      // scores high enough to corroborate anywhere, even though the tag's
+      // real, repeating device icon (the same rectangle+dot 22 other
+      // instances also carry) genuinely recurs — trying the NEXT occurrence
+      // as anchor instead finds a clean capture with no unrelated linework
+      // nearby, which corroborates immediately (confirmed live: anchor #0
+      // and #1 find zero corroborating matches at any pad; anchor #2 finds
+      // 2 real corroborating siblings on the first pad tried).
+      //
+      // This is NOT the reverted "best-generalizing candidate" mechanism
+      // (commit 6eee55b, backed out in d982172): that heuristic tried every
+      // occurrence and kept whichever candidate matched the MOST siblings,
+      // which let a promiscuous, over-generic candidate outscore a precise
+      // one (itd-d1-lab's US-1 regression). This stops at the FIRST
+      // anchor/pad/corroborator triple that clears matchSymbol's own
+      // scoreHigh bar — the identical stop-at-first-success rule the padK
+      // ladder already uses one level down, just extended to the anchor
+      // choice too — so it can only ever ADD a way to find REAL,
+      // threshold-passing corroboration that the first occurrence alone
+      // happened to miss; it never scores or compares candidates against
+      // each other. A tag drawn exactly once per sheet (withOcc[0].occ.length
+      // === 1, e.g. itd-d1-lab's own US-1) has exactly one anchor to try
+      // here, so this is a no-op for it — unchanged from before this loop
+      // existed.
+      outerSameTag:
+      for (const candAnchor of withOcc[0].occ) {
+        anchor = candAnchor;
+        const candidatesForAnchor = candAnchor === withOcc[0].occ[0]
+          ? corroCandidates
+          : [...sameSheetCorroFor(candAnchor), ...crossSheetCorro];
+        for (const cand of candidatesForAnchor) {
+          for (const padK of [1, 2, 3]) {
+            const got = candFor(padK);
+            if (got === "region") break;
+            if (!got) continue;
+            if (probes(got.cand, cand)) { fp = got.cand; anchorRect = got.rect; corroborated = true; break outerSameTag; }
+          }
+        }
+      }
+      // No whole-shape corroboration anywhere — restore the default anchor
+      // so every fallback below (inline-motif retry, TIER 2) runs exactly
+      // as it did before this loop existed; each of those has its own
+      // reading-order walk over withOcc[0].occ and sets `anchor` fresh.
+      if (!fp) anchor = withOcc[0].occ[0];
+      if (!fp || !anchorRect) {
+        for (const cand of corroCandidates) {
+          const inlineAnchored = corroborateInlineMotif(
+            anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+            anchor, anchorSheet.upp,
+            { segs: cand.segs, meta: (await this.ensureGeometry(cand.sh)).meta, occ: cand.occ, upp: cand.sh.upp },
+          );
+          if (inlineAnchored) {
+            inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
+            break;
+          }
+        }
+        // TIER 2: NOTHING corroborated the original anchor — not one
+        // candidate, under either detector. Real case (itd-d1-lab
+        // B-1/B-2): the anchor SHEET draws the SAME physical unit twice in
+        // two real, physically incompatible conventions — an NTS piping
+        // SCHEMATIC icon and a to-scale ENLARGED PLAN symbol (a leader-line
+        // tag column) — and a schematic icon can never recur as a to-scale
+        // plan symbol, or vice versa, no matter how far the pad widens or
+        // which of the two is tried as "anchor" first: it is a real
+        // drawing-convention mismatch, not a detection failure. Demanding a
+        // recurrence between them manufactures exactly the false "linework
+        // does not recur" refusal the discipline gate above already exists
+        // to prevent for the cross-SHEET case — this is its same-SHEET
+        // twin. Once every corroboration attempt is exhausted, fall through
+        // to the SAME disclosed, weaker "uncorroborated" acceptance already
+        // used below for a tag drawn exactly once anywhere: try the tag's
+        // OTHER occurrences on this same anchor sheet, in reading order, as
+        // the anchor instead — uncorroborated, never silently promoted to
+        // "corroborated" (the caller's own !corroborated disclosure below
+        // fires exactly as it does for the single-occurrence case). This
+        // can only ever ADD a way to succeed: the original anchor already
+        // exhausted every real candidate above.
+        //
+        // The identical drawing-convention mismatch recurs a THIRD way —
+        // real case (itd-d1-lab HC-1..HC-9): a mechanical device that
+        // touches two systems (a duct-mounted hydronic heating coil) gets
+        // ONE occurrence on the discipline's own duct-side "HVAC FLOOR
+        // PLAN" sheet (a leader-line tag next to the in-duct coil icon) and
+        // a SEPARATE single occurrence on that SAME discipline's own
+        // piping-side "HYDRONIC FLOOR PLAN" sheet (a leader-line tag next
+        // to a totally different valve/union icon at the coil's water
+        // connection) — both real, both mechanical (so disciplineOfSheetNumber
+        // never excludes the pairing), yet the two icons can never recur as
+        // each other, for the exact same reason a schematic can never recur
+        // as a to-scale plan. Unlike B-1/B-2, this is cross-SHEET with only
+        // ONE occurrence on EACH sheet, so `withOcc[0].occ` (the anchor
+        // sheet's own occurrence list) never has a second entry to
+        // reassign to — the `> 1` gate below existed only to skip a
+        // redundant re-try, but it also skips the one entry that IS present
+        // whenever the anchor sheet has exactly one occurrence, which is
+        // exactly the case that needs this same fallback. Occurrence count
+        // is irrelevant to whether the ORIGINAL anchor's own fingerprint is
+        // real; it is the identical uncorroborated acceptance already
+        // granted to a tag drawn exactly once anywhere (below), just
+        // reached from the "drawn more than once, but every corroborator
+        // is a different convention" side instead. Still can only ever ADD
+        // a way to succeed — every real candidate is already exhausted by
+        // this point.
+        if (!fp && !inlineFp) {
+          // REVERTED (commit 6eee55b's own "best-generalizing candidate"
+          // mechanism, found to cause a real regression): trying every
+          // occurrence and keeping whichever candidate recovers the MOST of
+          // this row's other occurrences assumes more matches = a better
+          // candidate — but when the row's true drawn count really is low,
+          // a candidate that matches MORE is wrong, not better. Confirmed
+          // live: itd-d1-lab's own US-1 (a real, previously-exact single
+          // match, expected=1) started over-matching to 3 under this
+          // mechanism, because a more "generalizing" (i.e. more promiscuous)
+          // candidate outscored the correct, precise one — the heuristic
+          // can't distinguish a candidate that generalizes to real siblings
+          // from one that's simply generic enough to false-positive on
+          // unrelated geometry. Back to the original, simpler, safe rule:
+          // stop at the FIRST occurrence that yields a valid candidate, in
+          // reading order — every real candidate here is independently
+          // valid by the same pad-ladder rule either way, this just no
+          // longer gambles on "more matches" as a proxy for "more correct".
+          for (const altAnchor of withOcc[0].occ) {
+            anchor = altAnchor;
+            for (const padK of [1, 2, 3]) {
+              const got = candFor(padK);
+              if (got === "region") break;
+              if (!got) continue;
+              fp = got.cand; anchorRect = got.rect; corroborated = false;
+              break;
+            }
+            if (fp) break;
+          }
+          if (!fp) {
+            for (const altAnchor of withOcc[0].occ) {
+              anchor = altAnchor;
+              const inlineAnchored = corroborateInlineMotif(
+                anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+                anchor, anchorSheet.upp, null,
+              );
+              if (inlineAnchored) {
+                inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
+                break;
+              }
+            }
+          }
+        }
+        if (!fp && !inlineFp) {
+          anchor = withOcc[0].occ[0]; // restore for a clean error state
+          const triedNote = corroCandidates.length > 1 ? ` (tried ${corroCandidates.length} of its other occurrences)` : "";
+          throw new UserError(`Schedule row "${t}" cannot be anchored: the linework around its drawn tag on ${anchorSheet.key} does not recur at the tag's other occurrences${triedNote} — no repeatable marker geometry to fingerprint (tried both a whole-shape match and a hatch-fill size/pitch match). Marquee one instance with symbol_sweep instead.`);
+        }
+      }
+    } else {
+      // No same-tag corroborator exists at all. Try cross-tag candidates —
+      // this can only ever UPGRADE an uncorroborated anchor to a disclosed
+      // cross-tag one; a candidate that fails to corroborate is silently
+      // skipped and the NEXT one tried, exactly as if it were never offered —
+      // it must never turn a would-have-succeeded uncorroborated anchor into
+      // a refusal, unlike the same-tag case above.
+      outer:
+      for (const cross of crossCandidates) {
+        for (const padK of [1, 2, 3]) {
+          const got = candFor(padK);
+          if (got === "region") break;
+          if (!got) continue;
+          if (probes(got.cand, cross)) { fp = got.cand; anchorRect = got.rect; corroborated = true; corroboratedVia = cross.tag; break outer; }
+        }
+      }
+      if (!fp) {
+        for (const padK of [1, 2, 3]) {
+          const got = candFor(padK);
+          if (got === "region") break;
+          if (!got) continue;
+          fp = got.cand; anchorRect = got.rect; break;
+        }
+      }
+      if (!fp) {
+        // No same-tag occurrence and no whole-shape candidate at all (no
+        // drawn linework near the tag whatsoever) — try the hatch-fill
+        // check uncorroborated too, matching the pre-cross-tag-merge
+        // behavior for this exact case.
+        const inlineAnchored = corroborateInlineMotif(
+          anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+          anchor, anchorSheet.upp, null,
+        );
+        if (inlineAnchored) {
+          inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
+        }
+      }
+      if (!fp && !inlineFp) {
+        throw new UserError(`Schedule row "${t}" cannot be anchored: no fingerprintable marker linework sits around its drawn tag on ${anchorSheet.key}. Marquee one instance with symbol_sweep instead.`);
+      }
+    }
+
+    // classifySweepMatches' own occurrence-claim radius (R = footprint/2 +
+    // anchorH) assumes a match's centroid sits close to the TAG TEXT it
+    // claims — true when the pad ladder widens enough to capture a symbol
+    // whose own ink surrounds its label, but real, corpus-found (federal-
+    // attachment4-mechanical.pdf, 13 real VAV boxes): the pad ladder stops
+    // at the SMALLEST pad that still corroborates (fewest segments, not the
+    // most complete shape), and a real box glyph drawn OFF to one side of
+    // its own tag text — a real, firm-specific convention, not noise — then
+    // has a geometric centroid measurably farther from the tag than that
+    // small footprint's own radius covers. The result: even the ANCHOR's
+    // OWN occurrence, on its OWN sheet, reads as text_only — matchSymbol
+    // correctly re-finds the identical ink it was built from (self-matching
+    // at fp.center with score 1), just outside the radius classifySweep-
+    // Matches uses to credit it to the tag that produced it. `fp.center` is
+    // matchSymbol's own report of where THIS exact fingerprint's self-match
+    // lands, so the true distance from the tag to its own symbol is already
+    // known by construction, not guessed — flooring anchorH at that
+    // measured offset can only ever ADD coverage (it never shrinks the
+    // existing footprint/anchorH radius) and is bounded by the same modest,
+    // real search the pad ladder already performed to find this geometry in
+    // the first place.
+    const selfOffset = fp ? Math.hypot(fp.center[0] - anchor.cx, fp.center[1] - anchor.cy) : 0;
+    const anchorHForSweep = Math.max(anchor.h, selfOffset);
+
+    // 4. the full plan-only sweep + tag corroboration per match.
+    // The tag-proximity radius is the marker's footprint AS DRAWN ON THE SHEET
+    // being read, so it rides the size ratio with the fingerprint (#186): a
+    // marker resized to a 12×-smaller plan has a 12×-smaller footprint, and a
+    // radius left at the seed's size would sweep up whatever tag happened to
+    // be nearby. Unscaled sheets take the identical radius they always did.
+    type CountedMatch = SweepMatch & { tag_at: [number, number, number, number] };
+    const perSheet: {
+      state: SheetState;
+      matches: CountedMatch[];
+      withheld: SweepWithheld[];
+      excluded: { at: Point; tag: string }[];
+      text_only: { at: Point }[];
+      candidates: { considered: number; dropped: number };
+      complete: boolean;
+      elapsed_ms: number;
+      scale: { scale: number; known: boolean };
+      scaled?: NonNullable<SymbolMatchResult["scaled"]>;
+      redundant_view: (CountedMatch & { room: string; kept_sheet: string })[];
+    }[] = [];
+    // per-sheet classification — the shared symbolsweep.ts function, so this
+    // server and the browser's own port can never silently disagree.
+    for (const { sh, occ } of occBySheet) {
+      const g2 = await this.ensureGeometry(sh);
+      if (!g2.segs.length) {
+        skipped.push({ sheet: sh.key, role: "plan", reason: "no vector linework (likely a scan) — symbol matching reads the drawn segments" });
+        continue;
+      }
+      const ratio = sweepRatio(anchorSheet, sh);
+      const t0 = process.hrtime.bigint();
+      const sibSpans: { key: string; cx: number; cy: number }[] = [];
+      for (const k of siblings) for (const o of occOf(sh, k)) sibSpans.push({ key: k, cx: o.cx, cy: o.cy });
+      let matches: CountedMatch[], withheld: SweepWithheld[], excluded: { at: Point; tag: string }[],
+        text_only: { at: Point }[], candidates: { considered: number; dropped: number }, complete: boolean,
+        scaled: SymbolMatchResult["scaled"];
+      if (fp) {
+        let cls: ReturnType<typeof classifySweepMatches>;
+        try {
+          cls = classifySweepMatches(t, fp, g2.segs, ratio, occ, sibSpans, anchorHForSweep, sweepOpts);
+        } catch (e) {
+          skipped.push({ sheet: sh.key, role: "plan", reason: e instanceof Error ? e.message : String(e) });
+          continue;
+        }
+        ({ matches, withheld, excluded, text_only, candidates, complete, scaled } = cls);
+      } else {
+        // inline-motif fallback path (register/grille hatch fill) — see the
+        // corroborateInlineMotif branch above for why this runs instead.
+        const inlineRes = sweepInlineMotif(inlineFp!, g2.segs, g2.meta, sh.upp);
+        const icls = classifyInlineMotifMatches(t, inlineRes, occ, sibSpans, anchor.h);
+        // adapted into the whole-shape CountedMatch/SweepWithheld shape so the
+        // commit/notes/aggregation code below stays untouched either way —
+        // size_score standing in for score, rotation/mirrored not meaningful
+        // for a hatch-fill match (no rigid shape to rotate/mirror).
+        matches = icls.matches.map((m) => ({ at: m.at, score: m.size_score, rotation: 0, mirrored: false, tag_at: m.tag_at }));
+        withheld = icls.withheld.map((w) => ({ at: w.at, score: w.size_score, rotation: 0, mirrored: false, reason: w.reason }));
+        excluded = icls.excluded;
+        text_only = icls.text_only;
+        candidates = { considered: icls.candidates_considered, dropped: 0 };
+        complete = icls.complete;
+        scaled = undefined;
+      }
+      const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
+      perSheet.push({
+        state: sh, matches, withheld, excluded, text_only,
+        candidates, complete, elapsed_ms, scale: ratio,
+        redundant_view: [],
+        ...(scaled ? { scaled } : {}),
+      });
+    }
+
+    // 4b. cross-discipline redundant room-view collapse — a real, generic
+    // drafting convention (see symbolsweep.ts's dedupeCrossDisciplineRoomViews
+    // for the full doctrine): two different disciplines each drawing their
+    // OWN "enlarged" plan of the SAME physical room redraw whatever equipment
+    // sits in it for their own trade's reference, so the SAME tag matched
+    // once on each discipline's view of the SAME room is one physical device,
+    // not one install per sheet. Never touches a same-discipline repeat (a
+    // real separate-install signal) or a match with no confidently-attributed
+    // room (never guessed). `disciplineOfSheetNumber` (symbolsweep.ts) is the
+    // same read step 3's same-tag corroborator gate already uses above.
+    const roomsBySheet = new Map<string, ReturnType<typeof roomTags>>();
+    const roomsFor = (sh: SheetState): ReturnType<typeof roomTags> => {
+      let rooms = roomsBySheet.get(sh.key);
+      if (!rooms) {
+        const spans = (sh.spans ?? []).map((sp) => ({ str: sp.str, x: sp.x0, y: sp.y0, w: sp.x1 - sp.x0, h: sp.y1 - sp.y0, ...(sp.rot ? { rot: sp.rot } : {}) }));
+        rooms = roomTags({ key: sh.key, sheet_number: sh.sheetNumber, spans });
+        roomsBySheet.set(sh.key, rooms);
+      }
+      return rooms;
+    };
+    const dedupInstances: RoomSweepInstance<CountedMatch>[] = [];
+    for (const ps of perSheet) {
+      const discipline = disciplineOfSheetNumber(ps.state.sheetNumber);
+      const rooms = discipline ? roomsFor(ps.state) : [];
+      for (const m of ps.matches) {
+        dedupInstances.push({
+          id: m, sheet: ps.state.key, discipline, at: m.at,
+          rooms, sheetWidthPx: ps.state.widthPx, sheetHeightPx: ps.state.heightPx,
+        });
+      }
+    }
+    const redundant = dedupeCrossDisciplineRoomViews(dedupInstances);
+    if (redundant.length) {
+      const redundantSet = new Map<CountedMatch, RedundantRoomView<CountedMatch>>(redundant.map((r) => [r.id, r]));
+      for (const ps of perSheet) {
+        const keep: CountedMatch[] = [];
+        for (const m of ps.matches) {
+          const r = redundantSet.get(m);
+          if (r) ps.redundant_view.push({ ...m, room: r.room, kept_sheet: r.keptSheet });
+          else keep.push(m);
+        }
+        ps.matches = keep;
+      }
+    }
+
+    // 5. commit — condition minted FROM the row (its key IS the tag), the
+    // schedule verdict and the seed citation on every marker, one undo step
+    const found = perSheet.reduce((n, p) => n + p.matches.length, 0);
+    let committed: { committed: number; shape_ids: string[]; condition: string; ea_total: number } | undefined;
+    if (opts.commit && found) {
+      const ids: string[] = [];
+      for (const ps of perSheet) {
+        for (const m of ps.matches) {
+          ids.push(this.commit(ps.state, t, "count", [m.at], { count: 1 }, {
+            method: "symbol_sweep",
+            actor: "agent",
+            reviewed: false,
+            assignment: { source: "schedule", schedule_sheet: tb.sheet },
+            symbol: {
+              score: m.score, rotation: m.rotation, mirrored: m.mirrored,
+              seed: {
+                source: "schedule_row", sheet: anchorSheet.key, row: { sheet: tb.sheet, key: t, table },
+                corroborated, ...(corroboratedVia ? { corroborated_via: "sibling_tag" as const, corroborated_tag: corroboratedVia } : corroborated ? { corroborated_via: "same_tag" as const } : {}),
+              },
+            },
+          }).id);
+        }
+      }
+      this.flushCommits("sweep_schedule_row");
+      const c = this.conditions.find((x) => x.finish_tag === t)!;
+      const ea_total = this.shapes
+        .filter((x) => x.condition_id === c.id && x.measure_role === "count")
+        .reduce((n, x) => n + (x.computed.count || 1), 0);
+      committed = { committed: ids.length, shape_ids: ids, condition: c.finish_tag, ea_total };
+    }
+
+    const cells: Record<string, string> = {};
+    for (const [k, v] of Object.entries(r.cells)) cells[k] = v.text;
+    const firstCell = r.cells[Object.keys(r.cells)[0]];
+    const capped = perSheet.filter((p) => p.candidates.dropped > 0);
+    const notes: string[] = [];
+    if (accessoryNote) notes.push(accessoryNote);
+    if (!corroborated) {
+      notes.push(`The tag "${t}" is drawn ${totalOcc === 1 ? "exactly once" : "too sparsely to cross-check"} — the fingerprint could not corroborate at a second occurrence${crossCandidates.length ? `, and none of ${crossCandidates.length} sibling tag(s) from the same ${table} table reproduced it either` : ""}; audit the matches with view_sheet before trusting the count.`);
+    } else if (corroboratedVia) {
+      // weaker evidence than same-tag corroboration, disclosed rather than
+      // left to read identically to it (anchor.corroborated_via says the
+      // same in the structured reply)
+      notes.push(`The tag "${t}" is drawn exactly once, so the fingerprint was corroborated against sibling tag "${corroboratedVia}"'s own occurrence in the same ${table} table instead — a real, weaker form of evidence than a same-tag corroboration (two different marks sharing a symbol family, not the same mark recurring); audit the matches with view_sheet before trusting the count.`);
+    }
+    if (inlineFp) notes.push(`No whole-shape marker recurs around this tag's own drawn text, so this anchored on the surrounding hatch fill's own real-world size/pitch instead (the register/grille fallback) — score is a size closeness, not a segment match; audit with view_sheet before trusting the count.`);
+    if (opts.commit && !found) notes.push("commit requested but nothing cleared the bar — no shapes were committed.");
+    // #186, same disclosure discipline as symbol_sweep: a ratio the count
+    // depends on is stated, and an assumed ratio over an empty sheet is named
+    // as the live explanation rather than left to read as absence.
+    const rowRescaled = perSheet.filter((p) => p.scaled);
+    if (rowRescaled.length) {
+      notes.push(`Size ratio applied from the sheets' own scales: ${rowRescaled.map((p) => `${p.state.key} ×${p.scaled!.ratio}`).join(", ")} — the marker was resized from ${anchorSheet.key} before matching.`);
+    }
+    const rowAssumed = perSheet.filter((p) => !p.scale.known && !p.matches.length);
+    if (rowAssumed.length) {
+      notes.push(`${rowAssumed.map((p) => p.state.key).join(", ")} found nothing and were swept at 1:1 — no scale is set on ${anchorSheet.key} or on them, so a different drawn scale there is a live explanation for the zero. set_scale on both ends to rule it out.`);
+    }
+    const rowRedundant = perSheet.filter((p) => p.redundant_view.length);
+    if (rowRedundant.length) {
+      notes.push(`${rowRedundant.map((p) => `${p.redundant_view.length} on ${p.state.key}`).join(", ")} withheld from the count as a cross-discipline REDUNDANT VIEW — the same "${t}" mark, in the same drawn room, on a different-discipline sheet's own "enlarged" plan of that room (the SAME physical device redrawn for another trade's reference, not a second install); audit with view_sheet before trusting this.`);
+    }
+    return {
+      tag: t,
+      row: {
+        sheet: tb.sheet,
+        table,
+        key: t,
+        cells,
+        citation: { sheet: tb.sheet, text: `${table} row ${t}`, bbox: Session.wireBox(firstCell?.bbox || tb.region) },
+      },
+      anchor: {
+        sheet: anchorSheet.key,
+        at: [round1(anchor.cx), round1(anchor.cy)],
+        rect: [round1(anchorRect![0][0]), round1(anchorRect![0][1]), round1(anchorRect![1][0]), round1(anchorRect![1][1])],
+        // inline-motif fallback has no rigid whole-shape perimeter to count
+        // segments/length on — `segments` reports the hatch cluster's own
+        // member-stroke count instead, `length_px` its own pitch, so the
+        // field is never a fabricated whole-shape number for this mode.
+        segments: fp ? fp.segments : inlineFp!.members,
+        length_px: round1(fp ? fp.totalLen : inlineFp!.pitchPx),
+        corroborated,
+        ...(corroborated ? { corroborated_via: corroboratedVia ? "sibling_tag" as const : "same_tag" as const } : {}),
+        ...(corroboratedVia ? { corroborated_tag: corroboratedVia } : {}),
+        occurrences: totalOcc,
+      },
+      found,
+      sheets: perSheet.map((p) => ({
+        sheet: p.state.key,
+        found: p.matches.length,
+        matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, tag_at: Session.wireBox(m.tag_at) })),
+        withheld: p.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, reason: w.reason })),
+        excluded: p.excluded.map((e) => ({ at: [round1(e.at[0]), round1(e.at[1])], tag: e.tag })),
+        text_only: p.text_only,
+        candidates: p.candidates,
+        complete: p.complete,
+        elapsed_ms: p.elapsed_ms,
+        ...(p.scaled ? { scaled: p.scaled } : {}),
+        ...(p.scale.known ? {} : { scale_assumed: `no scale set on ${anchorSheet.key} or this sheet — swept at 1:1` }),
+        ...(p.redundant_view.length ? {
+          redundant_view: p.redundant_view.map((m) => ({
+            at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored,
+            tag_at: Session.wireBox(m.tag_at), room: m.room, kept_sheet: m.kept_sheet,
+          })),
+        } : {}),
+      })),
+      complete: perSheet.every((p) => p.complete),
+      skipped,
+      ...(committed ?? {}),
+      ...(notes.length ? { note: notes.join(" ") } : {}),
+      ...(capped.length ? { warning: `Work cap: candidate placements were dropped un-scored on ${capped.map((p) => p.state.key).join(", ")} — sweep those sheets singly with symbol_sweep and reconcile the counts.` } : {}),
+    };
+  }
+
+  /** The mid-session shape inventory (#149): every committed shape's id,
+   * home, role, and quantities in one compact read — the ids edit_shape /
+   * delete_shape assume you have, without pulling the whole export_takeoff
+   * payload to find one shape. Filters narrow, they never 404 an empty list. */
+  listShapes(f: { sheet?: string; condition?: string } = {}) {
+    if (!this.docs.size) throw new UserError("No plan loaded — call load_plan first.");
+    let rows = this.shapes;
+    if (f.sheet) { const s = this.sheet(f.sheet); rows = rows.filter((x) => x.sheet_id === s.key); }
+    if (f.condition) {
+      const c = this.conditions.find((x) => x.finish_tag === f.condition);
+      if (!c) throw new UserError(`No condition ${JSON.stringify(f.condition)} — tags: ${this.conditions.map((x) => x.finish_tag).join(", ") || "(none)"}.`);
+      rows = rows.filter((x) => x.condition_id === c.id);
+    }
+    const tagById = new Map(this.conditions.map((c) => [c.id, c.finish_tag]));
+    return {
+      shapes: rows.map((x) => ({
+        id: x.id,
+        sheet: x.sheet_id,
+        condition: tagById.get(x.condition_id) ?? "",
+        measure_role: x.measure_role,
+        ...(x.computed.area_sf !== undefined ? { area_sf: x.computed.area_sf } : {}),
+        ...(x.computed.perimeter_lf !== undefined ? { perimeter_lf: x.computed.perimeter_lf } : {}),
+        ...(x.computed.count !== undefined ? { count: x.computed.count } : {}),
+        ...(x.height_ft !== undefined ? { height_ft: x.height_ft } : {}),
+        ...(x.label ? { label: x.label } : {}),
+        nverts: x.verts_norm.length,
+        reviewed: x.origin?.reviewed === true,
+        ...(x.origin?.assignment ? { assignment: x.origin.assignment.source } : {}),
+        ...(x.origin?.agent_edits ? { agent_edits: x.origin.agent_edits } : {}),
+      })),
+      count: rows.length,
+    };
+  }
+
+  summary() {
+    const rows = conditionTotals(this.conditions, this.shapes, this.seamCtx()) as Record<string, unknown>[];
+    // strip presentation fields for a compact agent-facing reply
+    const lean = rows.map(({ color, fill, hatch, materials, ...rest }) => rest);
+    // Scale gate: name every sheet whose scale is agent-set and unconfirmed —
+    // a totals reply must say what its numbers stand on
+    const unconfirmed = [...this.sheets.values()].filter((s) => s.upp != null && s.scaleConfirmed === false).map((s) => s.key);
+    return { conditions: lean, totals: grandTotals(rows), ...(unconfirmed.length ? { scale_unconfirmed: unconfirmed } : {}) };
+  }
+
+  deleteShape(id: string) {
+    const i = this.shapes.findIndex((x) => x.id === id);
+    if (i < 0) throw new UserError(`No shape with id ${JSON.stringify(id)}.`);
+    const shape = this.shapes[i];
+    // #206 — the canvas's answer is the spec (deleteSelected): deleting a
+    // reconciled deduct reverts its cut out of the parent too. The sole cut
+    // restores the frozen parent_prev; one of SEVERAL rebuilds from the
+    // chain's earliest snapshot minus the survivors. A rebuild that can't be
+    // trusted falls through to the plain delete — the shape goes, its cut
+    // stays baked in, and the reply says so instead of staying silent.
+    if (shape.cuts_shape_id && shape.origin?.parent_prev) {
+      const parent = this.shapes.find((x) => x.id === shape.cuts_shape_id);
+      if (parent) {
+        const parentPrev = this.cutoutParentPrevSans(shape);
+        if (parentPrev) {
+          const parentAfter: CutoutParentPrev = {
+            verts_norm: parent.verts_norm.map((v) => [...v] as [number, number]),
+            ...(parent.verts_norm_holes ? { verts_norm_holes: parent.verts_norm_holes.map((h) => h.map((v) => [...v] as [number, number])) } : {}),
+            computed: { ...parent.computed },
+          };
+          this.shapes.splice(i, 1);
+          Session.restoreCutoutSnapshot(parent, parentPrev);
+          this.record({ op: "cutout_restore", tool: "delete_shape", removed: { shape, index: i }, parent_id: parent.id, parent_after: parentAfter });
+          return {
+            deleted: id, shape_count: this.shapes.length,
+            note: `Reconciled cutout: the cut was reverted out of parent ${parent.id} too (its net is back to ${parent.computed.area_sf} SF).`,
+          };
+        }
+        this.shapes.splice(i, 1);
+        this.record({ op: "delete", tool: "delete_shape", removed: [{ shape, index: i }] });
+        return {
+          deleted: id, shape_count: this.shapes.length,
+          note: `The cut could not be rebuilt out of parent ${parent.id} (a re-subtract degenerates) — the deduct is gone but its hole stays baked into the parent's geometry, the canvas's own fallback.`,
+        };
+      }
+    }
+    this.shapes.splice(i, 1);
+    this.record({ op: "delete", tool: "delete_shape", removed: [{ shape, index: i }] });
+    // deleting a PARENT with reconciled cuts: the canvas has no cascade — the
+    // deduct children stay, orphaned (skipped by totals, dangling on the
+    // sheet). Same behavior here, disclosed rather than silent.
+    const orphans = this.shapes.filter((x) => x.cuts_shape_id === id).length;
+    return {
+      deleted: id, shape_count: this.shapes.length,
+      ...(orphans ? { note: `${orphans} reconciled deduct(s) pointed at this shape and are now orphaned (their holes died with the parent; totals ignore them) — the canvas behaves the same. delete_shape them too, or undo_last.` } : {}),
+    };
+  }
+
+  /** Revise a committed shape in place: new geometry, a different condition, a
+   * different role, or any combination. This is the verb that turns the agent
+   * from an appender into an editor — it can propose a ring, look at the
+   * overlay, see it overshot into the corridor, and move the two offending
+   * vertices, instead of deleting and re-deriving the whole room.
+   *
+   * The review gate is absolute: a shape a human affirmed (origin.reviewed ===
+   * true) is ink, and no agent verb touches ink. This server never sets that
+   * flag itself, so the guard is inert here today — it is the contract that
+   * makes this surface portable to a host that DOES have a review gate, and it
+   * belongs in the code rather than in a host's good intentions.
+   *
+   * `label` is the room (or phase, or area) the shape belongs to — the same
+   * per-shape field the canvas groups the Report by. A visible string sets it,
+   * "" clears it, and the whole shape is snapshotted before the write, so undo
+   * restores a cleared label as exactly as it restores geometry.
+   *
+   * Provenance: agent self-revision bumps origin.agent_edits and touches
+   * NOTHING in the human-correction vocabulary (edited / edits /
+   * proposed_verts_norm — see web/src/lib/provenance.js). Those fields grade a
+   * human's correction of a machine proposal; an agent fixing its own work is
+   * not that, and conflating the two would poison the exact signal the capture
+   * layer exists to collect. Freezing proposed_verts_norm stays correct on the
+   * human's first edit, because the geometry a reviewer saw IS the agent's
+   * final revision, not its first draft. */
+  editShape(id: string, patch: { verts?: Point[]; condition?: string; role?: MeasureRole; label?: string }) {
+    const i = this.shapes.findIndex((x) => x.id === id);
+    if (i < 0) throw new UserError(`No shape with id ${JSON.stringify(id)}.`);
+    const cur = this.shapes[i];
+    if (cur.origin?.reviewed === true) {
+      throw new UserError(`Shape ${JSON.stringify(id)} was affirmed by a human — reviewed work is ink, not pencil, and cannot be edited by an agent.`);
+    }
+    if (patch.verts === undefined && patch.condition === undefined && patch.role === undefined && patch.label === undefined) {
+      throw new UserError("Nothing to change — pass at least one of verts, condition, role, label.");
+    }
+    // #206 — a reconciled cutout pair is one geometry, not two shapes to edit
+    // independently. Moving/re-roling the deduct would desync the hole it cut
+    // (the parent's computed would keep netting the OLD ring); moving a holed
+    // parent's outer ring would strand its holes at their frozen coordinates
+    // (the canvas has the same limitation — its hole rings don't track a
+    // reshape either, #137 follow-up). Label edits stay fine on both.
+    if (cur.cuts_shape_id && (patch.verts !== undefined || patch.role !== undefined || patch.condition !== undefined)) {
+      throw new UserError(`Shape ${JSON.stringify(id)} is a reconciled cutout — its ring IS the hole in ${cur.cuts_shape_id}. delete_shape it (the parent's geometry is restored) and cut_out again where you mean it.`);
+    }
+    if (cur.verts_norm_holes?.length && (patch.verts !== undefined || patch.role !== undefined)) {
+      throw new UserError(`Shape ${JSON.stringify(id)} carries ${cur.verts_norm_holes.length} reconciled hole(s) — reshaping its outer ring would strand them. delete_shape the cutout deduct(s) first (each restores the parent), reshape, then cut_out again.`);
+    }
+    const s = this.sheet(cur.sheet_id);
+    const role = patch.role ?? cur.measure_role;
+    // count is scale-free (EA), exactly as commit-time: moving a marker on an
+    // unscaled sheet must not trip the scale gate
+    if (role !== "count" && s.upp == null) throw new UserError(this.scaleGate(s));
+    const upp = s.upp ?? 0;
+
+    // Geometry: either the supplied verts or the shape's own, back in image px.
+    const vertsPx: Point[] = patch.verts
+      ?? cur.verts_norm.map(([x, y]) => [x * s.widthPx, y * s.heightPx] as Point);
+    const minPts = role === "count" ? 1 : role === "linear" || role === "surface_area" ? 2 : 3;
+    if (vertsPx.length < minPts) {
+      throw new UserError(`A ${role === "count" ? "count marker needs at least 1 point" : role === "linear" || role === "surface_area" ? `${role} shape needs at least 2 points` : "closed shape needs at least 3 vertices"} — got ${vertsPx.length}.`);
+    }
+
+    // Quantities are always recomputed from the resulting geometry AND role, so
+    // a role flip alone re-measures correctly (open length vs closed area).
+    // surface_area re-measures at its height: the shape's snapshot, else the
+    // condition's H knob — flipping INTO surface with neither is refused.
+    const heightFor = (): number => {
+      const condId = patch.condition !== undefined ? this.conditionFor(patch.condition).id : cur.condition_id;
+      const cond = this.conditions.find((x) => x.id === condId);
+      const h = Number(cur.height_ft) || Number(cond?.height_ft) || 0;
+      if (!(h > 0)) throw new UserError(`Surface Area needs a height — set height_ft on ${cond?.finish_tag ?? "the condition"} with edit_condition first.`);
+      return h;
+    };
+    const computed =
+      role === "count" ? { count: cur.computed.count ?? 1 }
+      : role === "linear" ? { area_sf: 0, perimeter_lf: round2(openLen(vertsPx) * upp) }
+      : role === "surface_area" ? (() => {
+          const LF = openLen(vertsPx) * upp;
+          return { area_sf: round2(LF * heightFor()), perimeter_lf: round2(LF) };
+        })()
+      : (() => {
+          const met = closedMetrics(vertsPx);
+          return { area_sf: round2(met.area * upp * upp), perimeter_lf: round2(met.perim * upp) };
+        })();
+
+    const before: Shape = structuredClone(cur);
+    const condition_id = patch.condition !== undefined ? this.conditionFor(patch.condition).id : cur.condition_id;
+    // label: a visible string sets it, "" (or whitespace) CLEARS it — the
+    // canvas's own rule (web/src/lib/shapeLabels.js), where unassigned is the
+    // key being absent rather than an empty string sitting in the payload.
+    const nextLabel = patch.label !== undefined ? patch.label.trim() : (cur.label ?? "");
+    this.shapes[i] = {
+      ...cur,
+      condition_id,
+      measure_role: role,
+      verts_norm: vertsPx.map(([x, y]) => [x / s.widthPx, y / s.heightPx]),
+      computed,
+      ...(nextLabel ? { label: nextLabel } : {}),
+      ...(role === "surface_area" ? { height_ft: Number(cur.height_ft) || heightFor() } : {}),
+      ...(cur.origin ? { origin: {
+        ...cur.origin,
+        agent_edits: (cur.origin.agent_edits ?? 0) + 1,
+        // a reassign onto a different tag is the agent choosing the finish —
+        // keeping "schedule" (and its citation) past that point would be a lie
+        ...(patch.condition !== undefined && cur.origin.assignment?.source === "schedule"
+          ? { assignment: { source: "asserted" as const } } : {}),
+      } } : {}),
+    };
+    // the spread above carried the old label through — clearing means the key
+    // GOES, so an export never ships label: "" for "no room"
+    if (!nextLabel) delete this.shapes[i].label;
+    this.record({ op: "edit", tool: "edit_shape", before });
+
+    const changed = [
+      ...(patch.verts !== undefined ? ["verts"] : []),
+      ...(patch.condition !== undefined ? ["condition"] : []),
+      ...(patch.role !== undefined ? ["role"] : []),
+      ...(patch.label !== undefined ? ["label"] : []),
+    ];
+    return {
+      shape_id: id,
+      changed,
+      measure_role: role,
+      nverts: vertsPx.length,
+      ...computed,
+      ...(nextLabel ? { label: nextLabel } : {}),
+      agent_edits: this.shapes[i].origin?.agent_edits ?? 0,
+    };
+  }
+
+  /** Add/remove/patch supporting-materials rows on a condition, in one call.
+   * Unlike editShape there is no review gate to check — materials rows carry
+   * no origin/reviewed field, because they are quantity CONFIG (a coverage
+   * rate), not geometry a human traced. Validated all-or-nothing before
+   * anything is written: a bad id anywhere in remove/patch throws and nothing
+   * changes, same discipline as the shapes tools. Reversible with undo_last —
+   * one journal entry snapshots the condition's whole materials array before
+   * the call, restored verbatim on undo (same pattern as editShape's `before`
+   * capture, simpler here because there is no per-row provenance to preserve). */
+  editMaterials(tag: string, opts: {
+    add?: { name: string; per?: number; basis?: MaterialRow["basis"]; unit?: string; round?: boolean; note?: string }[];
+    remove?: string[];
+    patch?: { id: string; fields: Partial<Omit<MaterialRow, "id">> }[];
+  }) {
+    const add = opts.add ?? [], remove = opts.remove ?? [], patch = opts.patch ?? [];
+    if (!add.length && !remove.length && !patch.length) {
+      throw new UserError("Nothing to change — pass at least one of add, remove, patch.");
+    }
+    for (let i = 0; i < add.length; i++) {
+      if (!add[i].name.trim()) throw new UserError(`add[${i}]: name required.`);
+    }
+    // Validate remove/patch against whatever condition already exists, WITHOUT
+    // minting one — conditionFor() below creates on first touch (same as every
+    // other condition-bearing tool), and a validation failure must leave no
+    // trace: an unknown tag + a bad row id should error, not mint an empty
+    // condition as a side effect of the error.
+    const existingMaterials = this.conditions.find((x) => x.finish_tag === tag)?.materials ?? [];
+    const byId = new Map(existingMaterials.map((m) => [m.id, m]));
+    for (const id of remove) {
+      if (!byId.has(id)) throw new UserError(`remove: no material row ${JSON.stringify(id)} on condition ${JSON.stringify(tag)}.`);
+    }
+    for (let i = 0; i < patch.length; i++) {
+      if (!byId.has(patch[i].id)) throw new UserError(`patch[${i}]: no material row ${JSON.stringify(patch[i].id)} on condition ${JSON.stringify(tag)}.`);
+      if (!Object.keys(patch[i].fields).length) throw new UserError(`patch[${i}]: fields must be non-empty.`);
+    }
+
+    const c = this.conditionFor(tag);
+    // Snapshot BEFORE anything is written — the target AND its descendants.
+    // Materials edits propagate (variants.ts, the same propagate-on-write the
+    // canvas runs per row gesture), so undo has to restore every condition the
+    // write could reach, tombstones included: a remove on a twin writes
+    // materials_dropped, and undo must take that back too.
+    const cid = c.id;
+    const snap = [cid, ...this.descendantConditionIds(cid)].map((id) => {
+      const x = this.conditions.find((q) => q.id === id)! as unknown as VariantCond;
+      return { condition_id: id, before: structuredClone(x.materials) as unknown as MaterialRow[],
+               ...(x.materials_dropped ? { dropped_before: [...x.materials_dropped] } : {}) };
+    });
+
+    // The family rules are the canvas's, verb for verb (TakeoffCanvas.jsx):
+    // add on a parent reaches every twin still listening; remove on a twin
+    // tombstones a following row (so a later family edit cannot bring it
+    // back); a patch on a twin's own row takes THAT row local. The functions
+    // are pure and return fresh objects, so this section works functionally
+    // over `conds` and writes the array back once at the end.
+    let conds = this.conditions as unknown as VariantCond[];
+    const isParent = () => conds.some((x) => x.variant_of === cid);
+    const target = () => conds.find((x) => x.id === cid)!;
+    const mint = (p: string) => uid(p);
+
+    const added: string[] = [];
+    for (const a of add) {
+      const row: MaterialRow = {
+        id: uid("mat"), name: a.name.trim(), per: Math.max(0, a.per ?? 0),
+        basis: a.basis ?? "area", unit: a.unit ?? "", round: a.round ?? true,
+        ...(a.note ? { note: a.note } : {}),
+      };
+      conds = conds.map((x) => (x.id !== cid ? x : { ...x, materials: [...(x.materials || []), row as unknown as VariantRow] }));
+      added.push(row.id);
+      if (isParent()) conds = propagateRowAdd(conds, cid, row as unknown as VariantRow, mint);
+    }
+    const removed = new Set(remove);
+    for (const id of remove) {
+      if (target().variant_of) {
+        conds = conds.map((x) => (x.id !== cid ? x : dropRowLocal(x, id)));
+      } else {
+        conds = conds.map((x) => (x.id !== cid ? x : { ...x, materials: (x.materials || []).filter((r) => r.id !== id) }));
+        conds = propagateRowRemove(conds, cid, id);
+      }
+    }
+    const patched: string[] = [];
+    for (const p of patch) {
+      conds = conds.map((x) => (x.id !== cid ? x : {
+        ...x,
+        materials: (x.materials || []).map((r) => {
+          if (r.id !== p.id) return r;
+          // fields is an open record at the schema — the row's link fields
+          // (id/origin_id/inherited) are pinned back so a patch cannot forge
+          // or shed a family link
+          const merged = { ...r, ...p.fields, id: r.id } as VariantRow;
+          if (r.origin_id === undefined) delete merged.origin_id; else merged.origin_id = r.origin_id;
+          if (r.inherited === undefined) delete merged.inherited; else merged.inherited = r.inherited;
+          return merged;
+        }),
+      }));
+      patched.push(p.id);
+      const cur = target();
+      if (cur.variant_of) {
+        conds = conds.map((x) => (x.id !== cid ? x : markRowLocal(x, p.id)));
+      } else if (isParent()) {
+        const row = (cur.materials || []).find((r) => r.id === p.id);
+        if (row) conds = propagateRowPatch(conds, cid, p.id, row as unknown as Record<string, unknown>);
+      }
+    }
+    this.conditions = conds as unknown as Condition[];
+
+    const [primary, ...familySnap] = snap;
+    this.record({ op: "materials", tool: "edit_materials", condition_id: cid,
+                  before: primary.before,
+                  ...(primary.dropped_before ? { dropped_before: primary.dropped_before } : {}),
+                  ...(familySnap.length ? { family: familySnap } : {}) });
+
+    return {
+      condition: tag, condition_id: cid,
+      changed: { added, removed: [...removed], patched },
+      materials: target().materials as unknown as MaterialRow[],
+    };
+  }
+
+  /** Set a condition's quantity knobs — waste % and multiplier. Both are
+   * emitted by takeoff_summary (`waste_pct`, the `*_net` order quantities) and
+   * carried by every export, but nothing in the tool surface could set them,
+   * so an agent's takeoff always shipped net === gross (#131). Same class as
+   * editMaterials — quantity config, not traced geometry, so no review gate —
+   * but resolve-or-error rather than mint-on-first-touch: these knobs only
+   * mean anything on a condition that exists, and a typo'd tag must error,
+   * not create an empty condition as a side effect. One journal entry
+   * snapshots both knobs; undo restores them verbatim. */
+  /** dimsFor / uppFor as computeRollTakeoff wants them — bitmap px and real
+   * feet per px, null for sheets that can't participate. */
+  private rollInputs() {
+    return {
+      dimsFor: (sheetId: string) => { const s = this.sheets.get(sheetId); return s ? { w: s.widthPx, h: s.heightPx } : null; },
+      uppFor: (sheetId: string) => this.sheets.get(sheetId)?.upp ?? null,
+    };
+  }
+
+  /** The figured seam length per SHAPE, as conditionTotals wants it — the
+   * basis a materials row with basis "seam_lf" (weld rod, seam tape) divides
+   * against. computeRollTakeoff returns immediately when no condition carries
+   * a roll setup, so this costs nothing on a job that has none, and every
+   * seam_lf row on such a job reads 0 rather than guessing. */
+  private seamCtx() {
+    const { dimsFor, uppFor } = this.rollInputs();
+    const { byCond } = computeRollTakeoff(this.conditions, this.shapes, dimsFor, uppFor) as { byCond: Map<string, unknown> };
+    return { seamByShape: seamLfByShape(byCond) as Map<string, number> };
+  }
+
+  editCondition(tag: string, opts: { waste_pct?: number; multiplier?: number; height_ft?: number; roll_setup?: Record<string, unknown> | null }) {
+    if (opts.waste_pct === undefined && opts.multiplier === undefined && opts.height_ft === undefined && opts.roll_setup === undefined) {
+      throw new UserError("Nothing to change — pass at least one of waste_pct, multiplier, height_ft, roll_setup.");
+    }
+    const c = this.conditions.find((x) => x.finish_tag === tag);
+    if (!c) {
+      const known = this.conditions.map((x) => x.finish_tag);
+      throw new UserError(`No condition ${JSON.stringify(tag)}.${known.length ? ` Known tags: ${known.join(", ")}.` : " Nothing has minted a condition yet — commit a measurement or add materials first."}`);
+    }
+    const before = {
+      waste_pct: c.waste_pct, multiplier: c.multiplier, height_ft: c.height_ft,
+      roll_setup: c.roll_setup ? structuredClone(c.roll_setup) : undefined,
+    };
+    if (opts.waste_pct !== undefined) c.waste_pct = opts.waste_pct;
+    if (opts.multiplier !== undefined) c.multiplier = opts.multiplier;
+    if (opts.height_ft !== undefined) c.height_ft = opts.height_ft;
+    if (opts.roll_setup !== undefined) {
+      if (opts.roll_setup === null) {
+        delete c.roll_setup; // opt out — the condition is trade-agnostic again
+      } else {
+        const given = Object.fromEntries(Object.entries(opts.roll_setup).filter(([, v]) => v !== undefined));
+        const prevMaterial = (c.roll_setup as { material?: string } | undefined)?.material;
+        const material = (given.material as string | undefined) ?? prevMaterial ?? "carpet";
+        // a material change (or a fresh opt-in) starts from the engine's
+        // defaults for that class — the canvas's opt-in select does the same;
+        // a same-material partial edit patches the existing setup
+        const base = hasRollSetup(c) && material === prevMaterial ? (c.roll_setup as object) : (mintRollSetup(material) as object);
+        c.roll_setup = { ...base, ...given, material };
+      }
+    }
+    this.record({ op: "condition", tool: "edit_condition", condition_id: c.id, before });
+
+    // when the condition is roll goods AND floor shapes exist on scaled sheets,
+    // echo the figured order right on the reply — the agent should not need an
+    // export round-trip to learn what its knob just did
+    let roll: Record<string, unknown> | undefined;
+    if (hasRollSetup(c)) {
+      const { dimsFor, uppFor } = this.rollInputs();
+      const { byCond } = computeRollTakeoff([c], this.shapes, dimsFor, uppFor) as { byCond: Map<string, unknown> };
+      const rows = conditionTotals([c], this.shapes) as Record<string, unknown>[];
+      roll = (rollReportRows(byCond, rows) as Record<string, unknown>[])[0];
+    }
+    return {
+      condition: tag, condition_id: c.id, waste_pct: c.waste_pct, multiplier: c.multiplier,
+      ...(c.height_ft !== undefined ? { height_ft: c.height_ft } : {}),
+      ...(c.roll_setup ? { roll_setup: c.roll_setup } : {}),
+      ...(roll ? { roll } : {}),
+    };
+  }
+
+  /**
+   * Twin a condition — the same finish measured somewhere else, with its own materials.
+   *
+   * The same sheet goods over a slab and over a raised deck take the same field material and
+   * different preparation underneath. The twin carries the original's whole materials list and
+   * keeps FOLLOWING it: change a coverage rate on the original and every twin that hasn't
+   * touched that row gets it; edit a row on the twin and only that row goes local. The rule
+   * lives in web/src/lib/variants.ts — one copy, shared with the canvas, so a headless session
+   * and the app can never disagree about what a twin holds.
+   *
+   * A twin needs its OWN tag, and that is not cosmetic here: every tool in this server resolves
+   * a condition by finish tag and takes the FIRST match, so two conditions sharing one would
+   * make the second permanently unreachable — and a takeoff re-import collapses them last-wins.
+   * So the label is required and a collision is refused rather than de-collided.
+   */
+  /** Every condition below `rootId` in the family tree, children first. The
+   * propagate functions walk this same tree; undo snapshots ride it so a
+   * family edit's inverse restores exactly the set the write could touch.
+   * The `seen` guard mirrors variants.ts — a hand-edited payload with a
+   * cycle must not hang the session. */
+  private descendantConditionIds(rootId: string): string[] {
+    const out: string[] = [];
+    const seen = new Set<string>([rootId]);
+    const walk = (pid: string) => {
+      for (const child of this.conditions as unknown as VariantCond[]) {
+        if (child.variant_of === pid && !seen.has(child.id)) {
+          seen.add(child.id);
+          out.push(child.id);
+          walk(child.id);
+        }
+      }
+    };
+    walk(rootId);
+    return out;
+  }
+
+  duplicateCondition(tag: string, label: string) {
+    const src = this.conditions.find((x) => x.finish_tag === tag);
+    if (!src) {
+      const known = this.conditions.map((x) => x.finish_tag);
+      throw new UserError(`No condition ${JSON.stringify(tag)} to duplicate.${known.length ? ` Known tags: ${known.join(", ")}.` : ""}`);
+    }
+    const lab = String(label || "").trim();
+    if (!lab) throw new UserError("label is required — it is what gives the twin its own finish tag, and a tag is how every tool here resolves a condition.");
+    const newTag = variantTag(src.finish_tag, lab);
+    if (this.conditions.some((x) => x.finish_tag.trim().toUpperCase() === newTag.trim().toUpperCase())) {
+      throw new UserError(`A condition is already called ${JSON.stringify(newTag)} — pick a different label. Two conditions sharing a tag would make one of them unreachable to every tool.`);
+    }
+    const { twin, parentPatch } = mintTwin(src as unknown as VariantCond, {
+      label: lab, tag: newTag, mintId: (p: string) => uid(p), nowIso,
+      nextHatch: HATCH_IDS[1 + ((this.conditions.length + 1) % (HATCH_IDS.length - 1))],
+    });
+    if (parentPatch) Object.assign(src, parentPatch);
+    this.conditions.push(twin as unknown as Condition);
+    this.record({ op: "duplicate_condition", tool: "duplicate_condition", condition_id: twin.id, parent_id: src.id,
+                  parent_had_family: !parentPatch });
+    return {
+      condition: newTag, condition_id: twin.id, variant_of: src.id, variant_label: lab,
+      family_id: twin.family_id as string,
+      inherited_rows: (twin.materials || []).length,
+      note: `Materials follow ${src.finish_tag} until you edit them on this condition. No takeoffs came along — measure into ${newTag}.`,
+    };
+  }
+
+  /** Cut a twin loose: every following row freezes where it stands. It KEEPS its family_id, so
+   * it still groups with its siblings — only the inheritance ends. */
+  splitCondition(tag: string) {
+    const c = this.conditions.find((x) => x.finish_tag === tag);
+    if (!c) {
+      const known = this.conditions.map((x) => x.finish_tag);
+      throw new UserError(`No condition ${JSON.stringify(tag)}.${known.length ? ` Known tags: ${known.join(", ")}.` : ""}`);
+    }
+    const cond = c as unknown as VariantCond;
+    if (!cond.variant_of) {
+      return { condition: tag, condition_id: c.id, split: false, frozen_rows: 0,
+               note: "Already owns its materials — nothing was following." };
+    }
+    const frozen = (cond.materials || []).filter((r) => r.inherited).length;
+    const before = structuredClone({ variant_of: cond.variant_of, materials: cond.materials,
+                                     materials_dropped: cond.materials_dropped });
+    const [next] = splitFromFamily([cond], cond.id);
+    Object.assign(c, next);
+    // splitFromFamily cuts variant_of and the tombstones BY OMISSION —
+    // Object.assign cannot delete, so take them off the live object
+    // explicitly or the "split" twin would still carry its link in every
+    // export and read as a follower to the canvas.
+    delete (c as unknown as VariantCond).variant_of;
+    delete (c as unknown as VariantCond).materials_dropped;
+    this.record({ op: "split_condition", tool: "split_condition", condition_id: c.id, before });
+    return { condition: tag, condition_id: c.id, split: true, frozen_rows: frozen,
+             family_id: cond.family_id as string | undefined,
+             note: "Frozen at its current values; edits to the original no longer reach it. It still groups with its family." };
+  }
+
+  /** Step back over this session's own last n mutations, newest first. Each
+   * entry's inverse is exact (see JournalEntry), so this restores state rather
+   * than approximating it. Reads are not journaled, so undo never has to step
+   * over a look — n counts gestures that changed something. */
+  undoLast(n: number) {
+    const undone: { seq: number; op: JournalEntry["op"]; tool: string; shapes: number }[] = [];
+    for (let k = 0; k < n; k++) {
+      const e = this.journal.pop();
+      if (!e) break;
+      if (e.op === "commit") {
+        const dead = new Set(e.ids);
+        this.shapes = this.shapes.filter((x) => !dead.has(x.id));
+        undone.push({ seq: e.seq, op: e.op, tool: e.tool, shapes: e.ids.length });
+      } else if (e.op === "edit") {
+        const i = this.shapes.findIndex((x) => x.id === e.before.id);
+        // the shape may have been deleted after the edit; undoing the edit of a
+        // shape that is gone is a no-op on geometry, not an error
+        if (i >= 0) this.shapes[i] = e.before;
+        undone.push({ seq: e.seq, op: e.op, tool: e.tool, shapes: i >= 0 ? 1 : 0 });
+      } else if (e.op === "materials") {
+        // the write may have PROPAGATED (variants.ts — the same
+        // propagate-on-write the canvas runs), so the entry carries snapshots
+        // for every condition it could reach: the target plus its
+        // descendants, tombstones included. Each goes back verbatim.
+        const put = (condition_id: string, before: MaterialRow[], dropped?: string[]) => {
+          const cc = this.conditions.find((x) => x.id === condition_id) as unknown as VariantCond | undefined;
+          if (!cc) return;
+          cc.materials = before as unknown as VariantRow[];
+          if (dropped === undefined) delete cc.materials_dropped;
+          else cc.materials_dropped = dropped;
+        };
+        put(e.condition_id, e.before, e.dropped_before);
+        for (const f of e.family ?? []) put(f.condition_id, f.before, f.dropped_before);
+        undone.push({ seq: e.seq, op: e.op, tool: e.tool, shapes: 0 });
+      } else if (e.op === "condition") {
+        const c = this.conditions.find((x) => x.id === e.condition_id);
+        if (c) {
+          c.waste_pct = e.before.waste_pct;
+          c.multiplier = e.before.multiplier;
+          if (e.before.height_ft === undefined) delete c.height_ft;
+          else c.height_ft = e.before.height_ft;
+          if (e.before.roll_setup === undefined) delete c.roll_setup;
+          else c.roll_setup = e.before.roll_setup;
+        }
+        undone.push({ seq: e.seq, op: e.op, tool: e.tool, shapes: 0 });
+      } else if (e.op === "duplicate_condition") {
+        // a twin is removed whole — and the family_id the mint may have stamped on the PARENT
+        // comes off too when the parent had no family before, so undo leaves no orphan grouping
+        const at = this.conditions.findIndex((x) => x.id === e.condition_id);
+        if (at >= 0) this.conditions.splice(at, 1);
+        if (!e.parent_had_family) {
+          const parent = this.conditions.find((x) => x.id === e.parent_id) as unknown as VariantCond | undefined;
+          if (parent) delete parent.family_id;
+        }
+        undone.push({ seq: e.seq, op: e.op, tool: e.tool, shapes: 0 });
+      } else if (e.op === "split_condition") {
+        // the link and every row's inherited/origin_id flag go back verbatim — a split is
+        // reversible, so an agent that cut a twin loose by mistake is not stuck with it
+        const c = this.conditions.find((x) => x.id === e.condition_id) as unknown as VariantCond | undefined;
+        if (c) {
+          if (e.before.variant_of === undefined) delete c.variant_of;
+          else c.variant_of = e.before.variant_of;
+          c.materials = structuredClone(e.before.materials) as VariantCond["materials"];
+          if (e.before.materials_dropped === undefined) delete c.materials_dropped;
+          else c.materials_dropped = structuredClone(e.before.materials_dropped);
+        }
+        undone.push({ seq: e.seq, op: e.op, tool: e.tool, shapes: 0 });
+      } else if (e.op === "cutout") {
+        // parent and hole go back TOGETHER — the deduct vanishes and the
+        // parent re-takes its frozen pre-cut snapshot, one gesture (#206)
+        this.shapes = this.shapes.filter((x) => x.id !== e.deduct_id);
+        const p = this.shapes.find((x) => x.id === e.parent_id);
+        if (p) Session.restoreCutoutSnapshot(p, e.parent_prev);
+        undone.push({ seq: e.seq, op: e.op, tool: e.tool, shapes: 1 });
+      } else if (e.op === "runcut") {
+        // the far-side pieces vanish and the run re-takes its pre-cut geometry
+        const dead = new Set(e.minted_ids);
+        this.shapes = this.shapes.filter((x) => !dead.has(x.id));
+        const t = this.shapes.find((x) => x.id === e.target_id);
+        if (t) Session.restoreCutoutSnapshot(t, e.target_prev);
+        undone.push({ seq: e.seq, op: e.op, tool: e.tool, shapes: 1 + e.minted_ids.length });
+      } else if (e.op === "cutout_restore") {
+        // inverse of deleting a reconciled deduct: the deduct returns at its
+        // index and the parent re-takes the cut state it held before
+        this.shapes.splice(Math.min(e.removed.index, this.shapes.length), 0, e.removed.shape);
+        const p = this.shapes.find((x) => x.id === e.parent_id);
+        if (p) Session.restoreCutoutSnapshot(p, e.parent_after);
+        undone.push({ seq: e.seq, op: e.op, tool: e.tool, shapes: 1 });
+      } else if (e.op === "approval") {
+        // the stored inverse came from the canvas's own pure apply — exact
+        // restore, array order included (a lifted verdict returns to its
+        // recorded index; a minted one is removed, id and all)
+        this.approvals = applyApprovalCommand(this.approvals, e.inverse).approvals;
+        undone.push({ seq: e.seq, op: e.op, tool: e.tool, shapes: 0 });
+      } else {
+        for (const { shape, index } of e.removed) {
+          this.shapes.splice(Math.min(index, this.shapes.length), 0, shape);
+        }
+        undone.push({ seq: e.seq, op: e.op, tool: e.tool, shapes: e.removed.length });
+      }
+    }
+    return {
+      undone: undone.length,
+      steps: undone,
+      shape_count: this.shapes.length,
+      remaining: this.journal.length,
+      ...(undone.length < n ? { note: `Only ${undone.length} step(s) were available to undo.` } : {}),
+    };
+  }
+
+  /** Place an annotation. A note ABOUT the work — it never measures anything
+   *  and never touches a quantity, which is why there is no review gate here:
+   *  the pencil-not-ink rule exists to stop an agent inventing GEOMETRY, and a
+   *  cloud saying "verify substrate" is not geometry.
+   *
+   *  `condition` attaches it to a scope by finish tag, minting the condition on
+   *  first touch exactly like one_click/measure_polygon — so an agent can note
+   *  something about CPT-1 before anything is traced for CPT-1. Omit it for a
+   *  note about the sheet rather than about a finish. */
+  annotate(a: { sheet: string; type: Markup["type"]; text: string; at?: Point; target?: Point; rect?: [Point, Point]; from?: Point; to?: Point; r?: number; condition?: string }): Record<string, unknown> {
+    const s = this.sheet(a.sheet);
+    const n = ([x, y]: Point): [number, number] => [x / s.widthPx, y / s.heightPx];
+    if ((a.type === "cloud" || a.type === "highlight") && !a.rect) throw new UserError(`a ${a.type} needs rect: [[x0,y0],[x1,y1]] in image px`);
+    if ((a.type === "text" || a.type === "callout" || a.type === "bubble") && !a.at) throw new UserError(`a ${a.type} needs at: [x,y] in image px`);
+    if (a.type === "callout" && !a.target) throw new UserError("a callout needs target: [x,y] — the point the leader line aims at");
+    if ((a.type === "arrow" || a.type === "dimension") && (!a.from || !a.to)) {
+      throw new UserError(a.type === "arrow"
+        ? "an arrow needs from: [x,y] and to: [x,y] — tail and head, in image px"
+        : "a dimension needs from: [x,y] and to: [x,y] — its two measured endpoints, in image px");
+    }
+    // a dimension LABELS a real length, so it is the one annotation the scale
+    // gate applies to — same refusal the measure tools give, never a px label
+    // dressed up as feet
+    let len_ft: number | undefined;
+    if (a.type === "dimension") {
+      if (s.upp == null) throw new UserError(this.scaleGate(s));
+      len_ft = round2(Math.hypot(a.to![0] - a.from![0], a.to![1] - a.from![1]) * s.upp);
+    }
+    const cond = a.condition ? this.conditionFor(a.condition) : null;
+    const m: Markup = {
+      id: uid("mk"),
+      sheet_id: s.key,
+      type: a.type,
+      text: a.text || "",
+      condition_id: cond?.id ?? "",
+      rfi_id: "",
+      created_at: new Date().toISOString(),
+      ...(a.at ? { at: n(a.at) } : {}),
+      ...(a.target ? { target: n(a.target) } : {}),
+      ...(a.rect ? { rect: [n(a.rect[0]), n(a.rect[1])] as [[number, number], [number, number]] } : {}),
+      ...(a.from ? { from: n(a.from) } : {}),
+      ...(a.to ? { to: n(a.to) } : {}),
+      // bubble radius: px → fraction of sheet WIDTH (marked-set frame); the
+      // canvas default is 0.02 when unset — stored explicitly so exports agree
+      ...(a.type === "bubble" ? { r: a.r != null ? a.r / s.widthPx : 0.02 } : {}),
+      // dimension: the measured length rides the markup so the renderers
+      // (canvas, marked set) draw the label without scale plumbing
+      ...(len_ft !== undefined ? { len_ft } : {}),
+    };
+    this.markups.push(m);
+    return {
+      id: m.id, sheet: s.key, type: m.type, text: m.text,
+      condition: cond?.finish_tag ?? "", condition_id: m.condition_id,
+      ...(len_ft !== undefined ? { length_lf: len_ft } : {}),
+      note: cond
+        ? `Attached to ${cond.finish_tag} — it wears that condition's colour on the canvas and in the marked set.`
+        : "Unattached — a note about the sheet. Pass condition to tie it to a scope.",
+    };
+  }
+
+  /** Read annotations, optionally narrowed to a sheet and/or a condition.
+   *  Resolves condition_id to its finish tag so a caller can act on the reply
+   *  without joining against the conditions array.
+   *
+   *  Verdict marks (#176) ride the same inventory as their own block: the
+   *  sheet filter applies directly (a record renders on its sheet), and a
+   *  condition filter reaches a verdict THROUGH its target shape — a verdict
+   *  on a CPT-1 shape is about CPT-1 work, while a sheet-point mark carries
+   *  no scope and drops out of any condition filter. */
+  listAnnotations(f: { sheet?: string; condition?: string } = {}): Record<string, unknown> {
+    const tagById = new Map(this.conditions.map((c) => [c.id, c.finish_tag]));
+    let rows = this.markups;
+    let seals = this.approvals;
+    if (f.sheet) {
+      const s = this.sheet(f.sheet);
+      rows = rows.filter((m) => m.sheet_id === s.key);
+      seals = seals.filter((a) => a.sheet_id === s.key);
+    }
+    const shapeById = new Map(this.shapes.map((x) => [x.id, x]));
+    if (f.condition) {
+      const c = this.conditions.find((x) => x.finish_tag === f.condition);
+      if (!c) throw new UserError(`no condition "${f.condition}" — tags: ${this.conditions.map((x) => x.finish_tag).join(", ") || "(none)"}`);
+      rows = rows.filter((m) => m.condition_id === c.id);
+      seals = seals.filter((a) => a.shape_id !== undefined && shapeById.get(a.shape_id)?.condition_id === c.id);
+    }
+    const s0 = this.sheets;
+    const px = (m: Markup, p?: [number, number]): [number, number] | undefined => {
+      const sh = s0.get(m.sheet_id); if (!p || !sh) return undefined;
+      return [round1(p[0] * sh.widthPx), round1(p[1] * sh.heightPx)];
+    };
+    return {
+      annotations: rows.map((m) => ({
+        id: m.id, sheet: m.sheet_id, type: m.type, text: m.text,
+        condition: tagById.get(m.condition_id) ?? "", condition_id: m.condition_id,
+        ...(m.at ? { at: px(m, m.at) } : {}),
+        ...(m.target ? { target: px(m, m.target) } : {}),
+        ...(m.rect ? { rect: [px(m, m.rect[0]), px(m, m.rect[1])] } : {}),
+        ...(m.from ? { from: px(m, m.from) } : {}),
+        ...(m.to ? { to: px(m, m.to) } : {}),
+        ...(m.r != null ? { r: round1(m.r * (s0.get(m.sheet_id)?.widthPx ?? 0)) } : {}),
+        ...(m.len_ft != null ? { length_lf: m.len_ft } : {}),
+      })),
+      count: rows.length,
+      unattached: rows.filter((m) => !m.condition_id).length,
+      verdicts: seals.map((a) => {
+        const sh = s0.get(a.sheet_id);
+        const target = a.shape_id !== undefined ? shapeById.get(a.shape_id) : undefined;
+        return {
+          id: a.id,
+          actor: a.actor,
+          sheet: a.sheet_id,
+          ...(sh ? { at: [round1(a.at[0] * sh.widthPx), round1(a.at[1] * sh.heightPx)] as [number, number] } : {}),
+          ...(a.ts ? { ts: a.ts } : {}),
+          ...(a.shape_id !== undefined ? { shape_id: a.shape_id } : {}),
+          condition: target ? (tagById.get(target.condition_id) ?? "") : "",
+          ...(typeof a.text === "string" && a.text ? { text: a.text } : {}),
+        };
+      }),
+      verdict_count: seals.length,
+    };
+  }
+
+  /** Attach an existing annotation to a condition, or detach it with "". The
+   *  canvas's Attach/Detach, reachable by an agent. */
+  linkAnnotation(id: string, condition: string): Record<string, unknown> {
+    const m = this.markups.find((x) => x.id === id);
+    if (!m) throw new UserError(`no annotation "${id}" — call list_annotations for real ids`);
+    if (!condition) {
+      m.condition_id = "";
+      return { id: m.id, condition: "", note: "Detached — now a note about the sheet." };
+    }
+    const c = this.conditionFor(condition);
+    m.condition_id = c.id;
+    return { id: m.id, condition: c.finish_tag, condition_id: c.id, note: `Attached to ${c.finish_tag}.` };
+  }
+
+  // ── verdict marks (#176) — the agent half of the approval family ───────────
+
+  /** Where a shape-targeted verdict draws, in the space of the verts given.
+   * The anchor is a render decision, not a measurement: a closed room anchors
+   * at its area centroid, an open run at its on-path midpoint (a bent run's
+   * centroid can sit off the work; the midpoint never does), a count marker
+   * at the marker itself. Callers pass SHEET-PX verts so the midpoint is the
+   * drawn run's true midpoint — arc length does not commute with the
+   * non-uniform norm↔px map (centroids do, so they'd be safe either way).
+   * Degenerate geometry falls back to the vertex mean. */
+  private static verdictAnchor(v: [number, number][], role: MeasureRole): [number, number] {
+    if (v.length === 1) return [v[0][0], v[0][1]];
+    const closed = role === "floor_area" || role === "deduct";
+    if (closed && v.length >= 3) {
+      let a = 0, cx = 0, cy = 0;
+      for (let i = 0; i < v.length; i++) {
+        const [x1, y1] = v[i], [x2, y2] = v[(i + 1) % v.length];
+        const w = x1 * y2 - x2 * y1;
+        a += w; cx += (x1 + x2) * w; cy += (y1 + y2) * w;
+      }
+      if (Math.abs(a) > 1e-12) return [cx / (3 * a), cy / (3 * a)];
+    } else if (!closed && v.length >= 2) {
+      const lens: number[] = [];
+      let total = 0;
+      for (let i = 1; i < v.length; i++) {
+        const l = Math.hypot(v[i][0] - v[i - 1][0], v[i][1] - v[i - 1][1]);
+        lens.push(l); total += l;
+      }
+      let walk = total / 2;
+      for (let i = 0; i < lens.length; i++) {
+        if (walk <= lens[i] && lens[i] > 0) {
+          const t = walk / lens[i];
+          return [v[i][0] + (v[i + 1][0] - v[i][0]) * t, v[i][1] + (v[i + 1][1] - v[i][1]) * t];
+        }
+        walk -= lens[i];
+      }
+    }
+    const n = v.length || 1;
+    return [v.reduce((s, p) => s + p[0], 0) / n, v.reduce((s, p) => s + p[1], 0) / n];
+  }
+
+  /** Mint the agent's verdict mark. actor is the string literal "agent" on
+   * the one line that writes the record — there is no actor parameter on this
+   * method, on the tool, or anywhere between, so no MCP path can produce the
+   * estimator's APPROVED seal (that ink stays behind the canvas's human-only
+   * Approve tool). The mutation and its exact-restore inverse both come from
+   * the canvas's pure apply, so a mark here undoes and hydrates exactly like
+   * a mark made in the app. Touches no quantity. */
+  markVerdict(a: { shape_id?: string; sheet?: string; at?: Point; text?: string }): Record<string, unknown> {
+    let sheetId: string;
+    let atNorm: [number, number];
+    let shape: Shape | undefined;
+    if (a.shape_id !== undefined) {
+      shape = this.shapes.find((x) => x.id === a.shape_id);
+      if (!shape) throw new UserError(`No shape with id ${JSON.stringify(a.shape_id)} — list_shapes has the real ids.`);
+      // one mark per shape: a second identical diamond stacked on the same
+      // anchor is invisible duplication, the same failure class the canvas's
+      // click-to-lift toggle prevents. Re-mark = delete_verdict + mark_verdict.
+      const dup = this.approvals.find((x) => x.actor === "agent" && x.shape_id === shape!.id);
+      if (dup) throw new UserError(`Shape ${shape.id} already carries an agent verdict (${dup.id}) — one mark per shape. delete_verdict it first to re-mark.`);
+      sheetId = shape.sheet_id;
+      // anchor in sheet px, normalized back for storage; a shape riding a
+      // file this session hasn't loaded (#152) anchors in normalized space —
+      // still on the work, just without the true-aspect midpoint
+      const dims = this.sheets.get(sheetId);
+      if (dims) {
+        const px = shape.verts_norm.map(([nx, ny]) => [nx * dims.widthPx, ny * dims.heightPx] as [number, number]);
+        const [ax, ay] = Session.verdictAnchor(px, shape.measure_role);
+        atNorm = [ax / dims.widthPx, ay / dims.heightPx];
+      } else {
+        atNorm = Session.verdictAnchor(shape.verts_norm, shape.measure_role);
+      }
+    } else {
+      const s = this.sheet(a.sheet!);
+      sheetId = s.key;
+      atNorm = [a.at![0] / s.widthPx, a.at![1] / s.heightPx];
+    }
+    const text = (a.text ?? "").trim();
+    const { approvals, inverse } = applyApprovalCommand(this.approvals, {
+      type: "add",
+      approvals: [{
+        actor: "agent",   // hardcoded — the structural impossibility, not a default
+        sheet_id: sheetId,
+        at: atNorm,
+        ...(shape ? { shape_id: shape.id } : {}),
+        ...(text ? { text } : {}),
+      }],
+    });
+    this.approvals = approvals;
+    this.record({ op: "approval", tool: "mark_verdict", inverse });
+    const minted = this.approvals[this.approvals.length - 1];
+    const sh = this.sheets.get(sheetId);
+    const tag = shape ? (this.conditions.find((c) => c.id === shape!.condition_id)?.finish_tag ?? "") : undefined;
+    return {
+      id: minted.id,
+      actor: "agent" as const,
+      sheet: sheetId,
+      ...(sh ? { at: [round1(atNorm[0] * sh.widthPx), round1(atNorm[1] * sh.heightPx)] as [number, number] } : {}),
+      ts: minted.ts,
+      ...(shape ? { shape_id: shape.id } : {}),
+      ...(tag !== undefined ? { condition: tag } : {}),
+      ...(text ? { text } : {}),
+      note: shape
+        ? `AGENT diamond anchored on ${shape.id} — the agent's pencil-signature on its own work, beside the estimator's ink, never in its place. It touches no quantity.`
+        : "AGENT diamond at the sheet point — the agent's pencil-signature, beside the estimator's ink, never in its place. It touches no quantity.",
+    };
+  }
+
+  /** Lift an agent verdict mark. The estimator's seal is human ink and is
+   * refused — the same line editShape holds on reviewed shapes: an agent
+   * retracts only its own marks. */
+  deleteVerdict(id: string): Record<string, unknown> {
+    const a = this.approvals.find((x) => x.id === id);
+    if (!a) throw new UserError(`No verdict ${JSON.stringify(id)} — list_annotations returns the real ids in verdicts[].`);
+    if (a.actor !== "agent") {
+      throw new UserError(`${id} is the estimator's APPROVED seal — human ink, refused. An agent lifts only its own marks (actor "agent").`);
+    }
+    const { approvals, inverse } = applyApprovalCommand(this.approvals, { type: "delete", ids: [id] });
+    this.approvals = approvals;
+    this.record({ op: "approval", tool: "delete_verdict", inverse });
+    return { deleted: id, verdicts_remaining: this.approvals.length };
+  }
+
+  /** The exact browser save payload (TakeoffCanvas.jsx autosave + the schema key
+   * store.saveAnnotations stamps) — importable by the app. */
+  /** The takeoff on ONE sheet as a DXF drawing (R2000, LWPOLYLINE per shape,
+   * OT-<TAG> layer per finish, feet by default) — the CAD-native handoff.
+   * `sheet` omitted resolves only when exactly one calibrated sheet carries
+   * shapes; otherwise the refusal names the candidates, because two floors in
+   * one model space at the same origin would be a lie. A sheet without a
+   * scale refuses too (a CAD file in pixels is worse than none). */
+  exportDxf(sheetName?: string, units: "ft" | "m" = "ft"): { sheet: SheetState; build: DxfBuild } {
+    if (!this.docs.size) throw new UserError("No plan loaded — call load_plan first.");
+    let s: SheetState;
+    if (sheetName != null && sheetName !== "") {
+      s = this.sheet(sheetName);
+    } else {
+      const withShapes = new Set(this.shapes.map((x) => x.sheet_id));
+      const cands = [...this.sheets.values()].filter((x) => withShapes.has(x.key));
+      if (cands.length === 0) throw new UserError("No sheet carries committed shapes yet — measure something before exporting to CAD.");
+      if (cands.length > 1) {
+        throw new UserError(`Several sheets carry shapes — pass sheet to pick one drawing (a DXF is one sheet, like a DWG is): ${cands.map((x) => `"${x.key}"${x.sheetNumber ? ` (${x.sheetNumber})` : ""}`).join(", ")}.`);
+      }
+      s = cands[0];
+    }
+    if (s.upp == null) throw new UserError(`Sheet "${s.key}" has no scale — call set_scale first; a CAD file in pixels is worse than none.`);
+    const build = buildSheetDxf({
+      sheet_id: s.key,
+      label: s.sheetNumber || s.key,
+      dims: { w: s.widthPx, h: s.heightPx },
+      upp: s.upp,
+      shapes: this.shapes,
+      conditions: this.conditions,
+    }, { units });
+    return { sheet: s, build };
+  }
+
+  exportPayload() {
+    if (!this.docs.size) throw new UserError("No plan loaded — call load_plan first.");
+    return {
+      schema: ANN_SCHEMA,
+      project_name: "",
+      units: "imperial",
+      sheets: [...this.sheets.values()].filter((s) => s.upp != null).map((s) => ({
+        sheet_id: s.key, units_per_px: s.upp,
+        // provenance rides the payload (it used to be dropped here): the canvas
+        // hydrates scale_source for its report and scale_confirmed for the
+        // scale gate's confirm affordance — absent = confirmed (pre-flag docs)
+        ...(s.scaleSource ? { scale_source: s.scaleSource } : {}),
+        ...(s.scaleConfirmed === false ? { scale_confirmed: false } : {}),
+      })),
+      conditions: this.conditions,
+      shapes: this.shapes,
+      markups: this.markups,
+      // approvals ride the payload additively (#176) — present only when any
+      // exist, exactly the canvas buildPayload's convention, so a verdict-free
+      // export stays byte-identical to a pre-#176 one
+      ...(this.approvals.length ? { approvals: this.approvals } : {}),
+      sheet_group: [],
+      last_group: [],
+      sheet_tabs: [],
+      sheet_levels: {},
+    };
+  }
+
+  /** The computed Report document — "opentakeoff.report.v1", the SAME schema
+   * and math as the canvas Report's JSON export (web reportJson, totals.js):
+   * per-condition quantities with waste and multiplier applied, the computed
+   * materials buy list, per-sheet BASE subtotals, scale provenance. This is
+   * the contract a pricing consumer reads (#130) — export_takeoff carries
+   * materials as CONFIG rows and takeoff_summary strips them; only this
+   * document carries the computed order quantities. */
+  exportReport(projectName = "") {
+    if (!this.docs.size) throw new UserError("No plan loaded — call load_plan first.");
+    // roll goods (#147): the same pure seam the canvas report uses — figured
+    // here so the report.v1 block fills the moment a condition carries a setup.
+    // It runs BEFORE the rows because a materials row with basis "seam_lf"
+    // divides against the layout's figured seams, not against an area.
+    const { dimsFor, uppFor } = this.rollInputs();
+    const { byCond } = computeRollTakeoff(this.conditions, this.shapes, dimsFor, uppFor) as { byCond: Map<string, unknown> };
+    const rows = (conditionTotals(this.conditions, this.shapes, { seamByShape: seamLfByShape(byCond) }) as Record<string, unknown>[]).filter((r) => (r.shape_count as number) > 0);
+    return reportJson({
+      projectName,
+      rows,
+      bySheet: sheetTotals(this.conditions, this.shapes),
+      scaleInfo: [...this.sheets.values()].filter((s) => s.upp != null).map((s) => ({ sheet_id: s.key, scale_source: s.scaleSource ?? "unknown", scale_confirmed: s.scaleConfirmed !== false })),
+      markups: this.markups,
+      rfis: [],
+      rollGoods: rollReportRows(byCond, rows),
+    });
+  }
+
+  // ── the sheet graph (#87) ─────────────────────────────────────────────────
+  // Built lazily from every sheet's text spans, cached per document (loadPlan
+  // clears it). The engine is pure (web/src/lib/sheetgraph.ts); this is the
+  // span plumbing plus the wire shapes.
+  private graph: SheetGraph | null = null;
+
+  private async ensureGraph(): Promise<SheetGraph> {
+    if (!this.docs.size) throw new UserError("No plan loaded — call load_plan first.");
+    if (!this.graph) {
+      const inputs: SheetSpans[] = [];
+      // The drawn delta-triangle hunt needs linework — but the hunt is a BONUS
+      // lane and must never take the graph down. On a monster set (a 287-sheet
+      // combined pricing set is real), extracting-and-retaining every sheet's
+      // vectors OOMs the process, so: only plan/schedule-shaped sheets that
+      // carry a bare 1–2 digit span are hunted, extraction is THROWAWAY (the
+      // cached s.geo is reused when a tool already paid for it, otherwise the
+      // op list is dropped and the page cleaned), and a global vector budget
+      // bounds the whole pass. Sheets past the budget are NAMED in notes —
+      // text markers are still read everywhere.
+      let vecBudget = 30_000_000; // segments across the whole hunt
+      let skippedHeavy = 0;
+      for (const s of this.sheets.values()) {
+        if (!s.spans) s.spans = textSpans(s.page);
+        const spans = s.spans.map((t) => ({ str: t.str, x: t.x0, y: t.y0, w: t.x1 - t.x0, h: t.y1 - t.y0, ...(t.rot ? { rot: t.rot } : {}) }));
+        let segs: number[] | undefined;
+        if (spans.some((t) => /^\d{1,2}$/.test(t.str.trim()))) {
+          const role = classifySheetRole({ key: s.key, sheet_number: s.sheetNumber, spans }).role;
+          if (role === "plan" || role === "schedule" || role === "demolition" || role === "unknown") {
+            if (vecBudget <= 0) skippedHeavy++;
+            else if (s.geo) { segs = s.geo.segs; vecBudget -= segs.length / 4; }
+            else {
+              const opList = await s.page.operatorList();
+              segs = extractVectorGeometry(opList, s.page.viewport.transform, OPS).segs;
+              vecBudget -= segs.length / 4;
+              s.page.cleanup();
+            }
+          }
+        }
+        inputs.push({ key: s.key, sheet_number: s.sheetNumber, spans, ...(segs?.length ? { segs } : {}) });
+      }
+      this.graph = buildSheetGraph(inputs);
+      if (skippedHeavy) this.graph.notes.push(`drawn-delta hunt skipped on ${skippedHeavy} sheet(s) — the set's linework exceeded the vector budget; text revision markers (Δ2 / REV 2) were still read everywhere`);
+      await this.enhanceTablesWithODL(this.graph);
+    }
+    return this.graph;
+  }
+
+  /** Cross-checks every schedule-role sheet's tables against
+   * OpenDataLoader-PDF's own independent, deterministic table-structure
+   * detection (mcp/src/opendataloader.ts) and keeps whichever extraction of
+   * each real table is more COMPLETE — never a fixed preference for either
+   * source (this file's own geometric heuristics, or ODL), purely the
+   * evidence: more recovered headers wins, a header-count tie is broken by
+   * more populated cells (tableCompleteness). Runs ONCE per source PDF (one
+   * `--pages "3,7,15"` call covering every schedule sheet in that document)
+   * to keep the real per-call JVM cost affordable on a large set. Best-
+   * effort only: no Java runtime, a scanned/uncooperative PDF, or any per-
+   * table parse error silently leaves the existing geometric result in
+   * place — this pass can only ever IMPROVE g.tables, never take it down. */
+  private async enhanceTablesWithODL(g: SheetGraph): Promise<void> {
+    const scheduleSheets = g.sheets.filter((s) => s.role === "schedule");
+    if (!scheduleSheets.length) return;
+    const byPdf = new Map<string, { path: string; pages: number[]; sheetByPage: Map<number, string> }>();
+    for (const sh of scheduleSheets) {
+      const base = this.fileFor(sh.key);
+      const doc = this.docs.get(base);
+      const state = this.sheets.get(sh.key);
+      if (!doc || !state) continue;
+      let entry = byPdf.get(doc.path);
+      if (!entry) { entry = { path: doc.path, pages: [], sheetByPage: new Map() }; byPdf.set(doc.path, entry); }
+      entry.pages.push(state.pageNum);
+      entry.sheetByPage.set(state.pageNum, sh.key);
+    }
+    if (!byPdf.size) return;
+    const buildingsSet = new Set(g.buildings);
+    const touchedSheets = new Set<string>();
+    let recovered = 0, added = 0, odlErrors = 0;
+    // "reference"-kind candidates (a real cross-reference/connection/calc
+    // table, per scheduleTableFromODL's own CONNECTION/CALCULATION check)
+    // no longer get a deferred, order-dependent "drop rows that collide
+    // with an established tag" pass here — see the push site's own comment
+    // below for why that used to run, and why it was a real regression
+    // (baker-county-eoc-bidset.pdf#60's own MECHANICAL EQUIPMENT CONNECTION
+    // SCHEDULE lost its own real CU-1/WH-1/ERV-01/RTU-01 rows wholesale).
+    // sweepScheduleRow's own query-time kind-based accessory narrowing
+    // handles the ambiguity this used to guard against instead, so every
+    // reference-kind candidate is simply appended in the SAME loop pass
+    // that finds it, same as any other newly-recovered table.
+    for (const entry of byPdf.values()) {
+      let result;
+      try {
+        result = await runOpenDataLoaderPages(entry.path, entry.pages);
+      } catch {
+        odlErrors++;
+        continue;
+      }
+      if (result.error) { odlErrors++; continue; }
+      for (const odlTable of result.tables) {
+        const sheetKey = entry.sheetByPage.get(odlTable["page number"]);
+        if (!sheetKey) continue;
+        const state = this.sheets.get(sheetKey);
+        if (!state) continue;
+        let built;
+        try {
+          built = scheduleTableFromODL(odlTable, sheetKey, state.page.viewport.transform, { buildings: buildingsSet });
+        } catch {
+          continue; // one malformed table must never take the whole pass down
+        }
+        if (!built) continue;
+        // Match against an EXISTING geometric table on the same sheet by
+        // REGION OVERLAP, not title text — a real title-less table (this
+        // fixture's own real "FINISH SCHEDULE" caption sits ABOVE the
+        // table's own bounding box, never merged into ODL's row 1, unlike
+        // AHU-1's own colspan-title row) would otherwise title-match
+        // nothing and get appended as a spurious DUPLICATE of a table
+        // that's already there — a real bug this reconciliation caught
+        // live against the mcp test suite's own symbol-set.pdf fixture.
+        // matchByKeySet only ever runs when region overlap found nothing —
+        // it never overrides a real bbox-overlap match, and never fires
+        // for a "reference"-kind candidate (see its own comment above).
+        let existingIdx = matchByRegionOverlap(g.tables, sheetKey, built.region);
+        if (existingIdx < 0) existingIdx = matchByKeySet(g.tables, sheetKey, built);
+        if (existingIdx >= 0) {
+          const existing = g.tables[existingIdx];
+          const a = tableCompleteness(existing), b = tableCompleteness(built);
+          const aDupes = duplicateKeyCount(existing), bDupes = duplicateKeyCount(built);
+          // Never adopt a candidate that introduces MORE internally
+          // ambiguous (duplicate, undifferentiated) row keys than the one
+          // it would replace — a real schedule never legitimately repeats
+          // an unqualified key, so a rise in duplicates is real evidence of
+          // a misparse, regardless of which extraction produced it. Pure
+          // evidence-based reconciliation either way: neither source is
+          // favored, the SAME bar applies no matter which one is currently
+          // in `g.tables`.
+          //
+          // Two real gaps in the plain "more headers, or tied headers with
+          // more cells" bar, both measured live on navfac-cherry-point-atc-
+          // mechanical.pdf#42/#44:
+          //
+          // 1. An untitled ("reference", title: null) existing table is, by
+          //    this file's OWN classification, the weakest possible read —
+          //    no title recognized, no vocabulary matched. It is also
+          //    exactly the shape a wrongly-merged pair of adjacent tables
+          //    takes (two real tables' worth of columns counted as one,
+          //    which can easily out-count either real piece alone on raw
+          //    header count). #42's real PUMP SCHEDULE and BOILER SCHEDULE
+          //    sit side by side; the geometric pass merged them into one
+          //    untitled 16-header blob, and ODL's own correct, separately-
+          //    titled PUMP SCHEDULE (13 headers) and BOILER SCHEDULE (10
+          //    headers) each individually lost the raw header-count
+          //    compare to that merged blob, locking the merge in
+          //    permanently. A titled, vocabulary-classified ODL candidate
+          //    should never be blocked by an anonymous blob's inflated
+          //    column count.
+          // 2. On an EXACT completeness tie, the existing table won by
+          //    default (`>` not `>=`) even when the candidate's `kind` is
+          //    strictly more specific — #44's real AIR SEPARATOR SCHEDULE:
+          //    geometric pass got the title right but the kind wrong
+          //    ("reference"); ODL's own read ties it 7 headers/12 cells
+          //    exactly but correctly classifies "equipment". Vocabulary-
+          //    free "reference" is already this file's own least-specific,
+          //    last-resort kind (see the classification comment above,
+          //    "ties favor the more specific vocab … reference" is the
+          //    residual fourth) — a real tie should resolve toward the
+          //    more specific read, not freeze on whichever happened to be
+          //    extracted first.
+          const existingAnonymous = existing.kind === "reference" && !existing.title;
+          const candidateIdentified = built.kind !== "reference" || !!built.title;
+          const shouldReplace =
+            bDupes <= aDupes &&
+            (b.headers > a.headers ||
+              (b.headers === a.headers && b.cells > a.cells) ||
+              (b.headers === a.headers && b.cells === a.cells && existing.kind === "reference" && built.kind !== "reference") ||
+              (existingAnonymous && candidateIdentified));
+          if (shouldReplace) {
+            g.tables[existingIdx] = built;
+            touchedSheets.add(sheetKey);
+            recovered++;
+          }
+        } else if (built.kind === "reference") {
+          // A DELIBERATE, evidence-based "reference" classification
+          // (scheduleTableFromODL's own CONNECTION/CALCULATION title check,
+          // gated on MODEL/MANUFACTURER absence) names a REAL cross-
+          // reference/connection/calc table, not probable noise — its own
+          // rows carry real, independently-useful data a dedicated catalog
+          // schedule elsewhere does NOT restate (baker-county-eoc-bidset.
+          // pdf#60's own MECHANICAL EQUIPMENT CONNECTION SCHEDULE: VA/MCA/
+          // MOCP/CIRCUIT NUMBER for CU-1/WH-1/…, scored on its own by
+          // reference-eval). An earlier version of this pass dropped any row
+          // whose key was already "established" elsewhere, on the theory a
+          // repeated key added nothing new — real, measured regression: that
+          // deleted this exact table's own CU-1/WH-1/ERV-01/RTU-01 rows
+          // wholesale (real electrical hookup data with no other home in the
+          // graph at all), not just excused a name collision. sweepScheduleRow's
+          // own kind-based accessory-narrowing tier (mcp/src/session.ts) now
+          // resolves the SAME "N schedule rows carry the key" ambiguity this
+          // used to prevent — non-destructively, at query time, preferring a
+          // non-"reference" row over a "reference" one — so this table is
+          // simply kept whole, same as any other newly-recovered table.
+          g.tables.push(built);
+          touchedSheets.add(sheetKey);
+          added++;
+        } else {
+          // No existing alternative to compare against, so nothing to
+          // reconcile against — appended as-is. A FEW rows sharing one
+          // generic, un-numbered tag (a real "PLUMBING FIXTURE SCHEDULE"
+          // convention measured live: two distinct grade-cleanout variants
+          // both marked bare "GCO", no suffix) is real, legitimate schedule
+          // data, not a misparse to filter out here — the EXISTING,
+          // already-tested "Ambiguous: N schedule rows carry the key…"
+          // refusal downstream (rowKeyOf/resolveTag/sweepScheduleRow) is
+          // already the correct, honest response to a genuine duplicate
+          // mark, and doing that filtering a second time at extraction only
+          // risks discarding an otherwise real, mostly-unique-keyed table
+          // wholesale over one or two rows (measured live: a first version
+          // of this gate silently dropped a real 35-row schedule entirely
+          // over its own 2 real "GCO" rows).
+          g.tables.push(built);
+          touchedSheets.add(sheetKey);
+          added++;
+        }
+      }
+    }
+    if (touchedSheets.size) syncSheetSchedules(g, touchedSheets);
+    if (recovered || added) {
+      g.notes.push(`OpenDataLoader-PDF cross-check: ${recovered} table(s) replaced with a more complete extraction, ${added} table(s) recovered that the geometric pass missed entirely (${touchedSheets.size} sheet(s) affected).`);
+    }
+  }
+
+  private static wireBox(b: [number, number, number, number]) {
+    return { x0: round1(b[0]), y0: round1(b[1]), x1: round1(b[2]), y1: round1(b[3]) };
+  }
+  private static wireEvidence(e: { sheet: string; text: string; bbox: [number, number, number, number] }) {
+    return { sheet: e.sheet, text: e.text, bbox: Session.wireBox(e.bbox) };
+  }
+  private static wireRoom(r: SheetGraph["rooms"][number]) {
+    return {
+      tag: r.tag, name: r.name, sheet: r.sheet, bbox: Session.wireBox(r.bbox),
+      ...(r.building ? { building: r.building } : {}),
+      ...(r.corroboration ? { corroboration: r.corroboration } : {}),
+      ...(r.revision ? { revision: { rev: r.revision.rev, source: Session.wireEvidence(r.revision.source), ...(r.revision.drawn ? { drawn: true } : {}) } } : {}),
+    };
+  }
+
+  /** Real, confirmed finding (accuracy-hardening plan, this session): a
+   * schedule-role sheet that extracted ZERO tables reads today as
+   * indistinguishable from "this sheet legitimately has none" — but on the
+   * real `weld-county-permit` corpus set, its own two densest schedule
+   * sheets carry almost no real text at all because their tables are
+   * literally embedded RASTER IMAGES pasted onto an otherwise-vector CAD
+   * sheet (confirmed via the sheet's own pdf.js operator list: real
+   * `paintImageXObject` calls placed exactly where the visible tables sit),
+   * not a vocabulary/column-model gap sheetgraph.ts could ever close. The
+   * signal to catch this already exists and is already correct — the same
+   * `imageArea`/`rasterPolicy` machinery `classify_symbol`/`symbol_sweep`'s
+   * own raster fallback already uses (confirmed: this real sheet already
+   * scores 50%/30% image coverage, both well past `RASTER_MIN_IMG_FRAC`) —
+   * it was simply never consulted from this reporting path. Scoped narrowly
+   * to the exact rare case that matters (a schedule-role sheet with zero
+   * extracted tables) so a normal set's own sheetGraph() call pays nothing
+   * extra; best-effort only — a geometry failure here must never take
+   * sheet_graph's own real output down with it. */
+  private async rasterScheduleNotes(g: SheetGraph): Promise<string[]> {
+    const notes: string[] = [];
+    for (const s of g.sheets) {
+      if (s.schedules.length > 0) continue;
+      try {
+        const sheetState = this.sheet(s.key);
+        const geo = await this.ensureGeometry(sheetState);
+        const sheetArea = sheetState.widthPx * sheetState.heightPx;
+        if (s.role === "schedule" && this.rasterPolicy(sheetState, geo).rasterEligible) {
+          notes.push(`${s.key} is classified as a schedule sheet but 0 tables extracted from it, and ${Math.round((geo.imageArea / sheetArea) * 100)}% of its own area is embedded raster image content — its schedule data is very likely pasted in as a picture (or scanned), invisible to text-based extraction no matter the vocabulary. view_sheet to confirm; classify_symbol may still find shapes there, but table rows will not extract.`);
+        } else if (sheetArea > 0 && (geo.maxImageArea ?? 0) / sheetArea >= RASTER_SOLO_IMG_MIN_FRAC) {
+          // Real, general construction-document convention this catches that
+          // the check above cannot (it fires on a whole-sheet-scan fraction,
+          // and only on schedule-role sheets): a SMALL equipment/reference
+          // sub-schedule pasted directly onto a plan (or other non-schedule-
+          // role) sheet as one picture, rather than collected on its own
+          // dedicated schedule sheet — far too small a fraction of that
+          // sheet's own total area to ever clear rasterPolicy's whole-sheet
+          // bar, and never reached above because plan-role sheets aren't
+          // schedule-role. `maxImageArea` (a SINGLE placed image's own area,
+          // never a sum — see its own comment in oneclick.ts) is what tells
+          // "one unusually large picture" apart from a sheet that merely
+          // carries several small incidental images (title-block logo, PE
+          // stamp, north arrow) whose combined area could otherwise read as
+          // "some raster content" without any one of them being big enough
+          // to plausibly BE a table.
+          notes.push(`${s.key} (role: ${s.role}) extracted 0 tables but carries a single embedded picture covering ${Math.round((geo.maxImageArea! / sheetArea) * 100)}% of its own area — real sets sometimes paste a small schedule/table directly onto a plan (or other) sheet as an image rather than as real text, instead of collecting it on its own dedicated schedule sheet; that picture may be exactly such a table, invisible to text-based extraction no matter the vocabulary. view_sheet to confirm.`);
+        }
+      } catch { /* diagnostic only */ }
+    }
+    return notes;
+  }
+
+  /** Raw internal graph (full table rows/cells, not `sheetGraph()`'s own
+   * wire-summarized counts) — for internal, same-package orchestration only
+   * (takeoff.ts's project-level pipeline). Not a new capability: every
+   * field here is already what `sheetGraph()`/`sweepScheduleRow()` read
+   * internally, just not otherwise reachable outside this class. */
+  async graphForPipeline(): Promise<SheetGraph> {
+    return this.ensureGraph();
+  }
+
+  async sheetGraph() {
+    const g = await this.ensureGraph();
+    const rasterNotes = await this.rasterScheduleNotes(g);
+    const notes = rasterNotes.length ? [...g.notes, ...rasterNotes] : g.notes;
+    return {
+      available: g.available,
+      sheets: g.sheets.map((s) => ({
+        sheet: s.key, role: s.role, confidence: s.confidence,
+        ...(s.evidence ? { evidence: Session.wireEvidence(s.evidence) } : {}),
+        ...(s.building ? { building: s.building } : {}),
+        schedules: s.schedules.map((t) => ({
+          kind: t.kind, title: t.title, rows: t.rows, region: Session.wireBox(t.region),
+          ...(t.continues ? { continues: t.continues } : {}),
+          ...(t.rotated_headers ? { rotated_headers: true } : {}),
+        })),
+      })),
+      rooms: g.rooms.map(Session.wireRoom),
+      ...(g.unmatched_tags.length ? {
+        unmatched_tags: g.unmatched_tags.map((u) => ({
+          tag: u.tag, sheet: u.sheet, bbox: Session.wireBox(u.bbox),
+          ...(u.building ? { building: u.building } : {}),
+          ...(u.name ? { name: u.name } : {}),
+          reason: u.reason,
+        })),
+      } : {}),
+      callouts: g.callouts.map((c) => ({ detail: c.detail, target_sheet: c.target_sheet, sheet: c.sheet, bbox: Session.wireBox(c.bbox) })),
+      ...(g.buildings.length ? { buildings: g.buildings } : {}),
+      ...(g.revisions.length ? { revisions: g.revisions.map((r) => ({ rev: r.rev, sheet: r.sheet, bbox: Session.wireBox(r.bbox), ...(r.drawn ? { drawn: true } : {}) })) } : {}),
+      ...(notes.length ? { notes } : {}),
+      counts: { rooms: g.rooms.length, unmatched_tags: g.unmatched_tags.length, schedules: g.tables.length, callouts: g.callouts.length },
+    };
+  }
+
+  /** The FLOOR finish a room's own schedule row states — assign-from-schedule's
+   * per-room resolver (0.9.18): resolveTag's chain narrowed to the one surface
+   * a floor takeoff commits. Refusal over guessing, per room: an unresolved
+   * tag returns resolveTag's own reason; a resolved row with no FLOOR cell
+   * says so; a compound cell ("CPT-1/VCT-1") is ambiguous — committing the
+   * whole room's SF under a two-finish literal would assert an area split the
+   * schedule never stated. Compound detection is narrow ("/", ",", " OR "),
+   * so a hyphenated code never trips it. BASE/WALL are deliberately ignored:
+   * those are derive_base's and measure_surface's measures. */
+  private floorTagFor(g: SheetGraph, tag: string): { tag: string; sheet: string } | { reason: string } {
+    const res = resolveTag(g, tag);
+    if (res.status !== "resolved") return { reason: res.reason };
+    const floor = res.finishes.find((f) => f.surface === "FLOOR");
+    const code = floor?.code.trim();
+    if (!floor || !code) return { reason: `schedule row ${res.tag} states no FLOOR finish` };
+    if (/[/,]|\bOR\b/i.test(code)) return { reason: `ambiguous: floor cell "${code}" names more than one finish with no stated split` };
+    return { tag: code, sheet: floor.source.sheet };
+  }
+
+  async resolveRoomTag(tag: string) {
+    if (!tag || !tag.trim()) throw new UserError("Pass a room tag, e.g. resolve_tag { tag: \"134\" }.");
+    const g = await this.ensureGraph();
+    if (!g.available) throw new UserError("This set has no text layer (a scan) — the sheet graph is unavailable, not empty.");
+    const res = resolveTag(g, tag);
+    const room = res.room ? Session.wireRoom(res.room) : null;
+    if (res.status === "unresolved") {
+      return {
+        status: "unresolved" as const, tag: res.tag, room, reason: res.reason,
+        ...(res.candidates?.length ? { candidates: res.candidates } : {}),
+      };
+    }
+    return {
+      status: "resolved" as const,
+      tag: res.tag,
+      room,
+      ...(res.building ? { building: res.building } : {}),
+      finishes: res.finishes.map((f) => ({
+        surface: f.surface, code: f.code, source: Session.wireEvidence(f.source),
+        ...(f.definition ? { definition: { cells: f.definition.cells, source: Session.wireEvidence(f.definition.source) } } : {}),
+      })),
+      sources: res.sources.map(Session.wireEvidence),
+      ...(res.revisions?.length ? { revisions: res.revisions.map((v) => ({ rev: v.rev, source: Session.wireEvidence(v.source), ...(v.drawn ? { drawn: true } : {}) })) } : {}),
+    };
+  }
+
+  async findSchedule(kind: string) {
+    const g = await this.ensureGraph();
+    if (!g.available) throw new UserError("This set has no text layer (a scan) — the sheet graph is unavailable.");
+    const k = (kind || "").toLowerCase();
+    const want = /room/.test(k) ? "room-finish" : /finish|material|product|code|mark/.test(k) ? "finish" : k;
+    const hits = g.tables.filter((t) => t.kind === want);
+    if (!hits.length) {
+      const found = g.tables.map((t) => `${t.kind} on ${t.sheet}`).join(" | ");
+      throw new UserError(`No ${JSON.stringify(kind)} schedule found in the set. Found: ${found || "no schedules at all"}.`);
+    }
+    return {
+      matches: hits.map((t) => ({
+        sheet: t.sheet, kind: t.kind, title: t.title?.text || "", rows: t.rows.length,
+        headers: t.headers, region: Session.wireBox(t.region),
+        ...(t.building ? { building: t.building } : {}),
+        ...(t.rotated_headers ? { rotated_headers: true } : {}),
+        ...(t.rows.some((r) => r.revision) ? { revised_rows: t.rows.filter((r) => r.revision).length } : {}),
+        ...(t.parts ? { parts: t.parts.map((p) => ({ sheet: p.sheet, title: p.title, rows: p.rows, region: Session.wireBox(p.region) })) } : {}),
+      })),
+    };
+  }
+
+  readSheetText(name: string, region?: { x0: number; y0: number; x1: number; y1: number }) {
+    const s = this.sheet(name);
+    const items = region
+      ? s.text.filter((t) => t.x >= region.x0 && t.x <= region.x1 && t.y >= region.y0 && t.y <= region.y1)
+      : s.text;
+    return { sheet: s.key, items, text: items.map((t) => t.str).join(" ") };
+  }
+
+  /** LOCATE a known string — the complement to readSheetText (which returns
+   * what a region SAYS; this finds WHERE a string you already know sits).
+   * Case-insensitive substring match per pdf.js text run, so a room label
+   * split across runs ("OFFICE" then "134" as separate items) needs its own
+   * find_text call per fragment, or read_sheet_text over a region to see the
+   * whole thing at once — this tool doesn't merge runs into lines. Reuses the
+   * bbox spans sheet_context lazily builds (same cache, same textSpans()
+   * call), so calling both on one sheet costs the extraction once.
+   *
+   * INVESTIGATED DEAD END, worth recording so it isn't re-chased: a tag can
+   * be legible and clearly drawn on the sheet yet produce ZERO hits here —
+   * not fragmented (fragmentedTagOcc's problem), not rotated (textSpans
+   * already carries `rot`), not a font/encoding substitution (checked via
+   * the raw pdf.js item codepoints). Confirmed live on a real sheet where a
+   * handful of tags sat among many correctly-extracted siblings drawn with
+   * the identical font and style: pdf.js's own textContent had NO item at
+   * all there (not even a garbled or empty one), the page's operator list
+   * had no more showText calls than the tags that DID extract accounted
+   * for, and there were zero marked-content ranges and zero image
+   * XObjects near the ink. The only remaining explanation is that those
+   * specific tags were drawn as raw vector path geometry (stroke/fill
+   * ops tracing the letterforms directly — the classic result of
+   * "explode text to polylines" in CAD authoring, applied to a handful of
+   * tags but not their siblings) rather than with the font's text-showing
+   * operator at all. There is no text-layer fix for this: the string
+   * genuinely isn't encoded as text anywhere in the PDF, so no amount of
+   * run-stitching, rotation-awareness, or codepoint-decoding can recover
+   * it — only OCR against the rendered raster, or vector glyph-shape
+   * recognition, could, and neither is what this tool does. Treat a
+   * stubborn zero-hit search on a visually-confirmed tag as a candidate
+   * for this, not a fragmentation bug, once fragmentedTagOcc's shapes and
+   * a `rot`-aware search have both already been tried. */
+  findText(name: string, q: string, opts: { region?: { x0: number; y0: number; x1: number; y1: number }; limit?: number } = {}) {
+    const query = q.trim();
+    if (!query) throw new UserError("q must be a non-empty string.");
+    const s = this.sheet(name);
+    if (!s.spans) s.spans = textSpans(s.page);
+    const r = opts.region;
+    const needle = query.toLowerCase();
+    const limit = opts.limit ?? 200;
+    const all = s.spans.filter((sp) => sp.str.toLowerCase().includes(needle)
+      && (!r || (sp.x0 <= r.x1 && sp.x1 >= r.x0 && sp.y0 <= r.y1 && sp.y1 >= r.y0)));
+    const hits = all.slice(0, limit).map((sp) => ({
+      str: sp.str,
+      bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number],
+      center: [round1((sp.x0 + sp.x1) / 2), round1((sp.y0 + sp.y1) / 2)] as [number, number],
+    }));
+    return { sheet: s.key, q: query, count: all.length, truncated: all.length > hits.length, hits };
+  }
+}

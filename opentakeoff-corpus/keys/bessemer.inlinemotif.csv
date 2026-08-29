@@ -1,0 +1,9 @@
+sheet,seed_x,seed_y,target_x,target_y,expect_status,note
+bessemer-mechanical-bidset.pdf#6,1093.6,1693.4,1294.9,1039.7,matched,"SR-1 145 CFM, visually confirmed by rendering page 6 region [1000,900]-[1600,1200] and looking at it directly"
+bessemer-mechanical-bidset.pdf#6,1093.6,1693.4,2041.3,1039.7,matched,"SR-1 145 CFM, same visual convention, visually confirmed"
+bessemer-mechanical-bidset.pdf#6,1093.6,1693.4,3669.4,1039.7,matched,"SR-1 160 CFM -- a genuinely different real physical size than the seed's own 145 CFM box, visually confirmed by rendering and looking directly (this is the real reason this tool exists: symbol_sweep's own whole-shape matcher scores this pair at only ~76-77%)"
+bessemer-mechanical-bidset.pdf#6,1093.6,1693.4,2144,1638.6,matched,"SR-1 55 CFM -- the smallest real box on the sheet, visually confirmed; symbol_sweep's own real withheld candidate from this exact real case (score 0.763, under the 0.92 commit bar) before this tool existed"
+bessemer-mechanical-bidset.pdf#6,1093.6,1693.4,2858.4,1638.6,matched,"SR-1 75 CFM, visually confirmed"
+bessemer-mechanical-bidset.pdf#6,1093.6,1693.4,2923,1039.7,matched,"SR-2 0 CFM -- a genuinely different real tag (dashed border, denser hatch), visually confirmed; this tool correctly generalizes across the whole SR family by shape, not just the seed's own exact tag -- resolve_tag/a schedule read is still needed to confirm WHICH tag a match belongs to"
+bessemer-mechanical-bidset.pdf#6,1093.6,1693.4,3243.6,1039.7,matched,"SR-2 0 CFM, same convention, visually confirmed"
+bessemer-mechanical-bidset.pdf#6,1093.6,1693.4,1645,1084,missed,"SR-1 145 CFM -- a real, different drawing convention: dashed border, drawn mid-duct with a vertical riser crossing through it rather than at a tapered terminus. Real, disclosed miss -- not chased this session, a genuinely different real shape from the tapered-terminus case this tool was built for"

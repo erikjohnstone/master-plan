@@ -1,0 +1,43 @@
+╔══════════════════════════════════════════════════════════════════════════
+║ PROJECT-LEVEL TAKEOFF — scored against real sets
+╚══════════════════════════════════════════════════════════════════════════
+
+set                        tags   exact    Σ|Δqty|   missing   false-add
+──────────────────────────────────────────────────────────────────────────
+baker-county-eoc             40    35.0%        91         2           0
+──────────────────────────────────────────────────────────────────────────
+CORPUS                       40    35.0%        91         2           0
+
+── baker-county-eoc — real mismatches ──
+  R1         expected=23  actual=3  Δ=-20  status=resolved
+  CD-1       expected=21  actual=3  Δ=-18  status=resolved
+  R2         expected=9  actual=1  Δ=-8  status=resolved
+  S1         expected=9  actual=1  Δ=-8  status=resolved
+  E2         expected=7  actual=1  Δ=-6  status=resolved
+  X1         expected=5  actual=1  Δ=-4  status=resolved
+  RD-1       expected=4  actual=1  Δ=-3  status=resolved
+  EG-1       expected=3  actual=1  Δ=-2  status=resolved
+  HB-1       expected=1  actual=3  Δ=+2  status=resolved
+  E1         expected=7  actual=5  Δ=-2  status=resolved
+  S3         expected=4  actual=2  Δ=-2  status=resolved
+  V1         expected=3  actual=1  Δ=-2  status=resolved
+  RTU-1      expected=1  actual=0  Δ=-1  status=error
+  RTU-2      expected=1  actual=0  Δ=-1  status=error
+  CU-1       expected=1  actual=0  Δ=-1  status=error
+  CU-2       expected=1  actual=0  Δ=-1  status=error
+  EF-1       expected=1  actual=0  Δ=-1  status=error
+  ERV-01     expected=1  actual=0  Δ=-1  status=error
+  FCU-1      expected=1  actual=0  Δ=-1  status=error
+  FCU-2      expected=1  actual=0  Δ=-1  status=error
+  EWH-1      expected=1  actual=0  Δ=-1  status=error
+  EWH-2      expected=1  actual=0  Δ=-1  status=error
+  RG-1       expected=7  actual=6  Δ=-1  status=resolved
+  HB-2       expected=2  actual=1  Δ=-1  status=resolved
+  WH-1       expected=1  actual=0  Δ=-1  status=error
+  P1         expected=5  actual=4  Δ=-1  status=resolved
+  EAC-1      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EAC-2      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+
+── failure-type breakdown (TakeoffFailure[], every set) ──
+    13×  AMBIGUOUS_ROW_KEY
+     2×  REFUSED_NO_SCALE

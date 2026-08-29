@@ -1,0 +1,51 @@
+# bldg5406-hvac-demo.reference.csv — ground-truth key for the "reference"-
+# kind table extraction path (sheetgraph.ts's structural, vocabulary-free
+# FOURTH table kind — TYPE-keyed rows with no per-instance drawn-symbol tag
+# of their own, e.g. federal-mech's own ARCHITECTURAL LOUVERED PENTHOUSE
+# SCHEDULE / AIR HANDLING UNIT HYDRONIC COIL SCHEDULE). Companion to
+# bldg5406-hvac-demo.takeoff.csv. Scored by mcp/scripts/reference-eval.mjs,
+# which reads ONLY buildPlanSetTakeoff's own reference_tables[] array —
+# confirmed directly in mcp/src/takeoff.ts (out.reference_tables.push(...)
+# fires only `if (tb.kind === "reference")`; every other real kind,
+# including "finish", is not captured in ANY structured output array at
+# all, only summarized in tables_seen).
+#
+# REAL, HONEST FINDING THIS SESSION (2026-08-28): bldg5406-hvac-demo's own
+# mechanical/HVAC-scoped content (sheets #1-12, same scope this set's own
+# takeoff.csv declares) contains ZERO real tables that are "reference"-kind
+# by design. Every real schedule table found on this set's own MECHANICAL
+# SCHEDULES sheets (#6/#7) is TAG-keyed (MARK column: AC-1/ACCU-1, CH-1,
+# CWP-1/2, AS-1, ET-1, EF-1..5, L-1/2, AHU-1, VAV-1..9 — the last still
+# undiscovered per takeoff.csv's own Finding #1) — genuinely equipment-kind
+# by design, not reference-kind, even where the pipeline currently
+# misclassifies one of them ("finish", for the EXPANSION AND COMPRESSION
+# TANK SCHEDULE — a real, disclosed classification gap named in this set's
+# own takeoff.csv, but "finish" is still not "reference" either way) or
+# correctly classifies one as "finish" by design (GRILLE/REGISTER/DIFFUSER
+# SCHEDULE — real, MARK-keyed, but a finish item per this project's own
+# scheduleKind convention, not equipment and not reference).
+# graphForPipeline() confirms this directly: reference_tables.length === 0
+# for this whole set today — not a discovery bug, a genuine absence of
+# reference-kind-BY-DESIGN content within the declared HVAC scope.
+#
+# The ONE real, genuinely reference-kind-by-design table anywhere in the
+# full 20-sheet PDF is the PIPE HANGER SUPPORT AND SPACING table (sheet #17,
+# P-502 "PLUMBING DETAILS" — PIPE SIZE-keyed rows, ROD SIZE/STEEL PIPE
+# SPACING/COPPER PIPE SPACING columns, no per-instance equipment tag at
+# all — directly confirmed by a full-page render of sheet #17) — but that
+# sheet is P-series (plumbing), out of this key's own declared HVAC-only
+# scope (see takeoff.csv's own header on the two-discipline PDF). Rather
+# than force a misleading in-scope pick (scoring 0% on a table that could
+# never structurally reach reference_tables[] even if every other pipeline
+# bug were fixed, since it is genuinely equipment-kind by design — a
+# DIFFERENT, less honest kind of "gap" than federal-mech's own coil-
+# schedule pick, which IS reference-kind by design and genuinely
+# undiscovered), this key is left with ZERO scored rows, matching the real,
+# checked state of the real data: THIS METRIC IS STRUCTURALLY N/A for this
+# corpus member's declared HVAC scope today, not a 0% pipeline failure. A
+# future session extending this key's scope to include the plumbing
+# discipline (see takeoff.csv's own note on the real ET-1 cross-discipline
+# tag collision) would be the natural place to add the PIPE HANGER SUPPORT
+# AND SPACING table as this set's own first real reference-kind example.
+#
+sheet,table_title,row_key,column,expected_value

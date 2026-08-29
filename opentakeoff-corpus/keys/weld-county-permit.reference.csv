@@ -1,0 +1,100 @@
+# weld-county-permit.reference.csv — ground-truth key for the "reference"-
+# kind table extraction path (sheetgraph.ts's structural, vocabulary-free
+# fourth table kind) — companion to weld-county-permit.takeoff.csv, same
+# discipline: rendered and read by eye directly, never trusted from the
+# pipeline's own extraction. Scored by mcp/scripts/reference-eval.mjs.
+#
+# HOW EVERY VALUE BELOW WAS VERIFIED (2026-08-28): Session.viewSheet region
+# crops of sheet #6 (M0.5, "MECHANICAL SPECIFICATIONS" — the ONE sheet on
+# this whole set carrying real VECTOR reference-kind tables; #2/#3's own
+# equipment schedules are raster, see weld-county-permit.takeoff.csv's own
+# FINDING #1, and are out of scope for this file), at 1-2.2x zoom, read
+# directly against the real PDF — never assumed from the pipeline's own
+# reference_tables[] dump. This set has exactly 2 real reference-kind
+# tables, both on sheet #6: DUCT SCHEDULE (7 real physical rows, 2 real
+# sections "SUPPLY AND RETURN DUCTS"/"EXHAUST DUCTS") and INSULATION
+# SCHEDULE (11 real category rows / 17 real physical rows, since 6 of the
+# 11 categories split into separate SUPPLY/RETURN rows).
+#
+# `table_title`/`row_key` below deliberately use the PIPELINE's own reported
+# label for each ROW that actually SCORES below (same convention
+# federal-mech.reference.csv's own header already establishes, since that
+# is what reference-eval.mjs's own (sheet,title,row_key) lookup indexes
+# by) — the real drawn label is always quoted in prose too, so the mapping
+# from real table to pipeline label stays checkable.
+#
+# ══════════════════════════════════════════════════════════════════════════
+# FINDING (real, disclosed, NOT fixed this session — a genuine row-key-
+# extraction bug, same species as federal-mech.reference.csv's own
+# documented CU-1..6/ET-1,2 case, independently re-found here on a totally
+# different firm's table): for BOTH real tables on sheet #6, the row_key
+# builder reads the wrong column — a generic spec value instead of each
+# table's own real leftmost CATEGORY-LABEL column:
+#   - DUCT SCHEDULE: row_key comes out as the MATERIAL cell ("GALVANIZED",
+#     "STEEL", "304 STAINLESS") instead of the real row label ("UPSTREAM
+#     AND DOWNSTREAM OF FANS WITH GREATER THAN 2" ESP", etc). Since 6 of
+#     the table's 7 real rows share MATERIAL="GALVANIZED STEEL", all 6
+#     collapse onto the SAME row_key "GALVANIZED" and only the LAST one
+#     processed (row-order dependent, not the estimator's real name for any
+#     specific row) is reachable at that key at all — a real, confirmed
+#     6-row collision. Only the FUME HOOD EXHAUST row (304 STAINLESS STEEL,
+#     the one row with a materially different MATERIAL value) row-keys
+#     uniquely, and is the one row scored below.
+#   - INSULATION SCHEDULE: row_key comes out as the SYSTEM cell ("SUPPLY" /
+#     "RETURN") instead of the real row label ("EXTERIOR DUCTWORK", "FIRST
+#     20 FEET FROM AIR HANDLING UNITS, AND ROOFTOP UNITS", etc). Every one
+#     of the table's real category rows that splits into a SUPPLY row and a
+#     RETURN row collides with every OTHER category's own SUPPLY (or
+#     RETURN) row under this scheme — a real, confirmed 5-way collision on
+#     each of the two keys reached (see below). No row in the reached
+#     portion of this table row-keys uniquely; none is scored below for
+#     this reason (same "disclosed in prose, not forced into a misleading
+#     scored row" discipline federal-mech.reference.csv's own header
+#     already establishes for its own unscorable collision case).
+# A (sheet,title,row_key) key can score at most ONE real row per colliding
+# group, which would misrepresent a 5-6-row collision as a small single-row
+# gap — deliberately not done here.
+#
+# SECOND FINDING (real, disclosed, NOT fixed — table-extraction truncation,
+# independent of the row-key bug above): buildPlanSetTakeoff's own
+# tables_seen reports INSULATION SCHEDULE as exactly 10 rows. The REAL table
+# has 17 physical rows across 11 real categories (confirmed by rendering
+# the whole table, sheet #6): only the first 5 categories (EXTERIOR
+# DUCTWORK; FIRST 20 FEET FROM AIR HANDLING UNITS, AND ROOFTOP UNITS;
+# RECTANGULAR DUCTWORK DOWNSTREAM OF VAV BOXES; DUCTWORK IN UNCONDITIONED
+# SPACE; DUCTWORK IN UNVENTILATED ATTIC — 5 x 2 SUPPLY/RETURN sub-rows = 10)
+# are captured at all; the remaining 6 real categories (EXPOSED SPIRAL
+# DUCT; ALL OTHER SUPPLY DUCTWORK; UNTREATED OUTSIDE AIR DUCT (ENCLOSED);
+# TRANSFER DUCTS (AT FULL HEIGHT WALLS, RETURN BOOTS, ETC.); ALL OTHER
+# RETURN WITHIN RA PLENUM; ALL OTHER EXHAUST) are entirely absent from the
+# pipeline's own output — not mis-keyed, genuinely never reached. These 5
+# of the 6 missing categories are single-physical-row categories (no
+# SUPPLY/RETURN split), so they row-key unambiguously even under the buggy
+# scheme above, and ARE scored below — a clean, honest MISSING signal for
+# the real truncation, uncomplicated by the collision finding above.
+#
+sheet,table_title,row_key,column,expected_value
+weld-county-mechanical-permit.pdf#6,DUCT SCHEDULE,304 STAINLESS,MATERIAL,304 STAINLESS STEEL
+weld-county-mechanical-permit.pdf#6,DUCT SCHEDULE,304 STAINLESS,PRESSURE CLASS,3-INCH WG
+weld-county-mechanical-permit.pdf#6,DUCT SCHEDULE,304 STAINLESS,MINIMUM SMACNA SEAL CLASS,AIRTIGHT/WATERTIGHT
+weld-county-mechanical-permit.pdf#6,DUCT SCHEDULE,304 STAINLESS,SMACNA LEAKAGE CLASS FOR RECT.,-
+weld-county-mechanical-permit.pdf#6,DUCT SCHEDULE,304 STAINLESS,SMACNA LEAKAGE CLASS FOR ROUND,-
+weld-county-mechanical-permit.pdf#6,DUCT SCHEDULE,304 STAINLESS,DUCT SYSTEM NOTES,#3
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,EXPOSED SPIRAL DUCT,SYSTEM,SUPPLY/RETURN
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,EXPOSED SPIRAL DUCT,LINER/WRAP,NONE
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,EXPOSED SPIRAL DUCT,MINIMUM,N/A
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,EXPOSED SPIRAL DUCT,NOTES,UNLESS NOTED ON PLANS
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,ALL OTHER SUPPLY DUCTWORK,SYSTEM,SUPPLY
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,ALL OTHER SUPPLY DUCTWORK,LINER/WRAP,WRAP
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,ALL OTHER SUPPLY DUCTWORK,THICKNESS,"1.5"""
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,ALL OTHER SUPPLY DUCTWORK,MINIMUM,R-4.2
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,"TRANSFER DUCTS (AT FULL HEIGHT WALLS, RETURN BOOTS, ETC.)",SYSTEM,RETURN
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,"TRANSFER DUCTS (AT FULL HEIGHT WALLS, RETURN BOOTS, ETC.)",LINER/WRAP,LINER
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,"TRANSFER DUCTS (AT FULL HEIGHT WALLS, RETURN BOOTS, ETC.)",THICKNESS,"1"""
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,"TRANSFER DUCTS (AT FULL HEIGHT WALLS, RETURN BOOTS, ETC.)",MINIMUM,R-4.2
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,ALL OTHER RETURN WITHIN RA PLENUM,SYSTEM,RETURN
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,ALL OTHER RETURN WITHIN RA PLENUM,LINER/WRAP,NONE
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,ALL OTHER RETURN WITHIN RA PLENUM,MINIMUM,N/A
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,ALL OTHER EXHAUST,SYSTEM,EXHAUST
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,ALL OTHER EXHAUST,LINER/WRAP,NONE
+weld-county-mechanical-permit.pdf#6,INSULATION SCHEDULE,ALL OTHER EXHAUST,MINIMUM,N/A

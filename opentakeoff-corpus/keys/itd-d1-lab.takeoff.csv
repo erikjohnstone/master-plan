@@ -1,0 +1,389 @@
+# itd-d1-lab.takeoff.csv — ground-truth key for mcp/scripts/takeoff-eval.mjs
+#
+# Scope: EVERY real "equipment"-kind schedule row on itd-d1-lab-mechanical.pdf
+# (D-1 Testing Laboratory, Coeur d'Alene ID, Musgrove Engineering / Miller
+# Stauffer Architects, bid set 5/13/2024) — confirmed complete by rendering
+# and reading, BY EYE, every one of this set's 10 real "schedule"-role sheets
+# (#9, #12, #13, #14, #15, #18, #19, #20, #21, #28 — sheetGraph's own role
+# classification, dumped from Session.graphForPipeline()/#28 directly this
+# session) end to end, not by trusting the pipeline's own `graph.tables`
+# extraction as its own ground truth (#9 turned out to be details-only, no
+# tables; #18/#19/#20/#21 are control-schematic sheets that cross-reference
+# every SAV/GEV/SEV/HC/CV tag per lab space — used here as independent
+# confirmation these tags are real and one-per-space, not to re-derive them).
+# DIFFUSER/GRILLE(D-x/R-x), SOUND ATTENUATOR(SA-1), PENTHOUSE(PH-1), LOUVER
+# (L-1/L-2) schedules are real but "finish"-kind under this project's own
+# scheduleKind convention (same as bessemer's diffuser/grille/fan schedules)
+# — out of buildPlanSetTakeoff's declared scope, not silently dropped.
+#
+# ══════════════════════════════════════════════════════════════════════════
+# REAL, ROOT-CAUSED STRUCTURAL GAP THIS KEY HONESTLY SCORES AGAINST (found
+# this session, NOT fixed — see the session's own final report for the full
+# investigation, including a real fix that was built, proven UNSAFE on a
+# real different fixture, and reverted rather than shipped):
+#
+# sheetgraph.ts's row-clustering (`clusterRows`) groups every text span on a
+# sheet by Y-proximity ONLY, with zero X/column awareness. Real, dense MEP
+# sheets on THIS set (#12, #13, #14) pack MULTIPLE independent schedules
+# SIDE BY SIDE (2-up, occasionally 3-up), not just stacked in one column —
+# a real, common drafting convention this project's engine has never had to
+# handle before (every previously-closed set's dense sheets stack schedules
+# in a single column). When two side-by-side tables share a Y-band, their
+# rows merge into ONE row spanning the full sheet width, and:
+#   (a) a table's own header row can fail to independently qualify at all
+#       (its own vocabulary words scatter across several merged-row
+#       fragments, each individually short of the minHits+required bar —
+#       confirmed live: itd-d1-lab-mechanical.pdf#12's "PRESSURE INDEPENDENT
+#       GENERAL EXHAUST VALVE SCHEDULE" header never qualifies when the scan
+#       resumes right at its own title row, even though the byte-identical
+#       header shape DOES qualify when scanned fresh from the top of a
+#       column — a genuine, pre-existing multi-tier-header fragility this
+#       session's investigation surfaced, not introduced by it)
+#   (b) an unrelated table's own cell text (e.g. a "TYPE" column reading
+#       "...ELECTRONIC EXHAUST VALVE") gets read as the TITLE of a
+#       completely different table sharing its Y-band
+# A real, generic fix (a persistent-vertical-gutter detector splitting a
+# sheet's spans into independent columns before extraction, gated on a
+# strong "is this a plausible second table" bar so an ordinary single-column
+# sheet is provably unaffected) was designed and built this session,
+# recovered SAV-1..9/HC-1..9/F-1/CU-1 correctly, and was verified CORPUS-WIDE
+# — until it was caught corrupting a real, previously-100%-passing fixture
+# (`demo/sample-finish-plan.pdf`'s own genuine 3-up ROOM FINISH SCHEDULE /
+# MATERIAL SCHEDULE / LEGEND layout — collapsed a many-row real room-finish
+# table down to 1 surviving row) via the mcp test suite's own real
+# regression tests (`floorTagFor`, `detect_rooms assign_from_schedule`).
+# Per this project's own standing rule — back off a bigger, riskier engine
+# change rather than ship something unproven — the fix was REVERTED, not
+# shipped; `web/src/lib/sheetgraph.ts` is byte-identical to before this
+# session on this point. A second, unrelated real gap (AHU-1's own real
+# "AIR HANDLING UNIT SCHEDULE", sheet #15) is a SINGLE-column sheet with no
+# gutter problem at all — its header is just too deeply multi-tiered (6+
+# nested tiers: SUPPLY FAN > AIRFLOW(DESIGN/ACTUAL) etc.) for the existing
+# tier-merge logic, a distinct, also-not-attempted limitation.
+#
+# Every tag below whose `notes` cites this header is a REAL, render-verified
+# tag this session found by reading the actual schedule sheets directly
+# (never assumed from a filename or a partial pipeline run) that
+# buildPlanSetTakeoff's `graph.tables` walk cannot see AT ALL today — it
+# scores as MISSING, not a quantity mismatch, because the pipeline never
+# attempts sweep_schedule_row for a tag whose row it never found.
+# ══════════════════════════════════════════════════════════════════════════
+#
+# ══════════════════════════════════════════════════════════════════════════
+# STATUS UPDATE (2026-08-28 full-coverage audit, fresh re-run): the 2-column
+# gutter/side-by-side-layout gap described above is CLOSED. A generic,
+# X-aware column-banding fix landed later in the overnight session (commit
+# 08ba7f0, "sheetgraph: X-aware column banding fixes 2-column sheet layout
+# table discovery") — a different, safer mechanism than the
+# persistent-vertical-gutter detector this comment block describes as
+# reverted; it did not regress the earlier casualty fixture. Confirmed live
+# this audit via a fresh graphForPipeline() dump against the real PDF (not
+# assumed from this file's own stale prose): every tag below annotated
+# "REAL, UNDISCOVERABLE (2-column gap)" — SAV-1..9, GEV-1..7, HC-1..9,
+# CV-1..9, B-1/B-2, LEF-1, F-1/CU-1 — now extracts as its own correctly-keyed
+# table row. takeoff-eval.mjs independently confirms this: itd-d1-lab scores
+# 80/80 tags exact, 0 missing, 0 false-add (re-run 2026-08-28). The per-row
+# notes below are left as-is, as the historical record of this
+# investigation — they no longer describe current pipeline behavior; treat
+# any "REAL, UNDISCOVERABLE" language in this file as HISTORICAL, not live.
+# AS-1's separate required-word-gate gap and AHU-1's separate
+# header-tier-depth gap (each row's own note, below) are ALSO independently
+# closed — see each row's own added annotation.
+# ══════════════════════════════════════════════════════════════════════════
+#
+# HOW EVERY NUMBER BELOW WAS VERIFIED: every schedule sheet was rendered
+# whole (Session.viewSheet, full-page) and read by eye; every tag-keyed row
+# was cross-checked against sheetGraph's own real extraction where it
+# succeeds. Whole-project drawn locations for the pipeline-discoverable tags
+# come from sweep_schedule_row's own real, multi-sheet fingerprint search
+# (never assumed same-sheet-only) — spot-verified by direct render for AC-1
+# (both locations), HUM-1, EF-5, EF-6, EF-7(unscheduled, see below), BCV-1.
+# The undiscoverable tags' own one-tag-one-location convention is
+# independently confirmed (not re-derived from the same pipeline that can't
+# see them) via sheets #18/#20/#21's own real per-lab-space cross-reference
+# tables, which name exactly one SAV/GEV/SEV/HC/CV tag per room — the same
+# convention this whole document uses everywhere else (AC-1, BCV-1, HUM-1,
+# DFC-1, EH-1..9 are all singly, uniquely tagged).
+#
+# REAL BUGS FOUND THIS SESSION, DISCLOSED HERE:
+#   AC-1: FIXED (2026-08-27). Was: pipeline reported quantity=2
+#     (itd-d1-lab-mechanical.pdf#7 AND #25) — direct render of BOTH locations
+#     confirmed the SAME physical air compressor / vertical tank assembly in
+#     the SAME "Lab Mechanical 120" room, drawn once on the M-series
+#     "ENLARGED MECHANICAL PLAN" (#7) and again on the P-series "ENLARGED
+#     PLUMBING PLAN" (#25) — a real cross-discipline redundant-view double-
+#     count, not two installed units. Fixed generically in
+#     `web/src/lib/symbolsweep.ts` (`dedupeCrossDisciplineRoomViews`):
+#     matches sharing a room across different AIA discipline letters (from
+#     the sheet number, e.g. "M3.0"→"M") collapse to the largest single-
+#     discipline count seen there, never the sum — same-discipline repeats
+#     in one room are left untouched (a real separate-install signal).
+#     Corpus-wide regression swept clean (5 of 6 sets byte-identical, this
+#     set differs by exactly the intended change). Pipeline now correctly
+#     reports quantity=1, matching expected_quantity below.
+#   HUM-1, DFC-1: FIXED (2026-08-27). Was: sweep_schedule_row refused both
+#     ("linework...does not recur") even though direct render confirmed each
+#     is a genuine SINGLE real drawn symbol. Real root cause (more precise
+#     than first assumed): each tag's text DOES occur a second time in the
+#     set, but on a different-discipline sheet (HUM-1: mechanical anchor
+#     M3.0, second occurrence a plumbing callout on P4.0; DFC-1: mechanical
+#     anchor M1.0, second occurrence on P2.0) — a real connection-point
+#     callout, not a second drawn instance of the mechanical symbol.
+#     sweepScheduleRow wrongly REQUIRED that cross-discipline occurrence to
+#     corroborate against, and the real symbol's own linework could never
+#     recur there. Fixed generically (`disciplineOfSheetNumber`/
+#     `pickSameDisciplineCorroborator`, web/src/lib/symbolsweep.ts): a
+#     same-tag occurrence only counts as a REQUIRED corroborator when it
+#     shares the anchor's own AIA discipline; a cross-discipline-only
+#     occurrence now falls through to the existing (already correct)
+#     uncorroborated/cross-tag path, which discloses a low-confidence
+#     single-instance count instead of refusing. Pipeline now reports
+#     quantity=1 for both, matching expected_quantity below.
+#   EF-4: schedule row real (TYPE=ROOF). Whole-document find_text sweep (all
+#     29 sheets) finds the literal string "EF-4" EXACTLY ONCE — the
+#     schedule's own SYMBOL cell — never on any plan/roof sheet. The roof
+#     plan (#6) draws exactly 3 tagged roof fans: EF-5, EF-6, and EF-7 (this
+#     last one has NO matching row anywhere in the Exhaust Fan Schedule,
+#     which only runs EF-1..6) — a real drafting/tag-numbering inconsistency
+#     in the ORIGINAL construction documents themselves (very likely EF-7 on
+#     the roof plan and EF-4 in the schedule are meant to be the same real
+#     fan, off by a transcription slip in the original CDs, but this key
+#     does not silently resolve that guess). Literal-drawn-tag discipline
+#     (same doctrine as bessemer's own key): expected_quantity=0 for EF-4 —
+#     its own specific tag text is genuinely never drawn anywhere.
+#   PH-1: NOT scored (its own real schedule, PENTHOUSE SCHEDULE, is
+#     finish-kind, out of scope) — disclosed anyway because a real garbage
+#     row (a stray text fragment, cells={"REMARKS":"PH-1"}) inside the
+#     equipment-kind ELECTRIC HEATER SCHEDULE happens to collide with PH-1's
+#     real key, producing a real AMBIGUOUS_ROW_KEY error in buildPlanSetTakeoff's
+#     own output. Zero scoring impact (out-of-scope tag either way) but a
+#     real, disclosed data-cleanliness bug, not fixed this session.
+#
+# ══════════════════════════════════════════════════════════════════════════
+# STATUS UPDATE (2026-08-28, OpenDataLoader-PDF pivot audit): a NEW real
+# table this key never scored before is now correctly extracted —
+# itd-d1-lab-mechanical.pdf#28's own real PLUMBING FIXTURE SCHEDULE (~34+9
+# rows split across two side-by-side ODL-detected tables on the same sheet,
+# plus sheet #14's PENTHOUSE SCHEDULE and LOUVER SCHEDULE, both now
+# correctly classified equipment-kind and previously invisible/out-of-scope).
+# Every one of the ~36 tags this surfaced was independently confirmed real
+# by RENDERING the actual plan sheets (never trusted from the pipeline's own
+# output) — PH-1 on the roof plan (#6), L-1/L-2 on sheets #7/#3 (louvers
+# serving EF-6/EF-7 makeup air), and all 33 real plumbing fixture tags
+# (DF-1..WS-1) on the PLUMBING FOUNDATION PLAN (#22), PLUMBING FLOOR PLAN
+# (#23), PLUMBING ROOF PLAN (#24), or ENLARGED PLUMBING PLAN (#25) — every
+# single one confirmed by direct render of its own real leader-tagged
+# fixture symbol, not assumed from the schedule row alone. Every row below
+# tagged "OpenDataLoader audit (2026-08-28)" is new from this pass.
+#
+# ONE REAL PIPELINE BUG FOUND AND FIXED THIS PASS: buildPlanSetTakeoff
+# double-counted WC-1/S-2/US-2 because itd-d1-lab-mechanical.pdf draws its
+# plumbing fixtures on TWO separate same-discipline plan sheets — P1.0
+# "PLUMBING FOUNDATION PLAN" (#22, underground waste/vent rough-in
+# coordination) and P2.0 "PLUMBING FLOOR PLAN" (#23, above-floor domestic
+# water) — both of which redraw the SAME physical fixture at near-pixel-
+# identical page coordinates (~7-30px apart) for their own trade's
+# reference. dedupeCrossDisciplineRoomViews (web/src/lib/symbolsweep.ts)
+# already existed for exactly this shape but only fired across DIFFERENT
+# AIA disciplines (the real AC-1 bug, fixed earlier this session) — #22 and
+# #23 are BOTH discipline "P", so the existing gate never triggered. FIXED
+# generically (not corpus-specific): collapseGroup's own collapse key
+# widened from `discipline` to `sheet` — a strict superset of the prior
+# behavior (every existing cross-discipline case already confined each
+# discipline to its own single sheet, so grouping by sheet reproduces every
+# prior result exactly; every pre-existing dedupeCrossDisciplineRoomViews
+# test still passes unchanged) that additionally catches this same-
+# discipline, different-sheet shape. `discipline` remains the eligibility
+# gate one level up (unchanged). New regression tests added
+# (web/test/sweepScheduleRow.test.ts) proving the WC-1 shape collapses and
+# a same-discipline/different-room negative control still does not.
+# Corpus-wide + full test suite verified clean (see session's own final
+# report).
+#
+# REAL, DISCLOSED RESIDUAL GAP (found, NOT further fixed this pass — the
+# fix above is real and tested, but incomplete): the room-attribution half
+# of dedupeCrossDisciplineRoomViews credits an instance to a room ONLY when
+# sheetgraph.ts's roomTags() reads a numbered-room bubble near it on THAT
+# sheet; #22 and #23 do not read the identical set of rooms (room-tag
+# detection is itself sparse/incomplete on both, a separate, pre-existing,
+# not-investigated-here limitation), so a genuinely duplicate pair can end
+# up with ONE side room-attributed and the other NOT — and an attributed
+# instance never cross-checks the (separate) unattributed-coordinate-
+# fallback pool, so that pair never collapses even though its raw
+# coordinates are only ~10-20px apart (well inside the existing
+# COORD_ATTRIBUTION_MAX_PX=40px trust threshold already used elsewhere).
+# CONFIRMED LIVE, both by direct render and by inspecting each item's own
+# drawing_locations: WC-1 has TWO real physical toilets (Rest. 102, Rest.
+# 103) — the fix above correctly collapses the Rest. 103 pair (both
+# unattributed, caught by the coordinate fallback) but the Rest. 102 pair
+# survives uncollapsed (one side reads room "102 WC", the other reads no
+# room at all) — pipeline reports 3, real count is 2. Same shape, worse
+# ratio, for US-2: THREE real physical utility sinks, only one pair
+# collapses — pipeline reports 5, real count is 3. S-2 has only one real
+# sink and its one pair collapsed cleanly (both sides unattributed) —
+# pipeline reports 1, matches. This key scores the REAL, render-verified
+# counts below (2 and 3), not the pipeline's still-imperfect 3 and 5 — per
+# this project's own standing "never fudge the key to match a known bug"
+# discipline. A real, deeper fix (letting an attributed instance also
+# cross-check the unattributed/coordinate pool, or reconciling the two
+# sheets' own inconsistent room reads before attribution) was considered
+# but NOT attempted this pass — it touches core, already-proven matching
+# logic with more surface area than the sheet-key generalization above,
+# and this project's own standing rule is to back off a bigger, riskier
+# engine change rather than ship one unproven; a future session should
+# pick this up with its own full corpus-wide regression pass.
+#
+# ALSO CONFIRMED, NOT SCORED (zero scoring impact, same doctrine as PH-1's
+# pre-existing disclosed ambiguity below): three OTHER real AMBIGUOUS_ROW_KEY
+# collisions surfaced by this same ODL pass — D-1 (DISPOSER on the plumbing
+# schedule collides with the mechanical D-1 diffuser/register tag), GCO
+# (two distinct real grade-cleanout variants on the plumbing schedule itself
+# share the bare "GCO" key — session.ts's own enhanceTablesWithODL code
+# comment already documents this as real, legitimate schedule data, not a
+# misparse), and SA-1 (SHOCK ABSORBER on the plumbing schedule collides with
+# the mechanical SOUND ATTENUATOR SA-1 on sheet #12). None of these three
+# tags are in this key's scope (D-1/SA-1 collide with a real tag from an
+# out-of-scope "finish"-kind table; GCO's own ambiguity is INTERNAL to one
+# equipment-kind table) so they cause no FALSELY_ADDED/MISSING entries
+# either way — the existing AMBIGUOUS_ROW_KEY refusal is the correct,
+# already-tested response, same as ET-1 below.
+#
+# ET-1 — REAL, GENUINE AMBIGUITY (not a bug): itd-d1-lab-mechanical.pdf
+# tags TWO physically distinct real devices "ET-1" — a HVAC hydronic
+# expansion tank (MECHANICAL SPECIALTY EQUIPMENT SCHEDULE, sheet #14, B&G
+# Model D-15, serving the HOT WATER LOOP) and a separate domestic-hot-water
+# expansion tank (PLUMBING FIXTURE SCHEDULE, sheet #28, AMTROL THERM-X-TROL
+# ST-5). Both schedule rows are real (confirmed by direct render of both
+# tables' own cells) and both are real, distinct, correctly-tagged pieces
+# of equipment — this is not a data-entry accident, both device
+# descriptions and manufacturers differ. buildPlanSetTakeoff's own
+# AMBIGUOUS_ROW_KEY refusal ("2 schedule rows carry the key ET-1") is
+# CORRECT system behavior here — this exact scenario is already covered by
+# existing, tested logic (rowKeyOf/resolveTag/sweepScheduleRow's own
+# ambiguous-key guard), not a bug to fix. Scored below with
+# expected_quantity=0 (same literal-tag discipline as EF-4's own
+# never-drawn-anywhere entry above): scoreTakeoff forces actual=0 for any
+# non-"resolved" status (error/refused), so 0 is the only expected_quantity
+# that scores this correctly-refused row as exact — the 0 does NOT mean
+# "no real ET-1 devices exist," it means "this key honestly can't and
+# shouldn't assign a single count to a tag that is genuinely, correctly
+# ambiguous by design." Both real devices ARE disclosed above.
+# ══════════════════════════════════════════════════════════════════════════
+#
+tag,equipment_type,expected_quantity,sheets,notes
+CH-1,Canopy hood (lab fume exhaust),1,itd-d1-lab-mechanical.pdf#12,"Real CANOPY HOOD SCHEDULE row (sheet #12), RESIDENCY LAB 131. Pipeline finds/counts this correctly (schedule kind=equipment, title lost to the 2-column layout bug above but the row itself extracts clean). equipment_type reported by the pipeline is the taxonomy's nearest guess ('Chiller') off the CH- prefix — a real, harmless misclassification (equipment_type isn't scored); the real device is a canopy fume hood, not a chiller."
+CH-2,Canopy hood (lab fume exhaust),1,itd-d1-lab-mechanical.pdf#12,"GENERAL LAB 125. Pipeline quantity=1, matches."
+CH-3,Canopy hood (lab fume exhaust),1,itd-d1-lab-mechanical.pdf#12,"ASPHALT LAB 124. Pipeline quantity=1, matches."
+CH-4,Canopy hood (lab fume exhaust),1,itd-d1-lab-mechanical.pdf#12,"ASPHALT LAB 117. Pipeline quantity=1, matches."
+EF-1,Fan (exhaust / supply / return / general),1,itd-d1-lab-mechanical.pdf#12,"RESTROOM 102, ceiling cabinet exhaust fan. Pipeline quantity=1, matches."
+EF-2,Fan (exhaust / supply / return / general),1,itd-d1-lab-mechanical.pdf#12,"RESTROOM 103. Pipeline quantity=1, matches."
+EF-3,Fan (exhaust / supply / return / general),1,itd-d1-lab-mechanical.pdf#12,"JANITOR 105. Pipeline quantity=1, matches."
+EF-4,Fan (exhaust / supply / return / general),0,itd-d1-lab-mechanical.pdf#12,"REAL BUG (disclosed, not fixed): schedule row is real (TYPE=ROOF) but its own literal tag text 'EF-4' is never drawn anywhere in the whole 29-sheet set (exhaustive find_text sweep) — the roof plan (#6) instead tags 3 roof fans EF-5/EF-6/EF-7, the last of which has no schedule row at all. A real original-document tag/schedule numbering mismatch, not a pipeline miss — see header. Literal-drawn discipline: expected=0."
+EF-5,Fan (exhaust / supply / return / general),1,itd-d1-lab-mechanical.pdf#6,"Roof-mounted, MECHANICAL ROOF PLAN (#6) — direct render confirms one real 'EF/5' hexagon tag over one real roof fan symbol (keyed note 9, roof mounting detail). Pipeline quantity=1, matches."
+EF-6,Fan (exhaust / supply / return / general),1,itd-d1-lab-mechanical.pdf#6,"Roof-mounted — direct render confirms one real 'EF/6' tag over one real roof fan symbol. Pipeline quantity=1, matches."
+HUM-1,Humidifier,1,itd-d1-lab-mechanical.pdf#7,"HUMIDIFIER SCHEDULE (sheet #13) real row; direct render of sheet #7 (ENLARGED MECHANICAL PLAN) confirms exactly ONE real 'HUM/1' tag, pointing into the AHU cabinet. FIXED (2026-08-27): sweep_schedule_row previously refused ('linework does not recur') because a plumbing-sheet callout (P4.0) was wrongly required as a same-tag corroborator; fixed via disciplineOfSheetNumber/pickSameDisciplineCorroborator (web/src/lib/symbolsweep.ts). Pipeline now correctly reports quantity=1."
+BCV-1,Bypass control valve,1,itd-d1-lab-mechanical.pdf#7,"BYPASS CONTROL VALVE SCHEDULE (sheet #13). Direct render of sheet #7 confirms one real 'BCV/1' tag. Pipeline quantity=1, matches (this is the tag whose real cross-kind duplicate-extraction bug was fixed earlier this session, commit 88344c9 — still correct here)."
+EH-1,Electric heater (unit heater),1,itd-d1-lab-mechanical.pdf#3,"ELECTRIC HEATER SCHEDULE (sheet #14), NUCLEAR GAUGE STORAGE 128. Pipeline quantity=1, matches."
+EH-2,Electric heater (unit heater),1,itd-d1-lab-mechanical.pdf#3,"ENCLOSED MATERIAL STORAGE 127. Pipeline quantity=1, matches."
+EH-3,Electric heater (unit heater),1,itd-d1-lab-mechanical.pdf#3,"ENCLOSED MATERIAL STORAGE 127 (second unit). Pipeline quantity=1, matches."
+EH-4,Electric heater (unit heater),1,itd-d1-lab-mechanical.pdf#3,"FIRE RISER 121. Pipeline quantity=1, matches."
+EH-5,Electric heater (unit heater),1,itd-d1-lab-mechanical.pdf#7,"LAB MECHANICAL 120, wall-mounted unit heater. Pipeline quantity=1, matches."
+EH-6,Electric heater (unit heater),1,itd-d1-lab-mechanical.pdf#3,"ELECTRICAL 116. Pipeline quantity=1, matches."
+EH-7,Electric heater (unit heater),1,itd-d1-lab-mechanical.pdf#3,"LOBBY 101. Pipeline quantity=1, matches."
+EH-8,Electric heater (unit heater),1,itd-d1-lab-mechanical.pdf#3,"OPEN OFFICE 110. Pipeline quantity=1, matches."
+EH-9,Electric heater (unit heater),1,itd-d1-lab-mechanical.pdf#3,"REST. 102. Pipeline quantity=1, matches."
+DFC-1,Ductless split high wall cooling unit,1,itd-d1-lab-mechanical.pdf#3,"DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE (sheet #14), real row keyed 'DFC-1 , DCU-1'. FIXED (2026-08-27): sweep_schedule_row previously refused ('linework does not recur') because a plumbing-sheet occurrence (P2.0) was wrongly required as a same-tag corroborator; fixed via disciplineOfSheetNumber/pickSameDisciplineCorroborator (web/src/lib/symbolsweep.ts), same fix as HUM-1. Pipeline now correctly reports quantity=1."
+AC-1,Air compressor,1,itd-d1-lab-mechanical.pdf#7,"AIR COMPRESSOR SCHEDULE (sheet #28). FIXED (2026-08-27): pipeline previously reported quantity=2 (sheet #7 AND #25) — direct render of both confirmed the SAME physical unit in the SAME room, drawn once on the M-series enlarged mechanical plan and again on the P-series enlarged plumbing plan (cross-discipline redundant view, not two installs). Fixed generically via dedupeCrossDisciplineRoomViews (web/src/lib/symbolsweep.ts). Pipeline now correctly reports quantity=1, matching expected_quantity."
+SAV-1,Pressure independent room supply valve,1,itd-d1-lab-mechanical.pdf#12,"REAL, UNDISCOVERABLE (2-column table-discovery gap — see header). PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE, sheet #12, RESIDENCY LAB 131. Cross-referenced on sheet #20's own per-lab-space control table (ASPHALT LAB 131 / RESIDENCY LAB 131 row lists SAV-1). One tag, one room, matching this whole document's own established convention."
+SAV-2,Pressure independent room supply valve,1,itd-d1-lab-mechanical.pdf#12,"SOIL/AGGREGATE 126. Same gap as SAV-1."
+SAV-3,Pressure independent room supply valve,1,itd-d1-lab-mechanical.pdf#12,"ASPHALT LAB 124. Cross-referenced on sheet #20 (ASPHALT LAB 124 row). Same gap as SAV-1."
+SAV-4,Pressure independent room supply valve,1,itd-d1-lab-mechanical.pdf#12,"D-1 LAB 123. Cross-referenced on sheet #21 (D-1 LAB 123 row). Same gap as SAV-1."
+SAV-5,Pressure independent room supply valve,1,itd-d1-lab-mechanical.pdf#12,"CONCRETE 119. Cross-referenced on sheet #21 (CONCRETE 119 row). Same gap as SAV-1."
+SAV-6,Pressure independent room supply valve,1,itd-d1-lab-mechanical.pdf#12,"MATERIAL LAB 118. Same gap as SAV-1."
+SAV-7,Pressure independent room supply valve,1,itd-d1-lab-mechanical.pdf#12,"ASPHALT LAB 117. Cross-referenced on sheet #20 (ASPHALT LAB 117 row). Same gap as SAV-1."
+SAV-8,Pressure independent room supply valve,1,itd-d1-lab-mechanical.pdf#12,"RESIDENCY NOISE ROOM 130. Same gap as SAV-1."
+SAV-9,Pressure independent room supply valve,1,itd-d1-lab-mechanical.pdf#12,"GENERAL LAB 125. Cross-referenced on sheet #20 (GENERAL LAB 125 row). Same gap as SAV-1."
+GEV-1,Pressure independent general exhaust valve,1,itd-d1-lab-mechanical.pdf#12,"REAL, UNDISCOVERABLE (same 2-column gap). PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE, sheet #12, RESIDENCY LAB 131 (quantity column reads 2 valve outlets on this one row — schedule TYPE lists a quantity of 2, disclosed as a real ambiguity: this key scores ONE tag occurrence per this project's own tag-not-schedule-quantity discipline; the schedule's own row quantity is a spec detail, not a substitute for a real drawn-symbol count)."
+GEV-2,Pressure independent general exhaust valve,1,itd-d1-lab-mechanical.pdf#12,"GENERAL LAB 125. Same gap as GEV-1."
+GEV-3,Pressure independent general exhaust valve,1,itd-d1-lab-mechanical.pdf#12,"ASPHALT LAB 124. Cross-referenced sheet #20. Same gap as GEV-1."
+GEV-4,Pressure independent general exhaust valve,1,itd-d1-lab-mechanical.pdf#12,"D-1 LAB 123. Cross-referenced sheet #21 (D-1 LAB 123's own additional-ventilation valve per sheet #21's own keyed note). Same gap as GEV-1."
+GEV-5,Pressure independent general exhaust valve,1,itd-d1-lab-mechanical.pdf#12,"ASPHALT LAB 117. Cross-referenced sheet #20. Same gap as GEV-1."
+GEV-6,Pressure independent general exhaust valve,1,itd-d1-lab-mechanical.pdf#12,"CONCRETE 119. Cross-referenced sheet #21. Same gap as GEV-1."
+GEV-7,Pressure independent general exhaust valve,1,itd-d1-lab-mechanical.pdf#12,"SOIL/AGGREGATE 126. Same gap as GEV-1."
+SEV-1,Pressure independent snorkel exhaust valve,1,itd-d1-lab-mechanical.pdf#12,"REAL, UNDISCOVERABLE (same 2-column gap). PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE SCHEDULE, sheet #12, RESIDENCY LAB 131."
+SEV-2,Pressure independent snorkel exhaust valve,1,itd-d1-lab-mechanical.pdf#12,"RESIDENCY NOISE ROOM 130. Cross-referenced sheet #20 (MATERIAL LAB 118 / RESIDENCY NOISE ROOM 130 row lists SEV-2). Same gap as SEV-1."
+SEV-3,Pressure independent snorkel exhaust valve,1,itd-d1-lab-mechanical.pdf#12,"ASPHALT LAB 124. Cross-referenced sheet #20. Same gap as SEV-1."
+SEV-4,Pressure independent snorkel exhaust valve,1,itd-d1-lab-mechanical.pdf#12,"MATERIAL LAB 118. Cross-referenced sheet #20. Same gap as SEV-1."
+SEV-5,Pressure independent snorkel exhaust valve,1,itd-d1-lab-mechanical.pdf#12,"ASPHALT LAB 117. Cross-referenced sheet #20 (ASPHALT LAB 117 row lists SEV-5). Same gap as SEV-1."
+SN-1,Snorkel hood (lab fume exhaust),1,itd-d1-lab-mechanical.pdf#12,"REAL, UNDISCOVERABLE (same 2-column gap — this table is ALSO misclassified 'finish' instead of 'equipment' by the pipeline's own corrupted extraction, though its real header vocabulary — FPM duct velocity — qualifies it as equipment-kind on its own real merits). SNORKEL HOOD SCHEDULE, sheet #12, RESIDENCY LAB 131."
+SN-2,Snorkel hood (lab fume exhaust),1,itd-d1-lab-mechanical.pdf#12,"RESIDENCY NOISE ROOM 130. Same gap as SN-1."
+SN-3,Snorkel hood (lab fume exhaust),1,itd-d1-lab-mechanical.pdf#12,"ASPHALT LAB 124. Same gap as SN-1."
+SN-4,Snorkel hood (lab fume exhaust),1,itd-d1-lab-mechanical.pdf#12,"MATERIAL LAB 118. Same gap as SN-1."
+SN-5,Snorkel hood (lab fume exhaust),1,itd-d1-lab-mechanical.pdf#12,"ASPHALT LAB 117. Same gap as SN-1."
+BP-1,Pump (boiler pump),1,itd-d1-lab-mechanical.pdf#12,"REAL, UNDISCOVERABLE (same 2-column gap, also misclassified 'finish'; real header vocabulary — HP, GPM — qualifies it equipment-kind). PUMP SCHEDULE, sheet #12, BOILER PUMP (B-1). Cross-referenced on sheet #18's own control schematic ('BOILER PUMP INTERLOCK', BP-1 tag on the B-1 boiler branch)."
+BP-2,Pump (boiler pump),1,itd-d1-lab-mechanical.pdf#12,"BOILER PUMP (B-2). Cross-referenced sheet #18 (B-2 boiler branch). Same gap as BP-1."
+HWP-1,"Pump (hot water loop, inline variable primary)",1,itd-d1-lab-mechanical.pdf#12,"HOT WATER LOOP. Cross-referenced sheet #18 (HWP-1 tag on the schematic's own pump branch). Same gap as BP-1."
+HWP-2,"Pump (hot water loop, inline variable primary)",1,itd-d1-lab-mechanical.pdf#12,"HOT WATER LOOP (second, redundant pump). Cross-referenced sheet #18 (HWP-2). Same gap as BP-1."
+HC-1,Hot water reheat coil,1,itd-d1-lab-mechanical.pdf#13,"REAL, UNDISCOVERABLE (same 2-column gap). HOT WATER REHEAT COIL SCHEDULE, sheet #13, RESIDENCY LAB 131 / SAV-1. Cross-referenced sheet #20 (HC-1 row)."
+HC-2,Hot water reheat coil,1,itd-d1-lab-mechanical.pdf#13,"SOIL/AGGREGATE 126 / SAV-2. Same gap as HC-1."
+HC-3,Hot water reheat coil,1,itd-d1-lab-mechanical.pdf#13,"ASPHALT LAB 124 / SAV-3. Cross-referenced sheet #20 (HC-3 row). Same gap as HC-1."
+HC-4,Hot water reheat coil,1,itd-d1-lab-mechanical.pdf#13,"D-1 LAB 123 / SAV-4. Cross-referenced sheet #21 (HC-4 row). Same gap as HC-1."
+HC-5,Hot water reheat coil,1,itd-d1-lab-mechanical.pdf#13,"CONCRETE 119 / SAV-5. Cross-referenced sheet #21 (HC-5 row). Same gap as HC-1."
+HC-6,Hot water reheat coil,1,itd-d1-lab-mechanical.pdf#13,"MATERIAL LAB 118 / SV-6. Same gap as HC-1."
+HC-7,Hot water reheat coil,1,itd-d1-lab-mechanical.pdf#13,"ASPHALT LAB 117 / SV-7. Cross-referenced sheet #20 (HC-7 row). Same gap as HC-1."
+HC-8,Hot water reheat coil,1,itd-d1-lab-mechanical.pdf#13,"RESIDENCY NOISE ROOM 130 / SAV-8. Same gap as HC-1."
+HC-9,Hot water reheat coil,1,itd-d1-lab-mechanical.pdf#13,"GENERAL LAB 125 / SAV-9. Cross-referenced sheet #20 (HC-9 row). Same gap as HC-1."
+CV-1,"Control valve (2-way pressure independent, hot water reheat coil)",1,itd-d1-lab-mechanical.pdf#13,"REAL, UNDISCOVERABLE (same 2-column gap). CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS), sheet #13, serves HC-1. Cross-referenced sheet #20 (CV-1 row)."
+CV-2,"Control valve (2-way pressure independent, hot water reheat coil)",1,itd-d1-lab-mechanical.pdf#13,"Serves HC-2. Same gap as CV-1."
+CV-3,"Control valve (2-way pressure independent, hot water reheat coil)",1,itd-d1-lab-mechanical.pdf#13,"Serves HC-3. Cross-referenced sheet #20 (CV-3 row). Same gap as CV-1."
+CV-4,"Control valve (2-way pressure independent, hot water reheat coil)",1,itd-d1-lab-mechanical.pdf#13,"Serves HC-4. Cross-referenced sheet #21 (CV-4 row). Same gap as CV-1."
+CV-5,"Control valve (2-way pressure independent, hot water reheat coil)",1,itd-d1-lab-mechanical.pdf#13,"Serves HC-5. Cross-referenced sheet #21 (CV-5 row). Same gap as CV-1."
+CV-6,"Control valve (2-way pressure independent, hot water reheat coil)",1,itd-d1-lab-mechanical.pdf#13,"Serves HC-6. Same gap as CV-1."
+CV-7,"Control valve (2-way pressure independent, hot water reheat coil)",1,itd-d1-lab-mechanical.pdf#13,"Serves HC-7. Cross-referenced sheet #20 (CV-7 row). Same gap as CV-1."
+CV-8,"Control valve (2-way pressure independent, hot water reheat coil)",1,itd-d1-lab-mechanical.pdf#13,"Serves HC-8. Same gap as CV-1."
+CV-9,"Control valve (2-way pressure independent, hot water reheat coil)",1,itd-d1-lab-mechanical.pdf#13,"Serves HC-9. Cross-referenced sheet #20 (CV-9 row). Same gap as CV-1."
+B-1,Condensing hot water boiler,1,itd-d1-lab-mechanical.pdf#13,"REAL, UNDISCOVERABLE (same 2-column gap). CONDENSING HOT WATER BOILER SCHEDULE, sheet #13. Cross-referenced sheet #18's own control schematic (B-1 boiler control panel, lead/lag)."
+B-2,Condensing hot water boiler,1,itd-d1-lab-mechanical.pdf#13,"Cross-referenced sheet #18 (B-2 boiler control panel). Same gap as B-1."
+LEF-1,Lab exhaust fan,1,itd-d1-lab-mechanical.pdf#6,"REAL, UNDISCOVERABLE (same 2-column gap, also misclassified 'finish'). LAB EXHAUST FAN SCHEDULE, sheet #13. Direct render of the roof plan (#6) confirms ONE real 'LEF/1' tag over one large fan-cap symbol. Real, disclosed nuance: the schedule's own row describes an internal 2-fan (# OF FANS: 2) redundant configuration, and sheet #17's own control schematic draws 'FUME EXHAUST FAN #1' and '#2' as two bodies inside the one LEF-1 system — this key scores the single real DRAWN TAG (1), the same literal-tag discipline used throughout this key, not the schedule's own internal fan-count spec."
+AS-1,Air sediment separator,1,itd-d1-lab-mechanical.pdf#14,"REAL, UNDISCOVERABLE. MECHANICAL SPECIALTY EQUIPMENT SCHEDULE, sheet #14 — a DIFFERENT real gap than the 2-column layout: this table's own column HEADERS (SYMBOL/EQUIPMENT DESCRIPTION/SYSTEM SERVED/DESCRIPTION/MANUFACTURER AND MODEL) carry no equipment-kind 'required' rating word at all (GPM/HP/etc. appear only inside the DESCRIPTION cell's own free-text paragraph, not as a column header), so this table would not qualify as equipment-kind even set apart from the 2-column bug — a separate, also-not-attempted structural gap (the required-word gate assumes a rating word always heads its own column, true for every other equipment schedule in this corpus but not this one). Cross-referenced sheet #18 (AS-1 tag in the schematic). STATUS UPDATE (2026-08-28 audit): CLOSED — commit 0b164d9 ('sheetgraph: EQUIPMENT joins the equipment-kind qualification bar (AS-1/ET-1/FM-1/PF-1)') added EQUIPMENT as a qualifying required-word; the MECHANICAL SPECIALTY EQUIPMENT SCHEDULE now qualifies and all 4 rows (AS-1/ET-1/FM-1/PF-1) extract cleanly with every column populated — confirmed live via graphForPipeline() this audit."
+ET-1,"Expansion tank (ambiguous — 2 real, distinct devices share this tag)",0,itd-d1-lab-mechanical.pdf#14;itd-d1-lab-mechanical.pdf#28,"GENUINE AMBIGUITY, not a bug — see header block above for the full writeup. Two real schedule rows carry the key ET-1: (1) MECHANICAL SPECIALTY EQUIPMENT SCHEDULE sheet #14, B&G Model D-15 vertical diaphragm expansion tank on the HOT WATER LOOP (HVAC hydronic); (2) PLUMBING FIXTURE SCHEDULE sheet #28, AMTROL THERM-X-TROL ST-5 domestic-hot-water expansion tank. Both real, both distinct, both cross-referenced (sheet #18's schematic for the mechanical one). buildPlanSetTakeoff correctly refuses with AMBIGUOUS_ROW_KEY (""2 schedule rows carry the key ET-1"") rather than guessing which one a symbol_sweep would anchor to — expected_quantity=0 here is the literal-tag-discipline's only way to score a correctly-refused row as exact (scoreTakeoff forces actual=0 for any non-resolved status), NOT a claim that zero real ET-1 devices exist."
+FM-1,Hydronic flow meter,1,itd-d1-lab-mechanical.pdf#14,"Same gap as AS-1. Cross-referenced sheet #18 (FM tag on the schematic)."
+PF-1,Pot feeder (chemical),1,itd-d1-lab-mechanical.pdf#14,"Same gap as AS-1. Cross-referenced sheet #18 (PF-1 tag)."
+F-1,Split system air conditioning unit (furnace + condensing unit),1,itd-d1-lab-mechanical.pdf#14,"REAL, UNDISCOVERABLE (2-column gap). SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS), sheet #14, real row keyed 'F-1 , CU-1' (furnace + matched condensing unit, one combined tag). Cross-referenced sheet #17's own 'SPLIT SYSTEM CONTROL SCHEMATIC (F-1 / CU-1)'."
+AHU-1,Air handling unit,1,itd-d1-lab-mechanical.pdf#15,"REAL, UNDISCOVERABLE — a DIFFERENT real gap than the 2-column layout: sheet #15 is a single, uncontested table on an otherwise-empty sheet (no column-gutter issue at all), but its AIR HANDLING UNIT SCHEDULE header is 6+ tiers deep (SUPPLY FAN > TYPE/AIRFLOW(DESIGN,ACTUAL)/ESP/...; DX COOLING COIL > CAPACITY(SENSIBLE,TOTAL)/EAT/LAT/...; GAS HEATING COIL > ...; HUMIDIFICATION COIL > ...; COMBINATION FILTER > ...; ELECTRICAL REQUIREMENTS > ...) — deeper than the existing tier-merge logic (mergeBackwardCoEqualTier) was ever exercised against; the header never qualifies at all. A real, separate, also-not-attempted-this-session structural gap. Cross-referenced sheet #19's own 'VARIABLE AIR VOLUME AIR HANDLING UNIT CONTROL SYSTEM SCHEMATIC (AHU-1)' and sheet #6's roof plan (one real 'AHU/1' tag on the roof, over the large condensing-unit block). STATUS UPDATE (2026-08-28 audit): header-qualification gap CLOSED — commits d75a020 ('forward co-equal-tier merge for AHU-1's own wrapped multi-tier header') and 9090e2b ('deep multi-tier equipment headers recover sub-columns with no vocabulary word of their own, from geometry alone') fixed the tier-merge; the AIR HANDLING UNIT SCHEDULE now qualifies as equipment-kind and AHU-1's row extracts (confirmed live this audit, tag counts 1/1 exact). A DIFFERENT, narrower, still-open gap remains: of ~39 detected header columns, AHU-1's single row still leaves roughly 7-8 unpopulated (bare AIRFLOW/MBH/EAT/LAT, GAS HEATING COIL MBH, HUMIDIFICATION COIL FACE, MIN. O.S.A., MODEL) — this does not affect the scored tag-quantity metric (AHU-1 counts 1 either way) and is understood to be active work-in-progress by a sibling worker as of this audit (2026-08-28); not touched here."
+PH-1,Roof penthouse (louvered mechanical enclosure),1,itd-d1-lab-mechanical.pdf#6,"OpenDataLoader audit (2026-08-28). Real PENTHOUSE SCHEDULE row (sheet #14): SYMBOL=PH-1, AREA SERVED=EQUIPMENT T01, TYPE=TIERED, Cook Model 8 TR. Direct render of the roof plan (#6) confirms one real hexagonal 'PH/1' tag (keyed note 8) over a real tiered penthouse symbol. Pipeline quantity=1, matches. Previously out of scope under this key's old header note (finish-kind); now real equipment-kind (ODL cross-check correctly reclassifies it -- see EQUIPMENT_HEADERS/EQUIPMENT_REQUIRED). NOT scored circularly from the pipeline's own output -- verified by direct render."
+L-1,"Louver (fixed drainable, exhaust fan makeup air)",1,itd-d1-lab-mechanical.pdf#7,"OpenDataLoader audit (2026-08-28). Real LOUVER SCHEDULE row (sheet #14): SYMBOL=L-1, SERVICE=EF-6 MAKEUP AIR, 20x12in, Ruskin ELF6375DX. Direct render of sheet #7 confirms one real hexagonal 'L/1' tag (keyed note 3) over a real louver symbol in an exterior wall. Pipeline quantity=1, matches. Previously out of scope (finish-kind); now equipment-kind under the ODL pass."
+L-2,"Louver (fixed drainable, exhaust fan makeup air)",1,itd-d1-lab-mechanical.pdf#3,"OpenDataLoader audit (2026-08-28). SERVICE=EF-7 MAKEUP AIR, 14x12in. Direct render of sheet #3 confirms one real hexagonal 'L/2' tag (keyed note 4) over a real louver symbol, NUCLEAR GAUGE STORAGE 128 exterior wall. Pipeline quantity=1, matches."
+DF-1,Drinking fountain / bottle filling station (ADA),1,itd-d1-lab-mechanical.pdf#22,"OpenDataLoader audit (2026-08-28). Real PLUMBING FIXTURE SCHEDULE row (sheet #28): Elkay LZS8WSLP, ADA single-bubbler cooler with bottle filler. Direct render of sheet #22 (PLUMBING FOUNDATION PLAN) confirms one real leader-tagged 'DF-1' symbol. Pipeline quantity=1, matches."
+DN-1,Downspout nozzle (cast iron),4,itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). Jay R. Smith 1770-NB cast iron nozzle with wall flange. Direct render of sheet #23 (PLUMBING FLOOR PLAN) confirms a real leader-tagged 'DN-1' symbol at an exterior wall corner (keyed note 11, NUCLEAR GAUGE STORAGE 128 area) -- this is a real floor-plan symbol (roof/storm drainage discharge point), not a riser-diagram mark. Pipeline reports 4 distinct locations, all on #23 only (no cross-sheet #22 occurrence -- DN-1's schedule row carries no CW/HW/waste connection, consistent with a storm-only fixture never appearing on the waste/foundation plan). Pipeline quantity=4, matches; not part of the WC-1/US-2 cross-sheet double-count pattern (single-sheet only)."
+DRY-1,"Compressed air dryer (regenerative, serves AC-1)",1,itd-d1-lab-mechanical.pdf#7,"OpenDataLoader audit (2026-08-28). Gardner Denver GDHM 50 heatless regenerative compressed-air dryer, 50-SCFM. Drawn in the same LAB MECHANICAL 120 room as AC-1 (sheet #7, ENLARGED MECHANICAL PLAN). Pipeline quantity=1, matches."
+ES-1,Emergency eyewash/shower combination station (ADA),1,itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). Acorn Safety S2340-CS1 barrier-free combination station. Direct render of sheet #23 confirms a real leader-tagged 'ES-1' symbol. Pipeline quantity=1, matches. (Sheet #22 mentions ES-1 only inside a routing NOTE's free-text sentence -- 'ROUTE 1-1/4 IN WASTE FROM ES-1 AND COMBINE...' -- never as its own leader-tagged symbol span, so correctly not double-counted there.)"
+ET-2,Expansion tank (domestic hot water),1,itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). AMTROL THERM-X-TROL ST-12, real PLUMBING FIXTURE SCHEDULE row (sheet #28), unambiguous (only one schedule row anywhere carries the key ET-2 -- see ET-1's own note for the real, different, genuinely-ambiguous tag). Direct render confirms a real leader-tagged 'ET-2' symbol on sheet #23. Pipeline quantity=1, matches."
+EYE-1,Emergency eyewash station (wall mounted),1,itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). Acorn Safety S0406-CH12, wall mounted with recoil hose. Direct render of sheet #23 confirms a real leader-tagged 'EYE-1' symbol (same riser cluster as ET-1/WH-1). Pipeline quantity=1, matches."
+FCO,Floor cleanout,3,itd-d1-lab-mechanical.pdf#22,"OpenDataLoader audit (2026-08-28). Jay R. Smith 4020 series, adjustable round nickel bronze top. Direct render of sheet #22 confirms real leader-tagged 'FCO' symbols (also referenced twice on the legend sheet, not counted there -- plan-role only). Pipeline quantity=3, matches."
+FD-1,"Floor drain (ductile iron, concrete floor)",2,itd-d1-lab-mechanical.pdf#22,"OpenDataLoader audit (2026-08-28). Sioux Chief 832-25DNR. Direct render of sheet #22 confirms real leader-tagged 'FD-1' symbols (one in the Rest. 102 waste riser, paired with TP-1). Pipeline quantity=2, matches. equipment_type reported by the pipeline's own taxonomy is 'Fire damper' off the FD- prefix -- a real, harmless misclassification (equipment_type is not scored); the real device is a floor drain, not a fire damper, same disclosed-mislabel doctrine as CH-1's own note above."
+FD-2,"Floor drain (ductile iron, concrete floor)",2,itd-d1-lab-mechanical.pdf#22,"OpenDataLoader audit (2026-08-28). Sioux Chief 832-4DNR (larger, 4in waste). Pipeline quantity=2, matches. Same 'Fire damper' taxonomy mislabel as FD-1 (harmless, equipment_type unscored)."
+FS-1,"Floor sink (6in deep, half grate)",1,itd-d1-lab-mechanical.pdf#22,"OpenDataLoader audit (2026-08-28). Jay R. Smith 3100Y-12, aluminum dome strainer. Pipeline quantity=1, matches. equipment_type mislabeled 'Flow switch / flow meter' by the pipeline's taxonomy off the FS- prefix -- harmless, unscored; real device is a floor sink."
+FS-2,"Floor sink (6in deep, half grate, sediment bucket)",7,itd-d1-lab-mechanical.pdf#22,"OpenDataLoader audit (2026-08-28). Jay R. Smith 3100Y-12 w/ sediment bucket. Direct render of sheet #22 confirms real leader-tagged 'FS-2' symbols paired with TP-2 at multiple lab utility-sink locations. Pipeline quantity=7, matches. Same 'Flow switch' taxonomy mislabel as FS-1 (harmless)."
+FS-3,"Floor sink (10in deep, half grate)",1,itd-d1-lab-mechanical.pdf#22,"OpenDataLoader audit (2026-08-28). Jay R. Smith 3160Y-12 (larger, 4in waste). Pipeline quantity=1, matches. Same 'Flow switch' taxonomy mislabel (harmless)."
+HB-1,"Hose bibb (exterior, non-freeze)",3,itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). Woodford Model 67 w/ Model 50HA backflow preventer. Pipeline reports 3 distinct exterior locations on sheet #23 only (no #22 occurrence -- no waste connection on this fixture, consistent with it never appearing on the waste/foundation plan). Pipeline quantity=3, matches; not part of the WC-1/US-2 cross-sheet pattern (single-sheet only)."
+HB-2,Hose bibb (interior),2,itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). Woodford Model V26 wall faucet. Pipeline quantity=2, matches; single-sheet only, same reasoning as HB-1."
+LAV-1,"Lavatory (wall mounted, ADA)",1,itd-d1-lab-mechanical.pdf#22,"OpenDataLoader audit (2026-08-28). Kohler Kingston K-2005 w/ K-15198 faucet and LS-1 lav shield. Direct render of sheet #22 confirms a real leader-tagged 'LAV-1' symbol in the Rest. 102 waste riser. Pipeline quantity=1, matches."
+LS-1,Lavatory shield (ADA piping guard),1,itd-d1-lab-mechanical.pdf#22,"OpenDataLoader audit (2026-08-28). TrueBro 'Lav Shield', ADA total-enclosure piping guard for LAV-1. Direct render confirms a real leader-tagged 'LS-1' symbol immediately below LAV-1's own tag on sheet #22. Pipeline quantity=1, matches. equipment_type mislabeled 'Level sensor' by the pipeline's taxonomy off the LS- prefix -- harmless, unscored; real device is a lavatory shield, not a sensor."
+RH-1,Roof hydrant (non-freeze),1,itd-d1-lab-mechanical.pdf#24,"OpenDataLoader audit (2026-08-28). Woodford RHY2-MS w/ integral double-check backflow preventer. Drawn on the PLUMBING ROOF PLAN (#24), consistent with a roof-mounted fixture. Pipeline quantity=1, matches. equipment_type mislabeled 'Relative humidity sensor' by the pipeline's taxonomy off the RH- prefix -- harmless, unscored; real device is a roof hydrant."
+RP-1,Recirculation pump (domestic hot water return),1,itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). Bell & Gossett NBF-22, real PLUMBING FIXTURE SCHEDULE row keyed RP-1 (a second row, RP-2, exists in the schedule but its own tag text is never drawn anywhere in the 29-sheet set -- same literal-drawn-tag discipline as EF-4 above; RP-2 is correctly out of this key's scope with 0 real instances found, not silently assumed). Direct render of sheet #23 confirms one real leader-tagged 'RP-1' symbol. Pipeline quantity=1, matches."
+RPBP-1,Reduced pressure backflow preventer,1,itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). Watts LF009 lead-free RPZ assembly. Pipeline quantity=1, matches."
+S-1,"Sink (double compartment, ADA)",1,itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). Kohler Verse K-5267-1, 14x14x6.5in each compartment. Pipeline quantity=1, matches."
+S-2,"Sink (single compartment, ADA)",1,itd-d1-lab-mechanical.pdf#22,"OpenDataLoader audit (2026-08-28). Kohler Staccato K-3363-1, 20x20x8.5in. Real cross-sheet pair (drawn once on #22, once on #23 for the same physical sink) -- CORRECTLY collapsed to 1 by this session's dedupeCrossDisciplineRoomViews sheet-key fix (both sides fell to the unattributed coordinate-proximity path, ~33px apart, well inside the trusted threshold). Direct render of sheet #22 confirms one real leader-tagged 'S-2' symbol. Pipeline quantity=1, matches (post-fix)."
+SS-1,Service sink,2,itd-d1-lab-mechanical.pdf#22;itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). Acorn Terrazzo-Ware TCR-28. TWO real, genuinely DIFFERENT physical service sinks -- one on sheet #22 at (2593,1150), one on sheet #23 at (2798,1154), ~200px apart (NOT a cross-sheet redundant-view pair; positions too far apart to be the same fixture redrawn, correctly left uncollapsed by the dedup fix). Pipeline quantity=2, matches."
+TD-1,"Trench drain (6in wide, heavy traffic)",2,itd-d1-lab-mechanical.pdf#22,"OpenDataLoader audit (2026-08-28). Jay R. Smith 9895 6in trench drain system. Pipeline quantity=2, matches."
+TP-2,"Trap primer (electronic operated, 4 traps)",12,itd-d1-lab-mechanical.pdf#22,"OpenDataLoader audit (2026-08-28). Precision Plumbing Products PTS-4 electronic trap-priming assembly; schedule row's own '(4 TRAPS)' spec describes ONE physical valve's internal capacity, not a per-tag multiplier. Direct render of sheet #22 confirms TP-2's own tag is independently leader-drawn at EACH trap location it serves (paired with FS-2 at multiple floor sinks) -- 12 real, distinct, literally-drawn tag occurrences, all single-sheet (#22 only, no cross-sheet #23 pair). Scored as the literal drawn-tag count (12), same 'count what's actually drawn, not the schedule's own internal spec' discipline as LEF-1's own note above (real nuance disclosed, not silently resolved either way: whether 12 tag-occurrences implies 12 separate physical valves or fewer valves each serving several tagged trap connections is a plumbing-estimating judgment call this key does not make -- it scores the literal drawn tag, consistent with every other tag in this whole document). Pipeline quantity=12, matches."
+U-1,Urinal (flush valve),1,itd-d1-lab-mechanical.pdf#22,"OpenDataLoader audit (2026-08-28). Kohler Dexter K-PR5452-T1DS w/ Sloan Regal 186-0.5 flushometer. Direct render (same crop as WC-1's second Rest. 103 instance) confirms a real leader-tagged 'U-1' symbol. Pipeline quantity=1, matches."
+US-1,"Utility sink (single compartment, floor mounted)",1,itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). Regency stainless steel one-compartment sink w/ Krowne pre-rinse faucet. Direct render of sheet #23 confirms a real leader-tagged 'US-1' symbol (paired near FS-2/TP-2). Pipeline quantity=1, matches."
+US-2,"Utility sink (double compartment, floor mounted)",3,itd-d1-lab-mechanical.pdf#22;itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). Regency stainless steel two-compartment sink. REAL PIPELINE BUG, PARTIALLY FIXED THIS SESSION (see header block's own full writeup): THREE real physical utility sinks confirmed by direct render -- one near Rest. 103/Janitor, one in ASPHALT LAB 124, one further location -- each genuinely drawn ONCE on #22 (foundation) and ONCE on #23 (floor), a real cross-sheet redundant view (6 raw occurrences for 3 real sinks). This session's sheet-key dedup fix correctly collapses ONE of the three pairs; the other two survive uncollapsed because of the separate, disclosed room-attribution-asymmetry gap (header block above) -- pipeline currently reports 5, not 3. This key scores the REAL, render-verified count (3), not the pipeline's still-imperfect 5, per this project's own 'never fudge the key to a known bug' discipline. Direct render confirmed for 2 of the 3 physical sinks (Rest. 103/Janitor area on both #22 and #23; Asphalt Lab 124 on both #22 and #23) -- both genuinely paired duplicates, not distinct installs."
+WB-1,Wall box (water supply to ice maker),1,itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). Oatey FireMaster 39121, fire-rated. Pipeline quantity=1, matches."
+WC-1,"Water closet (wall mounted, flush valve, ADA)",2,itd-d1-lab-mechanical.pdf#22;itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). Kohler Kingston Ultra K-PR84325-T5D w/ Sloan Regal 111-1.6 flushometer. REAL PIPELINE BUG, PARTIALLY FIXED THIS SESSION (see header block's own full writeup): TWO real physical toilets confirmed by direct render -- one in Rest. 102 (shares its riser with FD-1/TP-1/LAV-1/LS-1 on #22, and SA-1 on #23), one in Rest. 103 (shares its riser with LS-1/LAV-1/TP-1/FD-1/U-1 on #22, and TP-2/ET-1/EYE-1/WH-1/SS-1/RP-1 on #23) -- each genuinely drawn ONCE on #22 (foundation) and ONCE on #23 (floor), a real cross-sheet redundant view (4 raw occurrences for 2 real toilets). This session's sheet-key dedup fix correctly collapses the Rest. 103 pair (both sides unattributed, caught by the coordinate fallback) but the Rest. 102 pair survives uncollapsed (asymmetric room attribution -- #22 reads room ""102 WC"" near it, #23 reads no room there at all) -- pipeline currently reports 3, not 2. This key scores the REAL, render-verified count (2), not the pipeline's still-imperfect 3, per this project's own 'never fudge the key to a known bug' discipline. Both physical toilets directly confirmed by render (Rest. 102 on both #22 and #23; Rest. 103 on both #22 and #23)."
+WCO,Wall cleanout,7,itd-d1-lab-mechanical.pdf#22,"OpenDataLoader audit (2026-08-28). Jay R. Smith 4472T series, cast bronze taper thread plug. Direct render of sheet #22 confirms real leader-tagged 'WCO' symbols at multiple riser penetration points (also referenced twice on the legend sheet, not counted there). Pipeline quantity=7, matches."
+WH-1,"Water heater (electric, 40 gallon)",1,itd-d1-lab-mechanical.pdf#23,"OpenDataLoader audit (2026-08-28). Bradford White LE340S3-3, 208V/1-phase electric. Direct render of sheet #23 confirms a real leader-tagged 'WH-1' symbol (same riser cluster as ET-1/EYE-1). Pipeline quantity=1, matches."
+WH-2,"Water heater (gas, 100 gallon)",1,itd-d1-lab-mechanical.pdf#3,"OpenDataLoader audit (2026-08-28). Bradford White EF-100T-199E-3N, natural gas, 199 MBH. Drawn on sheet #3 (mechanical plan, not the plumbing riser sheets), consistent with a larger gas-fired unit sited in a mechanical space. Pipeline quantity=1, matches."
+WS-1,Water softener system,1,itd-d1-lab-mechanical.pdf#25,"OpenDataLoader audit (2026-08-28). Water Control Corporation system, EFT-30 valve, (2) 18in tanks. Drawn on sheet #25 (ENLARGED PLUMBING PLAN / ENLARGED MECHANICAL ROOM PLUMBING PLAN -- real 'SEE WATER SOFTENER PIPING DETAIL' cross-reference on that same sheet). Pipeline quantity=1, matches."

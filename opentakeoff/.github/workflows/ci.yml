@@ -1,0 +1,229 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# least-privilege token: every job only checks out and reads
+permissions:
+  contents: read
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      # Voice model (RFC #59): ~44 MB, cached between runs; the fetch script
+      # is the cache key, so bumping MODEL_REV/files in it invalidates cleanly.
+      # With the model staged, the corpus + privacy voice tests run for real
+      # (they skip loudly when it's absent, e.g. on forks with cache misses).
+      - uses: actions/cache@v4
+        with:
+          path: web/public/models
+          key: voice-model-${{ hashFiles('web/scripts/fetch-voice-model.mjs') }}
+      - run: node scripts/fetch-voice-model.mjs
+      - run: npm run typecheck
+      - run: npm test
+      # The bench is a ruler, and a ruler that silently stops matching the
+      # engine is worse than no ruler (#198): results.json is committed, the
+      # runner rewrites it on every run, and nothing used to compare the two —
+      # so an engine PR could change flood-fill behavior without the numbers
+      # moving in the same PR, where a reviewer would see the delta.
+      - run: npm run bench
+      - name: bench/results.json must match what the engine produces (#198)
+        run: |
+          git diff --exit-code -- bench/results.json || {
+            echo "::error file=web/bench/results.json::the engine no longer produces the committed bench numbers — run 'cd web && npm run bench' and commit the regenerated results.json in this PR so the delta is reviewed with the change that caused it"
+            exit 1
+          }
+      - run: npm run build
+
+  mcp:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            web/package-lock.json
+            mcp/package-lock.json
+      - run: npm ci
+        working-directory: web
+      - run: npm ci
+        working-directory: mcp
+      - run: npm run typecheck
+        working-directory: mcp
+      - run: npm test
+        working-directory: mcp
+      - run: npm run check:tool-count
+        working-directory: mcp
+      - run: npm run build
+        working-directory: mcp
+      - run: npm run smoke:dist
+        working-directory: mcp
+
+  # Publishing the MCP server is fully unattended ONCE an mcp-v* tag exists —
+  # but nothing ever checked that a change to mcp/ came with a version bump, so
+  # "publish when needed" quietly depended on remembering. This is the check.
+  #
+  # It deliberately does NOT create the tag. publish-mcp.yml fires on the tag
+  # push, and a tag pushed by a workflow's GITHUB_TOKEN does not trigger other
+  # workflows — an auto-tag here would fire nothing AND consume the tag name,
+  # so the manual push that would have published is now a no-op. That trades a
+  # forgotten publish for a silently impossible one. Auto-publishing needs a
+  # PAT, which is a credential decision, not a CI one.
+  mcp-version-guard:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # need the base commit to diff against
+      - name: Require a version bump when mcp/ changes
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          # Container-only files are excluded from the trigger. The guard exists
+          # because a change to the PUBLISHED server must ship, and the npm
+          # tarball is exactly four entries — dist/, README.md, package.json
+          # ("files": ["dist","README.md"]). mcp/Dockerfile is not one of them:
+          # it is how Glama and other registries build an image, never something
+          # a user installs. Demanding a version bump for it would publish a
+          # release whose tarball is byte-identical to the one before it, and a
+          # version number that means nothing is worse than one nobody bumped.
+          PUBLISHED=(mcp/ ':(exclude)mcp/Dockerfile')
+          if git diff --quiet "$BASE" HEAD -- "${PUBLISHED[@]}"; then
+            echo "no change to published mcp/ files — nothing to check."
+            exit 0
+          fi
+          echo "published mcp/ files changed in this PR:"
+          git diff --name-only "$BASE" HEAD -- "${PUBLISHED[@]}" | sed 's/^/  /'
+
+          PKG=$(jq -r .version mcp/package.json)
+          SRV=$(jq -r .version mcp/server.json)
+          SRVPKG=$(jq -r '.packages[0].version' mcp/server.json)
+          # Same three-way agreement publish-mcp.yml enforces at tag time.
+          # Catching it here means a mismatch fails a PR instead of a release.
+          if [ "$PKG" != "$SRV" ] || [ "$PKG" != "$SRVPKG" ]; then
+            echo "::error::version fields disagree (package.json=$PKG server.json=$SRV packages[0]=$SRVPKG) — bump them together"
+            exit 1
+          fi
+
+          # ...and the DEPLOYED manifest, which is the surface nobody remembers.
+          # AGENTS.md has always said the version lives on three surfaces, but
+          # this guard only ever checked two, so the third silently rotted: at
+          # 0.9.29 the well-known file still said 0.9.27 while npm and the
+          # registry served 0.9.29. It is not cosmetic — directory indexers
+          # (Smithery among them) cache whatever they last scanned, and the same
+          # drift once had them describing the 17-tool era of a 31-tool server.
+          # It ships from web/, not mcp/, which is exactly why a change confined
+          # to mcp/ forgets it, so it is checked HERE where mcp/ is the trigger.
+          WK=web/public/.well-known/mcp.json
+          WKV=$(jq -r .version "$WK")
+          WKPKG=$(jq -r '.packages[0].version' "$WK")
+          if [ "$PKG" != "$WKV" ] || [ "$PKG" != "$WKPKG" ]; then
+            echo "::error file=$WK::the deployed manifest still says $WKV/$WKPKG while mcp/ is $PKG — bump BOTH version fields in $WK too, or the directories keep advertising the old server"
+            exit 1
+          fi
+
+          BASE_PKG=$(git show "$BASE:mcp/package.json" | jq -r .version)
+          if [ "$PKG" = "$BASE_PKG" ]; then
+            echo "::error file=mcp/package.json::mcp/ changed but the version is still $PKG. Bump mcp/package.json AND mcp/server.json (.version and .packages[0].version), or the change ships to nobody: the registry only ever sees a published mcp-v* tag."
+            exit 1
+          fi
+          echo "version $BASE_PKG -> $PKG"
+          if git rev-parse -q --verify "refs/tags/mcp-v$PKG" >/dev/null; then
+            echo "::error::tag mcp-v$PKG already exists — pick an unused version"
+            exit 1
+          fi
+          echo "OK — merge, then publish with:  git tag mcp-v$PKG && git push origin mcp-v$PKG"
+
+  # Post-merge nudge: says exactly what to run, so a bumped-but-unpublished
+  # version can't sit unnoticed. Never fails the build — main is already green
+  # by here and an unpublished version is a pending action, not a defect.
+  mcp-release-reminder:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Flag an unpublished version
+        run: |
+          set -euo pipefail
+          PKG=$(jq -r .version mcp/package.json)
+          if git rev-parse -q --verify "refs/tags/mcp-v$PKG" >/dev/null; then
+            echo "mcp v$PKG is tagged — nothing pending." >> "$GITHUB_STEP_SUMMARY"
+          else
+            {
+              echo "### MCP v$PKG is not published"
+              echo ""
+              echo '```'
+              echo "git tag mcp-v$PKG && git push origin mcp-v$PKG"
+              echo '```'
+              echo ""
+              echo "That tag push runs \`publish-mcp.yml\` end to end: npm (OIDC, provenance), the MCP registry entry, the GitHub release, and the MCPB bundle."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning::mcp v$PKG has no mcp-v$PKG tag — not published yet"
+          fi
+
+  # Doc-link rot is how a contributor's first click lands on nothing (#197):
+  # a doc moves, a section is renamed, and the link stays. Tier 1 (paths +
+  # anchors) is offline and deterministic, so it gates every PR. The closed-
+  # issue nudge (--issues) is a network call to a third-party API, so it runs
+  # only on pushes to main and can never turn the build red — the point is a
+  # reminder to reword, not a block, and a red build must never depend on
+  # api.github.com being up.
+  docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: node scripts/check-doc-links.mjs
+      - name: Nudge on links to closed issues (never gating)
+        if: github.event_name == 'push'
+        continue-on-error: true
+        run: node scripts/check-doc-links.mjs --issues
+
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 capture/capture_server.py selftest
+
+  server:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt -r requirements-dev.txt
+      - run: python -m pytest -q

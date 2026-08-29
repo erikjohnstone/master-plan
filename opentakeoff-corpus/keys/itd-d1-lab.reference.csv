@@ -1,0 +1,121 @@
+# itd-d1-lab.reference.csv — ground-truth key for the "reference"-kind table
+# extraction path (sheetgraph.ts's structural, vocabulary-free fourth table
+# kind, full-coverage-standard work) — companion to itd-d1-lab.takeoff.csv/
+# itd-d1-lab.rowsym.csv, same discipline: rendered and read by eye directly,
+# never trusted from the pipeline's own extraction. Scored by
+# mcp/scripts/reference-eval.mjs.
+#
+# Scope: both real "reference"-kind tables on itd-d1-lab-mechanical.pdf#20 —
+# "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" (4 rows,
+# LAB-SPACE-keyed) and "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF
+# OPERATION" (2 rows, LAB-SPACE-keyed). Neither has a per-instance drawn-
+# symbol tag of its own — real reference/sequence-of-operation tables listing
+# OTHER tables' own tags (SAV-#/GEV-#/SEV-#/HC-#/CV-#), out of
+# buildPlanSetTakeoff's tag-sweep scope by design (see ReferenceTable's own
+# doc comment in mcp/src/takeoff.ts) — this key exists to verify the RAW DATA
+# these tables extract, not a drawn quantity.
+#
+# HOW EVERY VALUE BELOW WAS VERIFIED (2026-08-28): mcp/src/pdf.ts's own
+# openPdf/textSpans against the real PDF directly (Node harness, not the
+# pipeline's own output trusted as its own ground truth), cross-checked
+# against a direct high-resolution render of sheet #20 (renderRegionPng up to
+# ~7x native page resolution) — both tables' real header words (both,
+# including the SNORKEL-HOOD table's real 2-line wrapped headers "SUPPLY /
+# AIR VALVE", "SNORKEL / EXHAUST VALVE", "REHEAT / VALVE", "HEATING / COIL")
+# and every cell's real text confirmed by eye against the rendered image.
+# `column` below uses the PIPELINE's own reported header label for each
+# column (verified against a live dump of reference_tables[], since that is
+# what reference-eval.mjs's own row lookup indexes by), not the full two-line
+# drawn header text — the real drawn header text is quoted in this comment
+# instead, so the mapping from real header to pipeline label stays checkable.
+# Both tables' own real section titles ("LAB VENTILATION WITH MULTIPLE HOODS
+# SYSTEM SEQUENCE OF OPERATION" / "...WITH SNORKEL HOOD SYSTEM SEQUENCE OF
+# OPERATION") were independently confirmed drawn verbatim on the sheet — as a
+# caption below each table's own control-schematic diagram, not directly
+# above the table itself — via a full-sheet text-span sweep, not assumed from
+# the pipeline's own title-hunt output.
+#
+# A REAL, PRECISELY-NAMED GAP disclosed here, not silently hidden: this same
+# sheet set's sheet #28 (P6.0) carries a real "PLUMBING FIXTURE SCHEDULE" —
+# tag-anchored (SYMBOL D-1/DF-1/.../WS-1), correctly OUT of this key's own
+# scope (a real tag-keyed schedule belongs under "equipment"/"finish"-kind,
+# not "reference"-kind) — but sheet #28 draws it as TWO side-by-side column
+# strips under one shared title, a real 2-up layout the pipeline's own
+# 2-column-band recovery (bandedSheets) cannot yet safely prove a seam for on
+# this specific sheet (its own seam-safety check, extractedKeys/lostAny,
+# compares the unsplit read's OWN column count against each split side's —
+# and the unsplit read's dup-driven header-label resolution, working exactly
+# as designed on a genuinely two-tables-in-one-row input, inflates that
+# unsplit count above either correctly-split side's real count, so every
+# candidate seam here reads as "lossy" and is correctly refused rather than
+# forced). The result: the real schedule's own header/most rows never clear
+# EQUIPMENT_HEADERS'/FINISH_HEADERS' own vocabulary bar as a whole, and two
+# real, named-but-dropped-schedule "reference"-kind fragments currently still
+# leak through with bogus titles lifted from its own row prose ("LAVATORY
+# SHIELD", "ROOF DRAIN" — real fixture DESCRIPTION cell text, not real table
+# titles) — confirmed live, NOT included below (a bogus title/2-column
+# read is not a real reference table, and reference-eval's own per-key
+# lookup never penalizes an un-keyed pipeline table either way). A third such
+# fragment ("(WATER SUPPLY TO ICE MAKER)", untitled) was already fixed this
+# session (droppedNamedTables claimer, sheetgraph.ts) and no longer appears.
+# Untangling the remaining two needs the full column-band split working on
+# this specific dense, multi-table sheet — a real, disclosed, harder
+# structural gap, not a shortcut skipped for convenience.
+#
+# ══════════════════════════════════════════════════════════════════════════
+# STATUS UPDATE (2026-08-28 full-coverage audit, fresh re-run): CLOSED.
+# Commit a9a5fab ("sheetgraph: PLUMBING FIXTURE SCHEDULE dual-strip layout —
+# 3 compounding root causes", 2026-08-28 03:55, after this file was last
+# written) fixed the column-band split for this specific sheet: the real
+# PLUMBING FIXTURE SCHEDULE (both strips, D-1..WCO and WH-1..WS-1) now
+# extracts fully and correctly internally (31 rows) but stays deliberately
+# EXCLUDED from graph.tables via the pre-existing droppedNamedTables policy
+# ("another schedule family, not finish/material" — unchanged, intentional).
+# The real bug this fixed was the LEAK: the LAVATORY SHIELD / ROOF DRAIN /
+# GRADE CLEANOUT spurious "reference"-kind fragments and the duplicate-title
+# PLUMBING FIXTURE SCHEDULE scraps this file describes above are GONE.
+# Confirmed live this audit via a fresh graphForPipeline() dump against the
+# real PDF: sheet #28 reports exactly 2 tables (GAS SIZING CHART,
+# AIR COMPRESSOR SCHEDULE), no spurious fragments. reference-eval.mjs
+# independently confirms no regression: itd-d1-lab still scores 34/34 cells
+# exact (re-run 2026-08-28).
+# ══════════════════════════════════════════════════════════════════════════
+#
+# Format: one row per (table row x column) cell -- long format, since each
+# real table's own column set differs and this keeps the key trivially
+# diffable against the pipeline's own reference_tables[].rows[].cells.
+sheet,table_title,row_key,column,expected_value
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,ASPHALT LAB 117,LAB SPACE,ASPHALT LAB 117
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,ASPHALT LAB 117,SUPPLY AIR VALVE,SAV-7
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,ASPHALT LAB 117,GENERAL EXHAUST VALVE,GEV-5
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,ASPHALT LAB 117,SNORKEL EXHAUST VALVE,SEV-5
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,ASPHALT LAB 117,REHEAT VALVE,HC-7
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,ASPHALT LAB 117,HEATING COIL,CV-7
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,ASPHALT LAB 124,LAB SPACE,ASPHALT LAB 124
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,ASPHALT LAB 124,SUPPLY AIR VALVE,SAV-3
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,ASPHALT LAB 124,GENERAL EXHAUST VALVE,GEV-1
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,ASPHALT LAB 124,SNORKEL EXHAUST VALVE,SEV-3
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,ASPHALT LAB 124,REHEAT VALVE,HC-3
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,ASPHALT LAB 124,HEATING COIL,CV-3
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,GENERAL LAB 125,LAB SPACE,GENERAL LAB 125
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,GENERAL LAB 125,SUPPLY AIR VALVE,SAV-9
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,GENERAL LAB 125,GENERAL EXHAUST VALVE,GEV-2
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,GENERAL LAB 125,SNORKEL EXHAUST VALVE,N/A
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,GENERAL LAB 125,REHEAT VALVE,HC-9
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,GENERAL LAB 125,HEATING COIL,CV-9
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,RESIDENCY LAB 131,LAB SPACE,RESIDENCY LAB 131
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,RESIDENCY LAB 131,SUPPLY AIR VALVE,SAV-1
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,RESIDENCY LAB 131,GENERAL EXHAUST VALVE,GEV-1
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,RESIDENCY LAB 131,SNORKEL EXHAUST VALVE,SEV-1
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,RESIDENCY LAB 131,REHEAT VALVE,HC-1
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION,RESIDENCY LAB 131,HEATING COIL,CV-1
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION,RESIDENCY NOISE ROOM 130,LAB SPACE,RESIDENCY NOISE ROOM 130
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION,RESIDENCY NOISE ROOM 130,AIR VALVE,SAV-8
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION,RESIDENCY NOISE ROOM 130,EXHAUST VALVE,SEV-2
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION,RESIDENCY NOISE ROOM 130,VALVE,HC-8
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION,RESIDENCY NOISE ROOM 130,COIL,CV-8
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION,MATERIAL LAB 118,LAB SPACE,MATERIAL LAB 118
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION,MATERIAL LAB 118,AIR VALVE,SAV-6
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION,MATERIAL LAB 118,EXHAUST VALVE,SEV-4
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION,MATERIAL LAB 118,VALVE,HC-6
+itd-d1-lab-mechanical.pdf#20,LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION,MATERIAL LAB 118,COIL,CV-6

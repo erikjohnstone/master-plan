@@ -1,0 +1,127 @@
+# baker-county-eoc.takeoff.csv — ground-truth key for mcp/scripts/takeoff-eval.mjs
+#
+# Set: baker-county-eoc-bidset.pdf — Baker County Sheriff's Office ~3,863 SF
+# Operations Center addition (communications room, expanded 911 dispatch),
+# 3410 K Street, Baker City, OR 97814 (Cole Architects / Sazan Group MEP,
+# real title-block text). 65 sheets total. This session followed the
+# 2026-08-28 pivot that wired OpenDataLoader-PDF (deterministic table-
+# structure detection) into the pipeline, which took this set from 1 real
+# extracted table (the room-finish schedule) to 15 (9 equipment-kind) —
+# this key is the first real ground-truth takeoff built against that new
+# extraction.
+#
+# HOW EVERY NUMBER BELOW WAS VERIFIED (2026-08-28): `node --import tsx
+# scripts/takeoff-pipeline.mjs <pdf> --categories=all` gave a first-pass
+# candidate list, but NOTHING below was copy-pasted from it — every row was
+# independently checked by Session.viewSheet renders (full-sheet, then a
+# targeted high-zoom region crop of the busy areas) of the real schedule
+# sheets AND the real plan sheets the tags are actually drawn on, plus
+# Session.findText sweeps across ALL 65 sheets (never same-sheet-only).
+# Real plan sheets identified and rendered this session:
+#   #38 = M1.01 Mechanical - Level 1 Plan     #39 = M1.21 Mechanical - Roof Plan
+#   #41 = M6.01 Mechanical Schedules          #46 = P1.21 Plumbing - Roof Plan
+#   #47 = P4.01 Plumbing - Level 1 Enlarged Plan   #48 = P6.01 Plumbing Schedules
+#   #54 = EL1.01 Electrical Lighting - Level 1 Plan #59 = E6.01 Electrical Lighting Schedule
+#   #60 = E6.02 Electrical Schedules (Mechanical Equipment Connection Schedule)
+#
+# SCOPE: this is a small (3,863 SF), single-story addition — this key covers
+# essentially ALL real, distinctly-tagged NEW equipment on the set (mechanical
+# roof + level-1 plans, plumbing roof + level-1 plans, electrical lighting
+# level-1 plan), not a partial sample. NOT covered: (a) EXISTING building
+# equipment referenced only inside the NATURAL GAS CALCULATION table's own
+# "(E)AC-1..9" rows (existing air handlers, outside this addition's new-work
+# scope — 2 of the 9 spot-checked below, real, correct refusals); (b) the
+# LUMINAIRE SCHEDULE's real drawn quantities (E1/E2/P1/R1/R2/R3/S1/S3/V1/X1)
+# were counted via each fixture's own real, visible compound circuit label
+# (e.g. "R1/C-11", "R1/INV-2") rather than by circling every individual glyph
+# by eye one at a time — the R1 count (23) was independently cross-checked by
+# hand-counting a full high-zoom region crop of the busiest area and it
+# matched the text-sweep count exactly, which is why this method is trusted
+# for the rest of the luminaire tags too, not re-validated tag-by-tag.
+#
+# ══════════════════════════════════════════════════════════════════════════
+# REAL FINDINGS this session (disclosed, NOT fixed — see task constraints):
+#
+# 1. RTU-1/RTU-2 vs RTU-01/RTU-02 — a real, confirmed drafting-convention
+#    mismatch WITHIN the source bid set itself (not a pipeline bug): the
+#    PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (sheet #41) and the
+#    roof plan (sheet #39) both tag the 2 real RTUs "RTU-1"/"RTU-2" (no
+#    leading zero); the REQUIRED OUTSIDE AIR FLOW RATE table (sheet #41) and
+#    the MECHANICAL EQUIPMENT CONNECTION SCHEDULE (sheet #60/E6.02) instead
+#    key the same 2 real units "RTU-01"/"RTU-02" (WITH a leading zero). A
+#    full 65-sheet find_text sweep confirms "RTU-01"/"RTU-02" are never
+#    drawn as a plan tag anywhere — the pipeline's own refusal for those two
+#    spellings is real and correct, not a miss.
+#
+# 2. CD-1/RG-1/EG-1 (DIFFUSER-GRILLE SCHEDULE) and CU-1/CU-2 (SPLIT SYSTEM
+#    CONDENSING UNIT SCHEDULE), both real tables on sheet #41, are currently
+#    NOT DISCOVERED AT ALL by buildPlanSetTakeoff (absent from tables_seen
+#    in a full categories=all run) — these 5 tags will score as MISSING, a
+#    real, disclosed table-discovery gap, same shape as federal-mech's own
+#    CH-1/AS-1/AS-2 finding.
+#
+# 3. RD-1 and HB-2 real undercounts: the pipeline currently resolves RD-1
+#    qty=1 (uncorroborated) and HB-2 qty=1 (uncorroborated), but the real
+#    Plumbing Roof Plan (sheet #46/P1.21) visually shows 4 real RD-1 roof-
+#    drain glyphs and 2 real HB-2 hose-bibb glyphs. find_text('HB-2') on
+#    sheet #46 returns ZERO hits despite the tag being clearly legible in
+#    the render — a real, disclosed text-layer extraction gap for that tag
+#    box's own drafting style (not investigated further this session).
+#
+# 4. HB-1 real OVERCOUNT: the pipeline currently resolves HB-1 qty=3
+#    (corroborated — no "(uncorroborated)" flag), but only ONE real HB-1 is
+#    drawn anywhere (sheet #47/P4.01, SW exterior corner). FD-1 (floor
+#    drain, a visually similar black-square+white-circle glyph) has exactly
+#    3 real drawn instances on the same sheet — suspected but NOT root-
+#    caused this session to be a cross-tag glyph-fingerprint confusion.
+#
+# 5. WH-1/ET-1 real inter-sheet room-number inconsistency (a bid-set
+#    authoring error, not a pipeline bug): the ELECTRIC WATER HEATER
+#    SCHEDULE and EXPANSION TANK SCHEDULE (sheet #48/P6.01) both state
+#    LOCATION=JANITOR 103; the MECHANICAL EQUIPMENT CONNECTION SCHEDULE
+#    (sheet #60/E6.02) instead states LOCATION=JANITOR 107 for the same
+#    WH-1 tag; the real architectural room tag directly on the plan sheet
+#    the equipment is actually drawn on (sheet #47/P4.01) reads JANITOR 102
+#    — a third value. The real drawn quantity (1) is unambiguous regardless.
+# ══════════════════════════════════════════════════════════════════════════
+tag,equipment_type,expected_quantity,sheets,notes
+RTU-1,Rooftop unit (RTU),1,baker-county-eoc-bidset.pdf#39,"PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT) (sheet #41/M6.01) row, MAIN OPERATIONS service. Visually confirmed drawn once on the Mechanical Roof Plan (sheet #39/M1.21) — real labeled box-glyph RTU symbol, NW roof area."
+RTU-2,Rooftop unit (RTU),1,baker-county-eoc-bidset.pdf#39,"Same schedule, BUILDING SOUTH service. Visually confirmed drawn once on sheet #39 — real labeled box-glyph RTU symbol, SE roof area."
+RTU-01,Rooftop unit (RTU),0,baker-county-eoc-bidset.pdf#41,"See this file's own header FINDING #1 — a real drafting-convention mismatch, not a pipeline miss. 'RTU-01' (with leading zero) is never drawn as a plan tag anywhere; the real unit is tagged 'RTU-1' (see row above). Correct refusal."
+RTU-02,Rooftop unit (RTU),0,baker-county-eoc-bidset.pdf#41,"Same real naming mismatch as RTU-01 — 'RTU-02' is never drawn as a plan tag anywhere; the real unit is tagged 'RTU-2' (see row above). Correct refusal."
+CU-1,Split-system condensing unit,1,baker-county-eoc-bidset.pdf#39,"SPLIT SYSTEM CONDENSING UNIT SCHEDULE (sheet #41), 911 CALL CENTER service. Visually confirmed drawn once on the roof plan (sheet #39). See FINDING #2 — this whole schedule table is not discovered by buildPlanSetTakeoff at all; scores as MISSING."
+CU-2,Split-system condensing unit,1,baker-county-eoc-bidset.pdf#39,"Same schedule, IDF ROOM service. Visually confirmed drawn once on the roof plan. Same table-discovery gap as CU-1 (FINDING #2) — scores as MISSING."
+EF-1,Fan (exhaust / supply / return / general),1,baker-county-eoc-bidset.pdf#39,"FAN SCHEDULE (sheet #41) row, ROOF location, RESTROOMS/CUSTODIAL service. Visually confirmed drawn once on the roof plan (sheet #39), SW corner."
+ERV-01,Energy recovery ventilator (ERV),1,baker-county-eoc-bidset.pdf#38,"ENERGY RECOVERY VENTILATOR SCHEDULE (sheet #41) row. Visually confirmed drawn once on the Mechanical Level 1 Plan (sheet #38/M1.01), directly outside the 911 CALL CENTER room, beside FCU-1."
+FCU-1,Fan coil unit (FCU),1,baker-county-eoc-bidset.pdf#38,"SPLIT SYSTEM FAN COIL UNIT SCHEDULE (sheet #41) row, 911 CALL CENTER service. Visually confirmed drawn once on sheet #38, beside ERV-01."
+FCU-2,Fan coil unit (FCU),1,baker-county-eoc-bidset.pdf#38,"Same schedule, IDF service. Visually confirmed drawn once on sheet #38, in room 109 (IDF)."
+EWH-1,Unit heater — electric wall / baseboard,1,baker-county-eoc-bidset.pdf#38,"ELECTRIC UNIT HEATER SCHEDULE (sheet #41) row, RR1 location. Visually confirmed drawn once on sheet #38, near CONFERENCE 105/RR1."
+EWH-2,Unit heater — electric wall / baseboard,1,baker-county-eoc-bidset.pdf#38,"Same schedule, RR2 location. Visually confirmed drawn once on sheet #38, near RR2/JANITOR 102 (beside the 'up to EF-1' exhaust note)."
+CD-1,Diffuser (ceiling supply),21,baker-county-eoc-bidset.pdf#38,"DIFFUSER-GRILLE SCHEDULE (sheet #41) row — 4-way adjustable modular-core ceiling diffuser. Real count: 9 distinct callout boxes text-swept on sheet #38, 2 of which carry an explicit 'TYP N' multiplier (TYP 8 in MAIN OPERATIONS, TYP 6 near CONFERENCE) — real total = 7×1 + 8 + 6 = 21. Cross-checked visually via 2 high-zoom region crops covering the whole plan. See FINDING #2 — table not discovered at all; scores as MISSING."
+RG-1,Return grille,7,baker-county-eoc-bidset.pdf#38,"Same schedule, egg-crate return grille. Real count: 7 distinct callout boxes text-swept on sheet #38, none carrying a TYP multiplier — 7 real single-instance grilles. Same table-discovery gap (FINDING #2) — scores as MISSING."
+EG-1,Exhaust grille,3,baker-county-eoc-bidset.pdf#38,"Same schedule, single-deflection exhaust grille. Real count: 1 callout box ('6X6 EG-1 50 TYP 3', near JANITOR 102/RR2, up to EF-1) carrying an explicit TYP 3 multiplier — real total = 3. Same table-discovery gap (FINDING #2) — scores as MISSING."
+EAC-1,Air handler (existing — outside new-work scope),0,baker-county-eoc-bidset.pdf#41,"NATURAL GAS CALCULATION table (sheet #41), 'EXISTING MECHANICAL EQUIPMENT' section — '(E)AC-1' is existing equipment referenced only for gas-demand accounting. Full 65-sheet find_text sweep confirms '(E)AC-1' is never drawn as a plan tag anywhere — correct refusal, not a miss."
+EAC-2,Air handler (existing — outside new-work scope),0,baker-county-eoc-bidset.pdf#41,"Same real reason as EAC-1. (EAC-3 through EAC-9 in the same table share the identical real pattern — not individually re-swept this session.)"
+RD-1,Roof drain,4,baker-county-eoc-bidset.pdf#46,"PLUMBING FIXTURE SCHEDULE (sheet #48/P6.01) row. Real count: 4 — visually confirmed on the Plumbing Roof Plan (sheet #46/P1.21), one at each of the 4 real roof valleys. See FINDING #3 — pipeline currently resolves qty=1 (uncorroborated), a real, disclosed undercount."
+HB-1,Hose bibb — freeze proof,1,baker-county-eoc-bidset.pdf#47,"Same PLUMBING FIXTURE SCHEDULE. Real count: 1 — visually confirmed on the Plumbing Level 1 Enlarged Plan (sheet #47/P4.01), exterior hose bibb at the SW corner. See FINDING #4 — pipeline currently resolves qty=3 (corroborated), a real, disclosed OVERcount (suspected FD-1 glyph cross-match, not root-caused)."
+HB-2,Hose bibb — freeze proof,2,baker-county-eoc-bidset.pdf#46,"Same schedule. Real count: 2 — visually confirmed on the Plumbing Roof Plan (sheet #46/P1.21), NE and SE roof-access areas. See FINDING #3 — pipeline currently resolves qty=1 (uncorroborated); find_text('HB-2') returns 0 hits on this sheet despite the tag being legible in the render, a real disclosed text-layer gap."
+EWC-1,Water cooler / bottle filler — dual electric,1,baker-county-eoc-bidset.pdf#47,"Same schedule. Visually confirmed drawn once on sheet #47, HALLWAY 101 corner."
+FD-1,Floor drain,3,baker-county-eoc-bidset.pdf#47,"Same schedule. Real count: 3 — visually confirmed on sheet #47 (JANITOR 102, and one each in RR1 104 / RR2 103 near the water closets)."
+MS-1,Mop sink,1,baker-county-eoc-bidset.pdf#47,"Same schedule. Visually confirmed drawn once, JANITOR 102."
+WH-1,Electric water heater,1,baker-county-eoc-bidset.pdf#47,"ELECTRIC WATER HEATER SCHEDULE (sheet #48/P6.01) row. See FINDING #5 — a real, 3-way inter-sheet room-number inconsistency (schedule says JANITOR 103, connection schedule says JANITOR 107, the real plan room tag says JANITOR 102). Real drawn quantity is unambiguous: visually confirmed once, in the tank cluster beside TV-1/ET-1."
+TV-1,Tempering valve,1,baker-county-eoc-bidset.pdf#47,"Same PLUMBING FIXTURE SCHEDULE. Visually confirmed drawn once, same JANITOR 102 tank cluster as WH-1/ET-1."
+ET-1,Expansion tank,1,baker-county-eoc-bidset.pdf#48,"EXPANSION TANK SCHEDULE (sheet #48/P6.01) row — same real room-number inconsistency as WH-1 (FINDING #5). Visually confirmed drawn once, same tank cluster."
+SH-1,Shower stall,1,baker-county-eoc-bidset.pdf#47,"Same PLUMBING FIXTURE SCHEDULE. Visually confirmed drawn once, RR2 103."
+WC-1,Water closet — floor mounted / ADA,2,baker-county-eoc-bidset.pdf#47,"Same schedule. Real count: 2 — visually confirmed, one each in RR1 104 and RR2 103."
+L-1,Lavatory — drop-in countertop,2,baker-county-eoc-bidset.pdf#47,"Same schedule. Real count: 2 — visually confirmed, one each in RR1 104 and RR2 103."
+TPV-1,Trap primer valve,1,baker-county-eoc-bidset.pdf#47,"Same schedule. Visually confirmed drawn once, between RR1 and RR2 (feeds the '2"" V UP' floor-drain trap-primer distribution)."
+E1,Luminaire — IP65 architectural wedge wall pack LED,7,baker-county-eoc-bidset.pdf#54,"LUMINAIRE SCHEDULE (sheet #59/E6.01) row. Real count: 7 — every 'E1/C-2' compound circuit-label instance on the Electrical Lighting Level 1 Plan (sheet #54/EL1.01) text-swept and cross-checked against a high-zoom region crop of the busiest cluster, confirming the compound-label-equals-one-real-fixture pattern holds."
+E2,Luminaire — IP65 4-inch round downlight LED,7,baker-county-eoc-bidset.pdf#54,"Same schedule. Real count: 7, same text-sweep-plus-crop-cross-check discipline as E1."
+P1,Luminaire — 8'-0-inch pendant aircraft-cable linear LED,5,baker-county-eoc-bidset.pdf#54,"Same schedule. Real count: 5 — 3 directly confirmed in the 911 CALL CENTER daylighting-zone region crop ('P1/C-11', 'P1/INV-2', 'P1/C-11'), 2 more confirmed by the same text sweep elsewhere on sheet #54 (outside the crop, not individually re-cropped)."
+R1,Luminaire — 2x4 edge-lit troffer LED,23,baker-county-eoc-bidset.pdf#54,"Same schedule. Real count: 23 — independently hand-counted against a high-zoom region crop of the full MAIN OPERATIONS/hallway/RR area (every 'R1/C-11', 'R1/INV-1', 'R1/INV-2', 'R1/INV-3' compound label counted by eye), which matched the text-sweep hit count exactly — the two methods cross-validate."
+R2,Luminaire — 4-inch round downlight LED,9,baker-county-eoc-bidset.pdf#54,"Same schedule. Real count: 9 — text-swept and spot-checked against the same region crop (911 CALL CENTER/UTILITIES/JANITOR area, where most R2 instances cluster)."
+R3,Luminaire — 4-inch round downlight LED (deadfront rated),1,baker-county-eoc-bidset.pdf#54,"Same schedule. Real count: 1 — visually confirmed in the region crop, JANITOR 102 (over the mop sink)."
+S1,Luminaire — surface strip LED (lengths per drawings),9,baker-county-eoc-bidset.pdf#54,"Same schedule. Real count: 9 — text-swept and spot-checked against the region crop (2 pairs of 'S1/INV-3' in HAM RADIO/COMM, 2 'S1/C-11' in STORAGE, plus 3 more 'S1/INV-3'/'S1/C-11' near UTILITIES/RR2, not individually re-cropped)."
+S3,Luminaire — 4'-0-inch edge-lit linear LED,4,baker-county-eoc-bidset.pdf#54,"Same schedule. Real count: 4 — visually confirmed in the region crop, all 4 in the IDF 109 room ('S3/C-11' x4)."
+V1,Luminaire — nominal 24-inch linear vanity light LED,3,baker-county-eoc-bidset.pdf#54,"Same schedule. Real count: 3 — 2 directly confirmed in the region crop (RR1/RR2 'V1/C-11' pair), 1 more confirmed by the same text sweep elsewhere on sheet #54 (a third toilet room outside the crop, not individually re-cropped)."
+X1,Single face exit sign,5,baker-county-eoc-bidset.pdf#54,"Same schedule. Real count: 5 — text-swept and spot-checked against the region crop (circled-X exit-sign glyphs at egress points)."

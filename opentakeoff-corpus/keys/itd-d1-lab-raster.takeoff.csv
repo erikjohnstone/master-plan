@@ -1,0 +1,73 @@
+# itd-d1-lab-raster.takeoff.csv — ground-truth key for mcp/scripts/takeoff-eval.mjs
+#
+# itd-d1-lab-raster.pdf is a ONE-page synthetic raster variant of sheet M1.0
+# from itd-d1-lab-mechanical.pdf (page 3) — the same real HVAC floor plan,
+# flattened to a single image-only PDF page with ZERO vector linework and
+# ZERO extractable text layer (mcp/scripts/make-corpus-raster-variant.mjs).
+# The real "LAB EQUIPMENT LIST" schedule table (TAG/EQUIPMENT NAME/.../QTY
+# columns, bottom-right of the sheet) is CONFIRMED PRESENT IN THE PIXELS —
+# rendered at 300-600dpi with pdftoppm and read by eye this session, tag by
+# tag, directly off itd-d1-lab-raster.pdf itself (not copied from any other
+# key or from the pipeline's own output). 28 of its 29 rows are keyed below
+# with their real TAG and real QTY column value (EQ17 "LAB BBQ" is excluded:
+# its QTY cell is genuinely blank on the sheet — an existing-equipment row
+# with nothing new to take off — so expected_quantity would be 0, and 0
+# expected vs. 0 actual would score as a trivial/misleading "exact match"
+# rather than a real signal; see src/takeoffEval.ts's scoreTakeoff, delta =
+# actual - expected, exact = delta===0).
+#
+# HONEST EXPECTED RESULT, confirmed live this session (not guessed): every
+# one of these 28 tags scores as MISSING (actual=0) and the run's failures[]
+# carries exactly one whole-set entry —
+#   { type: "TABLE_DISCOVERY_FAILURE", tag: "(whole set)",
+#     detail: "No text layer anywhere in this set — sheet graph unavailable." }
+# — because Session.graphForPipeline()'s `available` flag is false for a
+# scan (mcp/src/takeoff.ts buildPlanSetTakeoff, graph.available check) and
+# the function returns immediately with items: [] rather than attempting
+# per-row extraction. This is the CORRECT, HONEST refusal path (#154's own
+# raster-fallback doctrine only covers one_click/room-flood, not table
+# extraction — sweepScheduleRow / buildPlanSetTakeoff have no raster
+# fallback and are not expected to have one), verified this session to fire
+# cleanly with no crash and no silently-wrong data. A near-total real
+# failure (0/28 tags recovered, Σ|Δqty|=64) is therefore the CORRECT score
+# for this key, not a bug to chase.
+#
+# Side note (NOT this key's concern, not fixed here): running the SAME
+# buildPlanSetTakeoff against the real itd-d1-lab-mechanical.pdf (full
+# vector text, page 3 = M1.0) ALSO extracts zero items and zero reference
+# tables from this exact "LAB EQUIPMENT LIST" table — a real, separate,
+# pre-existing table-recognition gap unrelated to has_vector_linework or the
+# raster path (confirmed live this session: buildPlanSetTakeoff over the
+# 29-page vector PDF returns 124 items total, none tagged EQ*, none
+# referencing page #3). Out of scope for the raster-refusal task this key
+# was built for.
+#
+tag,equipment_type,expected_quantity,sheets,notes
+EQ1,Aggregate wash station,2,itd-d1-lab-raster.pdf,"LAB EQUIPMENT LIST row, TAG=EQ1, QTY column=2. Read directly off the 300dpi render of itd-d1-lab-raster.pdf this session."
+EQ2,Asphalt bath with owner-provided shelf above,4,itd-d1-lab-raster.pdf,"TAG=EQ2, QTY column=4 (existing=1, new=3)."
+EQ3,Concrete bath,2,itd-d1-lab-raster.pdf,"TAG=EQ3, QTY column=2 (owner supplied=N, construction-manager supplied=Y, installed by Contractor, new=2)."
+EQ4,"""Not used"" schedule row (table's own literal equipment-name text)",1,itd-d1-lab-raster.pdf,"TAG=EQ4, EQUIPMENT NAME cell literally reads ""NOT USED"" with every other cell blank EXCEPT QTY=1 — visually re-confirmed at 600dpi this session (a real, odd-but-real drawn row, not a misread)."
+EQ5,Concrete grinder,1,itd-d1-lab-raster.pdf,"TAG=EQ5, QTY column=1."
+EQ6,Convection oven,4,itd-d1-lab-raster.pdf,"TAG=EQ6, QTY column=4 (all existing)."
+EQ7,Forney compression machine,1,itd-d1-lab-raster.pdf,"TAG=EQ7, QTY column=1."
+EQ8,Gilson porta screen,1,itd-d1-lab-raster.pdf,"TAG=EQ8, QTY column=1, VENTILATION=SNORKEL HOOD."
+EQ9,Gilson testing screen,1,itd-d1-lab-raster.pdf,"TAG=EQ9, QTY column=1, VENTILATION=SNORKEL HOOD."
+EQ10,Grieve bench oven,6,itd-d1-lab-raster.pdf,"TAG=EQ10, QTY column=6 (all new), VENTILATION=CANOPY HOOD."
+EQ11,Hamburg wheel tracker,1,itd-d1-lab-raster.pdf,"TAG=EQ11, QTY column=1 (new)."
+EQ12,Heated table,3,itd-d1-lab-raster.pdf,"TAG=EQ12, QTY column=3 (all new)."
+EQ13,Ideal CT,1,itd-d1-lab-raster.pdf,"TAG=EQ13, QTY column=1 (new)."
+EQ14,Infratest extractor,1,itd-d1-lab-raster.pdf,"TAG=EQ14, QTY column=1 (new), VENTILATION=CANOPY HOOD."
+EQ15,Instroteck corelok,3,itd-d1-lab-raster.pdf,"TAG=EQ15, QTY column=3 (existing=1, new=2)."
+EQ16,Instrotek coredry,3,itd-d1-lab-raster.pdf,"TAG=EQ16, QTY column=3 (existing=1, new=2)."
+EQ18,Mary Ann laboratory sifter,4,itd-d1-lab-raster.pdf,"TAG=EQ18, QTY column=4 (existing=2, new=2)."
+EQ19,NCAT lab oven,6,itd-d1-lab-raster.pdf,"TAG=EQ19, QTY column=6 (existing=4, new=2), VENTILATION=CANOPY HOOD."
+EQ20,Pine gyratory compactor,3,itd-d1-lab-raster.pdf,"TAG=EQ20, QTY column=3 (existing=2, new=1)."
+EQ21,Ploog compactor,1,itd-d1-lab-raster.pdf,"TAG=EQ21, QTY column=1 (existing)."
+EQ22,Proctor block,2,itd-d1-lab-raster.pdf,"TAG=EQ22, QTY column=2 (existing)."
+EQ23,"Rice table (Gilson vibro-deairator, pump saver, autorice controller, small compressor) with owner-provided shelf/stand",3,itd-d1-lab-raster.pdf,"TAG=EQ23, QTY column=3 (existing=2, new=1)."
+EQ24,Rotary evaporator,1,itd-d1-lab-raster.pdf,"TAG=EQ24, QTY column=1 (new), VENTILATION=CANOPY HOOD."
+EQ25,S.E. system,2,itd-d1-lab-raster.pdf,"TAG=EQ25, QTY column=2 (existing)."
+EQ26,Saw,1,itd-d1-lab-raster.pdf,"TAG=EQ26, QTY column=1 (existing)."
+EQ27,Scale,4,itd-d1-lab-raster.pdf,"TAG=EQ27, QTY column=4 (existing)."
+EQ28,Thermo chiller,1,itd-d1-lab-raster.pdf,"TAG=EQ28, QTY column=1 (new)."
+EQ29,Ultrasonic cleaner,1,itd-d1-lab-raster.pdf,"TAG=EQ29, QTY column=1 (existing)."
