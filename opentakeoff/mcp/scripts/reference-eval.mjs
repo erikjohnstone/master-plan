@@ -23,6 +23,7 @@ import { spawn } from "node:child_process";
 import pLimit from "p-limit";
 import { Session } from "../src/session.ts";
 import { buildPlanSetTakeoff } from "../src/takeoff.ts";
+import { parseReferenceKeyCsv, scoreReference } from "../src/referenceEval.ts";
 
 const [corpusDir, ...only] = process.argv.slice(2).filter((a) => !a.startsWith("--") && a !== "--single-json");
 // --single-json <setId>: internal mode, see takeoff-eval.mjs's own identical
@@ -38,62 +39,6 @@ if (!corpusDir) {
 }
 const corpus = resolve(corpusDir);
 const spec = JSON.parse(readFileSync(join(corpus, "sets.json"), "utf8"));
-
-function splitCsv(l) {
-  const cells = [];
-  let cur = "", q = false;
-  for (let i = 0; i < l.length; i++) {
-    const ch = l[i];
-    if (ch === '"') {
-      if (q && l[i + 1] === '"') { cur += '"'; i++; continue; }
-      q = !q; continue;
-    }
-    if (ch === "," && !q) { cells.push(cur); cur = ""; continue; }
-    cur += ch;
-  }
-  cells.push(cur);
-  return cells;
-}
-
-function parseReferenceKeyCsv(text) {
-  const lines = text.split(/\r?\n/).filter((l) => l.trim() && !/^\s*#/.test(l));
-  if (lines.length < 2) return [];
-  const head = splitCsv(lines[0]).map((h) => h.trim().toLowerCase());
-  const idx = (name) => head.indexOf(name);
-  const iSheet = idx("sheet"), iTitle = idx("table_title"), iKey = idx("row_key"), iCol = idx("column"), iVal = idx("expected_value");
-  return lines.slice(1).map((l) => {
-    const c = splitCsv(l);
-    return {
-      sheet: (c[iSheet] ?? "").trim(),
-      table_title: (c[iTitle] ?? "").trim(),
-      row_key: (c[iKey] ?? "").trim(),
-      column: (c[iCol] ?? "").trim(),
-      expected_value: (c[iVal] ?? "").trim(),
-    };
-  });
-}
-
-const norm = (s) => (s || "").trim().toUpperCase().replace(/\s+/g, " ");
-
-function scoreReference(referenceTables, key) {
-  // index the pipeline's own output the same way an estimator would look it
-  // up: (sheet, table title, row key) -> cells
-  const byRow = new Map();
-  for (const t of referenceTables) {
-    for (const r of t.rows) {
-      byRow.set(`${t.sheet}::${norm(t.table_title ?? t.title)}::${norm(r.key)}`, r.cells);
-    }
-  }
-  const perCell = key.map((k) => {
-    const rowKey = `${k.sheet}::${norm(k.table_title)}::${norm(k.row_key)}`;
-    const cells = byRow.get(rowKey);
-    const actual = cells ? (cells[k.column] ?? null) : null;
-    const exact = actual != null && norm(actual) === norm(k.expected_value);
-    return { ...k, actual, exact };
-  });
-  const exactCount = perCell.filter((c) => c.exact).length;
-  return { perCell, exactCount, total: perCell.length, exactPct: perCell.length ? exactCount / perCell.length : 1 };
-}
 
 const pct = (n) => (n * 100).toFixed(1).padStart(5) + "%";
 

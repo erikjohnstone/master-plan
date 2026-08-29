@@ -46,9 +46,15 @@ import pLimit from "p-limit";
 import { Session } from "../src/session.ts";
 import { buildPlanSetTakeoff } from "../src/takeoff.ts";
 import { parseTakeoffKeyCsv, scoreTakeoff } from "../src/takeoffEval.ts";
+import { parseReferenceKeyCsv, scoreReference } from "../src/referenceEval.ts";
 
 const [corpusDir, ...only] = process.argv.slice(2).filter((a) => !a.startsWith("--") && a !== "--single-json");
 const writeReport = process.argv.includes("--report");
+// Reuse the already-built PlanSetTakeoff to score reference tables too.
+// This replaces an entire second PDF/session/pipeline pass in the normal
+// all-metrics development loop while leaving the standalone reference
+// evaluator available for focused work.
+const withReference = process.argv.includes("--with-reference");
 // --single-json <setId>: internal mode used by the parallel fan-out below —
 // evaluate exactly one set and print ONLY its JSON result to stdout, no
 // table/formatting. Not meant to be invoked directly by a human/agent; the
@@ -78,17 +84,26 @@ const spec = JSON.parse(readFileSync(join(corpus, "sets.json"), "utf8"));
 const pct = (n) => (n * 100).toFixed(1).padStart(5) + "%";
 
 async function evalSet(set) {
-  const keyPath = join(corpus, "keys", `${set.id}.takeoff.csv`);
-  if (!existsSync(keyPath)) return { id: set.id, gc: set.gc, project: set.project, unlabelled: true };
-  const key = parseTakeoffKeyCsv(readFileSync(keyPath, "utf8"));
+  const takeoffKeyPath = join(corpus, "keys", `${set.id}.takeoff.csv`);
+  const referenceKeyPath = join(corpus, "keys", `${set.id}.reference.csv`);
+  const hasTakeoffKey = existsSync(takeoffKeyPath);
+  const hasReferenceKey = existsSync(referenceKeyPath);
+  if (!hasTakeoffKey && !hasReferenceKey) {
+    return { id: set.id, gc: set.gc, project: set.project, unlabelled: true, reference: null };
+  }
 
   const s = new Session();
   const files = resolveSetFiles(corpus, spec, set);
   for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
   const takeoff = await buildPlanSetTakeoff(s, { categories: null }); // "all" — the key is authored against the full real equipment-kind scope, not a partial run
 
-  const score = scoreTakeoff(takeoff, key);
-  return { id: set.id, gc: set.gc, project: set.project, score };
+  const score = hasTakeoffKey
+    ? scoreTakeoff(takeoff, parseTakeoffKeyCsv(readFileSync(takeoffKeyPath, "utf8")))
+    : null;
+  const reference = hasReferenceKey
+    ? scoreReference(takeoff.reference_tables, parseReferenceKeyCsv(readFileSync(referenceKeyPath, "utf8")))
+    : null;
+  return { id: set.id, gc: set.gc, project: set.project, score, reference, unlabelled: !hasTakeoffKey };
 }
 
 // Internal single-set worker mode — runs in its own child process, prints
@@ -175,6 +190,27 @@ for (const r of results) {
 if (failureAgg.size) {
   say("── failure-type breakdown (TakeoffFailure[], every set) ──");
   for (const [type, n] of [...failureAgg.entries()].sort((a, b) => b[1] - a[1])) say(`  ${String(n).padStart(4)}×  ${type}`);
+  say("");
+}
+
+if (withReference) {
+  say("╔══════════════════════════════════════════════════════════════════════════");
+  say("║ REFERENCE-TABLE EXTRACTION — reused from the takeoff pass");
+  say("╚══════════════════════════════════════════════════════════════════════════");
+  say("");
+  say("set                        cells   exact");
+  say("──────────────────────────────────────────");
+  let anyReference = false;
+  for (const r of results) {
+    if (r.error) { say(`${r.id.padEnd(26)} ERROR: ${r.error}`); continue; }
+    if (!r.reference) { say(`${r.id.padEnd(26)} (no reference key — not scored)`); continue; }
+    anyReference = true;
+    say(`${r.id.padEnd(26)} ${String(r.reference.total).padStart(5)}   ${pct(r.reference.exactPct)}`);
+    for (const c of r.reference.perCell) {
+      if (!c.exact) say(`   MISMATCH  "${c.table_title}" / "${c.row_key}" / "${c.column}": expected "${c.expected_value}" got ${c.actual == null ? "(missing)" : `"${c.actual}"`}`);
+    }
+  }
+  if (!anyReference) say("(no sets had a *.reference.csv key)");
   say("");
 }
 
