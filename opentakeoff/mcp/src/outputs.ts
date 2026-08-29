@@ -45,6 +45,62 @@ export const loadPlanOutput = {
   note: z.string(),
 };
 
+const projectTakeoffItem = z.object({
+  tag: z.string(),
+  equipment_type: z.string().nullable(),
+  category: z.string().nullable(),
+  schedule: z.object({
+    sheet: z.string(),
+    kind: z.string(),
+    title: z.string().nullable(),
+  }).nullable(),
+  schedule_row: z.record(z.string(), z.string()).nullable(),
+  quantity: z.number(),
+  drawing_locations: z.array(z.object({ sheet: z.string(), at: point })),
+  siblings_excluded: z.array(z.string()),
+  corroborated: z.boolean(),
+  status: z.enum(["resolved", "refused", "error"]),
+  reason: z.string().optional(),
+  source: z.enum(["schedule_row", "legend_symbol"]),
+  legend: z.object({ sheet: z.string(), caption: z.string(), at: point }).optional(),
+});
+
+const projectTakeoffStats = {
+  schedule_rows_total: z.number().int(),
+  resolved: z.number().int(),
+  refused: z.number().int(),
+  errored: z.number().int(),
+  total_drawn_instances: z.number(),
+};
+
+/** Complete production query surface for an unattended plan-set takeoff. */
+export const projectTakeoffOutput = {
+  set_files: z.array(z.string()),
+  family_filter: z.array(z.string()).nullable(),
+  equipment_type_filter: z.array(z.string()).nullable(),
+  items: z.array(projectTakeoffItem),
+  legend_items: z.array(projectTakeoffItem),
+  reference_tables: z.array(z.unknown()),
+  extracted_tables: z.array(z.unknown()),
+  failures: z.array(z.object({
+    type: z.string(),
+    tag: z.string(),
+    sheet: z.string().optional(),
+    detail: z.string(),
+  })),
+  tables_seen: z.array(z.unknown()),
+  legend_sheets_seen: z.array(z.unknown()),
+  stats: z.object(projectTakeoffStats),
+  legend_stats: z.object({
+    glyphs_seen: z.number().int(),
+    glyphs_matched: z.number().int(),
+    resolved: z.number().int(),
+    refused: z.number().int(),
+    errored: z.number().int(),
+    total_drawn_instances: z.number(),
+  }),
+};
+
 export const sheetInfoOutput = {
   ...sheetSummary,
   seg_count: z.number().int().describe("Vector segment count"),

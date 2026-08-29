@@ -17,12 +17,16 @@ import {
   exportMarkedPdfOutput, listShapesOutput, deriveBaseOutput, deriveTransitionsOutput, importTakeoffOutput, applyRulesOutput, cutOutOutput,
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
   markVerdictOutput, deleteVerdictOutput,
-  sheetGraphOutput, resolveTagOutput, findScheduleOutput, sweepScheduleRowOutput, countMarksOutput,
+  sheetGraphOutput, resolveTagOutput, findScheduleOutput, projectTakeoffOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
 import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
 import { importTakeoff } from "./importing.ts";
+import { buildPlanSetTakeoff } from "./takeoff.ts";
+import {
+  VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
+} from "../../web/src/lib/hvacTaxonomy.ts";
 
 // The coordinate contract, stated on every tool so any agent reading any one
 // description knows the space it is working in.
@@ -563,6 +567,56 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     inputSchema: { kind: z.string().describe('"room finish" (rooms → surface finishes), "finish"/"material" (codes → products), or "equipment" (MEP equipment schedules)') },
     outputSchema: findScheduleOutput,
   }, run("find_schedule", ({ kind }) => session.findSchedule(kind)));
+
+  server.registerTool("project_takeoff", {
+    description: `Run the complete deterministic takeoff across every loaded plan and schedule in one call. This is the production answer to requests such as "do a butterfly valve takeoff": pass equipment_types:["Butterfly valve"] for an exact taxonomy subtype, categories:["valve"] for the entire trade family, or omit both for all recognized equipment. The reply includes every schedule row and extracted table cell, installed quantities, drawing coordinates, source schedule coordinates, explicit failures/refusals, and separate tagged-row versus untagged-legend results. It never estimates quantity from a schedule row: installed counts come only from corroborated plan labels/geometry, and structurally unavailable evidence returns a typed refusal. Load every file in the bid set first with load_plan + merge:true. This is read-only; it does not commit canvas shapes. ${COORDS}`,
+    inputSchema: {
+      categories: z.array(z.string()).optional().describe('Taxonomy families, e.g. ["valve","damper"]. Omit for every recognized family.'),
+      equipment_types: z.array(z.string()).optional().describe('Exact taxonomy component names, case-insensitive, e.g. ["Butterfly valve"]. Narrows both tagged schedule and untagged legend results.'),
+    },
+    outputSchema: projectTakeoffOutput,
+  }, run("project_takeoff", async ({ categories, equipment_types }) => {
+    const allComponents = [
+      ...VALVES, ...ACTUATORS, ...DAMPERS, ...AIR_TERMINALS, ...MAJOR_EQUIPMENT, ...SENSORS,
+    ];
+    const requested: HvacComponent[] | null = equipment_types ? equipment_types.map((name: string): HvacComponent => {
+      const found = allComponents.find((component) => component.name.toLowerCase() === name.trim().toLowerCase());
+      if (!found) throw new UserError(`Unknown equipment type "${name}". Use an exact taxonomy name.`);
+      return found;
+    }) : null;
+    const effectiveCategories = categories ?? (requested ? [...new Set(requested.map((component) => component.category))] : null);
+    const result = await buildPlanSetTakeoff(session, { categories: effectiveCategories });
+    const names = requested ? new Set(requested.map((component) => component.name)) : null;
+    const items = names ? result.items.filter((item) => item.equipment_type && names.has(item.equipment_type)) : result.items;
+    const legendItems = names ? result.legend_items.filter((item) => item.equipment_type && names.has(item.equipment_type)) : result.legend_items;
+    const retainedTags = new Set([...items, ...legendItems].map((item) => item.tag));
+    const statsFor = (rows: typeof items) => ({
+      schedule_rows_total: rows.length,
+      resolved: rows.filter((item) => item.status === "resolved").length,
+      refused: rows.filter((item) => item.status === "refused").length,
+      errored: rows.filter((item) => item.status === "error").length,
+      total_drawn_instances: rows.reduce((sum, item) => sum + item.quantity, 0),
+    });
+    const stats = statsFor(items);
+    const legendStats = statsFor(legendItems);
+    return {
+      ...result,
+      family_filter: effectiveCategories,
+      equipment_type_filter: requested?.map((component) => component.name) ?? null,
+      items,
+      legend_items: legendItems,
+      failures: names ? result.failures.filter((failure) => retainedTags.has(failure.tag)) : result.failures,
+      stats,
+      legend_stats: {
+        glyphs_seen: names ? legendItems.length : result.legend_stats.glyphs_seen,
+        glyphs_matched: names ? legendItems.length : result.legend_stats.glyphs_matched,
+        resolved: legendStats.resolved,
+        refused: legendStats.refused,
+        errored: legendStats.errored,
+        total_drawn_instances: legendStats.total_drawn_instances,
+      },
+    };
+  }));
 
   server.registerTool("read_sheet_text", {
     description: `The sheet's text with positions — items [{str, x, y}] in image px plus the joined text. Optionally restrict to a region {x0, y0, x1, y1}. Use it to read title blocks, room labels, finish schedules, and scale notes. ${COORDS}`,
