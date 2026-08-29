@@ -3975,6 +3975,19 @@ export class Session {
           }
         }
       }
+      // An exact plan label for an individually numbered schedule mark is
+      // itself placement evidence even when surrounding linework is too
+      // sparse or variable to fingerprint. Repeatable type marks stay on
+      // their stricter family-specific paths above.
+      if (isIndividuallyMarkedEquipmentSchedule(table) && !matches.length && occ.length) {
+        const tagged = occ[0];
+        matches.push({
+          at: [tagged.cx, tagged.cy], score: 1, rotation: 0, mirrored: false,
+          tag_at: tagged.bbox, text_counted: true,
+        });
+        text_only = text_only.filter((entry) =>
+          Math.hypot(tagged.cx - entry.at[0], tagged.cy - entry.at[1]) > anchor.h * 2);
+      }
       const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
       perSheet.push({
         state: sh, matches, withheld, excluded, text_only,
