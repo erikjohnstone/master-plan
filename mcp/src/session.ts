@@ -41,6 +41,44 @@ function matchByRegionOverlap(tables: ScheduleTable[], sheetKey: string, region:
   return best;
 }
 
+/** Fallback for matchByRegionOverlap when two independent extractions of the
+ * SAME real table land on wildly different bounding boxes, so region overlap
+ * alone never crosses the 40% bar even though both reads are unmistakably
+ * the same real table — real, corpus-found shape: baker-county-eoc-bidset.
+ * pdf#41's own FAN SCHEDULE. The geometric pass's own region for it merges in
+ * a neighboring table's columns (its bbox stretches across both tables'
+ * combined width), landing far from ODL's own tightly-bounded read of just
+ * the real Fan Schedule box — under 40% overlap, so matchByRegionOverlap
+ * alone missed it and both extractions stood side by side in `g.tables`,
+ * both keyed "EF-1", turning a real, resolvable schedule row into a
+ * permanent "Ambiguous: 2 schedule rows carry the key" error downstream.
+ * Their ROW KEYS still agree exactly, though, which region overlap can't see
+ * but this can. Deliberately narrow: EXACT key-set equality only (not
+ * "mostly overlaps" — a coincidental shared tag between two genuinely
+ * different tables is exactly what sweep_schedule_row's own accessory-
+ * narrowing / ambiguity refusal already exists to handle), same sheet only,
+ * and never against a "reference"-kind table on either side — a real cross-
+ * reference/connection/calc table sharing one real device's tag with its own
+ * primary schedule is a genuine, DIFFERENT real table (baker-county-eoc-
+ * bidset.pdf#60's own MECHANICAL EQUIPMENT CONNECTION SCHEDULE), never the
+ * same table mis-bounded, and must stay a separate table for that same
+ * accessory-narrowing tier to correctly exclude. */
+function matchByKeySet(tables: ScheduleTable[], sheetKey: string, built: ScheduleTable): number {
+  if (built.kind === "reference" || !built.rows.length) return -1;
+  const builtKeys = new Set(built.rows.map((r) => r.key));
+  if (builtKeys.size !== built.rows.length) return -1; // built itself already has a duplicate key — not a clean set to match against
+  for (let i = 0; i < tables.length; i++) {
+    const t = tables[i];
+    if (t.sheet !== sheetKey || t.kind === "reference" || t.rows.length !== builtKeys.size) continue;
+    const tKeys = new Set(t.rows.map((r) => r.key));
+    if (tKeys.size !== builtKeys.size) continue;
+    let allMatch = true;
+    for (const k of builtKeys) if (!tKeys.has(k)) { allMatch = false; break; }
+    if (allMatch) return i;
+  }
+  return -1;
+}
+
 /** How many rows share a key with at least one other row — a real schedule
  * never legitimately repeats an unqualified key, so any rise in this count
  * from one extraction of the same table to another is real evidence of a
@@ -4880,7 +4918,11 @@ export class Session {
         // nothing and get appended as a spurious DUPLICATE of a table
         // that's already there — a real bug this reconciliation caught
         // live against the mcp test suite's own symbol-set.pdf fixture.
-        const existingIdx = matchByRegionOverlap(g.tables, sheetKey, built.region);
+        // matchByKeySet only ever runs when region overlap found nothing —
+        // it never overrides a real bbox-overlap match, and never fires
+        // for a "reference"-kind candidate (see its own comment above).
+        let existingIdx = matchByRegionOverlap(g.tables, sheetKey, built.region);
+        if (existingIdx < 0) existingIdx = matchByKeySet(g.tables, sheetKey, built);
         if (existingIdx >= 0) {
           const existing = g.tables[existingIdx];
           const a = tableCompleteness(existing), b = tableCompleteness(built);

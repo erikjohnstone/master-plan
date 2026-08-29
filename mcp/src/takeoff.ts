@@ -22,6 +22,7 @@
 import type { Session } from "./session.ts";
 import { HVAC_TAXONOMY, type HvacComponent } from "../../web/src/lib/hvacTaxonomy.ts";
 import type { Point } from "../../web/src/lib/oneclick.ts";
+import type { ScheduleTable, TableRow } from "../../web/src/lib/sheetgraph.ts";
 
 /** The structured failure taxonomy requested for this pipeline — classifies
  * WHY a tag's takeoff came out the way it did, distinct from a raw error
@@ -297,13 +298,76 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
   const index = taxonomyPrefixIndex(categories);
   const seenTags = new Set<string>();
 
+  // Shared per-row resolver — the SAME sweep_schedule_row call, item shape,
+  // and stats bookkeeping for every row this pipeline attempts, whichever
+  // table `kind` it came from. Pulled out so the "reference"-kind pass below
+  // (deferredReferenceRows) can reuse it verbatim instead of re-deriving the
+  // same try/catch/classifyError bookkeeping a second time.
+  async function resolveRow(tb: ScheduleTable, row: TableRow, tag: string, cls: HvacComponent | null): Promise<void> {
+    out.stats.schedule_rows_total++;
+    const cellsRaw: Record<string, string> = {};
+    for (const [label, cell] of Object.entries(row.cells || {})) if (cell?.text) cellsRaw[label] = cell.text;
+
+    const item: TakeoffItem = {
+      tag,
+      equipment_type: cls?.name ?? null,
+      category: cls?.category ?? null,
+      schedule: { sheet: tb.sheet, kind: tb.kind, title: tb.title?.text ?? null },
+      schedule_row: cellsRaw,
+      quantity: 0,
+      drawing_locations: [],
+      siblings_excluded: [],
+      corroborated: false,
+      status: "error",
+      source: "schedule_row",
+    };
+
+    try {
+      const r = await session.sweepScheduleRow(tag, { commit: false });
+      item.quantity = r.found ?? 0;
+      item.drawing_locations = (r.sheets || []).flatMap((ps: any) =>
+        (ps.matches || []).map((m: any) => ({ sheet: ps.sheet, at: m.at as [number, number] })));
+      item.corroborated = !!r.anchor?.corroborated;
+      item.status = "resolved";
+      out.stats.resolved++;
+      out.stats.total_drawn_instances += item.quantity;
+    } catch (e: any) {
+      const msg = e?.message || String(e);
+      const ft = classifyError(msg);
+      item.status = ft === "SYMBOL_FALSE_NEGATIVE" ? "refused" : "error";
+      item.reason = msg;
+      if (item.status === "refused") out.stats.refused++; else out.stats.errored++;
+      out.failures.push({ type: ft, tag, sheet: tb.sheet, detail: msg });
+    }
+    out.items.push(item);
+  }
+
+  // "reference"-kind tables (full-coverage-standard work) mostly have no
+  // per-instance drawn-symbol tag at all — nothing for sweep_schedule_row to
+  // chase — so their raw data is captured verbatim into reference_tables[]
+  // rather than walking the equipment tag-sweep loop, matching
+  // ReferenceTable's own doc comment. But a real, corpus-found exception:
+  // some reference-kind tables (a real CALCULATION table, e.g. baker-county-
+  // eoc-bidset.pdf#41's own NATURAL GAS CALCULATION) are keyed by real
+  // equipment tags too — a mix of tags genuinely never drawn on a plan sheet
+  // (existing equipment cited only for load accounting) and tags that ARE
+  // drawn but already own a real "equipment"-kind schedule elsewhere. Such a
+  // row deserves the SAME honest sweep_schedule_row attempt (and the SAME
+  // real resolved/refused/error verdict) as any other tagged row — silently
+  // omitting it entirely (the previous behavior) reads as "never even
+  // looked", which is worse than a disclosed refusal. Deferred to its own
+  // pass, run AFTER every "equipment"-kind table below, so a proper
+  // equipment schedule's own row always wins `seenTags` first — this pass
+  // only ever fills a genuine gap, never shadows or double-counts a tag a
+  // real equipment schedule already answers for. Gated on classifyTag()
+  // recognizing the tag (unlike the main loop's own permissive "all"-scope
+  // behavior) specifically because most reference-table rows are NOT
+  // equipment tags at all (spec/insulation/connection keys) — attempting
+  // every one of those would just manufacture noise, not real evidence.
+  const deferredReferenceRows: { tb: ScheduleTable; row: TableRow; tag: string; cls: HvacComponent }[] = [];
+
   for (const tb of graph.tables) {
     out.tables_seen.push({ sheet: tb.sheet, kind: tb.kind, title: tb.title?.text ?? null, rows: tb.rows.length });
-    // "reference"-kind tables (full-coverage-standard work) have no per-
-    // instance drawn-symbol tag at all — nothing for sweep_schedule_row to
-    // chase — so their raw data is captured verbatim into its own array
-    // instead of walking the equipment tag-sweep loop below, matching
-    // ReferenceTable's own doc comment.
     if (tb.kind === "reference") {
       out.reference_tables.push({
         sheet: tb.sheet, title: tb.title?.text ?? null, headers: tb.headers,
@@ -313,6 +377,14 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
           return { key: row.key, cells };
         }),
       });
+      for (const row of tb.rows) {
+        const tag = (row.key || "").trim();
+        if (!tag) continue;
+        const cls = classifyTag(tag, index.length ? index : taxonomyPrefixIndex(null));
+        if (!cls) continue; // no real taxonomy hypothesis for this row's tag — not equipment-shaped, leave it to reference_tables[] alone
+        if (categories && !categories.includes(cls.category)) continue; // out of this run's own declared scope
+        deferredReferenceRows.push({ tb, row, tag, cls });
+      }
       continue;
     }
     if (tb.kind !== "equipment") continue; // this pipeline's own scope, matching hvacTaxonomy's scheduleKind convention
@@ -325,44 +397,15 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
 
       const cls = classifyTag(tag, index.length ? index : taxonomyPrefixIndex(null));
       if (categories && (!cls || !categories.includes(cls.category))) continue; // out of this run's own declared scope — not a failure, just not requested; not counted in stats either
-      out.stats.schedule_rows_total++;
-
-      const cellsRaw: Record<string, string> = {};
-      for (const [label, cell] of Object.entries(row.cells || {})) if (cell?.text) cellsRaw[label] = cell.text;
-
-      const item: TakeoffItem = {
-        tag,
-        equipment_type: cls?.name ?? null,
-        category: cls?.category ?? null,
-        schedule: { sheet: tb.sheet, kind: tb.kind, title: tb.title?.text ?? null },
-        schedule_row: cellsRaw,
-        quantity: 0,
-        drawing_locations: [],
-        siblings_excluded: [],
-        corroborated: false,
-        status: "error",
-        source: "schedule_row",
-      };
-
-      try {
-        const r = await session.sweepScheduleRow(tag, { commit: false });
-        item.quantity = r.found ?? 0;
-        item.drawing_locations = (r.sheets || []).flatMap((ps: any) =>
-          (ps.matches || []).map((m: any) => ({ sheet: ps.sheet, at: m.at as [number, number] })));
-        item.corroborated = !!r.anchor?.corroborated;
-        item.status = "resolved";
-        out.stats.resolved++;
-        out.stats.total_drawn_instances += item.quantity;
-      } catch (e: any) {
-        const msg = e?.message || String(e);
-        const ft = classifyError(msg);
-        item.status = ft === "SYMBOL_FALSE_NEGATIVE" ? "refused" : "error";
-        item.reason = msg;
-        if (item.status === "refused") out.stats.refused++; else out.stats.errored++;
-        out.failures.push({ type: ft, tag, sheet: tb.sheet, detail: msg });
-      }
-      out.items.push(item);
+      await resolveRow(tb, row, tag, cls);
     }
+  }
+
+  for (const { tb, row, tag, cls } of deferredReferenceRows) {
+    const canon = tag.toUpperCase().replace(/\s+/g, "");
+    if (seenTags.has(canon)) continue; // a real "equipment"-kind schedule elsewhere already answered for this exact tag — never shadow or double-count it
+    seenTags.add(canon);
+    await resolveRow(tb, row, tag, cls);
   }
 
   // Second pass (accuracy-hardening plan, this session's own progressive-
