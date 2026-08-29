@@ -3371,72 +3371,46 @@ export class Session {
         // a way to succeed — every real candidate is already exhausted by
         // this point.
         if (!fp && !inlineFp) {
-          // Try BOTH fallback shapes, across up to CAND_CAP of this row's
-          // own occurrences each (same reading-order search as before, just
-          // no longer stopping at the FIRST occurrence that clears candFor's
-          // bare segments>=3 floor) — then prefer whichever candidate
-          // actually explains more of this row's OWN other drawn
-          // occurrences when swept against the anchor sheet's own geometry
-          // right now: a cheap self-check against positions occOf already
-          // trusts, never a guess. Two real reasons the FIRST occurrence
-          // tried is routinely a bad representative, both confirmed live
-          // against this same corpus: (1) a register/grille's real siblings
-          // routinely score only ~76-77% against each other under
-          // matchSymbol's 92% whole-shape bar (corroborateInlineMotif's own
-          // header comment) — low enough that TIER 1 correctly refused to
-          // call it corroborated, yet a whole-shape candidate built from ONE
-          // such occurrence still trivially clears the segments>=3 floor;
-          // (2) even a rigid, genuinely-repeated icon (baker-county-eoc-
-          // bidset.pdf#54's own 2x4 troffer luminaires, drawn as an exact
-          // grid) can pad-ladder onto a fingerprint that accidentally also
-          // captures unique nearby context (an adjacent duct run, a wall) at
-          // ONE grid cell — a fingerprint indistinguishable from a real
-          // marker by segments>=3 alone, but which then fails to recur
-          // ANYWHERE else on the sheet, not even as a near-miss. Every
-          // candidate this tries is independently valid by the SAME
-          // unchanged pad-ladder rule already used everywhere else in this
-          // function; this only changes WHICH of several valid candidates is
-          // kept, by measuring which one actually generalizes. The first
-          // candidate is always included in the pool, so when only one
-          // occurrence yields a candidate, or every candidate explains the
-          // same count (most commonly 0, none generalizing), the original
-          // first-found choice stands unchanged — this can only ever swap in
-          // a demonstrably BETTER candidate, never a worse one.
-          const CAND_CAP = 6;
-          const recoveryCount = (test: (o: TagOcc) => boolean) => withOcc[0].occ.filter(test).length;
-          let bestWs: { cand: SymbolFingerprint; rect: [Point, Point]; from: TagOcc; n: number } | null = null;
-          for (const altAnchor of withOcc[0].occ.slice(0, CAND_CAP)) {
-            // already explains every OTHER occurrence — no candidate can score higher
-            if (bestWs && bestWs.n >= withOcc[0].occ.length - 1) break;
+          // REVERTED (commit 6eee55b's own "best-generalizing candidate"
+          // mechanism, found to cause a real regression): trying every
+          // occurrence and keeping whichever candidate recovers the MOST of
+          // this row's other occurrences assumes more matches = a better
+          // candidate — but when the row's true drawn count really is low,
+          // a candidate that matches MORE is wrong, not better. Confirmed
+          // live: itd-d1-lab's own US-1 (a real, previously-exact single
+          // match, expected=1) started over-matching to 3 under this
+          // mechanism, because a more "generalizing" (i.e. more promiscuous)
+          // candidate outscored the correct, precise one — the heuristic
+          // can't distinguish a candidate that generalizes to real siblings
+          // from one that's simply generic enough to false-positive on
+          // unrelated geometry. Back to the original, simpler, safe rule:
+          // stop at the FIRST occurrence that yields a valid candidate, in
+          // reading order — every real candidate here is independently
+          // valid by the same pad-ladder rule either way, this just no
+          // longer gambles on "more matches" as a proxy for "more correct".
+          for (const altAnchor of withOcc[0].occ) {
             anchor = altAnchor;
             for (const padK of [1, 2, 3]) {
               const got = candFor(padK);
               if (got === "region") break;
               if (!got) continue;
-              const probe = matchSymbol(got.cand, anchorGeo.segs, sweepOpts);
-              const R = got.cand.footprint / 2 + altAnchor.h;
-              const n = recoveryCount((o) => probe.matches.some((m) => Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= R));
-              if (!bestWs || n > bestWs.n) bestWs = { cand: got.cand, rect: got.rect, from: altAnchor, n };
+              fp = got.cand; anchorRect = got.rect; corroborated = false;
               break;
             }
+            if (fp) break;
           }
-          let bestIl: { fp: InlineMotifFingerprint; rect: [Point, Point]; from: TagOcc; n: number } | null = null;
-          for (const altAnchor of withOcc[0].occ.slice(0, CAND_CAP)) {
-            anchor = altAnchor;
-            const inlineAnchored = corroborateInlineMotif(
-              anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
-              anchor, anchorSheet.upp, null,
-            );
-            if (!inlineAnchored) continue;
-            const probe = sweepInlineMotif(inlineAnchored.fp, anchorGeo.segs, anchorGeo.meta, anchorSheet.upp);
-            const R = Math.max(inlineAnchored.fp.widthPx, inlineAnchored.fp.heightPx) / 2 + altAnchor.h;
-            const n = recoveryCount((o) => probe.matches.some((m) => Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= R));
-            if (!bestIl || n > bestIl.n) bestIl = { fp: inlineAnchored.fp, rect: inlineAnchored.anchorRect, from: altAnchor, n };
-          }
-          if (bestIl && (!bestWs || bestIl.n > bestWs.n)) {
-            anchor = bestIl.from; inlineFp = bestIl.fp; anchorRect = bestIl.rect; corroborated = false;
-          } else if (bestWs) {
-            anchor = bestWs.from; fp = bestWs.cand; anchorRect = bestWs.rect; corroborated = false;
+          if (!fp) {
+            for (const altAnchor of withOcc[0].occ) {
+              anchor = altAnchor;
+              const inlineAnchored = corroborateInlineMotif(
+                anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+                anchor, anchorSheet.upp, null,
+              );
+              if (inlineAnchored) {
+                inlineFp = inlineAnchored.fp; anchorRect = inlineAnchored.anchorRect; corroborated = inlineAnchored.corroborated;
+                break;
+              }
+            }
           }
         }
         if (!fp && !inlineFp) {
