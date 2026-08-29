@@ -3618,6 +3618,40 @@ function columnStarts(
   return center.score > left.score + 0.05 ? center : left;
 }
 
+/**
+ * Repair a common deep-header extraction shape: an engineering unit printed
+ * on the lowest header tier is vertically clustered into the first data row
+ * while later rows contain only the numeric value. Promote that unit into the
+ * column label and remove it from the affected value.
+ *
+ * The promotion requires both forms in the same column (one unit-prefixed
+ * numeric value and another plain numeric value), so prose values and tables
+ * that intentionally repeat units in every row remain unchanged.
+ */
+export function promoteLeadingEngineeringUnits(headers: string[], rows: TableRow[]): string[] {
+  const out = [...headers];
+  const unitValue = /^(FT\.?\s*H2O|I\.?\s*W\.?G\.?)\s+([-+]?(?:\d+(?:\.\d*)?|\.\d+))$/i;
+  const plainNumber = /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)$/;
+  for (let i = 0; i < out.length; i++) {
+    const label = out[i];
+    const populated = rows.map((row) => row.cells[label]?.text.trim()).filter((v): v is string => !!v);
+    const prefixed = populated.map((value) => ({ value, match: value.match(unitValue) })).find((entry) => entry.match);
+    if (!prefixed?.match || !populated.some((value) => plainNumber.test(value))) continue;
+    const unit = prefixed.match[1].toUpperCase().replace(/\s+/g, " ");
+    const promoted = `${label} ${unit}`;
+    if (out.includes(promoted)) continue;
+    out[i] = promoted;
+    for (const row of rows) {
+      const cell = row.cells[label];
+      if (!cell) continue;
+      const match = cell.text.trim().match(unitValue);
+      row.cells[promoted] = { ...cell, text: match ? match[2] : cell.text };
+      delete row.cells[label];
+    }
+  }
+  return out;
+}
+
 function bandDataRows(
   rows: GraphSpan[][],
   anchors: Anchor[],
@@ -4604,6 +4638,8 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
     }
   }
   const out = banded.out;
+  const promotedHeaders = promoteLeadingEngineeringUnits(anchors.map((a) => a.label), out);
+  anchors = anchors.map((anchor, i) => ({ ...anchor, label: promotedHeaders[i] }));
   if (banded.region) region = region ? merge(region, banded.region) : banded.region;
   // A real header WAS found and a real boundary WAS computed — but every
   // candidate row inside it turned out to be garbage once filtered (real,
@@ -7495,6 +7531,8 @@ export function scheduleTableFromODL(
     rows.push({ key: keyRes.key, sheet: sheetKey, ...(keyRes.building ? { building: keyRes.building } : {}), cells });
   }
   if (!rows.length) return null;
+  const promotedHeaders = promoteLeadingEngineeringUnits(headers, rows);
+  headers.splice(0, headers.length, ...promotedHeaders);
 
   const region = odlBboxToProjectSpace(t["bounding box"], pageViewportTransform);
   return {

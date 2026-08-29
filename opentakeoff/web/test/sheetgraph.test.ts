@@ -10,10 +10,31 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, roomTags, detailCallouts, revisionOf, type GraphSpan, type SheetSpans, type SheetGraph } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, roomTags, detailCallouts, revisionOf, promoteLeadingEngineeringUnits, type GraphSpan, type SheetSpans, type SheetGraph } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
+
+test("promoteLeadingEngineeringUnits moves a stranded pressure unit into its header", () => {
+  const rows = [
+    { key: "A-1", sheet: "S", cells: { "WATER MAX PD": { text: "FT. H2O 16.60", bbox: [0, 0, 1, 1] as [number, number, number, number] } } },
+    { key: "A-2", sheet: "S", cells: { "WATER MAX PD": { text: "10.00", bbox: [0, 1, 1, 2] as [number, number, number, number] } } },
+  ];
+  const headers = promoteLeadingEngineeringUnits(["TAG", "WATER MAX PD"], rows);
+  assert.deepEqual(headers, ["TAG", "WATER MAX PD FT. H2O"]);
+  assert.equal(rows[0].cells["WATER MAX PD FT. H2O"].text, "16.60");
+  assert.equal(rows[1].cells["WATER MAX PD FT. H2O"].text, "10.00");
+  assert.equal(rows[0].cells["WATER MAX PD"], undefined);
+});
+
+test("promoteLeadingEngineeringUnits leaves per-row units and prose untouched", () => {
+  const rows = [
+    { key: "A-1", sheet: "S", cells: { PRESSURE: { text: "FT. H2O 16.60", bbox: [0, 0, 1, 1] as [number, number, number, number] } } },
+    { key: "A-2", sheet: "S", cells: { PRESSURE: { text: "FT. H2O 10.00", bbox: [0, 1, 1, 2] as [number, number, number, number] } } },
+  ];
+  assert.deepEqual(promoteLeadingEngineeringUnits(["PRESSURE"], rows), ["PRESSURE"]);
+  assert.equal(rows[0].cells.PRESSURE.text, "FT. H2O 16.60");
+});
 
 // ── the synthetic set: a plan sheet + a schedule sheet ──────────────────────
 const planSheet: SheetSpans = {
