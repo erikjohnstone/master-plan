@@ -301,7 +301,7 @@ export interface ScheduleTable {
 /** Columns that ARE a surface in their own right — never renamed by a parent. */
 const SURFACE_WORDS = new Set(["FLOOR", "BASE", "WALL", "WALLS", "CEILING", "NORTH", "SOUTH", "EAST", "WEST", "WAINSCOT"]);
 const ROOM_HEADERS = ["ROOM", "NO", "NUMBER", "NAME", "MARK", "LOCATION", "FLOOR", "BASE", "WALL", "WALLS", "NORTH", "SOUTH", "EAST", "WEST", "CEILING", "WAINSCOT", "REMARKS", "CLG", "HT", "HEIGHT", "FINISH", "CASEWORK", "CABINET", "COUNTER", "COUNTERTOP", "BLDG", "BUILDING"];
-const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "MATERIAL", "MANUFACTURER", "PRODUCT", "STYLE", "COLOR", "SIZE", "REMARKS", "DESCRIPTION", "PATTERN", "COMMENTS"];
+const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "MATERIAL", "MANUFACTURER", "MODEL", "SERIES", "PRODUCT", "STYLE", "COLOR", "SIZE", "REMARKS", "DESCRIPTION", "PATTERN", "COMMENTS"];
 // A header CELL is often a multi-word span ("FLOOR FINISH", "CEILING FINISH")
 // — the vocabulary word inside it names the column.
 /** A column anchor. `x` is the header's center. A two-tier SUB-column also
@@ -619,13 +619,47 @@ export const isReferenceOrSpecTable = (title: string): boolean => {
   if (/\b(FINISH|MATERIAL)S?\b/.test(u) && !/\b(?:CROSS[-\s]*REF|X-?REF)\b/.test(u)) return false;
   return true;
 };
+
+// ODL / span-extracted catalog identity: a table is equipment when it names
+// a manufacturer AND a model. HVAC basis-of-design tables often print SERIES
+// instead of MODEL — SERIES is MODEL-equivalent HERE ONLY, never a general
+// column rename. MANUFACTURER+SERIES with no MODEL is still equipment.
+const CATALOG_MFR_RE = /\b(?:MANUFACTURER|MFR\.?|MFG\.?)\b/;
+const CATALOG_MODEL_RE = /\bMODEL\b/;
+const CATALOG_SERIES_RE = /\bSERIES\b/;
+
+/** Column names carry catalog identity when they name a manufacturer and a
+ *  model-equivalent (MODEL, or SERIES as its HVAC basis-of-design stand-in). */
+export function hasCatalogIdentity(headers: readonly string[]): boolean {
+  const u = headers.map((h) => norm(h)).filter(Boolean);
+  if (!u.some((h) => CATALOG_MFR_RE.test(h))) return false;
+  return u.some((h) => CATALOG_MODEL_RE.test(h) || CATALOG_SERIES_RE.test(h));
+}
+
+// Derived-calc tables share a MARK column with instance schedules but list
+// computed values, not installed equipment. CONNECTION / CALCULATION /
+// ISOLATION titles are that family. An OUTSIDE AIR title with no catalog
+// identity (no MODEL/MANUFACTURER) joins them — OA CFM calcs, not a unit.
+// A real OA unit catalog (MANUFACTURER + MODEL or SERIES) is not demoted.
+const DERIVED_CALC_TITLE_RE = /\b(?:CONNECTION|CALCULATION|ISOLATION)S?\b/;
+const OUTSIDE_AIR_TITLE_RE = /\bOUTSIDE\s+AIR\b/;
+
+export function isDerivedCalcTable(title: string, headers: readonly string[] = []): boolean {
+  const u = norm(title);
+  if (!u || REFERENCE_RE.test(u)) return false;
+  if (DERIVED_CALC_TITLE_RE.test(u)) return true;
+  if (OUTSIDE_AIR_TITLE_RE.test(u) && !hasCatalogIdentity(headers)) return true;
+  return false;
+}
+
 /** A span that NAMES a table, not running text. Schedule titles plus the
  *  reference/spec family above — so a CROSS-REFERENCE with no "SCHEDULE"
- *  word still captions the table the title hunt is looking for. */
+ *  word still captions the table the title hunt is looking for. CONNECTION /
+ *  CALCULATION / ISOLATION titles without "SCHEDULE" are the same shape. */
 const isTableCaption = (s: string): boolean => {
   const u = norm(s);
   if (u.length < 4 || u.length > 60 || REFERENCE_RE.test(u)) return false;
-  return /SCHEDULE/.test(u) || isReferenceOrSpecTable(u);
+  return /SCHEDULE/.test(u) || isReferenceOrSpecTable(u) || DERIVED_CALC_TITLE_RE.test(u);
 };
 
 function rowKeyOf(raw: string, kind: "room-finish" | "finish", buildings?: Set<string>): { key: string; building?: string } | null {
@@ -1194,6 +1228,14 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
       // suppresses plan tags (above).
       if (t.title && isReferenceOrSpecTable(t.title.text)) {
         notes.push(`${s.key}: "${t.title.text}" is a reference/cross-reference/specification table, not an instance schedule — its ${t.rows.length} rows are NOT indexed as takeoff instance tags`);
+        continue;
+      }
+      // Derived calcs (CONNECTION / CALCULATION / ISOLATION, and OUTSIDE AIR
+      // with no catalog identity) share a MARK column with instance schedules.
+      // Indexing one makes sweep_schedule_row count a calc row as installed
+      // work. A real OA unit catalog (MANUFACTURER + MODEL/SERIES) is kept.
+      if (t.title && isDerivedCalcTable(t.title.text, t.headers)) {
+        notes.push(`${s.key}: "${t.title.text}" is a derived calculation/connection/isolation table, not an instance schedule — its ${t.rows.length} rows are NOT indexed as takeoff instance tags`);
         continue;
       }
       // table-level building: its own title first, the sheet's context second

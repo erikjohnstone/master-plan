@@ -4,7 +4,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  markKey, marksEqual, dedupeMarks, spanAnswersFor, pickMarkHits, MARK_CLUSTER_K,
+  markKey, marksEqual, dedupeMarks, spanAnswersFor, pickMarkHits, compoundTagOcc, MARK_CLUSTER_K,
 } from "../src/lib/markid.ts";
 
 const box = (str: string, x0: number, y0: number, w = str.length * 5, h = 8) =>
@@ -127,4 +127,47 @@ test("MARK_CLUSTER_K is the label-adjacency constant, not a looser net", () => {
   const hits = pickMarkHits(spans, "US-2", ["US-2"]);
   assert.equal(hits.length, 2);
   assert.ok(3 > MARK_CLUSTER_K, "the far pair is outside the cluster radius by construction");
+});
+
+test("compoundTagOcc: key plus slash or whitespace then more text in the same run", () => {
+  assert.equal(compoundTagOcc("R1 /C-11", "R1"), true);
+  assert.equal(compoundTagOcc("R1/C-11", "R1"), true);
+  assert.equal(compoundTagOcc("R1 C-11", "R1"), true);
+  assert.equal(compoundTagOcc("R-1 / C-11", "R1"), true);
+  assert.equal(compoundTagOcc("r1 /c-11", "R-1"), true);
+  // exact equality is not a compound — the alias path owns it
+  assert.equal(compoundTagOcc("R1", "R1"), false);
+  assert.equal(compoundTagOcc("R-1", "R1"), false);
+});
+
+test("compoundTagOcc: a dotted numeric suffix is a sheet number, not the key", () => {
+  assert.equal(compoundTagOcc("S3.1", "S3"), false);
+  assert.equal(compoundTagOcc("P1.01", "P1"), false);
+  assert.equal(compoundTagOcc("M2.3", "M2"), false);
+  assert.equal(compoundTagOcc("S3 .1", "S3"), false);
+});
+
+test("compoundTagOcc: any other non-alnum remainder is not a compound hit", () => {
+  assert.equal(compoundTagOcc("P10", "P1"), false);
+  assert.equal(compoundTagOcc("P1A", "P1"), false);
+  assert.equal(compoundTagOcc("P1A", "P-1"), false);
+  assert.equal(compoundTagOcc("S3:1", "S3"), false);
+  assert.equal(compoundTagOcc("S3_1", "S3"), false);
+  assert.equal(compoundTagOcc("R1/", "R1"), false);
+  assert.equal(compoundTagOcc("R1 /", "R1"), false);
+  assert.equal(compoundTagOcc("R1 /...", "R1"), false);
+});
+
+test("spanAnswersFor / pickMarkHits: a compound run counts as the leading key", () => {
+  const vocab = ["R1", "C-11", "S3"];
+  assert.equal(spanAnswersFor("R1 /C-11", "R1", vocab), true);
+  assert.equal(spanAnswersFor("S3.1", "S3", vocab), false);
+  assert.equal(spanAnswersFor("P1.01", "P1", ["P1"]), false);
+  const spans = [
+    box("R1 /C-11", 100, 100),
+    box("S3.1", 300, 100),
+    box("R1", 500, 100),
+  ];
+  assert.equal(pickMarkHits(spans, "R1", vocab).length, 2, "compound run and the bare R1 are two instances");
+  assert.equal(pickMarkHits(spans, "S3", vocab).length, 0, "sheet number S3.1 is not an S3 instance");
 });

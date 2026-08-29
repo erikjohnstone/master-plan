@@ -23,6 +23,12 @@
 //      nobody; the caller withholds or refuses. A UNIQUE bare prefix of a
 //      single qualified mark may resolve — there is no second candidate.
 //
+//   4. COMPOUND RUN vs SHEET NUMBER. A plan label "R1 /C-11" is one
+//      instance of R1 (the key, then '/' or whitespace, then more text in
+//      the same run). A dotted numeric suffix is a sheet number ("S3.1",
+//      "P1.01"), not that key. Any other non-alnum remainder is not a
+//      compound hit — the separator is '/' or whitespace, nothing else.
+//
 // No corpus names, no tag literals, no sheet numbers. The rule is the
 // shape of the identity, not a list of jobs it was measured on.
 
@@ -78,14 +84,44 @@ export function dedupeMarks(marks: readonly string[]): string[] {
   return out;
 }
 
+/** A compound instance: the scheduled key, then '/' or whitespace, then
+ * more text in the SAME run ("R1 /C-11", "R1/C-11", "R1 C-11").
+ *
+ * A dotted numeric suffix is a sheet number ("S3.1", "P1.01"), not the
+ * key. Any other non-alnum remainder is not a compound hit — "P10" and
+ * "P1A" stay short-mark overcounts, "S3:1" is punctuation, not a join.
+ * Exact equality is not a compound (the exact-alias path handles it). */
+export function compoundTagOcc(have: string, want: string): boolean {
+  const raw = (have || "").trim().toUpperCase();
+  const w = markKey(want);
+  if (!w || !raw) return false;
+  let i = 0, k = 0;
+  while (i < raw.length && k < w.length) {
+    const ch = raw[i];
+    if (ch === "-" || /\s/.test(ch)) { i++; continue; }
+    if (ch !== w[k]) return false;
+    i++; k++;
+  }
+  if (k < w.length) return false;
+  while (i < raw.length && raw[i] === "-") i++;
+  if (i >= raw.length) return false;
+  const rest = raw.slice(i);
+  if (/^\.\d/.test(rest)) return false;
+  if (!/^[\/\s]/.test(rest)) return false;
+  const more = rest.replace(/^[\/\s]+/, "");
+  if (/^\.\d/.test(more)) return false;
+  return /[A-Z0-9]/.test(more);
+}
+
 /** Does the drawn text `have` uniquely answer for scheduled mark `want`,
  * given the rest of the mark vocabulary?
  *
  * Exact alias (hyphen/space-insensitive) always answers — unless `have`
  * is a BARE family name and the vocab carries qualified siblings of it
- * (shared bare mark: never auto-resolve). A longer string that merely
- * starts with `want` never answers (short-mark overcount). A bare prefix
- * of `want` answers only when no other vocab mark shares that prefix. */
+ * (shared bare mark: never auto-resolve). A compound run of the key
+ * ("R1 /C-11") answers. A longer string that merely starts with `want`
+ * never answers (short-mark overcount). A bare prefix of `want` answers
+ * only when no other vocab mark shares that prefix. */
 export function spanAnswersFor(have: string, want: string, vocab: readonly string[]): boolean {
   const h = markKey(have);
   const w = markKey(want);
@@ -98,6 +134,8 @@ export function spanAnswersFor(have: string, want: string, vocab: readonly strin
     })) return false;
     return true;
   }
+
+  if (compoundTagOcc(have, want)) return true;
 
   // short-mark overcount: "P10" / "P1A" must not answer for "P1"
   if (h.startsWith(w)) return false;

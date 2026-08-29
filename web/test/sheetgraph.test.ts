@@ -895,7 +895,7 @@ test("a lone unexplained token never mints a column — the sub-tier needs a par
 // MATERIAL | COMMENTS) extracted as 54 "finish" rows, so a finish code
 // colliding with a door mark would chain to a DOOR — a confidently wrong
 // product in the bid. Refused by title, and the drop is named.
-import { isNonFinishSchedule, isReferenceOrSpecTable } from "../src/lib/sheetgraph.ts";
+import { isNonFinishSchedule, isReferenceOrSpecTable, hasCatalogIdentity, isDerivedCalcTable } from "../src/lib/sheetgraph.ts";
 
 test("isNonFinishSchedule: other families refuse, anything naming FINISH or MATERIAL is kept", () => {
   for (const t of ["DOOR SCHEDULE", "DOOR AND WINDOW SCHEDULE", "PARTITION SCHEDULE", "EQUIPMENT SCHEDULE", "LIGHTING SCHEDULE"]) {
@@ -1237,4 +1237,93 @@ test("#355: ROOM NO. | ROOM NAME self-cannibalizing the distinct-hit count no lo
   assert.equal(rf.title?.text, "ROOM FINISH SCHEDULE");
   const fin = extractTable(schedSheet, "finish")!;
   assert.equal(fin.rows.length, 3);
+});
+
+// ── HVAC catalog identity / derived calcs ───────────────────────────────────
+// SERIES is MODEL-equivalent for catalog-identity only (a basis-of-design
+// table that names MANUFACTURER+SERIES and no MODEL is still equipment).
+// CONNECTION / CALCULATION / ISOLATION titles are derived calcs. An OUTSIDE
+// AIR title with no MODEL/MANUFACTURER joins them; a real OA unit catalog
+// is not demoted.
+
+test("hasCatalogIdentity: SERIES is MODEL-equivalent; manufacturer is required", () => {
+  assert.equal(hasCatalogIdentity(["MARK", "MANUFACTURER", "MODEL"]), true);
+  assert.equal(hasCatalogIdentity(["MARK", "MANUFACTURER", "SERIES"]), true, "SERIES stands in for MODEL");
+  assert.equal(hasCatalogIdentity(["MFR", "SERIES"]), true);
+  assert.equal(hasCatalogIdentity(["MFG.", "MODEL"]), true);
+  assert.equal(hasCatalogIdentity(["MARK", "SERIES"]), false, "SERIES alone is not a catalog");
+  assert.equal(hasCatalogIdentity(["MARK", "MANUFACTURER", "CFM"]), false);
+  assert.equal(hasCatalogIdentity(["MODEL"]), false);
+  assert.equal(hasCatalogIdentity([]), false);
+});
+
+test("isDerivedCalcTable: CONNECTION/CALCULATION/ISOLATION, and OUTSIDE AIR without catalog identity", () => {
+  for (const title of [
+    "PIPE CONNECTION SCHEDULE",
+    "EQUIPMENT CONNECTION SCHEDULE",
+    "LOAD CALCULATION SCHEDULE",
+    "VIBRATION ISOLATION SCHEDULE",
+    "ISOLATION SCHEDULE",
+  ]) {
+    assert.equal(isDerivedCalcTable(title), true, title);
+  }
+  assert.equal(isDerivedCalcTable("OUTSIDE AIR SCHEDULE", ["MARK", "DESCRIPTION", "REMARKS"]), true,
+    "OA with no MODEL/MANUFACTURER is a derived calc");
+  assert.equal(isDerivedCalcTable("OUTSIDE AIR CALCULATION", ["MARK", "CFM"]), true);
+  assert.equal(isDerivedCalcTable("OUTSIDE AIR UNIT SCHEDULE", ["MARK", "MANUFACTURER", "MODEL"]), false,
+    "a real OA unit catalog is not demoted");
+  assert.equal(isDerivedCalcTable("OUTSIDE AIR HANDLING UNIT SCHEDULE", ["MARK", "MANUFACTURER", "SERIES"]), false,
+    "MANUFACTURER+SERIES is enough catalog identity");
+  assert.equal(isDerivedCalcTable("AIR HANDLING UNIT SCHEDULE", ["MARK", "MANUFACTURER", "MODEL"]), false);
+  assert.equal(isDerivedCalcTable("REFER TO CONNECTION SCHEDULE"), false, "running-text notes are not titles");
+  assert.equal(isDerivedCalcTable("SEE OUTSIDE AIR SCHEDULE", ["MARK"]), false);
+});
+
+test("a CONNECTION / OUTSIDE-AIR-calc table is not indexed; a real OA unit catalog is", () => {
+  const conn: SheetSpans = {
+    key: "hvac.pdf#0",
+    sheet_number: "M-601",
+    spans: [
+      sp("PIPE CONNECTION SCHEDULE", 100, 20),
+      sp("MARK", 100, 60), sp("DESCRIPTION", 220, 60), sp("MATERIAL", 420, 60), sp("COMMENTS", 580, 60),
+      sp("PC-1", 100, 80), sp("CHW SUPPLY", 220, 80), sp("COPPER", 420, 80), sp("GROOVED", 580, 80),
+      sp("PC-2", 100, 100), sp("CHW RETURN", 220, 100), sp("COPPER", 420, 100), sp("GROOVED", 580, 100),
+    ],
+  };
+  const oaCalc: SheetSpans = {
+    key: "hvac.pdf#1",
+    sheet_number: "M-602",
+    spans: [
+      sp("OUTSIDE AIR SCHEDULE", 100, 20),
+      sp("MARK", 100, 60), sp("DESCRIPTION", 220, 60), sp("REMARKS", 420, 60),
+      sp("OA-1", 100, 80), sp("MINIMUM OA CFM", 220, 80), sp("CALC FROM ZONES", 420, 80),
+    ],
+  };
+  const oaUnit: SheetSpans = {
+    key: "hvac.pdf#2",
+    sheet_number: "M-603",
+    spans: [
+      sp("OUTSIDE AIR UNIT SCHEDULE", 100, 20),
+      sp("MARK", 100, 60), sp("DESCRIPTION", 220, 60), sp("MANUFACTURER", 400, 60), sp("MODEL", 560, 60),
+      sp("OA-1", 100, 80), sp("DOAS", 220, 80), sp("VENDOR-A", 400, 80), sp("XYZ-100", 560, 80),
+    ],
+  };
+  assert.ok(extractTable(conn, "finish"), "raw reader still sees the connection table");
+  assert.ok(extractTable(oaCalc, "finish"), "raw reader still sees the OA calc table");
+  const unit = extractTable(oaUnit, "finish");
+  assert.ok(unit, "raw reader sees the OA unit catalog");
+  assert.ok(unit!.headers.includes("MANUFACTURER") && unit!.headers.includes("MODEL"),
+    `OA unit headers carry catalog identity: ${unit!.headers.join(" | ")}`);
+
+  const g = buildSheetGraph([conn, oaCalc, oaUnit]);
+  assert.ok(!g.tables.some((tab) => /CONNECTION/i.test(tab.title?.text || "")),
+    "connection table is not indexed as instances");
+  assert.ok(!g.tables.some((tab) => /^OUTSIDE AIR SCHEDULE$/i.test(tab.title?.text || "")),
+    "OA calc table is not indexed as instances");
+  assert.ok(g.tables.some((tab) => /OUTSIDE AIR UNIT/i.test(tab.title?.text || "") && tab.rows.some((r) => r.key === "OA-1")),
+    "real OA unit catalog stays indexed");
+  assert.ok(g.notes.some((n) => /CONNECTION/.test(n) && /NOT indexed/.test(n)),
+    `connection drop is named: ${g.notes.join(" | ")}`);
+  assert.ok(g.notes.some((n) => /OUTSIDE AIR SCHEDULE/.test(n) && /NOT indexed/.test(n)),
+    `OA-calc drop is named: ${g.notes.join(" | ")}`);
 });
