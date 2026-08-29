@@ -7,6 +7,7 @@ import cacache from "cacache";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const MCP_ROOT = resolve(HERE, "..");
+const WEB_ROOT = resolve(MCP_ROOT, "..", "web");
 const WEB_LIB = resolve(MCP_ROOT, "..", "web", "src", "lib");
 const CACHE_DIR = join(process.env.XDG_CACHE_HOME || join(homedir(), ".cache"), "opentakeoff-eval");
 const CACHE_VERSION = "scored-result-v1";
@@ -28,8 +29,13 @@ function sourceDigest() {
       ...await sourceFiles(join(MCP_ROOT, "src")),
       ...await sourceFiles(HERE),
       ...await sourceFiles(WEB_LIB),
+      join(MCP_ROOT, "package.json"),
+      join(MCP_ROOT, "package-lock.json"),
+      join(WEB_ROOT, "package.json"),
+      join(WEB_ROOT, "package-lock.json"),
     ].sort();
     const hash = createHash("sha256");
+    hash.update(process.version);
     for (const path of files) {
       hash.update(path);
       hash.update(await readFile(path));
