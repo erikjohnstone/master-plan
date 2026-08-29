@@ -10,7 +10,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, roomTags, detailCallouts, revisionOf, type GraphSpan, type SheetSpans, type SheetGraph } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, type GraphSpan, type SheetSpans, type SheetGraph } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
@@ -2781,4 +2781,16 @@ test("2-column sheet layout negative control: a real single wide table (NUMBER/N
   const mat = g.tables.find((t) => t.kind === "finish" && t.title?.text === "MATERIAL SCHEDULE");
   assert.ok(mat, "the real, separate MATERIAL SCHEDULE also extracts, on its own");
   assert.equal(mat!.rows.length, 10);
+});
+
+test("isReferenceCrossTable: OUTSIDE AIR flow-rate calc demotes without MODEL/MANUFACTURER, genuine OA unit catalog does not", () => {
+  const oaHeaders = ["ROOM NUMBER", "ROOM NAME", "CFM PER PERSON", "SCHEDULED OUTDOOR AIRFLOW (CFM)"];
+  assert.equal(isReferenceCrossTable("REQUIRED OUTSIDE AIR FLOW RATE", oaHeaders), true,
+    "a ventilation calc with no catalog identity is a cross-reference");
+  assert.equal(isReferenceCrossTable("MECHANICAL EQUIPMENT CONNECTION SCHEDULE", ["NO.", "LOCATION", "VA", "MCA"]), true);
+  assert.equal(isReferenceCrossTable("NATURAL GAS CALCULATION", ["TAG", "DESCRIPTION", "TOTAL MBH"]), true);
+  assert.equal(isReferenceCrossTable("OUTSIDE AIR UNIT SCHEDULE", ["EQUIP NO", "MANUFACTURER", "MODEL", "CFM"]), false,
+    "a genuine outdoor-air unit catalog states MODEL/MANUFACTURER and stays equipment");
+  assert.equal(isReferenceCrossTable("FAN SCHEDULE", oaHeaders), false,
+    "a title that does not name CONNECTION/CALCULATION/ISOLATION/OUTSIDE AIR is untouched");
 });
