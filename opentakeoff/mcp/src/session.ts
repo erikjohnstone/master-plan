@@ -3296,6 +3296,7 @@ export class Session {
 
     // 2. plan-role sheets, and every drawn occurrence of the tag on them
     const roleOf = new Map(graph.sheets.map((g) => [g.key, g.role] as const));
+    const planTitleOf = new Map(graph.sheets.map((g) => [g.key, g.evidence?.text || ""] as const));
     const skipped: { sheet: string; role: string; reason: string }[] = [];
     const planSheets: SheetState[] = [];
     for (const sh of this.sheetList()) {
@@ -4030,7 +4031,7 @@ export class Session {
       // fixtures: foundation/floor plans often redraw the same fixture
       // across views.
       const roofFixturePlacement = /^(?:RD|HB)(?:-|$)/i.test(t)
-        && (sh.spans || []).some((span) => /\bROOF\s+PLAN\b/i.test(span.str));
+        && /\bROOF\s+PLAN\b/i.test(planTitleOf.get(sh.key) || "");
       if (roofFixturePlacement) {
         const familyTagCount = tableSiblingKeys.reduce((sum, key) => sum + occOf(sh, key).length, 0);
         if (familyTagCount >= 4) {
