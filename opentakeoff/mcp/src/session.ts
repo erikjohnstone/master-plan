@@ -3801,8 +3801,7 @@ export class Session {
             sum + compoundTagOcc(sheet.spans || [], key).length, 0) >= 10)
         .map((sheet) => sheet.key))
       : new Set<string>();
-    const tagUsesCompoundConvention = luminaireCompoundSheets.size > 0
-      && planSheets.some((sheet) => compoundTagOcc(sheet.spans || [], t).length > 0);
+    const luminaireConventionActive = luminaireCompoundSheets.size > 0;
     // per-sheet classification — the shared symbolsweep.ts function, so this
     // server and the browser's own port can never silently disagree.
     for (const { sh, occ } of occBySheet) {
@@ -3879,7 +3878,7 @@ export class Session {
       // explicit instance marks. Trust them only when the same plan carries
       // a large family-wide quorum of independently tagged luminaires; this
       // excludes isolated schedule notes and ordinary prefix collisions.
-      if (tagUsesCompoundConvention && !luminaireCompoundSheets.has(sh.key)) {
+      if (luminaireConventionActive && !luminaireCompoundSheets.has(sh.key)) {
         // A short luminaire code such as S3 can independently label a
         // non-lighting device on another plan. Once this set proves its
         // fixture convention with a compound-label quorum, bare matches on
@@ -3889,7 +3888,10 @@ export class Session {
         const familyCompoundCount = tableSiblingKeys.reduce((sum, key) =>
           sum + compoundTagOcc(sh.spans || [], key).length, 0);
         if (familyCompoundCount >= 10) {
-          for (const tagged of compoundTagOcc(sh.spans || [], t)) {
+          // The family quorum establishes this as the luminaire placement
+          // sheet. Individual rows may use either compound circuit labels
+          // or bare labels (exit signs commonly use bare X1).
+          for (const tagged of occ) {
             const alreadyClaimed = matches.some((match) => {
               const box = match.tag_at;
               return Math.hypot((box[0] + box[2]) / 2 - tagged.cx, (box[1] + box[3]) / 2 - tagged.cy) <= 1;
