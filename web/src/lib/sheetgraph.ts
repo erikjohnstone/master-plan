@@ -173,6 +173,52 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   // anchored to `LEVEL\s+\d+`, so "KEY PLAN" and a bare "LEVEL 1 PLAN" (no
   // discipline word) are unaffected, exactly as before.
   { re: /(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\s+PLAN\b|(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\s*-\s*LEVEL\s+\d+\s+(?:ENLARGED\s+|PARTIAL\s+)?PLAN\b/, role: "plan", conf: 0.85 },
+  // A ROOM-scoped enlarged plan — real, standard AEC drafting convention for
+  // a zoomed-in mechanical/electrical ROOM (not a whole building LEVEL) —
+  // was invisible to the signal above, which only ever recognized "LEVEL
+  // N ... PLAN". Real, found live (navfac-cherry-point-atc-mechanical.pdf's
+  // own M-401/M-411/M-421, all THREE building areas): "MECHANICAL - ROOM
+  // 151 ENLARGED DUCT PLAN", "MECHANICAL - DUCT ENLARGED PLAN",
+  // "MECHANICAL DUCT ENLARGED PLAN - MECH RM" — three real, differently-
+  // worded titles for the exact same real drawing convention (a mechanical-
+  // room enlarged duct/pipe plan), none matching "LEVEL N" (no level number
+  // at all — a ROOM-scoped plan, not a building-story one) NOR the base
+  // signal's required direct DISCIPLINE-adjacent-to-PLAN adjacency (DUCT/
+  // PIPE/ENLARGED words sit between them). classifySheetRole scored every
+  // one of these real sheets role "unknown" (confirmed live, zero hits) —
+  // the single most severe class of miss this file has: every equipment
+  // tag drawn ONLY on such a sheet (this corpus's own real PCHWP-/PHHWP-/
+  // SHHWP-/HHWP-DOAH-/SCHWP- pumps, AS-CHW-/AS-HHW- air separators, DH-
+  // dehumidifiers, B- boilers, CV- control valves, FCU-/CUH- units — all
+  // drawn ONLY on these enlarged room plans, never on a whole-floor plan)
+  // becomes silently invisible to sweep_schedule_row (same "not drawn on
+  // any plan sheet" refusal path as a genuine absence), across all three
+  // real building areas at once — one general regex gap, not dozens of
+  // separate per-tag bugs.
+  //
+  // Deliberately NOT chasing each exact word order as its own alternative
+  // (a real, found-live corpus-specific-pattern trap) — the one true
+  // invariant across every real "enlarged room/area plan" title, any firm,
+  // any discipline, is simply that a discipline word, "ENLARGED", and
+  // "PLAN" all appear SOMEWHERE in the same short title span, in any order,
+  // with any sub-drawing-type qualifier (DUCT/PIPE/POWER/…) between them.
+  // Three independent lookaheads encode exactly that — general, not tied to
+  // "ROOM"/"MECH RM"/"DUCT"/"PIPE" at all. Placed AFTER the base plan
+  // signal (same 0.85 confidence) so a title the base signal already
+  // matches is unaffected; this only ever adds a way to succeed for a real
+  // enlarged-plan title the narrower, order-sensitive signal above misses.
+  // A referencing sentence ("SEE THE MECHANICAL ENLARGED PLAN FOR...")
+  // never reaches this signal at all — REFERENCE_RE already excludes it
+  // before any ROLE_SIGNALS check runs. "PLANS?" (not bare "PLAN") because
+  // the identical convention also prints its plural, sheet-category form
+  // ("AIR OPS - MECHANICAL ENLARGED PLANS", this same navfac set's own
+  // margin label) — the same real gap independently confirmed on a SECOND,
+  // unrelated corpus set (federal-attachment4-mechanical.pdf#7's own real
+  // "MECHANICAL ROOM ENLARGED DUCT PLAN"/"MECHANICAL ROOM ENLARGED PIPING
+  // PLAN" — that set's own key already separately disclosed this exact
+  // sheet's tags as affected), confirming this is a real, general AEC title
+  // convention this file was missing, not a navfac-only pattern.
+  { re: /^(?=.*\b(?:FINISH|FLOOR|FURNITURE|CEILING|DUCTWORK|PIPING|MECHANICAL|ELECTRICAL|LIGHTING|POWER|PLUMBING|SPRINKLER|HVAC|FRAMING|FOUNDATION|ROOF|SITE|EQUIPMENT)\b)(?=.*\bENLARGED\b)(?=.*\bPLANS?\b)/, role: "plan", conf: 0.85 },
   { re: SCHEDULE_TITLE_RE, role: "schedule", conf: 0.85 },
   { re: /SCHEDULE/, role: "schedule", conf: 0.5 },
   { re: /LEGEND/, role: "legend", conf: 0.5 },
