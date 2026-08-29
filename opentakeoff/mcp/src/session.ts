@@ -3346,7 +3346,12 @@ export class Session {
     const compoundRankingOcc = /\bLUMINAIRE\b/i.test(table)
       ? compoundTagOcc(anchorSheet.spans || [], t)
       : [];
-    const rankingOcc = compoundRankingOcc.length >= 4 ? compoundRankingOcc : withOcc[0].occ;
+    // A large compound-label population is self-corroborating evidence that
+    // this is the table's dominant placement convention. Small mixed
+    // populations can legitimately coexist with bare placements (P1/E1
+    // shapes), so they retain first-success behavior.
+    const compoundRankingQuorum = compoundRankingOcc.length >= 10;
+    const rankingOcc = compoundRankingQuorum ? compoundRankingOcc : withOcc[0].occ;
 
     // Cross-tag fallback corroborators, tried only when the tag itself has no
     // second occurrence anywhere (corroCandidates is empty) — the
@@ -3496,7 +3501,7 @@ export class Session {
       // exact tag they claim. This is intentionally not the old "most raw
       // matches wins" heuristic: generic fragments lose the tie to a shape
       // with the same tag coverage and fewer unrelated geometric hits.
-      const rankByTagClaims = airDeviceTable || compoundRankingOcc.length >= 4;
+      const rankByTagClaims = airDeviceTable || compoundRankingQuorum;
       type RankedFingerprint = {
         fp: SymbolFingerprint;
         rect: [Point, Point];
