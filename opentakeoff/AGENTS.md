@@ -14,6 +14,29 @@ npm run build    # → web/dist/ (static output; this is what Netlify deploys)
 npm run check    # typecheck + lint + test + build — exactly what CI runs; green here ⇒ green CI
 ```
 
+### Corpus evaluation
+
+Run all scored corpus metrics from `mcp/` with:
+
+```bash
+npm run eval:corpus -- /path/to/opentakeoff-corpus
+```
+
+The normal loop is content-addressed by engine/evaluator source, Node and
+dependency versions, PDFs, and answer keys. An unchanged full-corpus rerun
+should take seconds, not minutes. During implementation, run focused affected
+sets first, then the cached full corpus; reserve forced-cold recomputation for
+milestone and shipping gates:
+
+```bash
+OPENTAKEOFF_EVAL_NO_CACHE=1 npm run eval:corpus -- /path/to/opentakeoff-corpus
+```
+
+For accuracy-equivalence investigation, restore production's complete
+whole-sheet symbol search with `OPENTAKEOFF_EVAL_FULL_SWEEP=1`. Never weaken
+keys, thresholds, or metric semantics to improve runtime. The evaluator-only
+focused path may omit candidates solely when the scorer cannot count them.
+
 ## Shipping — the required steps, every change
 
 `main` is protected on GitHub by a ruleset (PR-only, one approving review,

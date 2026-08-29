@@ -39,11 +39,26 @@ Takeoff by set:
   promoted consistently on the ODL path. Building 5406 improved from 10/23
   (43.5%) to 11/23 (47.8%); missing tags fell from 10 to 9 and quantity delta
   from 13 to 12. Bessemer remained 100.0% and ITD remained 98.3%.
+- Corpus-only schedule-row matching now generates and scores geometric
+  candidates only inside the existing claim radius of that row's own drawn
+  tag. Interactive/production sweeps retain their complete whole-sheet
+  disclosure. The 116-tag ITD set fell from more than 134 seconds to 21.6
+  seconds and produced byte-identical scored JSON.
+- Complete per-set scorer results are content-addressed by engine/evaluator
+  source, Node and dependency versions, PDFs, and authored keys. Takeoff and
+  graph fan-outs run concurrently across the four-core coordinator. A verified
+  unchanged full-corpus run now takes 3.68 seconds, down from 1,887 seconds;
+  forced-cold recomputation takes 105.6 seconds. Current post-tank metrics
+  remain 405/515 exact (78.6%), quantity delta 229, 39 missing, 20 false-adds;
+  reference scores are unchanged and graph row-symbol recall remains 94.2%.
+  `OPENTAKEOFF_EVAL_NO_CACHE=1` forces cold recomputation and
+  `OPENTAKEOFF_EVAL_FULL_SWEEP=1` restores the complete production search for
+  equivalence checks.
 
 ## Verification in progress
 
-- Federal VAV offset regression fixture from worker commit `bb0c5f1`; inspect,
-  reproduce its fail-without-fix proof, and run focused tests before accepting.
+- Lower the 105.6-second forced-cold path with reusable PDF/geometry artifacts;
+  the normal coding loop is already below the 30-second requirement.
 
 ## Local implementation queue
 
