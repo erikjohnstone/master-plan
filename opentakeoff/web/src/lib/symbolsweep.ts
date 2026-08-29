@@ -1476,7 +1476,12 @@ export function compoundTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
  */
 export function splitHyphenTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   const parts = key.trim().toUpperCase().split("-");
-  if (parts.length !== 2 || parts.some((part) => !part)) return [];
+  // Structural scope: long equipment-family stem plus an alphanumeric
+  // unit suffix (SCHWP-M1, PCHWP-MT1). Short generic tags such as TP-2 or
+  // US-1 already use fragmentedTagOcc's proven conservative path; admitting
+  // them here recreates dense plumbing-sheet cross-joins.
+  if (parts.length !== 2 || parts[0].length < 5
+    || !/[A-Z]/.test(parts[1]) || !/\d/.test(parts[1])) return [];
   const upper = (value: string) => value.trim().toUpperCase();
   const out: TagOcc[] = [];
   for (const left of spans.filter((span) => upper(span.str) === parts[0])) {

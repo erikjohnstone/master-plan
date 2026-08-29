@@ -490,4 +490,8 @@ test("splitHyphenTagOcc recovers an exact adjacent two-run tag without fuzzy joi
   assert.equal(splitHyphenTagOcc(spans, "SCHWP-M1").length, 1);
   assert.equal(splitHyphenTagOcc(spans, "SCHWP-M2").length, 0);
   assert.equal(splitHyphenTagOcc(spans, "SCHWP-M1-X").length, 0);
+  assert.equal(splitHyphenTagOcc([
+    { str: "TP", x0: 100, y0: 200, x1: 120, y1: 220 },
+    { str: "2", x0: 125, y0: 200, x1: 135, y1: 220 },
+  ], "TP-2").length, 0, "short plumbing tags stay on the existing conservative fragment path");
 });
