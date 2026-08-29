@@ -19,6 +19,14 @@ test("parseReferenceKeyCsv handles comments, quoted commas, and escaped quotes",
   }]);
 });
 
+test("parseReferenceKeyCsv preserves literal inch marks in unquoted fields", () => {
+  const rows = parseReferenceKeyCsv([
+    "sheet,table_title,row_key,column,expected_value",
+    'plan.pdf#2,COIL SCHEDULE,CHWC,LENGTH,107"',
+  ].join("\n"));
+  assert.equal(rows[0].expected_value, '107"');
+});
+
 test("scoreReference preserves standalone evaluator matching semantics", () => {
   const tables: ReferenceTable[] = [{
     sheet: "plan.pdf#2",
