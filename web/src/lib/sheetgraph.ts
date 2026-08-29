@@ -602,6 +602,29 @@ export const isNonFinishSchedule = (title: string): boolean => {
   return OTHER_FAMILY_RE.test(u) && !/\b(FINISH|MATERIAL)S?\b/.test(u);
 };
 
+// Lookup tables that share a MARK/CODE column with finish schedules — a
+// CROSS-REFERENCE, SPECIFICATION INDEX, or POINTS LIST. extractTable reads
+// them as finish tables, and sweep_schedule_row then treats every row key as
+// a takeoff instance. Running-text "REFER TO SPEC" is not a title
+// (REFERENCE_RE). A title that ALSO names FINISH or MATERIAL is a product
+// table, kept — when in doubt, keep and let the caller look.
+const REF_SPEC_FAMILY_RE = /\b(?:CROSS[-\s]*REF(?:ERENCE)?S?|X-?REFS?|(?:EQUIPMENT|DRAWING|SHEET|DETAIL)\s+INDEX|SPECIFICATION(?:S)?(?:\s+(?:INDEX|TABLE|SCHEDULE))?|SPEC\s+(?:INDEX|TABLE|SCHEDULE|SECTIONS?)|POINTS?\s+(?:LIST|SCHEDULE)|(?:DDC|BAS)\s+POINTS?|REFERENCE(?:S)?\s+(?:TABLE|SCHEDULE|LIST|INDEX))\b/;
+export const isReferenceOrSpecTable = (title: string): boolean => {
+  const u = norm(title);
+  if (REFERENCE_RE.test(u)) return false; // "REFER TO SPECIFICATIONS" is a note, not a table name
+  if (!REF_SPEC_FAMILY_RE.test(u)) return false;
+  if (/\b(FINISH|MATERIAL)S?\b/.test(u) && !/\b(?:CROSS[-\s]*REF|X-?REF)\b/.test(u)) return false;
+  return true;
+};
+/** A span that NAMES a table, not running text. Schedule titles plus the
+ *  reference/spec family above — so a CROSS-REFERENCE with no "SCHEDULE"
+ *  word still captions the table the title hunt is looking for. */
+const isTableCaption = (s: string): boolean => {
+  const u = norm(s);
+  if (u.length < 4 || u.length > 60 || REFERENCE_RE.test(u)) return false;
+  return /SCHEDULE/.test(u) || isReferenceOrSpecTable(u);
+};
+
 function rowKeyOf(raw: string, kind: "room-finish" | "finish", buildings?: Set<string>): { key: string; building?: string } | null {
   const kept = norm(raw).replace(/[^A-Z0-9/-]/g, "");
   const key = kept.replace(/\//g, "");
@@ -901,7 +924,7 @@ export function extractTable(sheet: SheetSpans, kind: "room-finish" | "finish", 
   // shares the y-band and must not label this one
   let title: Evidence | null = null;
   for (let i = titleFrom; i >= 0 && i >= titleFrom - 5 && !title; i--) {
-    const hit = rows[i].find((t) => /SCHEDULE/.test(norm(t.str)) && t.x >= x0 && t.x <= x1);
+    const hit = rows[i].find((t) => isTableCaption(t.str) && t.x >= x0 && t.x <= x1);
     if (hit) title = { sheet: sheet.key, text: hit.str.trim(), bbox: bboxOf(hit) };
   }
   const table: ScheduleTable = { kind, sheet: sheet.key, title, headers: anchors.map((a) => a.label), rows: out, region: region!, anchors };
@@ -1129,11 +1152,18 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
   const roles = new Map<string, ReturnType<typeof classifySheetRole>>();
   const fragments: ScheduleTable[] = [];
   const fragmentKinds = new Map<string, Set<TableKind>>(); // sheet key → kinds extracted there
+  // Per-sheet regions of EVERY extracted table (kept or refused). Cells
+  // inside a table are table content, never plan instance tags — a MARK
+  // column of 2–3 digit numbers on a plan sheet otherwise mints a second
+  // "room" for every spec/cross-ref row.
+  const tagSuppress = new Map<string, Bbox[]>();
   for (const s of withText) {
     roles.set(s.key, classifySheetRole(s));
     for (const kind of ["room-finish", "finish"] as const) {
       const t = extractTable(s, kind, { buildings, deltas: deltasBySheet.get(s.key) });
       if (!t) continue;
+      if (!tagSuppress.has(s.key)) tagSuppress.set(s.key, []);
+      tagSuppress.get(s.key)!.push(t.region);
       // A DOOR / WINDOW / PARTITION schedule carries a MARK column, so the
       // finish-table hunt happily reads one as a finish/material schedule —
       // and then a finish code that collides with a door mark chains to a
@@ -1143,6 +1173,15 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
       // material: when in doubt the table is kept, and the drop is NAMED.
       if (kind === "finish" && t.title && isNonFinishSchedule(t.title.text)) {
         notes.push(`${s.key}: "${t.title.text}" names another schedule family, not a finish/material schedule — its ${t.rows.length} rows are NOT indexed as finish definitions`);
+        continue;
+      }
+      // Same MARK/CODE shape, different job: a CROSS-REFERENCE, SPECIFICATION
+      // INDEX or POINTS LIST lists codes for lookup, not installed instances.
+      // Indexing one as finish/room-finish makes sweep_schedule_row count
+      // every row as a takeoff instance. The drop is NAMED; the region still
+      // suppresses plan tags (above).
+      if (t.title && isReferenceOrSpecTable(t.title.text)) {
+        notes.push(`${s.key}: "${t.title.text}" is a reference/cross-reference/specification table, not an instance schedule — its ${t.rows.length} rows are NOT indexed as takeoff instance tags`);
         continue;
       }
       // table-level building: its own title first, the sheet's context second
@@ -1211,7 +1250,10 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     const suppresses = (role.role === "schedule" || role.role === "legend" || role.role === "elevation" || role.role === "detail") && role.confidence >= 0.6;
     if (!suppresses) {
       const ctxB = ctxBySheet.get(s.key);
+      const banned = tagSuppress.get(s.key) || [];
       for (const r of roomTags(s, { buildings, exclude: sheetNumbers, deltas: deltasBySheet.get(s.key) })) {
+        const cx = (r.bbox[0] + r.bbox[2]) / 2, cy = (r.bbox[1] + r.bbox[3]) / 2;
+        if (banned.some((b) => cx >= b[0] && cy >= b[1] && cx <= b[2] && cy <= b[3])) continue;
         if (r.building == null && ctxB) r.building = ctxB;
         found.push(r);
       }
