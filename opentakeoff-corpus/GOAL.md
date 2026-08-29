@@ -112,20 +112,20 @@ the whole deterministic (non-LLM) claim.
 ## 3. Current real state, per set, per metric
 
 **The numbers below are the latest independently verified forced-cold
-full-corpus gate**, run 2026-08-29 against commit `7977639` in 53.5 seconds.
+full-corpus gate**, run 2026-08-29 against commit `b1c1082` in 45.9 seconds.
 
 | Set | takeoff-eval | reference-eval | graph-eval (rowsym) | Status |
 |---|---|---|---|---|
 | **bessemer** | **100.0%** (10/10) | **100.0%** (12/12) | rowsym 100.0% | Expected-tag takeoff and reference closed. |
 | **itd-d1-lab** | **98.3%** (114/116) | **100.0%** (34/34) | rowsym 100.0% | US-2 and WC-1 remain small overcounts. |
 | **federal-mech** | **100.0%** (83/83) | **100.0%** (31/31) | rowsym 100.0% | Expected tags closed; 19 extracted real schedule rows remain pending false-add key audit. |
-| **navfac-cherry-point-atc** | **84.2%** (181/215) | **90.3%** (28/31) | rowsym 95.8% | Largest remaining vector/text-backed gap: repeated views, air devices, and pump/valve refusals. |
-| **baker-county-eoc** | **80.0%** (32/40) | **95.2%** (20/21) | rowsym 100.0% | CD-1 and four compound-luminaire families closed in the latest batch. |
+| **navfac-cherry-point-atc** | **90.2%** (194/215) | **90.3%** (28/31) | rowsym 100.0% | Remaining vector/text-backed gaps center on pump/valve refusals and a few air-device undercounts. |
+| **baker-county-eoc** | **85.0%** (34/40) | **100.0%** (21/21) | rowsym 100.0% | Exit-sign labels, RG-1, and the final reference mismatch closed in the latest batch. |
 | **bldg5406-hvac-demo** | **47.8%** (11/23) | 0/0 vacuous | rowsym 64.7% | Most remaining misses use exploded vector letterforms; see §7. |
 | **itd-d1-lab-raster** | 0.0% (correct — see below) | 0/0 cells, vacuous | rowsym 0.0% (vacuous — all-refused key) | **This 0% is the CORRECT, expected answer, not a failure.** This set is a synthetically-rasterized (zero vector text) version of itd-d1-lab's own M1.0 sheet, built specifically to prove the pipeline *refuses cleanly* on a scanned page instead of crashing or inventing data. Confirmed: every real code path refuses honestly, no crashes. This is what "100%" looks like for a raster set under this project's own honesty rules — it will only ever change if OCR is added. |
 
-**Current corpus aggregate:** takeoff 431/515 exact (83.7%), quantity delta
-140; reference 125/129 exact (96.9%); graph 91/91 cells exact and 95.0%
+**Current corpus aggregate:** takeoff 446/515 exact (86.6%), quantity delta
+114; reference 126/129 exact (97.7%); graph 91/91 cells exact and 95.7%
 row-symbol recall. Per-set closure remains the goal (§1).
 
 ---
@@ -265,8 +265,8 @@ that discloses its real limits.
 
 ## 8. Immediate next steps (as of this file's writing)
 
-1. Start the next five-fix batch from the verified 83.7% takeoff, 96.9%
-   reference, and 95.0% graph baseline.
+1. Start the next five-fix batch from the verified 86.6% takeoff, 97.7%
+   reference, and 95.7% graph baseline.
 2. Prioritize NAVFAC repeated views/air devices, Baker's remaining
    vector-backed deltas, and the seven graph row-symbol misses.
 3. Continue directly in the coordinator VM. Do not dispatch workers or

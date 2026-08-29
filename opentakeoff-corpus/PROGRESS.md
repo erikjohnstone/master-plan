@@ -126,11 +126,28 @@ Takeoff by set:
     inch marks survive CSV parsing, three stale NAVFAC point-list keys were
     corrected, and Baker control-station subrows now band correctly.
   - Graph remains 91/91 cells exact and 95.0% row-symbol recall.
+- Second five-fix accuracy batch, independently verified forced-cold on
+  2026-08-29 at commit `b1c1082` (45.9 seconds):
+  - Takeoff improved 431/515 → 446/515 exact (83.7% → 86.6%); quantity
+    delta fell 140 → 114. NAVFAC rose 181/215 → 194/215 (84.2% → 90.2%)
+    and Baker rose 32/40 → 34/40 (80.0% → 85.0%).
+  - Numeric AIA view registration (for example MH121/MP121), backed by
+    coordinate proximity, collapses repeated discipline overlays.
+  - Family-corroborated explicit air-device and luminaire labels recover
+    variable-size devices and bare exit-sign labels without requiring one
+    rigid perimeter fingerprint.
+  - Exact two-run long-family tags such as `SCHWP` + `M1` now anchor. The
+    first corpus gate exposed unsafe joins for short ITD tags; requiring a
+    long family stem and alphanumeric unit suffix restored ITD to 98.3%.
+  - Baker's transposed RTU-01 MCA key was corrected from MOCP `45 A` to
+    printed MCA `33.0`; reference improved 125/129 → 126/129 (97.7%).
+  - Graph remains 91/91 cells exact and row-symbol recall improves
+    95.0% → 95.7%; NAVFAC reaches 100% row-symbol recall.
 
 ## Verification in progress
 
-- Start the next five-fix accuracy batch from the current 83.7% takeoff,
-  125/129 reference, and 95.0% graph baseline.
+- Start the next five-fix accuracy batch from the current 86.6% takeoff,
+  126/129 reference, and 95.7% graph baseline.
 
 ## Local implementation queue
 
