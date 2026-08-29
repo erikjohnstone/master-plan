@@ -334,7 +334,22 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
     };
 
     try {
-      const r = await session.sweepScheduleRow(tag, { commit: false, evaluationFast: opts.evaluationFast });
+      let r;
+      try {
+        r = await session.sweepScheduleRow(tag, { commit: false, evaluationFast: opts.evaluationFast });
+      } catch (primary: any) {
+        // Some drawings omit a schedule's redundant trailing unit digit
+        // when only one device exists at that site (schedule ...-A1, plan
+        // ...-A). sweepScheduleRow owns the conservative proof: it accepts
+        // the base only when exactly one strict numbered extension exists.
+        // The project walker must try that real plan mark too; otherwise the
+        // one-tag API can resolve it while the unattended takeoff silently
+        // cannot.
+        const alias = /[A-Z]\d$/i.test(tag) ? tag.slice(0, -1) : null;
+        if (!alias || !/tag is not drawn on any plan sheet/i.test(primary?.message || String(primary))) throw primary;
+        r = await session.sweepScheduleRow(alias, { commit: false, evaluationFast: opts.evaluationFast });
+        item.tag = alias;
+      }
       item.quantity = r.found ?? 0;
       item.drawing_locations = (r.sheets || []).flatMap((ps: any) =>
         (ps.matches || []).map((m: any) => ({ sheet: ps.sheet, at: m.at as [number, number] })));
@@ -348,7 +363,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
       item.status = ft === "SYMBOL_FALSE_NEGATIVE" ? "refused" : "error";
       item.reason = msg;
       if (item.status === "refused") out.stats.refused++; else out.stats.errored++;
-      out.failures.push({ type: ft, tag, sheet: tb.sheet, detail: msg });
+      out.failures.push({ type: ft, tag: item.tag, sheet: tb.sheet, detail: msg });
     }
     out.items.push(item);
   }
