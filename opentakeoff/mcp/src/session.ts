@@ -3115,6 +3115,26 @@ export class Session {
     // through to the unchanged ambiguity refusal.
     let accessoryNote: string | null = null;
     if (rowHits.length > 1) {
+      const partTitle = (text: string | null | undefined): string | null => {
+        const normalized = (text || "").toUpperCase().replace(/\s+/g, " ").trim();
+        return /\b\d+\s+OF\s+\d+\b/.test(normalized)
+          ? normalized.replace(/\b\d+\s+OF\s+\d+\b/g, "").replace(/[^A-Z0-9]/g, "")
+          : null;
+      };
+      const collapsed: typeof rowHits = [];
+      for (const hit of rowHits) {
+        const family = partTitle(hit.tb.title?.text);
+        const prior = family ? collapsed.findIndex((candidate) =>
+          candidate.tb.sheet === hit.tb.sheet && partTitle(candidate.tb.title?.text) === family) : -1;
+        if (prior >= 0) {
+          if (Object.keys(hit.r.cells).length > Object.keys(collapsed[prior].r.cells).length) collapsed[prior] = hit;
+        } else {
+          collapsed.push(hit);
+        }
+      }
+      rowHits = collapsed;
+    }
+    if (rowHits.length > 1) {
       const keyHeaderFor = (tb: ScheduleTable, row: { key: string; cells: Record<string, { text: string }> }): string | null => {
         for (const h of tb.headers) {
           const c = row.cells[h];
