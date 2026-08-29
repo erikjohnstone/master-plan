@@ -3966,6 +3966,32 @@ export class Session {
         complete = icls.complete;
         scaled = undefined;
       }
+      // Variable-size air devices can land just below the rigid 0.92
+      // perimeter bar even while the candidate sits beside this row's own
+      // exact tag. Promote only the narrow 0.90–0.92 band when that explicit
+      // identity corroboration is present; unlabeled hatch matches and
+      // ordinary low-score variants remain withheld.
+      if (airDeviceTable) {
+        const promoted = new Set<SweepWithheld>();
+        for (const candidate of withheld) {
+          if (candidate.score < 0.9 || !candidate.reason.includes(`"${t}" tag is drawn beside it`)) continue;
+          const tagged = occ
+            .filter((entry) => !matches.some((match) =>
+              Math.hypot((match.tag_at[0] + match.tag_at[2]) / 2 - entry.cx,
+                (match.tag_at[1] + match.tag_at[3]) / 2 - entry.cy) <= 1))
+            .sort((a, b) =>
+              Math.hypot(candidate.at[0] - a.cx, candidate.at[1] - a.cy)
+              - Math.hypot(candidate.at[0] - b.cx, candidate.at[1] - b.cy))[0];
+          if (!tagged) continue;
+          matches.push({
+            at: candidate.at, score: candidate.score,
+            rotation: candidate.rotation, mirrored: candidate.mirrored,
+            tag_at: tagged.bbox,
+          });
+          promoted.add(candidate);
+        }
+        if (promoted.size) withheld = withheld.filter((candidate) => !promoted.has(candidate));
+      }
       // Compound luminaire labels ("R2/C-11", "S1/INV-3") are themselves
       // explicit instance marks. Trust them only when the same plan carries
       // a large family-wide quorum of independently tagged luminaires; this
