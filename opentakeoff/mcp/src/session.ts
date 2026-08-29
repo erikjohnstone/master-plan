@@ -3115,6 +3115,21 @@ export class Session {
     // sweep runs on the mark as drawn on the plans, not the compound key.
     const canonKey = (k: string) => (k || "").trim().toUpperCase().replace(/\s+/g, "");
     let rowHits = graph.tables.flatMap((tb) => tb.rows.filter((r) => rowKeyAnswersFor(r.key, t)).map((r) => ({ tb, r })));
+    let scheduleAliasNote: string | null = null;
+    if (!rowHits.length && /[A-Z]$/.test(t)) {
+      // A plan can omit a schedule's redundant trailing unit digit when
+      // there is only one unit at that site (real example: plan mark
+      // CV-HHW-BP-A, schedule mark CV-HHW-BP-A1). Admit this only when the
+      // entire set contains exactly one strict one-digit extension; two
+      // candidates remain unresolved rather than choosing by prefix.
+      const numbered = graph.tables.flatMap((tb) => tb.rows
+        .filter((r) => canonKey(r.key).startsWith(t) && /^\d$/.test(canonKey(r.key).slice(t.length)))
+        .map((r) => ({ tb, r })));
+      if (numbered.length === 1) {
+        rowHits = numbered;
+        scheduleAliasNote = `Plan mark "${t}" resolves to the schedule's sole strict numbered extension "${canonKey(numbered[0].r.key)}"; no competing numbered row exists.`;
+      }
+    }
     if (!rowHits.length) {
       const found = graph.tables.map((x) => {
         const keys = x.rows.map((row) => row.key).slice(0, 12).join(", ");
@@ -4187,6 +4202,7 @@ export class Session {
     const firstCell = r.cells[Object.keys(r.cells)[0]];
     const capped = perSheet.filter((p) => p.candidates.dropped > 0);
     const notes: string[] = [];
+    if (scheduleAliasNote) notes.push(scheduleAliasNote);
     if (accessoryNote) notes.push(accessoryNote);
     if (!corroborated) {
       notes.push(`The tag "${t}" is drawn ${totalOcc === 1 ? "exactly once" : "too sparsely to cross-check"} — the fingerprint could not corroborate at a second occurrence${crossCandidates.length ? `, and none of ${crossCandidates.length} sibling tag(s) from the same ${table} table reproduced it either` : ""}; audit the matches with view_sheet before trusting the count.`);
