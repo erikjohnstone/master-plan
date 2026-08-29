@@ -1150,7 +1150,10 @@ test("isReferenceOrSpecTable: lookup tables refuse, finish/material specs and in
     "FINISH SPECIFICATION",
     "MATERIAL SPECIFICATION",
     "AIR-COOLED CONDENSING UNIT SCHEDULE",
+    "DX FAN COIL UNIT SCHEDULE",
     "UNIT HEATER SCHEDULE (HOT WATER)",
+    "SILENCER SCHEDULE",
+    "FIN TUBE RADIATION SCHEDULE",
     "REFER TO SPECIFICATIONS",
     "SEE SPEC SECTION 233723",
   ]) {
@@ -1211,6 +1214,53 @@ test("a CROSS-REFERENCE / SPECIFICATION table never becomes a finish table — a
   if (res.status !== "resolved") return;
   const fl = res.finishes.find((f) => f.surface === "FLOOR")!;
   assert.equal(fl.code, "SC-1", "room 201 chains to the finish schedule, never the lookup row");
+});
+
+test("a catalog instance schedule is indexed even when a lookup table sits on the same set", () => {
+  // Inverse of the refuse above: a MARK/TAG column plus MODEL/MANUFACTURER
+  // is a purchasable product table, not a cross-reference. The title hunt
+  // must still caption CROSS-REFERENCE (no "SCHEDULE" word) so that table
+  // drops, and must not drag the catalog table down with it.
+  const catalog: SheetSpans = {
+    key: "catalog.pdf#0",
+    sheet_number: "M-702",
+    spans: [
+      sp("AIR-COOLED CONDENSING UNIT SCHEDULE", 100, 20),
+      sp("TAG", 100, 60), sp("TYPE", 200, 60), sp("TONS", 300, 60), sp("VOLTAGE", 380, 60), sp("PHASE", 480, 60), sp("MANUFACTURER", 560, 60), sp("MODEL", 720, 60),
+      sp("CU-1", 100, 80), sp("AIR COOLED", 200, 80), sp("2", 300, 80), sp("208", 380, 80), sp("1", 480, 80), sp("DAIKIN", 560, 80), sp("RK24NMVJU", 720, 80),
+      sp("CU-2", 100, 100), sp("AIR COOLED", 200, 100), sp("2", 300, 100), sp("208", 380, 100), sp("1", 480, 100), sp("DAIKIN", 560, 100), sp("RK24NMVJU", 720, 100),
+    ],
+  };
+  const coil: SheetSpans = {
+    key: "catalog.pdf#1",
+    sheet_number: "M-703",
+    spans: [
+      sp("DX FAN COIL UNIT SCHEDULE", 100, 20),
+      sp("TAG", 100, 60), sp("SYSTEM", 180, 60), sp("TYPE", 280, 60), sp("VOLTAGE", 400, 60), sp("PHASE", 500, 60), sp("MANUFACTURER", 580, 60), sp("MODEL", 740, 60),
+      sp("EV-1", 100, 80), sp("CU-1", 180, 80), sp("DX-WALL", 280, 80), sp("208", 400, 80), sp("1", 500, 80), sp("DAIKIN", 580, 80), sp("FTK24NMVJU", 740, 80),
+    ],
+  };
+  const xref: SheetSpans = {
+    key: "catalog.pdf#2",
+    sheet_number: "M-701",
+    spans: [
+      sp("EQUIPMENT CROSS REFERENCE", 100, 20),
+      sp("MARK", 100, 60), sp("DESCRIPTION", 220, 60), sp("MATERIAL", 420, 60),
+      sp("CU-1", 100, 80), sp("CONDENSING UNIT", 220, 80), sp("DX", 420, 80),
+    ],
+  };
+  const g = buildSheetGraph([catalog, coil, xref]);
+  assert.ok(!g.tables.some((tab) => /CROSS\s*REF/i.test(tab.title?.text || "")), "lookup stays dropped");
+  const cu = g.tables.find((tab) => tab.title?.text === "AIR-COOLED CONDENSING UNIT SCHEDULE");
+  const ev = g.tables.find((tab) => tab.title?.text === "DX FAN COIL UNIT SCHEDULE");
+  assert.ok(cu, `condensing-unit catalog must stay indexed: ${g.tables.map((t) => t.title?.text).join(" | ")}`);
+  assert.ok(ev, `dx fan-coil catalog must stay indexed: ${g.tables.map((t) => t.title?.text).join(" | ")}`);
+  assert.equal(cu.kind, "equipment");
+  assert.equal(ev.kind, "equipment");
+  assert.deepEqual(cu.rows.map((r) => r.key).sort(), ["CU-1", "CU-2"]);
+  assert.deepEqual(ev.rows.map((r) => r.key), ["EV-1"]);
+  assert.equal(cu.rows.find((r) => r.key === "CU-1")!.cells.MODEL.text, "RK24NMVJU");
+  assert.equal(ev.rows[0].cells.MODEL.text, "FTK24NMVJU");
 });
 
 // ═════════════════════════════════════════════════════════════════════════════
