@@ -1912,6 +1912,72 @@ export interface RedundantRoomView<Id> {
   keptDiscipline: string;
   keptSheet: string;
 }
+
+export interface TaggedViewLandmark {
+  tag: string;
+  at: Point;
+}
+
+/**
+ * Collapse repeated plan views drawn side-by-side on one sheet.
+ *
+ * Room attribution cannot distinguish these because both views may omit room
+ * labels entirely. Instead, require a strong sheet-intrinsic registration
+ * signal: at least four distinct schedule tags must occur exactly once in
+ * each page half and retain the same coordinate on the orthogonal axis. This
+ * is the characteristic shape of two system-specific overlays of one floor
+ * plan (for example duct and piping), while ordinary repeated type marks are
+ * excluded from the evidence because they occur more than once per half.
+ *
+ * Once that registration is proven, keep the larger count from either view,
+ * never the sum and never the smaller partial view. Repeats within one view
+ * remain untouched. Vertical and horizontal layouts are both supported.
+ */
+export function dedupeAlignedSameSheetViews<Id>(
+  instances: Array<{ id: Id; at: Point }>,
+  landmarks: TaggedViewLandmark[],
+  sheetWidthPx: number,
+  sheetHeightPx: number,
+): Id[] {
+  if (instances.length < 2 || landmarks.length < 8) return [];
+
+  type Axis = "vertical" | "horizontal";
+  const support = (axis: Axis): number => {
+    const byTag = new Map<string, TaggedViewLandmark[]>();
+    for (const landmark of landmarks) {
+      const tag = landmark.tag.trim().toUpperCase();
+      const group = byTag.get(tag);
+      if (group) group.push(landmark); else byTag.set(tag, [landmark]);
+    }
+    const split = axis === "vertical" ? sheetWidthPx / 2 : sheetHeightPx / 2;
+    const orthogonalTolerance = (axis === "vertical" ? sheetHeightPx : sheetWidthPx) * 0.03;
+    let count = 0;
+    for (const group of byTag.values()) {
+      const first = group.filter((p) => (axis === "vertical" ? p.at[0] : p.at[1]) < split);
+      const second = group.filter((p) => (axis === "vertical" ? p.at[0] : p.at[1]) >= split);
+      if (first.length !== 1 || second.length !== 1) continue;
+      const orthogonalDelta = Math.abs(
+        (axis === "vertical" ? first[0].at[1] : first[0].at[0])
+        - (axis === "vertical" ? second[0].at[1] : second[0].at[0]),
+      );
+      if (orthogonalDelta <= orthogonalTolerance) count++;
+    }
+    return count;
+  };
+
+  const verticalSupport = support("vertical");
+  const horizontalSupport = support("horizontal");
+  const axis: Axis = verticalSupport >= horizontalSupport ? "vertical" : "horizontal";
+  if (Math.max(verticalSupport, horizontalSupport) < 4) return [];
+
+  const split = axis === "vertical" ? sheetWidthPx / 2 : sheetHeightPx / 2;
+  const first = instances.filter((p) => (axis === "vertical" ? p.at[0] : p.at[1]) < split);
+  const second = instances.filter((p) => (axis === "vertical" ? p.at[0] : p.at[1]) >= split);
+  if (!first.length || !second.length) return [];
+  // Deterministic tie: retain the first (left/top) view.
+  return (first.length >= second.length ? second : first).map((p) => p.id);
+}
+
 /** Fraction of the sheet's own diagonal a room's label must sit within to be
  * credited to a nearby occurrence — generous enough for a real "enlarged"
  * partial-sheet plan (which crops tightly around the one room it shows),

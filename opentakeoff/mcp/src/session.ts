@@ -119,7 +119,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -731,6 +731,7 @@ export class Session {
     this.graph = null;   // the sheet graph (#87) indexes the OLD document set
     this.tagOccurrenceCache.clear();
     this.roomTagCache.clear();
+    this.viewLandmarkCache.clear();
 
     const doc = await openPdf(filePath);
     const resolved = path.resolve(filePath);
@@ -2998,6 +2999,35 @@ export class Session {
     return rooms;
   }
 
+  /** Schedule-tag registration evidence is sheet-intrinsic and shared by
+   * every row's same-sheet multi-view collapse. */
+  private viewLandmarkCache = new Map<string, TaggedViewLandmark[]>();
+
+  private viewLandmarksOnSheet(sh: SheetState, graph: SheetGraph): TaggedViewLandmark[] {
+    const cached = this.viewLandmarkCache.get(sh.key);
+    if (cached) return cached;
+    const keys = new Set<string>();
+    for (const table of graph.tables) {
+      if (table.kind !== "equipment") continue;
+      for (const row of table.rows) {
+        for (const part of (row.key || "").trim().toUpperCase().replace(/\s+/g, "").split("/")) {
+          // Equipment marks contain both a letter and a digit. This excludes
+          // accidentally-keyed headers such as SCALE/TYPE from becoming view
+          // registration evidence.
+          if (/^(?=.*[A-Z])(?=.*\d)[A-Z0-9][A-Z0-9-]*$/.test(part)) keys.add(part);
+        }
+      }
+    }
+    const landmarks: TaggedViewLandmark[] = [];
+    for (const key of [...keys].sort()) {
+      for (const occurrence of this.tagOccurrencesOnSheet(sh, key)) {
+        landmarks.push({ tag: key, at: [occurrence.cx, occurrence.cy] });
+      }
+    }
+    this.viewLandmarkCache.set(sh.key, landmarks);
+    return landmarks;
+  }
+
   /** sweep_schedule_row (phase 2) — the estimator's story, honored: a
    * transition type sometimes exists only as a schedule row plus tag markers
    * scattered across the plan sheets. Given the ROW's key, this mints the
@@ -3734,7 +3764,35 @@ export class Session {
       });
     }
 
-    // 4b. cross-discipline redundant room-view collapse — a real, generic
+    // 4b. redundant plan-view collapse. First handle two registered plan
+    // views drawn side-by-side/top-to-bottom on the SAME sheet. This uses
+    // several other schedule tags as alignment evidence, never the active
+    // row alone; see dedupeAlignedSameSheetViews for the conservative gate.
+    for (const ps of perSheet) {
+      const redundantIds = new Set(dedupeAlignedSameSheetViews(
+        ps.matches.map((m) => ({ id: m, at: m.at })),
+        this.viewLandmarksOnSheet(ps.state, graph),
+        ps.state.widthPx,
+        ps.state.heightPx,
+      ));
+      if (!redundantIds.size) continue;
+      const kept = ps.matches.find((m) => !redundantIds.has(m));
+      const keep: CountedMatch[] = [];
+      for (const m of ps.matches) {
+        if (redundantIds.has(m)) {
+          ps.redundant_view.push({
+            ...m,
+            room: "(aligned repeated plan view on the same sheet)",
+            kept_sheet: ps.state.key,
+          });
+        } else keep.push(m);
+      }
+      // The helper only reports redundancy when both registered views have
+      // matches, so a retained instance always exists.
+      if (kept) ps.matches = keep;
+    }
+
+    // Then handle cross-sheet redundant room-view collapse — a real, generic
     // drafting convention (see symbolsweep.ts's dedupeCrossDisciplineRoomViews
     // for the full doctrine): two different disciplines each drawing their
     // OWN "enlarged" plan of the SAME physical room redraw whatever equipment

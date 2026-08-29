@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type Point, type RoomSweepInstance } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -364,4 +364,60 @@ test("dedupeCrossDisciplineRoomViews: three disciplines drawing the same room â€
   const ids = redundant.map((r) => r.id).sort();
   assert.deepEqual(ids, [3, 4]);
   for (const r of redundant) assert.equal(r.keptDiscipline, "M");
+});
+
+test("dedupeAlignedSameSheetViews: aligned side-by-side system plans collapse one redrawn instance", () => {
+  const landmarks: TaggedViewLandmark[] = ["AHU-1", "P-1", "P-2", "AS-1"].flatMap((tag, i) => [
+    { tag, at: [500 + i * 40, 600 + i * 100] as Point },
+    { tag, at: [3500 + i * 55, 605 + i * 100] as Point },
+  ]);
+  const redundant = dedupeAlignedSameSheetViews(
+    [{ id: 1, at: [600, 900] }, { id: 2, at: [3600, 905] }],
+    landmarks,
+    5000,
+    4000,
+  );
+  assert.deepEqual(redundant, [2], "the right-hand redraw collapses after four independent aligned tags prove two registered views");
+});
+
+test("dedupeAlignedSameSheetViews: repeated equipment within one view is never collapsed", () => {
+  const landmarks: TaggedViewLandmark[] = ["AHU-1", "P-1", "P-2", "AS-1"].flatMap((tag, i) => [
+    { tag, at: [500 + i * 40, 600 + i * 100] as Point },
+    { tag, at: [3500 + i * 55, 605 + i * 100] as Point },
+  ]);
+  const redundant = dedupeAlignedSameSheetViews(
+    [{ id: 1, at: [500, 900] }, { id: 2, at: [700, 930] }],
+    landmarks,
+    5000,
+    4000,
+  );
+  assert.deepEqual(redundant, [], "two real instances in the same left-hand plan remain two");
+});
+
+test("dedupeAlignedSameSheetViews: fewer than four aligned tag pairs is insufficient evidence", () => {
+  const landmarks: TaggedViewLandmark[] = ["T-1", "T-2", "T-3"].flatMap((tag, i) => [
+    { tag, at: [500, 600 + i * 100] as Point },
+    { tag, at: [3500, 600 + i * 100] as Point },
+  ]);
+  const redundant = dedupeAlignedSameSheetViews(
+    [{ id: 1, at: [500, 900] }, { id: 2, at: [3500, 900] }],
+    landmarks,
+    5000,
+    4000,
+  );
+  assert.deepEqual(redundant, [], "weak symmetry on a normal plan cannot erase a real installation");
+});
+
+test("dedupeAlignedSameSheetViews: horizontal stacked views retain the larger view count", () => {
+  const landmarks: TaggedViewLandmark[] = ["AHU-1", "P-1", "P-2", "AS-1"].flatMap((tag, i) => [
+    { tag, at: [600 + i * 100, 500] as Point },
+    { tag, at: [605 + i * 100, 3500] as Point },
+  ]);
+  const redundant = dedupeAlignedSameSheetViews(
+    [{ id: 1, at: [600, 500] }, { id: 2, at: [650, 550] }, { id: 3, at: [605, 3500] }],
+    landmarks,
+    5000,
+    5000,
+  );
+  assert.deepEqual(redundant, [3], "the fuller top view's two real instances win over the partial bottom redraw");
 });
