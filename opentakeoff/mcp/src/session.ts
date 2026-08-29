@@ -3822,10 +3822,6 @@ export class Session {
         throw new UserError(`Schedule row "${t}" cannot be anchored: no fingerprintable marker linework sits around its drawn tag on ${anchorSheet.key}. Marquee one instance with symbol_sweep instead.`);
       }
     }
-    const explicitLabelAnchor = !fp && !inlineFp && specificEquipmentLabel;
-    if (explicitLabelAnchor) {
-      anchorRect = [[anchor.bbox[0], anchor.bbox[1]], [anchor.bbox[2], anchor.bbox[3]]];
-    }
 
     // classifySweepMatches' own occurrence-claim radius (R = footprint/2 +
     // anchorH) assumes a match's centroid sits close to the TAG TEXT it
@@ -3910,7 +3906,7 @@ export class Session {
         });
         continue;
       }
-      if (explicitLabelAnchor) {
+      if (specificEquipmentLabel && !fp && !inlineFp) {
         perSheet.push({
           state: sh,
           matches: occ.map((tagged) => ({
@@ -4281,8 +4277,8 @@ export class Session {
         // segments/length on — `segments` reports the hatch cluster's own
         // member-stroke count instead, `length_px` its own pitch, so the
         // field is never a fabricated whole-shape number for this mode.
-        segments: fp ? fp.segments : inlineFp ? inlineFp.members : 0,
-        length_px: round1(fp ? fp.totalLen : inlineFp ? inlineFp.pitchPx : 0),
+        segments: fp ? fp.segments : inlineFp!.members,
+        length_px: round1(fp ? fp.totalLen : inlineFp!.pitchPx),
         corroborated,
         ...(corroborated ? { corroborated_via: corroboratedVia ? "sibling_tag" as const : "same_tag" as const } : {}),
         ...(corroboratedVia ? { corroborated_tag: corroboratedVia } : {}),
