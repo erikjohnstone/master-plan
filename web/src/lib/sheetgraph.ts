@@ -21,6 +21,7 @@
 // serves (sheet_context.text.spans).
 
 import { ROOM_LABEL_RE } from "./detectRooms";
+import { isEquipTag, joinGraphSpans } from "./equiptags";
 
 /** rot: text rotation in degrees, clockwise in device space (y down). Absent
  * or 0 = horizontal; 90/270 = a quarter-turn — the rotated-header case. When
@@ -587,6 +588,7 @@ function bandLimits(anchors: Anchor[]): { x0: number; x1: number; medGap: number
 // names (opts.buildings) — otherwise a stray finish code ("P-2") banding to
 // the key column would mint a phantom building.
 const CODE_RE = /^[A-Z]{1,4}(-?[A-Z0-9]{1,4})?$/;
+const isFinishKey = (s: string) => CODE_RE.test(s) || isEquipTag(s);
 const ROW_KEY_RE = /^\d{1,3}[A-Z]{0,2}$/;
 const QUALIFIED_KEY_RE = /^([A-Z]{1,2})-(\d{1,3}[A-Z]{0,2})$/;
 
@@ -611,8 +613,8 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish", buildings?: Set<s
     // for each mark on its own (checked first: slash-stripped "R1E1" would
     // otherwise pass CODE_RE and bury the compound)
     const parts = kept.split("/").filter(Boolean);
-    if (parts.length > 1 && parts.every((p) => CODE_RE.test(p))) return { key: parts.join("/") };
-    return CODE_RE.test(key) ? { key } : null;
+    if (parts.length > 1 && parts.every((p) => isFinishKey(p))) return { key: parts.join("/") };
+    return isFinishKey(key) ? { key } : null;
   }
   if (ROW_KEY_RE.test(key)) return { key };
   const q = key.match(QUALIFIED_KEY_RE);
@@ -848,6 +850,7 @@ function bandDataRows(
  * are tried first; a sheet without one is re-tried against a rotated
  * (quarter-turn) header band. */
 export function extractTable(sheet: SheetSpans, kind: "room-finish" | "finish", opts: ExtractOpts = {}): ScheduleTable | null {
+  sheet = { ...sheet, spans: joinGraphSpans(sheet.spans) };
   const horiz = sheet.spans.filter((s) => !isVertical(s));
   const vert = sheet.spans.filter(isVertical);
   const rows = clusterRows(horiz);
@@ -1091,6 +1094,7 @@ export interface SheetGraph {
 }
 
 export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
+  sheets = sheets.map((s) => ({ ...s, spans: joinGraphSpans(s.spans) }));
   const withText = sheets.filter((s) => s.spans.length > 0);
   if (!withText.length) return { available: false, sheets: [], rooms: [], unmatched_tags: [], tables: [], callouts: [], buildings: [], revisions: [], notes: [] };
   const notes: string[] = [];

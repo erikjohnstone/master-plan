@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-29 — multi-hyphen equipment tags
+
+### Fixed
+- **Hyphenated equipment tags are one token.** Mechanical marks like PCHWP-MT1, CUH-T1, and CV-CHW-BP-T (letter-led, hyphen-separated segments — a class, not a name list) were dropped by the finish-code and fixture-token patterns, and CAD glyph splits ("PCHWP" + "-" + "MT1") never reassembled. Shared classifier + join in `lib/equiptags.ts`; sheet graph, schedule import, symbol labels, and the MCP census/text layer all read the tag as drawn.
+
 ## 2026-08-28 — richer variants are named, and variant_guard makes them questions
 
 ### Added
