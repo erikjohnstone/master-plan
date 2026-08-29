@@ -729,6 +729,8 @@ export class Session {
       throw new UserError(`${base} is already loaded — merge adds NEW documents. To reload it, call load_plan without merge (replaces the whole session).`);
     }
     this.graph = null;   // the sheet graph (#87) indexes the OLD document set
+    this.tagOccurrenceCache.clear();
+    this.roomTagCache.clear();
 
     const doc = await openPdf(filePath);
     const resolved = path.resolve(filePath);
@@ -2941,6 +2943,61 @@ export class Session {
     });
   }
 
+  /** Positioned tag occurrences are immutable for a loaded document. A full
+   * project takeoff asks for every schedule key on every plan sheet—both as
+   * the active row and as sibling-exclusion evidence—so recomputing exact,
+   * compound, and fragmented text searches inside each row sweep creates an
+   * avoidable rows² × sheets × spans loop. Cache by sheet and canonical key;
+   * loadPlan clears it whenever the document set changes. */
+  private tagOccurrenceCache = new Map<string, Map<string, TagOcc[]>>();
+
+  private tagOccurrencesOnSheet(sh: SheetState, key: string): TagOcc[] {
+    let byKey = this.tagOccurrenceCache.get(sh.key);
+    if (!byKey) {
+      byKey = new Map();
+      this.tagOccurrenceCache.set(sh.key, byKey);
+    }
+    const cached = byKey.get(key);
+    if (cached) return cached;
+    if (!sh.spans) sh.spans = textSpans(sh.page);
+    const exact = sh.spans
+      .filter((sp) => sp.str.trim().toUpperCase() === key)
+      .map((sp) => ({
+        cx: (sp.x0 + sp.x1) / 2,
+        cy: (sp.y0 + sp.y1) / 2,
+        h: Math.max(sp.y1 - sp.y0, 6),
+        bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number],
+      }));
+    const merged = [...exact, ...compoundTagOcc(sh.spans, key)];
+    const fragmented = fragmentedTagOcc(sh.spans, key);
+    const occurrences = merged.length
+      ? merged
+      : (fragmented.length ? fragmented : deepHyphenChainTagOcc(sh.spans, key));
+    occurrences.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
+    byKey.set(key, occurrences);
+    return occurrences;
+  }
+
+  /** Room attribution is sheet-intrinsic. Multi-view deduplication runs after
+   * every row sweep, but the room index does not change between rows. */
+  private roomTagCache = new Map<string, ReturnType<typeof roomTags>>();
+
+  private roomTagsOnSheet(sh: SheetState): ReturnType<typeof roomTags> {
+    let rooms = this.roomTagCache.get(sh.key);
+    if (rooms) return rooms;
+    const spans = (sh.spans ?? []).map((sp) => ({
+      str: sp.str,
+      x: sp.x0,
+      y: sp.y0,
+      w: sp.x1 - sp.x0,
+      h: sp.y1 - sp.y0,
+      ...(sp.rot ? { rot: sp.rot } : {}),
+    }));
+    rooms = roomTags({ key: sh.key, sheet_number: sh.sheetNumber, spans });
+    this.roomTagCache.set(sh.key, rooms);
+    return rooms;
+  }
+
   /** sweep_schedule_row (phase 2) — the estimator's story, honored: a
    * transition type sometimes exists only as a schedule row plus tag markers
    * scattered across the plan sheets. Given the ROW's key, this mints the
@@ -3120,37 +3177,7 @@ export class Session {
         });
       }
     }
-    const occOf = (sh: SheetState, key: string): TagOcc[] => {
-      if (!sh.spans) sh.spans = textSpans(sh.page);
-      const exact = sh.spans
-        .filter((sp) => sp.str.trim().toUpperCase() === key)
-        .map((sp) => ({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number] }));
-      // compoundTagOcc's own single-span compound labels ("R1 /C-11") can
-      // never coincide with an exact match's own span (equality vs.
-      // strictly-longer), so it's merged in ALONGSIDE exact unconditionally
-      // — a sheet can legitimately carry both a bare, unrelated coincidental
-      // occurrence of the key elsewhere AND this row's own real compound-
-      // labeled instances (baker-county-eoc-bidset.pdf#54's own "P1": one
-      // bare span plus three real "P1 /C-11"-style compound spans — see
-      // compoundTagOcc's own header comment).
-      const merged = [...exact, ...compoundTagOcc(sh.spans, key)];
-      // Fallback only — a real drawn tag ALSO, separately, routinely splits
-      // across multiple SHORTER text runs (see fragmentedTagOcc's own header
-      // comment for the two real, different-shaped cases this was found
-      // against), and never fires when exact/compound already found
-      // something — its own join-fragments search risks stitching unrelated
-      // short spans together, so it stays the more conservative last resort.
-      // Third tier, after exact/compound AND fragmentedTagOcc: a SEPARATE
-      // deeper same-row chain (deepHyphenChainTagOcc's own header comment)
-      // for a real shape fragmentedTagOcc's own 4-hop budget can't reach —
-      // never invoked unless fragmentedTagOcc's own unmodified search
-      // already found nothing, and structurally gated to >=2-hyphen keys
-      // (no real tag in this project's own corpus keys has one), so it can
-      // never touch a case fragmentedTagOcc itself already resolves.
-      const fragmented = fragmentedTagOcc(sh.spans, key);
-      const occ = merged.length ? merged : (fragmented.length ? fragmented : deepHyphenChainTagOcc(sh.spans, key));
-      return occ.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
-    };
+    const occOf = (sh: SheetState, key: string): TagOcc[] => this.tagOccurrencesOnSheet(sh, key);
     // Compound-key geometric fallback — a real, general bug distinct from
     // the row-LOOKUP layer above (rowKeyAnswersFor already resolves a
     // compound key like "AC-1/ACCU-1" or "R1/E1" fine): the literal joined
@@ -3688,20 +3715,10 @@ export class Session {
     // real separate-install signal) or a match with no confidently-attributed
     // room (never guessed). `disciplineOfSheetNumber` (symbolsweep.ts) is the
     // same read step 3's same-tag corroborator gate already uses above.
-    const roomsBySheet = new Map<string, ReturnType<typeof roomTags>>();
-    const roomsFor = (sh: SheetState): ReturnType<typeof roomTags> => {
-      let rooms = roomsBySheet.get(sh.key);
-      if (!rooms) {
-        const spans = (sh.spans ?? []).map((sp) => ({ str: sp.str, x: sp.x0, y: sp.y0, w: sp.x1 - sp.x0, h: sp.y1 - sp.y0, ...(sp.rot ? { rot: sp.rot } : {}) }));
-        rooms = roomTags({ key: sh.key, sheet_number: sh.sheetNumber, spans });
-        roomsBySheet.set(sh.key, rooms);
-      }
-      return rooms;
-    };
     const dedupInstances: RoomSweepInstance<CountedMatch>[] = [];
     for (const ps of perSheet) {
       const discipline = disciplineOfSheetNumber(ps.state.sheetNumber);
-      const rooms = discipline ? roomsFor(ps.state) : [];
+      const rooms = discipline ? this.roomTagsOnSheet(ps.state) : [];
       for (const m of ps.matches) {
         dedupInstances.push({
           id: m, sheet: ps.state.key, discipline, at: m.at,

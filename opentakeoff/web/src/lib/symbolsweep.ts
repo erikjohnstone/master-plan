@@ -307,6 +307,52 @@ class EndpointGrid {
 const segLen = (segs: number[], i: number): number =>
   Math.hypot(segs[i * 4 + 2] - segs[i * 4], segs[i * 4 + 3] - segs[i * 4 + 1]);
 
+/** Immutable-sheet acceleration shared by every fingerprint swept against the
+ * same extracted geometry. A project takeoff can call matchSymbol hundreds of
+ * times per plan sheet; rebuilding the length histogram and endpoint hash for
+ * every equipment row is identical O(sheet segments) work each time.
+ *
+ * Geometry arrays are immutable after extraction and identity-stable in both
+ * the browser and MCP Session. Weak keys release the index with the geometry,
+ * so this adds no document-lifetime leak. Endpoint grids depend on tolerance
+ * (cross-scale sweeps can change it); cap variants per sheet so pathological
+ * scale metadata cannot grow an unbounded cache. */
+interface SheetMatchIndex {
+  lengths: Float64Array;
+  lenBucket: Map<number, number[]>;
+  endpointGrids: Map<number, EndpointGrid>;
+}
+
+const MAX_TOLERANCE_INDEXES_PER_SHEET = 8;
+const sheetMatchIndexes = new WeakMap<number[], SheetMatchIndex>();
+
+function sheetMatchIndex(segs: number[], tol: number): SheetMatchIndex & { grid: EndpointGrid } {
+  let cached = sheetMatchIndexes.get(segs);
+  if (!cached) {
+    const n = segs.length >> 2;
+    const lengths = new Float64Array(n);
+    const lenBucket = new Map<number, number[]>();
+    for (let i = 0; i < n; i++) {
+      const length = segLen(segs, i);
+      lengths[i] = length;
+      const bucket = Math.round(length);
+      const entries = lenBucket.get(bucket);
+      if (entries) entries.push(i);
+      else lenBucket.set(bucket, [i]);
+    }
+    cached = { lengths, lenBucket, endpointGrids: new Map() };
+    sheetMatchIndexes.set(segs, cached);
+  }
+  let grid = cached.endpointGrids.get(tol);
+  if (!grid) {
+    grid = new EndpointGrid(segs, tol);
+    if (cached.endpointGrids.size < MAX_TOLERANCE_INDEXES_PER_SHEET) {
+      cached.endpointGrids.set(tol, grid);
+    }
+  }
+  return { ...cached, grid };
+}
+
 /** A symbol's fingerprint, detached from the sheet it was marqueed on:
  * centroid-relative segments plus the diagnostics every consumer reports.
  * Pure data — matchSymbol can run it against any sheet's segments. */
@@ -769,21 +815,16 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   const { rel, totalLen } = fpS;
 
   // ── 2. candidates ──────────────────────────────────────────────────────────
-  // Sheet-wide length histogram (bucket = round(len)) for anchor rarity and
-  // the per-anchor candidate walk. Deterministic: plain arrays, sorted scans.
-  const lenBucket = new Map<number, number[]>();
-  for (let i = 0; i < n; i++) {
-    const b = Math.round(segLen(segs, i));
-    const a = lenBucket.get(b);
-    if (a) a.push(i); else lenBucket.set(b, [i]);
-  }
+  // Sheet-wide immutable indexes are shared across every schedule-row sweep
+  // in this document; see sheetMatchIndex's lifetime and tolerance contract.
+  const { lengths, lenBucket, grid } = sheetMatchIndex(segs, tol);
   const bucketBand = (L: number): number[] => {
     // every sheet segment with |len − L| ≤ 2·tol (both endpoints off by tol
     // can stretch/shrink the drawn length by up to 2·tol)
     const out: number[] = [];
     for (let b = Math.floor(L - 2 * tol); b <= Math.ceil(L + 2 * tol); b++) {
       const a = lenBucket.get(b);
-      if (a) for (const i of a) if (Math.abs(segLen(segs, i) - L) <= 2 * tol) out.push(i);
+      if (a) for (const i of a) if (Math.abs(lengths[i] - L) <= 2 * tol) out.push(i);
     }
     return out;
   };
@@ -838,7 +879,6 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   const dropped = proposals.length - considered;
 
   // ── 3. score ───────────────────────────────────────────────────────────────
-  const grid = new EndpointGrid(segs, tol);
   const scratch: number[] = [];
   const tol2 = tol * tol;
   const near = (x1: number, y1: number, x2: number, y2: number): boolean =>
