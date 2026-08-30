@@ -97,6 +97,20 @@ try {
   await page.screenshot({ path: "/opt/cursor/artifacts/d01_ui_agent_result.png" });
   const panel = await page.locator('textarea[name="agent-goal"]').locator("xpath=../../..").innerText();
   console.log(`UI_AGENT_RESULT\n${panel}`);
+  const sheetSelect = page.locator("select").filter({ has: page.locator("option") }).first();
+  const options = await sheetSelect.locator("option").evaluateAll((nodes) =>
+    nodes.map((node) => ({ value: node.value, text: node.textContent || "" })));
+  for (const [needle, path] of [
+    ["MS101", "/opt/cursor/artifacts/d01_ui_plan_highlight.png"],
+    ["M-603", "/opt/cursor/artifacts/d01_ui_schedule_highlight.png"],
+  ]) {
+    const option = options.find((candidate) => candidate.text.includes(needle));
+    if (!option) throw new Error(`No sheet selector option contains ${needle}.`);
+    await sheetSelect.selectOption(option.value);
+    await page.getByText("Rendering sheet…").waitFor({ state: "hidden", timeout: 120_000 });
+    await page.waitForTimeout(750);
+    await page.screenshot({ path });
+  }
   if (headed) await page.waitForTimeout(10_000);
 } catch (error) {
   await page.screenshot({ path: "/opt/cursor/artifacts/d01_ui_failure.png" }).catch(() => {});

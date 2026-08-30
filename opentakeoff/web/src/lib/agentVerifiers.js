@@ -136,6 +136,13 @@ function checkSweepScheduleRow(calls) {
   return parts.join("");
 }
 
+function checkHighlightedCitations(calls) {
+  const highlighted = calls.filter(({ out }) => out && !out.error && Array.isArray(out.bbox_px))
+    .map(({ out }) => `${out.sheet} ${JSON.stringify(out.bbox_px)}${out.text ? ` (${out.text})` : ""}`);
+  if (!highlighted.length) return null;
+  return `[Automated check: highlight_citation painted exactly ${highlighted.length} source region(s): ${highlighted.join("; ")}. No other cell or region was highlighted in this run.]`;
+}
+
 /** The registry — one entry per tool with a known real honesty risk.
  * Adding protection for a NEW tool is a one-line addition here, not a new
  * hand-written backstop wired into the loop itself. */
@@ -144,6 +151,7 @@ export const AGENT_VERIFIERS = [
   { tool: "count_marks", check: checkCountMarks },
   { tool: "read_schedule", check: checkScheduleRowKeys },
   { tool: "sweep_schedule_row", check: checkSweepScheduleRow },
+  { tool: "highlight_citation", check: checkHighlightedCitations },
 ];
 
 /** A real word for "the estimator is asking for a whole-set/whole-building

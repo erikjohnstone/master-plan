@@ -7684,12 +7684,18 @@ export default function TakeoffCanvas() {
     if (!(x1 > x0 && y1 > y0) || x0 < 0 || y0 < 0 || x1 > dims.w || y1 > dims.h) {
       return { error: "bbox_px is degenerate or outside the cited sheet." };
     }
-    return agentAnnotate({
+    const result = await agentAnnotate({
       sheet,
       type: "highlight",
       text,
       rect: [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]],
     });
+    return result.error ? result : {
+      ...result,
+      bbox_px,
+      rect: [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]],
+      text,
+    };
   }
 
   function agentListAnnotations(sheetFilter, conditionFilter) {
