@@ -357,6 +357,27 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     } },
   ], "Do a full HVAC takeoff — give AHU scheduled counts and cite AHU-A1.",
   "AHUs: 5. Spot-check AHU-A1."), null);
+  // Narrow conversational follow-ups must not re-impose full-set inventory gates.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 5,
+      matches: [{ title: { text: "AIR HANDLING UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: {} } }],
+    } },
+    { name: "query_table", out: {
+      query: { title: "FAN COIL UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 42,
+      building_tag_counts: { A: 14, M: 10, T: 18 },
+      matches: [{ title: { text: "FAN COIL UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "FCU-T11", all_cells: { MARK: { text: "FCU-T11", bbox: [1, 2, 3, 4] } } } }],
+    } },
+    { name: "query_table", out: {
+      query: { title: "DEDICATED OUTDOOR AIR HANDLING", row_key: "DOAH-T1", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [{ title: { text: "DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "DOAH-T1", all_cells: { MARK: { text: "DOAH-T1", bbox: [5, 6, 7, 8] } } } }],
+    } },
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4], text: "FCU-T11" } },
+  ], "Is DOAH-T1 on a dedicated outdoor-air schedule? Which title, and how many ATCT fan coils are scheduled including FCU-T11?",
+  "Yes — DOAH-T1 is on the DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE. ATCT fan coils: 18, including FCU-T11."), null);
   // Dual inventory tables (title-scan + painted equipment totals) must fail.
   assert.match(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4] } },

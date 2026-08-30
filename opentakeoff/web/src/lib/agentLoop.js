@@ -855,8 +855,23 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   }
   // Full-set schedule takeoffs must use title-scan query_table counts — not
   // the number of MARK cells painted for spot-check.
-  const asksScheduleCounts = /\b(?:takeoff|how many|counts?|totals?|splits?)\b/i.test(goal)
-    && /\b(?:AHU|FCU|VAV|DOAH|chiller|boiler|fan[\s-]*coil|points?\s*list|scheduled|equipment)\b/i.test(goal);
+  // Narrow follow-ups ("how many ATCT fan coils… including FCU-T11?") must NOT
+  // trigger this gate — only multi-family inventory / takeoff asks do.
+  const scheduleFamilyMentions = [
+    /\bAHUs?\b/i.test(goal),
+    /\bDOAH\b|dedicated outdoor-air units?\b|dedicated outdoor air units?\b/i.test(goal),
+    /\bFCUs?\b|fan[\s-]*coils?\b/i.test(goal),
+    /\bVAVs?\b|variable[\s-]*air/i.test(goal),
+    /\b(?:air[\s-]*cooled\s+)?chillers?\b|\bheat[\s-]*recovery\s+chillers?\b/i.test(goal),
+    /\bboilers?\b/i.test(goal),
+    /\bpoints?\s*list\b/i.test(goal),
+  ].filter(Boolean).length;
+  const asksScheduleCounts = (
+    /\btakeoff\b/i.test(goal)
+    || /\bscheduled\s+(?:unit\s+)?counts?\b/i.test(goal)
+    || /\bequipment\s+(?:totals?|counts?)\b/i.test(goal)
+    || (/\b(?:how many|counts?|totals?|splits?)\b/i.test(goal) && scheduleFamilyMentions >= 3)
+  ) && /\b(?:AHU|FCU|VAV|DOAH|chiller|boiler|fan[\s-]*coil|points?\s*list|scheduled|equipment)\b/i.test(goal);
   if (asksScheduleCounts && finalText) {
     const titleScans = callLog.filter(({ name, out, args }) => {
       if (name !== "query_table" || out?.error) return false;
@@ -865,7 +880,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         || q.column != null
         || q.cell_value != null
         || q.cell_contains != null;
-      return !scoped && Number.isFinite(Number(out?.count));
+      return !scoped && Number.isFinite(Number(out?.count)) && Number(out.count) >= 1;
     });
     if (!titleScans.length) {
       return "The goal asks for scheduled equipment / points-list counts. Call query_table with each relevant schedule title (no row_key), then copy that result's count and building_tag_counts into the answer before finishing. Do not invent totals from the few MARK rows you painted for spot-check.";
@@ -875,8 +890,8 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     if (/\bDOAH\b|dedicated outdoor/i.test(goal)) familyNeedles.push({ label: "DOAH unit", titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i });
     if (/\bFCU\b|fan[\s-]*coil/i.test(goal)) familyNeedles.push({ label: "FCU", titleRe: /FAN\s*COIL/i });
     if (/\bVAV\b|variable[\s-]*air/i.test(goal)) familyNeedles.push({ label: "VAV", titleRe: /VARIABLE AIR VOLUME|\bVAV\b/i });
-    if (/\bair[\s-]*cooled chiller/i.test(goal)) familyNeedles.push({ label: "air-cooled chiller", titleRe: /AIR COOLED CHILLER/i, exclude: /HEAT RECOVERY/i });
-    if (/\bheat[\s-]*recovery chiller/i.test(goal)) familyNeedles.push({ label: "heat-recovery chiller", titleRe: /HEAT RECOVERY/i });
+    if (/\bair[\s-]*cooled chiller/i.test(goal)) familyNeedles.push({ label: "air-cooled chiller", titleRe: /AIR COOLED CHILLER/i, exclude: /HEAT RECOVERY/i, minCount: 1 });
+    if (/\bheat[\s-]*recovery chiller/i.test(goal)) familyNeedles.push({ label: "heat-recovery chiller", titleRe: /HEAT RECOVERY/i, minCount: 1 });
     if (/\bboilers?\b/i.test(goal)) familyNeedles.push({ label: "boiler", titleRe: /BOILER/i });
     // When the goal names a specific points list (e.g. AHU-T1A/TIB), require that
     // tag in the title-scan — a bare "POINTS LIST" rollup across sibling lists
@@ -905,6 +920,8 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       if (!fam.titleRe.test(title)) return false;
       if (fam.exclude && fam.exclude.test(title)) return false;
       if (fam.require && !fam.require.test(title)) return false;
+      const min = fam.minCount ?? 1;
+      if (Number(out.count) < min) return false;
       return true;
     })).map((fam) => fam.label);
     if (missingFamilies.length) {
@@ -986,6 +1003,10 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         label = "points-list";
       }
       if (!label) continue;
+      // Only require counts the current goal asked for — incidental title-scans
+      // from exploratory follow-up tools must not force a full inventory dump.
+      const goalAskedThisFamily = familyNeedles.some((fam) => fam.label === label);
+      if (!goalAskedThisFamily) continue;
       if (!countNearLabel(label, count)) {
         missingCounts.push(`${label} count=${count}`);
       }
