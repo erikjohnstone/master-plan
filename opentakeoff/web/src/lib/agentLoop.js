@@ -199,6 +199,9 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   for (const [, headers] of identityHeadersByTag) {
     const tagCanonical = String(headers[0].text).toUpperCase().replace(/[^A-Z0-9]/g, "");
     if (!finalCanonical.includes(tagCanonical)) continue;
+    // AI/AO/BI/BO marks are themselves the semantic identity — requiring the
+    // column title ("MARK ANALOG INPUT") in the user-facing answer is noise.
+    if (/^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(headers[0].text)) continue;
     if (headers.some((item) => finalCanonical.includes(item.headerCanonical))) continue;
     const example = headers[0];
     return `The final answer mentions ${example.text} but does not cite its semantic identity header ${example.header}. Use query_table row.identity exactly; do not substitute another repeated-value column.`;
@@ -322,10 +325,20 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     if (sectionHits.length) {
       const usesSectionHit = sectionHits.some((hit) => {
         const hitCanonical = hit.str.toUpperCase().replace(/[^A-Z0-9]/g, "");
-        return hitCanonical.length >= 8 && finalCanonical.includes(hitCanonical.slice(0, Math.min(40, hitCanonical.length)));
+        if (hitCanonical.length >= 8
+          && finalCanonical.includes(hitCanonical.slice(0, Math.min(40, hitCanonical.length)))) {
+          return true;
+        }
+        if (!answerHasSection) return false;
+        // Accept when the answer names SECTION and the same equipment tags as the hit.
+        const tags = (hit.str.toUpperCase().match(/\b(?:AHU|RTU|VAV|FCU|EF|SF|RF|UH|CUH|MAU)[-A-Z0-9/]+\b/g) || [])
+          .map((tag) => tag.replace(/[^A-Z0-9]/g, ""))
+          .filter((tag) => tag.length >= 4);
+        return tags.length > 0 && tags.every((tag) => finalCanonical.includes(tag));
       });
       if (!usesSectionHit) {
-        return "A find_text/read_sheet_text hit already contains the physical section label, but the final answer does not copy that hit.str. Cite the section label from the drawing-text hit and its sheet.";
+        const example = sectionHits[0];
+        return `A find_text/read_sheet_text hit already contains the physical section label. Do not call more tools — emit the complete answer and include this exact hit.str as the section citation: "${example.str}" on ${example.sheet}.`;
       }
     } else if (!answerHasSection) {
       return "The goal asks for the physical drawing section where the equipment is shown. Call find_text (omit sheet if needed) for the section label on the drawings, cite hit.str, or refuse — do not substitute a schedule sheet title.";
@@ -542,8 +555,8 @@ export function agentSystemPrompt() {
     "- NEVER infer installed quantity from the existence of a schedule row. Installed quantity requires sweep_schedule_row; use its found count and tag_at evidence or refuse.",
     "- NEVER report a plan location for any equipment or valve tag unless sweep_schedule_row succeeded for that exact tag. A schedule-cell bbox is a schedule location, never an installed plan location, and one tag's plan coordinates never belong to another tag.",
     "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized.",
-    "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Agent-panel text alone is incomplete — the product must be interactive. Do this for every such question, not only when the goal says \"show me\" or \"cite the exact\".",
-    "- Never say a cell or field was highlighted unless a successful highlight_citation call targeted that exact sheet and bbox_px. State exactly which source regions were highlighted; do not imply unpainted cells were painted.",
+    "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Agent-panel text alone is incomplete — the product must be interactive. Do this for every such question, not only when the goal says \"show me\" or \"cite the exact\". Paint each used schedule row and each phrase-length drawing hit you copy into the answer, then write the final answer — do not claim every cell is highlighted.",
+    "- Never say a cell or field was highlighted unless a successful highlight_citation call targeted that exact sheet and bbox_px. State exactly which source regions were highlighted; do not imply unpainted cells were painted. Never write that all/each cited cells are highlighted.",
     "- For a scheduled device tag, cite query_table row.identity (for example VALVE MARK), not the first different column that happens to repeat the same text (for example UNIT MARK).",
     "- For any equipment-to-control-valve join, use this direct set-wide sequence: query_table with row_key set to the equipment tag; sweep_schedule_row for installed quantity/plan evidence when requested; query_table with cell_contains set to that exact equipment tag to find compound relationship marks; then highlight the exact returned tag and row-identity bboxes. Do not browse guessed sheets or repeatedly retry the same empty exact-row query.",
     "- When the goal gives a BAS/DDC point description and asks for the point mark, alarm, or trend, call query_table with cell_contains set to that description (omit invented table titles on the first try). Read the AI/AO/BI/BO mark and alarm/trend fields from row.all_cells — never treat the description string itself as the point mark.",
@@ -698,9 +711,15 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       const correction = requiredEvidenceCorrection(callLog, goal, turn.text);
       if (correction) {
         messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
+        const needsMoreTools = /\bcall (?:query_table|find_text|read_sheet_text|sweep_schedule_row|highlight_citation|count_marks)\b/i.test(correction)
+          || /\bomit sheet\b/i.test(correction)
+          || /\bno successful\b/i.test(correction);
+        const toolDirective = needsMoreTools
+          ? "Use tools only if this correction requires new evidence or paint; otherwise emit the complete replacement answer now."
+          : "Do not call any tools. Emit the complete replacement answer now.";
         messages.push({
           role: "user",
-          content: `${correction}\n\nReturn a complete replacement answer that satisfies every part of the original goal. Preserve every previously retrieved, tool-grounded requested field; do not answer only the latest correction.`,
+          content: `${correction}\n\n${toolDirective} Preserve every previously retrieved, tool-grounded requested field; do not answer only the latest correction. Satisfy every part of the original goal.`,
         });
         emit({ type: "text", text: `[Evidence gate: ${correction}]` });
         continue;
