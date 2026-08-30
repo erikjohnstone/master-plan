@@ -245,11 +245,11 @@ try {
     const v = String(value);
     return new RegExp(`(?:${lab})[^0-9]{0,48}${v}(?![0-9])|${v}(?![0-9])[^0-9]{0,48}(?:${lab})`, "i").test(followNorm);
   };
-  if (!/SUITE100/i.test(followAnswer)) {
+  if (!/SUITE\s*100/i.test(followAnswer)) {
     throw new Error("D04 follow-up missing SUITE100 acknowledgement.");
   }
-  if (!/(?:not a|is not|no(?:t)?\b[^.]{0,40})\b(?:scheduled )?VAV|junk|not (?:an? )?VAV|exclude|should not count/i.test(followAnswer)
-    && !/SUITE100[^.]{0,80}(?:not|no)\b/i.test(followAnswer)) {
+  if (!/(?:not a|is not|no(?:t)?\b[^.?]{0,60})\b(?:scheduled )?VAV|junk|not (?:an? )?VAV|exclude|should not count|does not have a TAG/i.test(followAnswer)
+    && !/SUITE\s*100[^.?]{0,100}(?:not|no)\b/i.test(followAnswer)) {
     throw new Error("D04 follow-up must reject SUITE100 as a scheduled VAV.");
   }
   if (!followNear(["VAV-58", "CFM", "SUPPLY"], 350) && !/VAV-58[^0-9]{0,40}350/.test(followNorm)) {
