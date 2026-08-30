@@ -19,6 +19,12 @@
 
 import { chatWithTools, describeImageForAgent } from "./ai.js";
 import { runVerifiers } from "./agentVerifiers.js";
+import {
+  classifyTakeoffIntent,
+  advanceTakeoffWorkflow,
+  workflowDirective,
+  isIllegalWorkflowTransition,
+} from "./takeoffWorkflow.js";
 
 // Full-set HVAC/BAS takeoffs need list/graph + several count queries + scoped
 // cite re-queries + paints; 32 was truncating D03 mid-gate. Keep a hard cap.
@@ -439,6 +445,9 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   }
   const asksPointMark = /\bpoint mark\b|\balarm\b.{0,40}\btrend\b|\btrend\b.{0,40}\balarm\b/i.test(goal);
   if (asksPointMark) {
+    const goalPointMarks = [...goal.matchAll(/\b((?:AI|AO|BI|BO)\d+[A-Z]?)\b/gi)]
+      .map((m) => m[1].toUpperCase().replace(/[^A-Z0-9]/g, ""));
+    const goalPointSet = new Set(goalPointMarks);
     const pointRows = callLog
       .filter(({ name }) => name === "query_table")
       .flatMap(({ out }) => out?.matches || [])
@@ -455,7 +464,12 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       for (const match of out?.matches || []) {
         const mark = String(match?.row?.identity?.text || match?.row?.key || "").trim();
         if (!/^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(mark)) continue;
-        if (!finalCanonical.includes(mark.toUpperCase().replace(/[^A-Z0-9]/g, ""))) continue;
+        const markCanon = mark.toUpperCase().replace(/[^A-Z0-9]/g, "");
+        // Only enforce description paste for marks the goal named (e.g. AI10).
+        // Sibling lists reuse AI/AO/BI/BO namespaces — do not require every
+        // incidental title-scan / cell_contains row's description.
+        if (goalPointSet.size && !goalPointSet.has(markCanon)) continue;
+        if (!finalCanonical.includes(markCanon)) continue;
         for (const [header, cell] of Object.entries(match?.row?.all_cells || match?.row?.cells || {})) {
           if (!/\bDESCRIPTION\b/i.test(String(header))) continue;
           const text = String(cell?.text || "").trim();
@@ -1066,6 +1080,11 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     }
     if (asksToShowCite) {
       for (const line of finalText.split("\n").filter((text) => /\bhighlight/i.test(text))) {
+        // Negation / disclosure lines are not overclaims ("was not highlighted",
+        // "not among the painted regions").
+        if (/\b(?:not|never|no)\b.{0,40}\b(?:highlight|painted)\b|\b(?:highlight|painted)\b.{0,40}\b(?:not|never|missing|absent|failed)\b|\bnot among the painted\b/i.test(line)) {
+          continue;
+        }
         const lineCanonical = line.toUpperCase().replace(/[^A-Z0-9]/g, "");
         const claimedCells = evidenceCells.filter(({ header, text }) => {
           const headerCanonical = String(header).toUpperCase().replace(/[^A-Z0-9]/g, "");
@@ -1318,21 +1337,27 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   // the number of MARK cells painted for spot-check.
   // Narrow follow-ups ("how many ATCT fan coils… including FCU-T11?") must NOT
   // trigger this gate — only multi-family inventory / takeoff asks do.
+  // BAS points-list takeoffs name DOAH/AHU/FCU inside list titles — that must
+  // not pull equipment-schedule families (DEDICATED OUTDOOR AIR UNIT, FAN COIL
+  // UNIT SCHEDULE, etc.) into the count gate.
+  const pointsListTakeoff = /\b(?:points?\s*list|DDC\s+points?(?:\s*list)?)\b/i.test(goal)
+    && (/\b(?:AI|AO|BI|BO)\b/i.test(goal) || /\bpoint[-\s]?type/i.test(goal) || /\btakeoff\b/i.test(goal));
   const scheduleFamilyMentions = [
-    /\bAHUs?\b/i.test(goal),
-    /\bDOAH\b|dedicated outdoor-air units?\b|dedicated outdoor air units?\b/i.test(goal),
-    /\bFCUs?\b|fan[\s-]*coils?\b/i.test(goal),
-    /\bVAVs?\b|variable[\s-]*air/i.test(goal),
-    /\b(?:air[\s-]*cooled\s+)?chillers?\b|\bheat[\s-]*recovery\s+chillers?\b/i.test(goal),
-    /\bboilers?\b/i.test(goal),
-    /\bpoints?\s*list\b/i.test(goal),
+    !pointsListTakeoff && /\bAHUs?\b/i.test(goal),
+    !pointsListTakeoff && (/\bDOAH\b|dedicated outdoor-air units?\b|dedicated outdoor air units?\b/i.test(goal)),
+    !pointsListTakeoff && (/\bFCUs?\b|fan[\s-]*coils?\b/i.test(goal)),
+    !pointsListTakeoff && (/\bVAVs?\b|variable[\s-]*air/i.test(goal)),
+    !pointsListTakeoff && (/\b(?:air[\s-]*cooled\s+)?chillers?\b|\bheat[\s-]*recovery\s+chillers?\b/i.test(goal)),
+    !pointsListTakeoff && /\bboilers?\b/i.test(goal),
+    /\bpoints?\s*list\b|\bDDC\s+points?\b/i.test(goal),
   ].filter(Boolean).length;
   const asksScheduleCounts = (
     /\btakeoff\b/i.test(goal)
     || /\bscheduled\s+(?:unit\s+)?counts?\b/i.test(goal)
     || /\bequipment\s+(?:totals?|counts?)\b/i.test(goal)
     || (/\b(?:how many|counts?|totals?|splits?)\b/i.test(goal) && scheduleFamilyMentions >= 3)
-  ) && /\b(?:AHU|FCU|VAV|DOAH|chiller|boiler|fan[\s-]*coil|points?\s*list|scheduled|equipment)\b/i.test(goal);
+    || (pointsListTakeoff && /\b(?:row\s+count|breakdown|totals?)\b/i.test(goal))
+  ) && /\b(?:AHU|FCU|VAV|DOAH|chiller|boiler|fan[\s-]*coil|points?\s*list|DDC\s+points?|scheduled|equipment)\b/i.test(goal);
   if (asksScheduleCounts && finalText) {
     const titleScans = callLog.filter(({ name, out, args }) => {
       if (name !== "query_table" || out?.error) return false;
@@ -1347,13 +1372,13 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return "The goal asks for scheduled equipment / points-list counts. Call query_table with each relevant schedule title (no row_key), then copy that result's count and building_tag_counts into the answer before finishing. Do not invent totals from the few MARK rows you painted for spot-check.";
     }
     const familyNeedles = [];
-    if (/\bAHUs?\b/i.test(goal)) familyNeedles.push({ label: "AHU", titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED/i });
-    if (/\bDOAH\b|dedicated outdoor/i.test(goal)) familyNeedles.push({ label: "DOAH unit", titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i });
-    if (/\bFCU\b|fan[\s-]*coil/i.test(goal)) familyNeedles.push({ label: "FCU", titleRe: /FAN\s*COIL/i });
-    if (/\bVAVs?\b|variable[\s-]*air|volume control box/i.test(goal)) familyNeedles.push({ label: "VAV", titleRe: /VARIABLE AIR VOLUME|\bVAV\b|VOLUME CONTROL BOX/i });
-    if (/\bair[\s-]*cooled chiller/i.test(goal)) familyNeedles.push({ label: "air-cooled chiller", titleRe: /AIR COOLED CHILLER/i, exclude: /HEAT RECOVERY/i, minCount: 1 });
-    if (/\bheat[\s-]*recovery chiller/i.test(goal)) familyNeedles.push({ label: "heat-recovery chiller", titleRe: /HEAT RECOVERY/i, minCount: 1 });
-    if (/\bboilers?\b/i.test(goal)) familyNeedles.push({ label: "boiler", titleRe: /BOILER/i });
+    if (!pointsListTakeoff && /\bAHUs?\b/i.test(goal)) familyNeedles.push({ label: "AHU", titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED/i });
+    if (!pointsListTakeoff && (/\bDOAH\b|dedicated outdoor/i.test(goal))) familyNeedles.push({ label: "DOAH unit", titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i });
+    if (!pointsListTakeoff && (/\bFCU\b|fan[\s-]*coil/i.test(goal))) familyNeedles.push({ label: "FCU", titleRe: /FAN\s*COIL/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i });
+    if (!pointsListTakeoff && (/\bVAVs?\b|variable[\s-]*air|volume control box/i.test(goal))) familyNeedles.push({ label: "VAV", titleRe: /VARIABLE AIR VOLUME|\bVAV\b|VOLUME CONTROL BOX/i });
+    if (!pointsListTakeoff && /\bair[\s-]*cooled chiller/i.test(goal)) familyNeedles.push({ label: "air-cooled chiller", titleRe: /AIR COOLED CHILLER/i, exclude: /HEAT RECOVERY/i, minCount: 1 });
+    if (!pointsListTakeoff && /\bheat[\s-]*recovery chiller/i.test(goal)) familyNeedles.push({ label: "heat-recovery chiller", titleRe: /HEAT RECOVERY/i, minCount: 1 });
+    if (!pointsListTakeoff && /\bboilers?\b/i.test(goal)) familyNeedles.push({ label: "boiler", titleRe: /BOILER/i });
     // When the goal names a specific points list (e.g. AHU-T1A/TIB), require that
     // tag in the title-scan — a bare "POINTS LIST" rollup across sibling lists
     // is the wrong family (often a doubled page sum).
@@ -1363,11 +1388,13 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       );
       return m ? String(m[1] || m[2]).toUpperCase() : null;
     })();
-    if (/\bpoints?\s*list\b|BAS\b/i.test(goal)) {
-      const requireRe = namedPointsListTag
+    if (/\bpoints?\s*list\b|\bDDC\s+points?\b|BAS\b/i.test(goal)) {
+      // For multi-list points takeoffs, require at least one POINTS/DDC list
+      // title-scan — do not require a single named tag across every list.
+      const requireRe = (!pointsListTakeoff && namedPointsListTag)
         ? new RegExp(namedPointsListTag.split("/")[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i")
         : null;
-      familyNeedles.push({ label: "points-list", titleRe: /POINTS LIST/i, require: requireRe });
+      familyNeedles.push({ label: "points-list", titleRe: /POINTS\s*LIST|DDC\s+POINTS/i, require: requireRe });
     }
     const scanTitle = (out) => String(
       out.query?.title || out.matches?.[0]?.title?.text || out.matches?.[0]?.title || "",
@@ -1467,7 +1494,15 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       if (!Number.isFinite(count) || count < 2) continue;
       const title = scanTitleFull(out).toUpperCase();
       let label = null;
-      if (/FAN\s*COIL/.test(title)) label = "FCU";
+      // Points/DDC list titles can contain FCU/AHU/DOAH words — classify as
+      // points-list first so equipment-schedule count gates do not fire.
+      if (/POINTS\s*LIST|DDC\s+POINTS/i.test(title)) {
+        if (namedPointsListTag && !pointsListTakeoff) {
+          const tagRe = new RegExp(namedPointsListTag.split("/")[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+          if (!tagRe.test(title)) continue; // skip sibling/generic points-list rollups
+        }
+        label = "points-list";
+      } else if (/FAN\s*COIL/.test(title)) label = "FCU";
       else if (/DEDICATED OUTDOOR AIR UNIT/.test(title) && !/HANDLING/.test(title)) label = "DOAH unit";
       else if (/DEDICATED OUTDOOR AIR HANDLING/.test(title)) label = "DOAH handling";
       else if (/AIR HANDLING UNIT/.test(title) && !/DEDICATED/.test(title)) label = "AHU";
@@ -1475,18 +1510,40 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       else if (/HEAT RECOVERY/.test(title) && /CHILLER/.test(title)) label = "heat-recovery chiller";
       else if (/AIR COOLED CHILLER/.test(title) && !/HEAT RECOVERY/.test(title)) label = "air-cooled chiller";
       else if (/BOILER/.test(title)) label = "boiler";
-      else if (/POINTS LIST/.test(title)) {
-        if (namedPointsListTag) {
-          const tagRe = new RegExp(namedPointsListTag.split("/")[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
-          if (!tagRe.test(title)) continue; // skip sibling/generic points-list rollups
-        }
-        label = "points-list";
-      }
       if (!label) continue;
       // Only require counts the current goal asked for — incidental title-scans
       // from exploratory follow-up tools must not force a full inventory dump.
       const goalAskedThisFamily = familyNeedles.some((fam) => fam.label === label);
       if (!goalAskedThisFamily) continue;
+      // Multi-list points takeoffs: each list has its own count; require the
+      // count near that list's title keywords (or overall total), not a single
+      // "points-list" label that collides across lists.
+      if (pointsListTakeoff && label === "points-list") {
+        const listHint = title
+          .replace(/POINTS\s*LIST|DDC\s+POINTS(?:\s*LIST)?/ig, " ")
+          .replace(/WITH|AND|THE|FOR/g, " ")
+          .trim()
+          .split(/\s+/)
+          .filter((w) => w.length >= 3)
+          .slice(0, 3)
+          .join(" ");
+        const nearList = listHint
+          ? nearCountsForLabel(listHint).includes(Number(count))
+          : false;
+        const nearPoints = countNearLabel("points-list", count)
+          || countNearLabel("POINTS", count)
+          || nearCountsForLabel(title.slice(0, 40)).includes(Number(count));
+        if (!(nearList || nearPoints || countNearLabel("overall", count) || countNearLabel("total", count))) {
+          // Accept when the answer simply states the number somewhere with the
+          // list title fragment (e.g. DOAH-TI … 34).
+          const titleFrag = title.replace(/[^A-Z0-9]+/g, "").slice(0, 12);
+          const fragOk = titleFrag.length >= 6
+            && finalCanonical.includes(titleFrag)
+            && finalCanonical.includes(String(count));
+          if (!fragOk) missingCounts.push(`${title.slice(0, 48)} count=${count}`);
+        }
+        continue;
+      }
       const foundNear = nearCountsForLabel(label);
       if (!foundNear.includes(Number(count))) {
         missingCounts.push(`${label} count=${count}`);
@@ -1580,8 +1637,8 @@ export function agentSystemPrompt() {
     "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized.",
     "- Be extremely, genuinely useful: whatever the goal asks — a full takeoff, an AHU characteristic, counting valves, a BAS trace, schedule attributes, cross-sheet joins — do that ask end-to-end. Return every requested field with evidence-backed values plus enough citation context to trust the answer. Paint ALL answering evidence on the sheets (value cells / row data / drawing text / counted marks), not only a tag mark. Partial answers and mark-only flybys are incomplete.",
     "- query_table and find_text search the whole loaded set — they do not require the sheet to be open as a canvas tab. Never refuse schedule cell values because a tab is closed; call query_table with row_key and copy row.all_cells, then highlight_citation.",
-    "- When asked for scheduled equipment or points-list row counts, call query_table with the schedule title (no row_key and no cell_contains). Copy that tool result's count and building_tag_counts into the answer — do not re-sum sheet_graph page row totals by hand (continuation pages 1 OF 2 / 2 OF 2 repeat the same MARK keys). building_tag_counts letters map as A=Air Ops, M=MITRACON/Mitracon, T=ATCT — never swap them. Prefer one accurate title needle per asked family; when the goal distinguishes sibling titles (for example dedicated outdoor-air UNIT vs HANDLING schedules, or air-cooled vs heat-recovery chillers), query the title that matches what was asked rather than blending both. When the goal names a specific points list (for example AHU-T1A/TIB), put that tag in the query_table title — a bare POINTS LIST title can roll up sibling lists and double the row count. Then re-query specific row_key values for MARK/identity bboxes you must cite.",
-    "- Sequencing for full-set count + cite goals: (1) list_sheets + sheet_graph once, (2) one title-scan query_table per requested family and copy count/building_tag_counts, (3) only then re-query the named cite MARKs / points-list title and paint those cells, (4) write ONE final answer whose family totals match those tool counts (do not add a second contradictory totals table that recounts only painted MARKs). Do not paint every equipment row on a schedule, and do not dump full schedule tables into the answer.",
+    "- When asked for scheduled equipment or points-list row counts, call query_table with the schedule title (no row_key and no cell_contains). Copy that tool result's count and building_tag_counts into the answer — do not re-sum sheet_graph page row totals by hand (continuation pages 1 OF 2 / 2 OF 2 repeat the same MARK keys). building_tag_counts letters map as A=Air Ops, M=MITRACON/Mitracon, T=ATCT — never swap them. When point_type_counts is present, copy AI/AO/BI/BO from it — do not burn iterations re-filtering the same title with cell_contains for each point type. Prefer one accurate title needle per asked family; when the goal distinguishes sibling titles (for example dedicated outdoor-air UNIT vs HANDLING schedules, or air-cooled vs heat-recovery chillers), query the title that matches what was asked rather than blending both. When the goal names a specific points list (for example AHU-T1A/TIB), put that tag in the query_table title — a bare POINTS LIST title can roll up sibling lists and double the row count. Then re-query specific row_key values for MARK/identity bboxes you must cite.",
+    "- Sequencing for full-set count + cite goals: (1) list_sheets + sheet_graph once, (2) one title-scan query_table per requested family and copy count/building_tag_counts/point_type_counts, (3) only then re-query the named cite MARKs / points-list title and paint those cells, (4) write ONE final answer whose family totals match those tool counts (do not add a second contradictory totals table that recounts only painted MARKs). Do not paint every equipment row on a schedule, and do not dump full schedule tables into the answer.",
     "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Pass row_key, column, table_title, and value whenever known so the Agent source card title reads like \"VAV-1 · CFM = 350\" (not a naked \"350\"). Do not rely on auto-flying the canvas — the UI shows clickable expandable source cards; painting is enough. When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",
     "- The final Answer in chat must give the estimator MORE than enough to understand the workflow and act: every requested count/field with units, schedule titles and sheets, and clear structure. Prefer markdown tables and short labeled lists the UI can render (not a wall of prose or pipe-character dumps). Do not embed highlight_citation markup ids (【mk-…】) in chat — those belong on Source cards. Do not dump incidental inventory rows the goal did not ask for. Do not leave the usable answer only in Sources or highlights — chat is primary.",
     "- Never draw or request overlay label text that would cover the cited cell value; the highlight is a frame around readable blueprint text.",
@@ -1592,6 +1649,7 @@ export function agentSystemPrompt() {
     "- For a scheduled device tag, cite query_table row.identity (for example VALVE MARK), not the first different column that happens to repeat the same text (for example UNIT MARK).",
     "- For any equipment-to-control-valve join, use this direct set-wide sequence: query_table with row_key set to the equipment tag; sweep_schedule_row for installed quantity/plan evidence when requested; query_table with cell_contains set to that exact equipment tag to find compound relationship marks; then highlight the exact returned tag and row-identity bboxes. Do not browse guessed sheets or repeatedly retry the same empty exact-row query.",
     "- When the goal gives a BAS/DDC point description and asks for the point mark, alarm, or trend, call query_table with cell_contains set to that description (omit invented table titles on the first try). Read the AI/AO/BI/BO mark and alarm/trend fields from row.all_cells — never treat the description string itself as the point mark. If several sibling points share an equipment tag (e.g. HW vs CHW valve feedback), pick the row whose DESCRIPTION matches the goal's point wording.",
+    "- When asked how many points-list descriptions name only equipment A vs only equipment B vs neither/shared/common: (1) title-scan the named POINTS LIST for the total row count, (2) count exclusive DESCRIPTION matches for each equipment string, (3) neither = total − onlyA − onlyB when the exclusive sets are disjoint. Do not treat 'shared' as the intersection of rows that contain both strings — shared/neither means descriptions that name neither exclusive tag.",
     "- Schedule LOCATION/ROOM cells are installation-location attributes only. When asked what equipment serves from drawing narrative, call find_text or read_sheet_text and copy from hit.str — never paraphrase a LOCATION cell into a serves claim. Schedule SERVICE (duty) cells are different: when the goal names a service that matches a SERVICE cell (for example MAIN OPERATIONS or BUILDING SOUTH), answer with that row's EQUIP/MARK and cite the SERVICE cell.",
     "- When asked for a physical drawing section or detail label where equipment is shown, cite find_text/read_sheet_text hit.str for that section label. A schedule title is not a drawing section.",
     "- When asked where equipment appears on a roof/floor plan, prefer a find_text hit whose hit.str equals the exact equipment tag on a plan sheet over longer detail/callout phrases that only contain the tag.",
@@ -1830,6 +1888,7 @@ function appendToolResults(provider, messages, results) {
 export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal, maxIterations = MAX_AGENT_ITERATIONS, fetchFn, priorMessages = [] }) {
   const provider = cfg?.provider === "anthropic" ? "anthropic" : "openai";
   const emit = (ev) => { try { onEvent?.(ev); } catch { /* a status listener must never kill the run */ } };
+  const takeoffIntent = classifyTakeoffIntent(goal);
   const providerTools = toProviderTools(provider, toolsForGoal(goal, tools));
   const system = agentSystemPrompt();
   // priorMessages enables conversational follow-ups in the same Agent thread.
@@ -1839,6 +1898,17 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       .map((m) => ({ role: m.role, content: m.content }))
     : [];
   const messages = [...history, { role: "user", content: goal }];
+  // Seed workflow directive so the first turn follows the state machine.
+  let lastWorkflowPhase = "";
+  {
+    const initialWf = advanceTakeoffWorkflow(takeoffIntent, [], goal);
+    lastWorkflowPhase = initialWf.phase;
+    const directive = workflowDirective(takeoffIntent, initialWf);
+    if (directive) {
+      messages.push({ role: "user", content: directive });
+      emit({ type: "text", text: `[Workflow: ${takeoffIntent} / ${initialWf.phase}]` });
+    }
+  }
   let iterations = 0;
   const aborted = () => { emit({ type: "aborted" }); return { status: /** @type {const} */ ("aborted"), iterations }; };
   // Deterministic honesty backstop, generalized (see agentVerifiers.js's own
@@ -1965,7 +2035,8 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
             const sampleTitle = String(out.matches?.[0]?.title?.text || out.matches?.[0]?.title || title);
             scanSummaries.push(
               `${sampleTitle}: count=${out.count}`
-              + (out.building_tag_counts ? ` building_tag_counts=${JSON.stringify(out.building_tag_counts)}` : ""),
+              + (out.building_tag_counts ? ` building_tag_counts=${JSON.stringify(out.building_tag_counts)}` : "")
+              + (out.point_type_counts ? ` point_type_counts=${JSON.stringify(out.point_type_counts)}` : ""),
             );
           }
         }
@@ -2064,12 +2135,20 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
         : call.args;
       emit({ type: "tool_start", name: call.name, args: callArgs });
       let out;
-      try {
-        out = call.argsError
-          ? { error: `Invalid arguments for ${call.name}: ${call.argsError}.` }
-          : await execute(call.name, callArgs);
-      } catch (e) {
-        out = { error: `Tool ${call.name} failed: ${String((e && e.message) || e)}` };
+      // Block illegal workflow transitions before execute (durable phase machine).
+      const wfBefore = advanceTakeoffWorkflow(takeoffIntent, callLog, goal);
+      if (!call.argsError && isIllegalWorkflowTransition(wfBefore, call.name, callArgs || {})) {
+        out = {
+          error: `Illegal workflow transition (${takeoffIntent}/${wfBefore.phase}): ${call.name} is not allowed now.${wfBefore.nextMove ? ` ${wfBefore.nextMove}` : ""}`,
+        };
+      } else {
+        try {
+          out = call.argsError
+            ? { error: `Invalid arguments for ${call.name}: ${call.argsError}.` }
+            : await execute(call.name, callArgs);
+        } catch (e) {
+          out = { error: `Tool ${call.name} failed: ${String((e && e.message) || e)}` };
+        }
       }
       if (out == null || typeof out !== "object") out = { result: out ?? null };
       // Vision-as-a-tool (real, later addition — see aiConfig()'s own
@@ -2096,6 +2175,19 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       results.push({ call, out });
     }
     appendToolResults(provider, messages, results);
+    // Re-inject the workflow directive when the phase advances so later turns
+    // follow the state machine without relying on a one-shot system prompt.
+    {
+      const wfAfter = advanceTakeoffWorkflow(takeoffIntent, callLog, goal);
+      if (wfAfter.phase !== lastWorkflowPhase) {
+        lastWorkflowPhase = wfAfter.phase;
+        const directive = workflowDirective(takeoffIntent, wfAfter);
+        if (directive) {
+          messages.push({ role: "user", content: directive });
+          emit({ type: "text", text: `[Workflow: ${takeoffIntent} / ${wfAfter.phase}]` });
+        }
+      }
+    }
     // Paint thrash without an Answer burns the step cap (seen on VAV rollups
     // that highlight inventory rows forever). Nudge once: stop extra paints
     // and write the complete takeoff answer from retrieved cells.
@@ -2130,7 +2222,8 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
           const sampleTitle = String(out.matches?.[0]?.title?.text || out.matches?.[0]?.title || title);
           scanSummaries.push(
             `${sampleTitle}: count=${out.count}`
-            + (out.building_tag_counts ? ` building_tag_counts=${JSON.stringify(out.building_tag_counts)}` : ""),
+            + (out.building_tag_counts ? ` building_tag_counts=${JSON.stringify(out.building_tag_counts)}` : "")
+            + (out.point_type_counts ? ` point_type_counts=${JSON.stringify(out.point_type_counts)}` : ""),
           );
         }
       }

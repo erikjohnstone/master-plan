@@ -779,6 +779,30 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       }
       return counts;
     })();
+    // Broad points-list / DDC list scans: keys are AI##/AO##/BI##/BO## (not
+    // building-letter MEP tags). Surface point_type_counts so callers copy the
+    // AI/AO/BI/BO breakdown instead of re-filtering with cell_contains.
+    const pointTypeCounts = (() => {
+      if (!keysOnly) return undefined;
+      const counts = { AI: 0, AO: 0, BI: 0, BO: 0, other: 0 };
+      let typed = 0;
+      for (const match of unique) {
+        const tag = String(match.row.key || "").toUpperCase();
+        const m = tag.match(/^(AI|AO|BI|BO)\d/i);
+        if (m) {
+          counts[m[1].toUpperCase()] += 1;
+          typed += 1;
+        } else {
+          counts.other += 1;
+        }
+      }
+      if (typed < Math.max(4, Math.ceil(unique.length * 0.5))) return undefined;
+      if (counts.other === 0) {
+        const { other: _drop, ...typedOnly } = counts;
+        return typedOnly;
+      }
+      return counts;
+    })();
     const multiTitleHint = (() => {
       if (!row_key || keysOnly) return null;
       const titles = [...new Set(unique.map((m) => m.title?.text).filter(Boolean))];
@@ -808,12 +832,15 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       truncated: unique.length > limit,
       matches,
       ...(buildingTagCounts ? { building_tag_counts: buildingTagCounts } : {}),
+      ...(pointTypeCounts ? { point_type_counts: pointTypeCounts } : {}),
       ...(unique.length === 0 ? {
         next_move: cell_contains
           ? "Zero rows matched. Retry once with cell_contains set to an exact equipment tag from the user question and no title filter, then inspect returned descriptions; do not paraphrase the same empty description query."
           : "Zero rows matched. Drop invented title filters, use a filter value that already appears in tool evidence, or refuse if the evidence is not present.",
       } : keysOnly ? {
-        next_move: `Use count=${unique.length} as the scheduled row total and building_tag_counts=${JSON.stringify(buildingTagCounts)} for building splits. Re-query with row_key for citation cell bboxes.`,
+        next_move: pointTypeCounts
+          ? `Use count=${unique.length} as the points-list row total and point_type_counts=${JSON.stringify(pointTypeCounts)} for the AI/AO/BI/BO breakdown. Do not re-filter with cell_contains for each point type. Re-query with row_key only for MARK cells you must cite.`
+          : `Use count=${unique.length} as the scheduled row total and building_tag_counts=${JSON.stringify(buildingTagCounts)} for building splits. Re-query with row_key for citation cell bboxes.`,
       } : nonFamilyHint ? {
         next_move: nonFamilyHint,
       } : multiTitleHint ? {

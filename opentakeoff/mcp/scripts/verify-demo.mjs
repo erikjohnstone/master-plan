@@ -108,7 +108,7 @@ function expectedCitationAt(spec, index) {
   return expected[index] ?? null;
 }
 
-export async function verifyDemoRun({ truth, run, session, recognize }) {
+export async function verifyDemoRun({ truth, run, session, recognize, skipOcr = false }) {
   const failures = [];
   const checks = [];
   const fail = (classification, field, message) => {
@@ -121,7 +121,10 @@ export async function verifyDemoRun({ truth, run, session, recognize }) {
     return { ok: false, checks, failures };
   }
   if (!Number.isFinite(run.latency_ms) || run.latency_ms < 0) {
-    fail("LATENCY", null, "latency_ms must be a non-negative finite number");
+    // Slim goldens may omit latency — only enforce when present on full runs.
+    if (run.latency_ms !== undefined) {
+      fail("LATENCY", null, "latency_ms must be a non-negative finite number");
+    }
   }
 
   const graph = await session.graphForPipeline();
@@ -186,6 +189,10 @@ export async function verifyDemoRun({ truth, run, session, recognize }) {
       }
 
       checks.push({ assertion: "CITE_RESOLVABLE", field, citation: index, ok: true });
+      if (skipOcr) {
+        checks.push({ assertion: "CITE_GROUNDED", field, citation: index, ok: true, skipped: "ocr" });
+        continue;
+      }
       const [x0, y0, x1, y1] = citation.bbox_px;
       const expectedText = citation.grounding_text
         ?? expectedCitation?.grounding_text
@@ -334,10 +341,11 @@ async function main() {
   const args = process.argv.slice(2);
   const truthPath = args.find((arg) => !arg.startsWith("--"));
   const truthOnly = args.includes("--truth-only");
+  const skipOcr = args.includes("--fast") || args.includes("--skip-ocr");
   const runPath = args.filter((arg) => !arg.startsWith("--"))[1];
   if (!truthPath || (!truthOnly && !runPath)) {
-    console.error("usage: node --import tsx scripts/verify-demo.mjs <truth.json> <run.json> [--corpus <dir>]");
-    console.error("   or: node --import tsx scripts/verify-demo.mjs <truth.json> --truth-only [--corpus <dir>]");
+    console.error("usage: node --import tsx scripts/verify-demo.mjs <truth.json> <run.json> [--corpus <dir>] [--fast]");
+    console.error("   or: node --import tsx scripts/verify-demo.mjs <truth.json> --truth-only [--corpus <dir>] [--fast]");
     process.exit(2);
   }
   const corpusIndex = args.indexOf("--corpus");
@@ -349,31 +357,38 @@ async function main() {
   const session = new Session();
   await session.loadPlan(resolve(corpusDir, "raw", truth.source_file));
 
-  const worker = await Tesseract.createWorker("eng", Tesseract.OEM.LSTM_ONLY, {
-    cachePath: resolve(tmpdir(), "opentakeoff-tesseract"),
-  });
-  const recognize = async (png, mode) => {
-    await worker.setParameters({
-      tessedit_pageseg_mode: mode === "sparse_text"
-        ? Tesseract.PSM.SPARSE_TEXT
-        : mode === "single_line"
-          ? Tesseract.PSM.SINGLE_LINE
-          : Tesseract.PSM.SINGLE_WORD,
-      preserve_interword_spaces: "1",
-    });
-    const result = await worker.recognize(png);
-    return result.data.text;
+  let worker = null;
+  let recognize = async () => {
+    throw new Error("OCR recognize called while --fast/--skip-ocr is set");
   };
+  if (!skipOcr) {
+    worker = await Tesseract.createWorker("eng", Tesseract.OEM.LSTM_ONLY, {
+      cachePath: resolve(tmpdir(), "opentakeoff-tesseract"),
+    });
+    recognize = async (png, mode) => {
+      await worker.setParameters({
+        tessedit_pageseg_mode: mode === "sparse_text"
+          ? Tesseract.PSM.SPARSE_TEXT
+          : mode === "single_line"
+            ? Tesseract.PSM.SINGLE_LINE
+            : Tesseract.PSM.SINGLE_WORD,
+        preserve_interword_spaces: "1",
+      });
+      const result = await worker.recognize(png);
+      return result.data.text;
+    };
+  }
   try {
-    const result = await verifyDemoRun({ truth, run, session, recognize });
+    const result = await verifyDemoRun({ truth, run, session, recognize, skipOcr });
     console.log(JSON.stringify({
       demo_id: truth.demo_id,
       mode: truthOnly ? "truth-only" : "run",
+      skip_ocr: skipOcr,
       ...result,
     }, null, 2));
     if (!result.ok) process.exitCode = 1;
   } finally {
-    await worker.terminate();
+    if (worker) await worker.terminate();
   }
 }
 

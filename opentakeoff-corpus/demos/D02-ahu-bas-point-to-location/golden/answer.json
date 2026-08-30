@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "demo_id": "D02",
+  "status": "done",
+  "source": "synthesized_from_truth",
+  "answer": {
+    "equipment_tag": {
+      "value": "AHU-T1A",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#48",
+          "table_title": "AIR HANDLING UNIT SCHEDULE",
+          "row_key": "AHU-T1A",
+          "column": "MARK",
+          "bbox_px": [
+            230.64,
+            348,
+            371.52,
+            382.56
+          ],
+          "grounding_text": "AHU-T1A",
+          "ocr_mode": "single_line",
+          "ocr_confusables": true
+        }
+      ]
+    },
+    "physical_location": {
+      "value": "11TH FLOOR MECHANICAL",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#48",
+          "table_title": "AIR HANDLING UNIT SCHEDULE",
+          "row_key": "AHU-T1A",
+          "column": "LOCATION",
+          "bbox_px": [
+            371.52,
+            348,
+            680.64,
+            382.56
+          ],
+          "grounding_text": "11TH FLOOR MECHANICAL",
+          "ocr_mode": "single_line"
+        }
+      ]
+    },
+    "maximum_supply_air_cfm": {
+      "value": 3850,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#48",
+          "table_title": "AIR HANDLING UNIT SCHEDULE",
+          "row_key": "AHU-T1A",
+          "column": "FAN DATA S.A. CFM (MAX)",
+          "bbox_px": [
+            680.64,
+            348,
+            754.08,
+            382.56
+          ],
+          "grounding_text": "3850"
+        }
+      ]
+    },
+    "point_mark": {
+      "value": "AI10",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": "AI10",
+          "column": "MARK ANALOG INPUT",
+          "bbox_px": [
+            3340.074,
+            895.918,
+            3434.88,
+            930.476
+          ],
+          "grounding_text": "AI10",
+          "ocr_mode": "single_line",
+          "ocr_confusables": true
+        }
+      ]
+    },
+    "point_description": {
+      "value": "AHU-T1A HW VALVE POSITION (FEEDBACK)",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": "AI10",
+          "column": "DESCRIPTION ANALOG INPUT",
+          "bbox_px": [
+            3434.88,
+            895.918,
+            4109.28,
+            930.476
+          ],
+          "grounding_text": "AHU-T1A HW VALVE POSITION (FEEDBACK)",
+          "ocr_mode": "single_line",
+          "ocr_confusables": true
+        }
+      ]
+    },
+    "alarm_required": {
+      "value": "No",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": "AI10",
+          "column": "ALARM",
+          "bbox_px": [
+            4109.28,
+            895.918,
+            4206.722,
+            930.476
+          ],
+          "grounding_text": "No"
+        }
+      ]
+    },
+    "trend_required": {
+      "value": "No",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": "AI10",
+          "column": "TREND",
+          "bbox_px": [
+            4206.722,
+            895.918,
+            4313.762,
+            930.476
+          ],
+          "grounding_text": "No"
+        }
+      ]
+    },
+    "serves": {
+      "value": "AHU-T1A/B provide ventilation, heating, cooling, and dehumidification to the control cab. Both AHUs are sized to fully serving the cab, providing N+1 redundancy. Room",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#2",
+          "bbox_px": [
+            264.9,
+            2582.2,
+            1770.2,
+            2607.4
+          ],
+          "grounding_text": "ventilation, heating, cooling, and dehumidification to the control cab",
+          "ocr_mode": "single_word",
+          "ocr_px": 2400
+        }
+      ]
+    },
+    "physical_section": {
+      "value": "AHU-T1A / AHU-T1B SECTION",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#28",
+          "bbox_px": [
+            312,
+            2428.9,
+            879.9,
+            2478.7
+          ],
+          "grounding_text": "AHU-T1A / AHU-T1B SECTION",
+          "ocr_mode": "single_line"
+        }
+      ]
+    }
+  }
+}
