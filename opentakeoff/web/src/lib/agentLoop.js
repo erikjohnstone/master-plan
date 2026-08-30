@@ -2318,6 +2318,26 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       }
       lastWordingCorrection = "";
       wordingCorrectionStreak = 0;
+      // Final safety: re-merge any attrs the last model rewrite dropped, then
+      // re-check gates so paint duties for those values still run.
+      {
+        const missingFinal = missingNamedScheduleAttrs(callLog, goal, draftForGate);
+        if (missingFinal.length) {
+          draftForGate = appendNamedScheduleAttrs(draftForGate, missingFinal);
+          displayText = draftForGate;
+          lastDraftText = draftForGate;
+          correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+          if (correction) {
+            messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
+            messages.push({
+              role: "user",
+              content: `${correction}\n\nUse tools only if this correction requires new evidence or paint; otherwise emit the complete replacement answer now. Preserve every previously retrieved, tool-grounded requested field.`,
+            });
+            emit({ type: "text", text: `[Evidence gate: ${correction}]` });
+            continue;
+          }
+        }
+      }
       const notes = runVerifiers(callLog, goal);
       if (notes.length) displayText = `${displayText || ""}\n\n${notes.join("\n\n")}`;
     }
