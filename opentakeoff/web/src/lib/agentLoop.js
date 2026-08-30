@@ -61,6 +61,15 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     || /bbox(?:_px)?\s*=\s*\[\s*0\.\d+\s*,\s*0\.\d+/i.test(finalText)) {
     return "The final answer exposes normalized citation coordinates. Production evidence citations use image-pixel bboxes only. Remove normalized coordinates and report the unchanged sheet and bbox_px returned by the evidence tool.";
   }
+  // query_table / find_text are whole-set tools. Refusing schedule attributes
+  // because a sheet tab is closed is incorrect when those tools already returned cells.
+  if (/(?:not (?:currently )?open|isn'?t open|sheet (?:is |was )?(?:not |never )?open).{0,100}(?:canvas|tab)|(?:canvas|tab).{0,80}(?:not (?:currently )?open|isn'?t open)/i.test(finalText)
+    && callLog.some(({ name, out }) =>
+      name === "query_table" && !out?.error
+      && (out?.matches || []).some((match) =>
+        match?.row?.all_cells || match?.row?.cells || match?.row?.key))) {
+    return "query_table already returned schedule cells without needing an open sheet tab. Copy the requested values from row.all_cells into the answer and call highlight_citation on those bboxes — do not refuse because a canvas tab is closed.";
+  }
   if (/(?:≈|\bapproximately\b|\bapprox\.)/i.test(finalText)
     && !/\b(?:derived|calculated|converted|conversion)\b/i.test(finalText)) {
     return "The final answer adds an approximate value without labeling its derivation. Remove unrequested derived values, or explicitly label the calculation/conversion and cite the source inputs; never present it as direct tool output.";
