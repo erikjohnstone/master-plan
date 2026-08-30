@@ -65,7 +65,7 @@ hardcoding. D02 counts toward ten. Next: D03.
 
 ## D03 selection record
 
-Status: `RE-PROOF REQUIRED — chat/source-card usefulness + verified follow-up visible`
+Status: `LOCKED — API 5/5; UI re-proof (expandable cards + verified follow-up)`
 
 Target holds: 75-sheet NAVFAC set with Air Ops / MITRACON / ATCT namespaces.
 Independent equipment-schedule inventory (unique MARK rows) yields AHU 5,
@@ -75,11 +75,11 @@ AHU-T1A/TIB points list at 62 rows. Stratified 20% find_text hand-count
 reconciled before model runs (`hand_count_20pct` in truth.json). Vibration-
 isolation compound keys are not equipment units.
 
-N=5 API/stdio previously 5/5 (p95 **12.156 s**). UI must be re-proved under
-the chat-usefulness bar: answer-first visible Answer, expandable source cards
-with structured detail (not naked fragments), follow-up **asked + verified**
-(HANDLING title + ATCT FCU 18 + FCU-T11) in the same recording. Do not treat
-prior lock as current.
+N=5 API/stdio 5/5 (p95 **12.156 s**). UI re-proved under the chat-usefulness
+bar: answer-first visible Answer, expandable source cards, follow-up **asked
++ verified** (HANDLING title + ATCT FCU 18 + FCU-T11) in
+`/opt/cursor/artifacts/d03_ui_prompt_answer_cards_followup_2026-08-30T11-52-24-499Z.webm`.
+Next: D05.
 
 ## D04 selection record
 
@@ -98,4 +98,4 @@ bar: complete structured Answer, expandable source cards (`tag · field ·
 value` + dropdown), follow-up **asked + verified** (SUITE100 not a VAV;
 VAV-58 CFM 350) in
 `/opt/cursor/artifacts/d04_ui_prompt_answer_cards_followup_2026-08-30T11-28-54-597Z.webm`.
-Next after D03 clears the same bar: D05.
+D03 and D04 locked; next: D05.

@@ -1,6 +1,6 @@
 # D03 — HVAC/BAS project takeoff
 
-Status: `LOCKED — API 5/5 + stdio + UI proof (primary totals + HANDLING follow-up)`
+Status: `LOCKED — API 5/5 + stdio + UI re-proof (expandable cards + verified follow-up)`
 
 ## Live question
 
@@ -71,19 +71,22 @@ path was proved separately with the frozen prompt + follow-up.
 ## Production UI proof
 
 Validated recording:
-`/opt/cursor/artifacts/d03_ui_prompt_answer_cards_followup_2026-08-30T10-38-25-850Z.webm`.
+`/opt/cursor/artifacts/d03_ui_prompt_answer_cards_followup_2026-08-30T11-52-24-499Z.webm`.
 
 Walkthrough shows the frozen prompt, live tools, answer-first family totals
-matching truth (including chillers 2+2 and points 62), source cards, on-sheet
-MARK paints, and a correct in-thread follow-up (HANDLING title + ATCT 18 +
-FCU-T11). Harness rejects empty answers, wrong family totals, dual
-contradictory totals tables, and missing follow-up evidence.
+matching truth (including chillers 2+2 and points 62), expandable source
+cards, on-sheet MARK paints, and a correct in-thread follow-up (HANDLING
+title + ATCT 18 + FCU-T11) visible in chat. Harness rejects empty answers,
+wrong family totals, dual contradictory totals tables, and missing/wrong
+follow-up evidence (including A/T tag swaps). Re-proved 2026-08-30 under the
+chat-usefulness bar.
 
 UI/API path fixes that cleared this gate are generalized production behavior
 (title-scan counts; short-needle rejection; chiller non-blend; DOAH UNIT vs
 HANDLING; named points-list; follow-up gate scoping; string-arg coercion;
 primary schedule-title ranking for MARK lookups; compact find_schedule miss
-errors) — not demo-PDF special cases.
+errors; auto title-scan for missing families; ATCT=T fan-coil follow-up
+enforcement; expandable Agent source cards) — not demo-PDF special cases.
 
 ## Failure behavior
 

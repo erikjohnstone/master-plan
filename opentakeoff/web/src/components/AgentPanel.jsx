@@ -8,6 +8,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { keyText } from "../lib/keys.ts";
 import { Icon } from "../brand/icons.jsx";
+import AgentAnswer from "./AgentAnswer.jsx";
 
 const evidenceText = (ev) => {
   if (!ev) return "";
@@ -280,9 +281,13 @@ export default function AgentPanel({
                 <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: 4 }}>
                   {m.role === "user" ? "You" : "Answer"}
                 </div>
-                <div style={{ color: "var(--ink)", whiteSpace: "pre-wrap", overflowWrap: "anywhere", fontSize: 13, lineHeight: 1.55, fontFamily: "inherit" }}>
-                  {m.text}
-                </div>
+                {m.role === "assistant" ? (
+                  <AgentAnswer text={m.text} />
+                ) : (
+                  <div style={{ color: "var(--ink)", whiteSpace: "pre-wrap", overflowWrap: "anywhere", fontSize: 13, lineHeight: 1.55, fontFamily: "inherit" }}>
+                    {m.text}
+                  </div>
+                )}
               </div>
             ))}
             {running && (
