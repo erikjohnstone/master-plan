@@ -251,11 +251,12 @@ Locking D01–D10 one-by-one is **not** the finish line. Immediately after the
    `demoDNN.regression.test.mjs` that loads the pinned PDF via `Session`,
    asserts schedule/graph evidence against `truth.json`, and calls **no**
    model. `npm run test:demos` must pass all ten.
-2. **Frozen-answer verify.** Each demo keeps a slim checked-in
-   `golden/answer.json` (final `status` + `answer` only — not raw tool
-   dumps). `verify:demo` against that golden must pass value / cite-form /
-   cite-ground. No new model calls. Full `runs/run-*.json` dumps stay local
-   / gitignored.
+2. **Frozen-answer verify (fast by default).** Each demo keeps a slim
+   checked-in `golden/answer.json`. `verify-demo-suite` checks values,
+   citation shape, sheet/table resolvability, and bbox overlap — **no OCR**
+   (`--fast`). Full OCR cite-ground remains available via
+   `npm run verify:demo-suite -- --ocr` when needed. No new model calls.
+   Full `runs/run-*.json` dumps stay local / gitignored.
 3. **Optional UI smoke (when UI wiring changes).** Run each existing
    `opentakeoff/web/scripts/demo-ui-proof-dXX.mjs` **once**, headed or
    headless, **no video required**. Skip on pure engine-only changes.
