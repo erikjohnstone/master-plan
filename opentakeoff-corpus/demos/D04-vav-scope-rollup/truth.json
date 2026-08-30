@@ -47,14 +47,12 @@
       "citation": {
         "sheet_id": "federal-attachment4-mechanical.pdf#16",
         "table_title": "VOLUME CONTROL BOX SCHEDULE",
-        "row_key": "VAV-1",
-        "column": "TAG",
-        "bbox_px": [2376.7, 303.7, 2431.1, 322.6],
-        "grounding_text": "VAV-1",
+        "bbox_px": [3409.2, 112, 4284.6, 162.5],
+        "grounding_text": "VOLUME CONTROL BOX SCHEDULE",
         "ocr_mode": "single_line",
         "ocr_confusables": true
       },
-      "derivation": "Unique keys matching /^VAV-/ on VOLUME CONTROL BOX SCHEDULE; exclude SUITE100 junk key."
+      "derivation": "Unique keys matching /^VAV-/ on VOLUME CONTROL BOX SCHEDULE; exclude SUITE100 junk key. Count field cites the schedule title region."
     },
     "vav_1_cfm": {
       "type": "number",
