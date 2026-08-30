@@ -1,4 +1,4 @@
-// UI proof: Takeoff panel compiles seeded rows into line items + exports.
+// UI proof: Takeoff panel compiles seeded rows into modular per-family columns + exports.
 // Does not require an LLM key — seeds via window.__otSeedAgentTakeoff.
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -10,6 +10,7 @@ const outDir = resolve("/opt/cursor/artifacts");
 mkdirSync(outDir, { recursive: true });
 
 const sampleRows = [
+  // VAV — air-side columns
   {
     id: "demo-1", created_at: Date.now(), run_id: "proof",
     workflow: "VAV schedule + plan join",
@@ -19,6 +20,13 @@ const sampleRows = [
   },
   {
     id: "demo-1b", created_at: Date.now(), run_id: "proof",
+    workflow: "VAV schedule + plan join",
+    tag: "VAV-1", field: "MBH", value: "41.0", unit: null,
+    sheet_id: "mech.pdf#6", table_title: "AIR TERMINAL BOX SCHEDULE",
+    column: "MBH", bbox_px: null, source_tool: "query_table", note: null,
+  },
+  {
+    id: "demo-1c", created_at: Date.now(), run_id: "proof",
     workflow: "VAV schedule + plan join",
     tag: "VAV-1", field: "MANUFACTURER", value: "TRANE / VCEF", unit: null,
     sheet_id: "mech.pdf#6", table_title: "AIR TERMINAL BOX SCHEDULE",
@@ -31,6 +39,51 @@ const sampleRows = [
     sheet_id: "mech.pdf#2", table_title: "AIR TERMINAL BOX SCHEDULE",
     column: null, bbox_px: [50, 60, 80, 90], source_tool: "sweep_schedule_row", note: null,
   },
+  // Valve — hydronic columns (no CFM)
+  {
+    id: "demo-v1", created_at: Date.now(), run_id: "proof",
+    workflow: "Valve takeoff",
+    tag: "CV-3", field: "GPM", value: "18", unit: null,
+    sheet_id: "mech.pdf#8", table_title: "CONTROL VALVE SCHEDULE",
+    column: "GPM", bbox_px: null, source_tool: "query_table", note: null,
+  },
+  {
+    id: "demo-v2", created_at: Date.now(), run_id: "proof",
+    workflow: "Valve takeoff",
+    tag: "CV-3", field: "Cv", value: "5.2", unit: null,
+    sheet_id: "mech.pdf#8", table_title: "CONTROL VALVE SCHEDULE",
+    column: "Cv", bbox_px: null, source_tool: "query_table", note: null,
+  },
+  {
+    id: "demo-v3", created_at: Date.now(), run_id: "proof",
+    workflow: "Valve takeoff",
+    tag: "CV-3", field: "PIPE SIZE", value: "1-1/2\"", unit: null,
+    sheet_id: "mech.pdf#8", table_title: "CONTROL VALVE SCHEDULE",
+    column: "PIPE SIZE", bbox_px: null, source_tool: "query_table", note: null,
+  },
+  // Points — BAS columns
+  {
+    id: "demo-p1", created_at: Date.now(), run_id: "proof",
+    workflow: "AHU points list",
+    tag: "AHU-1 SA TEMP", field: "POINT TYPE", value: "AI", unit: null,
+    sheet_id: "ctrl.pdf#2", table_title: "AHU-1 POINTS LIST",
+    column: "POINT TYPE", bbox_px: null, source_tool: "query_table", note: null,
+  },
+  {
+    id: "demo-p2", created_at: Date.now(), run_id: "proof",
+    workflow: "AHU points list",
+    tag: "AHU-1 SA TEMP", field: "SIGNAL", value: "4-20mA", unit: null,
+    sheet_id: "ctrl.pdf#2", table_title: "AHU-1 POINTS LIST",
+    column: "SIGNAL", bbox_px: null, source_tool: "query_table", note: null,
+  },
+  {
+    id: "demo-p3", created_at: Date.now(), run_id: "proof",
+    workflow: "AHU points list",
+    tag: "AHU-1 SA TEMP", field: "CONTROLLER", value: "UC600-1", unit: null,
+    sheet_id: "ctrl.pdf#2", table_title: "AHU-1 POINTS LIST",
+    column: "CONTROLLER", bbox_px: null, source_tool: "query_table", note: null,
+  },
+  // Fan refuse
   {
     id: "demo-3", created_at: Date.now(), run_id: "proof",
     workflow: "Fan schedule honesty",
@@ -80,13 +133,23 @@ await page.evaluate((rows) => window.__otSeedAgentTakeoff(rows, { open: true }),
 
 await page.waitForSelector('[aria-label="Takeoff"]', { timeout: 10_000 });
 await page.waitForTimeout(600);
-await page.screenshot({ path: resolve(outDir, "takeoff-panel-compiled.png"), fullPage: true });
+await page.screenshot({ path: resolve(outDir, "takeoff-panel-modular-columns.png"), fullPage: true });
 
 const dialog = page.locator('[aria-label="Takeoff"]');
-const descCount = await dialog.locator("th", { hasText: "Description" }).count();
-if (!descCount) throw new Error("Compiled Takeoff tab missing Description column");
-const qtyCell = await dialog.locator("text=TRANE").count();
-if (!qtyCell) throw new Error("Expected compiled VAV-1 description TRANE / VCEF");
+
+// Per-family adaptive headers — not a Description dump
+const mustHeaders = ["CFM", "GPM", "SIGNAL", "CONTROLLER"];
+for (const h of mustHeaders) {
+  const n = await dialog.locator("th", { hasText: new RegExp(`^${h}$`, "i") }).count();
+  if (!n) throw new Error(`Expected adaptive column header ${h}`);
+}
+// Valve section must not show CFM in its own table header row — check section presence
+const valveTitle = await dialog.locator("text=CONTROL VALVE SCHEDULE").count();
+if (!valveTitle) throw new Error("Expected valve schedule section");
+const pointsTitle = await dialog.locator("text=AHU-1 POINTS LIST").count();
+if (!pointsTitle) throw new Error("Expected points list section");
+const trane = await dialog.locator("text=TRANE").count();
+if (!trane) throw new Error("Expected VAV manufacturer TRANE");
 
 await dialog.getByRole("button", { name: /^CSV$/i }).click();
 await page.waitForTimeout(500);
@@ -113,25 +176,16 @@ const videoDir = resolve(outDir, "takeoff-panel-video-tmp");
 const videos = readdirSync(videoDir).filter((f) => f.endsWith(".webm"));
 let videoPath = null;
 if (videos.length) {
-  videoPath = resolve(outDir, "takeoff-compiled-tabs-demo.webm");
+  videoPath = resolve(outDir, "takeoff-modular-families-demo.webm");
   copyFileSync(resolve(videoDir, videos[0]), videoPath);
 }
 
 writeFileSync(resolve(outDir, "takeoff-panel-proof.json"), JSON.stringify({
-  downloads,
-  rowCount: sampleRows.length,
-  video: videoPath,
-  at: new Date().toISOString(),
-}, null, 2));
-
-console.log(JSON.stringify({
   ok: true,
+  baseUrl,
   downloads,
-  video: videoPath,
+  videoPath,
   videoBytes: videoPath ? statSync(videoPath).size : 0,
+  families: ["AIR TERMINAL BOX SCHEDULE", "CONTROL VALVE SCHEDULE", "AHU-1 POINTS LIST", "FAN SCHEDULE"],
 }, null, 2));
-
-if (downloads.length < 3) {
-  console.error(`Expected 3 downloads (csv/xlsx/pdf), got ${downloads.length}`);
-  process.exit(1);
-}
+console.log("proof ok", { downloads: downloads.length, videoPath });

@@ -1,5 +1,5 @@
-// Takeoff UI — main tab is a compiled takeoff (line items); Workflow data is
-// the raw agent EAV aggregate for audit. Chat stays conversational.
+// Takeoff UI — main tab is a compiled takeoff with per-family adaptive columns;
+// Workflow data is the raw agent EAV aggregate for audit. Chat stays conversational.
 import { useMemo, useState } from "react";
 import { Icon } from "../brand/icons.jsx";
 import {
@@ -7,6 +7,9 @@ import {
   downloadTakeoffCsv,
   downloadTakeoffPdf,
   downloadTakeoffXlsx,
+  groupTakeoffByFamily,
+  lineLeadValue,
+  lineSpecValue,
 } from "../lib/agentTakeoff.js";
 
 const th = {
@@ -62,7 +65,8 @@ export default function TakeoffDataPanel({
     const q = filter.trim().toLowerCase();
     if (!q) return lines;
     return lines.filter((r) =>
-      [r.tag, r.description, r.sheet_id, r.table_title, r.attrs_text, r.notes, r.workflow]
+      [r.tag, r.type, r.description, r.manufacturer, r.model, r.sheet_id, r.table_title,
+        r.family, r.attrs_text, r.notes, r.workflow, ...Object.values(r.specs || {})]
         .some((v) => String(v ?? "").toLowerCase().includes(q)));
   }, [lines, filter]);
 
@@ -74,15 +78,7 @@ export default function TakeoffDataPanel({
         .some((v) => String(v ?? "").toLowerCase().includes(q)));
   }, [rows, filter]);
 
-  const bySchedule = useMemo(() => {
-    const map = new Map();
-    for (const line of visibleLines) {
-      const key = line.table_title || "(no schedule)";
-      if (!map.has(key)) map.set(key, []);
-      map.get(key).push(line);
-    }
-    return [...map.entries()];
-  }, [visibleLines]);
+  const familyGroups = useMemo(() => groupTakeoffByFamily(visibleLines), [visibleLines]);
 
   const byWorkflow = useMemo(() => {
     const map = new Map();
@@ -98,7 +94,7 @@ export default function TakeoffDataPanel({
     let n = 0;
     let any = false;
     for (const line of visibleLines) {
-      if (typeof line.qty === "number" && line.unit === "EA") {
+      if (typeof line.qty === "number" && (line.unit || "EA") === "EA") {
         n += line.qty;
         any = true;
       }
@@ -138,14 +134,14 @@ export default function TakeoffDataPanel({
         position: "fixed", inset: 0, zIndex: 80,
         background: "color-mix(in srgb, var(--ink) 45%, transparent)",
         display: "flex", alignItems: "stretch", justifyContent: "center",
-        padding: "4vh 4vw",
+        padding: "4vh 2vw",
       }}
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: "min(1200px, 100%)",
+          width: "min(1440px, 100%)",
           background: "var(--paper-bright)",
           color: "var(--ink)",
           borderRadius: 8,
@@ -168,18 +164,19 @@ export default function TakeoffDataPanel({
               {projectName || "Project takeoff"}
               <span style={{ fontWeight: 500, color: "var(--ink-muted)", marginLeft: 8, fontSize: 14 }}>
                 {lines.length} line{lines.length === 1 ? "" : "s"}
+                {familyGroups.length > 1 ? ` · ${familyGroups.length} schedules` : ""}
                 {qtyTotal != null ? ` · ${qtyTotal} EA` : ""}
                 {rows.length ? ` · ${rows.length} evidence` : ""}
               </span>
             </div>
             <div style={{ fontSize: 12.5, color: "var(--ink-muted)", marginTop: 4 }}>
-              Agent workflows build this takeoff. Finalize quantities here — export CSV, Excel, or PDF.
+              Columns adapt per schedule — valves show GPM/Cv, VAVs show CFM/MBH, points show I/O fields.
             </div>
           </div>
           <input
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            placeholder={tab === "takeoff" ? "Filter tag, description…" : "Filter tag, field, sheet…"}
+            placeholder={tab === "takeoff" ? "Filter tag, type, field…" : "Filter tag, field, sheet…"}
             style={{
               width: 200, padding: "8px 10px", borderRadius: 6, marginBottom: 10,
               border: "1px solid var(--ink-faint)", background: "var(--paper)",
@@ -222,81 +219,124 @@ export default function TakeoffDataPanel({
             !lines.length ? (
               <div style={{ padding: "48px 24px", textAlign: "center", color: "var(--ink-muted)", fontSize: 14 }}>
                 No takeoff lines yet. Run an Agent workflow that reads schedules,
-                sweeps plan tags, or builds a project takeoff — those results
-                compile here into line items you can finalize and export.
+                sweeps plan tags, points lists, or builds a project takeoff —
+                those results compile here with columns matching each schedule type.
               </div>
             ) : (
-              bySchedule.map(([schedule, group]) => (
-                <section key={schedule} style={{ marginTop: 16 }}>
-                  <h3 style={{
-                    margin: "0 10px 8px", fontSize: 13, fontWeight: 600,
-                    color: "var(--ink-muted)",
-                  }}>{schedule}</h3>
-                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                    <thead>
-                      <tr>
-                        <th style={th}>Tag</th>
-                        <th style={th}>Description</th>
-                        <th style={{ ...th, textAlign: "right" }}>Qty</th>
-                        <th style={th}>Unit</th>
-                        <th style={th}>Sheet</th>
-                        <th style={th}>Details</th>
-                        <th style={th} />
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {group.map((line) => (
-                        <tr key={line.id}>
-                          <td style={{ ...td, fontFamily: "var(--f-mono)", fontSize: 12, fontWeight: 650 }}>
-                            {line.tag || "—"}
-                          </td>
-                          <td style={td}>
-                            <div>{line.description}</div>
-                            {line.qty_kind && line.qty_kind !== "installed" && (
-                              <div style={{ fontSize: 11, color: "var(--ink-muted)", marginTop: 2 }}>
-                                {line.qty_kind === "scheduled" ? "Scheduled" : line.qty_kind}
-                              </div>
-                            )}
-                          </td>
-                          <td style={{ ...td, textAlign: "right", fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>
-                            {line.qty ?? "—"}
-                          </td>
-                          <td style={td}>{line.unit || "—"}</td>
-                          <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)" }}>{line.sheet_id || "—"}</td>
-                          <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)", maxWidth: 280 }}>
-                            {line.attrs_text || line.notes || "—"}
-                            {line.attrs_text && line.notes ? (
-                              <div style={{ marginTop: 2 }}>{line.notes}</div>
-                            ) : null}
-                          </td>
-                          <td style={{ ...td, whiteSpace: "nowrap" }}>
-                            {typeof onOpenCitation === "function" && line.sheet_id && line.bbox_px && (
-                              <button type="button" onClick={() => onOpenCitation({
-                                sheet_id: line.sheet_id,
-                                bbox_px: line.bbox_px,
-                                tag: line.tag,
-                                value: line.qty,
+              familyGroups.map((group) => {
+                const lead = group.leadColumns || [];
+                const specs = group.specColumns || [];
+                return (
+                  <section key={group.family} style={{ marginTop: 16 }}>
+                    <h3 style={{
+                      margin: "0 10px 8px", fontSize: 13, fontWeight: 600,
+                      color: "var(--ink-muted)", display: "flex", gap: 10, alignItems: "baseline",
+                      flexWrap: "wrap",
+                    }}>
+                      <span>{group.family}</span>
+                      <span style={{
+                        fontFamily: "var(--f-mono)", fontSize: 11, fontWeight: 500,
+                        letterSpacing: "0.04em",
+                      }}>
+                        {group.lines.length} line{group.lines.length === 1 ? "" : "s"}
+                        {group.qtyTotal ? ` · ${group.qtyTotal} EA` : ""}
+                        {specs.length ? ` · ${specs.length} field${specs.length === 1 ? "" : "s"}` : ""}
+                      </span>
+                    </h3>
+                    <div style={{ overflowX: "auto" }}>
+                      <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 640 }}>
+                        <thead>
+                          <tr>
+                            {lead.map((c) => (
+                              <th key={c.key} style={{
+                                ...th,
+                                textAlign: c.key === "qty" ? "right" : "left",
+                              }}>{c.label}</th>
+                            ))}
+                            {specs.map((c) => (
+                              <th key={c} style={th}>{c}</th>
+                            ))}
+                            <th style={th}>Sheet</th>
+                            <th style={th}>Status</th>
+                            <th style={th} />
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {group.lines.map((line) => (
+                            <tr key={line.id}>
+                              {lead.map((c) => {
+                                const val = lineLeadValue(line, c.key);
+                                const isTag = c.key === "tag";
+                                const isQty = c.key === "qty";
+                                return (
+                                  <td
+                                    key={c.key}
+                                    style={{
+                                      ...td,
+                                      fontFamily: isTag ? "var(--f-mono)" : undefined,
+                                      fontSize: isTag ? 12 : 13,
+                                      fontWeight: isTag || isQty ? 650 : undefined,
+                                      textAlign: isQty ? "right" : "left",
+                                      fontVariantNumeric: isQty ? "tabular-nums" : undefined,
+                                      whiteSpace: isTag ? "nowrap" : undefined,
+                                    }}
+                                  >
+                                    {val === "" || val == null ? "—" : String(val)}
+                                    {c.key === "qty" && line.qty_kind && line.qty_kind !== "installed" && (
+                                      <div style={{ fontSize: 10, fontWeight: 500, color: "var(--ink-muted)" }}>
+                                        {line.qty_kind === "scheduled" ? "sched" : line.qty_kind}
+                                      </div>
+                                    )}
+                                  </td>
+                                );
                               })}
-                                style={{ ...btnStyle, padding: "4px 8px", fontSize: 11 }}>
-                                View
-                              </button>
-                            )}
-                            {typeof onRemoveLine === "function" && (
-                              <button type="button" onClick={() => onRemoveLine(line)}
-                                style={{
-                                  border: "none", background: "transparent", cursor: "pointer",
-                                  color: "var(--ink-muted)", padding: "4px 6px", fontSize: 11,
+                              {specs.map((c) => (
+                                <td key={c} style={{
+                                  ...td, fontSize: 12.5, fontVariantNumeric: "tabular-nums",
+                                  whiteSpace: "nowrap",
                                 }}>
-                                Remove
-                              </button>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </section>
-              ))
+                                  {String(lineSpecValue(line, c) || "—")}
+                                </td>
+                              ))}
+                              <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)", whiteSpace: "nowrap" }}>
+                                {line.plan_sheet_id || line.schedule_sheet_id || line.sheet_id || "—"}
+                              </td>
+                              <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)" }}>
+                                {line.status || "—"}
+                                {line.notes ? (
+                                  <div style={{ marginTop: 2, maxWidth: 160, whiteSpace: "normal" }}>{line.notes}</div>
+                                ) : null}
+                              </td>
+                              <td style={{ ...td, whiteSpace: "nowrap" }}>
+                                {typeof onOpenCitation === "function" && line.sheet_id && line.bbox_px && (
+                                  <button type="button" onClick={() => onOpenCitation({
+                                    sheet_id: line.sheet_id,
+                                    bbox_px: line.bbox_px,
+                                    tag: line.tag,
+                                    value: line.qty,
+                                  })}
+                                    style={{ ...btnStyle, padding: "4px 8px", fontSize: 11 }}>
+                                    View
+                                  </button>
+                                )}
+                                {typeof onRemoveLine === "function" && (
+                                  <button type="button" onClick={() => onRemoveLine(line)}
+                                    style={{
+                                      border: "none", background: "transparent", cursor: "pointer",
+                                      color: "var(--ink-muted)", padding: "4px 6px", fontSize: 11,
+                                    }}>
+                                    Remove
+                                  </button>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+                );
+              })
             )
           ) : (
             !rows.length ? (

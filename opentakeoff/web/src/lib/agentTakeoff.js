@@ -68,38 +68,56 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
 
   if (name === "query_table") {
     const title = data.matches?.[0]?.title || args.title || null;
-    for (const match of data.matches || []) {
-      const key = match.row?.key || match.row?.identity?.text || args.row_key || null;
-      const cells = match.row?.all_cells || match.row?.cells || {};
-      // Prefer scoped column lookups; otherwise emit identity + a few fields.
-      if (args.column && cells[args.column]) {
-        const cell = cells[args.column];
-        rows.push(makeTakeoffRow({
-          workflow, runId, tag: key, field: args.column, value: cellText(cell),
-          sheet_id: match.sheet, table_title: match.title || title,
-          column: args.column, bbox_px: cell?.bbox, source_tool: name,
-        }));
-        continue;
-      }
-      if (key) {
-        const idCell = match.row?.identity || cells.MARK || cells.TAG || cells.SYMBOL;
-        rows.push(makeTakeoffRow({
-          workflow, runId, tag: key, field: "MARK", value: key,
-          sheet_id: match.sheet, table_title: match.title || title,
-          column: match.row?.identity?.header || "MARK",
-          bbox_px: idCell?.bbox, source_tool: name,
-        }));
-      }
-      if (typeof data.count === "number" && !args.row_key) {
-        rows.push(makeTakeoffRow({
-          workflow, runId, tag: null, field: "schedule_count", value: data.count,
-          sheet_id: match.sheet, table_title: match.title || title,
-          source_tool: name, note: "query_table count",
-        }));
-        break;
+    const matches = data.matches || [];
+    // Title-scan counts stay compact; row_key / modest result sets expand into
+    // full schedule columns so the Takeoff UI can adapt (valves, points, …).
+    const expandRows = Boolean(args.row_key) || Boolean(args.column) || matches.length <= 24;
+    if (!expandRows && typeof data.count === "number" && !args.row_key) {
+      rows.push(makeTakeoffRow({
+        workflow, runId, tag: null, field: "schedule_count", value: data.count,
+        sheet_id: matches[0]?.sheet || null, table_title: title || args.title || null,
+        source_tool: name, note: "query_table count",
+      }));
+    } else {
+      for (const match of matches) {
+        const key = match.row?.key || match.row?.identity?.text || args.row_key || null;
+        const cells = match.row?.all_cells || match.row?.cells || {};
+        const tableTitle = match.title || title;
+        if (args.column && cells[args.column]) {
+          const cell = cells[args.column];
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag: key, field: args.column, value: cellText(cell),
+            sheet_id: match.sheet, table_title: tableTitle,
+            column: args.column, bbox_px: cell?.bbox, source_tool: name,
+          }));
+          continue;
+        }
+        if (key) {
+          const idCell = match.row?.identity || cells.MARK || cells.TAG || cells.SYMBOL || cells.POINT;
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag: key, field: "MARK", value: key,
+            sheet_id: match.sheet, table_title: tableTitle,
+            column: match.row?.identity?.header || "MARK",
+            bbox_px: idCell?.bbox || (typeof idCell === "object" ? idCell.bbox : null),
+            source_tool: name,
+          }));
+        }
+        for (const [header, cell] of Object.entries(cells)) {
+          const hu = String(header || "").toUpperCase();
+          if (hu === "MARK" || hu === "TAG" || hu === "SYMBOL") continue;
+          const text = cellText(cell);
+          if (!String(text).trim()) continue;
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag: key, field: header, value: text,
+            sheet_id: match.sheet, table_title: tableTitle,
+            column: header,
+            bbox_px: cell && typeof cell === "object" ? cell.bbox : null,
+            source_tool: name,
+          }));
+        }
       }
     }
-    if (typeof data.count === "number" && !(data.matches || []).length) {
+    if (typeof data.count === "number" && !matches.length) {
       rows.push(makeTakeoffRow({
         workflow, runId, field: "schedule_count", value: data.count,
         table_title: args.title || null, source_tool: name,
@@ -138,24 +156,38 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
   }
 
   if (name === "takeoff_summary" || name === "project_takeoff") {
-    for (const item of data.items || data.equipment || data.legend_items || []) {
-      const tag = item.tag || item.mark || item.id || null;
-      const qty = item.quantity ?? item.qty ?? item.found;
+    for (const item of data.items || data.equipment || data.legend_items || data.points || []) {
+      const tag = item.tag || item.mark || item.id || item.point || null;
+      const qty = item.quantity ?? item.qty ?? item.found ?? (tag ? 1 : null);
       const schedule = item.schedule && typeof item.schedule === "object" ? item.schedule : null;
+      const sheet = schedule?.sheet || item.schedule_sheet || item.sheet || null;
+      const table = schedule?.title || item.schedule_title || item.table || item.points_list || null;
       if (tag != null && qty != null) {
         rows.push(makeTakeoffRow({
           workflow, runId, tag, field: "quantity", value: qty, unit: item.unit || "EA",
-          sheet_id: schedule?.sheet || item.schedule_sheet || item.sheet || null,
-          table_title: schedule?.title || item.schedule_title || item.table || null,
+          sheet_id: sheet, table_title: table,
           source_tool: name, note: item.equipment_type || item.type || item.status || null,
         }));
         if (item.equipment_type) {
           rows.push(makeTakeoffRow({
             workflow, runId, tag, field: "equipment_type", value: item.equipment_type,
-            sheet_id: schedule?.sheet || item.sheet || null,
-            table_title: schedule?.title || item.table || null,
-            source_tool: name,
+            sheet_id: sheet, table_title: table, source_tool: name,
           }));
+        }
+        const attrBags = [
+          schedule?.cells, item.cells, item.attrs, item.attributes, item.fields,
+        ].filter((x) => x && typeof x === "object" && !Array.isArray(x));
+        for (const bag of attrBags) {
+          for (const [header, raw] of Object.entries(bag)) {
+            const hu = String(header || "").toUpperCase();
+            if (hu === "MARK" || hu === "TAG" || hu === "SYMBOL") continue;
+            const text = cellText(raw);
+            if (!String(text).trim()) continue;
+            rows.push(makeTakeoffRow({
+              workflow, runId, tag, field: header, value: text,
+              sheet_id: sheet, table_title: table, column: header, source_tool: name,
+            }));
+          }
         }
       }
     }
@@ -274,10 +306,46 @@ export function mergeTakeoffRows(existing, incoming) {
 const QTY_FIELDS = new Set([
   "installed_quantity", "quantity", "mark_count", "schedule_count", "project_total",
 ]);
-const DESC_FIELDS = [
-  "equipment_type", "DESCRIPTION", "TYPE", "MODEL", "MANUFACTURER", "MANUFACTURER / MODEL",
+const SKIP_ATTR = new Set(["MARK", "TAG", "SYMBOL", "plan_tag", "plan_status", ...QTY_FIELDS]);
+
+/** Preferred left-to-right order when a field appears — never forces empty columns.
+ * Columns only show when at least one line in the (family) group has that field. */
+export const TAKEOFF_SPEC_ORDER = [
+  // Identity / product / duty
+  "TYPE", "SERVICE", "DESCRIPTION", "PATTERN", "STYLE", "APPLICATION", "DUTY",
+  "SIZE", "NOMINAL SIZE", "FRAME SIZE",
+  // Air-side / terminals
+  "CFM", "SUPPLY CFM", "RETURN CFM", "EXHAUST CFM", "OA CFM", "MAX CFM", "MIN CFM",
+  "MBH", "HEATING MBH", "COOLING MBH", "TONS", "KW", "HEATING KW", "COOLING KW",
+  "EAT", "LAT", "DB", "WB", "EAT DB", "LAT DB",
+  "ESP", "S.P. (IN.W.C.)", "SP", "TSP", "EXTERNAL SP",
+  "NC", "NC LEVEL", "DISCHARGE", "INLET", "OUTLET",
+  // Hydronic / valve / coil
+  "GPM", "FLOW", "FLOW (GPM)", "MAX GPM", "MIN GPM",
+  "CV", "Cv", "CV VALUE", "CV (MIN)", "CV (MAX)",
+  "PRESSURE DROP", "PD", "PD (FT)", "FT HD", "HEAD", "HEAD (FT)",
+  "PIPE SIZE", "CONN", "CONNECTION", "BODY", "BODY SIZE", "END CONN", "END CONNECTION",
+  "FLUID", "MEDIUM", "DESIGN ΔP", "DELTA P", "ΔP", "CLOSE-OFF", "CLOSE OFF",
+  "ACTUATOR", "FAIL POSITION", "FAIL POS", "CONTROL SIGNAL",
+  // Dampers / duct / fire-smoke
+  "BLADE", "BLADE ACTION", "LEAKAGE", "CLASS", "VELOCITY", "FPM",
+  "DUCT SIZE", "W x H", "WIDTH", "HEIGHT", "DIAMETER", "Ø",
+  // Electrical / motor
+  "HP", "ELECTRICAL HP", "RPM", "MOTORRPM", "MOTOR RPM", "POLES",
+  "VOLTAGE", "ELECTRICAL VOLTS", "VOLTS", "V", "PHASE", "ELECTRICAL Ø", "PH",
+  "HZ", "ELECTRICAL HZ.", "MCA", "MOCP", "FLA", "RLA", "AMPS", "LRA",
+  // Drive / refrigeration / misc equipment
+  "DRIVE", "REFRIGERANT", "EER", "IEER", "SEER", "COP", "CAPACITY",
+  "WEIGHT", "WEIGHT (LBS)", "AREA", "SF", "LENGTH", "LF",
+  "REMARKS", "NOTES", "COMMENT", "COMMENTS",
+  // BAS / points lists
+  "POINT TYPE", "POINT", "POINT NAME", "POINT DESCRIPTION",
+  "SIGNAL", "SIGNAL TYPE", "SIGNAL RANGE", "IO", "I/O", "I/O TYPE",
+  "AI", "AO", "BI", "BO", "DI", "DO", "UI", "UO",
+  "CONTROLLER", "CONTROLLER NAME", "PANEL", "DEVICE", "DEVICE NAME",
+  "ADDRESS", "BACNET", "BACNET OBJECT", "OBJECT", "OBJECT TYPE", "INSTANCE",
+  "UNITS", "RANGE", "NORMAL", "ALARM", "TREND", "PRIORITY",
 ];
-const SKIP_ATTR = new Set(["MARK", "TAG", "SYMBOL", "plan_tag", ...QTY_FIELDS]);
 
 const asNumber = (v) => {
   if (typeof v === "number" && Number.isFinite(v)) return v;
@@ -285,9 +353,132 @@ const asNumber = (v) => {
   return Number.isFinite(n) ? n : null;
 };
 
+const normKey = (k) => String(k || "").toUpperCase().replace(/\s+/g, " ").trim();
+
+const pickAttr = (attrs, names) => {
+  for (const name of names) {
+    const hit = Object.entries(attrs).find(([k]) => normKey(k) === normKey(name));
+    if (hit && hit[1] != null && String(hit[1]).trim() !== "") return { key: hit[0], value: hit[1] };
+  }
+  return null;
+};
+
+const familyFromSchedule = (title, tag) => {
+  // Prefer the real schedule / list title — that is the modular takeoff section.
+  const t = String(title || "").trim();
+  if (t) return t;
+  const tg = String(tag || "").toUpperCase();
+  if (/POINT|POINTS LIST|\bAI-|\bAO-|\bBI-|\bBO-/i.test(tg) || /^(AI|AO|BI|BO|DI|DO)[\s_-]/i.test(tg)) {
+    return "BAS points";
+  }
+  if (/^VAV-/.test(tg)) return "VAV / Air terminals";
+  if (/^(CV|BCV|FV|PRV|TCV|MV|HV|CHWV|HWV)-/.test(tg)) return "Valves / hydronic";
+  if (/^(FD|SD|FSD|MD)-/.test(tg)) return "Dampers";
+  if (/^EF-|^SF-|^RF-|^EF\b/.test(tg)) return "Fans";
+  if (/^AHU-|^DOAH-/.test(tg)) return "Air handlers";
+  if (/^RTU-/.test(tg)) return "Rooftop / packaged units";
+  if (/^CH-/.test(tg)) return "Chillers";
+  if (/^P-|^CP-|^CHP-|^HWP-/.test(tg)) return "Pumps";
+  if (/^FCU-/.test(tg)) return "Fan coil units";
+  if (/^CD-|^SD-|^RCD-/.test(tg)) return "Diffusers / grilles";
+  return "Equipment";
+};
+
+/** Spec value on a line by column header (case/space tolerant). */
+export function lineSpecValue(line, col) {
+  if (!line?.specs) return "";
+  const hit = Object.entries(line.specs).find(([k]) => normKey(k) === normKey(col));
+  return hit ? hit[1] : "";
+}
+
 /**
- * Compile EAV workflow rows into estimator takeoff line items
- * (one line per tag / schedule family).
+ * Lead (identity) columns for a family group — only fields that appear.
+ * Points lists skip Manufacturer/Model; valve takeoffs keep them when present.
+ */
+const tagLabelFor = (lines) => {
+  const fam = String(lines[0]?.family || lines[0]?.table_title || "");
+  if (/POINT/i.test(fam)) return "Point";
+  return "Tag";
+};
+
+export function takeoffLeadColumns(lines = []) {
+  const list = lines || [];
+  const has = (fn) => list.some(fn);
+  const cols = [{ key: "tag", label: tagLabelFor(list) }];
+  if (has((l) => {
+    const t = String(l.type || "").trim();
+    return t && t !== String(l.tag || "").trim();
+  })) {
+    cols.push({ key: "type", label: "Type" });
+  }
+  if (has((l) => l.qty != null && l.qty !== "")) {
+    cols.push({ key: "qty", label: "Qty" });
+    if (has((l) => l.unit)) cols.push({ key: "unit", label: "Unit" });
+  }
+  if (has((l) => l.manufacturer)) cols.push({ key: "manufacturer", label: "Manufacturer" });
+  if (has((l) => l.model)) cols.push({ key: "model", label: "Model" });
+  return cols;
+}
+
+/**
+ * Technical columns for a set of lines — ONLY fields that appear on at least
+ * one line. Valve groups surface GPM/Cv/pipe size; VAV groups surface CFM/MBH/kW;
+ * points lists surface Point Type / Signal / Controller. Empty air columns
+ * never pad a hydronic or points takeoff.
+ */
+export function takeoffSpecColumns(lines = []) {
+  const seen = new Map();
+  for (const line of lines) {
+    for (const [k, v] of Object.entries(line.specs || {})) {
+      if (v == null || String(v).trim() === "") continue;
+      const nk = normKey(k);
+      if (!seen.has(nk)) seen.set(nk, k);
+    }
+  }
+  const keys = [...seen.values()];
+  keys.sort((a, b) => {
+    const ia = TAKEOFF_SPEC_ORDER.findIndex((x) => normKey(x) === normKey(a));
+    const ib = TAKEOFF_SPEC_ORDER.findIndex((x) => normKey(x) === normKey(b));
+    const aa = ia < 0 ? 999 : ia;
+    const bb = ib < 0 ? 999 : ib;
+    if (aa !== bb) return aa - bb;
+    return a.localeCompare(b);
+  });
+  return keys;
+}
+
+/** Group compiled lines by schedule/family (each family gets its own column set). */
+export function groupTakeoffByFamily(lines = []) {
+  const map = new Map();
+  for (const line of lines) {
+    const key = line.family || line.table_title || "Equipment";
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(line);
+  }
+  return [...map.entries()].map(([family, group]) => ({
+    family,
+    lines: group,
+    leadColumns: takeoffLeadColumns(group),
+    specColumns: takeoffSpecColumns(group),
+    qtyTotal: group.reduce((n, l) => n + (typeof l.qty === "number" && (l.unit || "EA") === "EA" ? l.qty : 0), 0),
+  }));
+}
+
+/** Cell value for a lead column key. */
+export function lineLeadValue(line, key) {
+  if (!line) return "";
+  if (key === "tag") return line.tag || "";
+  if (key === "type") return line.type || "";
+  if (key === "qty") return line.qty ?? "";
+  if (key === "unit") return line.unit || "";
+  if (key === "manufacturer") return line.manufacturer || "";
+  if (key === "model") return line.model || "";
+  return "";
+}
+
+/**
+ * Compile EAV workflow rows into a real equipment takeoff:
+ * one line per tag with qty + technical schedule columns (CFM, MBH, kW, …).
  */
 export function compileAgentTakeoff(rows = []) {
   const groups = new Map();
@@ -305,12 +496,14 @@ export function compileAgentTakeoff(rows = []) {
         qty: null,
         unit: null,
         qty_kind: null,
-        sheet_id: null,
+        schedule_sheet_id: null,
         plan_sheet_id: null,
         table_title: null,
         workflows: new Set(),
+        status: null,
         notes: [],
         bbox_px: null,
+        plan_bbox_px: null,
       });
     }
     const g = groups.get(key);
@@ -342,103 +535,131 @@ export function compileAgentTakeoff(rows = []) {
         g.qty_kind = "scheduled";
       }
     } else if (field === "plan_status") {
-      const status = String(row.value || "").toLowerCase();
-      if (status === "refused") g.notes.push("Plan tag refused — not drawn on plan sheets");
-      else if (status) g.notes.push(`Plan: ${row.value}`);
-      if (row.sheet_id && !g.sheet_id) g.sheet_id = row.sheet_id;
+      const status = String(row.value || "").trim().toLowerCase();
+      if (status === "refused") {
+        g.status = "refused";
+        g.notes.push("Tag not drawn on plan — sweep refused");
+      } else if (status) {
+        g.status = status;
+        g.notes.push(`Plan: ${row.value}`);
+      }
+      if (row.sheet_id && !g.schedule_sheet_id) g.schedule_sheet_id = row.sheet_id;
     } else if (field === "plan_tag") {
       if (row.sheet_id) g.plan_sheet_id = row.sheet_id;
-      if (row.bbox_px && !g.bbox_px) g.bbox_px = row.bbox_px;
+      if (row.bbox_px) g.plan_bbox_px = row.bbox_px;
+      g.status = g.status || "located";
     } else if (!SKIP_ATTR.has(field) && !SKIP_ATTR.has(fieldU) && row.value != null && String(row.value).trim() !== "") {
-      g.attrs[field] = row.value;
-      if (row.unit && !g.attrs[`${field}_unit`]) g.attrs[`${field}_unit`] = row.unit;
+      // Prefer first non-empty; later richer tools can overwrite empty.
+      if (g.attrs[field] == null || String(g.attrs[field]).trim() === "") {
+        g.attrs[field] = row.value;
+      }
     }
 
-    // Prefer plan sheet for location; keep schedule sheet as fallback.
     if (row.source_tool === "sweep_schedule_row" && row.sheet_id && field === "installed_quantity") {
       g.plan_sheet_id = row.sheet_id;
-      if (row.bbox_px) g.bbox_px = row.bbox_px;
-    } else if (row.sheet_id && !g.sheet_id) {
-      g.sheet_id = row.sheet_id;
+      if (row.bbox_px) g.plan_bbox_px = row.bbox_px;
+      g.status = g.status || "located";
+    } else if (row.sheet_id && (field !== "installed_quantity" && field !== "plan_tag")) {
+      if (!g.schedule_sheet_id) g.schedule_sheet_id = row.sheet_id;
     }
-    if (row.bbox_px && !g.bbox_px && field !== "plan_status") g.bbox_px = row.bbox_px;
+    if (row.bbox_px && !g.bbox_px && field !== "plan_status" && field !== "plan_tag" && field !== "installed_quantity") {
+      g.bbox_px = row.bbox_px;
+    }
   }
 
   const lines = [];
   for (const g of groups.values()) {
-    // Tagged equipment with attrs but no qty → scheduled line of 1.
     if (g.tag && g.qty == null && Object.keys(g.attrs).length) {
       g.qty = 1;
       g.unit = "EA";
       g.qty_kind = "scheduled";
     }
-    let description = "";
-    for (const f of DESC_FIELDS) {
-      if (g.attrs[f] != null && String(g.attrs[f]).trim()) {
-        description = String(g.attrs[f]).trim();
-        break;
+    if (g.qty == null && !g.tag) continue; // drop empty junk
+
+    const mfr = pickAttr(g.attrs, ["MANUFACTURER", "MFR", "MANUFACTURER/MODEL", "MANUFACTURER / MODEL"]);
+    const model = pickAttr(g.attrs, ["MODEL"]);
+    // If manufacturer/model is combined, split display.
+    let manufacturer = mfr?.value != null ? String(mfr.value) : null;
+    let modelVal = model?.value != null ? String(model.value) : null;
+    if (manufacturer && /[/|]/.test(manufacturer) && !modelVal) {
+      const parts = manufacturer.split(/\s*[/|]\s*/);
+      if (parts.length >= 2) {
+        manufacturer = parts[0];
+        modelVal = parts.slice(1).join(" / ");
       }
     }
-    if (!description) description = g.table_title || (g.tag ? g.tag : "Schedule count");
-    const attrParts = [];
+
+    const typePick = pickAttr(g.attrs, ["equipment_type", "TYPE", "POINT TYPE", "SERVICE", "DESCRIPTION"]);
+    const typeLabel = typePick?.value != null ? String(typePick.value) : (g.tag || "Item");
+    const typeKeyNorm = typePick ? normKey(typePick.key) : null;
+
+    const specs = {};
     for (const [k, v] of Object.entries(g.attrs)) {
       if (k.endsWith("_unit")) continue;
-      if (DESC_FIELDS.includes(k) && String(v) === description) continue;
-      const u = g.attrs[`${k}_unit`];
-      // Avoid "CFM 400 CFM" when the field name is already the unit.
-      if (u && String(u).toUpperCase() !== String(k).toUpperCase()) {
-        attrParts.push(`${k} ${v} ${u}`);
-      } else {
-        attrParts.push(`${k} ${v}`);
-      }
+      const nk = normKey(k);
+      // Manufacturer/model live in dedicated columns; the attr used as Type
+      // is shown in the Type lead column — keep remaining technical fields.
+      if (["MANUFACTURER", "MFR", "MODEL", "MANUFACTURER/MODEL", "MANUFACTURER / MODEL", "EQUIPMENT_TYPE"].includes(nk)) continue;
+      if (typeKeyNorm && nk === typeKeyNorm) continue;
+      specs[k] = v;
     }
-    const sheet = g.plan_sheet_id || g.sheet_id || null;
-    const noteParts = [...g.notes];
-    if (g.qty_kind === "scheduled" && g.tag) noteParts.push("Scheduled (not sweep-confirmed)");
-    if (g.qty_kind === "mark_count") noteParts.push("Mark count");
+
+    const family = familyFromSchedule(g.table_title, g.tag);
     lines.push({
       id: g.id,
       tag: g.tag,
-      description,
+      family,
+      type: typeLabel,
+      manufacturer,
+      model: modelVal,
       qty: g.qty,
       unit: g.unit || (g.qty != null ? "EA" : null),
       qty_kind: g.qty_kind,
-      sheet_id: sheet,
+      specs,
+      plan_sheet_id: g.plan_sheet_id || null,
+      schedule_sheet_id: g.schedule_sheet_id || g.sheet_id || null,
       table_title: g.table_title,
-      attrs: Object.fromEntries(
-        Object.entries(g.attrs).filter(([k]) => !k.endsWith("_unit")),
-      ),
-      attrs_text: attrParts.join(" · "),
-      notes: noteParts.join("; "),
+      status: g.status || (g.qty_kind === "installed" ? "located" : (g.qty_kind === "scheduled" ? "scheduled" : null)),
+      notes: g.notes.join("; "),
       workflow: [...g.workflows].join(" · "),
-      bbox_px: g.bbox_px,
+      bbox_px: g.plan_bbox_px || g.bbox_px,
       source_ids: g.sourceRows.map((r) => r.id),
       source_count: g.sourceRows.length,
+      // back-compat aliases used by older panel code
+      description: [manufacturer, modelVal].filter(Boolean).join(" / ") || typeLabel,
+      sheet_id: g.plan_sheet_id || g.schedule_sheet_id || null,
+      attrs_text: Object.entries(specs).map(([k, v]) => `${k} ${v}`).join(" · "),
     });
   }
 
-  // Tag lines first (alpha), then schedule-only summaries.
   lines.sort((a, b) => {
-    const at = a.tag || `\uffff${a.description}`;
-    const bt = b.tag || `\uffff${b.description}`;
+    const fam = a.family.localeCompare(b.family);
+    if (fam) return fam;
+    const at = a.tag || a.type || "";
+    const bt = b.tag || b.type || "";
     return at.localeCompare(bt, undefined, { numeric: true, sensitivity: "base" });
   });
   return lines;
 }
 
 export function compiledTakeoffToCsv(lines) {
-  const header = ["Tag", "Description", "Qty", "Unit", "Qty kind", "Sheet", "Schedule", "Attributes", "Notes", "Workflow"];
+  // One CSV with union of columns — Excel export prefers per-family sheets.
+  const lead = takeoffLeadColumns(lines);
+  const specCols = takeoffSpecColumns(lines);
+  const header = [
+    ...lead.map((c) => c.label),
+    ...specCols,
+    "Plan sheet", "Schedule sheet", "Schedule", "Status", "Notes", "Workflow",
+  ];
   const out = [header.map(esc).join(",")];
   for (const r of lines || []) {
     out.push([
-      r.tag || "",
-      r.description || "",
-      r.qty ?? "",
-      r.unit || "",
-      r.qty_kind || "",
-      r.sheet_id || "",
+      ...lead.map((c) => lineLeadValue(r, c.key)),
+      ...specCols.map((c) => lineSpecValue(r, c)),
+      r.plan_sheet_id || "",
+      r.schedule_sheet_id || "",
       r.table_title || "",
-      r.attrs_text || "",
+      r.status || "",
       r.notes || "",
       r.workflow || "",
     ].map(esc).join(","));
@@ -477,23 +698,49 @@ export function downloadTakeoffCsv(linesOrRows, filename = "opentakeoff-takeoff.
 }
 
 export async function downloadTakeoffXlsx(linesOrRows, filename = "opentakeoff-takeoff.xlsx", { mode = "compiled" } = {}) {
-  const sheetRows = mode === "workflow"
-    ? [
-      ["Tag", "Field", "Value", "Unit", "Sheet", "Schedule", "Column", "Workflow", "Source"],
-      ...(linesOrRows || []).map((r) => [
-        r.tag || "", r.field || "", typeof r.value === "number" ? r.value : (r.value ?? ""),
-        r.unit || "", r.sheet_id || "", r.table_title || "", r.column || "", r.workflow || "", r.source_tool || "",
-      ]),
-    ]
-    : [
-      ["Tag", "Description", "Qty", "Unit", "Qty kind", "Sheet", "Schedule", "Attributes", "Notes", "Workflow"],
-      ...(linesOrRows || []).map((r) => [
-        r.tag || "", r.description || "", typeof r.qty === "number" ? r.qty : (r.qty ?? ""),
-        r.unit || "", r.qty_kind || "", r.sheet_id || "", r.table_title || "",
-        r.attrs_text || "", r.notes || "", r.workflow || "",
-      ]),
-    ];
-  const bytes = await buildXlsx([{ name: mode === "workflow" ? "Workflow data" : "Takeoff", rows: sheetRows }]);
+  let sheets;
+  if (mode === "workflow") {
+    sheets = [{
+      name: "Workflow data",
+      rows: [
+        ["Tag", "Field", "Value", "Unit", "Sheet", "Schedule", "Column", "Workflow", "Source"],
+        ...(linesOrRows || []).map((r) => [
+          r.tag || "", r.field || "", typeof r.value === "number" ? r.value : (r.value ?? ""),
+          r.unit || "", r.sheet_id || "", r.table_title || "", r.column || "", r.workflow || "", r.source_tool || "",
+        ]),
+      ],
+    }];
+  } else {
+    // One worksheet per schedule/family — columns adapt to that family's fields only.
+    const groups = groupTakeoffByFamily(linesOrRows || []);
+    sheets = (groups.length ? groups : [{ family: "Takeoff", lines: [], leadColumns: [], specColumns: [] }]).map((g) => {
+      const lead = g.leadColumns || takeoffLeadColumns(g.lines);
+      const cols = g.specColumns || takeoffSpecColumns(g.lines);
+      const header = [
+        ...lead.map((c) => c.label),
+        ...cols,
+        "Plan sheet", "Schedule sheet", "Status", "Notes",
+      ];
+      return {
+        name: g.family || "Takeoff",
+        rows: [
+          header,
+          ...(g.lines || []).map((r) => [
+            ...lead.map((c) => {
+              const v = lineLeadValue(r, c.key);
+              return c.key === "qty" && typeof v === "number" ? v : v;
+            }),
+            ...cols.map((c) => lineSpecValue(r, c)),
+            r.plan_sheet_id || "",
+            r.schedule_sheet_id || "",
+            r.status || "",
+            r.notes || "",
+          ]),
+        ],
+      };
+    });
+  }
+  const bytes = await buildXlsx(sheets);
   const blob = new Blob([bytes], {
     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   });
@@ -507,7 +754,7 @@ export async function downloadTakeoffXlsx(linesOrRows, filename = "opentakeoff-t
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-/** Build takeoff PDF bytes (landscape table). Used by download + tests. */
+/** Build takeoff PDF bytes. Compiled mode: one table per family with that family's columns. */
 export async function buildTakeoffPdfBytes(linesOrRows, {
   title = "OpenTakeoff — Takeoff",
   projectName = "",
@@ -517,94 +764,103 @@ export async function buildTakeoffPdfBytes(linesOrRows, {
   const doc = await PDFDocument.create();
   const font = await doc.embedFont(StandardFonts.Helvetica);
   const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
-  const pageWidth = 792; // landscape letter
+  const pageWidth = 792;
   const pageHeight = 612;
-  const margin = 36;
-  const compiled = mode !== "workflow";
-  const colWidths = compiled
-    ? [72, 160, 48, 36, 140, 160]
-    : [70, 110, 90, 40, 150, 140];
-  const headers = compiled
-    ? ["Tag", "Description", "Qty", "Unit", "Sheet", "Attributes / notes"]
-    : ["Tag", "Field", "Value", "Unit", "Sheet", "Schedule"];
-  const lineH = 14;
+  const margin = 28;
+  const lineH = 12;
   const list = linesOrRows || [];
 
-  const drawHeader = (page, y) => {
-    page.drawText(title, { x: margin, y, size: 14, font: fontBold, color: rgb(0.1, 0.1, 0.15) });
-    y -= 16;
-    if (projectName) {
-      page.drawText(String(projectName), { x: margin, y, size: 10, font, color: rgb(0.35, 0.35, 0.4) });
-      y -= 14;
-    }
-    page.drawText(`Generated ${new Date().toLocaleString()} · ${list.length} line${list.length === 1 ? "" : "s"}`, {
-      x: margin, y, size: 9, font, color: rgb(0.45, 0.45, 0.5),
-    });
-    y -= 18;
-    let x = margin;
-    headers.forEach((h, i) => {
-      page.drawText(h, { x, y, size: 9, font: fontBold, color: rgb(0.15, 0.15, 0.2) });
-      x += colWidths[i];
-    });
-    y -= 4;
-    page.drawLine({
-      start: { x: margin, y },
-      end: { x: pageWidth - margin, y },
-      thickness: 0.8,
-      color: rgb(0.7, 0.7, 0.75),
-    });
-    return y - 12;
+  const clip = (text, maxW, size = 8) => {
+    const s = String(text ?? "");
+    if (font.widthOfTextAtSize(s, size) <= maxW) return s;
+    let out = s;
+    while (out.length > 1 && font.widthOfTextAtSize(`${out}…`, size) > maxW) out = out.slice(0, -1);
+    return `${out}…`;
   };
 
   let page = doc.addPage([pageWidth, pageHeight]);
   let y = pageHeight - margin;
-  y = drawHeader(page, y);
+  const newPage = () => { page = doc.addPage([pageWidth, pageHeight]); y = pageHeight - margin; };
+  const ensure = (need) => { if (y < margin + need) newPage(); };
 
-  const clip = (text, maxW) => {
-    const s = String(text ?? "");
-    if (font.widthOfTextAtSize(s, 9) <= maxW) return s;
-    let out = s;
-    while (out.length > 1 && font.widthOfTextAtSize(`${out}…`, 9) > maxW) out = out.slice(0, -1);
-    return `${out}…`;
-  };
+  page.drawText(title, { x: margin, y, size: 13, font: fontBold, color: rgb(0.1, 0.1, 0.15) });
+  y -= 14;
+  if (projectName) {
+    page.drawText(String(projectName), { x: margin, y, size: 9, font, color: rgb(0.35, 0.35, 0.4) });
+    y -= 12;
+  }
+  page.drawText(`Generated ${new Date().toLocaleString()} · ${list.length} line${list.length === 1 ? "" : "s"}`, {
+    x: margin, y, size: 8, font, color: rgb(0.45, 0.45, 0.5),
+  });
+  y -= 16;
 
-  for (const r of list) {
-    if (y < margin + lineH) {
-      page = doc.addPage([pageWidth, pageHeight]);
-      y = pageHeight - margin;
-      y = drawHeader(page, y);
-    }
-    const vals = compiled
-      ? [
-        r.tag || "—",
-        r.description || "",
-        r.qty ?? "",
-        r.unit || "",
-        r.sheet_id || "",
-        [r.attrs_text, r.notes].filter(Boolean).join(" · ") || "",
-      ]
-      : [
-        r.tag || "—",
-        r.field || "",
-        r.value ?? "",
-        r.unit || "",
-        r.sheet_id || "",
-        r.table_title || "",
-      ];
+  if (mode === "workflow") {
+    const headers = ["Tag", "Field", "Value", "Unit", "Sheet", "Schedule"];
+    const colWidths = [70, 110, 90, 40, 150, 140];
+    ensure(40);
     let x = margin;
-    vals.forEach((v, i) => {
-      page.drawText(clip(v, colWidths[i] - 6), {
-        x, y, size: 9, font, color: rgb(0.12, 0.12, 0.16),
-      });
+    headers.forEach((h, i) => {
+      page.drawText(h, { x, y, size: 8, font: fontBold, color: rgb(0.15, 0.15, 0.2) });
       x += colWidths[i];
     });
-    y -= lineH;
+    y -= 10;
+    for (const r of list) {
+      ensure(lineH);
+      const vals = [r.tag || "—", r.field || "", r.value ?? "", r.unit || "", r.sheet_id || "", r.table_title || ""];
+      let xx = margin;
+      vals.forEach((v, i) => {
+        page.drawText(clip(v, colWidths[i] - 4), { x: xx, y, size: 8, font, color: rgb(0.12, 0.12, 0.16) });
+        xx += colWidths[i];
+      });
+      y -= lineH;
+    }
+  } else {
+    for (const group of groupTakeoffByFamily(list)) {
+      ensure(36);
+      page.drawText(String(group.family), { x: margin, y, size: 10, font: fontBold, color: rgb(0.15, 0.15, 0.2) });
+      y -= 14;
+      const lead = (group.leadColumns || takeoffLeadColumns(group.lines)).filter((c) => c.key !== "unit");
+      const specs = (group.specColumns || []).slice(0, Math.max(2, 6 - lead.length));
+      const headers = [...lead.map((c) => c.label), ...specs, "Plan", "Status"];
+      const usable = pageWidth - margin * 2;
+      const n = headers.length;
+      const base = Math.floor(usable / Math.max(n, 1));
+      const colWidths = headers.map((_, i) => (i === 0 ? Math.max(base, 64) : base));
+      const drift = usable - colWidths.reduce((a, b) => a + b, 0);
+      if (colWidths.length) colWidths[colWidths.length - 1] += drift;
+      ensure(20);
+      let x = margin;
+      headers.forEach((h, i) => {
+        page.drawText(clip(h, colWidths[i] - 3, 7), { x, y, size: 7, font: fontBold, color: rgb(0.2, 0.2, 0.25) });
+        x += colWidths[i];
+      });
+      y -= 9;
+      page.drawLine({
+        start: { x: margin, y }, end: { x: pageWidth - margin, y },
+        thickness: 0.6, color: rgb(0.75, 0.75, 0.78),
+      });
+      y -= 10;
+      for (const r of group.lines) {
+        ensure(lineH);
+        const vals = [
+          ...lead.map((c) => lineLeadValue(r, c.key)),
+          ...specs.map((c) => lineSpecValue(r, c)),
+          r.plan_sheet_id || r.schedule_sheet_id || "", r.status || "",
+        ];
+        let xx = margin;
+        vals.forEach((v, i) => {
+          page.drawText(clip(v, (colWidths[i] || 50) - 3), { x: xx, y, size: 8, font, color: rgb(0.12, 0.12, 0.16) });
+          xx += colWidths[i] || 50;
+        });
+        y -= lineH;
+      }
+      y -= 10;
+    }
   }
 
   return doc.save();
 }
 
-/** Build a simple multi-page PDF table via pdf-lib. */
 export async function downloadTakeoffPdf(linesOrRows, {
   filename = "opentakeoff-takeoff.pdf",
   title = "OpenTakeoff — Takeoff",

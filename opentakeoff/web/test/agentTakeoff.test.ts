@@ -6,11 +6,14 @@ import {
   compileAgentTakeoff,
   compiledTakeoffToCsv,
   dedupeTakeoffRows,
+  groupTakeoffByFamily,
   makeTakeoffRow,
   mergeTakeoffRows,
   rowsFromAnswerMarkdown,
   rowsFromToolResult,
   splitConversationalAnswer,
+  takeoffLeadColumns,
+  takeoffSpecColumns,
   takeoffToCsv,
 } from "../src/lib/agentTakeoff.js";
 import { buildXlsx } from "../src/lib/xlsx.js";
@@ -34,6 +37,28 @@ test("rowsFromToolResult: query_table scoped column + count", () => {
   assert.equal(rows[0].sheet_id, "mech.pdf#6");
   assert.deepEqual(rows[0].bbox_px, [1, 2, 3, 4]);
   assert.equal(rows[0].workflow, "fan takeoff");
+});
+
+test("rowsFromToolResult: query_table expands full row cells for modular columns", () => {
+  const rows = rowsFromToolResult("query_table", { title: "CONTROL VALVE SCHEDULE", row_key: "CV-1" }, {
+    count: 1,
+    matches: [{
+      sheet: "mech.pdf#8",
+      title: "CONTROL VALVE SCHEDULE",
+      row: {
+        key: "CV-1",
+        all_cells: {
+          MARK: { text: "CV-1" },
+          GPM: { text: "12" },
+          Cv: { text: "4.7" },
+          "PIPE SIZE": { text: "1\"" },
+        },
+      },
+    }],
+  }, { workflow: "valves" });
+  assert.ok(rows.some((r) => r.field === "GPM" && r.value === "12"));
+  assert.ok(rows.some((r) => r.field === "Cv" && r.value === "4.7"));
+  assert.ok(rows.some((r) => r.field === "PIPE SIZE"));
 });
 
 test("rowsFromToolResult: sweep_schedule_row installed qty + attributes", () => {
@@ -90,8 +115,69 @@ test("compileAgentTakeoff collapses EAV rows into line items", () => {
   assert.equal(ef.qty_kind, "scheduled");
   assert.match(ef.notes, /refused/i);
   const csv = compiledTakeoffToCsv(lines);
-  assert.match(csv, /^Tag,Description,Qty,/);
+  assert.match(csv, /^Tag,/);
   assert.match(csv, /VAV-1/);
+  assert.match(csv, /CFM/);
+});
+
+test("columns adapt per family: valves vs VAV vs points", () => {
+  const rows = [
+    makeTakeoffRow({
+      tag: "VAV-1", field: "CFM", value: "2170",
+      table_title: "AIR TERMINAL BOX SCHEDULE", sheet_id: "m#6",
+    }),
+    makeTakeoffRow({
+      tag: "VAV-1", field: "MBH", value: "41",
+      table_title: "AIR TERMINAL BOX SCHEDULE", sheet_id: "m#6",
+    }),
+    makeTakeoffRow({
+      tag: "CV-3", field: "GPM", value: "18",
+      table_title: "CONTROL VALVE SCHEDULE", sheet_id: "m#8",
+    }),
+    makeTakeoffRow({
+      tag: "CV-3", field: "Cv", value: "5.2",
+      table_title: "CONTROL VALVE SCHEDULE", sheet_id: "m#8",
+    }),
+    makeTakeoffRow({
+      tag: "CV-3", field: "PIPE SIZE", value: "1-1/2\"",
+      table_title: "CONTROL VALVE SCHEDULE", sheet_id: "m#8",
+    }),
+    makeTakeoffRow({
+      tag: "AHU-1 SA TEMP", field: "POINT TYPE", value: "AI",
+      table_title: "AHU-1 POINTS LIST", sheet_id: "c#2",
+    }),
+    makeTakeoffRow({
+      tag: "AHU-1 SA TEMP", field: "SIGNAL", value: "4-20mA",
+      table_title: "AHU-1 POINTS LIST", sheet_id: "c#2",
+    }),
+    makeTakeoffRow({
+      tag: "AHU-1 SA TEMP", field: "CONTROLLER", value: "UC600-1",
+      table_title: "AHU-1 POINTS LIST", sheet_id: "c#2",
+    }),
+  ];
+  const lines = compileAgentTakeoff(rows);
+  const groups = groupTakeoffByFamily(lines);
+  assert.equal(groups.length, 3);
+
+  const vav = groups.find((g) => /AIR TERMINAL/i.test(g.family));
+  const valve = groups.find((g) => /VALVE/i.test(g.family));
+  const points = groups.find((g) => /POINTS/i.test(g.family));
+  assert.ok(vav && valve && points);
+
+  assert.deepEqual(vav.specColumns.map((c) => c.toUpperCase()).sort(), ["CFM", "MBH"]);
+  assert.ok(valve.specColumns.some((c) => /GPM/i.test(c)));
+  assert.ok(valve.specColumns.some((c) => /CV/i.test(c)));
+  assert.ok(valve.specColumns.some((c) => /PIPE/i.test(c)));
+  assert.ok(!valve.specColumns.some((c) => /CFM/i.test(c)), "valve table must not pad CFM");
+
+  assert.ok(points.specColumns.some((c) => /SIGNAL/i.test(c)));
+  assert.ok(points.specColumns.some((c) => /CONTROLLER/i.test(c)));
+  assert.ok(!points.specColumns.some((c) => /GPM|CFM/i.test(c)));
+  // Points Type lead from POINT TYPE; no manufacturer columns.
+  const pointLead = takeoffLeadColumns(points.lines);
+  assert.ok(pointLead.some((c) => c.key === "type"));
+  assert.ok(!pointLead.some((c) => c.key === "manufacturer"));
+  assert.equal(pointLead.find((c) => c.key === "tag")?.label, "Point");
 });
 
 test("rowsFromAnswerMarkdown + splitConversationalAnswer strip tables from chat", () => {
@@ -139,9 +225,10 @@ test("xlsx + pdf export builders produce non-empty artifacts", async () => {
     makeTakeoffRow({ tag: "EF-2", field: "plan_status", value: "refused", sheet_id: "mech.pdf#6", table_title: "FAN SCHEDULE" }),
   ];
   const lines = compileAgentTakeoff(rows);
+  assert.ok(takeoffSpecColumns(lines).includes("CFM") || takeoffSpecColumns(lines).some((c) => /CFM/i.test(c)));
   const sheetRows = [
-    ["Tag", "Description", "Qty"],
-    ...lines.map((r) => [r.tag || "", r.description, r.qty]),
+    ["Tag", "Type", "Qty"],
+    ...lines.map((r) => [r.tag || "", r.type, r.qty]),
   ];
   const xlsx = await buildXlsx([{ name: "Takeoff", rows: sheetRows }]);
   assert.ok(xlsx.byteLength > 500);
