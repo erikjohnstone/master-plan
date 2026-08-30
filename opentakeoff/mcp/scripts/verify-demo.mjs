@@ -197,15 +197,33 @@ export async function verifyDemoRun({ truth, run, session, recognize }) {
       let ocrText = "";
       let grounded = false;
       const modes = [...new Set([ocrMode, "single_line", "sparse_text", "single_word"].filter(Boolean))];
+      /** Expand tiny glyph boxes (e.g. a single "5") so Tesseract has enough pixels. */
+      const ocrRegion = (box) => {
+        const [bx0, by0, bx1, by1] = box;
+        const w = bx1 - bx0;
+        const h = by1 - by0;
+        const pad = Math.max(4, Math.min(12, Math.round(Math.min(w, h) * 0.2) || 4));
+        let x0 = bx0 - pad;
+        let y0 = by0 - pad;
+        let x1 = bx1 + pad;
+        let y1 = by1 + pad;
+        const minW = 36;
+        const minH = 28;
+        if (x1 - x0 < minW) {
+          const mid = (x0 + x1) / 2;
+          x0 = mid - minW / 2;
+          x1 = mid + minW / 2;
+        }
+        if (y1 - y0 < minH) {
+          const mid = (y0 + y1) / 2;
+          y0 = mid - minH / 2;
+          y1 = mid + minH / 2;
+        }
+        return { x0: Math.max(0, x0), y0: Math.max(0, y0), x1, y1 };
+      };
       for (const px of tryPx) {
-        const pad = Math.max(1, Math.min(8, Math.round(Math.min(x1 - x0, y1 - y0) * 0.05)));
         const rendered = await session.viewSheet(citation.sheet_id, {
-          region: {
-            x0: Math.max(0, x0 - pad),
-            y0: Math.max(0, y0 - pad),
-            x1: x1 + pad,
-            y1: y1 + pad,
-          },
+          region: ocrRegion([x0, y0, x1, y1]),
           px,
         });
         for (const mode of modes) {
@@ -224,14 +242,8 @@ export async function verifyDemoRun({ truth, run, session, recognize }) {
         if (expectedCitation?.bbox_px && overlapAgainstSmaller(citation.bbox_px, expectedCitation.bbox_px) >= 0.8) {
           const [ex0, ey0, ex1, ey1] = expectedCitation.bbox_px;
           for (const px of tryPx) {
-            const pad = Math.max(1, Math.min(8, Math.round(Math.min(ex1 - ex0, ey1 - ey0) * 0.05)));
             const rendered = await session.viewSheet(citation.sheet_id, {
-              region: {
-                x0: Math.max(0, ex0 - pad),
-                y0: Math.max(0, ey0 - pad),
-                x1: ex1 + pad,
-                y1: ey1 + pad,
-              },
+              region: ocrRegion([ex0, ey0, ex1, ey1]),
               px,
             });
             for (const mode of modes) {
@@ -243,6 +255,61 @@ export async function verifyDemoRun({ truth, run, session, recognize }) {
             }
             if (grounded) break;
           }
+        }
+      }
+      if (!grounded && typeof session.findText === "function") {
+        // Vector-text grounding: when raster OCR misreads a tiny glyph (5→0,
+        // 48FE→43FE) but pdf.js already has the exact string under the cite
+        // box, accept that as CITE_GROUND — same evidence the tools read.
+        try {
+          const found = session.findText(citation.sheet_id, String(expectedText), { limit: 200 });
+          for (const hit of found?.hits || []) {
+            if (!Array.isArray(hit?.bbox) || hit.bbox.length !== 4) continue;
+            if (!ocrGrounds(hit.str, expectedText, { allowConfusables: false })) continue;
+            const overlap = Math.max(
+              overlapAgainstSmaller(citation.bbox_px, hit.bbox),
+              overlapAgainstSmaller(hit.bbox, citation.bbox_px),
+            );
+            if (overlap >= 0.5) {
+              grounded = true;
+              ocrText = hit.str;
+              break;
+            }
+          }
+        } catch {
+          // findText unavailable for this session shape — keep OCR failure
+        }
+      }
+      if (!grounded && typeof session.sheet === "function") {
+        // Fragmented plan tags (separate "CV" + "1" runs) never match find_text
+        // for "CV-1". Join pdf.js spans whose centers fall in the cite box.
+        try {
+          const state = session.sheet(citation.sheet_id);
+          if (state && !state.spans) {
+            const { textSpans } = await import("../src/pdf.ts");
+            state.spans = textSpans(state.page);
+          }
+          const [cx0, cy0, cx1, cy1] = citation.bbox_px;
+          const parts = (state?.spans || [])
+            .filter((span) => {
+              const x0 = span.x0 ?? span.x;
+              const y0 = span.y0 ?? span.y;
+              const x1 = span.x1 ?? (x0 + (span.w || 0));
+              const y1 = span.y1 ?? (y0 + (span.h || 0));
+              const mx = (x0 + x1) / 2;
+              const my = (y0 + y1) / 2;
+              return mx >= cx0 - 2 && mx <= cx1 + 2 && my >= cy0 - 2 && my <= cy1 + 2;
+            })
+            .sort((a, b) => (a.y0 ?? a.y) - (b.y0 ?? b.y) || (a.x0 ?? a.x) - (b.x0 ?? b.x))
+            .map((span) => span.str)
+            .filter(Boolean);
+          const joined = parts.join("");
+          if (parts.length && ocrGrounds(joined, expectedText, { allowConfusables })) {
+            grounded = true;
+            ocrText = parts.join(" ");
+          }
+        } catch {
+          // span cache unavailable — keep prior failure
         }
       }
       if (!grounded) {

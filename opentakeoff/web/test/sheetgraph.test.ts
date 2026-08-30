@@ -10,7 +10,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, promoteLeadingEngineeringUnits, preferLastOverprintedText, type GraphSpan, type SheetSpans, type SheetGraph, type TableRow } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, type GraphSpan, type SheetSpans, type SheetGraph, type TableRow, type ScheduleTable } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
@@ -29,6 +29,36 @@ test("preferLastOverprintedText preserves ordinary adjacent cell text", () => {
     { str: "ADJUSTABLE", x: 30, y: 10, w: 50, h: 10 },
   ];
   assert.equal(preferLastOverprintedText("FIELD ADJUSTABLE", [0, 0, 90, 30], spans), "FIELD ADJUSTABLE");
+});
+
+test("snapCellBboxesToSourceSpans remaps ODL boxes onto the painted row band", () => {
+  const spans: GraphSpan[] = [
+    { str: "RTU-1", x: 100, y: 40, w: 40, h: 12 },
+    { str: "CARRIER", x: 200, y: 40, w: 50, h: 12 },
+    { str: "1650", x: 300, y: 40, w: 30, h: 12 },
+    { str: "CARRIER", x: 200, y: 200, w: 50, h: 12 }, // sibling row / other schedule
+    { str: "1650", x: 900, y: 400, w: 30, h: 12 }, // off-row distractor
+  ];
+  const table: ScheduleTable = {
+    kind: "equipment",
+    sheet: "S#1",
+    title: { sheet: "S#1", text: "PACKAGED ROOFTOP", bbox: [0, 0, 10, 200] },
+    headers: ["EQUIP NO", "MANUFACTURER", "SUPPLY AIR (CFM)"],
+    rows: [{
+      key: "RTU-1",
+      sheet: "S#1",
+      cells: {
+        "EQUIP NO": { text: "RTU-1", bbox: [500, 0, 520, 80] },
+        MANUFACTURER: { text: "CARRIER", bbox: [500, 80, 520, 160] },
+        "SUPPLY AIR (CFM)": { text: "1650", bbox: [500, 160, 520, 240] },
+      },
+    }],
+    region: [490, 0, 530, 250],
+  };
+  const snapped = snapCellBboxesToSourceSpans(table, spans);
+  assert.deepEqual(snapped.rows[0].cells["EQUIP NO"].bbox, [100, 40, 140, 52]);
+  assert.deepEqual(snapped.rows[0].cells.MANUFACTURER.bbox, [200, 40, 250, 52]);
+  assert.deepEqual(snapped.rows[0].cells["SUPPLY AIR (CFM)"].bbox, [300, 40, 330, 52]);
 });
 
 test("promoteLeadingEngineeringUnits moves a stranded pressure unit into its header", () => {

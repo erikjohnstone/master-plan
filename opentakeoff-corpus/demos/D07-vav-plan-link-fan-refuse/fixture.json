@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "set_id": "bldg5406-hvac-demo",
+  "source_file": "raw/bldg5406-hvac-demo-mechanical.pdf",
+  "sha256": "4f9d17d030d1f9707078ebaf51ccd0ab7ff8dcfa21e13f34dd96dab2f85c3f3b",
+  "required_pages": [
+    {
+      "page": 6,
+      "purpose": "AIR TERMINAL BOX SCHEDULE (quarter-turned) + FAN SCHEDULE"
+    },
+    {
+      "page": 2,
+      "purpose": "Plan tags for VAV-1/5/9 and EF-1/EF-5; EF-2 absent"
+    }
+  ],
+  "redistribution": "External local-use corpus fixture; do not commit or republish the source PDF."
+}

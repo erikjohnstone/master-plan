@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "set_id": "itd-d1-lab",
+  "source_file": "raw/itd-d1-lab-mechanical.pdf",
+  "sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "required_pages": [
+    {
+      "page": 13,
+      "purpose": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS) + BYPASS CONTROL VALVE SCHEDULE"
+    },
+    {
+      "page": 5,
+      "purpose": "Plan tags for CV valves"
+    },
+    {
+      "page": 7,
+      "purpose": "Plan tag for BCV-1"
+    }
+  ],
+  "redistribution": "External local-use corpus fixture; do not commit or republish the source PDF."
+}

@@ -7191,6 +7191,142 @@ function odlCellText(cell: ODLTableCell): string {
  * shows only the later-painted string. Only act when the ODL cell contains
  * every conflicting source token and their boxes overlap by at least 80%;
  * ordinary multi-token cells are left unchanged. */
+/** Compact alphanumeric form for matching ODL cell text to pdf.js spans. */
+function compactSpanText(value: string): string {
+  return String(value || "")
+    .normalize("NFKD")
+    .toUpperCase()
+    .replace(/[^A-Z0-9.]/g, "");
+}
+
+function spanCenterInBbox(span: GraphSpan, bbox: Bbox, pad = 2): boolean {
+  const cx = span.x + span.w / 2;
+  const cy = span.y + span.h / 2;
+  return cx >= bbox[0] - pad && cx <= bbox[2] + pad && cy >= bbox[1] - pad && cy <= bbox[3] + pad;
+}
+
+/**
+ * When ODL recovers correct cell TEXT but its grid bbox misses the painted
+ * pdf.js glyph (common on quarter-turned / sideways schedule detections whose
+ * native boxes land on header strips), snap each cell bbox to an exact
+ * sourceSpan whose text matches. Unique sheet-wide values establish the row
+ * band first; ambiguous values (shared labels like "CARRIER" or "5") then
+ * snap onto that band. No unique match → leave the ODL bbox unchanged.
+ */
+export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: GraphSpan[]): ScheduleTable {
+  if (!sourceSpans?.length || !table.rows?.length) return table;
+  const ROW_Y_TOL = 28;
+  const COL_X_TOL = 28;
+  const isHorizontal = (span: GraphSpan) => (span.w || 0) >= (span.h || 0) * 0.9;
+  const isVerticalBox = (bbox: Bbox) => (bbox[3] - bbox[1]) > (bbox[2] - bbox[0]) * 1.1;
+  const exactSpans = (want: string): GraphSpan[] => {
+    const needle = compactSpanText(want);
+    if (!needle) return [];
+    return sourceSpans.filter((span) => compactSpanText(span.str) === needle);
+  };
+  const pickNearAxis = (
+    candidates: GraphSpan[],
+    axis: "y" | "x",
+    center: number | null,
+    tol: number,
+  ): GraphSpan | null => {
+    if (!candidates.length) return null;
+    if (candidates.length === 1) return candidates[0];
+    let pool = candidates;
+    if (center != null) {
+      const band = candidates.filter((span) => {
+        const mid = axis === "y" ? span.y + span.h / 2 : span.x + span.w / 2;
+        return Math.abs(mid - center) <= tol;
+      });
+      if (!band.length) return null;
+      pool = band;
+    } else {
+      return null; // ambiguous with no band — do not guess
+    }
+    if (pool.length === 1) return pool[0];
+    // Prefer orientation matching the schedule axis: horizontal rows vs
+    // quarter-turned columns (tall/thin glyph stacks).
+    const preferVert = axis === "x";
+    const oriented = pool.filter((span) => preferVert ? !isHorizontal(span) : isHorizontal(span));
+    if (oriented.length) pool = oriented;
+    return pool.slice().sort((a, b) => {
+      const aMid = axis === "y" ? a.y + a.h / 2 : a.x + a.w / 2;
+      const bMid = axis === "y" ? b.y + b.h / 2 : b.x + b.w / 2;
+      const d = Math.abs(aMid - center!) - Math.abs(bMid - center!);
+      if (d) return d;
+      return a.x - b.x || a.y - b.y;
+    })[0];
+  };
+
+  const rows = table.rows.map((row) => {
+    const cells = { ...row.cells };
+    // Clone cell objects so we don't mutate shared graph state unexpectedly.
+    for (const [header, cell] of Object.entries(cells)) {
+      cells[header] = { ...cell, bbox: [...cell.bbox] as Bbox };
+    }
+
+    const alreadyGrounded = (cell: { text: string; bbox: Bbox }) =>
+      exactSpans(cell.text).some((span) => spanCenterInBbox(span, cell.bbox));
+
+    // Prefer the row-key / MARK cell as the axis seed when it is already a
+    // tall thin (quarter-turned) or wide (normal) glyph span.
+    const keyHeader = Object.keys(cells).find((header) => {
+      const cell = cells[header];
+      return cell && compactSpanText(cell.text) === compactSpanText(row.key);
+    });
+    const keyCell = keyHeader ? cells[keyHeader] : null;
+    const columnMode = !!(keyCell && alreadyGrounded(keyCell) && isVerticalBox(keyCell.bbox));
+
+    // Pass 1: snap uniquely-occurring values (and keep already-grounded ones).
+    const axisCenters: number[] = [];
+    for (const cell of Object.values(cells)) {
+      const hits = exactSpans(cell.text);
+      if (alreadyGrounded(cell)) {
+        const hit = hits.find((span) => spanCenterInBbox(span, cell.bbox));
+        if (hit) {
+          axisCenters.push(columnMode ? hit.x + hit.w / 2 : hit.y + hit.h / 2);
+        }
+        continue;
+      }
+      if (hits.length === 1) {
+        cell.bbox = bboxOf(hits[0]);
+        axisCenters.push(columnMode ? hits[0].x + hits[0].w / 2 : hits[0].y + hits[0].h / 2);
+      }
+    }
+    const axisCenter = axisCenters.length
+      ? axisCenters.slice().sort((a, b) => a - b)[Math.floor(axisCenters.length / 2)]
+      : (keyCell && columnMode
+        ? (keyCell.bbox[0] + keyCell.bbox[2]) / 2
+        : null);
+
+    // Pass 2: snap remaining cells onto the consensus row-Y or column-X band.
+    if (axisCenter != null) {
+      const axis = columnMode ? "x" : "y";
+      const tol = columnMode ? COL_X_TOL : ROW_Y_TOL;
+      for (const cell of Object.values(cells)) {
+        if (alreadyGrounded(cell)) continue;
+        const picked = pickNearAxis(exactSpans(cell.text), axis, axisCenter, tol);
+        if (picked) cell.bbox = bboxOf(picked);
+      }
+    }
+
+    return { ...row, cells };
+  });
+
+  let title = table.title;
+  if (title?.text && sourceSpans.length) {
+    const titleHits = exactSpans(title.text);
+    const already = titleHits.some((span) => spanCenterInBbox(span, title!.bbox));
+    if (!already) {
+      const horiz = titleHits.filter(isHorizontal);
+      const pool = horiz.length ? horiz : titleHits;
+      if (pool.length === 1) title = { ...title, bbox: bboxOf(pool[0]) };
+    }
+  }
+
+  return { ...table, title, rows };
+}
+
 export function preferLastOverprintedText(cellText: string, bbox: Bbox, sourceSpans: GraphSpan[]): string {
   const inCell = sourceSpans
     .map((span, sourceIndex) => ({ span, sourceIndex }))
@@ -7670,7 +7806,7 @@ export function scheduleTableFromODL(
   headers.splice(0, headers.length, ...promotedHeaders);
 
   const region = odlBboxToProjectSpace(t["bounding box"], pageViewportTransform);
-  return {
+  const built: ScheduleTable = {
     kind,
     sheet: sheetKey,
     title: titleCell ? { sheet: sheetKey, text: titleText, bbox: odlBboxToProjectSpace(titleCell["bounding box"], pageViewportTransform) } : null,
@@ -7678,6 +7814,10 @@ export function scheduleTableFromODL(
     rows,
     region,
   };
+  // ODL sometimes recovers the right cell strings with grid boxes that miss
+  // the painted glyphs (sideways / quarter-turned detections). Snap to exact
+  // pdf.js spans when unique so query_table citations OCR-ground and paint.
+  return opts.sourceSpans ? snapCellBboxesToSourceSpans(built, opts.sourceSpans) : built;
 }
 
 /** Total non-empty cells across a table's rows — the plainest, most

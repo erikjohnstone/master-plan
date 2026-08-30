@@ -65,7 +65,12 @@ export function citationProvenanceErrors(answer, toolCalls) {
       : []));
   if (!planTags.size) return [];
   const errors = [];
-  for (const field of ["equipment_tag", "installed_quantity"]) {
+  // Field names may be bare (`installed_quantity`) or scoped
+  // (`cv_1_installed_quantity`, `rtu_1_equipment_tag`) when one prompt
+  // asks for several tags.
+  const fields = Object.keys(answer?.answer || {}).filter((field) =>
+    /(?:^|_)(?:equipment_tag|installed_quantity|plan_tag)$/i.test(field));
+  for (const field of fields) {
     const citations = answer?.answer?.[field]?.citations;
     if (!Array.isArray(citations) || !citations.length) continue;
     for (const citation of citations) {
@@ -178,11 +183,37 @@ export function drawingTextEvidenceErrors(answer, truth, toolCalls) {
       const text = call.result?.data?.text;
       return typeof text === "string" && sheet ? [{ sheet, str: text, bbox: null, query: "" }] : [];
     }
+    if (call.name === "sweep_schedule_row") {
+      const tag = call.result?.data?.tag || call.arguments?.tag || "";
+      return (call.result?.data?.tag_citations || []).map((citation) => ({
+        sheet: citation.sheet,
+        str: tag,
+        bbox: citation.bbox
+          ? [citation.bbox.x0, citation.bbox.y0, citation.bbox.x1, citation.bbox.y1]
+          : null,
+        query: tag,
+      }));
+    }
     return [];
   });
-  const scheduleTexts = new Set(collectToolTexts(toolCalls.filter((call) => call.name === "query_table"))
-    .map((text) => text.trim())
-    .filter(Boolean));
+  const scheduleCellTexts = new Map(); // text -> list of {sheet, bbox}
+  for (const call of toolCalls.filter((c) => c.name === "query_table")) {
+    for (const match of call.result?.data?.matches || []) {
+      const sheet = match.sheet;
+      for (const cell of Object.values(match.row?.all_cells || match.row?.cells || {})) {
+        const text = typeof cell?.text === "string" ? cell.text.trim() : "";
+        if (!text) continue;
+        const bbox = Array.isArray(cell.bbox) ? cell.bbox
+          : (cell.bbox && typeof cell.bbox === "object"
+            ? [cell.bbox.x0, cell.bbox.y0, cell.bbox.x1, cell.bbox.y1]
+            : null);
+        const list = scheduleCellTexts.get(text) || [];
+        list.push({ sheet, bbox });
+        scheduleCellTexts.set(text, list);
+      }
+    }
+  }
+  const scheduleTexts = new Set([...scheduleCellTexts.keys()]);
   const sameBbox = (a, b) => Array.isArray(a) && Array.isArray(b)
     && a.length === 4 && b.length === 4
     && a.every((n, i) => Math.abs(n - b[i]) < 0.05);
@@ -197,16 +228,23 @@ export function drawingTextEvidenceErrors(answer, truth, toolCalls) {
       }
     }
     if (typeof value !== "string" || !value.trim()) continue;
-    if (scheduleTexts.has(value.trim())) {
+    const supporting = drawingHits.filter((hit) => typeof hit.str === "string" && hit.str.includes(value));
+    const exactDrawingHits = supporting.filter((hit) => hit.str.trim() === value.trim());
+    const scheduleCellsForValue = scheduleCellTexts.get(value.trim()) || [];
+    const exactIsDistinctFromSchedule = exactDrawingHits.some((hit) =>
+      !scheduleCellsForValue.some((cell) =>
+        (!cell.sheet || !hit.sheet || cell.sheet === hit.sheet)
+        && (cell.bbox == null || hit.bbox == null || sameBbox(cell.bbox, hit.bbox))));
+    if (scheduleTexts.has(value.trim()) && !exactIsDistinctFromSchedule) {
       errors.push(`${field} value is exact schedule-cell text from query_table; choose a find_text/read_sheet_text phrase that is not a schedule attribute`);
       continue;
     }
-    const supporting = drawingHits.filter((hit) => typeof hit.str === "string" && hit.str.includes(value));
     if (!supporting.length) {
       errors.push(`${field} value must appear verbatim in find_text/read_sheet_text evidence; do not reuse a schedule cell`);
       continue;
     }
-    if (supporting.some((hit) => hit.query && hit.query === value.trim() && hit.str.trim() !== value.trim())) {
+    if (supporting.some((hit) => hit.query && hit.query === value.trim() && hit.str.trim() !== value.trim())
+      && !exactDrawingHits.length) {
       errors.push(`${field} value equals the find_text query string; copy answering text from hit.str instead of echoing q`);
       continue;
     }
@@ -244,20 +282,32 @@ function systemPrompt(truth) {
     type: spec.type,
     tolerance: spec.tolerance,
   }));
-  const needsInstalledQuantity = Object.hasOwn(truth.expected, "installed_quantity");
+  const needsInstalledQuantity = Object.keys(truth.expected).some((name) =>
+    /(?:^|_)installed_quantity$/i.test(name));
   const nonTableFields = Object.entries(truth.expected)
     .filter(([, spec]) => {
       const citations = Array.isArray(spec.citations) ? spec.citations : [spec.citation];
       return citations.some((citation) => citation && !citation.table_title);
     })
     .map(([name]) => name);
+  const installedFields = Object.keys(truth.expected).filter((name) =>
+    /(?:^|_)installed_quantity$/i.test(name));
+  const equipmentTagFields = Object.keys(truth.expected).filter((name) =>
+    /(?:^|_)equipment_tag$/i.test(name));
+  const planTagFields = Object.keys(truth.expected).filter((name) =>
+    /(?:^|_)plan_tag$/i.test(name));
+  const planStatusFields = Object.keys(truth.expected).filter((name) =>
+    /(?:^|_)plan_status$/i.test(name));
   return [
     "You are an HVAC/BAS estimator operating OpenTakeoff's production MCP API.",
     `The real drawing set ${truth.source_file} is already loaded.`,
     "Use deterministic tools for every factual claim. Never infer a value from the field names or invent a citation.",
     needsInstalledQuantity
-      ? "Installed quantity is required: call sweep_schedule_row once with tagged_only:true; this returns the complete tagged count and exact tag_at locations while explicitly excluding the unnecessary unlabeled near-match audit."
+      ? `Installed quantity is required (${installedFields.join(", ")}): call sweep_schedule_row once per requested tag (tagged_only:true is preferred); this returns the complete tagged count and exact tag_at locations while explicitly excluding the unnecessary unlabeled near-match audit.`
       : "Installed quantity is not requested. Do not call sweep_schedule_row merely for equipment_tag; cite equipment_tag from its exact schedule identity cell returned by query_table.",
+    planTagFields.length || planStatusFields.length
+      ? `Plan location fields are required (${[...planTagFields, ...planStatusFields].join(", ")}): call sweep_schedule_row for each named tag. When the sweep returns found≥1, set each *_plan_tag value to the exact tag string and cite sweep_schedule_row.tag_citations (no schedule table_title/row_key/column). When the tool refuses because the tag is not drawn on any plan sheet, set the matching *_plan_status value exactly to "refused" and cite the schedule MARK/identity cell that proves the row exists — never invent a plan bbox.`
+      : null,
     "For schedule attributes and BAS points-list fields, call query_table. When the prompt gives a distinctive point description but asks you to discover its point mark, use cell_contains with that description, then read every requested field from row.all_cells.",
     "Never invent a table-title filter from the user's category words. Omit title on the first query, or use only a literal title phrase already returned by a tool (for example POINTS LIST); 'BAS points' does not imply a table literally titled BAS POINTS.",
     "If a natural-language description returns no rows, broaden once with cell_contains set to the exact equipment tag from the prompt and no title filter, then inspect the returned descriptions for the requested point meaning. Do not repeat an equivalent empty query.",
@@ -265,6 +315,7 @@ function systemPrompt(truth) {
       ? `These required fields need drawing-text evidence rather than a table cell: ${nonTableFields.join(", ")}. Call find_text or read_sheet_text and cite the returned hit. Never fill these fields from a schedule cell, and never invent a label that no tool returned.`
       : "No required field needs free drawing-text evidence.",
     "find_text accepts an optional sheet; omit sheet to search the entire loaded set. When searching drawing text, use a distinctive fragment from the user's question—not the field name itself—and set the answer value from hit.str (a contiguous substring is allowed). Never echo the find_text query string as the value when hit.str is longer.",
+    "When the goal asks where equipment appears on a roof/floor plan, prefer a find_text hit whose hit.str equals the exact equipment tag on a plan sheet over longer detail callouts that merely contain the tag (for example prefer plan-sheet \"RTU-1\" over \"RTU-1. TRANSITION TO UNIT\" on a detail sheet). Cite that exact hit's sheet and bbox.",
     "Group independent tool calls into the same response. Inspect each complete result before calling another tool, and never repeat an equivalent query.",
     "Use query_table cell_value for exact cross-table relationships and cell_contains when the related tag is embedded in a compound value; do not scan a whole table or infer a row without source text.",
     "Every query_table match includes row.all_cells. After the first matching row, use all_cells for every requested field on that row instead of making separate column calls.",
@@ -277,7 +328,7 @@ function systemPrompt(truth) {
     '{"status":"done","answer":{"<field>":{"value":"typed value","citations":[{"sheet_id":"exact tool sheet","table_title":"when applicable","row_key":"when applicable","column":"when applicable","bbox_px":[x0,y0,x1,y1]}]}}}',
     "Translate every native tool citation into the final JSON citation shape: tool sheet → sheet_id, and tool bbox {x0,y0,x1,y1} → bbox_px [x0,y0,x1,y1]. Preserve the exact sheet string and coordinate numbers, but do not copy the tool object's key names or bbox object shape. Never emit a citation key named sheet.",
     needsInstalledQuantity
-      ? "A schedule field uses its exact cell bbox. For equipment_tag and installed_quantity in this quantity workflow, use sweep_schedule_row.tag_citations and no schedule citation."
+      ? `A schedule field uses its exact cell bbox. For ${[...equipmentTagFields, ...installedFields].join(", ") || "equipment_tag and installed_quantity"} in this quantity workflow, use sweep_schedule_row.tag_citations and no schedule citation.`
       : "Every requested schedule field, including equipment_tag, uses its exact query_table identity or value-cell bbox.",
     "A citation must name the exact source header and bbox of the cell containing that field's returned value. Never relabel a header, reuse another field's bbox, or use a row-level bbox for a cell value.",
     "For a related scheduled device's tag field, use query_table row.identity exactly; it selects the semantic identity header when duplicate cells contain the same tag.",
@@ -285,7 +336,7 @@ function systemPrompt(truth) {
     "For an installed quantity, include one plan tag citation per counted instance; the citations array length must equal the quantity.",
     `Required fields (names and types only; values are not supplied): ${JSON.stringify(fields)}`,
     "If a required value or citation cannot be established, return status \"refused\" and explain the missing evidence instead of guessing.",
-  ].join("\n");
+  ].filter((line) => typeof line === "string" && line.length > 0).join("\n");
 }
 
 function requestId(response, json) {
@@ -315,6 +366,51 @@ export function compactSheetGraph(data) {
   };
 }
 
+/** Keep installed-count evidence; drop empty plan-sheet audit rows. */
+export function compactSweepScheduleRow(data) {
+  if (!data || typeof data !== "object") return data;
+  const sheets = Array.isArray(data.sheets) ? data.sheets : [];
+  const active = sheets.filter((sheet) => {
+    if (!sheet || typeof sheet !== "object") return false;
+    if (Number(sheet.found) > 0) return true;
+    if (Array.isArray(sheet.matches) && sheet.matches.length) return true;
+    if (Array.isArray(sheet.withheld) && sheet.withheld.length) return true;
+    if (Array.isArray(sheet.excluded) && sheet.excluded.length) return true;
+    if (Array.isArray(sheet.text_only) && sheet.text_only.length) return true;
+    if (Array.isArray(sheet.redundant_view) && sheet.redundant_view.length) return true;
+    return false;
+  });
+  const row = data.row && typeof data.row === "object"
+    ? {
+      sheet: data.row.sheet,
+      table: data.row.table,
+      key: data.row.key,
+      cells: data.row.cells,
+      citation: data.row.citation,
+      // cell_citations ride with query_table for field answers; keep the row cells.
+    }
+    : data.row;
+  return {
+    tag: data.tag,
+    search_scope: data.search_scope,
+    unlabeled_audit_complete: data.unlabeled_audit_complete,
+    row,
+    tag_citations: data.tag_citations,
+    anchor: data.anchor,
+    found: data.found,
+    sheets: active,
+    sheets_omitted_empty: Math.max(0, sheets.length - active.length),
+    complete: data.complete,
+    skipped: Array.isArray(data.skipped) ? data.skipped.slice(0, 8) : data.skipped,
+    committed: data.committed,
+    shape_ids: data.shape_ids,
+    condition: data.condition,
+    ea_total: data.ea_total,
+    note: data.note,
+    warning: data.warning,
+  };
+}
+
 /** Keep demo-runner transcripts under the model context limit on large sets. */
 export function compactToolResult(result) {
   if (!result || typeof result !== "object") return result;
@@ -326,8 +422,19 @@ export function compactToolResult(result) {
     return result;
   }
   let next = data;
-  if (Array.isArray(data.sheets) && data.sheets.length > 0) {
+  // sheet_graph alone uses top-level `available` + role/schedule sheet rows.
+  // Other tools (sweep_schedule_row, symbol_sweep, load_plan, …) also return a
+  // `sheets` array — compacting those as a graph silently strips found/tag
+  // evidence and causes honest refusals on installed-quantity demos.
+  if (typeof data.available === "boolean" && Array.isArray(data.sheets) && data.sheets.length > 0) {
     next = compactSheetGraph(data);
+  } else if (
+    typeof data.found === "number"
+    && Array.isArray(data.tag_citations)
+    && Array.isArray(data.sheets)
+    && (data.tag != null || data.anchor != null)
+  ) {
+    next = compactSweepScheduleRow(data);
   } else if (Array.isArray(data.matches) && data.matches.length > 2
     && Number.isFinite(Number(data.count)) && Number(data.count) >= 2) {
     const q = data.query || {};
@@ -350,6 +457,36 @@ export function compactToolResult(result) {
   const payload = { ...result, data: next };
   const text = JSON.stringify(payload);
   if (text.length > 8000) {
+    // Prefer a real shrink over a lying "truncated" flag that still ships the
+    // full payload — that note made the model skip follow-up sweeps.
+    if (
+      typeof next.found === "number"
+      && Array.isArray(next.tag_citations)
+      && next.tag != null
+    ) {
+      return {
+        ...result,
+        data: {
+          tag: next.tag,
+          found: next.found,
+          tag_citations: next.tag_citations,
+          row: next.row
+            ? { sheet: next.row.sheet, table: next.row.table, key: next.row.key, cells: next.row.cells }
+            : undefined,
+          anchor: next.anchor
+            ? {
+              sheet: next.anchor.sheet,
+              at: next.anchor.at,
+              corroborated: next.anchor.corroborated,
+              occurrences: next.anchor.occurrences,
+            }
+            : undefined,
+          complete: next.complete,
+          search_scope: next.search_scope,
+          note: "sweep_schedule_row compacted to count evidence; empty plan sheets omitted.",
+        },
+      };
+    }
     return {
       ...result,
       data: {
@@ -385,8 +522,15 @@ async function productionPair(stdio) {
 async function callTool(client, name, args) {
   const response = await client.callTool({ name, arguments: args });
   const text = response.content?.find((item) => item.type === "text")?.text;
-  const data = text ? JSON.parse(text) : null;
-  return { is_error: !!response.isError, data };
+  if (response.isError) {
+    return { is_error: true, data: { error: text || `${name} failed` } };
+  }
+  if (!text) return { is_error: false, data: null };
+  try {
+    return { is_error: false, data: JSON.parse(text) };
+  } catch {
+    return { is_error: true, data: { error: text } };
+  }
 }
 
 export async function runToolCallingModel({
@@ -398,7 +542,7 @@ export async function runToolCallingModel({
   tools,
   execute,
   fetchFn = fetch,
-  maxIterations = 18,
+  maxIterations = 28,
   seededToolCalls = [],
 }) {
   const messages = [

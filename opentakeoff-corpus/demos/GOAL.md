@@ -65,14 +65,23 @@ gates for the current demo are clear:
 2. Frozen prompt; N=5 API / verify; localhost/stdio when required
 3. Generalized production correctness (no corpus hardcoding / answer-steering)
 4. UI proof: answer-first panel, source cards, readable paints (no auto-fly)
-5. **At least one real follow-up in the same Agent thread is answered
-   correctly** — whether it is a data question or a workflow/clarification
-   ask — with evidence-backed content matching what a competent estimator
-   would accept
+5. **At least one real follow-up in the same Agent thread is asked,
+   answered correctly, and verified** — whether it is a data question or a
+   workflow/clarification ask — with evidence-backed content matching what a
+   competent estimator would accept. The follow-up must be **explicitly asked**
+   after the primary answer (frozen `truth.follow_up.prompt` or equivalent),
+   the reply must be checked against expected values/evidence (not vibes),
+   and the UI recording must show both the ask and the correct Answer. Skipping
+   the follow-up, assuming primary-only is enough, or locking without
+   verification is a **fail**.
 
 A demo that passes the primary ask but fails the follow-up is **not** locked.
 Fix production behavior, re-prove the UI recording (primary ask + correct
-follow-up), then advance.
+verified follow-up), then advance.
+
+**After D10 is locked**, the suite still requires the **Final suite gate**
+below (full D01–D10 sequential N=5 again = 50 API runs, plus 3 correct UI
+tests per demo with no video). Per-demo lock alone is not suite completion.
 
 ## Demo quality bar (non-negotiable)
 
@@ -88,19 +97,34 @@ joins, or any other real estimating ask — the software MUST:
 1. **Do that ask end-to-end.** Execute the workflow the question implies; do
    not substitute a weaker tag-lookup or a partial answer.
 2. **Return more than enough correct information in chat** so the answer is
-   immediately usable: every requested field, evidence-backed values, and the
-   citations/context needed to trust it.
+   immediately usable: every requested field, evidence-backed values, units,
+   schedule titles/sheets, and enough workflow context to trust and act —
+   not a fragment list, not tool-dump residue, and not “boxes painted, see
+   Sources.” An estimator reading **only** the Agent Answer must understand
+   what was found, why it matters, and how to check it.
 3. **Paint ALL answering evidence on the sheets** via `highlight_citation`
    (value cells, row data, drawing text, counted marks — not lonely tag
    marks). Do **not** auto-fly the viewport. Put clickable source cards in
    the Agent panel so the estimator jumps on demand. Highlight frames must
    leave the underlying value readable — no label text on top of the cell.
+4. **Source cards must be useful at scale.** Each card needs a human-readable
+   title (`equipment/tag · field · value`) and an **expandable dropdown**
+   with full detail (schedule title, sheet id, column/header, value, why it
+   was cited). Naked fragments like `350`, `PRICE;`, or `SDV.` as the only
+   card content are a **fail**. Highlights corroborate the chat answer; they
+   are not a substitute for a usable chat answer. Unexplained highlight spam
+   is a **fail**.
 
 Agent-panel text alone is incomplete. Mark-only sheet flybys are incomplete.
 Partial answers, wrong sibling rows, or “flying around tags” without the
 asked-for data are a **fail**. Bar: ask → complete useful answer in chat →
-full paint on the drawings. Make OpenTakeoff the tool an estimator actually
-wants open.
+rich source cards → full paint on the drawings. Make OpenTakeoff the tool an
+estimator actually wants open.
+
+**Honesty rule:** Do not mark a demo locked because a harness scraped DOM
+text while the visible UI still looks like highlight spam or fragment cards.
+If a live reviewer cannot understand the workflow from chat + expandable
+cards, the demo is not locked — fix production UX/answer quality and re-prove.
 
 ### Prompt and recording rules
 
@@ -214,6 +238,35 @@ workspace.
    truth **and** shows at least one correctly answered follow-up in-thread,
    and commit. Only then does it count toward ten. Do not begin the next
    slate demo until this lock is complete.
+
+## Final suite gate (after D10 lock — non-negotiable)
+
+Locking D01–D10 one-by-one is **not** the finish line. Immediately after the
+**10th demo is locked**, before declaring the suite complete, re-prove the
+**entire** slate in one continuous pass:
+
+1. **Sequential N=5 for every demo (50 runs).** For each of D01, D02, …, D10
+   in order, re-run the frozen prompt **five times** (`run:demo` →
+   `verify:demo`). All **50** runs must pass value / cite-form / cite-ground
+   (and latency) against that demo's `truth.json`. Do **not** skip a demo
+   because it was locked earlier. Do **not** interleave or parallelize across
+   demos. A single failed run fails the suite gate — fix production behavior,
+   then restart this final pass from D01 run 1 (full 50 again), not from the
+   failing demo alone.
+2. **Three correct UI tests per demo (no video required for this gate).** For
+   each of D01–D10, run **three** independent production UI Agent proofs on
+   the live localhost canvas (same frozen primary prompt + required follow-up
+   bar as the per-demo lock). All three must be correct: usable Answer,
+   useful source cards, readable paints, verified follow-up. **No screen
+   recording is required** for these final UI tests — harness / headed
+   pass-fail evidence is enough — but wrong or empty answers still fail.
+   That is **30** UI proofs (10 × 3) on top of the 50 API runs.
+3. **Straight-correct bar.** The suite is complete only when the final pass
+   finishes **50/50 API** and **30/30 UI** without a fail. Partial credit
+   from earlier per-demo locks does not count.
+
+Arithmetic check: 10 demos × 5 API runs = **50** sequential API demos; plus
+10 × 3 UI tests = **30** UI proofs. Both must clear after D10 lock.
 
 ## Required per-demo layout
 

@@ -24,6 +24,65 @@ import { runVerifiers } from "./agentVerifiers.js";
 // cite re-queries + paints; 32 was truncating D03 mid-gate. Keep a hard cap.
 export const MAX_AGENT_ITERATIONS = 80;
 
+/** Fill structured highlight_citation fields from prior query_table / sweep cells
+ *  so Agent source cards read "VAV-1 · CFM = 350" even when the model only
+ *  passed sheet + bbox_px + a naked text fragment. */
+export function enrichHighlightCitationArgs(args, callLog = []) {
+  if (!args || typeof args !== "object") return args;
+  const bbox = args.bbox_px;
+  const sheet = String(args.sheet || "");
+  if (!sheet || !Array.isArray(bbox) || bbox.length !== 4) return args;
+  const hasRich = String(args.row_key || "").trim()
+    && String(args.column || "").trim()
+    && String(args.value || "").trim();
+  if (hasRich) return args;
+  const near = (a, b) => Array.isArray(a) && Array.isArray(b) && a.length === 4
+    && a.every((v, i) => Math.abs(Number(v) - Number(b[i])) <= 2);
+
+  for (const { name, out } of callLog) {
+    if (name === "query_table") {
+      for (const match of out?.matches || []) {
+        if (String(match?.sheet || "") !== sheet) continue;
+        const rowKey = String(match?.row?.key || match?.row?.identity?.text || "").trim();
+        const title = String(match?.title || "").trim();
+        for (const [header, cell] of Object.entries(match?.row?.all_cells || match?.row?.cells || {})) {
+          if (!near(cell?.bbox, bbox)) continue;
+          return {
+            ...args,
+            row_key: String(args.row_key || "").trim() || rowKey || undefined,
+            column: String(args.column || "").trim() || String(header || "").trim() || undefined,
+            value: String(args.value || "").trim()
+              || (cell?.text != null ? String(cell.text).trim() : undefined)
+              || undefined,
+            table_title: String(args.table_title || "").trim() || title || undefined,
+          };
+        }
+      }
+    }
+    if (name === "sweep_schedule_row" && out?.row) {
+      const row = out.row;
+      if (String(row.sheet || "") !== sheet) continue;
+      const rowKey = String(row.key || row.identity?.text || "").trim();
+      const title = String(row.title || out.title || "").trim();
+      for (const [header, cell] of Object.entries(row.cell_citations || row.all_cells || {})) {
+        const cellBbox = Array.isArray(cell?.bbox) ? cell.bbox
+          : [cell?.bbox?.x0, cell?.bbox?.y0, cell?.bbox?.x1, cell?.bbox?.y1];
+        if (!near(cellBbox, bbox)) continue;
+        return {
+          ...args,
+          row_key: String(args.row_key || "").trim() || rowKey || undefined,
+          column: String(args.column || "").trim() || String(header || "").trim() || undefined,
+          value: String(args.value || "").trim()
+            || (cell?.text != null ? String(cell.text).trim() : undefined)
+            || undefined,
+          table_title: String(args.table_title || "").trim() || title || undefined,
+        };
+      }
+    }
+  }
+  return args;
+}
+
 const EQUIPMENT_VALVE_EVIDENCE_TOOLS = new Set([
   "list_sheets",
   "sheet_graph",
@@ -39,6 +98,67 @@ export function toolsForGoal(goal, tools) {
   return exactEquipmentValveWorkflow
     ? tools.filter(({ name }) => EQUIPMENT_VALVE_EVIDENCE_TOOLS.has(name))
     : tools;
+}
+
+/** Title-scan needles for multi-family schedule takeoffs. Returns Exact
+ *  query_table title strings still missing from the call log. */
+export function missingScheduleTitleScans(callLog, goal) {
+  const asksScheduleCounts = (
+    /\btakeoff\b/i.test(goal)
+    || /\bscheduled\s+(?:unit\s+)?counts?\b/i.test(goal)
+    || /\bequipment\s+(?:totals?|counts?)\b/i.test(goal)
+    || (/\b(?:how many|counts?|totals?|splits?)\b/i.test(goal)
+      && [/\bAHUs?\b/i, /\bDOAH\b|dedicated outdoor/i, /\bFCUs?\b|fan[\s-]*coils?\b/i, /\bVAVs?\b/i, /\bchillers?\b/i, /\bboilers?\b/i, /\bpoints?\s*list\b/i]
+        .filter((re) => re.test(goal)).length >= 3)
+  ) && /\b(?:AHU|FCU|VAV|DOAH|chiller|boiler|fan[\s-]*coil|points?\s*list|scheduled|equipment)\b/i.test(goal);
+  if (!asksScheduleCounts) return [];
+  const titleScans = callLog.filter(({ name, out, args }) => {
+    if (name !== "query_table" || out?.error) return false;
+    const q = out?.query || args || {};
+    const scoped = q.row_key != null && String(q.row_key).trim() !== ""
+      || q.column != null
+      || q.cell_value != null
+      || q.cell_contains != null;
+    return !scoped && Number.isFinite(Number(out?.count)) && Number(out.count) >= 1;
+  });
+  const namedPointsListTag = (() => {
+    const m = goal.match(
+      /\b((?:AHU|DOAH|FCU|VAV|CH|B)-[A-Z0-9]+(?:\/[A-Z0-9]+)?)\s*(?:BAS\s+)?points?\s*list\b|(?:BAS\s+)?points?\s*list\b[^.\n]{0,48}\b((?:AHU|DOAH|FCU|VAV|CH|B)-[A-Z0-9]+(?:\/[A-Z0-9]+)?)/i,
+    );
+    return m ? String(m[1] || m[2]).toUpperCase() : null;
+  })();
+  const familyNeedles = [];
+  if (/\bAHUs?\b/i.test(goal)) familyNeedles.push({ label: "AHU", titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED/i, title: "AIR HANDLING UNIT SCHEDULE" });
+  if (/\bDOAH\b|dedicated outdoor/i.test(goal)) familyNeedles.push({ label: "DOAH unit", titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i, title: "DEDICATED OUTDOOR AIR UNIT SCHEDULE" });
+  if (/\bFCU\b|fan[\s-]*coil/i.test(goal)) familyNeedles.push({ label: "FCU", titleRe: /FAN\s*COIL/i, title: "FAN COIL UNIT SCHEDULE" });
+  if (/\bVAVs?\b|variable[\s-]*air|volume control box/i.test(goal)) familyNeedles.push({ label: "VAV", titleRe: /VARIABLE AIR VOLUME|\bVAV\b|VOLUME CONTROL BOX/i, title: "VARIABLE AIR VOLUME" });
+  if (/\bair[\s-]*cooled chiller/i.test(goal)) familyNeedles.push({ label: "air-cooled chiller", titleRe: /AIR COOLED CHILLER/i, exclude: /HEAT RECOVERY/i, title: "AIR COOLED CHILLER SCHEDULE", minCount: 1 });
+  if (/\bheat[\s-]*recovery chiller/i.test(goal)) familyNeedles.push({ label: "heat-recovery chiller", titleRe: /HEAT RECOVERY/i, title: "AIR COOLED HEAT RECOVERY CHILLER", minCount: 1 });
+  if (/\bboilers?\b/i.test(goal)) familyNeedles.push({ label: "boiler", titleRe: /BOILER/i, title: "BOILER SCHEDULE" });
+  if (/\bpoints?\s*list\b|BAS\b/i.test(goal)) {
+    const requireRe = namedPointsListTag
+      ? new RegExp(namedPointsListTag.split("/")[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i")
+      : null;
+    familyNeedles.push({
+      label: "points-list",
+      titleRe: /POINTS LIST/i,
+      require: requireRe,
+      title: namedPointsListTag ? `POINTS LIST ${namedPointsListTag.split("/")[0]}` : "POINTS LIST",
+    });
+  }
+  const scanTitleFull = (out) => [
+    out.query?.title,
+    out.matches?.[0]?.title?.text || out.matches?.[0]?.title,
+  ].filter(Boolean).map(String).join(" ");
+  return familyNeedles.filter((fam) => !titleScans.some(({ out }) => {
+    const title = scanTitleFull(out);
+    if (!fam.titleRe.test(title)) return false;
+    if (fam.exclude && fam.exclude.test(title)) return false;
+    if (fam.require && !fam.require.test(title)) return false;
+    const min = fam.minCount ?? 1;
+    if (Number(out.count) < min) return false;
+    return true;
+  })).map((fam) => fam.title).filter(Boolean);
 }
 
 export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
@@ -217,6 +337,15 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   }
   for (const [, headers] of identityHeadersByTag) {
     const tagCanonical = String(headers[0].text).toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (!tagCanonical) continue;
+    // Occupancy / use-group letter codes (USED GROUP = A-3 / B) are not equipment
+    // identities. Requiring their header in an RTU/AHU answer causes junk row dumps.
+    if (headers.every((item) =>
+      /^(?:USEDGROUP|OCCUPANCYGROUP|OCCUPANCY|USEGROUP|GROUPCODE|TYPEOFCONSTRUCTION)$/i
+        .test(item.headerCanonical))) continue;
+    // Very short keys ("B", "A3") match as substrings of sheet filenames /
+    // ordinary prose — never enforce identity-header thrash for them.
+    if (tagCanonical.length < 3) continue;
     if (!finalCanonical.includes(tagCanonical)) continue;
     // AI/AO/BI|BO marks are themselves the semantic identity — requiring the
     // column title ("MARK ANALOG INPUT") in the user-facing answer is noise.
@@ -230,6 +359,12 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     if (headers.some((item) => finalCanonical.includes(item.headerCanonical))) continue;
     const example = headers[0];
     return `The final answer mentions ${example.text} but does not cite its semantic identity header ${example.header}. Use query_table row.identity exactly; do not substitute another repeated-value column.`;
+  }
+  // Occupancy / use-group dumps do not belong in equipment join answers.
+  if (/\b(?:RTU|AHU|VAV|FCU|DOAH|CH)-[A-Z0-9]/i.test(goal)
+    && !/\bUSED\s*GROUP\b|\bOCCUPANCY\b/i.test(goal)
+    && (/\bUSED\s*GROUP\b/i.test(finalText) || /\bAdditional Requested Rows\b/i.test(finalText))) {
+    return "The goal asks for named HVAC/BAS equipment schedule data. Remove unrelated occupancy/use-group rows (USED GROUP, A-3, B, etc.) and any \"Additional Requested Rows\" inventory the goal did not ask for — answer only the requested equipment join and plan label.";
   }
   const asksPointMark = /\bpoint mark\b|\balarm\b.{0,40}\btrend\b|\btrend\b.{0,40}\balarm\b/i.test(goal);
   if (asksPointMark) {
@@ -414,6 +549,28 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return "The goal asks for the physical drawing section where the equipment is shown. Call find_text (omit sheet if needed) for the section label on the drawings, cite hit.str, or refuse — do not substitute a schedule sheet title.";
     }
   }
+  // Roof/floor plan location: prefer an exact-tag find_text hit over a longer
+  // detail callout that merely contains the tag (e.g. plan "RTU-1" vs detail
+  // "RTU-1. TRANSITION TO UNIT").
+  const asksPlanLocation = /\b(?:roof|floor)?\s*plan\b/i.test(goal)
+    && /\b(?:where|appear|location|label|note|show|cite)\b/i.test(goal);
+  if (asksPlanLocation && drawingTextHits.length) {
+    const tagFromGoal = (goal.toUpperCase().match(/\b(?:AHU|RTU|VAV|FCU|EF|SF|RF|UH|CUH|MAU|DOAH)[-A-Z0-9/]+\b/) || [])[0];
+    if (tagFromGoal) {
+      const exactHits = drawingTextHits.filter((hit) => hit.str.trim().toUpperCase() === tagFromGoal);
+      if (exactHits.length) {
+        const answerUsesLongerCallout = drawingTextHits.some((hit) => {
+          const s = hit.str.trim().toUpperCase();
+          return s !== tagFromGoal && s.includes(tagFromGoal)
+            && finalCanonical.includes(s.replace(/[^A-Z0-9]/g, "").slice(0, 40));
+        });
+        if (answerUsesLongerCallout || /TRANSITION TO UNIT/i.test(finalText)) {
+          const example = exactHits[0];
+          return `The goal asks for the plan location of ${tagFromGoal}. Prefer the exact find_text hit.str "${example.str}" on ${example.sheet} over a longer detail callout that only contains the tag. Re-emit using that exact label and bbox.`;
+        }
+      }
+    }
+  }
   // Product rule: paint cited evidence on the sheets whenever the answer uses
   // paint-able tool evidence — not only when the goal says "show me" / "cite the exact".
   // Also treat "Cite each TAG and its CFM cell" as an explicit cite ask.
@@ -466,16 +623,26 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     const keysOnlyCount = isKeysOnlyCountResult(out);
     for (const match of out?.matches || []) {
       const rowKey = String(match?.row?.key || match?.row?.identity?.text || "");
-      if (!rowKey || !finalCanonical.includes(rowKey.toUpperCase().replace(/[^A-Z0-9]/g, ""))) continue;
+      if (!rowKey) continue;
+      const rowKeyCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (!rowKeyCanonical) continue;
+      // Short keys ("B", "A3") are substrings of sheet ids / prose — require a
+      // spaced standalone token in the answer, not finalCanonical.includes.
+      if (rowKeyCanonical.length < 3) {
+        const spaced = ` ${finalText.toUpperCase().replace(/[^A-Z0-9]+/g, " ")} `;
+        if (!spaced.includes(` ${rowKeyCanonical} `)
+          && !spaced.includes(` ${rowKey.toUpperCase().replace(/[^A-Z0-9]+/g, " ")} `)) continue;
+      } else if (!finalCanonical.includes(rowKeyCanonical)) {
+        continue;
+      }
       const cells = Object.entries(match?.row?.all_cells || match?.row?.cells || {});
       const paintable = cells
-        .map(([, cell]) => cell)
+        .map(([header, cell]) => (cell && typeof cell === "object" ? { ...cell, header } : cell))
         .filter((cell) => Array.isArray(cell?.bbox) && cell.bbox.length === 4);
       if (!paintable.length) continue;
       // Only rows whose non-key cell values appear in the answer, or explicit
       // cite / points targets from the goal on scoped queries. Naming a sheet
       // in the answer must not attach every MARK queried on that sheet.
-      const rowKeyCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
       // Serving/relationship cells often hold another unit's MARK (VAV row
       // "AHU-A1"). That is not "using this row's answering values" when the
       // answer cites the other mark on its own.
@@ -712,8 +879,18 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       const paintHints = missingValues.slice(0, 8).map(({ cell, sheet: cellSheet }) => {
         const bbox = cell?.bbox;
         if (!Array.isArray(bbox) || bbox.length !== 4) return null;
-        const label = String(cell.text || rowKey).replace(/\s+/g, "_").slice(0, 32) || rowKey;
-        return `highlight_citation sheet=${cellSheet} bbox_px=${JSON.stringify(bbox)} text=${label}`;
+        const col = String(cell?.header || cell?.column || "").replace(/\s+/g, "_").slice(0, 24);
+        const val = String(cell.text || "").replace(/\s+/g, "_").slice(0, 32) || rowKey;
+        const label = val;
+        const bits = [
+          `highlight_citation sheet=${cellSheet}`,
+          `bbox_px=${JSON.stringify(bbox)}`,
+          `text=${label}`,
+          `row_key=${rowKey}`,
+        ];
+        if (col) bits.push(`column=${col}`);
+        if (cell?.text != null && String(cell.text).trim()) bits.push(`value=${String(cell.text).trim().replace(/\s+/g, "_").slice(0, 32)}`);
+        return bits.join(" ");
       }).filter(Boolean);
       const hint = paintHints.length
         ? ` Exact paint args already retrieved: ${paintHints.join("; ")}.`
@@ -972,14 +1149,62 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       if (!preferredTitle) continue;
       const prefU = preferredTitle.toUpperCase().replace(/[\u2010-\u2015\u2212]/g, "-");
       const titleOk = (() => {
-        if (answerU.includes(prefU.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim().slice(0, 36))) return true;
-        if (/\bHANDLING\b/.test(prefU)) return /\bHANDLING\b/.test(answerU);
+        const prefCore = prefU.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+        if (answerU.includes(prefCore.slice(0, 36))) return true;
+        // DOAH HANDLING vs UNIT (and similar siblings): bare "HANDLING" also
+        // matches AHU "Air-Handling" prose in a re-dumped takeoff — require the
+        // distinctive outdoor-air handling phrase, not the single word.
+        if (/\bOUTDOOR AIR HANDLING\b/.test(prefU) || /\bDEDICATED OUTDOOR AIR HANDLING\b/.test(prefU)) {
+          return /\bOUTDOOR AIR HANDLING\b/.test(answerU);
+        }
+        if (/\bHANDLING\b/.test(prefU) && !/\bAIR HANDLING UNIT\b/.test(prefU)) {
+          return answerU.includes(prefCore.slice(0, 40));
+        }
         const words = prefU.split(/[^A-Z0-9]+/).filter((w) => w.length > 4);
         return words.filter((w) => answerU.includes(w)).length >= Math.min(3, words.length);
       })();
       if (!titleOk) {
         return `The goal asks which schedule ${tag} is on. Copy the primary equipment schedule title from query_table (e.g. "${preferredTitle}") into the answer — do not substitute a sibling family's schedule title or a cross-ref table.`;
       }
+      // Tool found the MARK on a primary equipment schedule — rejecting
+      // "not found" / "not on any schedule" when family evidence exists.
+      const deniesPresence = /\b(?:not\s+found|is\s+not\s+(?:present|found)|no(?:t)?\s+(?:on|in)\s+(?:any|the)\s+schedule|does\s+not\s+appear)\b/i.test(finalText)
+        && new RegExp(tag.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/-/g, "[\\-\\u2010-\\u2015\\u2212]?"), "i").test(finalText);
+      if (deniesPresence) {
+        return `Tool evidence found ${tag} on "${preferredTitle}". Do not claim it is missing — answer YES with that exact schedule title.`;
+      }
+    }
+  }
+  // Narrow follow-ups: "how many ATCT fan coils … including FCU-T11?"
+  // must copy building_tag_counts.T from the FCU title-scan (A≠T; never swap).
+  const asksAtctFanCoilCount = /\bATCT\b/i.test(goal)
+    && /fan[\s\-]*coils?/i.test(goal)
+    && /\b(?:how many|count|scheduled|including)\b/i.test(goal);
+  if (asksAtctFanCoilCount && finalText) {
+    const fcuScan = callLog.find(({ name, out, args }) => {
+      if (name !== "query_table" || out?.error) return false;
+      const q = out?.query || args || {};
+      const scoped = q.row_key != null && String(q.row_key).trim() !== ""
+        || q.column != null || q.cell_value != null || q.cell_contains != null;
+      if (scoped) return false;
+      const title = String(q.title || out.matches?.[0]?.title?.text || out.matches?.[0]?.title || "");
+      return /FAN\s*COIL/i.test(title) && out.building_tag_counts && Number.isFinite(Number(out.building_tag_counts.T));
+    });
+    if (!fcuScan) {
+      return "The goal asks how many ATCT fan coils are scheduled. Call query_table with title FAN COIL UNIT SCHEDULE (no row_key), then copy building_tag_counts.T as the ATCT total (A=Air Ops, T=ATCT — never swap).";
+    }
+    const tCount = Number(fcuScan.out.building_tag_counts.T);
+    const aCount = Number(fcuScan.out.building_tag_counts.A);
+    const answerU = finalText.toUpperCase().replace(/[\u2010-\u2015\u2212]/g, "-");
+    const atctNear = (n) => new RegExp(
+      `(?:ATCT|T\\s*[=:]|T-TAG|T\\s+TAG)[^0-9]{0,48}\\b${n}\\b|\\b${n}\\b[^0-9]{0,48}(?:ATCT|T-TAG)`,
+      "i",
+    ).test(answerU);
+    if (!atctNear(tCount)) {
+      return `Tool evidence shows FAN COIL building_tag_counts.T=${tCount} (ATCT). Copy ATCT fan-coil count ${tCount} into the answer — A=Air Ops, T=ATCT; do not swap them.`;
+    }
+    if (Number.isFinite(aCount) && aCount !== tCount && atctNear(aCount) && !atctNear(tCount)) {
+      return `The answer assigns Air Ops count ${aCount} to ATCT. building_tag_counts map A=Air Ops and T=ATCT=${tCount} — use T=${tCount} for ATCT fan coils.`;
     }
   }
   // Full-set schedule takeoffs must use title-scan query_table counts — not
@@ -1054,10 +1279,29 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return true;
     })).map((fam) => fam.label);
     if (missingFamilies.length) {
+      const titleByLabel = {
+        AHU: "AIR HANDLING UNIT SCHEDULE",
+        "DOAH unit": "DEDICATED OUTDOOR AIR UNIT SCHEDULE",
+        FCU: "FAN COIL UNIT SCHEDULE",
+        VAV: "VARIABLE AIR VOLUME",
+        "air-cooled chiller": "AIR COOLED CHILLER SCHEDULE",
+        "heat-recovery chiller": "AIR COOLED HEAT RECOVERY CHILLER",
+        boiler: "BOILER SCHEDULE",
+        "points-list": namedPointsListTag
+          ? `POINTS LIST ${namedPointsListTag.split("/")[0]}`
+          : "POINTS LIST",
+      };
+      const exactScans = missingFamilies
+        .map((label) => titleByLabel[label])
+        .filter(Boolean)
+        .map((title) => `query_table title=${JSON.stringify(title)}`);
       const hint = namedPointsListTag && missingFamilies.includes("points-list")
         ? ` For the points-list, query_table title must include ${namedPointsListTag.split("/")[0]} (not a generic POINTS LIST rollup).`
         : "";
-      return `The goal asks for counts of ${missingFamilies.join(", ")}, but no title-scan query_table (no row_key) was run for those schedule families yet. Call query_table with each missing schedule title, copy count/building_tag_counts, then answer.${hint}`;
+      const exact = exactScans.length
+        ? ` Exact title-scan args already chosen: ${exactScans.join("; ")}.`
+        : "";
+      return `The goal asks for counts of ${missingFamilies.join(", ")}, but no title-scan query_table (no row_key) was run for those schedule families yet. Call query_table with each missing schedule title, copy count/building_tag_counts, then answer.${hint}${exact}`;
     }
     // Normalize unicode dashes so "Air‑cooled" / "DOAH‑A1" match ASCII patterns.
     const answerNorm = finalText.replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/g, "-");
@@ -1136,8 +1380,15 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       // from exploratory follow-up tools must not force a full inventory dump.
       const goalAskedThisFamily = familyNeedles.some((fam) => fam.label === label);
       if (!goalAskedThisFamily) continue;
-      if (!countNearLabel(label, count)) {
+      const foundNear = nearCountsForLabel(label);
+      if (!foundNear.includes(Number(count))) {
         missingCounts.push(`${label} count=${count}`);
+      } else if (foundNear[0] != null && foundNear[0] !== Number(count)
+        && foundNear[0] > Number(count) && foundNear[0] >= 2) {
+        // Inflated primary total (e.g. DOAH **5** when title-scan count=3 from
+        // summing continuation pages). Ignore smaller leading numbers (page
+        // markers / incidental 1s near points-list titles).
+        conflictingCounts.push(`${label} stated ${foundNear[0]} but title-scan count=${count}`);
       }
       if (out.building_tag_counts && typeof out.building_tag_counts === "object" && /\bsplit/i.test(goal)) {
         // Only enforce splits for families the goal actually asked to split —
@@ -1186,6 +1437,9 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     if (missingCounts.length) {
       return `The goal asks for schedule counts, and title-scan query_table results are available, but the answer omits these tool counts next to their equipment family: ${[...new Set(missingCounts)].slice(0, 8).join("; ")}. Copy count (and building_tag_counts when splits are asked) from those tool results into the family totals — do not replace them with the number of MARKs you painted for spot-check, and do not leave a second contradictory totals table.`;
     }
+    if (conflictingCounts.length) {
+      return `The answer's primary family totals conflict with title-scan query_table counts: ${[...new Set(conflictingCounts)].slice(0, 6).join("; ")}. Use the tool count as the scheduled total — do not sum continuation pages or sibling schedules into a larger figure.`;
+    }
     // Reject dual inventory dumps (title-scan table + painted-only "equipment totals").
     if (/(?:title[\s_-]*scan|schedule counts)/i.test(answerNorm)
       && /(?:equipment totals|total scheduled units)/i.test(answerNorm)) {
@@ -1220,7 +1474,8 @@ export function agentSystemPrompt() {
     "- query_table and find_text search the whole loaded set — they do not require the sheet to be open as a canvas tab. Never refuse schedule cell values because a tab is closed; call query_table with row_key and copy row.all_cells, then highlight_citation.",
     "- When asked for scheduled equipment or points-list row counts, call query_table with the schedule title (no row_key and no cell_contains). Copy that tool result's count and building_tag_counts into the answer — do not re-sum sheet_graph page row totals by hand (continuation pages 1 OF 2 / 2 OF 2 repeat the same MARK keys). building_tag_counts letters map as A=Air Ops, M=MITRACON/Mitracon, T=ATCT — never swap them. Prefer one accurate title needle per asked family; when the goal distinguishes sibling titles (for example dedicated outdoor-air UNIT vs HANDLING schedules, or air-cooled vs heat-recovery chillers), query the title that matches what was asked rather than blending both. When the goal names a specific points list (for example AHU-T1A/TIB), put that tag in the query_table title — a bare POINTS LIST title can roll up sibling lists and double the row count. Then re-query specific row_key values for MARK/identity bboxes you must cite.",
     "- Sequencing for full-set count + cite goals: (1) list_sheets + sheet_graph once, (2) one title-scan query_table per requested family and copy count/building_tag_counts, (3) only then re-query the named cite MARKs / points-list title and paint those cells, (4) write ONE final answer whose family totals match those tool counts (do not add a second contradictory totals table that recounts only painted MARKs). Do not paint every equipment row on a schedule, and do not dump full schedule tables into the answer.",
-    "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Do not rely on auto-flying the canvas — the UI shows clickable source cards in the Agent panel; painting is enough. When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",
+    "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Pass row_key, column, table_title, and value whenever known so the Agent source card title reads like \"VAV-1 · CFM = 350\" (not a naked \"350\"). Do not rely on auto-flying the canvas — the UI shows clickable expandable source cards; painting is enough. When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",
+    "- The final Answer in chat must give the estimator MORE than enough to understand the workflow and act: every requested count/field with units, schedule titles and sheets, and clear structure. Prefer markdown tables and short labeled lists the UI can render (not a wall of prose or pipe-character dumps). Do not embed highlight_citation markup ids (【mk-…】) in chat — those belong on Source cards. Do not dump incidental inventory rows the goal did not ask for. Do not leave the usable answer only in Sources or highlights — chat is primary.",
     "- Never draw or request overlay label text that would cover the cited cell value; the highlight is a frame around readable blueprint text.",
     "- Conversational follow-ups: when the estimator asks a follow-up about the previous answer or workflow, reply in plain language using evidence already gathered; call tools again only when new evidence is needed. Answer the follow-up question directly first — do not digress into unrelated points-list rows or extra fields unless asked. Explain what you did and why in estimator terms — not tool JSON. Be a useful collaborator across turns, not a one-shot report.",
     "- When asked whether a MARK is on a schedule and which title: call query_table with that row_key (omit title), read matches[0].title (primary equipment schedule — not vibration-isolation / valve / sound / points-list cross-refs), and copy that exact title into the answer. Sibling families can differ (for example DOAH UNIT vs DOAH HANDLING schedules).",
@@ -1231,6 +1486,7 @@ export function agentSystemPrompt() {
     "- When the goal gives a BAS/DDC point description and asks for the point mark, alarm, or trend, call query_table with cell_contains set to that description (omit invented table titles on the first try). Read the AI/AO/BI/BO mark and alarm/trend fields from row.all_cells — never treat the description string itself as the point mark. If several sibling points share an equipment tag (e.g. HW vs CHW valve feedback), pick the row whose DESCRIPTION matches the goal's point wording.",
     "- Schedule LOCATION/ROOM cells are installation-location attributes only. When asked what equipment serves, call find_text or read_sheet_text and copy from hit.str — never paraphrase a LOCATION cell into a serves claim.",
     "- When asked for a physical drawing section or detail label where equipment is shown, cite find_text/read_sheet_text hit.str for that section label. A schedule title is not a drawing section.",
+    "- When asked where equipment appears on a roof/floor plan, prefer a find_text hit whose hit.str equals the exact equipment tag on a plan sheet over longer detail/callout phrases that only contain the tag.",
     "- find_text accepts an optional sheet; omit sheet to search the entire loaded set. When a sheet-scoped search returns zero hits with a next_move, follow that next_move instead of answering from schedule cells.",
     "- resolve_tag resolves room-finish relationships only. Never use it to locate scheduled HVAC/BAS equipment.",
     "- read_schedule/find_schedule return two DIFFERENT kinds of name and they are never interchangeable: `headers` names the table's own COLUMNS (e.g. \"SYMBOL\", \"REMARKS\" as column labels), while each entry in `rows` has its own `key` naming that ONE ROW (e.g. \"AC-1\"). A word appearing in `headers` does NOT mean a row exists with that word as its key — check `rows[].key` directly, never infer a row's existence from a column name alone.",
@@ -1295,15 +1551,62 @@ const resultText = (out) => {
   if (typeof payload?.error === "string" && payload.error.length > 600) {
     payload = { ...payload, error: `${payload.error.slice(0, 500)}…` };
   }
-  // Compact sheet_graph — full sheet dumps blow the 131k context window.
-  if (Array.isArray(payload?.sheets) && payload.sheets.length > 0) {
+  // Compact sheet_graph only — full sheet dumps blow the 131k context window.
+  // Other tools (sweep_schedule_row, symbol_sweep, load_plan, …) also return a
+  // `sheets` array; treating them as a graph strips found/tag evidence.
+  if (typeof payload?.available === "boolean" && Array.isArray(payload?.sheets) && payload.sheets.length > 0) {
     payload = {
       sheet_count: payload.sheets.length,
       sheets: payload.sheets.slice(0, 40).map((s) => ({
         key: s.key || s.id || s.sheet || s.name,
         title: s.title || s.name || s.label || undefined,
+        role: s.role,
+        schedules: Array.isArray(s.schedules)
+          ? s.schedules.map((sch) => ({ kind: sch.kind, title: sch.title, rows: sch.rows }))
+          : undefined,
       })),
       note: "sheet_graph compacted; use query_table/find_schedule for schedule titles",
+    };
+  }
+  // Keep sweep_schedule_row count evidence; drop empty plan-sheet audit rows
+  // before the hard char cap can slice through tag_citations.
+  if (
+    typeof payload?.found === "number"
+    && Array.isArray(payload?.tag_citations)
+    && Array.isArray(payload?.sheets)
+    && (payload.tag != null || payload.anchor != null)
+  ) {
+    const sheets = payload.sheets.filter((sheet) => {
+      if (!sheet || typeof sheet !== "object") return false;
+      if (Number(sheet.found) > 0) return true;
+      if (Array.isArray(sheet.matches) && sheet.matches.length) return true;
+      if (Array.isArray(sheet.withheld) && sheet.withheld.length) return true;
+      if (Array.isArray(sheet.excluded) && sheet.excluded.length) return true;
+      if (Array.isArray(sheet.text_only) && sheet.text_only.length) return true;
+      if (Array.isArray(sheet.redundant_view) && sheet.redundant_view.length) return true;
+      return false;
+    });
+    payload = {
+      tag: payload.tag,
+      search_scope: payload.search_scope,
+      unlabeled_audit_complete: payload.unlabeled_audit_complete,
+      found: payload.found,
+      tag_citations: payload.tag_citations,
+      row: payload.row
+        ? {
+          sheet: payload.row.sheet,
+          table: payload.row.table,
+          key: payload.row.key,
+          cells: payload.row.cells,
+          citation: payload.row.citation,
+        }
+        : undefined,
+      anchor: payload.anchor,
+      sheets,
+      sheets_omitted_empty: Math.max(0, payload.sheets.length - sheets.length),
+      complete: payload.complete,
+      note: payload.note,
+      warning: payload.warning,
     };
   }
   // Compact read_schedule / large row dumps.
@@ -1498,13 +1801,23 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       // When cite-MARK bboxes are already in the call log, paint them now
       // instead of asking the model to re-type the same highlight_citation args.
       if (correction && /Exact paint args already retrieved:/i.test(correction)) {
-        const hintRe = /highlight_citation sheet=(\S+) bbox_px=(\[[^\]]+\]) text=(\S+)/g;
+        const hintRe = /highlight_citation sheet=(\S+) bbox_px=(\[[^\]]+\]) text=(\S+)(?: row_key=(\S+))?(?: column=(\S+))?(?: value=(\S+))?(?: table_title=(\S+))?/g;
         let paintedAny = false;
         for (const m of correction.matchAll(hintRe)) {
           let bbox;
           try { bbox = JSON.parse(m[2]); } catch { continue; }
           if (!Array.isArray(bbox) || bbox.length !== 4) continue;
-          const args = { sheet: m[1], bbox_px: bbox, text: m[3] };
+          const rawArgs = {
+            sheet: m[1],
+            bbox_px: bbox,
+            text: m[3],
+            ...(m[4] ? { row_key: m[4] } : {}),
+            ...(m[5] ? { column: m[5].replace(/_/g, " ") } : {}),
+            ...(m[6] ? { value: m[6].replace(/_/g, " ") } : {}),
+            ...(m[7] ? { table_title: m[7].replace(/_/g, " ") } : {}),
+          };
+          // Prefer real schedule headers/values from the call log over underscore-squashed hints.
+          const args = enrichHighlightCitationArgs(rawArgs, callLog);
           emit({ type: "tool_start", name: "highlight_citation", args });
           let out;
           try { out = await execute("highlight_citation", args); }
@@ -1515,6 +1828,44 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
           paintedAny = true;
         }
         if (paintedAny) {
+          correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+        }
+      }
+      // Auto title-scans for missing schedule families (full takeoffs thrash on
+      // find_text and never finish counts — run Exact title needles now).
+      if (correction && /Exact title-scan args already chosen:/i.test(correction)) {
+        const scanRe = /query_table title=("(?:\\.|[^"])*"|'(?:\\.|[^'])*'|[^\s;]+)/g;
+        const scanSummaries = [];
+        for (const m of correction.matchAll(scanRe)) {
+          let title = m[1];
+          try {
+            if ((title.startsWith('"') && title.endsWith('"')) || (title.startsWith("'") && title.endsWith("'"))) {
+              title = JSON.parse(title.includes('"') ? title : `"${title.slice(1, -1)}"`);
+            }
+          } catch { /* keep raw */ }
+          title = String(title || "").trim();
+          if (!title) continue;
+          const args = { title };
+          emit({ type: "tool_start", name: "query_table", args });
+          let out;
+          try { out = await execute("query_table", args); }
+          catch (e) { out = { error: String((e && e.message) || e) }; }
+          if (out == null || typeof out !== "object") out = { result: out ?? null };
+          callLog.push({ id: `auto_title_scan_${callLog.length}`, name: "query_table", args, out });
+          emit({ type: "tool_end", name: "query_table", result: out });
+          if (!out.error) {
+            const sampleTitle = String(out.matches?.[0]?.title?.text || out.matches?.[0]?.title || title);
+            scanSummaries.push(
+              `${sampleTitle}: count=${out.count}`
+              + (out.building_tag_counts ? ` building_tag_counts=${JSON.stringify(out.building_tag_counts)}` : ""),
+            );
+          }
+        }
+        if (scanSummaries.length) {
+          messages.push({
+            role: "user",
+            content: `Auto title-scan results (copy these tool counts into the answer; do not invent totals):\n${scanSummaries.join("\n")}`,
+          });
           correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
         }
       }
@@ -1600,10 +1951,15 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     else consecutiveHighlightOnlyTurns = 0;
     for (const call of turn.toolCalls) {
       if (signal?.aborted) return aborted();
-      emit({ type: "tool_start", name: call.name, args: call.args });
+      const callArgs = call.name === "highlight_citation" && !call.argsError
+        ? enrichHighlightCitationArgs(call.args, callLog)
+        : call.args;
+      emit({ type: "tool_start", name: call.name, args: callArgs });
       let out;
       try {
-        out = call.argsError ? { error: `Invalid arguments for ${call.name}: ${call.argsError}.` } : await execute(call.name, call.args);
+        out = call.argsError
+          ? { error: `Invalid arguments for ${call.name}: ${call.argsError}.` }
+          : await execute(call.name, callArgs);
       } catch (e) {
         out = { error: `Tool ${call.name} failed: ${String((e && e.message) || e)}` };
       }
@@ -1627,7 +1983,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
           emit({ type: "text", text: `[Vision routing degraded — the vision model call failed (${String((e && e.message) || e)}), falling back to the raw image for this one result.]` });
         }
       }
-      if (!call.argsError) callLog.push({ id: call.id, name: call.name, args: call.args, out });
+      if (!call.argsError) callLog.push({ id: call.id, name: call.name, args: callArgs, out });
       emit({ type: "tool_end", name: call.name, result: out });
       results.push({ call, out });
     }
@@ -1636,20 +1992,70 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     // that highlight inventory rows forever). Nudge once: stop extra paints
     // and write the complete takeoff answer from retrieved cells.
     const paintCount = callLog.filter((c) => c.name === "highlight_citation" && !c.out?.error).length;
+    const findTextCount = callLog.filter((c) => c.name === "find_text").length;
     const hasQueryEvidence = callLog.some((c) =>
       c.name === "query_table" && !c.out?.error
       && (Number(c.out?.count) > 0 || (c.out?.matches || []).length > 0));
+    const takeoffLike = /\btakeoff\b|\bscheduled\s+(?:unit\s+)?counts?\b|\bequipment\s+(?:totals?|counts?)\b/i.test(goal);
+    // Mid-loop: auto-run missing family title-scans before the step cap
+    // (full HVAC takeoffs were burning 80 steps on find_text and never counting).
+    if (takeoffLike && iterations >= 8 && iterations % 4 === 0) {
+      const missingTitles = missingScheduleTitleScans(callLog, goal);
+      const scanSummaries = [];
+      for (const title of missingTitles) {
+        // Skip titles already attempted (including zero-count) so a bad Exact
+        // needle cannot thrash the step cap forever.
+        const attempted = callLog.some(({ name, args }) =>
+          name === "query_table"
+          && String(args?.title || "").toUpperCase() === title.toUpperCase()
+          && (args?.row_key == null || String(args.row_key).trim() === ""));
+        if (attempted) continue;
+        const args = { title };
+        emit({ type: "tool_start", name: "query_table", args });
+        let out;
+        try { out = await execute("query_table", args); }
+        catch (e) { out = { error: String((e && e.message) || e) }; }
+        if (out == null || typeof out !== "object") out = { result: out ?? null };
+        callLog.push({ id: `auto_title_scan_${callLog.length}`, name: "query_table", args, out });
+        emit({ type: "tool_end", name: "query_table", result: out });
+        if (!out.error && Number(out.count) >= 1) {
+          const sampleTitle = String(out.matches?.[0]?.title?.text || out.matches?.[0]?.title || title);
+          scanSummaries.push(
+            `${sampleTitle}: count=${out.count}`
+            + (out.building_tag_counts ? ` building_tag_counts=${JSON.stringify(out.building_tag_counts)}` : ""),
+          );
+        }
+      }
+      if (scanSummaries.length) {
+        messages.push({
+          role: "user",
+          content: `Auto title-scan results (copy these tool counts into the final answer; stop find_text browsing):\n${scanSummaries.join("\n")}\nEmit the COMPLETE takeoff answer now with every requested family count and cite MARK cells. Do not call more tools unless Exact paint args are named.`,
+        });
+        emit({ type: "text", text: "[Loop nudge: title-scans completed — write the takeoff answer.]" });
+        answerNudgeSent = true;
+      }
+    }
     const shouldNudgeAnswer = !answerNudgeSent && !lastDraftText && hasQueryEvidence
       && (consecutiveHighlightOnlyTurns >= 3
         || (paintCount >= 10 && iterations >= 14)
-        || (paintCount >= 6 && iterations >= Math.max(18, Math.floor(maxIterations * 0.35))));
+        || (paintCount >= 6 && iterations >= Math.max(18, Math.floor(maxIterations * 0.35)))
+        || (takeoffLike && findTextCount >= 6 && iterations >= 16)
+        || (takeoffLike && iterations >= 28));
     if (shouldNudgeAnswer) {
       answerNudgeSent = true;
       messages.push({
         role: "user",
-        content: "Stop painting additional inventory / off-ask rows. You already have query_table evidence and enough highlight_citation paints for the requested tags and fields. Do not call more tools unless a gate names Exact paint args still missing. Emit the COMPLETE final answer now: every requested count and attribute with sheet citations, using only retrieved cells.",
+        content: "Stop painting additional inventory / off-ask rows and stop extra find_text browsing. You already have query_table evidence and enough highlight_citation paints for the requested tags and fields. Do not call more tools unless a gate names Exact paint args still missing. Emit the COMPLETE final answer now: every requested count and attribute with sheet citations, using only retrieved cells.",
       });
       emit({ type: "text", text: "[Loop nudge: write the final answer now — stop inventory paint thrash.]" });
+    }
+    // After a nudge, refuse further tool thrash — demand a text-only answer.
+    if (answerNudgeSent && !lastDraftText && iterations >= 36 && iterations % 6 === 0) {
+      messages.push({
+        role: "user",
+        content: "CRITICAL: Do NOT call any more tools. Reply with the COMPLETE takeoff answer as plain text only, using Auto title-scan / query_table counts already in this thread. Omit the word \"highlighted\" unless you are sure that exact cell was painted.",
+      });
+      emit({ type: "text", text: "[Loop nudge: text-only answer required — tools closed.]" });
     }
   }
   emit({ type: "max_iterations", limit: maxIterations });

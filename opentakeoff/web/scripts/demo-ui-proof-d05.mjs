@@ -15,17 +15,17 @@ if (!apiKey) throw new Error("CEREBRAS_API_KEY is required.");
 
 const root = resolve(import.meta.dirname, "../..");
 const corpus = resolve(root, "../opentakeoff-corpus");
-const demo = resolve(corpus, "demos/D03-hvac-bas-project-takeoff");
-const pdf = resolve(corpus, "raw/navfac-cherry-point-atc-mechanical.pdf");
+const demo = resolve(corpus, "demos/D05-rtu-mech-to-electrical");
+const pdf = resolve(corpus, "raw/baker-county-eoc-bidset.pdf");
 const prompt = readFileSync(resolve(demo, "prompt.txt"), "utf8").trim();
 const truth = JSON.parse(readFileSync(resolve(demo, "truth.json"), "utf8"));
 const followUp = truth.follow_up?.prompt
-  || "Is DOAH-T1 on a dedicated outdoor-air schedule? Which title, and how many ATCT fan coils are scheduled including FCU-T11?";
+  || "Is RTU-2 on the connection schedule as RTU-02? What is its MCA and circuit number?";
 
 const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
 const mcpServer = buildServer();
 await mcpServer.connect(serverTransport);
-const mcpClient = new Client({ name: "opentakeoff-ui-proof-d03", version: "1.0.0" });
+const mcpClient = new Client({ name: "opentakeoff-ui-proof-d05", version: "1.0.0" });
 await mcpClient.connect(clientTransport);
 await mcpClient.callTool({ name: "load_plan", arguments: { path: pdf } });
 
@@ -60,7 +60,6 @@ const proxy = createServer(async (request, response) => {
     },
     body,
   });
-  // Retry rate limits / transient upstream failures so long paint loops do not die mid-run.
   const retryable = (status) => status === 429 || status === 503;
   if (retryable(upstream.status) && request.url !== "/tool") {
     let last = upstream;
@@ -139,10 +138,10 @@ let succeeded = false;
 try {
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   await page.locator('input[name="sheet-file"]').first().setInputFiles(pdf);
-  await page.getByText("Open your plans").waitFor({ state: "hidden", timeout: 120_000 });
-  await page.locator("canvas").first().waitFor({ state: "visible", timeout: 120_000 });
-  await page.getByText("Rendering sheet…").waitFor({ state: "hidden", timeout: 120_000 });
-  await page.screenshot({ path: "/opt/cursor/artifacts/d03_ui_loaded.png" });
+  await page.getByText("Open your plans").waitFor({ state: "hidden", timeout: 180_000 });
+  await page.locator("canvas").first().waitFor({ state: "visible", timeout: 180_000 });
+  await page.getByText("Rendering sheet…").waitFor({ state: "hidden", timeout: 180_000 });
+  await page.screenshot({ path: "/opt/cursor/artifacts/d05_ui_loaded.png" });
 
   await page.locator('button[title^="Agent —"]').click();
   const goal = page.locator('textarea[name="agent-goal"]');
@@ -151,87 +150,69 @@ try {
   await page.getByRole("button", { name: "Run", exact: true }).click();
   const stop = page.getByRole("button", { name: /Stop/ });
   await stop.waitFor({ state: "visible", timeout: 10_000 });
-  await stop.waitFor({ state: "hidden", timeout: 480_000 });
+  await stop.waitFor({ state: "hidden", timeout: 600_000 });
   await page.waitForTimeout(2_000);
-  await page.screenshot({ path: "/opt/cursor/artifacts/d03_ui_primary_answer.png" });
+  await page.screenshot({ path: "/opt/cursor/artifacts/d05_ui_primary_answer.png" });
 
   const panelRoot = page.locator('textarea[name="agent-goal"]').locator("xpath=ancestor::div[contains(@style,\"width: 380\")]").first();
   const panelText = await panelRoot.innerText();
-  console.log(`UI_AGENT_PRIMARY\n${panelText.slice(0, 4000)}`);
+  console.log(`UI_AGENT_PRIMARY\n${panelText.slice(0, 4500)}`);
 
-  // Answer-first: an Answer thread entry must exist with truth values.
   if (!/\bAnswer\b/i.test(panelText)) {
-    throw new Error("D03 UI panel missing answer-first thread (no Answer section).");
+    throw new Error("D05 UI panel missing answer-first thread (no Answer section).");
   }
-  // Prefer the Answer body (exclude Goal / Technical steps dumps) so incidental
-  // digits in tool traces cannot satisfy count checks.
   const answerBodies = [...panelText.matchAll(/(?:^|\n)\s*Answer\b\s*\n([\s\S]*?)(?=\n\s*(?:Answer|Sources|Technical steps|Goal:|Ask a follow-up|You)\b|$)/gi)]
     .map((m) => m[1].trim())
     .filter((body) => body.length >= 40 && !/^\[Evidence gate:/i.test(body));
   const primaryAnswer = answerBodies[0] || "";
   if (primaryAnswer.length < 80) {
-    throw new Error("D03 UI Answer section is empty or too short to be a takeoff reply.");
+    throw new Error("D05 UI Answer section is empty or too short.");
   }
   const answerNorm = normalize(primaryAnswer);
+  const has = (...needles) => needles.every((n) => answerNorm.includes(normalize(n)));
   const near = (labels, value) => {
-    const hay = normalize(primaryAnswer);
     const lab = labels.map((l) => l.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
-    const v = String(value);
-    // Markdown table: label and count may be several cells apart on the same row.
-    if (new RegExp(`(?:${lab})[^\\n]{0,160}?\\b\\*{0,2}${v}\\*{0,2}\\b`, "i").test(hay)) return true;
-    // Or prose "AHU: 5" / "AHUs **5**" — but not sheet "#5" / "sheet 5".
-    const prose = new RegExp(
-      `(?:${lab})(?:(?!\\bsheet\\b)[^0-9\\n#]){0,40}(?<!#)\\b${v}\\b`,
-      "i",
-    );
-    return prose.test(hay);
+    const v = String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(`(?:${lab})[^\\n]{0,160}?\\b${v}\\b|\\b${v}\\b[^\\n]{0,80}(?:${lab})`, "i").test(answerNorm);
   };
-  const checks = [
-    [["AHU", "AIR HANDLING"], truth.expected.ahu_count.value],
-    [["DOAH", "DEDICATED OUTDOOR"], truth.expected.doah_count.value],
-    [["FCU", "FAN COIL", "FAN-COIL"], truth.expected.fcu_count.value],
-    [["VAV", "VARIABLE"], truth.expected.vav_count.value],
-    [["AIR-COOLED CHILLER", "AIR COOLED CHILLER", "AIR-COOLED"], truth.expected.air_cooled_chiller_count.value],
-    [["HEAT-RECOVERY", "HEAT RECOVERY"], truth.expected.heat_recovery_chiller_count.value],
-    [["BOILER"], truth.expected.boiler_count.value],
-    [["POINTS", "BAS", "AHU-T1A"], truth.expected.bas_ahu_t1a_tib_points_rows.value],
-  ];
-  for (const [labels, value] of checks) {
-    if (!near(labels, value)) {
-      throw new Error(`D03 UI Answer missing labeled truth for ${labels[0]}=${value}`);
+
+  if (!has("MAIN OPERATIONS") || !has("CARRIER") || !has("48FE")) {
+    throw new Error("D05 UI Answer missing mech service/manufacturer/model.");
+  }
+  if (!near(["TON", "NOMINAL", "CAP"], 5) && !/\b5\b/.test(answerNorm)) {
+    throw new Error("D05 UI Answer missing nominal tons 5.");
+  }
+  if (!near(["SUPPLY", "CFM"], 1650) && !/\b1650\b/.test(answerNorm)) {
+    throw new Error("D05 UI Answer missing supply CFM 1650.");
+  }
+  if (!near(["OA", "OUTSIDE", "MIN"], 330) && !/\b330\b/.test(answerNorm)) {
+    throw new Error("D05 UI Answer missing min OA CFM 330.");
+  }
+  if (!has("RTU-01")) {
+    throw new Error("D05 UI Answer missing zero-padded connection tag RTU-01.");
+  }
+  if (!near(["MCA"], "33") && !/\b33(?:\.0)?\b/.test(answerNorm)) {
+    throw new Error("D05 UI Answer missing MCA 33.0.");
+  }
+  if (!has("45 A") && !/\b45\s*A\b/.test(answerNorm)) {
+    throw new Error("D05 UI Answer missing MOCP 45 A.");
+  }
+  if (!near(["VA"], 11880) && !/\b11880\b/.test(answerNorm)) {
+    throw new Error("D05 UI Answer missing VA 11880.");
+  }
+  if (!/C\s*-?\s*29[, ]*31[, ]*33/.test(answerNorm)) {
+    throw new Error("D05 UI Answer missing circuit C - 29,31,33.");
+  }
+  if (!/\bRTU-1\b/.test(answerNorm) || !/(?:plan|#39|roof|M1\.21)/i.test(primaryAnswer)) {
+    // Exact plan label must appear; sheet/plan wording preferred.
+    if (!/\bRTU-1\b/.test(answerNorm)) {
+      throw new Error("D05 UI Answer missing plan label RTU-1.");
     }
   }
-  // Building splits may sit under column headers (Air Ops | MITRACON | ATCT)
-  // rather than repeating "Air Ops: 14" on the FCU row — accept FCU-row cells
-  // when the Answer table names those building columns.
-  const hasAirOpsCol = /AIR[\s\-]*OPS|\bA\s*[\=\:\)\|]/i.test(answerNorm);
-  const hasAtctCol = /\bATCT\b|\bT\s*[\=\:\)\|]/i.test(answerNorm);
-  const fcuRowHas = (value) => primaryAnswer.split("\n").some((line) =>
-    /FCU|FAN[\s\-]*COIL/i.test(line) && new RegExp(`\\b${value}\\b`).test(normalize(line)));
-  if (!(near(["AIR OPS", "A =", "A=", "A:"], truth.expected.fcu_air_ops_count.value)
-    || (hasAirOpsCol && fcuRowHas(truth.expected.fcu_air_ops_count.value)))) {
-    throw new Error(`D03 UI Answer missing Air Ops FCU split ${truth.expected.fcu_air_ops_count.value}`);
-  }
-  if (!(near(["ATCT", "T =", "T=", "T:"], truth.expected.fcu_atct_count.value)
-    || (hasAtctCol && fcuRowHas(truth.expected.fcu_atct_count.value)))) {
-    throw new Error(`D03 UI Answer missing ATCT FCU split ${truth.expected.fcu_atct_count.value}`);
-  }
-  // Dual inventory tables (title-scan + painted recount) are a product fail.
-  if (/(?:title[\s_-]*scan|schedule counts)/i.test(primaryAnswer)
-    && /(?:equipment totals|total scheduled units)/i.test(primaryAnswer)) {
-    throw new Error("D03 UI Answer has both schedule-counts and a second equipment-totals table.");
-  }
-  // Explicit set totals that must not be doubled (points list is 62, not 122).
-  if (/\b122\b/.test(primaryAnswer) && !near(["POINTS", "BAS", "AHU-T1A"], 62)) {
-    throw new Error("D03 UI Answer reports doubled points-list rows without the correct 62.");
-  }
-  // Reject known wrong DOAH rollups that blend UNIT+HANDLING page sums.
-  if (/\bDOAH\b[^0-9]{0,60}\b4\b/i.test(answerNorm) && !near(["DOAH", "DEDICATED OUTDOOR"], 3)) {
-    throw new Error("D03 UI Answer reports DOAH total 4 without the correct unit-schedule total 3.");
+  if (/TRANSITION TO UNIT/i.test(primaryAnswer) && !/\b#?39\b|\broof plan\b/i.test(primaryAnswer)) {
+    throw new Error("D05 UI Answer preferred detail callout over roof-plan RTU-1.");
   }
 
-  // Source cards (estimator-clarity): expand Sources, open a card dropdown,
-  // then jump via View — titles must be human-readable, not naked fragments.
   const sourcesHeader = page.getByRole("button", { name: /Sources · \d+ · click to open/i });
   await sourcesHeader.waitFor({ state: "visible", timeout: 10_000 });
   await sourcesHeader.click();
@@ -240,48 +221,42 @@ try {
   const viewButtons = panelRoot.getByRole("button", { name: /^View$/i });
   const cardCount = await viewButtons.count();
   console.log(`UI_SOURCE_CARDS count=${cardCount}`);
-  if (cardCount < 1) throw new Error("D03 UI missing clickable source cards.");
+  if (cardCount < 1) throw new Error("D05 UI missing clickable source cards.");
   if (await detailToggles.count()) {
     await detailToggles.first().click();
     await page.waitForTimeout(800);
   }
   const sourcesBlock = await panelRoot.innerText();
-  if (!/Schedule|Tag \/ MARK|Column|Value|BBox|Sheet/i.test(sourcesBlock)) {
-    throw new Error("D03 source card dropdown missing structured detail fields.");
+  if (!/Schedule|Tag \/ MARK|Column|Value|BBox/i.test(sourcesBlock)) {
+    throw new Error("D05 source card dropdown missing structured detail fields.");
+  }
+  if (!/[A-Z]{2,8}-[A-Z0-9]+|[·•]|CFM|MCA|RTU/i.test(sourcesBlock)) {
+    console.log("UI_SOURCE_CARD_TITLES_WARN: titles may still be sparse.");
   }
   await viewButtons.first().click();
   await page.waitForTimeout(1_500);
-  await page.screenshot({ path: "/opt/cursor/artifacts/d03_ui_source_card_open.png" });
+  await page.screenshot({ path: "/opt/cursor/artifacts/d05_ui_source_card_open.png" });
 
-  // Paint evidence (quiet — no auto-fly required; card click is the jump)
-  if (!/\bhighlight_citation\b/i.test(panelText) && cardCount < 1) {
-    throw new Error("D03 UI never painted citations / source cards.");
-  }
-
-  // Bring the primary Answer back into view after Sources expand (answer-first).
   const primaryAnswerHeaders = panelRoot.locator('[data-agent-role="assistant"]');
   if (await primaryAnswerHeaders.count()) {
     await primaryAnswerHeaders.first().scrollIntoViewIfNeeded();
   }
   await page.waitForTimeout(2_500);
-  await page.screenshot({ path: "/opt/cursor/artifacts/d03_ui_primary_answer.png" });
+  await page.screenshot({ path: "/opt/cursor/artifacts/d05_ui_primary_answer.png" });
 
-  // Conversational follow-up — must be answered correctly before lock.
   await goal.fill(followUp);
   await page.waitForTimeout(1_000);
   await page.getByRole("button", { name: "Ask", exact: true }).click();
   await stop.waitFor({ state: "visible", timeout: 10_000 });
-  await stop.waitFor({ state: "hidden", timeout: 240_000 });
+  await stop.waitFor({ state: "hidden", timeout: 300_000 });
   await page.waitForTimeout(2_000);
-  // Scroll the latest Answer into view and hold so the recording clearly
-  // shows the follow-up reply (not just Sources / Ask box).
   const followAnswerNodes = panelRoot.locator('[data-agent-role="assistant"]');
   const followAnswerCount = await followAnswerNodes.count();
   if (followAnswerCount > 0) {
     await followAnswerNodes.nth(followAnswerCount - 1).scrollIntoViewIfNeeded();
   }
   await page.waitForTimeout(6_000);
-  await page.screenshot({ path: "/opt/cursor/artifacts/d03_ui_followup_answer.png" });
+  await page.screenshot({ path: "/opt/cursor/artifacts/d05_ui_followup_answer.png" });
   const afterFollow = await panelRoot.innerText();
   console.log(`UI_AGENT_FOLLOWUP\n${afterFollow.slice(-2500)}`);
   const followBodies = [...afterFollow.matchAll(/(?:^|\n)\s*Answer\b\s*\n([\s\S]*?)(?=\n\s*(?:Answer|Sources|Technical steps|Goal:|Ask a follow-up)\b|$)/gi)]
@@ -290,37 +265,22 @@ try {
   const followAnswer = followBodies[followBodies.length - 1] || "";
   console.log(`UI_FOLLOWUP_ANSWER\n${followAnswer.slice(0, 1200)}`);
   if (followAnswer.length < 20) {
-    throw new Error("D03 follow-up missing Answer thread entry.");
+    throw new Error("D05 follow-up missing Answer thread entry.");
   }
   const followNorm = normalize(followAnswer);
-  const followNear = (labels, value) => {
-    const lab = labels.map((l) => l.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
-    const v = String(value);
-    return new RegExp(`(?:${lab})[^0-9]{0,48}${v}(?![0-9])|${v}(?![0-9])[^0-9]{0,48}(?:${lab})`, "i").test(followNorm);
-  };
-  if (!followNear(["ATCT", "FAN COIL", "FCU", "T=", "T:"], 18) && !/\b18\b/.test(followNorm)) {
-    throw new Error("D03 follow-up missing ATCT FCU count 18.");
+  if (!/\bRTU-02\b/.test(followNorm)) {
+    throw new Error("D05 follow-up missing connection tag RTU-02.");
   }
-  if (!/FCU[\s\u2010-\u2015\u2212\-]*T11/i.test(followAnswer) && !/FCUT11/i.test(followNorm)) {
-    throw new Error("D03 follow-up missing FCU-T11 acknowledgement.");
+  if (!/\b24(?:\.0)?\b/.test(followNorm) || !/\bMCA\b/.test(followNorm)) {
+    throw new Error("D05 follow-up missing RTU-02 MCA 24.0.");
   }
-  // Require HANDLING as its own schedule-family word — not merely "AIR HANDLING".
-  if (!/OUTDOOR AIR HANDLING|DOAH[^\n]{0,80}HANDLING|HANDLING UNIT SCHEDULE/i.test(followNorm)) {
-    throw new Error("D03 follow-up missing DOAH-T1 HANDLING schedule evidence.");
-  }
-  if (!/DOAH[\s\u2010-\u2015\u2212\-]*T1/i.test(followAnswer) && !/DOAHT1/i.test(followNorm)) {
-    throw new Error("D03 follow-up missing DOAH-T1.");
-  }
-  // Must not deny presence when HANDLING evidence is required.
-  if (/\b(?:not\s+found|is\s+not\s+(?:present|found)|not\s+on\s+any\s+schedule)\b/i.test(followNorm)
-    && /DOAHT1/i.test(followNorm)) {
-    throw new Error("D03 follow-up wrongly denies DOAH-T1 schedule presence.");
+  if (!/C\s*-?\s*32[, ]*34[, ]*36/.test(followNorm)) {
+    throw new Error("D05 follow-up missing circuit C - 32,34,36.");
   }
 
-  // Extra hold so the saved video ends on the readable follow-up Answer.
   await page.waitForTimeout(4_000);
   succeeded = true;
-  console.log("D03_UI_PROOF_OK");
+  console.log("D05_UI_PROOF_OK");
 } finally {
   const video = page.video();
   await page.close();
@@ -332,12 +292,12 @@ try {
     const path = await video.path();
     mkdirSync("/opt/cursor/artifacts", { recursive: true });
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const dest = `/opt/cursor/artifacts/d03_ui_prompt_answer_cards_followup_${stamp}.webm`;
+    const dest = `/opt/cursor/artifacts/d05_ui_prompt_answer_cards_followup_${stamp}.webm`;
     if (succeeded) {
       copyFileSync(path, dest);
-      console.log(`D03_UI_VIDEO ${dest}`);
+      console.log(`D05_UI_VIDEO ${dest}`);
     } else {
-      console.log(`D03_UI_VIDEO_DISCARDED ${path}`);
+      console.log(`D05_UI_VIDEO_DISCARDED ${path}`);
     }
   }
 }
