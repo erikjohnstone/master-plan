@@ -43,6 +43,10 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     out: { found: 1 },
   }], "Give me the installed quantity for CH-A1"), null);
   assert.equal(requiredEvidenceCorrection([], "Give me CH-A1 capacity"), null);
+  assert.match(requiredEvidenceCorrection([{
+    name: "sweep_schedule_row",
+    out: { found: 1 },
+  }], "Give me installed quantity", "Installed quantity: 1 (single schedule entry).")!, /reasoning is invalid/);
   assert.match(requiredEvidenceCorrection([
     { name: "sweep_schedule_row", args: { tag: "CH-A1" }, out: { found: 1 } },
     { name: "query_table", out: { matches: [{ row: { key: "CV-CH-A1" } }] } },

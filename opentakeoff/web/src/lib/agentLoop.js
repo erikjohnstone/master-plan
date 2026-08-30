@@ -29,6 +29,10 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   if (/\b(?:installed\s+quantity|quantity|take\s*off|count)\b/i.test(goal) && !successfulCount) {
     return "The goal asks for installed quantity, but no successful sweep_schedule_row or count_marks call exists in this run. Do not infer quantity from schedule-row count. Call the appropriate counting tool, then answer from its result or refuse.";
   }
+  if (/\binstalled\s+quantity\b/i.test(finalText)
+    && /\b(?:single|one)\s+schedule\s+(?:entry|row)\b|\bschedule\s+row\s+appears\s+(?:once|one time)\b/i.test(finalText)) {
+    return "The final answer describes installed quantity as a single/one schedule entry. That reasoning is invalid even when the numeric value happens to match. Attribute installed quantity only to the successful sweep/count result and remove schedule-row-count wording.";
+  }
   const swept = new Set(callLog.filter(({ name, out }) =>
     name === "sweep_schedule_row" && (out?.found ?? out?.total_found) > 0)
     .map(({ args, out }) => String(args?.tag || out?.tag || "").toUpperCase()));
