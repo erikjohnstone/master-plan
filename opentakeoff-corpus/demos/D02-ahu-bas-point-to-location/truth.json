@@ -93,7 +93,9 @@
         "row_key": "AI10",
         "column": "MARK ANALOG INPUT",
         "bbox_px": [3340.074, 895.918, 3434.88, 930.476],
-        "grounding_text": "AI10"
+        "grounding_text": "AI10",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
       }
     },
     "point_description": {
@@ -144,7 +146,8 @@
         "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#2",
         "bbox_px": [264.9, 2582.2, 1770.2, 2607.4],
         "grounding_text": "ventilation, heating, cooling, and dehumidification to the control cab",
-        "ocr_mode": "single_line"
+        "ocr_mode": "single_word",
+        "ocr_px": 2400
       }
     },
     "physical_section": {

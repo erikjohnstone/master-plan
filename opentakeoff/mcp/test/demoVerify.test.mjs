@@ -20,6 +20,9 @@ test("demo verifier primitives enforce exact values and valid source boxes", () 
   assert.match(validateBbox([-1, 2, 10, 20], [0, 0, 100, 100]), /outside/);
   assert.equal(overlapAgainstSmaller([0, 0, 10, 10], [1, 1, 9, 9]), 1);
   assert.equal(ocrGrounds("CV—CH A1", "CV-CH-A1"), true);
+  assert.equal(ocrGrounds("Al10", "AI10"), false, "strict matching remains the default");
+  assert.equal(ocrGrounds("Al10", "AI10", { allowConfusables: true }), true);
+  assert.equal(ocrGrounds("A", "AI10", { allowConfusables: true }), false);
 });
 
 const truth = {

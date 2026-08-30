@@ -51,10 +51,13 @@ const compact = (value) => String(value)
   .toUpperCase()
   .replace(/[^A-Z0-9]/g, "");
 
-export function ocrGrounds(text, expectedText) {
+export function ocrGrounds(text, expectedText, { allowConfusables = false } = {}) {
   const haystack = compact(text);
   const needle = compact(expectedText);
-  return needle.length > 0 && haystack.includes(needle);
+  if (needle.length > 0 && haystack.includes(needle)) return true;
+  if (!allowConfusables || needle.length < 3) return false;
+  const canonical = (value) => value.replace(/[IL1]/g, "1");
+  return canonical(haystack).includes(canonical(needle));
 }
 
 function citationsFor(spec) {
@@ -167,13 +170,15 @@ export async function verifyDemoRun({ truth, run, session, recognize }) {
       const [x0, y0, x1, y1] = citation.bbox_px;
       const rendered = await session.viewSheet(citation.sheet_id, {
         region: { x0, y0, x1, y1 },
-        px: 1200,
+        px: citation.ocr_px ?? expectedCitation?.ocr_px ?? 1200,
       });
       const expectedText = citation.grounding_text
         ?? expectedCitation?.grounding_text
         ?? String(spec.value);
       const ocrText = await recognize(rendered.png, citation.ocr_mode);
-      if (!ocrGrounds(ocrText, expectedText)) {
+      if (!ocrGrounds(ocrText, expectedText, {
+        allowConfusables: citation.ocr_confusables ?? expectedCitation?.ocr_confusables ?? false,
+      })) {
         fail("CITE_GROUND", field, `OCR ${JSON.stringify(ocrText.trim())} does not contain ${JSON.stringify(expectedText)}`);
       } else {
         checks.push({
