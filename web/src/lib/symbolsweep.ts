@@ -1645,15 +1645,6 @@ export function corroborateFingerprint(
   return null;
 }
 
-/** One leftover labeled near-miss is the schematic-versus-plan extra.
- * Two or more, next to a counted instance, are a same-convention family.
- * When two or more instances already counted, leftovers must strictly
- * outnumber them — a partial family that missed more siblings than it
- * hit, not N commits plus N extras. */
-function isLabeledNearMissFamily(confident: number, leftoverN: number): boolean {
-  return confident >= 1 && leftoverN >= 2 && (confident === 1 || leftoverN > confident);
-}
-
 function occClaimedByMatch(o: TagOcc, matches: SweepSheetMatch[]): boolean {
   return matches.some((m) =>
     m.tag_at[0] === o.bbox[0] && m.tag_at[1] === o.bbox[1]
@@ -1766,25 +1757,32 @@ export interface LabeledNearMissSheet {
 }
 
 /**
- * The same labeled-family rule as promoteLabeledNearMisses, counted
- * across every swept sheet. A same-convention family split one leftover
- * per sheet never clears the per-sheet bar (each sheet sees a lone
- * leftover — the schematic-versus-plan shape). Two or more leftover
- * labeled near-misses next to at least one set-wide counted instance
- * are that family. When two or more instances already counted,
- * leftovers must strictly outnumber them (N commits plus N leftovers
- * stay withheld). Mutates each sheet's matches/withheld in place.
- * Returns how many leftovers were promoted.
+ * A same-convention family split one leftover per sheet never clears
+ * the per-sheet bar (each sheet sees a lone leftover — the
+ * schematic-versus-plan shape). The set-wide pass is narrower than
+ * the per-sheet family: exactly one counted instance, exactly two
+ * leftover labeled near-misses, on two or more sheets, each leftover
+ * scoring at least SETWIDE_NEAR_MISS_MIN. A leftover down near the
+ * 0.75 withhold floor next to a unique mark is the schematic extra.
+ * A pile of leftovers is hatch-field noise, not this family. Mutates
+ * each sheet's matches/withheld in place. Returns how many leftovers
+ * were promoted.
  */
+/** Near-bar leftovers this close to the 0.92 commit bar are still
+ * same-convention siblings. The withhold floor is 0.75; leftovers
+ * sitting down there next to a unique mark are the schematic extra. */
+export const SETWIDE_NEAR_MISS_MIN = 0.80;
+
 export function promoteSetWideLabeledNearMisses(sheets: LabeledNearMissSheet[]): number {
   const per = sheets.map((s) => {
-    const leftover = s.withheld.filter((w) => w.beside_tag);
+    const leftover = s.withheld.filter((w) => w.beside_tag && w.score >= SETWIDE_NEAR_MISS_MIN);
     const info = collectLabeledNearMissLeftovers(leftover, s.occ, s.matches, s.R, s.excludeCenter);
     return { s, leftover, ...info };
   });
   const confident = per.reduce((n, p) => n + p.confident, 0);
   const leftoverN = per.reduce((n, p) => n + p.labeledLeftovers.length, 0);
-  if (!isLabeledNearMissFamily(confident, leftoverN)) return 0;
+  const sheetsWithLeftovers = per.filter((p) => p.labeledLeftovers.length > 0).length;
+  if (confident !== 1 || leftoverN !== 2 || sheetsWithLeftovers < 2) return 0;
   let n = 0;
   for (const p of per) {
     if (!p.labeledLeftovers.length) continue;

@@ -555,7 +555,7 @@ test("promoteSetWideLabeledNearMisses: N commits plus N leftovers stay withheld"
   assert.equal(withheld.length, 2);
 });
 
-test("promoteSetWideLabeledNearMisses: leftovers that strictly outnumber commits COUNT", () => {
+test("promoteSetWideLabeledNearMisses: leftovers that outnumber commits on one sheet stay per-sheet", () => {
   const o = [tagNear([100, 100]), tagNear([200, 100]), tagNear([300, 100]),
     tagNear([400, 100]), tagNear([500, 100]), tagNear([600, 100]),
     tagNear([700, 100]), tagNear([800, 100]), tagNear([900, 100])];
@@ -563,9 +563,24 @@ test("promoteSetWideLabeledNearMisses: leftovers that strictly outnumber commits
   const withheld = [bagNear([400, 100]), bagNear([500, 100]), bagNear([600, 100]),
     bagNear([700, 100]), bagNear([800, 100]), bagNear([900, 100])];
   const n = promoteSetWideLabeledNearMisses([{ matches, withheld, occ: o, R: 50 }]);
-  assert.equal(n, 6, "a partial family that missed more siblings than it hit promotes");
-  assert.equal(matches.length, 9);
-  assert.equal(withheld.length, 0);
+  assert.equal(n, 0, "a same-sheet pile is the per-sheet rule, not the split-family pass");
+  assert.equal(matches.length, 3);
+});
+
+test("promoteSetWideLabeledNearMisses: a low-score leftover pair stays withheld", () => {
+  // Near the withhold floor, not the commit bar — schematic extra, not
+  // a same-convention sibling (the split-family leftovers sit ~0.83+).
+  const oA = [tagNear([100, 100]), tagNear([400, 100])];
+  const oB = [tagNear([700, 100])];
+  const matches = [bagMatch([100, 100], oA[0])];
+  const wA: SweepWithheld = { at: [400, 100], score: 0.76, rotation: 0, mirrored: false, reason: "near-bar", beside_tag: true };
+  const wB: SweepWithheld = { at: [700, 100], score: 0.76, rotation: 0, mirrored: false, reason: "near-bar", beside_tag: true };
+  const n = promoteSetWideLabeledNearMisses([
+    { matches, withheld: [wA], occ: oA, R: 50 },
+    { matches: [], withheld: [wB], occ: oB, R: 50 },
+  ]);
+  assert.equal(n, 0);
+  assert.equal(matches.length, 1);
 });
 
 test("classifySweepMatches: a near-bar withheld match with NO own tag stays withheld", () => {
