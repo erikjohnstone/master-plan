@@ -71,6 +71,23 @@ test("query_table delegates whole-set cited cell filters", async () => {
   });
 });
 
+test("query_table coerces null/array string filters instead of failing validation", async () => {
+  const { ctx } = makeCtx();
+  const nullKey = await executeAgentTool(ctx, "query_table", {
+    title: "CHILLER SCHEDULE",
+    row_key: null,
+  });
+  assert.equal(nullKey.error, undefined);
+  assert.equal(nullKey.query?.row_key, undefined);
+  assert.equal(nullKey.query?.title, "CHILLER SCHEDULE");
+  const arrayKey = await executeAgentTool(ctx, "query_table", {
+    title: "CHILLER SCHEDULE",
+    row_key: ["CH-A1"],
+  });
+  assert.equal(arrayKey.error, undefined);
+  assert.equal(arrayKey.query?.row_key, "CH-A1");
+});
+
 test("validateToolArgs: required keys and primitive types enforced", () => {
   const schema = AGENT_TOOL_DEFS.find((d) => d.name === "one_click")!.input_schema;
   assert.equal(validateToolArgs(schema, { sheet: "plan.pdf", x: 0.5, y: 0.5 }), null);

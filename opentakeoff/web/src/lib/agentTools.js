@@ -123,6 +123,39 @@ export function validateToolArgs(schema, args) {
   return null;
 }
 
+/** Models often pass null / numbers / single-element arrays for optional string
+ *  filters (query_table.row_key, find_text.sheet, …). Coerce before validate so
+ *  those calls succeed instead of burning the step cap on "must be a string". */
+export function coerceStringTypedArgs(schema, args) {
+  if (!schema?.properties || args == null || typeOf(args) !== "object") return args;
+  const out = { ...args };
+  for (const [key, spec] of Object.entries(schema.properties)) {
+    if (spec?.type !== "string" || !(key in out)) continue;
+    let v = out[key];
+    if (v == null || v === "") { delete out[key]; continue; }
+    if (typeof v === "string") continue;
+    if (typeof v === "number" || typeof v === "boolean") { out[key] = String(v); continue; }
+    if (Array.isArray(v)) {
+      const first = v.find((item) => item != null && String(item).trim() !== "");
+      if (first == null) { delete out[key]; continue; }
+      if (typeof first === "object") {
+        const nested = first.text ?? first.value ?? first.key ?? first.q;
+        if (nested == null || String(nested).trim() === "") { delete out[key]; continue; }
+        out[key] = String(nested);
+      } else {
+        out[key] = String(first);
+      }
+      continue;
+    }
+    if (typeof v === "object") {
+      const nested = v.text ?? v.value ?? v.key ?? v.q;
+      if (nested == null || String(nested).trim() === "") { delete out[key]; continue; }
+      out[key] = String(nested);
+    }
+  }
+  return out;
+}
+
 // Normalized region rect — the shared sub-schema. All agent coordinates are
 // normalized 0..1 against the sheet (render-scale-free, same frame as
 // verts_norm), so nothing the agent says depends on raster resolution.
@@ -745,6 +778,7 @@ function stageValidatedShapes(ctx, rawShapes) {
 export async function executeAgentTool(ctx, name, args) {
   const def = DEFS_BY_NAME[name];
   if (!def) return { error: `Unknown tool: ${name}. Available: ${AGENT_TOOL_DEFS.map((d) => d.name).join(", ")}.` };
+  args = coerceStringTypedArgs(def.input_schema, args);
   const bad = validateToolArgs(def.input_schema, args);
   if (bad) return { error: `Invalid arguments for ${name}: ${bad}.` };
   try {
