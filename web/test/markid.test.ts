@@ -5,6 +5,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   markKey, marksEqual, dedupeMarks, spanAnswersFor, pickMarkHits, compoundTagOcc, MARK_CLUSTER_K,
+  isRoutingPhrase, isRoutingLabelOcc, ROUTING_LABEL_RADIUS_K,
 } from "../src/lib/markid.ts";
 
 const box = (str: string, x0: number, y0: number, w = str.length * 5, h = 8) =>
@@ -176,4 +177,28 @@ test("spanAnswersFor / pickMarkHits: a compound run counts as the leading key", 
   ];
   assert.equal(pickMarkHits(spans, "R1", vocab).length, 2, "compound run and the bare R1 are two instances");
   assert.equal(pickMarkHits(spans, "S3", vocab).length, 0, "sheet number S3.1 is not an S3 instance");
+});
+
+test("isRoutingPhrase: destination/source callouts, not quantity notes or long sentences", () => {
+  assert.equal(isRoutingPhrase("DUCT DOWN TO"), true);
+  assert.equal(isRoutingPhrase("36x16 RETURN DUCT DOWN TO"), true);
+  assert.equal(isRoutingPhrase("SA PIPE TO"), true);
+  assert.equal(isRoutingPhrase("DOWN TO"), true);
+  assert.equal(isRoutingPhrase("FROM"), true);
+  assert.equal(isRoutingPhrase("RETURN TO"), true);
+  assert.equal(isRoutingPhrase("36x16 RETURN"), false, "a duct size without TO is not a destination");
+  assert.equal(isRoutingPhrase("UP TO 200 CFM"), false, "a quantity cap is not a destination");
+  assert.equal(isRoutingPhrase("TO BUILDING AUTOMATION"), false);
+  assert.equal(isRoutingPhrase("TYP OF 2"), false);
+  assert.equal(isRoutingPhrase("AHU-1"), false);
+});
+
+test("isRoutingLabelOcc: a nearby destination phrase attaches; a room-away one does not", () => {
+  const tag = { cx: 100, cy: 100, h: 10 };
+  const near = [box("AHU-1", 95, 95, 10, 10), box("DUCT DOWN TO", 100, 100 + 2 * 10, 40, 10)];
+  assert.equal(isRoutingLabelOcc(near, tag), true);
+  const far = [box("AHU-1", 95, 95, 10, 10), box("DUCT DOWN TO", 100, 100 + (ROUTING_LABEL_RADIUS_K + 2) * 10, 40, 10)];
+  assert.equal(isRoutingLabelOcc(far, tag), false);
+  const sizeOnly = [box("AHU-1", 95, 95, 10, 10), box("36x16 RETURN", 100, 110, 40, 10)];
+  assert.equal(isRoutingLabelOcc(sizeOnly, tag), false);
 });

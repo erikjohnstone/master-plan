@@ -119,7 +119,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, detectSheetViewports, matchQuantity, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type SheetViewport } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, detectSheetViewports, matchQuantity, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type SheetViewport } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -3150,7 +3150,7 @@ export class Session {
       const fragmented = fragmentedTagOcc(sh.spans, key).map((o) => ({ ...o, kind: "fragmented" as const }));
       const deep = deepHyphenChainTagOcc(sh.spans, key).map((o) => ({ ...o, kind: "fragmented" as const }));
       const occ = merged.length ? merged : (fragmented.length ? fragmented : deep);
-      return occ.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
+      return markRoutingLabels(sh.spans, occ).sort((a, b) => a.cy - b.cy || a.cx - b.cx);
     };
     // Compound-key geometric fallback — a real, general bug distinct from
     // the row-LOOKUP layer above (rowKeyAnswersFor already resolves a
@@ -3176,8 +3176,12 @@ export class Session {
         }
       }
     }
-    const occBySheet = planSheets.map((sh) => ({ sh, occ: occOf(sh, t) }));
+    const occBySheet = planSheets.map((sh) => {
+      const split = preferInstallTagOccs(occOf(sh, t));
+      return { sh, occ: split.occ, routing: split.routing };
+    });
     const totalOcc = occBySheet.reduce((n, e) => n + e.occ.length, 0);
+    const routingN = occBySheet.reduce((n, e) => n + e.routing.length, 0);
     if (!totalOcc) {
       const markNote = ownMarks.size > 1 ? ` Tried every mark of this compound key (${[...ownMarks].join(", ")}) — none is drawn on any plan sheet.` : "";
       throw new UserError(`Schedule row "${t}" (${table} on ${tb.sheet}) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone.${markNote} If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: "set"}.`);
@@ -3300,7 +3304,7 @@ export class Session {
         tb.rows.filter((row) => !rowKeys(row.key).includes(t)).flatMap((row) => rowKeys(row.key)),
       )].sort();
       const withDist = tableSiblingKeys
-        .map((k) => ({ k, occ: occOf(anchorSheet, k) }))
+        .map((k) => ({ k, occ: preferInstallTagOccs(occOf(anchorSheet, k)).occ }))
         .filter((e) => e.occ.length > 0)
         .map((e) => ({ ...e, dist: Math.min(...e.occ.map((o) => Math.hypot(o.cx - anchor.cx, o.cy - anchor.cy))) }))
         .sort((a, b) => a.dist - b.dist);
@@ -3631,7 +3635,7 @@ export class Session {
     }[] = [];
     // per-sheet classification — the shared symbolsweep.ts function, so this
     // server and the browser's own port can never silently disagree.
-    for (const { sh, occ } of occBySheet) {
+    for (const { sh, occ, routing } of occBySheet) {
       const g2 = await this.ensureGeometry(sh);
       if (!g2.segs.length) {
         skipped.push({ sheet: sh.key, role: "plan", reason: "no vector linework (likely a scan) — symbol matching reads the drawn segments" });
@@ -3640,7 +3644,7 @@ export class Session {
       const ratio = sweepRatio(anchorSheet, sh);
       const t0 = process.hrtime.bigint();
       const sibSpans: { key: string; cx: number; cy: number }[] = [];
-      for (const k of siblings) for (const o of occOf(sh, k)) sibSpans.push({ key: k, cx: o.cx, cy: o.cy });
+      for (const k of siblings) for (const o of preferInstallTagOccs(occOf(sh, k)).occ) sibSpans.push({ key: k, cx: o.cx, cy: o.cy });
       let matches: CountedMatch[], withheld: SweepWithheld[], excluded: { at: Point; tag: string }[],
         text_only: { at: Point }[], candidates: { considered: number; dropped: number }, complete: boolean,
         scaled: SymbolMatchResult["scaled"];
@@ -3670,6 +3674,7 @@ export class Session {
         complete = icls.complete;
         scaled = undefined;
       }
+      text_only = discloseRoutingLabels(text_only, routing);
       const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
       perSheet.push({
         state: sh, matches, withheld, excluded, text_only,
@@ -3809,6 +3814,9 @@ export class Session {
     const leftoverN = perSheet.reduce((n, p) => n + p.matches.filter((m) => m.labeled_leftover).length, 0);
     if (leftoverN) {
       notes.push(`${leftoverN} counted from a leftover compound circuit/panel label on a sheet that already has a geometrically-confirmed "${t}" — the tag is drawn, the sibling marker did not clear the bar; audit with view_sheet before trusting the count.`);
+    }
+    if (routingN) {
+      notes.push(`${routingN} drawn occurrence(s) of "${t}" sit next to a duct/pipe destination or source callout and were withheld as routing labels, not installs; audit with view_sheet before treating one as a second unit.`);
     }
     const typN = perSheet.reduce((n, p) => n + p.matches.filter((m) => (m.count ?? 1) > 1).length, 0);
     if (typN) {

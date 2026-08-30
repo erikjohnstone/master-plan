@@ -208,3 +208,37 @@ export function pickMarkHits(
   }
   return kept;
 }
+
+/** Destination/source callout language. A scheduled tag sitting next to
+ * one of these is named as where a duct/pipe run goes, not as a drawn
+ * device. Whole-span match so "UP TO 200 CFM" and "TO BUILDING AUTOMATION"
+ * never fire. No project, sheet, or tag names. */
+export function isRoutingPhrase(str: string): boolean {
+  const t = (str || "").trim().toUpperCase().replace(/\s+/g, " ");
+  if (!t) return false;
+  if (/\b(?:DUCT|PIPE|MAIN|RISER|DROP|RUN)\b/.test(t) && /\bTO\.?$/.test(t)) return true;
+  if (/^(?:DOWN|UP|OVER|BACK)\s+TO\.?$/.test(t)) return true;
+  if (/^(?:RETURN|SUPPLY|EXHAUST|RELIEF)\s+TO\.?$/.test(t)) return true;
+  if (/^FROM\.?$/.test(t)) return true;
+  return false;
+}
+
+/** Cluster radius, in units of the tag's own text height, for a routing
+ * phrase to attach to that occurrence. 4× covers a stacked callout
+ * ("36X16 RETURN" over "DUCT DOWN TO" over the tag) without reaching a
+ * second unit a room away. */
+export const ROUTING_LABEL_RADIUS_K = 4;
+
+/** True when a destination/source phrase sits next to this occurrence. */
+export function isRoutingLabelOcc(
+  spans: readonly MarkBox[],
+  occ: { cx: number; cy: number; h: number },
+): boolean {
+  const R = ROUTING_LABEL_RADIUS_K * Math.max(occ.h, 6);
+  for (const sp of spans) {
+    if (!isRoutingPhrase(sp.str)) continue;
+    const cx = (sp.x0 + sp.x1) / 2, cy = (sp.y0 + sp.y1) / 2;
+    if (Math.hypot(cx - occ.cx, cy - occ.cy) <= R) return true;
+  }
+  return false;
+}
