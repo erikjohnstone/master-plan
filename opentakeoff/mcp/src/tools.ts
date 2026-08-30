@@ -671,13 +671,14 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   }));
 
   server.registerTool("project_takeoff", {
-    description: `Run the complete deterministic takeoff across every loaded plan and schedule in one call. This is the production answer to requests such as "do a butterfly valve takeoff": pass equipment_types:["Butterfly valve"] for an exact taxonomy subtype, categories:["valve"] for the entire trade family, or omit both for all recognized equipment. The reply includes every schedule row and extracted table cell, installed quantities, drawing coordinates, source schedule coordinates, explicit failures/refusals, and separate tagged-row versus untagged-legend results. It never estimates quantity from a schedule row: installed counts come only from corroborated plan labels/geometry, and structurally unavailable evidence returns a typed refusal. Load every file in the bid set first with load_plan + merge:true. This is read-only; it does not commit canvas shapes. ${COORDS}`,
+    description: `Run the complete deterministic takeoff across every loaded plan and schedule in one call. This is the production answer to requests such as "do a butterfly valve takeoff": pass equipment_types:["Butterfly valve"] for an exact taxonomy subtype, categories:["valve"] for the entire trade family, or omit both for all recognized equipment. Default detail is "compact" (stats + per-item tag/type/qty/status/schedule sheet + failures + tables_seen) so agent context stays usable on large sets; pass detail:"full" only when you need every schedule_row cell dump and extracted_tables. Installed counts come only from corroborated plan labels/geometry; structurally unavailable evidence returns a typed refusal. For pure schedule MARK counts by family, prefer query_table on the titled equipment schedules — do not invent extra units from vibration-isolation or other cross-reference tables. Load every file in the bid set first with load_plan + merge:true. Read-only; does not commit canvas shapes. ${COORDS}`,
     inputSchema: {
       categories: z.array(z.string()).optional().describe('Taxonomy families, e.g. ["valve","damper"]. Omit for every recognized family.'),
       equipment_types: z.array(z.string()).optional().describe('Exact taxonomy component names, case-insensitive, e.g. ["Butterfly valve"]. Narrows both tagged schedule and untagged legend results.'),
+      detail: z.enum(["compact", "full"]).optional().describe('Response size. "compact" (default) omits bulky schedule_row dumps and extracted/reference table bodies. "full" returns the complete payload.'),
     },
     outputSchema: projectTakeoffOutput,
-  }, run("project_takeoff", async ({ categories, equipment_types }) => {
+  }, run("project_takeoff", async ({ categories, equipment_types, detail }) => {
     const allComponents = [
       ...VALVES, ...ACTUATORS, ...DAMPERS, ...AIR_TERMINALS, ...MAJOR_EQUIPMENT, ...SENSORS,
     ];
@@ -701,7 +702,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     });
     const stats = statsFor(items);
     const legendStats = statsFor(legendItems);
-    return {
+    const full = {
       ...result,
       family_filter: effectiveCategories,
       equipment_type_filter: requested?.map((component) => component.name) ?? null,
@@ -717,6 +718,24 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
         errored: legendStats.errored,
         total_drawn_instances: legendStats.total_drawn_instances,
       },
+    };
+    if (detail === "full") return full;
+    // compact (default): keep schema-shaped items, drop multi-hundred-KB dumps.
+    const slimItem = (item: (typeof items)[number]) => ({
+      ...item,
+      schedule_row: null,
+      drawing_locations: (item.drawing_locations || []).slice(0, 3),
+    });
+    return {
+      ...full,
+      detail: "compact",
+      items: items.map(slimItem),
+      legend_items: legendItems.map(slimItem),
+      extracted_tables: [],
+      reference_tables: [],
+      extracted_tables_count: result.extracted_tables?.length ?? 0,
+      reference_tables_count: result.reference_tables?.length ?? 0,
+      note: "detail=compact: schedule_row cell dumps and extracted/reference table bodies omitted. Pass detail:\"full\" for the complete payload, or query_table for cited schedule cells.",
     };
   }));
 
