@@ -935,6 +935,10 @@ export const sweepScheduleRowOutput = {
     table: z.string().describe("The table's title (or kind, when untitled)"),
     key: z.string(),
     cells: z.record(z.string()).describe("The row's cells, header → text — what the schedule SAYS this mark is"),
+    cell_citations: z.record(z.string(), z.object({
+      text: z.string(),
+      bbox: wireBox,
+    })).describe("Every row cell with its exact source text and bbox; use this instead of the row-level citation for field answers"),
     citation: wireEvidence,
   }).describe("The schedule row the sweep was seeded from — the condition's source"),
   anchor: z.object({

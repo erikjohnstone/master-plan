@@ -99,6 +99,7 @@ test("demo runner captures request IDs, raw replies, and complete tool payloads"
   assert.equal(requestBodies.every((body) => !("response_format" in body)), true);
   assert.match(requestBodies[0].messages[0].content, /tagged_only:true/);
   assert.match(requestBodies[0].messages[0].content, /row\.all_cells/);
+  assert.match(requestBodies[0].messages[0].content, /row\.cell_citations/);
   assert.deepEqual(executed, [{
     name: "query_table",
     args: { row_key: "CH-A1", column: "GPM" },

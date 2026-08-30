@@ -2743,6 +2743,10 @@ test("sweep_schedule_row: row citation, corroborated anchor, text-corroborated c
   // the row is the cited source, cells included
   assert.equal(r.data.row.sheet, "symbol-set.pdf#4");
   assert.equal(r.data.row.cells.MATERIAL, "TRANSITION");
+  assert.deepEqual(r.data.row.cell_citations.MATERIAL, {
+    text: "TRANSITION",
+    bbox: { x0: 400, y0: 176, x1: 509, y1: 194 },
+  });
   assert.match(r.data.row.citation.text, /FINISH SCHEDULE row T1/);
 
   // the anchor: fingerprinted at a drawn occurrence, corroborated at another

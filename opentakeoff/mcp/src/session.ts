@@ -4249,6 +4249,10 @@ export class Session {
 
     const cells: Record<string, string> = {};
     for (const [k, v] of Object.entries(r.cells)) cells[k] = v.text;
+    const cellCitations = Object.fromEntries(Object.entries(r.cells).map(([header, cell]) => [
+      header,
+      { text: cell.text, bbox: Session.wireBox(cell.bbox) },
+    ]));
     const firstCell = r.cells[Object.keys(r.cells)[0]];
     const capped = perSheet.filter((p) => p.candidates.dropped > 0);
     const notes: string[] = [];
@@ -4293,6 +4297,7 @@ export class Session {
         table,
         key: t,
         cells,
+        cell_citations: cellCitations,
         citation: { sheet: tb.sheet, text: `${table} row ${t}`, bbox: Session.wireBox(firstCell?.bbox || tb.region) },
       },
       anchor: {
