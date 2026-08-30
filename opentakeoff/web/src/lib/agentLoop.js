@@ -117,11 +117,13 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     const uncovered = [];
     for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
       for (const match of out?.matches || []) {
+        const rowKey = String(match?.row?.key || "");
+        if (!rowKey || !finalCanonical.includes(rowKey.toUpperCase().replace(/[^A-Z0-9]/g, ""))) continue;
         const cells = Object.values(match?.row?.all_cells || match?.row?.cells || {});
         const covered = cells.some((cell) => Array.isArray(cell?.bbox)
           && highlights.some((highlight) => highlight.sheet === match.sheet
             && highlight.bbox.every((value, index) => Math.abs(value - cell.bbox[index]) <= 1)));
-        if (!covered && match?.row?.key) uncovered.push(`${match.row.key} on ${match.sheet}`);
+        if (!covered) uncovered.push(`${rowKey} on ${match.sheet}`);
       }
     }
     if (uncovered.length) {

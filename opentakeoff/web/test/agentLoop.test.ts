@@ -109,6 +109,13 @@ test("installed quantity cannot finish without deterministic count evidence", ()
       row: { key: "CV-CH-A1", all_cells: { CV: { bbox: [10, 20, 30, 40] } } },
     }] } },
   ], "Cite the exact schedule cells", "CV-CH-A1 is 324.")!, /no painted source cell/);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: { matches: [
+      { sheet: "set.pdf#44", row: { key: "AHU-1", all_cells: { MARK: { bbox: [10, 20, 30, 40] } } } },
+      { sheet: "set.pdf#44", row: { key: "AHU-2", all_cells: { MARK: { bbox: [50, 60, 70, 80] } } } },
+    ] } },
+  ], "Cite the exact schedule cells", "AHU-1 is cited."), null);
 });
 
 test("anthropic-style: scripted tool_use → tools execute → results pair up in ONE user message → done", async () => {
