@@ -62,3 +62,16 @@ is saved as
 `/opt/cursor/artifacts/d02_ui_prompt_tools_answer_highlights_2026-08-30T05-05-42-831Z.webm`
 (8 painted regions). Production gates stay methodology-general — no corpus
 hardcoding. D02 counts toward ten. Next: D03.
+
+## D03 selection record
+
+Status: `IN PROGRESS — ground truth authored; N=5 / UI+correct-follow-up pending`
+
+Target holds: 75-sheet NAVFAC set with Air Ops / MITRACON / ATCT namespaces.
+Independent equipment-schedule inventory (unique MARK rows) yields AHU 5,
+DOAH 4, FCU 42, VAV 52, chiller 4, boiler 6, with FCU/VAV building splits and
+MI731 AHU-T1A/TIB points list at 62 rows. Stratified 20% find_text hand-count
+reconciled before model runs (`hand_count_20pct` in truth.json). Vibration-
+isolation compound keys (AHU-T1AT1B, CH-MT1MT2) are not equipment units.
+Scaffold: `D03-hvac-bas-project-takeoff/`. Lock requires N=5 + UI proof with
+source cards + a correctly answered follow-up before advancing.

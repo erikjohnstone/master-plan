@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "demo_id": "D03",
+  "set_id": "navfac-cherry-point-atc",
+  "source_file": "navfac-cherry-point-atc-mechanical.pdf",
+  "ground_truth_completed_before_model_runs": true,
+  "derivation": "Independent equipment-schedule inventory across A/M/T sheets; 20% stratified find_text hand-count reconciled before any model run (see hand_count_20pct). Counts are unique MARK rows on the named equipment schedules (vibration-isolation compound keys excluded). BAS points-list row count read from MI731 POINTS LIST AHU-T1A/TIB.",
+  "hardness": {
+    "sheet_count": 75,
+    "building_namespaces": [
+      "Air Ops (A)",
+      "MITRACON (M)",
+      "ATCT (T)"
+    ],
+    "stress_confirmed": "Full-set rollup must disambiguate three building tag namespaces and join equipment schedules to a BAS points list without treating vibration-isolation compound keys as extra AHU/chiller units."
+  },
+  "hand_count_20pct": {
+    "ahu": {
+      "required_sample": 1,
+      "found_on_drawings_or_schedules": 1,
+      "sample_size": 1,
+      "sample_tags": [
+        "AHU-A1"
+      ],
+      "reconciliation": "pass"
+    },
+    "doah": {
+      "required_sample": 1,
+      "found_on_drawings_or_schedules": 1,
+      "sample_size": 1,
+      "sample_tags": [
+        "DOAH-A1"
+      ],
+      "reconciliation": "pass"
+    },
+    "fcu": {
+      "required_sample": 9,
+      "found_on_drawings_or_schedules": 9,
+      "sample_size": 9,
+      "sample_tags": [
+        "FCU-A1",
+        "FCU-M1A",
+        "FCU-T1",
+        "FCU-A2",
+        "FCU-M1B",
+        "FCU-T2",
+        "FCU-A3",
+        "FCU-M2A",
+        "FCU-T3"
+      ],
+      "reconciliation": "pass"
+    },
+    "vav": {
+      "required_sample": 11,
+      "found_on_drawings_or_schedules": 11,
+      "sample_size": 11,
+      "sample_tags": [
+        "VAV-A101",
+        "VAV-M101",
+        "VAV-A102",
+        "VAV-M102",
+        "VAV-A103",
+        "VAV-M103",
+        "VAV-A104",
+        "VAV-M104",
+        "VAV-A105",
+        "VAV-M105",
+        "VAV-A106A"
+      ],
+      "reconciliation": "pass"
+    },
+    "chiller": {
+      "required_sample": 1,
+      "found_on_drawings_or_schedules": 1,
+      "sample_size": 1,
+      "sample_tags": [
+        "CH-A1"
+      ],
+      "reconciliation": "pass"
+    },
+    "boiler": {
+      "required_sample": 2,
+      "found_on_drawings_or_schedules": 2,
+      "sample_size": 2,
+      "sample_tags": [
+        "B-A1",
+        "B-M1"
+      ],
+      "reconciliation": "pass"
+    }
+  },
+  "sources": {
+    "ahu_air_ops": {
+      "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+      "sheet_number": "M-601",
+      "table_title": "AIR HANDLING UNIT SCHEDULE"
+    },
+    "ahu_atct": {
+      "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#48",
+      "sheet_number": "M-621",
+      "table_title": "AIR HANDLING UNIT SCHEDULE"
+    },
+    "fcu_air_ops": {
+      "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+      "table_title": "FAN COIL UNIT SCHEDULE"
+    },
+    "vav_air_ops": {
+      "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#43",
+      "table_title": "VARIABLE AIR VOLUME TERMINAL BOX"
+    },
+    "chiller_air_ops": {
+      "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+      "sheet_number": "M-603",
+      "table_title": "AIR COOLED CHILLER SCHEDULE"
+    },
+    "boiler_air_ops": {
+      "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+      "table_title": "BOILER SCHEDULE"
+    },
+    "bas_points_ahu": {
+      "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+      "sheet_number": "MI731",
+      "table_title": "POINTS LIST AHU-T1A/TIB",
+      "rows": 62
+    }
+  },
+  "follow_up": {
+    "prompt": "How many fan coils are scheduled in the ATCT, and is FCU-T11 on that schedule?",
+    "expected": {
+      "fcu_atct_count": 18,
+      "fcu_t11_on_schedule": true,
+      "note": "FCU-T11 is a scheduled ATCT mark (LOCATION 21004 BREAKROOM). project_takeoff may refuse plan geometry if the tag is not plan-anchored — still count it in the schedule rollup."
+    }
+  },
+  "expected": {
+    "ahu_count": {
+      "type": "integer",
+      "value": 5,
+      "tolerance": 0,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+          "table_title": "AIR HANDLING UNIT SCHEDULE",
+          "row_key": "AHU-A1",
+          "column": "MARK",
+          "bbox_px": [
+            301.2,
+            303.1199999999999,
+            442.32,
+            337.67999999999984
+          ],
+          "grounding_text": "AHU-A1",
+          "ocr_mode": "single_line",
+          "ocr_confusables": true
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#48",
+          "table_title": "AIR HANDLING UNIT SCHEDULE",
+          "row_key": "AHU-T1A",
+          "column": "MARK",
+          "bbox_px": [
+            230.64,
+            348,
+            371.52,
+            382.55999999999995
+          ],
+          "grounding_text": "AHU-T1A",
+          "ocr_mode": "single_line",
+          "ocr_confusables": true
+        }
+      ]
+    },
+    "doah_count": {
+      "type": "integer",
+      "value": 4,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+        "table_title": "DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 1",
+        "row_key": "DOAH-A1",
+        "column": "MARK",
+        "bbox_px": [
+          301.2,
+          791.5219999999999,
+          445.2,
+          826.0839999999998
+        ],
+        "grounding_text": "DOAH-A1",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "fcu_count": {
+      "type": "integer",
+      "value": 42,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+        "table_title": "FAN COIL UNIT SCHEDULE",
+        "row_key": "FCU-A1",
+        "column": "MARK",
+        "bbox_px": [
+          301.2,
+          1673.038,
+          441.6,
+          1707.36
+        ],
+        "grounding_text": "FCU-A1",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_count": {
+      "type": "integer",
+      "value": 52,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#43",
+        "table_title": "VARIABLE AIR VOLUME TERMINAL BOX",
+        "row_key": "VAV-A101",
+        "column": "MARK",
+        "bbox_px": [
+          301.92,
+          1897.68,
+          526.8,
+          1932.24
+        ],
+        "grounding_text": "VAV-A101",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "chiller_count": {
+      "type": "integer",
+      "value": 4,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+        "table_title": "AIR COOLED CHILLER SCHEDULE",
+        "row_key": "CH-A1",
+        "column": "MARK",
+        "bbox_px": [
+          437.04,
+          304.8000000000002,
+          555.12,
+          339.3600000000001
+        ],
+        "grounding_text": "CH-A1",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "boiler_count": {
+      "type": "integer",
+      "value": 6,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+        "table_title": "BOILER SCHEDULE",
+        "row_key": "B-A1",
+        "column": "MARK",
+        "bbox_px": [
+          2766.5,
+          2639.9,
+          2810.2,
+          2665.2
+        ],
+        "grounding_text": "B-A1",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "fcu_air_ops_count": {
+      "type": "integer",
+      "value": 14,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+        "table_title": "FAN COIL UNIT SCHEDULE",
+        "row_key": "FCU-A1",
+        "column": "MARK",
+        "bbox_px": [
+          301.2,
+          1673.038,
+          441.6,
+          1707.36
+        ],
+        "grounding_text": "FCU-A1",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "fcu_atct_count": {
+      "type": "integer",
+      "value": 18,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#48",
+        "table_title": "FAN COIL UNIT SCHEDULE",
+        "row_key": "FCU-T1",
+        "column": "MARK",
+        "bbox_px": [
+          230.64,
+          856.556,
+          342.24,
+          891.116
+        ],
+        "grounding_text": "FCU-T1",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_air_ops_count": {
+      "type": "integer",
+      "value": 27,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#43",
+        "table_title": "VARIABLE AIR VOLUME TERMINAL BOX",
+        "row_key": "VAV-A101",
+        "column": "MARK",
+        "bbox_px": [
+          301.92,
+          1897.68,
+          526.8,
+          1932.24
+        ],
+        "grounding_text": "VAV-A101",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_mitracon_count": {
+      "type": "integer",
+      "value": 25,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#46",
+        "table_title": "VARIABLE AIR VOLUME TERMINAL BOX",
+        "row_key": "VAV-M101",
+        "column": "MARK",
+        "bbox_px": [
+          293.28,
+          323.03999999999996,
+          467.52,
+          357.5999999999999
+        ],
+        "grounding_text": "VAV-M101",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "bas_ahu_t1a_tib_points_rows": {
+      "type": "integer",
+      "value": 62,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+        "table_title": "POINTS LIST AHU-T1A/TIB",
+        "bbox_px": [
+          3340.074,
+          456.47400000000016,
+          4313.762,
+          516.48
+        ],
+        "grounding_text": "POINTS LIST AHU-T1A/TIB",
+        "ocr_mode": "single_line"
+      }
+    }
+  }
+}

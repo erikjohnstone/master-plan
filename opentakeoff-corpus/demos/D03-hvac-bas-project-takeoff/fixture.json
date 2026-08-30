@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "set_id": "navfac-cherry-point-atc",
+  "source_file": "raw/navfac-cherry-point-atc-mechanical.pdf",
+  "sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "required_pages": [
+    {
+      "page": 42,
+      "purpose": "Air Ops AHU/DOAH/FCU/boiler schedules"
+    },
+    {
+      "page": 43,
+      "purpose": "Air Ops VAV schedule"
+    },
+    {
+      "page": 44,
+      "purpose": "Air Ops chiller schedule"
+    },
+    {
+      "page": 48,
+      "purpose": "ATCT AHU/FCU schedules"
+    },
+    {
+      "page": 65,
+      "sheet_number": "MI731",
+      "purpose": "AHU-T1A/TIB BAS points list"
+    }
+  ],
+  "redistribution": "External local-use corpus fixture; do not commit or republish the source PDF."
+}
