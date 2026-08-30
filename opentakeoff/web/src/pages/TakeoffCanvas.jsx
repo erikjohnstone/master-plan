@@ -12159,7 +12159,7 @@ export default function TakeoffCanvas() {
             onOpenSettings={() => setShowAiSettings(true)}
             onClose={() => setAgentOpen(false)}
             onOpenTakeoff={() => setShowTakeoffData(true)}
-            takeoffRowCount={agentTakeoffRows.length}
+            takeoffRowCount={finishedTakeoffLineCount}
             runHistory={runHistory}
             historyOpen={runHistoryOpen}
             onToggleHistory={() => { if (!runHistoryOpen) refreshRunHistory(); setRunHistoryOpen((o) => !o); }}
