@@ -853,6 +853,49 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return `The goal asks to cite MARK cells for ${missingCite.join(", ")}, but those tags are not painted yet.${hint}`;
     }
   }
+  // "Which schedule / title is MARK on?" follow-ups must copy the primary
+  // equipment schedule title from a scoped query_table — not a sibling family's
+  // UNIT schedule or a vibration/valve cross-ref.
+  const asksWhichScheduleTitle = /\bwhich title\b|\bon a .{0,80}schedule\b/i.test(goal);
+  if (asksWhichScheduleTitle && finalText) {
+    const namedMarks = [...goal.matchAll(/\b((?:AHU|DOAH|FCU|VAV|CH|B)-[A-Z0-9]+)\b/gi)]
+      .map((m) => m[1].toUpperCase());
+    const answerU = finalText.toUpperCase().replace(/[\u2010-\u2015\u2212]/g, "-");
+    for (const tag of namedMarks) {
+      const tagCanon = tag.replace(/[^A-Z0-9]/g, "");
+      const scoped = callLog.filter(({ name, out, args }) => {
+        if (name !== "query_table" || out?.error) return false;
+        const rk = String(out?.query?.row_key || args?.row_key || "")
+          .toUpperCase().replace(/[^A-Z0-9]/g, "");
+        return rk === tagCanon;
+      });
+      if (!scoped.length) {
+        return `The goal asks which schedule ${tag} is on. Call query_table with row_key=${tag} (omit title), then copy the primary equipment schedule title from matches[0].title into the answer.`;
+      }
+      let preferredTitle = null;
+      for (const { out } of scoped) {
+        for (const match of out.matches || []) {
+          const t = String(match?.title?.text || match?.title || "").trim();
+          if (!t) continue;
+          if (/VIBRATION ISOLATION|SOUND POWER|CONTROL VALVE|POINTS LIST|PUMP SCHEDULE/i.test(t)) continue;
+          preferredTitle = t;
+          break;
+        }
+        if (preferredTitle) break;
+      }
+      if (!preferredTitle) continue;
+      const prefU = preferredTitle.toUpperCase().replace(/[\u2010-\u2015\u2212]/g, "-");
+      const titleOk = (() => {
+        if (answerU.includes(prefU.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim().slice(0, 36))) return true;
+        if (/\bHANDLING\b/.test(prefU)) return /\bHANDLING\b/.test(answerU);
+        const words = prefU.split(/[^A-Z0-9]+/).filter((w) => w.length > 4);
+        return words.filter((w) => answerU.includes(w)).length >= Math.min(3, words.length);
+      })();
+      if (!titleOk) {
+        return `The goal asks which schedule ${tag} is on. Copy the primary equipment schedule title from query_table (e.g. "${preferredTitle}") into the answer — do not substitute a sibling family's schedule title or a cross-ref table.`;
+      }
+    }
+  }
   // Full-set schedule takeoffs must use title-scan query_table counts — not
   // the number of MARK cells painted for spot-check.
   // Narrow follow-ups ("how many ATCT fan coils… including FCU-T11?") must NOT
@@ -1093,6 +1136,7 @@ export function agentSystemPrompt() {
     "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Do not rely on auto-flying the canvas — the UI shows clickable source cards in the Agent panel; painting is enough. When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",
     "- Never draw or request overlay label text that would cover the cited cell value; the highlight is a frame around readable blueprint text.",
     "- Conversational follow-ups: when the estimator asks a follow-up about the previous answer or workflow, reply in plain language using evidence already gathered; call tools again only when new evidence is needed. Answer the follow-up question directly first — do not digress into unrelated points-list rows or extra fields unless asked. Explain what you did and why in estimator terms — not tool JSON. Be a useful collaborator across turns, not a one-shot report.",
+    "- When asked whether a MARK is on a schedule and which title: call query_table with that row_key (omit title), read matches[0].title (primary equipment schedule — not vibration-isolation / valve / sound / points-list cross-refs), and copy that exact title into the answer. Sibling families can differ (for example DOAH UNIT vs DOAH HANDLING schedules).",
     "- Never say a cell or field was highlighted unless a successful highlight_citation call targeted that exact sheet and bbox_px. State exactly which source regions were highlighted; do not imply unpainted cells were painted. Never write that all/each cited cells are highlighted.",
     "- For a scheduled device tag, cite query_table row.identity (for example VALVE MARK), not the first different column that happens to repeat the same text (for example UNIT MARK).",
     "- For any equipment-to-control-valve join, use this direct set-wide sequence: query_table with row_key set to the equipment tag; sweep_schedule_row for installed quantity/plan evidence when requested; query_table with cell_contains set to that exact equipment tag to find compound relationship marks; then highlight the exact returned tag and row-identity bboxes. Do not browse guessed sheets or repeatedly retry the same empty exact-row query.",

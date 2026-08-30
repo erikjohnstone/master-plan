@@ -683,6 +683,26 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       // each scheduled unit once per schedule family, not once per page.
       return [`${titleBase}::${match.row.key.toUpperCase().replace(/\s+/g, "")}`, match];
     })).values()];
+    // When looking up a specific MARK, surface the unit's own equipment schedule
+    // before vibration-isolation / valve / sound / points-list cross-refs so
+    // "which schedule is this on?" answers cite the primary title.
+    if (row_key) {
+      const equipmentScheduleRank = (title, key) => {
+        const t = String(title || "").toUpperCase().replace(/\s+/g, " ");
+        const family = String(key || "").toUpperCase().match(/^([A-Z]{2,8})(?=-)/)?.[1] || "";
+        if (/VIBRATION ISOLATION|SOUND POWER|CONTROL VALVE|POINTS LIST|PUMP SCHEDULE/i.test(t)) return 90;
+        if (family === "DOAH" && /DEDICATED OUTDOOR AIR/.test(t)) return /HANDLING/.test(t) ? 0 : 1;
+        if (family === "AHU" && /AIR HANDLING UNIT/.test(t) && !/DEDICATED/.test(t)) return 0;
+        if (family === "FCU" && /FAN\s*COIL/.test(t)) return 0;
+        if (family === "VAV" && /VARIABLE AIR VOLUME|\bVAV\b/.test(t)) return 0;
+        if ((family === "CH" || family === "B") && /(?:CHILLER|BOILER)/.test(t)) return 0;
+        if (/SCHEDULE/.test(t)) return 40;
+        return 60;
+      };
+      unique.sort((a, b) =>
+        equipmentScheduleRank(a.title?.text, a.row.key)
+        - equipmentScheduleRank(b.title?.text, b.row.key));
+    }
     // Title-wide / unscoped queries on dense schedules must not dump every
     // cell bbox into the model context. Return identity keys only once the
     // unique MARK set is larger than a handful; the caller re-queries with
@@ -721,6 +741,13 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       }
       return counts;
     })();
+    const multiTitleHint = (() => {
+      if (!row_key || keysOnly) return null;
+      const titles = [...new Set(unique.map((m) => m.title?.text).filter(Boolean))];
+      if (titles.length < 2) return null;
+      const primary = unique[0]?.title?.text || titles[0];
+      return `MARK ${row_key} appears on ${titles.length} tables. When asked which schedule the unit is on, cite the primary equipment schedule title first (matches[0].title="${primary}"), not vibration-isolation / valve / sound / points-list cross-refs.`;
+    })();
     return {
       query: {
         title: title ?? null,
@@ -739,6 +766,8 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
           : "Zero rows matched. Drop invented title filters, use a filter value that already appears in tool evidence, or refuse if the evidence is not present.",
       } : keysOnly ? {
         next_move: `Use count=${unique.length} as the scheduled row total and building_tag_counts=${JSON.stringify(buildingTagCounts)} for building splits. Re-query with row_key for citation cell bboxes.`,
+      } : multiTitleHint ? {
+        next_move: multiTitleHint,
       } : {}),
     };
   }));

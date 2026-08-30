@@ -246,6 +246,7 @@ try {
     .map((m) => m[1].trim())
     .filter(Boolean);
   const followAnswer = followBodies[followBodies.length - 1] || "";
+  console.log(`UI_FOLLOWUP_ANSWER\n${followAnswer.slice(0, 1200)}`);
   if (followAnswer.length < 20) {
     throw new Error("D03 follow-up missing Answer thread entry.");
   }

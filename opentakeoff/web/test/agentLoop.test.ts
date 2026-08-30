@@ -378,6 +378,19 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4], text: "FCU-T11" } },
   ], "Is DOAH-T1 on a dedicated outdoor-air schedule? Which title, and how many ATCT fan coils are scheduled including FCU-T11?",
   "Yes — DOAH-T1 is on the DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE. ATCT fan coils: 18, including FCU-T11."), null);
+  // Wrong sibling schedule title (UNIT instead of HANDLING) must fail the title gate.
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: {
+      query: { title: null, row_key: "DOAH-T1", column: null, cell_value: null, cell_contains: null },
+      count: 2,
+      matches: [
+        { title: { text: "DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE" }, sheet: "set.pdf#49", row: { key: "DOAH-T1", all_cells: { MARK: { text: "DOAH-T1", bbox: [1, 2, 3, 4] } } } },
+        { title: { text: "VIBRATION ISOLATION SCHEDULE" }, sheet: "set.pdf#49", row: { key: "DOAH-T1", all_cells: {} } },
+      ],
+    } },
+    { name: "highlight_citation", out: { sheet: "set.pdf#49", bbox_px: [1, 2, 3, 4], text: "DOAH-T1" } },
+  ], "Is DOAH-T1 on a dedicated outdoor-air schedule? Which title?",
+  "Yes — DOAH-T1 is on the DEDICATED OUTDOOR AIR UNIT SCHEDULE.")!, /HANDLING|primary equipment schedule title/i);
   // Dual inventory tables (title-scan + painted equipment totals) must fail.
   assert.match(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4] } },
