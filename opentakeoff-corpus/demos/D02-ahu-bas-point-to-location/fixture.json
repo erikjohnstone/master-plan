@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "set_id": "navfac-cherry-point-atc",
+  "source_file": "raw/navfac-cherry-point-atc-mechanical.pdf",
+  "sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "required_pages": [
+    {
+      "page": 65,
+      "sheet_number": "MI731",
+      "purpose": "POINTS LIST AHU-T1A/TIB including AI10 HW valve feedback"
+    },
+    {
+      "page": 48,
+      "sheet_number": "M-621",
+      "purpose": "AIR HANDLING UNIT SCHEDULE for AHU-T1A location and max CFM"
+    },
+    {
+      "page": 28,
+      "purpose": "AHU-T1A / AHU-T1B SECTION drawing label"
+    },
+    {
+      "page": 2,
+      "sheet_number": "M-002",
+      "purpose": "ATCT cab service narrative for AHU-T1A/T1B"
+    }
+  ],
+  "redistribution": "External local-use corpus fixture; do not commit or republish the source PDF."
+}

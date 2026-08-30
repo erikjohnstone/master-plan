@@ -2,11 +2,14 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   answerShapeErrors,
+  citationFormErrors,
   citationProvenanceErrors,
   DEMO_TOOLS,
+  drawingTextEvidenceErrors,
   parseJsonAnswer,
   runTimingMetadata,
   runToolCallingModel,
+  toolTextOrthographyErrors,
 } from "../scripts/run-demo.mjs";
 import { formatDemoRun } from "../scripts/show-demo-run.mjs";
 
@@ -25,6 +28,96 @@ test("demo timing separates cold source indexing from live prompt latency", () =
       latency_ms: 1234.57,
     },
   });
+});
+
+test("demo runner rejects tool-key citation sheets and missing sheet_id", () => {
+  assert.deepEqual(citationFormErrors({
+    status: "done",
+    answer: {
+      equipment_tag: {
+        value: "AHU-T1A",
+        citations: [{
+          sheet: "set.pdf#48",
+          bbox_px: [1, 2, 3, 4],
+        }],
+      },
+    },
+  }, {
+    expected: { equipment_tag: { type: "string" } },
+  }), [
+    'equipment_tag citation 0 uses tool key "sheet"; rename it to sheet_id',
+    "equipment_tag citation 0 must include sheet_id",
+  ]);
+});
+
+test("demo runner rejects schedule cells for drawing-text fields", () => {
+  assert.deepEqual(drawingTextEvidenceErrors({
+    status: "done",
+    answer: {
+      serves: {
+        value: "11TH FLOOR MECHANICAL",
+        citations: [{
+          sheet_id: "set.pdf#48",
+          table_title: "AIR HANDLING UNIT SCHEDULE",
+          row_key: "AHU-T1A",
+          column: "LOCATION",
+          bbox_px: [1, 2, 3, 4],
+        }],
+      },
+    },
+  }, {
+    expected: {
+      serves: {
+        type: "string",
+        citation: {
+          sheet_id: "set.pdf#2",
+          bbox_px: [1, 2, 3, 4],
+          grounding_text: "control cab",
+        },
+      },
+    },
+  }, [{
+    name: "query_table",
+    result: {
+      data: {
+        matches: [{
+          row: {
+            all_cells: {
+              LOCATION: { text: "11TH FLOOR MECHANICAL", bbox: { x0: 1, y0: 2, x1: 3, y1: 4 } },
+            },
+          },
+        }],
+      },
+    },
+  }]), [
+    "serves citation 0 is a drawing-text field and must not use table_title, row_key, or column",
+    "serves value must appear verbatim in find_text/read_sheet_text evidence; do not reuse a schedule cell",
+  ]);
+});
+
+test("demo runner rejects Unicode hyphen substitutions of tool text", () => {
+  assert.deepEqual(toolTextOrthographyErrors({
+    status: "done",
+    answer: {
+      equipment_tag: {
+        value: "AHU\u2011T1A",
+        citations: [{ sheet_id: "set.pdf#48", bbox_px: [1, 2, 3, 4] }],
+      },
+    },
+  }, {
+    expected: { equipment_tag: { type: "string" } },
+  }, [{
+    name: "query_table",
+    result: {
+      data: {
+        matches: [{
+          row: { all_cells: { MARK: { text: "AHU-T1A", bbox: { x0: 1, y0: 2, x1: 3, y1: 4 } } } },
+        }],
+      },
+    },
+  }]), [
+    "equipment_tag must copy the exact ASCII hyphen/text from the tool evidence",
+  ]);
 });
 
 test("local demo presenter shows transport, prompt, values, and citations", () => {
@@ -131,7 +224,21 @@ test("demo runner repairs a non-JSON final response without changing facts", asy
       choices: [{
         message: {
           role: "assistant",
-          content: '{"status":"done","answer":{"capacity_tons":{"value":56,"citations":[]}}}',
+          content: JSON.stringify({
+            status: "done",
+            answer: {
+              capacity_tons: {
+                value: 56,
+                citations: [{
+                  sheet_id: "set.pdf#44",
+                  table_title: "CHILLER SCHEDULE",
+                  row_key: "CH-A1",
+                  column: "CAPACITY (TONS)",
+                  bbox_px: [1, 2, 3, 4],
+                }],
+              },
+            },
+          }),
         },
       }],
     }), { status: 200 }),
@@ -144,7 +251,17 @@ test("demo runner repairs a non-JSON final response without changing facts", asy
     prompt: "Capacity?",
     truth: {
       source_file: "set.pdf",
-      expected: { capacity_tons: { type: "number", tolerance: 0 } },
+      expected: {
+        capacity_tons: {
+          type: "number",
+          tolerance: 0,
+          citation: {
+            sheet_id: "set.pdf#44",
+            table_title: "CHILLER SCHEDULE",
+            bbox_px: [1, 2, 3, 4],
+          },
+        },
+      },
     },
     tools: [],
     execute: async () => {
@@ -160,6 +277,85 @@ test("demo runner repairs a non-JSON final response without changing facts", asy
   assert.match(requests[1].messages.at(-1).content, /Re-emit the same answer as one valid JSON object/);
   assert.equal(result.raw_model_responses.length, 2);
   assert.equal(result.answer.answer.capacity_tons.value, 56);
+});
+
+test("demo runner repairs tool-key sheet citations before accepting a run", async () => {
+  const replies = [
+    new Response(JSON.stringify({
+      id: "bad-cite",
+      choices: [{
+        message: {
+          role: "assistant",
+          content: JSON.stringify({
+            status: "done",
+            answer: {
+              equipment_tag: {
+                value: "AHU-T1A",
+                citations: [{
+                  sheet: "set.pdf#48",
+                  bbox_px: [1, 2, 3, 4],
+                }],
+              },
+            },
+          }),
+        },
+      }],
+    }), { status: 200 }),
+    new Response(JSON.stringify({
+      id: "fixed-cite",
+      choices: [{
+        message: {
+          role: "assistant",
+          content: JSON.stringify({
+            status: "done",
+            answer: {
+              equipment_tag: {
+                value: "AHU-T1A",
+                citations: [{
+                  sheet_id: "set.pdf#48",
+                  table_title: "AIR HANDLING UNIT SCHEDULE",
+                  row_key: "AHU-T1A",
+                  column: "MARK",
+                  bbox_px: [1, 2, 3, 4],
+                }],
+              },
+            },
+          }),
+        },
+      }],
+    }), { status: 200 }),
+  ];
+  const requests = [];
+  const result = await runToolCallingModel({
+    endpoint: "https://model.invalid/v1/chat/completions",
+    apiKey: "test-key",
+    model: "test-model",
+    prompt: "Tag?",
+    truth: {
+      source_file: "set.pdf",
+      expected: {
+        equipment_tag: {
+          type: "string",
+          citation: {
+            sheet_id: "set.pdf#48",
+            table_title: "AIR HANDLING UNIT SCHEDULE",
+            bbox_px: [1, 2, 3, 4],
+          },
+        },
+      },
+    },
+    tools: [],
+    execute: async () => {
+      throw new Error("no tool call expected");
+    },
+    fetchFn: async (_endpoint, request) => {
+      requests.push(JSON.parse(request.body));
+      return replies.shift();
+    },
+  });
+  assert.equal(requests.length, 2);
+  assert.match(requests[1].messages.at(-1).content, /required citation shape/);
+  assert.equal(result.answer.answer.equipment_tag.citations[0].sheet_id, "set.pdf#48");
 });
 
 test("demo runner captures request IDs, raw replies, and complete tool payloads", async () => {

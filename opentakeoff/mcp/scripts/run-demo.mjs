@@ -98,6 +98,107 @@ export function answerShapeErrors(answer, truth) {
   return errors;
 }
 
+export function citationFormErrors(answer, truth) {
+  if (answer?.status !== "done" || !answer.answer || typeof answer.answer !== "object") return [];
+  const errors = [];
+  for (const field of Object.keys(truth.expected)) {
+    const citations = answer.answer?.[field]?.citations;
+    if (!Array.isArray(citations) || !citations.length) {
+      errors.push(`${field} must include at least one citation`);
+      continue;
+    }
+    for (const [index, citation] of citations.entries()) {
+      if (!citation || typeof citation !== "object" || Array.isArray(citation)) {
+        errors.push(`${field} citation ${index} must be an object`);
+        continue;
+      }
+      if (Object.hasOwn(citation, "sheet")) {
+        errors.push(`${field} citation ${index} uses tool key "sheet"; rename it to sheet_id`);
+      }
+      if (typeof citation.sheet_id !== "string" || !citation.sheet_id.trim()) {
+        errors.push(`${field} citation ${index} must include sheet_id`);
+      }
+      if (!Array.isArray(citation.bbox_px) || citation.bbox_px.length !== 4
+        || citation.bbox_px.some((n) => typeof n !== "number" || !Number.isFinite(n))) {
+        errors.push(`${field} citation ${index} must include bbox_px [x0,y0,x1,y1]`);
+      }
+    }
+  }
+  return errors;
+}
+
+function collectToolTexts(toolCalls) {
+  const texts = [];
+  for (const call of toolCalls) {
+    const data = call.result?.data;
+    if (!data) continue;
+    if (call.name === "find_text") {
+      for (const hit of data.hits || []) {
+        if (typeof hit?.str === "string") texts.push(hit.str);
+      }
+    } else if (call.name === "read_sheet_text") {
+      if (typeof data.text === "string") texts.push(data.text);
+      for (const run of data.runs || data.items || []) {
+        if (typeof run?.str === "string") texts.push(run.str);
+        if (typeof run?.text === "string") texts.push(run.text);
+      }
+    } else if (call.name === "query_table") {
+      for (const match of data.matches || []) {
+        for (const cell of Object.values(match.row?.all_cells || match.row?.cells || {})) {
+          if (typeof cell?.text === "string") texts.push(cell.text);
+        }
+        if (typeof match.row?.identity?.text === "string") texts.push(match.row.identity.text);
+      }
+    }
+  }
+  return texts;
+}
+
+export function drawingTextEvidenceErrors(answer, truth, toolCalls) {
+  if (answer?.status !== "done" || !answer.answer || typeof answer.answer !== "object") return [];
+  const nonTableFields = Object.entries(truth.expected)
+    .filter(([, spec]) => {
+      const citations = Array.isArray(spec.citations) ? spec.citations : [spec.citation];
+      return citations.some((citation) => citation && !citation.table_title);
+    })
+    .map(([name]) => name);
+  if (!nonTableFields.length) return [];
+  const drawingTexts = collectToolTexts(toolCalls.filter((call) =>
+    call.name === "find_text" || call.name === "read_sheet_text"));
+  const errors = [];
+  for (const field of nonTableFields) {
+    const value = answer.answer?.[field]?.value;
+    const citations = answer.answer?.[field]?.citations;
+    if (!Array.isArray(citations)) continue;
+    for (const [index, citation] of citations.entries()) {
+      if (citation?.table_title || citation?.row_key || citation?.column) {
+        errors.push(`${field} citation ${index} is a drawing-text field and must not use table_title, row_key, or column`);
+      }
+    }
+    if (typeof value === "string" && value.trim()
+      && !drawingTexts.some((text) => text.includes(value))) {
+      errors.push(`${field} value must appear verbatim in find_text/read_sheet_text evidence; do not reuse a schedule cell`);
+    }
+  }
+  return errors;
+}
+
+export function toolTextOrthographyErrors(answer, truth, toolCalls) {
+  if (answer?.status !== "done" || !answer.answer || typeof answer.answer !== "object") return [];
+  const toolTexts = collectToolTexts(toolCalls);
+  const errors = [];
+  for (const [field, spec] of Object.entries(truth.expected)) {
+    if (spec.type !== "string") continue;
+    const value = answer.answer?.[field]?.value;
+    if (typeof value !== "string" || !value) continue;
+    if (/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/.test(value)
+      && toolTexts.some((text) => text.includes(value.replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/g, "-")))) {
+      errors.push(`${field} must copy the exact ASCII hyphen/text from the tool evidence`);
+    }
+  }
+  return errors;
+}
+
 function systemPrompt(truth) {
   const fields = Object.entries(truth.expected).map(([name, spec]) => ({
     name,
@@ -122,16 +223,17 @@ function systemPrompt(truth) {
     "Never invent a table-title filter from the user's category words. Omit title on the first query, or use only a literal title phrase already returned by a tool (for example POINTS LIST); 'BAS points' does not imply a table literally titled BAS POINTS.",
     "If a natural-language description returns no rows, broaden once with cell_contains set to the exact equipment tag from the prompt and no title filter, then inspect the returned descriptions for the requested point meaning. Do not repeat an equivalent empty query.",
     nonTableFields.length
-      ? `These required fields need drawing-text evidence rather than a table cell: ${nonTableFields.join(", ")}. Use sheet_graph to orient, then find_text/read_sheet_text to return their exact source text and bbox; do not substitute a schedule citation.`
+      ? `These required fields need drawing-text evidence rather than a table cell: ${nonTableFields.join(", ")}. Use sheet_graph roles/evidence to choose candidate sheets, then call find_text/read_sheet_text on those sheets until the exact source phrase is returned. Never fill these fields from a schedule LOCATION or any other table cell, and never invent a section/sheet label.`
       : "No required field needs free drawing-text evidence.",
     "Group independent tool calls into the same response. Inspect each complete result before calling another tool, and never repeat an equivalent query.",
     "Use query_table cell_value for exact cross-table relationships and cell_contains when the related tag is embedded in a compound value; do not scan a whole table or infer a row without source text.",
     "Every query_table match includes row.all_cells. After the first matching row, use all_cells for every requested field on that row instead of making separate column calls.",
     "sweep_schedule_row includes row.cell_citations for every schedule attribute. Use those exact per-cell bboxes; row.citation is only the row identity and must never be reused for attribute fields.",
+    "Copy string values exactly from tool text. Do not replace ASCII hyphens with Unicode dashes, and do not paraphrase a returned phrase.",
     "Return JSON only after all required fields are answered.",
     "The final JSON shape is:",
     '{"status":"done","answer":{"<field>":{"value":"typed value","citations":[{"sheet_id":"exact tool sheet","table_title":"when applicable","row_key":"when applicable","column":"when applicable","bbox_px":[x0,y0,x1,y1]}]}}}',
-    "Translate every native tool citation into the final JSON citation shape: tool sheet → sheet_id, and tool bbox {x0,y0,x1,y1} → bbox_px [x0,y0,x1,y1]. Preserve the exact sheet string and coordinate numbers, but do not copy the tool object's key names or bbox object shape.",
+    "Translate every native tool citation into the final JSON citation shape: tool sheet → sheet_id, and tool bbox {x0,y0,x1,y1} → bbox_px [x0,y0,x1,y1]. Preserve the exact sheet string and coordinate numbers, but do not copy the tool object's key names or bbox object shape. Never emit a citation key named sheet.",
     needsInstalledQuantity
       ? "A schedule field uses its exact cell bbox. For equipment_tag and installed_quantity in this quantity workflow, use sweep_schedule_row.tag_citations and no schedule citation."
       : "Every requested schedule field, including equipment_tag, uses its exact query_table identity or value-cell bbox.",
@@ -236,6 +338,30 @@ export async function runToolCallingModel({
           messages.push({
             role: "user",
             content: `Your previous final response violated the required field types: ${shapeErrors.join("; ")}. Re-emit the same answer with those JSON types corrected. Do not change factual values, citations, or add new claims.`,
+          });
+          continue;
+        }
+        const formErrors = citationFormErrors(answer, truth);
+        if (formErrors.length) {
+          messages.push({
+            role: "user",
+            content: `Your previous final response violated the required citation shape: ${formErrors.join("; ")}. Re-emit the same answer using sheet_id and bbox_px only. Do not change factual values or add new claims.`,
+          });
+          continue;
+        }
+        const orthographyErrors = toolTextOrthographyErrors(answer, truth, toolCalls);
+        if (orthographyErrors.length) {
+          messages.push({
+            role: "user",
+            content: `Your previous final response altered tool text orthography: ${orthographyErrors.join("; ")}. Re-emit the same answer copying the exact characters returned by the tools.`,
+          });
+          continue;
+        }
+        const drawingErrors = drawingTextEvidenceErrors(answer, truth, toolCalls);
+        if (drawingErrors.length) {
+          messages.push({
+            role: "user",
+            content: `Your previous final response lacked drawing-text evidence: ${drawingErrors.join("; ")}. Call find_text/read_sheet_text for those fields if needed, then re-emit only after the exact source phrases are present in tool evidence.`,
           });
           continue;
         }
