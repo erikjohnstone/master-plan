@@ -1,10 +1,9 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { Session } from "../src/session.ts";
+import { loadFixtureGraph } from "./helpers/loadFixtureGraph.mjs";
 
 const CORPUS = resolve(dirname(fileURLToPath(import.meta.url)), "../../../opentakeoff-corpus");
 const DEMO = resolve(CORPUS, "demos/D08-fcu-cross-building");
@@ -30,19 +29,8 @@ function cellText(row, headerRe) {
 }
 
 test("D08 production engine preserves cross-building FCU rollup evidence", async () => {
-  const fixture = JSON.parse(await readFile(resolve(DEMO, "fixture.json"), "utf8"));
   const truth = JSON.parse(await readFile(resolve(DEMO, "truth.json"), "utf8"));
-  const source = resolve(CORPUS, fixture.source_file);
-  const pdf = await readFile(source).catch((error) => {
-    throw new Error(`D08 real fixture is required at ${source}; see ${resolve(DEMO, "fixture.json")}`, {
-      cause: error,
-    });
-  });
-  assert.equal(createHash("sha256").update(pdf).digest("hex"), fixture.sha256);
-
-  const session = new Session();
-  await session.loadPlan(source);
-  const graph = await session.graphForPipeline();
+  const { graph } = await loadFixtureGraph(CORPUS, DEMO);
 
   const fcu = uniqueMarks(graph.tables, /FAN\s*COIL\s*UNIT\s*SCHEDULE/i);
   assert.equal(fcu.size, truth.expected.fcu_count.value);
