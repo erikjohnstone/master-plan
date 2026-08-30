@@ -10,38 +10,77 @@ every page, no sampling — scoped to what that set actually contains. A set is
 not done until it clears **five runs**, each independently passing **five
 gates**, and the deliverable is **Run 5's output only**.
 
-### Platform mandate (2026-08-30) — ALL major chat workflows on this set
+### Platform mandate (2026-08-30) — ~50 production-ready intent-matched workflows
 
-**Do not ship one-off “works only for this prompt” patches.** Every major
-estimator ask in chat on `navfac-cherry-point-atc` must land a **contractor-
-grade, citable, repeatable** answer on the shared UI+MCP path without a human
-having to re-prompt engineering for that workflow.
+**Long-running harden.** Leave this goal running until the bar is met. Ship a
+large catalog of **genuine production-ready** estimator chat workflows — on
+the order of **~50** — not a handful of demos and not valve-only.
 
-Priority order (get #1 right first, then expand coverage — never stop at #1):
+Each workflow must be:
+
+1. **Intent-matched** in `takeoffWorkflow.js` (and related agent gates) —
+   **phrase-robust:** if the estimator intent is clear, wording must not
+   matter (`valve takeoff` ≡ `control valve takeoff`; “complete HVAC takeoff
+   of this set” ≡ “full equipment quantity takeoff on these drawings”; same
+   discipline for BAS/points and every other intent).
+2. On the **shared UI+MCP path** (compile / tools / Takeoff panel) — Agent
+   scrap must not become the Takeoff tab.
+3. **Contractor-grade** columns + **honest cites** (Tag / Sheet / schedule
+   jump to real `sheet_id`+`bbox_px`).
+4. **Proven** with automated checks + Agent UI proofs on corpus fixtures.
+5. **Merged to `main`** when that workflow is **genuinely complete** — then
+   move to the next. Do not batch “almost done” forever.
+
+**Do not ship one-off “works only for this prompt” patches.** Do not redefine
+success down to a smaller subset because it is easier to green.
+
+#### NON-NEGOTIABLE — SET-AGNOSTIC / GENERAL FIXES ONLY
+
+- **ALL product fixes must be set-agnostic.** Do **not** tailor routing,
+  compile rules, ODL/role heuristics, prompts, thresholds, column maps, or UI
+  to `navfac-cherry-point-atc` (or any single corpus set) just to green that
+  set. A fix that only works on one job makes the software useless.
+- Corpus sets are **regression fixtures and proof targets** — never hardcode
+  their sheet numbers, family names, locked counts (396 / 122 / 163), building
+  labels, or schedule titles into product code as special cases.
+- Prefer durable patterns: schedule-title signals, role/ODL heuristics,
+  workflow intent classification, contractor columns from **this drawing’s**
+  headers, cites from `sheet_id`+`bbox_px` — reusable on the next job’s PDFs.
+- Truth bars on a fixture are **acceptance checks**, not a license to encode
+  those numbers/titles into the product.
+
+**Proof fixtures:** `navfac-cherry-point-atc` + corpus demos D01–D10 and
+takeoff cards. Grow an explicit inventory toward **~50** HVAC/BAS (and related
+MEP schedule/plan) production intents — complete-set compiles, named-family /
+multi-list points, FCU/building splits, valve schedule+plan joins, equipment
+rollups, plan↔schedule joins, room/HVAC coordination, RTU mech↔elec, VAV plan
+links, AHU↔BAS traces, project takeoffs, refusals, multi-building /
+multi-schedule asks, and further genuine estimator intents the product should
+support.
+
+Seed priority (expand; never stop at the seed):
 
 1. **Complete control-valve takeoff** (`kind=control_valves` / `T-VALVE-01`) —
-   CHW + HHW CONTROL VALVE SCHEDULE. One row per **valve mark**. Columns that
-   earn their place: Valve mark, Served equipment (`UNIT MARK`), Service
-   (CHW|HHW), Size, GPM, **one Cv for that valve**, Configuration, Notes,
-   Sheet cite. **Never** dual “CHW CV” + “HHW CV” on the same row (that is
-   agent markdown mash, not the drawing). Truth bar on this set: **64 CHW +
-   99 HHW = 163** unique valve marks with resolvable schedule-row cites.
+   CONTROL VALVE SCHEDULE pattern. One row per valve mark. Columns: Valve
+   mark, Served equipment, Service (CHW|HHW when present), Size, GPM, **one
+   Cv**, Configuration, Notes, Sheet cite. Never dual Cv columns / markdown
+   tags / empty Sheet / scrap. Fixture truth on NAVFAC: **64 + 99 = 163**.
 2. **Complete HVAC equipment** (`T-HVAC-01`, 396) and **complete BAS points**
-   (`T-BAS-01`, 122) — already LOCKED; must stay green under regression.
-3. **Named-family / multi-list workflows** already proven in demos (FCU
-   building splits, points-list title scans, control-valve joins, room/HVAC
-   coordination) — chat routing must send them through the durable workflow
-   machine (`takeoffWorkflow.js`), not free-crawl scrap into the Takeoff tab.
-4. **UI honesty for every workflow:** Tag / Sheet / schedule-name clicks jump
-   and highlight real schedule rows; no literal `**markdown**` tags; no empty
-   Sheet column when `sheet_id`+`bbox_px` exist; Takeoff tab = compiled lines
-   only.
+   (`T-BAS-01`, 122) — LOCKED; stay green; phrase-robust; general compile path.
+3. **Named-family / multi-list / join workflows** (FCU building splits,
+   points-list title scans, control-valve joins, room/HVAC coordination, and
+   other corpus demos still production-facing) — durable `takeoffWorkflow`
+   phases + shared tools.
+4. **UI honesty everywhere:** cites jump; no `**markdown**` tags; Takeoff tab
+   = finished lines only.
+5. **Keep growing** the inventory until ~50 production-ready intents are
+   genuinely complete and on `main`.
 
 **Regression bar:** multi-prompt UI harness + ground-truth compile checks must
-fail loudly if a workflow regresses. Interview / CEO demos require the same
-path a new user gets: upload → Agent prompt → Run → Takeoff panel.
+fail loudly if a workflow regresses. Interview / CEO demos use the same path a
+new user gets: upload → Agent prompt → Run → Takeoff panel.
 
-**This corpus records these takeoffs:**
+**This corpus records these takeoffs (fixtures — not product special cases):**
 
 | ID | Kind | Set | Status |
 |---|---|---|---|
@@ -49,8 +88,9 @@ path a new user gets: upload → Agent prompt → Run → Takeoff panel.
 | `T-BAS-01` | BAS / DDC points takeoff | `navfac-cherry-point-atc` | `LOCKED` — legend/unknown sheets with locked POINTS/DDC list titles get ODL without flipping every POINTS LIST mention to schedule (preserves 5 lists / 122). |
 | `T-VALVE-01` | Control valve takeoff (CHW+HHW schedules) | `navfac-cherry-point-atc` | `AGENT UI PROVEN` — 163 unique valve marks via frozen Agent prompt; contractor columns + cites; N=5 card pending |
 
-Additional takeoff IDs require an explicit goal change (this mandate counts as
-that change for `T-VALVE-01` only).
+Maintain a living **~50-workflow inventory** in
+`takeoffs/WORKFLOWS.md`. This is a platform harden — not a single-demo
+finish line.
 
 ## Industry-standard EXCEPTIONAL takeoff (non-negotiable)
 
