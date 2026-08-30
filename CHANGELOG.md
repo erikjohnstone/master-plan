@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — routing-label mentions are not second installs
+
+### Fixed
+- **A tag next to a duct/pipe destination or source callout is not a second unit.** `sweep_schedule_row` treated every exact same-sheet occurrence as a corroborator and a countable install. A routing mention (`DUCT DOWN TO`, `DOWN TO`, `FROM`) sitting beside the same scheduled tag let a tiny label-box fingerprint recur and count twice. Those mentions are now marked `routing` and dropped from the install set whenever another occurrence of the same tag remains; they are disclosed as `text_only`. A lone tagged unit whose only drawn text is on the callout is kept (do not refuse a real install). Quantity notes (`UP TO 200 CFM`), long sentences (`TO BUILDING AUTOMATION`), and a duct size without `TO` never fire. Real second units on other sheets stay counted. No project, sheet, or tag names. **opentakeoff-mcp 0.9.72** (three surfaces).
+
 ## 2026-08-30 — viewport titles sit under their views; complementary sheets share a space key
 
 ### Fixed

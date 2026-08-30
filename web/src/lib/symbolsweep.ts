@@ -67,7 +67,7 @@
 //
 // sweepSymbols composes the two on one sheet, unchanged.
 
-import { compoundRemainderIsLabel, MARK_CLUSTER_K } from "./markid.ts";
+import { compoundRemainderIsLabel, isRoutingLabelOcc, MARK_CLUSTER_K } from "./markid.ts";
 
 export type Point = [number, number];
 
@@ -1307,8 +1307,42 @@ export interface TagOcc {
   bbox: [number, number, number, number];
   /** How this occurrence was recovered. A compound circuit/panel label
    * ("R1 /C-11") is itself an instance marker; a bare exact/fragmented
-   * leftover is a note unless other geometry already claimed it. */
-  kind?: "exact" | "compound" | "fragmented";
+   * leftover is a note unless other geometry already claimed it. A
+   * routing label is a destination/source mention (duct/pipe "DOWN TO"
+   * / "FROM"), never an install. */
+  kind?: "exact" | "compound" | "fragmented" | "routing";
+}
+
+/** Mark occurrences whose neighboring span is destination/source callout
+ * language. Both sweep_schedule_row occOf copies call this so canvas and
+ * MCP cannot disagree. */
+export function markRoutingLabels(spans: FlatSpan[], occs: TagOcc[]): TagOcc[] {
+  return occs.map((o) =>
+    o.kind !== "routing" && isRoutingLabelOcc(spans, o) ? { ...o, kind: "routing" as const } : o);
+}
+
+/** Drop routing mentions when a real install occurrence remains. If every
+ * occurrence is a routing mention, keep them — that may be the only drawn
+ * tag on the device, and suppressing it would refuse a real unit. */
+export function preferInstallTagOccs(occs: TagOcc[]): { occ: TagOcc[]; routing: TagOcc[] } {
+  const routing = occs.filter((o) => o.kind === "routing");
+  const install = occs.filter((o) => o.kind !== "routing");
+  if (!install.length) return { occ: occs, routing: [] };
+  return { occ: install, routing };
+}
+
+/** Disclose withheld routing mentions as text_only without double-counting
+ * a point classifySweepMatches already reported. */
+export function discloseRoutingLabels(
+  textOnly: Array<{ at: Point }>,
+  routing: TagOcc[],
+): Array<{ at: Point }> {
+  const out = [...textOnly];
+  for (const o of routing) {
+    const at: Point = [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10];
+    if (!out.some((t) => Math.hypot(t.at[0] - at[0], t.at[1] - at[1]) < 0.6)) out.push({ at });
+  }
+  return out;
 }
 
 /** A minimal positioned text span — the shape both sweep_schedule_row's own
@@ -1635,7 +1669,7 @@ function promoteLabeledNearMisses(
   const besideCounted = (x: number, y: number) => countedAt.some((p) => within(x, y, p));
   const leftoverOcc = occ
     .map((o, i) => ({ o, i }))
-    .filter(({ o, i }) => !matchedOcc.has(i) && !besideCounted(o.cx, o.cy));
+    .filter(({ o, i }) => o.kind !== "routing" && !matchedOcc.has(i) && !besideCounted(o.cx, o.cy));
   const labeledLeftovers = leftoverOcc.filter(({ o }) => {
     const nearW = leftover.filter((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R);
     if (!nearW.length) return false;
@@ -1852,6 +1886,7 @@ export function classifySweepMatches(
   for (const m of physical) {
     let oi = -1, bestD = Infinity;
     for (let k = 0; k < occ.length; k++) {
+      if (occ[k].kind === "routing") continue;
       const d = Math.hypot(m.at[0] - occ[k].cx, m.at[1] - occ[k].cy);
       if (d <= R && d < bestD) { bestD = d; oi = k; }
     }
