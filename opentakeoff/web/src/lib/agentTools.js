@@ -471,7 +471,7 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "compile_corpus_takeoff",
-    description: "Compile a full HVAC schedule-quantity takeoff (kind hvac_equipment / T-HVAC-01) or BAS points-list takeoff (kind bas_points / T-BAS-01) from the loaded set's extractable tables. Returns category/list counts, item tags with sheet+bbox cites, page accounting (empty pages explicit), and exclusions. This is schedule/list quantity — not installed drawing counts (use sweep_schedule_row for those). When download is true (default), also triggers a real browser download of the compiled workbook (JSON + CSV rollup). Use when the estimator asks for a complete HVAC or BAS takeoff of the set.",
+    description: "PRIMARY tool for a COMPLETE HVAC or BAS takeoff of the loaded set. kind hvac_equipment (T-HVAC-01) or bas_points (T-BAS-01). Returns deterministic category/list counts, totals, exclusions, and empty-page accounting (same Session+ODL path as MCP). Opens TakeoffDataPanel with the finished takeoff. Prefer this over crawling find_schedule/query_table family-by-family when the goal asks for a complete set takeoff. Not for installed drawing counts (use sweep_schedule_row). download true (default) also downloads the workbook.",
     input_schema: {
       type: "object",
       properties: {

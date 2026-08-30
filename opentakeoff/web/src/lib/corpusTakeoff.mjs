@@ -22,6 +22,28 @@ function cellBbox(row, headerRe) {
   return null;
 }
 
+/** Flatten schedule row cells into plain text attrs for the takeoff line. */
+function scheduleAttrs(row) {
+  const cells = {};
+  for (const [header, cell] of Object.entries(row.cells || {})) {
+    const hu = String(header || "").toUpperCase().replace(/\s+/g, " ").trim();
+    if (/^(MARK|TAG|SYMBOL|VALVE MARK|ID|KEY)$/.test(hu)) continue;
+    const text = String(cell?.text ?? "").trim();
+    if (!text) continue;
+    cells[header] = text;
+  }
+  const description = cellText(row, /^DESCRIPTION$/i)
+    || cellText(row, /DESCRIPTION/i)
+    || cellText(row, /^SERVICE$/i)
+    || null;
+  return { cells, description };
+}
+
+function buildingLetter(tag) {
+  const m = String(tag || "").toUpperCase().match(/-([AMT])(?=[A-Z0-9]|$)/);
+  return m ? m[1] : null;
+}
+
 function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
   const keys = new Set();
   const items = [];
@@ -43,6 +65,8 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
       const bbox = identityHeaderRe
         ? (cellBbox(row, identityHeaderRe) || cellBbox(row, /^MARK$/i) || row.identity?.bbox)
         : (cellBbox(row, /^MARK$/i) || row.identity?.bbox || cellBbox(row, /./));
+      const { cells, description } = scheduleAttrs(row);
+      const bldg = buildingLetter(tag);
       items.push({
         tag,
         quantity: 1,
@@ -50,6 +74,9 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
         sheet_id: table.sheet,
         table_title: title.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim(),
         bbox_px: bbox || null,
+        description: description || null,
+        building: bldg,
+        cells,
       });
     }
   }
@@ -179,6 +206,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       const m = tag.toUpperCase().match(/^(AI|AO|BI|BO)\d/);
       if (m) counts[m[1]] += 1;
       else counts.other += 1;
+      const { cells, description } = scheduleAttrs(row);
       items.push({
         tag,
         quantity: 1,
@@ -186,7 +214,8 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
         sheet_id: table.sheet,
         table_title: title,
         bbox_px: cellBbox(row, /^MARK/i) || row.identity?.bbox || null,
-        description: cellText(row, /DESCRIPTION/i) || null,
+        description: description || cellText(row, /DESCRIPTION/i) || null,
+        cells,
       });
     }
     lists.push({
@@ -279,15 +308,42 @@ export function takeoffWorkbookSheets(takeoff, { interrogationLog = null } = {})
         cat.building?.T ?? 0,
         cat.building?.other ?? 0,
       ]);
-      const rows = [["tag", "description", "qty", "unit", "sheet_id", "table_title", "bbox_px"]];
+      const attrKeys = [];
+      const seenAttr = new Set();
+      for (const item of cat.items || []) {
+        for (const k of Object.keys(item.cells || {})) {
+          const nk = String(k).toUpperCase();
+          if (seenAttr.has(nk)) continue;
+          seenAttr.add(nk);
+          attrKeys.push(k);
+        }
+      }
+      // Prefer contractor-facing columns first; keep the rest stable by name.
+      const prefer = [
+        /DESCRIPTION/i, /^SERVICE$/i, /^TYPE$/i, /LOCATION|AREA SERVED/i,
+        /\bCFM\b/i, /\bGPM\b/i, /\bMBH\b|\bTONS?\b|\bKW\b/i,
+        /HEAD|FT HD|ESP|STATIC/i, /VOLTAGE|VOLTS|\bPHASE\b|\bHP\b/i,
+        /\bCV\b|PIPE SIZE|CONN/i, /MANUFACTURER|MODEL/i, /REMARKS|NOTES/i,
+      ];
+      attrKeys.sort((a, b) => {
+        const ia = prefer.findIndex((re) => re.test(a));
+        const ib = prefer.findIndex((re) => re.test(b));
+        const aa = ia < 0 ? 999 : ia;
+        const bb = ib < 0 ? 999 : ib;
+        if (aa !== bb) return aa - bb;
+        return String(a).localeCompare(String(b));
+      });
+      const rows = [["tag", "description", "qty", "unit", "building", "sheet_id", "table_title", ...attrKeys, "bbox_px"]];
       for (const item of cat.items || []) {
         rows.push([
           item.tag,
           item.description || "",
           item.quantity,
           item.unit,
+          item.building || "",
           item.sheet_id,
           item.table_title,
+          ...attrKeys.map((k) => item.cells?.[k] ?? ""),
           Array.isArray(item.bbox_px) ? item.bbox_px.join(",") : "",
         ]);
       }
@@ -304,15 +360,29 @@ export function takeoffWorkbookSheets(takeoff, { interrogationLog = null } = {})
     ];
     sheets.push({ name: "ROLLUP", rows: rollup });
     for (const list of lists) {
-      const rows = [["tag", "description", "qty", "unit", "sheet_id", "table_title", "bbox_px"]];
+      const attrKeys = [];
+      const seenAttr = new Set();
       for (const item of list.items || []) {
+        for (const k of Object.keys(item.cells || {})) {
+          const nk = String(k).toUpperCase();
+          if (seenAttr.has(nk)) continue;
+          seenAttr.add(nk);
+          attrKeys.push(k);
+        }
+      }
+      attrKeys.sort((a, b) => String(a).localeCompare(String(b)));
+      const rows = [["tag", "point_type", "description", "qty", "unit", "sheet_id", "table_title", ...attrKeys, "bbox_px"]];
+      for (const item of list.items || []) {
+        const pt = String(item.tag || "").toUpperCase().match(/^(AI|AO|BI|BO)/)?.[1] || "";
         rows.push([
           item.tag,
+          pt,
           item.description || "",
           item.quantity,
           item.unit,
           item.sheet_id,
           item.table_title,
+          ...attrKeys.map((k) => item.cells?.[k] ?? ""),
           Array.isArray(item.bbox_px) ? item.bbox_px.join(",") : "",
         ]);
       }

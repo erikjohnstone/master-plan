@@ -12,9 +12,28 @@
  * Extensible: add intents/phases here; do not special-case corpus answers.
  */
 
-/** @typedef {"points_takeoff"|"fcu_buildings"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"generic"} TakeoffIntent */
+/** @typedef {"corpus_hvac"|"corpus_bas"|"points_takeoff"|"fcu_buildings"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"generic"} TakeoffIntent */
 
-/** @typedef {"survey"|"title_scans"|"spot_cites"|"paint"|"answer"|"done"} WorkflowPhase */
+/** @typedef {"survey"|"compile"|"title_scans"|"spot_cites"|"paint"|"answer"|"done"} WorkflowPhase */
+
+/**
+ * Complete set-wide HVAC/BAS takeoffs that the corpus compiler covers
+ * (T-HVAC-01 / T-BAS-01). Named multi-list goals stay on points_takeoff.
+ * @param {string} goal
+ * @returns {"hvac_equipment"|"bas_points"|null}
+ */
+export function corpusCompileKind(goal) {
+  const g = String(goal || "");
+  // Specific named points lists → title-scan workflow, not full-set compile.
+  if (namedPointsListTitles(g).length >= 2) return null;
+  const completeSet = /\bcomplete\b/i.test(g)
+    && /\btakeoff\b/i.test(g)
+    && /\b(?:this set|these drawings|of this set)\b/i.test(g);
+  if (!completeSet) return null;
+  if (/\b(?:BAS|DDC)\b/i.test(g) && /\bpoints?\b/i.test(g)) return "bas_points";
+  if (/\bHVAC\b/i.test(g) && /\bequipment\b/i.test(g)) return "hvac_equipment";
+  return null;
+}
 
 /**
  * @param {string} goal
@@ -22,6 +41,10 @@
  */
 export function classifyTakeoffIntent(goal) {
   const g = String(goal || "");
+  const corpusKind = corpusCompileKind(g);
+  if (corpusKind === "hvac_equipment") return "corpus_hvac";
+  if (corpusKind === "bas_points") return "corpus_bas";
+
   const pointsListTakeoff = /\b(?:points?\s*list|DDC\s+points?(?:\s*list)?)\b/i.test(g)
     && (/\b(?:AI|AO|BI|BO)\b/i.test(g) || /\bpoint[-\s]?type/i.test(g) || /\btakeoff\b/i.test(g))
     && /\b(?:row\s+count|breakdown|totals?|takeoff)\b/i.test(g);
@@ -96,6 +119,40 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
     name === "highlight_citation" && !out?.error && Array.isArray(out?.bbox_px)).length;
   const rowKeyCites = log.filter(({ name, args, out }) =>
     name === "query_table" && !out?.error && args?.row_key != null).length;
+  const hasCorpusCompile = log.some(({ name, out }) =>
+    name === "compile_corpus_takeoff" && !out?.error && (out?.takeoff_id || out?.kind));
+
+  // Complete set HVAC / BAS → one deterministic compile, then spot-cites.
+  if (intent === "corpus_hvac" || intent === "corpus_bas") {
+    const kind = intent === "corpus_bas" ? "bas_points" : "hvac_equipment";
+    if (!hasCorpusCompile) {
+      return {
+        phase: "compile",
+        allowedTools: ["compile_corpus_takeoff", "list_sheets", "sheet_graph"],
+        nextMove: `Call compile_corpus_takeoff with kind="${kind}" now (download true). `
+          + "Do NOT crawl find_schedule / query_table family-by-family for the set total — "
+          + "the compiler returns the full deterministic takeoff (categories/lists, totals, exclusions, empty pages). "
+          + "After it returns, summarize from its totals / category_counts / list_counts.",
+        blockReason: null,
+      };
+    }
+    if (rowKeyCites < 1 || paints < 1) {
+      return {
+        phase: paints < 1 && rowKeyCites >= 1 ? "paint" : "spot_cites",
+        allowedTools: ["query_table", "highlight_citation", "find_text"],
+        nextMove: "From the compile result, spot-check with query_table { row_key } + highlight_citation "
+          + "(at least one MARK per family/list the goal asks to cite). Then write the final answer from compile totals — do not invent a second inventory.",
+        blockReason: null,
+      };
+    }
+    return {
+      phase: "answer",
+      allowedTools: null,
+      nextMove: "Emit the complete takeoff answer from compile_corpus_takeoff totals "
+        + "(category/list counts, building splits / AI-AO-BI-BO, exclusions, empty pages). Cite painted MARKs. No more exploratory tools.",
+      blockReason: null,
+    };
+  }
 
   if (intent === "points_takeoff") {
     const titles = namedPointsListTitles(goal);

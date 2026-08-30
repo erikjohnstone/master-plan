@@ -256,7 +256,7 @@ export default function TakeoffDataPanel({
                               <th key={c} style={th}>{c}</th>
                             ))}
                             <th style={th}>Sheet</th>
-                            <th style={th}>Status</th>
+                            {group.lines.some((l) => l.status) ? <th style={th}>Status</th> : null}
                             <th style={th} />
                           </tr>
                         </thead>
@@ -300,12 +300,14 @@ export default function TakeoffDataPanel({
                               <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)", whiteSpace: "nowrap" }}>
                                 {line.plan_sheet_id || line.schedule_sheet_id || line.sheet_id || "—"}
                               </td>
-                              <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)" }}>
-                                {line.status || "—"}
-                                {line.notes ? (
-                                  <div style={{ marginTop: 2, maxWidth: 160, whiteSpace: "normal" }}>{line.notes}</div>
-                                ) : null}
-                              </td>
+                              {group.lines.some((l) => l.status) ? (
+                                <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)" }}>
+                                  {line.status || "—"}
+                                  {line.notes ? (
+                                    <div style={{ marginTop: 2, maxWidth: 160, whiteSpace: "normal" }}>{line.notes}</div>
+                                  ) : null}
+                                </td>
+                              ) : null}
                               <td style={{ ...td, whiteSpace: "nowrap" }}>
                                 {typeof onOpenCitation === "function" && line.sheet_id && line.bbox_px && (
                                   <button type="button" onClick={() => onOpenCitation({

@@ -19,6 +19,56 @@ gates**, and the deliverable is **Run 5's output only**.
 
 No additional takeoff IDs without an explicit goal change.
 
+## Industry-standard EXCEPTIONAL takeoff (non-negotiable)
+
+A takeoff is **not** chat scrap, partial Agent evidence crawls, blank Status
+columns, or an “evidence row” dump. It is the finished commercial document a
+seasoned MEP / controls contractor would accept for bidding, procurement, and
+field use — structured rows and columns whose associated data make sense.
+
+**Locked totals on this set:** HVAC **396** scheduled equipment tags · BAS
+**122** extractable points-list rows. The Takeoff UI Takeoff tab must land on
+those finished quantities via `compile_corpus_takeoff` (Session+ODL). Exploratory
+`find_schedule` / `query_table` crawls are audit/Workflow data only — they are
+**not** the takeoff.
+
+### HVAC equipment (mechanical schedule / estimating workbook bar)
+
+Aligned with US MEP practice (equipment schedules; MasterFormat 23 06 00
+“Schedules for HVAC”; estimating workbooks keyed by mark):
+
+- Grouped by schedule family (AHU, FCU, VAV, chiller, boiler, pump, …) — never
+  one giant sparse table padded with empty columns.
+- **One row per equipment tag.**
+- Columns that earn their place for that family: Tag, Qty, Unit,
+  Description/Service when present, sheet cite, plus type-appropriate technical
+  fields from the drawing schedule (air-side: CFM / ESP / capacity / volts-phase;
+  pumps: GPM / head; valves: Cv / size; etc.).
+- Building splits where schedules support them (Air Ops / MITRACON / ATCT).
+- Rollup: per-category counts + set total reconciled to `truth.json`.
+- CSV / Excel / PDF export a contractor can open without explanation.
+
+### BAS / DDC points (controls points list / I/O schedule bar)
+
+Aligned with controls practice (points lists; ASHRAE Guideline 13–style I/O
+counting; instrument-index discipline):
+
+- Grouped by extractable POINTS LIST / DDC POINTS LIST title.
+- **One row per point mark.**
+- Columns: Point tag, Point type (AI / AO / BI / BO), Description, Qty, Unit,
+  sheet cite, plus schedule fields present on the drawing (alarm / trend when
+  extractable).
+- Per-list and overall AI/AO/BI/BO rollups + overall row total.
+- Disclose non-extractable title-only lists — never invent counts.
+
+### UI honesty
+
+- New-user path: upload PDF → Agent frozen prompt → Run → Takeoff panel shows
+  the **literal compiled takeoff** (396 / 122), not partial scrap.
+- No seed cheats; no programmatic compile as the demo path.
+- Blank or meaningless columns are bugs — iron them out.
+- Do not idle on long shell waits; diagnose graph/compile stalls immediately.
+
 ## Non-negotiables
 
 1. Ground truth authored **before** run 1, by hand, from the drawings — never
@@ -50,6 +100,9 @@ No additional takeoff IDs without an explicit goal change.
     **no**, keep it surface-specific. Shared = anything that decides schedule
     truth or answers “what’s on the schedules / how many / where.” Default to
     shared when unsure.
+12. **Industry-standard exceptional output.** Takeoff UI + exports must meet the
+    quality bar in “Industry-standard EXCEPTIONAL takeoff” above. Partial Agent
+    scrap in the Takeoff tab is a fail for demos and for “done.”
 ## Ground-truth harness (per takeoff)
 
 Before any run, produce `truth.json`:

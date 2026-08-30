@@ -263,6 +263,13 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
           workflow, runId, tag, field: "equipment_type", value: catName,
           sheet_id: sheet, table_title: table, source_tool,
         }));
+        if (item.building) {
+          const bldgName = ({ A: "Air Ops", M: "MITRACON", T: "ATCT" })[item.building] || item.building;
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag, field: "BUILDING", value: bldgName,
+            sheet_id: sheet, table_title: table, column: "BUILDING", source_tool,
+          }));
+        }
         if (item.description) {
           rows.push(makeTakeoffRow({
             workflow, runId, tag, field: "DESCRIPTION", value: item.description,
@@ -273,7 +280,7 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
         if (cells && typeof cells === "object" && !Array.isArray(cells)) {
           for (const [header, raw] of Object.entries(cells)) {
             const hu = String(header || "").toUpperCase();
-            if (hu === "MARK" || hu === "TAG" || hu === "SYMBOL") continue;
+            if (hu === "MARK" || hu === "TAG" || hu === "SYMBOL" || hu === "DESCRIPTION") continue;
             const text = cellText(raw);
             if (!String(text).trim()) continue;
             rows.push(makeTakeoffRow({
@@ -438,7 +445,7 @@ const SKIP_ATTR = new Set(["MARK", "TAG", "SYMBOL", "plan_tag", "plan_status", .
  * Columns only show when at least one line in the (family) group has that field. */
 export const TAKEOFF_SPEC_ORDER = [
   // Identity / product / duty
-  "TYPE", "SERVICE", "DESCRIPTION", "PATTERN", "STYLE", "APPLICATION", "DUTY",
+  "TYPE", "SERVICE", "DESCRIPTION", "BUILDING", "PATTERN", "STYLE", "APPLICATION", "DUTY",
   "SIZE", "NOMINAL SIZE", "FRAME SIZE",
   // Air-side / terminals
   "CFM", "SUPPLY CFM", "RETURN CFM", "EXHAUST CFM", "OA CFM", "MAX CFM", "MIN CFM",

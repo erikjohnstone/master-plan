@@ -40,13 +40,19 @@ const JOBS = {
     label: "hvac",
     title: "HVAC equipment takeoff",
     promptPath: resolve(corpus, "takeoffs/T-HVAC-01-navfac-equipment/prompt.txt"),
-    expectMinEvidence: 20,
+    expectMinEvidence: 350,
+    expectMinLines: 350,
+    expectTakeoffId: "T-HVAC-01",
+    expectEa: 350,
   },
   bas: {
     label: "bas",
     title: "BAS points takeoff",
     promptPath: resolve(corpus, "takeoffs/T-BAS-01-navfac-points/prompt.txt"),
-    expectMinEvidence: 10,
+    expectMinEvidence: 100,
+    expectMinLines: 100,
+    expectTakeoffId: "T-BAS-01",
+    expectEa: 100,
   },
 };
 
@@ -56,8 +62,10 @@ const jobs = kindArg === "both" ? [JOBS.hvac, JOBS.bas]
     : [JOBS.hvac];
 
 const AGENT_TIMEOUT_MS = Number(process.env.OT_DEMO_AGENT_TIMEOUT_MS || 8 * 60 * 1000);
-/** If status text is unchanged this long, dump diagnosis and fail — do not sit idle. */
+/** If status text is unchanged this long, dump diagnosis (do not sit idle for 25m). */
 const STALL_DIAG_MS = Number(process.env.OT_DEMO_STALL_MS || 90_000);
+/** Fail after this much unchanged status unless a graph/compile worker is live. */
+const STALL_FAIL_MS = Number(process.env.OT_DEMO_STALL_FAIL_MS || 3 * 60 * 1000);
 
 async function diagnoseHang(label, status) {
   const { execSync } = await import("node:child_process");
@@ -76,8 +84,9 @@ async function diagnoseHang(label, status) {
   } catch {
     tmpDirs = "";
   }
+  const graphLive = /production-graph-cli/.test(procs);
   const msg = [
-    `[${label}] STALL after ${Math.round(STALL_DIAG_MS / 1000)}s unchanged status: ${JSON.stringify(status)}`,
+    `[${label}] STALL status=${JSON.stringify(status)} graphLive=${graphLive}`,
     "--- processes ---",
     procs.trim() || "(none)",
     "--- prod-graph dirs ---",
@@ -85,7 +94,7 @@ async function diagnoseHang(label, status) {
   ].join("\n");
   console.error(msg);
   writeFileSync(resolve(artifacts, `demo_${label}_stall_diag.log`), `${msg}\n`);
-  return msg;
+  return { msg, graphLive };
 }
 
 async function waitAgentDone(page, label, timeoutMs) {
@@ -93,6 +102,7 @@ async function waitAgentDone(page, label, timeoutMs) {
   let lastStatus = "";
   let statusChangedAt = Date.now();
   let sawRunning = false;
+  let loggedStall = false;
   while (Date.now() < deadline) {
     const state = await page.evaluate(() => {
       const stop = [...document.querySelectorAll("button")].some((b) => /■\s*Stop/.test(b.textContent || ""));
@@ -114,9 +124,23 @@ async function waitAgentDone(page, label, timeoutMs) {
       console.log(`[${label}] ${state.status}`);
       lastStatus = state.status;
       statusChangedAt = Date.now();
+      loggedStall = false;
     } else if (state.running && Date.now() - statusChangedAt > STALL_DIAG_MS) {
-      const diag = await diagnoseHang(label, lastStatus || state.status || "(empty)");
-      throw new Error(diag.split("\n")[0]);
+      const stuckFor = Date.now() - statusChangedAt;
+      const { graphLive, msg } = await diagnoseHang(label, lastStatus || state.status || "(empty)");
+      if (!loggedStall) {
+        loggedStall = true;
+        console.error(`[${label}] diagnosing after ${Math.round(stuckFor / 1000)}s unchanged…`);
+      }
+      // Graph/compile worker still chewing — keep waiting, but not forever.
+      if (!graphLive && stuckFor > STALL_FAIL_MS) {
+        throw new Error(msg.split("\n")[0]);
+      }
+      if (graphLive && stuckFor > Math.max(STALL_FAIL_MS, 5 * 60 * 1000)) {
+        throw new Error(`[${label}] production-graph-cli still running after ${Math.round(stuckFor / 1000)}s — ${lastStatus}`);
+      }
+      // Reset the diag clock so we re-check every STALL_DIAG_MS, not spin-print.
+      statusChangedAt = Date.now() - (STALL_DIAG_MS - 15_000);
     }
     if (sawRunning && !state.running) {
       console.log(`[${label}] Agent done — Takeoff evidence=${state.evidence} rows=${state.rowCount} compile=${state.meta?.takeoff_id || "none"}`);
@@ -227,6 +251,21 @@ async function runOne(job) {
   }
   if (pageErrors.some((e) => /Objects are not valid as a React child/i.test(e))) {
     throw new Error(`[${job.label}] React crash in TakeoffDataPanel`);
+  }
+  if (job.expectTakeoffId && stats.meta?.takeoff_id !== job.expectTakeoffId) {
+    await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
+    throw new Error(
+      `[${job.label}] expected compiled takeoff ${job.expectTakeoffId}, got ${stats.meta?.takeoff_id || "none"} `
+      + `(lines=${stats.lines} evidence=${stats.evidence}) — scrap evidence is not a takeoff`,
+    );
+  }
+  if (stats.lines < (job.expectMinLines || job.expectMinEvidence)) {
+    await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
+    throw new Error(`[${job.label}] Takeoff lines ${stats.lines} < ${job.expectMinLines} (need finished takeoff)`);
+  }
+  if (job.expectEa && (stats.ea == null || stats.ea < job.expectEa)) {
+    await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
+    throw new Error(`[${job.label}] EA total ${stats.ea} < ${job.expectEa}`);
   }
   if (stats.rowCount < job.expectMinEvidence && stats.evidence < job.expectMinEvidence) {
     await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
