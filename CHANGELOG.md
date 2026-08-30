@@ -2,6 +2,13 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — leftover complementary +1s: whole-sheet space keys, column-major grids, unique match-line tiles
+
+### Fixed
+- **A single whole-sheet plan title is a cross-sheet space identity.** Complementary duct vs piping sheets of one floor used to skip collapse when each sheet had only one caption (`detectSheetViewports` required two). A leftover `FLOOR` inside `PIPING FLOOR PLAN` no longer splits that pair. A singular `FLR N & M` typical-pair caption is one viewport, not a multi-floor key plan; three-or-more floor numbers (or a plural `FLRS`/`FLOORS`/`LEVELS` listing) still are. Marks on a 2×2 title grid are assigned column-major so a left-column unit is not stolen by a higher right-column title.
+- **A located space key no longer requires a digit.** An area-letter tile, an ordinal `FIRST FLOOR`, or a site token beyond a bare discipline word (`MTRACON MECHANICAL`) can meet its complementary sheet. An enlarged crop whose own caption is only a discipline word inherits the sheet's building prefix so it can meet that building's floor plan; two untitled enlarged rooms still never meet.
+- **A unique mark on two area-letter tiles of the same floor is a match-line redraw.** Folding the area letter happens only when every contributing sheet has exactly one instance — two real units of a type-mark, one on each tile, stay independent. Two units inside one viewport stay independent. No project, sheet, or tag names. **opentakeoff-mcp 0.9.73** (three surfaces).
+
 ## 2026-08-30 — routing-label mentions are not second installs
 
 ### Fixed

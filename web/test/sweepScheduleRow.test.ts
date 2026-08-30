@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, leftoverLabeledOccs, typicalMultiplierNear, matchQuantity, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, isSheetCategoryTitle, spaceKeyIsLocated, assignMarkToViewport, type Point, type RoomSweepInstance, type SheetViewport, type TagOcc } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, leftoverLabeledOccs, typicalMultiplierNear, matchQuantity, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, isSheetCategoryTitle, spaceKeyIsLocated, assignMarkToViewport, buildingKeyFromTitle, tileSpaceKey, collapseSpaceKey, type Point, type RoomSweepInstance, type SheetViewport, type TagOcc } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -713,6 +713,12 @@ test("viewportSpaceKey: complementary views of one room compare equal; different
   assert.equal(viewportSpaceKey("MECHANICAL ROOM SECTION 1"), viewportSpaceKey("MECHANICAL ROOM SECTION 3"));
   assert.notEqual(viewportSpaceKey("LEVEL 1 PLAN"), viewportSpaceKey("LEVEL 2 PLAN"));
   assert.notEqual(viewportSpaceKey("ROOM 151 ENLARGED DUCT PLAN"), viewportSpaceKey("ROOM 202 ENLARGED DUCT PLAN"));
+  // "PIPING FLOOR PLAN" is a view-type phrase — the leftover FLOOR must not
+  // split a duct plan from the piping plan of the same area tile.
+  assert.equal(
+    viewportSpaceKey("CAMPUS FIRST FLOOR MECHANICAL DUCTWORK PLAN - AREA B"),
+    viewportSpaceKey("CAMPUS FIRST FLOOR MECHANICAL PIPING FLOOR PLAN - AREA B"),
+  );
 });
 
 test("isViewportTitle / detectSheetViewports: accepts paired room-plan titles, rejects notes and a lone whole-sheet title", () => {
@@ -732,18 +738,22 @@ test("isViewportTitle / detectSheetViewports: accepts paired room-plan titles, r
   const single = detectSheetViewports([
     { str: "FIRST FLOOR MECHANICAL PLAN", x: 2000, y: 3800, w: 400, h: 24 },
   ]);
-  assert.equal(single.length, 0, "a single whole-sheet plan title is not a dual-view");
+  assert.equal(single.length, 1, "a single whole-sheet plan title is a space identity for cross-sheet collapse");
+  assert.equal(dedupeCrossDisciplineRoomViews([
+    inst(1, "MH1", "MH", [1200, 1300], [ROOM], single),
+    inst(2, "MH1", "MH", [3400, 1310], [ROOM], single),
+  ]).length, 0, "one title is not a same-sheet dual-view — two marks stay two installs");
   // Title-block reprint of the same caption is still one viewport.
   const reprint = detectSheetViewports([
     { str: "FIRST FLOOR MECHANICAL PLAN", x: 1600, y: 3100, w: 400, h: 24 },
     { str: "FIRST FLOOR MECHANICAL PLAN", x: 4800, y: 2400, w: 400, h: 24 },
   ]);
-  assert.equal(reprint.length, 0, "the same title printed twice (drawing + title block) is not a dual-view");
+  assert.equal(reprint.length, 1, "the same title printed twice (drawing + title block) is one space, not two views");
   const aliasReprint = detectSheetViewports([
-    { str: "MTRACON - MECHANICAL DUCTWORK ROOF PLAN", x: 4700, y: 2360, w: 400, h: 24 },
-    { str: "MTRACON - MECHANICAL DUCT ROOF PLAN", x: 770, y: 2770, w: 400, h: 24 },
+    { str: "CAMPUS - MECHANICAL DUCTWORK ROOF PLAN", x: 4700, y: 2360, w: 400, h: 24 },
+    { str: "CAMPUS - MECHANICAL DUCT ROOF PLAN", x: 770, y: 2770, w: 400, h: 24 },
   ]);
-  assert.equal(aliasReprint.length, 0, "DUCT vs DUCTWORK is a title-block wording alias, not two views");
+  assert.equal(aliasReprint.length, 1, "DUCT vs DUCTWORK is a title-block wording alias, not two views");
   assert.equal(isViewportTitle("INDICATED ON THE FLOOR PLAN"), false);
   assert.equal(isViewportTitle("MECHANICAL ROOF PLAN FOR CONTINUATION."), false);
 });
@@ -796,12 +806,20 @@ test("isSheetCategoryTitle / spaceKeyIsLocated: sheet names and key plans are no
   assert.equal(isSheetCategoryTitle("AIR OPS - MECHANICAL ENLARGED PLANS"), true);
   assert.equal(isSheetCategoryTitle("MTRACON - MECHANICAL ENLARGED PLANS"), true);
   assert.equal(isSheetCategoryTitle("ATCT - MECHANICAL DUCTWORK PLAN - FLRS 7, 8, 9, & 10"), true);
-  assert.equal(isSheetCategoryTitle("ATCT - MECHANICAL DUCTWORK PLAN - FLR 11 & 12"), true);
+  assert.equal(isSheetCategoryTitle("TOWER - MECHANICAL PIPING PLAN - 1, 3 & 5"), true);
   assert.equal(isSheetCategoryTitle("MECHANICAL - DUCT ENLARGED PLAN"), false);
   assert.equal(isSheetCategoryTitle("ATCT - MECHANICAL DUCTWORK PLAN - FLR 8"), false);
+  // Singular FLR N & M is one typical-pair drawing, not a multi-floor key plan.
+  assert.equal(isSheetCategoryTitle("TOWER - MECHANICAL DUCTWORK PLAN - FLR 3 & 5"), false);
+  assert.equal(isSheetCategoryTitle("TOWER - MECHANICAL DUCTWORK PLAN - FLR 11 & 12"), false);
   assert.equal(spaceKeyIsLocated(viewportSpaceKey("ATCT - MECHANICAL DUCTWORK PLAN - FLR 8")), true);
   assert.equal(spaceKeyIsLocated(viewportSpaceKey("MECHANICAL - ROOM 152 ENLARGED DUCT PLAN")), true);
   assert.equal(spaceKeyIsLocated(viewportSpaceKey("MECHANICAL - DUCT ENLARGED PLAN")), false);
+  assert.equal(spaceKeyIsLocated(viewportSpaceKey("CAMPUS FIRST FLOOR MECHANICAL DUCTWORK PLAN - AREA B")), true);
+  assert.equal(spaceKeyIsLocated(viewportSpaceKey("CAMPUS - MECHANICAL PIPING PLAN")), true);
+  assert.equal(buildingKeyFromTitle("CAMPUS - MECHANICAL ENLARGED PLANS"), "CAMPUS");
+  assert.equal(buildingKeyFromTitle("MECHANICAL - DUCT ENLARGED PLAN"), "");
+  assert.equal(tileSpaceKey("CAMPUS FIRST FLOOR MECHANICAL AREA A"), tileSpaceKey("CAMPUS FIRST FLOOR MECHANICAL AREA B"));
 });
 
 test("detectSheetViewports: drops a rotated title-block sheet name so the duct/pipe pair survives", () => {
@@ -813,6 +831,8 @@ test("detectSheetViewports: drops a rotated title-block sheet name so the duct/p
   assert.equal(vps.length, 2);
   assert.equal(vps[0].spaceKey, vps[1].spaceKey);
   assert.ok(vps.every((v) => !/PLANS/.test(v.title)));
+  assert.equal(vps[0].buildingKey, "MTRACON");
+  assert.equal(vps[1].buildingKey, "MTRACON");
 });
 
 test("assignMarkToViewport: a stacked duct/pipe pair assigns the lower mark to the lower title (title sits under its view)", () => {
@@ -902,4 +922,88 @@ test("dedupeCrossDisciplineRoomViews: two real repeats on the kept sheet survive
   ];
   const redundant = dedupeCrossDisciplineRoomViews(instances);
   assert.equal(redundant.length, 2, "the piping-plan pair is the redraw; both duct-plan installs remain");
+});
+
+test("assignMarkToViewport: a 2×2 grid assigns a left-column mark to the left title, not a higher right-column title", () => {
+  const grid: SheetViewport[] = [
+    { title: "TOWER DUCTWORK PLAN - FLR 2", spaceKey: viewportSpaceKey("TOWER DUCTWORK PLAN - FLR 2"), at: [3200, 1500] },
+    { title: "TOWER DUCTWORK PLAN - FLR 1", spaceKey: viewportSpaceKey("TOWER DUCTWORK PLAN - FLR 1"), at: [900, 2900] },
+    { title: "TOWER DUCTWORK PLAN - FLR 3 & 5", spaceKey: viewportSpaceKey("TOWER DUCTWORK PLAN - FLR 3 & 5"), at: [2800, 2900] },
+  ];
+  const left = assignMarkToViewport([800, 1520], grid, 4896, 3168);
+  assert.equal(left?.title, "TOWER DUCTWORK PLAN - FLR 1", "upper-left belongs to the left column, not FLR 2");
+  const rightUpper = assignMarkToViewport([3300, 400], grid, 4896, 3168);
+  assert.equal(rightUpper?.title, "TOWER DUCTWORK PLAN - FLR 2");
+});
+
+test("dedupeCrossDisciplineRoomViews: whole-sheet duct vs piping of the same area tile collapse", () => {
+  const none: typeof ROOM[] = [];
+  const ductTitle = "CAMPUS FIRST FLOOR MECHANICAL DUCTWORK PLAN - AREA B";
+  const pipeTitle = "CAMPUS FIRST FLOOR MECHANICAL PIPING FLOOR PLAN - AREA B";
+  assert.equal(viewportSpaceKey(ductTitle), viewportSpaceKey(pipeTitle));
+  const duct: SheetViewport[] = [{ title: ductTitle, spaceKey: viewportSpaceKey(ductTitle), at: [1050, 2420], buildingKey: "CAMPUS" }];
+  const pipe: SheetViewport[] = [{ title: pipeTitle, spaceKey: viewportSpaceKey(pipeTitle), at: [1080, 2420], buildingKey: "CAMPUS" }];
+  const pair = [
+    inst(1, "MH102", "MH", [1670, 1660], none, duct),
+    inst(2, "MP102", "MP", [1690, 1535], none, pipe),
+  ];
+  assert.equal(dedupeCrossDisciplineRoomViews(pair).length, 1, "one install on complementary whole-sheet plans");
+});
+
+test("dedupeCrossDisciplineRoomViews: floor plan vs enlarged crop of the same building collapse", () => {
+  const none: typeof ROOM[] = [];
+  const floorTitle = "CAMPUS - MECHANICAL PIPING PLAN";
+  const enlDuct = "MECHANICAL - DUCT ENLARGED PLAN";
+  const enlPipe = "MECHANICAL - ENLARGED PIPE PLAN";
+  const floor: SheetViewport[] = [{ title: floorTitle, spaceKey: viewportSpaceKey(floorTitle), at: [400, 2760], buildingKey: "CAMPUS" }];
+  const enlarged: SheetViewport[] = [
+    { title: enlDuct, spaceKey: viewportSpaceKey(enlDuct), at: [705, 1439], buildingKey: "CAMPUS" },
+    { title: enlPipe, spaceKey: viewportSpaceKey(enlPipe), at: [686, 2765], buildingKey: "CAMPUS" },
+  ];
+  assert.equal(collapseSpaceKey(enlDuct, viewportSpaceKey(enlDuct), "CAMPUS"), collapseSpaceKey(floorTitle, viewportSpaceKey(floorTitle), "CAMPUS"));
+  const pair = [
+    inst(1, "MP111", "MP", [2150, 2050], none, floor),
+    inst(2, "M-411", "M", [1070, 1010], none, enlarged),
+  ];
+  assert.equal(dedupeCrossDisciplineRoomViews(pair).length, 1, "enlarged crop is the same install as the floor plan");
+  const bare: SheetViewport[] = [
+    { title: enlDuct, spaceKey: viewportSpaceKey(enlDuct), at: [705, 1439] },
+    { title: enlPipe, spaceKey: viewportSpaceKey(enlPipe), at: [686, 2765] },
+  ];
+  const otherBare: SheetViewport[] = [
+    { title: "MECHANICAL DUCT ENLARGED PLAN - MECH RM", spaceKey: viewportSpaceKey("MECHANICAL DUCT ENLARGED PLAN - MECH RM"), at: [900, 1500] },
+  ];
+  assert.equal(dedupeCrossDisciplineRoomViews([
+    inst(1, "M-4A", "M", [800, 800], none, bare),
+    inst(2, "M-4B", "M", [900, 900], none, otherBare),
+  ]).length, 0, "two untitled enlarged rooms never meet");
+});
+
+test("dedupeCrossDisciplineRoomViews: two area tiles of the same floor share a unique tag (match-line)", () => {
+  const none: typeof ROOM[] = [];
+  const areaA = "CAMPUS FIRST FLOOR MECHANICAL PIPING FLOOR PLAN - AREA A";
+  const areaB = "CAMPUS FIRST FLOOR MECHANICAL PIPING FLOOR PLAN - AREA B";
+  const a: SheetViewport[] = [{ title: areaA, spaceKey: viewportSpaceKey(areaA), at: [580, 2750], buildingKey: "CAMPUS" }];
+  const b: SheetViewport[] = [{ title: areaB, spaceKey: viewportSpaceKey(areaB), at: [1080, 2420], buildingKey: "CAMPUS" }];
+  const pair = [
+    inst(1, "MP101", "MP", [1200, 2410], none, a),
+    inst(2, "MP102", "MP", [1290, 1360], none, b),
+  ];
+  assert.equal(dedupeCrossDisciplineRoomViews(pair).length, 1, "match-line redraw on adjacent area tiles is one install");
+  const lvl2 = "CAMPUS SECOND FLOOR MECHANICAL PIPING FLOOR PLAN - AREA B";
+  const otherFloor: SheetViewport[] = [{ title: lvl2, spaceKey: viewportSpaceKey(lvl2), at: [1080, 2420], buildingKey: "CAMPUS" }];
+  assert.equal(dedupeCrossDisciplineRoomViews([
+    inst(1, "MP101", "MP", [1200, 2410], none, a),
+    inst(2, "MP104", "MP", [1290, 1360], none, otherFloor),
+  ]).length, 0, "first floor vs second floor stay independent");
+  const twoAndTwo = [
+    inst(1, "MP101", "MP", [800, 800], none, a),
+    inst(2, "MP101", "MP", [1600, 900], none, a),
+    inst(3, "MP102", "MP", [900, 800], none, b),
+    inst(4, "MP102", "MP", [1700, 900], none, b),
+  ];
+  assert.equal(
+    dedupeCrossDisciplineRoomViews(twoAndTwo).length, 0,
+    "two real units on each area tile of a type-mark are not a match-line unique",
+  );
 });

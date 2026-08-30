@@ -2030,23 +2030,29 @@ export function pickSameDisciplineCorroborator<T>(
 // ELEVATION of a room/area, sitting on the same sheet. Their *space* key
 // (the title minus view-type words — DUCT/PIPING/PLAN/SECTION/ENLARGED)
 // must agree, so "LEVEL 1 PLAN" beside "LEVEL 2 PLAN" never collapses and
-// two enlarged plans of different rooms never collapse. A sheet with fewer
-// than two such titles is a no-op. A real repeat *inside* one viewport is
-// also a no-op — assignment is nearest-title, and collapseGroup still
-// requires 2+ groups.
+// two enlarged plans of different rooms never collapse. A single
+// whole-sheet title is a space identity for cross-sheet collapse, not a
+// same-sheet dual-view. A real repeat *inside* one viewport is a no-op —
+// assignment is column-major (title under its view), and collapseGroup
+// still requires 2+ sheets.
 //
 // This is the same "a redundant view is not a second install" doctrine as
 // the cross-sheet path below, applied to the same-sheet case that path's
 // own sheet-grouping structurally cannot see.
 
 export interface ViewportTitleSpan { str: string; x: number; y: number; w?: number; h?: number }
-export interface SheetViewport { title: string; spaceKey: string; at: Point }
+export interface SheetViewport { title: string; spaceKey: string; at: Point; buildingKey?: string }
 
 const VIEWPORT_NOTE_RE = /\b(PROVIDE|SHALL|SEE\s|TYPICAL\s+FOR|NOTES?\b|REQUIREMENTS?|COMPLIANCE|MANUFACTURER|COORDINATE|BEFORE|AFTER|KEYED|INDICATED|REFERRING|RELEVANT|ACCESSIBLE|CONTINUATION)\b/i;
 const VIEWPORT_VIEW_RE = /\b(PLANS?|SECTIONS?|ELEVATIONS?)\b/;
 const VIEWPORT_SCOPE_RE = /\b(ROOM|AREA|LEVEL|FLOOR|ENLARGED|PARTIAL|MECH(?:ANICAL)?|ELEC(?:TRICAL)?)\b/;
 const VIEWPORT_TYPE_WORDS = /\b(ENLARGED|PARTIAL|DUCTWORK|DUCT|PIPING|PIPE|PLANS?|SECTIONS?|ELEVATIONS?|DETAILS?|DIAGRAM|VIEW|AND)\b/g;
+const VIEWPORT_FLOOR_PLAN = /\bFLOOR\s+PLANS?\b/g;
 const VIEWPORT_SECTION_NUM = /\bSECTION\s+\d+\b/g;
+const VIEWPORT_ORDINAL_FLOOR = /\b(FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|EIGHTH|NINTH|TENTH|ELEVENTH|TWELFTH|GROUND)\s+FLOOR\b/;
+const VIEWPORT_AREA_LETTER = /\bAREA\s+[A-Z]\b/;
+const VIEWPORT_DISCIPLINE_TOKEN = /^(MECHANICAL|ELECTRICAL|PLUMBING|HVAC|MECH|ELEC)$/;
+const VIEWPORT_BUILDING_STOP = /\b(MECHANICAL|ELECTRICAL|PLUMBING|HVAC|MECH|ELEC|ENLARGED|PARTIAL|DUCTWORK|DUCT|PIPING|PIPE|PLANS?|SECTIONS?|ELEVATIONS?|DETAILS?|ROOM|AREA|LEVEL|FLOOR|FLR|FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|EIGHTH|NINTH|TENTH|ELEVENTH|TWELFTH|GROUND)\b/;
 
 /** A short title caption naming a drawing viewport, not a sheet note or a
  *  title-block fragment. Purely structural — no project vocabulary. */
@@ -2073,9 +2079,25 @@ export function viewportSpaceKey(title: string): string {
     .toUpperCase()
     .replace(/[^A-Z0-9]+/g, " ")
     .replace(VIEWPORT_SECTION_NUM, " ")
+    .replace(VIEWPORT_FLOOR_PLAN, " ")
     .replace(VIEWPORT_TYPE_WORDS, " ")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+/** Site/building prefix of a plan title — the run before the first
+ *  discipline, view-type, or ordinal-floor word. Empty when the title
+ *  is only a discipline ("MECHANICAL - DUCT ENLARGED PLAN"). */
+export function buildingKeyFromTitle(title: string): string {
+  const s = title.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim();
+  const prefix = s.split(VIEWPORT_BUILDING_STOP)[0].trim();
+  return prefix;
+}
+
+/** Two area-letter tiles of one floor compare equal ("AREA A" vs "AREA B"
+ *  of the same FIRST FLOOR). LEVEL 1 vs LEVEL 2 stay distinct. */
+export function tileSpaceKey(spaceKey: string): string {
+  return spaceKey.replace(VIEWPORT_AREA_LETTER, "AREA").replace(/\s+/g, " ").trim();
 }
 
 const VIEWPORT_MERGE_PX = 160;
@@ -2095,11 +2117,15 @@ function normalizeViewportTitle(title: string): string {
 
 /** A sheet-category / key-plan caption, not one drawing. Plural PLANS
  *  without a view-type word is the title-block sheet name ("…ENLARGED
- *  PLANS"). Two or more floor/level numbers in one title is a key plan
- *  of several stories, not a single viewport. */
+ *  PLANS"). Three or more floor numbers, or a plural FLRS/FLOORS/LEVELS
+ *  listing two or more, is a key plan of several stories. A singular
+ *  "FLR 3 & 5" is one typical-pair viewport, not a key plan. */
 export function isSheetCategoryTitle(raw: string): boolean {
   const s = raw.replace(/\s+/g, " ").trim().toUpperCase();
-  if (placeNumbers(s).length >= 2) return true;
+  const nums = placeNumbers(s);
+  if (nums.length >= 3) return true;
+  const pluralFloors = /\b(FLRS|FLOORS|LEVELS)\b/.test(s);
+  if (nums.length >= 2 && pluralFloors) return true;
   const plural = /\b(PLANS|SECTIONS|ELEVATIONS)\b/.test(s);
   const viewType = /\b(DUCTWORK|DUCT|PIPING|PIPE)\b/.test(s) || /\bSECTION\s+\d+\b/.test(s);
   return plural && !viewType;
@@ -2122,15 +2148,25 @@ function isTitleBlockSpan(sp: ViewportTitleSpan, sheetW: number): boolean {
   return h > 3 * w && (sp.x + w / 2) > sheetW * 0.85;
 }
 
-/** Detect complementary titled viewports on one sheet. Returns [] unless
- *  at least two distinct, well-separated titles survive the filters — a
- *  single whole-sheet "FIRST FLOOR PLAN" is not a dual-view. Sheet-name
- *  captions (plural PLANS, a multi-floor key plan, the rotated right-hand
- *  title block) are not viewports: they steal marks from the real pair. */
+/** Detect titled viewports on one sheet. A single whole-sheet plan title
+ *  is a space identity for cross-sheet collapse (duct plan vs piping plan
+ *  of the same floor) but is not a same-sheet dual-view — that path still
+ *  requires two distinct captions. Sheet-name captions (plural PLANS, a
+ *  multi-floor key plan, the rotated right-hand title block) are not
+ *  viewports: they steal marks from the real pair. Category titles still
+ *  contribute a building key so an untitled enlarged crop can meet the
+ *  floor plan of the same site. */
 export function detectSheetViewports(spans: ViewportTitleSpan[], sheetWidthPx?: number): SheetViewport[] {
   const sheetW = sheetWidthPx && sheetWidthPx > 0
     ? sheetWidthPx
     : Math.max(1, ...spans.map((sp) => sp.x + (sp.w ?? 0)));
+  let sheetBuilding = "";
+  for (const sp of spans) {
+    const raw = sp.str.replace(/\s+/g, " ").trim();
+    if (!isViewportTitle(raw) && !isSheetCategoryTitle(raw)) continue;
+    const bk = buildingKeyFromTitle(raw);
+    if (bk && !sheetBuilding) sheetBuilding = bk;
+  }
   const found: SheetViewport[] = [];
   for (const sp of spans) {
     if (!isViewportTitle(sp.str)) continue;
@@ -2156,7 +2192,9 @@ export function detectSheetViewports(spans: ViewportTitleSpan[], sheetWidthPx?: 
     }
     found.push({ title, spaceKey, at });
   }
-  return found.length >= 2 ? found : [];
+  const building = sheetBuilding;
+  for (const v of found) v.buildingKey = buildingKeyFromTitle(v.title) || building;
+  return found;
 }
 
 const TITLE_ROW_PX = 80;
@@ -2176,39 +2214,83 @@ function medianY(row: SheetViewport[]): number {
   return row.reduce((s, v) => s + v.at[1], 0) / row.length;
 }
 
-/** A view title sits under its drawing. Partition the sheet into bands
- *  above each title row and columns between same-row titles — nearest-
- *  title Voronoi assigns a mark in the lower view to the upper title
- *  whenever that title is closer to the mark than the lower title is. */
+function medianX(col: SheetViewport[]): number {
+  return col.reduce((s, v) => s + v.at[0], 0) / col.length;
+}
+
+function clusterTitleColumns(viewports: SheetViewport[], sheetW: number): SheetViewport[][] {
+  const colPx = Math.max(120, sheetW * 0.15);
+  const sorted = [...viewports].sort((a, b) => a.at[0] - b.at[0] || a.at[1] - b.at[1]);
+  const cols: SheetViewport[][] = [];
+  for (const v of sorted) {
+    const col = cols.find((c) => Math.abs(medianX(c) - v.at[0]) <= colPx);
+    if (col) col.push(v);
+    else cols.push([v]);
+  }
+  return cols;
+}
+
+function assignInColumn(at: Point, col: SheetViewport[]): SheetViewport {
+  const rows = clusterTitleRows(col);
+  for (let i = 0; i < rows.length; i++) {
+    const yTop = i === 0 ? 0 : medianY(rows[i - 1]);
+    const yBot = medianY(rows[i]);
+    if (at[1] + 1 >= yTop && at[1] <= yBot + TITLE_ROW_PX) return rows[i][0];
+  }
+  if (rows.length && at[1] > medianY(rows[rows.length - 1])) return rows[rows.length - 1][0];
+  if (rows.length && at[1] < medianY(rows[0])) return rows[0][0];
+  return col[0];
+}
+
+/** A view title sits under its drawing. Partition the sheet into columns
+ *  first (a 2×2 grid's upper-left cell is not the upper-right title), then
+ *  into bands above each title in that column. Row-then-column assignment
+ *  steals a left-column mark into a right-column title that happens to sit
+ *  higher on the sheet. */
 export function assignMarkToViewport(
   at: Point, viewports: SheetViewport[], sheetW: number, sheetH: number,
 ): SheetViewport | null {
   if (!viewports.length) return null;
-  const rows = clusterTitleRows(viewports);
-  const pickInRow = (row: SheetViewport[]): SheetViewport => {
-    const ordered = [...row].sort((a, b) => a.at[0] - b.at[0]);
-    for (let j = 0; j < ordered.length; j++) {
-      const x0 = j === 0 ? 0 : (ordered[j - 1].at[0] + ordered[j].at[0]) / 2;
-      const x1 = j === ordered.length - 1 ? Math.max(sheetW, ordered[j].at[0] + 1) : (ordered[j].at[0] + ordered[j + 1].at[0]) / 2;
-      if (at[0] >= x0 && at[0] < x1) return ordered[j];
-    }
-    return ordered[ordered.length - 1];
-  };
-  for (let i = 0; i < rows.length; i++) {
-    const yTop = i === 0 ? 0 : medianY(rows[i - 1]);
-    const yBot = medianY(rows[i]);
-    if (at[1] + 1 >= yTop && at[1] <= yBot + TITLE_ROW_PX) return pickInRow(rows[i]);
+  if (viewports.length === 1) return viewports[0];
+  const cols = clusterTitleColumns(viewports, sheetW);
+  const ordered = [...cols].sort((a, b) => medianX(a) - medianX(b));
+  let col = ordered[ordered.length - 1];
+  for (let j = 0; j < ordered.length; j++) {
+    const x0 = j === 0 ? 0 : (medianX(ordered[j - 1]) + medianX(ordered[j])) / 2;
+    const x1 = j === ordered.length - 1
+      ? Math.max(sheetW, medianX(ordered[j]) + 1)
+      : (medianX(ordered[j]) + medianX(ordered[j + 1])) / 2;
+    if (at[0] >= x0 && at[0] < x1) { col = ordered[j]; break; }
   }
-  if (rows.length && at[1] > medianY(rows[rows.length - 1])) return pickInRow(rows[rows.length - 1]);
-  if (rows.length && at[1] < medianY(rows[0])) return pickInRow(rows[0]);
-  return viewports[0];
+  return assignInColumn(at, col);
 }
 
-/** A space key that names a room, floor, or level — safe to match across
- *  sheets. A bare discipline word ("MECHANICAL") is not: two enlarged
- *  rooms on two sheets would collapse. */
+/** A space key that names a room, floor, level, area tile, or a site
+ *  beyond a bare discipline word — safe to match across sheets. A bare
+ *  "MECHANICAL" is not: two enlarged rooms on two sheets would collapse. */
 export function spaceKeyIsLocated(spaceKey: string): boolean {
-  return /\b(ROOM|FLR|FLOOR|LEVEL|AREA)\b/.test(spaceKey) && /\d/.test(spaceKey);
+  if (/\b(ROOM|FLR|FLOOR|LEVEL|AREA)\b/.test(spaceKey) && /\d/.test(spaceKey)) return true;
+  if (VIEWPORT_AREA_LETTER.test(spaceKey)) return true;
+  if (VIEWPORT_ORDINAL_FLOOR.test(spaceKey)) return true;
+  const extra = spaceKey.split(/\s+/).filter((t) => t && !VIEWPORT_DISCIPLINE_TOKEN.test(t));
+  return extra.some((t) => /[A-Z]{3,}/.test(t));
+}
+
+/** Cross-sheet collapse identity. An enlarged crop whose own key is only
+ *  a discipline word inherits the sheet's building prefix so it can meet
+ *  that building's floor plan. Area-letter tiles stay distinct here —
+ *  a unique mark straddling a match line is folded later, only when each
+ *  tile sheet has exactly one instance. */
+export function collapseSpaceKey(title: string, spaceKey: string, buildingKey?: string): string | null {
+  let k = spaceKey.replace(/\s+/g, " ").trim();
+  const enlarged = /\bENLARGED\b/.test(title.toUpperCase());
+  const bldg = (buildingKey || "").trim();
+  if (enlarged && bldg && !spaceKeyIsLocated(k)) {
+    const parts = new Set(k.split(/\s+/).filter(Boolean));
+    if (![...bldg.split(/\s+/)].every((w) => parts.has(w))) k = `${bldg} ${k}`.trim();
+  }
+  if (!k || !spaceKeyIsLocated(k)) return null;
+  return k;
 }
 
 function dedupeSameSheetViewports<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
@@ -2261,27 +2343,57 @@ function dedupeSameSheetViewports<Id>(instances: RoomSweepInstance<Id>[]): Redun
 }
 
 /** Complementary views of one located space drawn on two sheets (a
- *  ductwork plan and a piping plan of the same floor). Same space-key
- *  doctrine as the same-sheet path; gated on a room/floor/level number
- *  so two untitled "MECHANICAL" enlarged rooms never meet. */
+ *  ductwork plan and a piping plan of the same floor, a floor plan and
+ *  an enlarged crop of the same building, two area tiles of one floor).
+ *  A bare "MECHANICAL" enlarged room still cannot meet another untitled
+ *  enlarged room — collapseSpaceKey stays null without a building prefix
+ *  or a room/floor/area token. */
 function dedupeCrossSheetViewports<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
   type Assigned = RoomSweepInstance<Id> & { vpSheet: string; spaceKey: string };
   const assigned: Assigned[] = [];
   for (const inst of instances) {
     if (!inst.discipline || !(inst.viewports?.length)) continue;
     const vp = assignMarkToViewport(inst.at, inst.viewports, inst.sheetWidthPx, inst.sheetHeightPx);
-    if (!vp || !spaceKeyIsLocated(vp.spaceKey)) continue;
-    assigned.push({ ...inst, vpSheet: inst.sheet, spaceKey: vp.spaceKey });
+    if (!vp) continue;
+    const spaceKey = collapseSpaceKey(vp.title, vp.spaceKey, vp.buildingKey);
+    if (!spaceKey) continue;
+    assigned.push({ ...inst, vpSheet: inst.sheet, spaceKey });
   }
+  const out: RedundantRoomView<Id>[] = [];
+  const dropped = new Set<Id>();
+  const pushCollapsed = (group: Assigned[]) => {
+    if (new Set(group.map((g) => g.vpSheet)).size < 2) return;
+    for (const r of collapseGroup<Id, Assigned>(group, (a) => a.spaceKey)) {
+      if (dropped.has(r.id)) continue;
+      dropped.add(r.id);
+      out.push(r);
+    }
+  };
   const bySpace = new Map<string, Assigned[]>();
   for (const a of assigned) {
     const arr = bySpace.get(a.spaceKey);
     if (arr) arr.push(a); else bySpace.set(a.spaceKey, [a]);
   }
-  const out: RedundantRoomView<Id>[] = [];
-  for (const group of bySpace.values()) {
-    if (new Set(group.map((g) => g.vpSheet)).size < 2) continue;
-    out.push(...collapseGroup<Id, Assigned>(group, (a) => a.spaceKey));
+  for (const group of bySpace.values()) pushCollapsed(group);
+
+  // Match-line tiles of one floor ("AREA A" / "AREA B") reprint a unique
+  // mark on both sides of the cut. Fold the area letter only when every
+  // contributing sheet has exactly one instance — two real units of a
+  // type-mark, one on each tile, stay independent.
+  const leftover = assigned.filter((a) => !dropped.has(a.id));
+  const byTile = new Map<string, Assigned[]>();
+  for (const a of leftover) {
+    const tile = tileSpaceKey(a.spaceKey);
+    if (tile === a.spaceKey) continue;
+    const arr = byTile.get(tile);
+    if (arr) arr.push(a); else byTile.set(tile, [a]);
+  }
+  for (const group of byTile.values()) {
+    const perSheet = new Map<string, number>();
+    for (const a of group) perSheet.set(a.vpSheet, (perSheet.get(a.vpSheet) ?? 0) + 1);
+    if (perSheet.size < 2) continue;
+    if (![...perSheet.values()].every((n) => n === 1)) continue;
+    pushCollapsed(group);
   }
   return out;
 }
@@ -2361,9 +2473,11 @@ export interface RoomSweepInstance<Id> {
   sheetWidthPx: number;
   sheetHeightPx: number;
   /** Titled drawing viewports on this sheet (duct plan vs piping plan,
-   *  section 1 vs 2). Empty / omitted when the sheet has fewer than two
-   *  recognizable view titles — the same-sheet viewport path then no-ops,
-   *  so a real repeat inside one drawing stays a real repeat. */
+   *  section 1 vs 2, or a single whole-sheet plan title). Empty / omitted
+   *  when no recognizable view title was read. Same-sheet complementary
+   *  collapse still requires two distinct captions; a lone title is only
+   *  a cross-sheet space identity. A real repeat inside one drawing stays
+   *  a real repeat. */
   viewports?: SheetViewport[];
 }
 export interface RedundantRoomView<Id> {
