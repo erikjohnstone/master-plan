@@ -125,11 +125,11 @@
     }
   },
   "follow_up": {
-    "prompt": "How many fan coils are scheduled in the ATCT, and is FCU-T11 on that schedule?",
+    "prompt": "Is DOAH-T1 on a dedicated outdoor-air schedule? Which title, and how many ATCT fan coils are scheduled including FCU-T11?",
     "expected": {
+      "doah_t1_schedule_title_contains": "HANDLING",
       "fcu_atct_count": 18,
-      "fcu_t11_on_schedule": true,
-      "note": "FCU-T11 is a scheduled ATCT mark (LOCATION 21004 BREAKROOM)."
+      "fcu_t11_on_schedule": true
     }
   },
   "expected": {
@@ -157,7 +157,7 @@
     },
     "doah_count": {
       "type": "integer",
-      "value": 4,
+      "value": 3,
       "tolerance": 0,
       "citation": {
         "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
@@ -175,7 +175,8 @@
         "ocr_confusables": true,
         "sheet_flexible": true,
         "bbox_flexible": true
-      }
+      },
+      "derivation": "Unique MARK keys on DEDICATED OUTDOOR AIR UNIT SCHEDULE pages (DOAH-A1/A2/M1). ATCT DOAH-T1 lives on DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE and is covered in the follow-up."
     },
     "fcu_count": {
       "type": "integer",
