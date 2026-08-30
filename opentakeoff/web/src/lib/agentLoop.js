@@ -100,6 +100,67 @@ export function toolsForGoal(goal, tools) {
     : tools;
 }
 
+/** Title-scan needles for multi-family schedule takeoffs. Returns Exact
+ *  query_table title strings still missing from the call log. */
+export function missingScheduleTitleScans(callLog, goal) {
+  const asksScheduleCounts = (
+    /\btakeoff\b/i.test(goal)
+    || /\bscheduled\s+(?:unit\s+)?counts?\b/i.test(goal)
+    || /\bequipment\s+(?:totals?|counts?)\b/i.test(goal)
+    || (/\b(?:how many|counts?|totals?|splits?)\b/i.test(goal)
+      && [/\bAHUs?\b/i, /\bDOAH\b|dedicated outdoor/i, /\bFCUs?\b|fan[\s-]*coils?\b/i, /\bVAVs?\b/i, /\bchillers?\b/i, /\bboilers?\b/i, /\bpoints?\s*list\b/i]
+        .filter((re) => re.test(goal)).length >= 3)
+  ) && /\b(?:AHU|FCU|VAV|DOAH|chiller|boiler|fan[\s-]*coil|points?\s*list|scheduled|equipment)\b/i.test(goal);
+  if (!asksScheduleCounts) return [];
+  const titleScans = callLog.filter(({ name, out, args }) => {
+    if (name !== "query_table" || out?.error) return false;
+    const q = out?.query || args || {};
+    const scoped = q.row_key != null && String(q.row_key).trim() !== ""
+      || q.column != null
+      || q.cell_value != null
+      || q.cell_contains != null;
+    return !scoped && Number.isFinite(Number(out?.count)) && Number(out.count) >= 1;
+  });
+  const namedPointsListTag = (() => {
+    const m = goal.match(
+      /\b((?:AHU|DOAH|FCU|VAV|CH|B)-[A-Z0-9]+(?:\/[A-Z0-9]+)?)\s*(?:BAS\s+)?points?\s*list\b|(?:BAS\s+)?points?\s*list\b[^.\n]{0,48}\b((?:AHU|DOAH|FCU|VAV|CH|B)-[A-Z0-9]+(?:\/[A-Z0-9]+)?)/i,
+    );
+    return m ? String(m[1] || m[2]).toUpperCase() : null;
+  })();
+  const familyNeedles = [];
+  if (/\bAHUs?\b/i.test(goal)) familyNeedles.push({ label: "AHU", titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED/i, title: "AIR HANDLING UNIT SCHEDULE" });
+  if (/\bDOAH\b|dedicated outdoor/i.test(goal)) familyNeedles.push({ label: "DOAH unit", titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i, title: "DEDICATED OUTDOOR AIR UNIT SCHEDULE" });
+  if (/\bFCU\b|fan[\s-]*coil/i.test(goal)) familyNeedles.push({ label: "FCU", titleRe: /FAN\s*COIL/i, title: "FAN COIL UNIT SCHEDULE" });
+  if (/\bVAVs?\b|variable[\s-]*air|volume control box/i.test(goal)) familyNeedles.push({ label: "VAV", titleRe: /VARIABLE AIR VOLUME|\bVAV\b|VOLUME CONTROL BOX/i, title: "VARIABLE AIR VOLUME" });
+  if (/\bair[\s-]*cooled chiller/i.test(goal)) familyNeedles.push({ label: "air-cooled chiller", titleRe: /AIR COOLED CHILLER/i, exclude: /HEAT RECOVERY/i, title: "AIR COOLED CHILLER SCHEDULE", minCount: 1 });
+  if (/\bheat[\s-]*recovery chiller/i.test(goal)) familyNeedles.push({ label: "heat-recovery chiller", titleRe: /HEAT RECOVERY/i, title: "HEAT RECOVERY CHILLER", minCount: 1 });
+  if (/\bboilers?\b/i.test(goal)) familyNeedles.push({ label: "boiler", titleRe: /BOILER/i, title: "BOILER SCHEDULE" });
+  if (/\bpoints?\s*list\b|BAS\b/i.test(goal)) {
+    const requireRe = namedPointsListTag
+      ? new RegExp(namedPointsListTag.split("/")[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i")
+      : null;
+    familyNeedles.push({
+      label: "points-list",
+      titleRe: /POINTS LIST/i,
+      require: requireRe,
+      title: namedPointsListTag ? `POINTS LIST ${namedPointsListTag.split("/")[0]}` : "POINTS LIST",
+    });
+  }
+  const scanTitleFull = (out) => [
+    out.query?.title,
+    out.matches?.[0]?.title?.text || out.matches?.[0]?.title,
+  ].filter(Boolean).map(String).join(" ");
+  return familyNeedles.filter((fam) => !titleScans.some(({ out }) => {
+    const title = scanTitleFull(out);
+    if (!fam.titleRe.test(title)) return false;
+    if (fam.exclude && fam.exclude.test(title)) return false;
+    if (fam.require && !fam.require.test(title)) return false;
+    const min = fam.minCount ?? 1;
+    if (Number(out.count) < min) return false;
+    return true;
+  })).map((fam) => fam.title).filter(Boolean);
+}
+
 export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   const successfulCount = callLog.some(({ name, out }) =>
     (name === "sweep_schedule_row" && Number.isFinite(out?.found))
@@ -1139,10 +1200,29 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return true;
     })).map((fam) => fam.label);
     if (missingFamilies.length) {
+      const titleByLabel = {
+        AHU: "AIR HANDLING UNIT SCHEDULE",
+        "DOAH unit": "DEDICATED OUTDOOR AIR UNIT SCHEDULE",
+        FCU: "FAN COIL UNIT SCHEDULE",
+        VAV: "VARIABLE AIR VOLUME",
+        "air-cooled chiller": "AIR COOLED CHILLER SCHEDULE",
+        "heat-recovery chiller": "HEAT RECOVERY CHILLER",
+        boiler: "BOILER SCHEDULE",
+        "points-list": namedPointsListTag
+          ? `POINTS LIST ${namedPointsListTag.split("/")[0]}`
+          : "POINTS LIST",
+      };
+      const exactScans = missingFamilies
+        .map((label) => titleByLabel[label])
+        .filter(Boolean)
+        .map((title) => `query_table title=${JSON.stringify(title)}`);
       const hint = namedPointsListTag && missingFamilies.includes("points-list")
         ? ` For the points-list, query_table title must include ${namedPointsListTag.split("/")[0]} (not a generic POINTS LIST rollup).`
         : "";
-      return `The goal asks for counts of ${missingFamilies.join(", ")}, but no title-scan query_table (no row_key) was run for those schedule families yet. Call query_table with each missing schedule title, copy count/building_tag_counts, then answer.${hint}`;
+      const exact = exactScans.length
+        ? ` Exact title-scan args already chosen: ${exactScans.join("; ")}.`
+        : "";
+      return `The goal asks for counts of ${missingFamilies.join(", ")}, but no title-scan query_table (no row_key) was run for those schedule families yet. Call query_table with each missing schedule title, copy count/building_tag_counts, then answer.${hint}${exact}`;
     }
     // Normalize unicode dashes so "Air‑cooled" / "DOAH‑A1" match ASCII patterns.
     const answerNorm = finalText.replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/g, "-");
@@ -1614,6 +1694,44 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
           correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
         }
       }
+      // Auto title-scans for missing schedule families (full takeoffs thrash on
+      // find_text and never finish counts — run Exact title needles now).
+      if (correction && /Exact title-scan args already chosen:/i.test(correction)) {
+        const scanRe = /query_table title=("(?:\\.|[^"])*"|'(?:\\.|[^'])*'|[^\s;]+)/g;
+        const scanSummaries = [];
+        for (const m of correction.matchAll(scanRe)) {
+          let title = m[1];
+          try {
+            if ((title.startsWith('"') && title.endsWith('"')) || (title.startsWith("'") && title.endsWith("'"))) {
+              title = JSON.parse(title.includes('"') ? title : `"${title.slice(1, -1)}"`);
+            }
+          } catch { /* keep raw */ }
+          title = String(title || "").trim();
+          if (!title) continue;
+          const args = { title };
+          emit({ type: "tool_start", name: "query_table", args });
+          let out;
+          try { out = await execute("query_table", args); }
+          catch (e) { out = { error: String((e && e.message) || e) }; }
+          if (out == null || typeof out !== "object") out = { result: out ?? null };
+          callLog.push({ id: `auto_title_scan_${callLog.length}`, name: "query_table", args, out });
+          emit({ type: "tool_end", name: "query_table", result: out });
+          if (!out.error) {
+            const sampleTitle = String(out.matches?.[0]?.title?.text || out.matches?.[0]?.title || title);
+            scanSummaries.push(
+              `${sampleTitle}: count=${out.count}`
+              + (out.building_tag_counts ? ` building_tag_counts=${JSON.stringify(out.building_tag_counts)}` : ""),
+            );
+          }
+        }
+        if (scanSummaries.length) {
+          messages.push({
+            role: "user",
+            content: `Auto title-scan results (copy these tool counts into the answer; do not invent totals):\n${scanSummaries.join("\n")}`,
+          });
+          correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+        }
+      }
       if (correction) {
         messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
         const needsMoreTools = /\bcall (?:query_table|find_text|read_sheet_text|sweep_schedule_row|highlight_citation|count_marks)\b/i.test(correction)
@@ -1737,18 +1855,53 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     // that highlight inventory rows forever). Nudge once: stop extra paints
     // and write the complete takeoff answer from retrieved cells.
     const paintCount = callLog.filter((c) => c.name === "highlight_citation" && !c.out?.error).length;
+    const findTextCount = callLog.filter((c) => c.name === "find_text").length;
     const hasQueryEvidence = callLog.some((c) =>
       c.name === "query_table" && !c.out?.error
       && (Number(c.out?.count) > 0 || (c.out?.matches || []).length > 0));
+    const takeoffLike = /\btakeoff\b|\bscheduled\s+(?:unit\s+)?counts?\b|\bequipment\s+(?:totals?|counts?)\b/i.test(goal);
+    // Mid-loop: auto-run missing family title-scans before the step cap
+    // (full HVAC takeoffs were burning 80 steps on find_text and never counting).
+    if (takeoffLike && iterations >= 8 && iterations % 4 === 0) {
+      const missingTitles = missingScheduleTitleScans(callLog, goal);
+      const scanSummaries = [];
+      for (const title of missingTitles) {
+        const args = { title };
+        emit({ type: "tool_start", name: "query_table", args });
+        let out;
+        try { out = await execute("query_table", args); }
+        catch (e) { out = { error: String((e && e.message) || e) }; }
+        if (out == null || typeof out !== "object") out = { result: out ?? null };
+        callLog.push({ id: `auto_title_scan_${callLog.length}`, name: "query_table", args, out });
+        emit({ type: "tool_end", name: "query_table", result: out });
+        if (!out.error) {
+          const sampleTitle = String(out.matches?.[0]?.title?.text || out.matches?.[0]?.title || title);
+          scanSummaries.push(
+            `${sampleTitle}: count=${out.count}`
+            + (out.building_tag_counts ? ` building_tag_counts=${JSON.stringify(out.building_tag_counts)}` : ""),
+          );
+        }
+      }
+      if (scanSummaries.length) {
+        messages.push({
+          role: "user",
+          content: `Auto title-scan results (copy these tool counts into the final answer; stop find_text browsing):\n${scanSummaries.join("\n")}\nEmit the COMPLETE takeoff answer now with every requested family count and cite MARK cells.`,
+        });
+        emit({ type: "text", text: "[Loop nudge: title-scans completed — write the takeoff answer.]" });
+        answerNudgeSent = true;
+      }
+    }
     const shouldNudgeAnswer = !answerNudgeSent && !lastDraftText && hasQueryEvidence
       && (consecutiveHighlightOnlyTurns >= 3
         || (paintCount >= 10 && iterations >= 14)
-        || (paintCount >= 6 && iterations >= Math.max(18, Math.floor(maxIterations * 0.35))));
+        || (paintCount >= 6 && iterations >= Math.max(18, Math.floor(maxIterations * 0.35)))
+        || (takeoffLike && findTextCount >= 6 && iterations >= 16)
+        || (takeoffLike && iterations >= 28));
     if (shouldNudgeAnswer) {
       answerNudgeSent = true;
       messages.push({
         role: "user",
-        content: "Stop painting additional inventory / off-ask rows. You already have query_table evidence and enough highlight_citation paints for the requested tags and fields. Do not call more tools unless a gate names Exact paint args still missing. Emit the COMPLETE final answer now: every requested count and attribute with sheet citations, using only retrieved cells.",
+        content: "Stop painting additional inventory / off-ask rows and stop extra find_text browsing. You already have query_table evidence and enough highlight_citation paints for the requested tags and fields. Do not call more tools unless a gate names Exact paint args still missing. Emit the COMPLETE final answer now: every requested count and attribute with sheet citations, using only retrieved cells.",
       });
       emit({ type: "text", text: "[Loop nudge: write the final answer now — stop inventory paint thrash.]" });
     }
