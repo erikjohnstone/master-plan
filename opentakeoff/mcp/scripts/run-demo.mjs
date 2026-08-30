@@ -104,11 +104,24 @@ function systemPrompt(truth) {
     type: spec.type,
     tolerance: spec.tolerance,
   }));
+  const needsInstalledQuantity = Object.hasOwn(truth.expected, "installed_quantity");
+  const nonTableFields = Object.entries(truth.expected)
+    .filter(([, spec]) => {
+      const citations = Array.isArray(spec.citations) ? spec.citations : [spec.citation];
+      return citations.some((citation) => citation && !citation.table_title);
+    })
+    .map(([name]) => name);
   return [
     "You are an HVAC/BAS estimator operating OpenTakeoff's production MCP API.",
     `The real drawing set ${truth.source_file} is already loaded.`,
     "Use deterministic tools for every factual claim. Never infer a value from the field names or invent a citation.",
-    "For plan placement and installed quantity, call sweep_schedule_row once with tagged_only:true; this returns the complete tagged count and exact tag_at locations while explicitly excluding the unnecessary unlabeled near-match audit. For schedule attributes, call query_table.",
+    needsInstalledQuantity
+      ? "Installed quantity is required: call sweep_schedule_row once with tagged_only:true; this returns the complete tagged count and exact tag_at locations while explicitly excluding the unnecessary unlabeled near-match audit."
+      : "Installed quantity is not requested. Do not call sweep_schedule_row merely for equipment_tag; cite equipment_tag from its exact schedule identity cell returned by query_table.",
+    "For schedule attributes and BAS points-list fields, call query_table. When the prompt gives a distinctive point description but asks you to discover its point mark, use cell_contains with that description, then read every requested field from row.all_cells.",
+    nonTableFields.length
+      ? `These required fields need drawing-text evidence rather than a table cell: ${nonTableFields.join(", ")}. Use sheet_graph to orient, then find_text/read_sheet_text to return their exact source text and bbox; do not substitute a schedule citation.`
+      : "No required field needs free drawing-text evidence.",
     "Group independent tool calls into the same response. Inspect each complete result before calling another tool, and never repeat an equivalent query.",
     "Use query_table cell_value for exact cross-table relationships and cell_contains when the related tag is embedded in a compound value; do not scan a whole table or infer a row without source text.",
     "Every query_table match includes row.all_cells. After the first matching row, use all_cells for every requested field on that row instead of making separate column calls.",
@@ -117,7 +130,9 @@ function systemPrompt(truth) {
     "The final JSON shape is:",
     '{"status":"done","answer":{"<field>":{"value":"typed value","citations":[{"sheet_id":"exact tool sheet","table_title":"when applicable","row_key":"when applicable","column":"when applicable","bbox_px":[x0,y0,x1,y1]}]}}}',
     "Translate every native tool citation into the final JSON citation shape: tool sheet → sheet_id, and tool bbox {x0,y0,x1,y1} → bbox_px [x0,y0,x1,y1]. Preserve the exact sheet string and coordinate numbers, but do not copy the tool object's key names or bbox object shape.",
-    "A schedule field uses its exact cell bbox. For equipment_tag and installed_quantity, use sweep_schedule_row.tag_citations and no schedule citation.",
+    needsInstalledQuantity
+      ? "A schedule field uses its exact cell bbox. For equipment_tag and installed_quantity in this quantity workflow, use sweep_schedule_row.tag_citations and no schedule citation."
+      : "Every requested schedule field, including equipment_tag, uses its exact query_table identity or value-cell bbox.",
     "A citation must name the exact source header and bbox of the cell containing that field's returned value. Never relabel a header, reuse another field's bbox, or use a row-level bbox for a cell value.",
     "For a related scheduled device's tag field, use query_table row.identity exactly; it selects the semantic identity header when duplicate cells contain the same tag.",
     "When both equipment_tag and installed_quantity are requested, cite the same plan tag_at bbox for both fields.",
@@ -263,7 +278,15 @@ export async function runToolCallingModel({
       });
     }
   }
-  throw new Error(`Model exceeded ${maxIterations} tool-use iterations.`);
+  const error = new Error(`Model exceeded ${maxIterations} tool-use iterations.`);
+  error.code = "ITERATION_LIMIT";
+  error.diagnostics = {
+    raw_model_responses: rawModelResponses,
+    tool_calls: toolCalls,
+    request_ids: requestIds,
+    model_version_identifier: resolvedModel,
+  };
+  throw error;
 }
 
 async function main() {
@@ -314,15 +337,55 @@ async function main() {
         },
       }));
     const started = performance.now();
-    const modelResult = await runToolCallingModel({
-      endpoint,
-      apiKey,
-      model,
-      prompt,
-      truth,
-      tools,
-      execute: (name, toolArgs) => callTool(client, name, toolArgs),
-    });
+    let modelResult;
+    try {
+      modelResult = await runToolCallingModel({
+        endpoint,
+        apiKey,
+        model,
+        prompt,
+        truth,
+        tools,
+        execute: (name, toolArgs) => callTool(client, name, toolArgs),
+      });
+    } catch (error) {
+      const elapsed = performance.now() - started;
+      const diagnostics = error?.diagnostics || {};
+      const failureRecord = {
+        schema_version: 1,
+        demo_id: truth.demo_id,
+        run_number: runNumber,
+        cold_cache: cold,
+        timestamp: startedAt,
+        ...runTimingMetadata(cold, setupLatencyMs),
+        local_run_id: randomUUID(),
+        transport: stdio ? "stdio_local_process" : "in_memory_local_process",
+        request_id: diagnostics.request_ids?.at(-1) ?? null,
+        request_ids: diagnostics.request_ids || [],
+        requested_model: model,
+        model_version_identifier: diagnostics.model_version_identifier || model,
+        latency_ms: +elapsed.toFixed(2),
+        status: "failed",
+        failure_class: error?.code === "ITERATION_LIMIT" ? "RETRIEVAL" : "PARSE",
+        failure: error instanceof Error ? error.message : String(error),
+        raw_model_responses: diagnostics.raw_model_responses || [],
+        tool_calls: [
+          { name: "load_plan", arguments: { path: basename(sourcePath) }, result: load },
+          { name: "sheet_graph", arguments: {}, result: sourceIndex },
+          ...(diagnostics.tool_calls || []),
+        ],
+      };
+      mkdirSync(dirname(resolve(outputPath)), { recursive: true });
+      writeFileSync(resolve(outputPath), `${JSON.stringify(failureRecord, null, 2)}\n`);
+      console.error(JSON.stringify({
+        output: resolve(outputPath),
+        status: failureRecord.status,
+        failure_class: failureRecord.failure_class,
+        failure: failureRecord.failure,
+        tool_calls: failureRecord.tool_calls.length,
+      }, null, 2));
+      throw error;
+    }
     const elapsed = performance.now() - started;
     const record = {
       schema_version: 1,

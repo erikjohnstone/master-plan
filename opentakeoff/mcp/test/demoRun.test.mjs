@@ -259,3 +259,39 @@ test("demo runner captures request IDs, raw replies, and complete tool payloads"
   });
   assert.equal(result.answer.answer.design_flow_gpm.value, 128.5);
 });
+
+test("demo runner preserves diagnostics when the model exceeds its iteration budget", async () => {
+  const toolReply = () => new Response(JSON.stringify({
+    id: "req-loop",
+    model: "test-model-v1",
+    choices: [{
+      message: {
+        role: "assistant",
+        content: null,
+        tool_calls: [{
+          id: "call-loop",
+          type: "function",
+          function: { name: "query_table", arguments: '{"row_key":"AHU-1"}' },
+        }],
+      },
+    }],
+  }), { status: 200 });
+  await assert.rejects(runToolCallingModel({
+    endpoint: "https://model.invalid/v1/chat/completions",
+    apiKey: "test-key",
+    model: "test-model",
+    prompt: "Find AHU-1.",
+    truth: { source_file: "set.pdf", expected: {} },
+    tools: [],
+    execute: async () => ({ is_error: false, data: { count: 1 } }),
+    fetchFn: async () => toolReply(),
+    maxIterations: 2,
+  }), (error) => {
+    assert.equal(error.code, "ITERATION_LIMIT");
+    assert.equal(error.diagnostics.raw_model_responses.length, 2);
+    assert.equal(error.diagnostics.tool_calls.length, 2);
+    assert.deepEqual(error.diagnostics.request_ids, ["req-loop", "req-loop"]);
+    assert.equal(error.diagnostics.model_version_identifier, "test-model-v1");
+    return true;
+  });
+});
