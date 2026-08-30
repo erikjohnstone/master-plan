@@ -56,13 +56,33 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     name: "query_table",
     args: { cell_contains: "AHU-1" },
     out: { matches: [] },
+  }, {
+    name: "sweep_schedule_row",
+    args: { tag: "AHU-1" },
+    out: { found: 1 },
   }], "Give me the matching control valve", "The matching control valve is 4 in.")!, /no query_table result/);
   assert.match(requiredEvidenceCorrection([], "Give me the matching control valve", "No matching control valve row was found.")!, /Before refusing/);
   assert.equal(requiredEvidenceCorrection([{
     name: "query_table",
     args: { cell_contains: "AHU-1" },
     out: { matches: [] },
+  }, {
+    name: "sweep_schedule_row",
+    args: { tag: "AHU-1" },
+    out: { found: 1 },
   }], "Give me the matching control valve", "No matching control valve row was found."), null);
+  assert.match(requiredEvidenceCorrection([
+    {
+      name: "sweep_schedule_row",
+      args: { tag: "AHU-1" },
+      out: { found: 1 },
+    },
+    {
+      name: "query_table",
+      args: { cell_contains: "AHU-2" },
+      out: { matches: [] },
+    },
+  ], "Give me the matching control valve", "No matching control valve row was found.")!, /Before refusing/);
   assert.equal(requiredEvidenceCorrection([{
     name: "query_table",
     out: { matches: [{ title: { text: "CHW CONTROL VALVE SCHEDULE" } }] },

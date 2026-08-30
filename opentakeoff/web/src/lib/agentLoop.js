@@ -41,14 +41,23 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     return "The final answer contains example or placeholder data. Never substitute example values for requested drawing facts. Retrieve each value from a successful tool result with a citation, or explicitly say the evidence was not found.";
   }
   if (/\bcontrol\s+valve\b/i.test(goal)) {
-    const valveMatch = callLog.filter(({ name }) => name === "query_table")
-      .flatMap(({ out }) => out?.matches || [])
-      .some((match) => /\bcontrol\s+valve\b/i.test(String(
-        match?.table || match?.title?.text || match?.title
-          || match?.row?.table || match?.row?.table_title || "",
-      )));
+    const tableTitle = (match) => String(
+      match?.table || match?.title?.text || match?.title
+        || match?.row?.table || match?.row?.table_title || "",
+    );
+    const tableMatches = callLog.filter(({ name }) => name === "query_table")
+      .flatMap(({ out }) => out?.matches || []);
+    const valveMatch = tableMatches.some((match) => /\bcontrol\s+valve\b/i.test(tableTitle(match)));
+    const equipmentTags = new Set([
+      ...callLog.filter(({ name, out }) =>
+        name === "sweep_schedule_row" && (out?.found ?? out?.total_found) > 0)
+        .map(({ args, out }) => String(args?.tag || out?.tag || "")),
+      ...tableMatches.filter((match) => !/\bcontrol\s+valve\b/i.test(tableTitle(match)))
+        .map((match) => String(match?.row?.identity?.text || match?.row?.key || "")),
+    ].map((tag) => tag.toUpperCase().replace(/[^A-Z0-9]/g, "")).filter(Boolean));
     const relationshipSearch = callLog.some(({ name, args }) =>
-      name === "query_table" && String(args?.cell_contains || "").trim());
+      name === "query_table"
+      && equipmentTags.has(String(args?.cell_contains || "").toUpperCase().replace(/[^A-Z0-9]/g, "")));
     const refusedValve = /\b(?:could not|can't|cannot|unable to|not found|no matching)\b.{0,80}\bcontrol\s+valve\b/i.test(finalText)
       || /\bcontrol\s+valve\b.{0,80}\b(?:could not|can't|cannot|unable to|not found|no matching)\b/i.test(finalText);
     if (!valveMatch && !relationshipSearch) {
