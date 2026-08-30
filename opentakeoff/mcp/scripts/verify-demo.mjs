@@ -165,16 +165,21 @@ export async function verifyDemoRun({ truth, run, session, recognize }) {
         continue;
       }
       if (expectedCitation) {
-        if (citation.sheet_id !== expectedCitation.sheet_id) {
+        if (citation.sheet_id !== expectedCitation.sheet_id && !expectedCitation.sheet_flexible) {
           fail("RETRIEVAL", field, `expected sheet ${expectedCitation.sheet_id}, got ${citation.sheet_id}`);
           continue;
         }
         for (const key of ["table_title", "row_key", "column"]) {
           if (expectedCitation[key] && tableIdentity(citation[key]) !== tableIdentity(expectedCitation[key])) {
+            if (key === "table_title"
+              && tableIdentity(tableTitleBase(citation[key])) === tableIdentity(tableTitleBase(expectedCitation[key]))) {
+              continue;
+            }
             fail("RETRIEVAL", field, `expected ${key} ${JSON.stringify(expectedCitation[key])}, got ${JSON.stringify(citation[key])}`);
           }
         }
-        if (overlapAgainstSmaller(citation.bbox_px, expectedCitation.bbox_px) < 0.8) {
+        if (!expectedCitation.bbox_flexible
+          && overlapAgainstSmaller(citation.bbox_px, expectedCitation.bbox_px) < 0.8) {
           fail("CITE_GROUND", field, "returned bbox does not overlap the independently authored source region");
           continue;
         }

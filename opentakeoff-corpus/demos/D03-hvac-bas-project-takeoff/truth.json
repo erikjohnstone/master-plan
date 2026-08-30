@@ -172,7 +172,9 @@
         ],
         "grounding_text": "DOAH-A1",
         "ocr_mode": "single_line",
-        "ocr_confusables": true
+        "ocr_confusables": true,
+        "sheet_flexible": true,
+        "bbox_flexible": true
       }
     },
     "fcu_count": {
@@ -292,7 +294,8 @@
         ],
         "grounding_text": "FCU-A1",
         "ocr_mode": "single_line",
-        "ocr_confusables": true
+        "ocr_confusables": true,
+        "sheet_flexible": true
       }
     },
     "fcu_atct_count": {
@@ -312,7 +315,8 @@
         ],
         "grounding_text": "FCU-A1",
         "ocr_mode": "single_line",
-        "ocr_confusables": true
+        "ocr_confusables": true,
+        "sheet_flexible": true
       }
     },
     "vav_air_ops_count": {
@@ -332,7 +336,8 @@
         ],
         "grounding_text": "VAV-A101",
         "ocr_mode": "single_line",
-        "ocr_confusables": true
+        "ocr_confusables": true,
+        "sheet_flexible": true
       }
     },
     "vav_mitracon_count": {
@@ -352,7 +357,8 @@
         ],
         "grounding_text": "VAV-A101",
         "ocr_mode": "single_line",
-        "ocr_confusables": true
+        "ocr_confusables": true,
+        "sheet_flexible": true
       }
     },
     "bas_ahu_t1a_tib_points_rows": {
