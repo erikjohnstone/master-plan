@@ -80,8 +80,8 @@ export function classifyTakeoffIntent(goal) {
   if (corpusKind === "control_valves") return "corpus_valves";
 
   const pointsListTakeoff = /\b(?:points?\s*list|DDC\s+points?(?:\s*list)?)\b/i.test(g)
-    && (/\b(?:AI|AO|BI|BO)\b/i.test(g) || /\bpoint[-\s]?type/i.test(g) || /\btakeoff\b/i.test(g))
-    && /\b(?:row\s+count|breakdown|totals?|takeoff)\b/i.test(g);
+    && (/\b(?:AI|AO|BI|BO)\b/i.test(g) || /\bpoint[-\s]?type/i.test(g) || goalAsksTakeoff(g))
+    && (/\b(?:row\s+counts?|breakdown|totals?|counts?)\b/i.test(g) || goalAsksTakeoff(g));
   if (pointsListTakeoff) return "points_takeoff";
 
   if (/\bfan[\s\-]*coil|\bFCUs?\b/i.test(g)
@@ -120,7 +120,9 @@ export function classifyTakeoffIntent(goal) {
 /** Extract explicit POINTS LIST / DDC list titles named in the goal. */
 export function namedPointsListTitles(goal) {
   const titles = [];
-  const re = /\b((?:POINTS LIST|FCU WITH[^.?\n]{0,80}DDC POINTS LIST|UNIT HEATER DDC POINTS LIST)[A-Z0-9\s\-\/]*)/gi;
+  // FCU WITH … must not span a comma into the next sibling title
+  // ("FCU WITH COOLING … LIST, FCU WITH HEATING … LIST").
+  const re = /\b((?:POINTS\s+LIST|UNIT\s+HEATER\s+DDC\s+POINTS\s+LIST|FCU\s+WITH[^,.\n?]{0,80}DDC\s+POINTS\s+LIST)[A-Z0-9\s\-\/]*)/gi;
   for (const m of String(goal || "").matchAll(re)) {
     const t = m[1].replace(/\s+/g, " ").trim().replace(/[,:;]+$/, "");
     if (t.length >= 12) titles.push(t);
