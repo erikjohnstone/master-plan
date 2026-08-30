@@ -112,8 +112,7 @@ Forty tools, in the order an agent tends to reach for them:
   markers labeled with a sibling key are excluded and say whose they are,
   unlabeled ones are withheld as questions; a leftover compound
   circuit/panel label on a sheet that already has a counted match is
-  promoted (`labeled_leftover`); a bare leftover promotes only when
-  withheld marker geometry sits beside it; a `TYP N` callout next to a
+  promoted (`labeled_leftover`); a `TYP N` callout next to a
   geometrically-confirmed tag multiplies that match only; and a row whose
   tag cannot be geometrically anchored is *refused with the reason*—a
   fingerprint is never guessed from text alone). Scanned sheets work

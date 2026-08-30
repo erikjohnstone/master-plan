@@ -284,12 +284,10 @@ test("leftoverLabeledOccs: no counted match — leftovers stay unpromoted (a not
   assert.deepEqual(leftoverLabeledOccs([], occ, new Set(), 20), []);
 });
 
-test("leftoverLabeledOccs: a bare leftover promotes only when withheld geometry sits beside it", () => {
+test("leftoverLabeledOccs: a bare leftover never promotes — only a compound circuit/panel label does", () => {
   const counted = [{ at: [100, 100] as Point, tag_at: [90, 90, 110, 110] as [number, number, number, number] }];
   const bareFar = tagNear([700, 700], 40, "exact");
   assert.equal(leftoverLabeledOccs(counted, [bareFar], new Set(), 20).length, 0);
-  const withheld = [{ at: [698, 698] as Point }];
-  assert.equal(leftoverLabeledOccs(counted, [bareFar], new Set(), 20, undefined, undefined, withheld, 40).length, 1);
   assert.equal(leftoverLabeledOccs(counted, [tagCompound([700, 700])], new Set(), 20).length, 1);
 });
 

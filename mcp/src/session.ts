@@ -3808,7 +3808,7 @@ export class Session {
     }
     const leftoverN = perSheet.reduce((n, p) => n + p.matches.filter((m) => m.labeled_leftover).length, 0);
     if (leftoverN) {
-      notes.push(`${leftoverN} counted from a leftover labeled occurrence on a sheet that already has a geometrically-confirmed "${t}" — the tag is drawn, the sibling marker did not clear the bar (a leader offset or a size-variant hatch); audit with view_sheet before trusting the count.`);
+      notes.push(`${leftoverN} counted from a leftover compound circuit/panel label on a sheet that already has a geometrically-confirmed "${t}" — the tag is drawn, the sibling marker did not clear the bar; audit with view_sheet before trusting the count.`);
     }
     const typN = perSheet.reduce((n, p) => n + p.matches.filter((m) => (m.count ?? 1) > 1).length, 0);
     if (typN) {

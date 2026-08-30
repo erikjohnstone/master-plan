@@ -1307,7 +1307,7 @@ export interface TagOcc {
   bbox: [number, number, number, number];
   /** How this occurrence was recovered. A compound circuit/panel label
    * ("R1 /C-11") is itself an instance marker; a bare exact/fragmented
-   * leftover needs nearby withheld geometry before it is counted. */
+   * leftover is a note unless other geometry already claimed it. */
   kind?: "exact" | "compound" | "fragmented";
 }
 
@@ -1676,10 +1676,10 @@ export interface SweepSheetMatch extends SweepMatch {
   /** The tag-text evidence bbox that put this match IN the count — a match
    * counts only when the row's own tag sits inside its footprint. */
   tag_at: [number, number, number, number];
-  /** True when this row was counted from a leftover labeled occurrence on a
-   * sheet that already has a geometrically-confirmed instance — the tag is
-   * drawn, the sibling marker did not clear the bar (leader offset, hatch
-   * size variance). Never a note on a sheet with zero confirmed matches. */
+  /** True when this row was counted from a leftover compound circuit/panel
+   * label on a sheet that already has a geometrically-confirmed instance —
+   * the tag is drawn, the sibling marker did not clear the bar. Never a
+   * bare note, and never a note on a sheet with zero confirmed matches. */
   labeled_leftover?: boolean;
   /** Installed quantity this match represents. 1 unless a `TYP N` callout
    * sits next to a geometrically-confirmed tag. Leftover labels stay 1. */
@@ -1707,12 +1707,12 @@ export function typicalMultiplierNear(spans: FlatSpan[], at: Point, radiusPx: nu
   return best;
 }
 
-/** Leftover own-tag occurrences on a sheet that already has ≥1 counted
- * match, sitting farther than one mark-cluster from every counted instance.
- * Those are sibling installs whose marker failed to match, not a second
- * label on the same device and not a note on a sheet with no confirmed
- * instance. Pure — both classifySweepMatches and classifyInlineMotifMatches
- * call this so canvas and MCP cannot disagree. */
+/** Leftover compound circuit/panel labels on a sheet that already has ≥1
+ * counted match, sitting farther than one mark-cluster from every counted
+ * instance. Those are sibling installs whose marker failed to match, not a
+ * second label on the same device and not a note on a sheet with no
+ * confirmed instance. Pure — both classifySweepMatches and
+ * classifyInlineMotifMatches call this so canvas and MCP cannot disagree. */
 export function leftoverLabeledOccs(
   matches: Array<{ at: Point; tag_at: [number, number, number, number] }>,
   occ: TagOcc[],
@@ -1720,8 +1720,6 @@ export function leftoverLabeledOccs(
   clusterR: number,
   excludeCenter?: Point,
   excludeR?: number,
-  withheld?: { at: Point }[],
-  withheldR?: number,
 ): TagOcc[] {
   if (!matches.length) return [];
   const out: TagOcc[] = [];
@@ -1737,13 +1735,10 @@ export function leftoverLabeledOccs(
     });
     if (clustered) continue;
     // A compound circuit/panel label is the instance. A bare leftover is
-    // only an instance when withheld geometry already sits beside it
-    // (the marker was found, the claim radius missed). A bare tag with
-    // no nearby marker is a note — the fixture's own T1 text_only case.
-    const compound = o.kind === "compound";
-    const nearWithheld = (withheld ?? []).some((w) =>
-      Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= (withheldR ?? clusterR));
-    if (!compound && !nearWithheld) continue;
+    // a note (the fixture's own T1 text_only case) or a single labeled
+    // near-miss that classifySweepMatches already withholds as the
+    // schematic-versus-plan extra — never a second install by text alone.
+    if (o.kind !== "compound") continue;
     out.push(o);
   }
   return out;
@@ -1908,7 +1903,7 @@ export function classifySweepMatches(
       && !(ex && Math.hypot(o.cx - ex[0], o.cy - ex[1]) <= R))
     .map((o) => ({ at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10] as Point }));
   const clusterR = MARK_CLUSTER_K * Math.max(anchorH, 6);
-  const leftovers = leftoverLabeledOccs(matches, occ, matchedOcc, clusterR, ex, R, withheld, R);
+  const leftovers = leftoverLabeledOccs(matches, occ, matchedOcc, clusterR, ex, R);
   for (const o of leftovers) {
     matches.push({
       at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10],
