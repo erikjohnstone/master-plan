@@ -140,6 +140,11 @@ export const queryTableOutput = {
     headers: z.array(z.string()),
     row: z.object({
       key: z.string(),
+      identity: z.object({
+        header: z.string(),
+        text: z.string(),
+        bbox: sourceBox,
+      }).nullable(),
       cells: z.record(z.string(), z.object({
         text: z.string(),
         bbox: sourceBox,
@@ -941,6 +946,10 @@ export const sweepScheduleRowOutput = {
     })).describe("Every row cell with its exact source text and bbox; use this instead of the row-level citation for field answers"),
     citation: wireEvidence,
   }).describe("The schedule row the sweep was seeded from — the condition's source"),
+  tag_citations: z.array(z.object({
+    sheet: z.string(),
+    bbox: wireBox,
+  })).describe("One exact plan tag bbox per counted placement; use for the equipment tag and installed quantity"),
   anchor: z.object({
     sheet: z.string().describe("The plan sheet the fingerprint was anchored on"),
     at: z.tuple([z.number(), z.number()]).describe("The anchoring tag occurrence's center (image px)"),

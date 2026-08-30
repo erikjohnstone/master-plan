@@ -2560,6 +2560,8 @@ test("query_table joins through an exact non-key cell value", async () => {
   assert.equal(r.data.count, 2);
   assert.equal(r.data.query.cell_value, "transition");
   assert.deepEqual(r.data.matches.map((match: any) => match.row.key), ["T1", "T2"]);
+  assert.equal(r.data.matches[0].row.identity.header, "CODE");
+  assert.equal(r.data.matches[0].row.identity.text, "T1");
   assert.equal(r.data.matches.every((match: any) => match.row.cells.MATERIAL.text === "TRANSITION"), true);
   assert.equal(r.data.matches[0].row.all_cells.DESCRIPTION.text, "EDGE STRIP RESILIENT");
 
@@ -2784,6 +2786,8 @@ test("sweep_schedule_row tagged_only preserves the complete tagged count and dis
   assert.equal(r.data.search_scope, "tagged_only");
   assert.equal(r.data.unlabeled_audit_complete, false);
   assert.equal(r.data.found, 5);
+  assert.equal(r.data.tag_citations.length, 5);
+  assert.equal(r.data.tag_citations.every((citation: any) => citation.bbox.x1 > citation.bbox.x0), true);
   assert.deepEqual(r.data.sheets.map((sheet: any) => [sheet.sheet, sheet.found]), [
     ["symbol-set.pdf", 3],
     ["symbol-set.pdf#2", 2],

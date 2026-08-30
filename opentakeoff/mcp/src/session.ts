@@ -4300,6 +4300,11 @@ export class Session {
         cell_citations: cellCitations,
         citation: { sheet: tb.sheet, text: `${table} row ${t}`, bbox: Session.wireBox(firstCell?.bbox || tb.region) },
       },
+      tag_citations: perSheet.flatMap((sheet) => sheet.matches.flatMap((match) =>
+        Array.from({ length: match.multiplier ?? 1 }, () => ({
+          sheet: sheet.state.key,
+          bbox: Session.wireBox(match.tag_at),
+        })))),
       anchor: {
         sheet: anchorSheet.key,
         at: [round1(anchor.cx), round1(anchor.cy)],

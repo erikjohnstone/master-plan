@@ -608,6 +608,15 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
           const cell = row.cells[header];
           return cell?.text ? [[header, { text: cell.text, bbox: cell.bbox }]] : [];
         }));
+        const rowKey = row.key.trim().toUpperCase().replace(/\s+/g, "");
+        const identityHeaders = table.headers.filter((header) =>
+          allCells[header]?.text.trim().toUpperCase().replace(/\s+/g, "") === rowKey);
+        const titleText = (table.title?.text || "").toUpperCase();
+        const identityHeader = identityHeaders.find((header) =>
+          header.toUpperCase().split(/\s+/).some((word) =>
+            !["ID", "MARK", "CODE", "SYMBOL", "TAG", "NO", "NUMBER"].includes(word)
+            && titleText.includes(word))) ?? identityHeaders[0];
+        const identityCell = identityHeader ? allCells[identityHeader] : null;
         const cells = Object.fromEntries(selectedHeaders.flatMap((header) => {
           const cell = row.cells[header];
           return cell?.text ? [[header, { text: cell.text, bbox: cell.bbox }]] : [];
@@ -619,7 +628,16 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
           title: table.title ? { text: table.title.text, bbox: table.title.bbox } : null,
           region: table.region,
           headers: selectedHeaders,
-          row: { key: row.key, cells, all_cells: allCells },
+          row: {
+            key: row.key,
+            identity: identityCell ? {
+              header: identityHeader,
+              text: identityCell.text,
+              bbox: identityCell.bbox,
+            } : null,
+            cells,
+            all_cells: allCells,
+          },
         }];
       });
     });
