@@ -193,7 +193,7 @@ try {
     await page.locator('button[title^="Sheet — the sheets in this set"]').click();
     const item = page.getByText(needle, { exact: true }).last();
     await item.waitFor({ state: "visible", timeout: 10_000 });
-    await item.click();
+    await item.click({ force: true });
     await page.getByText("Rendering sheet…").waitFor({ state: "hidden", timeout: 120_000 });
     await page.waitForTimeout(750);
     const fit = page.getByRole("button", { name: "fit", exact: true });
