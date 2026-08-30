@@ -125,7 +125,7 @@ D05 locked; next: D06.
 
 ## D06 selection record
 
-Status: `SELECTED — ground truth authored; N=5 pending`
+Status: `LOCKED — API 5/5 + stdio + UI proof (expandable cards + verified follow-up)`
 
 Target holds on `itd-d1-lab` (29 sheets). Slate CHW wording adapted to the
 set's real **HW reheat control valves** CV-1..9 plus **bypass** BCV-1 (no
@@ -133,3 +133,5 @@ dedicated CHW control-valve schedule on this PDF). Dense sibling air-valve
 schedules remain as distractors. Installed plan tags confirmed via
 `sweep_schedule_row` (qty 1 each for CV-1/5/9/BCV-1). Ground truth authored
 before model runs in `D06-control-valve-takeoff/`.
+
+D06 locked; next: D07.

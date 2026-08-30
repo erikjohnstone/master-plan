@@ -65,7 +65,12 @@ export function citationProvenanceErrors(answer, toolCalls) {
       : []));
   if (!planTags.size) return [];
   const errors = [];
-  for (const field of ["equipment_tag", "installed_quantity"]) {
+  // Field names may be bare (`installed_quantity`) or scoped
+  // (`cv_1_installed_quantity`, `rtu_1_equipment_tag`) when one prompt
+  // asks for several tags.
+  const fields = Object.keys(answer?.answer || {}).filter((field) =>
+    /(?:^|_)(?:equipment_tag|installed_quantity)$/i.test(field));
+  for (const field of fields) {
     const citations = answer?.answer?.[field]?.citations;
     if (!Array.isArray(citations) || !citations.length) continue;
     for (const citation of citations) {
@@ -266,19 +271,24 @@ function systemPrompt(truth) {
     type: spec.type,
     tolerance: spec.tolerance,
   }));
-  const needsInstalledQuantity = Object.hasOwn(truth.expected, "installed_quantity");
+  const needsInstalledQuantity = Object.keys(truth.expected).some((name) =>
+    /(?:^|_)installed_quantity$/i.test(name));
   const nonTableFields = Object.entries(truth.expected)
     .filter(([, spec]) => {
       const citations = Array.isArray(spec.citations) ? spec.citations : [spec.citation];
       return citations.some((citation) => citation && !citation.table_title);
     })
     .map(([name]) => name);
+  const installedFields = Object.keys(truth.expected).filter((name) =>
+    /(?:^|_)installed_quantity$/i.test(name));
+  const equipmentTagFields = Object.keys(truth.expected).filter((name) =>
+    /(?:^|_)equipment_tag$/i.test(name));
   return [
     "You are an HVAC/BAS estimator operating OpenTakeoff's production MCP API.",
     `The real drawing set ${truth.source_file} is already loaded.`,
     "Use deterministic tools for every factual claim. Never infer a value from the field names or invent a citation.",
     needsInstalledQuantity
-      ? "Installed quantity is required: call sweep_schedule_row once with tagged_only:true; this returns the complete tagged count and exact tag_at locations while explicitly excluding the unnecessary unlabeled near-match audit."
+      ? `Installed quantity is required (${installedFields.join(", ")}): call sweep_schedule_row once per requested tag (tagged_only:true is preferred); this returns the complete tagged count and exact tag_at locations while explicitly excluding the unnecessary unlabeled near-match audit.`
       : "Installed quantity is not requested. Do not call sweep_schedule_row merely for equipment_tag; cite equipment_tag from its exact schedule identity cell returned by query_table.",
     "For schedule attributes and BAS points-list fields, call query_table. When the prompt gives a distinctive point description but asks you to discover its point mark, use cell_contains with that description, then read every requested field from row.all_cells.",
     "Never invent a table-title filter from the user's category words. Omit title on the first query, or use only a literal title phrase already returned by a tool (for example POINTS LIST); 'BAS points' does not imply a table literally titled BAS POINTS.",
@@ -300,7 +310,7 @@ function systemPrompt(truth) {
     '{"status":"done","answer":{"<field>":{"value":"typed value","citations":[{"sheet_id":"exact tool sheet","table_title":"when applicable","row_key":"when applicable","column":"when applicable","bbox_px":[x0,y0,x1,y1]}]}}}',
     "Translate every native tool citation into the final JSON citation shape: tool sheet → sheet_id, and tool bbox {x0,y0,x1,y1} → bbox_px [x0,y0,x1,y1]. Preserve the exact sheet string and coordinate numbers, but do not copy the tool object's key names or bbox object shape. Never emit a citation key named sheet.",
     needsInstalledQuantity
-      ? "A schedule field uses its exact cell bbox. For equipment_tag and installed_quantity in this quantity workflow, use sweep_schedule_row.tag_citations and no schedule citation."
+      ? `A schedule field uses its exact cell bbox. For ${[...equipmentTagFields, ...installedFields].join(", ") || "equipment_tag and installed_quantity"} in this quantity workflow, use sweep_schedule_row.tag_citations and no schedule citation.`
       : "Every requested schedule field, including equipment_tag, uses its exact query_table identity or value-cell bbox.",
     "A citation must name the exact source header and bbox of the cell containing that field's returned value. Never relabel a header, reuse another field's bbox, or use a row-level bbox for a cell value.",
     "For a related scheduled device's tag field, use query_table row.identity exactly; it selects the semantic identity header when duplicate cells contain the same tag.",

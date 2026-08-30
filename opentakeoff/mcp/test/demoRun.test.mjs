@@ -234,6 +234,13 @@ test("demo runner rejects schedule citations when plan tag evidence exists", () 
           table_title: "CHILLER SCHEDULE",
         }],
       },
+      cv_1_installed_quantity: {
+        value: 1,
+        citations: [{
+          sheet_id: "set.pdf#13",
+          bbox_px: [100, 100, 110, 110],
+        }],
+      },
     },
   };
   const toolCalls = [{
@@ -243,6 +250,9 @@ test("demo runner rejects schedule citations when plan tag evidence exists", () 
         tag_citations: [{
           sheet: "set.pdf#3",
           bbox: { x0: 1, y0: 2, x1: 3, y1: 4 },
+        }, {
+          sheet: "set.pdf#5",
+          bbox: { x0: 10, y0: 20, x1: 30, y1: 40 },
         }],
       },
     },
@@ -250,6 +260,7 @@ test("demo runner rejects schedule citations when plan tag evidence exists", () 
   assert.deepEqual(citationProvenanceErrors(answer, toolCalls), [
     "equipment_tag must cite a plan tag returned by sweep_schedule_row.tag_citations",
     "installed_quantity uses a plan tag citation, so table_title, row_key, and column must be null or omitted",
+    "cv_1_installed_quantity must cite a plan tag returned by sweep_schedule_row.tag_citations",
   ]);
 });
 
