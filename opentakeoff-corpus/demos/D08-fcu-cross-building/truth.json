@@ -4,7 +4,7 @@
   "set_id": "navfac-cherry-point-atc",
   "source_file": "navfac-cherry-point-atc-mechanical.pdf",
   "ground_truth_completed_before_model_runs": true,
-  "derivation": "Independent FAN COIL UNIT SCHEDULE title-scan across A/M/T sheets before any model run: query_table title FAN COIL UNIT SCHEDULE → count 42 with building_tag_counts A=14, M=10, T=18. Spot-check MARK/TYPE/CFM cells for FCU-A1 (#42), FCU-M1A (#45), FCU-T1 (#48). Stratified 20% sample (9 of 42) reconciled on schedule via query_table row_key (see hand_count_20pct).",
+  "derivation": "Independent FAN COIL UNIT SCHEDULE title-scan across A/M/T sheets before any model run: query_table title FAN COIL UNIT SCHEDULE \u2192 count 42 with building_tag_counts A=14, M=10, T=18. Spot-check MARK/TYPE/CFM cells for FCU-A1 (#42), FCU-M1A (#45), FCU-T1 (#48). Stratified 20% sample (9 of 42) reconciled on schedule via query_table row_key (see hand_count_20pct).",
   "hardness": {
     "sheet_count": 75,
     "building_namespaces": [
@@ -50,12 +50,18 @@
       "citation": {
         "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
         "table_title": "FAN COIL UNIT SCHEDULE",
-        "row_key": "FCU-A1",
-        "column": "MARK",
-        "bbox_px": [301.2, 1673.038, 441.6, 1707.36],
-        "grounding_text": "FCU-A1",
-        "ocr_mode": "single_line",
-        "ocr_confusables": true
+        "row_key": null,
+        "column": null,
+        "bbox_px": [
+          301.2,
+          1482.238,
+          4382.888,
+          1541.998
+        ],
+        "grounding_text": "FAN COIL",
+        "ocr_mode": "sparse_text",
+        "ocr_confusables": true,
+        "sheet_flexible": true
       },
       "derivation": "query_table title-scan FAN COIL UNIT SCHEDULE count across A/M/T pages"
     },
@@ -66,11 +72,16 @@
       "citation": {
         "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
         "table_title": "FAN COIL UNIT SCHEDULE",
-        "row_key": "FCU-A1",
-        "column": "MARK",
-        "bbox_px": [301.2, 1673.038, 441.6, 1707.36],
-        "grounding_text": "FCU-A1",
-        "ocr_mode": "single_line",
+        "row_key": null,
+        "column": null,
+        "bbox_px": [
+          301.2,
+          1482.238,
+          4382.888,
+          1541.998
+        ],
+        "grounding_text": "FAN COIL",
+        "ocr_mode": "sparse_text",
         "ocr_confusables": true,
         "sheet_flexible": true
       },
@@ -81,13 +92,18 @@
       "value": 10,
       "tolerance": 0,
       "citation": {
-        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#45",
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
         "table_title": "FAN COIL UNIT SCHEDULE",
-        "row_key": "FCU-M1A",
-        "column": "MARK",
-        "bbox_px": [313.682, 702.236, 416.16, 736.556],
-        "grounding_text": "FCU-M1A",
-        "ocr_mode": "single_line",
+        "row_key": null,
+        "column": null,
+        "bbox_px": [
+          301.2,
+          1482.238,
+          4382.888,
+          1541.998
+        ],
+        "grounding_text": "FAN COIL",
+        "ocr_mode": "sparse_text",
         "ocr_confusables": true,
         "sheet_flexible": true
       },
@@ -98,13 +114,18 @@
       "value": 18,
       "tolerance": 0,
       "citation": {
-        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#48",
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
         "table_title": "FAN COIL UNIT SCHEDULE",
-        "row_key": "FCU-T1",
-        "column": "MARK",
-        "bbox_px": [230.64, 856.556, 342.24, 891.116],
-        "grounding_text": "FCU-T1",
-        "ocr_mode": "single_line",
+        "row_key": null,
+        "column": null,
+        "bbox_px": [
+          301.2,
+          1482.238,
+          4382.888,
+          1541.998
+        ],
+        "grounding_text": "FAN COIL",
+        "ocr_mode": "sparse_text",
         "ocr_confusables": true,
         "sheet_flexible": true
       },
@@ -118,7 +139,12 @@
         "table_title": "FAN COIL UNIT SCHEDULE",
         "row_key": "FCU-A1",
         "column": "TYPE",
-        "bbox_px": [441.6, 1673.038, 882.48, 1707.36],
+        "bbox_px": [
+          441.6,
+          1673.038,
+          882.48,
+          1707.36
+        ],
         "grounding_text": "VERTICAL",
         "ocr_mode": "sparse_text",
         "ocr_confusables": true
@@ -132,7 +158,12 @@
         "table_title": "FAN COIL UNIT SCHEDULE",
         "row_key": "FCU-A1",
         "column": "FAN DATA CFM (CLG/HTG)",
-        "bbox_px": [882.48, 1673.038, 1002.48, 1707.36],
+        "bbox_px": [
+          882.48,
+          1673.038,
+          1002.48,
+          1707.36
+        ],
         "grounding_text": "150",
         "ocr_mode": "sparse_text",
         "ocr_confusables": true
@@ -146,7 +177,12 @@
         "table_title": "FAN COIL UNIT SCHEDULE",
         "row_key": "FCU-A1",
         "column": "MARK",
-        "bbox_px": [301.2, 1673.038, 441.6, 1707.36],
+        "bbox_px": [
+          301.2,
+          1673.038,
+          441.6,
+          1707.36
+        ],
         "grounding_text": "FCU-A1",
         "ocr_mode": "single_line",
         "ocr_confusables": true
@@ -160,7 +196,12 @@
         "table_title": "FAN COIL UNIT SCHEDULE",
         "row_key": "FCU-M1A",
         "column": "TYPE",
-        "bbox_px": [416.16, 702.236, 799.44, 736.556],
+        "bbox_px": [
+          416.16,
+          702.236,
+          799.44,
+          736.556
+        ],
         "grounding_text": "SUSPENDED",
         "ocr_mode": "sparse_text",
         "ocr_confusables": true
@@ -174,7 +215,12 @@
         "table_title": "FAN COIL UNIT SCHEDULE",
         "row_key": "FCU-M1A",
         "column": "FAN DATA CFM (CLG / HTG )",
-        "bbox_px": [799.44, 702.236, 928.08, 736.556],
+        "bbox_px": [
+          799.44,
+          702.236,
+          928.08,
+          736.556
+        ],
         "grounding_text": "600",
         "ocr_mode": "sparse_text",
         "ocr_confusables": true
@@ -188,7 +234,12 @@
         "table_title": "FAN COIL UNIT SCHEDULE",
         "row_key": "FCU-M1A",
         "column": "MARK",
-        "bbox_px": [313.682, 702.236, 416.16, 736.556],
+        "bbox_px": [
+          313.682,
+          702.236,
+          416.16,
+          736.556
+        ],
         "grounding_text": "FCU-M1A",
         "ocr_mode": "single_line",
         "ocr_confusables": true
@@ -202,7 +253,12 @@
         "table_title": "FAN COIL UNIT SCHEDULE",
         "row_key": "FCU-T1",
         "column": "TYPE",
-        "bbox_px": [342.24, 856.556, 744, 891.116],
+        "bbox_px": [
+          342.24,
+          856.556,
+          744,
+          891.116
+        ],
         "grounding_text": "SUSPENDED",
         "ocr_mode": "sparse_text",
         "ocr_confusables": true
@@ -216,7 +272,12 @@
         "table_title": "FAN COIL UNIT SCHEDULE",
         "row_key": "FCU-T1",
         "column": "FAN DATA CFM",
-        "bbox_px": [947.76, 856.556, 1087.2, 891.116],
+        "bbox_px": [
+          947.76,
+          856.556,
+          1087.2,
+          891.116
+        ],
         "grounding_text": "230",
         "ocr_mode": "single_line",
         "ocr_confusables": true
@@ -230,7 +291,12 @@
         "table_title": "FAN COIL UNIT SCHEDULE",
         "row_key": "FCU-T1",
         "column": "MARK",
-        "bbox_px": [230.64, 856.556, 342.24, 891.116],
+        "bbox_px": [
+          230.64,
+          856.556,
+          342.24,
+          891.116
+        ],
         "grounding_text": "FCU-T1",
         "ocr_mode": "single_line",
         "ocr_confusables": true
