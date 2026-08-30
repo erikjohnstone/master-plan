@@ -21,7 +21,7 @@ Fixture counts (396 / 122 / 163, building names, schedule titles) are
 | 2 | Complete BAS / DDC points takeoff | complete BAS points takeoff of this set; full DDC points takeoff on these drawings | `corpus_bas` → compile | T-BAS-01 (122) | ON_MAIN |
 | 3 | Complete control-valve takeoff | complete valve takeoff; complete control valve takeoff on this blueprint set | `corpus_valves` → compile; Takeoff UI: Building · CHW/HHW + Unit Mark + whole-row cites | T-VALVE-01 (163) | ON_MAIN |
 | 4 | Named multi-list points takeoff | Takeoff POINTS LIST … + DDC lists: row counts + AI/AO/BI/BO | `points_takeoff` | D10 | ROUTING |
-| 5 | FCU / fan-coil cross-building split | How many FCUs across buildings; compare fan-coil quantities by building | `fcu_buildings` | D08 | ROUTING |
+| 5 | FCU / fan-coil cross-building split | How many FCUs across buildings; compare fan-coil quantities by building | `fcu_buildings` | D08 | PROVEN |
 | 6 | Valve schedule + plan join | Take off CONTROL VALVE SCHEDULE + installed plan qty for CV-n | `valve_join` | D06 | ROUTING |
 | 7 | Equipment schedule family rollup | How many VAVs on the volume control box schedule + attributes | `equipment_schedule` | D04 | ROUTING |
 | 8 | Room ↔ HVAC coordination | Room-oriented HVAC package: finishes + diffusers + serving RTU | `room_coordination` | D09 | ROUTING |
