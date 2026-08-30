@@ -19,7 +19,7 @@ sheets. If the evidence does not hold, replace the target before N=5 runs.
 
 ## D01 selection record
 
-Status: `LOCKED — 5/5 clean; p95 3.988 s; production UI proof validated`
+Status: `LOCKED API 5/5 — UI MUST RE-PROVE under demo quality bar (intelligent prompt + full row values + answering-cell highlights, not mark-only flybys)`
 
 The target holds up. Independent graph extraction from the real NAVFAC PDF
 found the `AIR COOLED CHILLER SCHEDULE` and `CHW CONTROL VALVE SCHEDULE` on
