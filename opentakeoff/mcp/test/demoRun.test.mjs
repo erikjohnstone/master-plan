@@ -8,6 +8,7 @@ import {
   runTimingMetadata,
   runToolCallingModel,
 } from "../scripts/run-demo.mjs";
+import { formatDemoRun } from "../scripts/show-demo-run.mjs";
 
 test("demo runner exposes deterministic plan-location evidence tools", () => {
   assert.equal(DEMO_TOOLS.has("find_text"), true);
@@ -24,6 +25,31 @@ test("demo timing separates cold source indexing from live prompt latency", () =
       latency_ms: 1234.57,
     },
   });
+});
+
+test("local demo presenter shows transport, prompt, values, and citations", () => {
+  const text = formatDemoRun({
+    demo_id: "D01",
+    transport: "stdio_local_process",
+    model_version_identifier: "test-model",
+    request_id: "request-1",
+    latency_ms: 2500,
+    answer: {
+      capacity_tons: {
+        value: 56,
+        citations: [{
+          sheet_id: "set.pdf#44",
+          table_title: "CHILLER SCHEDULE",
+          column: "CAPACITY",
+          bbox_px: [1, 2, 3, 4],
+        }],
+      },
+    },
+  }, "Find CH-A1.");
+  assert.match(text, /Transport: stdio_local_process/);
+  assert.match(text, /FROZEN PROMPT\nFind CH-A1\./);
+  assert.match(text, /capacity_tons: 56/);
+  assert.match(text, /set\.pdf#44 \| CHILLER SCHEDULE \| CAPACITY \| bbox \[1,2,3,4\]/);
 });
 
 test("demo runner rejects schedule citations when plan tag evidence exists", () => {
