@@ -7,6 +7,11 @@ be proven on the hardest suitable blueprint set, run through the production API
 and a locally hosted environment, and locked by a regression test that fails
 loudly if the API drifts.
 
+Every local-host proof must be shown live in a saved screen recording. The
+recording must visibly show the locally hosted server, the frozen prompt, tool
+activity, final answer with citations, and the verification result; a written
+claim that localhost ran is not sufficient evidence.
+
 In a live review, each demo must answer these questions on the cited sheet in
 under ten seconds:
 
