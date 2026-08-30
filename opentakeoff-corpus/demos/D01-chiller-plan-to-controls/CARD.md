@@ -54,7 +54,8 @@ The production bundle was built and launched as a separate local stdio MCP
 process. `local-host-run.json` records `transport: "stdio_local_process"`,
 10/10 correct values, 10/10 resolvable citations, 10/10 OCR-grounded citations,
 and 3.449-second live latency. The saved walkthrough recording is the visible
-proof; a headless claim alone does not satisfy this card.
+proof; a headless claim alone does not satisfy this card. Artifact:
+`d01_live_localhost_proof.mp4`.
 
 ## Failure behavior
 
