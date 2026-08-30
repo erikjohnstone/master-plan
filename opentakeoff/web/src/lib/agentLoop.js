@@ -1128,6 +1128,38 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       }
     }
   }
+  // Narrow follow-ups: "how many ATCT fan coils … including FCU-T11?"
+  // must copy building_tag_counts.T from the FCU title-scan (A≠T; never swap).
+  const asksAtctFanCoilCount = /\bATCT\b/i.test(goal)
+    && /fan[\s\-]*coils?/i.test(goal)
+    && /\b(?:how many|count|scheduled|including)\b/i.test(goal);
+  if (asksAtctFanCoilCount && finalText) {
+    const fcuScan = callLog.find(({ name, out, args }) => {
+      if (name !== "query_table" || out?.error) return false;
+      const q = out?.query || args || {};
+      const scoped = q.row_key != null && String(q.row_key).trim() !== ""
+        || q.column != null || q.cell_value != null || q.cell_contains != null;
+      if (scoped) return false;
+      const title = String(q.title || out.matches?.[0]?.title?.text || out.matches?.[0]?.title || "");
+      return /FAN\s*COIL/i.test(title) && out.building_tag_counts && Number.isFinite(Number(out.building_tag_counts.T));
+    });
+    if (!fcuScan) {
+      return "The goal asks how many ATCT fan coils are scheduled. Call query_table with title FAN COIL UNIT SCHEDULE (no row_key), then copy building_tag_counts.T as the ATCT total (A=Air Ops, T=ATCT — never swap).";
+    }
+    const tCount = Number(fcuScan.out.building_tag_counts.T);
+    const aCount = Number(fcuScan.out.building_tag_counts.A);
+    const answerU = finalText.toUpperCase().replace(/[\u2010-\u2015\u2212]/g, "-");
+    const atctNear = (n) => new RegExp(
+      `(?:ATCT|T\\s*[=:]|T-TAG|T\\s+TAG)[^0-9]{0,48}\\b${n}\\b|\\b${n}\\b[^0-9]{0,48}(?:ATCT|T-TAG)`,
+      "i",
+    ).test(answerU);
+    if (!atctNear(tCount)) {
+      return `Tool evidence shows FAN COIL building_tag_counts.T=${tCount} (ATCT). Copy ATCT fan-coil count ${tCount} into the answer — A=Air Ops, T=ATCT; do not swap them.`;
+    }
+    if (Number.isFinite(aCount) && aCount !== tCount && atctNear(aCount) && !atctNear(tCount)) {
+      return `The answer assigns Air Ops count ${aCount} to ATCT. building_tag_counts map A=Air Ops and T=ATCT=${tCount} — use T=${tCount} for ATCT fan coils.`;
+    }
+  }
   // Full-set schedule takeoffs must use title-scan query_table counts — not
   // the number of MARK cells painted for spot-check.
   // Narrow follow-ups ("how many ATCT fan coils… including FCU-T11?") must NOT
@@ -1301,8 +1333,12 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       // from exploratory follow-up tools must not force a full inventory dump.
       const goalAskedThisFamily = familyNeedles.some((fam) => fam.label === label);
       if (!goalAskedThisFamily) continue;
-      if (!countNearLabel(label, count)) {
+      const foundNear = nearCountsForLabel(label);
+      if (!foundNear.includes(Number(count))) {
         missingCounts.push(`${label} count=${count}`);
+      } else if (foundNear[0] != null && foundNear[0] !== Number(count)) {
+        // Primary bold total disagrees with title-scan (e.g. DOAH **5** when tool count=3).
+        conflictingCounts.push(`${label} stated ${foundNear[0]} but title-scan count=${count}`);
       }
       if (out.building_tag_counts && typeof out.building_tag_counts === "object" && /\bsplit/i.test(goal)) {
         // Only enforce splits for families the goal actually asked to split —
@@ -1350,6 +1386,9 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     }
     if (missingCounts.length) {
       return `The goal asks for schedule counts, and title-scan query_table results are available, but the answer omits these tool counts next to their equipment family: ${[...new Set(missingCounts)].slice(0, 8).join("; ")}. Copy count (and building_tag_counts when splits are asked) from those tool results into the family totals — do not replace them with the number of MARKs you painted for spot-check, and do not leave a second contradictory totals table.`;
+    }
+    if (conflictingCounts.length) {
+      return `The answer's primary family totals conflict with title-scan query_table counts: ${[...new Set(conflictingCounts)].slice(0, 6).join("; ")}. Use the tool count as the scheduled total — do not sum continuation pages or sibling schedules into a larger figure.`;
     }
     // Reject dual inventory dumps (title-scan table + painted-only "equipment totals").
     if (/(?:title[\s_-]*scan|schedule counts)/i.test(answerNorm)
