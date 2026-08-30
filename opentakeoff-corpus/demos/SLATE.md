@@ -19,7 +19,7 @@ sheets. If the evidence does not hold, replace the target before N=5 runs.
 
 ## D01 selection record
 
-Status: `SELECTED — ground truth in progress`
+Status: `SELECTED — N=5 gate in progress`
 
 The target holds up. Independent graph extraction from the real NAVFAC PDF
 found the `AIR COOLED CHILLER SCHEDULE` and `CHW CONTROL VALVE SCHEDULE` on
@@ -33,3 +33,16 @@ The first rasterization also exposed and fixed an evidence-integrity blocker:
 the table renderer's old filenames omitted table identity, causing all nine
 page-44 table crops to overwrite one another. D01 cannot enter model runs until
 fresh unique crops are read and its `truth.json` is complete.
+
+## D02 selection record
+
+Status: `SELECTED — ground truth complete; no model runs started`
+
+The NAVFAC target holds up after direct rendering. MI731 contains one 62-row
+`POINTS LIST AHU-T1A/TIB` that interleaves AHU-T1A and AHU-T1B under repeated
+AI/AO/BI/BO marks. AI10 is specifically `AHU-T1A HW VALVE POSITION
+(FEEDBACK)`. Its controlled unit must then be joined to the separate M-621 air
+handling schedule, the physical `AHU-T1A / AHU-T1B SECTION`, and the M-002
+ATCT cab narrative. Those sources occupy four different sheets in a 75-sheet,
+three-building set, so the required BAS-to-equipment-to-location stress is
+genuine rather than inferred from the slate.
