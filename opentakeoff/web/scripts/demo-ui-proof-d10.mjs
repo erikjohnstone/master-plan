@@ -20,7 +20,7 @@ const pdf = resolve(corpus, "raw/navfac-cherry-point-atc-mechanical.pdf");
 const prompt = readFileSync(resolve(demo, "prompt.txt"), "utf8").trim();
 const truth = JSON.parse(readFileSync(resolve(demo, "truth.json"), "utf8"));
 const followUp = truth.follow_up?.prompt
-  || "On POINTS LIST AHU-T1A/TIB, how many point descriptions name AHU-T1A vs AHU-T1B, and how many are shared? Confirm AI10's description and alarm/trend.";
+  || "On POINTS LIST AHU-T1A/TIB, how many point descriptions name only AHU-T1A, how many name only AHU-T1B, and how many name neither (shared/common points)? Confirm AI10's description and alarm/trend.";
 
 const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
 const mcpServer = buildServer();
@@ -254,11 +254,18 @@ try {
     throw new Error("D10 follow-up missing Answer thread entry.");
   }
   const followNorm = normalize(followAnswer);
-  if (!/\b24\b/.test(followNorm)) {
+  const followCounts = String(followAnswer || "").toUpperCase()
+    .replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D‑–—]/g, "-")
+    .replace(/[\u00A0\u202F\u2007\t]+/g, " ");
+  if (!/(?:^|[^\d])24(?:[^\d]|$)/.test(followCounts)) {
     throw new Error("D10 follow-up missing AHU-T1A/T1B named counts (24).");
   }
-  if (!/\b14\b/.test(followNorm) && !/SHARED/i.test(followNorm)) {
-    throw new Error("D10 follow-up missing shared count 14.");
+  // Must be exactly 14 shared/neither — not 0 from a both-strings misread.
+  if (!/(?:^|[^\d])14(?:[^\d]|$)/.test(followCounts)) {
+    throw new Error("D10 follow-up missing shared/neither count 14.");
+  }
+  if (/SHARED[^\n]{0,40}\b0\b|\b0\b[^\n]{0,40}SHARED/i.test(followCounts)) {
+    throw new Error("D10 follow-up incorrectly reports shared=0 (should be 14 neither-named).");
   }
   if (!/HW VALVE POSITION|FEEDBACK/i.test(followNorm)) {
     throw new Error("D10 follow-up missing AI10 description.");

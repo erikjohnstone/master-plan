@@ -31,7 +31,7 @@
     }
   },
   "follow_up": {
-    "prompt": "On POINTS LIST AHU-T1A/TIB, how many point descriptions name AHU-T1A vs AHU-T1B, and how many are shared? Confirm AI10's description and alarm/trend.",
+    "prompt": "On POINTS LIST AHU-T1A/TIB, how many point descriptions name only AHU-T1A, how many name only AHU-T1B, and how many name neither (shared/common points)? Confirm AI10's description and alarm/trend.",
     "expected": {
       "ahu_t1a_named": 24,
       "ahu_t1b_named": 24,

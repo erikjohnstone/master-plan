@@ -15,9 +15,9 @@ Status: `IN PROGRESS — ground truth authored; N=5 not started`
 
 ## Follow-up (required for lock)
 
-> On POINTS LIST AHU-T1A/TIB, how many point descriptions name AHU-T1A
-> vs AHU-T1B, and how many are shared? Confirm AI10's description and
-> alarm/trend.
+> On POINTS LIST AHU-T1A/TIB, how many point descriptions name only
+> AHU-T1A, how many name only AHU-T1B, and how many name neither
+> (shared/common points)? Confirm AI10's description and alarm/trend.
 
 ## Why this is hard
 
