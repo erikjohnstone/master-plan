@@ -120,7 +120,7 @@ function checkSweepScheduleRow(calls) {
     const tag = args?.tag || out?.tag;
     if (typeof tag !== "string" || seen.has(tag)) continue;
     seen.add(tag);
-    const n = out?.total_found;
+    const n = out?.total_found ?? out?.found;
     if (typeof n === "number" && n > 0) {
       const at = Array.isArray(out?.anchor?.at) ? ` at ${JSON.stringify(out.anchor.at)}` : "";
       confirmed.push(`${tag} (total_found=${n}${at})`);

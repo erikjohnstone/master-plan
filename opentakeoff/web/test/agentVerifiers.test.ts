@@ -133,6 +133,18 @@ test("sweep_schedule_row: a real non-zero total_found is always disclosed, with 
   assert.match(notes[0], /2435\.9/);
 });
 
+test("sweep_schedule_row: production MCP found is accepted as the same confirmed count", () => {
+  const notes = runVerifiers([{
+    id: "1",
+    name: "sweep_schedule_row",
+    args: { tag: "CH-A1" },
+    out: { tag: "CH-A1", found: 1, anchor: { at: [2561.9, 2511.1] } },
+  }]);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /Confirmed with a real match/);
+  assert.doesNotMatch(notes[0], /NOT confirmed/);
+});
+
 test("sweep_schedule_row: a real total_found of 0 — still discloses the tag as NOT confirmed (the exact real family-completeness gap this exists to close)", () => {
   const callLog = [{ id: "1", name: "sweep_schedule_row", args: { tag: "ZZ9" }, out: { tag: "ZZ9", total_found: 0 } }];
   const notes = runVerifiers(callLog);

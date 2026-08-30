@@ -22,14 +22,26 @@ import { runVerifiers } from "./agentVerifiers.js";
 
 export const MAX_AGENT_ITERATIONS = 24;
 
-export function requiredEvidenceCorrection(callLog, goal) {
-  if (!/\b(?:installed\s+quantity|quantity|take\s*off|count)\b/i.test(goal)) return null;
+export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   const successfulCount = callLog.some(({ name, out }) =>
     (name === "sweep_schedule_row" && Number.isFinite(out?.found))
     || (name === "count_marks" && !out?.error));
-  return successfulCount
-    ? null
-    : "The goal asks for installed quantity, but no successful sweep_schedule_row or count_marks call exists in this run. Do not infer quantity from schedule-row count. Call the appropriate counting tool, then answer from its result or refuse.";
+  if (/\b(?:installed\s+quantity|quantity|take\s*off|count)\b/i.test(goal) && !successfulCount) {
+    return "The goal asks for installed quantity, but no successful sweep_schedule_row or count_marks call exists in this run. Do not infer quantity from schedule-row count. Call the appropriate counting tool, then answer from its result or refuse.";
+  }
+  const swept = new Set(callLog.filter(({ name, out }) =>
+    name === "sweep_schedule_row" && (out?.found ?? out?.total_found) > 0)
+    .map(({ args, out }) => String(args?.tag || out?.tag || "").toUpperCase()));
+  const queried = new Set(callLog.filter(({ name }) => name === "query_table")
+    .flatMap(({ out }) => out?.matches || [])
+    .map((match) => String(match?.row?.key || "").toUpperCase())
+    .filter(Boolean));
+  const unswept = [...queried].filter((tag) => !swept.has(tag));
+  if (unswept.length && /\bboth tags\b|\bplan location\b/i.test(finalText)
+    && unswept.some((tag) => finalText.toUpperCase().includes(tag))) {
+    return `The final answer claims a plan location for unswept tag(s): ${unswept.join(", ")}. A schedule query proves schedule data only. Remove those plan-location claims or call sweep_schedule_row for each exact tag.`;
+  }
+  return null;
 }
 
 // The takeoff-agent contract. Kept in one exported function so the tests (and
@@ -51,6 +63,7 @@ export function agentSystemPrompt() {
     "- NEVER report an aggregate, sum, or \"total for the building/set\" unless you have checked every relevant row across every relevant sheet AND say so. If you only checked one piece of equipment, your answer must say exactly what you checked (\"the only unit I found was X, on sheet Y — I have not verified there are no others\") and must not present that single value as a whole-building total. When in doubt about completeness, refuse to give a total and say what would need to be checked next.",
     "- Every factual claim about a connection, a symbol match, or a schedule value must trace back to a specific tool call's own returned data in this run — if you can't point to which tool call produced a fact, don't state it.",
     "- NEVER infer installed quantity from the existence of a schedule row. Installed quantity requires sweep_schedule_row; use its found count and tag_at evidence or refuse.",
+    "- NEVER report a plan location for any equipment or valve tag unless sweep_schedule_row succeeded for that exact tag. A schedule-cell bbox is a schedule location, never an installed plan location, and one tag's plan coordinates never belong to another tag.",
     "- read_schedule/find_schedule return two DIFFERENT kinds of name and they are never interchangeable: `headers` names the table's own COLUMNS (e.g. \"SYMBOL\", \"REMARKS\" as column labels), while each entry in `rows` has its own `key` naming that ONE ROW (e.g. \"AC-1\"). A word appearing in `headers` does NOT mean a row exists with that word as its key — check `rows[].key` directly, never infer a row's existence from a column name alone.",
     "",
     "Working method: list_sheets first. Use sheet_graph to orient across the entire loaded set, then query_table for cited equipment/reference cells or read_schedule for a known region; use find_text and view_region to locate and show plan evidence. Match or create conditions, measure rooms with one_click, then stage propose_shapes with evidence. Then summarize what you proposed and what you could not do, and stop. If you are blocked (no scale, sheet not open, nothing matches), say so plainly and stop rather than guessing.",
@@ -195,7 +208,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     // append MUST happen here, before this emit, on the LAST turn only.
     let displayText = turn.text;
     if (!turn.toolCalls.length) {
-      const correction = requiredEvidenceCorrection(callLog, goal);
+      const correction = requiredEvidenceCorrection(callLog, goal, turn.text);
       if (correction) {
         messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
         messages.push({ role: "user", content: correction });
