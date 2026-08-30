@@ -20,6 +20,15 @@ corpus supports one, and other difficult high-frequency estimating workflows.
 Every demo must connect a symbol or tag to useful presented data and connect
 multiple parts of a drawing set or span multiple sheets.
 
+## Execution policy
+
+Do not dispatch subagents of any kind. The active coordinator performs all
+research, implementation, model runs, debugging, review, and verification
+directly. This prohibition includes local workers, cloud workers, background
+agents, exploration agents, debug agents, review agents, and computer-use
+agents. Keep the full ten-demo goal active and make progress serially in this
+workspace.
+
 ## Required loop for every demo
 
 1. **Select.** Take the next entry from `SLATE.md`. Independently verify its
