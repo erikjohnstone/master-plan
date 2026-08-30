@@ -2058,13 +2058,48 @@ function normalizeViewportTitle(title: string): string {
     .trim();
 }
 
+/** A sheet-category / key-plan caption, not one drawing. Plural PLANS
+ *  without a view-type word is the title-block sheet name ("…ENLARGED
+ *  PLANS"). Two or more floor/level numbers in one title is a key plan
+ *  of several stories, not a single viewport. */
+export function isSheetCategoryTitle(raw: string): boolean {
+  const s = raw.replace(/\s+/g, " ").trim().toUpperCase();
+  if (placeNumbers(s).length >= 2) return true;
+  const plural = /\b(PLANS|SECTIONS|ELEVATIONS)\b/.test(s);
+  const viewType = /\b(DUCTWORK|DUCT|PIPING|PIPE)\b/.test(s) || /\bSECTION\s+\d+\b/.test(s);
+  return plural && !viewType;
+}
+
+function placeNumbers(title: string): string[] {
+  const nums = new Set<string>();
+  for (const m of title.matchAll(/\b(?:FLRS?|FLOORS?|LEVELS?|ROOMS?|AREAS?)\s+([\d,\s&]+)/g)) {
+    for (const n of m[1].match(/\d+/g) || []) nums.add(n);
+  }
+  const tail = title.match(/\bPLAN\s*-\s*([\d,\s&]+)$/);
+  if (tail) for (const n of tail[1].match(/\d+/g) || []) nums.add(n);
+  return [...nums];
+}
+
+/** Rotated title-block strip: tall, skinny, in the right-hand margin. */
+function isTitleBlockSpan(sp: ViewportTitleSpan, sheetW: number): boolean {
+  const w = Math.max(sp.w ?? 0, 1);
+  const h = Math.max(sp.h ?? 0, 1);
+  return h > 3 * w && (sp.x + w / 2) > sheetW * 0.85;
+}
+
 /** Detect complementary titled viewports on one sheet. Returns [] unless
  *  at least two distinct, well-separated titles survive the filters — a
- *  single whole-sheet "FIRST FLOOR PLAN" is not a dual-view. */
-export function detectSheetViewports(spans: ViewportTitleSpan[]): SheetViewport[] {
+ *  single whole-sheet "FIRST FLOOR PLAN" is not a dual-view. Sheet-name
+ *  captions (plural PLANS, a multi-floor key plan, the rotated right-hand
+ *  title block) are not viewports: they steal marks from the real pair. */
+export function detectSheetViewports(spans: ViewportTitleSpan[], sheetWidthPx?: number): SheetViewport[] {
+  const sheetW = sheetWidthPx && sheetWidthPx > 0
+    ? sheetWidthPx
+    : Math.max(1, ...spans.map((sp) => sp.x + (sp.w ?? 0)));
   const found: SheetViewport[] = [];
   for (const sp of spans) {
     if (!isViewportTitle(sp.str)) continue;
+    if (isSheetCategoryTitle(sp.str) || isTitleBlockSpan(sp, sheetW)) continue;
     const title = sp.str.replace(/\s+/g, " ").trim();
     const spaceKey = viewportSpaceKey(title);
     if (!spaceKey || !/[A-Z]/.test(spaceKey)) continue;
@@ -2089,14 +2124,56 @@ export function detectSheetViewports(spans: ViewportTitleSpan[]): SheetViewport[
   return found.length >= 2 ? found : [];
 }
 
-function nearestViewport(at: Point, viewports: SheetViewport[]): SheetViewport | null {
-  if (!viewports.length) return null;
-  let best = viewports[0], bestD = Infinity;
-  for (const v of viewports) {
-    const d = Math.hypot(at[0] - v.at[0], at[1] - v.at[1]);
-    if (d < bestD) { bestD = d; best = v; }
+const TITLE_ROW_PX = 80;
+
+function clusterTitleRows(viewports: SheetViewport[]): SheetViewport[][] {
+  const sorted = [...viewports].sort((a, b) => a.at[1] - b.at[1] || a.at[0] - b.at[0]);
+  const rows: SheetViewport[][] = [];
+  for (const v of sorted) {
+    const row = rows.find((r) => Math.abs(r[0].at[1] - v.at[1]) <= TITLE_ROW_PX);
+    if (row) row.push(v);
+    else rows.push([v]);
   }
-  return best;
+  return rows;
+}
+
+function medianY(row: SheetViewport[]): number {
+  return row.reduce((s, v) => s + v.at[1], 0) / row.length;
+}
+
+/** A view title sits under its drawing. Partition the sheet into bands
+ *  above each title row and columns between same-row titles — nearest-
+ *  title Voronoi assigns a mark in the lower view to the upper title
+ *  whenever that title is closer to the mark than the lower title is. */
+export function assignMarkToViewport(
+  at: Point, viewports: SheetViewport[], sheetW: number, sheetH: number,
+): SheetViewport | null {
+  if (!viewports.length) return null;
+  const rows = clusterTitleRows(viewports);
+  const pickInRow = (row: SheetViewport[]): SheetViewport => {
+    const ordered = [...row].sort((a, b) => a.at[0] - b.at[0]);
+    for (let j = 0; j < ordered.length; j++) {
+      const x0 = j === 0 ? 0 : (ordered[j - 1].at[0] + ordered[j].at[0]) / 2;
+      const x1 = j === ordered.length - 1 ? Math.max(sheetW, ordered[j].at[0] + 1) : (ordered[j].at[0] + ordered[j + 1].at[0]) / 2;
+      if (at[0] >= x0 && at[0] < x1) return ordered[j];
+    }
+    return ordered[ordered.length - 1];
+  };
+  for (let i = 0; i < rows.length; i++) {
+    const yTop = i === 0 ? 0 : medianY(rows[i - 1]);
+    const yBot = medianY(rows[i]);
+    if (at[1] + 1 >= yTop && at[1] <= yBot + TITLE_ROW_PX) return pickInRow(rows[i]);
+  }
+  if (rows.length && at[1] > medianY(rows[rows.length - 1])) return pickInRow(rows[rows.length - 1]);
+  if (rows.length && at[1] < medianY(rows[0])) return pickInRow(rows[0]);
+  return viewports[0];
+}
+
+/** A space key that names a room, floor, or level — safe to match across
+ *  sheets. A bare discipline word ("MECHANICAL") is not: two enlarged
+ *  rooms on two sheets would collapse. */
+export function spaceKeyIsLocated(spaceKey: string): boolean {
+  return /\b(ROOM|FLR|FLOOR|LEVEL|AREA)\b/.test(spaceKey) && /\d/.test(spaceKey);
 }
 
 function dedupeSameSheetViewports<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
@@ -2124,18 +2201,19 @@ function dedupeSameSheetViewports<Id>(instances: RoomSweepInstance<Id>[]): Redun
       if (new Set(spaceViewports.map((v) => normalizeViewportTitle(v.title))).size < 2) continue;
       type Assigned = RoomSweepInstance<Id> & { vpSheet: string };
       const assigned: Assigned[] = [];
+      const sheetW = group[0].sheetWidthPx, sheetH = group[0].sheetHeightPx;
       for (const inst of group) {
-        const vp = nearestViewport(inst.at, spaceViewports);
+        const vp = assignMarkToViewport(inst.at, spaceViewports, sheetW, sheetH);
         if (!vp) continue;
-        // Only instances whose nearest title among the WHOLE sheet set
-        // is one of this space's viewports — a mark belonging to a
-        // different space's view on the same sheet stays out.
-        const nearestAll = nearestViewport(inst.at, viewports);
+        // Only instances whose region among the WHOLE sheet set is one
+        // of this space's viewports — a mark belonging to a different
+        // space's view on the same sheet stays out.
+        const nearestAll = assignMarkToViewport(inst.at, viewports, sheetW, sheetH);
         if (!nearestAll || nearestAll.spaceKey !== vp.spaceKey) continue;
         assigned.push({ ...inst, sheet: `${inst.sheet}::${vp.title}`, vpSheet: inst.sheet });
       }
       const collapsed = collapseGroup<Id, Assigned>(assigned, (a) => {
-        const vp = nearestViewport(a.at, spaceViewports);
+        const vp = assignMarkToViewport(a.at, spaceViewports, sheetW, sheetH);
         return vp ? `${vp.spaceKey} (${vp.title})` : a.vpSheet;
       });
       for (const r of collapsed) {
@@ -2143,6 +2221,32 @@ function dedupeSameSheetViewports<Id>(instances: RoomSweepInstance<Id>[]): Redun
         out.push({ ...r, sheet: src?.vpSheet ?? r.sheet, keptSheet: src?.vpSheet ?? r.keptSheet });
       }
     }
+  }
+  return out;
+}
+
+/** Complementary views of one located space drawn on two sheets (a
+ *  ductwork plan and a piping plan of the same floor). Same space-key
+ *  doctrine as the same-sheet path; gated on a room/floor/level number
+ *  so two untitled "MECHANICAL" enlarged rooms never meet. */
+function dedupeCrossSheetViewports<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
+  type Assigned = RoomSweepInstance<Id> & { vpSheet: string; spaceKey: string };
+  const assigned: Assigned[] = [];
+  for (const inst of instances) {
+    if (!inst.discipline || !(inst.viewports?.length)) continue;
+    const vp = assignMarkToViewport(inst.at, inst.viewports, inst.sheetWidthPx, inst.sheetHeightPx);
+    if (!vp || !spaceKeyIsLocated(vp.spaceKey)) continue;
+    assigned.push({ ...inst, vpSheet: inst.sheet, spaceKey: vp.spaceKey });
+  }
+  const bySpace = new Map<string, Assigned[]>();
+  for (const a of assigned) {
+    const arr = bySpace.get(a.spaceKey);
+    if (arr) arr.push(a); else bySpace.set(a.spaceKey, [a]);
+  }
+  const out: RedundantRoomView<Id>[] = [];
+  for (const group of bySpace.values()) {
+    if (new Set(group.map((g) => g.vpSheet)).size < 2) continue;
+    out.push(...collapseGroup<Id, Assigned>(group, (a) => a.spaceKey));
   }
   return out;
 }
@@ -2392,7 +2496,10 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   // cannot report the same match twice.
   const alreadyDropped = new Set(out.map((r) => r.id));
   for (const r of dedupeSameSheetViewports(instances)) {
-    if (!alreadyDropped.has(r.id)) out.push(r);
+    if (!alreadyDropped.has(r.id)) { alreadyDropped.add(r.id); out.push(r); }
+  }
+  for (const r of dedupeCrossSheetViewports(instances)) {
+    if (!alreadyDropped.has(r.id)) { alreadyDropped.add(r.id); out.push(r); }
   }
   return out;
 }
