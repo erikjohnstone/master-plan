@@ -519,23 +519,37 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     };
     for (const { sheet, rowKey, cells } of usedQueryRows) {
       const rowKeyCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
-      const valueCells = [];
+      // Distinct answering texts only: identical values in adjacent columns
+      // (e.g. MAX CFM and MIN CFM both 3850, or Alarm/Trend both No) share one
+      // paint duty so the loop cannot thrash re-painting the same figure while
+      // a twin bbox stays unmarked. Distinct fields (location vs flow) still
+      // each require their own paint.
+      const valueByText = new Map();
       for (const cell of cells) {
         const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-        if (textCanonical === rowKeyCanonical) continue;
+        if (!textCanonical || textCanonical === rowKeyCanonical) continue;
         if (!answerUsesValueCell(cell?.text)) continue;
-        if (valueCells.some((other) => Array.isArray(other.bbox) && Array.isArray(cell.bbox)
-          && other.bbox.every((value, index) => Math.abs(value - cell.bbox[index]) <= 1))) continue;
-        valueCells.push(cell);
+        if (valueByText.has(textCanonical)) continue;
+        valueByText.set(textCanonical, cell);
       }
+      const valueCells = [...valueByText.values()];
       if (valueCells.length < 2) continue;
-      const missingValues = valueCells.filter((cell) => !highlightMatches(sheet, cell.bbox));
+      const missingValues = valueCells.filter((cell) => {
+        const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+        const siblingBboxes = cells
+          .filter((other) => String(other?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "") === textCanonical)
+          .map((other) => other.bbox);
+        if (siblingBboxes.some((bbox) => highlightMatches(sheet, bbox))) return false;
+        return !callLog.some(({ name, out }) =>
+          name === "highlight_citation" && !out?.error && out.sheet === sheet
+          && String(out.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "") === textCanonical);
+      });
       if (!missingValues.length) continue;
       const missingLabel = missingValues
         .map((cell) => `"${String(cell.text || "").slice(0, 40)}"`)
         .slice(0, 6)
         .join(", ");
-      return `The answer uses multiple fields from ${rowKey} on ${sheet}, but these answering value cells are not painted: ${missingLabel}. Call highlight_citation on EACH answering value cell from that row (capacity, flow, size, Cv, location, description, alarm/trend, etc.) — painting only the mark or a single field is not enough.`;
+      return `The answer uses multiple fields from ${rowKey} on ${sheet}, but these answering value cells are not painted: ${missingLabel}. Call highlight_citation on EACH distinct answering value from that row (capacity, flow, size, Cv, location, description, alarm/trend, etc.) — painting only the mark or a single field is not enough. Identical twin values in adjacent columns count as one paint duty.`;
     }
   }
   if (uniqDrawingHits.length) {
