@@ -244,7 +244,7 @@ test("installed quantity cannot finish without deterministic count evidence", ()
         },
       },
     }] } },
-  ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted.\nCAPACITY (TONS) 56.0 is highlighted.")!, /specific schedule cell is highlighted/);
+  ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted.\nCAPACITY (TONS) 56.0 is highlighted.")!, /highlighted that was not painted|Rewrite the answer without that claim/);
   assert.match(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
     { name: "query_table", out: { matches: [{
@@ -257,7 +257,7 @@ test("installed quantity cannot finish without deterministic count evidence", ()
         },
       },
     }] } },
-  ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted; CFM is 3850. All cited cells are highlighted.")!, /broadly says all\/each/);
+  ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted; CFM is 3850. All cited cells are highlighted.")!, /broadly says all\/each|ONLY these painted/);
   const servesGoal = "Trace the point back to the air handler. Give me what the unit serves and cite the physical drawing section where the equipment is shown.";
   assert.match(requiredEvidenceCorrection([
     { name: "query_table", out: { matches: [{

@@ -401,12 +401,17 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     })
     .filter((hit) => {
       if (!hit.str || !hit.bbox_px || !hit.sheet) return false;
-      // Short tag tokens are covered by query_table/sweep painting — only
-      // require painting phrase-length drawing evidence (serves narrative,
-      // section labels, title blocks) that the answer actually copies.
+      // Require paint for answering drawing evidence only: section labels and
+      // phrase-length serving narratives — not incidental title-block hits
+      // (e.g. "POINTS LIST …") that merely share tokens with the answer.
       const words = hit.str.trim().split(/\s+/).filter(Boolean);
-      const phraseLength = words.length >= 3 || hit.str.length >= 24 || /\bSECTION\b/i.test(hit.str);
-      if (!phraseLength) return false;
+      const isSection = /\bSECTION\b/i.test(hit.str);
+      const isTitleBlock = /\bPOINTS\s+LIST\b|\bSCHEDULE\b|\bCONTROL\s+SCHEMATIC\b/i.test(hit.str)
+        && words.length <= 8;
+      const isNarrative = !isTitleBlock
+        && (words.length >= 6 || hit.str.length >= 40)
+        && !/\bPOINTS\s+LIST\b/i.test(hit.str);
+      if (!isSection && !isNarrative) return false;
       const hitCanonical = hit.str.toUpperCase().replace(/[^A-Z0-9]/g, "");
       if (hitCanonical.length < 8) return false;
       const needle = hitCanonical.slice(0, Math.min(40, hitCanonical.length));
@@ -490,7 +495,8 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       const unpaintedMentioned = mentionedCells.filter((cell) =>
         !highlightMatches(cell.sheet, cell.bbox));
       if (unpaintedMentioned.length) {
-        return "The final answer broadly says all/each cited value or cell is highlighted, but some mentioned evidence cells were not painted. Describe only the exact highlighted regions, or highlight every claimed cell.";
+        const painted = highlights.map((h) => `${h.sheet} ${JSON.stringify(h.bbox)}`).slice(0, 8);
+        return `The final answer broadly says all/each cited value or cell is highlighted, but some mentioned evidence cells were not painted. Rewrite the answer and describe ONLY these painted regions: ${painted.join("; ") || "(none)"}. Do not claim any other cell was highlighted.`;
       }
     }
     for (const line of finalText.split("\n").filter((text) => /\bhighlight/i.test(text))) {
@@ -502,7 +508,8 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
           && lineCanonical.includes(headerCanonical) && lineCanonical.includes(textCanonical);
       });
       if (claimedCells.length && !claimedCells.some((cell) => highlightMatches(cell.sheet, cell.bbox))) {
-        return "The final answer says a specific schedule cell is highlighted, but no highlight_citation call painted that exact cell bbox. Remove the highlighted claim for unpainted fields or highlight the exact returned cell; another cell in the same row is not equivalent.";
+        const painted = highlights.map((h) => `${h.sheet} ${JSON.stringify(h.bbox)}`).slice(0, 8);
+        return `The final answer claims a schedule cell is highlighted that was not painted. Rewrite the answer without that claim. Painted regions only: ${painted.join("; ") || "(none)"}. Do not use the word "highlighted" for any unpainted field.`;
       }
     }
   }
