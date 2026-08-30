@@ -250,7 +250,15 @@ export function fingerprintInlineMotif(
     const d = inside ? 0 : Math.hypot(Math.max(c.x0 - cx, 0, cx - c.x1), Math.max(c.y0 - cy, 0, cy - c.y1));
     if (d < bestD) { bestD = d; seedCluster = c; }
   }
-  if (!seedCluster || seedCluster.members < 4) return null;
+  // Same floor sweepInlineMotif uses to emit a match. A 4–39 stroke
+  // cluster is real hatch *ink* (dimension ticks, a leader hash, a
+  // pump body's few fill dashes) but not a register/grille fill — and
+  // fingerprinting it lets corroborateInlineMotif "succeed" against an
+  // unrelated dense box of similar bbox size, which then blocks
+  // sweep_schedule_row's whole-shape fallback. The pad ladder already
+  // widens; a true fill (100+ members, measured) appears at some pad
+  // or this is not an inline-motif mark.
+  if (!seedCluster || seedCluster.members < MIN_FILL_MEMBERS) return null;
   const w = seedCluster.x1 - seedCluster.x0, h = seedCluster.y1 - seedCluster.y0;
   const refW = maxClusterRef ? maxClusterRef.w : rx1 - rx0, refH = maxClusterRef ? maxClusterRef.h : ry1 - ry0;
   // reject a cluster that dwarfs the reference size (see

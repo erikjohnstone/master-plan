@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — sparse hatch ticks are not a register fill
+
+### Fixed
+- **An inline-motif seed must be real fill, not a handful of dashes.** `fingerprintInlineMotif` used to accept any 4-stroke cluster. Sweep still requires 40 members to emit a match, so a 7-dash pump-body or leader hash became a seed that can never self-match — but size-tolerance could "corroborate" it against an unrelated dense box of similar bbox, and that false hatch win blocked `sweep_schedule_row`'s whole-shape fallback. The fingerprint floor is now the same `MIN_FILL_MEMBERS` (40) the sweep already uses. A true register/grille fill (100+ members, measured) is unchanged. No project, sheet, or tag names. **opentakeoff-mcp 0.9.74** (three surfaces).
+
 ## 2026-08-30 — smashed MEP titles still name an equipment family
 
 ### Fixed
