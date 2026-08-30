@@ -6,6 +6,7 @@ import {
   classifyTakeoffIntent,
   corpusCompileKind,
   namedPointsListTitles,
+  suggestedScheduleTitles,
   advanceTakeoffWorkflow,
   isIllegalWorkflowTransition,
   workflowDirective,
@@ -242,4 +243,41 @@ test("all D01–D10 frozen prompts route to durable non-generic intents", () => 
     assert.ok(state.nextMove || state.phase === "title_scans" || state.phase === "survey", dir);
     assert.notEqual(intent, "generic", dir);
   }
+});
+
+test("suggestedScheduleTitles maps family words to industry schedule needles", () => {
+  const ahu = suggestedScheduleTitles("How many AHUs are on the air handling schedule?");
+  assert.ok(ahu.some((t) => /AIR HANDLING/i.test(t)));
+  const boiler = suggestedScheduleTitles("Boiler schedule takeoff — totals and capacity");
+  assert.ok(boiler.some((t) => /BOILER/i.test(t)));
+  const state = advanceTakeoffWorkflow(
+    "equipment_schedule",
+    [{ name: "sheet_graph", out: { sheets: [] } }],
+    "How many VAVs on the volume control box schedule?",
+  );
+  assert.equal(state.phase, "title_scans");
+  assert.match(state.nextMove || "", /VOLUME CONTROL|AIR TERMINAL|VARIABLE AIR/i);
+});
+
+test("phrase variants keep D01/D05/D08/D10 intents stable", () => {
+  assert.equal(
+    classifyTakeoffIntent("Locate CH-A1 on the plan and give cooling capacity plus matching CHW control valve Cv"),
+    "equipment_plan_join",
+  );
+  assert.equal(
+    classifyTakeoffIntent("Join RTU-1 packaged rooftop schedule to the electrical connection schedule for MCA MOCP and circuit"),
+    "cross_discipline_join",
+  );
+  assert.equal(
+    classifyTakeoffIntent("Compare fan-coil counts across the buildings on this set"),
+    "fcu_buildings",
+  );
+  assert.equal(
+    classifyTakeoffIntent(
+      "Takeoff POINTS LIST A, POINTS LIST B, FCU WITH COOLING COILS DDC POINTS LIST, "
+      + "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST, and UNIT HEATER DDC POINTS LIST: "
+      + "row counts and AI/AO/BI/BO breakdown",
+    ),
+    "points_takeoff",
+  );
 });
