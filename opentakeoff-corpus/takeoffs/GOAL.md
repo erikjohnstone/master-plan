@@ -47,7 +47,7 @@ path a new user gets: upload → Agent prompt → Run → Takeoff panel.
 |---|---|---|---|
 | `T-HVAC-01` | HVAC equipment quantity takeoff | `navfac-cherry-point-atc` | `LOCKED` |
 | `T-BAS-01` | BAS / DDC points takeoff | `navfac-cherry-point-atc` | `LOCKED` — legend/unknown sheets with locked POINTS/DDC list titles get ODL without flipping every POINTS LIST mention to schedule (preserves 5 lists / 122). |
-| `T-VALVE-01` | Control valve takeoff (CHW+HHW schedules) | `navfac-cherry-point-atc` | `COMPILE PATH SHIPPED` — 163 unique valve marks, contractor columns, UI cites proven; Agent UI demos + N=5 card pending |
+| `T-VALVE-01` | Control valve takeoff (CHW+HHW schedules) | `navfac-cherry-point-atc` | `AGENT UI PROVEN` — 163 unique valve marks via frozen Agent prompt; contractor columns + cites; N=5 card pending |
 
 Additional takeoff IDs require an explicit goal change (this mandate counts as
 that change for `T-VALVE-01` only).

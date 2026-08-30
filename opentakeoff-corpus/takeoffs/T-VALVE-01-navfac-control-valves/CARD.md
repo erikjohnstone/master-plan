@@ -1,6 +1,6 @@
 # T-VALVE-01 — NAVFAC control valve takeoff (CHW + HHW)
 
-Status: `COMPILE PATH SHIPPED` — Agent UI + N=5 card pending
+Status: `AGENT UI PROVEN` — frozen Agent prompt → Run → Takeoff panel 163 (N=5 card pending)
 
 ## Set
 
