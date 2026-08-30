@@ -60,6 +60,36 @@ const proxy = createServer(async (request, response) => {
     },
     body,
   });
+  // Retry rate limits / transient upstream failures so long paint loops do not die mid-run.
+  if ((upstream.status === 429 || upstream.status === 503) && request.url !== "/tool") {
+    let last = upstream;
+    for (let attempt = 0; attempt < 4; attempt++) {
+      const retryAfter = Number(last.headers.get("retry-after"));
+      const waitMs = Number.isFinite(retryAfter) && retryAfter > 0
+        ? Math.min(60_000, retryAfter * 1000)
+        : Math.min(32_000, 4_000 * (2 ** attempt));
+      console.log(`[proxy] HTTP ${last.status}; retry in ${waitMs}ms (attempt ${attempt + 1})`);
+      await new Promise((r) => setTimeout(r, waitMs));
+      last = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body,
+      });
+      if (last.status !== 429 && last.status !== 503) {
+        response.statusCode = last.status;
+        response.setHeader("Content-Type", last.headers.get("content-type") || "application/json");
+        response.end(Buffer.from(await last.arrayBuffer()));
+        return;
+      }
+    }
+    response.statusCode = last.status;
+    response.setHeader("Content-Type", last.headers.get("content-type") || "application/json");
+    response.end(Buffer.from(await last.arrayBuffer()));
+    return;
+  }
   response.statusCode = upstream.status;
   response.setHeader("Content-Type", upstream.headers.get("content-type") || "application/json");
   response.end(Buffer.from(await upstream.arrayBuffer()));

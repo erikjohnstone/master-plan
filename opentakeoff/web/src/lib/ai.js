@@ -287,14 +287,26 @@ export async function chatWithTools({ cfg, system, messages, tools, maxTokens = 
     }
   } catch { /* keep the caller's signal */ }
   let res;
-  try {
-    res = await (fetchFn || fetch)(url, { method: "POST", headers, body: JSON.stringify(body), signal: sig });
-  } catch (e) {
-    if (signal?.aborted || e?.name === "AbortError") throw e;
-    if (e?.name === "TimeoutError") throw new Error("The endpoint took more than 2 minutes — check the model is loaded.");
-    throw new Error("Couldn't reach the endpoint — check the URL, and that it allows browser requests (CORS).");
+  const maxAttempts = 5;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      res = await (fetchFn || fetch)(url, { method: "POST", headers, body: JSON.stringify(body), signal: sig });
+    } catch (e) {
+      if (signal?.aborted || e?.name === "AbortError") throw e;
+      if (e?.name === "TimeoutError") throw new Error("The endpoint took more than 2 minutes — check the model is loaded.");
+      throw new Error("Couldn't reach the endpoint — check the URL, and that it allows browser requests (CORS).");
+    }
+    if (res.ok) break;
+    if ((res.status === 429 || res.status === 503) && attempt < maxAttempts - 1) {
+      const retryAfter = Number(res.headers?.get?.("retry-after"));
+      const waitMs = Number.isFinite(retryAfter) && retryAfter > 0
+        ? Math.min(60_000, retryAfter * 1000)
+        : Math.min(32_000, 4_000 * (2 ** attempt));
+      await new Promise((resolveWait) => setTimeout(resolveWait, waitMs));
+      continue;
+    }
+    throw new Error(`AI request failed (HTTP ${res.status}).`);
   }
-  if (!res.ok) throw new Error(`AI request failed (HTTP ${res.status}).`);
   const json = await res.json().catch(() => null);
   if (!json || typeof json !== "object") throw new Error("The endpoint replied, but not with JSON.");
   return json;

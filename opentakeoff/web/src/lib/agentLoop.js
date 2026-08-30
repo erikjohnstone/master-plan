@@ -447,8 +447,19 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       // cite / points targets from the goal on scoped queries. Naming a sheet
       // in the answer must not attach every MARK queried on that sheet.
       const rowKeyCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      // Serving/relationship cells often hold another unit's MARK (VAV row
+      // "AHU-A1"). That is not "using this row's answering values" when the
+      // answer cites the other mark on its own.
+      const isForeignMarkText = (raw) => {
+        const text = String(raw || "").trim();
+        if (!text) return false;
+        if (!/^(?:[A-Z]{1,8}-[A-Z0-9]{1,16}|(?:AI|AO|BI|BO)\d+[A-Z]?)$/i.test(text)) return false;
+        const textCanonical = text.toUpperCase().replace(/[^A-Z0-9]/g, "");
+        return textCanonical.length >= 3 && textCanonical !== rowKeyCanonical;
+      };
       const usesCellFromRow = cells.some(([, cell]) => {
         const raw = String(cell?.text || "").trim();
+        if (isForeignMarkText(raw)) return false;
         const textCanonical = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
         if (!textCanonical || textCanonical === rowKeyCanonical) return false;
         // Pure numerics: count only standalone tokens of length >= 3 so
@@ -457,6 +468,11 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         if (/^\d+(?:[.,]\d+)?$/.test(raw)) {
           if (textCanonical.length < 3) return false;
           return spacedHasToken(textCanonical);
+        }
+        // Fractions / sized tokens (3/4) must appear as spaced answer tokens,
+        // not via concatenated digit glue from unrelated numbers.
+        if (/^\d+\s*\/\s*\d+$/.test(raw)) {
+          return spacedHasToken(raw.replace(/\s+/g, ""));
         }
         if (textCanonical.length < 4) return false;
         return finalCanonical.includes(textCanonical);
@@ -581,9 +597,15 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     // Matching is methodology-general (text used in the answer), never corpus-
     // or demo-specific: require standalone tokens for short numerics so mark
     // suffixes (e.g. "10" inside "AI10") do not invent phantom paint duties.
-    const answerUsesValueCell = (raw) => {
+    const answerUsesValueCell = (raw, rowKeyCanonical) => {
       const text = String(raw || "").trim();
       if (!text) return false;
+      // Foreign equipment MARKs in relationship columns are not this row's
+      // answering value fields (they are other units' identities).
+      if (/^(?:[A-Z]{1,8}-[A-Z0-9]{1,16}|(?:AI|AO|BI|BO)\d+[A-Z]?)$/i.test(text)) {
+        const textCanonical = text.toUpperCase().replace(/[^A-Z0-9]/g, "");
+        if (textCanonical !== rowKeyCanonical) return false;
+      }
       const textCanonical = text.toUpperCase().replace(/[^A-Z0-9]/g, "");
       if (textCanonical.length < 2) return false;
       if (/^\d+(?:[.,]\d+)?$/.test(text)) {
@@ -592,13 +614,18 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         if (textCanonical.length < 1) return false;
         return spacedHasToken(textCanonical);
       }
+      if (/^\d+\s*\/\s*\d+$/.test(text)) {
+        return spacedHasToken(text.replace(/\s+/g, ""));
+      }
       if (textCanonical.length <= 3 && /^[A-Z]+$/.test(textCanonical)) {
         const escaped = text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
         return new RegExp(`\\b${escaped}\\b`, "i").test(finalText);
       }
       return finalCanonical.includes(textCanonical);
     };
-    for (const { sheet, rowKey, cells } of usedQueryRows) {
+    for (const { sheet, rowKey, cells, weak, coverAny } of usedQueryRows) {
+      // Cite-only MARK duties need one paint, not every relationship column.
+      if (weak) continue;
       const rowKeyCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
       // Distinct answering texts only: identical values in adjacent columns
       // (e.g. MAX CFM and MIN CFM both 3850, or Alarm/Trend both No) share one
@@ -606,28 +633,31 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       // a twin bbox stays unmarked. Distinct fields (location vs flow) still
       // each require their own paint.
       const valueByText = new Map();
-      for (const cell of cells) {
-        const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-        if (!textCanonical || textCanonical === rowKeyCanonical) continue;
-        if (!answerUsesValueCell(cell?.text)) continue;
-        if (valueByText.has(textCanonical)) continue;
-        valueByText.set(textCanonical, cell);
+      const cellSheets = coverAny || [{ sheet, cells }];
+      for (const option of cellSheets) {
+        for (const cell of option.cells) {
+          const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+          if (!textCanonical || textCanonical === rowKeyCanonical) continue;
+          if (!answerUsesValueCell(cell?.text, rowKeyCanonical)) continue;
+          if (valueByText.has(textCanonical)) continue;
+          valueByText.set(textCanonical, { cell, sheet: option.sheet, cells: option.cells });
+        }
       }
       const valueCells = [...valueByText.values()];
       if (valueCells.length < 2) continue;
-      const missingValues = valueCells.filter((cell) => {
+      const missingValues = valueCells.filter(({ cell, sheet: cellSheet, cells: siblingCells }) => {
         const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-        const siblingBboxes = cells
+        const siblingBboxes = siblingCells
           .filter((other) => String(other?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "") === textCanonical)
           .map((other) => other.bbox);
-        if (siblingBboxes.some((bbox) => highlightMatches(sheet, bbox))) return false;
+        if (siblingBboxes.some((bbox) => highlightMatches(cellSheet, bbox))) return false;
         return !callLog.some(({ name, out }) =>
-          name === "highlight_citation" && !out?.error && out.sheet === sheet
+          name === "highlight_citation" && !out?.error && out.sheet === cellSheet
           && String(out.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "") === textCanonical);
       });
       if (!missingValues.length) continue;
       const missingLabel = missingValues
-        .map((cell) => `"${String(cell.text || "").slice(0, 40)}"`)
+        .map(({ cell }) => `"${String(cell.text || "").slice(0, 40)}"`)
         .slice(0, 6)
         .join(", ");
       return `The answer uses multiple fields from ${rowKey} on ${sheet}, but these answering value cells are not painted: ${missingLabel}. Call highlight_citation on EACH distinct answering value from that row (capacity, flow, size, Cv, location, description, alarm/trend, etc.) — painting only the mark or a single field is not enough. Identical twin values in adjacent columns count as one paint duty.`;
@@ -717,12 +747,20 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       const usesCellFromRow = Object.values(match?.row?.all_cells || match?.row?.cells || {})
         .some((cell) => {
           const raw = String(cell?.text || "").trim();
+          // Relationship columns holding another unit's MARK are not this row's values.
+          if (/^(?:[A-Z]{1,8}-[A-Z0-9]{1,16}|(?:AI|AO|BI|BO)\d+[A-Z]?)$/i.test(raw)) {
+            const foreign = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
+            if (foreign && foreign !== rowCanonical) return false;
+          }
           const textCanonical = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
           // Row key/identity text alone does not mean this sheet's row was used.
           if (!textCanonical || textCanonical === rowCanonical) return false;
           if (/^\d+(?:[.,]\d+)?$/.test(raw)) {
             if (textCanonical.length < 3) return false;
             return spacedHasToken(textCanonical);
+          }
+          if (/^\d+\s*\/\s*\d+$/.test(raw)) {
+            return spacedHasToken(raw.replace(/\s+/g, ""));
           }
           if (textCanonical.length < 4) return false;
           return finalCanonical.includes(textCanonical);

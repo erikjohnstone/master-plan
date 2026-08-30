@@ -294,6 +294,27 @@ test("installed quantity cannot finish without deterministic count evidence", ()
       ],
     } },
   ], "Cite the schedule MARK for AHU-A1", "AHU-A1 MARK is cited."), null);
+  // Relationship-column foreign MARKs (VAV serves AHU-A1) must not invent
+  // multi-field paint duties when the goal only cites the VAV MARK.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#43", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: {
+      query: { title: null, row_key: "VAV-A101", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [{
+        sheet: "set.pdf#43",
+        row: {
+          key: "VAV-A101",
+          all_cells: {
+            MARK: { text: "VAV-A101", bbox: [10, 20, 30, 40] },
+            SERVES: { text: "AHU-A1", bbox: [50, 20, 70, 40] },
+            SIZE: { text: "3/4", bbox: [80, 20, 100, 40] },
+          },
+        },
+      }],
+    } },
+  ], "Cite the schedule MARK cells for VAV-A101 and AHU-A1, so I can spot-check.",
+  "VAV-A101 MARK is cited. AHU-A1 is also on the set."), null);
   assert.match(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
     { name: "query_table", out: { matches: [{
