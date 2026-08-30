@@ -1072,7 +1072,7 @@ test("a lone unexplained token never mints a column — the sub-tier needs a par
 // MATERIAL | COMMENTS) extracted as 54 "finish" rows, so a finish code
 // colliding with a door mark would chain to a DOOR — a confidently wrong
 // product in the bid. Refused by title, and the drop is named.
-import { isMepEquipmentSchedule, isNonFinishSchedule, isReferenceOrSpecTable } from "../src/lib/sheetgraph.ts";
+import { isMepEquipmentSchedule, isNonFinishSchedule, isReferenceOrSpecTable, scheduleTableFromODL, type ODLTable } from "../src/lib/sheetgraph.ts";
 
 test("isNonFinishSchedule: other families refuse, anything naming FINISH or MATERIAL is kept", () => {
   for (const t of ["DOOR SCHEDULE", "DOOR AND WINDOW SCHEDULE", "PARTITION SCHEDULE", "EQUIPMENT SCHEDULE", "LIGHTING SCHEDULE"]) {
@@ -1132,6 +1132,43 @@ test("a smashed EXPANSION TANK title reclassifies finish→equipment so ET-1 is 
   const hit = g.tables.find((t) => t.rows.some((r) => r.key === "ET-1"));
   assert.ok(hit, "ET-1 survives as a graph table");
   assert.equal(hit!.kind, "equipment");
+});
+
+test("scheduleTableFromODL reclassifies a smashed tank title finish→equipment", () => {
+  // Live shape on a hydronic vessel sheet: MARK is finish-only vocabulary,
+  // MANUFACTURER/MODEL is one cell (counts once for equipment), so the
+  // header-hit bar prefers finish. The title family is still the signal.
+  let id = 1;
+  const cell = (row: number, col: number, text: string, colspan = 1) => ({
+    type: "table cell" as const,
+    id: id++,
+    "page number": 1,
+    "bounding box": [col * 80, row * 20, col * 80 + 70, row * 20 + 16],
+    "row number": row,
+    "column number": col,
+    "row span": 1,
+    "column span": colspan,
+    kids: [{ type: "paragraph", content: text }],
+  });
+  const headers = ["MARK", "BASEDON MANUFACTURER/MODEL", "SERVICE", "SIZE(GALLONS)", "ACCEPTANCEVOLUME (GALLONS)", "REMARKS"];
+  const values = ["ET-1", "WESSELS NLA-35", "CHILLED WATER", "35", "12", "—"];
+  const odl: ODLTable = {
+    type: "table",
+    id: 99,
+    "page number": 1,
+    "bounding box": [0, 0, 480, 60],
+    "number of rows": 3,
+    "number of columns": 6,
+    rows: [
+      { type: "table row", "row number": 1, id: id++, cells: [cell(1, 1, "EPANSIONANDCOPRESSIONTANKSCHEDULE", 6)] },
+      { type: "table row", "row number": 2, id: id++, cells: headers.map((h, i) => cell(2, i + 1, h)) },
+      { type: "table row", "row number": 3, id: id++, cells: values.map((v, i) => cell(3, i + 1, v)) },
+    ],
+  };
+  const built = scheduleTableFromODL(odl, "tank.pdf#1", [1, 0, 0, 1, 0, 0]);
+  assert.ok(built, "ODL adapter must keep the table");
+  assert.equal(built!.kind, "equipment");
+  assert.deepEqual(built!.rows.map((r) => r.key), ["ET-1"]);
 });
 
 test("a DOOR SCHEDULE never becomes a finish table — and the drop is NAMED", () => {

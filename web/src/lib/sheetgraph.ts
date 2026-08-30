@@ -7419,7 +7419,18 @@ export function scheduleTableFromODL(
       ? "equipment"
       : "reference";
   }
-  if (kind === "finish" && titleText && isNonFinishSchedule(titleText)) return null;
+  // Same finish→equipment title gate as the geometric extractor. A hydronic
+  // vessel catalog (MARK + combined MANUFACTURER/MODEL + SIZE/REMARKS, no
+  // VOLTAGE/GPM/HP) clears finHits>=3 because MARK is finish-only and the
+  // smashed MANUFACTURER/MODEL cell counts once for equipment — so the
+  // eqHits>=finHits bar loses and this adapter used to emit finish-kind.
+  // enhanceTablesWithODL then replaced the geometric equipment read with
+  // that more-complete finish table, hiding the row from buildPlanSetTakeoff.
+  // The family test (word-boundary or glued-to-SCHEDULE) is the signal;
+  // architectural families still drop via isNonFinishSchedule below.
+  if (kind === "finish" && titleText && isMepEquipmentSchedule(titleText)) {
+    kind = "equipment";
+  } else if (kind === "finish" && titleText && isNonFinishSchedule(titleText)) return null;
 
   // A real, standard cross-firm MEP title — "…CONNECTION SCHEDULE" (electrical
   // OR mechanical) — names a table that cross-REFERENCES equipment tags a
