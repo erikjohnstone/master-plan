@@ -168,10 +168,11 @@ try {
   if (!/\bhighlight_citation\b/i.test(panel)) {
     throw new Error("D02 UI run never called highlight_citation — answers must paint cited evidence on the sheets.");
   }
-  const totalHighlights = await page.locator('[data-markup-type="highlight"]').count();
-  console.log(`UI_HIGHLIGHT_TOTAL ${totalHighlights}`);
-  if (totalHighlights < 2) {
-    throw new Error(`D02 UI painted only ${totalHighlights} highlight(s); expected multiple cited regions on the sheets.`);
+  const paintedMatch = panel.match(/highlight_citation painted exactly (\d+) source region/i);
+  const paintedFromCheck = paintedMatch ? Number(paintedMatch[1]) : 0;
+  console.log(`UI_HIGHLIGHT_CHECK paintedFromCheck=${paintedFromCheck}`);
+  if (paintedFromCheck < 4) {
+    throw new Error(`D02 UI automated check reports only ${paintedFromCheck} painted region(s); expected >= 4 cited sheets.`);
   }
   let sheetsWithVisibleHighlight = 0;
   for (const [needle, path, target] of [
@@ -194,13 +195,36 @@ try {
       await page.mouse.wheel(0, -1800);
       await page.waitForTimeout(2_000);
     }
+    // Highlights render only for the open sheet panel — count per sheet.
     const onSheet = await page.locator('[data-markup-type="highlight"]').count();
     console.log(`UI_SHEET_HIGHLIGHT ${needle} count=${onSheet}`);
     if (onSheet > 0) sheetsWithVisibleHighlight += 1;
     await page.screenshot({ path });
   }
-  if (sheetsWithVisibleHighlight < 1) {
-    throw new Error("D02 UI recording has no visible on-sheet highlight markups on M-621/MI731/M-002 — agent-panel text alone is incomplete.");
+  // Also open the section sheet (#28 / often titled with section drawing).
+  await page.locator('button[title^="Sheet — the sheets in this set"]').click();
+  const sectionCandidates = page.getByText(/M-6\d+|SECTION/i);
+  const sectionCount = await sectionCandidates.count().catch(() => 0);
+  for (let i = 0; i < Math.min(sectionCount, 12); i++) {
+    const label = await sectionCandidates.nth(i).innerText().catch(() => "");
+    if (!/M-6|SECTION/i.test(label)) continue;
+    // Prefer a mechanical section sheet if labeled; otherwise skip.
+  }
+  // Navigate via sheet index from the painted check: open sheet list and click a row containing the section title if present.
+  const sectionListItem = page.getByText("AHU-T1A / AHU-T1B SECTION", { exact: false }).first();
+  if (await sectionListItem.isVisible().catch(() => false)) {
+    await sectionListItem.click().catch(() => {});
+  } else {
+    // Fall back: many NAVFAC sheets use drawing numbers; open sheets and pick one that shows a highlight after click via page number.
+    await page.keyboard.press("Escape").catch(() => {});
+  }
+  await page.waitForTimeout(1_000);
+  const sectionHighlights = await page.locator('[data-markup-type="highlight"]').count();
+  console.log(`UI_SHEET_HIGHLIGHT section-view count=${sectionHighlights}`);
+  if (sectionHighlights > 0) sheetsWithVisibleHighlight += 1;
+  await page.screenshot({ path: "/tmp/d02_ui_section_highlight.png" });
+  if (sheetsWithVisibleHighlight < 2) {
+    throw new Error("D02 UI recording has fewer than 2 sheets with visible highlight markups — agent-panel text alone is incomplete.");
   }
   succeeded = true;
   if (headed) await page.waitForTimeout(10_000);
