@@ -4,6 +4,29 @@ The repository-wide mission is defined by `opentakeoff-corpus/GOAL.md`. Read it
 before planning work anywhere in this repository. `opentakeoff/AGENTS.md`
 continues to govern implementation and verification inside `opentakeoff/`.
 
+## Shared production path — mandatory pre-change gate
+
+**Before every code addition, removal, or change, ask and answer:**
+
+> **SHOULD THIS BE ON THE SHARED PATH?**
+> - **If yes → implement it on the shared path** (one module / Session pipeline
+>   both UI and MCP consume). Do **not** add a UI-only or MCP-only fork.
+> - **If no → keep it surface-specific** (canvas chrome, tiles, click UX, etc.).
+>   Do **not** force unrelated UI interaction code into Session.
+
+**Shared path means:** anything that decides schedule/table truth or answers
+“what’s on the schedules / how many / where” — including sheet-graph
+construction (`Session.graphForPipeline` = geometric + ODL), `compile_corpus_takeoff`,
+`query_table`, `find_schedule`, `resolve_tag`, `sheet_graph`, and (as extracted)
+`count_marks` / `sweep_schedule_row`. Entry points may differ (browser vs server);
+extraction and query logic must not.
+
+**Not shared:** pan/zoom, tile paint, drawing tools, markup chrome, download UX.
+
+If unsure, default to **shared** for any quantity, cite, schedule title, or
+MARK/points-list answer. Document the decision in the PR/commit body when
+non-obvious.
+
 ## Coordinator policy
 
 When working autonomously toward the corpus goal:

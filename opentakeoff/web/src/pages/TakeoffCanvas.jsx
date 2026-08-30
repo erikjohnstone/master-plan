@@ -113,6 +113,7 @@ import { deriveTransitionRuns, transitionRefusal } from "../lib/transitions";
 import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, downloadText } from "../lib/totals.js";
 import { buildXlsx } from "../lib/xlsx.js";
 import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "../lib/corpusTakeoff.mjs";
+import { queryTable } from "../lib/queryTable.mjs";
 import { measurementBreakdown } from "../lib/measurementBreakdown.js";
 import { buildSheetDxf, dxfFileName, DXF_MIME } from "../lib/dxf.js";
 import { shapesInZone, shapeCenter } from "../lib/zone.js";
@@ -6835,6 +6836,7 @@ export default function TakeoffCanvas() {
     try {
       const prod = await fetchProductionSheetGraph();
       if (prod?.tables || prod?.available) {
+        prod.__production = true;
         agentGraphCacheRef.current = prod;
         agentGraphCacheKeyRef.current = sig;
         return prod;
@@ -6939,8 +6941,7 @@ export default function TakeoffCanvas() {
   }
 
   async function agentFindSchedule(kind) {
-    const remote = await agentMcpTool("find_schedule", { kind });
-    if (remote) return remote;
+    // Production Session+ODL graph (via ensureAgentGraph) — same tables as MCP.
     const g = await ensureAgentGraph();
     if (!g.available) return { error: "This set has no text layer (a scan) — the sheet graph is unavailable." };
     const k = (kind || "").toLowerCase();
@@ -6974,49 +6975,24 @@ export default function TakeoffCanvas() {
     return await response.json();
   }
 
-  async function agentQueryTable({ title, row_key, column, cell_contains }) {
-    const remote = await agentMcpTool("query_table", { title, row_key, column, cell_contains });
-    if (remote) return remote;
-    const g = await ensureAgentGraph();
-    if (!g.available) return { error: "This set has no text layer (a scan) — the sheet graph is unavailable." };
-    const titleNeedle = (title || "").trim().toUpperCase();
-    const rowNeedle = (row_key || "").trim().toUpperCase().replace(/\s+/g, "");
-    const columnNeedle = (column || "").trim().toUpperCase();
-    const containsNeedle = (cell_contains || "").trim().toUpperCase();
-    if (!titleNeedle && !rowNeedle && !columnNeedle && !containsNeedle) {
-      return { error: "Pass title, row_key, column, or cell_contains." };
-    }
-    const matches = [];
-    for (const table of g.tables) {
-      if (titleNeedle && !(table.title?.text || "").toUpperCase().includes(titleNeedle)) continue;
-      const dims = await ensureSheetDims(table.sheet);
-      if (!dims) continue;
-      const headers = columnNeedle
-        ? table.headers.filter((header) => header.toUpperCase().includes(columnNeedle))
-        : table.headers;
-      if (columnNeedle && !headers.length) continue;
-      for (const row of table.rows) {
-        const keys = row.key.toUpperCase().replace(/\s+/g, "").split("/");
-        if (rowNeedle && !keys.includes(rowNeedle)) continue;
-        if (containsNeedle && !Object.values(row.cells).some((cell) =>
-          cell.text.toUpperCase().includes(containsNeedle))) continue;
-        const cells = Object.fromEntries(headers.flatMap((header) => {
-          const cell = row.cells[header];
-          return cell?.text ? [[header, {
-            text: cell.text,
-            bbox: wireBoxNorm(cell.bbox, dims),
-          }]] : [];
-        }));
-        if (columnNeedle && !Object.keys(cells).length) continue;
-        matches.push({
-          sheet: table.sheet,
-          kind: table.kind,
-          title: table.title?.text || "",
-          row: { key: row.key, cells },
-        });
+  async function agentQueryTable({ title, row_key, column, cell_contains, cell_value }) {
+    // Same queryTable module as MCP, on the production Session+ODL graph only.
+    let g;
+    try {
+      const sig = sheets.map((s) => `${s.name}:${s.rev ?? 1}`).join("|");
+      if (agentGraphCacheRef.current && agentGraphCacheKeyRef.current === sig
+        && agentGraphCacheRef.current.__production) {
+        g = agentGraphCacheRef.current;
+      } else {
+        g = await fetchProductionSheetGraph();
+        if (g) g.__production = true;
+        agentGraphCacheRef.current = g;
+        agentGraphCacheKeyRef.current = sig;
       }
+    } catch (e) {
+      return { error: `Production Session+ODL graph required for query_table: ${e?.message || e}` };
     }
-    return { count: matches.length, matches: matches.slice(0, 100) };
+    return queryTable(g, { title, row_key, column, cell_value, cell_contains, limit: 100 });
   }
 
   // Exports trigger a REAL browser download (the same downloadText the human
@@ -7166,6 +7142,8 @@ export default function TakeoffCanvas() {
 
   // Playwright / primary-agent UI demos call the same compile path the Agent
   // tool uses — no blueprint hardcoding; works on whatever plan is loaded.
+  // Re-assigns every render so closures stay fresh. Do NOT delete in cleanup:
+  // React cleanup+setup races Playwright mid-call (openAgent undefined).
   useEffect(() => {
     window.__opentakeoff = {
       compileCorpusTakeoff: (kind, opts) => agentCompileCorpusTakeoff(kind, opts),
@@ -7190,9 +7168,6 @@ export default function TakeoffCanvas() {
         agentGraphCacheKeyRef.current = "";
         wholeSetSpansRef.current = new Map();
       },
-    };
-    return () => {
-      if (window.__opentakeoff) delete window.__opentakeoff;
     };
   });
 

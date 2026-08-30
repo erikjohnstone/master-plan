@@ -1,0 +1,43 @@
+{
+  "takeoff_id": "T-BAS-01",
+  "run": 5,
+  "surface": "takeoff_ui",
+  "pass": true,
+  "elapsed_ms": 27236,
+  "totals": {
+    "lists": 5,
+    "rows": 122,
+    "AI": 43,
+    "AO": 15,
+    "BI": 49,
+    "BO": 15
+  },
+  "gates": {
+    "1": {
+      "name": "Quantity",
+      "ok": true,
+      "failures": []
+    },
+    "2": {
+      "name": "Cite resolvability",
+      "ok": true,
+      "failures": []
+    },
+    "3": {
+      "name": "Cite groundedness (vector)",
+      "ok": true,
+      "failures": []
+    },
+    "4": {
+      "name": "Completeness",
+      "ok": true,
+      "failures": []
+    },
+    "5": {
+      "name": "Interrogation",
+      "ok": true,
+      "failures": []
+    }
+  },
+  "failures": []
+}

@@ -2,6 +2,21 @@
 
 OpenTakeoff is a **client-only React app**: a PDF construction-takeoff canvas for flooring (useful for any trade). No backend, no database, no auth—everything runs and persists in the browser. Apache-2.0. (For the one-page project pitch and vision, see [`AGENT_BRIEF.md`](AGENT_BRIEF.md); for capability → code mapping, see [`FEATURES.md`](FEATURES.md).)
 
+## Shared production path — read before every edit
+
+**Before every code addition, removal, or change, ask:**
+
+> **SHOULD THIS BE ON THE SHARED PATH?**
+> - **Yes** → put it on the shared path (one implementation both UI and MCP use:
+>   `Session.graphForPipeline` / shared `web/src/lib/*` modules). Never add a
+>   second UI-only or MCP-only copy of schedule/table/quantity logic.
+> - **No** → keep it surface-specific (canvas interaction, tiles, chrome).
+
+Shared = sheet graph (geometric + ODL), `compile_corpus_takeoff`, `query_table`,
+`find_schedule`, `resolve_tag`, `sheet_graph`, and plan-schedule tools as they
+are extracted (`count_marks`, `sweep_schedule_row`, …). See also root
+`AGENTS.md` and `opentakeoff-corpus/takeoffs/GOAL.md`.
+
 ## Run / build / check
 
 ```bash

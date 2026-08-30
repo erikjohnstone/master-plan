@@ -1,6 +1,6 @@
 # T-HVAC-01 — NAVFAC full HVAC equipment takeoff
 
-Status: `LOCKED` (5/5)
+Status: `LOCKED` (MCP 5/5 · UI 5/5)
 
 ## Set
 
@@ -15,7 +15,7 @@ See `prompt.txt`.
 22 scheduled HVAC equipment families — **396** unique tags. Exclusions in
 `truth.json` (vibration isolation, fan sound, points/DDC, general notes).
 
-## Validation
+## Validation — MCP
 
 | Run | Cold | Gates 1–5 |
 |---|---|---|
@@ -27,3 +27,17 @@ See `prompt.txt`.
 
 Canonical workbook: `export/` (category CSVs + `run-5.xlsx` + `takeoff.json`).
 Interrogation: `interrogation/run-5.json`.
+
+## Validation — Takeoff UI
+
+Same frozen truth. Compile via shared Session+ODL (`/__ot/compile-corpus-takeoff`).
+
+| Run | Cold | Gates 1–5 |
+|---|---|---|
+| 1 | yes | PASS |
+| 2 | | PASS |
+| 3 | | PASS |
+| 4 | | PASS |
+| 5 | yes | PASS |
+
+Evidence: `ui-runs/` (run-1…run-5.json + CHANGELOG.md). Totals: **396** items / 22 categories every run.

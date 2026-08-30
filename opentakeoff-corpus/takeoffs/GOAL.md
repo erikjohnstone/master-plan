@@ -44,7 +44,12 @@ No additional takeoff IDs without an explicit goal change.
    less complex blueprints without per-set tuning.
 10. **Both surfaces must clear N=5** (see UI requirement). MCP/API and Takeoff UI
     each independently pass N=5 against the same truth; UI must be deterministic.
-
+11. **Shared-path gate (every edit).** Before any code addition, removal, or
+    change, ask: *Should this be on the shared path?* If **yes**, implement it
+    once for UI+MCP (Session / shared `web/src/lib` module) — no forks. If
+    **no**, keep it surface-specific. Shared = anything that decides schedule
+    truth or answers “what’s on the schedules / how many / where.” Default to
+    shared when unsure.
 ## Ground-truth harness (per takeoff)
 
 Before any run, produce `truth.json`:
@@ -118,8 +123,18 @@ shared path:
 4. Surface a non-blocking “schedules indexing…” state; never silently fall
    back to geometric-only for quantity/cite answers.
 
-Do not implement prewarm until UI N=5 is locked on the shared path — parity
-first, then eager accuracy.
+**Unify schedule-query tools on Session.** Graph + compile + `query_table` are
+shared (`web/src/lib/queryTable.mjs` used by MCP tools and Takeoff UI;
+`ensureAgentGraph` prefers Session+ODL). Remaining follow-ons: proxy or extract
+`count_marks` / `sweep_schedule_row` the same way (plan-geometry tools that still
+have dual implementations).
+
+**Background graph prewarm on upload** (after query parity for plan tools):
+
+1. Upload still opens the canvas immediately and keeps the eager **text** index.
+2. Kick an async prewarm of `Session.graphForPipeline()` (geometric + ODL).
+3. Cache that graph; agent / compile use it.
+4. Non-blocking “schedules indexing…”; never silent geometric-only for cites.
 
 ## Regression tests
 

@@ -1,0 +1,92 @@
+{
+  "takeoff_id": "T-HVAC-01",
+  "surface": "takeoff_ui",
+  "locked": true,
+  "runs": [
+    {
+      "run": 1,
+      "pass": true,
+      "totals": {
+        "categories": 22,
+        "items": 396
+      },
+      "elapsed_ms": 27841,
+      "gates": {
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true
+      },
+      "surface": "takeoff_ui"
+    },
+    {
+      "run": 2,
+      "pass": true,
+      "totals": {
+        "categories": 22,
+        "items": 396
+      },
+      "elapsed_ms": 28230,
+      "gates": {
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true
+      },
+      "surface": "takeoff_ui"
+    },
+    {
+      "run": 3,
+      "pass": true,
+      "totals": {
+        "categories": 22,
+        "items": 396
+      },
+      "elapsed_ms": 27520,
+      "gates": {
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true
+      },
+      "surface": "takeoff_ui"
+    },
+    {
+      "run": 4,
+      "pass": true,
+      "totals": {
+        "categories": 22,
+        "items": 396
+      },
+      "elapsed_ms": 27106,
+      "gates": {
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true
+      },
+      "surface": "takeoff_ui"
+    },
+    {
+      "run": 5,
+      "pass": true,
+      "totals": {
+        "categories": 22,
+        "items": 396
+      },
+      "elapsed_ms": 27760,
+      "gates": {
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true
+      },
+      "surface": "takeoff_ui"
+    }
+  ]
+}

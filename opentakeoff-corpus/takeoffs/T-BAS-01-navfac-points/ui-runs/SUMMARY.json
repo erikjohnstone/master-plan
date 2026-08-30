@@ -1,0 +1,112 @@
+{
+  "takeoff_id": "T-BAS-01",
+  "surface": "takeoff_ui",
+  "locked": true,
+  "runs": [
+    {
+      "run": 1,
+      "pass": true,
+      "totals": {
+        "lists": 5,
+        "rows": 122,
+        "AI": 43,
+        "AO": 15,
+        "BI": 49,
+        "BO": 15
+      },
+      "elapsed_ms": 28672,
+      "gates": {
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true
+      },
+      "surface": "takeoff_ui"
+    },
+    {
+      "run": 2,
+      "pass": true,
+      "totals": {
+        "lists": 5,
+        "rows": 122,
+        "AI": 43,
+        "AO": 15,
+        "BI": 49,
+        "BO": 15
+      },
+      "elapsed_ms": 27998,
+      "gates": {
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true
+      },
+      "surface": "takeoff_ui"
+    },
+    {
+      "run": 3,
+      "pass": true,
+      "totals": {
+        "lists": 5,
+        "rows": 122,
+        "AI": 43,
+        "AO": 15,
+        "BI": 49,
+        "BO": 15
+      },
+      "elapsed_ms": 26823,
+      "gates": {
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true
+      },
+      "surface": "takeoff_ui"
+    },
+    {
+      "run": 4,
+      "pass": true,
+      "totals": {
+        "lists": 5,
+        "rows": 122,
+        "AI": 43,
+        "AO": 15,
+        "BI": 49,
+        "BO": 15
+      },
+      "elapsed_ms": 29087,
+      "gates": {
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true
+      },
+      "surface": "takeoff_ui"
+    },
+    {
+      "run": 5,
+      "pass": true,
+      "totals": {
+        "lists": 5,
+        "rows": 122,
+        "AI": 43,
+        "AO": 15,
+        "BI": 49,
+        "BO": 15
+      },
+      "elapsed_ms": 27236,
+      "gates": {
+        "1": true,
+        "2": true,
+        "3": true,
+        "4": true,
+        "5": true
+      },
+      "surface": "takeoff_ui"
+    }
+  ]
+}

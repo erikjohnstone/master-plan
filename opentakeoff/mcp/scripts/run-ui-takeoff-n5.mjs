@@ -98,19 +98,19 @@ async function runOnce(runNumber) {
     run: runNumber,
     surface: "takeoff_ui",
     elapsed_ms: Date.now() - t0,
-    pass: verification.pass,
+    pass: verification.ok,
     gates: verification.gates,
     totals: compiled.totals,
     compiled,
     verification,
   };
   writeFileSync(resolve(uiRunsDir, `run-${runNumber}.json`), JSON.stringify(out, null, 2));
-  appendFileSync(logPath, `- run ${runNumber}: ${verification.pass ? "PASS" : "FAIL"} (${Date.now() - t0}ms) surface=takeoff_ui items/rows=${compiled.totals?.items ?? compiled.totals?.rows}\n`);
+  appendFileSync(logPath, `- run ${runNumber}: ${verification.ok ? "PASS" : "FAIL"} (${Date.now() - t0}ms) surface=takeoff_ui items/rows=${compiled.totals?.items ?? compiled.totals?.rows}\n`);
   console.log(JSON.stringify({
     run: runNumber,
-    pass: verification.pass,
+    pass: verification.ok,
     totals: compiled.totals,
-    gates: Object.fromEntries(Object.entries(verification.gates || {}).map(([k, v]) => [k, v.pass ?? v.ok ?? v])),
+    gates: Object.fromEntries(Object.entries(verification.gates || {}).map(([k, v]) => [k, !!(v.ok ?? v.pass)])),
     elapsed_ms: Date.now() - t0,
   }));
   return out;
@@ -121,6 +121,9 @@ for (let i = 1; i <= runsN; i++) {
   const r = await runOnce(i);
   if (!r.pass) {
     console.error(`UI N=5 FAILED at run ${i} — restart at 0/5 after system fix`);
+    if (r.verification?.failures?.length) {
+      console.error(JSON.stringify(r.verification.failures.slice(0, 10), null, 2));
+    }
     process.exit(1);
   }
   passed++;
