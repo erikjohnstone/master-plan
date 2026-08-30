@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — leftover exact tag on an empty sheet, set-wide
+
+### Fixed
+- **A leftover exact tag on a sheet with no counted match is no longer always a note.** Per-sheet `leftoverLabeledOccs` still requires a geometrically-confirmed instance on *that* sheet (and two leftover exact tags for a family), so a counted instance on sheet A plus one leftover exact tag on sheet B stayed `text_only` — the empty sheet saw a lone note. A second pass runs set-wide after every plan sheet is classified: at least one geometrically-confirmed instance, a leftover exact-tag family already counted on a confirmed sheet (two or more `labeled_leftover` matches), exactly one leftover exact/fragmented site on empty sheets, farther than the redundant-view coordinate radius from every counted match (a complementary-view redraw of the same device sits at nearly the same page coordinates; a missed sibling on another area of the floor does not). A unique mark with one geo instance and no leftover family stays a note — that empty-sheet leftover is the complementary-view extra whose coordinates missed the 40 px bar. Two empty-sheet leftovers stay notes. A leftover on a counted sheet is still the per-sheet rule. A leftover sitting on a withheld stays with the labeled near-miss family. Canvas and MCP share the pass. No project, sheet, or tag names. **opentakeoff-mcp 0.9.79** (three surfaces).
+
 ## 2026-08-30 — smashed ODL header row still starts a schedule
 
 ### Fixed
