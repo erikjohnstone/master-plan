@@ -1072,7 +1072,7 @@ test("a lone unexplained token never mints a column — the sub-tier needs a par
 // MATERIAL | COMMENTS) extracted as 54 "finish" rows, so a finish code
 // colliding with a door mark would chain to a DOOR — a confidently wrong
 // product in the bid. Refused by title, and the drop is named.
-import { isMepEquipmentSchedule, isNonFinishSchedule, isReferenceOrSpecTable, isPointsListTitle, scheduleTableFromODL, hasPoweredEquipmentColumns, type ODLTable } from "../src/lib/sheetgraph.ts";
+import { isMepEquipmentSchedule, isPassiveAcousticDuctSchedule, isNonFinishSchedule, isReferenceOrSpecTable, isPointsListTitle, scheduleTableFromODL, hasPoweredEquipmentColumns, type ODLTable } from "../src/lib/sheetgraph.ts";
 
 test("isNonFinishSchedule: other families refuse, anything naming FINISH or MATERIAL is kept", () => {
   for (const t of ["DOOR SCHEDULE", "DOOR AND WINDOW SCHEDULE", "PARTITION SCHEDULE", "EQUIPMENT SCHEDULE", "LIGHTING SCHEDULE"]) {
@@ -1111,6 +1111,7 @@ test("isMepEquipmentSchedule: hydronic vessel titles, including smashed ALL-CAPS
   assert.equal(isMepEquipmentSchedule("AIRTERMINALBOXSCHEDULE"), true);
   assert.equal(isMepEquipmentSchedule("FAN SCHEDULE"), false, "FAN is still not an MEP family word");
   assert.equal(isMepEquipmentSchedule("SOUND ATTENUATOR SCHEDULE"), false);
+  assert.equal(isMepEquipmentSchedule("DUCT SILENCER SCHEDULE"), false);
   assert.equal(isMepEquipmentSchedule("DOOR SCHEDULE"), false);
   assert.equal(isMepEquipmentSchedule("TERMINAL BLOCK SCHEDULE"), false, "TERMINAL without AIR is not an HVAC air-terminal table");
   assert.equal(isMepEquipmentSchedule("JUNCTION BOX SCHEDULE"), false, "BOX alone is not an HVAC air-terminal table");
@@ -3202,6 +3203,77 @@ test("2-column sheet layout negative control: a real single wide table (NUMBER/N
   const mat = g.tables.find((t) => t.kind === "finish" && t.title?.text === "MATERIAL SCHEDULE");
   assert.ok(mat, "the real, separate MATERIAL SCHEDULE also extracts, on its own");
   assert.equal(mat!.rows.length, 10);
+});
+
+test("isPassiveAcousticDuctSchedule: silencer/attenuator titles, including smashed tokens", () => {
+  for (const t of ["DUCT SILENCER SCHEDULE", "SOUND ATTENUATOR SCHEDULE", "ACOUSTIC ATTENUATOR SCHEDULE", "DUCT SILENCERS"]) {
+    assert.equal(isPassiveAcousticDuctSchedule(t), true, t);
+  }
+  assert.equal(isPassiveAcousticDuctSchedule("DUCTSILENCERSCHEDULE"), true);
+  assert.equal(isPassiveAcousticDuctSchedule("SOUNDATTENUATORSCHEDULE"), true);
+  assert.equal(isPassiveAcousticDuctSchedule("AIR HANDLING UNIT SCHEDULE"), false);
+  assert.equal(isPassiveAcousticDuctSchedule("FAN SCHEDULE"), false);
+  assert.equal(isPassiveAcousticDuctSchedule("VIBRATION ISOLATION SCHEDULE"), false);
+  assert.equal(isPassiveAcousticDuctSchedule("SILENCER"), false, "a bare column cell is not a table title");
+});
+
+test("buildSheetGraph: a duct-silencer catalog stays finish-kind, not an install schedule", () => {
+  // Same sparse catalog shape as the SOUND ATTENUATOR fixture: MARK +
+  // MANUFACTURER + REMARKS. The tank test's smashed-title path would
+  // reclassify this to equipment if SILENCER were an MEP family word; it
+  // is not. The live overcount path is ODL (eqHits on CFM/SIZE/LENGTH)
+  // and is covered by the adapter test below.
+  const sheet: SheetSpans = {
+    key: "silencer.pdf#1", sheet_number: "M-622",
+    spans: [
+      sp("DUCT SILENCER SCHEDULE", 100, 20),
+      sp("MARK", 100, 50), sp("MANUFACTURER", 220, 50), sp("REMARKS", 400, 50),
+      sp("DS-AHU-1-RA", 100, 80), sp("VIBRO-ACOUSTICS", 220, 80), sp("RETURN", 400, 80),
+      sp("DS-AHU-1-SA", 100, 110), sp("VIBRO-ACOUSTICS", 220, 110), sp("SUPPLY", 400, 110),
+    ],
+  };
+  const finish = extractAllTables(sheet, "finish");
+  assert.ok(finish.some((t) => t.rows.some((r) => r.key === "DS-AHU-1-RA")));
+  const g = buildSheetGraph([sheet]);
+  const hits = g.tables.filter((t) => t.rows.some((r) => /^DS-AHU-1-/.test(r.key || "")));
+  assert.ok(hits.length, "silencer rows survive on the graph");
+  assert.ok(hits.every((t) => t.kind !== "equipment"),
+    "no equipment-kind fragment — takeoff must not sweep these marks");
+  assert.ok(hits.some((t) => t.kind === "finish"), "finish-kind read is the surviving one");
+});
+
+test("scheduleTableFromODL: a duct-silencer catalog emits finish-kind, not equipment", () => {
+  let id = 1;
+  const cell = (row: number, col: number, text: string, colspan = 1) => ({
+    type: "table cell" as const,
+    id: id++,
+    "page number": 1,
+    "bounding box": [col * 80, row * 20, col * 80 + 70, row * 20 + 16],
+    "row number": row,
+    "column number": col,
+    "row span": 1,
+    "column span": colspan,
+    kids: [{ type: "paragraph", content: text }],
+  });
+  const headers = ["MARK", "FLOW RATE (CFM)", "SIZE WIDTH (IN)", "SIZE HEIGHT (IN)", "LENGTH (IN)", "NOTES"];
+  const values = ["DS-AHU-1-RA", "4000", "24", "24", "60", "RETURN"];
+  const odl: ODLTable = {
+    type: "table",
+    id: 77,
+    "page number": 1,
+    "bounding box": [0, 0, 480, 60],
+    "number of rows": 3,
+    "number of columns": 6,
+    rows: [
+      { type: "table row", "row number": 1, id: id++, cells: [cell(1, 1, "DUCT SILENCER SCHEDULE", 6)] },
+      { type: "table row", "row number": 2, id: id++, cells: headers.map((h, i) => cell(2, i + 1, h)) },
+      { type: "table row", "row number": 3, id: id++, cells: values.map((v, i) => cell(3, i + 1, v)) },
+    ],
+  };
+  const built = scheduleTableFromODL(odl, "silencer.pdf#1", [1, 0, 0, 1, 0, 0]);
+  assert.ok(built, "ODL adapter must keep the table");
+  assert.equal(built!.kind, "finish");
+  assert.deepEqual(built!.rows.map((r) => r.key), ["DS-AHU-1-RA"]);
 });
 
 test("isReferenceCrossTable: OUTSIDE AIR flow-rate calc demotes without MODEL/MANUFACTURER, genuine OA unit catalog does not", () => {
