@@ -857,7 +857,7 @@ export const sweepScheduleRowOutput = {
     scaled: sweepScaled.optional(),
     scale_assumed: sweepScaleAssumed.optional(),
     redundant_view: z.array(z.object({ ...rowSweepPlacement, tag_at: wireBox, room: z.string(), kept_sheet: z.string() }))
-      .optional().describe("A match that WOULD have counted, but sits in the SAME drawn room as an already-counted match on a DIFFERENT-discipline sheet's own 'enlarged' plan of that room — a real, common cross-trade drafting convention (mechanical and plumbing each draw their own enlarged view of a shared mechanical room, redrawing the SAME physical device for their own trade's reference). Withheld from `found`/`matches` as the same physical unit, not a second install; `kept_sheet` names the sheet whose match this duplicates. Audit with view_sheet before trusting it as redundant rather than a real second unit."),
+      .optional().describe("A match that WOULD have counted, but is the SAME physical device redrawn: either in the same drawn room on another sheet's own enlarged/purpose-specific plan, or in another titled viewport on this same sheet (a duct plan beside a piping plan, a second section cut of one room). Withheld from `found`/`matches` as one install, not a second; `kept_sheet` names the sheet whose match this duplicates. Audit with view_sheet before trusting it as redundant rather than a real second unit."),
   })).describe("One entry per swept PLAN-role sheet, load order"),
   complete: z.boolean().describe("True when every proposed placement was scored on every swept sheet — false means at least one sheet's count is a FLOOR, not a total (#261)"),
   skipped: z.array(z.object({ sheet: z.string(), role: z.string(), reason: z.string() }))

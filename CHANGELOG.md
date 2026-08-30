@@ -9,6 +9,11 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 - **Overlapping matches collapse to one.** Two centroids closer than half a symbol diagonal, or a different square-symmetry transform just outside that bar (a few px of eccentricity, capped so a large fingerprint cannot swallow a real rotated sibling), are the same ink; the better score counts and the shadow is a disclosed question.
 - **A same-convention labeled family no longer dies on the unlabeled commit bar.** When a sheet already has exactly one confident instance (including the seed) and two or more leftover own-tag occurrences each sit next to a near-bar withheld — and those leftovers are not extra labels on the counted instance — those siblings count. A single leftover labeled near-miss stays a disclosed question — that is the schematic-versus-plan extra, not a second install.
 
+## 2026-08-29 — same-sheet dual-view overcount
+
+### Fixed
+- **A tag drawn once per titled viewport on one plan sheet is one install.** Complementary views of the same room on a single sheet (a duct-layer plan beside a piping-layer plan, two section cuts) each redraw and retag the same equipment; `sweep_schedule_row` previously counted every viewport that cleared the fingerprint bar. Same-sheet matches now collapse when they sit in different titled viewports whose space key agrees (view-type words stripped). Two units inside one viewport, or two viewports of different rooms/levels, stay separate. No project, sheet, or tag names. **opentakeoff-mcp 0.9.68** (three surfaces).
+
 ## 2026-08-29 — rotated hyphen joins; work notes are not instances
 
 ### Fixed
@@ -24,7 +29,7 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 ## 2026-08-29 — lookup tables are not instance schedules
 
 ### Fixed
-- **Reference / cross-reference / specification tables no longer emit takeoff instance tags.** A CROSS-REFERENCE, SPECIFICATION INDEX, or POINTS LIST shares the MARK/CODE column shape of a finish schedule, so the extractor indexed every lookup row and `sweep_schedule_row` counted it as installed work — and a numbered MARK cell on a plan sheet minted a second "room" for a bubble the sheet already carried. Those captions are now recognized as table titles (running-text "REFER TO SPEC" is not), refused as finish/room-finish tables (the drop named in notes), and their cells never become plan tags. A title that also names FINISH or MATERIAL is still kept. Does not touch header-boundary / deep-header continuation.
+- **Reference / cross-reference / specification tables no longer emit takeoff instance tags.** A CROSS-REFERENCE, SPECIFICATION INDEX, or POINTS LIST shares the MARK/CODE column shape of a finish schedule, so the extractor indexed every lookup row and `sweep_schedule_row` counted it as installed work — and a numbered MARK cell on a plan sheet minted a second "room" for a bubble the sheet already carried. Those captions are now recognized as table titles (running-text "REFER TO SPEC" is not), refused as finish/room-finish tables (the drop named in notes), and their cells never become plan tags. A title that also names FINISH or MATERIAL is still kept. A catalog instance schedule (AIR-COOLED CONDENSING UNIT, DX FAN COIL UNIT, UNIT HEATER, SILENCER, FIN TUBE RADIATION) is still kept — those share a MARK/TAG column but name a purchasable product with MODEL/MANUFACTURER, not a lookup. Does not touch header-boundary / deep-header continuation.
 
 ## 2026-08-29 — mark identity: short-mark overcount and twin-alias double-count
 

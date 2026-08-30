@@ -1874,6 +1874,175 @@ export function pickSameDisciplineCorroborator<T>(
   return candidates.find((c) => disciplineOfSheetNumber(sheetNumberOf(c)) === anchorDisc) ?? null;
 }
 
+// ── same-sheet titled-viewport collapse ─────────────────────────────────────
+// A single PLAN-role sheet routinely draws the SAME physical room more than
+// once as complementary views — a duct-layer plan beside a piping-layer
+// plan, or two section cuts of one mechanical room. Each view redraws the
+// same installed equipment and tags it again. sweep_schedule_row's per-
+// occurrence fingerprint then independently clears the match bar at every
+// view (the marker geometry is the same device, just restated), so a tag
+// drawn once per viewport is counted once per viewport.
+//
+// collapseGroup below cannot see this: it treats a same-sheet repeat as a
+// genuine separate-install signal, which is correct for two units on ONE
+// drawing and wrong for two titled drawings of one unit on one sheet. The
+// signal used here is the view TITLE, not a project/sheet/tag name: two
+// short, mostly-uppercase captions that each name a PLAN / SECTION /
+// ELEVATION of a room/area, sitting on the same sheet. Their *space* key
+// (the title minus view-type words — DUCT/PIPING/PLAN/SECTION/ENLARGED)
+// must agree, so "LEVEL 1 PLAN" beside "LEVEL 2 PLAN" never collapses and
+// two enlarged plans of different rooms never collapse. A sheet with fewer
+// than two such titles is a no-op. A real repeat *inside* one viewport is
+// also a no-op — assignment is nearest-title, and collapseGroup still
+// requires 2+ groups.
+//
+// This is the same "a redundant view is not a second install" doctrine as
+// the cross-sheet path below, applied to the same-sheet case that path's
+// own sheet-grouping structurally cannot see.
+
+export interface ViewportTitleSpan { str: string; x: number; y: number; w?: number; h?: number }
+export interface SheetViewport { title: string; spaceKey: string; at: Point }
+
+const VIEWPORT_NOTE_RE = /\b(PROVIDE|SHALL|SEE\s|TYPICAL\s+FOR|NOTES?\b|REQUIREMENTS?|COMPLIANCE|MANUFACTURER|COORDINATE|BEFORE|AFTER|KEYED|INDICATED|REFERRING|RELEVANT|ACCESSIBLE|CONTINUATION)\b/i;
+const VIEWPORT_VIEW_RE = /\b(PLANS?|SECTIONS?|ELEVATIONS?)\b/;
+const VIEWPORT_SCOPE_RE = /\b(ROOM|AREA|LEVEL|FLOOR|ENLARGED|PARTIAL|MECH(?:ANICAL)?|ELEC(?:TRICAL)?)\b/;
+const VIEWPORT_TYPE_WORDS = /\b(ENLARGED|PARTIAL|DUCTWORK|DUCT|PIPING|PIPE|PLANS?|SECTIONS?|ELEVATIONS?|DETAILS?|DIAGRAM|VIEW|AND)\b/g;
+const VIEWPORT_SECTION_NUM = /\bSECTION\s+\d+\b/g;
+
+/** A short title caption naming a drawing viewport, not a sheet note or a
+ *  title-block fragment. Purely structural — no project vocabulary. */
+export function isViewportTitle(raw: string): boolean {
+  const s = raw.replace(/\s+/g, " ").trim();
+  if (s.length < 8 || s.length > 80) return false;
+  if (/[.!?]/.test(s)) return false;                 // running-text sentence
+  if (/^(THE|ON|TO|FOR|AND|OR|WITH|AS)\b/i.test(s)) return false;
+  if (/\b(AND|OR)$/i.test(s)) return false;          // truncated "FLOOR PLAN AND"
+  if (VIEWPORT_NOTE_RE.test(s)) return false;
+  if (!VIEWPORT_VIEW_RE.test(s) || !VIEWPORT_SCOPE_RE.test(s)) return false;
+  const letters = s.replace(/[^A-Za-z]/g, "");
+  if (letters.length < 4) return false;
+  let upper = 0;
+  for (const ch of letters) if (ch === ch.toUpperCase()) upper++;
+  return upper / letters.length >= 0.8;
+}
+
+/** Room/area identity of a viewport title, with view-type words stripped
+ *  so a duct plan and a piping plan of the same room compare equal, while
+ *  "LEVEL 1" and "LEVEL 2" (or "ROOM 151" and "ROOM 202") stay distinct. */
+export function viewportSpaceKey(title: string): string {
+  return title
+    .toUpperCase()
+    .replace(/[^A-Z0-9]+/g, " ")
+    .replace(VIEWPORT_SECTION_NUM, " ")
+    .replace(VIEWPORT_TYPE_WORDS, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+const VIEWPORT_MERGE_PX = 160;
+
+/** Fold title-block wording aliases so "DUCT" / "DUCTWORK" and
+ *  "PIPE" / "PIPING" reprints of one caption compare equal, while a
+ *  real duct-vs-pipe pair stays distinct. */
+function normalizeViewportTitle(title: string): string {
+  return title
+    .toUpperCase()
+    .replace(/[^A-Z0-9]+/g, " ")
+    .replace(/\bDUCTWORK\b/g, "DUCT")
+    .replace(/\bPIPING\b/g, "PIPE")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Detect complementary titled viewports on one sheet. Returns [] unless
+ *  at least two distinct, well-separated titles survive the filters — a
+ *  single whole-sheet "FIRST FLOOR PLAN" is not a dual-view. */
+export function detectSheetViewports(spans: ViewportTitleSpan[]): SheetViewport[] {
+  const found: SheetViewport[] = [];
+  for (const sp of spans) {
+    if (!isViewportTitle(sp.str)) continue;
+    const title = sp.str.replace(/\s+/g, " ").trim();
+    const spaceKey = viewportSpaceKey(title);
+    if (!spaceKey || !/[A-Z]/.test(spaceKey)) continue;
+    const at: Point = [sp.x + (sp.w ?? 0) / 2, sp.y + (sp.h ?? 0) / 2];
+    // The same caption is routinely printed twice — once under the drawing
+    // and once in the title block. That is one viewport, not two. Keep the
+    // leftmost copy (drawings sit in the sheet body; the title block is
+    // the right-hand strip).
+    const norm = normalizeViewportTitle(title);
+    const sameText = found.find((v) => normalizeViewportTitle(v.title) === norm);
+    if (sameText) {
+      if (at[0] < sameText.at[0]) sameText.at = at;
+      continue;
+    }
+    const near = found.find((v) => Math.hypot(v.at[0] - at[0], v.at[1] - at[1]) <= VIEWPORT_MERGE_PX);
+    if (near) {
+      if (title.length > near.title.length) { near.title = title; near.spaceKey = spaceKey; near.at = at; }
+      continue;
+    }
+    found.push({ title, spaceKey, at });
+  }
+  return found.length >= 2 ? found : [];
+}
+
+function nearestViewport(at: Point, viewports: SheetViewport[]): SheetViewport | null {
+  if (!viewports.length) return null;
+  let best = viewports[0], bestD = Infinity;
+  for (const v of viewports) {
+    const d = Math.hypot(at[0] - v.at[0], at[1] - v.at[1]);
+    if (d < bestD) { bestD = d; best = v; }
+  }
+  return best;
+}
+
+function dedupeSameSheetViewports<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
+  const bySheet = new Map<string, RoomSweepInstance<Id>[]>();
+  for (const inst of instances) {
+    if (!inst.discipline || (inst.viewports?.length ?? 0) < 2) continue;
+    const arr = bySheet.get(inst.sheet);
+    if (arr) arr.push(inst); else bySheet.set(inst.sheet, [inst]);
+  }
+  const out: RedundantRoomView<Id>[] = [];
+  for (const group of bySheet.values()) {
+    const viewports = group[0].viewports!;
+    const bySpace = new Map<string, SheetViewport[]>();
+    for (const v of viewports) {
+      const arr = bySpace.get(v.spaceKey);
+      if (arr) arr.push(v); else bySpace.set(v.spaceKey, [v]);
+    }
+    for (const spaceViewports of bySpace.values()) {
+      // Complementary views have DISTINCT captions (duct vs piping,
+      // section 1 vs 2). Two copies of the same caption are a title-block
+      // reprint, already merged in detectSheetViewports — still require
+      // two different titles here so a leftover pair cannot collapse
+      // two real installs across a floor plan / title-block Voronoi split.
+      if (spaceViewports.length < 2) continue;
+      if (new Set(spaceViewports.map((v) => normalizeViewportTitle(v.title))).size < 2) continue;
+      type Assigned = RoomSweepInstance<Id> & { vpSheet: string };
+      const assigned: Assigned[] = [];
+      for (const inst of group) {
+        const vp = nearestViewport(inst.at, spaceViewports);
+        if (!vp) continue;
+        // Only instances whose nearest title among the WHOLE sheet set
+        // is one of this space's viewports — a mark belonging to a
+        // different space's view on the same sheet stays out.
+        const nearestAll = nearestViewport(inst.at, viewports);
+        if (!nearestAll || nearestAll.spaceKey !== vp.spaceKey) continue;
+        assigned.push({ ...inst, sheet: `${inst.sheet}::${vp.title}`, vpSheet: inst.sheet });
+      }
+      const collapsed = collapseGroup<Id, Assigned>(assigned, (a) => {
+        const vp = nearestViewport(a.at, spaceViewports);
+        return vp ? `${vp.spaceKey} (${vp.title})` : a.vpSheet;
+      });
+      for (const r of collapsed) {
+        const src = assigned.find((a) => a.id === r.id);
+        out.push({ ...r, sheet: src?.vpSheet ?? r.sheet, keptSheet: src?.vpSheet ?? r.keptSheet });
+      }
+    }
+  }
+  return out;
+}
+
 // ── cross-sheet redundant room-view dedup ───────────────────────────────────
 // A real, common drafting convention: two DIFFERENT SHEETS each draw their
 // OWN "enlarged"/purpose-specific plan of the SAME physical room, redrawing
@@ -1909,15 +2078,19 @@ export function pickSameDisciplineCorroborator<T>(
 // is a narrow, specific shape, not a general "trust the first count"
 // heuristic.
 //
-// Never applied when: the two occurrences share a SHEET (a real repeat on
-// one sheet's own drawing is a genuine separate-install signal, not a
-// redrawn reference — left alone); no room can be confidently attributed to
+// Never applied when: the two occurrences share a SHEET *and* the same
+// titled viewport (a real repeat on one drawing is a genuine separate-
+// install signal — left alone); no room can be confidently attributed to
 // an occurrence (never guessed — see maxDist below); or only one sheet
-// is represented in a room (nothing to collapse against). The kept count for
-// a duplicated room is the LARGEST single-sheet count seen there — never
-// the SUM (double/triple-counts the redundant views, the actual AC-1 bug)
-// and never the smallest (a partial crop that only shows some of a room's
-// real units must never silently undercut a fuller sibling view).
+// is represented in a room (nothing to collapse against). SAME-sheet
+// complementary viewports of one space (a duct plan beside a piping plan,
+// two section cuts of one room) are the exception — see detectSheetViewports
+// and the viewport path at the end of dedupeCrossDisciplineRoomViews. The
+// kept count for a duplicated room is the LARGEST single-sheet count seen
+// there — never the SUM (double/triple-counts the redundant views, the
+// actual AC-1 bug) and never the smallest (a partial crop that only shows
+// some of a room's real units must never silently undercut a fuller sibling
+// view).
 export interface RoomCandidate { tag: string; name: string; bbox: [number, number, number, number] }
 export interface RoomSweepInstance<Id> {
   id: Id;
@@ -1935,6 +2108,11 @@ export interface RoomSweepInstance<Id> {
   rooms: RoomCandidate[];
   sheetWidthPx: number;
   sheetHeightPx: number;
+  /** Titled drawing viewports on this sheet (duct plan vs piping plan,
+   *  section 1 vs 2). Empty / omitted when the sheet has fewer than two
+   *  recognizable view titles — the same-sheet viewport path then no-ops,
+   *  so a real repeat inside one drawing stays a real repeat. */
+  viewports?: SheetViewport[];
 }
 export interface RedundantRoomView<Id> {
   id: Id;
@@ -2070,6 +2248,18 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   }
   for (const cluster of clusters.values()) {
     out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(no room drawn nearby — same-location redraw)"));
+  }
+
+  // Same-sheet complementary viewports of one space (duct plan | piping
+  // plan, section 1 | section 2). Independent of room attribution — a
+  // mechanical room often has no room-number bubble on an enlarged sheet
+  // that *is* the room — and structurally invisible to collapseGroup's
+  // same-sheet "real repeat" gate. Ids already collapsed above are skipped
+  // so a cross-sheet room collapse plus a same-sheet viewport collapse
+  // cannot report the same match twice.
+  const already = new Set(out.map((r) => r.id));
+  for (const r of dedupeSameSheetViewports(instances)) {
+    if (!already.has(r.id)) out.push(r);
   }
   return out;
 }
