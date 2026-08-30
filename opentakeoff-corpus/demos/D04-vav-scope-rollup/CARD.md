@@ -64,19 +64,22 @@ path was proved separately with the frozen prompt + follow-up.
 ## Production UI proof
 
 Validated recording:
-`/opt/cursor/artifacts/d04_ui_prompt_answer_cards_followup_2026-08-30T11-18-46-431Z.webm`.
+`/opt/cursor/artifacts/d04_ui_prompt_answer_cards_followup_2026-08-30T11-28-54-597Z.webm`.
 
 Walkthrough shows the frozen prompt, live tools, answer-first VAV rollup
-(58 + requested attributes), source cards, on-sheet TAG/CFM paints, and a
+(58 + requested attributes), expandable source cards with structured titles
+(`VAV-1 · CFM = 350` + Details dropdown), on-sheet TAG/CFM paints, and a
 correct in-thread follow-up rejecting SUITE100 while reporting VAV-58 CFM
-350. Harness rejects empty answers, plan-label rollups, and wrong follow-ups.
-(Re-recorded 2026-08-30 after fixing Agent-panel answer-first scroll so the
-Answer is not buried under Sources cards.)
+350. Harness rejects empty answers, plan-label rollups, naked fragment-only
+cards, and wrong follow-ups. Re-proved 2026-08-30 under the chat-usefulness
+bar (answer-first + expandable cards + verified follow-up visible).
 
 UI/API path fixes that cleared this gate are generalized production behavior
 (family-key junk filter + `family_mark`; keep full `all_cells` on row_key
 lookups; paint-thrash answer nudge; Cite-each-TAG target fallback; reject
 affirming junk remarks keys as scheduled family units; schedule-count title
+citations; expandable Agent source cards; enrich `highlight_citation` from
+prior query cells for structured card labels).
 citations) — not demo-PDF special cases.
 
 ## Failure behavior

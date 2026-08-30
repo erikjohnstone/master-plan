@@ -83,7 +83,7 @@ prior lock as current.
 
 ## D04 selection record
 
-Status: `RE-PROOF REQUIRED — chat/source-card usefulness + verified follow-up visible`
+Status: `LOCKED — API 5/5; UI re-proof (expandable cards + verified follow-up)`
 
 Target holds: 24-sheet `federal-mech` set. `VOLUME CONTROL BOX SCHEDULE` on
 sheet #16 lists VAV-1..VAV-58 (58 unique VAV-* tags; junk key SUITE100
@@ -93,8 +93,9 @@ Independent 20% find_text hand-count (13 tags) reconciled before model runs.
 Re-verified 2026-08-30 from pinned PDF: 59 rows, 58 VAV-*, SUITE100 junk;
 VAV-1/12/30/58 attribute cells match truth.
 
-N=5 API/stdio previously 5/5 (p95 **3.535 s**). UI must be re-proved under
-the chat-usefulness bar: complete structured Answer in chat, expandable
-source cards (tag · field · value + dropdown detail), follow-up **asked +
-verified** (SUITE100 not a VAV; VAV-58 CFM 350) visible in recording. Do not
-treat prior lock as current. Next after both D03/D04 clear: D05.
+N=5 API/stdio 5/5 (p95 **3.535 s**). UI re-proved under the chat-usefulness
+bar: complete structured Answer, expandable source cards (`tag · field ·
+value` + dropdown), follow-up **asked + verified** (SUITE100 not a VAV;
+VAV-58 CFM 350) in
+`/opt/cursor/artifacts/d04_ui_prompt_answer_cards_followup_2026-08-30T11-28-54-597Z.webm`.
+Next after D03 clears the same bar: D05.
