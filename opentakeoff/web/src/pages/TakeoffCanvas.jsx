@@ -7693,7 +7693,6 @@ export default function TakeoffCanvas() {
     return result.error ? result : {
       ...result,
       bbox_px,
-      rect: [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]],
       text,
     };
   }
