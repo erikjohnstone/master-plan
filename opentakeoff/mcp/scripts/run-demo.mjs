@@ -223,8 +223,9 @@ function systemPrompt(truth) {
     "Never invent a table-title filter from the user's category words. Omit title on the first query, or use only a literal title phrase already returned by a tool (for example POINTS LIST); 'BAS points' does not imply a table literally titled BAS POINTS.",
     "If a natural-language description returns no rows, broaden once with cell_contains set to the exact equipment tag from the prompt and no title filter, then inspect the returned descriptions for the requested point meaning. Do not repeat an equivalent empty query.",
     nonTableFields.length
-      ? `These required fields need drawing-text evidence rather than a table cell: ${nonTableFields.join(", ")}. Use sheet_graph roles/evidence to choose candidate sheets, then call find_text/read_sheet_text on those sheets until the exact source phrase is returned. Never fill these fields from a schedule LOCATION or any other table cell, and never invent a section/sheet label.`
+      ? `These required fields need drawing-text evidence rather than a table cell: ${nonTableFields.join(", ")}. Call find_text or read_sheet_text and cite the returned hit. Never fill these fields from a schedule cell, and never invent a label that no tool returned.`
       : "No required field needs free drawing-text evidence.",
+    "find_text accepts an optional sheet; omit sheet to search the entire loaded set. When searching drawing text, use a distinctive fragment from the user's question—not the field name itself—and copy the returned tool text exactly.",
     "Group independent tool calls into the same response. Inspect each complete result before calling another tool, and never repeat an equivalent query.",
     "Use query_table cell_value for exact cross-table relationships and cell_contains when the related tag is embedded in a compound value; do not scan a whole table or infer a row without source text.",
     "Every query_table match includes row.all_cells. After the first matching row, use all_cells for every requested field on that row instead of making separate column calls.",
@@ -251,6 +252,26 @@ function requestId(response, json) {
     || response.headers.get("request-id")
     || json.id
     || null;
+}
+
+/** Compact sheet_graph payload for seeding the already-computed setup index into
+ * the model transcript without re-sending full span/evidence payloads. */
+export function compactSheetGraph(data) {
+  const sheets = Array.isArray(data?.sheets) ? data.sheets : [];
+  return {
+    sheet_count: sheets.length,
+    sheets: sheets.map((sheet) => ({
+      sheet: sheet.sheet,
+      role: sheet.role,
+      schedules: Array.isArray(sheet.schedules)
+        ? sheet.schedules.map((schedule) => ({
+          kind: schedule.kind,
+          title: schedule.title,
+          rows: schedule.rows,
+        }))
+        : [],
+    })),
+  };
 }
 
 async function productionPair(stdio) {
@@ -290,6 +311,7 @@ export async function runToolCallingModel({
   execute,
   fetchFn = fetch,
   maxIterations = 12,
+  seededToolCalls = [],
 }) {
   const messages = [
     { role: "system", content: systemPrompt(truth) },
@@ -299,6 +321,27 @@ export async function runToolCallingModel({
   const toolCalls = [];
   const requestIds = [];
   let resolvedModel = model;
+
+  for (const seeded of seededToolCalls) {
+    const callId = seeded.id || `seed-${toolCalls.length + 1}`;
+    messages.push({
+      role: "assistant",
+      content: null,
+      tool_calls: [{
+        id: callId,
+        type: "function",
+        function: {
+          name: seeded.name,
+          arguments: JSON.stringify(seeded.arguments || {}),
+        },
+      }],
+    });
+    messages.push({
+      role: "tool",
+      tool_call_id: callId,
+      content: JSON.stringify(seeded.result),
+    });
+  }
 
   for (let iteration = 0; iteration < maxIterations; iteration++) {
     const started = performance.now();
@@ -475,6 +518,12 @@ async function main() {
         truth,
         tools,
         execute: (name, toolArgs) => callTool(client, name, toolArgs),
+        seededToolCalls: [{
+          id: "seed-sheet-graph",
+          name: "sheet_graph",
+          arguments: {},
+          result: { is_error: false, data: compactSheetGraph(sourceIndex.data) },
+        }],
       });
     } catch (error) {
       const elapsed = performance.now() - started;

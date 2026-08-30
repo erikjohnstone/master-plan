@@ -5784,22 +5784,52 @@ export class Session {
    * stubborn zero-hit search on a visually-confirmed tag as a candidate
    * for this, not a fragmentation bug, once fragmentedTagOcc's shapes and
    * a `rot`-aware search have both already been tried. */
-  findText(name: string, q: string, opts: { region?: { x0: number; y0: number; x1: number; y1: number }; limit?: number } = {}) {
+  findText(name: string | null | undefined, q: string, opts: { region?: { x0: number; y0: number; x1: number; y1: number }; limit?: number } = {}) {
     const query = q.trim();
     if (!query) throw new UserError("q must be a non-empty string.");
-    const s = this.sheet(name);
-    if (!s.spans) s.spans = textSpans(s.page);
-    const r = opts.region;
     const needle = query.toLowerCase();
     const limit = opts.limit ?? 200;
-    const all = s.spans.filter((sp) => sp.str.toLowerCase().includes(needle)
-      && (!r || (sp.x0 <= r.x1 && sp.x1 >= r.x0 && sp.y0 <= r.y1 && sp.y1 >= r.y0)));
-    const hits = all.slice(0, limit).map((sp) => ({
-      str: sp.str,
-      bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number],
-      center: [round1((sp.x0 + sp.x1) / 2), round1((sp.y0 + sp.y1) / 2)] as [number, number],
-    }));
-    return { sheet: s.key, q: query, count: all.length, truncated: all.length > hits.length, hits };
+    const region = opts.region;
+    if (region && !name) {
+      throw new UserError("region requires sheet; omit both to search the loaded set, or pass sheet with region.");
+    }
+
+    const matchSpans = (sheet: { key: string; spans?: GraphSpan[] | null; page: PageHandle }) => {
+      if (!sheet.spans) sheet.spans = textSpans(sheet.page);
+      return sheet.spans.filter((sp) => sp.str.toLowerCase().includes(needle)
+        && (!region || (sp.x0 <= region.x1 && sp.x1 >= region.x0 && sp.y0 <= region.y1 && sp.y1 >= region.y0)));
+    };
+
+    if (name) {
+      const s = this.sheet(name);
+      const all = matchSpans(s);
+      const hits = all.slice(0, limit).map((sp) => ({
+        sheet: s.key,
+        str: sp.str,
+        bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number],
+        center: [round1((sp.x0 + sp.x1) / 2), round1((sp.y0 + sp.y1) / 2)] as [number, number],
+      }));
+      return { sheet: s.key, q: query, count: all.length, truncated: all.length > hits.length, hits };
+    }
+
+    const all: Array<{
+      sheet: string;
+      str: string;
+      bbox: [number, number, number, number];
+      center: [number, number];
+    }> = [];
+    for (const sheet of this.sheetList()) {
+      for (const sp of matchSpans(sheet)) {
+        all.push({
+          sheet: sheet.key,
+          str: sp.str,
+          bbox: [sp.x0, sp.y0, sp.x1, sp.y1],
+          center: [round1((sp.x0 + sp.x1) / 2), round1((sp.y0 + sp.y1) / 2)],
+        });
+      }
+    }
+    const hits = all.slice(0, limit);
+    return { sheet: null, q: query, count: all.length, truncated: all.length > hits.length, hits };
   }
 
   /**

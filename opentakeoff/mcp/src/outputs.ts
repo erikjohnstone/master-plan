@@ -711,11 +711,12 @@ export const undoLastOutput = {
 /** findText — the complement to readSheetTextOutput: WHERE a known string
  * sits, not what a region says. */
 export const findTextOutput = {
-  sheet: z.string(),
+  sheet: z.string().nullable().describe("Sheet searched, or null when the query ran across the loaded set"),
   q: z.string(),
   count: z.number().int().describe("Total matches before the limit cap"),
   truncated: z.boolean().describe("true = count exceeds hits.length; narrow the region or raise limit"),
   hits: z.array(z.object({
+    sheet: z.string().describe("Sheet containing this hit"),
     str: z.string().describe("The matched pdf.js text run, verbatim (may be shorter than the full label — runs aren't merged into lines)"),
     bbox: z.tuple([z.number(), z.number(), z.number(), z.number()]).describe("[x0, y0, x1, y1] image px"),
     center: z.tuple([z.number(), z.number()]).describe("Bbox center, image px — feed straight into one_click's seed"),

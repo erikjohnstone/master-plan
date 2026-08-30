@@ -4,6 +4,7 @@ import {
   answerShapeErrors,
   citationFormErrors,
   citationProvenanceErrors,
+  compactSheetGraph,
   DEMO_TOOLS,
   drawingTextEvidenceErrors,
   parseJsonAnswer,
@@ -12,6 +13,72 @@ import {
   toolTextOrthographyErrors,
 } from "../scripts/run-demo.mjs";
 import { formatDemoRun } from "../scripts/show-demo-run.mjs";
+
+test("demo runner seeds the setup sheet_graph compactly without counting it as a model call", async () => {
+  const requests = [];
+  const result = await runToolCallingModel({
+    endpoint: "https://model.invalid/v1/chat/completions",
+    apiKey: "test-key",
+    model: "test-model",
+    prompt: "Tag?",
+    truth: {
+      source_file: "set.pdf",
+      expected: {
+        equipment_tag: {
+          type: "string",
+          citation: {
+            sheet_id: "set.pdf#1",
+            table_title: "AIR HANDLING UNIT SCHEDULE",
+            bbox_px: [1, 2, 3, 4],
+          },
+        },
+      },
+    },
+    tools: [],
+    seededToolCalls: [{
+      id: "seed-sheet-graph",
+      name: "sheet_graph",
+      arguments: {},
+      result: { is_error: false, data: compactSheetGraph({
+        sheets: [{ sheet: "set.pdf#1", role: "schedule", schedules: [{ kind: "equipment", title: "AIR HANDLING UNIT SCHEDULE", rows: 2 }] }],
+      }) },
+    }],
+    execute: async () => {
+      throw new Error("no tool call expected");
+    },
+    fetchFn: async (_endpoint, request) => {
+      requests.push(JSON.parse(request.body));
+      return new Response(JSON.stringify({
+        id: "final",
+        choices: [{
+          message: {
+            role: "assistant",
+            content: JSON.stringify({
+              status: "done",
+              answer: {
+                equipment_tag: {
+                  value: "AHU-T1A",
+                  citations: [{
+                    sheet_id: "set.pdf#1",
+                    table_title: "AIR HANDLING UNIT SCHEDULE",
+                    row_key: "AHU-T1A",
+                    column: "MARK",
+                    bbox_px: [1, 2, 3, 4],
+                  }],
+                },
+              },
+            }),
+          },
+        }],
+      }), { status: 200 });
+    },
+  });
+  assert.equal(requests.length, 1);
+  assert.equal(requests[0].messages[2].tool_calls[0].function.name, "sheet_graph");
+  assert.match(requests[0].messages[0].content, /omit sheet to search the entire loaded set/);
+  assert.equal(result.tool_calls.length, 0);
+  assert.equal(result.answer.answer.equipment_tag.value, "AHU-T1A");
+});
 
 test("demo runner exposes deterministic plan-location evidence tools", () => {
   assert.equal(DEMO_TOOLS.has("find_text"), true);

@@ -385,6 +385,8 @@ test("schema-invalid arguments: -32602 validation error naming the tool; the ses
   await callViolation(client, "view_sheet", { sheet: KEY, region: { x0: 0, y0: 0, x1: 10 } }); // partial region
   await callViolation(client, "find_text", { sheet: KEY });                                // missing q
   await callViolation(client, "find_text", { sheet: KEY, q: "101", limit: 0 });            // limit below min 1
+  await callViolation(client, "find_text", { q: "101", region: { x0: 0, y0: 0, x1: 1, y1: 1 }, limit: 0 }); // limit still enforced when sheet omitted
+
   await callViolation(client, "symbol_sweep", { sheet: KEY });                             // missing seed_rect
   await callViolation(client, "symbol_sweep", { sheet: KEY, seed_rect: [[0, 0]] });        // one corner is not a rect
   await callViolation(client, "symbol_sweep", { sheet: KEY, seed_rect: [[0, 0], [50, 50]], tolerance_px: 0 }); // tolerance must be positive
