@@ -381,7 +381,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
         return;
       }
       const ft = classifyError(msg);
-      item.status = ft === "SYMBOL_FALSE_NEGATIVE" ? "refused" : "error";
+      item.status = ft === "SYMBOL_FALSE_NEGATIVE" || ft === "AMBIGUOUS_ROW_KEY" ? "refused" : "error";
       item.reason = msg;
       if (item.status === "refused") out.stats.refused++; else out.stats.errored++;
       out.failures.push({ type: ft, tag: item.tag, sheet: tb.sheet, detail: msg });
