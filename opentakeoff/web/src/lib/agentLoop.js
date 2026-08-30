@@ -2121,6 +2121,21 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     if (!turn.toolCalls.length) {
       if (turn.text && !/^\[Evidence gate:/i.test(turn.text)) lastDraftText = turn.text;
       let draftForGate = turn.text;
+      // Always merge omitted named-tag schedule attrs from query_table before
+      // evidence gates — do not wait for a correction round-trip the model may
+      // dodge by rewriting paint/sheet text without the values.
+      {
+        const missingUpfront = missingNamedScheduleAttrs(callLog, goal, draftForGate);
+        if (missingUpfront.length) {
+          const filled = appendNamedScheduleAttrs(draftForGate, missingUpfront);
+          if (filled && filled !== draftForGate) {
+            draftForGate = filled;
+            displayText = filled;
+            lastDraftText = filled;
+            emit({ type: "text", text: "[Evidence: appended schedule attributes from query_table.]" });
+          }
+        }
+      }
       let correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
       if (correction && correction.startsWith("__FATAL__:")) {
         const msg = correction.slice("__FATAL__:".length).trim();
