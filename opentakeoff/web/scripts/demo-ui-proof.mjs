@@ -118,7 +118,8 @@ try {
     || (/(?:≈|\bapproximately\b|\bapprox\.)/i.test(finalAnswer)
       && !/\b(?:derived|calculated|converted|conversion)\b/i.test(finalAnswer))
     || finalAnswer.split("\n").some((line) =>
-      /\bplan[- ]?location\b/i.test(line) && /#44\b/.test(line))) {
+      /\bplan[- ]?location\b/i.test(line) && /#44\b/.test(line))
+    || /\b(?:all|each)\b.{0,160}\bhighlight/is.test(finalAnswer)) {
     throw new Error("D01 UI answer contains a correction cap, placeholder, invalid quantity rationale, or invalid coordinate form.");
   }
   const normalizedPanel = finalAnswer.toUpperCase().replace(/[‑–—]/g, "-").replace(/\s+/g, " ");

@@ -213,6 +213,20 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         evidenceCells.push({ sheet: out.row.sheet, header, text: cell.text, bbox: bboxArray });
       }
     }
+    if (/\b(?:all|each)\b.{0,160}\bhighlight/i.test(finalText)) {
+      const mentionedCells = evidenceCells.filter(({ header, text }) => {
+        const headerCanonical = String(header).toUpperCase().replace(/[^A-Z0-9]/g, "");
+        const textCanonical = String(text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+        return headerCanonical.length >= 3 && textCanonical
+          && finalCanonical.includes(headerCanonical) && finalCanonical.includes(textCanonical);
+      });
+      const unpaintedMentioned = mentionedCells.filter((cell) =>
+        !highlights.some((highlight) => highlight.sheet === cell.sheet
+          && highlight.bbox.every((value, index) => Math.abs(value - cell.bbox[index]) <= 1)));
+      if (unpaintedMentioned.length) {
+        return "The final answer broadly says all/each cited value or cell is highlighted, but some mentioned evidence cells were not painted. Describe only the exact highlighted regions, or highlight every claimed cell.";
+      }
+    }
     for (const line of finalText.split("\n").filter((text) => /\bhighlight/i.test(text))) {
       const lineCanonical = line.toUpperCase().replace(/[^A-Z0-9]/g, "");
       const claimedCells = evidenceCells.filter(({ header, text }) => {

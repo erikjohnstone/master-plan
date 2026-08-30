@@ -207,6 +207,19 @@ test("installed quantity cannot finish without deterministic count evidence", ()
       },
     }] } },
   ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted.\nCAPACITY (TONS) 56.0 is highlighted.")!, /specific schedule cell is highlighted/);
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#44",
+      row: {
+        key: "AHU-1",
+        all_cells: {
+          MARK: { text: "AHU-1", bbox: [10, 20, 30, 40] },
+          CFM: { text: "3850", bbox: [40, 20, 60, 40] },
+        },
+      },
+    }] } },
+  ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted; CFM is 3850. All cited cells are highlighted.")!, /broadly says all\/each/);
 });
 
 test("anthropic-style: scripted tool_use → tools execute → results pair up in ONE user message → done", async () => {
