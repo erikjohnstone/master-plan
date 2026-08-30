@@ -1648,14 +1648,15 @@ export function corroborateFingerprint(
  * (same-sheet sibling copies of the counted geometry), promote those
  * best withhelds. The seed (`excludeCenter`) counts as a confident
  * instance — matchSymbol hid it, but it is already in the takeoff.
- * "At least one" not "exactly one": a partial family whose fingerprint
- * cleared the bar at two or three callouts and missed the rest by
- * hatch/size is the same convention, not a schematic extra. The seed
- * occurrence itself is not a leftover — it is already counted. Extra
- * labels (or a withheld) sitting inside R of an already-counted
- * instance are the same device, not sibling copies. A single leftover
- * labeled near-miss stays withheld: that is the typical
- * schematic-versus-plan extra, not a sibling cluster.
+ * One confident + two leftover near-misses is the original family.
+ * Two-or-more already counted: leftovers must strictly outnumber the
+ * commits — a partial family that missed more siblings than it hit,
+ * not N commits plus N schematic extras. The seed occurrence itself
+ * is not a leftover — it is already counted. Extra labels (or a
+ * withheld) sitting inside R of an already-counted instance are the
+ * same device, not sibling copies. A single leftover labeled near-miss
+ * stays withheld: that is the typical schematic-versus-plan extra,
+ * not a sibling cluster.
  */
 function promoteLabeledNearMisses(
   leftover: SweepWithheld[],
@@ -1682,7 +1683,9 @@ function promoteLabeledNearMisses(
     return true;
   });
   const confident = matches.length + (excludeCenter ? 1 : 0);
-  if (confident < 1 || labeledLeftovers.length < 2) {
+  const family = labeledLeftovers.length >= 2
+    && (confident === 1 || labeledLeftovers.length > confident);
+  if (confident < 1 || !family) {
     for (const w of leftover) withheld.push(w);
     return;
   }
@@ -1815,13 +1818,12 @@ export interface SweepSheetResult {
  * through as WITHHELD too, with the tag-adjacency noted when one is drawn
  * beside it — except when this sheet already has at least one confident
  * counted instance (committed matches, or the seed that `excludeCenter`
- * hid — the seed occurrence itself is not a leftover) and two or more
- * still-unclaimed same-tag occurrences each sit
- * next to a near-bar withheld (a labeled same-convention family whose
- * fingerprint cleared the bar at some callouts and missed it at the
- * siblings by hatch/size, not identity). A single leftover labeled
- * near-miss is left withheld: that is the schematic-vs-plan
- * dual-convention shape, not a second install. Matches closer than half a symbol diagonal,
+ * hid — the seed occurrence itself is not a leftover) and a leftover
+ * labeled family: two or more still-unclaimed same-tag occurrences each
+ * sitting next to a near-bar withheld, and when two or more instances
+ * already committed the leftovers must strictly outnumber them. A single
+ * leftover labeled near-miss is left withheld: that is the
+ * schematic-vs-plan dual-convention shape, not a second install. Matches closer than half a symbol diagonal,
  * or a different square-symmetry transform inside one footprint,
  * collapse to the better score before any tag is claimed. A match is
  * claimed against the NEAREST occurrence within R, never the first-in-
