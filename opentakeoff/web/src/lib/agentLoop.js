@@ -22,6 +22,16 @@ import { runVerifiers } from "./agentVerifiers.js";
 
 export const MAX_AGENT_ITERATIONS = 24;
 
+export function requiredEvidenceCorrection(callLog, goal) {
+  if (!/\b(?:installed\s+quantity|quantity|take\s*off|count)\b/i.test(goal)) return null;
+  const successfulCount = callLog.some(({ name, out }) =>
+    (name === "sweep_schedule_row" && Number.isFinite(out?.found))
+    || (name === "count_marks" && !out?.error));
+  return successfulCount
+    ? null
+    : "The goal asks for installed quantity, but no successful sweep_schedule_row or count_marks call exists in this run. Do not infer quantity from schedule-row count. Call the appropriate counting tool, then answer from its result or refuse.";
+}
+
 // The takeoff-agent contract. Kept in one exported function so the tests (and
 // the mock server's authors) can read exactly what the model is promised.
 export function agentSystemPrompt() {
@@ -185,6 +195,13 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     // append MUST happen here, before this emit, on the LAST turn only.
     let displayText = turn.text;
     if (!turn.toolCalls.length) {
+      const correction = requiredEvidenceCorrection(callLog, goal);
+      if (correction) {
+        messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
+        messages.push({ role: "user", content: correction });
+        emit({ type: "text", text: `[Evidence gate: ${correction}]` });
+        continue;
+      }
       const notes = runVerifiers(callLog, goal);
       if (notes.length) displayText = `${displayText || ""}\n\n${notes.join("\n\n")}`;
     }

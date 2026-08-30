@@ -7,7 +7,7 @@
 //   - malformed model output → {status:"error"} + an error event, never a throw.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { runAgentLoop, parseAssistantTurn, toProviderTools, agentSystemPrompt, MAX_AGENT_ITERATIONS } from "../src/lib/agentLoop.js";
+import { runAgentLoop, parseAssistantTurn, toProviderTools, agentSystemPrompt, MAX_AGENT_ITERATIONS, requiredEvidenceCorrection } from "../src/lib/agentLoop.js";
 
 const CFG_A = { endpoint: "http://localhost:9999", apiKey: "k", model: "mock", provider: "anthropic" };
 const CFG_O = { ...CFG_A, provider: "openai" };
@@ -35,6 +35,15 @@ const anthropicTurn = (id: string, name: string, input: unknown, text = "") => (
   stop_reason: "tool_use",
 });
 const anthropicDone = (text: string) => ({ content: [{ type: "text", text }], stop_reason: "end_turn" });
+
+test("installed quantity cannot finish without deterministic count evidence", () => {
+  assert.match(requiredEvidenceCorrection([], "Give me the installed quantity for CH-A1")!, /no successful sweep_schedule_row/);
+  assert.equal(requiredEvidenceCorrection([{
+    name: "sweep_schedule_row",
+    out: { found: 1 },
+  }], "Give me the installed quantity for CH-A1"), null);
+  assert.equal(requiredEvidenceCorrection([], "Give me CH-A1 capacity"), null);
+});
 
 test("anthropic-style: scripted tool_use → tools execute → results pair up in ONE user message → done", async () => {
   const { fn, requests } = scriptedFetch([
