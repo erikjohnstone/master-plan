@@ -6790,15 +6790,60 @@ export default function TakeoffCanvas() {
   // tool calls. Keyed on a signature of the loaded sheet list (name:rev
   // pairs) rather than invalidated by every call, so it survives renders
   // and only rebuilds when the plan set itself actually changed.
+  // Production graph = MCP Session.graphForPipeline (geometric + ODL). The
+  // browser cannot spawn the JVM OpenDataLoader CLI, so the Vite/dev (and
+  // later API) endpoint builds that same graph server-side. Geometric-only
+  // buildSheetGraph remains a last-resort fallback when the endpoint is down.
+  async function fetchProductionSheetGraph() {
+    const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
+    if (!names.length) return null;
+    const fd = new FormData();
+    for (const name of names) {
+      const bytes = await store.loadPdfData(name);
+      fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
+    }
+    const res = await fetch("/__ot/sheet-graph", { method: "POST", body: fd });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `sheet-graph HTTP ${res.status}`);
+    }
+    return await res.json();
+  }
+
+  async function fetchProductionCorpusTakeoff(kind) {
+    const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
+    if (!names.length) throw new Error("No PDF loaded");
+    const fd = new FormData();
+    fd.append("kind", kind);
+    for (const name of names) {
+      const bytes = await store.loadPdfData(name);
+      fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
+    }
+    const res = await fetch("/__ot/compile-corpus-takeoff", { method: "POST", body: fd });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `compile-corpus-takeoff HTTP ${res.status}`);
+    }
+    return await res.json();
+  }
+
   async function ensureAgentGraph() {
     const sig = sheets.map((s) => `${s.name}:${s.rev ?? 1}`).join("|");
     if (agentGraphCacheRef.current && agentGraphCacheKeyRef.current === sig) return agentGraphCacheRef.current;
-    // Make sure every currently-loaded sheet has at least been offered to
-    // the background indexer before building the graph. indexOneSheet's own
-    // cache checks make this a fast no-op for anything already indexed — it
-    // only genuinely waits on a sheet that's new since the last build, so
-    // sheet_graph/find_schedule can't silently miss a sheet purely because
-    // the background pass hadn't reached it yet.
+    // Prefer the shared production Session+ODL graph (same as MCP) for every
+    // blueprint — sheet_graph / query_table / compile all see identical tables.
+    try {
+      const prod = await fetchProductionSheetGraph();
+      if (prod?.tables || prod?.available) {
+        agentGraphCacheRef.current = prod;
+        agentGraphCacheKeyRef.current = sig;
+        return prod;
+      }
+    } catch (e) {
+      console.warn("[ensureAgentGraph] production Session+ODL unavailable; geometric fallback:", e?.message || e);
+    }
+    // Fallback: in-browser geometric extract only (no ODL) — under-counts on
+    // dense schedule sets. Used only when the production endpoint is missing.
     await indexWholeSet(sheets);
     const inputs = [];
     for (const [key, spans] of wholeSetSpansRef.current) {
@@ -7014,38 +7059,7 @@ export default function TakeoffCanvas() {
     return { downloaded: filename, condition_count: rows.length };
   }
 
-  async function agentCompileCorpusTakeoff(kind, opts = {}) {
-    const g = await ensureAgentGraph();
-    if (!g?.available && !(g?.tables?.length)) {
-      return { error: "This set has no extractable schedule/points tables (scan or empty graph) — compile_corpus_takeoff needs vector schedule text." };
-    }
-    let compiled;
-    try {
-      compiled = compileCorpusTakeoff(null, g, kind);
-    } catch (e) {
-      return { error: String(e?.message || e) };
-    }
-    const downloads = [];
-    if (opts.download !== false) {
-      const base = `${exportBaseName()}.${compiled.takeoff_id || "corpus-takeoff"}`;
-      downloadText(`${base}.json`, JSON.stringify(compiled, null, 2), "application/json");
-      downloads.push(`${base}.json`);
-      const sheets = takeoffWorkbookSheets(compiled);
-      const rollup = sheets.find((s) => s.name === "ROLLUP") || sheets[0];
-      if (rollup) {
-        downloadText(`${base}.rollup.csv`, rowsToCsv(rollup.rows), "text/csv");
-        downloads.push(`${base}.rollup.csv`);
-      }
-      try {
-        const bytes = await buildXlsx(sheets);
-        downloadBytes(`${base}.xlsx`, bytes);
-        downloads.push(`${base}.xlsx`);
-      } catch (e) {
-        // CSV/JSON still delivered
-      }
-    }
-    // Surface the rollup in-canvas so the estimator can read the takeoff
-    // without opening the downloaded workbook (any loaded set).
+  function showCompiledTakeoff(compiled) {
     const rollupRows = (() => {
       if (compiled.kind === "hvac_equipment") {
         return [
@@ -7072,11 +7086,61 @@ export default function TakeoffCanvas() {
       takeoff_id: compiled.takeoff_id,
       kind: compiled.kind,
       sheet_count: compiled.sheet_count,
-      totals: compiled.totals,
+      totals: compiled.totals || (
+        compiled.kind === "hvac_equipment"
+          ? { categories: Object.keys(compiled.categories || {}).length, items: Object.values(compiled.categories || {}).reduce((n, c) => n + (c.items?.length || c.count || 0), 0) }
+          : compiled.categories?.points_lists?.totals
+      ),
       empty_pages: compiled.page_accounting?.empty_pages,
       exclusions: compiled.exclusions || [],
       rows: rollupRows,
+      category_counts: compiled.kind === "hvac_equipment"
+        ? Object.fromEntries(Object.entries(compiled.categories || {}).map(([k, v]) => [k, v.count]))
+        : null,
+      list_counts: compiled.kind === "bas_points"
+        ? (compiled.categories?.points_lists?.lists || []).map((l) => ({
+          title: l.title, rows: l.rows, AI: l.AI, AO: l.AO, BI: l.BI, BO: l.BO,
+        }))
+        : null,
     });
+  }
+
+  async function agentCompileCorpusTakeoff(kind, opts = {}) {
+    // Same Session+ODL+compileCorpusTakeoff path as MCP — never geometric-only.
+    let compiled;
+    try {
+      compiled = await fetchProductionCorpusTakeoff(kind);
+    } catch (e) {
+      // If the production endpoint is down, refuse rather than silently under-count.
+      return {
+        error: `Production compile (Session+ODL) failed: ${e?.message || e}. `
+          + "UI must use the same graph pipeline as MCP — geometric-only fallback is disabled for compile_corpus_takeoff.",
+      };
+    }
+    if (compiled?.error) return compiled;
+    if (!compiled?.takeoff_id && !compiled?.kind) {
+      return { error: "Production compile returned an empty result." };
+    }
+    const downloads = [];
+    if (opts.download !== false) {
+      const base = `${exportBaseName()}.${compiled.takeoff_id || "corpus-takeoff"}`;
+      downloadText(`${base}.json`, JSON.stringify(compiled, null, 2), "application/json");
+      downloads.push(`${base}.json`);
+      const sheets = takeoffWorkbookSheets(compiled);
+      const rollup = sheets.find((s) => s.name === "ROLLUP") || sheets[0];
+      if (rollup) {
+        downloadText(`${base}.rollup.csv`, rowsToCsv(rollup.rows), "text/csv");
+        downloads.push(`${base}.rollup.csv`);
+      }
+      try {
+        const bytes = await buildXlsx(sheets);
+        downloadBytes(`${base}.xlsx`, bytes);
+        downloads.push(`${base}.xlsx`);
+      } catch (e) {
+        // CSV/JSON still delivered
+      }
+    }
+    showCompiledTakeoff(compiled);
     return {
       takeoff_id: compiled.takeoff_id,
       kind: compiled.kind,
@@ -7087,10 +7151,50 @@ export default function TakeoffCanvas() {
       category_count: compiled.kind === "hvac_equipment"
         ? Object.keys(compiled.categories || {}).length
         : (compiled.categories?.points_lists?.lists || []).length,
+      category_counts: compiled.kind === "hvac_equipment"
+        ? Object.fromEntries(Object.entries(compiled.categories || {}).map(([k, v]) => [k, v.count]))
+        : null,
+      list_counts: compiled.kind === "bas_points"
+        ? (compiled.categories?.points_lists?.lists || []).map((l) => ({
+          title: l.title, rows: l.rows, AI: l.AI, AO: l.AO, BI: l.BI, BO: l.BO,
+        }))
+        : null,
       downloaded: downloads,
       ui_rollup_open: true,
     };
   }
+
+  // Playwright / primary-agent UI demos call the same compile path the Agent
+  // tool uses — no blueprint hardcoding; works on whatever plan is loaded.
+  useEffect(() => {
+    window.__opentakeoff = {
+      compileCorpusTakeoff: (kind, opts) => agentCompileCorpusTakeoff(kind, opts),
+      showCompiledTakeoff,
+      openAgent: () => setAgentOpen(true),
+      lastCorpusTakeoff: () => corpusTakeoffView,
+      debugGraph: async () => {
+        const g = await ensureAgentGraph();
+        return {
+          available: g.available,
+          sheet_count: g.sheets?.length,
+          table_count: g.tables?.length,
+          titles: (g.tables || []).map((t) => ({
+            sheet: t.sheet,
+            title: t.title?.text || t.title || null,
+            rows: (t.rows || []).length,
+          })),
+        };
+      },
+      clearGraphCache: () => {
+        agentGraphCacheRef.current = null;
+        agentGraphCacheKeyRef.current = "";
+        wholeSetSpansRef.current = new Map();
+      },
+    };
+    return () => {
+      if (window.__opentakeoff) delete window.__opentakeoff;
+    };
+  });
 
   // export_dxf (Phase 4) — mirrors MCP's export_dxf (session.ts exportDxf):
   // one sheet per file, like a DWG; sheet is required only when ambiguous

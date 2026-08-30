@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { corpusTakeoffApiPlugin } from "./vite.corpusTakeoffApi.js";
 
 // The one source of truth for the app version — package.json — inlined as
 // __APP_VERSION__ so contributions can carry generator_version without a
@@ -16,8 +17,11 @@ const pkg = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), 
 // The `/ai` proxy is OPTIONAL — it only matters if you run the bring-your-own-
 // model AI sandbox in `../server` (see server/README.md). Without it, the app
 // works fully; the AI hooks just stay dormant.
+//
+// `/__ot/sheet-graph` + `/__ot/compile-corpus-takeoff` (dev server) run the
+// SAME Session + ODL path as MCP for every blueprint — not takeoff-only.
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), corpusTakeoffApiPlugin()],
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   // The STT worker (stt.worker.ts, RFC #59) lazy-imports its engine adapter,
   // which needs code-splitting inside the worker bundle — only the ES format
