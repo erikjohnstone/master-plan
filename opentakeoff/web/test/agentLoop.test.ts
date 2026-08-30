@@ -152,6 +152,44 @@ test("installed quantity cannot finish without deterministic count evidence", ()
       out: { matches: [{ sheet: "set.pdf#44", row: { key: "CV-CH-A1" } }] },
     },
   ], "Find CH-A1", "Plan location | set.pdf#44 schedule bbox [1, 2, 3, 4].")!, /schedule sheet\/region as a plan location/);
+  assert.match(requiredEvidenceCorrection([
+    {
+      name: "query_table",
+      args: { row_key: "EF-2", column: "CFM" },
+      out: {
+        matches: [{
+          sheet: "mech.pdf#6",
+          title: "FAN SCHEDULE",
+          row: { key: "EF-2", all_cells: { CFM: { text: "400" } } },
+        }],
+      },
+    },
+    {
+      name: "sweep_schedule_row",
+      args: { tag: "EF-2" },
+      out: { error: "Schedule row \"EF-2\" cannot be geometrically anchored — its tag is not drawn on any plan sheet" },
+    },
+  ], "For EF-2 report schedule CFM and plan location or honest refusal",
+  "EF-2 is not drawn on any plan sheet — sweep refused.")!, /Keep reporting those schedule field/);
+  assert.equal(requiredEvidenceCorrection([
+    {
+      name: "query_table",
+      args: { row_key: "EF-2", column: "CFM" },
+      out: {
+        matches: [{
+          sheet: "mech.pdf#6",
+          title: "FAN SCHEDULE",
+          row: { key: "EF-2", all_cells: { CFM: { text: "400" } } },
+        }],
+      },
+    },
+    {
+      name: "sweep_schedule_row",
+      args: { tag: "EF-2" },
+      out: { error: "Schedule row \"EF-2\" cannot be geometrically anchored — its tag is not drawn on any plan sheet" },
+    },
+  ], "For EF-2 report schedule CFM and plan location or honest refusal",
+  "EF-2 schedule CFM is 400 on FAN SCHEDULE (mech.pdf#6).\nPlan location: refused — tag not drawn on any plan sheet."), null);
   const sweptPlan = {
     name: "sweep_schedule_row",
     args: { tag: "CH-A1" },

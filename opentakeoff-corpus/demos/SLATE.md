@@ -138,11 +138,20 @@ D06 locked; next: D07.
 
 ## D07 selection record
 
-Status: `SELECTED — ground truth authored; N=5 pending`
+Status: `LOCKED — API 5/5; p95 43.737 s; stdio + UI proof (expandable cards + verified follow-up)`
 
 Target holds on `bldg5406-hvac-demo` (20 sheets). Quarter-turned
 `AIR TERMINAL BOX SCHEDULE` (VAV-1..9) linked to plan tags on #2;
 `FAN SCHEDULE` CFM with honest `sweep_schedule_row` refusal when EF-2/EF-3
-tags are not drawn on any plan sheet. Ground truth authored before model
-runs in `D07-vav-plan-link-fan-refuse/`.
+tags are not drawn on any plan sheet, while schedule CFM stays in the
+answer. Ground truth authored before model runs in
+`D07-vav-plan-link-fan-refuse/`.
+
+N=5 production runs are 5/5 under `verify:demo` (values, citation
+resolvability, and OCR grounding) with nearest-rank p95 **43.737 s**.
+Localhost stdio harness True. UI proof under the usefulness bar (full
+fields + expandable source cards + verified EF-3 follow-up) is saved as
+`/opt/cursor/artifacts/d07_ui_prompt_answer_cards_followup_2026-08-30T15-23-46-695Z.webm`.
+Production gates stay methodology-general — no corpus hardcoding. D07
+counts toward ten. Next: D08.
 

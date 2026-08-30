@@ -290,7 +290,7 @@
         "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
         "table_title": "FAN SCHEDULE",
         "row_key": "EF-2",
-        "column": "MARK",
+        "column": null,
         "bbox_px": [757.8, 55.1, 763.7, 67.8],
         "grounding_text": "EF-2",
         "ocr_mode": "sparse_text",
