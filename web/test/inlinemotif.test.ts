@@ -15,7 +15,7 @@
 // angle/length, not how many columns compose one visual row).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintInlineMotif, sweepInlineMotif, classifyInlineMotifMatches } from "../src/lib/inlinemotif.ts";
+import { fingerprintInlineMotif, sweepInlineMotif, classifyInlineMotifMatches, corroborateInlineMotif } from "../src/lib/inlinemotif.ts";
 import type { TagOcc } from "../src/lib/symbolsweep.ts";
 
 const seg = (ax: number, ay: number, bx: number, by: number) => [ax, ay, bx, by];
@@ -60,6 +60,33 @@ test("fingerprintInlineMotif: finds the dominant hatch cluster inside a tight se
 test("fingerprintInlineMotif: null when the seed rect has no hatch fill inside it", () => {
   const fp = fingerprintInlineMotif(ALL, ALL_META, [[0, 0], [50, 50]], null);
   assert.equal(fp, null);
+});
+
+test("fingerprintInlineMotif: a sparse dash cluster is not a register fill — same floor as sweep", () => {
+  // NOISE is 8 dashes: above the old 4-stroke "any ink" floor, below
+  // MIN_FILL_MEMBERS (40). Fingerprinting it used to return a seed that
+  // can never self-match (sweep drops <40) but can corroborate against
+  // an unrelated dense box of similar size and steal the whole-shape path.
+  const fp = fingerprintInlineMotif(ALL, ALL_META, [[695, 95], [765, 125]], null);
+  assert.equal(fp, null);
+});
+
+test("corroborateInlineMotif: a sparse seed next to the tag does not corroborate via a distant dense box", () => {
+  // Two "P-2" tags: the anchor sits on 8 hatch ticks (furniture, not
+  // fill); the other occurrence sits on a real 44-row box of similar
+  // bbox. The old 4-stroke floor let the ticks become the seed, and
+  // size-tolerance then "corroborated" at the dense box — a false
+  // same-tag hatch match that blocked a real whole-shape fallback.
+  const ticks = hatchBox(100, 100, 40, 16, 8);
+  const dense = hatchBox(400, 100, 42, 18, 44);
+  const segs = [...ticks, ...dense];
+  const meta = metaFor(segs);
+  const anchor: TagOcc = { cx: 120, cy: 108, h: 10, bbox: [100, 100, 140, 116] };
+  const corroOcc: TagOcc[] = [{ cx: 421, cy: 109, h: 10, bbox: [400, 100, 442, 118] }];
+  const r = corroborateInlineMotif(segs, meta, { w: 800, h: 400 }, anchor, null, {
+    segs, meta, occ: corroOcc, upp: null,
+  });
+  assert.equal(r, null, "sparse ticks must not become a corroborated hatch seed");
 });
 
 test("sweepInlineMotif: finds the real sibling at a different physical size, excludes the noise scrap and the same-signature decoy by size", () => {
