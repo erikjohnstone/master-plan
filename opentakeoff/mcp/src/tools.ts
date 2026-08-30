@@ -582,10 +582,22 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
         (v) => (v == null || v === "" ? undefined : String(v)),
         z.string().min(1).optional(),
       ).describe('Exact row key/mark, e.g. "CV-HHW-BP-M" or "RTU-01"'),
-      column: z.string().min(1).optional().describe('Header substring; only matching columns are returned, e.g. "MCA"'),
-      cell_value: z.string().min(1).optional().describe('Exact cell text anywhere in the row, case-insensitive; use this to join tables through non-key columns, e.g. UNIT MARK "CH-A1"'),
-      cell_contains: z.string().min(1).optional().describe('Case-insensitive text contained in any cell; use for explicit compound relationships such as "CH-A1" inside "CV-CH-A1"'),
-      limit: z.number().int().min(1).max(1000).default(100).describe("Maximum matching rows returned"),
+      column: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : String(v)),
+        z.string().min(1).optional(),
+      ).describe('Header substring; only matching columns are returned, e.g. "MCA"'),
+      cell_value: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : String(v)),
+        z.string().min(1).optional(),
+      ).describe('Exact cell text anywhere in the row, case-insensitive; use this to join tables through non-key columns, e.g. UNIT MARK "CH-A1"'),
+      cell_contains: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : String(v)),
+        z.string().min(1).optional(),
+      ).describe('Case-insensitive text contained in any cell; use for explicit compound relationships such as "CH-A1" inside "CV-CH-A1"'),
+      limit: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : Number(v)),
+        z.number().int().min(1).max(1000).default(100),
+      ).describe("Maximum matching rows returned"),
     },
     outputSchema: queryTableOutput,
   }, run("query_table", async ({ title, row_key, column, cell_value, cell_contains, limit }) => {

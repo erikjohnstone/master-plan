@@ -408,8 +408,15 @@ async function productionPair(stdio) {
 async function callTool(client, name, args) {
   const response = await client.callTool({ name, arguments: args });
   const text = response.content?.find((item) => item.type === "text")?.text;
-  const data = text ? JSON.parse(text) : null;
-  return { is_error: !!response.isError, data };
+  if (response.isError) {
+    return { is_error: true, data: { error: text || `${name} failed` } };
+  }
+  if (!text) return { is_error: false, data: null };
+  try {
+    return { is_error: false, data: JSON.parse(text) };
+  } catch {
+    return { is_error: true, data: { error: text } };
+  }
 }
 
 export async function runToolCallingModel({
