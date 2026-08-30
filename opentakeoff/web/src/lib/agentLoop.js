@@ -56,6 +56,24 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     && !callLog.some(({ name, out }) => name === "highlight_citation" && !out?.error)) {
     return "The goal asks to show exact cited source locations, but no successful highlight_citation call exists. Highlight the returned plan tag and schedule-cell bboxes on their real sheets before answering.";
   }
+  if (/\bcite the exact\b/i.test(goal)) {
+    const highlights = callLog.filter(({ name, out }) =>
+      name === "highlight_citation" && !out?.error && Array.isArray(out.bbox_px))
+      .map(({ out }) => ({ sheet: out.sheet, bbox: out.bbox_px }));
+    const uncovered = [];
+    for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
+      for (const match of out?.matches || []) {
+        const cells = Object.values(match?.row?.all_cells || match?.row?.cells || {});
+        const covered = cells.some((cell) => Array.isArray(cell?.bbox)
+          && highlights.some((highlight) => highlight.sheet === match.sheet
+            && highlight.bbox.every((value, index) => Math.abs(value - cell.bbox[index]) <= 1)));
+        if (!covered && match?.row?.key) uncovered.push(`${match.row.key} on ${match.sheet}`);
+      }
+    }
+    if (uncovered.length) {
+      return `The answer uses queried schedule row(s) with no painted source cell: ${[...new Set(uncovered)].join(", ")}. Call highlight_citation on at least one exact cited cell from each row before finishing.`;
+    }
+  }
   return null;
 }
 

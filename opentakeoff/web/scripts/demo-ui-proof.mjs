@@ -100,6 +100,7 @@ try {
   for (const [needle, path, target] of [
     ["MS101", "/opt/cursor/artifacts/d01_ui_plan_highlight.png", [2561.9 / 4896, 2511.1 / 3168]],
     ["M-603", "/opt/cursor/artifacts/d01_ui_schedule_highlight.png", [496 / 4896, 322 / 3168]],
+    ["M-603", "/opt/cursor/artifacts/d01_ui_valve_highlight.png", [3900 / 4896, 700 / 3168]],
   ]) {
     await page.locator('button[title^="Sheet — the sheets in this set"]').click();
     const item = page.getByText(needle, { exact: true }).last();
@@ -107,6 +108,8 @@ try {
     await item.click();
     await page.getByText("Rendering sheet…").waitFor({ state: "hidden", timeout: 120_000 });
     await page.waitForTimeout(750);
+    const fit = page.getByRole("button", { name: "fit", exact: true });
+    if (await fit.isVisible().catch(() => false)) await fit.click();
     const canvas = page.locator("canvas").first();
     const box = await canvas.boundingBox();
     if (box) {

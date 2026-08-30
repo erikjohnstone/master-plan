@@ -56,6 +56,13 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     out: { matches: [{ row: { identity: { header: "VALVE MARK", text: "CV-CH-A1" } } }] },
   }], "Find the valve", "CV‑CH‑A1 comes from UNIT MARK.")!, /semantic identity header VALVE MARK/);
   assert.match(requiredEvidenceCorrection([], "Show me the plan and cite the exact cells")!, /highlight_citation/);
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#3", bbox_px: [1, 2, 3, 4] } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#44",
+      row: { key: "CV-CH-A1", all_cells: { CV: { bbox: [10, 20, 30, 40] } } },
+    }] } },
+  ], "Cite the exact schedule cells", "CV-CH-A1 is 324.")!, /no painted source cell/);
 });
 
 test("anthropic-style: scripted tool_use → tools execute → results pair up in ONE user message → done", async () => {
