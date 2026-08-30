@@ -106,8 +106,8 @@ try {
   await page.screenshot({ path: "/tmp/d01_ui_agent_result.png" });
   const panel = await page.locator('textarea[name="agent-goal"]').locator("xpath=../../..").innerText();
   console.log(`UI_AGENT_RESULT\n${panel}`);
-  if (/Stopped at the \d+-step cap|example (?:size|type|Cv)|placeholder/i.test(panel)) {
-    throw new Error("D01 UI answer ended in a correction cap or contains placeholder data.");
+  if (/Stopped at the \d+-step cap|example (?:size|type|Cv)|placeholder|(?:schedule\s+|the\s+)?row\s+appears\s+(?:only\s+)?once|normalized\s+(?:rectangle|coordinates?|bbox|bounding box)/i.test(panel)) {
+    throw new Error("D01 UI answer contains a correction cap, placeholder, invalid quantity rationale, or invalid coordinate form.");
   }
   const normalizedPanel = panel.toUpperCase().replace(/[‑–—]/g, "-").replace(/\s+/g, " ");
   for (const expected of [

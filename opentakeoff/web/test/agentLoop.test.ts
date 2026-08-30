@@ -49,6 +49,11 @@ test("installed quantity cannot finish without deterministic count evidence", ()
   }], "Give me installed quantity", "Installed quantity: 1 (single schedule entry).")!, /reasoning is invalid/);
   assert.match(requiredEvidenceCorrection([{
     name: "sweep_schedule_row",
+    out: { found: 1 },
+  }], "Give me installed quantity", "Installed quantity: 1 (the row appears only once).")!, /reasoning is invalid/);
+  assert.match(requiredEvidenceCorrection([], "Cite the source", "Normalized rectangle: [[0.1, 0.2], [0.3, 0.4]].")!, /image-pixel bboxes only/);
+  assert.match(requiredEvidenceCorrection([{
+    name: "sweep_schedule_row",
     out: { found: 2 },
   }], "Give me the installed quantity", "Two units were found.")!, /does not explicitly state/);
   assert.match(requiredEvidenceCorrection([], "Give me valve size", "Valve size: 4 in (example size).")!, /example or placeholder/);
