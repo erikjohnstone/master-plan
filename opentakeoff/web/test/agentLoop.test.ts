@@ -7,7 +7,7 @@
 //   - malformed model output → {status:"error"} + an error event, never a throw.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { runAgentLoop, parseAssistantTurn, toProviderTools, agentSystemPrompt, MAX_AGENT_ITERATIONS, requiredEvidenceCorrection } from "../src/lib/agentLoop.js";
+import { runAgentLoop, parseAssistantTurn, toProviderTools, agentSystemPrompt, MAX_AGENT_ITERATIONS, requiredEvidenceCorrection, toolsForGoal } from "../src/lib/agentLoop.js";
 
 const CFG_A = { endpoint: "http://localhost:9999", apiKey: "k", model: "mock", provider: "anthropic" };
 const CFG_O = { ...CFG_A, provider: "openai" };
@@ -16,6 +16,21 @@ const TOOLS = [
   { name: "probe", description: "probe something", input_schema: { type: "object", properties: { q: { type: "string" } }, required: ["q"] } },
   { name: "look", description: "look at something", input_schema: { type: "object", properties: {}, required: [] } },
 ];
+
+test("exact equipment-to-valve evidence goals expose only relevant deterministic tools", () => {
+  const tools = [
+    "list_sheets", "sheet_graph", "query_table", "sweep_schedule_row",
+    "highlight_citation", "resolve_tag", "one_click", "find_text",
+  ].map((name) => ({ name }));
+  assert.deepEqual(
+    toolsForGoal(
+      "Give me installed quantity and the matching control valve; cite the exact schedule cells.",
+      tools,
+    ).map(({ name }) => name),
+    ["list_sheets", "sheet_graph", "query_table", "sweep_schedule_row", "highlight_citation"],
+  );
+  assert.equal(toolsForGoal("Trace AHU-1 connectivity", tools), tools);
+});
 
 const resp = (json: unknown, status = 200) => ({ ok: status < 400, status, json: async () => json });
 

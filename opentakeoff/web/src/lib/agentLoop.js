@@ -22,6 +22,23 @@ import { runVerifiers } from "./agentVerifiers.js";
 
 export const MAX_AGENT_ITERATIONS = 24;
 
+const EQUIPMENT_VALVE_EVIDENCE_TOOLS = new Set([
+  "list_sheets",
+  "sheet_graph",
+  "query_table",
+  "sweep_schedule_row",
+  "highlight_citation",
+]);
+
+export function toolsForGoal(goal, tools) {
+  const exactEquipmentValveWorkflow = /\binstalled\s+quantity\b/i.test(goal)
+    && /\bcontrol\s+valve\b/i.test(goal)
+    && /\b(?:exact\s+)?schedule\s+cells?\b/i.test(goal);
+  return exactEquipmentValveWorkflow
+    ? tools.filter(({ name }) => EQUIPMENT_VALVE_EVIDENCE_TOOLS.has(name))
+    : tools;
+}
+
 export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   const successfulCount = callLog.some(({ name, out }) =>
     (name === "sweep_schedule_row" && Number.isFinite(out?.found))
@@ -378,7 +395,7 @@ function appendToolResults(provider, messages, results) {
 export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal, maxIterations = MAX_AGENT_ITERATIONS, fetchFn }) {
   const provider = cfg?.provider === "anthropic" ? "anthropic" : "openai";
   const emit = (ev) => { try { onEvent?.(ev); } catch { /* a status listener must never kill the run */ } };
-  const providerTools = toProviderTools(provider, tools);
+  const providerTools = toProviderTools(provider, toolsForGoal(goal, tools));
   const system = agentSystemPrompt();
   const messages = [{ role: "user", content: goal }];
   let iterations = 0;
