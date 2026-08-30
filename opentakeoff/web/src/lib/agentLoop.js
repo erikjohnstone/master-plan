@@ -999,15 +999,19 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
           || (label === "AHU" && /\bAHUs?[^\n.]{0,48}\bsplits?\b/i.test(goal))
           || (label === "DOAH unit" && /\bDOAHs?[^\n.]{0,48}\bsplits?\b/i.test(goal));
         const splitClause = (() => {
-          // Match the family+"splits" pair tightly, then look back for building names.
-          const re = label === "FCU" ? /fan[\s\-]*coils?[^\n.]{0,24}\bsplits?\b/i
-            : label === "VAV" ? /\bVAVs?[^\n.]{0,24}\bsplits?\b/i
-            : null;
-          if (!re) return "";
-          const m = goal.match(re);
-          if (!m || m.index == null) return "";
-          const start = Math.max(0, m.index - 80);
-          return goal.slice(start, m.index + m[0].length);
+          if (label === "FCU") {
+            const m = goal.match(
+              /((?:air\s*ops|mitracon|mtrac?on|ATCT)(?:\s+and\s+(?:air\s*ops|mitracon|mtrac?on|ATCT))?)\s+fan[\s\-]*coil\s+splits?/i,
+            );
+            return m ? m[0] : "";
+          }
+          if (label === "VAV") {
+            const m = goal.match(
+              /((?:air\s*ops|mitracon|mtrac?on|ATCT)(?:\s+and\s+(?:air\s*ops|mitracon|mtrac?on|ATCT))?)\s+VAV\s+splits?/i,
+            );
+            return m ? m[0] : "";
+          }
+          return "";
         })();
         const wantedLetters = new Set();
         if (/air\s*ops/i.test(splitClause)) wantedLetters.add("A");
