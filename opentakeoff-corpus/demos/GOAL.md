@@ -30,26 +30,28 @@ this on the production UI path for arbitrary uploaded sets.
 ## Demo quality bar (non-negotiable)
 
 Demos are not tag flybys. They must look like a competent estimator using the
-product.
+product — and the product must be **extremely, genuinely useful**.
 
-### Answer ALL of it, highlight ALL of it
+### Do exactly what the user asks — and give them more than enough
 
-If the user asks for a valve's characteristics, mechanical-schedule data, BAS
-point fields, capacities, flows, temperatures, Cv, size, configuration,
-alarm/trend, location, serves, or any other requested attributes — the product
-MUST:
+Whatever the user asks for — a whole takeoff, an AHU characteristic, counting
+all the valves, a BAS point→equipment trace, schedule row data, cross-sheet
+joins, or any other real estimating ask — the software MUST:
 
-1. **Return every requested field** correctly in the Agent chat (no dropped
-   columns, no sibling-point substitutions, no mark-only summaries).
-2. **Highlight every answering evidence region** on the sheets — the value
-   cells, row data, and drawing text that support those fields — via
-   `highlight_citation`, and navigate/fly to them.
+1. **Do that ask end-to-end.** Execute the workflow the question implies; do
+   not substitute a weaker tag-lookup or a partial answer.
+2. **Return more than enough correct information in chat** so the answer is
+   immediately usable: every requested field, evidence-backed values, and the
+   citations/context needed to trust it.
+3. **Paint ALL answering evidence on the sheets** via `highlight_citation`
+   (value cells, row data, drawing text, counted marks — not lonely tag
+   marks), and navigate/fly to those regions.
 
-Highlighting only a tag mark while the prompt asked for corresponding row
-values is a **fail**. Answering only some of the asked fields is a **fail**.
-Agent-panel text alone is incomplete; mark-only sheet flybys are incomplete.
-This is the easiest estimator ask and the product must nail it: ask → full
-answer in chat → full paint on the drawings.
+Agent-panel text alone is incomplete. Mark-only sheet flybys are incomplete.
+Partial answers, wrong sibling rows, or “flying around tags” without the
+asked-for data are a **fail**. Bar: ask → complete useful answer in chat →
+full paint on the drawings. Make OpenTakeoff the tool an estimator actually
+wants open.
 
 ### Prompt and recording rules
 

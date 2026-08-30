@@ -544,31 +544,36 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         evidenceCells.push({ sheet: out.row.sheet, header, text: cell.text, bbox: bboxArray });
       }
     }
-    if (/\b(?:all|each)\b.{0,160}\bhighlight/i.test(finalText)) {
-      const mentionedCells = evidenceCells.filter(({ header, text }) => {
-        const headerCanonical = String(header).toUpperCase().replace(/[^A-Z0-9]/g, "");
-        const textCanonical = String(text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-        return headerCanonical.length >= 3 && textCanonical
-          && finalCanonical.includes(headerCanonical) && finalCanonical.includes(textCanonical);
-      });
-      const unpaintedMentioned = mentionedCells.filter((cell) =>
-        !highlightMatches(cell.sheet, cell.bbox));
-      if (unpaintedMentioned.length) {
-        const painted = highlights.map((h) => `${h.sheet} ${JSON.stringify(h.bbox)}`).slice(0, 8);
-        return `The final answer broadly says all/each cited value or cell is highlighted, but some mentioned evidence cells were not painted. Rewrite the answer and describe ONLY these painted regions: ${painted.join("; ") || "(none)"}. Do not claim any other cell was highlighted.`;
+    // Strict "don't claim unpainted cells" prose checks apply when the goal
+    // explicitly asks to show/cite highlights. For ordinary asks, require real
+    // paint of answering evidence above; do not thrash on highlight wording.
+    if (asksToShowCite) {
+      if (/\b(?:all|each)\b.{0,160}\bhighlight/i.test(finalText)) {
+        const mentionedCells = evidenceCells.filter(({ header, text }) => {
+          const headerCanonical = String(header).toUpperCase().replace(/[^A-Z0-9]/g, "");
+          const textCanonical = String(text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+          return headerCanonical.length >= 3 && textCanonical
+            && finalCanonical.includes(headerCanonical) && finalCanonical.includes(textCanonical);
+        });
+        const unpaintedMentioned = mentionedCells.filter((cell) =>
+          !highlightMatches(cell.sheet, cell.bbox));
+        if (unpaintedMentioned.length) {
+          const painted = highlights.map((h) => `${h.sheet} ${JSON.stringify(h.bbox)}`).slice(0, 8);
+          return `The final answer broadly says all/each cited value or cell is highlighted, but some mentioned evidence cells were not painted. Rewrite the answer and describe ONLY these painted regions: ${painted.join("; ") || "(none)"}. Do not claim any other cell was highlighted.`;
+        }
       }
-    }
-    for (const line of finalText.split("\n").filter((text) => /\bhighlight/i.test(text))) {
-      const lineCanonical = line.toUpperCase().replace(/[^A-Z0-9]/g, "");
-      const claimedCells = evidenceCells.filter(({ header, text }) => {
-        const headerCanonical = String(header).toUpperCase().replace(/[^A-Z0-9]/g, "");
-        const textCanonical = String(text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-        return headerCanonical.length >= 3 && textCanonical
-          && lineCanonical.includes(headerCanonical) && lineCanonical.includes(textCanonical);
-      });
-      if (claimedCells.length && !claimedCells.some((cell) => highlightMatches(cell.sheet, cell.bbox))) {
-        const painted = highlights.map((h) => `${h.sheet} ${JSON.stringify(h.bbox)}`).slice(0, 8);
-        return `The final answer claims a schedule cell is highlighted that was not painted. Rewrite the answer without that claim. Painted regions only: ${painted.join("; ") || "(none)"}. Do not use the word "highlighted" for any unpainted field.`;
+      for (const line of finalText.split("\n").filter((text) => /\bhighlight/i.test(text))) {
+        const lineCanonical = line.toUpperCase().replace(/[^A-Z0-9]/g, "");
+        const claimedCells = evidenceCells.filter(({ header, text }) => {
+          const headerCanonical = String(header).toUpperCase().replace(/[^A-Z0-9]/g, "");
+          const textCanonical = String(text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+          return headerCanonical.length >= 3 && textCanonical
+            && lineCanonical.includes(headerCanonical) && lineCanonical.includes(textCanonical);
+        });
+        if (claimedCells.length && !claimedCells.some((cell) => highlightMatches(cell.sheet, cell.bbox))) {
+          const painted = highlights.map((h) => `${h.sheet} ${JSON.stringify(h.bbox)}`).slice(0, 8);
+          return `The final answer claims a schedule cell is highlighted that was not painted. Rewrite the answer without that claim. Painted regions only: ${painted.join("; ") || "(none)"}. Do not use the word "highlighted" for any unpainted field.`;
+        }
       }
     }
   }
@@ -621,8 +626,8 @@ export function agentSystemPrompt() {
     "- NEVER infer installed quantity from the existence of a schedule row. Installed quantity requires sweep_schedule_row; use its found count and tag_at evidence or refuse.",
     "- NEVER report a plan location for any equipment or valve tag unless sweep_schedule_row succeeded for that exact tag. A schedule-cell bbox is a schedule location, never an installed plan location, and one tag's plan coordinates never belong to another tag.",
     "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized.",
-    "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Agent-panel text alone is incomplete — the product must be interactive. Do this for every such question, not only when the goal says \"show me\" or \"cite the exact\". Paint each used schedule row and each phrase-length drawing hit you copy into the answer, then write the final answer — do not claim every cell is highlighted.",
-    "- When the goal asks for corresponding schedule values (capacity, flow, size, Cv, temperatures, alarm/trend, location, etc.), paint the answering value cells — not only the row mark/tag. A mark-only highlight while the answer lists row fields is incomplete.",
+    "- Be extremely, genuinely useful: whatever the goal asks — a full takeoff, an AHU characteristic, counting valves, a BAS trace, schedule attributes, cross-sheet joins — do that ask end-to-end. Return every requested field with evidence-backed values plus enough citation context to trust the answer. Paint ALL answering evidence on the sheets (value cells / row data / drawing text / counted marks), not only a tag mark. Partial answers and mark-only flybys are incomplete.",
+    "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Agent-panel text alone is incomplete — the product must be interactive. Do this for every such question, not only when the goal says \"show me\" or \"cite the exact\". Paint each used schedule row's answering value cells and each phrase-length drawing hit you copy into the answer, then write the final answer.",
     "- Never say a cell or field was highlighted unless a successful highlight_citation call targeted that exact sheet and bbox_px. State exactly which source regions were highlighted; do not imply unpainted cells were painted. Never write that all/each cited cells are highlighted.",
     "- For a scheduled device tag, cite query_table row.identity (for example VALVE MARK), not the first different column that happens to repeat the same text (for example UNIT MARK).",
     "- For any equipment-to-control-valve join, use this direct set-wide sequence: query_table with row_key set to the equipment tag; sweep_schedule_row for installed quantity/plan evidence when requested; query_table with cell_contains set to that exact equipment tag to find compound relationship marks; then highlight the exact returned tag and row-identity bboxes. Do not browse guessed sheets or repeatedly retry the same empty exact-row query.",
