@@ -508,7 +508,9 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       const textCanonical = text.toUpperCase().replace(/[^A-Z0-9]/g, "");
       if (textCanonical.length < 2) return false;
       if (/^\d+(?:[.,]\d+)?$/.test(text)) {
-        if (textCanonical.length < 3) return false;
+        // Allow short schedule figures (45°F, valve size 4) via spaced tokens.
+        // Sibling-sheet attach still uses a stricter numeric floor separately.
+        if (textCanonical.length < 1) return false;
         return spacedHasToken(textCanonical);
       }
       if (textCanonical.length <= 3 && /^[A-Z]+$/.test(textCanonical)) {
