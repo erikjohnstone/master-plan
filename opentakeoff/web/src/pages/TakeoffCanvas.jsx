@@ -572,6 +572,10 @@ export default function TakeoffCanvas() {
   const rollDragRef = useRef(null);                       // live cut-drag gesture; commit is ONE rollcut command on release
   const [agentLog, setAgentLog] = useState([]);           // streaming run status [{kind, text}]
   const [agentRunning, setAgentRunning] = useState(false);
+  const [agentStatus, setAgentStatus] = useState("");     // plain-language "what's happening"
+  const [agentCitations, setAgentCitations] = useState([]); // clickable source cards (no auto-fly)
+  const [agentThread, setAgentThread] = useState([]);       // [{role:'user'|'assistant', text}]
+  const agentPriorRef = useRef([]);                         // provider priorMessages for follow-ups
   const [showAiSettings, setShowAiSettings] = useState(false); // BYO-key config modal (ai.js seam)
   const agentAbortRef = useRef(null);                     // live AbortController while a run is in flight
   // Persistent Agent run history (maturity plan Phase 2, #HVAC-runhistory):
@@ -7752,23 +7756,47 @@ export default function TakeoffCanvas() {
     const result = await agentAnnotate({
       sheet,
       type: "highlight",
+      // Keep label text on the markup record for lists/tool results, but the
+      // canvas never draws it inside the rect (would cover the cited value).
       text,
       rect: [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]],
     });
     if (result.error) return result;
-    // Open the cited sheet and fly to the new highlight so the estimator sees
-    // the painted evidence on the canvas — not only a note in the agent panel.
-    const markup = agentStateRef.current.markups.find((m) => m.id === result.id);
-    if (markup) {
-      setShowMarkups(true);
-      flyToMarkup(markup);
-    }
+    // Estimator-clarity: paint quietly — do NOT auto-fly the viewport.
+    // Source cards in the Agent panel are how the estimator jumps on demand.
+    setShowMarkups(true);
+    const label = String(text || "").trim() || "Cited source";
+    setAgentCitations((list) => {
+      if (list.some((c) => c.id === result.id)) return list;
+      return [...list, {
+        id: result.id,
+        markupId: result.id,
+        sheet,
+        sheetLabel: tabLabel(sheet),
+        label,
+        bbox_px,
+      }];
+    });
     return {
       ...result,
       bbox_px,
       text,
       opened_sheet: sheet,
+      navigation: "agent_panel_card",
     };
+  }
+
+  function openAgentCitation(citation) {
+    if (!citation) return;
+    setShowMarkups(true);
+    const markup = agentStateRef.current.markups.find((m) => m.id === citation.markupId)
+      || markups.find((m) => m.id === citation.markupId);
+    if (markup) {
+      flyToMarkup(markup);
+      return;
+    }
+    // Markup not found yet — open the sheet; user can retry from the card.
+    if (citation.sheet) openSheets([citation.sheet], false);
   }
 
   function agentListAnnotations(sheetFilter, conditionFilter) {
@@ -8419,18 +8447,39 @@ export default function TakeoffCanvas() {
   const rejectAllAgentProposals = () => setAgentProposals([]);
 
   // ── the run ────────────────────────────────────────────────────────────────
-  const trimJson = (v, n) => { let s; try { s = JSON.stringify(v); } catch { s = String(v); } return s && s.length > n ? `${s.slice(0, n)}…` : s || ""; };
   function appendAgentLog(ev) {
+    // Estimator-clarity: live log keeps short tool names (for proof harness /
+    // Run History) but the panel shows plain-language status + the answer.
+    // Full args/results still land in Run History via recordRunEvent.
+    const STATUS = {
+      list_sheets: "Listing sheets in this set…",
+      sheet_graph: "Mapping schedules and sheets…",
+      find_schedule: "Finding the right schedule…",
+      read_schedule: "Reading schedule rows…",
+      query_table: "Reading schedule data…",
+      find_text: "Searching the drawings…",
+      read_sheet_text: "Reading sheet text…",
+      sweep_schedule_row: "Looking for plan tags…",
+      count_marks: "Counting marks on plans…",
+      highlight_citation: "Saving a source card…",
+      project_takeoff: "Building the project takeoff…",
+      view_sheet: "Checking a sheet…",
+      resolve_tag: "Resolving a tag…",
+    };
+    if (ev.type === "tool_start") setAgentStatus(STATUS[ev.name] || `Working (${ev.name})…`);
+    if (ev.type === "done" || ev.type === "aborted" || ev.type === "error" || ev.type === "max_iterations") {
+      setAgentStatus("");
+    }
     const entry =
       ev.type === "text" ? { kind: "text", text: ev.text }
-      : ev.type === "tool_start" ? { kind: "tool", text: `→ ${ev.name} ${trimJson(ev.args, 120)}` }
+      : ev.type === "tool_start" ? { kind: "tool", text: `→ ${ev.name}` }
       : ev.type === "tool_end" ? (ev.result?.error
           ? { kind: "error", text: `✗ ${ev.name}: ${ev.result.error}` }
-          : { kind: "status", text: `✓ ${ev.name} ${trimJson({ ...ev.result, image_data_url: undefined, items: Array.isArray(ev.result?.items) ? `${ev.result.items.length} items` : undefined }, 160)}` })
+          : { kind: "status", text: `✓ ${ev.name}` })
       : ev.type === "error" ? { kind: "error", text: `Error: ${ev.message}` }
       : ev.type === "aborted" ? { kind: "status", text: "Stopped." }
       : ev.type === "max_iterations" ? { kind: "status", text: `Stopped at the ${ev.limit}-step cap — review what's staged.` }
-      : ev.type === "done" ? { kind: "status", text: "Done — review the dashed proposals." }
+      : ev.type === "done" ? { kind: "status", text: "Done — review the answer and source cards." }
       : null;
     if (entry) setAgentLog((l) => [...l.slice(-199), entry]);
   }
@@ -8462,27 +8511,56 @@ export default function TakeoffCanvas() {
     if (runSaveTimerRef.current) clearTimeout(runSaveTimerRef.current);
     runSaveTimerRef.current = setTimeout(() => { runSaveTimerRef.current = null; saveRun(run); }, 700);
   }
-  async function runAgent(goal) {
+  async function runAgent(goal, opts = {}) {
     if (agentRunning) return;
     if (!isAiConfigured()) { setShowAiSettings(true); return; }
     if (agentStateRef.current.status !== "ready") { setCommitMsg("Sheet still loading — try again in a moment."); return; }
+    const ask = String(goal || "").trim();
+    if (!ask) return;
+    const followUp = !!opts.followUp && agentPriorRef.current.length > 0;
     const ctl = new AbortController();
     agentAbortRef.current = ctl;
     setAgentRunning(true);
-    setAgentLog([{ kind: "status", text: `Goal: ${goal}` }]);
-    const run = newRun(goal);
+    setAgentStatus(followUp ? "Thinking about your follow-up…" : "Starting…");
+    if (!followUp) {
+      setAgentCitations([]);
+      agentPriorRef.current = [];
+      setAgentThread([{ role: "user", text: ask }]);
+      setAgentLog([{ kind: "status", text: `Goal: ${ask}` }]);
+    } else {
+      setAgentThread((t) => [...t, { role: "user", text: ask }]);
+      setAgentLog((l) => [...l, { kind: "status", text: `Follow-up: ${ask}` }]);
+    }
+    const run = newRun(ask);
     currentRunRef.current = run;
     saveRun(run); // persist immediately — even an instant crash leaves the goal itself on record
     const ctx = buildAgentCtx();
     try {
-      await runAgentLoop({
-        cfg: aiConfig(), goal, tools: AGENT_TOOL_DEFS,
+      const result = await runAgentLoop({
+        cfg: aiConfig(), goal: ask, tools: AGENT_TOOL_DEFS,
+        priorMessages: followUp ? agentPriorRef.current : [],
         execute: (name, args) => executeAgentTool(ctx, name, args),
         onEvent: (ev) => { appendAgentLog(ev); recordRunEvent(ev); },
         signal: ctl.signal,
       });
+      const answerText = typeof result?.text === "string" ? result.text.trim() : "";
+      if (answerText) {
+        agentPriorRef.current = [
+          ...agentPriorRef.current,
+          { role: "user", content: ask },
+          { role: "assistant", content: answerText },
+        ];
+        setAgentThread((t) => {
+          // Avoid duplicating if appendAgentLog already streamed the same final text
+          // as a thread entry — we own thread writes here.
+          const last = t[t.length - 1];
+          if (last?.role === "assistant" && last.text === answerText) return t;
+          return [...t, { role: "assistant", text: answerText }];
+        });
+      }
     } finally {
       setAgentRunning(false);
+      setAgentStatus("");
       agentAbortRef.current = null;
       if (runSaveTimerRef.current) { clearTimeout(runSaveTimerRef.current); runSaveTimerRef.current = null; }
       const run = currentRunRef.current;
@@ -8494,6 +8572,15 @@ export default function TakeoffCanvas() {
       }
       refreshRunHistory();
     }
+  }
+
+  function resetAgentChat() {
+    if (agentRunning) return;
+    agentPriorRef.current = [];
+    setAgentThread([]);
+    setAgentCitations([]);
+    setAgentLog([]);
+    setAgentStatus("");
   }
   const stopAgent = () => agentAbortRef.current?.abort();
 
@@ -10795,8 +10882,12 @@ export default function TakeoffCanvas() {
                         return (
                           <g key={m.id} data-markup-type="highlight" data-markup-id={m.id} data-markup-sheet={m.sheet_id}>
                             {halo(hx0 - pad, hy0 - pad, hx1 + pad, hy1 + pad)}
-                            <rect x={hx0} y={hy0} width={hx1 - hx0} height={hy1 - hy0} fill={mk} fillOpacity={0.18} stroke={mk} strokeWidth={(2 * w) / z} strokeDasharray={dash} />
-                            {m.text && <text x={(hx0 + hx1) / 2} y={(hy0 + hy1) / 2} fill={mk} fontSize={13 / z} fontWeight="700" textAnchor="middle" dominantBaseline="central" style={{ pointerEvents: "none" }}>{m.text}</text>}
+                            {/* Citation/hand highlights are a translucent frame only —
+                                never draw m.text inside the rect: that covers the
+                                schedule value / drawing text the highlight is citing. */}
+                            <rect x={hx0} y={hy0} width={hx1 - hx0} height={hy1 - hy0} fill={mk} fillOpacity={0.18} stroke={mk} strokeWidth={(2 * w) / z} strokeDasharray={dash}>
+                              {m.text ? <title>{m.text}</title> : null}
+                            </rect>
                             {badge(hx0, hy0 - pad - 9 / z)}
                           </g>
                         );
@@ -11726,7 +11817,10 @@ export default function TakeoffCanvas() {
           <AgentPanel
             configured={isAiConfigured()}
             running={agentRunning}
+            status={agentStatus}
             log={agentLog}
+            thread={agentThread}
+            citations={agentCitations}
             proposals={agentProposals}
             condById={condById}
             sheetLabel={(k) => tabLabel(k)}
@@ -11734,6 +11828,8 @@ export default function TakeoffCanvas() {
             fmtArea={(sf) => fa(sf)}
             onRun={runAgent}
             onStop={stopAgent}
+            onResetChat={resetAgentChat}
+            onOpenCitation={openAgentCitation}
             onAccept={acceptAgentProposal}
             onReject={rejectAgentProposal}
             onAcceptAll={acceptAllVisibleAgentProposals}

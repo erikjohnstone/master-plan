@@ -558,7 +558,7 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "highlight_citation",
-    description: "Highlight an exact production-API citation bbox on the real blueprint and navigate the canvas to it. Pass the cited sheet and bbox_px unchanged (from query_table cells, find_text hit.bbox_px, or sweep_schedule_row citations); the canvas converts image pixels to normalized UI coordinates, adds a visible highlight markup, opens that sheet, and flies to the painted region. Call this for every factual answer backed by cited evidence — agent-panel text alone is incomplete.",
+    description: "Paint an exact production-API citation bbox on the real blueprint as a highlight markup (no auto-navigation). Pass the cited sheet and bbox_px unchanged (from query_table cells, find_text hit.bbox_px, or sweep_schedule_row citations). The Agent panel shows a clickable source card the estimator uses to jump there on demand. Call this for every factual answer backed by cited evidence. Prefer a short label in text (the value or field name) for the source card — do not rely on overlay words drawn on top of the cell.",
     input_schema: {
       type: "object",
       properties: {

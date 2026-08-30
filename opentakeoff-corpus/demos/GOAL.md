@@ -27,6 +27,35 @@ prompts that say "show me" or "cite the exact". UI recordings must show the
 highlights on the canvas. Evidence gates and the system prompt must enforce
 this on the production UI path for arbitrary uploaded sets.
 
+## Estimator-clarity UX (non-negotiable, going forward)
+
+Demos and the production Agent must stay readable for a real estimator — not
+an engineer watching a tool trace. Apply on every new demo and every UI proof:
+
+1. **Answer first in the Agent panel.** The usable answer (every requested
+   field, evidence-backed) is the primary surface. Plain-language status
+   ("Reading schedules…") may show while working. Raw tool names, JSON dumps,
+   and internal gate chatter are secondary — collapsed — never the thing the
+   eye lands on.
+2. **No automatic fly-around.** Do **not** yank the viewport across sheets
+   while the agent runs. Paint highlights quietly on the sheets. Surface each
+   cited value as a **clickable source card/stamp in the Agent panel**; the
+   estimator reads the answer, then clicks a card when they want to jump to
+   that sheet/region. Auto fly-to thrash is a fail.
+3. **Highlights must not cover the value.** Citation highlight boxes are a
+   translucent frame around the answering cell/text. Do **not** draw label
+   words inside the box that obscure the schedule value or drawing text being
+   cited. The blueprint value stays readable through the paint.
+4. **Conversational follow-ups.** After an answer, the estimator must be able
+   to keep chatting in the same Agent thread — ask why a value was chosen,
+   what a field means, where else it appears, what to check next — and get
+   real, plain-language responses grounded in the run's evidence (and fresh
+   tools when needed). One-shot dump-and-done is incomplete. Demo UI recordings
+   going forward must show at least one real follow-up turn with a useful
+   reply, like a user actually using the platform.
+
+These rules are product behavior for arbitrary uploads, not demo polish.
+
 ## Demo quality bar (non-negotiable)
 
 Demos are not tag flybys. They must look like a competent estimator using the
@@ -45,7 +74,9 @@ joins, or any other real estimating ask — the software MUST:
    citations/context needed to trust it.
 3. **Paint ALL answering evidence on the sheets** via `highlight_citation`
    (value cells, row data, drawing text, counted marks — not lonely tag
-   marks), and navigate/fly to those regions.
+   marks). Do **not** auto-fly the viewport. Put clickable source cards in
+   the Agent panel so the estimator jumps on demand. Highlight frames must
+   leave the underlying value readable — no label text on top of the cell.
 
 Agent-panel text alone is incomplete. Mark-only sheet flybys are incomplete.
 Partial answers, wrong sibling rows, or “flying around tags” without the
@@ -65,9 +96,11 @@ wants open.
    text that support the answer. Highlighting only a tag mark while the prompt
    asked for corresponding row values is a fail. Flying between sheets without
    showing the answering cells is a fail.
-4. **UI recording.** Must show: real blueprint → frozen prompt → tool activity
-   → complete answer matching the prompt → on-sheet highlights of that
-   evidence.
+4. **UI recording.** Must show: real blueprint → frozen prompt → complete
+   usable answer + clickable source cards in the Agent panel → at least one
+   conversational follow-up with a useful reply → calm on-sheet highlights
+   with values still readable (opened via source cards, not auto-fly). Auto
+   fly-around videos and label-obscured highlights are a fail.
 
 If a recording cannot demonstrate those points, the demo is not locked —
 including demos previously marked locked that fail this bar (re-prove them).
