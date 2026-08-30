@@ -414,8 +414,12 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       // The row key/identity text alone does not count as "using" the row.
       const rowKeyCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
       const usesCellFromRow = cells.some(([, cell]) => {
-        const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+        const raw = String(cell?.text || "").trim();
+        const textCanonical = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
         if (textCanonical.length < 4 || textCanonical === rowKeyCanonical) return false;
+        // Short pure-numeric cells (e.g. 6.5) appear across many rows — they
+        // must not attach a sibling schedule sheet unless that sheet is named.
+        if (/^\d+(?:\.\d+)?$/.test(raw) && textCanonical.length < 6) return false;
         return finalCanonical.includes(textCanonical);
       });
       const sheetNorm = String(match.sheet || "").toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
@@ -587,9 +591,11 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       if (!rowCanonical || !finalCanonical.includes(rowCanonical)) continue;
       const usesCellFromRow = Object.values(match?.row?.all_cells || match?.row?.cells || {})
         .some((cell) => {
-          const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+          const raw = String(cell?.text || "").trim();
+          const textCanonical = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
           // Row key/identity text alone does not mean this sheet's row was used.
           if (textCanonical.length < 4 || textCanonical === rowCanonical) return false;
+          if (/^\d+(?:\.\d+)?$/.test(raw) && textCanonical.length < 6) return false;
           return finalCanonical.includes(textCanonical);
         });
       // Require sheet only when the answer uses this row's cell values, not merely mentions the tag.

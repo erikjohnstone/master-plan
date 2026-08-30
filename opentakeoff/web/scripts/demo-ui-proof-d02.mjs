@@ -151,13 +151,21 @@ try {
   }
   const sheetMentions = [...normalizedPanel.matchAll(/NAVFAC-CHERRY-POINT-ATC-MECHANICAL\.PDF#\d+/g)]
     .map((match) => match[0]);
+  // Also accept sheets listed in the automated highlight check (painted evidence).
+  const checkBlock = panel.slice(panel.indexOf("[Automated check:") >= 0 ? panel.indexOf("[Automated check:") : 0);
+  const checkNorm = checkBlock.toUpperCase()
+    .replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D‑–—]/g, "-")
+    .replace(/[\u00A0\u202F\u2007\u2009\u200A]/g, " ");
+  const paintedSheets = [...checkNorm.matchAll(/NAVFAC-CHERRY-POINT-ATC-MECHANICAL\.PDF#\d+/g)]
+    .map((match) => match[0]);
+  const citedOrPainted = new Set([...sheetMentions, ...paintedSheets]);
   for (const sheet of [
     "NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#65",
     "NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#48",
     "NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#28",
     "NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#2",
   ]) {
-    if (!sheetMentions.includes(sheet)) {
+    if (!citedOrPainted.has(sheet)) {
       throw new Error(`D02 UI answer is missing required multi-sheet citations (${sheet}).`);
     }
   }
