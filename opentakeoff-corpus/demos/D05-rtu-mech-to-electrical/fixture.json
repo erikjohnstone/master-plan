@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "set_id": "baker-county-eoc",
+  "source_file": "raw/baker-county-eoc-bidset.pdf",
+  "sha256": "1998d7daaac114b3780832b9cd6e017ed5b0342e6331ee025d4088fa47cc73cc",
+  "required_pages": [
+    {"page": 41, "purpose": "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT) — RTU-1 / RTU-2"},
+    {"page": 60, "purpose": "MECHANICAL EQUIPMENT CONNECTION SCHEDULE — RTU-01 / RTU-02"},
+    {"page": 39, "purpose": "Roof plan RTU-1 symbol/label"}
+  ],
+  "redistribution": "External local-use corpus fixture; do not commit or republish the source PDF."
+}

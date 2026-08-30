@@ -99,3 +99,16 @@ value` + dropdown), follow-up **asked + verified** (SUITE100 not a VAV;
 VAV-58 CFM 350) in
 `/opt/cursor/artifacts/d04_ui_prompt_answer_cards_followup_2026-08-30T11-28-54-597Z.webm`.
 D03 and D04 locked; next: D05.
+
+## D05 selection record
+
+Status: `SELECTED — ground truth authored; N=5 pending`
+
+Target holds: 65-sheet `baker-county-eoc` bid set. Mechanical
+`PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)` on sheet #41
+uses `RTU-1`/`RTU-2`; electrical `MECHANICAL EQUIPMENT CONNECTION SCHEDULE`
+on sheet #60 zero-pads to `RTU-01`/`RTU-02`. Roof plan label for RTU-1 is on
+sheet #39. Ground truth for RTU-1 mech attrs + RTU-01 electrical join (and
+RTU-2↔RTU-02 follow-up) authored from live `query_table`/`find_text` before
+any model run — see `D05-rtu-mech-to-electrical/truth.json`.
+
