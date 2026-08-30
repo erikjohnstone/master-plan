@@ -7674,6 +7674,24 @@ export default function TakeoffCanvas() {
     return { id, sheet: key, type };
   }
 
+  async function agentHighlightCitation({ sheet, bbox_px, text = "" }) {
+    if (!Array.isArray(bbox_px) || bbox_px.length !== 4 || bbox_px.some((value) => !Number.isFinite(value))) {
+      return { error: "bbox_px must contain four finite production image-pixel coordinates." };
+    }
+    const dims = await ensureSheetDims(sheet);
+    if (!dims) return { error: `Sheet ${sheet} not found.` };
+    const [x0, y0, x1, y1] = bbox_px;
+    if (!(x1 > x0 && y1 > y0) || x0 < 0 || y0 < 0 || x1 > dims.w || y1 > dims.h) {
+      return { error: "bbox_px is degenerate or outside the cited sheet." };
+    }
+    return agentAnnotate({
+      sheet,
+      type: "highlight",
+      text,
+      rect: [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]],
+    });
+  }
+
   function agentListAnnotations(sheetFilter, conditionFilter) {
     const st = agentStateRef.current;
     const tagById = new Map(st.conditions.map((c) => [c.id, c.finish_tag]));
@@ -7860,6 +7878,7 @@ export default function TakeoffCanvas() {
       exportDxf: agentExportDxf,
       exportMarkedPdf: agentExportMarkedPdf,
       annotate: agentAnnotate,
+      highlightCitation: agentHighlightCitation,
       listAnnotations: agentListAnnotations,
       linkAnnotation: agentLinkAnnotation,
       markVerdict: agentMarkVerdict,

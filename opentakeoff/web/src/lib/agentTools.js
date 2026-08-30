@@ -557,6 +557,19 @@ export const AGENT_TOOL_DEFS = [
     },
   },
   {
+    name: "highlight_citation",
+    description: "Highlight an exact production-API citation bbox on the real blueprint. Pass the cited sheet and bbox_px unchanged; the canvas converts image pixels to normalized UI coordinates and adds a visible highlight markup.",
+    input_schema: {
+      type: "object",
+      properties: {
+        sheet: { type: "string" },
+        bbox_px: { type: "array", items: { type: "number" } },
+        text: { type: "string" },
+      },
+      required: ["sheet", "bbox_px"],
+    },
+  },
+  {
     name: "list_annotations",
     description: "Every annotation on the takeoff, condition_id resolved to its finish tag. Filter by sheet, by condition, or both. `unattached` counts notes carrying no condition — the candidates for link_annotation. `verdicts` is the approval family's inventory (mark_verdict/delete_verdict): every mark with its actor — the estimator's APPROVED ring or the agent's AGENT diamond — under the same filters (a condition filter reaches a verdict through its target shape).",
     input_schema: {
@@ -945,6 +958,8 @@ export async function executeAgentTool(ctx, name, args) {
           at: args.at, target: args.target, rect: args.rect, from: args.from, to: args.to, r: args.r,
         });
       }
+      case "highlight_citation":
+        return await ctx.highlightCitation(args);
 
       case "list_annotations":
         return ctx.listAnnotations(args.sheet, args.condition);

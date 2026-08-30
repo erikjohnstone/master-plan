@@ -27,6 +27,7 @@ function makeCtx(overrides: Record<string, unknown> = {}) {
       rows: [{ finish_tag: "CPT-1", section: "FLOORING", category: "floor", description: "CARPET", manufacturer: "", style: "", spec_color: "", size: "", suggested: true }],
     }),
     queryTable: async (query: unknown) => ({ count: 1, query, matches: [{ row: { key: "CH-A1" } }] }),
+    highlightCitation: async (args: unknown) => ({ id: "mk-1", args }),
     viewRegion: async () => ({ image_data_url: "data:image/png;base64,AAAA", width: 100, height: 80 }),
     classifySymbol: async () => ({ classification: "gate valve", confidence: 0.9, reasoning: "bowtie body with a straight stem" }),
     oneClick: async (sheet: string, x: number, y: number) => {
@@ -52,7 +53,7 @@ test("registry: every tool has a name, description, and object schema; names are
     assert.ok(!names.has(d.name), `duplicate tool name ${d.name}`);
     names.add(d.name);
   }
-  for (const expected of ["list_sheets", "read_sheet_text", "read_schedule", "query_table", "view_region", "one_click", "get_conditions", "create_condition", "propose_shapes"]) {
+  for (const expected of ["list_sheets", "read_sheet_text", "read_schedule", "query_table", "highlight_citation", "view_region", "one_click", "get_conditions", "create_condition", "propose_shapes"]) {
     assert.ok(names.has(expected), `missing tool ${expected}`);
   }
 });

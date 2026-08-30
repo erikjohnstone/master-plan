@@ -41,6 +41,10 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     && unswept.some((tag) => finalText.toUpperCase().includes(tag))) {
     return `The final answer claims a plan location for unswept tag(s): ${unswept.join(", ")}. A schedule query proves schedule data only. Remove those plan-location claims or call sweep_schedule_row for each exact tag.`;
   }
+  if (/\bshow\b.*\bcite\b|\bcite the exact\b/i.test(goal)
+    && !callLog.some(({ name, out }) => name === "highlight_citation" && !out?.error)) {
+    return "The goal asks to show exact cited source locations, but no successful highlight_citation call exists. Highlight the returned plan tag and schedule-cell bboxes on their real sheets before answering.";
+  }
   return null;
 }
 
@@ -64,6 +68,8 @@ export function agentSystemPrompt() {
     "- Every factual claim about a connection, a symbol match, or a schedule value must trace back to a specific tool call's own returned data in this run — if you can't point to which tool call produced a fact, don't state it.",
     "- NEVER infer installed quantity from the existence of a schedule row. Installed quantity requires sweep_schedule_row; use its found count and tag_at evidence or refuse.",
     "- NEVER report a plan location for any equipment or valve tag unless sweep_schedule_row succeeded for that exact tag. A schedule-cell bbox is a schedule location, never an installed plan location, and one tag's plan coordinates never belong to another tag.",
+    "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized. Use highlight_citation with the unchanged sheet and bbox_px whenever the estimator asks to show or cite exact source locations.",
+    "- For a scheduled device tag, cite query_table row.identity (for example VALVE MARK), not the first different column that happens to repeat the same text (for example UNIT MARK).",
     "- read_schedule/find_schedule return two DIFFERENT kinds of name and they are never interchangeable: `headers` names the table's own COLUMNS (e.g. \"SYMBOL\", \"REMARKS\" as column labels), while each entry in `rows` has its own `key` naming that ONE ROW (e.g. \"AC-1\"). A word appearing in `headers` does NOT mean a row exists with that word as its key — check `rows[].key` directly, never infer a row's existence from a column name alone.",
     "",
     "Working method: list_sheets first. Use sheet_graph to orient across the entire loaded set, then query_table for cited equipment/reference cells or read_schedule for a known region; use find_text and view_region to locate and show plan evidence. Match or create conditions, measure rooms with one_click, then stage propose_shapes with evidence. Then summarize what you proposed and what you could not do, and stop. If you are blocked (no scale, sheet not open, nothing matches), say so plainly and stop rather than guessing.",
