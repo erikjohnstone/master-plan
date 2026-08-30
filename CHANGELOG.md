@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — a remote-sensor callout is not a second install
+
+### Fixed
+- **A boxed equipment tag on a leader to a circled thermostat/sensor is not a second unit.** `sweep_schedule_row` treats two same-sheet same-viewport matches as real repeats. Drafting also reprints that boxed tag on a leader pointing at a circled single-letter (T / S / H) — the remote sensor for the same unit — so the label-box fingerprint clears the bar twice. When another match of the same tag remains on the sheet, the callout is disclosed as `text_only`. A unit whose only drawn tag is on the sensor stays counted (same doctrine as a lone routing mention). Two real installs with no circled-letter leader are unchanged. No project, sheet, or tag names. Canvas and MCP share the pass.
+
 ## 2026-08-30 — unique last-segment unit suffix adopts the plan-drawn letter
 
 ### Fixed

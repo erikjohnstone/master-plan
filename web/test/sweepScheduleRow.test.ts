@@ -284,6 +284,58 @@ test("classifySweepMatches: two unlabeled-as-routing installs still count as two
   assert.equal(matchQuantity(r.matches), 2, "real second units stay counted");
 });
 
+function circleSegs(cx: number, cy: number, r: number, n = 24): number[] {
+  const out: number[] = [];
+  for (let i = 0; i < n; i++) {
+    const a1 = (2 * Math.PI * i) / n, a2 = (2 * Math.PI * (i + 1)) / n;
+    out.push(cx + r * Math.cos(a1), cy + r * Math.sin(a1), cx + r * Math.cos(a2), cy + r * Math.sin(a2));
+  }
+  return out;
+}
+
+test("classifySweepMatches: a remote-sensor callout is text_only when the unit itself also matched", () => {
+  const unitAt: Point = [400, 400];
+  const calloutAt: Point = [100, 230];
+  const sensor: Point = [220, 200];
+  const anchorSegs = place([{ at: unitAt }]);
+  const anchor = tagNear(unitAt);
+  const cf = corroborateFingerprint(anchorSegs, { w: 2000, h: 2000 }, anchor, null)!;
+  const sheetSegs = [
+    ...place([{ at: unitAt }, { at: calloutAt }]),
+    ...circleSegs(sensor[0], sensor[1], 16),
+    sensor[0] - 15, sensor[1] + 5, calloutAt[0] + 20, calloutAt[1] + 5,
+  ];
+  const occ = [tagNear(unitAt, 40, "exact"), tagNear(calloutAt, 40, "exact")];
+  const typSpans = [
+    { str: "T", x0: sensor[0] - 4, y0: sensor[1] - 4, x1: sensor[0] + 4, y1: sensor[1] + 4 },
+    { str: "FCU-1", x0: unitAt[0] - 10, y0: unitAt[1], x1: unitAt[0], y1: unitAt[1] + 40 },
+    { str: "FCU-1", x0: calloutAt[0] - 10, y0: calloutAt[1], x1: calloutAt[0], y1: calloutAt[1] + 40 },
+  ];
+  const r = classifySweepMatches("FCU-1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, { typSpans });
+  assert.equal(matchQuantity(r.matches), 1, "the sensor leader is not a second install");
+  assert.equal(r.text_only.length, 1, "the callout is disclosed, not dropped");
+});
+
+test("classifySweepMatches: a lone match on a sensor callout still counts", () => {
+  const calloutAt: Point = [100, 230];
+  const sensor: Point = [220, 200];
+  const anchorSegs = place([{ at: calloutAt }]);
+  const anchor = tagNear(calloutAt);
+  const cf = corroborateFingerprint(anchorSegs, { w: 2000, h: 2000 }, anchor, null)!;
+  const sheetSegs = [
+    ...place([{ at: calloutAt }]),
+    ...circleSegs(sensor[0], sensor[1], 16),
+    sensor[0] - 15, sensor[1] + 5, calloutAt[0] + 20, calloutAt[1] + 5,
+  ];
+  const occ = [tagNear(calloutAt, 40, "exact")];
+  const typSpans = [
+    { str: "T", x0: sensor[0] - 4, y0: sensor[1] - 4, x1: sensor[0] + 4, y1: sensor[1] + 4 },
+    { str: "UH-1", x0: calloutAt[0] - 10, y0: calloutAt[1], x1: calloutAt[0], y1: calloutAt[1] + 40 },
+  ];
+  const r = classifySweepMatches("UH-1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, { typSpans });
+  assert.equal(matchQuantity(r.matches), 1, "do not refuse a unit whose only tag is on the sensor");
+});
+
 test("discloseRoutingLabels: appends withheld mentions without duplicating text_only", () => {
   const routing: TagOcc[] = [tagNear([700, 700], 10, "routing")];
   const already = discloseRoutingLabels([], routing);
