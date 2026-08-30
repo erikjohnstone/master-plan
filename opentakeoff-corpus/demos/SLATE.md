@@ -41,7 +41,7 @@ validated the final answer and saved the strict pass under
 
 ## D02 selection record
 
-Status: `IN PROGRESS — ground truth locked; restarting N=5 at 0/5 after RETRIEVAL`
+Status: `LOCKED — API 5/5; p95 7.263 s; truth harness green`
 
 The NAVFAC target holds up after direct rendering. MI731 contains one 62-row
 `POINTS LIST AHU-T1A/TIB` that interleaves AHU-T1A and AHU-T1B under repeated
@@ -52,8 +52,7 @@ ATCT cab narrative. Those sources occupy four different sheets in a 75-sheet,
 three-building set, so the required BAS-to-equipment-to-location stress is
 genuine rather than inferred from the slate.
 
-Independent tool probe confirms exact `cell_contains` on the full feedback
-description returns the AI10 row with Alarm/Trend, and the AHU schedule row
-returns location + 3850 CFM. The earlier cold attempt exhausted the 12-turn
-budget (`RETRIEVAL`) before the adaptive title-filter / broaden guidance
-landed; N=5 restarts from zero with full failed-run diagnostics preserved.
+N=5 production runs are 5/5 under `verify:demo` (values, citation
+resolvability, and OCR grounding) with nearest-rank p95 **7.263 s**. Failed
+cold attempts remain under `runs/failed/` with classified diagnostics.
+Localhost stdio and production-UI proof follow the same harness rules as D01.
