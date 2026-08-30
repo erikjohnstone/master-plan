@@ -37,6 +37,17 @@ export function parseJsonAnswer(content) {
   return parsed;
 }
 
+export function runTimingMetadata(cold, setupLatencyMs) {
+  return {
+    latency_scope: "prompt_to_final_answer_after_loaded_source_index",
+    setup: {
+      fresh_session: true,
+      source_index_forced_cold: cold,
+      latency_ms: +setupLatencyMs.toFixed(2),
+    },
+  };
+}
+
 function systemPrompt(truth) {
   const fields = Object.entries(truth.expected).map(([name, spec]) => ({
     name,
@@ -195,10 +206,13 @@ async function main() {
   const sourcePath = resolve(corpusDir, "raw", truth.source_file);
   const { client, server } = await productionPair();
   const startedAt = new Date().toISOString();
-  const started = performance.now();
   try {
+    const setupStarted = performance.now();
     const load = await callTool(client, "load_plan", { path: sourcePath });
     if (load.is_error) throw new Error(`load_plan failed: ${JSON.stringify(load.data)}`);
+    const sourceIndex = await callTool(client, "sheet_graph", {});
+    if (sourceIndex.is_error) throw new Error(`sheet_graph failed: ${JSON.stringify(sourceIndex.data)}`);
+    const setupLatencyMs = performance.now() - setupStarted;
     const listed = await client.listTools();
     const tools = listed.tools
       .filter((tool) => DEMO_TOOLS.has(tool.name))
@@ -210,6 +224,7 @@ async function main() {
           parameters: tool.inputSchema,
         },
       }));
+    const started = performance.now();
     const modelResult = await runToolCallingModel({
       endpoint,
       apiKey,
@@ -226,6 +241,7 @@ async function main() {
       run_number: runNumber,
       cold_cache: cold,
       timestamp: startedAt,
+      ...runTimingMetadata(cold, setupLatencyMs),
       local_run_id: randomUUID(),
       request_id: modelResult.request_ids.at(-1) ?? null,
       request_ids: modelResult.request_ids,
@@ -236,7 +252,11 @@ async function main() {
       answer: modelResult.answer.answer,
       raw_response: modelResult.raw_response,
       raw_model_responses: modelResult.raw_model_responses,
-      tool_calls: [{ name: "load_plan", arguments: { path: basename(sourcePath) }, result: load }, ...modelResult.tool_calls],
+      tool_calls: [
+        { name: "load_plan", arguments: { path: basename(sourcePath) }, result: load },
+        { name: "sheet_graph", arguments: {}, result: sourceIndex },
+        ...modelResult.tool_calls,
+      ],
     };
     mkdirSync(dirname(resolve(outputPath)), { recursive: true });
     writeFileSync(resolve(outputPath), `${JSON.stringify(record, null, 2)}\n`);

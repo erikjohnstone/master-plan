@@ -1,11 +1,27 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { DEMO_TOOLS, parseJsonAnswer, runToolCallingModel } from "../scripts/run-demo.mjs";
+import {
+  DEMO_TOOLS,
+  parseJsonAnswer,
+  runTimingMetadata,
+  runToolCallingModel,
+} from "../scripts/run-demo.mjs";
 
 test("demo runner exposes deterministic plan-location evidence tools", () => {
   assert.equal(DEMO_TOOLS.has("find_text"), true);
   assert.equal(DEMO_TOOLS.has("read_sheet_text"), true);
   assert.equal(DEMO_TOOLS.has("view_sheet"), true);
+});
+
+test("demo timing separates cold source indexing from live prompt latency", () => {
+  assert.deepEqual(runTimingMetadata(true, 1234.567), {
+    latency_scope: "prompt_to_final_answer_after_loaded_source_index",
+    setup: {
+      fresh_session: true,
+      source_index_forced_cold: true,
+      latency_ms: 1234.57,
+    },
+  });
 });
 
 test("parseJsonAnswer accepts JSON and strips a fenced transport wrapper", () => {
