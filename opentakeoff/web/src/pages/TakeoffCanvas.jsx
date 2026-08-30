@@ -12451,6 +12451,11 @@ export default function TakeoffCanvas() {
           const tip = indexing
             ? `Indexing PDF text ${indexProgress.done}/${indexProgress.total} (${pct}%). Agent and schedule workflows may miss pages until this finishes — wait for Indexed before running a full-set takeoff.`
             : `PDF text index ready (${indexProgress.total} page${indexProgress.total === 1 ? "" : "s"}). Agent / schedule workflows can search the whole set.`;
+          // Status bar is dark (--status-bg). Do NOT use --ink / --c-positive
+          // (those are for light paper chrome and wash out here).
+          const fg = indexing ? "var(--status-acc)" : "#9AF0C0";
+          const track = "rgba(232,238,248,0.22)";
+          const fill = indexing ? "var(--status-acc)" : "#9AF0C0";
           return (
             <span
               title={tip}
@@ -12460,11 +12465,13 @@ export default function TakeoffCanvas() {
               data-total={indexProgress.total}
               style={{
                 marginLeft: 10, display: "inline-flex", alignItems: "center", gap: 8,
-                minWidth: 0, maxWidth: 280, color: indexing ? "var(--ink)" : "var(--c-positive)",
+                minWidth: 0, maxWidth: 320, color: fg, fontWeight: 600,
               }}
             >
-              <span style={{ opacity: 0.85, overflow: "hidden", textOverflow: "ellipsis" }}>
-                {indexing ? `Indexing ${indexProgress.done}/${indexProgress.total}` : `Indexed ${indexProgress.total}`}
+              <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+                {indexing
+                  ? `Indexing ${indexProgress.done}/${indexProgress.total}`
+                  : `Indexed · ${indexProgress.total} pages`}
               </span>
               <span
                 role="progressbar"
@@ -12473,14 +12480,14 @@ export default function TakeoffCanvas() {
                 aria-valuenow={indexProgress.done}
                 aria-label="PDF text index progress"
                 style={{
-                  width: 64, height: 4, flex: "0 0 auto",
-                  background: "color-mix(in srgb, var(--ink) 18%, transparent)",
-                  borderRadius: 2, overflow: "hidden",
+                  width: 72, height: 5, flex: "0 0 auto",
+                  background: track,
+                  borderRadius: 3, overflow: "hidden",
                 }}
               >
                 <span style={{
                   display: "block", height: "100%", width: `${pct}%`,
-                  background: indexing ? "var(--status-acc)" : "var(--c-positive)",
+                  background: fill,
                   transition: "width 120ms linear",
                 }} />
               </span>
@@ -12489,8 +12496,8 @@ export default function TakeoffCanvas() {
                   title="Warning: running Agent or schedule takeoffs before indexing finishes can miss sheets that are not in the text index yet."
                   style={{
                     flex: "0 0 auto", width: 14, height: 14, borderRadius: 7,
-                    border: "1px solid currentColor", fontSize: 10, lineHeight: "12px",
-                    textAlign: "center", opacity: 0.9, cursor: "help",
+                    border: "1.5px solid #F5C542", color: "#F5C542", fontSize: 10,
+                    lineHeight: "11px", textAlign: "center", cursor: "help", fontWeight: 700,
                   }}
                 >!</span>
               ) : null}
