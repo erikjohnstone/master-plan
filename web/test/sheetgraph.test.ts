@@ -3376,42 +3376,44 @@ test("reference kind: a rowspan count line does not swallow the next column's sh
 });
 
 test("reference kind: a multi-word cell next to a filled neighbor is not overflow-split", () => {
-  // Overflow only fires when the next column is empty. A MATERIAL phrase
-  // made of several same-line spans must stay in MATERIAL when INSULATION
+  // Overflow only fires when the next column is empty. A BUILDUP phrase
+  // made of several same-line spans must stay in BUILDUP when JACKET
   // already has its own value — the integer-occupancy gate also does not
-  // apply (leading token is not a bare count).
+  // apply (leading token is not a bare count). Headers stay off the
+  // equipment/finish vocab bars so this stays a reference-kind extract.
   const uh = (str: string, x: number, y: number, w: number): GraphSpan => ({ str, x, y, w, h: 10 });
   const sheet: SheetSpans = {
     key: "pipe-spec.pdf#1", sheet_number: "M6.2",
     spans: [
       { str: "PIPING SERVICE SCHEDULE", x: 80, y: 10, w: 320, h: 28 },
-      uh("SERVICE", 80, 70, 80), uh("MATERIAL", 280, 70, 90), uh("INSULATION", 620, 70, 100),
-      uh("CHW", 80, 120, 40), uh("TYPE", 280, 120, 40), uh("L", 330, 120, 12), uh("COPPER", 355, 120, 60), uh("CELLULAR", 620, 120, 80),
-      uh("HHW", 80, 150, 40), uh("TYPE", 280, 150, 40), uh("L", 330, 150, 12), uh("STEEL", 355, 150, 50), uh("MINERAL", 620, 150, 70),
+      uh("SERVICE", 80, 70, 80), uh("BUILDUP", 280, 70, 80), uh("JACKET", 620, 70, 70),
+      uh("CHW-1", 80, 120, 50), uh("TYPE", 280, 120, 40), uh("L", 330, 120, 12), uh("COPPER", 355, 120, 60), uh("CELLULAR", 620, 120, 80),
+      uh("HHW-1", 80, 150, 50), uh("TYPE", 280, 150, 40), uh("L", 330, 150, 12), uh("STEEL", 355, 150, 50), uh("MINERAL", 620, 150, 70),
     ],
     segs: [70, 95, 760, 95],
   };
   const g = buildSheetGraph([sheet]);
   const tab = g.tables.find((t) => t.kind === "reference");
   assert.ok(tab, `reference table must extract: ${g.tables.map((t) => `${t.kind}:${t.title?.text}`).join(" | ")}`);
-  const chw = tab!.rows.find((r) => r.key === "CHW");
-  assert.ok(chw, `CHW row: ${tab!.rows.map((r) => r.key).join(",")}`);
-  const matCol = tab!.headers.find((h) => /MATERIAL/.test(h)) || "MATERIAL";
-  const insCol = tab!.headers.find((h) => /INSULATION/.test(h)) || "INSULATION";
-  assert.match(chw!.cells[matCol]?.text || "", /COPPER/, `material phrase stays together: ${JSON.stringify(chw!.cells)}`);
-  assert.match(chw!.cells[insCol]?.text || "", /CELLULAR/, `insulation not stolen from material: ${JSON.stringify(chw!.cells)}`);
+  const chw = tab!.rows.find((r) => r.key === "CHW-1");
+  assert.ok(chw, `CHW-1 row: ${tab!.rows.map((r) => r.key).join(",")}`);
+  const matCol = tab!.headers.find((h) => /BUILDUP/.test(h)) || "BUILDUP";
+  const insCol = tab!.headers.find((h) => /JACKET/.test(h)) || "JACKET";
+  assert.match(chw!.cells[matCol]?.text || "", /COPPER/, `buildup phrase stays together: ${JSON.stringify(chw!.cells)}`);
+  assert.match(chw!.cells[insCol]?.text || "", /CELLULAR/, `jacket not stolen from buildup: ${JSON.stringify(chw!.cells)}`);
 });
 
 test("reference kind: a letter-leading wrap still orphan-folds into the parent cell", () => {
   // Sibling-count refuse must not drop a real wrapped continuation whose
-  // leftover line starts with a letter (ASTM / MATERIAL prose). Two keyed
-  // rows so the repeating-grid floor still clears.
+  // leftover line starts with a letter (ASTM / spec prose). Two keyed
+  // rows so the repeating-grid floor still clears. Headers stay off the
+  // equipment/finish vocab bars so this stays a reference-kind extract.
   const uh = (str: string, x: number, y: number, w: number): GraphSpan => ({ str, x, y, w, h: 10 });
   const sheet: SheetSpans = {
     key: "wrap-spec.pdf#1", sheet_number: "M6.3",
     spans: [
       { str: "INSULATION TYPE SCHEDULE", x: 80, y: 10, w: 320, h: 28 },
-      uh("CODE", 80, 70, 50), uh("DESCRIPTION", 220, 70, 120),
+      uh("SYSTEM", 80, 70, 70), uh("BUILDUP", 220, 70, 80),
       uh("D-1", 80, 120, 30), uh("EXTERIOR DUCTS WITHIN", 220, 120, 200),
       uh("TEN FEET OF OPENINGS", 220, 132, 190),
       uh("D-2", 80, 170, 30), uh("INTERIOR LINED DUCTS", 220, 170, 180),
@@ -3423,6 +3425,6 @@ test("reference kind: a letter-leading wrap still orphan-folds into the parent c
   assert.ok(tab, `reference table must extract: ${g.tables.map((t) => `${t.kind}:${t.title?.text}`).join(" | ")}`);
   const d1 = tab!.rows.find((r) => r.key === "D-1");
   assert.ok(d1, `D-1 row: ${tab!.rows.map((r) => r.key).join(",")}`);
-  const descCol = tab!.headers.find((h) => /DESCRIPTION/.test(h)) || "DESCRIPTION";
+  const descCol = tab!.headers.find((h) => /BUILDUP/.test(h)) || "BUILDUP";
   assert.match(d1!.cells[descCol]?.text || "", /OPENINGS/, `wrap folded, not dropped: ${JSON.stringify(d1!.cells)}`);
 });
