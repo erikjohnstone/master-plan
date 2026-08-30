@@ -347,7 +347,14 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
         // cannot.
         const alias = /[A-Z]\d$/i.test(tag) ? tag.slice(0, -1) : null;
         if (!alias || !/tag is not drawn on any plan sheet/i.test(primary?.message || String(primary))) throw primary;
-        r = await session.sweepScheduleRow(alias, { commit: false, evaluationFast: opts.evaluationFast });
+        try {
+          r = await session.sweepScheduleRow(alias, { commit: false, evaluationFast: opts.evaluationFast });
+        } catch {
+          // Alias lookup is an optional recovery attempt. If it cannot prove
+          // a unique row and plan anchor, retain the original no-plan-tag
+          // refusal instead of replacing it with an incidental alias error.
+          throw primary;
+        }
         item.tag = alias;
       }
       item.quantity = r.found ?? 0;
