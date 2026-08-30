@@ -680,6 +680,45 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     } },
   ], servesGoal,
   "Physical section: AHU-1 / AHU-2 SECTION on set.pdf#28.\nCould not find a drawn serving narrative with evidence; refusing serves."), null);
+  // Schedule SERVICE cells answer named-service joins (not drawing "serves").
+  const serviceJoinGoal = "Which RTU serves BUILDING SOUTH and what supply CFM does it list?";
+  assert.equal(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#41",
+      row: {
+        key: "RTU-2",
+        all_cells: {
+          "EQUIP NO": { text: "RTU-2" },
+          SERVICE: { text: "BUILDING SOUTH" },
+          "SUPPLY AIR": { text: "750" },
+        },
+      },
+    }] } },
+  ], serviceJoinGoal,
+  "RTU-2 serves BUILDING SOUTH at 750 CFM on set.pdf#41."), null);
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#41",
+      row: {
+        key: "RTU-2",
+        all_cells: {
+          "EQUIP NO": { text: "RTU-2" },
+          SERVICE: { text: "BUILDING SOUTH" },
+          "SUPPLY AIR": { text: "750" },
+        },
+      },
+    }] } },
+  ], serviceJoinGoal,
+  "Could not determine which RTU serves BUILDING SOUTH from drawing evidence."), /schedule SERVICE join|matching equipment MARK/);
+  // LOCATION still cannot paraphrase into serves even when SERVICE exists on another row.
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#48",
+      row: { key: "AHU-1", all_cells: { LOCATION: { text: "11TH FLOOR MECHANICAL" } } },
+    }] } },
+    { name: "find_text", args: { q: "AHU-1" }, out: { count: 1, hits: [{ str: "AHU-1", sheet: "set.pdf#2" }] } },
+  ], servesGoal,
+  "Location: 11TH FLOOR MECHANICAL.\nServes: supplies the 11TH FLOOR MECHANICAL spaces.")!, /LOCATION\/ROOM cell/);
   assert.match(requiredEvidenceCorrection([
     { name: "query_table", out: { matches: [{
       sheet: "set.pdf#65",

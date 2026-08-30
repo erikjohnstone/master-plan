@@ -523,9 +523,31 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     .filter(([header]) => /\b(?:LOCATION|ROOM|AREA)\b/i.test(String(header)))
     .map(([, cell]) => String(cell?.text || "").trim())
     .filter(Boolean);
+  // Schedule SERVICE/duty cells are the scheduled service assignment (e.g.
+  // MAIN OPERATIONS, BUILDING SOUTH). When the goal names that service, the
+  // matching EQUIP row is valid evidence — not a drawing "serves" narrative,
+  // and not a LOCATION paraphrase.
+  const scheduleServiceHits = callLog
+    .filter(({ name }) => name === "query_table")
+    .flatMap(({ out }) => out?.matches || [])
+    .flatMap((match) => {
+      const key = String(match?.row?.key || match?.row?.identity?.text || "").trim();
+      return Object.entries(match?.row?.all_cells || match?.row?.cells || {})
+        .filter(([header]) => /\bSERVICE\b/i.test(String(header)))
+        .map(([, cell]) => ({
+          key,
+          text: String(cell?.text || cell || "").trim(),
+        }));
+    })
+    .filter((hit) => hit.text);
+  const goalCanonical = goal.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const serviceAnswersGoal = scheduleServiceHits.some(({ text }) => {
+    const tc = text.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    return tc.length >= 6 && goalCanonical.includes(tc);
+  });
   const asksServes = /\bserves\b|\bwhat (?:the |this |that )?(?:unit|equipment|ahu|device)\s+serves\b/i.test(goal);
   const asksPhysicalSection = /\bphysical (?:drawing )?section\b|\bdrawing section\b|\bsection where (?:the )?equipment\b/i.test(goal);
-  if (asksServes || asksPhysicalSection) {
+  if ((asksServes && !serviceAnswersGoal) || asksPhysicalSection) {
     const setWideTextSearch = callLog.some(({ name, args, out }) =>
       name === "find_text" && !out?.error && (args?.sheet == null || args?.sheet === ""));
     const sheetScopedEmpty = callLog.some(({ name, args, out }) =>
@@ -544,7 +566,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return "A sheet-scoped find_text returned zero hits. Omit sheet so find_text searches the entire loaded set, then answer from hit.str — do not fill serving/section fields from schedule cells.";
     }
   }
-  if (asksServes && /\bserves\b|\bserving\b/i.test(finalText)) {
+  if (asksServes && /\bserves\b|\bserving\b/i.test(finalText) && !serviceAnswersGoal) {
     const refusedServes = /\b(?:could not|can't|cannot|unable to|not found|no (?:drawn )?serving|missing evidence|refuse[sd]?)\b.{0,100}\bserves?\b/i.test(finalText)
       || /\bserves?\b.{0,100}\b(?:could not|can't|cannot|unable to|not found|missing evidence|no (?:drawn )?serving)\b/i.test(finalText);
     const locationCanonical = scheduleLocationTexts
@@ -590,6 +612,21 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       } else {
         return "No phrase-length find_text/read_sheet_text hit supports the serving claim. Keep searching the loaded set for the drawn serving description and copy from hit.str, or refuse; do not answer serves from schedule LOCATION.";
       }
+    }
+  }
+  if (asksServes && serviceAnswersGoal && /\bserves\b|\bserving\b/i.test(finalText)) {
+    // Require the matching EQUIP mark when SERVICE answered the goal.
+    const matched = scheduleServiceHits.filter(({ text }) => {
+      const tc = text.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      return tc.length >= 6 && goalCanonical.includes(tc);
+    });
+    const missingMark = matched.some(({ key }) => {
+      if (!key) return false;
+      const kc = key.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      return kc && !finalCanonical.includes(kc);
+    });
+    if (missingMark) {
+      return "The goal names a schedule SERVICE assignment that query_table already returned. Include the matching equipment MARK/EQUIP NO from that row (and the SERVICE text) with citations — do not refuse a schedule SERVICE join as if it were a drawing serves narrative.";
     }
   }
   if (asksPhysicalSection) {
@@ -667,7 +704,6 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     }
     return found.length ? new Set(found) : null;
   })();
-  const goalCanonical = goal.toUpperCase().replace(/[^A-Z0-9]/g, "");
   // Broad title-scan / keys-only count results name dozens of MARKs so the
   // model can copy `count` — they are not per-row citation duties. Re-queries
   // with row_key (or cell filters) carry the cite paint obligation.
@@ -1556,7 +1592,7 @@ export function agentSystemPrompt() {
     "- For a scheduled device tag, cite query_table row.identity (for example VALVE MARK), not the first different column that happens to repeat the same text (for example UNIT MARK).",
     "- For any equipment-to-control-valve join, use this direct set-wide sequence: query_table with row_key set to the equipment tag; sweep_schedule_row for installed quantity/plan evidence when requested; query_table with cell_contains set to that exact equipment tag to find compound relationship marks; then highlight the exact returned tag and row-identity bboxes. Do not browse guessed sheets or repeatedly retry the same empty exact-row query.",
     "- When the goal gives a BAS/DDC point description and asks for the point mark, alarm, or trend, call query_table with cell_contains set to that description (omit invented table titles on the first try). Read the AI/AO/BI/BO mark and alarm/trend fields from row.all_cells — never treat the description string itself as the point mark. If several sibling points share an equipment tag (e.g. HW vs CHW valve feedback), pick the row whose DESCRIPTION matches the goal's point wording.",
-    "- Schedule LOCATION/ROOM cells are installation-location attributes only. When asked what equipment serves, call find_text or read_sheet_text and copy from hit.str — never paraphrase a LOCATION cell into a serves claim.",
+    "- Schedule LOCATION/ROOM cells are installation-location attributes only. When asked what equipment serves from drawing narrative, call find_text or read_sheet_text and copy from hit.str — never paraphrase a LOCATION cell into a serves claim. Schedule SERVICE (duty) cells are different: when the goal names a service that matches a SERVICE cell (for example MAIN OPERATIONS or BUILDING SOUTH), answer with that row's EQUIP/MARK and cite the SERVICE cell.",
     "- When asked for a physical drawing section or detail label where equipment is shown, cite find_text/read_sheet_text hit.str for that section label. A schedule title is not a drawing section.",
     "- When asked where equipment appears on a roof/floor plan, prefer a find_text hit whose hit.str equals the exact equipment tag on a plan sheet over longer detail/callout phrases that only contain the tag.",
     "- find_text accepts an optional sheet; omit sheet to search the entire loaded set. When a sheet-scoped search returns zero hits with a next_move, follow that next_move instead of answering from schedule cells.",
