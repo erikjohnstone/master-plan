@@ -1072,7 +1072,7 @@ test("a lone unexplained token never mints a column — the sub-tier needs a par
 // MATERIAL | COMMENTS) extracted as 54 "finish" rows, so a finish code
 // colliding with a door mark would chain to a DOOR — a confidently wrong
 // product in the bid. Refused by title, and the drop is named.
-import { isMepEquipmentSchedule, isNonFinishSchedule, isReferenceOrSpecTable, scheduleTableFromODL, type ODLTable } from "../src/lib/sheetgraph.ts";
+import { isMepEquipmentSchedule, isNonFinishSchedule, isReferenceOrSpecTable, isPointsListTitle, scheduleTableFromODL, type ODLTable } from "../src/lib/sheetgraph.ts";
 
 test("isNonFinishSchedule: other families refuse, anything naming FINISH or MATERIAL is kept", () => {
   for (const t of ["DOOR SCHEDULE", "DOOR AND WINDOW SCHEDULE", "PARTITION SCHEDULE", "EQUIPMENT SCHEDULE", "LIGHTING SCHEDULE"]) {
@@ -1216,6 +1216,12 @@ test("isReferenceOrSpecTable: lookup tables refuse, finish/material specs and in
     "REFERENCE TABLE",
   ]) {
     assert.equal(isReferenceOrSpecTable(title), true, title);
+  }
+  for (const title of ["POINTS LIST", "POINTS LIST DOAH-TI", "DDC POINTS SCHEDULE", "BAS POINTS LIST", "POINT SCHEDULE"]) {
+    assert.equal(isPointsListTitle(title), true, title);
+  }
+  for (const title of ["EQUIPMENT CROSS REFERENCE", "SPECIFICATION INDEX", "SEE POINTS LIST FOR ALARMS", "FAN SCHEDULE"]) {
+    assert.equal(isPointsListTitle(title), false, title);
   }
   for (const title of [
     "ROOM FINISH SCHEDULE",
@@ -2730,6 +2736,77 @@ test("reference kind: scoped to schedule-role sheets — the identical real tabl
   assert.equal(classifySheetRole(sheet).role, "plan");
   const g = buildSheetGraph([sheet]);
   assert.ok(!g.tables.some((t) => t.kind === "reference"), "a plan-role sheet is out of this pass's own declared scope");
+});
+
+// A DDC/BAS points list is the one named exception to the schedule-role
+// scope above: the title never satisfies SCHEDULE_TITLE_RE, so a sheet that
+// also prints LEGEND classifies legend and the structural pass used to skip
+// the page. The table itself is the lookup — keep it. Do not flip the sheet
+// to schedule (a plan with a corner POINTS LIST box must stay a plan at
+// 0.85; an 0.80 schedule signal would dissent and halve that confidence).
+const POINTS_LIST_SPANS: GraphSpan[] = [
+  { str: "POINTS LIST DOAH-TI", x: 153, y: 10, w: 280, h: 40 },
+  rh("MARK", 153, 80, 50), rh("DESCRIPTION", 260, 80, 130), rh("ALARM", 520, 80, 60), rh("TREND", 660, 80, 60),
+  rh("AI01", 153, 120, 40), rh("OA TEMPERATURE", 260, 120, 160), rh("No", 520, 120, 25), rh("Yes", 660, 120, 30),
+  rh("AI02", 153, 160, 40), rh("OA HUMIDITY", 260, 160, 130), rh("No", 520, 160, 25), rh("Yes", 660, 160, 30),
+];
+const POINTS_LIST_RULE = [150, 105, 750, 105];
+
+test("reference kind: a POINTS LIST on a legend-role sheet still extracts", () => {
+  const sheet: SheetSpans = {
+    key: "pts.pdf#1", sheet_number: "M701",
+    // LEGEND sits well below the table — clusterRows is Y-only, so a
+    // same-band "MECHANICAL LEGEND" token would fuse with the caption and
+    // the title hunt (exactly one in-band span) would miss.
+    spans: [...POINTS_LIST_SPANS, rh("MECHANICAL LEGEND", 0, 500, 200)],
+    segs: POINTS_LIST_RULE,
+  };
+  const role = classifySheetRole(sheet);
+  assert.equal(role.role, "legend", "POINTS LIST must not flip a LEGEND sheet to schedule");
+  const g = buildSheetGraph([sheet]);
+  const tab = g.tables.find((t) => t.kind === "reference" && /POINTS LIST/i.test(t.title?.text || ""));
+  assert.ok(tab, `points list must extract on a legend sheet: ${g.tables.map((t) => `${t.kind}:${t.title?.text}`).join(" | ")}`);
+  assert.equal(tab!.rows.length, 2);
+  assert.equal(tab!.rows[0].key, "AI01");
+  assert.equal(tab!.rows[0].cells.ALARM?.text, "No");
+  assert.equal(tab!.rows[0].cells.TREND?.text, "Yes");
+  assert.equal(tab!.rows[1].key, "AI02");
+});
+
+test("reference kind: a plan sheet that also prints POINTS LIST stays plan at full confidence", () => {
+  const sheet: SheetSpans = {
+    key: "pts.pdf#2", sheet_number: "M101",
+    spans: [...POINTS_LIST_SPANS, rh("MECHANICAL - LEVEL 1 PLAN", 153, 500, 300)],
+    segs: POINTS_LIST_RULE,
+  };
+  const role = classifySheetRole(sheet);
+  assert.equal(role.role, "plan");
+  assert.equal(role.confidence, 0.85, "a corner POINTS LIST must not dissent against a real plan title");
+  const g = buildSheetGraph([sheet]);
+  const tab = g.tables.find((t) => t.kind === "reference" && /POINTS LIST/i.test(t.title?.text || ""));
+  assert.ok(tab, "the points-list lookup on a plan sheet is still the table itself");
+  assert.equal(tab!.rows[0].key, "AI01");
+});
+
+test("reference kind: POINTS LIST on a legend sheet does not reopen the structural pass for every other table on that sheet", () => {
+  // Same real insulation table the plan-scope test refuses, but WITHOUT
+  // its "…SCHEDULE" title (that title is 0.85 schedule and would flip the
+  // sheet). Untitled, the structural pass can still find it; the
+  // lookup-only filter must drop it and keep only the points list.
+  const sheet: SheetSpans = {
+    key: "pts.pdf#3", sheet_number: "M701",
+    spans: [
+      ...POINTS_LIST_SPANS,
+      rh("MECHANICAL LEGEND", 0, 900, 200),
+      ...REF_TABLE_SPANS.slice(1).map((s) => ({ ...s, y: s.y + 400 })),
+    ],
+    segs: [...POINTS_LIST_RULE, REF_TABLE_RULE[0], REF_TABLE_RULE[1] + 400, REF_TABLE_RULE[2], REF_TABLE_RULE[3] + 400],
+  };
+  assert.equal(classifySheetRole(sheet).role, "legend");
+  const g = buildSheetGraph([sheet]);
+  const titles = g.tables.filter((t) => t.kind === "reference").map((t) => t.title?.text || "");
+  assert.ok(titles.some((t) => /POINTS LIST/i.test(t)), `points list kept: ${titles.join(" | ")}`);
+  assert.ok(!titles.some((t) => /DUCTWORK INSULATION/i.test(t)), `insulation reprint must stay out: ${titles.join(" | ")}`);
 });
 
 test("reference kind: refuses without a real nearby ruled border (segs supplied, none present)", () => {

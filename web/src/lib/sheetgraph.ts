@@ -3102,6 +3102,28 @@ export const isReferenceOrSpecTable = (title: string): boolean => {
   return true;
 };
 
+// A DDC/BAS points-list (or "points schedule") is already inside
+// REF_SPEC_FAMILY_RE — the table IS the lookup an estimator wants, unlike a
+// CROSS-REF / SPEC INDEX that only mints phantom instance keys. Those titles
+// rarely contain a standalone "… SCHEDULE" phrase, so SCHEDULE_TITLE_RE
+// never fires and classifySheetRole loses to a same-confidence bare LEGEND.
+// The schedule-role-only structural pass then never runs, and the ODL
+// cross-check (also schedule-role-scoped) never sees the page. This helper
+// is the sheet-level gate that reopens reference extraction for that family
+// only — not a role flip (a plan that prints a corner POINTS LIST box must
+// stay a plan; flipping would dissent against the 0.85 plan signal the way
+// an 0.80 legend signal already did). Length/REFERENCE_RE match the role
+// hunt's own title-span filters so a running-text mention does not trip it.
+const POINTS_LIST_TITLE_RE = /\b(?:POINTS?\s+(?:LIST|SCHEDULE)|(?:DDC|BAS)\s+POINTS?)\b/;
+export function isPointsListTitle(text: string): boolean {
+  const u = norm(text);
+  if (u.length < 4 || u.length > 80 || REFERENCE_RE.test(u)) return false;
+  return POINTS_LIST_TITLE_RE.test(u);
+}
+export function sheetCarriesPointsList(sheet: SheetSpans): boolean {
+  return sheet.spans.some((sp) => isPointsListTitle(sp.str));
+}
+
 
 // The NARROW subset of OTHER_FAMILY_RE that names a real MEP mechanical-
 // equipment family, not an architectural one — real, found live (itd-d1-lab-
@@ -4937,13 +4959,23 @@ export function extractAllTables(sheet: SheetSpans, kind: "room-finish" | "finis
 //      minimum-population floor; a header-shaped row with nothing real
 //      below it is refused, exactly like extractTableAt's own
 //      `table: null, nextIdx` convention for the other three kinds.
-// Scoped to schedule-ROLE sheets only (buildSheetGraph's own existing
-// per-sheet role classification) — every real instance found in this corpus
-// lives on a schedule sheet, and a plan sheet (dense with title-block text,
-// dimension strings, general-notes lists) is exactly where this heuristic's
-// false-positive risk concentrates. A reference table drawn on a plan sheet
-// is a real, disclosed scope limit this pass will not find — not assumed to
-// not exist, just not chased without real corpus evidence it happens.
+// Scoped to schedule-ROLE sheets by default (buildSheetGraph's own existing
+// per-sheet role classification) — every vocabulary-free insulation /
+// calculation table found in this corpus lives on a schedule sheet, and a
+// plan sheet (dense with title-block text, dimension strings, general-notes
+// lists) is exactly where this heuristic's false-positive risk concentrates.
+// A generic reference table drawn on a plan sheet is a real, disclosed
+// scope limit this pass will not find — not assumed to not exist, just not
+// chased without real corpus evidence it happens.
+//
+// One named exception, not a role flip: a sheet that CARRIES a points-list
+// / DDC-BAS-points title (isPointsListTitle) still runs this pass, but only
+// the matching lookup table is kept. Those titles never satisfy
+// SCHEDULE_TITLE_RE, so the sheet routinely classifies legend (bare LEGEND
+// at the same 0.5 as a split "…SCHEDULE" fragment) and the role gate used
+// to drop the whole family. Catalog reprints that share the page stay out
+// — ingesting them as a second equipment definition would compete with the
+// dedicated schedule sheet that already owns the tag.
 //
 // A THIRD real bessemer M601 table this session's own standing mandate named
 // — "VENTILATION CALCULATION SCHEDULE" — is a genuinely DIFFERENT, real
@@ -6385,10 +6417,14 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     // before this existed.
     const bands = bandedSheets(s, { buildings, deltas: deltasBySheet.get(s.key) });
     // Structural "reference" tables (see the section above extractAllTables)
-    // — scoped to schedule-role sheets only, a real, disclosed scope limit
-    // named in that section's own comment, not an oversight.
-    if (role.role === "schedule") {
+    // — schedule-role sheets, plus the points-list exception named there.
+    // lookupOnly: keep the titled points-list table and refuse everything
+    // else this pass would otherwise emit (catalog reprints on a legend
+    // sheet must not become a second equipment definition).
+    const lookupOnly = role.role !== "schedule" && sheetCarriesPointsList(s);
+    if (role.role === "schedule" || lookupOnly) {
       for (const bs of bands) for (const t of extractAllReferenceTables(bs, s)) {
+        if (lookupOnly && !(t.title && isPointsListTitle(t.title.text))) continue;
         // A structural "reference" read can be the ONLY successful
         // extraction of a genuine MEP-equipment schedule whose own required
         // rating word (GPM/EWT/LWT/…) never independently co-occurs with its
@@ -6411,7 +6447,9 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
         // equipment-kind path in this file already enforces (a table with no
         // TAG/MARK/CODE/SYMBOL/ID column has no real key column an estimator
         // or symbol_sweep can chase, so a title match alone is not enough).
-        if (t.title && isMepEquipmentSchedule(t.title.text) && t.headers.some((h) => CATALOG_ANCHOR_WORDS.includes(norm(h)))) {
+        // lookupOnly never reclassifies: that path is points-list titles
+        // only, and a points list is not a catalog.
+        if (!lookupOnly && t.title && isMepEquipmentSchedule(t.title.text) && t.headers.some((h) => CATALOG_ANCHOR_WORDS.includes(norm(h)))) {
           notes.push(`${s.key}: "${t.title.text}" names a real MEP-equipment family but never independently cleared any kind's own row-vocabulary bar (its required rating word never co-occurs with its own anchor row) — reclassified from a structural reference read to equipment-kind.`);
           t.kind = "equipment";
           reclassified.add(t);
