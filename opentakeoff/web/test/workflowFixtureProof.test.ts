@@ -12,8 +12,10 @@ import {
 import {
   classifyTakeoffIntent,
   namedPointsListTitles,
+  suggestedScheduleTitles,
   valveServiceFromGoal,
 } from "../src/lib/takeoffWorkflow.js";
+import { familyTableCite } from "../src/lib/agentTakeoff.js";
 
 const GRAPH_CANDIDATES = [
   "/tmp/g-navfac.json",
@@ -186,4 +188,168 @@ test("CHW/HHW valve service filter acceptance on fixture graph", () => {
   assert.equal(hhw.totals.items, 99);
   assert.equal(chw.service_filter, "CHW");
   assert.equal(hhw.service_filter, "HHW");
+});
+
+test("schedule-family ROUTING rows: intent → title needle → fixture counts + cites", () => {
+  const graph = loadGraph();
+  // Acceptance counts from T-HVAC-01 (fixture only — not product hardcodes).
+  const families = [
+    {
+      goal: "Pump schedule takeoff — counts and GPM/head",
+      cat: "PUMP",
+      count: 26,
+      titleRe: /PUMP SCHEDULE/i,
+    },
+    {
+      goal: "Boiler schedule takeoff — totals and capacity",
+      cat: "BOILER",
+      count: 6,
+      titleRe: /BOILER SCHEDULE/i,
+    },
+    {
+      goal: "Dedicated outdoor-air unit schedule takeoff",
+      cat: "DOAH_UNIT",
+      count: 3,
+      titleRe: /DEDICATED OUTDOOR AIR UNIT SCHEDULE/i,
+    },
+    {
+      goal: "Diffuser grille schedule takeoff",
+      cat: "GRD",
+      count: 30,
+      titleRe: /GRILLE,\s*REGISTER,\s*AND\s*DIFFUSER/i,
+    },
+    {
+      goal: "Humidifier schedule takeoff",
+      cat: "HUMIDIFIER",
+      count: 12,
+      titleRe: /HUMIDIFIER SCHEDULE/i,
+    },
+    {
+      goal: "CRAH schedule takeoff",
+      cat: "CRAH",
+      count: 6,
+      titleRe: /COMPUTER ROOM AIR HANDLER/i,
+    },
+    {
+      goal: "Unit heater schedule takeoff",
+      cat: "UNIT_HEATER",
+      count: 6,
+      titleRe: /UNIT HEATER SCHEDULE/i,
+    },
+    {
+      goal: "Cabinet unit heater takeoff",
+      cat: "CABINET_UNIT_HEATER",
+      count: 5,
+      titleRe: /CABINET UNIT HEATER/i,
+    },
+    {
+      goal: "Air separator schedule takeoff",
+      cat: "AIR_SEPARATOR",
+      count: 6,
+      titleRe: /AIR SEPARATOR SCHEDULE/i,
+    },
+    {
+      goal: "Expansion tank schedule takeoff",
+      cat: "EXPANSION_TANK",
+      count: 4,
+      titleRe: /EXPANSION TANK SCHEDULE/i,
+    },
+  ];
+  for (const fam of families) {
+    assert.equal(classifyTakeoffIntent(fam.goal), "equipment_schedule", fam.goal);
+    const titles = suggestedScheduleTitles(fam.goal);
+    assert.ok(titles.some((t) => fam.titleRe.test(t)), `${fam.goal} titles=${titles.join("|")}`);
+  }
+  if (!graph) {
+    test.skip("No cached NAVFAC sheet graph — skip fixture acceptance");
+    return;
+  }
+  const hvac = compileHvacTakeoff(null, graph);
+  for (const fam of families) {
+    const cat = hvac.categories[fam.cat];
+    assert.ok(cat, fam.cat);
+    assert.equal(cat.count, fam.count, fam.cat);
+    assert.ok(cat.items.length === fam.count);
+    const withCite = cat.items.filter((i) =>
+      i.sheet_id && (i.bbox_px || i.row_bbox_px || i.table_bbox_px));
+    assert.equal(withCite.length, fam.count, `${fam.cat} cites`);
+    const titleNeedle = suggestedScheduleTitles(fam.goal).find((t) => fam.titleRe.test(t));
+    const qt = queryTable(graph, { title: titleNeedle });
+    assert.ok(!qt.error, `${fam.goal} query_table: ${qt.error}`);
+    assert.equal(qt.count, fam.count, `${fam.goal} query_table count`);
+  }
+});
+
+test("continuation-page MARK dedupe: 1 OF 2 / 2 OF 2 must not double-count", () => {
+  const graph = loadGraph();
+  if (!graph) {
+    test.skip("No cached NAVFAC sheet graph — skip fixture acceptance");
+    return;
+  }
+  const cont = (graph.tables || []).filter((t) =>
+    /DEDICATED OUTDOOR AIR UNIT/i.test(t.title?.text || "")
+    && !/HANDLING/i.test(t.title?.text || "")
+    && /\d+\s+OF\s+\d+/i.test(t.title?.text || ""));
+  assert.ok(cont.length >= 2, "fixture must expose continuation-titled DOAH schedules");
+  let rawRows = 0;
+  const rawKeys = new Set();
+  for (const t of cont) {
+    for (const row of t.rows || []) {
+      rawRows += 1;
+      const k = String(row.key || "").toUpperCase().replace(/\s+/g, "");
+      if (k) rawKeys.add(k);
+    }
+  }
+  assert.ok(rawRows > rawKeys.size, "continuation pages must repeat MARK keys in raw rows");
+  const qt = queryTable(graph, { title: "DEDICATED OUTDOOR AIR UNIT SCHEDULE" });
+  assert.equal(qt.count, rawKeys.size, "query_table must dedupe continuation MARKs");
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.DOAH_UNIT.count, rawKeys.size);
+});
+
+test("BAS compile discloses non-extractable title-only points lists", () => {
+  const graph = loadGraph();
+  if (!graph) {
+    test.skip("No cached NAVFAC sheet graph — skip fixture acceptance");
+    return;
+  }
+  const bas = compileBasTakeoff(null, graph);
+  assert.equal(bas.totals.rows, 122);
+  assert.equal(bas.totals.lists, 5);
+  assert.ok(Array.isArray(bas.exclusions) && bas.exclusions.length >= 1);
+  assert.ok(
+    bas.exclusions.some((e) => /non-extractable|title-only|schematic/i.test(e)),
+    `exclusions must disclose non-extractable lists: ${bas.exclusions.join("; ")}`,
+  );
+  // Extractable lists must carry typed rows — never invent empty title-only entries as counted lists.
+  for (const list of bas.categories.points_lists.lists) {
+    assert.ok(list.rows >= 1, list.title);
+    assert.ok((list.items || []).length === list.rows, list.title);
+  }
+});
+
+test("schedule title region cite: family items expose table_bbox_px for whole-table paint", () => {
+  const graph = loadGraph();
+  if (!graph) {
+    test.skip("No cached NAVFAC sheet graph — skip fixture acceptance");
+    return;
+  }
+  const hvac = compileHvacTakeoff(null, graph);
+  const pump = hvac.categories.PUMP;
+  assert.ok(pump.count >= 1);
+  const withTable = pump.items.filter((i) => Array.isArray(i.table_bbox_px) && i.table_bbox_px.length === 4);
+  assert.ok(withTable.length >= 1, "at least one pump row must carry schedule title/region bbox");
+  const cite = familyTableCite({
+    family: "PUMP SCHEDULE",
+    lines: withTable.map((i) => ({
+      sheet_id: i.sheet_id,
+      table_bbox_px: i.table_bbox_px,
+      bbox_px: i.bbox_px,
+      table_title: i.table_title,
+    })),
+  });
+  assert.ok(cite);
+  assert.equal(cite.kind, "table");
+  assert.ok(cite.sheet_id);
+  assert.equal(cite.bbox_px.length, 4);
 });

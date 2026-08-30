@@ -163,8 +163,16 @@ export function classifyTakeoffIntent(goal) {
     return "bas_point_trace";
   }
 
-  if (/\b(?:schedule|AHU|DOAH|VAV|chiller|boiler|RTU)\b/i.test(g)
-    && goalAsksTakeoff(g)) {
+  // Named HVAC schedule-family takeoffs (pump, CRAH, diffuser, …) — phrase
+  // robust; industry family words, not set-specific schedule titles.
+  if (goalAsksTakeoff(g) && (
+    /\bschedule\b/i.test(g)
+    || /\b(?:AHUs?|DOAHs?|DOAS|VAVs?|FCUs?|RTUs?|CRAHs?|CUHs?|UHs?)\b/i.test(g)
+    || /\b(?:chillers?|boilers?|pumps?|humidifiers?|dehumidifiers?)\b/i.test(g)
+    || /\b(?:diffusers?|grilles?|registers?|air\s+separators?|expansion\s+tanks?)\b/i.test(g)
+    || /\b(?:unit\s+heaters?|cabinet\s+unit\s+heaters?|fan[\s\-]*coils?|rooftop)\b/i.test(g)
+    || /\b(?:dedicated\s+outdoor|computer[\s\-]*room)\b/i.test(g)
+  )) {
     return "equipment_schedule";
   }
 
@@ -192,35 +200,168 @@ export function namedPointsListTitles(goal) {
  * @param {string} goal
  * @returns {string[]}
  */
-export function suggestedScheduleTitles(goal) {
+/**
+ * Schedule-family title-scan needles from goal phrasing.
+ * Titles must be long enough for query_table matching (≥12 chars / full
+ * industry schedule names) — short tokens like "CRAH"/"DIFFUSER" miss.
+ * @param {string} goal
+ * @returns {Array<{label:string,title:string,titleRe:RegExp,exclude?:RegExp,minCount?:number}>}
+ */
+export function scheduleFamilyNeedles(goal) {
   const g = String(goal || "");
+  /** @type {Array<{label:string,title:string,titleRe:RegExp,exclude?:RegExp,minCount?:number}>} */
   const out = [];
-  const add = (t) => { if (!out.includes(t)) out.push(t); };
-  if (/\bAHUs?\b/i.test(g)) add("AIR HANDLING UNIT SCHEDULE");
-  if (/\bDOAH\b|dedicated\s+outdoor|DOAS\b/i.test(g)) add("DEDICATED OUTDOOR AIR UNIT SCHEDULE");
-  if (/\bFCUs?\b|fan[\s\-]*coil/i.test(g)) add("FAN COIL UNIT SCHEDULE");
-  if (/\bVAVs?\b|volume\s+control\s+box|air\s+terminal\s+box/i.test(g)) {
-    add("VOLUME CONTROL BOX SCHEDULE");
-    add("AIR TERMINAL BOX SCHEDULE");
-    add("VARIABLE AIR VOLUME");
+  const add = (needle) => {
+    if (!out.some((n) => n.label === needle.label && n.title === needle.title)) out.push(needle);
+  };
+  if (/\bAHUs?\b/i.test(g)) {
+    add({
+      label: "AHU",
+      title: "AIR HANDLING UNIT SCHEDULE",
+      titleRe: /AIR HANDLING UNIT/i,
+      exclude: /DEDICATED/i,
+    });
   }
-  if (/\bair[\s\-]*cooled\s+chiller/i.test(g)) add("AIR COOLED CHILLER SCHEDULE");
-  if (/\bheat[\s\-]*recovery\s+chiller/i.test(g)) add("AIR COOLED HEAT RECOVERY CHILLER");
-  if (/\bchillers?\b/i.test(g) && !/\bair[\s\-]*cooled|heat[\s\-]*recovery/i.test(g)) add("CHILLER SCHEDULE");
-  if (/\bboilers?\b/i.test(g)) add("BOILER SCHEDULE");
-  if (/\bpumps?\b/i.test(g)) add("PUMP SCHEDULE");
-  if (/\bRTUs?\b|rooftop|packaged/i.test(g)) add("PACKAGED ROOFTOP");
-  if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s\-]*coil/i.test(g)) add("FAN SCHEDULE");
-  if (/\bdiffuser|grille|GRD\b/i.test(g)) add("DIFFUSER");
-  if (/\bhumidif/i.test(g)) add("HUMIDIFIER");
-  if (/\bdehumidif/i.test(g)) add("DEHUMIDIFIER");
-  if (/\bCRAH\b|computer[\s\-]*room/i.test(g)) add("CRAH");
-  if (/\bunit\s+heater|cabinet\s+unit\s+heater|CUH\b/i.test(g)) add("UNIT HEATER");
-  if (/\bair\s+separator/i.test(g)) add("AIR SEPARATOR");
-  if (/\bexpansion\s+tank/i.test(g)) add("EXPANSION TANK");
-  if (/\bcontrol\s+valves?\b/i.test(g)) add("CONTROL VALVE SCHEDULE");
-  if (/\bBYPASS\b/i.test(g) && /\bvalve/i.test(g)) add("BYPASS CONTROL VALVE SCHEDULE");
+  if (/\bDOAH\b|dedicated\s+outdoor|DOAS\b/i.test(g)) {
+    add({
+      label: "DOAH unit",
+      title: "DEDICATED OUTDOOR AIR UNIT SCHEDULE",
+      titleRe: /DEDICATED OUTDOOR AIR UNIT/i,
+      exclude: /HANDLING/i,
+    });
+  }
+  if (/\bFCUs?\b|fan[\s\-]*coil/i.test(g)) {
+    add({
+      label: "FCU",
+      title: "FAN COIL UNIT SCHEDULE",
+      titleRe: /FAN\s*COIL/i,
+      exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
+    });
+  }
+  if (/\bVAVs?\b|volume\s+control\s+box|air\s+terminal\s+box/i.test(g)) {
+    add({
+      label: "VAV",
+      title: "VOLUME CONTROL BOX SCHEDULE",
+      titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|AIR TERMINAL BOX/i,
+    });
+  }
+  if (/\bair[\s\-]*cooled\s+chiller/i.test(g)) {
+    add({
+      label: "air-cooled chiller",
+      title: "AIR COOLED CHILLER SCHEDULE",
+      titleRe: /AIR COOLED CHILLER/i,
+      exclude: /HEAT RECOVERY/i,
+      minCount: 1,
+    });
+  }
+  if (/\bheat[\s\-]*recovery\s+chiller/i.test(g)) {
+    add({
+      label: "heat-recovery chiller",
+      title: "AIR COOLED HEAT RECOVERY CHILLER",
+      titleRe: /HEAT RECOVERY/i,
+      minCount: 1,
+    });
+  }
+  if (/\bchillers?\b/i.test(g) && !/\bair[\s\-]*cooled|heat[\s\-]*recovery/i.test(g)) {
+    add({ label: "chiller", title: "CHILLER SCHEDULE", titleRe: /CHILLER SCHEDULE/i });
+  }
+  if (/\bboilers?\b/i.test(g)) {
+    add({ label: "boiler", title: "BOILER SCHEDULE", titleRe: /BOILER/i });
+  }
+  if (/\bpumps?\b/i.test(g)) {
+    add({ label: "pump", title: "PUMP SCHEDULE", titleRe: /PUMP SCHEDULE/i });
+  }
+  if (/\bRTUs?\b|rooftop|packaged/i.test(g)) {
+    add({ label: "RTU", title: "PACKAGED ROOFTOP", titleRe: /PACKAGED ROOFTOP|ROOFTOP/i });
+  }
+  if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s\-]*coil/i.test(g)) {
+    add({ label: "fan", title: "FAN SCHEDULE", titleRe: /FAN SCHEDULE/i });
+  }
+  if (/\bdiffuser|grille|register|GRD\b/i.test(g)) {
+    add({
+      label: "diffuser",
+      title: "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+      titleRe: /GRILLE,\s*REGISTER,\s*AND\s*DIFFUSER|DIFFUSER[\s\-]*GRILLE/i,
+    });
+  }
+  if (/\bdehumidif/i.test(g)) {
+    add({
+      label: "dehumidifier",
+      title: "DEHUMIDIFIER SCHEDULE",
+      titleRe: /DEHUMIDIFIER SCHEDULE/i,
+    });
+  } else if (/\bhumidif/i.test(g)) {
+    add({
+      label: "humidifier",
+      title: "HUMIDIFIER SCHEDULE",
+      titleRe: /HUMIDIFIER SCHEDULE/i,
+    });
+  }
+  if (/\bCRAH\b|computer[\s\-]*room/i.test(g)) {
+    add({
+      label: "CRAH",
+      title: "COMPUTER ROOM AIR HANDLER",
+      titleRe: /COMPUTER ROOM AIR HANDLER|\bCRAH\b/i,
+    });
+  }
+  if (/\bcabinet\s+unit\s+heater|\bCUHs?\b/i.test(g)) {
+    add({
+      label: "cabinet unit heater",
+      title: "CABINET UNIT HEATER SCHEDULE",
+      titleRe: /CABINET UNIT HEATER/i,
+    });
+  }
+  if (
+    (/\bunit\s+heater/i.test(g) && !/\bcabinet\s+unit\s+heater/i.test(g))
+    || (/\bUHs?\b/i.test(g) && !/\bCUHs?\b/i.test(g))
+  ) {
+    add({
+      label: "unit heater",
+      title: "UNIT HEATER SCHEDULE",
+      titleRe: /UNIT HEATER SCHEDULE/i,
+      exclude: /CABINET|DDC|POINTS/i,
+    });
+  }
+  if (/\bair\s+separator/i.test(g)) {
+    add({
+      label: "air separator",
+      title: "AIR SEPARATOR SCHEDULE",
+      titleRe: /AIR SEPARATOR SCHEDULE/i,
+    });
+  }
+  if (/\bexpansion\s+tank/i.test(g)) {
+    add({
+      label: "expansion tank",
+      title: "EXPANSION TANK SCHEDULE",
+      titleRe: /EXPANSION TANK SCHEDULE/i,
+    });
+  }
+  if (/\bcontrol\s+valves?\b/i.test(g)) {
+    add({
+      label: "control valve",
+      title: "CONTROL VALVE SCHEDULE",
+      titleRe: /CONTROL VALVE SCHEDULE/i,
+    });
+  }
+  if (/\bBYPASS\b/i.test(g) && /\bvalve/i.test(g)) {
+    add({
+      label: "bypass valve",
+      title: "BYPASS CONTROL VALVE SCHEDULE",
+      titleRe: /BYPASS CONTROL VALVE SCHEDULE/i,
+    });
+  }
   return out;
+}
+
+export function suggestedScheduleTitles(goal) {
+  const titles = scheduleFamilyNeedles(goal).map((n) => n.title);
+  // Extra VAV sibling needles for title-scan hints (same family, one gate label).
+  if (/\bVAVs?\b|volume\s+control\s+box|air\s+terminal\s+box/i.test(String(goal || ""))) {
+    for (const t of ["AIR TERMINAL BOX SCHEDULE", "VARIABLE AIR VOLUME"]) {
+      if (!titles.includes(t)) titles.push(t);
+    }
+  }
+  return [...new Set(titles)];
 }
 
 /**
