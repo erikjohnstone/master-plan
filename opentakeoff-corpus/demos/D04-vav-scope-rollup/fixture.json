@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "set_id": "federal-mech",
+  "source_file": "raw/federal-attachment4-mechanical.pdf",
+  "sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+  "required_pages": [
+    {
+      "page": 16,
+      "purpose": "VOLUME CONTROL BOX SCHEDULE (VAV-1..VAV-58)"
+    },
+    {
+      "page": 2,
+      "purpose": "Plan labels for VAV hand-count sample"
+    }
+  ],
+  "redistribution": "External local-use corpus fixture; do not commit or republish the source PDF."
+}

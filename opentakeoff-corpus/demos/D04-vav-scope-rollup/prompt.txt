@@ -1,0 +1,1 @@
+How many VAV boxes are on the volume control box schedule, and what are the supply CFM, heating CFM (EAT CFM), GPM, manufacturer, and model for VAV-1, VAV-12, VAV-30, and VAV-58? Cite each TAG and its CFM cell so I can spot-check the schedule — do not treat every plan label as an extra scheduled unit.

@@ -81,3 +81,15 @@ under the usefulness bar + required in-thread follow-up is saved as
 `/opt/cursor/artifacts/d03_ui_prompt_answer_cards_followup_2026-08-30T10-38-25-850Z.webm`
 (HANDLING title + ATCT FCU 18 + FCU-T11). Production gates stay
 methodology-general — no corpus hardcoding. D03 counts toward ten. Next: D04.
+
+## D04 selection record
+
+Status: `IN PROGRESS — ground truth authored; N=5 / UI+follow-up pending`
+
+Target holds: 24-sheet `federal-mech` set. `VOLUME CONTROL BOX SCHEDULE` on
+sheet #16 lists VAV-1..VAV-58 (58 unique VAV-* tags; junk key SUITE100
+excluded). Plan sheets carry hundreds of fragmented `VAV-` labels, so the
+rollup must use the schedule title-scan — not plan-label frequency.
+Independent 20% find_text hand-count (13 tags) reconciled before model runs.
+Scaffold: `D04-vav-scope-rollup/`. Lock requires N=5 + UI proof with source
+cards + a correctly answered follow-up before advancing.

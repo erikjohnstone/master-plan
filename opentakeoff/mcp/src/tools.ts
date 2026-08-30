@@ -676,7 +676,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     const all = (titleNeedle && /CHILLER/i.test(titleNeedle) && !/HEAT\s*RECOVERY/i.test(titleNeedle))
       ? allRaw.filter((match) => !/HEAT\s*RECOVERY/i.test(match.title?.text || ""))
       : allRaw;
-    const unique = [...new Map(all.map((match) => {
+    const uniqueRaw = [...new Map(all.map((match) => {
       const titleText = match.title?.text || "";
       const titleBase = titleText.toUpperCase().replace(/\s+/g, " ").trim()
         .replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
@@ -684,6 +684,23 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       // each scheduled unit once per schedule family, not once per page.
       return [`${titleBase}::${match.row.key.toUpperCase().replace(/\s+/g, "")}`, match];
     })).values()];
+    // Drop non-family junk keys that sometimes ride into equipment schedules
+    // (e.g. SUITE100 on a VOLUME CONTROL BOX / VAV schedule).
+    const familyKeyRe = (title) => {
+      const t = String(title || "").toUpperCase();
+      if (/VOLUME CONTROL BOX|VARIABLE AIR VOLUME/.test(t)) return /^VAV[\s\-]/i;
+      if (/FAN\s*COIL/.test(t)) return /^FCU[\s\-]/i;
+      if (/AIR HANDLING UNIT/.test(t) && !/DEDICATED/.test(t)) return /^AHU[\s\-]/i;
+      if (/DEDICATED OUTDOOR AIR/.test(t)) return /^DOAH[\s\-]/i;
+      if (/BOILER/.test(t)) return /^B[\s\-]/i;
+      return null;
+    };
+    const unique = uniqueRaw.filter((match) => {
+      if (row_key || column || cell_value || cell_contains) return true;
+      const re = familyKeyRe(match.title?.text);
+      if (!re) return true;
+      return re.test(String(match.row.key || ""));
+    });
     // When looking up a specific MARK, surface the unit's own equipment schedule
     // before vibration-isolation / valve / sound / points-list cross-refs so
     // "which schedule is this on?" answers cite the primary title.
@@ -695,7 +712,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
         if (family === "DOAH" && /DEDICATED OUTDOOR AIR/.test(t)) return /HANDLING/.test(t) ? 0 : 1;
         if (family === "AHU" && /AIR HANDLING UNIT/.test(t) && !/DEDICATED/.test(t)) return 0;
         if (family === "FCU" && /FAN\s*COIL/.test(t)) return 0;
-        if (family === "VAV" && /VARIABLE AIR VOLUME|\bVAV\b/.test(t)) return 0;
+        if (family === "VAV" && /VOLUME CONTROL BOX|VARIABLE AIR VOLUME|\bVAV\b/.test(t)) return 0;
         if ((family === "CH" || family === "B") && /(?:CHILLER|BOILER)/.test(t)) return 0;
         if (/SCHEDULE/.test(t)) return 40;
         return 60;
