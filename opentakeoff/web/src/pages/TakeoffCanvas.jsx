@@ -12470,8 +12470,8 @@ export default function TakeoffCanvas() {
             >
               <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
                 {indexing
-                  ? `Indexing ${indexProgress.done}/${indexProgress.total}`
-                  : `Indexed · ${indexProgress.total} pages`}
+                  ? `Indexing ${pct}% · ${indexProgress.done}/${indexProgress.total} pages`
+                  : `Indexed 100% · ${indexProgress.total} pages`}
               </span>
               <span
                 role="progressbar"
