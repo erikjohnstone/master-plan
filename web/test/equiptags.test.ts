@@ -116,6 +116,30 @@ test("joinHyphenatedTags: a 90° span between +X fragments still interrupts the 
   assert.ok(out.includes("TP"));
 });
 
+test("joinHyphenatedTags: stacked fixture-group callouts stay one tag per baseline", () => {
+  // Three hyphen-split marks in one column (FS-2 / TP-2 / US-1). Each row
+  // is its own scheduled install at the same leader. Joining must recover
+  // exactly those three tags — never a cross-row compound, never a second
+  // copy of one mark glued from the neighbor's digit.
+  const row = (prefix: string, digit: string, y0: number): TagBox[] => [
+    box(prefix, 0, y0, 20, 10),
+    box("-", 21, y0, 5, 10),
+    box(digit, 27, y0, 9, 10),
+  ];
+  const stack = [...row("FS", "2", 0), ...row("TP", "2", 23), ...row("US", "1", 49)];
+  const tags = joinHyphenatedTags(stack).map((s) => s.str).sort();
+  assert.deepEqual(tags, ["FS-2", "TP-2", "US-1"]);
+
+  const twoLeaders = [
+    ...stack,
+    ...row("FS", "2", 0).map((b) => ({ ...b, x0: b.x0 + 200, x1: b.x1 + 200 })),
+    ...row("TP", "2", 23).map((b) => ({ ...b, x0: b.x0 + 200, x1: b.x1 + 200 })),
+    ...row("TD", "1", 49).map((b) => ({ ...b, x0: b.x0 + 200, x1: b.x1 + 200 })),
+  ];
+  const two = joinHyphenatedTags(twoLeaders).map((s) => s.str).sort();
+  assert.deepEqual(two, ["FS-2", "FS-2", "TD-1", "TP-2", "TP-2", "US-1"]);
+});
+
 test("joinHyphenatedTags: an unrotated join is unchanged when a 270° neighbor sits nearby", () => {
   const h = 10;
   const pump = [

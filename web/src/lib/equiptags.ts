@@ -236,6 +236,12 @@ function joinAlongRun<T extends TagBox>(items: T[]): T[] {
  * along the run instead of +X. Join adjacent fragments on the same baseline
  * whose concatenation IS an equipment tag. A join that is not a tag is never
  * emitted, so joining can only add candidates, never hide a real span.
+ *
+ * Stacked fixture-group callouts (FS-2 over TP-2 over US-1, each its own
+ * hyphen-split baseline) stay three tags. sameRow refuses the vertical
+ * neighbors; the hyphen-connector gate refuses a completed "FS-2" gluing
+ * onto the next row's "TP". Those are three scheduled installs at one
+ * leader, not one invented compound and not a reason to drop the extras.
  */
 export function joinHyphenatedTags<T extends TagBox>(spans: T[]): T[] {
   const items = spans.filter((s) => piece(s));
