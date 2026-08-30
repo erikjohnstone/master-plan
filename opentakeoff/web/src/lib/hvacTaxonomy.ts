@@ -116,6 +116,12 @@ export const AIR_TERMINALS: HvacComponent[] = [
   },
   { category: "air_terminal", name: "CAV box (constant air volume terminal)", tagPrefixes: ["CAV-"], note: "Commonly published convention; not independently observed on this project's own corpus (every real terminal-unit schedule found so far is variable-volume)." },
   { category: "air_terminal", name: "Fan-powered terminal unit", tagPrefixes: ["FPT-", "FPB-"], note: "Commonly published convention; not independently observed on this project's own corpus yet." },
+  { category: "air_terminal", name: "Linear supply diffuser", tagPrefixes: ["LD-"], scheduleKind: "equipment", note: "REAL, observed in NAVFAC's GRD SCHEDULE and across multiple ductwork-plan levels." },
+  { category: "air_terminal", name: "Transfer grille", tagPrefixes: ["TG-"], scheduleKind: "equipment", note: "REAL, observed in NAVFAC's GRD SCHEDULE." },
+  { category: "air_terminal", name: "Return grille", tagPrefixes: ["RG-", "EG-"], scheduleKind: "equipment", note: "REAL, observed in NAVFAC's GRD SCHEDULE." },
+  { category: "air_terminal", name: "Ceiling supply diffuser", tagPrefixes: ["CDA", "CDB"], scheduleKind: "equipment", note: "REAL, observed in Building 5406's GRILLE, REGISTER AND DIFFUSER SCHEDULE." },
+  { category: "air_terminal", name: "Return register", tagPrefixes: ["RRA"], scheduleKind: "equipment", note: "REAL, observed in Building 5406's GRILLE, REGISTER AND DIFFUSER SCHEDULE." },
+  { category: "air_terminal", name: "Exhaust register", tagPrefixes: ["ERA"], scheduleKind: "equipment", note: "REAL, observed in Building 5406's GRILLE, REGISTER AND DIFFUSER SCHEDULE." },
 ];
 
 // ── major equipment ──────────────────────────────────────────────────────
@@ -132,6 +138,7 @@ export const MAJOR_EQUIPMENT: HvacComponent[] = [
   { category: "major_equipment", name: "Air-cooled condensing unit", tagPrefixes: ["CU-"], scheduleKind: "equipment", note: "REAL, observed: Eglin AFB's AIR-COOLED CONDENSING UNIT SCHEDULE uses CU-1..CU-6, each independently located on the plan." },
   { category: "major_equipment", name: "Unit heater — electric wall / baseboard", tagPrefixes: ["EWH-", "EBB-", "CUH-", "UH-"], scheduleKind: "equipment", note: "REAL, observed verbatim: Bessemer's own 'ELECTRIC WALL HEATER SCHEDULE' (EWH-1) and 'ELECTRIC BASEBOARD HEATER SCHEDULE' (EBB-1..8), plus NAVFAC's CABINET UNIT HEATER schedules (CUH-). 'ELECTRIC HEATER SCHEDULE' is D-1 Lab's own real equivalent, differently named." },
   { category: "major_equipment", name: "Fin-tube radiator", tagPrefixes: ["FTR-"], scheduleKind: "equipment", note: "REAL, observed: Eglin AFB's FIN TUBE RADIATION SCHEDULE uses FTR-1/FTR-2 for wall-mounted hydronic radiation." },
+  { category: "major_equipment", name: "Duct silencer", tagPrefixes: ["DS-"], scheduleKind: "equipment", note: "REAL, observed: NAVFAC's DUCT SILENCER SCHEDULE uses DS-AHU-T1-RA and DS-AHU-T1-SA for independently plan-tagged return/supply silencers." },
   { category: "major_equipment", name: "VRF / heat pump", tagPrefixes: ["HP-", "VRF-"], scheduleKind: "equipment", note: "REAL, observed verbatim: Bessemer's own 'VARIABLE REFRIGERANT PACKAGED HEAT PUMP' table (HP-1) — the real split-co-equal-tier-header table Phase 0's VRF merge fix makes findable." },
   { category: "major_equipment", name: "Ductless split system (high-wall cooling unit)", tagPrefixes: [], scheduleKind: "equipment", note: "REAL, observed: D-1 Lab's own 'DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE' — a real, distinct equipment family this taxonomy did not anticipate before reading the real corpus for it." },
   { category: "major_equipment", name: "Chiller", tagPrefixes: ["CH-", "CHL"], scheduleKind: "equipment", note: "REAL, observed: Eglin AFB's own 'CHILLER SCHEDULE (ELECTRIC AIR-COOLED)', CH-1. 'CHL' is Helonic's own published alternate form, not observed on this project's corpus." },
