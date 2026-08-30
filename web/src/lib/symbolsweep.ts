@@ -67,7 +67,7 @@
 //
 // sweepSymbols composes the two on one sheet, unchanged.
 
-import { compoundRemainderIsLabel } from "./markid.ts";
+import { compoundRemainderIsLabel, MARK_CLUSTER_K } from "./markid.ts";
 
 export type Point = [number, number];
 
@@ -378,6 +378,10 @@ export interface MatchOptions extends SweepOptions {
    * detail and swept across a 1/8" plan passes ~1/12. NEVER searched: the
    * caller states it from two committed scales or doesn't sweep across them. */
   scale?: number;
+  /** Positioned text on this sheet, used only to read a `TYP N` / `TYPICAL N`
+   * quantity multiplier sitting next to a counted tag. Omit to leave every
+   * match at count 1. */
+  typSpans?: FlatSpan[];
   /** Richer-variant bar (default SWEEP_EXTRA_MAX): a high-recall placement
    * whose footprint carries more than this fraction of unmatched extra
    * linework demotes to withheld with the variant reason. */
@@ -1301,6 +1305,10 @@ export interface TagOcc {
    * tag and a huge one both get a proportionate footprint. */
   h: number;
   bbox: [number, number, number, number];
+  /** How this occurrence was recovered. A compound circuit/panel label
+   * ("R1 /C-11") is itself an instance marker; a bare exact/fragmented
+   * leftover needs nearby withheld geometry before it is counted. */
+  kind?: "exact" | "compound" | "fragmented";
 }
 
 /** A minimal positioned text span — the shape both sweep_schedule_row's own
@@ -1668,15 +1676,93 @@ export interface SweepSheetMatch extends SweepMatch {
   /** The tag-text evidence bbox that put this match IN the count — a match
    * counts only when the row's own tag sits inside its footprint. */
   tag_at: [number, number, number, number];
+  /** True when this row was counted from a leftover labeled occurrence on a
+   * sheet that already has a geometrically-confirmed instance — the tag is
+   * drawn, the sibling marker did not clear the bar (leader offset, hatch
+   * size variance). Never a note on a sheet with zero confirmed matches. */
+  labeled_leftover?: boolean;
+  /** Installed quantity this match represents. 1 unless a `TYP N` callout
+   * sits next to a geometrically-confirmed tag. Leftover labels stay 1. */
+  count?: number;
 }
+
+/** A short `TYP N` / `TYPICAL N` span next to a callout is a quantity
+ * multiplier (N copies of the tagged device), not a second tag. Requires an
+ * integer 2–50 so a bare "TYP." abbreviation or a running-text "TYPICAL FOR"
+ * never multiplies. Returns 1 when nothing adjacent qualifies. */
+const TYP_SPAN_RE = /^(?:TYP(?:ICAL)?\.?)\s+(\d+)$/i;
+export const TYP_MULTIPLIER_MAX = 50;
+
+export function typicalMultiplierNear(spans: FlatSpan[], at: Point, radiusPx: number): number {
+  let best = 1, bestD = radiusPx;
+  for (const sp of spans) {
+    const m = TYP_SPAN_RE.exec((sp.str || "").trim());
+    if (!m) continue;
+    const n = Number(m[1]);
+    if (!Number.isInteger(n) || n < 2 || n > TYP_MULTIPLIER_MAX) continue;
+    const cx = (sp.x0 + sp.x1) / 2, cy = (sp.y0 + sp.y1) / 2;
+    const d = Math.hypot(cx - at[0], cy - at[1]);
+    if (d <= bestD) { bestD = d; best = n; }
+  }
+  return best;
+}
+
+/** Leftover own-tag occurrences on a sheet that already has ≥1 counted
+ * match, sitting farther than one mark-cluster from every counted instance.
+ * Those are sibling installs whose marker failed to match, not a second
+ * label on the same device and not a note on a sheet with no confirmed
+ * instance. Pure — both classifySweepMatches and classifyInlineMotifMatches
+ * call this so canvas and MCP cannot disagree. */
+export function leftoverLabeledOccs(
+  matches: Array<{ at: Point; tag_at: [number, number, number, number] }>,
+  occ: TagOcc[],
+  matchedOcc: Set<number>,
+  clusterR: number,
+  excludeCenter?: Point,
+  excludeR?: number,
+  withheld?: { at: Point }[],
+  withheldR?: number,
+): TagOcc[] {
+  if (!matches.length) return [];
+  const out: TagOcc[] = [];
+  for (let k = 0; k < occ.length; k++) {
+    if (matchedOcc.has(k)) continue;
+    const o = occ[k];
+    if (excludeCenter != null && excludeR != null
+      && Math.hypot(o.cx - excludeCenter[0], o.cy - excludeCenter[1]) <= excludeR) continue;
+    const clustered = matches.some((m) => {
+      const tx = (m.tag_at[0] + m.tag_at[2]) / 2, ty = (m.tag_at[1] + m.tag_at[3]) / 2;
+      return Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= clusterR
+        || Math.hypot(tx - o.cx, ty - o.cy) <= clusterR;
+    });
+    if (clustered) continue;
+    // A compound circuit/panel label is the instance. A bare leftover is
+    // only an instance when withheld geometry already sits beside it
+    // (the marker was found, the claim radius missed). A bare tag with
+    // no nearby marker is a note — the fixture's own T1 text_only case.
+    const compound = o.kind === "compound";
+    const nearWithheld = (withheld ?? []).some((w) =>
+      Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= (withheldR ?? clusterR));
+    if (!compound && !nearWithheld) continue;
+    out.push(o);
+  }
+  return out;
+}
+
+export function matchQuantity(matches: Array<{ count?: number }>): number {
+  return matches.reduce((n, m) => n + (m.count ?? 1), 0);
+}
+
 export interface SweepSheetResult {
   matches: SweepSheetMatch[];
   /** A matching marker whose footprint carries a SIBLING row's tag, not this
    * one's — that mark belongs to the sibling, disclosed with which tag. */
   excluded: Array<{ at: Point; tag: string }>;
   withheld: SweepWithheld[];
-  /** A drawn occurrence of the tag with no matching marker geometry nearby —
-   * disclosed, never counted: the tag is there, the symbol isn't. */
+  /** A drawn occurrence of the tag with no matching marker geometry nearby
+   * and not promoted as a labeled leftover (see leftoverLabeledOccs).
+   * Disclosed: the tag is there, the symbol isn't, and this sheet has no
+   * geometrically-confirmed instance to justify counting the label alone. */
   text_only: Array<{ at: Point }>;
   candidates: { considered: number; dropped: number };
   complete: boolean;
@@ -1816,11 +1902,34 @@ export function classifySweepMatches(
   // res.withheld before we ever see it (it's already counted — as the seed
   // — not an unexplained gap), so it must not fall through to text_only.
   const ex = opts.excludeCenter;
-  const text_only = occ
+  let text_only = occ
     .filter((o, k) => !matchedOcc.has(k)
       && !res.withheld.some((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R)
       && !(ex && Math.hypot(o.cx - ex[0], o.cy - ex[1]) <= R))
     .map((o) => ({ at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10] as Point }));
+  const clusterR = MARK_CLUSTER_K * Math.max(anchorH, 6);
+  const leftovers = leftoverLabeledOccs(matches, occ, matchedOcc, clusterR, ex, R, withheld, R);
+  for (const o of leftovers) {
+    matches.push({
+      at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10],
+      score: 0, rotation: 0, mirrored: false,
+      tag_at: o.bbox, labeled_leftover: true, count: 1,
+    });
+  }
+  if (leftovers.length) {
+    text_only = text_only.filter((t) =>
+      !leftovers.some((o) => Math.hypot(o.cx - t.at[0], o.cy - t.at[1]) < 0.6));
+    matches.sort(byPos);
+  }
+  const typSpans = opts.typSpans;
+  if (typSpans?.length) {
+    const typR = Math.max(4 * anchorH, 40);
+    for (const m of matches) {
+      if (m.labeled_leftover) { m.count = 1; continue; }
+      const tx = (m.tag_at[0] + m.tag_at[2]) / 2, ty = (m.tag_at[1] + m.tag_at[3]) / 2;
+      m.count = typicalMultiplierNear(typSpans, [tx, ty], typR);
+    }
+  }
   return {
     matches, excluded, withheld, text_only,
     candidates: res.candidates, complete: res.complete,

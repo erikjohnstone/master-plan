@@ -40,7 +40,9 @@
 // tolerance wide enough for a different CFM rating, narrow enough to
 // exclude an unrelated texture region.
 import { hatchFamilies, type HatchFamily } from "./oneclick.ts";
-import type { TagOcc } from "./symbolsweep.ts";
+import type { FlatSpan, TagOcc } from "./symbolsweep.ts";
+import { leftoverLabeledOccs, typicalMultiplierNear } from "./symbolsweep.ts";
+import { MARK_CLUSTER_K } from "./markid.ts";
 
 export type Point = [number, number];
 
@@ -321,6 +323,8 @@ export function sweepInlineMotif(
 
 export interface InlineMotifSweepMatch extends InlineMotifMatch {
   tag_at: [number, number, number, number];
+  labeled_leftover?: boolean;
+  count?: number;
 }
 export interface InlineMotifSweepResult {
   matches: InlineMotifSweepMatch[];
@@ -346,6 +350,7 @@ export function classifyInlineMotifMatches(
   tag: string, res: InlineMotifResult, occ: TagOcc[],
   siblingOcc: Array<{ key: string; cx: number; cy: number }>, anchorH: number,
   excludeCenter?: Point,
+  typSpans?: FlatSpan[],
 ): InlineMotifSweepResult {
   const matches: InlineMotifSweepMatch[] = [];
   const excluded: Array<{ at: Point; tag: string }> = [];
@@ -369,11 +374,35 @@ export function classifyInlineMotifMatches(
   }
   const byPos = (a: { at: Point }, b: { at: Point }) => a.at[1] - b.at[1] || a.at[0] - b.at[0];
   matches.sort(byPos); excluded.sort(byPos); withheld.sort(byPos);
-  const text_only = occ
+  let text_only = occ
     .filter((o, k) => !matchedOcc.has(k)
       && !res.withheld.some((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= (Math.max(w.w_px, w.h_px) / 2 + anchorH))
       && !(excludeCenter && Math.hypot(o.cx - excludeCenter[0], o.cy - excludeCenter[1]) <= anchorH * 3))
     .map((o) => ({ at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10] as Point }));
+  const clusterR = MARK_CLUSTER_K * Math.max(anchorH, 6);
+  const leftovers = leftoverLabeledOccs(matches, occ, matchedOcc, clusterR, excludeCenter, anchorH * 3, withheld, clusterR);
+  for (const o of leftovers) {
+    const w = Math.max(o.bbox[2] - o.bbox[0], 6), h = Math.max(o.bbox[3] - o.bbox[1], 6);
+    matches.push({
+      at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10],
+      rect: [[o.bbox[0], o.bbox[1]], [o.bbox[2], o.bbox[3]]],
+      w_px: w, h_px: h, w_ft: null, h_ft: null, members: 0, size_score: 0,
+      tag_at: o.bbox, labeled_leftover: true, count: 1,
+    });
+  }
+  if (leftovers.length) {
+    text_only = text_only.filter((t) =>
+      !leftovers.some((o) => Math.hypot(o.cx - t.at[0], o.cy - t.at[1]) < 0.6));
+    matches.sort(byPos);
+  }
+  if (typSpans?.length) {
+    const typR = Math.max(4 * anchorH, 40);
+    for (const m of matches) {
+      if (m.labeled_leftover) { m.count = 1; continue; }
+      const tx = (m.tag_at[0] + m.tag_at[2]) / 2, ty = (m.tag_at[1] + m.tag_at[3]) / 2;
+      m.count = typicalMultiplierNear(typSpans, [tx, ty], typR);
+    }
+  }
   return { matches, excluded, withheld, text_only, candidates_considered: res.candidates_considered, complete: true };
 }
 
