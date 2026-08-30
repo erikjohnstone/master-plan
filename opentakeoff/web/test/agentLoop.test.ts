@@ -26,7 +26,7 @@ test("exact equipment-to-valve evidence goals expose only relevant deterministic
     toolsForGoal(
       "Give me installed quantity and the matching control valve; cite the exact schedule cells.",
       tools,
-    ).map(({ name }) => name),
+    ).map((tool: { name: string }) => tool.name),
     ["list_sheets", "sheet_graph", "query_table", "sweep_schedule_row", "highlight_citation"],
   );
   assert.equal(toolsForGoal("Trace AHU-1 connectivity", tools), tools);
