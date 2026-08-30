@@ -492,6 +492,60 @@ test("classifySweepMatches: two leftover labeled near-bar matches on a one-insta
   assert.equal(r.text_only.length, 0);
 });
 
+test("classifySweepMatches: a labeled family still promotes when leftovers outnumber two commits", () => {
+  // Partial family: the fingerprint cleared the bar at two callouts and
+  // missed three siblings by hatch (no stub). Leftovers outnumber commits,
+  // so they are the rest of the family, not N schematic extras.
+  const thin: [number, number, number, number][] = [
+    [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],
+    [0, 0, 20, 20],
+  ];
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const counted: Point = [400, 400];
+  const a: Point = [700, 400];
+  const b: Point = [1000, 400];
+  const c: Point = [1300, 400];
+  const sheetSegs = place([
+    { at: [100, 100] },
+    { at: counted },
+    { at: a, segs: thin },
+    { at: b, segs: thin },
+    { at: c, segs: thin },
+  ]);
+  const occ = [tagNear([100, 100]), tagNear(counted), tagNear(a), tagNear(b), tagNear(c)];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
+  assert.equal(r.matches.filter((m) => !m.labeled_leftover).length, 5, "two commits plus three labeled near-miss siblings");
+  assert.equal(r.text_only.length, 0);
+  assert.equal(matchQuantity(r.matches), 5);
+});
+
+test("classifySweepMatches: N leftover near-misses on an N-commit sheet stay withheld", () => {
+  // Two commits + two leftover labeled near-misses is as likely N schematic
+  // extras as it is more of the family. Do not promote.
+  const thin: [number, number, number, number][] = [
+    [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],
+    [0, 0, 20, 20],
+  ];
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const counted: Point = [400, 400];
+  const a: Point = [700, 400];
+  const b: Point = [1000, 400];
+  const sheetSegs = place([
+    { at: [100, 100] },
+    { at: counted },
+    { at: a, segs: thin },
+    { at: b, segs: thin },
+  ]);
+  const occ = [tagNear([100, 100]), tagNear(counted), tagNear(a), tagNear(b)];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
+  assert.equal(r.matches.filter((m) => !m.labeled_leftover).length, 2, "only the two commits");
+  assert.ok(r.withheld.some((w) => w.reason.includes("tag is drawn beside it")), "the leftover pair stays a disclosed question");
+});
+
 test("classifySweepMatches: a near-bar withheld match with NO own tag stays withheld", () => {
   const anchorSegs = place([{ at: [100, 100] }]);
   const anchor = tagNear([100, 100]);
