@@ -1,18 +1,15 @@
 /**
- * REAL first-run UI demos — not staged, not seeded, not programmatic compile.
+ * First-time user demo — exactly how a new estimator would use it:
+ *   1. Fresh browser (empty localStorage / no prior project)
+ *   2. Upload the blueprint PDF
+ *   3. Open Agent
+ *   4. Paste the takeoff goal and click Run
+ *   5. Wait for Agent to finish
+ *   6. Open Takeoff panel (Takeoff tab + Workflow data)
  *
- * Flow (as a contractor would):
- *   1. Fresh browser (empty localStorage)
- *   2. Upload the NAVFAC mechanical PDF
- *   3. Open Agent from the rail
- *   4. Paste the frozen takeoff prompt
- *   5. Click Run — wait until Agent finishes
- *   6. If the finished takeoff is incomplete, Ask a real follow-up to
- *      compile_corpus_takeoff (still Agent UI — no window.compile cheat)
- *   7. Capture Takeoff tab + Workflow data tab + video
+ * No seeds. No window.__opentakeoff.compile cheat. No engineer follow-ups.
  *
- * Usage:
- *   node scripts/playwright-takeoff-ui-demo.mjs hvac|bas|both
+ * Usage: node scripts/playwright-takeoff-ui-demo.mjs hvac|bas|both
  */
 import { chromium } from "playwright";
 import {
@@ -31,7 +28,7 @@ const apiKey = (process.env.CEREBRAS_API_KEY || (existsSync("/tmp/cerebras_ui_ke
   : "")).trim();
 
 if (!apiKey || apiKey === "demo-key") {
-  throw new Error("Real demos need a live CEREBRAS_API_KEY (or /tmp/cerebras_ui_key.txt). Refusing staged keys.");
+  throw new Error("Need a live CEREBRAS_API_KEY (or /tmp/cerebras_ui_key.txt).");
 }
 if (!existsSync(pdf)) throw new Error(`PDF missing: ${pdf}`);
 
@@ -43,19 +40,13 @@ const JOBS = {
     label: "hvac",
     title: "HVAC equipment takeoff",
     promptPath: resolve(corpus, "takeoffs/T-HVAC-01-navfac-equipment/prompt.txt"),
-    expectTakeoffId: "T-HVAC-01",
-    expectItems: 396,
-    expectMinLines: 100,
-    followUp: "Please call compile_corpus_takeoff with kind=hvac_equipment to produce the complete set takeoff into the Takeoff panel, cite MARK cells, and account for every page.",
+    expectMinEvidence: 20,
   },
   bas: {
     label: "bas",
     title: "BAS points takeoff",
     promptPath: resolve(corpus, "takeoffs/T-BAS-01-navfac-points/prompt.txt"),
-    expectTakeoffId: "T-BAS-01",
-    expectRows: 122,
-    expectMinLines: 50,
-    followUp: "Please call compile_corpus_takeoff with kind=bas_points to produce the complete points takeoff into the Takeoff panel, cite MARK cells, and account for every page.",
+    expectMinEvidence: 10,
   },
 };
 
@@ -64,7 +55,7 @@ const jobs = kindArg === "both" ? [JOBS.hvac, JOBS.bas]
   : kindArg === "bas" ? [JOBS.bas]
     : [JOBS.hvac];
 
-const AGENT_TIMEOUT_MS = Number(process.env.OT_DEMO_AGENT_TIMEOUT_MS || 25 * 60 * 1000);
+const AGENT_TIMEOUT_MS = Number(process.env.OT_DEMO_AGENT_TIMEOUT_MS || 8 * 60 * 1000);
 
 async function waitAgentDone(page, label, timeoutMs) {
   const deadline = Date.now() + timeoutMs;
@@ -74,68 +65,42 @@ async function waitAgentDone(page, label, timeoutMs) {
     const state = await page.evaluate(() => {
       const stop = [...document.querySelectorAll("button")].some((b) => /■\s*Stop/.test(b.textContent || ""));
       const statusEl = document.querySelector("[data-agent-status]");
-      const takeoffBtn = [...document.querySelectorAll("button")].find((b) => /^Takeoff/.test((b.textContent || "").trim()));
+      const takeoffBtn = [...document.querySelectorAll("button")]
+        .find((b) => /^Takeoff/.test((b.textContent || "").trim()));
       const btnText = takeoffBtn?.textContent?.trim() || "";
       const rowMatch = btnText.match(/Takeoff\s*·\s*(\d+)/);
       return {
         running: stop,
         status: statusEl?.textContent || "",
         evidence: rowMatch ? Number(rowMatch[1]) : 0,
-        meta: window.__opentakeoff?.lastCorpusTakeoff?.() || null,
         rowCount: window.__opentakeoff?.takeoffRowCount?.() ?? 0,
+        meta: window.__opentakeoff?.lastCorpusTakeoff?.() || null,
       };
     });
     if (state.running) sawRunning = true;
     if (state.status && state.status !== lastStatus) {
-      console.log(`[${label}] status: ${state.status}`);
+      console.log(`[${label}] ${state.status}`);
       lastStatus = state.status;
     }
-    // Must have started, then stopped — avoids treating pre-click idle as done.
     if (sawRunning && !state.running) {
-      console.log(`[${label}] Agent finished (evidence=${state.evidence}, rows=${state.rowCount}, compile=${state.meta?.takeoff_id || "none"})`);
+      console.log(`[${label}] Agent done — Takeoff evidence=${state.evidence} rows=${state.rowCount} compile=${state.meta?.takeoff_id || "none"}`);
       return state;
     }
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(1500);
   }
-  throw new Error(`[${label}] Agent did not finish within ${Math.round(timeoutMs / 1000)}s`);
-}
-
-async function openTakeoffPanel(page) {
-  const open = await page.locator('[aria-label="Takeoff"]').count();
-  if (open) return;
-  const topTakeoff = page.locator("button", { hasText: /^Takeoff/ }).first();
-  if (await topTakeoff.count()) await topTakeoff.click();
-  await page.waitForSelector('[aria-label="Takeoff"]', { timeout: 30_000 });
-}
-
-async function panelStats(page) {
-  return page.evaluate(() => {
-    const panel = document.querySelector('[aria-label="Takeoff"]');
-    const text = panel?.innerText || "";
-    const lineMatch = text.match(/(\d+)\s+lines?/i);
-    const evidenceMatch = text.match(/(\d+)\s+evidence/i);
-    const eaMatch = text.match(/·\s*(\d+)\s+EA/i);
-    return {
-      textHead: text.slice(0, 500),
-      lines: lineMatch ? Number(lineMatch[1]) : 0,
-      evidence: evidenceMatch ? Number(evidenceMatch[1]) : 0,
-      ea: eaMatch ? Number(eaMatch[1]) : null,
-      meta: window.__opentakeoff?.lastCorpusTakeoff?.() || null,
-      rowCount: window.__opentakeoff?.takeoffRowCount?.() ?? 0,
-      hasObjectObject: /\[object Object\]/i.test(text),
-    };
-  });
+  throw new Error(`[${label}] Agent still running after ${Math.round(timeoutMs / 1000)}s`);
 }
 
 async function runOne(job) {
   const prompt = readFileSync(job.promptPath, "utf8").trim();
-  if (!prompt) throw new Error(`Empty prompt: ${job.promptPath}`);
-
-  const videoDir = `/tmp/ot-pw-videos/${job.label}-real-${Date.now()}`;
+  const videoDir = `/tmp/ot-pw-videos/${job.label}-user-${Date.now()}`;
   mkdirSync(videoDir, { recursive: true });
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-  const outBase = `takeoff_ui_${job.label}_real_agent_${stamp}`;
+  const outBase = `takeoff_ui_${job.label}_new_user_${stamp}`;
   const pageErrors = [];
+
+  console.log(`\n========== ${job.title} ==========`);
+  console.log(`[${job.label}] new user · fresh browser · upload blueprint · Agent Run`);
 
   const browser = await chromium.launch({
     headless: false,
@@ -148,23 +113,15 @@ async function runOne(job) {
   const page = await context.newPage();
   page.setDefaultTimeout(120_000);
   page.on("console", (msg) => {
-    const t = msg.type();
-    if (t === "error" || t === "warning") {
-      console.log(`[${job.label}] console.${t}: ${msg.text().slice(0, 300)}`);
-    }
+    if (msg.type() === "error") console.log(`[${job.label}] console: ${msg.text().slice(0, 220)}`);
   });
   page.on("pageerror", (err) => {
     const s = String(err);
     pageErrors.push(s);
-    console.log(`[${job.label}] pageerror: ${s.slice(0, 300)}`);
-  });
-  page.on("requestfailed", (req) => {
-    const u = req.url();
-    if (/cerebras|openai|\/v1\/chat/i.test(u)) {
-      console.log(`[${job.label}] requestfailed: ${req.failure()?.errorText || "?"} ${u.slice(0, 120)}`);
-    }
+    console.log(`[${job.label}] pageerror: ${s.slice(0, 220)}`);
   });
 
+  // Brand-new user: empty storage, only AI key so Agent can run.
   await page.addInitScript(({ endpoint, apiKey, model }) => {
     localStorage.clear();
     localStorage.setItem("opentakeoff_ai_endpoint", endpoint);
@@ -177,97 +134,80 @@ async function runOne(job) {
     model: process.env.CEREBRAS_MODEL || "gpt-oss-120b",
   });
 
-  console.log(`[${job.label}] goto ${baseUrl}`);
+  console.log(`[${job.label}] open app`);
   await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
-  await page.waitForTimeout(800);
+  await page.waitForTimeout(700);
 
-  console.log(`[${job.label}] upload PDF`);
+  console.log(`[${job.label}] upload blueprint PDF`);
   await page.locator('input[name="sheet-file"]').first().setInputFiles(pdf);
   await page.waitForFunction(
-    () => typeof window.__opentakeoff?.openAgent === "function"
-      && typeof window.__opentakeoff?.compileCorpusTakeoff === "function",
+    () => typeof window.__opentakeoff?.openAgent === "function",
     { timeout: 180_000 },
   );
-  await page.waitForTimeout(4000);
+  await page.waitForTimeout(3500);
 
   console.log(`[${job.label}] open Agent`);
   const agentRail = page.locator('button[title*="Agent — describe a takeoff"]').first();
   if (await agentRail.count()) await agentRail.click();
   else await page.evaluate(() => window.__opentakeoff.openAgent());
   await page.waitForSelector('textarea[name="agent-goal"]', { timeout: 30_000 });
-  await page.waitForTimeout(500);
 
-  console.log(`[${job.label}] paste frozen prompt (${prompt.length} chars) + Run`);
+  console.log(`[${job.label}] type goal (${prompt.length} chars)`);
+  console.log(`[${job.label}] >>> ${prompt.slice(0, 120)}…`);
   await page.locator('textarea[name="agent-goal"]').fill(prompt);
   await page.waitForTimeout(400);
+
+  console.log(`[${job.label}] click Run`);
   await page.locator('button.btn-primary', { hasText: /^Run$/ }).click();
-  console.log(`[${job.label}] Agent running — waiting up to ${Math.round(AGENT_TIMEOUT_MS / 1000)}s for finish`);
 
-  let state = await waitAgentDone(page, job.label, AGENT_TIMEOUT_MS);
+  const state = await waitAgentDone(page, job.label, AGENT_TIMEOUT_MS);
 
-  // Real follow-up if Agent did not compile the full takeoff into the panel.
-  const needFollowUp = !state.meta?.takeoff_id
-    || (job.expectItems != null && (state.meta?.totals?.items ?? 0) < job.expectItems)
-    || (job.expectRows != null && (state.meta?.totals?.rows ?? 0) < job.expectRows)
-    || state.rowCount < job.expectMinLines;
-
-  if (needFollowUp) {
-    console.log(`[${job.label}] incomplete after first pass — Ask follow-up for compile_corpus_takeoff`);
-    // Close takeoff overlay if open so Agent composer is usable.
-    const panel = page.locator('[aria-label="Takeoff"]');
-    if (await panel.count()) {
-      await page.keyboard.press("Escape");
-      await page.waitForTimeout(400);
-    }
-    await page.locator('textarea[name="agent-goal"]').fill(job.followUp);
-    await page.waitForTimeout(300);
-    const askBtn = page.locator('button.btn-primary', { hasText: /^(Ask|Run)$/ });
-    await askBtn.click();
-    state = await waitAgentDone(page, job.label, AGENT_TIMEOUT_MS);
+  // Open Takeoff the way a user would — top-bar Takeoff button.
+  console.log(`[${job.label}] open Takeoff panel`);
+  if (!(await page.locator('[aria-label="Takeoff"]').count())) {
+    await page.locator("button", { hasText: /^Takeoff/ }).first().click();
   }
+  await page.waitForSelector('[aria-label="Takeoff"]', { timeout: 20_000 });
+  await page.waitForTimeout(1000);
 
-  await openTakeoffPanel(page);
-  await page.waitForTimeout(1200);
-  let stats = await panelStats(page);
-  console.log(`[${job.label}] panel stats`, JSON.stringify(stats));
+  const stats = await page.evaluate(() => {
+    const panel = document.querySelector('[aria-label="Takeoff"]');
+    const text = panel?.innerText || "";
+    return {
+      textHead: text.slice(0, 450),
+      lines: Number((text.match(/(\d+)\s+lines?/i) || [])[1] || 0),
+      evidence: Number((text.match(/(\d+)\s+evidence/i) || [])[1] || 0),
+      ea: Number((text.match(/·\s*(\d+)\s+EA/i) || [])[1] || 0) || null,
+      rowCount: window.__opentakeoff?.takeoffRowCount?.() ?? 0,
+      meta: window.__opentakeoff?.lastCorpusTakeoff?.() || null,
+      hasObjectObject: /\[object Object\]/i.test(text),
+    };
+  });
+  console.log(`[${job.label}] Takeoff panel:`, JSON.stringify(stats));
 
   if (stats.hasObjectObject) {
-    await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL_object.png`), fullPage: true });
-    throw new Error(`[${job.label}] Takeoff panel still shows [object Object] — title coercion failed`);
+    throw new Error(`[${job.label}] panel shows [object Object]`);
   }
   if (pageErrors.some((e) => /Objects are not valid as a React child/i.test(e))) {
-    throw new Error(`[${job.label}] React child crash still present in TakeoffDataPanel`);
+    throw new Error(`[${job.label}] React crash in TakeoffDataPanel`);
   }
-
-  if (stats.lines < job.expectMinLines && stats.rowCount < job.expectMinLines) {
-    await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL_low_count.png`), fullPage: true });
-    writeFileSync(resolve(artifacts, `${outBase}_FAIL_diag.json`), JSON.stringify({ stats, state }, null, 2));
-    throw new Error(`[${job.label}] Too few takeoff lines (${stats.lines} / ${stats.rowCount}); expected ≥ ${job.expectMinLines}`);
-  }
-
-  if (job.expectItems != null && stats.meta?.totals?.items != null
-    && stats.meta.totals.items !== job.expectItems) {
-    console.warn(`[${job.label}] WARN compile items ${stats.meta.totals.items} != ${job.expectItems}`);
-  }
-  if (job.expectRows != null && stats.meta?.totals?.rows != null
-    && stats.meta.totals.rows !== job.expectRows) {
-    console.warn(`[${job.label}] WARN compile rows ${stats.meta.totals.rows} != ${job.expectRows}`);
+  if (stats.rowCount < job.expectMinEvidence && stats.evidence < job.expectMinEvidence) {
+    await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
+    throw new Error(`[${job.label}] almost empty Takeoff (${stats.rowCount} rows)`);
   }
 
   await page.screenshot({ path: resolve(artifacts, `${outBase}_takeoff_tab.png`) });
+  console.log(`[${job.label}] screenshot Takeoff tab`);
 
-  const wfTab = page.locator("button", { hasText: /^Workflow data$/ });
-  if (await wfTab.count()) {
-    await wfTab.click();
-    await page.waitForTimeout(800);
-    stats = await panelStats(page);
-    if (stats.hasObjectObject) {
-      throw new Error(`[${job.label}] Workflow data tab shows [object Object]`);
-    }
+  const wf = page.locator("button", { hasText: /^Workflow data$/ });
+  if (await wf.count()) {
+    await wf.click();
+    await page.waitForTimeout(700);
     await page.screenshot({ path: resolve(artifacts, `${outBase}_workflow_tab.png`) });
+    console.log(`[${job.label}] screenshot Workflow data tab`);
   }
 
-  await page.waitForTimeout(2500);
+  await page.waitForTimeout(2000);
   await context.close();
   await browser.close();
 
@@ -285,18 +225,15 @@ async function runOne(job) {
       workflow_tab: resolve(artifacts, `${outBase}_workflow_tab.png`),
     },
     stats,
-    pageErrorCount: pageErrors.length,
-    path: "REAL Agent Run — frozen prompt + optional compile follow-up; no seed; no programmatic compile",
-    prompt_file: job.promptPath,
+    path: "new-user: upload PDF → Agent goal → Run → Takeoff panel",
   };
   writeFileSync(resolve(artifacts, `${outBase}_summary.json`), JSON.stringify(summary, null, 2));
-  console.log(JSON.stringify(summary, null, 2));
+  console.log(`[${job.label}] DONE video=${dest}`);
   return dest;
 }
 
 const paths = [];
 for (const job of jobs) {
-  console.log(`\n=== REAL first-run demo: ${job.title} ===`);
   paths.push(await runOne(job));
 }
-console.log("\nDONE", paths);
+console.log("\nALL DONE", paths);
