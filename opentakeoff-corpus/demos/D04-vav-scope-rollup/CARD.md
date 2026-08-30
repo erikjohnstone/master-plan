@@ -1,6 +1,6 @@
 # D04 — VAV scope rollup
 
-Status: `LOCKED — API 5/5 + stdio + UI proof (58 VAVs + SUITE100 follow-up)`
+Status: `LOCKED — API 5/5 + stdio + UI re-proof (expandable cards + verified follow-up)`
 
 ## Live question
 
