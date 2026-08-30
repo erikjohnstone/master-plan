@@ -1475,7 +1475,7 @@ export function agentSystemPrompt() {
     "- When asked for scheduled equipment or points-list row counts, call query_table with the schedule title (no row_key and no cell_contains). Copy that tool result's count and building_tag_counts into the answer — do not re-sum sheet_graph page row totals by hand (continuation pages 1 OF 2 / 2 OF 2 repeat the same MARK keys). building_tag_counts letters map as A=Air Ops, M=MITRACON/Mitracon, T=ATCT — never swap them. Prefer one accurate title needle per asked family; when the goal distinguishes sibling titles (for example dedicated outdoor-air UNIT vs HANDLING schedules, or air-cooled vs heat-recovery chillers), query the title that matches what was asked rather than blending both. When the goal names a specific points list (for example AHU-T1A/TIB), put that tag in the query_table title — a bare POINTS LIST title can roll up sibling lists and double the row count. Then re-query specific row_key values for MARK/identity bboxes you must cite.",
     "- Sequencing for full-set count + cite goals: (1) list_sheets + sheet_graph once, (2) one title-scan query_table per requested family and copy count/building_tag_counts, (3) only then re-query the named cite MARKs / points-list title and paint those cells, (4) write ONE final answer whose family totals match those tool counts (do not add a second contradictory totals table that recounts only painted MARKs). Do not paint every equipment row on a schedule, and do not dump full schedule tables into the answer.",
     "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Pass row_key, column, table_title, and value whenever known so the Agent source card title reads like \"VAV-1 · CFM = 350\" (not a naked \"350\"). Do not rely on auto-flying the canvas — the UI shows clickable expandable source cards; painting is enough. When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",
-    "- The final Answer in chat must give the estimator MORE than enough to understand the workflow and act: every requested count/field with units, schedule titles and sheets, and clear structure. Prefer markdown tables and short labeled lists the UI can render (not a wall of prose or pipe-character dumps). Do not embed highlight_citation markup ids (【mk-…】) in chat — those belong on Source cards. Do not dump incidental inventory rows the goal did not ask for. Do not leave the usable answer only in Sources or highlights — chat is primary.",
+    "- Split surfaces: Agent chat is for conversation and workflow next steps (short status, what you checked, what to do next, follow-up Q&A). Structured takeoff numbers (schedule counts, CFM/GPM/MCA, installed quantities, equipment attributes) are aggregated into the Takeoff panel from your tool results and any markdown tables. Prefer a brief conversational Answer in chat; dense field tables are collected into Takeoff for CSV/Excel/PDF export. Do not leave usable numbers only in tool JSON or Sources.",
     "- Never draw or request overlay label text that would cover the cited cell value; the highlight is a frame around readable blueprint text.",
     "- Conversational follow-ups: when the estimator asks a follow-up about the previous answer or workflow, reply in plain language using evidence already gathered; call tools again only when new evidence is needed. Answer the follow-up question directly first — do not digress into unrelated points-list rows or extra fields unless asked. Explain what you did and why in estimator terms — not tool JSON. Be a useful collaborator across turns, not a one-shot report.",
     "- When asked whether a MARK is on a schedule and which title: call query_table with that row_key (omit title), read matches[0].title (primary equipment schedule — not vibration-isolation / valve / sound / points-list cross-refs), and copy that exact title into the answer. Sibling families can differ (for example DOAH UNIT vs DOAH HANDLING schedules).",
@@ -1824,7 +1824,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
           catch (e) { out = { error: String((e && e.message) || e) }; }
           if (out == null || typeof out !== "object") out = { result: out ?? null };
           callLog.push({ id: `auto_paint_${callLog.length}`, name: "highlight_citation", args, out });
-          emit({ type: "tool_end", name: "highlight_citation", result: out });
+          emit({ type: "tool_end", name: "highlight_citation", args, result: out });
           paintedAny = true;
         }
         if (paintedAny) {
@@ -1852,7 +1852,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
           catch (e) { out = { error: String((e && e.message) || e) }; }
           if (out == null || typeof out !== "object") out = { result: out ?? null };
           callLog.push({ id: `auto_title_scan_${callLog.length}`, name: "query_table", args, out });
-          emit({ type: "tool_end", name: "query_table", result: out });
+          emit({ type: "tool_end", name: "query_table", args, result: out });
           if (!out.error) {
             const sampleTitle = String(out.matches?.[0]?.title?.text || out.matches?.[0]?.title || title);
             scanSummaries.push(
@@ -1984,7 +1984,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
         }
       }
       if (!call.argsError) callLog.push({ id: call.id, name: call.name, args: callArgs, out });
-      emit({ type: "tool_end", name: call.name, result: out });
+      emit({ type: "tool_end", name: call.name, args: callArgs, result: out });
       results.push({ call, out });
     }
     appendToolResults(provider, messages, results);
@@ -2017,7 +2017,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
         catch (e) { out = { error: String((e && e.message) || e) }; }
         if (out == null || typeof out !== "object") out = { result: out ?? null };
         callLog.push({ id: `auto_title_scan_${callLog.length}`, name: "query_table", args, out });
-        emit({ type: "tool_end", name: "query_table", result: out });
+        emit({ type: "tool_end", name: "query_table", args, result: out });
         if (!out.error && Number(out.count) >= 1) {
           const sampleTitle = String(out.matches?.[0]?.title?.text || out.matches?.[0]?.title || title);
           scanSummaries.push(

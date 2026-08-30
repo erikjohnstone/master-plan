@@ -37,6 +37,14 @@ import { buildProfile, parseProfile, applyProfile, resetProfileDefaults, isProfi
 import ToolMenu from "../components/ToolMenu.jsx";
 import PlanNavigator from "../components/PlanNavigator.jsx";
 import ReportPanel from "../components/ReportPanel.jsx";
+import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
+import {
+  dedupeTakeoffRows,
+  mergeTakeoffRows,
+  rowsFromAnswerMarkdown,
+  rowsFromToolResult,
+  splitConversationalAnswer,
+} from "../lib/agentTakeoff.js";
 import RevisionsPanel from "../components/RevisionsPanel.jsx";
 import UserGuide from "../components/UserGuide.jsx";
 import TakeoffsPanel, { clampPanelW, CONDITION_DND_MIME, ConditionAppearanceEditor } from "../components/TakeoffsPanel.jsx";
@@ -565,6 +573,8 @@ export default function TakeoffCanvas() {
   const [ruleOffer, setRuleOffer] = useState(null);   // { deduct, seed, tag }
   const [ruleStage, setRuleStage] = useState(null);   // { rule, candidates, proposed_ts }
   const [agentOpen, setAgentOpen] = useState(false);      // docked right-rail Agent panel
+  const [agentTakeoffRows, setAgentTakeoffRows] = useState([]); // structured rows for Takeoff UI
+  const [showTakeoffData, setShowTakeoffData] = useState(false);
   // ── roll goods (#136) — view state; the figured layouts are a memo below ──
   const [rollShow, setRollShow] = useState(true);         // draw the figured cuts over the plan (on: opting a condition in shows its cuts immediately)
   const [rollEdit, setRollEdit] = useState(false);        // cut-edit mode — cuts take pointer events (slide / resize / double-click reset)
@@ -786,6 +796,7 @@ export default function TakeoffCanvas() {
     return () => clearTimeout(t);
   }, [commitMsgState]);
   const [showReport, setShowReport] = useState(false);  // Reports overlay (STACK-style breakdown + export)
+  // showTakeoffData declared with agent state above
   const [showRevisions, setShowRevisions] = useState(false); // Revisions overlay (save / compare any two, buy-list deltas, CSV, auto-banked restore)
   const [importRows, setImportRows] = useState(null);        // Import-from-schedule approval rows (null = dialog closed)
   const [scheduleAnchor, setScheduleAnchor] = useState(null); // first marquee corner for the "schedule" tool — ISOLATED from poly so it can never leak into a measure shape
@@ -7811,14 +7822,61 @@ export default function TakeoffCanvas() {
   function openAgentCitation(citation) {
     if (!citation) return;
     setShowMarkups(true);
-    const markup = agentStateRef.current.markups.find((m) => m.id === citation.markupId)
-      || markups.find((m) => m.id === citation.markupId);
+    const markupId = citation.markupId || citation.id || null;
+    const markup = markupId
+      ? (agentStateRef.current.markups.find((m) => m.id === markupId)
+        || markups.find((m) => m.id === markupId))
+      : null;
     if (markup) {
       flyToMarkup(markup);
       return;
     }
-    // Markup not found yet — open the sheet; user can retry from the card.
-    if (citation.sheet) openSheets([citation.sheet], false);
+    const sheet = citation.sheet_id || citation.sheet || null;
+    const bbox = Array.isArray(citation.bbox_px) && citation.bbox_px.length === 4
+      ? citation.bbox_px.map((n) => Number(n))
+      : null;
+    // Takeoff-panel View: fly to sheet+bbox without minting a permanent markup.
+    // Prefer a matching already-painted agent citation when present.
+    if (sheet && bbox && bbox.every((n) => Number.isFinite(n))) {
+      const painted = agentCitations.find((c) =>
+        (c.sheet === sheet || c.sheet_id === sheet)
+        && Array.isArray(c.bbox_px)
+        && c.bbox_px.length === 4
+        && c.bbox_px.every((v, i) => Math.abs(Number(v) - bbox[i]) < 1.5));
+      if (painted?.markupId) {
+        const paintedMarkup = agentStateRef.current.markups.find((m) => m.id === painted.markupId)
+          || markups.find((m) => m.id === painted.markupId);
+        if (paintedMarkup) {
+          flyToMarkup(paintedMarkup);
+          return;
+        }
+      }
+      void (async () => {
+        const dims = await ensureSheetDims(sheet);
+        if (!dims?.w || !dims?.h) {
+          openSheets([sheet], false);
+          return;
+        }
+        const [x0, y0, x1, y1] = bbox;
+        const rect = [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]];
+        const mid = [(rect[0][0] + rect[1][0]) / 2, (rect[0][1] + rect[1][1]) / 2];
+        const token = ++sourceTraceSeqRef.current;
+        pendingFlyRef.current = null;
+        if (panelKeySet.has(sheet)) {
+          const sp = panels.find((p) => p.key === sheet);
+          if (sp?.img?.w && centerOnPanelPoint(sp, mid[0], mid[1])) {
+            flashSource(sheet, rect, token);
+            setShowTakeoffData(false);
+            return;
+          }
+        }
+        pendingSourceRef.current = { sheet_id: sheet, rect, token, attempts: 0 };
+        setShowTakeoffData(false);
+        openSheets([sheet], false);
+      })();
+      return;
+    }
+    if (sheet) openSheets([sheet], false);
   }
 
   function agentListAnnotations(sheetFilter, conditionFilter) {
@@ -8557,28 +8615,54 @@ export default function TakeoffCanvas() {
     currentRunRef.current = run;
     saveRun(run); // persist immediately — even an instant crash leaves the goal itself on record
     const ctx = buildAgentCtx();
+    const collectedTakeoff = [];
     try {
       const result = await runAgentLoop({
         cfg: aiConfig(), goal: ask, tools: AGENT_TOOL_DEFS,
         priorMessages: followUp ? agentPriorRef.current : [],
         execute: (name, args) => executeAgentTool(ctx, name, args),
-        onEvent: (ev) => { appendAgentLog(ev); recordRunEvent(ev); },
+        onEvent: (ev) => {
+          appendAgentLog(ev);
+          recordRunEvent(ev);
+          if (ev.type === "tool_end" && ev.name && ev.result && !ev.result.error) {
+            collectedTakeoff.push(...rowsFromToolResult(ev.name, ev.args || {}, ev.result, {
+              workflow: ask,
+              runId: run.id,
+            }));
+          }
+        },
         signal: ctl.signal,
       });
       const answerText = typeof result?.text === "string" ? result.text.trim() : "";
       if (answerText) {
+        const fromTables = rowsFromAnswerMarkdown(answerText, { workflow: ask, runId: run.id });
+        const merged = dedupeTakeoffRows([...collectedTakeoff, ...fromTables]);
+        if (merged.length) {
+          setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, merged));
+          setShowTakeoffData(true);
+        }
+        const { chat } = splitConversationalAnswer(answerText, { rowCount: merged.length });
         agentPriorRef.current = [
           ...agentPriorRef.current,
           { role: "user", content: ask },
           { role: "assistant", content: answerText },
         ];
         setAgentThread((t) => {
-          // Avoid duplicating if appendAgentLog already streamed the same final text
-          // as a thread entry — we own thread writes here.
           const last = t[t.length - 1];
-          if (last?.role === "assistant" && last.text === answerText) return t;
-          return [...t, { role: "assistant", text: answerText }];
+          if (last?.role === "assistant" && (last.text === chat || last.text === answerText)) {
+            return [...t.slice(0, -1), { role: "assistant", text: chat, takeoffRows: merged.length }];
+          }
+          return [...t, { role: "assistant", text: chat, takeoffRows: merged.length }];
         });
+      } else if (collectedTakeoff.length) {
+        const merged = dedupeTakeoffRows(collectedTakeoff);
+        setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, merged));
+        setShowTakeoffData(true);
+        setAgentThread((t) => [...t, {
+          role: "assistant",
+          text: `Wrote ${merged.length} takeoff row${merged.length === 1 ? "" : "s"} to the Takeoff panel — open Takeoff to review and export.`,
+          takeoffRows: merged.length,
+        }]);
       }
     } finally {
       setAgentRunning(false);
@@ -10044,6 +10128,17 @@ export default function TakeoffCanvas() {
         <div style={{ flex: 1 }} />
         </div>
         <span data-topbar-pinned style={{ display: "inline-flex", alignItems: "center", gap: 7, flexShrink: 0, paddingTop: 16 }}>
+        <button onClick={() => setShowTakeoffData(true)}
+          title="Open Takeoff — structured data from Agent workflows, with CSV / Excel / PDF export."
+          style={{
+            padding: "8px 14px", border: "none",
+            background: agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
+            color: agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
+            cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11,
+            letterSpacing: "0.12em", textTransform: "uppercase",
+          }}>
+          Takeoff{agentTakeoffRows.length ? ` · ${agentTakeoffRows.length}` : ""}
+        </button>
         <button onClick={() => setShowReport(true)} disabled={!conditions.length} title="Open the takeoff report — per-condition breakdown with waste, plus CSV / JSON export."
           style={{ padding: "8px 14px", border: "none", background: conditions.length ? "var(--ink)" : "var(--text-faint)", color: "var(--paper-bright)", cursor: conditions.length ? "pointer" : "default", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase" }}>Report</button>
         {/* ⋯ overflow — rarely-used project controls, so the row never wraps
@@ -11858,6 +11953,8 @@ export default function TakeoffCanvas() {
             onRejectAll={rejectAllAgentProposals}
             onOpenSettings={() => setShowAiSettings(true)}
             onClose={() => setAgentOpen(false)}
+            onOpenTakeoff={() => setShowTakeoffData(true)}
+            takeoffRowCount={agentTakeoffRows.length}
             runHistory={runHistory}
             historyOpen={runHistoryOpen}
             onToggleHistory={() => { if (!runHistoryOpen) refreshRunHistory(); setRunHistoryOpen((o) => !o); }}
@@ -11985,6 +12082,26 @@ export default function TakeoffCanvas() {
         </div>
       )}
 
+      {showTakeoffData && (
+        <TakeoffDataPanel
+          rows={agentTakeoffRows}
+          projectName={projectName}
+          onClear={() => setAgentTakeoffRows([])}
+          onRemove={(id) => setAgentTakeoffRows((rows) => rows.filter((r) => r.id !== id))}
+          onClose={() => setShowTakeoffData(false)}
+          onOpenCitation={(row) => {
+            if (!row?.sheet_id || !row?.bbox_px) return;
+            openAgentCitation({
+              sheet_id: row.sheet_id,
+              bbox_px: row.bbox_px,
+              row_key: row.tag,
+              column: row.column,
+              table_title: row.table_title,
+              value: row.value,
+            });
+          }}
+        />
+      )}
       {showReport && (
         <ReportPanel
           projectName={projectName} onProjectName={setProjectName}

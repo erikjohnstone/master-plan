@@ -96,12 +96,13 @@ joins, or any other real estimating ask — the software MUST:
 
 1. **Do that ask end-to-end.** Execute the workflow the question implies; do
    not substitute a weaker tag-lookup or a partial answer.
-2. **Return more than enough correct information in chat** so the answer is
-   immediately usable: every requested field, evidence-backed values, units,
-   schedule titles/sheets, and enough workflow context to trust and act —
-   not a fragment list, not tool-dump residue, and not “boxes painted, see
-   Sources.” An estimator reading **only** the Agent Answer must understand
-   what was found, why it matters, and how to check it.
+2. **Return a usable conversational Answer in chat** so the estimator knows
+   what was found and what to do next — plus **write structured takeoff
+   numbers into the Takeoff panel** (schedule counts, attributes, installed
+   quantities, markdown tables). Chat is for workflow and follow-up Q&A; the
+   Takeoff UI aggregates exportable rows (CSV / Excel / PDF). Do not leave
+   usable numbers only in tool JSON or Sources. An estimator reading chat
+   must still understand the workflow; dense field tables belong in Takeoff.
 3. **Paint ALL answering evidence on the sheets** via `highlight_citation`
    (value cells, row data, drawing text, counted marks — not lonely tag
    marks). Do **not** auto-fly the viewport. Put clickable source cards in
@@ -115,11 +116,12 @@ joins, or any other real estimating ask — the software MUST:
    are not a substitute for a usable chat answer. Unexplained highlight spam
    is a **fail**.
 
-Agent-panel text alone is incomplete. Mark-only sheet flybys are incomplete.
-Partial answers, wrong sibling rows, or “flying around tags” without the
-asked-for data are a **fail**. Bar: ask → complete useful answer in chat →
-rich source cards → full paint on the drawings. Make OpenTakeoff the tool an
-estimator actually wants open.
+Agent-panel chat alone is incomplete when structured numbers stay buried in
+tool JSON. Mark-only sheet flybys are incomplete. Partial answers, wrong
+sibling rows, or “flying around tags” without the asked-for data are a
+**fail**. Bar: ask → conversational workflow answer in chat → structured
+rows in the Takeoff panel (exportable) → rich source cards → full paint on
+the drawings. Make OpenTakeoff the tool an estimator actually wants open.
 
 **Honesty rule:** Do not mark a demo locked because a harness scraped DOM
 text while the visible UI still looks like highlight spam or fragment cards.
