@@ -999,15 +999,15 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
           || (label === "AHU" && /\bAHUs?[^\n.]{0,48}\bsplits?\b/i.test(goal))
           || (label === "DOAH unit" && /\bDOAHs?[^\n.]{0,48}\bsplits?\b/i.test(goal));
         const splitClause = (() => {
-          if (label === "FCU") {
-            const m = goal.match(/[^.\n]{0,100}fan[\s\-]*coil[^.\n]{0,48}\bsplits?\b/i);
-            return m ? m[0] : "";
-          }
-          if (label === "VAV") {
-            const m = goal.match(/[^.\n]{0,100}\bVAVs?[^.\n]{0,48}\bsplits?\b/i);
-            return m ? m[0] : "";
-          }
-          return "";
+          // Match the family+"splits" pair tightly, then look back for building names.
+          const re = label === "FCU" ? /fan[\s\-]*coils?[^\n.]{0,24}\bsplits?\b/i
+            : label === "VAV" ? /\bVAVs?[^\n.]{0,24}\bsplits?\b/i
+            : null;
+          if (!re) return "";
+          const m = goal.match(re);
+          if (!m || m.index == null) return "";
+          const start = Math.max(0, m.index - 80);
+          return goal.slice(start, m.index + m[0].length);
         })();
         const wantedLetters = new Set();
         if (/air\s*ops/i.test(splitClause)) wantedLetters.add("A");
@@ -1172,9 +1172,25 @@ export function parseAssistantTurn(provider, json) {
 // the context; image results ride as real image blocks (Anthropic) or a
 // follow-up user image message (OpenAI-style function calling has no image
 // slot in the tool role).
-const RESULT_MAX_CHARS = 12000;
+const RESULT_MAX_CHARS = 5000;
 const resultText = (out) => {
   let payload = out && typeof out === "object" ? out : { value: out };
+  // Compact sheet_graph — full sheet dumps blow the 131k context window.
+  if (Array.isArray(payload?.sheets) && payload.sheets.length > 0) {
+    payload = {
+      sheet_count: payload.sheets.length,
+      sheets: payload.sheets.slice(0, 40).map((s) => ({
+        key: s.key || s.id || s.sheet || s.name,
+        title: s.title || s.name || s.label || undefined,
+      })),
+      note: "sheet_graph compacted; use query_table/find_schedule for schedule titles",
+    };
+  }
+  // Compact read_schedule / large row dumps.
+  if (Array.isArray(payload?.rows) && payload.rows.length > 4) {
+    const { image_data_url: _i, ...rest } = payload;
+    payload = { ...rest, rows: payload.rows.slice(0, 4), rows_omitted: payload.rows.length - 4 };
+  }
   // Title-scan inventory dumps (no row_key, many matches) only need count +
   // building splits + one sample row — full match arrays thrash context on
   // multi-family takeoffs and trigger upstream HTTP 400s.
@@ -1190,6 +1206,30 @@ const resultText = (out) => {
       ...rest,
       matches: payload.matches.slice(0, 1),
       matches_omitted: payload.matches.length - 1,
+    };
+  }
+  // Scoped row hits: keep identity + MARK bbox only when many cells present.
+  if (scoped && Array.isArray(payload?.matches)) {
+    payload = {
+      ...payload,
+      matches: payload.matches.slice(0, 3).map((match) => {
+        const row = match?.row;
+        if (!row?.all_cells && !row?.cells) return match;
+        const cells = row.all_cells || row.cells || {};
+        const keep = {};
+        for (const [k, v] of Object.entries(cells)) {
+          if (/mark|identity|tag/i.test(k) || v === row.identity) keep[k] = v;
+        }
+        if (!Object.keys(keep).length) {
+          const first = Object.entries(cells)[0];
+          if (first) keep[first[0]] = first[1];
+        }
+        return {
+          sheet: match.sheet,
+          title: match.title,
+          row: { key: row.key, identity: row.identity, all_cells: keep },
+        };
+      }),
     };
   }
   const { image_data_url: _img, ...rest } = payload && typeof payload === "object" ? payload : { value: payload };
