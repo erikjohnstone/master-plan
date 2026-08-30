@@ -48,6 +48,34 @@ export function runTimingMetadata(cold, setupLatencyMs) {
   };
 }
 
+const citationKey = (sheet, bbox) =>
+  `${sheet}|${Array.isArray(bbox) ? bbox.join(",") : ""}`;
+
+export function citationProvenanceErrors(answer, toolCalls) {
+  const planTags = new Set(toolCalls.flatMap((call) =>
+    call.name === "sweep_schedule_row"
+      ? (call.result?.data?.tag_citations ?? []).map((citation) =>
+        citationKey(citation.sheet, [
+          citation.bbox?.x0,
+          citation.bbox?.y0,
+          citation.bbox?.x1,
+          citation.bbox?.y1,
+        ]))
+      : []));
+  if (!planTags.size) return [];
+  const errors = [];
+  for (const field of ["equipment_tag", "installed_quantity"]) {
+    const citations = answer?.answer?.[field]?.citations;
+    if (!Array.isArray(citations) || !citations.length) continue;
+    for (const citation of citations) {
+      if (!planTags.has(citationKey(citation.sheet_id, citation.bbox_px))) {
+        errors.push(`${field} must cite a plan tag returned by sweep_schedule_row.tag_citations`);
+      }
+    }
+  }
+  return errors;
+}
+
 function systemPrompt(truth) {
   const fields = Object.entries(truth.expected).map(([name, spec]) => ({
     name,
@@ -152,8 +180,17 @@ export async function runToolCallingModel({
     const calls = Array.isArray(message.tool_calls) ? message.tool_calls : [];
     if (!calls.length) {
       try {
+        const answer = parseJsonAnswer(message.content);
+        const provenanceErrors = citationProvenanceErrors(answer, toolCalls);
+        if (provenanceErrors.length) {
+          messages.push({
+            role: "user",
+            content: `Your previous final response used unsupported citation provenance: ${provenanceErrors.join("; ")}. Re-emit the same answer with citations drawn only from the named tool evidence. Do not change factual values or add new claims.`,
+          });
+          continue;
+        }
         return {
-          answer: parseJsonAnswer(message.content),
+          answer,
           raw_response: message.content,
           raw_model_responses: rawModelResponses,
           tool_calls: toolCalls,

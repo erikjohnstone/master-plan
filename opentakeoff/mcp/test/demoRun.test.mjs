@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  citationProvenanceErrors,
   DEMO_TOOLS,
   parseJsonAnswer,
   runTimingMetadata,
@@ -22,6 +23,41 @@ test("demo timing separates cold source indexing from live prompt latency", () =
       latency_ms: 1234.57,
     },
   });
+});
+
+test("demo runner rejects schedule citations when plan tag evidence exists", () => {
+  const answer = {
+    answer: {
+      equipment_tag: {
+        value: "CH-A1",
+        citations: [{
+          sheet_id: "set.pdf#44",
+          bbox_px: [10, 20, 30, 40],
+        }],
+      },
+      installed_quantity: {
+        value: 1,
+        citations: [{
+          sheet_id: "set.pdf#3",
+          bbox_px: [1, 2, 3, 4],
+        }],
+      },
+    },
+  };
+  const toolCalls = [{
+    name: "sweep_schedule_row",
+    result: {
+      data: {
+        tag_citations: [{
+          sheet: "set.pdf#3",
+          bbox: { x0: 1, y0: 2, x1: 3, y1: 4 },
+        }],
+      },
+    },
+  }];
+  assert.deepEqual(citationProvenanceErrors(answer, toolCalls), [
+    "equipment_tag must cite a plan tag returned by sweep_schedule_row.tag_citations",
+  ]);
 });
 
 test("parseJsonAnswer accepts JSON and strips a fenced transport wrapper", () => {
