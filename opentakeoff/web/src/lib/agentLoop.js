@@ -127,7 +127,8 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
             .replace(/[^A-Z0-9]/g, "").includes(tagCanonical)));
       if (!covered) missingPlanTags.push(tag);
       if (citations.length && !citations.some((citation) =>
-        citation.sheet && finalText.includes(citation.sheet))) {
+        citation.sheet
+        && finalCanonical.includes(String(citation.sheet).toUpperCase().replace(/[^A-Z0-9]/g, "")))) {
         missingPlanSheets.push(tag);
       }
     }

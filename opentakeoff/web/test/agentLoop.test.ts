@@ -146,7 +146,7 @@ test("installed quantity cannot finish without deterministic count evidence", ()
       args: { text: "CH-A1" },
       out: { sheet: "set.pdf#3", bbox_px: [10, 20, 30, 40], text: "CH-A1" },
     },
-  ], "Show me the plan location for CH-A1", "CH-A1 is shown on set.pdf#3."), null);
+  ], "Show me the plan location for CH-A1", "CH-A1 is shown on SET‑PDF#3."), null);
   assert.match(requiredEvidenceCorrection([
     sweptPlan,
     {
