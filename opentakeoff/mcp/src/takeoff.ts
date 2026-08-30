@@ -22,7 +22,7 @@
 import type { Session } from "./session.ts";
 import { HVAC_TAXONOMY, type HvacComponent } from "../../web/src/lib/hvacTaxonomy.ts";
 import type { Point } from "../../web/src/lib/oneclick.ts";
-import type { ScheduleTable, TableRow } from "../../web/src/lib/sheetgraph.ts";
+import { isReferenceCrossTable, type ScheduleTable, type TableRow } from "../../web/src/lib/sheetgraph.ts";
 
 /** The structured failure taxonomy requested for this pipeline — classifies
  * WHY a tag's takeoff came out the way it did, distinct from a raw error
@@ -114,6 +114,9 @@ export interface ReferenceTable {
   headers: string[];
   rows: ReferenceTableRow[];
 }
+export interface ExtractedTable extends ReferenceTable {
+  kind: string;
+}
 
 export interface PlanSetTakeoff {
   set_files: string[];
@@ -134,6 +137,8 @@ export interface PlanSetTakeoff {
    * confidence/different-shape data into one list" doctrine already
    * established for those two this session. */
   reference_tables: ReferenceTable[];
+  /** Complete deterministic table-query surface across every extracted kind. */
+  extracted_tables: ExtractedTable[];
   failures: TakeoffFailure[];
   tables_seen: Array<{ sheet: string; kind: string; title: string | null; rows: number }>;
   legend_sheets_seen: Array<{ sheet: string; glyphs_detected: number }>;
@@ -236,7 +241,12 @@ async function commitDetectedScale(session: Session, keys: Iterable<string>): Pr
  * LLM involved — every real decision was already made by sheetgraph.ts's
  * extraction and sweep_schedule_row's corroboration; this only walks and
  * assembles. */
-export async function buildPlanSetTakeoff(session: Session, opts: { categories?: string[] | null } = {}): Promise<PlanSetTakeoff> {
+export async function buildPlanSetTakeoff(session: Session, opts: {
+  categories?: string[] | null;
+  /** Corpus scorer optimization: preserve counted row-tag matches while
+   * omitting whole-sheet unlabeled/other-tag disclosure that no metric reads. */
+  evaluationFast?: boolean;
+} = {}): Promise<PlanSetTakeoff> {
   const categories = opts.categories ?? null;
   const graph = await session.graphForPipeline();
   const out: PlanSetTakeoff = {
@@ -245,6 +255,7 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
     items: [],
     legend_items: [],
     reference_tables: [],
+    extracted_tables: [],
     failures: [],
     tables_seen: [],
     legend_sheets_seen: [],
@@ -323,7 +334,29 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
     };
 
     try {
-      const r = await session.sweepScheduleRow(tag, { commit: false });
+      let r;
+      try {
+        r = await session.sweepScheduleRow(tag, { commit: false, evaluationFast: opts.evaluationFast });
+      } catch (primary: any) {
+        // Some drawings omit a schedule's redundant trailing unit digit
+        // when only one device exists at that site (schedule ...-A1, plan
+        // ...-A). sweepScheduleRow owns the conservative proof: it accepts
+        // the base only when exactly one strict numbered extension exists.
+        // The project walker must try that real plan mark too; otherwise the
+        // one-tag API can resolve it while the unattended takeoff silently
+        // cannot.
+        const alias = /[A-Z]\d$/i.test(tag) ? tag.slice(0, -1) : null;
+        if (!alias || !/tag is not drawn on any plan sheet/i.test(primary?.message || String(primary))) throw primary;
+        try {
+          r = await session.sweepScheduleRow(alias, { commit: false, evaluationFast: opts.evaluationFast });
+        } catch {
+          // Alias lookup is an optional recovery attempt. If it cannot prove
+          // a unique row and plan anchor, retain the original no-plan-tag
+          // refusal instead of replacing it with an incidental alias error.
+          throw primary;
+        }
+        item.tag = alias;
+      }
       item.quantity = r.found ?? 0;
       item.drawing_locations = (r.sheets || []).flatMap((ps: any) =>
         (ps.matches || []).map((m: any) => ({ sheet: ps.sheet, at: m.at as [number, number] })));
@@ -333,11 +366,25 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
       out.stats.total_drawn_instances += item.quantity;
     } catch (e: any) {
       const msg = e?.message || String(e);
+      const installationNotes = await session.explicitInstallationNotes(tag);
+      if (installationNotes.length === 1) {
+        item.quantity = 1;
+        item.drawing_locations = [{
+          sheet: installationNotes[0].sheet,
+          at: installationNotes[0].at,
+        }];
+        item.status = "resolved";
+        item.reason = `Counted from explicit installation note: "${installationNotes[0].text}"`;
+        out.stats.resolved++;
+        out.stats.total_drawn_instances++;
+        out.items.push(item);
+        return;
+      }
       const ft = classifyError(msg);
-      item.status = ft === "SYMBOL_FALSE_NEGATIVE" ? "refused" : "error";
+      item.status = ft === "SYMBOL_FALSE_NEGATIVE" || ft === "AMBIGUOUS_ROW_KEY" ? "refused" : "error";
       item.reason = msg;
       if (item.status === "refused") out.stats.refused++; else out.stats.errored++;
-      out.failures.push({ type: ft, tag, sheet: tb.sheet, detail: msg });
+      out.failures.push({ type: ft, tag: item.tag, sheet: tb.sheet, detail: msg });
     }
     out.items.push(item);
   }
@@ -368,15 +415,26 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
 
   for (const tb of graph.tables) {
     out.tables_seen.push({ sheet: tb.sheet, kind: tb.kind, title: tb.title?.text ?? null, rows: tb.rows.length });
+    const extracted: ExtractedTable = {
+      sheet: tb.sheet,
+      kind: tb.kind,
+      title: tb.title?.text ?? null,
+      headers: tb.headers,
+      rows: tb.rows.map((row) => {
+        const cells: Record<string, string> = {};
+        for (const [label, cell] of Object.entries(row.cells || {})) if (cell?.text) cells[label] = cell.text;
+        return { key: row.key, cells };
+      }),
+    };
+    out.extracted_tables.push(extracted);
     if (tb.kind === "reference") {
-      out.reference_tables.push({
-        sheet: tb.sheet, title: tb.title?.text ?? null, headers: tb.headers,
-        rows: tb.rows.map((row) => {
-          const cells: Record<string, string> = {};
-          for (const [label, cell] of Object.entries(row.cells || {})) if (cell?.text) cells[label] = cell.text;
-          return { key: row.key, cells };
-        }),
-      });
+      out.reference_tables.push(extracted);
+      // CONNECTION / CALCULATION / ISOLATION tables are always cross-refs to
+      // equipment defined on dedicated schedules (see isReferenceCrossTable).
+      // Sweeping their MARK keys as deferred "gap fillers" invents phantom
+      // units from concatenated twin marks (AHU-T1AT1B, CH-MT1MT2) and blows
+      // rollups. Keep them in reference_tables[] for disclosure; do not resolve.
+      if (isReferenceCrossTable(tb.title?.text || "", tb.headers || [])) continue;
       for (const row of tb.rows) {
         const tag = (row.key || "").trim();
         if (!tag) continue;

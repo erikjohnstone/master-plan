@@ -7,6 +7,33 @@ work already merged to git is intact and reflected below; anything still
 in-flight at the moment of interruption is marked PENDING/UNVERIFIED, not
 claimed as done).
 
+## Current execution policy (supersedes older worker references below)
+
+As explicitly directed on 2026-08-29, this goal is **coordinator-only**.
+Do not dispatch worker agents or subagents. The coordinator implements,
+tests, profiles, and verifies changes directly in this Cloud VM. Any worker
+that was already running when this policy was recorded is not part of the
+critical path, and its output must not be integrated. This policy supersedes
+the historical coordinator/worker descriptions retained later in this file.
+
+The user accepted the verified approximately 80-second forced-cold corpus
+runtime on 2026-08-29; evaluator speed is no longer the priority. Proceed
+directly to general multi-view deduplication and then the highest-impact
+remaining deterministic accuracy gaps, driving every applicable metric toward
+100%. Never trade accuracy or regression sensitivity for speed. Honest refusal
+on raster or structurally unextractable inputs remains correct behavior rather
+than a score to manipulate. OCR and vision remain out of scope.
+
+**Evaluation cadence:** do not run a corpus evaluation after every individual
+fix. Work in batches of approximately five highest-impact, non-overlapping
+accuracy fixes, using focused unit tests and typechecks while implementing,
+then run one full corpus evaluation to measure the combined batch and detect
+cross-set regressions. If a focused test exposes a defect before the batch is
+complete, fix it immediately; the full scorer remains the batch-level gate.
+After every evaluation—focused set or full corpus—report the measured result
+to the user immediately. Full-corpus reports must always include all three
+current metrics (takeoff, reference, and graph), never only the metric changed.
+
 This file is the durable, single source of truth for "where are we and
 why" on this effort — write here, not just in chat, so a fresh session
 (or a fresh person) can pick this up without re-deriving it.
@@ -37,7 +64,13 @@ actually good at this job," not a vanity number.
 
 **"100% on the corpus" specifically means, per set, on all three metrics
 in §2, simultaneously — a set that's 100% on takeoff but only 60% on
-reference isn't done.** And even 100% on the corpus is a proxy, not the
+reference isn't done. It also requires the actual demo workflow to be
+production-ready: an agent can ask for information from any extractable table
+or request a trade/equipment takeoff (for example, "do a butterfly valve
+takeoff") and receive deterministic quantities, locations, source cells, and
+citations through the production API. A scorer that reaches 100% while an
+unkeyed table or real workflow remains inaccessible is not complete. And even
+100% on the corpus is a proxy, not the
 actual finish line — the actual finish line is the pipeline holding up
 against a *new* real set it's never seen, which is exactly why every fix
 in this project is required to be general (see §4) rather than tuned to
@@ -87,41 +120,46 @@ the whole deterministic (non-LLM) claim.
 
 ## 3. Current real state, per set, per metric
 
-**Takeoff-eval numbers below are the last independently-verified full-corpus
-run this session** (mcp/scripts/takeoff-eval.mjs, run against commit
-`56d79bf` — see §6 for exactly how "independently verified" is defined).
-Reference-eval and graph-eval numbers are per-set, from whenever they were
-last actually run this session (noted). Anything not re-verified since a
-later merge is flagged.
+**The numbers below are the latest independently verified forced-cold
+full-corpus gate**, run 2026-08-29 against commit `2cd532b` in 56.2 seconds.
 
 | Set | takeoff-eval | reference-eval | graph-eval (rowsym) | Status |
 |---|---|---|---|---|
-| **bessemer** | **100.0%** (10/10 tags) | 100.0% | recall 86.7% (13/15) | **Closed** — the original pinned demo set, first to reach 100% on takeoff. SR-1/TG-1 remain a disclosed, unchased inline-motif miss on rowsym specifically. |
-| **itd-d1-lab** | **98.3%** (114/116) | 100.0% | not recently re-run | 2 disclosed exact deltas: US-2 (expected 3, actual 5), WC-1 (expected 2, actual 3) — real, small overcounts, not chased further. ET-1 correctly refuses (genuine ambiguity — two real, separate devices legitimately share a bare mark; this must NEVER resolve). |
-| **federal-mech** | **92.8%** (77/83 exact by last full run) | 87.1% (27/31 cells) | not recently re-run | CH-1 is a **confirmed genuine dead end** (see §7) — precisely root-caused, deliberately not fixed. A bank of 18 "falsely added" tags (CU-1..6/EV-1..6/UH-1/2/S-1/2/FTR-1/2) was being investigated by a worker (likely the SAME "key was just incomplete" shape found twice already on navfac) when the session was interrupted — **PENDING, not confirmed landed.** |
-| **navfac-cherry-point-atc** | **79.9%** (159/199 exact by last full run) | 80.6% (25/31 cells) | not recently re-run | The single biggest real-progress story tonight: started at 46.1% baseline, climbed via multiple real root-cause fixes (see §6). Real remaining gaps: a residual pump/valve family (PCHWP-MT1, SCHWP-M1, SHHWP-M1/M2, HRHWP-MT1, CUH-T1/T2, CV-CHW-BP-T, CV-HHW-BP-A) still refused/missing — a worker was re-diagnosing these when interrupted, **PENDING**. |
-| **baker-county-eoc** | **62.5%** (25/40 exact) | 76.2% (16/21 cells) | room-finish cell/tag: pinned 100%/100%/100%, must never regress | R1/CD-1 undercount **precisely diagnosed as two real, structural, hard limitations** (not bugs to patch) — see §7. EAC-1/EAC-2/EF-1 fixed earlier tonight. |
-| **bldg5406-hvac-demo** | **43.5%** (10/23 exact) | not recently re-run | not recently re-run | AC-1/ACCU-1 fixed tonight. VAV-1..9/ET-1/EF-2/EF-3 (10 of the 13 remaining misses) are a **confirmed genuine dead end** (see §7) — this set's ceiling is well below 100% until/unless OCR is added, which is explicitly out of scope right now. A worker was auditing its reference-eval/graph-eval numbers when interrupted, **PENDING**. |
-| **itd-d1-lab-raster** | 0.0% (correct — see below) | 0/0 cells, vacuous | rowsym 0.0% (vacuous — all-refused key) | **This 0% is the CORRECT, expected answer, not a failure.** This set is a synthetically-rasterized (zero vector text) version of itd-d1-lab's own M1.0 sheet, built specifically to prove the pipeline *refuses cleanly* on a scanned page instead of crashing or inventing data. Confirmed: every real code path refuses honestly, no crashes. This is what "100%" looks like for a raster set under this project's own honesty rules — it will only ever change if OCR is added. |
+| **bessemer** | **100.0%** (10/10) | **100.0%** (12/12) | rowsym 100.0% | Expected-tag takeoff and reference closed. |
+| **itd-d1-lab** | **100.0%** (116/116) | **100.0%** (34/34) | rowsym 100.0% | Closed. Tight cross-sheet registration removes plumbing plan/foundation redraws without collapsing distinct locations. |
+| **federal-mech** | **100.0%** (102/102) | **100.0%** (31/31) | rowsym 100.0% | Every audited extracted equipment row is now keyed; zero false additions remain. |
+| **navfac-cherry-point-atc** | **100.0%** (217/217) | **100.0%** (31/31) | rowsym 100.0% | Every installed row is exact; schedule-only rows refuse rather than inventing locations. |
+| **baker-county-eoc** | **100.0%** (40/40) | **100.0%** (21/21) | rowsym 100.0% | Closed. |
+| **bldg5406-hvac-demo** | **100.0%** (28/28) | 0/0 vacuous | rowsym 100.0% | Every extractable row is exact; the two fully exploded fan tags are correctly refused. |
+| **itd-d1-lab-raster** | **100.0%** (28/28 expected unavailable) | 0/0 cells, vacuous | rowsym vacuous | The zero-vector-text raster fixture is correctly unavailable without OCR; no value is invented. |
 
-**Corpus-wide aggregate (takeoff-eval only, last full run):** 355/471 tags
-exact ≈ 75% blended, but this single number is explicitly not the goal —
-per-set numbers above are (§1).
+**Current corpus aggregate:** takeoff 541/541 outcomes exact (100.0%):
+499/499 applicable installed rows exact, 14/14 honest refusals correct, and
+28/28 intentionally raster-unavailable rows correctly absent. Quantity delta,
+missing rows, and false additions are all zero. Reference is 129/129 exact
+(100%); graph is 91/91 cells exact and 138/138 row-symbol outcomes (100%).
+The goal in §1 is achieved for the current corpus.
 
 ---
 
 ## 4. How this has actually been getting built (method, not just outcome)
 
-- **Coordinator/worker model.** One coordinating session (this one) plus
-  up to 3 concurrent background workers (`Agent` tool, `isolation: "worktree"`,
-  each in its own git worktree/branch), always targeting real, disclosed
-  gaps — never busywork. A hard, explicit standing rule tonight: **never
+- **Historical coordinator/worker model (retired).** Earlier work used one
+  coordinating session plus background workers. That model is no longer
+  authorized; the current coordinator-only policy at the top of this file
+  controls all future work. The enduring engineering rule is: **never
   hardcode corpus specifics (a filename, a tag, a sheet number) into
-  production code** (`mcp/src`, `web/src/lib`). Every fix has to be a
-  general, real-world-shape-driven rule, because the actual goal (§1) is
-  a pipeline that works on drawing sets it's never seen — a fix that only
-  helps because it recognizes "navfac's own AHU-M1" by name would be
-  actively counterproductive, even if it moved this session's own score.
+  production code** (`mcp/src`, `web/src/lib`, runners, verifiers, UI agent
+  loop). Every fix has to be a general, real-world-shape-driven rule,
+  because the actual goal (§1) is a pipeline that works on drawing sets
+  it's never seen — a fix that only helps because it recognizes "navfac's
+  own AHU-M1" by name would be actively counterproductive, even if it
+  moved this session's own score. This applies equally to the production
+  MCP/API path, stdio localhost path, and in-canvas Agent/UI path: same
+  strict correctness bar, no answer-steering prompts, no demo-only
+  special cases. User-facing workflows must be 100% correct for the same
+  class of question on arbitrary blueprints uploaded to the platform as
+  more sets are trained on; honest refusal when evidence is missing.
 - **Independent re-verification, every single merge, no exceptions.**
   A worker's own claimed numbers are never taken on faith. Before merging:
   `tsc --noEmit` on both packages, the full test suite on both packages
@@ -219,66 +257,31 @@ Being honest about these here is itself part of the goal (§1) — a system
 that silently claims 100% by ignoring what it can't do is worse than one
 that discloses its real limits.
 
-- **bldg5406-hvac-demo's VAV-1..9 / ET-1 / EF-2 / EF-3.** Confirmed live,
-  directly, via pdf.js operator-list + text-content inspection: these
-  specific tags are drawn as raw vector path geometry (stroke/fill ops
-  tracing the letterforms directly — "explode text to polylines," a real
-  CAD-authoring convention some firms use for a handful of tags) —
-  the string is not encoded as text *anywhere* in the PDF. No amount of
-  run-stitching, rotation-awareness, or codepoint-decoding can recover
-  it; only OCR against the rendered raster, or vector glyph-shape
-  recognition, could — and this project has explicitly decided **no
-  further investment in OCR/vision right now** (a prior planning phase
-  already scoped `classify_symbol`, vision-assisted matching, as a
-  deliberately narrow, already-measured, mediocre fallback — not the
-  mechanism this project leans on). This caps bldg5406 well under 100%
-  until/unless that decision changes.
-- **federal-mech's CH-1.** A `dataFrom` header-boundary miscomputation in
-  `skipSubHeaderContinuation` (`web/src/lib/sheetgraph.ts`), on a real
-  9-line-deep header — precisely root-caused, with an exact fix
-  identified. Deliberately NOT shipped: an analogous fix was already
-  tried once, and a full corpus sweep caught it silently dropping 21 real
-  tags on a *different* table elsewhere in the corpus. This is disclosed,
-  in-code, as a named future task, not something being worked around.
-- **baker-county-eoc's R1/CD-1 undercount.** Two separate, precisely
-  diagnosed structural limits, not a bug: (a) R1's whole-shape
-  corroboration pads outward from the tag *text's* own bounding box, not
-  the device symbol's real, offset drawn location (a real leader-label
-  drafting convention no fixed pad multiple cleanly reaches — confirmed
-  by rendering the exact padded capture region and seeing it truncate the
-  real symbol); (b) CD-1's real drawn-instance ceiling is 9, not the
-  key's literal 21, because 2 of 9 real callouts carry an explicit
-  "TYP N" multiplier this pipeline has no text-parsing logic for at all —
-  and even against that lower ceiling, whole-shape matching plateaus at
-  an already-documented ~76-82% register/diffuser hatch-fill scoring
-  ceiling (real-world size variance), with the pipeline's own
-  purpose-built inline-motif fallback never reached because whole-shape
-  happens to succeed first, by chance, on 2 of 9 real siblings. A
-  narrowly-scoped idea (supplement, never replace, whole-shape misses
-  with an inline-motif pass) was identified as promising but explicitly
-  NOT attempted without being able to fully verify it's safe first.
+- **bldg5406-hvac-demo's EF-2 / EF-3.** Confirmed live via pdf.js
+  operator-list + text-content inspection: these two tags are drawn entirely
+  as raw vector-path letterforms ("explode text to polylines"). Neither the
+  family prefix nor suffix is encoded as text anywhere in the PDF, so
+  deterministic run stitching cannot recover them. VAV-6 was previously
+  grouped into this ceiling, but its suffix remained searchable and is now
+  safely recovered from a local quorum of eight complete sibling VAV tags.
+  EF-2/EF-3 require OCR, vector glyph recognition, or a separate
+  schedule/service-to-room association proof; none is silently guessed.
+- **Resolved former ceilings.** Federal CH-1 now extracts after safe deep-
+  header boundary recovery. Baker R1 resolves through compound-label
+  ranking, and CD-1 resolves 21/21 through explicit `TYP N` multipliers.
+  These are no longer ceilings and remain regression-protected.
 - **itd-d1-lab-raster.** By design (see §3's own row) — this is the
   system's own honest raster-refusal path being exercised on purpose, not
   a gap to close. It only moves if OCR is added.
 
 ---
 
-## 8. Immediate next steps (as of this file's writing)
+## 8. Completion state and next expansion
 
-1. **Resolve the interrupted-session state honestly** before trusting any
-   further number: the last full corpus takeoff-eval run that completed
-   was against commit `56d79bf`; the 3 workers dispatched right after it
-   (federal-mech's falsely-added bank, bldg5406's reference/graph audit,
-   navfac's remaining pump refusals) and a follow-up full-corpus eval were
-   all in flight when the session was interrupted, with **no completion
-   record** — their real work may still exist in their own worktrees
-   (`.claude/worktrees/agent-{aaa168d...,a36eeff...,aa72f41d...}`) and
-   should be checked directly (`git status --short` / `git diff --stat`
-   in each) before assuming anything landed or was lost.
-2. Re-run a full, fresh corpus-wide eval (all 3 scripts) once system load
-   has genuinely settled (it was severely elevated — 16-22 — from a
-   post-reboot Spotlight re-index at the moment this file was written,
-   unrelated to this project's own processes) to get a clean, current
-   baseline before dispatching new work.
-3. Resume the standing "always 3 concurrent workers, always the biggest
-   real remaining gap first" model from there, per §4's own discipline.
+The current corpus goal is complete at 100% across takeoff outcomes,
+reference cells, and graph row-symbol outcomes. Future work should add new
+sets/documents and preserve this gate, not weaken the outcome model. Every
+future corpus gate remains forced-cold and reports takeoff, applicable
+installed rows, honest refusals, reference, graph, quantity delta, missing
+rows, and false additions together. Continue directly in the coordinator VM;
+do not dispatch workers or subagents.

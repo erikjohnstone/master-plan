@@ -1,0 +1,2269 @@
+{
+  "schema_version": 1,
+  "takeoff_id": "T-BAS-01",
+  "kind": "bas_points",
+  "compiler": "corpusTakeoff.compileBasTakeoff",
+  "sheet_count": 75,
+  "categories": {
+    "points_lists": {
+      "provenance": "Each extractable POINTS/DDC list title-scanned; AI/AO/BI/BO from MARK prefixes; title-only schematic lists excluded and disclosed.",
+      "tolerance": {
+        "count": 0,
+        "point_type": 0
+      },
+      "lists": [
+        {
+          "title": "POINTS LIST DOAH-TI",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+          "rows": 34,
+          "AI": 13,
+          "AO": 4,
+          "BI": 13,
+          "BO": 4,
+          "items": [
+            {
+              "tag": "AI01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                822.7199999999998,
+                3490.326,
+                857.038
+              ],
+              "description": "UOA RELATIVE HUMIDITY"
+            },
+            {
+              "tag": "AI02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                857.038,
+                3490.326,
+                891.5999999999999
+              ],
+              "description": "UOA TEMPERATURE"
+            },
+            {
+              "tag": "AI03",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                891.5999999999999,
+                3490.326,
+                926.1579999999999
+              ],
+              "description": "HHW VALVE POSITION (FEEDBACK)"
+            },
+            {
+              "tag": "AI04",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                926.1579999999999,
+                3490.326,
+                960.48
+              ],
+              "description": "HEATING COIL LAT"
+            },
+            {
+              "tag": "AI05",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                960.48,
+                3490.326,
+                995.038
+              ],
+              "description": "COOLING COIL LAT"
+            },
+            {
+              "tag": "AI06",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                995.038,
+                3490.326,
+                1029.6
+              ],
+              "description": "TOA TEMPERATURE"
+            },
+            {
+              "tag": "AI07",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1029.6,
+                3490.326,
+                1064.158
+              ],
+              "description": "TOA HUMIDITY"
+            },
+            {
+              "tag": "AI08",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1064.158,
+                3490.326,
+                1098.478
+              ],
+              "description": "TOA AIRFLOW"
+            },
+            {
+              "tag": "AI09",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1098.478,
+                3490.326,
+                1133.038
+              ],
+              "description": "CHW VALVE POSITION (FEEDBACK)"
+            },
+            {
+              "tag": "AI10",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1133.038,
+                3490.326,
+                1167.598
+              ],
+              "description": "FAN SPEED (FEEDBACK)"
+            },
+            {
+              "tag": "AI11",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1167.598,
+                3490.326,
+                1201.92
+              ],
+              "description": "TOA FAN DIFFERENTIAL PRESSURE"
+            },
+            {
+              "tag": "AI12",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1201.92,
+                3490.326,
+                1236.478
+              ],
+              "description": "REHEAT HHW VALVE POSITION (FEEDBACK)"
+            },
+            {
+              "tag": "AI13",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1236.478,
+                3490.326,
+                1271.038
+              ],
+              "description": "DOAH DISCHARGE TEMPERATURE"
+            },
+            {
+              "tag": "AO01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1339.92,
+                3490.326,
+                1374.48
+              ],
+              "description": "HHW VALVE CONTROL"
+            },
+            {
+              "tag": "AO02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1374.48,
+                3490.326,
+                1409.038
+              ],
+              "description": "CHW VALVE CONTROL"
+            },
+            {
+              "tag": "AO03",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1409.038,
+                3490.326,
+                1443.36
+              ],
+              "description": "FAN SPEED CONTROL"
+            },
+            {
+              "tag": "AO04",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1443.36,
+                3490.326,
+                1477.92
+              ],
+              "description": "REHEAT HHW VALVE CONTROL"
+            },
+            {
+              "tag": "BI01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1546.8,
+                3490.326,
+                1581.358
+              ],
+              "description": "MERV 8 UOA FILTER STATUS"
+            },
+            {
+              "tag": "BI02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1581.358,
+                3490.326,
+                1615.92
+              ],
+              "description": "MERV 13 UOA FILTER STATUS"
+            },
+            {
+              "tag": "BI03",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1615.92,
+                3490.326,
+                1650.238
+              ],
+              "description": "FREEZESTAT"
+            },
+            {
+              "tag": "BI04",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1650.238,
+                3490.326,
+                1684.8
+              ],
+              "description": "UOA DAMPER POSITION CLOSED (FEEDBACK)"
+            },
+            {
+              "tag": "BI05",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1684.8,
+                3490.326,
+                1719.358
+              ],
+              "description": "UOA DAMPER POSITION OPEN (FEEDBACK)"
+            },
+            {
+              "tag": "BI06",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1719.358,
+                3490.326,
+                1753.92
+              ],
+              "description": "HIGH LIMIT STATIC PRESSURE"
+            },
+            {
+              "tag": "BI07",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1753.92,
+                3490.326,
+                1788.238
+              ],
+              "description": "TREATED OA DAMPER POSITION CLOSED (FEEDBACK)"
+            },
+            {
+              "tag": "BI08",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1788.238,
+                3490.326,
+                1822.798
+              ],
+              "description": "TREATED OA DAMPER POSITION OPEN (FEEDBACK)"
+            },
+            {
+              "tag": "BI09",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1822.798,
+                3490.326,
+                1857.36
+              ],
+              "description": "HHWP-DOAH-T1 CIRCULATOR PUMP STATUS"
+            },
+            {
+              "tag": "BI10",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1857.36,
+                3490.326,
+                1891.68
+              ],
+              "description": "FAN VFD STATUS"
+            },
+            {
+              "tag": "BI11",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1891.68,
+                3490.326,
+                1926.24
+              ],
+              "description": "FAN VFD ALARM"
+            },
+            {
+              "tag": "BI12",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1926.24,
+                3490.326,
+                1960.8
+              ],
+              "description": "ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT"
+            },
+            {
+              "tag": "BI13",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                1960.8,
+                3490.326,
+                1995.36
+              ],
+              "description": "ATCT DOAH DDC RESET"
+            },
+            {
+              "tag": "BO01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                2064.2380000000003,
+                3490.326,
+                2098.8
+              ],
+              "description": "UOA DAMPER CONTROL"
+            },
+            {
+              "tag": "BO02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                2098.8,
+                3490.326,
+                2133.12
+              ],
+              "description": "TREATED OA DAMPER CONTROL"
+            },
+            {
+              "tag": "BO03",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                2133.12,
+                3490.326,
+                2167.68
+              ],
+              "description": "HHWP-DOAH-T1 CIRCULATOR PUMP ON/OFF"
+            },
+            {
+              "tag": "BO04",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+              "table_title": "POINTS LIST DOAH-TI",
+              "bbox_px": [
+                3297.85,
+                2167.68,
+                3490.326,
+                2202.2380000000003
+              ],
+              "description": "FAN START/STOP"
+            }
+          ]
+        },
+        {
+          "title": "POINTS LIST AHU-T1A/TIB",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "rows": 62,
+          "AI": 21,
+          "AO": 7,
+          "BI": 26,
+          "BO": 8,
+          "items": [
+            {
+              "tag": "AI01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                585.3560000000002,
+                3434.88,
+                619.9160000000002
+              ],
+              "description": "AHU-T1B HW VALVE POSITION (FEEDBACK)"
+            },
+            {
+              "tag": "AI02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                619.9160000000002,
+                3434.88,
+                654.4760000000001
+              ],
+              "description": "AHU-T1B SA TEMPERATURE"
+            },
+            {
+              "tag": "AI03",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                654.4760000000001,
+                3434.88,
+                689.0360000000001
+              ],
+              "description": "AHU-T1B SA FAN STATUS"
+            },
+            {
+              "tag": "AI04",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                689.0360000000001,
+                3434.88,
+                723.3560000000002
+              ],
+              "description": "AHU-T1B SA FAN AIRFLOW"
+            },
+            {
+              "tag": "AI05",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                723.3560000000002,
+                3434.88,
+                757.9180000000001
+              ],
+              "description": "AHU-T1B FAN SPEED (FEEDBACK)"
+            },
+            {
+              "tag": "AI06",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                757.9180000000001,
+                3434.88,
+                792.4780000000001
+              ],
+              "description": "MIN OA AIRFLOW"
+            },
+            {
+              "tag": "AI07",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                792.4780000000001,
+                3434.88,
+                826.7979999999998
+              ],
+              "description": "AHU-T1B CHW VALVE POSITION (FEEDBACK)"
+            },
+            {
+              "tag": "AI08",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                826.7979999999998,
+                3434.88,
+                861.3580000000002
+              ],
+              "description": "AHU-T1B CC DISCHARGE TEMPERATURE"
+            },
+            {
+              "tag": "AI09",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                861.3580000000002,
+                3434.88,
+                895.9180000000001
+              ],
+              "description": "AHU-T1B MA TEMPERATURE"
+            },
+            {
+              "tag": "AI10",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                895.9180000000001,
+                3434.88,
+                930.4760000000001
+              ],
+              "description": "AHU-T1A HW VALVE POSITION (FEEDBACK)"
+            },
+            {
+              "tag": "AI11",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                930.4760000000001,
+                3434.88,
+                964.7959999999998
+              ],
+              "description": "AHU-T1A SA TEMPERATURE"
+            },
+            {
+              "tag": "AI12",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                964.7959999999998,
+                3434.88,
+                999.3580000000002
+              ],
+              "description": "AHU-T1A SA FAN STATUS"
+            },
+            {
+              "tag": "AI13",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                999.3580000000002,
+                3434.88,
+                1033.9180000000001
+              ],
+              "description": "AHU-T1A SA FAN AIRFLOW"
+            },
+            {
+              "tag": "AI14",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1033.9180000000001,
+                3434.88,
+                1068.2379999999998
+              ],
+              "description": "AHU-T1A FAN SPEED (FEEDBACK)"
+            },
+            {
+              "tag": "AI15",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1068.2379999999998,
+                3434.88,
+                1102.7979999999998
+              ],
+              "description": "AHU-T1A CHW VALVE POSITION (FEEDBACK)"
+            },
+            {
+              "tag": "AI16",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1102.7979999999998,
+                3434.88,
+                1137.358
+              ],
+              "description": "AHU-T1A CC DISCHARGE TEMPERATURE"
+            },
+            {
+              "tag": "AI17",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1137.358,
+                3434.88,
+                1171.678
+              ],
+              "description": "AHU-T1A MA TEMPERATURE"
+            },
+            {
+              "tag": "AI18",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1171.678,
+                3434.88,
+                1206.238
+              ],
+              "description": "HIGH LIMIT HUMIDISTAT"
+            },
+            {
+              "tag": "AI19",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1206.238,
+                3434.88,
+                1240.798
+              ],
+              "description": "SPACE HUMIDITY"
+            },
+            {
+              "tag": "AI20",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1240.798,
+                3434.88,
+                1275.358
+              ],
+              "description": "SPACE THERMOSTAT"
+            },
+            {
+              "tag": "AI21",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1275.358,
+                3434.88,
+                1309.678
+              ],
+              "description": "HUMIDIFIER CONTROL"
+            },
+            {
+              "tag": "AO01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1378.798,
+                3434.88,
+                1413.118
+              ],
+              "description": "AHU-T1B HW VALVE CONTROL"
+            },
+            {
+              "tag": "AO02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1413.118,
+                3434.88,
+                1447.678
+              ],
+              "description": "AHU-T1B FAN SPEED CONTROL"
+            },
+            {
+              "tag": "AO03",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1447.678,
+                3434.88,
+                1482.238
+              ],
+              "description": "AHU-T1B CHW VALVE CONTROL"
+            },
+            {
+              "tag": "AO04",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1482.238,
+                3434.88,
+                1516.558
+              ],
+              "description": "AHU-T1A HW VALVE CONTROL"
+            },
+            {
+              "tag": "AO05",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1516.558,
+                3434.88,
+                1551.118
+              ],
+              "description": "AHU-T1A FAN SPEED CONTROL"
+            },
+            {
+              "tag": "AO06",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1551.118,
+                3434.88,
+                1585.678
+              ],
+              "description": "AHU-T1A CHW VALVE CONTROL"
+            },
+            {
+              "tag": "AO07",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1585.678,
+                3434.88,
+                1620.238
+              ],
+              "description": "HUMIDIFIER OUTPUT"
+            },
+            {
+              "tag": "BI01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1689.12,
+                3434.88,
+                1723.678
+              ],
+              "description": "AHU-T1B MERV 8 FILTER STATUS"
+            },
+            {
+              "tag": "BI02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1723.678,
+                3434.88,
+                1757.998
+              ],
+              "description": "AHU-T1B SA DUCT SMOKE DETECTOR"
+            },
+            {
+              "tag": "BI03",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1757.998,
+                3434.88,
+                1792.558
+              ],
+              "description": "AHU-T1B MERV 13 FILTER STATUS"
+            },
+            {
+              "tag": "BI04",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1792.558,
+                3434.88,
+                1827.118
+              ],
+              "description": "AHU-T1B VFD FAULT STATUS"
+            },
+            {
+              "tag": "BI05",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1827.118,
+                3434.88,
+                1861.438
+              ],
+              "description": "MINIMUM OA DAMPER POSITION CLOSED (FEEDBACK)"
+            },
+            {
+              "tag": "BI06",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1861.438,
+                3434.88,
+                1895.998
+              ],
+              "description": "MINIMUM OA DAMPER POSITION OPEN (FEEDBACK)"
+            },
+            {
+              "tag": "BI07",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1895.998,
+                3434.88,
+                1930.56
+              ],
+              "description": "REDUNDANT OA DAMPER POSITION CLOSED (FEEDBACK)"
+            },
+            {
+              "tag": "BI08",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1930.56,
+                3434.88,
+                1965.118
+              ],
+              "description": "REDUNDANT OA DAMPER POSITION OPEN (FEEDBACK)"
+            },
+            {
+              "tag": "BI09",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1965.118,
+                3434.88,
+                1999.438
+              ],
+              "description": "AHU-T1A MERV 8 FILTER STATUS"
+            },
+            {
+              "tag": "BI10",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                1999.438,
+                3434.88,
+                2033.998
+              ],
+              "description": "AHU-T1A SA DUCT SMOKE DETECTOR"
+            },
+            {
+              "tag": "BI11",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2033.998,
+                3434.88,
+                2068.558
+              ],
+              "description": "AHU-T1A MERV 13 FILTER STATUS"
+            },
+            {
+              "tag": "BI12",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2068.558,
+                3434.88,
+                2102.8779999999997
+              ],
+              "description": "AHU-T1A VFD FAULT STATUS"
+            },
+            {
+              "tag": "BI13",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2102.8779999999997,
+                3434.88,
+                2137.438
+              ],
+              "description": "AHU-T1A RA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)"
+            },
+            {
+              "tag": "BI14",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2137.438,
+                3434.88,
+                2172
+              ],
+              "description": "AHU-T1A RA ISOLATION DAMPER POSITION OPEN (FEEDBACK)"
+            },
+            {
+              "tag": "BI15",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2172,
+                3434.88,
+                2206.56
+              ],
+              "description": "AHU-T1B RA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)"
+            },
+            {
+              "tag": "BI16",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2206.56,
+                3434.88,
+                2240.88
+              ],
+              "description": "AHU-T1B RA ISOLATION DAMPER POSITION OPEN (FEEDBACK)"
+            },
+            {
+              "tag": "BI17",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2240.88,
+                3434.88,
+                2275.438
+              ],
+              "description": "AHU-T1B SA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)"
+            },
+            {
+              "tag": "BI18",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2275.438,
+                3434.88,
+                2309.998
+              ],
+              "description": "AHU-T1B SA ISOLATION DAMPER POSITION OPEN (FEEDBACK)"
+            },
+            {
+              "tag": "BI19",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2309.998,
+                3434.88,
+                2344.318
+              ],
+              "description": "AHU-T1A SA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)"
+            },
+            {
+              "tag": "BI20",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2344.318,
+                3434.88,
+                2378.88
+              ],
+              "description": "AHU-T1A SA ISOLATION DAMPER POSITION OPEN (FEEDBACK)"
+            },
+            {
+              "tag": "BI21",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2378.88,
+                3434.88,
+                2413.44
+              ],
+              "description": "ATFP EMERGENCY SHUTDOWN SWITCH"
+            },
+            {
+              "tag": "BI22",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2413.44,
+                3434.88,
+                2447.76
+              ],
+              "description": "AHU-T1A FREEZESTAT"
+            },
+            {
+              "tag": "BI23",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2447.76,
+                3434.88,
+                2482.32
+              ],
+              "description": "AHU-T1B FREEZESTAT"
+            },
+            {
+              "tag": "BI24",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2482.32,
+                3434.88,
+                2516.88
+              ],
+              "description": "ATCT AHU DDC RESET"
+            },
+            {
+              "tag": "BI25",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2516.88,
+                3434.88,
+                2551.438
+              ],
+              "description": "AHU-T1A HIGH LIMIT STATIC PRESSURE"
+            },
+            {
+              "tag": "BI26",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2551.438,
+                3434.88,
+                2585.758
+              ],
+              "description": "AHU-T1B HIGH LIMIT STATIC PRESSURE"
+            },
+            {
+              "tag": "BO01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2654.88,
+                3434.88,
+                2689.2
+              ],
+              "description": "AHU-T1B FAN START/STOP"
+            },
+            {
+              "tag": "BO02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2689.2,
+                3434.88,
+                2723.76
+              ],
+              "description": "MINIMUM OA DAMPER CONTROL"
+            },
+            {
+              "tag": "BO03",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2723.76,
+                3434.88,
+                2758.32
+              ],
+              "description": "REDUNDANT OA DAMPER CONTROL"
+            },
+            {
+              "tag": "BO04",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2758.32,
+                3434.88,
+                2792.64
+              ],
+              "description": "AHU-T1A FAN START/STOP"
+            },
+            {
+              "tag": "BO05",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2792.64,
+                3434.88,
+                2827.2
+              ],
+              "description": "AHU-T1A RA ISOLATION DAMPER CONTROL"
+            },
+            {
+              "tag": "BO06",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2827.2,
+                3434.88,
+                2861.76
+              ],
+              "description": "AHU-T1B RA ISOLATION DAMPER CONTROL"
+            },
+            {
+              "tag": "BO07",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2861.76,
+                3434.88,
+                2896.32
+              ],
+              "description": "AHU-T1B SA ISOLATION DAMPER CONTROL"
+            },
+            {
+              "tag": "BO08",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+              "table_title": "POINTS LIST AHU-T1A/TIB",
+              "bbox_px": [
+                3340.074,
+                2896.32,
+                3434.88,
+                2930.64
+              ],
+              "description": "AHU-T1A SA ISOLATION DAMPER CONTROL"
+            }
+          ]
+        },
+        {
+          "title": "FCU WITH COOLING COILS DDC POINTS LIST",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "rows": 9,
+          "AI": 3,
+          "AO": 1,
+          "BI": 4,
+          "BO": 1,
+          "items": [
+            {
+              "tag": "AI01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                798.24,
+                2237.52,
+                889.2,
+                2271.84
+              ],
+              "description": "SPACE TEMPERATURE"
+            },
+            {
+              "tag": "AI02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                798.24,
+                2271.84,
+                889.2,
+                2306.4
+              ],
+              "description": "CHW VALVE CONTROL"
+            },
+            {
+              "tag": "AI03",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                798.24,
+                2306.4,
+                889.2,
+                2370
+              ],
+              "description": "DISCHARGE AIR TEMPERATURE SENSOR"
+            },
+            {
+              "tag": "AO01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                798.24,
+                2438.88,
+                889.2,
+                2473.44
+              ],
+              "description": "CHW VALVE CONTROL"
+            },
+            {
+              "tag": "BI01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                798.24,
+                2542.32,
+                889.2,
+                2576.88
+              ],
+              "description": "FAN STATUS"
+            },
+            {
+              "tag": "BI02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                798.24,
+                2576.88,
+                889.2,
+                2640.48
+              ],
+              "description": "SECONDARY DRAIN PAN OVERFLOW SWITCH"
+            },
+            {
+              "tag": "BI03",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                798.24,
+                2640.48,
+                889.2,
+                2675.04
+              ],
+              "description": "DIRTY FILTER SWITCH"
+            },
+            {
+              "tag": "BI04",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                798.24,
+                2675.04,
+                889.2,
+                2709.36
+              ],
+              "description": "FCU DDC RESET"
+            },
+            {
+              "tag": "BO01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                798.24,
+                2778.48,
+                889.2,
+                2813.04
+              ],
+              "description": "FAN START/STOP"
+            }
+          ]
+        },
+        {
+          "title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "rows": 11,
+          "AI": 4,
+          "AO": 2,
+          "BI": 4,
+          "BO": 1,
+          "items": [
+            {
+              "tag": "AI01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                2400.96,
+                2263.68,
+                2477.28,
+                2298.24
+              ],
+              "description": "SPACE TEMPERATURE"
+            },
+            {
+              "tag": "AI02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                2400.96,
+                2298.24,
+                2477.28,
+                2332.56
+              ],
+              "description": "CHW VALVE CONTROL (FEEDBACK)"
+            },
+            {
+              "tag": "AI03",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                2400.96,
+                2332.56,
+                2477.28,
+                2367.12
+              ],
+              "description": "HHW VALVE CONTROL (FEEDBACK)"
+            },
+            {
+              "tag": "AI04",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                2400.96,
+                2367.12,
+                2477.28,
+                2401.68
+              ],
+              "description": "DISCHARGE AIR TEMPERATURE SENSOR"
+            },
+            {
+              "tag": "AO01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                2400.96,
+                2470.56,
+                2477.28,
+                2505.12
+              ],
+              "description": "CHW VALVE CONTROL"
+            },
+            {
+              "tag": "AO02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                2400.96,
+                2505.12,
+                2477.28,
+                2539.68
+              ],
+              "description": "HHW VALVE CONTROL"
+            },
+            {
+              "tag": "BI01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                2400.96,
+                2608.56,
+                2477.28,
+                2643.12
+              ],
+              "description": "SUPPLY FAN START/STOP"
+            },
+            {
+              "tag": "BI02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                2400.96,
+                2643.12,
+                2477.28,
+                2677.44
+              ],
+              "description": "DIRTY FILTER SWITCH"
+            },
+            {
+              "tag": "BI03",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                2400.96,
+                2677.44,
+                2477.28,
+                2712
+              ],
+              "description": "SECOUNDARY DRAIN PAN OVERFLOW SWITCH"
+            },
+            {
+              "tag": "BI04",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                2400.96,
+                2712,
+                2477.28,
+                2746.56
+              ],
+              "description": "FCU DDC RESET"
+            },
+            {
+              "tag": "BO01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+              "bbox_px": [
+                2400.96,
+                2815.44,
+                2477.28,
+                2850
+              ],
+              "description": "SUPPLY FAN START/STOP"
+            }
+          ]
+        },
+        {
+          "title": "UNIT HEATER DDC POINTS LIST",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "rows": 6,
+          "AI": 2,
+          "AO": 1,
+          "BI": 2,
+          "BO": 1,
+          "items": [
+            {
+              "tag": "AI01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "UNIT HEATER DDC POINTS LIST",
+              "bbox_px": [
+                3493.444,
+                2433.12,
+                3578.64,
+                2467.44
+              ],
+              "description": "SPACE TEMPERATURE"
+            },
+            {
+              "tag": "AI02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "UNIT HEATER DDC POINTS LIST",
+              "bbox_px": [
+                3493.444,
+                2467.44,
+                3578.64,
+                2502.002
+              ],
+              "description": "HHW VALVE CONTROL"
+            },
+            {
+              "tag": "AO01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "UNIT HEATER DDC POINTS LIST",
+              "bbox_px": [
+                3493.444,
+                2571.12,
+                3578.64,
+                2605.44
+              ],
+              "description": "HHW VALVE CONTROL"
+            },
+            {
+              "tag": "BI01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "UNIT HEATER DDC POINTS LIST",
+              "bbox_px": [
+                3493.444,
+                2674.56,
+                3578.64,
+                2708.88
+              ],
+              "description": "FAN STATUS"
+            },
+            {
+              "tag": "BI02",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "UNIT HEATER DDC POINTS LIST",
+              "bbox_px": [
+                3493.444,
+                2708.88,
+                3578.64,
+                2743.44
+              ],
+              "description": "CUH/UH DDC RESET"
+            },
+            {
+              "tag": "BO01",
+              "quantity": 1,
+              "unit": "EA",
+              "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+              "table_title": "UNIT HEATER DDC POINTS LIST",
+              "bbox_px": [
+                3493.444,
+                2812.32,
+                3578.64,
+                2846.88
+              ],
+              "description": "FAN START/STOP"
+            }
+          ]
+        }
+      ],
+      "totals": {
+        "rows": 122,
+        "AI": 43,
+        "AO": 15,
+        "BI": 49,
+        "BO": 15
+      }
+    }
+  },
+  "totals": {
+    "lists": 5,
+    "rows": 122,
+    "AI": 43,
+    "AO": 15,
+    "BI": 49,
+    "BO": 15
+  },
+  "page_accounting": {
+    "sheet_count": 75,
+    "pages_accounted_for": 75,
+    "empty_pages": 72,
+    "pages": [
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf",
+        "sheet_number": "M-001",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#2",
+        "sheet_number": "M-002",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#3",
+        "sheet_number": "MS101",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#4",
+        "sheet_number": "MS102",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#5",
+        "sheet_number": "MH100",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#6",
+        "sheet_number": "MH101",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#7",
+        "sheet_number": "MH102",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#8",
+        "sheet_number": "MH103",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#9",
+        "sheet_number": "MH104",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#10",
+        "sheet_number": "MH105",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#11",
+        "sheet_number": "MH106",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#12",
+        "sheet_number": "MH111",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#13",
+        "sheet_number": "MH112",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#14",
+        "sheet_number": "MH121",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#15",
+        "sheet_number": "MH122",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#16",
+        "sheet_number": "MH123",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#17",
+        "sheet_number": "MP100",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#18",
+        "sheet_number": "MP101",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#19",
+        "sheet_number": "MP102",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#20",
+        "sheet_number": "MP103",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#21",
+        "sheet_number": "MP104",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#22",
+        "sheet_number": "MP111",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#23",
+        "sheet_number": "MP121",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#24",
+        "sheet_number": "MP122",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#25",
+        "sheet_number": "MP123",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#26",
+        "sheet_number": "M-301",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#27",
+        "sheet_number": "M-311",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#28",
+        "sheet_number": "M-321",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#29",
+        "sheet_number": "M-401",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#30",
+        "sheet_number": "M-411",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#31",
+        "sheet_number": "M-421",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#32",
+        "sheet_number": "M-501",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#33",
+        "sheet_number": "M-502",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#34",
+        "sheet_number": "M-503",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#35",
+        "sheet_number": "M-504",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#36",
+        "sheet_number": "M-505",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#37",
+        "sheet_number": "M-506",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#38",
+        "sheet_number": "M-507",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#39",
+        "sheet_number": "M-508",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#40",
+        "sheet_number": "M-509",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#41",
+        "sheet_number": "M-510",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+        "sheet_number": "M-601",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#43",
+        "sheet_number": "M-602",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+        "sheet_number": "M-603",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#45",
+        "sheet_number": "M-611",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#46",
+        "sheet_number": "M-612",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+        "sheet_number": "M-613",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#48",
+        "sheet_number": "M-621",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+        "sheet_number": "M-622",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#50",
+        "sheet_number": "MI700",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#51",
+        "sheet_number": "MI701",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#52",
+        "sheet_number": "MI702",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#53",
+        "sheet_number": "MI703",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#54",
+        "sheet_number": "MI704",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#55",
+        "sheet_number": "MI705",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#56",
+        "sheet_number": "MI710",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#57",
+        "sheet_number": "MI711",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#58",
+        "sheet_number": "MI712",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#59",
+        "sheet_number": "MI713",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#60",
+        "sheet_number": "MI720",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#61",
+        "sheet_number": "MI721",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#62",
+        "sheet_number": "MI722",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#63",
+        "sheet_number": "MI723",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+        "sheet_number": "MI730",
+        "status": "has_bas_points_list",
+        "titles": [
+          "POINTS LIST DOAH-TI"
+        ]
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+        "sheet_number": "MI731",
+        "status": "has_bas_points_list",
+        "titles": [
+          "POINTS LIST AHU-T1A/TIB"
+        ]
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#66",
+        "sheet_number": "MI732",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+        "sheet_number": "MI740",
+        "status": "has_bas_points_list",
+        "titles": [
+          "FCU WITH COOLING COILS DDC POINTS LIST",
+          "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+          "UNIT HEATER DDC POINTS LIST"
+        ]
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#68",
+        "sheet_number": "MI741",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#69",
+        "sheet_number": "MI742",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#70",
+        "sheet_number": "MI743",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#71",
+        "sheet_number": "MI744",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#72",
+        "sheet_number": "M-801",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#73",
+        "sheet_number": "M-802",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#74",
+        "sheet_number": "M-803",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#75",
+        "sheet_number": "M-804",
+        "status": "empty_for_bas_points_lists",
+        "titles": []
+      }
+    ]
+  },
+  "exclusions": [
+    "Title-only Air Ops / MITRACON schematic points lists (non-extractable typed rows)",
+    "HVAC equipment schedules (counted under T-HVAC-01)"
+  ],
+  "prompt_frozen": "Do a complete BAS / DDC points takeoff of this set. For every extractable points-list or DDC points-list family on these drawings, give the list title, sheet, row count, and AI/AO/BI/BO breakdown. Then give overall AI/AO/BI/BO totals and the overall row total across those lists. Cite each list title and enough MARK cells to spot-check. Disclose any points-list titles that are present but not extractable as typed rows — do not invent counts for them. Account for every page; mark sheets with no points/DDC lists as empty for this takeoff.",
+  "run": 5,
+  "cold": true,
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf"
+}

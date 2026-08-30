@@ -10,10 +10,77 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, type GraphSpan, type SheetSpans, type SheetGraph } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, type GraphSpan, type SheetSpans, type SheetGraph, type TableBound, type ScheduleTable } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
+
+test("preferLastOverprintedText keeps the later visible CAD value", () => {
+  const spans: GraphSpan[] = [
+    { str: "57.1", x: 10, y: 10, w: 20, h: 10 },
+    { str: "324.0", x: 9, y: 10, w: 25, h: 10 },
+  ];
+  assert.equal(preferLastOverprintedText("324.057.1", [0, 0, 40, 30], spans), "324.0");
+});
+
+test("preferLastOverprintedText preserves ordinary adjacent cell text", () => {
+  const spans: GraphSpan[] = [
+    { str: "FIELD", x: 0, y: 10, w: 25, h: 10 },
+    { str: "ADJUSTABLE", x: 30, y: 10, w: 50, h: 10 },
+  ];
+  assert.equal(preferLastOverprintedText("FIELD ADJUSTABLE", [0, 0, 90, 30], spans), "FIELD ADJUSTABLE");
+});
+
+test("snapCellBboxesToSourceSpans remaps ODL boxes onto the painted row band", () => {
+  const spans: GraphSpan[] = [
+    { str: "RTU-1", x: 100, y: 40, w: 40, h: 12 },
+    { str: "CARRIER", x: 200, y: 40, w: 50, h: 12 },
+    { str: "1650", x: 300, y: 40, w: 30, h: 12 },
+    { str: "CARRIER", x: 200, y: 200, w: 50, h: 12 }, // sibling row / other schedule
+    { str: "1650", x: 900, y: 400, w: 30, h: 12 }, // off-row distractor
+  ];
+  const table: ScheduleTable = {
+    kind: "equipment",
+    sheet: "S#1",
+    title: { sheet: "S#1", text: "PACKAGED ROOFTOP", bbox: [0, 0, 10, 200] },
+    headers: ["EQUIP NO", "MANUFACTURER", "SUPPLY AIR (CFM)"],
+    rows: [{
+      key: "RTU-1",
+      sheet: "S#1",
+      cells: {
+        "EQUIP NO": { text: "RTU-1", bbox: [500, 0, 520, 80] },
+        MANUFACTURER: { text: "CARRIER", bbox: [500, 80, 520, 160] },
+        "SUPPLY AIR (CFM)": { text: "1650", bbox: [500, 160, 520, 240] },
+      },
+    }],
+    region: [490, 0, 530, 250],
+  };
+  const snapped = snapCellBboxesToSourceSpans(table, spans);
+  assert.deepEqual(snapped.rows[0].cells["EQUIP NO"].bbox, [100, 40, 140, 52]);
+  assert.deepEqual(snapped.rows[0].cells.MANUFACTURER.bbox, [200, 40, 250, 52]);
+  assert.deepEqual(snapped.rows[0].cells["SUPPLY AIR (CFM)"].bbox, [300, 40, 330, 52]);
+});
+
+test("promoteLeadingEngineeringUnits moves a stranded pressure unit into its header", () => {
+  const rows: TableRow[] = [
+    { key: "A-1", sheet: "S", cells: { "WATER MAX PD": { text: "FT. H2O 16.60", bbox: [0, 0, 1, 1] as [number, number, number, number] } } },
+    { key: "A-2", sheet: "S", cells: { "WATER MAX PD": { text: "10.00", bbox: [0, 1, 1, 2] as [number, number, number, number] } } },
+  ];
+  const headers = promoteLeadingEngineeringUnits(["TAG", "WATER MAX PD"], rows);
+  assert.deepEqual(headers, ["TAG", "WATER MAX PD FT. H2O"]);
+  assert.equal(rows[0].cells["WATER MAX PD FT. H2O"].text, "16.60");
+  assert.equal(rows[1].cells["WATER MAX PD FT. H2O"].text, "10.00");
+  assert.equal(rows[0].cells["WATER MAX PD"], undefined);
+});
+
+test("promoteLeadingEngineeringUnits leaves per-row units and prose untouched", () => {
+  const rows: TableRow[] = [
+    { key: "A-1", sheet: "S", cells: { PRESSURE: { text: "FT. H2O 16.60", bbox: [0, 0, 1, 1] as [number, number, number, number] } } },
+    { key: "A-2", sheet: "S", cells: { PRESSURE: { text: "FT. H2O 10.00", bbox: [0, 1, 1, 2] as [number, number, number, number] } } },
+  ];
+  assert.deepEqual(promoteLeadingEngineeringUnits(["PRESSURE"], rows), ["PRESSURE"]);
+  assert.equal(rows[0].cells.PRESSURE.text, "FT. H2O 16.60");
+});
 
 // ── the synthetic set: a plan sheet + a schedule sheet ──────────────────────
 const planSheet: SheetSpans = {
@@ -460,6 +527,30 @@ test("rotated headers: a quarter-turn header band still anchors the table", () =
   if (res.status === "resolved") {
     assert.equal(res.finishes.find((f) => f.surface === "FLOOR")!.definition?.cells.MANUFACTURER, "EXAMPLECO");
   }
+});
+
+test("an entire quarter-turned equipment schedule is normalized and mapped back", () => {
+  const vertical = (str: string, rowX: number, columnY: number): GraphSpan =>
+    ({ str, x: rowX, y: columnY, w: 8, h: Math.max(12, str.length * 5), rot: 90 });
+  const sheet: SheetSpans = {
+    key: "quarter-turned.pdf#1",
+    spans: [
+      vertical("AIR TERMINAL BOX SCHEDULE", 340, 20),
+      vertical("TAG", 300, 20), vertical("MODEL", 300, 160),
+      vertical("VOLTAGE", 300, 260), vertical("GPM", 300, 340),
+      vertical("VAV-1", 280, 20), vertical("VCEF", 280, 160),
+      vertical("120", 280, 260), vertical("10", 280, 340),
+      vertical("VAV-2", 260, 20), vertical("VCEF", 260, 160),
+      vertical("120", 260, 260), vertical("20", 260, 340),
+    ],
+  };
+  const table = extractAllQuarterTurnedTables(sheet)[0];
+  assert.ok(table);
+  assert.equal(table.title?.text, "AIR TERMINAL BOX SCHEDULE");
+  assert.deepEqual(table.rows.map((row) => row.key), ["VAV-1", "VAV-2"]);
+  assert.equal(table.rows[1].cells.GPM.text, "20");
+  assert.ok(table.rows[0].cells.MODEL.bbox[0] < table.rows[0].cells.MODEL.bbox[2],
+    "restored evidence is a valid source-space box");
 });
 
 // ── multi-building keys: room 134 in Building A ≠ 134 in Building B ─────────
@@ -1072,7 +1163,7 @@ test("a lone unexplained token never mints a column — the sub-tier needs a par
 // MATERIAL | COMMENTS) extracted as 54 "finish" rows, so a finish code
 // colliding with a door mark would chain to a DOOR — a confidently wrong
 // product in the bid. Refused by title, and the drop is named.
-import { isNonFinishSchedule, isReferenceOrSpecTable } from "../src/lib/sheetgraph.ts";
+import { isMepEquipmentSchedule, isNonFinishSchedule, isReferenceOrSpecTable } from "../src/lib/sheetgraph.ts";
 
 test("isNonFinishSchedule: other families refuse, anything naming FINISH or MATERIAL is kept", () => {
   for (const t of ["DOOR SCHEDULE", "DOOR AND WINDOW SCHEDULE", "PARTITION SCHEDULE", "EQUIPMENT SCHEDULE", "LIGHTING SCHEDULE"]) {
@@ -1092,10 +1183,35 @@ test("isNonFinishSchedule: real MEP-equipment families refuse too (ledger item 2
   // the moment it was tried — the real Bessemer sample's own "FAN SCHEDULE"
   // is a legitimate finish-kind table (diffuser/grille/register), not an
   // HVAC fan-equipment one, and the word alone can't tell the two apart.
-  for (const t of ["CONDENSING HOT WATER BOILER SCHEDULE", "HUMIDIFIER SCHEDULE", "HOT WATER REHEAT COIL SCHEDULE", "CHILLER SCHEDULE", "CONDENSATE PUMP SCHEDULE", "AHU SCHEDULE", "VAV SCHEDULE"]) {
+  for (const t of ["CONDENSING HOT WATER BOILER SCHEDULE", "HUMIDIFIER SCHEDULE", "HOT WATER REHEAT COIL SCHEDULE", "CHILLER SCHEDULE", "CONDENSATE PUMP SCHEDULE", "AHU SCHEDULE", "VAV SCHEDULE", "EXPANSION AND COMPRESSION TANK SCHEDULE"]) {
     assert.equal(isNonFinishSchedule(t), true, t);
   }
   assert.equal(isNonFinishSchedule("FAN SCHEDULE"), false, "FAN stays out of the guard on purpose — see this test's own comment");
+});
+
+test("tank schedule classification survives a concatenated extracted title", () => {
+  assert.equal(isMepEquipmentSchedule("EXPANSION AND COMPRESSION TANK SCHEDULE"), true);
+  assert.equal(isMepEquipmentSchedule("EPANSIONANDCOPRESSIONTANKSCHEDULE"), true);
+  assert.equal(isNonFinishSchedule("EPANSIONANDCOPRESSIONTANKSCHEDULE"), true);
+  assert.equal(isMepEquipmentSchedule("TANK MATERIAL SCHEDULE"), true, "equipment-family classification is independent of finish/material exclusion");
+  assert.equal(isNonFinishSchedule("TANK MATERIAL SCHEDULE"), false, "an explicit MATERIAL title remains protected");
+});
+
+test("finish→equipment reclassification keeps a sparse tank schedule in the graph", () => {
+  const sched: SheetSpans = {
+    key: "tank.pdf#1",
+    sheet_number: "M-602",
+    spans: [
+      sp("EXPANSION AND COMPRESSION TANK SCHEDULE", 100, 20),
+      sp("MARK", 100, 50), sp("SERVICE", 220, 50), sp("MANUFACTURER", 380, 50), sp("MODEL", 540, 50), sp("REMARKS", 680, 50),
+      sp("ET-1", 100, 75), sp("CHILLED WATER", 220, 75), sp("WESSELS", 380, 75), sp("NLA-35", 540, 75), sp("1,2", 680, 75),
+    ],
+  };
+  const graph = buildSheetGraph([sched]);
+  const tank = graph.tables.find((table) => table.rows.some((row) => row.key === "ET-1"));
+  assert.ok(tank, "ET-1 row survives finish-family exclusion");
+  assert.equal(tank.kind, "equipment");
+  assert.ok(graph.notes.some((note) => /EXPANSION AND COMPRESSION TANK SCHEDULE/.test(note) && /reclassified as equipment-kind/.test(note)));
 });
 
 test("a DOOR SCHEDULE never becomes a finish table — and the drop is NAMED", () => {
@@ -1767,6 +1883,25 @@ test("equipment extraction: a bare vocabulary hit on the very next row reads as 
   };
   const tables = extractAllTables(sched, "equipment");
   assert.ok(!tables.some((t) => t.title?.text === "FAN SCHEDULE"), "Fan Schedule not pulled into equipment kind by a neighboring table's own bare required word");
+});
+
+test("equipment extraction: data starts after every consumed deep header tier", () => {
+  const sched: SheetSpans = {
+    key: "deep-chiller.pdf#1", sheet_number: "M7.1",
+    spans: [
+      sp("CHILLER SCHEDULE (ELECTRIC AIR-COOLED)", 100, 10),
+      sp("TAG", 0, 40), sp("TYPE", 180, 40), sp("GPM", 260, 40), sp("MANUFACTURER", 360, 40), sp("REMARKS", 760, 40),
+      sp("MINIMUM", 100, 50), sp("DESIGN", 260, 50), sp("STARTER", 500, 50), sp("MAXIMUM", 640, 50),
+      sp("NET", 100, 60), sp("WATER", 260, 60), sp("TYPE", 500, 60), sp("KW", 640, 60),
+      sp("COOLING", 100, 70), sp("FLOW", 260, 70), sp("VOLTAGE", 500, 70), sp("PHASE", 640, 70),
+      sp("TONS", 100, 80), sp("GPM", 260, 80),
+      sp("CH-1", 0, 110), sp("AIR COOLED", 180, 110), sp("128.5", 260, 110), sp("ACME", 360, 110), sp("460", 500, 110), sp("3", 640, 110), sp("1", 760, 110),
+    ],
+  };
+  const table = extractAllTables(sched, "equipment").find((candidate) => candidate.rows.some((row) => row.key === "CH-1"));
+  assert.ok(table, "the real keyed row is reached after five deep sub-header lines");
+  assert.equal(table!.title?.text, "CHILLER SCHEDULE (ELECTRIC AIR-COOLED)");
+  assert.deepEqual(table!.rows.map((row) => row.key), ["CH-1"]);
 });
 
 // ── accuracy-hardening plan Phase 3 (ledger items 6/7) ──────────────────────
@@ -2593,6 +2728,33 @@ test("reference kind: a real, vocabulary-free schedule table extracts correctly 
   assert.equal(r2.cells["SYSTEM TYPE"]?.text, "EXHAUST DUCTS WITHIN 10 FEET OF EXTERIOR OPENINGS");
   assert.equal(r2.cells["INSULATION TYPE"]?.text, "D-1, D-2");
   assert.equal(r2.cells["INSULATION OR LINER THICKNESS"]?.text, "1\"");
+});
+
+test("reference kind: button subrows do not corrupt their spanning control-station row", () => {
+  const spans: GraphSpan[] = [
+    rh("ELECTRICAL SCHEDULES", 900, -60, 220),
+    rh("LIGHTING CONTROL STATIONS", 0, 0, 280),
+    rh("CONTROL STATION", 0, 35, 150), rh("ZONES", 250, 35, 60), rh("BUTTON", 480, 35, 70),
+    rh("DESIGNATION", 20, 55, 110), rh("CONTROLLED", 230, 55, 100), rh("NUMBER", 480, 55, 75),
+    rh("FUNCTION", 710, 55, 100), rh("LABEL", 950, 55, 60), rh("NOTES", 1080, 55, 60),
+    rh("$OS", 0, 90, 35), rh("ALL", 250, 90, 35), rh("1", 500, 90, 10),
+    // Deliberately starts well left of the centered FUNCTION header, exactly
+    // like the real wide, left-aligned column.
+    rh("ALL ON", 555, 90, 90), rh("ON", 950, 90, 30),
+    // The merged designation cell spans this second physical button row.
+    rh("2", 500, 115, 10), rh("ALL OFF", 555, 115, 100), rh("OFF", 950, 115, 35),
+    rh("$OSD", 0, 145, 45), rh("ALL", 250, 145, 35), rh("1", 500, 145, 10),
+    rh("ALL ON/HOLD DIM UP", 555, 145, 220), rh("UP", 950, 145, 30),
+  ];
+  const sheet: SheetSpans = {
+    key: "controls.pdf#1", sheet_number: "E601", spans,
+    segs: [0, 75, 1140, 75],
+  };
+  const tab = buildSheetGraph([sheet]).tables.find((t) => t.title?.text === "LIGHTING CONTROL STATIONS");
+  assert.ok(tab);
+  const os = tab!.rows.find((row) => row.key === "$OS");
+  assert.equal(os?.cells["BUTTON NUMBER"]?.text, "1");
+  assert.equal(os?.cells.FUNCTION?.text, "ALL ON");
 });
 
 test("reference kind: scoped to schedule-role sheets — the identical real table on a PLAN sheet is not extracted", () => {

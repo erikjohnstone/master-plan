@@ -135,8 +135,9 @@ export interface ODLRunResult { tables: ODLTable[]; error?: string }
  * of this project already holds to. */
 export async function runOpenDataLoaderPages(pdfPath: string, pages: number[]): Promise<ODLRunResult> {
   if (!pages.length) return { tables: [] };
+  const bypassCache = process.env.OPENTAKEOFF_ODL_NO_CACHE === "1";
   const cacheKey = await odlCacheKey(pdfPath, pages);
-  if (cacheKey) {
+  if (cacheKey && !bypassCache) {
     try {
       const hit = await cacache.get(CACHE_DIR, cacheKey);
       return JSON.parse(hit.data.toString("utf8"));
@@ -171,7 +172,7 @@ export async function runOpenDataLoaderPages(pdfPath: string, pages: number[]): 
     };
     walk(raw);
     const result: ODLRunResult = { tables };
-    if (cacheKey) await cacache.put(CACHE_DIR, cacheKey, JSON.stringify(result)).catch(() => {});
+    if (cacheKey && !bypassCache) await cacache.put(CACHE_DIR, cacheKey, JSON.stringify(result)).catch(() => {});
     return result;
   } catch (err) {
     return { tables: [], error: err instanceof Error ? err.message : String(err) };

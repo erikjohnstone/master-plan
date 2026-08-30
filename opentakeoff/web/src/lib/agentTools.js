@@ -47,6 +47,7 @@
 //   sheetGraph(): Promise<SheetGraph>                    // whole-set schedule tables/tags (Phase 1: eager, no open sheet required)
 //   resolveTag(tag): Promise<ResolveResult>
 //   findSchedule(kind): Promise<FindScheduleResult>
+//   compileCorpusTakeoff(kind, opts): Promise<CompiledTakeoff | { error }>
 //   exportTakeoff(): { downloaded, condition_count } | { error }   // real browser download
 //   exportReport(): { downloaded, condition_count } | { error }    // real browser download
 //   countMarks(marks|undefined): Promise<CountMarksResult>
@@ -123,6 +124,39 @@ export function validateToolArgs(schema, args) {
   return null;
 }
 
+/** Models often pass null / numbers / single-element arrays for optional string
+ *  filters (query_table.row_key, find_text.sheet, …). Coerce before validate so
+ *  those calls succeed instead of burning the step cap on "must be a string". */
+export function coerceStringTypedArgs(schema, args) {
+  if (!schema?.properties || args == null || typeOf(args) !== "object") return args;
+  const out = { ...args };
+  for (const [key, spec] of Object.entries(schema.properties)) {
+    if (spec?.type !== "string" || !(key in out)) continue;
+    let v = out[key];
+    if (v == null || v === "") { delete out[key]; continue; }
+    if (typeof v === "string") continue;
+    if (typeof v === "number" || typeof v === "boolean") { out[key] = String(v); continue; }
+    if (Array.isArray(v)) {
+      const first = v.find((item) => item != null && String(item).trim() !== "");
+      if (first == null) { delete out[key]; continue; }
+      if (typeof first === "object") {
+        const nested = first.text ?? first.value ?? first.key ?? first.q;
+        if (nested == null || String(nested).trim() === "") { delete out[key]; continue; }
+        out[key] = String(nested);
+      } else {
+        out[key] = String(first);
+      }
+      continue;
+    }
+    if (typeof v === "object") {
+      const nested = v.text ?? v.value ?? v.key ?? v.q;
+      if (nested == null || String(nested).trim() === "") { delete out[key]; continue; }
+      out[key] = String(nested);
+    }
+  }
+  return out;
+}
+
 // Normalized region rect — the shared sub-schema. All agent coordinates are
 // normalized 0..1 against the sheet (render-scale-free, same frame as
 // verts_norm), so nothing the agent says depends on raster resolution.
@@ -164,6 +198,20 @@ export const AGENT_TOOL_DEFS = [
       type: "object",
       properties: { sheet: { type: "string" }, region: REGION_SCHEMA },
       required: ["sheet", "region"],
+    },
+  },
+  {
+    name: "query_table",
+    description: "Query extracted table cells across the whole loaded set with normalized source bboxes. Filter by table-title substring, exact row key, header substring, or cell_contains for compound relationships. Omit column to return every cited cell in the matching row.",
+    input_schema: {
+      type: "object",
+      properties: {
+        title: { type: "string" },
+        row_key: { type: "string" },
+        column: { type: "string" },
+        cell_contains: { type: "string" },
+      },
+      required: [],
     },
   },
   {
@@ -422,6 +470,25 @@ export const AGENT_TOOL_DEFS = [
     },
   },
   {
+    name: "compile_corpus_takeoff",
+    description: "PRIMARY tool for a COMPLETE HVAC or BAS takeoff of the loaded set. kind hvac_equipment (T-HVAC-01) or bas_points (T-BAS-01). Returns deterministic category/list counts, totals, exclusions, and empty-page accounting (same Session+ODL path as MCP). Opens TakeoffDataPanel with the finished takeoff. Prefer this over crawling find_schedule/query_table family-by-family when the goal asks for a complete set takeoff. Not for installed drawing counts (use sweep_schedule_row). download true (default) also downloads the workbook.",
+    input_schema: {
+      type: "object",
+      properties: {
+        kind: {
+          type: "string",
+          enum: ["hvac_equipment", "bas_points", "T-HVAC-01", "T-BAS-01"],
+          description: "Which takeoff to compile.",
+        },
+        download: {
+          type: "boolean",
+          description: "If true (default), download the compiled workbook in the browser.",
+        },
+      },
+      required: ["kind"],
+    },
+  },
+  {
     name: "export_takeoff",
     description: "Export the current committed takeoff (all accepted shapes, not pending proposals) as a CSV — per-condition quantities with waste applied. Triggers a real file download in the estimator's browser; the tool result only confirms it happened. Refuses if nothing is committed yet.",
     input_schema: { type: "object", properties: {}, required: [] },
@@ -461,16 +528,16 @@ export const AGENT_TOOL_DEFS = [
   // convention — MCP's equivalents (session.ts) take image px.
   {
     name: "find_text",
-    description: "LOCATE a known string on a sheet — the complement to read_sheet_text (which returns what a region SAYS; this finds WHERE a string you already know sits). Case-insensitive substring match against each positioned text run. Whole-set aware — the sheet does not need to be open as a tab (unlike read_sheet_text/view_region). Optionally restrict to a region; results cap at limit (default 200), with count/truncated telling you exactly how much a tighter region or higher limit would recover.",
+    description: "LOCATE a known string — the complement to read_sheet_text (which returns what a region SAYS; this finds WHERE a string you already know sits). Case-insensitive substring match against each positioned text run. Pass sheet to search one page, or omit sheet to search the entire loaded set (each hit then carries its own sheet). Whole-set aware — sheets do not need to be open as tabs. Each hit includes bbox_px (production image pixels) for highlight_citation, plus normalized bbox/at for UI. Optionally restrict to a region on a single sheet; results cap at limit (default 200), with count/truncated/next_move telling you what to do next on zero hits.",
     input_schema: {
       type: "object",
       properties: {
-        sheet: { type: "string", description: "Sheet key, e.g. 'plan.pdf' or 'plan.pdf#2' — from list_sheets or sheet_graph." },
+        sheet: { type: "string", description: "Sheet to search (e.g. 'plan.pdf#2'); omit to search the entire loaded set." },
         q: { type: "string", description: "Text to find — a room number ('134'), a label fragment ('RECEPTION'), a schedule tag ('CPT-1')." },
         region: REGION_SCHEMA,
         limit: { type: "number", minimum: 1, maximum: 500, description: "Cap on hits returned (default 200)." },
       },
-      required: ["sheet", "q"],
+      required: ["q"],
     },
   },
   {
@@ -540,6 +607,23 @@ export const AGENT_TOOL_DEFS = [
         r: { type: "number", description: "Bubble radius, normalized to sheet width; omit for the canvas default." },
       },
       required: ["sheet", "type"],
+    },
+  },
+  {
+    name: "highlight_citation",
+    description: "Paint an exact production-API citation bbox on the real blueprint as a highlight markup (no auto-navigation). Pass the cited sheet and bbox_px unchanged (from query_table cells, find_text hit.bbox_px, or sweep_schedule_row citations). The Agent panel shows a clickable source card the estimator uses to jump there on demand — pass row_key, column, table_title, and value whenever known so the card title is human-readable (e.g. VAV-1 · CFM = 350), not a naked fragment. Call this for every factual answer backed by cited evidence. Do not draw overlay words on top of the cell value.",
+    input_schema: {
+      type: "object",
+      properties: {
+        sheet: { type: "string" },
+        bbox_px: { type: "array", items: { type: "number" } },
+        text: { type: "string", description: "Fallback short label if structured fields are unavailable." },
+        row_key: { type: "string", description: "Equipment/MARK tag for this cell when known (e.g. VAV-1)." },
+        column: { type: "string", description: "Schedule column/header for this cell when known (e.g. CFM, GPM)." },
+        table_title: { type: "string", description: "Schedule title when known (e.g. VOLUME CONTROL BOX SCHEDULE)." },
+        value: { type: "string", description: "Exact cell value being cited when known." },
+      },
+      required: ["sheet", "bbox_px"],
     },
   },
   {
@@ -718,6 +802,7 @@ function stageValidatedShapes(ctx, rawShapes) {
 export async function executeAgentTool(ctx, name, args) {
   const def = DEFS_BY_NAME[name];
   if (!def) return { error: `Unknown tool: ${name}. Available: ${AGENT_TOOL_DEFS.map((d) => d.name).join(", ")}.` };
+  args = coerceStringTypedArgs(def.input_schema, args);
   const bad = validateToolArgs(def.input_schema, args);
   if (bad) return { error: `Invalid arguments for ${name}: ${bad}.` };
   try {
@@ -754,6 +839,8 @@ export async function executeAgentTool(ctx, name, args) {
             : `Sheet ${args.sheet} isn't open on the canvas, so only the whole-table fallback ran — and it found no match either. Try find_schedule({kind:"room"|"finish"|"equipment"}) or sheet_graph, or open the sheet as a tab and retry for the region-based parse.`,
         };
       }
+      case "query_table":
+        return await ctx.queryTable(args);
       case "view_region": {
         if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
         const img = await ctx.viewRegion(args.sheet, clampRegion(args.region));
@@ -873,6 +960,15 @@ export async function executeAgentTool(ctx, name, args) {
         return await ctx.findSchedule(kind);
       }
 
+      case "compile_corpus_takeoff": {
+        const kind = (args.kind || "").trim();
+        if (!kind) return { error: "Pass kind: \"hvac_equipment\" / \"T-HVAC-01\" or \"bas_points\" / \"T-BAS-01\"." };
+        if (typeof ctx.compileCorpusTakeoff !== "function") {
+          return { error: "compile_corpus_takeoff is not wired in this session." };
+        }
+        return await ctx.compileCorpusTakeoff(kind, { download: args.download !== false });
+      }
+
       case "export_takeoff":
         return ctx.exportTakeoff();
 
@@ -929,6 +1025,8 @@ export async function executeAgentTool(ctx, name, args) {
           at: args.at, target: args.target, rect: args.rect, from: args.from, to: args.to, r: args.r,
         });
       }
+      case "highlight_citation":
+        return await ctx.highlightCitation(args);
 
       case "list_annotations":
         return ctx.listAnnotations(args.sheet, args.condition);

@@ -1,0 +1,39 @@
+{
+  "takeoff_id": "T-HVAC-01",
+  "run": 1,
+  "surface": "takeoff_ui",
+  "pass": true,
+  "elapsed_ms": 27841,
+  "totals": {
+    "categories": 22,
+    "items": 396
+  },
+  "gates": {
+    "1": {
+      "name": "Quantity",
+      "ok": true,
+      "failures": []
+    },
+    "2": {
+      "name": "Cite resolvability",
+      "ok": true,
+      "failures": []
+    },
+    "3": {
+      "name": "Cite groundedness (vector)",
+      "ok": true,
+      "failures": []
+    },
+    "4": {
+      "name": "Completeness",
+      "ok": true,
+      "failures": []
+    },
+    "5": {
+      "name": "Interrogation",
+      "ok": true,
+      "failures": []
+    }
+  },
+  "failures": []
+}

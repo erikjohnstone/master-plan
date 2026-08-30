@@ -17,12 +17,18 @@ import {
   exportMarkedPdfOutput, listShapesOutput, deriveBaseOutput, deriveTransitionsOutput, importTakeoffOutput, applyRulesOutput, cutOutOutput,
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
   markVerdictOutput, deleteVerdictOutput,
-  sheetGraphOutput, resolveTagOutput, findScheduleOutput, sweepScheduleRowOutput, countMarksOutput,
+  sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
 import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
 import { importTakeoff } from "./importing.ts";
+import { buildPlanSetTakeoff } from "./takeoff.ts";
+import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "./corpusTakeoff.mjs";
+import {
+  VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
+} from "../../web/src/lib/hvacTaxonomy.ts";
+import { queryTable } from "../../web/src/lib/queryTable.mjs";
 
 // The coordinate contract, stated on every tool so any agent reading any one
 // description knows the space it is working in.
@@ -257,6 +263,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       rotations: z.boolean().default(true).describe("Also match 90/180/270-rotated markers"),
       mirror: z.boolean().default(true).describe("Also match mirrored markers"),
       tolerance_px: z.number().positive().max(20).default(2).describe("Endpoint match tolerance in image px (default 2 — CAD jitter, not drift)"),
+      tagged_only: z.boolean().default(false).describe("Search every sheet carrying the exact tag and skip sheets that cannot contribute a tagged count; faster, but unlabeled near-match auditing is explicitly incomplete"),
     },
     outputSchema: sweepScheduleRowOutput,
   }, run("sweep_schedule_row", (a) => session.sweepScheduleRow(a.tag, {
@@ -264,6 +271,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     rotations: a.rotations,
     mirror: a.mirror,
     tolerancePx: a.tolerance_px,
+    evaluationFast: a.tagged_only,
   })));
 
   server.registerTool("trace_connectivity", {
@@ -564,6 +572,150 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     outputSchema: findScheduleOutput,
   }, run("find_schedule", ({ kind }) => session.findSchedule(kind)));
 
+  server.registerTool("query_table", {
+    description: `Query actual extracted table cells across the loaded plan set, with source coordinates on every answer. Use title for a case-insensitive table-title substring, row_key for an exact schedule mark/key (compound rows such as R1/E1 answer for either mark), column for a case-insensitive header substring, cell_value for an exact cell value, and cell_contains when a relationship is encoded inside a compound value (for example, equipment CH-A1 inside valve mark CV-CH-A1). Combine filters to narrow the result. At least one filter is required. A column filter narrows cells, but row.all_cells still returns the complete matching row with exact bboxes so multi-field questions need one call. Every returned table region, title, and cell carries its source-sheet bbox so the answer can be audited with view_sheet. This reads all deterministic table kinds—not only reference tables and not only equipment schedules—and never invokes an LLM. ${COORDS}`,
+    inputSchema: {
+      title: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : String(v)),
+        z.string().min(1).optional(),
+      ).describe('Table-title substring, e.g. "CONTROL VALVE SCHEDULE"'),
+      row_key: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : String(v)),
+        z.string().min(1).optional(),
+      ).describe('Exact row key/mark, e.g. "CV-HHW-BP-M" or "RTU-01"'),
+      column: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : String(v)),
+        z.string().min(1).optional(),
+      ).describe('Header substring; only matching columns are returned, e.g. "MCA"'),
+      cell_value: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : String(v)),
+        z.string().min(1).optional(),
+      ).describe('Exact cell text anywhere in the row, case-insensitive; use this to join tables through non-key columns, e.g. UNIT MARK "CH-A1"'),
+      cell_contains: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : String(v)),
+        z.string().min(1).optional(),
+      ).describe('Case-insensitive text contained in any cell; use for explicit compound relationships such as "CH-A1" inside "CV-CH-A1"'),
+      limit: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : Number(v)),
+        z.number().int().min(1).max(1000).default(100),
+      ).describe("Maximum matching rows returned"),
+    },
+    outputSchema: queryTableOutput,
+  }, run("query_table", async ({ title, row_key, column, cell_value, cell_contains, limit }) => {
+    const graph = await session.graphForPipeline();
+    const result = queryTable(graph, { title, row_key, column, cell_value, cell_contains, limit });
+    if (result.error) throw new UserError(result.error);
+    return result;
+  }));
+
+  server.registerTool("project_takeoff", {
+    description: `Run the complete deterministic takeoff across every loaded plan and schedule in one call. This is the production answer to requests such as "do a butterfly valve takeoff": pass equipment_types:["Butterfly valve"] for an exact taxonomy subtype, categories:["valve"] for the entire trade family, or omit both for all recognized equipment. Default detail is "compact" (stats + per-item tag/type/qty/status/schedule sheet + failures + tables_seen) so agent context stays usable on large sets; pass detail:"full" only when you need every schedule_row cell dump and extracted_tables. Installed counts come only from corroborated plan labels/geometry; structurally unavailable evidence returns a typed refusal. For pure schedule MARK counts by family, prefer query_table on the titled equipment schedules — do not invent extra units from vibration-isolation or other cross-reference tables. Load every file in the bid set first with load_plan + merge:true. Read-only; does not commit canvas shapes. ${COORDS}`,
+    inputSchema: {
+      categories: z.array(z.string()).optional().describe('Taxonomy families, e.g. ["valve","damper"]. Omit for every recognized family.'),
+      equipment_types: z.array(z.string()).optional().describe('Exact taxonomy component names, case-insensitive, e.g. ["Butterfly valve"]. Narrows both tagged schedule and untagged legend results.'),
+      detail: z.enum(["compact", "full"]).optional().describe('Response size. "compact" (default) omits bulky schedule_row dumps and extracted/reference table bodies. "full" returns the complete payload.'),
+    },
+    outputSchema: projectTakeoffOutput,
+  }, run("project_takeoff", async ({ categories, equipment_types, detail }) => {
+    const allComponents = [
+      ...VALVES, ...ACTUATORS, ...DAMPERS, ...AIR_TERMINALS, ...MAJOR_EQUIPMENT, ...SENSORS,
+    ];
+    const requested: HvacComponent[] | null = equipment_types ? equipment_types.map((name: string): HvacComponent => {
+      const found = allComponents.find((component) => component.name.toLowerCase() === name.trim().toLowerCase());
+      if (!found) throw new UserError(`Unknown equipment type "${name}". Use an exact taxonomy name.`);
+      return found;
+    }) : null;
+    const effectiveCategories = categories ?? (requested ? [...new Set(requested.map((component) => component.category))] : null);
+    const result = await buildPlanSetTakeoff(session, { categories: effectiveCategories });
+    const names = requested ? new Set(requested.map((component) => component.name)) : null;
+    const items = names ? result.items.filter((item) => item.equipment_type && names.has(item.equipment_type)) : result.items;
+    const legendItems = names ? result.legend_items.filter((item) => item.equipment_type && names.has(item.equipment_type)) : result.legend_items;
+    const retainedTags = new Set([...items, ...legendItems].map((item) => item.tag));
+    const statsFor = (rows: typeof items) => ({
+      schedule_rows_total: rows.length,
+      resolved: rows.filter((item) => item.status === "resolved").length,
+      refused: rows.filter((item) => item.status === "refused").length,
+      errored: rows.filter((item) => item.status === "error").length,
+      total_drawn_instances: rows.reduce((sum, item) => sum + item.quantity, 0),
+    });
+    const stats = statsFor(items);
+    const legendStats = statsFor(legendItems);
+    const full = {
+      ...result,
+      family_filter: effectiveCategories,
+      equipment_type_filter: requested?.map((component) => component.name) ?? null,
+      items,
+      legend_items: legendItems,
+      failures: names ? result.failures.filter((failure) => retainedTags.has(failure.tag)) : result.failures,
+      stats,
+      legend_stats: {
+        glyphs_seen: names ? legendItems.length : result.legend_stats.glyphs_seen,
+        glyphs_matched: names ? legendItems.length : result.legend_stats.glyphs_matched,
+        resolved: legendStats.resolved,
+        refused: legendStats.refused,
+        errored: legendStats.errored,
+        total_drawn_instances: legendStats.total_drawn_instances,
+      },
+    };
+    if (detail === "full") return full;
+    // compact (default): keep schema-shaped items, drop multi-hundred-KB dumps.
+    // Do not add undeclared output fields — MCP structuredContent is strict.
+    const slimItem = (item: (typeof items)[number]) => ({
+      ...item,
+      schedule_row: null,
+      drawing_locations: (item.drawing_locations || []).slice(0, 3),
+    });
+    return {
+      ...full,
+      items: items.map(slimItem),
+      legend_items: legendItems.map(slimItem),
+      extracted_tables: [],
+      reference_tables: [],
+    };
+  }));
+
+  server.registerTool("compile_corpus_takeoff", {
+    description: `Compile a full HVAC schedule-quantity or BAS points-list takeoff from the loaded plan set's extractable tables — unique scheduled MARK/VALVE MARK tags per equipment family (T-HVAC-01) or extractable POINTS/DDC list rows with AI/AO/BI/BO (T-BAS-01). This is schedule/list quantity, not installed drawing counts (use project_takeoff for those). Returns categories, item cites with bboxes, page accounting (empty pages explicit), and exclusions. Pass path to write JSON; pass export_path to also write CSV tabs (+ XLSX when available) under that directory. Read-only; does not commit canvas shapes. ${COORDS}`,
+    inputSchema: {
+      kind: z.enum(["hvac_equipment", "bas_points", "T-HVAC-01", "T-BAS-01"]).describe('Which corpus takeoff to compile'),
+      detail: z.enum(["compact", "full"]).optional().describe('"compact" (default) omits per-page page_accounting.pages; "full" includes every sheet'),
+      path: z.string().optional().describe("Optional JSON file path for the compiled takeoff"),
+      export_path: z.string().optional().describe("Optional directory for CSV/XLSX workbook tabs"),
+      overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
+    },
+    outputSchema: compileCorpusTakeoffOutput,
+  }, run("compile_corpus_takeoff", async ({ kind, detail, path: outPath, export_path: exportPath, overwrite }) => {
+    const graph = await session.graphForPipeline();
+    const compiled = compileCorpusTakeoff(session, graph, kind);
+    if (detail !== "full") {
+      compiled.page_accounting = {
+        ...compiled.page_accounting,
+        pages: undefined,
+      };
+    }
+    if (outPath) {
+      await assertWritable(outPath, "json", overwrite);
+      const { writeFile, mkdir } = await import("node:fs/promises");
+      await writeFile(outPath, JSON.stringify(compiled, null, 2));
+      compiled.path = outPath;
+    } else {
+      compiled.path = null;
+    }
+    if (exportPath) {
+      const { mkdir, writeFile } = await import("node:fs/promises");
+      await mkdir(exportPath, { recursive: true });
+      const sheets = takeoffWorkbookSheets(compiled);
+      for (const sheet of sheets) {
+        const safe = sheet.name.replace(/[^\w.-]+/g, "_").slice(0, 40);
+        await writeFile(`${exportPath.replace(/\/$/, "")}/${safe}.csv`, rowsToCsv(sheet.rows));
+      }
+      compiled.export_path = exportPath;
+    } else {
+      compiled.export_path = null;
+    }
+    return compiled;
+  }));
+
   server.registerTool("read_sheet_text", {
     description: `The sheet's text with positions — items [{str, x, y}] in image px plus the joined text. Optionally restrict to a region {x0, y0, x1, y1}. Use it to read title blocks, room labels, finish schedules, and scale notes. ${COORDS}`,
     inputSchema: {
@@ -574,16 +726,30 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   }, run("read_sheet_text", (a) => session.readSheetText(a.sheet, a.region)));
 
   server.registerTool("find_text", {
-    description: `LOCATE a known string on a sheet — the complement to read_sheet_text (which returns what a region SAYS; this finds WHERE a string you already know sits). Case-insensitive substring match against each pdf.js text run, so a room label split across runs ("OFFICE" then "134" as separate items) needs a find_text call per fragment, or read_sheet_text over a region to see the whole thing joined. Every hit's center feeds straight into one_click as the seed — the locate-then-trace workflow: find_text the room number, one_click at (or just past) its center. Optionally restrict to a region {x0, y0, x1, y1}; results cap at limit (default 200), with count/truncated telling you exactly how much a tighter region or higher limit would recover. ${COORDS}`,
+    description: `LOCATE a known string — the complement to read_sheet_text (which returns what a region SAYS; this finds WHERE a string you already know sits). Case-insensitive substring match against each pdf.js text run, so a room label split across runs ("OFFICE" then "134" as separate items) needs a find_text call per fragment, or read_sheet_text over a region to see the whole thing joined. Pass sheet to search one page, or omit sheet to search the entire loaded set (each hit then carries its own sheet). Every hit's center feeds straight into one_click as the seed — the locate-then-trace workflow: find_text the room number, one_click at (or just past) its center. Optionally restrict to a region {x0, y0, x1, y1} on a single sheet; results cap at limit (default 200), with count/truncated telling you exactly how much a tighter region or higher limit would recover. ${COORDS}`,
     inputSchema: {
-      sheet: z.string(),
+      sheet: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : String(v)),
+        z.string().optional(),
+      ).describe("Sheet to search; omit to search the entire loaded set"),
       q: z.string().min(1).describe("Text to find — a room number ('134'), a label fragment ('RECEPTION'), a schedule tag ('CPT-1')"),
       region: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }).optional()
-        .describe("Rect in image px (origin top-left, y down); omit for the full sheet"),
+        .describe("Rect in image px (origin top-left, y down); requires sheet; omit for the full sheet or set-wide search"),
       limit: z.number().int().min(1).max(2000).default(200).describe("Max hits returned"),
     },
     outputSchema: findTextOutput,
-  }, run("find_text", (a) => session.findText(a.sheet, a.q, { region: a.region, limit: a.limit })));
+  }, run("find_text", (a) => {
+    const result = session.findText(a.sheet, a.q, { region: a.region, limit: a.limit });
+    if (result.count === 0) {
+      return {
+        ...result,
+        next_move: a.sheet
+          ? "Zero hits on that sheet. Omit sheet to search the loaded set, or try a shorter distinctive fragment from the user question—not a field name."
+          : "Zero hits across the loaded set. Try a shorter distinctive fragment from the user question—not a field name—or refuse if the text is not present.",
+      };
+    }
+    return result;
+  }));
 
   server.registerTool("view_sheet", {
     description: `SEE the sheet — render the page (or a crop of it) to a PNG image. This is your eyes on the plan, so CROP, DON'T SQUINT: the render downsamples to the px budget (≤2000 long side), which on an E-size sheet is ~4 sheet pixels per returned pixel — a full-sheet render finds WHERE things are, and only a tight region crop can tell you what the linework and labels actually say. Never audit a trace or read a dimension off a full-sheet render. region is in image px — the same space as every other tool — so a feature at pixel (ix, iy) of the returned image sits at x = region_x0 + ix × (region_x1 − region_x0) / img_w (same for y), and those coordinates go straight into one_click, measure_polygon, or read_sheet_text. overlay:true burns the session's committed shapes into the render (human-affirmed ink solid red, unreviewed machine shapes dashed blue) — render again after committing to verify your geometry landed where you intended, and sanity-check what you see: a fixture-sized ring where a room should be means the seed landed inside a stall or casework; an outsized ring means the flood escaped through an opening. To MEASURE rather than guess, pass grid: a calibrated measuring grid is burned in — thin lines every 1 ft, heavy blue every 5 ft, foot labels along the crop edges, feet counted from the crop's top-left corner. Count grid cells between walls exactly like an estimator scaling a plan; never derive a dimension by eye when the grid can give it to you. grid "auto" uses the sheet's set scale; before set_scale, pass the drawing scale read off the title block as inches-per-foot — "1/4" for a 1/4" = 1'-0" plan, "3/16", "0.25". marks (#297) burns DISCLOSURE layers into the render, so what a reply names, the picture shows: pass the coordinate lists a tool disclosed — question: withheld placements (orange ?-circles), struck: rejections a counter-example or luminance gate refused (magenta struck ×), ring: reference points like the sweep's own seed (violet double ring). The colors sit deliberately off the common CAD pens so they cannot vanish into color-plotted work. An overlay audit without marks shows only committed ink — the validation trap where 37 disclosed near-misses read as "it missed them". Rendering needs the optional native canvas (@napi-rs/canvas); where it isn't installed this tool errors cleanly and every other tool still works. ${COORDS}`,

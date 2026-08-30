@@ -307,6 +307,52 @@ class EndpointGrid {
 const segLen = (segs: number[], i: number): number =>
   Math.hypot(segs[i * 4 + 2] - segs[i * 4], segs[i * 4 + 3] - segs[i * 4 + 1]);
 
+/** Immutable-sheet acceleration shared by every fingerprint swept against the
+ * same extracted geometry. A project takeoff can call matchSymbol hundreds of
+ * times per plan sheet; rebuilding the length histogram and endpoint hash for
+ * every equipment row is identical O(sheet segments) work each time.
+ *
+ * Geometry arrays are immutable after extraction and identity-stable in both
+ * the browser and MCP Session. Weak keys release the index with the geometry,
+ * so this adds no document-lifetime leak. Endpoint grids depend on tolerance
+ * (cross-scale sweeps can change it); cap variants per sheet so pathological
+ * scale metadata cannot grow an unbounded cache. */
+interface SheetMatchIndex {
+  lengths: Float64Array;
+  lenBucket: Map<number, number[]>;
+  endpointGrids: Map<number, EndpointGrid>;
+}
+
+const MAX_TOLERANCE_INDEXES_PER_SHEET = 8;
+const sheetMatchIndexes = new WeakMap<number[], SheetMatchIndex>();
+
+function sheetMatchIndex(segs: number[], tol: number): SheetMatchIndex & { grid: EndpointGrid } {
+  let cached = sheetMatchIndexes.get(segs);
+  if (!cached) {
+    const n = segs.length >> 2;
+    const lengths = new Float64Array(n);
+    const lenBucket = new Map<number, number[]>();
+    for (let i = 0; i < n; i++) {
+      const length = segLen(segs, i);
+      lengths[i] = length;
+      const bucket = Math.round(length);
+      const entries = lenBucket.get(bucket);
+      if (entries) entries.push(i);
+      else lenBucket.set(bucket, [i]);
+    }
+    cached = { lengths, lenBucket, endpointGrids: new Map() };
+    sheetMatchIndexes.set(segs, cached);
+  }
+  let grid = cached.endpointGrids.get(tol);
+  if (!grid) {
+    grid = new EndpointGrid(segs, tol);
+    if (cached.endpointGrids.size < MAX_TOLERANCE_INDEXES_PER_SHEET) {
+      cached.endpointGrids.set(tol, grid);
+    }
+  }
+  return { ...cached, grid };
+}
+
 /** A symbol's fingerprint, detached from the sheet it was marqueed on:
  * centroid-relative segments plus the diagnostics every consumer reports.
  * Pure data — matchSymbol can run it against any sheet's segments. */
@@ -380,6 +426,16 @@ export interface MatchOptions extends SweepOptions {
    * whose footprint carries more than this fraction of unmatched extra
    * linework demotes to withheld with the variant reason. */
   extraMax?: number;
+  /** Optional exact search windows for callers whose result can only use
+   * placements near known points (schedule-row evaluation is one such
+   * caller: a counted marker must claim that row's own drawn tag).
+   *
+   * This is a work bound, not a scoring heuristic. Candidate centroids
+   * outside every window are omitted before scoring; candidates inside are
+   * generated and scored identically to an unrestricted sweep. Normal
+   * interactive symbol_sweep calls leave this unset and retain the complete
+   * whole-sheet search. */
+  candidateRegions?: Array<{ center: Point; radius: number }>;
 }
 
 /** A fingerprint resized by a stated ratio, for matching against a sheet drawn
@@ -430,13 +486,18 @@ export function scaleFingerprint(fp: SymbolFingerprint, k: number): SymbolFinger
  * to their length-weighted centroid. Throws the same instructive refusals
  * sweepSymbols always has (empty marquee, region-sized marquee). */
 export function fingerprintSymbol(segs: number[], seedRect: [Point, Point], lum?: Uint8Array): SymbolFingerprint {
-  const n = segs.length >> 2;
   const rx0 = Math.min(seedRect[0][0], seedRect[1][0]), rx1 = Math.max(seedRect[0][0], seedRect[1][0]);
   const ry0 = Math.min(seedRect[0][1], seedRect[1][1]), ry1 = Math.max(seedRect[0][1], seedRect[1][1]);
 
   const inside = (x: number, y: number): boolean => x >= rx0 && x <= rx1 && y >= ry0 && y <= ry1;
   const seedIdx: number[] = [];
-  for (let i = 0; i < n; i++) {
+  // A fully-contained segment necessarily has an endpoint in one of the
+  // rectangle's endpoint-index cells. Query that immutable sheet index
+  // instead of rescanning 100k+ segments for every pad/anchor attempt in a
+  // schedule-row evaluation. Sort to retain the original segment-order
+  // fingerprint exactly.
+  const candidates = [...sheetMatchIndex(segs, SWEEP_TOL_PX).grid.nearRect(rx0, ry0, rx1, ry1)].sort((a, b) => a - b);
+  for (const i of candidates) {
     if (inside(segs[i * 4], segs[i * 4 + 1]) && inside(segs[i * 4 + 2], segs[i * 4 + 3]) && segLen(segs, i) >= MIN_SEG_LEN) {
       seedIdx.push(i);
     }
@@ -769,21 +830,55 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   const { rel, totalLen } = fpS;
 
   // ── 2. candidates ──────────────────────────────────────────────────────────
-  // Sheet-wide length histogram (bucket = round(len)) for anchor rarity and
-  // the per-anchor candidate walk. Deterministic: plain arrays, sorted scans.
-  const lenBucket = new Map<number, number[]>();
-  for (let i = 0; i < n; i++) {
-    const b = Math.round(segLen(segs, i));
-    const a = lenBucket.get(b);
-    if (a) a.push(i); else lenBucket.set(b, [i]);
+  // Sheet-wide immutable indexes are shared across every schedule-row sweep
+  // in this document; see sheetMatchIndex's lifetime and tolerance contract.
+  const { lengths, lenBucket, grid } = sheetMatchIndex(segs, tol);
+  const regions = opts.candidateRegions?.filter((r) =>
+    Number.isFinite(r.center[0]) && Number.isFinite(r.center[1]) && Number.isFinite(r.radius) && r.radius >= 0);
+  // If a candidate centroid is inside a requested region, every one of its
+  // anchor endpoints must be inside this expanded box. Querying the endpoint
+  // index up front avoids walking the sheet-wide length bucket for every
+  // anchor while remaining complete for all centroids the caller requested.
+  let regionSegments: Set<number> | null = null;
+  if (regions?.length) {
+    regionSegments = new Set<number>();
+    let maxRelRadius = 0;
+    for (const r of rel) {
+      maxRelRadius = Math.max(maxRelRadius, Math.hypot(r[0], r[1]), Math.hypot(r[2], r[3]));
+    }
+    for (const region of regions) {
+      const reach = region.radius + maxRelRadius + 2 * tol;
+      for (const i of grid.nearRect(
+        region.center[0] - reach, region.center[1] - reach,
+        region.center[0] + reach, region.center[1] + reach,
+      )) regionSegments.add(i);
+    }
   }
+  let focusedLenBucket: Map<number, number[]> | null = null;
+  if (regionSegments) {
+    focusedLenBucket = new Map<number, number[]>();
+    for (const i of regionSegments) {
+      const bucket = Math.round(lengths[i]);
+      const entries = focusedLenBucket.get(bucket);
+      if (entries) entries.push(i);
+      else focusedLenBucket.set(bucket, [i]);
+    }
+  }
+  const activeLenBucket = focusedLenBucket ?? lenBucket;
+  const insideRequestedRegion = (x: number, y: number): boolean =>
+    !regions?.length || regions.some((r) => {
+      const dx = x - r.center[0], dy = y - r.center[1];
+      return dx * dx + dy * dy <= r.radius * r.radius;
+    });
   const bucketBand = (L: number): number[] => {
     // every sheet segment with |len − L| ≤ 2·tol (both endpoints off by tol
     // can stretch/shrink the drawn length by up to 2·tol)
     const out: number[] = [];
     for (let b = Math.floor(L - 2 * tol); b <= Math.ceil(L + 2 * tol); b++) {
-      const a = lenBucket.get(b);
-      if (a) for (const i of a) if (Math.abs(segLen(segs, i) - L) <= 2 * tol) out.push(i);
+      const a = activeLenBucket.get(b);
+      if (a) for (const i of a) {
+        if (Math.abs(lengths[i] - L) <= 2 * tol) out.push(i);
+      }
     }
     return out;
   };
@@ -821,6 +916,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
           const c2x = qx - bx, c2y = qy - by;
           if (Math.abs(c1x - c2x) > 2 * tol || Math.abs(c1y - c2y) > 2 * tol) continue;
           const tx = (c1x + c2x) / 2, ty = (c1y + c2y) / 2;
+          if (!insideRequestedRegion(tx, ty)) continue;
           const key = `${xi}:${Math.round(tx / quant)}:${Math.round(ty / quant)}`;
           if (seen.has(key)) continue;
           seen.add(key);
@@ -838,7 +934,6 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   const dropped = proposals.length - considered;
 
   // ── 3. score ───────────────────────────────────────────────────────────────
-  const grid = new EndpointGrid(segs, tol);
   const scratch: number[] = [];
   const tol2 = tol * tol;
   const near = (x1: number, y1: number, x2: number, y2: number): boolean =>
@@ -1307,6 +1402,35 @@ export interface TagOcc {
  * span type. */
 export interface FlatSpan { str: string; x0: number; y0: number; x1: number; y1: number }
 
+/**
+ * Read an explicit drafting multiplier attached to one tag callout.
+ * "TYP 8" means the tagged symbol represents eight installed instances.
+ * The annotation must be a standalone span immediately above or below the
+ * tag and horizontally aligned with it; unrelated plan notes are ignored.
+ */
+export function typicalCountMultiplier(
+  spans: FlatSpan[],
+  tagBox: [number, number, number, number],
+): number {
+  const [x0, y0, x1, y1] = tagBox;
+  const tagCx = (x0 + x1) / 2;
+  const tagH = Math.max(1, y1 - y0);
+  for (const span of spans) {
+    const match = span.str.trim().match(/^TYP(?:ICAL)?\.?\s*(?:X\s*)?(\d{1,3})$/i);
+    if (!match) continue;
+    const count = Number(match[1]);
+    if (!Number.isInteger(count) || count < 2 || count > 100) continue;
+    const spanCx = (span.x0 + span.x1) / 2;
+    const spanH = Math.max(1, span.y1 - span.y0);
+    const verticalGap = Math.max(0, span.y0 - y1, y0 - span.y1);
+    const horizontalOverlap = Math.min(x1, span.x1) - Math.max(x0, span.x0);
+    const aligned = horizontalOverlap >= 0
+      || Math.abs(spanCx - tagCx) <= Math.max(x1 - x0, span.x1 - span.x0) * 0.75;
+    if (aligned && verticalGap <= Math.max(tagH, spanH) * 1.5) return count;
+  }
+  return 1;
+}
+
 /** A single span LONGER than the key — the schedule's own bare key with more
  * text appended in the SAME PDF text run (a circuit/panel reference, an
  * inverter tag, …), never split across separate spans at all. Real,
@@ -1358,6 +1482,50 @@ export function compoundTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   return out;
 }
 
+/**
+ * Recover the common two-run form of a one-hyphen tag when the PDF omits
+ * the printed hyphen from text extraction ("SCHWP" + "M1"). Both sides
+ * must exactly equal the key's two components and sit adjacently on one
+ * baseline; this never performs a fuzzy prefix chain.
+ */
+export function splitHyphenTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
+  const parts = key.trim().toUpperCase().split("-");
+  // Structural scope: long equipment-family stem plus an alphanumeric
+  // unit suffix (SCHWP-M1, PCHWP-MT1). Short generic tags such as TP-2 or
+  // US-1 already use fragmentedTagOcc's proven conservative path; admitting
+  // them here recreates dense plumbing-sheet cross-joins.
+  if (parts.length !== 2 || parts[0].length < 5
+    || !/[A-Z]/.test(parts[1]) || !/\d/.test(parts[1])) return [];
+  const upper = (value: string) => value.trim().toUpperCase();
+  const out: TagOcc[] = [];
+  for (const left of spans.filter((span) => upper(span.str) === parts[0])) {
+    const h = Math.max(left.y1 - left.y0, 6);
+    const right = spans
+      .filter((span) =>
+        upper(span.str) === parts[1]
+        && (
+          (Math.abs(span.y0 - left.y0) <= h * 0.4
+            && span.x0 >= left.x1 - 1
+            && span.x0 - left.x1 <= h * 2)
+          // Rotated/stacked pump tags often extract the unit suffix on the
+          // line immediately above or below the long family stem.
+          || (Math.abs((span.x0 + span.x1) / 2 - (left.x0 + left.x1) / 2) <= h * 4
+            && Math.max(0, span.y0 - left.y1, left.y0 - span.y1) <= h * 2)
+        ))
+      .sort((a, b) =>
+        Math.hypot(a.x0 - left.x1, a.y0 - left.y0)
+        - Math.hypot(b.x0 - left.x1, b.y0 - left.y0))[0];
+    if (!right) continue;
+    out.push({
+      cx: (left.x0 + right.x1) / 2,
+      cy: (Math.min(left.y0, right.y0) + Math.max(left.y1, right.y1)) / 2,
+      h: Math.max(left.y1, right.y1) - Math.min(left.y0, right.y0),
+      bbox: [left.x0, Math.min(left.y0, right.y0), right.x1, Math.max(left.y1, right.y1)],
+    });
+  }
+  return out;
+}
+
 /** sweep_schedule_row's own tag-occurrence match (`occOf` in both
  * session.ts and TakeoffCanvas.jsx) requires the FULL tag text to appear as
  * ONE literal span — but a real drawn tag is routinely split across
@@ -1384,7 +1552,9 @@ export function fragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   const stripHy = (s: string) => s.replace(/-/g, "");
   const targetStripped = stripHy(key);
   if (!targetStripped) return [];
-  const upper = (s: string) => s.trim().toUpperCase();
+  // Parenthesized gang counts belong to the placement callout, not the
+  // schedule mark itself: "(6) LD" + "-" + "1" is one LD-1 occurrence.
+  const upper = (s: string) => s.trim().toUpperCase().replace(/^\(\d+\)\s*/, "");
   const out: TagOcc[] = [];
   const starts = spans.filter((sp) => {
     const t = upper(sp.str);
@@ -1414,6 +1584,58 @@ export function fragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
     if (ok) out.push({ cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, h: Math.max(y1 - y0, 6), bbox: [x0, y0, x1, y1] });
   }
   return out;
+}
+
+/**
+ * Complete missed same-row fragments only after four ordinary occurrences
+ * prove this page's family convention. The legacy extractor intentionally
+ * keeps PDF content-stream order; dense labels can put an overlapping room
+ * word before the adjacent "-" or suffix. Under a four-hit quorum, retry
+ * with nearest viable continuations while preserving every prefix check.
+ */
+export function familyQuorumFragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
+  const base = fragmentedTagOcc(spans, key);
+  if (base.length < 4) return base;
+  const stripHy = (s: string) => s.replace(/-/g, "");
+  const target = stripHy(key);
+  const upper = (s: string) => s.trim().toUpperCase().replace(/^\(\d+\)\s*/, "");
+  const recovered: TagOcc[] = [];
+  for (const start of spans) {
+    let text = upper(start.str);
+    if (!text || text.length >= key.length || !target.startsWith(stripHy(text))) continue;
+    let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
+    let cur = start;
+    const used = new Set<FlatSpan>([start]);
+    for (let guard = 0; stripHy(text).length < target.length && guard < 4; guard++) {
+      const h = Math.max(cur.y1 - cur.y0, 6);
+      const candidates = spans.filter((span) => {
+        if (used.has(span)) return false;
+        const candidate = text + upper(span.str);
+        if (!target.startsWith(stripHy(candidate))) return false;
+        return Math.abs(span.y0 - cur.y0) < h * 0.4
+          && span.x0 >= cur.x0 - 1
+          && span.x0 - cur.x1 < h * 1.5;
+      }).sort((a, b) => Math.abs(a.x0 - cur.x1) - Math.abs(b.x0 - cur.x1));
+      const next = candidates[0];
+      if (!next) break;
+      used.add(next);
+      text += upper(next.str);
+      x0 = Math.min(x0, next.x0); y0 = Math.min(y0, next.y0);
+      x1 = Math.max(x1, next.x1); y1 = Math.max(y1, next.y1);
+      cur = next;
+    }
+    if (stripHy(text) === target) {
+      recovered.push({ cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, h: Math.max(y1 - y0, 6), bbox: [x0, y0, x1, y1] });
+    }
+  }
+  const merged = [...base];
+  for (const occurrence of recovered) {
+    if (!merged.some((existing) =>
+      Math.hypot(existing.cx - occurrence.cx, existing.cy - occurrence.cy) <= Math.max(existing.h, occurrence.h))) {
+      merged.push(occurrence);
+    }
+  }
+  return merged;
 }
 
 /** A SEPARATE, DEEPER same-row fragment chain for a real shape
@@ -1487,20 +1709,26 @@ export function deepHyphenChainTagOcc(spans: FlatSpan[], key: string): TagOcc[] 
   const out: TagOcc[] = [];
   const starts = spans.filter((sp) => {
     const t = upper(sp.str);
-    return t.length > 0 && t.length < key.length && targetStripped.startsWith(stripHy(t));
+    return stripHy(t).length > 0 && t.length < key.length && targetStripped.startsWith(stripHy(t));
   });
   for (const start of starts) {
     let text = upper(start.str);
     let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
     let cur = start;
+    const used = new Set<FlatSpan>([start]);
     let ok = stripHy(text) === targetStripped;
     for (let guard = 0; !ok && stripHy(text).length < targetStripped.length && guard < HOP_BUDGET; guard++) {
       const h = Math.max(cur.y1 - cur.y0, 6);
       let next: FlatSpan | null = null, bestD = Infinity;
       for (const sp of spans) {
-        if (sp === cur) continue;
+        if (used.has(sp)) continue;
+        const candidate = text + upper(sp.str);
+        if (!targetStripped.startsWith(stripHy(candidate))) continue;
         const sameRow = Math.abs(sp.y0 - cur.y0) < h * 0.4 && sp.x0 >= cur.x0 - 1 && sp.x0 - cur.x1 < h * 1.5;
-        if (!sameRow) continue;
+        const sameColumn = Math.abs(sp.x0 - cur.x0) < h * 0.4
+          && ((sp.y1 <= cur.y1 + 1 && cur.y0 - sp.y1 < h * 1.5)
+            || (sp.y0 >= cur.y0 - 1 && sp.y0 - cur.y1 < h * 1.5));
+        if (!sameRow && !sameColumn) continue;
         const dx = (sp.x0 + sp.x1) / 2 - (cur.x0 + cur.x1) / 2;
         const dy = (sp.y0 + sp.y1) / 2 - (cur.y0 + cur.y1) / 2;
         const d = dx * dx + dy * dy;
@@ -1508,15 +1736,66 @@ export function deepHyphenChainTagOcc(spans: FlatSpan[], key: string): TagOcc[] 
       }
       if (!next) break;
       const candidate = text + upper(next.str);
-      if (!targetStripped.startsWith(stripHy(candidate))) break;
       text = candidate;
       x0 = Math.min(x0, next.x0); y0 = Math.min(y0, next.y0); x1 = Math.max(x1, next.x1); y1 = Math.max(y1, next.y1);
       cur = next;
+      used.add(next);
       ok = stripHy(text) === targetStripped;
     }
-    if (ok) out.push({ cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, h: Math.max(y1 - y0, 6), bbox: [x0, y0, x1, y1] });
+    if (ok) out.push({
+      cx: (x0 + x1) / 2,
+      cy: (y0 + y1) / 2,
+      h: Math.max(Math.min(x1 - x0, y1 - y0), 6),
+      bbox: [x0, y0, x1, y1],
+    });
   }
   return out;
+}
+
+/**
+ * Recover a tag whose family prefix was emitted as vector outlines while its
+ * suffix remained searchable text. This is deliberately family-corroborated:
+ * at least four distinct complete sibling tags must establish the local
+ * convention, and exactly one same-sized bare suffix must sit near two of
+ * those siblings. A page's ordinary detail/dimension numeral cannot satisfy
+ * that shape by itself.
+ */
+export function familySuffixTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
+  const target = key.trim().toUpperCase().replace(/\s+/g, "");
+  const match = target.match(/^([A-Z][A-Z0-9-]*-)(\d+[A-Z]?)$/);
+  if (!match) return [];
+  const [, stem, suffix] = match;
+  const normalize = (text: string) => text.trim().toUpperCase().replace(/\s+/g, "");
+  const siblingPattern = new RegExp(`^${stem.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(\\d+[A-Z]?)$`);
+  const siblings = spans.flatMap((span) => {
+    const sibling = normalize(span.str).match(siblingPattern);
+    return sibling && sibling[1] !== suffix ? [{ span, suffix: sibling[1] }] : [];
+  });
+  if (new Set(siblings.map((entry) => entry.suffix)).size < 4) return [];
+  const heights = siblings.map(({ span }) => Math.max(span.y1 - span.y0, 1)).sort((a, b) => a - b);
+  const medianH = heights[Math.floor(heights.length / 2)];
+  const candidates = spans.filter((span) => {
+    if (normalize(span.str) !== suffix) return false;
+    const h = Math.max(span.y1 - span.y0, 1);
+    // A CAD font can outline the missing prefix at a different rotation,
+    // leaving the searchable suffix with roughly half the sibling run's
+    // reported axis-aligned height.
+    if (h < medianH * 0.4 || h > medianH * 1.6) return false;
+    const cx = (span.x0 + span.x1) / 2, cy = (span.y0 + span.y1) / 2;
+    const nearby = siblings.filter(({ span: sibling }) => {
+      const sx = (sibling.x0 + sibling.x1) / 2, sy = (sibling.y0 + sibling.y1) / 2;
+      return Math.hypot(cx - sx, cy - sy) <= medianH * 25;
+    });
+    return nearby.length >= 2;
+  });
+  if (candidates.length !== 1) return [];
+  const span = candidates[0];
+  return [{
+    cx: (span.x0 + span.x1) / 2,
+    cy: (span.y0 + span.y1) / 2,
+    h: Math.max(span.y1 - span.y0, 6),
+    bbox: [span.x0, span.y0, span.x1, span.y1],
+  }];
 }
 
 /** The seed→target size ratio for a cross-sheet sweep (#186): seed-sheet
@@ -1809,6 +2088,12 @@ export interface RoomCandidate { tag: string; name: string; bbox: [number, numbe
 export interface RoomSweepInstance<Id> {
   id: Id;
   sheet: string;
+  /** Full title-block sheet number, when available. Paired discipline
+   * overlays commonly share its numeric view suffix (MH121 / MP121). */
+  sheetNumber?: string | null;
+  /** Explicit building level parsed from the graph-classified plan title.
+   * Distinct known levels are never duplicate views of one installation. */
+  level?: string | null;
   /** Leading AIA discipline letters off the sheet's own title-block sheet
    *  number ("M3.0" → "M"); null when no sheet number was read — an
    *  attribution never guessed, so the instance never enters the dedup. */
@@ -1831,6 +2116,135 @@ export interface RedundantRoomView<Id> {
   keptDiscipline: string;
   keptSheet: string;
 }
+
+export interface TaggedViewLandmark {
+  tag: string;
+  at: Point;
+}
+
+export interface TaggedViewCaption {
+  text: string;
+  at: Point;
+}
+
+export interface TagClaimCoverage {
+  claimed: number;
+  rawMatches: number;
+  segments: number;
+}
+
+/**
+ * Rank fingerprints by evidence tied to the requested tag, not by generic
+ * geometric hit count. More distinct claimed tag occurrences wins; equal
+ * coverage prefers fewer unclaimed geometric hits, then the richer shape.
+ */
+export function prefersTagClaimCoverage(candidate: TagClaimCoverage, current: TagClaimCoverage | null): boolean {
+  if (!current) return true;
+  if (candidate.claimed !== current.claimed) return candidate.claimed > current.claimed;
+  if (candidate.rawMatches !== current.rawMatches) return candidate.rawMatches < current.rawMatches;
+  return candidate.segments > current.segments;
+}
+
+/**
+ * Schedules whose marks identify individually numbered equipment rather
+ * than repeatable type symbols. Repeated appearances of one such mark are
+ * plan/section/detail references to the same scheduled unit.
+ */
+export function isIndividuallyMarkedEquipmentSchedule(title: string): boolean {
+  const squashed = title.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  return /(?:AIRHANDLING|DEDICATEDOUT(?:SIDE|DOOR)AIR|FANCOIL|ENERGYRECOVERY|ROOFTOP|CONDENSINGUNIT|HEATPUMP|PUMP|BOILER|CHILLER|UNITHEATER|DEHUMIDIFIER|EXHAUSTFAN)/.test(squashed)
+    && !/(?:DIFFUSER|GRILLE|REGISTER|FIXTURE|LUMINAIRE)/.test(squashed);
+}
+
+/**
+ * Collapse repeated plan views drawn side-by-side on one sheet.
+ *
+ * Room attribution cannot distinguish these because both views may omit room
+ * labels entirely. Instead, require a strong sheet-intrinsic registration
+ * signal: at least four distinct schedule tags must occur exactly once in
+ * each page half and retain the same coordinate on the orthogonal axis. This
+ * is the characteristic shape of two system-specific overlays of one floor
+ * plan (for example duct and piping), while ordinary repeated type marks are
+ * excluded from the evidence because they occur more than once per half.
+ *
+ * Once that registration is proven, keep the larger count from either view,
+ * never the sum and never the smaller partial view. Repeats within one view
+ * remain untouched. Vertical and horizontal layouts are both supported.
+ */
+export function dedupeAlignedSameSheetViews<Id>(
+  instances: Array<{ id: Id; at: Point }>,
+  landmarks: TaggedViewLandmark[],
+  sheetWidthPx: number,
+  sheetHeightPx: number,
+  captions: TaggedViewCaption[] = [],
+): Id[] {
+  if (instances.length < 2 || landmarks.length < 8) return [];
+
+  type Axis = "vertical" | "horizontal";
+  const captionKind = (text: string): "duct" | "pipe" | null =>
+    /\bDUCT\b/i.test(text) ? "duct" : /\b(?:PIPE|PIPING)\b/i.test(text) ? "pipe" : null;
+  const captionStem = (text: string): string =>
+    text.toUpperCase().replace(/\b(?:DUCT|PIPE|PIPING)\b/g, "").replace(/[^A-Z0-9]+/g, " ").trim();
+  let captionPair: [TaggedViewCaption, TaggedViewCaption] | null = null;
+  for (const first of captions) {
+    for (const second of captions) {
+      if (first === second
+        || !/\bENLARGED\s+PLANS?\b/i.test(first.text)
+        || !/\bENLARGED\s+PLANS?\b/i.test(second.text)
+        || captionKind(first.text) === null
+        || captionKind(second.text) === null
+        || captionKind(first.text) === captionKind(second.text)
+        || captionStem(first.text) !== captionStem(second.text)) continue;
+      captionPair = [first, second];
+      break;
+    }
+    if (captionPair) break;
+  }
+  const captionAxis: Axis | null = captionPair
+    ? Math.abs(captionPair[0].at[0] - captionPair[1].at[0]) >= Math.abs(captionPair[0].at[1] - captionPair[1].at[1])
+      ? "vertical" : "horizontal"
+    : null;
+  const splitFor = (axis: Axis): number => captionPair && captionAxis === axis
+    ? ((axis === "vertical" ? captionPair[0].at[0] + captionPair[1].at[0] : captionPair[0].at[1] + captionPair[1].at[1]) / 2)
+    : (axis === "vertical" ? sheetWidthPx / 2 : sheetHeightPx / 2);
+  const support = (axis: Axis): { aligned: number; paired: number } => {
+    const byTag = new Map<string, TaggedViewLandmark[]>();
+    for (const landmark of landmarks) {
+      const tag = landmark.tag.trim().toUpperCase();
+      const group = byTag.get(tag);
+      if (group) group.push(landmark); else byTag.set(tag, [landmark]);
+    }
+    const split = splitFor(axis);
+    const orthogonalTolerance = (axis === "vertical" ? sheetHeightPx : sheetWidthPx) * 0.03;
+    let aligned = 0, paired = 0;
+    for (const group of byTag.values()) {
+      const first = group.filter((p) => (axis === "vertical" ? p.at[0] : p.at[1]) < split);
+      const second = group.filter((p) => (axis === "vertical" ? p.at[0] : p.at[1]) >= split);
+      if (first.length !== 1 || second.length !== 1) continue;
+      paired++;
+      const orthogonalDelta = Math.abs(
+        (axis === "vertical" ? first[0].at[1] : first[0].at[0])
+        - (axis === "vertical" ? second[0].at[1] : second[0].at[0]),
+      );
+      if (orthogonalDelta <= orthogonalTolerance) aligned++;
+    }
+    return { aligned, paired };
+  };
+
+  const verticalSupport = support("vertical");
+  const horizontalSupport = support("horizontal");
+  const axis: Axis = captionAxis ?? (verticalSupport.aligned >= horizontalSupport.aligned ? "vertical" : "horizontal");
+  const evidence = axis === "vertical" ? verticalSupport : horizontalSupport;
+  const split = splitFor(axis);
+  if (evidence.aligned < 4 && !(captionPair && evidence.paired >= 4 && evidence.aligned >= 2)) return [];
+
+  const first = instances.filter((p) => (axis === "vertical" ? p.at[0] : p.at[1]) < split);
+  const second = instances.filter((p) => (axis === "vertical" ? p.at[0] : p.at[1]) >= split);
+  if (!first.length || !second.length) return [];
+  // Deterministic tie: retain the first (left/top) view.
+  return (first.length >= second.length ? second : first).map((p) => p.id);
+}
+
 /** Fraction of the sheet's own diagonal a room's label must sit within to be
  * credited to a nearby occurrence — generous enough for a real "enlarged"
  * partial-sheet plan (which crops tightly around the one room it shows),
@@ -1872,6 +2286,11 @@ const ROOM_ATTRIBUTION_MAX_DIAGONAL_FRAC = 0.2;
 function collapseGroup<Id, A extends { discipline: string | null; sheet: string; id: Id }>(
   group: A[], describeRoom: (kept: A) => string,
 ): RedundantRoomView<Id>[] {
+  const levels = new Set(group.flatMap((entry) => {
+    const level = (entry as A & { level?: string | null }).level;
+    return level ? [level] : [];
+  }));
+  if (levels.size > 1) return [];
   const bySheet = new Map<string, A[]>();
   for (const a of group) {
     const arr = bySheet.get(a.sheet);
@@ -1901,10 +2320,38 @@ function collapseGroup<Id, A extends { discipline: string | null; sheet: string;
  * its M2.0 or P3.0 "enlarged" view) sits 9.2px apart. */
 const COORD_ATTRIBUTION_MAX_PX = 40;
 
+export function planLevelOfTitle(title: string): string | null {
+  const text = title.trim().toUpperCase();
+  const numbered = text.match(/\b(FIRST|SECOND|THIRD|FOURTH|FIFTH|\d+(?:ST|ND|RD|TH)?)\s+(?:FLOOR|LEVEL)\b/)
+    || text.match(/\bLEVEL\s+(FIRST|SECOND|THIRD|FOURTH|FIFTH|\d+)\b/);
+  if (numbered) {
+    const aliases: Record<string, string> = {
+      FIRST: "1", SECOND: "2", THIRD: "3", FOURTH: "4", FIFTH: "5",
+    };
+    return aliases[numbered[1]] || numbered[1].replace(/(?:ST|ND|RD|TH)$/, "");
+  }
+  if (/\bROOF\s+PLAN\b/.test(text)) return "ROOF";
+  if (/\bBASEMENT\s+PLAN\b/.test(text)) return "BASEMENT";
+  return null;
+}
+
 export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
   type Attributed = RoomSweepInstance<Id> & { room: RoomCandidate };
   const attributed: Attributed[] = [];
   const unattributed: RoomSweepInstance<Id>[] = [];
+  const sheetPair = (a: string, b: string): string => a < b ? `${a}\0${b}` : `${b}\0${a}`;
+  const differentKnownLevels = (a: RoomSweepInstance<Id>, b: RoomSweepInstance<Id>): boolean =>
+    !!a.level && !!b.level && a.level !== b.level;
+  const tightPairCounts = new Map<string, number>();
+  for (let i = 0; i < instances.length; i++) {
+    for (let j = i + 1; j < instances.length; j++) {
+      if (instances[i].sheet === instances[j].sheet
+        || differentKnownLevels(instances[i], instances[j])
+        || Math.hypot(instances[i].at[0] - instances[j].at[0], instances[i].at[1] - instances[j].at[1]) > 30) continue;
+      const key = sheetPair(instances[i].sheet, instances[j].sheet);
+      tightPairCounts.set(key, (tightPairCounts.get(key) || 0) + 1);
+    }
+  }
   for (const inst of instances) {
     if (!inst.discipline) continue; // no discipline read at all — never enters either path
     let best: RoomCandidate | null = null, bestD = Infinity;
@@ -1916,6 +2363,12 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
         if (d < bestD) { bestD = d; best = r; }
       }
       if (!best || bestD > maxDist) best = null;
+      // A bare one/two-digit token with no room name is weak enough to be a
+      // keynote, detail number, or duct size. It must not collapse two
+      // different plan sheets merely because both nearest-token reads happen
+      // to say "12"; named rooms and conventional 3+ digit room tags retain
+      // the existing attribution path.
+      if (best && !best.name.trim() && /^\d{1,2}$/.test(best.tag.trim())) best = null;
     }
     if (best) attributed.push({ ...inst, room: best });
     else unattributed.push(inst); // no room credited — try coordinate proximity below, never guessed either way
@@ -1931,6 +2384,48 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
     out.push(...collapseGroup<Id, Attributed>(group, (a) => `${a.room.name ? `${a.room.name} ` : ""}${a.room.tag}`.trim()));
   }
 
+  // Asymmetric attribution fallback: one drawing can carry a readable room
+  // label while its registered counterpart omits it. A tight same-location
+  // cross-sheet pair is still the same redraw; requiring both sides to be
+  // either attributed or unattributed strands exactly this mixed case.
+  const roomRedundant = new Set(out.map((entry) => entry.id));
+  const mixed = [
+    ...attributed.filter((entry) => !roomRedundant.has(entry.id)),
+    ...unattributed,
+  ];
+  const mixedParent = Array.from({ length: mixed.length }, (_, i) => i);
+  const mixedRoot = (i: number): number =>
+    mixedParent[i] === i ? i : (mixedParent[i] = mixedRoot(mixedParent[i]));
+  const attributedIds = new Set(attributed.map((entry) => entry.id));
+  for (let i = 0; i < mixed.length; i++) {
+    for (let j = i + 1; j < mixed.length; j++) {
+      const distance = Math.hypot(mixed[i].at[0] - mixed[j].at[0], mixed[i].at[1] - mixed[j].at[1]);
+      const asymmetric = attributedIds.has(mixed[i].id) !== attributedIds.has(mixed[j].id);
+      // Extremely tight registration overrides contradictory nearest-room
+      // reads only when another pair independently registers the same two
+      // sheets. One coincidentally aligned device on different floors is
+      // not enough evidence that the drawings are redundant overlays.
+      const registeredPair = (tightPairCounts.get(sheetPair(mixed[i].sheet, mixed[j].sheet)) || 0) >= 2;
+      if (mixed[i].sheet === mixed[j].sheet
+        || differentKnownLevels(mixed[i], mixed[j])
+        || !((distance <= 30 && registeredPair) || (asymmetric && distance <= COORD_ATTRIBUTION_MAX_PX))) continue;
+      const ri = mixedRoot(i), rj = mixedRoot(j);
+      if (ri !== rj) mixedParent[ri] = rj;
+    }
+  }
+  const mixedClusters = new Map<number, RoomSweepInstance<Id>[]>();
+  for (let i = 0; i < mixed.length; i++) {
+    const r = mixedRoot(i);
+    const arr = mixedClusters.get(r);
+    if (arr) arr.push(mixed[i]); else mixedClusters.set(r, [mixed[i]]);
+  }
+  const mixedHandled = new Set<Id>();
+  for (const cluster of mixedClusters.values()) {
+    if (cluster.length < 2) continue;
+    cluster.forEach((entry) => mixedHandled.add(entry.id));
+    out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(one view has no readable room — same-location redraw)"));
+  }
+
   // Coordinate-proximity fallback — ONLY for instances no room could be
   // credited to at all (never overrides a real room attribution above).
   // Simple connected-components clustering: two instances within
@@ -1938,12 +2433,14 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   // A near B near C clusters all three, same as the real drafting case
   // would produce for a 3+-discipline redraw), then the identical
   // multi-discipline collapse doctrine applies per cluster.
-  const n = unattributed.length;
+  const proximityCandidates = unattributed.filter((entry) => !mixedHandled.has(entry.id));
+  const n = proximityCandidates.length;
   const parent = Array.from({ length: n }, (_, i) => i);
   const find = (i: number): number => (parent[i] === i ? i : (parent[i] = find(parent[i])));
   for (let i = 0; i < n; i++) {
     for (let j = i + 1; j < n; j++) {
-      if (Math.hypot(unattributed[i].at[0] - unattributed[j].at[0], unattributed[i].at[1] - unattributed[j].at[1]) <= COORD_ATTRIBUTION_MAX_PX) {
+      if (!differentKnownLevels(proximityCandidates[i], proximityCandidates[j])
+        && Math.hypot(proximityCandidates[i].at[0] - proximityCandidates[j].at[0], proximityCandidates[i].at[1] - proximityCandidates[j].at[1]) <= COORD_ATTRIBUTION_MAX_PX) {
         const ri = find(i), rj = find(j);
         if (ri !== rj) parent[ri] = rj;
       }
@@ -1953,10 +2450,61 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   for (let i = 0; i < n; i++) {
     const r = find(i);
     const arr = clusters.get(r);
-    if (arr) arr.push(unattributed[i]); else clusters.set(r, [unattributed[i]]);
+    if (arr) arr.push(proximityCandidates[i]); else clusters.set(r, [proximityCandidates[i]]);
   }
   for (const cluster of clusters.values()) {
     out.push(...collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(no room drawn nearby — same-location redraw)"));
+  }
+
+  // Paired discipline-overlay fallback. AIA sheet series commonly preserve
+  // the numeric plan/view identity while changing only the discipline
+  // letters (MH121 / MP121). When the same tag also lands within 5% of the
+  // page diagonal on those paired sheets, registration is stronger than a
+  // missing or noisy room label. This is not a suffix-only collapse.
+  const alreadyRedundant = new Set(out.map((entry) => entry.id));
+  const viewStem = (sheetNumber: string | null | undefined): string | null => {
+    const m = /^[A-Z]{1,3}[- ]?(.+)$/.exec((sheetNumber || "").trim().toUpperCase());
+    return m?.[1]?.replace(/[^A-Z0-9]/g, "") || null;
+  };
+  const byViewStem = new Map<string, RoomSweepInstance<Id>[]>();
+  for (const inst of instances) {
+    if (!inst.discipline || alreadyRedundant.has(inst.id)) continue;
+    const stem = viewStem(inst.sheetNumber);
+    if (!stem) continue;
+    const arr = byViewStem.get(stem);
+    if (arr) arr.push(inst); else byViewStem.set(stem, [inst]);
+  }
+  for (const group of byViewStem.values()) {
+    if (new Set(group.map((entry) => entry.sheet)).size < 2) continue;
+    const parent = Array.from({ length: group.length }, (_, i) => i);
+    const root = (i: number): number => parent[i] === i ? i : (parent[i] = root(parent[i]));
+    for (let i = 0; i < group.length; i++) {
+      for (let j = i + 1; j < group.length; j++) {
+        if (group[i].sheet === group[j].sheet) continue;
+        const maxDist = Math.min(
+          Math.hypot(group[i].sheetWidthPx, group[i].sheetHeightPx),
+          Math.hypot(group[j].sheetWidthPx, group[j].sheetHeightPx),
+        ) * 0.05;
+        if (Math.hypot(group[i].at[0] - group[j].at[0], group[i].at[1] - group[j].at[1]) > maxDist) continue;
+        const ri = root(i), rj = root(j);
+        if (ri !== rj) parent[ri] = rj;
+      }
+    }
+    const registered = new Map<number, RoomSweepInstance<Id>[]>();
+    for (let i = 0; i < group.length; i++) {
+      const r = root(i);
+      const arr = registered.get(r);
+      if (arr) arr.push(group[i]); else registered.set(r, [group[i]]);
+    }
+    for (const cluster of registered.values()) {
+      const collapsed = collapseGroup<Id, RoomSweepInstance<Id>>(cluster, () => "(paired discipline-overlay sheets)");
+      for (const entry of collapsed) {
+        if (!alreadyRedundant.has(entry.id)) {
+          alreadyRedundant.add(entry.id);
+          out.push(entry);
+        }
+      }
+    }
   }
   return out;
 }

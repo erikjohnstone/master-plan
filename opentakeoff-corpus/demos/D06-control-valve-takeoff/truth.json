@@ -1,0 +1,343 @@
+{
+  "schema_version": 1,
+  "demo_id": "D06",
+  "set_id": "itd-d1-lab",
+  "source_file": "itd-d1-lab-mechanical.pdf",
+  "ground_truth_completed_before_model_runs": true,
+  "derivation": "Independent read of CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS) and BYPASS CONTROL VALVE SCHEDULE on sheet #13 plus sweep_schedule_row tagged_only for CV-1/CV-5/CV-9/BCV-1 plan tags before any model run. Slate CHW wording adapted to the set's real HW reheat + bypass valve vocabulary (no CHW control-valve schedule on this PDF).",
+  "hardness": {
+    "sheet_count": 29,
+    "stress_confirmed": "Dense valve vocabulary (CV + BCV + air valves on sibling schedules); installed plan tags via sweep; sheets uncalibrated so measure/scale paths must refuse honestly when asked."
+  },
+  "follow_up": {
+    "prompt": "Is BCV-1 a reheat coil control valve or a bypass valve? What fluid and flow GPM does its schedule row list?",
+    "expected": {
+      "bcv_role": "bypass",
+      "fluid": "100% WATER",
+      "gpm": 25
+    }
+  },
+  "expected": {
+    "cv_schedule_count": {
+      "type": "number",
+      "value": 9,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#13",
+        "table_title": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)",
+        "row_key": null,
+        "column": null,
+        "bbox_px": [
+          328.8,
+          1953.36,
+          2487.36,
+          2025.36
+        ],
+        "grounding_text": "CONTROL VALVE",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "bcv_schedule_count": {
+      "type": "number",
+      "value": 1,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#13",
+        "table_title": "BYPASS CONTROL VALVE SCHEDULE",
+        "row_key": null,
+        "column": null,
+        "bbox_px": [
+          2578.8,
+          2725.68,
+          4737.6,
+          2797.68
+        ],
+        "grounding_text": "BYPASS CONTROL VALVE",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "cv_1_gpm": {
+      "type": "number",
+      "value": 9,
+      "tolerance": 0.05,
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#13",
+        "table_title": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)",
+        "row_key": "CV-1",
+        "column": "FLOW (GPM)",
+        "bbox_px": [
+          1498.08,
+          2169.3599999999997,
+          1588.08,
+          2248.3199999999997
+        ],
+        "grounding_text": "9.0",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "cv_1_size": {
+      "type": "string",
+      "value": "1-1/4\"",
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#13",
+        "table_title": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)",
+        "row_key": "CV-1",
+        "column": "SIZE (IN)",
+        "bbox_px": [
+          1857.84,
+          2169.3599999999997,
+          1947.84,
+          2248.3199999999997
+        ],
+        "grounding_text": "1-1/4\"",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "cv_1_coil": {
+      "type": "string",
+      "value": "HC-1",
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#13",
+        "table_title": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)",
+        "row_key": "CV-1",
+        "column": "HOT WATER COIL",
+        "bbox_px": [
+          490.8,
+          2169.3599999999997,
+          634.8,
+          2248.3199999999997
+        ],
+        "grounding_text": "HC-1",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "cv_1_installed_quantity": {
+      "type": "number",
+      "value": 1,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#5",
+        "bbox_px": [
+          2043.3000000000002,
+          759.9,
+          2081,
+          825.2
+        ],
+        "grounding_text": "CV-1",
+        "ocr_mode": "sparse_text",
+        "ocr_confusables": true
+      }
+    },
+    "cv_5_gpm": {
+      "type": "number",
+      "value": 2,
+      "tolerance": 0.05,
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#13",
+        "table_title": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)",
+        "row_key": "CV-5",
+        "column": "FLOW (GPM)",
+        "bbox_px": [
+          1498.08,
+          2485.44,
+          1588.08,
+          2564.16
+        ],
+        "grounding_text": "2.0",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "cv_5_size": {
+      "type": "string",
+      "value": "3/4\"",
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#13",
+        "table_title": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)",
+        "row_key": "CV-5",
+        "column": "SIZE (IN)",
+        "bbox_px": [
+          1857.84,
+          2485.44,
+          1947.84,
+          2564.16
+        ],
+        "grounding_text": "3/4\"",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "cv_5_coil": {
+      "type": "string",
+      "value": "HC-5",
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#13",
+        "table_title": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)",
+        "row_key": "CV-5",
+        "column": "HOT WATER COIL",
+        "bbox_px": [
+          490.8,
+          2485.44,
+          634.8,
+          2564.16
+        ],
+        "grounding_text": "HC-5",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "cv_5_installed_quantity": {
+      "type": "number",
+      "value": 1,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#5",
+        "bbox_px": [
+          1914.2,
+          2045.1,
+          1951.9,
+          2110.4
+        ],
+        "grounding_text": "CV-5",
+        "ocr_mode": "sparse_text",
+        "ocr_confusables": true
+      }
+    },
+    "cv_9_gpm": {
+      "type": "number",
+      "value": 4.4,
+      "tolerance": 0.05,
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#13",
+        "table_title": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)",
+        "row_key": "CV-9",
+        "column": "FLOW (GPM)",
+        "bbox_px": [
+          1498.08,
+          2801.04,
+          1588.08,
+          2880.24
+        ],
+        "grounding_text": "4.4",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "cv_9_size": {
+      "type": "string",
+      "value": "1\"",
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#13",
+        "table_title": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)",
+        "row_key": "CV-9",
+        "column": "SIZE (IN)",
+        "bbox_px": [
+          1857.84,
+          2801.04,
+          1947.84,
+          2880.24
+        ],
+        "grounding_text": "1\"",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "cv_9_coil": {
+      "type": "string",
+      "value": "HC-9",
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#13",
+        "table_title": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)",
+        "row_key": "CV-9",
+        "column": "HOT WATER COIL",
+        "bbox_px": [
+          490.8,
+          2801.04,
+          634.8,
+          2880.24
+        ],
+        "grounding_text": "HC-9",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "cv_9_installed_quantity": {
+      "type": "number",
+      "value": 1,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#5",
+        "bbox_px": [
+          1894.2,
+          1187.8,
+          1931.9,
+          1253.1
+        ],
+        "grounding_text": "CV-9",
+        "ocr_mode": "sparse_text",
+        "ocr_confusables": true
+      }
+    },
+    "bcv_1_gpm": {
+      "type": "number",
+      "value": 25,
+      "tolerance": 0.05,
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#13",
+        "table_title": "BYPASS CONTROL VALVE SCHEDULE",
+        "row_key": "BCV-1",
+        "column": "FLOW (GPM)",
+        "bbox_px": [
+          3442.32,
+          2869.68,
+          3568.32,
+          2946.96
+        ],
+        "grounding_text": "25",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "bcv_1_size": {
+      "type": "string",
+      "value": "2.0",
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#13",
+        "table_title": "BYPASS CONTROL VALVE SCHEDULE",
+        "row_key": "BCV-1",
+        "column": "SIZE (IN)",
+        "bbox_px": [
+          3946.08,
+          2869.68,
+          4071.84,
+          2946.96
+        ],
+        "grounding_text": "2.0",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "bcv_1_installed_quantity": {
+      "type": "number",
+      "value": 1,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "itd-d1-lab-mechanical.pdf#7",
+        "bbox_px": [
+          3610,
+          1309.5,
+          3658.3,
+          1370.7
+        ],
+        "grounding_text": "BCV-1",
+        "ocr_mode": "sparse_text",
+        "ocr_confusables": true
+      }
+    }
+  }
+}

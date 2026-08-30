@@ -120,7 +120,7 @@ function checkSweepScheduleRow(calls) {
     const tag = args?.tag || out?.tag;
     if (typeof tag !== "string" || seen.has(tag)) continue;
     seen.add(tag);
-    const n = out?.total_found;
+    const n = out?.total_found ?? out?.found;
     if (typeof n === "number" && n > 0) {
       const at = Array.isArray(out?.anchor?.at) ? ` at ${JSON.stringify(out.anchor.at)}` : "";
       confirmed.push(`${tag} (total_found=${n}${at})`);
@@ -136,6 +136,23 @@ function checkSweepScheduleRow(calls) {
   return parts.join("");
 }
 
+function checkHighlightedCitations(calls) {
+  const highlighted = calls.filter(({ out }) => out && !out.error && Array.isArray(out.bbox_px))
+    .map(({ out }) => {
+      const label = String(out.text || out.row_key || "").trim();
+      if (label) return label;
+      return `${out.sheet} ${JSON.stringify(out.bbox_px)}`;
+    });
+  if (!highlighted.length) return null;
+  // Keep the Answer readable: dump of dozens of sheet+bbox lines buries the
+  // takeoff reply (seen on VAV rollups with 40+ paints). Prefer short labels.
+  const preview = highlighted.slice(0, 8);
+  const more = highlighted.length > preview.length
+    ? `; … +${highlighted.length - preview.length} more`
+    : "";
+  return `[Automated check: highlight_citation painted exactly ${highlighted.length} source region(s): ${preview.join("; ")}${more}. No other cell or region was highlighted in this run.]`;
+}
+
 /** The registry — one entry per tool with a known real honesty risk.
  * Adding protection for a NEW tool is a one-line addition here, not a new
  * hand-written backstop wired into the loop itself. */
@@ -144,6 +161,7 @@ export const AGENT_VERIFIERS = [
   { tool: "count_marks", check: checkCountMarks },
   { tool: "read_schedule", check: checkScheduleRowKeys },
   { tool: "sweep_schedule_row", check: checkSweepScheduleRow },
+  { tool: "highlight_citation", check: checkHighlightedCitations },
 ];
 
 /** A real word for "the estimator is asking for a whole-set/whole-building

@@ -149,6 +149,21 @@ export interface InlineMotifResult {
 
 type Box = { x0: number; y0: number; x1: number; y1: number };
 type Cluster = { x0: number; y0: number; x1: number; y1: number; members: number };
+interface InlineSheetIndex {
+  meta: Uint8Array;
+  families: HatchFamily[];
+  clusters: Map<HatchFamily, Map<number, Cluster[]>>;
+}
+const inlineSheetIndexes = new WeakMap<number[], InlineSheetIndex>();
+
+function inlineSheetIndex(segs: number[], meta: Uint8Array): InlineSheetIndex {
+  let index = inlineSheetIndexes.get(segs);
+  if (!index || index.meta !== meta) {
+    index = { meta, families: hatchFamilies(segs, meta), clusters: new Map() };
+    inlineSheetIndexes.set(segs, index);
+  }
+  return index;
+}
 
 /** Real-2D-proximity clusters within ONE hatch family's own members —
  * expand each member's own bbox by `marginPx` and union-find merge overlaps.
@@ -203,6 +218,20 @@ function clusterByProximity(segs: number[], memberIdx: number[], marginPx: numbe
   return out;
 }
 
+function clustersFor(segs: number[], index: InlineSheetIndex, family: HatchFamily, marginPx: number): Cluster[] {
+  let byMargin = index.clusters.get(family);
+  if (!byMargin) {
+    byMargin = new Map();
+    index.clusters.set(family, byMargin);
+  }
+  let clusters = byMargin.get(marginPx);
+  if (!clusters) {
+    clusters = clusterByProximity(segs, family.memberIdx, marginPx);
+    byMargin.set(marginPx, clusters);
+  }
+  return clusters;
+}
+
 const foldAngle90 = (a: number): number => { let x = a % 90; if (x < 0) x += 90; return x; };
 const angleDist90 = (a: number, b: number): number => { const d = Math.abs(foldAngle90(a) - foldAngle90(b)); return Math.min(d, 90 - d); };
 
@@ -225,7 +254,8 @@ export function fingerprintInlineMotif(
   // ladder's own smallest rect instead of letting it float.
   maxClusterRef?: { w: number; h: number },
 ): InlineMotifFingerprint | null {
-  const families = hatchFamilies(segs, meta);
+  const index = inlineSheetIndex(segs, meta);
+  const families = index.families;
   const rx0 = Math.min(seedRect[0][0], seedRect[1][0]), rx1 = Math.max(seedRect[0][0], seedRect[1][0]);
   const ry0 = Math.min(seedRect[0][1], seedRect[1][1]), ry1 = Math.max(seedRect[0][1], seedRect[1][1]);
   let best: { family: HatchFamily; inCount: number } | null = null;
@@ -239,7 +269,7 @@ export function fingerprintInlineMotif(
   }
   if (!best) return null;
   const margin = Math.max(best.family.pitch_px * PROXIMITY_PITCH_MULT, 1);
-  const clusters = clusterByProximity(segs, best.family.memberIdx, margin);
+  const clusters = clustersFor(segs, index, best.family, margin);
   // the cluster overlapping (or nearest) the seed rect's own center
   const cx = (rx0 + rx1) / 2, cy = (ry0 + ry1) / 2;
   let seedCluster: Cluster | null = null, bestD = Infinity;
@@ -278,7 +308,8 @@ export function sweepInlineMotif(
 ): InlineMotifResult {
   const sizeTol = opts.sizeTolFrac ?? SIZE_TOL_FRAC;
   const pitchTol = opts.pitchTolFrac ?? PITCH_TOL_FRAC;
-  const families = hatchFamilies(segs, meta);
+  const index = inlineSheetIndex(segs, meta);
+  const families = index.families;
   const matches: InlineMotifMatch[] = [];
   const withheld: InlineMotifWithheld[] = [];
   let considered = 0;
@@ -288,7 +319,7 @@ export function sweepInlineMotif(
     if (angleDist90(f.angle_deg, fp.angleMod90) > 6) continue;               // ~6deg drafting slack
     if (Math.abs(f.pitch_px - fp.pitchPx) / fp.pitchPx > pitchTol) continue;
     const margin = Math.max(f.pitch_px * PROXIMITY_PITCH_MULT, 1);
-    const clusters = clusterByProximity(segs, f.memberIdx, margin);
+    const clusters = clustersFor(segs, index, f, margin);
     for (const c of clusters) {
       if (c.members < MIN_FILL_MEMBERS) continue;
       const w = c.x1 - c.x0, h = c.y1 - c.y0;

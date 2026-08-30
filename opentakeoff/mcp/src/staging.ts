@@ -15,12 +15,13 @@ export const TOOL_STAGES: Record<string, readonly string[]> = {
   // Always enabled: an agent needs these to orient before anything else is useful.
   setup: [
     "load_plan", "sheet_info", "set_scale", "sheet_graph", "resolve_tag",
-    "find_schedule", "read_sheet_text", "find_text", "sheet_context", "view_sheet",
+    "find_schedule", "query_table", "read_sheet_text", "find_text", "sheet_context", "view_sheet",
   ],
   measure: [
     "one_click", "detect_rooms", "measure_polygon", "cut_out", "measure_line",
     "measure_surface", "place_count", "count_marks", "symbol_sweep", "sweep_schedule_row",
-    "derive_base", "derive_transitions", "trace_connectivity", "match_reference_symbol", "find_legend_symbols", "sweep_inline_motif",
+    "project_takeoff", "compile_corpus_takeoff", "derive_base", "derive_transitions", "trace_connectivity",
+    "match_reference_symbol", "find_legend_symbols", "sweep_inline_motif",
   ],
   revise: [
     "list_shapes", "delete_shape", "edit_shape", "edit_materials", "edit_condition",

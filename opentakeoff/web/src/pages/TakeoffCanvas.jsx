@@ -37,6 +37,15 @@ import { buildProfile, parseProfile, applyProfile, resetProfileDefaults, isProfi
 import ToolMenu from "../components/ToolMenu.jsx";
 import PlanNavigator from "../components/PlanNavigator.jsx";
 import ReportPanel from "../components/ReportPanel.jsx";
+import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
+import {
+  dedupeTakeoffRows,
+  mergeTakeoffRows,
+  rowsFromAnswerMarkdown,
+  rowsFromCompiledTakeoff,
+  rowsFromToolResult,
+  splitConversationalAnswer,
+} from "../lib/agentTakeoff.js";
 import RevisionsPanel from "../components/RevisionsPanel.jsx";
 import UserGuide from "../components/UserGuide.jsx";
 import TakeoffsPanel, { clampPanelW, CONDITION_DND_MIME, ConditionAppearanceEditor } from "../components/TakeoffsPanel.jsx";
@@ -111,6 +120,9 @@ import { buildLayerInfos, effectiveLayerRoles, layerRoleCodes, segRoles, sanitiz
 import { detectCandidateRule, buildRuleFromSeed, applyRuleToProject } from "../lib/rules";
 import { deriveTransitionRuns, transitionRefusal } from "../lib/transitions";
 import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, downloadText } from "../lib/totals.js";
+import { buildXlsx } from "../lib/xlsx.js";
+import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "../lib/corpusTakeoff.mjs";
+import { queryTable } from "../lib/queryTable.mjs";
 import { measurementBreakdown } from "../lib/measurementBreakdown.js";
 import { buildSheetDxf, dxfFileName, DXF_MIME } from "../lib/dxf.js";
 import { shapesInZone, shapeCenter } from "../lib/zone.js";
@@ -565,6 +577,22 @@ export default function TakeoffCanvas() {
   const [ruleOffer, setRuleOffer] = useState(null);   // { deduct, seed, tag }
   const [ruleStage, setRuleStage] = useState(null);   // { rule, candidates, proposed_ts }
   const [agentOpen, setAgentOpen] = useState(false);      // docked right-rail Agent panel
+  // TakeoffDataPanel — production output for ALL platform workflows:
+  // Takeoff tab = finished compiled takeoff; Workflow data = raw aggregate.
+  const [agentTakeoffRows, setAgentTakeoffRows] = useState([]);
+  const [showTakeoffData, setShowTakeoffData] = useState(false);
+  const [lastCorpusTakeoffMeta, setLastCorpusTakeoffMeta] = useState(null);
+  // Demo / Playwright: seed or open Takeoff without a full agent run.
+  useEffect(() => {
+    window.__otSeedAgentTakeoff = (rows, { open = true } = {}) => {
+      setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, Array.isArray(rows) ? rows : []));
+      if (open) setShowTakeoffData(true);
+    };
+    window.__otOpenTakeoff = () => setShowTakeoffData(true);
+    return () => {
+      try { delete window.__otSeedAgentTakeoff; delete window.__otOpenTakeoff; } catch { /* */ }
+    };
+  }, []);
   // ── roll goods (#136) — view state; the figured layouts are a memo below ──
   const [rollShow, setRollShow] = useState(true);         // draw the figured cuts over the plan (on: opting a condition in shows its cuts immediately)
   const [rollEdit, setRollEdit] = useState(false);        // cut-edit mode — cuts take pointer events (slide / resize / double-click reset)
@@ -572,6 +600,10 @@ export default function TakeoffCanvas() {
   const rollDragRef = useRef(null);                       // live cut-drag gesture; commit is ONE rollcut command on release
   const [agentLog, setAgentLog] = useState([]);           // streaming run status [{kind, text}]
   const [agentRunning, setAgentRunning] = useState(false);
+  const [agentStatus, setAgentStatus] = useState("");     // plain-language "what's happening"
+  const [agentCitations, setAgentCitations] = useState([]); // clickable source cards (no auto-fly)
+  const [agentThread, setAgentThread] = useState([]);       // [{role:'user'|'assistant', text}]
+  const agentPriorRef = useRef([]);                         // provider priorMessages for follow-ups
   const [showAiSettings, setShowAiSettings] = useState(false); // BYO-key config modal (ai.js seam)
   const agentAbortRef = useRef(null);                     // live AbortController while a run is in flight
   // Persistent Agent run history (maturity plan Phase 2, #HVAC-runhistory):
@@ -2014,7 +2046,15 @@ export default function TakeoffCanvas() {
         const ux = t[2] / un, uy = t[3] / un;   // glyph ascent
         const xs = [t[4], t[4] + w * dx, t[4] + h * ux, t[4] + w * dx + h * ux];
         const ys = [t[5], t[5] + w * dy, t[5] + h * uy, t[5] + w * dy + h * uy];
-        spans.push({ str, x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) });
+        const rot = ((Math.round(Math.atan2(t[1], t[0]) * 180 / Math.PI / 90) * 90) % 360 + 360) % 360;
+        spans.push({
+          str,
+          x0: Math.min(...xs),
+          y0: Math.min(...ys),
+          x1: Math.max(...xs),
+          y1: Math.max(...ys),
+          ...(rot ? { rot } : {}),
+        });
       }
       wholeSetSpansRef.current.set(key, spans);
       saveSheetSpans(key, rev, spans);
@@ -4598,6 +4638,11 @@ export default function TakeoffCanvas() {
   // ships (sweepSymbols / labelPlacements) — canvas and agent cannot disagree.
   async function ensureTextSpans(key) {
     if (textSpansRef.current.has(key)) return textSpansRef.current.get(key);
+    const indexed = wholeSetSpansRef.current.get(key);
+    if (indexed) {
+      textSpansRef.current.set(key, indexed);
+      return indexed;
+    }
     const spans = [];
     try {
       const pg = pageObjsRef.current.get(key);
@@ -4625,7 +4670,15 @@ export default function TakeoffCanvas() {
           const ux = t[2] / un, uy = t[3] / un;
           const xs = [t[4], t[4] + w * dx, t[4] + h * ux, t[4] + w * dx + h * ux];
           const ys = [t[5], t[5] + w * dy, t[5] + h * uy, t[5] + w * dy + h * uy];
-          spans.push({ str, x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) });
+          const rot = ((Math.round(Math.atan2(t[1], t[0]) * 180 / Math.PI / 90) * 90) % 360 + 360) % 360;
+          spans.push({
+            str,
+            x0: Math.min(...xs),
+            y0: Math.min(...ys),
+            x1: Math.max(...xs),
+            y1: Math.max(...ys),
+            ...(rot ? { rot } : {}),
+          });
         }
       }
     } catch { /* no text layer — labels simply stay absent */ }
@@ -6762,19 +6815,72 @@ export default function TakeoffCanvas() {
   // tool calls. Keyed on a signature of the loaded sheet list (name:rev
   // pairs) rather than invalidated by every call, so it survives renders
   // and only rebuilds when the plan set itself actually changed.
+  // Production graph = MCP Session.graphForPipeline (geometric + ODL). The
+  // browser cannot spawn the JVM OpenDataLoader CLI, so the Vite/dev (and
+  // later API) endpoint builds that same graph server-side. Geometric-only
+  // buildSheetGraph remains a last-resort fallback when the endpoint is down.
+  async function fetchProductionSheetGraph() {
+    const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
+    if (!names.length) return null;
+    const fd = new FormData();
+    for (const name of names) {
+      const bytes = await store.loadPdfData(name);
+      fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
+    }
+    const res = await fetch("/__ot/sheet-graph", { method: "POST", body: fd });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `sheet-graph HTTP ${res.status}`);
+    }
+    return await res.json();
+  }
+
+  async function fetchProductionCorpusTakeoff(kind) {
+    const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
+    if (!names.length) throw new Error("No PDF loaded");
+    const fd = new FormData();
+    fd.append("kind", kind);
+    for (const name of names) {
+      const bytes = await store.loadPdfData(name);
+      fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
+    }
+    const res = await fetch("/__ot/compile-corpus-takeoff", { method: "POST", body: fd });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `compile-corpus-takeoff HTTP ${res.status}`);
+    }
+    return await res.json();
+  }
+
   async function ensureAgentGraph() {
     const sig = sheets.map((s) => `${s.name}:${s.rev ?? 1}`).join("|");
     if (agentGraphCacheRef.current && agentGraphCacheKeyRef.current === sig) return agentGraphCacheRef.current;
-    // Make sure every currently-loaded sheet has at least been offered to
-    // the background indexer before building the graph. indexOneSheet's own
-    // cache checks make this a fast no-op for anything already indexed — it
-    // only genuinely waits on a sheet that's new since the last build, so
-    // sheet_graph/find_schedule can't silently miss a sheet purely because
-    // the background pass hadn't reached it yet.
+    // Prefer the shared production Session+ODL graph (same as MCP) for every
+    // blueprint — sheet_graph / query_table / compile all see identical tables.
+    try {
+      const prod = await fetchProductionSheetGraph();
+      if (prod?.tables || prod?.available) {
+        prod.__production = true;
+        agentGraphCacheRef.current = prod;
+        agentGraphCacheKeyRef.current = sig;
+        return prod;
+      }
+    } catch (e) {
+      console.warn("[ensureAgentGraph] production Session+ODL unavailable; geometric fallback:", e?.message || e);
+    }
+    // Fallback: in-browser geometric extract only (no ODL) — under-counts on
+    // dense schedule sets. Used only when the production endpoint is missing.
     await indexWholeSet(sheets);
     const inputs = [];
     for (const [key, spans] of wholeSetSpansRef.current) {
-      const graphSpans = spans.map((s) => ({ str: s.str, x: s.x0, y: s.y0, w: s.x1 - s.x0, h: s.y1 - s.y0 }));
+      const graphSpans = spans.map((s) => ({
+        str: s.str,
+        x: s.x0,
+        y: s.y0,
+        w: s.x1 - s.x0,
+        h: s.y1 - s.y0,
+        ...(s.rot ? { rot: s.rot } : {}),
+      }));
       const segs = vectorSegsRef.current.get(key);
       inputs.push({ key, sheet_number: null, spans: graphSpans, ...(segs?.length ? { segs } : {}) });
     }
@@ -6859,6 +6965,7 @@ export default function TakeoffCanvas() {
   }
 
   async function agentFindSchedule(kind) {
+    // Production Session+ODL graph (via ensureAgentGraph) — same tables as MCP.
     const g = await ensureAgentGraph();
     if (!g.available) return { error: "This set has no text layer (a scan) — the sheet graph is unavailable." };
     const k = (kind || "").toLowerCase();
@@ -6877,6 +6984,39 @@ export default function TakeoffCanvas() {
         ...(t.building ? { building: t.building } : {}),
       })),
     };
+  }
+
+  async function agentMcpTool(name, args) {
+    let endpoint = "";
+    try { endpoint = localStorage.getItem("opentakeoff_mcp_endpoint") || ""; } catch { /* unavailable */ }
+    if (!endpoint) return null;
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, arguments: args }),
+    });
+    if (!response.ok) return { error: `Local MCP bridge returned HTTP ${response.status}.` };
+    return await response.json();
+  }
+
+  async function agentQueryTable({ title, row_key, column, cell_contains, cell_value }) {
+    // Same queryTable module as MCP, on the production Session+ODL graph only.
+    let g;
+    try {
+      const sig = sheets.map((s) => `${s.name}:${s.rev ?? 1}`).join("|");
+      if (agentGraphCacheRef.current && agentGraphCacheKeyRef.current === sig
+        && agentGraphCacheRef.current.__production) {
+        g = agentGraphCacheRef.current;
+      } else {
+        g = await fetchProductionSheetGraph();
+        if (g) g.__production = true;
+        agentGraphCacheRef.current = g;
+        agentGraphCacheKeyRef.current = sig;
+      }
+    } catch (e) {
+      return { error: `Production Session+ODL graph required for query_table: ${e?.message || e}` };
+    }
+    return queryTable(g, { title, row_key, column, cell_value, cell_contains, limit: 100 });
   }
 
   // Exports trigger a REAL browser download (the same downloadText the human
@@ -6918,6 +7058,187 @@ export default function TakeoffCanvas() {
     downloadText(filename, JSON.stringify(doc, null, 2), "application/json");
     return { downloaded: filename, condition_count: rows.length };
   }
+
+  /** Paint schedule-table + per-tag row highlights so the takeoff is auditable on the sheets. */
+  async function paintCompiledTakeoffHighlights(compiled) {
+    if (!compiled || compiled.error) return { tables: 0, rows: 0 };
+    const jobs = [];
+    const seenTable = new Set();
+    const enqueue = (item) => {
+      if (!item?.sheet_id) return;
+      if (Array.isArray(item.table_bbox_px) && item.table_bbox_px.length === 4) {
+        const k = `${item.sheet_id}|${item.table_bbox_px.join(",")}`;
+        if (!seenTable.has(k)) {
+          seenTable.add(k);
+          jobs.push({
+            sheet: item.sheet_id,
+            bbox_px: item.table_bbox_px,
+            table_title: item.table_title || "",
+            text: item.table_title || "Schedule",
+          });
+        }
+      }
+      if (item.tag && Array.isArray(item.bbox_px) && item.bbox_px.length === 4) {
+        jobs.push({
+          sheet: item.sheet_id,
+          bbox_px: item.bbox_px,
+          row_key: item.tag,
+          column: "MARK",
+          value: item.tag,
+          table_title: item.table_title || "",
+        });
+      }
+    };
+    if (compiled.kind === "hvac_equipment") {
+      for (const cat of Object.values(compiled.categories || {})) {
+        for (const item of cat.items || []) enqueue(item);
+      }
+    } else if (compiled.kind === "bas_points") {
+      for (const list of compiled.categories?.points_lists?.lists || []) {
+        for (const item of list.items || []) enqueue(item);
+      }
+    }
+    // Chunk so the UI stays responsive while the audit trail paints.
+    for (let i = 0; i < jobs.length; i += 40) {
+      const chunk = jobs.slice(i, i + 40);
+      await Promise.all(chunk.map((j) => agentHighlightCitation(j)));
+    }
+    return { tables: seenTable.size, rows: jobs.length - seenTable.size };
+  }
+
+  /** Feed finished compile into TakeoffDataPanel (Takeoff + Workflow data tabs). */
+  function showCompiledTakeoff(compiled, meta = {}) {
+    if (!compiled || compiled.error) return;
+    const totals = compiled.totals || (
+      compiled.kind === "hvac_equipment"
+        ? {
+          categories: Object.keys(compiled.categories || {}).length,
+          items: Object.values(compiled.categories || {}).reduce((n, c) => n + (c.items?.length || c.count || 0), 0),
+        }
+        : compiled.categories?.points_lists?.totals
+    );
+    setLastCorpusTakeoffMeta({
+      takeoff_id: compiled.takeoff_id,
+      kind: compiled.kind,
+      sheet_count: compiled.sheet_count,
+      totals,
+      empty_pages: compiled.page_accounting?.empty_pages,
+      exclusions: compiled.exclusions || [],
+      category_counts: compiled.kind === "hvac_equipment"
+        ? Object.fromEntries(Object.entries(compiled.categories || {}).map(([k, v]) => [k, v.count]))
+        : null,
+      list_counts: compiled.kind === "bas_points"
+        ? (compiled.categories?.points_lists?.lists || []).map((l) => ({
+          title: l.title, rows: l.rows, AI: l.AI, AO: l.AO, BI: l.BI, BO: l.BO,
+        }))
+        : null,
+    });
+    const rows = rowsFromCompiledTakeoff(compiled, {
+      workflow: meta.workflow || compiled.takeoff_id || "corpus takeoff",
+      runId: meta.runId || null,
+      source_tool: "compile_corpus_takeoff",
+    });
+    if (rows.length) {
+      setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, rows));
+      setShowTakeoffData(true);
+      // Audit trail on the blueprints: one highlight per schedule table + per tag row.
+      void paintCompiledTakeoffHighlights(compiled);
+    }
+  }
+
+  async function agentCompileCorpusTakeoff(kind, opts = {}) {
+    // Same Session+ODL+compileCorpusTakeoff path as MCP — never geometric-only.
+    let compiled;
+    try {
+      compiled = await fetchProductionCorpusTakeoff(kind);
+    } catch (e) {
+      // If the production endpoint is down, refuse rather than silently under-count.
+      return {
+        error: `Production compile (Session+ODL) failed: ${e?.message || e}. `
+          + "UI must use the same graph pipeline as MCP — geometric-only fallback is disabled for compile_corpus_takeoff.",
+      };
+    }
+    if (compiled?.error) return compiled;
+    if (!compiled?.takeoff_id && !compiled?.kind) {
+      return { error: "Production compile returned an empty result." };
+    }
+    const downloads = [];
+    if (opts.download !== false) {
+      const base = `${exportBaseName()}.${compiled.takeoff_id || "corpus-takeoff"}`;
+      downloadText(`${base}.json`, JSON.stringify(compiled, null, 2), "application/json");
+      downloads.push(`${base}.json`);
+      const sheets = takeoffWorkbookSheets(compiled);
+      const rollup = sheets.find((s) => s.name === "ROLLUP") || sheets[0];
+      if (rollup) {
+        downloadText(`${base}.rollup.csv`, rowsToCsv(rollup.rows), "text/csv");
+        downloads.push(`${base}.rollup.csv`);
+      }
+      try {
+        const bytes = await buildXlsx(sheets);
+        downloadBytes(`${base}.xlsx`, bytes);
+        downloads.push(`${base}.xlsx`);
+      } catch (e) {
+        // CSV/JSON still delivered
+      }
+    }
+    showCompiledTakeoff(compiled);
+    return {
+      takeoff_id: compiled.takeoff_id,
+      kind: compiled.kind,
+      sheet_count: compiled.sheet_count,
+      totals: compiled.totals,
+      empty_pages: compiled.page_accounting?.empty_pages,
+      exclusions: compiled.exclusions,
+      category_count: compiled.kind === "hvac_equipment"
+        ? Object.keys(compiled.categories || {}).length
+        : (compiled.categories?.points_lists?.lists || []).length,
+      category_counts: compiled.kind === "hvac_equipment"
+        ? Object.fromEntries(Object.entries(compiled.categories || {}).map(([k, v]) => [k, v.count]))
+        : null,
+      list_counts: compiled.kind === "bas_points"
+        ? (compiled.categories?.points_lists?.lists || []).map((l) => ({
+          title: l.title, rows: l.rows, AI: l.AI, AO: l.AO, BI: l.BI, BO: l.BO,
+        }))
+        : null,
+      downloaded: downloads,
+      // Panel is the production surface — fed by showCompiledTakeoff above.
+      ui_takeoff_open: true,
+      // Lean summary for the LLM; full item rows live in TakeoffDataPanel.
+    };
+  }
+
+  // Playwright / primary-agent UI demos call the same compile path the Agent
+  // tool uses — no blueprint hardcoding; works on whatever plan is loaded.
+  // Re-assigns every render so closures stay fresh. Do NOT delete in cleanup:
+  // React cleanup+setup races Playwright mid-call (openAgent undefined).
+  useEffect(() => {
+    window.__opentakeoff = {
+      compileCorpusTakeoff: (kind, opts) => agentCompileCorpusTakeoff(kind, opts),
+      showCompiledTakeoff,
+      openAgent: () => setAgentOpen(true),
+      openTakeoff: () => setShowTakeoffData(true),
+      lastCorpusTakeoff: () => lastCorpusTakeoffMeta,
+      takeoffRowCount: () => agentTakeoffRows.length,
+      debugGraph: async () => {
+        const g = await ensureAgentGraph();
+        return {
+          available: g.available,
+          sheet_count: g.sheets?.length,
+          table_count: g.tables?.length,
+          titles: (g.tables || []).map((t) => ({
+            sheet: t.sheet,
+            title: t.title?.text || t.title || null,
+            rows: (t.rows || []).length,
+          })),
+        };
+      },
+      clearGraphCache: () => {
+        agentGraphCacheRef.current = null;
+        agentGraphCacheKeyRef.current = "";
+        wholeSetSpansRef.current = new Map();
+      },
+    };
+  });
 
   // export_dxf (Phase 4) — mirrors MCP's export_dxf (session.ts exportDxf):
   // one sheet per file, like a DWG; sheet is required only when ambiguous
@@ -7119,6 +7440,13 @@ export default function TakeoffCanvas() {
    * matching MCP's own sweep_schedule_row exactly — that's symbol_sweep's
    * own opt-in, not wired into this tool on either side. */
   async function agentSweepScheduleRow(tag, opts = {}) {
+    const remote = await agentMcpTool("sweep_schedule_row", {
+      tag,
+      tagged_only: true,
+      rotations: opts.rotations,
+      mirror: opts.mirror,
+    });
+    if (remote) return remote;
     const g = await ensureAgentGraph();
     if (!g.available) return { error: "This set has no text layer (a scan) — schedule rows cannot be read." };
     const t = canonMark(tag);
@@ -7297,19 +7625,113 @@ export default function TakeoffCanvas() {
   async function agentFindText(key, q, region, limitOpt) {
     const query = (q || "").trim();
     if (!query) return { error: "Pass q — the text to find, e.g. a room number or a schedule tag." };
-    const dims = await ensureSheetGeometry(key);
-    if (!dims) return { error: `Sheet ${key} not found, or has no page to read.` };
-    const spans = await ensureTextSpans(key);
-    const r = region ? { x0: region.x0 * dims.w, y0: region.y0 * dims.h, x1: region.x1 * dims.w, y1: region.y1 * dims.h } : null;
-    const needle = query.toLowerCase();
-    const all = spans.filter((sp) => sp.str.toLowerCase().includes(needle)
-      && (!r || (sp.x0 <= r.x1 && sp.x1 >= r.x0 && sp.y0 <= r.y1 && sp.y1 >= r.y0)));
+    if (region && (key == null || key === "")) {
+      return { error: "region requires sheet; omit both to search the loaded set, or pass sheet with region." };
+    }
+    const remoteDims = (key && region) ? await ensureSheetDims(key) : null;
+    const remote = await agentMcpTool("find_text", {
+      ...(key ? { sheet: key } : {}),
+      q: query,
+      ...(region && remoteDims ? { region: {
+        x0: region.x0 * remoteDims.w,
+        y0: region.y0 * remoteDims.h,
+        x1: region.x1 * remoteDims.w,
+        y1: region.y1 * remoteDims.h,
+      } } : {}),
+      ...(limitOpt ? { limit: limitOpt } : {}),
+    });
+    if (remote) {
+      if (!Array.isArray(remote.hits)) return remote;
+      const mapHit = async (hit) => {
+        const sheetKey = hit.sheet || key;
+        const dims = sheetKey ? await ensureSheetDims(sheetKey) : null;
+        if (!dims || !Array.isArray(hit.bbox) || !Array.isArray(hit.center)) {
+          return { text: hit.str || hit.text, str: hit.str || hit.text, sheet: sheetKey || null };
+        }
+        return {
+          text: hit.str || hit.text,
+          str: hit.str || hit.text,
+          sheet: sheetKey || null,
+          bbox_px: Array.isArray(hit.bbox) && hit.bbox.length === 4 ? hit.bbox : undefined,
+          at: [hit.center[0] / dims.w, hit.center[1] / dims.h],
+          bbox: {
+            x0: hit.bbox[0] / dims.w,
+            y0: hit.bbox[1] / dims.h,
+            x1: hit.bbox[2] / dims.w,
+            y1: hit.bbox[3] / dims.h,
+          },
+        };
+      };
+      const hits = [];
+      for (const hit of remote.hits) hits.push(await mapHit(hit));
+      const emptyNext = remote.count === 0
+        ? (key
+          ? "Zero hits on that sheet. Omit sheet to search the loaded set, or try a shorter distinctive fragment from the user question—not a field name."
+          : "Zero hits across the loaded set. Try a shorter distinctive fragment from the user question—not a field name—or refuse if the text is not present.")
+        : undefined;
+      return {
+        ...remote,
+        hits,
+        ...(remote.next_move || emptyNext ? { next_move: remote.next_move || emptyNext } : {}),
+      };
+    }
     const limit = Math.max(1, Math.min(limitOpt || 200, 500));
-    const hits = all.slice(0, limit).map((sp) => ({
-      text: sp.str,
-      at: [+(((sp.x0 + sp.x1) / 2) / dims.w).toFixed(4), +(((sp.y0 + sp.y1) / 2) / dims.h).toFixed(4)],
-    }));
-    return { count: all.length, truncated: all.length > hits.length, hits };
+    const needle = query.toLowerCase();
+    const searchKeys = key
+      ? [key]
+      : agentStateRef.current.panels.filter((p) => p.img?.w).map((p) => p.key);
+    if (!searchKeys.length) {
+      return {
+        sheet: key || null,
+        q: query,
+        count: 0,
+        truncated: false,
+        hits: [],
+        next_move: key
+          ? "Zero hits on that sheet. Omit sheet to search the loaded set, or try a shorter distinctive fragment from the user question—not a field name."
+          : "Zero hits across the loaded set. Try a shorter distinctive fragment from the user question—not a field name—or refuse if the text is not present.",
+      };
+    }
+    const all = [];
+    for (const sheetKey of searchKeys) {
+      const dims = await ensureSheetGeometry(sheetKey);
+      if (!dims) continue;
+      const spans = await ensureTextSpans(sheetKey);
+      const r = (region && sheetKey === key)
+        ? { x0: region.x0 * dims.w, y0: region.y0 * dims.h, x1: region.x1 * dims.w, y1: region.y1 * dims.h }
+        : null;
+      for (const sp of spans) {
+        if (!sp.str.toLowerCase().includes(needle)) continue;
+        if (r && !(sp.x0 <= r.x1 && sp.x1 >= r.x0 && sp.y0 <= r.y1 && sp.y1 >= r.y0)) continue;
+        all.push({
+          text: sp.str,
+          str: sp.str,
+          sheet: sheetKey,
+          bbox_px: [sp.x0, sp.y0, sp.x1, sp.y1],
+          at: [+(((sp.x0 + sp.x1) / 2) / dims.w).toFixed(4), +(((sp.y0 + sp.y1) / 2) / dims.h).toFixed(4)],
+          bbox: {
+            x0: +(sp.x0 / dims.w).toFixed(4),
+            y0: +(sp.y0 / dims.h).toFixed(4),
+            x1: +(sp.x1 / dims.w).toFixed(4),
+            y1: +(sp.y1 / dims.h).toFixed(4),
+          },
+        });
+      }
+    }
+    const hits = all.slice(0, limit);
+    const result = {
+      sheet: key || null,
+      q: query,
+      count: all.length,
+      truncated: all.length > hits.length,
+      hits,
+    };
+    if (all.length === 0) {
+      result.next_move = key
+        ? "Zero hits on that sheet. Omit sheet to search the loaded set, or try a shorter distinctive fragment from the user question—not a field name."
+        : "Zero hits across the loaded set. Try a shorter distinctive fragment from the user question—not a field name—or refuse if the text is not present.";
+    }
+    return result;
   }
 
   // sheet_context — the sheet's STRUCTURE in one call: classified vector
@@ -7550,6 +7972,84 @@ export default function TakeoffCanvas() {
     return { id, sheet: key, type };
   }
 
+  async function agentHighlightCitation({
+    sheet, bbox_px, text = "", row_key = "", column = "", table_title = "", value = "",
+  }) {
+    if (!Array.isArray(bbox_px) || bbox_px.length !== 4 || bbox_px.some((v) => !Number.isFinite(v))) {
+      return { error: "bbox_px must contain four finite production image-pixel coordinates." };
+    }
+    const dims = await ensureSheetDims(sheet);
+    if (!dims) return { error: `Sheet ${sheet} not found.` };
+    const [x0, y0, x1, y1] = bbox_px;
+    if (!(x1 > x0 && y1 > y0) || x0 < 0 || y0 < 0 || x1 > dims.w || y1 > dims.h) {
+      return { error: "bbox_px is degenerate or outside the cited sheet." };
+    }
+    const rowKey = String(row_key || "").trim();
+    const col = String(column || "").trim();
+    const val = String(value || "").trim();
+    const tableTitle = String(table_title || "").trim();
+    const fallback = String(text || "").trim();
+    const label = (() => {
+      if (rowKey && col && val) return `${rowKey} · ${col} = ${val}`;
+      if (rowKey && col) return `${rowKey} · ${col}`;
+      if (rowKey && val) return `${rowKey} · ${val}`;
+      if (col && val) return `${col} = ${val}`;
+      return fallback || "Cited source";
+    })();
+    const result = await agentAnnotate({
+      sheet,
+      type: "highlight",
+      // Keep label text on the markup record for lists/tool results, but the
+      // canvas never draws it inside the rect (would cover the cited value).
+      text: label,
+      rect: [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]],
+    });
+    if (result.error) return result;
+    // Estimator-clarity: paint quietly — do NOT auto-fly the viewport.
+    // Source cards in the Agent panel are how the estimator jumps on demand.
+    setShowMarkups(true);
+    setAgentCitations((list) => {
+      if (list.some((c) => c.id === result.id)) return list;
+      return [...list, {
+        id: result.id,
+        markupId: result.id,
+        sheet,
+        sheetLabel: tabLabel(sheet),
+        label,
+        text: fallback || label,
+        row_key: rowKey || undefined,
+        column: col || undefined,
+        table_title: tableTitle || undefined,
+        value: val || undefined,
+        bbox_px,
+      }];
+    });
+    return {
+      ...result,
+      bbox_px,
+      text: label,
+      row_key: rowKey || null,
+      column: col || null,
+      table_title: tableTitle || null,
+      value: val || null,
+      opened_sheet: sheet,
+      navigation: "agent_panel_card",
+    };
+  }
+
+  function openAgentCitation(citation) {
+    if (!citation) return;
+    setShowMarkups(true);
+    const markup = agentStateRef.current.markups.find((m) => m.id === citation.markupId)
+      || markups.find((m) => m.id === citation.markupId);
+    if (markup) {
+      flyToMarkup(markup);
+      return;
+    }
+    // Markup not found yet — open the sheet; user can retry from the card.
+    if (citation.sheet) openSheets([citation.sheet], false);
+  }
+
   function agentListAnnotations(sheetFilter, conditionFilter) {
     const st = agentStateRef.current;
     const tagById = new Map(st.conditions.map((c) => [c.id, c.finish_tag]));
@@ -7725,8 +8225,10 @@ export default function TakeoffCanvas() {
       sheetGraph: agentSheetGraph,
       resolveTag: agentResolveTag,
       findSchedule: agentFindSchedule,
+      queryTable: agentQueryTable,
       exportTakeoff: agentExportTakeoff,
       exportReport: agentExportReport,
+      compileCorpusTakeoff: agentCompileCorpusTakeoff,
       countMarks: agentCountMarks,
       sweepScheduleRow: agentSweepScheduleRow,
       findText: agentFindText,
@@ -7735,6 +8237,7 @@ export default function TakeoffCanvas() {
       exportDxf: agentExportDxf,
       exportMarkedPdf: agentExportMarkedPdf,
       annotate: agentAnnotate,
+      highlightCitation: agentHighlightCitation,
       listAnnotations: agentListAnnotations,
       linkAnnotation: agentLinkAnnotation,
       markVerdict: agentMarkVerdict,
@@ -8196,18 +8699,40 @@ export default function TakeoffCanvas() {
   const rejectAllAgentProposals = () => setAgentProposals([]);
 
   // ── the run ────────────────────────────────────────────────────────────────
-  const trimJson = (v, n) => { let s; try { s = JSON.stringify(v); } catch { s = String(v); } return s && s.length > n ? `${s.slice(0, n)}…` : s || ""; };
   function appendAgentLog(ev) {
+    // Estimator-clarity: live log keeps short tool names (for proof harness /
+    // Run History) but the panel shows plain-language status + the answer.
+    // Full args/results still land in Run History via recordRunEvent.
+    const STATUS = {
+      list_sheets: "Listing sheets in this set…",
+      sheet_graph: "Mapping schedules and sheets…",
+      find_schedule: "Finding the right schedule…",
+      read_schedule: "Reading schedule rows…",
+      query_table: "Reading schedule data…",
+      find_text: "Searching the drawings…",
+      read_sheet_text: "Reading sheet text…",
+      sweep_schedule_row: "Looking for plan tags…",
+      count_marks: "Counting marks on plans…",
+      highlight_citation: "Saving a source card…",
+      project_takeoff: "Building the project takeoff…",
+      compile_corpus_takeoff: "Compiling the full takeoff…",
+      view_sheet: "Checking a sheet…",
+      resolve_tag: "Resolving a tag…",
+    };
+    if (ev.type === "tool_start") setAgentStatus(STATUS[ev.name] || `Working (${ev.name})…`);
+    if (ev.type === "done" || ev.type === "aborted" || ev.type === "error" || ev.type === "max_iterations") {
+      setAgentStatus("");
+    }
     const entry =
       ev.type === "text" ? { kind: "text", text: ev.text }
-      : ev.type === "tool_start" ? { kind: "tool", text: `→ ${ev.name} ${trimJson(ev.args, 120)}` }
+      : ev.type === "tool_start" ? { kind: "tool", text: `→ ${ev.name}` }
       : ev.type === "tool_end" ? (ev.result?.error
           ? { kind: "error", text: `✗ ${ev.name}: ${ev.result.error}` }
-          : { kind: "status", text: `✓ ${ev.name} ${trimJson({ ...ev.result, image_data_url: undefined, items: Array.isArray(ev.result?.items) ? `${ev.result.items.length} items` : undefined }, 160)}` })
+          : { kind: "status", text: `✓ ${ev.name}` })
       : ev.type === "error" ? { kind: "error", text: `Error: ${ev.message}` }
       : ev.type === "aborted" ? { kind: "status", text: "Stopped." }
       : ev.type === "max_iterations" ? { kind: "status", text: `Stopped at the ${ev.limit}-step cap — review what's staged.` }
-      : ev.type === "done" ? { kind: "status", text: "Done — review the dashed proposals." }
+      : ev.type === "done" ? { kind: "status", text: "Done — review the answer and source cards." }
       : null;
     if (entry) setAgentLog((l) => [...l.slice(-199), entry]);
   }
@@ -8239,27 +8764,84 @@ export default function TakeoffCanvas() {
     if (runSaveTimerRef.current) clearTimeout(runSaveTimerRef.current);
     runSaveTimerRef.current = setTimeout(() => { runSaveTimerRef.current = null; saveRun(run); }, 700);
   }
-  async function runAgent(goal) {
+  async function runAgent(goal, opts = {}) {
     if (agentRunning) return;
     if (!isAiConfigured()) { setShowAiSettings(true); return; }
     if (agentStateRef.current.status !== "ready") { setCommitMsg("Sheet still loading — try again in a moment."); return; }
+    const ask = String(goal || "").trim();
+    if (!ask) return;
+    const followUp = !!opts.followUp && agentPriorRef.current.length > 0;
     const ctl = new AbortController();
     agentAbortRef.current = ctl;
     setAgentRunning(true);
-    setAgentLog([{ kind: "status", text: `Goal: ${goal}` }]);
-    const run = newRun(goal);
+    setAgentStatus(followUp ? "Thinking about your follow-up…" : "Starting…");
+    if (!followUp) {
+      setAgentCitations([]);
+      agentPriorRef.current = [];
+      setAgentThread([{ role: "user", text: ask }]);
+      setAgentLog([{ kind: "status", text: `Goal: ${ask}` }]);
+    } else {
+      setAgentThread((t) => [...t, { role: "user", text: ask }]);
+      setAgentLog((l) => [...l, { kind: "status", text: `Follow-up: ${ask}` }]);
+    }
+    const run = newRun(ask);
     currentRunRef.current = run;
     saveRun(run); // persist immediately — even an instant crash leaves the goal itself on record
     const ctx = buildAgentCtx();
+    const collectedTakeoff = [];
     try {
-      await runAgentLoop({
-        cfg: aiConfig(), goal, tools: AGENT_TOOL_DEFS,
+      const result = await runAgentLoop({
+        cfg: aiConfig(), goal: ask, tools: AGENT_TOOL_DEFS,
+        priorMessages: followUp ? agentPriorRef.current : [],
         execute: (name, args) => executeAgentTool(ctx, name, args),
-        onEvent: (ev) => { appendAgentLog(ev); recordRunEvent(ev); },
+        onEvent: (ev) => {
+          appendAgentLog(ev);
+          recordRunEvent(ev);
+          // Every successful tool result lands in TakeoffDataPanel (Workflow data
+          // aggregate → Takeoff tab compiles finished lines).
+          if (ev.type === "tool_end" && ev.name && ev.result && !ev.result.error) {
+            collectedTakeoff.push(...rowsFromToolResult(ev.name, ev.args || {}, ev.result, {
+              workflow: ask,
+              runId: run.id,
+            }));
+          }
+        },
         signal: ctl.signal,
       });
+      const answerText = typeof result?.text === "string" ? result.text.trim() : "";
+      if (answerText) {
+        const fromTables = rowsFromAnswerMarkdown(answerText, { workflow: ask, runId: run.id });
+        const merged = dedupeTakeoffRows([...collectedTakeoff, ...fromTables]);
+        if (merged.length) {
+          setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, merged));
+          setShowTakeoffData(true);
+        }
+        const { chat } = splitConversationalAnswer(answerText, { rowCount: merged.length });
+        agentPriorRef.current = [
+          ...agentPriorRef.current,
+          { role: "user", content: ask },
+          { role: "assistant", content: answerText },
+        ];
+        setAgentThread((t) => {
+          const last = t[t.length - 1];
+          if (last?.role === "assistant" && (last.text === chat || last.text === answerText)) {
+            return [...t.slice(0, -1), { role: "assistant", text: chat, takeoffRows: merged.length }];
+          }
+          return [...t, { role: "assistant", text: chat, takeoffRows: merged.length }];
+        });
+      } else if (collectedTakeoff.length) {
+        const merged = dedupeTakeoffRows(collectedTakeoff);
+        setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, merged));
+        setShowTakeoffData(true);
+        setAgentThread((t) => [...t, {
+          role: "assistant",
+          text: `Wrote ${merged.length} takeoff row${merged.length === 1 ? "" : "s"} to the Takeoff panel — open Takeoff to review and export.`,
+          takeoffRows: merged.length,
+        }]);
+      }
     } finally {
       setAgentRunning(false);
+      setAgentStatus("");
       agentAbortRef.current = null;
       if (runSaveTimerRef.current) { clearTimeout(runSaveTimerRef.current); runSaveTimerRef.current = null; }
       const run = currentRunRef.current;
@@ -8271,6 +8853,15 @@ export default function TakeoffCanvas() {
       }
       refreshRunHistory();
     }
+  }
+
+  function resetAgentChat() {
+    if (agentRunning) return;
+    agentPriorRef.current = [];
+    setAgentThread([]);
+    setAgentCitations([]);
+    setAgentLog([]);
+    setAgentStatus("");
   }
   const stopAgent = () => agentAbortRef.current?.abort();
 
@@ -9712,6 +10303,17 @@ export default function TakeoffCanvas() {
         <div style={{ flex: 1 }} />
         </div>
         <span data-topbar-pinned style={{ display: "inline-flex", alignItems: "center", gap: 7, flexShrink: 0, paddingTop: 16 }}>
+        <button onClick={() => setShowTakeoffData(true)}
+          title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export."
+          style={{
+            padding: "8px 14px", border: "none",
+            background: agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
+            color: agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
+            cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11,
+            letterSpacing: "0.12em", textTransform: "uppercase",
+          }}>
+          Takeoff{agentTakeoffRows.length ? ` · ${agentTakeoffRows.length}` : ""}
+        </button>
         <button onClick={() => setShowReport(true)} disabled={!conditions.length} title="Open the takeoff report — per-condition breakdown with waste, plus CSV / JSON export."
           style={{ padding: "8px 14px", border: "none", background: conditions.length ? "var(--ink)" : "var(--text-faint)", color: "var(--paper-bright)", cursor: conditions.length ? "pointer" : "default", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase" }}>Report</button>
         {/* ⋯ overflow — rarely-used project controls, so the row never wraps
@@ -10570,10 +11172,14 @@ export default function TakeoffCanvas() {
                         const hx1 = Math.max(c0[0], c1[0]) * p.img.w, hy1 = Math.max(c0[1], c1[1]) * p.img.h;
                         const pad = (5 * w) / z;
                         return (
-                          <g key={m.id}>
+                          <g key={m.id} data-markup-type="highlight" data-markup-id={m.id} data-markup-sheet={m.sheet_id}>
                             {halo(hx0 - pad, hy0 - pad, hx1 + pad, hy1 + pad)}
-                            <rect x={hx0} y={hy0} width={hx1 - hx0} height={hy1 - hy0} fill={mk} fillOpacity={0.18} stroke={mk} strokeWidth={(2 * w) / z} strokeDasharray={dash} />
-                            {m.text && <text x={(hx0 + hx1) / 2} y={(hy0 + hy1) / 2} fill={mk} fontSize={13 / z} fontWeight="700" textAnchor="middle" dominantBaseline="central" style={{ pointerEvents: "none" }}>{m.text}</text>}
+                            {/* Citation/hand highlights are a translucent frame only —
+                                never draw m.text inside the rect: that covers the
+                                schedule value / drawing text the highlight is citing. */}
+                            <rect x={hx0} y={hy0} width={hx1 - hx0} height={hy1 - hy0} fill={mk} fillOpacity={0.18} stroke={mk} strokeWidth={(2 * w) / z} strokeDasharray={dash}>
+                              {m.text ? <title>{m.text}</title> : null}
+                            </rect>
                             {badge(hx0, hy0 - pad - 9 / z)}
                           </g>
                         );
@@ -11503,7 +12109,10 @@ export default function TakeoffCanvas() {
           <AgentPanel
             configured={isAiConfigured()}
             running={agentRunning}
+            status={agentStatus}
             log={agentLog}
+            thread={agentThread}
+            citations={agentCitations}
             proposals={agentProposals}
             condById={condById}
             sheetLabel={(k) => tabLabel(k)}
@@ -11511,12 +12120,16 @@ export default function TakeoffCanvas() {
             fmtArea={(sf) => fa(sf)}
             onRun={runAgent}
             onStop={stopAgent}
+            onResetChat={resetAgentChat}
+            onOpenCitation={openAgentCitation}
             onAccept={acceptAgentProposal}
             onReject={rejectAgentProposal}
             onAcceptAll={acceptAllVisibleAgentProposals}
             onRejectAll={rejectAllAgentProposals}
             onOpenSettings={() => setShowAiSettings(true)}
             onClose={() => setAgentOpen(false)}
+            onOpenTakeoff={() => setShowTakeoffData(true)}
+            takeoffRowCount={agentTakeoffRows.length}
             runHistory={runHistory}
             historyOpen={runHistoryOpen}
             onToggleHistory={() => { if (!runHistoryOpen) refreshRunHistory(); setRunHistoryOpen((o) => !o); }}
@@ -11642,6 +12255,41 @@ export default function TakeoffCanvas() {
           </span>
           <button onClick={() => window.location.reload()} style={{ whiteSpace: "nowrap", padding: "6px 12px", border: "1px solid var(--ink-faint)", background: "var(--paper-bright)", cursor: "pointer", fontSize: 12 }}>Reload</button>
         </div>
+      )}
+
+      {showTakeoffData && (
+        <TakeoffDataPanel
+          rows={agentTakeoffRows}
+          projectName={projectName}
+          corpusMeta={lastCorpusTakeoffMeta}
+          onClear={() => { setAgentTakeoffRows([]); setLastCorpusTakeoffMeta(null); }}
+          onRemove={(id) => setAgentTakeoffRows((rows) => rows.filter((r) => r.id !== id))}
+          onRemoveLine={(line) => {
+            const ids = new Set(line?.source_ids || []);
+            if (!ids.size) return;
+            setAgentTakeoffRows((rows) => rows.filter((r) => !ids.has(r.id)));
+          }}
+          onClose={() => setShowTakeoffData(false)}
+          onOpenCitation={async (row) => {
+            if (!row?.sheet_id || !row?.bbox_px) return;
+            // Close the takeoff modal so the estimator can see the sheet highlight.
+            setShowTakeoffData(false);
+            const result = await agentHighlightCitation({
+              sheet: row.sheet_id,
+              bbox_px: row.bbox_px,
+              row_key: row.tag || row.row_key || "",
+              column: row.column || row.field || "",
+              table_title: row.table_title || "",
+              value: String(row.value ?? row.qty ?? ""),
+            });
+            if (result?.error) {
+              setCommitMsg(`Could not open cite: ${result.error}`);
+              return;
+            }
+            const markup = agentStateRef.current.markups.find((m) => m.id === result.id);
+            if (markup) flyToMarkup(markup);
+          }}
+        />
       )}
 
       {showReport && (

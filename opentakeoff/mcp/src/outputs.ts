@@ -45,6 +45,148 @@ export const loadPlanOutput = {
   note: z.string(),
 };
 
+const projectTakeoffItem = z.object({
+  tag: z.string(),
+  equipment_type: z.string().nullable(),
+  category: z.string().nullable(),
+  schedule: z.object({
+    sheet: z.string(),
+    kind: z.string(),
+    title: z.string().nullable(),
+  }).nullable(),
+  schedule_row: z.record(z.string(), z.string()).nullable(),
+  quantity: z.number(),
+  drawing_locations: z.array(z.object({ sheet: z.string(), at: point })),
+  siblings_excluded: z.array(z.string()),
+  corroborated: z.boolean(),
+  status: z.enum(["resolved", "refused", "error"]),
+  reason: z.string().optional(),
+  source: z.enum(["schedule_row", "legend_symbol"]),
+  legend: z.object({ sheet: z.string(), caption: z.string(), at: point }).optional(),
+});
+
+const projectTakeoffStats = {
+  schedule_rows_total: z.number().int(),
+  resolved: z.number().int(),
+  refused: z.number().int(),
+  errored: z.number().int(),
+  total_drawn_instances: z.number(),
+};
+
+const extractedTable = z.object({
+  sheet: z.string(),
+  kind: z.string().optional(),
+  title: z.string().nullable(),
+  headers: z.array(z.string()),
+  rows: z.array(z.object({
+    key: z.string(),
+    cells: z.record(z.string(), z.string()),
+  })),
+}).passthrough();
+
+/** Schedule / points-list quantity takeoff (corpus T-HVAC-01 / T-BAS-01). */
+export const compileCorpusTakeoffOutput = {
+  takeoff_id: z.string(),
+  kind: z.enum(["hvac_equipment", "bas_points"]),
+  compiler: z.string(),
+  sheet_count: z.number().int(),
+  totals: z.record(z.string(), z.number()).optional(),
+  categories: z.any(),
+  page_accounting: z.object({
+    sheet_count: z.number().int(),
+    pages_accounted_for: z.number().int(),
+    empty_pages: z.number().int(),
+    pages: z.array(z.any()).optional(),
+  }).passthrough(),
+  exclusions: z.array(z.string()),
+  path: z.string().nullable().optional(),
+  export_path: z.string().nullable().optional(),
+};
+
+/** Complete production query surface for an unattended plan-set takeoff. */
+export const projectTakeoffOutput = {
+  set_files: z.array(z.string()),
+  family_filter: z.array(z.string()).nullable(),
+  equipment_type_filter: z.array(z.string()).nullable(),
+  items: z.array(projectTakeoffItem),
+  legend_items: z.array(projectTakeoffItem),
+  reference_tables: z.array(extractedTable),
+  extracted_tables: z.array(extractedTable),
+  failures: z.array(z.object({
+    type: z.string(),
+    tag: z.string(),
+    sheet: z.string().optional(),
+    detail: z.string(),
+  })),
+  tables_seen: z.array(z.object({
+    sheet: z.string(),
+    kind: z.string(),
+    title: z.string().nullable(),
+    rows: z.number().int(),
+  })),
+  legend_sheets_seen: z.array(z.object({
+    sheet: z.string(),
+    glyphs_detected: z.number().int(),
+  })),
+  stats: z.object(projectTakeoffStats),
+  legend_stats: z.object({
+    glyphs_seen: z.number().int(),
+    glyphs_matched: z.number().int(),
+    resolved: z.number().int(),
+    refused: z.number().int(),
+    errored: z.number().int(),
+    total_drawn_instances: z.number(),
+  }),
+};
+
+const sourceBox = z.tuple([z.number(), z.number(), z.number(), z.number()]);
+
+export const queryTableOutput = {
+  query: z.object({
+    title: z.string().nullable(),
+    row_key: z.string().nullable(),
+    column: z.string().nullable(),
+    cell_value: z.string().nullable(),
+    cell_contains: z.string().nullable(),
+  }),
+  count: z.number().int(),
+  truncated: z.boolean(),
+  matches: z.array(z.object({
+    sheet: z.string(),
+    kind: z.string(),
+    title: z.object({ text: z.string(), bbox: sourceBox }).nullable(),
+    region: sourceBox,
+    headers: z.array(z.string()),
+    /** False when the row key is junk on this equipment schedule (e.g. SUITE100
+     * on a VOLUME CONTROL BOX / VAV schedule) and must not count as a family unit. */
+    family_mark: z.boolean().optional(),
+    row: z.object({
+      key: z.string(),
+      identity: z.object({
+        header: z.string(),
+        text: z.string(),
+        bbox: sourceBox,
+      }).nullable(),
+      family_mark: z.boolean().optional(),
+      cells: z.record(z.string(), z.object({
+        text: z.string(),
+        bbox: sourceBox,
+      })),
+      all_cells: z.record(z.string(), z.object({
+        text: z.string(),
+        bbox: sourceBox,
+      })),
+    }),
+  })),
+  /** Present on broad title scans: unique-key totals partitioned by the
+   * building letter encoded in MEP tags (e.g. FCU-A1 → A, VAV-M101 → M). */
+  building_tag_counts: z.record(z.string(), z.number().int()).optional(),
+  /** Present on broad points-list / DDC list title scans when keys are
+   * AI##/AO##/BI##/BO## — copy these for point-type rollups. */
+  point_type_counts: z.record(z.string(), z.number().int()).optional(),
+  next_move: z.string().optional().describe("Present only when count is 0; names the next legal tool move without inventing values"),
+};
+
 export const sheetInfoOutput = {
   ...sheetSummary,
   seg_count: z.number().int().describe("Vector segment count"),
@@ -599,15 +741,17 @@ export const undoLastOutput = {
 /** findText — the complement to readSheetTextOutput: WHERE a known string
  * sits, not what a region says. */
 export const findTextOutput = {
-  sheet: z.string(),
+  sheet: z.string().nullable().describe("Sheet searched, or null when the query ran across the loaded set"),
   q: z.string(),
   count: z.number().int().describe("Total matches before the limit cap"),
   truncated: z.boolean().describe("true = count exceeds hits.length; narrow the region or raise limit"),
   hits: z.array(z.object({
+    sheet: z.string().describe("Sheet containing this hit"),
     str: z.string().describe("The matched pdf.js text run, verbatim (may be shorter than the full label — runs aren't merged into lines)"),
     bbox: z.tuple([z.number(), z.number(), z.number(), z.number()]).describe("[x0, y0, x1, y1] image px"),
     center: z.tuple([z.number(), z.number()]).describe("Bbox center, image px — feed straight into one_click's seed"),
   })),
+  next_move: z.string().optional().describe("Present only when count is 0; names the next legal tool move without inventing values"),
 };
 
 /** editMaterials — session.ts's MaterialRow, verbatim. */
@@ -821,13 +965,23 @@ const rowSweepPlacement = {
 
 export const sweepScheduleRowOutput = {
   tag: z.string().describe("The row key as normalized (the tag as drawn)"),
+  search_scope: z.enum(["exhaustive", "tagged_only"]).describe("exhaustive audits every plan sheet for unlabeled near-matches; tagged_only searches every exact tag occurrence but skips sheets that cannot contribute a tagged count"),
+  unlabeled_audit_complete: z.boolean().describe("false only in tagged_only mode, where the installed tagged count is complete but unlabeled/sibling geometry was not exhaustively audited"),
   row: z.object({
     sheet: z.string(),
     table: z.string().describe("The table's title (or kind, when untitled)"),
     key: z.string(),
     cells: z.record(z.string()).describe("The row's cells, header → text — what the schedule SAYS this mark is"),
+    cell_citations: z.record(z.string(), z.object({
+      text: z.string(),
+      bbox: wireBox,
+    })).describe("Every row cell with its exact source text and bbox; use this instead of the row-level citation for field answers"),
     citation: wireEvidence,
   }).describe("The schedule row the sweep was seeded from — the condition's source"),
+  tag_citations: z.array(z.object({
+    sheet: z.string(),
+    bbox: wireBox,
+  })).describe("One exact plan tag bbox per counted placement; use for the equipment tag and installed quantity"),
   anchor: z.object({
     sheet: z.string().describe("The plan sheet the fingerprint was anchored on"),
     at: z.tuple([z.number(), z.number()]).describe("The anchoring tag occurrence's center (image px)"),

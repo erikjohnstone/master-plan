@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "demo_id": "D01",
+  "set_id": "navfac-cherry-point-atc",
+  "source_file": "navfac-cherry-point-atc-mechanical.pdf",
+  "ground_truth_completed_before_model_runs": true,
+  "derivation": "Read CH-A1 directly on the rendered MS101 site-plan crop, then transcribed the CH-A1 and CV-CH-A1 rows from the independently rendered M-603 schedule crops.",
+  "sources": {
+    "plan": {
+      "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#3",
+      "sheet_number": "MS101",
+      "page_bounds_px": [0, 0, 4896, 3168],
+      "region_px": [2350, 2100, 3050, 2850],
+      "evidence": "renders/navfac-cherry-point-atc--p3-ch-a1-site-crop.png"
+    },
+    "chiller_schedule": {
+      "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+      "sheet_number": "M-603",
+      "table_title": "AIR COOLED CHILLER SCHEDULE",
+      "page_bounds_px": [0, 0, 4896, 3168],
+      "table_region_px": [435.84, 172.8, 3126.96, 375.12],
+      "evidence": "renders/navfac-cherry-point-atc--rry-point-atc-mechanical-p44--02-air-cooled-chiller-schedule-1of1.png"
+    },
+    "valve_schedule": {
+      "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+      "sheet_number": "M-603",
+      "table_title": "CHW CONTROL VALVE SCHEDULE",
+      "page_bounds_px": [0, 0, 4896, 3168],
+      "table_region_px": [3460.064, 485.04, 4442.142, 1337.048],
+      "evidence": "renders/navfac-cherry-point-atc--rry-point-atc-mechanical-p44--08-chw-control-valve-schedule-1of1.png"
+    }
+  },
+  "expected": {
+    "equipment_tag": {
+      "type": "string",
+      "value": "CH-A1",
+      "tolerance": "exact",
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#3",
+        "bbox_px": [2520, 2490, 2605, 2535],
+        "grounding_text": "CH-A1",
+        "ocr_mode": "single_line"
+      }
+    },
+    "installed_quantity": {
+      "type": "integer",
+      "value": 1,
+      "tolerance": 0,
+      "derivation": "One CH-A1 unit rectangle and tag are present in the cited MS101 region; CH-A2 is a separate adjacent unit.",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#3",
+          "bbox_px": [2520, 2490, 2605, 2535],
+          "grounding_text": "CH-A1",
+          "ocr_mode": "single_line"
+        }
+      ]
+    },
+    "capacity_tons": {
+      "type": "number",
+      "value": 56.0,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+        "table_title": "AIR COOLED CHILLER SCHEDULE",
+        "row_key": "CH-A1",
+        "column": "CAPACITY (TONS)",
+        "bbox_px": [555.12, 304.8, 739.92, 339.36],
+        "grounding_text": "56.0"
+      }
+    },
+    "entering_water_temperature_f": {
+      "type": "number",
+      "value": 55.4,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+        "table_title": "AIR COOLED CHILLER SCHEDULE",
+        "row_key": "CH-A1",
+        "column": "EWT (°F)",
+        "bbox_px": [739.92, 304.8, 883.92, 339.36],
+        "grounding_text": "55.4"
+      }
+    },
+    "leaving_water_temperature_f": {
+      "type": "number",
+      "value": 45,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+        "table_title": "AIR COOLED CHILLER SCHEDULE",
+        "row_key": "CH-A1",
+        "column": "LWT (°F)",
+        "bbox_px": [883.92, 304.8, 1027.68, 339.36],
+        "grounding_text": "45"
+      }
+    },
+    "design_flow_gpm": {
+      "type": "number",
+      "value": 128.5,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+        "table_title": "AIR COOLED CHILLER SCHEDULE",
+        "row_key": "CH-A1",
+        "column": "GPM",
+        "bbox_px": [1027.68, 304.8, 1171.68, 339.36],
+        "grounding_text": "128.5"
+      }
+    },
+    "control_valve_tag": {
+      "type": "string",
+      "value": "CV-CH-A1",
+      "tolerance": "exact",
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+        "table_title": "CHW CONTROL VALVE SCHEDULE",
+        "row_key": "CV-CH-A1",
+        "column": "VALVE MARK",
+        "bbox_px": [3611.04, 680.646, 3802.32, 714.966],
+        "grounding_text": "CV-CH-A1"
+      }
+    },
+    "control_valve_flow_gpm": {
+      "type": "number",
+      "value": 128.0,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+        "table_title": "CHW CONTROL VALVE SCHEDULE",
+        "row_key": "CV-CH-A1",
+        "column": "FLOWRATE (GPM)",
+        "bbox_px": [3802.32, 680.646, 3940.322, 714.966],
+        "grounding_text": "128.0"
+      }
+    },
+    "control_valve_size_in": {
+      "type": "number",
+      "value": 4,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+        "table_title": "CHW CONTROL VALVE SCHEDULE",
+        "row_key": "CV-CH-A1",
+        "column": "VALVE SIZE (IN)",
+        "bbox_px": [3940.322, 680.646, 4038.006, 714.966],
+        "grounding_text": "4"
+      }
+    },
+    "control_valve_configuration": {
+      "type": "string",
+      "value": "2-WAY",
+      "tolerance": "exact",
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+        "table_title": "CHW CONTROL VALVE SCHEDULE",
+        "row_key": "CV-CH-A1",
+        "column": "CONFIGURATION",
+        "bbox_px": [4038.006, 680.646, 4213.458, 714.966],
+        "grounding_text": "2-WAY"
+      }
+    },
+    "control_valve_cv": {
+      "type": "number",
+      "value": 324.0,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+        "table_title": "CHW CONTROL VALVE SCHEDULE",
+        "row_key": "CV-CH-A1",
+        "column": "CV",
+        "bbox_px": [4213.458, 680.646, 4357.46, 714.966],
+        "grounding_text": "324.0"
+      }
+    }
+  }
+}

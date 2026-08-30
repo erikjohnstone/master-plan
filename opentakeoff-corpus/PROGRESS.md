@@ -1,0 +1,309 @@
+# Corpus goal progress
+
+This is the coordinator's durable, auditable handoff for `GOAL.md`. Update it
+only from independently reproduced results; worker reports remain provisional
+until verification.
+
+## Verified baseline
+
+Commit `b46c97f`, Node 24, full corpus run on 2026-08-29:
+
+- Takeoff: 78.4% exact (404/515), total quantity delta 230, 40 missing,
+  20 false-adds.
+- Reference tables: Bessemer 12/12, ITD 34/34, Federal 27/31, NAVFAC
+  25/31, Building 5406 0/0, Baker 16/21, ITD raster 0/0.
+- Sheet graph: cells 91 right / 0 wrong / 0 missed; row-symbol recall 94.2%
+  (131 found, 1 unexpected resolve, 8 missed).
+
+Takeoff by set:
+
+| Set | Exact | Quantity delta | Missing | False-add |
+| --- | ---: | ---: | ---: | ---: |
+| bessemer | 10/10 (100.0%) | 0 | 0 | 0 |
+| itd-d1-lab | 114/116 (98.3%) | 3 | 0 | 0 |
+| federal-mech | 77/83 (92.8%) | 6 | 1 | 18 |
+| navfac-cherry-point-atc | 168/215 (78.1%) | 64 | 1 | 2 |
+| bldg5406-hvac-demo | 10/23 (43.5%) | 13 | 10 | 0 |
+| baker-county-eoc | 25/40 (62.5%) | 80 | 0 | 0 |
+| itd-d1-lab-raster | 0/28 (0.0%) | 64 | 28 | 0 |
+
+## Accepted changes
+
+- Portable corpus PDF resolution for cloud, CI, and alternate checkout roots.
+- Federal VAV key notes corrected after independently confirming all 58 VAV
+  tags resolve in the current pipeline.
+- Combined corpus evaluator reuses one takeoff pipeline pass for both takeoff
+  and reference scoring. Full-corpus metrics were byte-for-byte unchanged;
+  wall time fell from 3,875 seconds to 1,887 seconds (51.3% faster).
+- Sparse tank schedules survive concatenated PDF-extractor titles and are
+  promoted consistently on the ODL path. Building 5406 improved from 10/23
+  (43.5%) to 11/23 (47.8%); missing tags fell from 10 to 9 and quantity delta
+  from 13 to 12. Bessemer remained 100.0% and ITD remained 98.3%.
+- Corpus-only schedule-row matching now generates and scores geometric
+  candidates only inside the existing claim radius of that row's own drawn
+  tag. Interactive/production sweeps retain their complete whole-sheet
+  disclosure. The 116-tag ITD set fell from more than 134 seconds to 21.6
+  seconds and produced byte-identical scored JSON.
+- Complete per-set scorer results are content-addressed by engine/evaluator
+  source, Node and dependency versions, PDFs, and authored keys. Takeoff and
+  graph fan-outs run concurrently across the four-core coordinator. A verified
+  unchanged full-corpus run now takes 3.68 seconds, down from 1,887 seconds;
+  forced-cold recomputation takes 105.6 seconds. Current post-tank metrics
+  remain 405/515 exact (78.6%), quantity delta 229, 39 missing, 20 false-adds;
+  reference scores are unchanged and graph row-symbol recall remains 94.2%.
+  `OPENTAKEOFF_EVAL_NO_CACHE=1` forces cold recomputation and
+  `OPENTAKEOFF_EVAL_FULL_SWEEP=1` restores the complete production search for
+  equivalence checks.
+- First three-fix accuracy batch, independently verified forced-cold on
+  2026-08-29 at commit `4f8a85c` (43.6 seconds):
+  - Takeoff improved from the post-tank 405/515 (78.6%) to 420/515 (81.6%);
+    quantity delta fell from 229 to 211 with missing/false-add counts unchanged
+    at 39/20. Federal improved 77/83 → 82/83 and NAVFAC 168/215 → 178/215;
+    ITD remained 114/116 and Bessemer remained 10/10.
+  - Reference extraction improved from 114/129 to 116/129 exact. Federal's
+    stranded `FT. H2O` header tier now promotes into the column name and both
+    hydronic pressure-drop values score; all previously-exact cells remain
+    exact.
+  - Aligned same-sheet repeated views collapse only after four distinct
+    schedule-tag landmark pairs establish registration. Repeated instances
+    inside one view and fewer-than-four-pair controls remain untouched.
+  - A separately corroborated inline hatch motif may supplement, never
+    replace, whole-shape matches only for diffuser/grille/register schedules
+    and only at still-unclaimed occurrences of that exact tag. The first
+    corpus gate caught an over-broad version adding three ITD plumbing
+    overcounts; schedule-family scoping removed all three before acceptance.
+  - Graph metrics remain unchanged: 91/91 cells exact and 94.2% row-symbol
+    recall. Web and MCP typechecks pass; MCP tests pass 246/246. The full web
+    suite passes 1,897 functional tests plus its isolated dense-grid
+    performance gate; the gate exceeded its wall-time threshold only when
+    contending with the concurrently-run MCP suite, then passed alone in
+    2.86 seconds.
+- Second three-fix accuracy batch, independently verified forced-cold on
+  2026-08-29 at commit `3164146` (46.5 seconds):
+  - Takeoff improved again, 420/515 → 425/515 exact (81.6% → 82.5%);
+    quantity delta fell 211 → 179 and missing tags fell 39 → 38.
+  - Federal expected-tag accuracy reached 83/83 (100%): deep header-tier
+    harvesting now advances the data boundary through every consumed tier,
+    exposing the real one-row CHILLER SCHEDULE and resolving `CH-1`.
+    The same extraction exposed one additional real scheduled/drawn `FCU-1`
+    absent from the authored key, so false-add accounting is 19 pending key
+    audit rather than silently suppressing a real row.
+  - NAVFAC improved 178/215 → 181/215 exact (82.8% → 84.2%). Matched
+    DUCT/PIPE enlarged-plan captions now define an off-center viewport split
+    and corroborate weaker landmark alignment; `FCU-T15`, `B-T1`, and `DH-T1`
+    each resolve from two redundant views to one.
+  - Baker improved 25/40 → 26/40 exact and quantity delta fell 80 → 54.
+    For a luminaire family dominated by 10+ single-span compound circuit
+    labels, fingerprint candidates are ranked against those direct placement
+    labels rather than unrelated bare text: `R1` now resolves 23/23.
+    Variable-size air-device ranking also improves `CD-1` from 3 to 9, while
+    its two `TYP N` multipliers remain unresolved (expected 21).
+  - The first full gate of this batch exposed broad ranking regressions
+    (`TD-1`, `TP-2`, `FS-1`, `HB-2`, `US-1`, and others). Two intermediate
+    gates were rejected. The accepted implementation limits ranking to the
+    structurally proven compound-label quorum and diffuser/grille/register
+    families; the corrected gate restores ITD to 114/116 (98.3%) and
+    Bessemer to 10/10.
+  - The complete web suite then exposed three sparse-first-row regressions
+    from the initial deep-tier boundary. The accepted boundary stops at the
+    first leading digit-bearing equipment key; focused regressions pass,
+    followed by the complete web suite (1,898 pass / 3 intentional skips),
+    MCP suite (246/246), both typechecks, and the byte-identical corrected
+    corpus result above.
+  - Graph row-symbol recall improved 94.2% → 95.0% (Federal now 100%);
+    reference metrics remain 116/129.
+- First five-fix accuracy batch, independently verified forced-cold on
+  2026-08-29 at commit `7977639` (53.5 seconds):
+  - Takeoff improved 425/515 → 431/515 exact (82.5% → 83.7%); quantity
+    delta fell 179 → 140. Baker improved 26/40 → 32/40 (65.0% → 80.0%).
+  - Explicit adjacent `TYP N` multipliers now contribute their printed
+    installed quantity. Baker `CD-1` resolves exactly 21.
+  - A family-wide quorum of compound luminaire/circuit labels makes those
+    labels direct instance evidence and excludes ambiguous bare short-code
+    collisions outside that proven convention. `E2`, `R2`, `S1`, and `S3`
+    now resolve exactly.
+  - Reference improved 116/129 → 125/129 exact (89.9% → 96.9%). Literal
+    inch marks survive CSV parsing, three stale NAVFAC point-list keys were
+    corrected, and Baker control-station subrows now band correctly.
+  - Graph remains 91/91 cells exact and 95.0% row-symbol recall.
+- Second five-fix accuracy batch, independently verified forced-cold on
+  2026-08-29 at commit `b1c1082` (45.9 seconds):
+  - Takeoff improved 431/515 → 446/515 exact (83.7% → 86.6%); quantity
+    delta fell 140 → 114. NAVFAC rose 181/215 → 194/215 (84.2% → 90.2%)
+    and Baker rose 32/40 → 34/40 (80.0% → 85.0%).
+  - Numeric AIA view registration (for example MH121/MP121), backed by
+    coordinate proximity, collapses repeated discipline overlays.
+  - Family-corroborated explicit air-device and luminaire labels recover
+    variable-size devices and bare exit-sign labels without requiring one
+    rigid perimeter fingerprint.
+  - Exact two-run long-family tags such as `SCHWP` + `M1` now anchor. The
+    first corpus gate exposed unsafe joins for short ITD tags; requiring a
+    long family stem and alphanumeric unit suffix restored ITD to 98.3%.
+  - Baker's transposed RTU-01 MCA key was corrected from MOCP `45 A` to
+    printed MCA `33.0`; reference improved 125/129 → 126/129 (97.7%).
+  - Graph remains 91/91 cells exact and row-symbol recall improves
+    95.0% → 95.7%; NAVFAC reaches 100% row-symbol recall.
+- Third five-fix accuracy batch, independently verified forced-cold on
+  2026-08-29 at commit `a372424` (53.5 seconds):
+  - Takeoff improved 446/515 → 456/515 exact (86.6% → 88.5%); excluding
+    the intentional raster refusal set, the applicable result is 456/487
+    (93.6%) with quantity delta 37.
+  - Long-family stacked pump tags recover when PDF text extraction separates
+    the alphanumeric suffix above or below its family stem.
+  - Repeated appearances of individually numbered equipment marks across
+    plans/details collapse to one scheduled unit. NAVFAC reaches 201/215.
+  - The production query surface now exposes raw cells for every extracted
+    table kind, not only tag-free reference tables. Reference reaches
+    129/129 (100%) without a second PDF-processing pass.
+  - Roof-drain labels on explicit roof plans count directly under a repeated
+    family quorum; Baker `RD-1` reaches 4/4.
+  - Tight cross-sheet registration overrides missing or incidental
+    contradictory nearest-room text. ITD `US-2` and `WC-1` now close and the
+    set reaches 116/116 (100%) while the distinct `SS-1` pair remains 2/2.
+  - The first gate exposed an over-broad plumbing-label implementation that
+    overcounted ITD. It was rejected, narrowed to roof drains, and the full
+    gate was rerun before acceptance.
+  - Reference is 100%; graph remains 91/91 cells exact and 95.7% row-symbol
+    recall.
+- Fourth five-fix accuracy batch, independently verified forced-cold on
+  2026-08-29 at commit `48338a1` (55.3 seconds):
+  - Takeoff improved 456/515 → 467/515 exact (88.5% → 90.7%); excluding
+    the intentional raster refusal set, applicable takeoff improved
+    93.6% → 95.9% and quantity delta fell 37 → 25.
+  - Entire quarter-turned equipment tables now normalize into the ordinary
+    multi-table extractor and map every cell citation back into source-sheet
+    coordinates. Building 5406's nine-row AIR TERMINAL BOX SCHEDULE is now
+    queryable and eight text-backed VAV takeoffs resolve.
+  - MARK-keyed equipment headers, multipart numbered schedule sections, and
+    concatenated extracted titles are handled without creating duplicate
+    device definitions.
+  - Exact plan labels can count individually numbered equipment when the
+    surrounding symbol linework is not fingerprintable; repeatable type marks
+    remain on their stricter family paths.
+  - Cross-extractor table reads reconcile by exact sheet/title/key-set
+    identity, keeping the more complete cells. Device-qualified identity
+    columns such as VALVE MARK remain primary on valve schedules while UNIT
+    MARK remains an accessory cross-reference.
+  - Cross-sheet coordinate dedup now requires a second registered pair before
+    overriding contradictory room reads, preventing coincidental alignment
+    across different floors while retaining ITD's proven overlays.
+  - Reference remains 129/129 (100%). Graph row-symbol recall improves
+    95.7% → 97.8%; cells remain 91/91 exact.
+  - Full regression suites pass: web 1,907/1,907 (3 intentional skips), MCP
+    247/247, and both typechecks.
+- Fifth five-fix accuracy/API batch, independently verified forced-cold on
+  2026-08-29 at commit `a3f8c20` (55.6 seconds):
+  - Takeoff improved 467/515 → 471/515 exact (90.7% → 91.5%); excluding
+    the intentional raster refusal set, applicable takeoff improved
+    95.9% → 96.7% and quantity delta fell 25 → 21.
+  - The unattended project walker now follows the same uniquely-proven
+    one-digit plan/schedule alias as the direct row sweep.
+  - Multi-run tag recovery now supports quarter-turned chains while rejecting
+    punctuation-only starts and preserving the horizontal negative controls.
+  - A missing vector-outlined family prefix can recover from one bare suffix
+    only when four distinct complete siblings establish the local convention,
+    two sit near the suffix, and no second candidate competes. This closes
+    Building 5406 VAV-6 without admitting ordinary plan numerals.
+  - Production MCP now exposes `project_takeoff` for complete loaded-set
+    takeoffs and `query_table` for arbitrary title/row/header queries. The
+    latter returns the exact source sheet and bounding box for every cell.
+  - Reference remains 129/129 (100%). Graph row-symbol recall improves
+    97.8% → 98.6%; cells remain 91/91 exact.
+  - Full regression suites pass: web 1,909/1,909 (3 intentional skips), MCP
+    247/247, and both typechecks.
+- Sixth accuracy/completeness batch, independently verified forced-cold on
+  2026-08-29 at commit `7678a53` (55.4 seconds):
+  - Takeoff now covers 534 keyed tags and scores 492/534 exact (92.1%);
+    excluding the intentional raster refusal set, applicable takeoff is
+    492/506 (97.2%) with quantity delta 17.
+  - Federal's narrow 83-row key was audited against all positive project
+    results and expanded with 19 independently scheduled and plan-located
+    units (FCU, condensing units, DX fan coils, unit heaters, silencers, and
+    fin-tube radiation). The expanded 102-row set remains 100% exact with
+    zero false additions.
+  - The taxonomy now names the observed CU-, EV-, CUH-, and FTR- equipment
+    families instead of returning null classifications for real schedule
+    rows.
+  - Baker's HB-1 and E1 keys were corrected after full-sheet text/coordinate
+    audits disproved two incomplete crop-based counts. Baker improves
+    87.5% → 92.5%.
+  - A broad plumbing-label supplementation attempt was rejected after the
+    gate exposed ITD overcounts; it was fully reverted. The corrected gate
+    restores ITD to 116/116.
+  - Reference remains 129/129 (100%); graph remains 91/91 cells exact and
+    98.6% row-symbol recall.
+- Seventh five-fix accuracy batch, independently verified forced-cold on
+  2026-08-29 at commit `362bc9c` (56.4 seconds):
+  - Takeoff improves 492/534 → 495/534 exact (92.1% → 92.7%); excluding the
+    intentional raster refusal set, applicable takeoff improves 97.2% →
+    97.8% and quantity delta falls 17 → 14.
+  - Exact roof-plan hose-bibb placements now share the existing conservative
+    roof-drain path, gated on the graph-classified sheet title rather than
+    incidental note text. Baker HB-2 closes while ITD controls stay exact.
+  - A 0.90–0.92 air-device geometry match can commit only when the row's own
+    exact tag sits beside it. Unlabeled variants remain withheld.
+  - Unnamed one/two-digit tokens no longer count as room registration
+    evidence across sheets. This prevents a detail numeral from collapsing
+    two real `RG-12` placements.
+  - Inline and whole-symbol candidates claiming the same exact tag bbox are
+    reduced to one strongest claim. This closes the `RG-11` overcount.
+  - NAVFAC improves 95.8% → 96.7%; Baker improves 92.5% → 95.0%.
+  - The stale AC-1/ACCU-1 refusal expectation now records the production
+    compound-key resolver; graph has zero unexpected resolutions.
+  - Full regressions pass: web 1,910/1,910 (3 intentional skips), MCP
+    247/247, and MCP typecheck.
+- Eighth five-fix batch closed every remaining extractable quantity gap:
+  - Parenthesized gang labels such as `(6) LD-1` are reconstructed as one
+    placement mark; a four-hit air-device quorum safely skips unrelated
+    content-stream distractors.
+  - Explicit first/second-floor identities prevent same-coordinate devices
+    on different levels from being collapsed as duplicate views.
+  - NAVFAC's LD-1, LD-3, and TG-5 and Baker's final P1/V1 audit discrepancies
+    are closed. A first gate exposed an ITD plumbing regression; scoping the
+    quorum retry to air-device schedule titles restored ITD to 100%.
+- Final outcome/production batch, independently verified forced-cold on
+  2026-08-29 at commit `2cd532b` (56.2 seconds):
+  - Takeoff is 541/541 outcomes exact (100%): 499/499 applicable installed
+    rows, 14/14 expected honest refusals, and 28/28 intentional
+    raster-unavailable rows.
+  - Quantity delta, missing rows, and false additions are all zero.
+  - Reference remains 129/129 exact (100%).
+  - Graph is 91/91 cells and 138/138 expected row-symbol outcomes (100%).
+  - Explicit prose placements (`CUH-T1 ON FLOOR 3; CUH-T2 ON FLOOR 5`) are
+    returned with source coordinates; duplicate schedule-only notes do not
+    multiply quantity.
+  - Ambiguous duplicate keys are typed refusals, not generic errors.
+  - Corpus keys now encode expected resolved/refused/unavailable outcomes,
+    preventing a zero quantity from masquerading as a successful refusal.
+  - `project_takeoff` and `query_table` were exercised through the production
+    MCP registration on real sets; table answers include exact source bboxes
+    and butterfly-valve takeoff refuses its unscaled legend honestly.
+  - Final regressions pass: web 1,914/1,914 (3 intentional skips), MCP
+    249/249, isolated dense-grid performance 3.09s, and both typechecks.
+
+## Verified completion
+
+The current corpus goal is complete. New sets should expand the key and rerun
+the same forced-cold outcome, reference, and graph gates.
+
+Cloud dispatch and all subagent dispatch are prohibited by the user's
+2026-08-29 instruction. The coordinator VM is the only execution path.
+
+## Rejected or deferred approaches
+
+- NAVFAC per-area row-key scoping: zero scored NAVFAC tags are currently
+  blocked by `AMBIGUOUS_ROW_KEY`; the remaining ambiguous marks have no
+  extracted area qualifier and resolving them would increase false-adds.
+- Taxonomy-only score fix: equipment-table rows are already swept regardless
+  of taxonomy classification. Prefix additions improve labels but do not close
+  the measured score gap.
+- OCR, raster vision, and learned symbol detection are out of the current
+  user-authorized scope.
+
+## Next queue
+
+Select five non-overlapping fixes from the current evaluator output, using
+focused diagnostics between changes and one full corpus gate after the batch.
+Prioritize NAVFAC repeated views and air devices, Baker's remaining
+vector-backed deltas, and graph row-symbol misses; preserve exact sets and
+honest refusal behavior.

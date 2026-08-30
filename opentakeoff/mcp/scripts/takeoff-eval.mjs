@@ -39,15 +39,27 @@
 // pipeline output; this script is just the corpus-walking CLI shell around it.
 import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { resolveSetFiles } from "./corpusFiles.mjs";
+import { cachedEvalResult } from "./evalCache.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import pLimit from "p-limit";
 import { Session } from "../src/session.ts";
 import { buildPlanSetTakeoff } from "../src/takeoff.ts";
 import { parseTakeoffKeyCsv, scoreTakeoff } from "../src/takeoffEval.ts";
+import { parseReferenceKeyCsv, scoreReference } from "../src/referenceEval.ts";
 
 const [corpusDir, ...only] = process.argv.slice(2).filter((a) => !a.startsWith("--") && a !== "--single-json");
 const writeReport = process.argv.includes("--report");
+// Escape hatch used by equivalence benchmarks: the default scorer searches
+// only row-tag claim windows, while this restores production's complete
+// whole-sheet disclosure path for an A/B metric comparison.
+const evaluationFast = process.env.OPENTAKEOFF_EVAL_FULL_SWEEP !== "1";
+// Reuse the already-built PlanSetTakeoff to score reference tables too.
+// This replaces an entire second PDF/session/pipeline pass in the normal
+// all-metrics development loop while leaving the standalone reference
+// evaluator available for focused work.
+const withReference = process.argv.includes("--with-reference");
 // --single-json <setId>: internal mode used by the parallel fan-out below —
 // evaluate exactly one set and print ONLY its JSON result to stdout, no
 // table/formatting. Not meant to be invoked directly by a human/agent; the
@@ -76,18 +88,44 @@ const spec = JSON.parse(readFileSync(join(corpus, "sets.json"), "utf8"));
 
 const pct = (n) => (n * 100).toFixed(1).padStart(5) + "%";
 
-async function evalSet(set) {
-  const keyPath = join(corpus, "keys", `${set.id}.takeoff.csv`);
-  if (!existsSync(keyPath)) return { id: set.id, gc: set.gc, project: set.project, unlabelled: true };
-  const key = parseTakeoffKeyCsv(readFileSync(keyPath, "utf8"));
+async function evalSetUncached(set) {
+  const takeoffKeyPath = join(corpus, "keys", `${set.id}.takeoff.csv`);
+  const referenceKeyPath = join(corpus, "keys", `${set.id}.reference.csv`);
+  const hasTakeoffKey = existsSync(takeoffKeyPath);
+  const hasReferenceKey = existsSync(referenceKeyPath);
+  if (!hasTakeoffKey && !hasReferenceKey) {
+    return { id: set.id, gc: set.gc, project: set.project, unlabelled: true, reference: null };
+  }
 
   const s = new Session();
-  const files = set.files.map((f) => join(set.root ?? spec.root, f));
+  const files = resolveSetFiles(corpus, spec, set);
   for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
-  const takeoff = await buildPlanSetTakeoff(s, { categories: null }); // "all" — the key is authored against the full real equipment-kind scope, not a partial run
+  const takeoff = await buildPlanSetTakeoff(s, {
+    categories: null,
+    evaluationFast,
+  }); // "all" — scorer only needs row-tag-claimed placements; whole-sheet unlabeled disclosure is intentionally omitted
 
-  const score = scoreTakeoff(takeoff, key);
-  return { id: set.id, gc: set.gc, project: set.project, score };
+  const score = hasTakeoffKey
+    ? scoreTakeoff(takeoff, parseTakeoffKeyCsv(readFileSync(takeoffKeyPath, "utf8")))
+    : null;
+  const reference = hasReferenceKey
+    ? scoreReference(takeoff.extracted_tables, parseReferenceKeyCsv(readFileSync(referenceKeyPath, "utf8")))
+    : null;
+  return { id: set.id, gc: set.gc, project: set.project, score, reference, unlabelled: !hasTakeoffKey };
+}
+
+async function evalSet(set) {
+  const files = resolveSetFiles(corpus, spec, set);
+  return cachedEvalResult(
+    `takeoff:${evaluationFast ? "focused" : "full"}`,
+    [
+      ...files,
+      join(corpus, "keys", `${set.id}.takeoff.csv`),
+      join(corpus, "keys", `${set.id}.reference.csv`),
+    ],
+    [JSON.stringify(set)],
+    () => evalSetUncached(set),
+  );
 }
 
 // Internal single-set worker mode — runs in its own child process, prints
@@ -135,7 +173,7 @@ say("╚════════════════════════
 say("");
 say("set                        tags   exact    Σ|Δqty|   missing   false-add");
 say("──────────────────────────────────────────────────────────────────────────");
-const agg = { tags: 0, exact: 0, delta: 0, missing: 0, falseAdd: 0 };
+const agg = { tags: 0, exact: 0, delta: 0, missing: 0, falseAdd: 0, applicable: 0, applicableExact: 0, refusals: 0, correctRefusals: 0 };
 const failureAgg = new Map();
 for (const r of results) {
   if (r.error) { say(`${r.id.padEnd(26)} ERROR: ${r.error.slice(0, 60)}`); continue; }
@@ -146,6 +184,10 @@ for (const r of results) {
   agg.delta += score.summary.total_quantity_delta;
   agg.missing += score.missing.length;
   agg.falseAdd += score.falsely_added.length;
+  agg.applicable += score.summary.applicable_tags;
+  agg.applicableExact += score.summary.applicable_exact_matches;
+  agg.refusals += score.summary.expected_refusals;
+  agg.correctRefusals += score.summary.correct_refusals;
   for (const [type, n] of Object.entries(score.failure_breakdown)) failureAgg.set(type, (failureAgg.get(type) || 0) + n);
   say(`${r.id.padEnd(26)}${String(score.summary.total_tags).padStart(5)}   ${pct(score.summary.exact_match_pct)}   `
     + `${String(score.summary.total_quantity_delta).padStart(7)}   ${String(score.missing.length).padStart(7)}   ${String(score.falsely_added.length).padStart(9)}`);
@@ -153,6 +195,8 @@ for (const r of results) {
 say("──────────────────────────────────────────────────────────────────────────");
 say(`${"CORPUS".padEnd(26)}${String(agg.tags).padStart(5)}   ${pct(agg.tags ? agg.exact / agg.tags : 0)}   `
   + `${String(agg.delta).padStart(7)}   ${String(agg.missing).padStart(7)}   ${String(agg.falseAdd).padStart(9)}`);
+say(`applicable installed rows: ${agg.applicableExact}/${agg.applicable} exact (${pct(agg.applicable ? agg.applicableExact / agg.applicable : 0)})`);
+say(`expected honest refusals: ${agg.correctRefusals}/${agg.refusals} correct`);
 say("");
 
 // per-tag detail, worst first (largest |delta| first, then missing, then falsely-added)
@@ -174,6 +218,27 @@ for (const r of results) {
 if (failureAgg.size) {
   say("── failure-type breakdown (TakeoffFailure[], every set) ──");
   for (const [type, n] of [...failureAgg.entries()].sort((a, b) => b[1] - a[1])) say(`  ${String(n).padStart(4)}×  ${type}`);
+  say("");
+}
+
+if (withReference) {
+  say("╔══════════════════════════════════════════════════════════════════════════");
+  say("║ REFERENCE-TABLE EXTRACTION — reused from the takeoff pass");
+  say("╚══════════════════════════════════════════════════════════════════════════");
+  say("");
+  say("set                        cells   exact");
+  say("──────────────────────────────────────────");
+  let anyReference = false;
+  for (const r of results) {
+    if (r.error) { say(`${r.id.padEnd(26)} ERROR: ${r.error}`); continue; }
+    if (!r.reference) { say(`${r.id.padEnd(26)} (no reference key — not scored)`); continue; }
+    anyReference = true;
+    say(`${r.id.padEnd(26)} ${String(r.reference.total).padStart(5)}   ${pct(r.reference.exactPct)}`);
+    for (const c of r.reference.perCell) {
+      if (!c.exact) say(`   MISMATCH  "${c.table_title}" / "${c.row_key}" / "${c.column}": expected "${c.expected_value}" got ${c.actual == null ? "(missing)" : `"${c.actual}"`}`);
+    }
+  }
+  if (!anyReference) say("(no sets had a *.reference.csv key)");
   say("");
 }
 

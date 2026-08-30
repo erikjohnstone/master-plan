@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "demo_id": "D03",
+  "status": "done",
+  "source": "run-1",
+  "latency_ms": 9524.04,
+  "answer": {
+    "ahu_count": {
+      "value": 5,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+          "table_title": "AIR HANDLING UNIT SCHEDULE",
+          "row_key": "AHU-A1",
+          "column": "MARK",
+          "bbox_px": [
+            301.2,
+            303.1199999999999,
+            442.32,
+            337.67999999999984
+          ]
+        }
+      ]
+    },
+    "doah_count": {
+      "value": 3,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+          "table_title": "DEDICATED OUTDOOR AIR UNIT SCHEDULE 2 OF 2",
+          "row_key": "DOAH-A1",
+          "column": "MARK",
+          "bbox_px": [
+            301.2,
+            1151.286,
+            445.2,
+            1185.844
+          ]
+        }
+      ]
+    },
+    "fcu_count": {
+      "value": 42,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": "FCU-A1",
+          "column": "MARK",
+          "bbox_px": [
+            301.2,
+            1673.038,
+            441.6,
+            1707.36
+          ]
+        }
+      ]
+    },
+    "vav_count": {
+      "value": 52,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#43",
+          "table_title": "VARIABLE AIR VOLUME TERMINAL BOX",
+          "row_key": "VAV-A101",
+          "column": "MARK",
+          "bbox_px": [
+            301.92,
+            1897.68,
+            526.8,
+            1932.24
+          ]
+        }
+      ]
+    },
+    "air_cooled_chiller_count": {
+      "value": 2,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "AIR COOLED CHILLER SCHEDULE",
+          "row_key": "CH-A1",
+          "column": "MARK",
+          "bbox_px": [
+            437.04,
+            304.8000000000002,
+            555.12,
+            339.3600000000001
+          ]
+        }
+      ]
+    },
+    "heat_recovery_chiller_count": {
+      "value": 2,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#45",
+          "table_title": "AIR COOLED HEAT RECOVERY CHILLER SCHEDULE",
+          "row_key": "CH-MT1",
+          "column": "MARK",
+          "bbox_px": [
+            303.84,
+            2236.56,
+            421.92,
+            2271.12
+          ]
+        }
+      ]
+    },
+    "boiler_count": {
+      "value": 6,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+          "table_title": "BOILER SCHEDULE",
+          "row_key": "B-A1",
+          "column": "MARK",
+          "bbox_px": [
+            2716.568,
+            2640,
+            2860.32,
+            2674.56
+          ]
+        }
+      ]
+    },
+    "fcu_air_ops_count": {
+      "value": 14,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": "FCU-A1",
+          "column": "MARK",
+          "bbox_px": [
+            301.2,
+            1673.038,
+            441.6,
+            1707.36
+          ]
+        }
+      ]
+    },
+    "fcu_atct_count": {
+      "value": 18,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": "FCU-A1",
+          "column": "MARK",
+          "bbox_px": [
+            301.2,
+            1673.038,
+            441.6,
+            1707.36
+          ]
+        }
+      ]
+    },
+    "vav_air_ops_count": {
+      "value": 27,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#43",
+          "table_title": "VARIABLE AIR VOLUME TERMINAL BOX",
+          "row_key": "VAV-A101",
+          "column": "MARK",
+          "bbox_px": [
+            301.92,
+            1897.68,
+            526.8,
+            1932.24
+          ]
+        }
+      ]
+    },
+    "vav_mitracon_count": {
+      "value": 25,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#43",
+          "table_title": "VARIABLE AIR VOLUME TERMINAL BOX",
+          "row_key": "VAV-A101",
+          "column": "MARK",
+          "bbox_px": [
+            301.92,
+            1897.68,
+            526.8,
+            1932.24
+          ]
+        }
+      ]
+    },
+    "bas_ahu_t1a_tib_points_rows": {
+      "value": 62,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": null,
+          "column": "title",
+          "bbox_px": [
+            3340.074,
+            456.47400000000016,
+            4313.762,
+            516.48
+          ]
+        }
+      ]
+    }
+  }
+}

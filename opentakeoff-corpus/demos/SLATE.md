@@ -1,0 +1,212 @@
+# Demo slate
+
+This is an ordered slate, not proof. A row becomes selected only after its
+hardness and stress evidence are independently rechecked from rendered source
+sheets. If the evidence does not hold, replace the target before N=5 runs.
+
+**Suite finish line (see `GOAL.md` Final suite gate):** after D10 locks,
+run the durable suite — engine regressions D01–D10 + frozen `golden/answer.json`
+verify (`npm run test:demos`). Live 50 API / 30 UI re-runs are demoted.
+Earlier per-demo locks do not skip a failing demo in that command.
+
+| ID | Estimator workflow | Candidate hard set | Required stress |
+|---|---|---|---|
+| D01 | Locate CH-A1 and join its plan symbol to chiller performance and associated CHW valve data | `navfac-cherry-point-atc` | 75 sheets; three building namespaces; site-plan placement plus equipment and valve schedules |
+| D02 | Trace an AHU BAS point from points list to controlled equipment and physical location | `navfac-cherry-point-atc` | BAS point list, equipment schedule, narrative/plan evidence on separate sheets |
+| D03 | Full HVAC/BAS project takeoff with equipment and controls breakdown | `navfac-cherry-point-atc` | full-set rollup across Air Ops, MITRACON, and ATCT; 20% hand-count reconciliation |
+| D04 | VAV scope rollup with quantities and schedule attributes | `federal-mech` | dense VAV population and fragmented plan labels; 20% hand-count reconciliation |
+| D05 | Coordinate RTU mechanical data with electrical connection requirements | `baker-county-eoc` | cross-discipline equipment and connection schedules in a 65-sheet bid set |
+| D06 | Take off chilled-water valves and distinguish installed, packaged, and unscaled evidence | `itd-d1-lab` | dense real valve vocabulary, repeated symbols, and honest scale refusal path |
+| D07 | Link VAV schedule rows to plan locations while disclosing exploded-text fan limits | `bldg5406-hvac-demo` | quarter-turned schedule extraction plus vector-path-only labels that must refuse |
+| D08 | Compare air-device or FCU quantities across independent buildings | `navfac-cherry-point-atc` | reused local tag namespaces and cross-building dedup; 20% hand-count reconciliation |
+| D09 | Produce a room-oriented HVAC coordination package with equipment, air devices, and cited room context | `baker-county-eoc` | architectural room data joined to mechanical plan/schedule evidence |
+| D10 | Full BAS points takeoff grouped by controller/equipment and point type | `navfac-cherry-point-atc` | multiple points-list families and buildings; AI/AO/BI/BO breakdown; 20% hand-count reconciliation |
+
+## D01 selection record
+
+Status: `LOCKED — API 5/5; UI re-proved (full row values + answering-cell paints, 12 regions)`
+
+The target holds up. Independent graph extraction from the real NAVFAC PDF
+found the `AIR COOLED CHILLER SCHEDULE` and `CHW CONTROL VALVE SCHEDULE` on
+page 44, while the authored source audit places the real `CH-A1` outdoor unit
+on the mechanical site plan at page 3. The set has 75 sheets and three
+independent area namespaces (`A`, `M`, and `T`), so retrieval must disambiguate
+the Air Operations chiller rather than succeeding on a small or single-area
+sample.
+
+The first rasterization also exposed and fixed an evidence-integrity blocker:
+the table renderer's old filenames omitted table identity, causing all nine
+page-44 table crops to overwrite one another. Unique evidence crops, typed
+ground truth and N=5 API gate are locked in
+`D01-chiller-plan-to-controls/`. UI re-proof under the usefulness bar
+(intelligent prompt + every requested field + painted answering value cells)
+is saved as
+`/opt/cursor/artifacts/d01_ui_prompt_tools_answer_highlights_2026-08-30T05-09-16-177Z.webm`
+(12 painted regions on MS101 + M-603). Production gates stay
+methodology-general. D01 counts toward ten.
+
+## D02 selection record
+
+Status: `LOCKED — API 5/5; p95 7.263 s; UI re-proof with multi-field paints (incl. CFM) validated`
+
+The NAVFAC target holds up after direct rendering. MI731 contains one 62-row
+`POINTS LIST AHU-T1A/TIB` that interleaves AHU-T1A and AHU-T1B under repeated
+AI/AO/BI/BO marks. AI10 is specifically `AHU-T1A HW VALVE POSITION
+(FEEDBACK)`. Its controlled unit must then be joined to the separate M-621 air
+handling schedule, the physical `AHU-T1A / AHU-T1B SECTION`, and the M-002
+ATCT cab narrative. Those sources occupy four different sheets in a 75-sheet,
+three-building set, so the required BAS-to-equipment-to-location stress is
+genuine rather than inferred from the slate.
+
+N=5 production runs are 5/5 under `verify:demo` (values, citation
+resolvability, and OCR grounding) with nearest-rank p95 **7.263 s**. Failed
+cold attempts remain under `runs/failed/` with classified diagnostics.
+Localhost stdio harness True. UI re-proof under the usefulness bar (full
+fields + each distinct answering value cell painted, including **3850 CFM**)
+is saved as
+`/opt/cursor/artifacts/d02_ui_prompt_tools_answer_highlights_2026-08-30T05-05-42-831Z.webm`
+(8 painted regions). Production gates stay methodology-general — no corpus
+hardcoding. D02 counts toward ten. Next: D03.
+
+## D03 selection record
+
+Status: `LOCKED — API 5/5; UI re-proof (expandable cards + verified follow-up)`
+
+Target holds: 75-sheet NAVFAC set with Air Ops / MITRACON / ATCT namespaces.
+Independent equipment-schedule inventory (unique MARK rows) yields AHU 5,
+DOAH unit 3 (HANDLING DOAH-T1 covered in follow-up), FCU 42, VAV 52,
+air-cooled chillers 2, heat-recovery chillers 2, boilers 6, and MI731
+AHU-T1A/TIB points list at 62 rows. Stratified 20% find_text hand-count
+reconciled before model runs (`hand_count_20pct` in truth.json). Vibration-
+isolation compound keys are not equipment units.
+
+N=5 API/stdio 5/5 (p95 **12.156 s**). UI re-proved under the chat-usefulness
+bar: answer-first visible Answer, expandable source cards, follow-up **asked
++ verified** (HANDLING title + ATCT FCU 18 + FCU-T11) in
+`/opt/cursor/artifacts/d03_ui_prompt_answer_cards_followup_2026-08-30T11-52-24-499Z.webm`.
+Next: D05.
+
+## D04 selection record
+
+Status: `LOCKED — API 5/5; UI re-proof (expandable cards + verified follow-up)`
+
+Target holds: 24-sheet `federal-mech` set. `VOLUME CONTROL BOX SCHEDULE` on
+sheet #16 lists VAV-1..VAV-58 (58 unique VAV-* tags; junk key SUITE100
+excluded). Plan sheets carry hundreds of fragmented `VAV-` labels, so the
+rollup must use the schedule title-scan — not plan-label frequency.
+Independent 20% find_text hand-count (13 tags) reconciled before model runs.
+Re-verified 2026-08-30 from pinned PDF: 59 rows, 58 VAV-*, SUITE100 junk;
+VAV-1/12/30/58 attribute cells match truth.
+
+N=5 API/stdio 5/5 (p95 **3.535 s**). UI re-proved under the chat-usefulness
+bar: complete structured Answer, expandable source cards (`tag · field ·
+value` + dropdown), follow-up **asked + verified** (SUITE100 not a VAV;
+VAV-58 CFM 350) in
+`/opt/cursor/artifacts/d04_ui_prompt_answer_cards_followup_2026-08-30T11-28-54-597Z.webm`.
+D03 and D04 locked; next: D05.
+
+## D05 selection record
+
+Status: `LOCKED — API 5/5 + stdio + UI proof (expandable cards + verified follow-up)`
+
+Target holds: 65-sheet `baker-county-eoc` bid set. Mechanical
+`PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)` on sheet #41
+uses `RTU-1`/`RTU-2`; electrical `MECHANICAL EQUIPMENT CONNECTION SCHEDULE`
+on sheet #60 zero-pads to `RTU-01`/`RTU-02`. Roof plan label for RTU-1 is on
+sheet #39. Ground truth for RTU-1 mech attrs + RTU-01 electrical join (and
+RTU-2↔RTU-02 follow-up) authored from live `query_table`/`find_text` before
+any model run — see `D05-rtu-mech-to-electrical/truth.json`.
+
+N=5 API 5/5 (p95 **3.317 s**) + stdio verify clean. UI proved under the
+chat-usefulness bar: structured Answer, expandable source cards, follow-up
+**asked + verified** (RTU-02 / MCA 24.0 / C - 32,34,36) in
+`/opt/cursor/artifacts/d05_ui_prompt_answer_cards_followup_2026-08-30T12-38-23-670Z.webm`.
+D05 locked; next: D06.
+
+## D06 selection record
+
+Status: `LOCKED — API 5/5 + stdio + UI proof (expandable cards + verified follow-up)`
+
+Target holds on `itd-d1-lab` (29 sheets). Slate CHW wording adapted to the
+set's real **HW reheat control valves** CV-1..9 plus **bypass** BCV-1 (no
+dedicated CHW control-valve schedule on this PDF). Dense sibling air-valve
+schedules remain as distractors. Installed plan tags confirmed via
+`sweep_schedule_row` (qty 1 each for CV-1/5/9/BCV-1). Ground truth authored
+before model runs in `D06-control-valve-takeoff/`.
+
+D06 locked; next: D07.
+
+## D07 selection record
+
+Status: `LOCKED — API 5/5; p95 43.737 s; stdio + UI proof (expandable cards + verified follow-up)`
+
+Target holds on `bldg5406-hvac-demo` (20 sheets). Quarter-turned
+`AIR TERMINAL BOX SCHEDULE` (VAV-1..9) linked to plan tags on #2;
+`FAN SCHEDULE` CFM with honest `sweep_schedule_row` refusal when EF-2/EF-3
+tags are not drawn on any plan sheet, while schedule CFM stays in the
+answer. Ground truth authored before model runs in
+`D07-vav-plan-link-fan-refuse/`.
+
+N=5 production runs are 5/5 under `verify:demo` (values, citation
+resolvability, and OCR grounding) with nearest-rank p95 **43.737 s**.
+Localhost stdio harness True. UI proof under the usefulness bar (full
+fields + expandable source cards + verified EF-3 follow-up) is saved as
+`/opt/cursor/artifacts/d07_ui_prompt_answer_cards_followup_2026-08-30T15-23-46-695Z.webm`.
+Production gates stay methodology-general — no corpus hardcoding. D07
+counts toward ten. Next: D08.
+
+## D08 selection record
+
+Status: `LOCKED — API 5/5; p95 5.186 s; stdio + UI proof (expandable cards + verified follow-up)`
+
+Target holds on `navfac-cherry-point-atc` (75 sheets). FAN COIL UNIT
+SCHEDULE title-scan yields 42 with building splits A=14 / M=10 / T=18;
+spot-check MARK/TYPE/CFM for FCU-A1, FCU-M1A, FCU-T1 on #42/#45/#48.
+Stratified 20% sample (9 tags) reconciled on schedule before model runs in
+`D08-fcu-cross-building/`.
+
+N=5 production runs are 5/5 under `verify:demo` with nearest-rank p95
+**5.186 s**. Localhost stdio harness True. UI proof under the usefulness
+bar (building splits + expandable source cards + verified FCU-T11
+follow-up) is saved as
+`/opt/cursor/artifacts/d08_ui_prompt_answer_cards_followup_2026-08-30T15-38-13-794Z.webm`.
+Production gates stay methodology-general — no corpus hardcoding. D08
+counts toward ten. Next: D09.
+
+## D09 selection record
+
+Status: `LOCKED — API 5/5; p95 6.644 s; stdio + UI proof (expandable cards + verified follow-up)`
+
+Target holds on `baker-county-eoc` (65 sheets). Room 105 finish context on
+#27 joins DIFFUSER-GRILLE + packaged rooftop evidence on #41 into one
+coordination package. 20% room sample reconciled before model runs in
+`D09-room-hvac-coordination/`.
+
+N=5 production runs are 5/5 under `verify:demo` with nearest-rank p95
+**6.644 s**. Localhost stdio harness True. UI proof under the usefulness
+bar (room finish + air devices + RTU SERVICE join + expandable source cards
++ verified room 101 / RTU-2 follow-up) is saved as
+`/opt/cursor/artifacts/d09_ui_prompt_answer_cards_followup_2026-08-30T15-53-38-297Z.webm`.
+Production gates stay methodology-general — schedule SERVICE answers named
+service joins; LOCATION→serves paraphrase remains blocked. D09 counts toward
+ten. Next: D10.
+
+## D10 selection record
+
+Status: `LOCKED — API 5/5; p95 6.296 s; stdio + UI proof (expandable cards + verified follow-up)`
+
+Target holds on `navfac-cherry-point-atc` (75 sheets). Five extractable
+points/DDC lists on #64/#65/#67 roll up to 122 rows (AI 43 / AO 15 / BI 49 /
+BO 15). Title-only Air Ops/MITRACON schematic lists stay disclosed
+non-extractable. 20% stratified sample (25/122) reconciled before model runs
+in `D10-bas-points-takeoff/`.
+
+N=5 production runs are 5/5 under `verify:demo` with nearest-rank p95
+**6.296 s**. Localhost stdio harness True. UI proof under the usefulness
+bar (five-list takeoff + expandable source cards + verified T1A/T1B/neither
+follow-up) is saved as
+`/opt/cursor/artifacts/d10_ui_prompt_answer_cards_followup_2026-08-30T17-02-51-387Z.webm`.
+Production gates stay methodology-general — `point_type_counts` from
+title-scans; shared/neither = total − onlyA − onlyB. D10 counts toward ten.
+Next: durable regression suite (`npm run test:demos`).
+

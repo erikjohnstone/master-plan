@@ -17,6 +17,8 @@
 # page renders of sheets #59 (E6.01) and #60 (E6.02), plus targeted high-
 # zoom region crops of each table below, read directly against the real
 # PDF — never assumed from the pipeline's own reference_tables[] dump.
+# Rechecked 2026-08-29: RTU-01's printed MCA is 33.0; 45 A is its adjacent
+# MOCP value. The earlier key had transposed the MOCP into the MCA column.
 #
 # SCOPE / REAL FINDING: this session swept every table the pipeline's own
 # categories=all run reported as reference-kind or otherwise structurally
@@ -63,7 +65,7 @@ baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,EF-01,MO
 baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,ERV-01,LOCATION,CALL CENTER 109
 baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,ERV-01,VA,360
 baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,RTU-01,VA,11880
-baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,RTU-01,MCA,45 A
+baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,RTU-01,MCA,33.0
 baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,RTU-01,CIRCUIT NUMBER,"C - 29,31,33"
 baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,WH-1,LOCATION,JANITOR 107
 baker-county-eoc-bidset.pdf#60,MECHANICAL EQUIPMENT CONNECTION SCHEDULE,WH-1,VA,6000

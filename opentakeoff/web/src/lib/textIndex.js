@@ -18,12 +18,17 @@
 // than relying on rev alone to disambiguate.
 import { metaGet, metaPut, metaDelete, metaDeletePrefix } from "./store.js";
 
+// v3: indexOneSheet now persists the discrete rotation alongside its
+// rotation-aware bbox, so quarter-turned table extraction receives the same
+// GraphSpan signal as the MCP pipeline. v2 corrected placement but silently
+// dropped the rotation field itself.
+//
 // v2: indexOneSheet's span math became rotation-aware (a real 270°-rotated
 // title-block run was previously mispositioned into a horizontal-text guess
 // that could bleed into a nearby schedule row) — bumped so every already-
 // cached sheet re-extracts with the corrected geometry instead of serving
 // the old, wrongly-positioned rotated spans forever.
-const INDEX_VERSION = 2;
+const INDEX_VERSION = 3;
 const PREFIX = `textidx:v${INDEX_VERSION}:`;
 const keyOf = (sheetKey) => `${PREFIX}${sheetKey}`;
 

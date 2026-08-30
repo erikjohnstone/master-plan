@@ -8,7 +8,7 @@ import path from "node:path";
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, type SheetGraph, type SheetSpans, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
@@ -79,6 +79,40 @@ function matchByKeySet(tables: ScheduleTable[], sheetKey: string, built: Schedul
   return -1;
 }
 
+/** Collapse equivalent primary-table reads after all extractors have run.
+ * Region matching can pair an oversized geometric box with the wrong nearby
+ * ODL table before exact keys are consulted; same sheet + normalized title +
+ * exact key set identifies the duplicate without conflating accessory
+ * reference tables or complementary numbered schedule sections. */
+function collapseEquivalentPrimaryTables(tables: ScheduleTable[]): number {
+  const seen = new Map<string, number>();
+  const remove = new Set<number>();
+  for (let i = 0; i < tables.length; i++) {
+    const table = tables[i];
+    if (table.kind === "reference" || !table.title || !table.rows.length) continue;
+    const keys = [...new Set(table.rows.map((row) => row.key))].sort();
+    if (keys.length !== table.rows.length) continue;
+    const title = table.title.text.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    const identity = `${table.sheet}\0${title}\0${keys.join("\0")}`;
+    const prior = seen.get(identity);
+    if (prior == null) {
+      seen.set(identity, i);
+      continue;
+    }
+    const a = tableCompleteness(tables[prior]), b = tableCompleteness(table);
+    if (b.headers > a.headers || (b.headers === a.headers && b.cells > a.cells)) {
+      remove.add(prior);
+      seen.set(identity, i);
+    } else {
+      remove.add(i);
+    }
+  }
+  if (!remove.size) return 0;
+  const kept = tables.filter((_, index) => !remove.has(index));
+  tables.splice(0, tables.length, ...kept);
+  return remove.size;
+}
+
 /** How many rows share a key with at least one other row — a real schedule
  * never legitimately repeats an unqualified key, so any rise in this count
  * from one extraction of the same table to another is real evidence of a
@@ -119,7 +153,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, familyQuorumFragmentedTagOcc, splitHyphenTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, typicalCountMultiplier, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, isIndividuallyMarkedEquipmentSchedule, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -729,6 +763,9 @@ export class Session {
       throw new UserError(`${base} is already loaded — merge adds NEW documents. To reload it, call load_plan without merge (replaces the whole session).`);
     }
     this.graph = null;   // the sheet graph (#87) indexes the OLD document set
+    this.tagOccurrenceCache.clear();
+    this.roomTagCache.clear();
+    this.viewLandmarkCache.clear();
 
     const doc = await openPdf(filePath);
     const resolved = path.resolve(filePath);
@@ -2941,6 +2978,98 @@ export class Session {
     });
   }
 
+  /** Positioned tag occurrences are immutable for a loaded document. A full
+   * project takeoff asks for every schedule key on every plan sheet—both as
+   * the active row and as sibling-exclusion evidence—so recomputing exact,
+   * compound, and fragmented text searches inside each row sweep creates an
+   * avoidable rows² × sheets × spans loop. Cache by sheet and canonical key;
+   * loadPlan clears it whenever the document set changes. */
+  private tagOccurrenceCache = new Map<string, Map<string, TagOcc[]>>();
+
+  private tagOccurrencesOnSheet(sh: SheetState, key: string, allowFamilyQuorum = false): TagOcc[] {
+    let byKey = this.tagOccurrenceCache.get(sh.key);
+    if (!byKey) {
+      byKey = new Map();
+      this.tagOccurrenceCache.set(sh.key, byKey);
+    }
+    const cacheKey = allowFamilyQuorum ? `${key}\0family-quorum` : key;
+    const cached = byKey.get(cacheKey);
+    if (cached) return cached;
+    if (!sh.spans) sh.spans = textSpans(sh.page);
+    const exact = sh.spans
+      .filter((sp) => sp.str.trim().toUpperCase() === key)
+      .map((sp) => ({
+        cx: (sp.x0 + sp.x1) / 2,
+        cy: (sp.y0 + sp.y1) / 2,
+        h: Math.max(sp.y1 - sp.y0, 6),
+        bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number],
+      }));
+    const merged = [...exact, ...compoundTagOcc(sh.spans, key)];
+    const splitHyphen = splitHyphenTagOcc(sh.spans, key);
+    const fragmented = allowFamilyQuorum
+      ? familyQuorumFragmentedTagOcc(sh.spans, key)
+      : fragmentedTagOcc(sh.spans, key);
+    const deepHyphen = deepHyphenChainTagOcc(sh.spans, key);
+    const occurrences = merged.length
+      ? merged
+      : (splitHyphen.length ? splitHyphen
+        : fragmented.length ? fragmented
+          : deepHyphen.length ? deepHyphen
+            : familySuffixTagOcc(sh.spans, key));
+    occurrences.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
+    byKey.set(cacheKey, occurrences);
+    return occurrences;
+  }
+
+  /** Room attribution is sheet-intrinsic. Multi-view deduplication runs after
+   * every row sweep, but the room index does not change between rows. */
+  private roomTagCache = new Map<string, ReturnType<typeof roomTags>>();
+
+  private roomTagsOnSheet(sh: SheetState): ReturnType<typeof roomTags> {
+    let rooms = this.roomTagCache.get(sh.key);
+    if (rooms) return rooms;
+    const spans = (sh.spans ?? []).map((sp) => ({
+      str: sp.str,
+      x: sp.x0,
+      y: sp.y0,
+      w: sp.x1 - sp.x0,
+      h: sp.y1 - sp.y0,
+      ...(sp.rot ? { rot: sp.rot } : {}),
+    }));
+    rooms = roomTags({ key: sh.key, sheet_number: sh.sheetNumber, spans });
+    this.roomTagCache.set(sh.key, rooms);
+    return rooms;
+  }
+
+  /** Schedule-tag registration evidence is sheet-intrinsic and shared by
+   * every row's same-sheet multi-view collapse. */
+  private viewLandmarkCache = new Map<string, TaggedViewLandmark[]>();
+
+  private viewLandmarksOnSheet(sh: SheetState, graph: SheetGraph): TaggedViewLandmark[] {
+    const cached = this.viewLandmarkCache.get(sh.key);
+    if (cached) return cached;
+    const keys = new Set<string>();
+    for (const table of graph.tables) {
+      if (table.kind !== "equipment") continue;
+      for (const row of table.rows) {
+        for (const part of (row.key || "").trim().toUpperCase().replace(/\s+/g, "").split("/")) {
+          // Equipment marks contain both a letter and a digit. This excludes
+          // accidentally-keyed headers such as SCALE/TYPE from becoming view
+          // registration evidence.
+          if (/^(?=.*[A-Z])(?=.*\d)[A-Z0-9][A-Z0-9-]*$/.test(part)) keys.add(part);
+        }
+      }
+    }
+    const landmarks: TaggedViewLandmark[] = [];
+    for (const key of [...keys].sort()) {
+      for (const occurrence of this.tagOccurrencesOnSheet(sh, key)) {
+        landmarks.push({ tag: key, at: [occurrence.cx, occurrence.cy] });
+      }
+    }
+    this.viewLandmarkCache.set(sh.key, landmarks);
+    return landmarks;
+  }
+
   /** sweep_schedule_row (phase 2) — the estimator's story, honored: a
    * transition type sometimes exists only as a schedule row plus tag markers
    * scattered across the plan sheets. Given the ROW's key, this mints the
@@ -2973,6 +3102,12 @@ export class Session {
     rotations?: boolean;
     mirror?: boolean;
     tolerancePx?: number;
+    /** Tagged-count mode. A placement can count only when it claims this row's
+     * own tag occurrence, so constrain geometric candidates to those exact
+     * claim windows and skip sheets with no occurrence. The installed tagged
+     * count remains complete; unlabeled/sibling near-match disclosure does
+     * not, and the wire result states that distinction explicitly. */
+    evaluationFast?: boolean;
   } = {}) {
     let t = (tag || "").trim().toUpperCase().replace(/\s+/g, "");
     if (!t) throw new UserError('Pass a schedule-row tag as drawn, e.g. sweep_schedule_row { tag: "T1" }.');
@@ -2985,6 +3120,21 @@ export class Session {
     // sweep runs on the mark as drawn on the plans, not the compound key.
     const canonKey = (k: string) => (k || "").trim().toUpperCase().replace(/\s+/g, "");
     let rowHits = graph.tables.flatMap((tb) => tb.rows.filter((r) => rowKeyAnswersFor(r.key, t)).map((r) => ({ tb, r })));
+    let scheduleAliasNote: string | null = null;
+    if (!rowHits.length && /[A-Z]$/.test(t)) {
+      // A plan can omit a schedule's redundant trailing unit digit when
+      // there is only one unit at that site (real example: plan mark
+      // CV-HHW-BP-A, schedule mark CV-HHW-BP-A1). Admit this only when the
+      // entire set contains exactly one strict one-digit extension; two
+      // candidates remain unresolved rather than choosing by prefix.
+      const numbered = graph.tables.flatMap((tb) => tb.rows
+        .filter((r) => canonKey(r.key).startsWith(t) && /^\d$/.test(canonKey(r.key).slice(t.length)))
+        .map((r) => ({ tb, r })));
+      if (numbered.length === 1) {
+        rowHits = numbered;
+        scheduleAliasNote = `Plan mark "${t}" resolves to the schedule's sole strict numbered extension "${canonKey(numbered[0].r.key)}"; no competing numbered row exists.`;
+      }
+    }
     if (!rowHits.length) {
       const found = graph.tables.map((x) => {
         const keys = x.rows.map((row) => row.key).slice(0, 12).join(", ");
@@ -3019,12 +3169,43 @@ export class Session {
     // through to the unchanged ambiguity refusal.
     let accessoryNote: string | null = null;
     if (rowHits.length > 1) {
-      const keyHeaderFor = (tb: ScheduleTable, row: { key: string; cells: Record<string, { text: string }> }): string | null => {
-        for (const h of tb.headers) {
-          const c = row.cells[h];
-          if (c && canonKey(c.text) === canonKey(row.key)) return h;
+      const partTitle = (text: string | null | undefined): string | null => {
+        const normalized = (text || "").toUpperCase().replace(/\s+/g, " ").trim();
+        return /\b\d+\s+OF\s+\d+\b/.test(normalized)
+          ? normalized.replace(/\b\d+\s+OF\s+\d+\b/g, "").replace(/[^A-Z0-9]/g, "")
+          : null;
+      };
+      const collapsed: typeof rowHits = [];
+      for (const hit of rowHits) {
+        const family = partTitle(hit.tb.title?.text);
+        const prior = family ? collapsed.findIndex((candidate) =>
+          candidate.tb.sheet === hit.tb.sheet && partTitle(candidate.tb.title?.text) === family) : -1;
+        if (prior >= 0) {
+          if (Object.keys(hit.r.cells).length > Object.keys(collapsed[prior].r.cells).length) collapsed[prior] = hit;
+        } else {
+          collapsed.push(hit);
         }
-        return null;
+      }
+      rowHits = collapsed;
+    }
+    if (rowHits.length > 1) {
+      const qualifiedQualifier = (header: string | null): string | null =>
+        (header || "").toUpperCase().split(/\s+/)
+          .find((word) => !["ID", "MARK", "CODE", "SYMBOL", "TAG"].includes(word)) ?? null;
+      const keyHeaderFor = (tb: ScheduleTable, row: { key: string; cells: Record<string, { text: string }> }): string | null => {
+        const matching = tb.headers.filter((header) => {
+          const cell = row.cells[header];
+          return cell && canonKey(cell.text) === canonKey(row.key);
+        });
+        // Some device schedules repeat the exact same mark in both the
+        // served-equipment reference and the device's own identity column
+        // (UNIT MARK = VALVE MARK). Preserve the row once, but anchor its
+        // role to the header whose qualifier names the schedule itself.
+        const title = (tb.title?.text || "").toUpperCase();
+        return matching.find((header) => {
+          const qualifier = qualifiedQualifier(header);
+          return qualifier != null && title.includes(qualifier);
+        }) ?? matching[0] ?? null;
       };
       const withHeader = rowHits.map((h) => ({ ...h, keyHeader: keyHeaderFor(h.tb, h.r) }));
       // A row is this tag's OWN device definition only when BOTH real
@@ -3076,7 +3257,16 @@ export class Session {
       // "bare" (this row's own header names no OTHER row's mark, so it is
       // not disqualified on word-shape grounds) while still excluding a
       // genuinely QUALIFIED header exactly as before.
-      const isCandidate = (h: (typeof withHeader)[number]) => !isQualifiedAnchorHeader(h.keyHeader) && h.tb.kind !== "reference";
+      const isCandidate = (h: (typeof withHeader)[number]) => {
+        if (h.tb.kind === "reference") return false;
+        if (!isQualifiedAnchorHeader(h.keyHeader)) return true;
+        // "VALVE MARK" is the device identity on a CONTROL VALVE
+        // SCHEDULE, while "UNIT MARK" there is a cross-reference. A
+        // qualified anchor is primary when its qualifier names the table's
+        // own product family, not equipment served by that product.
+        const qualifier = qualifiedQualifier(h.keyHeader);
+        return !!qualifier && (h.tb.title?.text || "").toUpperCase().includes(qualifier);
+      };
       const candidates = withHeader.filter(isCandidate);
       const accessory = withHeader.filter((h) => !isCandidate(h));
       if (candidates.length === 1 && accessory.length > 0) {
@@ -3097,14 +3287,20 @@ export class Session {
     // split-system pair's two component marks are each the row's OWN
     // identity, not another row's competing tag.
     const ownMarks = new Set(canonKey(r.key).split("/").map((s) => s.trim()).filter(Boolean));
+    const tableSiblingKeys = [...new Set(tb.rows.flatMap((row) =>
+      canonKey(row.key).split("/").map((s) => s.trim()).filter(Boolean)))];
     // sibling keys span EVERY table in the set, not just the row's own: a
     // marker labeled with any other schedule key is that mark's instance, and
     // disclosing it as "excluded, labeled 135" beats calling it unlabeled
-    const siblings = [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(row.key).split("/").filter(Boolean))))].filter((k) => !ownMarks.has(k)).sort();
+    const siblings = opts.evaluationFast
+      ? []
+      : [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(row.key).split("/").filter(Boolean))))].filter((k) => !ownMarks.has(k)).sort();
     const table = tb.title?.text || `${tb.kind} schedule`;
+    const airDeviceTable = /\b(?:DIFFUSER|GRILLE|REGISTER)\b/i.test(table);
 
     // 2. plan-role sheets, and every drawn occurrence of the tag on them
     const roleOf = new Map(graph.sheets.map((g) => [g.key, g.role] as const));
+    const planTitleOf = new Map(graph.sheets.map((g) => [g.key, g.evidence?.text || ""] as const));
     const skipped: { sheet: string; role: string; reason: string }[] = [];
     const planSheets: SheetState[] = [];
     for (const sh of this.sheetList()) {
@@ -3120,37 +3316,8 @@ export class Session {
         });
       }
     }
-    const occOf = (sh: SheetState, key: string): TagOcc[] => {
-      if (!sh.spans) sh.spans = textSpans(sh.page);
-      const exact = sh.spans
-        .filter((sp) => sp.str.trim().toUpperCase() === key)
-        .map((sp) => ({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number] }));
-      // compoundTagOcc's own single-span compound labels ("R1 /C-11") can
-      // never coincide with an exact match's own span (equality vs.
-      // strictly-longer), so it's merged in ALONGSIDE exact unconditionally
-      // — a sheet can legitimately carry both a bare, unrelated coincidental
-      // occurrence of the key elsewhere AND this row's own real compound-
-      // labeled instances (baker-county-eoc-bidset.pdf#54's own "P1": one
-      // bare span plus three real "P1 /C-11"-style compound spans — see
-      // compoundTagOcc's own header comment).
-      const merged = [...exact, ...compoundTagOcc(sh.spans, key)];
-      // Fallback only — a real drawn tag ALSO, separately, routinely splits
-      // across multiple SHORTER text runs (see fragmentedTagOcc's own header
-      // comment for the two real, different-shaped cases this was found
-      // against), and never fires when exact/compound already found
-      // something — its own join-fragments search risks stitching unrelated
-      // short spans together, so it stays the more conservative last resort.
-      // Third tier, after exact/compound AND fragmentedTagOcc: a SEPARATE
-      // deeper same-row chain (deepHyphenChainTagOcc's own header comment)
-      // for a real shape fragmentedTagOcc's own 4-hop budget can't reach —
-      // never invoked unless fragmentedTagOcc's own unmodified search
-      // already found nothing, and structurally gated to >=2-hyphen keys
-      // (no real tag in this project's own corpus keys has one), so it can
-      // never touch a case fragmentedTagOcc itself already resolves.
-      const fragmented = fragmentedTagOcc(sh.spans, key);
-      const occ = merged.length ? merged : (fragmented.length ? fragmented : deepHyphenChainTagOcc(sh.spans, key));
-      return occ.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
-    };
+    const occOf = (sh: SheetState, key: string): TagOcc[] =>
+      this.tagOccurrencesOnSheet(sh, key, airDeviceTable);
     // Compound-key geometric fallback — a real, general bug distinct from
     // the row-LOOKUP layer above (rowKeyAnswersFor already resolves a
     // compound key like "AC-1/ACCU-1" or "R1/E1" fine): the literal joined
@@ -3277,6 +3444,15 @@ export class Session {
         ? [{ sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.filter((o) => o !== candAnchor) }]
         : [];
     const corroCandidates: Corro[] = [...sameSheetCorroFor(anchor), ...crossSheetCorro];
+    const compoundRankingOcc = /\bLUMINAIRE\b/i.test(table)
+      ? compoundTagOcc(anchorSheet.spans || [], t)
+      : [];
+    // A large compound-label population is self-corroborating evidence that
+    // this is the table's dominant placement convention. Small mixed
+    // populations can legitimately coexist with bare placements (P1/E1
+    // shapes), so they retain first-success behavior.
+    const compoundRankingQuorum = compoundRankingOcc.length >= 10;
+    const rankingOcc = compoundRankingQuorum ? compoundRankingOcc : withOcc[0].occ;
 
     // Cross-tag fallback corroborators, tried only when the tag itself has no
     // second occurrence anywhere (corroCandidates is empty) — the
@@ -3341,7 +3517,14 @@ export class Session {
       const cr = sweepRatio(anchorSheet, against.sh);
       let probe: SymbolMatchResult;
       try {
-        probe = matchSymbol(cand, against.segs, { ...sweepOpts, ...(cr.scale === 1 ? {} : { scale: cr.scale }) });
+        const radius = cand.footprint * cr.scale / 2 + anchor.h;
+        probe = matchSymbol(cand, against.segs, {
+          ...sweepOpts,
+          ...(cr.scale === 1 ? {} : { scale: cr.scale }),
+          ...(opts.evaluationFast ? {
+            candidateRegions: against.occ.map((o) => ({ center: [o.cx, o.cy] as Point, radius })),
+          } : {}),
+        });
       } catch {
         // this pad's fingerprint can't survive the trip to the corroborator
         // (too small once scaled) — a wider pad may; never a hard stop
@@ -3414,8 +3597,22 @@ export class Session {
       // === 1, e.g. itd-d1-lab's own US-1) has exactly one anchor to try
       // here, so this is a no-op for it — unchanged from before this loop
       // existed.
+      // Four or more same-sheet occurrences provide enough evidence to rank
+      // candidate fingerprints by how many DISTINCT occurrences of this
+      // exact tag they claim. This is intentionally not the old "most raw
+      // matches wins" heuristic: generic fragments lose the tie to a shape
+      // with the same tag coverage and fewer unrelated geometric hits.
+      const rankByTagClaims = airDeviceTable || compoundRankingQuorum;
+      type RankedFingerprint = {
+        fp: SymbolFingerprint;
+        rect: [Point, Point];
+        anchor: TagOcc;
+        coverage: TagClaimCoverage;
+      };
+      let best: RankedFingerprint | null = null;
+      let firstPassing: RankedFingerprint | null = null;
       outerSameTag:
-      for (const candAnchor of withOcc[0].occ) {
+      for (const candAnchor of (rankByTagClaims ? rankingOcc : withOcc[0].occ)) {
         anchor = candAnchor;
         const candidatesForAnchor = candAnchor === withOcc[0].occ[0]
           ? corroCandidates
@@ -3425,9 +3622,54 @@ export class Session {
             const got = candFor(padK);
             if (got === "region") break;
             if (!got) continue;
-            if (probes(got.cand, cand)) { fp = got.cand; anchorRect = got.rect; corroborated = true; break outerSameTag; }
+            if (!probes(got.cand, cand)) continue;
+            if (!rankByTagClaims) {
+              fp = got.cand; anchorRect = got.rect; corroborated = true;
+              break outerSameTag;
+            }
+            const selfOffset = Math.hypot(got.cand.center[0] - candAnchor.cx, got.cand.center[1] - candAnchor.cy);
+            const radius = got.cand.footprint / 2 + Math.max(candAnchor.h, selfOffset);
+            let result: SymbolMatchResult;
+            try {
+              result = matchSymbol(got.cand, anchorGeo.segs, {
+                ...sweepOpts,
+                candidateRegions: rankingOcc.map((o) => ({ center: [o.cx, o.cy] as Point, radius })),
+              });
+            } catch {
+              continue;
+            }
+            const claimed = new Set<number>();
+            for (const match of result.matches) {
+              let bestIdx = -1, bestDist = Infinity;
+              for (let i = 0; i < rankingOcc.length; i++) {
+                const o = rankingOcc[i];
+                const d = Math.hypot(match.at[0] - o.cx, match.at[1] - o.cy);
+                if (d < bestDist) { bestDist = d; bestIdx = i; }
+              }
+              if (bestIdx >= 0 && bestDist <= radius) claimed.add(bestIdx);
+            }
+            const coverage: TagClaimCoverage = {
+              claimed: claimed.size,
+              rawMatches: result.matches.length,
+              segments: got.cand.segments,
+            };
+            if (!firstPassing) firstPassing = { fp: got.cand, rect: got.rect, anchor: candAnchor, coverage };
+            if (prefersTagClaimCoverage(coverage, best?.coverage ?? null)) {
+              best = { fp: got.cand, rect: got.rect, anchor: candAnchor, coverage };
+            }
           }
         }
+      }
+      // Compound circuit labels ("R1/C-11", "R1/INV-2") are direct
+      // luminaire-instance evidence, unlike a bare repeated tag. Rank only
+      // against those spans (or the separately established variable-size
+      // air-device family); every other table preserves first-success.
+      const selected = rankByTagClaims && best ? best : firstPassing;
+      if (selected) {
+        fp = selected.fp;
+        anchorRect = selected.rect;
+        anchor = selected.anchor;
+        corroborated = true;
       }
       // No whole-shape corroboration anywhere — restore the default anchor
       // so every fallback below (inline-motif retry, TIER 2) runs exactly
@@ -3608,13 +3850,34 @@ export class Session {
     const selfOffset = fp ? Math.hypot(fp.center[0] - anchor.cx, fp.center[1] - anchor.cy) : 0;
     const anchorHForSweep = Math.max(anchor.h, selfOffset);
 
+    // A whole-shape match can succeed for only the few siblings whose exact
+    // perimeter happens to share the anchor's physical size while missing
+    // the rest of a variable-size register/diffuser family. Do not replace
+    // those strong matches. Independently derive a hatch motif and require it
+    // to corroborate at another occurrence; if successful, it may supplement
+    // only still-unclaimed occurrences of this exact tag below.
+    let supplementalInlineFp: InlineMotifFingerprint | undefined;
+    if (fp && corroCandidates.length && /\b(?:DIFFUSER|GRILLE|REGISTER)\b/i.test(table)) {
+      for (const cand of corroCandidates) {
+        const inline = corroborateInlineMotif(
+          anchorGeo.segs, anchorGeo.meta, { w: anchorSheet.widthPx, h: anchorSheet.heightPx },
+          anchor, anchorSheet.upp,
+          { segs: cand.segs, meta: (await this.ensureGeometry(cand.sh)).meta, occ: cand.occ, upp: cand.sh.upp },
+        );
+        if (inline?.corroborated) {
+          supplementalInlineFp = inline.fp;
+          break;
+        }
+      }
+    }
+
     // 4. the full plan-only sweep + tag corroboration per match.
     // The tag-proximity radius is the marker's footprint AS DRAWN ON THE SHEET
     // being read, so it rides the size ratio with the fingerprint (#186): a
     // marker resized to a 12×-smaller plan has a 12×-smaller footprint, and a
     // radius left at the seed's size would sweep up whatever tag happened to
     // be nearby. Unscaled sheets take the identical radius they always did.
-    type CountedMatch = SweepMatch & { tag_at: [number, number, number, number] };
+    type CountedMatch = SweepMatch & { tag_at: [number, number, number, number]; multiplier?: number; text_counted?: boolean };
     const perSheet: {
       state: SheetState;
       matches: CountedMatch[];
@@ -3628,9 +3891,24 @@ export class Session {
       scaled?: NonNullable<SymbolMatchResult["scaled"]>;
       redundant_view: (CountedMatch & { room: string; kept_sheet: string })[];
     }[] = [];
+    const luminaireCompoundSheets = /\bLUMINAIRE\b/i.test(table)
+      ? new Set(planSheets.filter((sheet) =>
+          tableSiblingKeys.reduce((sum, key) =>
+            sum + compoundTagOcc(sheet.spans || [], key).length, 0) >= 10)
+        .map((sheet) => sheet.key))
+      : new Set<string>();
+    const luminaireConventionActive = luminaireCompoundSheets.size > 0;
     // per-sheet classification — the shared symbolsweep.ts function, so this
     // server and the browser's own port can never silently disagree.
     for (const { sh, occ } of occBySheet) {
+      if (opts.evaluationFast && !occ.length) {
+        perSheet.push({
+          state: sh, matches: [], withheld: [], excluded: [], text_only: [],
+          candidates: { considered: 0, dropped: 0 }, complete: true,
+          elapsed_ms: 0, scale: sweepRatio(anchorSheet, sh), redundant_view: [],
+        });
+        continue;
+      }
       const g2 = await this.ensureGeometry(sh);
       if (!g2.segs.length) {
         skipped.push({ sheet: sh.key, role: "plan", reason: "no vector linework (likely a scan) — symbol matching reads the drawn segments" });
@@ -3646,12 +3924,35 @@ export class Session {
       if (fp) {
         let cls: ReturnType<typeof classifySweepMatches>;
         try {
-          cls = classifySweepMatches(t, fp, g2.segs, ratio, occ, sibSpans, anchorHForSweep, sweepOpts);
+          const radius = fp.footprint * ratio.scale / 2 + anchorHForSweep;
+          cls = classifySweepMatches(t, fp, g2.segs, ratio, occ, sibSpans, anchorHForSweep, {
+            ...sweepOpts,
+            ...(opts.evaluationFast ? {
+              candidateRegions: occ.map((o) => ({ center: [o.cx, o.cy] as Point, radius })),
+            } : {}),
+          });
         } catch (e) {
           skipped.push({ sheet: sh.key, role: "plan", reason: e instanceof Error ? e.message : String(e) });
           continue;
         }
         ({ matches, withheld, excluded, text_only, candidates, complete, scaled } = cls);
+        if (supplementalInlineFp && text_only.length) {
+          const inlineRes = sweepInlineMotif(supplementalInlineFp, g2.segs, g2.meta, sh.upp);
+          const supplement = classifyInlineMotifMatches(t, inlineRes, occ, sibSpans, anchor.h);
+          const claimed = new Set(matches.map((m) => m.tag_at.join(",")));
+          for (const m of supplement.matches) {
+            const key = m.tag_at.join(",");
+            if (claimed.has(key)) continue; // one installed count per tag occurrence
+            claimed.add(key);
+            matches.push({ at: m.at, score: m.size_score, rotation: 0, mirrored: false, tag_at: m.tag_at });
+          }
+          text_only = text_only.filter((entry) =>
+            !supplement.matches.some((m) => Math.hypot(m.at[0] - entry.at[0], m.at[1] - entry.at[1]) <= Math.max(m.w_px, m.h_px) / 2 + anchor.h));
+          candidates = {
+            considered: candidates.considered + supplement.candidates_considered,
+            dropped: candidates.dropped,
+          };
+        }
       } else {
         // inline-motif fallback path (register/grille hatch fill) — see the
         // corroborateInlineMotif branch above for why this runs instead.
@@ -3669,6 +3970,142 @@ export class Session {
         complete = icls.complete;
         scaled = undefined;
       }
+      // Variable-size air devices can land just below the rigid 0.92
+      // perimeter bar even while the candidate sits beside this row's own
+      // exact tag. Promote only the narrow 0.90–0.92 band when that explicit
+      // identity corroboration is present; unlabeled hatch matches and
+      // ordinary low-score variants remain withheld.
+      if (airDeviceTable) {
+        const promoted = new Set<SweepWithheld>();
+        for (const candidate of withheld) {
+          if (candidate.score < 0.9 || !candidate.reason.includes(`"${t}" tag is drawn beside it`)) continue;
+          const tagged = occ
+            .filter((entry) => !matches.some((match) =>
+              Math.hypot((match.tag_at[0] + match.tag_at[2]) / 2 - entry.cx,
+                (match.tag_at[1] + match.tag_at[3]) / 2 - entry.cy) <= 1))
+            .sort((a, b) =>
+              Math.hypot(candidate.at[0] - a.cx, candidate.at[1] - a.cy)
+              - Math.hypot(candidate.at[0] - b.cx, candidate.at[1] - b.cy))[0];
+          if (!tagged) continue;
+          matches.push({
+            at: candidate.at, score: candidate.score,
+            rotation: candidate.rotation, mirrored: candidate.mirrored,
+            tag_at: tagged.bbox,
+          });
+          promoted.add(candidate);
+        }
+        if (promoted.size) withheld = withheld.filter((candidate) => !promoted.has(candidate));
+      }
+      // Compound luminaire labels ("R2/C-11", "S1/INV-3") are themselves
+      // explicit instance marks. Trust them only when the same plan carries
+      // a large family-wide quorum of independently tagged luminaires; this
+      // excludes isolated schedule notes and ordinary prefix collisions.
+      if (luminaireConventionActive && !luminaireCompoundSheets.has(sh.key)) {
+        // A short luminaire code such as S3 can independently label a
+        // non-lighting device on another plan. Once this set proves its
+        // fixture convention with a compound-label quorum, bare matches on
+        // sheets outside that convention are ambiguous collisions.
+        matches = [];
+      } else if (/\bLUMINAIRE\b/i.test(table)) {
+        const familyCompoundCount = tableSiblingKeys.reduce((sum, key) =>
+          sum + compoundTagOcc(sh.spans || [], key).length, 0);
+        if (familyCompoundCount >= 10) {
+          // The family quorum establishes this as the luminaire placement
+          // sheet. Individual rows may use either compound circuit labels
+          // or bare labels (exit signs commonly use bare X1).
+          for (const tagged of occ) {
+            const alreadyClaimed = matches.some((match) => {
+              const box = match.tag_at;
+              return Math.hypot((box[0] + box[2]) / 2 - tagged.cx, (box[1] + box[3]) / 2 - tagged.cy) <= 1;
+            });
+            if (alreadyClaimed) continue;
+            matches.push({
+              at: [tagged.cx, tagged.cy],
+              score: 1,
+              rotation: 0,
+              mirrored: false,
+              tag_at: tagged.bbox,
+              text_counted: true,
+            });
+          }
+          text_only = text_only.filter((entry) =>
+            !matches.some((m) => Math.hypot(m.at[0] - entry.at[0], m.at[1] - entry.at[1]) <= anchor.h * 2));
+        }
+      }
+      // Air-device plans commonly print the schedule key beside every
+      // diffuser/grille/register while varying the drawn neck/face size,
+      // which makes one rigid perimeter fingerprint intrinsically partial.
+      // A large family-wide population on this plan proves that explicit
+      // tag placement convention; supplement only this row's own labels.
+      if (airDeviceTable) {
+        const familyTagCount = tableSiblingKeys.reduce((sum, key) => sum + occOf(sh, key).length, 0);
+        if (familyTagCount >= 10) {
+          for (const tagged of occ) {
+            const alreadyClaimed = matches.some((match) => {
+              const box = match.tag_at;
+              return Math.hypot((box[0] + box[2]) / 2 - tagged.cx, (box[1] + box[3]) / 2 - tagged.cy) <= 1;
+            });
+            if (alreadyClaimed) continue;
+            matches.push({
+              at: [tagged.cx, tagged.cy], score: 1, rotation: 0, mirrored: false,
+              tag_at: tagged.bbox, text_counted: true,
+            });
+          }
+          text_only = text_only.filter((entry) =>
+            !occ.some((tagged) => Math.hypot(tagged.cx - entry.at[0], tagged.cy - entry.at[1]) <= anchor.h * 2));
+        }
+      }
+      // Roof plans commonly label drain and freeze-proof hose-bibb
+      // placements directly while listing them in a general plumbing-
+      // fixture schedule. Keep this deliberately narrower than all plumbing
+      // fixtures: foundation/floor plans often redraw the same fixture
+      // across views.
+      const roofFixturePlacement = /^(?:RD|HB)(?:-|$)/i.test(t)
+        && /\bROOF\s+PLAN\b/i.test(planTitleOf.get(sh.key) || "");
+      if (roofFixturePlacement) {
+        const familyTagCount = tableSiblingKeys.reduce((sum, key) => sum + occOf(sh, key).length, 0);
+        if (familyTagCount >= 4) {
+          for (const tagged of occ) {
+            const alreadyClaimed = matches.some((match) => {
+              const box = match.tag_at;
+              return Math.hypot((box[0] + box[2]) / 2 - tagged.cx, (box[1] + box[3]) / 2 - tagged.cy) <= 1;
+            });
+            if (alreadyClaimed) continue;
+            matches.push({
+              at: [tagged.cx, tagged.cy], score: 1, rotation: 0, mirrored: false,
+              tag_at: tagged.bbox, text_counted: true,
+            });
+          }
+        }
+      }
+      // An exact plan label for an individually numbered schedule mark is
+      // itself placement evidence even when surrounding linework is too
+      // sparse or variable to fingerprint. Repeatable type marks stay on
+      // their stricter family-specific paths above.
+      if (isIndividuallyMarkedEquipmentSchedule(table) && !matches.length && occ.length) {
+        const tagged = occ[0];
+        matches.push({
+          at: [tagged.cx, tagged.cy], score: 1, rotation: 0, mirrored: false,
+          tag_at: tagged.bbox, text_counted: true,
+        });
+        text_only = text_only.filter((entry) =>
+          Math.hypot(tagged.cx - entry.at[0], tagged.cy - entry.at[1]) > anchor.h * 2);
+      }
+      // Every counted match must claim one distinct tag occurrence. Inline
+      // motif variants can produce two nearby geometry candidates for the
+      // same literal label; keep the strongest claim instead of counting the
+      // label twice.
+      const byClaim = new Map<string, CountedMatch>();
+      for (const match of matches) {
+        const key = match.tag_at.join(",");
+        const prior = byClaim.get(key);
+        if (!prior
+          || (match.multiplier ?? 1) > (prior.multiplier ?? 1)
+          || ((match.multiplier ?? 1) === (prior.multiplier ?? 1) && match.score > prior.score)) {
+          byClaim.set(key, match);
+        }
+      }
+      matches = [...byClaim.values()];
       const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
       perSheet.push({
         state: sh, matches, withheld, excluded, text_only,
@@ -3678,7 +4115,41 @@ export class Session {
       });
     }
 
-    // 4b. cross-discipline redundant room-view collapse — a real, generic
+    // 4b. redundant plan-view collapse. First handle two registered plan
+    // views drawn side-by-side/top-to-bottom on the SAME sheet. This uses
+    // several other schedule tags as alignment evidence, never the active
+    // row alone; see dedupeAlignedSameSheetViews for the conservative gate.
+    for (const ps of perSheet) {
+      const redundantIds = new Set(dedupeAlignedSameSheetViews(
+        ps.matches.map((m) => ({ id: m, at: m.at })),
+        this.viewLandmarksOnSheet(ps.state, graph),
+        ps.state.widthPx,
+        ps.state.heightPx,
+        (ps.state.spans || [])
+          .filter((span) => /\bENLARGED\s+PLANS?\b/i.test(span.str))
+          .map((span): TaggedViewCaption => ({
+            text: span.str,
+            at: [(span.x0 + span.x1) / 2, (span.y0 + span.y1) / 2],
+          })),
+      ));
+      if (!redundantIds.size) continue;
+      const kept = ps.matches.find((m) => !redundantIds.has(m));
+      const keep: CountedMatch[] = [];
+      for (const m of ps.matches) {
+        if (redundantIds.has(m)) {
+          ps.redundant_view.push({
+            ...m,
+            room: "(aligned repeated plan view on the same sheet)",
+            kept_sheet: ps.state.key,
+          });
+        } else keep.push(m);
+      }
+      // The helper only reports redundancy when both registered views have
+      // matches, so a retained instance always exists.
+      if (kept) ps.matches = keep;
+    }
+
+    // Then handle cross-sheet redundant room-view collapse — a real, generic
     // drafting convention (see symbolsweep.ts's dedupeCrossDisciplineRoomViews
     // for the full doctrine): two different disciplines each drawing their
     // OWN "enlarged" plan of the SAME physical room redraw whatever equipment
@@ -3688,23 +4159,14 @@ export class Session {
     // real separate-install signal) or a match with no confidently-attributed
     // room (never guessed). `disciplineOfSheetNumber` (symbolsweep.ts) is the
     // same read step 3's same-tag corroborator gate already uses above.
-    const roomsBySheet = new Map<string, ReturnType<typeof roomTags>>();
-    const roomsFor = (sh: SheetState): ReturnType<typeof roomTags> => {
-      let rooms = roomsBySheet.get(sh.key);
-      if (!rooms) {
-        const spans = (sh.spans ?? []).map((sp) => ({ str: sp.str, x: sp.x0, y: sp.y0, w: sp.x1 - sp.x0, h: sp.y1 - sp.y0, ...(sp.rot ? { rot: sp.rot } : {}) }));
-        rooms = roomTags({ key: sh.key, sheet_number: sh.sheetNumber, spans });
-        roomsBySheet.set(sh.key, rooms);
-      }
-      return rooms;
-    };
     const dedupInstances: RoomSweepInstance<CountedMatch>[] = [];
     for (const ps of perSheet) {
       const discipline = disciplineOfSheetNumber(ps.state.sheetNumber);
-      const rooms = discipline ? roomsFor(ps.state) : [];
+      const rooms = discipline ? this.roomTagsOnSheet(ps.state) : [];
       for (const m of ps.matches) {
         dedupInstances.push({
-          id: m, sheet: ps.state.key, discipline, at: m.at,
+          id: m, sheet: ps.state.key, sheetNumber: ps.state.sheetNumber, discipline, at: m.at,
+          level: planLevelOfTitle(planTitleOf.get(ps.state.key) || ""),
           rooms, sheetWidthPx: ps.state.widthPx, sheetHeightPx: ps.state.heightPx,
         });
       }
@@ -3723,15 +4185,46 @@ export class Session {
       }
     }
 
+    // An individually numbered equipment schedule names one physical unit
+    // per mark. The same mark repeated across plan/section/detail views is
+    // reference duplication, unlike diffuser/fixture/luminaire type marks.
+    if (isIndividuallyMarkedEquipmentSchedule(table)) {
+      const all = perSheet.flatMap((sheet) => sheet.matches.map((match) => ({ sheet, match })));
+      if (all.length > 1) {
+        const kept = all.slice().sort((a, b) =>
+          b.match.score - a.match.score || a.sheet.state.ord - b.sheet.state.ord)[0];
+        for (const entry of all) {
+          if (entry === kept) continue;
+          entry.sheet.matches = entry.sheet.matches.filter((match) => match !== entry.match);
+          entry.sheet.redundant_view.push({
+            ...entry.match,
+            room: "(individually marked equipment repeated in another plan/detail view)",
+            kept_sheet: kept.sheet.state.key,
+          });
+        }
+      }
+    }
+
+    // A callout may explicitly represent several identical installs ("TYP
+    // 8"). Preserve one geometric marker while applying that printed
+    // quantity; proximity and alignment gates live in the pure helper.
+    for (const ps of perSheet) {
+      for (const match of ps.matches) {
+        const multiplier = typicalCountMultiplier(ps.state.spans || [], match.tag_at);
+        if (multiplier > 1) match.multiplier = multiplier;
+      }
+    }
+
     // 5. commit — condition minted FROM the row (its key IS the tag), the
     // schedule verdict and the seed citation on every marker, one undo step
-    const found = perSheet.reduce((n, p) => n + p.matches.length, 0);
+    const found = perSheet.reduce((n, p) =>
+      n + p.matches.reduce((sum, match) => sum + (match.multiplier ?? 1), 0), 0);
     let committed: { committed: number; shape_ids: string[]; condition: string; ea_total: number } | undefined;
     if (opts.commit && found) {
       const ids: string[] = [];
       for (const ps of perSheet) {
         for (const m of ps.matches) {
-          ids.push(this.commit(ps.state, t, "count", [m.at], { count: 1 }, {
+          ids.push(this.commit(ps.state, t, "count", [m.at], { count: m.multiplier ?? 1 }, {
             method: "symbol_sweep",
             actor: "agent",
             reviewed: false,
@@ -3756,9 +4249,14 @@ export class Session {
 
     const cells: Record<string, string> = {};
     for (const [k, v] of Object.entries(r.cells)) cells[k] = v.text;
+    const cellCitations = Object.fromEntries(Object.entries(r.cells).map(([header, cell]) => [
+      header,
+      { text: cell.text, bbox: Session.wireBox(cell.bbox) },
+    ]));
     const firstCell = r.cells[Object.keys(r.cells)[0]];
     const capped = perSheet.filter((p) => p.candidates.dropped > 0);
     const notes: string[] = [];
+    if (scheduleAliasNote) notes.push(scheduleAliasNote);
     if (accessoryNote) notes.push(accessoryNote);
     if (!corroborated) {
       notes.push(`The tag "${t}" is drawn ${totalOcc === 1 ? "exactly once" : "too sparsely to cross-check"} — the fingerprint could not corroborate at a second occurrence${crossCandidates.length ? `, and none of ${crossCandidates.length} sibling tag(s) from the same ${table} table reproduced it either` : ""}; audit the matches with view_sheet before trusting the count.`);
@@ -3769,6 +4267,11 @@ export class Session {
       notes.push(`The tag "${t}" is drawn exactly once, so the fingerprint was corroborated against sibling tag "${corroboratedVia}"'s own occurrence in the same ${table} table instead — a real, weaker form of evidence than a same-tag corroboration (two different marks sharing a symbol family, not the same mark recurring); audit the matches with view_sheet before trusting the count.`);
     }
     if (inlineFp) notes.push(`No whole-shape marker recurs around this tag's own drawn text, so this anchored on the surrounding hatch fill's own real-world size/pitch instead (the register/grille fallback) — score is a size closeness, not a segment match; audit with view_sheet before trusting the count.`);
+    if (supplementalInlineFp) notes.push(`Whole-shape matches were preserved and a separately corroborated hatch-size/pitch motif supplemented only this tag's still-unclaimed drawn occurrences; each occurrence contributes at most one count.`);
+    const multiplied = perSheet.flatMap((p) => p.matches.filter((m) => (m.multiplier ?? 1) > 1));
+    if (multiplied.length) notes.push(`${multiplied.length} drawn callout(s) carry explicit TYP multipliers; their printed quantities were applied to the installed count.`);
+    const textCounted = perSheet.flatMap((p) => p.matches.filter((m) => m.text_counted));
+    if (textCounted.length) notes.push(`${textCounted.length} additional explicit placement labels were counted directly under a family-wide quorum.`);
     if (opts.commit && !found) notes.push("commit requested but nothing cleared the bar — no shapes were committed.");
     // #186, same disclosure discipline as symbol_sweep: a ratio the count
     // depends on is stated, and an assumed ratio over an empty sheet is named
@@ -3787,13 +4290,21 @@ export class Session {
     }
     return {
       tag: t,
+      search_scope: opts.evaluationFast ? "tagged_only" : "exhaustive",
+      unlabeled_audit_complete: !opts.evaluationFast,
       row: {
         sheet: tb.sheet,
         table,
         key: t,
         cells,
+        cell_citations: cellCitations,
         citation: { sheet: tb.sheet, text: `${table} row ${t}`, bbox: Session.wireBox(firstCell?.bbox || tb.region) },
       },
+      tag_citations: perSheet.flatMap((sheet) => sheet.matches.flatMap((match) =>
+        Array.from({ length: match.multiplier ?? 1 }, () => ({
+          sheet: sheet.state.key,
+          bbox: Session.wireBox(match.tag_at),
+        })))),
       anchor: {
         sheet: anchorSheet.key,
         at: [round1(anchor.cx), round1(anchor.cy)],
@@ -3812,8 +4323,8 @@ export class Session {
       found,
       sheets: perSheet.map((p) => ({
         sheet: p.state.key,
-        found: p.matches.length,
-        matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, tag_at: Session.wireBox(m.tag_at) })),
+        found: p.matches.reduce((sum, match) => sum + (match.multiplier ?? 1), 0),
+        matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, tag_at: Session.wireBox(m.tag_at), ...(m.multiplier ? { multiplier: m.multiplier } : {}), ...(m.text_counted ? { counted_from: "explicit_label" as const } : {}) })),
         withheld: p.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, reason: w.reason })),
         excluded: p.excluded.map((e) => ({ at: [round1(e.at[0]), round1(e.at[1])], tag: e.tag })),
         text_only: p.text_only,
@@ -4885,6 +5396,7 @@ export class Session {
     if (!byPdf.size) return;
     const buildingsSet = new Set(g.buildings);
     const touchedSheets = new Set<string>();
+    const sourceSpansBySheet = new Map<string, GraphSpan[]>();
     let recovered = 0, added = 0, odlErrors = 0;
     // "reference"-kind candidates (a real cross-reference/connection/calc
     // table, per scheduleTableFromODL's own CONNECTION/CALCULATION check)
@@ -4913,7 +5425,22 @@ export class Session {
         if (!state) continue;
         let built;
         try {
-          built = scheduleTableFromODL(odlTable, sheetKey, state.page.viewport.transform, { buildings: buildingsSet });
+          let sourceSpans = sourceSpansBySheet.get(sheetKey);
+          if (!sourceSpans) {
+            sourceSpans = (state.spans ?? textSpans(state.page)).map((span) => ({
+              str: span.str,
+              x: span.x0,
+              y: span.y0,
+              w: span.x1 - span.x0,
+              h: span.y1 - span.y0,
+              ...(span.rot ? { rot: span.rot } : {}),
+            }));
+            sourceSpansBySheet.set(sheetKey, sourceSpans);
+          }
+          built = scheduleTableFromODL(odlTable, sheetKey, state.page.viewport.transform, {
+            buildings: buildingsSet,
+            sourceSpans,
+          });
         } catch {
           continue; // one malformed table must never take the whole pass down
         }
@@ -5031,6 +5558,43 @@ export class Session {
           added++;
         }
       }
+    }
+    const equivalentCollapsed = collapseEquivalentPrimaryTables(g.tables);
+    if (equivalentCollapsed) {
+      g.notes.push(`${equivalentCollapsed} duplicate primary table read(s) from independent extractors were collapsed by exact sheet/title/key-set identity.`);
+    }
+    // Final paint-grounding pass: geometric tables that beat ODL on raw
+    // completeness can still carry mis-associated cell boxes (real: quarter-
+    // turned FAN SCHEDULE EF-2 CFM). Re-snap every table against the sheet's
+    // pdf.js spans so cite boxes land on the glyphs, regardless of which
+    // extractor won the completeness race.
+    let snappedTables = 0;
+    for (let i = 0; i < g.tables.length; i++) {
+      const table = g.tables[i];
+      const state = this.sheets.get(table.sheet);
+      if (!state) continue;
+      let sourceSpans = sourceSpansBySheet.get(table.sheet);
+      if (!sourceSpans) {
+        sourceSpans = (state.spans ?? textSpans(state.page)).map((span) => ({
+          str: span.str,
+          x: span.x0,
+          y: span.y0,
+          w: span.x1 - span.x0,
+          h: span.y1 - span.y0,
+          ...(span.rot ? { rot: span.rot } : {}),
+        }));
+        sourceSpansBySheet.set(table.sheet, sourceSpans);
+      }
+      if (!sourceSpans.length) continue;
+      const next = snapCellBboxesToSourceSpans(table, sourceSpans);
+      if (next !== table) {
+        g.tables[i] = next;
+        snappedTables++;
+        touchedSheets.add(table.sheet);
+      }
+    }
+    if (snappedTables) {
+      g.notes.push(`Cell bbox snap: ${snappedTables} table(s) re-grounded onto pdf.js source spans after extractor reconciliation.`);
     }
     if (touchedSheets.size) syncSheetSchedules(g, touchedSheets);
     if (recovered || added) {
@@ -5198,8 +5762,16 @@ export class Session {
     const want = /room/.test(k) ? "room-finish" : /finish|material|product|code|mark/.test(k) ? "finish" : k;
     const hits = g.tables.filter((t) => t.kind === want);
     if (!hits.length) {
-      const found = g.tables.map((t) => `${t.kind} on ${t.sheet}`).join(" | ");
-      throw new UserError(`No ${JSON.stringify(kind)} schedule found in the set. Found: ${found || "no schedules at all"}.`);
+      const kindCounts = new Map();
+      for (const t of g.tables) {
+        kindCounts.set(t.kind, (kindCounts.get(t.kind) || 0) + 1);
+      }
+      const found = [...kindCounts.entries()]
+        .map(([tableKind, n]) => `${tableKind}×${n}`)
+        .join(", ") || "no schedules at all";
+      throw new UserError(
+        `No ${JSON.stringify(kind)} schedule found in the set. Found kinds: ${found}. For titled equipment/points tables use query_table with a title substring instead of find_schedule kind.`,
+      );
     }
     return {
       matches: hits.map((t) => ({
@@ -5253,21 +5825,86 @@ export class Session {
    * stubborn zero-hit search on a visually-confirmed tag as a candidate
    * for this, not a fragmentation bug, once fragmentedTagOcc's shapes and
    * a `rot`-aware search have both already been tried. */
-  findText(name: string, q: string, opts: { region?: { x0: number; y0: number; x1: number; y1: number }; limit?: number } = {}) {
+  findText(name: string | null | undefined, q: string, opts: { region?: { x0: number; y0: number; x1: number; y1: number }; limit?: number } = {}) {
     const query = q.trim();
     if (!query) throw new UserError("q must be a non-empty string.");
-    const s = this.sheet(name);
-    if (!s.spans) s.spans = textSpans(s.page);
-    const r = opts.region;
     const needle = query.toLowerCase();
     const limit = opts.limit ?? 200;
-    const all = s.spans.filter((sp) => sp.str.toLowerCase().includes(needle)
-      && (!r || (sp.x0 <= r.x1 && sp.x1 >= r.x0 && sp.y0 <= r.y1 && sp.y1 >= r.y0)));
-    const hits = all.slice(0, limit).map((sp) => ({
-      str: sp.str,
-      bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number],
-      center: [round1((sp.x0 + sp.x1) / 2), round1((sp.y0 + sp.y1) / 2)] as [number, number],
-    }));
-    return { sheet: s.key, q: query, count: all.length, truncated: all.length > hits.length, hits };
+    const region = opts.region;
+    if (region && !name) {
+      throw new UserError("region requires sheet; omit both to search the loaded set, or pass sheet with region.");
+    }
+
+    const matchSpans = (sheet: { key: string; spans?: TextSpan[] | null; page: PageHandle }) => {
+      if (!sheet.spans) sheet.spans = textSpans(sheet.page);
+      return sheet.spans.filter((sp) => sp.str.toLowerCase().includes(needle)
+        && (!region || (sp.x0 <= region.x1 && sp.x1 >= region.x0 && sp.y0 <= region.y1 && sp.y1 >= region.y0)));
+    };
+
+    if (name) {
+      const s = this.sheet(name);
+      const all = matchSpans(s);
+      const hits = all.slice(0, limit).map((sp) => ({
+        sheet: s.key,
+        str: sp.str,
+        bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number],
+        center: [round1((sp.x0 + sp.x1) / 2), round1((sp.y0 + sp.y1) / 2)] as [number, number],
+      }));
+      return { sheet: s.key, q: query, count: all.length, truncated: all.length > hits.length, hits };
+    }
+
+    const all: Array<{
+      sheet: string;
+      str: string;
+      bbox: [number, number, number, number];
+      center: [number, number];
+    }> = [];
+    for (const sheet of this.sheetList()) {
+      for (const sp of matchSpans(sheet)) {
+        all.push({
+          sheet: sheet.key,
+          str: sp.str,
+          bbox: [sp.x0, sp.y0, sp.x1, sp.y1],
+          center: [round1((sp.x0 + sp.x1) / 2), round1((sp.y0 + sp.y1) / 2)],
+        });
+      }
+    }
+    const hits = all.slice(0, limit);
+    return { sheet: null, q: query, count: all.length, truncated: all.length > hits.length, hits };
+  }
+
+  /**
+   * Find explicit prose placement evidence such as "CUH-T1 ON FLOOR 3".
+   * Identical notes repeated on multiple discipline sheets represent one
+   * statement, not multiple installed units, and are deduplicated by the
+   * tag + stated level.
+   */
+  async explicitInstallationNotes(tag: string): Promise<Array<{
+    sheet: string; at: [number, number]; text: string; level: string;
+  }>> {
+    const graph = await this.graphForPipeline();
+    const planKeys = new Set(graph.sheets.filter((sheet) => sheet.role === "plan").map((sheet) => sheet.key));
+    const escaped = tag.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pattern = new RegExp(`(?:^|[^A-Z0-9])${escaped}\\s+ON\\s+(?:FLOOR|LEVEL)\\s+([A-Z0-9]+)`, "i");
+    const byLevel = new Map<string, { sheet: string; at: [number, number]; text: string; level: string }>();
+    for (const sheet of this.sheetList()) {
+      if (!planKeys.has(sheet.key)) continue;
+      if (!sheet.spans) sheet.spans = textSpans(sheet.page);
+      for (const span of sheet.spans) {
+        const match = pattern.exec(span.str);
+        if (!match) continue;
+        const level = match[1].toUpperCase();
+        const key = `${tag.trim().toUpperCase()}\0${level}`;
+        if (!byLevel.has(key)) {
+          byLevel.set(key, {
+            sheet: sheet.key,
+            at: [round1((span.x0 + span.x1) / 2), round1((span.y0 + span.y1) / 2)],
+            text: span.str.trim(),
+            level,
+          });
+        }
+      }
+    }
+    return [...byLevel.values()];
   }
 }

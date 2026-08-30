@@ -2,6 +2,21 @@
 
 OpenTakeoff is a **client-only React app**: a PDF construction-takeoff canvas for flooring (useful for any trade). No backend, no database, no auth—everything runs and persists in the browser. Apache-2.0. (For the one-page project pitch and vision, see [`AGENT_BRIEF.md`](AGENT_BRIEF.md); for capability → code mapping, see [`FEATURES.md`](FEATURES.md).)
 
+## Shared production path — read before every edit
+
+**Before every code addition, removal, or change, ask:**
+
+> **SHOULD THIS BE ON THE SHARED PATH?**
+> - **Yes** → put it on the shared path (one implementation both UI and MCP use:
+>   `Session.graphForPipeline` / shared `web/src/lib/*` modules). Never add a
+>   second UI-only or MCP-only copy of schedule/table/quantity logic.
+> - **No** → keep it surface-specific (canvas interaction, tiles, chrome).
+
+Shared = sheet graph (geometric + ODL), `compile_corpus_takeoff`, `query_table`,
+`find_schedule`, `resolve_tag`, `sheet_graph`, and plan-schedule tools as they
+are extracted (`count_marks`, `sweep_schedule_row`, …). See also root
+`AGENTS.md` and `opentakeoff-corpus/takeoffs/GOAL.md`.
+
 ## Run / build / check
 
 ```bash
@@ -13,6 +28,32 @@ npm test         # node:test over the pure geometry + totals math (test/*.test.t
 npm run build    # → web/dist/ (static output; this is what Netlify deploys)
 npm run check    # typecheck + lint + test + build — exactly what CI runs; green here ⇒ green CI
 ```
+
+### Corpus evaluation
+
+Run all scored corpus metrics from `mcp/` with:
+
+```bash
+npm run eval:corpus -- /path/to/opentakeoff-corpus
+```
+
+The normal loop is content-addressed by engine/evaluator source, Node and
+dependency versions, PDFs, and answer keys. An unchanged full-corpus rerun
+should take seconds, not minutes. During implementation, run focused affected
+sets first, then the cached full corpus; reserve forced-cold recomputation for
+milestone and shipping gates:
+
+```bash
+OPENTAKEOFF_EVAL_NO_CACHE=1 npm run eval:corpus -- /path/to/opentakeoff-corpus
+```
+
+For accuracy-equivalence investigation, restore production's complete
+whole-sheet symbol search with `OPENTAKEOFF_EVAL_FULL_SWEEP=1`. Never weaken
+keys, thresholds, or metric semantics to improve runtime. The evaluator-only
+focused path may omit candidates solely when the scorer cannot count them.
+Report every focused or full evaluation result to the user immediately after
+it completes. A full-corpus report always states takeoff, reference, and graph
+metrics together, including regressions—not just the targeted metric.
 
 ## Shipping — the required steps, every change
 

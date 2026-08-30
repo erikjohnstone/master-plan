@@ -50,7 +50,7 @@ test("parseTakeoffKeyCsv: skips '#' comment lines and blank lines, keeps data ro
   ].join("\n");
   const rows = parseTakeoffKeyCsv(csv);
   assert.equal(rows.length, 2);
-  assert.deepEqual(rows[0], { tag: "EWH-1", equipment_type: "Electric wall heater", expected_quantity: 1, sheets: ["plan.pdf#6"], notes: "has, a comma" });
+  assert.deepEqual(rows[0], { tag: "EWH-1", equipment_type: "Electric wall heater", expected_quantity: 1, sheets: ["plan.pdf#6"], notes: "has, a comma", expected_status: "resolved" });
   assert.deepEqual(rows[1].sheets, ["plan.pdf#6", "plan.pdf#7"]);
   assert.equal(rows[1].expected_quantity, 2);
 });
@@ -66,7 +66,7 @@ test("scoreTakeoff: exact match scores delta=0, exact=true", () => {
   const key = [keyRow({ tag: "T-1", expected_quantity: 3 })];
   const score = scoreTakeoff(takeoff, key);
   assert.equal(score.per_tag.length, 1);
-  assert.deepEqual(score.per_tag[0], { tag: "T-1", expected: 3, actual: 3, delta: 0, exact: true, status: "resolved" });
+  assert.deepEqual(score.per_tag[0], { tag: "T-1", expected: 3, actual: 3, delta: 0, exact: true, status: "resolved", expected_status: "resolved" });
   assert.equal(score.summary.exact_matches, 1);
   assert.equal(score.summary.exact_match_pct, 1);
   assert.equal(score.summary.total_quantity_delta, 0);
@@ -97,6 +97,22 @@ test("scoreTakeoff: a refused/errored item counts as actual=0, not skipped", () 
   assert.equal(score.per_tag[0].actual, 0);
   assert.equal(score.per_tag[0].delta, -2);
   assert.equal(score.per_tag[0].status, "refused");
+});
+
+test("scoreTakeoff: an expected honest refusal scores exact but is excluded from applicable quantity", () => {
+  const takeoff = takeoffOf([item({ tag: "T-1", quantity: 0, status: "refused" })]);
+  const score = scoreTakeoff(takeoff, [keyRow({ expected_quantity: 1, expected_status: "refused" })]);
+  assert.equal(score.per_tag[0].exact, true);
+  assert.equal(score.per_tag[0].delta, 0);
+  assert.equal(score.summary.applicable_tags, 0);
+  assert.equal(score.summary.correct_refusals, 1);
+});
+
+test("scoreTakeoff: an expected structurally unavailable row scores only when absent", () => {
+  const score = scoreTakeoff(takeoffOf([]), [keyRow({ expected_status: "not_in_output" })]);
+  assert.equal(score.per_tag[0].exact, true);
+  assert.deepEqual(score.missing, []);
+  assert.equal(score.summary.exact_matches, 1);
 });
 
 // ── scoreTakeoff: missing ──────────────────────────────────────────────────

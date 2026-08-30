@@ -1,0 +1,1 @@
+Find CH-A1 on the drawings and give me its installed quantity, cooling capacity, entering and leaving water temperatures, design flow, and the matching chilled-water control valve with its flow, size, configuration, and Cv. Show me the plan location and cite the exact schedule cells you used.

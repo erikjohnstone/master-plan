@@ -27,6 +27,7 @@
 // within a real tolerance radius of the target's own center?
 import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { resolveSetFiles } from "./corpusFiles.mjs";
 import { Session } from "../src/session.ts";
 
 const [corpusDir, ...only] = process.argv.slice(2).filter((a) => !a.startsWith("--"));
@@ -65,7 +66,7 @@ const MATCH_TOL_PX = 60;
 
 async function evalSet(set) {
   const s = new Session();
-  const files = set.files.map((f) => join(set.root ?? spec.root, f));
+  const files = resolveSetFiles(corpus, spec, set);
   for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
 
   const key = readCsv(join(corpus, "keys", `${set.id}.inlinemotif.csv`));

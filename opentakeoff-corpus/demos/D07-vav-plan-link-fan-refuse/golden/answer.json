@@ -1,0 +1,383 @@
+{
+  "schema_version": 1,
+  "demo_id": "D07",
+  "status": "done",
+  "source": "run-1",
+  "latency_ms": 43736.86,
+  "answer": {
+    "vav_schedule_count": {
+      "value": 9,
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "AIR TERMINAL BOX SCHEDULE",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            1002.6,
+            468.6,
+            1011.5,
+            603.2
+          ]
+        }
+      ]
+    },
+    "vav_1_manufacturer": {
+      "value": "TRANE / VCEF",
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "AIR TERMINAL BOX SCHEDULE",
+          "row_key": "VAV-1",
+          "column": "MANUFACTURER",
+          "bbox_px": [
+            973.9,
+            158.3,
+            979.8,
+            199
+          ]
+        }
+      ]
+    },
+    "vav_1_cfm": {
+      "value": 2170,
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "AIR TERMINAL BOX SCHEDULE",
+          "row_key": "VAV-1",
+          "column": "CFM",
+          "bbox_px": [
+            973.9,
+            368.7,
+            979.8,
+            381.9
+          ]
+        }
+      ]
+    },
+    "vav_1_mbh": {
+      "value": 41,
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "AIR TERMINAL BOX SCHEDULE",
+          "row_key": "VAV-1",
+          "column": "MBH",
+          "bbox_px": [
+            973.9,
+            508.2,
+            979.8,
+            519.6
+          ]
+        }
+      ]
+    },
+    "vav_1_kw": {
+      "value": 12,
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "AIR TERMINAL BOX SCHEDULE",
+          "row_key": "VAV-1",
+          "column": "KW",
+          "bbox_px": [
+            973.9,
+            582.5,
+            979.8,
+            589.1
+          ]
+        }
+      ]
+    },
+    "vav_1_plan_tag": {
+      "value": "VAV-1",
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#2",
+          "table_title": null,
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            894,
+            680.3,
+            911.2,
+            686.2
+          ]
+        }
+      ]
+    },
+    "vav_5_manufacturer": {
+      "value": "TRANE / VCEF",
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "AIR TERMINAL BOX SCHEDULE",
+          "row_key": "VAV-5",
+          "column": "MANUFACTURER",
+          "bbox_px": [
+            922.9,
+            158.3,
+            928.8,
+            199.1
+          ]
+        }
+      ]
+    },
+    "vav_5_cfm": {
+      "value": 460,
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "AIR TERMINAL BOX SCHEDULE",
+          "row_key": "VAV-5",
+          "column": "CFM",
+          "bbox_px": [
+            922.9,
+            370.4,
+            928.8,
+            380.3
+          ]
+        }
+      ]
+    },
+    "vav_5_mbh": {
+      "value": 8.5,
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "AIR TERMINAL BOX SCHEDULE",
+          "row_key": "VAV-5",
+          "column": "MBH",
+          "bbox_px": [
+            922.9,
+            509.6,
+            928.8,
+            517.8
+          ]
+        }
+      ]
+    },
+    "vav_5_kw": {
+      "value": 2.5,
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "AIR TERMINAL BOX SCHEDULE",
+          "row_key": "VAV-5",
+          "column": "KW",
+          "bbox_px": [
+            922.9,
+            582,
+            928.8,
+            590.1
+          ]
+        }
+      ]
+    },
+    "vav_5_plan_tag": {
+      "value": "VAV-5",
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#2",
+          "table_title": null,
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            751.3,
+            630.7,
+            768.5,
+            636.6
+          ]
+        }
+      ]
+    },
+    "vav_9_manufacturer": {
+      "value": "TRANE / VCEF",
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "AIR TERMINAL BOX SCHEDULE",
+          "row_key": "VAV-9",
+          "column": "MANUFACTURER",
+          "bbox_px": [
+            871.9,
+            158.3,
+            877.8,
+            199.1
+          ]
+        }
+      ]
+    },
+    "vav_9_cfm": {
+      "value": 85,
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "AIR TERMINAL BOX SCHEDULE",
+          "row_key": "VAV-9",
+          "column": "CFM",
+          "bbox_px": [
+            871.9,
+            371.9,
+            877.8,
+            378.5
+          ]
+        }
+      ]
+    },
+    "vav_9_mbh": {
+      "value": 3.4,
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "AIR TERMINAL BOX SCHEDULE",
+          "row_key": "VAV-9",
+          "column": "MBH",
+          "bbox_px": [
+            871.9,
+            509.7,
+            877.8,
+            517.9
+          ]
+        }
+      ]
+    },
+    "vav_9_kw": {
+      "value": 1,
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "AIR TERMINAL BOX SCHEDULE",
+          "row_key": "VAV-9",
+          "column": "KW",
+          "bbox_px": [
+            871.9,
+            581.7,
+            877.8,
+            589.9
+          ]
+        }
+      ]
+    },
+    "vav_9_plan_tag": {
+      "value": "VAV-9",
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#2",
+          "table_title": null,
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            706,
+            747.3,
+            723.2,
+            753.2
+          ]
+        }
+      ]
+    },
+    "ef_1_cfm": {
+      "value": 165,
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "FANSCHEDULE",
+          "row_key": "EF-1",
+          "column": "CFM",
+          "bbox_px": [
+            770.6,
+            262.1,
+            776.5,
+            272
+          ]
+        }
+      ]
+    },
+    "ef_1_plan_tag": {
+      "value": "EF-1",
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#2",
+          "table_title": null,
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            882,
+            891.8,
+            887.9,
+            904.6
+          ]
+        }
+      ]
+    },
+    "ef_2_cfm": {
+      "value": 400,
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "FANSCHEDULE",
+          "row_key": "EF-2",
+          "column": "CFM",
+          "bbox_px": [
+            757.8,
+            262.4,
+            763.7,
+            272.3
+          ]
+        }
+      ]
+    },
+    "ef_2_plan_status": {
+      "value": "refused",
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "FANSCHEDULE",
+          "row_key": "EF-2",
+          "column": "MARK",
+          "bbox_px": [
+            757.8,
+            55.1,
+            763.7,
+            67.8
+          ]
+        }
+      ]
+    },
+    "ef_5_cfm": {
+      "value": 80,
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#6",
+          "table_title": "FANSCHEDULE",
+          "row_key": "EF-5",
+          "column": "CFM",
+          "bbox_px": [
+            719.6,
+            264.1,
+            725.5,
+            270.6
+          ]
+        }
+      ]
+    },
+    "ef_5_plan_tag": {
+      "value": "EF-5",
+      "citations": [
+        {
+          "sheet_id": "bldg5406-hvac-demo-mechanical.pdf#2",
+          "table_title": null,
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            915,
+            901.3,
+            920.9,
+            914.1
+          ]
+        }
+      ]
+    }
+  }
+}

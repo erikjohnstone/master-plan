@@ -1,0 +1,313 @@
+{
+  "schema_version": 1,
+  "demo_id": "D05",
+  "set_id": "baker-county-eoc",
+  "source_file": "baker-county-eoc-bidset.pdf",
+  "ground_truth_completed_before_model_runs": true,
+  "derivation": "Independent read of PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT) on sheet #41 for RTU-1 mech attributes, MECHANICAL EQUIPMENT CONNECTION SCHEDULE on sheet #60 for RTU-01 electrical connection (zero-padded tag), and find_text RTU-1 on roof plan sheet #39. Confirmed RTU-1 has no connection-schedule row under the unpadded key; RTU-01 is the matching electrical mark. Authored before any model run.",
+  "hardness": {
+    "sheet_count": 65,
+    "stress_confirmed": "Cross-discipline join: mechanical schedule uses RTU-1 while electrical connection schedule uses RTU-01 for the same rooftop unit. Model must discover the zero-padding convention without inventing a second unit, and must not transpose MCA/MOCP."
+  },
+  "follow_up": {
+    "prompt": "Is RTU-2 on the connection schedule as RTU-02? What is its MCA and circuit number?",
+    "expected": {
+      "rtu_2_connection_tag": "RTU-02",
+      "rtu_02_mca": 24,
+      "rtu_02_circuit": "C - 32,34,36"
+    }
+  },
+  "expected": {
+    "rtu_1_service": {
+      "type": "string",
+      "value": "MAIN OPERATIONS",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+        "row_key": "RTU-1",
+        "column": "SERVICE",
+        "bbox_px": [
+          908.2,
+          642.1,
+          1049,
+          661
+        ],
+        "grounding_text": "MAIN OPERATIONS",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_1_manufacturer": {
+      "type": "string",
+      "value": "CARRIER",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+        "row_key": "RTU-1",
+        "column": "MANUFACTURER",
+        "bbox_px": [
+          1111,
+          642.1,
+          1179,
+          661
+        ],
+        "grounding_text": "CARRIER",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_1_model": {
+      "type": "string",
+      "value": "48FE",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+        "row_key": "RTU-1",
+        "column": "MODEL",
+        "bbox_px": [
+          1279.4,
+          642.1,
+          1315.7,
+          661
+        ],
+        "grounding_text": "48FE",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_1_nominal_tons": {
+      "type": "number",
+      "value": 5,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+        "row_key": "RTU-1",
+        "column": "NOMINAL CAP (TONS)",
+        "bbox_px": [
+          1412.6,
+          642.1,
+          1421.2,
+          661
+        ],
+        "grounding_text": "5",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_1_supply_cfm": {
+      "type": "number",
+      "value": 1650,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+        "row_key": "RTU-1",
+        "column": "SUPPLY AIR (CFM)",
+        "bbox_px": [
+          1496.9,
+          642.1,
+          1530.7,
+          661
+        ],
+        "grounding_text": "1650",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_1_min_oa_cfm": {
+      "type": "number",
+      "value": 330,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+        "row_key": "RTU-1",
+        "column": "MIN OUTSIDE AIR (CFM)",
+        "bbox_px": [
+          1597.9,
+          642.1,
+          1623.3,
+          661
+        ],
+        "grounding_text": "330",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_1_equip_no": {
+      "type": "string",
+      "value": "RTU-1",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+        "row_key": "RTU-1",
+        "column": "EQUIP NO",
+        "bbox_px": [
+          676.6,
+          642.1,
+          720.9,
+          661
+        ],
+        "grounding_text": "RTU-1",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "connection_tag": {
+      "type": "string",
+      "value": "RTU-01",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#60",
+        "table_title": "MECHANICAL EQUIPMENT CONNECTION SCHEDULE",
+        "row_key": "RTU-01",
+        "column": "NO.",
+        "bbox_px": [
+          562.32,
+          847.2,
+          653.76,
+          873.36
+        ],
+        "grounding_text": "RTU-01",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      },
+      "derivation": "Electrical connection schedule zero-pads mech RTU-1 → RTU-01; unpadded RTU-1 has zero hits on that schedule."
+    },
+    "rtu_01_va": {
+      "type": "number",
+      "value": 11880,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#60",
+        "table_title": "MECHANICAL EQUIPMENT CONNECTION SCHEDULE",
+        "row_key": "RTU-01",
+        "column": "VA",
+        "bbox_px": [
+          1044.96,
+          847.2,
+          1102.56,
+          873.36
+        ],
+        "grounding_text": "11880",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_01_mca": {
+      "type": "number",
+      "value": 33,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#60",
+        "table_title": "MECHANICAL EQUIPMENT CONNECTION SCHEDULE",
+        "row_key": "RTU-01",
+        "column": "MCA",
+        "bbox_px": [
+          1275.36,
+          847.2,
+          1332.96,
+          873.36
+        ],
+        "grounding_text": "33.0",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_01_mocp": {
+      "type": "string",
+      "value": "45 A",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#60",
+        "table_title": "MECHANICAL EQUIPMENT CONNECTION SCHEDULE",
+        "row_key": "RTU-01",
+        "column": "MOCP",
+        "bbox_px": [
+          1332.96,
+          847.2,
+          1390.32,
+          873.36
+        ],
+        "grounding_text": "45 A",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_01_voltage": {
+      "type": "number",
+      "value": 208,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#60",
+        "table_title": "MECHANICAL EQUIPMENT CONNECTION SCHEDULE",
+        "row_key": "RTU-01",
+        "column": "VOLTAGE",
+        "bbox_px": [
+          1390.32,
+          847.2,
+          1476.72,
+          873.36
+        ],
+        "grounding_text": "208",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_01_phases": {
+      "type": "number",
+      "value": 3,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#60",
+        "table_title": "MECHANICAL EQUIPMENT CONNECTION SCHEDULE",
+        "row_key": "RTU-01",
+        "column": "PHASES",
+        "bbox_px": [
+          1476.72,
+          847.2,
+          1580.16,
+          873.36
+        ],
+        "grounding_text": "3",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_01_circuit": {
+      "type": "string",
+      "value": "C - 29,31,33",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#60",
+        "table_title": "MECHANICAL EQUIPMENT CONNECTION SCHEDULE",
+        "row_key": "RTU-01",
+        "column": "CIRCUIT NUMBER",
+        "bbox_px": [
+          2004.72,
+          847.2,
+          2138.16,
+          873.36
+        ],
+        "grounding_text": "C - 29,31,33",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_1_plan_label": {
+      "type": "string",
+      "value": "RTU-1",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#39",
+        "bbox_px": [
+          1614.5,
+          1973.8,
+          1660.5,
+          1992.8
+        ],
+        "grounding_text": "RTU-1",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      },
+      "derivation": "Roof plan find_text hit on sheet #39 (M1.21)."
+    }
+  }
+}
