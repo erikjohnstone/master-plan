@@ -609,6 +609,27 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     }] } },
   ], "What are AHU-1 location and supply airflow?",
   "AHU-1 location is 11TH FLOOR MECHANICAL on set.pdf#44; supply airflow is 3850 CFM."), null);
+  // Type + CFM asks must not thrash on incidental coil/EWT cells that happen
+  // to appear in the answer or on the same schedule row.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [10, 20, 30, 40], text: "FCU-A1" } },
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [40, 20, 60, 40], text: "VERTICAL CABINET" } },
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [60, 20, 80, 40], text: "150" } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#42",
+      row: {
+        key: "FCU-A1",
+        all_cells: {
+          MARK: { text: "FCU-A1", bbox: [10, 20, 30, 40] },
+          TYPE: { text: "VERTICAL CABINET", bbox: [40, 20, 60, 40] },
+          "FAN DATA CFM (CLG / HTG)": { text: "150", bbox: [60, 20, 80, 40] },
+          "COOLING COIL DATA ENT. W": { text: "45", bbox: [90, 20, 110, 40] },
+          "COOLING COIL DATA TOTAL": { text: "4.2", bbox: [120, 20, 140, 40] },
+        },
+      },
+    }] } },
+  ], "For FCU-A1 give type and CFM from the FAN COIL UNIT SCHEDULE and cite the MARK cells",
+  "FCU-A1 on set.pdf#42 is VERTICAL CABINET at 150 CFM. Also note EWT 45 and TOTAL 4.2 appear on the row."), null);
   // Short digits inside a mark must not invent a phantom numeric paint duty.
   assert.equal(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#48", bbox_px: [10, 20, 30, 40] } },

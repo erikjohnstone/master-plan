@@ -955,11 +955,36 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     // answer uses those fields, paint EACH answering value cell — not only
     // the mark. Count / cite-MARK goals must not thrash on incidental numerics
     // the model copied from a schedule row (ESP 4.6, EWT 45, etc.).
-    const goalRequestsRowAttributes = /\b(?:location|room|cfm|airflow|capacity|tons?|alarm|trend|description|serves|serving|supply\s+air|return|gpm|mbh|static|ewt|lwt|\bcv\b|valve size|characteristics?|setpoint|feedback)\b/i.test(goal);
+    // Scope paint duties to headers the GOAL actually named (TYPE, CFM, …) so
+    // a "type and CFM" ask cannot demand every coil/EWT cell on the row.
+    const goalRequestsRowAttributes = /\b(?:location|room|cfm|airflow|capacity|tons?|alarm|trend|description|serves|serving|supply\s+air|return|gpm|mbh|static|ewt|lwt|\bcv\b|valve size|characteristics?|setpoint|feedback|type)\b/i.test(goal);
     if (!goalRequestsRowAttributes) {
       // cite / count goals: rowCovered (one paint) is enough
     } else {
-    const answerUsesValueCell = (raw, rowKeyCanonical) => {
+    /** Headers the goal asked to report — set-agnostic schedule column patterns. */
+    const goalAskedHeader = (header) => {
+      const h = String(header || "");
+      if (!h) return false;
+      const checks = [];
+      if (/\b(?:cfm|airflow)\b/i.test(goal)) checks.push(/\bCFM\b|AIR\s*FLOW|FAN\s*DATA/i);
+      if (/\btype\b/i.test(goal)) checks.push(/^TYPE$/i);
+      if (/\bgpm\b|flowrate|\bflow\b/i.test(goal) && !/\bcfm\b/i.test(goal)) {
+        checks.push(/\bGPM\b|FLOWRATE|\bFLOW\b/i);
+      }
+      if (/\b(?:capacity|tons?|mbh|kw)\b/i.test(goal)) {
+        checks.push(/CAPACITY|\bTONS?\b|\bMBH\b|\bKW\b/i);
+      }
+      if (/\blocation|room\b/i.test(goal)) checks.push(/LOCATION|ROOM|AREA\s*SERVED/i);
+      if (/\bdescription\b/i.test(goal)) checks.push(/DESCRIPTION/i);
+      if (/\b(?:alarm|trend)\b/i.test(goal)) checks.push(/ALARM|TREND/i);
+      if (/\b(?:ewt|lwt|ent\.?\s*w|leaving)\b/i.test(goal)) checks.push(/EWT|LWT|ENT\.?\s*W|WATER\s*TEMP/i);
+      if (/\bcv\b|valve size/i.test(goal)) checks.push(/^\s*C[Vv]\s*$|VALVE\s*SIZE|PIPE\s*SIZE/i);
+      if (/\bstatic|esp\b/i.test(goal)) checks.push(/\bESP\b|STATIC|S\.?P\.?/i);
+      if (!checks.length) return true; // goal named a generic attr word — keep prior behavior
+      return checks.some((re) => re.test(h));
+    };
+    const answerUsesValueCell = (raw, rowKeyCanonical, header) => {
+      if (!goalAskedHeader(header)) return false;
       const text = String(raw || "").trim();
       if (!text) return false;
       // Foreign equipment MARKs in relationship columns are not this row's
@@ -1003,7 +1028,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         for (const cell of option.cells) {
           const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
           if (!textCanonical || textCanonical === rowKeyCanonical) continue;
-          if (!answerUsesValueCell(cell?.text, rowKeyCanonical)) continue;
+          if (!answerUsesValueCell(cell?.text, rowKeyCanonical, cell?.header)) continue;
           if (valueByText.has(textCanonical)) continue;
           valueByText.set(textCanonical, { cell, sheet: option.sheet, cells: option.cells });
         }
