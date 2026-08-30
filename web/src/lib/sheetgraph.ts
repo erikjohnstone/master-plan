@@ -784,7 +784,24 @@ const ACRONYM_DOT_RE = /(?<=\b[A-Z])\.(?=[A-Z]\b)/g;
 const headerLabels = (s: string, vocab: string[]): string[] => {
   const out: string[] = [];
   const collapsed = norm(s).replace(ACRONYM_DOT_RE, "").replace(/\bCEILIING\b/g, "CEILING");
-  for (const w of collapsed.split(/[^A-Z]+/)) if (w && vocab.includes(w) && !out.includes(w)) out.push(w);
+  const add = (w: string) => { if (w && !out.includes(w)) out.push(w); };
+  for (const tok of collapsed.split(/[^A-Z]+/)) {
+    if (!tok) continue;
+    if (vocab.includes(tok)) { add(tok); continue; }
+    // Smashed ALL-CAPS compound from a CAD/ODL text layer
+    // ("REGULATORSETCFM", "REHEATMBH"): no delimiter remains, so the split
+    // above yields one token that is not itself a vocabulary word. The
+    // trailing unit/name still is — a suffix, not a mid-token collision
+    // (MARK inside REMARKS is a whole-token hit above and never reaches
+    // here). Require three letters so two-letter units (ID/HP) cannot
+    // claim an arbitrary tail; longest suffix wins when several apply.
+    let best: string | null = null;
+    for (const w of vocab) {
+      if (w.length < 3 || w.length >= tok.length) continue;
+      if (tok.endsWith(w) && (!best || w.length > best.length)) best = w;
+    }
+    if (best) add(best);
+  }
   return out;
 };
 
@@ -3164,10 +3181,17 @@ const MEP_EQUIPMENT_FAMILY_RE = new RegExp(`\\b(?:${MEP_EQUIPMENT_FAMILIES})S?\\
 // word-boundary family test misses that; the family word glued to
 // SCHEDULE is the same signal, not a second vocabulary.
 const MEP_EQUIPMENT_SMASHED_RE = new RegExp(`(?:${MEP_EQUIPMENT_FAMILIES})S?SCHEDULE`);
+// Air-terminal boxes are the same family as VAV, but many schedules never
+// print the letters V-A-V — they title the table AIR TERMINAL BOX / AIR
+// TERMINAL UNIT. "TERMINAL" or "BOX" alone is too generic (electrical
+// terminals, junction boxes); the AIR+TERMINAL pair is the HVAC name.
+const MEP_AIR_TERMINAL_RE = /\bAIR\s+TERMINALS?\b/;
+const MEP_AIR_TERMINAL_SMASHED_RE = /AIRTERMINALS?/;
 export const isMepEquipmentSchedule = (title: string): boolean => {
   const u = norm(title);
-  if (MEP_EQUIPMENT_FAMILY_RE.test(u)) return true;
-  return MEP_EQUIPMENT_SMASHED_RE.test(u.replace(/\s+/g, ""));
+  if (MEP_EQUIPMENT_FAMILY_RE.test(u) || MEP_AIR_TERMINAL_RE.test(u)) return true;
+  const smashed = u.replace(/\s+/g, "");
+  return MEP_EQUIPMENT_SMASHED_RE.test(smashed) || MEP_AIR_TERMINAL_SMASHED_RE.test(smashed);
 };
 
 // A real, standard cross-firm MEP title — "…CONNECTION SCHEDULE", "…
@@ -7315,7 +7339,13 @@ export function scheduleTableFromODL(
       headerCandidateChecked = true;
       const texts = [...ownCells].map(odlCellText).filter(Boolean);
       const vocabHits = texts.filter((s) => headerLabels(s, ALL_HEADER_WORDS_ARR).length > 0).length;
-      if (texts.length && vocabHits / texts.length >= 0.4) { headerEnd = r + 1; continue; }
+      // A cell that IS the catalog-anchor column name (MARK/TAG/SYMBOL/ID/
+      // CODE), not a device tag, is a header label. A data row carries the
+      // instance (VAV-1), never the word MARK. This is the same ambiguity
+      // the 40% vocab ratio was written for, and it still holds when the
+      // other cells are smashed unit compounds that miss the ratio.
+      const hasAnchorLabel = texts.some((s) => CATALOG_ANCHOR_WORDS.includes(norm(s)));
+      if (texts.length && (vocabHits / texts.length >= 0.4 || hasAnchorLabel)) { headerEnd = r + 1; continue; }
     }
     break; // first real data row
   }
