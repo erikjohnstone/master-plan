@@ -46,15 +46,33 @@ an engineer watching a tool trace. Apply on every new demo and every UI proof:
    translucent frame around the answering cell/text. Do **not** draw label
    words inside the box that obscure the schedule value or drawing text being
    cited. The blueprint value stays readable through the paint.
-4. **Conversational follow-ups.** After an answer, the estimator must be able
-   to keep chatting in the same Agent thread — ask why a value was chosen,
-   what a field means, where else it appears, what to check next — and get
-   real, plain-language responses grounded in the run's evidence (and fresh
-   tools when needed). One-shot dump-and-done is incomplete. Demo UI recordings
-   going forward must show at least one real follow-up turn with a useful
-   reply, like a user actually using the platform.
+4. **Conversational follow-ups — answered correctly.** After an answer, the
+   estimator must be able to keep chatting in the same Agent thread — ask why
+   a value was chosen, what a field means, where else it appears, what to
+   check next, or another data question about the same workflow — and get a
+   **correct**, plain-language reply grounded in the run's evidence (and fresh
+   tools when needed). One-shot dump-and-done is incomplete. Wrong, empty,
+   evasive, or placeholder follow-up replies are a **fail**.
 
 These rules are product behavior for arbitrary uploads, not demo polish.
+
+## Per-demo advance rule (non-negotiable)
+
+Do **not** mark a demo locked or move on to the next slate entry until **all**
+gates for the current demo are clear:
+
+1. Ground truth before model runs (including 20% hand-count where required)
+2. Frozen prompt; N=5 API / verify; localhost/stdio when required
+3. Generalized production correctness (no corpus hardcoding / answer-steering)
+4. UI proof: answer-first panel, source cards, readable paints (no auto-fly)
+5. **At least one real follow-up in the same Agent thread is answered
+   correctly** — whether it is a data question or a workflow/clarification
+   ask — with evidence-backed content matching what a competent estimator
+   would accept
+
+A demo that passes the primary ask but fails the follow-up is **not** locked.
+Fix production behavior, re-prove the UI recording (primary ask + correct
+follow-up), then advance.
 
 ## Demo quality bar (non-negotiable)
 
@@ -98,12 +116,15 @@ wants open.
    showing the answering cells is a fail.
 4. **UI recording.** Must show: real blueprint → frozen prompt → complete
    usable answer + clickable source cards in the Agent panel → at least one
-   conversational follow-up with a useful reply → calm on-sheet highlights
-   with values still readable (opened via source cards, not auto-fly). Auto
-   fly-around videos and label-obscured highlights are a fail.
+   conversational follow-up whose reply is **correct and useful** (data or
+   otherwise) → calm on-sheet highlights with values still readable (opened
+   via source cards, not auto-fly). Auto fly-around videos, label-obscured
+   highlights, or a wrong/empty follow-up are a fail.
 
 If a recording cannot demonstrate those points, the demo is not locked —
 including demos previously marked locked that fail this bar (re-prove them).
+Do not start the next demo until the current one clears every gate above,
+including the correct follow-up.
 
 In a live review, each demo must answer these questions on the cited sheet in
 under ten seconds:
@@ -190,7 +211,9 @@ workspace.
    production correctness** above before the restart counts.
 7. **Lock.** Write the demo card, add its fixture pointer and regression test,
    prove the production UI path with a saved recording that matches the same
-   truth, and commit. Only then does it count toward ten.
+   truth **and** shows at least one correctly answered follow-up in-thread,
+   and commit. Only then does it count toward ten. Do not begin the next
+   slate demo until this lock is complete.
 
 ## Required per-demo layout
 
