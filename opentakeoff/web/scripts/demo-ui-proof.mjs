@@ -67,7 +67,13 @@ const browser = await chromium.launch({
   executablePath: process.env.CHROME_EXECUTABLE_PATH || "/usr/local/bin/google-chrome",
   args: ["--no-sandbox"],
 });
-const context = await browser.newContext({ viewport: { width: 1920, height: 1080 } });
+const context = await browser.newContext({
+  viewport: { width: 1920, height: 1080 },
+  recordVideo: {
+    dir: "/opt/cursor/artifacts",
+    size: { width: 1920, height: 1080 },
+  },
+});
 await context.addInitScript(() => {
   localStorage.setItem("opentakeoff_ai_endpoint", "http://127.0.0.1:8787");
   localStorage.setItem("opentakeoff_ai_model", "gpt-oss-120b");
@@ -79,6 +85,7 @@ const page = await context.newPage();
 page.on("console", (message) => console.log(`[browser:${message.type()}] ${message.text()}`));
 page.on("pageerror", (error) => console.error(`[browser:error] ${error.message}`));
 
+let succeeded = false;
 try {
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   await page.locator('input[name="sheet-file"]').first().setInputFiles(pdf);
@@ -90,10 +97,12 @@ try {
   await page.locator('button[title^="Agent —"]').click();
   const goal = page.locator('textarea[name="agent-goal"]');
   await goal.fill(prompt);
+  await page.waitForTimeout(2_000);
   await page.getByRole("button", { name: "Run", exact: true }).click();
   const stop = page.getByRole("button", { name: /Stop/ });
   await stop.waitFor({ state: "visible", timeout: 10_000 });
   await stop.waitFor({ state: "hidden", timeout: 180_000 });
+  await page.waitForTimeout(3_000);
   await page.screenshot({ path: "/opt/cursor/artifacts/d01_ui_agent_result.png" });
   const panel = await page.locator('textarea[name="agent-goal"]').locator("xpath=../../..").innerText();
   console.log(`UI_AGENT_RESULT\n${panel}`);
@@ -115,15 +124,21 @@ try {
     if (box) {
       await page.mouse.move(box.x + box.width * target[0], box.y + box.height * target[1]);
       await page.mouse.wheel(0, -1800);
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(2_000);
     }
     await page.screenshot({ path });
   }
+  succeeded = true;
   if (headed) await page.waitForTimeout(10_000);
 } catch (error) {
   await page.screenshot({ path: "/opt/cursor/artifacts/d01_ui_failure.png" }).catch(() => {});
   throw error;
 } finally {
+  const video = page.video();
+  await page.close();
+  if (succeeded && video) {
+    await video.saveAs("/opt/cursor/artifacts/d01_ui_prompt_tools_answer_highlights.webm");
+  }
   await browser.close();
   await new Promise((resolveClose) => proxy.close(resolveClose));
   await mcpClient.close();

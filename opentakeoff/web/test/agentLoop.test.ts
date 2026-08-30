@@ -55,6 +55,33 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     { name: "sweep_schedule_row", args: { tag: "CH-A1" }, out: { found: 1 } },
     { name: "query_table", out: { matches: [{ row: { key: "CV-CH-A1" } }] } },
   ], "Find CH-A1", "Plan location for CV‑CH‑A1 is the same." )!, /unswept tag/);
+  const sweptPlan = {
+    name: "sweep_schedule_row",
+    args: { tag: "CH-A1" },
+    out: {
+      found: 1,
+      tag_citations: [{
+        sheet: "set.pdf#3",
+        bbox: { x0: 10, y0: 20, x1: 30, y1: 40 },
+      }],
+    },
+  };
+  assert.match(requiredEvidenceCorrection([
+    sweptPlan,
+    {
+      name: "highlight_citation",
+      args: { text: "Valve CV-CH-A1" },
+      out: { sheet: "set.pdf#3", bbox_px: [5, 15, 35, 45], text: "Valve CV-CH-A1" },
+    },
+  ], "Show me the plan location for CH-A1", "CH-A1 is shown.")!, /exact sweep tag citation/);
+  assert.equal(requiredEvidenceCorrection([
+    sweptPlan,
+    {
+      name: "highlight_citation",
+      args: { text: "CH-A1" },
+      out: { sheet: "set.pdf#3", bbox_px: [10, 20, 30, 40], text: "CH-A1" },
+    },
+  ], "Show me the plan location for CH-A1", "CH-A1 is shown."), null);
   assert.match(requiredEvidenceCorrection([{
     name: "query_table",
     out: { matches: [{ row: { identity: { header: "VALVE MARK", text: "CV-CH-A1" } } }] },

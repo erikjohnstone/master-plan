@@ -46,6 +46,33 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     && unswept.some((tag) => finalCanonical.includes(tag.replace(/[^A-Z0-9]/g, "")))) {
     return `The final answer claims a plan location for unswept tag(s): ${unswept.join(", ")}. A schedule query proves schedule data only. Remove those plan-location claims or call sweep_schedule_row for each exact tag.`;
   }
+  if (/\bshow\b.*\bplan location\b|\bshow me the plan\b/i.test(goal)) {
+    const highlights = callLog.filter(({ name, out }) =>
+      name === "highlight_citation" && !out?.error && Array.isArray(out.bbox_px));
+    const missingPlanTags = [];
+    for (const { args, out } of callLog.filter(({ name, out }) =>
+      name === "sweep_schedule_row" && (out?.found ?? out?.total_found) > 0)) {
+      const tag = String(args?.tag || out?.tag || "").trim();
+      const tagCanonical = tag.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      const citations = (out?.tag_citations || []).map((citation) => {
+        const bbox = citation?.bbox;
+        return {
+          sheet: citation?.sheet,
+          bbox: Array.isArray(bbox) ? bbox : [bbox?.x0, bbox?.y0, bbox?.x1, bbox?.y1],
+        };
+      });
+      const covered = citations.some((citation) => citation.bbox.every(Number.isFinite)
+        && highlights.some(({ args: highlightArgs, out: highlightOut }) =>
+          highlightOut.sheet === citation.sheet
+          && highlightOut.bbox_px.every((value, index) => Math.abs(value - citation.bbox[index]) <= 1)
+          && String(highlightArgs?.text || highlightOut?.text || "").toUpperCase()
+            .replace(/[^A-Z0-9]/g, "").includes(tagCanonical)));
+      if (!covered) missingPlanTags.push(tag);
+    }
+    if (missingPlanTags.length) {
+      return `The requested plan location is not painted from the exact sweep tag citation for: ${missingPlanTags.join(", ")}. Call highlight_citation with an unchanged sweep_schedule_row.tag_citations sheet and bbox, and label it with that exact tag. Do not use the broader anchor rect or label one tag as another.`;
+    }
+  }
   for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
     for (const match of out?.matches || []) {
       const identity = match?.row?.identity;
