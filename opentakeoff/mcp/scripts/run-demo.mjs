@@ -71,6 +71,9 @@ export function citationProvenanceErrors(answer, toolCalls) {
       if (!planTags.has(citationKey(citation.sheet_id, citation.bbox_px))) {
         errors.push(`${field} must cite a plan tag returned by sweep_schedule_row.tag_citations`);
       }
+      if (citation.table_title || citation.row_key || citation.column) {
+        errors.push(`${field} uses a plan tag citation, so table_title, row_key, and column must be null or omitted`);
+      }
     }
   }
   return errors;
