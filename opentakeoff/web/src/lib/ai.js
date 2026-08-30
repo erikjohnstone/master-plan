@@ -15,7 +15,7 @@ const KEYS = {
   visionModel: "opentakeoff_ai_vision_model",
 };
 
-/** Defaults for the OpenTakeoff Agent product path (browser only). */
+/** Defaults for the in-canvas Agent path (browser only). */
 export const PLATFORM_AI = {
   endpoint: "/cerebras-api",
   apiKey: "",

@@ -17,7 +17,7 @@ import { useEffect } from "react";
 import { Z } from "../lib/ui.js";
 import { keyLabel, keyText, isApplePlatform } from "../lib/keys.ts";
 
-const GUIDE_URL = "https://github.com/Kentucky-ai/opentakeoff/blob/main/docs/USER_GUIDE.md";
+const GUIDE_URL = "https://github.com/erikjohnstone/master-plan/blob/main/opentakeoff/docs/USER_GUIDE.md";
 
 function Kbd({ children }) {
   return (

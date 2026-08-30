@@ -48,7 +48,7 @@ const centered = {
 };
 const brand = (
   <strong style={{ fontFamily: "var(--f-display)", fontSize: 20, letterSpacing: "-0.02em" }}>
-    open<span style={{ fontStyle: "italic", color: "var(--cobalt)" }}>takeoff</span>
+    Takeoff
   </strong>
 );
 
