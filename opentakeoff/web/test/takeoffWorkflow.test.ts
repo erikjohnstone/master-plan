@@ -11,6 +11,7 @@ import {
   advanceTakeoffWorkflow,
   isIllegalWorkflowTransition,
   workflowDirective,
+  scaleRefuseMessage,
 } from "../src/lib/takeoffWorkflow.js";
 import { readFileSync } from "node:fs";
 
@@ -26,7 +27,49 @@ test("classifyTakeoffIntent maps points-list takeoffs", () => {
     classifyTakeoffIntent("How many FCUs across Air Ops vs MITRACON buildings?"),
     "fcu_buildings",
   );
-  assert.equal(classifyTakeoffIntent("Trace AHU-1 connectivity"), "generic");
+  assert.equal(classifyTakeoffIntent("Trace AHU-1 connectivity"), "connectivity");
+});
+
+test("symbol_sweep / connectivity / scale_refuse intents are phrase-robust", () => {
+  assert.equal(
+    classifyTakeoffIntent("Find every instance of this plan symbol from the seed marquee"),
+    "symbol_sweep",
+  );
+  assert.equal(
+    classifyTakeoffIntent("Run a symbol_sweep on this valve seed across the set"),
+    "symbol_sweep",
+  );
+  assert.equal(
+    classifyTakeoffIntent("Trace which valve belongs to which equipment via drawn pipe connectivity"),
+    "connectivity",
+  );
+  assert.equal(
+    classifyTakeoffIntent("Refuse installed duct length on an unscaled sheet — set_scale first"),
+    "scale_refuse",
+  );
+  assert.equal(
+    scaleRefuseMessage("plan.pdf#3", "1/4\" = 1'-0\""),
+    "Set the scale for plan.pdf#3 first — use set_scale (detected: 1/4\" = 1'-0\").",
+  );
+  assert.equal(
+    scaleRefuseMessage("plan.pdf#3"),
+    "Set the scale for plan.pdf#3 first — use set_scale.",
+  );
+  const sweep = advanceTakeoffWorkflow("symbol_sweep", [
+    { name: "sheet_graph", out: { sheets: [] } },
+  ], "Find every instance of this symbol");
+  assert.equal(sweep.phase, "spot_cites");
+  assert.ok(sweep.allowedTools?.includes("symbol_sweep"));
+  assert.match(sweep.nextMove || "", /symbol_sweep|seed_rect/i);
+  const conn = advanceTakeoffWorkflow("connectivity", [
+    { name: "sheet_graph", out: { sheets: [] } },
+  ], "Trace valve to equipment connectivity");
+  assert.ok(conn.allowedTools?.includes("trace_connectivity"));
+  assert.match(conn.nextMove || "", /trace_connectivity/i);
+  const scale = advanceTakeoffWorkflow("scale_refuse", [
+    { name: "sheet_graph", out: { sheets: [] } },
+  ], "installed length on unscaled sheet");
+  assert.match(scale.nextMove || "", /set_scale|refuse/i);
 });
 
 test("complete set HVAC/BAS/valve goals route to corpus compile", () => {

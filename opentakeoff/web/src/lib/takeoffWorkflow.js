@@ -14,7 +14,7 @@
  * hardcode sheet numbers, building names, or locked counts.
  */
 
-/** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"project_takeoff"|"equipment_plan_join"|"cross_discipline_join"|"plan_link_refuse"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"generic"} TakeoffIntent */
+/** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"project_takeoff"|"equipment_plan_join"|"cross_discipline_join"|"plan_link_refuse"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"symbol_sweep"|"connectivity"|"scale_refuse"|"generic"} TakeoffIntent */
 
 /** Estimator phrasing: "takeoff", "take off", counts, rollups. */
 export function goalAsksTakeoff(g) {
@@ -163,6 +163,27 @@ export function classifyTakeoffIntent(goal) {
     return "bas_point_trace";
   }
 
+  // Every placement of one plan symbol from a seed marquee (not schedule MARK sweep).
+  if (/\bsymbol[_\s-]*sweep\b/i.test(g)
+    || (/\bsymbol\b/i.test(g) && /\b(?:seed|marquee|every\s+instance|every\s+placement|find\s+every)\b/i.test(g))
+    || /\bfind\s+every\s+instance\b/i.test(g)) {
+    return "symbol_sweep";
+  }
+
+  // Valve↔equipment (or pipe/duct) connectivity via drawn linework — not proximity.
+  if (/\bconnectivity\b/i.test(g)
+    || (/\btrace\b/i.test(g) && /\b(?:valve|pipe|duct|equipment|connect)\b/i.test(g)
+      && !/\bpoints?\s*list\b/i.test(g))) {
+    return "connectivity";
+  }
+
+  // Real-world installed qty / measure that must refuse when the sheet is unscaled.
+  if (/\b(?:unscaled|no\s+scale|set_scale|scale\s+first)\b/i.test(g)
+    || (/\b(?:installed\s+(?:qty|quantity|length)|linear\s+feet|\bLF\b|measure|duct\s+length)\b/i.test(g)
+      && /\b(?:scale|refuse|calibrat)\b/i.test(g))) {
+    return "scale_refuse";
+  }
+
   // Named HVAC schedule-family takeoffs (pump, CRAH, diffuser, …) — phrase
   // robust; industry family words, not set-specific schedule titles.
   if (goalAsksTakeoff(g) && (
@@ -177,6 +198,13 @@ export function classifyTakeoffIntent(goal) {
   }
 
   return "generic";
+}
+
+/** Honest unscaled-sheet refusal — same wording Session scaleGate uses. */
+export function scaleRefuseMessage(sheetKey, detectedLabel) {
+  const key = String(sheetKey || "this sheet");
+  const detected = detectedLabel ? ` (detected: ${detectedLabel})` : "";
+  return `Set the scale for ${key} first — use set_scale${detected}.`;
 }
 
 /** Extract explicit POINTS LIST / DDC list titles named in the goal. */
@@ -702,6 +730,95 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
         phase: "answer",
         allowedTools: null,
         nextMove: "Emit schedule counts/attrs, plan cites where found, and explicit refusals where sweeps found nothing.",
+        blockReason: null,
+      };
+    })());
+  }
+
+  if (intent === "symbol_sweep") {
+    const allowed = [
+      "list_sheets", "sheet_graph", "set_scale", "view_sheet", "view_region",
+      "symbol_sweep", "highlight_citation",
+    ];
+    const hasSymbolSweep = (callLog || []).some(({ name, out }) =>
+      name === "symbol_sweep" && out && !out.error);
+    return surveyThenTitleTools(hasGraph, (() => {
+      if (!hasSymbolSweep) {
+        return {
+          phase: "spot_cites",
+          allowedTools: allowed,
+          nextMove: "Marquee one real drawn instance as seed_rect and call symbol_sweep. "
+            + "Copy found/matches/withheld — never invent placements. Detail-seeded set scope needs scale on both ends.",
+          blockReason: null,
+        };
+      }
+      if (paints < 1) {
+        return {
+          phase: "paint",
+          allowedTools: allowed,
+          nextMove: "highlight_citation (or commit) on accepted symbol matches, then answer with counts and withheld disclosures.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "Emit match counts, rotations/mirrors when present, and every withheld near-miss with its reason.",
+        blockReason: null,
+      };
+    })());
+  }
+
+  if (intent === "connectivity") {
+    const allowed = [
+      "list_sheets", "sheet_graph", "set_scale", "view_sheet", "view_region",
+      "symbol_sweep", "sweep_schedule_row", "trace_connectivity", "highlight_citation",
+    ];
+    const hasTrace = (callLog || []).some(({ name, out }) =>
+      name === "trace_connectivity" && out && !out.error);
+    return surveyThenTitleTools(hasGraph, (() => {
+      if (!hasTrace) {
+        return {
+          phase: "spot_cites",
+          allowedTools: allowed,
+          nextMove: "Sweep valve/equipment placements first, then trace_connectivity from a seed ON drawn pipe/duct linework. "
+            + "Never claim connectivity from proximity alone. Honor reached/ambiguous/dead_end/refused statuses.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "Report the walked status with cites. If ambiguous, name every candidate — never pick one. If refused, copy the tool reason.",
+        blockReason: null,
+      };
+    })());
+  }
+
+  if (intent === "scale_refuse") {
+    const allowed = [
+      "list_sheets", "sheet_graph", "set_scale", "measure_line", "measure_poly",
+      "one_click", "symbol_sweep", "sweep_schedule_row",
+    ];
+    const hasScale = (callLog || []).some(({ name, out }) =>
+      name === "set_scale" && out && !out.error);
+    const hasMeasure = (callLog || []).some(({ name, out }) =>
+      ["measure_line", "measure_poly", "one_click", "symbol_sweep", "sweep_schedule_row"].includes(name)
+      && out && !out.error);
+    return surveyThenTitleTools(hasGraph, (() => {
+      if (!hasScale && !hasMeasure) {
+        return {
+          phase: "survey",
+          allowedTools: allowed,
+          nextMove: "Call set_scale before any real-world installed length/area qty. "
+            + "If the sheet is unscaled, refuse with scaleRefuseMessage — never invent LF/SF from pixels.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "If tools refused for missing scale, copy that refusal verbatim. Otherwise emit the scaled measurement with sheet cite.",
         blockReason: null,
       };
     })());
