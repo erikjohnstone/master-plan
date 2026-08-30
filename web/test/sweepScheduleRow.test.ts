@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, leftoverLabeledOccs, typicalMultiplierNear, matchQuantity, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, isSheetCategoryTitle, spaceKeyIsLocated, assignMarkToViewport, buildingKeyFromTitle, tileSpaceKey, collapseSpaceKey, type Point, type RoomSweepInstance, type SheetViewport, type TagOcc } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, promoteSetWideLabeledNearMisses, leftoverLabeledOccs, typicalMultiplierNear, matchQuantity, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, isSheetCategoryTitle, spaceKeyIsLocated, assignMarkToViewport, buildingKeyFromTitle, tileSpaceKey, collapseSpaceKey, type Point, type RoomSweepInstance, type SheetViewport, type TagOcc, type SweepSheetMatch, type SweepWithheld } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -532,6 +532,97 @@ test("classifySweepMatches: two leftover labeled near-bar matches on a one-insta
   const tags = r.matches.map((m) => m.tag_at).sort();
   assert.deepEqual(tags, [occ[1].bbox, occ[2].bbox].sort());
   assert.equal(r.text_only.length, 0);
+});
+
+test("promoteSetWideLabeledNearMisses: a family split one leftover per sheet COUNTS", () => {
+  // Per-sheet, each leftover is the schematic-versus-plan extra. Across
+  // the set they are the same-convention family the per-sheet bar cannot
+  // see — the seed (excludeCenter) is the one confident instance, one
+  // labeled near-miss on A, one labeled near-miss on B.
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const a: Point = [400, 400];
+  const b: Point = [700, 400];
+  const occA = [tagNear([100, 100]), tagNear(a)];
+  const occB = [tagNear(b)];
+  const rA = classifySweepMatches("T1", cf.fp, place([{ at: [100, 100] }, { at: a }]), { scale: 1, known: true },
+    occA, [], anchor.h, { excludeCenter: cf.fp.center, scoreHigh: 1.01 });
+  const rB = classifySweepMatches("T1", cf.fp, place([{ at: b }]), { scale: 1, known: true },
+    occB, [], anchor.h, { scoreHigh: 1.01 });
+  assert.equal(rA.matches.length, 0, "sheet A leftover stays a per-sheet question");
+  assert.ok(rA.withheld.some((w) => w.beside_tag), "sheet A leftover is a labeled near-miss");
+  assert.equal(rB.matches.length, 0, "sheet B has no confident instance");
+  assert.ok(rB.withheld.some((w) => w.beside_tag), "sheet B leftover is a labeled near-miss");
+  const R = cf.fp.footprint / 2 + anchor.h;
+  const n = promoteSetWideLabeledNearMisses([
+    { matches: rA.matches, withheld: rA.withheld, occ: occA, R, excludeCenter: cf.fp.center },
+    { matches: rB.matches, withheld: rB.withheld, occ: occB, R },
+  ]);
+  assert.equal(n, 2, "both leftovers promote as one set-wide family");
+  assert.equal(rA.matches.length, 1);
+  assert.equal(rB.matches.length, 1);
+});
+
+test("promoteSetWideLabeledNearMisses: a single leftover across the set stays withheld", () => {
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const a: Point = [400, 400];
+  const occA = [tagNear([100, 100]), tagNear(a)];
+  const rA = classifySweepMatches("T1", cf.fp, place([{ at: [100, 100] }, { at: a }]), { scale: 1, known: true },
+    occA, [], anchor.h, { excludeCenter: cf.fp.center, scoreHigh: 1.01 });
+  const R = cf.fp.footprint / 2 + anchor.h;
+  const n = promoteSetWideLabeledNearMisses([
+    { matches: rA.matches, withheld: rA.withheld, occ: occA, R, excludeCenter: cf.fp.center },
+  ]);
+  assert.equal(n, 0, "one leftover labeled near-miss is still the schematic extra");
+  assert.equal(rA.matches.length, 0);
+});
+
+const bagMatch = (at: Point, tag: TagOcc): SweepSheetMatch =>
+  ({ at, score: 1, rotation: 0, mirrored: false, tag_at: tag.bbox });
+const bagNear = (at: Point): SweepWithheld =>
+  ({ at, score: 0.91, rotation: 0, mirrored: false, reason: "near-bar", beside_tag: true });
+
+test("promoteSetWideLabeledNearMisses: N commits plus N leftovers stay withheld", () => {
+  // Measured shape: two counted instances and two leftover near-misses
+  // (not four installs — N extras beside N commits).
+  const o = [tagNear([100, 100]), tagNear([400, 100]), tagNear([700, 100]), tagNear([1000, 100])];
+  const matches = [bagMatch([100, 100], o[0]), bagMatch([400, 100], o[1])];
+  const withheld = [bagNear([700, 100]), bagNear([1000, 100])];
+  const n = promoteSetWideLabeledNearMisses([{ matches, withheld, occ: o, R: 50 }]);
+  assert.equal(n, 0);
+  assert.equal(matches.length, 2);
+  assert.equal(withheld.length, 2);
+});
+
+test("promoteSetWideLabeledNearMisses: leftovers that outnumber commits on one sheet stay per-sheet", () => {
+  const o = [tagNear([100, 100]), tagNear([200, 100]), tagNear([300, 100]),
+    tagNear([400, 100]), tagNear([500, 100]), tagNear([600, 100]),
+    tagNear([700, 100]), tagNear([800, 100]), tagNear([900, 100])];
+  const matches = [bagMatch([100, 100], o[0]), bagMatch([200, 100], o[1]), bagMatch([300, 100], o[2])];
+  const withheld = [bagNear([400, 100]), bagNear([500, 100]), bagNear([600, 100]),
+    bagNear([700, 100]), bagNear([800, 100]), bagNear([900, 100])];
+  const n = promoteSetWideLabeledNearMisses([{ matches, withheld, occ: o, R: 50 }]);
+  assert.equal(n, 0, "a same-sheet pile is the per-sheet rule, not the split-family pass");
+  assert.equal(matches.length, 3);
+});
+
+test("promoteSetWideLabeledNearMisses: a low-score leftover pair stays withheld", () => {
+  // Near the withhold floor, not the commit bar — schematic extra, not
+  // a same-convention sibling (the split-family leftovers sit ~0.83+).
+  const oA = [tagNear([100, 100]), tagNear([400, 100])];
+  const oB = [tagNear([700, 100])];
+  const matches = [bagMatch([100, 100], oA[0])];
+  const wA: SweepWithheld = { at: [400, 100], score: 0.76, rotation: 0, mirrored: false, reason: "near-bar", beside_tag: true };
+  const wB: SweepWithheld = { at: [700, 100], score: 0.76, rotation: 0, mirrored: false, reason: "near-bar", beside_tag: true };
+  const n = promoteSetWideLabeledNearMisses([
+    { matches, withheld: [wA], occ: oA, R: 50 },
+    { matches: [], withheld: [wB], occ: oB, R: 50 },
+  ]);
+  assert.equal(n, 0);
+  assert.equal(matches.length, 1);
 });
 
 test("classifySweepMatches: a labeled family still promotes when leftovers outnumber two commits", () => {

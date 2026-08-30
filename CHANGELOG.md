@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — leftover labeled near-miss family, set-wide
+
+### Fixed
+- **A same-convention labeled family split across sheets no longer dies one leftover at a time.** Per-sheet `promoteLabeledNearMisses` still requires two leftovers on *one* sheet (and leftovers-outnumber-commits after a partial commit), so a counted instance on sheet A plus one labeled near-bar sibling on A and another on B stayed withheld — each sheet saw a lone leftover, the schematic-versus-plan extra. A second pass runs set-wide after every plan sheet is classified: exactly one confident instance, exactly two leftover own-tag near-misses, on two or more sheets, each leftover scoring at least 0.80 (near the 0.92 commit bar, not the 0.75 withhold floor). A single leftover, a low-score leftover, or a pile of leftovers stays withheld. Canvas and MCP share the pass. No project, sheet, or tag names. **opentakeoff-mcp 0.9.77** (three surfaces).
+
 ## 2026-08-30 — leftover exact-tag families are installs
 
 ### Fixed

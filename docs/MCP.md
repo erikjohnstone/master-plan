@@ -109,7 +109,8 @@ Forty tools, in the order an agent tends to reach for them:
   match counting only where geometry AND the row's own tag text agree
   (a labeled family of near-bar siblings of a confident instance
   counts — leftovers must outnumber commits when two or more already
-  counted; a lone leftover labeled near-miss stays withheld);
+  counted; a high-score leftover pair split across sheets also counts;
+  a lone leftover labeled near-miss stays withheld);
   markers labeled with a sibling key are excluded and say whose they are,
   unlabeled ones are withheld as questions; a leftover compound
   circuit/panel label on a sheet that already has a counted match is
