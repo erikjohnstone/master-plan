@@ -610,16 +610,17 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       if (!t) return false;
       const base = t.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
       if (base === titleNeedle || t === titleNeedle) return true;
+      // Prefix / mid-title embeds need a long-enough needle. Short tokens like
+      // "AIR" or "AHU" otherwise blend unrelated families (AIR COOLED + AIR
+      // HANDLING + AIR SEPARATOR → count≈77) or hit POINTS LIST AHU-… titles.
+      if (titleNeedle.length < 12) return false;
       if (base.startsWith(`${titleNeedle} `) || t.startsWith(`${titleNeedle} `)) return true;
       if (!t.includes(titleNeedle) && !base.includes(titleNeedle)) return false;
-      if (titleNeedle.length >= 12) {
-        const idx = Math.min(
-          t.includes(titleNeedle) ? t.indexOf(titleNeedle) : 999,
-          base.includes(titleNeedle) ? base.indexOf(titleNeedle) : 999,
-        );
-        return idx === 0;
-      }
-      return true;
+      const idx = Math.min(
+        t.includes(titleNeedle) ? t.indexOf(titleNeedle) : 999,
+        base.includes(titleNeedle) ? base.indexOf(titleNeedle) : 999,
+      );
+      return idx === 0;
     };
     const allRaw = graph.tables.flatMap((table) => {
       if (!titleMatches(table.title?.text || "")) return [];

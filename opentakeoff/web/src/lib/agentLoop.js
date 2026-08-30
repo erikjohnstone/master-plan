@@ -856,10 +856,14 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   // "Which schedule / title is MARK on?" follow-ups must copy the primary
   // equipment schedule title from a scoped query_table — not a sibling family's
   // UNIT schedule or a vibration/valve cross-ref.
-  const asksWhichScheduleTitle = /\bwhich title\b|\bon a .{0,80}schedule\b/i.test(goal);
+  const asksWhichScheduleTitle = /\bwhich title\b|\bis\s+(?:[A-Z]{2,8}-[A-Z0-9]+)\s+on\b.{0,80}\bschedule\b/i.test(goal);
   if (asksWhichScheduleTitle && finalText) {
-    const namedMarks = [...goal.matchAll(/\b((?:AHU|DOAH|FCU|VAV|CH|B)-[A-Z0-9]+)\b/gi)]
-      .map((m) => m[1].toUpperCase());
+    // Only the MARK asked about schedule membership / title — not every tag
+    // mentioned later in the same follow-up (e.g. FCU-T11 in a count clause).
+    const namedMarks = [...new Set([
+      ...[...goal.matchAll(/\bis\s+((?:AHU|DOAH|FCU|VAV|CH|B)-[A-Z0-9]+)\s+on\b/gi)].map((m) => m[1].toUpperCase()),
+      ...[...goal.matchAll(/\b((?:AHU|DOAH|FCU|VAV|CH|B)-[A-Z0-9]+)\b[^.?\n]{0,48}\bwhich title\b/gi)].map((m) => m[1].toUpperCase()),
+    ])];
     const answerU = finalText.toUpperCase().replace(/[\u2010-\u2015\u2212]/g, "-");
     for (const tag of namedMarks) {
       const tagCanon = tag.replace(/[^A-Z0-9]/g, "");
