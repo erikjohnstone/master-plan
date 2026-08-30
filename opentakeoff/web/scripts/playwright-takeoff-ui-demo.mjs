@@ -304,7 +304,38 @@ async function runOne(job) {
   await page.screenshot({ path: resolve(artifacts, `${outBase}_takeoff_tab.png`) });
   console.log(`[${job.label}] screenshot Takeoff tab`);
 
-  const wf = page.locator("button", { hasText: /^Workflow data$/ });
+  // Prove auditable UX: Tag → schedule row; schedule name → whole table.
+  const rowCite = page.locator('[aria-label="Takeoff"] [data-takeoff-cite="row"]').first();
+  if (await rowCite.count()) {
+    const tagText = (await rowCite.innerText()).trim().slice(0, 40);
+    console.log(`[${job.label}] click Tag cite → schedule row (${tagText || "row"})`);
+    await rowCite.click();
+    await page.waitForTimeout(1400);
+    await page.screenshot({ path: resolve(artifacts, `${outBase}_cite_row.png`) });
+    // Re-open Takeoff so we can exercise the table cite next.
+    if (!(await page.locator('[aria-label="Takeoff"]').count())) {
+      const reopen = page.locator("button", { hasText: /^Takeoff/ }).first();
+      if (await reopen.count()) await reopen.click();
+      await page.waitForSelector('[aria-label="Takeoff"]', { timeout: 15_000 });
+      await page.waitForTimeout(600);
+    }
+  }
+  const tableCite = page.locator('[aria-label="Takeoff"] [data-takeoff-cite="table"]').first();
+  if (await tableCite.count()) {
+    const schedText = (await tableCite.innerText()).trim().slice(0, 60);
+    console.log(`[${job.label}] click schedule cite → whole table (${schedText || "table"})`);
+    await tableCite.click();
+    await page.waitForTimeout(1400);
+    await page.screenshot({ path: resolve(artifacts, `${outBase}_cite_table.png`) });
+    if (!(await page.locator('[aria-label="Takeoff"]').count())) {
+      const reopen = page.locator("button", { hasText: /^Takeoff/ }).first();
+      if (await reopen.count()) await reopen.click();
+      await page.waitForSelector('[aria-label="Takeoff"]', { timeout: 15_000 });
+      await page.waitForTimeout(500);
+    }
+  }
+
+  const wf = page.locator('[aria-label="Takeoff"] button', { hasText: /^Workflow data$/ });
   if (await wf.count()) {
     await wf.click();
     await page.waitForTimeout(700);
@@ -327,10 +358,12 @@ async function runOne(job) {
     video: dest,
     screenshots: {
       takeoff_tab: resolve(artifacts, `${outBase}_takeoff_tab.png`),
+      cite_row: resolve(artifacts, `${outBase}_cite_row.png`),
+      cite_table: resolve(artifacts, `${outBase}_cite_table.png`),
       workflow_tab: resolve(artifacts, `${outBase}_workflow_tab.png`),
     },
     stats,
-    path: "new-user: upload PDF → Agent goal → Run → Takeoff panel",
+    path: "new-user: upload PDF → Agent goal → Run → Takeoff panel → Tag/table cites",
   };
   writeFileSync(resolve(artifacts, `${outBase}_summary.json`), JSON.stringify(summary, null, 2));
   console.log(`[${job.label}] DONE video=${dest}`);
