@@ -8,7 +8,7 @@ import path from "node:path";
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, type SheetGraph, type SheetSpans, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, isPointsListTitle, type SheetGraph, type SheetSpans, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
@@ -4902,20 +4902,37 @@ export class Session {
     return this.graph;
   }
 
+  /** True when any of this sheet's own text spans name a DDC/BAS
+   * points-list lookup — see isPointsListTitle. Spans are already
+   * materialized by ensureGraph before this pass runs. */
+  private sheetCarriesPointsListTitle(sheetKey: string): boolean {
+    const state = this.sheets.get(sheetKey);
+    if (!state) return false;
+    if (!state.spans) state.spans = textSpans(state.page);
+    return state.spans.some((t) => isPointsListTitle(t.str));
+  }
+
   /** Cross-checks every schedule-role sheet's tables against
    * OpenDataLoader-PDF's own independent, deterministic table-structure
    * detection (mcp/src/opendataloader.ts) and keeps whichever extraction of
    * each real table is more COMPLETE — never a fixed preference for either
    * source (this file's own geometric heuristics, or ODL), purely the
    * evidence: more recovered headers wins, a header-count tie is broken by
-   * more populated cells (tableCompleteness). Runs ONCE per source PDF (one
-   * `--pages "3,7,15"` call covering every schedule sheet in that document)
-   * to keep the real per-call JVM cost affordable on a large set. Best-
-   * effort only: no Java runtime, a scanned/uncooperative PDF, or any per-
-   * table parse error silently leaves the existing geometric result in
-   * place — this pass can only ever IMPROVE g.tables, never take it down. */
+   * more populated cells (tableCompleteness). Also visits a non-schedule
+   * sheet that CARRIES a points-list / DDC-BAS-points title (the same
+   * family sheetgraph's geometric pass already admits): those titles never
+   * classify the sheet as schedule, so this pass used to skip the page and
+   * the lookup never reached `g.tables`. On those sheets only the titled
+   * points-list table is ingested — catalog reprints that share the page
+   * stay with whatever the geometric pass already kept. Runs ONCE per
+   * source PDF (one `--pages "3,7,15"` call covering every selected sheet
+   * in that document) to keep the real per-call JVM cost affordable on a
+   * large set. Best-effort only: no Java runtime, a scanned/uncooperative
+   * PDF, or any per-table parse error silently leaves the existing
+   * geometric result in place — this pass can only ever IMPROVE g.tables,
+   * never take it down. */
   private async enhanceTablesWithODL(g: SheetGraph): Promise<void> {
-    const scheduleSheets = g.sheets.filter((s) => s.role === "schedule");
+    const scheduleSheets = g.sheets.filter((s) => s.role === "schedule" || this.sheetCarriesPointsListTitle(s.key));
     if (!scheduleSheets.length) return;
     const byPdf = new Map<string, { path: string; pages: number[]; sheetByPage: Map<number, string> }>();
     for (const sh of scheduleSheets) {
@@ -4964,6 +4981,15 @@ export class Session {
           continue; // one malformed table must never take the whole pass down
         }
         if (!built) continue;
+        // Non-schedule pages are only in this pass because they carry a
+        // points-list title. Catalog reprints on the same page (a FAN /
+        // CHILLER schedule already owned by a dedicated schedule sheet)
+        // must not be appended as a second definition of those tags.
+        const sheetMeta = g.sheets.find((sh) => sh.key === sheetKey);
+        if (sheetMeta && sheetMeta.role !== "schedule") {
+          const title = built.title?.text || "";
+          if (!isPointsListTitle(title)) continue;
+        }
         // Match against an EXISTING geometric table on the same sheet by
         // REGION OVERLAP, not title text — a real title-less table (this
         // fixture's own real "FINISH SCHEDULE" caption sits ABOVE the

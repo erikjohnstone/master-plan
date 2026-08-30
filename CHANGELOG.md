@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — points-list lookups survive a legend-role sheet
+
+### Fixed
+- **A DDC/BAS points list is still a reference table when the sheet classifies as legend.** Those titles never say `SCHEDULE` the way a room-finish or equipment catalog does, so sheet role loses to a same-confidence bare `LEGEND` and both the geometric reference pass and the OpenDataLoader cross-check skipped the page. The already-defined points-list title family now reopens reference extraction on that sheet without flipping its role — a plan that prints a corner points list stays a plan at full confidence. Only the titled lookup is kept; catalog reprints that share the page are not ingested as a second equipment definition. Cross-reference and specification-index tables stay dropped. No project, sheet, or tag names. **opentakeoff-mcp 0.9.78** (three surfaces).
+
 ## 2026-08-30 — leftover labeled near-miss family, set-wide
 
 ### Fixed
