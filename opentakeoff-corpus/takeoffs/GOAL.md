@@ -46,8 +46,8 @@ path a new user gets: upload → Agent prompt → Run → Takeoff panel.
 | ID | Kind | Set | Status |
 |---|---|---|---|
 | `T-HVAC-01` | HVAC equipment quantity takeoff | `navfac-cherry-point-atc` | `LOCKED` |
-| `T-BAS-01` | BAS / DDC points takeoff | `navfac-cherry-point-atc` | `LOCKED` |
-| `T-VALVE-01` | Control valve takeoff (CHW+HHW schedules) | `navfac-cherry-point-atc` | `IN PROGRESS` — compile path + cites required |
+| `T-BAS-01` | BAS / DDC points takeoff | `navfac-cherry-point-atc` | `REGRESSED` — POINTS LIST sheets were mis-role'd as legend; ODL skipped them. Role fix restores extractable lists (was 5/122; fuller coverage now recovers additional ATCT/Air Ops DDC lists). Truth refresh + N=5 restart required before re-LOCK. |
+| `T-VALVE-01` | Control valve takeoff (CHW+HHW schedules) | `navfac-cherry-point-atc` | `COMPILE PATH SHIPPED` — 163 unique valve marks, contractor columns, UI cites proven; N=5 card pending |
 
 Additional takeoff IDs require an explicit goal change (this mandate counts as
 that change for `T-VALVE-01` only).

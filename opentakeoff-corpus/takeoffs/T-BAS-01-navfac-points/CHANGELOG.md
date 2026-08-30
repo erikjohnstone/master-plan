@@ -1,3 +1,24 @@
+# CHANGELOG — T-BAS-01
+
+## 2026-08-30 — REGRESSED (truth refresh required)
+
+**Cause:** `classifySheetRole` could label ATCT POINTS LIST sheets (e.g. mechanical `#64`)
+as `legend` when note text hit `/LEGEND/` at the same confidence as weak `/SCHEDULE/`
+hits. `enhanceTablesWithODL` only runs on `role === "schedule"`, so POINTS LIST /
+DDC POINTS LIST tables were never recovered and `compile_corpus_takeoff` /
+`bas_points` returned **0** lists.
+
+**Fix:** Prefer `POINTS? LIST` / `DDC POINTS?` as `schedule` at conf 0.86
+in `web/src/lib/sheetgraph.ts`.
+
+**Effect:** Locked **122** (5 lists) was the extractable set under incomplete ODL
+coverage. With the role fix, Session+ODL recovers additional real typed DDC /
+POINTS lists (Air Ops / ATCT siblings). Overall row totals rise above 122.
+Per GOAL.md non-negotiable #2, truth is **not** silently edited to match — status
+moves to `REGRESSED` until a justified truth refresh + N=5 restart.
+
+---
+
 # CHANGELOG — T-BAS-01 harness
 
 ## 2026-08-30 — TRUTH BUILT (pre-run)

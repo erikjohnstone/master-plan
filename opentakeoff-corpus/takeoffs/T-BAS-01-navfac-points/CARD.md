@@ -1,6 +1,6 @@
 # T-BAS-01 — NAVFAC BAS / DDC points takeoff
 
-Status: `LOCKED` (MCP 5/5 · UI 5/5)
+Status: `REGRESSED` — POINTS LIST role/ODL fix; truth refresh + N=5 restart required (was LOCKED MCP 5/5 · UI 5/5)
 
 ## Set
 
