@@ -92,7 +92,7 @@ async function runOne(job) {
   });
   page.on("requestfailed", (req) => {
     const u = req.url();
-    if (/cerebras|openai|api\.|/v1\/chat/i.test(u)) {
+    if (/cerebras|openai|\/v1\/chat/i.test(u)) {
       console.log(`[${job.label}] requestfailed: ${req.failure()?.errorText || "?"} ${u.slice(0, 120)}`);
     }
   });
@@ -105,10 +105,11 @@ async function runOne(job) {
     localStorage.setItem("opentakeoff_ai_model", model);
     localStorage.setItem("opentakeoff_ai_provider", "openai");
   }, {
-    endpoint: "https://api.cerebras.ai/v1",
+    endpoint: "https://api.cerebras.ai",
     apiKey,
     model: process.env.CEREBRAS_MODEL || "gpt-oss-120b",
   });
+  // aiRequestUrl appends /v1/chat/completions onto the host root.
 
   console.log(`[${job.label}] goto ${baseUrl}`);
   await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });

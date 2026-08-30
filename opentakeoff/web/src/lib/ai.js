@@ -82,11 +82,15 @@ export function saveAiConfig({ endpoint, apiKey, model, provider, visionModel })
 /** Base URL → full request URL. A path that already ends in the protocol's
  *  completion route is used as-is; otherwise the standard route is appended. */
 export function aiRequestUrl(endpoint, provider) {
-  const base = (endpoint || "").replace(/\/+$/, "");
+  // Accept host root (`https://api.example.com`) or a base that already ends
+  // in `/v1` / `/chat/completions` — never produce `/v1/v1/...`.
+  let base = (endpoint || "").replace(/\/+$/, "");
   if (provider === "anthropic") {
-    return /\/messages$/.test(base) ? base : `${base}/v1/messages`;
+    return /\/messages$/.test(base) ? base : `${base.replace(/\/v1$/, "")}/v1/messages`;
   }
-  return /\/chat\/completions$/.test(base) ? base : `${base}/v1/chat/completions`;
+  if (/\/chat\/completions$/.test(base)) return base;
+  base = base.replace(/\/v1$/, "");
+  return `${base}/v1/chat/completions`;
 }
 
 /** One vision request: an image + a question. Returns {url, headers, body}
