@@ -59,18 +59,12 @@
 #    unchanged in shape (just re-keyed), for 18 real, now-matching cells.
 #
 # 3. POINTS LIST AHU-T1A/T1B (sheet #65/MI731) — the real ATCT AHU point
-#    list, ~62 real points (21 AI + 7 AO + 26 BI + 8 BO) directly counted
-#    off the render. NOT independently re-verified in the 2026-08-29 pass
-#    above (out of that task's own explicit scope, which named only POINTS
-#    LIST DOAH-TI and the chiller schedule) — the original 2026-08-28
-#    finding is carried forward as-is: the pipeline's own reference_tables[]
-#    for this sheet then extracted only 3 garbled, meaningless rows (keys
-#    "M","AI07","AO03" with columns "NC"/"NC (2)" that do not correspond to
-#    this table's real MARK/DESCRIPTION/ALARM/TREND structure at all). Given
-#    #2 above turned out stale, this may ALSO now be stale — flagged here
-#    rather than assumed. The 3 rows below use the REAL correct data (not
-#    the pipeline's garbled keys, which the original session declined to
-#    reverse-engineer/game a coincidental match against).
+#    list, 62 real points. Re-verified 2026-08-29: the current pipeline
+#    cleanly extracts all 62 rows under "POINTS LIST AHU-T1A/TIB"; the old
+#    three-row NC/NC (2) finding was a separate false table beside it and
+#    the three expected keys below were stale DESCRIPTION values rather
+#    than the table's real MARK keys. They now use AI01, AI06, and BI23,
+#    matching the same convention already corrected for DOAH-TI above.
 #
 # ALSO: AIR COOLED CHILLER SCHEDULE (sheet #44/M-603, CH-A1/CH-A2 — the
 # same real table navfac-cherry-point-atc.takeoff.csv's own equipment rows
@@ -142,9 +136,9 @@ navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AI08,ALARM,Yes
 navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,AO01,ALARM,No
 navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,BI01,ALARM,Yes
 navfac-cherry-point-atc-mechanical.pdf#64,POINTS LIST DOAH-TI,BO04,ALARM,No
-navfac-cherry-point-atc-mechanical.pdf#65,,AHU-T1B HW VALVE POSITION (FEEDBACK),ALARM,No
-navfac-cherry-point-atc-mechanical.pdf#65,,MIN OA AIRFLOW,ALARM,Yes
-navfac-cherry-point-atc-mechanical.pdf#65,,AHU-T1A FREEZESTAT,ALARM,Yes
+navfac-cherry-point-atc-mechanical.pdf#65,POINTS LIST AHU-T1A/TIB,AI01,ALARM,No
+navfac-cherry-point-atc-mechanical.pdf#65,POINTS LIST AHU-T1A/TIB,AI06,ALARM,Yes
+navfac-cherry-point-atc-mechanical.pdf#65,POINTS LIST AHU-T1A/TIB,BI23,ALARM,Yes
 navfac-cherry-point-atc-mechanical.pdf#44,AIR COOLED CHILLER SCHEDULE,CH-A1,CAPACITY (TONS),56.0
 navfac-cherry-point-atc-mechanical.pdf#44,AIR COOLED CHILLER SCHEDULE,CH-A1,EWT (°F),55.4
 navfac-cherry-point-atc-mechanical.pdf#44,AIR COOLED CHILLER SCHEDULE,CH-A2,GPM,128.5

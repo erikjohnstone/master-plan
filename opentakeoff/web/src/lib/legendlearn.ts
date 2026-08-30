@@ -16,21 +16,11 @@
 // reusing that tool's own cross-scale ratio (#186) and refusal doctrine
 // untouched. Pure, no PDF/DOM — segments and spans in, glyph/caption pairs
 // out.
-// Connectivity reuses buildMepGraph's own robust JTS noding (mepconnectivity.ts,
-// maturity plan Phase 4) — NOT a naive endpoint-to-endpoint union-find. Found
-// live, against this exact real legend: a glyph's own actuator box connects to
-// its valve body by a STEM whose own endpoint lands on the MIDDLE of the box's
-// bottom edge (a real T-junction), and the "bowtie" itself is drawn as two
-// full corner-to-corner diagonals whose crossing point is the shape's visual
-// center — nowhere a segment's own endpoint sits. A first, naive version of
-// this module (endpoint-proximity clustering only) silently split every such
-// glyph into 2-3 disconnected fragments, each independently paired with a
-// caption — never caught by any synthetic fixture, only by testing against
-// this real, messy sheet. buildMepGraph already solves exactly this class of
-// problem (real CAD linework: T-junctions, mid-edge touches, near-coincident
-// duplicates) via JTS's UnaryUnionOp; reused here purely for its noding,
-// never for anything MEP-specific (no layers, no system classification).
-import { buildMepGraph } from "./mepconnectivity.ts";
+// Connectivity must recognize crossings and T-junctions, not merely shared
+// endpoints. Legend learning only needs connected-component bounds, however;
+// constructing a complete JTS overlay graph here used to dominate cold corpus
+// evaluation. The local spatially indexed segment union below preserves those
+// junction semantics without manufacturing every noded sub-edge.
 
 export type Point = [number, number];
 
@@ -50,46 +40,13 @@ export interface LegendGlyph {
   segments: number;
 }
 
-/** Connected components of a node/edge set (real-junction-aware, via
- * `buildMepGraph`'s own noding) restricted to the given edge list — shared by
- * both the first, whole-sheet pass and the second, grid-stripped pass below,
- * so the two can never silently disagree on how a component's own bbox/edge
- * count is computed. */
-function componentsOf(
-  nodes: Array<{ x: number; y: number }>, edges: Array<{ a: number; b: number }>,
-): Array<{ x0: number; y0: number; x1: number; y1: number; edges: number }> {
-  const n = nodes.length;
-  if (!n) return [];
-  const parent = Array.from({ length: n }, (_, i) => i);
-  const find = (i: number): number => { while (parent[i] !== i) { parent[i] = parent[parent[i]]; i = parent[i]; } return i; };
-  const union = (a: number, b: number) => { const ra = find(a), rb = find(b); if (ra !== rb) parent[ra] = rb; };
-  for (const e of edges) union(e.a, e.b);
-  const groups = new Map<number, { nodeIdxs: number[]; edgeCount: number }>();
-  for (let i = 0; i < n; i++) {
-    const r = find(i);
-    let g = groups.get(r);
-    if (!g) { g = { nodeIdxs: [], edgeCount: 0 }; groups.set(r, g); }
-    g.nodeIdxs.push(i);
-  }
-  for (const e of edges) groups.get(find(e.a))!.edgeCount++;
-  return [...groups.values()].map((g) => {
-    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
-    for (const i of g.nodeIdxs) {
-      const nd = nodes[i];
-      x0 = Math.min(x0, nd.x); x1 = Math.max(x1, nd.x);
-      y0 = Math.min(y0, nd.y); y1 = Math.max(y1, nd.y);
-    }
-    return { x0, y0, x1, y1, edges: g.edgeCount };
-  });
-}
-
 /** Connected components of `segs`, real-junction-aware (T-junctions, mid-edge
- * touches, crossings) via buildMepGraph's own robust noding — a real glyph is
+ * touches, crossings) — a real glyph is
  * one connected cluster of strokes; a component whose own bbox is a long
  * straight run (a table rule/column divider, not a symbol) is filtered out by
  * the caller via `looksLikeGlyph` below, not here.
  *
- * SECOND PASS, additive only (accuracy-hardening plan, ledger item 44): a
+ * GRID STRIPPING (accuracy-hardening plan, ledger item 44): a
  * real, BORDERED symbol/description table (found live: itd-d1-lab's own
  * "CONTROLS LEGEND" — three ruled tables, ~22 real rows) draws its own
  * ruled grid (outer border, column divider, per-row rules) as linework that
@@ -102,35 +59,97 @@ function componentsOf(
  * strokes and short cell rules) and 25 long ones (300px+: a column divider,
  * row-height rules, the ~758px outer border), with a clean, empty gap from
  * ~100px to ~300px between them — not a close call needing a delicate
- * threshold. So: any component that fails `looksLikeGlyph` (too big) gets
- * ONE retry — strip every edge at least `gridLineMinPx` long (a real
- * multiple of the seed glyph's own bound, sized well inside that measured
- * gap) and re-run connectivity on what's left, restricted to that
- * component's own original nodes only. Each resulting sub-component is
- * returned as an ADDITIONAL candidate alongside the originals — this can
- * only ever recover rows from a component that was already being discarded
- * whole; an already-compact, already-accepted glyph is never touched. */
+ * threshold. Strip every edge at least `gridLineMinPx` long (a real multiple
+ * of the seed glyph's own bound, sized well inside that measured gap) before
+ * connectivity. Such an edge cannot fit inside any bbox the caller can
+ * accept as a glyph, so it is impossible output rather than evidence.
+ * Removing it before JTS also prevents the ruled table from forcing a
+ * whole-sheet snap-overlay operation merely to reject those edges later. */
 function clusterSegments(
   segs: number[], maxGlyphDimPx: number,
 ): { components: Array<{ x0: number; y0: number; x1: number; y1: number; edges: number }>; gridPx: number } {
   if (!segs.length) return { components: [], gridPx: 0 };
-  const graph = buildMepGraph(segs, {});
-  if (!graph.nodes.length) return { components: [], gridPx: graph.quantGridPx };
-  const first = componentsOf(graph.nodes, graph.edges);
-  // sized well inside the measured real gap (~100-300px on the real table
-  // this was found against) — a multiple of the caller's own glyph bound,
-  // not an independent magic number.
+  // A segment at least twice the maximum allowed glyph dimension cannot be
+  // part of any component this function can return as a glyph. These are the
+  // table borders/dividers that the old second pass removed only AFTER
+  // feeding the entire ruled sheet through JTS noding. On a real Federal
+  // legend that made GeometrySnapper spend tens of seconds intersecting ink
+  // guaranteed to be rejected. Remove that impossible ink before noding;
+  // every segment that could fit a returned glyph is preserved.
   const gridLineMinPx = maxGlyphDimPx * 2;
-  const recovered: Array<{ x0: number; y0: number; x1: number; y1: number; edges: number }> = [];
-  for (const c of first) {
-    if (looksLikeGlyph(c, c.edges, maxGlyphDimPx)) continue;   // already usable — no retry needed
-    const inBox = new Set<number>();
-    graph.nodes.forEach((nd, i) => { if (nd.x >= c.x0 && nd.x <= c.x1 && nd.y >= c.y0 && nd.y <= c.y1) inBox.add(i); });
-    const strippedEdges = graph.edges.filter((e) => e.length < gridLineMinPx && inBox.has(e.a) && inBox.has(e.b));
-    if (!strippedEdges.length) continue;
-    for (const sub of componentsOf(graph.nodes, strippedEdges)) if (sub.edges > 0) recovered.push(sub);
+  const gridPx = 1.8;
+  const quantize = (v: number) => Math.round(v / gridPx) * gridPx;
+  type Seg = { ax: number; ay: number; bx: number; by: number; x0: number; y0: number; x1: number; y1: number };
+  const strokes: Seg[] = [];
+  for (let i = 0; i < segs.length; i += 4) {
+    if (Math.hypot(segs[i + 2] - segs[i], segs[i + 3] - segs[i + 1]) < gridLineMinPx) {
+      const ax = quantize(segs[i]), ay = quantize(segs[i + 1]);
+      const bx = quantize(segs[i + 2]), by = quantize(segs[i + 3]);
+      if (ax === bx && ay === by) continue;
+      strokes.push({ ax, ay, bx, by, x0: Math.min(ax, bx), y0: Math.min(ay, by), x1: Math.max(ax, bx), y1: Math.max(ay, by) });
+    }
   }
-  return { components: [...first, ...recovered], gridPx: graph.quantGridPx };
+  if (!strokes.length) return { components: [], gridPx };
+
+  const parent = Array.from({ length: strokes.length }, (_, i) => i);
+  const find = (i: number): number => {
+    while (parent[i] !== i) { parent[i] = parent[parent[i]]; i = parent[i]; }
+    return i;
+  };
+  const union = (a: number, b: number) => {
+    const ra = find(a), rb = find(b);
+    if (ra !== rb) parent[ra] = rb;
+  };
+  const orient = (ax: number, ay: number, bx: number, by: number, cx: number, cy: number) =>
+    (bx - ax) * (cy - ay) - (by - ay) * (cx - ax);
+  const intersects = (a: Seg, b: Seg): boolean => {
+    if (a.x1 < b.x0 || b.x1 < a.x0 || a.y1 < b.y0 || b.y1 < a.y0) return false;
+    const o1 = orient(a.ax, a.ay, a.bx, a.by, b.ax, b.ay);
+    const o2 = orient(a.ax, a.ay, a.bx, a.by, b.bx, b.by);
+    const o3 = orient(b.ax, b.ay, b.bx, b.by, a.ax, a.ay);
+    const o4 = orient(b.ax, b.ay, b.bx, b.by, a.bx, a.by);
+    return ((o1 === 0 || o2 === 0 || Math.sign(o1) !== Math.sign(o2))
+      && (o3 === 0 || o4 === 0 || Math.sign(o3) !== Math.sign(o4)));
+  };
+
+  // Each retained stroke is shorter than 2*maxGlyphDimPx, so indexing its
+  // bbox into maxGlyphDimPx cells keeps candidate pairs local and bounded.
+  const cell = Math.max(1, maxGlyphDimPx);
+  const buckets = new Map<string, number[]>();
+  for (let i = 0; i < strokes.length; i++) {
+    const s = strokes[i];
+    const candidates = new Set<number>();
+    for (let gx = Math.floor(s.x0 / cell); gx <= Math.floor(s.x1 / cell); gx++) {
+      for (let gy = Math.floor(s.y0 / cell); gy <= Math.floor(s.y1 / cell); gy++) {
+        const key = `${gx},${gy}`;
+        for (const j of buckets.get(key) || []) candidates.add(j);
+      }
+    }
+    for (const j of candidates) if (intersects(s, strokes[j])) union(i, j);
+    for (let gx = Math.floor(s.x0 / cell); gx <= Math.floor(s.x1 / cell); gx++) {
+      for (let gy = Math.floor(s.y0 / cell); gy <= Math.floor(s.y1 / cell); gy++) {
+        const key = `${gx},${gy}`;
+        const bucket = buckets.get(key);
+        if (bucket) bucket.push(i);
+        else buckets.set(key, [i]);
+      }
+    }
+  }
+
+  const groups = new Map<number, { x0: number; y0: number; x1: number; y1: number; edges: number }>();
+  for (let i = 0; i < strokes.length; i++) {
+    const s = strokes[i];
+    const root = find(i);
+    const group = groups.get(root);
+    if (group) {
+      group.x0 = Math.min(group.x0, s.x0); group.y0 = Math.min(group.y0, s.y0);
+      group.x1 = Math.max(group.x1, s.x1); group.y1 = Math.max(group.y1, s.y1);
+      group.edges++;
+    } else {
+      groups.set(root, { x0: s.x0, y0: s.y0, x1: s.x1, y1: s.y1, edges: 1 });
+    }
+  }
+  return { components: [...groups.values()], gridPx };
 }
 
 /** Is this cluster shaped like a real, compact drafting glyph rather than a
@@ -146,6 +165,59 @@ function looksLikeGlyph(bbox: { x0: number; y0: number; x1: number; y1: number }
   const aspect = Math.max(w, h) / Math.max(1, Math.min(w, h));
   if (aspect > 6 && segCount <= 2) return false;   // a bare rule line, not a symbol
   return true;
+}
+
+/** Keep only linework that could geometrically belong to a glyph which the
+ * pairing pass below can return for one of the known captions.
+ *
+ * A returned glyph is at most maxGlyphDimPx wide/high, sits to a caption's
+ * left within maxCaptionGapPx, and overlaps that caption's row after the
+ * pairing pass's half-height expansion. The boxes below are deliberately
+ * wider than those exact limits. Any segment contributing to a pairable
+ * glyph intersects one such box; intersection (not endpoint containment)
+ * preserves a longer stem that JTS splits at a mid-edge glyph junction.
+ * Everything else is guaranteed dead work for this function. A coarse box
+ * grid keeps the filter linear on 80k-segment plan/legend hybrids.
+ */
+function segmentsNearCaptions(
+  segs: number[], spans: LegendSpan[], maxGlyphDimPx: number, maxCaptionGapPx: number,
+): number[] {
+  const boxes = spans.map((s) => ({
+    x0: s.x0 - maxCaptionGapPx - maxGlyphDimPx,
+    x1: s.x0,
+    y0: s.y0 - maxGlyphDimPx * 1.5,
+    y1: s.y1 + maxGlyphDimPx * 1.5,
+  }));
+  const CELL = 256;
+  const grid = new Map<string, number[]>();
+  for (let i = 0; i < boxes.length; i++) {
+    const b = boxes[i];
+    for (let gx = Math.floor(b.x0 / CELL); gx <= Math.floor(b.x1 / CELL); gx++) {
+      for (let gy = Math.floor(b.y0 / CELL); gy <= Math.floor(b.y1 / CELL); gy++) {
+        const key = `${gx},${gy}`;
+        const entries = grid.get(key);
+        if (entries) entries.push(i);
+        else grid.set(key, [i]);
+      }
+    }
+  }
+  const out: number[] = [];
+  for (let i = 0; i < segs.length; i += 4) {
+    const ax = segs[i], ay = segs[i + 1], bx = segs[i + 2], by = segs[i + 3];
+    const sx0 = Math.min(ax, bx), sx1 = Math.max(ax, bx);
+    const sy0 = Math.min(ay, by), sy1 = Math.max(ay, by);
+    const candidates = new Set<number>();
+    for (let gx = Math.floor(sx0 / CELL); gx <= Math.floor(sx1 / CELL); gx++) {
+      for (let gy = Math.floor(sy0 / CELL); gy <= Math.floor(sy1 / CELL); gy++) {
+        for (const j of grid.get(`${gx},${gy}`) || []) candidates.add(j);
+      }
+    }
+    if ([...candidates].some((j) => {
+      const b = boxes[j];
+      return sx0 <= b.x1 && sx1 >= b.x0 && sy0 <= b.y1 && sy1 >= b.y0;
+    })) out.push(ax, ay, bx, by);
+  }
+  return out;
 }
 
 /** A real caption is routinely drawn as SEVERAL separate text runs on one
@@ -267,7 +339,8 @@ export function findLegendGlyphs(
   const lines = mergeCaptionLines(rawSpans, opts.captionMergeGapPx ?? 3);
   const spans = mergeWrappedCaptions(lines, opts.maxWrapGapPx ?? 8, opts.maxWrapIndentPx ?? 5);
 
-  const { components: clusters, gridPx } = clusterSegments(segs, maxGlyphDimPx);
+  const relevantSegs = segmentsNearCaptions(segs, spans, maxGlyphDimPx, maxCaptionGapPx);
+  const { components: clusters, gridPx } = clusterSegments(relevantSegs, maxGlyphDimPx);
   // Real, measured bug (accuracy-hardening plan, this session): a cluster's
   // bbox here is built from buildMepGraph's own NODED node coordinates,
   // which are quantized to its solved snap grid (quantGridPx) before

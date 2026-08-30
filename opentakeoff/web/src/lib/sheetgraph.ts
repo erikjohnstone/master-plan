@@ -388,11 +388,28 @@ export function drawnDeltaMarkers(spans: GraphSpan[], segs: ArrayLike<number>): 
     }
     if (near.length < 3 || near.length > 60) continue;      // dense hatch → refuse, never guess
     const tol = Math.max(2, h * 0.35);
+    const tol2 = tol * tol;
     let best: Bbox | null = null;
     let bestArea = Infinity;
     const P = (i: number, end: 0 | 1): [number, number] => [segs[i * 4 + end * 2], segs[i * 4 + 1 + end * 2]];
-    const close = (a: [number, number], b: [number, number]) => Math.hypot(a[0] - b[0], a[1] - b[1]) <= tol;
+    const close = (a: [number, number], b: [number, number]) => {
+      const dx = a[0] - b[0], dy = a[1] - b[1];
+      return dx * dx + dy * dy <= tol2;
+    };
+    // A triangle requires every pair of its three segments to share a corner.
+    // Precompute that sparse adjacency once: dense digit neighbourhoods used
+    // to pay eight endpoint orientations for every O(n³) triple even though
+    // almost all segment pairs were nowhere near one another.
+    const adjacent: boolean[][] = Array.from({ length: near.length }, () => Array(near.length).fill(false));
+    for (let a = 0; a < near.length; a++) {
+      for (let b = a + 1; b < near.length; b++) {
+        const a0 = P(near[a], 0), a1 = P(near[a], 1);
+        const b0 = P(near[b], 0), b1 = P(near[b], 1);
+        adjacent[a][b] = adjacent[b][a] = close(a0, b0) || close(a0, b1) || close(a1, b0) || close(a1, b1);
+      }
+    }
     for (let a = 0; a < near.length; a++) for (let b = a + 1; b < near.length; b++) for (let c = b + 1; c < near.length; c++) {
+      if (!adjacent[a][b] || !adjacent[b][c] || !adjacent[c][a]) continue;
       // a 3-cycle: each segment's ends pair corner-to-corner with the other two
       for (const fa of [0, 1] as const) for (const fb of [0, 1] as const) for (const fc of [0, 1] as const) {
         const [a0, a1] = [P(near[a], fa), P(near[a], (1 - fa) as 0 | 1)];
@@ -701,7 +718,7 @@ const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "ID", "MATERIAL", "MANUFACTURE
 // scope even after its rows extracted correctly. Restores the tie-break
 // this file's own kind-classification comment already documents as the
 // intended behavior ("ties favor the more specific vocab, equipment").
-const EQUIPMENT_HEADERS = ["ID", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "RPM", "ESP", "EQUIPMENT", "VELOCITY", "AIRFLOW", "SIZE", "FPM", "LENGTH", "TYPE", "MOUNTING", "CCT", "CRI", "DRIVER", "DIMMING", "LENS", "FINISH", "NOTES", "LUMENS", "SERVED", "PRESSURE"];
+const EQUIPMENT_HEADERS = ["ID", "MARK", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "RPM", "ESP", "EQUIPMENT", "VELOCITY", "AIRFLOW", "SIZE", "FPM", "LENGTH", "TYPE", "MOUNTING", "CCT", "CRI", "DRIVER", "DIMMING", "LENS", "FINISH", "NOTES", "LUMENS", "SERVED", "PRESSURE"];
 // Hoisted out of extractTableAt (module-level, not a local) so the
 // structural "reference" pass (below extractAllTables) can check "would
 // THIS candidate header already qualify under an EXISTING vocabulary" off
@@ -1675,12 +1692,15 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
       }
     }
     let finalAnchors = subTierAnchors(rows, idx, anchors.sort((a, b) => a.x - b.x), vocab);
+    let deepDataFrom = skipEnd + 1;
     // See harvestGeometricSubTiers' own comment: a deep, wide equipment
     // header's own sub-tier labels can sit many real rows below `idx`,
     // never on `idx` itself — additive only, same equipment-only gate every
     // other multi-tier mechanism in this file already uses.
     if (opts.equipmentTierMerge) {
-      finalAnchors = harvestGeometricSubTiers(rows, vocab, idx + 1, finalAnchors);
+      const deep = harvestGeometricSubTiers(rows, vocab, idx + 1, finalAnchors);
+      finalAnchors = deep.anchors;
+      deepDataFrom = Math.max(deepDataFrom, deep.dataFrom);
       finalAnchors = harvestBareVocabLeafTiers(rows, vocab, Math.max(0, idx - 20), idx + 1, finalAnchors);
       finalAnchors = harvestBareVocabAboveTiers(rows, vocab, idx, finalAnchors);
     }
@@ -1721,7 +1741,7 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
     return {
       anchors: finalAnchors,
       rowIndex: idx,
-      dataFrom: skipEnd + 1,
+      dataFrom: deepDataFrom,
       mergedTopIdx,
     };
   }
@@ -2152,16 +2172,30 @@ function looksLikeDeepDataRow(row: GraphSpan[]): boolean {
   const numeric = row.filter((t) => DATA_VALUE_RE.test(t.str.trim())).length;
   return numeric >= 2 || numeric >= Math.ceil(row.length * 0.3);
 }
-function harvestGeometricSubTiers(rows: GraphSpan[][], vocab: string[], startIdx: number, anchors: Anchor[]): Anchor[] {
+function harvestGeometricSubTiers(
+  rows: GraphSpan[][],
+  vocab: string[],
+  startIdx: number,
+  anchors: Anchor[],
+): { anchors: Anchor[]; dataFrom: number } {
   let out = anchors.slice();
+  let dataFrom = startIdx;
   const MAX_ROWS = 15;
   for (let ri = startIdx, n = 0; ri < rows.length && n < MAX_ROWS; ri++, n++) {
     if (looksLikeDeepDataRow(rows[ri])) break;
+    const leading = [...rows[ri]].sort((a, b) => a.x - b.x)[0];
+    const leadingKey = leading ? rowKeyOf(leading.str, "equipment") : null;
+    // A real digit-bearing equipment key is a definitive data boundary even
+    // when the rest of its sparse row contains too little numeric content
+    // for looksLikeDeepDataRow (AS-1/E1/AHU-1 fixture shapes). Deep header
+    // labels may be bare words, but they do not lead with a catalog tag.
+    if (leadingKey && /\d/.test(leadingKey.key)) break;
     if (ri > startIdx) {
       const prev = rows[ri - 1];
       const h = prev.reduce((s, t) => s + (t.h || 8), 0) / Math.max(1, prev.length);
       if (rowY(rows[ri]) - rowY(prev) > h * 3) break;
     }
+    dataFrom = ri + 1;
     // A row carrying a bare CATALOG_ANCHOR_WORD (SYMBOL/TAG/ID/MARK) is
     // SKIPPED, not a stop — this exact table wraps a catalog-anchor-bearing
     // sub-label ("UNIT" / "TAG", itself a real fragment of "COIL AIR P.D." /
@@ -2303,7 +2337,7 @@ function harvestGeometricSubTiers(rows: GraphSpan[][], vocab: string[], startIdx
       mintSubAnchors(out, used, filtered, mid);
     }
   }
-  return out.sort((a, b) => a.x - b.x);
+  return { anchors: out.sort((a, b) => a.x - b.x), dataFrom };
 }
 
 // ── numeric-only sub-header discrimination gate (itd-d1-lab-mechanical.pdf
@@ -3601,6 +3635,40 @@ function columnStarts(
   return center.score > left.score + 0.05 ? center : left;
 }
 
+/**
+ * Repair a common deep-header extraction shape: an engineering unit printed
+ * on the lowest header tier is vertically clustered into the first data row
+ * while later rows contain only the numeric value. Promote that unit into the
+ * column label and remove it from the affected value.
+ *
+ * The promotion requires both forms in the same column (one unit-prefixed
+ * numeric value and another plain numeric value), so prose values and tables
+ * that intentionally repeat units in every row remain unchanged.
+ */
+export function promoteLeadingEngineeringUnits(headers: string[], rows: TableRow[]): string[] {
+  const out = [...headers];
+  const unitValue = /^(FT\.?\s*H2O|I\.?\s*W\.?G\.?)\s+([-+]?(?:\d+(?:\.\d*)?|\.\d+))$/i;
+  const plainNumber = /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)$/;
+  for (let i = 0; i < out.length; i++) {
+    const label = out[i];
+    const populated = rows.map((row) => row.cells[label]?.text.trim()).filter((v): v is string => !!v);
+    const prefixed = populated.map((value) => ({ value, match: value.match(unitValue) })).find((entry) => entry.match);
+    if (!prefixed?.match || !populated.some((value) => plainNumber.test(value))) continue;
+    const unit = prefixed.match[1].toUpperCase().replace(/\s+/g, " ");
+    const promoted = `${label} ${unit}`;
+    if (out.includes(promoted)) continue;
+    out[i] = promoted;
+    for (const row of rows) {
+      const cell = row.cells[label];
+      if (!cell) continue;
+      const match = cell.text.trim().match(unitValue);
+      row.cells[promoted] = { ...cell, text: match ? match[2] : cell.text };
+      delete row.cells[label];
+    }
+  }
+  return out;
+}
+
 function bandDataRows(
   rows: GraphSpan[][],
   anchors: Anchor[],
@@ -4587,6 +4655,8 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
     }
   }
   const out = banded.out;
+  const promotedHeaders = promoteLeadingEngineeringUnits(anchors.map((a) => a.label), out);
+  anchors = anchors.map((anchor, i) => ({ ...anchor, label: promotedHeaders[i] }));
   if (banded.region) region = region ? merge(region, banded.region) : banded.region;
   // A real header WAS found and a real boundary WAS computed — but every
   // candidate row inside it turned out to be garbage once filtered (real,
@@ -4864,6 +4934,45 @@ export function extractAllTables(sheet: SheetSpans, kind: "room-finish" | "finis
     fromIdx = found.nextIdx;
   }
   return out;
+}
+
+/** Extract equipment schedules drawn as an entire quarter-turned table.
+ * Rotating only vertical text into a temporary coordinate space lets the
+ * normal multi-table extractor retain all of its header, boundary, and
+ * refusal rules. Evidence boxes are mapped back to the source sheet. */
+export function extractAllQuarterTurnedTables(
+  sheet: SheetSpans,
+  opts: ExtractOpts = {},
+): ScheduleTable[] {
+  const vertical = sheet.spans.filter(isVertical);
+  if (vertical.length < 8) return [];
+  const pivot = Math.max(...vertical.map((span) => span.x + (span.w || 0)));
+  const turned: SheetSpans = {
+    key: sheet.key,
+    sheet_number: sheet.sheet_number,
+    spans: vertical.map((span) => ({
+      str: span.str,
+      x: span.y,
+      y: pivot - span.x - (span.w || 0),
+      w: span.h || 0,
+      h: span.w || 0,
+      rot: 0,
+    })),
+  };
+  const restore = ([x0, y0, x1, y1]: Bbox): Bbox =>
+    [pivot - y1, x0, pivot - y0, x1];
+  return extractAllTables(turned, "equipment", opts).map((table) => ({
+    ...table,
+    rotated_headers: true,
+    anchors: undefined,
+    region: restore(table.region),
+    title: table.title ? { ...table.title, bbox: restore(table.title.bbox) } : null,
+    rows: table.rows.map((row) => ({
+      ...row,
+      cells: Object.fromEntries(Object.entries(row.cells).map(([label, cell]) =>
+        [label, { ...cell, bbox: restore(cell.bbox) }])),
+    })),
+  }));
 }
 
 // ── structural (vocabulary-free) reference/calculation tables ──────────────
@@ -5388,8 +5497,22 @@ function bandGenericDataRows(
   const add = (row: TableRow, toks: GraphSpan[]) => {
     let byLabel = cellToks.get(row);
     if (!byLabel) cellToks.set(row, (byLabel = new Map()));
+    const buttonAnchor = anchors.find((a) => /\bBUTTON\s+(?:NUMBER|NO\.?|#)\b/.test(a.label));
+    const functionAnchor = anchors.find((a) => /\bFUNCTION\b/.test(a.label));
+    const buttonNumber = buttonAnchor && toks.find((t) =>
+      /^\d+$/.test(t.str.trim()) && nearestAnchor(centerX(t), anchors) === buttonAnchor.label);
     for (const t of toks) {
-      const label = nearestAnchor(centerX(t), anchors);
+      let label = nearestAnchor(centerX(t), anchors);
+      // Wide, left-aligned FUNCTION cells can begin close enough to a
+      // narrow preceding BUTTON NUMBER header that center-based banding
+      // assigns the phrase to the number column. The row's own standalone
+      // button integer proves the narrow column; a later letter-bearing
+      // token belongs to the explicitly-present FUNCTION column.
+      if (buttonAnchor && functionAnchor && buttonNumber
+        && label === buttonAnchor.label && /[A-Z]/i.test(t.str)
+        && t.x >= buttonNumber.x + buttonNumber.w) {
+        label = functionAnchor.label;
+      }
       if (label == null) continue;
       const existing = byLabel.get(label);
       const lastBbox = existing?.length ? bboxOf(existing[existing.length - 1]) : undefined;
@@ -5447,8 +5570,14 @@ function bandGenericDataRows(
   // fold untouched.
   const isSectionHeading = (toks: GraphSpan[]): boolean =>
     toks.length === 1 && /^[A-Z][A-Z0-9 .,'"&()/%°∅Ø-]*:$/.test(norm(toks[0].str));
+  const isUnkeyedButtonSubrow = (toks: GraphSpan[]): boolean => {
+    const button = anchors.find((a) => /\bBUTTON\s+(?:NUMBER|NO\.?|#)\b/.test(a.label));
+    if (!button) return false;
+    return toks.some((t) => /^\d+$/.test(t.str.trim()) && nearestAnchor(centerX(t), anchors) === button.label)
+      && toks.filter((t) => nearestAnchor(centerX(t), anchors) !== anchors[0].label).length >= 2;
+  };
   for (const o of orphans) {
-    if (isSectionHeading(o.toks)) continue;
+    if (isSectionHeading(o.toks) || isUnkeyedButtonSubrow(o.toks)) continue;
     const { i, d } = nearest(o.y);
     if (i < 0 || d > radius) continue;
     add(out[i], o.toks);
@@ -5580,6 +5709,8 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     // discriminator the mandate above asked for, not a corpus-specific
     // title/tag hack.
     if (banded.out.length < 2) return { table: null, nextIdx: toIdx };
+    const promotedHeaders = promoteLeadingEngineeringUnits(anchors.map((a) => a.label), banded.out);
+    for (let i = 0; i < anchors.length; i++) anchors[i].label = promotedHeaders[i];
 
     // Title hunt.
     //
@@ -6399,7 +6530,11 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     for (const kind of ["room-finish", "finish", "equipment"] as const) {
       // Every table of this kind on the sheet, not just the first — a dense
       // MEP sheet routinely stacks several (#HVAC-boundary), now per band too.
-      for (const bs of bands) for (const t of extractAllTables(bs, kind, { buildings, deltas: deltasBySheet.get(s.key) })) {
+      for (const bs of bands) {
+        const extractOpts = { buildings, deltas: deltasBySheet.get(s.key) };
+        const found = extractAllTables(bs, kind, extractOpts);
+        if (kind === "equipment") found.push(...extractAllQuarterTurnedTables(bs, extractOpts));
+        for (const t of found) {
         // A DOOR / WINDOW / PARTITION schedule carries a MARK column, so the
         // finish-table hunt happily reads one as a finish/material schedule —
         // and then a finish code that collides with a door mark chains to a
@@ -6453,6 +6588,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
         fragments.push(t);
         if (!fragmentKinds.has(s.key)) fragmentKinds.set(s.key, new Set());
         fragmentKinds.get(s.key)!.add(t.kind);
+      }
       }
     }
   }
@@ -7048,6 +7184,52 @@ function odlCellText(cell: ODLTableCell): string {
   return parts.filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
 }
 
+/** Recover the text that is actually visible when a PDF paints two different
+ * strings at effectively the same coordinates. Some CAD exports retain a
+ * superseded value in the text layer, then paint the revised value directly
+ * over it. ODL concatenates both into one cell even though the rendered sheet
+ * shows only the later-painted string. Only act when the ODL cell contains
+ * every conflicting source token and their boxes overlap by at least 80%;
+ * ordinary multi-token cells are left unchanged. */
+export function preferLastOverprintedText(cellText: string, bbox: Bbox, sourceSpans: GraphSpan[]): string {
+  const inCell = sourceSpans
+    .map((span, sourceIndex) => ({ span, sourceIndex }))
+    .filter(({ span }) => {
+      const cx = span.x + span.w / 2;
+      const cy = span.y + span.h / 2;
+      return cx >= bbox[0] - 2 && cx <= bbox[2] + 2 && cy >= bbox[1] - 2 && cy <= bbox[3] + 2;
+    });
+  if (inCell.length < 2) return cellText;
+  const area = (span: GraphSpan) => Math.max(1, span.w * span.h);
+  const overlap = (a: GraphSpan, b: GraphSpan) => {
+    const x0 = Math.max(a.x, b.x), y0 = Math.max(a.y, b.y);
+    const x1 = Math.min(a.x + a.w, b.x + b.w), y1 = Math.min(a.y + a.h, b.y + b.h);
+    return Math.max(0, x1 - x0) * Math.max(0, y1 - y0) / Math.min(area(a), area(b));
+  };
+  const compactText = (value: string) => norm(value).replace(/[^A-Z0-9.]/g, "");
+  const cellCompact = compactText(cellText);
+  const drop = new Set<number>();
+  let conflict = false;
+  for (let i = 0; i < inCell.length; i++) {
+    for (let j = i + 1; j < inCell.length; j++) {
+      const a = inCell[i], b = inCell[j];
+      if ((a.span.rot ?? 0) !== (b.span.rot ?? 0) || overlap(a.span, b.span) < 0.8) continue;
+      const at = compactText(a.span.str), bt = compactText(b.span.str);
+      if (!at || !bt || at === bt || !cellCompact.includes(at) || !cellCompact.includes(bt)) continue;
+      conflict = true;
+      drop.add(a.sourceIndex < b.sourceIndex ? a.sourceIndex : b.sourceIndex);
+    }
+  }
+  if (!conflict) return cellText;
+  const visible = inCell
+    .filter(({ sourceIndex }) => !drop.has(sourceIndex))
+    .sort((a, b) => a.span.y - b.span.y || a.span.x - b.span.x)
+    .map(({ span }) => span.str.trim())
+    .filter(Boolean)
+    .join(" ");
+  return visible || cellText;
+}
+
 /** ODL reports every bounding box in the PDF's own native user-space points
  * (x right, y UP from the page's bottom-left) — confirmed by direct
  * measurement against this project's own `textSpans()` output for the same
@@ -7146,7 +7328,7 @@ export function scheduleTableFromODL(
   t: ODLTable,
   sheetKey: string,
   pageViewportTransform: number[],
-  opts: { buildings?: Set<string> } = {},
+  opts: { buildings?: Set<string>; sourceSpans?: GraphSpan[] } = {},
 ): ScheduleTable | null {
   if (t["number of rows"] < 2 || t["number of columns"] < 2) return null;
   if (hasRowOrientedTitle(t, t["number of rows"])) t = rotateODLTable90(t);
@@ -7463,7 +7645,13 @@ export function scheduleTableFromODL(
       rowCellRef[c] = cell;
     }
     const texts = new Array(C).fill("");
-    for (let c = 0; c < C; c++) if (grid[r][c]) texts[c] = odlCellText(grid[r][c]!);
+    for (let c = 0; c < C; c++) {
+      const sourceCell = grid[r][c];
+      if (!sourceCell) continue;
+      const text = odlCellText(sourceCell);
+      const bbox = odlBboxToProjectSpace(sourceCell["bounding box"], pageViewportTransform);
+      texts[c] = opts.sourceSpans ? preferLastOverprintedText(text, bbox, opts.sourceSpans) : text;
+    }
     if (texts.every((s: string) => !s.trim())) continue; // blank spacer row
     const rawKey = texts[keyColIdx >= 0 ? keyColIdx : 0] || "";
     const keyRes = rowKeyOf(rawKey, kind === "room-finish" ? "room-finish" : kind === "equipment" ? "equipment" : "finish", opts.buildings);
@@ -7478,6 +7666,8 @@ export function scheduleTableFromODL(
     rows.push({ key: keyRes.key, sheet: sheetKey, ...(keyRes.building ? { building: keyRes.building } : {}), cells });
   }
   if (!rows.length) return null;
+  const promotedHeaders = promoteLeadingEngineeringUnits(headers, rows);
+  headers.splice(0, headers.length, ...promotedHeaders);
 
   const region = odlBboxToProjectSpace(t["bounding box"], pageViewportTransform);
   return {

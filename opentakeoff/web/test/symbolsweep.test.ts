@@ -3,7 +3,7 @@
 // tolerance behavior, decoy rejection, determinism, and the reported work cap.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, fragmentedTagOcc, deepHyphenChainTagOcc, type Point, type FlatSpan } from "../src/lib/symbolsweep.ts";
+import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, fragmentedTagOcc, familyQuorumFragmentedTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, type Point, type FlatSpan } from "../src/lib/symbolsweep.ts";
 
 // The test symbol — deliberately ASYMMETRIC under every rotation and mirror:
 // a 20×20 square, ONE diagonal, and a stub off the right side. Local coords,
@@ -64,6 +64,21 @@ test("a grid of identical clusters: exact count, seed excluded, deterministic or
   assert.deepEqual(centers, [...centers].sort((a, b) => a[0] - b[0] || a[1] - b[1]), "reading order");
   const again = sweepSymbols(segs, RECT);
   assert.deepEqual(again, r, "same input, same result, byte for byte");
+});
+
+test("candidate regions preserve in-window scores while pruning whole-sheet work", () => {
+  const placements = Array.from({ length: 80 }, (_, i) => ({ at: [(i % 20) * 100, Math.floor(i / 20) * 100] as Point }));
+  const segs = place(placements);
+  const fp = fingerprintSymbol(segs, RECT);
+  const full = matchSymbol(fp, segs);
+  const target = full.matches.find((m) => m.at[0] > 900 && m.at[0] < 1100 && m.at[1] > 90 && m.at[1] < 210);
+  assert.ok(target);
+
+  const radius = 5;
+  const focused = matchSymbol(fp, segs, { candidateRegions: [{ center: target.at, radius }] });
+  assert.deepEqual(focused.matches, [target], "the in-window placement is scored identically");
+  assert.equal(focused.withheld.length, 0);
+  assert.ok(focused.candidates.considered < full.candidates.considered / 20, "irrelevant whole-sheet proposals are never scored");
 });
 
 test("rotated and mirrored copies: found when enabled, ignored when disabled", () => {
@@ -326,6 +341,36 @@ test("fragmentedTagOcc: no false match when the tag simply isn't drawn", () => {
   assert.equal(fragmentedTagOcc(spans, "EF-1").length, 0, "EF+2 must never satisfy a search for EF-1");
 });
 
+test("fragmentedTagOcc: a parenthesized gang count is not part of the tag", () => {
+  const spans: FlatSpan[] = [
+    { str: "(6) LD", x0: 100, y0: 200, x1: 140, y1: 210 },
+    { str: "-", x0: 140, y0: 200, x1: 144, y1: 210 },
+    { str: "1", x0: 144, y0: 200, x1: 150, y1: 210 },
+  ];
+  assert.deepEqual(fragmentedTagOcc(spans, "LD-1")[0]?.bbox, [100, 200, 150, 210]);
+});
+
+test("familyQuorumFragmentedTagOcc: proven family skips overlapping non-prefix distractors", () => {
+  const spans: FlatSpan[] = [];
+  for (let i = 0; i < 4; i++) {
+    const x = i * 100;
+    spans.push(
+      { str: "TG", x0: x, y0: 100, x1: x + 20, y1: 110 },
+      { str: "-", x0: x + 20, y0: 100, x1: x + 24, y1: 110 },
+      { str: "5", x0: x + 24, y0: 100, x1: x + 30, y1: 110 },
+    );
+  }
+  spans.push(
+    { str: "TG", x0: 500, y0: 100, x1: 520, y1: 110 },
+    // PDF stream order places this overlapping room word first.
+    { str: "WOMEN", x0: 522, y0: 99, x1: 560, y1: 109 },
+    { str: "-", x0: 520, y0: 100, x1: 524, y1: 110 },
+    { str: "5", x0: 524, y0: 100, x1: 530, y1: 110 },
+  );
+  assert.equal(fragmentedTagOcc(spans, "TG-5").length, 4);
+  assert.equal(familyQuorumFragmentedTagOcc(spans, "TG-5").length, 5);
+});
+
 // deepHyphenChainTagOcc — a THIRD tier, after exact/compound AND
 // fragmentedTagOcc, for a real shape past fragmentedTagOcc's own 4-hop
 // budget: navfac-cherry-point-atc draws "CV-CHW-BP-M" as SEVEN same-row
@@ -345,6 +390,22 @@ test("deepHyphenChainTagOcc: navfac's own 7-run same-row split (\"CV\",\"-\",\"C
   const occ = deepHyphenChainTagOcc(spans, "CV-CHW-BP-M");
   assert.equal(occ.length, 1, "the seven same-row runs reconstruct into exactly one occurrence");
   assert.deepEqual(occ[0].bbox, [100, 200, 168, 206]);
+});
+
+test("deepHyphenChainTagOcc: quarter-turned seven-run labels chain vertically", () => {
+  const spans: FlatSpan[] = [
+    { str: "CV", x0: 200, y0: 170, x1: 206, y1: 190 },
+    { str: "-", x0: 200, y0: 164, x1: 206, y1: 170 },
+    { str: "CHW", x0: 200, y0: 144, x1: 206, y1: 164 },
+    { str: "-", x0: 200, y0: 138, x1: 206, y1: 144 },
+    { str: "BP", x0: 200, y0: 124, x1: 206, y1: 138 },
+    { str: "-", x0: 200, y0: 118, x1: 206, y1: 124 },
+    { str: "T", x0: 200, y0: 110, x1: 206, y1: 118 },
+  ];
+  const occ = deepHyphenChainTagOcc(spans, "CV-CHW-BP-T");
+  assert.equal(occ.length, 1);
+  assert.deepEqual(occ[0].bbox, [200, 110, 206, 190]);
+  assert.equal(occ[0].h, 6, "rotated text uses glyph thickness, not the full label length");
 });
 
 test("deepHyphenChainTagOcc: a coincidental word positioned below the start, listed earlier in the spans array, must not derail the same-row chain (the real CV-CHW-BP-M \"AS\" distractor)", () => {
@@ -382,6 +443,32 @@ test("deepHyphenChainTagOcc: no false match when the multi-hyphen tag simply isn
     { str: "HHW", x0: 124, y0: 200, x1: 140, y1: 206 },
   ];
   assert.equal(deepHyphenChainTagOcc(spans, "CV-CHW-BP-M").length, 0, "CV-HHW must never satisfy a search for CV-CHW-BP-M");
+});
+
+test("familySuffixTagOcc: four complete siblings recover one nearby outlined-prefix suffix", () => {
+  const spans: FlatSpan[] = [
+    ...["1", "2", "3", "4", "5"].map((n, index) => ({
+      str: `VAV-${n}`, x0: 100 + index * 40, y0: 100 + (index % 2) * 30,
+      x1: 130 + index * 40, y1: 110 + (index % 2) * 30,
+    })),
+    { str: "6", x0: 210, y0: 150, x1: 216, y1: 160 },
+    { str: "6", x0: 900, y0: 900, x1: 906, y1: 910 },
+  ];
+  const occ = familySuffixTagOcc(spans, "VAV-6");
+  assert.equal(occ.length, 1);
+  assert.deepEqual(occ[0].bbox, [210, 150, 216, 160]);
+});
+
+test("familySuffixTagOcc: ambiguous nearby bare suffixes remain unresolved", () => {
+  const spans: FlatSpan[] = [
+    ...["1", "2", "3", "4"].map((n, index) => ({
+      str: `VAV-${n}`, x0: 100 + index * 40, y0: 100,
+      x1: 130 + index * 40, y1: 110,
+    })),
+    { str: "6", x0: 150, y0: 140, x1: 156, y1: 150 },
+    { str: "6", x0: 190, y0: 140, x1: 196, y1: 150 },
+  ];
+  assert.equal(familySuffixTagOcc(spans, "VAV-6").length, 0);
 });
 
 test("seed diagnostics: centroid and total length are the fingerprint's own", () => {

@@ -2014,7 +2014,15 @@ export default function TakeoffCanvas() {
         const ux = t[2] / un, uy = t[3] / un;   // glyph ascent
         const xs = [t[4], t[4] + w * dx, t[4] + h * ux, t[4] + w * dx + h * ux];
         const ys = [t[5], t[5] + w * dy, t[5] + h * uy, t[5] + w * dy + h * uy];
-        spans.push({ str, x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) });
+        const rot = ((Math.round(Math.atan2(t[1], t[0]) * 180 / Math.PI / 90) * 90) % 360 + 360) % 360;
+        spans.push({
+          str,
+          x0: Math.min(...xs),
+          y0: Math.min(...ys),
+          x1: Math.max(...xs),
+          y1: Math.max(...ys),
+          ...(rot ? { rot } : {}),
+        });
       }
       wholeSetSpansRef.current.set(key, spans);
       saveSheetSpans(key, rev, spans);
@@ -4598,6 +4606,11 @@ export default function TakeoffCanvas() {
   // ships (sweepSymbols / labelPlacements) — canvas and agent cannot disagree.
   async function ensureTextSpans(key) {
     if (textSpansRef.current.has(key)) return textSpansRef.current.get(key);
+    const indexed = wholeSetSpansRef.current.get(key);
+    if (indexed) {
+      textSpansRef.current.set(key, indexed);
+      return indexed;
+    }
     const spans = [];
     try {
       const pg = pageObjsRef.current.get(key);
@@ -4625,7 +4638,15 @@ export default function TakeoffCanvas() {
           const ux = t[2] / un, uy = t[3] / un;
           const xs = [t[4], t[4] + w * dx, t[4] + h * ux, t[4] + w * dx + h * ux];
           const ys = [t[5], t[5] + w * dy, t[5] + h * uy, t[5] + w * dy + h * uy];
-          spans.push({ str, x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) });
+          const rot = ((Math.round(Math.atan2(t[1], t[0]) * 180 / Math.PI / 90) * 90) % 360 + 360) % 360;
+          spans.push({
+            str,
+            x0: Math.min(...xs),
+            y0: Math.min(...ys),
+            x1: Math.max(...xs),
+            y1: Math.max(...ys),
+            ...(rot ? { rot } : {}),
+          });
         }
       }
     } catch { /* no text layer — labels simply stay absent */ }
@@ -6774,7 +6795,14 @@ export default function TakeoffCanvas() {
     await indexWholeSet(sheets);
     const inputs = [];
     for (const [key, spans] of wholeSetSpansRef.current) {
-      const graphSpans = spans.map((s) => ({ str: s.str, x: s.x0, y: s.y0, w: s.x1 - s.x0, h: s.y1 - s.y0 }));
+      const graphSpans = spans.map((s) => ({
+        str: s.str,
+        x: s.x0,
+        y: s.y0,
+        w: s.x1 - s.x0,
+        h: s.y1 - s.y0,
+        ...(s.rot ? { rot: s.rot } : {}),
+      }));
       const segs = vectorSegsRef.current.get(key);
       inputs.push({ key, sheet_number: null, spans: graphSpans, ...(segs?.length ? { segs } : {}) });
     }
@@ -6859,6 +6887,8 @@ export default function TakeoffCanvas() {
   }
 
   async function agentFindSchedule(kind) {
+    const remote = await agentMcpTool("find_schedule", { kind });
+    if (remote) return remote;
     const g = await ensureAgentGraph();
     if (!g.available) return { error: "This set has no text layer (a scan) — the sheet graph is unavailable." };
     const k = (kind || "").toLowerCase();
@@ -6877,6 +6907,64 @@ export default function TakeoffCanvas() {
         ...(t.building ? { building: t.building } : {}),
       })),
     };
+  }
+
+  async function agentMcpTool(name, args) {
+    let endpoint = "";
+    try { endpoint = localStorage.getItem("opentakeoff_mcp_endpoint") || ""; } catch { /* unavailable */ }
+    if (!endpoint) return null;
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, arguments: args }),
+    });
+    if (!response.ok) return { error: `Local MCP bridge returned HTTP ${response.status}.` };
+    return await response.json();
+  }
+
+  async function agentQueryTable({ title, row_key, column, cell_contains }) {
+    const remote = await agentMcpTool("query_table", { title, row_key, column, cell_contains });
+    if (remote) return remote;
+    const g = await ensureAgentGraph();
+    if (!g.available) return { error: "This set has no text layer (a scan) — the sheet graph is unavailable." };
+    const titleNeedle = (title || "").trim().toUpperCase();
+    const rowNeedle = (row_key || "").trim().toUpperCase().replace(/\s+/g, "");
+    const columnNeedle = (column || "").trim().toUpperCase();
+    const containsNeedle = (cell_contains || "").trim().toUpperCase();
+    if (!titleNeedle && !rowNeedle && !columnNeedle && !containsNeedle) {
+      return { error: "Pass title, row_key, column, or cell_contains." };
+    }
+    const matches = [];
+    for (const table of g.tables) {
+      if (titleNeedle && !(table.title?.text || "").toUpperCase().includes(titleNeedle)) continue;
+      const dims = await ensureSheetDims(table.sheet);
+      if (!dims) continue;
+      const headers = columnNeedle
+        ? table.headers.filter((header) => header.toUpperCase().includes(columnNeedle))
+        : table.headers;
+      if (columnNeedle && !headers.length) continue;
+      for (const row of table.rows) {
+        const keys = row.key.toUpperCase().replace(/\s+/g, "").split("/");
+        if (rowNeedle && !keys.includes(rowNeedle)) continue;
+        if (containsNeedle && !Object.values(row.cells).some((cell) =>
+          cell.text.toUpperCase().includes(containsNeedle))) continue;
+        const cells = Object.fromEntries(headers.flatMap((header) => {
+          const cell = row.cells[header];
+          return cell?.text ? [[header, {
+            text: cell.text,
+            bbox: wireBoxNorm(cell.bbox, dims),
+          }]] : [];
+        }));
+        if (columnNeedle && !Object.keys(cells).length) continue;
+        matches.push({
+          sheet: table.sheet,
+          kind: table.kind,
+          title: table.title?.text || "",
+          row: { key: row.key, cells },
+        });
+      }
+    }
+    return { count: matches.length, matches: matches.slice(0, 100) };
   }
 
   // Exports trigger a REAL browser download (the same downloadText the human
@@ -7119,6 +7207,13 @@ export default function TakeoffCanvas() {
    * matching MCP's own sweep_schedule_row exactly — that's symbol_sweep's
    * own opt-in, not wired into this tool on either side. */
   async function agentSweepScheduleRow(tag, opts = {}) {
+    const remote = await agentMcpTool("sweep_schedule_row", {
+      tag,
+      tagged_only: true,
+      rotations: opts.rotations,
+      mirror: opts.mirror,
+    });
+    if (remote) return remote;
     const g = await ensureAgentGraph();
     if (!g.available) return { error: "This set has no text layer (a scan) — schedule rows cannot be read." };
     const t = canonMark(tag);
@@ -7297,6 +7392,35 @@ export default function TakeoffCanvas() {
   async function agentFindText(key, q, region, limitOpt) {
     const query = (q || "").trim();
     if (!query) return { error: "Pass q — the text to find, e.g. a room number or a schedule tag." };
+    const remoteDims = region ? await ensureSheetDims(key) : null;
+    const remote = await agentMcpTool("find_text", {
+      sheet: key,
+      q: query,
+      ...(region && remoteDims ? { region: {
+        x0: region.x0 * remoteDims.w,
+        y0: region.y0 * remoteDims.h,
+        x1: region.x1 * remoteDims.w,
+        y1: region.y1 * remoteDims.h,
+      } } : {}),
+      ...(limitOpt ? { limit: limitOpt } : {}),
+    });
+    if (remote) {
+      const dims = remoteDims || await ensureSheetDims(key);
+      if (!dims || !Array.isArray(remote.hits)) return remote;
+      return {
+        ...remote,
+        hits: remote.hits.map((hit) => ({
+          text: hit.str,
+          at: [hit.center[0] / dims.w, hit.center[1] / dims.h],
+          bbox: {
+            x0: hit.bbox[0] / dims.w,
+            y0: hit.bbox[1] / dims.h,
+            x1: hit.bbox[2] / dims.w,
+            y1: hit.bbox[3] / dims.h,
+          },
+        })),
+      };
+    }
     const dims = await ensureSheetGeometry(key);
     if (!dims) return { error: `Sheet ${key} not found, or has no page to read.` };
     const spans = await ensureTextSpans(key);
@@ -7550,6 +7674,29 @@ export default function TakeoffCanvas() {
     return { id, sheet: key, type };
   }
 
+  async function agentHighlightCitation({ sheet, bbox_px, text = "" }) {
+    if (!Array.isArray(bbox_px) || bbox_px.length !== 4 || bbox_px.some((value) => !Number.isFinite(value))) {
+      return { error: "bbox_px must contain four finite production image-pixel coordinates." };
+    }
+    const dims = await ensureSheetDims(sheet);
+    if (!dims) return { error: `Sheet ${sheet} not found.` };
+    const [x0, y0, x1, y1] = bbox_px;
+    if (!(x1 > x0 && y1 > y0) || x0 < 0 || y0 < 0 || x1 > dims.w || y1 > dims.h) {
+      return { error: "bbox_px is degenerate or outside the cited sheet." };
+    }
+    const result = await agentAnnotate({
+      sheet,
+      type: "highlight",
+      text,
+      rect: [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]],
+    });
+    return result.error ? result : {
+      ...result,
+      bbox_px,
+      text,
+    };
+  }
+
   function agentListAnnotations(sheetFilter, conditionFilter) {
     const st = agentStateRef.current;
     const tagById = new Map(st.conditions.map((c) => [c.id, c.finish_tag]));
@@ -7725,6 +7872,7 @@ export default function TakeoffCanvas() {
       sheetGraph: agentSheetGraph,
       resolveTag: agentResolveTag,
       findSchedule: agentFindSchedule,
+      queryTable: agentQueryTable,
       exportTakeoff: agentExportTakeoff,
       exportReport: agentExportReport,
       countMarks: agentCountMarks,
@@ -7735,6 +7883,7 @@ export default function TakeoffCanvas() {
       exportDxf: agentExportDxf,
       exportMarkedPdf: agentExportMarkedPdf,
       annotate: agentAnnotate,
+      highlightCitation: agentHighlightCitation,
       listAnnotations: agentListAnnotations,
       linkAnnotation: agentLinkAnnotation,
       markVerdict: agentMarkVerdict,

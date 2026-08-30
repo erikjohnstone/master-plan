@@ -22,6 +22,246 @@ import { runVerifiers } from "./agentVerifiers.js";
 
 export const MAX_AGENT_ITERATIONS = 24;
 
+const EQUIPMENT_VALVE_EVIDENCE_TOOLS = new Set([
+  "list_sheets",
+  "sheet_graph",
+  "query_table",
+  "sweep_schedule_row",
+  "highlight_citation",
+]);
+
+export function toolsForGoal(goal, tools) {
+  const exactEquipmentValveWorkflow = /\binstalled\s+quantity\b/i.test(goal)
+    && /\bcontrol\s+valve\b/i.test(goal)
+    && /\b(?:exact\s+)?schedule\s+cells?\b/i.test(goal);
+  return exactEquipmentValveWorkflow
+    ? tools.filter(({ name }) => EQUIPMENT_VALVE_EVIDENCE_TOOLS.has(name))
+    : tools;
+}
+
+export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
+  const successfulCount = callLog.some(({ name, out }) =>
+    (name === "sweep_schedule_row" && Number.isFinite(out?.found))
+    || (name === "count_marks" && !out?.error));
+  if (/\b(?:installed\s+quantity|quantity|take\s*off|count)\b/i.test(goal) && !successfulCount) {
+    return "The goal asks for installed quantity, but no successful sweep_schedule_row or count_marks call exists in this run. Do not infer quantity from schedule-row count. Call the appropriate counting tool, then answer from its result or refuse.";
+  }
+  if (/\binstalled\s+quantity\b/i.test(goal) && successfulCount && finalText
+    && !/\binstalled\s+quantity\b.{0,30}\b\d+(?:\.\d+)?\b/i.test(finalText)) {
+    return "The goal asks for installed quantity and a deterministic count succeeded, but the final answer does not explicitly state the numeric installed quantity. Report it under an “Installed quantity” label and attribute it to the sweep/count result.";
+  }
+  if (/\binstalled\s+quantity\b/i.test(finalText)
+    && /\b(?:single|one)\s+(?:schedule\s+)?(?:entry|row)\b|\b(?:schedule\s+)?row\b.{0,80}\bappears\s+(?:only\s+)?(?:once|one time)\b/i.test(finalText)) {
+    return "The final answer describes installed quantity as a single/one schedule entry. That reasoning is invalid even when the numeric value happens to match. Attribute installed quantity only to the successful sweep/count result and remove schedule-row-count wording.";
+  }
+  if (/\bnormalized\b/i.test(finalText)) {
+    return "The final answer exposes normalized citation coordinates. Production evidence citations use image-pixel bboxes only. Remove normalized coordinates and report the unchanged sheet and bbox_px returned by the evidence tool.";
+  }
+  if (/(?:≈|\bapproximately\b|\bapprox\.)/i.test(finalText)
+    && !/\b(?:derived|calculated|converted|conversion)\b/i.test(finalText)) {
+    return "The final answer adds an approximate value without labeling its derivation. Remove unrequested derived values, or explicitly label the calculation/conversion and cite the source inputs; never present it as direct tool output.";
+  }
+  if (/\bexample\b/i.test(finalText)) {
+    return "The final answer contains example or placeholder data. Never substitute example values for requested drawing facts. Retrieve each value from a successful tool result with a citation, or explicitly say the evidence was not found.";
+  }
+  if (/\bcontrol\s+valve\b/i.test(goal)) {
+    const tableTitle = (match) => String(
+      match?.table || match?.title?.text || match?.title
+        || match?.row?.table || match?.row?.table_title || "",
+    );
+    const tableMatches = callLog.filter(({ name }) => name === "query_table")
+      .flatMap(({ out }) => out?.matches || []);
+    const valveMatches = tableMatches.filter((match) => /\bcontrol\s+valve\b/i.test(tableTitle(match)));
+    const valveMatch = valveMatches.length > 0;
+    const equipmentTags = new Set([
+      ...callLog.filter(({ name, out }) =>
+        name === "sweep_schedule_row" && (out?.found ?? out?.total_found) > 0)
+        .map(({ args, out }) => String(args?.tag || out?.tag || "")),
+      ...tableMatches.filter((match) => !/\bcontrol\s+valve\b/i.test(tableTitle(match)))
+        .map((match) => String(match?.row?.identity?.text || match?.row?.key || "")),
+    ].map((tag) => tag.toUpperCase().replace(/[^A-Z0-9]/g, "")).filter(Boolean));
+    const relationshipSearch = callLog.some(({ name, args }) =>
+      name === "query_table"
+      && equipmentTags.has(String(args?.cell_contains || "").toUpperCase().replace(/[^A-Z0-9]/g, "")));
+    const refusedValve = /\b(?:could not|can't|cannot|unable to|not found|no matching)\b.{0,80}\bcontrol\s+valve\b/i.test(finalText)
+      || /\bcontrol\s+valve\b.{0,80}\b(?:could not|can't|cannot|unable to|not found|no matching)\b/i.test(finalText);
+    if (!valveMatch && !relationshipSearch) {
+      return "No control-valve row matched the exact equipment row key, but relationship schedules often encode the equipment tag inside another cell or compound valve mark. Before refusing, call query_table with cell_contains set to the exact evidence-backed equipment tag. Use the returned semantic row identity if it matches.";
+    }
+    if (!valveMatch && !refusedValve) {
+      return "The goal asks for control-valve data, but no query_table result matched a control-valve schedule. Do not supply valve values from memory, inference, or examples. Query the matching control-valve row and cite it, or explicitly report that no matching row was found.";
+    }
+    const valveIdentities = valveMatches
+      .map((match) => String(match?.row?.identity?.text || match?.row?.key || ""))
+      .map((tag) => tag.toUpperCase().replace(/[^A-Z0-9]/g, ""))
+      .filter(Boolean);
+    const answerCanonical = finalText.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (valveMatch && valveIdentities.length
+      && !valveIdentities.some((identity) => answerCanonical.includes(identity))) {
+      return "A matching control-valve schedule row was retrieved, but the final answer omitted its semantic valve identity and requested data. Include the evidence-backed valve mark and its requested fields, with citations, in the complete replacement answer.";
+    }
+  }
+  const swept = new Set(callLog.filter(({ name, out }) =>
+    name === "sweep_schedule_row" && (out?.found ?? out?.total_found) > 0)
+    .map(({ args, out }) => String(args?.tag || out?.tag || "").toUpperCase()));
+  const queried = new Set(callLog.filter(({ name }) => name === "query_table")
+    .flatMap(({ out }) => out?.matches || [])
+    .map((match) => String(match?.row?.key || "").toUpperCase())
+    .filter(Boolean));
+  const unswept = [...queried].filter((tag) => !swept.has(tag));
+  const finalCanonical = finalText.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const claimedUnswept = unswept.filter((tag) => {
+    const tagCanonical = tag.replace(/[^A-Z0-9]/g, "");
+    return finalText.split(/[\n.!?]+/).some((fragment) => {
+      const words = fragment.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim();
+      const canonical = words.replace(/\s+/g, "");
+      if (!canonical.includes(tagCanonical)) return false;
+      return /\bBOTH TAGS\b/.test(words)
+        || /\bPLAN LOCATION (?:FOR|OF) \b/.test(words)
+        || /\bLOCATED ON (?:THE )?PLAN\b/.test(words);
+    });
+  });
+  if (claimedUnswept.length) {
+    return `The final answer claims a plan location for unswept tag(s): ${claimedUnswept.join(", ")}. A schedule query proves schedule data only. Remove those plan-location claims or call sweep_schedule_row for each exact tag.`;
+  }
+  const sweptPlanSheets = new Set(callLog.filter(({ name, out }) =>
+    name === "sweep_schedule_row" && (out?.found ?? out?.total_found) > 0)
+    .flatMap(({ out }) => out?.tag_citations || [])
+    .map((citation) => String(citation?.sheet || "").toUpperCase().replace(/[^A-Z0-9]/g, ""))
+    .filter(Boolean));
+  const scheduleSheets = new Set(callLog.filter(({ name }) => name === "query_table")
+    .flatMap(({ out }) => out?.matches || [])
+    .map((match) => String(match?.sheet || "").toUpperCase().replace(/[^A-Z0-9]/g, ""))
+    .filter(Boolean));
+  const scheduleClaimedAsPlan = finalText.split("\n")
+    .filter((line) => /\bplan[- ]?location\b/i.test(line))
+    .some((line) => {
+      const lineCanonical = line.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      return [...scheduleSheets].some((sheet) =>
+        lineCanonical.includes(sheet) && !sweptPlanSheets.has(sheet));
+    });
+  if (scheduleClaimedAsPlan) {
+    return "The final answer labels a queried schedule sheet/region as a plan location without swept plan evidence on that sheet. A table bbox is a schedule citation only. Remove the plan-location label or provide a successful exact-tag sweep citation from the real plan sheet.";
+  }
+  if (/\bshow\b.*\bplan location\b|\bshow me the plan\b/i.test(goal)) {
+    const highlights = callLog.filter(({ name, out }) =>
+      name === "highlight_citation" && !out?.error && Array.isArray(out.bbox_px));
+    const missingPlanTags = [];
+    const missingPlanSheets = [];
+    for (const { args, out } of callLog.filter(({ name, out }) =>
+      name === "sweep_schedule_row" && (out?.found ?? out?.total_found) > 0)) {
+      const tag = String(args?.tag || out?.tag || "").trim();
+      const tagCanonical = tag.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      const citations = (out?.tag_citations || []).map((citation) => {
+        const bbox = citation?.bbox;
+        return {
+          sheet: citation?.sheet,
+          bbox: Array.isArray(bbox) ? bbox : [bbox?.x0, bbox?.y0, bbox?.x1, bbox?.y1],
+        };
+      });
+      const covered = citations.some((citation) => citation.bbox.every(Number.isFinite)
+        && highlights.some(({ args: highlightArgs, out: highlightOut }) =>
+          highlightOut.sheet === citation.sheet
+          && highlightOut.bbox_px.every((value, index) => Math.abs(value - citation.bbox[index]) <= 1)
+          && String(highlightArgs?.text || highlightOut?.text || "").toUpperCase()
+            .replace(/[^A-Z0-9]/g, "").includes(tagCanonical)));
+      if (!covered) missingPlanTags.push(tag);
+      if (citations.length && !citations.some((citation) =>
+        citation.sheet
+        && finalCanonical.includes(String(citation.sheet).toUpperCase().replace(/[^A-Z0-9]/g, "")))) {
+        missingPlanSheets.push(tag);
+      }
+    }
+    if (missingPlanTags.length) {
+      return `The requested plan location is not painted from the exact sweep tag citation for: ${missingPlanTags.join(", ")}. Call highlight_citation with an unchanged sweep_schedule_row.tag_citations sheet and bbox, and label it with that exact tag. Do not use the broader anchor rect or label one tag as another.`;
+    }
+    if (missingPlanSheets.length) {
+      return `The final answer does not state the actual swept plan sheet for: ${missingPlanSheets.join(", ")}. Include the unchanged sheet and image-pixel bbox from sweep_schedule_row.tag_citations in the plan-location section; do not substitute a schedule sheet.`;
+    }
+  }
+  for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
+    for (const match of out?.matches || []) {
+      const identity = match?.row?.identity;
+      if (!identity?.header || !identity?.text) continue;
+      const tagCanonical = String(identity.text).toUpperCase().replace(/[^A-Z0-9]/g, "");
+      const headerCanonical = String(identity.header).toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (finalCanonical.includes(tagCanonical) && !finalCanonical.includes(headerCanonical)) {
+        return `The final answer mentions ${identity.text} but does not cite its semantic identity header ${identity.header}. Use query_table row.identity exactly; do not substitute another repeated-value column.`;
+      }
+    }
+  }
+  if (/\bshow\b.*\bcite\b|\bcite the exact\b/i.test(goal)
+    && !callLog.some(({ name, out }) => name === "highlight_citation" && !out?.error)) {
+    return "The goal asks to show exact cited source locations, but no successful highlight_citation call exists. Highlight the returned plan tag and schedule-cell bboxes on their real sheets before answering.";
+  }
+  if (/\bcite the exact\b/i.test(goal)) {
+    const highlights = callLog.filter(({ name, out }) =>
+      name === "highlight_citation" && !out?.error && Array.isArray(out.bbox_px))
+      .map(({ out }) => ({ sheet: out.sheet, bbox: out.bbox_px }));
+    const uncovered = [];
+    for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
+      for (const match of out?.matches || []) {
+        const rowKey = String(match?.row?.key || "");
+        if (!rowKey || !finalCanonical.includes(rowKey.toUpperCase().replace(/[^A-Z0-9]/g, ""))) continue;
+        const cells = Object.values(match?.row?.all_cells || match?.row?.cells || {});
+        const covered = cells.some((cell) => Array.isArray(cell?.bbox)
+          && highlights.some((highlight) => highlight.sheet === match.sheet
+            && highlight.bbox.every((value, index) => Math.abs(value - cell.bbox[index]) <= 1)));
+        if (!covered) uncovered.push(`${rowKey} on ${match.sheet}`);
+      }
+    }
+    if (uncovered.length) {
+      return `The answer uses queried schedule row(s) with no painted source cell: ${[...new Set(uncovered)].join(", ")}. Call highlight_citation on at least one exact cited cell from each row before finishing.`;
+    }
+    const evidenceCells = [];
+    for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
+      for (const match of out?.matches || []) {
+        for (const [header, cell] of Object.entries(match?.row?.all_cells || match?.row?.cells || {})) {
+          if (!Array.isArray(cell?.bbox)) continue;
+          evidenceCells.push({ sheet: match.sheet, header, text: cell.text, bbox: cell.bbox });
+        }
+      }
+    }
+    for (const { out } of callLog.filter(({ name }) => name === "sweep_schedule_row")) {
+      for (const [header, cell] of Object.entries(out?.row?.cell_citations || {})) {
+        const bbox = cell?.bbox;
+        const bboxArray = Array.isArray(bbox) ? bbox : [bbox?.x0, bbox?.y0, bbox?.x1, bbox?.y1];
+        if (!bboxArray.every(Number.isFinite)) continue;
+        evidenceCells.push({ sheet: out.row.sheet, header, text: cell.text, bbox: bboxArray });
+      }
+    }
+    if (/\b(?:all|each)\b.{0,160}\bhighlight/i.test(finalText)) {
+      const mentionedCells = evidenceCells.filter(({ header, text }) => {
+        const headerCanonical = String(header).toUpperCase().replace(/[^A-Z0-9]/g, "");
+        const textCanonical = String(text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+        return headerCanonical.length >= 3 && textCanonical
+          && finalCanonical.includes(headerCanonical) && finalCanonical.includes(textCanonical);
+      });
+      const unpaintedMentioned = mentionedCells.filter((cell) =>
+        !highlights.some((highlight) => highlight.sheet === cell.sheet
+          && highlight.bbox.every((value, index) => Math.abs(value - cell.bbox[index]) <= 1)));
+      if (unpaintedMentioned.length) {
+        return "The final answer broadly says all/each cited value or cell is highlighted, but some mentioned evidence cells were not painted. Describe only the exact highlighted regions, or highlight every claimed cell.";
+      }
+    }
+    for (const line of finalText.split("\n").filter((text) => /\bhighlight/i.test(text))) {
+      const lineCanonical = line.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      const claimedCells = evidenceCells.filter(({ header, text }) => {
+        const headerCanonical = String(header).toUpperCase().replace(/[^A-Z0-9]/g, "");
+        const textCanonical = String(text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+        return headerCanonical.length >= 3 && textCanonical
+          && lineCanonical.includes(headerCanonical) && lineCanonical.includes(textCanonical);
+      });
+      if (claimedCells.length && !claimedCells.some((cell) =>
+        highlights.some((highlight) => highlight.sheet === cell.sheet
+          && highlight.bbox.every((value, index) => Math.abs(value - cell.bbox[index]) <= 1)))) {
+        return "The final answer says a specific schedule cell is highlighted, but no highlight_citation call painted that exact cell bbox. Remove the highlighted claim for unpainted fields or highlight the exact returned cell; another cell in the same row is not equivalent.";
+      }
+    }
+  }
+  return null;
+}
+
 // The takeoff-agent contract. Kept in one exported function so the tests (and
 // the mock server's authors) can read exactly what the model is promised.
 export function agentSystemPrompt() {
@@ -40,9 +280,16 @@ export function agentSystemPrompt() {
     "- If every trace_connectivity attempt for a piece of equipment came back dead_end/refused, your ENTIRE final answer about that equipment's connectivity must literally be, word for word (you may add which seed points you tried before this sentence, nothing after it): \"The connectivity trace did not find a path from <equipment id> to any other identified equipment on this sheet.\" Do not add a \"visually\", \"it appears\", \"likely\", or any tag name after that sentence — the sentence above is the complete, final word on the connectivity question, not an opening for further speculation. Anything you think you notice in a view_region image about POSSIBLE targets is not evidence and must not be written down anywhere in your answer.",
     "- NEVER report an aggregate, sum, or \"total for the building/set\" unless you have checked every relevant row across every relevant sheet AND say so. If you only checked one piece of equipment, your answer must say exactly what you checked (\"the only unit I found was X, on sheet Y — I have not verified there are no others\") and must not present that single value as a whole-building total. When in doubt about completeness, refuse to give a total and say what would need to be checked next.",
     "- Every factual claim about a connection, a symbol match, or a schedule value must trace back to a specific tool call's own returned data in this run — if you can't point to which tool call produced a fact, don't state it.",
+    "- NEVER infer installed quantity from the existence of a schedule row. Installed quantity requires sweep_schedule_row; use its found count and tag_at evidence or refuse.",
+    "- NEVER report a plan location for any equipment or valve tag unless sweep_schedule_row succeeded for that exact tag. A schedule-cell bbox is a schedule location, never an installed plan location, and one tag's plan coordinates never belong to another tag.",
+    "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized. Use highlight_citation with the unchanged sheet and bbox_px whenever the estimator asks to show or cite exact source locations.",
+    "- Never say a cell or field was highlighted unless a successful highlight_citation call targeted that exact sheet and bbox_px. State exactly which source regions were highlighted; do not imply unpainted cells were painted.",
+    "- For a scheduled device tag, cite query_table row.identity (for example VALVE MARK), not the first different column that happens to repeat the same text (for example UNIT MARK).",
+    "- For any equipment-to-control-valve join, use this direct set-wide sequence: query_table with row_key set to the equipment tag; sweep_schedule_row for installed quantity/plan evidence when requested; query_table with cell_contains set to that exact equipment tag to find compound relationship marks; then highlight the exact returned tag and row-identity bboxes. Do not browse guessed sheets or repeatedly retry the same empty exact-row query.",
+    "- resolve_tag resolves room-finish relationships only. Never use it to locate scheduled HVAC/BAS equipment.",
     "- read_schedule/find_schedule return two DIFFERENT kinds of name and they are never interchangeable: `headers` names the table's own COLUMNS (e.g. \"SYMBOL\", \"REMARKS\" as column labels), while each entry in `rows` has its own `key` naming that ONE ROW (e.g. \"AC-1\"). A word appearing in `headers` does NOT mean a row exists with that word as its key — check `rows[].key` directly, never infer a row's existence from a column name alone.",
     "",
-    "Working method: list_sheets first. Read the finish schedule (read_schedule) or the sheet text (read_sheet_text) to ground WHAT to take off; use view_region to look at scanned or ambiguous areas. Match or create conditions, measure rooms with one_click, then stage propose_shapes with evidence. Then summarize what you proposed and what you could not do, and stop. If you are blocked (no scale, sheet not open, nothing matches), say so plainly and stop rather than guessing.",
+    "Working method: list_sheets first. Use sheet_graph to orient across the entire loaded set, then query_table for cited equipment/reference cells or read_schedule for a known region; use find_text and view_region to locate and show plan evidence. Match or create conditions, measure rooms with one_click, then stage propose_shapes with evidence. Then summarize what you proposed and what you could not do, and stop. If you are blocked (no scale, sheet not open, nothing matches), say so plainly and stop rather than guessing.",
   ].join("\n");
 }
 
@@ -148,7 +395,7 @@ function appendToolResults(provider, messages, results) {
 export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal, maxIterations = MAX_AGENT_ITERATIONS, fetchFn }) {
   const provider = cfg?.provider === "anthropic" ? "anthropic" : "openai";
   const emit = (ev) => { try { onEvent?.(ev); } catch { /* a status listener must never kill the run */ } };
-  const providerTools = toProviderTools(provider, tools);
+  const providerTools = toProviderTools(provider, toolsForGoal(goal, tools));
   const system = agentSystemPrompt();
   const messages = [{ role: "user", content: goal }];
   let iterations = 0;
@@ -184,6 +431,16 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     // append MUST happen here, before this emit, on the LAST turn only.
     let displayText = turn.text;
     if (!turn.toolCalls.length) {
+      const correction = requiredEvidenceCorrection(callLog, goal, turn.text);
+      if (correction) {
+        messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
+        messages.push({
+          role: "user",
+          content: `${correction}\n\nReturn a complete replacement answer that satisfies every part of the original goal. Preserve every previously retrieved, tool-grounded requested field; do not answer only the latest correction.`,
+        });
+        emit({ type: "text", text: `[Evidence gate: ${correction}]` });
+        continue;
+      }
       const notes = runVerifiers(callLog, goal);
       if (notes.length) displayText = `${displayText || ""}\n\n${notes.join("\n\n")}`;
     }

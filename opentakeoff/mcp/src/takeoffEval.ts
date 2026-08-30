@@ -15,6 +15,7 @@ export interface TakeoffKeyRow {
   expected_quantity: number;
   sheets: string[];
   notes: string;
+  expected_status?: "resolved" | "refused" | "not_in_output";
 }
 
 export interface TagScore {
@@ -24,6 +25,7 @@ export interface TagScore {
   delta: number;          // actual - expected; positive = over-counted, negative = under-counted
   exact: boolean;
   status: "resolved" | "refused" | "error" | "not_in_output";
+  expected_status: "resolved" | "refused" | "not_in_output";
 }
 
 export interface FalseAdd {
@@ -42,6 +44,11 @@ export interface TakeoffScore {
     exact_matches: number;
     exact_match_pct: number;      // 0..1
     total_quantity_delta: number; // sum of |delta| across every key tag (not the falsely-added ones — those are named separately)
+    applicable_tags: number;
+    applicable_exact_matches: number;
+    applicable_exact_match_pct: number;
+    expected_refusals: number;
+    correct_refusals: number;
   };
 }
 
@@ -77,7 +84,7 @@ export function parseTakeoffKeyCsv(text: string): TakeoffKeyRow[] {
   const head = splitCsv(lines[0]).map((h) => h.trim().toLowerCase());
   const idx = (name: string) => head.indexOf(name);
   const iTag = idx("tag"), iType = idx("equipment_type"), iQty = idx("expected_quantity"),
-    iSheets = idx("sheets"), iNotes = idx("notes");
+    iSheets = idx("sheets"), iNotes = idx("notes"), iStatus = idx("expected_status");
   return lines.slice(1).map((l) => {
     const c = splitCsv(l);
     return {
@@ -86,6 +93,9 @@ export function parseTakeoffKeyCsv(text: string): TakeoffKeyRow[] {
       expected_quantity: Number((c[iQty] ?? "0").trim()) || 0,
       sheets: (c[iSheets] ?? "").split(";").map((s) => s.trim()).filter(Boolean),
       notes: (c[iNotes] ?? "").trim(),
+      expected_status: (["refused", "not_in_output"].includes((c[iStatus] ?? "").trim().toLowerCase())
+        ? (c[iStatus] ?? "").trim().toLowerCase()
+        : "resolved") as TakeoffKeyRow["expected_status"],
     };
   });
 }
@@ -101,13 +111,21 @@ export function scoreTakeoff(takeoff: Pick<PlanSetTakeoff, "items" | "failures">
   const per_tag: TagScore[] = key.map((k) => {
     const t = canonTag(k.tag);
     const item = itemByTag.get(t);
+    const expectedStatus = k.expected_status ?? "resolved";
     const actual = item?.status === "resolved" ? item.quantity : 0;
     const status: TagScore["status"] = !item ? "not_in_output" : (item.status as TagScore["status"]);
-    const delta = actual - k.expected_quantity;
-    return { tag: k.tag, expected: k.expected_quantity, actual, delta, exact: delta === 0, status };
+    const delta = expectedStatus === "resolved" ? actual - k.expected_quantity : 0;
+    const exact = expectedStatus === "resolved"
+      ? status === "resolved" && delta === 0
+      : expectedStatus === "refused"
+        ? status === "refused"
+        : status === "not_in_output";
+    return { tag: k.tag, expected: k.expected_quantity, actual, delta, exact, status, expected_status: expectedStatus };
   });
 
-  const missing = key.filter((k) => !itemByTag.has(canonTag(k.tag))).map((k) => k.tag);
+  const missing = key
+    .filter((k) => (k.expected_status ?? "resolved") !== "not_in_output" && !itemByTag.has(canonTag(k.tag)))
+    .map((k) => k.tag);
 
   const falsely_added: FalseAdd[] = takeoff.items
     .filter((it) => it.status === "resolved" && it.quantity > 0 && !keyTags.has(canonTag(it.tag)))
@@ -118,6 +136,9 @@ export function scoreTakeoff(takeoff: Pick<PlanSetTakeoff, "items" | "failures">
 
   const exact_matches = per_tag.filter((t) => t.exact).length;
   const total_quantity_delta = per_tag.reduce((n, t) => n + Math.abs(t.delta), 0);
+  const applicable = per_tag.filter((t) => t.expected_status === "resolved");
+  const applicable_exact_matches = applicable.filter((t) => t.exact).length;
+  const refusalRows = per_tag.filter((t) => t.expected_status === "refused");
 
   return {
     per_tag,
@@ -129,6 +150,11 @@ export function scoreTakeoff(takeoff: Pick<PlanSetTakeoff, "items" | "failures">
       exact_matches,
       exact_match_pct: key.length ? exact_matches / key.length : 0,
       total_quantity_delta,
+      applicable_tags: applicable.length,
+      applicable_exact_matches,
+      applicable_exact_match_pct: applicable.length ? applicable_exact_matches / applicable.length : 0,
+      expected_refusals: refusalRows.length,
+      correct_refusals: refusalRows.filter((t) => t.exact).length,
     },
   };
 }

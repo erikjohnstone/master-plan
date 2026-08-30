@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, type Point, type RoomSweepInstance } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, typicalCountMultiplier, splitHyphenTagOcc, isIndividuallyMarkedEquipmentSchedule, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -269,6 +269,16 @@ test("dedupeCrossDisciplineRoomViews: negative control — same tag, DIFFERENT r
   assert.equal(redundant.length, 0, "two genuinely distinct installs in two different rooms must never collapse");
 });
 
+test("dedupeCrossDisciplineRoomViews: unnamed two-digit tokens do not prove a shared room", () => {
+  const weak = { tag: "12", name: "", bbox: [990, 990, 1030, 1010] as [number, number, number, number] };
+  const instances = [
+    inst(1, "M1.0", "M", [1000, 1000], [weak]),
+    inst(2, "M2.0", "M", [1400, 1200], [weak]),
+  ];
+  assert.equal(dedupeCrossDisciplineRoomViews(instances).length, 0,
+    "the same nearby detail/size numeral on two sheets is not room-registration evidence");
+});
+
 test("dedupeCrossDisciplineRoomViews: negative control — same tag, same room, SAME discipline — a real repeat within one trade, not a redundant view", () => {
   const instances = [
     inst(1, "M3.0", "M", [1005, 1005], [ROOM]),
@@ -332,6 +342,18 @@ test("dedupeCrossDisciplineRoomViews: negative control — same tag, same discip
   assert.equal(redundant.length, 0, "two genuinely distinct installs in two different rooms must never collapse, even on same-discipline sheets");
 });
 
+test("dedupeCrossDisciplineRoomViews: registered coordinates on explicit different floors remain distinct", () => {
+  const first = { ...inst(1, "M1.0", "M", [1000, 1000], []), level: "1" };
+  const second = { ...inst(2, "M2.0", "M", [1005, 1004], []), level: "2" };
+  assert.equal(dedupeCrossDisciplineRoomViews([first, second]).length, 0);
+});
+
+test("planLevelOfTitle: reads explicit floor identities without guessing generic floor plans", () => {
+  assert.equal(planLevelOfTitle("AIR OPS - FIRST FLOOR MECHANICAL DUCTWORK PLAN"), "1");
+  assert.equal(planLevelOfTitle("AIR OPS - SECOND FLOOR MECHANICAL DUCTWORK PLAN"), "2");
+  assert.equal(planLevelOfTitle("PLUMBING FLOOR PLAN"), null);
+});
+
 test("dedupeCrossDisciplineRoomViews: no room nearby, marks close, SAME discipline but DIFFERENT sheets — coordinate-proximity fallback now collapses too (the WC-1 shape without a readable room label)", () => {
   const instances = [
     inst(1, "P1.0", "P", [2231.8, 2356.8], [ROOM]),
@@ -341,6 +363,33 @@ test("dedupeCrossDisciplineRoomViews: no room nearby, marks close, SAME discipli
   assert.equal(redundant.length, 1, "same-discipline marks on two different sheets, within the coordinate-proximity threshold, collapse to one");
   assert.equal(redundant[0].keptDiscipline, "P");
   assert.equal(redundant[0].keptSheet, "P1.0");
+});
+
+test("dedupeCrossDisciplineRoomViews: asymmetric room attribution still collapses a tight redraw pair", () => {
+  const room = { tag: "102", name: "RESTROOM", bbox: [90, 90, 110, 110] as [number, number, number, number] };
+  const instances: RoomSweepInstance<number>[] = [
+    { id: 1, sheet: "set.pdf#1", discipline: "P", at: [100, 100], rooms: [room], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+    { id: 2, sheet: "set.pdf#2", discipline: "P", at: [112, 106], rooms: [], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+  ];
+  assert.deepEqual(dedupeCrossDisciplineRoomViews(instances).map((entry) => entry.id), [2]);
+});
+
+test("dedupeCrossDisciplineRoomViews: two sub-30px pairs override contradictory incidental room reads", () => {
+  const instances: RoomSweepInstance<number>[] = [
+    { id: 1, sheet: "set.pdf#1", discipline: "P", at: [100, 100], rooms: [{ tag: "102", name: "", bbox: [95, 95, 105, 105] }], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+    { id: 2, sheet: "set.pdf#2", discipline: "P", at: [118, 108], rooms: [{ tag: "103", name: "", bbox: [113, 103, 123, 113] }], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+    { id: 3, sheet: "set.pdf#1", discipline: "P", at: [500, 500], rooms: [{ tag: "104", name: "", bbox: [495, 495, 505, 505] }], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+    { id: 4, sheet: "set.pdf#2", discipline: "P", at: [512, 508], rooms: [{ tag: "105", name: "", bbox: [507, 503, 517, 513] }], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+  ];
+  assert.deepEqual(dedupeCrossDisciplineRoomViews(instances).map((entry) => entry.id), [2, 4]);
+});
+
+test("dedupeCrossDisciplineRoomViews: one tight coincidence across different rooms is not registration", () => {
+  const instances: RoomSweepInstance<number>[] = [
+    { id: 1, sheet: "set.pdf#1", discipline: "M", at: [100, 100], rooms: [{ tag: "101", name: "", bbox: [95, 95, 105, 105] }], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+    { id: 2, sheet: "set.pdf#2", discipline: "M", at: [112, 106], rooms: [{ tag: "201", name: "", bbox: [107, 101, 117, 111] }], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+  ];
+  assert.deepEqual(dedupeCrossDisciplineRoomViews(instances), []);
 });
 
 test("dedupeCrossDisciplineRoomViews: an instance with no known discipline never enters the dedup (never dropped, never a kept anchor)", () => {
@@ -364,4 +413,148 @@ test("dedupeCrossDisciplineRoomViews: three disciplines drawing the same room �
   const ids = redundant.map((r) => r.id).sort();
   assert.deepEqual(ids, [3, 4]);
   for (const r of redundant) assert.equal(r.keptDiscipline, "M");
+});
+
+test("dedupeCrossDisciplineRoomViews: paired AIA discipline-overlay sheets register by suffix and position", () => {
+  const instances: RoomSweepInstance<number>[] = [
+    { id: 1, sheet: "set.pdf#14", sheetNumber: "MH121", discipline: "MH", at: [900, 1650], rooms: [], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+    { id: 2, sheet: "set.pdf#23", sheetNumber: "MP121", discipline: "MP", at: [828, 1428], rooms: [], sheetWidthPx: 5000, sheetHeightPx: 5000 },
+  ];
+  assert.deepEqual(dedupeCrossDisciplineRoomViews(instances).map((entry) => entry.id), [2]);
+  assert.deepEqual(dedupeCrossDisciplineRoomViews([
+    instances[0],
+    { ...instances[1], id: 3, at: [3000, 3000] },
+  ]), [], "a shared numeric suffix without coordinate registration is insufficient");
+});
+
+test("dedupeAlignedSameSheetViews: aligned side-by-side system plans collapse one redrawn instance", () => {
+  const landmarks: TaggedViewLandmark[] = ["AHU-1", "P-1", "P-2", "AS-1"].flatMap((tag, i) => [
+    { tag, at: [500 + i * 40, 600 + i * 100] as Point },
+    { tag, at: [3500 + i * 55, 605 + i * 100] as Point },
+  ]);
+  const redundant = dedupeAlignedSameSheetViews(
+    [{ id: 1, at: [600, 900] }, { id: 2, at: [3600, 905] }],
+    landmarks,
+    5000,
+    4000,
+  );
+  assert.deepEqual(redundant, [2], "the right-hand redraw collapses after four independent aligned tags prove two registered views");
+});
+
+test("dedupeAlignedSameSheetViews: repeated equipment within one view is never collapsed", () => {
+  const landmarks: TaggedViewLandmark[] = ["AHU-1", "P-1", "P-2", "AS-1"].flatMap((tag, i) => [
+    { tag, at: [500 + i * 40, 600 + i * 100] as Point },
+    { tag, at: [3500 + i * 55, 605 + i * 100] as Point },
+  ]);
+  const redundant = dedupeAlignedSameSheetViews(
+    [{ id: 1, at: [500, 900] }, { id: 2, at: [700, 930] }],
+    landmarks,
+    5000,
+    4000,
+  );
+  assert.deepEqual(redundant, [], "two real instances in the same left-hand plan remain two");
+});
+
+test("dedupeAlignedSameSheetViews: fewer than four aligned tag pairs is insufficient evidence", () => {
+  const landmarks: TaggedViewLandmark[] = ["T-1", "T-2", "T-3"].flatMap((tag, i) => [
+    { tag, at: [500, 600 + i * 100] as Point },
+    { tag, at: [3500, 600 + i * 100] as Point },
+  ]);
+  const redundant = dedupeAlignedSameSheetViews(
+    [{ id: 1, at: [500, 900] }, { id: 2, at: [3500, 900] }],
+    landmarks,
+    5000,
+    4000,
+  );
+  assert.deepEqual(redundant, [], "weak symmetry on a normal plan cannot erase a real installation");
+});
+
+test("dedupeAlignedSameSheetViews: paired duct/pipe enlarged-plan captions admit four paired tags with two aligned", () => {
+  const landmarks: TaggedViewLandmark[] = [
+    { tag: "B-1", at: [100, 100] }, { tag: "B-1", at: [600, 390] },
+    { tag: "B-2", at: [120, 200] }, { tag: "B-2", at: [620, 202] },
+    { tag: "DH-1", at: [140, 300] }, { tag: "DH-1", at: [640, 300] },
+    { tag: "FCU-1", at: [160, 400] }, { tag: "FCU-1", at: [660, 510] },
+  ];
+  const instances = [{ id: "left", at: [150, 300] as Point }, { id: "right", at: [650, 300] as Point }];
+  const captions = [
+    { text: "MECHANICAL DUCT ENLARGED PLAN - MECH RM", at: [250, 600] as Point },
+    { text: "MECHANICAL PIPE ENLARGED PLAN - MECH RM", at: [750, 600] as Point },
+  ];
+  assert.deepEqual(dedupeAlignedSameSheetViews(instances, landmarks, 2000, 800, captions), ["right"]);
+  assert.deepEqual(dedupeAlignedSameSheetViews(
+    instances,
+    landmarks,
+    2000,
+    800,
+    captions.map((caption) => ({ ...caption, text: caption.text.replace(/DUCT|PIPE/, "DUCT") })),
+  ), []);
+});
+
+test("dedupeAlignedSameSheetViews: horizontal stacked views retain the larger view count", () => {
+  const landmarks: TaggedViewLandmark[] = ["AHU-1", "P-1", "P-2", "AS-1"].flatMap((tag, i) => [
+    { tag, at: [600 + i * 100, 500] as Point },
+    { tag, at: [605 + i * 100, 3500] as Point },
+  ]);
+  const redundant = dedupeAlignedSameSheetViews(
+    [{ id: 1, at: [600, 500] }, { id: 2, at: [650, 550] }, { id: 3, at: [605, 3500] }],
+    landmarks,
+    5000,
+    5000,
+  );
+  assert.deepEqual(redundant, [3], "the fuller top view's two real instances win over the partial bottom redraw");
+});
+
+test("prefersTagClaimCoverage ranks exact-tag coverage before raw geometric popularity", () => {
+  assert.equal(prefersTagClaimCoverage(
+    { claimed: 8, rawMatches: 8, segments: 20 },
+    { claimed: 7, rawMatches: 3, segments: 40 },
+  ), true);
+  assert.equal(prefersTagClaimCoverage(
+    { claimed: 8, rawMatches: 12, segments: 40 },
+    { claimed: 8, rawMatches: 8, segments: 20 },
+  ), false);
+  assert.equal(prefersTagClaimCoverage(
+    { claimed: 8, rawMatches: 8, segments: 40 },
+    { claimed: 8, rawMatches: 8, segments: 20 },
+  ), true);
+});
+
+test("typicalCountMultiplier reads only an adjacent aligned TYP count", () => {
+  const spans = [
+    { str: "TYP 8", x0: 100, y0: 130, x1: 144, y1: 149 },
+    { str: "TYP 50", x0: 700, y0: 130, x1: 760, y1: 149 },
+  ];
+  assert.equal(typicalCountMultiplier(spans, [100, 100, 133, 119]), 8);
+  assert.equal(typicalCountMultiplier(spans, [400, 100, 433, 119]), 1);
+  assert.equal(typicalCountMultiplier([{ str: "TYP NOTE", x0: 100, y0: 130, x1: 160, y1: 149 }], [100, 100, 133, 119]), 1);
+});
+
+test("splitHyphenTagOcc recovers an exact adjacent two-run tag without fuzzy joining", () => {
+  const spans = [
+    { str: "SCHWP", x0: 100, y0: 200, x1: 160, y1: 220 },
+    { str: "M1", x0: 176, y0: 200, x1: 196, y1: 220 },
+    { str: "M2", x0: 400, y0: 200, x1: 420, y1: 220 },
+  ];
+  assert.equal(splitHyphenTagOcc(spans, "SCHWP-M1").length, 1);
+  assert.equal(splitHyphenTagOcc(spans, "SCHWP-M2").length, 0);
+  assert.equal(splitHyphenTagOcc(spans, "SCHWP-M1-X").length, 0);
+  assert.equal(splitHyphenTagOcc([
+    { str: "TP", x0: 100, y0: 200, x1: 120, y1: 220 },
+    { str: "2", x0: 125, y0: 200, x1: 135, y1: 220 },
+  ], "TP-2").length, 0, "short plumbing tags stay on the existing conservative fragment path");
+  assert.equal(splitHyphenTagOcc([
+    { str: "M2", x0: 100, y0: 160, x1: 120, y1: 180 },
+    { str: "SHHWP", x0: 80, y0: 190, x1: 140, y1: 210 },
+  ], "SHHWP-M2").length, 1, "a rotated pump tag may extract its suffix immediately above the family stem");
+});
+
+test("individually marked equipment schedules exclude repeatable type-symbol schedules", () => {
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("FAN COIL UNIT SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("AIRHANDLINGUNITSCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("DEDICATED OUTDOOR AIR UNIT SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("SECONDARY CHILLED WATER PUMP SCHEDULE"), true);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("GRILLE, REGISTER, AND DIFFUSER SCHEDULE"), false);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("PLUMBING FIXTURE SCHEDULE"), false);
+  assert.equal(isIndividuallyMarkedEquipmentSchedule("LUMINAIRE SCHEDULE"), false);
 });

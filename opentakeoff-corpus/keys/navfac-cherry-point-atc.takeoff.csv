@@ -127,7 +127,7 @@
 # CV-HHW-BP-A, etc) — a third real prefix mismatch, same family as
 # FINDING #2's Pump-prefix mismatch.
 # ══════════════════════════════════════════════════════════════════════════
-tag,equipment_type,expected_quantity,sheets,notes
+tag,equipment_type,expected_quantity,sheets,notes,expected_status
 AHU-A1,Air handling unit (AHU),1,navfac-cherry-point-atc-mechanical.pdf#26;navfac-cherry-point-atc-mechanical.pdf#29,"AIR HANDLING UNIT SCHEDULE (sheet #42/M-601), MECH ROOM 152. plan-confirmed: real labeled rectangle in MECHANICAL ROOM 152 ENLARGED DUCT PLAN and SECTION 1 (M-401/#29, M-301/#26). Real narrative (M-002/#2) corroborates: '24/7 areas on the first floor', no redundant backup."
 AHU-A2,Air handling unit (AHU),1,navfac-cherry-point-atc-mechanical.pdf#26;navfac-cherry-point-atc-mechanical.pdf#29,"Same AHU SCHEDULE, MECH ROOM 151. plan-confirmed: real labeled rectangle in MECHANICAL ROOM 151 ENLARGED DUCT PLAN and SECTION (M-401/#29, M-301/#26)."
 AHU-M1,Air handling unit (AHU),1,navfac-cherry-point-atc-mechanical.pdf#30,"AIR HANDLING UNIT SCHEDULE (sheet #45/M-611), MITRACON 171 MECH. plan-confirmed: real labeled rectangle, MITRACON MECHANICAL ENLARGED PLANS (M-411/#30), both duct and pipe views."
@@ -151,7 +151,7 @@ SHHWP-A1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same PUMP SCHEDULE, S
 SHHWP-A2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same PUMP SCHEDULE — second real secondary HHW pump. plan-confirmed M-401/#29."
 HHWP-DOAH-A1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#26,"Same PUMP SCHEDULE, DOAH CIRCULATOR for DOAH-A1. plan-confirmed: real labeled circulator, MECHANICAL ROOM 152 SECTION 1 (M-301/#26) and M-401/#29."
 HHWP-DOAH-A2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same PUMP SCHEDULE, DOAH CIRCULATOR for DOAH-A2. plan-confirmed M-401/#29 (room 151 pipe plan)."
-PCHWP-MT1,Pump,1,,"PUMP SCHEDULE (sheet #45/M-611). schedule-only this session (not individually re-confirmed on M-411's own crop, though the same sheet was rendered for other MITRACON pumps)."
+PCHWP-MT1,Pump,1,,"PUMP SCHEDULE (sheet #45/M-611). Schedule-only: no exact plan tag or installation note exists in the vector text. Production must return the schedule row and refuse an installed quantity rather than invent one.",refused
 SCHWP-M1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE, SECONDARY CHILLED WATER PUMP. plan-confirmed: real labeled pump, MITRACON MECHANICAL ENLARGED PIPE PLAN (M-411/#30)."
 SCHWP-M2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE — second real unit. plan-confirmed M-411/#30."
 PHHWP-M1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE, HEATING HOT WATER PRIMARY. plan-confirmed M-411/#30."
@@ -159,7 +159,7 @@ PHHWP-M2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE �
 SHHWP-M1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE, HEATING HOT WATER SECONDARY. plan-confirmed M-411/#30."
 SHHWP-M2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE — second real unit. plan-confirmed M-411/#30."
 HHWP-DOAH-M1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE, DOAH CIRCULATOR. plan-confirmed M-411/#30."
-HRHWP-MT1,Pump,1,,"PUMP SCHEDULE (sheet #45/M-611), PRIMARY HEAT RECOVERY HEATING HOT WATER PUMP, CHILLER MOUNTED END SUCTION. schedule-only this session."
+HRHWP-MT1,Pump,1,,"PUMP SCHEDULE (sheet #45/M-611), PRIMARY HEAT RECOVERY HEATING HOT WATER PUMP, CHILLER MOUNTED END SUCTION. Schedule-only: no exact plan tag or installation note exists in the vector text; installed quantity must be refused.",refused
 PHHWP-T1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#31,"PUMP SCHEDULE (sheet #48/M-621), PRIMARY HEATING HOT WATER. plan-confirmed: real labeled pump, ATCT MECHANICAL ENLARGED PIPE PLAN (M-421/#31)."
 PHHWP-T2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#31,"Same PUMP SCHEDULE — second real unit. plan-confirmed M-421/#31."
 SCHWP-T1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#31,"Same PUMP SCHEDULE, SECONDARY CHILLED WATER. plan-confirmed M-421/#31."
@@ -436,6 +436,8 @@ RG-12,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy
 RG-13,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#8,"Same GRD SCHEDULE, FILTERED LOUVERED RETURN GRILLE, SURFACE. plan-confirmed: real tagged callout (70 CFM), MH103/#8, LOCKER/TOILET-SHOWER area. buildPlanSetTakeoff's own sweep matched this exactly (found=1)."
 TG-4,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy vocab),3,navfac-cherry-point-atc-mechanical.pdf#6;navfac-cherry-point-atc-mechanical.pdf#8,"Same GRD SCHEDULE, LOUVERED TRANSFER GRILLE, DUCT/SURFACE. plan-confirmed: 3 real distinct tagged callouts, MH101/#6 (1, TOILET/SHOWER 130) and MH103/#8 (2, CORRIDOR). FINDING #7: buildPlanSetTakeoff's own sweep found only 1 of these 3 real placements."
 TG-5,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy vocab),7,navfac-cherry-point-atc-mechanical.pdf#6;navfac-cherry-point-atc-mechanical.pdf#8,"Same GRD SCHEDULE, EGGCRATE TRANSFER GRILLE, SURFACE. plan-confirmed: 7 real distinct tagged leader placements — MH101/#6 (1, near BUNK ROOM/TOILET-SHOWER) and MH103/#8 (6: BREAK/MEN boundary, TOILET/SHOWER, a real '(2) TG-5' gang callout near MEN, and WOMEN — 8 real modular units total once the gang note is summed). FINDING #7: buildPlanSetTakeoff's own sweep found only 1 of these 7 real placements — the largest single undercount found this session."
+DS-AHU-T1-RA,Duct silencer,1,navfac-cherry-point-atc-mechanical.pdf#16,"DUCT SILENCER SCHEDULE (#49) return-air row plus one exact plan-tagged placement at [1716.2,1989.7] on #16."
+DS-AHU-T1-SA,Duct silencer,1,navfac-cherry-point-atc-mechanical.pdf#16,"DUCT SILENCER SCHEDULE (#49) supply-air row plus one exact plan-tagged placement at [1401.1,2191.8] on #16."
 RG-9,(unclassified — GRD prefixes EG-/LD-/RG-/TG- not in current hvacTaxonomy vocab),4,navfac-cherry-point-atc-mechanical.pdf#12,"GRILLE, REGISTER, AND DIFFUSER SCHEDULE (sheet #47/M-613), RETURN GRILLE, ACT, 12x12 neck. plan-confirmed: 4 real distinct tagged callouts (680/525/375/600 CFM, four different rooms), MTRACON MECHANICAL DUCTWORK PLAN (MH111/#12). buildPlanSetTakeoff's own sweep matched this exactly (found=4)."
 ET-CHW-A1,(unclassified — expansion tank / ET- not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#26;navfac-cherry-point-atc-mechanical.pdf#29,"EXPANSION TANK SCHEDULE (sheet #44/M-603), CHILLED WATER, 11.0 GAL. plan-confirmed: real labeled tank symbol, MECHANICAL ROOM 152 SECTION 1 (M-301/#26) and ENLARGED PIPE PLAN (M-401/#29) — same physical tank, two views (the AHU-A1 precedent above)."
 ET-HHW-A1,(unclassified — expansion tank / ET- not in current hvacTaxonomy vocab),1,navfac-cherry-point-atc-mechanical.pdf#29,"Same EXPANSION TANK SCHEDULE, HEATING HOT WATER, 8.0 GAL. plan-confirmed: real labeled tank symbol, MECHANICAL ROOM 152 ENLARGED PIPE PLAN (M-401/#29), near CSF-HHW-A1/SHHWP-A1/A2."

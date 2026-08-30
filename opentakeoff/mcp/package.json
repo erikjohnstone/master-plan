@@ -18,7 +18,10 @@
     "typecheck": "tsc --noEmit",
     "check:tool-count": "node scripts/check-tool-count.mjs",
     "eval:corpus": "node --import tsx scripts/corpus-eval.mjs",
-    "test": "node --import tsx --test test/conformance.test.ts test/context.test.ts test/dxf.test.ts test/e2e.test.ts test/labels.test.ts test/overlap.test.ts test/parity.test.ts test/raster.test.ts test/referenceEval.test.ts test/resources.test.ts test/safewrite.test.ts test/scalewarn.test.ts test/session.test.ts test/staging.test.ts test/takeoff.test.ts test/takeoffEval.test.ts test/tools.test.ts test/transitions.test.ts test/twins.test.ts test/view.test.ts"
+    "test": "node --import tsx --test test/conformance.test.ts test/context.test.ts test/demoRun.test.mjs test/demoVerify.test.mjs test/dxf.test.ts test/e2e.test.ts test/evalCache.test.mjs test/labels.test.ts test/overlap.test.ts test/parity.test.ts test/raster.test.ts test/referenceEval.test.ts test/resources.test.ts test/safewrite.test.ts test/scalewarn.test.ts test/session.test.ts test/staging.test.ts test/takeoff.test.ts test/takeoffEval.test.ts test/tools.test.ts test/transitions.test.ts test/twins.test.ts test/view.test.ts",
+    "run:demo": "node --import tsx scripts/run-demo.mjs",
+    "show:demo": "node scripts/show-demo-run.mjs",
+    "verify:demo": "node --import tsx scripts/verify-demo.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
@@ -28,6 +31,7 @@
     "@turf/difference": "^7.4.0",
     "@turf/helpers": "^7.4.0",
     "cacache": "^20.0.4",
+    "jsts": "^2.12.1",
     "p-limit": "^7.3.1",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^4.10.38",
@@ -39,7 +43,9 @@
   "devDependencies": {
     "@types/cacache": "^20.0.1",
     "@types/node": "^22.19.21",
+    "dotenv": "^17.4.2",
     "esbuild": "^0.25.0",
+    "tesseract.js": "^7.0.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   },

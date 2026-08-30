@@ -10,10 +10,47 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, roomTags, detailCallouts, revisionOf, type GraphSpan, type SheetSpans, type SheetGraph } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, promoteLeadingEngineeringUnits, preferLastOverprintedText, type GraphSpan, type SheetSpans, type SheetGraph, type TableRow } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
+
+test("preferLastOverprintedText keeps the later visible CAD value", () => {
+  const spans: GraphSpan[] = [
+    { str: "57.1", x: 10, y: 10, w: 20, h: 10 },
+    { str: "324.0", x: 9, y: 10, w: 25, h: 10 },
+  ];
+  assert.equal(preferLastOverprintedText("324.057.1", [0, 0, 40, 30], spans), "324.0");
+});
+
+test("preferLastOverprintedText preserves ordinary adjacent cell text", () => {
+  const spans: GraphSpan[] = [
+    { str: "FIELD", x: 0, y: 10, w: 25, h: 10 },
+    { str: "ADJUSTABLE", x: 30, y: 10, w: 50, h: 10 },
+  ];
+  assert.equal(preferLastOverprintedText("FIELD ADJUSTABLE", [0, 0, 90, 30], spans), "FIELD ADJUSTABLE");
+});
+
+test("promoteLeadingEngineeringUnits moves a stranded pressure unit into its header", () => {
+  const rows: TableRow[] = [
+    { key: "A-1", sheet: "S", cells: { "WATER MAX PD": { text: "FT. H2O 16.60", bbox: [0, 0, 1, 1] as [number, number, number, number] } } },
+    { key: "A-2", sheet: "S", cells: { "WATER MAX PD": { text: "10.00", bbox: [0, 1, 1, 2] as [number, number, number, number] } } },
+  ];
+  const headers = promoteLeadingEngineeringUnits(["TAG", "WATER MAX PD"], rows);
+  assert.deepEqual(headers, ["TAG", "WATER MAX PD FT. H2O"]);
+  assert.equal(rows[0].cells["WATER MAX PD FT. H2O"].text, "16.60");
+  assert.equal(rows[1].cells["WATER MAX PD FT. H2O"].text, "10.00");
+  assert.equal(rows[0].cells["WATER MAX PD"], undefined);
+});
+
+test("promoteLeadingEngineeringUnits leaves per-row units and prose untouched", () => {
+  const rows: TableRow[] = [
+    { key: "A-1", sheet: "S", cells: { PRESSURE: { text: "FT. H2O 16.60", bbox: [0, 0, 1, 1] as [number, number, number, number] } } },
+    { key: "A-2", sheet: "S", cells: { PRESSURE: { text: "FT. H2O 10.00", bbox: [0, 1, 1, 2] as [number, number, number, number] } } },
+  ];
+  assert.deepEqual(promoteLeadingEngineeringUnits(["PRESSURE"], rows), ["PRESSURE"]);
+  assert.equal(rows[0].cells.PRESSURE.text, "FT. H2O 16.60");
+});
 
 // ── the synthetic set: a plan sheet + a schedule sheet ──────────────────────
 const planSheet: SheetSpans = {
@@ -460,6 +497,30 @@ test("rotated headers: a quarter-turn header band still anchors the table", () =
   if (res.status === "resolved") {
     assert.equal(res.finishes.find((f) => f.surface === "FLOOR")!.definition?.cells.MANUFACTURER, "EXAMPLECO");
   }
+});
+
+test("an entire quarter-turned equipment schedule is normalized and mapped back", () => {
+  const vertical = (str: string, rowX: number, columnY: number): GraphSpan =>
+    ({ str, x: rowX, y: columnY, w: 8, h: Math.max(12, str.length * 5), rot: 90 });
+  const sheet: SheetSpans = {
+    key: "quarter-turned.pdf#1",
+    spans: [
+      vertical("AIR TERMINAL BOX SCHEDULE", 340, 20),
+      vertical("TAG", 300, 20), vertical("MODEL", 300, 160),
+      vertical("VOLTAGE", 300, 260), vertical("GPM", 300, 340),
+      vertical("VAV-1", 280, 20), vertical("VCEF", 280, 160),
+      vertical("120", 280, 260), vertical("10", 280, 340),
+      vertical("VAV-2", 260, 20), vertical("VCEF", 260, 160),
+      vertical("120", 260, 260), vertical("20", 260, 340),
+    ],
+  };
+  const table = extractAllQuarterTurnedTables(sheet)[0];
+  assert.ok(table);
+  assert.equal(table.title?.text, "AIR TERMINAL BOX SCHEDULE");
+  assert.deepEqual(table.rows.map((row) => row.key), ["VAV-1", "VAV-2"]);
+  assert.equal(table.rows[1].cells.GPM.text, "20");
+  assert.ok(table.rows[0].cells.MODEL.bbox[0] < table.rows[0].cells.MODEL.bbox[2],
+    "restored evidence is a valid source-space box");
 });
 
 // ── multi-building keys: room 134 in Building A ≠ 134 in Building B ─────────
@@ -1707,6 +1768,25 @@ test("equipment extraction: a bare vocabulary hit on the very next row reads as 
   assert.ok(!tables.some((t) => t.title?.text === "FAN SCHEDULE"), "Fan Schedule not pulled into equipment kind by a neighboring table's own bare required word");
 });
 
+test("equipment extraction: data starts after every consumed deep header tier", () => {
+  const sched: SheetSpans = {
+    key: "deep-chiller.pdf#1", sheet_number: "M7.1",
+    spans: [
+      sp("CHILLER SCHEDULE (ELECTRIC AIR-COOLED)", 100, 10),
+      sp("TAG", 0, 40), sp("TYPE", 180, 40), sp("GPM", 260, 40), sp("MANUFACTURER", 360, 40), sp("REMARKS", 760, 40),
+      sp("MINIMUM", 100, 50), sp("DESIGN", 260, 50), sp("STARTER", 500, 50), sp("MAXIMUM", 640, 50),
+      sp("NET", 100, 60), sp("WATER", 260, 60), sp("TYPE", 500, 60), sp("KW", 640, 60),
+      sp("COOLING", 100, 70), sp("FLOW", 260, 70), sp("VOLTAGE", 500, 70), sp("PHASE", 640, 70),
+      sp("TONS", 100, 80), sp("GPM", 260, 80),
+      sp("CH-1", 0, 110), sp("AIR COOLED", 180, 110), sp("128.5", 260, 110), sp("ACME", 360, 110), sp("460", 500, 110), sp("3", 640, 110), sp("1", 760, 110),
+    ],
+  };
+  const table = extractAllTables(sched, "equipment").find((candidate) => candidate.rows.some((row) => row.key === "CH-1"));
+  assert.ok(table, "the real keyed row is reached after five deep sub-header lines");
+  assert.equal(table!.title?.text, "CHILLER SCHEDULE (ELECTRIC AIR-COOLED)");
+  assert.deepEqual(table!.rows.map((row) => row.key), ["CH-1"]);
+});
+
 // ── accuracy-hardening plan Phase 3 (ledger items 6/7) ──────────────────────
 test("headerLabels: a real dotted abbreviation (\"E.S.P\") resolves to its vocabulary word, not three lone letters", () => {
   // Found live on the real federal-mech AHU Unit Schedule's own header —
@@ -2531,6 +2611,33 @@ test("reference kind: a real, vocabulary-free schedule table extracts correctly 
   assert.equal(r2.cells["SYSTEM TYPE"]?.text, "EXHAUST DUCTS WITHIN 10 FEET OF EXTERIOR OPENINGS");
   assert.equal(r2.cells["INSULATION TYPE"]?.text, "D-1, D-2");
   assert.equal(r2.cells["INSULATION OR LINER THICKNESS"]?.text, "1\"");
+});
+
+test("reference kind: button subrows do not corrupt their spanning control-station row", () => {
+  const spans: GraphSpan[] = [
+    rh("ELECTRICAL SCHEDULES", 900, -60, 220),
+    rh("LIGHTING CONTROL STATIONS", 0, 0, 280),
+    rh("CONTROL STATION", 0, 35, 150), rh("ZONES", 250, 35, 60), rh("BUTTON", 480, 35, 70),
+    rh("DESIGNATION", 20, 55, 110), rh("CONTROLLED", 230, 55, 100), rh("NUMBER", 480, 55, 75),
+    rh("FUNCTION", 710, 55, 100), rh("LABEL", 950, 55, 60), rh("NOTES", 1080, 55, 60),
+    rh("$OS", 0, 90, 35), rh("ALL", 250, 90, 35), rh("1", 500, 90, 10),
+    // Deliberately starts well left of the centered FUNCTION header, exactly
+    // like the real wide, left-aligned column.
+    rh("ALL ON", 555, 90, 90), rh("ON", 950, 90, 30),
+    // The merged designation cell spans this second physical button row.
+    rh("2", 500, 115, 10), rh("ALL OFF", 555, 115, 100), rh("OFF", 950, 115, 35),
+    rh("$OSD", 0, 145, 45), rh("ALL", 250, 145, 35), rh("1", 500, 145, 10),
+    rh("ALL ON/HOLD DIM UP", 555, 145, 220), rh("UP", 950, 145, 30),
+  ];
+  const sheet: SheetSpans = {
+    key: "controls.pdf#1", sheet_number: "E601", spans,
+    segs: [0, 75, 1140, 75],
+  };
+  const tab = buildSheetGraph([sheet]).tables.find((t) => t.title?.text === "LIGHTING CONTROL STATIONS");
+  assert.ok(tab);
+  const os = tab!.rows.find((row) => row.key === "$OS");
+  assert.equal(os?.cells["BUTTON NUMBER"]?.text, "1");
+  assert.equal(os?.cells.FUNCTION?.text, "ALL ON");
 });
 
 test("reference kind: scoped to schedule-role sheets — the identical real table on a PLAN sheet is not extracted", () => {

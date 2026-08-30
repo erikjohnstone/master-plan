@@ -17,12 +17,17 @@ import {
   exportMarkedPdfOutput, listShapesOutput, deriveBaseOutput, deriveTransitionsOutput, importTakeoffOutput, applyRulesOutput, cutOutOutput,
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
   markVerdictOutput, deleteVerdictOutput,
-  sheetGraphOutput, resolveTagOutput, findScheduleOutput, sweepScheduleRowOutput, countMarksOutput,
+  sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
 import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
 import { importTakeoff } from "./importing.ts";
+import { buildPlanSetTakeoff } from "./takeoff.ts";
+import {
+  VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
+} from "../../web/src/lib/hvacTaxonomy.ts";
+import { rowKeyAnswersFor } from "../../web/src/lib/sheetgraph.ts";
 
 // The coordinate contract, stated on every tool so any agent reading any one
 // description knows the space it is working in.
@@ -257,6 +262,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       rotations: z.boolean().default(true).describe("Also match 90/180/270-rotated markers"),
       mirror: z.boolean().default(true).describe("Also match mirrored markers"),
       tolerance_px: z.number().positive().max(20).default(2).describe("Endpoint match tolerance in image px (default 2 — CAD jitter, not drift)"),
+      tagged_only: z.boolean().default(false).describe("Search every sheet carrying the exact tag and skip sheets that cannot contribute a tagged count; faster, but unlabeled near-match auditing is explicitly incomplete"),
     },
     outputSchema: sweepScheduleRowOutput,
   }, run("sweep_schedule_row", (a) => session.sweepScheduleRow(a.tag, {
@@ -264,6 +270,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     rotations: a.rotations,
     mirror: a.mirror,
     tolerancePx: a.tolerance_px,
+    evaluationFast: a.tagged_only,
   })));
 
   server.registerTool("trace_connectivity", {
@@ -563,6 +570,150 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     inputSchema: { kind: z.string().describe('"room finish" (rooms → surface finishes), "finish"/"material" (codes → products), or "equipment" (MEP equipment schedules)') },
     outputSchema: findScheduleOutput,
   }, run("find_schedule", ({ kind }) => session.findSchedule(kind)));
+
+  server.registerTool("query_table", {
+    description: `Query actual extracted table cells across the loaded plan set, with source coordinates on every answer. Use title for a case-insensitive table-title substring, row_key for an exact schedule mark/key (compound rows such as R1/E1 answer for either mark), column for a case-insensitive header substring, cell_value for an exact cell value, and cell_contains when a relationship is encoded inside a compound value (for example, equipment CH-A1 inside valve mark CV-CH-A1). Combine filters to narrow the result. At least one filter is required. A column filter narrows cells, but row.all_cells still returns the complete matching row with exact bboxes so multi-field questions need one call. Every returned table region, title, and cell carries its source-sheet bbox so the answer can be audited with view_sheet. This reads all deterministic table kinds—not only reference tables and not only equipment schedules—and never invokes an LLM. ${COORDS}`,
+    inputSchema: {
+      title: z.string().min(1).optional().describe('Table-title substring, e.g. "CONTROL VALVE SCHEDULE"'),
+      row_key: z.string().min(1).optional().describe('Exact row key/mark, e.g. "CV-HHW-BP-M" or "RTU-01"'),
+      column: z.string().min(1).optional().describe('Header substring; only matching columns are returned, e.g. "MCA"'),
+      cell_value: z.string().min(1).optional().describe('Exact cell text anywhere in the row, case-insensitive; use this to join tables through non-key columns, e.g. UNIT MARK "CH-A1"'),
+      cell_contains: z.string().min(1).optional().describe('Case-insensitive text contained in any cell; use for explicit compound relationships such as "CH-A1" inside "CV-CH-A1"'),
+      limit: z.number().int().min(1).max(1000).default(100).describe("Maximum matching rows returned"),
+    },
+    outputSchema: queryTableOutput,
+  }, run("query_table", async ({ title, row_key, column, cell_value, cell_contains, limit }) => {
+    if (!title && !row_key && !column && !cell_value && !cell_contains) {
+      throw new UserError("Pass at least one of title, row_key, column, cell_value, or cell_contains.");
+    }
+    const graph = await session.graphForPipeline();
+    const titleNeedle = title?.trim().toUpperCase();
+    const rowNeedle = row_key?.trim().toUpperCase().replace(/\s+/g, "");
+    const columnNeedle = column?.trim().toUpperCase();
+    const valueNeedle = cell_value?.trim().toUpperCase().replace(/\s+/g, " ");
+    const containsNeedle = cell_contains?.trim().toUpperCase().replace(/\s+/g, " ");
+    const all = graph.tables.flatMap((table) => {
+      if (titleNeedle && !(table.title?.text || "").toUpperCase().includes(titleNeedle)) return [];
+      const selectedHeaders = columnNeedle
+        ? table.headers.filter((header) => header.toUpperCase().includes(columnNeedle))
+        : table.headers;
+      if (columnNeedle && !selectedHeaders.length) return [];
+      return table.rows.flatMap((row) => {
+        if (rowNeedle && !rowKeyAnswersFor(row.key, rowNeedle)) return [];
+        if (valueNeedle && !Object.values(row.cells).some((cell) =>
+          cell?.text.trim().toUpperCase().replace(/\s+/g, " ") === valueNeedle)) return [];
+        if (containsNeedle && !Object.values(row.cells).some((cell) =>
+          cell?.text.trim().toUpperCase().replace(/\s+/g, " ").includes(containsNeedle))) return [];
+        const allCells = Object.fromEntries(table.headers.flatMap((header) => {
+          const cell = row.cells[header];
+          return cell?.text ? [[header, { text: cell.text, bbox: cell.bbox }]] : [];
+        }));
+        const rowKey = row.key.trim().toUpperCase().replace(/\s+/g, "");
+        const identityHeaders = table.headers.filter((header) =>
+          allCells[header]?.text.trim().toUpperCase().replace(/\s+/g, "") === rowKey);
+        const titleText = (table.title?.text || "").toUpperCase();
+        const identityHeader = identityHeaders.find((header) =>
+          header.toUpperCase().split(/\s+/).some((word) =>
+            !["ID", "MARK", "CODE", "SYMBOL", "TAG", "NO", "NUMBER"].includes(word)
+            && titleText.includes(word))) ?? identityHeaders[0];
+        const identityCell = identityHeader ? allCells[identityHeader] : null;
+        const cells = Object.fromEntries(selectedHeaders.flatMap((header) => {
+          const cell = row.cells[header];
+          return cell?.text ? [[header, { text: cell.text, bbox: cell.bbox }]] : [];
+        }));
+        if (columnNeedle && !Object.keys(cells).length) return [];
+        return [{
+          sheet: table.sheet,
+          kind: table.kind,
+          title: table.title ? { text: table.title.text, bbox: table.title.bbox } : null,
+          region: table.region,
+          headers: selectedHeaders,
+          row: {
+            key: row.key,
+            identity: identityCell ? {
+              header: identityHeader,
+              text: identityCell.text,
+              bbox: identityCell.bbox,
+            } : null,
+            cells,
+            all_cells: allCells,
+          },
+        }];
+      });
+    });
+    const unique = [...new Map(all.map((match) => [
+      JSON.stringify([
+        match.sheet,
+        match.title,
+        match.region,
+        match.row.key,
+        match.row.cells,
+      ]),
+      match,
+    ])).values()];
+    return {
+      query: {
+        title: title ?? null,
+        row_key: row_key ?? null,
+        column: column ?? null,
+        cell_value: cell_value ?? null,
+        cell_contains: cell_contains ?? null,
+      },
+      count: unique.length,
+      truncated: unique.length > limit,
+      matches: unique.slice(0, limit),
+    };
+  }));
+
+  server.registerTool("project_takeoff", {
+    description: `Run the complete deterministic takeoff across every loaded plan and schedule in one call. This is the production answer to requests such as "do a butterfly valve takeoff": pass equipment_types:["Butterfly valve"] for an exact taxonomy subtype, categories:["valve"] for the entire trade family, or omit both for all recognized equipment. The reply includes every schedule row and extracted table cell, installed quantities, drawing coordinates, source schedule coordinates, explicit failures/refusals, and separate tagged-row versus untagged-legend results. It never estimates quantity from a schedule row: installed counts come only from corroborated plan labels/geometry, and structurally unavailable evidence returns a typed refusal. Load every file in the bid set first with load_plan + merge:true. This is read-only; it does not commit canvas shapes. ${COORDS}`,
+    inputSchema: {
+      categories: z.array(z.string()).optional().describe('Taxonomy families, e.g. ["valve","damper"]. Omit for every recognized family.'),
+      equipment_types: z.array(z.string()).optional().describe('Exact taxonomy component names, case-insensitive, e.g. ["Butterfly valve"]. Narrows both tagged schedule and untagged legend results.'),
+    },
+    outputSchema: projectTakeoffOutput,
+  }, run("project_takeoff", async ({ categories, equipment_types }) => {
+    const allComponents = [
+      ...VALVES, ...ACTUATORS, ...DAMPERS, ...AIR_TERMINALS, ...MAJOR_EQUIPMENT, ...SENSORS,
+    ];
+    const requested: HvacComponent[] | null = equipment_types ? equipment_types.map((name: string): HvacComponent => {
+      const found = allComponents.find((component) => component.name.toLowerCase() === name.trim().toLowerCase());
+      if (!found) throw new UserError(`Unknown equipment type "${name}". Use an exact taxonomy name.`);
+      return found;
+    }) : null;
+    const effectiveCategories = categories ?? (requested ? [...new Set(requested.map((component) => component.category))] : null);
+    const result = await buildPlanSetTakeoff(session, { categories: effectiveCategories });
+    const names = requested ? new Set(requested.map((component) => component.name)) : null;
+    const items = names ? result.items.filter((item) => item.equipment_type && names.has(item.equipment_type)) : result.items;
+    const legendItems = names ? result.legend_items.filter((item) => item.equipment_type && names.has(item.equipment_type)) : result.legend_items;
+    const retainedTags = new Set([...items, ...legendItems].map((item) => item.tag));
+    const statsFor = (rows: typeof items) => ({
+      schedule_rows_total: rows.length,
+      resolved: rows.filter((item) => item.status === "resolved").length,
+      refused: rows.filter((item) => item.status === "refused").length,
+      errored: rows.filter((item) => item.status === "error").length,
+      total_drawn_instances: rows.reduce((sum, item) => sum + item.quantity, 0),
+    });
+    const stats = statsFor(items);
+    const legendStats = statsFor(legendItems);
+    return {
+      ...result,
+      family_filter: effectiveCategories,
+      equipment_type_filter: requested?.map((component) => component.name) ?? null,
+      items,
+      legend_items: legendItems,
+      failures: names ? result.failures.filter((failure) => retainedTags.has(failure.tag)) : result.failures,
+      stats,
+      legend_stats: {
+        glyphs_seen: names ? legendItems.length : result.legend_stats.glyphs_seen,
+        glyphs_matched: names ? legendItems.length : result.legend_stats.glyphs_matched,
+        resolved: legendStats.resolved,
+        refused: legendStats.refused,
+        errored: legendStats.errored,
+        total_drawn_instances: legendStats.total_drawn_instances,
+      },
+    };
+  }));
 
   server.registerTool("read_sheet_text", {
     description: `The sheet's text with positions — items [{str, x, y}] in image px plus the joined text. Optionally restrict to a region {x0, y0, x1, y1}. Use it to read title blocks, room labels, finish schedules, and scale notes. ${COORDS}`,

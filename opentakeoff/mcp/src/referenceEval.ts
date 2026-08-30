@@ -36,7 +36,16 @@ function splitCsv(line: string): string[] {
         i++;
         continue;
       }
-      quoted = !quoted;
+      if (quoted) {
+        quoted = false;
+      } else if (current.length === 0) {
+        quoted = true;
+      } else {
+        // RFC-style quoting only starts at the beginning of a field. A quote
+        // inside an unquoted value is literal engineering notation (107",
+        // 33"), not a delimiter to silently discard.
+        current += ch;
+      }
       continue;
     }
     if (ch === "," && !quoted) {

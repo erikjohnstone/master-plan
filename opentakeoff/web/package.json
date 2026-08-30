@@ -14,6 +14,7 @@
     "bench": "node --import tsx bench/run.mts",
     "bench:callouts": "node --import tsx bench/callouts.mts",
     "bench:batch": "node --import tsx bench/batch.mts",
+    "demo:ui": "node --import tsx scripts/demo-ui-proof.mjs",
     "check": "npm run typecheck && npm run lint && npm test && npm run bench && npm run build",
     "styles:sync": "diff src/styles/tokens.css ${SPLINE_DIR:-../../spline-app/frontend}/src/styles/tokens.css && diff src/styles/app.css ${SPLINE_DIR:-../../spline-app/frontend}/src/styles/app.css && echo styles-in-sync || echo \"sibling missing or drifted (non-fatal)\"",
     "lint": "eslint src netlify/functions"
@@ -45,6 +46,7 @@
     "eslint-plugin-react-hooks": "7.1.1",
     "fake-indexeddb": "6.2.5",
     "globals": "17.7.0",
+    "playwright": "^1.62.1",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vite": "^6.0.7"

@@ -34,6 +34,7 @@
 import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { resolveSetFiles } from "./corpusFiles.mjs";
+import { cachedEvalResult } from "./evalCache.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import pLimit from "p-limit";
@@ -41,6 +42,7 @@ import { Session } from "../src/session.ts";
 
 const [corpusDir, ...only] = process.argv.slice(2).filter((a) => !a.startsWith("--") && a !== "--single-json");
 const writeReport = process.argv.includes("--report");
+const evaluationFast = process.env.OPENTAKEOFF_EVAL_FULL_SWEEP !== "1";
 // --single-json <setId>: internal mode, see takeoff-eval.mjs's own identical
 // mechanism for the full rationale (real per-set CPU-bound work needs real
 // OS-level parallelism — a child process per set — not just promise
@@ -110,7 +112,7 @@ const pct = (n) => (n * 100).toFixed(1).padStart(5) + "%";
 const f1 = (p, r) => (p + r ? (2 * p * r) / (p + r) : 0);
 
 // ── run one set ─────────────────────────────────────────────────────────────
-async function evalSet(set) {
+async function evalSetUncached(set) {
   const s = new Session();
   const files = resolveSetFiles(corpus, spec, set);
   for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
@@ -199,7 +201,7 @@ async function evalSet(set) {
       const expect = (row.expect_status || "").trim();
       let status;
       try {
-        const r = await s.sweepScheduleRow(tag, {});
+        const r = await s.sweepScheduleRow(tag, { evaluationFast });
         status = (r.found ?? 0) > 0 ? "resolved" : "refused";
       } catch {
         status = "refused";   // sweepScheduleRow throws UserError on any refusal path
@@ -219,6 +221,21 @@ async function evalSet(set) {
 
   if (!cellKey && !tagKey && !rowSymKey) out.unlabelled = true;
   return out;
+}
+
+async function evalSet(set) {
+  const files = resolveSetFiles(corpus, spec, set);
+  return cachedEvalResult(
+    `graph:${evaluationFast ? "focused" : "full"}`,
+    [
+      ...files,
+      join(corpus, "keys", `${set.id}.csv`),
+      join(corpus, "keys", `${set.id}.tags.csv`),
+      join(corpus, "keys", `${set.id}.rowsym.csv`),
+    ],
+    [JSON.stringify(set)],
+    () => evalSetUncached(set),
+  );
 }
 
 if (singleJsonSetId) {

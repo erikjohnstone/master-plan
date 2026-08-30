@@ -45,6 +45,118 @@ export const loadPlanOutput = {
   note: z.string(),
 };
 
+const projectTakeoffItem = z.object({
+  tag: z.string(),
+  equipment_type: z.string().nullable(),
+  category: z.string().nullable(),
+  schedule: z.object({
+    sheet: z.string(),
+    kind: z.string(),
+    title: z.string().nullable(),
+  }).nullable(),
+  schedule_row: z.record(z.string(), z.string()).nullable(),
+  quantity: z.number(),
+  drawing_locations: z.array(z.object({ sheet: z.string(), at: point })),
+  siblings_excluded: z.array(z.string()),
+  corroborated: z.boolean(),
+  status: z.enum(["resolved", "refused", "error"]),
+  reason: z.string().optional(),
+  source: z.enum(["schedule_row", "legend_symbol"]),
+  legend: z.object({ sheet: z.string(), caption: z.string(), at: point }).optional(),
+});
+
+const projectTakeoffStats = {
+  schedule_rows_total: z.number().int(),
+  resolved: z.number().int(),
+  refused: z.number().int(),
+  errored: z.number().int(),
+  total_drawn_instances: z.number(),
+};
+
+const extractedTable = z.object({
+  sheet: z.string(),
+  kind: z.string().optional(),
+  title: z.string().nullable(),
+  headers: z.array(z.string()),
+  rows: z.array(z.object({
+    key: z.string(),
+    cells: z.record(z.string(), z.string()),
+  })),
+}).passthrough();
+
+/** Complete production query surface for an unattended plan-set takeoff. */
+export const projectTakeoffOutput = {
+  set_files: z.array(z.string()),
+  family_filter: z.array(z.string()).nullable(),
+  equipment_type_filter: z.array(z.string()).nullable(),
+  items: z.array(projectTakeoffItem),
+  legend_items: z.array(projectTakeoffItem),
+  reference_tables: z.array(extractedTable),
+  extracted_tables: z.array(extractedTable),
+  failures: z.array(z.object({
+    type: z.string(),
+    tag: z.string(),
+    sheet: z.string().optional(),
+    detail: z.string(),
+  })),
+  tables_seen: z.array(z.object({
+    sheet: z.string(),
+    kind: z.string(),
+    title: z.string().nullable(),
+    rows: z.number().int(),
+  })),
+  legend_sheets_seen: z.array(z.object({
+    sheet: z.string(),
+    glyphs_detected: z.number().int(),
+  })),
+  stats: z.object(projectTakeoffStats),
+  legend_stats: z.object({
+    glyphs_seen: z.number().int(),
+    glyphs_matched: z.number().int(),
+    resolved: z.number().int(),
+    refused: z.number().int(),
+    errored: z.number().int(),
+    total_drawn_instances: z.number(),
+  }),
+};
+
+const sourceBox = z.tuple([z.number(), z.number(), z.number(), z.number()]);
+
+export const queryTableOutput = {
+  query: z.object({
+    title: z.string().nullable(),
+    row_key: z.string().nullable(),
+    column: z.string().nullable(),
+    cell_value: z.string().nullable(),
+    cell_contains: z.string().nullable(),
+  }),
+  count: z.number().int(),
+  truncated: z.boolean(),
+  matches: z.array(z.object({
+    sheet: z.string(),
+    kind: z.string(),
+    title: z.object({ text: z.string(), bbox: sourceBox }).nullable(),
+    region: sourceBox,
+    headers: z.array(z.string()),
+    row: z.object({
+      key: z.string(),
+      identity: z.object({
+        header: z.string(),
+        text: z.string(),
+        bbox: sourceBox,
+      }).nullable(),
+      cells: z.record(z.string(), z.object({
+        text: z.string(),
+        bbox: sourceBox,
+      })),
+      all_cells: z.record(z.string(), z.object({
+        text: z.string(),
+        bbox: sourceBox,
+      })),
+    }),
+  })),
+};
+
 export const sheetInfoOutput = {
   ...sheetSummary,
   seg_count: z.number().int().describe("Vector segment count"),
@@ -821,13 +933,23 @@ const rowSweepPlacement = {
 
 export const sweepScheduleRowOutput = {
   tag: z.string().describe("The row key as normalized (the tag as drawn)"),
+  search_scope: z.enum(["exhaustive", "tagged_only"]).describe("exhaustive audits every plan sheet for unlabeled near-matches; tagged_only searches every exact tag occurrence but skips sheets that cannot contribute a tagged count"),
+  unlabeled_audit_complete: z.boolean().describe("false only in tagged_only mode, where the installed tagged count is complete but unlabeled/sibling geometry was not exhaustively audited"),
   row: z.object({
     sheet: z.string(),
     table: z.string().describe("The table's title (or kind, when untitled)"),
     key: z.string(),
     cells: z.record(z.string()).describe("The row's cells, header → text — what the schedule SAYS this mark is"),
+    cell_citations: z.record(z.string(), z.object({
+      text: z.string(),
+      bbox: wireBox,
+    })).describe("Every row cell with its exact source text and bbox; use this instead of the row-level citation for field answers"),
     citation: wireEvidence,
   }).describe("The schedule row the sweep was seeded from — the condition's source"),
+  tag_citations: z.array(z.object({
+    sheet: z.string(),
+    bbox: wireBox,
+  })).describe("One exact plan tag bbox per counted placement; use for the equipment tag and installed quantity"),
   anchor: z.object({
     sheet: z.string().describe("The plan sheet the fingerprint was anchored on"),
     at: z.tuple([z.number(), z.number()]).describe("The anchoring tag occurrence's center (image px)"),

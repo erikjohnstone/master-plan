@@ -7,7 +7,7 @@
 //   - malformed model output → {status:"error"} + an error event, never a throw.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { runAgentLoop, parseAssistantTurn, toProviderTools, agentSystemPrompt, MAX_AGENT_ITERATIONS } from "../src/lib/agentLoop.js";
+import { runAgentLoop, parseAssistantTurn, toProviderTools, agentSystemPrompt, MAX_AGENT_ITERATIONS, requiredEvidenceCorrection, toolsForGoal } from "../src/lib/agentLoop.js";
 
 const CFG_A = { endpoint: "http://localhost:9999", apiKey: "k", model: "mock", provider: "anthropic" };
 const CFG_O = { ...CFG_A, provider: "openai" };
@@ -16,6 +16,21 @@ const TOOLS = [
   { name: "probe", description: "probe something", input_schema: { type: "object", properties: { q: { type: "string" } }, required: ["q"] } },
   { name: "look", description: "look at something", input_schema: { type: "object", properties: {}, required: [] } },
 ];
+
+test("exact equipment-to-valve evidence goals expose only relevant deterministic tools", () => {
+  const tools: Array<{ name: string }> = [
+    "list_sheets", "sheet_graph", "query_table", "sweep_schedule_row",
+    "highlight_citation", "resolve_tag", "one_click", "find_text",
+  ].map((name) => ({ name }));
+  assert.deepEqual(
+    toolsForGoal(
+      "Give me installed quantity and the matching control valve; cite the exact schedule cells.",
+      tools,
+    ).map((tool: { name: string }) => tool.name),
+    ["list_sheets", "sheet_graph", "query_table", "sweep_schedule_row", "highlight_citation"],
+  );
+  assert.equal(toolsForGoal("Trace AHU-1 connectivity", tools), tools);
+});
 
 const resp = (json: unknown, status = 200) => ({ ok: status < 400, status, json: async () => json });
 
@@ -35,6 +50,192 @@ const anthropicTurn = (id: string, name: string, input: unknown, text = "") => (
   stop_reason: "tool_use",
 });
 const anthropicDone = (text: string) => ({ content: [{ type: "text", text }], stop_reason: "end_turn" });
+
+test("installed quantity cannot finish without deterministic count evidence", () => {
+  assert.match(requiredEvidenceCorrection([], "Give me the installed quantity for CH-A1")!, /no successful sweep_schedule_row/);
+  assert.equal(requiredEvidenceCorrection([{
+    name: "sweep_schedule_row",
+    out: { found: 1 },
+  }], "Give me the installed quantity for CH-A1"), null);
+  assert.equal(requiredEvidenceCorrection([], "Give me CH-A1 capacity"), null);
+  assert.match(requiredEvidenceCorrection([{
+    name: "sweep_schedule_row",
+    out: { found: 1 },
+  }], "Give me installed quantity", "Installed quantity: 1 (single schedule entry).")!, /reasoning is invalid/);
+  assert.match(requiredEvidenceCorrection([{
+    name: "sweep_schedule_row",
+    out: { found: 1 },
+  }], "Give me installed quantity", "Installed quantity: 1 (single row).")!, /reasoning is invalid/);
+  assert.match(requiredEvidenceCorrection([{
+    name: "sweep_schedule_row",
+    out: { found: 1 },
+  }], "Give me installed quantity", "Installed quantity: 1 (the row appears only once).")!, /reasoning is invalid/);
+  assert.match(requiredEvidenceCorrection([{
+    name: "sweep_schedule_row",
+    out: { found: 1 },
+  }], "Give me installed quantity", "Installed quantity: 1 (the schedule row for AHU-1 appears only once).")!, /reasoning is invalid/);
+  assert.match(requiredEvidenceCorrection([], "Cite the source", "Normalized rectangle: [[0.1, 0.2], [0.3, 0.4]].")!, /image-pixel bboxes only/);
+  assert.match(requiredEvidenceCorrection([], "Cite the source", "BBox [1, 2, 3, 4] (normalized ≈ [0.1, 0.2]).")!, /image-pixel bboxes only/);
+  assert.match(requiredEvidenceCorrection([], "Give capacity", "Capacity is 56 tons (≈672 MBH).")!, /without labeling its derivation/);
+  assert.equal(requiredEvidenceCorrection([], "Give capacity", "Capacity is 56 tons (calculated conversion: approximately 672 MBH)."), null);
+  assert.match(requiredEvidenceCorrection([{
+    name: "sweep_schedule_row",
+    out: { found: 2 },
+  }], "Give me the installed quantity", "Two units were found.")!, /does not explicitly state/);
+  assert.match(requiredEvidenceCorrection([], "Give me valve size", "Valve size: 4 in (example size).")!, /example or placeholder/);
+  assert.match(requiredEvidenceCorrection([{
+    name: "query_table",
+    args: { cell_contains: "AHU-1" },
+    out: { matches: [] },
+  }, {
+    name: "sweep_schedule_row",
+    args: { tag: "AHU-1" },
+    out: { found: 1 },
+  }], "Give me the matching control valve", "The matching control valve is 4 in.")!, /no query_table result/);
+  assert.match(requiredEvidenceCorrection([], "Give me the matching control valve", "No matching control valve row was found.")!, /Before refusing/);
+  assert.equal(requiredEvidenceCorrection([{
+    name: "query_table",
+    args: { cell_contains: "AHU-1" },
+    out: { matches: [] },
+  }, {
+    name: "sweep_schedule_row",
+    args: { tag: "AHU-1" },
+    out: { found: 1 },
+  }], "Give me the matching control valve", "No matching control valve row was found."), null);
+  assert.match(requiredEvidenceCorrection([
+    {
+      name: "sweep_schedule_row",
+      args: { tag: "AHU-1" },
+      out: { found: 1 },
+    },
+    {
+      name: "query_table",
+      args: { cell_contains: "AHU-2" },
+      out: { matches: [] },
+    },
+  ], "Give me the matching control valve", "No matching control valve row was found.")!, /Before refusing/);
+  assert.equal(requiredEvidenceCorrection([{
+    name: "query_table",
+    out: { matches: [{ title: { text: "CHW CONTROL VALVE SCHEDULE" } }] },
+  }], "Give me the matching control valve", "The matching control valve is cited."), null);
+  assert.match(requiredEvidenceCorrection([{
+    name: "query_table",
+    out: { matches: [{
+      title: { text: "CHW CONTROL VALVE SCHEDULE" },
+      row: { identity: { header: "VALVE MARK", text: "CV-AHU-1" } },
+    }] },
+  }], "Give me the matching control valve", "The chiller data is complete.")!, /omitted its semantic valve identity/);
+  assert.match(requiredEvidenceCorrection([
+    { name: "sweep_schedule_row", args: { tag: "CH-A1" }, out: { found: 1 } },
+    { name: "query_table", out: { matches: [{ row: { key: "CV-CH-A1" } }] } },
+  ], "Find CH-A1", "Both tags share this plan location: CH-A1 and CV-CH-A1.")!, /unswept tag/);
+  assert.match(requiredEvidenceCorrection([
+    { name: "sweep_schedule_row", args: { tag: "CH-A1" }, out: { found: 1 } },
+    { name: "query_table", out: { matches: [{ row: { key: "CV-CH-A1" } }] } },
+  ], "Find CH-A1", "Plan location for CV‑CH‑A1 is the same." )!, /unswept tag/);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "sweep_schedule_row", args: { tag: "CH-A1" }, out: { found: 1 } },
+    { name: "query_table", out: { matches: [{ row: { key: "CV-CH-A1" } }] } },
+  ], "Find CH-A1", "Plan location: CH-A1 is on sheet 3.\nValve schedule: CV-CH-A1 is 4 in."), null);
+  assert.match(requiredEvidenceCorrection([
+    {
+      name: "sweep_schedule_row",
+      args: { tag: "CH-A1" },
+      out: {
+        found: 1,
+        tag_citations: [{ sheet: "set.pdf#3", bbox: [10, 20, 30, 40] }],
+      },
+    },
+    {
+      name: "query_table",
+      out: { matches: [{ sheet: "set.pdf#44", row: { key: "CV-CH-A1" } }] },
+    },
+  ], "Find CH-A1", "Plan location | set.pdf#44 schedule bbox [1, 2, 3, 4].")!, /schedule sheet\/region as a plan location/);
+  const sweptPlan = {
+    name: "sweep_schedule_row",
+    args: { tag: "CH-A1" },
+    out: {
+      found: 1,
+      tag_citations: [{
+        sheet: "set.pdf#3",
+        bbox: { x0: 10, y0: 20, x1: 30, y1: 40 },
+      }],
+    },
+  };
+  assert.match(requiredEvidenceCorrection([
+    sweptPlan,
+    {
+      name: "highlight_citation",
+      args: { text: "Valve CV-CH-A1" },
+      out: { sheet: "set.pdf#3", bbox_px: [5, 15, 35, 45], text: "Valve CV-CH-A1" },
+    },
+  ], "Show me the plan location for CH-A1", "CH-A1 is shown.")!, /exact sweep tag citation/);
+  assert.equal(requiredEvidenceCorrection([
+    sweptPlan,
+    {
+      name: "highlight_citation",
+      args: { text: "CH-A1" },
+      out: { sheet: "set.pdf#3", bbox_px: [10, 20, 30, 40], text: "CH-A1" },
+    },
+  ], "Show me the plan location for CH-A1", "CH-A1 is shown on SET‑PDF#3."), null);
+  assert.match(requiredEvidenceCorrection([
+    sweptPlan,
+    {
+      name: "highlight_citation",
+      args: { text: "CH-A1" },
+      out: { sheet: "set.pdf#3", bbox_px: [10, 20, 30, 40], text: "CH-A1" },
+    },
+  ], "Show me the plan location for CH-A1", "CH-A1 is shown on schedule sheet set.pdf#44.")!, /actual swept plan sheet/);
+  assert.match(requiredEvidenceCorrection([{
+    name: "query_table",
+    out: { matches: [{ row: { identity: { header: "VALVE MARK", text: "CV-CH-A1" } } }] },
+  }], "Find the valve", "CV‑CH‑A1 comes from UNIT MARK.")!, /semantic identity header VALVE MARK/);
+  assert.equal(requiredEvidenceCorrection([{
+    name: "query_table",
+    out: { matches: [{ row: { identity: { header: "VALVE MARK", text: "CV-CH-A1" } } }] },
+  }], "Find the valve", "CV‑CH‑A1 comes from VALVE MARK."), null);
+  assert.match(requiredEvidenceCorrection([], "Show me the plan and cite the exact cells")!, /highlight_citation/);
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#3", bbox_px: [1, 2, 3, 4] } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#44",
+      row: { key: "CV-CH-A1", all_cells: { CV: { bbox: [10, 20, 30, 40] } } },
+    }] } },
+  ], "Cite the exact schedule cells", "CV-CH-A1 is 324.")!, /no painted source cell/);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: { matches: [
+      { sheet: "set.pdf#44", row: { key: "AHU-1", all_cells: { MARK: { bbox: [10, 20, 30, 40] } } } },
+      { sheet: "set.pdf#44", row: { key: "AHU-2", all_cells: { MARK: { bbox: [50, 60, 70, 80] } } } },
+    ] } },
+  ], "Cite the exact schedule cells", "AHU-1 is cited."), null);
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#44",
+      row: {
+        key: "AHU-1",
+        all_cells: {
+          MARK: { text: "AHU-1", bbox: [10, 20, 30, 40] },
+          "CAPACITY (TONS)": { text: "56.0", bbox: [40, 20, 60, 40] },
+        },
+      },
+    }] } },
+  ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted.\nCAPACITY (TONS) 56.0 is highlighted.")!, /specific schedule cell is highlighted/);
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#44",
+      row: {
+        key: "AHU-1",
+        all_cells: {
+          MARK: { text: "AHU-1", bbox: [10, 20, 30, 40] },
+          CFM: { text: "3850", bbox: [40, 20, 60, 40] },
+        },
+      },
+    }] } },
+  ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted; CFM is 3850. All cited cells are highlighted.")!, /broadly says all\/each/);
+});
 
 test("anthropic-style: scripted tool_use → tools execute → results pair up in ONE user message → done", async () => {
   const { fn, requests } = scriptedFetch([
