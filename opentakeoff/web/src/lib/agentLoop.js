@@ -1041,13 +1041,29 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       if (!preferredTitle) continue;
       const prefU = preferredTitle.toUpperCase().replace(/[\u2010-\u2015\u2212]/g, "-");
       const titleOk = (() => {
-        if (answerU.includes(prefU.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim().slice(0, 36))) return true;
-        if (/\bHANDLING\b/.test(prefU)) return /\bHANDLING\b/.test(answerU);
+        const prefCore = prefU.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+        if (answerU.includes(prefCore.slice(0, 36))) return true;
+        // DOAH HANDLING vs UNIT (and similar siblings): bare "HANDLING" also
+        // matches AHU "Air-Handling" prose in a re-dumped takeoff — require the
+        // distinctive outdoor-air handling phrase, not the single word.
+        if (/\bOUTDOOR AIR HANDLING\b/.test(prefU) || /\bDEDICATED OUTDOOR AIR HANDLING\b/.test(prefU)) {
+          return /\bOUTDOOR AIR HANDLING\b/.test(answerU);
+        }
+        if (/\bHANDLING\b/.test(prefU) && !/\bAIR HANDLING UNIT\b/.test(prefU)) {
+          return answerU.includes(prefCore.slice(0, 40));
+        }
         const words = prefU.split(/[^A-Z0-9]+/).filter((w) => w.length > 4);
         return words.filter((w) => answerU.includes(w)).length >= Math.min(3, words.length);
       })();
       if (!titleOk) {
         return `The goal asks which schedule ${tag} is on. Copy the primary equipment schedule title from query_table (e.g. "${preferredTitle}") into the answer — do not substitute a sibling family's schedule title or a cross-ref table.`;
+      }
+      // Tool found the MARK on a primary equipment schedule — rejecting
+      // "not found" / "not on any schedule" when family evidence exists.
+      const deniesPresence = /\b(?:not\s+found|is\s+not\s+(?:present|found)|no(?:t)?\s+(?:on|in)\s+(?:any|the)\s+schedule|does\s+not\s+appear)\b/i.test(finalText)
+        && new RegExp(tag.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/-/g, "[\\-\\u2010-\\u2015\\u2212]?"), "i").test(finalText);
+      if (deniesPresence) {
+        return `Tool evidence found ${tag} on "${preferredTitle}". Do not claim it is missing — answer YES with that exact schedule title.`;
       }
     }
   }

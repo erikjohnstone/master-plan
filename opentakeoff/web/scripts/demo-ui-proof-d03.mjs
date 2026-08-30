@@ -288,15 +288,20 @@ try {
   if (!followNear(["ATCT", "FAN COIL", "FCU", "T=", "T:"], 18) && !/\b18\b/.test(followNorm)) {
     throw new Error("D03 follow-up missing ATCT FCU count 18.");
   }
-  if (!/FCU-T11/i.test(followAnswer)) {
+  if (!/FCU[\s\u2010-\u2015\u2212\-]*T11/i.test(followAnswer) && !/FCUT11/i.test(followNorm)) {
     throw new Error("D03 follow-up missing FCU-T11 acknowledgement.");
   }
   // Require HANDLING as its own schedule-family word — not merely "AIR HANDLING".
-  if (!/OUTDOOR AIR HANDLING|DOAH[^\n]{0,80}HANDLING|HANDLING UNIT SCHEDULE/i.test(followAnswer)) {
+  if (!/OUTDOOR AIR HANDLING|DOAH[^\n]{0,80}HANDLING|HANDLING UNIT SCHEDULE/i.test(followNorm)) {
     throw new Error("D03 follow-up missing DOAH-T1 HANDLING schedule evidence.");
   }
-  if (!/DOAH-T1/i.test(followAnswer)) {
+  if (!/DOAH[\s\u2010-\u2015\u2212\-]*T1/i.test(followAnswer) && !/DOAHT1/i.test(followNorm)) {
     throw new Error("D03 follow-up missing DOAH-T1.");
+  }
+  // Must not deny presence when HANDLING evidence is required.
+  if (/\b(?:not\s+found|is\s+not\s+(?:present|found)|not\s+on\s+any\s+schedule)\b/i.test(followNorm)
+    && /DOAHT1/i.test(followNorm)) {
+    throw new Error("D03 follow-up wrongly denies DOAH-T1 schedule presence.");
   }
 
   // Extra hold so the saved video ends on the readable follow-up Answer.
