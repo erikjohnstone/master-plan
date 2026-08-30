@@ -344,9 +344,18 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     for (const match of out?.matches || []) {
       const rowKey = String(match?.row?.key || match?.row?.identity?.text || "");
       if (!rowKey || !finalCanonical.includes(rowKey.toUpperCase().replace(/[^A-Z0-9]/g, ""))) continue;
-      const cells = Object.values(match?.row?.all_cells || match?.row?.cells || {});
-      const paintable = cells.filter((cell) => Array.isArray(cell?.bbox) && cell.bbox.length === 4);
+      const cells = Object.entries(match?.row?.all_cells || match?.row?.cells || {});
+      const paintable = cells
+        .map(([, cell]) => cell)
+        .filter((cell) => Array.isArray(cell?.bbox) && cell.bbox.length === 4);
       if (!paintable.length) continue;
+      // Only rows whose cell values actually appear in the answer — not every
+      // query_table hit that shares the same tag key across sheets.
+      const usesCellFromRow = cells.some(([, cell]) => {
+        const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+        return textCanonical.length >= 4 && finalCanonical.includes(textCanonical);
+      });
+      if (!usesCellFromRow && !/^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(rowKey)) continue;
       usedQueryRows.push({ sheet: match.sheet, rowKey, cells: paintable });
     }
   }
@@ -362,10 +371,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         : (typeof hit?.text === "string" ? hit.text : "");
       const sheet = hit?.sheet || "";
       const bbox = Array.isArray(hit?.bbox_px) && hit.bbox_px.length === 4 ? hit.bbox_px
-        : (Array.isArray(hit?.bbox) && hit.bbox.length === 4 ? hit.bbox
-          : (hit?.bbox && Number.isFinite(hit.bbox.x0)
-            ? [hit.bbox.x0, hit.bbox.y0, hit.bbox.x1, hit.bbox.y1]
-            : null));
+        : (Array.isArray(hit?.bbox) && hit.bbox.length === 4 ? hit.bbox : null);
       // Only image-pixel bboxes are paint-able via highlight_citation.
       const bbox_px = Array.isArray(bbox) && bbox.every((v) => Number.isFinite(v) && Math.abs(v) > 1.5)
         ? bbox : null;
@@ -373,12 +379,25 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     })
     .filter((hit) => {
       if (!hit.str || !hit.bbox_px || !hit.sheet) return false;
+      // Short tag tokens are covered by query_table/sweep painting — only
+      // require painting phrase-length drawing evidence (serves narrative,
+      // section labels, title blocks) that the answer actually copies.
+      const words = hit.str.trim().split(/\s+/).filter(Boolean);
+      const phraseLength = words.length >= 3 || hit.str.length >= 24 || /\bSECTION\b/i.test(hit.str);
+      if (!phraseLength) return false;
       const hitCanonical = hit.str.toUpperCase().replace(/[^A-Z0-9]/g, "");
-      if (hitCanonical.length < 6) return false;
+      if (hitCanonical.length < 8) return false;
       const needle = hitCanonical.slice(0, Math.min(40, hitCanonical.length));
       return finalCanonical.includes(needle);
     });
-  const needsPaint = usedQueryRows.length > 0 || usedDrawingHits.length > 0;
+  // Deduplicate drawing hits by sheet+bbox so one painted phrase covers repeats.
+  const uniqDrawingHits = [];
+  for (const hit of usedDrawingHits) {
+    if (uniqDrawingHits.some((other) => other.sheet === hit.sheet
+      && other.bbox_px.every((value, index) => Math.abs(value - hit.bbox_px[index]) <= 1))) continue;
+    uniqDrawingHits.push(hit);
+  }
+  const needsPaint = usedQueryRows.length > 0 || uniqDrawingHits.length > 0;
   const asksToShowCite = /\bshow\b.*\bcite\b|\bcite the exact\b|\bshow me\b.*\b(?:plan|sheet|schedule|highlight)\b/i.test(goal);
   if ((needsPaint || asksToShowCite) && !highlights.length) {
     return "The answer cites schedule or drawing evidence that can be painted on the sheets, but no successful highlight_citation call exists. Call highlight_citation with each cited sheet and unchanged bbox_px so the estimator sees the source on the blueprint — agent-panel text alone is incomplete.";
@@ -391,8 +410,8 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return `The answer uses queried schedule row(s) with no painted source cell: ${[...new Set(uncovered)].join(", ")}. Call highlight_citation on at least one exact cited cell from each row before finishing.`;
     }
   }
-  if (usedDrawingHits.length) {
-    const uncoveredHits = usedDrawingHits.filter((hit) => !highlightMatches(hit.sheet, hit.bbox_px));
+  if (uniqDrawingHits.length) {
+    const uncoveredHits = uniqDrawingHits.filter((hit) => !highlightMatches(hit.sheet, hit.bbox_px));
     if (uncoveredHits.length) {
       return `The answer copies drawing-text evidence that is not painted on the sheet: ${uncoveredHits.slice(0, 3).map((hit) => `"${hit.str.slice(0, 48)}" on ${hit.sheet}`).join("; ")}. Call highlight_citation with that hit's sheet and bbox_px before finishing.`;
     }
