@@ -237,6 +237,41 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     if (missingDescriptions.length) {
       return `The BAS point mark is present, but its points-list description cell is missing from the answer (${missingDescriptions[0]}). Copy the description text from row.all_cells along with alarm/trend.`;
     }
+    // When the goal names a specific point (e.g. heating-water vs chilled-water),
+    // the answered mark's DESCRIPTION must match that wording — sibling points
+    // on the same list are not interchangeable.
+    const pointGoalMatchers = [];
+    if (/\bheating[- ]?water\b|\bHW\b/i.test(goal)) {
+      pointGoalMatchers.push({ label: "heating-water / HW", re: /\b(?:heating[- ]?water|HW)\b/i });
+    }
+    if (/\bchilled[- ]?water\b|\bCHW\b/i.test(goal)) {
+      pointGoalMatchers.push({ label: "chilled-water / CHW", re: /\b(?:chilled[- ]?water|CHW)\b/i });
+    }
+    if (/\bhot[- ]?water\b/i.test(goal) && !/\bheating[- ]?water\b/i.test(goal)) {
+      pointGoalMatchers.push({ label: "hot-water", re: /\bhot[- ]?water\b|\bHW\b/i });
+    }
+    if (pointGoalMatchers.length) {
+      for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
+        for (const match of out?.matches || []) {
+          const mark = String(match?.row?.identity?.text || match?.row?.key || "").trim();
+          if (!/^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(mark)) continue;
+          if (!finalCanonical.includes(mark.toUpperCase().replace(/[^A-Z0-9]/g, ""))) continue;
+          let description = "";
+          for (const [header, cell] of Object.entries(match?.row?.all_cells || match?.row?.cells || {})) {
+            if (/\bDESCRIPTION\b/i.test(String(header))) {
+              description = String(cell?.text || "").trim();
+              break;
+            }
+          }
+          if (!description) continue;
+          const matched = pointGoalMatchers.some(({ re }) => re.test(description));
+          if (!matched) {
+            const wanted = pointGoalMatchers.map(({ label }) => label).join(" or ");
+            return `The answered BAS point ${mark} has description "${description}", which does not match the point named in the goal (${wanted}). Select the query_table row whose DESCRIPTION matches the goal's point wording — sibling points on the same list are not interchangeable.`;
+          }
+        }
+      }
+    }
   }
   const drawingTextHits = callLog
     .filter(({ name, out }) =>
