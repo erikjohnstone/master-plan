@@ -97,9 +97,20 @@ try {
   await page.screenshot({ path: "/opt/cursor/artifacts/d01_ui_agent_result.png" });
   const panel = await page.locator('textarea[name="agent-goal"]').locator("xpath=../../..").innerText();
   console.log(`UI_AGENT_RESULT\n${panel}`);
-  const sheetSelect = page.locator("select").filter({ has: page.locator("option") }).first();
-  const options = await sheetSelect.locator("option").evaluateAll((nodes) =>
-    nodes.map((node) => ({ value: node.value, text: node.textContent || "" })));
+  const selects = page.locator("select");
+  let sheetSelect = null;
+  let options = [];
+  for (let index = 0; index < await selects.count(); index++) {
+    const candidate = selects.nth(index);
+    const candidateOptions = await candidate.locator("option").evaluateAll((nodes) =>
+      nodes.map((node) => ({ value: node.value, text: node.textContent || "" })));
+    if (candidateOptions.some((option) => option.text.includes("MS101"))) {
+      sheetSelect = candidate;
+      options = candidateOptions;
+      break;
+    }
+  }
+  if (!sheetSelect) throw new Error("Could not locate the 75-sheet navigator.");
   for (const [needle, path] of [
     ["MS101", "/opt/cursor/artifacts/d01_ui_plan_highlight.png"],
     ["M-603", "/opt/cursor/artifacts/d01_ui_schedule_highlight.png"],
@@ -109,6 +120,13 @@ try {
     await sheetSelect.selectOption(option.value);
     await page.getByText("Rendering sheet…").waitFor({ state: "hidden", timeout: 120_000 });
     await page.waitForTimeout(750);
+    const canvas = page.locator("canvas").first();
+    const box = await canvas.boundingBox();
+    if (box) {
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.wheel(0, -1200);
+      await page.waitForTimeout(500);
+    }
     await page.screenshot({ path });
   }
   if (headed) await page.waitForTimeout(10_000);
