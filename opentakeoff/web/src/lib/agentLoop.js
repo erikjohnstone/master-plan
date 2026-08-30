@@ -19,6 +19,12 @@
 
 import { chatWithTools, describeImageForAgent } from "./ai.js";
 import { runVerifiers } from "./agentVerifiers.js";
+import {
+  classifyTakeoffIntent,
+  advanceTakeoffWorkflow,
+  workflowDirective,
+  isIllegalWorkflowTransition,
+} from "./takeoffWorkflow.js";
 
 // Full-set HVAC/BAS takeoffs need list/graph + several count queries + scoped
 // cite re-queries + paints; 32 was truncating D03 mid-gate. Keep a hard cap.
@@ -439,6 +445,9 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   }
   const asksPointMark = /\bpoint mark\b|\balarm\b.{0,40}\btrend\b|\btrend\b.{0,40}\balarm\b/i.test(goal);
   if (asksPointMark) {
+    const goalPointMarks = [...goal.matchAll(/\b((?:AI|AO|BI|BO)\d+[A-Z]?)\b/gi)]
+      .map((m) => m[1].toUpperCase().replace(/[^A-Z0-9]/g, ""));
+    const goalPointSet = new Set(goalPointMarks);
     const pointRows = callLog
       .filter(({ name }) => name === "query_table")
       .flatMap(({ out }) => out?.matches || [])
@@ -455,7 +464,12 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       for (const match of out?.matches || []) {
         const mark = String(match?.row?.identity?.text || match?.row?.key || "").trim();
         if (!/^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(mark)) continue;
-        if (!finalCanonical.includes(mark.toUpperCase().replace(/[^A-Z0-9]/g, ""))) continue;
+        const markCanon = mark.toUpperCase().replace(/[^A-Z0-9]/g, "");
+        // Only enforce description paste for marks the goal named (e.g. AI10).
+        // Sibling lists reuse AI/AO/BI/BO namespaces — do not require every
+        // incidental title-scan / cell_contains row's description.
+        if (goalPointSet.size && !goalPointSet.has(markCanon)) continue;
+        if (!finalCanonical.includes(markCanon)) continue;
         for (const [header, cell] of Object.entries(match?.row?.all_cells || match?.row?.cells || {})) {
           if (!/\bDESCRIPTION\b/i.test(String(header))) continue;
           const text = String(cell?.text || "").trim();
@@ -1874,6 +1888,7 @@ function appendToolResults(provider, messages, results) {
 export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal, maxIterations = MAX_AGENT_ITERATIONS, fetchFn, priorMessages = [] }) {
   const provider = cfg?.provider === "anthropic" ? "anthropic" : "openai";
   const emit = (ev) => { try { onEvent?.(ev); } catch { /* a status listener must never kill the run */ } };
+  const takeoffIntent = classifyTakeoffIntent(goal);
   const providerTools = toProviderTools(provider, toolsForGoal(goal, tools));
   const system = agentSystemPrompt();
   // priorMessages enables conversational follow-ups in the same Agent thread.
@@ -1883,6 +1898,17 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       .map((m) => ({ role: m.role, content: m.content }))
     : [];
   const messages = [...history, { role: "user", content: goal }];
+  // Seed workflow directive so the first turn follows the state machine.
+  let lastWorkflowPhase = "";
+  {
+    const initialWf = advanceTakeoffWorkflow(takeoffIntent, [], goal);
+    lastWorkflowPhase = initialWf.phase;
+    const directive = workflowDirective(takeoffIntent, initialWf);
+    if (directive) {
+      messages.push({ role: "user", content: directive });
+      emit({ type: "text", text: `[Workflow: ${takeoffIntent} / ${initialWf.phase}]` });
+    }
+  }
   let iterations = 0;
   const aborted = () => { emit({ type: "aborted" }); return { status: /** @type {const} */ ("aborted"), iterations }; };
   // Deterministic honesty backstop, generalized (see agentVerifiers.js's own
@@ -2109,12 +2135,20 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
         : call.args;
       emit({ type: "tool_start", name: call.name, args: callArgs });
       let out;
-      try {
-        out = call.argsError
-          ? { error: `Invalid arguments for ${call.name}: ${call.argsError}.` }
-          : await execute(call.name, callArgs);
-      } catch (e) {
-        out = { error: `Tool ${call.name} failed: ${String((e && e.message) || e)}` };
+      // Block illegal workflow transitions before execute (durable phase machine).
+      const wfBefore = advanceTakeoffWorkflow(takeoffIntent, callLog, goal);
+      if (!call.argsError && isIllegalWorkflowTransition(wfBefore, call.name, callArgs || {})) {
+        out = {
+          error: `Illegal workflow transition (${takeoffIntent}/${wfBefore.phase}): ${call.name} is not allowed now.${wfBefore.nextMove ? ` ${wfBefore.nextMove}` : ""}`,
+        };
+      } else {
+        try {
+          out = call.argsError
+            ? { error: `Invalid arguments for ${call.name}: ${call.argsError}.` }
+            : await execute(call.name, callArgs);
+        } catch (e) {
+          out = { error: `Tool ${call.name} failed: ${String((e && e.message) || e)}` };
+        }
       }
       if (out == null || typeof out !== "object") out = { result: out ?? null };
       // Vision-as-a-tool (real, later addition — see aiConfig()'s own
@@ -2141,6 +2175,19 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       results.push({ call, out });
     }
     appendToolResults(provider, messages, results);
+    // Re-inject the workflow directive when the phase advances so later turns
+    // follow the state machine without relying on a one-shot system prompt.
+    {
+      const wfAfter = advanceTakeoffWorkflow(takeoffIntent, callLog, goal);
+      if (wfAfter.phase !== lastWorkflowPhase) {
+        lastWorkflowPhase = wfAfter.phase;
+        const directive = workflowDirective(takeoffIntent, wfAfter);
+        if (directive) {
+          messages.push({ role: "user", content: directive });
+          emit({ type: "text", text: `[Workflow: ${takeoffIntent} / ${wfAfter.phase}]` });
+        }
+      }
+    }
     // Paint thrash without an Answer burns the step cap (seen on VAV rollups
     // that highlight inventory rows forever). Nudge once: stop extra paints
     // and write the complete takeoff answer from retrieved cells.

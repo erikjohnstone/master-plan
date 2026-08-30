@@ -8,6 +8,8 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import dotenv from "dotenv";
 import { buildServer } from "../server.ts";
 import { Session } from "../src/session.ts";
+import { validateDemoAnswer } from "../src/demoAnswerSchema.mjs";
+import { repairDemoAnswerStructured } from "../src/structuredRepair.mjs";
 
 export const DEMO_TOOLS = new Set([
   "sheet_graph",
@@ -614,7 +616,37 @@ export async function runToolCallingModel({
     const calls = Array.isArray(message.tool_calls) ? message.tool_calls : [];
     if (!calls.length) {
       try {
-        const answer = parseJsonAnswer(message.content);
+        let answer = parseJsonAnswer(message.content);
+        const zodCheck = validateDemoAnswer(answer, truth);
+        if (!zodCheck.ok) {
+          // One Instructor-style structured repair via AI SDK before falling
+          // through to the existing text repair loops.
+          const repaired = await repairDemoAnswerStructured({
+            endpoint,
+            apiKey,
+            model: resolvedModel || model,
+            truth,
+            previousAnswer: answer,
+            validationErrors: zodCheck.errors,
+          });
+          if (repaired) {
+            const again = validateDemoAnswer(repaired, truth);
+            if (again.ok) answer = again.data;
+            else {
+              messages.push({
+                role: "user",
+                content: `Your previous final response failed schema validation: ${zodCheck.errors.slice(0, 8).join("; ")}. Re-emit valid JSON matching the required fields and citation shape. Do not change factual values or invent citations.`,
+              });
+              continue;
+            }
+          } else {
+            messages.push({
+              role: "user",
+              content: `Your previous final response failed schema validation: ${zodCheck.errors.slice(0, 8).join("; ")}. Re-emit valid JSON matching the required fields and citation shape. Do not change factual values or invent citations.`,
+            });
+            continue;
+          }
+        }
         const shapeErrors = answerShapeErrors(answer, truth);
         if (shapeErrors.length) {
           messages.push({
