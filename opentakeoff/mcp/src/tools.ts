@@ -570,24 +570,26 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   }, run("find_schedule", ({ kind }) => session.findSchedule(kind)));
 
   server.registerTool("query_table", {
-    description: `Query actual extracted table cells across the loaded plan set, with source coordinates on every answer. Use title for a case-insensitive table-title substring, row_key for an exact schedule mark/key (compound rows such as R1/E1 answer for either mark), column for a case-insensitive header substring, and cell_value to find rows containing an exact cell value anywhere (the deterministic cross-table join—for example, find the control-valve row whose UNIT MARK is CH-A1). Combine filters to narrow the result. At least one filter is required. Every returned table region, title, and cell carries its source-sheet bbox so the answer can be audited with view_sheet. This reads all deterministic table kinds—not only reference tables and not only equipment schedules—and never invokes an LLM. ${COORDS}`,
+    description: `Query actual extracted table cells across the loaded plan set, with source coordinates on every answer. Use title for a case-insensitive table-title substring, row_key for an exact schedule mark/key (compound rows such as R1/E1 answer for either mark), column for a case-insensitive header substring, cell_value for an exact cell value, and cell_contains when a relationship is encoded inside a compound value (for example, equipment CH-A1 inside valve mark CV-CH-A1). Combine filters to narrow the result. At least one filter is required. A column filter narrows cells, but row.all_cells still returns the complete matching row with exact bboxes so multi-field questions need one call. Every returned table region, title, and cell carries its source-sheet bbox so the answer can be audited with view_sheet. This reads all deterministic table kinds—not only reference tables and not only equipment schedules—and never invokes an LLM. ${COORDS}`,
     inputSchema: {
       title: z.string().min(1).optional().describe('Table-title substring, e.g. "CONTROL VALVE SCHEDULE"'),
       row_key: z.string().min(1).optional().describe('Exact row key/mark, e.g. "CV-HHW-BP-M" or "RTU-01"'),
       column: z.string().min(1).optional().describe('Header substring; only matching columns are returned, e.g. "MCA"'),
       cell_value: z.string().min(1).optional().describe('Exact cell text anywhere in the row, case-insensitive; use this to join tables through non-key columns, e.g. UNIT MARK "CH-A1"'),
+      cell_contains: z.string().min(1).optional().describe('Case-insensitive text contained in any cell; use for explicit compound relationships such as "CH-A1" inside "CV-CH-A1"'),
       limit: z.number().int().min(1).max(1000).default(100).describe("Maximum matching rows returned"),
     },
     outputSchema: queryTableOutput,
-  }, run("query_table", async ({ title, row_key, column, cell_value, limit }) => {
-    if (!title && !row_key && !column && !cell_value) {
-      throw new UserError("Pass at least one of title, row_key, column, or cell_value.");
+  }, run("query_table", async ({ title, row_key, column, cell_value, cell_contains, limit }) => {
+    if (!title && !row_key && !column && !cell_value && !cell_contains) {
+      throw new UserError("Pass at least one of title, row_key, column, cell_value, or cell_contains.");
     }
     const graph = await session.graphForPipeline();
     const titleNeedle = title?.trim().toUpperCase();
     const rowNeedle = row_key?.trim().toUpperCase().replace(/\s+/g, "");
     const columnNeedle = column?.trim().toUpperCase();
     const valueNeedle = cell_value?.trim().toUpperCase().replace(/\s+/g, " ");
+    const containsNeedle = cell_contains?.trim().toUpperCase().replace(/\s+/g, " ");
     const all = graph.tables.flatMap((table) => {
       if (titleNeedle && !(table.title?.text || "").toUpperCase().includes(titleNeedle)) return [];
       const selectedHeaders = columnNeedle
@@ -598,6 +600,12 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
         if (rowNeedle && !rowKeyAnswersFor(row.key, rowNeedle)) return [];
         if (valueNeedle && !Object.values(row.cells).some((cell) =>
           cell?.text.trim().toUpperCase().replace(/\s+/g, " ") === valueNeedle)) return [];
+        if (containsNeedle && !Object.values(row.cells).some((cell) =>
+          cell?.text.trim().toUpperCase().replace(/\s+/g, " ").includes(containsNeedle))) return [];
+        const allCells = Object.fromEntries(table.headers.flatMap((header) => {
+          const cell = row.cells[header];
+          return cell?.text ? [[header, { text: cell.text, bbox: cell.bbox }]] : [];
+        }));
         const cells = Object.fromEntries(selectedHeaders.flatMap((header) => {
           const cell = row.cells[header];
           return cell?.text ? [[header, { text: cell.text, bbox: cell.bbox }]] : [];
@@ -609,7 +617,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
           title: table.title ? { text: table.title.text, bbox: table.title.bbox } : null,
           region: table.region,
           headers: selectedHeaders,
-          row: { key: row.key, cells },
+          row: { key: row.key, cells, all_cells: allCells },
         }];
       });
     });
@@ -629,6 +637,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
         row_key: row_key ?? null,
         column: column ?? null,
         cell_value: cell_value ?? null,
+        cell_contains: cell_contains ?? null,
       },
       count: unique.length,
       truncated: unique.length > limit,

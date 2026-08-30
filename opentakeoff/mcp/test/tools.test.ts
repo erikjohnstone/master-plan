@@ -2561,6 +2561,15 @@ test("query_table joins through an exact non-key cell value", async () => {
   assert.equal(r.data.query.cell_value, "transition");
   assert.deepEqual(r.data.matches.map((match: any) => match.row.key), ["T1", "T2"]);
   assert.equal(r.data.matches.every((match: any) => match.row.cells.MATERIAL.text === "TRANSITION"), true);
+  assert.equal(r.data.matches[0].row.all_cells.DESCRIPTION.text, "EDGE STRIP RESILIENT");
+
+  const contained = await call(client, "query_table", {
+    title: "FINISH SCHEDULE",
+    cell_contains: "T1",
+  });
+  assert.equal(contained.isError, false);
+  assert.equal(contained.data.count, 1);
+  assert.equal(contained.data.matches[0].row.key, "T1");
 });
 
 test("symbol_sweep scope 'set': detail-seeded, counts plan sheets only, per-sheet results, deterministic", async () => {

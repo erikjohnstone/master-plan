@@ -128,6 +128,7 @@ export const queryTableOutput = {
     row_key: z.string().nullable(),
     column: z.string().nullable(),
     cell_value: z.string().nullable(),
+    cell_contains: z.string().nullable(),
   }),
   count: z.number().int(),
   truncated: z.boolean(),
@@ -140,6 +141,10 @@ export const queryTableOutput = {
     row: z.object({
       key: z.string(),
       cells: z.record(z.string(), z.object({
+        text: z.string(),
+        bbox: sourceBox,
+      })),
+      all_cells: z.record(z.string(), z.object({
         text: z.string(),
         bbox: sourceBox,
       })),
