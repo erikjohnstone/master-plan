@@ -2737,6 +2737,8 @@ test("sweep_schedule_row: row citation, corroborated anchor, text-corroborated c
 
   const r = await call(client, "sweep_schedule_row", { tag: "T1" });
   assert.equal(r.isError, false);
+  assert.equal(r.data.search_scope, "exhaustive");
+  assert.equal(r.data.unlabeled_audit_complete, true);
 
   // the row is the cited source, cells included
   assert.equal(r.data.row.sheet, "symbol-set.pdf#4");
@@ -2768,6 +2770,20 @@ test("sweep_schedule_row: row citation, corroborated anchor, text-corroborated c
 
   // read mode committed nothing
   assert.equal((await call(client, "takeoff_summary")).data.conditions.length, 0);
+});
+
+test("sweep_schedule_row tagged_only preserves the complete tagged count and discloses reduced audit scope", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SYMSET });
+  const r = await call(client, "sweep_schedule_row", { tag: "T1", tagged_only: true });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.search_scope, "tagged_only");
+  assert.equal(r.data.unlabeled_audit_complete, false);
+  assert.equal(r.data.found, 5);
+  assert.deepEqual(r.data.sheets.map((sheet: any) => [sheet.sheet, sheet.found]), [
+    ["symbol-set.pdf", 3],
+    ["symbol-set.pdf#2", 2],
+  ]);
 });
 
 test("sweep_schedule_row commit: condition minted FROM the row, schedule provenance + row citation, one undo step", async () => {

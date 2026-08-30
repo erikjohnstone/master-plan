@@ -262,6 +262,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       rotations: z.boolean().default(true).describe("Also match 90/180/270-rotated markers"),
       mirror: z.boolean().default(true).describe("Also match mirrored markers"),
       tolerance_px: z.number().positive().max(20).default(2).describe("Endpoint match tolerance in image px (default 2 — CAD jitter, not drift)"),
+      tagged_only: z.boolean().default(false).describe("Search every sheet carrying the exact tag and skip sheets that cannot contribute a tagged count; faster, but unlabeled near-match auditing is explicitly incomplete"),
     },
     outputSchema: sweepScheduleRowOutput,
   }, run("sweep_schedule_row", (a) => session.sweepScheduleRow(a.tag, {
@@ -269,6 +270,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     rotations: a.rotations,
     mirror: a.mirror,
     tolerancePx: a.tolerance_px,
+    evaluationFast: a.tagged_only,
   })));
 
   server.registerTool("trace_connectivity", {

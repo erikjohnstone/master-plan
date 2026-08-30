@@ -928,6 +928,8 @@ const rowSweepPlacement = {
 
 export const sweepScheduleRowOutput = {
   tag: z.string().describe("The row key as normalized (the tag as drawn)"),
+  search_scope: z.enum(["exhaustive", "tagged_only"]).describe("exhaustive audits every plan sheet for unlabeled near-matches; tagged_only searches every exact tag occurrence but skips sheets that cannot contribute a tagged count"),
+  unlabeled_audit_complete: z.boolean().describe("false only in tagged_only mode, where the installed tagged count is complete but unlabeled/sibling geometry was not exhaustively audited"),
   row: z.object({
     sheet: z.string(),
     table: z.string().describe("The table's title (or kind, when untitled)"),

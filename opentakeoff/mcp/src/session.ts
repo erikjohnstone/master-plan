@@ -3102,11 +3102,11 @@ export class Session {
     rotations?: boolean;
     mirror?: boolean;
     tolerancePx?: number;
-    /** Internal corpus-evaluation mode. A scored schedule-row placement can
-     * only count when it claims this row's own tag occurrence, so constrain
-     * geometric candidate generation to those exact claim windows. The MCP
-     * tool never sets this: interactive calls retain complete whole-sheet
-     * withheld/excluded disclosure. */
+    /** Tagged-count mode. A placement can count only when it claims this row's
+     * own tag occurrence, so constrain geometric candidates to those exact
+     * claim windows and skip sheets with no occurrence. The installed tagged
+     * count remains complete; unlabeled/sibling near-match disclosure does
+     * not, and the wire result states that distinction explicitly. */
     evaluationFast?: boolean;
   } = {}) {
     let t = (tag || "").trim().toUpperCase().replace(/\s+/g, "");
@@ -4286,6 +4286,8 @@ export class Session {
     }
     return {
       tag: t,
+      search_scope: opts.evaluationFast ? "tagged_only" : "exhaustive",
+      unlabeled_audit_complete: !opts.evaluationFast,
       row: {
         sheet: tb.sheet,
         table,
