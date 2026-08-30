@@ -413,18 +413,27 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   }
   // Product rule: paint cited evidence on the sheets whenever the answer uses
   // paint-able tool evidence — not only when the goal says "show me" / "cite the exact".
-  const asksToShowCite = /\bshow\b.*\bcite\b|\bcite the exact\b|\bshow me\b.*\b(?:plan|sheet|schedule|highlight)\b|\bcite the (?:schedule|exact|mark)\b/i.test(goal);
+  // Also treat "Cite each TAG and its CFM cell" as an explicit cite ask.
+  const asksToShowCite = /\bshow\b.*\bcite\b|\bcite the exact\b|\bshow me\b.*\b(?:plan|sheet|schedule|highlight)\b|\bcite the (?:schedule|exact|mark)\b|\bcite\b.{0,80}\b(?:TAG|MARK|cells?)\b/i.test(goal);
   // When the goal names explicit spot-check tags after "cite …", only those
   // MARKs create cite paint duty — not every equipment key a rollup answer
   // happens to mention (FCU-A2, sample AI01 points, etc.). Hyphenated tags
   // must include a digit so prose like "points-list title" is not treated as
-  // a MARK cite target.
+  // a MARK cite target. When the cite clause says "each TAG" without listing
+  // marks, fall back to equipment tags named earlier in the same goal.
   const citeTargetsFromGoal = (() => {
     const m = goal.match(/\bcite\b([\s\S]*?)(?:\bso I can\b|\bso you can\b|\bso we can\b|[.?!]|$)/i);
     if (!m) return null;
-    const found = [...m[1].matchAll(/\b[A-Z]{1,8}-[A-Z0-9]*\d[A-Z0-9]*\b|\b(?:AI|AO|BI|BO)\d+[A-Z]?\b/gi)]
+    const tagRe = /\b[A-Z]{1,8}-[A-Z0-9]*\d[A-Z0-9]*\b|\b(?:AI|AO|BI|BO)\d+[A-Z]?\b/gi;
+    let found = [...m[1].matchAll(tagRe)]
       .map((hit) => hit[0].toUpperCase().replace(/[^A-Z0-9]/g, ""))
       .filter((tag) => tag.length >= 3);
+    if (!found.length && /\beach\b.{0,20}\b(?:TAG|MARK)\b|\bthose\b.{0,20}\b(?:TAG|MARK)\b|\bnamed\b.{0,20}\b(?:TAG|MARK)\b/i.test(m[1])) {
+      const before = goal.slice(0, m.index || 0);
+      found = [...before.matchAll(tagRe)]
+        .map((hit) => hit[0].toUpperCase().replace(/[^A-Z0-9]/g, ""))
+        .filter((tag) => tag.length >= 3);
+    }
     return found.length ? new Set(found) : null;
   })();
   const goalCanonical = goal.toUpperCase().replace(/[^A-Z0-9]/g, "");
@@ -697,7 +706,16 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         .map(({ cell }) => `"${String(cell.text || "").slice(0, 40)}"`)
         .slice(0, 6)
         .join(", ");
-      return `The answer uses multiple fields from ${rowKey} on ${sheet}, but these answering value cells are not painted: ${missingLabel}. Call highlight_citation on EACH distinct answering value from that row (capacity, flow, size, Cv, location, description, alarm/trend, etc.) — painting only the mark or a single field is not enough. Identical twin values in adjacent columns count as one paint duty.`;
+      const paintHints = missingValues.slice(0, 8).map(({ cell, sheet: cellSheet }) => {
+        const bbox = cell?.bbox;
+        if (!Array.isArray(bbox) || bbox.length !== 4) return null;
+        const label = String(cell.text || rowKey).replace(/\s+/g, "_").slice(0, 32) || rowKey;
+        return `highlight_citation sheet=${cellSheet} bbox_px=${JSON.stringify(bbox)} text=${label}`;
+      }).filter(Boolean);
+      const hint = paintHints.length
+        ? ` Exact paint args already retrieved: ${paintHints.join("; ")}.`
+        : "";
+      return `The answer uses multiple fields from ${rowKey} on ${sheet}, but these answering value cells are not painted: ${missingLabel}. Call highlight_citation on EACH distinct answering value from that row (capacity, flow, size, Cv, location, description, alarm/trend, etc.) — painting only the mark or a single field is not enough. Identical twin values in adjacent columns count as one paint duty.${hint}`;
     }
     } // goalRequestsRowAttributes
   }
@@ -1257,13 +1275,27 @@ const resultText = (out) => {
       matches_omitted: payload.matches.length - 1,
     };
   }
-  // Scoped row hits: keep identity + MARK bbox only when many cells present.
+  // Scoped row hits: exact row_key lookups must keep every answering column
+  // (CFM, GPM, manufacturer, …). Broader cell_contains dumps still trim to
+  // identity/MARK so inventory context stays small.
   if (scoped && Array.isArray(payload?.matches)) {
+    const rowKeyScoped = q.row_key != null && String(q.row_key).trim() !== "";
     payload = {
       ...payload,
       matches: payload.matches.slice(0, 3).map((match) => {
         const row = match?.row;
         if (!row?.all_cells && !row?.cells) return match;
+        if (rowKeyScoped) {
+          return {
+            sheet: match.sheet,
+            title: match.title,
+            row: {
+              key: row.key,
+              identity: row.identity,
+              all_cells: row.all_cells || row.cells,
+            },
+          };
+        }
         const cells = row.all_cells || row.cells || {};
         const keep = {};
         for (const [k, v] of Object.entries(cells)) {
@@ -1355,6 +1387,8 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
   let lastDraftText = "";
   let lastWordingCorrection = "";
   let wordingCorrectionStreak = 0;
+  let answerNudgeSent = false;
+  let consecutiveHighlightOnlyTurns = 0;
 
   for (; iterations < maxIterations; iterations++) {
     if (signal?.aborted) return aborted();
@@ -1508,6 +1542,9 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       return { status: "done", text: displayText, iterations: iterations + 1 };
     }
     const results = [];
+    const highlightOnlyTurn = turn.toolCalls.every((call) => call.name === "highlight_citation");
+    if (highlightOnlyTurn) consecutiveHighlightOnlyTurns += 1;
+    else consecutiveHighlightOnlyTurns = 0;
     for (const call of turn.toolCalls) {
       if (signal?.aborted) return aborted();
       emit({ type: "tool_start", name: call.name, args: call.args });
@@ -1542,6 +1579,25 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       results.push({ call, out });
     }
     appendToolResults(provider, messages, results);
+    // Paint thrash without an Answer burns the step cap (seen on VAV rollups
+    // that highlight inventory rows forever). Nudge once: stop extra paints
+    // and write the complete takeoff answer from retrieved cells.
+    const paintCount = callLog.filter((c) => c.name === "highlight_citation" && !c.out?.error).length;
+    const hasQueryEvidence = callLog.some((c) =>
+      c.name === "query_table" && !c.out?.error
+      && (Number(c.out?.count) > 0 || (c.out?.matches || []).length > 0));
+    const shouldNudgeAnswer = !answerNudgeSent && !lastDraftText && hasQueryEvidence
+      && (consecutiveHighlightOnlyTurns >= 3
+        || (paintCount >= 10 && iterations >= 14)
+        || (paintCount >= 6 && iterations >= Math.max(18, Math.floor(maxIterations * 0.35))));
+    if (shouldNudgeAnswer) {
+      answerNudgeSent = true;
+      messages.push({
+        role: "user",
+        content: "Stop painting additional inventory / off-ask rows. You already have query_table evidence and enough highlight_citation paints for the requested tags and fields. Do not call more tools unless a gate names Exact paint args still missing. Emit the COMPLETE final answer now: every requested count and attribute with sheet citations, using only retrieved cells.",
+      });
+      emit({ type: "text", text: "[Loop nudge: write the final answer now — stop inventory paint thrash.]" });
+    }
   }
   emit({ type: "max_iterations", limit: maxIterations });
   // Only surface a draft Answer if it already clears evidence gates — otherwise
