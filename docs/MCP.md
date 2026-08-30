@@ -122,7 +122,10 @@ Forty tools, in the order an agent tends to reach for them:
   exact-tag family on a confirmed sheet (two or more labeled leftovers)
   plus a geometrically-confirmed instance, and the leftover is not a
   same-coordinate complementary-view redraw; a unique mark with no
-  leftover family stays a note); a `TYP N` callout next to a
+  leftover family stays a note); a boxed tag on a leader to a circled
+  single-letter sensor (T / S / H) is `text_only` when another match of
+  the same tag remains on the sheet (a lone sensor-side tag still counts);
+  a `TYP N` callout next to a
   geometrically-confirmed tag multiplies that match only; and a row whose
   tag cannot be geometrically anchored is *refused with the reason*—a
   fingerprint is never guessed from text alone). Scanned sheets work

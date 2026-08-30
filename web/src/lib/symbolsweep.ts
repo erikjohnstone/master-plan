@@ -67,8 +67,8 @@
 //
 // sweepSymbols composes the two on one sheet, unchanged.
 
-import { compoundRemainderIsLabel, isRoutingLabelOcc, MARK_CLUSTER_K } from "./markid.ts";
-export { MARK_CLUSTER_K };
+import { compoundRemainderIsLabel, isRoutingLabelOcc, isRemoteSensorCalloutOcc, MARK_CLUSTER_K } from "./markid.ts";
+export { MARK_CLUSTER_K, isRemoteSensorCalloutOcc };
 
 export type Point = [number, number];
 
@@ -2190,6 +2190,28 @@ export function classifySweepMatches(
       if (m.labeled_leftover) { m.count = 1; continue; }
       const tx = (m.tag_at[0] + m.tag_at[2]) / 2, ty = (m.tag_at[1] + m.tag_at[3]) / 2;
       m.count = typicalMultiplierNear(typSpans, [tx, ty], typR);
+    }
+    // Remote-sensor callout: the same boxed-tag stamp on a leader to a
+    // circled T/S/H is not a second install. Drop it only when another
+    // match remains — a unit whose only drawn tag is on the sensor stays.
+    if (matches.length >= 2) {
+      const install: SweepSheetMatch[] = [];
+      const callouts: SweepSheetMatch[] = [];
+      for (const m of matches) {
+        const cx = (m.tag_at[0] + m.tag_at[2]) / 2, cy = (m.tag_at[1] + m.tag_at[3]) / 2;
+        const h = Math.max(m.tag_at[3] - m.tag_at[1], 6);
+        if (isRemoteSensorCalloutOcc(typSpans, sheetSegs, { cx, cy, h, bbox: m.tag_at })) callouts.push(m);
+        else install.push(m);
+      }
+      if (install.length && callouts.length) {
+        for (const m of callouts) {
+          const at: Point = [Math.round(m.at[0] * 10) / 10, Math.round(m.at[1] * 10) / 10];
+          if (!text_only.some((t) => Math.hypot(t.at[0] - at[0], t.at[1] - at[1]) < 0.6)) text_only.push({ at });
+        }
+        matches.length = 0;
+        for (const m of install) matches.push(m);
+        matches.sort(byPos);
+      }
     }
   }
   return {

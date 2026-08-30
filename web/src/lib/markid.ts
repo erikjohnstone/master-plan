@@ -242,3 +242,62 @@ export function isRoutingLabelOcc(
   }
   return false;
 }
+
+/** Circled single-letter sensor captions — thermostat / smoke-or-switch /
+ *  humidistat. Not grid letters, not equipment tags. */
+const SENSOR_LETTER_RE = /^[TSH]$/;
+
+/** A tag occurrence that names a remote sensor rather than the installed
+ *  unit: a circled single-letter (the sensor glyph) sits at the far end of
+ *  a short drawn leader. The same boxed-tag stamp often recurs at that
+ *  callout, so geometry alone counts a second install. A lone occurrence
+ *  whose only drawn tag is on the sensor is NOT this class — the caller
+ *  keeps it (same preferInstallTagOccs doctrine as a routing mention).
+ *  No project, sheet, or tag names. */
+export function isRemoteSensorCalloutOcc(
+  spans: readonly MarkBox[],
+  segs: number[],
+  occ: { cx: number; cy: number; h: number; bbox?: [number, number, number, number] },
+): boolean {
+  const n = segs.length >> 2;
+  if (n < 12) return false;
+  const bb = occ.bbox ?? [occ.cx - 2 * occ.h, occ.cy - occ.h / 2, occ.cx + 2 * occ.h, occ.cy + occ.h / 2];
+  const pad = Math.max(occ.h * 0.4, 8);
+  const inTagBox = (x: number, y: number) =>
+    x >= bb[0] - pad && x <= bb[2] + pad && y >= bb[1] - pad && y <= bb[3] + pad;
+  for (const sp of spans) {
+    const letter = (sp.str || "").trim().toUpperCase();
+    if (!SENSOR_LETTER_RE.test(letter)) continue;
+    const lx = (sp.x0 + sp.x1) / 2, ly = (sp.y0 + sp.y1) / 2;
+    const lh = Math.max(sp.y1 - sp.y0, 6);
+    const dOcc = Math.hypot(lx - occ.cx, ly - occ.cy);
+    if (dOcc < 40 || dOcc > 240) continue;
+    if (dOcc < Math.max(occ.h, lh) * 1.5) continue;
+    let chords = 0;
+    const r0 = 0.85 * lh, r1 = 2.5 * lh;
+    for (let i = 0; i < n; i++) {
+      const x1 = segs[i * 4], y1 = segs[i * 4 + 1], x2 = segs[i * 4 + 2], y2 = segs[i * 4 + 3];
+      const len = Math.hypot(x2 - x1, y2 - y1);
+      if (len >= 8 || len < 1.5) continue;
+      const d = Math.hypot((x1 + x2) / 2 - lx, (y1 + y2) / 2 - ly);
+      if (d >= r0 && d <= r1) {
+        chords++;
+        if (chords >= 12) break;
+      }
+    }
+    if (chords < 12) continue;
+    for (let i = 0; i < n; i++) {
+      const x1 = segs[i * 4], y1 = segs[i * 4 + 1], x2 = segs[i * 4 + 2], y2 = segs[i * 4 + 3];
+      const len = Math.hypot(x2 - x1, y2 - y1);
+      if (len < 20 || len > 220) continue;
+      const da = Math.hypot(x1 - lx, y1 - ly);
+      const db = Math.hypot(x2 - lx, y2 - ly);
+      // The circle end of a real leader sits on the sensor, not on this
+      // tag's own boxed nameplate (those wings otherwise look like a
+      // short "leader" when the unit sits next to its thermostat).
+      if (da <= 28 && !inTagBox(x1, y1) && Math.hypot(x2 - occ.cx, y2 - occ.cy) < dOcc * 0.75) return true;
+      if (db <= 28 && !inTagBox(x2, y2) && Math.hypot(x1 - occ.cx, y1 - occ.cy) < dOcc * 0.75) return true;
+    }
+  }
+  return false;
+}

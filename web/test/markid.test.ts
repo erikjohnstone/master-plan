@@ -5,7 +5,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   markKey, marksEqual, dedupeMarks, spanAnswersFor, pickMarkHits, compoundTagOcc, MARK_CLUSTER_K,
-  isRoutingPhrase, isRoutingLabelOcc, ROUTING_LABEL_RADIUS_K,
+  isRoutingPhrase, isRoutingLabelOcc, isRemoteSensorCalloutOcc, ROUTING_LABEL_RADIUS_K,
 } from "../src/lib/markid.ts";
 
 const box = (str: string, x0: number, y0: number, w = str.length * 5, h = 8) =>
@@ -201,4 +201,56 @@ test("isRoutingLabelOcc: a nearby destination phrase attaches; a room-away one d
   assert.equal(isRoutingLabelOcc(far, tag), false);
   const sizeOnly = [box("AHU-1", 95, 95, 10, 10), box("36x16 RETURN", 100, 110, 40, 10)];
   assert.equal(isRoutingLabelOcc(sizeOnly, tag), false);
+});
+
+function circleSegs(cx: number, cy: number, r: number, n = 24): number[] {
+  const out: number[] = [];
+  for (let i = 0; i < n; i++) {
+    const a1 = (2 * Math.PI * i) / n, a2 = (2 * Math.PI * (i + 1)) / n;
+    out.push(cx + r * Math.cos(a1), cy + r * Math.sin(a1), cx + r * Math.cos(a2), cy + r * Math.sin(a2));
+  }
+  return out;
+}
+
+test("isRemoteSensorCalloutOcc: a boxed tag on a leader to a circled T is a callout", () => {
+  const t = box("T", 196, 196, 8, 8);
+  const tag = { cx: 80, cy: 230, h: 10 };
+  const segs = [
+    ...circleSegs(200, 200, 16),
+    185, 205, 120, 225, // leader: one end at the circle, the other closer to the tag
+  ];
+  assert.equal(isRemoteSensorCalloutOcc([t, box("FCU-A10", 70, 225, 20, 10)], segs, tag), true);
+});
+
+test("isRemoteSensorCalloutOcc: a tag beside equipment with no leader to the circled T is not a callout", () => {
+  const t = box("T", 196, 196, 8, 8);
+  const tag = { cx: 280, cy: 200, h: 10 }; // to the right of the T; no pointing leader
+  const segs = [
+    ...circleSegs(200, 200, 16),
+    185, 205, 120, 225, // leader goes LEFT, away from this tag
+    260, 180, 300, 180, 300, 180, 300, 220, 300, 220, 260, 220, 260, 220, 260, 180,
+  ];
+  assert.equal(isRemoteSensorCalloutOcc([t, box("FCU-A10", 270, 195, 20, 10)], segs, tag), false);
+});
+
+test("isRemoteSensorCalloutOcc: the unit nameplate box reaching toward a nearby T is not a leader", () => {
+  const t = box("T", 196, 196, 8, 8);
+  const tag = { cx: 264, cy: 200, h: 10, bbox: [224, 190, 304, 210] as [number, number, number, number] };
+  // Nameplate wing: one end near the T, the other on the tag — the live
+  // false-positive when a unit sits next to its own thermostat.
+  const segs = [...circleSegs(200, 200, 16), 220, 200, 250, 200];
+  assert.equal(isRemoteSensorCalloutOcc([t], segs, tag), false);
+});
+
+test("isRemoteSensorCalloutOcc: a circled letter without a leader is not a callout", () => {
+  const t = box("T", 196, 196, 8, 8);
+  const tag = { cx: 80, cy: 230, h: 10 };
+  assert.equal(isRemoteSensorCalloutOcc([t], circleSegs(200, 200, 16), tag), false);
+});
+
+test("isRemoteSensorCalloutOcc: a bare T span (no circle chords) is not a sensor", () => {
+  const t = box("T", 196, 196, 8, 8);
+  const tag = { cx: 80, cy: 230, h: 10 };
+  const segs = [185, 205, 120, 225];
+  assert.equal(isRemoteSensorCalloutOcc([t], segs, tag), false);
 });
