@@ -523,7 +523,7 @@
       "tolerance": 0,
       "citation": {
         "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
-        "table_title": null,
+        "table_title": "POINTS LIST AHU-T1A/TIB",
         "row_key": null,
         "column": null,
         "bbox_px": [
@@ -532,11 +532,10 @@
           4313.762,
           516.48
         ],
-        "grounding_text": "POINTS LIST",
+        "grounding_text": "POINTS LIST AHU-T1A/TIB",
         "ocr_mode": "single_line",
         "sheet_flexible": true,
-        "bbox_flexible": true,
-        "ocr_confusables": true
+        "bbox_flexible": true
       }
     },
     "total_ai": {
@@ -545,7 +544,7 @@
       "tolerance": 0,
       "citation": {
         "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
-        "table_title": null,
+        "table_title": "POINTS LIST AHU-T1A/TIB",
         "row_key": null,
         "column": null,
         "bbox_px": [
@@ -554,11 +553,10 @@
           4313.762,
           516.48
         ],
-        "grounding_text": "POINTS LIST",
+        "grounding_text": "POINTS LIST AHU-T1A/TIB",
         "ocr_mode": "single_line",
         "sheet_flexible": true,
-        "bbox_flexible": true,
-        "ocr_confusables": true
+        "bbox_flexible": true
       }
     },
     "total_ao": {
@@ -567,7 +565,7 @@
       "tolerance": 0,
       "citation": {
         "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
-        "table_title": null,
+        "table_title": "POINTS LIST AHU-T1A/TIB",
         "row_key": null,
         "column": null,
         "bbox_px": [
@@ -576,11 +574,10 @@
           4313.762,
           516.48
         ],
-        "grounding_text": "POINTS LIST",
+        "grounding_text": "POINTS LIST AHU-T1A/TIB",
         "ocr_mode": "single_line",
         "sheet_flexible": true,
-        "bbox_flexible": true,
-        "ocr_confusables": true
+        "bbox_flexible": true
       }
     },
     "total_bi": {
@@ -589,7 +586,7 @@
       "tolerance": 0,
       "citation": {
         "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
-        "table_title": null,
+        "table_title": "POINTS LIST AHU-T1A/TIB",
         "row_key": null,
         "column": null,
         "bbox_px": [
@@ -598,11 +595,10 @@
           4313.762,
           516.48
         ],
-        "grounding_text": "POINTS LIST",
+        "grounding_text": "POINTS LIST AHU-T1A/TIB",
         "ocr_mode": "single_line",
         "sheet_flexible": true,
-        "bbox_flexible": true,
-        "ocr_confusables": true
+        "bbox_flexible": true
       }
     },
     "total_bo": {
@@ -611,7 +607,7 @@
       "tolerance": 0,
       "citation": {
         "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
-        "table_title": null,
+        "table_title": "POINTS LIST AHU-T1A/TIB",
         "row_key": null,
         "column": null,
         "bbox_px": [
@@ -620,11 +616,10 @@
           4313.762,
           516.48
         ],
-        "grounding_text": "POINTS LIST",
+        "grounding_text": "POINTS LIST AHU-T1A/TIB",
         "ocr_mode": "single_line",
         "sheet_flexible": true,
-        "bbox_flexible": true,
-        "ocr_confusables": true
+        "bbox_flexible": true
       }
     },
     "doah_ai07_mark": {
