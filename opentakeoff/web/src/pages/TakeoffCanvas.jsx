@@ -8666,6 +8666,7 @@ export default function TakeoffCanvas() {
       count_marks: "Counting marks on plans…",
       highlight_citation: "Saving a source card…",
       project_takeoff: "Building the project takeoff…",
+      compile_corpus_takeoff: "Compiling the full takeoff…",
       view_sheet: "Checking a sheet…",
       resolve_tag: "Resolving a tag…",
     };

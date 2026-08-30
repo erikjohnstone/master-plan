@@ -81,6 +81,21 @@ async function runOne(job) {
   });
   const page = await context.newPage();
   page.setDefaultTimeout(120_000);
+  page.on("console", (msg) => {
+    const t = msg.type();
+    if (t === "error" || t === "warning") {
+      console.log(`[${job.label}] console.${t}: ${msg.text().slice(0, 400)}`);
+    }
+  });
+  page.on("pageerror", (err) => {
+    console.log(`[${job.label}] pageerror: ${String(err).slice(0, 400)}`);
+  });
+  page.on("requestfailed", (req) => {
+    const u = req.url();
+    if (/cerebras|openai|api\.|/v1\/chat/i.test(u)) {
+      console.log(`[${job.label}] requestfailed: ${req.failure()?.errorText || "?"} ${u.slice(0, 120)}`);
+    }
+  });
 
   // Only AI settings — no seeded takeoff rows, no pre-loaded project.
   await page.addInitScript(({ endpoint, apiKey, model }) => {
