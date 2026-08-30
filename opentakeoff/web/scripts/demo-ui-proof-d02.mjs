@@ -135,7 +135,9 @@ try {
     || /\b(?:all|each)\b.{0,160}\bhighlight/is.test(finalAnswer)) {
     throw new Error("D02 UI answer contains a correction cap, placeholder, invalid quantity rationale, or invalid coordinate form.");
   }
-  const normalizedPanel = finalAnswer.toUpperCase().replace(/[‑–—]/g, "-").replace(/\s+/g, " ");
+  const normalizedPanel = finalAnswer.toUpperCase()
+    .replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D‑–—]/g, "-")
+    .replace(/\s+/g, " ");
   for (const expected of [
     "AI10", "AHU-T1A", "11TH FLOOR MECHANICAL", "3850",
     "HW VALVE POSITION (FEEDBACK)", "CONTROL CAB",
@@ -145,11 +147,17 @@ try {
       throw new Error(`D02 UI answer is missing required truth value: ${expected}`);
     }
   }
-  if (!normalizedPanel.includes("NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#65")
-    || !normalizedPanel.includes("NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#48")
-    || !normalizedPanel.includes("NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#28")
-    || !normalizedPanel.includes("NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#2")) {
-    throw new Error("D02 UI answer is missing required multi-sheet citations.");
+  const sheetMentions = [...normalizedPanel.matchAll(/NAVFAC-CHERRY-POINT-ATC-MECHANICAL\.PDF#\d+/g)]
+    .map((match) => match[0]);
+  for (const sheet of [
+    "NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#65",
+    "NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#48",
+    "NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#28",
+    "NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#2",
+  ]) {
+    if (!sheetMentions.includes(sheet)) {
+      throw new Error(`D02 UI answer is missing required multi-sheet citations (${sheet}).`);
+    }
   }
   // Reject schedule LOCATION substituted for serves narrative.
   if (/SERVES[\s\S]{0,120}11TH FLOOR MECHANICAL/i.test(finalAnswer)

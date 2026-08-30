@@ -181,16 +181,43 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return `The final answer does not state the actual swept plan sheet for: ${missingPlanSheets.join(", ")}. Include the unchanged sheet and image-pixel bbox from sweep_schedule_row.tag_citations in the plan-location section; do not substitute a schedule sheet.`;
     }
   }
+  const identityHeadersByTag = new Map();
   for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
     for (const match of out?.matches || []) {
       const identity = match?.row?.identity;
       if (!identity?.header || !identity?.text) continue;
       const tagCanonical = String(identity.text).toUpperCase().replace(/[^A-Z0-9]/g, "");
-      const headerCanonical = String(identity.header).toUpperCase().replace(/[^A-Z0-9]/g, "");
-      if (finalCanonical.includes(tagCanonical) && !finalCanonical.includes(headerCanonical)) {
-        return `The final answer mentions ${identity.text} but does not cite its semantic identity header ${identity.header}. Use query_table row.identity exactly; do not substitute another repeated-value column.`;
-      }
+      if (!tagCanonical) continue;
+      if (!identityHeadersByTag.has(tagCanonical)) identityHeadersByTag.set(tagCanonical, []);
+      identityHeadersByTag.get(tagCanonical).push({
+        text: identity.text,
+        header: identity.header,
+        headerCanonical: String(identity.header).toUpperCase().replace(/[^A-Z0-9]/g, ""),
+      });
     }
+  }
+  for (const [, headers] of identityHeadersByTag) {
+    const tagCanonical = String(headers[0].text).toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (!finalCanonical.includes(tagCanonical)) continue;
+    if (headers.some((item) => finalCanonical.includes(item.headerCanonical))) continue;
+    const example = headers[0];
+    return `The final answer mentions ${example.text} but does not cite its semantic identity header ${example.header}. Use query_table row.identity exactly; do not substitute another repeated-value column.`;
+  }
+  const mentionedQuerySheets = [];
+  for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
+    for (const match of out?.matches || []) {
+      const sheet = String(match?.sheet || "");
+      if (!sheet) continue;
+      const rowKey = String(match?.row?.key || match?.row?.identity?.text || "");
+      const rowCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (!rowCanonical || !finalCanonical.includes(rowCanonical)) continue;
+      const sheetNorm = sheet.toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
+      const answerNorm = finalText.toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
+      if (!answerNorm.includes(sheetNorm)) mentionedQuerySheets.push(`${rowKey} → ${sheet}`);
+    }
+  }
+  if (mentionedQuerySheets.length) {
+    return `The final answer uses query_table row(s) without naming their evidence sheet id(s): ${[...new Set(mentionedQuerySheets)].slice(0, 6).join("; ")}. Copy the unchanged match.sheet string from the tool result into the citation.`;
   }
   const drawingTextHits = callLog
     .filter(({ name, out }) =>
