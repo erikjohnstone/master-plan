@@ -9,23 +9,89 @@
  * takeoff-only fork. Body: JSON { pdfPath } or multipart file(s) + kind.
  */
 import { mkdtemp, writeFile, rm, readFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { spawn } from "node:child_process";
-import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
-const mcpRoot = resolve(fileURLToPath(new URL(".", import.meta.url)), "../mcp");
+const webRoot = resolve(fileURLToPath(new URL(".", import.meta.url)));
+const mcpRoot = resolve(webRoot, "../mcp");
 const cli = resolve(mcpRoot, "scripts/production-graph-cli.mjs");
+
+/**
+ * Resolve the tsx ESM loader to an absolute file URL/path so
+ * `node --import <tsx>` works even when:
+ *   - only `opentakeoff/web` was npm-installed (tsx lives under web/)
+ *   - mcp has tsx as a dependency but node_modules is incomplete
+ * Bare `--import tsx` with cwd=mcp fails with ERR_MODULE_NOT_FOUND when
+ * mcp/node_modules/tsx is missing — that broke every compile_corpus_takeoff
+ * in the Takeoff UI (valve/HVAC/BAS).
+ */
+export function resolveTsxLoader() {
+  const bases = [
+    mcpRoot,
+    webRoot,
+    resolve(webRoot, ".."),
+    process.cwd(),
+  ];
+  const tried = [];
+  for (const base of bases) {
+    const pkg = join(base, "package.json");
+    if (!existsSync(pkg)) {
+      tried.push(`${base} (no package.json)`);
+      continue;
+    }
+    try {
+      const req = createRequire(pkg);
+      const resolved = req.resolve("tsx");
+      tried.push(`${base} → ${resolved}`);
+      if (resolved) return resolved;
+    } catch (err) {
+      tried.push(`${base} → ${err?.code || err?.message || err}`);
+    }
+  }
+  // Last resort: known relative install layouts
+  for (const candidate of [
+    resolve(mcpRoot, "node_modules/tsx/dist/loader.mjs"),
+    resolve(webRoot, "node_modules/tsx/dist/loader.mjs"),
+  ]) {
+    if (existsSync(candidate)) return candidate;
+    tried.push(`${candidate} (missing)`);
+  }
+  throw new Error(
+    "Cannot resolve 'tsx' for production Session+ODL compile. "
+    + "Install dependencies in opentakeoff/mcp (and/or opentakeoff/web): "
+    + "`npm install`. Tried: "
+    + tried.join("; "),
+  );
+}
 
 function runCli({ mode, kind, pdfPaths, outPath }) {
   return new Promise((resolvePromise, reject) => {
-    const args = ["--import", "tsx", cli, "--mode", mode];
+    let tsxLoader;
+    try {
+      tsxLoader = resolveTsxLoader();
+    } catch (err) {
+      reject(err);
+      return;
+    }
+    // Prefer file URL so Node resolves the loader regardless of cwd.
+    const importSpec = pathToFileURL(tsxLoader).href;
+    const args = ["--import", importSpec, cli, "--mode", mode];
     if (kind) args.push("--kind", kind);
     for (const p of pdfPaths) args.push("--pdf", p);
     if (outPath) args.push("--out", outPath);
     const child = spawn(process.execPath, args, {
       cwd: mcpRoot,
-      env: process.env,
+      env: {
+        ...process.env,
+        // Help Node find peer deps of tsx / mcp packages from either tree.
+        NODE_PATH: [resolve(mcpRoot, "node_modules"), resolve(webRoot, "node_modules"), process.env.NODE_PATH]
+          .filter(Boolean)
+          .join(":"),
+      },
       stdio: ["ignore", "pipe", "pipe"],
     });
     let stdout = "";
