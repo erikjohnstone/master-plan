@@ -37,9 +37,20 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     .map((match) => String(match?.row?.key || "").toUpperCase())
     .filter(Boolean));
   const unswept = [...queried].filter((tag) => !swept.has(tag));
+  const finalCanonical = finalText.toUpperCase().replace(/[^A-Z0-9]/g, "");
   if (unswept.length && /\bboth tags\b|\bplan location\b/i.test(finalText)
-    && unswept.some((tag) => finalText.toUpperCase().includes(tag))) {
+    && unswept.some((tag) => finalCanonical.includes(tag.replace(/[^A-Z0-9]/g, "")))) {
     return `The final answer claims a plan location for unswept tag(s): ${unswept.join(", ")}. A schedule query proves schedule data only. Remove those plan-location claims or call sweep_schedule_row for each exact tag.`;
+  }
+  for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
+    for (const match of out?.matches || []) {
+      const identity = match?.row?.identity;
+      if (!identity?.header || !identity?.text) continue;
+      const tagCanonical = String(identity.text).toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (finalCanonical.includes(tagCanonical) && !finalText.toUpperCase().includes(identity.header.toUpperCase())) {
+        return `The final answer mentions ${identity.text} but does not cite its semantic identity header ${identity.header}. Use query_table row.identity exactly; do not substitute another repeated-value column.`;
+      }
+    }
   }
   if (/\bshow\b.*\bcite\b|\bcite the exact\b/i.test(goal)
     && !callLog.some(({ name, out }) => name === "highlight_citation" && !out?.error)) {

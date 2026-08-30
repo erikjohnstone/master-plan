@@ -47,6 +47,14 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     { name: "sweep_schedule_row", args: { tag: "CH-A1" }, out: { found: 1 } },
     { name: "query_table", out: { matches: [{ row: { key: "CV-CH-A1" } }] } },
   ], "Find CH-A1", "Both tags share this plan location: CH-A1 and CV-CH-A1.")!, /unswept tag/);
+  assert.match(requiredEvidenceCorrection([
+    { name: "sweep_schedule_row", args: { tag: "CH-A1" }, out: { found: 1 } },
+    { name: "query_table", out: { matches: [{ row: { key: "CV-CH-A1" } }] } },
+  ], "Find CH-A1", "Plan location for CV‑CH‑A1 is the same." )!, /unswept tag/);
+  assert.match(requiredEvidenceCorrection([{
+    name: "query_table",
+    out: { matches: [{ row: { identity: { header: "VALVE MARK", text: "CV-CH-A1" } } }] },
+  }], "Find the valve", "CV‑CH‑A1 comes from UNIT MARK.")!, /semantic identity header VALVE MARK/);
   assert.match(requiredEvidenceCorrection([], "Show me the plan and cite the exact cells")!, /highlight_citation/);
 });
 
