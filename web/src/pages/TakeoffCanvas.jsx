@@ -65,7 +65,7 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // The Symbol tool (#264) — the canvas face for the sweep engine. The engine,
 // counter-examples, the luminance channel, and label corroboration all live
 // as pure web libs already; this file adds only the gesture and the review.
-import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, matchQuantity } from "../lib/symbolsweep";
+import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches, promoteSetWideLabeledNearMisses, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, matchQuantity } from "../lib/symbolsweep";
 import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib/mepconnectivity.ts";
 import { mepLayerSignal } from "../lib/mepsystems.ts";
 // Accuracy-hardening plan Phase 2 — on an unlayered/weakly-layered sheet, a
@@ -7240,8 +7240,9 @@ export default function TakeoffCanvas() {
 
     // 4. the full plan-only sweep + tag corroboration per match, per sheet —
     // classifySweepMatches carries the #186 size ratio and reports it.
-    let totalFound = 0;
-    const perSheet = [];
+    // Classify every sheet first, then promote a leftover labeled family
+    // that is split across sheets (same rule as mcp/src/session.ts).
+    const rawSheets = [];
     for (const { key, occ, routing } of occBySheet) {
       const dims = await ensureSheetGeometry(key);
       const segs = vectorSegsRef.current.get(key);
@@ -7253,7 +7254,15 @@ export default function TakeoffCanvas() {
       const typSpans = await ensureTextSpans(key);
       try { cls = classifySweepMatches(t, fp, segs, ratio, occ, sibSpans, anchor.h, { ...sweepOpts, typSpans }); }
       catch (e) { skipped.push({ sheet: key, role: "plan", reason: String(e?.message || e) }); continue; }
-
+      const claimR = (cls.scaled ? cls.scaled.footprint_px : fp.footprint) / 2 + anchor.h;
+      rawSheets.push({ key, occ, routing, dims, cls, ratio, claimR });
+    }
+    const familyLeftoverN = promoteSetWideLabeledNearMisses(
+      rawSheets.map((r) => ({ matches: r.cls.matches, withheld: r.cls.withheld, occ: r.occ, R: r.claimR })),
+    );
+    let totalFound = 0;
+    const perSheet = [];
+    for (const { key, routing, dims, cls, ratio } of rawSheets) {
       const norm = ([x, y]) => [+(x / dims.w).toFixed(5), +(y / dims.h).toFixed(5)];
       const matches = cls.matches.map((m) => ({ at: norm(m.at), score: m.score }));
       const excluded = cls.excluded.map((e) => ({ at: norm(e.at), tag: e.tag }));
@@ -7279,6 +7288,7 @@ export default function TakeoffCanvas() {
     const rowAssumed = perSheet.filter((p) => p.scale_assumed && !p.found);
     if (rowAssumed.length) notes.push(`${rowAssumed.map((p) => p.sheet).join(", ")} found nothing and were swept at 1:1 — no scale is set on ${anchorKey} or on them, so a different drawn scale there is a live explanation for the zero. Set scale on both ends to rule it out.`);
     if (routingN) notes.push(`${routingN} drawn occurrence(s) of "${t}" sit next to a duct/pipe destination or source callout and were withheld as routing labels, not installs; audit with view_region before treating one as a second unit.`);
+    if (familyLeftoverN) notes.push(`${familyLeftoverN} leftover labeled near-miss(es) counted as a same-convention family split across sheets — each leftover sits next to this row's own tag and a near-bar withheld, and the set already has a geometrically-confirmed instance; audit with view_region before trusting the count.`);
 
     return {
       tag: t,

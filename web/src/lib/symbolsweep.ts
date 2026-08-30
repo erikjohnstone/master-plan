@@ -132,6 +132,9 @@ export interface SweepMatch {
 
 export interface SweepWithheld extends SweepMatch {
   reason: string;
+  /** True when this near-bar withheld sits next to this row's own tag.
+   * Set-wide family promotion reads this flag, not the reason string. */
+  beside_tag?: boolean;
 }
 
 /** A placement a counter-example rejected (#259). Disclosed the way `withheld`
@@ -1642,6 +1645,86 @@ export function corroborateFingerprint(
   return null;
 }
 
+/** One leftover labeled near-miss is the schematic-versus-plan extra.
+ * Two or more, next to a counted instance, are a same-convention family.
+ * When two or more instances already counted, leftovers must strictly
+ * outnumber them — a partial family that missed more siblings than it
+ * hit, not N commits plus N extras. */
+function isLabeledNearMissFamily(confident: number, leftoverN: number): boolean {
+  return confident >= 1 && leftoverN >= 2 && (confident === 1 || leftoverN > confident);
+}
+
+function occClaimedByMatch(o: TagOcc, matches: SweepSheetMatch[]): boolean {
+  return matches.some((m) =>
+    m.tag_at[0] === o.bbox[0] && m.tag_at[1] === o.bbox[1]
+    && m.tag_at[2] === o.bbox[2] && m.tag_at[3] === o.bbox[3]);
+}
+
+function collectLabeledNearMissLeftovers(
+  leftover: SweepWithheld[],
+  occ: TagOcc[],
+  matches: SweepSheetMatch[],
+  R: number,
+  excludeCenter?: Point,
+  matchedOcc?: Set<number>,
+): { leftoverOcc: Array<{ o: TagOcc; i: number }>; labeledLeftovers: Array<{ o: TagOcc; i: number }>; confident: number } {
+  const countedAt: Point[] = matches.map((m) => m.at);
+  if (excludeCenter) countedAt.push(excludeCenter);
+  const within = (x: number, y: number, p: Point) => Math.hypot(x - p[0], y - p[1]) <= R;
+  const besideCounted = (x: number, y: number) => countedAt.some((p) => within(x, y, p));
+  const leftoverOcc = occ
+    .map((o, i) => ({ o, i }))
+    .filter(({ o, i }) => o.kind !== "routing"
+      && !(matchedOcc?.has(i))
+      && !occClaimedByMatch(o, matches)
+      && !besideCounted(o.cx, o.cy));
+  const labeledLeftovers = leftoverOcc.filter(({ o }) => {
+    const nearW = leftover.filter((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R);
+    if (!nearW.length) return false;
+    // A withheld that also sits on an already-counted instance is that
+    // instance's own furniture, not a second install.
+    if (nearW.some((w) => besideCounted(w.at[0], w.at[1]))) return false;
+    return true;
+  });
+  return { leftoverOcc, labeledLeftovers, confident: matches.length + (excludeCenter ? 1 : 0) };
+}
+
+function claimLabeledNearMisses(
+  leftover: SweepWithheld[],
+  leftoverOcc: Array<{ o: TagOcc; i: number }>,
+  occ: TagOcc[],
+  matchedOcc: Set<number> | undefined,
+  matches: SweepSheetMatch[],
+  withheld: SweepWithheld[],
+  R: number,
+): number {
+  const claimed = new Set<SweepWithheld>();
+  let n = 0;
+  for (const { i } of leftoverOcc) {
+    let best: SweepWithheld | null = null;
+    let bestD = Infinity;
+    for (const w of leftover) {
+      if (claimed.has(w)) continue;
+      const d = Math.hypot(w.at[0] - occ[i].cx, w.at[1] - occ[i].cy);
+      if (d <= R && d < bestD) {
+        best = w;
+        bestD = d;
+      }
+    }
+    if (best) {
+      const { beside_tag: _beside, ...rest } = best;
+      matches.push({ ...rest, tag_at: occ[i].bbox });
+      matchedOcc?.add(i);
+      claimed.add(best);
+      n++;
+    }
+  }
+  for (const w of leftover) {
+    if (!claimed.has(w)) withheld.push(w);
+  }
+  return n;
+}
+
 /**
  * When a sheet already has exactly one confident counted instance and
  * several leftover own-tag occurrences each have a near-bar withheld
@@ -1663,47 +1746,54 @@ function promoteLabeledNearMisses(
   R: number,
   excludeCenter?: Point,
 ): void {
-  const countedAt: Point[] = matches.map((m) => m.at);
-  if (excludeCenter) countedAt.push(excludeCenter);
-  const within = (x: number, y: number, p: Point) => Math.hypot(x - p[0], y - p[1]) <= R;
-  const besideCounted = (x: number, y: number) => countedAt.some((p) => within(x, y, p));
-  const leftoverOcc = occ
-    .map((o, i) => ({ o, i }))
-    .filter(({ o, i }) => o.kind !== "routing" && !matchedOcc.has(i) && !besideCounted(o.cx, o.cy));
-  const labeledLeftovers = leftoverOcc.filter(({ o }) => {
-    const nearW = leftover.filter((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R);
-    if (!nearW.length) return false;
-    // A withheld that also sits on an already-counted instance is that
-    // instance's own furniture, not a second install.
-    if (nearW.some((w) => besideCounted(w.at[0], w.at[1]))) return false;
-    return true;
-  });
-  const confident = matches.length + (excludeCenter ? 1 : 0);
+  const { leftoverOcc, labeledLeftovers, confident } =
+    collectLabeledNearMissLeftovers(leftover, occ, matches, R, excludeCenter, matchedOcc);
   if (confident !== 1 || labeledLeftovers.length < 2) {
     for (const w of leftover) withheld.push(w);
     return;
   }
-  const claimed = new Set<SweepWithheld>();
-  for (const { o, i } of leftoverOcc) {
-    let best: SweepWithheld | null = null;
-    let bestD = Infinity;
-    for (const w of leftover) {
-      if (claimed.has(w)) continue;
-      const d = Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy);
-      if (d <= R && d < bestD) {
-        best = w;
-        bestD = d;
-      }
-    }
-    if (best) {
-      matches.push({ ...best, tag_at: occ[i].bbox });
-      matchedOcc.add(i);
-      claimed.add(best);
-    }
+  claimLabeledNearMisses(leftover, leftoverOcc, occ, matchedOcc, matches, withheld, R);
+}
+
+/** One sheet's classifySweepMatches bags, for a set-wide leftover family.
+ * `R` is that sheet's own claim radius (footprint/2 + anchorH). */
+export interface LabeledNearMissSheet {
+  matches: SweepSheetMatch[];
+  withheld: SweepWithheld[];
+  occ: TagOcc[];
+  R: number;
+  excludeCenter?: Point;
+}
+
+/**
+ * The same labeled-family rule as promoteLabeledNearMisses, counted
+ * across every swept sheet. A same-convention family split one leftover
+ * per sheet never clears the per-sheet bar (each sheet sees a lone
+ * leftover — the schematic-versus-plan shape). Two or more leftover
+ * labeled near-misses next to at least one set-wide counted instance
+ * are that family. When two or more instances already counted,
+ * leftovers must strictly outnumber them (N commits plus N leftovers
+ * stay withheld). Mutates each sheet's matches/withheld in place.
+ * Returns how many leftovers were promoted.
+ */
+export function promoteSetWideLabeledNearMisses(sheets: LabeledNearMissSheet[]): number {
+  const per = sheets.map((s) => {
+    const leftover = s.withheld.filter((w) => w.beside_tag);
+    const info = collectLabeledNearMissLeftovers(leftover, s.occ, s.matches, s.R, s.excludeCenter);
+    return { s, leftover, ...info };
+  });
+  const confident = per.reduce((n, p) => n + p.confident, 0);
+  const leftoverN = per.reduce((n, p) => n + p.labeledLeftovers.length, 0);
+  if (!isLabeledNearMissFamily(confident, leftoverN)) return 0;
+  let n = 0;
+  for (const p of per) {
+    if (!p.labeledLeftovers.length) continue;
+    const keep = p.s.withheld.filter((w) => !p.leftover.includes(w));
+    p.s.withheld.length = 0;
+    for (const w of keep) p.s.withheld.push(w);
+    n += claimLabeledNearMisses(p.leftover, p.leftoverOcc, p.s.occ, undefined, p.s.matches, p.s.withheld, p.s.R);
   }
-  for (const w of leftover) {
-    if (!claimed.has(w)) withheld.push(w);
-  }
+  return n;
 }
 
 export interface SweepSheetMatch extends SweepMatch {
@@ -1816,9 +1906,11 @@ export interface SweepSheetResult {
  * still-unclaimed same-tag occurrences each sit
  * next to a near-bar withheld (a labeled same-convention family whose
  * fingerprint cleared the bar at the seed and missed it at the siblings
- * by hatch/size, not identity). A single leftover labeled near-miss is
- * left withheld: that is the schematic-vs-plan dual-convention shape,
- * not a second install. Matches closer than half a symbol diagonal,
+ * by hatch/size, not identity). A single leftover labeled near-miss on
+ * one sheet is left withheld (the schematic-vs-plan extra). The same
+ * family counted across sheets — `promoteSetWideLabeledNearMisses` —
+ * promotes when leftovers split one-per-sheet next to a set-wide
+ * counted instance. Matches closer than half a symbol diagonal,
  * or a different square-symmetry transform inside one footprint,
  * collapse to the better score before any tag is claimed. A match is
  * claimed against the NEAREST occurrence within R, never the first-in-
@@ -1922,7 +2014,7 @@ export function classifySweepMatches(
       continue;
     }
     const near = occ.some((o) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= R);
-    leftoverWithheld.push(near ? { ...w, reason: `${w.reason} — and the "${tag}" tag is drawn beside it` } : w);
+    leftoverWithheld.push(near ? { ...w, reason: `${w.reason} — and the "${tag}" tag is drawn beside it`, beside_tag: true } : w);
   }
   promoteLabeledNearMisses(leftoverWithheld, occ, matchedOcc, matches, withheld, R, opts.excludeCenter);
   const byPos = (a: { at: Point }, b: { at: Point }) => a.at[1] - b.at[1] || a.at[0] - b.at[0];
