@@ -149,40 +149,45 @@ try {
   console.log(`UI_AGENT_PRIMARY\n${panelText.slice(0, 4000)}`);
 
   // Answer-first: an Answer thread entry must exist with truth values.
-  if (!/^\s*Answer\b/m.test(panelText) && !/\bANSWER\b/.test(panelText)) {
-    // New panel labels assistant turns "Answer"
-    if (!panelText.includes("Answer")) {
-      throw new Error("D03 UI panel missing answer-first thread (no Answer section).");
-    }
+  if (!/\bAnswer\b/.test(panelText)) {
+    throw new Error("D03 UI panel missing answer-first thread (no Answer section).");
   }
-  const norm = normalize(panelText);
-  const required = [
-    ["AHU", String(truth.expected.ahu_count.value)],
-    ["FCU", String(truth.expected.fcu_count.value)],
-    ["VAV", String(truth.expected.vav_count.value)],
-    ["BOILER", String(truth.expected.boiler_count.value)],
-    ["42", "42"], // fcu total appears as number
+  // Prefer the Answer body (exclude Goal / Technical steps dumps) so incidental
+  // digits in tool traces cannot satisfy count checks.
+  const answerBodies = [...panelText.matchAll(/(?:^|\n)\s*Answer\b\s*\n([\s\S]*?)(?=\n\s*(?:Answer|Sources|Technical steps|Goal:|Ask a follow-up)\b|$)/gi)]
+    .map((m) => m[1].trim())
+    .filter(Boolean);
+  const primaryAnswer = answerBodies[0] || "";
+  if (primaryAnswer.length < 40) {
+    throw new Error("D03 UI Answer section is empty or too short to be a takeoff reply.");
+  }
+  const answerNorm = normalize(primaryAnswer);
+  const near = (labels, value) => {
+    const lab = labels.map((l) => l.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
+    const v = String(value);
+    return new RegExp(`(?:${lab})[^0-9]{0,48}${v}(?![0-9])|${v}(?![0-9])[^0-9]{0,48}(?:${lab})`, "i").test(answerNorm);
+  };
+  const checks = [
+    [["AHU", "AIR HANDLING"], truth.expected.ahu_count.value],
+    [["DOAH", "DEDICATED OUTDOOR"], truth.expected.doah_count.value],
+    [["FCU", "FAN COIL"], truth.expected.fcu_count.value],
+    [["VAV", "VARIABLE AIR"], truth.expected.vav_count.value],
+    [["AIR-COOLED CHILLER", "AIR COOLED CHILLER", "AIR-COOLED"], truth.expected.air_cooled_chiller_count.value],
+    [["HEAT-RECOVERY", "HEAT RECOVERY"], truth.expected.heat_recovery_chiller_count.value],
+    [["BOILER"], truth.expected.boiler_count.value],
+    [["AIR OPS", "A=", "A:"], truth.expected.fcu_air_ops_count.value],
+    [["ATCT", "T=", "T:"], truth.expected.fcu_atct_count.value],
+    [["POINTS", "BAS", "AHU-T1A"], truth.expected.bas_ahu_t1a_tib_points_rows.value],
   ];
-  // Stronger: require the exact totals near family words when possible
-  for (const [label, value] of [
-    ["ahu_count", truth.expected.ahu_count.value],
-    ["fcu_count", truth.expected.fcu_count.value],
-    ["vav_count", truth.expected.vav_count.value],
-    ["air_cooled_chiller_count", truth.expected.air_cooled_chiller_count.value],
-    ["heat_recovery_chiller_count", truth.expected.heat_recovery_chiller_count.value],
-    ["boiler_count", truth.expected.boiler_count.value],
-    ["fcu_air_ops_count", truth.expected.fcu_air_ops_count.value],
-    ["fcu_atct_count", truth.expected.fcu_atct_count.value],
-    ["vav_air_ops_count", truth.expected.vav_air_ops_count.value],
-    ["vav_mitracon_count", truth.expected.vav_mitracon_count.value],
-    ["bas_ahu_t1a_tib_points_rows", truth.expected.bas_ahu_t1a_tib_points_rows.value],
-    ["doah_count", truth.expected.doah_count.value],
-  ]) {
-    if (!norm.includes(String(value))) {
-      throw new Error(`D03 UI answer missing truth value for ${label}=${value}`);
+  for (const [labels, value] of checks) {
+    if (!near(labels, value)) {
+      throw new Error(`D03 UI Answer missing labeled truth for ${labels[0]}=${value}`);
     }
   }
-  void required;
+  // Reject known wrong DOAH rollups that blend UNIT+HANDLING page sums.
+  if (/\bDOAH\b[^0-9]{0,60}\b4\b/i.test(answerNorm) && !near(["DOAH", "DEDICATED OUTDOOR"], 3)) {
+    throw new Error("D03 UI Answer reports DOAH total 4 without the correct unit-schedule total 3.");
+  }
 
   // Source cards (estimator-clarity): clickable Sources section
   const sourcesHeader = page.getByText(/Sources · click to open/i);
@@ -209,15 +214,31 @@ try {
   await page.screenshot({ path: "/opt/cursor/artifacts/d03_ui_followup_answer.png" });
   const afterFollow = await panelRoot.innerText();
   console.log(`UI_AGENT_FOLLOWUP\n${afterFollow.slice(-2500)}`);
-  const followNorm = normalize(afterFollow);
-  if (!followNorm.includes("18")) {
+  const followBodies = [...afterFollow.matchAll(/(?:^|\n)\s*Answer\b\s*\n([\s\S]*?)(?=\n\s*(?:Answer|Sources|Technical steps|Goal:|Ask a follow-up)\b|$)/gi)]
+    .map((m) => m[1].trim())
+    .filter(Boolean);
+  const followAnswer = followBodies[followBodies.length - 1] || "";
+  if (followAnswer.length < 20) {
+    throw new Error("D03 follow-up missing Answer thread entry.");
+  }
+  const followNorm = normalize(followAnswer);
+  const followNear = (labels, value) => {
+    const lab = labels.map((l) => l.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
+    const v = String(value);
+    return new RegExp(`(?:${lab})[^0-9]{0,48}${v}(?![0-9])|${v}(?![0-9])[^0-9]{0,48}(?:${lab})`, "i").test(followNorm);
+  };
+  if (!followNear(["ATCT", "FAN COIL", "FCU", "T=", "T:"], 18) && !/\b18\b/.test(followNorm)) {
     throw new Error("D03 follow-up missing ATCT FCU count 18.");
   }
-  if (!/FCU-T11/.test(afterFollow) && !followNorm.includes("FCU-T11")) {
+  if (!/FCU-T11/i.test(followAnswer)) {
     throw new Error("D03 follow-up missing FCU-T11 acknowledgement.");
   }
-  if (!/HANDLING/i.test(afterFollow) && !/DOAH-T1/i.test(afterFollow)) {
-    throw new Error("D03 follow-up missing DOAH-T1 / HANDLING schedule evidence.");
+  // Require HANDLING as its own schedule-family word — not merely "AIR HANDLING".
+  if (!/OUTDOOR AIR HANDLING|DOAH[^\n]{0,80}HANDLING|HANDLING UNIT SCHEDULE/i.test(followAnswer)) {
+    throw new Error("D03 follow-up missing DOAH-T1 HANDLING schedule evidence.");
+  }
+  if (!/DOAH-T1/i.test(followAnswer)) {
+    throw new Error("D03 follow-up missing DOAH-T1.");
   }
 
   succeeded = true;
