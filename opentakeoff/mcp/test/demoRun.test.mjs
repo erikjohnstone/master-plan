@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { parseJsonAnswer, runToolCallingModel } from "../scripts/run-demo.mjs";
+import { DEMO_TOOLS, parseJsonAnswer, runToolCallingModel } from "../scripts/run-demo.mjs";
+
+test("demo runner exposes deterministic plan-location evidence tools", () => {
+  assert.equal(DEMO_TOOLS.has("find_text"), true);
+  assert.equal(DEMO_TOOLS.has("read_sheet_text"), true);
+  assert.equal(DEMO_TOOLS.has("view_sheet"), true);
+});
 
 test("parseJsonAnswer accepts JSON and strips a fenced transport wrapper", () => {
   assert.deepEqual(parseJsonAnswer('{"status":"done","answer":{}}'), {

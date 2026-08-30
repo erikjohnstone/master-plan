@@ -8,11 +8,13 @@ import dotenv from "dotenv";
 import { buildServer } from "../server.ts";
 import { Session } from "../src/session.ts";
 
-const DEMO_TOOLS = new Set([
+export const DEMO_TOOLS = new Set([
   "sheet_graph",
   "find_schedule",
   "read_schedule",
   "query_table",
+  "read_sheet_text",
+  "find_text",
   "sweep_schedule_row",
   "project_takeoff",
   "view_sheet",
