@@ -4,6 +4,8 @@ import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import Tesseract from "tesseract.js";
 import { Session } from "../src/session.ts";
+import { cachedSheetGraph } from "./sheetGraphCache.mjs";
+import { createHash } from "node:crypto";
 
 const FAILURE_CLASSES = new Set([
   "RETRIEVAL",
@@ -354,8 +356,23 @@ async function main() {
   const run = truthOnly
     ? synthesizeTruthRun(truth)
     : JSON.parse(readFileSync(resolve(runPath), "utf8"));
+  const pdfPath = resolve(corpusDir, "raw", truth.source_file);
   const session = new Session();
-  await session.loadPlan(resolve(corpusDir, "raw", truth.source_file));
+  await session.loadPlan(pdfPath);
+  // Warm sheet-graph cache (same PDF shared by most demos) — still loadPlan
+  // for sheet dims / findText, but skip ~11s ensureGraph rebuild on hits.
+  try {
+    const pdfBytes = readFileSync(pdfPath);
+    const sha = createHash("sha256").update(pdfBytes).digest("hex");
+    const graph = await cachedSheetGraph(pdfPath, {
+      expectedSha256: sha,
+      identity: [truth.set_id || "", "graphForPipeline"],
+      compute: async () => session.graphForPipeline(),
+    });
+    session.seedPipelineGraph(graph);
+  } catch {
+    /* cold path: ensureGraph on first verifyDemoRun call */
+  }
 
   let worker = null;
   let recognize = async () => {
