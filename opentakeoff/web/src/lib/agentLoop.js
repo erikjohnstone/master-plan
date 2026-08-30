@@ -25,6 +25,7 @@ import {
   advanceTakeoffWorkflow,
   workflowDirective,
   isIllegalWorkflowTransition,
+  scheduleFamilyNeedles,
 } from "./takeoffWorkflow.js";
 
 // Full-set HVAC/BAS takeoffs need list/graph + several count queries + scoped
@@ -110,14 +111,14 @@ export function toolsForGoal(goal, tools) {
 /** Title-scan needles for multi-family schedule takeoffs. Returns Exact
  *  query_table title strings still missing from the call log. */
 export function missingScheduleTitleScans(callLog, goal) {
+  const familyTokens = /\b(?:AHU|FCU|VAV|DOAH|DOAS|CRAH|CUH|chiller|boiler|pump|humidifier|dehumidifier|diffuser|grille|separator|expansion|unit\s+heater|fan[\s-]*coil|points?\s*list|DDC\s+points?|scheduled|equipment)\b/i;
   const asksScheduleCounts = (
     /\btakeoff\b/i.test(goal)
     || /\bscheduled\s+(?:unit\s+)?counts?\b/i.test(goal)
     || /\bequipment\s+(?:totals?|counts?)\b/i.test(goal)
     || (/\b(?:how many|counts?|totals?|splits?)\b/i.test(goal)
-      && [/\bAHUs?\b/i, /\bDOAH\b|dedicated outdoor/i, /\bFCUs?\b|fan[\s-]*coils?\b/i, /\bVAVs?\b/i, /\bchillers?\b/i, /\bboilers?\b/i, /\bpoints?\s*list\b/i]
-        .filter((re) => re.test(goal)).length >= 3)
-  ) && /\b(?:AHU|FCU|VAV|DOAH|chiller|boiler|fan[\s-]*coil|points?\s*list|scheduled|equipment)\b/i.test(goal);
+      && scheduleFamilyNeedles(goal).length + (/\bpoints?\s*list\b/i.test(goal) ? 1 : 0) >= 3)
+  ) && familyTokens.test(goal);
   if (!asksScheduleCounts) return [];
   const titleScans = callLog.filter(({ name, out, args }) => {
     if (name !== "query_table" || out?.error) return false;
@@ -134,14 +135,13 @@ export function missingScheduleTitleScans(callLog, goal) {
     );
     return m ? String(m[1] || m[2]).toUpperCase() : null;
   })();
-  const familyNeedles = [];
-  if (/\bAHUs?\b/i.test(goal)) familyNeedles.push({ label: "AHU", titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED/i, title: "AIR HANDLING UNIT SCHEDULE" });
-  if (/\bDOAH\b|dedicated outdoor/i.test(goal)) familyNeedles.push({ label: "DOAH unit", titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i, title: "DEDICATED OUTDOOR AIR UNIT SCHEDULE" });
-  if (/\bFCU\b|fan[\s-]*coil/i.test(goal)) familyNeedles.push({ label: "FCU", titleRe: /FAN\s*COIL/i, title: "FAN COIL UNIT SCHEDULE" });
-  if (/\bVAVs?\b|variable[\s-]*air|volume control box/i.test(goal)) familyNeedles.push({ label: "VAV", titleRe: /VARIABLE AIR VOLUME|\bVAV\b|VOLUME CONTROL BOX/i, title: "VARIABLE AIR VOLUME" });
-  if (/\bair[\s-]*cooled chiller/i.test(goal)) familyNeedles.push({ label: "air-cooled chiller", titleRe: /AIR COOLED CHILLER/i, exclude: /HEAT RECOVERY/i, title: "AIR COOLED CHILLER SCHEDULE", minCount: 1 });
-  if (/\bheat[\s-]*recovery chiller/i.test(goal)) familyNeedles.push({ label: "heat-recovery chiller", titleRe: /HEAT RECOVERY/i, title: "AIR COOLED HEAT RECOVERY CHILLER", minCount: 1 });
-  if (/\bboilers?\b/i.test(goal)) familyNeedles.push({ label: "boiler", titleRe: /BOILER/i, title: "BOILER SCHEDULE" });
+  const familyNeedles = scheduleFamilyNeedles(goal).map((n) => ({
+    label: n.label,
+    title: n.title,
+    titleRe: n.titleRe,
+    exclude: n.exclude,
+    minCount: n.minCount,
+  }));
   if (/\bpoints?\s*list\b|BAS\b/i.test(goal)) {
     const requireRe = namedPointsListTag
       ? new RegExp(namedPointsListTag.split("/")[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i")
@@ -1514,21 +1514,19 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   const pointsListTakeoff = /\b(?:points?\s*list|DDC\s+points?(?:\s*list)?)\b/i.test(goal)
     && (/\b(?:AI|AO|BI|BO)\b/i.test(goal) || /\bpoint[-\s]?type/i.test(goal) || /\btakeoff\b/i.test(goal));
   const scheduleFamilyMentions = [
-    !pointsListTakeoff && /\bAHUs?\b/i.test(goal),
-    !pointsListTakeoff && (/\bDOAH\b|dedicated outdoor-air units?\b|dedicated outdoor air units?\b/i.test(goal)),
-    !pointsListTakeoff && (/\bFCUs?\b|fan[\s-]*coils?\b/i.test(goal)),
-    !pointsListTakeoff && (/\bVAVs?\b|variable[\s-]*air/i.test(goal)),
-    !pointsListTakeoff && (/\b(?:air[\s-]*cooled\s+)?chillers?\b|\bheat[\s-]*recovery\s+chillers?\b/i.test(goal)),
-    !pointsListTakeoff && /\bboilers?\b/i.test(goal),
-    /\bpoints?\s*list\b|\bDDC\s+points?\b/i.test(goal),
-  ].filter(Boolean).length;
+    ...(!pointsListTakeoff ? scheduleFamilyNeedles(goal).map((n) => n.label) : []),
+    ...((/\bpoints?\s*list\b|\bDDC\s+points?\b/i.test(goal)) ? ["points-list"] : []),
+  ];
+  // Dedupe labels (VAV sibling titles share one label).
+  const distinctFamilyCount = new Set(scheduleFamilyMentions).size;
+  const familyTokens = /\b(?:AHU|FCU|VAV|DOAH|DOAS|CRAH|CUH|chiller|boiler|pump|humidifier|dehumidifier|diffuser|grille|separator|expansion|unit\s+heater|fan[\s-]*coil|points?\s*list|DDC\s+points?|scheduled|equipment)\b/i;
   const asksScheduleCounts = (
     /\btakeoff\b/i.test(goal)
     || /\bscheduled\s+(?:unit\s+)?counts?\b/i.test(goal)
     || /\bequipment\s+(?:totals?|counts?)\b/i.test(goal)
-    || (/\b(?:how many|counts?|totals?|splits?)\b/i.test(goal) && scheduleFamilyMentions >= 3)
+    || (/\b(?:how many|counts?|totals?|splits?)\b/i.test(goal) && distinctFamilyCount >= 3)
     || (pointsListTakeoff && /\b(?:row\s+count|breakdown|totals?)\b/i.test(goal))
-  ) && /\b(?:AHU|FCU|VAV|DOAH|chiller|boiler|fan[\s-]*coil|points?\s*list|DDC\s+points?|scheduled|equipment)\b/i.test(goal);
+  ) && familyTokens.test(goal);
   if (asksScheduleCounts && finalText) {
     const titleScans = callLog.filter(({ name, out, args }) => {
       if (name !== "query_table" || out?.error) return false;
@@ -1543,13 +1541,17 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return "The goal asks for scheduled equipment / points-list counts. Call query_table with each relevant schedule title (no row_key), then copy that result's count and building_tag_counts into the answer before finishing. Do not invent totals from the few MARK rows you painted for spot-check.";
     }
     const familyNeedles = [];
-    if (!pointsListTakeoff && /\bAHUs?\b/i.test(goal)) familyNeedles.push({ label: "AHU", titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED/i });
-    if (!pointsListTakeoff && (/\bDOAH\b|dedicated outdoor/i.test(goal))) familyNeedles.push({ label: "DOAH unit", titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i });
-    if (!pointsListTakeoff && (/\bFCU\b|fan[\s-]*coil/i.test(goal))) familyNeedles.push({ label: "FCU", titleRe: /FAN\s*COIL/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i });
-    if (!pointsListTakeoff && (/\bVAVs?\b|variable[\s-]*air|volume control box/i.test(goal))) familyNeedles.push({ label: "VAV", titleRe: /VARIABLE AIR VOLUME|\bVAV\b|VOLUME CONTROL BOX/i });
-    if (!pointsListTakeoff && /\bair[\s-]*cooled chiller/i.test(goal)) familyNeedles.push({ label: "air-cooled chiller", titleRe: /AIR COOLED CHILLER/i, exclude: /HEAT RECOVERY/i, minCount: 1 });
-    if (!pointsListTakeoff && /\bheat[\s-]*recovery chiller/i.test(goal)) familyNeedles.push({ label: "heat-recovery chiller", titleRe: /HEAT RECOVERY/i, minCount: 1 });
-    if (!pointsListTakeoff && /\bboilers?\b/i.test(goal)) familyNeedles.push({ label: "boiler", titleRe: /BOILER/i });
+    if (!pointsListTakeoff) {
+      for (const n of scheduleFamilyNeedles(goal)) {
+        familyNeedles.push({
+          label: n.label,
+          titleRe: n.titleRe,
+          exclude: n.exclude,
+          minCount: n.minCount,
+          title: n.title,
+        });
+      }
+    }
     // When the goal names a specific points list (e.g. AHU-T1A/TIB), require that
     // tag in the title-scan — a bare "POINTS LIST" rollup across sibling lists
     // is the wrong family (often a doubled page sum).
@@ -1584,18 +1586,12 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return true;
     })).map((fam) => fam.label);
     if (missingFamilies.length) {
-      const titleByLabel = {
-        AHU: "AIR HANDLING UNIT SCHEDULE",
-        "DOAH unit": "DEDICATED OUTDOOR AIR UNIT SCHEDULE",
-        FCU: "FAN COIL UNIT SCHEDULE",
-        VAV: "VARIABLE AIR VOLUME",
-        "air-cooled chiller": "AIR COOLED CHILLER SCHEDULE",
-        "heat-recovery chiller": "AIR COOLED HEAT RECOVERY CHILLER",
-        boiler: "BOILER SCHEDULE",
-        "points-list": namedPointsListTag
-          ? `POINTS LIST ${namedPointsListTag.split("/")[0]}`
-          : "POINTS LIST",
-      };
+      const titleByLabel = Object.fromEntries(
+        familyNeedles.filter((n) => n.title).map((n) => [n.label, n.title]),
+      );
+      titleByLabel["points-list"] = namedPointsListTag
+        ? `POINTS LIST ${namedPointsListTag.split("/")[0]}`
+        : "POINTS LIST";
       const exactScans = missingFamilies
         .map((label) => titleByLabel[label])
         .filter(Boolean)
@@ -1622,6 +1618,16 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       "heat-recovery chiller": /HEAT[\s\-]*RECOVERY[\s\-]*(?:CHILLERS?)?/gi,
       "air-cooled chiller": /AIR[\s\-]*COOLED(?![\s\-]*HEAT)[\s\-]*CHILLERS?/gi,
       boiler: /BOILERS?\b/gi,
+      pump: /PUMPS?\b/gi,
+      humidifier: /HUMIDIFIERS?\b/gi,
+      dehumidifier: /DEHUMIDIFIERS?\b/gi,
+      CRAH: /\bCRAHs?\b|COMPUTER[\s\-]*ROOM/gi,
+      diffuser: /DIFFUSERS?|GRILLES?|REGISTERS?/gi,
+      "unit heater": /UNIT\s+HEATERS?\b|\bUHs?\b/gi,
+      "cabinet unit heater": /CABINET\s+UNIT\s+HEATERS?|\bCUHs?\b/gi,
+      "air separator": /AIR\s+SEPARATORS?/gi,
+      "expansion tank": /EXPANSION\s+TANKS?/gi,
+      fan: /\bFANS?\b/gi,
       "points-list": /POINTS?\s*LIST|BAS\b|AHU-T1A/gi,
     }[label] || new RegExp(label, "gi"));
     // Prefer specific multi-word spaced needles — never bare "AIR" (false-hits Air Ops).
@@ -1634,6 +1640,16 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       "heat-recovery chiller": "HEAT RECOVERY",
       "air-cooled chiller": "AIR COOLED",
       boiler: "BOILER",
+      pump: "PUMP",
+      humidifier: "HUMIDIFIER",
+      dehumidifier: "DEHUMIDIFIER",
+      CRAH: "CRAH",
+      diffuser: "DIFFUSER",
+      "unit heater": "UNIT HEATER",
+      "cabinet unit heater": "CABINET UNIT HEATER",
+      "air separator": "AIR SEPARATOR",
+      "expansion tank": "EXPANSION TANK",
+      fan: "FAN",
       "points-list": "POINTS LIST",
     }[label] || label.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim());
     const nearCountsForLabel = (label) => {
@@ -1673,7 +1689,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
           if (!tagRe.test(title)) continue; // skip sibling/generic points-list rollups
         }
         label = "points-list";
-      } else if (/FAN\s*COIL/.test(title)) label = "FCU";
+      }       else if (/FAN\s*COIL/.test(title)) label = "FCU";
       else if (/DEDICATED OUTDOOR AIR UNIT/.test(title) && !/HANDLING/.test(title)) label = "DOAH unit";
       else if (/DEDICATED OUTDOOR AIR HANDLING/.test(title)) label = "DOAH handling";
       else if (/AIR HANDLING UNIT/.test(title) && !/DEDICATED/.test(title)) label = "AHU";
@@ -1681,6 +1697,16 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       else if (/HEAT RECOVERY/.test(title) && /CHILLER/.test(title)) label = "heat-recovery chiller";
       else if (/AIR COOLED CHILLER/.test(title) && !/HEAT RECOVERY/.test(title)) label = "air-cooled chiller";
       else if (/BOILER/.test(title)) label = "boiler";
+      else if (/PUMP SCHEDULE/.test(title)) label = "pump";
+      else if (/DEHUMIDIFIER SCHEDULE/.test(title)) label = "dehumidifier";
+      else if (/HUMIDIFIER SCHEDULE/.test(title)) label = "humidifier";
+      else if (/COMPUTER ROOM AIR HANDLER|\bCRAH\b/.test(title)) label = "CRAH";
+      else if (/GRILLE,\s*REGISTER,\s*AND\s*DIFFUSER|DIFFUSER[\s\-]*GRILLE/.test(title)) label = "diffuser";
+      else if (/CABINET UNIT HEATER/.test(title)) label = "cabinet unit heater";
+      else if (/^UNIT HEATER SCHEDULE|UNIT HEATER SCHEDULE/.test(title) && !/CABINET|DDC|POINTS/.test(title)) label = "unit heater";
+      else if (/AIR SEPARATOR SCHEDULE/.test(title)) label = "air separator";
+      else if (/EXPANSION TANK SCHEDULE/.test(title)) label = "expansion tank";
+      else if (/^FAN SCHEDULE$|FAN SCHEDULE/.test(title) && !/COIL|SOUND|POWER/.test(title)) label = "fan";
       if (!label) continue;
       // Only require counts the current goal asked for — incidental title-scans
       // from exploratory follow-up tools must not force a full inventory dump.

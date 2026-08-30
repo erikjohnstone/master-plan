@@ -314,6 +314,28 @@ test("suggestedScheduleTitles maps family words to industry schedule needles", (
   assert.match(state.nextMove || "", /VOLUME CONTROL|AIR TERMINAL|VARIABLE AIR/i);
 });
 
+test("remaining schedule families route + suggest query_table-viable titles", () => {
+  const cases = [
+    ["Pump schedule takeoff — counts and GPM/head", /PUMP SCHEDULE/i],
+    ["Boiler schedule takeoff — totals and capacity", /BOILER SCHEDULE/i],
+    ["Dedicated outdoor-air / DOAS schedule takeoff", /DEDICATED OUTDOOR AIR UNIT SCHEDULE/i],
+    ["Diffuser grille schedule takeoff", /GRILLE,\s*REGISTER,\s*AND\s*DIFFUSER/i],
+    ["Humidifier schedule takeoff", /HUMIDIFIER SCHEDULE/i],
+    ["CRAH / computer-room air handler schedule takeoff", /COMPUTER ROOM AIR HANDLER/i],
+    ["Unit heater schedule takeoff", /UNIT HEATER SCHEDULE/i],
+    ["Cabinet unit heater takeoff", /CABINET UNIT HEATER SCHEDULE/i],
+    ["Air separator schedule takeoff", /AIR SEPARATOR SCHEDULE/i],
+    ["Expansion tank schedule takeoff", /EXPANSION TANK SCHEDULE/i],
+  ];
+  for (const [goal, titleRe] of cases) {
+    assert.equal(classifyTakeoffIntent(goal), "equipment_schedule", goal);
+    const titles = suggestedScheduleTitles(goal);
+    assert.ok(titles.some((t) => titleRe.test(t)), `${goal} → ${titles.join("|")}`);
+    // query_table rejects short needles (<12) for substring matches — titles must be viable.
+    assert.ok(titles.every((t) => t.length >= 12), `${goal} short needle ${titles.join("|")}`);
+  }
+});
+
 test("D01–D10 follow-up prompts stay on durable intents (not remapped to unrelated families)", () => {
   const cases = [
     ["D03-hvac-bas-project-takeoff", "equipment_schedule"],
