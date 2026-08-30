@@ -7184,6 +7184,52 @@ function odlCellText(cell: ODLTableCell): string {
   return parts.filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
 }
 
+/** Recover the text that is actually visible when a PDF paints two different
+ * strings at effectively the same coordinates. Some CAD exports retain a
+ * superseded value in the text layer, then paint the revised value directly
+ * over it. ODL concatenates both into one cell even though the rendered sheet
+ * shows only the later-painted string. Only act when the ODL cell contains
+ * every conflicting source token and their boxes overlap by at least 80%;
+ * ordinary multi-token cells are left unchanged. */
+export function preferLastOverprintedText(cellText: string, bbox: Bbox, sourceSpans: GraphSpan[]): string {
+  const inCell = sourceSpans
+    .map((span, sourceIndex) => ({ span, sourceIndex }))
+    .filter(({ span }) => {
+      const cx = span.x + span.w / 2;
+      const cy = span.y + span.h / 2;
+      return cx >= bbox[0] - 2 && cx <= bbox[2] + 2 && cy >= bbox[1] - 2 && cy <= bbox[3] + 2;
+    });
+  if (inCell.length < 2) return cellText;
+  const area = (span: GraphSpan) => Math.max(1, span.w * span.h);
+  const overlap = (a: GraphSpan, b: GraphSpan) => {
+    const x0 = Math.max(a.x, b.x), y0 = Math.max(a.y, b.y);
+    const x1 = Math.min(a.x + a.w, b.x + b.w), y1 = Math.min(a.y + a.h, b.y + b.h);
+    return Math.max(0, x1 - x0) * Math.max(0, y1 - y0) / Math.min(area(a), area(b));
+  };
+  const compactText = (value: string) => norm(value).replace(/[^A-Z0-9.]/g, "");
+  const cellCompact = compactText(cellText);
+  const drop = new Set<number>();
+  let conflict = false;
+  for (let i = 0; i < inCell.length; i++) {
+    for (let j = i + 1; j < inCell.length; j++) {
+      const a = inCell[i], b = inCell[j];
+      if ((a.span.rot ?? 0) !== (b.span.rot ?? 0) || overlap(a.span, b.span) < 0.8) continue;
+      const at = compactText(a.span.str), bt = compactText(b.span.str);
+      if (!at || !bt || at === bt || !cellCompact.includes(at) || !cellCompact.includes(bt)) continue;
+      conflict = true;
+      drop.add(a.sourceIndex < b.sourceIndex ? a.sourceIndex : b.sourceIndex);
+    }
+  }
+  if (!conflict) return cellText;
+  const visible = inCell
+    .filter(({ sourceIndex }) => !drop.has(sourceIndex))
+    .sort((a, b) => a.span.y - b.span.y || a.span.x - b.span.x)
+    .map(({ span }) => span.str.trim())
+    .filter(Boolean)
+    .join(" ");
+  return visible || cellText;
+}
+
 /** ODL reports every bounding box in the PDF's own native user-space points
  * (x right, y UP from the page's bottom-left) — confirmed by direct
  * measurement against this project's own `textSpans()` output for the same
@@ -7282,7 +7328,7 @@ export function scheduleTableFromODL(
   t: ODLTable,
   sheetKey: string,
   pageViewportTransform: number[],
-  opts: { buildings?: Set<string> } = {},
+  opts: { buildings?: Set<string>; sourceSpans?: GraphSpan[] } = {},
 ): ScheduleTable | null {
   if (t["number of rows"] < 2 || t["number of columns"] < 2) return null;
   if (hasRowOrientedTitle(t, t["number of rows"])) t = rotateODLTable90(t);
@@ -7599,7 +7645,13 @@ export function scheduleTableFromODL(
       rowCellRef[c] = cell;
     }
     const texts = new Array(C).fill("");
-    for (let c = 0; c < C; c++) if (grid[r][c]) texts[c] = odlCellText(grid[r][c]!);
+    for (let c = 0; c < C; c++) {
+      const sourceCell = grid[r][c];
+      if (!sourceCell) continue;
+      const text = odlCellText(sourceCell);
+      const bbox = odlBboxToProjectSpace(sourceCell["bounding box"], pageViewportTransform);
+      texts[c] = opts.sourceSpans ? preferLastOverprintedText(text, bbox, opts.sourceSpans) : text;
+    }
     if (texts.every((s: string) => !s.trim())) continue; // blank spacer row
     const rawKey = texts[keyColIdx >= 0 ? keyColIdx : 0] || "";
     const keyRes = rowKeyOf(rawKey, kind === "room-finish" ? "room-finish" : kind === "equipment" ? "equipment" : "finish", opts.buildings);

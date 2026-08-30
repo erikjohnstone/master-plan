@@ -8,7 +8,7 @@ import path from "node:path";
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, type SheetGraph, type SheetSpans, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
@@ -5384,6 +5384,7 @@ export class Session {
     if (!byPdf.size) return;
     const buildingsSet = new Set(g.buildings);
     const touchedSheets = new Set<string>();
+    const sourceSpansBySheet = new Map<string, GraphSpan[]>();
     let recovered = 0, added = 0, odlErrors = 0;
     // "reference"-kind candidates (a real cross-reference/connection/calc
     // table, per scheduleTableFromODL's own CONNECTION/CALCULATION check)
@@ -5412,7 +5413,22 @@ export class Session {
         if (!state) continue;
         let built;
         try {
-          built = scheduleTableFromODL(odlTable, sheetKey, state.page.viewport.transform, { buildings: buildingsSet });
+          let sourceSpans = sourceSpansBySheet.get(sheetKey);
+          if (!sourceSpans) {
+            sourceSpans = (state.spans ?? textSpans(state.page)).map((span) => ({
+              str: span.str,
+              x: span.x0,
+              y: span.y0,
+              w: span.x1 - span.x0,
+              h: span.y1 - span.y0,
+              ...(span.rot ? { rot: span.rot } : {}),
+            }));
+            sourceSpansBySheet.set(sheetKey, sourceSpans);
+          }
+          built = scheduleTableFromODL(odlTable, sheetKey, state.page.viewport.transform, {
+            buildings: buildingsSet,
+            sourceSpans,
+          });
         } catch {
           continue; // one malformed table must never take the whole pass down
         }

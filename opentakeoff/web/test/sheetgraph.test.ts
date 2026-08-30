@@ -10,10 +10,26 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, promoteLeadingEngineeringUnits, type GraphSpan, type SheetSpans, type SheetGraph, type TableRow } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, promoteLeadingEngineeringUnits, preferLastOverprintedText, type GraphSpan, type SheetSpans, type SheetGraph, type TableRow } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
+
+test("preferLastOverprintedText keeps the later visible CAD value", () => {
+  const spans: GraphSpan[] = [
+    { str: "57.1", x: 10, y: 10, w: 20, h: 10 },
+    { str: "324.0", x: 9, y: 10, w: 25, h: 10 },
+  ];
+  assert.equal(preferLastOverprintedText("324.057.1", [0, 0, 40, 30], spans), "324.0");
+});
+
+test("preferLastOverprintedText preserves ordinary adjacent cell text", () => {
+  const spans: GraphSpan[] = [
+    { str: "FIELD", x: 0, y: 10, w: 25, h: 10 },
+    { str: "ADJUSTABLE", x: 30, y: 10, w: 50, h: 10 },
+  ];
+  assert.equal(preferLastOverprintedText("FIELD ADJUSTABLE", [0, 0, 90, 30], spans), "FIELD ADJUSTABLE");
+});
 
 test("promoteLeadingEngineeringUnits moves a stranded pressure unit into its header", () => {
   const rows: TableRow[] = [
