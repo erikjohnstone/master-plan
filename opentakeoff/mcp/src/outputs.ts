@@ -162,6 +162,9 @@ export const queryTableOutput = {
   /** Present on broad title scans: unique-key totals partitioned by the
    * building letter encoded in MEP tags (e.g. FCU-A1 → A, VAV-M101 → M). */
   building_tag_counts: z.record(z.string(), z.number().int()).optional(),
+  /** Present on broad points-list / DDC list title scans when keys are
+   * AI##/AO##/BI##/BO## — copy these for point-type rollups. */
+  point_type_counts: z.record(z.string(), z.number().int()).optional(),
   next_move: z.string().optional().describe("Present only when count is 0; names the next legal tool move without inventing values"),
 };
 
