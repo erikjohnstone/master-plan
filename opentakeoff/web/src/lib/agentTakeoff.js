@@ -385,7 +385,12 @@ export function compileAgentTakeoff(rows = []) {
       if (k.endsWith("_unit")) continue;
       if (DESC_FIELDS.includes(k) && String(v) === description) continue;
       const u = g.attrs[`${k}_unit`];
-      attrParts.push(u ? `${k} ${v} ${u}` : `${k} ${v}`);
+      // Avoid "CFM 400 CFM" when the field name is already the unit.
+      if (u && String(u).toUpperCase() !== String(k).toUpperCase()) {
+        attrParts.push(`${k} ${v} ${u}`);
+      } else {
+        attrParts.push(`${k} ${v}`);
+      }
     }
     const sheet = g.plan_sheet_id || g.sheet_id || null;
     const noteParts = [...g.notes];
