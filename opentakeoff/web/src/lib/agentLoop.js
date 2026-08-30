@@ -65,7 +65,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     && !/\b(?:derived|calculated|converted|conversion)\b/i.test(finalText)) {
     return "The final answer adds an approximate value without labeling its derivation. Remove unrequested derived values, or explicitly label the calculation/conversion and cite the source inputs; never present it as direct tool output.";
   }
-  if (/\bexample\b/i.test(finalText)) {
+  if (/\((?:example|placeholder|sample)(?:\s+\w+)?\)|\bexample\s+(?:size|value|data|only|figures?)\b|\bplaceholder\b|\blorem ipsum\b/i.test(finalText)) {
     return "The final answer contains example or placeholder data. Never substitute example values for requested drawing facts. Retrieve each value from a successful tool result with a citation, or explicitly say the evidence was not found.";
   }
   if (/\bcontrol\s+valve\b/i.test(goal)) {
