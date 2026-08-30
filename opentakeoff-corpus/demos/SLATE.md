@@ -155,3 +155,13 @@ fields + expandable source cards + verified EF-3 follow-up) is saved as
 Production gates stay methodology-general — no corpus hardcoding. D07
 counts toward ten. Next: D08.
 
+## D08 selection record
+
+Status: `SELECTED — ground truth authored; N=5 pending`
+
+Target holds on `navfac-cherry-point-atc` (75 sheets). FAN COIL UNIT
+SCHEDULE title-scan yields 42 with building splits A=14 / M=10 / T=18;
+spot-check MARK/TYPE/CFM for FCU-A1, FCU-M1A, FCU-T1 on #42/#45/#48.
+Stratified 20% sample (9 tags) reconciled on schedule before model runs in
+`D08-fcu-cross-building/`.
+
