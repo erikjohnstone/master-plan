@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, prefersTagClaimCoverage, typicalCountMultiplier, splitHyphenTagOcc, isIndividuallyMarkedEquipmentSchedule, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, typicalCountMultiplier, splitHyphenTagOcc, isIndividuallyMarkedEquipmentSchedule, type Point, type RoomSweepInstance, type TaggedViewLandmark } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -340,6 +340,18 @@ test("dedupeCrossDisciplineRoomViews: negative control — same tag, same discip
   ];
   const redundant = dedupeCrossDisciplineRoomViews(instances);
   assert.equal(redundant.length, 0, "two genuinely distinct installs in two different rooms must never collapse, even on same-discipline sheets");
+});
+
+test("dedupeCrossDisciplineRoomViews: registered coordinates on explicit different floors remain distinct", () => {
+  const first = { ...inst(1, "M1.0", "M", [1000, 1000], []), level: "1" };
+  const second = { ...inst(2, "M2.0", "M", [1005, 1004], []), level: "2" };
+  assert.equal(dedupeCrossDisciplineRoomViews([first, second]).length, 0);
+});
+
+test("planLevelOfTitle: reads explicit floor identities without guessing generic floor plans", () => {
+  assert.equal(planLevelOfTitle("AIR OPS - FIRST FLOOR MECHANICAL DUCTWORK PLAN"), "1");
+  assert.equal(planLevelOfTitle("AIR OPS - SECOND FLOOR MECHANICAL DUCTWORK PLAN"), "2");
+  assert.equal(planLevelOfTitle("PLUMBING FLOOR PLAN"), null);
 });
 
 test("dedupeCrossDisciplineRoomViews: no room nearby, marks close, SAME discipline but DIFFERENT sheets — coordinate-proximity fallback now collapses too (the WC-1 shape without a readable room label)", () => {

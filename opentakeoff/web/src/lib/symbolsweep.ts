@@ -2077,6 +2077,9 @@ export interface RoomSweepInstance<Id> {
   /** Full title-block sheet number, when available. Paired discipline
    * overlays commonly share its numeric view suffix (MH121 / MP121). */
   sheetNumber?: string | null;
+  /** Explicit building level parsed from the graph-classified plan title.
+   * Distinct known levels are never duplicate views of one installation. */
+  level?: string | null;
   /** Leading AIA discipline letters off the sheet's own title-block sheet
    *  number ("M3.0" → "M"); null when no sheet number was read — an
    *  attribution never guessed, so the instance never enters the dedup. */
@@ -2269,6 +2272,11 @@ const ROOM_ATTRIBUTION_MAX_DIAGONAL_FRAC = 0.2;
 function collapseGroup<Id, A extends { discipline: string | null; sheet: string; id: Id }>(
   group: A[], describeRoom: (kept: A) => string,
 ): RedundantRoomView<Id>[] {
+  const levels = new Set(group.flatMap((entry) => {
+    const level = (entry as A & { level?: string | null }).level;
+    return level ? [level] : [];
+  }));
+  if (levels.size > 1) return [];
   const bySheet = new Map<string, A[]>();
   for (const a of group) {
     const arr = bySheet.get(a.sheet);
@@ -2298,15 +2306,33 @@ function collapseGroup<Id, A extends { discipline: string | null; sheet: string;
  * its M2.0 or P3.0 "enlarged" view) sits 9.2px apart. */
 const COORD_ATTRIBUTION_MAX_PX = 40;
 
+export function planLevelOfTitle(title: string): string | null {
+  const text = title.trim().toUpperCase();
+  const numbered = text.match(/\b(FIRST|SECOND|THIRD|FOURTH|FIFTH|\d+(?:ST|ND|RD|TH)?)\s+(?:FLOOR|LEVEL)\b/)
+    || text.match(/\bLEVEL\s+(FIRST|SECOND|THIRD|FOURTH|FIFTH|\d+)\b/);
+  if (numbered) {
+    const aliases: Record<string, string> = {
+      FIRST: "1", SECOND: "2", THIRD: "3", FOURTH: "4", FIFTH: "5",
+    };
+    return aliases[numbered[1]] || numbered[1].replace(/(?:ST|ND|RD|TH)$/, "");
+  }
+  if (/\bROOF\s+PLAN\b/.test(text)) return "ROOF";
+  if (/\bBASEMENT\s+PLAN\b/.test(text)) return "BASEMENT";
+  return null;
+}
+
 export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
   type Attributed = RoomSweepInstance<Id> & { room: RoomCandidate };
   const attributed: Attributed[] = [];
   const unattributed: RoomSweepInstance<Id>[] = [];
   const sheetPair = (a: string, b: string): string => a < b ? `${a}\0${b}` : `${b}\0${a}`;
+  const differentKnownLevels = (a: RoomSweepInstance<Id>, b: RoomSweepInstance<Id>): boolean =>
+    !!a.level && !!b.level && a.level !== b.level;
   const tightPairCounts = new Map<string, number>();
   for (let i = 0; i < instances.length; i++) {
     for (let j = i + 1; j < instances.length; j++) {
       if (instances[i].sheet === instances[j].sheet
+        || differentKnownLevels(instances[i], instances[j])
         || Math.hypot(instances[i].at[0] - instances[j].at[0], instances[i].at[1] - instances[j].at[1]) > 30) continue;
       const key = sheetPair(instances[i].sheet, instances[j].sheet);
       tightPairCounts.set(key, (tightPairCounts.get(key) || 0) + 1);
@@ -2367,6 +2393,7 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
       // not enough evidence that the drawings are redundant overlays.
       const registeredPair = (tightPairCounts.get(sheetPair(mixed[i].sheet, mixed[j].sheet)) || 0) >= 2;
       if (mixed[i].sheet === mixed[j].sheet
+        || differentKnownLevels(mixed[i], mixed[j])
         || !((distance <= 30 && registeredPair) || (asymmetric && distance <= COORD_ATTRIBUTION_MAX_PX))) continue;
       const ri = mixedRoot(i), rj = mixedRoot(j);
       if (ri !== rj) mixedParent[ri] = rj;
@@ -2398,7 +2425,8 @@ export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<
   const find = (i: number): number => (parent[i] === i ? i : (parent[i] = find(parent[i])));
   for (let i = 0; i < n; i++) {
     for (let j = i + 1; j < n; j++) {
-      if (Math.hypot(proximityCandidates[i].at[0] - proximityCandidates[j].at[0], proximityCandidates[i].at[1] - proximityCandidates[j].at[1]) <= COORD_ATTRIBUTION_MAX_PX) {
+      if (!differentKnownLevels(proximityCandidates[i], proximityCandidates[j])
+        && Math.hypot(proximityCandidates[i].at[0] - proximityCandidates[j].at[0], proximityCandidates[i].at[1] - proximityCandidates[j].at[1]) <= COORD_ATTRIBUTION_MAX_PX) {
         const ri = find(i), rj = find(j);
         if (ri !== rj) parent[ri] = rj;
       }
