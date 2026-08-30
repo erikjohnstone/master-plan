@@ -50,6 +50,10 @@ test("installed quantity cannot finish without deterministic count evidence", ()
   assert.match(requiredEvidenceCorrection([{
     name: "sweep_schedule_row",
     out: { found: 1 },
+  }], "Give me installed quantity", "Installed quantity: 1 (single row).")!, /reasoning is invalid/);
+  assert.match(requiredEvidenceCorrection([{
+    name: "sweep_schedule_row",
+    out: { found: 1 },
   }], "Give me installed quantity", "Installed quantity: 1 (the row appears only once).")!, /reasoning is invalid/);
   assert.match(requiredEvidenceCorrection([{
     name: "sweep_schedule_row",
