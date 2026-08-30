@@ -1,6 +1,6 @@
 # D10 — Full BAS points takeoff
 
-Status: `IN PROGRESS — ground truth authored; N=5 not started`
+Status: `LOCKED — API 5/5 + stdio + UI proof (expandable cards + verified follow-up)`
 
 ## Live question
 
@@ -43,10 +43,41 @@ Follow-up: T1A **24** / T1B **24** / shared **14**; AI10 alarm/trend **No**/**No
 
 20% hand-count: 25/25 stratified MARK samples reconciled via `query_table` row_key.
 
+`fixture.json` pins the external source PDF by SHA-256.
+
 ## N=5 gate
 
-Not started.
+| Run | Cold | Latency |
+|---:|---|---:|
+| 1 | forced cold | 5.122 s |
+| 2 | fresh session | 4.887 s |
+| 3 | fresh session | 4.544 s |
+| 4 | fresh session | 6.296 s |
+| 5 | forced cold | 5.936 s |
+
+Nearest-rank p95: **6.296 seconds**. Gate: **5/5 clean** via `verify:demo`.
+
+Raw responses, request IDs, model/version, tool payloads, and citations are
+under `runs/`.
+
+## Local-host proof
+
+Production MCP was exercised as a separate local stdio process
+(`transport: "stdio_local_process"`) after rebuilding `dist/`. See
+`local-host-run.json` (verify clean). The Vite UI path was proved separately
+with the frozen prompt + follow-up.
 
 ## Production UI proof
 
-Not started.
+Validated recording:
+`/opt/cursor/artifacts/d10_ui_prompt_answer_cards_followup_2026-08-30T17-02-51-387Z.webm`.
+
+Walkthrough shows the frozen prompt, live tools, answer-first five-list
+takeoff (122 / AI 43 / AO 15 / BI 49 / BO 15), expandable source cards, and
+a correct in-thread follow-up (T1A 24 / T1B 24 / neither 14 + AI10 HW valve
+feedback No/No). Harness: `opentakeoff/web/scripts/demo-ui-proof-d10.mjs`.
+
+Production notes: title-scan `point_type_counts` copy for AI/AO/BI/BO; shared
+/neither = total − onlyA − onlyB (not intersection); durable
+`takeoffWorkflow` phases ban illegal type-filter `cell_contains` during
+title-scans.

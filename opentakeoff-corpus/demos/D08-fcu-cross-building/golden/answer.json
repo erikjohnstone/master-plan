@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "demo_id": "D08",
+  "status": "done",
+  "source": "run-1",
+  "latency_ms": 5186.11,
+  "answer": {
+    "fcu_count": {
+      "value": 42,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            301.2,
+            1482.238,
+            4382.888,
+            1541.998
+          ]
+        }
+      ]
+    },
+    "fcu_air_ops_count": {
+      "value": 14,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            301.2,
+            1482.238,
+            4382.888,
+            1541.998
+          ]
+        }
+      ]
+    },
+    "fcu_mitracon_count": {
+      "value": 10,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            301.2,
+            1482.238,
+            4382.888,
+            1541.998
+          ]
+        }
+      ]
+    },
+    "fcu_atct_count": {
+      "value": 18,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            301.2,
+            1482.238,
+            4382.888,
+            1541.998
+          ]
+        }
+      ]
+    },
+    "fcu_a1_type": {
+      "value": "VERTICAL CABINET",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": "FCU-A1",
+          "column": "TYPE",
+          "bbox_px": [
+            441.6,
+            1673.038,
+            882.48,
+            1707.36
+          ]
+        }
+      ]
+    },
+    "fcu_a1_cfm": {
+      "value": "150 / 150",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": "FCU-A1",
+          "column": "FAN DATA CFM (CLG/HTG)",
+          "bbox_px": [
+            882.48,
+            1673.038,
+            1002.48,
+            1707.36
+          ]
+        }
+      ]
+    },
+    "fcu_a1_mark": {
+      "value": "FCU-A1",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": "FCU-A1",
+          "column": "MARK",
+          "bbox_px": [
+            301.2,
+            1673.038,
+            441.6,
+            1707.36
+          ]
+        }
+      ]
+    },
+    "fcu_m1a_type": {
+      "value": "SUSPENDED HORIZONTAL DUCTED",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#45",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": "FCU-M1A",
+          "column": "TYPE",
+          "bbox_px": [
+            416.16,
+            702.2359999999999,
+            799.44,
+            736.556
+          ]
+        }
+      ]
+    },
+    "fcu_m1a_cfm": {
+      "value": "600 / -",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#45",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": "FCU-M1A",
+          "column": "FAN DATA CFM (CLG / HTG )",
+          "bbox_px": [
+            799.44,
+            702.2359999999999,
+            928.08,
+            736.556
+          ]
+        }
+      ]
+    },
+    "fcu_m1a_mark": {
+      "value": "FCU-M1A",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#45",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": "FCU-M1A",
+          "column": "MARK",
+          "bbox_px": [
+            313.682,
+            702.2359999999999,
+            416.16,
+            736.556
+          ]
+        }
+      ]
+    },
+    "fcu_t1_type": {
+      "value": "SUSPENDED HORIZONTAL CABINET",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#48",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": "FCU-T1",
+          "column": "TYPE",
+          "bbox_px": [
+            342.24,
+            856.556,
+            744,
+            891.116
+          ]
+        }
+      ]
+    },
+    "fcu_t1_cfm": {
+      "value": "230",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#48",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": "FCU-T1",
+          "column": "FAN DATA CFM",
+          "bbox_px": [
+            947.76,
+            856.556,
+            1087.2,
+            891.116
+          ]
+        }
+      ]
+    },
+    "fcu_t1_mark": {
+      "value": "FCU-T1",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#48",
+          "table_title": "FAN COIL UNIT SCHEDULE",
+          "row_key": "FCU-T1",
+          "column": "MARK",
+          "bbox_px": [
+            230.64,
+            856.556,
+            342.24,
+            891.116
+          ]
+        }
+      ]
+    }
+  }
+}

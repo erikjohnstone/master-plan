@@ -1,0 +1,827 @@
+{
+  "schema_version": 1,
+  "demo_id": "D10",
+  "status": "done",
+  "source": "run-1",
+  "latency_ms": 5122.27,
+  "answer": {
+    "doah_rows": {
+      "value": 34,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+          "table_title": "POINTS LIST DOAH-TI",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3297.85,
+            693.594,
+            4298.896,
+            753.598
+          ]
+        }
+      ]
+    },
+    "doah_ai": {
+      "value": 13,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+          "table_title": "POINTS LIST DOAH-TI",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3297.85,
+            693.594,
+            4298.896,
+            753.598
+          ]
+        }
+      ]
+    },
+    "doah_ao": {
+      "value": 4,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+          "table_title": "POINTS LIST DOAH-TI",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3297.85,
+            693.594,
+            4298.896,
+            753.598
+          ]
+        }
+      ]
+    },
+    "doah_bi": {
+      "value": 13,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+          "table_title": "POINTS LIST DOAH-TI",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3297.85,
+            693.594,
+            4298.896,
+            753.598
+          ]
+        }
+      ]
+    },
+    "doah_bo": {
+      "value": 4,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+          "table_title": "POINTS LIST DOAH-TI",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3297.85,
+            693.594,
+            4298.896,
+            753.598
+          ]
+        }
+      ]
+    },
+    "ahu_rows": {
+      "value": 62,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3340.074,
+            456.47400000000016,
+            4313.762,
+            516.48
+          ]
+        }
+      ]
+    },
+    "ahu_ai": {
+      "value": 21,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3340.074,
+            456.47400000000016,
+            4313.762,
+            516.48
+          ]
+        }
+      ]
+    },
+    "ahu_ao": {
+      "value": 7,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3340.074,
+            456.47400000000016,
+            4313.762,
+            516.48
+          ]
+        }
+      ]
+    },
+    "ahu_bi": {
+      "value": 26,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3340.074,
+            456.47400000000016,
+            4313.762,
+            516.48
+          ]
+        }
+      ]
+    },
+    "ahu_bo": {
+      "value": 8,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3340.074,
+            456.47400000000016,
+            4313.762,
+            516.48
+          ]
+        }
+      ]
+    },
+    "fcu_cool_rows": {
+      "value": 9,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            798.24,
+            2108.4,
+            1358.4,
+            2168.4
+          ]
+        }
+      ]
+    },
+    "fcu_cool_ai": {
+      "value": 3,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            798.24,
+            2108.4,
+            1358.4,
+            2168.4
+          ]
+        }
+      ]
+    },
+    "fcu_cool_ao": {
+      "value": 1,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            798.24,
+            2108.4,
+            1358.4,
+            2168.4
+          ]
+        }
+      ]
+    },
+    "fcu_cool_bi": {
+      "value": 4,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            798.24,
+            2108.4,
+            1358.4,
+            2168.4
+          ]
+        }
+      ]
+    },
+    "fcu_cool_bo": {
+      "value": 1,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            798.24,
+            2108.4,
+            1358.4,
+            2168.4
+          ]
+        }
+      ]
+    },
+    "fcu_hc_rows": {
+      "value": 11,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            2400.96,
+            2134.8,
+            3111.84,
+            2194.8
+          ]
+        }
+      ]
+    },
+    "fcu_hc_ai": {
+      "value": 4,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            2400.96,
+            2134.8,
+            3111.84,
+            2194.8
+          ]
+        }
+      ]
+    },
+    "fcu_hc_ao": {
+      "value": 2,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            2400.96,
+            2134.8,
+            3111.84,
+            2194.8
+          ]
+        }
+      ]
+    },
+    "fcu_hc_bi": {
+      "value": 4,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            2400.96,
+            2134.8,
+            3111.84,
+            2194.8
+          ]
+        }
+      ]
+    },
+    "fcu_hc_bo": {
+      "value": 1,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            2400.96,
+            2134.8,
+            3111.84,
+            2194.8
+          ]
+        }
+      ]
+    },
+    "uh_rows": {
+      "value": 6,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "UNIT HEATER DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3493.444,
+            2304,
+            4077.126,
+            2364
+          ]
+        }
+      ]
+    },
+    "uh_ai": {
+      "value": 2,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "UNIT HEATER DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3493.444,
+            2304,
+            4077.126,
+            2364
+          ]
+        }
+      ]
+    },
+    "uh_ao": {
+      "value": 1,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "UNIT HEATER DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3493.444,
+            2304,
+            4077.126,
+            2364
+          ]
+        }
+      ]
+    },
+    "uh_bi": {
+      "value": 2,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "UNIT HEATER DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3493.444,
+            2304,
+            4077.126,
+            2364
+          ]
+        }
+      ]
+    },
+    "uh_bo": {
+      "value": 1,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "UNIT HEATER DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3493.444,
+            2304,
+            4077.126,
+            2364
+          ]
+        }
+      ]
+    },
+    "total_rows": {
+      "value": 122,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+          "table_title": "POINTS LIST DOAH-TI",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3297.85,
+            693.594,
+            4298.896,
+            753.598
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3340.074,
+            456.47400000000016,
+            4313.762,
+            516.48
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            798.24,
+            2108.4,
+            1358.4,
+            2168.4
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            2400.96,
+            2134.8,
+            3111.84,
+            2194.8
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "UNIT HEATER DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3493.444,
+            2304,
+            4077.126,
+            2364
+          ]
+        }
+      ]
+    },
+    "total_ai": {
+      "value": 43,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+          "table_title": "POINTS LIST DOAH-TI",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3297.85,
+            693.594,
+            4298.896,
+            753.598
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3340.074,
+            456.47400000000016,
+            4313.762,
+            516.48
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            798.24,
+            2108.4,
+            1358.4,
+            2168.4
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            2400.96,
+            2134.8,
+            3111.84,
+            2194.8
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "UNIT HEATER DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3493.444,
+            2304,
+            4077.126,
+            2364
+          ]
+        }
+      ]
+    },
+    "total_ao": {
+      "value": 15,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+          "table_title": "POINTS LIST DOAH-TI",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3297.85,
+            693.594,
+            4298.896,
+            753.598
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3340.074,
+            456.47400000000016,
+            4313.762,
+            516.48
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            798.24,
+            2108.4,
+            1358.4,
+            2168.4
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            2400.96,
+            2134.8,
+            3111.84,
+            2194.8
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "UNIT HEATER DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3493.444,
+            2304,
+            4077.126,
+            2364
+          ]
+        }
+      ]
+    },
+    "total_bi": {
+      "value": 49,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+          "table_title": "POINTS LIST DOAH-TI",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3297.85,
+            693.594,
+            4298.896,
+            753.598
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3340.074,
+            456.47400000000016,
+            4313.762,
+            516.48
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            798.24,
+            2108.4,
+            1358.4,
+            2168.4
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            2400.96,
+            2134.8,
+            3111.84,
+            2194.8
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "UNIT HEATER DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3493.444,
+            2304,
+            4077.126,
+            2364
+          ]
+        }
+      ]
+    },
+    "total_bo": {
+      "value": 15,
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+          "table_title": "POINTS LIST DOAH-TI",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3297.85,
+            693.594,
+            4298.896,
+            753.598
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3340.074,
+            456.47400000000016,
+            4313.762,
+            516.48
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            798.24,
+            2108.4,
+            1358.4,
+            2168.4
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            2400.96,
+            2134.8,
+            3111.84,
+            2194.8
+          ]
+        },
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "UNIT HEATER DDC POINTS LIST",
+          "row_key": null,
+          "column": null,
+          "bbox_px": [
+            3493.444,
+            2304,
+            4077.126,
+            2364
+          ]
+        }
+      ]
+    },
+    "doah_ai07_mark": {
+      "value": "AI07",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+          "table_title": "POINTS LIST DOAH-TI",
+          "row_key": "AI07",
+          "column": "MARK",
+          "bbox_px": [
+            3297.85,
+            1029.6,
+            3490.326,
+            1064.158
+          ]
+        }
+      ]
+    },
+    "ahu_ai10_mark": {
+      "value": "AI10",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+          "table_title": "POINTS LIST AHU-T1A/TIB",
+          "row_key": "AI10",
+          "column": "MARK ANALOG INPUT",
+          "bbox_px": [
+            3340.074,
+            895.9180000000001,
+            3434.88,
+            930.4760000000001
+          ]
+        }
+      ]
+    },
+    "fcu_cool_ao01_mark": {
+      "value": "AO01",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "FCU WITH COOLING COILS DDC POINTS LIST",
+          "row_key": "AO01",
+          "column": "MARK ANALOG INPUT",
+          "bbox_px": [
+            798.24,
+            2438.88,
+            889.2,
+            2473.44
+          ]
+        }
+      ]
+    },
+    "uh_bi02_mark": {
+      "value": "BI02",
+      "citations": [
+        {
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+          "table_title": "UNIT HEATER DDC POINTS LIST",
+          "row_key": "BI02",
+          "column": "MARK ANALOG INPUT",
+          "bbox_px": [
+            3493.444,
+            2708.88,
+            3578.64,
+            2743.44
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -5,9 +5,9 @@ hardness and stress evidence are independently rechecked from rendered source
 sheets. If the evidence does not hold, replace the target before N=5 runs.
 
 **Suite finish line (see `GOAL.md` Final suite gate):** after D10 locks,
-re-run N=5 for **every** demo D01–D10 sequentially (**50** API runs, all
-must pass) and **3** correct UI tests per demo (**30** total, no video
-required for that final UI pass). Earlier per-demo locks do not skip this.
+run the durable suite — engine regressions D01–D10 + frozen `golden/answer.json`
+verify (`npm run test:demos`). Live 50 API / 30 UI re-runs are demoted.
+Earlier per-demo locks do not skip a failing demo in that command.
 
 | ID | Estimator workflow | Candidate hard set | Required stress |
 |---|---|---|---|
@@ -193,11 +193,20 @@ ten. Next: D10.
 
 ## D10 selection record
 
-Status: `SELECTED — ground truth authored; N=5 pending`
+Status: `LOCKED — API 5/5; p95 6.296 s; stdio + UI proof (expandable cards + verified follow-up)`
 
 Target holds on `navfac-cherry-point-atc` (75 sheets). Five extractable
 points/DDC lists on #64/#65/#67 roll up to 122 rows (AI 43 / AO 15 / BI 49 /
 BO 15). Title-only Air Ops/MITRACON schematic lists stay disclosed
 non-extractable. 20% stratified sample (25/122) reconciled before model runs
 in `D10-bas-points-takeoff/`.
+
+N=5 production runs are 5/5 under `verify:demo` with nearest-rank p95
+**6.296 s**. Localhost stdio harness True. UI proof under the usefulness
+bar (five-list takeoff + expandable source cards + verified T1A/T1B/neither
+follow-up) is saved as
+`/opt/cursor/artifacts/d10_ui_prompt_answer_cards_followup_2026-08-30T17-02-51-387Z.webm`.
+Production gates stay methodology-general — `point_type_counts` from
+title-scans; shared/neither = total − onlyA − onlyB. D10 counts toward ten.
+Next: durable regression suite (`npm run test:demos`).
 

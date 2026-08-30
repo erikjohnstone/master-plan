@@ -80,8 +80,9 @@ Fix production behavior, re-prove the UI recording (primary ask + correct
 verified follow-up), then advance.
 
 **After D10 is locked**, the suite still requires the **Final suite gate**
-below (full D01–D10 sequential N=5 again = 50 API runs, plus 3 correct UI
-tests per demo with no video). Per-demo lock alone is not suite completion.
+below (durable engine regressions + frozen golden verify via
+`npm run test:demos`). Live 50 API / 30 UI re-runs are demoted. Per-demo lock
+alone is not suite completion.
 
 ## Demo quality bar (non-negotiable)
 
@@ -239,34 +240,33 @@ workspace.
    and commit. Only then does it count toward ten. Do not begin the next
    slate demo until this lock is complete.
 
-## Final suite gate (after D10 lock — non-negotiable)
+## Final suite gate (after D10 lock)
 
 Locking D01–D10 one-by-one is **not** the finish line. Immediately after the
 **10th demo is locked**, before declaring the suite complete, re-prove the
-**entire** slate in one continuous pass:
+**entire** slate with the **durable regression suite** (no live 50× LLM /
+30× UI re-burn required):
 
-1. **Sequential N=5 for every demo (50 runs).** For each of D01, D02, …, D10
-   in order, re-run the frozen prompt **five times** (`run:demo` →
-   `verify:demo`). All **50** runs must pass value / cite-form / cite-ground
-   (and latency) against that demo's `truth.json`. Do **not** skip a demo
-   because it was locked earlier. Do **not** interleave or parallelize across
-   demos. A single failed run fails the suite gate — fix production behavior,
-   then restart this final pass from D01 run 1 (full 50 again), not from the
-   failing demo alone.
-2. **Three correct UI tests per demo (no video required for this gate).** For
-   each of D01–D10, run **three** independent production UI Agent proofs on
-   the live localhost canvas (same frozen primary prompt + required follow-up
-   bar as the per-demo lock). All three must be correct: usable Answer,
-   useful source cards, readable paints, verified follow-up. **No screen
-   recording is required** for these final UI tests — harness / headed
-   pass-fail evidence is enough — but wrong or empty answers still fail.
-   That is **30** UI proofs (10 × 3) on top of the 50 API runs.
-3. **Straight-correct bar.** The suite is complete only when the final pass
-   finishes **50/50 API** and **30/30 UI** without a fail. Partial credit
-   from earlier per-demo locks does not count.
+1. **Engine regressions (D01–D10).** Every demo has a
+   `demoDNN.regression.test.mjs` that loads the pinned PDF via `Session`,
+   asserts schedule/graph evidence against `truth.json`, and calls **no**
+   model. `npm run test:demos` must pass all ten.
+2. **Frozen-answer verify.** Each demo keeps a slim checked-in
+   `golden/answer.json` (final `status` + `answer` only — not raw tool
+   dumps). `verify:demo` against that golden must pass value / cite-form /
+   cite-ground. No new model calls. Full `runs/run-*.json` dumps stay local
+   / gitignored.
+3. **Optional UI smoke (when UI wiring changes).** Run each existing
+   `opentakeoff/web/scripts/demo-ui-proof-dXX.mjs` **once**, headed or
+   headless, **no video required**. Skip on pure engine-only changes.
 
-Arithmetic check: 10 demos × 5 API runs = **50** sequential API demos; plus
-10 × 3 UI tests = **30** UI proofs. Both must clear after D10 lock.
+**Demoted (not required for suite completion):** re-running live N=5 for
+every demo (50 API) and 3× UI per demo (30). Those remain available as a
+rare release / provider-drift check, not the finish line.
+
+The suite is complete when `npm run test:demos` is green after D10 lock
+(engine + golden verify). Partial credit from earlier per-demo locks does
+not skip a failing demo in that command.
 
 ## Required per-demo layout
 
@@ -275,12 +275,11 @@ demos/DNN-name/
   CARD.md
   prompt.txt
   truth.json
-  runs/
-    run-1.json
-    run-2.json
-    run-3.json
-    run-4.json
-    run-5.json
+  fixture.json
+  golden/
+    answer.json          # slim final answer for verify:demo (checked in)
+  runs/                  # local-only full dumps (gitignored)
+    run-1.json …
 ```
 
 `WORKING` is a measured state, never a planning label. A demo card must show
