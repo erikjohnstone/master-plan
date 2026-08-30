@@ -97,9 +97,9 @@ try {
   await page.screenshot({ path: "/opt/cursor/artifacts/d01_ui_agent_result.png" });
   const panel = await page.locator('textarea[name="agent-goal"]').locator("xpath=../../..").innerText();
   console.log(`UI_AGENT_RESULT\n${panel}`);
-  for (const [needle, path] of [
-    ["MS101", "/opt/cursor/artifacts/d01_ui_plan_highlight.png"],
-    ["M-603", "/opt/cursor/artifacts/d01_ui_schedule_highlight.png"],
+  for (const [needle, path, target] of [
+    ["MS101", "/opt/cursor/artifacts/d01_ui_plan_highlight.png", [2561.9 / 4896, 2511.1 / 3168]],
+    ["M-603", "/opt/cursor/artifacts/d01_ui_schedule_highlight.png", [496 / 4896, 322 / 3168]],
   ]) {
     await page.locator('button[title^="Sheet — the sheets in this set"]').click();
     const item = page.getByText(needle, { exact: true }).last();
@@ -110,8 +110,8 @@ try {
     const canvas = page.locator("canvas").first();
     const box = await canvas.boundingBox();
     if (box) {
-      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-      await page.mouse.wheel(0, -1200);
+      await page.mouse.move(box.x + box.width * target[0], box.y + box.height * target[1]);
+      await page.mouse.wheel(0, -1800);
       await page.waitForTimeout(500);
     }
     await page.screenshot({ path });
