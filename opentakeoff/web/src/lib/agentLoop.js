@@ -970,10 +970,26 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
           || (label === "VAV" && /\bVAVs?[^\n.]{0,48}\bsplits?\b/i.test(goal))
           || (label === "AHU" && /\bAHUs?[^\n.]{0,48}\bsplits?\b/i.test(goal))
           || (label === "DOAH unit" && /\bDOAHs?[^\n.]{0,48}\bsplits?\b/i.test(goal));
+        const splitClause = (() => {
+          if (label === "FCU") {
+            const m = goal.match(/[^.\n]{0,100}fan[\s\-]*coil[^.\n]{0,48}\bsplits?\b/i);
+            return m ? m[0] : "";
+          }
+          if (label === "VAV") {
+            const m = goal.match(/[^.\n]{0,100}\bVAVs?[^.\n]{0,48}\bsplits?\b/i);
+            return m ? m[0] : "";
+          }
+          return "";
+        })();
+        const wantedLetters = new Set();
+        if (/air\s*ops/i.test(splitClause)) wantedLetters.add("A");
+        if (/mitracon|mtrac?on/i.test(splitClause)) wantedLetters.add("M");
+        if (/\bATCT\b/i.test(splitClause)) wantedLetters.add("T");
         if (!goalAsksThisSplit) {
           // skip split enforcement for this family
         } else for (const [letter, n] of Object.entries(out.building_tag_counts)) {
           if (letter === "other") continue;
+          if (wantedLetters.size && !wantedLetters.has(letter)) continue;
           if (!Number.isFinite(Number(n)) || Number(n) < 1) continue;
           // Building splits must appear near the family or the letter token.
           const splitWindowOk = countNearLabel(label, n)
@@ -1243,7 +1259,21 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     let displayText = turn.text;
     if (!turn.toolCalls.length) {
       if (turn.text && !/^\[Evidence gate:/i.test(turn.text)) lastDraftText = turn.text;
-      const correction = requiredEvidenceCorrection(callLog, goal, turn.text);
+      let draftForGate = turn.text;
+      let correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+      // Auto-strip broad all/each-highlighted claims once paints exist — saves
+      // a model round-trip that otherwise burns the step cap.
+      if (correction && /\bbroad all\/each-highlighted claim\b/i.test(correction)
+        && callLog.some((c) => c.name === "highlight_citation" && !c.out?.error)) {
+        draftForGate = String(draftForGate || "")
+          .replace(/\b(?:all|each)\s+(?:of\s+)?(?:the\s+)?(?:cited|requested|queried|required|spot-?check\s+)?(?:cells?|fields?|marks?|regions?|values?|sources?)\s+(?:are|is|were|was)\s+highlight[^.]*\./gi, "")
+          .replace(/\ball\s+cited\b[^.]*\bhighlight[^.]*\./gi, "")
+          .replace(/\beach\s+cited\b[^.]*\bhighlight[^.]*\./gi, "")
+          .trim();
+        displayText = draftForGate;
+        lastDraftText = draftForGate;
+        correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+      }
       if (correction) {
         messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
         const needsMoreTools = /\bcall (?:query_table|find_text|read_sheet_text|sweep_schedule_row|highlight_citation|count_marks)\b/i.test(correction)
@@ -1256,7 +1286,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
           if (correction === lastWordingCorrection) wordingCorrectionStreak += 1;
           else { lastWordingCorrection = correction; wordingCorrectionStreak = 1; }
           if (wordingCorrectionStreak >= 2 && /\ball\/each-highlighted claim\b/i.test(correction)) {
-            displayText = String(turn.text || "")
+            displayText = String(draftForGate || "")
               .replace(/\b(?:all|each)\s+(?:of\s+)?(?:the\s+)?(?:cited|requested|queried|required|spot-?check\s+)?(?:cells?|fields?|marks?|regions?|values?|sources?)\s+(?:are|is|were|was)\s+highlight[^.]*\./gi, "")
               .replace(/\ball\s+cited\b[^.]*\bhighlight[^.]*\./gi, "")
               .replace(/\beach\s+cited\b[^.]*\bhighlight[^.]*\./gi, "")
