@@ -1551,13 +1551,19 @@ const resultText = (out) => {
   if (typeof payload?.error === "string" && payload.error.length > 600) {
     payload = { ...payload, error: `${payload.error.slice(0, 500)}…` };
   }
-  // Compact sheet_graph — full sheet dumps blow the 131k context window.
-  if (Array.isArray(payload?.sheets) && payload.sheets.length > 0) {
+  // Compact sheet_graph only — full sheet dumps blow the 131k context window.
+  // Other tools (sweep_schedule_row, symbol_sweep, load_plan, …) also return a
+  // `sheets` array; treating them as a graph strips found/tag evidence.
+  if (typeof payload?.available === "boolean" && Array.isArray(payload?.sheets) && payload.sheets.length > 0) {
     payload = {
       sheet_count: payload.sheets.length,
       sheets: payload.sheets.slice(0, 40).map((s) => ({
         key: s.key || s.id || s.sheet || s.name,
         title: s.title || s.name || s.label || undefined,
+        role: s.role,
+        schedules: Array.isArray(s.schedules)
+          ? s.schedules.map((sch) => ({ kind: sch.kind, title: sch.title, rows: sch.rows }))
+          : undefined,
       })),
       note: "sheet_graph compacted; use query_table/find_schedule for schedule titles",
     };

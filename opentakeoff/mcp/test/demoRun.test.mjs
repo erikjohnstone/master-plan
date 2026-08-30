@@ -5,6 +5,7 @@ import {
   citationFormErrors,
   citationProvenanceErrors,
   compactSheetGraph,
+  compactToolResult,
   DEMO_TOOLS,
   drawingTextEvidenceErrors,
   parseJsonAnswer,
@@ -524,6 +525,42 @@ test("demo runner captures request IDs, raw replies, and complete tool payloads"
     data: { count: 1 },
   });
   assert.equal(result.answer.answer.design_flow_gpm.value, 128.5);
+});
+
+test("compactToolResult compacts sheet_graph but preserves sweep_schedule_row evidence", () => {
+  const graph = compactToolResult({
+    is_error: false,
+    data: {
+      available: true,
+      sheets: [
+        { sheet: "set.pdf#1", role: "plan", schedules: [] },
+        { sheet: "set.pdf#2", role: "schedule", schedules: [{ kind: "equipment", title: "VALVE SCHEDULE", rows: 9 }] },
+      ],
+      rooms: [{ id: "101" }],
+      counts: { rooms: 1, schedules: 1, callouts: 0 },
+    },
+  });
+  assert.deepEqual(graph.data, {
+    sheet_count: 2,
+    sheets: [
+      { sheet: "set.pdf#1", role: "plan", schedules: [] },
+      { sheet: "set.pdf#2", role: "schedule", schedules: [{ kind: "equipment", title: "VALVE SCHEDULE", rows: 9 }] },
+    ],
+  });
+
+  const sweep = {
+    is_error: false,
+    data: {
+      tag: "CV-1",
+      found: 1,
+      tag_citations: [{ sheet: "set.pdf#5", bbox: [10, 20, 30, 40] }],
+      sheets: [
+        { sheet: "set.pdf#5", found: 1, matches: [{ at: [15, 25], score: 1, rotation: 0, mirrored: false, tag_at: [10, 20, 30, 40] }] },
+      ],
+      complete: true,
+    },
+  };
+  assert.deepEqual(compactToolResult(sweep), sweep);
 });
 
 test("demo runner preserves diagnostics when the model exceeds its iteration budget", async () => {

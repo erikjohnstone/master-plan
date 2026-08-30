@@ -349,7 +349,11 @@ export function compactToolResult(result) {
     return result;
   }
   let next = data;
-  if (Array.isArray(data.sheets) && data.sheets.length > 0) {
+  // sheet_graph alone uses top-level `available` + role/schedule sheet rows.
+  // Other tools (sweep_schedule_row, symbol_sweep, load_plan, …) also return a
+  // `sheets` array — compacting those as a graph silently strips found/tag
+  // evidence and causes honest refusals on installed-quantity demos.
+  if (typeof data.available === "boolean" && Array.isArray(data.sheets) && data.sheets.length > 0) {
     next = compactSheetGraph(data);
   } else if (Array.isArray(data.matches) && data.matches.length > 2
     && Number.isFinite(Number(data.count)) && Number(data.count) >= 2) {
