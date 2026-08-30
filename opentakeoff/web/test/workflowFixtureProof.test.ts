@@ -101,6 +101,75 @@ test("corpus compiles expose empty-page accounting (HVAC + BAS)", () => {
   );
 });
 
+test("D06 valve_join: CONTROL VALVE + BYPASS schedules extract on fixture graph", () => {
+  const graph = loadGraph();
+  const d06 = readFileSync(
+    new URL("../../../opentakeoff-corpus/demos/D06-control-valve-takeoff/prompt.txt", import.meta.url),
+    "utf8",
+  );
+  assert.equal(classifyTakeoffIntent(d06), "valve_join");
+  if (!graph) {
+    test.skip("No cached sheet graph — skip fixture acceptance");
+    return;
+  }
+  // D06 fixture is itd-d1-lab (not NAVFAC CHW/HHW valve schedules).
+  const cv = (graph.tables || []).find((t) => {
+    const title = t.title?.text || "";
+    return /CONTROL VALVE SCHEDULE/i.test(title)
+      && !/BYPASS/i.test(title)
+      && !/\bCHW\b|\bHHW\b/i.test(title);
+  });
+  const bcv = (graph.tables || []).find((t) =>
+    /BYPASS CONTROL VALVE SCHEDULE/i.test(t.title?.text || ""));
+  if (!cv || !bcv) {
+    test.skip("Cached graph is not the D06 itd-d1-lab set — engine regression covers extractability");
+    return;
+  }
+  assert.ok((cv.rows || []).length >= 1, "CONTROL VALVE SCHEDULE must extract");
+  assert.ok((bcv.rows || []).length >= 1, "BYPASS CONTROL VALVE SCHEDULE must extract");
+});
+
+test("D10 follow-up acceptance: AHU-T1A/T1B description split + AI10 attrs", () => {
+  const graph = loadGraph();
+  const truth = JSON.parse(readFileSync(
+    new URL("../../../opentakeoff-corpus/demos/D10-bas-points-takeoff/truth.json", import.meta.url),
+    "utf8",
+  ));
+  assert.equal(classifyTakeoffIntent(truth.follow_up.prompt), "points_takeoff");
+  if (!graph) {
+    test.skip("No cached NAVFAC sheet graph — skip fixture acceptance");
+    return;
+  }
+  const ahu = (graph.tables || []).find((t) => /POINTS LIST AHU-T1A/i.test(t.title?.text || ""));
+  assert.ok(ahu, "AHU points list must extract");
+  assert.equal((ahu.rows || []).length, 62);
+  const cellText = (row, headerRe) => {
+    for (const [header, cell] of Object.entries(row.cells || {})) {
+      if (headerRe.test(header)) return String(cell?.text || "").trim();
+    }
+    return "";
+  };
+  let onlyA = 0;
+  let onlyB = 0;
+  let neither = 0;
+  for (const row of ahu.rows || []) {
+    const desc = cellText(row, /DESCRIPTION/i);
+    const hasA = /AHU-T1A/i.test(desc);
+    const hasB = /AHU-T1B/i.test(desc);
+    if (hasA && !hasB) onlyA += 1;
+    else if (hasB && !hasA) onlyB += 1;
+    else neither += 1;
+  }
+  assert.equal(onlyA, truth.follow_up.expected.ahu_t1a_named);
+  assert.equal(onlyB, truth.follow_up.expected.ahu_t1b_named);
+  assert.equal(neither, truth.follow_up.expected.ahu_shared);
+  const ai10 = (ahu.rows || []).find((row) => String(row.key || "").toUpperCase() === "AI10");
+  assert.ok(ai10);
+  assert.equal(cellText(ai10, /DESCRIPTION/i), truth.follow_up.expected.ai10_description);
+  assert.equal(cellText(ai10, /^ALARM$/i), truth.follow_up.expected.ai10_alarm);
+  assert.equal(cellText(ai10, /^TREND$/i), truth.follow_up.expected.ai10_trend);
+});
+
 test("CHW/HHW valve service filter acceptance on fixture graph", () => {
   const graph = loadGraph();
   if (!graph) {

@@ -314,6 +314,26 @@ test("suggestedScheduleTitles maps family words to industry schedule needles", (
   assert.match(state.nextMove || "", /VOLUME CONTROL|AIR TERMINAL|VARIABLE AIR/i);
 });
 
+test("D01–D10 follow-up prompts stay on durable intents (not remapped to unrelated families)", () => {
+  const cases = [
+    ["D03-hvac-bas-project-takeoff", "equipment_schedule"],
+    ["D04-vav-scope-rollup", "equipment_schedule"],
+    ["D05-rtu-mech-to-electrical", "cross_discipline_join"],
+    ["D08-fcu-cross-building", "equipment_schedule"],
+    ["D09-room-hvac-coordination", "room_coordination"],
+    ["D10-bas-points-takeoff", "points_takeoff"],
+  ];
+  for (const [dir, want] of cases) {
+    const truth = JSON.parse(readFileSync(
+      new URL(`../../../opentakeoff-corpus/demos/${dir}/truth.json`, import.meta.url),
+      "utf8",
+    ));
+    const fu = truth.follow_up?.prompt;
+    assert.ok(fu, dir);
+    assert.equal(classifyTakeoffIntent(fu), want, `${dir} follow-up`);
+  }
+});
+
 test("phrase variants keep D01/D05/D08/D10 intents stable", () => {
   assert.equal(
     classifyTakeoffIntent("Locate CH-A1 on the plan and give cooling capacity plus matching CHW control valve Cv"),
