@@ -235,10 +235,19 @@ try {
 
   // Conversational follow-up — must be answered correctly before lock.
   await goal.fill(followUp);
+  await page.waitForTimeout(1_000);
   await page.getByRole("button", { name: "Ask", exact: true }).click();
   await stop.waitFor({ state: "visible", timeout: 10_000 });
   await stop.waitFor({ state: "hidden", timeout: 240_000 });
   await page.waitForTimeout(2_000);
+  // Scroll the latest Answer into view and hold so the recording clearly
+  // shows the follow-up reply (not just Sources / Ask box).
+  const followAnswerHeaders = panelRoot.locator("text=/^Answer$/i");
+  const followHeaderCount = await followAnswerHeaders.count();
+  if (followHeaderCount > 0) {
+    await followAnswerHeaders.nth(followHeaderCount - 1).scrollIntoViewIfNeeded();
+  }
+  await page.waitForTimeout(6_000);
   await page.screenshot({ path: "/opt/cursor/artifacts/d03_ui_followup_answer.png" });
   const afterFollow = await panelRoot.innerText();
   console.log(`UI_AGENT_FOLLOWUP\n${afterFollow.slice(-2500)}`);
@@ -270,6 +279,8 @@ try {
     throw new Error("D03 follow-up missing DOAH-T1.");
   }
 
+  // Extra hold so the saved video ends on the readable follow-up Answer.
+  await page.waitForTimeout(4_000);
   succeeded = true;
   console.log("D03_UI_PROOF_OK");
 } finally {

@@ -120,6 +120,9 @@ export default function AgentPanel({
 }) {
   const [draft, setDraft] = useState("");
   const [showSteps, setShowSteps] = useState(false);
+  // Sources stay collapsed by default so the Answer stays answer-first —
+  // a long card list must not bury the takeoff reply (seen on D03/D04 demos).
+  const [showSources, setShowSources] = useState(false);
   const threadRef = useRef(null);
   const logRef = useRef(null);
   const { steps, meta } = useMemo(() => splitLog(log), [log]);
@@ -131,7 +134,21 @@ export default function AgentPanel({
   }, [running, hasAssistant]);
 
   useEffect(() => {
-    if (threadRef.current) threadRef.current.scrollTop = threadRef.current.scrollHeight;
+    const el = threadRef.current;
+    if (!el) return;
+    if (running) {
+      el.scrollTop = el.scrollHeight;
+      return;
+    }
+    // When idle with an Answer, keep the latest assistant reply in view —
+    // do not auto-scroll to the Sources list at the bottom.
+    const answers = el.querySelectorAll('[data-agent-role="assistant"]');
+    const last = answers[answers.length - 1];
+    if (last) {
+      last.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      return;
+    }
+    el.scrollTop = el.scrollHeight;
   }, [thread, citations, status, running]);
 
   useEffect(() => {
@@ -186,6 +203,7 @@ export default function AgentPanel({
             {thread.map((m, i) => (
               <div
                 key={`${m.role}-${i}`}
+                data-agent-role={m.role}
                 style={{
                   marginBottom: 10,
                   padding: m.role === "user" ? "8px 10px" : 0,
@@ -209,10 +227,21 @@ export default function AgentPanel({
             )}
             {citations.length > 0 && (
               <div style={{ marginTop: 4 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: 6 }}>
-                  Sources · click to open
-                </div>
-                {citations.map((c) => (
+                <button
+                  type="button"
+                  onClick={() => setShowSources((v) => !v)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 6, width: "100%",
+                    padding: "4px 0", border: "none", background: "transparent",
+                    cursor: "pointer", font: "inherit",
+                    fontSize: 11, fontWeight: 700, letterSpacing: "0.04em",
+                    textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: 6,
+                  }}
+                >
+                  <Icon name={showSources ? "chevronDown" : "chevronRight"} size={13} />
+                  <span>Sources · {citations.length} · click to open</span>
+                </button>
+                {showSources && citations.map((c) => (
                   <SourceCard key={c.id} citation={c} onOpen={onOpenCitation} />
                 ))}
               </div>
