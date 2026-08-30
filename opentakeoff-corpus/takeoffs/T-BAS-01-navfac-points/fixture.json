@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "takeoff_id": "T-BAS-01",
+  "kind": "bas_points",
+  "set_id": "navfac-cherry-point-atc",
+  "source_file": "raw/navfac-cherry-point-atc-mechanical.pdf",
+  "sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "redistribution": "External local-use corpus fixture; do not commit or republish the source PDF."
+}

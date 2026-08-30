@@ -1,0 +1,331 @@
+{
+  "schema_version": 1,
+  "takeoff_id": "T-HVAC-01",
+  "kind": "hvac_equipment",
+  "set_id": "navfac-cherry-point-atc",
+  "source_file": "navfac-cherry-point-atc-mechanical.pdf",
+  "status": "TRUTH_BUILT_DRAFT",
+  "ground_truth_completed_before_model_runs": false,
+  "note": "DRAFT category rollup from live Session graph inventory. Item-level citations, valve schedules (use VALVE MARK identity), humidifier family, pump tags, 25% hand-count reconciliation, and Gate 4 page map still required before VALIDATING.",
+  "sheet_count": 75,
+  "categories": {
+    "AHU": {
+      "count": 5,
+      "building": {
+        "A": 2,
+        "M": 1,
+        "T": 2,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "AHU-A1",
+        "AHU-A2",
+        "AHU-M1",
+        "AHU-T1A",
+        "AHU-T1B"
+      ]
+    },
+    "DOAH_UNIT": {
+      "count": 3,
+      "building": {
+        "A": 2,
+        "M": 1,
+        "T": 0,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "DOAH-A1",
+        "DOAH-A2",
+        "DOAH-M1"
+      ]
+    },
+    "DOAH_HANDLING": {
+      "count": 1,
+      "building": {
+        "A": 0,
+        "M": 0,
+        "T": 1,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "DOAH-T1"
+      ]
+    },
+    "FCU": {
+      "count": 42,
+      "building": {
+        "A": 14,
+        "M": 10,
+        "T": 18,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "FCU-A1",
+        "FCU-A10",
+        "FCU-A11",
+        "FCU-A12",
+        "FCU-A13"
+      ]
+    },
+    "VAV": {
+      "count": 52,
+      "building": {
+        "A": 27,
+        "M": 25,
+        "T": 0,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "VAV-A101",
+        "VAV-A102",
+        "VAV-A103",
+        "VAV-A104",
+        "VAV-A105"
+      ]
+    },
+    "AIR_COOLED_CHILLER": {
+      "count": 2,
+      "building": {
+        "A": 2,
+        "M": 0,
+        "T": 0,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "CH-A1",
+        "CH-A2"
+      ]
+    },
+    "HEAT_RECOVERY_CHILLER": {
+      "count": 2,
+      "building": {
+        "A": 0,
+        "M": 2,
+        "T": 0,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "CH-MT1",
+        "CH-MT2"
+      ]
+    },
+    "BOILER": {
+      "count": 6,
+      "building": {
+        "A": 2,
+        "M": 2,
+        "T": 2,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "B-A1",
+        "B-A2",
+        "B-M1",
+        "B-M2",
+        "B-T1"
+      ]
+    },
+    "FAN": {
+      "count": 8,
+      "building": {
+        "A": 3,
+        "M": 1,
+        "T": 4,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "EF-A1",
+        "EF-A2",
+        "EF-A3",
+        "EF-M1",
+        "EF-T1"
+      ]
+    },
+    "CABINET_UNIT_HEATER": {
+      "count": 5,
+      "building": {
+        "A": 2,
+        "M": 1,
+        "T": 2,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "CUH-A1",
+        "CUH-A2",
+        "CUH-M1",
+        "CUH-T1",
+        "CUH-T2"
+      ]
+    },
+    "UNIT_HEATER": {
+      "count": 6,
+      "building": {
+        "A": 5,
+        "M": 1,
+        "T": 0,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "UH-A1",
+        "UH-A2",
+        "UH-A3",
+        "UH-A4",
+        "UH-A5"
+      ]
+    },
+    "CRAH": {
+      "count": 6,
+      "building": {
+        "A": 0,
+        "M": 4,
+        "T": 2,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "CRAH-M1A",
+        "CRAH-M1B",
+        "CRAH-M2A",
+        "CRAH-M2B",
+        "CRAH-T1A"
+      ]
+    },
+    "DEHUMIDIFIER": {
+      "count": 12,
+      "building": {
+        "A": 6,
+        "M": 3,
+        "T": 3,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "DH-A1",
+        "DH-A2",
+        "DH-A3",
+        "DH-A4",
+        "DH-A5"
+      ]
+    },
+    "AIR_SEPARATOR": {
+      "count": 6,
+      "building": {
+        "A": 2,
+        "M": 2,
+        "T": 2,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "AS-CHW-A1",
+        "AS-CHW-M1",
+        "AS-CHW-T1",
+        "AS-HHW-A1",
+        "AS-HHW-M1"
+      ]
+    },
+    "EXPANSION_TANK": {
+      "count": 4,
+      "building": {
+        "A": 2,
+        "M": 2,
+        "T": 0,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "ET-CHW-A1",
+        "ET-CHW-MT1",
+        "ET-HHW-A1",
+        "ET-HW-MT1"
+      ]
+    },
+    "GRD": {
+      "count": 30,
+      "building": {
+        "A": 0,
+        "M": 0,
+        "T": 0,
+        "other": 30
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "CD-1",
+        "CD-2",
+        "CD-3",
+        "CD-4",
+        "CD-5"
+      ]
+    },
+    "RANGE_HOOD": {
+      "count": 3,
+      "building": {
+        "A": 0,
+        "M": 3,
+        "T": 0,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "RH-M1",
+        "RH-M2",
+        "RH-M3"
+      ]
+    },
+    "DUCT_SILENCER": {
+      "count": 2,
+      "building": {
+        "A": 2,
+        "M": 0,
+        "T": 0,
+        "other": 0
+      },
+      "tolerance": 0,
+      "provenance": "Unique MARK rows on named equipment schedule(s); continuation pages deduped by MARK; vibration-isolation excluded.",
+      "sample_tags": [
+        "DS-AHU-T1-RA",
+        "DS-AHU-T1-SA"
+      ]
+    }
+  },
+  "deferred_categories": [
+    "CHW_CONTROL_VALVE",
+    "HHW_CONTROL_VALVE",
+    "HUMIDIFIER",
+    "PUMP",
+    "FAN_SOUND",
+    "VIBRATION_ISOLATION"
+  ],
+  "page_accounting": {
+    "status": "pending",
+    "sheet_count": 75
+  }
+}
