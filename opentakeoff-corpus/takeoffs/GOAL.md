@@ -14,8 +14,8 @@ gates**, and the deliverable is **Run 5's output only**.
 
 | ID | Kind | Set | Status |
 |---|---|---|---|
-| `T-HVAC-01` | HVAC equipment quantity takeoff | `navfac-cherry-point-atc` | `NOT STARTED` |
-| `T-BAS-01` | BAS / DDC points takeoff | `navfac-cherry-point-atc` | `NOT STARTED` |
+| `T-HVAC-01` | HVAC equipment quantity takeoff | `navfac-cherry-point-atc` | `TRUTH BUILT (draft)` |
+| `T-BAS-01` | BAS / DDC points takeoff | `navfac-cherry-point-atc` | `TRUTH BUILT (draft)` |
 
 No additional takeoff IDs without an explicit goal change.
 
@@ -31,6 +31,9 @@ No additional takeoff IDs without an explicit goal change.
 5. Prompt frozen once validation starts. Changing it resets the count.
 6. Only real US HVAC/BAS construction-document scope — nothing invented.
 7. "In full" means full coverage of every present category on that set.
+8. **No subagents.** Do not use Cursor Task/subagent tools (explore, generalPurpose,
+   computerUse, debug, best-of-n, etc.) for this goal. The primary agent does all
+   work directly — inventory, truth, gates, N=5 runs, export, UI, regressions.
 
 ## Ground-truth harness (per takeoff)
 
