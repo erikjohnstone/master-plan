@@ -2131,7 +2131,8 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
           const sampleTitle = String(out.matches?.[0]?.title?.text || out.matches?.[0]?.title || title);
           scanSummaries.push(
             `${sampleTitle}: count=${out.count}`
-            + (out.building_tag_counts ? ` building_tag_counts=${JSON.stringify(out.building_tag_counts)}` : ""),
+            + (out.building_tag_counts ? ` building_tag_counts=${JSON.stringify(out.building_tag_counts)}` : "")
+            + (out.point_type_counts ? ` point_type_counts=${JSON.stringify(out.point_type_counts)}` : ""),
           );
         }
       }
