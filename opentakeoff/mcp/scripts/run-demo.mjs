@@ -542,7 +542,7 @@ export async function runToolCallingModel({
   tools,
   execute,
   fetchFn = fetch,
-  maxIterations = 18,
+  maxIterations = 28,
   seededToolCalls = [],
 }) {
   const messages = [
