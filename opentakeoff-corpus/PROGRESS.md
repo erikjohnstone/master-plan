@@ -252,21 +252,39 @@ Takeoff by set:
     compound-key resolver; graph has zero unexpected resolutions.
   - Full regressions pass: web 1,910/1,910 (3 intentional skips), MCP
     247/247, and MCP typecheck.
+- Eighth five-fix batch closed every remaining extractable quantity gap:
+  - Parenthesized gang labels such as `(6) LD-1` are reconstructed as one
+    placement mark; a four-hit air-device quorum safely skips unrelated
+    content-stream distractors.
+  - Explicit first/second-floor identities prevent same-coordinate devices
+    on different levels from being collapsed as duplicate views.
+  - NAVFAC's LD-1, LD-3, and TG-5 and Baker's final P1/V1 audit discrepancies
+    are closed. A first gate exposed an ITD plumbing regression; scoping the
+    quorum retry to air-device schedule titles restored ITD to 100%.
+- Final outcome/production batch, independently verified forced-cold on
+  2026-08-29 at commit `2cd532b` (56.2 seconds):
+  - Takeoff is 541/541 outcomes exact (100%): 499/499 applicable installed
+    rows, 14/14 expected honest refusals, and 28/28 intentional
+    raster-unavailable rows.
+  - Quantity delta, missing rows, and false additions are all zero.
+  - Reference remains 129/129 exact (100%).
+  - Graph is 91/91 cells and 138/138 expected row-symbol outcomes (100%).
+  - Explicit prose placements (`CUH-T1 ON FLOOR 3; CUH-T2 ON FLOOR 5`) are
+    returned with source coordinates; duplicate schedule-only notes do not
+    multiply quantity.
+  - Ambiguous duplicate keys are typed refusals, not generic errors.
+  - Corpus keys now encode expected resolved/refused/unavailable outcomes,
+    preventing a zero quantity from masquerading as a successful refusal.
+  - `project_takeoff` and `query_table` were exercised through the production
+    MCP registration on real sets; table answers include exact source bboxes
+    and butterfly-valve takeoff refuses its unscaled legend honestly.
+  - Final regressions pass: web 1,914/1,914 (3 intentional skips), MCP
+    249/249, isolated dense-grid performance 3.09s, and both typechecks.
 
-## Verification in progress
+## Verified completion
 
-- Start the next five-fix accuracy batch from the current 92.7% takeoff
-  (97.8% applicable), 129/129 reference, and 98.6% graph baseline.
-
-## Local implementation queue
-
-- NAVFAC's remaining air-device undercounts and pump/valve refusals are the
-  largest vector/text-backed quantity gap.
-- Baker's remaining deterministic gaps are `HB-1`, `E1`, `HB-2`, `P1`, and
-  `V1`.
-- Building 5406's fully exploded EF-2 and EF-3 labels account for both graph
-  row-symbol misses; VAV-6 is now recovered from its surviving suffix.
-- Reference extraction is closed at 129/129.
+The current corpus goal is complete. New sets should expand the key and rerun
+the same forced-cold outcome, reference, and graph gates.
 
 Cloud dispatch and all subagent dispatch are prohibited by the user's
 2026-08-29 instruction. The coordinator VM is the only execution path.
