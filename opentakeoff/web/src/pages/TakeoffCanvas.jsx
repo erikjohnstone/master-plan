@@ -7419,6 +7419,7 @@ export default function TakeoffCanvas() {
           text: hit.str || hit.text,
           str: hit.str || hit.text,
           sheet: sheetKey || null,
+          bbox_px: Array.isArray(hit.bbox) && hit.bbox.length === 4 ? hit.bbox : undefined,
           at: [hit.center[0] / dims.w, hit.center[1] / dims.h],
           bbox: {
             x0: hit.bbox[0] / dims.w,
@@ -7473,6 +7474,7 @@ export default function TakeoffCanvas() {
           text: sp.str,
           str: sp.str,
           sheet: sheetKey,
+          bbox_px: [sp.x0, sp.y0, sp.x1, sp.y1],
           at: [+(((sp.x0 + sp.x1) / 2) / dims.w).toFixed(4), +(((sp.y0 + sp.y1) / 2) / dims.h).toFixed(4)],
           bbox: {
             x0: +(sp.x0 / dims.w).toFixed(4),
@@ -7753,10 +7755,19 @@ export default function TakeoffCanvas() {
       text,
       rect: [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]],
     });
-    return result.error ? result : {
+    if (result.error) return result;
+    // Open the cited sheet and fly to the new highlight so the estimator sees
+    // the painted evidence on the canvas — not only a note in the agent panel.
+    const markup = agentStateRef.current.markups.find((m) => m.id === result.id);
+    if (markup) {
+      setShowMarkups(true);
+      flyToMarkup(markup);
+    }
+    return {
       ...result,
       bbox_px,
       text,
+      opened_sheet: sheet,
     };
   }
 
@@ -10782,7 +10793,7 @@ export default function TakeoffCanvas() {
                         const hx1 = Math.max(c0[0], c1[0]) * p.img.w, hy1 = Math.max(c0[1], c1[1]) * p.img.h;
                         const pad = (5 * w) / z;
                         return (
-                          <g key={m.id}>
+                          <g key={m.id} data-markup-type="highlight" data-markup-id={m.id} data-markup-sheet={m.sheet_id}>
                             {halo(hx0 - pad, hy0 - pad, hx1 + pad, hy1 + pad)}
                             <rect x={hx0} y={hy0} width={hx1 - hx0} height={hy1 - hy0} fill={mk} fillOpacity={0.18} stroke={mk} strokeWidth={(2 * w) / z} strokeDasharray={dash} />
                             {m.text && <text x={(hx0 + hx1) / 2} y={(hy0 + hy1) / 2} fill={mk} fontSize={13 / z} fontWeight="700" textAnchor="middle" dominantBaseline="central" style={{ pointerEvents: "none" }}>{m.text}</text>}

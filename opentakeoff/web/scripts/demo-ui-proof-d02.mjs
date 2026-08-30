@@ -164,6 +164,16 @@ try {
     && !/CONTROL CAB/i.test(finalAnswer)) {
     throw new Error("D02 UI serves field reused schedule location text.");
   }
+  // Product rule: answers must be painted on the sheets, not only in the agent panel.
+  if (!/\bhighlight_citation\b/i.test(panel)) {
+    throw new Error("D02 UI run never called highlight_citation — answers must paint cited evidence on the sheets.");
+  }
+  const totalHighlights = await page.locator('[data-markup-type="highlight"]').count();
+  console.log(`UI_HIGHLIGHT_TOTAL ${totalHighlights}`);
+  if (totalHighlights < 2) {
+    throw new Error(`D02 UI painted only ${totalHighlights} highlight(s); expected multiple cited regions on the sheets.`);
+  }
+  let sheetsWithVisibleHighlight = 0;
   for (const [needle, path, target] of [
     ["M-621", "/tmp/d02_ui_ahu_highlight.png", [300 / 4896, 365 / 3168]],
     ["MI731", "/tmp/d02_ui_points_highlight.png", [3700 / 4896, 910 / 3168]],
@@ -184,7 +194,13 @@ try {
       await page.mouse.wheel(0, -1800);
       await page.waitForTimeout(2_000);
     }
+    const onSheet = await page.locator('[data-markup-type="highlight"]').count();
+    console.log(`UI_SHEET_HIGHLIGHT ${needle} count=${onSheet}`);
+    if (onSheet > 0) sheetsWithVisibleHighlight += 1;
     await page.screenshot({ path });
+  }
+  if (sheetsWithVisibleHighlight < 1) {
+    throw new Error("D02 UI recording has no visible on-sheet highlight markups on M-621/MI731/M-002 — agent-panel text alone is incomplete.");
   }
   succeeded = true;
   if (headed) await page.waitForTimeout(10_000);

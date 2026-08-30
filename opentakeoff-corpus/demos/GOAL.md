@@ -14,6 +14,19 @@ tool activity, the final answer, and the cited plan/schedule regions highlighted
 on the blueprint. A terminal-only recording, backend process log, or written
 claim that localhost ran is not sufficient evidence.
 
+## Paint answers on the sheets (product rule)
+
+OpenTakeoff must be as interactive and easy as possible. Whenever an estimator
+asks for information in the Agent, the product must **paint the cited evidence
+on the real blueprints** via `highlight_citation` (visible highlight markups,
+plus navigate/fly to those sheets). Agent-panel text alone is incomplete.
+
+This applies to **every** factual question that uses tool evidence
+(`query_table`, `find_text`, `sweep_schedule_row`, and similar) — not only
+prompts that say "show me" or "cite the exact". UI recordings must show the
+highlights on the canvas. Evidence gates and the system prompt must enforce
+this on the production UI path for arbitrary uploaded sets.
+
 In a live review, each demo must answer these questions on the cited sheet in
 under ten seconds:
 

@@ -195,6 +195,29 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     out: { matches: [{ row: { identity: { header: "VALVE MARK", text: "CV-CH-A1" } } }] },
   }], "Find the valve", "CV‑CH‑A1 comes from VALVE MARK."), null);
   assert.match(requiredEvidenceCorrection([], "Show me the plan and cite the exact cells")!, /highlight_citation/);
+  // Paint-on-sheets is required for any answer that uses paint-able query_table
+  // evidence — not only when the goal says "cite the exact".
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#44",
+      row: { key: "AHU-1", all_cells: { CFM: { text: "3850", bbox: [10, 20, 30, 40] } } },
+    }] } },
+  ], "What is AHU-1 maximum supply airflow?", "AHU-1 is 3850 CFM.")!, /highlight_citation|painted/);
+  assert.match(requiredEvidenceCorrection([
+    { name: "find_text", args: { q: "SECTION" }, out: {
+      count: 1,
+      hits: [{ str: "AHU-1 / AHU-2 SECTION", sheet: "set.pdf#28", bbox_px: [100, 200, 400, 260] }],
+    } },
+  ], "Where is the physical drawing section?",
+  "Physical section: AHU-1 / AHU-2 SECTION on set.pdf#28.")!, /highlight_citation|painted/);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#28", bbox_px: [100, 200, 400, 260] } },
+    { name: "find_text", args: { q: "SECTION" }, out: {
+      count: 1,
+      hits: [{ str: "AHU-1 / AHU-2 SECTION", sheet: "set.pdf#28", bbox_px: [100, 200, 400, 260] }],
+    } },
+  ], "Where is the physical drawing section?",
+  "Physical section: AHU-1 / AHU-2 SECTION on set.pdf#28."), null);
   assert.match(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#3", bbox_px: [1, 2, 3, 4] } },
     { name: "query_table", out: { matches: [{

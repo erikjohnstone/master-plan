@@ -475,7 +475,7 @@ export const AGENT_TOOL_DEFS = [
   // convention — MCP's equivalents (session.ts) take image px.
   {
     name: "find_text",
-    description: "LOCATE a known string — the complement to read_sheet_text (which returns what a region SAYS; this finds WHERE a string you already know sits). Case-insensitive substring match against each positioned text run. Pass sheet to search one page, or omit sheet to search the entire loaded set (each hit then carries its own sheet). Whole-set aware — sheets do not need to be open as tabs. Optionally restrict to a region on a single sheet; results cap at limit (default 200), with count/truncated/next_move telling you what to do next on zero hits.",
+    description: "LOCATE a known string — the complement to read_sheet_text (which returns what a region SAYS; this finds WHERE a string you already know sits). Case-insensitive substring match against each positioned text run. Pass sheet to search one page, or omit sheet to search the entire loaded set (each hit then carries its own sheet). Whole-set aware — sheets do not need to be open as tabs. Each hit includes bbox_px (production image pixels) for highlight_citation, plus normalized bbox/at for UI. Optionally restrict to a region on a single sheet; results cap at limit (default 200), with count/truncated/next_move telling you what to do next on zero hits.",
     input_schema: {
       type: "object",
       properties: {
@@ -558,7 +558,7 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "highlight_citation",
-    description: "Highlight an exact production-API citation bbox on the real blueprint. Pass the cited sheet and bbox_px unchanged; the canvas converts image pixels to normalized UI coordinates and adds a visible highlight markup.",
+    description: "Highlight an exact production-API citation bbox on the real blueprint and navigate the canvas to it. Pass the cited sheet and bbox_px unchanged (from query_table cells, find_text hit.bbox_px, or sweep_schedule_row citations); the canvas converts image pixels to normalized UI coordinates, adds a visible highlight markup, opens that sheet, and flies to the painted region. Call this for every factual answer backed by cited evidence — agent-panel text alone is incomplete.",
     input_schema: {
       type: "object",
       properties: {

@@ -331,29 +331,73 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return "The goal asks for the physical drawing section where the equipment is shown. Call find_text (omit sheet if needed) for the section label on the drawings, cite hit.str, or refuse — do not substitute a schedule sheet title.";
     }
   }
-  if (/\bshow\b.*\bcite\b|\bcite the exact\b/i.test(goal)
-    && !callLog.some(({ name, out }) => name === "highlight_citation" && !out?.error)) {
-    return "The goal asks to show exact cited source locations, but no successful highlight_citation call exists. Highlight the returned plan tag and schedule-cell bboxes on their real sheets before answering.";
-  }
-  if (/\bcite the exact\b/i.test(goal)) {
-    const highlights = callLog.filter(({ name, out }) =>
-      name === "highlight_citation" && !out?.error && Array.isArray(out.bbox_px))
-      .map(({ out }) => ({ sheet: out.sheet, bbox: out.bbox_px }));
-    const uncovered = [];
-    for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
-      for (const match of out?.matches || []) {
-        const rowKey = String(match?.row?.key || "");
-        if (!rowKey || !finalCanonical.includes(rowKey.toUpperCase().replace(/[^A-Z0-9]/g, ""))) continue;
-        const cells = Object.values(match?.row?.all_cells || match?.row?.cells || {});
-        const covered = cells.some((cell) => Array.isArray(cell?.bbox)
-          && highlights.some((highlight) => highlight.sheet === match.sheet
-            && highlight.bbox.every((value, index) => Math.abs(value - cell.bbox[index]) <= 1)));
-        if (!covered) uncovered.push(`${rowKey} on ${match.sheet}`);
-      }
+// Product rule: paint cited evidence on the sheets whenever the answer uses
+  // paint-able tool evidence — not only when the goal says "show me" / "cite the exact".
+  const highlights = callLog.filter(({ name, out }) =>
+    name === "highlight_citation" && !out?.error && Array.isArray(out.bbox_px))
+    .map(({ out }) => ({ sheet: out.sheet, bbox: out.bbox_px }));
+  const highlightMatches = (sheet, bbox) => Array.isArray(bbox) && bbox.length === 4
+    && highlights.some((highlight) => highlight.sheet === sheet
+      && highlight.bbox.every((value, index) => Math.abs(value - bbox[index]) <= 1));
+  const usedQueryRows = [];
+  for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
+    for (const match of out?.matches || []) {
+      const rowKey = String(match?.row?.key || match?.row?.identity?.text || "");
+      if (!rowKey || !finalCanonical.includes(rowKey.toUpperCase().replace(/[^A-Z0-9]/g, ""))) continue;
+      const cells = Object.values(match?.row?.all_cells || match?.row?.cells || {});
+      const paintable = cells.filter((cell) => Array.isArray(cell?.bbox) && cell.bbox.length === 4);
+      if (!paintable.length) continue;
+      usedQueryRows.push({ sheet: match.sheet, rowKey, cells: paintable });
     }
+  }
+  const usedDrawingHits = callLog
+    .filter(({ name, out }) =>
+      (name === "find_text" || name === "read_sheet_text")
+      && !out?.error
+      && Array.isArray(out?.hits)
+      && out.hits.length > 0)
+    .flatMap(({ out }) => out.hits)
+    .map((hit) => {
+      const str = typeof hit?.str === "string" ? hit.str
+        : (typeof hit?.text === "string" ? hit.text : "");
+      const sheet = hit?.sheet || "";
+      const bbox = Array.isArray(hit?.bbox_px) && hit.bbox_px.length === 4 ? hit.bbox_px
+        : (Array.isArray(hit?.bbox) && hit.bbox.length === 4 ? hit.bbox
+          : (hit?.bbox && Number.isFinite(hit.bbox.x0)
+            ? [hit.bbox.x0, hit.bbox.y0, hit.bbox.x1, hit.bbox.y1]
+            : null));
+      // Only image-pixel bboxes are paint-able via highlight_citation.
+      const bbox_px = Array.isArray(bbox) && bbox.every((v) => Number.isFinite(v) && Math.abs(v) > 1.5)
+        ? bbox : null;
+      return { str, sheet, bbox_px };
+    })
+    .filter((hit) => {
+      if (!hit.str || !hit.bbox_px || !hit.sheet) return false;
+      const hitCanonical = hit.str.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (hitCanonical.length < 6) return false;
+      const needle = hitCanonical.slice(0, Math.min(40, hitCanonical.length));
+      return finalCanonical.includes(needle);
+    });
+  const needsPaint = usedQueryRows.length > 0 || usedDrawingHits.length > 0;
+  const asksToShowCite = /\bshow\b.*\bcite\b|\bcite the exact\b|\bshow me\b.*\b(?:plan|sheet|schedule|highlight)\b/i.test(goal);
+  if ((needsPaint || asksToShowCite) && !highlights.length) {
+    return "The answer cites schedule or drawing evidence that can be painted on the sheets, but no successful highlight_citation call exists. Call highlight_citation with each cited sheet and unchanged bbox_px so the estimator sees the source on the blueprint — agent-panel text alone is incomplete.";
+  }
+  if (usedQueryRows.length) {
+    const uncovered = usedQueryRows
+      .filter(({ sheet, cells }) => !cells.some((cell) => highlightMatches(sheet, cell.bbox)))
+      .map(({ rowKey, sheet }) => `${rowKey} on ${sheet}`);
     if (uncovered.length) {
       return `The answer uses queried schedule row(s) with no painted source cell: ${[...new Set(uncovered)].join(", ")}. Call highlight_citation on at least one exact cited cell from each row before finishing.`;
     }
+  }
+  if (usedDrawingHits.length) {
+    const uncoveredHits = usedDrawingHits.filter((hit) => !highlightMatches(hit.sheet, hit.bbox_px));
+    if (uncoveredHits.length) {
+      return `The answer copies drawing-text evidence that is not painted on the sheet: ${uncoveredHits.slice(0, 3).map((hit) => `"${hit.str.slice(0, 48)}" on ${hit.sheet}`).join("; ")}. Call highlight_citation with that hit's sheet and bbox_px before finishing.`;
+    }
+  }
+  {
     const evidenceCells = [];
     for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
       for (const match of out?.matches || []) {
@@ -379,8 +423,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
           && finalCanonical.includes(headerCanonical) && finalCanonical.includes(textCanonical);
       });
       const unpaintedMentioned = mentionedCells.filter((cell) =>
-        !highlights.some((highlight) => highlight.sheet === cell.sheet
-          && highlight.bbox.every((value, index) => Math.abs(value - cell.bbox[index]) <= 1)));
+        !highlightMatches(cell.sheet, cell.bbox));
       if (unpaintedMentioned.length) {
         return "The final answer broadly says all/each cited value or cell is highlighted, but some mentioned evidence cells were not painted. Describe only the exact highlighted regions, or highlight every claimed cell.";
       }
@@ -393,9 +436,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         return headerCanonical.length >= 3 && textCanonical
           && lineCanonical.includes(headerCanonical) && lineCanonical.includes(textCanonical);
       });
-      if (claimedCells.length && !claimedCells.some((cell) =>
-        highlights.some((highlight) => highlight.sheet === cell.sheet
-          && highlight.bbox.every((value, index) => Math.abs(value - cell.bbox[index]) <= 1)))) {
+      if (claimedCells.length && !claimedCells.some((cell) => highlightMatches(cell.sheet, cell.bbox))) {
         return "The final answer says a specific schedule cell is highlighted, but no highlight_citation call painted that exact cell bbox. Remove the highlighted claim for unpainted fields or highlight the exact returned cell; another cell in the same row is not equivalent.";
       }
     }
@@ -448,7 +489,8 @@ export function agentSystemPrompt() {
     "- Every factual claim about a connection, a symbol match, or a schedule value must trace back to a specific tool call's own returned data in this run — if you can't point to which tool call produced a fact, don't state it.",
     "- NEVER infer installed quantity from the existence of a schedule row. Installed quantity requires sweep_schedule_row; use its found count and tag_at evidence or refuse.",
     "- NEVER report a plan location for any equipment or valve tag unless sweep_schedule_row succeeded for that exact tag. A schedule-cell bbox is a schedule location, never an installed plan location, and one tag's plan coordinates never belong to another tag.",
-    "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized. Use highlight_citation with the unchanged sheet and bbox_px whenever the estimator asks to show or cite exact source locations.",
+    "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized.",
+    "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Agent-panel text alone is incomplete — the product must be interactive. Do this for every such question, not only when the goal says \"show me\" or \"cite the exact\".",
     "- Never say a cell or field was highlighted unless a successful highlight_citation call targeted that exact sheet and bbox_px. State exactly which source regions were highlighted; do not imply unpainted cells were painted.",
     "- For a scheduled device tag, cite query_table row.identity (for example VALVE MARK), not the first different column that happens to repeat the same text (for example UNIT MARK).",
     "- For any equipment-to-control-valve join, use this direct set-wide sequence: query_table with row_key set to the equipment tag; sweep_schedule_row for installed quantity/plan evidence when requested; query_table with cell_contains set to that exact equipment tag to find compound relationship marks; then highlight the exact returned tag and row-identity bboxes. Do not browse guessed sheets or repeatedly retry the same empty exact-row query.",

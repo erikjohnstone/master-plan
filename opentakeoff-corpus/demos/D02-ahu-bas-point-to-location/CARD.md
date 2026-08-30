@@ -1,6 +1,6 @@
 # D02 — AHU BAS point to location
 
-Status: `LOCKED — API 5/5; localhost stdio + production UI proof validated`
+Status: `WORKING — API 5/5 + stdio proven; UI re-proof required (must show on-sheet highlights)`
 
 ## Live question
 
