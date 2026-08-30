@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — viewport titles sit under their views; complementary sheets share a space key
+
+### Fixed
+- **Same-sheet dual-view assignment uses the title-under-view band, not nearest-title Voronoi.** A stacked duct plan over a piping plan prints each caption under its drawing; the lower mark is closer to the upper title than to its own, so both matches landed in one viewport and the pair never collapsed. Marks now belong to the band above each title row, split on midpoints between same-row titles. A sheet-category caption (plural PLANS with no view-type word, a multi-floor key plan, the rotated right-hand title block) is not a viewport. Cross-sheet complementary views of a *located* space (a room/floor/level number in the space key: ductwork plan vs piping plan of the same floor) collapse the same way. Two units inside one viewport, two floors, or a bare "MECHANICAL" space key stay independent. No project, sheet, or tag names. **opentakeoff-mcp 0.9.71** (three surfaces).
+
 ## 2026-08-30 — leftover labeled occs and TYP N
 
 ### Fixed

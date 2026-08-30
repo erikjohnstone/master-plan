@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, leftoverLabeledOccs, typicalMultiplierNear, matchQuantity, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, type Point, type RoomSweepInstance, type SheetViewport, type TagOcc } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, leftoverLabeledOccs, typicalMultiplierNear, matchQuantity, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, isSheetCategoryTitle, spaceKeyIsLocated, assignMarkToViewport, type Point, type RoomSweepInstance, type SheetViewport, type TagOcc } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -736,4 +736,116 @@ test("dedupeCrossDisciplineRoomViews: same-sheet viewport collapse does not requ
   ];
   const redundant = dedupeCrossDisciplineRoomViews(noRoom);
   assert.equal(redundant.length, 1, "viewport path fires even when no room number is near either mark");
+});
+
+test("isSheetCategoryTitle / spaceKeyIsLocated: sheet names and key plans are not viewports; a room/floor number is a located space", () => {
+  assert.equal(isSheetCategoryTitle("AIR OPS - MECHANICAL ENLARGED PLANS"), true);
+  assert.equal(isSheetCategoryTitle("MTRACON - MECHANICAL ENLARGED PLANS"), true);
+  assert.equal(isSheetCategoryTitle("ATCT - MECHANICAL DUCTWORK PLAN - FLRS 7, 8, 9, & 10"), true);
+  assert.equal(isSheetCategoryTitle("ATCT - MECHANICAL DUCTWORK PLAN - FLR 11 & 12"), true);
+  assert.equal(isSheetCategoryTitle("MECHANICAL - DUCT ENLARGED PLAN"), false);
+  assert.equal(isSheetCategoryTitle("ATCT - MECHANICAL DUCTWORK PLAN - FLR 8"), false);
+  assert.equal(spaceKeyIsLocated(viewportSpaceKey("ATCT - MECHANICAL DUCTWORK PLAN - FLR 8")), true);
+  assert.equal(spaceKeyIsLocated(viewportSpaceKey("MECHANICAL - ROOM 152 ENLARGED DUCT PLAN")), true);
+  assert.equal(spaceKeyIsLocated(viewportSpaceKey("MECHANICAL - DUCT ENLARGED PLAN")), false);
+});
+
+test("detectSheetViewports: drops a rotated title-block sheet name so the duct/pipe pair survives", () => {
+  const vps = detectSheetViewports([
+    { str: "MECHANICAL - DUCT ENLARGED PLAN", x: 323, y: 1414, w: 764, h: 50 },
+    { str: "MTRACON - MECHANICAL ENLARGED PLANS", x: 4735, y: 2156, w: 25, h: 426 },
+    { str: "MECHANICAL - ENLARGED PIPE PLAN", x: 314, y: 2740, w: 745, h: 50 },
+  ], 4896);
+  assert.equal(vps.length, 2);
+  assert.equal(vps[0].spaceKey, vps[1].spaceKey);
+  assert.ok(vps.every((v) => !/PLANS/.test(v.title)));
+});
+
+test("assignMarkToViewport: a stacked duct/pipe pair assigns the lower mark to the lower title (title sits under its view)", () => {
+  const stacked: SheetViewport[] = [
+    { title: "MECHANICAL - DUCT ENLARGED PLAN", spaceKey: viewportSpaceKey("MECHANICAL - DUCT ENLARGED PLAN"), at: [705, 1439] },
+    { title: "MECHANICAL - ENLARGED PIPE PLAN", spaceKey: viewportSpaceKey("MECHANICAL - ENLARGED PIPE PLAN"), at: [686, 2765] },
+  ];
+  const upper = assignMarkToViewport([681, 687], stacked, 4896, 3168);
+  const lower = assignMarkToViewport([825, 2012], stacked, 4896, 3168);
+  assert.equal(upper?.title, "MECHANICAL - DUCT ENLARGED PLAN");
+  assert.equal(lower?.title, "MECHANICAL - ENLARGED PIPE PLAN");
+});
+
+test("dedupeCrossDisciplineRoomViews: stacked same-sheet duct/pipe (titles under each view) collapses", () => {
+  const stacked: SheetViewport[] = [
+    { title: "MECHANICAL - DUCT ENLARGED PLAN", spaceKey: viewportSpaceKey("MECHANICAL - DUCT ENLARGED PLAN"), at: [705, 1439] },
+    { title: "MECHANICAL - ENLARGED PIPE PLAN", spaceKey: viewportSpaceKey("MECHANICAL - ENLARGED PIPE PLAN"), at: [686, 2765] },
+  ];
+  const instances = [
+    inst(1, "M-411", "M", [681, 687], [ROOM], stacked),
+    inst(2, "M-411", "M", [825, 2012], [ROOM], stacked),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 1, "lower-view redraw is one install, not a second unit");
+});
+
+test("dedupeCrossDisciplineRoomViews: 2×2 room grid — duct/pipe of ONE room collapse; the other room stays", () => {
+  const grid: SheetViewport[] = [
+    { title: "MECHANICAL - ROOM 151 ENLARGED DUCT PLAN", spaceKey: viewportSpaceKey("MECHANICAL - ROOM 151 ENLARGED DUCT PLAN"), at: [892, 1209] },
+    { title: "MECHANICAL - ROOM 151 ENLARGED PIPE PLAN", spaceKey: viewportSpaceKey("MECHANICAL - ROOM 151 ENLARGED PIPE PLAN"), at: [2547, 1209] },
+    { title: "MECHANICAL - ROOM 152 ENLARGED DUCT PLAN", spaceKey: viewportSpaceKey("MECHANICAL - ROOM 152 ENLARGED DUCT PLAN"), at: [892, 2946] },
+    { title: "MECHANICAL - ROOM 152 ENLARGED PIPE PLAN", spaceKey: viewportSpaceKey("MECHANICAL - ROOM 152 ENLARGED PIPE PLAN"), at: [2532, 2937] },
+  ];
+  const sameRoom = [
+    inst(1, "M-401", "M", [1139, 1991], [ROOM], grid),
+    inst(2, "M-401", "M", [3179, 2082], [ROOM], grid),
+  ];
+  assert.equal(dedupeCrossDisciplineRoomViews(sameRoom).length, 1, "room-152 duct + pipe of one pump");
+  const twoRooms = [
+    inst(1, "M-401", "M", [600, 600], [ROOM], grid),
+    inst(2, "M-401", "M", [600, 2000], [OTHER_ROOM], grid),
+  ];
+  assert.equal(dedupeCrossDisciplineRoomViews(twoRooms).length, 0, "room 151 vs room 152 are two spaces");
+});
+
+test("dedupeCrossDisciplineRoomViews: cross-sheet complementary views of the same floor collapse", () => {
+  const none: typeof ROOM[] = [];
+  const ductFlr8: SheetViewport[] = [
+    { title: "ATCT - MECHANICAL DUCTWORK PLAN - FLR 7", spaceKey: viewportSpaceKey("ATCT - MECHANICAL DUCTWORK PLAN - FLR 7"), at: [1000, 800] },
+    { title: "ATCT - MECHANICAL DUCTWORK PLAN - FLR 8", spaceKey: viewportSpaceKey("ATCT - MECHANICAL DUCTWORK PLAN - FLR 8"), at: [3200, 800] },
+  ];
+  const pipeFlr8: SheetViewport[] = [
+    { title: "ATCT - MECHANICAL PIPING PLAN - FLR 7", spaceKey: viewportSpaceKey("ATCT - MECHANICAL PIPING PLAN - FLR 7"), at: [1000, 800] },
+    { title: "ATCT - MECHANICAL PIPING PLAN - FLR 8", spaceKey: viewportSpaceKey("ATCT - MECHANICAL PIPING PLAN - FLR 8"), at: [3200, 800] },
+  ];
+  assert.equal(ductFlr8[1].spaceKey, pipeFlr8[1].spaceKey);
+  // Farther than COORD_ATTRIBUTION_MAX_PX, no room bubbles — only space-key.
+  const pair = [
+    inst(1, "MH122", "MH", [3300, 200], none, ductFlr8),
+    inst(2, "MP122", "MP", [3400, 600], none, pipeFlr8),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(pair);
+  assert.equal(redundant.length, 1, "duct-plan + piping-plan of floor 8 is one install");
+  const differentFloors = [
+    inst(1, "MH122", "MH", [1100, 200], none, ductFlr8),
+    inst(2, "MP122", "MP", [3300, 200], none, pipeFlr8),
+  ];
+  assert.equal(dedupeCrossDisciplineRoomViews(differentFloors).length, 0, "floor 7 vs floor 8 stay independent");
+});
+
+test("dedupeCrossDisciplineRoomViews: two real repeats on the kept sheet survive a complementary-view collapse", () => {
+  const none: typeof ROOM[] = [];
+  const duct: SheetViewport[] = [
+    { title: "LEVEL 2 MECHANICAL DUCTWORK PLAN", spaceKey: viewportSpaceKey("LEVEL 2 MECHANICAL DUCTWORK PLAN"), at: [2500, 1800] },
+    { title: "LEVEL 1 MECHANICAL DUCTWORK PLAN", spaceKey: viewportSpaceKey("LEVEL 1 MECHANICAL DUCTWORK PLAN"), at: [2500, 3800] },
+  ];
+  const pipe: SheetViewport[] = [
+    { title: "LEVEL 2 MECHANICAL PIPING PLAN", spaceKey: viewportSpaceKey("LEVEL 2 MECHANICAL PIPING PLAN"), at: [2500, 1800] },
+    { title: "LEVEL 1 MECHANICAL PIPING PLAN", spaceKey: viewportSpaceKey("LEVEL 1 MECHANICAL PIPING PLAN"), at: [2500, 3800] },
+  ];
+  assert.equal(duct[1].spaceKey, pipe[1].spaceKey);
+  const instances = [
+    inst(1, "MH101", "MH", [1800, 2500], none, duct),
+    inst(2, "MH101", "MH", [3200, 2700], none, duct),
+    inst(3, "MP101", "MP", [1900, 3000], none, pipe),
+    inst(4, "MP101", "MP", [3100, 3200], none, pipe),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 2, "the piping-plan pair is the redraw; both duct-plan installs remain");
 });

@@ -3712,7 +3712,7 @@ export class Session {
     const viewportsFor = (sh: SheetState): SheetViewport[] => {
       let vps = viewportsBySheet.get(sh.key);
       if (!vps) {
-        vps = detectSheetViewports(spansFor(sh));
+        vps = detectSheetViewports(spansFor(sh), sh.widthPx);
         viewportsBySheet.set(sh.key, vps);
       }
       return vps;
