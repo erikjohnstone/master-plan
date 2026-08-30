@@ -385,7 +385,8 @@ export function normalizeControlValveCells(item, service) {
   take(/CONFIGURATION|CONFIG/i, "Configuration");
   take(/^NOTES$/i, "Notes");
   if (service) {
-    out.Service = { text: service, bbox: item.table_bbox_px || null };
+    // Label only — never borrow the whole table region as a "Service" cite.
+    out.Service = { text: service, bbox: null };
   }
   return out;
 }
