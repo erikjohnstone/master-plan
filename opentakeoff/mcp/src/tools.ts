@@ -804,7 +804,10 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   server.registerTool("find_text", {
     description: `LOCATE a known string — the complement to read_sheet_text (which returns what a region SAYS; this finds WHERE a string you already know sits). Case-insensitive substring match against each pdf.js text run, so a room label split across runs ("OFFICE" then "134" as separate items) needs a find_text call per fragment, or read_sheet_text over a region to see the whole thing joined. Pass sheet to search one page, or omit sheet to search the entire loaded set (each hit then carries its own sheet). Every hit's center feeds straight into one_click as the seed — the locate-then-trace workflow: find_text the room number, one_click at (or just past) its center. Optionally restrict to a region {x0, y0, x1, y1} on a single sheet; results cap at limit (default 200), with count/truncated telling you exactly how much a tighter region or higher limit would recover. ${COORDS}`,
     inputSchema: {
-      sheet: z.string().optional().describe("Sheet to search; omit to search the entire loaded set"),
+      sheet: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : String(v)),
+        z.string().optional(),
+      ).describe("Sheet to search; omit to search the entire loaded set"),
       q: z.string().min(1).describe("Text to find — a room number ('134'), a label fragment ('RECEPTION'), a schedule tag ('CPT-1')"),
       region: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }).optional()
         .describe("Rect in image px (origin top-left, y down); requires sheet; omit for the full sheet or set-wide search"),
