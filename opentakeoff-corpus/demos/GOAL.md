@@ -7,9 +7,11 @@ be proven on the hardest suitable blueprint set, run through the production API
 and a locally hosted environment, and locked by a regression test that fails
 loudly if the API drifts.
 
-Every local-host proof must be shown live in a saved screen recording. The
-recording must visibly show the locally hosted server, the frozen prompt, tool
-activity, final answer with citations, and the verification result; a written
+Every local-host proof must be shown live in a saved screen recording of the
+actual OpenTakeoff UI. The recording must visibly show the real blueprint
+loaded in the canvas, the frozen prompt being run in the in-canvas Agent panel,
+tool activity, the final answer, and the cited plan/schedule regions highlighted
+on the blueprint. A terminal-only recording, backend process log, or written
 claim that localhost ran is not sufficient evidence.
 
 In a live review, each demo must answer these questions on the cited sheet in

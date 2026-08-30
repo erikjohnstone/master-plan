@@ -1,6 +1,6 @@
 # D01 — Chiller plan to controls
 
-Status: `WORKING`
+Status: `GATED — API 5/5; actual UI proof pending`
 
 ## Live question
 
@@ -53,9 +53,11 @@ live prompt latency under `runs/`.
 The production bundle was built and launched as a separate local stdio MCP
 process. `local-host-run.json` records `transport: "stdio_local_process"`,
 10/10 correct values, 10/10 resolvable citations, 10/10 OCR-grounded citations,
-and 3.449-second live latency. The saved walkthrough recording is the visible
-proof; a headless claim alone does not satisfy this card. Artifact:
-`d01_live_localhost_proof.mp4`.
+and 3.449-second live latency. This proves the backend path only. The first
+terminal recording did not show the OpenTakeoff canvas or blueprint and is
+rejected as completion evidence. D01 does not count toward ten until a
+replacement recording shows the actual locally hosted UI, frozen prompt,
+tool activity, answer, and highlighted source regions on the real drawings.
 
 ## Failure behavior
 
