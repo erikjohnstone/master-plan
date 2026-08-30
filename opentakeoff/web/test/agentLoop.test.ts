@@ -258,6 +258,56 @@ test("installed quantity cannot finish without deterministic count evidence", ()
       },
     }] } },
   ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted; CFM is 3850. All cited cells are highlighted.")!, /broadly says all\/each|ONLY these painted/);
+  // Multi-field answers must paint EACH answering value cell — painting only
+  // location (or any single field) while citing CFM/capacity/etc. is incomplete.
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#44",
+      row: {
+        key: "AHU-1",
+        all_cells: {
+          MARK: { text: "AHU-1", bbox: [1, 2, 3, 4] },
+          LOCATION: { text: "11TH FLOOR MECHANICAL", bbox: [10, 20, 30, 40] },
+          CFM: { text: "3850", bbox: [50, 60, 70, 80] },
+        },
+      },
+    }] } },
+  ], "What are AHU-1 location and supply airflow?",
+  "AHU-1 location is 11TH FLOOR MECHANICAL; supply airflow is 3850 CFM.")!, /answering value cells|3850|EACH answering/);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [50, 60, 70, 80] } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#44",
+      row: {
+        key: "AHU-1",
+        all_cells: {
+          MARK: { text: "AHU-1", bbox: [1, 2, 3, 4] },
+          LOCATION: { text: "11TH FLOOR MECHANICAL", bbox: [10, 20, 30, 40] },
+          CFM: { text: "3850", bbox: [50, 60, 70, 80] },
+        },
+      },
+    }] } },
+  ], "What are AHU-1 location and supply airflow?",
+  "AHU-1 location is 11TH FLOOR MECHANICAL on set.pdf#44; supply airflow is 3850 CFM."), null);
+  // Short digits inside a mark must not invent a phantom numeric paint duty.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#48", bbox_px: [10, 20, 30, 40] } },
+    { name: "highlight_citation", out: { sheet: "set.pdf#48", bbox_px: [50, 60, 200, 80] } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#48",
+      row: {
+        key: "AI10",
+        all_cells: {
+          MARK: { text: "AI10", bbox: [10, 20, 30, 40] },
+          DESCRIPTION: { text: "HW VALVE POSITION (FEEDBACK)", bbox: [50, 60, 200, 80] },
+          PHANTOM: { text: "10", bbox: [90, 90, 100, 100] },
+        },
+      },
+    }] } },
+  ], "What is the HW valve position feedback point mark?",
+  "Point mark AI10 — HW VALVE POSITION (FEEDBACK) on set.pdf#48."), null);
   const servesGoal = "Trace the point back to the air handler. Give me what the unit serves and cite the physical drawing section where the equipment is shown.";
   assert.match(requiredEvidenceCorrection([
     { name: "query_table", out: { matches: [{

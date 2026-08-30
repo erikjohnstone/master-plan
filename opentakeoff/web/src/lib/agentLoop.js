@@ -112,6 +112,14 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     .filter(Boolean));
   const unswept = [...queried].filter((tag) => !swept.has(tag));
   const finalCanonical = finalText.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  // Space-tokenized form for standalone numeric / short-token checks — fully
+  // concatenated canonicalization glues values to units (3850CFM) and must not
+  // be used for numeric word boundaries.
+  const finalSpaced = finalText.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim();
+  const spacedHasToken = (token) => {
+    if (!token) return false;
+    return new RegExp(`(?:^|\\s)${token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:\\s|$)`).test(finalSpaced);
+  };
   const claimedUnswept = unswept.filter((tag) => {
     const tagCanonical = tag.replace(/[^A-Z0-9]/g, "");
     return finalText.split(/[\n.!?]+/).some((fragment) => {
@@ -416,10 +424,15 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       const usesCellFromRow = cells.some(([, cell]) => {
         const raw = String(cell?.text || "").trim();
         const textCanonical = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
-        if (textCanonical.length < 4 || textCanonical === rowKeyCanonical) return false;
-        // Short pure-numeric cells (e.g. 6.5) appear across many rows — they
-        // must not attach a sibling schedule sheet unless that sheet is named.
-        if (/^\d+(?:\.\d+)?$/.test(raw) && textCanonical.length < 6) return false;
+        if (!textCanonical || textCanonical === rowKeyCanonical) return false;
+        // Pure numerics: count only standalone tokens of length >= 3 so
+        // ambiguous shorts (1, 2, 6.5→65) do not attach unrelated sibling
+        // sheets, while real schedule values (3850, 560 from 56.0) still do.
+        if (/^\d+(?:[.,]\d+)?$/.test(raw)) {
+          if (textCanonical.length < 3) return false;
+          return spacedHasToken(textCanonical);
+        }
+        if (textCanonical.length < 4) return false;
         return finalCanonical.includes(textCanonical);
       });
       const sheetNorm = String(match.sheet || "").toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
@@ -485,18 +498,44 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return `The answer uses queried schedule row(s) with no painted source cell: ${[...new Set(uncovered)].join(", ")}. Call highlight_citation on at least one exact cited cell from each row before finishing.`;
     }
     // Quality bar: when the answer uses multiple value fields from a row,
-    // paint answering value cells — not only the row mark/identity.
+    // paint EACH answering value cell — not only the mark or a single field.
+    // Matching is methodology-general (text used in the answer), never corpus-
+    // or demo-specific: require standalone tokens for short numerics so mark
+    // suffixes (e.g. "10" inside "AI10") do not invent phantom paint duties.
+    const answerUsesValueCell = (raw) => {
+      const text = String(raw || "").trim();
+      if (!text) return false;
+      const textCanonical = text.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (textCanonical.length < 2) return false;
+      if (/^\d+(?:[.,]\d+)?$/.test(text)) {
+        if (textCanonical.length < 3) return false;
+        return spacedHasToken(textCanonical);
+      }
+      if (textCanonical.length <= 3 && /^[A-Z]+$/.test(textCanonical)) {
+        const escaped = text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        return new RegExp(`\\b${escaped}\\b`, "i").test(finalText);
+      }
+      return finalCanonical.includes(textCanonical);
+    };
     for (const { sheet, rowKey, cells } of usedQueryRows) {
       const rowKeyCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
-      const valueCells = cells.filter((cell) => {
+      const valueCells = [];
+      for (const cell of cells) {
         const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-        if (textCanonical.length < 2 || textCanonical === rowKeyCanonical) return false;
-        return finalCanonical.includes(textCanonical);
-      });
+        if (textCanonical === rowKeyCanonical) continue;
+        if (!answerUsesValueCell(cell?.text)) continue;
+        if (valueCells.some((other) => Array.isArray(other.bbox) && Array.isArray(cell.bbox)
+          && other.bbox.every((value, index) => Math.abs(value - cell.bbox[index]) <= 1))) continue;
+        valueCells.push(cell);
+      }
       if (valueCells.length < 2) continue;
-      const paintedValues = valueCells.filter((cell) => highlightMatches(sheet, cell.bbox));
-      if (paintedValues.length >= 1) continue;
-      return `The answer uses multiple fields from ${rowKey} on ${sheet}, but only the mark (or no value cell) is painted. Call highlight_citation on the answering value cells from that row (e.g. capacity, flow, size, Cv, location) — highlighting only the tag mark is not enough.`;
+      const missingValues = valueCells.filter((cell) => !highlightMatches(sheet, cell.bbox));
+      if (!missingValues.length) continue;
+      const missingLabel = missingValues
+        .map((cell) => `"${String(cell.text || "").slice(0, 40)}"`)
+        .slice(0, 6)
+        .join(", ");
+      return `The answer uses multiple fields from ${rowKey} on ${sheet}, but these answering value cells are not painted: ${missingLabel}. Call highlight_citation on EACH answering value cell from that row (capacity, flow, size, Cv, location, description, alarm/trend, etc.) — painting only the mark or a single field is not enough.`;
     }
   }
   if (uniqDrawingHits.length) {
@@ -594,8 +633,12 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
           const raw = String(cell?.text || "").trim();
           const textCanonical = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
           // Row key/identity text alone does not mean this sheet's row was used.
-          if (textCanonical.length < 4 || textCanonical === rowCanonical) return false;
-          if (/^\d+(?:\.\d+)?$/.test(raw) && textCanonical.length < 6) return false;
+          if (!textCanonical || textCanonical === rowCanonical) return false;
+          if (/^\d+(?:[.,]\d+)?$/.test(raw)) {
+            if (textCanonical.length < 3) return false;
+            return spacedHasToken(textCanonical);
+          }
+          if (textCanonical.length < 4) return false;
           return finalCanonical.includes(textCanonical);
         });
       // Require sheet only when the answer uses this row's cell values, not merely mentions the tag.
@@ -633,7 +676,7 @@ export function agentSystemPrompt() {
     "- NEVER report a plan location for any equipment or valve tag unless sweep_schedule_row succeeded for that exact tag. A schedule-cell bbox is a schedule location, never an installed plan location, and one tag's plan coordinates never belong to another tag.",
     "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized.",
     "- Be extremely, genuinely useful: whatever the goal asks — a full takeoff, an AHU characteristic, counting valves, a BAS trace, schedule attributes, cross-sheet joins — do that ask end-to-end. Return every requested field with evidence-backed values plus enough citation context to trust the answer. Paint ALL answering evidence on the sheets (value cells / row data / drawing text / counted marks), not only a tag mark. Partial answers and mark-only flybys are incomplete.",
-    "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Agent-panel text alone is incomplete — the product must be interactive. Do this for every such question, not only when the goal says \"show me\" or \"cite the exact\". Paint each used schedule row's answering value cells and each phrase-length drawing hit you copy into the answer, then write the final answer.",
+    "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Agent-panel text alone is incomplete — the product must be interactive. Do this for every such question, not only when the goal says \"show me\" or \"cite the exact\". When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",
     "- Never say a cell or field was highlighted unless a successful highlight_citation call targeted that exact sheet and bbox_px. State exactly which source regions were highlighted; do not imply unpainted cells were painted. Never write that all/each cited cells are highlighted.",
     "- For a scheduled device tag, cite query_table row.identity (for example VALVE MARK), not the first different column that happens to repeat the same text (for example UNIT MARK).",
     "- For any equipment-to-control-valve join, use this direct set-wide sequence: query_table with row_key set to the equipment tag; sweep_schedule_row for installed quantity/plan evidence when requested; query_table with cell_contains set to that exact equipment tag to find compound relationship marks; then highlight the exact returned tag and row-identity bboxes. Do not browse guessed sheets or repeatedly retry the same empty exact-row query.",
