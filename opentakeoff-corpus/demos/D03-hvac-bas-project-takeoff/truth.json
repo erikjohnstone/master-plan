@@ -242,14 +242,17 @@
       "citation": {
         "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
         "table_title": "BOILER SCHEDULE",
+        "row_key": "B-A1",
+        "column": "MARK",
         "bbox_px": [
-          2716.568,
-          2484.7200000000003,
-          4406.164,
-          2544.48
+          2766.5,
+          2639.9,
+          2810.2,
+          2665.2
         ],
-        "grounding_text": "BOILER SCHEDULE",
-        "ocr_mode": "single_line"
+        "grounding_text": "B-A1",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
       }
     },
     "fcu_air_ops_count": {

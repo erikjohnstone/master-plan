@@ -693,6 +693,17 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
         },
       };
     });
+    const buildingTagCounts = (() => {
+      if (!keysOnly) return undefined;
+      const counts = {};
+      for (const match of unique) {
+        const tag = match.row.key || "";
+        const m = tag.match(/-([AMT])(?=[A-Z0-9]|$)/i);
+        const b = m ? m[1].toUpperCase() : "other";
+        counts[b] = (counts[b] || 0) + 1;
+      }
+      return counts;
+    })();
     return {
       query: {
         title: title ?? null,
@@ -704,12 +715,13 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       count: unique.length,
       truncated: unique.length > limit,
       matches,
+      ...(buildingTagCounts ? { building_tag_counts: buildingTagCounts } : {}),
       ...(unique.length === 0 ? {
         next_move: cell_contains
           ? "Zero rows matched. Retry once with cell_contains set to an exact equipment tag from the user question and no title filter, then inspect returned descriptions; do not paraphrase the same empty description query."
           : "Zero rows matched. Drop invented title filters, use a filter value that already appears in tool evidence, or refuse if the evidence is not present.",
       } : keysOnly ? {
-        next_move: `Title-wide query matched ${unique.length} rows — returning MARK/identity keys only so context stays usable. Re-query with row_key (and optional column) for the exact cell bboxes you need to cite.`,
+        next_move: `Use count=${unique.length} as the scheduled row total and building_tag_counts=${JSON.stringify(buildingTagCounts)} for building splits. Re-query with row_key for citation cell bboxes.`,
       } : {}),
     };
   }));

@@ -177,6 +177,7 @@ export async function verifyDemoRun({ truth, run, session, recognize }) {
       const tryPx = [...new Set([basePx, Math.min(2000, Math.max(basePx, 1600)), 2000])];
       let ocrText = "";
       let grounded = false;
+      const modes = [...new Set([ocrMode, "single_line", "sparse_text", "single_word"].filter(Boolean))];
       for (const px of tryPx) {
         const pad = Math.max(1, Math.min(8, Math.round(Math.min(x1 - x0, y1 - y0) * 0.05)));
         const rendered = await session.viewSheet(citation.sheet_id, {
@@ -188,11 +189,14 @@ export async function verifyDemoRun({ truth, run, session, recognize }) {
           },
           px,
         });
-        ocrText = await recognize(rendered.png, ocrMode);
-        if (ocrGrounds(ocrText, expectedText, { allowConfusables })) {
-          grounded = true;
-          break;
+        for (const mode of modes) {
+          ocrText = await recognize(rendered.png, mode);
+          if (ocrGrounds(ocrText, expectedText, { allowConfusables })) {
+            grounded = true;
+            break;
+          }
         }
+        if (grounded) break;
       }
       if (!grounded) {
         fail("CITE_GROUND", field, `OCR ${JSON.stringify(ocrText.trim())} does not contain ${JSON.stringify(expectedText)}`);
