@@ -24,6 +24,65 @@ import { runVerifiers } from "./agentVerifiers.js";
 // cite re-queries + paints; 32 was truncating D03 mid-gate. Keep a hard cap.
 export const MAX_AGENT_ITERATIONS = 80;
 
+/** Fill structured highlight_citation fields from prior query_table / sweep cells
+ *  so Agent source cards read "VAV-1 · CFM = 350" even when the model only
+ *  passed sheet + bbox_px + a naked text fragment. */
+export function enrichHighlightCitationArgs(args, callLog = []) {
+  if (!args || typeof args !== "object") return args;
+  const bbox = args.bbox_px;
+  const sheet = String(args.sheet || "");
+  if (!sheet || !Array.isArray(bbox) || bbox.length !== 4) return args;
+  const hasRich = String(args.row_key || "").trim()
+    && String(args.column || "").trim()
+    && String(args.value || "").trim();
+  if (hasRich) return args;
+  const near = (a, b) => Array.isArray(a) && Array.isArray(b) && a.length === 4
+    && a.every((v, i) => Math.abs(Number(v) - Number(b[i])) <= 2);
+
+  for (const { name, out } of callLog) {
+    if (name === "query_table") {
+      for (const match of out?.matches || []) {
+        if (String(match?.sheet || "") !== sheet) continue;
+        const rowKey = String(match?.row?.key || match?.row?.identity?.text || "").trim();
+        const title = String(match?.title || "").trim();
+        for (const [header, cell] of Object.entries(match?.row?.all_cells || match?.row?.cells || {})) {
+          if (!near(cell?.bbox, bbox)) continue;
+          return {
+            ...args,
+            row_key: String(args.row_key || "").trim() || rowKey || undefined,
+            column: String(args.column || "").trim() || String(header || "").trim() || undefined,
+            value: String(args.value || "").trim()
+              || (cell?.text != null ? String(cell.text).trim() : undefined)
+              || undefined,
+            table_title: String(args.table_title || "").trim() || title || undefined,
+          };
+        }
+      }
+    }
+    if (name === "sweep_schedule_row" && out?.row) {
+      const row = out.row;
+      if (String(row.sheet || "") !== sheet) continue;
+      const rowKey = String(row.key || row.identity?.text || "").trim();
+      const title = String(row.title || out.title || "").trim();
+      for (const [header, cell] of Object.entries(row.cell_citations || row.all_cells || {})) {
+        const cellBbox = Array.isArray(cell?.bbox) ? cell.bbox
+          : [cell?.bbox?.x0, cell?.bbox?.y0, cell?.bbox?.x1, cell?.bbox?.y1];
+        if (!near(cellBbox, bbox)) continue;
+        return {
+          ...args,
+          row_key: String(args.row_key || "").trim() || rowKey || undefined,
+          column: String(args.column || "").trim() || String(header || "").trim() || undefined,
+          value: String(args.value || "").trim()
+            || (cell?.text != null ? String(cell.text).trim() : undefined)
+            || undefined,
+          table_title: String(args.table_title || "").trim() || title || undefined,
+        };
+      }
+    }
+  }
+  return args;
+}
+
 const EQUIPMENT_VALVE_EVIDENCE_TOOLS = new Set([
   "list_sheets",
   "sheet_graph",
@@ -469,7 +528,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       if (!rowKey || !finalCanonical.includes(rowKey.toUpperCase().replace(/[^A-Z0-9]/g, ""))) continue;
       const cells = Object.entries(match?.row?.all_cells || match?.row?.cells || {});
       const paintable = cells
-        .map(([, cell]) => cell)
+        .map(([header, cell]) => (cell && typeof cell === "object" ? { ...cell, header } : cell))
         .filter((cell) => Array.isArray(cell?.bbox) && cell.bbox.length === 4);
       if (!paintable.length) continue;
       // Only rows whose non-key cell values appear in the answer, or explicit
@@ -712,8 +771,18 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       const paintHints = missingValues.slice(0, 8).map(({ cell, sheet: cellSheet }) => {
         const bbox = cell?.bbox;
         if (!Array.isArray(bbox) || bbox.length !== 4) return null;
-        const label = String(cell.text || rowKey).replace(/\s+/g, "_").slice(0, 32) || rowKey;
-        return `highlight_citation sheet=${cellSheet} bbox_px=${JSON.stringify(bbox)} text=${label}`;
+        const col = String(cell?.header || cell?.column || "").replace(/\s+/g, "_").slice(0, 24);
+        const val = String(cell.text || "").replace(/\s+/g, "_").slice(0, 32) || rowKey;
+        const label = val;
+        const bits = [
+          `highlight_citation sheet=${cellSheet}`,
+          `bbox_px=${JSON.stringify(bbox)}`,
+          `text=${label}`,
+          `row_key=${rowKey}`,
+        ];
+        if (col) bits.push(`column=${col}`);
+        if (cell?.text != null && String(cell.text).trim()) bits.push(`value=${String(cell.text).trim().replace(/\s+/g, "_").slice(0, 32)}`);
+        return bits.join(" ");
       }).filter(Boolean);
       const hint = paintHints.length
         ? ` Exact paint args already retrieved: ${paintHints.join("; ")}.`
@@ -1220,7 +1289,8 @@ export function agentSystemPrompt() {
     "- query_table and find_text search the whole loaded set — they do not require the sheet to be open as a canvas tab. Never refuse schedule cell values because a tab is closed; call query_table with row_key and copy row.all_cells, then highlight_citation.",
     "- When asked for scheduled equipment or points-list row counts, call query_table with the schedule title (no row_key and no cell_contains). Copy that tool result's count and building_tag_counts into the answer — do not re-sum sheet_graph page row totals by hand (continuation pages 1 OF 2 / 2 OF 2 repeat the same MARK keys). building_tag_counts letters map as A=Air Ops, M=MITRACON/Mitracon, T=ATCT — never swap them. Prefer one accurate title needle per asked family; when the goal distinguishes sibling titles (for example dedicated outdoor-air UNIT vs HANDLING schedules, or air-cooled vs heat-recovery chillers), query the title that matches what was asked rather than blending both. When the goal names a specific points list (for example AHU-T1A/TIB), put that tag in the query_table title — a bare POINTS LIST title can roll up sibling lists and double the row count. Then re-query specific row_key values for MARK/identity bboxes you must cite.",
     "- Sequencing for full-set count + cite goals: (1) list_sheets + sheet_graph once, (2) one title-scan query_table per requested family and copy count/building_tag_counts, (3) only then re-query the named cite MARKs / points-list title and paint those cells, (4) write ONE final answer whose family totals match those tool counts (do not add a second contradictory totals table that recounts only painted MARKs). Do not paint every equipment row on a schedule, and do not dump full schedule tables into the answer.",
-    "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Do not rely on auto-flying the canvas — the UI shows clickable source cards in the Agent panel; painting is enough. When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",
+    "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Pass row_key, column, table_title, and value whenever known so the Agent source card title reads like \"VAV-1 · CFM = 350\" (not a naked \"350\"). Do not rely on auto-flying the canvas — the UI shows clickable expandable source cards; painting is enough. When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",
+    "- The final Answer in chat must give the estimator MORE than enough to understand the workflow and act: every requested count/field with units, schedule titles and sheets, and clear structure. Do not dump incidental inventory rows the goal did not ask for. Do not leave the usable answer only in Sources or highlights — chat is primary.",
     "- Never draw or request overlay label text that would cover the cited cell value; the highlight is a frame around readable blueprint text.",
     "- Conversational follow-ups: when the estimator asks a follow-up about the previous answer or workflow, reply in plain language using evidence already gathered; call tools again only when new evidence is needed. Answer the follow-up question directly first — do not digress into unrelated points-list rows or extra fields unless asked. Explain what you did and why in estimator terms — not tool JSON. Be a useful collaborator across turns, not a one-shot report.",
     "- When asked whether a MARK is on a schedule and which title: call query_table with that row_key (omit title), read matches[0].title (primary equipment schedule — not vibration-isolation / valve / sound / points-list cross-refs), and copy that exact title into the answer. Sibling families can differ (for example DOAH UNIT vs DOAH HANDLING schedules).",
@@ -1498,13 +1568,23 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       // When cite-MARK bboxes are already in the call log, paint them now
       // instead of asking the model to re-type the same highlight_citation args.
       if (correction && /Exact paint args already retrieved:/i.test(correction)) {
-        const hintRe = /highlight_citation sheet=(\S+) bbox_px=(\[[^\]]+\]) text=(\S+)/g;
+        const hintRe = /highlight_citation sheet=(\S+) bbox_px=(\[[^\]]+\]) text=(\S+)(?: row_key=(\S+))?(?: column=(\S+))?(?: value=(\S+))?(?: table_title=(\S+))?/g;
         let paintedAny = false;
         for (const m of correction.matchAll(hintRe)) {
           let bbox;
           try { bbox = JSON.parse(m[2]); } catch { continue; }
           if (!Array.isArray(bbox) || bbox.length !== 4) continue;
-          const args = { sheet: m[1], bbox_px: bbox, text: m[3] };
+          const rawArgs = {
+            sheet: m[1],
+            bbox_px: bbox,
+            text: m[3],
+            ...(m[4] ? { row_key: m[4].replace(/_/g, "-") } : {}),
+            ...(m[5] ? { column: m[5].replace(/_/g, " ") } : {}),
+            ...(m[6] ? { value: m[6].replace(/_/g, " ") } : {}),
+            ...(m[7] ? { table_title: m[7].replace(/_/g, " ") } : {}),
+          };
+          // Prefer real schedule headers/values from the call log over underscore-squashed hints.
+          const args = enrichHighlightCitationArgs(rawArgs, callLog);
           emit({ type: "tool_start", name: "highlight_citation", args });
           let out;
           try { out = await execute("highlight_citation", args); }
@@ -1600,10 +1680,15 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     else consecutiveHighlightOnlyTurns = 0;
     for (const call of turn.toolCalls) {
       if (signal?.aborted) return aborted();
-      emit({ type: "tool_start", name: call.name, args: call.args });
+      const callArgs = call.name === "highlight_citation" && !call.argsError
+        ? enrichHighlightCitationArgs(call.args, callLog)
+        : call.args;
+      emit({ type: "tool_start", name: call.name, args: callArgs });
       let out;
       try {
-        out = call.argsError ? { error: `Invalid arguments for ${call.name}: ${call.argsError}.` } : await execute(call.name, call.args);
+        out = call.argsError
+          ? { error: `Invalid arguments for ${call.name}: ${call.argsError}.` }
+          : await execute(call.name, callArgs);
       } catch (e) {
         out = { error: `Tool ${call.name} failed: ${String((e && e.message) || e)}` };
       }
@@ -1627,7 +1712,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
           emit({ type: "text", text: `[Vision routing degraded — the vision model call failed (${String((e && e.message) || e)}), falling back to the raw image for this one result.]` });
         }
       }
-      if (!call.argsError) callLog.push({ id: call.id, name: call.name, args: call.args, out });
+      if (!call.argsError) callLog.push({ id: call.id, name: call.name, args: callArgs, out });
       emit({ type: "tool_end", name: call.name, result: out });
       results.push({ call, out });
     }

@@ -64,12 +64,14 @@ path was proved separately with the frozen prompt + follow-up.
 ## Production UI proof
 
 Validated recording:
-`/opt/cursor/artifacts/d04_ui_prompt_answer_cards_followup_2026-08-30T11-06-05-710Z.webm`.
+`/opt/cursor/artifacts/d04_ui_prompt_answer_cards_followup_2026-08-30T11-18-46-431Z.webm`.
 
 Walkthrough shows the frozen prompt, live tools, answer-first VAV rollup
 (58 + requested attributes), source cards, on-sheet TAG/CFM paints, and a
 correct in-thread follow-up rejecting SUITE100 while reporting VAV-58 CFM
 350. Harness rejects empty answers, plan-label rollups, and wrong follow-ups.
+(Re-recorded 2026-08-30 after fixing Agent-panel answer-first scroll so the
+Answer is not buried under Sources cards.)
 
 UI/API path fixes that cleared this gate are generalized production behavior
 (family-key junk filter + `family_mark`; keep full `all_cells` on row_key

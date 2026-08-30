@@ -217,14 +217,26 @@ try {
     throw new Error("D03 UI Answer reports DOAH total 4 without the correct unit-schedule total 3.");
   }
 
-  // Source cards (estimator-clarity): clickable Sources section
-  const sourcesHeader = page.getByText(/Sources · click to open/i);
+  // Source cards (estimator-clarity): expand Sources, open a card dropdown,
+  // then jump via View — titles must be human-readable, not naked fragments.
+  const sourcesHeader = page.getByRole("button", { name: /Sources · \d+ · click to open/i });
   await sourcesHeader.waitFor({ state: "visible", timeout: 10_000 });
-  const sourceCards = page.getByRole("button", { name: /view on drawing/i });
-  const cardCount = await sourceCards.count();
+  await sourcesHeader.click();
+  await page.waitForTimeout(500);
+  const detailToggles = panelRoot.getByRole("button", { name: /Details ·/i });
+  const viewButtons = panelRoot.getByRole("button", { name: /^View$/i });
+  const cardCount = await viewButtons.count();
   console.log(`UI_SOURCE_CARDS count=${cardCount}`);
   if (cardCount < 1) throw new Error("D03 UI missing clickable source cards.");
-  await sourceCards.first().click();
+  if (await detailToggles.count()) {
+    await detailToggles.first().click();
+    await page.waitForTimeout(800);
+  }
+  const sourcesBlock = await panelRoot.innerText();
+  if (!/Schedule|Tag \/ MARK|Column|Value|BBox|Sheet/i.test(sourcesBlock)) {
+    throw new Error("D03 source card dropdown missing structured detail fields.");
+  }
+  await viewButtons.first().click();
   await page.waitForTimeout(1_500);
   await page.screenshot({ path: "/opt/cursor/artifacts/d03_ui_source_card_open.png" });
 
@@ -232,6 +244,14 @@ try {
   if (!/\bhighlight_citation\b/i.test(panelText) && cardCount < 1) {
     throw new Error("D03 UI never painted citations / source cards.");
   }
+
+  // Bring the primary Answer back into view after Sources expand (answer-first).
+  const primaryAnswerHeaders = panelRoot.locator('[data-agent-role="assistant"]');
+  if (await primaryAnswerHeaders.count()) {
+    await primaryAnswerHeaders.first().scrollIntoViewIfNeeded();
+  }
+  await page.waitForTimeout(2_500);
+  await page.screenshot({ path: "/opt/cursor/artifacts/d03_ui_primary_answer.png" });
 
   // Conversational follow-up — must be answered correctly before lock.
   await goal.fill(followUp);
@@ -242,10 +262,10 @@ try {
   await page.waitForTimeout(2_000);
   // Scroll the latest Answer into view and hold so the recording clearly
   // shows the follow-up reply (not just Sources / Ask box).
-  const followAnswerHeaders = panelRoot.locator("text=/^Answer$/i");
-  const followHeaderCount = await followAnswerHeaders.count();
-  if (followHeaderCount > 0) {
-    await followAnswerHeaders.nth(followHeaderCount - 1).scrollIntoViewIfNeeded();
+  const followAnswerNodes = panelRoot.locator('[data-agent-role="assistant"]');
+  const followAnswerCount = await followAnswerNodes.count();
+  if (followAnswerCount > 0) {
+    await followAnswerNodes.nth(followAnswerCount - 1).scrollIntoViewIfNeeded();
   }
   await page.waitForTimeout(6_000);
   await page.screenshot({ path: "/opt/cursor/artifacts/d03_ui_followup_answer.png" });

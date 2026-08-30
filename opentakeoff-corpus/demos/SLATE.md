@@ -65,7 +65,7 @@ hardcoding. D02 counts toward ten. Next: D03.
 
 ## D03 selection record
 
-Status: `LOCKED — API 5/5; p95 12.156 s; stdio + UI proof with correct HANDLING follow-up`
+Status: `RE-PROOF REQUIRED — chat/source-card usefulness + verified follow-up visible`
 
 Target holds: 75-sheet NAVFAC set with Air Ops / MITRACON / ATCT namespaces.
 Independent equipment-schedule inventory (unique MARK rows) yields AHU 5,
@@ -75,27 +75,26 @@ AHU-T1A/TIB points list at 62 rows. Stratified 20% find_text hand-count
 reconciled before model runs (`hand_count_20pct` in truth.json). Vibration-
 isolation compound keys are not equipment units.
 
-N=5 production runs are 5/5 under `verify:demo` with nearest-rank p95
-**12.156 s**. Localhost stdio harness True (`local-host-run.json`). UI proof
-under the usefulness bar + required in-thread follow-up is saved as
-`/opt/cursor/artifacts/d03_ui_prompt_answer_cards_followup_2026-08-30T10-38-25-850Z.webm`
-(HANDLING title + ATCT FCU 18 + FCU-T11). Production gates stay
-methodology-general — no corpus hardcoding. D03 counts toward ten. Next: D04.
+N=5 API/stdio previously 5/5 (p95 **12.156 s**). UI must be re-proved under
+the chat-usefulness bar: answer-first visible Answer, expandable source cards
+with structured detail (not naked fragments), follow-up **asked + verified**
+(HANDLING title + ATCT FCU 18 + FCU-T11) in the same recording. Do not treat
+prior lock as current.
 
 ## D04 selection record
 
-Status: `LOCKED — API 5/5; p95 3.535 s; stdio + UI proof with SUITE100 follow-up`
+Status: `RE-PROOF REQUIRED — chat/source-card usefulness + verified follow-up visible`
 
 Target holds: 24-sheet `federal-mech` set. `VOLUME CONTROL BOX SCHEDULE` on
 sheet #16 lists VAV-1..VAV-58 (58 unique VAV-* tags; junk key SUITE100
 excluded). Plan sheets carry hundreds of fragmented `VAV-` labels, so the
 rollup must use the schedule title-scan — not plan-label frequency.
 Independent 20% find_text hand-count (13 tags) reconciled before model runs.
+Re-verified 2026-08-30 from pinned PDF: 59 rows, 58 VAV-*, SUITE100 junk;
+VAV-1/12/30/58 attribute cells match truth.
 
-N=5 production runs are 5/5 under `verify:demo` with nearest-rank p95
-**3.535 s**. Localhost stdio harness True (`local-host-run.json`). UI proof
-under the usefulness bar + required in-thread follow-up is saved as
-`/opt/cursor/artifacts/d04_ui_prompt_answer_cards_followup_2026-08-30T11-06-05-710Z.webm`
-(58 VAVs + attributes; SUITE100 rejected; VAV-58 CFM 350). Production gates
-stay methodology-general — no corpus hardcoding. D04 counts toward ten.
-Next: D05.
+N=5 API/stdio previously 5/5 (p95 **3.535 s**). UI must be re-proved under
+the chat-usefulness bar: complete structured Answer in chat, expandable
+source cards (tag · field · value + dropdown detail), follow-up **asked +
+verified** (SUITE100 not a VAV; VAV-58 CFM 350) visible in recording. Do not
+treat prior lock as current. Next after both D03/D04 clear: D05.

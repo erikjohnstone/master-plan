@@ -89,26 +89,91 @@ function splitLog(log) {
   return { steps, meta };
 }
 
+function citationCardTitle(citation) {
+  const tag = String(citation.row_key || "").trim();
+  const col = String(citation.column || "").trim();
+  const val = String(citation.value || "").trim();
+  if (tag && col && val) return `${tag} · ${col} = ${val}`;
+  if (tag && col) return `${tag} · ${col}`;
+  if (tag && val) return `${tag} · ${val}`;
+  if (col && val) return `${col} = ${val}`;
+  const fallback = String(citation.label || citation.text || "").trim();
+  return fallback || "Cited source";
+}
+
 function SourceCard({ citation, onOpen }) {
+  const [open, setOpen] = useState(false);
+  const title = citationCardTitle(citation);
+  const sheet = citation.sheetLabel || citation.sheet || "";
+  const details = [
+    citation.table_title ? ["Schedule", citation.table_title] : null,
+    citation.row_key ? ["Tag / MARK", citation.row_key] : null,
+    citation.column ? ["Column", citation.column] : null,
+    citation.value ? ["Value", citation.value] : null,
+    sheet ? ["Sheet", sheet] : null,
+    Array.isArray(citation.bbox_px) ? ["BBox (px)", citation.bbox_px.map((n) => Number(n).toFixed?.(1) ?? n).join(", ")] : null,
+  ].filter(Boolean);
+
   return (
-    <button
-      type="button"
-      onClick={() => onOpen?.(citation)}
-      title={`Open ${citation.sheetLabel || citation.sheet} and show this source`}
+    <div
       style={{
-        display: "block", width: "100%", textAlign: "left", cursor: "pointer",
-        padding: "8px 10px", marginBottom: 6,
+        marginBottom: 6,
         border: "1px solid var(--ink-faint)", borderRadius: 6,
-        background: "var(--paper)", color: "var(--ink)", font: "inherit",
+        background: "var(--paper)", color: "var(--ink)", overflow: "hidden",
       }}
     >
-      <span style={{ display: "block", fontSize: 13, fontWeight: 600, lineHeight: 1.35, overflowWrap: "anywhere" }}>
-        {citation.label}
-      </span>
-      <span style={{ display: "block", fontSize: 11, color: "var(--cobalt)", marginTop: 3 }}>
-        {citation.sheetLabel || citation.sheet} → view on drawing
-      </span>
-    </button>
+      <div style={{ display: "flex", alignItems: "stretch" }}>
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          title={open ? "Hide source details" : "Show source details"}
+          style={{
+            flex: 1, textAlign: "left", cursor: "pointer",
+            padding: "8px 10px", border: "none", background: "transparent",
+            color: "inherit", font: "inherit", display: "flex", gap: 8, alignItems: "flex-start",
+          }}
+        >
+          <Icon name={open ? "chevronDown" : "chevronRight"} size={13} />
+          <span style={{ flex: 1, minWidth: 0 }}>
+            <span style={{ display: "block", fontSize: 13, fontWeight: 600, lineHeight: 1.35, overflowWrap: "anywhere" }}>
+              {title}
+            </span>
+            <span style={{ display: "block", fontSize: 11, color: "var(--ink-muted)", marginTop: 2 }}>
+              {open ? "Hide details" : "Details"} · {sheet || "sheet"}
+            </span>
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={() => onOpen?.(citation)}
+          title={`Open ${sheet} and show this source`}
+          style={{
+            flexShrink: 0, border: "none", borderLeft: "1px solid var(--ink-faint)",
+            background: "transparent", color: "var(--cobalt)", cursor: "pointer",
+            padding: "8px 10px", font: "inherit", fontSize: 11, fontWeight: 600,
+          }}
+        >
+          View
+        </button>
+      </div>
+      {open && (
+        <div style={{ padding: "0 10px 10px 31px", fontSize: 12, lineHeight: 1.5 }}>
+          {details.length === 0 && (
+            <div style={{ color: "var(--ink-muted)" }}>No structured fields on this citation — open the drawing to inspect the highlight.</div>
+          )}
+          {details.map(([k, v]) => (
+            <div key={k} style={{ display: "flex", gap: 8, marginTop: 4 }}>
+              <span style={{ width: 88, flexShrink: 0, color: "var(--ink-muted)", fontSize: 11 }}>{k}</span>
+              <span style={{ overflowWrap: "anywhere" }}>{v}</span>
+            </div>
+          ))}
+          <div style={{ marginTop: 6, fontSize: 11, color: "var(--ink-muted)" }}>
+            Cited so you can spot-check the answering cell on the blueprint.
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
