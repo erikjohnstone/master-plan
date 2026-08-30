@@ -6862,6 +6862,8 @@ export default function TakeoffCanvas() {
   async function fetchProductionCorpusTakeoff(kind, opts = {}) {
     const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
     if (!names.length) throw new Error("No PDF loaded");
+    const onProgress = typeof opts.onProgress === "function" ? opts.onProgress : null;
+    if (onProgress) onProgress({ phase: "upload", message: "Preparing plans for Session+ODL compile…" });
     const fd = new FormData();
     fd.append("kind", kind);
     if (opts.service) fd.append("service", String(opts.service).toUpperCase());
@@ -6869,10 +6871,62 @@ export default function TakeoffCanvas() {
       const bytes = await store.loadPdfData(name);
       fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
     }
-    const res = await fetch("/__ot/compile-corpus-takeoff", { method: "POST", body: fd });
+    if (onProgress) {
+      onProgress({
+        phase: "upload",
+        message: `Uploading ${names.length} plan PDF${names.length === 1 ? "" : "s"}…`,
+      });
+    }
+    const res = await fetch("/__ot/compile-corpus-takeoff", {
+      method: "POST",
+      body: fd,
+      headers: onProgress ? { Accept: "application/x-ndjson" } : undefined,
+    });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new Error(err.error || `compile-corpus-takeoff HTTP ${res.status}`);
+    }
+    const ctype = String(res.headers.get("content-type") || "");
+    if (onProgress && /ndjson/i.test(ctype) && res.body) {
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buf = "";
+      let result = null;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += decoder.decode(value, { stream: true });
+        const lines = buf.split("\n");
+        buf = lines.pop() || "";
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed) continue;
+          let msg;
+          try { msg = JSON.parse(trimmed); } catch { continue; }
+          if (msg.type === "progress") {
+            onProgress({
+              phase: msg.phase,
+              message: msg.message || "Compiling…",
+              ...msg,
+            });
+          } else if (msg.type === "result") {
+            result = msg.result;
+          } else if (msg.type === "error") {
+            throw new Error(msg.error || "compile failed");
+          }
+        }
+      }
+      if (buf.trim()) {
+        try {
+          const msg = JSON.parse(buf.trim());
+          if (msg.type === "result") result = msg.result;
+          if (msg.type === "error") throw new Error(msg.error || "compile failed");
+        } catch (e) {
+          if (e?.message && !/JSON/.test(e.message)) throw e;
+        }
+      }
+      if (!result) throw new Error("compile stream ended without a result");
+      return result;
     }
     return await res.json();
   }
@@ -7145,10 +7199,23 @@ export default function TakeoffCanvas() {
 
   async function agentCompileCorpusTakeoff(kind, opts = {}) {
     // Same Session+ODL+compileCorpusTakeoff path as MCP — never geometric-only.
+    // Stream OT_PROGRESS phases into the Agent status/log so a long compile
+    // does not look frozen ("nothing is working").
+    const reportProgress = (p) => {
+      const message = String(p?.message || "Compiling the full takeoff…");
+      setAgentStatus(message);
+      setAgentLog((l) => {
+        const next = { kind: "progress", text: message };
+        const last = l[l.length - 1];
+        if (last?.kind === "progress" && last.text === message) return l;
+        return [...l.slice(-199), next];
+      });
+    };
     let compiled;
     try {
       compiled = await fetchProductionCorpusTakeoff(kind, {
         service: opts.service || null,
+        onProgress: reportProgress,
       });
     } catch (e) {
       // If the production endpoint is down, refuse rather than silently under-count.
@@ -7161,6 +7228,10 @@ export default function TakeoffCanvas() {
     if (!compiled?.takeoff_id && !compiled?.kind) {
       return { error: "Production compile returned an empty result." };
     }
+    reportProgress({
+      phase: "panel",
+      message: "Opening Takeoff with contractor columns and cites…",
+    });
     const downloads = [];
     if (opts.download !== false) {
       const base = `${exportBaseName()}.${compiled.takeoff_id || "corpus-takeoff"}`;

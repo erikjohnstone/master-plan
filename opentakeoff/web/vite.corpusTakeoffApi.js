@@ -68,7 +68,7 @@ export function resolveTsxLoader() {
   );
 }
 
-function runCli({ mode, kind, pdfPaths, outPath, service }) {
+function runCli({ mode, kind, pdfPaths, outPath, service, onProgress }) {
   return new Promise((resolvePromise, reject) => {
     let tsxLoader;
     try {
@@ -97,12 +97,36 @@ function runCli({ mode, kind, pdfPaths, outPath, service }) {
     });
     let stdout = "";
     let stderr = "";
+    let stderrBuf = "";
+    const consumeProgressLine = (line) => {
+      if (!line.startsWith("OT_PROGRESS\t")) return;
+      if (typeof onProgress !== "function") return;
+      try {
+        onProgress(JSON.parse(line.slice("OT_PROGRESS\t".length)));
+      } catch {
+        /* ignore malformed progress */
+      }
+    };
     child.stdout.on("data", (d) => { stdout += d; });
-    child.stderr.on("data", (d) => { stderr += d; });
+    child.stderr.on("data", (d) => {
+      const chunk = String(d);
+      stderr += chunk;
+      stderrBuf += chunk;
+      const parts = stderrBuf.split("\n");
+      stderrBuf = parts.pop() || "";
+      for (const line of parts) consumeProgressLine(line.trim());
+    });
     child.on("error", reject);
     child.on("close", (code) => {
+      if (stderrBuf.trim()) consumeProgressLine(stderrBuf.trim());
       if (code !== 0) {
-        reject(new Error(stderr.trim() || `production-graph-cli exited ${code}`));
+        // Strip progress lines from the error surface so the real failure shows.
+        const errText = stderr
+          .split("\n")
+          .filter((l) => !l.startsWith("OT_PROGRESS\t"))
+          .join("\n")
+          .trim();
+        reject(new Error(errText || `production-graph-cli exited ${code}`));
         return;
       }
       const line = stdout.trim().split("\n").filter(Boolean).at(-1);
@@ -197,8 +221,26 @@ async function resolvePdfs(req) {
   return { kind, service, pdfPaths, tmpDir };
 }
 
+function wantsProgressStream(req) {
+  const accept = String(req.headers.accept || "");
+  return /application\/x-ndjson/i.test(accept) || /text\/event-stream/i.test(accept);
+}
+
+function beginNdjson(res) {
+  res.statusCode = 200;
+  res.setHeader("Content-Type", "application/x-ndjson; charset=utf-8");
+  res.setHeader("Cache-Control", "no-cache, no-transform");
+  res.setHeader("X-Accel-Buffering", "no");
+  if (typeof res.flushHeaders === "function") res.flushHeaders();
+}
+
+function writeNdjson(res, obj) {
+  res.write(`${JSON.stringify(obj)}\n`);
+}
+
 async function handle(req, res, mode) {
   let tmpDir = null;
+  const stream = mode === "compile" && wantsProgressStream(req);
   try {
     const resolved = await resolvePdfs(req);
     tmpDir = resolved.tmpDir;
@@ -213,10 +255,33 @@ async function handle(req, res, mode) {
       const raw = await readFile(outPath, "utf8");
       return sendJson(res, 200, raw);
     }
+    if (stream) {
+      beginNdjson(res);
+      writeNdjson(res, {
+        type: "progress",
+        phase: "upload",
+        message: `Plans received (${pdfPaths.length} PDF${pdfPaths.length === 1 ? "" : "s"}) — starting Session+ODL compile…`,
+      });
+      const result = await runCli({
+        mode: "compile",
+        kind,
+        pdfPaths,
+        service,
+        onProgress: (p) => writeNdjson(res, { type: "progress", ...p }),
+      });
+      writeNdjson(res, { type: "result", result });
+      res.end();
+      return;
+    }
     const result = await runCli({ mode: "compile", kind, pdfPaths, service });
     sendJson(res, 200, result);
   } catch (err) {
     console.error(`[production-graph-api ${mode}]`, err);
+    if (stream && res.headersSent) {
+      writeNdjson(res, { type: "error", error: String(err?.message || err) });
+      res.end();
+      return;
+    }
     sendJson(res, err.status || 500, { error: String(err?.message || err) });
   } finally {
     if (tmpDir) await rm(tmpDir, { recursive: true, force: true }).catch(() => {});
