@@ -433,8 +433,8 @@ test("dedupeCrossDisciplineRoomViews: negative control — same tag, same room, 
 test("dedupeCrossDisciplineRoomViews: no room within a plausible distance, and the marks themselves are far apart too — never guesses, never collapses", () => {
   // ROOM sits far outside the 20%-of-diagonal attribution bound from `at`,
   // and the two `at` marks are also >COORD_ATTRIBUTION_MAX_PX apart, so
-  // NEITHER the room-based nor the coordinate-proximity fallback fires —
-  // two real, unrelated marks that just happen to have no nearby room.
+  // coordinate clustering does not join them — two real, unrelated marks
+  // that just happen to have no nearby room.
   const instances = [
     inst(1, "M3.0", "M", [10, 10], [ROOM]),
     inst(2, "P4.0", "P", [500, 500], [ROOM]),
@@ -516,6 +516,48 @@ test("dedupeCrossDisciplineRoomViews: three disciplines drawing the same room �
   const ids = redundant.map((r) => r.id).sort();
   assert.deepEqual(ids, [3, 4]);
   for (const r of redundant) assert.equal(r.keptDiscipline, "M");
+});
+
+test("dedupeCrossDisciplineRoomViews: one side room-attributed, the other not, marks within the coordinate threshold — collapses (asymmetric roomTags on two same-footprint plan sheets)", () => {
+  // Real residual after the sheet-key generalization: a pair at ~6–30px on
+  // P1.0 / P2.0 where only one sheet's roomTags() credits a nearby bubble.
+  // Grouping by room first left the attributed mark out of the coordinate
+  // pool, so the pair survived as two installs.
+  const instances = [
+    inst(1, "P1.0", "P", [2439.6, 980.7], [ROOM]), // ROOM is ~1400px away — not attributed
+    inst(2, "P2.0", "P", [2437.9, 986.7], [{ tag: "124", name: "ASPHALT LAB", bbox: [2420, 970, 2460, 1000] }]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 1, "an attributed/unattributed pair at the same coordinate still collapses");
+  assert.equal(redundant[0].keptDiscipline, "P");
+});
+
+test("dedupeCrossDisciplineRoomViews: same room name, different sheets, marks far apart — never collapses (two real installs, not a redraw)", () => {
+  // Two service sinks sharing a tag, each drawn on only one of two same-
+  // discipline plan sheets, ~200px apart — the same room bubble is near
+  // both on a full-sheet diagonal pad, but they are not the same fixture.
+  const janitor = { tag: "105", name: "JANITOR", bbox: [2700, 1100, 2860, 1220] as [number, number, number, number] };
+  const instances = [
+    inst(1, "P1.0", "P", [2593, 1150], [janitor]),
+    inst(2, "P2.0", "P", [2796, 1151], [janitor]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 0, "same room, 200px apart, two sheets: two real fixtures, never collapsed");
+});
+
+test("dedupeCrossDisciplineRoomViews: same room, far coordinates, CROSS-discipline — still collapses (enlarged M vs P views of one room, different page crops)", () => {
+  // Each sheet crops the same physical room to a different page origin, so
+  // the room label (same tag + name) sits near that sheet's own mark — not
+  // at one shared bbox that would fail the other crop's attribution pad.
+  const roomOnM = { tag: "120", name: "MECH", bbox: [780, 580, 820, 620] as [number, number, number, number] };
+  const roomOnP = { tag: "120", name: "MECH", bbox: [2380, 1780, 2420, 1820] as [number, number, number, number] };
+  const instances = [
+    inst(1, "M3.0", "M", [800, 600], [roomOnM]),
+    inst(2, "P4.0", "P", [2400, 1800], [roomOnP]),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 1, "cross-discipline same-room pair collapses even when page crops differ");
+  assert.equal(redundant[0].keptDiscipline, "M");
 });
 
 // ── same-sheet titled viewports (duct plan | piping plan of one room) ─────

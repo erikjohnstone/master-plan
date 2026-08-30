@@ -9,6 +9,11 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 - **Overlapping matches collapse to one.** Two centroids closer than half a symbol diagonal, or a different square-symmetry transform just outside that bar (a few px of eccentricity, capped so a large fingerprint cannot swallow a real rotated sibling), are the same ink; the better score counts and the shadow is a disclosed question.
 - **A same-convention labeled family no longer dies on the unlabeled commit bar.** When a sheet already has exactly one confident instance (including the seed) and two or more leftover own-tag occurrences each sit next to a near-bar withheld — and those leftovers are not extra labels on the counted instance — those siblings count. A single leftover labeled near-miss stays a disclosed question — that is the schematic-versus-plan extra, not a second install.
 
+## 2026-08-29 — redundant-view collapse is pairwise by coordinate
+
+### Fixed
+- **Cross-sheet redraws cluster by coordinate first; room credit is only a cross-discipline fallback.** `dedupeCrossDisciplineRoomViews` used to group by attributed room first and only then fall back to coordinate proximity for leftovers. A pair with a room bubble on one sheet and none on the other never met (two installs for one device). Two real fixtures that merely shared a room name (or the same distant bubble on a full-sheet diagonal pad) collapsed into one. Eligible marks now cluster together by `COORD_ATTRIBUTION_MAX_PX` regardless of room credit. Leftover same-room pairs still collapse when they span two AIA disciplines (enlarged M vs P views often crop the page differently). Same-discipline leftovers farther than the coordinate threshold stay independent. A same-sheet repeat is still never collapsed. Room labels remain on the result for disclosure. **opentakeoff-mcp 0.9.69** (three surfaces).
+
 ## 2026-08-29 — same-sheet dual-view overcount
 
 ### Fixed
