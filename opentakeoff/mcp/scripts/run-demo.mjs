@@ -163,8 +163,27 @@ export function drawingTextEvidenceErrors(answer, truth, toolCalls) {
     })
     .map(([name]) => name);
   if (!nonTableFields.length) return [];
-  const drawingTexts = collectToolTexts(toolCalls.filter((call) =>
-    call.name === "find_text" || call.name === "read_sheet_text"));
+  const drawingHits = toolCalls.flatMap((call) => {
+    if (call.name === "find_text") {
+      return (call.result?.data?.hits || []).map((hit) => ({
+        sheet: hit.sheet || call.result?.data?.sheet,
+        str: hit.str,
+        bbox: hit.bbox,
+      }));
+    }
+    if (call.name === "read_sheet_text") {
+      const sheet = call.result?.data?.sheet;
+      const text = call.result?.data?.text;
+      return typeof text === "string" && sheet ? [{ sheet, str: text, bbox: null }] : [];
+    }
+    return [];
+  });
+  const scheduleTexts = new Set(collectToolTexts(toolCalls.filter((call) => call.name === "query_table"))
+    .map((text) => text.trim())
+    .filter(Boolean));
+  const sameBbox = (a, b) => Array.isArray(a) && Array.isArray(b)
+    && a.length === 4 && b.length === 4
+    && a.every((n, i) => Math.abs(n - b[i]) < 0.05);
   const errors = [];
   for (const field of nonTableFields) {
     const value = answer.answer?.[field]?.value;
@@ -175,9 +194,23 @@ export function drawingTextEvidenceErrors(answer, truth, toolCalls) {
         errors.push(`${field} citation ${index} is a drawing-text field and must not use table_title, row_key, or column`);
       }
     }
-    if (typeof value === "string" && value.trim()
-      && !drawingTexts.some((text) => text.includes(value))) {
+    if (typeof value !== "string" || !value.trim()) continue;
+    if (scheduleTexts.has(value.trim())) {
+      errors.push(`${field} value is exact schedule-cell text from query_table; choose a find_text/read_sheet_text phrase that is not a schedule attribute`);
+      continue;
+    }
+    const supporting = drawingHits.filter((hit) => typeof hit.str === "string" && hit.str.includes(value));
+    if (!supporting.length) {
       errors.push(`${field} value must appear verbatim in find_text/read_sheet_text evidence; do not reuse a schedule cell`);
+      continue;
+    }
+    for (const [index, citation] of citations.entries()) {
+      const matched = supporting.some((hit) =>
+        hit.sheet === citation?.sheet_id
+        && (hit.bbox == null || sameBbox(hit.bbox, citation?.bbox_px)));
+      if (!matched) {
+        errors.push(`${field} citation ${index} must reuse a find_text/read_sheet_text hit sheet and bbox for the returned phrase`);
+      }
     }
   }
   return errors;

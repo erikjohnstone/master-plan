@@ -125,9 +125,6 @@ test("demo runner rejects schedule cells for drawing-text fields", () => {
         value: "11TH FLOOR MECHANICAL",
         citations: [{
           sheet_id: "set.pdf#48",
-          table_title: "AIR HANDLING UNIT SCHEDULE",
-          row_key: "AHU-T1A",
-          column: "LOCATION",
           bbox_px: [1, 2, 3, 4],
         }],
       },
@@ -156,9 +153,15 @@ test("demo runner rejects schedule cells for drawing-text fields", () => {
         }],
       },
     },
+  }, {
+    name: "find_text",
+    result: {
+      data: {
+        hits: [{ sheet: "set.pdf#48", str: "11TH FLOOR MECHANICAL", bbox: [1, 2, 3, 4] }],
+      },
+    },
   }]), [
-    "serves citation 0 is a drawing-text field and must not use table_title, row_key, or column",
-    "serves value must appear verbatim in find_text/read_sheet_text evidence; do not reuse a schedule cell",
+    "serves value is exact schedule-cell text from query_table; choose a find_text/read_sheet_text phrase that is not a schedule attribute",
   ]);
 });
 
