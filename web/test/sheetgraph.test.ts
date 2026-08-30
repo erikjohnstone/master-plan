@@ -1072,7 +1072,7 @@ test("a lone unexplained token never mints a column — the sub-tier needs a par
 // MATERIAL | COMMENTS) extracted as 54 "finish" rows, so a finish code
 // colliding with a door mark would chain to a DOOR — a confidently wrong
 // product in the bid. Refused by title, and the drop is named.
-import { isMepEquipmentSchedule, isNonFinishSchedule, isReferenceOrSpecTable, isPointsListTitle, scheduleTableFromODL, type ODLTable } from "../src/lib/sheetgraph.ts";
+import { isMepEquipmentSchedule, isNonFinishSchedule, isReferenceOrSpecTable, isPointsListTitle, scheduleTableFromODL, hasPoweredEquipmentColumns, type ODLTable } from "../src/lib/sheetgraph.ts";
 
 test("isNonFinishSchedule: other families refuse, anything naming FINISH or MATERIAL is kept", () => {
   for (const t of ["DOOR SCHEDULE", "DOOR AND WINDOW SCHEDULE", "PARTITION SCHEDULE", "EQUIPMENT SCHEDULE", "LIGHTING SCHEDULE"]) {
@@ -1284,6 +1284,25 @@ test("scheduleTableFromODL: a catalog-anchor label still starts the header when 
   const built = scheduleTableFromODL(odl, "anchor.pdf#1", [1, 0, 0, 1, 0, 0]);
   assert.ok(built, "MARK as a column label must keep the table even when most headers miss vocabulary");
   assert.deepEqual(built!.rows.map((r) => r.key), ["UT-1"]);
+});
+
+test("hasPoweredEquipmentColumns: smashed tails in remarks are not nameplate columns", () => {
+  // The ODL smashed-suffix walk must stay out of headerLabels. A material
+  // schedule remark like PREWATTS / FOOPHASE would otherwise count as
+  // WATTS+PHASE and flip the table to equipment-kind (no definition chain).
+  const spans = [
+    sp("MATERIAL SCHEDULE", 100, 20),
+    sp("CODE", 100, 50), sp("MATERIAL", 220, 50), sp("MANUFACTURER", 400, 50), sp("REMARKS", 600, 50),
+    sp("CPT-1", 100, 80), sp("CARPET TILE", 220, 80), sp("VENDOR-A", 400, 80), sp("PREWATTS FOOPHASE", 600, 80),
+  ];
+  const sheet: SheetSpans = { key: "mat.pdf#1", sheet_number: "A-601", spans };
+  const finish = extractAllTables(sheet, "finish");
+  assert.equal(finish.length, 1);
+  assert.equal(hasPoweredEquipmentColumns(spans, finish[0]), false);
+  const g = buildSheetGraph([sheet]);
+  const hit = g.tables.find((t) => t.title?.text === "MATERIAL SCHEDULE");
+  assert.ok(hit, "material schedule stays in the graph");
+  assert.equal(hit!.kind, "finish");
 });
 
 test("a DOOR SCHEDULE never becomes a finish table — and the drop is NAMED", () => {

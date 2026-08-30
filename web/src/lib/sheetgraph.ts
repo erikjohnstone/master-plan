@@ -784,26 +784,33 @@ const ACRONYM_DOT_RE = /(?<=\b[A-Z])\.(?=[A-Z]\b)/g;
 const headerLabels = (s: string, vocab: string[]): string[] => {
   const out: string[] = [];
   const collapsed = norm(s).replace(ACRONYM_DOT_RE, "").replace(/\bCEILIING\b/g, "CEILING");
-  const add = (w: string) => { if (w && !out.includes(w)) out.push(w); };
+  for (const w of collapsed.split(/[^A-Z]+/)) if (w && vocab.includes(w) && !out.includes(w)) out.push(w);
+  return out;
+};
+
+/** ODL-only: same as `headerLabels`, plus a trailing vocabulary word on a
+ * leftover smashed ALL-CAPS token (`REGULATORSETCFM` → CFM, `REHEATMBH` →
+ * MBH). Not used by the geometric extractor — suffix-matching free-text
+ * spans inside a table region would let a material/finish schedule's own
+ * prose trip `hasPoweredEquipmentColumns` (VOLTAGE/PHASE/AMPS as a tail).
+ * Whole-token hits still win (`REMARKS` is REMARKS, never MARK). Three
+ * letters minimum so two-letter units (ID/HP) cannot claim an arbitrary
+ * tail; longest suffix wins. */
+const headerLabelsSmashed = (s: string, vocab: string[]): string[] => {
+  const out = headerLabels(s, vocab);
+  if (out.length) return out;
+  const collapsed = norm(s).replace(ACRONYM_DOT_RE, "").replace(/\bCEILIING\b/g, "CEILING");
+  let best: string | null = null;
   for (const tok of collapsed.split(/[^A-Z]+/)) {
     if (!tok) continue;
-    if (vocab.includes(tok)) { add(tok); continue; }
-    // Smashed ALL-CAPS compound from a CAD/ODL text layer
-    // ("REGULATORSETCFM", "REHEATMBH"): no delimiter remains, so the split
-    // above yields one token that is not itself a vocabulary word. The
-    // trailing unit/name still is — a suffix, not a mid-token collision
-    // (MARK inside REMARKS is a whole-token hit above and never reaches
-    // here). Require three letters so two-letter units (ID/HP) cannot
-    // claim an arbitrary tail; longest suffix wins when several apply.
-    let best: string | null = null;
     for (const w of vocab) {
       if (w.length < 3 || w.length >= tok.length) continue;
       if (tok.endsWith(w) && (!best || w.length > best.length)) best = w;
     }
-    if (best) add(best);
   }
-  return out;
+  return best ? [best] : [];
 };
+const headerLabelSmashed = (s: string, vocab: string[]): string | null => headerLabelsSmashed(s, vocab)[0] ?? null;
 
 // A real, found-live false-positive: baker-county-eoc's own sheet #27 draws a
 // free-text FINISH LEGEND (ACCESSORIES/BASE & TRIM/CEILING/FLOORING/WALLS —
@@ -7338,7 +7345,7 @@ export function scheduleTableFromODL(
     if (!headerCandidateChecked) {
       headerCandidateChecked = true;
       const texts = [...ownCells].map(odlCellText).filter(Boolean);
-      const vocabHits = texts.filter((s) => headerLabels(s, ALL_HEADER_WORDS_ARR).length > 0).length;
+      const vocabHits = texts.filter((s) => headerLabelsSmashed(s, ALL_HEADER_WORDS_ARR).length > 0).length;
       // A cell that IS the catalog-anchor column name (MARK/TAG/SYMBOL/ID/
       // CODE), not a device tag, is a header label. A data row carries the
       // instance (VAV-1), never the word MARK. This is the same ambiguity
@@ -7398,7 +7405,7 @@ export function scheduleTableFromODL(
   // band. Ties favor the more specific vocab (equipment, then room, then
   // finish) since a real equipment schedule's words are a proper superset
   // risk onto FINISH_HEADERS (MODEL/MANUFACTURER/REMARKS overlap both).
-  const hitCount = (vocab: string[]) => headers.filter((h) => headerLabel(h, vocab)).length;
+  const hitCount = (vocab: string[]) => headers.filter((h) => headerLabelSmashed(h, vocab)).length;
   const eqHits = hitCount(EQUIPMENT_HEADERS), rmHits = hitCount(ROOM_HEADERS), finHits = hitCount(FINISH_HEADERS);
   // room-finish needs real SURFACE columns, not just ROOM_HEADERS' own
   // generic words — a real DOOR SCHEDULE ("…FROM ROOM"/"…TO ROOM"/"DOOR
