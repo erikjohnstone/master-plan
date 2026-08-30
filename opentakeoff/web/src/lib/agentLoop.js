@@ -173,6 +173,37 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     if (uncovered.length) {
       return `The answer uses queried schedule row(s) with no painted source cell: ${[...new Set(uncovered)].join(", ")}. Call highlight_citation on at least one exact cited cell from each row before finishing.`;
     }
+    const evidenceCells = [];
+    for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
+      for (const match of out?.matches || []) {
+        for (const [header, cell] of Object.entries(match?.row?.all_cells || match?.row?.cells || {})) {
+          if (!Array.isArray(cell?.bbox)) continue;
+          evidenceCells.push({ sheet: match.sheet, header, text: cell.text, bbox: cell.bbox });
+        }
+      }
+    }
+    for (const { out } of callLog.filter(({ name }) => name === "sweep_schedule_row")) {
+      for (const [header, cell] of Object.entries(out?.row?.cell_citations || {})) {
+        const bbox = cell?.bbox;
+        const bboxArray = Array.isArray(bbox) ? bbox : [bbox?.x0, bbox?.y0, bbox?.x1, bbox?.y1];
+        if (!bboxArray.every(Number.isFinite)) continue;
+        evidenceCells.push({ sheet: out.row.sheet, header, text: cell.text, bbox: bboxArray });
+      }
+    }
+    for (const line of finalText.split("\n").filter((text) => /\bhighlight/i.test(text))) {
+      const lineCanonical = line.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      const claimedCells = evidenceCells.filter(({ header, text }) => {
+        const headerCanonical = String(header).toUpperCase().replace(/[^A-Z0-9]/g, "");
+        const textCanonical = String(text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+        return headerCanonical.length >= 3 && textCanonical
+          && lineCanonical.includes(headerCanonical) && lineCanonical.includes(textCanonical);
+      });
+      if (claimedCells.length && !claimedCells.some((cell) =>
+        highlights.some((highlight) => highlight.sheet === cell.sheet
+          && highlight.bbox.every((value, index) => Math.abs(value - cell.bbox[index]) <= 1)))) {
+        return "The final answer says a specific schedule cell is highlighted, but no highlight_citation call painted that exact cell bbox. Remove the highlighted claim for unpainted fields or highlight the exact returned cell; another cell in the same row is not equivalent.";
+      }
+    }
   }
   return null;
 }
