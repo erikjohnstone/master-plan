@@ -84,12 +84,18 @@ methodology-general — no corpus hardcoding. D03 counts toward ten. Next: D04.
 
 ## D04 selection record
 
-Status: `IN PROGRESS — ground truth authored; N=5 / UI+follow-up pending`
+Status: `LOCKED — API 5/5; p95 3.535 s; stdio + UI proof with SUITE100 follow-up`
 
 Target holds: 24-sheet `federal-mech` set. `VOLUME CONTROL BOX SCHEDULE` on
 sheet #16 lists VAV-1..VAV-58 (58 unique VAV-* tags; junk key SUITE100
 excluded). Plan sheets carry hundreds of fragmented `VAV-` labels, so the
 rollup must use the schedule title-scan — not plan-label frequency.
 Independent 20% find_text hand-count (13 tags) reconciled before model runs.
-Scaffold: `D04-vav-scope-rollup/`. Lock requires N=5 + UI proof with source
-cards + a correctly answered follow-up before advancing.
+
+N=5 production runs are 5/5 under `verify:demo` with nearest-rank p95
+**3.535 s**. Localhost stdio harness True (`local-host-run.json`). UI proof
+under the usefulness bar + required in-thread follow-up is saved as
+`/opt/cursor/artifacts/d04_ui_prompt_answer_cards_followup_2026-08-30T11-06-05-710Z.webm`
+(58 VAVs + attributes; SUITE100 rejected; VAV-58 CFM 350). Production gates
+stay methodology-general — no corpus hardcoding. D04 counts toward ten.
+Next: D05.

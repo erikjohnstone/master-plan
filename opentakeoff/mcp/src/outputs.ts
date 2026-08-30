@@ -138,6 +138,9 @@ export const queryTableOutput = {
     title: z.object({ text: z.string(), bbox: sourceBox }).nullable(),
     region: sourceBox,
     headers: z.array(z.string()),
+    /** False when the row key is junk on this equipment schedule (e.g. SUITE100
+     * on a VOLUME CONTROL BOX / VAV schedule) and must not count as a family unit. */
+    family_mark: z.boolean().optional(),
     row: z.object({
       key: z.string(),
       identity: z.object({
@@ -145,6 +148,7 @@ export const queryTableOutput = {
         text: z.string(),
         bbox: sourceBox,
       }).nullable(),
+      family_mark: z.boolean().optional(),
       cells: z.record(z.string(), z.object({
         text: z.string(),
         bbox: sourceBox,
