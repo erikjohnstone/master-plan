@@ -430,6 +430,7 @@ test("normalizeControlValveCells: one Cv + served equipment, never dual CHW/HHW 
     table_bbox_px: [10, 20, 30, 40],
   }, "HHW");
   assert.equal(cells["Served equipment"]?.text, "AHU-A1");
+  assert.equal(cells["Unit Mark"]?.text, "AHU-A1");
   assert.equal(cells.Service?.text, "HHW");
   assert.equal(cells.Cv?.text, "0.5");
   assert.equal(cells.GPM?.text, "2.0");
@@ -579,11 +580,83 @@ test("control_valves compile → panel lines with cites; dual-Cv scrap dropped",
   assert.equal(hhw.specs["CHW CV"], undefined);
   assert.equal(hhw.specs["HHW CV"], undefined);
   assert.ok(hhw.specs.Cv === "0.5" || hhw.specs.CV === "0.5" || Object.values(hhw.specs).includes("0.5"));
-  assert.ok(
-    hhw.specs["Served equipment"] === "AHU-A1"
-    || hhw.specs["UNIT MARK"] === "AHU-A1"
-    || Object.values(hhw.specs).includes("AHU-A1"),
-  );
+  assert.equal(hhw.unit_mark, "AHU-A1");
+  assert.match(hhw.family, /Building A · .*HHW CONTROL VALVE/i);
+  const cite = lineLeadCite(hhw, "tag");
+  assert.ok(cite?.bbox_px);
+  // Prefer whole-row bbox when present (union of cells).
+  if (hhw.row_bbox_px) {
+    assert.deepEqual(cite.bbox_px, hhw.row_bbox_px);
+  }
+  const groups = groupTakeoffByFamily(lines);
+  assert.ok(groups.some((g) => /Building A · .*CONTROL VALVE/i.test(String(g.family))));
+  const lead = takeoffLeadColumns(lines.filter((l) => /VALVE/i.test(l.table_title || "")));
+  assert.ok(lead.some((c) => c.key === "unit_mark" && /Unit Mark/i.test(c.label)));
+  assert.ok(lead.some((c) => c.key === "tag" && /Valve Mark/i.test(c.label)));
+});
+
+test("valve takeoff sections Building · CHW before Building · HHW; row cite uses union bbox", () => {
+  const compiled = compileControlValveTakeoff([], {
+    tables: [
+      {
+        sheet: "mech.pdf#49",
+        title: { text: "CHW CONTROL VALVE SCHEDULE", bbox: [0, 0, 50, 10] },
+        rows: [{
+          key: "AHU-T1A-CHW",
+          cells: {
+            "UNIT MARK": { text: "AHU-T1A", bbox: [10, 20, 30, 40] },
+            "VALVE MARK": { text: "AHU-T1A-CHW", bbox: [30, 20, 60, 40] },
+            "FLOWRATE (GPM)": { text: "32.0", bbox: [60, 20, 90, 40] },
+            CV: { text: "14.3", bbox: [90, 20, 120, 40] },
+          },
+        }],
+      },
+      {
+        sheet: "mech.pdf#44",
+        title: { text: "HHW CONTROL VALVE SCHEDULE", bbox: [0, 0, 50, 10] },
+        rows: [{
+          key: "CV-AHU-A1-HHW",
+          cells: {
+            "UNIT MARK": { text: "AHU-A1", bbox: [1, 2, 3, 4] },
+            "VALVE MARK": { text: "CV-AHU-A1-HHW", bbox: [3, 2, 5, 4] },
+            CV: { text: "0.5", bbox: [5, 2, 7, 4] },
+          },
+        }],
+      },
+      {
+        sheet: "mech.pdf#44",
+        title: { text: "CHW CONTROL VALVE SCHEDULE", bbox: [0, 50, 50, 60] },
+        rows: [{
+          key: "CV-AHU-A1-CHW",
+          cells: {
+            "UNIT MARK": { text: "AHU-A1", bbox: [10, 50, 20, 60] },
+            "VALVE MARK": { text: "CV-AHU-A1-CHW", bbox: [20, 50, 40, 60] },
+            CV: { text: "27.5", bbox: [40, 50, 55, 60] },
+          },
+        }],
+      },
+    ],
+  });
+  const item = compiled.categories.CHW_CONTROL_VALVE.items.find((i) => /T1A/i.test(i.tag));
+  assert.ok(item?.row_bbox_px);
+  assert.deepEqual(item.row_bbox_px, [10, 20, 120, 40]);
+  assert.equal(item.building, "T");
+  // No project-name hardcodes in BUILDING field.
+  const rows = rowsFromCompiledTakeoff(compiled);
+  const bldgRows = rows.filter((r) => r.field === "BUILDING");
+  assert.ok(bldgRows.every((r) => /^Building [A-Z0-9]+$/i.test(String(r.value))));
+  assert.equal(bldgRows.some((r) => /Air Ops|MITRACON|ATCT/i.test(String(r.value))), false);
+
+  const lines = compileAgentTakeoff(rows);
+  const groups = groupTakeoffByFamily(lines);
+  const names = groups.map((g) => String(g.family));
+  // Building A sections before Building T; within a building CHW before HHW.
+  const idxAChw = names.findIndex((n) => /Building A · .*CHW/i.test(n));
+  const idxAHhw = names.findIndex((n) => /Building A · .*HHW/i.test(n));
+  const idxTChw = names.findIndex((n) => /Building T · .*CHW/i.test(n));
+  assert.ok(idxAChw >= 0 && idxAHhw >= 0 && idxTChw >= 0);
+  assert.ok(idxAChw < idxAHhw, `CHW before HHW within building: ${names.join(" | ")}`);
+  assert.ok(idxAChw < idxTChw, `Building A before Building T: ${names.join(" | ")}`);
 });
 
 test("query_table CONTROL VALVE title-scan expands beyond 24 matches", () => {

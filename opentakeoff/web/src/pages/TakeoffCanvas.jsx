@@ -7079,51 +7079,23 @@ export default function TakeoffCanvas() {
     return { downloaded: filename, condition_count: rows.length };
   }
 
-  /** Paint schedule-table + per-tag row highlights so the takeoff is auditable on the sheets. */
+  /** Do NOT paint every schedule row on compile — that floods the sheets with
+   * highlights ("everything is highlighted"). Provenance is on-demand: the
+   * estimator clicks a Takeoff Tag / Unit Mark / Sheet to paint that one row. */
   async function paintCompiledTakeoffHighlights(compiled) {
     if (!compiled || compiled.error) return { tables: 0, rows: 0 };
-    const jobs = [];
-    const seenTable = new Set();
-    const enqueue = (item) => {
-      if (!item?.sheet_id) return;
-      if (Array.isArray(item.table_bbox_px) && item.table_bbox_px.length === 4) {
-        const k = `${item.sheet_id}|${item.table_bbox_px.join(",")}`;
-        if (!seenTable.has(k)) {
-          seenTable.add(k);
-          jobs.push({
-            sheet: item.sheet_id,
-            bbox_px: item.table_bbox_px,
-            table_title: item.table_title || "",
-            text: item.table_title || "Schedule",
-          });
-        }
-      }
-      if (item.tag && Array.isArray(item.bbox_px) && item.bbox_px.length === 4) {
-        jobs.push({
-          sheet: item.sheet_id,
-          bbox_px: item.bbox_px,
-          row_key: item.tag,
-          column: "MARK",
-          value: item.tag,
-          table_title: item.table_title || "",
-        });
-      }
-    };
-    if (compiled.kind === "hvac_equipment" || compiled.kind === "control_valves") {
-      for (const cat of Object.values(compiled.categories || {})) {
-        for (const item of cat.items || []) enqueue(item);
-      }
-    } else if (compiled.kind === "bas_points") {
-      for (const list of compiled.categories?.points_lists?.lists || []) {
-        for (const item of list.items || []) enqueue(item);
-      }
-    }
-    // Chunk so the UI stays responsive while the audit trail paints.
-    for (let i = 0; i < jobs.length; i += 40) {
-      const chunk = jobs.slice(i, i + 40);
-      await Promise.all(chunk.map((j) => agentHighlightCitation(j)));
-    }
-    return { tables: seenTable.size, rows: jobs.length - seenTable.size };
+    // Clear prior takeoff-audit highlights so a re-compile starts clean.
+    clearTakeoffCiteHighlights();
+    return { tables: 0, rows: 0 };
+  }
+
+  function clearTakeoffCiteHighlights() {
+    setMarkups((ms) => {
+      const next = ms.filter((m) => m.source !== "takeoff_cite");
+      agentStateRef.current = { ...agentStateRef.current, markups: next };
+      return next;
+    });
+    setAgentCitations((list) => list.filter((c) => c.source !== "takeoff_cite"));
   }
 
   /** Feed finished compile into TakeoffDataPanel (Takeoff + Workflow data tabs). */
@@ -7997,6 +7969,7 @@ export default function TakeoffCanvas() {
 
   async function agentHighlightCitation({
     sheet, bbox_px, text = "", row_key = "", column = "", table_title = "", value = "",
+    replaceTakeoffCite = false, source = null,
   }) {
     if (!Array.isArray(bbox_px) || bbox_px.length !== 4 || bbox_px.some((v) => !Number.isFinite(v))) {
       return { error: "bbox_px must contain four finite production image-pixel coordinates." };
@@ -8007,11 +7980,13 @@ export default function TakeoffCanvas() {
     if (!(x1 > x0 && y1 > y0) || x0 < 0 || y0 < 0 || x1 > dims.w || y1 > dims.h) {
       return { error: "bbox_px is degenerate or outside the cited sheet." };
     }
+    if (replaceTakeoffCite) clearTakeoffCiteHighlights();
     const rowKey = String(row_key || "").trim();
     const col = String(column || "").trim();
     const val = String(value || "").trim();
     const tableTitle = String(table_title || "").trim();
     const fallback = String(text || "").trim();
+    const citeSource = source || (replaceTakeoffCite ? "takeoff_cite" : null);
     const label = (() => {
       if (rowKey && col && val) return `${rowKey} · ${col} = ${val}`;
       if (rowKey && col) return `${rowKey} · ${col}`;
@@ -8026,11 +8001,20 @@ export default function TakeoffCanvas() {
       // canvas never draws it inside the rect (would cover the cited value).
       text: label,
       rect: [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]],
+      source: citeSource,
     });
     if (result.error) return result;
     // Estimator-clarity: paint quietly — do NOT auto-fly the viewport.
     // Source cards in the Agent panel are how the estimator jumps on demand.
     setShowMarkups(true);
+    // Stamp source on the markup record (agentAnnotate may not persist extras).
+    if (citeSource) {
+      setMarkups((ms) => {
+        const next = ms.map((m) => (m.id === result.id ? { ...m, source: citeSource } : m));
+        agentStateRef.current = { ...agentStateRef.current, markups: next };
+        return next;
+      });
+    }
     setAgentCitations((list) => {
       if (list.some((c) => c.id === result.id)) return list;
       return [...list, {
@@ -8045,6 +8029,7 @@ export default function TakeoffCanvas() {
         table_title: tableTitle || undefined,
         value: val || undefined,
         bbox_px,
+        source: citeSource || undefined,
       }];
     });
     return {
@@ -12304,6 +12289,10 @@ export default function TakeoffCanvas() {
               column: row.column || row.field || "",
               table_title: row.table_title || "",
               value: String(row.value ?? row.qty ?? ""),
+              // One clear schedule-row paint — replace prior takeoff cites so
+              // the sheet is not covered in every MARK cell from the compile.
+              replaceTakeoffCite: row.kind === "row" || row.kind === "table" || !row.kind,
+              source: "takeoff_cite",
             });
             if (result?.error) {
               setCommitMsg(`Could not open cite: ${result.error}`);
