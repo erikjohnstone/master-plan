@@ -5773,4 +5773,39 @@ export class Session {
     }));
     return { sheet: s.key, q: query, count: all.length, truncated: all.length > hits.length, hits };
   }
+
+  /**
+   * Find explicit prose placement evidence such as "CUH-T1 ON FLOOR 3".
+   * Identical notes repeated on multiple discipline sheets represent one
+   * statement, not multiple installed units, and are deduplicated by the
+   * tag + stated level.
+   */
+  async explicitInstallationNotes(tag: string): Promise<Array<{
+    sheet: string; at: [number, number]; text: string; level: string;
+  }>> {
+    const graph = await this.graphForPipeline();
+    const planKeys = new Set(graph.sheets.filter((sheet) => sheet.role === "plan").map((sheet) => sheet.key));
+    const escaped = tag.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pattern = new RegExp(`(?:^|[^A-Z0-9])${escaped}\\s+ON\\s+(?:FLOOR|LEVEL)\\s+([A-Z0-9]+)`, "i");
+    const byLevel = new Map<string, { sheet: string; at: [number, number]; text: string; level: string }>();
+    for (const sheet of this.sheetList()) {
+      if (!planKeys.has(sheet.key)) continue;
+      if (!sheet.spans) sheet.spans = textSpans(sheet.page);
+      for (const span of sheet.spans) {
+        const match = pattern.exec(span.str);
+        if (!match) continue;
+        const level = match[1].toUpperCase();
+        const key = `${tag.trim().toUpperCase()}\0${level}`;
+        if (!byLevel.has(key)) {
+          byLevel.set(key, {
+            sheet: sheet.key,
+            at: [round1((span.x0 + span.x1) / 2), round1((span.y0 + span.y1) / 2)],
+            text: span.str.trim(),
+            level,
+          });
+        }
+      }
+    }
+    return [...byLevel.values()];
+  }
 }

@@ -366,6 +366,20 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
       out.stats.total_drawn_instances += item.quantity;
     } catch (e: any) {
       const msg = e?.message || String(e);
+      const installationNotes = await session.explicitInstallationNotes(tag);
+      if (installationNotes.length === 1) {
+        item.quantity = 1;
+        item.drawing_locations = [{
+          sheet: installationNotes[0].sheet,
+          at: installationNotes[0].at,
+        }];
+        item.status = "resolved";
+        item.reason = `Counted from explicit installation note: "${installationNotes[0].text}"`;
+        out.stats.resolved++;
+        out.stats.total_drawn_instances++;
+        out.items.push(item);
+        return;
+      }
       const ft = classifyError(msg);
       item.status = ft === "SYMBOL_FALSE_NEGATIVE" ? "refused" : "error";
       item.reason = msg;
