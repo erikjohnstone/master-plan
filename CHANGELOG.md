@@ -2,6 +2,13 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — compact hatch seeds; ganged quantity-prefix tags
+
+### Fixed
+- **An inline-motif seed picks the nearest *valid* hatch cluster, not the nearest cluster then reject.** A same-pitch field whose bbox contains the search-rect center used to win distance-zero and fail the size floor, returning null even when a compact local fill sat in the same family. Invalid clusters (too sparse, or many times the rect) are dropped first; an already-compact nearest seed is unchanged.
+- **A parenthetical quantity prefix is a drawn occurrence of the mark.** `sweep_schedule_row` now joins `(N)` plus the mark across same-row runs (`(6) LD-1`, or `(6) LD` + `-` + `1`) alongside exact/compound matches. The integer is not a quantity multiplier. A longer sibling (`LD-10` for `LD-1`), a work-note sentence, a next-line stack, and a bare `(N)` that never completes are refused.
+- **An oversized whole-shape pad is not corroborating evidence.** A grab of 80+ segments is a region; corroboration stops widening so the hatch-fill fallback can run. Last-resort uncorroborated acceptance may still take that grab so a uniquely-drawn mark is not refused. No project, sheet, or tag names. **opentakeoff-mcp 0.9.75** (three surfaces).
+
 ## 2026-08-30 — sparse hatch ticks are not a register fill
 
 ### Fixed

@@ -3,7 +3,7 @@
 // tolerance behavior, decoy rejection, determinism, and the reported work cap.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, type Point, type FlatSpan } from "../src/lib/symbolsweep.ts";
+import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, gangedTagOcc, type Point, type FlatSpan } from "../src/lib/symbolsweep.ts";
 
 // The test symbol — deliberately ASYMMETRIC under every rotation and mirror:
 // a 20×20 square, ONE diagonal, and a stub off the right side. Local coords,
@@ -376,6 +376,57 @@ test("compoundTagOcc: a work-note sentence that mentions the key is not an insta
   ];
   assert.equal(compoundTagOcc(spans, "CUH-T1").length, 0);
   assert.equal(compoundTagOcc(spans, "R1").length, 1);
+});
+
+// gangedTagOcc — a parenthetical quantity prefix then the mark, one run
+// or split across same-row runs. Merged alongside exact (a sheet can
+// carry both). The N is not a quantity multiplier.
+test("gangedTagOcc: one-span quantity prefix reconstructs the mark", () => {
+  const spans: FlatSpan[] = [
+    { str: "(6) LD-1", x0: 10, y0: 20, x1: 70, y1: 30 },
+    { str: "LD-1", x0: 10, y0: 40, x1: 40, y1: 50 },
+  ];
+  const occ = gangedTagOcc(spans, "LD-1");
+  assert.equal(occ.length, 1, "the prefixed run is one occurrence; the bare exact is someone else's job");
+  assert.deepEqual(occ[0].bbox, [10, 20, 70, 30]);
+});
+
+test("gangedTagOcc: same-row split \"(6) LD\",\"-\",\"1\" reconstructs", () => {
+  const spans: FlatSpan[] = [
+    { str: "(6) LD", x0: 100, y0: 200, x1: 140, y1: 210 },
+    { str: "-", x0: 140, y0: 200, x1: 146, y1: 210 },
+    { str: "1", x0: 146, y0: 200, x1: 154, y1: 210 },
+  ];
+  const occ = gangedTagOcc(spans, "LD-1");
+  assert.equal(occ.length, 1);
+  assert.deepEqual(occ[0].bbox, [100, 200, 154, 210]);
+});
+
+test("gangedTagOcc: a longer sibling mark is not a match for the short key", () => {
+  const spans: FlatSpan[] = [
+    { str: "(6) LD-10", x0: 10, y0: 20, x1: 80, y1: 30 },
+    { str: "(2) LD", x0: 10, y0: 40, x1: 50, y1: 50 },
+    { str: "-", x0: 50, y0: 40, x1: 56, y1: 50 },
+    { str: "10", x0: 56, y0: 40, x1: 70, y1: 50 },
+  ];
+  assert.equal(gangedTagOcc(spans, "LD-1").length, 0, "LD-10 must never satisfy LD-1");
+});
+
+test("gangedTagOcc: a work-note sentence is not an instance; a bare count does not complete", () => {
+  const spans: FlatSpan[] = [
+    { str: "(6) LD-1 ON FLOOR 3; SEE NOTES.", x0: 10, y0: 20, x1: 400, y1: 30 },
+    { str: "(6)", x0: 10, y0: 40, x1: 30, y1: 50 },
+    { str: "EACH", x0: 32, y0: 40, x1: 70, y1: 50 },
+  ];
+  assert.equal(gangedTagOcc(spans, "LD-1").length, 0);
+});
+
+test("gangedTagOcc: next-line fragments are not chased — same-row only", () => {
+  const spans: FlatSpan[] = [
+    { str: "(6) LD", x0: 100, y0: 200, x1: 140, y1: 210 },
+    { str: "-1", x0: 100, y0: 212, x1: 120, y1: 222 },
+  ];
+  assert.equal(gangedTagOcc(spans, "LD-1").length, 0);
 });
 
 // deepHyphenChainTagOcc — a THIRD tier, after exact/compound AND

@@ -242,30 +242,33 @@ export function fingerprintInlineMotif(
   if (!best) return null;
   const margin = Math.max(best.family.pitch_px * PROXIMITY_PITCH_MULT, 1);
   const clusters = clusterByProximity(segs, best.family.memberIdx, margin);
-  // the cluster overlapping (or nearest) the seed rect's own center
+  // Skip oversized clusters BEFORE picking nearest. A sheet-wide same-
+  // pitch field whose bbox contains the rect center wins d=0 under
+  // "nearest then reject" and shadows a compact local fill that also
+  // overlaps this rect — the function can only return null. Sparse
+  // local ticks stay a POST-pick rejection (do not walk from ticks to
+  // a distant dense box; that is the hatch-floor). A candidate must
+  // also overlap the seed rect so a far compact sibling cannot become
+  // the seed after the containing field is skipped. Aspect stays a
+  // sweep-time filter — a long linear diffuser is a real seed.
   const cx = (rx0 + rx1) / 2, cy = (ry0 + ry1) / 2;
+  const refW = maxClusterRef ? maxClusterRef.w : rx1 - rx0, refH = maxClusterRef ? maxClusterRef.h : ry1 - ry0;
+  const overlapsRect = (c: Cluster) => c.x1 >= rx0 && c.x0 <= rx1 && c.y1 >= ry0 && c.y0 <= ry1;
+  const notOversized = (c: Cluster): boolean => {
+    const cw = c.x1 - c.x0, ch = c.y1 - c.y0;
+    if (cw <= 0 || ch <= 0) return false;
+    return cw <= MAX_CLUSTER_TO_RECT_FRAC * Math.max(refW, 1)
+      && ch <= MAX_CLUSTER_TO_RECT_FRAC * Math.max(refH, 1);
+  };
   let seedCluster: Cluster | null = null, bestD = Infinity;
   for (const c of clusters) {
+    if (!notOversized(c) || !overlapsRect(c)) continue;
     const inside = cx >= c.x0 && cx <= c.x1 && cy >= c.y0 && cy <= c.y1;
     const d = inside ? 0 : Math.hypot(Math.max(c.x0 - cx, 0, cx - c.x1), Math.max(c.y0 - cy, 0, cy - c.y1));
     if (d < bestD) { bestD = d; seedCluster = c; }
   }
-  // Same floor sweepInlineMotif uses to emit a match. A 4–39 stroke
-  // cluster is real hatch *ink* (dimension ticks, a leader hash, a
-  // pump body's few fill dashes) but not a register/grille fill — and
-  // fingerprinting it lets corroborateInlineMotif "succeed" against an
-  // unrelated dense box of similar bbox size, which then blocks
-  // sweep_schedule_row's whole-shape fallback. The pad ladder already
-  // widens; a true fill (100+ members, measured) appears at some pad
-  // or this is not an inline-motif mark.
   if (!seedCluster || seedCluster.members < MIN_FILL_MEMBERS) return null;
   const w = seedCluster.x1 - seedCluster.x0, h = seedCluster.y1 - seedCluster.y0;
-  const refW = maxClusterRef ? maxClusterRef.w : rx1 - rx0, refH = maxClusterRef ? maxClusterRef.h : ry1 - ry0;
-  // reject a cluster that dwarfs the reference size (see
-  // MAX_CLUSTER_TO_RECT_FRAC above) — an unrelated, far-larger hatch field
-  // caught only because its bbox happened to sit nearest the rect's center,
-  // never a real local fixture the search was actually anchored around.
-  if (w > MAX_CLUSTER_TO_RECT_FRAC * Math.max(refW, 1) || h > MAX_CLUSTER_TO_RECT_FRAC * Math.max(refH, 1)) return null;
   return {
     angleMod90: foldAngle90(best.family.angle_deg),
     pitchPx: best.family.pitch_px,

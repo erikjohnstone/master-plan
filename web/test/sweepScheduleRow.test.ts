@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, leftoverLabeledOccs, typicalMultiplierNear, matchQuantity, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, isSheetCategoryTitle, spaceKeyIsLocated, assignMarkToViewport, buildingKeyFromTitle, tileSpaceKey, collapseSpaceKey, type Point, type RoomSweepInstance, type SheetViewport, type TagOcc } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, leftoverLabeledOccs, typicalMultiplierNear, matchQuantity, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, isSheetCategoryTitle, spaceKeyIsLocated, assignMarkToViewport, buildingKeyFromTitle, tileSpaceKey, collapseSpaceKey, OVERSIZED_MARKER_SEGS, type Point, type RoomSweepInstance, type SheetViewport, type TagOcc } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -120,6 +120,23 @@ test("corroborateFingerprint: a bare underline/leader (< 3 segments) at pad 1 is
   const r = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null);
   assert.ok(r);
   assert.ok(r!.fp.segments >= 3, "never fingerprints the degenerate underline alone");
+});
+
+test("corroborateFingerprint: an oversized grab is not a marker, even when the same region recurs", () => {
+  // A hatch-field of parallel ticks around the tag, copied at a second
+  // occurrence. Without the size floor this "corroborates" via an inflated
+  // footprint; it is a region, not a device.
+  const ticks = (x0: number, y0: number): number[] => {
+    const out: number[] = [];
+    for (let i = 0; i < OVERSIZED_MARKER_SEGS + 10; i++) out.push(x0 + i * 0.4, y0, x0 + i * 0.4, y0 + 30);
+    return out;
+  };
+  const segs = [...ticks(70, 95), ...ticks(370, 95)];
+  const anchor = tagNear([100, 100]);
+  const r = corroborateFingerprint(segs, { w: 1000, h: 1000 }, anchor, {
+    segs, occ: [tagNear([400, 100])], ratio: { scale: 1, known: true },
+  });
+  assert.equal(r, null, "a region-sized grab must not corroborate as a device marker");
 });
 
 // ── disciplineOfSheetNumber / pickSameDisciplineCorroborator ────────────────
