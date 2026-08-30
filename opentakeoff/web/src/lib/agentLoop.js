@@ -20,7 +20,7 @@
 import { chatWithTools, describeImageForAgent } from "./ai.js";
 import { runVerifiers } from "./agentVerifiers.js";
 
-export const MAX_AGENT_ITERATIONS = 24;
+export const MAX_AGENT_ITERATIONS = 32;
 
 const EQUIPMENT_VALVE_EVIDENCE_TOOLS = new Set([
   "list_sheets",
@@ -353,9 +353,12 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       // Only rows whose cell values appear in the answer, or whose sheet is
       // named there, or when the goal explicitly asks to paint/cite sources.
       // Sharing a tag key across sheets must not force painting unused siblings.
+      // The row key/identity text alone does not count as "using" the row.
+      const rowKeyCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
       const usesCellFromRow = cells.some(([, cell]) => {
         const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-        return textCanonical.length >= 4 && finalCanonical.includes(textCanonical);
+        if (textCanonical.length < 4 || textCanonical === rowKeyCanonical) return false;
+        return finalCanonical.includes(textCanonical);
       });
       const sheetNorm = String(match.sheet || "").toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
       const answerNorm = finalText.toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
@@ -416,7 +419,32 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     }
   }
   if (uniqDrawingHits.length) {
-    const uncoveredHits = uniqDrawingHits.filter((hit) => !highlightMatches(hit.sheet, hit.bbox_px));
+    // A find_text phrase is covered by an exact bbox paint, or by a painted
+    // query_table cell on the same sheet whose text matches the hit (same
+    // evidence, different tool) — avoid thrashing on duplicate bboxes.
+    const paintedCellTexts = new Map();
+    for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
+      for (const match of out?.matches || []) {
+        for (const cell of Object.values(match?.row?.all_cells || match?.row?.cells || {})) {
+          if (!Array.isArray(cell?.bbox) || !highlightMatches(match.sheet, cell.bbox)) continue;
+          const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+          if (textCanonical.length < 8) continue;
+          if (!paintedCellTexts.has(match.sheet)) paintedCellTexts.set(match.sheet, new Set());
+          paintedCellTexts.get(match.sheet).add(textCanonical);
+        }
+      }
+    }
+    const uncoveredHits = uniqDrawingHits.filter((hit) => {
+      if (highlightMatches(hit.sheet, hit.bbox_px)) return false;
+      const hitCanonical = hit.str.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      const painted = paintedCellTexts.get(hit.sheet);
+      if (painted && [...painted].some((text) =>
+        text.includes(hitCanonical.slice(0, Math.min(40, hitCanonical.length)))
+        || hitCanonical.includes(text.slice(0, Math.min(40, text.length))))) {
+        return false;
+      }
+      return true;
+    });
     if (uncoveredHits.length) {
       return `The answer copies drawing-text evidence that is not painted on the sheet: ${uncoveredHits.slice(0, 3).map((hit) => `"${hit.str.slice(0, 48)}" on ${hit.sheet}`).join("; ")}. Call highlight_citation with that hit's sheet and bbox_px before finishing.`;
     }
