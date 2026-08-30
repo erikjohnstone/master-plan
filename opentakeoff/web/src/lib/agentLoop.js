@@ -949,10 +949,11 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         if (/^\s*-\s*[A-Z]?\d/i.test(after)) continue;
         // Forward-only: "DOAH 2 … Boilers 3" must not satisfy DOAH=3.
         const window = answerNorm.slice(m.index, Math.min(answerNorm.length, m.index + m[0].length + 48))
+          .replace(/\[[^\]]{0,120}\]/g, " ")
           .replace(/\b\d+\s*OF\s*\d+\b/gi, " ");
         for (const num of window.matchAll(/(?:^|[^0-9])(\d{1,4})(?![0-9])/g)) {
           const n = Number(num[1]);
-          if (Number.isFinite(n) && n >= 1) found.push(n);
+          if (Number.isFinite(n) && n >= 1 && n <= 200) found.push(n);
         }
       }
       const needle = spacedNeedle(label).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -1063,10 +1064,12 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         // Skip MARK tags like VAV-A101 / AHU-A1 — their digits are not family totals.
         if (/^\s*-\s*[A-Z]?\d/i.test(after)) continue;
         const window = answerNorm.slice(m.index, Math.min(answerNorm.length, m.index + m[0].length + 48))
-          // Schedule continuation banners ("2 OF 2") are not family totals.
+          // Schedule continuation banners ("2 OF 2") and bbox arrays are not family totals.
+          .replace(/\[[^\]]{0,120}\]/g, " ")
           .replace(/\b\d+\s*OF\s*\d+\b/gi, " ");
         const num = window.match(/(?:^|[^0-9])(\d{1,4})(?![0-9])/);
-        if (num) firsts.push(Number(num[1]));
+        // Image-pixel bbox coords are typically >> schedule family totals.
+        if (num && Number(num[1]) <= 200) firsts.push(Number(num[1]));
       }
       const distinct = [...new Set(firsts.filter((n) => Number.isFinite(n) && n >= 2))];
       if (distinct.includes(count) && distinct.some((n) => n !== count && !splitVals.has(n))) {
@@ -1302,6 +1305,19 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
         displayText = draftForGate;
         lastDraftText = draftForGate;
         correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+      }
+      // Auto-strip a second "Equipment totals" dump that conflicts with title-scan counts.
+      if (correction && /(?:equipment-totals table|conflicting schedule totals)/i.test(correction)) {
+        const stripped = String(draftForGate || "")
+          .replace(/\n#{0,3}\s*\*{0,2}Equipment totals[\s\S]*?(?=\n#{1,3}\s|\n\*{2}[A-Z]|\n\[Automated|\n$)/i, "\n")
+          .replace(/\n#{0,3}\s*\*{0,2}Building[- ]split totals[\s\S]*?(?=\n#{1,3}\s|\n\*{2}[A-Z]|\n\[Automated|\n$)/i, "\n")
+          .trim();
+        if (stripped && stripped !== draftForGate) {
+          draftForGate = stripped;
+          displayText = draftForGate;
+          lastDraftText = draftForGate;
+          correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+        }
       }
       // When cite-MARK bboxes are already in the call log, paint them now
       // instead of asking the model to re-type the same highlight_citation args.
