@@ -805,14 +805,33 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     if (!titleScans.length) {
       return "The goal asks for scheduled equipment / points-list counts. Call query_table with each relevant schedule title (no row_key), then copy that result's count and building_tag_counts into the answer before finishing. Do not invent totals from the few MARK rows you painted for spot-check.";
     }
+    const familyNeedles = [];
+    if (/\bAHUs?\b/i.test(goal)) familyNeedles.push({ label: "AHU", titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED/i });
+    if (/\bDOAH\b|dedicated outdoor/i.test(goal)) familyNeedles.push({ label: "DOAH unit", titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i });
+    if (/\bFCU\b|fan[\s-]*coil/i.test(goal)) familyNeedles.push({ label: "FCU", titleRe: /FAN\s*COIL/i });
+    if (/\bVAV\b|variable[\s-]*air/i.test(goal)) familyNeedles.push({ label: "VAV", titleRe: /VARIABLE AIR VOLUME|\bVAV\b/i });
+    if (/\bair[\s-]*cooled chiller/i.test(goal)) familyNeedles.push({ label: "air-cooled chiller", titleRe: /AIR COOLED CHILLER/i, exclude: /HEAT RECOVERY/i });
+    if (/\bheat[\s-]*recovery chiller/i.test(goal)) familyNeedles.push({ label: "heat-recovery chiller", titleRe: /HEAT RECOVERY/i });
+    if (/\bboilers?\b/i.test(goal)) familyNeedles.push({ label: "boiler", titleRe: /BOILER/i });
+    if (/\bpoints?\s*list\b|BAS\b/i.test(goal)) familyNeedles.push({ label: "points-list", titleRe: /POINTS LIST/i });
+    const scanTitle = (out) => String(
+      out.query?.title || out.matches?.[0]?.title?.text || out.matches?.[0]?.title || "",
+    );
+    const missingFamilies = familyNeedles.filter((fam) => !titleScans.some(({ out }) => {
+      const title = scanTitle(out);
+      if (!fam.titleRe.test(title)) return false;
+      if (fam.exclude && fam.exclude.test(title)) return false;
+      return true;
+    })).map((fam) => fam.label);
+    if (missingFamilies.length) {
+      return `The goal asks for counts of ${missingFamilies.join(", ")}, but no title-scan query_table (no row_key) was run for those schedule families yet. Call query_table with each missing schedule title, copy count/building_tag_counts, then answer.`;
+    }
     const answerSpaced = finalText.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim();
     const missingCounts = [];
     for (const { out } of titleScans) {
       const count = Number(out.count);
       if (!Number.isFinite(count) || count < 2) continue;
-      const title = String(
-        out.query?.title || out.matches?.[0]?.title?.text || out.matches?.[0]?.title || "",
-      ).toUpperCase();
+      const title = scanTitle(out).toUpperCase();
       let label = null;
       if (/FAN\s*COIL/.test(title)) label = "FCU";
       else if (/DEDICATED OUTDOOR AIR UNIT/.test(title) && !/HANDLING/.test(title)) label = "DOAH unit";
@@ -829,6 +848,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       }
       if (out.building_tag_counts && typeof out.building_tag_counts === "object" && /\bsplit/i.test(goal)) {
         for (const [letter, n] of Object.entries(out.building_tag_counts)) {
+          if (letter === "other") continue;
           if (!Number.isFinite(Number(n)) || Number(n) < 1) continue;
           if (!new RegExp(`(?:^|\\s)${Number(n)}(?:\\s|$)`).test(answerSpaced)) {
             missingCounts.push(`${label} building_tag_counts.${letter}=${n}`);
