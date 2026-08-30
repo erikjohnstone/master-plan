@@ -153,7 +153,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, familyQuorumFragmentedTagOcc, splitHyphenTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, typicalCountMultiplier, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, isIndividuallyMarkedEquipmentSchedule, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, familyQuorumFragmentedTagOcc, splitHyphenTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, typicalCountMultiplier, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, isIndividuallyMarkedEquipmentSchedule, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -2986,13 +2986,14 @@ export class Session {
    * loadPlan clears it whenever the document set changes. */
   private tagOccurrenceCache = new Map<string, Map<string, TagOcc[]>>();
 
-  private tagOccurrencesOnSheet(sh: SheetState, key: string): TagOcc[] {
+  private tagOccurrencesOnSheet(sh: SheetState, key: string, allowFamilyQuorum = false): TagOcc[] {
     let byKey = this.tagOccurrenceCache.get(sh.key);
     if (!byKey) {
       byKey = new Map();
       this.tagOccurrenceCache.set(sh.key, byKey);
     }
-    const cached = byKey.get(key);
+    const cacheKey = allowFamilyQuorum ? `${key}\0family-quorum` : key;
+    const cached = byKey.get(cacheKey);
     if (cached) return cached;
     if (!sh.spans) sh.spans = textSpans(sh.page);
     const exact = sh.spans
@@ -3005,7 +3006,9 @@ export class Session {
       }));
     const merged = [...exact, ...compoundTagOcc(sh.spans, key)];
     const splitHyphen = splitHyphenTagOcc(sh.spans, key);
-    const fragmented = familyQuorumFragmentedTagOcc(sh.spans, key);
+    const fragmented = allowFamilyQuorum
+      ? familyQuorumFragmentedTagOcc(sh.spans, key)
+      : fragmentedTagOcc(sh.spans, key);
     const deepHyphen = deepHyphenChainTagOcc(sh.spans, key);
     const occurrences = merged.length
       ? merged
@@ -3014,7 +3017,7 @@ export class Session {
           : deepHyphen.length ? deepHyphen
             : familySuffixTagOcc(sh.spans, key));
     occurrences.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
-    byKey.set(key, occurrences);
+    byKey.set(cacheKey, occurrences);
     return occurrences;
   }
 
@@ -3293,6 +3296,7 @@ export class Session {
       ? []
       : [...new Set(graph.tables.flatMap((x) => x.rows.flatMap((row) => canonKey(row.key).split("/").filter(Boolean))))].filter((k) => !ownMarks.has(k)).sort();
     const table = tb.title?.text || `${tb.kind} schedule`;
+    const airDeviceTable = /\b(?:DIFFUSER|GRILLE|REGISTER)\b/i.test(table);
 
     // 2. plan-role sheets, and every drawn occurrence of the tag on them
     const roleOf = new Map(graph.sheets.map((g) => [g.key, g.role] as const));
@@ -3312,7 +3316,8 @@ export class Session {
         });
       }
     }
-    const occOf = (sh: SheetState, key: string): TagOcc[] => this.tagOccurrencesOnSheet(sh, key);
+    const occOf = (sh: SheetState, key: string): TagOcc[] =>
+      this.tagOccurrencesOnSheet(sh, key, airDeviceTable);
     // Compound-key geometric fallback — a real, general bug distinct from
     // the row-LOOKUP layer above (rowKeyAnswersFor already resolves a
     // compound key like "AC-1/ACCU-1" or "R1/E1" fine): the literal joined
@@ -3439,7 +3444,6 @@ export class Session {
         ? [{ sh: anchorSheet, segs: anchorGeo.segs, occ: withOcc[0].occ.filter((o) => o !== candAnchor) }]
         : [];
     const corroCandidates: Corro[] = [...sameSheetCorroFor(anchor), ...crossSheetCorro];
-    const airDeviceTable = /\b(?:DIFFUSER|GRILLE|REGISTER)\b/i.test(table);
     const compoundRankingOcc = /\bLUMINAIRE\b/i.test(table)
       ? compoundTagOcc(anchorSheet.spans || [], t)
       : [];
