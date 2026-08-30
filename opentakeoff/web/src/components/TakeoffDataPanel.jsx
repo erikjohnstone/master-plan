@@ -215,7 +215,7 @@ export default function TakeoffDataPanel({
       else if (kind === "xlsx") await downloadTakeoffXlsx(payload, undefined, { mode });
       else if (kind === "pdf") {
         await downloadTakeoffPdf(payload, {
-          title: mode === "workflow" ? "OpenTakeoff — Workflow data" : "OpenTakeoff — Takeoff",
+          title: mode === "workflow" ? "Workflow data" : "Takeoff",
           projectName,
           mode,
         });

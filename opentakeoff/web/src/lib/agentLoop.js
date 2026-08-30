@@ -1739,7 +1739,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
 // the mock server's authors) can read exactly what the model is promised.
 export function agentSystemPrompt() {
   return [
-    "You are the in-canvas takeoff agent inside OpenTakeoff, an open-source PDF takeoff tool for flooring estimators. An estimator gave you a goal; you aim the app's own deterministic tools to satisfy it.",
+    "You are the in-canvas takeoff agent. An estimator gave you a goal; you aim the app's own deterministic tools to satisfy it.",
     "",
     "Hard rules:",
     "- NEVER invent geometry. Rooms are measured by the one_click flood-fill engine; propose only the rings it returns.",

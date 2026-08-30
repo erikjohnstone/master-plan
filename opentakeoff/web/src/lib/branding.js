@@ -1,10 +1,7 @@
 // Branding mode — how a deliverable presents itself. Two modes:
-//   • "default"    — OpenTakeoff-branded, exactly as the parent repo ships. This
-//                    is the code default (unset ⇒ default), so an upstream clone
-//                    is unchanged.
+//   • "default"    — unbranded product masthead (no product name / parent credit).
 //   • "clearlabel" — a saved trade-name profile brands the document as the firm
-//                    presenting it; OpenTakeoff keeps a subtle plain-text credit
-//                    ("Measured with OpenTakeoff"), so the parent is still credited.
+//                    presenting it. No parent-product credit is appended.
 //
 // resolveBranding() is PURE — given the per-project selection + the global
 // profiles list it tells every render point (report masthead, marked-set cover,
@@ -14,8 +11,10 @@
 import { metaGet, metaPut } from "./store.js";
 import { activeProfile } from "./identity.js";
 
-export const OT_NAME = "OpenTakeoff";
-export const OT_CREDIT = "Measured with OpenTakeoff";
+/** Default product name for unbranded deliverables — intentionally empty. */
+export const OT_NAME = "";
+/** Legacy export; parent-product credit is never shown. */
+export const OT_CREDIT = null;
 
 /**
  * @param {{mode?: string, profileId?: string|null,
@@ -26,39 +25,25 @@ export const OT_CREDIT = "Measured with OpenTakeoff";
 export function resolveBranding(sel) {
   const profiles = sel?.profiles || [];
   // clear-label only takes effect when a real profile resolves — no profiles, a
-  // stale id with none left, or mode off all fall back to OpenTakeoff. A stale
-  // id with other profiles present rides the first one. activeProfile() is the
-  // ONE place that fallback rule lives (shared with the modal chip highlight) so
-  // the deliverable and the UI can never disagree on which profile is selected.
+  // stale id with none left, or mode off all fall back to unbranded defaults.
   const profile = sel?.mode === "clearlabel"
     ? activeProfile({ profiles, activeId: sel?.profileId })
     : null;
   const clear = Boolean(profile);
   return {
     clear,
-    // full identity for the masthead firm block + cover identity column; null in
-    // default mode so every `company?.x` guard degrades to the OpenTakeoff path
     company: clear ? { name: profile.name, address: profile.address, logo: profile.logo } : null,
-    // firm text / "Prepared by" cell / export title tag — the trade name when
-    // clear-labelling (a logo-only profile has no name → keep OpenTakeoff)
+    // Firm text / export title tag — trade name when clear-labelling; empty otherwise.
     brandName: (clear && profile.name) ? profile.name : OT_NAME,
-    // subtle parent credit — shown only when clear-labelling (default mode is
-    // already OpenTakeoff-branded throughout, so a separate credit is redundant)
-    credit: clear ? OT_CREDIT : null,
-    // marked-set cover wordmark — carries the OpenTakeoff prefix in default mode
-    coverTitle: clear ? "Marked Set" : "OpenTakeoff · Marked Set",
+    // Never append a parent-product credit on deliverables.
+    credit: null,
+    coverTitle: "Marked Set",
   };
 }
 
 // ── per-project persistence (browser-only; the meta KV is IndexedDB) ──────────
-// Keyed on the project id so cloud/Drive projects each remember their own
-// branding; the anonymous browser-only store threads id "" and lands on one key
-// — i.e. a single global setting, which is exactly right there.
 const selKey = (projectId) => `branding:${projectId || ""}`;
 
-// Both swallow IndexedDB failures (stale-tab VersionError, private mode, quota)
-// and degrade — the same resilience loadCompany/saveCompany apply — so a blocked
-// DB can never surface as an unhandled rejection at a fire-and-forget call site.
 /** @param {string} [projectId] @returns {Promise<{mode:string, profileId:string|null}>} */
 export async function loadBrandingSelection(projectId) {
   try {
@@ -67,7 +52,7 @@ export async function loadBrandingSelection(projectId) {
       return { mode: v.mode === "clearlabel" ? "clearlabel" : "default", profileId: v.profileId ?? null };
     }
   } catch {
-    /* DB blocked/unavailable — fall through to the default (OpenTakeoff) */
+    /* DB blocked/unavailable — fall through to unbranded default */
   }
   return { mode: "default", profileId: null };
 }
@@ -81,6 +66,14 @@ export async function saveBrandingSelection(projectId, sel) {
     });
     return true;
   } catch {
-    return false; // quota / private mode / stale tab — caller decides what to do
+    return false;
   }
+}
+
+/** CSV/MD export title line — omits empty brand names. */
+export function exportDocTitle(projectName, kind, brandName = "") {
+  if (!projectName) return "";
+  const brand = String(brandName || "").trim();
+  const label = brand ? `${brand} ${kind}` : kind;
+  return `# ${projectName} — ${label}\n`;
 }

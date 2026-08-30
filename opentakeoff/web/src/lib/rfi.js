@@ -14,6 +14,7 @@
 // the canvas uses elsewhere.
 
 import { csvEsc as esc } from "./csv.js";
+import { exportDocTitle } from "./branding.js";
 
 // The four RFI states, in lifecycle order. `color` is a literal hex (used both
 // as an SVG fill and as DOM chrome), `label` is the human string.
@@ -60,7 +61,7 @@ export function linkedMarkups(rfi, markups = []) {
  * @param {string} [projectName]
  * @param {((sheetId: any) => string)|null} [sheetLabel]
  */
-export function rfisToCsv(rfis = [], markups = [], projectName = "", sheetLabel = null, brandName = "OpenTakeoff") {
+export function rfisToCsv(rfis = [], markups = [], projectName = "", sheetLabel = null, brandName = "") {
   const label = (id) => (sheetLabel ? sheetLabel(id) : id);
   const header = [
     "Number", "Subject", "Status", "Ball in court", "Priority",
@@ -90,7 +91,7 @@ export function rfisToCsv(rfis = [], markups = [], projectName = "", sheetLabel 
       sheets,
     ].map(esc).join(","));
   }
-  const title = projectName ? `# ${projectName} — ${brandName} RFI log\n` : "";
+  const title = exportDocTitle(projectName, "RFI log", brandName);
   return title + lines.join("\n") + "\n";
 }
 
@@ -99,7 +100,7 @@ export function rfisToJson(rfis = [], projectName = "") {
   return {
     schema: "opentakeoff.rfis.v1",
     project_name: projectName || null,
-    generated_with: "OpenTakeoff",
+    generated_with: null,
     rfis: rfis || [],
   };
 }

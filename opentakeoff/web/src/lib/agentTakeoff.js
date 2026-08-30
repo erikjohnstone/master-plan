@@ -1211,12 +1211,12 @@ export function takeoffToCsv(rows) {
   return workflowDataToCsv(rows);
 }
 
-export function downloadTakeoffCsv(linesOrRows, filename = "opentakeoff-takeoff.csv", { mode = "compiled" } = {}) {
+export function downloadTakeoffCsv(linesOrRows, filename = "takeoff.csv", { mode = "compiled" } = {}) {
   const text = mode === "workflow" ? workflowDataToCsv(linesOrRows) : compiledTakeoffToCsv(linesOrRows);
   downloadText(filename, text, "text/csv;charset=utf-8");
 }
 
-export async function downloadTakeoffXlsx(linesOrRows, filename = "opentakeoff-takeoff.xlsx", { mode = "compiled" } = {}) {
+export async function downloadTakeoffXlsx(linesOrRows, filename = "takeoff.xlsx", { mode = "compiled" } = {}) {
   let sheets;
   if (mode === "workflow") {
     sheets = [{
@@ -1275,7 +1275,7 @@ export async function downloadTakeoffXlsx(linesOrRows, filename = "opentakeoff-t
 
 /** Build takeoff PDF bytes. Compiled mode: one table per family with that family's columns. */
 export async function buildTakeoffPdfBytes(linesOrRows, {
-  title = "OpenTakeoff — Takeoff",
+  title = "Takeoff",
   projectName = "",
   mode = "compiled",
 } = {}) {
@@ -1381,8 +1381,8 @@ export async function buildTakeoffPdfBytes(linesOrRows, {
 }
 
 export async function downloadTakeoffPdf(linesOrRows, {
-  filename = "opentakeoff-takeoff.pdf",
-  title = "OpenTakeoff — Takeoff",
+  filename = "takeoff.pdf",
+  title = "Takeoff",
   projectName = "",
   mode = "compiled",
 } = {}) {

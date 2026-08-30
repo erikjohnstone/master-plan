@@ -104,7 +104,7 @@ export default function ReportPanel({ projectName, onProjectName, conditions, sh
   }, [identityRev, projectId]);
   // resolveBranding decides the masthead identity, the export title tag, and the
   // end credit. company is null in default mode → the firm block renders the
-  // OpenTakeoff brand name instead of a trade-name identity (read only inside the
+  // Unbranded masthead instead of a trade-name identity (read only inside the
   // brand.clear branch below, so it is never dereferenced when null).
   const brand = resolveBranding({ ...brandSel, profiles: loadProfiles().profiles });
   const company = brand.company;
@@ -643,8 +643,7 @@ export default function ReportPanel({ projectName, onProjectName, conditions, sh
               closed by a strong rule */}
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16, borderBottom: "1.25px solid var(--ink)", paddingBottom: 9 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-              {/* clear-label: the trade-name identity. default: the OpenTakeoff
-                  brand name (no company data shown — "purely OpenTakeoff") */}
+              {/* clear-label: the trade-name identity. default: unbranded masthead */}
               {brand.clear ? (
                 <>
                   {company.logo && <img src={company.logo} alt="" style={{ maxHeight: 46, maxWidth: 170, objectFit: "contain", display: "block" }} />}
@@ -925,8 +924,7 @@ export default function ReportPanel({ projectName, onProjectName, conditions, sh
             </p>
           </div>
         )}
-        {/* subtle parent credit — clear-label mode only (default mode is already
-            OpenTakeoff-branded in the masthead, so a separate credit is redundant) */}
+        {/* optional parent credit (unused — resolveBranding never emits credit) */}
         {brand.credit && (
           <p style={{ maxWidth: 980, margin: "20px auto 0", textAlign: "center", fontFamily: "var(--f-mono)", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--text-faint)" }}>{brand.credit}</p>
         )}
@@ -985,7 +983,7 @@ function ProjectInfoModal({ clientInfo = {}, onClientInfo, onSaved, onClose }) {
 
   // branding mode — per-project (meta KV, keyed on the project id). Toggling
   // clear-label on brands the deliverables as the trade name; off (default) is
-  // OpenTakeoff. Persists immediately and bumps the masthead via onSaved.
+  // Persists immediately and bumps the masthead via onSaved.
   const projectId = projectIdFromUrl();
   const [brandSel, setBrandSel] = useState({ mode: "default", profileId: null });
   useEffect(() => {
@@ -1080,9 +1078,8 @@ function ProjectInfoModal({ clientInfo = {}, onClientInfo, onSaved, onClose }) {
           </div>
           {saveFailed && <p style={err}>Couldn't save on this device</p>}
 
-          {/* branding mode — per project. Off = OpenTakeoff (default); on brands
-              the report + marked set as the selected trade name, keeping a subtle
-              "Measured with OpenTakeoff" credit. Disabled until a trade name exists. */}
+          {/* branding mode — per project. Off = unbranded masthead; on brands
+              the report + marked set as the selected trade name. Disabled until a trade name exists. */}
           <div style={{ ...section, borderTop: "1px solid var(--ink-faint)", marginTop: 14, paddingTop: 12 }}>Branding — how this project's documents present</div>
           <label style={{ display: "flex", alignItems: "center", gap: 8, margin: "8px 0", cursor: profs.profiles.length ? "pointer" : "not-allowed", opacity: profs.profiles.length ? 1 : 0.6 }}>
             <input type="checkbox" name="trade-name-brand" checked={brandSel.mode === "clearlabel"} disabled={!profs.profiles.length}
