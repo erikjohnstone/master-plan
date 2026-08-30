@@ -47,7 +47,8 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     );
     const tableMatches = callLog.filter(({ name }) => name === "query_table")
       .flatMap(({ out }) => out?.matches || []);
-    const valveMatch = tableMatches.some((match) => /\bcontrol\s+valve\b/i.test(tableTitle(match)));
+    const valveMatches = tableMatches.filter((match) => /\bcontrol\s+valve\b/i.test(tableTitle(match)));
+    const valveMatch = valveMatches.length > 0;
     const equipmentTags = new Set([
       ...callLog.filter(({ name, out }) =>
         name === "sweep_schedule_row" && (out?.found ?? out?.total_found) > 0)
@@ -65,6 +66,15 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     }
     if (!valveMatch && !refusedValve) {
       return "The goal asks for control-valve data, but no query_table result matched a control-valve schedule. Do not supply valve values from memory, inference, or examples. Query the matching control-valve row and cite it, or explicitly report that no matching row was found.";
+    }
+    const valveIdentities = valveMatches
+      .map((match) => String(match?.row?.identity?.text || match?.row?.key || ""))
+      .map((tag) => tag.toUpperCase().replace(/[^A-Z0-9]/g, ""))
+      .filter(Boolean);
+    const answerCanonical = finalText.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (valveMatch && valveIdentities.length
+      && !valveIdentities.some((identity) => answerCanonical.includes(identity))) {
+      return "A matching control-valve schedule row was retrieved, but the final answer omitted its semantic valve identity and requested data. Include the evidence-backed valve mark and its requested fields, with citations, in the complete replacement answer.";
     }
   }
   const swept = new Set(callLog.filter(({ name, out }) =>
@@ -321,7 +331,10 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       const correction = requiredEvidenceCorrection(callLog, goal, turn.text);
       if (correction) {
         messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
-        messages.push({ role: "user", content: correction });
+        messages.push({
+          role: "user",
+          content: `${correction}\n\nReturn a complete replacement answer that satisfies every part of the original goal. Preserve every previously retrieved, tool-grounded requested field; do not answer only the latest correction.`,
+        });
         emit({ type: "text", text: `[Evidence gate: ${correction}]` });
         continue;
       }

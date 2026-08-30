@@ -87,6 +87,13 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     name: "query_table",
     out: { matches: [{ title: { text: "CHW CONTROL VALVE SCHEDULE" } }] },
   }], "Give me the matching control valve", "The matching control valve is cited."), null);
+  assert.match(requiredEvidenceCorrection([{
+    name: "query_table",
+    out: { matches: [{
+      title: { text: "CHW CONTROL VALVE SCHEDULE" },
+      row: { identity: { header: "VALVE MARK", text: "CV-AHU-1" } },
+    }] },
+  }], "Give me the matching control valve", "The chiller data is complete.")!, /omitted its semantic valve identity/);
   assert.match(requiredEvidenceCorrection([
     { name: "sweep_schedule_row", args: { tag: "CH-A1" }, out: { found: 1 } },
     { name: "query_table", out: { matches: [{ row: { key: "CV-CH-A1" } }] } },
