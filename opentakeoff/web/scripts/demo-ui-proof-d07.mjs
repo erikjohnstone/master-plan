@@ -60,7 +60,7 @@ const proxy = createServer(async (request, response) => {
     },
     body,
   });
-  const retryable = (status) => status === 429 || status === 503;
+  const retryable = (status) => status === 429 || status === 500 || status === 502 || status === 503;
   if (retryable(upstream.status) && request.url !== "/tool") {
     let last = upstream;
     for (let attempt = 0; attempt < 5; attempt++) {
