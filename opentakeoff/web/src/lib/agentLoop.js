@@ -29,6 +29,10 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   if (/\b(?:installed\s+quantity|quantity|take\s*off|count)\b/i.test(goal) && !successfulCount) {
     return "The goal asks for installed quantity, but no successful sweep_schedule_row or count_marks call exists in this run. Do not infer quantity from schedule-row count. Call the appropriate counting tool, then answer from its result or refuse.";
   }
+  if (/\binstalled\s+quantity\b/i.test(goal) && successfulCount && finalText
+    && !/\binstalled\s+quantity\b.{0,30}\b\d+(?:\.\d+)?\b/i.test(finalText)) {
+    return "The goal asks for installed quantity and a deterministic count succeeded, but the final answer does not explicitly state the numeric installed quantity. Report it under an “Installed quantity” label and attribute it to the sweep/count result.";
+  }
   if (/\binstalled\s+quantity\b/i.test(finalText)
     && /\b(?:single|one)\s+schedule\s+(?:entry|row)\b|\bschedule\s+row\s+appears\s+(?:once|one time)\b/i.test(finalText)) {
     return "The final answer describes installed quantity as a single/one schedule entry. That reasoning is invalid even when the numeric value happens to match. Attribute installed quantity only to the successful sweep/count result and remove schedule-row-count wording.";
@@ -43,8 +47,13 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         match?.table || match?.title?.text || match?.title
           || match?.row?.table || match?.row?.table_title || "",
       )));
+    const relationshipSearch = callLog.some(({ name, args }) =>
+      name === "query_table" && String(args?.cell_contains || "").trim());
     const refusedValve = /\b(?:could not|can't|cannot|unable to|not found|no matching)\b.{0,80}\bcontrol\s+valve\b/i.test(finalText)
       || /\bcontrol\s+valve\b.{0,80}\b(?:could not|can't|cannot|unable to|not found|no matching)\b/i.test(finalText);
+    if (!valveMatch && !relationshipSearch) {
+      return "No control-valve row matched the exact equipment row key, but relationship schedules often encode the equipment tag inside another cell or compound valve mark. Before refusing, call query_table with cell_contains set to the exact evidence-backed equipment tag. Use the returned semantic row identity if it matches.";
+    }
     if (!valveMatch && !refusedValve) {
       return "The goal asks for control-valve data, but no query_table result matched a control-valve schedule. Do not supply valve values from memory, inference, or examples. Query the matching control-valve row and cite it, or explicitly report that no matching row was found.";
     }
