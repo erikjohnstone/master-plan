@@ -335,8 +335,28 @@ test("installed quantity cannot finish without deterministic count evidence", ()
         },
       }],
     } },
-  ], "Give AHU counts and cite the schedule MARK for AHU-A1.",
-  "AHUs: 5. AHU-A1 MARK cited; row also shows ESP 4.6 and EWT 45."), null);
+  ], "Cite the schedule MARK for AHU-A1.",
+  "AHU-A1 MARK cited; row also shows ESP 4.6 and EWT 45."), null);
+  // Schedule takeoffs must run title-scan counts — paint-only MARK spot-checks fail.
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4] } },
+    { name: "query_table", out: {
+      query: { title: null, row_key: "AHU-A1", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [{ sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+  ], "Do a full HVAC takeoff — give AHU, FCU, and VAV scheduled counts and cite AHU-A1.",
+  "AHUs: 1 (AHU-A1 painted).")!, /title \(no row_key\)|scheduled equipment/);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4] } },
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 5,
+      building_tag_counts: { A: 2, M: 1, T: 2 },
+      matches: [{ sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+  ], "Do a full HVAC takeoff — give AHU scheduled counts and cite AHU-A1.",
+  "AHUs: 5. Spot-check AHU-A1."), null);
   assert.match(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
     { name: "query_table", out: { matches: [{

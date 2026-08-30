@@ -788,6 +788,58 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   if (mentionedQuerySheets.length) {
     return `The final answer uses query_table row(s) without naming their evidence sheet id(s): ${[...new Set(mentionedQuerySheets)].slice(0, 6).join("; ")}. Copy the unchanged match.sheet string from the tool result into the citation.`;
   }
+  // Full-set schedule takeoffs must use title-scan query_table counts — not
+  // the number of MARK cells painted for spot-check.
+  const asksScheduleCounts = /\b(?:takeoff|how many|counts?|totals?|splits?)\b/i.test(goal)
+    && /\b(?:AHU|FCU|VAV|DOAH|chiller|boiler|fan[\s-]*coil|points?\s*list|scheduled|equipment)\b/i.test(goal);
+  if (asksScheduleCounts && finalText) {
+    const titleScans = callLog.filter(({ name, out, args }) => {
+      if (name !== "query_table" || out?.error) return false;
+      const q = out?.query || args || {};
+      const scoped = q.row_key != null && String(q.row_key).trim() !== ""
+        || q.column != null
+        || q.cell_value != null
+        || q.cell_contains != null;
+      return !scoped && Number.isFinite(Number(out?.count));
+    });
+    if (!titleScans.length) {
+      return "The goal asks for scheduled equipment / points-list counts. Call query_table with each relevant schedule title (no row_key), then copy that result's count and building_tag_counts into the answer before finishing. Do not invent totals from the few MARK rows you painted for spot-check.";
+    }
+    const answerSpaced = finalText.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim();
+    const missingCounts = [];
+    for (const { out } of titleScans) {
+      const count = Number(out.count);
+      if (!Number.isFinite(count) || count < 2) continue;
+      const title = String(
+        out.query?.title || out.matches?.[0]?.title?.text || out.matches?.[0]?.title || "",
+      ).toUpperCase();
+      let label = null;
+      if (/FAN\s*COIL/.test(title)) label = "FCU";
+      else if (/DEDICATED OUTDOOR AIR UNIT/.test(title) && !/HANDLING/.test(title)) label = "DOAH unit";
+      else if (/DEDICATED OUTDOOR AIR HANDLING/.test(title)) label = "DOAH handling";
+      else if (/AIR HANDLING UNIT/.test(title) && !/DEDICATED/.test(title)) label = "AHU";
+      else if (/VARIABLE AIR VOLUME|\bVAV\b/.test(title)) label = "VAV";
+      else if (/HEAT RECOVERY/.test(title) && /CHILLER/.test(title)) label = "heat-recovery chiller";
+      else if (/AIR COOLED CHILLER/.test(title) && !/HEAT RECOVERY/.test(title)) label = "air-cooled chiller";
+      else if (/BOILER/.test(title)) label = "boiler";
+      else if (/POINTS LIST/.test(title)) label = "points-list";
+      if (!label) continue;
+      if (!new RegExp(`(?:^|\\s)${count}(?:\\s|$)`).test(answerSpaced)) {
+        missingCounts.push(`${label} count=${count}`);
+      }
+      if (out.building_tag_counts && typeof out.building_tag_counts === "object" && /\bsplit/i.test(goal)) {
+        for (const [letter, n] of Object.entries(out.building_tag_counts)) {
+          if (!Number.isFinite(Number(n)) || Number(n) < 1) continue;
+          if (!new RegExp(`(?:^|\\s)${Number(n)}(?:\\s|$)`).test(answerSpaced)) {
+            missingCounts.push(`${label} building_tag_counts.${letter}=${n}`);
+          }
+        }
+      }
+    }
+    if (missingCounts.length) {
+      return `The goal asks for schedule counts, and title-scan query_table results are available, but the answer omits these tool counts: ${[...new Set(missingCounts)].slice(0, 8).join("; ")}. Copy count (and building_tag_counts when splits are asked) from those tool results — do not replace them with the number of MARKs you painted for spot-check.`;
+    }
+  }
   return null;
 }
 
