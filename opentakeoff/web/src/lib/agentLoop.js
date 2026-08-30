@@ -360,6 +360,12 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     const example = headers[0];
     return `The final answer mentions ${example.text} but does not cite its semantic identity header ${example.header}. Use query_table row.identity exactly; do not substitute another repeated-value column.`;
   }
+  // Occupancy / use-group dumps do not belong in equipment join answers.
+  if (/\b(?:RTU|AHU|VAV|FCU|DOAH|CH)-[A-Z0-9]/i.test(goal)
+    && !/\bUSED\s*GROUP\b|\bOCCUPANCY\b/i.test(goal)
+    && (/\bUSED\s*GROUP\b/i.test(finalText) || /\bAdditional Requested Rows\b/i.test(finalText))) {
+    return "The goal asks for named HVAC/BAS equipment schedule data. Remove unrelated occupancy/use-group rows (USED GROUP, A-3, B, etc.) and any \"Additional Requested Rows\" inventory the goal did not ask for — answer only the requested equipment join and plan label.";
+  }
   const asksPointMark = /\bpoint mark\b|\balarm\b.{0,40}\btrend\b|\btrend\b.{0,40}\balarm\b/i.test(goal);
   if (asksPointMark) {
     const pointRows = callLog

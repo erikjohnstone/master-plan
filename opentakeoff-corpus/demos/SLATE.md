@@ -107,7 +107,7 @@ D03 and D04 locked; next: D05.
 
 ## D05 selection record
 
-Status: `SELECTED — ground truth authored; N=5 pending`
+Status: `LOCKED — API 5/5 + stdio + UI proof (expandable cards + verified follow-up)`
 
 Target holds: 65-sheet `baker-county-eoc` bid set. Mechanical
 `PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)` on sheet #41
@@ -117,3 +117,8 @@ sheet #39. Ground truth for RTU-1 mech attrs + RTU-01 electrical join (and
 RTU-2↔RTU-02 follow-up) authored from live `query_table`/`find_text` before
 any model run — see `D05-rtu-mech-to-electrical/truth.json`.
 
+N=5 API 5/5 (p95 **3.317 s**) + stdio verify clean. UI proved under the
+chat-usefulness bar: structured Answer, expandable source cards, follow-up
+**asked + verified** (RTU-02 / MCA 24.0 / C - 32,34,36) in
+`/opt/cursor/artifacts/d05_ui_prompt_answer_cards_followup_2026-08-30T12-38-23-670Z.webm`.
+D05 locked; next: D06.
