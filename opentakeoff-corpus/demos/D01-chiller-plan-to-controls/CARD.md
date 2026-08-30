@@ -1,6 +1,6 @@
 # D01 — Chiller plan to controls
 
-Status: `GATED — API 5/5; actual UI proof pending`
+Status: `LOCKED — API 5/5; production UI proof validated`
 
 ## Live question
 
@@ -53,11 +53,17 @@ live prompt latency under `runs/`.
 The production bundle was built and launched as a separate local stdio MCP
 process. `local-host-run.json` records `transport: "stdio_local_process"`,
 10/10 correct values, 10/10 resolvable citations, 10/10 OCR-grounded citations,
-and 3.449-second live latency. This proves the backend path only. The first
-terminal recording did not show the OpenTakeoff canvas or blueprint and is
-rejected as completion evidence. D01 does not count toward ten until a
-replacement recording shows the actual locally hosted UI, frozen prompt,
-tool activity, answer, and highlighted source regions on the real drawings.
+and 3.449-second live latency.
+
+The validated production-UI proof is saved as
+`/opt/cursor/artifacts/d01_ui_prompt_tools_answer_highlights_2026-08-30T03-12-35-742Z.webm`.
+Its 34.8-second walkthrough visibly shows the frozen prompt, live set-wide
+tool calls, the complete answer, the exact CH-A1 plan-tag highlight on MS101,
+and the CH-A1 and CV-CH-A1 source-cell highlights on M-603. The proof harness
+checks only the final-answer segment against every expected value and rejects
+iteration caps, placeholders, schedule-row quantity reasoning, normalized
+coordinates, schedule regions mislabeled as plan locations, unsupported
+derivations, and highlight overclaims before retaining a uniquely named video.
 
 ## Failure behavior
 
