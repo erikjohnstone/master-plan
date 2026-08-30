@@ -314,6 +314,53 @@ export function compactSheetGraph(data) {
   };
 }
 
+/** Keep demo-runner transcripts under the model context limit on large sets. */
+export function compactToolResult(result) {
+  if (!result || typeof result !== "object") return result;
+  const data = result.data;
+  if (!data || typeof data !== "object") {
+    if (typeof result.error === "string" && result.error.length > 600) {
+      return { ...result, error: `${result.error.slice(0, 500)}…` };
+    }
+    return result;
+  }
+  let next = data;
+  if (Array.isArray(data.sheets) && data.sheets.length > 0) {
+    next = compactSheetGraph(data);
+  } else if (Array.isArray(data.matches) && data.matches.length > 2
+    && Number.isFinite(Number(data.count)) && Number(data.count) >= 2) {
+    const q = data.query || {};
+    const scoped = q.row_key != null && String(q.row_key).trim() !== ""
+      || q.column != null
+      || q.cell_value != null
+      || q.cell_contains != null;
+    if (!scoped) {
+      next = {
+        ...data,
+        matches: data.matches.slice(0, 1),
+        matches_omitted: data.matches.length - 1,
+      };
+    } else if (data.matches.length > 3) {
+      next = { ...data, matches: data.matches.slice(0, 3), matches_omitted: data.matches.length - 3 };
+    }
+  } else if (Array.isArray(data.rows) && data.rows.length > 4) {
+    next = { ...data, rows: data.rows.slice(0, 4), rows_omitted: data.rows.length - 4 };
+  }
+  const payload = { ...result, data: next };
+  const text = JSON.stringify(payload);
+  if (text.length > 8000) {
+    return {
+      ...result,
+      data: {
+        ...(typeof next === "object" ? next : { value: next }),
+        truncated_for_context: true,
+        note: "Tool result truncated for model context; re-query with tighter filters for details.",
+      },
+    };
+  }
+  return payload;
+}
+
 async function productionPair(stdio) {
   const client = new Client({ name: "opentakeoff-demo-runner", version: "1.0.0" });
   if (stdio) {
@@ -519,6 +566,7 @@ export async function runToolCallingModel({
       } else {
         result = await execute(name, args);
       }
+      result = compactToolResult(result);
       toolCalls.push({ id: call.id, name, arguments: args, result });
       messages.push({
         role: "tool",

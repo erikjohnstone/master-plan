@@ -1206,6 +1206,11 @@ export function parseAssistantTurn(provider, json) {
 const RESULT_MAX_CHARS = 5000;
 const resultText = (out) => {
   let payload = out && typeof out === "object" ? out : { value: out };
+  // Cap oversized tool errors (e.g. legacy find_schedule dumps) so one failure
+  // cannot blow the model context window.
+  if (typeof payload?.error === "string" && payload.error.length > 600) {
+    payload = { ...payload, error: `${payload.error.slice(0, 500)}…` };
+  }
   // Compact sheet_graph — full sheet dumps blow the 131k context window.
   if (Array.isArray(payload?.sheets) && payload.sheets.length > 0) {
     payload = {

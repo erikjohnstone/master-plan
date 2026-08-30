@@ -65,13 +65,19 @@ hardcoding. D02 counts toward ten. Next: D03.
 
 ## D03 selection record
 
-Status: `IN PROGRESS — ground truth authored; N=5 / UI+correct-follow-up pending`
+Status: `LOCKED — API 5/5; p95 12.156 s; stdio + UI proof with correct HANDLING follow-up`
 
 Target holds: 75-sheet NAVFAC set with Air Ops / MITRACON / ATCT namespaces.
 Independent equipment-schedule inventory (unique MARK rows) yields AHU 5,
-DOAH 4, FCU 42, VAV 52, chiller 4, boiler 6, with FCU/VAV building splits and
-MI731 AHU-T1A/TIB points list at 62 rows. Stratified 20% find_text hand-count
+DOAH unit 3 (HANDLING DOAH-T1 covered in follow-up), FCU 42, VAV 52,
+air-cooled chillers 2, heat-recovery chillers 2, boilers 6, and MI731
+AHU-T1A/TIB points list at 62 rows. Stratified 20% find_text hand-count
 reconciled before model runs (`hand_count_20pct` in truth.json). Vibration-
-isolation compound keys (AHU-T1AT1B, CH-MT1MT2) are not equipment units.
-Scaffold: `D03-hvac-bas-project-takeoff/`. Lock requires N=5 + UI proof with
-source cards + a correctly answered follow-up before advancing.
+isolation compound keys are not equipment units.
+
+N=5 production runs are 5/5 under `verify:demo` with nearest-rank p95
+**12.156 s**. Localhost stdio harness True (`local-host-run.json`). UI proof
+under the usefulness bar + required in-thread follow-up is saved as
+`/opt/cursor/artifacts/d03_ui_prompt_answer_cards_followup_2026-08-30T10-38-25-850Z.webm`
+(HANDLING title + ATCT FCU 18 + FCU-T11). Production gates stay
+methodology-general — no corpus hardcoding. D03 counts toward ten. Next: D04.
