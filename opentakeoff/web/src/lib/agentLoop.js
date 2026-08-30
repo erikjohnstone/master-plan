@@ -858,6 +858,28 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     }
     const answerSpaced = finalText.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim();
     const missingCounts = [];
+    const countNearLabel = (label, count) => {
+      const labelRes = {
+        FCU: /FCU|FAN[\s\-]*COIL/gi,
+        "DOAH unit": /DOAH|DEDICATED OUTDOOR AIR UNIT/gi,
+        "DOAH handling": /DOAH|OUTDOOR AIR HANDLING/gi,
+        AHU: /AHU|AIR HANDLING UNIT/gi,
+        VAV: /VAV|VARIABLE AIR VOLUME/gi,
+        "heat-recovery chiller": /HEAT[\s\-]*RECOVERY|CH-MT/gi,
+        "air-cooled chiller": /AIR[\s\-]*COOLED CHILLER|\bCH-A/gi,
+        boiler: /BOILER|\bB-A|\bB-M|\bB-T/gi,
+        "points-list": /POINTS?\s*LIST|BAS\b|AHU-T1A/gi,
+      }[label] || new RegExp(label, "gi");
+      const n = String(count);
+      for (const m of finalText.matchAll(labelRes)) {
+        const start = Math.max(0, m.index - 30);
+        const window = finalText.slice(start, m.index + m[0].length + 100);
+        if (new RegExp(`(?:^|[^0-9])${n}(?:[^0-9]|$)`).test(window)) return true;
+      }
+      // Also accept "LABEL count=N" / "LABEL | **N** |" in spaced form near label tokens.
+      const spacedLabel = label.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim().split(/\s+/)[0];
+      return new RegExp(`(?:^|\\s)${spacedLabel}\\b[^0-9]{0,40}${n}(?:\\s|$)`).test(answerSpaced);
+    };
     for (const { out } of titleScans) {
       const count = Number(out.count);
       if (!Number.isFinite(count) || count < 2) continue;
@@ -873,21 +895,25 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       else if (/BOILER/.test(title)) label = "boiler";
       else if (/POINTS LIST/.test(title)) label = "points-list";
       if (!label) continue;
-      if (!new RegExp(`(?:^|\\s)${count}(?:\\s|$)`).test(answerSpaced)) {
+      if (!countNearLabel(label, count)) {
         missingCounts.push(`${label} count=${count}`);
       }
       if (out.building_tag_counts && typeof out.building_tag_counts === "object" && /\bsplit/i.test(goal)) {
         for (const [letter, n] of Object.entries(out.building_tag_counts)) {
           if (letter === "other") continue;
           if (!Number.isFinite(Number(n)) || Number(n) < 1) continue;
-          if (!new RegExp(`(?:^|\\s)${Number(n)}(?:\\s|$)`).test(answerSpaced)) {
+          // Building splits must appear near the family or the letter token.
+          const splitWindowOk = countNearLabel(label, n)
+            || new RegExp(`(?:^|\\s)${letter}\\s*=\\s*${Number(n)}(?:\\s|$)`, "i").test(finalText)
+            || new RegExp(`(?:^|\\s)${letter}\\s+${Number(n)}(?:\\s|$)`, "i").test(answerSpaced);
+          if (!splitWindowOk) {
             missingCounts.push(`${label} building_tag_counts.${letter}=${n}`);
           }
         }
       }
     }
     if (missingCounts.length) {
-      return `The goal asks for schedule counts, and title-scan query_table results are available, but the answer omits these tool counts: ${[...new Set(missingCounts)].slice(0, 8).join("; ")}. Copy count (and building_tag_counts when splits are asked) from those tool results — do not replace them with the number of MARKs you painted for spot-check.`;
+      return `The goal asks for schedule counts, and title-scan query_table results are available, but the answer omits these tool counts next to their equipment family: ${[...new Set(missingCounts)].slice(0, 8).join("; ")}. Copy count (and building_tag_counts when splits are asked) from those tool results into the family totals — do not replace them with the number of MARKs you painted for spot-check, and do not leave a second contradictory totals table.`;
     }
   }
   return null;
@@ -916,7 +942,7 @@ export function agentSystemPrompt() {
     "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized.",
     "- Be extremely, genuinely useful: whatever the goal asks — a full takeoff, an AHU characteristic, counting valves, a BAS trace, schedule attributes, cross-sheet joins — do that ask end-to-end. Return every requested field with evidence-backed values plus enough citation context to trust the answer. Paint ALL answering evidence on the sheets (value cells / row data / drawing text / counted marks), not only a tag mark. Partial answers and mark-only flybys are incomplete.",
     "- When asked for scheduled equipment or points-list row counts, call query_table with the schedule title (no row_key). Copy that tool result's count and building_tag_counts into the answer — do not re-sum sheet_graph page row totals by hand (continuation pages 1 OF 2 / 2 OF 2 repeat the same MARK keys). building_tag_counts letters map as A=Air Ops, M=MITRACON/Mitracon, T=ATCT — never swap them. Prefer one accurate title needle per asked family; when the goal distinguishes sibling titles (for example dedicated outdoor-air UNIT vs HANDLING schedules, or air-cooled vs heat-recovery chillers), query the title that matches what was asked rather than blending both. Then re-query specific row_key values for MARK/identity bboxes you must cite.",
-    "- Sequencing for full-set count + cite goals: (1) list_sheets + sheet_graph once, (2) one title-scan query_table per requested family and copy count/building_tag_counts, (3) only then re-query the named cite MARKs / points-list title and paint those cells, (4) write the final answer with every requested total. Do not paint every equipment row on a schedule, and do not dump full schedule tables into the answer.",
+    "- Sequencing for full-set count + cite goals: (1) list_sheets + sheet_graph once, (2) one title-scan query_table per requested family and copy count/building_tag_counts, (3) only then re-query the named cite MARKs / points-list title and paint those cells, (4) write ONE final answer whose family totals match those tool counts (do not add a second contradictory totals table that recounts only painted MARKs). Do not paint every equipment row on a schedule, and do not dump full schedule tables into the answer.",
     "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Do not rely on auto-flying the canvas — the UI shows clickable source cards in the Agent panel; painting is enough. When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",
     "- Never draw or request overlay label text that would cover the cited cell value; the highlight is a frame around readable blueprint text.",
     "- Conversational follow-ups: when the estimator asks a follow-up about the previous answer or workflow, reply in plain language using evidence already gathered; call tools again only when new evidence is needed. Answer the follow-up question directly first — do not digress into unrelated points-list rows or extra fields unless asked. Explain what you did and why in estimator terms — not tool JSON. Be a useful collaborator across turns, not a one-shot report.",
