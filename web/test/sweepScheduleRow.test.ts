@@ -1075,6 +1075,35 @@ test("dedupeCrossDisciplineRoomViews: floor plan vs enlarged crop of the same bu
   ]).length, 0, "two untitled enlarged rooms never meet");
 });
 
+test("dedupeCrossDisciplineRoomViews: an enlarged crop of one corner must not undercut a fuller same-level plan", () => {
+  // Same-discipline LEVEL N PLAN vs LEVEL N ENLARGED PLAN share a space key,
+  // so the crop's redraw of one unit is a redundant view. The overall plan
+  // still has two more units outside that crop — collapseGroup keeps the
+  // larger sheet count. Preferring the enlarged sheet would silently drop
+  // real installs that the crop never showed.
+  const none: typeof ROOM[] = [];
+  const overallTitle = "HVAC - LEVEL 2 PLAN";
+  const enlargedTitle = "HVAC - LEVEL 2 ENLARGED PLAN";
+  assert.equal(
+    collapseSpaceKey(overallTitle, viewportSpaceKey(overallTitle)),
+    collapseSpaceKey(enlargedTitle, viewportSpaceKey(enlargedTitle)),
+  );
+  const overall: SheetViewport[] = [{ title: overallTitle, spaceKey: viewportSpaceKey(overallTitle), at: [1200, 3100] }];
+  const enlarged: SheetViewport[] = [{ title: enlargedTitle, spaceKey: viewportSpaceKey(enlargedTitle), at: [1200, 3100] }];
+  const instances = [
+    inst(1, "P-PLAN", "P", [800, 1500], none, overall),
+    inst(2, "P-PLAN", "P", [2100, 1600], none, overall),
+    inst(3, "P-PLAN", "P", [700, 2500], none, overall),
+    inst(4, "P-ENL", "P", [1400, 2700], none, enlarged),
+  ];
+  const redundant = dedupeCrossDisciplineRoomViews(instances);
+  assert.equal(redundant.length, 1, "the enlarged redraw is withheld");
+  assert.equal(redundant[0].id, 4);
+  assert.equal(redundant[0].keptSheet, "P-PLAN");
+  const kept = new Set(instances.map((i) => i.id).filter((id) => !redundant.some((r) => r.id === id)));
+  assert.deepEqual([...kept].sort(), [1, 2, 3], "all three overall-plan units remain");
+});
+
 test("dedupeCrossDisciplineRoomViews: two area tiles of the same floor share a unique tag (match-line)", () => {
   const none: typeof ROOM[] = [];
   const areaA = "CAMPUS FIRST FLOOR MECHANICAL PIPING FLOOR PLAN - AREA A";
