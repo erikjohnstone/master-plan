@@ -280,6 +280,38 @@ export async function verifyDemoRun({ truth, run, session, recognize }) {
           // findText unavailable for this session shape — keep OCR failure
         }
       }
+      if (!grounded && typeof session.sheet === "function") {
+        // Fragmented plan tags (separate "CV" + "1" runs) never match find_text
+        // for "CV-1". Join pdf.js spans whose centers fall in the cite box.
+        try {
+          const state = session.sheet(citation.sheet_id);
+          if (state && !state.spans) {
+            const { textSpans } = await import("../src/pdf.ts");
+            state.spans = textSpans(state.page);
+          }
+          const [cx0, cy0, cx1, cy1] = citation.bbox_px;
+          const parts = (state?.spans || [])
+            .filter((span) => {
+              const x0 = span.x0 ?? span.x;
+              const y0 = span.y0 ?? span.y;
+              const x1 = span.x1 ?? (x0 + (span.w || 0));
+              const y1 = span.y1 ?? (y0 + (span.h || 0));
+              const mx = (x0 + x1) / 2;
+              const my = (y0 + y1) / 2;
+              return mx >= cx0 - 2 && mx <= cx1 + 2 && my >= cy0 - 2 && my <= cy1 + 2;
+            })
+            .sort((a, b) => (a.y0 ?? a.y) - (b.y0 ?? b.y) || (a.x0 ?? a.x) - (b.x0 ?? b.x))
+            .map((span) => span.str)
+            .filter(Boolean);
+          const joined = parts.join("");
+          if (parts.length && ocrGrounds(joined, expectedText, { allowConfusables })) {
+            grounded = true;
+            ocrText = parts.join(" ");
+          }
+        } catch {
+          // span cache unavailable — keep prior failure
+        }
+      }
       if (!grounded) {
         fail("CITE_GROUND", field, `OCR ${JSON.stringify(ocrText.trim())} does not contain ${JSON.stringify(expectedText)}`);
       } else {
