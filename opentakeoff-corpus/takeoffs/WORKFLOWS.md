@@ -54,9 +54,9 @@ Fixture counts (396 / 122 / 163, building names, schedule titles) are
 | 35 | Empty-page accounting (BAS) | Sheets with no points/DDC lists | corpus compile `page_accounting` | T-BAS-01 | PROVEN |
 | 36 | Schedule title region cite | Paint whole schedule table from title bbox | highlight_citation / `familyTableCite` | T-HVAC-01 `table_bbox_px` + familyTableCite | PROVEN |
 | 37 | Installed plan quantity via tagged sweep | sweep_schedule_row for MARK | sweep | D01/D06 sweeps | PROVEN |
-| 38 | Symbol sweep from seed | Find every instance of a plan symbol | symbol_sweep | — | TODO |
-| 39 | Valve↔equipment connectivity walk | Trace drawn pipe from valve to equipment | connectivity | — | TODO |
-| 40 | Scale / unscaled honest refusal | Refuse installed qty when sheet unscaled | refuse path | — | TODO |
+| 38 | Symbol sweep from seed | Find every instance of a plan symbol | `symbol_sweep` intent → tool | MCP symbol_sweep fixtures + intent/phase lock | PROVEN |
+| 39 | Valve↔equipment connectivity walk | Trace drawn pipe from valve to equipment | `connectivity` → `trace_connectivity` | MCP mep fixtures + intent/phase lock | PROVEN |
+| 40 | Scale / unscaled honest refusal | Refuse installed qty when sheet unscaled | `scale_refuse` + scaleRefuseMessage | MCP unscaled refuse + message contract | PROVEN |
 | 41 | Exploded-text / vector-path-only refuse | Refuse when tag not drawable text | refuse path | D07 EF-2/EF-3 | PROVEN |
 | 42 | Zero-padded tag join | RTU-1 ↔ 001 forms across schedules | resolve_tag / join | D05 RTU-01 | PROVEN |
 | 43 | Continuation-page dedupe | 1 OF 2 / 2 OF 2 must not double-count MARKs | query_table + HVAC compile | DOAH continuation unique MARK lock | PROVEN |
@@ -76,6 +76,6 @@ gate (#50) must stay green as the inventory grows.
 durable engine regressions + golden verify + intent/follow-up locks (no
 Playwright re-burn). Promoted remaining schedule-family ROUTING rows (#20–21,
 #24, #26–30) plus #33/#36/#43 on set-agnostic intent needles + fixture compile
-proofs (short title needles fixed so `query_table` hits). Still need human
-merge to `main` for ON_MAIN, and remaining TODO rows (#38 symbol_sweep, #39
-connectivity, #40 scale refuse).
+proofs (short title needles fixed so `query_table` hits). Promoted #38–#40
+(symbol_sweep / connectivity / scale_refuse) with phrase-robust intents +
+existing MCP tool fixtures. Still need human merge to `main` for ON_MAIN.
