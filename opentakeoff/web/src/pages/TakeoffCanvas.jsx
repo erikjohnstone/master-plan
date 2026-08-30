@@ -12212,7 +12212,8 @@ export default function TakeoffCanvas() {
         <TakeoffDataPanel
           rows={agentTakeoffRows}
           projectName={projectName}
-          onClear={() => setAgentTakeoffRows([])}
+          corpusMeta={lastCorpusTakeoffMeta}
+          onClear={() => { setAgentTakeoffRows([]); setLastCorpusTakeoffMeta(null); }}
           onRemove={(id) => setAgentTakeoffRows((rows) => rows.filter((r) => r.id !== id))}
           onRemoveLine={(line) => {
             const ids = new Set(line?.source_ids || []);

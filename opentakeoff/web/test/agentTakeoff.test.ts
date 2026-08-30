@@ -232,6 +232,37 @@ test("rowsFromCompiledTakeoff: HVAC categories → EAV rows for Takeoff panel", 
   assert.ok(viaTool.some((r) => r.tag === "EF-1" && r.source_tool === "compile_corpus_takeoff"));
 });
 
+test("compileAgentTakeoff: corpus compile locks line count — scrap cannot inflate", () => {
+  const compiled = rowsFromCompiledTakeoff({
+    takeoff_id: "T-HVAC-01",
+    kind: "hvac_equipment",
+    categories: {
+      AHU: {
+        count: 2,
+        items: [
+          { tag: "AHU-1", quantity: 1, unit: "EA", sheet_id: "m#1", table_title: "AIR HANDLING UNIT SCHEDULE", cells: { CFM: "2000" } },
+          { tag: "AHU-2", quantity: 1, unit: "EA", sheet_id: "m#1", table_title: "AIR HANDLING UNIT SCHEDULE", cells: { CFM: "1800" } },
+        ],
+      },
+    },
+    totals: { items: 2 },
+  });
+  const scrap = [
+    ...compiled,
+    // Extra tag from exploratory query — must NOT become a takeoff line
+    { id: "x1", tag: "JUNK-9", field: "CFM", value: "99", table_title: "SOME OTHER TABLE", source_tool: "query_table" },
+    // Attr enrichment for a compile tag — allowed
+    { id: "x2", tag: "AHU-1", field: "VOLTAGE", value: "460", table_title: "AIR HANDLING UNIT SCHEDULE", source_tool: "query_table" },
+  ];
+  const lines = compileAgentTakeoff(scrap);
+  assert.equal(lines.length, 2);
+  assert.equal(lines.reduce((n, l) => n + (l.qty || 0), 0), 2);
+  assert.ok(lines.every((l) => l.tag === "AHU-1" || l.tag === "AHU-2"));
+  const ahu1 = lines.find((l) => l.tag === "AHU-1");
+  assert.equal(String(ahu1.specs.CFM || ahu1.specs.cfm || ""), "2000");
+  assert.ok(Object.values(ahu1.specs).some((v) => String(v) === "460"));
+});
+
 test("rowsFromCompiledTakeoff: BAS points lists → POINT TYPE rows", () => {
   const rows = rowsFromCompiledTakeoff({
     takeoff_id: "T-BAS-01",

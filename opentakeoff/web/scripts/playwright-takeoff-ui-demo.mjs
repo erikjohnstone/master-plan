@@ -41,18 +41,20 @@ const JOBS = {
     title: "HVAC equipment takeoff",
     promptPath: resolve(corpus, "takeoffs/T-HVAC-01-navfac-equipment/prompt.txt"),
     expectMinEvidence: 350,
-    expectMinLines: 350,
+    expectMinLines: 396,
+    expectMaxLines: 396,
     expectTakeoffId: "T-HVAC-01",
-    expectEa: 350,
+    expectEa: 396,
   },
   bas: {
     label: "bas",
     title: "BAS points takeoff",
     promptPath: resolve(corpus, "takeoffs/T-BAS-01-navfac-points/prompt.txt"),
     expectMinEvidence: 100,
-    expectMinLines: 100,
+    expectMinLines: 122,
+    expectMaxLines: 122,
     expectTakeoffId: "T-BAS-01",
-    expectEa: 100,
+    expectEa: 122,
   },
 };
 
@@ -263,9 +265,22 @@ async function runOne(job) {
     await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
     throw new Error(`[${job.label}] Takeoff lines ${stats.lines} < ${job.expectMinLines} (need finished takeoff)`);
   }
-  if (job.expectEa && (stats.ea == null || stats.ea < job.expectEa)) {
+  if (job.expectMaxLines != null && stats.lines > job.expectMaxLines) {
     await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
-    throw new Error(`[${job.label}] EA total ${stats.ea} < ${job.expectEa}`);
+    throw new Error(`[${job.label}] Takeoff lines ${stats.lines} > ${job.expectMaxLines} (scrap inflated the takeoff)`);
+  }
+  if (job.expectEa && (stats.ea == null || stats.ea < job.expectEa || stats.ea > job.expectEa)) {
+    await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
+    throw new Error(`[${job.label}] EA total ${stats.ea} != ${job.expectEa}`);
+  }
+  if (stats.meta?.totals?.items != null && stats.meta.totals.items !== job.expectEa
+    && stats.meta?.totals?.rows != null && stats.meta.totals.rows !== job.expectEa) {
+    // HVAC uses items; BAS uses rows — either may be present
+  }
+  const locked = stats.meta?.totals?.items ?? stats.meta?.totals?.rows;
+  if (locked != null && locked !== job.expectEa) {
+    await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
+    throw new Error(`[${job.label}] compile totals ${locked} != ${job.expectEa}`);
   }
   if (stats.rowCount < job.expectMinEvidence && stats.evidence < job.expectMinEvidence) {
     await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });

@@ -560,8 +560,10 @@ export function takeoffLeadColumns(lines = []) {
  * one line. Valve groups surface GPM/Cv/pipe size; VAV groups surface CFM/MBH/kW;
  * points lists surface Point Type / Signal / Controller. Empty air columns
  * never pad a hydronic or points takeoff.
+ * @param {object[]} lines
+ * @param {{ max?: number }} [opts] — UI may cap visible columns; exports pass no max.
  */
-export function takeoffSpecColumns(lines = []) {
+export function takeoffSpecColumns(lines = [], opts = {}) {
   const seen = new Map();
   for (const line of lines) {
     for (const [k, v] of Object.entries(line.specs || {})) {
@@ -579,24 +581,31 @@ export function takeoffSpecColumns(lines = []) {
     if (aa !== bb) return aa - bb;
     return a.localeCompare(b);
   });
+  const max = Number.isFinite(opts.max) ? opts.max : null;
+  if (max != null && keys.length > max) return keys.slice(0, max);
   return keys;
 }
 
 /** Group compiled lines by schedule/family (each family gets its own column set). */
-export function groupTakeoffByFamily(lines = []) {
+export function groupTakeoffByFamily(lines = [], opts = {}) {
   const map = new Map();
   for (const line of lines) {
     const key = line.family || line.table_title || "Equipment";
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(line);
   }
-  return [...map.entries()].map(([family, group]) => ({
-    family,
-    lines: group,
-    leadColumns: takeoffLeadColumns(group),
-    specColumns: takeoffSpecColumns(group),
-    qtyTotal: group.reduce((n, l) => n + (typeof l.qty === "number" && (l.unit || "EA") === "EA" ? l.qty : 0), 0),
-  }));
+  const uiMax = opts.uiSpecMax ?? null;
+  return [...map.entries()].map(([family, group]) => {
+    const allSpecs = takeoffSpecColumns(group);
+    return {
+      family,
+      lines: group,
+      leadColumns: takeoffLeadColumns(group),
+      specColumns: uiMax != null ? allSpecs.slice(0, uiMax) : allSpecs,
+      specTotal: allSpecs.length,
+      qtyTotal: group.reduce((n, l) => n + (typeof l.qty === "number" && (l.unit || "EA") === "EA" ? l.qty : 0), 0),
+    };
+  });
 }
 
 /** Cell value for a lead column key. */
@@ -614,10 +623,31 @@ export function lineLeadValue(line, key) {
 /**
  * Compile EAV workflow rows into a real equipment takeoff:
  * one line per tag with qty + technical schedule columns (CFM, MBH, kW, …).
+ *
+ * When a corpus compile (`compile_corpus_takeoff`) is present, the Takeoff tab
+ * is ONLY those finished line items (396 / 122) — spot-cite scrap may enrich
+ * attrs on those tags but must not invent extra tags or double EA.
  */
 export function compileAgentTakeoff(rows = []) {
+  const all = rows || [];
+  const corpusQtyTags = new Set();
+  for (const row of all) {
+    if (row?.source_tool === "compile_corpus_takeoff"
+      && String(row.field || "") === "quantity"
+      && row.tag) {
+      corpusQtyTags.add(String(row.tag).trim().toUpperCase());
+    }
+  }
+  const corpusLocked = corpusQtyTags.size > 0;
+  const scoped = corpusLocked
+    ? all.filter((row) => {
+      if (!row?.tag) return row?.source_tool === "compile_corpus_takeoff";
+      return corpusQtyTags.has(String(row.tag).trim().toUpperCase());
+    })
+    : all;
+
   const groups = new Map();
-  for (const row of rows || []) {
+  for (const row of scoped) {
     const tag = row.tag ? String(row.tag).trim() : "";
     const key = tag
       ? `tag:${tag.toUpperCase()}`
@@ -644,18 +674,34 @@ export function compileAgentTakeoff(rows = []) {
     const g = groups.get(key);
     g.sourceRows.push(row);
     if (row.workflow) g.workflows.add(row.workflow);
-    if (row.table_title && !g.table_title) g.table_title = row.table_title;
+    // Prefer the corpus compile's schedule title — scrap titles can be noisy.
+    if (row.table_title) {
+      if (!g.table_title || row.source_tool === "compile_corpus_takeoff") {
+        g.table_title = row.table_title;
+      }
+    }
+    if (row.source_tool === "compile_corpus_takeoff") g.fromCompile = true;
     const field = String(row.field || "");
     const fieldU = field.toUpperCase();
 
-    if (field === "installed_quantity" || field === "quantity") {
+    if (field === "installed_quantity") {
       const n = asNumber(row.value);
       if (n != null) {
         g.qty = n;
         g.unit = row.unit || "EA";
         g.qty_kind = "installed";
       }
-    } else if (field === "mark_count" && g.qty_kind !== "installed") {
+    } else if (field === "quantity") {
+      const n = asNumber(row.value);
+      // Corpus compile quantity always wins for scheduled takeoff lines.
+      if (n != null && (row.source_tool === "compile_corpus_takeoff" || g.qty_kind !== "installed")) {
+        if (row.source_tool === "compile_corpus_takeoff" || g.qty_kind !== "scheduled") {
+          g.qty = n;
+          g.unit = row.unit || "EA";
+          g.qty_kind = row.source_tool === "compile_corpus_takeoff" ? "scheduled" : (g.qty_kind || "scheduled");
+        }
+      }
+    } else if (field === "mark_count" && g.qty_kind !== "installed" && g.qty_kind !== "scheduled") {
       const n = asNumber(row.value);
       if (n != null) {
         g.qty = n;
@@ -704,12 +750,14 @@ export function compileAgentTakeoff(rows = []) {
 
   const lines = [];
   for (const g of groups.values()) {
-    if (g.tag && g.qty == null && Object.keys(g.attrs).length) {
+    // With a corpus compile locked, never invent qty for attr-only junk tags.
+    if (g.tag && g.qty == null && Object.keys(g.attrs).length && !corpusLocked) {
       g.qty = 1;
       g.unit = "EA";
       g.qty_kind = "scheduled";
     }
     if (g.qty == null && !g.tag) continue; // drop empty junk
+    if (corpusLocked && (g.qty == null || !g.tag)) continue;
 
     const mfr = pickAttr(g.attrs, ["MANUFACTURER", "MFR", "MANUFACTURER/MODEL", "MANUFACTURER / MODEL"]);
     const model = pickAttr(g.attrs, ["MODEL"]);
@@ -724,16 +772,21 @@ export function compileAgentTakeoff(rows = []) {
       }
     }
 
-    const typePick = pickAttr(g.attrs, ["equipment_type", "TYPE", "POINT TYPE", "SERVICE", "DESCRIPTION"]);
-    const typeLabel = typePick?.value != null ? String(typePick.value) : (g.tag || "Item");
-    const typeKeyNorm = typePick ? normKey(typePick.key) : null;
+    const typePick = pickAttr(g.attrs, ["TYPE", "POINT TYPE", "SERVICE", "DESCRIPTION", "equipment_type"]);
+    let typeLabel = typePick?.value != null ? String(typePick.value) : null;
+    // Category codes like AIR_COOLED_CHILLER are redundant when the schedule
+    // title already names the family — drop them from the Type lead column.
+    if (typeLabel && /^[A-Z][A-Z0-9_]+$/.test(typeLabel) && /_/.test(typeLabel)) {
+      typeLabel = null;
+    }
+    if (!typeLabel) typeLabel = g.tag || "Item";
+    const typeKeyNorm = typePick && typeLabel !== g.tag ? normKey(typePick.key) : null;
 
     const specs = {};
     for (const [k, v] of Object.entries(g.attrs)) {
       if (k.endsWith("_unit")) continue;
       const nk = normKey(k);
-      // Manufacturer/model live in dedicated columns; the attr used as Type
-      // is shown in the Type lead column — keep remaining technical fields.
+      // Manufacturer/model live in dedicated columns; category codes stay out of specs.
       if (["MANUFACTURER", "MFR", "MODEL", "MANUFACTURER/MODEL", "MANUFACTURER / MODEL", "EQUIPMENT_TYPE"].includes(nk)) continue;
       if (typeKeyNorm && nk === typeKeyNorm) continue;
       specs[k] = v;
@@ -754,14 +807,18 @@ export function compileAgentTakeoff(rows = []) {
       plan_sheet_id: g.plan_sheet_id || null,
       schedule_sheet_id: g.schedule_sheet_id || g.sheet_id || null,
       table_title: g.table_title,
-      status: g.status || (g.qty_kind === "installed" ? "located" : (g.qty_kind === "scheduled" ? "scheduled" : null)),
+      status: g.status || null, // blank Status column is noise — only set when real
       notes: g.notes.join("; "),
       workflow: [...g.workflows].join(" · "),
       bbox_px: g.plan_bbox_px || g.bbox_px,
       source_ids: g.sourceRows.map((r) => r.id),
       source_count: g.sourceRows.length,
+      from_compile: !!g.fromCompile,
       // back-compat aliases used by older panel code
-      description: [manufacturer, modelVal].filter(Boolean).join(" / ") || typeLabel,
+      description: [manufacturer, modelVal].filter(Boolean).join(" / ")
+        || (pickAttr(g.attrs, ["DESCRIPTION", "SERVICE"])?.value != null
+          ? String(pickAttr(g.attrs, ["DESCRIPTION", "SERVICE"]).value)
+          : typeLabel),
       sheet_id: g.plan_sheet_id || g.schedule_sheet_id || null,
       attrs_text: Object.entries(specs).map(([k, v]) => `${k} ${v}`).join(" · "),
     });
