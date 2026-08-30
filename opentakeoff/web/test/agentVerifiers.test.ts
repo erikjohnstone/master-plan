@@ -73,7 +73,7 @@ test("both verifiers can fire together in one run, independently", () => {
 });
 
 test("the registry itself declares exactly the tools this session has real evidence for — a deliberate, named list, not a guess", () => {
-  assert.deepEqual(AGENT_VERIFIERS.map((v) => v.tool), ["trace_connectivity", "count_marks", "read_schedule", "sweep_schedule_row"]);
+  assert.deepEqual(AGENT_VERIFIERS.map((v) => v.tool), ["trace_connectivity", "count_marks", "read_schedule", "sweep_schedule_row", "highlight_citation"]);
 });
 
 // ── read_schedule row-key disclosure ────────────────────────────────────────

@@ -83,6 +83,7 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     out: { found: 2 },
   }], "Give me the installed quantity", "Two units were found.")!, /does not explicitly state/);
   assert.match(requiredEvidenceCorrection([], "Give me valve size", "Valve size: 4 in (example size).")!, /example or placeholder/);
+  assert.equal(requiredEvidenceCorrection([], "Give me valve size", "For example, AHU-1 is on sheet 42 with size from the schedule.")!, null);
   assert.match(requiredEvidenceCorrection([{
     name: "query_table",
     args: { cell_contains: "AHU-1" },
@@ -195,6 +196,67 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     out: { matches: [{ row: { identity: { header: "VALVE MARK", text: "CV-CH-A1" } } }] },
   }], "Find the valve", "CV‑CH‑A1 comes from VALVE MARK."), null);
   assert.match(requiredEvidenceCorrection([], "Show me the plan and cite the exact cells")!, /highlight_citation/);
+  // "Cite each TAG …" refers to equipment marks named earlier in the goal.
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#16", bbox_px: [1, 2, 3, 4], text: "TITLE" } },
+  ], "How many VAVs, and CFM for VAV-1 and VAV-12? Cite each TAG and its CFM cell so I can spot-check.")!,
+    /cite MARK cells for VAV-?1.*VAV-?12|VAV1.*VAV12/);
+  // Junk remarks keys on a family schedule are not scheduled units of that family.
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", args: { row_key: "SUITE100" }, out: {
+      matches: [{
+        sheet: "set.pdf#16",
+        title: { text: "VOLUME CONTROL BOX SCHEDULE" },
+        family_mark: false,
+        row: {
+          key: "SUITE100",
+          family_mark: false,
+          identity: { header: "REMARKS", text: "SUITE 100", bbox: [1, 2, 3, 4] },
+        },
+      }],
+    } },
+  ], "Is SUITE100 a scheduled VAV on that volume control box schedule?",
+  "Yes. SUITE100 is a scheduled entry on the volume control box schedule.")!,
+    /not a family equipment MARK|Answer NO|junk|family_mark=false/i);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "query_table", args: { row_key: "SUITE100" }, out: {
+      matches: [{
+        sheet: "set.pdf#16",
+        title: { text: "VOLUME CONTROL BOX SCHEDULE" },
+        family_mark: false,
+        row: {
+          key: "SUITE100",
+          family_mark: false,
+          identity: { header: "REMARKS", text: "SUITE 100", bbox: [1, 2, 3, 4] },
+        },
+      }],
+    } },
+    { name: "highlight_citation", out: { sheet: "set.pdf#16", bbox_px: [1, 2, 3, 4], text: "SUITE 100" } },
+  ], "Is SUITE100 a scheduled VAV on that volume control box schedule? What is VAV-58 supply CFM?",
+  "No. SUITE100 is a remarks junk key, not a scheduled VAV. VAV-58 supply CFM is 350."), null);
+  // Paint-on-sheets is required for any answer that uses paint-able query_table
+  // evidence — not only when the goal says "cite the exact".
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#44",
+      row: { key: "AHU-1", all_cells: { CFM: { text: "3850", bbox: [10, 20, 30, 40] } } },
+    }] } },
+  ], "What is AHU-1 maximum supply airflow?", "AHU-1 is 3850 CFM.")!, /highlight_citation|painted/);
+  assert.match(requiredEvidenceCorrection([
+    { name: "find_text", args: { q: "SECTION" }, out: {
+      count: 1,
+      hits: [{ str: "AHU-1 / AHU-2 SECTION", sheet: "set.pdf#28", bbox_px: [100, 200, 400, 260] }],
+    } },
+  ], "Where is the physical drawing section?",
+  "Physical section: AHU-1 / AHU-2 SECTION on set.pdf#28.")!, /highlight_citation|painted/);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#28", bbox_px: [100, 200, 400, 260] } },
+    { name: "find_text", args: { q: "SECTION" }, out: {
+      count: 1,
+      hits: [{ str: "AHU-1 / AHU-2 SECTION", sheet: "set.pdf#28", bbox_px: [100, 200, 400, 260] }],
+    } },
+  ], "Where is the physical drawing section?",
+  "Physical section: AHU-1 / AHU-2 SECTION on set.pdf#28."), null);
   assert.match(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#3", bbox_px: [1, 2, 3, 4] } },
     { name: "query_table", out: { matches: [{
@@ -209,6 +271,223 @@ test("installed quantity cannot finish without deterministic count evidence", ()
       { sheet: "set.pdf#44", row: { key: "AHU-2", all_cells: { MARK: { bbox: [50, 60, 70, 80] } } } },
     ] } },
   ], "Cite the exact schedule cells", "AHU-1 is cited."), null);
+  // Keys-only count scans must not force painting every MARK named in a rollup
+  // cite answer — only scoped row_key / cell re-queries create cite paint duty.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 12,
+      building_tag_counts: { A: 5, T: 7 },
+      next_move: "Use count=12 as the scheduled row total and building_tag_counts={\"A\":5,\"T\":7} for building splits. Re-query with row_key for citation cell bboxes.",
+      matches: [
+        { sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } },
+        { sheet: "set.pdf#44", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [5, 6, 7, 8] } } } },
+        { sheet: "set.pdf#42", row: { key: "AHU-A2", all_cells: { MARK: { text: "AHU-A2", bbox: [9, 10, 11, 12] } } } },
+      ],
+    } },
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: "AHU-A1", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [
+        { sheet: "set.pdf#44", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [10, 20, 30, 40] } } } },
+      ],
+    } },
+  ], "Cite the schedule MARK cells for AHU-A1 and give AHU counts",
+  "AHUs: 12 (Air Ops 5). Spot-check MARK AHU-A1. Also FCU-A2 and AI01 appear in the set."), null);
+  // Explicit cite lists must not force paint on non-listed keys the answer mentions.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: {
+      query: { title: null, row_key: "AHU-A1", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [
+        { sheet: "set.pdf#44", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [10, 20, 30, 40] } } } },
+      ],
+    } },
+    { name: "query_table", out: {
+      query: { title: null, row_key: "FCU-A2", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [
+        { sheet: "set.pdf#42", row: { key: "FCU-A2", all_cells: { MARK: { text: "FCU-A2", bbox: [50, 60, 70, 80] } } } },
+      ],
+    } },
+    { name: "query_table", out: {
+      query: { title: "POINTS", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 4,
+      matches: [
+        { sheet: "set.pdf#65", row: { key: "AI01", all_cells: { MARK: { text: "AI01", bbox: [1, 2, 3, 4] } } } },
+      ],
+    } },
+  ], "Cite the schedule MARK cells for AHU-A1, so I can spot-check.",
+  "AHU-A1 is cited. FCU-A2 and AI01 also exist on the set."), null);
+  // Same MARK on two scoped sheets: cite-only duty paints one sheet, not both.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: {
+      query: { title: null, row_key: "AHU-A1", column: null, cell_value: null, cell_contains: null },
+      count: 2,
+      matches: [
+        { sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } },
+        { sheet: "set.pdf#44", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [10, 20, 30, 40] } } } },
+      ],
+    } },
+  ], "Cite the schedule MARK for AHU-A1", "AHU-A1 MARK is cited."), null);
+  // Relationship-column foreign MARKs (VAV serves AHU-A1) must not invent
+  // multi-field paint duties when the goal only cites the VAV MARK.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#43", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: {
+      query: { title: null, row_key: "VAV-A101", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [{
+        sheet: "set.pdf#43",
+        row: {
+          key: "VAV-A101",
+          all_cells: {
+            MARK: { text: "VAV-A101", bbox: [10, 20, 30, 40] },
+            SERVES: { text: "AHU-A1", bbox: [50, 20, 70, 40] },
+            SIZE: { text: "3/4", bbox: [80, 20, 100, 40] },
+          },
+        },
+      }],
+    } },
+  ], "Cite the schedule MARK cells for VAV-A101, so I can spot-check.",
+  "VAV-A101 MARK is cited. AHU-A1 is also on the set."), null);
+  // Count / cite-MARK goals must not demand painting every numeric the model
+  // happened to copy from a schedule row.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4] } },
+    { name: "query_table", out: {
+      query: { title: null, row_key: "AHU-A1", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [{
+        sheet: "set.pdf#42",
+        row: {
+          key: "AHU-A1",
+          all_cells: {
+            MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] },
+            ESP: { text: "4.6", bbox: [5, 6, 7, 8] },
+            EWT: { text: "45", bbox: [9, 10, 11, 12] },
+          },
+        },
+      }],
+    } },
+  ], "Cite the schedule MARK for AHU-A1.",
+  "AHU-A1 MARK cited; row also shows ESP 4.6 and EWT 45."), null);
+  // Schedule takeoffs must run title-scan counts — paint-only MARK spot-checks fail.
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4] } },
+    { name: "query_table", out: {
+      query: { title: null, row_key: "AHU-A1", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [{ sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+  ], "Do a full HVAC takeoff — give AHU, FCU, and VAV scheduled counts and cite AHU-A1.",
+  "AHUs: 1 (AHU-A1 painted).")!, /title \(no row_key\)|scheduled equipment/);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4] } },
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 5,
+      building_tag_counts: { A: 2, M: 1, T: 2 },
+      matches: [{ sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+  ], "Do a full HVAC takeoff — give AHU scheduled counts and cite AHU-A1.",
+  "AHUs: 5. Spot-check AHU-A1."), null);
+  // Narrow conversational follow-ups must not re-impose full-set inventory gates.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 5,
+      matches: [{ title: { text: "AIR HANDLING UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: {} } }],
+    } },
+    { name: "query_table", out: {
+      query: { title: "FAN COIL UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 42,
+      building_tag_counts: { A: 14, M: 10, T: 18 },
+      matches: [{ title: { text: "FAN COIL UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "FCU-T11", all_cells: { MARK: { text: "FCU-T11", bbox: [1, 2, 3, 4] } } } }],
+    } },
+    { name: "query_table", out: {
+      query: { title: "DEDICATED OUTDOOR AIR HANDLING", row_key: "DOAH-T1", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [{ title: { text: "DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "DOAH-T1", all_cells: { MARK: { text: "DOAH-T1", bbox: [5, 6, 7, 8] } } } }],
+    } },
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4], text: "FCU-T11" } },
+  ], "Is DOAH-T1 on a dedicated outdoor-air schedule? Which title, and how many ATCT fan coils are scheduled including FCU-T11?",
+  "Yes — DOAH-T1 is on the DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE. ATCT fan coils: 18, including FCU-T11."), null);
+  // Wrong sibling schedule title (UNIT instead of HANDLING) must fail the title gate.
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: {
+      query: { title: null, row_key: "DOAH-T1", column: null, cell_value: null, cell_contains: null },
+      count: 2,
+      matches: [
+        { title: { text: "DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE" }, sheet: "set.pdf#49", row: { key: "DOAH-T1", all_cells: { MARK: { text: "DOAH-T1", bbox: [1, 2, 3, 4] } } } },
+        { title: { text: "VIBRATION ISOLATION SCHEDULE" }, sheet: "set.pdf#49", row: { key: "DOAH-T1", all_cells: {} } },
+      ],
+    } },
+    { name: "highlight_citation", out: { sheet: "set.pdf#49", bbox_px: [1, 2, 3, 4], text: "DOAH-T1" } },
+  ], "Is DOAH-T1 on a dedicated outdoor-air schedule? Which title?",
+  "Yes — DOAH-T1 is on the DEDICATED OUTDOOR AIR UNIT SCHEDULE.")!, /HANDLING|primary equipment schedule title/i);
+  // Dual inventory tables (title-scan + painted equipment totals) must fail.
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4] } },
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 5,
+      matches: [{ title: { text: "AIR HANDLING UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+    { name: "query_table", out: {
+      query: { title: "DEDICATED OUTDOOR AIR UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 3,
+      matches: [{ title: { text: "DEDICATED OUTDOOR AIR UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "DOAH-A1", all_cells: { MARK: { text: "DOAH-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+  ], "Do a full HVAC takeoff — give AHU and DOAH scheduled counts and cite AHU-A1.",
+  "**Schedule counts (title-scan)**\n| AHU | 5 |\n| DOAH | 3 |\n**Equipment totals (all sheets)**\n| AHU | 2 |\n| DOAH | 2 |\nAHU-A1 cited.")!, /equipment-totals|second|contradict/i);
+  // Missing DOAH tool count next to its label fails even when other families are present.
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4] } },
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 5,
+      matches: [{ title: { text: "AIR HANDLING UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+    { name: "query_table", out: {
+      query: { title: "DEDICATED OUTDOOR AIR UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 3,
+      matches: [{ title: { text: "DEDICATED OUTDOOR AIR UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "DOAH-A1", all_cells: { MARK: { text: "DOAH-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+  ], "Do a full HVAC takeoff — give AHU and DOAH scheduled counts and cite AHU-A1.",
+  "AHU 5. DOAH is painted as DOAH-A1 only.")!, /DOAH unit count=3/);
+  // Named points-list goals must not accept a generic POINTS LIST rollup count.
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#48", bbox_px: [1, 2, 3, 4], text: "AHU-T1A" } },
+    { name: "query_table", out: {
+      query: { title: "POINTS LIST", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 122,
+      matches: [{ title: { text: "POINTS LIST DOAH-TI" }, sheet: "set.pdf#50", row: { key: "X", all_cells: {} } }],
+    } },
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 5,
+      matches: [{ title: { text: "AIR HANDLING UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+  ], "Give AHU scheduled counts and how many rows are on the AHU-T1A/TIB BAS points list. Cite AHU-A1.",
+  "AHU 5. Points-list 122.")!, /points-list|AHU-T1A/i);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#48", bbox_px: [1, 2, 3, 4], text: "AHU-T1A" } },
+    { name: "query_table", out: {
+      query: { title: "POINTS LIST AHU-T1A", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 62,
+      matches: [{ title: { text: "POINTS LIST AHU-T1A/TIB" }, sheet: "set.pdf#48", row: { key: "X", all_cells: {} } }],
+    } },
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 5,
+      matches: [{ title: { text: "AIR HANDLING UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+  ], "Give AHU scheduled counts and how many rows are on the AHU-T1A/TIB BAS points list. Cite AHU-A1.",
+  "AHU 5. Points-list AHU-T1A 62."), null);
   assert.match(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
     { name: "query_table", out: { matches: [{
@@ -221,7 +500,7 @@ test("installed quantity cannot finish without deterministic count evidence", ()
         },
       },
     }] } },
-  ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted.\nCAPACITY (TONS) 56.0 is highlighted.")!, /specific schedule cell is highlighted/);
+  ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted.\nCAPACITY (TONS) 56.0 is highlighted.")!, /highlighted that was not painted|Rewrite the answer without that claim/);
   assert.match(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
     { name: "query_table", out: { matches: [{
@@ -234,7 +513,147 @@ test("installed quantity cannot finish without deterministic count evidence", ()
         },
       },
     }] } },
-  ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted; CFM is 3850. All cited cells are highlighted.")!, /broadly says all\/each/);
+  ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted; CFM is 3850. All cited cells are highlighted.")!, /broad all\/each|ONLY these painted/);
+  // Ordinary takeoff prose that uses "each" near "highlighted" must not thrash.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: {
+      query: { title: null, row_key: "AHU-1", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [{
+        sheet: "set.pdf#44",
+        row: { key: "AHU-1", all_cells: { MARK: { text: "AHU-1", bbox: [10, 20, 30, 40] } } },
+      }],
+    } },
+  ], "Cite the schedule MARK for AHU-1",
+  "AHU count is 5. Each building split is listed below. AHU-1 MARK is highlighted."), null);
+  // Multi-field answers must paint EACH answering value cell — painting only
+  // location (or any single field) while citing CFM/capacity/etc. is incomplete.
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#44",
+      row: {
+        key: "AHU-1",
+        all_cells: {
+          MARK: { text: "AHU-1", bbox: [1, 2, 3, 4] },
+          LOCATION: { text: "11TH FLOOR MECHANICAL", bbox: [10, 20, 30, 40] },
+          CFM: { text: "3850", bbox: [50, 60, 70, 80] },
+        },
+      },
+    }] } },
+  ], "What are AHU-1 location and supply airflow?",
+  "AHU-1 location is 11TH FLOOR MECHANICAL; supply airflow is 3850 CFM.")!, /answering value cells|3850|EACH answering/);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [50, 60, 70, 80] } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#44",
+      row: {
+        key: "AHU-1",
+        all_cells: {
+          MARK: { text: "AHU-1", bbox: [1, 2, 3, 4] },
+          LOCATION: { text: "11TH FLOOR MECHANICAL", bbox: [10, 20, 30, 40] },
+          CFM: { text: "3850", bbox: [50, 60, 70, 80] },
+        },
+      },
+    }] } },
+  ], "What are AHU-1 location and supply airflow?",
+  "AHU-1 location is 11TH FLOOR MECHANICAL on set.pdf#44; supply airflow is 3850 CFM."), null);
+  // Short digits inside a mark must not invent a phantom numeric paint duty.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#48", bbox_px: [10, 20, 30, 40] } },
+    { name: "highlight_citation", out: { sheet: "set.pdf#48", bbox_px: [50, 60, 200, 80] } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#48",
+      row: {
+        key: "AI10",
+        all_cells: {
+          MARK: { text: "AI10", bbox: [10, 20, 30, 40] },
+          DESCRIPTION: { text: "HW VALVE POSITION (FEEDBACK)", bbox: [50, 60, 200, 80] },
+          PHANTOM: { text: "10", bbox: [90, 90, 100, 100] },
+        },
+      },
+    }] } },
+  ], "What is the HW valve position feedback point mark?",
+  "Point mark AI10 — HW VALVE POSITION (FEEDBACK) on set.pdf#48."), null);
+  const servesGoal = "Trace the point back to the air handler. Give me what the unit serves and cite the physical drawing section where the equipment is shown.";
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#48",
+      row: { key: "AHU-1", all_cells: { LOCATION: { text: "11TH FLOOR MECHANICAL" } } },
+    }] } },
+  ], servesGoal, "Serves: 11TH FLOOR MECHANICAL spaces.")!, /drawing-text evidence/);
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#48",
+      row: { key: "AHU-1", all_cells: { LOCATION: { text: "11TH FLOOR MECHANICAL" } } },
+    }] } },
+    { name: "find_text", args: { sheet: "set.pdf#48", q: "AHU-1" }, out: { count: 0, hits: [], next_move: "omit sheet" } },
+  ], servesGoal, "Serves: derived from the LOCATION field.")!, /Omit sheet/);
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#48",
+      row: { key: "AHU-1", all_cells: { LOCATION: { text: "11TH FLOOR MECHANICAL" } } },
+    }] } },
+    { name: "find_text", args: { q: "AHU-1" }, out: { count: 1, hits: [{ str: "AHU-1", sheet: "set.pdf#2" }] } },
+  ], servesGoal,
+  "Location: 11TH FLOOR MECHANICAL.\nServes: supplies the 11TH FLOOR MECHANICAL spaces.")!, /LOCATION\/ROOM cell/);
+  const narrative = "AHU-1/B provide ventilation, heating, cooling, and dehumidification to the control cab.";
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#48",
+      row: { key: "AHU-1", all_cells: { LOCATION: { text: "11TH FLOOR MECHANICAL" } } },
+    }] } },
+    { name: "find_text", args: { q: "control cab" }, out: {
+      count: 1,
+      hits: [{ str: narrative, sheet: "set.pdf#2" }],
+    } },
+  ], servesGoal, "Location: 11TH FLOOR MECHANICAL.\nServes: the mechanical room.")!, /copy answering text from hit\.str/);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#48",
+      row: { key: "AHU-1", all_cells: { LOCATION: { text: "11TH FLOOR MECHANICAL" } } },
+    }] } },
+    { name: "find_text", args: { q: "control cab" }, out: {
+      count: 2,
+      hits: [
+        { str: narrative, sheet: "set.pdf#2" },
+        { str: "AHU-1 / AHU-2 SECTION", sheet: "set.pdf#28" },
+      ],
+    } },
+  ], servesGoal,
+  `Location: 11TH FLOOR MECHANICAL on set.pdf#48.\nServes: ${narrative}\nPhysical section: AHU-1 / AHU-2 SECTION on set.pdf#28.`), null);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "find_text", args: { q: "AHU-1" }, out: {
+      count: 1,
+      hits: [{ str: "AHU-1 / AHU-2 SECTION", sheet: "set.pdf#28" }],
+    } },
+  ], servesGoal,
+  "Physical section: AHU-1 / AHU-2 SECTION on set.pdf#28.\nCould not find a drawn serving narrative with evidence; refusing serves."), null);
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#65",
+      row: {
+        key: "AI10",
+        identity: { header: "MARK ANALOG INPUT", text: "AI10" },
+        all_cells: {
+          "MARK ANALOG INPUT": { text: "AI10" },
+          "DESCRIPTION ANALOG INPUT": { text: "AHU-1 HW VALVE POSITION (FEEDBACK)" },
+          ALARM: { text: "No" },
+          TREND: { text: "No" },
+        },
+      },
+    }] } },
+    { name: "find_text", args: { q: "control cab" }, out: {
+      count: 2,
+      hits: [
+        { str: narrative, sheet: "set.pdf#2" },
+        { str: "AHU-1 / AHU-2 SECTION", sheet: "set.pdf#28" },
+      ],
+    } },
+  ], "Give me the point mark, alarm and trend requirements, what the unit serves, and the physical drawing section.",
+  `Point mark: AHU-1 HW VALVE POSITION (FEEDBACK) on set.pdf#65\nServes: ${narrative}\nPhysical section: AHU-1 / AHU-2 SECTION on set.pdf#28`), /BAS point mark|does not state that mark/);
 });
 
 test("anthropic-style: scripted tool_use → tools execute → results pair up in ONE user message → done", async () => {

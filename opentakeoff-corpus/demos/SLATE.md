@@ -19,7 +19,7 @@ sheets. If the evidence does not hold, replace the target before N=5 runs.
 
 ## D01 selection record
 
-Status: `LOCKED — 5/5 clean; p95 3.988 s; production UI proof validated`
+Status: `LOCKED — API 5/5; UI re-proved (full row values + answering-cell paints, 12 regions)`
 
 The target holds up. Independent graph extraction from the real NAVFAC PDF
 found the `AIR COOLED CHILLER SCHEDULE` and `CHW CONTROL VALVE SCHEDULE` on
@@ -33,15 +33,16 @@ The first rasterization also exposed and fixed an evidence-integrity blocker:
 the table renderer's old filenames omitted table identity, causing all nine
 page-44 table crops to overwrite one another. Unique evidence crops, typed
 ground truth and N=5 API gate are locked in
-`D01-chiller-plan-to-controls/`. The replacement 34.8-second production-UI
-recording shows the frozen prompt, live tools, complete answer, actual MS101
-plan tag, and both M-603 schedule rows highlighted. The artifact harness
-validated the final answer and saved the strict pass under
-`/opt/cursor/artifacts/`; D01 now counts toward ten.
+`D01-chiller-plan-to-controls/`. UI re-proof under the usefulness bar
+(intelligent prompt + every requested field + painted answering value cells)
+is saved as
+`/opt/cursor/artifacts/d01_ui_prompt_tools_answer_highlights_2026-08-30T05-09-16-177Z.webm`
+(12 painted regions on MS101 + M-603). Production gates stay
+methodology-general. D01 counts toward ten.
 
 ## D02 selection record
 
-Status: `SELECTED — ground truth complete; no model runs started`
+Status: `LOCKED — API 5/5; p95 7.263 s; UI re-proof with multi-field paints (incl. CFM) validated`
 
 The NAVFAC target holds up after direct rendering. MI731 contains one 62-row
 `POINTS LIST AHU-T1A/TIB` that interleaves AHU-T1A and AHU-T1B under repeated
@@ -51,3 +52,50 @@ handling schedule, the physical `AHU-T1A / AHU-T1B SECTION`, and the M-002
 ATCT cab narrative. Those sources occupy four different sheets in a 75-sheet,
 three-building set, so the required BAS-to-equipment-to-location stress is
 genuine rather than inferred from the slate.
+
+N=5 production runs are 5/5 under `verify:demo` (values, citation
+resolvability, and OCR grounding) with nearest-rank p95 **7.263 s**. Failed
+cold attempts remain under `runs/failed/` with classified diagnostics.
+Localhost stdio harness True. UI re-proof under the usefulness bar (full
+fields + each distinct answering value cell painted, including **3850 CFM**)
+is saved as
+`/opt/cursor/artifacts/d02_ui_prompt_tools_answer_highlights_2026-08-30T05-05-42-831Z.webm`
+(8 painted regions). Production gates stay methodology-general — no corpus
+hardcoding. D02 counts toward ten. Next: D03.
+
+## D03 selection record
+
+Status: `LOCKED — API 5/5; p95 12.156 s; stdio + UI proof with correct HANDLING follow-up`
+
+Target holds: 75-sheet NAVFAC set with Air Ops / MITRACON / ATCT namespaces.
+Independent equipment-schedule inventory (unique MARK rows) yields AHU 5,
+DOAH unit 3 (HANDLING DOAH-T1 covered in follow-up), FCU 42, VAV 52,
+air-cooled chillers 2, heat-recovery chillers 2, boilers 6, and MI731
+AHU-T1A/TIB points list at 62 rows. Stratified 20% find_text hand-count
+reconciled before model runs (`hand_count_20pct` in truth.json). Vibration-
+isolation compound keys are not equipment units.
+
+N=5 production runs are 5/5 under `verify:demo` with nearest-rank p95
+**12.156 s**. Localhost stdio harness True (`local-host-run.json`). UI proof
+under the usefulness bar + required in-thread follow-up is saved as
+`/opt/cursor/artifacts/d03_ui_prompt_answer_cards_followup_2026-08-30T10-38-25-850Z.webm`
+(HANDLING title + ATCT FCU 18 + FCU-T11). Production gates stay
+methodology-general — no corpus hardcoding. D03 counts toward ten. Next: D04.
+
+## D04 selection record
+
+Status: `LOCKED — API 5/5; p95 3.535 s; stdio + UI proof with SUITE100 follow-up`
+
+Target holds: 24-sheet `federal-mech` set. `VOLUME CONTROL BOX SCHEDULE` on
+sheet #16 lists VAV-1..VAV-58 (58 unique VAV-* tags; junk key SUITE100
+excluded). Plan sheets carry hundreds of fragmented `VAV-` labels, so the
+rollup must use the schedule title-scan — not plan-label frequency.
+Independent 20% find_text hand-count (13 tags) reconciled before model runs.
+
+N=5 production runs are 5/5 under `verify:demo` with nearest-rank p95
+**3.535 s**. Localhost stdio harness True (`local-host-run.json`). UI proof
+under the usefulness bar + required in-thread follow-up is saved as
+`/opt/cursor/artifacts/d04_ui_prompt_answer_cards_followup_2026-08-30T11-06-05-710Z.webm`
+(58 VAVs + attributes; SUITE100 rejected; VAV-58 CFM 350). Production gates
+stay methodology-general — no corpus hardcoding. D04 counts toward ten.
+Next: D05.

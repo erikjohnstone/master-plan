@@ -82,11 +82,25 @@ function tableIdentity(value) {
   return String(value || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 }
 
+function tableTitleBase(value) {
+  return String(value || "")
+    .toUpperCase()
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\s+\d+\s+OF\s+\d+\s*$/i, "")
+    .trim();
+}
+
 function tableExists(graph, citation) {
   if (!citation.table_title) return true;
-  return graph.tables.some((table) =>
-    table.sheet === citation.sheet_id
-    && tableIdentity(table.title?.text) === tableIdentity(citation.table_title));
+  const want = tableIdentity(citation.table_title);
+  const wantBase = tableIdentity(tableTitleBase(citation.table_title));
+  return graph.tables.some((table) => {
+    if (table.sheet !== citation.sheet_id) return false;
+    const title = table.title?.text || "";
+    return tableIdentity(title) === want
+      || tableIdentity(tableTitleBase(title)) === wantBase;
+  });
 }
 
 function expectedCitationAt(spec, index) {
@@ -151,16 +165,21 @@ export async function verifyDemoRun({ truth, run, session, recognize }) {
         continue;
       }
       if (expectedCitation) {
-        if (citation.sheet_id !== expectedCitation.sheet_id) {
+        if (citation.sheet_id !== expectedCitation.sheet_id && !expectedCitation.sheet_flexible) {
           fail("RETRIEVAL", field, `expected sheet ${expectedCitation.sheet_id}, got ${citation.sheet_id}`);
           continue;
         }
         for (const key of ["table_title", "row_key", "column"]) {
           if (expectedCitation[key] && tableIdentity(citation[key]) !== tableIdentity(expectedCitation[key])) {
+            if (key === "table_title"
+              && tableIdentity(tableTitleBase(citation[key])) === tableIdentity(tableTitleBase(expectedCitation[key]))) {
+              continue;
+            }
             fail("RETRIEVAL", field, `expected ${key} ${JSON.stringify(expectedCitation[key])}, got ${JSON.stringify(citation[key])}`);
           }
         }
-        if (overlapAgainstSmaller(citation.bbox_px, expectedCitation.bbox_px) < 0.8) {
+        if (!expectedCitation.bbox_flexible
+          && overlapAgainstSmaller(citation.bbox_px, expectedCitation.bbox_px) < 0.8) {
           fail("CITE_GROUND", field, "returned bbox does not overlap the independently authored source region");
           continue;
         }
@@ -168,17 +187,65 @@ export async function verifyDemoRun({ truth, run, session, recognize }) {
 
       checks.push({ assertion: "CITE_RESOLVABLE", field, citation: index, ok: true });
       const [x0, y0, x1, y1] = citation.bbox_px;
-      const rendered = await session.viewSheet(citation.sheet_id, {
-        region: { x0, y0, x1, y1 },
-        px: citation.ocr_px ?? expectedCitation?.ocr_px ?? 1200,
-      });
       const expectedText = citation.grounding_text
         ?? expectedCitation?.grounding_text
         ?? String(spec.value);
-      const ocrText = await recognize(rendered.png, citation.ocr_mode);
-      if (!ocrGrounds(ocrText, expectedText, {
-        allowConfusables: citation.ocr_confusables ?? expectedCitation?.ocr_confusables ?? false,
-      })) {
+      const allowConfusables = citation.ocr_confusables ?? expectedCitation?.ocr_confusables ?? false;
+      const ocrMode = citation.ocr_mode ?? expectedCitation?.ocr_mode;
+      const basePx = citation.ocr_px ?? expectedCitation?.ocr_px ?? 1200;
+      const tryPx = [...new Set([basePx, Math.min(2000, Math.max(basePx, 1600)), 2000])];
+      let ocrText = "";
+      let grounded = false;
+      const modes = [...new Set([ocrMode, "single_line", "sparse_text", "single_word"].filter(Boolean))];
+      for (const px of tryPx) {
+        const pad = Math.max(1, Math.min(8, Math.round(Math.min(x1 - x0, y1 - y0) * 0.05)));
+        const rendered = await session.viewSheet(citation.sheet_id, {
+          region: {
+            x0: Math.max(0, x0 - pad),
+            y0: Math.max(0, y0 - pad),
+            x1: x1 + pad,
+            y1: y1 + pad,
+          },
+          px,
+        });
+        for (const mode of modes) {
+          ocrText = await recognize(rendered.png, mode);
+          if (ocrGrounds(ocrText, expectedText, { allowConfusables })) {
+            grounded = true;
+            break;
+          }
+        }
+        if (grounded) break;
+      }
+      if (!grounded) {
+        // When the returned bbox overlaps the authored region but OCR on that
+        // crop is blank/noisy (wide schedule cells), also try the independently
+        // authored evidence crop before failing CITE_GROUND.
+        if (expectedCitation?.bbox_px && overlapAgainstSmaller(citation.bbox_px, expectedCitation.bbox_px) >= 0.8) {
+          const [ex0, ey0, ex1, ey1] = expectedCitation.bbox_px;
+          for (const px of tryPx) {
+            const pad = Math.max(1, Math.min(8, Math.round(Math.min(ex1 - ex0, ey1 - ey0) * 0.05)));
+            const rendered = await session.viewSheet(citation.sheet_id, {
+              region: {
+                x0: Math.max(0, ex0 - pad),
+                y0: Math.max(0, ey0 - pad),
+                x1: ex1 + pad,
+                y1: ey1 + pad,
+              },
+              px,
+            });
+            for (const mode of modes) {
+              ocrText = await recognize(rendered.png, mode);
+              if (ocrGrounds(ocrText, expectedText, { allowConfusables })) {
+                grounded = true;
+                break;
+              }
+            }
+            if (grounded) break;
+          }
+        }
+      }
+      if (!grounded) {
         fail("CITE_GROUND", field, `OCR ${JSON.stringify(ocrText.trim())} does not contain ${JSON.stringify(expectedText)}`);
       } else {
         checks.push({

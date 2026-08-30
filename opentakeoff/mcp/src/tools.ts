@@ -574,8 +574,14 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   server.registerTool("query_table", {
     description: `Query actual extracted table cells across the loaded plan set, with source coordinates on every answer. Use title for a case-insensitive table-title substring, row_key for an exact schedule mark/key (compound rows such as R1/E1 answer for either mark), column for a case-insensitive header substring, cell_value for an exact cell value, and cell_contains when a relationship is encoded inside a compound value (for example, equipment CH-A1 inside valve mark CV-CH-A1). Combine filters to narrow the result. At least one filter is required. A column filter narrows cells, but row.all_cells still returns the complete matching row with exact bboxes so multi-field questions need one call. Every returned table region, title, and cell carries its source-sheet bbox so the answer can be audited with view_sheet. This reads all deterministic table kinds—not only reference tables and not only equipment schedules—and never invokes an LLM. ${COORDS}`,
     inputSchema: {
-      title: z.string().min(1).optional().describe('Table-title substring, e.g. "CONTROL VALVE SCHEDULE"'),
-      row_key: z.string().min(1).optional().describe('Exact row key/mark, e.g. "CV-HHW-BP-M" or "RTU-01"'),
+      title: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : String(v)),
+        z.string().min(1).optional(),
+      ).describe('Table-title substring, e.g. "CONTROL VALVE SCHEDULE"'),
+      row_key: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : String(v)),
+        z.string().min(1).optional(),
+      ).describe('Exact row key/mark, e.g. "CV-HHW-BP-M" or "RTU-01"'),
       column: z.string().min(1).optional().describe('Header substring; only matching columns are returned, e.g. "MCA"'),
       cell_value: z.string().min(1).optional().describe('Exact cell text anywhere in the row, case-insensitive; use this to join tables through non-key columns, e.g. UNIT MARK "CH-A1"'),
       cell_contains: z.string().min(1).optional().describe('Case-insensitive text contained in any cell; use for explicit compound relationships such as "CH-A1" inside "CV-CH-A1"'),
@@ -587,13 +593,37 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       throw new UserError("Pass at least one of title, row_key, column, cell_value, or cell_contains.");
     }
     const graph = await session.graphForPipeline();
-    const titleNeedle = title?.trim().toUpperCase();
+    // Strip continuation banners from the title needle so "… SCHEDULE 1 OF 2"
+    // still unions sibling pages ("… 2 OF 2") into one unique MARK count.
+    const titleNeedle = title?.trim().toUpperCase().replace(/\s+/g, " ")
+      .replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim() || undefined;
     const rowNeedle = row_key?.trim().toUpperCase().replace(/\s+/g, "");
     const columnNeedle = column?.trim().toUpperCase();
     const valueNeedle = cell_value?.trim().toUpperCase().replace(/\s+/g, " ");
     const containsNeedle = cell_contains?.trim().toUpperCase().replace(/\s+/g, " ");
-    const all = graph.tables.flatMap((table) => {
-      if (titleNeedle && !(table.title?.text || "").toUpperCase().includes(titleNeedle)) return [];
+    /** Prefer exact / prefix title matches. Mid-title embedding of a long needle
+     * (e.g. "AIR HANDLING UNIT SCHEDULE" inside "DEDICATED OUTDOOR AIR HANDLING
+     * UNIT SCHEDULE") is a false family hit and must not join the result set. */
+    const titleMatches = (rawTitle) => {
+      if (!titleNeedle) return true;
+      const t = (rawTitle || "").toUpperCase().replace(/\s+/g, " ").trim();
+      if (!t) return false;
+      const base = t.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+      if (base === titleNeedle || t === titleNeedle) return true;
+      // Prefix / mid-title embeds need a long-enough needle. Short tokens like
+      // "AIR" or "AHU" otherwise blend unrelated families (AIR COOLED + AIR
+      // HANDLING + AIR SEPARATOR → count≈77) or hit POINTS LIST AHU-… titles.
+      if (titleNeedle.length < 12) return false;
+      if (base.startsWith(`${titleNeedle} `) || t.startsWith(`${titleNeedle} `)) return true;
+      if (!t.includes(titleNeedle) && !base.includes(titleNeedle)) return false;
+      const idx = Math.min(
+        t.includes(titleNeedle) ? t.indexOf(titleNeedle) : 999,
+        base.includes(titleNeedle) ? base.indexOf(titleNeedle) : 999,
+      );
+      return idx === 0;
+    };
+    const allRaw = graph.tables.flatMap((table) => {
+      if (!titleMatches(table.title?.text || "")) return [];
       const selectedHeaders = columnNeedle
         ? table.headers.filter((header) => header.toUpperCase().includes(columnNeedle))
         : table.headers;
@@ -641,16 +671,119 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
         }];
       });
     });
-    const unique = [...new Map(all.map((match) => [
-      JSON.stringify([
-        match.sheet,
-        match.title,
-        match.region,
-        match.row.key,
-        match.row.cells,
-      ]),
-      match,
-    ])).values()];
+    // Generic "CHILLER" (without HEAT RECOVERY) must not blend air-cooled + heat-recovery
+    // schedules into one doubled count.
+    const all = (titleNeedle && /CHILLER/i.test(titleNeedle) && !/HEAT\s*RECOVERY/i.test(titleNeedle))
+      ? allRaw.filter((match) => !/HEAT\s*RECOVERY/i.test(match.title?.text || ""))
+      : allRaw;
+    const uniqueRaw = [...new Map(all.map((match) => {
+      const titleText = match.title?.text || "";
+      const titleBase = titleText.toUpperCase().replace(/\s+/g, " ").trim()
+        .replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+      // Continuation pages (1 OF 2 / 2 OF 2) repeat the same MARK keys — count
+      // each scheduled unit once per schedule family, not once per page.
+      return [`${titleBase}::${match.row.key.toUpperCase().replace(/\s+/g, "")}`, match];
+    })).values()];
+    // Drop non-family junk keys that sometimes ride into equipment schedules
+    // (e.g. SUITE100 on a VOLUME CONTROL BOX / VAV schedule).
+    const familyKeyRe = (title) => {
+      const t = String(title || "").toUpperCase();
+      if (/VOLUME CONTROL BOX|VARIABLE AIR VOLUME/.test(t)) return /^VAV[\s\-]/i;
+      if (/FAN\s*COIL/.test(t)) return /^FCU[\s\-]/i;
+      if (/AIR HANDLING UNIT/.test(t) && !/DEDICATED/.test(t)) return /^AHU[\s\-]/i;
+      if (/DEDICATED OUTDOOR AIR/.test(t)) return /^DOAH[\s\-]/i;
+      if (/BOILER/.test(t)) return /^B[\s\-]/i;
+      return null;
+    };
+    const unique = uniqueRaw.filter((match) => {
+      if (row_key || column || cell_value || cell_contains) return true;
+      const re = familyKeyRe(match.title?.text);
+      if (!re) return true;
+      return re.test(String(match.row.key || ""));
+    });
+    // When looking up a specific MARK, surface the unit's own equipment schedule
+    // before vibration-isolation / valve / sound / points-list cross-refs so
+    // "which schedule is this on?" answers cite the primary title.
+    if (row_key) {
+      const equipmentScheduleRank = (title, key) => {
+        const t = String(title || "").toUpperCase().replace(/\s+/g, " ");
+        const family = String(key || "").toUpperCase().match(/^([A-Z]{2,8})(?=-)/)?.[1] || "";
+        if (/VIBRATION ISOLATION|SOUND POWER|CONTROL VALVE|POINTS LIST|PUMP SCHEDULE/i.test(t)) return 90;
+        if (family === "DOAH" && /DEDICATED OUTDOOR AIR/.test(t)) return /HANDLING/.test(t) ? 0 : 1;
+        if (family === "AHU" && /AIR HANDLING UNIT/.test(t) && !/DEDICATED/.test(t)) return 0;
+        if (family === "FCU" && /FAN\s*COIL/.test(t)) return 0;
+        if (family === "VAV" && /VOLUME CONTROL BOX|VARIABLE AIR VOLUME|\bVAV\b/.test(t)) return 0;
+        if ((family === "CH" || family === "B") && /(?:CHILLER|BOILER)/.test(t)) return 0;
+        if (/SCHEDULE/.test(t)) return 40;
+        return 60;
+      };
+      unique.sort((a, b) =>
+        equipmentScheduleRank(a.title?.text, a.row.key)
+        - equipmentScheduleRank(b.title?.text, b.row.key));
+    }
+    // Title-wide / unscoped queries on dense schedules must not dump every
+    // cell bbox into the model context. Return identity keys only once the
+    // unique MARK set is larger than a handful; the caller re-queries with
+    // row_key for citation cells. Threshold 3 so even small multi-building
+    // families (AHU/DOAH) get an explicit count + building_tag_counts to copy.
+    const broad = !row_key && !column && !cell_value && !cell_contains;
+    const keysOnly = broad && unique.length > 3;
+    const annotateFamily = (match) => {
+      const re = familyKeyRe(match.title?.text);
+      const family_mark = !re || re.test(String(match.row.key || ""));
+      return { ...match, family_mark, row: { ...match.row, family_mark } };
+    };
+    const matches = unique.slice(0, limit).map((match) => {
+      const annotated = annotateFamily(match);
+      if (!keysOnly) return annotated;
+      const identity = annotated.row.identity;
+      const markCell = identity
+        ? { [identity.header]: { text: identity.text, bbox: identity.bbox } }
+        : {};
+      return {
+        sheet: annotated.sheet,
+        kind: annotated.kind,
+        title: annotated.title,
+        region: annotated.region,
+        family_mark: annotated.family_mark,
+        headers: identity ? [identity.header] : [],
+        row: {
+          key: annotated.row.key,
+          identity,
+          family_mark: annotated.family_mark,
+          cells: markCell,
+          all_cells: markCell,
+        },
+      };
+    });
+    const buildingTagCounts = (() => {
+      if (!keysOnly) return undefined;
+      const counts = {};
+      for (const match of unique) {
+        const tag = match.row.key || "";
+        const m = tag.match(/-([AMT])(?=[A-Z0-9]|$)/i);
+        const b = m ? m[1].toUpperCase() : "other";
+        counts[b] = (counts[b] || 0) + 1;
+      }
+      return counts;
+    })();
+    const multiTitleHint = (() => {
+      if (!row_key || keysOnly) return null;
+      const titles = [...new Set(unique.map((m) => m.title?.text).filter(Boolean))];
+      if (titles.length < 2) return null;
+      const primary = unique[0]?.title?.text || titles[0];
+      return `MARK ${row_key} appears on ${titles.length} tables. When asked which schedule the unit is on, cite the primary equipment schedule title first (matches[0].title="${primary}"), not vibration-isolation / valve / sound / points-list cross-refs.`;
+    })();
+    const nonFamilyHint = (() => {
+      if (keysOnly || !unique.length) return null;
+      const bad = matches.filter((m) => m.family_mark === false);
+      if (!bad.length) return null;
+      const sample = bad[0];
+      const key = sample.row?.key || row_key || cell_contains || "?";
+      const title = sample.title?.text || titleNeedle || "this schedule";
+      const ident = sample.row?.identity?.header || "non-TAG";
+      return `Row key "${key}" on "${title}" is not a family equipment MARK (identity header ${ident}; family_mark=false). Do not count it as a scheduled VAV/AHU/FCU/etc. unit — answer no when asked if it is a scheduled unit of that family.`;
+    })();
     return {
       query: {
         title: title ?? null,
@@ -661,18 +794,31 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       },
       count: unique.length,
       truncated: unique.length > limit,
-      matches: unique.slice(0, limit),
+      matches,
+      ...(buildingTagCounts ? { building_tag_counts: buildingTagCounts } : {}),
+      ...(unique.length === 0 ? {
+        next_move: cell_contains
+          ? "Zero rows matched. Retry once with cell_contains set to an exact equipment tag from the user question and no title filter, then inspect returned descriptions; do not paraphrase the same empty description query."
+          : "Zero rows matched. Drop invented title filters, use a filter value that already appears in tool evidence, or refuse if the evidence is not present.",
+      } : keysOnly ? {
+        next_move: `Use count=${unique.length} as the scheduled row total and building_tag_counts=${JSON.stringify(buildingTagCounts)} for building splits. Re-query with row_key for citation cell bboxes.`,
+      } : nonFamilyHint ? {
+        next_move: nonFamilyHint,
+      } : multiTitleHint ? {
+        next_move: multiTitleHint,
+      } : {}),
     };
   }));
 
   server.registerTool("project_takeoff", {
-    description: `Run the complete deterministic takeoff across every loaded plan and schedule in one call. This is the production answer to requests such as "do a butterfly valve takeoff": pass equipment_types:["Butterfly valve"] for an exact taxonomy subtype, categories:["valve"] for the entire trade family, or omit both for all recognized equipment. The reply includes every schedule row and extracted table cell, installed quantities, drawing coordinates, source schedule coordinates, explicit failures/refusals, and separate tagged-row versus untagged-legend results. It never estimates quantity from a schedule row: installed counts come only from corroborated plan labels/geometry, and structurally unavailable evidence returns a typed refusal. Load every file in the bid set first with load_plan + merge:true. This is read-only; it does not commit canvas shapes. ${COORDS}`,
+    description: `Run the complete deterministic takeoff across every loaded plan and schedule in one call. This is the production answer to requests such as "do a butterfly valve takeoff": pass equipment_types:["Butterfly valve"] for an exact taxonomy subtype, categories:["valve"] for the entire trade family, or omit both for all recognized equipment. Default detail is "compact" (stats + per-item tag/type/qty/status/schedule sheet + failures + tables_seen) so agent context stays usable on large sets; pass detail:"full" only when you need every schedule_row cell dump and extracted_tables. Installed counts come only from corroborated plan labels/geometry; structurally unavailable evidence returns a typed refusal. For pure schedule MARK counts by family, prefer query_table on the titled equipment schedules — do not invent extra units from vibration-isolation or other cross-reference tables. Load every file in the bid set first with load_plan + merge:true. Read-only; does not commit canvas shapes. ${COORDS}`,
     inputSchema: {
       categories: z.array(z.string()).optional().describe('Taxonomy families, e.g. ["valve","damper"]. Omit for every recognized family.'),
       equipment_types: z.array(z.string()).optional().describe('Exact taxonomy component names, case-insensitive, e.g. ["Butterfly valve"]. Narrows both tagged schedule and untagged legend results.'),
+      detail: z.enum(["compact", "full"]).optional().describe('Response size. "compact" (default) omits bulky schedule_row dumps and extracted/reference table bodies. "full" returns the complete payload.'),
     },
     outputSchema: projectTakeoffOutput,
-  }, run("project_takeoff", async ({ categories, equipment_types }) => {
+  }, run("project_takeoff", async ({ categories, equipment_types, detail }) => {
     const allComponents = [
       ...VALVES, ...ACTUATORS, ...DAMPERS, ...AIR_TERMINALS, ...MAJOR_EQUIPMENT, ...SENSORS,
     ];
@@ -696,7 +842,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     });
     const stats = statsFor(items);
     const legendStats = statsFor(legendItems);
-    return {
+    const full = {
       ...result,
       family_filter: effectiveCategories,
       equipment_type_filter: requested?.map((component) => component.name) ?? null,
@@ -713,6 +859,21 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
         total_drawn_instances: legendStats.total_drawn_instances,
       },
     };
+    if (detail === "full") return full;
+    // compact (default): keep schema-shaped items, drop multi-hundred-KB dumps.
+    // Do not add undeclared output fields — MCP structuredContent is strict.
+    const slimItem = (item: (typeof items)[number]) => ({
+      ...item,
+      schedule_row: null,
+      drawing_locations: (item.drawing_locations || []).slice(0, 3),
+    });
+    return {
+      ...full,
+      items: items.map(slimItem),
+      legend_items: legendItems.map(slimItem),
+      extracted_tables: [],
+      reference_tables: [],
+    };
   }));
 
   server.registerTool("read_sheet_text", {
@@ -725,16 +886,30 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   }, run("read_sheet_text", (a) => session.readSheetText(a.sheet, a.region)));
 
   server.registerTool("find_text", {
-    description: `LOCATE a known string on a sheet — the complement to read_sheet_text (which returns what a region SAYS; this finds WHERE a string you already know sits). Case-insensitive substring match against each pdf.js text run, so a room label split across runs ("OFFICE" then "134" as separate items) needs a find_text call per fragment, or read_sheet_text over a region to see the whole thing joined. Every hit's center feeds straight into one_click as the seed — the locate-then-trace workflow: find_text the room number, one_click at (or just past) its center. Optionally restrict to a region {x0, y0, x1, y1}; results cap at limit (default 200), with count/truncated telling you exactly how much a tighter region or higher limit would recover. ${COORDS}`,
+    description: `LOCATE a known string — the complement to read_sheet_text (which returns what a region SAYS; this finds WHERE a string you already know sits). Case-insensitive substring match against each pdf.js text run, so a room label split across runs ("OFFICE" then "134" as separate items) needs a find_text call per fragment, or read_sheet_text over a region to see the whole thing joined. Pass sheet to search one page, or omit sheet to search the entire loaded set (each hit then carries its own sheet). Every hit's center feeds straight into one_click as the seed — the locate-then-trace workflow: find_text the room number, one_click at (or just past) its center. Optionally restrict to a region {x0, y0, x1, y1} on a single sheet; results cap at limit (default 200), with count/truncated telling you exactly how much a tighter region or higher limit would recover. ${COORDS}`,
     inputSchema: {
-      sheet: z.string(),
+      sheet: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : String(v)),
+        z.string().optional(),
+      ).describe("Sheet to search; omit to search the entire loaded set"),
       q: z.string().min(1).describe("Text to find — a room number ('134'), a label fragment ('RECEPTION'), a schedule tag ('CPT-1')"),
       region: z.object({ x0: z.number(), y0: z.number(), x1: z.number(), y1: z.number() }).optional()
-        .describe("Rect in image px (origin top-left, y down); omit for the full sheet"),
+        .describe("Rect in image px (origin top-left, y down); requires sheet; omit for the full sheet or set-wide search"),
       limit: z.number().int().min(1).max(2000).default(200).describe("Max hits returned"),
     },
     outputSchema: findTextOutput,
-  }, run("find_text", (a) => session.findText(a.sheet, a.q, { region: a.region, limit: a.limit })));
+  }, run("find_text", (a) => {
+    const result = session.findText(a.sheet, a.q, { region: a.region, limit: a.limit });
+    if (result.count === 0) {
+      return {
+        ...result,
+        next_move: a.sheet
+          ? "Zero hits on that sheet. Omit sheet to search the loaded set, or try a shorter distinctive fragment from the user question—not a field name."
+          : "Zero hits across the loaded set. Try a shorter distinctive fragment from the user question—not a field name—or refuse if the text is not present.",
+      };
+    }
+    return result;
+  }));
 
   server.registerTool("view_sheet", {
     description: `SEE the sheet — render the page (or a crop of it) to a PNG image. This is your eyes on the plan, so CROP, DON'T SQUINT: the render downsamples to the px budget (≤2000 long side), which on an E-size sheet is ~4 sheet pixels per returned pixel — a full-sheet render finds WHERE things are, and only a tight region crop can tell you what the linework and labels actually say. Never audit a trace or read a dimension off a full-sheet render. region is in image px — the same space as every other tool — so a feature at pixel (ix, iy) of the returned image sits at x = region_x0 + ix × (region_x1 − region_x0) / img_w (same for y), and those coordinates go straight into one_click, measure_polygon, or read_sheet_text. overlay:true burns the session's committed shapes into the render (human-affirmed ink solid red, unreviewed machine shapes dashed blue) — render again after committing to verify your geometry landed where you intended, and sanity-check what you see: a fixture-sized ring where a room should be means the seed landed inside a stall or casework; an outsized ring means the flood escaped through an opening. To MEASURE rather than guess, pass grid: a calibrated measuring grid is burned in — thin lines every 1 ft, heavy blue every 5 ft, foot labels along the crop edges, feet counted from the crop's top-left corner. Count grid cells between walls exactly like an estimator scaling a plan; never derive a dimension by eye when the grid can give it to you. grid "auto" uses the sheet's set scale; before set_scale, pass the drawing scale read off the title block as inches-per-foot — "1/4" for a 1/4" = 1'-0" plan, "3/16", "0.25". marks (#297) burns DISCLOSURE layers into the render, so what a reply names, the picture shows: pass the coordinate lists a tool disclosed — question: withheld placements (orange ?-circles), struck: rejections a counter-example or luminance gate refused (magenta struck ×), ring: reference points like the sweep's own seed (violet double ring). The colors sit deliberately off the common CAD pens so they cannot vanish into color-plotted work. An overlay audit without marks shows only committed ink — the validation trap where 37 disclosed near-misses read as "it missed them". Rendering needs the optional native canvas (@napi-rs/canvas); where it isn't installed this tool errors cleanly and every other tool still works. ${COORDS}`,

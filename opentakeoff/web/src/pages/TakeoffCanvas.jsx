@@ -572,6 +572,10 @@ export default function TakeoffCanvas() {
   const rollDragRef = useRef(null);                       // live cut-drag gesture; commit is ONE rollcut command on release
   const [agentLog, setAgentLog] = useState([]);           // streaming run status [{kind, text}]
   const [agentRunning, setAgentRunning] = useState(false);
+  const [agentStatus, setAgentStatus] = useState("");     // plain-language "what's happening"
+  const [agentCitations, setAgentCitations] = useState([]); // clickable source cards (no auto-fly)
+  const [agentThread, setAgentThread] = useState([]);       // [{role:'user'|'assistant', text}]
+  const agentPriorRef = useRef([]);                         // provider priorMessages for follow-ups
   const [showAiSettings, setShowAiSettings] = useState(false); // BYO-key config modal (ai.js seam)
   const agentAbortRef = useRef(null);                     // live AbortController while a run is in flight
   // Persistent Agent run history (maturity plan Phase 2, #HVAC-runhistory):
@@ -7392,9 +7396,12 @@ export default function TakeoffCanvas() {
   async function agentFindText(key, q, region, limitOpt) {
     const query = (q || "").trim();
     if (!query) return { error: "Pass q — the text to find, e.g. a room number or a schedule tag." };
-    const remoteDims = region ? await ensureSheetDims(key) : null;
+    if (region && (key == null || key === "")) {
+      return { error: "region requires sheet; omit both to search the loaded set, or pass sheet with region." };
+    }
+    const remoteDims = (key && region) ? await ensureSheetDims(key) : null;
     const remote = await agentMcpTool("find_text", {
-      sheet: key,
+      ...(key ? { sheet: key } : {}),
       q: query,
       ...(region && remoteDims ? { region: {
         x0: region.x0 * remoteDims.w,
@@ -7405,12 +7412,18 @@ export default function TakeoffCanvas() {
       ...(limitOpt ? { limit: limitOpt } : {}),
     });
     if (remote) {
-      const dims = remoteDims || await ensureSheetDims(key);
-      if (!dims || !Array.isArray(remote.hits)) return remote;
-      return {
-        ...remote,
-        hits: remote.hits.map((hit) => ({
-          text: hit.str,
+      if (!Array.isArray(remote.hits)) return remote;
+      const mapHit = async (hit) => {
+        const sheetKey = hit.sheet || key;
+        const dims = sheetKey ? await ensureSheetDims(sheetKey) : null;
+        if (!dims || !Array.isArray(hit.bbox) || !Array.isArray(hit.center)) {
+          return { text: hit.str || hit.text, str: hit.str || hit.text, sheet: sheetKey || null };
+        }
+        return {
+          text: hit.str || hit.text,
+          str: hit.str || hit.text,
+          sheet: sheetKey || null,
+          bbox_px: Array.isArray(hit.bbox) && hit.bbox.length === 4 ? hit.bbox : undefined,
           at: [hit.center[0] / dims.w, hit.center[1] / dims.h],
           bbox: {
             x0: hit.bbox[0] / dims.w,
@@ -7418,22 +7431,78 @@ export default function TakeoffCanvas() {
             x1: hit.bbox[2] / dims.w,
             y1: hit.bbox[3] / dims.h,
           },
-        })),
+        };
+      };
+      const hits = [];
+      for (const hit of remote.hits) hits.push(await mapHit(hit));
+      const emptyNext = remote.count === 0
+        ? (key
+          ? "Zero hits on that sheet. Omit sheet to search the loaded set, or try a shorter distinctive fragment from the user question—not a field name."
+          : "Zero hits across the loaded set. Try a shorter distinctive fragment from the user question—not a field name—or refuse if the text is not present.")
+        : undefined;
+      return {
+        ...remote,
+        hits,
+        ...(remote.next_move || emptyNext ? { next_move: remote.next_move || emptyNext } : {}),
       };
     }
-    const dims = await ensureSheetGeometry(key);
-    if (!dims) return { error: `Sheet ${key} not found, or has no page to read.` };
-    const spans = await ensureTextSpans(key);
-    const r = region ? { x0: region.x0 * dims.w, y0: region.y0 * dims.h, x1: region.x1 * dims.w, y1: region.y1 * dims.h } : null;
-    const needle = query.toLowerCase();
-    const all = spans.filter((sp) => sp.str.toLowerCase().includes(needle)
-      && (!r || (sp.x0 <= r.x1 && sp.x1 >= r.x0 && sp.y0 <= r.y1 && sp.y1 >= r.y0)));
     const limit = Math.max(1, Math.min(limitOpt || 200, 500));
-    const hits = all.slice(0, limit).map((sp) => ({
-      text: sp.str,
-      at: [+(((sp.x0 + sp.x1) / 2) / dims.w).toFixed(4), +(((sp.y0 + sp.y1) / 2) / dims.h).toFixed(4)],
-    }));
-    return { count: all.length, truncated: all.length > hits.length, hits };
+    const needle = query.toLowerCase();
+    const searchKeys = key
+      ? [key]
+      : agentStateRef.current.panels.filter((p) => p.img?.w).map((p) => p.key);
+    if (!searchKeys.length) {
+      return {
+        sheet: key || null,
+        q: query,
+        count: 0,
+        truncated: false,
+        hits: [],
+        next_move: key
+          ? "Zero hits on that sheet. Omit sheet to search the loaded set, or try a shorter distinctive fragment from the user question—not a field name."
+          : "Zero hits across the loaded set. Try a shorter distinctive fragment from the user question—not a field name—or refuse if the text is not present.",
+      };
+    }
+    const all = [];
+    for (const sheetKey of searchKeys) {
+      const dims = await ensureSheetGeometry(sheetKey);
+      if (!dims) continue;
+      const spans = await ensureTextSpans(sheetKey);
+      const r = (region && sheetKey === key)
+        ? { x0: region.x0 * dims.w, y0: region.y0 * dims.h, x1: region.x1 * dims.w, y1: region.y1 * dims.h }
+        : null;
+      for (const sp of spans) {
+        if (!sp.str.toLowerCase().includes(needle)) continue;
+        if (r && !(sp.x0 <= r.x1 && sp.x1 >= r.x0 && sp.y0 <= r.y1 && sp.y1 >= r.y0)) continue;
+        all.push({
+          text: sp.str,
+          str: sp.str,
+          sheet: sheetKey,
+          bbox_px: [sp.x0, sp.y0, sp.x1, sp.y1],
+          at: [+(((sp.x0 + sp.x1) / 2) / dims.w).toFixed(4), +(((sp.y0 + sp.y1) / 2) / dims.h).toFixed(4)],
+          bbox: {
+            x0: +(sp.x0 / dims.w).toFixed(4),
+            y0: +(sp.y0 / dims.h).toFixed(4),
+            x1: +(sp.x1 / dims.w).toFixed(4),
+            y1: +(sp.y1 / dims.h).toFixed(4),
+          },
+        });
+      }
+    }
+    const hits = all.slice(0, limit);
+    const result = {
+      sheet: key || null,
+      q: query,
+      count: all.length,
+      truncated: all.length > hits.length,
+      hits,
+    };
+    if (all.length === 0) {
+      result.next_move = key
+        ? "Zero hits on that sheet. Omit sheet to search the loaded set, or try a shorter distinctive fragment from the user question—not a field name."
+        : "Zero hits across the loaded set. Try a shorter distinctive fragment from the user question—not a field name—or refuse if the text is not present.";
+    }
+    return result;
   }
 
   // sheet_context — the sheet's STRUCTURE in one call: classified vector
@@ -7687,14 +7756,47 @@ export default function TakeoffCanvas() {
     const result = await agentAnnotate({
       sheet,
       type: "highlight",
+      // Keep label text on the markup record for lists/tool results, but the
+      // canvas never draws it inside the rect (would cover the cited value).
       text,
       rect: [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]],
     });
-    return result.error ? result : {
+    if (result.error) return result;
+    // Estimator-clarity: paint quietly — do NOT auto-fly the viewport.
+    // Source cards in the Agent panel are how the estimator jumps on demand.
+    setShowMarkups(true);
+    const label = String(text || "").trim() || "Cited source";
+    setAgentCitations((list) => {
+      if (list.some((c) => c.id === result.id)) return list;
+      return [...list, {
+        id: result.id,
+        markupId: result.id,
+        sheet,
+        sheetLabel: tabLabel(sheet),
+        label,
+        bbox_px,
+      }];
+    });
+    return {
       ...result,
       bbox_px,
       text,
+      opened_sheet: sheet,
+      navigation: "agent_panel_card",
     };
+  }
+
+  function openAgentCitation(citation) {
+    if (!citation) return;
+    setShowMarkups(true);
+    const markup = agentStateRef.current.markups.find((m) => m.id === citation.markupId)
+      || markups.find((m) => m.id === citation.markupId);
+    if (markup) {
+      flyToMarkup(markup);
+      return;
+    }
+    // Markup not found yet — open the sheet; user can retry from the card.
+    if (citation.sheet) openSheets([citation.sheet], false);
   }
 
   function agentListAnnotations(sheetFilter, conditionFilter) {
@@ -8345,18 +8447,39 @@ export default function TakeoffCanvas() {
   const rejectAllAgentProposals = () => setAgentProposals([]);
 
   // ── the run ────────────────────────────────────────────────────────────────
-  const trimJson = (v, n) => { let s; try { s = JSON.stringify(v); } catch { s = String(v); } return s && s.length > n ? `${s.slice(0, n)}…` : s || ""; };
   function appendAgentLog(ev) {
+    // Estimator-clarity: live log keeps short tool names (for proof harness /
+    // Run History) but the panel shows plain-language status + the answer.
+    // Full args/results still land in Run History via recordRunEvent.
+    const STATUS = {
+      list_sheets: "Listing sheets in this set…",
+      sheet_graph: "Mapping schedules and sheets…",
+      find_schedule: "Finding the right schedule…",
+      read_schedule: "Reading schedule rows…",
+      query_table: "Reading schedule data…",
+      find_text: "Searching the drawings…",
+      read_sheet_text: "Reading sheet text…",
+      sweep_schedule_row: "Looking for plan tags…",
+      count_marks: "Counting marks on plans…",
+      highlight_citation: "Saving a source card…",
+      project_takeoff: "Building the project takeoff…",
+      view_sheet: "Checking a sheet…",
+      resolve_tag: "Resolving a tag…",
+    };
+    if (ev.type === "tool_start") setAgentStatus(STATUS[ev.name] || `Working (${ev.name})…`);
+    if (ev.type === "done" || ev.type === "aborted" || ev.type === "error" || ev.type === "max_iterations") {
+      setAgentStatus("");
+    }
     const entry =
       ev.type === "text" ? { kind: "text", text: ev.text }
-      : ev.type === "tool_start" ? { kind: "tool", text: `→ ${ev.name} ${trimJson(ev.args, 120)}` }
+      : ev.type === "tool_start" ? { kind: "tool", text: `→ ${ev.name}` }
       : ev.type === "tool_end" ? (ev.result?.error
           ? { kind: "error", text: `✗ ${ev.name}: ${ev.result.error}` }
-          : { kind: "status", text: `✓ ${ev.name} ${trimJson({ ...ev.result, image_data_url: undefined, items: Array.isArray(ev.result?.items) ? `${ev.result.items.length} items` : undefined }, 160)}` })
+          : { kind: "status", text: `✓ ${ev.name}` })
       : ev.type === "error" ? { kind: "error", text: `Error: ${ev.message}` }
       : ev.type === "aborted" ? { kind: "status", text: "Stopped." }
       : ev.type === "max_iterations" ? { kind: "status", text: `Stopped at the ${ev.limit}-step cap — review what's staged.` }
-      : ev.type === "done" ? { kind: "status", text: "Done — review the dashed proposals." }
+      : ev.type === "done" ? { kind: "status", text: "Done — review the answer and source cards." }
       : null;
     if (entry) setAgentLog((l) => [...l.slice(-199), entry]);
   }
@@ -8388,27 +8511,56 @@ export default function TakeoffCanvas() {
     if (runSaveTimerRef.current) clearTimeout(runSaveTimerRef.current);
     runSaveTimerRef.current = setTimeout(() => { runSaveTimerRef.current = null; saveRun(run); }, 700);
   }
-  async function runAgent(goal) {
+  async function runAgent(goal, opts = {}) {
     if (agentRunning) return;
     if (!isAiConfigured()) { setShowAiSettings(true); return; }
     if (agentStateRef.current.status !== "ready") { setCommitMsg("Sheet still loading — try again in a moment."); return; }
+    const ask = String(goal || "").trim();
+    if (!ask) return;
+    const followUp = !!opts.followUp && agentPriorRef.current.length > 0;
     const ctl = new AbortController();
     agentAbortRef.current = ctl;
     setAgentRunning(true);
-    setAgentLog([{ kind: "status", text: `Goal: ${goal}` }]);
-    const run = newRun(goal);
+    setAgentStatus(followUp ? "Thinking about your follow-up…" : "Starting…");
+    if (!followUp) {
+      setAgentCitations([]);
+      agentPriorRef.current = [];
+      setAgentThread([{ role: "user", text: ask }]);
+      setAgentLog([{ kind: "status", text: `Goal: ${ask}` }]);
+    } else {
+      setAgentThread((t) => [...t, { role: "user", text: ask }]);
+      setAgentLog((l) => [...l, { kind: "status", text: `Follow-up: ${ask}` }]);
+    }
+    const run = newRun(ask);
     currentRunRef.current = run;
     saveRun(run); // persist immediately — even an instant crash leaves the goal itself on record
     const ctx = buildAgentCtx();
     try {
-      await runAgentLoop({
-        cfg: aiConfig(), goal, tools: AGENT_TOOL_DEFS,
+      const result = await runAgentLoop({
+        cfg: aiConfig(), goal: ask, tools: AGENT_TOOL_DEFS,
+        priorMessages: followUp ? agentPriorRef.current : [],
         execute: (name, args) => executeAgentTool(ctx, name, args),
         onEvent: (ev) => { appendAgentLog(ev); recordRunEvent(ev); },
         signal: ctl.signal,
       });
+      const answerText = typeof result?.text === "string" ? result.text.trim() : "";
+      if (answerText) {
+        agentPriorRef.current = [
+          ...agentPriorRef.current,
+          { role: "user", content: ask },
+          { role: "assistant", content: answerText },
+        ];
+        setAgentThread((t) => {
+          // Avoid duplicating if appendAgentLog already streamed the same final text
+          // as a thread entry — we own thread writes here.
+          const last = t[t.length - 1];
+          if (last?.role === "assistant" && last.text === answerText) return t;
+          return [...t, { role: "assistant", text: answerText }];
+        });
+      }
     } finally {
       setAgentRunning(false);
+      setAgentStatus("");
       agentAbortRef.current = null;
       if (runSaveTimerRef.current) { clearTimeout(runSaveTimerRef.current); runSaveTimerRef.current = null; }
       const run = currentRunRef.current;
@@ -8420,6 +8572,15 @@ export default function TakeoffCanvas() {
       }
       refreshRunHistory();
     }
+  }
+
+  function resetAgentChat() {
+    if (agentRunning) return;
+    agentPriorRef.current = [];
+    setAgentThread([]);
+    setAgentCitations([]);
+    setAgentLog([]);
+    setAgentStatus("");
   }
   const stopAgent = () => agentAbortRef.current?.abort();
 
@@ -10719,10 +10880,14 @@ export default function TakeoffCanvas() {
                         const hx1 = Math.max(c0[0], c1[0]) * p.img.w, hy1 = Math.max(c0[1], c1[1]) * p.img.h;
                         const pad = (5 * w) / z;
                         return (
-                          <g key={m.id}>
+                          <g key={m.id} data-markup-type="highlight" data-markup-id={m.id} data-markup-sheet={m.sheet_id}>
                             {halo(hx0 - pad, hy0 - pad, hx1 + pad, hy1 + pad)}
-                            <rect x={hx0} y={hy0} width={hx1 - hx0} height={hy1 - hy0} fill={mk} fillOpacity={0.18} stroke={mk} strokeWidth={(2 * w) / z} strokeDasharray={dash} />
-                            {m.text && <text x={(hx0 + hx1) / 2} y={(hy0 + hy1) / 2} fill={mk} fontSize={13 / z} fontWeight="700" textAnchor="middle" dominantBaseline="central" style={{ pointerEvents: "none" }}>{m.text}</text>}
+                            {/* Citation/hand highlights are a translucent frame only —
+                                never draw m.text inside the rect: that covers the
+                                schedule value / drawing text the highlight is citing. */}
+                            <rect x={hx0} y={hy0} width={hx1 - hx0} height={hy1 - hy0} fill={mk} fillOpacity={0.18} stroke={mk} strokeWidth={(2 * w) / z} strokeDasharray={dash}>
+                              {m.text ? <title>{m.text}</title> : null}
+                            </rect>
                             {badge(hx0, hy0 - pad - 9 / z)}
                           </g>
                         );
@@ -11652,7 +11817,10 @@ export default function TakeoffCanvas() {
           <AgentPanel
             configured={isAiConfigured()}
             running={agentRunning}
+            status={agentStatus}
             log={agentLog}
+            thread={agentThread}
+            citations={agentCitations}
             proposals={agentProposals}
             condById={condById}
             sheetLabel={(k) => tabLabel(k)}
@@ -11660,6 +11828,8 @@ export default function TakeoffCanvas() {
             fmtArea={(sf) => fa(sf)}
             onRun={runAgent}
             onStop={stopAgent}
+            onResetChat={resetAgentChat}
+            onOpenCitation={openAgentCitation}
             onAccept={acceptAgentProposal}
             onReject={rejectAgentProposal}
             onAcceptAll={acceptAllVisibleAgentProposals}

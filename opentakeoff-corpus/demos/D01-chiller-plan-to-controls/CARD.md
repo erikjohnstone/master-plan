@@ -1,6 +1,6 @@
 # D01 — Chiller plan to controls
 
-Status: `LOCKED — API 5/5; production UI proof validated`
+Status: `LOCKED — API 5/5; UI re-proved under usefulness bar (full row values + answering-cell paints)`
 
 ## Live question
 
@@ -56,14 +56,14 @@ process. `local-host-run.json` records `transport: "stdio_local_process"`,
 and 3.449-second live latency.
 
 The validated production-UI proof is saved as
-`/opt/cursor/artifacts/d01_ui_prompt_tools_answer_highlights_2026-08-30T03-12-35-742Z.webm`.
-Its 34.8-second walkthrough visibly shows the frozen prompt, live set-wide
-tool calls, the complete answer, the exact CH-A1 plan-tag highlight on MS101,
-and the CH-A1 and CV-CH-A1 source-cell highlights on M-603. The proof harness
-checks only the final-answer segment against every expected value and rejects
-iteration caps, placeholders, schedule-row quantity reasoning, normalized
-coordinates, schedule regions mislabeled as plan locations, unsupported
-derivations, and highlight overclaims before retaining a uniquely named video.
+`/opt/cursor/artifacts/d01_ui_prompt_tools_answer_highlights_2026-08-30T05-09-16-177Z.webm`.
+Re-proved under the usefulness bar: frozen prompt, live tools, complete
+truth-matching answer (installed qty, 56.0 tons, 55.4/45°F, 128.5 GPM,
+CV-CH-A1 with 128.0 GPM / 4 in / 2-WAY / 324.0 Cv), plan tag on MS101, and
+**answering value cells** on M-603 (chiller capacity/temps/flow + valve
+flow/size/config/Cv) — not mark-only flybys. Automated check: **12 painted
+regions**. Harness requires ≥5 paints and visible highlights on plan +
+schedule sheets. Gates remain methodology-general.
 
 ## Failure behavior
 

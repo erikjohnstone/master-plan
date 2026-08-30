@@ -149,11 +149,17 @@ The goal in §1 is achieved for the current corpus.
   authorized; the current coordinator-only policy at the top of this file
   controls all future work. The enduring engineering rule is: **never
   hardcode corpus specifics (a filename, a tag, a sheet number) into
-  production code** (`mcp/src`, `web/src/lib`). Every fix has to be a
-  general, real-world-shape-driven rule, because the actual goal (§1) is
-  a pipeline that works on drawing sets it's never seen — a fix that only
-  helps because it recognizes "navfac's own AHU-M1" by name would be
-  actively counterproductive, even if it moved this session's own score.
+  production code** (`mcp/src`, `web/src/lib`, runners, verifiers, UI agent
+  loop). Every fix has to be a general, real-world-shape-driven rule,
+  because the actual goal (§1) is a pipeline that works on drawing sets
+  it's never seen — a fix that only helps because it recognizes "navfac's
+  own AHU-M1" by name would be actively counterproductive, even if it
+  moved this session's own score. This applies equally to the production
+  MCP/API path, stdio localhost path, and in-canvas Agent/UI path: same
+  strict correctness bar, no answer-steering prompts, no demo-only
+  special cases. User-facing workflows must be 100% correct for the same
+  class of question on arbitrary blueprints uploaded to the platform as
+  more sets are trained on; honest refusal when evidence is missing.
 - **Independent re-verification, every single merge, no exceptions.**
   A worker's own claimed numbers are never taken on faith. Before merging:
   `tsc --noEmit` on both packages, the full test suite on both packages

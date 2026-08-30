@@ -1274,6 +1274,22 @@ test("find_text: locates a room label, region narrows the search, limit caps it"
   const blank = await call(client, "find_text", { sheet: KEY, q: "   " });
   assert.equal(blank.isError, true);
   assert.match(blank.data.error, /non-empty/);
+
+  // set-wide search (omit sheet) still finds the same label and stamps sheet on each hit
+  const across = await call(client, "find_text", { q: "OFFICE 101" });
+  assert.equal(across.isError, false);
+  assert.equal(across.data.sheet, null);
+  assert.equal(across.data.count, 1);
+  assert.equal(across.data.hits[0].str, "OFFICE 101");
+  assert.equal(across.data.hits[0].sheet, KEY);
+
+  // region without sheet is a runtime misuse, not a silent full-set search
+  const regionNeedsSheet = await call(client, "find_text", {
+    q: "101",
+    region: { x0: 0, y0: 0, x1: 1, y1: 1 },
+  });
+  assert.equal(regionNeedsSheet.isError, true);
+  assert.match(regionNeedsSheet.data.error, /region requires sheet/);
 });
 
 test("edit_materials: add/remove/patch, minted-on-touch, all-or-nothing, undo restores verbatim", async () => {

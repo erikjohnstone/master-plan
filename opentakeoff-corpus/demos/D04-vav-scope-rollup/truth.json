@@ -1,0 +1,350 @@
+{
+  "schema_version": 1,
+  "demo_id": "D04",
+  "set_id": "federal-mech",
+  "source_file": "federal-attachment4-mechanical.pdf",
+  "ground_truth_completed_before_model_runs": true,
+  "derivation": "Independent unique VAV-* MARK inventory on VOLUME CONTROL BOX SCHEDULE (sheet #16). Non-VAV junk key SUITE100 excluded. 20% stratified find_text hand-count of 13 tags reconciled on plan sheets before any model run. Attribute values read from schedule cells for VAV-1/12/30/58.",
+  "hardness": {
+    "sheet_count": 24,
+    "stress_confirmed": "Dense VAV population (58 scheduled) with fragmented/repeated plan labels (hundreds of VAV- find_text hits across sheets). Rollup must use the schedule title-scan count, not plan-label frequency, and must not count non-VAV junk keys extracted into the schedule table."
+  },
+  "hand_count_20pct": {
+    "vav": {
+      "required_sample": 12,
+      "found_on_drawings_or_schedules": 13,
+      "sample_size": 13,
+      "sample_tags": [
+        "VAV-1",
+        "VAV-6",
+        "VAV-11",
+        "VAV-16",
+        "VAV-21",
+        "VAV-26",
+        "VAV-31",
+        "VAV-36",
+        "VAV-40",
+        "VAV-45",
+        "VAV-50",
+        "VAV-55",
+        "VAV-58"
+      ],
+      "reconciliation": "pass"
+    }
+  },
+  "follow_up": {
+    "prompt": "Is SUITE100 a scheduled VAV on that volume control box schedule? What is VAV-58 supply CFM?",
+    "expected": {
+      "suite100_is_vav": false,
+      "vav_58_cfm": 350
+    }
+  },
+  "expected": {
+    "vav_count": {
+      "type": "integer",
+      "value": 58,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "bbox_px": [3409.2, 112, 4284.6, 162.5],
+        "grounding_text": "VOLUME CONTROL BOX SCHEDULE",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      },
+      "derivation": "Unique keys matching /^VAV-/ on VOLUME CONTROL BOX SCHEDULE; exclude SUITE100 junk key. Count field cites the schedule title region."
+    },
+    "vav_1_cfm": {
+      "type": "number",
+      "value": 350,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-1",
+        "column": "CFM",
+        "bbox_px": [2676.2, 303.7, 2707.6, 322.6],
+        "grounding_text": "350",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_1_eat_cfm": {
+      "type": "number",
+      "value": 550,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-1",
+        "column": "EAT CFM",
+        "bbox_px": [2820.2, 303.7, 2851.6, 322.6],
+        "grounding_text": "550",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_1_gpm": {
+      "type": "number",
+      "value": 1.1,
+      "tolerance": 0.05,
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-1",
+        "column": "GPM",
+        "bbox_px": [4211.5, 303.7, 4237.9, 322.6],
+        "grounding_text": "1.1",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_1_manufacturer": {
+      "type": "string",
+      "value": "PRICE",
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-1",
+        "column": "MANUFACTURER",
+        "bbox_px": [4652.6, 303.7, 4709.9, 322.6],
+        "grounding_text": "PRICE",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_1_model": {
+      "type": "string",
+      "value": "SDV",
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-1",
+        "column": "MODEL",
+        "bbox_px": [4845.8, 303.7, 4884.4, 322.6],
+        "grounding_text": "SDV",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_12_cfm": {
+      "type": "number",
+      "value": 300,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-12",
+        "column": "CFM",
+        "bbox_px": [2676.2, 588.3, 2707.6, 607.2],
+        "grounding_text": "300",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_12_eat_cfm": {
+      "type": "number",
+      "value": 300,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-12",
+        "column": "EAT CFM",
+        "bbox_px": [2820.2, 588.3, 2851.6, 607.2],
+        "grounding_text": "300",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_12_gpm": {
+      "type": "number",
+      "value": 0.9,
+      "tolerance": 0.05,
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-12",
+        "column": "GPM",
+        "bbox_px": [4211.5, 588.3, 4237.9, 607.2],
+        "grounding_text": "0.9",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_12_manufacturer": {
+      "type": "string",
+      "value": "PRICE",
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-12",
+        "column": "MANUFACTURER",
+        "bbox_px": [4652.6, 588.3, 4709.9, 607.2],
+        "grounding_text": "PRICE",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_12_model": {
+      "type": "string",
+      "value": "SDV",
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-12",
+        "column": "MODEL",
+        "bbox_px": [4845.8, 588.3, 4884.4, 607.2],
+        "grounding_text": "SDV",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_30_cfm": {
+      "type": "number",
+      "value": 150,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-30",
+        "column": "CFM",
+        "bbox_px": [2676.2, 1053.9, 2707.6, 1072.8],
+        "grounding_text": "150",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_30_eat_cfm": {
+      "type": "number",
+      "value": 150,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-30",
+        "column": "EAT CFM",
+        "bbox_px": [2820.2, 1053.9, 2851.6, 1072.8],
+        "grounding_text": "150",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_30_gpm": {
+      "type": "number",
+      "value": 0.5,
+      "tolerance": 0.05,
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-30",
+        "column": "GPM",
+        "bbox_px": [4211.5, 1053.9, 4237.9, 1072.8],
+        "grounding_text": "0.5",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_30_manufacturer": {
+      "type": "string",
+      "value": "PRICE",
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-30",
+        "column": "MANUFACTURER",
+        "bbox_px": [4652.6, 1053.9, 4709.9, 1072.8],
+        "grounding_text": "PRICE",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_30_model": {
+      "type": "string",
+      "value": "SDV",
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-30",
+        "column": "MODEL",
+        "bbox_px": [4845.8, 1053.9, 4884.4, 1072.8],
+        "grounding_text": "SDV",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_58_cfm": {
+      "type": "number",
+      "value": 350,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-58",
+        "column": "CFM",
+        "bbox_px": [2676.2, 1778.5, 2707.6, 1797.4],
+        "grounding_text": "350",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_58_eat_cfm": {
+      "type": "number",
+      "value": 450,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-58",
+        "column": "EAT CFM",
+        "bbox_px": [2820.2, 1778.5, 2851.6, 1797.4],
+        "grounding_text": "450",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_58_gpm": {
+      "type": "number",
+      "value": 1.1,
+      "tolerance": 0.05,
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-58",
+        "column": "GPM",
+        "bbox_px": [4211.5, 1778.5, 4237.9, 1797.4],
+        "grounding_text": "1.1",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_58_manufacturer": {
+      "type": "string",
+      "value": "PRICE",
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-58",
+        "column": "MANUFACTURER",
+        "bbox_px": [4652.6, 1778.5, 4709.9, 1797.4],
+        "grounding_text": "PRICE",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "vav_58_model": {
+      "type": "string",
+      "value": "SDV",
+      "citation": {
+        "sheet_id": "federal-attachment4-mechanical.pdf#16",
+        "table_title": "VOLUME CONTROL BOX SCHEDULE",
+        "row_key": "VAV-58",
+        "column": "MODEL",
+        "bbox_px": [4845.8, 1778.5, 4884.4, 1797.4],
+        "grounding_text": "SDV",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    }
+  }
+}

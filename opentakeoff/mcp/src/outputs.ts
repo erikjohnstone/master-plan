@@ -138,6 +138,9 @@ export const queryTableOutput = {
     title: z.object({ text: z.string(), bbox: sourceBox }).nullable(),
     region: sourceBox,
     headers: z.array(z.string()),
+    /** False when the row key is junk on this equipment schedule (e.g. SUITE100
+     * on a VOLUME CONTROL BOX / VAV schedule) and must not count as a family unit. */
+    family_mark: z.boolean().optional(),
     row: z.object({
       key: z.string(),
       identity: z.object({
@@ -145,6 +148,7 @@ export const queryTableOutput = {
         text: z.string(),
         bbox: sourceBox,
       }).nullable(),
+      family_mark: z.boolean().optional(),
       cells: z.record(z.string(), z.object({
         text: z.string(),
         bbox: sourceBox,
@@ -155,6 +159,10 @@ export const queryTableOutput = {
       })),
     }),
   })),
+  /** Present on broad title scans: unique-key totals partitioned by the
+   * building letter encoded in MEP tags (e.g. FCU-A1 → A, VAV-M101 → M). */
+  building_tag_counts: z.record(z.string(), z.number().int()).optional(),
+  next_move: z.string().optional().describe("Present only when count is 0; names the next legal tool move without inventing values"),
 };
 
 export const sheetInfoOutput = {
@@ -711,15 +719,17 @@ export const undoLastOutput = {
 /** findText — the complement to readSheetTextOutput: WHERE a known string
  * sits, not what a region says. */
 export const findTextOutput = {
-  sheet: z.string(),
+  sheet: z.string().nullable().describe("Sheet searched, or null when the query ran across the loaded set"),
   q: z.string(),
   count: z.number().int().describe("Total matches before the limit cap"),
   truncated: z.boolean().describe("true = count exceeds hits.length; narrow the region or raise limit"),
   hits: z.array(z.object({
+    sheet: z.string().describe("Sheet containing this hit"),
     str: z.string().describe("The matched pdf.js text run, verbatim (may be shorter than the full label — runs aren't merged into lines)"),
     bbox: z.tuple([z.number(), z.number(), z.number(), z.number()]).describe("[x0, y0, x1, y1] image px"),
     center: z.tuple([z.number(), z.number()]).describe("Bbox center, image px — feed straight into one_click's seed"),
   })),
+  next_move: z.string().optional().describe("Present only when count is 0; names the next legal tool move without inventing values"),
 };
 
 /** editMaterials — session.ts's MaterialRow, verbatim. */

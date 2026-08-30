@@ -98,6 +98,146 @@ export function answerShapeErrors(answer, truth) {
   return errors;
 }
 
+export function citationFormErrors(answer, truth) {
+  if (answer?.status !== "done" || !answer.answer || typeof answer.answer !== "object") return [];
+  const errors = [];
+  for (const field of Object.keys(truth.expected)) {
+    const citations = answer.answer?.[field]?.citations;
+    if (!Array.isArray(citations) || !citations.length) {
+      errors.push(`${field} must include at least one citation`);
+      continue;
+    }
+    for (const [index, citation] of citations.entries()) {
+      if (!citation || typeof citation !== "object" || Array.isArray(citation)) {
+        errors.push(`${field} citation ${index} must be an object`);
+        continue;
+      }
+      if (Object.hasOwn(citation, "sheet")) {
+        errors.push(`${field} citation ${index} uses tool key "sheet"; rename it to sheet_id`);
+      }
+      if (typeof citation.sheet_id !== "string" || !citation.sheet_id.trim()) {
+        errors.push(`${field} citation ${index} must include sheet_id`);
+      }
+      if (!Array.isArray(citation.bbox_px) || citation.bbox_px.length !== 4
+        || citation.bbox_px.some((n) => typeof n !== "number" || !Number.isFinite(n))) {
+        errors.push(`${field} citation ${index} must include bbox_px [x0,y0,x1,y1]`);
+      }
+    }
+  }
+  return errors;
+}
+
+function collectToolTexts(toolCalls) {
+  const texts = [];
+  for (const call of toolCalls) {
+    const data = call.result?.data;
+    if (!data) continue;
+    if (call.name === "find_text") {
+      for (const hit of data.hits || []) {
+        if (typeof hit?.str === "string") texts.push(hit.str);
+      }
+    } else if (call.name === "read_sheet_text") {
+      if (typeof data.text === "string") texts.push(data.text);
+      for (const run of data.runs || data.items || []) {
+        if (typeof run?.str === "string") texts.push(run.str);
+        if (typeof run?.text === "string") texts.push(run.text);
+      }
+    } else if (call.name === "query_table") {
+      for (const match of data.matches || []) {
+        for (const cell of Object.values(match.row?.all_cells || match.row?.cells || {})) {
+          if (typeof cell?.text === "string") texts.push(cell.text);
+        }
+        if (typeof match.row?.identity?.text === "string") texts.push(match.row.identity.text);
+      }
+    }
+  }
+  return texts;
+}
+
+export function drawingTextEvidenceErrors(answer, truth, toolCalls) {
+  if (answer?.status !== "done" || !answer.answer || typeof answer.answer !== "object") return [];
+  const nonTableFields = Object.entries(truth.expected)
+    .filter(([, spec]) => {
+      const citations = Array.isArray(spec.citations) ? spec.citations : [spec.citation];
+      return citations.some((citation) => citation && !citation.table_title);
+    })
+    .map(([name]) => name);
+  if (!nonTableFields.length) return [];
+  const drawingHits = toolCalls.flatMap((call) => {
+    if (call.name === "find_text") {
+      const query = typeof call.arguments?.q === "string" ? call.arguments.q.trim() : "";
+      return (call.result?.data?.hits || []).map((hit) => ({
+        sheet: hit.sheet || call.result?.data?.sheet,
+        str: hit.str,
+        bbox: hit.bbox,
+        query,
+      }));
+    }
+    if (call.name === "read_sheet_text") {
+      const sheet = call.result?.data?.sheet;
+      const text = call.result?.data?.text;
+      return typeof text === "string" && sheet ? [{ sheet, str: text, bbox: null, query: "" }] : [];
+    }
+    return [];
+  });
+  const scheduleTexts = new Set(collectToolTexts(toolCalls.filter((call) => call.name === "query_table"))
+    .map((text) => text.trim())
+    .filter(Boolean));
+  const sameBbox = (a, b) => Array.isArray(a) && Array.isArray(b)
+    && a.length === 4 && b.length === 4
+    && a.every((n, i) => Math.abs(n - b[i]) < 0.05);
+  const errors = [];
+  for (const field of nonTableFields) {
+    const value = answer.answer?.[field]?.value;
+    const citations = answer.answer?.[field]?.citations;
+    if (!Array.isArray(citations)) continue;
+    for (const [index, citation] of citations.entries()) {
+      if (citation?.table_title || citation?.row_key || citation?.column) {
+        errors.push(`${field} citation ${index} is a drawing-text field and must not use table_title, row_key, or column`);
+      }
+    }
+    if (typeof value !== "string" || !value.trim()) continue;
+    if (scheduleTexts.has(value.trim())) {
+      errors.push(`${field} value is exact schedule-cell text from query_table; choose a find_text/read_sheet_text phrase that is not a schedule attribute`);
+      continue;
+    }
+    const supporting = drawingHits.filter((hit) => typeof hit.str === "string" && hit.str.includes(value));
+    if (!supporting.length) {
+      errors.push(`${field} value must appear verbatim in find_text/read_sheet_text evidence; do not reuse a schedule cell`);
+      continue;
+    }
+    if (supporting.some((hit) => hit.query && hit.query === value.trim() && hit.str.trim() !== value.trim())) {
+      errors.push(`${field} value equals the find_text query string; copy answering text from hit.str instead of echoing q`);
+      continue;
+    }
+    for (const [index, citation] of citations.entries()) {
+      const matched = supporting.some((hit) =>
+        hit.sheet === citation?.sheet_id
+        && (hit.bbox == null || sameBbox(hit.bbox, citation?.bbox_px)));
+      if (!matched) {
+        errors.push(`${field} citation ${index} must reuse a find_text/read_sheet_text hit sheet and bbox for the returned phrase`);
+      }
+    }
+  }
+  return errors;
+}
+
+export function toolTextOrthographyErrors(answer, truth, toolCalls) {
+  if (answer?.status !== "done" || !answer.answer || typeof answer.answer !== "object") return [];
+  const toolTexts = collectToolTexts(toolCalls);
+  const errors = [];
+  for (const [field, spec] of Object.entries(truth.expected)) {
+    if (spec.type !== "string") continue;
+    const value = answer.answer?.[field]?.value;
+    if (typeof value !== "string" || !value) continue;
+    if (/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/.test(value)
+      && toolTexts.some((text) => text.includes(value.replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/g, "-")))) {
+      errors.push(`${field} must copy the exact ASCII hyphen/text from the tool evidence`);
+    }
+  }
+  return errors;
+}
+
 function systemPrompt(truth) {
   const fields = Object.entries(truth.expected).map(([name, spec]) => ({
     name,
@@ -122,16 +262,20 @@ function systemPrompt(truth) {
     "Never invent a table-title filter from the user's category words. Omit title on the first query, or use only a literal title phrase already returned by a tool (for example POINTS LIST); 'BAS points' does not imply a table literally titled BAS POINTS.",
     "If a natural-language description returns no rows, broaden once with cell_contains set to the exact equipment tag from the prompt and no title filter, then inspect the returned descriptions for the requested point meaning. Do not repeat an equivalent empty query.",
     nonTableFields.length
-      ? `These required fields need drawing-text evidence rather than a table cell: ${nonTableFields.join(", ")}. Use sheet_graph to orient, then find_text/read_sheet_text to return their exact source text and bbox; do not substitute a schedule citation.`
+      ? `These required fields need drawing-text evidence rather than a table cell: ${nonTableFields.join(", ")}. Call find_text or read_sheet_text and cite the returned hit. Never fill these fields from a schedule cell, and never invent a label that no tool returned.`
       : "No required field needs free drawing-text evidence.",
+    "find_text accepts an optional sheet; omit sheet to search the entire loaded set. When searching drawing text, use a distinctive fragment from the user's question—not the field name itself—and set the answer value from hit.str (a contiguous substring is allowed). Never echo the find_text query string as the value when hit.str is longer.",
     "Group independent tool calls into the same response. Inspect each complete result before calling another tool, and never repeat an equivalent query.",
     "Use query_table cell_value for exact cross-table relationships and cell_contains when the related tag is embedded in a compound value; do not scan a whole table or infer a row without source text.",
     "Every query_table match includes row.all_cells. After the first matching row, use all_cells for every requested field on that row instead of making separate column calls.",
+    "When a required field is a scheduled equipment or points-list row count (not installed_quantity), call query_table with the schedule title (no row_key). Copy count and building_tag_counts from that tool result into the answer — do not re-sum or re-partition keys by hand. building_tag_counts letters map to building namespaces as A=Air Ops, M=MITRACON/Mitracon, T=ATCT — never swap them. If sheet_graph shows multiple related schedule titles for one family (air-cooled vs heat-recovery chillers; dedicated outdoor-air UNIT vs HANDLING schedules), query each title the goal asks for and sum those count values for unique keys (and merge building_tag_counts). Do not blend sibling titles the goal excluded — for DOAH unit schedules, query title \"DEDICATED OUTDOOR AIR UNIT\" (not HANDLING); query HANDLING only when the goal asks for it. Then re-query specific row_key values for the MARK/identity bboxes you must cite. Do not invent units from vibration-isolation, connection, or calculation cross-reference tables, and do not treat concatenated twin marks as extra units.",
+    "For those schedule/points-list count fields, cite the schedule title region: sheet_id + table_title + matches[0].title.bbox as bbox_px, with row_key and column null. Never cite a TAG/MARK cell for a count field.",
     "sweep_schedule_row includes row.cell_citations for every schedule attribute. Use those exact per-cell bboxes; row.citation is only the row identity and must never be reused for attribute fields.",
+    "Copy string values exactly from tool text. Do not replace ASCII hyphens with Unicode dashes, and do not paraphrase a returned phrase.",
     "Return JSON only after all required fields are answered.",
     "The final JSON shape is:",
     '{"status":"done","answer":{"<field>":{"value":"typed value","citations":[{"sheet_id":"exact tool sheet","table_title":"when applicable","row_key":"when applicable","column":"when applicable","bbox_px":[x0,y0,x1,y1]}]}}}',
-    "Translate every native tool citation into the final JSON citation shape: tool sheet → sheet_id, and tool bbox {x0,y0,x1,y1} → bbox_px [x0,y0,x1,y1]. Preserve the exact sheet string and coordinate numbers, but do not copy the tool object's key names or bbox object shape.",
+    "Translate every native tool citation into the final JSON citation shape: tool sheet → sheet_id, and tool bbox {x0,y0,x1,y1} → bbox_px [x0,y0,x1,y1]. Preserve the exact sheet string and coordinate numbers, but do not copy the tool object's key names or bbox object shape. Never emit a citation key named sheet.",
     needsInstalledQuantity
       ? "A schedule field uses its exact cell bbox. For equipment_tag and installed_quantity in this quantity workflow, use sweep_schedule_row.tag_citations and no schedule citation."
       : "Every requested schedule field, including equipment_tag, uses its exact query_table identity or value-cell bbox.",
@@ -149,6 +293,73 @@ function requestId(response, json) {
     || response.headers.get("request-id")
     || json.id
     || null;
+}
+
+/** Compact sheet_graph payload for seeding the already-computed setup index into
+ * the model transcript without re-sending full span/evidence payloads. */
+export function compactSheetGraph(data) {
+  const sheets = Array.isArray(data?.sheets) ? data.sheets : [];
+  return {
+    sheet_count: sheets.length,
+    sheets: sheets.map((sheet) => ({
+      sheet: sheet.sheet,
+      role: sheet.role,
+      schedules: Array.isArray(sheet.schedules)
+        ? sheet.schedules.map((schedule) => ({
+          kind: schedule.kind,
+          title: schedule.title,
+          rows: schedule.rows,
+        }))
+        : [],
+    })),
+  };
+}
+
+/** Keep demo-runner transcripts under the model context limit on large sets. */
+export function compactToolResult(result) {
+  if (!result || typeof result !== "object") return result;
+  const data = result.data;
+  if (!data || typeof data !== "object") {
+    if (typeof result.error === "string" && result.error.length > 600) {
+      return { ...result, error: `${result.error.slice(0, 500)}…` };
+    }
+    return result;
+  }
+  let next = data;
+  if (Array.isArray(data.sheets) && data.sheets.length > 0) {
+    next = compactSheetGraph(data);
+  } else if (Array.isArray(data.matches) && data.matches.length > 2
+    && Number.isFinite(Number(data.count)) && Number(data.count) >= 2) {
+    const q = data.query || {};
+    const scoped = q.row_key != null && String(q.row_key).trim() !== ""
+      || q.column != null
+      || q.cell_value != null
+      || q.cell_contains != null;
+    if (!scoped) {
+      next = {
+        ...data,
+        matches: data.matches.slice(0, 1),
+        matches_omitted: data.matches.length - 1,
+      };
+    } else if (data.matches.length > 3) {
+      next = { ...data, matches: data.matches.slice(0, 3), matches_omitted: data.matches.length - 3 };
+    }
+  } else if (Array.isArray(data.rows) && data.rows.length > 4) {
+    next = { ...data, rows: data.rows.slice(0, 4), rows_omitted: data.rows.length - 4 };
+  }
+  const payload = { ...result, data: next };
+  const text = JSON.stringify(payload);
+  if (text.length > 8000) {
+    return {
+      ...result,
+      data: {
+        ...(typeof next === "object" ? next : { value: next }),
+        truncated_for_context: true,
+        note: "Tool result truncated for model context; re-query with tighter filters for details.",
+      },
+    };
+  }
+  return payload;
 }
 
 async function productionPair(stdio) {
@@ -187,7 +398,8 @@ export async function runToolCallingModel({
   tools,
   execute,
   fetchFn = fetch,
-  maxIterations = 12,
+  maxIterations = 18,
+  seededToolCalls = [],
 }) {
   const messages = [
     { role: "system", content: systemPrompt(truth) },
@@ -197,6 +409,27 @@ export async function runToolCallingModel({
   const toolCalls = [];
   const requestIds = [];
   let resolvedModel = model;
+
+  for (const seeded of seededToolCalls) {
+    const callId = seeded.id || `seed-${toolCalls.length + 1}`;
+    messages.push({
+      role: "assistant",
+      content: null,
+      tool_calls: [{
+        id: callId,
+        type: "function",
+        function: {
+          name: seeded.name,
+          arguments: JSON.stringify(seeded.arguments || {}),
+        },
+      }],
+    });
+    messages.push({
+      role: "tool",
+      tool_call_id: callId,
+      content: JSON.stringify(seeded.result),
+    });
+  }
 
   for (let iteration = 0; iteration < maxIterations; iteration++) {
     const started = performance.now();
@@ -220,7 +453,14 @@ export async function runToolCallingModel({
     if (id) requestIds.push(id);
     rawModelResponses.push({ request_id: id, latency_ms: +elapsedMs.toFixed(2), response: json });
     if (!response.ok) {
-      throw new Error(`Model endpoint returned ${response.status}: ${JSON.stringify(json)}`);
+      const error = new Error(`Model endpoint returned ${response.status}: ${JSON.stringify(json)}`);
+      error.diagnostics = {
+        raw_model_responses: rawModelResponses,
+        tool_calls: toolCalls,
+        request_ids: requestIds,
+        model_version_identifier: resolvedModel,
+      };
+      throw error;
     }
     resolvedModel = json.model || resolvedModel;
     const message = json.choices?.[0]?.message;
@@ -236,6 +476,30 @@ export async function runToolCallingModel({
           messages.push({
             role: "user",
             content: `Your previous final response violated the required field types: ${shapeErrors.join("; ")}. Re-emit the same answer with those JSON types corrected. Do not change factual values, citations, or add new claims.`,
+          });
+          continue;
+        }
+        const formErrors = citationFormErrors(answer, truth);
+        if (formErrors.length) {
+          messages.push({
+            role: "user",
+            content: `Your previous final response violated the required citation shape: ${formErrors.join("; ")}. Re-emit the same answer using sheet_id and bbox_px only. Do not change factual values or add new claims.`,
+          });
+          continue;
+        }
+        const orthographyErrors = toolTextOrthographyErrors(answer, truth, toolCalls);
+        if (orthographyErrors.length) {
+          messages.push({
+            role: "user",
+            content: `Your previous final response altered tool text orthography: ${orthographyErrors.join("; ")}. Re-emit the same answer copying the exact characters returned by the tools.`,
+          });
+          continue;
+        }
+        const drawingErrors = drawingTextEvidenceErrors(answer, truth, toolCalls);
+        if (drawingErrors.length) {
+          messages.push({
+            role: "user",
+            content: `Your previous final response lacked drawing-text evidence: ${drawingErrors.join("; ")}. If a prior find_text/read_sheet_text hit already contains the required phrase, re-emit using that hit's sheet_id and bbox_px. Do not substitute schedule attribute strings. Only call find_text again when no prior hit contains the phrase.`,
           });
           continue;
         }
@@ -271,7 +535,39 @@ export async function runToolCallingModel({
       } catch {
         args = {};
       }
-      const result = await execute(name, args);
+      const normalizeArgs = (toolName, toolArgs) => {
+        const sorted = {};
+        for (const key of Object.keys(toolArgs || {}).sort()) {
+          const value = toolArgs[key];
+          if (typeof value === "string"
+            && (key === "q" || key === "cell_contains" || key === "cell_value" || key === "title" || key === "row_key" || key === "column")) {
+            sorted[key] = value.trim().toLowerCase().replace(/\s+/g, " ");
+          } else {
+            sorted[key] = value;
+          }
+        }
+        return sorted;
+      };
+      const signature = `${name}:${JSON.stringify(normalizeArgs(name, args))}`;
+      const prior = toolCalls.find((previous) =>
+        `${previous.name}:${JSON.stringify(normalizeArgs(previous.name, previous.arguments))}` === signature);
+      let result;
+      if (prior
+        && prior.result
+        && (prior.result.is_error
+          || prior.result.data?.count === 0
+          || (Array.isArray(prior.result.data?.matches) && prior.result.data.matches.length === 0)
+          || (Array.isArray(prior.result.data?.hits) && prior.result.data.hits.length === 0))) {
+        result = {
+          ...prior.result,
+          repeated_empty_query: true,
+          next_move: prior.result.data?.next_move
+            || "This exact tool call already returned empty. Change the filter using prior tool evidence, or refuse; do not repeat the same empty query.",
+        };
+      } else {
+        result = await execute(name, args);
+      }
+      result = compactToolResult(result);
       toolCalls.push({ id: call.id, name, arguments: args, result });
       messages.push({
         role: "tool",
@@ -349,6 +645,12 @@ async function main() {
         truth,
         tools,
         execute: (name, toolArgs) => callTool(client, name, toolArgs),
+        seededToolCalls: [{
+          id: "seed-sheet-graph",
+          name: "sheet_graph",
+          arguments: {},
+          result: { is_error: false, data: compactSheetGraph(sourceIndex.data) },
+        }],
       });
     } catch (error) {
       const elapsed = performance.now() - started;

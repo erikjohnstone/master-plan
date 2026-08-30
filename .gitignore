@@ -5,3 +5,9 @@ dist/
 .env.*
 worktrees/
 opentakeoff-corpus/renders/
+
+# Demo run dumps / localhost proofs stay out of git (keep locally; do not commit payloads)
+opentakeoff-corpus/demos/**/runs/
+opentakeoff-corpus/demos/**/local-host-run.json
+opentakeoff-corpus/raw/
+opentakeoff-corpus/keys/

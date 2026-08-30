@@ -1,12 +1,11 @@
-// Agent panel — the docked right-rail surface for the in-canvas takeoff agent.
-// An estimator types a goal; the agent (running on the user's OWN model via
-// the BYO-AI seam) aims the app's deterministic tools and stages DASHED pencil
-// proposals on the canvas. This panel is the review desk: streaming status
-// while the loop runs, then per-proposal Accept/Reject plus Accept all —
-// nothing becomes a takeoff until a human says so, exactly like one-click's
-// Create gate. Unconfigured builds get the honest empty state (the Contribute
-// modal pattern): no key, no run, and a link to AI settings.
-import { useEffect, useRef, useState } from "react";
+// Agent panel — docked right-rail takeoff agent.
+// Estimator-clarity contract:
+//   1. Plain-language status while working
+//   2. Chat thread with the actual data (not a tool dump)
+//   3. Clickable source cards → jump on demand (no auto-fly)
+//   4. Conversational follow-ups in the same thread
+//   5. Raw tool traces collapsed / secondary
+import { useEffect, useMemo, useRef, useState } from "react";
 import { keyText } from "../lib/keys.ts";
 import { Icon } from "../brand/icons.jsx";
 
@@ -22,9 +21,9 @@ const evidenceText = (ev) => {
 const LOG_STYLE = { status: "var(--ink-muted)", tool: "var(--cobalt)", text: "var(--ink)", error: "var(--c-danger)" };
 const RUN_STATUS_STYLE = { running: "var(--cobalt)", done: "var(--c-positive)", error: "var(--c-danger)", aborted: "var(--ink-muted)" };
 
-// One tool_calls entry rendered the same shape as the live log — a Run's
-// persisted trace and the streaming view of the run that produced it should
-// never look like two different things to the person reading them.
+const isGateOrCheck = (text) =>
+  /^\[(?:Evidence gate|Automated check):/i.test(String(text || "").trim());
+
 const runEventText = (ev) => {
   if (ev.type === "text") return ev.text;
   if (ev.type === "tool_start") return `→ ${ev.name}`;
@@ -42,10 +41,6 @@ const relTime = (ms) => {
   return new Date(ms).toLocaleDateString();
 };
 
-// Run History — a persisted, reviewable ledger of past goals (maturity plan
-// Phase 2): what was asked, its full tool trace, and how it ended, still
-// there after a reload — unlike the live log above, which is one run's
-// scrollback and is gone the moment the next run starts.
 function RunHistoryList({ runs }) {
   const [open, setOpen] = useState(() => new Set());
   const toggle = (id) => setOpen((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
@@ -84,29 +79,102 @@ function RunHistoryList({ runs }) {
   );
 }
 
+function splitLog(log) {
+  const steps = [];
+  const meta = [];
+  for (const e of log) {
+    if (e.kind === "text" && isGateOrCheck(e.text)) meta.push(e);
+    else if (e.kind !== "text" || isGateOrCheck(e.text)) steps.push(e);
+  }
+  return { steps, meta };
+}
+
+function SourceCard({ citation, onOpen }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onOpen?.(citation)}
+      title={`Open ${citation.sheetLabel || citation.sheet} and show this source`}
+      style={{
+        display: "block", width: "100%", textAlign: "left", cursor: "pointer",
+        padding: "8px 10px", marginBottom: 6,
+        border: "1px solid var(--ink-faint)", borderRadius: 6,
+        background: "var(--paper)", color: "var(--ink)", font: "inherit",
+      }}
+    >
+      <span style={{ display: "block", fontSize: 13, fontWeight: 600, lineHeight: 1.35, overflowWrap: "anywhere" }}>
+        {citation.label}
+      </span>
+      <span style={{ display: "block", fontSize: 11, color: "var(--cobalt)", marginTop: 3 }}>
+        {citation.sheetLabel || citation.sheet} → view on drawing
+      </span>
+    </button>
+  );
+}
+
 export default function AgentPanel({
-  configured, running, log, proposals, condById, sheetLabel, units,
-  fmtArea, onRun, onStop, onAccept, onReject, onAcceptAll, onRejectAll,
+  configured, running, status = "", log, thread = [], citations = [], proposals, condById, sheetLabel, units,
+  fmtArea, onRun, onStop, onResetChat, onOpenCitation, onAccept, onReject, onAcceptAll, onRejectAll,
   onOpenSettings, onClose,
   runHistory = [], historyOpen = false, onToggleHistory,
 }) {
-  const [goal, setGoal] = useState("");
+  const [draft, setDraft] = useState("");
+  const [showSteps, setShowSteps] = useState(false);
+  // Sources stay collapsed by default so the Answer stays answer-first —
+  // a long card list must not bury the takeoff reply (seen on D03/D04 demos).
+  const [showSources, setShowSources] = useState(false);
+  const threadRef = useRef(null);
   const logRef = useRef(null);
-  // follow the stream — pin the log to its latest line as events arrive
-  useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [log]);
-  void units; // reserved for a metric readout pass; fmtArea already localizes
+  const { steps, meta } = useMemo(() => splitLog(log), [log]);
+  const hasAssistant = thread.some((m) => m.role === "assistant");
+  const canFollowUp = hasAssistant && !running;
 
-  const run = () => { const g = goal.trim(); if (g && !running) onRun(g); };
+  useEffect(() => {
+    if (!running && hasAssistant) setShowSteps(false);
+  }, [running, hasAssistant]);
+
+  useEffect(() => {
+    const el = threadRef.current;
+    if (!el) return;
+    if (running) {
+      el.scrollTop = el.scrollHeight;
+      return;
+    }
+    // When idle with an Answer, keep the latest assistant reply in view —
+    // do not auto-scroll to the Sources list at the bottom.
+    const answers = el.querySelectorAll('[data-agent-role="assistant"]');
+    const last = answers[answers.length - 1];
+    if (last) {
+      last.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      return;
+    }
+    el.scrollTop = el.scrollHeight;
+  }, [thread, citations, status, running]);
+
+  useEffect(() => {
+    if (logRef.current && showSteps) logRef.current.scrollTop = logRef.current.scrollHeight;
+  }, [log, showSteps]);
+  void units;
+  void sheetLabel;
+
+  const send = (followUp) => {
+    const g = draft.trim();
+    if (!g || running) return;
+    setDraft("");
+    onRun(g, followUp ? { followUp: true } : {});
+  };
   const ctl = { padding: "3px 9px", border: "1px solid var(--ink-faint)", background: "transparent", cursor: "pointer", fontSize: 11.5 };
 
   return (
-    <div style={{ width: 340, flexShrink: 0, display: "flex", flexDirection: "column", borderLeft: "1px solid var(--ink-faint)", background: "var(--paper-bright)", overflow: "hidden", minHeight: 0 }}>
-      {/* header strip — matches the docked-panel chrome */}
+    <div style={{ width: 380, flexShrink: 0, display: "flex", flexDirection: "column", borderLeft: "1px solid var(--ink-faint)", background: "var(--paper-bright)", overflow: "hidden", minHeight: 0 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 12px", background: "var(--cobalt)", color: "var(--accent-contrast)" }}>
         <Icon name="target" size={15} />
         <strong style={{ flex: 1, fontSize: 12.5 }}>Agent{proposals.length ? ` · ${proposals.length} pending` : ""}</strong>
+        {configured && thread.length > 0 && (
+          <button onClick={onResetChat} disabled={running} title="Start a new question" style={{ border: "none", background: "transparent", color: "var(--accent-contrast)", cursor: running ? "default" : "pointer", fontSize: 11, opacity: running ? 0.5 : 1 }}>New</button>
+        )}
         {configured && (
-          <button onClick={onToggleHistory} title={historyOpen ? "Back to the current run" : "Run History — every past goal, its full tool trace, and how it ended (persists across reloads)"} style={{ border: "none", background: historyOpen ? "rgba(255,255,255,0.22)" : "transparent", color: "var(--accent-contrast)", cursor: "pointer", padding: "2px", display: "flex" }}>
+          <button onClick={onToggleHistory} title={historyOpen ? "Back to chat" : "Run History"} style={{ border: "none", background: historyOpen ? "rgba(255,255,255,0.22)" : "transparent", color: "var(--accent-contrast)", cursor: "pointer", padding: "2px", display: "flex" }}>
             <Icon name="history" size={14} />
           </button>
         )}
@@ -116,58 +184,146 @@ export default function AgentPanel({
       {configured && historyOpen ? (
         <RunHistoryList runs={runHistory} />
       ) : !configured ? (
-        // honest empty state — the Contribute-modal pattern: nothing configured,
-        // nothing runs, no pretense. Zero network calls until the user brings a key.
         <div style={{ padding: 14, fontSize: 13, lineHeight: 1.6, color: "var(--ink)" }}>
           <p style={{ marginTop: 0 }}>
             The agent runs on a model <strong>you</strong> provide — your endpoint, your key, straight from this
-            browser (the same bring-your-own-AI seam as the scale reader). Nothing is configured, so it can't run.
-          </p>
-          <p style={{ color: "var(--ink-muted)" }}>
-            Once configured, you describe a takeoff ("take off the carpet per the finish schedule on this sheet")
-            and the agent aims the app's own tools — the text layer, the schedule parser, the one-click engine —
-            then stages dashed proposals you accept or reject. It never invents geometry and never commits anything itself.
+            browser. Nothing is configured, so it can't run.
           </p>
           <button className="btn-primary" onClick={onOpenSettings} style={{ marginTop: 4 }}>AI settings…</button>
         </div>
       ) : (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
-          {/* goal + run */}
-          <div style={{ padding: "10px 12px", borderBottom: "1px solid var(--ink-faint)" }}>
+          {/* Chat thread — the primary surface */}
+          <div ref={threadRef} style={{ flex: 1, minHeight: 120, overflow: "auto", padding: "10px 12px" }}>
+            {thread.length === 0 && !running && (
+              <div style={{ color: "var(--ink-muted)", fontSize: 12.5, lineHeight: 1.55 }}>
+                Ask a real estimating question. You'll get the data here, source cards to open on the drawing, and you can keep chatting about what just happened.
+              </div>
+            )}
+            {thread.map((m, i) => (
+              <div
+                key={`${m.role}-${i}`}
+                data-agent-role={m.role}
+                style={{
+                  marginBottom: 10,
+                  padding: m.role === "user" ? "8px 10px" : 0,
+                  borderRadius: m.role === "user" ? 8 : 0,
+                  background: m.role === "user" ? "var(--paper)" : "transparent",
+                  border: m.role === "user" ? "1px solid var(--ink-faint)" : "none",
+                }}
+              >
+                <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: 4 }}>
+                  {m.role === "user" ? "You" : "Answer"}
+                </div>
+                <div style={{ color: "var(--ink)", whiteSpace: "pre-wrap", overflowWrap: "anywhere", fontSize: 13, lineHeight: 1.55, fontFamily: "inherit" }}>
+                  {m.text}
+                </div>
+              </div>
+            ))}
+            {running && (
+              <div style={{ fontSize: 12.5, color: "var(--cobalt)", fontWeight: 600, marginBottom: 8 }}>
+                {status || "Working…"}
+              </div>
+            )}
+            {citations.length > 0 && (
+              <div style={{ marginTop: 4 }}>
+                <button
+                  type="button"
+                  onClick={() => setShowSources((v) => !v)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 6, width: "100%",
+                    padding: "4px 0", border: "none", background: "transparent",
+                    cursor: "pointer", font: "inherit",
+                    fontSize: 11, fontWeight: 700, letterSpacing: "0.04em",
+                    textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: 6,
+                  }}
+                >
+                  <Icon name={showSources ? "chevronDown" : "chevronRight"} size={13} />
+                  <span>Sources · {citations.length} · click to open</span>
+                </button>
+                {showSources && citations.map((c) => (
+                  <SourceCard key={c.id} citation={c} onOpen={onOpenCitation} />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Composer — first ask or follow-up */}
+          <div style={{ padding: "10px 12px", borderTop: "1px solid var(--ink-faint)" }}>
             <textarea
-              name="agent-goal" value={goal} onChange={(e) => setGoal(e.target.value)} rows={3}
-              placeholder={'e.g. "Take off the carpet per the finish schedule on this sheet."'}
-              onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); run(); } }}
+              name="agent-goal"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              rows={canFollowUp ? 2 : 3}
+              placeholder={canFollowUp
+                ? 'Ask a follow-up — e.g. "Why AI10 and not another point?"'
+                : 'e.g. "What is CH-A1 capacity and the matching CHW valve?"'}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+                  e.preventDefault();
+                  send(canFollowUp);
+                }
+              }}
               style={{ width: "100%", boxSizing: "border-box", resize: "vertical", fontSize: 12.5, fontFamily: "inherit", padding: "6px 8px", border: "1px solid var(--ink-faint)", background: "var(--paper-bright)", color: "var(--ink)", outline: "none" }}
             />
             <div style={{ display: "flex", gap: 8, marginTop: 6, alignItems: "center" }}>
               {running ? (
                 <button onClick={onStop} style={{ ...ctl, color: "var(--c-danger)", fontWeight: 600 }}>■ Stop</button>
               ) : (
-                <button onClick={run} disabled={!goal.trim()} className="btn-primary" style={{ padding: "5px 14px", fontSize: 12, cursor: goal.trim() ? "pointer" : "default", opacity: goal.trim() ? 1 : 0.5 }}>Run</button>
+                <button
+                  onClick={() => send(canFollowUp)}
+                  disabled={!draft.trim()}
+                  className="btn-primary"
+                  style={{ padding: "5px 14px", fontSize: 12, cursor: draft.trim() ? "pointer" : "default", opacity: draft.trim() ? 1 : 0.5 }}
+                >
+                  {canFollowUp ? "Ask" : "Run"}
+                </button>
               )}
-              <span style={{ fontSize: 10.5, color: "var(--ink-muted)" }}>{running ? "Working — proposals land as dashed outlines." : keyText("⌘⏎ runs. Your key, your endpoint.")}</span>
-              <span style={{ flex: 1 }} />
-              <button onClick={onOpenSettings} title="AI settings (endpoint / model / key)" style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--ink-muted)" }}><Icon name="sliders" size={13} /></button>
+              <span style={{ flex: 1, fontSize: 11, color: "var(--ink-muted)" }}>
+                {running ? "" : keyText(canFollowUp ? "⌘⏎ asks follow-up" : "⌘⏎ runs")}
+              </span>
+              <button onClick={onOpenSettings} title="AI settings" style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--ink-muted)" }}><Icon name="sliders" size={13} /></button>
             </div>
           </div>
 
-          {/* streaming status log */}
-          <div ref={logRef} style={{ flex: 1, minHeight: 60, overflow: "auto", padding: "8px 12px", fontFamily: "var(--f-mono)", fontSize: 11, lineHeight: 1.55 }}>
-            {log.length === 0 && <div style={{ color: "var(--ink-muted)", fontFamily: "inherit" }}>No run yet.</div>}
-            {log.map((e, i) => (
-              <div key={i} style={{ color: LOG_STYLE[e.kind] || "var(--ink)", whiteSpace: "pre-wrap", overflowWrap: "anywhere", marginBottom: 3 }}>{e.text}</div>
-            ))}
+          <div style={{ position: "relative", borderTop: "1px solid var(--ink-faint)" }}>
+            <button
+              type="button"
+              onClick={() => setShowSteps((v) => !v)}
+              style={{
+                display: "flex", alignItems: "center", gap: 6, width: "100%",
+                padding: "7px 12px", border: "none", background: "transparent",
+                cursor: "pointer", font: "inherit", color: "var(--ink-muted)", fontSize: 11.5,
+              }}
+            >
+              <Icon name={showSteps ? "chevronDown" : "chevronRight"} size={13} />
+              <span style={{ flex: 1, textAlign: "left" }}>
+                Technical steps{steps.length ? ` · ${steps.filter((e) => e.kind === "tool").length}` : ""}
+              </span>
+            </button>
+            {showSteps && (
+              <div ref={logRef} style={{ maxHeight: 140, overflow: "auto", padding: "0 12px 8px", fontFamily: "var(--f-mono)", fontSize: 10.5, lineHeight: 1.5 }}>
+                {[...steps, ...meta].map((e, i) => (
+                  <div key={i} style={{ color: LOG_STYLE[e.kind] || "var(--ink)", whiteSpace: "pre-wrap", overflowWrap: "anywhere", marginBottom: 2 }}>{e.text}</div>
+                ))}
+              </div>
+            )}
+            {!showSteps && (
+              <div aria-hidden="true" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>
+                {[...steps, ...meta].map((e, i) => (
+                  <div key={`hidden-${i}`}>{e.text}</div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* pending proposals — the accept gate */}
-          <div style={{ borderTop: "1px solid var(--ink-faint)", maxHeight: "45%", display: "flex", flexDirection: "column", minHeight: 0 }}>
+          <div style={{ maxHeight: "28%", display: "flex", flexDirection: "column", minHeight: 0, borderTop: "1px solid var(--ink-faint)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 12px" }}>
               <strong style={{ flex: 1, fontSize: 11.5 }}>Proposals · {proposals.length}</strong>
               {proposals.length > 0 && (
                 <>
-                  <button onClick={onAcceptAll} style={{ ...ctl, color: "var(--c-positive)", fontWeight: 600 }} title={keyText("Accept every visible proposal (⏎ on the canvas does the same)")}>Accept all</button>
-                  <button onClick={onRejectAll} style={{ ...ctl, color: "var(--c-danger)" }} title="Discard every pending proposal (local only — nothing is recorded)">Reject all</button>
+                  <button onClick={onAcceptAll} style={{ ...ctl, color: "var(--c-positive)", fontWeight: 600 }}>Accept all</button>
+                  <button onClick={onRejectAll} style={{ ...ctl, color: "var(--c-danger)" }}>Reject all</button>
                 </>
               )}
             </div>
@@ -179,14 +335,14 @@ export default function AgentPanel({
                     <span style={{ width: 10, height: 10, flexShrink: 0, background: cond?.color || "var(--cobalt)", border: "1px solid var(--ink-faint)" }} />
                     <span style={{ flex: 1, minWidth: 0 }}>
                       <span style={{ fontWeight: 600 }}>{cond?.finish_tag || "?"}</span>
-                      {p.measure_role === "deduct" ? " (deduct)" : ""} · {sheetLabel(p.sheet_id)}
+                      {p.measure_role === "deduct" ? " (deduct)" : ""}
                       {p.area_sf != null ? ` · ${fmtArea(p.area_sf)}` : ""}
-                      <span style={{ display: "block", color: "var(--ink-muted)", fontSize: 10.5, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={evidenceText(p.evidence)}>
+                      <span style={{ display: "block", color: "var(--ink-muted)", fontSize: 10.5, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         {evidenceText(p.evidence) || "no evidence"}
                       </span>
                     </span>
-                    <button onClick={() => onAccept(p.id)} style={{ ...ctl, color: "var(--c-positive)", fontWeight: 600 }} title="Accept — commits as a takeoff (origin: agent, human-reviewed)">✓</button>
-                    <button onClick={() => onReject(p.id)} style={{ ...ctl, color: "var(--c-danger)" }} title="Reject — discard this proposal (local only)">✕</button>
+                    <button onClick={() => onAccept(p.id)} style={{ ...ctl, color: "var(--c-positive)", fontWeight: 600 }}>✓</button>
+                    <button onClick={() => onReject(p.id)} style={{ ...ctl, color: "var(--c-danger)" }}>✕</button>
                   </div>
                 );
               })}

@@ -22,7 +22,7 @@
 import type { Session } from "./session.ts";
 import { HVAC_TAXONOMY, type HvacComponent } from "../../web/src/lib/hvacTaxonomy.ts";
 import type { Point } from "../../web/src/lib/oneclick.ts";
-import type { ScheduleTable, TableRow } from "../../web/src/lib/sheetgraph.ts";
+import { isReferenceCrossTable, type ScheduleTable, type TableRow } from "../../web/src/lib/sheetgraph.ts";
 
 /** The structured failure taxonomy requested for this pipeline — classifies
  * WHY a tag's takeoff came out the way it did, distinct from a raw error
@@ -429,6 +429,12 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
     out.extracted_tables.push(extracted);
     if (tb.kind === "reference") {
       out.reference_tables.push(extracted);
+      // CONNECTION / CALCULATION / ISOLATION tables are always cross-refs to
+      // equipment defined on dedicated schedules (see isReferenceCrossTable).
+      // Sweeping their MARK keys as deferred "gap fillers" invents phantom
+      // units from concatenated twin marks (AHU-T1AT1B, CH-MT1MT2) and blows
+      // rollups. Keep them in reference_tables[] for disclosure; do not resolve.
+      if (isReferenceCrossTable(tb.title?.text || "", tb.headers || [])) continue;
       for (const row of tb.rows) {
         const tag = (row.key || "").trim();
         if (!tag) continue;

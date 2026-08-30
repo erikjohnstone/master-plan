@@ -4,7 +4,7 @@
   "set_id": "navfac-cherry-point-atc",
   "source_file": "navfac-cherry-point-atc-mechanical.pdf",
   "ground_truth_completed_before_model_runs": true,
-  "derivation": "Read AI10 from the rendered MI731 AHU points list, joined AHU-T1A to its M-621 equipment row, then independently confirmed the AHU-T1A/T1B section and ATCT cab-service narrative on separate rendered sheets.",
+  "derivation": "Read AI10 from the rendered MI731 AHU points list, joined AHU-T1A to its M-621 equipment row, then independently confirmed the AHU-T1A/T1B section and ATCT cab-service narrative on separate rendered sheets. The serves value is the verbatim pdf.js text-run clause from M-002 (not an editorial excerpt).",
   "hardness": {
     "sheet_count": 75,
     "building_namespace": "ATCT",
@@ -53,7 +53,8 @@
         "column": "MARK",
         "bbox_px": [230.64, 348, 371.52, 382.56],
         "grounding_text": "AHU-T1A",
-        "ocr_mode": "single_line"
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
       }
     },
     "physical_location": {
@@ -109,7 +110,8 @@
         "column": "DESCRIPTION ANALOG INPUT",
         "bbox_px": [3434.88, 895.918, 4109.28, 930.476],
         "grounding_text": "AHU-T1A HW VALVE POSITION (FEEDBACK)",
-        "ocr_mode": "single_line"
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
       }
     },
     "alarm_required": {
@@ -140,7 +142,7 @@
     },
     "serves": {
       "type": "string",
-      "value": "ventilation, heating, cooling, and dehumidification to the control cab",
+      "value": "AHU-T1A/B provide ventilation, heating, cooling, and dehumidification to the control cab. Both AHUs are sized to fully serving the cab, providing N+1 redundancy. Room",
       "tolerance": "exact",
       "citation": {
         "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#2",

@@ -123,6 +123,39 @@ export function validateToolArgs(schema, args) {
   return null;
 }
 
+/** Models often pass null / numbers / single-element arrays for optional string
+ *  filters (query_table.row_key, find_text.sheet, …). Coerce before validate so
+ *  those calls succeed instead of burning the step cap on "must be a string". */
+export function coerceStringTypedArgs(schema, args) {
+  if (!schema?.properties || args == null || typeOf(args) !== "object") return args;
+  const out = { ...args };
+  for (const [key, spec] of Object.entries(schema.properties)) {
+    if (spec?.type !== "string" || !(key in out)) continue;
+    let v = out[key];
+    if (v == null || v === "") { delete out[key]; continue; }
+    if (typeof v === "string") continue;
+    if (typeof v === "number" || typeof v === "boolean") { out[key] = String(v); continue; }
+    if (Array.isArray(v)) {
+      const first = v.find((item) => item != null && String(item).trim() !== "");
+      if (first == null) { delete out[key]; continue; }
+      if (typeof first === "object") {
+        const nested = first.text ?? first.value ?? first.key ?? first.q;
+        if (nested == null || String(nested).trim() === "") { delete out[key]; continue; }
+        out[key] = String(nested);
+      } else {
+        out[key] = String(first);
+      }
+      continue;
+    }
+    if (typeof v === "object") {
+      const nested = v.text ?? v.value ?? v.key ?? v.q;
+      if (nested == null || String(nested).trim() === "") { delete out[key]; continue; }
+      out[key] = String(nested);
+    }
+  }
+  return out;
+}
+
 // Normalized region rect — the shared sub-schema. All agent coordinates are
 // normalized 0..1 against the sheet (render-scale-free, same frame as
 // verts_norm), so nothing the agent says depends on raster resolution.
@@ -475,16 +508,16 @@ export const AGENT_TOOL_DEFS = [
   // convention — MCP's equivalents (session.ts) take image px.
   {
     name: "find_text",
-    description: "LOCATE a known string on a sheet — the complement to read_sheet_text (which returns what a region SAYS; this finds WHERE a string you already know sits). Case-insensitive substring match against each positioned text run. Whole-set aware — the sheet does not need to be open as a tab (unlike read_sheet_text/view_region). Optionally restrict to a region; results cap at limit (default 200), with count/truncated telling you exactly how much a tighter region or higher limit would recover.",
+    description: "LOCATE a known string — the complement to read_sheet_text (which returns what a region SAYS; this finds WHERE a string you already know sits). Case-insensitive substring match against each positioned text run. Pass sheet to search one page, or omit sheet to search the entire loaded set (each hit then carries its own sheet). Whole-set aware — sheets do not need to be open as tabs. Each hit includes bbox_px (production image pixels) for highlight_citation, plus normalized bbox/at for UI. Optionally restrict to a region on a single sheet; results cap at limit (default 200), with count/truncated/next_move telling you what to do next on zero hits.",
     input_schema: {
       type: "object",
       properties: {
-        sheet: { type: "string", description: "Sheet key, e.g. 'plan.pdf' or 'plan.pdf#2' — from list_sheets or sheet_graph." },
+        sheet: { type: "string", description: "Sheet to search (e.g. 'plan.pdf#2'); omit to search the entire loaded set." },
         q: { type: "string", description: "Text to find — a room number ('134'), a label fragment ('RECEPTION'), a schedule tag ('CPT-1')." },
         region: REGION_SCHEMA,
         limit: { type: "number", minimum: 1, maximum: 500, description: "Cap on hits returned (default 200)." },
       },
-      required: ["sheet", "q"],
+      required: ["q"],
     },
   },
   {
@@ -558,7 +591,7 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "highlight_citation",
-    description: "Highlight an exact production-API citation bbox on the real blueprint. Pass the cited sheet and bbox_px unchanged; the canvas converts image pixels to normalized UI coordinates and adds a visible highlight markup.",
+    description: "Paint an exact production-API citation bbox on the real blueprint as a highlight markup (no auto-navigation). Pass the cited sheet and bbox_px unchanged (from query_table cells, find_text hit.bbox_px, or sweep_schedule_row citations). The Agent panel shows a clickable source card the estimator uses to jump there on demand. Call this for every factual answer backed by cited evidence. Prefer a short label in text (the value or field name) for the source card — do not rely on overlay words drawn on top of the cell.",
     input_schema: {
       type: "object",
       properties: {
@@ -745,6 +778,7 @@ function stageValidatedShapes(ctx, rawShapes) {
 export async function executeAgentTool(ctx, name, args) {
   const def = DEFS_BY_NAME[name];
   if (!def) return { error: `Unknown tool: ${name}. Available: ${AGENT_TOOL_DEFS.map((d) => d.name).join(", ")}.` };
+  args = coerceStringTypedArgs(def.input_schema, args);
   const bad = validateToolArgs(def.input_schema, args);
   if (bad) return { error: `Invalid arguments for ${name}: ${bad}.` };
   try {

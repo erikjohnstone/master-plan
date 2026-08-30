@@ -385,6 +385,8 @@ test("schema-invalid arguments: -32602 validation error naming the tool; the ses
   await callViolation(client, "view_sheet", { sheet: KEY, region: { x0: 0, y0: 0, x1: 10 } }); // partial region
   await callViolation(client, "find_text", { sheet: KEY });                                // missing q
   await callViolation(client, "find_text", { sheet: KEY, q: "101", limit: 0 });            // limit below min 1
+  await callViolation(client, "find_text", { q: "101", region: { x0: 0, y0: 0, x1: 1, y1: 1 }, limit: 0 }); // limit still enforced when sheet omitted
+
   await callViolation(client, "symbol_sweep", { sheet: KEY });                             // missing seed_rect
   await callViolation(client, "symbol_sweep", { sheet: KEY, seed_rect: [[0, 0]] });        // one corner is not a rect
   await callViolation(client, "symbol_sweep", { sheet: KEY, seed_rect: [[0, 0], [50, 50]], tolerance_px: 0 }); // tolerance must be positive
@@ -606,7 +608,7 @@ test("sheet graph (#87): index, resolve with citations, refusal with reasons, fi
   // the region bounds just the two real rows (y≈1520–1592), not the ~2600px
   // of unrelated sheet the old fallback boundary used to sweep in
   assert.ok(patientRooms.region.y1 - patientRooms.region.y0 < 200, `region should hug the two real rows, not reach for debris: ${JSON.stringify(patientRooms.region)}`);
-  assert.match(await callErr(client, "find_schedule", { kind: "door" }), /No "door" schedule found .* Found: /);
+  assert.match(await callErr(client, "find_schedule", { kind: "door" }), /No "door" schedule found .* Found kinds:/);
 });
 
 // ── the sheet graph, phase 2 (#87): continuation sheets, rotated headers, ───
