@@ -27,6 +27,28 @@ prompts that say "show me" or "cite the exact". UI recordings must show the
 highlights on the canvas. Evidence gates and the system prompt must enforce
 this on the production UI path for arbitrary uploaded sets.
 
+## Demo quality bar (non-negotiable)
+
+Demos are not tag flybys. They must look like a competent estimator using the
+product.
+
+1. **Intelligent prompts.** Frozen `prompt.txt` values must ask what an
+   intelligent user would actually ask — natural, multi-field, useful
+   questions — not toy “find this tag” lookups.
+2. **Do what the prompt says.** The answer must return every requested field
+   with correct, evidence-backed values. Missing row data, wrong sibling
+   points, or placeholder prose is a fail.
+3. **Highlight answering evidence.** Paint the schedule row / cells / drawing
+   text that support the answer. Highlighting only a tag mark while the prompt
+   asked for corresponding row values is a fail. Flying between sheets without
+   showing the answering cells is a fail.
+4. **UI recording.** Must show: real blueprint → frozen prompt → tool activity
+   → complete answer matching the prompt → on-sheet highlights of that
+   evidence.
+
+If a recording cannot demonstrate those four points, the demo is not locked —
+including demos previously marked locked that fail this bar (re-prove them).
+
 In a live review, each demo must answer these questions on the cited sheet in
 under ten seconds:
 

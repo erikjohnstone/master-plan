@@ -480,6 +480,20 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     if (uncovered.length) {
       return `The answer uses queried schedule row(s) with no painted source cell: ${[...new Set(uncovered)].join(", ")}. Call highlight_citation on at least one exact cited cell from each row before finishing.`;
     }
+    // Quality bar: when the answer uses multiple value fields from a row,
+    // paint answering value cells — not only the row mark/identity.
+    for (const { sheet, rowKey, cells } of usedQueryRows) {
+      const rowKeyCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      const valueCells = cells.filter((cell) => {
+        const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+        if (textCanonical.length < 2 || textCanonical === rowKeyCanonical) return false;
+        return finalCanonical.includes(textCanonical);
+      });
+      if (valueCells.length < 2) continue;
+      const paintedValues = valueCells.filter((cell) => highlightMatches(sheet, cell.bbox));
+      if (paintedValues.length >= 1) continue;
+      return `The answer uses multiple fields from ${rowKey} on ${sheet}, but only the mark (or no value cell) is painted. Call highlight_citation on the answering value cells from that row (e.g. capacity, flow, size, Cv, location) — highlighting only the tag mark is not enough.`;
+    }
   }
   if (uniqDrawingHits.length) {
     // A find_text phrase is covered by an exact bbox paint, or by a painted
@@ -608,6 +622,7 @@ export function agentSystemPrompt() {
     "- NEVER report a plan location for any equipment or valve tag unless sweep_schedule_row succeeded for that exact tag. A schedule-cell bbox is a schedule location, never an installed plan location, and one tag's plan coordinates never belong to another tag.",
     "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized.",
     "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Agent-panel text alone is incomplete — the product must be interactive. Do this for every such question, not only when the goal says \"show me\" or \"cite the exact\". Paint each used schedule row and each phrase-length drawing hit you copy into the answer, then write the final answer — do not claim every cell is highlighted.",
+    "- When the goal asks for corresponding schedule values (capacity, flow, size, Cv, temperatures, alarm/trend, location, etc.), paint the answering value cells — not only the row mark/tag. A mark-only highlight while the answer lists row fields is incomplete.",
     "- Never say a cell or field was highlighted unless a successful highlight_citation call targeted that exact sheet and bbox_px. State exactly which source regions were highlighted; do not imply unpainted cells were painted. Never write that all/each cited cells are highlighted.",
     "- For a scheduled device tag, cite query_table row.identity (for example VALVE MARK), not the first different column that happens to repeat the same text (for example UNIT MARK).",
     "- For any equipment-to-control-valve join, use this direct set-wide sequence: query_table with row_key set to the equipment tag; sweep_schedule_row for installed quantity/plan evidence when requested; query_table with cell_contains set to that exact equipment tag to find compound relationship marks; then highlight the exact returned tag and row-identity bboxes. Do not browse guessed sheets or repeatedly retry the same empty exact-row query.",

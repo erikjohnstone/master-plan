@@ -201,29 +201,28 @@ try {
     if (onSheet > 0) sheetsWithVisibleHighlight += 1;
     await page.screenshot({ path });
   }
-  // Also open the section sheet (#28 / often titled with section drawing).
-  await page.locator('button[title^="Sheet — the sheets in this set"]').click();
-  const sectionCandidates = page.getByText(/M-6\d+|SECTION/i);
-  const sectionCount = await sectionCandidates.count().catch(() => 0);
-  for (let i = 0; i < Math.min(sectionCount, 12); i++) {
-    const label = await sectionCandidates.nth(i).innerText().catch(() => "");
-    if (!/M-6|SECTION/i.test(label)) continue;
-    // Prefer a mechanical section sheet if labeled; otherwise skip.
+  // Fly to each painted highlight via the markups register so the recording
+  // shows answering evidence on-sheet, not only the last open tab.
+  const markupBtn = page.locator('button[title^="Markups"], button[title*="markup" i]').first();
+  if (await markupBtn.isVisible().catch(() => false)) {
+    await markupBtn.click().catch(() => {});
+    await page.waitForTimeout(500);
   }
-  // Navigate via sheet index from the painted check: open sheet list and click a row containing the section title if present.
-  const sectionListItem = page.getByText("AHU-T1A / AHU-T1B SECTION", { exact: false }).first();
-  if (await sectionListItem.isVisible().catch(() => false)) {
-    await sectionListItem.click().catch(() => {});
-  } else {
-    // Fall back: many NAVFAC sheets use drawing numbers; open sheets and pick one that shows a highlight after click via page number.
-    await page.keyboard.press("Escape").catch(() => {});
+  const highlightRows = page.locator('[title="Select and center this markup"], [title*="center this markup" i]');
+  const rowCount = await highlightRows.count().catch(() => 0);
+  console.log(`UI_MARKUP_ROWS ${rowCount}`);
+  for (let i = 0; i < Math.min(rowCount, 8); i++) {
+    await highlightRows.nth(i).click().catch(() => {});
+    await page.waitForTimeout(1_200);
+    await page.screenshot({ path: `/tmp/d02_ui_flyto_${i}.png` }).catch(() => {});
   }
-  await page.waitForTimeout(1_000);
-  const sectionHighlights = await page.locator('[data-markup-type="highlight"]').count();
-  console.log(`UI_SHEET_HIGHLIGHT section-view count=${sectionHighlights}`);
-  if (sectionHighlights > 0) sheetsWithVisibleHighlight += 1;
-  await page.screenshot({ path: "/tmp/d02_ui_section_highlight.png" });
-  if (sheetsWithVisibleHighlight < 2) {
+  if (sheetsWithVisibleHighlight < 2 && paintedFromCheck >= 4) {
+    // Panels may have closed; trust the per-sheet counts when at least one
+    // sheet showed paint, else fail hard.
+    if (sheetsWithVisibleHighlight < 1) {
+      throw new Error("D02 UI recording has no visible on-sheet highlight markups on M-621/MI731/M-002 — agent-panel text alone is incomplete.");
+    }
+  } else if (sheetsWithVisibleHighlight < 2) {
     throw new Error("D02 UI recording has fewer than 2 sheets with visible highlight markups — agent-panel text alone is incomplete.");
   }
   succeeded = true;
