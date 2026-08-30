@@ -20,7 +20,9 @@
 import { chatWithTools, describeImageForAgent } from "./ai.js";
 import { runVerifiers } from "./agentVerifiers.js";
 
-export const MAX_AGENT_ITERATIONS = 32;
+// Full-set HVAC/BAS takeoffs need list/graph + several count queries + scoped
+// cite re-queries + paints; 32 was truncating D03 mid-gate. Keep a hard cap.
+export const MAX_AGENT_ITERATIONS = 48;
 
 const EQUIPMENT_VALVE_EVIDENCE_TOOLS = new Set([
   "list_sheets",
@@ -400,6 +402,18 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   // Product rule: paint cited evidence on the sheets whenever the answer uses
   // paint-able tool evidence — not only when the goal says "show me" / "cite the exact".
   const asksToShowCite = /\bshow\b.*\bcite\b|\bcite the exact\b|\bshow me\b.*\b(?:plan|sheet|schedule|highlight)\b|\bcite the (?:schedule|exact|mark)\b/i.test(goal);
+  // When the goal names explicit spot-check tags after "cite …", only those
+  // MARKs create cite paint duty — not every equipment key a rollup answer
+  // happens to mention (FCU-A2, sample AI01 points, etc.).
+  const citeTargetsFromGoal = (() => {
+    const m = goal.match(/\bcite\b([\s\S]*?)(?:\bso I can\b|\bso you can\b|\bso we can\b|[.?!]|$)/i);
+    if (!m) return null;
+    const found = [...m[1].matchAll(/\b[A-Z]{1,8}-[A-Z0-9]{1,16}\b|\b(?:AI|AO|BI|BO)\d+[A-Z]?\b/gi)]
+      .map((hit) => hit[0].toUpperCase().replace(/[^A-Z0-9]/g, ""))
+      .filter((tag) => tag.length >= 3);
+    return found.length ? new Set(found) : null;
+  })();
+  const goalCanonical = goal.toUpperCase().replace(/[^A-Z0-9]/g, "");
   // Broad title-scan / keys-only count results name dozens of MARKs so the
   // model can copy `count` — they are not per-row citation duties. Re-queries
   // with row_key (or cell filters) carry the cite paint obligation.
@@ -429,11 +443,9 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         .map(([, cell]) => cell)
         .filter((cell) => Array.isArray(cell?.bbox) && cell.bbox.length === 4);
       if (!paintable.length) continue;
-      // Only rows whose cell values appear in the answer, or whose sheet is
-      // named there, or when the goal explicitly asks to paint/cite sources
-      // from a scoped (non keys-only) query. Sharing a tag key across sheets
-      // must not force painting unused siblings. The row key/identity text
-      // alone does not count as "using" the row.
+      // Only rows whose non-key cell values appear in the answer, or explicit
+      // cite / points targets from the goal on scoped queries. Naming a sheet
+      // in the answer must not attach every MARK queried on that sheet.
       const rowKeyCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
       const usesCellFromRow = cells.some(([, cell]) => {
         const raw = String(cell?.text || "").trim();
@@ -449,18 +461,25 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         if (textCanonical.length < 4) return false;
         return finalCanonical.includes(textCanonical);
       });
-      const sheetNorm = String(match.sheet || "").toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
-      const answerNamesSheet = sheetNorm && answerNorm.includes(sheetNorm);
+      const keyInCiteTargets = citeTargetsFromGoal
+        ? citeTargetsFromGoal.has(rowKeyCanonical)
+        : null;
       // Cite prompts may force MARK-only rows from scoped re-queries — never
-      // from bulk keys-only count scans (those thrash rollup answers).
-      const citeForcesRow = asksToShowCite && !keysOnlyCount;
-      if (!usesCellFromRow && !answerNamesSheet && !citeForcesRow
-        && !/^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(rowKey)) continue;
+      // from bulk keys-only count scans. When the goal lists specific tags,
+      // only those tags are cite duties.
+      const citeForcesRow = asksToShowCite && !keysOnlyCount
+        && (keyInCiteTargets === null || keyInCiteTargets);
+      // Points-list marks only when the goal itself names that point (not
+      // every AI/AO/BI/BO that appears in a row-count rollup answer).
+      const pointsForce = /^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(rowKey)
+        && goalCanonical.includes(rowKeyCanonical)
+        && !keysOnlyCount;
+      if (!usesCellFromRow && !citeForcesRow && !pointsForce) continue;
       usedQueryRowsRaw.push({
         sheet: match.sheet,
         rowKey,
         cells: paintable,
-        weak: !usesCellFromRow && !answerNamesSheet,
+        weak: !usesCellFromRow,
       });
     }
   }
@@ -708,8 +727,14 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
           if (textCanonical.length < 4) return false;
           return finalCanonical.includes(textCanonical);
         });
-      // Require sheet only when the answer uses this row's cell values, not merely mentions the tag.
-      if (!usesCellFromRow && !/^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(rowKey)) continue;
+      // Require sheet only when the answer uses this row's cell values, or the
+      // goal itself asked about that points-list mark — not every AI/AO/BI/BO
+      // token a rollup answer happens to mention.
+      if (!usesCellFromRow) {
+        const pointsNamedInGoal = /^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(rowKey)
+          && goalCanonical.includes(rowCanonical);
+        if (!pointsNamedInGoal) continue;
+      }
       const sheetNorm = sheet.toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
       const answerNorm = finalText.toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
       if (!answerNorm.includes(sheetNorm)) mentionedQuerySheets.push(`${rowKey} → ${sheet}`);

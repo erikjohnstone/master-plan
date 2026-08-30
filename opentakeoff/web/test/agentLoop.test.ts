@@ -255,7 +255,33 @@ test("installed quantity cannot finish without deterministic count evidence", ()
       ],
     } },
   ], "Cite the schedule MARK cells for AHU-A1 and give AHU counts",
-  "AHUs: 12 (Air Ops 5). Spot-check MARK AHU-A1."), null);
+  "AHUs: 12 (Air Ops 5). Spot-check MARK AHU-A1. Also FCU-A2 and AI01 appear in the set."), null);
+  // Explicit cite lists must not force paint on non-listed keys the answer mentions.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: {
+      query: { title: null, row_key: "AHU-A1", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [
+        { sheet: "set.pdf#44", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [10, 20, 30, 40] } } } },
+      ],
+    } },
+    { name: "query_table", out: {
+      query: { title: null, row_key: "FCU-A2", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [
+        { sheet: "set.pdf#42", row: { key: "FCU-A2", all_cells: { MARK: { text: "FCU-A2", bbox: [50, 60, 70, 80] } } } },
+      ],
+    } },
+    { name: "query_table", out: {
+      query: { title: "POINTS", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 4,
+      matches: [
+        { sheet: "set.pdf#65", row: { key: "AI01", all_cells: { MARK: { text: "AI01", bbox: [1, 2, 3, 4] } } } },
+      ],
+    } },
+  ], "Cite the schedule MARK cells for AHU-A1, so I can spot-check.",
+  "AHU-A1 is cited. FCU-A2 and AI01 also exist on the set."), null);
   // Same MARK on two scoped sheets: cite-only duty paints one sheet, not both.
   assert.equal(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
