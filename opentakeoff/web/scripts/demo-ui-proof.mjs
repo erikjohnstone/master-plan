@@ -64,6 +64,7 @@ try {
   await page.locator('input[name="sheet-file"]').first().setInputFiles(pdf);
   await page.getByText("Open your plans").waitFor({ state: "hidden", timeout: 120_000 });
   await page.locator("canvas").first().waitFor({ state: "visible", timeout: 120_000 });
+  await page.getByText("Rendering sheet…").waitFor({ state: "hidden", timeout: 120_000 });
   await page.screenshot({ path: "/opt/cursor/artifacts/d01_ui_loaded.png" });
 
   await page.locator('button[title^="Agent —"]').click();
