@@ -21,6 +21,7 @@
 // fix belongs in sheetgraph.ts/symbolsweep.ts/session.ts, not here.
 import type { Session } from "./session.ts";
 import { HVAC_TAXONOMY, type HvacComponent } from "../../web/src/lib/hvacTaxonomy.ts";
+import { lastSegmentUnitShortening } from "../../web/src/lib/equiptags.ts";
 import type { Point } from "../../web/src/lib/oneclick.ts";
 import type { ScheduleTable, TableRow } from "../../web/src/lib/sheetgraph.ts";
 
@@ -329,6 +330,17 @@ export async function buildPlanSetTakeoff(session: Session, opts: { categories?:
         (ps.matches || []).map((m: any) => ({ sheet: ps.sheet, at: m.at as [number, number] })));
       item.corroborated = !!r.anchor?.corroborated;
       item.status = "resolved";
+      // sweep_schedule_row may adopt the unique plan-drawn letter-only
+      // form of a last-segment unit suffix (`…-A1` → `…-A`). Name the
+      // takeoff item as the drawing names it so a key authored against
+      // the plan tag matches; the long schedule key stays in seenTags
+      // so a later pass cannot emit it again.
+      const adopted = (r.tag || "").trim().toUpperCase().replace(/\s+/g, "");
+      const orig = tag.toUpperCase().replace(/\s+/g, "");
+      if (adopted && adopted !== orig && lastSegmentUnitShortening(orig) === adopted) {
+        item.tag = r.tag;
+        seenTags.add(adopted);
+      }
       out.stats.resolved++;
       out.stats.total_drawn_instances += item.quantity;
     } catch (e: any) {

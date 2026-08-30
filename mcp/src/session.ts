@@ -125,6 +125,7 @@ import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
 // codebase before this tool — confirmed by grep, the only prior caller was
 // its own test file. This wires it in.
+import { uniqueLastSegmentShortening } from "../../web/src/lib/equiptags.ts";
 import { HVAC_REF_SHAPES } from "../../web/src/lib/hvacRefShapes.ts";
 // Accuracy-hardening plan Phase 1 (pivoted after an explicit ask: "are we
 // learning symbols as we go, or scanning the legend once?") — no single
@@ -2985,6 +2986,22 @@ export class Session {
     // sweep runs on the mark as drawn on the plans, not the compound key.
     const canonKey = (k: string) => (k || "").trim().toUpperCase().replace(/\s+/g, "");
     let rowHits = graph.tables.flatMap((tb) => tb.rows.filter((r) => rowKeyAnswersFor(r.key, t)).map((r) => ({ tb, r })));
+    // Unique last-segment unit suffix: the caller asked for the plan-drawn
+    // letter-only form (`…-A`) while the only equipment row that owns that
+    // identity is keyed with a trailing unit digit (`…-A1`). Exact/compound
+    // identity correctly refuses to treat A1 as A (short-mark overcount).
+    // When the shortening is unique among equipment rows, that one row is
+    // the schedule claim for the plan-drawn tag — adopt it, then search
+    // the plans for the tag as asked. Never when two rows would shorten
+    // to the same letter, or when a row already is the short form.
+    if (!rowHits.length) {
+      const equipHits = graph.tables
+        .filter((tb) => tb.kind === "equipment")
+        .flatMap((tb) => tb.rows.map((r) => ({ tb, r })));
+      const equipKeys = equipHits.map((h) => h.r.key);
+      const aliases = equipHits.filter((h) => uniqueLastSegmentShortening(h.r.key, equipKeys) === t);
+      if (aliases.length === 1) rowHits = aliases;
+    }
     if (!rowHits.length) {
       const found = graph.tables.map((x) => {
         const keys = x.rows.map((row) => row.key).slice(0, 12).join(", ");
@@ -3176,12 +3193,36 @@ export class Session {
         }
       }
     }
-    const occBySheet = planSheets.map((sh) => {
+    let occBySheet = planSheets.map((sh) => {
       const split = preferInstallTagOccs(occOf(sh, t));
       return { sh, occ: split.occ, routing: split.routing };
     });
-    const totalOcc = occBySheet.reduce((n, e) => n + e.occ.length, 0);
-    const routingN = occBySheet.reduce((n, e) => n + e.routing.length, 0);
+    let totalOcc = occBySheet.reduce((n, e) => n + e.occ.length, 0);
+    let routingN = occBySheet.reduce((n, e) => n + e.routing.length, 0);
+    // Inverse of the row-lookup alias above: the schedule keys `…-A1` and
+    // no plan sheet draws that long form, but the unique letter-only
+    // shortening `…-A` is drawn. Adopt the plan-drawn identity as the
+    // geometric search key (and as this sweep's returned `tag`) so a
+    // takeoff item is named as the drawing names it. Same uniqueness
+    // gates — another row that is or also shortens to `…-A` leaves the
+    // long key unanchored, honestly.
+    if (!totalOcc) {
+      const equipKeys = graph.tables.filter((x) => x.kind === "equipment").flatMap((x) => x.rows.map((row) => row.key));
+      const short = uniqueLastSegmentShortening(t, equipKeys);
+      if (short) {
+        const shortSheets = planSheets.map((sh) => {
+          const split = preferInstallTagOccs(occOf(sh, short));
+          return { sh, occ: split.occ, routing: split.routing };
+        });
+        const shortTotal = shortSheets.reduce((n, e) => n + e.occ.length, 0);
+        if (shortTotal) {
+          t = short;
+          occBySheet = shortSheets;
+          totalOcc = shortTotal;
+          routingN = shortSheets.reduce((n, e) => n + e.routing.length, 0);
+        }
+      }
+    }
     if (!totalOcc) {
       const markNote = ownMarks.size > 1 ? ` Tried every mark of this compound key (${[...ownMarks].join(", ")}) — none is drawn on any plan sheet.` : "";
       throw new UserError(`Schedule row "${t}" (${table} on ${tb.sheet}) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone.${markNote} If the marker is drawn untagged, marquee one instance with symbol_sweep {scope: "set"}.`);
