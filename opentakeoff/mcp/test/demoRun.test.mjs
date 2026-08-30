@@ -118,6 +118,8 @@ test("demo runner captures request IDs, raw replies, and complete tool payloads"
   assert.match(requestBodies[0].messages[0].content, /row\.all_cells/);
   assert.match(requestBodies[0].messages[0].content, /row\.identity/);
   assert.match(requestBodies[0].messages[0].content, /row\.cell_citations/);
+  assert.match(requestBodies[0].messages[0].content, /tool sheet → sheet_id/);
+  assert.match(requestBodies[0].messages[0].content, /bbox_px \[x0,y0,x1,y1\]/);
   assert.deepEqual(executed, [{
     name: "query_table",
     args: { row_key: "CH-A1", column: "GPM" },
