@@ -30,23 +30,23 @@ Fixture counts (396 / 122 / 163, building names, schedule titles) are
 | 11 | Project HVAC+BAS rollup (named families) | Full HVAC/BAS takeoff across buildings with cited MARKs | `project_takeoff` | D03 | ROUTING |
 | 12 | RTU mech ↔ electrical connection | Packaged rooftop + connection schedule join | `cross_discipline_join` | D05 | ROUTING |
 | 13 | VAV schedule ↔ plan link + honest refuse | VAV tags on plan; EF tags refuse when not drawn | `plan_link_refuse` | D07 | ROUTING |
-| 14 | Single schedule title-scan count | How many rows on \<SCHEDULE TITLE\> | title-scan | — | TODO |
-| 15 | Single MARK schedule attributes | Give CFM/GPM/… for TAG-n from its schedule | row_key query | — | TODO |
-| 16 | Building-split any equipment family | Split AHU/VAV/FCU counts by building prefix | building_tag_counts | — | TODO |
+| 14 | Single schedule title-scan count | How many rows on \<SCHEDULE TITLE\> | `equipment_schedule` + title needle | — | ROUTING |
+| 15 | Single MARK schedule attributes | Give CFM/GPM/… for TAG-n from its schedule | `equipment_schedule` | — | ROUTING |
+| 16 | Building-split any equipment family | Split AHU/VAV/FCU counts by building prefix | `fcu_buildings` / title-scan building_tag_counts | — | ROUTING |
 | 17 | CHW-only valve takeoff | Complete chilled-water control valve takeoff | corpus_valves / filter | — | TODO |
 | 18 | HHW-only valve takeoff | Complete hot-water control valve takeoff | corpus_valves / filter | — | TODO |
-| 19 | Bypass valve schedule takeoff | BYPASS CONTROL VALVE SCHEDULE counts + attrs | valve_join | — | TODO |
-| 20 | Pump schedule takeoff | Pump schedule counts + GPM/head | equipment_schedule | — | TODO |
-| 21 | Boiler schedule takeoff | Boiler schedule totals + capacity | equipment_schedule | — | TODO |
-| 22 | Chiller schedule takeoff | Air-cooled / heat-recovery chiller counts | equipment_schedule | — | TODO |
-| 23 | AHU schedule takeoff | AHU schedule totals + CFM | equipment_schedule | — | TODO |
-| 24 | DOAH / DOAS schedule takeoff | Dedicated outdoor-air unit schedules | equipment_schedule | — | TODO |
-| 25 | Fan schedule takeoff | Exhaust/supply fan schedule + plan refuse | equipment_schedule | — | TODO |
-| 26 | Diffuser / grille schedule takeoff | Diffuser-grille schedule attrs | equipment_schedule | — | TODO |
-| 27 | Humidifier / dehumidifier takeoff | Humidity equipment schedules | equipment_schedule | — | TODO |
-| 28 | CRAH / computer-room unit takeoff | CRAH schedule | equipment_schedule | — | TODO |
-| 29 | Unit heater / CUH takeoff | Unit heater + cabinet unit heater | equipment_schedule | — | TODO |
-| 30 | Air separator / expansion tank takeoff | Hydronic accessories as scheduled | equipment_schedule | — | TODO |
+| 19 | Bypass valve schedule takeoff | BYPASS CONTROL VALVE SCHEDULE counts + attrs | `valve_join` | — | ROUTING |
+| 20 | Pump schedule takeoff | Pump schedule counts + GPM/head | `equipment_schedule` + suggested titles | — | ROUTING |
+| 21 | Boiler schedule takeoff | Boiler schedule totals + capacity | `equipment_schedule` + suggested titles | — | ROUTING |
+| 22 | Chiller schedule takeoff | Air-cooled / heat-recovery chiller counts | `equipment_schedule` + suggested titles | — | ROUTING |
+| 23 | AHU schedule takeoff | AHU schedule totals + CFM | `equipment_schedule` + suggested titles | — | ROUTING |
+| 24 | DOAH / DOAS schedule takeoff | Dedicated outdoor-air unit schedules | `equipment_schedule` + suggested titles | — | ROUTING |
+| 25 | Fan schedule takeoff | Exhaust/supply fan schedule + plan refuse | `equipment_schedule` / `plan_link_refuse` | — | ROUTING |
+| 26 | Diffuser / grille schedule takeoff | Diffuser-grille schedule attrs | `equipment_schedule` + suggested titles | — | ROUTING |
+| 27 | Humidifier / dehumidifier takeoff | Humidity equipment schedules | `equipment_schedule` + suggested titles | — | ROUTING |
+| 28 | CRAH / computer-room unit takeoff | CRAH schedule | `equipment_schedule` + suggested titles | — | ROUTING |
+| 29 | Unit heater / CUH takeoff | Unit heater + cabinet unit heater | `equipment_schedule` + suggested titles | — | ROUTING |
+| 30 | Air separator / expansion tank takeoff | Hydronic accessories as scheduled | `equipment_schedule` + suggested titles | — | ROUTING |
 | 31 | Single POINTS LIST title-scan | Row count + AI/AO/BI/BO for one named list | points_takeoff | — | TODO |
 | 32 | Points list MARK cite spot-check | query_table row_key + highlight | points_takeoff | — | TODO |
 | 33 | Non-extractable points list disclose | Title present but typed rows unavailable — honest disclose | bas compile exclusions | — | TODO |
@@ -62,9 +62,9 @@ Fixture counts (396 / 122 / 163, building names, schedule titles) are
 | 43 | Continuation-page dedupe | 1 OF 2 / 2 OF 2 must not double-count MARKs | query_table | — | TODO |
 | 44 | Export CSV / Excel / PDF takeoff | Download finished takeoff workbook | Takeoff panel | T-* | TODO |
 | 45 | Workflow data vs Takeoff tab honesty | Exploratory evidence stays on Workflow data | TakeoffDataPanel | — | TODO |
-| 46 | Multi-prompt phrase variants (HVAC) | ≥5 phrasings → same compile | corpus_hvac | T-HVAC-01 | TODO |
-| 47 | Multi-prompt phrase variants (BAS) | ≥5 phrasings → same compile | corpus_bas | T-BAS-01 | TODO |
-| 48 | Multi-prompt phrase variants (valves) | ≥5 phrasings → same compile | corpus_valves | T-VALVE-01 | TODO |
+| 46 | Multi-prompt phrase variants (HVAC) | ≥5 phrasings → same compile | corpus_hvac | T-HVAC-01 | ROUTING |
+| 47 | Multi-prompt phrase variants (BAS) | ≥5 phrasings → same compile | corpus_bas | T-BAS-01 | ROUTING |
+| 48 | Multi-prompt phrase variants (valves) | ≥5 phrasings → same compile | corpus_valves | T-VALVE-01 | ROUTING |
 | 49 | Follow-up cite after takeoff | Spot-check MARK without destroying locked lines | agent loop | — | TODO |
 | 50 | Suite regression gate | Engine demos + golden verify stay green | `npm run test:demos` | D01–D10 | TODO |
 

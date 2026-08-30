@@ -18,7 +18,7 @@
 
 /** Estimator phrasing: "takeoff", "take off", counts, rollups. */
 export function goalAsksTakeoff(g) {
-  return /\b(?:take\s*offs?|takeoff|quantity\s+takeoff|count|how many|totals?|rollup|scheduled)\b/i.test(String(g || ""));
+  return /\b(?:take\s*offs?|takeoff|quantity\s+takeoff|counts?|how many|totals?|rollup|scheduled)\b/i.test(String(g || ""));
 }
 
 /** Loaded set / these drawings / this blueprint — not a named corpus set. */
@@ -173,6 +173,43 @@ export function namedPointsListTitles(goal) {
     const orig = titles.find((t) => t.toUpperCase() === u);
     return orig || u;
   });
+}
+
+/**
+ * Suggest schedule title needles from goal family words (industry schedule
+ * naming patterns — not corpus-set hardcoding).
+ * @param {string} goal
+ * @returns {string[]}
+ */
+export function suggestedScheduleTitles(goal) {
+  const g = String(goal || "");
+  const out = [];
+  const add = (t) => { if (!out.includes(t)) out.push(t); };
+  if (/\bAHUs?\b/i.test(g)) add("AIR HANDLING UNIT SCHEDULE");
+  if (/\bDOAH\b|dedicated\s+outdoor|DOAS\b/i.test(g)) add("DEDICATED OUTDOOR AIR UNIT SCHEDULE");
+  if (/\bFCUs?\b|fan[\s\-]*coil/i.test(g)) add("FAN COIL UNIT SCHEDULE");
+  if (/\bVAVs?\b|volume\s+control\s+box|air\s+terminal\s+box/i.test(g)) {
+    add("VOLUME CONTROL BOX SCHEDULE");
+    add("AIR TERMINAL BOX SCHEDULE");
+    add("VARIABLE AIR VOLUME");
+  }
+  if (/\bair[\s\-]*cooled\s+chiller/i.test(g)) add("AIR COOLED CHILLER SCHEDULE");
+  if (/\bheat[\s\-]*recovery\s+chiller/i.test(g)) add("AIR COOLED HEAT RECOVERY CHILLER");
+  if (/\bchillers?\b/i.test(g) && !/\bair[\s\-]*cooled|heat[\s\-]*recovery/i.test(g)) add("CHILLER SCHEDULE");
+  if (/\bboilers?\b/i.test(g)) add("BOILER SCHEDULE");
+  if (/\bpumps?\b/i.test(g)) add("PUMP SCHEDULE");
+  if (/\bRTUs?\b|rooftop|packaged/i.test(g)) add("PACKAGED ROOFTOP");
+  if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s\-]*coil/i.test(g)) add("FAN SCHEDULE");
+  if (/\bdiffuser|grille|GRD\b/i.test(g)) add("DIFFUSER");
+  if (/\bhumidif/i.test(g)) add("HUMIDIFIER");
+  if (/\bdehumidif/i.test(g)) add("DEHUMIDIFIER");
+  if (/\bCRAH\b|computer[\s\-]*room/i.test(g)) add("CRAH");
+  if (/\bunit\s+heater|cabinet\s+unit\s+heater|CUH\b/i.test(g)) add("UNIT HEATER");
+  if (/\bair\s+separator/i.test(g)) add("AIR SEPARATOR");
+  if (/\bexpansion\s+tank/i.test(g)) add("EXPANSION TANK");
+  if (/\bcontrol\s+valves?\b/i.test(g)) add("CONTROL VALVE SCHEDULE");
+  if (/\bBYPASS\b/i.test(g) && /\bvalve/i.test(g)) add("BYPASS CONTROL VALVE SCHEDULE");
+  return out;
 }
 
 /**
@@ -519,11 +556,15 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
       "list_sheets", "sheet_graph", "find_schedule", "query_table",
       "resolve_tag", "sweep_schedule_row", "highlight_citation", "find_text",
     ];
+    const suggested = suggestedScheduleTitles(goal).slice(0, 4);
+    const suggestHint = suggested.length
+      ? ` Prefer title needles: ${suggested.join("; ")}.`
+      : "";
     return surveyThenTitleTools(hasGraph, {
       phase: rowKeyCites < 1 ? "title_scans" : (paints < 1 ? "paint" : "answer"),
       allowedTools: paints >= 1 && rowKeyCites >= 1 ? null : allowed,
       nextMove: rowKeyCites < 1
-        ? "Title-scan / query_table the named schedules, then row_key the requested tags. Copy tool counts and cells only."
+        ? `Title-scan / query_table the named schedules, then row_key the requested tags. Copy tool counts and cells only.${suggestHint}`
         : (paints < 1
           ? "highlight_citation on cited cells, then write the final answer."
           : "Emit the complete answer from retrieved cells and paints. No more exploratory tools."),
