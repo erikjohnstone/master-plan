@@ -83,6 +83,7 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     out: { found: 2 },
   }], "Give me the installed quantity", "Two units were found.")!, /does not explicitly state/);
   assert.match(requiredEvidenceCorrection([], "Give me valve size", "Valve size: 4 in (example size).")!, /example or placeholder/);
+  assert.equal(requiredEvidenceCorrection([], "Give me valve size", "For example, AHU-1 is on sheet 42 with size from the schedule.")!, null);
   assert.match(requiredEvidenceCorrection([{
     name: "query_table",
     args: { cell_contains: "AHU-1" },
