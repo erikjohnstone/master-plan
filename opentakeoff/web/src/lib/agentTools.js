@@ -47,6 +47,7 @@
 //   sheetGraph(): Promise<SheetGraph>                    // whole-set schedule tables/tags (Phase 1: eager, no open sheet required)
 //   resolveTag(tag): Promise<ResolveResult>
 //   findSchedule(kind): Promise<FindScheduleResult>
+//   compileCorpusTakeoff(kind, opts): Promise<CompiledTakeoff | { error }>
 //   exportTakeoff(): { downloaded, condition_count } | { error }   // real browser download
 //   exportReport(): { downloaded, condition_count } | { error }    // real browser download
 //   countMarks(marks|undefined): Promise<CountMarksResult>
@@ -465,6 +466,25 @@ export const AGENT_TOOL_DEFS = [
     input_schema: {
       type: "object",
       properties: { kind: { type: "string", description: "'room' (room-finish schedules), 'finish' (material/product schedules), or 'equipment' (MEP equipment schedules)." } },
+      required: ["kind"],
+    },
+  },
+  {
+    name: "compile_corpus_takeoff",
+    description: "Compile a full HVAC schedule-quantity takeoff (kind hvac_equipment / T-HVAC-01) or BAS points-list takeoff (kind bas_points / T-BAS-01) from the loaded set's extractable tables. Returns category/list counts, item tags with sheet+bbox cites, page accounting (empty pages explicit), and exclusions. This is schedule/list quantity — not installed drawing counts (use sweep_schedule_row for those). When download is true (default), also triggers a real browser download of the compiled workbook (JSON + CSV rollup). Use when the estimator asks for a complete HVAC or BAS takeoff of the set.",
+    input_schema: {
+      type: "object",
+      properties: {
+        kind: {
+          type: "string",
+          enum: ["hvac_equipment", "bas_points", "T-HVAC-01", "T-BAS-01"],
+          description: "Which takeoff to compile.",
+        },
+        download: {
+          type: "boolean",
+          description: "If true (default), download the compiled workbook in the browser.",
+        },
+      },
       required: ["kind"],
     },
   },
@@ -938,6 +958,15 @@ export async function executeAgentTool(ctx, name, args) {
         const kind = (args.kind || "").trim();
         if (!kind) return { error: "Pass a kind, e.g. find_schedule { kind: \"finish\" } or { kind: \"room\" }." };
         return await ctx.findSchedule(kind);
+      }
+
+      case "compile_corpus_takeoff": {
+        const kind = (args.kind || "").trim();
+        if (!kind) return { error: "Pass kind: \"hvac_equipment\" / \"T-HVAC-01\" or \"bas_points\" / \"T-BAS-01\"." };
+        if (typeof ctx.compileCorpusTakeoff !== "function") {
+          return { error: "compile_corpus_takeoff is not wired in this session." };
+        }
+        return await ctx.compileCorpusTakeoff(kind, { download: args.download !== false });
       }
 
       case "export_takeoff":

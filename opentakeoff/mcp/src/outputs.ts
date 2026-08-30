@@ -84,6 +84,25 @@ const extractedTable = z.object({
   })),
 }).passthrough();
 
+/** Schedule / points-list quantity takeoff (corpus T-HVAC-01 / T-BAS-01). */
+export const compileCorpusTakeoffOutput = {
+  takeoff_id: z.string(),
+  kind: z.enum(["hvac_equipment", "bas_points"]),
+  compiler: z.string(),
+  sheet_count: z.number().int(),
+  totals: z.record(z.string(), z.number()).optional(),
+  categories: z.any(),
+  page_accounting: z.object({
+    sheet_count: z.number().int(),
+    pages_accounted_for: z.number().int(),
+    empty_pages: z.number().int(),
+    pages: z.array(z.any()).optional(),
+  }).passthrough(),
+  exclusions: z.array(z.string()),
+  path: z.string().nullable().optional(),
+  export_path: z.string().nullable().optional(),
+};
+
 /** Complete production query surface for an unattended plan-set takeoff. */
 export const projectTakeoffOutput = {
   set_files: z.array(z.string()),

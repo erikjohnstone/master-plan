@@ -11,3 +11,4 @@ opentakeoff-corpus/demos/**/runs/
 opentakeoff-corpus/demos/**/local-host-run.json
 opentakeoff-corpus/raw/
 opentakeoff-corpus/keys/
+opentakeoff-corpus/takeoffs/**/runs/

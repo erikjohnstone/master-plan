@@ -17,13 +17,14 @@ import {
   exportMarkedPdfOutput, listShapesOutput, deriveBaseOutput, deriveTransitionsOutput, importTakeoffOutput, applyRulesOutput, cutOutOutput,
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
   markVerdictOutput, deleteVerdictOutput,
-  sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, sweepScheduleRowOutput, countMarksOutput,
+  sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
 import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
 import { importTakeoff } from "./importing.ts";
 import { buildPlanSetTakeoff } from "./takeoff.ts";
+import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "./corpusTakeoff.mjs";
 import {
   VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
 } from "../../web/src/lib/hvacTaxonomy.ts";
@@ -913,6 +914,48 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       extracted_tables: [],
       reference_tables: [],
     };
+  }));
+
+  server.registerTool("compile_corpus_takeoff", {
+    description: `Compile a full HVAC schedule-quantity or BAS points-list takeoff from the loaded plan set's extractable tables — unique scheduled MARK/VALVE MARK tags per equipment family (T-HVAC-01) or extractable POINTS/DDC list rows with AI/AO/BI/BO (T-BAS-01). This is schedule/list quantity, not installed drawing counts (use project_takeoff for those). Returns categories, item cites with bboxes, page accounting (empty pages explicit), and exclusions. Pass path to write JSON; pass export_path to also write CSV tabs (+ XLSX when available) under that directory. Read-only; does not commit canvas shapes. ${COORDS}`,
+    inputSchema: {
+      kind: z.enum(["hvac_equipment", "bas_points", "T-HVAC-01", "T-BAS-01"]).describe('Which corpus takeoff to compile'),
+      detail: z.enum(["compact", "full"]).optional().describe('"compact" (default) omits per-page page_accounting.pages; "full" includes every sheet'),
+      path: z.string().optional().describe("Optional JSON file path for the compiled takeoff"),
+      export_path: z.string().optional().describe("Optional directory for CSV/XLSX workbook tabs"),
+      overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
+    },
+    outputSchema: compileCorpusTakeoffOutput,
+  }, run("compile_corpus_takeoff", async ({ kind, detail, path: outPath, export_path: exportPath, overwrite }) => {
+    const graph = await session.graphForPipeline();
+    const compiled = compileCorpusTakeoff(session, graph, kind);
+    if (detail !== "full") {
+      compiled.page_accounting = {
+        ...compiled.page_accounting,
+        pages: undefined,
+      };
+    }
+    if (outPath) {
+      await assertWritable(outPath, "json", overwrite);
+      const { writeFile, mkdir } = await import("node:fs/promises");
+      await writeFile(outPath, JSON.stringify(compiled, null, 2));
+      compiled.path = outPath;
+    } else {
+      compiled.path = null;
+    }
+    if (exportPath) {
+      const { mkdir, writeFile } = await import("node:fs/promises");
+      await mkdir(exportPath, { recursive: true });
+      const sheets = takeoffWorkbookSheets(compiled);
+      for (const sheet of sheets) {
+        const safe = sheet.name.replace(/[^\w.-]+/g, "_").slice(0, 40);
+        await writeFile(`${exportPath.replace(/\/$/, "")}/${safe}.csv`, rowsToCsv(sheet.rows));
+      }
+      compiled.export_path = exportPath;
+    } else {
+      compiled.export_path = null;
+    }
+    return compiled;
   }));
 
   server.registerTool("read_sheet_text", {

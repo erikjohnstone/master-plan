@@ -14,8 +14,8 @@ gates**, and the deliverable is **Run 5's output only**.
 
 | ID | Kind | Set | Status |
 |---|---|---|---|
-| `T-HVAC-01` | HVAC equipment quantity takeoff | `navfac-cherry-point-atc` | `TRUTH BUILT (draft)` |
-| `T-BAS-01` | BAS / DDC points takeoff | `navfac-cherry-point-atc` | `TRUTH BUILT (draft)` |
+| `T-HVAC-01` | HVAC equipment quantity takeoff | `navfac-cherry-point-atc` | `TRUTH BUILT` |
+| `T-BAS-01` | BAS / DDC points takeoff | `navfac-cherry-point-atc` | `TRUTH BUILT` |
 
 No additional takeoff IDs without an explicit goal change.
 

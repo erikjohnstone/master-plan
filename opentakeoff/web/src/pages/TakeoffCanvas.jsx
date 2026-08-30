@@ -111,6 +111,8 @@ import { buildLayerInfos, effectiveLayerRoles, layerRoleCodes, segRoles, sanitiz
 import { detectCandidateRule, buildRuleFromSeed, applyRuleToProject } from "../lib/rules";
 import { deriveTransitionRuns, transitionRefusal } from "../lib/transitions";
 import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, downloadText } from "../lib/totals.js";
+import { buildXlsx } from "../lib/xlsx.js";
+import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "../../../mcp/src/corpusTakeoff.mjs";
 import { measurementBreakdown } from "../lib/measurementBreakdown.js";
 import { buildSheetDxf, dxfFileName, DXF_MIME } from "../lib/dxf.js";
 import { shapesInZone, shapeCenter } from "../lib/zone.js";
@@ -7011,6 +7013,50 @@ export default function TakeoffCanvas() {
     return { downloaded: filename, condition_count: rows.length };
   }
 
+  async function agentCompileCorpusTakeoff(kind, opts = {}) {
+    const g = await ensureAgentGraph();
+    if (!g?.available && !(g?.tables?.length)) {
+      return { error: "This set has no extractable schedule/points tables (scan or empty graph) — compile_corpus_takeoff needs vector schedule text." };
+    }
+    let compiled;
+    try {
+      compiled = compileCorpusTakeoff(null, g, kind);
+    } catch (e) {
+      return { error: String(e?.message || e) };
+    }
+    const downloads = [];
+    if (opts.download !== false) {
+      const base = `${exportBaseName()}.${compiled.takeoff_id || "corpus-takeoff"}`;
+      downloadText(`${base}.json`, JSON.stringify(compiled, null, 2), "application/json");
+      downloads.push(`${base}.json`);
+      const sheets = takeoffWorkbookSheets(compiled);
+      const rollup = sheets.find((s) => s.name === "ROLLUP") || sheets[0];
+      if (rollup) {
+        downloadText(`${base}.rollup.csv`, rowsToCsv(rollup.rows), "text/csv");
+        downloads.push(`${base}.rollup.csv`);
+      }
+      try {
+        const bytes = await buildXlsx(sheets);
+        downloadBytes(`${base}.xlsx`, bytes);
+        downloads.push(`${base}.xlsx`);
+      } catch (e) {
+        // CSV/JSON still delivered
+      }
+    }
+    return {
+      takeoff_id: compiled.takeoff_id,
+      kind: compiled.kind,
+      sheet_count: compiled.sheet_count,
+      totals: compiled.totals,
+      empty_pages: compiled.page_accounting?.empty_pages,
+      exclusions: compiled.exclusions,
+      category_count: compiled.kind === "hvac_equipment"
+        ? Object.keys(compiled.categories || {}).length
+        : (compiled.categories?.points_lists?.lists || []).length,
+      downloaded: downloads,
+    };
+  }
+
   // export_dxf (Phase 4) — mirrors MCP's export_dxf (session.ts exportDxf):
   // one sheet per file, like a DWG; sheet is required only when ambiguous
   // (several open sheets carry shapes), and the refusal lists the candidates
@@ -7999,6 +8045,7 @@ export default function TakeoffCanvas() {
       queryTable: agentQueryTable,
       exportTakeoff: agentExportTakeoff,
       exportReport: agentExportReport,
+      compileCorpusTakeoff: agentCompileCorpusTakeoff,
       countMarks: agentCountMarks,
       sweepScheduleRow: agentSweepScheduleRow,
       findText: agentFindText,
