@@ -2557,10 +2557,10 @@ test("query_table joins through an exact non-key cell value", async () => {
     cell_value: "transition",
   });
   assert.equal(r.isError, false);
-  assert.equal(r.data.count, 1);
+  assert.equal(r.data.count, 2);
   assert.equal(r.data.query.cell_value, "transition");
-  assert.equal(r.data.matches[0].row.key, "T1");
-  assert.equal(r.data.matches[0].row.cells.MATERIAL.text, "TRANSITION");
+  assert.deepEqual(r.data.matches.map((match: any) => match.row.key), ["T1", "T2"]);
+  assert.equal(r.data.matches.every((match: any) => match.row.cells.MATERIAL.text === "TRANSITION"), true);
 });
 
 test("symbol_sweep scope 'set': detail-seeded, counts plan sheets only, per-sheet results, deterministic", async () => {
