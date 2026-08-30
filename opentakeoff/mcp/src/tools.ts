@@ -651,6 +651,31 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       ]),
       match,
     ])).values()];
+    // Title-wide / unscoped queries on dense schedules (42+ FCU rows, etc.)
+    // must not dump every cell bbox into the model context. Return identity
+    // keys only; the caller re-queries with row_key for citation cells.
+    const broad = !row_key && !column && !cell_value && !cell_contains;
+    const keysOnly = broad && unique.length > 8;
+    const matches = unique.slice(0, limit).map((match) => {
+      if (!keysOnly) return match;
+      const identity = match.row.identity;
+      const markCell = identity
+        ? { [identity.header]: { text: identity.text, bbox: identity.bbox } }
+        : {};
+      return {
+        sheet: match.sheet,
+        kind: match.kind,
+        title: match.title,
+        region: match.region,
+        headers: identity ? [identity.header] : [],
+        row: {
+          key: match.row.key,
+          identity,
+          cells: markCell,
+          all_cells: markCell,
+        },
+      };
+    });
     return {
       query: {
         title: title ?? null,
@@ -661,7 +686,12 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       },
       count: unique.length,
       truncated: unique.length > limit,
-      matches: unique.slice(0, limit),
+      detail: keysOnly ? "keys" : "rows",
+      matches,
+      ...(keysOnly ? {
+        keys: unique.map((match) => match.row.key),
+        note: `Title-wide query matched ${unique.length} rows — returning MARK/identity keys only so context stays usable. Re-query with row_key (and optional column) for the exact cell bboxes you need to cite.`,
+      } : {}),
       ...(unique.length === 0 ? {
         next_move: cell_contains
           ? "Zero rows matched. Retry once with cell_contains set to an exact equipment tag from the user question and no title filter, then inspect returned descriptions; do not paraphrase the same empty description query."

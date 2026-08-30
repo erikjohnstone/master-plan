@@ -268,7 +268,7 @@ function systemPrompt(truth) {
     "Group independent tool calls into the same response. Inspect each complete result before calling another tool, and never repeat an equivalent query.",
     "Use query_table cell_value for exact cross-table relationships and cell_contains when the related tag is embedded in a compound value; do not scan a whole table or infer a row without source text.",
     "Every query_table match includes row.all_cells. After the first matching row, use all_cells for every requested field on that row instead of making separate column calls.",
-    "When a required field is a scheduled equipment or points-list row count (not installed_quantity), count unique MARK/row keys from the titled equipment or points-list schedules via query_table/find_schedule. Do not invent units from vibration-isolation, connection, or calculation cross-reference tables, and do not treat concatenated twin marks as extra units. project_takeoff detail defaults to compact for rollups; use query_table for the cited MARK cells the answer must paint.",
+    "When a required field is a scheduled equipment or points-list row count (not installed_quantity), call query_table with the schedule title (no row_key) to get the keys-only count, then re-query specific row_key values for the MARK/identity bboxes you must cite. Do not invent units from vibration-isolation, connection, or calculation cross-reference tables, and do not treat concatenated twin marks as extra units. project_takeoff detail defaults to compact for installed rollups.",
     "sweep_schedule_row includes row.cell_citations for every schedule attribute. Use those exact per-cell bboxes; row.citation is only the row identity and must never be reused for attribute fields.",
     "Copy string values exactly from tool text. Do not replace ASCII hyphens with Unicode dashes, and do not paraphrase a returned phrase.",
     "Return JSON only after all required fields are answered.",
@@ -405,7 +405,14 @@ export async function runToolCallingModel({
     if (id) requestIds.push(id);
     rawModelResponses.push({ request_id: id, latency_ms: +elapsedMs.toFixed(2), response: json });
     if (!response.ok) {
-      throw new Error(`Model endpoint returned ${response.status}: ${JSON.stringify(json)}`);
+      const error = new Error(`Model endpoint returned ${response.status}: ${JSON.stringify(json)}`);
+      error.diagnostics = {
+        raw_model_responses: rawModelResponses,
+        tool_calls: toolCalls,
+        request_ids: requestIds,
+        model_version_identifier: resolvedModel,
+      };
+      throw error;
     }
     resolvedModel = json.model || resolvedModel;
     const message = json.choices?.[0]?.message;
