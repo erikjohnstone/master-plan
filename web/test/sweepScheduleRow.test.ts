@@ -231,6 +231,158 @@ test("classifySweepMatches: cross-scale sweep — the fingerprint is resized per
   assert.equal(r.scaled!.ratio, 12);
 });
 
+test("classifySweepMatches: two matches closer than half a symbol diagonal collapse to one", () => {
+  // Same-device dual convention: two tags, two high-score centroids inside
+  // one footprint. Nearest-claim would bill each tag; they overlap, so only
+  // the better score counts.
+  const anchorSegs = place([{ at: [200, 200] }]);
+  const anchor = tagNear([200, 200]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const near: Point = [212, 200];
+  const sheetSegs = place([{ at: [200, 200] }, { at: near }]);
+  const occ = [tagNear([200, 200]), tagNear(near)];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
+  assert.equal(r.matches.length, 1, "overlapping matches are one device");
+  assert.ok(r.withheld.some((w) => /within a symbol/.test(w.reason)), "the shadow is a disclosed question");
+});
+
+test("classifySweepMatches: a different-transform match inside one footprint is a symmetry shadow, not a second install", () => {
+  // The seed read under 180°+mirror lands a second centroid just outside
+  // half-diagonal (eccentricity). Same-transform siblings at that distance
+  // stay two installs; a different transform is the same ink.
+  const anchorSegs = place([{ at: [200, 200] }]);
+  const anchor = tagNear([200, 200]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const shifted: Point = [200, 226];
+  const sheetSegs = place([{ at: [200, 200] }, { at: shifted, rot: 180, mir: true }]);
+  const occ = [tagNear([200, 200]), tagNear(shifted)];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
+  assert.equal(r.matches.length, 1, "a symmetry shadow does not count as a second device");
+});
+
+test("classifySweepMatches: two close same-tag labels each keep the match nearest them, not whichever occurrence sorts first", () => {
+  // Real undercount shape: two labeled instances sit inside one footprint
+  // of each other. First-in-array claiming billed both matches to the
+  // earlier occurrence and left the later one text_only, even though each
+  // match's own nearest tag was a different real instance.
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const a: Point = [400, 400];
+  const b: Point = [400, 455];
+  const sheetSegs = place([{ at: [100, 100] }, { at: a }, { at: b }]);
+  const occ = [tagNear([100, 100]), tagNear(a), tagNear(b)];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, { excludeCenter: cf.fp.center });
+  assert.equal(r.matches.length, 2, "each labeled instance counts once");
+  assert.equal(r.text_only.length, 0, "neither close tag is left as bare text");
+});
+
+test("classifySweepMatches: a single leftover labeled near-bar match stays withheld", () => {
+  // One leftover tagged near-miss is the schematic-versus-plan extra, not
+  // a sibling cluster. scoreHigh is raised past 1 so an otherwise-identical
+  // second instance falls in the withheld band; the tight family rule, not
+  // a lower bar, is what must leave it a question.
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const sheetSegs = place([{ at: [100, 100] }, { at: [400, 400] }]);
+  const occ = [tagNear([100, 100]), tagNear([400, 400])];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {
+    excludeCenter: cf.fp.center,
+    scoreHigh: 1.01,
+  });
+  assert.equal(r.matches.length, 0, "one leftover labeled near-miss is not a family");
+  assert.ok(r.withheld.some((w) => w.reason.includes("tag is drawn beside it")), "the leftover stays a disclosed question");
+});
+
+test("classifySweepMatches: the seed occurrence does not count as a leftover in the family rule", () => {
+  // Same-sheet extra sitting close enough that its withheld is also
+  // within R of the seed tag. Treating the seed's own tag as leftover #2
+  // would promote that one extra (the schematic/cross-ref shape). The
+  // seed is already counted — it is not a leftover.
+  const anchorSegs = place([{ at: [200, 200] }]);
+  const anchor = tagNear([200, 200]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const extra: Point = [250, 200];
+  const sheetSegs = place([{ at: [200, 200] }, { at: extra }]);
+  const occ = [tagNear([200, 200]), tagNear(extra)];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {
+    excludeCenter: cf.fp.center,
+    scoreHigh: 1.01,
+  });
+  assert.equal(r.matches.length, 0, "seed + one nearby leftover is not a family of two leftovers");
+  assert.ok(r.withheld.length >= 1, "the leftover stays a disclosed question");
+});
+
+test("classifySweepMatches: extra labels beside the counted instance are not a family", () => {
+  // Two leftover tags sharing one near-bar withheld next to the seed —
+  // schedule text + a leader on the same device. That is not two sibling
+  // copies. scoreHigh past 1 puts the extra geometry in the withheld band.
+  const anchorSegs = place([{ at: [200, 200] }]);
+  const anchor = tagNear([200, 200]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const extra: Point = [248, 200];
+  const sheetSegs = place([{ at: [200, 200] }, { at: extra }]);
+  const occ = [tagNear([200, 200]), tagNear(extra), tagNear([248, 230])];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {
+    excludeCenter: cf.fp.center,
+    scoreHigh: 1.01,
+  });
+  assert.equal(r.matches.length, 0, "labels on the counted instance do not promote a family");
+  assert.ok(r.withheld.length >= 1);
+});
+
+test("classifySweepMatches: two leftover labeled near-bar matches on a one-instance sheet COUNT", () => {
+  // Same-convention siblings of the seed: the fingerprint cleared the bar
+  // once and missed it twice by hatch/size, each leftover still carrying
+  // this row's own tag. That cluster is the family exception.
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const a: Point = [400, 400];
+  const b: Point = [700, 400];
+  const sheetSegs = place([{ at: [100, 100] }, { at: a }, { at: b }]);
+  const occ = [tagNear([100, 100]), tagNear(a), tagNear(b)];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {
+    excludeCenter: cf.fp.center,
+    scoreHigh: 1.01,
+  });
+  assert.equal(r.matches.length, 2, "the labeled family is promoted, not left withheld");
+  const tags = r.matches.map((m) => m.tag_at).sort();
+  assert.deepEqual(tags, [occ[1].bbox, occ[2].bbox].sort());
+  assert.equal(r.text_only.length, 0);
+});
+
+test("classifySweepMatches: a near-bar withheld match with NO own tag stays withheld", () => {
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const sheetSegs = place([{ at: [100, 100] }, { at: [400, 400] }]);
+  const occ = [tagNear([100, 100])];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {
+    excludeCenter: cf.fp.center,
+    scoreHigh: 1.01,
+  });
+  assert.equal(r.matches.length, 0);
+  assert.ok(r.withheld.length >= 1, "unlabeled near-bar geometry stays a disclosed question");
+});
+
+test("classifySweepMatches: a near-bar withheld match carrying a SIBLING's tag is excluded, not promoted", () => {
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const sheetSegs = place([{ at: [100, 100] }, { at: [400, 400] }]);
+  const occ = [tagNear([100, 100])];
+  const siblingOcc = [{ key: "T2", cx: 400 - 15, cy: 400 + 10 }];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, siblingOcc, anchor.h, {
+    excludeCenter: cf.fp.center,
+    scoreHigh: 1.01,
+  });
+  assert.equal(r.matches.length, 0);
+  assert.equal(r.excluded.length, 1);
+  assert.equal(r.excluded[0].tag, "T2");
+});
+
 // ── dedupeCrossDisciplineRoomViews ──────────────────────────────────────────
 // The real AC-1 bug (itd-d1-lab-mechanical.pdf#7/#25, set 002): the SAME
 // physical unit drawn on an M-series AND a P-series "enlarged" plan of the
