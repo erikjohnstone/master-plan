@@ -62,7 +62,7 @@ page.on("pageerror", (error) => console.error(`[browser:error] ${error.message}`
 try {
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   await page.locator('input[name="sheet-file"]').first().setInputFiles(pdf);
-  await page.getByText("Loading sheets…").waitFor({ state: "hidden", timeout: 120_000 }).catch(() => {});
+  await page.getByText("Open your plans").waitFor({ state: "hidden", timeout: 120_000 });
   await page.locator("canvas").first().waitFor({ state: "visible", timeout: 120_000 });
   await page.screenshot({ path: "/opt/cursor/artifacts/d01_ui_loaded.png" });
 
@@ -70,12 +70,16 @@ try {
   const goal = page.locator('textarea[name="agent-goal"]');
   await goal.fill(prompt);
   await page.getByRole("button", { name: "Run", exact: true }).click();
-  await page.getByRole("button", { name: "■ Stop", exact: true }).waitFor({ state: "visible", timeout: 10_000 });
-  await page.getByRole("button", { name: "■ Stop", exact: true }).waitFor({ state: "hidden", timeout: 180_000 });
+  const stop = page.getByRole("button", { name: /Stop/ });
+  await stop.waitFor({ state: "visible", timeout: 10_000 });
+  await stop.waitFor({ state: "hidden", timeout: 180_000 });
   await page.screenshot({ path: "/opt/cursor/artifacts/d01_ui_agent_result.png" });
   const panel = await page.locator('textarea[name="agent-goal"]').locator("xpath=../../..").innerText();
   console.log(`UI_AGENT_RESULT\n${panel}`);
   if (headed) await page.waitForTimeout(10_000);
+} catch (error) {
+  await page.screenshot({ path: "/opt/cursor/artifacts/d01_ui_failure.png" }).catch(() => {});
+  throw error;
 } finally {
   await browser.close();
   await new Promise((resolveClose) => proxy.close(resolveClose));
