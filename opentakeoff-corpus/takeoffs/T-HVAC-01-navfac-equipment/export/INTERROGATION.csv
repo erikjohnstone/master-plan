@@ -1,0 +1,42 @@
+turn,role,text
+1,interrogator,"How many unique AHU MARKs are scheduled on this set?
+How many unique FCU MARKs are scheduled?
+How many unique VAV MARKs are scheduled?
+Did you count vibration isolation schedule rows as HVAC equipment units? Answer yes or no.
+How many RTU units are on the HVAC equipment schedules for this set?
+How many sheets are empty for HVAC equipment schedules?"
+2,takeoff,"{
+  ""answers"": [
+    {
+      ""id"": ""qty-ahu"",
+      ""answer"": ""5"",
+      ""number"": null
+    },
+    {
+      ""id"": ""qty-fcu"",
+      ""answer"": ""42"",
+      ""number"": null
+    },
+    {
+      ""id"": ""qty-vav"",
+      ""answer"": ""52"",
+      ""number"": null
+    },
+    {
+      ""id"": ""neg-vib"",
+      ""answer"": ""no"",
+      ""number"": null
+    },
+    {
+      ""id"": ""false-rtu"",
+      ""answer"": ""0"",
+      ""number"": null
+    },
+    {
+      ""id"": ""empty-pages"",
+      ""answer"": ""67"",
+      ""number"": null
+    }
+  ]
+}"
+,verdict,"{""ok"":true,""model"":""gpt-oss-120b""}"

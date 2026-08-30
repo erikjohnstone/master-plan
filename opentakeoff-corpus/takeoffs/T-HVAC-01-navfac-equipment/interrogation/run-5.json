@@ -1,0 +1,96 @@
+{
+  "turns": [
+    {
+      "turn": 1,
+      "role": "interrogator",
+      "text": "How many unique AHU MARKs are scheduled on this set?\nHow many unique FCU MARKs are scheduled?\nHow many unique VAV MARKs are scheduled?\nDid you count vibration isolation schedule rows as HVAC equipment units? Answer yes or no.\nHow many RTU units are on the HVAC equipment schedules for this set?\nHow many sheets are empty for HVAC equipment schedules?"
+    },
+    {
+      "turn": 2,
+      "role": "takeoff",
+      "text": "{\n  \"answers\": [\n    {\n      \"id\": \"qty-ahu\",\n      \"answer\": \"5\",\n      \"number\": null\n    },\n    {\n      \"id\": \"qty-fcu\",\n      \"answer\": \"42\",\n      \"number\": null\n    },\n    {\n      \"id\": \"qty-vav\",\n      \"answer\": \"52\",\n      \"number\": null\n    },\n    {\n      \"id\": \"neg-vib\",\n      \"answer\": \"no\",\n      \"number\": null\n    },\n    {\n      \"id\": \"false-rtu\",\n      \"answer\": \"0\",\n      \"number\": null\n    },\n    {\n      \"id\": \"empty-pages\",\n      \"answer\": \"67\",\n      \"number\": null\n    }\n  ]\n}"
+    }
+  ],
+  "probes": [
+    {
+      "id": "qty-ahu",
+      "question": "How many unique AHU MARKs are scheduled on this set?",
+      "expect": {
+        "number": 5
+      }
+    },
+    {
+      "id": "qty-fcu",
+      "question": "How many unique FCU MARKs are scheduled?",
+      "expect": {
+        "number": 42
+      }
+    },
+    {
+      "id": "qty-vav",
+      "question": "How many unique VAV MARKs are scheduled?",
+      "expect": {
+        "number": 52
+      }
+    },
+    {
+      "id": "neg-vib",
+      "question": "Did you count vibration isolation schedule rows as HVAC equipment units? Answer yes or no.",
+      "expect": {
+        "answer_includes": [
+          "no"
+        ]
+      }
+    },
+    {
+      "id": "false-rtu",
+      "question": "How many RTU units are on the HVAC equipment schedules for this set?",
+      "expect": {
+        "number": 0
+      }
+    },
+    {
+      "id": "empty-pages",
+      "question": "How many sheets are empty for HVAC equipment schedules?",
+      "expect": {
+        "number": 67
+      }
+    }
+  ],
+  "model_answers": [
+    {
+      "id": "qty-ahu",
+      "answer": "5",
+      "number": null
+    },
+    {
+      "id": "qty-fcu",
+      "answer": "42",
+      "number": null
+    },
+    {
+      "id": "qty-vav",
+      "answer": "52",
+      "number": null
+    },
+    {
+      "id": "neg-vib",
+      "answer": "no",
+      "number": null
+    },
+    {
+      "id": "false-rtu",
+      "answer": "0",
+      "number": null
+    },
+    {
+      "id": "empty-pages",
+      "answer": "67",
+      "number": null
+    }
+  ],
+  "verdict": {
+    "ok": true,
+    "model": "gpt-oss-120b"
+  }
+}

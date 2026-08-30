@@ -422,38 +422,41 @@ function summarizeForProbe(result) {
 function buildProbes(truth, result) {
   const probes = [];
   if (truth.kind === "hvac_equipment") {
+    // Spot-check the three largest present families (set-agnostic).
+    const ranked = Object.entries(truth.categories || {})
+      .map(([name, cat]) => ({ name, count: cat.count }))
+      .filter((c) => c.count > 0)
+      .sort((a, b) => b.count - a.count);
+    for (const fam of ranked.slice(0, 3)) {
+      probes.push({
+        id: `qty-${fam.name.toLowerCase()}`,
+        question: `How many unique scheduled tags are in category ${fam.name}?`,
+        expect: { number: fam.count },
+      });
+    }
+    const exclusionHint = (truth.exclusions || result.exclusions || [])[0]
+      || "items outside this takeoff's declared exclusions";
     probes.push({
-      id: "qty-ahu",
-      question: "How many unique AHU MARKs are scheduled on this set?",
-      expect: { number: truth.categories.AHU.count },
-    });
-    probes.push({
-      id: "qty-fcu",
-      question: "How many unique FCU MARKs are scheduled?",
-      expect: { number: truth.categories.FCU.count },
-    });
-    probes.push({
-      id: "qty-vav",
-      question: "How many unique VAV MARKs are scheduled?",
-      expect: { number: truth.categories.VAV.count },
-    });
-    probes.push({
-      id: "neg-vib",
-      question: "Did you count vibration isolation schedule rows as HVAC equipment units? Answer yes or no.",
+      id: "neg-exclusion",
+      question: `Did you count the following as in-scope HVAC equipment units: "${exclusionHint}"? Answer yes or no.`,
       expect: { answer_includes: ["no"] },
     });
+    // False-premise: invent a category name that is not present on this set.
+    const present = new Set(Object.keys(truth.categories || {}));
+    const fake = ["RTU", "CRAC_EXTRA", "MAU_PHANTOM"].find((n) => !present.has(n)) || "PHANTOM_FAMILY";
     probes.push({
-      id: "false-rtu",
-      question: "How many RTU units are on the HVAC equipment schedules for this set?",
+      id: "false-absent-family",
+      question: `How many unique scheduled tags are in category ${fake}?`,
       expect: { number: 0 },
     });
     probes.push({
       id: "empty-pages",
-      question: "How many sheets are empty for HVAC equipment schedules?",
+      question: "How many sheets are empty for HVAC equipment schedules on this set?",
       expect: { number: truth.page_accounting.empty_pages },
     });
   } else {
     const t = truth.categories.points_lists.totals;
+    const lists = truth.categories.points_lists.lists || [];
     probes.push({
       id: "qty-rows",
       question: "What is the overall extractable points/DDC row total?",
@@ -474,16 +477,18 @@ function buildProbes(truth, result) {
       question: "Did you include HVAC equipment schedule MARKs in the BAS points takeoff? Answer yes or no.",
       expect: { answer_includes: ["no"] },
     });
-    probes.push({
-      id: "false-doah-extra",
-      question: "How many extractable POINTS LIST DOAH-TI rows are there?",
-      expect: {
-        number: truth.categories.points_lists.lists.find((l) => /DOAH/i.test(l.title))?.rows ?? 34,
-      },
-    });
+    // Spot-check the largest extractable list present on this set.
+    const largest = [...lists].sort((a, b) => b.rows - a.rows)[0];
+    if (largest) {
+      probes.push({
+        id: "qty-largest-list",
+        question: `How many extractable rows are on list "${largest.title}"?`,
+        expect: { number: largest.rows },
+      });
+    }
     probes.push({
       id: "empty-pages",
-      question: "How many sheets are empty for BAS points lists?",
+      question: "How many sheets are empty for BAS points lists on this set?",
       expect: { number: truth.page_accounting.empty_pages },
     });
   }

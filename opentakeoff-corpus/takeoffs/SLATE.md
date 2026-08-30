@@ -2,8 +2,8 @@
 
 | ID | Kind | Set | Status |
 |---|---|---|---|
-| T-HVAC-01 | HVAC equipment quantity takeoff | `navfac-cherry-point-atc` | `TRUTH BUILT` |
-| T-BAS-01 | BAS / DDC points takeoff | `navfac-cherry-point-atc` | `TRUTH BUILT` |
+| T-HVAC-01 | HVAC equipment quantity takeoff | `navfac-cherry-point-atc` | `LOCKED` |
+| T-BAS-01 | BAS / DDC points takeoff | `navfac-cherry-point-atc` | `LOCKED` |
 
 Selection rationale: `navfac-cherry-point-atc` (75 sheets) is the densest
 vector set with both full HVAC equipment schedules **and** extractable BAS

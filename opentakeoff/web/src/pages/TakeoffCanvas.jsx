@@ -112,7 +112,7 @@ import { detectCandidateRule, buildRuleFromSeed, applyRuleToProject } from "../l
 import { deriveTransitionRuns, transitionRefusal } from "../lib/transitions";
 import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, downloadText } from "../lib/totals.js";
 import { buildXlsx } from "../lib/xlsx.js";
-import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "../../../mcp/src/corpusTakeoff.mjs";
+import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "../lib/corpusTakeoff.mjs";
 import { measurementBreakdown } from "../lib/measurementBreakdown.js";
 import { buildSheetDxf, dxfFileName, DXF_MIME } from "../lib/dxf.js";
 import { shapesInZone, shapeCenter } from "../lib/zone.js";
@@ -567,6 +567,7 @@ export default function TakeoffCanvas() {
   const [ruleOffer, setRuleOffer] = useState(null);   // { deduct, seed, tag }
   const [ruleStage, setRuleStage] = useState(null);   // { rule, candidates, proposed_ts }
   const [agentOpen, setAgentOpen] = useState(false);      // docked right-rail Agent panel
+  const [corpusTakeoffView, setCorpusTakeoffView] = useState(null); // last compile_corpus_takeoff rollup for UI
   // ── roll goods (#136) — view state; the figured layouts are a memo below ──
   const [rollShow, setRollShow] = useState(true);         // draw the figured cuts over the plan (on: opting a condition in shows its cuts immediately)
   const [rollEdit, setRollEdit] = useState(false);        // cut-edit mode — cuts take pointer events (slide / resize / double-click reset)
@@ -7043,6 +7044,39 @@ export default function TakeoffCanvas() {
         // CSV/JSON still delivered
       }
     }
+    // Surface the rollup in-canvas so the estimator can read the takeoff
+    // without opening the downloaded workbook (any loaded set).
+    const rollupRows = (() => {
+      if (compiled.kind === "hvac_equipment") {
+        return [
+          ["Category", "Count", "A", "M", "T", "Other"],
+          ...Object.entries(compiled.categories || {}).map(([name, cat]) => [
+            name,
+            cat.count,
+            cat.building?.A ?? 0,
+            cat.building?.M ?? 0,
+            cat.building?.T ?? 0,
+            cat.building?.other ?? 0,
+          ]),
+        ];
+      }
+      const lists = compiled.categories?.points_lists?.lists || [];
+      const totals = compiled.categories?.points_lists?.totals || {};
+      return [
+        ["List", "Sheet", "Rows", "AI", "AO", "BI", "BO"],
+        ...lists.map((l) => [l.title, l.sheet_id, l.rows, l.AI, l.AO, l.BI, l.BO]),
+        ["TOTAL", "", totals.rows, totals.AI, totals.AO, totals.BI, totals.BO],
+      ];
+    })();
+    setCorpusTakeoffView({
+      takeoff_id: compiled.takeoff_id,
+      kind: compiled.kind,
+      sheet_count: compiled.sheet_count,
+      totals: compiled.totals,
+      empty_pages: compiled.page_accounting?.empty_pages,
+      exclusions: compiled.exclusions || [],
+      rows: rollupRows,
+    });
     return {
       takeoff_id: compiled.takeoff_id,
       kind: compiled.kind,
@@ -7054,6 +7088,7 @@ export default function TakeoffCanvas() {
         ? Object.keys(compiled.categories || {}).length
         : (compiled.categories?.points_lists?.lists || []).length,
       downloaded: downloads,
+      ui_rollup_open: true,
     };
   }
 
@@ -11909,6 +11944,60 @@ export default function TakeoffCanvas() {
             historyOpen={runHistoryOpen}
             onToggleHistory={() => { if (!runHistoryOpen) refreshRunHistory(); setRunHistoryOpen((o) => !o); }}
           />
+        )}
+
+        {/* Corpus HVAC/BAS takeoff rollup — shown after compile_corpus_takeoff.
+            Set-agnostic: whatever categories/lists the loaded plan actually has. */}
+        {corpusTakeoffView && (
+          <div
+            role="dialog"
+            aria-label="Compiled takeoff rollup"
+            style={{
+              position: "absolute", left: 16, bottom: 16, zIndex: 40,
+              width: "min(560px, calc(100% - 32px))", maxHeight: "45vh",
+              overflow: "auto", background: "var(--surface, #fff)",
+              border: "1px solid var(--line, #ccc)", borderRadius: 8,
+              boxShadow: "0 8px 28px rgba(0,0,0,0.18)", padding: 12,
+              fontSize: 12, color: "var(--ink, #111)",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 8, marginBottom: 8, alignItems: "baseline" }}>
+              <strong style={{ fontSize: 13 }}>
+                {corpusTakeoffView.takeoff_id} · {corpusTakeoffView.kind === "hvac_equipment" ? "HVAC equipment" : "BAS points"} takeoff
+              </strong>
+              <button type="button" className="btn" onClick={() => setCorpusTakeoffView(null)} style={{ fontSize: 11 }}>Close</button>
+            </div>
+            <div style={{ color: "var(--ink-muted)", marginBottom: 8 }}>
+              {corpusTakeoffView.sheet_count} sheets · {corpusTakeoffView.empty_pages} empty for this takeoff
+              {corpusTakeoffView.totals?.items != null ? ` · ${corpusTakeoffView.totals.items} items` : null}
+              {corpusTakeoffView.totals?.rows != null ? ` · ${corpusTakeoffView.totals.rows} rows` : null}
+            </div>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <tbody>
+                {(corpusTakeoffView.rows || []).map((row, i) => (
+                  <tr key={i} style={{ background: i === 0 ? "var(--wash, #f4f4f4)" : undefined }}>
+                    {row.map((cell, j) => (
+                      <td
+                        key={j}
+                        style={{
+                          borderBottom: "1px solid var(--line, #e5e5e5)",
+                          padding: "3px 6px",
+                          textAlign: j === 0 ? "left" : "right",
+                          fontWeight: i === 0 ? 600 : 400,
+                          maxWidth: j === 0 ? 220 : undefined,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
 
         {/* Roll panel (#136) — DOCKED right-rail sibling like the Agent panel:

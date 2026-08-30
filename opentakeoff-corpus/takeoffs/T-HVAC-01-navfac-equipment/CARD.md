@@ -1,32 +1,29 @@
 # T-HVAC-01 — NAVFAC full HVAC equipment takeoff
 
-Status: `TRUTH BUILT`
+Status: `LOCKED` (5/5)
 
 ## Set
 
 `navfac-cherry-point-atc` — `raw/navfac-cherry-point-atc-mechanical.pdf` (75 sheets)
 
-## Live prompt (frozen at validation start)
+## Live prompt (frozen)
 
 See `prompt.txt`.
 
-## Scope (set-driven)
+## Scope
 
-22 scheduled HVAC equipment families present and countable on this set
-(Air Ops / MITRACON / ATCT): AHU, DOAH unit, DOAH handling, FCU, VAV,
-air-cooled chiller, heat-recovery chiller, boiler, pump, fan, cabinet unit
-heater, unit heater, CRAH, dehumidifier, humidifier, air separator,
-expansion tank, CHW control valve, HHW control valve, GRD, range hood,
-duct silencer — **396** unique scheduled tags. Exclusions (vibration
-isolation, fan sound, points/DDC lists, general notes / piping construction)
-are named in `truth.json` and must be defended in Gate 5 negative-space.
+22 scheduled HVAC equipment families — **396** unique tags. Exclusions in
+`truth.json` (vibration isolation, fan sound, points/DDC, general notes).
 
-## Harness
+## Validation
 
-- `truth.json` — item-level cites, ≥25% independent hand-count pass, Gate 4
-  page map (75/75; 67 empty for HVAC schedules)
-- `ground_truth_completed_before_model_runs: true`
+| Run | Cold | Gates 1–5 |
+|---|---|---|
+| 1 | yes | PASS |
+| 2 | | PASS |
+| 3 | | PASS |
+| 4 | | PASS |
+| 5 | yes | PASS + canonical export |
 
-## Gates
-
-N=5 × Gates 1–5 per `../GOAL.md`. Canonical export = Run 5 only.
+Canonical workbook: `export/` (category CSVs + `run-5.xlsx` + `takeoff.json`).
+Interrogation: `interrogation/run-5.json`.

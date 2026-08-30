@@ -1,28 +1,29 @@
 # T-BAS-01 — NAVFAC BAS / DDC points takeoff
 
-Status: `TRUTH BUILT`
+Status: `LOCKED` (5/5)
 
 ## Set
 
 `navfac-cherry-point-atc` — `raw/navfac-cherry-point-atc-mechanical.pdf` (75 sheets)
 
-## Live prompt (frozen at validation start)
+## Live prompt (frozen)
 
 See `prompt.txt`.
 
-## Scope (set-driven)
+## Scope
 
-Five extractable POINTS/DDC lists on #64 / #65 / #67 — **122** rows
-(AI 43 / AO 15 / BI 49 / BO 15). Title-only schematic lists that do not
-extract as typed rows are disclosed as non-extractable in `truth.json`
-exclusions — not invented.
+Five extractable POINTS/DDC lists — **122** rows (AI 43 / AO 15 / BI 49 / BO 15).
+Title-only schematic lists disclosed non-extractable in `truth.json` exclusions.
 
-## Harness
+## Validation
 
-- `truth.json` — list totals + item-level cites, ≥25% MARK hand-count pass,
-  Gate 4 page map (75/75; 72 empty for BAS lists)
-- `ground_truth_completed_before_model_runs: true`
+| Run | Cold | Gates 1–5 |
+|---|---|---|
+| 1 | yes | PASS |
+| 2 | | PASS |
+| 3 | | PASS |
+| 4 | | PASS |
+| 5 | yes | PASS + canonical export |
 
-## Gates
-
-N=5 × Gates 1–5 per `../GOAL.md`. Canonical export = Run 5 only.
+Canonical workbook: `export/` (list CSVs + `run-5.xlsx` + `takeoff.json`).
+Interrogation: `interrogation/run-5.json`.

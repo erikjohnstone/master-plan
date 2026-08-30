@@ -1,0 +1,7 @@
+tag,description,qty,unit,sheet_id,table_title,bbox_px
+AI01,SPACE TEMPERATURE,1,EA,navfac-cherry-point-atc-mechanical.pdf#67,UNIT HEATER DDC POINTS LIST,"3493.444,2433.12,3578.64,2467.44"
+AI02,HHW VALVE CONTROL,1,EA,navfac-cherry-point-atc-mechanical.pdf#67,UNIT HEATER DDC POINTS LIST,"3493.444,2467.44,3578.64,2502.002"
+AO01,HHW VALVE CONTROL,1,EA,navfac-cherry-point-atc-mechanical.pdf#67,UNIT HEATER DDC POINTS LIST,"3493.444,2571.12,3578.64,2605.44"
+BI01,FAN STATUS,1,EA,navfac-cherry-point-atc-mechanical.pdf#67,UNIT HEATER DDC POINTS LIST,"3493.444,2674.56,3578.64,2708.88"
+BI02,CUH/UH DDC RESET,1,EA,navfac-cherry-point-atc-mechanical.pdf#67,UNIT HEATER DDC POINTS LIST,"3493.444,2708.88,3578.64,2743.44"
+BO01,FAN START/STOP,1,EA,navfac-cherry-point-atc-mechanical.pdf#67,UNIT HEATER DDC POINTS LIST,"3493.444,2812.32,3578.64,2846.88"

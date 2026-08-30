@@ -1,0 +1,96 @@
+{
+  "turns": [
+    {
+      "turn": 1,
+      "role": "interrogator",
+      "text": "What is the overall extractable points/DDC row total?\nWhat is the overall AI count across extractable lists?\nWhat is the overall BO count across extractable lists?\nDid you include HVAC equipment schedule MARKs in the BAS points takeoff? Answer yes or no.\nHow many extractable POINTS LIST DOAH-TI rows are there?\nHow many sheets are empty for BAS points lists?"
+    },
+    {
+      "turn": 2,
+      "role": "takeoff",
+      "text": "{\n  \"answers\": [\n    {\n      \"id\": \"qty-rows\",\n      \"answer\": \"122\",\n      \"number\": 122\n    },\n    {\n      \"id\": \"qty-ai\",\n      \"answer\": \"43\",\n      \"number\": 43\n    },\n    {\n      \"id\": \"qty-bo\",\n      \"answer\": \"15\",\n      \"number\": 15\n    },\n    {\n      \"id\": \"neg-hvac\",\n      \"answer\": \"no\",\n      \"number\": null\n    },\n    {\n      \"id\": \"false-doah-extra\",\n      \"answer\": \"34\",\n      \"number\": 34\n    },\n    {\n      \"id\": \"empty-pages\",\n      \"answer\": \"72\",\n      \"number\": 72\n    }\n  ]\n}"
+    }
+  ],
+  "probes": [
+    {
+      "id": "qty-rows",
+      "question": "What is the overall extractable points/DDC row total?",
+      "expect": {
+        "number": 122
+      }
+    },
+    {
+      "id": "qty-ai",
+      "question": "What is the overall AI count across extractable lists?",
+      "expect": {
+        "number": 43
+      }
+    },
+    {
+      "id": "qty-bo",
+      "question": "What is the overall BO count across extractable lists?",
+      "expect": {
+        "number": 15
+      }
+    },
+    {
+      "id": "neg-hvac",
+      "question": "Did you include HVAC equipment schedule MARKs in the BAS points takeoff? Answer yes or no.",
+      "expect": {
+        "answer_includes": [
+          "no"
+        ]
+      }
+    },
+    {
+      "id": "false-doah-extra",
+      "question": "How many extractable POINTS LIST DOAH-TI rows are there?",
+      "expect": {
+        "number": 34
+      }
+    },
+    {
+      "id": "empty-pages",
+      "question": "How many sheets are empty for BAS points lists?",
+      "expect": {
+        "number": 72
+      }
+    }
+  ],
+  "model_answers": [
+    {
+      "id": "qty-rows",
+      "answer": "122",
+      "number": 122
+    },
+    {
+      "id": "qty-ai",
+      "answer": "43",
+      "number": 43
+    },
+    {
+      "id": "qty-bo",
+      "answer": "15",
+      "number": 15
+    },
+    {
+      "id": "neg-hvac",
+      "answer": "no",
+      "number": null
+    },
+    {
+      "id": "false-doah-extra",
+      "answer": "34",
+      "number": 34
+    },
+    {
+      "id": "empty-pages",
+      "answer": "72",
+      "number": 72
+    }
+  ],
+  "verdict": {
+    "ok": true,
+    "model": "gpt-oss-120b"
+  }
+}
