@@ -6887,6 +6887,8 @@ export default function TakeoffCanvas() {
   }
 
   async function agentFindSchedule(kind) {
+    const remote = await agentMcpTool("find_schedule", { kind });
+    if (remote) return remote;
     const g = await ensureAgentGraph();
     if (!g.available) return { error: "This set has no text layer (a scan) — the sheet graph is unavailable." };
     const k = (kind || "").toLowerCase();
@@ -6907,7 +6909,22 @@ export default function TakeoffCanvas() {
     };
   }
 
+  async function agentMcpTool(name, args) {
+    let endpoint = "";
+    try { endpoint = localStorage.getItem("opentakeoff_mcp_endpoint") || ""; } catch { /* unavailable */ }
+    if (!endpoint) return null;
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, arguments: args }),
+    });
+    if (!response.ok) return { error: `Local MCP bridge returned HTTP ${response.status}.` };
+    return await response.json();
+  }
+
   async function agentQueryTable({ title, row_key, column, cell_contains }) {
+    const remote = await agentMcpTool("query_table", { title, row_key, column, cell_contains });
+    if (remote) return remote;
     const g = await ensureAgentGraph();
     if (!g.available) return { error: "This set has no text layer (a scan) — the sheet graph is unavailable." };
     const titleNeedle = (title || "").trim().toUpperCase();
@@ -7190,6 +7207,13 @@ export default function TakeoffCanvas() {
    * matching MCP's own sweep_schedule_row exactly — that's symbol_sweep's
    * own opt-in, not wired into this tool on either side. */
   async function agentSweepScheduleRow(tag, opts = {}) {
+    const remote = await agentMcpTool("sweep_schedule_row", {
+      tag,
+      tagged_only: true,
+      rotations: opts.rotations,
+      mirror: opts.mirror,
+    });
+    if (remote) return remote;
     const g = await ensureAgentGraph();
     if (!g.available) return { error: "This set has no text layer (a scan) — schedule rows cannot be read." };
     const t = canonMark(tag);
@@ -7368,6 +7392,35 @@ export default function TakeoffCanvas() {
   async function agentFindText(key, q, region, limitOpt) {
     const query = (q || "").trim();
     if (!query) return { error: "Pass q — the text to find, e.g. a room number or a schedule tag." };
+    const remoteDims = region ? await ensureSheetDims(key) : null;
+    const remote = await agentMcpTool("find_text", {
+      sheet: key,
+      q: query,
+      ...(region && remoteDims ? { region: {
+        x0: region.x0 * remoteDims.w,
+        y0: region.y0 * remoteDims.h,
+        x1: region.x1 * remoteDims.w,
+        y1: region.y1 * remoteDims.h,
+      } } : {}),
+      ...(limitOpt ? { limit: limitOpt } : {}),
+    });
+    if (remote) {
+      const dims = remoteDims || await ensureSheetDims(key);
+      if (!dims || !Array.isArray(remote.hits)) return remote;
+      return {
+        ...remote,
+        hits: remote.hits.map((hit) => ({
+          text: hit.str,
+          at: [hit.center[0] / dims.w, hit.center[1] / dims.h],
+          bbox: {
+            x0: hit.bbox[0] / dims.w,
+            y0: hit.bbox[1] / dims.h,
+            x1: hit.bbox[2] / dims.w,
+            y1: hit.bbox[3] / dims.h,
+          },
+        })),
+      };
+    }
     const dims = await ensureSheetGeometry(key);
     if (!dims) return { error: `Sheet ${key} not found, or has no page to read.` };
     const spans = await ensureTextSpans(key);

@@ -2,6 +2,9 @@ import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { chromium } from "playwright";
+import { Client } from "../../mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/client/index.js";
+import { InMemoryTransport } from "../../mcp/node_modules/@modelcontextprotocol/sdk/dist/esm/inMemory.js";
+import { buildServer } from "../../mcp/server.ts";
 
 const args = new Set(process.argv.slice(2));
 const headed = args.has("--headed");
@@ -14,6 +17,13 @@ const root = resolve(import.meta.dirname, "../..");
 const corpus = resolve(root, "../opentakeoff-corpus");
 const pdf = resolve(corpus, "raw/navfac-cherry-point-atc-mechanical.pdf");
 const prompt = readFileSync(resolve(corpus, "demos/D01-chiller-plan-to-controls/prompt.txt"), "utf8").trim();
+
+const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+const mcpServer = buildServer();
+await mcpServer.connect(serverTransport);
+const mcpClient = new Client({ name: "opentakeoff-ui-proof", version: "1.0.0" });
+await mcpClient.connect(clientTransport);
+await mcpClient.callTool({ name: "load_plan", arguments: { path: pdf } });
 
 const proxy = createServer(async (request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "*");
@@ -29,13 +39,22 @@ const proxy = createServer(async (request, response) => {
   }
   const chunks = [];
   for await (const chunk of request) chunks.push(chunk);
+  const body = Buffer.concat(chunks);
+  if (request.url === "/tool") {
+    const call = JSON.parse(body.toString("utf8"));
+    const result = await mcpClient.callTool({ name: call.name, arguments: call.arguments || {} });
+    const text = result.content?.find((item) => item.type === "text")?.text;
+    response.setHeader("Content-Type", "application/json");
+    response.end(text || "{}");
+    return;
+  }
   const upstream = await fetch(endpoint, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
-    body: Buffer.concat(chunks),
+    body,
   });
   response.statusCode = upstream.status;
   response.setHeader("Content-Type", upstream.headers.get("content-type") || "application/json");
@@ -53,6 +72,7 @@ await context.addInitScript(() => {
   localStorage.setItem("opentakeoff_ai_endpoint", "http://127.0.0.1:8787");
   localStorage.setItem("opentakeoff_ai_model", "gpt-oss-120b");
   localStorage.setItem("opentakeoff_ai_provider", "openai");
+  localStorage.setItem("opentakeoff_mcp_endpoint", "http://127.0.0.1:8787/tool");
   localStorage.removeItem("opentakeoff_ai_key");
 });
 const page = await context.newPage();
@@ -84,4 +104,6 @@ try {
 } finally {
   await browser.close();
   await new Promise((resolveClose) => proxy.close(resolveClose));
+  await mcpClient.close();
+  await mcpServer.close();
 }
