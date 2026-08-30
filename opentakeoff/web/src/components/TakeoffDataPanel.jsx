@@ -232,7 +232,7 @@ export default function TakeoffDataPanel({
                       color: "var(--ink-muted)", display: "flex", gap: 10, alignItems: "baseline",
                       flexWrap: "wrap",
                     }}>
-                      <span>{group.family}</span>
+                      <span>{typeof group.family === "object" ? String(group.family?.text || "Schedule") : group.family}</span>
                       <span style={{
                         fontFamily: "var(--f-mono)", fontSize: 11, fontWeight: 500,
                         letterSpacing: "0.04em",
@@ -366,11 +366,19 @@ export default function TakeoffDataPanel({
                       {group.map((r) => (
                         <tr key={r.id}>
                           <td style={{ ...td, fontFamily: "var(--f-mono)", fontSize: 12 }}>{r.tag || "—"}</td>
-                          <td style={td}>{r.field}</td>
-                          <td style={{ ...td, fontWeight: 600 }}>{String(r.value)}</td>
+                          <td style={td}>{String(r.field ?? "")}</td>
+                          <td style={{ ...td, fontWeight: 600 }}>
+                            {typeof r.value === "object" && r.value != null
+                              ? String(r.value.text ?? r.value.value ?? "")
+                              : String(r.value ?? "")}
+                          </td>
                           <td style={td}>{r.unit || "—"}</td>
                           <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)" }}>{r.sheet_id || "—"}</td>
-                          <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)" }}>{r.table_title || "—"}</td>
+                          <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)" }}>
+                            {typeof r.table_title === "object" && r.table_title != null
+                              ? String(r.table_title.text || "")
+                              : (r.table_title || "—")}
+                          </td>
                           <td style={{ ...td, whiteSpace: "nowrap" }}>
                             {typeof onOpenCitation === "function" && r.sheet_id && r.bbox_px && (
                               <button type="button" onClick={() => onOpenCitation(r)}

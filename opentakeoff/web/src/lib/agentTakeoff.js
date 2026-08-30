@@ -25,6 +25,21 @@ const cellText = (cell) => {
   return String(cell.value ?? "");
 };
 
+/** Schedule/list title may arrive as a plain string or { text, bbox }. */
+const titleText = (title) => {
+  if (title == null) return null;
+  if (typeof title === "string") {
+    const t = title.trim();
+    return t || null;
+  }
+  if (typeof title === "object") {
+    const t = cellText(title).trim();
+    return t || null;
+  }
+  const t = String(title).trim();
+  return t || null;
+};
+
 /** Build one takeoff row. */
 export function makeTakeoffRow({
   workflow = "",
@@ -40,6 +55,9 @@ export function makeTakeoffRow({
   source_tool = null,
   note = null,
 } = {}) {
+  const rawVal = typeof value === "object" && value !== null && !Array.isArray(value)
+    ? cellText(value)
+    : value;
   return {
     id: nextId(),
     created_at: Date.now(),
@@ -47,14 +65,14 @@ export function makeTakeoffRow({
     workflow: String(workflow || "").slice(0, 240),
     tag: tag != null && String(tag).trim() !== "" ? String(tag).trim() : null,
     field: String(field || "value").trim() || "value",
-    value: typeof value === "number" && Number.isFinite(value) ? value : String(value ?? "").trim(),
+    value: typeof rawVal === "number" && Number.isFinite(rawVal) ? rawVal : String(rawVal ?? "").trim(),
     unit: unit != null && String(unit).trim() !== "" ? String(unit).trim() : null,
     sheet_id: sheet_id || null,
-    table_title: table_title || null,
+    table_title: titleText(table_title),
     column: column || null,
     bbox_px: asBbox(bbox_px),
     source_tool: source_tool || null,
-    note: note || null,
+    note: note != null ? String(note) : null,
   };
 }
 
@@ -67,7 +85,7 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
   if (!data) return rows;
 
   if (name === "query_table") {
-    const title = data.matches?.[0]?.title || args.title || null;
+    const title = titleText(data.matches?.[0]?.title) || titleText(args.title) || null;
     const matches = data.matches || [];
     // Title-scan counts stay compact; row_key / modest result sets expand into
     // full schedule columns so the Takeoff UI can adapt (valves, points, …).
@@ -75,14 +93,14 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
     if (!expandRows && typeof data.count === "number" && !args.row_key) {
       rows.push(makeTakeoffRow({
         workflow, runId, tag: null, field: "schedule_count", value: data.count,
-        sheet_id: matches[0]?.sheet || null, table_title: title || args.title || null,
+        sheet_id: matches[0]?.sheet || null, table_title: title || titleText(args.title),
         source_tool: name, note: "query_table count",
       }));
     } else {
       for (const match of matches) {
         const key = match.row?.key || match.row?.identity?.text || args.row_key || null;
         const cells = match.row?.all_cells || match.row?.cells || {};
-        const tableTitle = match.title || title;
+        const tableTitle = titleText(match.title) || title;
         if (args.column && cells[args.column]) {
           const cell = cells[args.column];
           rows.push(makeTakeoffRow({
@@ -120,7 +138,7 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
     if (typeof data.count === "number" && !matches.length) {
       rows.push(makeTakeoffRow({
         workflow, runId, field: "schedule_count", value: data.count,
-        table_title: args.title || null, source_tool: name,
+        table_title: titleText(args.title), source_tool: name,
       }));
     }
   }
@@ -473,7 +491,7 @@ const pickAttr = (attrs, names) => {
 
 const familyFromSchedule = (title, tag) => {
   // Prefer the real schedule / list title — that is the modular takeoff section.
-  const t = String(title || "").trim();
+  const t = titleText(title) || "";
   if (t) return t;
   const tg = String(tag || "").toUpperCase();
   if (/POINT|POINTS LIST|\bAI-|\bAO-|\bBI-|\bBO-/i.test(tg) || /^(AI|AO|BI|BO|DI|DO)[\s_-]/i.test(tg)) {
@@ -496,7 +514,8 @@ const familyFromSchedule = (title, tag) => {
 export function lineSpecValue(line, col) {
   if (!line?.specs) return "";
   const hit = Object.entries(line.specs).find(([k]) => normKey(k) === normKey(col));
-  return hit ? hit[1] : "";
+  if (!hit) return "";
+  return cellText(hit[1]);
 }
 
 /**

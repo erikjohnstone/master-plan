@@ -256,6 +256,26 @@ test("rowsFromCompiledTakeoff: BAS points lists → POINT TYPE rows", () => {
   assert.ok(rows.some((r) => r.tag === "AI1" && r.field === "DESCRIPTION" && /SA TEMP/.test(String(r.value))));
 });
 
+test("rowsFromToolResult: query_table title {text,bbox} becomes plain string", () => {
+  const rows = rowsFromToolResult("query_table", { title: "FAN SCHEDULE", row_key: "EF-1" }, {
+    count: 1,
+    matches: [{
+      sheet: "mech.pdf#6",
+      title: { text: "FAN SCHEDULE", bbox: [1, 2, 3, 4] },
+      row: {
+        key: "EF-1",
+        all_cells: { CFM: { text: "165", bbox: [1, 2, 3, 4] }, MARK: { text: "EF-1" } },
+      },
+    }],
+  }, { workflow: "fans" });
+  assert.ok(rows.every((r) => typeof r.table_title === "string"));
+  assert.equal(rows[0].table_title, "FAN SCHEDULE");
+  const lines = compileAgentTakeoff(rows);
+  const groups = groupTakeoffByFamily(lines);
+  assert.equal(groups[0].family, "FAN SCHEDULE");
+  assert.equal(typeof groups[0].family, "string");
+});
+
 test("dedupe / merge keep first occurrence", () => {
   const a = makeTakeoffRow({ tag: "EF-1", field: "CFM", value: "165", sheet_id: "s" });
   const b = makeTakeoffRow({ tag: "EF-1", field: "CFM", value: "165", sheet_id: "s" });
