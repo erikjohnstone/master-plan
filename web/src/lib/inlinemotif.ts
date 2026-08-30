@@ -388,7 +388,7 @@ export function classifyInlineMotifMatches(
       && !(excludeCenter && Math.hypot(o.cx - excludeCenter[0], o.cy - excludeCenter[1]) <= anchorH * 3))
     .map((o) => ({ at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10] as Point }));
   const clusterR = MARK_CLUSTER_K * Math.max(anchorH, 6);
-  const leftovers = leftoverLabeledOccs(matches, occ, matchedOcc, clusterR, excludeCenter, anchorH * 3);
+  const leftovers = leftoverLabeledOccs(matches, occ, matchedOcc, clusterR, excludeCenter, anchorH * 3, withheld);
   for (const o of leftovers) {
     const w = Math.max(o.bbox[2] - o.bbox[0], 6), h = Math.max(o.bbox[3] - o.bbox[1], 6);
     matches.push({
