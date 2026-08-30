@@ -216,6 +216,24 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     if (!pointRows.some((key) => finalCanonical.includes(key.toUpperCase().replace(/[^A-Z0-9]/g, "")))) {
       return "A points-list query_table row with a BAS point mark was retrieved, but the final answer does not state that mark. Report the row identity/key (AI/AO/BI/BO style) and its alarm/trend fields; do not substitute the point description for the mark.";
     }
+    const missingDescriptions = [];
+    for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
+      for (const match of out?.matches || []) {
+        const mark = String(match?.row?.identity?.text || match?.row?.key || "").trim();
+        if (!/^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(mark)) continue;
+        if (!finalCanonical.includes(mark.toUpperCase().replace(/[^A-Z0-9]/g, ""))) continue;
+        for (const [header, cell] of Object.entries(match?.row?.all_cells || match?.row?.cells || {})) {
+          if (!/\bDESCRIPTION\b/i.test(String(header))) continue;
+          const text = String(cell?.text || "").trim();
+          const textCanonical = text.toUpperCase().replace(/[^A-Z0-9]/g, "");
+          if (textCanonical.length < 8) continue;
+          if (!finalCanonical.includes(textCanonical)) missingDescriptions.push(text);
+        }
+      }
+    }
+    if (missingDescriptions.length) {
+      return `The BAS point mark is present, but its points-list description cell is missing from the answer (${missingDescriptions[0]}). Copy the description text from row.all_cells along with alarm/trend.`;
+    }
   }
   const drawingTextHits = callLog
     .filter(({ name, out }) =>
