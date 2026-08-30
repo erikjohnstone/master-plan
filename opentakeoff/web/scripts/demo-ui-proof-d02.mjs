@@ -115,9 +115,19 @@ try {
   if (answerStart < 0 || answerEnd < 0) {
     throw new Error("D02 UI panel does not contain a complete final-answer segment.");
   }
-  const finalAnswer = panel.slice(answerStart, answerEnd);
+  let finalAnswer = panel.slice(answerStart, answerEnd);
+  const gateRe = /\[Evidence gate:[^\]]*\]/g;
+  let lastGateEnd = -1;
+  for (const match of finalAnswer.matchAll(gateRe)) {
+    lastGateEnd = match.index + match[0].length;
+  }
+  if (lastGateEnd >= 0) finalAnswer = finalAnswer.slice(lastGateEnd).trim();
+  if (!finalAnswer) {
+    throw new Error("D02 UI panel does not contain a complete final-answer segment.");
+  }
   if (/Stopped at the \d+-step cap/i.test(panel)
     || /example (?:size|type|Cv)|placeholder|\b(?:single|one)\s+(?:schedule\s+)?(?:entry|row)\b|(?:schedule\s+)?row\b.{0,80}\bappears\s+(?:only\s+)?once|\bnormalized\b/i.test(finalAnswer)
+    || /\bat\s*[\[(]\s*0\.\d+\s*,\s*0\.\d+\s*[\])]/i.test(finalAnswer)
     || (/(?:≈|\bapproximately\b|\bapprox\.)/i.test(finalAnswer)
       && !/\b(?:derived|calculated|converted|conversion)\b/i.test(finalAnswer))
     || finalAnswer.split("\n").some((line) =>
