@@ -534,6 +534,28 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return "The goal asks for the physical drawing section where the equipment is shown. Call find_text (omit sheet if needed) for the section label on the drawings, cite hit.str, or refuse — do not substitute a schedule sheet title.";
     }
   }
+  // Roof/floor plan location: prefer an exact-tag find_text hit over a longer
+  // detail callout that merely contains the tag (e.g. plan "RTU-1" vs detail
+  // "RTU-1. TRANSITION TO UNIT").
+  const asksPlanLocation = /\b(?:roof|floor)?\s*plan\b/i.test(goal)
+    && /\b(?:where|appear|location|label|note|show|cite)\b/i.test(goal);
+  if (asksPlanLocation && drawingTextHits.length) {
+    const tagFromGoal = (goal.toUpperCase().match(/\b(?:AHU|RTU|VAV|FCU|EF|SF|RF|UH|CUH|MAU|DOAH)[-A-Z0-9/]+\b/) || [])[0];
+    if (tagFromGoal) {
+      const exactHits = drawingTextHits.filter((hit) => hit.str.trim().toUpperCase() === tagFromGoal);
+      if (exactHits.length) {
+        const answerUsesLongerCallout = drawingTextHits.some((hit) => {
+          const s = hit.str.trim().toUpperCase();
+          return s !== tagFromGoal && s.includes(tagFromGoal)
+            && finalCanonical.includes(s.replace(/[^A-Z0-9]/g, "").slice(0, 40));
+        });
+        if (answerUsesLongerCallout || /TRANSITION TO UNIT/i.test(finalText)) {
+          const example = exactHits[0];
+          return `The goal asks for the plan location of ${tagFromGoal}. Prefer the exact find_text hit.str "${example.str}" on ${example.sheet} over a longer detail callout that only contains the tag. Re-emit using that exact label and bbox.`;
+        }
+      }
+    }
+  }
   // Product rule: paint cited evidence on the sheets whenever the answer uses
   // paint-able tool evidence — not only when the goal says "show me" / "cite the exact".
   // Also treat "Cite each TAG and its CFM cell" as an explicit cite ask.
