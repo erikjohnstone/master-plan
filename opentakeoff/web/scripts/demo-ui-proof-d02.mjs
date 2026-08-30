@@ -137,6 +137,8 @@ try {
   }
   const normalizedPanel = finalAnswer.toUpperCase()
     .replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D‑–—]/g, "-")
+    .replace(/[\u00A0\u202F\u2007\u2009\u200A]/g, " ")
+    .replace(/(\d)[\s,]+(?=\d)/g, "$1")
     .replace(/\s+/g, " ");
   for (const expected of [
     "AI10", "AHU-T1A", "11TH FLOOR MECHANICAL", "3850",
