@@ -3,7 +3,7 @@
 // tolerance behavior, decoy rejection, determinism, and the reported work cap.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, fragmentedTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, type Point, type FlatSpan } from "../src/lib/symbolsweep.ts";
+import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, fragmentedTagOcc, familyQuorumFragmentedTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, type Point, type FlatSpan } from "../src/lib/symbolsweep.ts";
 
 // The test symbol — deliberately ASYMMETRIC under every rotation and mirror:
 // a 20×20 square, ONE diagonal, and a stub off the right side. Local coords,
@@ -339,6 +339,36 @@ test("fragmentedTagOcc: no false match when the tag simply isn't drawn", () => {
     { str: "2", x0: 52, y0: 112, x1: 58, y1: 124 },
   ];
   assert.equal(fragmentedTagOcc(spans, "EF-1").length, 0, "EF+2 must never satisfy a search for EF-1");
+});
+
+test("fragmentedTagOcc: a parenthesized gang count is not part of the tag", () => {
+  const spans: FlatSpan[] = [
+    { str: "(6) LD", x0: 100, y0: 200, x1: 140, y1: 210 },
+    { str: "-", x0: 140, y0: 200, x1: 144, y1: 210 },
+    { str: "1", x0: 144, y0: 200, x1: 150, y1: 210 },
+  ];
+  assert.deepEqual(fragmentedTagOcc(spans, "LD-1")[0]?.bbox, [100, 200, 150, 210]);
+});
+
+test("familyQuorumFragmentedTagOcc: proven family skips overlapping non-prefix distractors", () => {
+  const spans: FlatSpan[] = [];
+  for (let i = 0; i < 4; i++) {
+    const x = i * 100;
+    spans.push(
+      { str: "TG", x0: x, y0: 100, x1: x + 20, y1: 110 },
+      { str: "-", x0: x + 20, y0: 100, x1: x + 24, y1: 110 },
+      { str: "5", x0: x + 24, y0: 100, x1: x + 30, y1: 110 },
+    );
+  }
+  spans.push(
+    { str: "TG", x0: 500, y0: 100, x1: 520, y1: 110 },
+    // PDF stream order places this overlapping room word first.
+    { str: "WOMEN", x0: 522, y0: 99, x1: 560, y1: 109 },
+    { str: "-", x0: 520, y0: 100, x1: 524, y1: 110 },
+    { str: "5", x0: 524, y0: 100, x1: 530, y1: 110 },
+  );
+  assert.equal(fragmentedTagOcc(spans, "TG-5").length, 4);
+  assert.equal(familyQuorumFragmentedTagOcc(spans, "TG-5").length, 5);
 });
 
 // deepHyphenChainTagOcc — a THIRD tier, after exact/compound AND

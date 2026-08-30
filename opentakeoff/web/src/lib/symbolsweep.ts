@@ -1538,7 +1538,9 @@ export function fragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   const stripHy = (s: string) => s.replace(/-/g, "");
   const targetStripped = stripHy(key);
   if (!targetStripped) return [];
-  const upper = (s: string) => s.trim().toUpperCase();
+  // Parenthesized gang counts belong to the placement callout, not the
+  // schedule mark itself: "(6) LD" + "-" + "1" is one LD-1 occurrence.
+  const upper = (s: string) => s.trim().toUpperCase().replace(/^\(\d+\)\s*/, "");
   const out: TagOcc[] = [];
   const starts = spans.filter((sp) => {
     const t = upper(sp.str);
@@ -1568,6 +1570,58 @@ export function fragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
     if (ok) out.push({ cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, h: Math.max(y1 - y0, 6), bbox: [x0, y0, x1, y1] });
   }
   return out;
+}
+
+/**
+ * Complete missed same-row fragments only after four ordinary occurrences
+ * prove this page's family convention. The legacy extractor intentionally
+ * keeps PDF content-stream order; dense labels can put an overlapping room
+ * word before the adjacent "-" or suffix. Under a four-hit quorum, retry
+ * with nearest viable continuations while preserving every prefix check.
+ */
+export function familyQuorumFragmentedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
+  const base = fragmentedTagOcc(spans, key);
+  if (base.length < 4) return base;
+  const stripHy = (s: string) => s.replace(/-/g, "");
+  const target = stripHy(key);
+  const upper = (s: string) => s.trim().toUpperCase().replace(/^\(\d+\)\s*/, "");
+  const recovered: TagOcc[] = [];
+  for (const start of spans) {
+    let text = upper(start.str);
+    if (!text || text.length >= key.length || !target.startsWith(stripHy(text))) continue;
+    let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
+    let cur = start;
+    const used = new Set<FlatSpan>([start]);
+    for (let guard = 0; stripHy(text).length < target.length && guard < 4; guard++) {
+      const h = Math.max(cur.y1 - cur.y0, 6);
+      const candidates = spans.filter((span) => {
+        if (used.has(span)) return false;
+        const candidate = text + upper(span.str);
+        if (!target.startsWith(stripHy(candidate))) return false;
+        return Math.abs(span.y0 - cur.y0) < h * 0.4
+          && span.x0 >= cur.x0 - 1
+          && span.x0 - cur.x1 < h * 1.5;
+      }).sort((a, b) => Math.abs(a.x0 - cur.x1) - Math.abs(b.x0 - cur.x1));
+      const next = candidates[0];
+      if (!next) break;
+      used.add(next);
+      text += upper(next.str);
+      x0 = Math.min(x0, next.x0); y0 = Math.min(y0, next.y0);
+      x1 = Math.max(x1, next.x1); y1 = Math.max(y1, next.y1);
+      cur = next;
+    }
+    if (stripHy(text) === target) {
+      recovered.push({ cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, h: Math.max(y1 - y0, 6), bbox: [x0, y0, x1, y1] });
+    }
+  }
+  const merged = [...base];
+  for (const occurrence of recovered) {
+    if (!merged.some((existing) =>
+      Math.hypot(existing.cx - occurrence.cx, existing.cy - occurrence.cy) <= Math.max(existing.h, occurrence.h))) {
+      merged.push(occurrence);
+    }
+  }
+  return merged;
 }
 
 /** A SEPARATE, DEEPER same-row fragment chain for a real shape
