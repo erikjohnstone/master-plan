@@ -1,6 +1,6 @@
 # D02 — AHU BAS point to location
 
-Status: `WORKING — API 5/5 + stdio proven; UI re-proof required (must show on-sheet highlights)`
+Status: `LOCKED — API 5/5 + stdio + UI re-proof (full answer + multi-field paints including CFM)`
 
 ## Live question
 
@@ -58,19 +58,22 @@ under `verify:demo`, and live latency of about 5.2 seconds after index.
 
 ## Production UI proof
 
-The validated production-UI proof is saved as
-`/opt/cursor/artifacts/d02_ui_prompt_tools_answer_highlights_2026-08-30T04-16-33-201Z.webm`.
-Its ~38.6-second walkthrough visibly shows the frozen prompt, live set-wide
-tool calls (including omit-sheet `find_text`), the complete answer matching
-truth (AI10, alarm/trend, description, location, 3850 CFM, control-cab
-narrative, AHU-T1A/AHU-T1B SECTION), and navigation to M-621 / MI731 / M-002.
-The proof harness rejects iteration caps, placeholders, schedule-LOCATION
-serves laundering, missing sheet ids, missing BAS mark/description fields,
-and normalized citation coordinates before retaining the uniquely named video.
+Re-proved under the usefulness bar (every requested field + paint ALL
+distinct answering value cells, not mark-only). Validated recording:
+`/opt/cursor/artifacts/d02_ui_prompt_tools_answer_highlights_2026-08-30T05-05-42-831Z.webm`.
+
+Walkthrough shows the frozen prompt, live tools, complete truth-matching
+answer (AI10, alarm/trend No, description, location, **3850 CFM painted**,
+control-cab narrative, AHU-T1A/AHU-T1B SECTION), and on-sheet highlights on
+M-621 (mark + location + CFM) and MI731 (point row). Automated check:
+**8 painted regions**. Harness rejects iteration caps, placeholders,
+LOCATION-as-serves laundering, missing truth fields, and missing paints.
 
 UI path fixes that cleared this gate are generalized production behavior
-(optional set-wide `find_text`, drawing-text vs LOCATION evidence gates, BAS
-point-mark/description methodology) — not demo-PDF special cases.
+in `agentLoop` (multi-field paint of each distinct answering value;
+space-tokenized numeric matching; twin-value dedupe for identical adjacent
+columns; BAS HW vs CHW description match; set-wide `find_text`; drawing-text
+vs LOCATION evidence) — not demo-PDF special cases.
 
 ## Failure behavior
 
