@@ -188,6 +188,16 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       const compiled = callLog.some(({ name, out }) =>
         name === "compile_corpus_takeoff" && !out?.error && (out?.takeoff_id || out?.kind));
       if (!compiled) {
+        const fails = callLog.filter(({ name, out }) =>
+          name === "compile_corpus_takeoff" && out?.error);
+        if (fails.length >= 1) {
+          const err = String(fails[fails.length - 1].out.error || "unknown error").slice(0, 500);
+          // FATAL: infrastructure / pipeline failures must not burn the 80-step
+          // cap retrying the same compile. Prefix is stripped by the agent loop.
+          return `__FATAL__: Production compile_corpus_takeoff failed (${fails.length} attempt(s)): ${err}. `
+            + "Install opentakeoff/mcp dependencies (`cd opentakeoff/mcp && npm install`) so the Session+ODL "
+            + "pipeline can load TypeScript (tsx). Do not retry compile in a loop — fix the environment and re-run.";
+        }
         return kind === "bas_points"
           ? 'The goal asks for a complete BAS/DDC points takeoff of this set. Call compile_corpus_takeoff with kind="bas_points" now — do not approximate the set total by crawling schedules.'
           : kind === "control_valves"
@@ -1969,6 +1979,12 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       if (turn.text && !/^\[Evidence gate:/i.test(turn.text)) lastDraftText = turn.text;
       let draftForGate = turn.text;
       let correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+      if (correction && correction.startsWith("__FATAL__:")) {
+        const msg = correction.slice("__FATAL__:".length).trim();
+        emit({ type: "text", text: msg });
+        emit({ type: "done", text: msg });
+        return { status: "error", text: msg, iterations: iterations + 1 };
+      }
       // Auto-strip broad all/each-highlighted claims once paints exist — saves
       // a model round-trip that otherwise burns the step cap.
       if (correction && /\bbroad all\/each-highlighted claim\b/i.test(correction)
@@ -2192,6 +2208,17 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       if (!call.argsError) callLog.push({ id: call.id, name: call.name, args: callArgs, out });
       emit({ type: "tool_end", name: call.name, result: out });
       results.push({ call, out });
+      // Hard compile infrastructure failures (missing tsx, etc.) must not burn
+      // the step cap — abort as soon as Session+ODL compile fails once.
+      if (call.name === "compile_corpus_takeoff" && out?.error
+        && corpusCompileKind(goal)) {
+        const msg = `Production compile_corpus_takeoff failed: ${String(out.error).slice(0, 500)}. `
+          + "Install opentakeoff/mcp dependencies (`cd opentakeoff/mcp && npm install`) so the Session+ODL "
+          + "pipeline can load TypeScript (tsx), then re-run. Not retrying.";
+        emit({ type: "text", text: msg });
+        emit({ type: "done", text: msg });
+        return { status: "error", text: msg, iterations: iterations + 1 };
+      }
     }
     appendToolResults(provider, messages, results);
     // Re-inject the workflow directive when the phase advances so later turns
