@@ -132,7 +132,7 @@ try {
       && !/\b(?:derived|calculated|converted|conversion)\b/i.test(finalAnswer))
     || finalAnswer.split("\n").some((line) =>
       /\bplan[- ]?location\b/i.test(line) && /#44\b/.test(line))
-    || /\b(?:all|each)\b.{0,160}\bhighlight/is.test(finalAnswer)) {
+    || /\b(?:all|each)\b.{0,40}\b(?:cited|source)\b.{0,40}\b(?:cells?|values?)\b.{0,40}\bhighlight/is.test(finalAnswer)) {
     throw new Error("D02 UI answer contains a correction cap, placeholder, invalid quantity rationale, or invalid coordinate form.");
   }
   const normalizedPanel = finalAnswer.toUpperCase()
