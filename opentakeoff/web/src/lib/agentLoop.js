@@ -22,7 +22,7 @@ import { runVerifiers } from "./agentVerifiers.js";
 
 // Full-set HVAC/BAS takeoffs need list/graph + several count queries + scoped
 // cite re-queries + paints; 32 was truncating D03 mid-gate. Keep a hard cap.
-export const MAX_AGENT_ITERATIONS = 64;
+export const MAX_AGENT_ITERATIONS = 80;
 
 const EQUIPMENT_VALVE_EVIDENCE_TOOLS = new Set([
   "list_sheets",
@@ -590,9 +590,9 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       const keyCanon = String(row.rowKey || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
       // A highlight labeled with this MARK covers the cite duty even when the
       // painted bbox is the identity cell vs another column on the same row.
-      if (keyCanon && callLog.some(({ name, out }) =>
+      if (keyCanon && callLog.some(({ name, out, args }) =>
         name === "highlight_citation" && !out?.error
-        && String(out.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "") === keyCanon)) {
+        && String(out?.text || args?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "") === keyCanon)) {
         return true;
       }
       const options = row.coverAny || [{ sheet: row.sheet, cells: row.cells }];
@@ -805,9 +805,9 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   // Explicit cite-target tags from the goal must each be painted (MARK spot-check).
   if (citeTargetsFromGoal && asksToShowCite) {
     const paintedTags = new Set();
-    for (const { name, out } of callLog) {
+    for (const { name, out, args } of callLog) {
       if (name !== "highlight_citation" || out?.error) continue;
-      const textCanon = String(out.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+      const textCanon = String(out.text || args?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
       if (textCanon) paintedTags.add(textCanon);
       // Also accept paints whose bbox matches a queried cell for that key.
       for (const { out: qOut } of callLog.filter((c) => c.name === "query_table")) {
@@ -921,8 +921,11 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       const labelRes = labelPattern(label);
       const found = [];
       for (const m of answerNorm.matchAll(labelRes)) {
+        const after = answerNorm.slice(m.index + m[0].length);
+        if (/^\s*-\s*[A-Z]?\d/i.test(after)) continue;
         // Forward-only: "DOAH 2 … Boilers 3" must not satisfy DOAH=3.
-        const window = answerNorm.slice(m.index, Math.min(answerNorm.length, m.index + m[0].length + 48));
+        const window = answerNorm.slice(m.index, Math.min(answerNorm.length, m.index + m[0].length + 48))
+          .replace(/\b\d+\s*OF\s*\d+\b/gi, " ");
         for (const num of window.matchAll(/(?:^|[^0-9])(\d{1,4})(?![0-9])/g)) {
           const n = Number(num[1]);
           if (Number.isFinite(n) && n >= 1) found.push(n);
@@ -1035,7 +1038,9 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         const after = answerNorm.slice(m.index + m[0].length);
         // Skip MARK tags like VAV-A101 / AHU-A1 — their digits are not family totals.
         if (/^\s*-\s*[A-Z]?\d/i.test(after)) continue;
-        const window = answerNorm.slice(m.index, Math.min(answerNorm.length, m.index + m[0].length + 48));
+        const window = answerNorm.slice(m.index, Math.min(answerNorm.length, m.index + m[0].length + 48))
+          // Schedule continuation banners ("2 OF 2") are not family totals.
+          .replace(/\b\d+\s*OF\s*\d+\b/gi, " ");
         const num = window.match(/(?:^|[^0-9])(\d{1,4})(?![0-9])/);
         if (num) firsts.push(Number(num[1]));
       }
