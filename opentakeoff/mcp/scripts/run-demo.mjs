@@ -1,9 +1,10 @@
 import { randomUUID } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import dotenv from "dotenv";
 import { buildServer } from "../server.ts";
 import { Session } from "../src/session.ts";
 
@@ -171,6 +172,10 @@ async function main() {
     process.exit(2);
   }
 
+  dotenv.config({
+    path: resolve(dirname(fileURLToPath(import.meta.url)), "../../server/.env"),
+    quiet: true,
+  });
   const apiKey = process.env.CEREBRAS_API_KEY?.trim();
   if (!apiKey) throw new Error("CEREBRAS_API_KEY is required for real demo runs.");
   const endpoint = process.env.CEREBRAS_ENDPOINT || "https://api.cerebras.ai/v1/chat/completions";
