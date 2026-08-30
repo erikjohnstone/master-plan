@@ -26,10 +26,10 @@ Fixture counts (396 / 122 / 163, building names, schedule titles) are
 | 7 | Equipment schedule family rollup | How many VAVs on the volume control box schedule + attributes | `equipment_schedule` | D04 | ROUTING |
 | 8 | Room ↔ HVAC coordination | Room-oriented HVAC package: finishes + diffusers + serving RTU | `room_coordination` | D09 | ROUTING |
 | 9 | BAS point → equipment → location | Trace AHU point from points list to unit location | `bas_point_trace` | D02 | ROUTING |
-| 10 | Chiller / equipment plan → schedule → valve | Find CH-n; capacity + matching CHW valve | (join workflow) | D01 | TODO |
-| 11 | Project HVAC+BAS rollup (named families) | Full HVAC/BAS takeoff across buildings with cited MARKs | (multi-intent / D03) | D03 | TODO |
-| 12 | RTU mech ↔ electrical connection | Packaged rooftop + connection schedule join | (cross-discipline join) | D05 | TODO |
-| 13 | VAV schedule ↔ plan link + honest refuse | VAV tags on plan; EF tags refuse when not drawn | (plan link + refuse) | D07 | TODO |
+| 10 | Chiller / equipment plan → schedule → valve | Find CH-n; capacity + matching CHW valve | `equipment_plan_join` | D01 | ROUTING |
+| 11 | Project HVAC+BAS rollup (named families) | Full HVAC/BAS takeoff across buildings with cited MARKs | `project_takeoff` | D03 | ROUTING |
+| 12 | RTU mech ↔ electrical connection | Packaged rooftop + connection schedule join | `cross_discipline_join` | D05 | ROUTING |
+| 13 | VAV schedule ↔ plan link + honest refuse | VAV tags on plan; EF tags refuse when not drawn | `plan_link_refuse` | D07 | ROUTING |
 | 14 | Single schedule title-scan count | How many rows on \<SCHEDULE TITLE\> | title-scan | — | TODO |
 | 15 | Single MARK schedule attributes | Give CFM/GPM/… for TAG-n from its schedule | row_key query | — | TODO |
 | 16 | Building-split any equipment family | Split AHU/VAV/FCU counts by building prefix | building_tag_counts | — | TODO |

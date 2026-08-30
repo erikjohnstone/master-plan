@@ -218,3 +218,28 @@ test("named-family / FCU / valve-join goals route through durable intents", () =
   assert.equal(afterGraph.phase, "title_scans");
   assert.match(afterGraph.nextMove || "", /CONTROL VALVE/);
 });
+
+test("all D01–D10 frozen prompts route to durable non-generic intents", () => {
+  const want = {
+    "D01-chiller-plan-to-controls": "equipment_plan_join",
+    "D02-ahu-bas-point-to-location": "bas_point_trace",
+    "D03-hvac-bas-project-takeoff": "project_takeoff",
+    "D04-vav-scope-rollup": "equipment_schedule",
+    "D05-rtu-mech-to-electrical": "cross_discipline_join",
+    "D06-control-valve-takeoff": "valve_join",
+    "D07-vav-plan-link-fan-refuse": "plan_link_refuse",
+    "D08-fcu-cross-building": "fcu_buildings",
+    "D09-room-hvac-coordination": "room_coordination",
+    "D10-bas-points-takeoff": "points_takeoff",
+  };
+  for (const [dir, intent] of Object.entries(want)) {
+    const g = readFileSync(
+      new URL(`../../../opentakeoff-corpus/demos/${dir}/prompt.txt`, import.meta.url),
+      "utf8",
+    );
+    assert.equal(classifyTakeoffIntent(g), intent, dir);
+    const state = advanceTakeoffWorkflow(intent, [], g);
+    assert.ok(state.nextMove || state.phase === "title_scans" || state.phase === "survey", dir);
+    assert.notEqual(intent, "generic", dir);
+  }
+});
