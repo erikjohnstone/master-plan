@@ -686,16 +686,13 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       },
       count: unique.length,
       truncated: unique.length > limit,
-      detail: keysOnly ? "keys" : "rows",
       matches,
-      ...(keysOnly ? {
-        keys: unique.map((match) => match.row.key),
-        note: `Title-wide query matched ${unique.length} rows — returning MARK/identity keys only so context stays usable. Re-query with row_key (and optional column) for the exact cell bboxes you need to cite.`,
-      } : {}),
       ...(unique.length === 0 ? {
         next_move: cell_contains
           ? "Zero rows matched. Retry once with cell_contains set to an exact equipment tag from the user question and no title filter, then inspect returned descriptions; do not paraphrase the same empty description query."
           : "Zero rows matched. Drop invented title filters, use a filter value that already appears in tool evidence, or refuse if the evidence is not present.",
+      } : keysOnly ? {
+        next_move: `Title-wide query matched ${unique.length} rows — returning MARK/identity keys only so context stays usable. Re-query with row_key (and optional column) for the exact cell bboxes you need to cite.`,
       } : {}),
     };
   }));
@@ -751,6 +748,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     };
     if (detail === "full") return full;
     // compact (default): keep schema-shaped items, drop multi-hundred-KB dumps.
+    // Do not add undeclared output fields — MCP structuredContent is strict.
     const slimItem = (item: (typeof items)[number]) => ({
       ...item,
       schedule_row: null,
@@ -758,14 +756,10 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     });
     return {
       ...full,
-      detail: "compact",
       items: items.map(slimItem),
       legend_items: legendItems.map(slimItem),
       extracted_tables: [],
       reference_tables: [],
-      extracted_tables_count: result.extracted_tables?.length ?? 0,
-      reference_tables_count: result.reference_tables?.length ?? 0,
-      note: "detail=compact: schedule_row cell dumps and extracted/reference table bodies omitted. Pass detail:\"full\" for the complete payload, or query_table for cited schedule cells.",
     };
   }));
 
