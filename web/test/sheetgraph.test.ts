@@ -3339,3 +3339,90 @@ test("reference kind: a unit-only pair does not start a table", () => {
   assert.ok(!g.tables.some((t) => t.kind === "reference"),
     `unit-only pair must not start a reference table: ${g.tables.map((t) => t.headers.join("/")).join(" | ")}`);
 });
+
+test("reference kind: a rowspan count line does not swallow the next column's short function", () => {
+  // Real shape: a merged left-column identity spans two physical sub-rows
+  // whose next column is a bare button/step index. The function value is
+  // left-aligned in the gutter after that index, so its center is nearer
+  // the NUMBER header than FUNCTION. Orphan-fold of the second count line
+  // used to concatenate both buttons and both functions into one row.
+  // Invented station codes — the class, not a corpus row.
+  const uh = (str: string, x: number, y: number, w: number): GraphSpan => ({ str, x, y, w, h: 10 });
+  const sheet: SheetSpans = {
+    key: "station-lookup.pdf#1", sheet_number: "E6.1",
+    spans: [
+      { str: "OPERATOR STATION SCHEDULE", x: 100, y: 10, w: 360, h: 28 },
+      uh("STATION", 100, 70, 80), uh("ZONE", 280, 70, 50),
+      uh("NUMBER", 500, 70, 70), uh("FUNCTION", 720, 70, 90), uh("LABEL", 900, 70, 50),
+      uh("STN-A", 100, 120, 55), uh("ALL", 280, 120, 30), uh("1", 520, 120, 10), uh("ON", 560, 120, 25), uh("A", 910, 120, 12),
+      uh("2", 520, 142, 10), uh("OFF", 560, 142, 30), uh("B", 910, 142, 12),
+      uh("STN-B", 100, 180, 55), uh("ALL", 280, 180, 30), uh("1", 520, 180, 10), uh("ON", 560, 180, 25), uh("C", 910, 180, 12),
+      uh("2", 520, 202, 10), uh("OFF", 560, 202, 30), uh("D", 910, 202, 12),
+    ],
+    segs: [90, 95, 980, 95],
+  };
+  const g = buildSheetGraph([sheet]);
+  const tab = g.tables.find((t) => t.kind === "reference");
+  assert.ok(tab, `reference table must extract: ${g.tables.map((t) => `${t.kind}:${t.title?.text}`).join(" | ")}`);
+  const a = tab!.rows.find((r) => r.key === "STN-A");
+  const b = tab!.rows.find((r) => r.key === "STN-B");
+  assert.ok(a && b, `both station keys extract: ${tab!.rows.map((r) => r.key).join(",")}`);
+  const numCol = tab!.headers.find((h) => /NUMBER/.test(h)) || "NUMBER";
+  const fnCol = tab!.headers.find((h) => /FUNCTION/.test(h)) || "FUNCTION";
+  assert.equal(a!.cells[numCol]?.text, "1", `first-button number only, not concatenated: ${JSON.stringify(a!.cells)}`);
+  assert.equal(a!.cells[fnCol]?.text, "ON", `short function stays in FUNCTION: ${JSON.stringify(a!.cells)}`);
+  assert.equal(b!.cells[numCol]?.text, "1");
+  assert.equal(b!.cells[fnCol]?.text, "ON");
+});
+
+test("reference kind: a multi-word cell next to a filled neighbor is not overflow-split", () => {
+  // Overflow only fires when the next column is empty. A MATERIAL phrase
+  // made of several same-line spans must stay in MATERIAL when INSULATION
+  // already has its own value — the integer-occupancy gate also does not
+  // apply (leading token is not a bare count).
+  const uh = (str: string, x: number, y: number, w: number): GraphSpan => ({ str, x, y, w, h: 10 });
+  const sheet: SheetSpans = {
+    key: "pipe-spec.pdf#1", sheet_number: "M6.2",
+    spans: [
+      { str: "PIPING SERVICE SCHEDULE", x: 80, y: 10, w: 320, h: 28 },
+      uh("SERVICE", 80, 70, 80), uh("MATERIAL", 280, 70, 90), uh("INSULATION", 620, 70, 100),
+      uh("CHW", 80, 120, 40), uh("TYPE", 280, 120, 40), uh("L", 330, 120, 12), uh("COPPER", 355, 120, 60), uh("CELLULAR", 620, 120, 80),
+      uh("HHW", 80, 150, 40), uh("TYPE", 280, 150, 40), uh("L", 330, 150, 12), uh("STEEL", 355, 150, 50), uh("MINERAL", 620, 150, 70),
+    ],
+    segs: [70, 95, 760, 95],
+  };
+  const g = buildSheetGraph([sheet]);
+  const tab = g.tables.find((t) => t.kind === "reference");
+  assert.ok(tab, `reference table must extract: ${g.tables.map((t) => `${t.kind}:${t.title?.text}`).join(" | ")}`);
+  const chw = tab!.rows.find((r) => r.key === "CHW");
+  assert.ok(chw, `CHW row: ${tab!.rows.map((r) => r.key).join(",")}`);
+  const matCol = tab!.headers.find((h) => /MATERIAL/.test(h)) || "MATERIAL";
+  const insCol = tab!.headers.find((h) => /INSULATION/.test(h)) || "INSULATION";
+  assert.match(chw!.cells[matCol]?.text || "", /COPPER/, `material phrase stays together: ${JSON.stringify(chw!.cells)}`);
+  assert.match(chw!.cells[insCol]?.text || "", /CELLULAR/, `insulation not stolen from material: ${JSON.stringify(chw!.cells)}`);
+});
+
+test("reference kind: a letter-leading wrap still orphan-folds into the parent cell", () => {
+  // Sibling-count refuse must not drop a real wrapped continuation whose
+  // leftover line starts with a letter (ASTM / MATERIAL prose). Two keyed
+  // rows so the repeating-grid floor still clears.
+  const uh = (str: string, x: number, y: number, w: number): GraphSpan => ({ str, x, y, w, h: 10 });
+  const sheet: SheetSpans = {
+    key: "wrap-spec.pdf#1", sheet_number: "M6.3",
+    spans: [
+      { str: "INSULATION TYPE SCHEDULE", x: 80, y: 10, w: 320, h: 28 },
+      uh("CODE", 80, 70, 50), uh("DESCRIPTION", 220, 70, 120),
+      uh("D-1", 80, 120, 30), uh("EXTERIOR DUCTS WITHIN", 220, 120, 200),
+      uh("TEN FEET OF OPENINGS", 220, 132, 190),
+      uh("D-2", 80, 170, 30), uh("INTERIOR LINED DUCTS", 220, 170, 180),
+    ],
+    segs: [70, 95, 520, 95],
+  };
+  const g = buildSheetGraph([sheet]);
+  const tab = g.tables.find((t) => t.kind === "reference");
+  assert.ok(tab, `reference table must extract: ${g.tables.map((t) => `${t.kind}:${t.title?.text}`).join(" | ")}`);
+  const d1 = tab!.rows.find((r) => r.key === "D-1");
+  assert.ok(d1, `D-1 row: ${tab!.rows.map((r) => r.key).join(",")}`);
+  const descCol = tab!.headers.find((h) => /DESCRIPTION/.test(h)) || "DESCRIPTION";
+  assert.match(d1!.cells[descCol]?.text || "", /OPENINGS/, `wrap folded, not dropped: ${JSON.stringify(d1!.cells)}`);
+});

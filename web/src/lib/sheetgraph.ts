@@ -5418,6 +5418,13 @@ function findGenericTableBoundary(rows: GraphSpan[][], dataFrom: number, x0: num
 // string that already matched still matches identically.
 const GENERIC_KEY_RE = /^[A-Z0-9$#][A-Z0-9 .,'"&()/%°∅Ø:+$#-]{0,99}$/;
 
+// A bare 1–3 digit counting token — button index, stage, step — never a
+// year, dimension, or measured value. Used only as a SHAPE gate inside
+// bandGenericDataRows (integer-occupied column overflow + sibling-count
+// orphan refuse), not as a vocabulary list and not as a row key.
+const BARE_COUNT_RE = /^\d{1,3}$/;
+const isBareCountToken = (raw: string): boolean => BARE_COUNT_RE.test((raw || "").trim());
+
 function genericRowKeyOf(raw: string, headerLabels: Set<string>): string | null {
   const s = (raw || "").trim();
   if (!s || s.length > 100) return null;
@@ -5531,9 +5538,34 @@ function bandGenericDataRows(
     let byLabel = cellToks.get(row);
     if (!byLabel) cellToks.set(row, (byLabel = new Map()));
     for (const t of toks) {
-      const label = nearestAnchor(centerX(t), anchors);
+      let label = nearestAnchor(centerX(t), anchors);
       if (label == null) continue;
-      const existing = byLabel.get(label);
+      let existing = byLabel.get(label);
+      const last = existing?.length ? existing[existing.length - 1] : undefined;
+      // Same-line overflow: a column that already holds a bare counting
+      // token (button / step / stage index) on this physical line does not
+      // also absorb a following non-count token. Real CAD shape — a
+      // centered NUMBER header over a narrow column, with the next
+      // column's left-aligned prose starting in the gutter before it
+      // reaches its own header center. Nearest-header assignment then
+      // piles "ON" into the count cell and leaves FUNCTION empty.
+      // Overflow only to the next still-empty column to the right; if
+      // every later column is already filled the token stays put so a
+      // multi-word cell whose neighbor is populated is untouched.
+      if (last && isBareCountToken(last.str) && !isBareCountToken(t.str)) {
+        const sameLine = Math.abs((t.y + (t.h || 0) / 2) - (last.y + (last.h || 0) / 2))
+          <= Math.max(t.h || 8, last.h || 8) * 0.7;
+        if (sameLine && t.x > last.x) {
+          const idx = anchors.findIndex((a) => a.label === label);
+          for (let j = idx + 1; j < anchors.length; j++) {
+            if (!byLabel.get(anchors[j].label)?.length) {
+              label = anchors[j].label;
+              existing = byLabel.get(label);
+              break;
+            }
+          }
+        }
+      }
       const lastBbox = existing?.length ? bboxOf(existing[existing.length - 1]) : undefined;
       if (farFromCell(label, t, lastBbox ? { text: "", bbox: lastBbox } : undefined)) continue;
       if (existing) existing.push(t); else byLabel.set(label, [t]);
@@ -5593,6 +5625,20 @@ function bandGenericDataRows(
     if (isSectionHeading(o.toks)) continue;
     const { i, d } = nearest(o.y);
     if (i < 0 || d > radius) continue;
+    // A physical line whose leftmost in-band token is a bare count, when
+    // the already-accepted parent row already has a count in a non-key
+    // column, is a sibling sub-row of a rowspan identity (button 2 under
+    // the same station designation), not a wrapped continuation of one
+    // cell. Folding it concatenates "1 2" / "ON OFF" and last-wins the
+    // second function. A real wrap (ASTM prose, a long MATERIAL cell)
+    // never opens with a 1–3 digit integer. First accepted sub-row stays
+    // the scored identity — one reference row per designation.
+    const parentToks = cellToks.get(out[i]);
+    const left = o.toks[0];
+    const keyLabel = anchors[0]?.label;
+    const parentHasCount = !!parentToks && [...parentToks].some(([lab, ts]) =>
+      lab !== keyLabel && ts.some((tok) => isBareCountToken(tok.str)));
+    if (left && isBareCountToken(left.str) && parentHasCount) continue;
     add(out[i], o.toks);
   }
 

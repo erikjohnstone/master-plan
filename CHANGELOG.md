@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — rowspan count lines keep the next column's short function
+
+### Fixed
+- **A merged left-column identity that spans two numbered sub-rows no longer concatenates both buttons and both functions.** The structural reference pass assigned a short left-aligned function value to the nearer NUMBER header (the text sits in the gutter before it reaches its own FUNCTION header center) and then orphan-folded the second count line into the same row. A column that already holds a bare 1–3 digit count on that physical line now overflows a following non-count token to the next empty column; a leftover line that itself opens with a bare count is refused as a sibling sub-row, not a wrap. A letter-leading wrap and a multi-word cell whose neighbor is already filled are unchanged. No project, sheet, or tag names.
+
 ## 2026-08-30 — a remote-sensor callout is not a second install
 
 ### Fixed
