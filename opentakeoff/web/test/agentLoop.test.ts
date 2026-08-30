@@ -55,6 +55,10 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     name: "query_table",
     out: { matches: [{ row: { identity: { header: "VALVE MARK", text: "CV-CH-A1" } } }] },
   }], "Find the valve", "CV‑CH‑A1 comes from UNIT MARK.")!, /semantic identity header VALVE MARK/);
+  assert.equal(requiredEvidenceCorrection([{
+    name: "query_table",
+    out: { matches: [{ row: { identity: { header: "VALVE MARK", text: "CV-CH-A1" } } }] },
+  }], "Find the valve", "CV‑CH‑A1 comes from VALVE MARK."), null);
   assert.match(requiredEvidenceCorrection([], "Show me the plan and cite the exact cells")!, /highlight_citation/);
   assert.match(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#3", bbox_px: [1, 2, 3, 4] } },

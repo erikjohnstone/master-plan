@@ -47,7 +47,8 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       const identity = match?.row?.identity;
       if (!identity?.header || !identity?.text) continue;
       const tagCanonical = String(identity.text).toUpperCase().replace(/[^A-Z0-9]/g, "");
-      if (finalCanonical.includes(tagCanonical) && !finalText.toUpperCase().includes(identity.header.toUpperCase())) {
+      const headerCanonical = String(identity.header).toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (finalCanonical.includes(tagCanonical) && !finalCanonical.includes(headerCanonical)) {
         return `The final answer mentions ${identity.text} but does not cite its semantic identity header ${identity.header}. Use query_table row.identity exactly; do not substitute another repeated-value column.`;
       }
     }
