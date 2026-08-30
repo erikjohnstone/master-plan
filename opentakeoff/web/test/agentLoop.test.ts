@@ -630,6 +630,23 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     }] } },
   ], "For FCU-A1 give type and CFM from the FAN COIL UNIT SCHEDULE and cite the MARK cells",
   "FCU-A1 on set.pdf#42 is VERTICAL CABINET at 150 CFM. Also note EWT 45 and TOTAL 4.2 appear on the row."), null);
+  // Named tags + type/CFM must copy evidence values — not "on the same row".
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [10, 20, 30, 40], text: "FCU-A1" } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#42",
+      row: {
+        key: "FCU-A1",
+        all_cells: {
+          MARK: { text: "FCU-A1", bbox: [10, 20, 30, 40] },
+          TYPE: { text: "VERTICAL CABINET", bbox: [40, 20, 60, 40] },
+          "FAN DATA CFM (CLG / HTG)": { text: "150", bbox: [60, 20, 80, 40] },
+        },
+      },
+    }] } },
+  ], "For FCU-A1 give type and CFM from the FAN COIL UNIT SCHEDULE and cite the MARK cells",
+  "FCU-A1 MARK highlighted on set.pdf#42. TYPE and FAN DATA CFM values are from the same row.")!,
+  /omits these evidence-backed values|VERTICAL CABINET|FCU-A1 TYPE/);
   // Short digits inside a mark must not invent a phantom numeric paint duty.
   assert.equal(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#48", bbox_px: [10, 20, 30, 40] } },

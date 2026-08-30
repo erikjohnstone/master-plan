@@ -1242,6 +1242,69 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return `The goal asks to cite MARK cells for ${missingCite.join(", ")}, but those tags are not painted yet.${hint}`;
     }
   }
+  // Goal-named tags + asked schedule attributes (type, CFM, …) must appear as
+  // evidence-backed values in the answer — "TYPE and CFM are on the same row"
+  // without copying the cells is incomplete (set-agnostic; not set-specific).
+  {
+    const attrAsk = [];
+    if (/\btype\b/i.test(goal)) attrAsk.push({ label: "TYPE", headerRe: /^TYPE$/i });
+    if (/\b(?:cfm|airflow)\b/i.test(goal)) {
+      attrAsk.push({ label: "CFM", headerRe: /\bCFM\b|AIR\s*FLOW|FAN\s*DATA/i });
+    }
+    if (/\bgpm\b/i.test(goal)) attrAsk.push({ label: "GPM", headerRe: /\bGPM\b|FLOWRATE/i });
+    if (/\b(?:capacity|tons?|mbh)\b/i.test(goal)) {
+      attrAsk.push({ label: "CAPACITY", headerRe: /CAPACITY|\bTONS?\b|\bMBH\b/i });
+    }
+    const goalTagRe = /\b[A-Z]{1,8}-[A-Z0-9]*\d[A-Z0-9]*\b/gi;
+    const goalTags = [...new Set([...goal.matchAll(goalTagRe)]
+      .map((hit) => hit[0].toUpperCase().replace(/[^A-Z0-9]/g, ""))
+      .filter((t) => t.length >= 3))];
+    if (attrAsk.length && goalTags.length && finalText) {
+      const cellTextOf = (cell) => {
+        if (cell == null) return "";
+        if (typeof cell === "string" || typeof cell === "number") return String(cell);
+        if (typeof cell.text === "string") return cell.text;
+        return String(cell.value ?? "");
+      };
+      const missingAttrs = [];
+      for (const tagCanon of goalTags) {
+        let bag = null;
+        let sheetHint = null;
+        for (const { out: qOut } of callLog.filter((c) => c.name === "query_table")) {
+          for (const match of qOut?.matches || []) {
+            const keyCanon = String(match?.row?.key || match?.row?.identity?.text || "")
+              .toUpperCase().replace(/[^A-Z0-9]/g, "");
+            if (keyCanon !== tagCanon) continue;
+            bag = match?.row?.all_cells || match?.row?.cells || null;
+            sheetHint = match?.sheet || null;
+            if (bag) break;
+          }
+          if (bag) break;
+        }
+        if (!bag) continue;
+        for (const ask of attrAsk) {
+          const entry = Object.entries(bag).find(([h]) => ask.headerRe.test(String(h)));
+          if (!entry) continue;
+          const raw = cellTextOf(entry[1]).trim();
+          if (!raw || /^(?:—|-|n\/?a|\.)$/i.test(raw)) continue;
+          // Numeric CFM cells may be "150 / -." — require the leading figure.
+          // Multi-word types require the full phrase (or every significant token).
+          const phraseCanon = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
+          const tokens = raw.toUpperCase().replace(/,/g, "").split(/[^A-Z0-9.]+/).filter((t) => t.length >= 2);
+          const present = (phraseCanon.length >= 3 && finalCanonical.includes(phraseCanon))
+            || (tokens.length > 0 && tokens.every((tok) => (
+              spacedHasToken(tok) || finalCanonical.includes(tok.replace(/[^A-Z0-9]/g, ""))
+            )));
+          if (!present) {
+            missingAttrs.push(`${tagCanon} ${ask.label}=${raw}${sheetHint ? ` (${sheetHint})` : ""}`);
+          }
+        }
+      }
+      if (missingAttrs.length) {
+        return `The goal asks for schedule attributes on named tags, and query_table already returned them, but the answer omits these evidence-backed values: ${missingAttrs.slice(0, 8).join("; ")}. Copy each TYPE/CFM/capacity value into the answer (do not say they are \"on the same row\" without stating the values), then paint those cells.`;
+      }
+    }
+  }
   // "Which schedule / title is MARK on?" follow-ups must copy the primary
   // equipment schedule title from a scoped query_table — not a sibling family's
   // UNIT schedule or a vibration/valve cross-ref.

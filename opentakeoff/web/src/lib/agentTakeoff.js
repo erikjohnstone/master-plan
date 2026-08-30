@@ -441,8 +441,10 @@ export function rowsFromAnswerMarkdown(text, meta = {}) {
 /**
  * Split a final agent answer into chat-facing prose vs data that belongs in
  * the Takeoff UI. Large markdown tables are removed from chat.
+ * finishedLineCount: contractor Takeoff lines only (compile/sweep/summary) —
+ * scrap row counts must not advertise "written to the Takeoff panel".
  */
-export function splitConversationalAnswer(text, { rowCount = 0 } = {}) {
+export function splitConversationalAnswer(text, { rowCount = 0, finishedLineCount = 0 } = {}) {
   const raw = String(text || "").trim();
   if (!raw) return { chat: "", hadTables: false };
 
@@ -468,10 +470,12 @@ export function splitConversationalAnswer(text, { rowCount = 0 } = {}) {
   // Strip "Answer" header leftovers that only framed a table.
   chat = chat.replace(/^(?:Answer|Key points)\s*$/gim, "").trim();
 
-  if (hadTables || rowCount > 0) {
-    const n = rowCount || "the";
-    const note = `Structured takeoff data (${typeof n === "number" ? n : "see"} row${n === 1 ? "" : "s"}) was written to the Takeoff panel — open Takeoff to review and export.`;
+  const finished = Number(finishedLineCount) || 0;
+  if (finished > 0) {
+    const note = `Structured takeoff data (${finished} line${finished === 1 ? "" : "s"}) was written to the Takeoff panel — open Takeoff to review and export.`;
     chat = chat ? `${chat}\n\n${note}` : note;
+  } else if (hadTables && !(Number(rowCount) > 0)) {
+    // Tables stripped from chat with no finished Takeoff — no panel note.
   }
   return { chat: chat || raw, hadTables };
 }

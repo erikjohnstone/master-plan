@@ -39,6 +39,7 @@ import PlanNavigator from "../components/PlanNavigator.jsx";
 import ReportPanel from "../components/ReportPanel.jsx";
 import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
 import {
+  compileAgentTakeoff,
   dedupeTakeoffRows,
   mergeTakeoffRows,
   rowsFromAnswerMarkdown,
@@ -582,6 +583,10 @@ export default function TakeoffCanvas() {
   const [agentTakeoffRows, setAgentTakeoffRows] = useState([]);
   const [showTakeoffData, setShowTakeoffData] = useState(false);
   const [lastCorpusTakeoffMeta, setLastCorpusTakeoffMeta] = useState(null);
+  const finishedTakeoffLineCount = useMemo(
+    () => compileAgentTakeoff(agentTakeoffRows).length,
+    [agentTakeoffRows],
+  );
   // Demo / Playwright: seed or open Takeoff without a full agent run.
   useEffect(() => {
     window.__otSeedAgentTakeoff = (rows, { open = true } = {}) => {
@@ -8829,11 +8834,15 @@ export default function TakeoffCanvas() {
       if (answerText) {
         const fromTables = rowsFromAnswerMarkdown(answerText, { workflow: ask, runId: run.id });
         const merged = dedupeTakeoffRows([...collectedTakeoff, ...fromTables]);
+        const finishedLines = compileAgentTakeoff(merged);
         if (merged.length) {
           setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, merged));
           if (hasFinishedTakeoffSeed(merged)) setShowTakeoffData(true);
         }
-        const { chat } = splitConversationalAnswer(answerText, { rowCount: merged.length });
+        const { chat } = splitConversationalAnswer(answerText, {
+          rowCount: merged.length,
+          finishedLineCount: finishedLines.length,
+        });
         agentPriorRef.current = [
           ...agentPriorRef.current,
           { role: "user", content: ask },
@@ -8841,20 +8850,22 @@ export default function TakeoffCanvas() {
         ];
         setAgentThread((t) => {
           const last = t[t.length - 1];
+          const takeoffN = finishedLines.length;
           if (last?.role === "assistant" && (last.text === chat || last.text === answerText)) {
-            return [...t.slice(0, -1), { role: "assistant", text: chat, takeoffRows: merged.length }];
+            return [...t.slice(0, -1), { role: "assistant", text: chat, takeoffRows: takeoffN }];
           }
-          return [...t, { role: "assistant", text: chat, takeoffRows: merged.length }];
+          return [...t, { role: "assistant", text: chat, takeoffRows: takeoffN }];
         });
       } else if (collectedTakeoff.length) {
         const merged = dedupeTakeoffRows(collectedTakeoff);
+        const finishedLines = compileAgentTakeoff(merged);
         setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, merged));
         if (hasFinishedTakeoffSeed(merged)) {
           setShowTakeoffData(true);
           setAgentThread((t) => [...t, {
             role: "assistant",
-            text: `Wrote ${merged.length} takeoff row${merged.length === 1 ? "" : "s"} to the Takeoff panel — open Takeoff to review and export.`,
-            takeoffRows: merged.length,
+            text: `Wrote ${finishedLines.length} takeoff line${finishedLines.length === 1 ? "" : "s"} to the Takeoff panel — open Takeoff to review and export.`,
+            takeoffRows: finishedLines.length,
           }]);
         }
       }
@@ -10326,12 +10337,12 @@ export default function TakeoffCanvas() {
           title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export."
           style={{
             padding: "8px 14px", border: "none",
-            background: agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
-            color: agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
+            background: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
+            color: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
             cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11,
             letterSpacing: "0.12em", textTransform: "uppercase",
           }}>
-          Takeoff{agentTakeoffRows.length ? ` · ${agentTakeoffRows.length}` : ""}
+          Takeoff{finishedTakeoffLineCount ? ` · ${finishedTakeoffLineCount}` : (agentTakeoffRows.length ? " · data" : "")}
         </button>
         <button onClick={() => setShowReport(true)} disabled={!conditions.length} title="Open the takeoff report — per-condition breakdown with waste, plus CSV / JSON export."
           style={{ padding: "8px 14px", border: "none", background: conditions.length ? "var(--ink)" : "var(--text-faint)", color: "var(--paper-bright)", cursor: conditions.length ? "pointer" : "default", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase" }}>Report</button>

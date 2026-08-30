@@ -243,11 +243,13 @@ test("rowsFromAnswerMarkdown + splitConversationalAnswer strip tables from chat"
   assert.equal(rows[0].tag, "EF-1");
   assert.equal(rows[0].field, "CFM");
   assert.equal(rows[0].value, "165");
-  const { chat, hadTables } = splitConversationalAnswer(md, { rowCount: rows.length });
+  const { chat, hadTables } = splitConversationalAnswer(md, { rowCount: rows.length, finishedLineCount: 0 });
   assert.equal(hadTables, true);
   assert.match(chat, /Found the fan schedule/);
-  assert.match(chat, /Takeoff panel/);
+  assert.doesNotMatch(chat, /Takeoff panel/, "scrap tables must not advertise Takeoff");
   assert.doesNotMatch(chat, /\| Tag \|/);
+  const withFinished = splitConversationalAnswer(md, { rowCount: rows.length, finishedLineCount: 2 });
+  assert.match(withFinished.chat, /2 lines.*Takeoff panel/i);
 });
 
 test("rowsFromCompiledTakeoff: HVAC categories → EAV rows for Takeoff panel", () => {
