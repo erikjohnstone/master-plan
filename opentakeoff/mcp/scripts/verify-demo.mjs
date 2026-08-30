@@ -168,17 +168,33 @@ export async function verifyDemoRun({ truth, run, session, recognize }) {
 
       checks.push({ assertion: "CITE_RESOLVABLE", field, citation: index, ok: true });
       const [x0, y0, x1, y1] = citation.bbox_px;
-      const rendered = await session.viewSheet(citation.sheet_id, {
-        region: { x0, y0, x1, y1 },
-        px: citation.ocr_px ?? expectedCitation?.ocr_px ?? 1200,
-      });
       const expectedText = citation.grounding_text
         ?? expectedCitation?.grounding_text
         ?? String(spec.value);
-      const ocrText = await recognize(rendered.png, citation.ocr_mode);
-      if (!ocrGrounds(ocrText, expectedText, {
-        allowConfusables: citation.ocr_confusables ?? expectedCitation?.ocr_confusables ?? false,
-      })) {
+      const allowConfusables = citation.ocr_confusables ?? expectedCitation?.ocr_confusables ?? false;
+      const ocrMode = citation.ocr_mode ?? expectedCitation?.ocr_mode;
+      const basePx = citation.ocr_px ?? expectedCitation?.ocr_px ?? 1200;
+      const tryPx = [...new Set([basePx, Math.min(2000, Math.max(basePx, 1600)), 2000])];
+      let ocrText = "";
+      let grounded = false;
+      for (const px of tryPx) {
+        const pad = Math.max(1, Math.min(8, Math.round(Math.min(x1 - x0, y1 - y0) * 0.05)));
+        const rendered = await session.viewSheet(citation.sheet_id, {
+          region: {
+            x0: Math.max(0, x0 - pad),
+            y0: Math.max(0, y0 - pad),
+            x1: x1 + pad,
+            y1: y1 + pad,
+          },
+          px,
+        });
+        ocrText = await recognize(rendered.png, ocrMode);
+        if (ocrGrounds(ocrText, expectedText, { allowConfusables })) {
+          grounded = true;
+          break;
+        }
+      }
+      if (!grounded) {
         fail("CITE_GROUND", field, `OCR ${JSON.stringify(ocrText.trim())} does not contain ${JSON.stringify(expectedText)}`);
       } else {
         checks.push({

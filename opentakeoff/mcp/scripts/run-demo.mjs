@@ -165,16 +165,18 @@ export function drawingTextEvidenceErrors(answer, truth, toolCalls) {
   if (!nonTableFields.length) return [];
   const drawingHits = toolCalls.flatMap((call) => {
     if (call.name === "find_text") {
+      const query = typeof call.arguments?.q === "string" ? call.arguments.q.trim() : "";
       return (call.result?.data?.hits || []).map((hit) => ({
         sheet: hit.sheet || call.result?.data?.sheet,
         str: hit.str,
         bbox: hit.bbox,
+        query,
       }));
     }
     if (call.name === "read_sheet_text") {
       const sheet = call.result?.data?.sheet;
       const text = call.result?.data?.text;
-      return typeof text === "string" && sheet ? [{ sheet, str: text, bbox: null }] : [];
+      return typeof text === "string" && sheet ? [{ sheet, str: text, bbox: null, query: "" }] : [];
     }
     return [];
   });
@@ -202,6 +204,10 @@ export function drawingTextEvidenceErrors(answer, truth, toolCalls) {
     const supporting = drawingHits.filter((hit) => typeof hit.str === "string" && hit.str.includes(value));
     if (!supporting.length) {
       errors.push(`${field} value must appear verbatim in find_text/read_sheet_text evidence; do not reuse a schedule cell`);
+      continue;
+    }
+    if (supporting.some((hit) => hit.query && hit.query === value.trim() && hit.str.trim() !== value.trim())) {
+      errors.push(`${field} value equals the find_text query string; copy answering text from hit.str instead of echoing q`);
       continue;
     }
     for (const [index, citation] of citations.entries()) {
@@ -258,7 +264,7 @@ function systemPrompt(truth) {
     nonTableFields.length
       ? `These required fields need drawing-text evidence rather than a table cell: ${nonTableFields.join(", ")}. Call find_text or read_sheet_text and cite the returned hit. Never fill these fields from a schedule cell, and never invent a label that no tool returned.`
       : "No required field needs free drawing-text evidence.",
-    "find_text accepts an optional sheet; omit sheet to search the entire loaded set. When searching drawing text, use a distinctive fragment from the user's question—not the field name itself—and copy the returned tool text exactly.",
+    "find_text accepts an optional sheet; omit sheet to search the entire loaded set. When searching drawing text, use a distinctive fragment from the user's question—not the field name itself—and set the answer value from hit.str (a contiguous substring is allowed). Never echo the find_text query string as the value when hit.str is longer.",
     "Group independent tool calls into the same response. Inspect each complete result before calling another tool, and never repeat an equivalent query.",
     "Use query_table cell_value for exact cross-table relationships and cell_contains when the related tag is embedded in a compound value; do not scan a whole table or infer a row without source text.",
     "Every query_table match includes row.all_cells. After the first matching row, use all_cells for every requested field on that row instead of making separate column calls.",
