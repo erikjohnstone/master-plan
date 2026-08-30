@@ -16,10 +16,12 @@ import { projectHomeFolderId } from "./lib/projectHome.js";
 import { initTheme } from "./lib/theme.js";
 import { initDrawStyle } from "./lib/drawStyles.js";
 import { initDraftOutline } from "./lib/draftOutline.js";
+import { migrateAiConfigToPlatform } from "./lib/ai.js";
 
 initTheme();   // index.html set data-theme pre-paint; this keeps it live
 initDrawStyle();   // syncs a draw-style choice made in another tab
 initDraftOutline();   // syncs the "outline area while drawing" choice made in another tab
+migrateAiConfigToPlatform(); // drop half-filled BYOK leftovers → Cerebras platform defaults
 
 // Client-only SPA. By default there is no backend: the canvas runs entirely in
 // the browser and persists to IndexedDB / localStorage (anonymous local mode).

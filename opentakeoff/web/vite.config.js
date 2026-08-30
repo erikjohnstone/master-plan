@@ -1,5 +1,6 @@
-import { readFileSync } from "node:fs";
-import { defineConfig } from "vite";
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import { corpusTakeoffApiPlugin } from "./vite.corpusTakeoffApi.js";
 
@@ -9,40 +10,86 @@ import { corpusTakeoffApiPlugin } from "./vite.corpusTakeoffApi.js";
 // runner (no Vite, no define) sees plain undefined instead of a crash.
 const pkg = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8"));
 
-// OpenTakeoff is a client-only static app: the takeoff canvas runs entirely in
-// the browser (pdf.js + canvas + the geometry libs), persists to IndexedDB /
-// localStorage, and builds to a static `dist/` you can host anywhere (GitHub
-// Pages, Vercel, Netlify, an S3 bucket).
+/** Cerebras key for the platform proxy — never a VITE_* (never shipped to the browser). */
+function cerebrasApiKey(mode) {
+  const env = loadEnv(mode, process.cwd(), "");
+  const fromEnv = (env.CEREBRAS_API_KEY || process.env.CEREBRAS_API_KEY || "").trim();
+  if (fromEnv) return fromEnv;
+  for (const rel of ["../server/.env", ".env", ".env.local"]) {
+    const p = resolve(process.cwd(), rel);
+    if (!existsSync(p)) continue;
+    for (const line of readFileSync(p, "utf8").split("\n")) {
+      const m = /^\s*CEREBRAS_API_KEY\s*=\s*(.*)$/.exec(line);
+      if (!m) continue;
+      return m[1].trim().replace(/^["']|["']$/g, "");
+    }
+  }
+  return "";
+}
+
+// OpenTakeoff canvas is client-side; Agent LLM calls go through /cerebras-api
+// so the real key stays in the Vite process (CEREBRAS_API_KEY), not localStorage.
 //
-// The `/ai` proxy is OPTIONAL — it only matters if you run the bring-your-own-
-// model AI sandbox in `../server` (see server/README.md). Without it, the app
-// works fully; the AI hooks just stay dormant.
-//
-// `/__ot/sheet-graph` + `/__ot/compile-corpus-takeoff` (dev server) run the
-// SAME Session + ODL path as MCP for every blueprint — not takeoff-only.
-export default defineConfig({
-  plugins: [react(), corpusTakeoffApiPlugin()],
-  define: { __APP_VERSION__: JSON.stringify(pkg.version) },
-  // The STT worker (stt.worker.ts, RFC #59) lazy-imports its engine adapter,
-  // which needs code-splitting inside the worker bundle — only the ES format
-  // supports that (Vite's default iife errors on split worker builds).
-  worker: { format: "es" },
-  server: {
-    port: 5173,
-    proxy: {
-      // The sandbox's /ai routes are key-locked (server/README.md). Export the
-      // same OT_SANDBOX_API_KEY in the shell running `npm run dev` and the
-      // proxy stamps the header on — the browser never handles the secret.
-      "/ai": {
-        target: "http://localhost:8000",
-        headers: process.env.OT_SANDBOX_API_KEY
-          ? { "X-API-Key": process.env.OT_SANDBOX_API_KEY }
-          : {},
+// `/__ot/sheet-graph` + `/__ot/compile-corpus-takeoff` run the same Session+ODL
+// path as MCP.
+export default defineConfig(({ mode }) => {
+  const key = cerebrasApiKey(mode);
+  if (!key) {
+    console.warn(
+      "[opentakeoff] CEREBRAS_API_KEY not set — put it in opentakeoff/server/.env or web/.env "
+      + "(not VITE_*). Agent will fail until the key is available to the Vite proxy.",
+    );
+  } else {
+    console.info("[opentakeoff] Cerebras platform proxy enabled at /cerebras-api (key not exposed to browser)");
+  }
+
+  return {
+    plugins: [react(), corpusTakeoffApiPlugin()],
+    define: { __APP_VERSION__: JSON.stringify(pkg.version) },
+    worker: { format: "es" },
+    server: {
+      port: 5173,
+      proxy: {
+        // Optional BYO sandbox (server/README.md).
+        "/ai": {
+          target: "http://localhost:8000",
+          headers: process.env.OT_SANDBOX_API_KEY
+            ? { "X-API-Key": process.env.OT_SANDBOX_API_KEY }
+            : {},
+        },
+        // Platform Agent path: browser → Vite → Cerebras. Key injected here.
+        "/cerebras-api": {
+          target: "https://api.cerebras.ai",
+          changeOrigin: true,
+          secure: true,
+          rewrite: (path) => path.replace(/^\/cerebras-api/, ""),
+          configure: (proxy) => {
+            proxy.on("proxyReq", (proxyReq) => {
+              if (key) proxyReq.setHeader("Authorization", `Bearer ${key}`);
+            });
+          },
+        },
       },
     },
-  },
-  build: {
-    outDir: "dist",
-    emptyOutDir: true,
-  },
+    preview: {
+      port: 5173,
+      proxy: {
+        "/cerebras-api": {
+          target: "https://api.cerebras.ai",
+          changeOrigin: true,
+          secure: true,
+          rewrite: (path) => path.replace(/^\/cerebras-api/, ""),
+          configure: (proxy) => {
+            proxy.on("proxyReq", (proxyReq) => {
+              if (key) proxyReq.setHeader("Authorization", `Bearer ${key}`);
+            });
+          },
+        },
+      },
+    },
+    build: {
+      outDir: "dist",
+      emptyOutDir: true,
+    },
+  };
 });
