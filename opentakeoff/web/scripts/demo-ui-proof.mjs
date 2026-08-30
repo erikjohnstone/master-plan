@@ -97,27 +97,14 @@ try {
   await page.screenshot({ path: "/opt/cursor/artifacts/d01_ui_agent_result.png" });
   const panel = await page.locator('textarea[name="agent-goal"]').locator("xpath=../../..").innerText();
   console.log(`UI_AGENT_RESULT\n${panel}`);
-  const selects = page.locator("select");
-  let sheetSelect = null;
-  let options = [];
-  for (let index = 0; index < await selects.count(); index++) {
-    const candidate = selects.nth(index);
-    const candidateOptions = await candidate.locator("option").evaluateAll((nodes) =>
-      nodes.map((node) => ({ value: node.value, text: node.textContent || "" })));
-    if (candidateOptions.some((option) => option.text.includes("MS101"))) {
-      sheetSelect = candidate;
-      options = candidateOptions;
-      break;
-    }
-  }
-  if (!sheetSelect) throw new Error("Could not locate the 75-sheet navigator.");
   for (const [needle, path] of [
     ["MS101", "/opt/cursor/artifacts/d01_ui_plan_highlight.png"],
     ["M-603", "/opt/cursor/artifacts/d01_ui_schedule_highlight.png"],
   ]) {
-    const option = options.find((candidate) => candidate.text.includes(needle));
-    if (!option) throw new Error(`No sheet selector option contains ${needle}.`);
-    await sheetSelect.selectOption(option.value);
+    await page.locator('button[title^="Sheet — the sheets in this set"]').click();
+    const item = page.getByText(needle, { exact: true }).last();
+    await item.waitFor({ state: "visible", timeout: 10_000 });
+    await item.click();
     await page.getByText("Rendering sheet…").waitFor({ state: "hidden", timeout: 120_000 });
     await page.waitForTimeout(750);
     const canvas = page.locator("canvas").first();
