@@ -41,7 +41,7 @@ validated the final answer and saved the strict pass under
 
 ## D02 selection record
 
-Status: `LOCKED — API 5/5; p95 7.263 s; truth harness green`
+Status: `LOCKED — 5/5 clean; p95 7.263 s; production UI proof validated`
 
 The NAVFAC target holds up after direct rendering. MI731 contains one 62-row
 `POINTS LIST AHU-T1A/TIB` that interleaves AHU-T1A and AHU-T1B under repeated
@@ -55,4 +55,6 @@ genuine rather than inferred from the slate.
 N=5 production runs are 5/5 under `verify:demo` (values, citation
 resolvability, and OCR grounding) with nearest-rank p95 **7.263 s**. Failed
 cold attempts remain under `runs/failed/` with classified diagnostics.
-Localhost stdio and production-UI proof follow the same harness rules as D01.
+Localhost stdio harness True. The production-UI recording is saved under
+`/opt/cursor/artifacts/d02_ui_prompt_tools_answer_highlights_2026-08-30T04-16-33-201Z.webm`
+and counts D02 toward ten. Next: D03.

@@ -1,6 +1,6 @@
 # D02 — AHU BAS point to location
 
-Status: `LOCKED — API 5/5; localhost stdio + UI proof pending in this commit cycle`
+Status: `LOCKED — API 5/5; localhost stdio + production UI proof validated`
 
 ## Live question
 
@@ -50,14 +50,37 @@ Every run records the raw model responses, request IDs, model/version,
 complete production tool payloads, citations, source-index setup latency, and
 live prompt latency under `runs/`.
 
+## Local-host proof
+
+The production bundle was exercised as a separate local stdio MCP process.
+`local-host-run.json` records `transport: "stdio_local_process"`, harness True
+under `verify:demo`, and live latency of about 5.2 seconds after index.
+
+## Production UI proof
+
+The validated production-UI proof is saved as
+`/opt/cursor/artifacts/d02_ui_prompt_tools_answer_highlights_2026-08-30T04-16-33-201Z.webm`.
+Its ~38.6-second walkthrough visibly shows the frozen prompt, live set-wide
+tool calls (including omit-sheet `find_text`), the complete answer matching
+truth (AI10, alarm/trend, description, location, 3850 CFM, control-cab
+narrative, AHU-T1A/AHU-T1B SECTION), and navigation to M-621 / MI731 / M-002.
+The proof harness rejects iteration caps, placeholders, schedule-LOCATION
+serves laundering, missing sheet ids, missing BAS mark/description fields,
+and normalized citation coordinates before retaining the uniquely named video.
+
+UI path fixes that cleared this gate are generalized production behavior
+(optional set-wide `find_text`, drawing-text vs LOCATION evidence gates, BAS
+point-mark/description methodology) — not demo-PDF special cases.
+
 ## Failure behavior
 
 Classified misses before fixes: invented title filters / iteration budget
 (`RETRIEVAL`), `sheet` vs `sheet_id` (`CITE_FORM`), Unicode hyphen drift
 (`VALUE`), schedule LOCATION laundered as drawing text (`VALUE`/`RETRIEVAL`),
-and find_text query-string echoes (`VALUE`). Production runner/tooling now
-rejects those shapes without answer-steering prompts. Missing evidence still
-returns an explicit refusal rather than a fabricated value.
+find_text query-string echoes (`VALUE`), and UI `find_text` requiring sheet
+so set-wide search could not run. Production runner/UI tooling now rejects
+those shapes without answer-steering prompts. Missing evidence still returns
+an explicit refusal rather than a fabricated value.
 
 ## Regression
 
