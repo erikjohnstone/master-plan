@@ -1,17 +1,11 @@
-// Bring-your-own-AI — strictly opt-in, dormant until configured.
+// Platform AI (default) + optional bring-your-own override.
 //
-// OpenTakeoff can ask a vision model YOU provide to read things off the plan —
-// starting with the drawn scale when the sheet text doesn't state one. You
-// point it at an endpoint you control: a hosted API or a local runtime on your
-// own machine (most local runtimes speak the OpenAI-style protocol). Nothing is
-// ever sent anywhere except the single, user-initiated request to YOUR
-// endpoint; unconfigured builds make zero AI network calls. No telemetry.
-// The code is open so anyone can audit exactly this.
+// Product default: Agent talks to same-origin `/cerebras-api` (Vite proxies to
+// Cerebras and injects CEREBRAS_API_KEY server-side). Models are fixed:
+// gpt-oss-120b (agent) + gemma-4-31b (vision). Users do NOT paste keys.
 //
-// Config lives per-browser (localStorage) with build-time VITE_* fallbacks for
-// self-hosted team deploys. WARNING for deployers: Vite inlines VITE_AI_KEY
-// into the shipped JS bundle — anyone who can load the page can read it.
-// Never set it on a public deploy; it exists for private/team builds only.
+// Optional override: localStorage / VITE_AI_* still work for forks that want
+// BYOK. Never set VITE_AI_KEY on a public deploy — Vite would inline it.
 
 const KEYS = {
   endpoint: "opentakeoff_ai_endpoint",
@@ -21,7 +15,17 @@ const KEYS = {
   visionModel: "opentakeoff_ai_vision_model",
 };
 
+/** Defaults for the OpenTakeoff Agent product path (browser only). */
+export const PLATFORM_AI = {
+  endpoint: "/cerebras-api",
+  apiKey: "",
+  model: "gpt-oss-120b",
+  provider: "openai",
+  visionModel: "gemma-4-31b",
+};
+
 const env = (name) => (import.meta.env && import.meta.env[name]) || "";
+const inBrowser = () => typeof window !== "undefined";
 
 function readKey(k, envName) {
   try {
@@ -52,20 +56,34 @@ function readKey(k, envName) {
  *  identically to before this existed — this is additive, not a forced
  *  change to anyone's existing config. */
 export function aiConfig() {
-  const model = readKey("model", "VITE_AI_MODEL");
+  const model = readKey("model", "VITE_AI_MODEL")
+    || (inBrowser() ? PLATFORM_AI.model : "");
   return {
-    endpoint: readKey("endpoint", "VITE_AI_ENDPOINT"),
-    apiKey: readKey("apiKey", "VITE_AI_KEY"),
+    endpoint: readKey("endpoint", "VITE_AI_ENDPOINT")
+      || (inBrowser() ? PLATFORM_AI.endpoint : ""),
+    // Browser never holds the platform Cerebras key — Vite proxy injects it.
+    apiKey: readKey("apiKey", "VITE_AI_KEY") || "",
     model,
-    provider: readKey("provider", "VITE_AI_PROVIDER") || "openai",
-    visionModel: readKey("visionModel", "VITE_AI_VISION_MODEL") || model,
+    provider: readKey("provider", "VITE_AI_PROVIDER")
+      || (inBrowser() ? PLATFORM_AI.provider : "openai"),
+    visionModel: readKey("visionModel", "VITE_AI_VISION_MODEL")
+      || (inBrowser() ? PLATFORM_AI.visionModel : "")
+      || model,
   };
 }
 
-/** Configured = endpoint + model. A key is optional — local runtimes need none. */
+/** Configured = endpoint + model. Platform defaults make this true in-browser. */
 export function isAiConfigured() {
   const c = aiConfig();
   return !!(c.endpoint && c.model);
+}
+
+/** True when using the built-in Cerebras proxy path (no BYOK key in the browser). */
+export function isPlatformAi() {
+  const c = aiConfig();
+  return c.endpoint === PLATFORM_AI.endpoint
+    && c.model === PLATFORM_AI.model
+    && !c.apiKey;
 }
 
 export function saveAiConfig({ endpoint, apiKey, model, provider, visionModel }) {
@@ -76,6 +94,33 @@ export function saveAiConfig({ endpoint, apiKey, model, provider, visionModel })
     }
   } catch { /* private mode */ }
 }
+
+/** Reset overrides so the next aiConfig() call uses PLATFORM_AI again. */
+export function clearAiConfigToPlatform() {
+  try {
+    for (const k of Object.values(KEYS)) localStorage.removeItem(k);
+  } catch { /* private mode */ }
+}
+
+/** Drop incomplete BYOK leftovers that would block platform defaults. */
+export function migrateAiConfigToPlatform() {
+  if (!inBrowser()) return;
+  try {
+    const ep = localStorage.getItem(KEYS.endpoint) || "";
+    const key = localStorage.getItem(KEYS.apiKey) || "";
+    const model = localStorage.getItem(KEYS.model) || "";
+    // Direct Cerebras URL without a browser key → use the Vite proxy instead.
+    if (/api\.cerebras\.ai/i.test(ep) && !key) {
+      clearAiConfigToPlatform();
+      return;
+    }
+    // Half-filled override (model xor endpoint) → platform.
+    if ((ep && !model) || (!ep && model)) {
+      clearAiConfigToPlatform();
+    }
+  } catch { /* private mode */ }
+}
+
 
 // ── pure request plumbing (unit-tested; no fetch, no DOM) ───────────────────
 

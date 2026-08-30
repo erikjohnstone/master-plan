@@ -19,6 +19,11 @@ test("config is safely empty under node (no localStorage, no env)", () => {
   assert.equal(isAiConfigured(), false);
 });
 
+test("aiRequestUrl accepts same-origin platform proxy base", () => {
+  assert.equal(aiRequestUrl("/cerebras-api", "openai"), "/cerebras-api/v1/chat/completions");
+  assert.equal(aiRequestUrl("/cerebras-api/v1", "openai"), "/cerebras-api/v1/chat/completions");
+});
+
 test("aiRequestUrl appends the protocol route unless already present", () => {
   assert.equal(aiRequestUrl("http://localhost:1234", "openai"), "http://localhost:1234/v1/chat/completions");
   assert.equal(aiRequestUrl("http://localhost:1234/", "openai"), "http://localhost:1234/v1/chat/completions");
