@@ -47,6 +47,13 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     name: "sweep_schedule_row",
     out: { found: 1 },
   }], "Give me installed quantity", "Installed quantity: 1 (single schedule entry).")!, /reasoning is invalid/);
+  assert.match(requiredEvidenceCorrection([], "Give me valve size", "Valve size: 4 in (example size).")!, /example or placeholder/);
+  assert.match(requiredEvidenceCorrection([], "Give me the matching control valve", "The matching control valve is 4 in.")!, /no query_table result/);
+  assert.equal(requiredEvidenceCorrection([], "Give me the matching control valve", "No matching control valve row was found."), null);
+  assert.equal(requiredEvidenceCorrection([{
+    name: "query_table",
+    out: { matches: [{ title: { text: "CHW CONTROL VALVE SCHEDULE" } }] },
+  }], "Give me the matching control valve", "The matching control valve is cited."), null);
   assert.match(requiredEvidenceCorrection([
     { name: "sweep_schedule_row", args: { tag: "CH-A1" }, out: { found: 1 } },
     { name: "query_table", out: { matches: [{ row: { key: "CV-CH-A1" } }] } },

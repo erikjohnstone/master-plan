@@ -33,6 +33,22 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     && /\b(?:single|one)\s+schedule\s+(?:entry|row)\b|\bschedule\s+row\s+appears\s+(?:once|one time)\b/i.test(finalText)) {
     return "The final answer describes installed quantity as a single/one schedule entry. That reasoning is invalid even when the numeric value happens to match. Attribute installed quantity only to the successful sweep/count result and remove schedule-row-count wording.";
   }
+  if (/\bexample\b/i.test(finalText)) {
+    return "The final answer contains example or placeholder data. Never substitute example values for requested drawing facts. Retrieve each value from a successful tool result with a citation, or explicitly say the evidence was not found.";
+  }
+  if (/\bcontrol\s+valve\b/i.test(goal)) {
+    const valveMatch = callLog.filter(({ name }) => name === "query_table")
+      .flatMap(({ out }) => out?.matches || [])
+      .some((match) => /\bcontrol\s+valve\b/i.test(String(
+        match?.table || match?.title?.text || match?.title
+          || match?.row?.table || match?.row?.table_title || "",
+      )));
+    const refusedValve = /\b(?:could not|can't|cannot|unable to|not found|no matching)\b.{0,80}\bcontrol\s+valve\b/i.test(finalText)
+      || /\bcontrol\s+valve\b.{0,80}\b(?:could not|can't|cannot|unable to|not found|no matching)\b/i.test(finalText);
+    if (!valveMatch && !refusedValve) {
+      return "The goal asks for control-valve data, but no query_table result matched a control-valve schedule. Do not supply valve values from memory, inference, or examples. Query the matching control-valve row and cite it, or explicitly report that no matching row was found.";
+    }
+  }
   const swept = new Set(callLog.filter(({ name, out }) =>
     name === "sweep_schedule_row" && (out?.found ?? out?.total_found) > 0)
     .map(({ args, out }) => String(args?.tag || out?.tag || "").toUpperCase()));
