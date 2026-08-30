@@ -5705,6 +5705,16 @@ export class Session {
     return this.ensureGraph();
   }
 
+  /**
+   * Install a precomputed SheetGraph (e.g. from the content-addressed
+   * sheet-graph cache) after loadPlan. Skips rebuild; used by verify/demo
+   * regressions so shared fixture PDFs are not re-extracted every process.
+   */
+  seedPipelineGraph(graph: SheetGraph): void {
+    if (!this.docs.size) throw new UserError("No plan loaded — call load_plan first.");
+    this.graph = graph;
+  }
+
   async sheetGraph() {
     const g = await this.ensureGraph();
     const rasterNotes = await this.rasterScheduleNotes(g);

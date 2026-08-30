@@ -1,26 +1,17 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { Session } from "../src/session.ts";
 import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "../src/corpusTakeoff.mjs";
 import { verifyTakeoffGates, loadTruth } from "../src/verifyTakeoffGates.mjs";
+import { loadFixtureSession } from "./helpers/loadFixtureGraph.mjs";
 
 const CORPUS = resolve(dirname(fileURLToPath(import.meta.url)), "../../../opentakeoff-corpus");
 const TAKEOFF = resolve(CORPUS, "takeoffs/T-HVAC-01-navfac-equipment");
 
 test("T-HVAC-01 compiler matches frozen truth quantities and cites", async () => {
-  const fixture = JSON.parse(await readFile(resolve(TAKEOFF, "fixture.json"), "utf8"));
   const truth = loadTruth(resolve(TAKEOFF, "truth.json"));
-  const source = resolve(CORPUS, fixture.source_file);
-  const pdf = await readFile(source);
-  assert.equal(createHash("sha256").update(pdf).digest("hex"), fixture.sha256);
-
-  const session = new Session();
-  await session.loadPlan(source);
-  const graph = await session.graphForPipeline();
+  const { graph, session } = await loadFixtureSession(CORPUS, TAKEOFF);
   const result = compileCorpusTakeoff(session, graph, "hvac_equipment");
 
   assert.equal(result.totals.items, 396);
