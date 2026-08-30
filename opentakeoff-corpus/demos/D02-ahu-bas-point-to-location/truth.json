@@ -142,7 +142,7 @@
     },
     "serves": {
       "type": "string",
-      "value": "AHU-T1A/B provide ventilation, heating, cooling, and dehumidification to the control cab.",
+      "value": "AHU-T1A/B provide ventilation, heating, cooling, and dehumidification to the control cab. Both AHUs are sized to fully serving the cab, providing N+1 redundancy. Room",
       "tolerance": "exact",
       "citation": {
         "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#2",
