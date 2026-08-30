@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  answerShapeErrors,
   citationProvenanceErrors,
   DEMO_TOOLS,
   parseJsonAnswer,
@@ -59,6 +60,26 @@ test("demo runner rejects schedule citations when plan tag evidence exists", () 
   assert.deepEqual(citationProvenanceErrors(answer, toolCalls), [
     "equipment_tag must cite a plan tag returned by sweep_schedule_row.tag_citations",
     "installed_quantity uses a plan tag citation, so table_title, row_key, and column must be null or omitted",
+  ]);
+});
+
+test("demo runner rejects numeric strings using only the frozen type contract", () => {
+  assert.deepEqual(answerShapeErrors({
+    status: "done",
+    answer: {
+      capacity_tons: { value: "56.0", citations: [] },
+      installed_quantity: { value: 1.5, citations: [] },
+      equipment_tag: { value: "CH-A1", citations: [] },
+    },
+  }, {
+    expected: {
+      capacity_tons: { type: "number" },
+      installed_quantity: { type: "integer" },
+      equipment_tag: { type: "string" },
+    },
+  }), [
+    "capacity_tons must be a finite JSON number, not string",
+    "installed_quantity must be a JSON integer, not number",
   ]);
 });
 

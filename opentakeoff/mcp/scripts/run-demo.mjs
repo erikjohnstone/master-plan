@@ -79,6 +79,24 @@ export function citationProvenanceErrors(answer, toolCalls) {
   return errors;
 }
 
+export function answerShapeErrors(answer, truth) {
+  if (answer?.status !== "done" || !answer.answer || typeof answer.answer !== "object") return [];
+  const errors = [];
+  for (const [field, spec] of Object.entries(truth.expected)) {
+    const value = answer.answer?.[field]?.value;
+    if (value === undefined) {
+      errors.push(`${field} is missing`);
+    } else if (spec.type === "number" && (typeof value !== "number" || !Number.isFinite(value))) {
+      errors.push(`${field} must be a finite JSON number, not ${typeof value}`);
+    } else if (spec.type === "integer" && (typeof value !== "number" || !Number.isInteger(value))) {
+      errors.push(`${field} must be a JSON integer, not ${typeof value}`);
+    } else if (spec.type === "string" && typeof value !== "string") {
+      errors.push(`${field} must be a JSON string, not ${typeof value}`);
+    }
+  }
+  return errors;
+}
+
 function systemPrompt(truth) {
   const fields = Object.entries(truth.expected).map(([name, spec]) => ({
     name,
@@ -184,6 +202,14 @@ export async function runToolCallingModel({
     if (!calls.length) {
       try {
         const answer = parseJsonAnswer(message.content);
+        const shapeErrors = answerShapeErrors(answer, truth);
+        if (shapeErrors.length) {
+          messages.push({
+            role: "user",
+            content: `Your previous final response violated the required field types: ${shapeErrors.join("; ")}. Re-emit the same answer with those JSON types corrected. Do not change factual values, citations, or add new claims.`,
+          });
+          continue;
+        }
         const provenanceErrors = citationProvenanceErrors(answer, toolCalls);
         if (provenanceErrors.length) {
           messages.push({
