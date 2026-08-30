@@ -175,10 +175,28 @@ counts toward ten. Next: D09.
 
 ## D09 selection record
 
-Status: `SELECTED — ground truth authored; N=5 pending`
+Status: `LOCKED — API 5/5; p95 6.644 s; stdio + UI proof (expandable cards + verified follow-up)`
 
 Target holds on `baker-county-eoc` (65 sheets). Room 105 finish context on
 #27 joins DIFFUSER-GRILLE + packaged rooftop evidence on #41 into one
 coordination package. 20% room sample reconciled before model runs in
 `D09-room-hvac-coordination/`.
+
+N=5 production runs are 5/5 under `verify:demo` with nearest-rank p95
+**6.644 s**. Localhost stdio harness True. UI proof under the usefulness
+bar (room finish + air devices + RTU SERVICE join + expandable source cards
++ verified room 101 / RTU-2 follow-up) is saved as
+`/opt/cursor/artifacts/d09_ui_prompt_answer_cards_followup_2026-08-30T15-53-38-297Z.webm`.
+Production gates stay methodology-general — schedule SERVICE answers named
+service joins; LOCATION→serves paraphrase remains blocked. D09 counts toward
+ten. Next: D10.
+
+## D10 selection record
+
+Status: `SELECTED — not started`
+
+Target holds on `navfac-cherry-point-atc` (75 sheets). Full BAS points takeoff
+grouped by controller/equipment and point type (AI/AO/BI/BO) across multiple
+points-list families and buildings. 20% hand-count reconciliation required
+before model runs.
 

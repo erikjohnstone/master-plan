@@ -1,6 +1,6 @@
 # D09 — Room-oriented HVAC coordination
 
-Status: `IN PROGRESS — ground truth authored; N=5 not started`
+Status: `LOCKED — API 5/5 + stdio + UI proof (expandable cards + verified follow-up)`
 
 ## Live question
 
@@ -36,10 +36,39 @@ Follow-up: room 101 = **HALLWAY**; BUILDING SOUTH = **RTU-2** · **750** CFM.
 
 20% room sample: 3/3 on finish schedule.
 
+`fixture.json` pins the external source PDF by SHA-256.
+
 ## N=5 gate
 
-Not started.
+| Run | Cold | Latency |
+|---:|---|---:|
+| 1 | forced cold | 5.433 s |
+| 2 | fresh session | 3.732 s |
+| 3 | fresh session | 4.123 s |
+| 4 | fresh session | 3.747 s |
+| 5 | forced cold | 6.644 s |
+
+Nearest-rank p95 (cold): **6.644 seconds**. Gate: **5/5 clean** via `verify:demo`.
+
+Raw responses, request IDs, model/version, tool payloads, and citations are
+under `runs/`.
+
+## Local-host proof
+
+Production MCP was exercised as a separate local stdio process
+(`transport: "stdio_local_process"`) after rebuilding `dist/`. See
+`local-host-run.json` (verify clean). The Vite UI path was proved separately
+with the frozen prompt + follow-up.
 
 ## Production UI proof
 
-Not started.
+Validated recording:
+`/opt/cursor/artifacts/d09_ui_prompt_answer_cards_followup_2026-08-30T15-53-38-297Z.webm`.
+
+Walkthrough shows the frozen prompt, live tools, answer-first room 105
+coordination package (finish + CD/RG/EG + RTU-1), expandable source cards,
+and a correct in-thread follow-up (room 101 HALLWAY + RTU-2 / BUILDING SOUTH /
+750 CFM). Harness: `opentakeoff/web/scripts/demo-ui-proof-d09.mjs`.
+
+Production note: schedule SERVICE cells answer named-service joins (MAIN
+OPERATIONS / BUILDING SOUTH); LOCATION paraphrase into serves remains blocked.
