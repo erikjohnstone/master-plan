@@ -5,7 +5,7 @@
 // clipped hatch linework, per-shape quantity chips, count markers, cobalt
 // markups — plus a legend cover: per-condition totals (net of deducts,
 // ×multiplier, waste-adjusted), swatches, hatch names, and a BY SHEET
-// breakdown. A PM or GC reads it with zero OpenTakeoff access.
+// breakdown. A PM or GC reads it with zero app access.
 //
 // Coordinate law (the part that bites): shape verts are normalized to the
 // sheet's VISUAL (rotated) raster. Light pages are vector copies of the source
@@ -259,8 +259,8 @@ export async function buildMarkedSetPdf({ projectName, dark, sheets, shapes, mar
   // emailed around, so it should say what produced it. It also lets the MCP
   // export recognize its own prior output and overwrite that without ceremony,
   // while still refusing to clobber a file it didn't write (mcp/src/safewrite.ts).
-  doc.setProducer("OpenTakeoff");
-  doc.setCreator("OpenTakeoff");
+  doc.setProducer("Takeoff");
+  doc.setCreator("Takeoff");
   const font = await doc.embedFont(StandardFonts.Helvetica);
   const bold = await doc.embedFont(StandardFonts.HelveticaBold);
   const ink = dark ? rgb(0.93, 0.92, 0.89) : rgb(0.13, 0.12, 0.1);
@@ -287,8 +287,7 @@ export async function buildMarkedSetPdf({ projectName, dark, sheets, shapes, mar
     if (dark) pg.drawRectangle({ x: 0, y: 0, width: 612, height: 792, color: rgb(...DARK_BG) });
     // the star is the canvas vertex mark — same 4-point / 0.38-inner geometry
     pg.drawSvgPath(starPath(0, 0, 11), { x: 52, y: 738, color: cobalt });
-    // cover wordmark: "OpenTakeoff · Marked Set" in default mode, "Marked Set"
-    // when a trade name brands the doc (the branding resolver decides)
+    // cover title from resolveBranding ("Marked Set", or trade-named when clear-label)
     const coverTitleSafe = winAnsiSafe(coverTitle);
     draw(coverTitleSafe, { x: 70, y: 731, size: 17, font: bold, color: ink });
     // the identity column's clamp wall: the title's right edge plus breathing
@@ -885,7 +884,7 @@ export async function buildMarkedSetPdf({ projectName, dark, sheets, shapes, mar
 
   // small tool credit on the LAST page only — the subtle parent credit shown in
   // clear-label mode. Default mode passes null: the cover already carries the
-  // "OpenTakeoff · " wordmark, so a separate credit would be redundant.
+  // Unbranded / trade-named cover already carries identity — no parent credit.
   const allPages = doc.getPages();
   const lastPg = allPages[allPages.length - 1];
   if (lastPg && credit) {

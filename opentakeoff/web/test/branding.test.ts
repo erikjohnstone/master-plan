@@ -13,13 +13,13 @@ const PROFILES = [
   { id: "b", name: "Fin Workspaces", address: "2 B St" },
 ];
 
-test("default mode → OpenTakeoff, no company, no credit, prefixed cover title", () => {
+test("default mode → unbranded, no company, no credit, plain cover title", () => {
   const b = resolveBranding({ mode: "default", profileId: "a", profiles: PROFILES });
   assert.equal(b.clear, false);
   assert.equal(b.company, null);
   assert.equal(b.brandName, OT_NAME);
   assert.equal(b.credit, null);
-  assert.equal(b.coverTitle, "OpenTakeoff · Marked Set");
+  assert.equal(b.coverTitle, "Marked Set");
 });
 
 test("clear-label with a valid profile → that trade name brands the doc", () => {
@@ -40,7 +40,7 @@ test("clear-label with no profiles falls back to default (nothing to brand as)",
   const b = resolveBranding({ mode: "clearlabel", profileId: "a", profiles: [] });
   assert.equal(b.clear, false);
   assert.equal(b.brandName, OT_NAME);
-  assert.equal(b.coverTitle, "OpenTakeoff · Marked Set");
+  assert.equal(b.coverTitle, "Marked Set");
 });
 
 test("clear-label with a stale profileId falls back to the first profile", () => {
@@ -49,7 +49,7 @@ test("clear-label with a stale profileId falls back to the first profile", () =>
   assert.equal(b.brandName, "345 Flooring");
 });
 
-test("clear-label profile without a name → brandName degrades to OpenTakeoff, company kept", () => {
+test("clear-label profile without a name → brandName stays empty, company kept", () => {
   const b = resolveBranding({ mode: "clearlabel", profileId: "c", profiles: [{ id: "c", logo: "data:x" }] });
   assert.equal(b.clear, true);
   assert.equal(b.brandName, OT_NAME);
@@ -62,13 +62,13 @@ test("garbage / missing mode → default", () => {
   assert.equal(resolveBranding(undefined).brandName, OT_NAME);
 });
 
-// export titles follow the brand name (decision: exports follow the mode) — the
-// resolver hands brandName to each CSV, defaulting to OpenTakeoff when unbranded
-test("CSV export titles carry the brand name (default OpenTakeoff)", () => {
-  assert.match(totalsToCsv([], "Proj"), /^# Proj — OpenTakeoff report/);
+// export titles follow the brand name when a trade name is set; unbranded
+// exports omit any product name.
+test("CSV export titles omit product brand when unbranded", () => {
+  assert.match(totalsToCsv([], "Proj"), /^# Proj — report/);
   assert.match(totalsToCsv([], "Proj", null, null, null, null, null, "345 Flooring"), /^# Proj — 345 Flooring report/);
-  assert.match(shapesToCsv([], "Proj"), /^# Proj — OpenTakeoff shapes/);
+  assert.match(shapesToCsv([], "Proj"), /^# Proj — shapes/);
   assert.match(shapesToCsv([], "Proj", "345 Flooring"), /^# Proj — 345 Flooring shapes/);
-  assert.match(rfisToCsv([], [], "Proj"), /^# Proj — OpenTakeoff RFI log/);
+  assert.match(rfisToCsv([], [], "Proj"), /^# Proj — RFI log/);
   assert.match(rfisToCsv([], [], "Proj", null, "345 Flooring"), /^# Proj — 345 Flooring RFI log/);
 });

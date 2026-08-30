@@ -19,7 +19,7 @@ const evidenceText = (ev) => {
   return bits.join(" · ");
 };
 
-const LOG_STYLE = { status: "var(--ink-muted)", tool: "var(--cobalt)", text: "var(--ink)", error: "var(--c-danger)" };
+const LOG_STYLE = { status: "var(--ink-muted)", tool: "var(--cobalt)", text: "var(--ink)", error: "var(--c-danger)", progress: "var(--cobalt)" };
 const RUN_STATUS_STYLE = { running: "var(--cobalt)", done: "var(--c-positive)", error: "var(--c-danger)", aborted: "var(--ink-muted)" };
 
 const isGateOrCheck = (text) =>
@@ -83,11 +83,13 @@ function RunHistoryList({ runs }) {
 function splitLog(log) {
   const steps = [];
   const meta = [];
+  const progress = [];
   for (const e of log) {
-    if (e.kind === "text" && isGateOrCheck(e.text)) meta.push(e);
+    if (e.kind === "progress") progress.push(e);
+    else if (e.kind === "text" && isGateOrCheck(e.text)) meta.push(e);
     else if (e.kind !== "text" || isGateOrCheck(e.text)) steps.push(e);
   }
-  return { steps, meta };
+  return { steps, meta, progress };
 }
 
 function citationCardTitle(citation) {
@@ -192,7 +194,7 @@ export default function AgentPanel({
   const [showSources, setShowSources] = useState(false);
   const threadRef = useRef(null);
   const logRef = useRef(null);
-  const { steps, meta } = useMemo(() => splitLog(log), [log]);
+  const { steps, meta, progress } = useMemo(() => splitLog(log), [log]);
   const hasAssistant = thread.some((m) => m.role === "assistant");
   const canFollowUp = hasAssistant && !running;
 
@@ -216,7 +218,7 @@ export default function AgentPanel({
       return;
     }
     el.scrollTop = el.scrollHeight;
-  }, [thread, citations, status, running]);
+  }, [thread, citations, status, running, progress]);
 
   useEffect(() => {
     if (logRef.current && showSteps) logRef.current.scrollTop = logRef.current.scrollHeight;
@@ -316,8 +318,39 @@ export default function AgentPanel({
               </div>
             ))}
             {running && (
-              <div data-agent-status style={{ fontSize: 12.5, color: "var(--cobalt)", fontWeight: 600, marginBottom: 8 }}>
-                {status || "Working…"}
+              <div data-agent-status style={{ marginBottom: 8 }}>
+                <div style={{ fontSize: 12.5, color: "var(--cobalt)", fontWeight: 600, marginBottom: progress.length ? 6 : 0 }}>
+                  {status || "Working…"}
+                </div>
+                {progress.length > 0 && (
+                  <ol
+                    data-agent-compile-progress
+                    style={{
+                      margin: 0,
+                      padding: "8px 10px 8px 26px",
+                      listStyle: "decimal",
+                      background: "var(--paper)",
+                      border: "1px solid var(--ink-faint)",
+                      borderRadius: 8,
+                      fontSize: 12,
+                      lineHeight: 1.45,
+                      color: "var(--ink)",
+                    }}
+                  >
+                    {progress.map((e, i) => (
+                      <li
+                        key={`prog-${i}`}
+                        style={{
+                          marginBottom: i === progress.length - 1 ? 0 : 4,
+                          fontWeight: i === progress.length - 1 ? 650 : 500,
+                          color: i === progress.length - 1 ? "var(--cobalt)" : "var(--ink-muted)",
+                        }}
+                      >
+                        {e.text}
+                      </li>
+                    ))}
+                  </ol>
+                )}
               </div>
             )}
             {citations.length > 0 && (

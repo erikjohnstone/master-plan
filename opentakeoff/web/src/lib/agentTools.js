@@ -484,6 +484,11 @@ export const AGENT_TOOL_DEFS = [
           type: "boolean",
           description: "If true (default), download the compiled workbook in the browser.",
         },
+        service: {
+          type: "string",
+          enum: ["CHW", "HHW"],
+          description: "Optional for control_valves: only CHW or only HHW CONTROL VALVE SCHEDULE. Omit for both.",
+        },
       },
       required: ["kind"],
     },
@@ -966,7 +971,10 @@ export async function executeAgentTool(ctx, name, args) {
         if (typeof ctx.compileCorpusTakeoff !== "function") {
           return { error: "compile_corpus_takeoff is not wired in this session." };
         }
-        return await ctx.compileCorpusTakeoff(kind, { download: args.download !== false });
+        return await ctx.compileCorpusTakeoff(kind, {
+          download: args.download !== false,
+          service: args.service || null,
+        });
       }
 
       case "export_takeoff":

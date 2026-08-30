@@ -7,7 +7,7 @@
 //   - malformed model output → {status:"error"} + an error event, never a throw.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { runAgentLoop, parseAssistantTurn, toProviderTools, agentSystemPrompt, MAX_AGENT_ITERATIONS, requiredEvidenceCorrection, toolsForGoal } from "../src/lib/agentLoop.js";
+import { runAgentLoop, parseAssistantTurn, toProviderTools, agentSystemPrompt, MAX_AGENT_ITERATIONS, requiredEvidenceCorrection, toolsForGoal, missingNamedScheduleAttrs, appendNamedScheduleAttrs } from "../src/lib/agentLoop.js";
 
 const CFG_A = { endpoint: "http://localhost:9999", apiKey: "k", model: "mock", provider: "anthropic" };
 const CFG_O = { ...CFG_A, provider: "openai" };
@@ -609,6 +609,68 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     }] } },
   ], "What are AHU-1 location and supply airflow?",
   "AHU-1 location is 11TH FLOOR MECHANICAL on set.pdf#44; supply airflow is 3850 CFM."), null);
+  // Type + CFM asks must not thrash on incidental coil/EWT cells that happen
+  // to appear in the answer or on the same schedule row.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [10, 20, 30, 40], text: "FCU-A1" } },
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [40, 20, 60, 40], text: "VERTICAL CABINET" } },
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [60, 20, 80, 40], text: "150" } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#42",
+      row: {
+        key: "FCU-A1",
+        all_cells: {
+          MARK: { text: "FCU-A1", bbox: [10, 20, 30, 40] },
+          TYPE: { text: "VERTICAL CABINET", bbox: [40, 20, 60, 40] },
+          "FAN DATA CFM (CLG / HTG)": { text: "150", bbox: [60, 20, 80, 40] },
+          "COOLING COIL DATA ENT. W": { text: "45", bbox: [90, 20, 110, 40] },
+          "COOLING COIL DATA TOTAL": { text: "4.2", bbox: [120, 20, 140, 40] },
+        },
+      },
+    }] } },
+  ], "For FCU-A1 give type and CFM from the FAN COIL UNIT SCHEDULE and cite the MARK cells",
+  "FCU-A1 on set.pdf#42 is VERTICAL CABINET at 150 CFM. Also note EWT 45 and TOTAL 4.2 appear on the row."), null);
+  // Named tags + type/CFM must copy evidence values — not "on the same row".
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [10, 20, 30, 40], text: "FCU-A1" } },
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#42",
+      row: {
+        key: "FCU-A1",
+        all_cells: {
+          MARK: { text: "FCU-A1", bbox: [10, 20, 30, 40] },
+          TYPE: { text: "VERTICAL CABINET", bbox: [40, 20, 60, 40] },
+          "FAN DATA CFM (CLG / HTG)": { text: "150", bbox: [60, 20, 80, 40] },
+        },
+      },
+    }] } },
+  ], "For FCU-A1 give type and CFM from the FAN COIL UNIT SCHEDULE and cite the MARK cells",
+  "FCU-A1 MARK highlighted on set.pdf#42. TYPE and FAN DATA CFM values are from the same row.")!,
+  /omits these evidence-backed values|VERTICAL CABINET|FCU-A1 TYPE/);
+  // Auto-append fills omitted attrs from query_table into the draft.
+  {
+    const callLog = [{
+      name: "query_table",
+      out: { matches: [{
+        sheet: "set.pdf#42",
+        row: {
+          key: "FCU-A1",
+          all_cells: {
+            TYPE: { text: "VERTICAL CABINET" },
+            "FAN DATA CFM (CLG / HTG)": { text: "150" },
+          },
+        },
+      }] },
+    }];
+    const goal = "For FCU-A1 give type and CFM from the schedule";
+    const weasel = "FCU-A1 MARK highlighted; TYPE and CFM are on the same row.";
+    const missing = missingNamedScheduleAttrs(callLog, goal, weasel);
+    assert.ok(missing.some((m) => m.label === "TYPE" && /VERTICAL/.test(m.value)));
+    const filled = appendNamedScheduleAttrs(weasel, missing);
+    assert.match(filled, /VERTICAL CABINET/);
+    assert.match(filled, /\b150\b/);
+    assert.equal(requiredEvidenceCorrection(callLog, goal, filled), null);
+  }
   // Short digits inside a mark must not invent a phantom numeric paint duty.
   assert.equal(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#48", bbox_px: [10, 20, 30, 40] } },

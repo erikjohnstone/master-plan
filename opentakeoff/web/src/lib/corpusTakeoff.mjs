@@ -22,6 +22,34 @@ function cellBbox(row, headerRe) {
   return null;
 }
 
+/** Union of cell bboxes → one schedule-row rect for cite highlights. */
+export function unionBboxPx(boxes) {
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  let any = false;
+  for (const b of boxes || []) {
+    if (!Array.isArray(b) || b.length !== 4) continue;
+    const [a, c, d, e] = b.map(Number);
+    if (![a, c, d, e].every(Number.isFinite) || !(d > a && e > c)) continue;
+    any = true;
+    if (a < x0) x0 = a;
+    if (c < y0) y0 = c;
+    if (d > x1) x1 = d;
+    if (e > y1) y1 = e;
+  }
+  return any ? [x0, y0, x1, y1] : null;
+}
+
+function rowCellsBbox(row) {
+  const boxes = [];
+  for (const cell of Object.values(row?.cells || {})) {
+    if (Array.isArray(cell?.bbox) && cell.bbox.length === 4) boxes.push(cell.bbox);
+  }
+  if (Array.isArray(row?.identity?.bbox) && row.identity.bbox.length === 4) {
+    boxes.push(row.identity.bbox);
+  }
+  return unionBboxPx(boxes);
+}
+
 /** Flatten schedule row cells into text + bbox for takeoff line cites. */
 function scheduleAttrs(row) {
   const cells = {};
@@ -42,9 +70,23 @@ function scheduleAttrs(row) {
   return { cells, description };
 }
 
+/**
+ * Building code from equipment / unit tags (set-agnostic): letter immediately
+ * before digits in a hyphen segment (AHU-A1 → A, FCU-T12 → T), or a trailing
+ * single letter (CV-CHW-BP-A → A). Not a project name map — callers display
+ * "Building A", never hard-coded job titles.
+ */
+export function buildingCodeFromTag(tag) {
+  const s = String(tag || "").toUpperCase();
+  const beforeDigits = s.match(/-([A-Z])(?=\d)/);
+  if (beforeDigits) return beforeDigits[1];
+  const trailing = s.match(/-([A-Z])$/);
+  if (trailing) return trailing[1];
+  return null;
+}
+
 function buildingLetter(tag) {
-  const m = String(tag || "").toUpperCase().match(/-([AMT])(?=[A-Z0-9]|$)/);
-  return m ? m[1] : null;
+  return buildingCodeFromTag(tag);
 }
 
 function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
@@ -69,7 +111,10 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
         ? (cellBbox(row, identityHeaderRe) || cellBbox(row, /^MARK$/i) || row.identity?.bbox)
         : (cellBbox(row, /^MARK$/i) || row.identity?.bbox || cellBbox(row, /./));
       const { cells, description } = scheduleAttrs(row);
-      const bldg = buildingLetter(tag);
+      const unitMark = cellText(row, /^UNIT\s*MARK$/i) || null;
+      // Prefer UNIT MARK for building (valve marks often end in -CHW/-HHW).
+      const bldg = buildingLetter(unitMark) || buildingLetter(tag);
+      const rowBbox = rowCellsBbox(row);
       const tableBbox = Array.isArray(table.title?.bbox) && table.title.bbox.length === 4
         ? table.title.bbox
         : (Array.isArray(table.region) && table.region.length === 4 ? table.region : null);
@@ -80,6 +125,8 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
         sheet_id: table.sheet,
         table_title: title.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim(),
         bbox_px: bbox || null,
+        // Whole schedule row for cite paints — not just the MARK cell.
+        row_bbox_px: rowBbox || bbox || null,
         table_bbox_px: tableBbox,
         description: description || null,
         building: bldg,
@@ -87,16 +134,21 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
       });
     }
   }
-  const building = { A: 0, M: 0, T: 0, other: 0 };
-  for (const k of keys) {
-    const m = k.match(/-([AMT])(?=[A-Z0-9]|$)/i);
-    if (m) building[m[1]] += 1;
+  const building = { other: 0 };
+  for (const item of items) {
+    const code = item.building || buildingLetter(item.tag);
+    if (code) building[code] = (building[code] || 0) + 1;
     else building.other += 1;
   }
   return {
     count: keys.size,
     building,
-    items: items.sort((a, b) => a.tag.localeCompare(b.tag, undefined, { numeric: true })),
+    items: items.sort((a, b) => {
+      const ba = a.building || "";
+      const bb = b.building || "";
+      if (ba !== bb) return ba.localeCompare(bb);
+      return a.tag.localeCompare(b.tag, undefined, { numeric: true });
+    }),
   };
 }
 
@@ -321,7 +373,11 @@ export function normalizeControlValveCells(item, service) {
       return;
     }
   };
-  take(/^UNIT\s*MARK$/i, "Served equipment");
+  // Schedule header is UNIT MARK — surface both labels (same value) so the
+  // Takeoff panel can lead with "Unit Mark" without losing "Served equipment".
+  take(/^UNIT\s*MARK$/i, "Unit Mark");
+  if (out["Unit Mark"]) out["Served equipment"] = { ...out["Unit Mark"] };
+  else take(/SERVED|EQUIPMENT\s*MARK/i, "Served equipment");
   take(/VALVE\s*SIZE|PIPE\s*SIZE|^\s*SIZE\s*$/i, "Size");
   take(/FLOWRATE|\bFLOW\b|\bGPM\b/i, "GPM");
   // Exactly one Cv — the schedule column is "CV", not "CHW CV" / "HHW CV".
@@ -329,7 +385,8 @@ export function normalizeControlValveCells(item, service) {
   take(/CONFIGURATION|CONFIG/i, "Configuration");
   take(/^NOTES$/i, "Notes");
   if (service) {
-    out.Service = { text: service, bbox: item.table_bbox_px || null };
+    // Label only — never borrow the whole table region as a "Service" cite.
+    out.Service = { text: service, bbox: null };
   }
   return out;
 }
@@ -338,19 +395,31 @@ export function normalizeControlValveCells(item, service) {
  * Deterministic CHW + HHW control-valve takeoff for "complete valve takeoff"
  * goals. Same Session+ODL family extractors as T-HVAC-01, filtered to valves,
  * with contractor columns: valve mark, served equipment, service, size, GPM, Cv.
+ *
+ * @param {object} [opts]
+ * @param {"CHW"|"HHW"|null} [opts.service] — when set, only that hydronic
+ *   service family's schedule (set-agnostic: matches CHW_/HHW_ family keys /
+ *   schedule titles, not a corpus hardcode).
  */
-export function compileControlValveTakeoff(sessionOrSheets, graph) {
+export function compileControlValveTakeoff(sessionOrSheets, graph, opts = {}) {
   const full = compileHvacTakeoff(sessionOrSheets, graph);
+  const wantService = opts.service ? String(opts.service).toUpperCase() : null;
   const categories = {};
   for (const name of CONTROL_VALVE_FAMILIES) {
+    if (wantService === "CHW" && !/^CHW/i.test(name)) continue;
+    if (wantService === "HHW" && !/^HHW/i.test(name)) continue;
     const cat = full.categories?.[name];
     if (!cat) continue;
     const service = /^CHW/i.test(name) ? "CHW" : /^HHW/i.test(name) ? "HHW" : null;
     const items = (cat.items || []).map((item) => {
       const cells = normalizeControlValveCells(item, service);
-      const served = cells["Served equipment"]?.text || null;
+      const served = cells["Unit Mark"]?.text || cells["Served equipment"]?.text || null;
+      const bldg = item.building
+        || buildingCodeFromTag(served)
+        || buildingCodeFromTag(item.tag);
       return {
         ...item,
+        building: bldg,
         cells,
         description: served ? `Serves ${served}` : (item.description || null),
       };
@@ -369,6 +438,7 @@ export function compileControlValveTakeoff(sessionOrSheets, graph) {
     takeoff_id: "T-VALVE-01",
     kind: "control_valves",
     compiler: "corpusTakeoff.compileControlValveTakeoff",
+    service_filter: wantService || null,
     categories,
     totals: {
       categories: Object.keys(categories).length,
@@ -377,14 +447,15 @@ export function compileControlValveTakeoff(sessionOrSheets, graph) {
     exclusions: [
       ...HVAC_EXCLUSIONS,
       "Non-control-valve HVAC equipment (AHU, FCU, VAV, pumps, …) — use kind hvac_equipment for the full equipment takeoff",
+      ...(wantService ? [`${wantService === "CHW" ? "HHW" : "CHW"} CONTROL VALVE SCHEDULE (filtered out — goal asked for ${wantService} only)`] : []),
     ],
   };
 }
 
-export function compileCorpusTakeoff(session, graph, kind) {
+export function compileCorpusTakeoff(session, graph, kind, opts = {}) {
   if (kind === "hvac_equipment" || kind === "T-HVAC-01") return compileHvacTakeoff(session, graph);
   if (kind === "bas_points" || kind === "T-BAS-01") return compileBasTakeoff(session, graph);
-  if (kind === "control_valves" || kind === "T-VALVE-01") return compileControlValveTakeoff(session, graph);
+  if (kind === "control_valves" || kind === "T-VALVE-01") return compileControlValveTakeoff(session, graph, opts);
   throw new Error(`Unknown takeoff kind: ${kind}`);
 }
 
@@ -392,16 +463,21 @@ export function compileCorpusTakeoff(session, graph, kind) {
 export function takeoffWorkbookSheets(takeoff, { interrogationLog = null } = {}) {
   const sheets = [];
   if (takeoff.kind === "hvac_equipment" || takeoff.kind === "control_valves") {
-    const rollup = [["category", "count", "unit", "building_A", "building_M", "building_T", "building_other"]];
+    const bldgKeys = [...new Set(
+      Object.values(takeoff.categories || {})
+        .flatMap((cat) => Object.keys(cat.building || {})),
+    )].sort((a, b) => {
+      if (a === "other") return 1;
+      if (b === "other") return -1;
+      return a.localeCompare(b);
+    });
+    const rollup = [["category", "count", "unit", ...bldgKeys.map((k) => `building_${k}`)]];
     for (const [name, cat] of Object.entries(takeoff.categories || {})) {
       rollup.push([
         name,
         cat.count,
         "EA",
-        cat.building?.A ?? 0,
-        cat.building?.M ?? 0,
-        cat.building?.T ?? 0,
-        cat.building?.other ?? 0,
+        ...bldgKeys.map((k) => cat.building?.[k] ?? 0),
       ]);
       const attrKeys = [];
       const seenAttr = new Set();

@@ -39,6 +39,7 @@ import PlanNavigator from "../components/PlanNavigator.jsx";
 import ReportPanel from "../components/ReportPanel.jsx";
 import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
 import {
+  compileAgentTakeoff,
   dedupeTakeoffRows,
   mergeTakeoffRows,
   rowsFromAnswerMarkdown,
@@ -582,6 +583,10 @@ export default function TakeoffCanvas() {
   const [agentTakeoffRows, setAgentTakeoffRows] = useState([]);
   const [showTakeoffData, setShowTakeoffData] = useState(false);
   const [lastCorpusTakeoffMeta, setLastCorpusTakeoffMeta] = useState(null);
+  const finishedTakeoffLineCount = useMemo(
+    () => compileAgentTakeoff(agentTakeoffRows).length,
+    [agentTakeoffRows],
+  );
   // Demo / Playwright: seed or open Takeoff without a full agent run.
   useEffect(() => {
     window.__otSeedAgentTakeoff = (rows, { open = true } = {}) => {
@@ -1594,7 +1599,7 @@ export default function TakeoffCanvas() {
     catch (e) { setCommitMsg(`Couldn't read those files: ${e.message || e}`); return; }
     if (!pdfs.length) {
       setCommitMsg(skipped.length
-        ? `Nothing to open — ${skipped.length} file${skipped.length === 1 ? "" : "s"} skipped. OpenTakeoff reads PDFs, images, and .zip plan sets.`
+        ? `Nothing to open — ${skipped.length} file${skipped.length === 1 ? "" : "s"} skipped. This canvas reads PDFs, images, and .zip plan sets.`
         : "No supported files found. Drop a PDF, an image, or a .zip plan set.");
       return;
     }
@@ -2751,7 +2756,7 @@ export default function TakeoffCanvas() {
       await backupProfileFile();
       await resetProfileDefaults();
       await refreshLibraries();
-      setCommitMsg("Profile reset to OpenTakeoff defaults — your previous setup downloaded as opentakeoff-profile-backup.otprofile (Import profile restores it). Project takeoffs are untouched.");
+      setCommitMsg("Profile reset to stock defaults — your previous setup downloaded as opentakeoff-profile-backup.otprofile (Import profile restores it). Project takeoffs are untouched.");
     } catch (e) { setCommitMsg(`Couldn't reset profile: ${e?.message || e}`); }
   };
 
@@ -6854,19 +6859,74 @@ export default function TakeoffCanvas() {
     return await res.json();
   }
 
-  async function fetchProductionCorpusTakeoff(kind) {
+  async function fetchProductionCorpusTakeoff(kind, opts = {}) {
     const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
     if (!names.length) throw new Error("No PDF loaded");
+    const onProgress = typeof opts.onProgress === "function" ? opts.onProgress : null;
+    if (onProgress) onProgress({ phase: "upload", message: "Preparing plans for Session+ODL compile…" });
     const fd = new FormData();
     fd.append("kind", kind);
+    if (opts.service) fd.append("service", String(opts.service).toUpperCase());
     for (const name of names) {
       const bytes = await store.loadPdfData(name);
       fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
     }
-    const res = await fetch("/__ot/compile-corpus-takeoff", { method: "POST", body: fd });
+    if (onProgress) {
+      onProgress({
+        phase: "upload",
+        message: `Uploading ${names.length} plan PDF${names.length === 1 ? "" : "s"}…`,
+      });
+    }
+    const res = await fetch("/__ot/compile-corpus-takeoff", {
+      method: "POST",
+      body: fd,
+      headers: onProgress ? { Accept: "application/x-ndjson" } : undefined,
+    });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new Error(err.error || `compile-corpus-takeoff HTTP ${res.status}`);
+    }
+    const ctype = String(res.headers.get("content-type") || "");
+    if (onProgress && /ndjson/i.test(ctype) && res.body) {
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buf = "";
+      let result = null;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += decoder.decode(value, { stream: true });
+        const lines = buf.split("\n");
+        buf = lines.pop() || "";
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed) continue;
+          let msg;
+          try { msg = JSON.parse(trimmed); } catch { continue; }
+          if (msg.type === "progress") {
+            onProgress({
+              phase: msg.phase,
+              message: msg.message || "Compiling…",
+              ...msg,
+            });
+          } else if (msg.type === "result") {
+            result = msg.result;
+          } else if (msg.type === "error") {
+            throw new Error(msg.error || "compile failed");
+          }
+        }
+      }
+      if (buf.trim()) {
+        try {
+          const msg = JSON.parse(buf.trim());
+          if (msg.type === "result") result = msg.result;
+          if (msg.type === "error") throw new Error(msg.error || "compile failed");
+        } catch (e) {
+          if (e?.message && !/JSON/.test(e.message)) throw e;
+        }
+      }
+      if (!result) throw new Error("compile stream ended without a result");
+      return result;
     }
     return await res.json();
   }
@@ -7054,7 +7114,7 @@ export default function TakeoffCanvas() {
     const rows = conditionTotals(liveConditions, liveShapes, seamCtx).filter((r) => r.shape_count > 0);
     if (!rows.length) return { error: "Nothing committed yet — accept some proposals first, or there's nothing to export." };
     const bySheet = sheetTotals(liveConditions, liveShapes);
-    const csv = totalsToCsv(rows, projectName, bySheet, tabLabel, null, seamCtx, null, "OpenTakeoff", units);
+    const csv = totalsToCsv(rows, projectName, bySheet, tabLabel, null, seamCtx, null, "", units);
     const filename = `${exportBaseName()}.csv`;
     downloadText(filename, csv, "text/csv");
     return { downloaded: filename, condition_count: rows.length };
@@ -7078,51 +7138,23 @@ export default function TakeoffCanvas() {
     return { downloaded: filename, condition_count: rows.length };
   }
 
-  /** Paint schedule-table + per-tag row highlights so the takeoff is auditable on the sheets. */
+  /** Do NOT paint every schedule row on compile — that floods the sheets with
+   * highlights ("everything is highlighted"). Provenance is on-demand: the
+   * estimator clicks a Takeoff Tag / Unit Mark / Sheet to paint that one row. */
   async function paintCompiledTakeoffHighlights(compiled) {
     if (!compiled || compiled.error) return { tables: 0, rows: 0 };
-    const jobs = [];
-    const seenTable = new Set();
-    const enqueue = (item) => {
-      if (!item?.sheet_id) return;
-      if (Array.isArray(item.table_bbox_px) && item.table_bbox_px.length === 4) {
-        const k = `${item.sheet_id}|${item.table_bbox_px.join(",")}`;
-        if (!seenTable.has(k)) {
-          seenTable.add(k);
-          jobs.push({
-            sheet: item.sheet_id,
-            bbox_px: item.table_bbox_px,
-            table_title: item.table_title || "",
-            text: item.table_title || "Schedule",
-          });
-        }
-      }
-      if (item.tag && Array.isArray(item.bbox_px) && item.bbox_px.length === 4) {
-        jobs.push({
-          sheet: item.sheet_id,
-          bbox_px: item.bbox_px,
-          row_key: item.tag,
-          column: "MARK",
-          value: item.tag,
-          table_title: item.table_title || "",
-        });
-      }
-    };
-    if (compiled.kind === "hvac_equipment" || compiled.kind === "control_valves") {
-      for (const cat of Object.values(compiled.categories || {})) {
-        for (const item of cat.items || []) enqueue(item);
-      }
-    } else if (compiled.kind === "bas_points") {
-      for (const list of compiled.categories?.points_lists?.lists || []) {
-        for (const item of list.items || []) enqueue(item);
-      }
-    }
-    // Chunk so the UI stays responsive while the audit trail paints.
-    for (let i = 0; i < jobs.length; i += 40) {
-      const chunk = jobs.slice(i, i + 40);
-      await Promise.all(chunk.map((j) => agentHighlightCitation(j)));
-    }
-    return { tables: seenTable.size, rows: jobs.length - seenTable.size };
+    // Clear prior takeoff-audit highlights so a re-compile starts clean.
+    clearTakeoffCiteHighlights();
+    return { tables: 0, rows: 0 };
+  }
+
+  function clearTakeoffCiteHighlights() {
+    setMarkups((ms) => {
+      const next = ms.filter((m) => m.source !== "takeoff_cite");
+      agentStateRef.current = { ...agentStateRef.current, markups: next };
+      return next;
+    });
+    setAgentCitations((list) => list.filter((c) => c.source !== "takeoff_cite"));
   }
 
   /** Feed finished compile into TakeoffDataPanel (Takeoff + Workflow data tabs). */
@@ -7167,9 +7199,24 @@ export default function TakeoffCanvas() {
 
   async function agentCompileCorpusTakeoff(kind, opts = {}) {
     // Same Session+ODL+compileCorpusTakeoff path as MCP — never geometric-only.
+    // Stream OT_PROGRESS phases into the Agent status/log so a long compile
+    // does not look frozen ("nothing is working").
+    const reportProgress = (p) => {
+      const message = String(p?.message || "Compiling the full takeoff…");
+      setAgentStatus(message);
+      setAgentLog((l) => {
+        const next = { kind: "progress", text: message };
+        const last = l[l.length - 1];
+        if (last?.kind === "progress" && last.text === message) return l;
+        return [...l.slice(-199), next];
+      });
+    };
     let compiled;
     try {
-      compiled = await fetchProductionCorpusTakeoff(kind);
+      compiled = await fetchProductionCorpusTakeoff(kind, {
+        service: opts.service || null,
+        onProgress: reportProgress,
+      });
     } catch (e) {
       // If the production endpoint is down, refuse rather than silently under-count.
       return {
@@ -7181,6 +7228,10 @@ export default function TakeoffCanvas() {
     if (!compiled?.takeoff_id && !compiled?.kind) {
       return { error: "Production compile returned an empty result." };
     }
+    reportProgress({
+      phase: "panel",
+      message: "Opening Takeoff with contractor columns and cites…",
+    });
     const downloads = [];
     if (opts.download !== false) {
       const base = `${exportBaseName()}.${compiled.takeoff_id || "corpus-takeoff"}`;
@@ -7994,6 +8045,7 @@ export default function TakeoffCanvas() {
 
   async function agentHighlightCitation({
     sheet, bbox_px, text = "", row_key = "", column = "", table_title = "", value = "",
+    replaceTakeoffCite = false, source = null,
   }) {
     if (!Array.isArray(bbox_px) || bbox_px.length !== 4 || bbox_px.some((v) => !Number.isFinite(v))) {
       return { error: "bbox_px must contain four finite production image-pixel coordinates." };
@@ -8004,11 +8056,13 @@ export default function TakeoffCanvas() {
     if (!(x1 > x0 && y1 > y0) || x0 < 0 || y0 < 0 || x1 > dims.w || y1 > dims.h) {
       return { error: "bbox_px is degenerate or outside the cited sheet." };
     }
+    if (replaceTakeoffCite) clearTakeoffCiteHighlights();
     const rowKey = String(row_key || "").trim();
     const col = String(column || "").trim();
     const val = String(value || "").trim();
     const tableTitle = String(table_title || "").trim();
     const fallback = String(text || "").trim();
+    const citeSource = source || (replaceTakeoffCite ? "takeoff_cite" : null);
     const label = (() => {
       if (rowKey && col && val) return `${rowKey} · ${col} = ${val}`;
       if (rowKey && col) return `${rowKey} · ${col}`;
@@ -8023,11 +8077,20 @@ export default function TakeoffCanvas() {
       // canvas never draws it inside the rect (would cover the cited value).
       text: label,
       rect: [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]],
+      source: citeSource,
     });
     if (result.error) return result;
     // Estimator-clarity: paint quietly — do NOT auto-fly the viewport.
     // Source cards in the Agent panel are how the estimator jumps on demand.
     setShowMarkups(true);
+    // Stamp source on the markup record (agentAnnotate may not persist extras).
+    if (citeSource) {
+      setMarkups((ms) => {
+        const next = ms.map((m) => (m.id === result.id ? { ...m, source: citeSource } : m));
+        agentStateRef.current = { ...agentStateRef.current, markups: next };
+        return next;
+      });
+    }
     setAgentCitations((list) => {
       if (list.some((c) => c.id === result.id)) return list;
       return [...list, {
@@ -8042,6 +8105,7 @@ export default function TakeoffCanvas() {
         table_title: tableTitle || undefined,
         value: val || undefined,
         bbox_px,
+        source: citeSource || undefined,
       }];
     });
     return {
@@ -8829,14 +8893,27 @@ export default function TakeoffCanvas() {
         signal: ctl.signal,
       });
       const answerText = typeof result?.text === "string" ? result.text.trim() : "";
+      // Finished Takeoff auto-open only for compile / project / sweep seeds —
+      // query_table scrap stays in Workflow data and must not steal focus from
+      // Sources / Agent (GOAL: Agent scrap ≠ Takeoff tab).
+      const hasFinishedTakeoffSeed = (rows) => rows.some((r) => (
+        r?.source_tool === "compile_corpus_takeoff"
+        || r?.source_tool === "takeoff_summary"
+        || r?.source_tool === "project_takeoff"
+        || r?.source_tool === "sweep_schedule_row"
+      ));
       if (answerText) {
         const fromTables = rowsFromAnswerMarkdown(answerText, { workflow: ask, runId: run.id });
         const merged = dedupeTakeoffRows([...collectedTakeoff, ...fromTables]);
+        const finishedLines = compileAgentTakeoff(merged);
         if (merged.length) {
           setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, merged));
-          setShowTakeoffData(true);
+          if (hasFinishedTakeoffSeed(merged)) setShowTakeoffData(true);
         }
-        const { chat } = splitConversationalAnswer(answerText, { rowCount: merged.length });
+        const { chat } = splitConversationalAnswer(answerText, {
+          rowCount: merged.length,
+          finishedLineCount: finishedLines.length,
+        });
         agentPriorRef.current = [
           ...agentPriorRef.current,
           { role: "user", content: ask },
@@ -8844,20 +8921,24 @@ export default function TakeoffCanvas() {
         ];
         setAgentThread((t) => {
           const last = t[t.length - 1];
+          const takeoffN = finishedLines.length;
           if (last?.role === "assistant" && (last.text === chat || last.text === answerText)) {
-            return [...t.slice(0, -1), { role: "assistant", text: chat, takeoffRows: merged.length }];
+            return [...t.slice(0, -1), { role: "assistant", text: chat, takeoffRows: takeoffN }];
           }
-          return [...t, { role: "assistant", text: chat, takeoffRows: merged.length }];
+          return [...t, { role: "assistant", text: chat, takeoffRows: takeoffN }];
         });
       } else if (collectedTakeoff.length) {
         const merged = dedupeTakeoffRows(collectedTakeoff);
+        const finishedLines = compileAgentTakeoff(merged);
         setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, merged));
-        setShowTakeoffData(true);
-        setAgentThread((t) => [...t, {
-          role: "assistant",
-          text: `Wrote ${merged.length} takeoff row${merged.length === 1 ? "" : "s"} to the Takeoff panel — open Takeoff to review and export.`,
-          takeoffRows: merged.length,
-        }]);
+        if (hasFinishedTakeoffSeed(merged)) {
+          setShowTakeoffData(true);
+          setAgentThread((t) => [...t, {
+            role: "assistant",
+            text: `Wrote ${finishedLines.length} takeoff line${finishedLines.length === 1 ? "" : "s"} to the Takeoff panel — open Takeoff to review and export.`,
+            takeoffRows: finishedLines.length,
+          }]);
+        }
       }
     } finally {
       setAgentRunning(false);
@@ -9988,7 +10069,7 @@ export default function TakeoffCanvas() {
   });
   sheetMenuItems.push({
     id: "reset-profile", icon: "undo", label: "Reset profile to defaults",
-    title: "Back to a stock OpenTakeoff setup — empty template/material libraries, the default stamps, no report customization. Your current setup downloads as a backup first; project takeoffs are untouched.",
+    title: "Back to a stock setup — empty template/material libraries, the default stamps, no report customization. Your current setup downloads as a backup first; project takeoffs are untouched.",
     onSelect: resetProfile,
   });
 
@@ -10327,12 +10408,12 @@ export default function TakeoffCanvas() {
           title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export."
           style={{
             padding: "8px 14px", border: "none",
-            background: agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
-            color: agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
+            background: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
+            color: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
             cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11,
             letterSpacing: "0.12em", textTransform: "uppercase",
           }}>
-          Takeoff{agentTakeoffRows.length ? ` · ${agentTakeoffRows.length}` : ""}
+          Takeoff{finishedTakeoffLineCount ? ` · ${finishedTakeoffLineCount}` : (agentTakeoffRows.length ? " · data" : "")}
         </button>
         <button onClick={() => setShowReport(true)} disabled={!conditions.length} title="Open the takeoff report — per-condition breakdown with waste, plus CSV / JSON export."
           style={{ padding: "8px 14px", border: "none", background: conditions.length ? "var(--ink)" : "var(--text-faint)", color: "var(--paper-bright)", cursor: conditions.length ? "pointer" : "default", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase" }}>Report</button>
@@ -10343,7 +10424,7 @@ export default function TakeoffCanvas() {
           onOpenChange={onMenuDepth}
           face={<span style={{ fontWeight: 700, letterSpacing: "0.08em" }}>⋯</span>}
           items={[
-            { id: "guide", label: "How OpenTakeoff works", shortcut: "?", onSelect: () => setGuideOpen(true) },
+            { id: "guide", label: "How takeoff works", shortcut: "?", onSelect: () => setGuideOpen(true) },
             { id: "theme", label: theme === "dark" ? "Light chrome" : "Dark chrome", onSelect: toggleTheme },
             { section: "Drawing style" },
             { id: "drawstyle", custom: drawStyleRow },
@@ -12149,7 +12230,7 @@ export default function TakeoffCanvas() {
             onOpenSettings={() => setShowAiSettings(true)}
             onClose={() => setAgentOpen(false)}
             onOpenTakeoff={() => setShowTakeoffData(true)}
-            takeoffRowCount={agentTakeoffRows.length}
+            takeoffRowCount={finishedTakeoffLineCount}
             runHistory={runHistory}
             historyOpen={runHistoryOpen}
             onToggleHistory={() => { if (!runHistoryOpen) refreshRunHistory(); setRunHistoryOpen((o) => !o); }}
@@ -12301,6 +12382,10 @@ export default function TakeoffCanvas() {
               column: row.column || row.field || "",
               table_title: row.table_title || "",
               value: String(row.value ?? row.qty ?? ""),
+              // One clear schedule-row paint — replace prior takeoff cites so
+              // the sheet is not covered in every MARK cell from the compile.
+              replaceTakeoffCite: row.kind === "row" || row.kind === "table" || !row.kind,
+              source: "takeoff_cite",
             });
             if (result?.error) {
               setCommitMsg(`Could not open cite: ${result.error}`);

@@ -71,6 +71,7 @@ export function makeTakeoffRow({
   column = null,
   bbox_px = null,
   table_bbox_px = null,
+  row_bbox_px = null,
   source_tool = null,
   note = null,
 } = {}) {
@@ -92,6 +93,7 @@ export function makeTakeoffRow({
     column: column || null,
     bbox_px: asBbox(bbox_px),
     table_bbox_px: asBbox(table_bbox_px),
+    row_bbox_px: asBbox(row_bbox_px),
     source_tool: source_tool || null,
     note: note != null ? String(note) : null,
   };
@@ -286,6 +288,7 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
           value: item.quantity ?? item.qty ?? 1, unit: item.unit || "EA",
           sheet_id: sheet, table_title: table, bbox_px: item.bbox_px || null,
           table_bbox_px: item.table_bbox_px || null,
+          row_bbox_px: item.row_bbox_px || null,
           source_tool, note: catName,
         }));
         rows.push(makeTakeoffRow({
@@ -293,7 +296,10 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
           sheet_id: sheet, table_title: table, source_tool,
         }));
         if (item.building) {
-          const bldgName = ({ A: "Air Ops", M: "MITRACON", T: "ATCT" })[item.building] || item.building;
+          // Set-agnostic label — never hardcode project building names.
+          const bldgName = /^[A-Z0-9]{1,3}$/i.test(String(item.building))
+            ? `Building ${String(item.building).toUpperCase()}`
+            : String(item.building);
           rows.push(makeTakeoffRow({
             workflow, runId, tag, field: "BUILDING", value: bldgName,
             sheet_id: sheet, table_title: table, column: "BUILDING", source_tool,
@@ -434,37 +440,56 @@ export function rowsFromAnswerMarkdown(text, meta = {}) {
 
 /**
  * Split a final agent answer into chat-facing prose vs data that belongs in
- * the Takeoff UI. Large markdown tables are removed from chat.
+ * the Takeoff UI. Markdown pipe tables are flattened to plain lines so
+ * answering values (TYPE, CFM, counts) stay visible in chat — dropping tables
+ * entirely made evidence-gate-passing answers lose their facts after strip.
+ * finishedLineCount: contractor Takeoff lines only (compile/sweep/summary) —
+ * scrap row counts must not advertise "written to the Takeoff panel".
  */
-export function splitConversationalAnswer(text, { rowCount = 0 } = {}) {
+export function splitConversationalAnswer(text, { rowCount = 0, finishedLineCount = 0 } = {}) {
   const raw = String(text || "").trim();
   if (!raw) return { chat: "", hadTables: false };
 
   const lines = raw.split(/\n/);
   const kept = [];
-  let inTable = false;
   let hadTables = false;
+  let tableHeaders = null;
+  const flushTableRow = (cells) => {
+    if (!tableHeaders || !cells.length) return;
+    if (cells.every((c) => /^:?-{3,}:?$/.test(c))) return;
+    // Header row — remember labels, don't emit yet.
+    if (tableHeaders === true) {
+      tableHeaders = cells;
+      return;
+    }
+    const parts = [];
+    for (let i = 0; i < cells.length; i++) {
+      const h = String(tableHeaders[i] || "").trim();
+      const v = String(cells[i] ?? "").trim();
+      if (!v) continue;
+      parts.push(h ? `${h}: ${v}` : v);
+    }
+    if (parts.length) kept.push(`- ${parts.join(" · ")}`);
+  };
   for (const line of lines) {
     const isTable = /^\s*\|/.test(line);
     if (isTable) {
       hadTables = true;
-      inTable = true;
+      const cells = line.split("|").slice(1, -1).map((c) => c.trim());
+      if (!tableHeaders) tableHeaders = true;
+      flushTableRow(cells);
       continue;
     }
-    if (inTable && /^\s*$/.test(line)) {
-      inTable = false;
-      continue;
-    }
-    inTable = false;
+    if (tableHeaders) tableHeaders = null;
     kept.push(line);
   }
   let chat = kept.join("\n").replace(/\n{3,}/g, "\n\n").trim();
   // Strip "Answer" header leftovers that only framed a table.
   chat = chat.replace(/^(?:Answer|Key points)\s*$/gim, "").trim();
 
-  if (hadTables || rowCount > 0) {
-    const n = rowCount || "the";
-    const note = `Structured takeoff data (${typeof n === "number" ? n : "see"} row${n === 1 ? "" : "s"}) was written to the Takeoff panel — open Takeoff to review and export.`;
+  const finished = Number(finishedLineCount) || 0;
+  if (finished > 0) {
+    const note = `Structured takeoff data (${finished} line${finished === 1 ? "" : "s"}) was written to the Takeoff panel — open Takeoff to review and export.`;
     chat = chat ? `${chat}\n\n${note}` : note;
   }
   return { chat: chat || raw, hadTables };
@@ -496,19 +521,22 @@ export function mergeTakeoffRows(existing, incoming) {
 const QTY_FIELDS = new Set([
   "installed_quantity", "quantity", "mark_count", "schedule_count", "project_total",
 ]);
-const SKIP_ATTR = new Set(["MARK", "TAG", "SYMBOL", "plan_tag", "plan_status", ...QTY_FIELDS]);
+const SKIP_ATTR = new Set([
+  "MARK", "TAG", "SYMBOL", "VALVE MARK", "VALVE_MARK", "plan_tag", "plan_status",
+  ...QTY_FIELDS,
+]);
 
 /** Preferred left-to-right order when a field appears — never forces empty columns.
  * Columns only show when at least one line in the (family) group has that field. */
 export const TAKEOFF_SPEC_ORDER = [
-  // Control-valve contractor columns (served equipment + ONE Cv for that valve)
-  "Served equipment", "UNIT MARK", "Service", "SERVICE",
+  // Control-valve contractor columns (Unit Mark / served equipment + ONE Cv)
+  "Unit Mark", "Served equipment", "UNIT MARK", "Service", "SERVICE",
   "Size", "VALVE SIZE (IN)", "VALVE SIZE", "PIPE SIZE",
   "GPM", "FLOWRATE (GPM)", "FLOW", "FLOW (GPM)", "MAX GPM", "MIN GPM",
   "Cv", "CV", "CV VALUE",
   "Configuration", "CONFIGURATION", "Notes", "NOTES",
-  // Identity / product / duty
-  "TYPE", "DESCRIPTION", "BUILDING", "PATTERN", "STYLE", "APPLICATION", "DUTY",
+  // Identity / product / duty — BUILDING is a section key, not a trailing col
+  "TYPE", "DESCRIPTION", "PATTERN", "STYLE", "APPLICATION", "DUTY",
   "SIZE", "NOMINAL SIZE", "FRAME SIZE",
   // Air-side / terminals
   "CFM", "SUPPLY CFM", "RETURN CFM", "EXHAUST CFM", "OA CFM", "MAX CFM", "MIN CFM",
@@ -593,16 +621,20 @@ export function lineSpecCite(line, col) {
   return lineLeadCite(line, "tag");
 }
 
-/** Cite for a lead cell (tag / qty) — identity MARK on that equipment's schedule row. */
+/** Cite for a lead cell (tag / qty) — whole schedule ROW when available. */
 export function lineLeadCite(line, key) {
-  if (!line?.bbox_px || !line?.sheet_id) return null;
-  if (key !== "tag" && key !== "qty") return null;
+  if (!line?.sheet_id) return null;
+  if (key !== "tag" && key !== "qty" && key !== "unit_mark") return null;
+  const bbox = line.row_bbox_px || line.bbox_px;
+  if (!bbox) return null;
   return {
     sheet_id: line.sheet_id,
-    bbox_px: line.bbox_px,
-    column: "MARK",
-    field: "MARK",
-    value: line.tag,
+    bbox_px: bbox,
+    column: key === "unit_mark" ? "UNIT MARK" : "MARK",
+    field: key === "unit_mark" ? "UNIT MARK" : "MARK",
+    value: key === "unit_mark"
+      ? (line.unit_mark || lineSpecValue(line, "Unit Mark") || line.tag)
+      : line.tag,
     tag: line.tag,
     table_title: line.table_title,
     kind: "row",
@@ -633,8 +665,8 @@ export function familyTableCite(group) {
  * Points lists skip Manufacturer/Model; valve takeoffs keep them when present.
  */
 const tagLabelFor = (lines) => {
-  const fams = new Set((lines || []).map((l) => l.family || l.table_title || ""));
-  // Mixed takeoffs keep a generic Tag header; a single points list uses Point.
+  const fams = new Set((lines || []).map((l) => l.table_title || l.family || ""));
+  if ([...fams].some((f) => /CONTROL\s+VALVE/i.test(f || ""))) return "Valve Mark";
   if (fams.size === 1 && /POINT/i.test([...fams][0] || "")) return "Point";
   return "Tag";
 };
@@ -643,9 +675,14 @@ export function takeoffLeadColumns(lines = []) {
   const list = lines || [];
   const has = (fn) => list.some(fn);
   const cols = [{ key: "tag", label: tagLabelFor(list) }];
+  // Valve / hydronic: Unit Mark (served equipment) is the primary verifiable join.
+  if (has((l) => l.unit_mark || lineSpecValue(l, "Unit Mark") || lineSpecValue(l, "Served equipment"))) {
+    cols.push({ key: "unit_mark", label: "Unit Mark" });
+  }
   if (has((l) => {
     const t = String(l.type || "").trim();
-    return t && t !== String(l.tag || "").trim();
+    return t && t !== String(l.tag || "").trim()
+      && !/^(CHW|HHW)$/i.test(t); // service is in the section title for valves
   })) {
     cols.push({ key: "type", label: "Type" });
   }
@@ -689,7 +726,9 @@ export function takeoffSpecColumns(lines = [], opts = {}) {
   return keys;
 }
 
-/** Group compiled lines by schedule/family (each family gets its own column set). */
+/** Group compiled lines by schedule/family (each family gets its own column set).
+ * Multi-building valve (and similar) takeoffs section as Building · Schedule so
+ * estimators scan building → CHW/HHW, not a flat CHW-then-HHW dump. */
 export function groupTakeoffByFamily(lines = [], opts = {}) {
   const map = new Map();
   for (const line of lines) {
@@ -698,24 +737,80 @@ export function groupTakeoffByFamily(lines = [], opts = {}) {
     map.get(key).push(line);
   }
   const uiMax = opts.uiSpecMax ?? null;
-  return [...map.entries()].map(([family, group]) => {
-    const allSpecs = takeoffSpecColumns(group);
+  const groups = [...map.entries()].map(([family, group]) => {
+    const sorted = [...group].sort((a, b) => {
+      const sheetA = sheetSortKey(a.sheet_id || a.schedule_sheet_id);
+      const sheetB = sheetSortKey(b.sheet_id || b.schedule_sheet_id);
+      if (sheetA !== sheetB) return sheetA - sheetB;
+      const at = a.tag || a.type || "";
+      const bt = b.tag || b.type || "";
+      return at.localeCompare(bt, undefined, { numeric: true, sensitivity: "base" });
+    });
+    const allSpecs = takeoffSpecColumns(sorted).filter((k) => {
+      const nk = normKey(k);
+      // Unit Mark is a lead column for valves — don't also trail it in specs.
+      if (nk === "UNIT MARK" || nk === "SERVED EQUIPMENT") {
+        return !sorted.some((l) => l.unit_mark || lineSpecValue(l, "Unit Mark") || lineSpecValue(l, "Served equipment"));
+      }
+      if (nk === "SERVICE" || nk === "BUILDING") return false;
+      return true;
+    });
     return {
       family,
-      lines: group,
-      leadColumns: takeoffLeadColumns(group),
+      lines: sorted,
+      leadColumns: takeoffLeadColumns(sorted),
       specColumns: uiMax != null ? allSpecs.slice(0, uiMax) : allSpecs,
       specTotal: allSpecs.length,
-      qtyTotal: group.reduce((n, l) => n + (typeof l.qty === "number" && (l.unit || "EA") === "EA" ? l.qty : 0), 0),
-      tableCite: familyTableCite({ family, lines: group }),
+      qtyTotal: sorted.reduce((n, l) => n + (typeof l.qty === "number" && (l.unit || "EA") === "EA" ? l.qty : 0), 0),
+      tableCite: familyTableCite({ family, lines: sorted }),
+      building: sorted.find((l) => l.building)?.building || null,
     };
   });
+  groups.sort((a, b) => {
+    const ba = buildingSortKey(a.building || a.family);
+    const bb = buildingSortKey(b.building || b.family);
+    if (ba !== bb) return ba.localeCompare(bb, undefined, { numeric: true });
+    const sa = serviceSortKey(a.family);
+    const sb = serviceSortKey(b.family);
+    if (sa !== sb) return sa - sb;
+    return String(a.family).localeCompare(String(b.family));
+  });
+  return groups;
+}
+
+function sheetSortKey(sheetId) {
+  const s = String(sheetId || "");
+  const m = s.match(/#(\d+)$/);
+  if (m) return Number(m[1]);
+  return 0;
+}
+
+function buildingSortKey(familyOrBuilding) {
+  const s = String(familyOrBuilding || "");
+  const m = s.match(/^Building\s+([A-Z0-9]+)/i);
+  if (m) return `0-${m[1].toUpperCase()}`;
+  if (/^Building\b/i.test(s)) return `0-${s}`;
+  return `1-${s}`;
+}
+
+function serviceSortKey(family) {
+  const s = String(family || "").toUpperCase();
+  if (/\bCHW\b/.test(s)) return 0;
+  if (/\bHHW\b/.test(s)) return 1;
+  if (/\bBYPASS\b/.test(s)) return 2;
+  return 3;
 }
 
 /** Cell value for a lead column key. */
 export function lineLeadValue(line, key) {
   if (!line) return "";
   if (key === "tag") return line.tag || "";
+  if (key === "unit_mark") {
+    return line.unit_mark
+      || lineSpecValue(line, "Unit Mark")
+      || lineSpecValue(line, "Served equipment")
+      || "";
+  }
   if (key === "type") return line.type || "";
   if (key === "qty") return line.qty ?? "";
   if (key === "unit") return line.unit || "";
@@ -734,6 +829,19 @@ function takeoffLineKey(tag, tableTitle, field) {
 }
 
 /**
+ * Tools that seed contractor finished-takeoff lines.
+ * query_table / answer_table / count_marks scrap stays Workflow data only —
+ * never invents Takeoff-tab lines (GOAL: Agent scrap ≠ Takeoff).
+ */
+export function isFinishedTakeoffSource(sourceTool) {
+  const t = String(sourceTool || "");
+  return t === "compile_corpus_takeoff"
+    || t === "takeoff_summary"
+    || t === "project_takeoff"
+    || t === "sweep_schedule_row";
+}
+
+/**
  * Compile EAV workflow rows into a real equipment takeoff:
  * one line per tag (+ schedule when marks repeat across lists) with qty +
  * technical schedule columns (CFM, MBH, kW, …).
@@ -741,6 +849,10 @@ function takeoffLineKey(tag, tableTitle, field) {
  * When a corpus compile (`compile_corpus_takeoff`) is present, the Takeoff tab
  * is ONLY those finished line items (396 / 122) — spot-cite scrap may enrich
  * attrs on those tags but must not invent extra tags or double EA.
+ *
+ * Without a finished-takeoff seed (compile / project_takeoff / takeoff_summary /
+ * sweep_schedule_row), return no Takeoff lines — query_table crawls and answer
+ * markdown tables remain Workflow data only.
  *
  * Identity is tag + schedule title so repeating BAS marks (AI1 on DOAH vs AHU
  * lists) stay separate rows; HVAC tags stay unique via their schedule name.
@@ -753,15 +865,31 @@ export function compileAgentTakeoff(rows = []) {
     && row.tag
   ));
   const corpusLocked = compileQtyRows.length > 0;
+  const finishedSeedRows = corpusLocked
+    ? compileQtyRows
+    : all.filter((row) => (
+      isFinishedTakeoffSource(row?.source_tool) && row?.tag
+    ));
+  // Scrap-only Agent runs (FCU building splits, cite crawls, …) must not mint
+  // a fake contractor takeoff from query_table / answer_table EAV.
+  if (!finishedSeedRows.length) return [];
+
   const corpusQtyTags = new Set(
     compileQtyRows.map((row) => String(row.tag).trim().toUpperCase()),
+  );
+  const finishedTags = new Set(
+    finishedSeedRows.map((row) => String(row.tag).trim().toUpperCase()).filter(Boolean),
   );
   const scoped = corpusLocked
     ? all.filter((row) => {
       if (!row?.tag) return row?.source_tool === "compile_corpus_takeoff";
       return corpusQtyTags.has(String(row.tag).trim().toUpperCase());
     })
-    : all;
+    : all.filter((row) => {
+      if (isFinishedTakeoffSource(row?.source_tool)) return true;
+      if (!row?.tag) return false;
+      return finishedTags.has(String(row.tag).trim().toUpperCase());
+    });
 
   const groups = new Map();
   const groupsByTag = new Map(); // UPPER tag → [group,…] for enrichment merge
@@ -786,6 +914,8 @@ export function compileAgentTakeoff(rows = []) {
         bbox_px: null,
         plan_bbox_px: null,
         table_bbox_px: null,
+        row_bbox_px: null,
+        building: null,
         fromCompile: false,
       };
       groups.set(key, g);
@@ -811,18 +941,19 @@ export function compileAgentTakeoff(rows = []) {
     return null;
   };
 
-  // Seed locked lines from compile quantity rows so identity = finished takeoff.
-  if (corpusLocked) {
-    for (const row of compileQtyRows) {
-      resolveGroup(row, { create: true });
-    }
+  // Seed finished lines first so identity = contractor takeoff (not scrap).
+  for (const row of finishedSeedRows) {
+    resolveGroup(row, { create: true });
   }
 
   for (const row of scoped) {
     const isCompileQty = row?.source_tool === "compile_corpus_takeoff"
       && String(row.field || "") === "quantity"
       && row.tag;
-    const g = resolveGroup(row, { create: !corpusLocked || isCompileQty });
+    const isFinishedSeed = isFinishedTakeoffSource(row?.source_tool) && row.tag;
+    const g = resolveGroup(row, {
+      create: corpusLocked ? isCompileQty : isFinishedSeed,
+    });
     if (!g) continue;
     const tag = row.tag ? String(row.tag).trim() : "";
     if (!g.tag && tag) g.tag = tag;
@@ -836,6 +967,9 @@ export function compileAgentTakeoff(rows = []) {
     }
     if (row.table_bbox_px && (!g.table_bbox_px || row.source_tool === "compile_corpus_takeoff")) {
       g.table_bbox_px = row.table_bbox_px;
+    }
+    if (row.row_bbox_px && (!g.row_bbox_px || row.source_tool === "compile_corpus_takeoff")) {
+      g.row_bbox_px = row.row_bbox_px;
     }
     if (row.source_tool === "compile_corpus_takeoff") g.fromCompile = true;
     const field = String(row.field || "");
@@ -860,6 +994,9 @@ export function compileAgentTakeoff(rows = []) {
       }
       if (row.bbox_px && (row.source_tool === "compile_corpus_takeoff" || !g.bbox_px)) {
         g.bbox_px = row.bbox_px;
+      }
+      if (row.row_bbox_px && (row.source_tool === "compile_corpus_takeoff" || !g.row_bbox_px)) {
+        g.row_bbox_px = row.row_bbox_px;
       }
     } else if (field === "mark_count" && g.qty_kind !== "installed" && g.qty_kind !== "scheduled") {
       const n = asNumber(row.value);
@@ -950,6 +1087,9 @@ export function compileAgentTakeoff(rows = []) {
     if (!typeLabel) typeLabel = g.tag || "Item";
     const typeKeyNorm = typePick && typeLabel !== g.tag ? normKey(typePick.key) : null;
 
+    const buildingAttr = pickAttr(g.attrs, ["BUILDING"]);
+    const building = buildingAttr?.value != null ? String(buildingAttr.value) : null;
+
     const specs = {};
     const spec_cites = {};
     const valveSched = /CONTROL\s+VALVE\s+SCHEDULE/i.test(g.table_title || "")
@@ -958,24 +1098,37 @@ export function compileAgentTakeoff(rows = []) {
       if (k.endsWith("_unit")) continue;
       const nk = normKey(k);
       // Manufacturer/model live in dedicated columns; category codes stay out of specs.
-      if (["MANUFACTURER", "MFR", "MODEL", "MANUFACTURER/MODEL", "MANUFACTURER / MODEL", "EQUIPMENT_TYPE"].includes(nk)) continue;
+      if (["MANUFACTURER", "MFR", "MODEL", "MANUFACTURER/MODEL", "MANUFACTURER / MODEL", "EQUIPMENT_TYPE", "BUILDING"].includes(nk)) continue;
       if (typeKeyNorm && nk === typeKeyNorm) continue;
       // Valve schedules have ONE Cv column. Dual "CHW CV" + "HHW CV" on the same
       // row is agent markdown mash — never surface it on a contractor takeoff.
-      if (valveSched && /^(CHW\s*CV|HHW\s*CV|MARK\s*NOTES)$/i.test(nk)) continue;
+      if (valveSched && /^(CHW\s*CV|HHW\s*CV|MARK\s*NOTES|VALVE\s*MARK)$/i.test(nk)) continue;
       // "Serves X" description duplicates Served equipment — drop the filler.
       if (valveSched && nk === "DESCRIPTION" && /^Serves\s+/i.test(String(v))) continue;
+      // Service is carried in the Building · Schedule section title for valves.
+      if (valveSched && nk === "SERVICE") continue;
       specs[k] = v;
       if (g.attrCites[k]?.bbox_px) {
         spec_cites[k] = g.attrCites[k];
       }
     }
 
-    const family = familyFromSchedule(g.table_title, g.tag);
+    const unitMark = pickAttr(g.attrs, ["Unit Mark", "UNIT MARK", "Served equipment"])?.value != null
+      ? String(pickAttr(g.attrs, ["Unit Mark", "UNIT MARK", "Served equipment"]).value)
+      : null;
+
+    const scheduleTitle = familyFromSchedule(g.table_title, g.tag);
+    // Modular sections: Building · schedule when a building code is known
+    // (multi-building valve sets). Otherwise keep the schedule title alone.
+    const family = (building && /CONTROL\s+VALVE/i.test(scheduleTitle || ""))
+      ? `${building} · ${scheduleTitle}`
+      : scheduleTitle;
     lines.push({
       id: g.id,
       tag: g.tag,
       family,
+      building,
+      unit_mark: unitMark,
       type: typeLabel,
       manufacturer,
       model: modelVal,
@@ -991,6 +1144,7 @@ export function compileAgentTakeoff(rows = []) {
       notes: g.notes.join("; "),
       workflow: [...g.workflows].join(" · "),
       bbox_px: g.plan_bbox_px || g.bbox_px,
+      row_bbox_px: g.row_bbox_px || null,
       table_bbox_px: g.table_bbox_px || null,
       source_ids: g.sourceRows.map((r) => r.id),
       source_count: g.sourceRows.length,
@@ -1006,8 +1160,15 @@ export function compileAgentTakeoff(rows = []) {
   }
 
   lines.sort((a, b) => {
-    const fam = a.family.localeCompare(b.family);
-    if (fam) return fam;
+    const ba = buildingSortKey(a.building || a.family);
+    const bb = buildingSortKey(b.building || b.family);
+    if (ba !== bb) return ba.localeCompare(bb, undefined, { numeric: true });
+    const sa = serviceSortKey(a.table_title || a.family);
+    const sb = serviceSortKey(b.table_title || b.family);
+    if (sa !== sb) return sa - sb;
+    const sheetA = sheetSortKey(a.sheet_id || a.schedule_sheet_id);
+    const sheetB = sheetSortKey(b.sheet_id || b.schedule_sheet_id);
+    if (sheetA !== sheetB) return sheetA - sheetB;
     const at = a.tag || a.type || "";
     const bt = b.tag || b.type || "";
     return at.localeCompare(bt, undefined, { numeric: true, sensitivity: "base" });
@@ -1065,12 +1226,12 @@ export function takeoffToCsv(rows) {
   return workflowDataToCsv(rows);
 }
 
-export function downloadTakeoffCsv(linesOrRows, filename = "opentakeoff-takeoff.csv", { mode = "compiled" } = {}) {
+export function downloadTakeoffCsv(linesOrRows, filename = "takeoff.csv", { mode = "compiled" } = {}) {
   const text = mode === "workflow" ? workflowDataToCsv(linesOrRows) : compiledTakeoffToCsv(linesOrRows);
   downloadText(filename, text, "text/csv;charset=utf-8");
 }
 
-export async function downloadTakeoffXlsx(linesOrRows, filename = "opentakeoff-takeoff.xlsx", { mode = "compiled" } = {}) {
+export async function downloadTakeoffXlsx(linesOrRows, filename = "takeoff.xlsx", { mode = "compiled" } = {}) {
   let sheets;
   if (mode === "workflow") {
     sheets = [{
@@ -1129,7 +1290,7 @@ export async function downloadTakeoffXlsx(linesOrRows, filename = "opentakeoff-t
 
 /** Build takeoff PDF bytes. Compiled mode: one table per family with that family's columns. */
 export async function buildTakeoffPdfBytes(linesOrRows, {
-  title = "OpenTakeoff — Takeoff",
+  title = "Takeoff",
   projectName = "",
   mode = "compiled",
 } = {}) {
@@ -1235,8 +1396,8 @@ export async function buildTakeoffPdfBytes(linesOrRows, {
 }
 
 export async function downloadTakeoffPdf(linesOrRows, {
-  filename = "opentakeoff-takeoff.pdf",
-  title = "OpenTakeoff — Takeoff",
+  filename = "takeoff.pdf",
+  title = "Takeoff",
   projectName = "",
   mode = "compiled",
 } = {}) {

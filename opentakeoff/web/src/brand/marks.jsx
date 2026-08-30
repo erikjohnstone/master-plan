@@ -1,5 +1,4 @@
-// OpenTakeoff brand marks. Neutral, paper/ink/cobalt — the same token palette as
-// the rest of the app. (No relation to any private branding.)
+// Neutral mark glyphs for the canvas chrome (no product wordmark).
 
 export function Wordmark({ size = 96, color = "var(--ink)", weight = 800, letterSpacing = "-0.03em" }) {
   return (
@@ -13,11 +12,10 @@ export function Wordmark({ size = 96, color = "var(--ink)", weight = 800, letter
         color,
         display: "inline-flex",
         alignItems: "baseline",
-        gap: "0.12em",
         fontOpticalSizing: "auto",
       }}
     >
-      open<span style={{ fontStyle: "italic", color: "var(--cobalt)" }}>takeoff</span>
+      Takeoff
     </span>
   );
 }

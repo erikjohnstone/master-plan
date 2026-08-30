@@ -215,7 +215,7 @@ export default function TakeoffDataPanel({
       else if (kind === "xlsx") await downloadTakeoffXlsx(payload, undefined, { mode });
       else if (kind === "pdf") {
         await downloadTakeoffPdf(payload, {
-          title: mode === "workflow" ? "OpenTakeoff — Workflow data" : "OpenTakeoff — Takeoff",
+          title: mode === "workflow" ? "Workflow data" : "Takeoff",
           projectName,
           mode,
         });
@@ -303,7 +303,7 @@ export default function TakeoffDataPanel({
             </div>
             <div style={{ fontSize: 12.5, color: "var(--ink-muted)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
               {tab === "takeoff"
-                ? "Finished quantity takeoff — click a Tag to open that schedule row on the drawings; click a schedule name to open the whole table. Spec fields for a tag share that row."
+                ? "Finished quantity takeoff — sections are Building · schedule when the set splits by building. Click Valve Mark / Unit Mark / Sheet to paint that whole schedule row on the drawings (one cite at a time)."
                 : "Workflow audit trail — every field the Agent gathered. Does not change the finished Takeoff totals."}
             </div>
           </div>
@@ -462,17 +462,20 @@ export default function TakeoffDataPanel({
                               {lead.map((c, i) => {
                                 const val = lineLeadValue(line, c.key);
                                 const isTag = c.key === "tag";
+                                const isUnit = c.key === "unit_mark";
                                 const isQty = c.key === "qty";
-                                // Tag (and qty) jump to the schedule ROW — not each scattered cell.
-                                const cite = isTag || isQty ? lineLeadCite(line, "tag") : null;
+                                // Valve Mark / Unit Mark / qty jump to the whole schedule ROW.
+                                const cite = (isTag || isQty || isUnit)
+                                  ? lineLeadCite(line, isUnit ? "unit_mark" : "tag")
+                                  : null;
                                 return (
                                   <td
                                     key={c.key}
                                     style={{
                                       ...td,
-                                      fontSize: isTag ? 12 : 13,
+                                      fontSize: isTag || isUnit ? 12 : 13,
                                       textAlign: isQty ? "right" : "left",
-                                      whiteSpace: isTag ? "nowrap" : undefined,
+                                      whiteSpace: isTag || isUnit ? "nowrap" : undefined,
                                       position: i === 0 ? "sticky" : undefined,
                                       left: i === 0 ? 0 : undefined,
                                       background: i === 0 ? "var(--paper-bright)" : undefined,
@@ -484,8 +487,8 @@ export default function TakeoffDataPanel({
                                       cite={cite}
                                       onOpenCitation={onOpenCitation}
                                       align={isQty ? "right" : "left"}
-                                      mono={isTag}
-                                      weight={isTag || isQty ? 650 : 400}
+                                      mono={isTag || isUnit}
+                                      weight={isTag || isQty || isUnit ? 650 : 400}
                                     />
                                   </td>
                                 );
@@ -522,16 +525,8 @@ export default function TakeoffDataPanel({
                                 </td>
                               ) : null}
                               <td style={{ ...td, whiteSpace: "nowrap" }}>
-                                {typeof onOpenCitation === "function" && line.sheet_id && line.bbox_px && (
-                                  <button type="button" onClick={() => onOpenCitation({
-                                    sheet_id: line.sheet_id,
-                                    bbox_px: line.bbox_px,
-                                    tag: line.tag,
-                                    column: "MARK",
-                                    field: "MARK",
-                                    value: line.tag,
-                                    table_title: line.table_title,
-                                  })}
+                                {typeof onOpenCitation === "function" && line.sheet_id && (line.row_bbox_px || line.bbox_px) && (
+                                  <button type="button" onClick={() => onOpenCitation(lineLeadCite(line, "tag"))}
                                     style={{ ...btnStyle, padding: "4px 8px", fontSize: 11 }}>
                                     View
                                   </button>

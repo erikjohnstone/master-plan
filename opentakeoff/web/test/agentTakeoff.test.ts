@@ -85,7 +85,26 @@ test("rowsFromToolResult: sweep_schedule_row installed qty + attributes", () => 
   assert.ok(!rows.some((r) => r.field === "MARK"));
 });
 
-test("compileAgentTakeoff collapses EAV rows into line items", () => {
+test("compileAgentTakeoff: query_table / answer scrap alone → no Takeoff lines", () => {
+  const scrap = [
+    ...rowsFromToolResult("query_table", { title: "FAN COIL UNIT SCHEDULE" }, {
+      count: 42,
+      matches: [
+        {
+          sheet: "m#3", title: "FAN COIL UNIT SCHEDULE",
+          row: { key: "FCU-A1", all_cells: { TYPE: { text: "VERTICAL CABINET" }, CFM: { text: "150" } } },
+        },
+      ],
+    }, { workflow: "fcu" }),
+    makeTakeoffRow({
+      tag: "FCU-T1", field: "CFM", value: "230", source_tool: "answer_table",
+      table_title: "FAN COIL UNIT SCHEDULE",
+    }),
+  ];
+  assert.equal(compileAgentTakeoff(scrap).length, 0);
+});
+
+test("compileAgentTakeoff collapses sweep EAV into installed line items", () => {
   const rows = [
     ...rowsFromToolResult("sweep_schedule_row", { tag: "VAV-1" }, {
       tag: "VAV-1",
@@ -97,17 +116,20 @@ test("compileAgentTakeoff collapses EAV rows into line items", () => {
         cells: { CFM: "2170", MANUFACTURER: "TRANE / VCEF", MARK: "VAV-1" },
       },
     }, { workflow: "vav" }),
+    // Scrap for a different tag must not mint a Takeoff line.
     makeTakeoffRow({
       tag: "EF-2", field: "plan_status", value: "refused",
       sheet_id: "mech.pdf#6", table_title: "FAN SCHEDULE", workflow: "fans",
+      source_tool: "query_table",
     }),
     makeTakeoffRow({
       tag: "EF-2", field: "CFM", value: 400, unit: "CFM",
       sheet_id: "mech.pdf#6", table_title: "FAN SCHEDULE", workflow: "fans",
+      source_tool: "query_table",
     }),
   ];
   const lines = compileAgentTakeoff(rows);
-  assert.equal(lines.length, 2);
+  assert.equal(lines.length, 1);
   const vav = lines.find((l) => l.tag === "VAV-1");
   assert.ok(vav);
   assert.equal(vav.qty, 1);
@@ -116,11 +138,7 @@ test("compileAgentTakeoff collapses EAV rows into line items", () => {
   assert.match(vav.description, /TRANE/);
   assert.match(vav.attrs_text, /CFM 2170/);
   assert.equal(vav.sheet_id, "mech.pdf#2");
-  const ef = lines.find((l) => l.tag === "EF-2");
-  assert.ok(ef);
-  assert.equal(ef.qty, 1);
-  assert.equal(ef.qty_kind, "scheduled");
-  assert.match(ef.notes, /refused/i);
+  assert.ok(!lines.some((l) => l.tag === "EF-2"), "query_table scrap must not become Takeoff");
   const csv = compiledTakeoffToCsv(lines);
   assert.match(csv, /^Tag,/);
   assert.match(csv, /VAV-1/);
@@ -130,36 +148,59 @@ test("compileAgentTakeoff collapses EAV rows into line items", () => {
 test("columns adapt per family: valves vs VAV vs points", () => {
   const rows = [
     makeTakeoffRow({
+      tag: "VAV-1", field: "quantity", value: 1, unit: "EA",
+      table_title: "AIR TERMINAL BOX SCHEDULE", sheet_id: "m#6",
+      source_tool: "compile_corpus_takeoff",
+    }),
+    makeTakeoffRow({
       tag: "VAV-1", field: "CFM", value: "2170",
       table_title: "AIR TERMINAL BOX SCHEDULE", sheet_id: "m#6",
+      source_tool: "compile_corpus_takeoff",
     }),
     makeTakeoffRow({
       tag: "VAV-1", field: "MBH", value: "41",
       table_title: "AIR TERMINAL BOX SCHEDULE", sheet_id: "m#6",
+      source_tool: "compile_corpus_takeoff",
+    }),
+    makeTakeoffRow({
+      tag: "CV-3", field: "quantity", value: 1, unit: "EA",
+      table_title: "CONTROL VALVE SCHEDULE", sheet_id: "m#8",
+      source_tool: "compile_corpus_takeoff",
     }),
     makeTakeoffRow({
       tag: "CV-3", field: "GPM", value: "18",
       table_title: "CONTROL VALVE SCHEDULE", sheet_id: "m#8",
+      source_tool: "compile_corpus_takeoff",
     }),
     makeTakeoffRow({
       tag: "CV-3", field: "Cv", value: "5.2",
       table_title: "CONTROL VALVE SCHEDULE", sheet_id: "m#8",
+      source_tool: "compile_corpus_takeoff",
     }),
     makeTakeoffRow({
       tag: "CV-3", field: "PIPE SIZE", value: "1-1/2\"",
       table_title: "CONTROL VALVE SCHEDULE", sheet_id: "m#8",
+      source_tool: "compile_corpus_takeoff",
+    }),
+    makeTakeoffRow({
+      tag: "AHU-1 SA TEMP", field: "quantity", value: 1, unit: "EA",
+      table_title: "AHU-1 POINTS LIST", sheet_id: "c#2",
+      source_tool: "compile_corpus_takeoff",
     }),
     makeTakeoffRow({
       tag: "AHU-1 SA TEMP", field: "POINT TYPE", value: "AI",
       table_title: "AHU-1 POINTS LIST", sheet_id: "c#2",
+      source_tool: "compile_corpus_takeoff",
     }),
     makeTakeoffRow({
       tag: "AHU-1 SA TEMP", field: "SIGNAL", value: "4-20mA",
       table_title: "AHU-1 POINTS LIST", sheet_id: "c#2",
+      source_tool: "compile_corpus_takeoff",
     }),
     makeTakeoffRow({
       tag: "AHU-1 SA TEMP", field: "CONTROLLER", value: "UC600-1",
       table_title: "AHU-1 POINTS LIST", sheet_id: "c#2",
+      source_tool: "compile_corpus_takeoff",
     }),
   ];
   const lines = compileAgentTakeoff(rows);
@@ -202,11 +243,15 @@ test("rowsFromAnswerMarkdown + splitConversationalAnswer strip tables from chat"
   assert.equal(rows[0].tag, "EF-1");
   assert.equal(rows[0].field, "CFM");
   assert.equal(rows[0].value, "165");
-  const { chat, hadTables } = splitConversationalAnswer(md, { rowCount: rows.length });
+  const { chat, hadTables } = splitConversationalAnswer(md, { rowCount: rows.length, finishedLineCount: 0 });
   assert.equal(hadTables, true);
   assert.match(chat, /Found the fan schedule/);
-  assert.match(chat, /Takeoff panel/);
+  // Pipe tables flatten to plain lines so answering values stay visible.
+  assert.match(chat, /EF-1/);
+  assert.match(chat, /165/);
   assert.doesNotMatch(chat, /\| Tag \|/);
+  const withFinished = splitConversationalAnswer(md, { rowCount: rows.length, finishedLineCount: 2 });
+  assert.match(withFinished.chat, /2 lines.*Takeoff panel/i);
 });
 
 test("rowsFromCompiledTakeoff: HVAC categories → EAV rows for Takeoff panel", () => {
@@ -366,7 +411,17 @@ test("rowsFromToolResult: query_table title {text,bbox} becomes plain string", (
   }, { workflow: "fans" });
   assert.ok(rows.every((r) => typeof r.table_title === "string"));
   assert.equal(rows[0].table_title, "FAN SCHEDULE");
-  const lines = compileAgentTakeoff(rows);
+  // query_table scrap alone is Workflow data — not a finished Takeoff.
+  assert.equal(compileAgentTakeoff(rows).length, 0);
+  const seeded = [
+    makeTakeoffRow({
+      tag: "EF-1", field: "quantity", value: 1, unit: "EA",
+      table_title: "FAN SCHEDULE", sheet_id: "mech.pdf#6",
+      source_tool: "compile_corpus_takeoff",
+    }),
+    ...rows,
+  ];
+  const lines = compileAgentTakeoff(seeded);
   const groups = groupTakeoffByFamily(lines);
   assert.equal(groups[0].family, "FAN SCHEDULE");
   assert.equal(typeof groups[0].family, "string");
@@ -390,11 +445,23 @@ test("takeoffToCsv emits workflow EAV header + escaped rows", () => {
 
 test("xlsx + pdf export builders produce non-empty artifacts", async () => {
   const rows = [
-    makeTakeoffRow({ tag: "VAV-1", field: "CFM", value: 2170, sheet_id: "mech.pdf#6", table_title: "AIR TERMINAL" }),
-    makeTakeoffRow({ tag: "VAV-1", field: "installed_quantity", value: 1, unit: "EA", sheet_id: "mech.pdf#2", table_title: "AIR TERMINAL" }),
-    makeTakeoffRow({ tag: "EF-2", field: "plan_status", value: "refused", sheet_id: "mech.pdf#6", table_title: "FAN SCHEDULE" }),
+    makeTakeoffRow({
+      tag: "VAV-1", field: "installed_quantity", value: 1, unit: "EA",
+      sheet_id: "mech.pdf#2", table_title: "AIR TERMINAL",
+      source_tool: "sweep_schedule_row",
+    }),
+    makeTakeoffRow({
+      tag: "VAV-1", field: "CFM", value: 2170, sheet_id: "mech.pdf#6", table_title: "AIR TERMINAL",
+      source_tool: "sweep_schedule_row",
+    }),
+    makeTakeoffRow({
+      tag: "EF-2", field: "plan_status", value: "refused",
+      sheet_id: "mech.pdf#6", table_title: "FAN SCHEDULE",
+      source_tool: "query_table",
+    }),
   ];
   const lines = compileAgentTakeoff(rows);
+  assert.equal(lines.length, 1);
   assert.ok(takeoffSpecColumns(lines).includes("CFM") || takeoffSpecColumns(lines).some((c) => /CFM/i.test(c)));
   const sheetRows = [
     ["Tag", "Type", "Qty"],
@@ -430,6 +497,7 @@ test("normalizeControlValveCells: one Cv + served equipment, never dual CHW/HHW 
     table_bbox_px: [10, 20, 30, 40],
   }, "HHW");
   assert.equal(cells["Served equipment"]?.text, "AHU-A1");
+  assert.equal(cells["Unit Mark"]?.text, "AHU-A1");
   assert.equal(cells.Service?.text, "HHW");
   assert.equal(cells.Cv?.text, "0.5");
   assert.equal(cells.GPM?.text, "2.0");
@@ -481,10 +549,82 @@ test("control_valves compile → panel lines with cites; dual-Cv scrap dropped",
   assert.equal(compiled.kind, "control_valves");
   assert.equal(compiled.takeoff_id, "T-VALVE-01");
   assert.equal(compiled.totals.items, 2);
+  assert.equal(compiled.service_filter, null);
   assert.equal(compiled.categories.HHW_CONTROL_VALVE.count, 1);
   assert.equal(compiled.categories.CHW_CONTROL_VALVE.count, 1);
   assert.equal(compiled.categories.HHW_CONTROL_VALVE.items[0].cells.Cv.text, "0.5");
   assert.equal(compiled.categories.HHW_CONTROL_VALVE.items[0].cells["Served equipment"].text, "AHU-A1");
+
+  const chwOnly = compileControlValveTakeoff([], {
+    tables: [
+      {
+        sheet: "mech.pdf#44",
+        title: { text: "HHW CONTROL VALVE SCHEDULE", bbox: [0, 0, 100, 10] },
+        rows: [{
+          key: "CV-AHU-A1-HHW",
+          cells: {
+            "VALVE MARK": { text: "CV-AHU-A1-HHW", bbox: [1, 2, 3, 4] },
+            "UNIT MARK": { text: "AHU-A1", bbox: null },
+            CV: { text: "0.5", bbox: null },
+          },
+          identity: { bbox: [1, 2, 3, 4] },
+        }],
+      },
+      {
+        sheet: "mech.pdf#44",
+        title: { text: "CHW CONTROL VALVE SCHEDULE", bbox: [0, 50, 100, 60] },
+        rows: [{
+          key: "CV-AHU-A1-CHW",
+          cells: {
+            "VALVE MARK": { text: "CV-AHU-A1-CHW", bbox: [11, 12, 13, 14] },
+            "UNIT MARK": { text: "AHU-A1", bbox: null },
+            CV: { text: "27.5", bbox: null },
+          },
+          identity: { bbox: [11, 12, 13, 14] },
+        }],
+      },
+    ],
+  }, { service: "CHW" });
+  assert.equal(chwOnly.service_filter, "CHW");
+  assert.equal(chwOnly.totals.items, 1);
+  assert.equal(chwOnly.categories.CHW_CONTROL_VALVE?.count, 1);
+  assert.equal(chwOnly.categories.HHW_CONTROL_VALVE, undefined);
+  assert.ok(chwOnly.exclusions.some((e) => /HHW/i.test(e) && /filtered/i.test(e)));
+
+  const hhwOnly = compileControlValveTakeoff([], {
+    tables: [
+      {
+        sheet: "mech.pdf#44",
+        title: { text: "HHW CONTROL VALVE SCHEDULE", bbox: [0, 0, 100, 10] },
+        rows: [{
+          key: "CV-AHU-A1-HHW",
+          cells: {
+            "VALVE MARK": { text: "CV-AHU-A1-HHW", bbox: [1, 2, 3, 4] },
+            "UNIT MARK": { text: "AHU-A1", bbox: null },
+            CV: { text: "0.5", bbox: null },
+          },
+          identity: { bbox: [1, 2, 3, 4] },
+        }],
+      },
+      {
+        sheet: "mech.pdf#44",
+        title: { text: "CHW CONTROL VALVE SCHEDULE", bbox: [0, 50, 100, 60] },
+        rows: [{
+          key: "CV-AHU-A1-CHW",
+          cells: {
+            "VALVE MARK": { text: "CV-AHU-A1-CHW", bbox: [11, 12, 13, 14] },
+            "UNIT MARK": { text: "AHU-A1", bbox: null },
+            CV: { text: "27.5", bbox: null },
+          },
+          identity: { bbox: [11, 12, 13, 14] },
+        }],
+      },
+    ],
+  }, { service: "HHW" });
+  assert.equal(hhwOnly.service_filter, "HHW");
+  assert.equal(hhwOnly.totals.items, 1);
+  assert.equal(hhwOnly.categories.HHW_CONTROL_VALVE?.count, 1);
+  assert.equal(hhwOnly.categories.CHW_CONTROL_VALVE, undefined);
 
   const rows = rowsFromCompiledTakeoff(compiled, { workflow: "valve takeoff" });
   // Inject dual-Cv scrap that must not appear on the compiled valve line.
@@ -507,11 +647,83 @@ test("control_valves compile → panel lines with cites; dual-Cv scrap dropped",
   assert.equal(hhw.specs["CHW CV"], undefined);
   assert.equal(hhw.specs["HHW CV"], undefined);
   assert.ok(hhw.specs.Cv === "0.5" || hhw.specs.CV === "0.5" || Object.values(hhw.specs).includes("0.5"));
-  assert.ok(
-    hhw.specs["Served equipment"] === "AHU-A1"
-    || hhw.specs["UNIT MARK"] === "AHU-A1"
-    || Object.values(hhw.specs).includes("AHU-A1"),
-  );
+  assert.equal(hhw.unit_mark, "AHU-A1");
+  assert.match(hhw.family, /Building A · .*HHW CONTROL VALVE/i);
+  const cite = lineLeadCite(hhw, "tag");
+  assert.ok(cite?.bbox_px);
+  // Prefer whole-row bbox when present (union of cells).
+  if (hhw.row_bbox_px) {
+    assert.deepEqual(cite.bbox_px, hhw.row_bbox_px);
+  }
+  const groups = groupTakeoffByFamily(lines);
+  assert.ok(groups.some((g) => /Building A · .*CONTROL VALVE/i.test(String(g.family))));
+  const lead = takeoffLeadColumns(lines.filter((l) => /VALVE/i.test(l.table_title || "")));
+  assert.ok(lead.some((c) => c.key === "unit_mark" && /Unit Mark/i.test(c.label)));
+  assert.ok(lead.some((c) => c.key === "tag" && /Valve Mark/i.test(c.label)));
+});
+
+test("valve takeoff sections Building · CHW before Building · HHW; row cite uses union bbox", () => {
+  const compiled = compileControlValveTakeoff([], {
+    tables: [
+      {
+        sheet: "mech.pdf#49",
+        title: { text: "CHW CONTROL VALVE SCHEDULE", bbox: [0, 0, 50, 10] },
+        rows: [{
+          key: "AHU-T1A-CHW",
+          cells: {
+            "UNIT MARK": { text: "AHU-T1A", bbox: [10, 20, 30, 40] },
+            "VALVE MARK": { text: "AHU-T1A-CHW", bbox: [30, 20, 60, 40] },
+            "FLOWRATE (GPM)": { text: "32.0", bbox: [60, 20, 90, 40] },
+            CV: { text: "14.3", bbox: [90, 20, 120, 40] },
+          },
+        }],
+      },
+      {
+        sheet: "mech.pdf#44",
+        title: { text: "HHW CONTROL VALVE SCHEDULE", bbox: [0, 0, 50, 10] },
+        rows: [{
+          key: "CV-AHU-A1-HHW",
+          cells: {
+            "UNIT MARK": { text: "AHU-A1", bbox: [1, 2, 3, 4] },
+            "VALVE MARK": { text: "CV-AHU-A1-HHW", bbox: [3, 2, 5, 4] },
+            CV: { text: "0.5", bbox: [5, 2, 7, 4] },
+          },
+        }],
+      },
+      {
+        sheet: "mech.pdf#44",
+        title: { text: "CHW CONTROL VALVE SCHEDULE", bbox: [0, 50, 50, 60] },
+        rows: [{
+          key: "CV-AHU-A1-CHW",
+          cells: {
+            "UNIT MARK": { text: "AHU-A1", bbox: [10, 50, 20, 60] },
+            "VALVE MARK": { text: "CV-AHU-A1-CHW", bbox: [20, 50, 40, 60] },
+            CV: { text: "27.5", bbox: [40, 50, 55, 60] },
+          },
+        }],
+      },
+    ],
+  });
+  const item = compiled.categories.CHW_CONTROL_VALVE.items.find((i) => /T1A/i.test(i.tag));
+  assert.ok(item?.row_bbox_px);
+  assert.deepEqual(item.row_bbox_px, [10, 20, 120, 40]);
+  assert.equal(item.building, "T");
+  // No project-name hardcodes in BUILDING field.
+  const rows = rowsFromCompiledTakeoff(compiled);
+  const bldgRows = rows.filter((r) => r.field === "BUILDING");
+  assert.ok(bldgRows.every((r) => /^Building [A-Z0-9]+$/i.test(String(r.value))));
+  assert.equal(bldgRows.some((r) => /Air Ops|MITRACON|ATCT/i.test(String(r.value))), false);
+
+  const lines = compileAgentTakeoff(rows);
+  const groups = groupTakeoffByFamily(lines);
+  const names = groups.map((g) => String(g.family));
+  // Building A sections before Building T; within a building CHW before HHW.
+  const idxAChw = names.findIndex((n) => /Building A · .*CHW/i.test(n));
+  const idxAHhw = names.findIndex((n) => /Building A · .*HHW/i.test(n));
+  const idxTChw = names.findIndex((n) => /Building T · .*CHW/i.test(n));
+  assert.ok(idxAChw >= 0 && idxAHhw >= 0 && idxTChw >= 0);
+  assert.ok(idxAChw < idxAHhw, `CHW before HHW within building: ${names.join(" | ")}`);
+  assert.ok(idxAChw < idxTChw, `Building A before Building T: ${names.join(" | ")}`);
 });
 
 test("query_table CONTROL VALVE title-scan expands beyond 24 matches", () => {

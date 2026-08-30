@@ -18,6 +18,7 @@
 // headers and the now-versioned JSON export keys (opentakeoff.report.v1) must
 // remain stable.
 
+import { exportDocTitle } from "./branding.js";
 import { round2 } from "./num.js";
 import { csvEsc as esc } from "./csv.js";
 import { GETTERS, CSV_PROFILE, colGetter, floorPerimeterLf, applyUnits, METRIC_CSV_LABELS } from "./reportColumns.js";
@@ -392,7 +393,7 @@ export function grandTotals(rows) {
  *   (SF/LF-based). "imperial" (default) is byte-identical to the frozen export.
  * @returns {string}
  */
-export function totalsToCsv(rows, projectName = "", bySheet = null, sheetLabel = null, cols = null, ctx = null, byLabel = null, brandName = "OpenTakeoff", units = "imperial") {
+export function totalsToCsv(rows, projectName = "", bySheet = null, sheetLabel = null, cols = null, ctx = null, byLabel = null, brandName = "", units = "imperial") {
   // the caller passes RAW descriptors; conversion happens here (one site per
   // output) through the same applyUnits seam the report table uses
   const columns = applyUnits(cols || CSV_PROFILE.filter((c) => c.defaultVisible), units, METRIC_CSV_LABELS);
@@ -463,7 +464,7 @@ export function totalsToCsv(rows, projectName = "", bySheet = null, sheetLabel =
     }
   }
 
-  const title = projectName ? `# ${projectName} — ${brandName} report\n` : "";
+  const title = exportDocTitle(projectName, "report", brandName);
   return title + lines.join("\n") + "\n";
 }
 
@@ -497,7 +498,7 @@ export function reportJson({ projectName = "", rows = [], bySheet = [], scaleInf
   return {
     schema: "opentakeoff.report.v1",
     project_name: projectName || null,
-    generated_with: "OpenTakeoff",
+    generated_with: null,
     // scale_confirmed (scale gate): false = an agent set this sheet's scale and
     // no human confirmed it — the report's consumer should treat those sheets'
     // quantities as standing on an unverified number. Absent input = true

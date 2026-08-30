@@ -31,6 +31,26 @@ Each workflow must be:
 5. **Merged to `main`** when that workflow is **genuinely complete** — then
    move to the next. Do not batch “almost done” forever.
 
+#### NON-NEGOTIABLE — ALWAYS TESTS · NO REGRESSIONS
+
+- **Every workflow always has tests.** Shipping a workflow without durable
+  automated coverage (intent routing, compile/tool acceptance, and/or
+  regression demos) is not production-ready. Agent UI proofs alone are not
+  enough — unit/fixture/demo tests must lock the behavior so it cannot
+  silently rot.
+- **No silent regressions.** Finishing workflow N must not break workflows
+  1…N−1. Before claiming a new workflow PROVEN/ON_MAIN, re-run the suite
+  gate for already-shipped workflows (at minimum: HVAC/BAS/valve compile
+  locks, phrase-robust intents, and `npm run test:demos` for D01–D10 when
+  those demos are on `main`).
+- If a later change breaks an earlier workflow, **fix or revert before
+  moving on** — reopen that row in `WORKFLOWS.md`. The bar is ~50
+  **simultaneously** production-ready workflows, not “the latest one
+  works.”
+- Prefer tests that assert set-agnostic behavior + fixture acceptance
+  checks (counts/titles as expectations in tests only — never as product
+  hardcodes).
+
 **Do not ship one-off “works only for this prompt” patches.** Do not redefine
 success down to a smaller subset because it is easier to green.
 
@@ -78,7 +98,8 @@ Seed priority (expand; never stop at the seed):
 
 **Regression bar:** multi-prompt UI harness + ground-truth compile checks must
 fail loudly if a workflow regresses. Interview / CEO demos use the same path a
-new user gets: upload → Agent prompt → Run → Takeoff panel.
+new user gets: upload → Agent prompt → Run → Takeoff panel. **Always add or
+extend tests with each workflow.** Re-run prior locks before merge.
 
 **This corpus records these takeoffs (fixtures — not product special cases):**
 

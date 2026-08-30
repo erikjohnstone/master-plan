@@ -168,6 +168,111 @@ export function missingScheduleTitleScans(callLog, goal) {
   })).map((fam) => fam.title).filter(Boolean);
 }
 
+/**
+ * Named-tag schedule attributes the goal asked for that query_table already
+ * returned but the answer omitted. Set-agnostic (TYPE/CFM/GPM/capacity).
+ * @returns {Array<{tag:string,label:string,value:string,sheet:string|null,header:string}>}
+ */
+export function missingNamedScheduleAttrs(callLog, goal, finalText, finalCanonicalIn, spacedHasTokenIn) {
+  const finalTextStr = String(finalText || "");
+  if (!finalTextStr) return [];
+  const finalCanonical = finalCanonicalIn
+    || finalTextStr.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const finalSpaced = finalTextStr.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim();
+  const spacedHasToken = spacedHasTokenIn || ((token) => {
+    if (!token) return false;
+    return new RegExp(`(?:^|\\s)${token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:\\s|$)`).test(finalSpaced);
+  });
+  const attrAsk = [];
+  if (/\btype\b/i.test(goal)) attrAsk.push({ label: "TYPE", headerRe: /^TYPE$/i });
+  if (/\b(?:cfm|airflow)\b/i.test(goal)) {
+    attrAsk.push({ label: "CFM", headerRe: /\bCFM\b|AIR\s*FLOW|FAN\s*DATA/i });
+  }
+  if (/\bgpm\b/i.test(goal)) attrAsk.push({ label: "GPM", headerRe: /\bGPM\b|FLOWRATE/i });
+  if (/\b(?:capacity|tons?|mbh)\b/i.test(goal)) {
+    attrAsk.push({ label: "CAPACITY", headerRe: /CAPACITY|\bTONS?\b|\bMBH\b/i });
+  }
+  const goalTagRe = /\b[A-Z]{1,8}-[A-Z0-9]*\d[A-Z0-9]*\b/gi;
+  const goalTags = [...new Set([...String(goal || "").matchAll(goalTagRe)]
+    .map((hit) => hit[0].toUpperCase().replace(/[^A-Z0-9]/g, ""))
+    .filter((t) => t.length >= 3))];
+  if (!attrAsk.length || !goalTags.length) return [];
+
+  const cellTextOf = (cell) => {
+    if (cell == null) return "";
+    if (typeof cell === "string" || typeof cell === "number") return String(cell);
+    if (typeof cell.text === "string") return cell.text;
+    return String(cell.value ?? "");
+  };
+  const missing = [];
+  for (const tagCanon of goalTags) {
+    let bag = null;
+    let sheetHint = null;
+    let displayTag = tagCanon;
+    let bagScore = -1;
+    for (const { out: qOut } of (callLog || []).filter((c) => c.name === "query_table")) {
+      for (const match of qOut?.matches || []) {
+        const rawKey = String(match?.row?.key || match?.row?.identity?.text || "");
+        const keyCanon = rawKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
+        if (keyCanon !== tagCanon) continue;
+        const candidate = match?.row?.all_cells || match?.row?.cells || null;
+        if (!candidate || typeof candidate !== "object") continue;
+        const score = attrAsk.reduce((n, ask) => (
+          n + (Object.keys(candidate).some((h) => ask.headerRe.test(String(h))) ? 1 : 0)
+        ), 0);
+        if (score > bagScore) {
+          bag = candidate;
+          sheetHint = match?.sheet || null;
+          displayTag = rawKey || tagCanon;
+          bagScore = score;
+        }
+      }
+    }
+    if (!bag || bagScore < 1) continue;
+    for (const ask of attrAsk) {
+      const entry = Object.entries(bag).find(([h]) => ask.headerRe.test(String(h)));
+      if (!entry) continue;
+      const raw = cellTextOf(entry[1]).trim();
+      if (!raw || /^(?:—|-|n\/?a|\.)$/i.test(raw)) continue;
+      const phraseCanon = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      const tokens = raw.toUpperCase().replace(/,/g, "").split(/[^A-Z0-9.]+/).filter((t) => t.length >= 2);
+      const present = (phraseCanon.length >= 3 && finalCanonical.includes(phraseCanon))
+        || (tokens.length > 0 && tokens.every((tok) => (
+          spacedHasToken(tok) || finalCanonical.includes(tok.replace(/[^A-Z0-9]/g, ""))
+        )));
+      if (!present) {
+        missing.push({
+          tag: displayTag,
+          label: ask.label,
+          value: raw,
+          sheet: sheetHint,
+          header: String(entry[0]),
+        });
+      }
+    }
+  }
+  return missing;
+}
+
+/** Append retrieved schedule attrs the model omitted — durable, set-agnostic. */
+export function appendNamedScheduleAttrs(draft, missing) {
+  if (!missing?.length) return String(draft || "");
+  const byTag = new Map();
+  for (const m of missing) {
+    if (!byTag.has(m.tag)) byTag.set(m.tag, { sheet: m.sheet, parts: [] });
+    const g = byTag.get(m.tag);
+    if (m.sheet && !g.sheet) g.sheet = m.sheet;
+    g.parts.push(`${m.label} ${m.value}`);
+  }
+  const lines = [...byTag.entries()].map(([tag, g]) => (
+    `- ${tag}: ${g.parts.join("; ")}${g.sheet ? ` (${g.sheet})` : ""}`
+  ));
+  const block = `Schedule attributes (from query_table):\n${lines.join("\n")}`;
+  const base = String(draft || "").trim();
+  if (/Schedule attributes \(from query_table\):/i.test(base)) return base;
+  return base ? `${base}\n\n${block}` : block;
+}
+
 export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   const successfulCount = callLog.some(({ name, out }) =>
     (name === "sweep_schedule_row" && Number.isFinite(out?.found))
@@ -386,6 +491,19 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
           return `sweep_schedule_row refused plan location for ${tag}, but schedule evidence already returned ${missing.join(", ")}. Keep reporting those schedule field(s) with schedule citations AND state the honest plan refusal — do not drop schedule data when plan anchoring fails.`;
         }
       }
+    }
+  }
+
+  // Goal-named tags + asked schedule attributes (type, CFM, …) must appear as
+  // evidence-backed values in the answer — run BEFORE paint/sheet gates so the
+  // model cannot finish by highlighting MARK alone while omitting the values.
+  {
+    const missing = missingNamedScheduleAttrs(callLog, goal, finalText, finalCanonical, spacedHasToken);
+    if (missing.length) {
+      const summary = missing.slice(0, 8).map((m) => (
+        `${m.tag} ${m.label}=${m.value}${m.sheet ? ` (${m.sheet})` : ""}`
+      )).join("; ");
+      return `The goal asks for schedule attributes on named tags, and query_table already returned them, but the answer omits these evidence-backed values: ${summary}. Copy each TYPE/CFM/capacity value into the answer (do not say they are \"on the same row\" without stating the values), then paint those cells.`;
     }
   }
 
@@ -955,11 +1073,36 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     // answer uses those fields, paint EACH answering value cell — not only
     // the mark. Count / cite-MARK goals must not thrash on incidental numerics
     // the model copied from a schedule row (ESP 4.6, EWT 45, etc.).
-    const goalRequestsRowAttributes = /\b(?:location|room|cfm|airflow|capacity|tons?|alarm|trend|description|serves|serving|supply\s+air|return|gpm|mbh|static|ewt|lwt|\bcv\b|valve size|characteristics?|setpoint|feedback)\b/i.test(goal);
+    // Scope paint duties to headers the GOAL actually named (TYPE, CFM, …) so
+    // a "type and CFM" ask cannot demand every coil/EWT cell on the row.
+    const goalRequestsRowAttributes = /\b(?:location|room|cfm|airflow|capacity|tons?|alarm|trend|description|serves|serving|supply\s+air|return|gpm|mbh|static|ewt|lwt|\bcv\b|valve size|characteristics?|setpoint|feedback|type)\b/i.test(goal);
     if (!goalRequestsRowAttributes) {
       // cite / count goals: rowCovered (one paint) is enough
     } else {
-    const answerUsesValueCell = (raw, rowKeyCanonical) => {
+    /** Headers the goal asked to report — set-agnostic schedule column patterns. */
+    const goalAskedHeader = (header) => {
+      const h = String(header || "");
+      if (!h) return false;
+      const checks = [];
+      if (/\b(?:cfm|airflow)\b/i.test(goal)) checks.push(/\bCFM\b|AIR\s*FLOW|FAN\s*DATA/i);
+      if (/\btype\b/i.test(goal)) checks.push(/^TYPE$/i);
+      if (/\bgpm\b|flowrate|\bflow\b/i.test(goal) && !/\bcfm\b/i.test(goal)) {
+        checks.push(/\bGPM\b|FLOWRATE|\bFLOW\b/i);
+      }
+      if (/\b(?:capacity|tons?|mbh|kw)\b/i.test(goal)) {
+        checks.push(/CAPACITY|\bTONS?\b|\bMBH\b|\bKW\b/i);
+      }
+      if (/\blocation|room\b/i.test(goal)) checks.push(/LOCATION|ROOM|AREA\s*SERVED/i);
+      if (/\bdescription\b/i.test(goal)) checks.push(/DESCRIPTION/i);
+      if (/\b(?:alarm|trend)\b/i.test(goal)) checks.push(/ALARM|TREND/i);
+      if (/\b(?:ewt|lwt|ent\.?\s*w|leaving)\b/i.test(goal)) checks.push(/EWT|LWT|ENT\.?\s*W|WATER\s*TEMP/i);
+      if (/\bcv\b|valve size/i.test(goal)) checks.push(/^\s*C[Vv]\s*$|VALVE\s*SIZE|PIPE\s*SIZE/i);
+      if (/\bstatic|esp\b/i.test(goal)) checks.push(/\bESP\b|STATIC|S\.?P\.?/i);
+      if (!checks.length) return true; // goal named a generic attr word — keep prior behavior
+      return checks.some((re) => re.test(h));
+    };
+    const answerUsesValueCell = (raw, rowKeyCanonical, header) => {
+      if (!goalAskedHeader(header)) return false;
       const text = String(raw || "").trim();
       if (!text) return false;
       // Foreign equipment MARKs in relationship columns are not this row's
@@ -1003,7 +1146,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         for (const cell of option.cells) {
           const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
           if (!textCanonical || textCanonical === rowKeyCanonical) continue;
-          if (!answerUsesValueCell(cell?.text, rowKeyCanonical)) continue;
+          if (!answerUsesValueCell(cell?.text, rowKeyCanonical, cell?.header)) continue;
           if (valueByText.has(textCanonical)) continue;
           valueByText.set(textCanonical, { cell, sheet: option.sheet, cells: option.cells });
         }
@@ -1645,7 +1788,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
 // the mock server's authors) can read exactly what the model is promised.
 export function agentSystemPrompt() {
   return [
-    "You are the in-canvas takeoff agent inside OpenTakeoff, an open-source PDF takeoff tool for flooring estimators. An estimator gave you a goal; you aim the app's own deterministic tools to satisfy it.",
+    "You are the in-canvas takeoff agent. An estimator gave you a goal; you aim the app's own deterministic tools to satisfy it.",
     "",
     "Hard rules:",
     "- NEVER invent geometry. Rooms are measured by the one_click flood-fill engine; propose only the rings it returns.",
@@ -1665,7 +1808,7 @@ export function agentSystemPrompt() {
     "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized.",
     "- Be extremely, genuinely useful: whatever the goal asks — a full takeoff, an AHU characteristic, counting valves, a BAS trace, schedule attributes, cross-sheet joins — do that ask end-to-end. Return every requested field with evidence-backed values plus enough citation context to trust the answer. Paint ALL answering evidence on the sheets (value cells / row data / drawing text / counted marks), not only a tag mark. Partial answers and mark-only flybys are incomplete.",
     "- query_table and find_text search the whole loaded set — they do not require the sheet to be open as a canvas tab. Never refuse schedule cell values because a tab is closed; call query_table with row_key and copy row.all_cells, then highlight_citation.",
-    "- COMPLETE set HVAC, BAS, or valve takeoff (goal says complete … takeoff of this set / these drawings / this blueprint set): call compile_corpus_takeoff FIRST — kind hvac_equipment for HVAC equipment, kind bas_points for BAS/DDC points, kind control_valves for a complete valve takeoff (CHW + HHW CONTROL VALVE SCHEDULE). That tool is the deterministic full-set answer (same Session+ODL path as MCP). Copy its totals / category_counts / list_counts / exclusions / empty_pages into the answer. Do NOT approximate the set total by crawling find_schedule, read_schedule, or title-scanning families one-by-one — that yields partial 10-row dumps with broken cites. After compile, spot-cite a few MARKs with query_table + highlight_citation only. For valves, report valve mark, served equipment (UNIT MARK), service (CHW/HHW), size, GPM, and ONE Cv per valve — never invent dual CHW CV + HHW CV columns on the same row.",
+    "- COMPLETE set HVAC, BAS, or valve takeoff (goal says complete … takeoff of this set / these drawings / this blueprint set): call compile_corpus_takeoff FIRST — kind hvac_equipment for HVAC equipment, kind bas_points for BAS/DDC points, kind control_valves for a complete valve takeoff (CHW + HHW CONTROL VALVE SCHEDULE). When the goal asks for chilled-water / CHW only or hot-water / HHW only, also pass service=\"CHW\" or service=\"HHW\". That tool is the deterministic full-set answer (same Session+ODL path as MCP). Copy its totals / category_counts / list_counts / exclusions / empty_pages into the answer. Do NOT approximate the set total by crawling find_schedule, read_schedule, or title-scanning families one-by-one — that yields partial 10-row dumps with broken cites. After compile, spot-cite a few MARKs with query_table + highlight_citation only. For valves, report valve mark, served equipment (UNIT MARK), service (CHW/HHW), size, GPM, and ONE Cv per valve — never invent dual CHW CV + HHW CV columns on the same row.",
     "- When asked for scheduled equipment or points-list row counts for NAMED families/lists (not a complete set compile), call query_table with the schedule title (no row_key and no cell_contains). Copy that tool result's count and building_tag_counts into the answer — do not re-sum sheet_graph page row totals by hand (continuation pages 1 OF 2 / 2 OF 2 repeat the same MARK keys). building_tag_counts letters map as A=Air Ops, M=MITRACON/Mitracon, T=ATCT — never swap them. When point_type_counts is present, copy AI/AO/BI/BO from it — do not burn iterations re-filtering the same title with cell_contains for each point type. Prefer one accurate title needle per asked family; when the goal distinguishes sibling titles (for example dedicated outdoor-air UNIT vs HANDLING schedules, or air-cooled vs heat-recovery chillers), query the title that matches what was asked rather than blending both. When the goal names a specific points list (for example AHU-T1A/TIB), put that tag in the query_table title — a bare POINTS LIST title can roll up sibling lists and double the row count. Then re-query specific row_key values for MARK/identity bboxes you must cite.",
     "- Sequencing for named-family count + cite goals (not complete-set compile): (1) list_sheets + sheet_graph once, (2) one title-scan query_table per requested family and copy count/building_tag_counts/point_type_counts, (3) only then re-query the named cite MARKs / points-list title and paint those cells, (4) write ONE final answer whose family totals match those tool counts (do not add a second contradictory totals table that recounts only painted MARKs). Do not paint every equipment row on a schedule, and do not dump full schedule tables into the answer.",
     "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Pass row_key, column, table_title, and value whenever known so the Agent source card title reads like \"VAV-1 · CFM = 350\" (not a naked \"350\"). Do not rely on auto-flying the canvas — the UI shows clickable expandable source cards; painting is enough. When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",
@@ -1978,6 +2121,21 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     if (!turn.toolCalls.length) {
       if (turn.text && !/^\[Evidence gate:/i.test(turn.text)) lastDraftText = turn.text;
       let draftForGate = turn.text;
+      // Always merge omitted named-tag schedule attrs from query_table before
+      // evidence gates — do not wait for a correction round-trip the model may
+      // dodge by rewriting paint/sheet text without the values.
+      {
+        const missingUpfront = missingNamedScheduleAttrs(callLog, goal, draftForGate);
+        if (missingUpfront.length) {
+          const filled = appendNamedScheduleAttrs(draftForGate, missingUpfront);
+          if (filled && filled !== draftForGate) {
+            draftForGate = filled;
+            displayText = filled;
+            lastDraftText = filled;
+            emit({ type: "text", text: "[Evidence: appended schedule attributes from query_table.]" });
+          }
+        }
+      }
       let correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
       if (correction && correction.startsWith("__FATAL__:")) {
         const msg = correction.slice("__FATAL__:".length).trim();
@@ -2009,6 +2167,20 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
           displayText = draftForGate;
           lastDraftText = draftForGate;
           correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+        }
+      }
+      // Auto-fill omitted TYPE/CFM (etc.) from query_table — models often paint
+      // MARK and claim "values are on the same row" without copying them.
+      if (correction && /omits these evidence-backed values/i.test(correction)) {
+        const missing = missingNamedScheduleAttrs(callLog, goal, draftForGate);
+        if (missing.length) {
+          const filled = appendNamedScheduleAttrs(draftForGate, missing);
+          if (filled && filled !== draftForGate) {
+            draftForGate = filled;
+            displayText = filled;
+            lastDraftText = filled;
+            correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+          }
         }
       }
       // When cite-MARK bboxes are already in the call log, paint them now
@@ -2146,6 +2318,26 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       }
       lastWordingCorrection = "";
       wordingCorrectionStreak = 0;
+      // Final safety: re-merge any attrs the last model rewrite dropped, then
+      // re-check gates so paint duties for those values still run.
+      {
+        const missingFinal = missingNamedScheduleAttrs(callLog, goal, draftForGate);
+        if (missingFinal.length) {
+          draftForGate = appendNamedScheduleAttrs(draftForGate, missingFinal);
+          displayText = draftForGate;
+          lastDraftText = draftForGate;
+          correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+          if (correction) {
+            messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
+            messages.push({
+              role: "user",
+              content: `${correction}\n\nUse tools only if this correction requires new evidence or paint; otherwise emit the complete replacement answer now. Preserve every previously retrieved, tool-grounded requested field.`,
+            });
+            emit({ type: "text", text: `[Evidence gate: ${correction}]` });
+            continue;
+          }
+        }
+      }
       const notes = runVerifiers(callLog, goal);
       if (notes.length) displayText = `${displayText || ""}\n\n${notes.join("\n\n")}`;
     }

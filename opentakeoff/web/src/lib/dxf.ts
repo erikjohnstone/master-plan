@@ -80,7 +80,7 @@ export interface DxfBuild {
 
 /** First line of every DXF this module writes — the authorship stamp the MCP
  * overwrite guard (safewrite.ts) recognizes, and plain provenance. */
-export const DXF_STAMP = "OpenTakeoff DXF export";
+export const DXF_STAMP = "DXF export";
 export const DXF_MIME = "application/dxf";
 
 const FT_PER_M = 1 / 0.3048;
