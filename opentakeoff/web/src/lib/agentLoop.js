@@ -209,9 +209,12 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   for (const [, headers] of identityHeadersByTag) {
     const tagCanonical = String(headers[0].text).toUpperCase().replace(/[^A-Z0-9]/g, "");
     if (!finalCanonical.includes(tagCanonical)) continue;
-    // AI/AO/BI/BO marks are themselves the semantic identity — requiring the
+    // AI/AO/BI|BO marks are themselves the semantic identity — requiring the
     // column title ("MARK ANALOG INPUT") in the user-facing answer is noise.
     if (/^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(headers[0].text)) continue;
+    // Trivial equipment MARK/TAG headers are not ambiguous (unlike UNIT MARK vs
+    // VALVE MARK). Count/cite takeoffs must not thrash requiring the word "MARK".
+    if (headers.every((item) => /^(?:MARK|TAG|EQUIPMENTMARK|EQUIPMENTTAG)$/i.test(item.headerCanonical))) continue;
     if (headers.some((item) => finalCanonical.includes(item.headerCanonical))) continue;
     const example = headers[0];
     return `The final answer mentions ${example.text} but does not cite its semantic identity header ${example.header}. Use query_table row.identity exactly; do not substitute another repeated-value column.`;
@@ -560,11 +563,11 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       // (e.g. "POINTS LIST …") that merely share tokens with the answer.
       const words = hit.str.trim().split(/\s+/).filter(Boolean);
       const isSection = /\bSECTION\b/i.test(hit.str);
-      const isTitleBlock = /\bPOINTS\s+LIST\b|\bSCHEDULE\b|\bCONTROL\s+SCHEMATIC\b/i.test(hit.str)
-        && words.length <= 8;
+      const isTitleBlock = /\bPOINTS?\s+LISTS?\b|\bSCHEDULE\b|\bCONTROL\s+SCHEMATIC\b/i.test(hit.str)
+        && words.length <= 10;
       const isNarrative = !isTitleBlock
         && (words.length >= 6 || hit.str.length >= 40)
-        && !/\bPOINTS\s+LIST\b/i.test(hit.str);
+        && !/\bPOINTS?\s+LISTS?\b/i.test(hit.str);
       if (!isSection && !isNarrative) return false;
       const hitCanonical = hit.str.toUpperCase().replace(/[^A-Z0-9]/g, "");
       if (hitCanonical.length < 8) return false;
@@ -584,6 +587,14 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   }
   if (usedQueryRows.length) {
     const rowCovered = (row) => {
+      const keyCanon = String(row.rowKey || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+      // A highlight labeled with this MARK covers the cite duty even when the
+      // painted bbox is the identity cell vs another column on the same row.
+      if (keyCanon && callLog.some(({ name, out }) =>
+        name === "highlight_citation" && !out?.error
+        && String(out.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "") === keyCanon)) {
+        return true;
+      }
       const options = row.coverAny || [{ sheet: row.sheet, cells: row.cells }];
       return options.some(({ sheet, cells }) =>
         cells.some((cell) => highlightMatches(sheet, cell.bbox)));
