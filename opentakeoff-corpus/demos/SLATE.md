@@ -155,3 +155,21 @@ fields + expandable source cards + verified EF-3 follow-up) is saved as
 Production gates stay methodology-general — no corpus hardcoding. D07
 counts toward ten. Next: D08.
 
+## D08 selection record
+
+Status: `LOCKED — API 5/5; p95 5.186 s; stdio + UI proof (expandable cards + verified follow-up)`
+
+Target holds on `navfac-cherry-point-atc` (75 sheets). FAN COIL UNIT
+SCHEDULE title-scan yields 42 with building splits A=14 / M=10 / T=18;
+spot-check MARK/TYPE/CFM for FCU-A1, FCU-M1A, FCU-T1 on #42/#45/#48.
+Stratified 20% sample (9 tags) reconciled on schedule before model runs in
+`D08-fcu-cross-building/`.
+
+N=5 production runs are 5/5 under `verify:demo` with nearest-rank p95
+**5.186 s**. Localhost stdio harness True. UI proof under the usefulness
+bar (building splits + expandable source cards + verified FCU-T11
+follow-up) is saved as
+`/opt/cursor/artifacts/d08_ui_prompt_answer_cards_followup_2026-08-30T15-38-13-794Z.webm`.
+Production gates stay methodology-general — no corpus hardcoding. D08
+counts toward ten. Next: D09.
+
