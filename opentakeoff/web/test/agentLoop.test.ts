@@ -316,6 +316,27 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     } },
   ], "Cite the schedule MARK cells for VAV-A101 and AHU-A1, so I can spot-check.",
   "VAV-A101 MARK is cited. AHU-A1 is also on the set."), null);
+  // Count / cite-MARK goals must not demand painting every numeric the model
+  // happened to copy from a schedule row.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4] } },
+    { name: "query_table", out: {
+      query: { title: null, row_key: "AHU-A1", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [{
+        sheet: "set.pdf#42",
+        row: {
+          key: "AHU-A1",
+          all_cells: {
+            MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] },
+            ESP: { text: "4.6", bbox: [5, 6, 7, 8] },
+            EWT: { text: "45", bbox: [9, 10, 11, 12] },
+          },
+        },
+      }],
+    } },
+  ], "Give AHU counts and cite the schedule MARK for AHU-A1.",
+  "AHUs: 5. AHU-A1 MARK cited; row also shows ESP 4.6 and EWT 45."), null);
   assert.match(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
     { name: "query_table", out: { matches: [{

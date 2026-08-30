@@ -592,11 +592,14 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     if (uncovered.length) {
       return `The answer uses queried schedule row(s) with no painted source cell: ${[...new Set(uncovered)].join(", ")}. Call highlight_citation on at least one exact cited cell from each row before finishing.`;
     }
-    // Quality bar: when the answer uses multiple value fields from a row,
-    // paint EACH answering value cell — not only the mark or a single field.
-    // Matching is methodology-general (text used in the answer), never corpus-
-    // or demo-specific: require standalone tokens for short numerics so mark
-    // suffixes (e.g. "10" inside "AI10") do not invent phantom paint duties.
+    // Quality bar: when the GOAL asks for multiple row attributes and the
+    // answer uses those fields, paint EACH answering value cell — not only
+    // the mark. Count / cite-MARK goals must not thrash on incidental numerics
+    // the model copied from a schedule row (ESP 4.6, EWT 45, etc.).
+    const goalRequestsRowAttributes = /\b(?:location|room|cfm|airflow|capacity|tons?|alarm|trend|description|serves|serving|supply\s+air|return|gpm|mbh|static|ewt|lwt|\bcv\b|valve size|characteristics?|setpoint|feedback)\b/i.test(goal);
+    if (!goalRequestsRowAttributes) {
+      // cite / count goals: rowCovered (one paint) is enough
+    } else {
     const answerUsesValueCell = (raw, rowKeyCanonical) => {
       const text = String(raw || "").trim();
       if (!text) return false;
@@ -665,6 +668,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         .join(", ");
       return `The answer uses multiple fields from ${rowKey} on ${sheet}, but these answering value cells are not painted: ${missingLabel}. Call highlight_citation on EACH distinct answering value from that row (capacity, flow, size, Cv, location, description, alarm/trend, etc.) — painting only the mark or a single field is not enough. Identical twin values in adjacent columns count as one paint duty.`;
     }
+    } // goalRequestsRowAttributes
   }
   if (uniqDrawingHits.length) {
     // A find_text phrase is covered by an exact bbox paint, or by a painted
