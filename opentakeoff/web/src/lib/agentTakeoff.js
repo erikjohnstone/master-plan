@@ -963,6 +963,8 @@ export function compileAgentTakeoff(rows = []) {
       // Valve schedules have ONE Cv column. Dual "CHW CV" + "HHW CV" on the same
       // row is agent markdown mash — never surface it on a contractor takeoff.
       if (valveSched && /^(CHW\s*CV|HHW\s*CV|MARK\s*NOTES)$/i.test(nk)) continue;
+      // "Serves X" description duplicates Served equipment — drop the filler.
+      if (valveSched && nk === "DESCRIPTION" && /^Serves\s+/i.test(String(v))) continue;
       specs[k] = v;
       if (g.attrCites[k]?.bbox_px) {
         spec_cites[k] = g.attrCites[k];
