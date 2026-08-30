@@ -658,16 +658,14 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
         }];
       });
     });
-    const unique = [...new Map(all.map((match) => [
-      JSON.stringify([
-        match.sheet,
-        match.title,
-        match.region,
-        match.row.key,
-        match.row.cells,
-      ]),
-      match,
-    ])).values()];
+    const unique = [...new Map(all.map((match) => {
+      const titleText = match.title?.text || "";
+      const titleBase = titleText.toUpperCase().replace(/\s+/g, " ").trim()
+        .replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+      // Continuation pages (1 OF 2 / 2 OF 2) repeat the same MARK keys — count
+      // each scheduled unit once per schedule family, not once per page.
+      return [`${titleBase}::${match.row.key.toUpperCase().replace(/\s+/g, "")}`, match];
+    })).values()];
     // Title-wide / unscoped queries on dense schedules (42+ FCU rows, etc.)
     // must not dump every cell bbox into the model context. Return identity
     // keys only; the caller re-queries with row_key for citation cells.

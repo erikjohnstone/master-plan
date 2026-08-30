@@ -242,17 +242,14 @@
       "citation": {
         "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
         "table_title": "BOILER SCHEDULE",
-        "row_key": "B-A1",
-        "column": "MARK",
         "bbox_px": [
-          2766.5,
-          2639.9,
-          2810.2,
-          2665.2
+          2716.568,
+          2484.7200000000003,
+          4406.164,
+          2544.48
         ],
-        "grounding_text": "B-A1",
-        "ocr_mode": "single_line",
-        "ocr_confusables": true
+        "grounding_text": "BOILER SCHEDULE",
+        "ocr_mode": "single_line"
       }
     },
     "fcu_air_ops_count": {
@@ -280,17 +277,17 @@
       "value": 18,
       "tolerance": 0,
       "citation": {
-        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#48",
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
         "table_title": "FAN COIL UNIT SCHEDULE",
-        "row_key": "FCU-T1",
+        "row_key": "FCU-A1",
         "column": "MARK",
         "bbox_px": [
-          230.64,
-          856.556,
-          342.24,
-          891.116
+          301.2,
+          1673.038,
+          441.6,
+          1707.36
         ],
-        "grounding_text": "FCU-T1",
+        "grounding_text": "FCU-A1",
         "ocr_mode": "single_line",
         "ocr_confusables": true
       }
@@ -320,17 +317,17 @@
       "value": 25,
       "tolerance": 0,
       "citation": {
-        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#46",
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#43",
         "table_title": "VARIABLE AIR VOLUME TERMINAL BOX",
-        "row_key": "VAV-M101",
+        "row_key": "VAV-A101",
         "column": "MARK",
         "bbox_px": [
-          293.28,
-          323.03999999999996,
-          467.52,
-          357.5999999999999
+          301.92,
+          1897.68,
+          526.8,
+          1932.24
         ],
-        "grounding_text": "VAV-M101",
+        "grounding_text": "VAV-A101",
         "ocr_mode": "single_line",
         "ocr_confusables": true
       }
