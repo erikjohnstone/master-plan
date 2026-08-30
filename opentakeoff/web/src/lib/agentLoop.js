@@ -327,6 +327,16 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     });
     const paraphrasedFromLocation = /\b(?:serves|serving)\b.{0,160}\b(?:derived from|from (?:the )?(?:schedule )?location|location field)\b/i.test(finalText);
     if (locationOnServesLine || paraphrasedFromLocation) {
+      const narrativeHits = drawingTextHits.filter((hit) => {
+        const words = hit.str.trim().split(/\s+/).filter(Boolean);
+        if (words.length < 6 && hit.str.length < 40) return false;
+        const hitCanonical = hit.str.toUpperCase().replace(/[^A-Z0-9]/g, "");
+        return !locationSet.has(hitCanonical);
+      });
+      const example = narrativeHits[0];
+      if (example) {
+        return `The final answer fills a serving/serves claim from a schedule LOCATION/ROOM cell. Do not call tools — emit the complete answer and copy this exact hit.str for serves: "${example.str}" on ${example.sheet}. Keep LOCATION as the installation-location field only; never paraphrase it into serves.`;
+      }
       return "The final answer fills a serving/serves claim from a schedule LOCATION/ROOM cell. That cell is installation location only. Retrieve the serving narrative with find_text/read_sheet_text and copy from hit.str, or refuse; never paraphrase LOCATION into a serves statement.";
     }
     if (!refusedServes) {
@@ -556,13 +566,13 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       const rowKey = String(match?.row?.key || match?.row?.identity?.text || "");
       const rowCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
       if (!rowCanonical || !finalCanonical.includes(rowCanonical)) continue;
-      const cellTexts = Object.values(match?.row?.all_cells || match?.row?.cells || {})
-        .map((cell) => String(cell?.text || "").trim())
-        .filter((text) => text.length >= 2);
-      const usesCellFromRow = cellTexts.some((text) => {
-        const textCanonical = text.toUpperCase().replace(/[^A-Z0-9]/g, "");
-        return textCanonical.length >= 4 && finalCanonical.includes(textCanonical);
-      });
+      const usesCellFromRow = Object.values(match?.row?.all_cells || match?.row?.cells || {})
+        .some((cell) => {
+          const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+          // Row key/identity text alone does not mean this sheet's row was used.
+          if (textCanonical.length < 4 || textCanonical === rowCanonical) return false;
+          return finalCanonical.includes(textCanonical);
+        });
       // Require sheet only when the answer uses this row's cell values, not merely mentions the tag.
       if (!usesCellFromRow && !/^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(rowKey)) continue;
       const sheetNorm = sheet.toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
