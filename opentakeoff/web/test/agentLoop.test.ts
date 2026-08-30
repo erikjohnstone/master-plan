@@ -62,6 +62,10 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     { name: "sweep_schedule_row", args: { tag: "CH-A1" }, out: { found: 1 } },
     { name: "query_table", out: { matches: [{ row: { key: "CV-CH-A1" } }] } },
   ], "Find CH-A1", "Plan location for CV‑CH‑A1 is the same." )!, /unswept tag/);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "sweep_schedule_row", args: { tag: "CH-A1" }, out: { found: 1 } },
+    { name: "query_table", out: { matches: [{ row: { key: "CV-CH-A1" } }] } },
+  ], "Find CH-A1", "Plan location: CH-A1 is on sheet 3.\nValve schedule: CV-CH-A1 is 4 in."), null);
   const sweptPlan = {
     name: "sweep_schedule_row",
     args: { tag: "CH-A1" },

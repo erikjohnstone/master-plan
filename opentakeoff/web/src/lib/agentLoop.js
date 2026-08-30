@@ -58,9 +58,15 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     .filter(Boolean));
   const unswept = [...queried].filter((tag) => !swept.has(tag));
   const finalCanonical = finalText.toUpperCase().replace(/[^A-Z0-9]/g, "");
-  if (unswept.length && /\bboth tags\b|\bplan location\b/i.test(finalText)
-    && unswept.some((tag) => finalCanonical.includes(tag.replace(/[^A-Z0-9]/g, "")))) {
-    return `The final answer claims a plan location for unswept tag(s): ${unswept.join(", ")}. A schedule query proves schedule data only. Remove those plan-location claims or call sweep_schedule_row for each exact tag.`;
+  const locationClaims = finalText.split(/[\n.!?]+/)
+    .filter((fragment) => /\bboth tags\b|\bplan location\b|\blocated on (?:the )?plan\b/i.test(fragment));
+  const claimedUnswept = unswept.filter((tag) => {
+    const tagCanonical = tag.replace(/[^A-Z0-9]/g, "");
+    return locationClaims.some((fragment) =>
+      fragment.toUpperCase().replace(/[^A-Z0-9]/g, "").includes(tagCanonical));
+  });
+  if (claimedUnswept.length) {
+    return `The final answer claims a plan location for unswept tag(s): ${claimedUnswept.join(", ")}. A schedule query proves schedule data only. Remove those plan-location claims or call sweep_schedule_row for each exact tag.`;
   }
   if (/\bshow\b.*\bplan location\b|\bshow me the plan\b/i.test(goal)) {
     const highlights = callLog.filter(({ name, out }) =>
