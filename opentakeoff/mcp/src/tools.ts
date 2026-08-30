@@ -574,7 +574,10 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   server.registerTool("query_table", {
     description: `Query actual extracted table cells across the loaded plan set, with source coordinates on every answer. Use title for a case-insensitive table-title substring, row_key for an exact schedule mark/key (compound rows such as R1/E1 answer for either mark), column for a case-insensitive header substring, cell_value for an exact cell value, and cell_contains when a relationship is encoded inside a compound value (for example, equipment CH-A1 inside valve mark CV-CH-A1). Combine filters to narrow the result. At least one filter is required. A column filter narrows cells, but row.all_cells still returns the complete matching row with exact bboxes so multi-field questions need one call. Every returned table region, title, and cell carries its source-sheet bbox so the answer can be audited with view_sheet. This reads all deterministic table kinds—not only reference tables and not only equipment schedules—and never invokes an LLM. ${COORDS}`,
     inputSchema: {
-      title: z.string().min(1).optional().describe('Table-title substring, e.g. "CONTROL VALVE SCHEDULE"'),
+      title: z.preprocess(
+        (v) => (v == null || v === "" ? undefined : String(v)),
+        z.string().min(1).optional(),
+      ).describe('Table-title substring, e.g. "CONTROL VALVE SCHEDULE"'),
       row_key: z.preprocess(
         (v) => (v == null || v === "" ? undefined : String(v)),
         z.string().min(1).optional(),
