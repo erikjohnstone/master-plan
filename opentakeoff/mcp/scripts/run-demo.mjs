@@ -283,6 +283,10 @@ function systemPrompt(truth) {
     /(?:^|_)installed_quantity$/i.test(name));
   const equipmentTagFields = Object.keys(truth.expected).filter((name) =>
     /(?:^|_)equipment_tag$/i.test(name));
+  const planTagFields = Object.keys(truth.expected).filter((name) =>
+    /(?:^|_)plan_tag$/i.test(name));
+  const planStatusFields = Object.keys(truth.expected).filter((name) =>
+    /(?:^|_)plan_status$/i.test(name));
   return [
     "You are an HVAC/BAS estimator operating OpenTakeoff's production MCP API.",
     `The real drawing set ${truth.source_file} is already loaded.`,
@@ -290,6 +294,9 @@ function systemPrompt(truth) {
     needsInstalledQuantity
       ? `Installed quantity is required (${installedFields.join(", ")}): call sweep_schedule_row once per requested tag (tagged_only:true is preferred); this returns the complete tagged count and exact tag_at locations while explicitly excluding the unnecessary unlabeled near-match audit.`
       : "Installed quantity is not requested. Do not call sweep_schedule_row merely for equipment_tag; cite equipment_tag from its exact schedule identity cell returned by query_table.",
+    planTagFields.length || planStatusFields.length
+      ? `Plan location fields are required (${[...planTagFields, ...planStatusFields].join(", ")}): call sweep_schedule_row for each named tag. When the sweep returns found≥1, set each *_plan_tag value to the exact tag string and cite sweep_schedule_row.tag_citations (no schedule table_title/row_key/column). When the tool refuses because the tag is not drawn on any plan sheet, set the matching *_plan_status value exactly to "refused" and cite the schedule MARK/identity cell that proves the row exists — never invent a plan bbox.`
+      : null,
     "For schedule attributes and BAS points-list fields, call query_table. When the prompt gives a distinctive point description but asks you to discover its point mark, use cell_contains with that description, then read every requested field from row.all_cells.",
     "Never invent a table-title filter from the user's category words. Omit title on the first query, or use only a literal title phrase already returned by a tool (for example POINTS LIST); 'BAS points' does not imply a table literally titled BAS POINTS.",
     "If a natural-language description returns no rows, broaden once with cell_contains set to the exact equipment tag from the prompt and no title filter, then inspect the returned descriptions for the requested point meaning. Do not repeat an equivalent empty query.",
