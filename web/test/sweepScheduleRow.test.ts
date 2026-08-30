@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, type Point, type RoomSweepInstance, type SheetViewport } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, leftoverLabeledOccs, typicalMultiplierNear, matchQuantity, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, type Point, type RoomSweepInstance, type SheetViewport, type TagOcc } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -43,9 +43,11 @@ function place(sets: { at: Point; rot?: number; mir?: boolean; sc?: number; segs
 // encloses the whole marker — these tests are about corroboration/
 // classification logic, not re-testing the pad ladder's own widening
 // behavior (that's covered directly, see the "bare underline" test below).
-const tagNear = (at: Point, h = 40): { cx: number; cy: number; h: number; bbox: [number, number, number, number] } => ({
+const tagNear = (at: Point, h = 40, kind?: TagOcc["kind"]): TagOcc => ({
   cx: at[0] - 5, cy: at[1] + h / 2, h, bbox: [at[0] - 10, at[1], at[0], at[1] + h],
+  ...(kind ? { kind } : {}),
 });
+const tagCompound = (at: Point, h = 40): TagOcc => tagNear(at, h, "compound");
 
 // ── sweepRatio ───────────────────────────────────────────────────────────
 test("sweepRatio: same object short-circuits to {scale:1, known:true} without touching upp", () => {
@@ -215,6 +217,89 @@ test("classifySweepMatches: a drawn tag occurrence with no matching geometry nea
   assert.equal(r.text_only.length, 1);
   const t = tagNear([700, 700]);
   assert.deepEqual(r.text_only[0].at, [Math.round(t.cx * 10) / 10, Math.round(t.cy * 10) / 10]);
+});
+
+test("classifySweepMatches: a leftover labeled occurrence on a sheet that already has a counted match is promoted", () => {
+  // Production sweep_schedule_row does not pass excludeCenter — the seed's
+  // own self-match is a counted instance. A second own-tag occurrence a
+  // room away, with no sibling marker clearing the bar, is then a leftover
+  // labeled install (circuit-label lights, a second hose bibb), not a note.
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const sheetSegs = place([{ at: [100, 100] }]);
+  const far = tagCompound([700, 700]);
+  const occ = [tagNear([100, 100]), far];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
+  assert.equal(r.matches.length, 2, "seed self-match plus the leftover labeled occurrence");
+  assert.equal(r.matches.filter((m) => m.labeled_leftover).length, 1);
+  assert.equal(r.text_only.length, 0, "the leftover left text_only once it was counted");
+  assert.equal(matchQuantity(r.matches), 2);
+});
+
+test("classifySweepMatches: a bare leftover with no nearby marker stays text_only", () => {
+  // Production fixture T1: a plan sheet already has counted matches, plus
+  // one bare "T1" note with no sibling marker. That note is not an install.
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const sheetSegs = place([{ at: [100, 100] }]);
+  const occ = [tagNear([100, 100], 40, "exact"), tagNear([700, 700], 40, "exact")];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
+  assert.equal(r.matches.filter((m) => m.labeled_leftover).length, 0);
+  assert.equal(r.text_only.length, 1, "the bare note stays disclosed, never counted");
+  assert.equal(matchQuantity(r.matches), 1);
+});
+
+test("classifySweepMatches: an extra label clustered on a counted match is not a second install", () => {
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const sheetSegs = place([{ at: [100, 100] }]);
+  const twin = tagNear([102, 100], 20); // same device, second convention
+  const occ = [tagNear([100, 100]), twin];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
+  assert.equal(r.matches.filter((m) => m.labeled_leftover).length, 0, "a twin label on the counted instance must not promote");
+});
+
+test("classifySweepMatches: TYP N next to a geometrically-confirmed tag multiplies that match only", () => {
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const sheetSegs = place([{ at: [100, 100] }]);
+  const occ = [tagNear([100, 100]), tagCompound([700, 700])];
+  const typSpans = [
+    { str: "TYP 3", x0: 90, y0: 130, x1: 130, y1: 150 },
+  ];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, { typSpans });
+  const geo = r.matches.find((m) => !m.labeled_leftover)!;
+  const leftover = r.matches.find((m) => m.labeled_leftover)!;
+  assert.equal(geo.count, 3, "the confirmed match sits next to TYP 3");
+  assert.equal(leftover.count, 1, "a leftover label never inherits TYP");
+  assert.equal(matchQuantity(r.matches), 4);
+});
+
+test("leftoverLabeledOccs: no counted match — leftovers stay unpromoted (a note on an empty sheet)", () => {
+  const occ: TagOcc[] = [tagCompound([700, 700])];
+  assert.deepEqual(leftoverLabeledOccs([], occ, new Set(), 20), []);
+});
+
+test("leftoverLabeledOccs: a bare leftover never promotes — only a compound circuit/panel label does", () => {
+  const counted = [{ at: [100, 100] as Point, tag_at: [90, 90, 110, 110] as [number, number, number, number] }];
+  const bareFar = tagNear([700, 700], 40, "exact");
+  assert.equal(leftoverLabeledOccs(counted, [bareFar], new Set(), 20).length, 0);
+  assert.equal(leftoverLabeledOccs(counted, [tagCompound([700, 700])], new Set(), 20).length, 1);
+});
+
+test("typicalMultiplierNear: TYP / TYPICAL + integer 2–50; running text and TYP. alone never multiply", () => {
+  const at: Point = [100, 100];
+  assert.equal(typicalMultiplierNear([{ str: "TYP 3", x0: 90, y0: 90, x1: 120, y1: 110 }], at, 40), 3);
+  assert.equal(typicalMultiplierNear([{ str: "TYPICAL 8", x0: 90, y0: 90, x1: 140, y1: 110 }], at, 40), 8);
+  assert.equal(typicalMultiplierNear([{ str: "TYP.", x0: 90, y0: 90, x1: 120, y1: 110 }], at, 40), 1);
+  assert.equal(typicalMultiplierNear([{ str: "TYPICAL FOR", x0: 90, y0: 90, x1: 180, y1: 110 }], at, 40), 1);
+  assert.equal(typicalMultiplierNear([{ str: "TYP 1", x0: 90, y0: 90, x1: 120, y1: 110 }], at, 40), 1);
+  assert.equal(typicalMultiplierNear([{ str: "TYP 99", x0: 90, y0: 90, x1: 120, y1: 110 }], at, 40), 1);
+  assert.equal(typicalMultiplierNear([{ str: "TYP 3", x0: 900, y0: 900, x1: 930, y1: 920 }], at, 40), 1, "far-away TYP is someone else's callout");
 });
 
 test("classifySweepMatches: cross-scale sweep — the fingerprint is resized per-sheet, and it says so", () => {

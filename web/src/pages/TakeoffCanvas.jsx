@@ -65,7 +65,7 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // The Symbol tool (#264) — the canvas face for the sweep engine. The engine,
 // counter-examples, the luminance channel, and label corroboration all live
 // as pure web libs already; this file adds only the gesture and the review.
-import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc } from "../lib/symbolsweep";
+import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, matchQuantity } from "../lib/symbolsweep";
 import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib/mepconnectivity.ts";
 import { mepLayerSignal } from "../lib/mepsystems.ts";
 // Accuracy-hardening plan Phase 2 — on an unlayered/weakly-layered sheet, a
@@ -7154,24 +7154,24 @@ export default function TakeoffCanvas() {
     async function occOf(key, mark) {
       const spans = await ensureTextSpans(key);
       const exact = spans.filter((sp) => canonMark(sp.str) === mark)
-        .map((sp) => ({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] }));
+        .map((sp) => ({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1], kind: "exact" }));
       // compoundTagOcc's own single-span compound labels ("R1 /C-11") can
       // never coincide with an exact match's own span (equality vs.
       // strictly-longer), so it's merged in ALONGSIDE exact unconditionally
       // — mirrors mcp/src/session.ts's identical fix, both sides calling the
       // SAME symbolsweep.ts functions so they can never silently disagree.
-      const merged = [...exact, ...compoundTagOcc(spans, mark)];
+      const merged = [...exact, ...compoundTagOcc(spans, mark).map((o) => ({ ...o, kind: "compound" }))];
       // Fallback only — a real drawn tag ALSO, separately, routinely splits
       // across multiple SHORTER text runs (see fragmentedTagOcc's own header
       // comment for the two real, different-shaped cases this was found
       // against), and never fires when exact/compound already found
       // something.
-      const fragmented = fragmentedTagOcc(spans, mark);
+      const fragmented = fragmentedTagOcc(spans, mark).map((o) => ({ ...o, kind: "fragmented" }));
       // Third tier — mirrors mcp/src/session.ts's identical fix: a SEPARATE
       // deeper same-row chain (deepHyphenChainTagOcc's own header comment),
       // never invoked unless fragmentedTagOcc's own unmodified search
       // already found nothing.
-      const occ = merged.length ? merged : (fragmented.length ? fragmented : deepHyphenChainTagOcc(spans, mark));
+      const occ = merged.length ? merged : (fragmented.length ? fragmented : deepHyphenChainTagOcc(spans, mark).map((o) => ({ ...o, kind: "fragmented" })));
       return occ.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
     }
 
@@ -7246,7 +7246,8 @@ export default function TakeoffCanvas() {
       const sibSpans = [];
       for (const k of siblings) for (const o of await occOf(key, k)) sibSpans.push({ key: k, cx: o.cx, cy: o.cy });
       let cls;
-      try { cls = classifySweepMatches(t, fp, segs, ratio, occ, sibSpans, anchor.h, sweepOpts); }
+      const typSpans = await ensureTextSpans(key);
+      try { cls = classifySweepMatches(t, fp, segs, ratio, occ, sibSpans, anchor.h, { ...sweepOpts, typSpans }); }
       catch (e) { skipped.push({ sheet: key, role: "plan", reason: String(e?.message || e) }); continue; }
 
       const norm = ([x, y]) => [+(x / dims.w).toFixed(5), +(y / dims.h).toFixed(5)];
@@ -7254,8 +7255,9 @@ export default function TakeoffCanvas() {
       const excluded = cls.excluded.map((e) => ({ at: norm(e.at), tag: e.tag }));
       const withheld = cls.withheld.map((w) => ({ at: norm(w.at), score: w.score, reason: w.reason }));
       const text_only = cls.text_only.map((o) => ({ at: norm(o.at) }));
+      const sheetFound = matchQuantity(cls.matches);
       perSheet.push({
-        sheet: key, found: matches.length, matches,
+        sheet: key, found: sheetFound, matches,
         ...(excluded.length ? { excluded } : {}),
         ...(withheld.length ? { withheld } : {}),
         ...(text_only.length ? { text_only } : {}),
@@ -7263,7 +7265,7 @@ export default function TakeoffCanvas() {
         ...(cls.scaled ? { scaled: cls.scaled } : {}),
         ...(ratio.known ? {} : { scale_assumed: `no scale set on ${anchorKey} or this sheet — swept at 1:1` }),
       });
-      totalFound += matches.length;
+      totalFound += sheetFound;
     }
 
     const notes = [];

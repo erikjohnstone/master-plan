@@ -2,6 +2,12 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — leftover labeled occs and TYP N
+
+### Fixed
+- **A leftover compound circuit/panel label on a sheet that already has a counted match is an install.** `sweep_schedule_row` used to leave every unmatched tag occurrence in `text_only` even when the same sheet already had a geometrically-confirmed instance of that row — circuit-label lights whose glyph did not recur. Those leftovers are now promoted (`labeled_leftover`) when they are a compound circuit/panel label sitting farther than one mark-cluster from every counted instance. A twin label on the same device, a bare leftover (the schematic-versus-plan extra, or a note), and a tag on a sheet with zero confirmed matches stay `text_only`.
+- **`TYP N` / `TYPICAL N` next to a geometrically-confirmed tag is a quantity multiplier.** A short `TYP 3` span in the same callout means three installs, not one. Leftover labels never inherit the multiplier (a labeled miss is still one drawn tag). Running-text `TYPICAL FOR`, a bare `TYP.`, `TYP 1`, or `TYP 99` never multiply. **opentakeoff-mcp 0.9.70** (three surfaces).
+
 ## 2026-08-29 — labeled symbol families, nearest tag claim
 
 ### Fixed

@@ -119,7 +119,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, detectSheetViewports, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type SheetViewport } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, detectSheetViewports, matchQuantity, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type SheetViewport } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -3124,7 +3124,7 @@ export class Session {
       if (!sh.spans) sh.spans = textSpans(sh.page);
       const exact = sh.spans
         .filter((sp) => sp.str.trim().toUpperCase() === key)
-        .map((sp) => ({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number] }));
+        .map((sp) => ({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] as [number, number, number, number], kind: "exact" as const }));
       // compoundTagOcc's own single-span compound labels ("R1 /C-11") can
       // never coincide with an exact match's own span (equality vs.
       // strictly-longer), so it's merged in ALONGSIDE exact unconditionally
@@ -3133,7 +3133,7 @@ export class Session {
       // labeled instances (baker-county-eoc-bidset.pdf#54's own "P1": one
       // bare span plus three real "P1 /C-11"-style compound spans — see
       // compoundTagOcc's own header comment).
-      const merged = [...exact, ...compoundTagOcc(sh.spans, key)];
+      const merged = [...exact, ...compoundTagOcc(sh.spans, key).map((o) => ({ ...o, kind: "compound" as const }))];
       // Fallback only — a real drawn tag ALSO, separately, routinely splits
       // across multiple SHORTER text runs (see fragmentedTagOcc's own header
       // comment for the two real, different-shaped cases this was found
@@ -3147,8 +3147,9 @@ export class Session {
       // already found nothing, and structurally gated to >=2-hyphen keys
       // (no real tag in this project's own corpus keys has one), so it can
       // never touch a case fragmentedTagOcc itself already resolves.
-      const fragmented = fragmentedTagOcc(sh.spans, key);
-      const occ = merged.length ? merged : (fragmented.length ? fragmented : deepHyphenChainTagOcc(sh.spans, key));
+      const fragmented = fragmentedTagOcc(sh.spans, key).map((o) => ({ ...o, kind: "fragmented" as const }));
+      const deep = deepHyphenChainTagOcc(sh.spans, key).map((o) => ({ ...o, kind: "fragmented" as const }));
+      const occ = merged.length ? merged : (fragmented.length ? fragmented : deep);
       return occ.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
     };
     // Compound-key geometric fallback — a real, general bug distinct from
@@ -3614,7 +3615,7 @@ export class Session {
     // marker resized to a 12×-smaller plan has a 12×-smaller footprint, and a
     // radius left at the seed's size would sweep up whatever tag happened to
     // be nearby. Unscaled sheets take the identical radius they always did.
-    type CountedMatch = SweepMatch & { tag_at: [number, number, number, number] };
+    type CountedMatch = SweepMatch & { tag_at: [number, number, number, number]; labeled_leftover?: boolean; count?: number };
     const perSheet: {
       state: SheetState;
       matches: CountedMatch[];
@@ -3646,7 +3647,7 @@ export class Session {
       if (fp) {
         let cls: ReturnType<typeof classifySweepMatches>;
         try {
-          cls = classifySweepMatches(t, fp, g2.segs, ratio, occ, sibSpans, anchorHForSweep, sweepOpts);
+          cls = classifySweepMatches(t, fp, g2.segs, ratio, occ, sibSpans, anchorHForSweep, { ...sweepOpts, typSpans: sh.spans });
         } catch (e) {
           skipped.push({ sheet: sh.key, role: "plan", reason: e instanceof Error ? e.message : String(e) });
           continue;
@@ -3656,12 +3657,12 @@ export class Session {
         // inline-motif fallback path (register/grille hatch fill) — see the
         // corroborateInlineMotif branch above for why this runs instead.
         const inlineRes = sweepInlineMotif(inlineFp!, g2.segs, g2.meta, sh.upp);
-        const icls = classifyInlineMotifMatches(t, inlineRes, occ, sibSpans, anchor.h);
+        const icls = classifyInlineMotifMatches(t, inlineRes, occ, sibSpans, anchor.h, undefined, sh.spans);
         // adapted into the whole-shape CountedMatch/SweepWithheld shape so the
         // commit/notes/aggregation code below stays untouched either way —
         // size_score standing in for score, rotation/mirrored not meaningful
         // for a hatch-fill match (no rigid shape to rotate/mirror).
-        matches = icls.matches.map((m) => ({ at: m.at, score: m.size_score, rotation: 0, mirrored: false, tag_at: m.tag_at }));
+        matches = icls.matches.map((m) => ({ at: m.at, score: m.size_score, rotation: 0, mirrored: false, tag_at: m.tag_at, ...(m.labeled_leftover ? { labeled_leftover: true } : {}), ...(m.count != null ? { count: m.count } : {}) }));
         withheld = icls.withheld.map((w) => ({ at: w.at, score: w.size_score, rotation: 0, mirrored: false, reason: w.reason }));
         excluded = icls.excluded;
         text_only = icls.text_only;
@@ -3745,13 +3746,13 @@ export class Session {
 
     // 5. commit — condition minted FROM the row (its key IS the tag), the
     // schedule verdict and the seed citation on every marker, one undo step
-    const found = perSheet.reduce((n, p) => n + p.matches.length, 0);
+    const found = perSheet.reduce((n, p) => n + matchQuantity(p.matches), 0);
     let committed: { committed: number; shape_ids: string[]; condition: string; ea_total: number } | undefined;
     if (opts.commit && found) {
       const ids: string[] = [];
       for (const ps of perSheet) {
         for (const m of ps.matches) {
-          ids.push(this.commit(ps.state, t, "count", [m.at], { count: 1 }, {
+          ids.push(this.commit(ps.state, t, "count", [m.at], { count: m.count ?? 1 }, {
             method: "symbol_sweep",
             actor: "agent",
             reviewed: false,
@@ -3805,6 +3806,14 @@ export class Session {
     if (rowRedundant.length) {
       notes.push(`${rowRedundant.map((p) => `${p.redundant_view.length} on ${p.state.key}`).join(", ")} withheld from the count as a REDUNDANT VIEW — the same "${t}" mark redrawn for another view of the same physical device (another sheet's enlarged plan of the same room, or another titled viewport on this sheet — a duct plan beside a piping plan, a second section cut), not a second install; audit with view_sheet before trusting this.`);
     }
+    const leftoverN = perSheet.reduce((n, p) => n + p.matches.filter((m) => m.labeled_leftover).length, 0);
+    if (leftoverN) {
+      notes.push(`${leftoverN} counted from a leftover compound circuit/panel label on a sheet that already has a geometrically-confirmed "${t}" — the tag is drawn, the sibling marker did not clear the bar; audit with view_sheet before trusting the count.`);
+    }
+    const typN = perSheet.reduce((n, p) => n + p.matches.filter((m) => (m.count ?? 1) > 1).length, 0);
+    if (typN) {
+      notes.push(`${typN} geometrically-confirmed match(es) sit next to a TYP N / TYPICAL N callout and were counted as that many installs, not one; leftover labels never take this multiplier.`);
+    }
     return {
       tag: t,
       row: {
@@ -3832,8 +3841,8 @@ export class Session {
       found,
       sheets: perSheet.map((p) => ({
         sheet: p.state.key,
-        found: p.matches.length,
-        matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, tag_at: Session.wireBox(m.tag_at) })),
+        found: matchQuantity(p.matches),
+        matches: p.matches.map((m) => ({ at: [round1(m.at[0]), round1(m.at[1])], score: m.score, rotation: m.rotation, mirrored: m.mirrored, tag_at: Session.wireBox(m.tag_at), ...(m.labeled_leftover ? { labeled_leftover: true } : {}), ...(m.count != null && m.count !== 1 ? { count: m.count } : {}) })),
         withheld: p.withheld.map((w) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, reason: w.reason })),
         excluded: p.excluded.map((e) => ({ at: [round1(e.at[0]), round1(e.at[1])], tag: e.tag })),
         text_only: p.text_only,

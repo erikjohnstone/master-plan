@@ -110,9 +110,12 @@ Forty tools, in the order an agent tends to reach for them:
   (a labeled family of near-bar siblings of the one confident instance
   counts; a lone leftover labeled near-miss stays withheld);
   markers labeled with a sibling key are excluded and say whose they are,
-  unlabeled ones are withheld as questions, and a row whose tag cannot be
-  geometrically anchored is *refused with the reason*—a fingerprint is
-  never guessed from text alone). Scanned sheets work
+  unlabeled ones are withheld as questions; a leftover compound
+  circuit/panel label on a sheet that already has a counted match is
+  promoted (`labeled_leftover`); a `TYP N` callout next to a
+  geometrically-confirmed tag multiplies that match only; and a row whose
+  tag cannot be geometrically anchored is *refused with the reason*—a
+  fingerprint is never guessed from text alone). Scanned sheets work
   (#154): where vectors can't bound the room—an image-only scan, or a scan
   wrapper whose only linework is the title block—`one_click` and
   `detect_rooms` fall back automatically to flooding the sheet's rendered
