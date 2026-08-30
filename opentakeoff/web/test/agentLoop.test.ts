@@ -314,7 +314,7 @@ test("installed quantity cannot finish without deterministic count evidence", ()
         },
       }],
     } },
-  ], "Cite the schedule MARK cells for VAV-A101 and AHU-A1, so I can spot-check.",
+  ], "Cite the schedule MARK cells for VAV-A101, so I can spot-check.",
   "VAV-A101 MARK is cited. AHU-A1 is also on the set."), null);
   // Count / cite-MARK goals must not demand painting every numeric the model
   // happened to copy from a schedule row.

@@ -788,6 +788,33 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   if (mentionedQuerySheets.length) {
     return `The final answer uses query_table row(s) without naming their evidence sheet id(s): ${[...new Set(mentionedQuerySheets)].slice(0, 6).join("; ")}. Copy the unchanged match.sheet string from the tool result into the citation.`;
   }
+  // Explicit cite-target tags from the goal must each be painted (MARK spot-check).
+  if (citeTargetsFromGoal && asksToShowCite) {
+    const paintedTags = new Set();
+    for (const { name, out } of callLog) {
+      if (name !== "highlight_citation" || out?.error) continue;
+      const textCanon = String(out.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (textCanon) paintedTags.add(textCanon);
+      // Also accept paints whose bbox matches a queried cell for that key.
+      for (const { out: qOut } of callLog.filter((c) => c.name === "query_table")) {
+        for (const match of qOut?.matches || []) {
+          const keyCanon = String(match?.row?.key || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+          if (!keyCanon || !citeTargetsFromGoal.has(keyCanon)) continue;
+          const cells = Object.values(match?.row?.all_cells || match?.row?.cells || {});
+          if (cells.some((cell) => Array.isArray(cell?.bbox) && cell.bbox.length === 4
+            && out.sheet === match.sheet
+            && Array.isArray(out.bbox_px)
+            && out.bbox_px.every((value, index) => Math.abs(value - cell.bbox[index]) <= 2))) {
+            paintedTags.add(keyCanon);
+          }
+        }
+      }
+    }
+    const missingCite = [...citeTargetsFromGoal].filter((tag) => !paintedTags.has(tag));
+    if (missingCite.length) {
+      return `The goal asks to cite MARK cells for ${missingCite.join(", ")}, but those tags are not painted yet. Re-query each with row_key, then call highlight_citation on the MARK/identity bbox before finishing.`;
+    }
+  }
   // Full-set schedule takeoffs must use title-scan query_table counts — not
   // the number of MARK cells painted for spot-check.
   const asksScheduleCounts = /\b(?:takeoff|how many|counts?|totals?|splits?)\b/i.test(goal)
@@ -1117,9 +1144,11 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     appendToolResults(provider, messages, results);
   }
   emit({ type: "max_iterations", limit: maxIterations });
-  // Surface the best draft so the Agent panel still shows an Answer thread
-  // entry when the step cap stops a long takeoff mid-gate — estimators can
-  // review what was gathered instead of an empty panel.
-  if (lastDraftText) emit({ type: "text", text: lastDraftText });
-  return { status: "max_iterations", iterations, text: lastDraftText || undefined };
+  // Only surface a draft Answer if it already clears evidence gates — otherwise
+  // a step-cap stop would publish a paint-only / incomplete takeoff as done.
+  if (lastDraftText && !requiredEvidenceCorrection(callLog, goal, lastDraftText)) {
+    emit({ type: "text", text: lastDraftText });
+    return { status: "max_iterations", iterations, text: lastDraftText };
+  }
+  return { status: "max_iterations", iterations };
 }

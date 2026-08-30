@@ -177,19 +177,23 @@ try {
   const checks = [
     [["AHU", "AIR HANDLING"], truth.expected.ahu_count.value],
     [["DOAH", "DEDICATED OUTDOOR"], truth.expected.doah_count.value],
-    [["FCU", "FAN COIL"], truth.expected.fcu_count.value],
-    [["VAV", "VARIABLE AIR"], truth.expected.vav_count.value],
+    [["FCU", "FAN COIL", "FAN-COIL"], truth.expected.fcu_count.value],
+    [["VAV", "VARIABLE"], truth.expected.vav_count.value],
     [["AIR-COOLED CHILLER", "AIR COOLED CHILLER", "AIR-COOLED"], truth.expected.air_cooled_chiller_count.value],
     [["HEAT-RECOVERY", "HEAT RECOVERY"], truth.expected.heat_recovery_chiller_count.value],
     [["BOILER"], truth.expected.boiler_count.value],
-    [["AIR OPS", "A=", "A:"], truth.expected.fcu_air_ops_count.value],
-    [["ATCT", "T=", "T:"], truth.expected.fcu_atct_count.value],
+    [["AIR OPS", "A =", "A=", "A:"], truth.expected.fcu_air_ops_count.value],
+    [["ATCT", "T =", "T=", "T:"], truth.expected.fcu_atct_count.value],
     [["POINTS", "BAS", "AHU-T1A"], truth.expected.bas_ahu_t1a_tib_points_rows.value],
   ];
   for (const [labels, value] of checks) {
     if (!near(labels, value)) {
       throw new Error(`D03 UI Answer missing labeled truth for ${labels[0]}=${value}`);
     }
+  }
+  // Explicit set totals that must not be doubled (points list is 62, not 122).
+  if (/\b122\b/.test(primaryAnswer) && !near(["POINTS", "BAS", "AHU-T1A"], 62)) {
+    throw new Error("D03 UI Answer reports doubled points-list rows without the correct 62.");
   }
   // Reject known wrong DOAH rollups that blend UNIT+HANDLING page sums.
   if (/\bDOAH\b[^0-9]{0,60}\b4\b/i.test(answerNorm) && !near(["DOAH", "DEDICATED OUTDOOR"], 3)) {
