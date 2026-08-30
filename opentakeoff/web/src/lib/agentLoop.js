@@ -89,12 +89,16 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     .filter(Boolean));
   const unswept = [...queried].filter((tag) => !swept.has(tag));
   const finalCanonical = finalText.toUpperCase().replace(/[^A-Z0-9]/g, "");
-  const locationClaims = finalText.split(/[\n.!?]+/)
-    .filter((fragment) => /\bboth tags\b|\bplan location\b|\blocated on (?:the )?plan\b/i.test(fragment));
   const claimedUnswept = unswept.filter((tag) => {
     const tagCanonical = tag.replace(/[^A-Z0-9]/g, "");
-    return locationClaims.some((fragment) =>
-      fragment.toUpperCase().replace(/[^A-Z0-9]/g, "").includes(tagCanonical));
+    return finalText.split(/[\n.!?]+/).some((fragment) => {
+      const words = fragment.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim();
+      const canonical = words.replace(/\s+/g, "");
+      if (!canonical.includes(tagCanonical)) return false;
+      return /\bBOTH TAGS\b/.test(words)
+        || /\bPLAN LOCATION (?:FOR|OF) \b/.test(words)
+        || /\bLOCATED ON (?:THE )?PLAN\b/.test(words);
+    });
   });
   if (claimedUnswept.length) {
     return `The final answer claims a plan location for unswept tag(s): ${claimedUnswept.join(", ")}. A schedule query proves schedule data only. Remove those plan-location claims or call sweep_schedule_row for each exact tag.`;
