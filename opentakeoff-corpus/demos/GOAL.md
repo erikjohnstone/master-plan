@@ -79,6 +79,10 @@ A demo that passes the primary ask but fails the follow-up is **not** locked.
 Fix production behavior, re-prove the UI recording (primary ask + correct
 verified follow-up), then advance.
 
+**After D10 is locked**, the suite still requires the **Final suite gate**
+below (full D01–D10 sequential N=5 again = 50 API runs, plus 3 correct UI
+tests per demo with no video). Per-demo lock alone is not suite completion.
+
 ## Demo quality bar (non-negotiable)
 
 Demos are not tag flybys. They must look like a competent estimator using the
@@ -234,6 +238,35 @@ workspace.
    truth **and** shows at least one correctly answered follow-up in-thread,
    and commit. Only then does it count toward ten. Do not begin the next
    slate demo until this lock is complete.
+
+## Final suite gate (after D10 lock — non-negotiable)
+
+Locking D01–D10 one-by-one is **not** the finish line. Immediately after the
+**10th demo is locked**, before declaring the suite complete, re-prove the
+**entire** slate in one continuous pass:
+
+1. **Sequential N=5 for every demo (50 runs).** For each of D01, D02, …, D10
+   in order, re-run the frozen prompt **five times** (`run:demo` →
+   `verify:demo`). All **50** runs must pass value / cite-form / cite-ground
+   (and latency) against that demo's `truth.json`. Do **not** skip a demo
+   because it was locked earlier. Do **not** interleave or parallelize across
+   demos. A single failed run fails the suite gate — fix production behavior,
+   then restart this final pass from D01 run 1 (full 50 again), not from the
+   failing demo alone.
+2. **Three correct UI tests per demo (no video required for this gate).** For
+   each of D01–D10, run **three** independent production UI Agent proofs on
+   the live localhost canvas (same frozen primary prompt + required follow-up
+   bar as the per-demo lock). All three must be correct: usable Answer,
+   useful source cards, readable paints, verified follow-up. **No screen
+   recording is required** for these final UI tests — harness / headed
+   pass-fail evidence is enough — but wrong or empty answers still fail.
+   That is **30** UI proofs (10 × 3) on top of the 50 API runs.
+3. **Straight-correct bar.** The suite is complete only when the final pass
+   finishes **50/50 API** and **30/30 UI** without a fail. Partial credit
+   from earlier per-demo locks does not count.
+
+Arithmetic check: 10 demos × 5 API runs = **50** sequential API demos; plus
+10 × 3 UI tests = **30** UI proofs. Both must clear after D10 lock.
 
 ## Required per-demo layout
 
