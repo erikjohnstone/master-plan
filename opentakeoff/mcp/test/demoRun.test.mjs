@@ -553,14 +553,41 @@ test("compactToolResult compacts sheet_graph but preserves sweep_schedule_row ev
     data: {
       tag: "CV-1",
       found: 1,
+      search_scope: "exhaustive",
+      unlabeled_audit_complete: true,
       tag_citations: [{ sheet: "set.pdf#5", bbox: [10, 20, 30, 40] }],
+      row: {
+        sheet: "set.pdf#13",
+        table: "CONTROL VALVE SCHEDULE",
+        key: "CV-1",
+        cells: { GPM: "5" },
+        cell_citations: { GPM: { text: "5", bbox: [1, 2, 3, 4] } },
+        citation: { sheet: "set.pdf#13", bbox: [1, 2, 3, 4] },
+      },
+      anchor: {
+        sheet: "set.pdf#5",
+        at: [15, 25],
+        rect: [1, 2, 3, 4],
+        segments: 4,
+        length_px: 40,
+        corroborated: true,
+        occurrences: 1,
+      },
       sheets: [
-        { sheet: "set.pdf#5", found: 1, matches: [{ at: [15, 25], score: 1, rotation: 0, mirrored: false, tag_at: [10, 20, 30, 40] }] },
+        { sheet: "set.pdf#3", found: 0, matches: [], withheld: [], excluded: [], text_only: [], candidates: { considered: 0, dropped: 0 }, complete: true, elapsed_ms: 1 },
+        { sheet: "set.pdf#5", found: 1, matches: [{ at: [15, 25], score: 1, rotation: 0, mirrored: false, tag_at: [10, 20, 30, 40] }], withheld: [], excluded: [], text_only: [], candidates: { considered: 1, dropped: 0 }, complete: true, elapsed_ms: 2 },
       ],
       complete: true,
+      skipped: [],
     },
   };
-  assert.deepEqual(compactToolResult(sweep), sweep);
+  const compacted = compactToolResult(sweep);
+  assert.equal(compacted.data.found, 1);
+  assert.deepEqual(compacted.data.tag_citations, sweep.data.tag_citations);
+  assert.equal(compacted.data.sheets.length, 1);
+  assert.equal(compacted.data.sheets[0].sheet, "set.pdf#5");
+  assert.equal(compacted.data.sheets_omitted_empty, 1);
+  assert.equal(compacted.data.truncated_for_context, undefined);
 });
 
 test("demo runner preserves diagnostics when the model exceeds its iteration budget", async () => {

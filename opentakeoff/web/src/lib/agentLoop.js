@@ -1568,6 +1568,47 @@ const resultText = (out) => {
       note: "sheet_graph compacted; use query_table/find_schedule for schedule titles",
     };
   }
+  // Keep sweep_schedule_row count evidence; drop empty plan-sheet audit rows
+  // before the hard char cap can slice through tag_citations.
+  if (
+    typeof payload?.found === "number"
+    && Array.isArray(payload?.tag_citations)
+    && Array.isArray(payload?.sheets)
+    && (payload.tag != null || payload.anchor != null)
+  ) {
+    const sheets = payload.sheets.filter((sheet) => {
+      if (!sheet || typeof sheet !== "object") return false;
+      if (Number(sheet.found) > 0) return true;
+      if (Array.isArray(sheet.matches) && sheet.matches.length) return true;
+      if (Array.isArray(sheet.withheld) && sheet.withheld.length) return true;
+      if (Array.isArray(sheet.excluded) && sheet.excluded.length) return true;
+      if (Array.isArray(sheet.text_only) && sheet.text_only.length) return true;
+      if (Array.isArray(sheet.redundant_view) && sheet.redundant_view.length) return true;
+      return false;
+    });
+    payload = {
+      tag: payload.tag,
+      search_scope: payload.search_scope,
+      unlabeled_audit_complete: payload.unlabeled_audit_complete,
+      found: payload.found,
+      tag_citations: payload.tag_citations,
+      row: payload.row
+        ? {
+          sheet: payload.row.sheet,
+          table: payload.row.table,
+          key: payload.row.key,
+          cells: payload.row.cells,
+          citation: payload.row.citation,
+        }
+        : undefined,
+      anchor: payload.anchor,
+      sheets,
+      sheets_omitted_empty: Math.max(0, payload.sheets.length - sheets.length),
+      complete: payload.complete,
+      note: payload.note,
+      warning: payload.warning,
+    };
+  }
   // Compact read_schedule / large row dumps.
   if (Array.isArray(payload?.rows) && payload.rows.length > 4) {
     const { image_data_url: _i, ...rest } = payload;

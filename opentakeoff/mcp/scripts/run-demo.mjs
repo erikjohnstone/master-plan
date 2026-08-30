@@ -338,6 +338,51 @@ export function compactSheetGraph(data) {
   };
 }
 
+/** Keep installed-count evidence; drop empty plan-sheet audit rows. */
+export function compactSweepScheduleRow(data) {
+  if (!data || typeof data !== "object") return data;
+  const sheets = Array.isArray(data.sheets) ? data.sheets : [];
+  const active = sheets.filter((sheet) => {
+    if (!sheet || typeof sheet !== "object") return false;
+    if (Number(sheet.found) > 0) return true;
+    if (Array.isArray(sheet.matches) && sheet.matches.length) return true;
+    if (Array.isArray(sheet.withheld) && sheet.withheld.length) return true;
+    if (Array.isArray(sheet.excluded) && sheet.excluded.length) return true;
+    if (Array.isArray(sheet.text_only) && sheet.text_only.length) return true;
+    if (Array.isArray(sheet.redundant_view) && sheet.redundant_view.length) return true;
+    return false;
+  });
+  const row = data.row && typeof data.row === "object"
+    ? {
+      sheet: data.row.sheet,
+      table: data.row.table,
+      key: data.row.key,
+      cells: data.row.cells,
+      citation: data.row.citation,
+      // cell_citations ride with query_table for field answers; keep the row cells.
+    }
+    : data.row;
+  return {
+    tag: data.tag,
+    search_scope: data.search_scope,
+    unlabeled_audit_complete: data.unlabeled_audit_complete,
+    row,
+    tag_citations: data.tag_citations,
+    anchor: data.anchor,
+    found: data.found,
+    sheets: active,
+    sheets_omitted_empty: Math.max(0, sheets.length - active.length),
+    complete: data.complete,
+    skipped: Array.isArray(data.skipped) ? data.skipped.slice(0, 8) : data.skipped,
+    committed: data.committed,
+    shape_ids: data.shape_ids,
+    condition: data.condition,
+    ea_total: data.ea_total,
+    note: data.note,
+    warning: data.warning,
+  };
+}
+
 /** Keep demo-runner transcripts under the model context limit on large sets. */
 export function compactToolResult(result) {
   if (!result || typeof result !== "object") return result;
@@ -355,6 +400,13 @@ export function compactToolResult(result) {
   // evidence and causes honest refusals on installed-quantity demos.
   if (typeof data.available === "boolean" && Array.isArray(data.sheets) && data.sheets.length > 0) {
     next = compactSheetGraph(data);
+  } else if (
+    typeof data.found === "number"
+    && Array.isArray(data.tag_citations)
+    && Array.isArray(data.sheets)
+    && (data.tag != null || data.anchor != null)
+  ) {
+    next = compactSweepScheduleRow(data);
   } else if (Array.isArray(data.matches) && data.matches.length > 2
     && Number.isFinite(Number(data.count)) && Number(data.count) >= 2) {
     const q = data.query || {};
@@ -377,6 +429,36 @@ export function compactToolResult(result) {
   const payload = { ...result, data: next };
   const text = JSON.stringify(payload);
   if (text.length > 8000) {
+    // Prefer a real shrink over a lying "truncated" flag that still ships the
+    // full payload — that note made the model skip follow-up sweeps.
+    if (
+      typeof next.found === "number"
+      && Array.isArray(next.tag_citations)
+      && next.tag != null
+    ) {
+      return {
+        ...result,
+        data: {
+          tag: next.tag,
+          found: next.found,
+          tag_citations: next.tag_citations,
+          row: next.row
+            ? { sheet: next.row.sheet, table: next.row.table, key: next.row.key, cells: next.row.cells }
+            : undefined,
+          anchor: next.anchor
+            ? {
+              sheet: next.anchor.sheet,
+              at: next.anchor.at,
+              corroborated: next.anchor.corroborated,
+              occurrences: next.anchor.occurrences,
+            }
+            : undefined,
+          complete: next.complete,
+          search_scope: next.search_scope,
+          note: "sweep_schedule_row compacted to count evidence; empty plan sheets omitted.",
+        },
+      };
+    }
     return {
       ...result,
       data: {
