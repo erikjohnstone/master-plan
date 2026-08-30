@@ -1041,48 +1041,6 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       && /(?:equipment totals|total scheduled units)/i.test(answerNorm)) {
       return "The answer includes both a title-scan/schedule-counts table and a second equipment-totals table. Keep ONE family-totals table that copies title-scan query_table counts — remove any second table that recounts only painted/spot-check MARKs.";
     }
-    // Also reject when the same family’s first nearby total disagrees across mentions
-    // (e.g. AHU **5** in one table and AHU **2** in another) even without those headings.
-    for (const { out } of titleScans) {
-      const count = Number(out.count);
-      if (!Number.isFinite(count) || count < 2) continue;
-      const title = scanTitle(out).toUpperCase();
-      let label = null;
-      if (/FAN\s*COIL/.test(title)) label = "FCU";
-      else if (/DEDICATED OUTDOOR AIR UNIT/.test(title) && !/HANDLING/.test(title)) label = "DOAH unit";
-      else if (/AIR HANDLING UNIT/.test(title) && !/DEDICATED/.test(title)) label = "AHU";
-      else if (/VARIABLE AIR VOLUME|\bVAV\b/.test(title)) label = "VAV";
-      else if (/BOILER/.test(title)) label = "boiler";
-      else if (/POINTS LIST/.test(title)) label = "points-list";
-      if (!label) continue;
-      const splitVals = new Set(
-        Object.entries(out.building_tag_counts || {})
-          .filter(([k]) => k !== "other")
-          .map(([, n]) => Number(n))
-          .filter((n) => Number.isFinite(n) && n >= 1),
-      );
-      const firsts = [];
-      const labelRes = labelPattern(label);
-      for (const m of answerNorm.matchAll(labelRes)) {
-        const after = answerNorm.slice(m.index + m[0].length);
-        // Skip MARK tags like VAV-A101 / AHU-A1 — their digits are not family totals.
-        if (/^\s*-\s*[A-Z]?\d/i.test(after)) continue;
-        const window = answerNorm.slice(m.index, Math.min(answerNorm.length, m.index + m[0].length + 48))
-          // Schedule continuation banners ("2 OF 2") and bbox arrays are not family totals.
-          .replace(/\[[^\]]{0,120}\]/g, " ")
-          .replace(/\b\d+\s*OF\s*\d+\b/gi, " ");
-        const num = window.match(/(?:^|[^0-9])(\d{1,4})(?![0-9])/);
-        // Image-pixel bbox coords are typically >> schedule family totals.
-        if (num && Number(num[1]) <= 200) firsts.push(Number(num[1]));
-      }
-      const distinct = [...new Set(firsts.filter((n) => Number.isFinite(n) && n >= 2))];
-      if (distinct.includes(count) && distinct.some((n) => n !== count && !splitVals.has(n))) {
-        conflictingCounts.push(`${label} shows both ${count} and ${distinct.find((n) => n !== count && !splitVals.has(n))}`);
-      }
-    }
-    if (conflictingCounts.length) {
-      return `The answer reports conflicting schedule totals for the same equipment family (${[...new Set(conflictingCounts)].slice(0, 6).join("; ")}). Keep ONE family-totals table that copies title-scan query_table counts — remove any second table that recounts only painted/spot-check MARKs.`;
-    }
   }
   return null;
 }
