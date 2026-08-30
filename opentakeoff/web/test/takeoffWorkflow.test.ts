@@ -123,3 +123,67 @@ test("workflowDirective is non-null for active intents", () => {
   assert.match(String(d), /phase=survey/);
   assert.equal(workflowDirective("generic", state), null);
 });
+
+test("phrase-robust corpus compile: valve ≡ control valve; take off; full; no literal complete", () => {
+  const valvePhrases = [
+    "Run a complete valve takeoff on this blueprint set",
+    "Run a complete control valve takeoff on this blueprint set",
+    "Do a full control-valve takeoff of these drawings",
+    "Take off all valves on this set",
+    "valve takeoff for this project",
+    "Control valve quantity takeoff of the loaded set",
+  ];
+  for (const p of valvePhrases) {
+    assert.equal(corpusCompileKind(p), "control_valves", p);
+    assert.equal(classifyTakeoffIntent(p), "corpus_valves", p);
+  }
+  const hvacPhrases = [
+    "Do a complete HVAC equipment quantity takeoff of this set",
+    "Full HVAC equipment takeoff on these drawings",
+    "HVAC equipment takeoff of the loaded set",
+  ];
+  for (const p of hvacPhrases) {
+    assert.equal(corpusCompileKind(p), "hvac_equipment", p);
+  }
+  const basPhrases = [
+    "Do a complete BAS / DDC points takeoff of this set",
+    "Full DDC points takeoff on these drawings",
+    "BAS points takeoff of the loaded set",
+  ];
+  for (const p of basPhrases) {
+    assert.equal(corpusCompileKind(p), "bas_points", p);
+  }
+  // Named multi-list stays off compile.
+  assert.equal(corpusCompileKind(D10_GOAL), null);
+  // FCU across buildings without hardcoding project names.
+  assert.equal(
+    classifyTakeoffIntent("Compare scheduled fan-coil quantities across the three buildings"),
+    "fcu_buildings",
+  );
+});
+
+test("named-family / FCU / valve-join goals route through durable intents", () => {
+  assert.equal(
+    classifyTakeoffIntent("How many FCUs across Air Ops vs MITRACON buildings?"),
+    "fcu_buildings",
+  );
+  const fcu = advanceTakeoffWorkflow("fcu_buildings", [], "How many FCUs across Air Ops vs MITRACON?");
+  assert.equal(fcu.phase, "title_scans");
+  assert.match(fcu.nextMove || "", /FAN COIL/);
+
+  const d06 = readFileSync(
+    new URL("../../../opentakeoff-corpus/demos/D06-control-valve-takeoff/prompt.txt", import.meta.url),
+    "utf8",
+  );
+  assert.equal(classifyTakeoffIntent(d06), "valve_join");
+  assert.equal(corpusCompileKind(d06), null);
+  const vj = advanceTakeoffWorkflow("valve_join", [], d06);
+  assert.equal(vj.phase, "survey");
+  assert.ok(vj.allowedTools?.includes("sheet_graph"));
+  const afterGraph = advanceTakeoffWorkflow("valve_join", [{
+    name: "sheet_graph",
+    out: { sheets: [{ id: "M-601" }] },
+  }], d06);
+  assert.equal(afterGraph.phase, "title_scans");
+  assert.match(afterGraph.nextMove || "", /CONTROL VALVE/);
+});

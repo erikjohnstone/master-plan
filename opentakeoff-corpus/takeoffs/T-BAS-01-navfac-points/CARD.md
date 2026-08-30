@@ -1,6 +1,6 @@
 # T-BAS-01 — NAVFAC BAS / DDC points takeoff
 
-Status: `REGRESSED` — POINTS LIST role/ODL fix; truth refresh + N=5 restart required (was LOCKED MCP 5/5 · UI 5/5)
+Status: `LOCKED` (MCP 5/5 · UI 5/5) — ODL also runs on legend/unknown sheets that print locked POINTS/DDC list titles (NAVFAC #64); broad POINTS LIST→schedule role flip reverted (over-recovered Air Ops siblings).
 
 ## Set
 

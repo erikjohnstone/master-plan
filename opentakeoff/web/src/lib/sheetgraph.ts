@@ -133,16 +133,6 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   //      sheet is deliberately left untouched, matching this fix's real
   //      scope.
   { re: /^(?:[A-Z]+\s+)?(?:ABBREVIATIONS|SYMBOLS)(?:\s+AND\s+(?:ABBREVIATIONS|SYMBOLS))?$|^LINE\s+TYPES$|^VALVES\s+AND\s+FITTINGS$/, role: "legend", conf: 0.72 },
-  // Real, found live (navfac-cherry-point-atc mechanical #64/#65/#67): ATCT /
-  // DOAH / AHU / FCU POINTS LIST and DDC POINTS LIST sheets print titles like
-  // "POINTS LIST DOAH-TI" / "FCU WITH … DDC POINTS LIST" — they do NOT end in
-  // the word SCHEDULE, so SCHEDULE_TITLE_RE misses them. Generic /SCHEDULE/
-  // and /LEGEND/ both fire at 0.5 from note text ("MECHANICAL LEGEND",
-  // "POINTS SCHEDULE"), dissent halves confidence, and the sheet can land as
-  // role "legend". enhanceTablesWithODL only runs on role === "schedule", so
-  // the POINTS LIST tables never get ODL-recovered and T-BAS-01 compiles to 0.
-  // Prefer these real list titles as schedule at schedule-title confidence.
-  { re: /\bPOINTS?\s+LIST\b|\bDDC\s+POINTS?(?:\s+LIST)?\b/, role: "schedule", conf: 0.86 },
   { re: /DEMOLITION\s+PLAN|DEMO\s+PLAN/, role: "demolition", conf: 0.9 },
   // every discipline draws plans, not just finishes — an M-sheet's "SECOND
   // FLOOR DUCTWORK PLAN" is as much a plan title as an A-sheet's finish plan.

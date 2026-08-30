@@ -12,7 +12,38 @@
  * Extensible: add intents/phases here; do not special-case corpus answers.
  */
 
-/** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"generic"} TakeoffIntent */
+/** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"generic"} TakeoffIntent */
+
+/** Estimator phrasing: "takeoff", "take off", counts, rollups. */
+export function goalAsksTakeoff(g) {
+  return /\b(?:take\s*offs?|takeoff|quantity\s+takeoff|count|how many|totals?|rollup|scheduled)\b/i.test(String(g || ""));
+}
+
+/** Loaded set / these drawings / this blueprint — not a named corpus set. */
+export function goalNamesLoadedSet(g) {
+  const s = String(g || "");
+  return /\b(?:this|these|the)\s+(?:blueprint\s+|plan\s+|drawing\s+)?(?:set|drawings|plans|pdf|project)\b/i.test(s)
+    || /\bon this (?:blueprint|plan)\s+set\b/i.test(s)
+    || /\bof this set\b/i.test(s)
+    || /\b(?:loaded|current|open)\s+(?:set|project|drawings|plan)\b/i.test(s)
+    || /\bacross (?:this|the)\s+(?:set|project|drawings)\b/i.test(s);
+}
+
+/**
+ * Set-wide finished takeoff intent (complete/full/entire, or a set-scoped
+ * valve/HVAC/BAS takeoff where "complete" is implied by scope).
+ */
+export function goalAsksCompleteSetTakeoff(g) {
+  const s = String(g || "");
+  if (!goalAsksTakeoff(s) || !goalNamesLoadedSet(s)) return false;
+  if (/\b(?:complete|full|entire|whole)\b/i.test(s)) return true;
+  // "valve takeoff on this set" / "BAS points takeoff of these drawings"
+  // without the word "complete" — still a set-wide compile ask.
+  if (/\b(?:control\s+)?valves?\b/i.test(s)) return true;
+  if (/\b(?:BAS|DDC)\b/i.test(s) && /\bpoints?\b/i.test(s)) return true;
+  if (/\bHVAC\b/i.test(s) && /\bequipment\b/i.test(s)) return true;
+  return false;
+}
 
 /** @typedef {"survey"|"compile"|"title_scans"|"spot_cites"|"paint"|"answer"|"done"} WorkflowPhase */
 
@@ -27,16 +58,12 @@ export function corpusCompileKind(goal) {
   const g = String(goal || "");
   // Specific named points lists → title-scan workflow, not full-set compile.
   if (namedPointsListTitles(g).length >= 2) return null;
-  const completeSet = /\bcomplete\b/i.test(g)
-    && /\btakeoff\b/i.test(g)
-    && (/\b(?:this|these)\s+(?:blueprint\s+|plan\s+)?(?:set|drawings)\b/i.test(g)
-      || /\bon this (?:blueprint|plan)\s+set\b/i.test(g)
-      || /\bof this set\b/i.test(g));
-  if (!completeSet) return null;
+  if (!goalAsksCompleteSetTakeoff(g)) return null;
   if (/\b(?:BAS|DDC)\b/i.test(g) && /\bpoints?\b/i.test(g)) return "bas_points";
-  // Valve goals before HVAC equipment — "complete valve takeoff" must not wait
-  // for the words HVAC + equipment (that path returned a 10-row partial crawl).
-  if (/\bvalves?\b/i.test(g)) return "control_valves";
+  // Valve goals before HVAC equipment — "valve takeoff" ≡ "control valve
+  // takeoff"; must not wait for the words HVAC + equipment (that path
+  // returned a 10-row partial crawl).
+  if (/\b(?:control\s+)?valves?\b/i.test(g)) return "control_valves";
   if (/\bHVAC\b/i.test(g) && /\bequipment\b/i.test(g)) return "hvac_equipment";
   return null;
 }
@@ -58,9 +85,19 @@ export function classifyTakeoffIntent(goal) {
   if (pointsListTakeoff) return "points_takeoff";
 
   if (/\bfan[\s\-]*coil|\bFCUs?\b/i.test(g)
-    && /\b(?:building|Air Ops|MITRACON|ATCT|splits?|cross[- ]building)\b/i.test(g)
-    && /\b(?:how many|count|total|compare|takeoff)\b/i.test(g)) {
+    && /\b(?:buildings?|splits?|cross[- ]building|across\b)/i.test(g)
+    && goalAsksTakeoff(g)) {
     return "fcu_buildings";
+  }
+
+  // Named control/bypass valve schedule takeoff + plan sweeps (D06-style).
+  // Not the complete set compile (corpus_valves) — schedule title scans +
+  // sweep_schedule_row for installed quantities.
+  if (/\bcontrol\s+valves?\b/i.test(g)
+    && /\bschedule\b/i.test(g)
+    && goalAsksTakeoff(g)
+    && (/\bsweep\b|\binstalled\b|\bplan\b|\bBYPASS\b/i.test(g) || /\bCV-\d/i.test(g))) {
+    return "valve_join";
   }
 
   if (/\broom\b/i.test(g) && /\b(?:finish|diffuser|grille|coordination|RTU)\b/i.test(g)) {
@@ -73,7 +110,7 @@ export function classifyTakeoffIntent(goal) {
   }
 
   if (/\b(?:schedule|AHU|DOAH|VAV|chiller|boiler|RTU)\b/i.test(g)
-    && /\b(?:takeoff|count|scheduled|rollup)\b/i.test(g)) {
+    && goalAsksTakeoff(g)) {
     return "equipment_schedule";
   }
 
@@ -231,6 +268,59 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
       nextMove: paints
         ? "Emit the FCU building split answer from building_tag_counts; cite requested MARK cells already painted."
         : "Re-query named FCU MARKs with row_key and highlight_citation, then answer.",
+      blockReason: null,
+    };
+  }
+
+  if (intent === "valve_join") {
+    const allowed = [
+      "list_sheets", "sheet_graph", "find_schedule", "query_table",
+      "highlight_citation", "sweep_schedule_row", "resolve_tag",
+    ];
+    const hasValveScan = log.some(({ name, out, args }) => {
+      if (name !== "query_table" || out?.error) return false;
+      const q = out?.query || args || {};
+      if (q.row_key != null || q.cell_contains != null) return false;
+      return /CONTROL\s+VALVE\s+SCHEDULE/i.test(String(q.title || out?.matches?.[0]?.title?.text || ""));
+    });
+    const hasSweep = log.some(({ name, out }) =>
+      name === "sweep_schedule_row" && !out?.error);
+    if (!hasGraph) {
+      return {
+        phase: "survey",
+        allowedTools: ["list_sheets", "sheet_graph", "find_schedule"],
+        nextMove: "Call sheet_graph / find_schedule for CONTROL VALVE / BYPASS CONTROL VALVE schedules, then title-scan each with query_table.",
+        blockReason: null,
+      };
+    }
+    if (!hasValveScan) {
+      return {
+        phase: "title_scans",
+        allowedTools: allowed,
+        nextMove: "Title-scan each named CONTROL VALVE / BYPASS CONTROL VALVE SCHEDULE with query_table (title only). Copy schedule counts from results — do not invent.",
+        blockReason: null,
+      };
+    }
+    if (!hasSweep || rowKeyCites < 1) {
+      return {
+        phase: "spot_cites",
+        allowedTools: allowed,
+        nextMove: "For named valve MARKs: query_table { title, row_key } for GPM/size/coil, then sweep_schedule_row for installed plan quantity. highlight_citation on schedule cells and plan hits.",
+        blockReason: null,
+      };
+    }
+    if (paints < 1) {
+      return {
+        phase: "paint",
+        allowedTools: ["query_table", "highlight_citation", "sweep_schedule_row"],
+        nextMove: "Paint cited schedule FLOW/SIZE cells and plan tag hits, then write the final answer.",
+        blockReason: null,
+      };
+    }
+    return {
+      phase: "answer",
+      allowedTools: null,
+      nextMove: "Emit schedule counts, per-valve GPM/size/coil, and installed plan quantities from tool results only. Cite painted cells.",
       blockReason: null,
     };
   }

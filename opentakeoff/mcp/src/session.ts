@@ -5380,7 +5380,15 @@ export class Session {
    * table parse error silently leaves the existing geometric result in
    * place — this pass can only ever IMPROVE g.tables, never take it down. */
   private async enhanceTablesWithODL(g: SheetGraph): Promise<void> {
-    const scheduleSheets = g.sheets.filter((s) => s.role === "schedule");
+    // Schedule-role sheets are the normal ODL targets. Also include legend /
+    // unknown sheets that print a real POINTS LIST / DDC POINTS LIST title:
+    // NAVFAC mechanical #64 was role=legend (note text hit /LEGEND/) while
+    // carrying "POINTS LIST DOAH-TI", so ODL never ran and T-BAS-01 compiled
+    // to 0 lists. Do NOT flip every POINTS LIST mention to role=schedule —
+    // that over-recovers Air Ops schematic siblings and breaks the locked 122.
+    const scheduleSheets = g.sheets.filter((s) =>
+      s.role === "schedule"
+      || ((s.role === "legend" || s.role === "unknown") && this.sheetHasPointsListTitle(s.key)));
     if (!scheduleSheets.length) return;
     const byPdf = new Map<string, { path: string; pages: number[]; sheetByPage: Map<number, string> }>();
     for (const sh of scheduleSheets) {
@@ -5666,6 +5674,26 @@ export class Session {
       } catch { /* diagnostic only */ }
     }
     return notes;
+  }
+
+  /**
+   * Legend/unknown sheets that print T-BAS-01 extractable POINTS/DDC list
+   * titles (not Air Ops schematic siblings). NAVFAC #64/#65/#67 land as
+   * legend from competing LEGEND note text; without ODL they compile to 0.
+   * Broader ATCT/Air Ops DDC lists stay out until a justified truth refresh.
+   */
+  private sheetHasPointsListTitle(sheetKey: string): boolean {
+    const state = this.sheets.get(sheetKey);
+    const spans = state?.spans;
+    if (!spans?.length) return false;
+    for (const sp of spans) {
+      const t = String(sp.str || "").replace(/\s+/g, " ").trim();
+      if (t.length < 10 || t.length > 90) continue;
+      if (/^POINTS?\s+LIST\b/i.test(t)) return true;
+      if (/^FCU WITH\b.+\bDDC POINTS LIST$/i.test(t)) return true;
+      if (/^UNIT HEATER DDC POINTS LIST$/i.test(t)) return true;
+    }
+    return false;
   }
 
   /** Raw internal graph (full table rows/cells, not `sheetGraph()`'s own

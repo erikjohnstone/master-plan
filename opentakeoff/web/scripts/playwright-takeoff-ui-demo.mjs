@@ -9,7 +9,7 @@
  *
  * No seeds. No window.__opentakeoff.compile cheat. No engineer follow-ups.
  *
- * Usage: node scripts/playwright-takeoff-ui-demo.mjs hvac|bas|both
+ * Usage: node scripts/playwright-takeoff-ui-demo.mjs hvac|bas|valve|both|all
  */
 import { chromium } from "playwright";
 import {
@@ -56,12 +56,25 @@ const JOBS = {
     expectTakeoffId: "T-BAS-01",
     expectEa: 122,
   },
+  valve: {
+    label: "valve",
+    title: "Control valve takeoff",
+    promptPath: resolve(corpus, "takeoffs/T-VALVE-01-navfac-control-valves/prompt.txt"),
+    expectMinEvidence: 150,
+    expectMinLines: 163,
+    expectMaxLines: 163,
+    expectTakeoffId: "T-VALVE-01",
+    expectEa: 163,
+  },
 };
 
 const kindArg = (process.argv[2] || "both").toLowerCase();
 const jobs = kindArg === "both" ? [JOBS.hvac, JOBS.bas]
+  : kindArg === "all" ? [JOBS.valve, JOBS.hvac, JOBS.bas]
   : kindArg === "bas" ? [JOBS.bas]
-    : [JOBS.hvac];
+    : kindArg === "valve" ? [JOBS.valve]
+      : [JOBS.hvac];
+
 
 const AGENT_TIMEOUT_MS = Number(process.env.OT_DEMO_AGENT_TIMEOUT_MS || 8 * 60 * 1000);
 /** If status text is unchanged this long, dump diagnosis (do not sit idle for 25m). */

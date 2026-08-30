@@ -21,6 +21,7 @@ import { chatWithTools, describeImageForAgent } from "./ai.js";
 import { runVerifiers } from "./agentVerifiers.js";
 import {
   classifyTakeoffIntent,
+  corpusCompileKind,
   advanceTakeoffWorkflow,
   workflowDirective,
   isIllegalWorkflowTransition,
@@ -179,24 +180,18 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     return "The goal asks for installed quantity and a deterministic count succeeded, but the final answer does not explicitly state the numeric installed quantity. Report it under an “Installed quantity” label and attribute it to the sweep/count result.";
   }
   // Complete set HVAC/BAS/valve → must go through compile_corpus_takeoff.
+  // Phrase-robust: same classifiers as takeoffWorkflow (take off / full /
+  // valve ≡ control valve / set scope without requiring literal "complete").
   {
-    const completeSet = /\bcomplete\b/i.test(goal) && /\btakeoff\b/i.test(goal)
-      && (/\b(?:this|these)\s+(?:blueprint\s+|plan\s+)?(?:set|drawings)\b/i.test(goal)
-        || /\bon this (?:blueprint|plan)\s+set\b/i.test(goal)
-        || /\bof this set\b/i.test(goal));
-    const wantsValveCompile = completeSet && /\bvalves?\b/i.test(goal);
-    const wantsHvacCompile = completeSet && /\bHVAC\b/i.test(goal) && /\bequipment\b/i.test(goal);
-    const wantsBasCompile = completeSet && /\b(?:BAS|DDC)\b/i.test(goal) && /\bpoints?\b/i.test(goal);
-    const namedLists = (goal.match(/\bPOINTS LIST\b/gi) || []).length
-      + (goal.match(/\bDDC POINTS LIST\b/gi) || []).length;
-    if ((wantsHvacCompile || wantsBasCompile || wantsValveCompile) && namedLists < 2) {
+    const kind = corpusCompileKind(goal);
+    if (kind) {
       const compiled = callLog.some(({ name, out }) =>
         name === "compile_corpus_takeoff" && !out?.error && (out?.takeoff_id || out?.kind));
       if (!compiled) {
-        return wantsBasCompile
+        return kind === "bas_points"
           ? 'The goal asks for a complete BAS/DDC points takeoff of this set. Call compile_corpus_takeoff with kind="bas_points" now — do not approximate the set total by crawling schedules.'
-          : wantsValveCompile
-            ? 'The goal asks for a complete valve takeoff of this set. Call compile_corpus_takeoff with kind="control_valves" now — that returns every CHW/HHW CONTROL VALVE SCHEDULE row (valve mark, served equipment, service, size, GPM, Cv). Do not approximate with a partial read_schedule or markdown table.'
+          : kind === "control_valves"
+            ? 'The goal asks for a complete valve takeoff of this set. Call compile_corpus_takeoff with kind="control_valves" now — that returns every CONTROL VALVE SCHEDULE row (valve mark, served equipment, service, size, GPM, Cv). Do not approximate with a partial read_schedule or markdown table.'
             : 'The goal asks for a complete HVAC equipment takeoff of this set. Call compile_corpus_takeoff with kind="hvac_equipment" now — do not approximate the set total by crawling schedules.';
       }
     }
