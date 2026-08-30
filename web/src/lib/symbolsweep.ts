@@ -1860,18 +1860,26 @@ function nearCountedMatch(o: TagOcc, matches: SweepSheetMatch[]): boolean {
  *
  * The set-wide pass is narrower than the per-sheet exact-tag family:
  * at least one geometrically-confirmed instance (not a leftover label),
- * exactly one leftover exact/fragmented site on empty sheets, and that
- * site farther than COORD_ATTRIBUTION_MAX_PX from every counted match
- * (the same redraw radius the redundant-view collapse already trusts).
- * A leftover sitting on a withheld stays with the labeled near-miss
- * family. Two empty-sheet leftovers stay notes (a pile of extras, not
- * this one missed sibling). A single leftover on a counted sheet is
- * still leftoverLabeledOccs's note. Mutates matches/text_only in place.
- * Returns how many leftovers were promoted.
+ * a leftover exact-tag family already counted on a confirmed sheet
+ * (two or more `labeled_leftover` matches — leftoverLabeledOccs's
+ * own gate), exactly one leftover exact/fragmented site on empty
+ * sheets, and that site farther than COORD_ATTRIBUTION_MAX_PX from
+ * every counted match (the same redraw radius the redundant-view
+ * collapse already trusts). A unique mark with one geo instance and
+ * no leftover family stays a note — that empty-sheet leftover is the
+ * complementary-view redraw whose page coordinates missed the 40 px
+ * bar, not another install. A leftover sitting on a withheld stays
+ * with the labeled near-miss family. Two empty-sheet leftovers stay
+ * notes (a pile of extras, not this one missed sibling). A single
+ * leftover on a counted sheet is still leftoverLabeledOccs's note.
+ * Mutates matches/text_only in place. Returns how many leftovers
+ * were promoted.
  */
 export function promoteSetWideLeftoverExactOccs(sheets: LeftoverExactSheet[]): number {
   const geoN = sheets.reduce((n, s) => n + s.matches.filter((m) => !m.labeled_leftover).length, 0);
   if (geoN < 1) return 0;
+  const familyN = sheets.reduce((n, s) => n + s.matches.filter((m) => m.labeled_leftover).length, 0);
+  if (familyN < 2) return 0;
   const counted = sheets.flatMap((s) => s.matches);
   const candidates: Array<{ s: LeftoverExactSheet; o: TagOcc }> = [];
   for (const s of sheets) {
@@ -1903,8 +1911,9 @@ export interface SweepSheetMatch extends SweepMatch {
    * sibling marker did not clear the bar. A compound circuit/panel label
    * promotes alone; leftover exact tags promote only as a family of two
    * or more unclustered leftovers that are not sitting on a withheld.
-   * Never a single bare note, and never a note on a sheet with zero
-   * confirmed matches. */
+   * Never a single bare note. A note on a sheet with zero confirmed
+   * matches stays a note unless the set-wide pass already has this
+   * leftover family on a confirmed sheet. */
   labeled_leftover?: boolean;
   /** Installed quantity this match represents. 1 unless a `TYP N` callout
    * sits next to a geometrically-confirmed tag. Leftover labels stay 1. */
@@ -1943,7 +1952,9 @@ export function typicalMultiplierNear(spans: FlatSpan[], at: Point, radiusPx: nu
  * A single leftover exact tag stays a note on that sheet. A leftover
  * on a sheet with zero matches is also a note here — the set-wide
  * pass (`promoteSetWideLeftoverExactOccs`) may promote exactly one
- * such leftover after dropping same-coordinate redraws. Leftovers
+ * such leftover after dropping same-coordinate redraws, and only
+ * when this family already counted two leftover labels on a
+ * confirmed sheet. Leftovers
  * next to a withheld stay with promoteLabeledNearMisses — that is
  * the labeled near-bar family, not this text-only family. Two
  * leftovers inside one cluster are one site (legend stack / twin

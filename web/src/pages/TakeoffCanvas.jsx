@@ -7296,7 +7296,7 @@ export default function TakeoffCanvas() {
     if (rowAssumed.length) notes.push(`${rowAssumed.map((p) => p.sheet).join(", ")} found nothing and were swept at 1:1 — no scale is set on ${anchorKey} or on them, so a different drawn scale there is a live explanation for the zero. Set scale on both ends to rule it out.`);
     if (routingN) notes.push(`${routingN} drawn occurrence(s) of "${t}" sit next to a duct/pipe destination or source callout and were withheld as routing labels, not installs; audit with view_region before treating one as a second unit.`);
     if (familyLeftoverN) notes.push(`${familyLeftoverN} leftover labeled near-miss(es) counted as a same-convention family split across sheets — each leftover sits next to this row's own tag and a near-bar withheld, and the set already has a geometrically-confirmed instance; audit with view_region before trusting the count.`);
-    if (exactLeftoverN) notes.push(`${exactLeftoverN} leftover exact tag(s) counted on a sheet that had no geometrically-confirmed instance — the set already has a confirmed "${t}", and this leftover is not a same-coordinate complementary-view redraw; audit with view_region before trusting the count.`);
+    if (exactLeftoverN) notes.push(`${exactLeftoverN} leftover exact tag(s) counted on a sheet that had no geometrically-confirmed instance — the set already has a leftover exact-tag family and a confirmed "${t}", and this leftover is not a same-coordinate complementary-view redraw; audit with view_region before trusting the count.`);
 
     return {
       tag: t,

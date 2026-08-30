@@ -612,22 +612,61 @@ test("promoteSetWideLabeledNearMisses: leftovers that outnumber commits on one s
 test("promoteSetWideLeftoverExactOccs: one leftover on an empty sheet COUNTS", () => {
   // Per-sheet leftoverLabeledOccs requires a counted match on THAT sheet,
   // so a lone exact tag on sheet B stays text_only. Across the set it is
-  // the missed sibling of sheet A's geometrically-confirmed instance,
-  // far from every counted match (not a complementary-view redraw).
-  const oA = tagNear([100, 100], 40, "exact");
+  // the missed sibling of a leftover exact-tag family already counted
+  // on sheet A, far from every counted match (not a complementary-view
+  // redraw of a unique mark).
+  const oA0 = tagNear([100, 100], 40, "exact");
+  const oA1 = tagNear([250, 100], 40, "exact");
+  const oA2 = tagNear([400, 100], 40, "exact");
   const oB = tagNear([800, 800], 40, "exact");
-  const matchesA = [bagMatch([100, 100], oA)];
+  const matchesA: SweepSheetMatch[] = [
+    bagMatch([100, 100], oA0),
+    { ...bagMatch([250, 100], oA1), labeled_leftover: true },
+    { ...bagMatch([400, 100], oA2), labeled_leftover: true },
+  ];
   const matchesB: SweepSheetMatch[] = [];
   const textB: Array<{ at: Point }> = [{ at: [795, 820] }];
   const n = promoteSetWideLeftoverExactOccs([
-    { matches: matchesA, withheld: [], occ: [oA], text_only: [], clusterR: 20 },
+    { matches: matchesA, withheld: [], occ: [oA0, oA1, oA2], text_only: [], clusterR: 20 },
     { matches: matchesB, withheld: [], occ: [oB], text_only: textB, clusterR: 20 },
   ]);
-  assert.equal(n, 1, "the empty-sheet leftover is the missed sibling");
-  assert.equal(matchesA.length, 1, "sheet A is unchanged");
+  assert.equal(n, 1, "the empty-sheet leftover is the missed family sibling");
+  assert.equal(matchesA.length, 3, "sheet A is unchanged");
   assert.equal(matchesB.length, 1);
   assert.equal(matchesB[0].labeled_leftover, true);
   assert.equal(textB.length, 0, "the leftover left text_only once it was counted");
+});
+
+test("promoteSetWideLeftoverExactOccs: a unique mark's empty-sheet leftover stays", () => {
+  // One geometrically-confirmed instance, no leftover family. The
+  // leftover on the empty sheet is a complementary-view redraw (or an
+  // unconfirmed extra) whose page coordinates missed the 40 px bar.
+  const oA = tagNear([100, 100], 40, "exact");
+  const oB = tagNear([800, 800], 40, "exact");
+  const matchesA = [bagMatch([100, 100], oA)];
+  const textB: Array<{ at: Point }> = [{ at: [oB.cx, oB.cy] }];
+  const n = promoteSetWideLeftoverExactOccs([
+    { matches: matchesA, withheld: [], occ: [oA], text_only: [], clusterR: 20 },
+    { matches: [], withheld: [], occ: [oB], text_only: textB, clusterR: 20 },
+  ]);
+  assert.equal(n, 0, "a unique mark does not grow from one empty-sheet leftover");
+  assert.equal(matchesA.length, 1);
+  assert.equal(textB.length, 1);
+});
+
+test("promoteSetWideLeftoverExactOccs: one leftover label is not a family", () => {
+  const oA0 = tagNear([100, 100], 40, "exact");
+  const oA1 = tagNear([250, 100], 40, "exact");
+  const oB = tagNear([800, 800], 40, "exact");
+  const matchesA: SweepSheetMatch[] = [
+    bagMatch([100, 100], oA0),
+    { ...bagMatch([250, 100], oA1), labeled_leftover: true },
+  ];
+  const n = promoteSetWideLeftoverExactOccs([
+    { matches: matchesA, withheld: [], occ: [oA0, oA1], text_only: [], clusterR: 20 },
+    { matches: [], withheld: [], occ: [oB], text_only: [{ at: [oB.cx, oB.cy] }], clusterR: 20 },
+  ]);
+  assert.equal(n, 0, "leftoverLabeledOccs's family is two leftover labels");
 });
 
 test("promoteSetWideLeftoverExactOccs: a leftover at the same page coordinate stays a note", () => {

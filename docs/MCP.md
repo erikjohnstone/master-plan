@@ -118,9 +118,11 @@ Forty tools, in the order an agent tends to reach for them:
   exact tags on that same sheet (a single leftover exact tag stays
   `text_only`; leftovers sitting on a withheld stay with the labeled
   near-miss family; exactly one leftover exact tag on a sheet with no
-  counted match also counts when the set already has a geometrically-
-  confirmed instance and the leftover is not a same-coordinate
-  complementary-view redraw); a `TYP N` callout next to a
+  counted match also counts when the set already has a leftover
+  exact-tag family on a confirmed sheet (two or more labeled leftovers)
+  plus a geometrically-confirmed instance, and the leftover is not a
+  same-coordinate complementary-view redraw; a unique mark with no
+  leftover family stays a note); a `TYP N` callout next to a
   geometrically-confirmed tag multiplies that match only; and a row whose
   tag cannot be geometrically anchored is *refused with the reason*—a
   fingerprint is never guessed from text alone). Scanned sheets work
