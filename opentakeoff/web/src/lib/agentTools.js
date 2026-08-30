@@ -167,6 +167,20 @@ export const AGENT_TOOL_DEFS = [
     },
   },
   {
+    name: "query_table",
+    description: "Query extracted table cells across the whole loaded set with normalized source bboxes. Filter by table-title substring, exact row key, header substring, or cell_contains for compound relationships. Omit column to return every cited cell in the matching row.",
+    input_schema: {
+      type: "object",
+      properties: {
+        title: { type: "string" },
+        row_key: { type: "string" },
+        column: { type: "string" },
+        cell_contains: { type: "string" },
+      },
+      required: [],
+    },
+  },
+  {
     name: "view_region",
     description: "Render a region of the sheet as an image and look at it. Use this for scanned sheets, hatched/ambiguous areas, or to visually confirm what a room contains before proposing.",
     input_schema: {
@@ -754,6 +768,8 @@ export async function executeAgentTool(ctx, name, args) {
             : `Sheet ${args.sheet} isn't open on the canvas, so only the whole-table fallback ran — and it found no match either. Try find_schedule({kind:"room"|"finish"|"equipment"}) or sheet_graph, or open the sheet as a tab and retry for the region-based parse.`,
         };
       }
+      case "query_table":
+        return await ctx.queryTable(args);
       case "view_region": {
         if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
         const img = await ctx.viewRegion(args.sheet, clampRegion(args.region));

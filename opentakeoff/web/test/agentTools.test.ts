@@ -26,6 +26,7 @@ function makeCtx(overrides: Record<string, unknown> = {}) {
       source: "region_parse",
       rows: [{ finish_tag: "CPT-1", section: "FLOORING", category: "floor", description: "CARPET", manufacturer: "", style: "", spec_color: "", size: "", suggested: true }],
     }),
+    queryTable: async (query: unknown) => ({ count: 1, query, matches: [{ row: { key: "CH-A1" } }] }),
     viewRegion: async () => ({ image_data_url: "data:image/png;base64,AAAA", width: 100, height: 80 }),
     classifySymbol: async () => ({ classification: "gate valve", confidence: 0.9, reasoning: "bowtie body with a straight stem" }),
     oneClick: async (sheet: string, x: number, y: number) => {
@@ -51,9 +52,22 @@ test("registry: every tool has a name, description, and object schema; names are
     assert.ok(!names.has(d.name), `duplicate tool name ${d.name}`);
     names.add(d.name);
   }
-  for (const expected of ["list_sheets", "read_sheet_text", "read_schedule", "view_region", "one_click", "get_conditions", "create_condition", "propose_shapes"]) {
+  for (const expected of ["list_sheets", "read_sheet_text", "read_schedule", "query_table", "view_region", "one_click", "get_conditions", "create_condition", "propose_shapes"]) {
     assert.ok(names.has(expected), `missing tool ${expected}`);
   }
+});
+
+test("query_table delegates whole-set cited cell filters", async () => {
+  const { ctx } = makeCtx();
+  const out = await executeAgentTool(ctx, "query_table", {
+    title: "CHILLER SCHEDULE",
+    row_key: "CH-A1",
+  });
+  assert.equal(out.count, 1);
+  assert.deepEqual(out.query, {
+    title: "CHILLER SCHEDULE",
+    row_key: "CH-A1",
+  });
 });
 
 test("validateToolArgs: required keys and primitive types enforced", () => {

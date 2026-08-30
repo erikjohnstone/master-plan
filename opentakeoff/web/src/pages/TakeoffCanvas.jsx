@@ -2014,7 +2014,15 @@ export default function TakeoffCanvas() {
         const ux = t[2] / un, uy = t[3] / un;   // glyph ascent
         const xs = [t[4], t[4] + w * dx, t[4] + h * ux, t[4] + w * dx + h * ux];
         const ys = [t[5], t[5] + w * dy, t[5] + h * uy, t[5] + w * dy + h * uy];
-        spans.push({ str, x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) });
+        const rot = ((Math.round(Math.atan2(t[1], t[0]) * 180 / Math.PI / 90) * 90) % 360 + 360) % 360;
+        spans.push({
+          str,
+          x0: Math.min(...xs),
+          y0: Math.min(...ys),
+          x1: Math.max(...xs),
+          y1: Math.max(...ys),
+          ...(rot ? { rot } : {}),
+        });
       }
       wholeSetSpansRef.current.set(key, spans);
       saveSheetSpans(key, rev, spans);
@@ -4598,6 +4606,11 @@ export default function TakeoffCanvas() {
   // ships (sweepSymbols / labelPlacements) — canvas and agent cannot disagree.
   async function ensureTextSpans(key) {
     if (textSpansRef.current.has(key)) return textSpansRef.current.get(key);
+    const indexed = wholeSetSpansRef.current.get(key);
+    if (indexed) {
+      textSpansRef.current.set(key, indexed);
+      return indexed;
+    }
     const spans = [];
     try {
       const pg = pageObjsRef.current.get(key);
@@ -4625,7 +4638,15 @@ export default function TakeoffCanvas() {
           const ux = t[2] / un, uy = t[3] / un;
           const xs = [t[4], t[4] + w * dx, t[4] + h * ux, t[4] + w * dx + h * ux];
           const ys = [t[5], t[5] + w * dy, t[5] + h * uy, t[5] + w * dy + h * uy];
-          spans.push({ str, x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) });
+          const rot = ((Math.round(Math.atan2(t[1], t[0]) * 180 / Math.PI / 90) * 90) % 360 + 360) % 360;
+          spans.push({
+            str,
+            x0: Math.min(...xs),
+            y0: Math.min(...ys),
+            x1: Math.max(...xs),
+            y1: Math.max(...ys),
+            ...(rot ? { rot } : {}),
+          });
         }
       }
     } catch { /* no text layer — labels simply stay absent */ }
@@ -6774,7 +6795,14 @@ export default function TakeoffCanvas() {
     await indexWholeSet(sheets);
     const inputs = [];
     for (const [key, spans] of wholeSetSpansRef.current) {
-      const graphSpans = spans.map((s) => ({ str: s.str, x: s.x0, y: s.y0, w: s.x1 - s.x0, h: s.y1 - s.y0 }));
+      const graphSpans = spans.map((s) => ({
+        str: s.str,
+        x: s.x0,
+        y: s.y0,
+        w: s.x1 - s.x0,
+        h: s.y1 - s.y0,
+        ...(s.rot ? { rot: s.rot } : {}),
+      }));
       const segs = vectorSegsRef.current.get(key);
       inputs.push({ key, sheet_number: null, spans: graphSpans, ...(segs?.length ? { segs } : {}) });
     }
@@ -6877,6 +6905,49 @@ export default function TakeoffCanvas() {
         ...(t.building ? { building: t.building } : {}),
       })),
     };
+  }
+
+  async function agentQueryTable({ title, row_key, column, cell_contains }) {
+    const g = await ensureAgentGraph();
+    if (!g.available) return { error: "This set has no text layer (a scan) — the sheet graph is unavailable." };
+    const titleNeedle = (title || "").trim().toUpperCase();
+    const rowNeedle = (row_key || "").trim().toUpperCase().replace(/\s+/g, "");
+    const columnNeedle = (column || "").trim().toUpperCase();
+    const containsNeedle = (cell_contains || "").trim().toUpperCase();
+    if (!titleNeedle && !rowNeedle && !columnNeedle && !containsNeedle) {
+      return { error: "Pass title, row_key, column, or cell_contains." };
+    }
+    const matches = [];
+    for (const table of g.tables) {
+      if (titleNeedle && !(table.title?.text || "").toUpperCase().includes(titleNeedle)) continue;
+      const dims = await ensureSheetDims(table.sheet);
+      if (!dims) continue;
+      const headers = columnNeedle
+        ? table.headers.filter((header) => header.toUpperCase().includes(columnNeedle))
+        : table.headers;
+      if (columnNeedle && !headers.length) continue;
+      for (const row of table.rows) {
+        const keys = row.key.toUpperCase().replace(/\s+/g, "").split("/");
+        if (rowNeedle && !keys.includes(rowNeedle)) continue;
+        if (containsNeedle && !Object.values(row.cells).some((cell) =>
+          cell.text.toUpperCase().includes(containsNeedle))) continue;
+        const cells = Object.fromEntries(headers.flatMap((header) => {
+          const cell = row.cells[header];
+          return cell?.text ? [[header, {
+            text: cell.text,
+            bbox: wireBoxNorm(cell.bbox, dims),
+          }]] : [];
+        }));
+        if (columnNeedle && !Object.keys(cells).length) continue;
+        matches.push({
+          sheet: table.sheet,
+          kind: table.kind,
+          title: table.title?.text || "",
+          row: { key: row.key, cells },
+        });
+      }
+    }
+    return { count: matches.length, matches: matches.slice(0, 100) };
   }
 
   // Exports trigger a REAL browser download (the same downloadText the human
@@ -7725,6 +7796,7 @@ export default function TakeoffCanvas() {
       sheetGraph: agentSheetGraph,
       resolveTag: agentResolveTag,
       findSchedule: agentFindSchedule,
+      queryTable: agentQueryTable,
       exportTakeoff: agentExportTakeoff,
       exportReport: agentExportReport,
       countMarks: agentCountMarks,
