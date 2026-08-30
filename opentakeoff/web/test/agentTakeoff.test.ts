@@ -306,6 +306,47 @@ test("rowsFromCompiledTakeoff: BAS points lists → POINT TYPE rows", () => {
   assert.ok(rows.some((r) => r.tag === "AI1" && r.field === "DESCRIPTION" && /SA TEMP/.test(String(r.value))));
 });
 
+test("compileAgentTakeoff: repeating BAS marks across lists stay separate lines", () => {
+  // Same AI1 on two points lists must not collapse — MCP compile totals 122,
+  // Takeoff UI must show 122 lines (shared corpusTakeoff identity).
+  const rows = rowsFromCompiledTakeoff({
+    takeoff_id: "T-BAS-01",
+    kind: "bas_points",
+    categories: {
+      points_lists: {
+        lists: [
+          {
+            title: "POINTS LIST DOAH-TI",
+            sheet_id: "c#1",
+            rows: 2,
+            items: [
+              { tag: "AI1", quantity: 1, sheet_id: "c#1", table_title: "POINTS LIST DOAH-TI", description: "OA TEMP" },
+              { tag: "BO1", quantity: 1, sheet_id: "c#1", table_title: "POINTS LIST DOAH-TI" },
+            ],
+          },
+          {
+            title: "POINTS LIST AHU-T1A/TIB",
+            sheet_id: "c#2",
+            rows: 2,
+            items: [
+              { tag: "AI1", quantity: 1, sheet_id: "c#2", table_title: "POINTS LIST AHU-T1A/TIB", description: "SA TEMP" },
+              { tag: "BO1", quantity: 1, sheet_id: "c#2", table_title: "POINTS LIST AHU-T1A/TIB" },
+            ],
+          },
+        ],
+        totals: { rows: 4, AI: 2, AO: 0, BI: 0, BO: 2 },
+      },
+    },
+  });
+  const lines = compileAgentTakeoff(rows);
+  assert.equal(lines.length, 4);
+  assert.equal(lines.reduce((n, l) => n + (l.qty || 0), 0), 4);
+  const ai1 = lines.filter((l) => l.tag === "AI1");
+  assert.equal(ai1.length, 2);
+  assert.ok(ai1.some((l) => /DOAH/i.test(l.table_title || "")));
+  assert.ok(ai1.some((l) => /AHU/i.test(l.table_title || "")));
+});
+
 test("rowsFromToolResult: query_table title {text,bbox} becomes plain string", () => {
   const rows = rowsFromToolResult("query_table", { title: "FAN SCHEDULE", row_key: "EF-1" }, {
     count: 1,

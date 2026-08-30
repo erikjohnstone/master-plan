@@ -693,25 +693,38 @@ export function lineLeadValue(line, key) {
   return "";
 }
 
+/** Line identity: Tag alone is wrong for BAS — AI1 on two points lists are two rows. */
+function takeoffLineKey(tag, tableTitle, field) {
+  const t = tag ? String(tag).trim().toUpperCase() : "";
+  const s = String(tableTitle || "").trim().toUpperCase();
+  if (t && s) return `tag:${t}|sched:${s}`;
+  if (t) return `tag:${t}`;
+  return `sched:${s || String(field || "misc").trim().toUpperCase()}`;
+}
+
 /**
  * Compile EAV workflow rows into a real equipment takeoff:
- * one line per tag with qty + technical schedule columns (CFM, MBH, kW, …).
+ * one line per tag (+ schedule when marks repeat across lists) with qty +
+ * technical schedule columns (CFM, MBH, kW, …).
  *
  * When a corpus compile (`compile_corpus_takeoff`) is present, the Takeoff tab
  * is ONLY those finished line items (396 / 122) — spot-cite scrap may enrich
  * attrs on those tags but must not invent extra tags or double EA.
+ *
+ * Identity is tag + schedule title so repeating BAS marks (AI1 on DOAH vs AHU
+ * lists) stay separate rows; HVAC tags stay unique via their schedule name.
  */
 export function compileAgentTakeoff(rows = []) {
   const all = rows || [];
-  const corpusQtyTags = new Set();
-  for (const row of all) {
-    if (row?.source_tool === "compile_corpus_takeoff"
-      && String(row.field || "") === "quantity"
-      && row.tag) {
-      corpusQtyTags.add(String(row.tag).trim().toUpperCase());
-    }
-  }
-  const corpusLocked = corpusQtyTags.size > 0;
+  const compileQtyRows = all.filter((row) => (
+    row?.source_tool === "compile_corpus_takeoff"
+    && String(row.field || "") === "quantity"
+    && row.tag
+  ));
+  const corpusLocked = compileQtyRows.length > 0;
+  const corpusQtyTags = new Set(
+    compileQtyRows.map((row) => String(row.tag).trim().toUpperCase()),
+  );
   const scoped = corpusLocked
     ? all.filter((row) => {
       if (!row?.tag) return row?.source_tool === "compile_corpus_takeoff";
@@ -720,13 +733,11 @@ export function compileAgentTakeoff(rows = []) {
     : all;
 
   const groups = new Map();
-  for (const row of scoped) {
-    const tag = row.tag ? String(row.tag).trim() : "";
-    const key = tag
-      ? `tag:${tag.toUpperCase()}`
-      : `sched:${String(row.table_title || row.field || "misc").trim().toUpperCase()}`;
+  const groupsByTag = new Map(); // UPPER tag → [group,…] for enrichment merge
+
+  const ensureGroup = (key, tag) => {
     if (!groups.has(key)) {
-      groups.set(key, {
+      const g = {
         id: key,
         tag: tag || null,
         sourceRows: [],
@@ -745,9 +756,45 @@ export function compileAgentTakeoff(rows = []) {
         plan_bbox_px: null,
         table_bbox_px: null,
         fromCompile: false,
-      });
+      };
+      groups.set(key, g);
+      if (tag) {
+        const tu = tag.toUpperCase();
+        if (!groupsByTag.has(tu)) groupsByTag.set(tu, []);
+        groupsByTag.get(tu).push(g);
+      }
     }
-    const g = groups.get(key);
+    return groups.get(key);
+  };
+
+  const resolveGroup = (row, { create }) => {
+    const tag = row.tag ? String(row.tag).trim() : "";
+    const key = takeoffLineKey(tag, row.table_title, row.field);
+    if (groups.has(key)) return groups.get(key);
+    if (create) return ensureGroup(key, tag || null);
+    // Scrap enrichment: same tag + one compile line → merge there.
+    if (tag) {
+      const matches = groupsByTag.get(tag.toUpperCase()) || [];
+      if (matches.length === 1) return matches[0];
+    }
+    return null;
+  };
+
+  // Seed locked lines from compile quantity rows so identity = finished takeoff.
+  if (corpusLocked) {
+    for (const row of compileQtyRows) {
+      resolveGroup(row, { create: true });
+    }
+  }
+
+  for (const row of scoped) {
+    const isCompileQty = row?.source_tool === "compile_corpus_takeoff"
+      && String(row.field || "") === "quantity"
+      && row.tag;
+    const g = resolveGroup(row, { create: !corpusLocked || isCompileQty });
+    if (!g) continue;
+    const tag = row.tag ? String(row.tag).trim() : "";
+    if (!g.tag && tag) g.tag = tag;
     g.sourceRows.push(row);
     if (row.workflow) g.workflows.add(row.workflow);
     // Prefer the corpus compile's schedule title — scrap titles can be noisy.
