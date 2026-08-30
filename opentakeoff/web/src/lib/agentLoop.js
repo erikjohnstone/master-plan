@@ -1318,21 +1318,27 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   // the number of MARK cells painted for spot-check.
   // Narrow follow-ups ("how many ATCT fan coils… including FCU-T11?") must NOT
   // trigger this gate — only multi-family inventory / takeoff asks do.
+  // BAS points-list takeoffs name DOAH/AHU/FCU inside list titles — that must
+  // not pull equipment-schedule families (DEDICATED OUTDOOR AIR UNIT, FAN COIL
+  // UNIT SCHEDULE, etc.) into the count gate.
+  const pointsListTakeoff = /\b(?:points?\s*list|DDC\s+points?(?:\s*list)?)\b/i.test(goal)
+    && (/\b(?:AI|AO|BI|BO)\b/i.test(goal) || /\bpoint[-\s]?type/i.test(goal) || /\btakeoff\b/i.test(goal));
   const scheduleFamilyMentions = [
-    /\bAHUs?\b/i.test(goal),
-    /\bDOAH\b|dedicated outdoor-air units?\b|dedicated outdoor air units?\b/i.test(goal),
-    /\bFCUs?\b|fan[\s-]*coils?\b/i.test(goal),
-    /\bVAVs?\b|variable[\s-]*air/i.test(goal),
-    /\b(?:air[\s-]*cooled\s+)?chillers?\b|\bheat[\s-]*recovery\s+chillers?\b/i.test(goal),
-    /\bboilers?\b/i.test(goal),
-    /\bpoints?\s*list\b/i.test(goal),
+    !pointsListTakeoff && /\bAHUs?\b/i.test(goal),
+    !pointsListTakeoff && (/\bDOAH\b|dedicated outdoor-air units?\b|dedicated outdoor air units?\b/i.test(goal)),
+    !pointsListTakeoff && (/\bFCUs?\b|fan[\s-]*coils?\b/i.test(goal)),
+    !pointsListTakeoff && (/\bVAVs?\b|variable[\s-]*air/i.test(goal)),
+    !pointsListTakeoff && (/\b(?:air[\s-]*cooled\s+)?chillers?\b|\bheat[\s-]*recovery\s+chillers?\b/i.test(goal)),
+    !pointsListTakeoff && /\bboilers?\b/i.test(goal),
+    /\bpoints?\s*list\b|\bDDC\s+points?\b/i.test(goal),
   ].filter(Boolean).length;
   const asksScheduleCounts = (
     /\btakeoff\b/i.test(goal)
     || /\bscheduled\s+(?:unit\s+)?counts?\b/i.test(goal)
     || /\bequipment\s+(?:totals?|counts?)\b/i.test(goal)
     || (/\b(?:how many|counts?|totals?|splits?)\b/i.test(goal) && scheduleFamilyMentions >= 3)
-  ) && /\b(?:AHU|FCU|VAV|DOAH|chiller|boiler|fan[\s-]*coil|points?\s*list|scheduled|equipment)\b/i.test(goal);
+    || (pointsListTakeoff && /\b(?:row\s+count|breakdown|totals?)\b/i.test(goal))
+  ) && /\b(?:AHU|FCU|VAV|DOAH|chiller|boiler|fan[\s-]*coil|points?\s*list|DDC\s+points?|scheduled|equipment)\b/i.test(goal);
   if (asksScheduleCounts && finalText) {
     const titleScans = callLog.filter(({ name, out, args }) => {
       if (name !== "query_table" || out?.error) return false;
@@ -1347,13 +1353,13 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return "The goal asks for scheduled equipment / points-list counts. Call query_table with each relevant schedule title (no row_key), then copy that result's count and building_tag_counts into the answer before finishing. Do not invent totals from the few MARK rows you painted for spot-check.";
     }
     const familyNeedles = [];
-    if (/\bAHUs?\b/i.test(goal)) familyNeedles.push({ label: "AHU", titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED/i });
-    if (/\bDOAH\b|dedicated outdoor/i.test(goal)) familyNeedles.push({ label: "DOAH unit", titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i });
-    if (/\bFCU\b|fan[\s-]*coil/i.test(goal)) familyNeedles.push({ label: "FCU", titleRe: /FAN\s*COIL/i });
-    if (/\bVAVs?\b|variable[\s-]*air|volume control box/i.test(goal)) familyNeedles.push({ label: "VAV", titleRe: /VARIABLE AIR VOLUME|\bVAV\b|VOLUME CONTROL BOX/i });
-    if (/\bair[\s-]*cooled chiller/i.test(goal)) familyNeedles.push({ label: "air-cooled chiller", titleRe: /AIR COOLED CHILLER/i, exclude: /HEAT RECOVERY/i, minCount: 1 });
-    if (/\bheat[\s-]*recovery chiller/i.test(goal)) familyNeedles.push({ label: "heat-recovery chiller", titleRe: /HEAT RECOVERY/i, minCount: 1 });
-    if (/\bboilers?\b/i.test(goal)) familyNeedles.push({ label: "boiler", titleRe: /BOILER/i });
+    if (!pointsListTakeoff && /\bAHUs?\b/i.test(goal)) familyNeedles.push({ label: "AHU", titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED/i });
+    if (!pointsListTakeoff && (/\bDOAH\b|dedicated outdoor/i.test(goal))) familyNeedles.push({ label: "DOAH unit", titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i });
+    if (!pointsListTakeoff && (/\bFCU\b|fan[\s-]*coil/i.test(goal))) familyNeedles.push({ label: "FCU", titleRe: /FAN\s*COIL/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i });
+    if (!pointsListTakeoff && (/\bVAVs?\b|variable[\s-]*air|volume control box/i.test(goal))) familyNeedles.push({ label: "VAV", titleRe: /VARIABLE AIR VOLUME|\bVAV\b|VOLUME CONTROL BOX/i });
+    if (!pointsListTakeoff && /\bair[\s-]*cooled chiller/i.test(goal)) familyNeedles.push({ label: "air-cooled chiller", titleRe: /AIR COOLED CHILLER/i, exclude: /HEAT RECOVERY/i, minCount: 1 });
+    if (!pointsListTakeoff && /\bheat[\s-]*recovery chiller/i.test(goal)) familyNeedles.push({ label: "heat-recovery chiller", titleRe: /HEAT RECOVERY/i, minCount: 1 });
+    if (!pointsListTakeoff && /\bboilers?\b/i.test(goal)) familyNeedles.push({ label: "boiler", titleRe: /BOILER/i });
     // When the goal names a specific points list (e.g. AHU-T1A/TIB), require that
     // tag in the title-scan — a bare "POINTS LIST" rollup across sibling lists
     // is the wrong family (often a doubled page sum).
@@ -1363,11 +1369,13 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       );
       return m ? String(m[1] || m[2]).toUpperCase() : null;
     })();
-    if (/\bpoints?\s*list\b|BAS\b/i.test(goal)) {
-      const requireRe = namedPointsListTag
+    if (/\bpoints?\s*list\b|\bDDC\s+points?\b|BAS\b/i.test(goal)) {
+      // For multi-list points takeoffs, require at least one POINTS/DDC list
+      // title-scan — do not require a single named tag across every list.
+      const requireRe = (!pointsListTakeoff && namedPointsListTag)
         ? new RegExp(namedPointsListTag.split("/")[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i")
         : null;
-      familyNeedles.push({ label: "points-list", titleRe: /POINTS LIST/i, require: requireRe });
+      familyNeedles.push({ label: "points-list", titleRe: /POINTS\s*LIST|DDC\s+POINTS/i, require: requireRe });
     }
     const scanTitle = (out) => String(
       out.query?.title || out.matches?.[0]?.title?.text || out.matches?.[0]?.title || "",
@@ -1467,7 +1475,15 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       if (!Number.isFinite(count) || count < 2) continue;
       const title = scanTitleFull(out).toUpperCase();
       let label = null;
-      if (/FAN\s*COIL/.test(title)) label = "FCU";
+      // Points/DDC list titles can contain FCU/AHU/DOAH words — classify as
+      // points-list first so equipment-schedule count gates do not fire.
+      if (/POINTS\s*LIST|DDC\s+POINTS/i.test(title)) {
+        if (namedPointsListTag && !pointsListTakeoff) {
+          const tagRe = new RegExp(namedPointsListTag.split("/")[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+          if (!tagRe.test(title)) continue; // skip sibling/generic points-list rollups
+        }
+        label = "points-list";
+      } else if (/FAN\s*COIL/.test(title)) label = "FCU";
       else if (/DEDICATED OUTDOOR AIR UNIT/.test(title) && !/HANDLING/.test(title)) label = "DOAH unit";
       else if (/DEDICATED OUTDOOR AIR HANDLING/.test(title)) label = "DOAH handling";
       else if (/AIR HANDLING UNIT/.test(title) && !/DEDICATED/.test(title)) label = "AHU";
@@ -1475,18 +1491,40 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       else if (/HEAT RECOVERY/.test(title) && /CHILLER/.test(title)) label = "heat-recovery chiller";
       else if (/AIR COOLED CHILLER/.test(title) && !/HEAT RECOVERY/.test(title)) label = "air-cooled chiller";
       else if (/BOILER/.test(title)) label = "boiler";
-      else if (/POINTS LIST/.test(title)) {
-        if (namedPointsListTag) {
-          const tagRe = new RegExp(namedPointsListTag.split("/")[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
-          if (!tagRe.test(title)) continue; // skip sibling/generic points-list rollups
-        }
-        label = "points-list";
-      }
       if (!label) continue;
       // Only require counts the current goal asked for — incidental title-scans
       // from exploratory follow-up tools must not force a full inventory dump.
       const goalAskedThisFamily = familyNeedles.some((fam) => fam.label === label);
       if (!goalAskedThisFamily) continue;
+      // Multi-list points takeoffs: each list has its own count; require the
+      // count near that list's title keywords (or overall total), not a single
+      // "points-list" label that collides across lists.
+      if (pointsListTakeoff && label === "points-list") {
+        const listHint = title
+          .replace(/POINTS\s*LIST|DDC\s+POINTS(?:\s*LIST)?/ig, " ")
+          .replace(/WITH|AND|THE|FOR/g, " ")
+          .trim()
+          .split(/\s+/)
+          .filter((w) => w.length >= 3)
+          .slice(0, 3)
+          .join(" ");
+        const nearList = listHint
+          ? nearCountsForLabel(listHint).includes(Number(count))
+          : false;
+        const nearPoints = countNearLabel("points-list", count)
+          || countNearLabel("POINTS", count)
+          || nearCountsForLabel(title.slice(0, 40)).includes(Number(count));
+        if (!(nearList || nearPoints || countNearLabel("overall", count) || countNearLabel("total", count))) {
+          // Accept when the answer simply states the number somewhere with the
+          // list title fragment (e.g. DOAH-TI … 34).
+          const titleFrag = title.replace(/[^A-Z0-9]+/g, "").slice(0, 12);
+          const fragOk = titleFrag.length >= 6
+            && finalCanonical.includes(titleFrag)
+            && finalCanonical.includes(String(count));
+          if (!fragOk) missingCounts.push(`${title.slice(0, 48)} count=${count}`);
+        }
+        continue;
+      }
       const foundNear = nearCountsForLabel(label);
       if (!foundNear.includes(Number(count))) {
         missingCounts.push(`${label} count=${count}`);
