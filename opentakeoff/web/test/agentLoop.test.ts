@@ -387,6 +387,35 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     } },
   ], "Do a full HVAC takeoff — give AHU and DOAH scheduled counts and cite AHU-A1.",
   "AHU 5. DOAH is painted as DOAH-A1 only.")!, /DOAH unit count=3/);
+  // Named points-list goals must not accept a generic POINTS LIST rollup count.
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#48", bbox_px: [1, 2, 3, 4], text: "AHU-T1A" } },
+    { name: "query_table", out: {
+      query: { title: "POINTS LIST", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 122,
+      matches: [{ title: { text: "POINTS LIST DOAH-TI" }, sheet: "set.pdf#50", row: { key: "X", all_cells: {} } }],
+    } },
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 5,
+      matches: [{ title: { text: "AIR HANDLING UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+  ], "Give AHU scheduled counts and how many rows are on the AHU-T1A/TIB BAS points list. Cite AHU-A1.",
+  "AHU 5. Points-list 122.")!, /points-list|AHU-T1A/i);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#48", bbox_px: [1, 2, 3, 4], text: "AHU-T1A" } },
+    { name: "query_table", out: {
+      query: { title: "POINTS LIST AHU-T1A", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 62,
+      matches: [{ title: { text: "POINTS LIST AHU-T1A/TIB" }, sheet: "set.pdf#48", row: { key: "X", all_cells: {} } }],
+    } },
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 5,
+      matches: [{ title: { text: "AIR HANDLING UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+  ], "Give AHU scheduled counts and how many rows are on the AHU-T1A/TIB BAS points list. Cite AHU-A1.",
+  "AHU 5. Points-list AHU-T1A 62."), null);
   assert.match(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
     { name: "query_table", out: { matches: [{

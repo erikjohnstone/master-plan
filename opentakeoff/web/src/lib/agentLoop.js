@@ -854,18 +854,40 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     if (/\bair[\s-]*cooled chiller/i.test(goal)) familyNeedles.push({ label: "air-cooled chiller", titleRe: /AIR COOLED CHILLER/i, exclude: /HEAT RECOVERY/i });
     if (/\bheat[\s-]*recovery chiller/i.test(goal)) familyNeedles.push({ label: "heat-recovery chiller", titleRe: /HEAT RECOVERY/i });
     if (/\bboilers?\b/i.test(goal)) familyNeedles.push({ label: "boiler", titleRe: /BOILER/i });
-    if (/\bpoints?\s*list\b|BAS\b/i.test(goal)) familyNeedles.push({ label: "points-list", titleRe: /POINTS LIST/i });
+    // When the goal names a specific points list (e.g. AHU-T1A/TIB), require that
+    // tag in the title-scan — a bare "POINTS LIST" rollup across sibling lists
+    // is the wrong family (often a doubled page sum).
+    const namedPointsListTag = (() => {
+      const m = goal.match(
+        /\b((?:AHU|DOAH|FCU|VAV|CH|B)-[A-Z0-9]+(?:\/[A-Z0-9]+)?)\s*(?:BAS\s+)?points?\s*list\b|(?:BAS\s+)?points?\s*list\b[^.\n]{0,48}\b((?:AHU|DOAH|FCU|VAV|CH|B)-[A-Z0-9]+(?:\/[A-Z0-9]+)?)/i,
+      );
+      return m ? String(m[1] || m[2]).toUpperCase() : null;
+    })();
+    if (/\bpoints?\s*list\b|BAS\b/i.test(goal)) {
+      const requireRe = namedPointsListTag
+        ? new RegExp(namedPointsListTag.split("/")[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i")
+        : null;
+      familyNeedles.push({ label: "points-list", titleRe: /POINTS LIST/i, require: requireRe });
+    }
     const scanTitle = (out) => String(
       out.query?.title || out.matches?.[0]?.title?.text || out.matches?.[0]?.title || "",
     );
+    const scanTitleFull = (out) => [
+      out.query?.title,
+      out.matches?.[0]?.title?.text || out.matches?.[0]?.title,
+    ].filter(Boolean).map(String).join(" ");
     const missingFamilies = familyNeedles.filter((fam) => !titleScans.some(({ out }) => {
-      const title = scanTitle(out);
+      const title = scanTitleFull(out);
       if (!fam.titleRe.test(title)) return false;
       if (fam.exclude && fam.exclude.test(title)) return false;
+      if (fam.require && !fam.require.test(title)) return false;
       return true;
     })).map((fam) => fam.label);
     if (missingFamilies.length) {
-      return `The goal asks for counts of ${missingFamilies.join(", ")}, but no title-scan query_table (no row_key) was run for those schedule families yet. Call query_table with each missing schedule title, copy count/building_tag_counts, then answer.`;
+      const hint = namedPointsListTag && missingFamilies.includes("points-list")
+        ? ` For the points-list, query_table title must include ${namedPointsListTag.split("/")[0]} (not a generic POINTS LIST rollup).`
+        : "";
+      return `The goal asks for counts of ${missingFamilies.join(", ")}, but no title-scan query_table (no row_key) was run for those schedule families yet. Call query_table with each missing schedule title, copy count/building_tag_counts, then answer.${hint}`;
     }
     // Normalize unicode dashes so "Air‑cooled" / "DOAH‑A1" match ASCII patterns.
     const answerNorm = finalText.replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/g, "-");
@@ -918,7 +940,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     for (const { out } of titleScans) {
       const count = Number(out.count);
       if (!Number.isFinite(count) || count < 2) continue;
-      const title = scanTitle(out).toUpperCase();
+      const title = scanTitleFull(out).toUpperCase();
       let label = null;
       if (/FAN\s*COIL/.test(title)) label = "FCU";
       else if (/DEDICATED OUTDOOR AIR UNIT/.test(title) && !/HANDLING/.test(title)) label = "DOAH unit";
@@ -928,7 +950,13 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       else if (/HEAT RECOVERY/.test(title) && /CHILLER/.test(title)) label = "heat-recovery chiller";
       else if (/AIR COOLED CHILLER/.test(title) && !/HEAT RECOVERY/.test(title)) label = "air-cooled chiller";
       else if (/BOILER/.test(title)) label = "boiler";
-      else if (/POINTS LIST/.test(title)) label = "points-list";
+      else if (/POINTS LIST/.test(title)) {
+        if (namedPointsListTag) {
+          const tagRe = new RegExp(namedPointsListTag.split("/")[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+          if (!tagRe.test(title)) continue; // skip sibling/generic points-list rollups
+        }
+        label = "points-list";
+      }
       if (!label) continue;
       if (!countNearLabel(label, count)) {
         missingCounts.push(`${label} count=${count}`);
@@ -1029,7 +1057,7 @@ export function agentSystemPrompt() {
     "- NEVER report a plan location for any equipment or valve tag unless sweep_schedule_row succeeded for that exact tag. A schedule-cell bbox is a schedule location, never an installed plan location, and one tag's plan coordinates never belong to another tag.",
     "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized.",
     "- Be extremely, genuinely useful: whatever the goal asks — a full takeoff, an AHU characteristic, counting valves, a BAS trace, schedule attributes, cross-sheet joins — do that ask end-to-end. Return every requested field with evidence-backed values plus enough citation context to trust the answer. Paint ALL answering evidence on the sheets (value cells / row data / drawing text / counted marks), not only a tag mark. Partial answers and mark-only flybys are incomplete.",
-    "- When asked for scheduled equipment or points-list row counts, call query_table with the schedule title (no row_key). Copy that tool result's count and building_tag_counts into the answer — do not re-sum sheet_graph page row totals by hand (continuation pages 1 OF 2 / 2 OF 2 repeat the same MARK keys). building_tag_counts letters map as A=Air Ops, M=MITRACON/Mitracon, T=ATCT — never swap them. Prefer one accurate title needle per asked family; when the goal distinguishes sibling titles (for example dedicated outdoor-air UNIT vs HANDLING schedules, or air-cooled vs heat-recovery chillers), query the title that matches what was asked rather than blending both. Then re-query specific row_key values for MARK/identity bboxes you must cite.",
+    "- When asked for scheduled equipment or points-list row counts, call query_table with the schedule title (no row_key). Copy that tool result's count and building_tag_counts into the answer — do not re-sum sheet_graph page row totals by hand (continuation pages 1 OF 2 / 2 OF 2 repeat the same MARK keys). building_tag_counts letters map as A=Air Ops, M=MITRACON/Mitracon, T=ATCT — never swap them. Prefer one accurate title needle per asked family; when the goal distinguishes sibling titles (for example dedicated outdoor-air UNIT vs HANDLING schedules, or air-cooled vs heat-recovery chillers), query the title that matches what was asked rather than blending both. When the goal names a specific points list (for example AHU-T1A/TIB), put that tag in the query_table title — a bare POINTS LIST title can roll up sibling lists and double the row count. Then re-query specific row_key values for MARK/identity bboxes you must cite.",
     "- Sequencing for full-set count + cite goals: (1) list_sheets + sheet_graph once, (2) one title-scan query_table per requested family and copy count/building_tag_counts, (3) only then re-query the named cite MARKs / points-list title and paint those cells, (4) write ONE final answer whose family totals match those tool counts (do not add a second contradictory totals table that recounts only painted MARKs). Do not paint every equipment row on a schedule, and do not dump full schedule tables into the answer.",
     "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Do not rely on auto-flying the canvas — the UI shows clickable source cards in the Agent panel; painting is enough. When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",
     "- Never draw or request overlay label text that would cover the cited cell value; the highlight is a frame around readable blueprint text.",
