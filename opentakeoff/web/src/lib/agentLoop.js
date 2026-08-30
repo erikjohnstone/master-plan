@@ -587,24 +587,15 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         evidenceCells.push({ sheet: out.row.sheet, header, text: cell.text, bbox: bboxArray });
       }
     }
-    // Strict "don't claim unpainted cells" prose checks apply when the goal
-    // explicitly asks to show/cite highlights. For ordinary asks, require real
-    // paint of answering evidence above; do not thrash on highlight wording.
+    // Broad "all/each … highlighted" claims are always wrong as prose — list
+    // the painted regions instead. Per-line "X is highlighted" wording thrash
+    // is limited to explicit cite/show goals so ordinary asks are not stalled
+    // after paint already succeeded.
+    if (/\b(?:all|each)\b.{0,160}\bhighlight/i.test(finalText)) {
+      const painted = highlights.map((h) => `${h.sheet} ${JSON.stringify(h.bbox)}`).slice(0, 8);
+      return `The final answer uses a broad all/each-highlighted claim. Rewrite without that wording and describe ONLY these painted regions: ${painted.join("; ") || "(none)"}. Do not claim any other cell was highlighted.`;
+    }
     if (asksToShowCite) {
-      if (/\b(?:all|each)\b.{0,160}\bhighlight/i.test(finalText)) {
-        const mentionedCells = evidenceCells.filter(({ header, text }) => {
-          const headerCanonical = String(header).toUpperCase().replace(/[^A-Z0-9]/g, "");
-          const textCanonical = String(text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-          return headerCanonical.length >= 3 && textCanonical
-            && finalCanonical.includes(headerCanonical) && finalCanonical.includes(textCanonical);
-        });
-        const unpaintedMentioned = mentionedCells.filter((cell) =>
-          !highlightMatches(cell.sheet, cell.bbox));
-        if (unpaintedMentioned.length) {
-          const painted = highlights.map((h) => `${h.sheet} ${JSON.stringify(h.bbox)}`).slice(0, 8);
-          return `The final answer broadly says all/each cited value or cell is highlighted, but some mentioned evidence cells were not painted. Rewrite the answer and describe ONLY these painted regions: ${painted.join("; ") || "(none)"}. Do not claim any other cell was highlighted.`;
-        }
-      }
       for (const line of finalText.split("\n").filter((text) => /\bhighlight/i.test(text))) {
         const lineCanonical = line.toUpperCase().replace(/[^A-Z0-9]/g, "");
         const claimedCells = evidenceCells.filter(({ header, text }) => {
