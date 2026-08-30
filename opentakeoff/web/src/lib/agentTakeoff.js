@@ -396,8 +396,9 @@ export function lineSpecValue(line, col) {
  * Points lists skip Manufacturer/Model; valve takeoffs keep them when present.
  */
 const tagLabelFor = (lines) => {
-  const fam = String(lines[0]?.family || lines[0]?.table_title || "");
-  if (/POINT/i.test(fam)) return "Point";
+  const fams = new Set((lines || []).map((l) => l.family || l.table_title || ""));
+  // Mixed takeoffs keep a generic Tag header; a single points list uses Point.
+  if (fams.size === 1 && /POINT/i.test([...fams][0] || "")) return "Point";
   return "Tag";
 };
 
