@@ -240,7 +240,8 @@ test("demo runner captures request IDs, raw replies, and complete tool payloads"
 
   assert.equal(requestBodies.length, 2);
   assert.equal(requestBodies.every((body) => !("response_format" in body)), true);
-  assert.match(requestBodies[0].messages[0].content, /tagged_only:true/);
+  assert.match(requestBodies[0].messages[0].content, /Installed quantity is not requested/);
+  assert.match(requestBodies[0].messages[0].content, /Do not call sweep_schedule_row merely for equipment_tag/);
   assert.match(requestBodies[0].messages[0].content, /sweep_schedule_row\.tag_citations/);
   assert.match(requestBodies[0].messages[0].content, /row\.all_cells/);
   assert.match(requestBodies[0].messages[0].content, /row\.identity/);
