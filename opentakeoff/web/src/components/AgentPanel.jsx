@@ -182,6 +182,7 @@ export default function AgentPanel({
   configured, running, status = "", log, thread = [], citations = [], proposals, condById, sheetLabel, units,
   fmtArea, onRun, onStop, onResetChat, onOpenCitation, onAccept, onReject, onAcceptAll, onRejectAll,
   onOpenSettings, onClose,
+  onOpenTakeoff, takeoffRowCount = 0,
   runHistory = [], historyOpen = false, onToggleHistory,
 }) {
   const [draft, setDraft] = useState("");
@@ -236,6 +237,15 @@ export default function AgentPanel({
       <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 12px", background: "var(--cobalt)", color: "var(--accent-contrast)" }}>
         <Icon name="target" size={15} />
         <strong style={{ flex: 1, fontSize: 12.5 }}>Agent{proposals.length ? ` · ${proposals.length} pending` : ""}</strong>
+        {configured && Number(takeoffRowCount) > 0 && typeof onOpenTakeoff === "function" && (
+          <button
+            onClick={onOpenTakeoff}
+            title="Open Takeoff panel — structured workflow data"
+            style={{ border: "none", background: "rgba(255,255,255,0.22)", color: "var(--accent-contrast)", cursor: "pointer", fontSize: 11, fontWeight: 650, padding: "2px 8px" }}
+          >
+            Takeoff · {takeoffRowCount}
+          </button>
+        )}
         {configured && thread.length > 0 && (
           <button onClick={onResetChat} disabled={running} title="Start a new question" style={{ border: "none", background: "transparent", color: "var(--accent-contrast)", cursor: running ? "default" : "pointer", fontSize: 11, opacity: running ? 0.5 : 1 }}>New</button>
         )}
@@ -263,7 +273,8 @@ export default function AgentPanel({
           <div ref={threadRef} style={{ flex: 1, minHeight: 120, overflow: "auto", padding: "10px 12px" }}>
             {thread.length === 0 && !running && (
               <div style={{ color: "var(--ink-muted)", fontSize: 12.5, lineHeight: 1.55 }}>
-                Ask a real estimating question. You'll get the data here, source cards to open on the drawing, and you can keep chatting about what just happened.
+                Ask a real estimating question. This chat stays for workflow steps and conversation —
+                structured quantities open in the Takeoff panel for review and CSV / Excel / PDF export.
               </div>
             )}
             {thread.map((m, i) => (
@@ -288,10 +299,24 @@ export default function AgentPanel({
                     {m.text}
                   </div>
                 )}
+                {m.role === "assistant" && Number(m.takeoffRows) > 0 && typeof onOpenTakeoff === "function" && (
+                  <button
+                    type="button"
+                    onClick={onOpenTakeoff}
+                    style={{
+                      marginTop: 8, padding: "5px 10px", border: "1px solid var(--ink-faint)",
+                      background: "var(--paper)", color: "var(--cobalt)", cursor: "pointer",
+                      fontSize: 11.5, fontWeight: 650, fontFamily: "var(--f-mono)",
+                      letterSpacing: "0.06em", textTransform: "uppercase",
+                    }}
+                  >
+                    Open Takeoff · {m.takeoffRows}
+                  </button>
+                )}
               </div>
             ))}
             {running && (
-              <div style={{ fontSize: 12.5, color: "var(--cobalt)", fontWeight: 600, marginBottom: 8 }}>
+              <div data-agent-status style={{ fontSize: 12.5, color: "var(--cobalt)", fontWeight: 600, marginBottom: 8 }}>
                 {status || "Working…"}
               </div>
             )}

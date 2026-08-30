@@ -37,6 +37,15 @@ import { buildProfile, parseProfile, applyProfile, resetProfileDefaults, isProfi
 import ToolMenu from "../components/ToolMenu.jsx";
 import PlanNavigator from "../components/PlanNavigator.jsx";
 import ReportPanel from "../components/ReportPanel.jsx";
+import TakeoffDataPanel from "../components/TakeoffDataPanel.jsx";
+import {
+  dedupeTakeoffRows,
+  mergeTakeoffRows,
+  rowsFromAnswerMarkdown,
+  rowsFromCompiledTakeoff,
+  rowsFromToolResult,
+  splitConversationalAnswer,
+} from "../lib/agentTakeoff.js";
 import RevisionsPanel from "../components/RevisionsPanel.jsx";
 import UserGuide from "../components/UserGuide.jsx";
 import TakeoffsPanel, { clampPanelW, CONDITION_DND_MIME, ConditionAppearanceEditor } from "../components/TakeoffsPanel.jsx";
@@ -568,7 +577,22 @@ export default function TakeoffCanvas() {
   const [ruleOffer, setRuleOffer] = useState(null);   // { deduct, seed, tag }
   const [ruleStage, setRuleStage] = useState(null);   // { rule, candidates, proposed_ts }
   const [agentOpen, setAgentOpen] = useState(false);      // docked right-rail Agent panel
-  const [corpusTakeoffView, setCorpusTakeoffView] = useState(null); // last compile_corpus_takeoff rollup for UI
+  // TakeoffDataPanel — production output for ALL platform workflows:
+  // Takeoff tab = finished compiled takeoff; Workflow data = raw aggregate.
+  const [agentTakeoffRows, setAgentTakeoffRows] = useState([]);
+  const [showTakeoffData, setShowTakeoffData] = useState(false);
+  const [lastCorpusTakeoffMeta, setLastCorpusTakeoffMeta] = useState(null);
+  // Demo / Playwright: seed or open Takeoff without a full agent run.
+  useEffect(() => {
+    window.__otSeedAgentTakeoff = (rows, { open = true } = {}) => {
+      setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, Array.isArray(rows) ? rows : []));
+      if (open) setShowTakeoffData(true);
+    };
+    window.__otOpenTakeoff = () => setShowTakeoffData(true);
+    return () => {
+      try { delete window.__otSeedAgentTakeoff; delete window.__otOpenTakeoff; } catch { /* */ }
+    };
+  }, []);
   // ── roll goods (#136) — view state; the figured layouts are a memo below ──
   const [rollShow, setRollShow] = useState(true);         // draw the figured cuts over the plan (on: opting a condition in shows its cuts immediately)
   const [rollEdit, setRollEdit] = useState(false);        // cut-edit mode — cuts take pointer events (slide / resize / double-click reset)
@@ -7035,41 +7059,24 @@ export default function TakeoffCanvas() {
     return { downloaded: filename, condition_count: rows.length };
   }
 
-  function showCompiledTakeoff(compiled) {
-    const rollupRows = (() => {
-      if (compiled.kind === "hvac_equipment") {
-        return [
-          ["Category", "Count", "A", "M", "T", "Other"],
-          ...Object.entries(compiled.categories || {}).map(([name, cat]) => [
-            name,
-            cat.count,
-            cat.building?.A ?? 0,
-            cat.building?.M ?? 0,
-            cat.building?.T ?? 0,
-            cat.building?.other ?? 0,
-          ]),
-        ];
-      }
-      const lists = compiled.categories?.points_lists?.lists || [];
-      const totals = compiled.categories?.points_lists?.totals || {};
-      return [
-        ["List", "Sheet", "Rows", "AI", "AO", "BI", "BO"],
-        ...lists.map((l) => [l.title, l.sheet_id, l.rows, l.AI, l.AO, l.BI, l.BO]),
-        ["TOTAL", "", totals.rows, totals.AI, totals.AO, totals.BI, totals.BO],
-      ];
-    })();
-    setCorpusTakeoffView({
+  /** Feed finished compile into TakeoffDataPanel (Takeoff + Workflow data tabs). */
+  function showCompiledTakeoff(compiled, meta = {}) {
+    if (!compiled || compiled.error) return;
+    const totals = compiled.totals || (
+      compiled.kind === "hvac_equipment"
+        ? {
+          categories: Object.keys(compiled.categories || {}).length,
+          items: Object.values(compiled.categories || {}).reduce((n, c) => n + (c.items?.length || c.count || 0), 0),
+        }
+        : compiled.categories?.points_lists?.totals
+    );
+    setLastCorpusTakeoffMeta({
       takeoff_id: compiled.takeoff_id,
       kind: compiled.kind,
       sheet_count: compiled.sheet_count,
-      totals: compiled.totals || (
-        compiled.kind === "hvac_equipment"
-          ? { categories: Object.keys(compiled.categories || {}).length, items: Object.values(compiled.categories || {}).reduce((n, c) => n + (c.items?.length || c.count || 0), 0) }
-          : compiled.categories?.points_lists?.totals
-      ),
+      totals,
       empty_pages: compiled.page_accounting?.empty_pages,
       exclusions: compiled.exclusions || [],
-      rows: rollupRows,
       category_counts: compiled.kind === "hvac_equipment"
         ? Object.fromEntries(Object.entries(compiled.categories || {}).map(([k, v]) => [k, v.count]))
         : null,
@@ -7079,6 +7086,15 @@ export default function TakeoffCanvas() {
         }))
         : null,
     });
+    const rows = rowsFromCompiledTakeoff(compiled, {
+      workflow: meta.workflow || compiled.takeoff_id || "corpus takeoff",
+      runId: meta.runId || null,
+      source_tool: "compile_corpus_takeoff",
+    });
+    if (rows.length) {
+      setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, rows));
+      setShowTakeoffData(true);
+    }
   }
 
   async function agentCompileCorpusTakeoff(kind, opts = {}) {
@@ -7136,7 +7152,9 @@ export default function TakeoffCanvas() {
         }))
         : null,
       downloaded: downloads,
-      ui_rollup_open: true,
+      // Panel is the production surface — fed by showCompiledTakeoff above.
+      ui_takeoff_open: true,
+      // Lean summary for the LLM; full item rows live in TakeoffDataPanel.
     };
   }
 
@@ -7149,7 +7167,9 @@ export default function TakeoffCanvas() {
       compileCorpusTakeoff: (kind, opts) => agentCompileCorpusTakeoff(kind, opts),
       showCompiledTakeoff,
       openAgent: () => setAgentOpen(true),
-      lastCorpusTakeoff: () => corpusTakeoffView,
+      openTakeoff: () => setShowTakeoffData(true),
+      lastCorpusTakeoff: () => lastCorpusTakeoffMeta,
+      takeoffRowCount: () => agentTakeoffRows.length,
       debugGraph: async () => {
         const g = await ensureAgentGraph();
         return {
@@ -8718,28 +8738,56 @@ export default function TakeoffCanvas() {
     currentRunRef.current = run;
     saveRun(run); // persist immediately — even an instant crash leaves the goal itself on record
     const ctx = buildAgentCtx();
+    const collectedTakeoff = [];
     try {
       const result = await runAgentLoop({
         cfg: aiConfig(), goal: ask, tools: AGENT_TOOL_DEFS,
         priorMessages: followUp ? agentPriorRef.current : [],
         execute: (name, args) => executeAgentTool(ctx, name, args),
-        onEvent: (ev) => { appendAgentLog(ev); recordRunEvent(ev); },
+        onEvent: (ev) => {
+          appendAgentLog(ev);
+          recordRunEvent(ev);
+          // Every successful tool result lands in TakeoffDataPanel (Workflow data
+          // aggregate → Takeoff tab compiles finished lines).
+          if (ev.type === "tool_end" && ev.name && ev.result && !ev.result.error) {
+            collectedTakeoff.push(...rowsFromToolResult(ev.name, ev.args || {}, ev.result, {
+              workflow: ask,
+              runId: run.id,
+            }));
+          }
+        },
         signal: ctl.signal,
       });
       const answerText = typeof result?.text === "string" ? result.text.trim() : "";
       if (answerText) {
+        const fromTables = rowsFromAnswerMarkdown(answerText, { workflow: ask, runId: run.id });
+        const merged = dedupeTakeoffRows([...collectedTakeoff, ...fromTables]);
+        if (merged.length) {
+          setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, merged));
+          setShowTakeoffData(true);
+        }
+        const { chat } = splitConversationalAnswer(answerText, { rowCount: merged.length });
         agentPriorRef.current = [
           ...agentPriorRef.current,
           { role: "user", content: ask },
           { role: "assistant", content: answerText },
         ];
         setAgentThread((t) => {
-          // Avoid duplicating if appendAgentLog already streamed the same final text
-          // as a thread entry — we own thread writes here.
           const last = t[t.length - 1];
-          if (last?.role === "assistant" && last.text === answerText) return t;
-          return [...t, { role: "assistant", text: answerText }];
+          if (last?.role === "assistant" && (last.text === chat || last.text === answerText)) {
+            return [...t.slice(0, -1), { role: "assistant", text: chat, takeoffRows: merged.length }];
+          }
+          return [...t, { role: "assistant", text: chat, takeoffRows: merged.length }];
         });
+      } else if (collectedTakeoff.length) {
+        const merged = dedupeTakeoffRows(collectedTakeoff);
+        setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, merged));
+        setShowTakeoffData(true);
+        setAgentThread((t) => [...t, {
+          role: "assistant",
+          text: `Wrote ${merged.length} takeoff row${merged.length === 1 ? "" : "s"} to the Takeoff panel — open Takeoff to review and export.`,
+          takeoffRows: merged.length,
+        }]);
       }
     } finally {
       setAgentRunning(false);
@@ -10205,6 +10253,17 @@ export default function TakeoffCanvas() {
         <div style={{ flex: 1 }} />
         </div>
         <span data-topbar-pinned style={{ display: "inline-flex", alignItems: "center", gap: 7, flexShrink: 0, paddingTop: 16 }}>
+        <button onClick={() => setShowTakeoffData(true)}
+          title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export."
+          style={{
+            padding: "8px 14px", border: "none",
+            background: agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
+            color: agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
+            cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11,
+            letterSpacing: "0.12em", textTransform: "uppercase",
+          }}>
+          Takeoff{agentTakeoffRows.length ? ` · ${agentTakeoffRows.length}` : ""}
+        </button>
         <button onClick={() => setShowReport(true)} disabled={!conditions.length} title="Open the takeoff report — per-condition breakdown with waste, plus CSV / JSON export."
           style={{ padding: "8px 14px", border: "none", background: conditions.length ? "var(--ink)" : "var(--text-faint)", color: "var(--paper-bright)", cursor: conditions.length ? "pointer" : "default", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase" }}>Report</button>
         {/* ⋯ overflow — rarely-used project controls, so the row never wraps
@@ -12019,64 +12078,12 @@ export default function TakeoffCanvas() {
             onRejectAll={rejectAllAgentProposals}
             onOpenSettings={() => setShowAiSettings(true)}
             onClose={() => setAgentOpen(false)}
+            onOpenTakeoff={() => setShowTakeoffData(true)}
+            takeoffRowCount={agentTakeoffRows.length}
             runHistory={runHistory}
             historyOpen={runHistoryOpen}
             onToggleHistory={() => { if (!runHistoryOpen) refreshRunHistory(); setRunHistoryOpen((o) => !o); }}
           />
-        )}
-
-        {/* Corpus HVAC/BAS takeoff rollup — shown after compile_corpus_takeoff.
-            Set-agnostic: whatever categories/lists the loaded plan actually has. */}
-        {corpusTakeoffView && (
-          <div
-            role="dialog"
-            aria-label="Compiled takeoff rollup"
-            style={{
-              position: "absolute", left: 16, bottom: 16, zIndex: 40,
-              width: "min(560px, calc(100% - 32px))", maxHeight: "45vh",
-              overflow: "auto", background: "var(--surface, #fff)",
-              border: "1px solid var(--line, #ccc)", borderRadius: 8,
-              boxShadow: "0 8px 28px rgba(0,0,0,0.18)", padding: 12,
-              fontSize: 12, color: "var(--ink, #111)",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", gap: 8, marginBottom: 8, alignItems: "baseline" }}>
-              <strong style={{ fontSize: 13 }}>
-                {corpusTakeoffView.takeoff_id} · {corpusTakeoffView.kind === "hvac_equipment" ? "HVAC equipment" : "BAS points"} takeoff
-              </strong>
-              <button type="button" className="btn" onClick={() => setCorpusTakeoffView(null)} style={{ fontSize: 11 }}>Close</button>
-            </div>
-            <div style={{ color: "var(--ink-muted)", marginBottom: 8 }}>
-              {corpusTakeoffView.sheet_count} sheets · {corpusTakeoffView.empty_pages} empty for this takeoff
-              {corpusTakeoffView.totals?.items != null ? ` · ${corpusTakeoffView.totals.items} items` : null}
-              {corpusTakeoffView.totals?.rows != null ? ` · ${corpusTakeoffView.totals.rows} rows` : null}
-            </div>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <tbody>
-                {(corpusTakeoffView.rows || []).map((row, i) => (
-                  <tr key={i} style={{ background: i === 0 ? "var(--wash, #f4f4f4)" : undefined }}>
-                    {row.map((cell, j) => (
-                      <td
-                        key={j}
-                        style={{
-                          borderBottom: "1px solid var(--line, #e5e5e5)",
-                          padding: "3px 6px",
-                          textAlign: j === 0 ? "left" : "right",
-                          fontWeight: i === 0 ? 600 : 400,
-                          maxWidth: j === 0 ? 220 : undefined,
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {cell}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
         )}
 
         {/* Roll panel (#136) — DOCKED right-rail sibling like the Agent panel:
@@ -12198,6 +12205,32 @@ export default function TakeoffCanvas() {
           </span>
           <button onClick={() => window.location.reload()} style={{ whiteSpace: "nowrap", padding: "6px 12px", border: "1px solid var(--ink-faint)", background: "var(--paper-bright)", cursor: "pointer", fontSize: 12 }}>Reload</button>
         </div>
+      )}
+
+      {showTakeoffData && (
+        <TakeoffDataPanel
+          rows={agentTakeoffRows}
+          projectName={projectName}
+          onClear={() => setAgentTakeoffRows([])}
+          onRemove={(id) => setAgentTakeoffRows((rows) => rows.filter((r) => r.id !== id))}
+          onRemoveLine={(line) => {
+            const ids = new Set(line?.source_ids || []);
+            if (!ids.size) return;
+            setAgentTakeoffRows((rows) => rows.filter((r) => !ids.has(r.id)));
+          }}
+          onClose={() => setShowTakeoffData(false)}
+          onOpenCitation={(row) => {
+            if (!row?.sheet_id || !row?.bbox_px) return;
+            openAgentCitation({
+              sheet_id: row.sheet_id,
+              bbox_px: row.bbox_px,
+              row_key: row.tag || row.row_key,
+              column: row.column,
+              table_title: row.table_title,
+              value: row.value ?? row.qty,
+            });
+          }}
+        />
       )}
 
       {showReport && (
