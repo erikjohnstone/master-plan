@@ -41,7 +41,7 @@ validated the final answer and saved the strict pass under
 
 ## D02 selection record
 
-Status: `SELECTED — ground truth complete; no model runs started`
+Status: `IN PROGRESS — ground truth locked; restarting N=5 at 0/5 after RETRIEVAL`
 
 The NAVFAC target holds up after direct rendering. MI731 contains one 62-row
 `POINTS LIST AHU-T1A/TIB` that interleaves AHU-T1A and AHU-T1B under repeated
@@ -51,3 +51,9 @@ handling schedule, the physical `AHU-T1A / AHU-T1B SECTION`, and the M-002
 ATCT cab narrative. Those sources occupy four different sheets in a 75-sheet,
 three-building set, so the required BAS-to-equipment-to-location stress is
 genuine rather than inferred from the slate.
+
+Independent tool probe confirms exact `cell_contains` on the full feedback
+description returns the AI10 row with Alarm/Trend, and the AHU schedule row
+returns location + 3850 CFM. The earlier cold attempt exhausted the 12-turn
+budget (`RETRIEVAL`) before the adaptive title-filter / broaden guidance
+landed; N=5 restarts from zero with full failed-run diagnostics preserved.
