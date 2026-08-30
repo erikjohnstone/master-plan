@@ -168,6 +168,111 @@ export function missingScheduleTitleScans(callLog, goal) {
   })).map((fam) => fam.title).filter(Boolean);
 }
 
+/**
+ * Named-tag schedule attributes the goal asked for that query_table already
+ * returned but the answer omitted. Set-agnostic (TYPE/CFM/GPM/capacity).
+ * @returns {Array<{tag:string,label:string,value:string,sheet:string|null,header:string}>}
+ */
+export function missingNamedScheduleAttrs(callLog, goal, finalText, finalCanonicalIn, spacedHasTokenIn) {
+  const finalTextStr = String(finalText || "");
+  if (!finalTextStr) return [];
+  const finalCanonical = finalCanonicalIn
+    || finalTextStr.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const finalSpaced = finalTextStr.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim();
+  const spacedHasToken = spacedHasTokenIn || ((token) => {
+    if (!token) return false;
+    return new RegExp(`(?:^|\\s)${token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:\\s|$)`).test(finalSpaced);
+  });
+  const attrAsk = [];
+  if (/\btype\b/i.test(goal)) attrAsk.push({ label: "TYPE", headerRe: /^TYPE$/i });
+  if (/\b(?:cfm|airflow)\b/i.test(goal)) {
+    attrAsk.push({ label: "CFM", headerRe: /\bCFM\b|AIR\s*FLOW|FAN\s*DATA/i });
+  }
+  if (/\bgpm\b/i.test(goal)) attrAsk.push({ label: "GPM", headerRe: /\bGPM\b|FLOWRATE/i });
+  if (/\b(?:capacity|tons?|mbh)\b/i.test(goal)) {
+    attrAsk.push({ label: "CAPACITY", headerRe: /CAPACITY|\bTONS?\b|\bMBH\b/i });
+  }
+  const goalTagRe = /\b[A-Z]{1,8}-[A-Z0-9]*\d[A-Z0-9]*\b/gi;
+  const goalTags = [...new Set([...String(goal || "").matchAll(goalTagRe)]
+    .map((hit) => hit[0].toUpperCase().replace(/[^A-Z0-9]/g, ""))
+    .filter((t) => t.length >= 3))];
+  if (!attrAsk.length || !goalTags.length) return [];
+
+  const cellTextOf = (cell) => {
+    if (cell == null) return "";
+    if (typeof cell === "string" || typeof cell === "number") return String(cell);
+    if (typeof cell.text === "string") return cell.text;
+    return String(cell.value ?? "");
+  };
+  const missing = [];
+  for (const tagCanon of goalTags) {
+    let bag = null;
+    let sheetHint = null;
+    let displayTag = tagCanon;
+    let bagScore = -1;
+    for (const { out: qOut } of (callLog || []).filter((c) => c.name === "query_table")) {
+      for (const match of qOut?.matches || []) {
+        const rawKey = String(match?.row?.key || match?.row?.identity?.text || "");
+        const keyCanon = rawKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
+        if (keyCanon !== tagCanon) continue;
+        const candidate = match?.row?.all_cells || match?.row?.cells || null;
+        if (!candidate || typeof candidate !== "object") continue;
+        const score = attrAsk.reduce((n, ask) => (
+          n + (Object.keys(candidate).some((h) => ask.headerRe.test(String(h))) ? 1 : 0)
+        ), 0);
+        if (score > bagScore) {
+          bag = candidate;
+          sheetHint = match?.sheet || null;
+          displayTag = rawKey || tagCanon;
+          bagScore = score;
+        }
+      }
+    }
+    if (!bag || bagScore < 1) continue;
+    for (const ask of attrAsk) {
+      const entry = Object.entries(bag).find(([h]) => ask.headerRe.test(String(h)));
+      if (!entry) continue;
+      const raw = cellTextOf(entry[1]).trim();
+      if (!raw || /^(?:—|-|n\/?a|\.)$/i.test(raw)) continue;
+      const phraseCanon = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      const tokens = raw.toUpperCase().replace(/,/g, "").split(/[^A-Z0-9.]+/).filter((t) => t.length >= 2);
+      const present = (phraseCanon.length >= 3 && finalCanonical.includes(phraseCanon))
+        || (tokens.length > 0 && tokens.every((tok) => (
+          spacedHasToken(tok) || finalCanonical.includes(tok.replace(/[^A-Z0-9]/g, ""))
+        )));
+      if (!present) {
+        missing.push({
+          tag: displayTag,
+          label: ask.label,
+          value: raw,
+          sheet: sheetHint,
+          header: String(entry[0]),
+        });
+      }
+    }
+  }
+  return missing;
+}
+
+/** Append retrieved schedule attrs the model omitted — durable, set-agnostic. */
+export function appendNamedScheduleAttrs(draft, missing) {
+  if (!missing?.length) return String(draft || "");
+  const byTag = new Map();
+  for (const m of missing) {
+    if (!byTag.has(m.tag)) byTag.set(m.tag, { sheet: m.sheet, parts: [] });
+    const g = byTag.get(m.tag);
+    if (m.sheet && !g.sheet) g.sheet = m.sheet;
+    g.parts.push(`${m.label} ${m.value}`);
+  }
+  const lines = [...byTag.entries()].map(([tag, g]) => (
+    `- ${tag}: ${g.parts.join("; ")}${g.sheet ? ` (${g.sheet})` : ""}`
+  ));
+  const block = `Schedule attributes (from query_table):\n${lines.join("\n")}`;
+  const base = String(draft || "").trim();
+  if (/Schedule attributes \(from query_table\):/i.test(base)) return base;
+  return base ? `${base}\n\n${block}` : block;
+}
+
 export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   const successfulCount = callLog.some(({ name, out }) =>
     (name === "sweep_schedule_row" && Number.isFinite(out?.found))
@@ -393,68 +498,12 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   // evidence-backed values in the answer — run BEFORE paint/sheet gates so the
   // model cannot finish by highlighting MARK alone while omitting the values.
   {
-    const attrAsk = [];
-    if (/\btype\b/i.test(goal)) attrAsk.push({ label: "TYPE", headerRe: /^TYPE$/i });
-    if (/\b(?:cfm|airflow)\b/i.test(goal)) {
-      attrAsk.push({ label: "CFM", headerRe: /\bCFM\b|AIR\s*FLOW|FAN\s*DATA/i });
-    }
-    if (/\bgpm\b/i.test(goal)) attrAsk.push({ label: "GPM", headerRe: /\bGPM\b|FLOWRATE/i });
-    if (/\b(?:capacity|tons?|mbh)\b/i.test(goal)) {
-      attrAsk.push({ label: "CAPACITY", headerRe: /CAPACITY|\bTONS?\b|\bMBH\b/i });
-    }
-    const goalTagRe = /\b[A-Z]{1,8}-[A-Z0-9]*\d[A-Z0-9]*\b/gi;
-    const goalTags = [...new Set([...goal.matchAll(goalTagRe)]
-      .map((hit) => hit[0].toUpperCase().replace(/[^A-Z0-9]/g, ""))
-      .filter((t) => t.length >= 3))];
-    if (attrAsk.length && goalTags.length && finalText) {
-      const cellTextOf = (cell) => {
-        if (cell == null) return "";
-        if (typeof cell === "string" || typeof cell === "number") return String(cell);
-        if (typeof cell.text === "string") return cell.text;
-        return String(cell.value ?? "");
-      };
-      const missingAttrs = [];
-      for (const tagCanon of goalTags) {
-        let bag = null;
-        let sheetHint = null;
-        let bagScore = -1;
-        for (const { out: qOut } of callLog.filter((c) => c.name === "query_table")) {
-          for (const match of qOut?.matches || []) {
-            const keyCanon = String(match?.row?.key || match?.row?.identity?.text || "")
-              .toUpperCase().replace(/[^A-Z0-9]/g, "");
-            if (keyCanon !== tagCanon) continue;
-            const candidate = match?.row?.all_cells || match?.row?.cells || null;
-            if (!candidate || typeof candidate !== "object") continue;
-            const score = attrAsk.reduce((n, ask) => (
-              n + (Object.keys(candidate).some((h) => ask.headerRe.test(String(h))) ? 1 : 0)
-            ), 0);
-            if (score > bagScore) {
-              bag = candidate;
-              sheetHint = match?.sheet || null;
-              bagScore = score;
-            }
-          }
-        }
-        if (!bag || bagScore < 1) continue;
-        for (const ask of attrAsk) {
-          const entry = Object.entries(bag).find(([h]) => ask.headerRe.test(String(h)));
-          if (!entry) continue;
-          const raw = cellTextOf(entry[1]).trim();
-          if (!raw || /^(?:—|-|n\/?a|\.)$/i.test(raw)) continue;
-          const phraseCanon = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
-          const tokens = raw.toUpperCase().replace(/,/g, "").split(/[^A-Z0-9.]+/).filter((t) => t.length >= 2);
-          const present = (phraseCanon.length >= 3 && finalCanonical.includes(phraseCanon))
-            || (tokens.length > 0 && tokens.every((tok) => (
-              spacedHasToken(tok) || finalCanonical.includes(tok.replace(/[^A-Z0-9]/g, ""))
-            )));
-          if (!present) {
-            missingAttrs.push(`${tagCanon} ${ask.label}=${raw}${sheetHint ? ` (${sheetHint})` : ""}`);
-          }
-        }
-      }
-      if (missingAttrs.length) {
-        return `The goal asks for schedule attributes on named tags, and query_table already returned them, but the answer omits these evidence-backed values: ${missingAttrs.slice(0, 8).join("; ")}. Copy each TYPE/CFM/capacity value into the answer (do not say they are \"on the same row\" without stating the values), then paint those cells.`;
-      }
+    const missing = missingNamedScheduleAttrs(callLog, goal, finalText, finalCanonical, spacedHasToken);
+    if (missing.length) {
+      const summary = missing.slice(0, 8).map((m) => (
+        `${m.tag} ${m.label}=${m.value}${m.sheet ? ` (${m.sheet})` : ""}`
+      )).join("; ");
+      return `The goal asks for schedule attributes on named tags, and query_table already returned them, but the answer omits these evidence-backed values: ${summary}. Copy each TYPE/CFM/capacity value into the answer (do not say they are \"on the same row\" without stating the values), then paint those cells.`;
     }
   }
 
@@ -2103,6 +2152,20 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
           displayText = draftForGate;
           lastDraftText = draftForGate;
           correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+        }
+      }
+      // Auto-fill omitted TYPE/CFM (etc.) from query_table — models often paint
+      // MARK and claim "values are on the same row" without copying them.
+      if (correction && /omits these evidence-backed values/i.test(correction)) {
+        const missing = missingNamedScheduleAttrs(callLog, goal, draftForGate);
+        if (missing.length) {
+          const filled = appendNamedScheduleAttrs(draftForGate, missing);
+          if (filled && filled !== draftForGate) {
+            draftForGate = filled;
+            displayText = filled;
+            lastDraftText = filled;
+            correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+          }
         }
       }
       // When cite-MARK bboxes are already in the call log, paint them now
