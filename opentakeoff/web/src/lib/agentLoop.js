@@ -203,21 +203,19 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     const example = headers[0];
     return `The final answer mentions ${example.text} but does not cite its semantic identity header ${example.header}. Use query_table row.identity exactly; do not substitute another repeated-value column.`;
   }
-  const mentionedQuerySheets = [];
-  for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
-    for (const match of out?.matches || []) {
-      const sheet = String(match?.sheet || "");
-      if (!sheet) continue;
-      const rowKey = String(match?.row?.key || match?.row?.identity?.text || "");
-      const rowCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
-      if (!rowCanonical || !finalCanonical.includes(rowCanonical)) continue;
-      const sheetNorm = sheet.toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
-      const answerNorm = finalText.toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
-      if (!answerNorm.includes(sheetNorm)) mentionedQuerySheets.push(`${rowKey} → ${sheet}`);
+  const asksPointMark = /\bpoint mark\b|\balarm\b.{0,40}\btrend\b|\btrend\b.{0,40}\balarm\b/i.test(goal);
+  if (asksPointMark) {
+    const pointRows = callLog
+      .filter(({ name }) => name === "query_table")
+      .flatMap(({ out }) => out?.matches || [])
+      .map((match) => String(match?.row?.identity?.text || match?.row?.key || "").trim())
+      .filter((key) => /^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(key));
+    if (!pointRows.length) {
+      return "The goal asks for a BAS/DDC point mark and alarm/trend fields. Call query_table with cell_contains set to the distinctive point description from the goal (or the equipment tag), then read the point mark and alarm/trend values from that row's all_cells — do not treat the description text as the point mark.";
     }
-  }
-  if (mentionedQuerySheets.length) {
-    return `The final answer uses query_table row(s) without naming their evidence sheet id(s): ${[...new Set(mentionedQuerySheets)].slice(0, 6).join("; ")}. Copy the unchanged match.sheet string from the tool result into the citation.`;
+    if (!pointRows.some((key) => finalCanonical.includes(key.toUpperCase().replace(/[^A-Z0-9]/g, "")))) {
+      return "A points-list query_table row with a BAS point mark was retrieved, but the final answer does not state that mark. Report the row identity/key (AI/AO/BI/BO style) and its alarm/trend fields; do not substitute the point description for the mark.";
+    }
   }
   const drawingTextHits = callLog
     .filter(({ name, out }) =>
@@ -384,6 +382,31 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       }
     }
   }
+  const mentionedQuerySheets = [];
+  for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
+    for (const match of out?.matches || []) {
+      const sheet = String(match?.sheet || "");
+      if (!sheet) continue;
+      const rowKey = String(match?.row?.key || match?.row?.identity?.text || "");
+      const rowCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (!rowCanonical || !finalCanonical.includes(rowCanonical)) continue;
+      const cellTexts = Object.values(match?.row?.all_cells || match?.row?.cells || {})
+        .map((cell) => String(cell?.text || "").trim())
+        .filter((text) => text.length >= 2);
+      const usesCellFromRow = cellTexts.some((text) => {
+        const textCanonical = text.toUpperCase().replace(/[^A-Z0-9]/g, "");
+        return textCanonical.length >= 4 && finalCanonical.includes(textCanonical);
+      });
+      // Require sheet only when the answer uses this row's cell values, not merely mentions the tag.
+      if (!usesCellFromRow && !/^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(rowKey)) continue;
+      const sheetNorm = sheet.toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
+      const answerNorm = finalText.toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
+      if (!answerNorm.includes(sheetNorm)) mentionedQuerySheets.push(`${rowKey} → ${sheet}`);
+    }
+  }
+  if (mentionedQuerySheets.length) {
+    return `The final answer uses query_table row(s) without naming their evidence sheet id(s): ${[...new Set(mentionedQuerySheets)].slice(0, 6).join("; ")}. Copy the unchanged match.sheet string from the tool result into the citation.`;
+  }
   return null;
 }
 
@@ -411,6 +434,7 @@ export function agentSystemPrompt() {
     "- Never say a cell or field was highlighted unless a successful highlight_citation call targeted that exact sheet and bbox_px. State exactly which source regions were highlighted; do not imply unpainted cells were painted.",
     "- For a scheduled device tag, cite query_table row.identity (for example VALVE MARK), not the first different column that happens to repeat the same text (for example UNIT MARK).",
     "- For any equipment-to-control-valve join, use this direct set-wide sequence: query_table with row_key set to the equipment tag; sweep_schedule_row for installed quantity/plan evidence when requested; query_table with cell_contains set to that exact equipment tag to find compound relationship marks; then highlight the exact returned tag and row-identity bboxes. Do not browse guessed sheets or repeatedly retry the same empty exact-row query.",
+    "- When the goal gives a BAS/DDC point description and asks for the point mark, alarm, or trend, call query_table with cell_contains set to that description (omit invented table titles on the first try). Read the AI/AO/BI/BO mark and alarm/trend fields from row.all_cells — never treat the description string itself as the point mark.",
     "- Schedule LOCATION/ROOM cells are installation-location attributes only. When asked what equipment serves, call find_text or read_sheet_text and copy from hit.str — never paraphrase a LOCATION cell into a serves claim.",
     "- When asked for a physical drawing section or detail label where equipment is shown, cite find_text/read_sheet_text hit.str for that section label. A schedule title is not a drawing section.",
     "- find_text accepts an optional sheet; omit sheet to search the entire loaded set. When a sheet-scoped search returns zero hits with a next_move, follow that next_move instead of answering from schedule cells.",

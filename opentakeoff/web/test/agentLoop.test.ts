@@ -281,7 +281,7 @@ test("installed quantity cannot finish without deterministic count evidence", ()
       ],
     } },
   ], servesGoal,
-  `Location: 11TH FLOOR MECHANICAL.\nServes: ${narrative}\nPhysical section: AHU-1 / AHU-2 SECTION on set.pdf#28.`), null);
+  `Location: 11TH FLOOR MECHANICAL on set.pdf#48.\nServes: ${narrative}\nPhysical section: AHU-1 / AHU-2 SECTION on set.pdf#28.`), null);
   assert.equal(requiredEvidenceCorrection([
     { name: "find_text", args: { q: "AHU-1" }, out: {
       count: 1,
@@ -289,6 +289,29 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     } },
   ], servesGoal,
   "Physical section: AHU-1 / AHU-2 SECTION on set.pdf#28.\nCould not find a drawn serving narrative with evidence; refusing serves."), null);
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#65",
+      row: {
+        key: "AI10",
+        identity: { header: "MARK ANALOG INPUT", text: "AI10" },
+        all_cells: {
+          "MARK ANALOG INPUT": { text: "AI10" },
+          "DESCRIPTION ANALOG INPUT": { text: "AHU-1 HW VALVE POSITION (FEEDBACK)" },
+          ALARM: { text: "No" },
+          TREND: { text: "No" },
+        },
+      },
+    }] } },
+    { name: "find_text", args: { q: "control cab" }, out: {
+      count: 2,
+      hits: [
+        { str: narrative, sheet: "set.pdf#2" },
+        { str: "AHU-1 / AHU-2 SECTION", sheet: "set.pdf#28" },
+      ],
+    } },
+  ], "Give me the point mark, alarm and trend requirements, what the unit serves, and the physical drawing section.",
+  `Point mark: AHU-1 HW VALVE POSITION (FEEDBACK) on set.pdf#65\nServes: ${narrative}\nPhysical section: AHU-1 / AHU-2 SECTION on set.pdf#28`), /BAS point mark|does not state that mark/);
 });
 
 test("anthropic-style: scripted tool_use → tools execute → results pair up in ONE user message → done", async () => {
