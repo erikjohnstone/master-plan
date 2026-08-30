@@ -65,7 +65,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     && !/\b(?:derived|calculated|converted|conversion)\b/i.test(finalText)) {
     return "The final answer adds an approximate value without labeling its derivation. Remove unrequested derived values, or explicitly label the calculation/conversion and cite the source inputs; never present it as direct tool output.";
   }
-  if (/\((?:example|placeholder|sample)(?:\s+\w+)?\)|\bexample\s+(?:size|value|data|only|figures?)\b|\bplaceholder\b|\blorem ipsum\b/i.test(finalText)) {
+  if (/\((?:example|placeholder|sample)(?:\s+\w+)?\)|\bexample\s+(?:size|value|data|only|figures?)\b|\bplaceholder\s+(?:data|value|text|figures?|row)\b|\blorem ipsum\b/i.test(finalText)) {
     return "The final answer contains example or placeholder data. Never substitute example values for requested drawing facts. Retrieve each value from a successful tool result with a citation, or explicitly say the evidence was not found.";
   }
   if (/\bcontrol\s+valve\b/i.test(goal)) {
@@ -1412,6 +1412,26 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
             messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
             emit({ type: "done", text: displayText });
             return { status: "done", text: displayText, iterations: iterations + 1 };
+          }
+          // Identical placeholder-wording false positives: strip trigger words and re-check once.
+          if (wordingCorrectionStreak >= 2 && /example or placeholder data/i.test(correction)) {
+            const cleaned = String(draftForGate || "")
+              .replace(/\((?:example|placeholder|sample)(?:\s+\w+)?\)/gi, "")
+              .replace(/\bplaceholder\s+(?:data|value|text|figures?|row)\b/gi, "value")
+              .replace(/\bexample\s+(?:size|value|data|only|figures?)\b/gi, "value")
+              .trim();
+            const again = requiredEvidenceCorrection(callLog, goal, cleaned);
+            if (!again) {
+              displayText = cleaned;
+              const notes = runVerifiers(callLog, goal);
+              if (notes.length) displayText = `${displayText || ""}\n\n${notes.join("\n\n")}`;
+              if (displayText) {
+                lastDraftText = displayText;
+                emit({ type: "text", text: displayText });
+              }
+              emit({ type: "done", text: displayText });
+              return { status: "done", text: displayText, iterations: iterations + 1 };
+            }
           }
         } else {
           lastWordingCorrection = "";

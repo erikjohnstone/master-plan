@@ -593,7 +593,10 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       throw new UserError("Pass at least one of title, row_key, column, cell_value, or cell_contains.");
     }
     const graph = await session.graphForPipeline();
-    const titleNeedle = title?.trim().toUpperCase().replace(/\s+/g, " ");
+    // Strip continuation banners from the title needle so "… SCHEDULE 1 OF 2"
+    // still unions sibling pages ("… 2 OF 2") into one unique MARK count.
+    const titleNeedle = title?.trim().toUpperCase().replace(/\s+/g, " ")
+      .replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim() || undefined;
     const rowNeedle = row_key?.trim().toUpperCase().replace(/\s+/g, "");
     const columnNeedle = column?.trim().toUpperCase();
     const valueNeedle = cell_value?.trim().toUpperCase().replace(/\s+/g, " ");
@@ -608,9 +611,12 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       const base = t.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
       if (base === titleNeedle || t === titleNeedle) return true;
       if (base.startsWith(`${titleNeedle} `) || t.startsWith(`${titleNeedle} `)) return true;
-      if (!t.includes(titleNeedle)) return false;
+      if (!t.includes(titleNeedle) && !base.includes(titleNeedle)) return false;
       if (titleNeedle.length >= 12) {
-        const idx = t.indexOf(titleNeedle);
+        const idx = Math.min(
+          t.includes(titleNeedle) ? t.indexOf(titleNeedle) : 999,
+          base.includes(titleNeedle) ? base.indexOf(titleNeedle) : 999,
+        );
         return idx === 0;
       }
       return true;
