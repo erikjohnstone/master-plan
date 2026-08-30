@@ -37,7 +37,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     && /\b(?:single|one)\s+schedule\s+(?:entry|row)\b|\b(?:schedule\s+|the\s+)?row\s+appears\s+(?:only\s+)?(?:once|one time)\b/i.test(finalText)) {
     return "The final answer describes installed quantity as a single/one schedule entry. That reasoning is invalid even when the numeric value happens to match. Attribute installed quantity only to the successful sweep/count result and remove schedule-row-count wording.";
   }
-  if (/\bnormalized\s+(?:rectangle|coordinates?|bbox|bounding box)\b/i.test(finalText)) {
+  if (/\bnormalized\b/i.test(finalText)) {
     return "The final answer exposes normalized citation coordinates. Production evidence citations use image-pixel bboxes only. Remove normalized coordinates and report the unchanged sheet and bbox_px returned by the evidence tool.";
   }
   if (/\bexample\b/i.test(finalText)) {
