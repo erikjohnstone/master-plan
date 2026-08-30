@@ -69,7 +69,7 @@ export function citationProvenanceErrors(answer, toolCalls) {
   // (`cv_1_installed_quantity`, `rtu_1_equipment_tag`) when one prompt
   // asks for several tags.
   const fields = Object.keys(answer?.answer || {}).filter((field) =>
-    /(?:^|_)(?:equipment_tag|installed_quantity)$/i.test(field));
+    /(?:^|_)(?:equipment_tag|installed_quantity|plan_tag)$/i.test(field));
   for (const field of fields) {
     const citations = answer?.answer?.[field]?.citations;
     if (!Array.isArray(citations) || !citations.length) continue;
@@ -182,6 +182,17 @@ export function drawingTextEvidenceErrors(answer, truth, toolCalls) {
       const sheet = call.result?.data?.sheet;
       const text = call.result?.data?.text;
       return typeof text === "string" && sheet ? [{ sheet, str: text, bbox: null, query: "" }] : [];
+    }
+    if (call.name === "sweep_schedule_row") {
+      const tag = call.result?.data?.tag || call.arguments?.tag || "";
+      return (call.result?.data?.tag_citations || []).map((citation) => ({
+        sheet: citation.sheet,
+        str: tag,
+        bbox: citation.bbox
+          ? [citation.bbox.x0, citation.bbox.y0, citation.bbox.x1, citation.bbox.y1]
+          : null,
+        query: tag,
+      }));
     }
     return [];
   });
@@ -325,7 +336,7 @@ function systemPrompt(truth) {
     "For an installed quantity, include one plan tag citation per counted instance; the citations array length must equal the quantity.",
     `Required fields (names and types only; values are not supplied): ${JSON.stringify(fields)}`,
     "If a required value or citation cannot be established, return status \"refused\" and explain the missing evidence instead of guessing.",
-  ].join("\n");
+  ].filter((line) => typeof line === "string" && line.length > 0).join("\n");
 }
 
 function requestId(response, json) {
