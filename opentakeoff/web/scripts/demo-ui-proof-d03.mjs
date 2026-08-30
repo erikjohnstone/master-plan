@@ -177,8 +177,8 @@ try {
     const hay = normalize(primaryAnswer);
     const lab = labels.map((l) => l.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
     const v = String(value);
-    // Prefer markdown table quantity cells: "AHU … | **5** |"
-    if (new RegExp(`(?:${lab})[^\\n|]{0,100}\\|\\s*\\*{0,2}${v}\\*{0,2}\\s*\\|`, "i").test(hay)) return true;
+    // Markdown table: label and count may be several cells apart on the same row.
+    if (new RegExp(`(?:${lab})[^\\n]{0,160}?\\b\\*{0,2}${v}\\*{0,2}\\b`, "i").test(hay)) return true;
     // Or prose "AHU: 5" / "AHUs **5**" — but not sheet "#5" / "sheet 5".
     const prose = new RegExp(
       `(?:${lab})(?:(?!\\bsheet\\b)[^0-9\\n#]){0,40}(?<!#)\\b${v}\\b`,

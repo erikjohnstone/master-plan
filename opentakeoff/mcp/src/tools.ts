@@ -621,7 +621,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       }
       return true;
     };
-    const all = graph.tables.flatMap((table) => {
+    const allRaw = graph.tables.flatMap((table) => {
       if (!titleMatches(table.title?.text || "")) return [];
       const selectedHeaders = columnNeedle
         ? table.headers.filter((header) => header.toUpperCase().includes(columnNeedle))
@@ -670,6 +670,11 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
         }];
       });
     });
+    // Generic "CHILLER" (without HEAT RECOVERY) must not blend air-cooled + heat-recovery
+    // schedules into one doubled count.
+    const all = (titleNeedle && /CHILLER/i.test(titleNeedle) && !/HEAT\s*RECOVERY/i.test(titleNeedle))
+      ? allRaw.filter((match) => !/HEAT\s*RECOVERY/i.test(match.title?.text || ""))
+      : allRaw;
     const unique = [...new Map(all.map((match) => {
       const titleText = match.title?.text || "";
       const titleBase = titleText.toUpperCase().replace(/\s+/g, " ").trim()
