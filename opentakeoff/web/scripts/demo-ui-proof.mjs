@@ -70,7 +70,7 @@ const browser = await chromium.launch({
 const context = await browser.newContext({
   viewport: { width: 1920, height: 1080 },
   recordVideo: {
-    dir: "/opt/cursor/artifacts",
+    dir: "/tmp/opentakeoff-ui-videos",
     size: { width: 1920, height: 1080 },
   },
 });
@@ -92,7 +92,7 @@ try {
   await page.getByText("Open your plans").waitFor({ state: "hidden", timeout: 120_000 });
   await page.locator("canvas").first().waitFor({ state: "visible", timeout: 120_000 });
   await page.getByText("Rendering sheet…").waitFor({ state: "hidden", timeout: 120_000 });
-  await page.screenshot({ path: "/opt/cursor/artifacts/d01_ui_loaded.png" });
+  await page.screenshot({ path: "/tmp/d01_ui_loaded.png" });
 
   await page.locator('button[title^="Agent —"]').click();
   const goal = page.locator('textarea[name="agent-goal"]');
@@ -103,13 +103,28 @@ try {
   await stop.waitFor({ state: "visible", timeout: 10_000 });
   await stop.waitFor({ state: "hidden", timeout: 180_000 });
   await page.waitForTimeout(3_000);
-  await page.screenshot({ path: "/opt/cursor/artifacts/d01_ui_agent_result.png" });
+  await page.screenshot({ path: "/tmp/d01_ui_agent_result.png" });
   const panel = await page.locator('textarea[name="agent-goal"]').locator("xpath=../../..").innerText();
   console.log(`UI_AGENT_RESULT\n${panel}`);
+  if (/Stopped at the \d+-step cap|example (?:size|type|Cv)|placeholder/i.test(panel)) {
+    throw new Error("D01 UI answer ended in a correction cap or contains placeholder data.");
+  }
+  const normalizedPanel = panel.toUpperCase().replace(/[‑–—]/g, "-").replace(/\s+/g, " ");
+  for (const expected of [
+    "INSTALLED QUANTITY", "56", "55.4", "45", "128.5",
+    "CV-CH-A1", "128.0", "4", "2-WAY", "324",
+  ]) {
+    if (!normalizedPanel.includes(expected)) {
+      throw new Error(`D01 UI answer is missing required truth value: ${expected}`);
+    }
+  }
+  if (!normalizedPanel.includes("NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#3")) {
+    throw new Error("D01 UI answer is missing the swept plan-sheet citation.");
+  }
   for (const [needle, path, target] of [
-    ["MS101", "/opt/cursor/artifacts/d01_ui_plan_highlight.png", [2561.9 / 4896, 2511.1 / 3168]],
-    ["M-603", "/opt/cursor/artifacts/d01_ui_schedule_highlight.png", [496 / 4896, 322 / 3168]],
-    ["M-603", "/opt/cursor/artifacts/d01_ui_valve_highlight.png", [3900 / 4896, 700 / 3168]],
+    ["MS101", "/tmp/d01_ui_plan_highlight.png", [2561.9 / 4896, 2511.1 / 3168]],
+    ["M-603", "/tmp/d01_ui_schedule_highlight.png", [496 / 4896, 322 / 3168]],
+    ["M-603", "/tmp/d01_ui_valve_highlight.png", [3900 / 4896, 700 / 3168]],
   ]) {
     await page.locator('button[title^="Sheet — the sheets in this set"]').click();
     const item = page.getByText(needle, { exact: true }).last();
@@ -131,13 +146,14 @@ try {
   succeeded = true;
   if (headed) await page.waitForTimeout(10_000);
 } catch (error) {
-  await page.screenshot({ path: "/opt/cursor/artifacts/d01_ui_failure.png" }).catch(() => {});
+  await page.screenshot({ path: "/tmp/d01_ui_failure.png" }).catch(() => {});
   throw error;
 } finally {
   const video = page.video();
   await page.close();
   if (succeeded && video) {
-    await video.saveAs("/opt/cursor/artifacts/d01_ui_prompt_tools_answer_highlights.webm");
+    const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+    await video.saveAs(`/opt/cursor/artifacts/d01_ui_prompt_tools_answer_highlights_${stamp}.webm`);
   }
   await browser.close();
   await new Promise((resolveClose) => proxy.close(resolveClose));
