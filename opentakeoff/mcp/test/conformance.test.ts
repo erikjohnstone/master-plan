@@ -608,7 +608,7 @@ test("sheet graph (#87): index, resolve with citations, refusal with reasons, fi
   // the region bounds just the two real rows (y≈1520–1592), not the ~2600px
   // of unrelated sheet the old fallback boundary used to sweep in
   assert.ok(patientRooms.region.y1 - patientRooms.region.y0 < 200, `region should hug the two real rows, not reach for debris: ${JSON.stringify(patientRooms.region)}`);
-  assert.match(await callErr(client, "find_schedule", { kind: "door" }), /No "door" schedule found .* Found: /);
+  assert.match(await callErr(client, "find_schedule", { kind: "door" }), /No "door" schedule found .* Found kinds:/);
 });
 
 // ── the sheet graph, phase 2 (#87): continuation sheets, rotated headers, ───

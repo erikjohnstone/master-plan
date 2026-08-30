@@ -5729,8 +5729,16 @@ export class Session {
     const want = /room/.test(k) ? "room-finish" : /finish|material|product|code|mark/.test(k) ? "finish" : k;
     const hits = g.tables.filter((t) => t.kind === want);
     if (!hits.length) {
-      const found = g.tables.map((t) => `${t.kind} on ${t.sheet}`).join(" | ");
-      throw new UserError(`No ${JSON.stringify(kind)} schedule found in the set. Found: ${found || "no schedules at all"}.`);
+      const kindCounts = new Map();
+      for (const t of g.tables) {
+        kindCounts.set(t.kind, (kindCounts.get(t.kind) || 0) + 1);
+      }
+      const found = [...kindCounts.entries()]
+        .map(([tableKind, n]) => `${tableKind}×${n}`)
+        .join(", ") || "no schedules at all";
+      throw new UserError(
+        `No ${JSON.stringify(kind)} schedule found in the set. Found kinds: ${found}. For titled equipment/points tables use query_table with a title substring instead of find_schedule kind.`,
+      );
     }
     return {
       matches: hits.map((t) => ({
