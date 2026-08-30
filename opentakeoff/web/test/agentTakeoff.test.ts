@@ -246,7 +246,9 @@ test("rowsFromAnswerMarkdown + splitConversationalAnswer strip tables from chat"
   const { chat, hadTables } = splitConversationalAnswer(md, { rowCount: rows.length, finishedLineCount: 0 });
   assert.equal(hadTables, true);
   assert.match(chat, /Found the fan schedule/);
-  assert.doesNotMatch(chat, /Takeoff panel/, "scrap tables must not advertise Takeoff");
+  // Pipe tables flatten to plain lines so answering values stay visible.
+  assert.match(chat, /EF-1/);
+  assert.match(chat, /165/);
   assert.doesNotMatch(chat, /\| Tag \|/);
   const withFinished = splitConversationalAnswer(md, { rowCount: rows.length, finishedLineCount: 2 });
   assert.match(withFinished.chat, /2 lines.*Takeoff panel/i);

@@ -440,7 +440,9 @@ export function rowsFromAnswerMarkdown(text, meta = {}) {
 
 /**
  * Split a final agent answer into chat-facing prose vs data that belongs in
- * the Takeoff UI. Large markdown tables are removed from chat.
+ * the Takeoff UI. Markdown pipe tables are flattened to plain lines so
+ * answering values (TYPE, CFM, counts) stay visible in chat — dropping tables
+ * entirely made evidence-gate-passing answers lose their facts after strip.
  * finishedLineCount: contractor Takeoff lines only (compile/sweep/summary) —
  * scrap row counts must not advertise "written to the Takeoff panel".
  */
@@ -450,20 +452,35 @@ export function splitConversationalAnswer(text, { rowCount = 0, finishedLineCoun
 
   const lines = raw.split(/\n/);
   const kept = [];
-  let inTable = false;
   let hadTables = false;
+  let tableHeaders = null;
+  const flushTableRow = (cells) => {
+    if (!tableHeaders || !cells.length) return;
+    if (cells.every((c) => /^:?-{3,}:?$/.test(c))) return;
+    // Header row — remember labels, don't emit yet.
+    if (tableHeaders === true) {
+      tableHeaders = cells;
+      return;
+    }
+    const parts = [];
+    for (let i = 0; i < cells.length; i++) {
+      const h = String(tableHeaders[i] || "").trim();
+      const v = String(cells[i] ?? "").trim();
+      if (!v) continue;
+      parts.push(h ? `${h}: ${v}` : v);
+    }
+    if (parts.length) kept.push(`- ${parts.join(" · ")}`);
+  };
   for (const line of lines) {
     const isTable = /^\s*\|/.test(line);
     if (isTable) {
       hadTables = true;
-      inTable = true;
+      const cells = line.split("|").slice(1, -1).map((c) => c.trim());
+      if (!tableHeaders) tableHeaders = true;
+      flushTableRow(cells);
       continue;
     }
-    if (inTable && /^\s*$/.test(line)) {
-      inTable = false;
-      continue;
-    }
-    inTable = false;
+    if (tableHeaders) tableHeaders = null;
     kept.push(line);
   }
   let chat = kept.join("\n").replace(/\n{3,}/g, "\n\n").trim();
@@ -474,8 +491,6 @@ export function splitConversationalAnswer(text, { rowCount = 0, finishedLineCoun
   if (finished > 0) {
     const note = `Structured takeoff data (${finished} line${finished === 1 ? "" : "s"}) was written to the Takeoff panel — open Takeoff to review and export.`;
     chat = chat ? `${chat}\n\n${note}` : note;
-  } else if (hadTables && !(Number(rowCount) > 0)) {
-    // Tables stripped from chat with no finished Takeoff — no panel note.
   }
   return { chat: chat || raw, hadTables };
 }
