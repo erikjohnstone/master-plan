@@ -814,6 +814,7 @@ export function agentSystemPrompt() {
     "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized.",
     "- Be extremely, genuinely useful: whatever the goal asks — a full takeoff, an AHU characteristic, counting valves, a BAS trace, schedule attributes, cross-sheet joins — do that ask end-to-end. Return every requested field with evidence-backed values plus enough citation context to trust the answer. Paint ALL answering evidence on the sheets (value cells / row data / drawing text / counted marks), not only a tag mark. Partial answers and mark-only flybys are incomplete.",
     "- When asked for scheduled equipment or points-list row counts, call query_table with the schedule title (no row_key). Copy that tool result's count and building_tag_counts into the answer — do not re-sum sheet_graph page row totals by hand (continuation pages 1 OF 2 / 2 OF 2 repeat the same MARK keys). building_tag_counts letters map as A=Air Ops, M=MITRACON/Mitracon, T=ATCT — never swap them. Prefer one accurate title needle per asked family; when the goal distinguishes sibling titles (for example dedicated outdoor-air UNIT vs HANDLING schedules, or air-cooled vs heat-recovery chillers), query the title that matches what was asked rather than blending both. Then re-query specific row_key values for MARK/identity bboxes you must cite.",
+    "- Sequencing for full-set count + cite goals: (1) list_sheets + sheet_graph once, (2) one title-scan query_table per requested family and copy count/building_tag_counts, (3) only then re-query the named cite MARKs / points-list title and paint those cells, (4) write the final answer with every requested total. Do not paint every equipment row on a schedule, and do not dump full schedule tables into the answer.",
     "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Do not rely on auto-flying the canvas — the UI shows clickable source cards in the Agent panel; painting is enough. When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",
     "- Never draw or request overlay label text that would cover the cited cell value; the highlight is a frame around readable blueprint text.",
     "- Conversational follow-ups: when the estimator asks a follow-up about the previous answer or workflow, reply in plain language using evidence already gathered; call tools again only when new evidence is needed. Answer the follow-up question directly first — do not digress into unrelated points-list rows or extra fields unless asked. Explain what you did and why in estimator terms — not tool JSON. Be a useful collaborator across turns, not a one-shot report.",
@@ -952,6 +953,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
   // rules the model can choose to ignore — before the final answer is shown.
   /** @type {Array<{ id: string, name: string, args: unknown, out: unknown }>} */
   const callLog = [];
+  let lastDraftText = "";
 
   for (; iterations < maxIterations; iterations++) {
     if (signal?.aborted) return aborted();
@@ -976,6 +978,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     // append MUST happen here, before this emit, on the LAST turn only.
     let displayText = turn.text;
     if (!turn.toolCalls.length) {
+      if (turn.text && !/^\[Evidence gate:/i.test(turn.text)) lastDraftText = turn.text;
       const correction = requiredEvidenceCorrection(callLog, goal, turn.text);
       if (correction) {
         messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
@@ -995,7 +998,10 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       const notes = runVerifiers(callLog, goal);
       if (notes.length) displayText = `${displayText || ""}\n\n${notes.join("\n\n")}`;
     }
-    if (displayText) emit({ type: "text", text: displayText });
+    if (displayText) {
+      lastDraftText = displayText;
+      emit({ type: "text", text: displayText });
+    }
     // echo the assistant turn back verbatim so tool_use ids / tool_calls pair up
     messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
     if (!turn.toolCalls.length) {
@@ -1039,5 +1045,9 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
     appendToolResults(provider, messages, results);
   }
   emit({ type: "max_iterations", limit: maxIterations });
-  return { status: "max_iterations", iterations };
+  // Surface the best draft so the Agent panel still shows an Answer thread
+  // entry when the step cap stops a long takeoff mid-gate — estimators can
+  // review what was gathered instead of an empty panel.
+  if (lastDraftText) emit({ type: "text", text: lastDraftText });
+  return { status: "max_iterations", iterations, text: lastDraftText || undefined };
 }

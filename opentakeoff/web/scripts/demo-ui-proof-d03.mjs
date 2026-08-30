@@ -149,16 +149,16 @@ try {
   console.log(`UI_AGENT_PRIMARY\n${panelText.slice(0, 4000)}`);
 
   // Answer-first: an Answer thread entry must exist with truth values.
-  if (!/\bAnswer\b/.test(panelText)) {
+  if (!/\bAnswer\b/i.test(panelText)) {
     throw new Error("D03 UI panel missing answer-first thread (no Answer section).");
   }
   // Prefer the Answer body (exclude Goal / Technical steps dumps) so incidental
   // digits in tool traces cannot satisfy count checks.
-  const answerBodies = [...panelText.matchAll(/(?:^|\n)\s*Answer\b\s*\n([\s\S]*?)(?=\n\s*(?:Answer|Sources|Technical steps|Goal:|Ask a follow-up)\b|$)/gi)]
+  const answerBodies = [...panelText.matchAll(/(?:^|\n)\s*Answer\b\s*\n([\s\S]*?)(?=\n\s*(?:Answer|Sources|Technical steps|Goal:|Ask a follow-up|You)\b|$)/gi)]
     .map((m) => m[1].trim())
-    .filter(Boolean);
+    .filter((body) => body.length >= 40 && !/^\[Evidence gate:/i.test(body));
   const primaryAnswer = answerBodies[0] || "";
-  if (primaryAnswer.length < 40) {
+  if (primaryAnswer.length < 80) {
     throw new Error("D03 UI Answer section is empty or too short to be a takeoff reply.");
   }
   const answerNorm = normalize(primaryAnswer);
