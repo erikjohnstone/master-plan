@@ -337,6 +337,15 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   }
   for (const [, headers] of identityHeadersByTag) {
     const tagCanonical = String(headers[0].text).toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (!tagCanonical) continue;
+    // Occupancy / use-group letter codes (USED GROUP = A-3 / B) are not equipment
+    // identities. Requiring their header in an RTU/AHU answer causes junk row dumps.
+    if (headers.every((item) =>
+      /^(?:USEDGROUP|OCCUPANCYGROUP|OCCUPANCY|USEGROUP|GROUPCODE|TYPEOFCONSTRUCTION)$/i
+        .test(item.headerCanonical))) continue;
+    // Very short keys ("B", "A3") match as substrings of sheet filenames /
+    // ordinary prose — never enforce identity-header thrash for them.
+    if (tagCanonical.length < 3) continue;
     if (!finalCanonical.includes(tagCanonical)) continue;
     // AI/AO/BI|BO marks are themselves the semantic identity — requiring the
     // column title ("MARK ANALOG INPUT") in the user-facing answer is noise.
@@ -608,7 +617,18 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     const keysOnlyCount = isKeysOnlyCountResult(out);
     for (const match of out?.matches || []) {
       const rowKey = String(match?.row?.key || match?.row?.identity?.text || "");
-      if (!rowKey || !finalCanonical.includes(rowKey.toUpperCase().replace(/[^A-Z0-9]/g, ""))) continue;
+      if (!rowKey) continue;
+      const rowKeyCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (!rowKeyCanonical) continue;
+      // Short keys ("B", "A3") are substrings of sheet ids / prose — require a
+      // spaced standalone token in the answer, not finalCanonical.includes.
+      if (rowKeyCanonical.length < 3) {
+        const spaced = ` ${finalText.toUpperCase().replace(/[^A-Z0-9]+/g, " ")} `;
+        if (!spaced.includes(` ${rowKeyCanonical} `)
+          && !spaced.includes(` ${rowKey.toUpperCase().replace(/[^A-Z0-9]+/g, " ")} `)) continue;
+      } else if (!finalCanonical.includes(rowKeyCanonical)) {
+        continue;
+      }
       const cells = Object.entries(match?.row?.all_cells || match?.row?.cells || {});
       const paintable = cells
         .map(([header, cell]) => (cell && typeof cell === "object" ? { ...cell, header } : cell))
@@ -617,7 +637,6 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       // Only rows whose non-key cell values appear in the answer, or explicit
       // cite / points targets from the goal on scoped queries. Naming a sheet
       // in the answer must not attach every MARK queried on that sheet.
-      const rowKeyCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
       // Serving/relationship cells often hold another unit's MARK (VAV row
       // "AHU-A1"). That is not "using this row's answering values" when the
       // answer cites the other mark on its own.
