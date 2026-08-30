@@ -61,6 +61,8 @@ test("installed quantity cannot finish without deterministic count evidence", ()
   }], "Give me installed quantity", "Installed quantity: 1 (the schedule row for AHU-1 appears only once).")!, /reasoning is invalid/);
   assert.match(requiredEvidenceCorrection([], "Cite the source", "Normalized rectangle: [[0.1, 0.2], [0.3, 0.4]].")!, /image-pixel bboxes only/);
   assert.match(requiredEvidenceCorrection([], "Cite the source", "BBox [1, 2, 3, 4] (normalized ≈ [0.1, 0.2]).")!, /image-pixel bboxes only/);
+  assert.match(requiredEvidenceCorrection([], "Give capacity", "Capacity is 56 tons (≈672 MBH).")!, /without labeling its derivation/);
+  assert.equal(requiredEvidenceCorrection([], "Give capacity", "Capacity is 56 tons (calculated conversion: approximately 672 MBH)."), null);
   assert.match(requiredEvidenceCorrection([{
     name: "sweep_schedule_row",
     out: { found: 2 },
@@ -120,6 +122,20 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     { name: "sweep_schedule_row", args: { tag: "CH-A1" }, out: { found: 1 } },
     { name: "query_table", out: { matches: [{ row: { key: "CV-CH-A1" } }] } },
   ], "Find CH-A1", "Plan location: CH-A1 is on sheet 3.\nValve schedule: CV-CH-A1 is 4 in."), null);
+  assert.match(requiredEvidenceCorrection([
+    {
+      name: "sweep_schedule_row",
+      args: { tag: "CH-A1" },
+      out: {
+        found: 1,
+        tag_citations: [{ sheet: "set.pdf#3", bbox: [10, 20, 30, 40] }],
+      },
+    },
+    {
+      name: "query_table",
+      out: { matches: [{ sheet: "set.pdf#44", row: { key: "CV-CH-A1" } }] },
+    },
+  ], "Find CH-A1", "Plan location | set.pdf#44 schedule bbox [1, 2, 3, 4].")!, /schedule sheet\/region as a plan location/);
   const sweptPlan = {
     name: "sweep_schedule_row",
     args: { tag: "CH-A1" },

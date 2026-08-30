@@ -40,6 +40,10 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   if (/\bnormalized\b/i.test(finalText)) {
     return "The final answer exposes normalized citation coordinates. Production evidence citations use image-pixel bboxes only. Remove normalized coordinates and report the unchanged sheet and bbox_px returned by the evidence tool.";
   }
+  if (/(?:≈|\bapproximately\b|\bapprox\.)/i.test(finalText)
+    && !/\b(?:derived|calculated|converted|conversion)\b/i.test(finalText)) {
+    return "The final answer adds an approximate value without labeling its derivation. Remove unrequested derived values, or explicitly label the calculation/conversion and cite the source inputs; never present it as direct tool output.";
+  }
   if (/\bexample\b/i.test(finalText)) {
     return "The final answer contains example or placeholder data. Never substitute example values for requested drawing facts. Retrieve each value from a successful tool result with a citation, or explicitly say the evidence was not found.";
   }
@@ -102,6 +106,25 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   });
   if (claimedUnswept.length) {
     return `The final answer claims a plan location for unswept tag(s): ${claimedUnswept.join(", ")}. A schedule query proves schedule data only. Remove those plan-location claims or call sweep_schedule_row for each exact tag.`;
+  }
+  const sweptPlanSheets = new Set(callLog.filter(({ name, out }) =>
+    name === "sweep_schedule_row" && (out?.found ?? out?.total_found) > 0)
+    .flatMap(({ out }) => out?.tag_citations || [])
+    .map((citation) => String(citation?.sheet || "").toUpperCase().replace(/[^A-Z0-9]/g, ""))
+    .filter(Boolean));
+  const scheduleSheets = new Set(callLog.filter(({ name }) => name === "query_table")
+    .flatMap(({ out }) => out?.matches || [])
+    .map((match) => String(match?.sheet || "").toUpperCase().replace(/[^A-Z0-9]/g, ""))
+    .filter(Boolean));
+  const scheduleClaimedAsPlan = finalText.split("\n")
+    .filter((line) => /\bplan[- ]?location\b/i.test(line))
+    .some((line) => {
+      const lineCanonical = line.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      return [...scheduleSheets].some((sheet) =>
+        lineCanonical.includes(sheet) && !sweptPlanSheets.has(sheet));
+    });
+  if (scheduleClaimedAsPlan) {
+    return "The final answer labels a queried schedule sheet/region as a plan location without swept plan evidence on that sheet. A table bbox is a schedule citation only. Remove the plan-location label or provide a successful exact-tag sweep citation from the real plan sheet.";
   }
   if (/\bshow\b.*\bplan location\b|\bshow me the plan\b/i.test(goal)) {
     const highlights = callLog.filter(({ name, out }) =>
