@@ -600,7 +600,13 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         cells.some((cell) => highlightMatches(sheet, cell.bbox)));
     };
     const uncovered = usedQueryRows
-      .filter((row) => !rowCovered(row))
+      .filter((row) => {
+        const keyCanon = String(row.rowKey || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+        // Cite-MARK spot-check tags are enforced once via paintedTags below —
+        // double-gating them here burns the step cap on every partial draft.
+        if (asksToShowCite && citeTargetsFromGoal?.has(keyCanon)) return false;
+        return !rowCovered(row);
+      })
       .map(({ rowKey, sheet }) => `${rowKey} on ${sheet}`);
     if (uncovered.length) {
       return `The answer uses queried schedule row(s) with no painted source cell: ${[...new Set(uncovered)].join(", ")}. Call highlight_citation on at least one exact cited cell from each row before finishing.`;
@@ -826,7 +832,25 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     }
     const missingCite = [...citeTargetsFromGoal].filter((tag) => !paintedTags.has(tag));
     if (missingCite.length) {
-      return `The goal asks to cite MARK cells for ${missingCite.join(", ")}, but those tags are not painted yet. Re-query each with row_key, then call highlight_citation on the MARK/identity bbox before finishing.`;
+      const hints = missingCite.map((tag) => {
+        for (const { out: qOut } of callLog.filter((c) => c.name === "query_table")) {
+          for (const match of qOut?.matches || []) {
+            const keyCanon = String(match?.row?.key || match?.row?.identity?.text || "")
+              .toUpperCase().replace(/[^A-Z0-9]/g, "");
+            if (keyCanon !== tag) continue;
+            const mark = match?.row?.all_cells?.MARK || match?.row?.identity;
+            const bbox = mark?.bbox || mark?.bbox_px;
+            if (match?.sheet && Array.isArray(bbox) && bbox.length === 4) {
+              return `${tag}: highlight_citation sheet=${match.sheet} bbox_px=${JSON.stringify(bbox)} text=${match.row?.key || match.row?.identity?.text}`;
+            }
+          }
+        }
+        return null;
+      }).filter(Boolean);
+      const hint = hints.length
+        ? ` Exact paint args already retrieved: ${hints.join("; ")}.`
+        : " Re-query each with row_key, then call highlight_citation on the MARK/identity bbox before finishing.";
+      return `The goal asks to cite MARK cells for ${missingCite.join(", ")}, but those tags are not painted yet.${hint}`;
     }
   }
   // Full-set schedule takeoffs must use title-scan query_table counts — not
@@ -1278,6 +1302,29 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
         displayText = draftForGate;
         lastDraftText = draftForGate;
         correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+      }
+      // When cite-MARK bboxes are already in the call log, paint them now
+      // instead of asking the model to re-type the same highlight_citation args.
+      if (correction && /Exact paint args already retrieved:/i.test(correction)) {
+        const hintRe = /highlight_citation sheet=(\S+) bbox_px=(\[[^\]]+\]) text=(\S+)/g;
+        let paintedAny = false;
+        for (const m of correction.matchAll(hintRe)) {
+          let bbox;
+          try { bbox = JSON.parse(m[2]); } catch { continue; }
+          if (!Array.isArray(bbox) || bbox.length !== 4) continue;
+          const args = { sheet: m[1], bbox_px: bbox, text: m[3] };
+          emit({ type: "tool_start", name: "highlight_citation", args });
+          let out;
+          try { out = await execute("highlight_citation", args); }
+          catch (e) { out = { error: String((e && e.message) || e) }; }
+          if (out == null || typeof out !== "object") out = { result: out ?? null };
+          callLog.push({ id: `auto_paint_${callLog.length}`, name: "highlight_citation", args, out });
+          emit({ type: "tool_end", name: "highlight_citation", result: out });
+          paintedAny = true;
+        }
+        if (paintedAny) {
+          correction = requiredEvidenceCorrection(callLog, goal, draftForGate);
+        }
       }
       if (correction) {
         messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
