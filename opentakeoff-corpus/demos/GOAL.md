@@ -32,6 +32,27 @@ this on the production UI path for arbitrary uploaded sets.
 Demos are not tag flybys. They must look like a competent estimator using the
 product.
 
+### Answer ALL of it, highlight ALL of it
+
+If the user asks for a valve's characteristics, mechanical-schedule data, BAS
+point fields, capacities, flows, temperatures, Cv, size, configuration,
+alarm/trend, location, serves, or any other requested attributes — the product
+MUST:
+
+1. **Return every requested field** correctly in the Agent chat (no dropped
+   columns, no sibling-point substitutions, no mark-only summaries).
+2. **Highlight every answering evidence region** on the sheets — the value
+   cells, row data, and drawing text that support those fields — via
+   `highlight_citation`, and navigate/fly to them.
+
+Highlighting only a tag mark while the prompt asked for corresponding row
+values is a **fail**. Answering only some of the asked fields is a **fail**.
+Agent-panel text alone is incomplete; mark-only sheet flybys are incomplete.
+This is the easiest estimator ask and the product must nail it: ask → full
+answer in chat → full paint on the drawings.
+
+### Prompt and recording rules
+
 1. **Intelligent prompts.** Frozen `prompt.txt` values must ask what an
    intelligent user would actually ask — natural, multi-field, useful
    questions — not toy “find this tag” lookups.
@@ -46,7 +67,7 @@ product.
    → complete answer matching the prompt → on-sheet highlights of that
    evidence.
 
-If a recording cannot demonstrate those four points, the demo is not locked —
+If a recording cannot demonstrate those points, the demo is not locked —
 including demos previously marked locked that fail this bar (re-prove them).
 
 In a live review, each demo must answer these questions on the cited sheet in
