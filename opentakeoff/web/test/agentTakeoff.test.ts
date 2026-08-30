@@ -10,6 +10,7 @@ import {
   lineLeadCite,
   makeTakeoffRow,
   mergeTakeoffRows,
+  cleanTakeoffTag,
   rowsFromAnswerMarkdown,
   rowsFromCompiledTakeoff,
   rowsFromToolResult,
@@ -19,6 +20,10 @@ import {
   takeoffToCsv,
 } from "../src/lib/agentTakeoff.js";
 import { buildXlsx } from "../src/lib/xlsx.js";
+import {
+  compileControlValveTakeoff,
+  normalizeControlValveCells,
+} from "../src/lib/corpusTakeoff.mjs";
 
 test("rowsFromToolResult: query_table scoped column + count", () => {
   const rows = rowsFromToolResult("query_table", { title: "FAN SCHEDULE", column: "CFM", row_key: "EF-1" }, {
@@ -402,4 +407,130 @@ test("xlsx + pdf export builders produce non-empty artifacts", async () => {
   assert.ok(pdfBytes.byteLength > 400);
   const doc = await PDFDocument.load(pdfBytes);
   assert.ok(doc.getPageCount() >= 1);
+});
+
+test("cleanTakeoffTag strips markdown bold wrappers", () => {
+  assert.equal(cleanTakeoffTag("**CV-AHU-A1-HHW**"), "CV-AHU-A1-HHW");
+  assert.equal(cleanTakeoffTag("`CV-1`"), "CV-1");
+  assert.equal(makeTakeoffRow({ tag: "**CV-2**", field: "quantity", value: 1 }).tag, "CV-2");
+});
+
+test("normalizeControlValveCells: one Cv + served equipment, never dual CHW/HHW Cv", () => {
+  const cells = normalizeControlValveCells({
+    cells: {
+      "UNIT MARK": { text: "AHU-A1", bbox: [1, 2, 3, 4] },
+      "VALVE SIZE (IN)": { text: "1", bbox: null },
+      "FLOWRATE (GPM)": { text: "2.0", bbox: null },
+      CV: { text: "0.5", bbox: [5, 6, 7, 8] },
+      CONFIGURATION: { text: "2-WAY", bbox: null },
+      NOTES: { text: "1", bbox: null },
+      "CHW CV": { text: "20.3", bbox: null },
+      "HHW CV": { text: "0.5", bbox: null },
+    },
+    table_bbox_px: [10, 20, 30, 40],
+  }, "HHW");
+  assert.equal(cells["Served equipment"]?.text, "AHU-A1");
+  assert.equal(cells.Service?.text, "HHW");
+  assert.equal(cells.Cv?.text, "0.5");
+  assert.equal(cells.GPM?.text, "2.0");
+  assert.equal(cells.Size?.text, "1");
+  assert.equal(cells["CHW CV"], undefined);
+  assert.equal(cells["HHW CV"], undefined);
+});
+
+test("control_valves compile → panel lines with cites; dual-Cv scrap dropped", () => {
+  const compiled = compileControlValveTakeoff([], {
+    tables: [
+      {
+        sheet: "mech.pdf#44",
+        title: { text: "HHW CONTROL VALVE SCHEDULE", bbox: [0, 0, 100, 10] },
+        rows: [
+          {
+            key: "CV-AHU-A1-HHW",
+            cells: {
+              "VALVE MARK": { text: "CV-AHU-A1-HHW", bbox: [1, 2, 3, 4] },
+              "UNIT MARK": { text: "AHU-A1", bbox: [5, 6, 7, 8] },
+              "FLOWRATE (GPM)": { text: "2.0", bbox: null },
+              "VALVE SIZE (IN)": { text: "1", bbox: null },
+              CV: { text: "0.5", bbox: null },
+              CONFIGURATION: { text: "2-WAY", bbox: null },
+            },
+            identity: { bbox: [1, 2, 3, 4] },
+          },
+        ],
+      },
+      {
+        sheet: "mech.pdf#44",
+        title: { text: "CHW CONTROL VALVE SCHEDULE", bbox: [0, 50, 100, 60] },
+        rows: [
+          {
+            key: "CV-AHU-A1-CHW",
+            cells: {
+              "VALVE MARK": { text: "CV-AHU-A1-CHW", bbox: [11, 12, 13, 14] },
+              "UNIT MARK": { text: "AHU-A1", bbox: null },
+              "FLOWRATE (GPM)": { text: "61.5", bbox: null },
+              "VALVE SIZE (IN)": { text: "2", bbox: null },
+              CV: { text: "27.5", bbox: null },
+            },
+            identity: { bbox: [11, 12, 13, 14] },
+          },
+        ],
+      },
+    ],
+  });
+  assert.equal(compiled.kind, "control_valves");
+  assert.equal(compiled.takeoff_id, "T-VALVE-01");
+  assert.equal(compiled.totals.items, 2);
+  assert.equal(compiled.categories.HHW_CONTROL_VALVE.count, 1);
+  assert.equal(compiled.categories.CHW_CONTROL_VALVE.count, 1);
+  assert.equal(compiled.categories.HHW_CONTROL_VALVE.items[0].cells.Cv.text, "0.5");
+  assert.equal(compiled.categories.HHW_CONTROL_VALVE.items[0].cells["Served equipment"].text, "AHU-A1");
+
+  const rows = rowsFromCompiledTakeoff(compiled, { workflow: "valve takeoff" });
+  // Inject dual-Cv scrap that must not appear on the compiled valve line.
+  rows.push(makeTakeoffRow({
+    tag: "CV-AHU-A1-HHW", field: "CHW CV", value: "20.3",
+    sheet_id: "mech.pdf#44", table_title: "HHW CONTROL VALVE SCHEDULE",
+    source_tool: "answer_table",
+  }));
+  rows.push(makeTakeoffRow({
+    tag: "CV-AHU-A1-HHW", field: "HHW CV", value: "0.5",
+    sheet_id: "mech.pdf#44", table_title: "HHW CONTROL VALVE SCHEDULE",
+    source_tool: "answer_table",
+  }));
+  const lines = compileAgentTakeoff(rows);
+  assert.equal(lines.length, 2);
+  const hhw = lines.find((l) => l.tag === "CV-AHU-A1-HHW");
+  assert.ok(hhw);
+  assert.ok(lineLeadCite(hhw, "tag")?.bbox_px);
+  assert.equal(hhw.sheet_id, "mech.pdf#44");
+  assert.equal(hhw.specs["CHW CV"], undefined);
+  assert.equal(hhw.specs["HHW CV"], undefined);
+  assert.ok(hhw.specs.Cv === "0.5" || hhw.specs.CV === "0.5" || Object.values(hhw.specs).includes("0.5"));
+  assert.ok(
+    hhw.specs["Served equipment"] === "AHU-A1"
+    || hhw.specs["UNIT MARK"] === "AHU-A1"
+    || Object.values(hhw.specs).includes("AHU-A1"),
+  );
+});
+
+test("query_table CONTROL VALVE title-scan expands beyond 24 matches", () => {
+  const matches = Array.from({ length: 30 }, (_, i) => ({
+    sheet: "mech.pdf#44",
+    title: { text: "CHW CONTROL VALVE SCHEDULE" },
+    row: {
+      key: `CV-${i}`,
+      all_cells: {
+        "VALVE MARK": { text: `CV-${i}`, bbox: [i, 1, i + 1, 2] },
+        CV: { text: "1.0", bbox: null },
+      },
+    },
+  }));
+  const rows = rowsFromToolResult("query_table", { title: "CHW CONTROL VALVE SCHEDULE" }, {
+    count: 30,
+    matches,
+  });
+  assert.ok(rows.some((r) => r.tag === "CV-0"));
+  assert.ok(rows.filter((r) => r.field === "quantity" || r.tag).length >= 30);
+  assert.equal(rows.filter((r) => r.field === "schedule_count").length, 0);
 });

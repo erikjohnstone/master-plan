@@ -298,16 +298,100 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
   };
 }
 
+/** Control / bypass valve schedules only (subset of HVAC equipment families). */
+export const CONTROL_VALVE_FAMILIES = ["CHW_CONTROL_VALVE", "HHW_CONTROL_VALVE"];
+
+/**
+ * Contractor-facing valve row fields from a schedule row's cells.
+ * One Cv / size / GPM / served unit per valve — never invent dual CHW+HHW Cv
+ * columns on the same line (those came from bad agent markdown merges).
+ */
+export function normalizeControlValveCells(item, service) {
+  const cells = item?.cells && typeof item.cells === "object" ? item.cells : {};
+  const out = {};
+  const take = (re, label) => {
+    for (const [header, cell] of Object.entries(cells)) {
+      if (!re.test(String(header || ""))) continue;
+      const text = String(cell?.text ?? (typeof cell === "string" ? cell : "")).trim();
+      if (!text) continue;
+      out[label] = {
+        text,
+        bbox: Array.isArray(cell?.bbox) && cell.bbox.length === 4 ? cell.bbox : (cell?.bbox_px || null),
+      };
+      return;
+    }
+  };
+  take(/^UNIT\s*MARK$/i, "Served equipment");
+  take(/VALVE\s*SIZE|PIPE\s*SIZE|^\s*SIZE\s*$/i, "Size");
+  take(/FLOWRATE|\bFLOW\b|\bGPM\b/i, "GPM");
+  // Exactly one Cv — the schedule column is "CV", not "CHW CV" / "HHW CV".
+  take(/^\s*C[Vv]\s*$/i, "Cv");
+  take(/CONFIGURATION|CONFIG/i, "Configuration");
+  take(/^NOTES$/i, "Notes");
+  if (service) {
+    out.Service = { text: service, bbox: item.table_bbox_px || null };
+  }
+  return out;
+}
+
+/**
+ * Deterministic CHW + HHW control-valve takeoff for "complete valve takeoff"
+ * goals. Same Session+ODL family extractors as T-HVAC-01, filtered to valves,
+ * with contractor columns: valve mark, served equipment, service, size, GPM, Cv.
+ */
+export function compileControlValveTakeoff(sessionOrSheets, graph) {
+  const full = compileHvacTakeoff(sessionOrSheets, graph);
+  const categories = {};
+  for (const name of CONTROL_VALVE_FAMILIES) {
+    const cat = full.categories?.[name];
+    if (!cat) continue;
+    const service = /^CHW/i.test(name) ? "CHW" : /^HHW/i.test(name) ? "HHW" : null;
+    const items = (cat.items || []).map((item) => {
+      const cells = normalizeControlValveCells(item, service);
+      const served = cells["Served equipment"]?.text || null;
+      return {
+        ...item,
+        cells,
+        description: served ? `Serves ${served}` : (item.description || null),
+      };
+    });
+    categories[name] = {
+      ...cat,
+      count: items.length,
+      items,
+      provenance: "Unique VALVE MARK rows on CHW/HHW CONTROL VALVE SCHEDULE pages; "
+        + "columns = valve mark, served equipment (UNIT MARK), service, size, GPM, Cv, configuration.",
+    };
+  }
+  const itemCount = Object.values(categories).reduce((n, c) => n + (c.items?.length || 0), 0);
+  return {
+    ...full,
+    takeoff_id: "T-VALVE-01",
+    kind: "control_valves",
+    compiler: "corpusTakeoff.compileControlValveTakeoff",
+    categories,
+    totals: {
+      categories: Object.keys(categories).length,
+      items: itemCount,
+    },
+    exclusions: [
+      ...HVAC_EXCLUSIONS,
+      "Non-control-valve HVAC equipment (AHU, FCU, VAV, pumps, …) — use kind hvac_equipment for the full equipment takeoff",
+    ],
+  };
+}
+
 export function compileCorpusTakeoff(session, graph, kind) {
   if (kind === "hvac_equipment" || kind === "T-HVAC-01") return compileHvacTakeoff(session, graph);
   if (kind === "bas_points" || kind === "T-BAS-01") return compileBasTakeoff(session, graph);
+  if (kind === "control_valves" || kind === "T-VALVE-01") return compileControlValveTakeoff(session, graph);
   throw new Error(`Unknown takeoff kind: ${kind}`);
 }
 
 /** Build workbook sheet rows for CSV/XLSX export from a compiled takeoff. */
 export function takeoffWorkbookSheets(takeoff, { interrogationLog = null } = {}) {
   const sheets = [];
-  if (takeoff.kind === "hvac_equipment") {
+  if (takeoff.kind === "hvac_equipment" || takeoff.kind === "control_valves") {
     const rollup = [["category", "count", "unit", "building_A", "building_M", "building_T", "building_other"]];
     for (const [name, cat] of Object.entries(takeoff.categories || {})) {
       rollup.push([

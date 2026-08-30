@@ -27,7 +27,7 @@ test("classifyTakeoffIntent maps points-list takeoffs", () => {
   assert.equal(classifyTakeoffIntent("Trace AHU-1 connectivity"), "generic");
 });
 
-test("complete set HVAC/BAS goals route to corpus compile", () => {
+test("complete set HVAC/BAS/valve goals route to corpus compile", () => {
   const hvac = readFileSync(
     new URL("../../../opentakeoff-corpus/takeoffs/T-HVAC-01-navfac-equipment/prompt.txt", import.meta.url),
     "utf8",
@@ -36,10 +36,13 @@ test("complete set HVAC/BAS goals route to corpus compile", () => {
     new URL("../../../opentakeoff-corpus/takeoffs/T-BAS-01-navfac-points/prompt.txt", import.meta.url),
     "utf8",
   );
+  const valveGoal = "Run a complete valve takeoff on this blueprint set";
   assert.equal(classifyTakeoffIntent(hvac), "corpus_hvac");
   assert.equal(classifyTakeoffIntent(bas), "corpus_bas");
+  assert.equal(classifyTakeoffIntent(valveGoal), "corpus_valves");
   assert.equal(corpusCompileKind(hvac), "hvac_equipment");
   assert.equal(corpusCompileKind(bas), "bas_points");
+  assert.equal(corpusCompileKind(valveGoal), "control_valves");
   // Named multi-list goals stay on title-scan workflow.
   assert.equal(corpusCompileKind(D10_GOAL), null);
 
@@ -55,6 +58,11 @@ test("complete set HVAC/BAS goals route to corpus compile", () => {
     out: { takeoff_id: "T-HVAC-01", kind: "hvac_equipment", totals: { items: 396 } },
   }], hvac);
   assert.equal(after.phase, "spot_cites");
+
+  const valvePhase = advanceTakeoffWorkflow("corpus_valves", [], valveGoal);
+  assert.equal(valvePhase.phase, "compile");
+  assert.match(valvePhase.nextMove || "", /control_valves/);
+  assert.equal(isIllegalWorkflowTransition(valvePhase, "read_schedule"), true);
 });
 
 test("namedPointsListTitles extracts goal list titles", () => {

@@ -393,7 +393,7 @@ export default function TakeoffDataPanel({
             !lines.length ? (
               <div style={{ padding: "56px 24px", textAlign: "center", color: "var(--ink-muted)", fontSize: 14, lineHeight: 1.5 }}>
                 No finished takeoff yet.<br />
-                Run Agent with a complete HVAC or BAS takeoff goal — compiled quantities land here.
+                Run Agent with a complete HVAC, BAS, or valve takeoff goal — compiled quantities land here.
               </div>
             ) : (
               familyGroups.map((group) => {
@@ -505,7 +505,13 @@ export default function TakeoffDataPanel({
                               })}
                               <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)", whiteSpace: "nowrap" }}
                                 title={line.plan_sheet_id || line.schedule_sheet_id || line.sheet_id || ""}>
-                                {shortSheet(line.plan_sheet_id || line.schedule_sheet_id || line.sheet_id)}
+                                <CiteValue
+                                  text={shortSheet(line.plan_sheet_id || line.schedule_sheet_id || line.sheet_id)}
+                                  cite={lineLeadCite(line, "tag")}
+                                  onOpenCitation={onOpenCitation}
+                                  mono
+                                  title="Jump to this schedule row on the drawings"
+                                />
                               </td>
                               {showStatus ? (
                                 <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)" }}>

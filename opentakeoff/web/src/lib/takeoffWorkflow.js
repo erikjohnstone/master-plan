@@ -12,15 +12,16 @@
  * Extensible: add intents/phases here; do not special-case corpus answers.
  */
 
-/** @typedef {"corpus_hvac"|"corpus_bas"|"points_takeoff"|"fcu_buildings"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"generic"} TakeoffIntent */
+/** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"generic"} TakeoffIntent */
 
 /** @typedef {"survey"|"compile"|"title_scans"|"spot_cites"|"paint"|"answer"|"done"} WorkflowPhase */
 
 /**
- * Complete set-wide HVAC/BAS takeoffs that the corpus compiler covers
- * (T-HVAC-01 / T-BAS-01). Named multi-list goals stay on points_takeoff.
+ * Complete set-wide HVAC / BAS / control-valve takeoffs that the corpus
+ * compiler covers (T-HVAC-01 / T-BAS-01 / T-VALVE-01). Named multi-list goals
+ * stay on points_takeoff.
  * @param {string} goal
- * @returns {"hvac_equipment"|"bas_points"|null}
+ * @returns {"hvac_equipment"|"bas_points"|"control_valves"|null}
  */
 export function corpusCompileKind(goal) {
   const g = String(goal || "");
@@ -28,9 +29,14 @@ export function corpusCompileKind(goal) {
   if (namedPointsListTitles(g).length >= 2) return null;
   const completeSet = /\bcomplete\b/i.test(g)
     && /\btakeoff\b/i.test(g)
-    && /\b(?:this set|these drawings|of this set)\b/i.test(g);
+    && (/\b(?:this|these)\s+(?:blueprint\s+|plan\s+)?(?:set|drawings)\b/i.test(g)
+      || /\bon this (?:blueprint|plan)\s+set\b/i.test(g)
+      || /\bof this set\b/i.test(g));
   if (!completeSet) return null;
   if (/\b(?:BAS|DDC)\b/i.test(g) && /\bpoints?\b/i.test(g)) return "bas_points";
+  // Valve goals before HVAC equipment — "complete valve takeoff" must not wait
+  // for the words HVAC + equipment (that path returned a 10-row partial crawl).
+  if (/\bvalves?\b/i.test(g)) return "control_valves";
   if (/\bHVAC\b/i.test(g) && /\bequipment\b/i.test(g)) return "hvac_equipment";
   return null;
 }
@@ -44,6 +50,7 @@ export function classifyTakeoffIntent(goal) {
   const corpusKind = corpusCompileKind(g);
   if (corpusKind === "hvac_equipment") return "corpus_hvac";
   if (corpusKind === "bas_points") return "corpus_bas";
+  if (corpusKind === "control_valves") return "corpus_valves";
 
   const pointsListTakeoff = /\b(?:points?\s*list|DDC\s+points?(?:\s*list)?)\b/i.test(g)
     && (/\b(?:AI|AO|BI|BO)\b/i.test(g) || /\bpoint[-\s]?type/i.test(g) || /\btakeoff\b/i.test(g))
@@ -122,15 +129,19 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
   const hasCorpusCompile = log.some(({ name, out }) =>
     name === "compile_corpus_takeoff" && !out?.error && (out?.takeoff_id || out?.kind));
 
-  // Complete set HVAC / BAS → one deterministic compile, then spot-cites.
-  if (intent === "corpus_hvac" || intent === "corpus_bas") {
-    const kind = intent === "corpus_bas" ? "bas_points" : "hvac_equipment";
+  // Complete set HVAC / BAS / valves → one deterministic compile, then spot-cites.
+  if (intent === "corpus_hvac" || intent === "corpus_bas" || intent === "corpus_valves") {
+    const kind = intent === "corpus_bas"
+      ? "bas_points"
+      : intent === "corpus_valves"
+        ? "control_valves"
+        : "hvac_equipment";
     if (!hasCorpusCompile) {
       return {
         phase: "compile",
         allowedTools: ["compile_corpus_takeoff", "list_sheets", "sheet_graph"],
         nextMove: `Call compile_corpus_takeoff with kind="${kind}" now (download true). `
-          + "Do NOT crawl find_schedule / query_table family-by-family for the set total — "
+          + "Do NOT crawl find_schedule / query_table / read_schedule family-by-family for the set total — "
           + "the compiler returns the full deterministic takeoff (categories/lists, totals, exclusions, empty pages). "
           + "After it returns, summarize from its totals / category_counts / list_counts.",
         blockReason: null,

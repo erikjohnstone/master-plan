@@ -7108,7 +7108,7 @@ export default function TakeoffCanvas() {
         });
       }
     };
-    if (compiled.kind === "hvac_equipment") {
+    if (compiled.kind === "hvac_equipment" || compiled.kind === "control_valves") {
       for (const cat of Object.values(compiled.categories || {})) {
         for (const item of cat.items || []) enqueue(item);
       }
@@ -7129,7 +7129,7 @@ export default function TakeoffCanvas() {
   function showCompiledTakeoff(compiled, meta = {}) {
     if (!compiled || compiled.error) return;
     const totals = compiled.totals || (
-      compiled.kind === "hvac_equipment"
+      compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
         ? {
           categories: Object.keys(compiled.categories || {}).length,
           items: Object.values(compiled.categories || {}).reduce((n, c) => n + (c.items?.length || c.count || 0), 0),
@@ -7143,7 +7143,7 @@ export default function TakeoffCanvas() {
       totals,
       empty_pages: compiled.page_accounting?.empty_pages,
       exclusions: compiled.exclusions || [],
-      category_counts: compiled.kind === "hvac_equipment"
+      category_counts: compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
         ? Object.fromEntries(Object.entries(compiled.categories || {}).map(([k, v]) => [k, v.count]))
         : null,
       list_counts: compiled.kind === "bas_points"
@@ -7208,10 +7208,10 @@ export default function TakeoffCanvas() {
       totals: compiled.totals,
       empty_pages: compiled.page_accounting?.empty_pages,
       exclusions: compiled.exclusions,
-      category_count: compiled.kind === "hvac_equipment"
+      category_count: compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
         ? Object.keys(compiled.categories || {}).length
         : (compiled.categories?.points_lists?.lists || []).length,
-      category_counts: compiled.kind === "hvac_equipment"
+      category_counts: compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
         ? Object.fromEntries(Object.entries(compiled.categories || {}).map(([k, v]) => [k, v.count]))
         : null,
       list_counts: compiled.kind === "bas_points"

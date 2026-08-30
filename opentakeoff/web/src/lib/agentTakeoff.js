@@ -25,6 +25,24 @@ const cellText = (cell) => {
   return String(cell.value ?? "");
 };
 
+/** Strip markdown wrappers models put on tags (`**CV-1**`, `*CV-1*`, `` `CV-1` ``). */
+export function cleanTakeoffTag(tag) {
+  if (tag == null) return null;
+  let t = String(tag).trim();
+  for (let i = 0; i < 3; i++) {
+    const next = t
+      .replace(/^\*\*(.+)\*\*$/s, "$1")
+      .replace(/^\*(.+)\*$/s, "$1")
+      .replace(/^__(.+)__$/s, "$1")
+      .replace(/^_(.+)_$/s, "$1")
+      .replace(/^`(.+)`$/s, "$1")
+      .trim();
+    if (next === t) break;
+    t = next;
+  }
+  return t || null;
+}
+
 /** Schedule/list title may arrive as a plain string or { text, bbox }. */
 const titleText = (title) => {
   if (title == null) return null;
@@ -59,12 +77,13 @@ export function makeTakeoffRow({
   const rawVal = typeof value === "object" && value !== null && !Array.isArray(value)
     ? cellText(value)
     : value;
+  const cleanedTag = cleanTakeoffTag(tag);
   return {
     id: nextId(),
     created_at: Date.now(),
     run_id: runId,
     workflow: String(workflow || "").slice(0, 240),
-    tag: tag != null && String(tag).trim() !== "" ? String(tag).trim() : null,
+    tag: cleanedTag,
     field: String(field || "value").trim() || "value",
     value: typeof rawVal === "number" && Number.isFinite(rawVal) ? rawVal : String(rawVal ?? "").trim(),
     unit: unit != null && String(unit).trim() !== "" ? String(unit).trim() : null,
@@ -89,9 +108,13 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
   if (name === "query_table") {
     const title = titleText(data.matches?.[0]?.title) || titleText(args.title) || null;
     const matches = data.matches || [];
-    // Title-scan counts stay compact; row_key / modest result sets expand into
-    // full schedule columns so the Takeoff UI can adapt (valves, points, …).
-    const expandRows = Boolean(args.row_key) || Boolean(args.column) || matches.length <= 24;
+    // Title-scan counts stay compact for huge equipment families; row_key /
+    // modest result sets expand into full schedule columns. CONTROL VALVE
+    // schedules always expand — a partial 10-row dump is not a valve takeoff.
+    const titleHint = title || titleText(args.title) || "";
+    const valveTitleScan = /CONTROL\s+VALVE\s+SCHEDULE/i.test(titleHint);
+    const expandRows = Boolean(args.row_key) || Boolean(args.column)
+      || matches.length <= 24 || valveTitleScan;
     if (!expandRows && typeof data.count === "number" && !args.row_key) {
       rows.push(makeTakeoffRow({
         workflow, runId, tag: null, field: "schedule_count", value: data.count,
@@ -242,11 +265,14 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
   if (!compiled || typeof compiled !== "object" || compiled.error) return rows;
   const workflow = meta.workflow
     || compiled.takeoff_id
-    || (compiled.kind === "bas_points" ? "BAS points takeoff" : "HVAC equipment takeoff");
+    || (compiled.kind === "bas_points" ? "BAS points takeoff"
+      : compiled.kind === "control_valves" ? "Control valve takeoff"
+        : "HVAC equipment takeoff");
   const runId = meta.runId || null;
   const source_tool = meta.source_tool || "compile_corpus_takeoff";
 
-  if (compiled.kind === "hvac_equipment" || (compiled.categories && !compiled.categories.points_lists)) {
+  if (compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
+    || (compiled.categories && !compiled.categories.points_lists)) {
     for (const [catName, cat] of Object.entries(compiled.categories || {})) {
       if (catName === "points_lists" || !cat || typeof cat !== "object") continue;
       const items = Array.isArray(cat.items) ? cat.items : [];
@@ -475,8 +501,14 @@ const SKIP_ATTR = new Set(["MARK", "TAG", "SYMBOL", "plan_tag", "plan_status", .
 /** Preferred left-to-right order when a field appears — never forces empty columns.
  * Columns only show when at least one line in the (family) group has that field. */
 export const TAKEOFF_SPEC_ORDER = [
+  // Control-valve contractor columns (served equipment + ONE Cv for that valve)
+  "Served equipment", "UNIT MARK", "Service", "SERVICE",
+  "Size", "VALVE SIZE (IN)", "VALVE SIZE", "PIPE SIZE",
+  "GPM", "FLOWRATE (GPM)", "FLOW", "FLOW (GPM)", "MAX GPM", "MIN GPM",
+  "Cv", "CV", "CV VALUE",
+  "Configuration", "CONFIGURATION", "Notes", "NOTES",
   // Identity / product / duty
-  "TYPE", "SERVICE", "DESCRIPTION", "BUILDING", "PATTERN", "STYLE", "APPLICATION", "DUTY",
+  "TYPE", "DESCRIPTION", "BUILDING", "PATTERN", "STYLE", "APPLICATION", "DUTY",
   "SIZE", "NOMINAL SIZE", "FRAME SIZE",
   // Air-side / terminals
   "CFM", "SUPPLY CFM", "RETURN CFM", "EXHAUST CFM", "OA CFM", "MAX CFM", "MIN CFM",
@@ -484,9 +516,8 @@ export const TAKEOFF_SPEC_ORDER = [
   "EAT", "LAT", "DB", "WB", "EAT DB", "LAT DB",
   "ESP", "S.P. (IN.W.C.)", "SP", "TSP", "EXTERNAL SP",
   "NC", "NC LEVEL", "DISCHARGE", "INLET", "OUTLET",
-  // Hydronic / valve / coil
-  "GPM", "FLOW", "FLOW (GPM)", "MAX GPM", "MIN GPM",
-  "CV", "Cv", "CV VALUE", "CV (MIN)", "CV (MAX)",
+  // Hydronic / coil (non-valve)
+  "CV (MIN)", "CV (MAX)",
   "PRESSURE DROP", "PD", "PD (FT)", "FT HD", "HEAD", "HEAD (FT)",
   "PIPE SIZE", "CONN", "CONNECTION", "BODY", "BODY SIZE", "END CONN", "END CONNECTION",
   "FLUID", "MEDIUM", "DESIGN ΔP", "DELTA P", "ΔP", "CLOSE-OFF", "CLOSE OFF",
@@ -921,12 +952,17 @@ export function compileAgentTakeoff(rows = []) {
 
     const specs = {};
     const spec_cites = {};
+    const valveSched = /CONTROL\s+VALVE\s+SCHEDULE/i.test(g.table_title || "")
+      || /CONTROL\s+VALVE\s+SCHEDULE/i.test(familyFromSchedule(g.table_title, g.tag) || "");
     for (const [k, v] of Object.entries(g.attrs)) {
       if (k.endsWith("_unit")) continue;
       const nk = normKey(k);
       // Manufacturer/model live in dedicated columns; category codes stay out of specs.
       if (["MANUFACTURER", "MFR", "MODEL", "MANUFACTURER/MODEL", "MANUFACTURER / MODEL", "EQUIPMENT_TYPE"].includes(nk)) continue;
       if (typeKeyNorm && nk === typeKeyNorm) continue;
+      // Valve schedules have ONE Cv column. Dual "CHW CV" + "HHW CV" on the same
+      // row is agent markdown mash — never surface it on a contractor takeoff.
+      if (valveSched && /^(CHW\s*CV|HHW\s*CV|MARK\s*NOTES)$/i.test(nk)) continue;
       specs[k] = v;
       if (g.attrCites[k]?.bbox_px) {
         spec_cites[k] = g.attrCites[k];

@@ -10,14 +10,47 @@ every page, no sampling — scoped to what that set actually contains. A set is
 not done until it clears **five runs**, each independently passing **five
 gates**, and the deliverable is **Run 5's output only**.
 
-**This corpus records exactly two locked takeoffs:**
+### Platform mandate (2026-08-30) — ALL major chat workflows on this set
+
+**Do not ship one-off “works only for this prompt” patches.** Every major
+estimator ask in chat on `navfac-cherry-point-atc` must land a **contractor-
+grade, citable, repeatable** answer on the shared UI+MCP path without a human
+having to re-prompt engineering for that workflow.
+
+Priority order (get #1 right first, then expand coverage — never stop at #1):
+
+1. **Complete control-valve takeoff** (`kind=control_valves` / `T-VALVE-01`) —
+   CHW + HHW CONTROL VALVE SCHEDULE. One row per **valve mark**. Columns that
+   earn their place: Valve mark, Served equipment (`UNIT MARK`), Service
+   (CHW|HHW), Size, GPM, **one Cv for that valve**, Configuration, Notes,
+   Sheet cite. **Never** dual “CHW CV” + “HHW CV” on the same row (that is
+   agent markdown mash, not the drawing). Truth bar on this set: **64 CHW +
+   99 HHW = 163** unique valve marks with resolvable schedule-row cites.
+2. **Complete HVAC equipment** (`T-HVAC-01`, 396) and **complete BAS points**
+   (`T-BAS-01`, 122) — already LOCKED; must stay green under regression.
+3. **Named-family / multi-list workflows** already proven in demos (FCU
+   building splits, points-list title scans, control-valve joins, room/HVAC
+   coordination) — chat routing must send them through the durable workflow
+   machine (`takeoffWorkflow.js`), not free-crawl scrap into the Takeoff tab.
+4. **UI honesty for every workflow:** Tag / Sheet / schedule-name clicks jump
+   and highlight real schedule rows; no literal `**markdown**` tags; no empty
+   Sheet column when `sheet_id`+`bbox_px` exist; Takeoff tab = compiled lines
+   only.
+
+**Regression bar:** multi-prompt UI harness + ground-truth compile checks must
+fail loudly if a workflow regresses. Interview / CEO demos require the same
+path a new user gets: upload → Agent prompt → Run → Takeoff panel.
+
+**This corpus records these takeoffs:**
 
 | ID | Kind | Set | Status |
 |---|---|---|---|
 | `T-HVAC-01` | HVAC equipment quantity takeoff | `navfac-cherry-point-atc` | `LOCKED` |
 | `T-BAS-01` | BAS / DDC points takeoff | `navfac-cherry-point-atc` | `LOCKED` |
+| `T-VALVE-01` | Control valve takeoff (CHW+HHW schedules) | `navfac-cherry-point-atc` | `IN PROGRESS` — compile path + cites required |
 
-No additional takeoff IDs without an explicit goal change.
+Additional takeoff IDs require an explicit goal change (this mandate counts as
+that change for `T-VALVE-01` only).
 
 ## Industry-standard EXCEPTIONAL takeoff (non-negotiable)
 
@@ -35,7 +68,8 @@ those finished quantities via `compile_corpus_takeoff` (Session+ODL). Explorator
 ### HVAC equipment (mechanical schedule / estimating workbook bar)
 
 Aligned with US MEP practice (equipment schedules; MasterFormat 23 06 00
-“Schedules for HVAC”; estimating workbooks keyed by mark):
+“Schedules for HVAC”; estimating workbooks keyed by mark; Simpro / Tagsight-
+style schedule takeoffs):
 
 - Grouped by schedule family (AHU, FCU, VAV, chiller, boiler, pump, …) — never
   one giant sparse table padded with empty columns.
@@ -43,10 +77,25 @@ Aligned with US MEP practice (equipment schedules; MasterFormat 23 06 00
 - Columns that earn their place for that family: Tag, Qty, Unit,
   Description/Service when present, sheet cite, plus type-appropriate technical
   fields from the drawing schedule (air-side: CFM / ESP / capacity / volts-phase;
-  pumps: GPM / head; valves: Cv / size; etc.).
+  pumps: GPM / head; etc.).
 - Building splits where schedules support them (Air Ops / MITRACON / ATCT).
 - Rollup: per-category counts + set total reconciled to `truth.json`.
 - CSV / Excel / PDF export a contractor can open without explanation.
+
+### Control valves (hydronic control-valve schedule bar)
+
+Aligned with MEP estimating + valve sizing practice (schedule-first quantities;
+Belimo / industry Cv = flow coefficient for **that** valve; served coil/unit
+from `UNIT MARK`):
+
+- Grouped by **CHW CONTROL VALVE SCHEDULE** vs **HHW CONTROL VALVE SCHEDULE**
+  (service is the schedule family — not two Cv columns on one row).
+- **One row per VALVE MARK.**
+- Columns: Valve mark, Served equipment (`UNIT MARK`), Service (CHW|HHW),
+  Size, GPM / flowrate, **Cv** (singular), Configuration, Notes, Sheet cite.
+- Schedule quantities ≠ installed plan counts — plan location requires
+  `sweep_schedule_row` when asked; never invent plan cites from schedule cells.
+- Rollup: CHW count + HHW count + total reconciled to truth (163 on NAVFAC).
 
 ### BAS / DDC points (controls points list / I/O schedule bar)
 
@@ -195,8 +244,10 @@ have dual implementations).
 
 ## Regression tests
 
-Each locked takeoff (`T-HVAC-01`, `T-BAS-01`) gets engine + export regression
-tests that fail loudly if quantities, citations, or export shape drift.
+Each locked takeoff (`T-HVAC-01`, `T-BAS-01`) and the valve compile path
+(`T-VALVE-01`) gets engine + export + **multi-prompt UI** regression tests that
+fail loudly if quantities, citations, column shape, or chat routing drift.
+Partial Agent scrap in the Takeoff tab is a fail for demos and for “done.”
 
 ## Lifecycle
 
