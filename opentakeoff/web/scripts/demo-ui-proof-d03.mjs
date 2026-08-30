@@ -61,13 +61,14 @@ const proxy = createServer(async (request, response) => {
     body,
   });
   // Retry rate limits / transient upstream failures so long paint loops do not die mid-run.
-  if ((upstream.status === 429 || upstream.status === 503) && request.url !== "/tool") {
+  const retryable = (status) => status === 429 || status === 503;
+  if (retryable(upstream.status) && request.url !== "/tool") {
     let last = upstream;
-    for (let attempt = 0; attempt < 4; attempt++) {
+    for (let attempt = 0; attempt < 5; attempt++) {
       const retryAfter = Number(last.headers.get("retry-after"));
       const waitMs = Number.isFinite(retryAfter) && retryAfter > 0
-        ? Math.min(60_000, retryAfter * 1000)
-        : Math.min(32_000, 4_000 * (2 ** attempt));
+        ? Math.min(90_000, retryAfter * 1000)
+        : Math.min(60_000, 5_000 * (2 ** attempt));
       console.log(`[proxy] HTTP ${last.status}; retry in ${waitMs}ms (attempt ${attempt + 1})`);
       await new Promise((r) => setTimeout(r, waitMs));
       last = await fetch(endpoint, {
@@ -78,21 +79,31 @@ const proxy = createServer(async (request, response) => {
         },
         body,
       });
-      if (last.status !== 429 && last.status !== 503) {
+      if (!retryable(last.status)) {
+        const buf = Buffer.from(await last.arrayBuffer());
+        if (last.status >= 400) {
+          console.log(`[proxy] upstream ${last.status}: ${buf.toString("utf8").slice(0, 500)}`);
+        }
         response.statusCode = last.status;
         response.setHeader("Content-Type", last.headers.get("content-type") || "application/json");
-        response.end(Buffer.from(await last.arrayBuffer()));
+        response.end(buf);
         return;
       }
     }
+    const buf = Buffer.from(await last.arrayBuffer());
+    console.log(`[proxy] giving up ${last.status}: ${buf.toString("utf8").slice(0, 500)}`);
     response.statusCode = last.status;
     response.setHeader("Content-Type", last.headers.get("content-type") || "application/json");
-    response.end(Buffer.from(await last.arrayBuffer()));
+    response.end(buf);
     return;
+  }
+  const buf = Buffer.from(await upstream.arrayBuffer());
+  if (upstream.status >= 400) {
+    console.log(`[proxy] upstream ${upstream.status}: ${buf.toString("utf8").slice(0, 800)}`);
   }
   response.statusCode = upstream.status;
   response.setHeader("Content-Type", upstream.headers.get("content-type") || "application/json");
-  response.end(Buffer.from(await upstream.arrayBuffer()));
+  response.end(buf);
 });
 await new Promise((resolveListen) => proxy.listen(8788, "127.0.0.1", resolveListen));
 

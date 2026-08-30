@@ -1085,9 +1085,27 @@ export function parseAssistantTurn(provider, json) {
 // the context; image results ride as real image blocks (Anthropic) or a
 // follow-up user image message (OpenAI-style function calling has no image
 // slot in the tool role).
-const RESULT_MAX_CHARS = 20000;
+const RESULT_MAX_CHARS = 12000;
 const resultText = (out) => {
-  const { image_data_url: _img, ...rest } = out && typeof out === "object" ? out : { value: out };
+  let payload = out && typeof out === "object" ? out : { value: out };
+  // Title-scan inventory dumps (no row_key, many matches) only need count +
+  // building splits + one sample row — full match arrays thrash context on
+  // multi-family takeoffs and trigger upstream HTTP 400s.
+  const q = payload?.query;
+  const scoped = q && (q.row_key != null && String(q.row_key).trim() !== ""
+    || q.column != null
+    || q.cell_value != null
+    || q.cell_contains != null);
+  if (!scoped && Array.isArray(payload?.matches) && payload.matches.length > 2
+    && Number.isFinite(Number(payload.count)) && Number(payload.count) >= 2) {
+    const { image_data_url: _drop, ...rest } = payload;
+    payload = {
+      ...rest,
+      matches: payload.matches.slice(0, 1),
+      matches_omitted: payload.matches.length - 1,
+    };
+  }
+  const { image_data_url: _img, ...rest } = payload && typeof payload === "object" ? payload : { value: payload };
   let s;
   try { s = JSON.stringify(rest); } catch { s = String(rest); }
   return s.length > RESULT_MAX_CHARS ? `${s.slice(0, RESULT_MAX_CHARS)}… (truncated)` : s;

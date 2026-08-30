@@ -305,7 +305,9 @@ export async function chatWithTools({ cfg, system, messages, tools, maxTokens = 
       await new Promise((resolveWait) => setTimeout(resolveWait, waitMs));
       continue;
     }
-    throw new Error(`AI request failed (HTTP ${res.status}).`);
+    let detail = "";
+    try { detail = (await res.text()).slice(0, 240); } catch { /* ignore */ }
+    throw new Error(`AI request failed (HTTP ${res.status})${detail ? `: ${detail}` : "."}`);
   }
   const json = await res.json().catch(() => null);
   if (!json || typeof json !== "object") throw new Error("The endpoint replied, but not with JSON.");
