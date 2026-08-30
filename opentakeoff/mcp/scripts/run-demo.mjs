@@ -115,7 +115,6 @@ export async function runToolCallingModel({
         tools,
         tool_choice: "auto",
         temperature: 0,
-        response_format: { type: "json_object" },
       }),
     });
     const elapsedMs = performance.now() - started;

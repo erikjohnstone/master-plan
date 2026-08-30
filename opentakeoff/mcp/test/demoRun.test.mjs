@@ -65,6 +65,7 @@ test("demo runner captures request IDs, raw replies, and complete tool payloads"
     }), { status: 200, headers: { "x-request-id": "header-final" } }),
   ];
   const executed = [];
+  const requestBodies = [];
   const result = await runToolCallingModel({
     endpoint: "https://model.invalid/v1/chat/completions",
     apiKey: "test-key",
@@ -88,9 +89,14 @@ test("demo runner captures request IDs, raw replies, and complete tool payloads"
       executed.push({ name, args });
       return { is_error: false, data: { count: 1 } };
     },
-    fetchFn: async () => replies.shift(),
+    fetchFn: async (_endpoint, request) => {
+      requestBodies.push(JSON.parse(request.body));
+      return replies.shift();
+    },
   });
 
+  assert.equal(requestBodies.length, 2);
+  assert.equal(requestBodies.every((body) => !("response_format" in body)), true);
   assert.deepEqual(executed, [{
     name: "query_table",
     args: { row_key: "CH-A1", column: "GPM" },
