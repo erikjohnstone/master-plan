@@ -481,10 +481,82 @@ test("control_valves compile → panel lines with cites; dual-Cv scrap dropped",
   assert.equal(compiled.kind, "control_valves");
   assert.equal(compiled.takeoff_id, "T-VALVE-01");
   assert.equal(compiled.totals.items, 2);
+  assert.equal(compiled.service_filter, null);
   assert.equal(compiled.categories.HHW_CONTROL_VALVE.count, 1);
   assert.equal(compiled.categories.CHW_CONTROL_VALVE.count, 1);
   assert.equal(compiled.categories.HHW_CONTROL_VALVE.items[0].cells.Cv.text, "0.5");
   assert.equal(compiled.categories.HHW_CONTROL_VALVE.items[0].cells["Served equipment"].text, "AHU-A1");
+
+  const chwOnly = compileControlValveTakeoff([], {
+    tables: [
+      {
+        sheet: "mech.pdf#44",
+        title: { text: "HHW CONTROL VALVE SCHEDULE", bbox: [0, 0, 100, 10] },
+        rows: [{
+          key: "CV-AHU-A1-HHW",
+          cells: {
+            "VALVE MARK": { text: "CV-AHU-A1-HHW", bbox: [1, 2, 3, 4] },
+            "UNIT MARK": { text: "AHU-A1", bbox: null },
+            CV: { text: "0.5", bbox: null },
+          },
+          identity: { bbox: [1, 2, 3, 4] },
+        }],
+      },
+      {
+        sheet: "mech.pdf#44",
+        title: { text: "CHW CONTROL VALVE SCHEDULE", bbox: [0, 50, 100, 60] },
+        rows: [{
+          key: "CV-AHU-A1-CHW",
+          cells: {
+            "VALVE MARK": { text: "CV-AHU-A1-CHW", bbox: [11, 12, 13, 14] },
+            "UNIT MARK": { text: "AHU-A1", bbox: null },
+            CV: { text: "27.5", bbox: null },
+          },
+          identity: { bbox: [11, 12, 13, 14] },
+        }],
+      },
+    ],
+  }, { service: "CHW" });
+  assert.equal(chwOnly.service_filter, "CHW");
+  assert.equal(chwOnly.totals.items, 1);
+  assert.equal(chwOnly.categories.CHW_CONTROL_VALVE?.count, 1);
+  assert.equal(chwOnly.categories.HHW_CONTROL_VALVE, undefined);
+  assert.ok(chwOnly.exclusions.some((e) => /HHW/i.test(e) && /filtered/i.test(e)));
+
+  const hhwOnly = compileControlValveTakeoff([], {
+    tables: [
+      {
+        sheet: "mech.pdf#44",
+        title: { text: "HHW CONTROL VALVE SCHEDULE", bbox: [0, 0, 100, 10] },
+        rows: [{
+          key: "CV-AHU-A1-HHW",
+          cells: {
+            "VALVE MARK": { text: "CV-AHU-A1-HHW", bbox: [1, 2, 3, 4] },
+            "UNIT MARK": { text: "AHU-A1", bbox: null },
+            CV: { text: "0.5", bbox: null },
+          },
+          identity: { bbox: [1, 2, 3, 4] },
+        }],
+      },
+      {
+        sheet: "mech.pdf#44",
+        title: { text: "CHW CONTROL VALVE SCHEDULE", bbox: [0, 50, 100, 60] },
+        rows: [{
+          key: "CV-AHU-A1-CHW",
+          cells: {
+            "VALVE MARK": { text: "CV-AHU-A1-CHW", bbox: [11, 12, 13, 14] },
+            "UNIT MARK": { text: "AHU-A1", bbox: null },
+            CV: { text: "27.5", bbox: null },
+          },
+          identity: { bbox: [11, 12, 13, 14] },
+        }],
+      },
+    ],
+  }, { service: "HHW" });
+  assert.equal(hhwOnly.service_filter, "HHW");
+  assert.equal(hhwOnly.totals.items, 1);
+  assert.equal(hhwOnly.categories.HHW_CONTROL_VALVE?.count, 1);
+  assert.equal(hhwOnly.categories.CHW_CONTROL_VALVE, undefined);
 
   const rows = rowsFromCompiledTakeoff(compiled, { workflow: "valve takeoff" });
   // Inject dual-Cv scrap that must not appear on the compiled valve line.

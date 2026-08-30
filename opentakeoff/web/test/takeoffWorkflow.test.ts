@@ -7,6 +7,7 @@ import {
   corpusCompileKind,
   namedPointsListTitles,
   suggestedScheduleTitles,
+  valveServiceFromGoal,
   advanceTakeoffWorkflow,
   isIllegalWorkflowTransition,
   workflowDirective,
@@ -123,6 +124,49 @@ test("workflowDirective is non-null for active intents", () => {
   assert.match(String(d), /Takeoff workflow/);
   assert.match(String(d), /phase=survey/);
   assert.equal(workflowDirective("generic", state), null);
+});
+
+test("valveServiceFromGoal: CHW / HHW only; both or neither → null", () => {
+  assert.equal(
+    valveServiceFromGoal("Complete chilled-water control valve takeoff of this set"),
+    "CHW",
+  );
+  assert.equal(
+    valveServiceFromGoal("Complete CHW valve takeoff on these drawings"),
+    "CHW",
+  );
+  assert.equal(
+    valveServiceFromGoal("Complete hot-water control valve takeoff of this set"),
+    "HHW",
+  );
+  assert.equal(
+    valveServiceFromGoal("HHW control valve quantity takeoff of the loaded set"),
+    "HHW",
+  );
+  assert.equal(
+    valveServiceFromGoal("Complete heating-water valve takeoff of this set"),
+    "HHW",
+  );
+  assert.equal(
+    valveServiceFromGoal("Complete valve takeoff of this set"),
+    null,
+  );
+  assert.equal(
+    valveServiceFromGoal("Complete CHW and HHW control valve takeoff of this set"),
+    null,
+  );
+  const chwPhase = advanceTakeoffWorkflow(
+    "corpus_valves",
+    [],
+    "Complete chilled-water control valve takeoff of this set",
+  );
+  assert.match(chwPhase.nextMove || "", /service="CHW"/);
+  const bothPhase = advanceTakeoffWorkflow(
+    "corpus_valves",
+    [],
+    "Run a complete valve takeoff on this blueprint set",
+  );
+  assert.equal(/service="(?:CHW|HHW)"/.test(bothPhase.nextMove || ""), false);
 });
 
 test("phrase-robust corpus compile: valve ≡ control valve; take off; full; no literal complete", () => {
@@ -243,6 +287,17 @@ test("all D01–D10 frozen prompts route to durable non-generic intents", () => 
     assert.ok(state.nextMove || state.phase === "title_scans" || state.phase === "survey", dir);
     assert.notEqual(intent, "generic", dir);
   }
+});
+
+test("single POINTS LIST title still routes to points_takeoff", () => {
+  const g = "Takeoff POINTS LIST DOAH-TI: row counts and AI/AO/BI/BO point-type breakdown";
+  assert.equal(classifyTakeoffIntent(g), "points_takeoff");
+  assert.equal(namedPointsListTitles(g).length, 1);
+  const state = advanceTakeoffWorkflow("points_takeoff", [
+    { name: "sheet_graph", out: { sheets: [] } },
+  ], g);
+  assert.equal(state.phase, "title_scans");
+  assert.match(state.nextMove || "", /POINTS LIST DOAH-TI/i);
 });
 
 test("suggestedScheduleTitles maps family words to industry schedule needles", () => {

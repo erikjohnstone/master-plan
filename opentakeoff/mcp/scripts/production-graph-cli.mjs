@@ -28,10 +28,11 @@ function arg(argv, name) {
 
 const mode = arg(process.argv, "--mode") || "graph";
 const kind = arg(process.argv, "--kind");
+const service = arg(process.argv, "--service");
 const outPath = arg(process.argv, "--out");
 const pdfs = argsOf(process.argv, "--pdf").map((p) => resolve(p));
 if (!pdfs.length) {
-  console.error("usage: production-graph-cli.mjs --mode graph|compile --pdf <path> [--pdf …] [--kind …] [--out …]");
+  console.error("usage: production-graph-cli.mjs --mode graph|compile --pdf <path> [--pdf …] [--kind …] [--service CHW|HHW] [--out …]");
   process.exit(2);
 }
 if (mode === "compile" && !kind) {
@@ -58,5 +59,5 @@ if (mode === "graph") {
   process.exit(0);
 }
 
-const compiled = compileCorpusTakeoff(session, graph, kind);
+const compiled = compileCorpusTakeoff(session, graph, kind, service ? { service } : {});
 process.stdout.write(`${JSON.stringify(compiled)}\n`);

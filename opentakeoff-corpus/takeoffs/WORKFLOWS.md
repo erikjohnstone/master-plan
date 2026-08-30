@@ -33,8 +33,8 @@ Fixture counts (396 / 122 / 163, building names, schedule titles) are
 | 14 | Single schedule title-scan count | How many rows on \<SCHEDULE TITLE\> | `equipment_schedule` + title needle | — | ROUTING |
 | 15 | Single MARK schedule attributes | Give CFM/GPM/… for TAG-n from its schedule | `equipment_schedule` | — | ROUTING |
 | 16 | Building-split any equipment family | Split AHU/VAV/FCU counts by building prefix | `fcu_buildings` / title-scan building_tag_counts | — | ROUTING |
-| 17 | CHW-only valve takeoff | Complete chilled-water control valve takeoff | corpus_valves / filter | — | TODO |
-| 18 | HHW-only valve takeoff | Complete hot-water control valve takeoff | corpus_valves / filter | — | TODO |
+| 17 | CHW-only valve takeoff | Complete chilled-water control valve takeoff | `corpus_valves` + `service=CHW` | T-VALVE-01 filter (64) | ROUTING |
+| 18 | HHW-only valve takeoff | Complete hot-water control valve takeoff | `corpus_valves` + `service=HHW` | T-VALVE-01 filter (99) | ROUTING |
 | 19 | Bypass valve schedule takeoff | BYPASS CONTROL VALVE SCHEDULE counts + attrs | `valve_join` | — | ROUTING |
 | 20 | Pump schedule takeoff | Pump schedule counts + GPM/head | `equipment_schedule` + suggested titles | — | ROUTING |
 | 21 | Boiler schedule takeoff | Boiler schedule totals + capacity | `equipment_schedule` + suggested titles | — | ROUTING |
@@ -47,11 +47,11 @@ Fixture counts (396 / 122 / 163, building names, schedule titles) are
 | 28 | CRAH / computer-room unit takeoff | CRAH schedule | `equipment_schedule` + suggested titles | — | ROUTING |
 | 29 | Unit heater / CUH takeoff | Unit heater + cabinet unit heater | `equipment_schedule` + suggested titles | — | ROUTING |
 | 30 | Air separator / expansion tank takeoff | Hydronic accessories as scheduled | `equipment_schedule` + suggested titles | — | ROUTING |
-| 31 | Single POINTS LIST title-scan | Row count + AI/AO/BI/BO for one named list | points_takeoff | — | TODO |
+| 31 | Single POINTS LIST title-scan | Row count + AI/AO/BI/BO for one named list | `points_takeoff` (≥1 title) | D10 subset | ROUTING |
 | 32 | Points list MARK cite spot-check | query_table row_key + highlight | points_takeoff | — | TODO |
 | 33 | Non-extractable points list disclose | Title present but typed rows unavailable — honest disclose | bas compile exclusions | — | TODO |
-| 34 | Empty-page accounting (HVAC) | Sheets with no HVAC schedule equipment | corpus compile | — | TODO |
-| 35 | Empty-page accounting (BAS) | Sheets with no points/DDC lists | corpus compile | — | TODO |
+| 34 | Empty-page accounting (HVAC) | Sheets with no HVAC schedule equipment | corpus compile `page_accounting` | T-HVAC-01 | ROUTING |
+| 35 | Empty-page accounting (BAS) | Sheets with no points/DDC lists | corpus compile `page_accounting` | T-BAS-01 | ROUTING |
 | 36 | Schedule title region cite | Paint whole schedule table from title bbox | highlight_citation | — | TODO |
 | 37 | Installed plan quantity via tagged sweep | sweep_schedule_row for MARK | sweep | — | TODO |
 | 38 | Symbol sweep from seed | Find every instance of a plan symbol | symbol_sweep | — | TODO |

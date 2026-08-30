@@ -6854,11 +6854,12 @@ export default function TakeoffCanvas() {
     return await res.json();
   }
 
-  async function fetchProductionCorpusTakeoff(kind) {
+  async function fetchProductionCorpusTakeoff(kind, opts = {}) {
     const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
     if (!names.length) throw new Error("No PDF loaded");
     const fd = new FormData();
     fd.append("kind", kind);
+    if (opts.service) fd.append("service", String(opts.service).toUpperCase());
     for (const name of names) {
       const bytes = await store.loadPdfData(name);
       fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
@@ -7169,7 +7170,9 @@ export default function TakeoffCanvas() {
     // Same Session+ODL+compileCorpusTakeoff path as MCP — never geometric-only.
     let compiled;
     try {
-      compiled = await fetchProductionCorpusTakeoff(kind);
+      compiled = await fetchProductionCorpusTakeoff(kind, {
+        service: opts.service || null,
+      });
     } catch (e) {
       // If the production endpoint is down, refuse rather than silently under-count.
       return {

@@ -68,7 +68,7 @@ export function resolveTsxLoader() {
   );
 }
 
-function runCli({ mode, kind, pdfPaths, outPath }) {
+function runCli({ mode, kind, pdfPaths, outPath, service }) {
   return new Promise((resolvePromise, reject) => {
     let tsxLoader;
     try {
@@ -81,6 +81,7 @@ function runCli({ mode, kind, pdfPaths, outPath }) {
     const importSpec = pathToFileURL(tsxLoader).href;
     const args = ["--import", importSpec, cli, "--mode", mode];
     if (kind) args.push("--kind", kind);
+    if (service) args.push("--service", String(service).toUpperCase());
     for (const p of pdfPaths) args.push("--pdf", p);
     if (outPath) args.push("--out", outPath);
     const child = spawn(process.execPath, args, {
@@ -166,11 +167,13 @@ function sendJson(res, status, obj) {
 async function resolvePdfs(req) {
   const ctype = req.headers["content-type"] || "";
   let kind;
+  let service = null;
   let pdfPaths = [];
   let tmpDir = null;
   if (ctype.includes("multipart/form-data")) {
     const mp = await readMultipart(req);
     kind = mp.fields.kind;
+    service = mp.fields.service || null;
     if (!mp.files.length) throw Object.assign(new Error("file required"), { status: 400 });
     tmpDir = await mkdtemp(join(tmpdir(), "ot-prod-graph-"));
     for (const f of mp.files) {
@@ -182,6 +185,7 @@ async function resolvePdfs(req) {
   } else {
     const body = await readJson(req);
     kind = body.kind;
+    service = body.service || null;
     if (Array.isArray(body.pdfPaths) && body.pdfPaths.length) {
       pdfPaths = body.pdfPaths;
     } else if (body.pdfPath) {
@@ -190,7 +194,7 @@ async function resolvePdfs(req) {
       throw Object.assign(new Error("pdfPath or multipart file required"), { status: 400 });
     }
   }
-  return { kind, pdfPaths, tmpDir };
+  return { kind, service, pdfPaths, tmpDir };
 }
 
 async function handle(req, res, mode) {
@@ -198,7 +202,7 @@ async function handle(req, res, mode) {
   try {
     const resolved = await resolvePdfs(req);
     tmpDir = resolved.tmpDir;
-    const { kind, pdfPaths } = resolved;
+    const { kind, service, pdfPaths } = resolved;
     if (mode === "compile" && !kind) {
       return sendJson(res, 400, { error: "kind required" });
     }
@@ -209,7 +213,7 @@ async function handle(req, res, mode) {
       const raw = await readFile(outPath, "utf8");
       return sendJson(res, 200, raw);
     }
-    const result = await runCli({ mode: "compile", kind, pdfPaths });
+    const result = await runCli({ mode: "compile", kind, pdfPaths, service });
     sendJson(res, 200, result);
   } catch (err) {
     console.error(`[production-graph-api ${mode}]`, err);

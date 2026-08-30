@@ -45,6 +45,17 @@ export function goalAsksCompleteSetTakeoff(g) {
   return false;
 }
 
+/** Hydronic service filter from goal phrasing (CHW vs HHW only). */
+export function valveServiceFromGoal(goal) {
+  const g = String(goal || "");
+  const chw = /\b(?:CHW|chilled[\s\-]*water)\b/i.test(g);
+  const hhw = /\b(?:HHW|hot[\s\-]*water|heating[\s\-]*water)\b/i.test(g);
+  if (chw && hhw) return null;
+  if (chw) return "CHW";
+  if (hhw) return "HHW";
+  return null;
+}
+
 /** Count distinct HVAC equipment family mentions (set-agnostic). */
 export function namedEquipmentFamilyCount(goal) {
   const g = String(goal || "");
@@ -272,10 +283,14 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
         ? "control_valves"
         : "hvac_equipment";
     if (!hasCorpusCompile) {
+      const service = intent === "corpus_valves" ? valveServiceFromGoal(goal) : null;
+      const serviceArg = service
+        ? ` Also pass service="${service}" (goal asked for that hydronic service only).`
+        : "";
       return {
         phase: "compile",
         allowedTools: ["compile_corpus_takeoff", "list_sheets", "sheet_graph"],
-        nextMove: `Call compile_corpus_takeoff with kind="${kind}" now (download true). `
+        nextMove: `Call compile_corpus_takeoff with kind="${kind}" now (download true).${serviceArg} `
           + "Do NOT crawl find_schedule / query_table / read_schedule family-by-family for the set total — "
           + "the compiler returns the full deterministic takeoff (categories/lists, totals, exclusions, empty pages). "
           + "After it returns, summarize from its totals / category_counts / list_counts.",

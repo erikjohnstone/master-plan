@@ -338,11 +338,19 @@ export function normalizeControlValveCells(item, service) {
  * Deterministic CHW + HHW control-valve takeoff for "complete valve takeoff"
  * goals. Same Session+ODL family extractors as T-HVAC-01, filtered to valves,
  * with contractor columns: valve mark, served equipment, service, size, GPM, Cv.
+ *
+ * @param {object} [opts]
+ * @param {"CHW"|"HHW"|null} [opts.service] — when set, only that hydronic
+ *   service family's schedule (set-agnostic: matches CHW_/HHW_ family keys /
+ *   schedule titles, not a corpus hardcode).
  */
-export function compileControlValveTakeoff(sessionOrSheets, graph) {
+export function compileControlValveTakeoff(sessionOrSheets, graph, opts = {}) {
   const full = compileHvacTakeoff(sessionOrSheets, graph);
+  const wantService = opts.service ? String(opts.service).toUpperCase() : null;
   const categories = {};
   for (const name of CONTROL_VALVE_FAMILIES) {
+    if (wantService === "CHW" && !/^CHW/i.test(name)) continue;
+    if (wantService === "HHW" && !/^HHW/i.test(name)) continue;
     const cat = full.categories?.[name];
     if (!cat) continue;
     const service = /^CHW/i.test(name) ? "CHW" : /^HHW/i.test(name) ? "HHW" : null;
@@ -369,6 +377,7 @@ export function compileControlValveTakeoff(sessionOrSheets, graph) {
     takeoff_id: "T-VALVE-01",
     kind: "control_valves",
     compiler: "corpusTakeoff.compileControlValveTakeoff",
+    service_filter: wantService || null,
     categories,
     totals: {
       categories: Object.keys(categories).length,
@@ -377,14 +386,15 @@ export function compileControlValveTakeoff(sessionOrSheets, graph) {
     exclusions: [
       ...HVAC_EXCLUSIONS,
       "Non-control-valve HVAC equipment (AHU, FCU, VAV, pumps, …) — use kind hvac_equipment for the full equipment takeoff",
+      ...(wantService ? [`${wantService === "CHW" ? "HHW" : "CHW"} CONTROL VALVE SCHEDULE (filtered out — goal asked for ${wantService} only)`] : []),
     ],
   };
 }
 
-export function compileCorpusTakeoff(session, graph, kind) {
+export function compileCorpusTakeoff(session, graph, kind, opts = {}) {
   if (kind === "hvac_equipment" || kind === "T-HVAC-01") return compileHvacTakeoff(session, graph);
   if (kind === "bas_points" || kind === "T-BAS-01") return compileBasTakeoff(session, graph);
-  if (kind === "control_valves" || kind === "T-VALVE-01") return compileControlValveTakeoff(session, graph);
+  if (kind === "control_valves" || kind === "T-VALVE-01") return compileControlValveTakeoff(session, graph, opts);
   throw new Error(`Unknown takeoff kind: ${kind}`);
 }
 
