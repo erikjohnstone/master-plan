@@ -46,7 +46,7 @@ test("installed quantity cannot finish without deterministic count evidence", ()
   assert.match(requiredEvidenceCorrection([
     { name: "sweep_schedule_row", args: { tag: "CH-A1" }, out: { found: 1 } },
     { name: "query_table", out: { matches: [{ row: { key: "CV-CH-A1" } }] } },
-  ], "Find CH-A1", "Both tags share this plan location: CH-A1 and CV-CH-A1."), /unswept tag/);
+  ], "Find CH-A1", "Both tags share this plan location: CH-A1 and CV-CH-A1.")!, /unswept tag/);
 });
 
 test("anthropic-style: scripted tool_use → tools execute → results pair up in ONE user message → done", async () => {
