@@ -5794,7 +5794,7 @@ export class Session {
       throw new UserError("region requires sheet; omit both to search the loaded set, or pass sheet with region.");
     }
 
-    const matchSpans = (sheet: { key: string; spans?: GraphSpan[] | null; page: PageHandle }) => {
+    const matchSpans = (sheet: { key: string; spans?: TextSpan[] | null; page: PageHandle }) => {
       if (!sheet.spans) sheet.spans = textSpans(sheet.page);
       return sheet.spans.filter((sp) => sp.str.toLowerCase().includes(needle)
         && (!region || (sp.x0 <= region.x1 && sp.x1 >= region.x0 && sp.y0 <= region.y1 && sp.y1 >= region.y0)));

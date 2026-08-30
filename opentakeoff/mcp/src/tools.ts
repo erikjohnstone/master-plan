@@ -662,6 +662,11 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       count: unique.length,
       truncated: unique.length > limit,
       matches: unique.slice(0, limit),
+      ...(unique.length === 0 ? {
+        next_move: cell_contains
+          ? "Zero rows matched. Retry once with cell_contains set to an exact equipment tag from the user question and no title filter, then inspect returned descriptions; do not paraphrase the same empty description query."
+          : "Zero rows matched. Drop invented title filters, use a filter value that already appears in tool evidence, or refuse if the evidence is not present.",
+      } : {}),
     };
   }));
 
@@ -734,7 +739,18 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       limit: z.number().int().min(1).max(2000).default(200).describe("Max hits returned"),
     },
     outputSchema: findTextOutput,
-  }, run("find_text", (a) => session.findText(a.sheet, a.q, { region: a.region, limit: a.limit })));
+  }, run("find_text", (a) => {
+    const result = session.findText(a.sheet, a.q, { region: a.region, limit: a.limit });
+    if (result.count === 0) {
+      return {
+        ...result,
+        next_move: a.sheet
+          ? "Zero hits on that sheet. Omit sheet to search the loaded set, or try a shorter distinctive fragment from the user question—not a field name."
+          : "Zero hits across the loaded set. Try a shorter distinctive fragment from the user question—not a field name—or refuse if the text is not present.",
+      };
+    }
+    return result;
+  }));
 
   server.registerTool("view_sheet", {
     description: `SEE the sheet — render the page (or a crop of it) to a PNG image. This is your eyes on the plan, so CROP, DON'T SQUINT: the render downsamples to the px budget (≤2000 long side), which on an E-size sheet is ~4 sheet pixels per returned pixel — a full-sheet render finds WHERE things are, and only a tight region crop can tell you what the linework and labels actually say. Never audit a trace or read a dimension off a full-sheet render. region is in image px — the same space as every other tool — so a feature at pixel (ix, iy) of the returned image sits at x = region_x0 + ix × (region_x1 − region_x0) / img_w (same for y), and those coordinates go straight into one_click, measure_polygon, or read_sheet_text. overlay:true burns the session's committed shapes into the render (human-affirmed ink solid red, unreviewed machine shapes dashed blue) — render again after committing to verify your geometry landed where you intended, and sanity-check what you see: a fixture-sized ring where a room should be means the seed landed inside a stall or casework; an outsized ring means the flood escaped through an opening. To MEASURE rather than guess, pass grid: a calibrated measuring grid is burned in — thin lines every 1 ft, heavy blue every 5 ft, foot labels along the crop edges, feet counted from the crop's top-left corner. Count grid cells between walls exactly like an estimator scaling a plan; never derive a dimension by eye when the grid can give it to you. grid "auto" uses the sheet's set scale; before set_scale, pass the drawing scale read off the title block as inches-per-foot — "1/4" for a 1/4" = 1'-0" plan, "3/16", "0.25". marks (#297) burns DISCLOSURE layers into the render, so what a reply names, the picture shows: pass the coordinate lists a tool disclosed — question: withheld placements (orange ?-circles), struck: rejections a counter-example or luminance gate refused (magenta struck ×), ring: reference points like the sweep's own seed (violet double ring). The colors sit deliberately off the common CAD pens so they cannot vanish into color-plotted work. An overlay audit without marks shows only committed ink — the validation trap where 37 disclosed near-misses read as "it missed them". Rendering needs the optional native canvas (@napi-rs/canvas); where it isn't installed this tool errors cleanly and every other tool still works. ${COORDS}`,

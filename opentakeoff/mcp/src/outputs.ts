@@ -155,6 +155,7 @@ export const queryTableOutput = {
       })),
     }),
   })),
+  next_move: z.string().optional().describe("Present only when count is 0; names the next legal tool move without inventing values"),
 };
 
 export const sheetInfoOutput = {
@@ -721,6 +722,7 @@ export const findTextOutput = {
     bbox: z.tuple([z.number(), z.number(), z.number(), z.number()]).describe("[x0, y0, x1, y1] image px"),
     center: z.tuple([z.number(), z.number()]).describe("Bbox center, image px — feed straight into one_click's seed"),
   })),
+  next_move: z.string().optional().describe("Present only when count is 0; names the next legal tool move without inventing values"),
 };
 
 /** editMaterials — session.ts's MaterialRow, verbatim. */

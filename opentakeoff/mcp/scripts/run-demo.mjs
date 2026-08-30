@@ -440,7 +440,38 @@ export async function runToolCallingModel({
       } catch {
         args = {};
       }
-      const result = await execute(name, args);
+      const normalizeArgs = (toolName, toolArgs) => {
+        const sorted = {};
+        for (const key of Object.keys(toolArgs || {}).sort()) {
+          const value = toolArgs[key];
+          if (typeof value === "string"
+            && (key === "q" || key === "cell_contains" || key === "cell_value" || key === "title" || key === "row_key" || key === "column")) {
+            sorted[key] = value.trim().toLowerCase().replace(/\s+/g, " ");
+          } else {
+            sorted[key] = value;
+          }
+        }
+        return sorted;
+      };
+      const signature = `${name}:${JSON.stringify(normalizeArgs(name, args))}`;
+      const prior = toolCalls.find((previous) =>
+        `${previous.name}:${JSON.stringify(normalizeArgs(previous.name, previous.arguments))}` === signature);
+      let result;
+      if (prior
+        && prior.result
+        && (prior.result.is_error
+          || prior.result.data?.count === 0
+          || (Array.isArray(prior.result.data?.matches) && prior.result.data.matches.length === 0)
+          || (Array.isArray(prior.result.data?.hits) && prior.result.data.hits.length === 0))) {
+        result = {
+          ...prior.result,
+          repeated_empty_query: true,
+          next_move: prior.result.data?.next_move
+            || "This exact tool call already returned empty. Change the filter using prior tool evidence, or refuse; do not repeat the same empty query.",
+        };
+      } else {
+        result = await execute(name, args);
+      }
       toolCalls.push({ id: call.id, name, arguments: args, result });
       messages.push({
         role: "tool",
