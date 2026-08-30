@@ -138,9 +138,19 @@ function checkSweepScheduleRow(calls) {
 
 function checkHighlightedCitations(calls) {
   const highlighted = calls.filter(({ out }) => out && !out.error && Array.isArray(out.bbox_px))
-    .map(({ out }) => `${out.sheet} ${JSON.stringify(out.bbox_px)}${out.text ? ` (${out.text})` : ""}`);
+    .map(({ out }) => {
+      const label = String(out.text || out.row_key || "").trim();
+      if (label) return label;
+      return `${out.sheet} ${JSON.stringify(out.bbox_px)}`;
+    });
   if (!highlighted.length) return null;
-  return `[Automated check: highlight_citation painted exactly ${highlighted.length} source region(s): ${highlighted.join("; ")}. No other cell or region was highlighted in this run.]`;
+  // Keep the Answer readable: dump of dozens of sheet+bbox lines buries the
+  // takeoff reply (seen on VAV rollups with 40+ paints). Prefer short labels.
+  const preview = highlighted.slice(0, 8);
+  const more = highlighted.length > preview.length
+    ? `; … +${highlighted.length - preview.length} more`
+    : "";
+  return `[Automated check: highlight_citation painted exactly ${highlighted.length} source region(s): ${preview.join("; ")}${more}. No other cell or region was highlighted in this run.]`;
 }
 
 /** The registry — one entry per tool with a known real honesty risk.

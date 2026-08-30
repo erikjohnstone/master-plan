@@ -591,13 +591,17 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "highlight_citation",
-    description: "Paint an exact production-API citation bbox on the real blueprint as a highlight markup (no auto-navigation). Pass the cited sheet and bbox_px unchanged (from query_table cells, find_text hit.bbox_px, or sweep_schedule_row citations). The Agent panel shows a clickable source card the estimator uses to jump there on demand. Call this for every factual answer backed by cited evidence. Prefer a short label in text (the value or field name) for the source card — do not rely on overlay words drawn on top of the cell.",
+    description: "Paint an exact production-API citation bbox on the real blueprint as a highlight markup (no auto-navigation). Pass the cited sheet and bbox_px unchanged (from query_table cells, find_text hit.bbox_px, or sweep_schedule_row citations). The Agent panel shows a clickable source card the estimator uses to jump there on demand — pass row_key, column, table_title, and value whenever known so the card title is human-readable (e.g. VAV-1 · CFM = 350), not a naked fragment. Call this for every factual answer backed by cited evidence. Do not draw overlay words on top of the cell value.",
     input_schema: {
       type: "object",
       properties: {
         sheet: { type: "string" },
         bbox_px: { type: "array", items: { type: "number" } },
-        text: { type: "string" },
+        text: { type: "string", description: "Fallback short label if structured fields are unavailable." },
+        row_key: { type: "string", description: "Equipment/MARK tag for this cell when known (e.g. VAV-1)." },
+        column: { type: "string", description: "Schedule column/header for this cell when known (e.g. CFM, GPM)." },
+        table_title: { type: "string", description: "Schedule title when known (e.g. VOLUME CONTROL BOX SCHEDULE)." },
+        value: { type: "string", description: "Exact cell value being cited when known." },
       },
       required: ["sheet", "bbox_px"],
     },

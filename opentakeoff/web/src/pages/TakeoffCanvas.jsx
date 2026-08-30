@@ -7743,8 +7743,10 @@ export default function TakeoffCanvas() {
     return { id, sheet: key, type };
   }
 
-  async function agentHighlightCitation({ sheet, bbox_px, text = "" }) {
-    if (!Array.isArray(bbox_px) || bbox_px.length !== 4 || bbox_px.some((value) => !Number.isFinite(value))) {
+  async function agentHighlightCitation({
+    sheet, bbox_px, text = "", row_key = "", column = "", table_title = "", value = "",
+  }) {
+    if (!Array.isArray(bbox_px) || bbox_px.length !== 4 || bbox_px.some((v) => !Number.isFinite(v))) {
       return { error: "bbox_px must contain four finite production image-pixel coordinates." };
     }
     const dims = await ensureSheetDims(sheet);
@@ -7753,19 +7755,30 @@ export default function TakeoffCanvas() {
     if (!(x1 > x0 && y1 > y0) || x0 < 0 || y0 < 0 || x1 > dims.w || y1 > dims.h) {
       return { error: "bbox_px is degenerate or outside the cited sheet." };
     }
+    const rowKey = String(row_key || "").trim();
+    const col = String(column || "").trim();
+    const val = String(value || "").trim();
+    const tableTitle = String(table_title || "").trim();
+    const fallback = String(text || "").trim();
+    const label = (() => {
+      if (rowKey && col && val) return `${rowKey} · ${col} = ${val}`;
+      if (rowKey && col) return `${rowKey} · ${col}`;
+      if (rowKey && val) return `${rowKey} · ${val}`;
+      if (col && val) return `${col} = ${val}`;
+      return fallback || "Cited source";
+    })();
     const result = await agentAnnotate({
       sheet,
       type: "highlight",
       // Keep label text on the markup record for lists/tool results, but the
       // canvas never draws it inside the rect (would cover the cited value).
-      text,
+      text: label,
       rect: [[x0 / dims.w, y0 / dims.h], [x1 / dims.w, y1 / dims.h]],
     });
     if (result.error) return result;
     // Estimator-clarity: paint quietly — do NOT auto-fly the viewport.
     // Source cards in the Agent panel are how the estimator jumps on demand.
     setShowMarkups(true);
-    const label = String(text || "").trim() || "Cited source";
     setAgentCitations((list) => {
       if (list.some((c) => c.id === result.id)) return list;
       return [...list, {
@@ -7774,13 +7787,22 @@ export default function TakeoffCanvas() {
         sheet,
         sheetLabel: tabLabel(sheet),
         label,
+        text: fallback || label,
+        row_key: rowKey || undefined,
+        column: col || undefined,
+        table_title: tableTitle || undefined,
+        value: val || undefined,
         bbox_px,
       }];
     });
     return {
       ...result,
       bbox_px,
-      text,
+      text: label,
+      row_key: rowKey || null,
+      column: col || null,
+      table_title: tableTitle || null,
+      value: val || null,
       opened_sheet: sheet,
       navigation: "agent_panel_card",
     };
