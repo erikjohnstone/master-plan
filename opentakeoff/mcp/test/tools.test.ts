@@ -2549,6 +2549,20 @@ const scaleSet = async (client: any): Promise<void> => {
   }
 };
 
+test("query_table joins through an exact non-key cell value", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SYMSET });
+  const r = await call(client, "query_table", {
+    title: "FINISH SCHEDULE",
+    cell_value: "transition",
+  });
+  assert.equal(r.isError, false);
+  assert.equal(r.data.count, 1);
+  assert.equal(r.data.query.cell_value, "transition");
+  assert.equal(r.data.matches[0].row.key, "T1");
+  assert.equal(r.data.matches[0].row.cells.MATERIAL.text, "TRANSITION");
+});
+
 test("symbol_sweep scope 'set': detail-seeded, counts plan sheets only, per-sheet results, deterministic", async () => {
   const client = await pair();
   await call(client, "load_plan", { path: SYMSET });

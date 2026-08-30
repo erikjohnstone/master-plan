@@ -127,6 +127,7 @@ export const queryTableOutput = {
     title: z.string().nullable(),
     row_key: z.string().nullable(),
     column: z.string().nullable(),
+    cell_value: z.string().nullable(),
   }),
   count: z.number().int(),
   truncated: z.boolean(),

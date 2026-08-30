@@ -570,20 +570,24 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   }, run("find_schedule", ({ kind }) => session.findSchedule(kind)));
 
   server.registerTool("query_table", {
-    description: `Query actual extracted table cells across the loaded plan set, with source coordinates on every answer. Use title for a case-insensitive table-title substring, row_key for an exact schedule mark/key (compound rows such as R1/E1 answer for either mark), and column for a case-insensitive header substring; combine filters to narrow the result. At least one filter is required. Every returned table region, title, and cell carries its source-sheet bbox so the answer can be audited with view_sheet. This reads all deterministic table kinds—not only reference tables and not only equipment schedules—and never invokes an LLM. ${COORDS}`,
+    description: `Query actual extracted table cells across the loaded plan set, with source coordinates on every answer. Use title for a case-insensitive table-title substring, row_key for an exact schedule mark/key (compound rows such as R1/E1 answer for either mark), column for a case-insensitive header substring, and cell_value to find rows containing an exact cell value anywhere (the deterministic cross-table join—for example, find the control-valve row whose UNIT MARK is CH-A1). Combine filters to narrow the result. At least one filter is required. Every returned table region, title, and cell carries its source-sheet bbox so the answer can be audited with view_sheet. This reads all deterministic table kinds—not only reference tables and not only equipment schedules—and never invokes an LLM. ${COORDS}`,
     inputSchema: {
       title: z.string().min(1).optional().describe('Table-title substring, e.g. "CONTROL VALVE SCHEDULE"'),
       row_key: z.string().min(1).optional().describe('Exact row key/mark, e.g. "CV-HHW-BP-M" or "RTU-01"'),
       column: z.string().min(1).optional().describe('Header substring; only matching columns are returned, e.g. "MCA"'),
+      cell_value: z.string().min(1).optional().describe('Exact cell text anywhere in the row, case-insensitive; use this to join tables through non-key columns, e.g. UNIT MARK "CH-A1"'),
       limit: z.number().int().min(1).max(1000).default(100).describe("Maximum matching rows returned"),
     },
     outputSchema: queryTableOutput,
-  }, run("query_table", async ({ title, row_key, column, limit }) => {
-    if (!title && !row_key && !column) throw new UserError("Pass at least one of title, row_key, or column.");
+  }, run("query_table", async ({ title, row_key, column, cell_value, limit }) => {
+    if (!title && !row_key && !column && !cell_value) {
+      throw new UserError("Pass at least one of title, row_key, column, or cell_value.");
+    }
     const graph = await session.graphForPipeline();
     const titleNeedle = title?.trim().toUpperCase();
     const rowNeedle = row_key?.trim().toUpperCase().replace(/\s+/g, "");
     const columnNeedle = column?.trim().toUpperCase();
+    const valueNeedle = cell_value?.trim().toUpperCase().replace(/\s+/g, " ");
     const all = graph.tables.flatMap((table) => {
       if (titleNeedle && !(table.title?.text || "").toUpperCase().includes(titleNeedle)) return [];
       const selectedHeaders = columnNeedle
@@ -592,6 +596,8 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       if (columnNeedle && !selectedHeaders.length) return [];
       return table.rows.flatMap((row) => {
         if (rowNeedle && !rowKeyAnswersFor(row.key, rowNeedle)) return [];
+        if (valueNeedle && !Object.values(row.cells).some((cell) =>
+          cell?.text.trim().toUpperCase().replace(/\s+/g, " ") === valueNeedle)) return [];
         const cells = Object.fromEntries(selectedHeaders.flatMap((header) => {
           const cell = row.cells[header];
           return cell?.text ? [[header, { text: cell.text, bbox: cell.bbox }]] : [];
@@ -608,7 +614,12 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       });
     });
     return {
-      query: { title: title ?? null, row_key: row_key ?? null, column: column ?? null },
+      query: {
+        title: title ?? null,
+        row_key: row_key ?? null,
+        column: column ?? null,
+        cell_value: cell_value ?? null,
+      },
       count: all.length,
       truncated: all.length > limit,
       matches: all.slice(0, limit),
