@@ -587,13 +587,30 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       throw new UserError("Pass at least one of title, row_key, column, cell_value, or cell_contains.");
     }
     const graph = await session.graphForPipeline();
-    const titleNeedle = title?.trim().toUpperCase();
+    const titleNeedle = title?.trim().toUpperCase().replace(/\s+/g, " ");
     const rowNeedle = row_key?.trim().toUpperCase().replace(/\s+/g, "");
     const columnNeedle = column?.trim().toUpperCase();
     const valueNeedle = cell_value?.trim().toUpperCase().replace(/\s+/g, " ");
     const containsNeedle = cell_contains?.trim().toUpperCase().replace(/\s+/g, " ");
+    /** Prefer exact / prefix title matches. Mid-title embedding of a long needle
+     * (e.g. "AIR HANDLING UNIT SCHEDULE" inside "DEDICATED OUTDOOR AIR HANDLING
+     * UNIT SCHEDULE") is a false family hit and must not join the result set. */
+    const titleMatches = (rawTitle) => {
+      if (!titleNeedle) return true;
+      const t = (rawTitle || "").toUpperCase().replace(/\s+/g, " ").trim();
+      if (!t) return false;
+      const base = t.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+      if (base === titleNeedle || t === titleNeedle) return true;
+      if (base.startsWith(`${titleNeedle} `) || t.startsWith(`${titleNeedle} `)) return true;
+      if (!t.includes(titleNeedle)) return false;
+      if (titleNeedle.length >= 12) {
+        const idx = t.indexOf(titleNeedle);
+        return idx === 0;
+      }
+      return true;
+    };
     const all = graph.tables.flatMap((table) => {
-      if (titleNeedle && !(table.title?.text || "").toUpperCase().includes(titleNeedle)) return [];
+      if (!titleMatches(table.title?.text || "")) return [];
       const selectedHeaders = columnNeedle
         ? table.headers.filter((header) => header.toUpperCase().includes(columnNeedle))
         : table.headers;

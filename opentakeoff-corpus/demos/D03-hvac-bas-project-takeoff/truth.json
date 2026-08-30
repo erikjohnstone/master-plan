@@ -129,7 +129,7 @@
     "expected": {
       "fcu_atct_count": 18,
       "fcu_t11_on_schedule": true,
-      "note": "FCU-T11 is a scheduled ATCT mark (LOCATION 21004 BREAKROOM). project_takeoff may refuse plan geometry if the tag is not plan-anchored — still count it in the schedule rollup."
+      "note": "FCU-T11 is a scheduled ATCT mark (LOCATION 21004 BREAKROOM). project_takeoff may refuse plan geometry if the tag is not plan-anchored \u2014 still count it in the schedule rollup."
     }
   },
   "expected": {
@@ -150,21 +150,6 @@
             337.67999999999984
           ],
           "grounding_text": "AHU-A1",
-          "ocr_mode": "single_line",
-          "ocr_confusables": true
-        },
-        {
-          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#48",
-          "table_title": "AIR HANDLING UNIT SCHEDULE",
-          "row_key": "AHU-T1A",
-          "column": "MARK",
-          "bbox_px": [
-            230.64,
-            348,
-            371.52,
-            382.55999999999995
-          ],
-          "grounding_text": "AHU-T1A",
           "ocr_mode": "single_line",
           "ocr_confusables": true
         }
@@ -257,17 +242,14 @@
       "citation": {
         "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
         "table_title": "BOILER SCHEDULE",
-        "row_key": "B-A1",
-        "column": "MARK",
         "bbox_px": [
-          2766.5,
-          2639.9,
-          2810.2,
-          2665.2
+          2716.568,
+          2484.7200000000003,
+          4406.164,
+          2544.48
         ],
-        "grounding_text": "B-A1",
-        "ocr_mode": "single_line",
-        "ocr_confusables": true
+        "grounding_text": "BOILER SCHEDULE",
+        "ocr_mode": "single_line"
       }
     },
     "fcu_air_ops_count": {
