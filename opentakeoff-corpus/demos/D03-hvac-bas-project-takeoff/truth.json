@@ -379,5 +379,6 @@
         "ocr_mode": "single_line"
       }
     }
-  }
+  },
+  "prompt_frozen": true
 }
