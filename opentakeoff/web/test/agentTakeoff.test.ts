@@ -3,6 +3,8 @@ import test from "node:test";
 import { PDFDocument } from "pdf-lib";
 import {
   buildTakeoffPdfBytes,
+  compileAgentTakeoff,
+  compiledTakeoffToCsv,
   dedupeTakeoffRows,
   makeTakeoffRow,
   mergeTakeoffRows,
@@ -51,6 +53,47 @@ test("rowsFromToolResult: sweep_schedule_row installed qty + attributes", () => 
   assert.ok(!rows.some((r) => r.field === "MARK"));
 });
 
+test("compileAgentTakeoff collapses EAV rows into line items", () => {
+  const rows = [
+    ...rowsFromToolResult("sweep_schedule_row", { tag: "VAV-1" }, {
+      tag: "VAV-1",
+      found: 1,
+      tag_citations: [{ sheet: "mech.pdf#2", bbox: [1, 2, 3, 4] }],
+      row: {
+        sheet: "mech.pdf#6",
+        table: "AIR TERMINAL BOX SCHEDULE",
+        cells: { CFM: "2170", MANUFACTURER: "TRANE / VCEF", MARK: "VAV-1" },
+      },
+    }, { workflow: "vav" }),
+    makeTakeoffRow({
+      tag: "EF-2", field: "plan_status", value: "refused",
+      sheet_id: "mech.pdf#6", table_title: "FAN SCHEDULE", workflow: "fans",
+    }),
+    makeTakeoffRow({
+      tag: "EF-2", field: "CFM", value: 400, unit: "CFM",
+      sheet_id: "mech.pdf#6", table_title: "FAN SCHEDULE", workflow: "fans",
+    }),
+  ];
+  const lines = compileAgentTakeoff(rows);
+  assert.equal(lines.length, 2);
+  const vav = lines.find((l) => l.tag === "VAV-1");
+  assert.ok(vav);
+  assert.equal(vav.qty, 1);
+  assert.equal(vav.unit, "EA");
+  assert.equal(vav.qty_kind, "installed");
+  assert.match(vav.description, /TRANE/);
+  assert.match(vav.attrs_text, /CFM 2170/);
+  assert.equal(vav.sheet_id, "mech.pdf#2");
+  const ef = lines.find((l) => l.tag === "EF-2");
+  assert.ok(ef);
+  assert.equal(ef.qty, 1);
+  assert.equal(ef.qty_kind, "scheduled");
+  assert.match(ef.notes, /refused/i);
+  const csv = compiledTakeoffToCsv(lines);
+  assert.match(csv, /^Tag,Description,Qty,/);
+  assert.match(csv, /VAV-1/);
+});
+
 test("rowsFromAnswerMarkdown + splitConversationalAnswer strip tables from chat", () => {
   const md = [
     "Found the fan schedule.",
@@ -81,7 +124,7 @@ test("dedupe / merge keep first occurrence", () => {
   assert.equal(mergeTakeoffRows([a], [b, c]).length, 2);
 });
 
-test("takeoffToCsv emits header + escaped rows", () => {
+test("takeoffToCsv emits workflow EAV header + escaped rows", () => {
   const rows = [makeTakeoffRow({ tag: 'EF,"1"', field: "CFM", value: 165, unit: "CFM", sheet_id: "s#6" })];
   const csv = takeoffToCsv(rows);
   assert.match(csv, /^Tag,Field,Value,/);
@@ -92,16 +135,18 @@ test("takeoffToCsv emits header + escaped rows", () => {
 test("xlsx + pdf export builders produce non-empty artifacts", async () => {
   const rows = [
     makeTakeoffRow({ tag: "VAV-1", field: "CFM", value: 2170, sheet_id: "mech.pdf#6", table_title: "AIR TERMINAL" }),
-    makeTakeoffRow({ tag: "EF-2", field: "plan_status", value: "refused", sheet_id: "mech.pdf#6" }),
+    makeTakeoffRow({ tag: "VAV-1", field: "installed_quantity", value: 1, unit: "EA", sheet_id: "mech.pdf#2", table_title: "AIR TERMINAL" }),
+    makeTakeoffRow({ tag: "EF-2", field: "plan_status", value: "refused", sheet_id: "mech.pdf#6", table_title: "FAN SCHEDULE" }),
   ];
+  const lines = compileAgentTakeoff(rows);
   const sheetRows = [
-    ["Tag", "Field", "Value"],
-    ...rows.map((r) => [r.tag || "", r.field, r.value]),
+    ["Tag", "Description", "Qty"],
+    ...lines.map((r) => [r.tag || "", r.description, r.qty]),
   ];
   const xlsx = await buildXlsx([{ name: "Takeoff", rows: sheetRows }]);
   assert.ok(xlsx.byteLength > 500);
 
-  const pdfBytes = await buildTakeoffPdfBytes(rows, { projectName: "Demo" });
+  const pdfBytes = await buildTakeoffPdfBytes(lines, { projectName: "Demo", mode: "compiled" });
   assert.ok(pdfBytes.byteLength > 400);
   const doc = await PDFDocument.load(pdfBytes);
   assert.ok(doc.getPageCount() >= 1);

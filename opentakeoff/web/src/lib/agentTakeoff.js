@@ -138,22 +138,37 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
   }
 
   if (name === "takeoff_summary" || name === "project_takeoff") {
-    for (const item of data.items || data.equipment || []) {
+    for (const item of data.items || data.equipment || data.legend_items || []) {
       const tag = item.tag || item.mark || item.id || null;
       const qty = item.quantity ?? item.qty ?? item.found;
+      const schedule = item.schedule && typeof item.schedule === "object" ? item.schedule : null;
       if (tag != null && qty != null) {
         rows.push(makeTakeoffRow({
           workflow, runId, tag, field: "quantity", value: qty, unit: item.unit || "EA",
-          sheet_id: item.schedule_sheet || item.sheet || null,
-          table_title: item.schedule_title || item.table || null,
-          source_tool: name, note: item.type || item.status || null,
+          sheet_id: schedule?.sheet || item.schedule_sheet || item.sheet || null,
+          table_title: schedule?.title || item.schedule_title || item.table || null,
+          source_tool: name, note: item.equipment_type || item.type || item.status || null,
         }));
+        if (item.equipment_type) {
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag, field: "equipment_type", value: item.equipment_type,
+            sheet_id: schedule?.sheet || item.sheet || null,
+            table_title: schedule?.title || item.table || null,
+            source_tool: name,
+          }));
+        }
       }
     }
     if (typeof data.total === "number") {
       rows.push(makeTakeoffRow({
         workflow, runId, field: "project_total", value: data.total,
         source_tool: name,
+      }));
+    }
+    if (typeof data.stats?.total_drawn_instances === "number") {
+      rows.push(makeTakeoffRow({
+        workflow, runId, field: "project_total", value: data.stats.total_drawn_instances,
+        unit: "EA", source_tool: name, note: "total_drawn_instances",
       }));
     }
   }
@@ -256,7 +271,178 @@ export function mergeTakeoffRows(existing, incoming) {
   return dedupeTakeoffRows([...(existing || []), ...(incoming || [])]);
 }
 
-export function takeoffToCsv(rows) {
+const QTY_FIELDS = new Set([
+  "installed_quantity", "quantity", "mark_count", "schedule_count", "project_total",
+]);
+const DESC_FIELDS = [
+  "equipment_type", "DESCRIPTION", "TYPE", "MODEL", "MANUFACTURER", "MANUFACTURER / MODEL",
+];
+const SKIP_ATTR = new Set(["MARK", "TAG", "SYMBOL", "plan_tag", ...QTY_FIELDS]);
+
+const asNumber = (v) => {
+  if (typeof v === "number" && Number.isFinite(v)) return v;
+  const n = Number(String(v ?? "").replace(/,/g, "").trim());
+  return Number.isFinite(n) ? n : null;
+};
+
+/**
+ * Compile EAV workflow rows into estimator takeoff line items
+ * (one line per tag / schedule family).
+ */
+export function compileAgentTakeoff(rows = []) {
+  const groups = new Map();
+  for (const row of rows || []) {
+    const tag = row.tag ? String(row.tag).trim() : "";
+    const key = tag
+      ? `tag:${tag.toUpperCase()}`
+      : `sched:${String(row.table_title || row.field || "misc").trim().toUpperCase()}`;
+    if (!groups.has(key)) {
+      groups.set(key, {
+        id: key,
+        tag: tag || null,
+        sourceRows: [],
+        attrs: {},
+        qty: null,
+        unit: null,
+        qty_kind: null,
+        sheet_id: null,
+        plan_sheet_id: null,
+        table_title: null,
+        workflows: new Set(),
+        notes: [],
+        bbox_px: null,
+      });
+    }
+    const g = groups.get(key);
+    g.sourceRows.push(row);
+    if (row.workflow) g.workflows.add(row.workflow);
+    if (row.table_title && !g.table_title) g.table_title = row.table_title;
+    const field = String(row.field || "");
+    const fieldU = field.toUpperCase();
+
+    if (field === "installed_quantity" || field === "quantity") {
+      const n = asNumber(row.value);
+      if (n != null) {
+        g.qty = n;
+        g.unit = row.unit || "EA";
+        g.qty_kind = "installed";
+      }
+    } else if (field === "mark_count" && g.qty_kind !== "installed") {
+      const n = asNumber(row.value);
+      if (n != null) {
+        g.qty = n;
+        g.unit = row.unit || "EA";
+        g.qty_kind = "mark_count";
+      }
+    } else if (field === "schedule_count" && g.qty == null) {
+      const n = asNumber(row.value);
+      if (n != null) {
+        g.qty = n;
+        g.unit = row.unit || "EA";
+        g.qty_kind = "scheduled";
+      }
+    } else if (field === "plan_status") {
+      const status = String(row.value || "").toLowerCase();
+      if (status === "refused") g.notes.push("Plan tag refused — not drawn on plan sheets");
+      else if (status) g.notes.push(`Plan: ${row.value}`);
+      if (row.sheet_id && !g.sheet_id) g.sheet_id = row.sheet_id;
+    } else if (field === "plan_tag") {
+      if (row.sheet_id) g.plan_sheet_id = row.sheet_id;
+      if (row.bbox_px && !g.bbox_px) g.bbox_px = row.bbox_px;
+    } else if (!SKIP_ATTR.has(field) && !SKIP_ATTR.has(fieldU) && row.value != null && String(row.value).trim() !== "") {
+      g.attrs[field] = row.value;
+      if (row.unit && !g.attrs[`${field}_unit`]) g.attrs[`${field}_unit`] = row.unit;
+    }
+
+    // Prefer plan sheet for location; keep schedule sheet as fallback.
+    if (row.source_tool === "sweep_schedule_row" && row.sheet_id && field === "installed_quantity") {
+      g.plan_sheet_id = row.sheet_id;
+      if (row.bbox_px) g.bbox_px = row.bbox_px;
+    } else if (row.sheet_id && !g.sheet_id) {
+      g.sheet_id = row.sheet_id;
+    }
+    if (row.bbox_px && !g.bbox_px && field !== "plan_status") g.bbox_px = row.bbox_px;
+  }
+
+  const lines = [];
+  for (const g of groups.values()) {
+    // Tagged equipment with attrs but no qty → scheduled line of 1.
+    if (g.tag && g.qty == null && Object.keys(g.attrs).length) {
+      g.qty = 1;
+      g.unit = "EA";
+      g.qty_kind = "scheduled";
+    }
+    let description = "";
+    for (const f of DESC_FIELDS) {
+      if (g.attrs[f] != null && String(g.attrs[f]).trim()) {
+        description = String(g.attrs[f]).trim();
+        break;
+      }
+    }
+    if (!description) description = g.table_title || (g.tag ? g.tag : "Schedule count");
+    const attrParts = [];
+    for (const [k, v] of Object.entries(g.attrs)) {
+      if (k.endsWith("_unit")) continue;
+      if (DESC_FIELDS.includes(k) && String(v) === description) continue;
+      const u = g.attrs[`${k}_unit`];
+      attrParts.push(u ? `${k} ${v} ${u}` : `${k} ${v}`);
+    }
+    const sheet = g.plan_sheet_id || g.sheet_id || null;
+    const noteParts = [...g.notes];
+    if (g.qty_kind === "scheduled" && g.tag) noteParts.push("Scheduled (not sweep-confirmed)");
+    if (g.qty_kind === "mark_count") noteParts.push("Mark count");
+    lines.push({
+      id: g.id,
+      tag: g.tag,
+      description,
+      qty: g.qty,
+      unit: g.unit || (g.qty != null ? "EA" : null),
+      qty_kind: g.qty_kind,
+      sheet_id: sheet,
+      table_title: g.table_title,
+      attrs: Object.fromEntries(
+        Object.entries(g.attrs).filter(([k]) => !k.endsWith("_unit")),
+      ),
+      attrs_text: attrParts.join(" · "),
+      notes: noteParts.join("; "),
+      workflow: [...g.workflows].join(" · "),
+      bbox_px: g.bbox_px,
+      source_ids: g.sourceRows.map((r) => r.id),
+      source_count: g.sourceRows.length,
+    });
+  }
+
+  // Tag lines first (alpha), then schedule-only summaries.
+  lines.sort((a, b) => {
+    const at = a.tag || `\uffff${a.description}`;
+    const bt = b.tag || `\uffff${b.description}`;
+    return at.localeCompare(bt, undefined, { numeric: true, sensitivity: "base" });
+  });
+  return lines;
+}
+
+export function compiledTakeoffToCsv(lines) {
+  const header = ["Tag", "Description", "Qty", "Unit", "Qty kind", "Sheet", "Schedule", "Attributes", "Notes", "Workflow"];
+  const out = [header.map(esc).join(",")];
+  for (const r of lines || []) {
+    out.push([
+      r.tag || "",
+      r.description || "",
+      r.qty ?? "",
+      r.unit || "",
+      r.qty_kind || "",
+      r.sheet_id || "",
+      r.table_title || "",
+      r.attrs_text || "",
+      r.notes || "",
+      r.workflow || "",
+    ].map(esc).join(","));
+  }
+  return out.join("\n");
+}
+
+/** Evidence / workflow-data CSV (EAV). */
+export function workflowDataToCsv(rows) {
   const header = ["Tag", "Field", "Value", "Unit", "Sheet", "Schedule", "Column", "Workflow", "Source"];
   const lines = [header.map(esc).join(",")];
   for (const r of rows || []) {
@@ -275,26 +461,34 @@ export function takeoffToCsv(rows) {
   return lines.join("\n");
 }
 
-export function downloadTakeoffCsv(rows, filename = "opentakeoff-takeoff.csv") {
-  downloadText(filename, takeoffToCsv(rows), "text/csv;charset=utf-8");
+/** @deprecated Prefer compiledTakeoffToCsv for the Takeoff tab. */
+export function takeoffToCsv(rows) {
+  return workflowDataToCsv(rows);
 }
 
-export async function downloadTakeoffXlsx(rows, filename = "opentakeoff-takeoff.xlsx") {
-  const sheetRows = [
-    ["Tag", "Field", "Value", "Unit", "Sheet", "Schedule", "Column", "Workflow", "Source"],
-    ...(rows || []).map((r) => [
-      r.tag || "",
-      r.field || "",
-      typeof r.value === "number" ? r.value : (r.value ?? ""),
-      r.unit || "",
-      r.sheet_id || "",
-      r.table_title || "",
-      r.column || "",
-      r.workflow || "",
-      r.source_tool || "",
-    ]),
-  ];
-  const bytes = await buildXlsx([{ name: "Takeoff", rows: sheetRows }]);
+export function downloadTakeoffCsv(linesOrRows, filename = "opentakeoff-takeoff.csv", { mode = "compiled" } = {}) {
+  const text = mode === "workflow" ? workflowDataToCsv(linesOrRows) : compiledTakeoffToCsv(linesOrRows);
+  downloadText(filename, text, "text/csv;charset=utf-8");
+}
+
+export async function downloadTakeoffXlsx(linesOrRows, filename = "opentakeoff-takeoff.xlsx", { mode = "compiled" } = {}) {
+  const sheetRows = mode === "workflow"
+    ? [
+      ["Tag", "Field", "Value", "Unit", "Sheet", "Schedule", "Column", "Workflow", "Source"],
+      ...(linesOrRows || []).map((r) => [
+        r.tag || "", r.field || "", typeof r.value === "number" ? r.value : (r.value ?? ""),
+        r.unit || "", r.sheet_id || "", r.table_title || "", r.column || "", r.workflow || "", r.source_tool || "",
+      ]),
+    ]
+    : [
+      ["Tag", "Description", "Qty", "Unit", "Qty kind", "Sheet", "Schedule", "Attributes", "Notes", "Workflow"],
+      ...(linesOrRows || []).map((r) => [
+        r.tag || "", r.description || "", typeof r.qty === "number" ? r.qty : (r.qty ?? ""),
+        r.unit || "", r.qty_kind || "", r.sheet_id || "", r.table_title || "",
+        r.attrs_text || "", r.notes || "", r.workflow || "",
+      ]),
+    ];
+  const bytes = await buildXlsx([{ name: mode === "workflow" ? "Workflow data" : "Takeoff", rows: sheetRows }]);
   const blob = new Blob([bytes], {
     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   });
@@ -309,9 +503,10 @@ export async function downloadTakeoffXlsx(rows, filename = "opentakeoff-takeoff.
 }
 
 /** Build takeoff PDF bytes (landscape table). Used by download + tests. */
-export async function buildTakeoffPdfBytes(rows, {
+export async function buildTakeoffPdfBytes(linesOrRows, {
   title = "OpenTakeoff — Takeoff",
   projectName = "",
+  mode = "compiled",
 } = {}) {
   const { PDFDocument, StandardFonts, rgb } = await import("pdf-lib");
   const doc = await PDFDocument.create();
@@ -320,10 +515,15 @@ export async function buildTakeoffPdfBytes(rows, {
   const pageWidth = 792; // landscape letter
   const pageHeight = 612;
   const margin = 36;
-  const colWidths = [70, 110, 90, 40, 150, 140];
-  const headers = ["Tag", "Field", "Value", "Unit", "Sheet", "Schedule"];
+  const compiled = mode !== "workflow";
+  const colWidths = compiled
+    ? [72, 160, 48, 36, 140, 160]
+    : [70, 110, 90, 40, 150, 140];
+  const headers = compiled
+    ? ["Tag", "Description", "Qty", "Unit", "Sheet", "Attributes / notes"]
+    : ["Tag", "Field", "Value", "Unit", "Sheet", "Schedule"];
   const lineH = 14;
-  const list = rows || [];
+  const list = linesOrRows || [];
 
   const drawHeader = (page, y) => {
     page.drawText(title, { x: margin, y, size: 14, font: fontBold, color: rgb(0.1, 0.1, 0.15) });
@@ -332,7 +532,7 @@ export async function buildTakeoffPdfBytes(rows, {
       page.drawText(String(projectName), { x: margin, y, size: 10, font, color: rgb(0.35, 0.35, 0.4) });
       y -= 14;
     }
-    page.drawText(`Generated ${new Date().toLocaleString()} · ${list.length} row${list.length === 1 ? "" : "s"}`, {
+    page.drawText(`Generated ${new Date().toLocaleString()} · ${list.length} line${list.length === 1 ? "" : "s"}`, {
       x: margin, y, size: 9, font, color: rgb(0.45, 0.45, 0.5),
     });
     y -= 18;
@@ -369,14 +569,23 @@ export async function buildTakeoffPdfBytes(rows, {
       y = pageHeight - margin;
       y = drawHeader(page, y);
     }
-    const vals = [
-      r.tag || "—",
-      r.field || "",
-      r.value ?? "",
-      r.unit || "",
-      r.sheet_id || "",
-      r.table_title || "",
-    ];
+    const vals = compiled
+      ? [
+        r.tag || "—",
+        r.description || "",
+        r.qty ?? "",
+        r.unit || "",
+        r.sheet_id || "",
+        [r.attrs_text, r.notes].filter(Boolean).join(" · ") || "",
+      ]
+      : [
+        r.tag || "—",
+        r.field || "",
+        r.value ?? "",
+        r.unit || "",
+        r.sheet_id || "",
+        r.table_title || "",
+      ];
     let x = margin;
     vals.forEach((v, i) => {
       page.drawText(clip(v, colWidths[i] - 6), {
@@ -391,12 +600,13 @@ export async function buildTakeoffPdfBytes(rows, {
 }
 
 /** Build a simple multi-page PDF table via pdf-lib. */
-export async function downloadTakeoffPdf(rows, {
+export async function downloadTakeoffPdf(linesOrRows, {
   filename = "opentakeoff-takeoff.pdf",
   title = "OpenTakeoff — Takeoff",
   projectName = "",
+  mode = "compiled",
 } = {}) {
-  const bytes = await buildTakeoffPdfBytes(rows, { title, projectName });
+  const bytes = await buildTakeoffPdfBytes(linesOrRows, { title, projectName, mode });
   const blob = new Blob([bytes], { type: "application/pdf" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");

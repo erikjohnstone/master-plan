@@ -575,6 +575,17 @@ export default function TakeoffCanvas() {
   const [agentOpen, setAgentOpen] = useState(false);      // docked right-rail Agent panel
   const [agentTakeoffRows, setAgentTakeoffRows] = useState([]); // structured rows for Takeoff UI
   const [showTakeoffData, setShowTakeoffData] = useState(false);
+  // Demo / Playwright hook: seed Takeoff rows without a full agent run.
+  useEffect(() => {
+    window.__otSeedAgentTakeoff = (rows, { open = true } = {}) => {
+      setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, Array.isArray(rows) ? rows : []));
+      if (open) setShowTakeoffData(true);
+    };
+    window.__otOpenTakeoff = () => setShowTakeoffData(true);
+    return () => {
+      try { delete window.__otSeedAgentTakeoff; delete window.__otOpenTakeoff; } catch { /* */ }
+    };
+  }, []);
   // ── roll goods (#136) — view state; the figured layouts are a memo below ──
   const [rollShow, setRollShow] = useState(true);         // draw the figured cuts over the plan (on: opting a condition in shows its cuts immediately)
   const [rollEdit, setRollEdit] = useState(false);        // cut-edit mode — cuts take pointer events (slide / resize / double-click reset)
@@ -12088,16 +12099,21 @@ export default function TakeoffCanvas() {
           projectName={projectName}
           onClear={() => setAgentTakeoffRows([])}
           onRemove={(id) => setAgentTakeoffRows((rows) => rows.filter((r) => r.id !== id))}
+          onRemoveLine={(line) => {
+            const ids = new Set(line?.source_ids || []);
+            if (!ids.size) return;
+            setAgentTakeoffRows((rows) => rows.filter((r) => !ids.has(r.id)));
+          }}
           onClose={() => setShowTakeoffData(false)}
           onOpenCitation={(row) => {
             if (!row?.sheet_id || !row?.bbox_px) return;
             openAgentCitation({
               sheet_id: row.sheet_id,
               bbox_px: row.bbox_px,
-              row_key: row.tag,
+              row_key: row.tag || row.row_key,
               column: row.column,
               table_title: row.table_title,
-              value: row.value,
+              value: row.value ?? row.qty,
             });
           }}
         />
