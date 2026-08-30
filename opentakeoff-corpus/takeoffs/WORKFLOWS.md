@@ -66,7 +66,7 @@ Fixture counts (396 / 122 / 163, building names, schedule titles) are
 | 47 | Multi-prompt phrase variants (BAS) | ≥5 phrasings → same compile | corpus_bas | T-BAS-01 | PROVEN |
 | 48 | Multi-prompt phrase variants (valves) | ≥5 phrasings → same compile | corpus_valves | T-VALVE-01 | PROVEN |
 | 49 | Follow-up cite after takeoff | Spot-check MARK without destroying locked lines | agent loop | — | TODO |
-| 50 | Suite regression gate | Engine demos + golden verify + fixture proofs stay green; never ship N if 1…N−1 regress | `npm run test:demos` + web fixture proofs | D01–D10 + T-* | ROUTING |
+| 50 | Suite regression gate | Engine demos + golden verify + fixture proofs stay green; never ship N if 1…N−1 regress | `npm run test:demos` + web fixture proofs | D01–D10 + T-* | PROVEN |
 
 **Progress:** count `PROVEN` + `ON_MAIN` toward 50. Re-open a row if it regresses.
 **Tests always:** every PROVEN/ON_MAIN row must keep automated coverage; suite

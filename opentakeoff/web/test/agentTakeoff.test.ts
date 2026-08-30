@@ -85,7 +85,26 @@ test("rowsFromToolResult: sweep_schedule_row installed qty + attributes", () => 
   assert.ok(!rows.some((r) => r.field === "MARK"));
 });
 
-test("compileAgentTakeoff collapses EAV rows into line items", () => {
+test("compileAgentTakeoff: query_table / answer scrap alone → no Takeoff lines", () => {
+  const scrap = [
+    ...rowsFromToolResult("query_table", { title: "FAN COIL UNIT SCHEDULE" }, {
+      count: 42,
+      matches: [
+        {
+          sheet: "m#3", title: "FAN COIL UNIT SCHEDULE",
+          row: { key: "FCU-A1", all_cells: { TYPE: { text: "VERTICAL CABINET" }, CFM: { text: "150" } } },
+        },
+      ],
+    }, { workflow: "fcu" }),
+    makeTakeoffRow({
+      tag: "FCU-T1", field: "CFM", value: "230", source_tool: "answer_table",
+      table_title: "FAN COIL UNIT SCHEDULE",
+    }),
+  ];
+  assert.equal(compileAgentTakeoff(scrap).length, 0);
+});
+
+test("compileAgentTakeoff collapses sweep EAV into installed line items", () => {
   const rows = [
     ...rowsFromToolResult("sweep_schedule_row", { tag: "VAV-1" }, {
       tag: "VAV-1",
@@ -97,17 +116,20 @@ test("compileAgentTakeoff collapses EAV rows into line items", () => {
         cells: { CFM: "2170", MANUFACTURER: "TRANE / VCEF", MARK: "VAV-1" },
       },
     }, { workflow: "vav" }),
+    // Scrap for a different tag must not mint a Takeoff line.
     makeTakeoffRow({
       tag: "EF-2", field: "plan_status", value: "refused",
       sheet_id: "mech.pdf#6", table_title: "FAN SCHEDULE", workflow: "fans",
+      source_tool: "query_table",
     }),
     makeTakeoffRow({
       tag: "EF-2", field: "CFM", value: 400, unit: "CFM",
       sheet_id: "mech.pdf#6", table_title: "FAN SCHEDULE", workflow: "fans",
+      source_tool: "query_table",
     }),
   ];
   const lines = compileAgentTakeoff(rows);
-  assert.equal(lines.length, 2);
+  assert.equal(lines.length, 1);
   const vav = lines.find((l) => l.tag === "VAV-1");
   assert.ok(vav);
   assert.equal(vav.qty, 1);
@@ -116,11 +138,7 @@ test("compileAgentTakeoff collapses EAV rows into line items", () => {
   assert.match(vav.description, /TRANE/);
   assert.match(vav.attrs_text, /CFM 2170/);
   assert.equal(vav.sheet_id, "mech.pdf#2");
-  const ef = lines.find((l) => l.tag === "EF-2");
-  assert.ok(ef);
-  assert.equal(ef.qty, 1);
-  assert.equal(ef.qty_kind, "scheduled");
-  assert.match(ef.notes, /refused/i);
+  assert.ok(!lines.some((l) => l.tag === "EF-2"), "query_table scrap must not become Takeoff");
   const csv = compiledTakeoffToCsv(lines);
   assert.match(csv, /^Tag,/);
   assert.match(csv, /VAV-1/);
@@ -130,36 +148,59 @@ test("compileAgentTakeoff collapses EAV rows into line items", () => {
 test("columns adapt per family: valves vs VAV vs points", () => {
   const rows = [
     makeTakeoffRow({
+      tag: "VAV-1", field: "quantity", value: 1, unit: "EA",
+      table_title: "AIR TERMINAL BOX SCHEDULE", sheet_id: "m#6",
+      source_tool: "compile_corpus_takeoff",
+    }),
+    makeTakeoffRow({
       tag: "VAV-1", field: "CFM", value: "2170",
       table_title: "AIR TERMINAL BOX SCHEDULE", sheet_id: "m#6",
+      source_tool: "compile_corpus_takeoff",
     }),
     makeTakeoffRow({
       tag: "VAV-1", field: "MBH", value: "41",
       table_title: "AIR TERMINAL BOX SCHEDULE", sheet_id: "m#6",
+      source_tool: "compile_corpus_takeoff",
+    }),
+    makeTakeoffRow({
+      tag: "CV-3", field: "quantity", value: 1, unit: "EA",
+      table_title: "CONTROL VALVE SCHEDULE", sheet_id: "m#8",
+      source_tool: "compile_corpus_takeoff",
     }),
     makeTakeoffRow({
       tag: "CV-3", field: "GPM", value: "18",
       table_title: "CONTROL VALVE SCHEDULE", sheet_id: "m#8",
+      source_tool: "compile_corpus_takeoff",
     }),
     makeTakeoffRow({
       tag: "CV-3", field: "Cv", value: "5.2",
       table_title: "CONTROL VALVE SCHEDULE", sheet_id: "m#8",
+      source_tool: "compile_corpus_takeoff",
     }),
     makeTakeoffRow({
       tag: "CV-3", field: "PIPE SIZE", value: "1-1/2\"",
       table_title: "CONTROL VALVE SCHEDULE", sheet_id: "m#8",
+      source_tool: "compile_corpus_takeoff",
+    }),
+    makeTakeoffRow({
+      tag: "AHU-1 SA TEMP", field: "quantity", value: 1, unit: "EA",
+      table_title: "AHU-1 POINTS LIST", sheet_id: "c#2",
+      source_tool: "compile_corpus_takeoff",
     }),
     makeTakeoffRow({
       tag: "AHU-1 SA TEMP", field: "POINT TYPE", value: "AI",
       table_title: "AHU-1 POINTS LIST", sheet_id: "c#2",
+      source_tool: "compile_corpus_takeoff",
     }),
     makeTakeoffRow({
       tag: "AHU-1 SA TEMP", field: "SIGNAL", value: "4-20mA",
       table_title: "AHU-1 POINTS LIST", sheet_id: "c#2",
+      source_tool: "compile_corpus_takeoff",
     }),
     makeTakeoffRow({
       tag: "AHU-1 SA TEMP", field: "CONTROLLER", value: "UC600-1",
       table_title: "AHU-1 POINTS LIST", sheet_id: "c#2",
+      source_tool: "compile_corpus_takeoff",
     }),
   ];
   const lines = compileAgentTakeoff(rows);
@@ -366,7 +407,17 @@ test("rowsFromToolResult: query_table title {text,bbox} becomes plain string", (
   }, { workflow: "fans" });
   assert.ok(rows.every((r) => typeof r.table_title === "string"));
   assert.equal(rows[0].table_title, "FAN SCHEDULE");
-  const lines = compileAgentTakeoff(rows);
+  // query_table scrap alone is Workflow data — not a finished Takeoff.
+  assert.equal(compileAgentTakeoff(rows).length, 0);
+  const seeded = [
+    makeTakeoffRow({
+      tag: "EF-1", field: "quantity", value: 1, unit: "EA",
+      table_title: "FAN SCHEDULE", sheet_id: "mech.pdf#6",
+      source_tool: "compile_corpus_takeoff",
+    }),
+    ...rows,
+  ];
+  const lines = compileAgentTakeoff(seeded);
   const groups = groupTakeoffByFamily(lines);
   assert.equal(groups[0].family, "FAN SCHEDULE");
   assert.equal(typeof groups[0].family, "string");
@@ -390,11 +441,23 @@ test("takeoffToCsv emits workflow EAV header + escaped rows", () => {
 
 test("xlsx + pdf export builders produce non-empty artifacts", async () => {
   const rows = [
-    makeTakeoffRow({ tag: "VAV-1", field: "CFM", value: 2170, sheet_id: "mech.pdf#6", table_title: "AIR TERMINAL" }),
-    makeTakeoffRow({ tag: "VAV-1", field: "installed_quantity", value: 1, unit: "EA", sheet_id: "mech.pdf#2", table_title: "AIR TERMINAL" }),
-    makeTakeoffRow({ tag: "EF-2", field: "plan_status", value: "refused", sheet_id: "mech.pdf#6", table_title: "FAN SCHEDULE" }),
+    makeTakeoffRow({
+      tag: "VAV-1", field: "installed_quantity", value: 1, unit: "EA",
+      sheet_id: "mech.pdf#2", table_title: "AIR TERMINAL",
+      source_tool: "sweep_schedule_row",
+    }),
+    makeTakeoffRow({
+      tag: "VAV-1", field: "CFM", value: 2170, sheet_id: "mech.pdf#6", table_title: "AIR TERMINAL",
+      source_tool: "sweep_schedule_row",
+    }),
+    makeTakeoffRow({
+      tag: "EF-2", field: "plan_status", value: "refused",
+      sheet_id: "mech.pdf#6", table_title: "FAN SCHEDULE",
+      source_tool: "query_table",
+    }),
   ];
   const lines = compileAgentTakeoff(rows);
+  assert.equal(lines.length, 1);
   assert.ok(takeoffSpecColumns(lines).includes("CFM") || takeoffSpecColumns(lines).some((c) => /CFM/i.test(c)));
   const sheetRows = [
     ["Tag", "Type", "Qty"],

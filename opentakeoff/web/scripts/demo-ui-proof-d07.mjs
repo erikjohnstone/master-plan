@@ -199,6 +199,15 @@ try {
     throw new Error("D07 UI Answer missing TRANE manufacturer.");
   }
 
+  // Dismiss Takeoff modal if open — scrap must not block Sources clicks.
+  const takeoffDlg = page.locator('[aria-label="Takeoff"]');
+  if (await takeoffDlg.count()) {
+    const closeBtn = takeoffDlg.getByRole("button", { name: /Close takeoff/i });
+    if (await closeBtn.count()) await closeBtn.click();
+    else await page.keyboard.press("Escape");
+    await page.waitForTimeout(400);
+  }
+
   const sourcesHeader = page.getByRole("button", { name: /Sources · \d+ · click to open/i });
   await sourcesHeader.waitFor({ state: "visible", timeout: 10_000 });
   await sourcesHeader.click();

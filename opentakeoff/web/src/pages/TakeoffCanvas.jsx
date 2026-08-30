@@ -8817,12 +8817,21 @@ export default function TakeoffCanvas() {
         signal: ctl.signal,
       });
       const answerText = typeof result?.text === "string" ? result.text.trim() : "";
+      // Finished Takeoff auto-open only for compile / project / sweep seeds —
+      // query_table scrap stays in Workflow data and must not steal focus from
+      // Sources / Agent (GOAL: Agent scrap ≠ Takeoff tab).
+      const hasFinishedTakeoffSeed = (rows) => rows.some((r) => (
+        r?.source_tool === "compile_corpus_takeoff"
+        || r?.source_tool === "takeoff_summary"
+        || r?.source_tool === "project_takeoff"
+        || r?.source_tool === "sweep_schedule_row"
+      ));
       if (answerText) {
         const fromTables = rowsFromAnswerMarkdown(answerText, { workflow: ask, runId: run.id });
         const merged = dedupeTakeoffRows([...collectedTakeoff, ...fromTables]);
         if (merged.length) {
           setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, merged));
-          setShowTakeoffData(true);
+          if (hasFinishedTakeoffSeed(merged)) setShowTakeoffData(true);
         }
         const { chat } = splitConversationalAnswer(answerText, { rowCount: merged.length });
         agentPriorRef.current = [
@@ -8840,12 +8849,14 @@ export default function TakeoffCanvas() {
       } else if (collectedTakeoff.length) {
         const merged = dedupeTakeoffRows(collectedTakeoff);
         setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, merged));
-        setShowTakeoffData(true);
-        setAgentThread((t) => [...t, {
-          role: "assistant",
-          text: `Wrote ${merged.length} takeoff row${merged.length === 1 ? "" : "s"} to the Takeoff panel — open Takeoff to review and export.`,
-          takeoffRows: merged.length,
-        }]);
+        if (hasFinishedTakeoffSeed(merged)) {
+          setShowTakeoffData(true);
+          setAgentThread((t) => [...t, {
+            role: "assistant",
+            text: `Wrote ${merged.length} takeoff row${merged.length === 1 ? "" : "s"} to the Takeoff panel — open Takeoff to review and export.`,
+            takeoffRows: merged.length,
+          }]);
+        }
       }
     } finally {
       setAgentRunning(false);

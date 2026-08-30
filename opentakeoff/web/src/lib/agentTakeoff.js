@@ -810,6 +810,19 @@ function takeoffLineKey(tag, tableTitle, field) {
 }
 
 /**
+ * Tools that seed contractor finished-takeoff lines.
+ * query_table / answer_table / count_marks scrap stays Workflow data only —
+ * never invents Takeoff-tab lines (GOAL: Agent scrap ≠ Takeoff).
+ */
+export function isFinishedTakeoffSource(sourceTool) {
+  const t = String(sourceTool || "");
+  return t === "compile_corpus_takeoff"
+    || t === "takeoff_summary"
+    || t === "project_takeoff"
+    || t === "sweep_schedule_row";
+}
+
+/**
  * Compile EAV workflow rows into a real equipment takeoff:
  * one line per tag (+ schedule when marks repeat across lists) with qty +
  * technical schedule columns (CFM, MBH, kW, …).
@@ -817,6 +830,10 @@ function takeoffLineKey(tag, tableTitle, field) {
  * When a corpus compile (`compile_corpus_takeoff`) is present, the Takeoff tab
  * is ONLY those finished line items (396 / 122) — spot-cite scrap may enrich
  * attrs on those tags but must not invent extra tags or double EA.
+ *
+ * Without a finished-takeoff seed (compile / project_takeoff / takeoff_summary /
+ * sweep_schedule_row), return no Takeoff lines — query_table crawls and answer
+ * markdown tables remain Workflow data only.
  *
  * Identity is tag + schedule title so repeating BAS marks (AI1 on DOAH vs AHU
  * lists) stay separate rows; HVAC tags stay unique via their schedule name.
@@ -829,15 +846,31 @@ export function compileAgentTakeoff(rows = []) {
     && row.tag
   ));
   const corpusLocked = compileQtyRows.length > 0;
+  const finishedSeedRows = corpusLocked
+    ? compileQtyRows
+    : all.filter((row) => (
+      isFinishedTakeoffSource(row?.source_tool) && row?.tag
+    ));
+  // Scrap-only Agent runs (FCU building splits, cite crawls, …) must not mint
+  // a fake contractor takeoff from query_table / answer_table EAV.
+  if (!finishedSeedRows.length) return [];
+
   const corpusQtyTags = new Set(
     compileQtyRows.map((row) => String(row.tag).trim().toUpperCase()),
+  );
+  const finishedTags = new Set(
+    finishedSeedRows.map((row) => String(row.tag).trim().toUpperCase()).filter(Boolean),
   );
   const scoped = corpusLocked
     ? all.filter((row) => {
       if (!row?.tag) return row?.source_tool === "compile_corpus_takeoff";
       return corpusQtyTags.has(String(row.tag).trim().toUpperCase());
     })
-    : all;
+    : all.filter((row) => {
+      if (isFinishedTakeoffSource(row?.source_tool)) return true;
+      if (!row?.tag) return false;
+      return finishedTags.has(String(row.tag).trim().toUpperCase());
+    });
 
   const groups = new Map();
   const groupsByTag = new Map(); // UPPER tag → [group,…] for enrichment merge
@@ -889,18 +922,19 @@ export function compileAgentTakeoff(rows = []) {
     return null;
   };
 
-  // Seed locked lines from compile quantity rows so identity = finished takeoff.
-  if (corpusLocked) {
-    for (const row of compileQtyRows) {
-      resolveGroup(row, { create: true });
-    }
+  // Seed finished lines first so identity = contractor takeoff (not scrap).
+  for (const row of finishedSeedRows) {
+    resolveGroup(row, { create: true });
   }
 
   for (const row of scoped) {
     const isCompileQty = row?.source_tool === "compile_corpus_takeoff"
       && String(row.field || "") === "quantity"
       && row.tag;
-    const g = resolveGroup(row, { create: !corpusLocked || isCompileQty });
+    const isFinishedSeed = isFinishedTakeoffSource(row?.source_tool) && row.tag;
+    const g = resolveGroup(row, {
+      create: corpusLocked ? isCompileQty : isFinishedSeed,
+    });
     if (!g) continue;
     const tag = row.tag ? String(row.tag).trim() : "";
     if (!g.tag && tag) g.tag = tag;
