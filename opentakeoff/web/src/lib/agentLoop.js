@@ -404,11 +404,13 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   const asksToShowCite = /\bshow\b.*\bcite\b|\bcite the exact\b|\bshow me\b.*\b(?:plan|sheet|schedule|highlight)\b|\bcite the (?:schedule|exact|mark)\b/i.test(goal);
   // When the goal names explicit spot-check tags after "cite …", only those
   // MARKs create cite paint duty — not every equipment key a rollup answer
-  // happens to mention (FCU-A2, sample AI01 points, etc.).
+  // happens to mention (FCU-A2, sample AI01 points, etc.). Hyphenated tags
+  // must include a digit so prose like "points-list title" is not treated as
+  // a MARK cite target.
   const citeTargetsFromGoal = (() => {
     const m = goal.match(/\bcite\b([\s\S]*?)(?:\bso I can\b|\bso you can\b|\bso we can\b|[.?!]|$)/i);
     if (!m) return null;
-    const found = [...m[1].matchAll(/\b[A-Z]{1,8}-[A-Z0-9]{1,16}\b|\b(?:AI|AO|BI|BO)\d+[A-Z]?\b/gi)]
+    const found = [...m[1].matchAll(/\b[A-Z]{1,8}-[A-Z0-9]*\d[A-Z0-9]*\b|\b(?:AI|AO|BI|BO)\d+[A-Z]?\b/gi)]
       .map((hit) => hit[0].toUpperCase().replace(/[^A-Z0-9]/g, ""))
       .filter((tag) => tag.length >= 3);
     return found.length ? new Set(found) : null;

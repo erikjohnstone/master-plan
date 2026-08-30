@@ -140,7 +140,7 @@ try {
   await page.getByRole("button", { name: "Run", exact: true }).click();
   const stop = page.getByRole("button", { name: /Stop/ });
   await stop.waitFor({ state: "visible", timeout: 10_000 });
-  await stop.waitFor({ state: "hidden", timeout: 300_000 });
+  await stop.waitFor({ state: "hidden", timeout: 480_000 });
   await page.waitForTimeout(2_000);
   await page.screenshot({ path: "/opt/cursor/artifacts/d03_ui_primary_answer.png" });
 
@@ -220,7 +220,7 @@ try {
   await goal.fill(followUp);
   await page.getByRole("button", { name: "Ask", exact: true }).click();
   await stop.waitFor({ state: "visible", timeout: 10_000 });
-  await stop.waitFor({ state: "hidden", timeout: 180_000 });
+  await stop.waitFor({ state: "hidden", timeout: 240_000 });
   await page.waitForTimeout(2_000);
   await page.screenshot({ path: "/opt/cursor/artifacts/d03_ui_followup_answer.png" });
   const afterFollow = await panelRoot.innerText();
