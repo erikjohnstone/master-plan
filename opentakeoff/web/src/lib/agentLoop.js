@@ -1336,8 +1336,11 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       const foundNear = nearCountsForLabel(label);
       if (!foundNear.includes(Number(count))) {
         missingCounts.push(`${label} count=${count}`);
-      } else if (foundNear[0] != null && foundNear[0] !== Number(count)) {
-        // Primary bold total disagrees with title-scan (e.g. DOAH **5** when tool count=3).
+      } else if (foundNear[0] != null && foundNear[0] !== Number(count)
+        && foundNear[0] > Number(count) && foundNear[0] >= 2) {
+        // Inflated primary total (e.g. DOAH **5** when title-scan count=3 from
+        // summing continuation pages). Ignore smaller leading numbers (page
+        // markers / incidental 1s near points-list titles).
         conflictingCounts.push(`${label} stated ${foundNear[0]} but title-scan count=${count}`);
       }
       if (out.building_tag_counts && typeof out.building_tag_counts === "object" && /\bsplit/i.test(goal)) {
