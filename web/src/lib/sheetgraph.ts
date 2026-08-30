@@ -3201,6 +3201,24 @@ export const isMepEquipmentSchedule = (title: string): boolean => {
   return MEP_EQUIPMENT_SMASHED_RE.test(smashed) || MEP_AIR_TERMINAL_SMASHED_RE.test(smashed);
 };
 
+// Passive acoustic duct fittings — a DUCT SILENCER / SOUND ATTENUATOR
+// schedule. Same class this file already treats as finish-kind for
+// itd-d1-lab's own SOUND ATTENUATOR SCHEDULE (see hasPoweredEquipmentColumns
+// and isMepEquipmentSchedule's false case): a silencer has no motor, no
+// nameplate, no catalog identity of a powered HVAC unit. A DUCT SILENCER
+// SCHEDULE still often clears EQUIPMENT_HEADERS on FLOW RATE / SIZE /
+// LENGTH / CFM alone (air it merely passes through), then wins the
+// cross-kind richness collapse and becomes a takeoff instance. Title is
+// the discriminator — never a tag prefix, never a project/sheet name.
+// "SILENCER" as a column cell on another table does not fire this.
+const PASSIVE_ACOUSTIC_DUCT_RE = /\b(?:DUCT\s+SILENCER|SOUND\s+ATTENUATOR|ACOUSTIC\s+(?:ATTENUATOR|SILENCER))S?\b/;
+const PASSIVE_ACOUSTIC_DUCT_SMASHED_RE = /(?:DUCTSILENCER|SOUNDATTENUATOR|ACOUSTICATTENUATOR|ACOUSTICSILENCER)S?/;
+export function isPassiveAcousticDuctSchedule(title: string): boolean {
+  const u = norm(title);
+  if (PASSIVE_ACOUSTIC_DUCT_RE.test(u)) return true;
+  return PASSIVE_ACOUSTIC_DUCT_SMASHED_RE.test(u.replace(/\s+/g, ""));
+}
+
 // A real, standard cross-firm MEP title — "…CONNECTION SCHEDULE", "…
 // CALCULATION…", or "…ISOLATION SCHEDULE" — names a table that cross-
 // REFERENCES equipment tags a DEDICATED per-category schedule already
@@ -6567,6 +6585,15 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
           notes.push(`${s.key}: "${t.title.text}" carries real motor/electrical nameplate data (VOLTAGE/PHASE/AMPS/HP/ESP/…) inside its own header region, not just a finish/material schedule's own vocabulary — reclassified as equipment-kind (its title alone named no recognizable equipment family, so isMepEquipmentSchedule's own title check never applied).`);
           t.kind = "equipment";
           reclassified.add(t);
+        } else if (kind === "equipment" && t.title && isPassiveAcousticDuctSchedule(t.title.text)) {
+          // FLOW RATE / SIZE / LENGTH / CFM are enough for extractAllTables
+          // ("equipment") to own a silencer catalog, then the richness
+          // collapse prefers that read over the finish-kind one. The
+          // finish-kind pass already extracts the same rows (MARK + SIZE +
+          // NOTES). Drop the equipment fragment so buildPlanSetTakeoff
+          // never sweeps a passive duct fitting as an install.
+          notes.push(`${s.key}: "${t.title.text}" names a passive acoustic duct fitting (silencer/attenuator), not powered HVAC equipment — kept finish-kind so its marks are not swept as installs.`);
+          continue;
         } else if (kind === "equipment" && t.title && isReferenceCrossTable(t.title.text, t.headers)) {
           // A cross-reference/spec table about equipment defined elsewhere
           // (VIBRATION ISOLATION SCHEDULE, a CONNECTION or CALCULATION
@@ -7586,6 +7613,9 @@ export function scheduleTableFromODL(
   // (which only fires with EXACTLY one bare-anchor survivor).
   if (kind === "equipment" && isReferenceCrossTable(titleText, headers)) {
     kind = "reference";
+  }
+  if (kind === "equipment" && isPassiveAcousticDuctSchedule(titleText)) {
+    kind = "finish";
   }
 
   // room-finish only: resolveTag/floorTagFor look up a row's surface cells
