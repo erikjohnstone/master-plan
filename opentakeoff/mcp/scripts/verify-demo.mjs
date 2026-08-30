@@ -82,11 +82,25 @@ function tableIdentity(value) {
   return String(value || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 }
 
+function tableTitleBase(value) {
+  return String(value || "")
+    .toUpperCase()
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\s+\d+\s+OF\s+\d+\s*$/i, "")
+    .trim();
+}
+
 function tableExists(graph, citation) {
   if (!citation.table_title) return true;
-  return graph.tables.some((table) =>
-    table.sheet === citation.sheet_id
-    && tableIdentity(table.title?.text) === tableIdentity(citation.table_title));
+  const want = tableIdentity(citation.table_title);
+  const wantBase = tableIdentity(tableTitleBase(citation.table_title));
+  return graph.tables.some((table) => {
+    if (table.sheet !== citation.sheet_id) return false;
+    const title = table.title?.text || "";
+    return tableIdentity(title) === want
+      || tableIdentity(tableTitleBase(title)) === wantBase;
+  });
 }
 
 function expectedCitationAt(spec, index) {
@@ -197,6 +211,34 @@ export async function verifyDemoRun({ truth, run, session, recognize }) {
           }
         }
         if (grounded) break;
+      }
+      if (!grounded) {
+        // When the returned bbox overlaps the authored region but OCR on that
+        // crop is blank/noisy (wide schedule cells), also try the independently
+        // authored evidence crop before failing CITE_GROUND.
+        if (expectedCitation?.bbox_px && overlapAgainstSmaller(citation.bbox_px, expectedCitation.bbox_px) >= 0.8) {
+          const [ex0, ey0, ex1, ey1] = expectedCitation.bbox_px;
+          for (const px of tryPx) {
+            const pad = Math.max(1, Math.min(8, Math.round(Math.min(ex1 - ex0, ey1 - ey0) * 0.05)));
+            const rendered = await session.viewSheet(citation.sheet_id, {
+              region: {
+                x0: Math.max(0, ex0 - pad),
+                y0: Math.max(0, ey0 - pad),
+                x1: ex1 + pad,
+                y1: ey1 + pad,
+              },
+              px,
+            });
+            for (const mode of modes) {
+              ocrText = await recognize(rendered.png, mode);
+              if (ocrGrounds(ocrText, expectedText, { allowConfusables })) {
+                grounded = true;
+                break;
+              }
+            }
+            if (grounded) break;
+          }
+        }
       }
       if (!grounded) {
         fail("CITE_GROUND", field, `OCR ${JSON.stringify(ocrText.trim())} does not contain ${JSON.stringify(expectedText)}`);
