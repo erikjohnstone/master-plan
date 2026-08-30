@@ -1920,6 +1920,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       });
       emit({ type: "text", text: "[Loop nudge: text-only answer required — tools closed.]" });
     }
+  }
   emit({ type: "max_iterations", limit: maxIterations });
   // Only surface a draft Answer if it already clears evidence gates — otherwise
   // a step-cap stop would publish a paint-only / incomplete takeoff as done.
