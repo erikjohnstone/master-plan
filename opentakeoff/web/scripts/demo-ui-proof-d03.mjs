@@ -194,14 +194,27 @@ try {
     [["AIR-COOLED CHILLER", "AIR COOLED CHILLER", "AIR-COOLED"], truth.expected.air_cooled_chiller_count.value],
     [["HEAT-RECOVERY", "HEAT RECOVERY"], truth.expected.heat_recovery_chiller_count.value],
     [["BOILER"], truth.expected.boiler_count.value],
-    [["AIR OPS", "A =", "A=", "A:"], truth.expected.fcu_air_ops_count.value],
-    [["ATCT", "T =", "T=", "T:"], truth.expected.fcu_atct_count.value],
     [["POINTS", "BAS", "AHU-T1A"], truth.expected.bas_ahu_t1a_tib_points_rows.value],
   ];
   for (const [labels, value] of checks) {
     if (!near(labels, value)) {
       throw new Error(`D03 UI Answer missing labeled truth for ${labels[0]}=${value}`);
     }
+  }
+  // Building splits may sit under column headers (Air Ops | MITRACON | ATCT)
+  // rather than repeating "Air Ops: 14" on the FCU row — accept FCU-row cells
+  // when the Answer table names those building columns.
+  const hasAirOpsCol = /AIR[\s\-]*OPS|\bA\s*[\=\:\)\|]/i.test(answerNorm);
+  const hasAtctCol = /\bATCT\b|\bT\s*[\=\:\)\|]/i.test(answerNorm);
+  const fcuRowHas = (value) => primaryAnswer.split("\n").some((line) =>
+    /FCU|FAN[\s\-]*COIL/i.test(line) && new RegExp(`\\b${value}\\b`).test(normalize(line)));
+  if (!(near(["AIR OPS", "A =", "A=", "A:"], truth.expected.fcu_air_ops_count.value)
+    || (hasAirOpsCol && fcuRowHas(truth.expected.fcu_air_ops_count.value)))) {
+    throw new Error(`D03 UI Answer missing Air Ops FCU split ${truth.expected.fcu_air_ops_count.value}`);
+  }
+  if (!(near(["ATCT", "T =", "T=", "T:"], truth.expected.fcu_atct_count.value)
+    || (hasAtctCol && fcuRowHas(truth.expected.fcu_atct_count.value)))) {
+    throw new Error(`D03 UI Answer missing ATCT FCU split ${truth.expected.fcu_atct_count.value}`);
   }
   // Dual inventory tables (title-scan + painted recount) are a product fail.
   if (/(?:title[\s_-]*scan|schedule counts)/i.test(primaryAnswer)
