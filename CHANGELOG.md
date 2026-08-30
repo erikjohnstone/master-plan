@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — labeled near-miss family survives a partial commit
+
+### Fixed
+- **A same-convention labeled family still counts when the fingerprint already cleared the bar more than once.** `promoteLabeledNearMisses` required *exactly* one confident instance, so a sheet that committed two or three callouts left every remaining same-tag near-bar sibling withheld — the rest of a TYP-multiplied diffuser family never entered the count. The gate is now *at least* one confident instance (committed matches or the hidden seed) and two or more leftover own-tag occurrences each sitting next to a near-bar withheld. A single leftover labeled near-miss stays a disclosed question — that is still the schematic-versus-plan extra. No project, sheet, or tag names. **opentakeoff-mcp 0.9.75** (three surfaces).
+
 ## 2026-08-30 — sparse hatch ticks are not a register fill
 
 ### Fixed
