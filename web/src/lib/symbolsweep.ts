@@ -223,6 +223,14 @@ export const ANCHOR_COUNT = 3;
 const MIN_SEG_LEN = 0.5;
 /** A marquee holding more segments than this is not one symbol instance. */
 const MAX_SEED_SEGS = 2000;
+/** A pad-ladder grab this large is a region, not a device marker.
+ * Measured compact markers sit in the low tens of segments; a grab of
+ * this many is sheet furniture / hatch field that "corroborates" only
+ * because its footprint radius swallows every leftover tag. Skip it
+ * during corroboration so a compact detector can run; last-resort
+ * uncorroborated acceptance (MCP `candFor(..., allowOversized)`) may
+ * still take it so a uniquely-drawn mark is not refused. */
+export const OVERSIZED_MARKER_SEGS = 80;
 /** Stated size ratios outside this band say the two sheets disagree by more
  * than any real drawing set does — 64× is already past a full-size detail
  * against a 1/16" plan — so the likelier reading is a wrong `set_scale` on one
@@ -1402,6 +1410,65 @@ export function compoundTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
   return out;
 }
 
+/** A parenthetical quantity prefix then the mark — "(6) LD-1" in one run,
+ * or the same callout split across same-row runs ("(6) LD","-","1").
+ * Real HVAC plans gang several of one type-mark under one leader; the
+ * prefix is drafting, not a second vocabulary. The N is NOT a quantity
+ * multiplier here (a leftover label is one drawn tag; TYP N is the
+ * multiplier, elsewhere). This recovers the occurrence so geometry and
+ * leftover-label promotion can see it.
+ *
+ * Merged ALONGSIDE exact/compound, never gated the way fragmentedTagOcc
+ * is: a sheet routinely carries both a bare mark and a ganged callout of
+ * the same key, and gating on "exact already found something" would hide
+ * the ganged placements. The start token is the parenthetical itself
+ * (`(N)` plus optional remainder) so this cannot stitch arbitrary short
+ * spans the way an un-gated fragment join would.
+ *
+ * Same-row only (the stacked-bubble shape is fragmentedTagOcc's). Hop
+ * budget 4. Completion is hyphen-insensitive exact reconstruct — "LD-10"
+ * never satisfies "LD-1"; a work-note sentence that merely mentions the
+ * key never completes (extra words keep stripHy from equaling the key);
+ * a bare `(6)` that never reaches the key is dropped. */
+export function gangedTagOcc(spans: FlatSpan[], key: string): TagOcc[] {
+  const stripHy = (s: string) => s.replace(/-/g, "");
+  const targetStripped = stripHy(key.trim().toUpperCase());
+  if (!targetStripped) return [];
+  const upper = (s: string) => s.trim().toUpperCase();
+  const GANG = /^\((\d{1,2})\)\s*(.*)$/;
+  const out: TagOcc[] = [];
+  for (const start of spans) {
+    const m = GANG.exec(upper(start.str));
+    if (!m) continue;
+    const qty = Number(m[1]);
+    if (!Number.isInteger(qty) || qty < 1) continue;
+    let text = m[2];
+    let x0 = start.x0, y0 = start.y0, x1 = start.x1, y1 = start.y1;
+    let cur = start;
+    let ok = stripHy(text) === targetStripped;
+    for (let guard = 0; !ok && stripHy(text).length < targetStripped.length && guard < 4; guard++) {
+      const h = Math.max(cur.y1 - cur.y0, 6);
+      let next: FlatSpan | null = null, bestD = Infinity;
+      for (const sp of spans) {
+        if (sp === cur) continue;
+        const sameRow = Math.abs(sp.y0 - cur.y0) < h * 0.4 && sp.x0 >= cur.x0 - 1 && sp.x0 - cur.x1 < h * 1.5;
+        if (!sameRow) continue;
+        const d = (sp.x0 + sp.x1) / 2 - (cur.x0 + cur.x1) / 2;
+        if (d >= 0 && d < bestD) { bestD = d; next = sp; }
+      }
+      if (!next) break;
+      const candidate = text + upper(next.str);
+      if (!targetStripped.startsWith(stripHy(candidate))) break;
+      text = candidate;
+      x0 = Math.min(x0, next.x0); y0 = Math.min(y0, next.y0); x1 = Math.max(x1, next.x1); y1 = Math.max(y1, next.y1);
+      cur = next;
+      ok = stripHy(text) === targetStripped;
+    }
+    if (ok) out.push({ cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, h: Math.max(y1 - y0, 6), bbox: [x0, y0, x1, y1] });
+  }
+  return out;
+}
+
 /** sweep_schedule_row's own tag-occurrence match (`occOf` in both
  * session.ts and TakeoffCanvas.jsx) requires the FULL tag text to appear as
  * ONE literal span — but a real drawn tag is routinely split across
@@ -1627,6 +1694,9 @@ export function corroborateFingerprint(
       continue;
     }
     if (cand.segments < MIN_MARKER_SEGMENTS) continue;
+    // Bigger pads only get worse — stop the ladder rather than
+    // "corroborating" a region-sized grab via an inflated footprint.
+    if (cand.segments >= OVERSIZED_MARKER_SEGS) break;
     if (!corro) return { fp: cand, anchorRect: rect, corroborated: false };
     let probe: SymbolMatchResult;
     try {

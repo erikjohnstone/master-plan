@@ -62,6 +62,30 @@ test("fingerprintInlineMotif: null when the seed rect has no hatch fill inside i
   assert.equal(fp, null);
 });
 
+test("fingerprintInlineMotif: a compact fill wins over a same-pitch field whose bbox contains the seed", () => {
+  // Same pitch, same phase as SEED so they share one hatch family. Tiles
+  // merge (1px gap < 1.5×pitch) except a hole around the compact box, so
+  // the field is one cluster whose bbox contains the seed center. The old
+  // "nearest (d=0) then reject" path returned null; filtering invalid
+  // clusters first must pick the compact box.
+  const pitch = 80 / 44;
+  const field: number[] = [];
+  for (let i = -40; i < 120; i++) {
+    const y = 100 + i * pitch + pitch / 2;
+    if (y < 10 || y > 500) continue;
+    for (let x = 20; x + 60 <= 480; x += 61) {
+      const inHole = y >= 80 && y <= 220 && x < 200 && x + 60 > 80;
+      if (inHole) continue;
+      field.push(...seg(x, y, x + 60, y));
+    }
+  }
+  const segs = [...SEED, ...field];
+  const fp = fingerprintInlineMotif(segs, metaFor(segs), [[95, 95], [165, 185]], null);
+  assert.ok(fp, "compact fill must be chosen, not rejected because the field contains the center");
+  assert.equal(fp!.members, 44);
+  assert.ok(fp!.widthPx < 65 && fp!.heightPx < 85, `seed bbox: ${fp!.widthPx}x${fp!.heightPx}`);
+});
+
 test("fingerprintInlineMotif: a sparse dash cluster is not a register fill — same floor as sweep", () => {
   // NOISE is 8 dashes: above the old 4-stroke "any ink" floor, below
   // MIN_FILL_MEMBERS (40). Fingerprinting it used to return a seed that

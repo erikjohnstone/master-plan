@@ -119,7 +119,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, detectSheetViewports, matchQuantity, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type SheetViewport } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, gangedTagOcc, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, detectSheetViewports, matchQuantity, OVERSIZED_MARKER_SEGS, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type SheetViewport } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -3133,7 +3133,15 @@ export class Session {
       // labeled instances (baker-county-eoc-bidset.pdf#54's own "P1": one
       // bare span plus three real "P1 /C-11"-style compound spans — see
       // compoundTagOcc's own header comment).
-      const merged = [...exact, ...compoundTagOcc(sh.spans, key).map((o) => ({ ...o, kind: "compound" as const }))];
+      const merged = [
+        ...exact,
+        ...compoundTagOcc(sh.spans, key).map((o) => ({ ...o, kind: "compound" as const })),
+        // Ganged "(N) MARK" callouts (gangedTagOcc's own header) never
+        // coincide with an exact span and are merged alongside, same
+        // doctrine as compound — a sheet can carry both a bare mark and
+        // a quantity-prefixed placement of the same key.
+        ...gangedTagOcc(sh.spans, key).map((o) => ({ ...o, kind: "compound" as const })),
+      ];
       // Fallback only — a real drawn tag ALSO, separately, routinely splits
       // across multiple SHORTER text runs (see fragmentedTagOcc's own header
       // comment for the two real, different-shaped cases this was found
@@ -3318,7 +3326,7 @@ export class Session {
     // One pad-ladder step: the candidate fingerprint at padK, or null to try
     // the next pad, or "region" to stop widening altogether (a region-sized
     // grab only gets worse with a bigger pad).
-    const candFor = (padK: number): { cand: SymbolFingerprint; rect: [Point, Point] } | "region" | null => {
+    const candFor = (padK: number, allowOversized = false): { cand: SymbolFingerprint; rect: [Point, Point] } | "region" | null => {
       const pad = padK * anchor.h;
       const rect: [Point, Point] = [
         [cX(anchor.bbox[0] - pad), cY(anchor.bbox[1] - pad)],
@@ -3337,6 +3345,12 @@ export class Session {
       // devices. Widen instead; if no pad ever captures real marker geometry,
       // the refusal below states it.
       if (cand.segments < 3) return null;
+      // An oversized grab "corroborates" only by swallowing leftover tags
+      // inside an inflated footprint, and it blocks the hatch-fill fallback.
+      // Stop widening (bigger pads are worse). Last-resort uncorroborated
+      // acceptance passes allowOversized so a uniquely-drawn mark is not
+      // refused when no compact detector could seed it.
+      if (!allowOversized && cand.segments >= OVERSIZED_MARKER_SEGS) return "region";
       return { cand, rect };
     };
     // Does `cand` reproduce near one of `against`'s occurrences? Identical
@@ -3519,7 +3533,7 @@ export class Session {
           for (const altAnchor of withOcc[0].occ) {
             anchor = altAnchor;
             for (const padK of [1, 2, 3]) {
-              const got = candFor(padK);
+              const got = candFor(padK, true);
               if (got === "region") break;
               if (!got) continue;
               fp = got.cand; anchorRect = got.rect; corroborated = false;
@@ -3565,7 +3579,7 @@ export class Session {
       }
       if (!fp) {
         for (const padK of [1, 2, 3]) {
-          const got = candFor(padK);
+          const got = candFor(padK, true);
           if (got === "region") break;
           if (!got) continue;
           fp = got.cand; anchorRect = got.rect; break;
