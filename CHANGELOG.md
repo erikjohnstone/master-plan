@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — smashed MEP titles still name an equipment family
+
+### Fixed
+- **A hydronic vessel schedule is equipment, even when CAD concatenates the title.** Expansion/compression tank and air-separator catalogs carry MARK + MODEL/MANUFACTURER + gallons/acceptance and no VOLTAGE/GPM/HP column, so they used to extract as finish-kind and never enter `buildPlanSetTakeoff`. The MEP family list now includes TANK/SEPARATOR. A title smashed into one ALL-CAPS token (`…TANKSCHEDULE`) still matches — the family word glued to SCHEDULE is the same signal as a spaced title. Finish→equipment reclassification keys off that family test first, not only `isNonFinishSchedule`'s word-boundary list. FAN is still excluded.
+
 ## 2026-08-30 — leftover complementary +1s: whole-sheet space keys, column-major grids, unique match-line tiles
 
 ### Fixed

@@ -1072,7 +1072,7 @@ test("a lone unexplained token never mints a column — the sub-tier needs a par
 // MATERIAL | COMMENTS) extracted as 54 "finish" rows, so a finish code
 // colliding with a door mark would chain to a DOOR — a confidently wrong
 // product in the bid. Refused by title, and the drop is named.
-import { isNonFinishSchedule, isReferenceOrSpecTable } from "../src/lib/sheetgraph.ts";
+import { isMepEquipmentSchedule, isNonFinishSchedule, isReferenceOrSpecTable } from "../src/lib/sheetgraph.ts";
 
 test("isNonFinishSchedule: other families refuse, anything naming FINISH or MATERIAL is kept", () => {
   for (const t of ["DOOR SCHEDULE", "DOOR AND WINDOW SCHEDULE", "PARTITION SCHEDULE", "EQUIPMENT SCHEDULE", "LIGHTING SCHEDULE"]) {
@@ -1092,10 +1092,46 @@ test("isNonFinishSchedule: real MEP-equipment families refuse too (ledger item 2
   // the moment it was tried — the real Bessemer sample's own "FAN SCHEDULE"
   // is a legitimate finish-kind table (diffuser/grille/register), not an
   // HVAC fan-equipment one, and the word alone can't tell the two apart.
-  for (const t of ["CONDENSING HOT WATER BOILER SCHEDULE", "HUMIDIFIER SCHEDULE", "HOT WATER REHEAT COIL SCHEDULE", "CHILLER SCHEDULE", "CONDENSATE PUMP SCHEDULE", "AHU SCHEDULE", "VAV SCHEDULE"]) {
+  for (const t of ["CONDENSING HOT WATER BOILER SCHEDULE", "HUMIDIFIER SCHEDULE", "HOT WATER REHEAT COIL SCHEDULE", "CHILLER SCHEDULE", "CONDENSATE PUMP SCHEDULE", "AHU SCHEDULE", "VAV SCHEDULE", "EXPANSION TANK SCHEDULE", "AIR SEPARATOR SCHEDULE"]) {
     assert.equal(isNonFinishSchedule(t), true, t);
   }
   assert.equal(isNonFinishSchedule("FAN SCHEDULE"), false, "FAN stays out of the guard on purpose — see this test's own comment");
+});
+
+test("isMepEquipmentSchedule: hydronic vessel titles, including smashed ALL-CAPS tokens", () => {
+  for (const t of ["EXPANSION AND COMPRESSION TANK SCHEDULE", "AIR SEPARATOR SCHEDULE", "PUMP SCHEDULE", "AHU SCHEDULE"]) {
+    assert.equal(isMepEquipmentSchedule(t), true, t);
+  }
+  // CAD/ODL concatenation: family word glued to SCHEDULE, no spaces.
+  assert.equal(isMepEquipmentSchedule("EPANSIONANDCOPRESSIONTANKSCHEDULE"), true);
+  assert.equal(isMepEquipmentSchedule("AIRSEPARATORSCHEDULE"), true);
+  assert.equal(isMepEquipmentSchedule("FAN SCHEDULE"), false, "FAN is still not an MEP family word");
+  assert.equal(isMepEquipmentSchedule("SOUND ATTENUATOR SCHEDULE"), false);
+  assert.equal(isMepEquipmentSchedule("DOOR SCHEDULE"), false);
+});
+
+test("a smashed EXPANSION TANK title reclassifies finish→equipment so ET-1 is a takeoff row", () => {
+  // Real shape: MARK + MANUFACTURER/MODEL + SIZE(GALLONS)/ACCEPTANCE, no
+  // VOLTAGE/GPM/HP, so extractTable("equipment") never qualifies and the
+  // finish pass owns the table. The title arrives as one ALL-CAPS token
+  // (letters dropped, spaces gone) — OTHER_FAMILY_RE cannot see TANK as a
+  // word, but isMepEquipmentSchedule's smashed FAMILYSCHEDULE test can.
+  const sched: SheetSpans = {
+    key: "tank.pdf#1", sheet_number: "M-602",
+    spans: [
+      sp("EPANSIONANDCOPRESSIONTANKSCHEDULE", 100, 20),
+      sp("MARK", 100, 50), sp("MANUFACTURER", 220, 50), sp("MODEL", 400, 50), sp("REMARKS", 560, 50),
+      sp("ET-1", 100, 80), sp("WESSELS", 220, 80), sp("NLA-35", 400, 80), sp("CHILLED WATER", 560, 80),
+    ],
+  };
+  assert.equal(extractAllTables(sched, "equipment").length, 0, "no EQUIPMENT_REQUIRED word — equipment pass must not invent the table");
+  const finish = extractAllTables(sched, "finish");
+  assert.equal(finish.length, 1);
+  assert.deepEqual(finish[0].rows.map((r) => r.key), ["ET-1"]);
+  const g = buildSheetGraph([sched]);
+  const hit = g.tables.find((t) => t.rows.some((r) => r.key === "ET-1"));
+  assert.ok(hit, "ET-1 survives as a graph table");
+  assert.equal(hit!.kind, "equipment");
 });
 
 test("a DOOR SCHEDULE never becomes a finish table — and the drop is NAMED", () => {

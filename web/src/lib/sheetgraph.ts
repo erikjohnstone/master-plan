@@ -3081,7 +3081,7 @@ export interface ExtractOpts { buildings?: Set<string>; deltas?: DeltaIndex; noF
 // SCHEDULE" is a legitimate finish-kind table (diffuser/grille/register),
 // not an HVAC fan-equipment one, and "FAN" alone is too generic a word to
 // tell the two apart by title text alone.
-const OTHER_FAMILY_RE = /\b(DOOR|WINDOW|PARTITION|EQUIPMENT|HARDWARE|LOUVER|SIGNAGE|LIGHTING|LUMINAIRE|PLUMBING|MECHANICAL|ELECTRICAL|STOREFRONT|GLAZING|CASEWORK|MILLWORK|APPLIANCE|BOILER|HUMIDIFIER|COIL|CHILLER|PUMP|AHU|VAV)S?\b/;
+const OTHER_FAMILY_RE = /\b(DOOR|WINDOW|PARTITION|EQUIPMENT|HARDWARE|LOUVER|SIGNAGE|LIGHTING|LUMINAIRE|PLUMBING|MECHANICAL|ELECTRICAL|STOREFRONT|GLAZING|CASEWORK|MILLWORK|APPLIANCE|BOILER|HUMIDIFIER|COIL|CHILLER|PUMP|AHU|VAV|TANK|SEPARATOR)S?\b/;
 export const isNonFinishSchedule = (title: string): boolean => {
   const u = norm(title);
   return OTHER_FAMILY_RE.test(u) && !/\b(FINISH|MATERIAL)S?\b/.test(u);
@@ -3112,26 +3112,41 @@ export const isReferenceOrSpecTable = (title: string): boolean => {
 // graph ENTIRELY — those are genuinely out of this pipeline's own MEP scope,
 // and isNonFinishSchedule's drop-and-note is exactly correct for them. But a
 // real mechanical/plumbing EQUIPMENT family (PUMP/BOILER/HUMIDIFIER/
-// DEHUMIDIFIER/COIL/CHILLER/AHU/VAV/APPLIANCE) is squarely IN scope —
-// dropping it outright loses real device data whenever its own header is too
-// fragmented to independently clear EQUIPMENT_HEADERS' own vocabulary bar
-// (see the PUMP SCHEDULE case: GPM/HP land bare, each alone on its own tier,
-// never co-occurring with SYMBOL the way CONTROL VALVE SCHEDULE's own bare
-// "(GPM)" unit fragment did). PLUMBING/MECHANICAL/ELECTRICAL/LIGHTING/
-// LUMINAIRE are deliberately left OUT of this narrower list — those words
-// are broad enough to title a real non-tag-schedule (a panel schedule, a
-// general note block) that isn't safe to blanket-reclassify as a device-tag
-// equipment table on title text alone; a genuine luminaire/lighting schedule
-// already qualifies as equipment-kind directly on its own real merits (see
-// the TYPE-keyed LUMINAIRE SCHEDULE test) without needing this fallback at
-// all. DEHUMIDIFIER is its own alternative, not covered by HUMIDIFIER's
-// \b...\b word-boundary match: "DEHUMIDIFIER" is one unbroken token, so
-// \bHUMIDIFIER\b never matches inside it (real, found live — see
-// scheduleTableFromODL's own DEHUMIDIFIER SCHEDULE comment below, where this
-// exact gap left navfac-cherry-point-atc-mechanical.pdf#44's own real
-// DH-A1..DH-A6 dehumidifiers undiscovered by the whole pipeline).
-const MEP_EQUIPMENT_FAMILY_RE = /\b(PUMP|BOILER|HUMIDIFIER|DEHUMIDIFIER|COIL|CHILLER|AHU|VAV|EQUIPMENT|APPLIANCE)S?\b/;
-export const isMepEquipmentSchedule = (title: string): boolean => MEP_EQUIPMENT_FAMILY_RE.test(norm(title));
+// DEHUMIDIFIER/COIL/CHILLER/AHU/VAV/APPLIANCE/TANK/SEPARATOR) is squarely
+// IN scope — dropping it outright loses real device data whenever its own
+// header is too fragmented to independently clear EQUIPMENT_HEADERS' own
+// vocabulary bar (see the PUMP SCHEDULE case: GPM/HP land bare, each alone
+// on its own tier, never co-occurring with SYMBOL the way CONTROL VALVE
+// SCHEDULE's own bare "(GPM)" unit fragment did). TANK/SEPARATOR are the
+// hydronic-vessel half of the same family (an EXPANSION / COMPRESSION TANK
+// SCHEDULE, an AIR SEPARATOR SCHEDULE): MARK + MODEL/MANUFACTURER +
+// GALLONS/ACCEPTANCE, no VOLTAGE/GPM/HP column, so EQUIPMENT_REQUIRED
+// never fires and the table lands finish-kind. PLUMBING/MECHANICAL/
+// ELECTRICAL/LIGHTING/LUMINAIRE are deliberately left OUT of this narrower
+// list — those words are broad enough to title a real non-tag-schedule (a
+// panel schedule, a general note block) that isn't safe to blanket-
+// reclassify as a device-tag equipment table on title text alone; a
+// genuine luminaire/lighting schedule already qualifies as equipment-kind
+// directly on its own real merits (see the TYPE-keyed LUMINAIRE SCHEDULE
+// test) without needing this fallback at all. DEHUMIDIFIER is its own
+// alternative, not covered by HUMIDIFIER's \b...\b word-boundary match:
+// "DEHUMIDIFIER" is one unbroken token, so \bHUMIDIFIER\b never matches
+// inside it (real, found live — see scheduleTableFromODL's own
+// DEHUMIDIFIER SCHEDULE comment below, where this exact gap left
+// navfac-cherry-point-atc-mechanical.pdf#44's own real DH-A1..DH-A6
+// dehumidifiers undiscovered by the whole pipeline).
+const MEP_EQUIPMENT_FAMILIES = "PUMP|BOILER|HUMIDIFIER|DEHUMIDIFIER|COIL|CHILLER|AHU|VAV|EQUIPMENT|APPLIANCE|TANK|SEPARATOR";
+const MEP_EQUIPMENT_FAMILY_RE = new RegExp(`\\b(?:${MEP_EQUIPMENT_FAMILIES})S?\\b`);
+// CAD/ODL often concatenates a schedule title into one ALL-CAPS token
+// ("EPANSIONANDCOPRESSIONTANKSCHEDULE", "AIRSEPARATORSCHEDULE"). A
+// word-boundary family test misses that; the family word glued to
+// SCHEDULE is the same signal, not a second vocabulary.
+const MEP_EQUIPMENT_SMASHED_RE = new RegExp(`(?:${MEP_EQUIPMENT_FAMILIES})S?SCHEDULE`);
+export const isMepEquipmentSchedule = (title: string): boolean => {
+  const u = norm(title);
+  if (MEP_EQUIPMENT_FAMILY_RE.test(u)) return true;
+  return MEP_EQUIPMENT_SMASHED_RE.test(u.replace(/\s+/g, ""));
+};
 
 // A real, standard cross-firm MEP title — "…CONNECTION SCHEDULE", "…
 // CALCULATION…", or "…ISOLATION SCHEDULE" — names a table that cross-
@@ -6425,20 +6440,21 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
         // a real grocery set whose DOOR SCHEDULE extracted as 54 "finish" rows.
         // Refuse by TITLE, and only when the title does not also say finish or
         // material: when in doubt the table is kept, and the drop is NAMED.
-        if (kind === "finish" && t.title && isNonFinishSchedule(t.title.text)) {
-          // A real MEP-equipment family (PUMP/BOILER/HUMIDIFIER/COIL/
-          // CHILLER/AHU/VAV/APPLIANCE) is reclassified, not dropped — see
-          // isMepEquipmentSchedule's own comment. An architectural family
-          // (DOOR/WINDOW/…) still vanishes entirely, exactly as before.
-          if (isMepEquipmentSchedule(t.title.text)) {
-            notes.push(`${s.key}: "${t.title.text}" names a real MEP-equipment family, not a finish/material schedule — reclassified as equipment-kind rather than dropped (its own header never independently cleared EQUIPMENT_HEADERS' vocabulary bar).`);
-            t.kind = "equipment";
-            reclassified.add(t);
-          } else {
-            notes.push(`${s.key}: "${t.title.text}" names another schedule family, not a finish/material schedule — its ${t.rows.length} rows are NOT indexed as finish definitions`);
-            droppedNamedTables.push(t);
-            continue;
-          }
+        if (kind === "finish" && t.title && isMepEquipmentSchedule(t.title.text)) {
+          // Checked BEFORE isNonFinishSchedule: a smashed ALL-CAPS title
+          // ("EPANSIONANDCOPRESSIONTANKSCHEDULE") has no word boundary for
+          // OTHER_FAMILY_RE, so the old nested "non-finish AND mep-family"
+          // gate never fired and a real hydronic-vessel catalog stayed
+          // finish-kind (invisible to buildPlanSetTakeoff). The family
+          // test itself is the signal — word-boundary or glued-to-SCHEDULE.
+          notes.push(`${s.key}: "${t.title.text}" names a real MEP-equipment family, not a finish/material schedule — reclassified as equipment-kind rather than dropped (its own header never independently cleared EQUIPMENT_HEADERS' vocabulary bar).`);
+          t.kind = "equipment";
+          reclassified.add(t);
+        } else if (kind === "finish" && t.title && isNonFinishSchedule(t.title.text)) {
+          // Architectural family (DOOR/WINDOW/…) still vanishes entirely.
+          notes.push(`${s.key}: "${t.title.text}" names another schedule family, not a finish/material schedule — its ${t.rows.length} rows are NOT indexed as finish definitions`);
+          droppedNamedTables.push(t);
+          continue;
         } else if (kind === "finish" && t.title && hasPoweredEquipmentColumns(bs.spans, t)) {
           // isNonFinishSchedule's own title check never triggered above (this
           // table's title names no recognizable OTHER_FAMILY_RE family at
