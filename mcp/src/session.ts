@@ -119,7 +119,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, promoteSetWideLabeledNearMisses, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, detectSheetViewports, matchQuantity, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type SheetViewport } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, promoteSetWideLabeledNearMisses, promoteSetWideLeftoverExactOccs, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, detectSheetViewports, matchQuantity, MARK_CLUSTER_K, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type SheetViewport } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -3634,6 +3634,7 @@ export class Session {
       redundant_view: (CountedMatch & { room: string; kept_sheet: string })[];
     }[] = [];
     const familyBags: { matches: CountedMatch[]; withheld: SweepWithheld[]; occ: TagOcc[]; R: number }[] = [];
+    const exactBags: { matches: CountedMatch[]; withheld: SweepWithheld[]; occ: TagOcc[]; text_only: { at: Point }[]; clusterR: number }[] = [];
     // per-sheet classification — the shared symbolsweep.ts function, so this
     // server and the browser's own port can never silently disagree.
     for (const { sh, occ, routing } of occBySheet) {
@@ -3686,9 +3687,14 @@ export class Session {
       if (fp) {
         const claimR = (scaled ? scaled.footprint_px : fp.footprint) / 2 + anchorHForSweep;
         familyBags.push({ matches, withheld, occ, R: claimR });
+        exactBags.push({
+          matches, withheld, occ, text_only,
+          clusterR: MARK_CLUSTER_K * Math.max(anchorHForSweep, 6),
+        });
       }
     }
     const familyLeftoverN = fp ? promoteSetWideLabeledNearMisses(familyBags) : 0;
+    const exactLeftoverN = fp ? promoteSetWideLeftoverExactOccs(exactBags) : 0;
 
     // 4b. redundant-view collapse — a real, generic drafting convention
     // (see symbolsweep.ts's dedupeCrossDisciplineRoomViews for the full
@@ -3817,12 +3823,15 @@ export class Session {
     if (rowRedundant.length) {
       notes.push(`${rowRedundant.map((p) => `${p.redundant_view.length} on ${p.state.key}`).join(", ")} withheld from the count as a REDUNDANT VIEW — the same "${t}" mark redrawn for another view of the same physical device (another sheet's enlarged plan of the same room, or another titled viewport on this sheet — a duct plan beside a piping plan, a second section cut), not a second install; audit with view_sheet before trusting this.`);
     }
-    const leftoverN = perSheet.reduce((n, p) => n + p.matches.filter((m) => m.labeled_leftover).length, 0);
+    const leftoverN = Math.max(0, perSheet.reduce((n, p) => n + p.matches.filter((m) => m.labeled_leftover).length, 0) - exactLeftoverN);
     if (leftoverN) {
       notes.push(`${leftoverN} counted from a leftover labeled tag on a sheet that already has a geometrically-confirmed "${t}" — the tag is drawn, the sibling marker did not clear the bar; audit with view_sheet before trusting the count.`);
     }
     if (familyLeftoverN) {
       notes.push(`${familyLeftoverN} leftover labeled near-miss(es) counted as a same-convention family split across sheets — each leftover sits next to this row's own tag and a near-bar withheld, and the set already has a geometrically-confirmed instance; audit with view_sheet before trusting the count.`);
+    }
+    if (exactLeftoverN) {
+      notes.push(`${exactLeftoverN} leftover exact tag(s) counted on a sheet that had no geometrically-confirmed instance — the set already has a confirmed "${t}", and this leftover is not a same-coordinate complementary-view redraw; audit with view_sheet before trusting the count.`);
     }
     if (routingN) {
       notes.push(`${routingN} drawn occurrence(s) of "${t}" sit next to a duct/pipe destination or source callout and were withheld as routing labels, not installs; audit with view_sheet before treating one as a second unit.`);

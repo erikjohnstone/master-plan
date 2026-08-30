@@ -68,6 +68,7 @@
 // sweepSymbols composes the two on one sheet, unchanged.
 
 import { compoundRemainderIsLabel, isRoutingLabelOcc, MARK_CLUSTER_K } from "./markid.ts";
+export { MARK_CLUSTER_K };
 
 export type Point = [number, number];
 
@@ -1802,6 +1803,97 @@ export function promoteSetWideLabeledNearMisses(sheets: LabeledNearMissSheet[]):
   return n;
 }
 
+/** One sheet's classifySweepMatches bags, for a set-wide leftover
+ * exact-tag on a sheet that has no counted match. `clusterR` is the
+ * same mark-cluster radius leftoverLabeledOccs uses on counted sheets.
+ * `text_only` is mutated when a leftover is promoted so disclosure
+ * does not keep a counted tag as a note. */
+export interface LeftoverExactSheet {
+  matches: SweepSheetMatch[];
+  withheld: Array<{ at: Point }>;
+  occ: TagOcc[];
+  text_only: Array<{ at: Point }>;
+  clusterR: number;
+}
+
+/** Leftover exact/fragmented tags on a sheet with zero counted matches.
+ * Compounds stay out — leftoverLabeledOccs already promotes those on a
+ * counted sheet, and a lone compound on an empty sheet is not this pass.
+ * Routing mentions stay out. Twins inside one cluster are one site. */
+function leftoverExactSitesOnEmptySheet(
+  occ: TagOcc[],
+  clusterR: number,
+  withheld: Array<{ at: Point }>,
+): TagOcc[] {
+  const nearWithheld = (o: TagOcc) =>
+    withheld.some((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= clusterR);
+  const bare: TagOcc[] = [];
+  for (const o of occ) {
+    if (o.kind === "routing" || o.kind === "compound") continue;
+    if (nearWithheld(o)) continue;
+    bare.push(o);
+  }
+  const sites: TagOcc[] = [];
+  for (const o of bare) {
+    if (sites.some((s) => Math.hypot(s.cx - o.cx, s.cy - o.cy) <= clusterR)) continue;
+    sites.push(o);
+  }
+  return sites;
+}
+
+function nearCountedMatch(o: TagOcc, matches: SweepSheetMatch[]): boolean {
+  for (const m of matches) {
+    const tx = (m.tag_at[0] + m.tag_at[2]) / 2, ty = (m.tag_at[1] + m.tag_at[3]) / 2;
+    if (Math.hypot(m.at[0] - o.cx, m.at[1] - o.cy) <= COORD_ATTRIBUTION_MAX_PX) return true;
+    if (Math.hypot(tx - o.cx, ty - o.cy) <= COORD_ATTRIBUTION_MAX_PX) return true;
+  }
+  return false;
+}
+
+/**
+ * A leftover exact tag on a sheet with no counted match is a note —
+ * leftoverLabeledOccs requires a same-sheet confirmed instance. Across
+ * the set that leftover can be a real sibling the fingerprint missed
+ * (a different area of the same floor) or a complementary-view redraw
+ * whose geometry never cleared the bar (duct plan vs piping plan of
+ * the same device, near-pixel-identical page coordinates).
+ *
+ * The set-wide pass is narrower than the per-sheet exact-tag family:
+ * at least one geometrically-confirmed instance (not a leftover label),
+ * exactly one leftover exact/fragmented site on empty sheets, and that
+ * site farther than COORD_ATTRIBUTION_MAX_PX from every counted match
+ * (the same redraw radius the redundant-view collapse already trusts).
+ * A leftover sitting on a withheld stays with the labeled near-miss
+ * family. Two empty-sheet leftovers stay notes (a pile of extras, not
+ * this one missed sibling). A single leftover on a counted sheet is
+ * still leftoverLabeledOccs's note. Mutates matches/text_only in place.
+ * Returns how many leftovers were promoted.
+ */
+export function promoteSetWideLeftoverExactOccs(sheets: LeftoverExactSheet[]): number {
+  const geoN = sheets.reduce((n, s) => n + s.matches.filter((m) => !m.labeled_leftover).length, 0);
+  if (geoN < 1) return 0;
+  const counted = sheets.flatMap((s) => s.matches);
+  const candidates: Array<{ s: LeftoverExactSheet; o: TagOcc }> = [];
+  for (const s of sheets) {
+    if (s.matches.length) continue;
+    for (const o of leftoverExactSitesOnEmptySheet(s.occ, s.clusterR, s.withheld)) {
+      if (nearCountedMatch(o, counted)) continue;
+      candidates.push({ s, o });
+    }
+  }
+  if (candidates.length !== 1) return 0;
+  const { s, o } = candidates[0];
+  s.matches.push({
+    at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10],
+    score: 0, rotation: 0, mirrored: false,
+    tag_at: o.bbox, labeled_leftover: true, count: 1,
+  });
+  const keep = s.text_only.filter((t) => Math.hypot(o.cx - t.at[0], o.cy - t.at[1]) >= 0.6);
+  s.text_only.length = 0;
+  for (const t of keep) s.text_only.push(t);
+  return 1;
+}
+
 export interface SweepSheetMatch extends SweepMatch {
   /** The tag-text evidence bbox that put this match IN the count — a match
    * counts only when the row's own tag sits inside its footprint. */
@@ -1848,11 +1940,14 @@ export function typicalMultiplierNear(spans: FlatSpan[], at: Point, radiusPx: nu
  * A compound circuit/panel label promotes on its own. Leftover exact
  * (or fragmented) tags promote only as a family: two or more leftovers
  * at distinct mark-clusters, none sitting on a withheld near-miss.
- * A single leftover exact tag stays a note. Leftovers next to a
- * withheld stay with promoteLabeledNearMisses — that is the labeled
- * near-bar family, not this text-only family. Two leftovers inside
- * one cluster are one site (legend stack / twin spelling), not two
- * installs. Pure — both classifySweepMatches and
+ * A single leftover exact tag stays a note on that sheet. A leftover
+ * on a sheet with zero matches is also a note here — the set-wide
+ * pass (`promoteSetWideLeftoverExactOccs`) may promote exactly one
+ * such leftover after dropping same-coordinate redraws. Leftovers
+ * next to a withheld stay with promoteLabeledNearMisses — that is
+ * the labeled near-bar family, not this text-only family. Two
+ * leftovers inside one cluster are one site (legend stack / twin
+ * spelling), not two installs. Pure — both classifySweepMatches and
  * classifyInlineMotifMatches call this so canvas and MCP cannot disagree. */
 export function leftoverLabeledOccs(
   matches: Array<{ at: Point; tag_at: [number, number, number, number] }>,
@@ -1940,7 +2035,11 @@ export interface SweepSheetResult {
  * leftover labeled near-miss on one sheet is left withheld (the
  * schematic-vs-plan extra). The same family counted across sheets —
  * `promoteSetWideLabeledNearMisses` — promotes a high-score pair split
- * one-per-sheet next to a set-wide counted instance. Matches closer than half a symbol diagonal,
+ * one-per-sheet next to a set-wide counted instance. A leftover exact
+ * tag on a sheet with no counted match is still a note here; the
+ * set-wide pass `promoteSetWideLeftoverExactOccs` may promote exactly
+ * one such leftover after dropping same-coordinate complementary-view
+ * redraws. Matches closer than half a symbol diagonal,
  * or a different square-symmetry transform inside one footprint,
  * collapse to the better score before any tag is claimed. A match is
  * claimed against the NEAREST occurrence within R, never the first-in-
@@ -2678,7 +2777,7 @@ function collapseGroup<Id, A extends { discipline: string | null; sheet: string;
  * measured case (itd-d1-lab-mechanical.pdf's LEF-1, an exhaust fan serving a
  * building-wide riser with no room number drawn anywhere near it on EITHER
  * its M2.0 or P3.0 "enlarged" view) sits 9.2px apart. */
-const COORD_ATTRIBUTION_MAX_PX = 40;
+export const COORD_ATTRIBUTION_MAX_PX = 40;
 
 export function dedupeCrossDisciplineRoomViews<Id>(instances: RoomSweepInstance<Id>[]): RedundantRoomView<Id>[] {
   type Eligible = RoomSweepInstance<Id> & { room: RoomCandidate | null };

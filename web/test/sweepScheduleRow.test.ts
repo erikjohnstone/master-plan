@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, promoteSetWideLabeledNearMisses, leftoverLabeledOccs, typicalMultiplierNear, matchQuantity, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, isSheetCategoryTitle, spaceKeyIsLocated, assignMarkToViewport, buildingKeyFromTitle, tileSpaceKey, collapseSpaceKey, type Point, type RoomSweepInstance, type SheetViewport, type TagOcc, type SweepSheetMatch, type SweepWithheld } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, promoteSetWideLabeledNearMisses, promoteSetWideLeftoverExactOccs, leftoverLabeledOccs, typicalMultiplierNear, matchQuantity, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, isSheetCategoryTitle, spaceKeyIsLocated, assignMarkToViewport, buildingKeyFromTitle, tileSpaceKey, collapseSpaceKey, COORD_ATTRIBUTION_MAX_PX, type Point, type RoomSweepInstance, type SheetViewport, type TagOcc, type SweepSheetMatch, type SweepWithheld } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -607,6 +607,90 @@ test("promoteSetWideLabeledNearMisses: leftovers that outnumber commits on one s
   const n = promoteSetWideLabeledNearMisses([{ matches, withheld, occ: o, R: 50 }]);
   assert.equal(n, 0, "a same-sheet pile is the per-sheet rule, not the split-family pass");
   assert.equal(matches.length, 3);
+});
+
+test("promoteSetWideLeftoverExactOccs: one leftover on an empty sheet COUNTS", () => {
+  // Per-sheet leftoverLabeledOccs requires a counted match on THAT sheet,
+  // so a lone exact tag on sheet B stays text_only. Across the set it is
+  // the missed sibling of sheet A's geometrically-confirmed instance,
+  // far from every counted match (not a complementary-view redraw).
+  const oA = tagNear([100, 100], 40, "exact");
+  const oB = tagNear([800, 800], 40, "exact");
+  const matchesA = [bagMatch([100, 100], oA)];
+  const matchesB: SweepSheetMatch[] = [];
+  const textB: Array<{ at: Point }> = [{ at: [795, 820] }];
+  const n = promoteSetWideLeftoverExactOccs([
+    { matches: matchesA, withheld: [], occ: [oA], text_only: [], clusterR: 20 },
+    { matches: matchesB, withheld: [], occ: [oB], text_only: textB, clusterR: 20 },
+  ]);
+  assert.equal(n, 1, "the empty-sheet leftover is the missed sibling");
+  assert.equal(matchesA.length, 1, "sheet A is unchanged");
+  assert.equal(matchesB.length, 1);
+  assert.equal(matchesB[0].labeled_leftover, true);
+  assert.equal(textB.length, 0, "the leftover left text_only once it was counted");
+});
+
+test("promoteSetWideLeftoverExactOccs: a leftover at the same page coordinate stays a note", () => {
+  // Complementary views redraw the same device at near-pixel-identical
+  // page coordinates. The leftover on the empty sheet is that redraw
+  // whose marker never cleared the bar — not a second install.
+  const oA = tagNear([100, 100], 40, "exact");
+  const oB = tagNear([100 + COORD_ATTRIBUTION_MAX_PX / 2, 100], 40, "exact");
+  const matches = [bagMatch([100, 100], oA)];
+  const textB: Array<{ at: Point }> = [{ at: [oB.cx, oB.cy] }];
+  const n = promoteSetWideLeftoverExactOccs([
+    { matches, withheld: [], occ: [oA], text_only: [], clusterR: 20 },
+    { matches: [], withheld: [], occ: [oB], text_only: textB, clusterR: 20 },
+  ]);
+  assert.equal(n, 0, "same-coordinate leftover is the complementary-view redraw");
+  assert.equal(textB.length, 1, "the leftover stays disclosed as text_only");
+});
+
+test("promoteSetWideLeftoverExactOccs: two empty-sheet leftovers stay notes", () => {
+  const oA = tagNear([100, 100], 40, "exact");
+  const oB = tagNear([800, 800], 40, "exact");
+  const oC = tagNear([200, 900], 40, "exact");
+  const matches = [bagMatch([100, 100], oA)];
+  const n = promoteSetWideLeftoverExactOccs([
+    { matches, withheld: [], occ: [oA], text_only: [], clusterR: 20 },
+    { matches: [], withheld: [], occ: [oB], text_only: [{ at: [oB.cx, oB.cy] }], clusterR: 20 },
+    { matches: [], withheld: [], occ: [oC], text_only: [{ at: [oC.cx, oC.cy] }], clusterR: 20 },
+  ]);
+  assert.equal(n, 0, "a pile of empty-sheet leftovers is not this one missed sibling");
+  assert.equal(matches.length, 1);
+});
+
+test("promoteSetWideLeftoverExactOccs: no geometrically-confirmed instance — leftover stays", () => {
+  const oB = tagNear([800, 800], 40, "exact");
+  const leftoverOnly = [{ ...bagMatch([100, 100], tagNear([100, 100], 40, "exact")), labeled_leftover: true }];
+  const n = promoteSetWideLeftoverExactOccs([
+    { matches: leftoverOnly, withheld: [], occ: [tagNear([100, 100], 40, "exact")], text_only: [], clusterR: 20 },
+    { matches: [], withheld: [], occ: [oB], text_only: [{ at: [oB.cx, oB.cy] }], clusterR: 20 },
+  ]);
+  assert.equal(n, 0, "a leftover label is not a geometric confirmation");
+});
+
+test("promoteSetWideLeftoverExactOccs: a single leftover on a counted sheet stays a note", () => {
+  const oA = tagNear([100, 100], 40, "exact");
+  const oFar = tagNear([800, 800], 40, "exact");
+  const matches = [bagMatch([100, 100], oA)];
+  const textA: Array<{ at: Point }> = [{ at: [oFar.cx, oFar.cy] }];
+  const n = promoteSetWideLeftoverExactOccs([
+    { matches, withheld: [], occ: [oA, oFar], text_only: textA, clusterR: 20 },
+  ]);
+  assert.equal(n, 0, "per-sheet leftoverLabeledOccs still owns a leftover on a counted sheet");
+  assert.equal(matches.length, 1);
+});
+
+test("promoteSetWideLeftoverExactOccs: a compound leftover on an empty sheet stays out", () => {
+  const oA = tagNear([100, 100], 40, "exact");
+  const oB = tagCompound([800, 800]);
+  const matches = [bagMatch([100, 100], oA)];
+  const n = promoteSetWideLeftoverExactOccs([
+    { matches, withheld: [], occ: [oA], text_only: [], clusterR: 20 },
+    { matches: [], withheld: [], occ: [oB], text_only: [{ at: [oB.cx, oB.cy] }], clusterR: 20 },
+  ]);
+  assert.equal(n, 0, "compounds are leftoverLabeledOccs's counted-sheet path, not this pass");
 });
 
 test("promoteSetWideLabeledNearMisses: a low-score leftover pair stays withheld", () => {

@@ -65,7 +65,7 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // The Symbol tool (#264) — the canvas face for the sweep engine. The engine,
 // counter-examples, the luminance channel, and label corroboration all live
 // as pure web libs already; this file adds only the gesture and the review.
-import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches, promoteSetWideLabeledNearMisses, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, matchQuantity } from "../lib/symbolsweep";
+import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches, promoteSetWideLabeledNearMisses, promoteSetWideLeftoverExactOccs, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, matchQuantity, MARK_CLUSTER_K } from "../lib/symbolsweep";
 import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib/mepconnectivity.ts";
 import { mepLayerSignal } from "../lib/mepsystems.ts";
 // Accuracy-hardening plan Phase 2 — on an unlayered/weakly-layered sheet, a
@@ -7260,6 +7260,13 @@ export default function TakeoffCanvas() {
     const familyLeftoverN = promoteSetWideLabeledNearMisses(
       rawSheets.map((r) => ({ matches: r.cls.matches, withheld: r.cls.withheld, occ: r.occ, R: r.claimR })),
     );
+    const exactLeftoverN = promoteSetWideLeftoverExactOccs(
+      rawSheets.map((r) => ({
+        matches: r.cls.matches, withheld: r.cls.withheld, occ: r.occ,
+        text_only: r.cls.text_only,
+        clusterR: MARK_CLUSTER_K * Math.max(anchor.h, 6),
+      })),
+    );
     let totalFound = 0;
     const perSheet = [];
     for (const { key, routing, dims, cls, ratio } of rawSheets) {
@@ -7289,6 +7296,7 @@ export default function TakeoffCanvas() {
     if (rowAssumed.length) notes.push(`${rowAssumed.map((p) => p.sheet).join(", ")} found nothing and were swept at 1:1 — no scale is set on ${anchorKey} or on them, so a different drawn scale there is a live explanation for the zero. Set scale on both ends to rule it out.`);
     if (routingN) notes.push(`${routingN} drawn occurrence(s) of "${t}" sit next to a duct/pipe destination or source callout and were withheld as routing labels, not installs; audit with view_region before treating one as a second unit.`);
     if (familyLeftoverN) notes.push(`${familyLeftoverN} leftover labeled near-miss(es) counted as a same-convention family split across sheets — each leftover sits next to this row's own tag and a near-bar withheld, and the set already has a geometrically-confirmed instance; audit with view_region before trusting the count.`);
+    if (exactLeftoverN) notes.push(`${exactLeftoverN} leftover exact tag(s) counted on a sheet that had no geometrically-confirmed instance — the set already has a confirmed "${t}", and this leftover is not a same-coordinate complementary-view redraw; audit with view_region before trusting the count.`);
 
     return {
       tag: t,
