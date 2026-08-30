@@ -856,30 +856,54 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     if (missingFamilies.length) {
       return `The goal asks for counts of ${missingFamilies.join(", ")}, but no title-scan query_table (no row_key) was run for those schedule families yet. Call query_table with each missing schedule title, copy count/building_tag_counts, then answer.`;
     }
-    const answerSpaced = finalText.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim();
+    // Normalize unicode dashes so "Air‑cooled" / "DOAH‑A1" match ASCII patterns.
+    const answerNorm = finalText.replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/g, "-");
+    const answerSpaced = answerNorm.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim();
     const missingCounts = [];
-    const countNearLabel = (label, count) => {
-      const labelRes = {
-        FCU: /FCU|FAN[\s\-]*COIL/gi,
-        "DOAH unit": /DOAH|DEDICATED OUTDOOR AIR UNIT/gi,
-        "DOAH handling": /DOAH|OUTDOOR AIR HANDLING/gi,
-        AHU: /AHU|AIR HANDLING UNIT/gi,
-        VAV: /VAV|VARIABLE AIR VOLUME/gi,
-        "heat-recovery chiller": /HEAT[\s\-]*RECOVERY|CH-MT/gi,
-        "air-cooled chiller": /AIR[\s\-]*COOLED CHILLER|\bCH-A/gi,
-        boiler: /BOILER|\bB-A|\bB-M|\bB-T/gi,
-        "points-list": /POINTS?\s*LIST|BAS\b|AHU-T1A/gi,
-      }[label] || new RegExp(label, "gi");
-      const n = String(count);
-      for (const m of finalText.matchAll(labelRes)) {
-        const start = Math.max(0, m.index - 30);
-        const window = finalText.slice(start, m.index + m[0].length + 100);
-        if (new RegExp(`(?:^|[^0-9])${n}(?:[^0-9]|$)`).test(window)) return true;
+    const conflictingCounts = [];
+    const labelPattern = (label) => ({
+      FCU: /FCU|FAN[\s\-]*COIL/gi,
+      "DOAH unit": /DOAH|DEDICATED OUTDOOR AIR UNIT/gi,
+      "DOAH handling": /DOAH|OUTDOOR AIR HANDLING/gi,
+      AHU: /\bAHUs?\b|AIR HANDLING UNIT/gi,
+      VAV: /\bVAVs?\b|VARIABLE AIR VOLUME/gi,
+      "heat-recovery chiller": /HEAT[\s\-]*RECOVERY[\s\-]*(?:CHILLERS?)?/gi,
+      "air-cooled chiller": /AIR[\s\-]*COOLED(?![\s\-]*HEAT)[\s\-]*CHILLERS?/gi,
+      boiler: /BOILERS?\b/gi,
+      "points-list": /POINTS?\s*LIST|BAS\b|AHU-T1A/gi,
+    }[label] || new RegExp(label, "gi"));
+    // Prefer specific multi-word spaced needles — never bare "AIR" (false-hits Air Ops).
+    const spacedNeedle = (label) => ({
+      FCU: "FCU",
+      "DOAH unit": "DOAH",
+      "DOAH handling": "DOAH",
+      AHU: "AHU",
+      VAV: "VAV",
+      "heat-recovery chiller": "HEAT RECOVERY",
+      "air-cooled chiller": "AIR COOLED",
+      boiler: "BOILER",
+      "points-list": "POINTS LIST",
+    }[label] || label.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim());
+    const nearCountsForLabel = (label) => {
+      const labelRes = labelPattern(label);
+      const found = [];
+      for (const m of answerNorm.matchAll(labelRes)) {
+        // Forward-only: "DOAH 2 … Boilers 3" must not satisfy DOAH=3.
+        const window = answerNorm.slice(m.index, Math.min(answerNorm.length, m.index + m[0].length + 48));
+        for (const num of window.matchAll(/(?:^|[^0-9])(\d{1,4})(?![0-9])/g)) {
+          const n = Number(num[1]);
+          if (Number.isFinite(n) && n >= 1) found.push(n);
+        }
       }
-      // Also accept "LABEL count=N" / "LABEL | **N** |" in spaced form near label tokens.
-      const spacedLabel = label.toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim().split(/\s+/)[0];
-      return new RegExp(`(?:^|\\s)${spacedLabel}\\b[^0-9]{0,40}${n}(?:\\s|$)`).test(answerSpaced);
+      const needle = spacedNeedle(label).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const spacedRe = new RegExp(`(?:^|\\s)${needle}\\b([^0-9]{0,28})(\\d{1,4})(?:\\s|$)`, "g");
+      for (const m of answerSpaced.matchAll(spacedRe)) {
+        const n = Number(m[2]);
+        if (Number.isFinite(n) && n >= 1) found.push(n);
+      }
+      return found;
     };
+    const countNearLabel = (label, count) => nearCountsForLabel(label).includes(Number(count));
     for (const { out } of titleScans) {
       const count = Number(out.count);
       if (!Number.isFinite(count) || count < 2) continue;
@@ -899,12 +923,22 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         missingCounts.push(`${label} count=${count}`);
       }
       if (out.building_tag_counts && typeof out.building_tag_counts === "object" && /\bsplit/i.test(goal)) {
-        for (const [letter, n] of Object.entries(out.building_tag_counts)) {
+        // Only enforce splits for families the goal actually asked to split —
+        // incidental building_tag_counts on other title-scans must not block.
+        // Family name must appear shortly BEFORE "splits" so "VAV splits … AHU-T1A"
+        // does not pull AHU into the split requirement.
+        const goalAsksThisSplit = (label === "FCU" && /fan[\s\-]*coil[^\n.]{0,48}\bsplits?\b/i.test(goal))
+          || (label === "VAV" && /\bVAVs?[^\n.]{0,48}\bsplits?\b/i.test(goal))
+          || (label === "AHU" && /\bAHUs?[^\n.]{0,48}\bsplits?\b/i.test(goal))
+          || (label === "DOAH unit" && /\bDOAHs?[^\n.]{0,48}\bsplits?\b/i.test(goal));
+        if (!goalAsksThisSplit) {
+          // skip split enforcement for this family
+        } else for (const [letter, n] of Object.entries(out.building_tag_counts)) {
           if (letter === "other") continue;
           if (!Number.isFinite(Number(n)) || Number(n) < 1) continue;
           // Building splits must appear near the family or the letter token.
           const splitWindowOk = countNearLabel(label, n)
-            || new RegExp(`(?:^|\\s)${letter}\\s*=\\s*${Number(n)}(?:\\s|$)`, "i").test(finalText)
+            || new RegExp(`(?:^|\\s)${letter}\\s*=\\s*${Number(n)}(?:\\s|$)`, "i").test(answerNorm)
             || new RegExp(`(?:^|\\s)${letter}\\s+${Number(n)}(?:\\s|$)`, "i").test(answerSpaced);
           if (!splitWindowOk) {
             missingCounts.push(`${label} building_tag_counts.${letter}=${n}`);
@@ -914,6 +948,49 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     }
     if (missingCounts.length) {
       return `The goal asks for schedule counts, and title-scan query_table results are available, but the answer omits these tool counts next to their equipment family: ${[...new Set(missingCounts)].slice(0, 8).join("; ")}. Copy count (and building_tag_counts when splits are asked) from those tool results into the family totals — do not replace them with the number of MARKs you painted for spot-check, and do not leave a second contradictory totals table.`;
+    }
+    // Reject dual inventory dumps (title-scan table + painted-only "equipment totals").
+    if (/(?:title[\s_-]*scan|schedule counts)/i.test(answerNorm)
+      && /(?:equipment totals|total scheduled units)/i.test(answerNorm)) {
+      return "The answer includes both a title-scan/schedule-counts table and a second equipment-totals table. Keep ONE family-totals table that copies title-scan query_table counts — remove any second table that recounts only painted/spot-check MARKs.";
+    }
+    // Also reject when the same family’s first nearby total disagrees across mentions
+    // (e.g. AHU **5** in one table and AHU **2** in another) even without those headings.
+    for (const { out } of titleScans) {
+      const count = Number(out.count);
+      if (!Number.isFinite(count) || count < 2) continue;
+      const title = scanTitle(out).toUpperCase();
+      let label = null;
+      if (/FAN\s*COIL/.test(title)) label = "FCU";
+      else if (/DEDICATED OUTDOOR AIR UNIT/.test(title) && !/HANDLING/.test(title)) label = "DOAH unit";
+      else if (/AIR HANDLING UNIT/.test(title) && !/DEDICATED/.test(title)) label = "AHU";
+      else if (/VARIABLE AIR VOLUME|\bVAV\b/.test(title)) label = "VAV";
+      else if (/BOILER/.test(title)) label = "boiler";
+      else if (/POINTS LIST/.test(title)) label = "points-list";
+      if (!label) continue;
+      const splitVals = new Set(
+        Object.entries(out.building_tag_counts || {})
+          .filter(([k]) => k !== "other")
+          .map(([, n]) => Number(n))
+          .filter((n) => Number.isFinite(n) && n >= 1),
+      );
+      const firsts = [];
+      const labelRes = labelPattern(label);
+      for (const m of answerNorm.matchAll(labelRes)) {
+        const after = answerNorm.slice(m.index + m[0].length);
+        // Skip MARK tags like VAV-A101 / AHU-A1 — their digits are not family totals.
+        if (/^\s*-\s*[A-Z]?\d/i.test(after)) continue;
+        const window = answerNorm.slice(m.index, Math.min(answerNorm.length, m.index + m[0].length + 48));
+        const num = window.match(/(?:^|[^0-9])(\d{1,4})(?![0-9])/);
+        if (num) firsts.push(Number(num[1]));
+      }
+      const distinct = [...new Set(firsts.filter((n) => Number.isFinite(n) && n >= 2))];
+      if (distinct.includes(count) && distinct.some((n) => n !== count && !splitVals.has(n))) {
+        conflictingCounts.push(`${label} shows both ${count} and ${distinct.find((n) => n !== count && !splitVals.has(n))}`);
+      }
+    }
+    if (conflictingCounts.length) {
+      return `The answer reports conflicting schedule totals for the same equipment family (${[...new Set(conflictingCounts)].slice(0, 6).join("; ")}). Keep ONE family-totals table that copies title-scan query_table counts — remove any second table that recounts only painted/spot-check MARKs.`;
     }
   }
   return null;

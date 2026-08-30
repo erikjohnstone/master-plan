@@ -357,6 +357,36 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     } },
   ], "Do a full HVAC takeoff — give AHU scheduled counts and cite AHU-A1.",
   "AHUs: 5. Spot-check AHU-A1."), null);
+  // Dual inventory tables (title-scan + painted equipment totals) must fail.
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4] } },
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 5,
+      matches: [{ title: { text: "AIR HANDLING UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+    { name: "query_table", out: {
+      query: { title: "DEDICATED OUTDOOR AIR UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 3,
+      matches: [{ title: { text: "DEDICATED OUTDOOR AIR UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "DOAH-A1", all_cells: { MARK: { text: "DOAH-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+  ], "Do a full HVAC takeoff — give AHU and DOAH scheduled counts and cite AHU-A1.",
+  "**Schedule counts (title-scan)**\n| AHU | 5 |\n| DOAH | 3 |\n**Equipment totals (all sheets)**\n| AHU | 2 |\n| DOAH | 2 |\nAHU-A1 cited.")!, /equipment-totals|second|contradict/i);
+  // Missing DOAH tool count next to its label fails even when other families are present.
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#42", bbox_px: [1, 2, 3, 4] } },
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 5,
+      matches: [{ title: { text: "AIR HANDLING UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+    { name: "query_table", out: {
+      query: { title: "DEDICATED OUTDOOR AIR UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 3,
+      matches: [{ title: { text: "DEDICATED OUTDOOR AIR UNIT SCHEDULE" }, sheet: "set.pdf#42", row: { key: "DOAH-A1", all_cells: { MARK: { text: "DOAH-A1", bbox: [1, 2, 3, 4] } } } }],
+    } },
+  ], "Do a full HVAC takeoff — give AHU and DOAH scheduled counts and cite AHU-A1.",
+  "AHU 5. DOAH is painted as DOAH-A1 only.")!, /DOAH unit count=3/);
   assert.match(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
     { name: "query_table", out: { matches: [{

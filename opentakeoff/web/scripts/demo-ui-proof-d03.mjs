@@ -163,16 +163,17 @@ try {
   }
   const answerNorm = normalize(primaryAnswer);
   const near = (labels, value) => {
+    const hay = normalize(primaryAnswer);
     const lab = labels.map((l) => l.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
     const v = String(value);
     // Prefer markdown table quantity cells: "AHU … | **5** |"
-    if (new RegExp(`(?:${lab})[^\\n|]{0,100}\\|\\s*\\*{0,2}${v}\\*{0,2}\\s*\\|`, "i").test(primaryAnswer)) return true;
+    if (new RegExp(`(?:${lab})[^\\n|]{0,100}\\|\\s*\\*{0,2}${v}\\*{0,2}\\s*\\|`, "i").test(hay)) return true;
     // Or prose "AHU: 5" / "AHUs **5**" — but not sheet "#5" / "sheet 5".
     const prose = new RegExp(
       `(?:${lab})(?:(?!\\bsheet\\b)[^0-9\\n#]){0,40}(?<!#)\\b${v}\\b`,
       "i",
     );
-    return prose.test(primaryAnswer);
+    return prose.test(hay);
   };
   const checks = [
     [["AHU", "AIR HANDLING"], truth.expected.ahu_count.value],
@@ -190,6 +191,11 @@ try {
     if (!near(labels, value)) {
       throw new Error(`D03 UI Answer missing labeled truth for ${labels[0]}=${value}`);
     }
+  }
+  // Dual inventory tables (title-scan + painted recount) are a product fail.
+  if (/(?:title[\s_-]*scan|schedule counts)/i.test(primaryAnswer)
+    && /(?:equipment totals|total scheduled units)/i.test(primaryAnswer)) {
+    throw new Error("D03 UI Answer has both schedule-counts and a second equipment-totals table.");
   }
   // Explicit set totals that must not be doubled (points list is 62, not 122).
   if (/\b122\b/.test(primaryAnswer) && !near(["POINTS", "BAS", "AHU-T1A"], 62)) {
