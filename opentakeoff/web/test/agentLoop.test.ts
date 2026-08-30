@@ -196,6 +196,11 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     out: { matches: [{ row: { identity: { header: "VALVE MARK", text: "CV-CH-A1" } } }] },
   }], "Find the valve", "CV‑CH‑A1 comes from VALVE MARK."), null);
   assert.match(requiredEvidenceCorrection([], "Show me the plan and cite the exact cells")!, /highlight_citation/);
+  // "Cite each TAG …" refers to equipment marks named earlier in the goal.
+  assert.match(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#16", bbox_px: [1, 2, 3, 4], text: "TITLE" } },
+  ], "How many VAVs, and CFM for VAV-1 and VAV-12? Cite each TAG and its CFM cell so I can spot-check.")!,
+    /cite MARK cells for VAV-?1.*VAV-?12|VAV1.*VAV12/);
   // Paint-on-sheets is required for any answer that uses paint-able query_table
   // evidence — not only when the goal says "cite the exact".
   assert.match(requiredEvidenceCorrection([

@@ -245,7 +245,8 @@ try {
     const v = String(value);
     return new RegExp(`(?:${lab})[^0-9]{0,48}${v}(?![0-9])|${v}(?![0-9])[^0-9]{0,48}(?:${lab})`, "i").test(followNorm);
   };
-  if (!/SUITE\s*100/i.test(followAnswer)) {
+  // Answers may use spaced / narrow-no-break "SUITE 100" forms.
+  if (!/SUITE[\s\u00A0\u202F]*100/i.test(followAnswer) && !/SUITE100/i.test(followNorm)) {
     throw new Error("D04 follow-up missing SUITE100 acknowledgement.");
   }
   if (!/(?:not a|is not|no(?:t)?\b[^.?]{0,60})\b(?:scheduled )?VAV|junk|not (?:an? )?VAV|exclude|should not count|does not have a TAG/i.test(followAnswer)
