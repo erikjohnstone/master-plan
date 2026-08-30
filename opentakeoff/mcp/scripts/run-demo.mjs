@@ -3,6 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import dotenv from "dotenv";
 import { buildServer } from "../server.ts";
@@ -133,11 +134,22 @@ function requestId(response, json) {
     || null;
 }
 
-async function productionPair() {
+async function productionPair(stdio) {
+  const client = new Client({ name: "opentakeoff-demo-runner", version: "1.0.0" });
+  if (stdio) {
+    const mcpRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+    const transport = new StdioClientTransport({
+      command: process.execPath,
+      args: ["dist/server.js"],
+      cwd: mcpRoot,
+      stderr: "inherit",
+    });
+    await client.connect(transport);
+    return { client, server: null };
+  }
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
   const server = buildServer(new Session());
   await server.connect(serverTransport);
-  const client = new Client({ name: "opentakeoff-demo-runner", version: "1.0.0" });
   await client.connect(clientTransport);
   return { client, server };
 }
@@ -261,8 +273,9 @@ async function main() {
   const runNumber = Number(arg(args, "--run"));
   const outputPath = arg(args, "--output");
   const cold = args.includes("--cold");
+  const stdio = args.includes("--stdio");
   if (!truthPath || !promptPath || !Number.isInteger(runNumber) || runNumber < 1 || !outputPath) {
-    console.error("usage: npm run run:demo -- --truth <truth.json> --prompt <prompt.txt> --run <N> --output <run.json> [--cold]");
+    console.error("usage: npm run run:demo -- --truth <truth.json> --prompt <prompt.txt> --run <N> --output <run.json> [--cold] [--stdio]");
     process.exit(2);
   }
 
@@ -280,7 +293,7 @@ async function main() {
   const prompt = readFileSync(resolve(promptPath), "utf8").trim();
   const corpusDir = dirname(dirname(dirname(resolve(truthPath))));
   const sourcePath = resolve(corpusDir, "raw", truth.source_file);
-  const { client, server } = await productionPair();
+  const { client, server } = await productionPair(stdio);
   const startedAt = new Date().toISOString();
   try {
     const setupStarted = performance.now();
@@ -319,6 +332,7 @@ async function main() {
       timestamp: startedAt,
       ...runTimingMetadata(cold, setupLatencyMs),
       local_run_id: randomUUID(),
+      transport: stdio ? "stdio_local_process" : "in_memory_local_process",
       request_id: modelResult.request_ids.at(-1) ?? null,
       request_ids: modelResult.request_ids,
       requested_model: model,
@@ -346,7 +360,7 @@ async function main() {
     }, null, 2));
   } finally {
     await client.close();
-    await server.close();
+    await server?.close();
   }
 }
 
