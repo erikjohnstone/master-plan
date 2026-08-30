@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — unique last-segment unit suffix adopts the plan-drawn letter
+
+### Fixed
+- **A schedule key that adds a unit digit the plan never draws is still the same mark.** `sweep_schedule_row` required the schedule cell and the plan tag to be identical, so a four-segment abbreviation stack keyed `…-A1` never answered for the plan-drawn `…-A` (and the takeoff item stayed named as the long key, or never appeared). When the last hyphen segment is a letter plus digits, the letter-only shortening is itself an equipment tag, no other equipment row owns or also shortens to that form, and only the short form is drawn on a plan-role sheet, the sweep adopts the plan-drawn identity — both when the caller asked for the long key and when they asked for the short one. Two-segment family names (`FCU-A`, `PCHWP-A`) are not equipment tags (no digit) and never collapse. The project-level takeoff names the item as the drawing names it. No project, sheet, or tag names. **opentakeoff-mcp 0.9.80** (three surfaces).
+
 ## 2026-08-30 — digit-bearing unit tiers still stitch into the header
 
 ### Fixed

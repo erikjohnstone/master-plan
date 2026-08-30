@@ -3,7 +3,7 @@
 // list of names — these strings are examples of the class, not a corpus.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { isEquipTag, joinHyphenatedTags, joinGraphSpans, type TagBox } from "../src/lib/equiptags.ts";
+import { isEquipTag, joinHyphenatedTags, joinGraphSpans, lastSegmentUnitShortening, uniqueLastSegmentShortening, type TagBox } from "../src/lib/equiptags.ts";
 import { labelTokens } from "../src/lib/symbollabels.ts";
 import { parseSchedule, type Token } from "../src/lib/scheduleParse.js";
 import { extractTable, type GraphSpan, type SheetSpans } from "../src/lib/sheetgraph.ts";
@@ -233,4 +233,30 @@ test("extractTable: finish-table row keys include joined multi-hyphen marks", ()
   assert.ok(keys.includes("PCHWP-MT1"), `PCHWP-MT1 in ${keys} (joined)`);
   assert.equal(keys.includes("CUH"), false, "split CUH must not key the row");
   assert.equal(keys.includes("PCHWP"), false, "split PCHWP must not key the row");
+});
+
+test("lastSegmentUnitShortening: abbreviation-stack letter+digit only; two-segment family names stay out", () => {
+  assert.equal(lastSegmentUnitShortening("CV-HHW-BP-A1"), "CV-HHW-BP-A");
+  assert.equal(lastSegmentUnitShortening("AS-CHW-A1"), "AS-CHW-A");
+  assert.equal(lastSegmentUnitShortening("HHWP-DOAH-A1"), "HHWP-DOAH-A");
+  // Two-segment letter-only remainder is English / a family name, not a tag.
+  assert.equal(lastSegmentUnitShortening("FCU-A1"), null);
+  assert.equal(lastSegmentUnitShortening("PCHWP-A1"), null);
+  assert.equal(lastSegmentUnitShortening("AHU-A1"), null);
+  assert.equal(lastSegmentUnitShortening("VAV-A101"), null);
+  assert.equal(lastSegmentUnitShortening("CUH-T1"), null);
+  assert.equal(lastSegmentUnitShortening("PCHWP-MT1"), null);
+  assert.equal(lastSegmentUnitShortening("CV-CHW-BP-A"), null);
+  assert.equal(lastSegmentUnitShortening("CV-HHW-BP-A"), null);
+});
+
+test("uniqueLastSegmentShortening: another row owning or sharing the short form blocks", () => {
+  const vocab = ["CV-HHW-BP-A1", "CV-CHW-BP-A", "CUH-A1", "DOAH-A1"];
+  assert.equal(uniqueLastSegmentShortening("CV-HHW-BP-A1", vocab), "CV-HHW-BP-A");
+  // A sibling that already is the short form — not unique.
+  assert.equal(uniqueLastSegmentShortening("CV-HHW-BP-A1", [...vocab, "CV-HHW-BP-A"]), null);
+  // Two long keys that would shorten to the same letter — not unique.
+  assert.equal(uniqueLastSegmentShortening("CV-HHW-BP-A1", ["CV-HHW-BP-A1", "CV-HHW-BP-A2"]), null);
+  // Two-segment keys never produce a shortening, unique or not.
+  assert.equal(uniqueLastSegmentShortening("FCU-A1", ["FCU-A1", "FCU-A2"]), null);
 });

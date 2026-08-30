@@ -255,6 +255,41 @@ export function joinHyphenatedTags<T extends TagBox>(spans: T[]): T[] {
   return [...kept, ...rotated].sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
 }
 
+const canonTag = (s: string) => (s || "").trim().toUpperCase().replace(/\s+/g, "");
+
+/**
+ * Last-segment unit suffix: a schedule key whose final hyphen piece is a
+ * letter plus digits (`…-A1`) may be the same mark a plan draws as the
+ * letter only (`…-A`). The shortened form must itself be an equipment tag
+ * — two-segment English (`FCU-A`, `PCHWP-A`) fails `isEquipTag` because
+ * it has no digit, so this never collapses an area+unit pair onto a
+ * family name. Three-or-more-segment abbreviation stacks (`CV-HHW-BP-A`)
+ * are the class that survives.
+ */
+export function lastSegmentUnitShortening(tag: string): string | null {
+  const t = canonTag(tag);
+  const m = /^(.*)-([A-Z])(\d+)$/.exec(t);
+  if (!m) return null;
+  const short = `${m[1]}-${m[2]}`;
+  return isEquipTag(short) ? short : null;
+}
+
+/**
+ * The letter-only shortening of `tag` when it is unique in `allKeys`:
+ * no other row already owns that short form, and no other row shortens
+ * to the same form. Plan occupancy is the caller's gate — this function
+ * is the string-identity half only.
+ */
+export function uniqueLastSegmentShortening(tag: string, allKeys: readonly string[]): string | null {
+  const short = lastSegmentUnitShortening(tag);
+  if (!short) return null;
+  const me = canonTag(tag);
+  const keys = allKeys.map(canonTag).filter(Boolean);
+  if (keys.some((k) => k === short)) return null;
+  if (keys.some((k) => k !== me && lastSegmentUnitShortening(k) === short)) return null;
+  return short;
+}
+
 /** GraphSpan-shaped cousin (x/y/w/h) — same join, same class.
  * Unmerged spans keep their original object identity so DeltaIndex (a
  * Map keyed by span reference) still finds drawn markers after a join
