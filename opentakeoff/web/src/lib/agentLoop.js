@@ -224,6 +224,9 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     // Trivial equipment MARK/TAG headers are not ambiguous (unlike UNIT MARK vs
     // VALVE MARK). Count/cite takeoffs must not thrash requiring the word "MARK".
     if (headers.every((item) => /^(?:MARK|TAG|EQUIPMENTMARK|EQUIPMENTTAG)$/i.test(item.headerCanonical))) continue;
+    // Junk remarks keys on equipment schedules (family_mark=false) are not
+    // equipment identities — do not require citing REMARKS/NOTE as a "mark header".
+    if (headers.every((item) => /^(?:REMARKS|NOTE|NOTES|COMMENT|COMMENTS)$/i.test(item.headerCanonical))) continue;
     if (headers.some((item) => finalCanonical.includes(item.headerCanonical))) continue;
     const example = headers[0];
     return `The final answer mentions ${example.text} but does not cite its semantic identity header ${example.header}. Use query_table row.identity exactly; do not substitute another repeated-value column.`;
@@ -887,6 +890,55 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   // equipment schedule title from a scoped query_table — not a sibling family's
   // UNIT schedule or a vibration/valve cross-ref.
   const asksWhichScheduleTitle = /\bwhich title\b|\bis\s+(?:[A-Z]{2,8}-[A-Z0-9]+)\s+on\b.{0,80}\bschedule\b/i.test(goal);
+  // "Is SUITE100 a scheduled VAV?" — affirm only when family_mark / TAG pattern matches.
+  const isScheduledAsk = goal.match(
+    /\bis\s+([A-Z0-9][A-Z0-9\-]*)\s+a\s+scheduled\s+(VAV|AHU|FCU|DOAH|CH|BOILER|volume\s+control)\b/i,
+  );
+  if (isScheduledAsk && finalText) {
+    const askedKey = isScheduledAsk[1].toUpperCase().replace(/[^A-Z0-9]/g, "");
+    const family = isScheduledAsk[2].toUpperCase().replace(/\s+/g, " ");
+    const familyRe = /VAV|VOLUME CONTROL/.test(family) ? /^VAV/i
+      : family === "AHU" ? /^AHU/i
+      : family === "FCU" ? /^FCU/i
+      : family === "DOAH" ? /^DOAH/i
+      : /BOILER/.test(family) ? /^B[\s\-]/i
+      : family === "CH" ? /^CH/i
+      : null;
+    const scoped = callLog.filter(({ name, out, args }) => {
+      if (name !== "query_table" || out?.error) return false;
+      return (out?.matches || []).some((match) => {
+        const keyCanon = String(match?.row?.key || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+        const qKey = String(out?.query?.row_key || args?.row_key || "")
+          .toUpperCase().replace(/[^A-Z0-9]/g, "");
+        return keyCanon === askedKey || qKey === askedKey;
+      });
+    });
+    const nonFamily = scoped.flatMap(({ out }) => out?.matches || []).filter((match) => {
+      const keyCanon = String(match?.row?.key || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (keyCanon !== askedKey) return false;
+      if (match.family_mark === false || match?.row?.family_mark === false) return true;
+      if (familyRe && !familyRe.test(String(match?.row?.key || ""))) return true;
+      const header = String(match?.row?.identity?.header || "").toUpperCase();
+      if (/REMARKS|NOTE|COMMENT/.test(header) && familyRe && !familyRe.test(String(match?.row?.key || ""))) {
+        return true;
+      }
+      return false;
+    });
+    const affirms = /\b(?:yes|it is(?:\s+therefore)?\s+a\s+scheduled|is a scheduled)\b/i.test(finalText)
+      && !/\b(?:no[,.]|not a scheduled|is not|not an?\s+(?:scheduled\s+)?(?:VAV|AHU|FCU)|junk|exclude|should not count|does not have a TAG)\b/i.test(finalText);
+    if (nonFamily.length && affirms) {
+      const sample = nonFamily[0];
+      const header = sample?.row?.identity?.header || "non-TAG";
+      return `Tool evidence shows "${isScheduledAsk[1]}" on this schedule is not a family equipment MARK (identity ${header}; family_mark=false). Answer NO — it is not a scheduled ${isScheduledAsk[2]} unit — and explain it is a junk/remarks key excluded from the family count.`;
+    }
+    if (!scoped.length && familyRe && !familyRe.test(isScheduledAsk[1])) {
+      // Key itself does not look like the family — still require a scoped lookup
+      // before affirming, but if the answer already affirms without evidence, reject.
+      if (affirms) {
+        return `The goal asks whether ${isScheduledAsk[1]} is a scheduled ${isScheduledAsk[2]}. Call query_table with that row_key on the family schedule, then answer NO if family_mark is false or the identity is REMARKS rather than a TAG/MARK matching the family pattern.`;
+      }
+    }
+  }
   if (asksWhichScheduleTitle && finalText) {
     // Only the MARK asked about schedule membership / title — not every tag
     // mentioned later in the same follow-up (e.g. FCU-T11 in a count clause).
@@ -1172,6 +1224,7 @@ export function agentSystemPrompt() {
     "- Never draw or request overlay label text that would cover the cited cell value; the highlight is a frame around readable blueprint text.",
     "- Conversational follow-ups: when the estimator asks a follow-up about the previous answer or workflow, reply in plain language using evidence already gathered; call tools again only when new evidence is needed. Answer the follow-up question directly first — do not digress into unrelated points-list rows or extra fields unless asked. Explain what you did and why in estimator terms — not tool JSON. Be a useful collaborator across turns, not a one-shot report.",
     "- When asked whether a MARK is on a schedule and which title: call query_table with that row_key (omit title), read matches[0].title (primary equipment schedule — not vibration-isolation / valve / sound / points-list cross-refs), and copy that exact title into the answer. Sibling families can differ (for example DOAH UNIT vs DOAH HANDLING schedules).",
+    "- When asked whether a key is a scheduled unit of a family (VAV, AHU, FCU, DOAH, …): answer yes only when query_table shows family_mark=true (or the row TAG/MARK matches that family's pattern, e.g. VAV-*). A junk remarks key on the same schedule (family_mark=false, identity header REMARKS/NOTE) is NOT a scheduled unit of that family — say no and note it is excluded from the title-scan family count.",
     "- Never say a cell or field was highlighted unless a successful highlight_citation call targeted that exact sheet and bbox_px. State exactly which source regions were highlighted; do not imply unpainted cells were painted. Never write that all/each cited cells are highlighted.",
     "- For a scheduled device tag, cite query_table row.identity (for example VALVE MARK), not the first different column that happens to repeat the same text (for example UNIT MARK).",
     "- For any equipment-to-control-valve join, use this direct set-wide sequence: query_table with row_key set to the equipment tag; sweep_schedule_row for installed quantity/plan evidence when requested; query_table with cell_contains set to that exact equipment tag to find compound relationship marks; then highlight the exact returned tag and row-identity bboxes. Do not browse guessed sheets or repeatedly retry the same empty exact-row query.",

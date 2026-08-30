@@ -201,6 +201,39 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     { name: "highlight_citation", out: { sheet: "set.pdf#16", bbox_px: [1, 2, 3, 4], text: "TITLE" } },
   ], "How many VAVs, and CFM for VAV-1 and VAV-12? Cite each TAG and its CFM cell so I can spot-check.")!,
     /cite MARK cells for VAV-?1.*VAV-?12|VAV1.*VAV12/);
+  // Junk remarks keys on a family schedule are not scheduled units of that family.
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", args: { row_key: "SUITE100" }, out: {
+      matches: [{
+        sheet: "set.pdf#16",
+        title: { text: "VOLUME CONTROL BOX SCHEDULE" },
+        family_mark: false,
+        row: {
+          key: "SUITE100",
+          family_mark: false,
+          identity: { header: "REMARKS", text: "SUITE 100", bbox: [1, 2, 3, 4] },
+        },
+      }],
+    } },
+  ], "Is SUITE100 a scheduled VAV on that volume control box schedule?",
+  "Yes. SUITE100 is a scheduled entry on the volume control box schedule.")!,
+    /not a family equipment MARK|Answer NO|junk|family_mark=false/i);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "query_table", args: { row_key: "SUITE100" }, out: {
+      matches: [{
+        sheet: "set.pdf#16",
+        title: { text: "VOLUME CONTROL BOX SCHEDULE" },
+        family_mark: false,
+        row: {
+          key: "SUITE100",
+          family_mark: false,
+          identity: { header: "REMARKS", text: "SUITE 100", bbox: [1, 2, 3, 4] },
+        },
+      }],
+    } },
+    { name: "highlight_citation", out: { sheet: "set.pdf#16", bbox_px: [1, 2, 3, 4], text: "SUITE 100" } },
+  ], "Is SUITE100 a scheduled VAV on that volume control box schedule? What is VAV-58 supply CFM?",
+  "No. SUITE100 is a remarks junk key, not a scheduled VAV. VAV-58 supply CFM is 350."), null);
   // Paint-on-sheets is required for any answer that uses paint-able query_table
   // evidence — not only when the goal says "cite the exact".
   assert.match(requiredEvidenceCorrection([

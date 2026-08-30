@@ -728,21 +728,29 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     // families (AHU/DOAH) get an explicit count + building_tag_counts to copy.
     const broad = !row_key && !column && !cell_value && !cell_contains;
     const keysOnly = broad && unique.length > 3;
+    const annotateFamily = (match) => {
+      const re = familyKeyRe(match.title?.text);
+      const family_mark = !re || re.test(String(match.row.key || ""));
+      return { ...match, family_mark, row: { ...match.row, family_mark } };
+    };
     const matches = unique.slice(0, limit).map((match) => {
-      if (!keysOnly) return match;
-      const identity = match.row.identity;
+      const annotated = annotateFamily(match);
+      if (!keysOnly) return annotated;
+      const identity = annotated.row.identity;
       const markCell = identity
         ? { [identity.header]: { text: identity.text, bbox: identity.bbox } }
         : {};
       return {
-        sheet: match.sheet,
-        kind: match.kind,
-        title: match.title,
-        region: match.region,
+        sheet: annotated.sheet,
+        kind: annotated.kind,
+        title: annotated.title,
+        region: annotated.region,
+        family_mark: annotated.family_mark,
         headers: identity ? [identity.header] : [],
         row: {
-          key: match.row.key,
+          key: annotated.row.key,
           identity,
+          family_mark: annotated.family_mark,
           cells: markCell,
           all_cells: markCell,
         },
@@ -766,6 +774,16 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       const primary = unique[0]?.title?.text || titles[0];
       return `MARK ${row_key} appears on ${titles.length} tables. When asked which schedule the unit is on, cite the primary equipment schedule title first (matches[0].title="${primary}"), not vibration-isolation / valve / sound / points-list cross-refs.`;
     })();
+    const nonFamilyHint = (() => {
+      if (keysOnly || !unique.length) return null;
+      const bad = matches.filter((m) => m.family_mark === false);
+      if (!bad.length) return null;
+      const sample = bad[0];
+      const key = sample.row?.key || row_key || cell_contains || "?";
+      const title = sample.title?.text || titleNeedle || "this schedule";
+      const ident = sample.row?.identity?.header || "non-TAG";
+      return `Row key "${key}" on "${title}" is not a family equipment MARK (identity header ${ident}; family_mark=false). Do not count it as a scheduled VAV/AHU/FCU/etc. unit — answer no when asked if it is a scheduled unit of that family.`;
+    })();
     return {
       query: {
         title: title ?? null,
@@ -784,6 +802,8 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
           : "Zero rows matched. Drop invented title filters, use a filter value that already appears in tool evidence, or refuse if the evidence is not present.",
       } : keysOnly ? {
         next_move: `Use count=${unique.length} as the scheduled row total and building_tag_counts=${JSON.stringify(buildingTagCounts)} for building splits. Re-query with row_key for citation cell bboxes.`,
+      } : nonFamilyHint ? {
+        next_move: nonFamilyHint,
       } : multiTitleHint ? {
         next_move: multiTitleHint,
       } : {}),
