@@ -15,17 +15,17 @@ if (!apiKey) throw new Error("CEREBRAS_API_KEY is required.");
 
 const root = resolve(import.meta.dirname, "../..");
 const corpus = resolve(root, "../opentakeoff-corpus");
-const demo = resolve(corpus, "demos/D09-room-hvac-coordination");
-const pdf = resolve(corpus, "raw/baker-county-eoc-bidset.pdf");
+const demo = resolve(corpus, "demos/D10-bas-points-takeoff");
+const pdf = resolve(corpus, "raw/navfac-cherry-point-atc-mechanical.pdf");
 const prompt = readFileSync(resolve(demo, "prompt.txt"), "utf8").trim();
 const truth = JSON.parse(readFileSync(resolve(demo, "truth.json"), "utf8"));
 const followUp = truth.follow_up?.prompt
-  || "Can EF-3 be located on a plan sheet with sweep_schedule_row? What CFM does its FAN SCHEDULE row list?";
+  || "On POINTS LIST AHU-T1A/TIB, how many point descriptions name AHU-T1A vs AHU-T1B, and how many are shared? Confirm AI10's description and alarm/trend.";
 
 const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
 const mcpServer = buildServer();
 await mcpServer.connect(serverTransport);
-const mcpClient = new Client({ name: "opentakeoff-ui-proof-d09", version: "1.0.0" });
+const mcpClient = new Client({ name: "opentakeoff-ui-proof-d10", version: "1.0.0" });
 await mcpClient.connect(clientTransport);
 await mcpClient.callTool({ name: "load_plan", arguments: { path: pdf } });
 
@@ -104,7 +104,7 @@ const proxy = createServer(async (request, response) => {
   response.setHeader("Content-Type", upstream.headers.get("content-type") || "application/json");
   response.end(buf);
 });
-await new Promise((resolveListen) => proxy.listen(8792, "127.0.0.1", resolveListen));
+await new Promise((resolveListen) => proxy.listen(8793, "127.0.0.1", resolveListen));
 
 const browser = await chromium.launch({
   headless: !headed,
@@ -114,15 +114,15 @@ const browser = await chromium.launch({
 const context = await browser.newContext({
   viewport: { width: 1920, height: 1080 },
   recordVideo: {
-    dir: "/tmp/opentakeoff-ui-videos-d09",
+    dir: "/tmp/opentakeoff-ui-videos-d10",
     size: { width: 1920, height: 1080 },
   },
 });
 await context.addInitScript(() => {
-  localStorage.setItem("opentakeoff_ai_endpoint", "http://127.0.0.1:8792");
+  localStorage.setItem("opentakeoff_ai_endpoint", "http://127.0.0.1:8793");
   localStorage.setItem("opentakeoff_ai_model", "gpt-oss-120b");
   localStorage.setItem("opentakeoff_ai_provider", "openai");
-  localStorage.setItem("opentakeoff_mcp_endpoint", "http://127.0.0.1:8792/tool");
+  localStorage.setItem("opentakeoff_mcp_endpoint", "http://127.0.0.1:8793/tool");
   localStorage.removeItem("opentakeoff_ai_key");
 });
 const page = await context.newPage();
@@ -141,7 +141,7 @@ try {
   await page.getByText("Open your plans").waitFor({ state: "hidden", timeout: 180_000 });
   await page.locator("canvas").first().waitFor({ state: "visible", timeout: 180_000 });
   await page.getByText("Rendering sheet…").waitFor({ state: "hidden", timeout: 180_000 });
-  await page.screenshot({ path: "/opt/cursor/artifacts/d09_ui_loaded.png" });
+  await page.screenshot({ path: "/opt/cursor/artifacts/d10_ui_loaded.png" });
 
   await page.locator('button[title^="Agent —"]').click();
   const goal = page.locator('textarea[name="agent-goal"]');
@@ -152,50 +152,45 @@ try {
   await stop.waitFor({ state: "visible", timeout: 10_000 });
   await stop.waitFor({ state: "hidden", timeout: 600_000 });
   await page.waitForTimeout(2_000);
-  await page.screenshot({ path: "/opt/cursor/artifacts/d09_ui_primary_answer.png" });
+  await page.screenshot({ path: "/opt/cursor/artifacts/d10_ui_primary_answer.png" });
 
   const panelRoot = page.locator('textarea[name="agent-goal"]').locator("xpath=ancestor::div[contains(@style,\"width: 380\")]").first();
   const panelText = await panelRoot.innerText();
   console.log(`UI_AGENT_PRIMARY\n${panelText.slice(0, 4500)}`);
 
   if (!/\bAnswer\b/i.test(panelText)) {
-    throw new Error("D09 UI panel missing answer-first thread (no Answer section).");
+    throw new Error("D10 UI panel missing answer-first thread (no Answer section).");
   }
   const answerBodies = [...panelText.matchAll(/(?:^|\n)\s*Answer\b\s*\n([\s\S]*?)(?=\n\s*(?:Answer|Sources|Technical steps|Goal:|Ask a follow-up|You)\b|$)/gi)]
     .map((m) => m[1].trim())
     .filter((body) => body.length >= 40 && !/^\[Evidence gate:/i.test(body));
   const primaryAnswer = answerBodies[0] || "";
   if (primaryAnswer.length < 80) {
-    throw new Error("D09 UI Answer section is empty or too short.");
+    throw new Error("D10 UI Answer section is empty or too short.");
   }
   const answerNorm = normalize(primaryAnswer);
   const has = (...needles) => needles.every((n) => answerNorm.includes(normalize(n)));
-  const near = (labels, value) => {
-    const lab = labels.map((l) => l.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
-    const v = String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    return new RegExp(`(?:${lab})[^\\n]{0,160}?\\b${v}\\b|\\b${v}\\b[^\\n]{0,80}(?:${lab})`, "i").test(answerNorm);
-  };
 
-  if (!has("105") || !/CONFERENCE/i.test(answerNorm)) {
-    throw new Error("D09 UI Answer missing room 105 CONFERENCE.");
+  if (!/DOAH-TI|POINTS LIST DOAH/i.test(answerNorm)) {
+    throw new Error("D10 UI Answer missing DOAH-TI points list.");
   }
-  if (!/CPTT-1/i.test(answerNorm)) {
-    throw new Error("D09 UI Answer missing floor finish CPTT-1.");
+  if (!/AHU-T1A\/TIB|AHU-T1A\/T1B|POINTS LIST AHU/i.test(answerNorm)) {
+    throw new Error("D10 UI Answer missing AHU-T1A/TIB points list.");
   }
-  if (!has("CD-1") || !has("RG-1") || !has("EG-1")) {
-    throw new Error("D09 UI Answer missing diffuser/grille marks.");
+  if (!/\b34\b/.test(answerNorm) || !/\b62\b/.test(answerNorm)) {
+    throw new Error("D10 UI Answer missing DOAH 34 / AHU 62 row counts.");
   }
-  if (!/TITUS/i.test(answerNorm)) {
-    throw new Error("D09 UI Answer missing TITUS manufacturer.");
+  if (!/\b122\b/.test(answerNorm)) {
+    throw new Error("D10 UI Answer missing overall row total 122.");
   }
-  if (!/\bMCD\b/i.test(answerNorm) || !/\b50F\b/i.test(answerNorm) || !/350FL/i.test(answerNorm)) {
-    throw new Error("D09 UI Answer missing diffuser/grille models.");
+  if (!/\b43\b/.test(answerNorm)) {
+    throw new Error("D10 UI Answer missing overall AI 43.");
   }
-  if (!has("RTU-1") || !/MAIN\s*OPERATIONS/i.test(answerNorm)) {
-    throw new Error("D09 UI Answer missing RTU-1 MAIN OPERATIONS.");
+  if (!/\b49\b/.test(answerNorm)) {
+    throw new Error("D10 UI Answer missing overall BI 49.");
   }
-  if (!/\b1650\b/.test(answerNorm)) {
-    throw new Error("D09 UI Answer missing RTU-1 CFM 1650.");
+  if (!has("AI07") || !has("AI10") || !has("AO01") || !has("BI02")) {
+    throw new Error("D10 UI Answer missing spot-check marks AI07/AI10/AO01/BI02.");
   }
 
   const sourcesHeader = page.getByRole("button", { name: /Sources · \d+ · click to open/i });
@@ -206,25 +201,25 @@ try {
   const viewButtons = panelRoot.getByRole("button", { name: /^View$/i });
   const cardCount = await viewButtons.count();
   console.log(`UI_SOURCE_CARDS count=${cardCount}`);
-  if (cardCount < 1) throw new Error("D09 UI missing clickable source cards.");
+  if (cardCount < 1) throw new Error("D10 UI missing clickable source cards.");
   if (await detailToggles.count()) {
     await detailToggles.first().click();
     await page.waitForTimeout(800);
   }
   const sourcesBlock = await panelRoot.innerText();
-  if (!/Schedule|Tag \/ MARK|Column|Value|BBox|CD-|RTU-|ROOM|105|CFM/i.test(sourcesBlock)) {
-    throw new Error("D09 source card dropdown missing structured detail fields.");
+  if (!/Schedule|Tag \/ MARK|Column|Value|BBox|AI|AO|BI|BO|POINTS|DOAH|AHU/i.test(sourcesBlock)) {
+    throw new Error("D10 source card dropdown missing structured detail fields.");
   }
   await viewButtons.first().click();
   await page.waitForTimeout(1_500);
-  await page.screenshot({ path: "/opt/cursor/artifacts/d09_ui_source_card_open.png" });
+  await page.screenshot({ path: "/opt/cursor/artifacts/d10_ui_source_card_open.png" });
 
   const primaryAnswerHeaders = panelRoot.locator('[data-agent-role="assistant"]');
   if (await primaryAnswerHeaders.count()) {
     await primaryAnswerHeaders.first().scrollIntoViewIfNeeded();
   }
   await page.waitForTimeout(2_500);
-  await page.screenshot({ path: "/opt/cursor/artifacts/d09_ui_primary_answer.png" });
+  await page.screenshot({ path: "/opt/cursor/artifacts/d10_ui_primary_answer.png" });
 
   await goal.fill(followUp);
   await page.waitForTimeout(1_000);
@@ -238,35 +233,38 @@ try {
     await followAnswerNodes.nth(followAnswerCount - 1).scrollIntoViewIfNeeded();
   }
   await page.waitForTimeout(6_000);
-  await page.screenshot({ path: "/opt/cursor/artifacts/d09_ui_followup_answer.png" });
+  await page.screenshot({ path: "/opt/cursor/artifacts/d10_ui_followup_answer.png" });
   const afterFollow = await panelRoot.innerText();
   console.log(`UI_AGENT_FOLLOWUP\n${afterFollow.slice(-2500)}`);
   const followBodies = [...afterFollow.matchAll(/(?:^|\n)\s*Answer\b\s*\n([\s\S]*?)(?=\n\s*(?:Answer|Sources|Technical steps|Goal:|Ask a follow-up)\b|$)/gi)]
     .map((m) => m[1].trim())
     .filter(Boolean);
   const followAnswer = [...followBodies].reverse().find((body) =>
-    (/HALLWAY/i.test(body) && /101/.test(body))
-    || (/RTU-2/i.test(body) && /\b750\b/.test(body)))
+    (/\b24\b/.test(body) && (/T1A/i.test(body) || /SHARED/i.test(body)))
+    || (/AI10/i.test(body) && /FEEDBACK|HW VALVE/i.test(body)))
     || followBodies[followBodies.length - 1]
     || "";
   console.log(`UI_FOLLOWUP_ANSWER\n${followAnswer.slice(0, 1200)}`);
   if (followAnswer.length < 20) {
-    throw new Error("D09 follow-up missing Answer thread entry.");
+    throw new Error("D10 follow-up missing Answer thread entry.");
   }
   const followNorm = normalize(followAnswer);
-  if (!/HALLWAY/i.test(followNorm)) {
-    throw new Error("D09 follow-up missing room 101 HALLWAY.");
+  if (!/\b24\b/.test(followNorm)) {
+    throw new Error("D10 follow-up missing AHU-T1A/T1B named counts (24).");
   }
-  if (!/RTU-2/i.test(followNorm)) {
-    throw new Error("D09 follow-up missing RTU-2.");
+  if (!/\b14\b/.test(followNorm) && !/SHARED/i.test(followNorm)) {
+    throw new Error("D10 follow-up missing shared count 14.");
   }
-  if (!/\b750\b/.test(followNorm)) {
-    throw new Error("D09 follow-up missing RTU-2 CFM 750.");
+  if (!/HW VALVE POSITION|FEEDBACK/i.test(followNorm)) {
+    throw new Error("D10 follow-up missing AI10 description.");
+  }
+  if (!/\bNO\b/.test(followNorm)) {
+    throw new Error("D10 follow-up missing AI10 alarm/trend No.");
   }
 
   await page.waitForTimeout(4_000);
   succeeded = true;
-  console.log("D09_UI_PROOF_OK");
+  console.log("D10_UI_PROOF_OK");
 } finally {
   const video = page.video();
   await page.close();
@@ -278,12 +276,12 @@ try {
     const path = await video.path();
     mkdirSync("/opt/cursor/artifacts", { recursive: true });
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const dest = `/opt/cursor/artifacts/d09_ui_prompt_answer_cards_followup_${stamp}.webm`;
+    const dest = `/opt/cursor/artifacts/d10_ui_prompt_answer_cards_followup_${stamp}.webm`;
     if (succeeded) {
       copyFileSync(path, dest);
-      console.log(`D09_UI_VIDEO ${dest}`);
+      console.log(`D10_UI_VIDEO ${dest}`);
     } else {
-      console.log(`D09_UI_VIDEO_DISCARDED ${path}`);
+      console.log(`D10_UI_VIDEO_DISCARDED ${path}`);
     }
   }
 }
