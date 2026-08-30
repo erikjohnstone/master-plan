@@ -182,13 +182,14 @@ try {
   if (!has("EF-1") || !has("EF-2") || !has("EF-5")) {
     throw new Error("D07 UI Answer missing required EF tags.");
   }
-  if (!near(["VAV", "AIR TERMINAL", "SCHEDULE", "BOX"], 9) && !/\b9\b/.test(answerNorm)) {
+  if (!/(?:VAV|AIR TERMINAL|SCHEDULE|BOXES?)[^\n]{0,80}\b9\b|\b9\b[^\n]{0,40}(?:VAV|AIR TERMINAL|BOX)/i.test(answerNorm)) {
     throw new Error("D07 UI Answer missing VAV schedule count 9.");
   }
   if (!near(["CFM"], 2170) && !/\b2170\b/.test(answerNorm)) {
     throw new Error("D07 UI Answer missing VAV-1 CFM 2170.");
   }
-  if (!near(["CFM"], 400) && !/\b400\b/.test(answerNorm)) {
+  // EF-2 must keep schedule CFM even when plan sweep refuses.
+  if (!/\b400\b/.test(answerNorm)) {
     throw new Error("D07 UI Answer missing EF-2 CFM 400.");
   }
   if (!/\bREFUS/.test(answerNorm) && !/NOT (?:DRAWN|FOUND|LOCATED)|NO PLAN/.test(answerNorm)) {

@@ -284,6 +284,77 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   if (scheduleClaimedAsPlan) {
     return "The final answer labels a queried schedule sheet/region as a plan location without swept plan evidence on that sheet. A table bbox is a schedule citation only. Remove the plan-location label or provide a successful exact-tag sweep citation from the real plan sheet.";
   }
+
+  // Plan sweep refused ≠ schedule data missing. If query_table (or the sweep
+  // row payload) already returned requested schedule cells for a refused tag,
+  // the answer must still carry those values alongside the honest refusal.
+  {
+    const cellText = (cell) => {
+      if (cell == null) return "";
+      if (typeof cell === "string" || typeof cell === "number") return String(cell);
+      if (typeof cell.text === "string") return cell.text;
+      return String(cell.value ?? "");
+    };
+    const scheduleFieldsFromGoal = [];
+    if (/\bCFM\b/i.test(goal)) scheduleFieldsFromGoal.push("CFM");
+    if (/\bMBH\b/i.test(goal)) scheduleFieldsFromGoal.push("MBH");
+    if (/\bkW\b|\bKW\b/i.test(goal)) scheduleFieldsFromGoal.push("KW");
+    if (/\bGPM\b|\bFLOW\b/i.test(goal)) scheduleFieldsFromGoal.push("GPM", "FLOW");
+    if (/\bmanufacturer\b/i.test(goal)) scheduleFieldsFromGoal.push("MANUFACTURER", "MFR");
+    if (scheduleFieldsFromGoal.length) {
+      const refusedTags = callLog.filter(({ name, out }) => {
+        if (name !== "sweep_schedule_row") return false;
+        const err = String(out?.error || out?.message || out?.reason || "");
+        if (/not drawn on any plan|cannot be geometrically anchored|geometrically anchored/i.test(err)) return true;
+        if (out?.status === "refused" || out?.refused) return true;
+        if ((out?.found ?? out?.total_found) === 0 && err) return true;
+        return false;
+      }).map(({ args, out }) => String(args?.tag || out?.tag || "").toUpperCase()).filter(Boolean);
+
+      for (const tag of [...new Set(refusedTags)]) {
+        const tagCanon = tag.replace(/[^A-Z0-9]/g, "");
+        if (!tagCanon || !finalCanonical.includes(tagCanon)) continue;
+        const cells = {};
+        for (const { out } of callLog.filter(({ name }) => name === "query_table" || name === "sweep_schedule_row")) {
+          const bags = [];
+          if (out?.row?.cells) bags.push(out.row.cells);
+          if (out?.row?.all_cells) bags.push(out.row.all_cells);
+          for (const match of out?.matches || []) {
+            if (String(match?.row?.key || "").toUpperCase() !== tag) continue;
+            if (match?.row?.all_cells) bags.push(match.row.all_cells);
+            if (match?.row?.cells) bags.push(match.row.cells);
+          }
+          if (String(out?.tag || out?.row?.key || "").toUpperCase() === tag) {
+            if (out?.row?.cells) bags.push(out.row.cells);
+            if (out?.row?.all_cells) bags.push(out.row.all_cells);
+          }
+          for (const bag of bags) {
+            for (const [header, raw] of Object.entries(bag || {})) {
+              const text = cellText(raw).trim();
+              if (!text) continue;
+              cells[String(header).toUpperCase()] = text;
+            }
+          }
+        }
+        const missing = [];
+        for (const field of scheduleFieldsFromGoal) {
+          const value = cells[field];
+          if (!value) continue;
+          const token = value.toUpperCase().replace(/[^A-Z0-9.]+/g, "");
+          if (!token) continue;
+          if (!spacedHasToken(value.toUpperCase().replace(/,/g, ""))
+            && !finalSpaced.includes(value.toUpperCase())
+            && !finalCanonical.includes(token)) {
+            missing.push(`${field}=${value}`);
+          }
+        }
+        if (missing.length) {
+          return `sweep_schedule_row refused plan location for ${tag}, but schedule evidence already returned ${missing.join(", ")}. Keep reporting those schedule field(s) with schedule citations AND state the honest plan refusal — do not drop schedule data when plan anchoring fails.`;
+        }
+      }
+    }
+  }
+
   if (/\bshow\b.*\bplan location\b|\bshow me the plan\b/i.test(goal)) {
     const highlights = callLog.filter(({ name, out }) =>
       name === "highlight_citation" && !out?.error && Array.isArray(out.bbox_px));
@@ -1469,6 +1540,7 @@ export function agentSystemPrompt() {
     "- Every factual claim about a connection, a symbol match, or a schedule value must trace back to a specific tool call's own returned data in this run — if you can't point to which tool call produced a fact, don't state it.",
     "- NEVER infer installed quantity from the existence of a schedule row. Installed quantity requires sweep_schedule_row; use its found count and tag_at evidence or refuse.",
     "- NEVER report a plan location for any equipment or valve tag unless sweep_schedule_row succeeded for that exact tag. A schedule-cell bbox is a schedule location, never an installed plan location, and one tag's plan coordinates never belong to another tag.",
+    "- When sweep_schedule_row refuses geometric anchoring (tag not drawn on any plan sheet), still report every requested schedule field for that tag from query_table/read_schedule (CFM, manufacturer, …) with schedule citations — the refusal is only about plan location, not about dropping schedule data.",
     "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized.",
     "- Be extremely, genuinely useful: whatever the goal asks — a full takeoff, an AHU characteristic, counting valves, a BAS trace, schedule attributes, cross-sheet joins — do that ask end-to-end. Return every requested field with evidence-backed values plus enough citation context to trust the answer. Paint ALL answering evidence on the sheets (value cells / row data / drawing text / counted marks), not only a tag mark. Partial answers and mark-only flybys are incomplete.",
     "- query_table and find_text search the whole loaded set — they do not require the sheet to be open as a canvas tab. Never refuse schedule cell values because a tab is closed; call query_table with row_key and copy row.all_cells, then highlight_citation.",
