@@ -27,6 +27,38 @@ corpus supports one, and other difficult high-frequency estimating workflows.
 Every demo must connect a symbol or tag to useful presented data and connect
 multiple parts of a drawing set or span multiple sheets.
 
+## Generalized production correctness (all paths)
+
+These demos exist so that, as more blueprints are trained on and uploaded to
+the platform, the same workflows remain correct on every real set — not only
+on the slate's current PDFs.
+
+The same strict demo gates apply on every surface that estimators use:
+
+- production MCP / API path (`run:demo`, `verify:demo`, stdio localhost)
+- production in-canvas Agent / UI path (live tool loop, evidence gates,
+  highlights, saved UI recording)
+- any shared library, runner, verifier, or tool implementation behind those
+  paths
+
+Fixes that clear a demo gate must be **generalized and deterministic**. They
+must encode real drawing/tool methodology (for example: cite `hit.str`, do not
+launder schedule LOCATION into a serves claim, omit sheet for set-wide
+`find_text`, refuse when evidence is missing). They must **not**:
+
+- hardcode a corpus filename, sheet number, tag, table title, or expected
+  answer value into production code or prompts
+- steer the model toward a known demo answer
+- special-case one blueprint so the gate passes while other uploads would fail
+- leave the UI path weaker or looser than the API path (or the reverse)
+
+If the UI answer, localhost answer, or API answer disagrees with `truth.json`
+or with each other, the demo is not locked — fix the shared production behavior
+and redo the failing path, including the UI recording when the UI was wrong.
+"Works on this demo PDF" is insufficient. The bar is **100% correct user-facing
+workflow behavior** for the same class of question on arbitrary blueprints
+uploaded to the platform, with honest refusal when evidence is absent.
+
 ## Execution policy
 
 Do not dispatch subagents of any kind. The active coordinator performs all
@@ -63,9 +95,11 @@ workspace.
    not working. Record latency; fail if p95 exceeds 15 seconds. Classify a
    failure before changing code as `RETRIEVAL`, `PARSE`, `VALUE`,
    `CITE_FORM`, `CITE_GROUND`, `LATENCY`, or `REFUSAL`. Fix the system and
-   restart the demo at zero of five.
+   restart the demo at zero of five. Fixes must satisfy **Generalized
+   production correctness** above before the restart counts.
 7. **Lock.** Write the demo card, add its fixture pointer and regression test,
-   and commit. Only then does it count toward ten.
+   prove the production UI path with a saved recording that matches the same
+   truth, and commit. Only then does it count toward ten.
 
 ## Required per-demo layout
 
@@ -84,4 +118,5 @@ demos/DNN-name/
 
 `WORKING` is a measured state, never a planning label. A demo card must show
 the hard-set evidence, 5/5 assertion matrix, p95 latency, local-host proof,
-failure/refusal behavior, and the exact regression command.
+validated UI recording path, failure/refusal behavior, and the exact
+regression command.

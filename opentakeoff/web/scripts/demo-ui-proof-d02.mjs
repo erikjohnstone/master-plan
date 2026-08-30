@@ -108,7 +108,10 @@ try {
   console.log(`UI_AGENT_RESULT\n${panel}`);
   const lastToolResult = panel.lastIndexOf("\n✓ ");
   const answerStart = lastToolResult >= 0 ? panel.indexOf("\n", lastToolResult + 1) : -1;
-  const answerEnd = panel.indexOf("\n[Automated check", answerStart);
+  const automated = panel.indexOf("\n[Automated check", answerStart);
+  const doneMark = panel.indexOf("\nDone", answerStart);
+  const proposalsMark = panel.indexOf("\nProposals", answerStart);
+  const answerEnd = [automated, doneMark, proposalsMark].filter((index) => index >= 0).sort((a, b) => a - b)[0] ?? -1;
   if (answerStart < 0 || answerEnd < 0) {
     throw new Error("D02 UI panel does not contain a complete final-answer segment.");
   }

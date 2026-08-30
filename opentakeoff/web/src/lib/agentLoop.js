@@ -43,7 +43,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   const successfulCount = callLog.some(({ name, out }) =>
     (name === "sweep_schedule_row" && Number.isFinite(out?.found))
     || (name === "count_marks" && !out?.error));
-  if (/\b(?:installed\s+quantity|quantity|take\s*off|count)\b/i.test(goal) && !successfulCount) {
+  if (/\binstalled\s+quantity\b/i.test(goal) && !successfulCount) {
     return "The goal asks for installed quantity, but no successful sweep_schedule_row or count_marks call exists in this run. Do not infer quantity from schedule-row count. Call the appropriate counting tool, then answer from its result or refuse.";
   }
   if (/\binstalled\s+quantity\b/i.test(goal) && successfulCount && finalText
@@ -190,6 +190,101 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       }
     }
   }
+  const drawingTextHits = callLog
+    .filter(({ name, out }) =>
+      (name === "find_text" || name === "read_sheet_text")
+      && !out?.error
+      && ((out?.count ?? out?.hits?.length ?? 0) > 0 || (Array.isArray(out?.hits) && out.hits.length > 0)))
+    .flatMap(({ args, out }) => (out?.hits || []).map((hit) => ({
+      query: typeof args?.q === "string" ? args.q : "",
+      str: typeof hit?.str === "string" ? hit.str : "",
+      sheet: hit?.sheet || out?.sheet || "",
+    })))
+    .filter((hit) => hit.str);
+  const scheduleLocationTexts = callLog
+    .filter(({ name }) => name === "query_table")
+    .flatMap(({ out }) => out?.matches || [])
+    .flatMap((match) => Object.entries(match?.row?.all_cells || match?.row?.cells || {}))
+    .filter(([header]) => /\b(?:LOCATION|ROOM|AREA)\b/i.test(String(header)))
+    .map(([, cell]) => String(cell?.text || "").trim())
+    .filter(Boolean);
+  const asksServes = /\bserves\b|\bwhat (?:the |this |that )?(?:unit|equipment|ahu|device)\s+serves\b/i.test(goal);
+  const asksPhysicalSection = /\bphysical (?:drawing )?section\b|\bdrawing section\b|\bsection where (?:the )?equipment\b/i.test(goal);
+  if (asksServes || asksPhysicalSection) {
+    const setWideTextSearch = callLog.some(({ name, args, out }) =>
+      name === "find_text" && !out?.error && (args?.sheet == null || args?.sheet === ""));
+    const sheetScopedEmpty = callLog.some(({ name, args, out }) =>
+      name === "find_text"
+      && !out?.error
+      && args?.sheet != null
+      && args?.sheet !== ""
+      && (out?.count === 0 || out?.hits?.length === 0));
+    if (!drawingTextHits.length) {
+      if (!setWideTextSearch && sheetScopedEmpty) {
+        return "A sheet-scoped find_text returned zero hits. Omit sheet so find_text searches the entire loaded set, then answer from hit.str — do not fill serving/section fields from schedule cells.";
+      }
+      return "This goal needs free drawing-text evidence (serving narrative and/or a physical section label). Schedule LOCATION/ROOM cells and schedule titles are not that evidence. Call find_text without a sheet filter to search the loaded set, copy answering text from hit.str, and cite that hit — or explicitly refuse.";
+    }
+    if (!setWideTextSearch && sheetScopedEmpty) {
+      return "A sheet-scoped find_text returned zero hits. Omit sheet so find_text searches the entire loaded set, then answer from hit.str — do not fill serving/section fields from schedule cells.";
+    }
+  }
+  if (asksServes && /\bserves\b|\bserving\b/i.test(finalText)) {
+    const refusedServes = /\b(?:could not|can't|cannot|unable to|not found|no (?:drawn )?serving|missing evidence|refuse[sd]?)\b.{0,100}\bserves?\b/i.test(finalText)
+      || /\bserves?\b.{0,100}\b(?:could not|can't|cannot|unable to|not found|missing evidence|no (?:drawn )?serving)\b/i.test(finalText);
+    const locationCanonical = scheduleLocationTexts
+      .map((text) => text.toUpperCase().replace(/[^A-Z0-9]/g, ""))
+      .filter((text) => text.length >= 6);
+    const locationSet = new Set(locationCanonical);
+    const servesLines = finalText.split(/\n+/).filter((line) => /\bserves\b|\bserving\b/i.test(line));
+    const locationOnServesLine = servesLines.some((line) => {
+      const lineCanonical = line.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      return locationCanonical.some((loc) => lineCanonical.includes(loc));
+    });
+    const paraphrasedFromLocation = /\b(?:serves|serving)\b.{0,160}\b(?:derived from|from (?:the )?(?:schedule )?location|location field)\b/i.test(finalText);
+    if (locationOnServesLine || paraphrasedFromLocation) {
+      return "The final answer fills a serving/serves claim from a schedule LOCATION/ROOM cell. That cell is installation location only. Retrieve the serving narrative with find_text/read_sheet_text and copy from hit.str, or refuse; never paraphrase LOCATION into a serves statement.";
+    }
+    if (!refusedServes) {
+      // Phrase-length drawing hits only — short tag hits do not count as serving narrative.
+      const narrativeHits = drawingTextHits.filter((hit) => {
+        const words = hit.str.trim().split(/\s+/).filter(Boolean);
+        if (words.length < 6 && hit.str.length < 40) return false;
+        const hitCanonical = hit.str.toUpperCase().replace(/[^A-Z0-9]/g, "");
+        return !locationSet.has(hitCanonical);
+      });
+      if (narrativeHits.length) {
+        const usesHit = narrativeHits.some((hit) => {
+          const hitCanonical = hit.str.toUpperCase().replace(/[^A-Z0-9]/g, "");
+          const needle = hitCanonical.slice(0, Math.min(48, hitCanonical.length));
+          return finalCanonical.includes(needle);
+        });
+        if (!usesHit) {
+          return "Drawing-text evidence for the serving narrative was already retrieved, but the final answer does not copy answering text from hit.str. Re-emit using a contiguous substring of that hit; do not substitute a schedule LOCATION string.";
+        }
+      } else {
+        return "No phrase-length find_text/read_sheet_text hit supports the serving claim. Keep searching the loaded set for the drawn serving description and copy from hit.str, or refuse; do not answer serves from schedule LOCATION.";
+      }
+    }
+  }
+  if (asksPhysicalSection) {
+    const sectionHits = drawingTextHits.filter((hit) => /\bSECTION\b/i.test(hit.str));
+    const answerHasSection = /\bSECTION\b/i.test(finalText);
+    if (answerHasSection && !sectionHits.length) {
+      return "The final answer names a physical section label without a find_text/read_sheet_text hit containing that section text. Call find_text for the section label and cite hit.str; a schedule title is not a drawing section.";
+    }
+    if (sectionHits.length) {
+      const usesSectionHit = sectionHits.some((hit) => {
+        const hitCanonical = hit.str.toUpperCase().replace(/[^A-Z0-9]/g, "");
+        return hitCanonical.length >= 8 && finalCanonical.includes(hitCanonical.slice(0, Math.min(40, hitCanonical.length)));
+      });
+      if (!usesSectionHit) {
+        return "A find_text/read_sheet_text hit already contains the physical section label, but the final answer does not copy that hit.str. Cite the section label from the drawing-text hit and its sheet.";
+      }
+    } else if (!answerHasSection) {
+      return "The goal asks for the physical drawing section where the equipment is shown. Call find_text (omit sheet if needed) for the section label on the drawings, cite hit.str, or refuse — do not substitute a schedule sheet title.";
+    }
+  }
   if (/\bshow\b.*\bcite\b|\bcite the exact\b/i.test(goal)
     && !callLog.some(({ name, out }) => name === "highlight_citation" && !out?.error)) {
     return "The goal asks to show exact cited source locations, but no successful highlight_citation call exists. Highlight the returned plan tag and schedule-cell bboxes on their real sheets before answering.";
@@ -286,6 +381,9 @@ export function agentSystemPrompt() {
     "- Never say a cell or field was highlighted unless a successful highlight_citation call targeted that exact sheet and bbox_px. State exactly which source regions were highlighted; do not imply unpainted cells were painted.",
     "- For a scheduled device tag, cite query_table row.identity (for example VALVE MARK), not the first different column that happens to repeat the same text (for example UNIT MARK).",
     "- For any equipment-to-control-valve join, use this direct set-wide sequence: query_table with row_key set to the equipment tag; sweep_schedule_row for installed quantity/plan evidence when requested; query_table with cell_contains set to that exact equipment tag to find compound relationship marks; then highlight the exact returned tag and row-identity bboxes. Do not browse guessed sheets or repeatedly retry the same empty exact-row query.",
+    "- Schedule LOCATION/ROOM cells are installation-location attributes only. When asked what equipment serves, call find_text or read_sheet_text and copy from hit.str — never paraphrase a LOCATION cell into a serves claim.",
+    "- When asked for a physical drawing section or detail label where equipment is shown, cite find_text/read_sheet_text hit.str for that section label. A schedule title is not a drawing section.",
+    "- find_text accepts an optional sheet; omit sheet to search the entire loaded set. When a sheet-scoped search returns zero hits with a next_move, follow that next_move instead of answering from schedule cells.",
     "- resolve_tag resolves room-finish relationships only. Never use it to locate scheduled HVAC/BAS equipment.",
     "- read_schedule/find_schedule return two DIFFERENT kinds of name and they are never interchangeable: `headers` names the table's own COLUMNS (e.g. \"SYMBOL\", \"REMARKS\" as column labels), while each entry in `rows` has its own `key` naming that ONE ROW (e.g. \"AC-1\"). A word appearing in `headers` does NOT mean a row exists with that word as its key — check `rows[].key` directly, never infer a row's existence from a column name alone.",
     "",

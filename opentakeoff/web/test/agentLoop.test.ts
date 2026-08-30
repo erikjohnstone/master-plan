@@ -235,6 +235,60 @@ test("installed quantity cannot finish without deterministic count evidence", ()
       },
     }] } },
   ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted; CFM is 3850. All cited cells are highlighted.")!, /broadly says all\/each/);
+  const servesGoal = "Trace the point back to the air handler. Give me what the unit serves and cite the physical drawing section where the equipment is shown.";
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#48",
+      row: { key: "AHU-1", all_cells: { LOCATION: { text: "11TH FLOOR MECHANICAL" } } },
+    }] } },
+  ], servesGoal, "Serves: 11TH FLOOR MECHANICAL spaces.")!, /drawing-text evidence/);
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#48",
+      row: { key: "AHU-1", all_cells: { LOCATION: { text: "11TH FLOOR MECHANICAL" } } },
+    }] } },
+    { name: "find_text", args: { sheet: "set.pdf#48", q: "AHU-1" }, out: { count: 0, hits: [], next_move: "omit sheet" } },
+  ], servesGoal, "Serves: derived from the LOCATION field.")!, /Omit sheet/);
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#48",
+      row: { key: "AHU-1", all_cells: { LOCATION: { text: "11TH FLOOR MECHANICAL" } } },
+    }] } },
+    { name: "find_text", args: { q: "AHU-1" }, out: { count: 1, hits: [{ str: "AHU-1", sheet: "set.pdf#2" }] } },
+  ], servesGoal,
+  "Location: 11TH FLOOR MECHANICAL.\nServes: supplies the 11TH FLOOR MECHANICAL spaces.")!, /LOCATION\/ROOM cell/);
+  const narrative = "AHU-1/B provide ventilation, heating, cooling, and dehumidification to the control cab.";
+  assert.match(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#48",
+      row: { key: "AHU-1", all_cells: { LOCATION: { text: "11TH FLOOR MECHANICAL" } } },
+    }] } },
+    { name: "find_text", args: { q: "control cab" }, out: {
+      count: 1,
+      hits: [{ str: narrative, sheet: "set.pdf#2" }],
+    } },
+  ], servesGoal, "Location: 11TH FLOOR MECHANICAL.\nServes: the mechanical room.")!, /copy answering text from hit\.str/);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "query_table", out: { matches: [{
+      sheet: "set.pdf#48",
+      row: { key: "AHU-1", all_cells: { LOCATION: { text: "11TH FLOOR MECHANICAL" } } },
+    }] } },
+    { name: "find_text", args: { q: "control cab" }, out: {
+      count: 2,
+      hits: [
+        { str: narrative, sheet: "set.pdf#2" },
+        { str: "AHU-1 / AHU-2 SECTION", sheet: "set.pdf#28" },
+      ],
+    } },
+  ], servesGoal,
+  `Location: 11TH FLOOR MECHANICAL.\nServes: ${narrative}\nPhysical section: AHU-1 / AHU-2 SECTION on set.pdf#28.`), null);
+  assert.equal(requiredEvidenceCorrection([
+    { name: "find_text", args: { q: "AHU-1" }, out: {
+      count: 1,
+      hits: [{ str: "AHU-1 / AHU-2 SECTION", sheet: "set.pdf#28" }],
+    } },
+  ], servesGoal,
+  "Physical section: AHU-1 / AHU-2 SECTION on set.pdf#28.\nCould not find a drawn serving narrative with evidence; refusing serves."), null);
 });
 
 test("anthropic-style: scripted tool_use → tools execute → results pair up in ONE user message → done", async () => {
