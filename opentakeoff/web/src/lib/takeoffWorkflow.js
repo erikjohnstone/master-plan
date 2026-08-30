@@ -10,9 +10,11 @@
  *    title-scan counts exist on a points-list takeoff)
  *
  * Extensible: add intents/phases here; do not special-case corpus answers.
+ * All patterns are set-agnostic — corpus fixtures prove them; they must not
+ * hardcode sheet numbers, building names, or locked counts.
  */
 
-/** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"generic"} TakeoffIntent */
+/** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"project_takeoff"|"equipment_plan_join"|"cross_discipline_join"|"plan_link_refuse"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"generic"} TakeoffIntent */
 
 /** Estimator phrasing: "takeoff", "take off", counts, rollups. */
 export function goalAsksTakeoff(g) {
@@ -37,32 +39,40 @@ export function goalAsksCompleteSetTakeoff(g) {
   const s = String(g || "");
   if (!goalAsksTakeoff(s) || !goalNamesLoadedSet(s)) return false;
   if (/\b(?:complete|full|entire|whole)\b/i.test(s)) return true;
-  // "valve takeoff on this set" / "BAS points takeoff of these drawings"
-  // without the word "complete" — still a set-wide compile ask.
   if (/\b(?:control\s+)?valves?\b/i.test(s)) return true;
   if (/\b(?:BAS|DDC)\b/i.test(s) && /\bpoints?\b/i.test(s)) return true;
   if (/\bHVAC\b/i.test(s) && /\bequipment\b/i.test(s)) return true;
   return false;
 }
 
+/** Count distinct HVAC equipment family mentions (set-agnostic). */
+export function namedEquipmentFamilyCount(goal) {
+  const g = String(goal || "");
+  let n = 0;
+  if (/\bAHUs?\b/i.test(g)) n += 1;
+  if (/\bDOAH\b|dedicated\s+outdoor/i.test(g)) n += 1;
+  if (/\bFCUs?\b|fan[\s\-]*coil/i.test(g)) n += 1;
+  if (/\bVAVs?\b|volume\s+control\s+box|air\s+terminal\s+box/i.test(g)) n += 1;
+  if (/\bchillers?\b/i.test(g)) n += 1;
+  if (/\bboilers?\b/i.test(g)) n += 1;
+  if (/\bpumps?\b/i.test(g)) n += 1;
+  if (/\bRTUs?\b|rooftop/i.test(g)) n += 1;
+  if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s\-]*coil/i.test(g)) n += 1;
+  return n;
+}
+
 /** @typedef {"survey"|"compile"|"title_scans"|"spot_cites"|"paint"|"answer"|"done"} WorkflowPhase */
 
 /**
- * Complete set-wide HVAC / BAS / control-valve takeoffs that the corpus
- * compiler covers (T-HVAC-01 / T-BAS-01 / T-VALVE-01). Named multi-list goals
- * stay on points_takeoff.
+ * Complete set-wide HVAC / BAS / control-valve takeoffs.
  * @param {string} goal
  * @returns {"hvac_equipment"|"bas_points"|"control_valves"|null}
  */
 export function corpusCompileKind(goal) {
   const g = String(goal || "");
-  // Specific named points lists → title-scan workflow, not full-set compile.
   if (namedPointsListTitles(g).length >= 2) return null;
   if (!goalAsksCompleteSetTakeoff(g)) return null;
   if (/\b(?:BAS|DDC)\b/i.test(g) && /\bpoints?\b/i.test(g)) return "bas_points";
-  // Valve goals before HVAC equipment — "valve takeoff" ≡ "control valve
-  // takeoff"; must not wait for the words HVAC + equipment (that path
-  // returned a 10-row partial crawl).
   if (/\b(?:control\s+)?valves?\b/i.test(g)) return "control_valves";
   if (/\bHVAC\b/i.test(g) && /\bequipment\b/i.test(g)) return "hvac_equipment";
   return null;
@@ -79,9 +89,23 @@ export function classifyTakeoffIntent(goal) {
   if (corpusKind === "bas_points") return "corpus_bas";
   if (corpusKind === "control_valves") return "corpus_valves";
 
+  // Named multi-list points takeoff before multi-family project rollup —
+  // list titles often embed AHU/FCU/DOAH tokens that would otherwise trip
+  // project_takeoff (e.g. "POINTS LIST AHU-…" / "FCU WITH … DDC POINTS LIST").
+  if (namedPointsListTitles(g).length >= 2) {
+    return "points_takeoff";
+  }
+
+  // Multi-family HVAC (+ optional one points list) project rollup.
+  if (namedEquipmentFamilyCount(g) >= 3 && goalAsksTakeoff(g)
+    && (/\bHVAC\b/i.test(g) || /\bscheduled\s+unit\s+counts?\b/i.test(g)
+      || /\bequipment\b.{0,48}\btakeoff\b|\btakeoff\b.{0,48}\bequipment\b/i.test(g))) {
+    return "project_takeoff";
+  }
+
   const pointsListTakeoff = /\b(?:points?\s*list|DDC\s+points?(?:\s*list)?)\b/i.test(g)
-    && (/\b(?:AI|AO|BI|BO)\b/i.test(g) || /\bpoint[-\s]?type/i.test(g) || /\btakeoff\b/i.test(g))
-    && /\b(?:row\s+count|breakdown|totals?|takeoff)\b/i.test(g);
+    && (/\b(?:AI|AO|BI|BO)\b/i.test(g) || /\bpoint[-\s]?type/i.test(g) || goalAsksTakeoff(g))
+    && (/\b(?:row\s+counts?|breakdown|totals?|counts?)\b/i.test(g) || goalAsksTakeoff(g));
   if (pointsListTakeoff) return "points_takeoff";
 
   if (/\bfan[\s\-]*coil|\bFCUs?\b/i.test(g)
@@ -90,21 +114,40 @@ export function classifyTakeoffIntent(goal) {
     return "fcu_buildings";
   }
 
-  // Named control/bypass valve schedule takeoff + plan sweeps (D06-style).
-  // Not the complete set compile (corpus_valves) — schedule title scans +
-  // sweep_schedule_row for installed quantities.
   if (/\bcontrol\s+valves?\b/i.test(g)
     && /\bschedule\b/i.test(g)
     && goalAsksTakeoff(g)
-    && (/\bsweep\b|\binstalled\b|\bplan\b|\bBYPASS\b/i.test(g) || /\bCV-\d/i.test(g))) {
+    && (/\bsweep\b|\binstalled\b|\bplan\b|\bBYPASS\b/i.test(g) || /\bCV-\d|\bBCV-\d/i.test(g))) {
     return "valve_join";
+  }
+
+  // Equipment on plan + schedule attrs + related valve/coil.
+  if (/\b(?:find|locate)\b/i.test(g)
+    && /\b(?:plan|drawings?|installed)\b/i.test(g)
+    && /\b(?:schedule|valve|capacity|GPM|CFM|temperature)\b/i.test(g)
+    && /\b(?:CH-|AHU-|FCU-|RTU-|VAV-|B-|PUMP-|DOAH-)[A-Z0-9]/i.test(g)) {
+    return "equipment_plan_join";
+  }
+
+  // Mech schedule ↔ electrical connection schedule.
+  if (/\b(?:MCA|MOCP|circuit|connection\s+schedule|electrical)\b/i.test(g)
+    && /\b(?:RTU|rooftop|packaged|mechanical|EQUIP)\b/i.test(g)
+    && /\b(?:join|matching|connection|voltage|phases?)\b/i.test(g)) {
+    return "cross_discipline_join";
+  }
+
+  // Schedule attrs + plan sweep with honest refuse when not drawn.
+  if (/\b(?:sweep|plan)\b/i.test(g)
+    && /\b(?:refuse|not drawn|honest|invent plan)\b/i.test(g)
+    && /\b(?:schedule|VAV|fan|EF-)\b/i.test(g)) {
+    return "plan_link_refuse";
   }
 
   if (/\broom\b/i.test(g) && /\b(?:finish|diffuser|grille|coordination|RTU)\b/i.test(g)) {
     return "room_coordination";
   }
 
-  if (/\bpoint mark\b|\bBAS\b.{0,40}\bpoint\b|\balarm\b.{0,40}\btrend\b/i.test(g)
+  if ((/\bpoint mark\b|\bBAS\b.{0,40}\bpoint\b|\balarm\b.{0,40}\btrend\b|\bpoints?\s*list\b/i.test(g))
     && /\b(?:serves|location|section|trace)\b/i.test(g)) {
     return "bas_point_trace";
   }
@@ -120,12 +163,12 @@ export function classifyTakeoffIntent(goal) {
 /** Extract explicit POINTS LIST / DDC list titles named in the goal. */
 export function namedPointsListTitles(goal) {
   const titles = [];
-  const re = /\b((?:POINTS LIST|FCU WITH[^.?\n]{0,80}DDC POINTS LIST|UNIT HEATER DDC POINTS LIST)[A-Z0-9\s\-\/]*)/gi;
+  // FCU WITH … must not span a comma into the next sibling title.
+  const re = /\b((?:POINTS\s+LIST|UNIT\s+HEATER\s+DDC\s+POINTS\s+LIST|FCU\s+WITH[^,.\n?]{0,80}DDC\s+POINTS\s+LIST)[A-Z0-9\s\-\/]*)/gi;
   for (const m of String(goal || "").matchAll(re)) {
     const t = m[1].replace(/\s+/g, " ").trim().replace(/[,:;]+$/, "");
     if (t.length >= 12) titles.push(t);
   }
-  // De-dupe preserving order
   return [...new Set(titles.map((t) => t.toUpperCase()))].map((u) => {
     const orig = titles.find((t) => t.toUpperCase() === u);
     return orig || u;
@@ -149,6 +192,18 @@ function hasTitleScan(callLog, title) {
   });
 }
 
+function surveyThenTitleTools(hasGraph, nextAfterGraph) {
+  if (!hasGraph) {
+    return {
+      phase: "survey",
+      allowedTools: ["list_sheets", "sheet_graph", "find_schedule"],
+      nextMove: "Call list_sheets and/or sheet_graph once, then follow the next workflow move.",
+      blockReason: null,
+    };
+  }
+  return nextAfterGraph;
+}
+
 /**
  * @param {TakeoffIntent} intent
  * @param {Array} callLog
@@ -165,8 +220,14 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
     name === "query_table" && !out?.error && args?.row_key != null).length;
   const hasCorpusCompile = log.some(({ name, out }) =>
     name === "compile_corpus_takeoff" && !out?.error && (out?.takeoff_id || out?.kind));
+  const hasSweep = log.some(({ name, out }) =>
+    name === "sweep_schedule_row" && !out?.error);
+  const titleScanCount = log.filter(({ name, out, args }) => {
+    if (name !== "query_table" || out?.error) return false;
+    const q = out?.query || args || {};
+    return q.row_key == null && q.cell_contains == null && q.title;
+  }).length;
 
-  // Complete set HVAC / BAS / valves → one deterministic compile, then spot-cites.
   if (intent === "corpus_hvac" || intent === "corpus_bas" || intent === "corpus_valves") {
     const kind = intent === "corpus_bas"
       ? "bas_points"
@@ -246,6 +307,35 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
     };
   }
 
+  if (intent === "project_takeoff") {
+    const allowed = ["list_sheets", "sheet_graph", "find_schedule", "query_table", "highlight_citation"];
+    return surveyThenTitleTools(hasGraph, (() => {
+      if (titleScanCount < 3) {
+        return {
+          phase: "title_scans",
+          allowedTools: allowed,
+          nextMove: "Title-scan each named HVAC equipment schedule family with query_table (title only). "
+            + "Copy count and building_tag_counts. If a points list is named, title-scan it once for count — do not AI/AO/BI/BO cell_contains loops.",
+          blockReason: null,
+        };
+      }
+      if (rowKeyCites < 1 || paints < 1) {
+        return {
+          phase: paints < 1 && rowKeyCites >= 1 ? "paint" : "spot_cites",
+          allowedTools: allowed,
+          nextMove: "Spot-cite requested MARK cells with query_table { row_key } + highlight_citation, then answer from title-scan counts only.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "Emit the multi-family project takeoff from query_table title-scan counts and building splits. Cite painted MARKs. No more exploratory tools.",
+        blockReason: null,
+      };
+    })());
+  }
+
   if (intent === "fcu_buildings") {
     const hasFcuScan = log.some(({ name, out, args }) => {
       if (name !== "query_table" || out?.error) return false;
@@ -258,7 +348,7 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
       return {
         phase: "title_scans",
         allowedTools: ["list_sheets", "sheet_graph", "query_table", "find_schedule", "highlight_citation"],
-        nextMove: "Call query_table with title FAN COIL UNIT SCHEDULE (no row_key). Copy count and building_tag_counts (A/M/T).",
+        nextMove: "Call query_table with title FAN COIL UNIT SCHEDULE (no row_key). Copy count and building_tag_counts.",
         blockReason: null,
       };
     }
@@ -283,8 +373,6 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
       if (q.row_key != null || q.cell_contains != null) return false;
       return /CONTROL\s+VALVE\s+SCHEDULE/i.test(String(q.title || out?.matches?.[0]?.title?.text || ""));
     });
-    const hasSweep = log.some(({ name, out }) =>
-      name === "sweep_schedule_row" && !out?.error);
     if (!hasGraph) {
       return {
         phase: "survey",
@@ -325,7 +413,125 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
     };
   }
 
-  // Generic / other intents: no hard allowlist (existing gates still apply).
+  if (intent === "equipment_plan_join") {
+    const allowed = [
+      "list_sheets", "sheet_graph", "find_schedule", "query_table",
+      "resolve_tag", "sweep_schedule_row", "highlight_citation", "find_text",
+    ];
+    return surveyThenTitleTools(hasGraph, (() => {
+      if (rowKeyCites < 1) {
+        return {
+          phase: "title_scans",
+          allowedTools: allowed,
+          nextMove: "Resolve the named equipment tag via resolve_tag / query_table { row_key }. Pull schedule attributes. Find the related control-valve row (query_table on CONTROL VALVE SCHEDULE with cell_contains or row identity). Sweep the plan for installed quantity.",
+          blockReason: null,
+        };
+      }
+      if (!hasSweep || paints < 1) {
+        return {
+          phase: paints < 1 ? "paint" : "spot_cites",
+          allowedTools: allowed,
+          nextMove: "sweep_schedule_row for plan location/qty; highlight_citation on schedule cells and plan hits; then answer.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "Emit equipment schedule values, matching valve attrs, installed qty, and plan cite from tool results only.",
+        blockReason: null,
+      };
+    })());
+  }
+
+  if (intent === "cross_discipline_join") {
+    const allowed = [
+      "list_sheets", "sheet_graph", "find_schedule", "query_table",
+      "resolve_tag", "sweep_schedule_row", "highlight_citation", "find_text",
+    ];
+    return surveyThenTitleTools(hasGraph, (() => {
+      if (rowKeyCites < 2) {
+        return {
+          phase: "title_scans",
+          allowedTools: allowed,
+          nextMove: "Query the mechanical packaged/rooftop schedule row, then the matching electrical/connection schedule row (watch zero-padded tag forms). Copy mech + electrical fields from tool cells only.",
+          blockReason: null,
+        };
+      }
+      if (paints < 1) {
+        return {
+          phase: "paint",
+          allowedTools: allowed,
+          nextMove: "highlight_citation on mech EQUIP/CFM cells and connection schedule NO/MCA cells; note roof-plan location via sweep or find_text. Then answer.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "Emit joined mech + electrical attributes with cites from both schedules. No invented values.",
+        blockReason: null,
+      };
+    })());
+  }
+
+  if (intent === "plan_link_refuse") {
+    const allowed = [
+      "list_sheets", "sheet_graph", "find_schedule", "query_table",
+      "sweep_schedule_row", "highlight_citation",
+    ];
+    return surveyThenTitleTools(hasGraph, (() => {
+      if (titleScanCount < 1 || rowKeyCites < 1) {
+        return {
+          phase: "title_scans",
+          allowedTools: allowed,
+          nextMove: "Title-scan the named schedule for count; query_table { row_key } for requested tags' schedule attrs.",
+          blockReason: null,
+        };
+      }
+      if (!hasSweep) {
+        return {
+          phase: "spot_cites",
+          allowedTools: allowed,
+          nextMove: "sweep_schedule_row for each requested plan tag. If a tag is not drawn on any plan sheet, report an honest refusal — never invent plan locations.",
+          blockReason: null,
+        };
+      }
+      if (paints < 1) {
+        return {
+          phase: "paint",
+          allowedTools: allowed,
+          nextMove: "Paint schedule cells and successful plan hits, then answer including any honest refusals.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "Emit schedule counts/attrs, plan cites where found, and explicit refusals where sweeps found nothing.",
+        blockReason: null,
+      };
+    })());
+  }
+
+  if (intent === "equipment_schedule" || intent === "room_coordination" || intent === "bas_point_trace") {
+    const allowed = [
+      "list_sheets", "sheet_graph", "find_schedule", "query_table",
+      "resolve_tag", "sweep_schedule_row", "highlight_citation", "find_text",
+    ];
+    return surveyThenTitleTools(hasGraph, {
+      phase: rowKeyCites < 1 ? "title_scans" : (paints < 1 ? "paint" : "answer"),
+      allowedTools: paints >= 1 && rowKeyCites >= 1 ? null : allowed,
+      nextMove: rowKeyCites < 1
+        ? "Title-scan / query_table the named schedules, then row_key the requested tags. Copy tool counts and cells only."
+        : (paints < 1
+          ? "highlight_citation on cited cells, then write the final answer."
+          : "Emit the complete answer from retrieved cells and paints. No more exploratory tools."),
+      blockReason: null,
+    });
+  }
+
+  // Generic: no hard allowlist (existing gates still apply).
   return {
     phase: "survey",
     allowedTools: null,
@@ -343,7 +549,6 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
 export function isIllegalWorkflowTransition(state, toolName, args = {}) {
   if (!state?.allowedTools) return false;
   if (!state.allowedTools.includes(toolName)) return true;
-  // Points takeoff: ban type-filter cell_contains during title_scans / survey.
   if ((state.phase === "survey" || state.phase === "title_scans")
     && toolName === "query_table"
     && args?.cell_contains != null

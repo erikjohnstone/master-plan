@@ -162,6 +162,37 @@ test("phrase-robust corpus compile: valve ≡ control valve; take off; full; no 
   );
 });
 
+test("D10 frozen prompt extracts five list titles without merging FCU siblings", () => {
+  const d10 = readFileSync(
+    new URL("../../../opentakeoff-corpus/demos/D10-bas-points-takeoff/prompt.txt", import.meta.url),
+    "utf8",
+  );
+  const titles = namedPointsListTitles(d10);
+  assert.equal(titles.length, 5, JSON.stringify(titles));
+  assert.ok(titles.some((t) => /DOAH-TI/i.test(t)));
+  assert.ok(titles.some((t) => /AHU-T1A/i.test(t)));
+  assert.ok(titles.some((t) => /COOLING COILS DDC/i.test(t) && !/HEATING/i.test(t)));
+  assert.ok(titles.some((t) => /HEATING AND COOLING/i.test(t)));
+  assert.ok(titles.some((t) => /UNIT HEATER DDC/i.test(t)));
+  assert.equal(classifyTakeoffIntent(d10), "points_takeoff");
+  assert.equal(corpusCompileKind(d10), null);
+});
+
+test("D08 / D06 frozen prompts route to fcu_buildings / valve_join", () => {
+  const d08 = readFileSync(
+    new URL("../../../opentakeoff-corpus/demos/D08-fcu-cross-building/prompt.txt", import.meta.url),
+    "utf8",
+  );
+  const d06 = readFileSync(
+    new URL("../../../opentakeoff-corpus/demos/D06-control-valve-takeoff/prompt.txt", import.meta.url),
+    "utf8",
+  );
+  assert.equal(classifyTakeoffIntent(d08), "fcu_buildings");
+  assert.equal(advanceTakeoffWorkflow("fcu_buildings", [], d08).phase, "title_scans");
+  assert.equal(classifyTakeoffIntent(d06), "valve_join");
+  assert.equal(advanceTakeoffWorkflow("valve_join", [], d06).phase, "survey");
+});
+
 test("named-family / FCU / valve-join goals route through durable intents", () => {
   assert.equal(
     classifyTakeoffIntent("How many FCUs across Air Ops vs MITRACON buildings?"),
@@ -186,4 +217,29 @@ test("named-family / FCU / valve-join goals route through durable intents", () =
   }], d06);
   assert.equal(afterGraph.phase, "title_scans");
   assert.match(afterGraph.nextMove || "", /CONTROL VALVE/);
+});
+
+test("all D01–D10 frozen prompts route to durable non-generic intents", () => {
+  const want = {
+    "D01-chiller-plan-to-controls": "equipment_plan_join",
+    "D02-ahu-bas-point-to-location": "bas_point_trace",
+    "D03-hvac-bas-project-takeoff": "project_takeoff",
+    "D04-vav-scope-rollup": "equipment_schedule",
+    "D05-rtu-mech-to-electrical": "cross_discipline_join",
+    "D06-control-valve-takeoff": "valve_join",
+    "D07-vav-plan-link-fan-refuse": "plan_link_refuse",
+    "D08-fcu-cross-building": "fcu_buildings",
+    "D09-room-hvac-coordination": "room_coordination",
+    "D10-bas-points-takeoff": "points_takeoff",
+  };
+  for (const [dir, intent] of Object.entries(want)) {
+    const g = readFileSync(
+      new URL(`../../../opentakeoff-corpus/demos/${dir}/prompt.txt`, import.meta.url),
+      "utf8",
+    );
+    assert.equal(classifyTakeoffIntent(g), intent, dir);
+    const state = advanceTakeoffWorkflow(intent, [], g);
+    assert.ok(state.nextMove || state.phase === "title_scans" || state.phase === "survey", dir);
+    assert.notEqual(intent, "generic", dir);
+  }
 });
