@@ -15,8 +15,34 @@
 /** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"generic"} TakeoffIntent */
 
 /** Estimator phrasing: "takeoff", "take off", counts, rollups. */
-function goalAsksTakeoff(g) {
-  return /\b(?:take\s*offs?|takeoff|count|how many|totals?|rollup|scheduled)\b/i.test(String(g || ""));
+export function goalAsksTakeoff(g) {
+  return /\b(?:take\s*offs?|takeoff|quantity\s+takeoff|count|how many|totals?|rollup|scheduled)\b/i.test(String(g || ""));
+}
+
+/** Loaded set / these drawings / this blueprint — not a named corpus set. */
+export function goalNamesLoadedSet(g) {
+  const s = String(g || "");
+  return /\b(?:this|these|the)\s+(?:blueprint\s+|plan\s+|drawing\s+)?(?:set|drawings|plans|pdf|project)\b/i.test(s)
+    || /\bon this (?:blueprint|plan)\s+set\b/i.test(s)
+    || /\bof this set\b/i.test(s)
+    || /\b(?:loaded|current|open)\s+(?:set|project|drawings|plan)\b/i.test(s)
+    || /\bacross (?:this|the)\s+(?:set|project|drawings)\b/i.test(s);
+}
+
+/**
+ * Set-wide finished takeoff intent (complete/full/entire, or a set-scoped
+ * valve/HVAC/BAS takeoff where "complete" is implied by scope).
+ */
+export function goalAsksCompleteSetTakeoff(g) {
+  const s = String(g || "");
+  if (!goalAsksTakeoff(s) || !goalNamesLoadedSet(s)) return false;
+  if (/\b(?:complete|full|entire|whole)\b/i.test(s)) return true;
+  // "valve takeoff on this set" / "BAS points takeoff of these drawings"
+  // without the word "complete" — still a set-wide compile ask.
+  if (/\b(?:control\s+)?valves?\b/i.test(s)) return true;
+  if (/\b(?:BAS|DDC)\b/i.test(s) && /\bpoints?\b/i.test(s)) return true;
+  if (/\bHVAC\b/i.test(s) && /\bequipment\b/i.test(s)) return true;
+  return false;
 }
 
 /** @typedef {"survey"|"compile"|"title_scans"|"spot_cites"|"paint"|"answer"|"done"} WorkflowPhase */
@@ -32,16 +58,12 @@ export function corpusCompileKind(goal) {
   const g = String(goal || "");
   // Specific named points lists → title-scan workflow, not full-set compile.
   if (namedPointsListTitles(g).length >= 2) return null;
-  const completeSet = /\bcomplete\b/i.test(g)
-    && /\btakeoff\b/i.test(g)
-    && (/\b(?:this|these)\s+(?:blueprint\s+|plan\s+)?(?:set|drawings)\b/i.test(g)
-      || /\bon this (?:blueprint|plan)\s+set\b/i.test(g)
-      || /\bof this set\b/i.test(g));
-  if (!completeSet) return null;
+  if (!goalAsksCompleteSetTakeoff(g)) return null;
   if (/\b(?:BAS|DDC)\b/i.test(g) && /\bpoints?\b/i.test(g)) return "bas_points";
-  // Valve goals before HVAC equipment — "complete valve takeoff" must not wait
-  // for the words HVAC + equipment (that path returned a 10-row partial crawl).
-  if (/\bvalves?\b/i.test(g)) return "control_valves";
+  // Valve goals before HVAC equipment — "valve takeoff" ≡ "control valve
+  // takeoff"; must not wait for the words HVAC + equipment (that path
+  // returned a 10-row partial crawl).
+  if (/\b(?:control\s+)?valves?\b/i.test(g)) return "control_valves";
   if (/\bHVAC\b/i.test(g) && /\bequipment\b/i.test(g)) return "hvac_equipment";
   return null;
 }
@@ -63,7 +85,7 @@ export function classifyTakeoffIntent(goal) {
   if (pointsListTakeoff) return "points_takeoff";
 
   if (/\bfan[\s\-]*coil|\bFCUs?\b/i.test(g)
-    && /\b(?:building|Air Ops|MITRACON|ATCT|splits?|cross[- ]building)\b/i.test(g)
+    && /\b(?:buildings?|splits?|cross[- ]building|across\b)/i.test(g)
     && goalAsksTakeoff(g)) {
     return "fcu_buildings";
   }

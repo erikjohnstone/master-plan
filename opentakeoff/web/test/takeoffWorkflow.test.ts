@@ -124,6 +124,44 @@ test("workflowDirective is non-null for active intents", () => {
   assert.equal(workflowDirective("generic", state), null);
 });
 
+test("phrase-robust corpus compile: valve ≡ control valve; take off; full; no literal complete", () => {
+  const valvePhrases = [
+    "Run a complete valve takeoff on this blueprint set",
+    "Run a complete control valve takeoff on this blueprint set",
+    "Do a full control-valve takeoff of these drawings",
+    "Take off all valves on this set",
+    "valve takeoff for this project",
+    "Control valve quantity takeoff of the loaded set",
+  ];
+  for (const p of valvePhrases) {
+    assert.equal(corpusCompileKind(p), "control_valves", p);
+    assert.equal(classifyTakeoffIntent(p), "corpus_valves", p);
+  }
+  const hvacPhrases = [
+    "Do a complete HVAC equipment quantity takeoff of this set",
+    "Full HVAC equipment takeoff on these drawings",
+    "HVAC equipment takeoff of the loaded set",
+  ];
+  for (const p of hvacPhrases) {
+    assert.equal(corpusCompileKind(p), "hvac_equipment", p);
+  }
+  const basPhrases = [
+    "Do a complete BAS / DDC points takeoff of this set",
+    "Full DDC points takeoff on these drawings",
+    "BAS points takeoff of the loaded set",
+  ];
+  for (const p of basPhrases) {
+    assert.equal(corpusCompileKind(p), "bas_points", p);
+  }
+  // Named multi-list stays off compile.
+  assert.equal(corpusCompileKind(D10_GOAL), null);
+  // FCU across buildings without hardcoding project names.
+  assert.equal(
+    classifyTakeoffIntent("Compare scheduled fan-coil quantities across the three buildings"),
+    "fcu_buildings",
+  );
+});
+
 test("named-family / FCU / valve-join goals route through durable intents", () => {
   assert.equal(
     classifyTakeoffIntent("How many FCUs across Air Ops vs MITRACON buildings?"),
