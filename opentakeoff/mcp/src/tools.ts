@@ -613,6 +613,16 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
         }];
       });
     });
+    const unique = [...new Map(all.map((match) => [
+      JSON.stringify([
+        match.sheet,
+        match.title,
+        match.region,
+        match.row.key,
+        match.row.cells,
+      ]),
+      match,
+    ])).values()];
     return {
       query: {
         title: title ?? null,
@@ -620,9 +630,9 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
         column: column ?? null,
         cell_value: cell_value ?? null,
       },
-      count: all.length,
-      truncated: all.length > limit,
-      matches: all.slice(0, limit),
+      count: unique.length,
+      truncated: unique.length > limit,
+      matches: unique.slice(0, limit),
     };
   }));
 
