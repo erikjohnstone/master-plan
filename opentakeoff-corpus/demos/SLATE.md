@@ -19,7 +19,7 @@ sheets. If the evidence does not hold, replace the target before N=5 runs.
 
 ## D01 selection record
 
-Status: `SELECTED — N=5 gate in progress`
+Status: `WORKING — 5/5 clean; p95 3.988 s; local stdio proof passed`
 
 The target holds up. Independent graph extraction from the real NAVFAC PDF
 found the `AIR COOLED CHILLER SCHEDULE` and `CHW CONTROL VALVE SCHEDULE` on
@@ -31,8 +31,9 @@ sample.
 
 The first rasterization also exposed and fixed an evidence-integrity blocker:
 the table renderer's old filenames omitted table identity, causing all nine
-page-44 table crops to overwrite one another. D01 cannot enter model runs until
-fresh unique crops are read and its `truth.json` is complete.
+page-44 table crops to overwrite one another. Unique evidence crops, typed
+ground truth, the N=5 gate, and the production local-process proof are now
+locked in `D01-chiller-plan-to-controls/`.
 
 ## D02 selection record
 
