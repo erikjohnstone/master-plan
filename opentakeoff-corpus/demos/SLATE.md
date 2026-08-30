@@ -193,10 +193,11 @@ ten. Next: D10.
 
 ## D10 selection record
 
-Status: `SELECTED — not started`
+Status: `SELECTED — ground truth authored; N=5 pending`
 
-Target holds on `navfac-cherry-point-atc` (75 sheets). Full BAS points takeoff
-grouped by controller/equipment and point type (AI/AO/BI/BO) across multiple
-points-list families and buildings. 20% hand-count reconciliation required
-before model runs.
+Target holds on `navfac-cherry-point-atc` (75 sheets). Five extractable
+points/DDC lists on #64/#65/#67 roll up to 122 rows (AI 43 / AO 15 / BI 49 /
+BO 15). Title-only Air Ops/MITRACON schematic lists stay disclosed
+non-extractable. 20% stratified sample (25/122) reconciled before model runs
+in `D10-bas-points-takeoff/`.
 

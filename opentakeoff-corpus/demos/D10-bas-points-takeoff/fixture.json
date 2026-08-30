@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "set_id": "navfac-cherry-point-atc",
+  "source_file": "raw/navfac-cherry-point-atc-mechanical.pdf",
+  "sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "required_pages": [
+    {
+      "page": 64,
+      "sheet_number": "MI730",
+      "purpose": "POINTS LIST DOAH-TI"
+    },
+    {
+      "page": 65,
+      "sheet_number": "MI731",
+      "purpose": "POINTS LIST AHU-T1A/TIB"
+    },
+    {
+      "page": 67,
+      "sheet_number": "MI740",
+      "purpose": "FCU and unit-heater DDC points lists"
+    }
+  ],
+  "redistribution": "External local-use corpus fixture; do not commit or republish the source PDF."
+}
