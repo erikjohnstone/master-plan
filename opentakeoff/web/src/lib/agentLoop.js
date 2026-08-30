@@ -399,15 +399,28 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   }
   // Product rule: paint cited evidence on the sheets whenever the answer uses
   // paint-able tool evidence — not only when the goal says "show me" / "cite the exact".
-  const asksToShowCite = /\bshow\b.*\bcite\b|\bcite the exact\b|\bshow me\b.*\b(?:plan|sheet|schedule|highlight)\b/i.test(goal);
+  const asksToShowCite = /\bshow\b.*\bcite\b|\bcite the exact\b|\bshow me\b.*\b(?:plan|sheet|schedule|highlight)\b|\bcite the (?:schedule|exact|mark)\b/i.test(goal);
+  // Broad title-scan / keys-only count results name dozens of MARKs so the
+  // model can copy `count` — they are not per-row citation duties. Re-queries
+  // with row_key (or cell filters) carry the cite paint obligation.
+  const isKeysOnlyCountResult = (out) => {
+    if (out?.building_tag_counts && typeof out.building_tag_counts === "object") return true;
+    if (typeof out?.next_move === "string" && /Use count=\d+/i.test(out.next_move)) return true;
+    const q = out?.query;
+    if (!q) return false;
+    const scoped = q.row_key != null || q.column != null || q.cell_value != null || q.cell_contains != null;
+    return !scoped && Number(out?.count || 0) > 8;
+  };
   const highlights = callLog.filter(({ name, out }) =>
     name === "highlight_citation" && !out?.error && Array.isArray(out.bbox_px))
     .map(({ out }) => ({ sheet: out.sheet, bbox: out.bbox_px }));
   const highlightMatches = (sheet, bbox) => Array.isArray(bbox) && bbox.length === 4
     && highlights.some((highlight) => highlight.sheet === sheet
       && highlight.bbox.every((value, index) => Math.abs(value - bbox[index]) <= 1));
-  const usedQueryRows = [];
+  const usedQueryRowsRaw = [];
+  const answerNorm = finalText.toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
   for (const { out } of callLog.filter(({ name }) => name === "query_table")) {
+    const keysOnlyCount = isKeysOnlyCountResult(out);
     for (const match of out?.matches || []) {
       const rowKey = String(match?.row?.key || match?.row?.identity?.text || "");
       if (!rowKey || !finalCanonical.includes(rowKey.toUpperCase().replace(/[^A-Z0-9]/g, ""))) continue;
@@ -417,9 +430,10 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         .filter((cell) => Array.isArray(cell?.bbox) && cell.bbox.length === 4);
       if (!paintable.length) continue;
       // Only rows whose cell values appear in the answer, or whose sheet is
-      // named there, or when the goal explicitly asks to paint/cite sources.
-      // Sharing a tag key across sheets must not force painting unused siblings.
-      // The row key/identity text alone does not count as "using" the row.
+      // named there, or when the goal explicitly asks to paint/cite sources
+      // from a scoped (non keys-only) query. Sharing a tag key across sheets
+      // must not force painting unused siblings. The row key/identity text
+      // alone does not count as "using" the row.
       const rowKeyCanonical = rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
       const usesCellFromRow = cells.some(([, cell]) => {
         const raw = String(cell?.text || "").trim();
@@ -436,12 +450,53 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         return finalCanonical.includes(textCanonical);
       });
       const sheetNorm = String(match.sheet || "").toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
-      const answerNorm = finalText.toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
       const answerNamesSheet = sheetNorm && answerNorm.includes(sheetNorm);
-      if (!usesCellFromRow && !answerNamesSheet && !asksToShowCite
+      // Cite prompts may force MARK-only rows from scoped re-queries — never
+      // from bulk keys-only count scans (those thrash rollup answers).
+      const citeForcesRow = asksToShowCite && !keysOnlyCount;
+      if (!usesCellFromRow && !answerNamesSheet && !citeForcesRow
         && !/^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(rowKey)) continue;
-      usedQueryRows.push({ sheet: match.sheet, rowKey, cells: paintable });
+      usedQueryRowsRaw.push({
+        sheet: match.sheet,
+        rowKey,
+        cells: paintable,
+        weak: !usesCellFromRow && !answerNamesSheet,
+      });
     }
+  }
+  // Weak (cite-only) attachments: one paint duty per MARK key across sibling
+  // sheets. Painting any matching sheet covers the duty; prefer the sheet the
+  // answer names when reporting. Strong attachments keep every distinct sheet.
+  const usedQueryRows = [];
+  const weakByKey = new Map();
+  for (const row of usedQueryRowsRaw) {
+    const keyCanon = row.rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (!row.weak) {
+      usedQueryRows.push(row);
+      continue;
+    }
+    if (!weakByKey.has(keyCanon)) {
+      weakByKey.set(keyCanon, { rowKey: row.rowKey, options: [] });
+    }
+    weakByKey.get(keyCanon).options.push({ sheet: row.sheet, cells: row.cells });
+  }
+  const strongKeys = new Set(usedQueryRows.map((row) =>
+    row.rowKey.toUpperCase().replace(/[^A-Z0-9]/g, "")));
+  for (const [keyCanon, group] of weakByKey) {
+    if (strongKeys.has(keyCanon)) continue;
+    const ranked = [...group.options].sort((a, b) => {
+      const aSheet = String(a.sheet || "").toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
+      const bSheet = String(b.sheet || "").toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
+      const aHit = aSheet && answerNorm.includes(aSheet) ? 0 : 1;
+      const bHit = bSheet && answerNorm.includes(bSheet) ? 0 : 1;
+      return aHit - bHit;
+    });
+    usedQueryRows.push({
+      sheet: ranked[0].sheet,
+      rowKey: group.rowKey,
+      cells: ranked[0].cells,
+      coverAny: ranked,
+    });
   }
   const usedDrawingHits = callLog
     .filter(({ name, out }) =>
@@ -491,8 +546,13 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     return "The answer cites schedule or drawing evidence that can be painted on the sheets, but no successful highlight_citation call exists. Call highlight_citation with each cited sheet and unchanged bbox_px so the estimator sees the source on the blueprint — agent-panel text alone is incomplete.";
   }
   if (usedQueryRows.length) {
+    const rowCovered = (row) => {
+      const options = row.coverAny || [{ sheet: row.sheet, cells: row.cells }];
+      return options.some(({ sheet, cells }) =>
+        cells.some((cell) => highlightMatches(sheet, cell.bbox)));
+    };
     const uncovered = usedQueryRows
-      .filter(({ sheet, cells }) => !cells.some((cell) => highlightMatches(sheet, cell.bbox)))
+      .filter((row) => !rowCovered(row))
       .map(({ rowKey, sheet }) => `${rowKey} on ${sheet}`);
     if (uncovered.length) {
       return `The answer uses queried schedule row(s) with no painted source cell: ${[...new Set(uncovered)].join(", ")}. Call highlight_citation on at least one exact cited cell from each row before finishing.`;

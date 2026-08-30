@@ -232,6 +232,42 @@ test("installed quantity cannot finish without deterministic count evidence", ()
       { sheet: "set.pdf#44", row: { key: "AHU-2", all_cells: { MARK: { bbox: [50, 60, 70, 80] } } } },
     ] } },
   ], "Cite the exact schedule cells", "AHU-1 is cited."), null);
+  // Keys-only count scans must not force painting every MARK named in a rollup
+  // cite answer — only scoped row_key / cell re-queries create cite paint duty.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: null, column: null, cell_value: null, cell_contains: null },
+      count: 12,
+      building_tag_counts: { A: 5, T: 7 },
+      next_move: "Use count=12 as the scheduled row total and building_tag_counts={\"A\":5,\"T\":7} for building splits. Re-query with row_key for citation cell bboxes.",
+      matches: [
+        { sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } },
+        { sheet: "set.pdf#44", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [5, 6, 7, 8] } } } },
+        { sheet: "set.pdf#42", row: { key: "AHU-A2", all_cells: { MARK: { text: "AHU-A2", bbox: [9, 10, 11, 12] } } } },
+      ],
+    } },
+    { name: "query_table", out: {
+      query: { title: "AIR HANDLING UNIT", row_key: "AHU-A1", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [
+        { sheet: "set.pdf#44", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [10, 20, 30, 40] } } } },
+      ],
+    } },
+  ], "Cite the schedule MARK cells for AHU-A1 and give AHU counts",
+  "AHUs: 12 (Air Ops 5). Spot-check MARK AHU-A1."), null);
+  // Same MARK on two scoped sheets: cite-only duty paints one sheet, not both.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: {
+      query: { title: null, row_key: "AHU-A1", column: null, cell_value: null, cell_contains: null },
+      count: 2,
+      matches: [
+        { sheet: "set.pdf#42", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [1, 2, 3, 4] } } } },
+        { sheet: "set.pdf#44", row: { key: "AHU-A1", all_cells: { MARK: { text: "AHU-A1", bbox: [10, 20, 30, 40] } } } },
+      ],
+    } },
+  ], "Cite the schedule MARK for AHU-A1", "AHU-A1 MARK is cited."), null);
   assert.match(requiredEvidenceCorrection([
     { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
     { name: "query_table", out: { matches: [{
