@@ -1066,6 +1066,11 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     }
     if (asksToShowCite) {
       for (const line of finalText.split("\n").filter((text) => /\bhighlight/i.test(text))) {
+        // Negation / disclosure lines are not overclaims ("was not highlighted",
+        // "not among the painted regions").
+        if (/\b(?:not|never|no)\b.{0,40}\b(?:highlight|painted)\b|\b(?:highlight|painted)\b.{0,40}\b(?:not|never|missing|absent|failed)\b|\bnot among the painted\b/i.test(line)) {
+          continue;
+        }
         const lineCanonical = line.toUpperCase().replace(/[^A-Z0-9]/g, "");
         const claimedCells = evidenceCells.filter(({ header, text }) => {
           const headerCanonical = String(header).toUpperCase().replace(/[^A-Z0-9]/g, "");

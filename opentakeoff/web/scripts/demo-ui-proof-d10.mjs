@@ -170,6 +170,11 @@ try {
   }
   const answerNorm = normalize(primaryAnswer);
   const has = (...needles) => needles.every((n) => answerNorm.includes(normalize(n)));
+  // Table answers list counts as adjacent integers (34 13 4 …). Do not use the
+  // digit-collapse normalize for those checks — it glues 34+13 into 3413.
+  const answerCounts = String(primaryAnswer || "").toUpperCase()
+    .replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D‑–—]/g, "-")
+    .replace(/[\u00A0\u202F\u2007\t]+/g, " ");
 
   if (!/DOAH-TI|POINTS LIST DOAH/i.test(answerNorm)) {
     throw new Error("D10 UI Answer missing DOAH-TI points list.");
@@ -177,16 +182,16 @@ try {
   if (!/AHU-T1A\/TIB|AHU-T1A\/T1B|POINTS LIST AHU/i.test(answerNorm)) {
     throw new Error("D10 UI Answer missing AHU-T1A/TIB points list.");
   }
-  if (!/\b34\b/.test(answerNorm) || !/\b62\b/.test(answerNorm)) {
+  if (!/(?:^|[^\d])34(?:[^\d]|$)/.test(answerCounts) || !/(?:^|[^\d])62(?:[^\d]|$)/.test(answerCounts)) {
     throw new Error("D10 UI Answer missing DOAH 34 / AHU 62 row counts.");
   }
-  if (!/\b122\b/.test(answerNorm)) {
+  if (!/(?:^|[^\d])122(?:[^\d]|$)/.test(answerCounts)) {
     throw new Error("D10 UI Answer missing overall row total 122.");
   }
-  if (!/\b43\b/.test(answerNorm)) {
+  if (!/(?:^|[^\d])43(?:[^\d]|$)/.test(answerCounts)) {
     throw new Error("D10 UI Answer missing overall AI 43.");
   }
-  if (!/\b49\b/.test(answerNorm)) {
+  if (!/(?:^|[^\d])49(?:[^\d]|$)/.test(answerCounts)) {
     throw new Error("D10 UI Answer missing overall BI 49.");
   }
   if (!has("AI07") || !has("AI10") || !has("AO01") || !has("BI02")) {
