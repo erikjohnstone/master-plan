@@ -119,6 +119,8 @@ function systemPrompt(truth) {
       ? "Installed quantity is required: call sweep_schedule_row once with tagged_only:true; this returns the complete tagged count and exact tag_at locations while explicitly excluding the unnecessary unlabeled near-match audit."
       : "Installed quantity is not requested. Do not call sweep_schedule_row merely for equipment_tag; cite equipment_tag from its exact schedule identity cell returned by query_table.",
     "For schedule attributes and BAS points-list fields, call query_table. When the prompt gives a distinctive point description but asks you to discover its point mark, use cell_contains with that description, then read every requested field from row.all_cells.",
+    "Never invent a table-title filter from the user's category words. Omit title on the first query, or use only a literal title phrase already returned by a tool (for example POINTS LIST); 'BAS points' does not imply a table literally titled BAS POINTS.",
+    "If a natural-language description returns no rows, broaden once with cell_contains set to the exact equipment tag from the prompt and no title filter, then inspect the returned descriptions for the requested point meaning. Do not repeat an equivalent empty query.",
     nonTableFields.length
       ? `These required fields need drawing-text evidence rather than a table cell: ${nonTableFields.join(", ")}. Use sheet_graph to orient, then find_text/read_sheet_text to return their exact source text and bbox; do not substitute a schedule citation.`
       : "No required field needs free drawing-text evidence.",
