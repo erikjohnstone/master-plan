@@ -41,6 +41,14 @@ const slug = (k) => {
   const base = k.replace(/#\d+$/, "").replace(/\.pdf$/i, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(-24);
   return `${base}-p${page}`;
 };
+const tableSlug = (title, kind, index) => {
+  const label = (title || kind || "untitled")
+    .replace(/[^A-Za-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .toLowerCase()
+    .slice(0, 64) || "untitled";
+  return `${String(index + 1).padStart(2, "0")}-${label}`;
+};
 
 // every table region the graph found, per sheet
 const regions = new Map();
@@ -66,7 +74,7 @@ for (const sh of g.sheets) {
     n++;
     continue;
   }
-  for (const t of tables) {
+  for (const [tableIndex, t] of tables.entries()) {
     const r = t.region;
     const pad = 40;
     const y0 = Math.max(0, r.y0 - pad), y1 = r.y1 + pad;
@@ -75,7 +83,7 @@ for (const sh of g.sheets) {
     for (let b = 0; b < BANDS; b++) {
       const by0 = y0 + b * h, by1 = b === BANDS - 1 ? y1 : y0 + (b + 1) * h + 12;
       const out = await page.renderRegionPng({ x0, y0: by0, x1, y1: by1 }, 2400);
-      const p = join(outDir, `${setId}--${slug(sh.sheet)}--${t.kind}-${b + 1}of${BANDS}.png`);
+      const p = join(outDir, `${setId}--${slug(sh.sheet)}--${tableSlug(t.title, t.kind, tableIndex)}-${b + 1}of${BANDS}.png`);
       writeFileSync(p, out.png);
       console.log(`${p}   "${t.title}" band ${b + 1}/${BANDS}`);
       n++;
