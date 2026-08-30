@@ -22,7 +22,7 @@ import { runVerifiers } from "./agentVerifiers.js";
 
 // Full-set HVAC/BAS takeoffs need list/graph + several count queries + scoped
 // cite re-queries + paints; 32 was truncating D03 mid-gate. Keep a hard cap.
-export const MAX_AGENT_ITERATIONS = 48;
+export const MAX_AGENT_ITERATIONS = 64;
 
 const EQUIPMENT_VALVE_EVIDENCE_TOOLS = new Set([
   "list_sheets",
@@ -719,11 +719,12 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         evidenceCells.push({ sheet: out.row.sheet, header, text: cell.text, bbox: bboxArray });
       }
     }
-    // Broad "all/each … highlighted" claims are always wrong as prose — list
-    // the painted regions instead. Per-line "X is highlighted" wording thrash
-    // is limited to explicit cite/show goals so ordinary asks are not stalled
-    // after paint already succeeded.
-    if (/\b(?:all|each)\b.{0,160}\bhighlight/i.test(finalText)) {
+    // Only reject true overclaims like "all cited cells are highlighted" —
+    // not ordinary prose that happens to use "each"/"all" near the word
+    // "highlighted" in a long takeoff answer (that thrash burned D03's cap).
+    if (/\b(?:all|each)\s+(?:of\s+)?(?:the\s+)?(?:cited|requested|queried|required|spot-?check\s+)?(?:cells?|fields?|marks?|regions?|values?|sources?)\s+(?:are|is|were|was)\s+highlight/i.test(finalText)
+      || /\ball\s+cited\b.{0,40}\bhighlight/i.test(finalText)
+      || /\beach\s+cited\b.{0,40}\bhighlight/i.test(finalText)) {
       const painted = highlights.map((h) => `${h.sheet} ${JSON.stringify(h.bbox)}`).slice(0, 8);
       return `The final answer uses a broad all/each-highlighted claim. Rewrite without that wording and describe ONLY these painted regions: ${painted.join("; ") || "(none)"}. Do not claim any other cell was highlighted.`;
     }
@@ -1053,6 +1054,8 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
   /** @type {Array<{ id: string, name: string, args: unknown, out: unknown }>} */
   const callLog = [];
   let lastDraftText = "";
+  let lastWordingCorrection = "";
+  let wordingCorrectionStreak = 0;
 
   for (; iterations < maxIterations; iterations++) {
     if (signal?.aborted) return aborted();
@@ -1084,6 +1087,32 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
         const needsMoreTools = /\bcall (?:query_table|find_text|read_sheet_text|sweep_schedule_row|highlight_citation|count_marks)\b/i.test(correction)
           || /\bomit sheet\b/i.test(correction)
           || /\bno successful\b/i.test(correction);
+        // Wording-only gates that repeat identical corrections thrash the step
+        // cap. After two identical wording corrections, strip the offending
+        // all/each-highlighted sentence and accept the rest.
+        if (!needsMoreTools) {
+          if (correction === lastWordingCorrection) wordingCorrectionStreak += 1;
+          else { lastWordingCorrection = correction; wordingCorrectionStreak = 1; }
+          if (wordingCorrectionStreak >= 2 && /\ball\/each-highlighted claim\b/i.test(correction)) {
+            displayText = String(turn.text || "")
+              .replace(/\b(?:all|each)\s+(?:of\s+)?(?:the\s+)?(?:cited|requested|queried|required|spot-?check\s+)?(?:cells?|fields?|marks?|regions?|values?|sources?)\s+(?:are|is|were|was)\s+highlight[^.]*\./gi, "")
+              .replace(/\ball\s+cited\b[^.]*\bhighlight[^.]*\./gi, "")
+              .replace(/\beach\s+cited\b[^.]*\bhighlight[^.]*\./gi, "")
+              .trim();
+            const notes = runVerifiers(callLog, goal);
+            if (notes.length) displayText = `${displayText || ""}\n\n${notes.join("\n\n")}`;
+            if (displayText) {
+              lastDraftText = displayText;
+              emit({ type: "text", text: displayText });
+            }
+            messages.push(provider === "anthropic" ? { role: "assistant", content: turn.raw.content } : turn.raw);
+            emit({ type: "done", text: displayText });
+            return { status: "done", text: displayText, iterations: iterations + 1 };
+          }
+        } else {
+          lastWordingCorrection = "";
+          wordingCorrectionStreak = 0;
+        }
         const toolDirective = needsMoreTools
           ? "Use tools only if this correction requires new evidence or paint; otherwise emit the complete replacement answer now."
           : "Do not call any tools. Emit the complete replacement answer now.";
@@ -1094,6 +1123,8 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
         emit({ type: "text", text: `[Evidence gate: ${correction}]` });
         continue;
       }
+      lastWordingCorrection = "";
+      wordingCorrectionStreak = 0;
       const notes = runVerifiers(callLog, goal);
       if (notes.length) displayText = `${displayText || ""}\n\n${notes.join("\n\n")}`;
     }

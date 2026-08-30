@@ -382,7 +382,20 @@ test("installed quantity cannot finish without deterministic count evidence", ()
         },
       },
     }] } },
-  ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted; CFM is 3850. All cited cells are highlighted.")!, /broadly says all\/each|ONLY these painted/);
+  ], "Cite the exact schedule cells", "AHU-1 MARK is highlighted; CFM is 3850. All cited cells are highlighted.")!, /broad all\/each|ONLY these painted/);
+  // Ordinary takeoff prose that uses "each" near "highlighted" must not thrash.
+  assert.equal(requiredEvidenceCorrection([
+    { name: "highlight_citation", out: { sheet: "set.pdf#44", bbox_px: [10, 20, 30, 40] } },
+    { name: "query_table", out: {
+      query: { title: null, row_key: "AHU-1", column: null, cell_value: null, cell_contains: null },
+      count: 1,
+      matches: [{
+        sheet: "set.pdf#44",
+        row: { key: "AHU-1", all_cells: { MARK: { text: "AHU-1", bbox: [10, 20, 30, 40] } } },
+      }],
+    } },
+  ], "Cite the schedule MARK for AHU-1",
+  "AHU count is 5. Each building split is listed below. AHU-1 MARK is highlighted."), null);
   // Multi-field answers must paint EACH answering value cell — painting only
   // location (or any single field) while citing CFM/capacity/etc. is incomplete.
   assert.match(requiredEvidenceCorrection([
