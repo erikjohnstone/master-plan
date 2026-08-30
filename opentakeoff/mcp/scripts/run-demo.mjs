@@ -180,9 +180,24 @@ export function drawingTextEvidenceErrors(answer, truth, toolCalls) {
     }
     return [];
   });
-  const scheduleTexts = new Set(collectToolTexts(toolCalls.filter((call) => call.name === "query_table"))
-    .map((text) => text.trim())
-    .filter(Boolean));
+  const scheduleCellTexts = new Map(); // text -> list of {sheet, bbox}
+  for (const call of toolCalls.filter((c) => c.name === "query_table")) {
+    for (const match of call.result?.data?.matches || []) {
+      const sheet = match.sheet;
+      for (const cell of Object.values(match.row?.all_cells || match.row?.cells || {})) {
+        const text = typeof cell?.text === "string" ? cell.text.trim() : "";
+        if (!text) continue;
+        const bbox = Array.isArray(cell.bbox) ? cell.bbox
+          : (cell.bbox && typeof cell.bbox === "object"
+            ? [cell.bbox.x0, cell.bbox.y0, cell.bbox.x1, cell.bbox.y1]
+            : null);
+        const list = scheduleCellTexts.get(text) || [];
+        list.push({ sheet, bbox });
+        scheduleCellTexts.set(text, list);
+      }
+    }
+  }
+  const scheduleTexts = new Set([...scheduleCellTexts.keys()]);
   const sameBbox = (a, b) => Array.isArray(a) && Array.isArray(b)
     && a.length === 4 && b.length === 4
     && a.every((n, i) => Math.abs(n - b[i]) < 0.05);
@@ -197,16 +212,23 @@ export function drawingTextEvidenceErrors(answer, truth, toolCalls) {
       }
     }
     if (typeof value !== "string" || !value.trim()) continue;
-    if (scheduleTexts.has(value.trim())) {
+    const supporting = drawingHits.filter((hit) => typeof hit.str === "string" && hit.str.includes(value));
+    const exactDrawingHits = supporting.filter((hit) => hit.str.trim() === value.trim());
+    const scheduleCellsForValue = scheduleCellTexts.get(value.trim()) || [];
+    const exactIsDistinctFromSchedule = exactDrawingHits.some((hit) =>
+      !scheduleCellsForValue.some((cell) =>
+        (!cell.sheet || !hit.sheet || cell.sheet === hit.sheet)
+        && (cell.bbox == null || hit.bbox == null || sameBbox(cell.bbox, hit.bbox))));
+    if (scheduleTexts.has(value.trim()) && !exactIsDistinctFromSchedule) {
       errors.push(`${field} value is exact schedule-cell text from query_table; choose a find_text/read_sheet_text phrase that is not a schedule attribute`);
       continue;
     }
-    const supporting = drawingHits.filter((hit) => typeof hit.str === "string" && hit.str.includes(value));
     if (!supporting.length) {
       errors.push(`${field} value must appear verbatim in find_text/read_sheet_text evidence; do not reuse a schedule cell`);
       continue;
     }
-    if (supporting.some((hit) => hit.query && hit.query === value.trim() && hit.str.trim() !== value.trim())) {
+    if (supporting.some((hit) => hit.query && hit.query === value.trim() && hit.str.trim() !== value.trim())
+      && !exactDrawingHits.length) {
       errors.push(`${field} value equals the find_text query string; copy answering text from hit.str instead of echoing q`);
       continue;
     }
@@ -265,6 +287,7 @@ function systemPrompt(truth) {
       ? `These required fields need drawing-text evidence rather than a table cell: ${nonTableFields.join(", ")}. Call find_text or read_sheet_text and cite the returned hit. Never fill these fields from a schedule cell, and never invent a label that no tool returned.`
       : "No required field needs free drawing-text evidence.",
     "find_text accepts an optional sheet; omit sheet to search the entire loaded set. When searching drawing text, use a distinctive fragment from the user's question—not the field name itself—and set the answer value from hit.str (a contiguous substring is allowed). Never echo the find_text query string as the value when hit.str is longer.",
+    "When the goal asks where equipment appears on a roof/floor plan, prefer a find_text hit whose hit.str equals the exact equipment tag on a plan sheet over longer detail callouts that merely contain the tag (for example prefer plan-sheet \"RTU-1\" over \"RTU-1. TRANSITION TO UNIT\" on a detail sheet). Cite that exact hit's sheet and bbox.",
     "Group independent tool calls into the same response. Inspect each complete result before calling another tool, and never repeat an equivalent query.",
     "Use query_table cell_value for exact cross-table relationships and cell_contains when the related tag is embedded in a compound value; do not scan a whole table or infer a row without source text.",
     "Every query_table match includes row.all_cells. After the first matching row, use all_cells for every requested field on that row instead of making separate column calls.",

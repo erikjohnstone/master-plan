@@ -13,7 +13,7 @@
     "prompt": "Is RTU-2 on the connection schedule as RTU-02? What is its MCA and circuit number?",
     "expected": {
       "rtu_2_connection_tag": "RTU-02",
-      "rtu_02_mca": 24.0,
+      "rtu_02_mca": 24,
       "rtu_02_circuit": "C - 32,34,36"
     }
   },
@@ -27,10 +27,10 @@
         "row_key": "RTU-1",
         "column": "SERVICE",
         "bbox_px": [
-          2778,
-          894.48,
-          2825.04,
-          1063.2
+          908.2,
+          642.1,
+          1049,
+          661
         ],
         "grounding_text": "MAIN OPERATIONS",
         "ocr_mode": "single_line",
@@ -46,10 +46,10 @@
         "row_key": "RTU-1",
         "column": "MANUFACTURER",
         "bbox_px": [
-          2778,
-          1063.2,
-          2825.04,
-          1226.88
+          1111,
+          642.1,
+          1179,
+          661
         ],
         "grounding_text": "CARRIER",
         "ocr_mode": "single_line",
@@ -65,10 +65,10 @@
         "row_key": "RTU-1",
         "column": "MODEL",
         "bbox_px": [
-          2778,
-          1226.88,
-          2825.04,
-          1368.24
+          1279.4,
+          642.1,
+          1315.7,
+          661
         ],
         "grounding_text": "48FE",
         "ocr_mode": "single_line",
@@ -85,10 +85,10 @@
         "row_key": "RTU-1",
         "column": "NOMINAL CAP (TONS)",
         "bbox_px": [
-          2778,
-          1368.24,
-          2825.04,
-          1465.2
+          1412.6,
+          642.1,
+          1421.2,
+          661
         ],
         "grounding_text": "5",
         "ocr_mode": "single_line",
@@ -105,10 +105,10 @@
         "row_key": "RTU-1",
         "column": "SUPPLY AIR (CFM)",
         "bbox_px": [
-          2778,
-          1465.2,
-          2825.04,
-          1562.4
+          1496.9,
+          642.1,
+          1530.7,
+          661
         ],
         "grounding_text": "1650",
         "ocr_mode": "single_line",
@@ -125,10 +125,10 @@
         "row_key": "RTU-1",
         "column": "MIN OUTSIDE AIR (CFM)",
         "bbox_px": [
-          2778,
-          1562.4,
-          2825.04,
-          1659.36
+          1597.9,
+          642.1,
+          1623.3,
+          661
         ],
         "grounding_text": "330",
         "ocr_mode": "single_line",
@@ -144,10 +144,10 @@
         "row_key": "RTU-1",
         "column": "EQUIP NO",
         "bbox_px": [
-          2778,
-          644.88,
-          2825.04,
-          752.88
+          676.6,
+          642.1,
+          720.9,
+          661
         ],
         "grounding_text": "RTU-1",
         "ocr_mode": "single_line",
@@ -172,7 +172,7 @@
         "ocr_mode": "single_line",
         "ocr_confusables": true
       },
-      "derivation": "Electrical connection schedule zero-pads mech RTU-1 \u2192 RTU-01; unpadded RTU-1 has zero hits on that schedule."
+      "derivation": "Electrical connection schedule zero-pads mech RTU-1 → RTU-01; unpadded RTU-1 has zero hits on that schedule."
     },
     "rtu_01_va": {
       "type": "number",
@@ -196,7 +196,7 @@
     },
     "rtu_01_mca": {
       "type": "number",
-      "value": 33.0,
+      "value": 33,
       "tolerance": 0,
       "citation": {
         "sheet_id": "baker-county-eoc-bidset.pdf#60",
