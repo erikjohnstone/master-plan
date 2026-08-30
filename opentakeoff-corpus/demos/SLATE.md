@@ -135,3 +135,14 @@ schedules remain as distractors. Installed plan tags confirmed via
 before model runs in `D06-control-valve-takeoff/`.
 
 D06 locked; next: D07.
+
+## D07 selection record
+
+Status: `SELECTED — ground truth authored; N=5 pending`
+
+Target holds on `bldg5406-hvac-demo` (20 sheets). Quarter-turned
+`AIR TERMINAL BOX SCHEDULE` (VAV-1..9) linked to plan tags on #2;
+`FAN SCHEDULE` CFM with honest `sweep_schedule_row` refusal when EF-2/EF-3
+tags are not drawn on any plan sheet. Ground truth authored before model
+runs in `D07-vav-plan-link-fan-refuse/`.
+

@@ -7216,29 +7216,44 @@ function spanCenterInBbox(span: GraphSpan, bbox: Bbox, pad = 2): boolean {
 export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: GraphSpan[]): ScheduleTable {
   if (!sourceSpans?.length || !table.rows?.length) return table;
   const ROW_Y_TOL = 28;
+  const COL_X_TOL = 28;
   const isHorizontal = (span: GraphSpan) => (span.w || 0) >= (span.h || 0) * 0.9;
+  const isVerticalBox = (bbox: Bbox) => (bbox[3] - bbox[1]) > (bbox[2] - bbox[0]) * 1.1;
   const exactSpans = (want: string): GraphSpan[] => {
     const needle = compactSpanText(want);
     if (!needle) return [];
     return sourceSpans.filter((span) => compactSpanText(span.str) === needle);
   };
-  const pickNearY = (candidates: GraphSpan[], rowY: number | null): GraphSpan | null => {
+  const pickNearAxis = (
+    candidates: GraphSpan[],
+    axis: "y" | "x",
+    center: number | null,
+    tol: number,
+  ): GraphSpan | null => {
     if (!candidates.length) return null;
     if (candidates.length === 1) return candidates[0];
     let pool = candidates;
-    if (rowY != null) {
-      const band = candidates.filter((span) => Math.abs(span.y + span.h / 2 - rowY) <= ROW_Y_TOL);
+    if (center != null) {
+      const band = candidates.filter((span) => {
+        const mid = axis === "y" ? span.y + span.h / 2 : span.x + span.w / 2;
+        return Math.abs(mid - center) <= tol;
+      });
       if (!band.length) return null;
       pool = band;
     } else {
-      return null; // ambiguous with no row band — do not guess
+      return null; // ambiguous with no band — do not guess
     }
     if (pool.length === 1) return pool[0];
-    const horiz = pool.filter(isHorizontal);
-    if (horiz.length) pool = horiz;
+    // Prefer orientation matching the schedule axis: horizontal rows vs
+    // quarter-turned columns (tall/thin glyph stacks).
+    const preferVert = axis === "x";
+    const oriented = pool.filter((span) => preferVert ? !isHorizontal(span) : isHorizontal(span));
+    if (oriented.length) pool = oriented;
     return pool.slice().sort((a, b) => {
-      const dy = Math.abs(a.y + a.h / 2 - (rowY as number)) - Math.abs(b.y + b.h / 2 - (rowY as number));
-      if (dy) return dy;
+      const aMid = axis === "y" ? a.y + a.h / 2 : a.x + a.w / 2;
+      const bMid = axis === "y" ? b.y + b.h / 2 : b.x + b.w / 2;
+      const d = Math.abs(aMid - center!) - Math.abs(bMid - center!);
+      if (d) return d;
       return a.x - b.x || a.y - b.y;
     })[0];
   };
@@ -7253,29 +7268,44 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
     const alreadyGrounded = (cell: { text: string; bbox: Bbox }) =>
       exactSpans(cell.text).some((span) => spanCenterInBbox(span, cell.bbox));
 
+    // Prefer the row-key / MARK cell as the axis seed when it is already a
+    // tall thin (quarter-turned) or wide (normal) glyph span.
+    const keyHeader = Object.keys(cells).find((header) => {
+      const cell = cells[header];
+      return cell && compactSpanText(cell.text) === compactSpanText(row.key);
+    });
+    const keyCell = keyHeader ? cells[keyHeader] : null;
+    const columnMode = !!(keyCell && alreadyGrounded(keyCell) && isVerticalBox(keyCell.bbox));
+
     // Pass 1: snap uniquely-occurring values (and keep already-grounded ones).
-    const rowYs: number[] = [];
+    const axisCenters: number[] = [];
     for (const cell of Object.values(cells)) {
       const hits = exactSpans(cell.text);
       if (alreadyGrounded(cell)) {
         const hit = hits.find((span) => spanCenterInBbox(span, cell.bbox));
-        if (hit) rowYs.push(hit.y + hit.h / 2);
+        if (hit) {
+          axisCenters.push(columnMode ? hit.x + hit.w / 2 : hit.y + hit.h / 2);
+        }
         continue;
       }
       if (hits.length === 1) {
         cell.bbox = bboxOf(hits[0]);
-        rowYs.push(hits[0].y + hits[0].h / 2);
+        axisCenters.push(columnMode ? hits[0].x + hits[0].w / 2 : hits[0].y + hits[0].h / 2);
       }
     }
-    const rowY = rowYs.length
-      ? rowYs.slice().sort((a, b) => a - b)[Math.floor(rowYs.length / 2)]
-      : null;
+    const axisCenter = axisCenters.length
+      ? axisCenters.slice().sort((a, b) => a - b)[Math.floor(axisCenters.length / 2)]
+      : (keyCell && columnMode
+        ? (keyCell.bbox[0] + keyCell.bbox[2]) / 2
+        : null);
 
-    // Pass 2: snap remaining cells onto the consensus row band.
-    if (rowY != null) {
+    // Pass 2: snap remaining cells onto the consensus row-Y or column-X band.
+    if (axisCenter != null) {
+      const axis = columnMode ? "x" : "y";
+      const tol = columnMode ? COL_X_TOL : ROW_Y_TOL;
       for (const cell of Object.values(cells)) {
         if (alreadyGrounded(cell)) continue;
-        const picked = pickNearY(exactSpans(cell.text), rowY);
+        const picked = pickNearAxis(exactSpans(cell.text), axis, axisCenter, tol);
         if (picked) cell.bbox = bboxOf(picked);
       }
     }

@@ -8,7 +8,7 @@ import path from "node:path";
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
@@ -5562,6 +5562,39 @@ export class Session {
     const equivalentCollapsed = collapseEquivalentPrimaryTables(g.tables);
     if (equivalentCollapsed) {
       g.notes.push(`${equivalentCollapsed} duplicate primary table read(s) from independent extractors were collapsed by exact sheet/title/key-set identity.`);
+    }
+    // Final paint-grounding pass: geometric tables that beat ODL on raw
+    // completeness can still carry mis-associated cell boxes (real: quarter-
+    // turned FAN SCHEDULE EF-2 CFM). Re-snap every table against the sheet's
+    // pdf.js spans so cite boxes land on the glyphs, regardless of which
+    // extractor won the completeness race.
+    let snappedTables = 0;
+    for (let i = 0; i < g.tables.length; i++) {
+      const table = g.tables[i];
+      const state = this.sheets.get(table.sheet);
+      if (!state) continue;
+      let sourceSpans = sourceSpansBySheet.get(table.sheet);
+      if (!sourceSpans) {
+        sourceSpans = (state.spans ?? textSpans(state.page)).map((span) => ({
+          str: span.str,
+          x: span.x0,
+          y: span.y0,
+          w: span.x1 - span.x0,
+          h: span.y1 - span.y0,
+          ...(span.rot ? { rot: span.rot } : {}),
+        }));
+        sourceSpansBySheet.set(table.sheet, sourceSpans);
+      }
+      if (!sourceSpans.length) continue;
+      const next = snapCellBboxesToSourceSpans(table, sourceSpans);
+      if (next !== table) {
+        g.tables[i] = next;
+        snappedTables++;
+        touchedSheets.add(table.sheet);
+      }
+    }
+    if (snappedTables) {
+      g.notes.push(`Cell bbox snap: ${snappedTables} table(s) re-grounded onto pdf.js source spans after extractor reconciliation.`);
     }
     if (touchedSheets.size) syncSheetSchedules(g, touchedSheets);
     if (recovered || added) {
