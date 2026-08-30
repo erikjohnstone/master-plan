@@ -151,14 +151,22 @@ export async function runToolCallingModel({
 
     const calls = Array.isArray(message.tool_calls) ? message.tool_calls : [];
     if (!calls.length) {
-      return {
-        answer: parseJsonAnswer(message.content),
-        raw_response: message.content,
-        raw_model_responses: rawModelResponses,
-        tool_calls: toolCalls,
-        request_ids: requestIds,
-        model_version_identifier: resolvedModel,
-      };
+      try {
+        return {
+          answer: parseJsonAnswer(message.content),
+          raw_response: message.content,
+          raw_model_responses: rawModelResponses,
+          tool_calls: toolCalls,
+          request_ids: requestIds,
+          model_version_identifier: resolvedModel,
+        };
+      } catch (error) {
+        messages.push({
+          role: "user",
+          content: `Your previous final response violated the required JSON-only transport (${error instanceof Error ? error.message : String(error)}). Re-emit the same answer as one valid JSON object using the exact required final shape. Do not add Markdown, commentary, or new factual claims.`,
+        });
+        continue;
+      }
     }
     for (const call of calls) {
       const name = call.function?.name;

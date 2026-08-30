@@ -35,6 +35,48 @@ test("parseJsonAnswer accepts JSON and strips a fenced transport wrapper", () =>
   });
 });
 
+test("demo runner repairs a non-JSON final response without changing facts", async () => {
+  const replies = [
+    new Response(JSON.stringify({
+      id: "bad-final",
+      choices: [{ message: { role: "assistant", content: "**Answer:** 56 tons" } }],
+    }), { status: 200 }),
+    new Response(JSON.stringify({
+      id: "fixed-final",
+      choices: [{
+        message: {
+          role: "assistant",
+          content: '{"status":"done","answer":{"capacity_tons":{"value":56,"citations":[]}}}',
+        },
+      }],
+    }), { status: 200 }),
+  ];
+  const requests = [];
+  const result = await runToolCallingModel({
+    endpoint: "https://model.invalid/v1/chat/completions",
+    apiKey: "test-key",
+    model: "test-model",
+    prompt: "Capacity?",
+    truth: {
+      source_file: "set.pdf",
+      expected: { capacity_tons: { type: "number", tolerance: 0 } },
+    },
+    tools: [],
+    execute: async () => {
+      throw new Error("no tool call expected");
+    },
+    fetchFn: async (_endpoint, request) => {
+      requests.push(JSON.parse(request.body));
+      return replies.shift();
+    },
+  });
+
+  assert.equal(requests.length, 2);
+  assert.match(requests[1].messages.at(-1).content, /Re-emit the same answer as one valid JSON object/);
+  assert.equal(result.raw_model_responses.length, 2);
+  assert.equal(result.answer.answer.capacity_tons.value, 56);
+});
+
 test("demo runner captures request IDs, raw replies, and complete tool payloads", async () => {
   const replies = [
     new Response(JSON.stringify({
