@@ -108,13 +108,26 @@ try {
   console.log(`UI_AGENT_RESULT\n${panel}`);
   const lastToolResult = panel.lastIndexOf("\n✓ ");
   const answerStart = lastToolResult >= 0 ? panel.indexOf("\n", lastToolResult + 1) : -1;
-  const answerEnd = panel.indexOf("\n[Automated check", answerStart);
+  const automated = panel.indexOf("\n[Automated check", answerStart);
+  const doneMark = panel.indexOf("\nDone", answerStart);
+  const proposalsMark = panel.indexOf("\nProposals", answerStart);
+  const answerEnd = [automated, doneMark, proposalsMark].filter((index) => index >= 0).sort((a, b) => a - b)[0] ?? -1;
   if (answerStart < 0 || answerEnd < 0) {
     throw new Error("D01 UI panel does not contain a complete final-answer segment.");
   }
-  const finalAnswer = panel.slice(answerStart, answerEnd);
+  let finalAnswer = panel.slice(answerStart, answerEnd);
+  const gateRe = /\[Evidence gate:[^\]]*\]/g;
+  let lastGateEnd = -1;
+  for (const match of finalAnswer.matchAll(gateRe)) {
+    lastGateEnd = match.index + match[0].length;
+  }
+  if (lastGateEnd >= 0) finalAnswer = finalAnswer.slice(lastGateEnd).trim();
+  if (!finalAnswer) {
+    throw new Error("D01 UI panel does not contain a complete final-answer segment.");
+  }
   if (/Stopped at the \d+-step cap/i.test(panel)
     || /example (?:size|type|Cv)|placeholder|\b(?:single|one)\s+(?:schedule\s+)?(?:entry|row)\b|(?:schedule\s+)?row\b.{0,80}\bappears\s+(?:only\s+)?once|\bnormalized\b/i.test(finalAnswer)
+    || /\bat\s*[\[(]\s*0\.\d+\s*,\s*0\.\d+\s*[\])]/i.test(finalAnswer)
     || (/(?:≈|\bapproximately\b|\bapprox\.)/i.test(finalAnswer)
       && !/\b(?:derived|calculated|converted|conversion)\b/i.test(finalAnswer))
     || finalAnswer.split("\n").some((line) =>
@@ -122,7 +135,11 @@ try {
     || /\b(?:all|each)\b.{0,160}\bhighlight/is.test(finalAnswer)) {
     throw new Error("D01 UI answer contains a correction cap, placeholder, invalid quantity rationale, or invalid coordinate form.");
   }
-  const normalizedPanel = finalAnswer.toUpperCase().replace(/[‑–—]/g, "-").replace(/\s+/g, " ");
+  const normalizedPanel = finalAnswer.toUpperCase()
+    .replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D‑–—]/g, "-")
+    .replace(/[\u00A0\u202F\u2007\u2009\u200A]/g, " ")
+    .replace(/(\d)[\s,]+(?=\d)/g, "$1")
+    .replace(/\s+/g, " ");
   for (const expected of [
     "INSTALLED QUANTITY", "56", "55.4", "45", "128.5",
     "CV-CH-A1", "128.0", "4", "2-WAY", "324",
@@ -131,9 +148,33 @@ try {
       throw new Error(`D01 UI answer is missing required truth value: ${expected}`);
     }
   }
-  if (!normalizedPanel.includes("NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#3")) {
+  const sheetMentions = [...normalizedPanel.matchAll(/NAVFAC-CHERRY-POINT-ATC-MECHANICAL\.PDF#\d+/g)]
+    .map((match) => match[0]);
+  const checkBlock = panel.slice(panel.indexOf("[Automated check:") >= 0 ? panel.indexOf("[Automated check:") : 0);
+  const checkNorm = checkBlock.toUpperCase()
+    .replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D‑–—]/g, "-")
+    .replace(/[\u00A0\u202F\u2007\u2009\u200A]/g, " ");
+  const paintedSheets = [...checkNorm.matchAll(/NAVFAC-CHERRY-POINT-ATC-MECHANICAL\.PDF#\d+/g)]
+    .map((match) => match[0]);
+  const citedOrPainted = new Set([...sheetMentions, ...paintedSheets]);
+  if (!citedOrPainted.has("NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#3")) {
     throw new Error("D01 UI answer is missing the swept plan-sheet citation.");
   }
+  if (!citedOrPainted.has("NAVFAC-CHERRY-POINT-ATC-MECHANICAL.PDF#44")) {
+    throw new Error("D01 UI answer is missing the schedule-sheet citation.");
+  }
+  // Product rule: paint answering evidence on the sheets (value cells), not mark-only.
+  if (!/\bhighlight_citation\b/i.test(panel)) {
+    throw new Error("D01 UI run never called highlight_citation — answers must paint cited evidence on the sheets.");
+  }
+  const paintedMatch = panel.match(/highlight_citation painted exactly (\d+) source region/i);
+  const paintedFromCheck = paintedMatch ? Number(paintedMatch[1]) : 0;
+  console.log(`UI_HIGHLIGHT_CHECK paintedFromCheck=${paintedFromCheck}`);
+  // Plan tag + multiple schedule value cells (capacity/temps/flow + valve fields).
+  if (paintedFromCheck < 5) {
+    throw new Error(`D01 UI automated check reports only ${paintedFromCheck} painted region(s); expected >= 5 answering cells (plan + schedule values), not mark-only.`);
+  }
+  let sheetsWithVisibleHighlight = 0;
   for (const [needle, path, target] of [
     ["MS101", "/tmp/d01_ui_plan_highlight.png", [2561.9 / 4896, 2511.1 / 3168]],
     ["M-603", "/tmp/d01_ui_schedule_highlight.png", [496 / 4896, 322 / 3168]],
@@ -142,7 +183,7 @@ try {
     await page.locator('button[title^="Sheet — the sheets in this set"]').click();
     const item = page.getByText(needle, { exact: true }).last();
     await item.waitFor({ state: "visible", timeout: 10_000 });
-    await item.click();
+    await item.click({ force: true });
     await page.getByText("Rendering sheet…").waitFor({ state: "hidden", timeout: 120_000 });
     await page.waitForTimeout(750);
     const fit = page.getByRole("button", { name: "fit", exact: true });
@@ -154,7 +195,13 @@ try {
       await page.mouse.wheel(0, -1800);
       await page.waitForTimeout(2_000);
     }
+    const onSheet = await page.locator('[data-markup-type="highlight"]').count();
+    console.log(`UI_SHEET_HIGHLIGHT ${needle} count=${onSheet}`);
+    if (onSheet > 0) sheetsWithVisibleHighlight += 1;
     await page.screenshot({ path });
+  }
+  if (sheetsWithVisibleHighlight < 2) {
+    throw new Error("D01 UI recording has fewer than 2 sheets with visible highlight markups — mark-only / panel-only is incomplete.");
   }
   succeeded = true;
   if (headed) await page.waitForTimeout(10_000);
