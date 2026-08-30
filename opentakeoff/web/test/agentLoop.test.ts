@@ -18,7 +18,7 @@ const TOOLS = [
 ];
 
 test("exact equipment-to-valve evidence goals expose only relevant deterministic tools", () => {
-  const tools = [
+  const tools: Array<{ name: string }> = [
     "list_sheets", "sheet_graph", "query_table", "sweep_schedule_row",
     "highlight_citation", "resolve_tag", "one_click", "find_text",
   ].map((name) => ({ name }));
