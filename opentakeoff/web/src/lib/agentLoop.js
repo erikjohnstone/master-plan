@@ -34,7 +34,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     return "The goal asks for installed quantity and a deterministic count succeeded, but the final answer does not explicitly state the numeric installed quantity. Report it under an “Installed quantity” label and attribute it to the sweep/count result.";
   }
   if (/\binstalled\s+quantity\b/i.test(finalText)
-    && /\b(?:single|one)\s+schedule\s+(?:entry|row)\b|\b(?:schedule\s+|the\s+)?row\s+appears\s+(?:only\s+)?(?:once|one time)\b/i.test(finalText)) {
+    && /\b(?:single|one)\s+schedule\s+(?:entry|row)\b|\b(?:schedule\s+)?row\b.{0,80}\bappears\s+(?:only\s+)?(?:once|one time)\b/i.test(finalText)) {
     return "The final answer describes installed quantity as a single/one schedule entry. That reasoning is invalid even when the numeric value happens to match. Attribute installed quantity only to the successful sweep/count result and remove schedule-row-count wording.";
   }
   if (/\bnormalized\b/i.test(finalText)) {
@@ -107,6 +107,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     const highlights = callLog.filter(({ name, out }) =>
       name === "highlight_citation" && !out?.error && Array.isArray(out.bbox_px));
     const missingPlanTags = [];
+    const missingPlanSheets = [];
     for (const { args, out } of callLog.filter(({ name, out }) =>
       name === "sweep_schedule_row" && (out?.found ?? out?.total_found) > 0)) {
       const tag = String(args?.tag || out?.tag || "").trim();
@@ -125,9 +126,16 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
           && String(highlightArgs?.text || highlightOut?.text || "").toUpperCase()
             .replace(/[^A-Z0-9]/g, "").includes(tagCanonical)));
       if (!covered) missingPlanTags.push(tag);
+      if (citations.length && !citations.some((citation) =>
+        citation.sheet && finalText.includes(citation.sheet))) {
+        missingPlanSheets.push(tag);
+      }
     }
     if (missingPlanTags.length) {
       return `The requested plan location is not painted from the exact sweep tag citation for: ${missingPlanTags.join(", ")}. Call highlight_citation with an unchanged sweep_schedule_row.tag_citations sheet and bbox, and label it with that exact tag. Do not use the broader anchor rect or label one tag as another.`;
+    }
+    if (missingPlanSheets.length) {
+      return `The final answer does not state the actual swept plan sheet for: ${missingPlanSheets.join(", ")}. Include the unchanged sheet and image-pixel bbox from sweep_schedule_row.tag_citations in the plan-location section; do not substitute a schedule sheet.`;
     }
   }
   for (const { out } of callLog.filter(({ name }) => name === "query_table")) {

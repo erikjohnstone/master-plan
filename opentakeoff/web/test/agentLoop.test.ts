@@ -51,6 +51,10 @@ test("installed quantity cannot finish without deterministic count evidence", ()
     name: "sweep_schedule_row",
     out: { found: 1 },
   }], "Give me installed quantity", "Installed quantity: 1 (the row appears only once).")!, /reasoning is invalid/);
+  assert.match(requiredEvidenceCorrection([{
+    name: "sweep_schedule_row",
+    out: { found: 1 },
+  }], "Give me installed quantity", "Installed quantity: 1 (the schedule row for AHU-1 appears only once).")!, /reasoning is invalid/);
   assert.match(requiredEvidenceCorrection([], "Cite the source", "Normalized rectangle: [[0.1, 0.2], [0.3, 0.4]].")!, /image-pixel bboxes only/);
   assert.match(requiredEvidenceCorrection([], "Cite the source", "BBox [1, 2, 3, 4] (normalized ≈ [0.1, 0.2]).")!, /image-pixel bboxes only/);
   assert.match(requiredEvidenceCorrection([{
@@ -138,7 +142,15 @@ test("installed quantity cannot finish without deterministic count evidence", ()
       args: { text: "CH-A1" },
       out: { sheet: "set.pdf#3", bbox_px: [10, 20, 30, 40], text: "CH-A1" },
     },
-  ], "Show me the plan location for CH-A1", "CH-A1 is shown."), null);
+  ], "Show me the plan location for CH-A1", "CH-A1 is shown on set.pdf#3."), null);
+  assert.match(requiredEvidenceCorrection([
+    sweptPlan,
+    {
+      name: "highlight_citation",
+      args: { text: "CH-A1" },
+      out: { sheet: "set.pdf#3", bbox_px: [10, 20, 30, 40], text: "CH-A1" },
+    },
+  ], "Show me the plan location for CH-A1", "CH-A1 is shown on schedule sheet set.pdf#44.")!, /actual swept plan sheet/);
   assert.match(requiredEvidenceCorrection([{
     name: "query_table",
     out: { matches: [{ row: { identity: { header: "VALVE MARK", text: "CV-CH-A1" } } }] },

@@ -106,10 +106,18 @@ try {
   await page.screenshot({ path: "/tmp/d01_ui_agent_result.png" });
   const panel = await page.locator('textarea[name="agent-goal"]').locator("xpath=../../..").innerText();
   console.log(`UI_AGENT_RESULT\n${panel}`);
-  if (/Stopped at the \d+-step cap|example (?:size|type|Cv)|placeholder|(?:schedule\s+|the\s+)?row\s+appears\s+(?:only\s+)?once|\bnormalized\b/i.test(panel)) {
+  const lastToolResult = panel.lastIndexOf("\n✓ ");
+  const answerStart = lastToolResult >= 0 ? panel.indexOf("\n", lastToolResult + 1) : -1;
+  const answerEnd = panel.indexOf("\n[Automated check", answerStart);
+  if (answerStart < 0 || answerEnd < 0) {
+    throw new Error("D01 UI panel does not contain a complete final-answer segment.");
+  }
+  const finalAnswer = panel.slice(answerStart, answerEnd);
+  if (/Stopped at the \d+-step cap/i.test(panel)
+    || /example (?:size|type|Cv)|placeholder|(?:schedule\s+)?row\b.{0,80}\bappears\s+(?:only\s+)?once|\bnormalized\b/i.test(finalAnswer)) {
     throw new Error("D01 UI answer contains a correction cap, placeholder, invalid quantity rationale, or invalid coordinate form.");
   }
-  const normalizedPanel = panel.toUpperCase().replace(/[‑–—]/g, "-").replace(/\s+/g, " ");
+  const normalizedPanel = finalAnswer.toUpperCase().replace(/[‑–—]/g, "-").replace(/\s+/g, " ");
   for (const expected of [
     "INSTALLED QUANTITY", "56", "55.4", "45", "128.5",
     "CV-CH-A1", "128.0", "4", "2-WAY", "324",
