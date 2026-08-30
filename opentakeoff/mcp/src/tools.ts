@@ -666,11 +666,13 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       // each scheduled unit once per schedule family, not once per page.
       return [`${titleBase}::${match.row.key.toUpperCase().replace(/\s+/g, "")}`, match];
     })).values()];
-    // Title-wide / unscoped queries on dense schedules (42+ FCU rows, etc.)
-    // must not dump every cell bbox into the model context. Return identity
-    // keys only; the caller re-queries with row_key for citation cells.
+    // Title-wide / unscoped queries on dense schedules must not dump every
+    // cell bbox into the model context. Return identity keys only once the
+    // unique MARK set is larger than a handful; the caller re-queries with
+    // row_key for citation cells. Threshold 3 so even small multi-building
+    // families (AHU/DOAH) get an explicit count + building_tag_counts to copy.
     const broad = !row_key && !column && !cell_value && !cell_contains;
-    const keysOnly = broad && unique.length > 8;
+    const keysOnly = broad && unique.length > 3;
     const matches = unique.slice(0, limit).map((match) => {
       if (!keysOnly) return match;
       const identity = match.row.identity;
