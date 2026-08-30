@@ -238,7 +238,12 @@ try {
   const followBodies = [...afterFollow.matchAll(/(?:^|\n)\s*Answer\b\s*\n([\s\S]*?)(?=\n\s*(?:Answer|Sources|Technical steps|Goal:|Ask a follow-up)\b|$)/gi)]
     .map((m) => m[1].trim())
     .filter(Boolean);
-  const followAnswer = followBodies[followBodies.length - 1] || "";
+  // Prefer the follow-up Answer that actually addresses fluid/role, not a
+  // re-emitted primary schedule dump that still contains "bypass"/"25".
+  const followAnswer = [...followBodies].reverse().find((body) =>
+    /100%\s*WATER|FLUID/i.test(body) && /\bBYPASS\b/i.test(body))
+    || followBodies[followBodies.length - 1]
+    || "";
   console.log(`UI_FOLLOWUP_ANSWER\n${followAnswer.slice(0, 1200)}`);
   if (followAnswer.length < 20) {
     throw new Error("D06 follow-up missing Answer thread entry.");
@@ -247,7 +252,7 @@ try {
   if (!/\bBYPASS\b/.test(followNorm)) {
     throw new Error("D06 follow-up missing bypass role.");
   }
-  if (!/100%\s*WATER|100\s*PERCENT\s*WATER/.test(followNorm) && !/\b100%\s*WATER\b/.test(followNorm)) {
+  if (!/100%\s*WATER/.test(followNorm)) {
     throw new Error("D06 follow-up missing fluid 100% WATER.");
   }
   if (!/\b25(?:\.0)?\b/.test(followNorm)) {
