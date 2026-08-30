@@ -56,10 +56,42 @@ const jobs = kindArg === "both" ? [JOBS.hvac, JOBS.bas]
     : [JOBS.hvac];
 
 const AGENT_TIMEOUT_MS = Number(process.env.OT_DEMO_AGENT_TIMEOUT_MS || 8 * 60 * 1000);
+/** If status text is unchanged this long, dump diagnosis and fail — do not sit idle. */
+const STALL_DIAG_MS = Number(process.env.OT_DEMO_STALL_MS || 90_000);
+
+async function diagnoseHang(label, status) {
+  const { execSync } = await import("node:child_process");
+  let procs = "";
+  try {
+    procs = execSync(
+      "ps -eo pid,etime,cmd --sort=-etime | grep -E 'production-graph-cli|playwright|chrome|node.*vite' | grep -v grep | head -20",
+      { encoding: "utf8" },
+    );
+  } catch {
+    procs = "(no matching processes)";
+  }
+  let tmpDirs = "";
+  try {
+    tmpDirs = execSync("ls -ltd /tmp/ot-prod-graph-* 2>/dev/null | head -5", { encoding: "utf8" });
+  } catch {
+    tmpDirs = "";
+  }
+  const msg = [
+    `[${label}] STALL after ${Math.round(STALL_DIAG_MS / 1000)}s unchanged status: ${JSON.stringify(status)}`,
+    "--- processes ---",
+    procs.trim() || "(none)",
+    "--- prod-graph dirs ---",
+    tmpDirs.trim() || "(none)",
+  ].join("\n");
+  console.error(msg);
+  writeFileSync(resolve(artifacts, `demo_${label}_stall_diag.log`), `${msg}\n`);
+  return msg;
+}
 
 async function waitAgentDone(page, label, timeoutMs) {
   const deadline = Date.now() + timeoutMs;
   let lastStatus = "";
+  let statusChangedAt = Date.now();
   let sawRunning = false;
   while (Date.now() < deadline) {
     const state = await page.evaluate(() => {
@@ -81,6 +113,10 @@ async function waitAgentDone(page, label, timeoutMs) {
     if (state.status && state.status !== lastStatus) {
       console.log(`[${label}] ${state.status}`);
       lastStatus = state.status;
+      statusChangedAt = Date.now();
+    } else if (state.running && Date.now() - statusChangedAt > STALL_DIAG_MS) {
+      const diag = await diagnoseHang(label, lastStatus || state.status || "(empty)");
+      throw new Error(diag.split("\n")[0]);
     }
     if (sawRunning && !state.running) {
       console.log(`[${label}] Agent done — Takeoff evidence=${state.evidence} rows=${state.rowCount} compile=${state.meta?.takeoff_id || "none"}`);
@@ -88,6 +124,7 @@ async function waitAgentDone(page, label, timeoutMs) {
     }
     await page.waitForTimeout(1500);
   }
+  await diagnoseHang(label, lastStatus || "(timeout)");
   throw new Error(`[${label}] Agent still running after ${Math.round(timeoutMs / 1000)}s`);
 }
 
