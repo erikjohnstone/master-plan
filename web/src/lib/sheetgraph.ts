@@ -5059,6 +5059,37 @@ function isGenericHeaderRow(row: GraphSpan[]): boolean {
   return toks.every((t) => isGenericHeaderToken(t.str) && !/\d/.test(t.str));
 }
 
+/** A thin unit-tier fragment whose only digit is a chemical / unit
+ * subscript — `H2O`, `FT. H2O`, smashed `FT.H2O` / `FT.H20` — never a
+ * measured value (`16.60`), inch-mark dimension (`107"`), refrigerant
+ * code (`R410A`), or tag (`AHU-1`). `isGenericHeaderRow` stays
+ * digit-free on purpose: a lone unit pair must not start a new table.
+ * `expandGenericHeaderBlock` is the one caller that may absorb such a
+ * token, and only as a continuation of a header that already qualified
+ * without it. Real, measured: a WATERSIDE / AIRSIDE unit row of
+ * digit-free `I.W.G` beside `FT. H2O` used to fail the ALL-tokens-
+ * digit-free continuation test, so the whole tier stayed out of the
+ * header block and `WATER MAX PD` never became `WATER MAX PD FT. H2O`. */
+function isDigitBearingUnitFragment(raw: string): boolean {
+  const inner = (raw || "").trim().replace(/^\(+/, "").replace(/\)+$/, "").trim();
+  if (!inner || inner.length > GENERIC_MAX_TOKEN_LEN) return false;
+  if (/[a-z]/.test(inner)) return false;
+  if (!/[A-Z]/.test(inner)) return false;
+  if (/^\d/.test(inner)) return false;
+  if (/\d+\.\d+/.test(inner)) return false;
+  if (/\d["']/.test(inner)) return false;
+  if (/[A-Z]+-\d/.test(inner)) return false;
+  if (REFERENCE_RE.test(norm(inner))) return false;
+  if (LABEL_VALUE_COLON_RE.test(inner)) return false;
+  const leftover = inner.replace(/[A-Z.\s/%°∅Ø,-]/g, "");
+  return leftover.length >= 1 && leftover.length <= 2 && /^\d+$/.test(leftover);
+}
+
+function isGenericHeaderContinuationToken(raw: string): boolean {
+  if (isGenericHeaderToken(raw) && !/\d/.test(raw)) return true;
+  return isDigitBearingUnitFragment(raw);
+}
+
 interface GenericHeaderBlock { top: number; bottom: number; tokens: GraphSpan[] }
 
 /** A real header is routinely wrapped over several physical lines (bessemer's
@@ -5069,9 +5100,11 @@ interface GenericHeaderBlock { top: number; bottom: number; tokens: GraphSpan[] 
  * physical line, one row below "INSULATION"/"INSULATION OR" (its column's
  * own parent words). Expands BOTH directions from that anchor row, one
  * physical line at a time, while each candidate line: is itself shape-
- * qualified + digit-free (a lone wrapped word, "TYPE", is a valid single-
- * token continuation — isGenericHeaderRow's own 2-cell floor does not apply
- * here, only the per-token shape+digit tests do), sits within 2x the
+ * qualified, either digit-free or a digit-bearing unit fragment (a lone
+ * wrapped word, "TYPE", is a valid single-token continuation —
+ * isGenericHeaderRow's own 2-cell floor does not apply here, only the
+ * per-token shape + continuation-token tests do; see
+ * isDigitBearingUnitFragment), sits within 2x the
  * anchor row's own median cell height of the block's current edge (a title
  * sitting one line above a real header can measure a smaller physical gap
  * than that — real, measured live: 34.8px vs this table's own header-
@@ -5091,7 +5124,7 @@ function expandGenericHeaderBlock(rows: GraphSpan[][], anchorIdx: number): Gener
   const rowOk = (r: GraphSpan[]): boolean => {
     const toks = r.filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null);
     if (!toks.length) return false;
-    if (!toks.every((t) => isGenericHeaderToken(t.str) && !/\d/.test(t.str))) return false;
+    if (!toks.every((t) => isGenericHeaderContinuationToken(t.str))) return false;
     if (toks.length === 1 && (toks[0].w || 0) > widthCap) return false;
     return true;
   };

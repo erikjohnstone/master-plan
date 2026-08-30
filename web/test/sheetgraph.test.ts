@@ -3215,3 +3215,55 @@ test("isReferenceCrossTable: OUTSIDE AIR flow-rate calc demotes without MODEL/MA
   assert.equal(isReferenceCrossTable("FAN SCHEDULE", oaHeaders), false,
     "a title that does not name CONNECTION/CALCULATION/ISOLATION/OUTSIDE AIR is untouched");
 });
+
+test("reference kind: a digit-bearing unit-tier fragment stitches into its parent column", () => {
+  // Real shape: a WATERSIDE / AIRSIDE unit row prints digit-free I.W.G
+  // beside FT. H2O. The ALL-tokens-digit-free continuation test used to
+  // reject the whole tier, so WATER MAX PD never became WATER MAX PD FT. H2O
+  // and the unit token folded into the first data cell. No set / sheet /
+  // tag names in production — this fixture is the class, not a corpus row.
+  const uh = (str: string, x: number, y: number, w: number): GraphSpan => ({ str, x, y, w, h: 19 });
+  const sheet: SheetSpans = {
+    key: "unit-tier.pdf#1", sheet_number: "M7.1",
+    spans: [
+      { str: "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE", x: 150, y: 10, w: 520, h: 40 },
+      uh("TYPE", 150, 80, 50), uh("SYSTEM", 320, 80, 70),
+      uh("MAX AIR", 520, 80, 80), uh("WATER", 760, 80, 60), uh("FLOW", 980, 80, 50),
+      uh("PD", 535, 100, 30), uh("MAX PD", 750, 100, 70), uh("RATE", 980, 100, 45),
+      uh("I.W.G", 525, 120, 55), uh("FT. H2O", 745, 120, 75),
+      uh("CHWC", 150, 170, 55), uh("AHU-1", 320, 170, 55), uh("1.19", 530, 170, 40), uh("16.60", 760, 170, 50), uh("252.20", 970, 170, 55),
+      uh("HWC", 155, 200, 40), uh("AHU-1", 320, 200, 55), uh("0.23", 530, 200, 40), uh("10.00", 760, 200, 50), uh("30.60", 980, 200, 50),
+    ],
+    segs: [140, 145, 1100, 145],
+  };
+  const g = buildSheetGraph([sheet]);
+  const tab = g.tables.find((t) => t.kind === "reference");
+  assert.ok(tab, `reference table must extract: ${g.tables.map((t) => `${t.kind}:${t.title?.text}`).join(" | ")}`);
+  assert.ok(tab!.headers.includes("WATER MAX PD FT. H2O"), `stitched unit column: ${tab!.headers.join(" | ")}`);
+  assert.ok(tab!.headers.includes("MAX AIR PD I.W.G"), `digit-free sibling unit still stitches: ${tab!.headers.join(" | ")}`);
+  const chwc = tab!.rows.find((r) => r.key === "CHWC");
+  const hwc = tab!.rows.find((r) => r.key === "HWC");
+  assert.ok(chwc && hwc, `both TYPE-keyed rows extract: ${tab!.rows.map((r) => r.key).join(",")}`);
+  assert.equal(chwc!.cells["WATER MAX PD FT. H2O"]?.text, "16.60", "unit fragment is a header, not a cell prefix");
+  assert.equal(hwc!.cells["WATER MAX PD FT. H2O"]?.text, "10.00");
+  assert.equal(chwc!.cells["MAX AIR PD I.W.G"]?.text, "1.19");
+});
+
+test("reference kind: a unit-only pair does not start a table", () => {
+  // isGenericHeaderRow stays digit-free so FT. H2O + I.W.G cannot mint a
+  // header of their own — only a continuation of an already-qualified block.
+  const uh = (str: string, x: number, y: number, w: number): GraphSpan => ({ str, x, y, w, h: 19 });
+  const sheet: SheetSpans = {
+    key: "unit-only.pdf#1", sheet_number: "M7.1",
+    spans: [
+      { str: "MECHANICAL SCHEDULES", x: 150, y: 10, w: 280, h: 40 },
+      uh("I.W.G", 200, 80, 55), uh("FT. H2O", 400, 80, 75),
+      uh("CHWC", 200, 130, 55), uh("16.60", 400, 130, 50),
+      uh("HWC", 200, 160, 40), uh("10.00", 400, 160, 50),
+    ],
+    segs: [180, 105, 500, 105],
+  };
+  const g = buildSheetGraph([sheet]);
+  assert.ok(!g.tables.some((t) => t.kind === "reference"),
+    `unit-only pair must not start a reference table: ${g.tables.map((t) => t.headers.join("/")).join(" | ")}`);
+});

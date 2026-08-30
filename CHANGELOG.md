@@ -2,6 +2,11 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — digit-bearing unit tiers still stitch into the header
+
+### Fixed
+- **A wrapped unit row that mixes digit-free units with a chemical-subscript unit is still part of the header.** The structural reference pass already joined stacked column fragments (`WATER` + `MAX PD`) but refused any continuation line that carried a digit anywhere, so `I.W.G` beside `FT. H2O` dropped the whole tier. The unit token then sat in the first data cell and the column never became `WATER MAX PD FT. H2O`. A continuation token may now be a digit-bearing unit fragment whose only digits are a one- or two-digit subscript (`H2O`, smashed `FT.H2O` / `FT.H20`) — not a measured value, inch-mark dimension, refrigerant code, or tag. A unit-only pair still cannot start a table; `isGenericHeaderRow` stays digit-free. No project, sheet, or tag names.
+
 ## 2026-08-30 — leftover exact tag on an empty sheet, set-wide
 
 ### Fixed
