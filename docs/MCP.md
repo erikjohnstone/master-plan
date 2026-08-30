@@ -107,13 +107,17 @@ Forty tools, in the order an agent tends to reach for them:
   the tag is drawn as is fingerprinted at a drawn occurrence—corroborated
   at a second one where the set allows—and every plan sheet is swept, a
   match counting only where geometry AND the row's own tag text agree
-  (a labeled family of near-bar siblings of the one confident instance
-  counts, including when leftovers sit on different sheets; a lone
-  leftover labeled near-miss stays withheld);
+  (a labeled family of near-bar siblings of a confident instance
+  counts — leftovers must outnumber commits when two or more already
+  counted; a high-score leftover pair split across sheets also counts;
+  a lone leftover labeled near-miss stays withheld);
   markers labeled with a sibling key are excluded and say whose they are,
   unlabeled ones are withheld as questions; a leftover compound
   circuit/panel label on a sheet that already has a counted match is
-  promoted (`labeled_leftover`); a `TYP N` callout next to a
+  promoted (`labeled_leftover`), as is a family of two or more leftover
+  exact tags on that same sheet (a single leftover exact tag stays
+  `text_only`; leftovers sitting on a withheld stay with the labeled
+  near-miss family); a `TYP N` callout next to a
   geometrically-confirmed tag multiplies that match only; and a row whose
   tag cannot be geometrically anchored is *refused with the reason*—a
   fingerprint is never guessed from text alone). Scanned sheets work

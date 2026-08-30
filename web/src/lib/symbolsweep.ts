@@ -1309,10 +1309,12 @@ export interface TagOcc {
   h: number;
   bbox: [number, number, number, number];
   /** How this occurrence was recovered. A compound circuit/panel label
-   * ("R1 /C-11") is itself an instance marker; a bare exact/fragmented
-   * leftover is a note unless other geometry already claimed it. A
-   * routing label is a destination/source mention (duct/pipe "DOWN TO"
-   * / "FROM"), never an install. */
+   * ("R1 /C-11") is itself an instance marker. A family of leftover
+   * exact/fragmented tags on a sheet that already has a counted match
+   * is the same shape for a bare mark whose glyph never recurred; a
+   * single leftover exact tag is still a note. A routing label is a
+   * destination/source mention (duct/pipe "DOWN TO" / "FROM"), never
+   * an install. */
   kind?: "exact" | "compound" | "fragmented" | "routing";
 }
 
@@ -1717,16 +1719,20 @@ function claimLabeledNearMisses(
 }
 
 /**
- * When a sheet already has exactly one confident counted instance and
+ * When a sheet already has at least one confident counted instance and
  * several leftover own-tag occurrences each have a near-bar withheld
  * (same-sheet sibling copies of the counted geometry), promote those
- * best withhelds. The seed (`excludeCenter`) counts as that one
- * confident instance — matchSymbol hid it, but it is already in the
- * takeoff. The seed occurrence itself is not a leftover — it is already
- * counted. Extra labels (or a withheld) sitting inside R of an already-
- * counted instance are the same device, not sibling copies. A single
- * leftover labeled near-miss stays withheld: that is the typical
- * schematic-versus-plan extra, not a sibling cluster.
+ * best withhelds. The seed (`excludeCenter`) counts as a confident
+ * instance — matchSymbol hid it, but it is already in the takeoff.
+ * One confident + two leftover near-misses is the original family.
+ * Two-or-more already counted: leftovers must strictly outnumber the
+ * commits — a partial family that missed more siblings than it hit,
+ * not N commits plus N schematic extras. The seed occurrence itself
+ * is not a leftover — it is already counted. Extra labels (or a
+ * withheld) sitting inside R of an already-counted instance are the
+ * same device, not sibling copies. A single leftover labeled near-miss
+ * stays withheld: that is the typical schematic-versus-plan extra,
+ * not a sibling cluster.
  */
 function promoteLabeledNearMisses(
   leftover: SweepWithheld[],
@@ -1739,7 +1745,9 @@ function promoteLabeledNearMisses(
 ): void {
   const { leftoverOcc, labeledLeftovers, confident } =
     collectLabeledNearMissLeftovers(leftover, occ, matches, R, excludeCenter, matchedOcc);
-  if (confident !== 1 || labeledLeftovers.length < 2) {
+  const family = labeledLeftovers.length >= 2
+    && (confident === 1 || labeledLeftovers.length > confident);
+  if (confident < 1 || !family) {
     for (const w of leftover) withheld.push(w);
     return;
   }
@@ -1798,10 +1806,13 @@ export interface SweepSheetMatch extends SweepMatch {
   /** The tag-text evidence bbox that put this match IN the count — a match
    * counts only when the row's own tag sits inside its footprint. */
   tag_at: [number, number, number, number];
-  /** True when this row was counted from a leftover compound circuit/panel
-   * label on a sheet that already has a geometrically-confirmed instance —
-   * the tag is drawn, the sibling marker did not clear the bar. Never a
-   * bare note, and never a note on a sheet with zero confirmed matches. */
+  /** True when this row was counted from a leftover label on a sheet that
+   * already has a geometrically-confirmed instance — the tag is drawn, the
+   * sibling marker did not clear the bar. A compound circuit/panel label
+   * promotes alone; leftover exact tags promote only as a family of two
+   * or more unclustered leftovers that are not sitting on a withheld.
+   * Never a single bare note, and never a note on a sheet with zero
+   * confirmed matches. */
   labeled_leftover?: boolean;
   /** Installed quantity this match represents. 1 unless a `TYP N` callout
    * sits next to a geometrically-confirmed tag. Leftover labels stay 1. */
@@ -1829,11 +1840,19 @@ export function typicalMultiplierNear(spans: FlatSpan[], at: Point, radiusPx: nu
   return best;
 }
 
-/** Leftover compound circuit/panel labels on a sheet that already has ≥1
- * counted match, sitting farther than one mark-cluster from every counted
- * instance. Those are sibling installs whose marker failed to match, not a
- * second label on the same device and not a note on a sheet with no
- * confirmed instance. Pure — both classifySweepMatches and
+/** Leftover labels on a sheet that already has ≥1 counted match, sitting
+ * farther than one mark-cluster from every counted instance. Those are
+ * sibling installs whose marker failed to match, not a second label on
+ * the same device and not a note on a sheet with no confirmed instance.
+ *
+ * A compound circuit/panel label promotes on its own. Leftover exact
+ * (or fragmented) tags promote only as a family: two or more leftovers
+ * at distinct mark-clusters, none sitting on a withheld near-miss.
+ * A single leftover exact tag stays a note. Leftovers next to a
+ * withheld stay with promoteLabeledNearMisses — that is the labeled
+ * near-bar family, not this text-only family. Two leftovers inside
+ * one cluster are one site (legend stack / twin spelling), not two
+ * installs. Pure — both classifySweepMatches and
  * classifyInlineMotifMatches call this so canvas and MCP cannot disagree. */
 export function leftoverLabeledOccs(
   matches: Array<{ at: Point; tag_at: [number, number, number, number] }>,
@@ -1842,12 +1861,18 @@ export function leftoverLabeledOccs(
   clusterR: number,
   excludeCenter?: Point,
   excludeR?: number,
+  withheld?: Array<{ at: Point }>,
 ): TagOcc[] {
   if (!matches.length) return [];
-  const out: TagOcc[] = [];
+  const nearR = excludeR ?? clusterR;
+  const nearWithheld = (o: TagOcc) =>
+    !!withheld?.some((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= nearR);
+  const compounds: TagOcc[] = [];
+  const bare: TagOcc[] = [];
   for (let k = 0; k < occ.length; k++) {
     if (matchedOcc.has(k)) continue;
     const o = occ[k];
+    if (o.kind === "routing") continue;
     if (excludeCenter != null && excludeR != null
       && Math.hypot(o.cx - excludeCenter[0], o.cy - excludeCenter[1]) <= excludeR) continue;
     const clustered = matches.some((m) => {
@@ -1856,14 +1881,22 @@ export function leftoverLabeledOccs(
         || Math.hypot(tx - o.cx, ty - o.cy) <= clusterR;
     });
     if (clustered) continue;
-    // A compound circuit/panel label is the instance. A bare leftover is
-    // a note (the fixture's own T1 text_only case) or a single labeled
-    // near-miss that classifySweepMatches already withholds as the
-    // schematic-versus-plan extra — never a second install by text alone.
-    if (o.kind !== "compound") continue;
-    out.push(o);
+    if (o.kind === "compound") {
+      compounds.push(o);
+      continue;
+    }
+    // A leftover sitting on a withheld is the labeled near-miss family,
+    // not a text-only family. A single leftover exact tag is a note.
+    if (nearWithheld(o)) continue;
+    bare.push(o);
   }
-  return out;
+  const sites: TagOcc[] = [];
+  for (const o of bare) {
+    if (sites.some((s) => Math.hypot(s.cx - o.cx, s.cy - o.cy) <= clusterR)) continue;
+    sites.push(o);
+  }
+  if (sites.length < 2) return compounds;
+  return [...compounds, ...sites];
 }
 
 export function matchQuantity(matches: Array<{ count?: number }>): number {
@@ -1898,17 +1931,16 @@ export interface SweepSheetResult {
  * carrying no tag is WITHHELD as a question; matchSymbol's own near-matches
  * (`res.withheld`, the score-band between scoreLow/scoreHigh) are carried
  * through as WITHHELD too, with the tag-adjacency noted when one is drawn
- * beside it — except when this sheet already has exactly one confident
- * counted instance (a committed match, or the seed that `excludeCenter`
- * hid — the seed occurrence itself is not a leftover) and two or more
- * still-unclaimed same-tag occurrences each sit
- * next to a near-bar withheld (a labeled same-convention family whose
- * fingerprint cleared the bar at the seed and missed it at the siblings
- * by hatch/size, not identity). A single leftover labeled near-miss on
- * one sheet is left withheld (the schematic-vs-plan extra). The same
- * family counted across sheets — `promoteSetWideLabeledNearMisses` —
- * promotes when leftovers split one-per-sheet next to a set-wide
- * counted instance. Matches closer than half a symbol diagonal,
+ * beside it — except when this sheet already has at least one confident
+ * counted instance (committed matches, or the seed that `excludeCenter`
+ * hid — the seed occurrence itself is not a leftover) and a leftover
+ * labeled family: two or more still-unclaimed same-tag occurrences each
+ * sitting next to a near-bar withheld, and when two or more instances
+ * already committed the leftovers must strictly outnumber them. A single
+ * leftover labeled near-miss on one sheet is left withheld (the
+ * schematic-vs-plan extra). The same family counted across sheets —
+ * `promoteSetWideLabeledNearMisses` — promotes a high-score pair split
+ * one-per-sheet next to a set-wide counted instance. Matches closer than half a symbol diagonal,
  * or a different square-symmetry transform inside one footprint,
  * collapse to the better score before any tag is claimed. A match is
  * claimed against the NEAREST occurrence within R, never the first-in-
@@ -2028,7 +2060,7 @@ export function classifySweepMatches(
       && !(ex && Math.hypot(o.cx - ex[0], o.cy - ex[1]) <= R))
     .map((o) => ({ at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10] as Point }));
   const clusterR = MARK_CLUSTER_K * Math.max(anchorH, 6);
-  const leftovers = leftoverLabeledOccs(matches, occ, matchedOcc, clusterR, ex, R);
+  const leftovers = leftoverLabeledOccs(matches, occ, matchedOcc, clusterR, ex, R, withheld);
   for (const o of leftovers) {
     matches.push({
       at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10],

@@ -305,6 +305,25 @@ test("classifySweepMatches: a bare leftover with no nearby marker stays text_onl
   assert.equal(matchQuantity(r.matches), 1);
 });
 
+test("classifySweepMatches: two leftover exact tags on a counted sheet are a family", () => {
+  // The seed glyph cleared the bar once and missed it at two other
+  // unclustered leftover exact tags — no withheld near-miss at those
+  // leftovers. That is a text-only family, not two notes.
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const sheetSegs = place([{ at: [100, 100] }]);
+  const occ = [
+    tagNear([100, 100], 40, "exact"),
+    tagNear([400, 400], 40, "exact"),
+    tagNear([700, 700], 40, "exact"),
+  ];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
+  assert.equal(r.matches.filter((m) => m.labeled_leftover).length, 2);
+  assert.equal(r.text_only.length, 0, "the leftover family is counted, not disclosed as notes");
+  assert.equal(matchQuantity(r.matches), 3);
+});
+
 test("classifySweepMatches: an extra label clustered on a counted match is not a second install", () => {
   const anchorSegs = place([{ at: [100, 100] }]);
   const anchor = tagNear([100, 100]);
@@ -338,11 +357,34 @@ test("leftoverLabeledOccs: no counted match — leftovers stay unpromoted (a not
   assert.deepEqual(leftoverLabeledOccs([], occ, new Set(), 20), []);
 });
 
-test("leftoverLabeledOccs: a bare leftover never promotes — only a compound circuit/panel label does", () => {
+test("leftoverLabeledOccs: a single bare leftover never promotes — only a compound circuit/panel label does", () => {
   const counted = [{ at: [100, 100] as Point, tag_at: [90, 90, 110, 110] as [number, number, number, number] }];
   const bareFar = tagNear([700, 700], 40, "exact");
   assert.equal(leftoverLabeledOccs(counted, [bareFar], new Set(), 20).length, 0);
   assert.equal(leftoverLabeledOccs(counted, [tagCompound([700, 700])], new Set(), 20).length, 1);
+});
+
+test("leftoverLabeledOccs: two leftover exact tags at distinct clusters promote as a family", () => {
+  const counted = [{ at: [100, 100] as Point, tag_at: [90, 90, 110, 110] as [number, number, number, number] }];
+  const a = tagNear([400, 400], 40, "exact");
+  const b = tagNear([700, 700], 40, "exact");
+  assert.equal(leftoverLabeledOccs(counted, [a, b], new Set(), 20).length, 2);
+});
+
+test("leftoverLabeledOccs: two leftover exact tags inside one cluster are one site, not a family", () => {
+  const counted = [{ at: [100, 100] as Point, tag_at: [90, 90, 110, 110] as [number, number, number, number] }];
+  const a = tagNear([700, 700], 40, "exact");
+  const twin = tagNear([704, 700], 40, "exact");
+  assert.equal(leftoverLabeledOccs(counted, [a, twin], new Set(), 20).length, 0);
+});
+
+test("leftoverLabeledOccs: leftover exact tags sitting on withhelds stay with the near-miss family", () => {
+  const counted = [{ at: [100, 100] as Point, tag_at: [90, 90, 110, 110] as [number, number, number, number] }];
+  const a = tagNear([400, 400], 40, "exact");
+  const b = tagNear([700, 700], 40, "exact");
+  const withheld = [{ at: [400, 400] as Point }, { at: [700, 700] as Point }];
+  assert.equal(leftoverLabeledOccs(counted, [a, b], new Set(), 20, undefined, 40, withheld).length, 0,
+    "labeled near-miss leftovers must not also promote as a text-only family");
 });
 
 test("typicalMultiplierNear: TYP / TYPICAL + integer 2–50; running text and TYP. alone never multiply", () => {
@@ -581,6 +623,60 @@ test("promoteSetWideLabeledNearMisses: a low-score leftover pair stays withheld"
   ]);
   assert.equal(n, 0);
   assert.equal(matches.length, 1);
+});
+
+test("classifySweepMatches: a labeled family still promotes when leftovers outnumber two commits", () => {
+  // Partial family: the fingerprint cleared the bar at two callouts and
+  // missed three siblings by hatch (no stub). Leftovers outnumber commits,
+  // so they are the rest of the family, not N schematic extras.
+  const thin: [number, number, number, number][] = [
+    [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],
+    [0, 0, 20, 20],
+  ];
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const counted: Point = [400, 400];
+  const a: Point = [700, 400];
+  const b: Point = [1000, 400];
+  const c: Point = [1300, 400];
+  const sheetSegs = place([
+    { at: [100, 100] },
+    { at: counted },
+    { at: a, segs: thin },
+    { at: b, segs: thin },
+    { at: c, segs: thin },
+  ]);
+  const occ = [tagNear([100, 100]), tagNear(counted), tagNear(a), tagNear(b), tagNear(c)];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
+  assert.equal(r.matches.filter((m) => !m.labeled_leftover).length, 5, "two commits plus three labeled near-miss siblings");
+  assert.equal(r.text_only.length, 0);
+  assert.equal(matchQuantity(r.matches), 5);
+});
+
+test("classifySweepMatches: N leftover near-misses on an N-commit sheet stay withheld", () => {
+  // Two commits + two leftover labeled near-misses is as likely N schematic
+  // extras as it is more of the family. Do not promote.
+  const thin: [number, number, number, number][] = [
+    [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],
+    [0, 0, 20, 20],
+  ];
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const counted: Point = [400, 400];
+  const a: Point = [700, 400];
+  const b: Point = [1000, 400];
+  const sheetSegs = place([
+    { at: [100, 100] },
+    { at: counted },
+    { at: a, segs: thin },
+    { at: b, segs: thin },
+  ]);
+  const occ = [tagNear([100, 100]), tagNear(counted), tagNear(a), tagNear(b)];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
+  assert.equal(r.matches.filter((m) => !m.labeled_leftover).length, 2, "only the two commits");
+  assert.ok(r.withheld.some((w) => w.reason.includes("tag is drawn beside it")), "the leftover pair stays a disclosed question");
 });
 
 test("classifySweepMatches: a near-bar withheld match with NO own tag stays withheld", () => {

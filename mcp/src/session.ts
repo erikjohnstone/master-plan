@@ -3819,7 +3819,7 @@ export class Session {
     }
     const leftoverN = perSheet.reduce((n, p) => n + p.matches.filter((m) => m.labeled_leftover).length, 0);
     if (leftoverN) {
-      notes.push(`${leftoverN} counted from a leftover compound circuit/panel label on a sheet that already has a geometrically-confirmed "${t}" — the tag is drawn, the sibling marker did not clear the bar; audit with view_sheet before trusting the count.`);
+      notes.push(`${leftoverN} counted from a leftover labeled tag on a sheet that already has a geometrically-confirmed "${t}" — the tag is drawn, the sibling marker did not clear the bar; audit with view_sheet before trusting the count.`);
     }
     if (familyLeftoverN) {
       notes.push(`${familyLeftoverN} leftover labeled near-miss(es) counted as a same-convention family split across sheets — each leftover sits next to this row's own tag and a near-bar withheld, and the set already has a geometrically-confirmed instance; audit with view_sheet before trusting the count.`);

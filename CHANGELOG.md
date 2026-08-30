@@ -5,7 +5,17 @@ All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 ## 2026-08-30 — leftover labeled near-miss family, set-wide
 
 ### Fixed
-- **A same-convention labeled family split across sheets no longer dies one leftover at a time.** `promoteLabeledNearMisses` still requires two leftovers on *one* sheet, so a counted instance on sheet A plus one labeled near-bar sibling on A and another on B stayed withheld — each sheet saw a lone leftover, the schematic-versus-plan extra. A second pass runs set-wide after every plan sheet is classified: exactly one confident instance, exactly two leftover own-tag near-misses, on two or more sheets, each leftover scoring at least 0.80 (near the 0.92 commit bar, not the 0.75 withhold floor). A single leftover, a low-score leftover, or a pile of leftovers stays withheld. Canvas and MCP share the pass. No project, sheet, or tag names. **opentakeoff-mcp 0.9.75** (three surfaces).
+- **A same-convention labeled family split across sheets no longer dies one leftover at a time.** Per-sheet `promoteLabeledNearMisses` still requires two leftovers on *one* sheet (and leftovers-outnumber-commits after a partial commit), so a counted instance on sheet A plus one labeled near-bar sibling on A and another on B stayed withheld — each sheet saw a lone leftover, the schematic-versus-plan extra. A second pass runs set-wide after every plan sheet is classified: exactly one confident instance, exactly two leftover own-tag near-misses, on two or more sheets, each leftover scoring at least 0.80 (near the 0.92 commit bar, not the 0.75 withhold floor). A single leftover, a low-score leftover, or a pile of leftovers stays withheld. Canvas and MCP share the pass. No project, sheet, or tag names. **opentakeoff-mcp 0.9.77** (three surfaces).
+
+## 2026-08-30 — leftover exact-tag families are installs
+
+### Fixed
+- **A family of leftover exact tags on a sheet that already has a counted match is an install.** `sweep_schedule_row` already promoted leftover *compound* circuit/panel labels when the sibling marker missed the bar. A bare mark whose circled/boxed glyph never recurred — several leftover exact tags, one geometrically-confirmed instance — stayed `text_only`. Those leftovers now promote (`labeled_leftover`) when two or more sit at distinct mark-clusters, none of them on a withheld near-miss. A single leftover exact tag is still a note. Leftovers sitting next to a withheld stay with the labeled near-miss family (that path owns TYP N on the withheld geometry). Two leftovers inside one cluster are one site, not two installs. No project, sheet, or tag names. **opentakeoff-mcp 0.9.76** (three surfaces).
+
+## 2026-08-30 — labeled near-miss family survives a partial commit
+
+### Fixed
+- **A same-convention labeled family still counts when the fingerprint already cleared the bar more than once.** `promoteLabeledNearMisses` required *exactly* one confident instance, so a sheet that committed two or three callouts left every remaining same-tag near-bar sibling withheld — the rest of a TYP-multiplied diffuser family never entered the count. The gate is now *at least* one confident instance (committed matches or the hidden seed) and a leftover labeled family: two or more leftover own-tag occurrences each sitting next to a near-bar withheld, and when two or more instances already committed the leftovers must strictly outnumber them (N commits plus N leftover near-misses stay withheld — as likely schematic extras as more of the family). A single leftover labeled near-miss stays a disclosed question — that is still the schematic-versus-plan extra. No project, sheet, or tag names. **opentakeoff-mcp 0.9.75** (three surfaces).
 
 ## 2026-08-30 — sparse hatch ticks are not a register fill
 
