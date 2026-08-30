@@ -331,8 +331,9 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return "The goal asks for the physical drawing section where the equipment is shown. Call find_text (omit sheet if needed) for the section label on the drawings, cite hit.str, or refuse — do not substitute a schedule sheet title.";
     }
   }
-// Product rule: paint cited evidence on the sheets whenever the answer uses
+  // Product rule: paint cited evidence on the sheets whenever the answer uses
   // paint-able tool evidence — not only when the goal says "show me" / "cite the exact".
+  const asksToShowCite = /\bshow\b.*\bcite\b|\bcite the exact\b|\bshow me\b.*\b(?:plan|sheet|schedule|highlight)\b/i.test(goal);
   const highlights = callLog.filter(({ name, out }) =>
     name === "highlight_citation" && !out?.error && Array.isArray(out.bbox_px))
     .map(({ out }) => ({ sheet: out.sheet, bbox: out.bbox_px }));
@@ -349,13 +350,18 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         .map(([, cell]) => cell)
         .filter((cell) => Array.isArray(cell?.bbox) && cell.bbox.length === 4);
       if (!paintable.length) continue;
-      // Only rows whose cell values actually appear in the answer — not every
-      // query_table hit that shares the same tag key across sheets.
+      // Only rows whose cell values appear in the answer, or whose sheet is
+      // named there, or when the goal explicitly asks to paint/cite sources.
+      // Sharing a tag key across sheets must not force painting unused siblings.
       const usesCellFromRow = cells.some(([, cell]) => {
         const textCanonical = String(cell?.text || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
         return textCanonical.length >= 4 && finalCanonical.includes(textCanonical);
       });
-      if (!usesCellFromRow && !/^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(rowKey)) continue;
+      const sheetNorm = String(match.sheet || "").toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
+      const answerNorm = finalText.toUpperCase().replace(/[\u2010-\u2015\u2212‑–—]/g, "-");
+      const answerNamesSheet = sheetNorm && answerNorm.includes(sheetNorm);
+      if (!usesCellFromRow && !answerNamesSheet && !asksToShowCite
+        && !/^(?:AI|AO|BI|BO)\d+[A-Z]?$/i.test(rowKey)) continue;
       usedQueryRows.push({ sheet: match.sheet, rowKey, cells: paintable });
     }
   }
@@ -398,7 +404,6 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     uniqDrawingHits.push(hit);
   }
   const needsPaint = usedQueryRows.length > 0 || uniqDrawingHits.length > 0;
-  const asksToShowCite = /\bshow\b.*\bcite\b|\bcite the exact\b|\bshow me\b.*\b(?:plan|sheet|schedule|highlight)\b/i.test(goal);
   if ((needsPaint || asksToShowCite) && !highlights.length) {
     return "The answer cites schedule or drawing evidence that can be painted on the sheets, but no successful highlight_citation call exists. Call highlight_citation with each cited sheet and unchanged bbox_px so the estimator sees the source on the blueprint — agent-panel text alone is incomplete.";
   }
