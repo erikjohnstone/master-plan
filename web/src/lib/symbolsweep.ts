@@ -1306,10 +1306,12 @@ export interface TagOcc {
   h: number;
   bbox: [number, number, number, number];
   /** How this occurrence was recovered. A compound circuit/panel label
-   * ("R1 /C-11") is itself an instance marker; a bare exact/fragmented
-   * leftover is a note unless other geometry already claimed it. A
-   * routing label is a destination/source mention (duct/pipe "DOWN TO"
-   * / "FROM"), never an install. */
+   * ("R1 /C-11") is itself an instance marker. A family of leftover
+   * exact/fragmented tags on a sheet that already has a counted match
+   * is the same shape for a bare mark whose glyph never recurred; a
+   * single leftover exact tag is still a note. A routing label is a
+   * destination/source mention (duct/pipe "DOWN TO" / "FROM"), never
+   * an install. */
   kind?: "exact" | "compound" | "fragmented" | "routing";
 }
 
@@ -1716,10 +1718,13 @@ export interface SweepSheetMatch extends SweepMatch {
   /** The tag-text evidence bbox that put this match IN the count — a match
    * counts only when the row's own tag sits inside its footprint. */
   tag_at: [number, number, number, number];
-  /** True when this row was counted from a leftover compound circuit/panel
-   * label on a sheet that already has a geometrically-confirmed instance —
-   * the tag is drawn, the sibling marker did not clear the bar. Never a
-   * bare note, and never a note on a sheet with zero confirmed matches. */
+  /** True when this row was counted from a leftover label on a sheet that
+   * already has a geometrically-confirmed instance — the tag is drawn, the
+   * sibling marker did not clear the bar. A compound circuit/panel label
+   * promotes alone; leftover exact tags promote only as a family of two
+   * or more unclustered leftovers that are not sitting on a withheld.
+   * Never a single bare note, and never a note on a sheet with zero
+   * confirmed matches. */
   labeled_leftover?: boolean;
   /** Installed quantity this match represents. 1 unless a `TYP N` callout
    * sits next to a geometrically-confirmed tag. Leftover labels stay 1. */
@@ -1747,11 +1752,19 @@ export function typicalMultiplierNear(spans: FlatSpan[], at: Point, radiusPx: nu
   return best;
 }
 
-/** Leftover compound circuit/panel labels on a sheet that already has ≥1
- * counted match, sitting farther than one mark-cluster from every counted
- * instance. Those are sibling installs whose marker failed to match, not a
- * second label on the same device and not a note on a sheet with no
- * confirmed instance. Pure — both classifySweepMatches and
+/** Leftover labels on a sheet that already has ≥1 counted match, sitting
+ * farther than one mark-cluster from every counted instance. Those are
+ * sibling installs whose marker failed to match, not a second label on
+ * the same device and not a note on a sheet with no confirmed instance.
+ *
+ * A compound circuit/panel label promotes on its own. Leftover exact
+ * (or fragmented) tags promote only as a family: two or more leftovers
+ * at distinct mark-clusters, none sitting on a withheld near-miss.
+ * A single leftover exact tag stays a note. Leftovers next to a
+ * withheld stay with promoteLabeledNearMisses — that is the labeled
+ * near-bar family, not this text-only family. Two leftovers inside
+ * one cluster are one site (legend stack / twin spelling), not two
+ * installs. Pure — both classifySweepMatches and
  * classifyInlineMotifMatches call this so canvas and MCP cannot disagree. */
 export function leftoverLabeledOccs(
   matches: Array<{ at: Point; tag_at: [number, number, number, number] }>,
@@ -1760,12 +1773,18 @@ export function leftoverLabeledOccs(
   clusterR: number,
   excludeCenter?: Point,
   excludeR?: number,
+  withheld?: Array<{ at: Point }>,
 ): TagOcc[] {
   if (!matches.length) return [];
-  const out: TagOcc[] = [];
+  const nearR = excludeR ?? clusterR;
+  const nearWithheld = (o: TagOcc) =>
+    !!withheld?.some((w) => Math.hypot(w.at[0] - o.cx, w.at[1] - o.cy) <= nearR);
+  const compounds: TagOcc[] = [];
+  const bare: TagOcc[] = [];
   for (let k = 0; k < occ.length; k++) {
     if (matchedOcc.has(k)) continue;
     const o = occ[k];
+    if (o.kind === "routing") continue;
     if (excludeCenter != null && excludeR != null
       && Math.hypot(o.cx - excludeCenter[0], o.cy - excludeCenter[1]) <= excludeR) continue;
     const clustered = matches.some((m) => {
@@ -1774,14 +1793,22 @@ export function leftoverLabeledOccs(
         || Math.hypot(tx - o.cx, ty - o.cy) <= clusterR;
     });
     if (clustered) continue;
-    // A compound circuit/panel label is the instance. A bare leftover is
-    // a note (the fixture's own T1 text_only case) or a single labeled
-    // near-miss that classifySweepMatches already withholds as the
-    // schematic-versus-plan extra — never a second install by text alone.
-    if (o.kind !== "compound") continue;
-    out.push(o);
+    if (o.kind === "compound") {
+      compounds.push(o);
+      continue;
+    }
+    // A leftover sitting on a withheld is the labeled near-miss family,
+    // not a text-only family. A single leftover exact tag is a note.
+    if (nearWithheld(o)) continue;
+    bare.push(o);
   }
-  return out;
+  const sites: TagOcc[] = [];
+  for (const o of bare) {
+    if (sites.some((s) => Math.hypot(s.cx - o.cx, s.cy - o.cy) <= clusterR)) continue;
+    sites.push(o);
+  }
+  if (sites.length < 2) return compounds;
+  return [...compounds, ...sites];
 }
 
 export function matchQuantity(matches: Array<{ count?: number }>): number {
@@ -1943,7 +1970,7 @@ export function classifySweepMatches(
       && !(ex && Math.hypot(o.cx - ex[0], o.cy - ex[1]) <= R))
     .map((o) => ({ at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10] as Point }));
   const clusterR = MARK_CLUSTER_K * Math.max(anchorH, 6);
-  const leftovers = leftoverLabeledOccs(matches, occ, matchedOcc, clusterR, ex, R);
+  const leftovers = leftoverLabeledOccs(matches, occ, matchedOcc, clusterR, ex, R, withheld);
   for (const o of leftovers) {
     matches.push({
       at: [Math.round(o.cx * 10) / 10, Math.round(o.cy * 10) / 10],

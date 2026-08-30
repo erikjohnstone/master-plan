@@ -2,19 +2,20 @@
 
 All notable changes to OpenTakeoff. Dates are release/merge dates on `main`.
 
+## 2026-08-30 — leftover exact-tag families are installs
+
+### Fixed
+- **A family of leftover exact tags on a sheet that already has a counted match is an install.** `sweep_schedule_row` already promoted leftover *compound* circuit/panel labels when the sibling marker missed the bar. A bare mark whose circled/boxed glyph never recurred — several leftover exact tags, one geometrically-confirmed instance — stayed `text_only`. Those leftovers now promote (`labeled_leftover`) when two or more sit at distinct mark-clusters, none of them on a withheld near-miss. A single leftover exact tag is still a note. Leftovers sitting next to a withheld stay with the labeled near-miss family (that path owns TYP N on the withheld geometry). Two leftovers inside one cluster are one site, not two installs. No project, sheet, or tag names. **opentakeoff-mcp 0.9.76** (three surfaces).
+
 ## 2026-08-30 — labeled near-miss family survives a partial commit
 
 ### Fixed
-<<<<<<< HEAD
-- **A same-convention labeled family still counts when the fingerprint already cleared the bar more than once.** `promoteLabeledNearMisses` required *exactly* one confident instance, so a sheet that committed two or three callouts left every remaining same-tag near-bar sibling withheld — the rest of a TYP-multiplied diffuser family never entered the count. The gate is now *at least* one confident instance (committed matches or the hidden seed) and two or more leftover own-tag occurrences each sitting next to a near-bar withheld. A single leftover labeled near-miss stays a disclosed question — that is still the schematic-versus-plan extra. No project, sheet, or tag names. **opentakeoff-mcp 0.9.75** (three surfaces).
+- **A same-convention labeled family still counts when the fingerprint already cleared the bar more than once.** `promoteLabeledNearMisses` required *exactly* one confident instance, so a sheet that committed two or three callouts left every remaining same-tag near-bar sibling withheld — the rest of a TYP-multiplied diffuser family never entered the count. The gate is now *at least* one confident instance (committed matches or the hidden seed) and a leftover labeled family: two or more leftover own-tag occurrences each sitting next to a near-bar withheld, and when two or more instances already committed the leftovers must strictly outnumber them (N commits plus N leftover near-misses stay withheld — as likely schematic extras as more of the family). A single leftover labeled near-miss stays a disclosed question — that is still the schematic-versus-plan extra. No project, sheet, or tag names. **opentakeoff-mcp 0.9.75** (three surfaces).
 
 ## 2026-08-30 — sparse hatch ticks are not a register fill
 
 ### Fixed
 - **An inline-motif seed must be real fill, not a handful of dashes.** `fingerprintInlineMotif` used to accept any 4-stroke cluster. Sweep still requires 40 members to emit a match, so a 7-dash pump-body or leader hash became a seed that can never self-match — but size-tolerance could "corroborate" it against an unrelated dense box of similar bbox, and that false hatch win blocked `sweep_schedule_row`'s whole-shape fallback. The fingerprint floor is now the same `MIN_FILL_MEMBERS` (40) the sweep already uses. A true register/grille fill (100+ members, measured) is unchanged. No project, sheet, or tag names. **opentakeoff-mcp 0.9.74** (three surfaces).
-=======
-- **A same-convention labeled family still counts when the fingerprint already cleared the bar more than once.** `promoteLabeledNearMisses` required *exactly* one confident instance, so a sheet that committed two or three callouts left every remaining same-tag near-bar sibling withheld — the rest of a TYP-multiplied diffuser family never entered the count. The gate is now *at least* one confident instance (committed matches or the hidden seed) and a leftover labeled family: two or more leftover own-tag occurrences each sitting next to a near-bar withheld, and when two or more instances already committed the leftovers must strictly outnumber them (N commits plus N leftover near-misses stay withheld — as likely schematic extras as more of the family). A single leftover labeled near-miss stays a disclosed question — that is still the schematic-versus-plan extra. No project, sheet, or tag names. **opentakeoff-mcp 0.9.74** (three surfaces).
->>>>>>> fef5574 (Require leftover near-misses to outnumber partial commits)
 
 ## 2026-08-30 — smashed MEP titles still name an equipment family
 
