@@ -22,7 +22,7 @@ function cellBbox(row, headerRe) {
   return null;
 }
 
-/** Flatten schedule row cells into plain text attrs for the takeoff line. */
+/** Flatten schedule row cells into text + bbox for takeoff line cites. */
 function scheduleAttrs(row) {
   const cells = {};
   for (const [header, cell] of Object.entries(row.cells || {})) {
@@ -30,7 +30,10 @@ function scheduleAttrs(row) {
     if (/^(MARK|TAG|SYMBOL|VALVE MARK|ID|KEY)$/.test(hu)) continue;
     const text = String(cell?.text ?? "").trim();
     if (!text) continue;
-    cells[header] = text;
+    cells[header] = {
+      text,
+      bbox: Array.isArray(cell?.bbox) && cell.bbox.length === 4 ? cell.bbox : null,
+    };
   }
   const description = cellText(row, /^DESCRIPTION$/i)
     || cellText(row, /DESCRIPTION/i)
@@ -67,6 +70,9 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
         : (cellBbox(row, /^MARK$/i) || row.identity?.bbox || cellBbox(row, /./));
       const { cells, description } = scheduleAttrs(row);
       const bldg = buildingLetter(tag);
+      const tableBbox = Array.isArray(table.title?.bbox) && table.title.bbox.length === 4
+        ? table.title.bbox
+        : (Array.isArray(table.region) && table.region.length === 4 ? table.region : null);
       items.push({
         tag,
         quantity: 1,
@@ -74,6 +80,7 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
         sheet_id: table.sheet,
         table_title: title.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim(),
         bbox_px: bbox || null,
+        table_bbox_px: tableBbox,
         description: description || null,
         building: bldg,
         cells,
@@ -207,6 +214,9 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       if (m) counts[m[1]] += 1;
       else counts.other += 1;
       const { cells, description } = scheduleAttrs(row);
+      const tableBbox = Array.isArray(table.title?.bbox) && table.title.bbox.length === 4
+        ? table.title.bbox
+        : (Array.isArray(table.region) && table.region.length === 4 ? table.region : null);
       items.push({
         tag,
         quantity: 1,
@@ -214,6 +224,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
         sheet_id: table.sheet,
         table_title: title,
         bbox_px: cellBbox(row, /^MARK/i) || row.identity?.bbox || null,
+        table_bbox_px: tableBbox,
         description: description || cellText(row, /DESCRIPTION/i) || null,
         cells,
       });
@@ -343,7 +354,12 @@ export function takeoffWorkbookSheets(takeoff, { interrogationLog = null } = {})
           item.building || "",
           item.sheet_id,
           item.table_title,
-          ...attrKeys.map((k) => item.cells?.[k] ?? ""),
+          ...attrKeys.map((k) => {
+            const c = item.cells?.[k];
+            if (c == null) return "";
+            if (typeof c === "object") return c.text ?? "";
+            return c;
+          }),
           Array.isArray(item.bbox_px) ? item.bbox_px.join(",") : "",
         ]);
       }
@@ -382,7 +398,12 @@ export function takeoffWorkbookSheets(takeoff, { interrogationLog = null } = {})
           item.unit,
           item.sheet_id,
           item.table_title,
-          ...attrKeys.map((k) => item.cells?.[k] ?? ""),
+          ...attrKeys.map((k) => {
+            const c = item.cells?.[k];
+            if (c == null) return "";
+            if (typeof c === "object") return c.text ?? "";
+            return c;
+          }),
           Array.isArray(item.bbox_px) ? item.bbox_px.join(",") : "",
         ]);
       }

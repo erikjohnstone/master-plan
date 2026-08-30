@@ -52,6 +52,7 @@ export function makeTakeoffRow({
   table_title = null,
   column = null,
   bbox_px = null,
+  table_bbox_px = null,
   source_tool = null,
   note = null,
 } = {}) {
@@ -71,6 +72,7 @@ export function makeTakeoffRow({
     table_title: titleText(table_title),
     column: column || null,
     bbox_px: asBbox(bbox_px),
+    table_bbox_px: asBbox(table_bbox_px),
     source_tool: source_tool || null,
     note: note != null ? String(note) : null,
   };
@@ -257,6 +259,7 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
           workflow, runId, tag, field: "quantity",
           value: item.quantity ?? item.qty ?? 1, unit: item.unit || "EA",
           sheet_id: sheet, table_title: table, bbox_px: item.bbox_px || null,
+          table_bbox_px: item.table_bbox_px || null,
           source_tool, note: catName,
         }));
         rows.push(makeTakeoffRow({
@@ -271,9 +274,12 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
           }));
         }
         if (item.description) {
+          const descCell = item.cells && Object.entries(item.cells).find(([h]) => /DESCRIPTION/i.test(h));
+          const descBbox = descCell && typeof descCell[1] === "object" ? descCell[1].bbox : null;
           rows.push(makeTakeoffRow({
             workflow, runId, tag, field: "DESCRIPTION", value: item.description,
-            sheet_id: sheet, table_title: table, column: "DESCRIPTION", source_tool,
+            sheet_id: sheet, table_title: table, column: "DESCRIPTION",
+            bbox_px: descBbox || item.bbox_px || null, source_tool,
           }));
         }
         const cells = item.cells || item.attrs || item.fields;
@@ -283,9 +289,13 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
             if (hu === "MARK" || hu === "TAG" || hu === "SYMBOL" || hu === "DESCRIPTION") continue;
             const text = cellText(raw);
             if (!String(text).trim()) continue;
+            const bbox = (raw && typeof raw === "object" && !Array.isArray(raw))
+              ? (raw.bbox || raw.bbox_px)
+              : null;
             rows.push(makeTakeoffRow({
               workflow, runId, tag, field: header, value: text,
-              sheet_id: sheet, table_title: table, column: header, source_tool,
+              sheet_id: sheet, table_title: table, column: header,
+              bbox_px: bbox || null, source_tool,
             }));
           }
         }
@@ -312,6 +322,7 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
           workflow, runId, tag, field: "quantity",
           value: item.quantity ?? 1, unit: item.unit || "EA",
           sheet_id: sheet, table_title: table, bbox_px: item.bbox_px || null,
+          table_bbox_px: item.table_bbox_px || null,
           source_tool,
         }));
         const m = String(tag).toUpperCase().match(/^(AI|AO|BI|BO)\d/);
@@ -322,10 +333,30 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
           }));
         }
         if (item.description) {
+          const descCell = item.cells && Object.entries(item.cells).find(([h]) => /DESCRIPTION/i.test(h));
+          const descBbox = descCell && typeof descCell[1] === "object" ? descCell[1].bbox : null;
           rows.push(makeTakeoffRow({
             workflow, runId, tag, field: "DESCRIPTION", value: item.description,
-            sheet_id: sheet, table_title: table, column: "DESCRIPTION", source_tool,
+            sheet_id: sheet, table_title: table, column: "DESCRIPTION",
+            bbox_px: descBbox || item.bbox_px || null, source_tool,
           }));
+        }
+        const cells = item.cells || item.attrs || item.fields;
+        if (cells && typeof cells === "object" && !Array.isArray(cells)) {
+          for (const [header, raw] of Object.entries(cells)) {
+            const hu = String(header || "").toUpperCase();
+            if (hu === "MARK" || hu === "TAG" || hu === "SYMBOL" || hu === "DESCRIPTION") continue;
+            const text = cellText(raw);
+            if (!String(text).trim()) continue;
+            const bbox = (raw && typeof raw === "object" && !Array.isArray(raw))
+              ? (raw.bbox || raw.bbox_px)
+              : null;
+            rows.push(makeTakeoffRow({
+              workflow, runId, tag, field: header, value: text,
+              sheet_id: sheet, table_title: table, column: header,
+              bbox_px: bbox || null, source_tool,
+            }));
+          }
         }
       }
       if (!items.length && typeof list.rows === "number") {
@@ -525,6 +556,47 @@ export function lineSpecValue(line, col) {
   return cellText(hit[1]);
 }
 
+/** Drawing cite for a technical column — same equipment row as the Tag (not a scatter jump). */
+export function lineSpecCite(line, col) {
+  // Spec values belong to the schedule row; jump to the row, not each cell.
+  return lineLeadCite(line, "tag");
+}
+
+/** Cite for a lead cell (tag / qty) — identity MARK on that equipment's schedule row. */
+export function lineLeadCite(line, key) {
+  if (!line?.bbox_px || !line?.sheet_id) return null;
+  if (key !== "tag" && key !== "qty") return null;
+  return {
+    sheet_id: line.sheet_id,
+    bbox_px: line.bbox_px,
+    column: "MARK",
+    field: "MARK",
+    value: line.tag,
+    tag: line.tag,
+    table_title: line.table_title,
+    kind: "row",
+  };
+}
+
+/** Cite for a schedule family section — the whole table title/region on the sheet. */
+export function familyTableCite(group) {
+  const line = (group?.lines || []).find((l) => l.table_bbox_px && l.sheet_id)
+    || (group?.lines || []).find((l) => l.bbox_px && l.sheet_id);
+  if (!line) return null;
+  const bbox = line.table_bbox_px || line.bbox_px;
+  if (!bbox) return null;
+  return {
+    sheet_id: line.schedule_sheet_id || line.sheet_id,
+    bbox_px: bbox,
+    column: null,
+    field: "table",
+    value: group.family,
+    tag: null,
+    table_title: group.family,
+    kind: "table",
+  };
+}
+
 /**
  * Lead (identity) columns for a family group — only fields that appear.
  * Points lists skip Manufacturer/Model; valve takeoffs keep them when present.
@@ -604,6 +676,7 @@ export function groupTakeoffByFamily(lines = [], opts = {}) {
       specColumns: uiMax != null ? allSpecs.slice(0, uiMax) : allSpecs,
       specTotal: allSpecs.length,
       qtyTotal: group.reduce((n, l) => n + (typeof l.qty === "number" && (l.unit || "EA") === "EA" ? l.qty : 0), 0),
+      tableCite: familyTableCite({ family, lines: group }),
     };
   });
 }
@@ -658,6 +731,7 @@ export function compileAgentTakeoff(rows = []) {
         tag: tag || null,
         sourceRows: [],
         attrs: {},
+        attrCites: {},
         qty: null,
         unit: null,
         qty_kind: null,
@@ -669,6 +743,8 @@ export function compileAgentTakeoff(rows = []) {
         notes: [],
         bbox_px: null,
         plan_bbox_px: null,
+        table_bbox_px: null,
+        fromCompile: false,
       });
     }
     const g = groups.get(key);
@@ -679,6 +755,9 @@ export function compileAgentTakeoff(rows = []) {
       if (!g.table_title || row.source_tool === "compile_corpus_takeoff") {
         g.table_title = row.table_title;
       }
+    }
+    if (row.table_bbox_px && (!g.table_bbox_px || row.source_tool === "compile_corpus_takeoff")) {
+      g.table_bbox_px = row.table_bbox_px;
     }
     if (row.source_tool === "compile_corpus_takeoff") g.fromCompile = true;
     const field = String(row.field || "");
@@ -700,6 +779,9 @@ export function compileAgentTakeoff(rows = []) {
           g.unit = row.unit || "EA";
           g.qty_kind = row.source_tool === "compile_corpus_takeoff" ? "scheduled" : (g.qty_kind || "scheduled");
         }
+      }
+      if (row.bbox_px && (row.source_tool === "compile_corpus_takeoff" || !g.bbox_px)) {
+        g.bbox_px = row.bbox_px;
       }
     } else if (field === "mark_count" && g.qty_kind !== "installed" && g.qty_kind !== "scheduled") {
       const n = asNumber(row.value);
@@ -734,6 +816,12 @@ export function compileAgentTakeoff(rows = []) {
       if (g.attrs[field] == null || String(g.attrs[field]).trim() === "") {
         g.attrs[field] = row.value;
       }
+      if (row.bbox_px && (!g.attrCites[field] || row.source_tool === "compile_corpus_takeoff")) {
+        g.attrCites[field] = {
+          bbox_px: row.bbox_px,
+          sheet_id: row.sheet_id || null,
+        };
+      }
     }
 
     if (row.source_tool === "sweep_schedule_row" && row.sheet_id && field === "installed_quantity") {
@@ -744,7 +832,9 @@ export function compileAgentTakeoff(rows = []) {
       if (!g.schedule_sheet_id) g.schedule_sheet_id = row.sheet_id;
     }
     if (row.bbox_px && !g.bbox_px && field !== "plan_status" && field !== "plan_tag" && field !== "installed_quantity") {
-      g.bbox_px = row.bbox_px;
+      // Identity / MARK cites prefer the quantity row's bbox; other fields keep attrCites.
+      if (field === "MARK" || field === "TAG" || field === "quantity") g.bbox_px = row.bbox_px;
+      else if (!g.bbox_px && row.source_tool === "compile_corpus_takeoff") g.bbox_px = row.bbox_px;
     }
   }
 
@@ -783,6 +873,7 @@ export function compileAgentTakeoff(rows = []) {
     const typeKeyNorm = typePick && typeLabel !== g.tag ? normKey(typePick.key) : null;
 
     const specs = {};
+    const spec_cites = {};
     for (const [k, v] of Object.entries(g.attrs)) {
       if (k.endsWith("_unit")) continue;
       const nk = normKey(k);
@@ -790,6 +881,9 @@ export function compileAgentTakeoff(rows = []) {
       if (["MANUFACTURER", "MFR", "MODEL", "MANUFACTURER/MODEL", "MANUFACTURER / MODEL", "EQUIPMENT_TYPE"].includes(nk)) continue;
       if (typeKeyNorm && nk === typeKeyNorm) continue;
       specs[k] = v;
+      if (g.attrCites[k]?.bbox_px) {
+        spec_cites[k] = g.attrCites[k];
+      }
     }
 
     const family = familyFromSchedule(g.table_title, g.tag);
@@ -804,6 +898,7 @@ export function compileAgentTakeoff(rows = []) {
       unit: g.unit || (g.qty != null ? "EA" : null),
       qty_kind: g.qty_kind,
       specs,
+      spec_cites,
       plan_sheet_id: g.plan_sheet_id || null,
       schedule_sheet_id: g.schedule_sheet_id || g.sheet_id || null,
       table_title: g.table_title,
@@ -811,6 +906,7 @@ export function compileAgentTakeoff(rows = []) {
       notes: g.notes.join("; "),
       workflow: [...g.workflows].join(" · "),
       bbox_px: g.plan_bbox_px || g.bbox_px,
+      table_bbox_px: g.table_bbox_px || null,
       source_ids: g.sourceRows.map((r) => r.id),
       source_count: g.sourceRows.length,
       from_compile: !!g.fromCompile,

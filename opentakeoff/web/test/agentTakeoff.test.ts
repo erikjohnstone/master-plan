@@ -7,6 +7,7 @@ import {
   compiledTakeoffToCsv,
   dedupeTakeoffRows,
   groupTakeoffByFamily,
+  lineLeadCite,
   makeTakeoffRow,
   mergeTakeoffRows,
   rowsFromAnswerMarkdown,
@@ -240,8 +241,20 @@ test("compileAgentTakeoff: corpus compile locks line count — scrap cannot infl
       AHU: {
         count: 2,
         items: [
-          { tag: "AHU-1", quantity: 1, unit: "EA", sheet_id: "m#1", table_title: "AIR HANDLING UNIT SCHEDULE", cells: { CFM: "2000" } },
-          { tag: "AHU-2", quantity: 1, unit: "EA", sheet_id: "m#1", table_title: "AIR HANDLING UNIT SCHEDULE", cells: { CFM: "1800" } },
+          {
+            tag: "AHU-1", quantity: 1, unit: "EA", sheet_id: "m#1",
+            table_title: "AIR HANDLING UNIT SCHEDULE",
+            bbox_px: [10, 20, 30, 40],
+            table_bbox_px: [1, 2, 500, 600],
+            cells: { CFM: { text: "2000", bbox: [11, 21, 31, 41] } },
+          },
+          {
+            tag: "AHU-2", quantity: 1, unit: "EA", sheet_id: "m#1",
+            table_title: "AIR HANDLING UNIT SCHEDULE",
+            bbox_px: [10, 50, 30, 70],
+            table_bbox_px: [1, 2, 500, 600],
+            cells: { CFM: { text: "1800", bbox: [11, 51, 31, 71] } },
+          },
         ],
       },
     },
@@ -249,9 +262,7 @@ test("compileAgentTakeoff: corpus compile locks line count — scrap cannot infl
   });
   const scrap = [
     ...compiled,
-    // Extra tag from exploratory query — must NOT become a takeoff line
     { id: "x1", tag: "JUNK-9", field: "CFM", value: "99", table_title: "SOME OTHER TABLE", source_tool: "query_table" },
-    // Attr enrichment for a compile tag — allowed
     { id: "x2", tag: "AHU-1", field: "VOLTAGE", value: "460", table_title: "AIR HANDLING UNIT SCHEDULE", source_tool: "query_table" },
   ];
   const lines = compileAgentTakeoff(scrap);
@@ -259,7 +270,15 @@ test("compileAgentTakeoff: corpus compile locks line count — scrap cannot infl
   assert.equal(lines.reduce((n, l) => n + (l.qty || 0), 0), 2);
   assert.ok(lines.every((l) => l.tag === "AHU-1" || l.tag === "AHU-2"));
   const ahu1 = lines.find((l) => l.tag === "AHU-1");
-  assert.equal(String(ahu1.specs.CFM || ahu1.specs.cfm || ""), "2000");
+  assert.deepEqual(ahu1.bbox_px, [10, 20, 30, 40]);
+  assert.deepEqual(ahu1.table_bbox_px, [1, 2, 500, 600]);
+  const groups = groupTakeoffByFamily(lines);
+  assert.ok(groups[0].tableCite?.bbox_px);
+  assert.equal(groups[0].tableCite.kind, "table");
+  const rowCite = lineLeadCite(ahu1, "tag");
+  assert.equal(rowCite.kind, "row");
+  assert.deepEqual(rowCite.bbox_px, [10, 20, 30, 40]);
+  assert.equal(String(ahu1.specs.CFM || ""), "2000");
   assert.ok(Object.values(ahu1.specs).some((v) => String(v) === "460"));
 });
 

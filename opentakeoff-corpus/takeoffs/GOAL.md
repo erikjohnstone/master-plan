@@ -68,6 +68,10 @@ counting; instrument-index discipline):
 - No seed cheats; no programmatic compile as the demo path.
 - Blank or meaningless columns are bugs — iron them out.
 - Do not idle on long shell waits; diagnose graph/compile stalls immediately.
+- **Auditable cites:** click a Tag → that equipment/point's schedule **row** on
+  the drawings; click a schedule section name → the **whole table**. Spec fields
+  for a tag share the row (no scatter jumps). Compile paints table + row
+  highlights so the takeoff is proven on the blueprints.
 
 ## Non-negotiables
 

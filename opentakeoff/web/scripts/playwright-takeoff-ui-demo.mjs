@@ -236,14 +236,23 @@ async function runOne(job) {
   const stats = await page.evaluate(() => {
     const panel = document.querySelector('[aria-label="Takeoff"]');
     const text = panel?.innerText || "";
+    const el = panel?.querySelector("[data-takeoff-stats]");
+    const lines = el ? Number(el.getAttribute("data-lines") || 0) : Number((text.match(/(\d+)\s+lines?/i) || [])[1] || 0);
+    const eaAttr = el?.getAttribute("data-ea");
+    const ea = eaAttr !== "" && eaAttr != null
+      ? Number(eaAttr)
+      : Number((text.match(/\b(\d+)\s+EA\b/i) || [])[1] || 0) || null;
     return {
       textHead: text.slice(0, 450),
-      lines: Number((text.match(/(\d+)\s+lines?/i) || [])[1] || 0),
-      evidence: Number((text.match(/(\d+)\s+evidence/i) || [])[1] || 0),
-      ea: Number((text.match(/·\s*(\d+)\s+EA/i) || [])[1] || 0) || null,
+      lines,
+      evidence: el ? Number(el.getAttribute("data-evidence") || 0) : Number((text.match(/(\d+)\s+evidence/i) || [])[1] || 0),
+      ea,
       rowCount: window.__opentakeoff?.takeoffRowCount?.() ?? 0,
       meta: window.__opentakeoff?.lastCorpusTakeoff?.() || null,
       hasObjectObject: /\[object Object\]/i.test(text),
+      citeButtons: panel ? panel.querySelectorAll("[data-takeoff-cite]").length : 0,
+      citeRows: panel ? panel.querySelectorAll('[data-takeoff-cite="row"]').length : 0,
+      citeTables: panel ? panel.querySelectorAll('[data-takeoff-cite="table"]').length : 0,
     };
   });
   console.log(`[${job.label}] Takeoff panel:`, JSON.stringify(stats));
@@ -269,18 +278,23 @@ async function runOne(job) {
     await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
     throw new Error(`[${job.label}] Takeoff lines ${stats.lines} > ${job.expectMaxLines} (scrap inflated the takeoff)`);
   }
-  if (job.expectEa && (stats.ea == null || stats.ea < job.expectEa || stats.ea > job.expectEa)) {
+  if (job.expectEa && (stats.ea == null || stats.ea !== job.expectEa)) {
     await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
     throw new Error(`[${job.label}] EA total ${stats.ea} != ${job.expectEa}`);
-  }
-  if (stats.meta?.totals?.items != null && stats.meta.totals.items !== job.expectEa
-    && stats.meta?.totals?.rows != null && stats.meta.totals.rows !== job.expectEa) {
-    // HVAC uses items; BAS uses rows — either may be present
   }
   const locked = stats.meta?.totals?.items ?? stats.meta?.totals?.rows;
   if (locked != null && locked !== job.expectEa) {
     await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
     throw new Error(`[${job.label}] compile totals ${locked} != ${job.expectEa}`);
+  }
+  // Row tags + schedule section headers must be jumpable (not every CFM cell).
+  if (stats.citeRows < 5) {
+    await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
+    throw new Error(`[${job.label}] too few row cites (${stats.citeRows}) — tags must jump to schedule rows`);
+  }
+  if (stats.citeTables < 1) {
+    await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
+    throw new Error(`[${job.label}] no table cites — schedule headers must jump to whole tables`);
   }
   if (stats.rowCount < job.expectMinEvidence && stats.evidence < job.expectMinEvidence) {
     await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });

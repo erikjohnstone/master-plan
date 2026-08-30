@@ -7059,6 +7059,53 @@ export default function TakeoffCanvas() {
     return { downloaded: filename, condition_count: rows.length };
   }
 
+  /** Paint schedule-table + per-tag row highlights so the takeoff is auditable on the sheets. */
+  async function paintCompiledTakeoffHighlights(compiled) {
+    if (!compiled || compiled.error) return { tables: 0, rows: 0 };
+    const jobs = [];
+    const seenTable = new Set();
+    const enqueue = (item) => {
+      if (!item?.sheet_id) return;
+      if (Array.isArray(item.table_bbox_px) && item.table_bbox_px.length === 4) {
+        const k = `${item.sheet_id}|${item.table_bbox_px.join(",")}`;
+        if (!seenTable.has(k)) {
+          seenTable.add(k);
+          jobs.push({
+            sheet: item.sheet_id,
+            bbox_px: item.table_bbox_px,
+            table_title: item.table_title || "",
+            text: item.table_title || "Schedule",
+          });
+        }
+      }
+      if (item.tag && Array.isArray(item.bbox_px) && item.bbox_px.length === 4) {
+        jobs.push({
+          sheet: item.sheet_id,
+          bbox_px: item.bbox_px,
+          row_key: item.tag,
+          column: "MARK",
+          value: item.tag,
+          table_title: item.table_title || "",
+        });
+      }
+    };
+    if (compiled.kind === "hvac_equipment") {
+      for (const cat of Object.values(compiled.categories || {})) {
+        for (const item of cat.items || []) enqueue(item);
+      }
+    } else if (compiled.kind === "bas_points") {
+      for (const list of compiled.categories?.points_lists?.lists || []) {
+        for (const item of list.items || []) enqueue(item);
+      }
+    }
+    // Chunk so the UI stays responsive while the audit trail paints.
+    for (let i = 0; i < jobs.length; i += 40) {
+      const chunk = jobs.slice(i, i + 40);
+      await Promise.all(chunk.map((j) => agentHighlightCitation(j)));
+    }
+    return { tables: seenTable.size, rows: jobs.length - seenTable.size };
+  }
+
   /** Feed finished compile into TakeoffDataPanel (Takeoff + Workflow data tabs). */
   function showCompiledTakeoff(compiled, meta = {}) {
     if (!compiled || compiled.error) return;
@@ -7094,6 +7141,8 @@ export default function TakeoffCanvas() {
     if (rows.length) {
       setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, rows));
       setShowTakeoffData(true);
+      // Audit trail on the blueprints: one highlight per schedule table + per tag row.
+      void paintCompiledTakeoffHighlights(compiled);
     }
   }
 
@@ -12221,16 +12270,24 @@ export default function TakeoffCanvas() {
             setAgentTakeoffRows((rows) => rows.filter((r) => !ids.has(r.id)));
           }}
           onClose={() => setShowTakeoffData(false)}
-          onOpenCitation={(row) => {
+          onOpenCitation={async (row) => {
             if (!row?.sheet_id || !row?.bbox_px) return;
-            openAgentCitation({
-              sheet_id: row.sheet_id,
+            // Close the takeoff modal so the estimator can see the sheet highlight.
+            setShowTakeoffData(false);
+            const result = await agentHighlightCitation({
+              sheet: row.sheet_id,
               bbox_px: row.bbox_px,
-              row_key: row.tag || row.row_key,
-              column: row.column,
-              table_title: row.table_title,
-              value: row.value ?? row.qty,
+              row_key: row.tag || row.row_key || "",
+              column: row.column || row.field || "",
+              table_title: row.table_title || "",
+              value: String(row.value ?? row.qty ?? ""),
             });
+            if (result?.error) {
+              setCommitMsg(`Could not open cite: ${result.error}`);
+              return;
+            }
+            const markup = agentStateRef.current.markups.find((m) => m.id === result.id);
+            if (markup) flyToMarkup(markup);
           }}
         />
       )}

@@ -9,6 +9,7 @@ import {
   downloadTakeoffPdf,
   downloadTakeoffXlsx,
   groupTakeoffByFamily,
+  lineLeadCite,
   lineLeadValue,
   lineSpecValue,
 } from "../lib/agentTakeoff.js";
@@ -79,6 +80,56 @@ function shortSheet(sheet) {
   const hash = s.lastIndexOf("#");
   if (hash >= 0) return `p.${s.slice(hash + 1)}`;
   return s.length > 28 ? `…${s.slice(-24)}` : s;
+}
+
+/** Clickable takeoff control — jumps to a schedule row or whole table on the drawings. */
+function CiteValue({ text, cite, onOpenCitation, align = "left", mono = false, weight = 400, title }) {
+  const display = text === "" || text == null ? "—" : String(text);
+  const canJump = cite?.sheet_id && Array.isArray(cite.bbox_px) && cite.bbox_px.length === 4
+    && typeof onOpenCitation === "function";
+  if (!canJump) {
+    return (
+      <span style={{
+        fontFamily: mono ? "var(--f-mono)" : undefined,
+        fontWeight: weight,
+        fontVariantNumeric: align === "right" ? "tabular-nums" : undefined,
+      }}>{display}</span>
+    );
+  }
+  const tip = title
+    || (cite.kind === "table"
+      ? "Jump to this schedule table on the drawings"
+      : "Jump to this equipment / point row on the drawings");
+  return (
+    <button
+      type="button"
+      title={tip}
+      data-takeoff-cite={cite.kind || "row"}
+      onClick={(e) => {
+        e.stopPropagation();
+        onOpenCitation(cite);
+      }}
+      style={{
+        border: "none",
+        background: "transparent",
+        padding: 0,
+        margin: 0,
+        cursor: "pointer",
+        color: "var(--ink)",
+        textAlign: align,
+        font: "inherit",
+        fontFamily: mono ? "var(--f-mono)" : "inherit",
+        fontWeight: weight,
+        fontSize: "inherit",
+        fontVariantNumeric: align === "right" ? "tabular-nums" : undefined,
+        textDecoration: "underline",
+        textDecorationColor: "color-mix(in srgb, var(--ink) 28%, transparent)",
+        textUnderlineOffset: 3,
+      }}
+    >
+      {display}
+    </button>
+  );
 }
 
 export default function TakeoffDataPanel({
@@ -230,11 +281,18 @@ export default function TakeoffDataPanel({
               display: "flex", flexWrap: "wrap", gap: "6px 14px",
               marginTop: 8, fontFamily: "var(--f-mono)", fontSize: 12,
               color: "var(--ink-muted)", letterSpacing: "0.02em",
-            }}>
+            }}
+              data-takeoff-stats
+              data-lines={lines.length}
+              data-schedules={familyGroups.length}
+              data-ea={qtyTotal ?? ""}
+              data-evidence={rows.length}
+              data-takeoff-id={takeoffId || ""}
+            >
               <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{lines.length}</strong> lines</span>
               <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{familyGroups.length}</strong> schedules</span>
               {qtyTotal != null && (
-                <span><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{qtyTotal}</strong> EA</span>
+                <span data-takeoff-ea={qtyTotal}><strong style={{ color: "var(--ink)", fontWeight: 650 }}>{qtyTotal}</strong> EA</span>
               )}
               {lockedTotal != null && (
                 <span style={{ color: compiledOk ? "var(--ink)" : "var(--c-danger)" }}>
@@ -243,9 +301,9 @@ export default function TakeoffDataPanel({
               )}
               <span>{rows.length} evidence fields</span>
             </div>
-            <div style={{ fontSize: 12.5, color: "var(--ink-muted)", marginTop: 6, maxWidth: 720, lineHeight: 1.45 }}>
+            <div style={{ fontSize: 12.5, color: "var(--ink-muted)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
               {tab === "takeoff"
-                ? "Finished quantity takeoff — one row per tag, grouped by schedule, with the schedule fields that justify each count."
+                ? "Finished quantity takeoff — click a Tag to open that schedule row on the drawings; click a schedule name to open the whole table. Spec fields for a tag share that row."
                 : "Workflow audit trail — every field the Agent gathered. Does not change the finished Takeoff totals."}
             </div>
           </div>
@@ -304,7 +362,10 @@ export default function TakeoffDataPanel({
                 <button
                   key={name}
                   type="button"
-                  onClick={() => jumpToFamily(name)}
+                  onClick={() => {
+                    if (g.tableCite && onOpenCitation) onOpenCitation(g.tableCite);
+                    else jumpToFamily(name);
+                  }}
                   style={{
                     ...btnStyle,
                     padding: "5px 9px",
@@ -315,8 +376,9 @@ export default function TakeoffDataPanel({
                     maxWidth: 220,
                     overflow: "hidden",
                     textOverflow: "ellipsis",
+                    textDecoration: g.tableCite ? "underline" : undefined,
                   }}
-                  title={name}
+                  title={g.tableCite ? `Open ${name} on the drawings` : name}
                 >
                   {name.replace(/ SCHEDULE$/i, "")}
                   <span style={{ opacity: 0.75 }}> · {g.qtyTotal || g.lines.length}</span>
@@ -350,7 +412,13 @@ export default function TakeoffDataPanel({
                       color: "var(--ink)", display: "flex", gap: 12, alignItems: "baseline",
                       flexWrap: "wrap", letterSpacing: "-0.01em",
                     }}>
-                      <span>{name}</span>
+                      <CiteValue
+                        text={name}
+                        cite={group.tableCite}
+                        onOpenCitation={onOpenCitation}
+                        weight={650}
+                        title={`Open ${name} schedule table on the drawings`}
+                      />
                       <span style={{
                         fontFamily: "var(--f-mono)", fontSize: 11, fontWeight: 500,
                         letterSpacing: "0.04em", color: "var(--ink-muted)",
@@ -395,16 +463,15 @@ export default function TakeoffDataPanel({
                                 const val = lineLeadValue(line, c.key);
                                 const isTag = c.key === "tag";
                                 const isQty = c.key === "qty";
+                                // Tag (and qty) jump to the schedule ROW — not each scattered cell.
+                                const cite = isTag || isQty ? lineLeadCite(line, "tag") : null;
                                 return (
                                   <td
                                     key={c.key}
                                     style={{
                                       ...td,
-                                      fontFamily: isTag ? "var(--f-mono)" : undefined,
                                       fontSize: isTag ? 12 : 13,
-                                      fontWeight: isTag || isQty ? 650 : undefined,
                                       textAlign: isQty ? "right" : "left",
-                                      fontVariantNumeric: isQty ? "tabular-nums" : undefined,
                                       whiteSpace: isTag ? "nowrap" : undefined,
                                       position: i === 0 ? "sticky" : undefined,
                                       left: i === 0 ? 0 : undefined,
@@ -412,7 +479,14 @@ export default function TakeoffDataPanel({
                                       boxShadow: i === 0 ? "2px 0 0 var(--ink-faint)" : undefined,
                                     }}
                                   >
-                                    {val === "" || val == null ? "—" : String(val)}
+                                    <CiteValue
+                                      text={val}
+                                      cite={cite}
+                                      onOpenCitation={onOpenCitation}
+                                      align={isQty ? "right" : "left"}
+                                      mono={isTag}
+                                      weight={isTag || isQty ? 650 : 400}
+                                    />
                                   </td>
                                 );
                               })}
@@ -424,6 +498,7 @@ export default function TakeoffDataPanel({
                                     whiteSpace: "nowrap",
                                     color: v ? "var(--ink)" : "var(--ink-faint)",
                                   }}>
+                                    {/* Specs belong to the row — use Tag to jump; keep values readable. */}
                                     {v || "—"}
                                   </td>
                                 );
@@ -446,7 +521,10 @@ export default function TakeoffDataPanel({
                                     sheet_id: line.sheet_id,
                                     bbox_px: line.bbox_px,
                                     tag: line.tag,
-                                    value: line.qty,
+                                    column: "MARK",
+                                    field: "MARK",
+                                    value: line.tag,
+                                    table_title: line.table_title,
                                   })}
                                     style={{ ...btnStyle, padding: "4px 8px", fontSize: 11 }}>
                                     View
