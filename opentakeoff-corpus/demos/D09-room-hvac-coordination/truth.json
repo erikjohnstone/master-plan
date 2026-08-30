@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "demo_id": "D09",
+  "set_id": "baker-county-eoc",
+  "source_file": "baker-county-eoc-bidset.pdf",
+  "ground_truth_completed_before_model_runs": true,
+  "derivation": "Independent reads before model runs: ROOM FINISH SCHEDULE on #27 for room 105 (CONFERENCE / CPTT-1); DIFFUSER-GRILLE SCHEDULE on #41 for CD-1/RG-1/EG-1; PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE on #41 for RTU-1 SERVICE=MAIN OPERATIONS / SUPPLY AIR 1650 CFM. 20% room sample (3 of 13) reconciled via query_table row_key.",
+  "hardness": {
+    "sheet_count": 65,
+    "stress_confirmed": "Architectural room finish data on #27 must be joined to mechanical air-device and rooftop schedules on #41 into one coordination package — not a single-discipline tag lookup."
+  },
+  "hand_count_20pct": {
+    "rooms": {
+      "required_sample": 3,
+      "found_on_drawings_or_schedules": 3,
+      "sample_size": 3,
+      "sample_tags": ["101", "102", "105"],
+      "method": "query_table row_key on ROOM FINISH SCHEDULE",
+      "reconciliation": "pass"
+    }
+  },
+  "follow_up": {
+    "prompt": "What is room 101 named on the finish schedule? Which RTU serves BUILDING SOUTH and what supply CFM does it list?",
+    "expected": {
+      "room_101_name": "HALLWAY",
+      "rtu_building_south": "RTU-2",
+      "rtu_2_cfm": 750
+    }
+  },
+  "expected": {
+    "room_105_name": {
+      "type": "string",
+      "value": "CONFERENCE",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#27",
+        "table_title": "ROOM FINISH SCHEDULE",
+        "row_key": "105",
+        "column": "ROOM",
+        "bbox_px": [2325.6, 436.1, 2456.5, 455],
+        "grounding_text": "CONFERENCE",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "room_105_floor": {
+      "type": "string",
+      "value": "CPTT-1",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#27",
+        "table_title": "ROOM FINISH SCHEDULE",
+        "row_key": "105",
+        "column": "FLOOR",
+        "bbox_px": [2632.3, 436.1, 2697.8, 455],
+        "grounding_text": "CPTT",
+        "ocr_mode": "sparse_text",
+        "ocr_confusables": true
+      }
+    },
+    "room_105_number": {
+      "type": "string",
+      "value": "105",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#27",
+        "table_title": "ROOM FINISH SCHEDULE",
+        "row_key": "105",
+        "column": "NUMBER",
+        "bbox_px": [2203, 436.1, 2234.3, 455],
+        "grounding_text": "105",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "cd_1_service": {
+      "type": "string",
+      "value": "SUPPLY DIFFUSER",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "DIFFUSER-GRILLE SCHEDULE",
+        "row_key": "CD-1",
+        "column": "SERVICE",
+        "bbox_px": [1085.5, 1248.3, 1224.8, 1267.2],
+        "grounding_text": "SUPPLY",
+        "ocr_mode": "sparse_text",
+        "ocr_confusables": true
+      }
+    },
+    "cd_1_manufacturer": {
+      "type": "string",
+      "value": "TITUS",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "DIFFUSER-GRILLE SCHEDULE",
+        "row_key": "CD-1",
+        "column": "MANUFACTURER",
+        "bbox_px": [1308, 1248.3, 1351.7, 1267.2],
+        "grounding_text": "TITUS",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "cd_1_model": {
+      "type": "string",
+      "value": "MCD",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "DIFFUSER-GRILLE SCHEDULE",
+        "row_key": "CD-1",
+        "column": "MODEL",
+        "bbox_px": [1465.2, 1248.3, 1499.6, 1267.2],
+        "grounding_text": "MCD",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "cd_1_mark": {
+      "type": "string",
+      "value": "CD-1",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "DIFFUSER-GRILLE SCHEDULE",
+        "row_key": "CD-1",
+        "column": "EQUIP NO",
+        "bbox_px": [849.6, 1248.3, 884.8, 1267.2],
+        "grounding_text": "CD-1",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rg_1_service": {
+      "type": "string",
+      "value": "RETURN GRILLE",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "DIFFUSER-GRILLE SCHEDULE",
+        "row_key": "RG-1",
+        "column": "SERVICE",
+        "bbox_px": [1094.6, 1280.7, 1215.4, 1299.6],
+        "grounding_text": "RETURN",
+        "ocr_mode": "sparse_text",
+        "ocr_confusables": true
+      }
+    },
+    "rg_1_manufacturer": {
+      "type": "string",
+      "value": "TITUS",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "DIFFUSER-GRILLE SCHEDULE",
+        "row_key": "RG-1",
+        "column": "MANUFACTURER",
+        "bbox_px": [1308, 1280.7, 1351.7, 1299.6],
+        "grounding_text": "TITUS",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rg_1_model": {
+      "type": "string",
+      "value": "50F",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "DIFFUSER-GRILLE SCHEDULE",
+        "row_key": "RG-1",
+        "column": "MODEL",
+        "bbox_px": [1469.3, 1280.7, 1495.5, 1299.6],
+        "grounding_text": "50F",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "eg_1_service": {
+      "type": "string",
+      "value": "EXHAUST GRILLE",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "DIFFUSER-GRILLE SCHEDULE",
+        "row_key": "EG-1",
+        "column": "SERVICE",
+        "bbox_px": [1090.8, 1313.1, 1219.9, 1332],
+        "grounding_text": "EXHAUST",
+        "ocr_mode": "sparse_text",
+        "ocr_confusables": true
+      }
+    },
+    "eg_1_manufacturer": {
+      "type": "string",
+      "value": "TITUS",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "DIFFUSER-GRILLE SCHEDULE",
+        "row_key": "EG-1",
+        "column": "MANUFACTURER",
+        "bbox_px": [1308, 1313.1, 1351.7, 1332],
+        "grounding_text": "TITUS",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "eg_1_model": {
+      "type": "string",
+      "value": "350FL",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "DIFFUSER-GRILLE SCHEDULE",
+        "row_key": "EG-1",
+        "column": "MODEL",
+        "bbox_px": [1460.9, 1313.1, 1503.8, 1332],
+        "grounding_text": "350FL",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_main_operations": {
+      "type": "string",
+      "value": "RTU-1",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+        "row_key": "RTU-1",
+        "column": "EQUIP NO",
+        "bbox_px": [676.6, 642.1, 720.9, 661],
+        "grounding_text": "RTU-1",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_1_cfm": {
+      "type": "integer",
+      "value": 1650,
+      "tolerance": 0,
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+        "row_key": "RTU-1",
+        "column": "SUPPLY AIR (CFM)",
+        "bbox_px": [1496.9, 642.1, 1530.7, 661],
+        "grounding_text": "1650",
+        "ocr_mode": "single_line",
+        "ocr_confusables": true
+      }
+    },
+    "rtu_1_service": {
+      "type": "string",
+      "value": "MAIN OPERATIONS",
+      "citation": {
+        "sheet_id": "baker-county-eoc-bidset.pdf#41",
+        "table_title": "PACKAGED ROOFTOP AIR CONDITIONING UNIT SCHEDULE (GAS HEAT)",
+        "row_key": "RTU-1",
+        "column": "SERVICE",
+        "bbox_px": [908.2, 642.1, 1049, 661],
+        "grounding_text": "MAIN",
+        "ocr_mode": "sparse_text",
+        "ocr_confusables": true
+      }
+    }
+  }
+}

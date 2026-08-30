@@ -173,3 +173,12 @@ follow-up) is saved as
 Production gates stay methodology-general — no corpus hardcoding. D08
 counts toward ten. Next: D09.
 
+## D09 selection record
+
+Status: `SELECTED — ground truth authored; N=5 pending`
+
+Target holds on `baker-county-eoc` (65 sheets). Room 105 finish context on
+#27 joins DIFFUSER-GRILLE + packaged rooftop evidence on #41 into one
+coordination package. 20% room sample reconciled before model runs in
+`D09-room-hvac-coordination/`.
+
