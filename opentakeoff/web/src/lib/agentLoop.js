@@ -197,7 +197,8 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       && ((out?.count ?? out?.hits?.length ?? 0) > 0 || (Array.isArray(out?.hits) && out.hits.length > 0)))
     .flatMap(({ args, out }) => (out?.hits || []).map((hit) => ({
       query: typeof args?.q === "string" ? args.q : "",
-      str: typeof hit?.str === "string" ? hit.str : "",
+      str: typeof hit?.str === "string" ? hit.str
+        : (typeof hit?.text === "string" ? hit.text : ""),
       sheet: hit?.sheet || out?.sheet || "",
     })))
     .filter((hit) => hit.str);

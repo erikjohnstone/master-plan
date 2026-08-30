@@ -7392,9 +7392,12 @@ export default function TakeoffCanvas() {
   async function agentFindText(key, q, region, limitOpt) {
     const query = (q || "").trim();
     if (!query) return { error: "Pass q — the text to find, e.g. a room number or a schedule tag." };
-    const remoteDims = region ? await ensureSheetDims(key) : null;
+    if (region && (key == null || key === "")) {
+      return { error: "region requires sheet; omit both to search the loaded set, or pass sheet with region." };
+    }
+    const remoteDims = (key && region) ? await ensureSheetDims(key) : null;
     const remote = await agentMcpTool("find_text", {
-      sheet: key,
+      ...(key ? { sheet: key } : {}),
       q: query,
       ...(region && remoteDims ? { region: {
         x0: region.x0 * remoteDims.w,
@@ -7405,12 +7408,17 @@ export default function TakeoffCanvas() {
       ...(limitOpt ? { limit: limitOpt } : {}),
     });
     if (remote) {
-      const dims = remoteDims || await ensureSheetDims(key);
-      if (!dims || !Array.isArray(remote.hits)) return remote;
-      return {
-        ...remote,
-        hits: remote.hits.map((hit) => ({
-          text: hit.str,
+      if (!Array.isArray(remote.hits)) return remote;
+      const mapHit = async (hit) => {
+        const sheetKey = hit.sheet || key;
+        const dims = sheetKey ? await ensureSheetDims(sheetKey) : null;
+        if (!dims || !Array.isArray(hit.bbox) || !Array.isArray(hit.center)) {
+          return { text: hit.str || hit.text, str: hit.str || hit.text, sheet: sheetKey || null };
+        }
+        return {
+          text: hit.str || hit.text,
+          str: hit.str || hit.text,
+          sheet: sheetKey || null,
           at: [hit.center[0] / dims.w, hit.center[1] / dims.h],
           bbox: {
             x0: hit.bbox[0] / dims.w,
@@ -7418,22 +7426,77 @@ export default function TakeoffCanvas() {
             x1: hit.bbox[2] / dims.w,
             y1: hit.bbox[3] / dims.h,
           },
-        })),
+        };
+      };
+      const hits = [];
+      for (const hit of remote.hits) hits.push(await mapHit(hit));
+      const emptyNext = remote.count === 0
+        ? (key
+          ? "Zero hits on that sheet. Omit sheet to search the loaded set, or try a shorter distinctive fragment from the user question—not a field name."
+          : "Zero hits across the loaded set. Try a shorter distinctive fragment from the user question—not a field name—or refuse if the text is not present.")
+        : undefined;
+      return {
+        ...remote,
+        hits,
+        ...(remote.next_move || emptyNext ? { next_move: remote.next_move || emptyNext } : {}),
       };
     }
-    const dims = await ensureSheetGeometry(key);
-    if (!dims) return { error: `Sheet ${key} not found, or has no page to read.` };
-    const spans = await ensureTextSpans(key);
-    const r = region ? { x0: region.x0 * dims.w, y0: region.y0 * dims.h, x1: region.x1 * dims.w, y1: region.y1 * dims.h } : null;
-    const needle = query.toLowerCase();
-    const all = spans.filter((sp) => sp.str.toLowerCase().includes(needle)
-      && (!r || (sp.x0 <= r.x1 && sp.x1 >= r.x0 && sp.y0 <= r.y1 && sp.y1 >= r.y0)));
     const limit = Math.max(1, Math.min(limitOpt || 200, 500));
-    const hits = all.slice(0, limit).map((sp) => ({
-      text: sp.str,
-      at: [+(((sp.x0 + sp.x1) / 2) / dims.w).toFixed(4), +(((sp.y0 + sp.y1) / 2) / dims.h).toFixed(4)],
-    }));
-    return { count: all.length, truncated: all.length > hits.length, hits };
+    const needle = query.toLowerCase();
+    const searchKeys = key
+      ? [key]
+      : agentStateRef.current.panels.filter((p) => p.img?.w).map((p) => p.key);
+    if (!searchKeys.length) {
+      return {
+        sheet: key || null,
+        q: query,
+        count: 0,
+        truncated: false,
+        hits: [],
+        next_move: key
+          ? "Zero hits on that sheet. Omit sheet to search the loaded set, or try a shorter distinctive fragment from the user question—not a field name."
+          : "Zero hits across the loaded set. Try a shorter distinctive fragment from the user question—not a field name—or refuse if the text is not present.",
+      };
+    }
+    const all = [];
+    for (const sheetKey of searchKeys) {
+      const dims = await ensureSheetGeometry(sheetKey);
+      if (!dims) continue;
+      const spans = await ensureTextSpans(sheetKey);
+      const r = (region && sheetKey === key)
+        ? { x0: region.x0 * dims.w, y0: region.y0 * dims.h, x1: region.x1 * dims.w, y1: region.y1 * dims.h }
+        : null;
+      for (const sp of spans) {
+        if (!sp.str.toLowerCase().includes(needle)) continue;
+        if (r && !(sp.x0 <= r.x1 && sp.x1 >= r.x0 && sp.y0 <= r.y1 && sp.y1 >= r.y0)) continue;
+        all.push({
+          text: sp.str,
+          str: sp.str,
+          sheet: sheetKey,
+          at: [+(((sp.x0 + sp.x1) / 2) / dims.w).toFixed(4), +(((sp.y0 + sp.y1) / 2) / dims.h).toFixed(4)],
+          bbox: {
+            x0: +(sp.x0 / dims.w).toFixed(4),
+            y0: +(sp.y0 / dims.h).toFixed(4),
+            x1: +(sp.x1 / dims.w).toFixed(4),
+            y1: +(sp.y1 / dims.h).toFixed(4),
+          },
+        });
+      }
+    }
+    const hits = all.slice(0, limit);
+    const result = {
+      sheet: key || null,
+      q: query,
+      count: all.length,
+      truncated: all.length > hits.length,
+      hits,
+    };
+    if (all.length === 0) {
+      result.next_move = key
+        ? "Zero hits on that sheet. Omit sheet to search the loaded set, or try a shorter distinctive fragment from the user question—not a field name."
+        : "Zero hits across the loaded set. Try a shorter distinctive fragment from the user question—not a field name—or refuse if the text is not present.";
+    }
+    return result;
   }
 
   // sheet_context — the sheet's STRUCTURE in one call: classified vector

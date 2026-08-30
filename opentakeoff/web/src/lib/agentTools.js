@@ -475,16 +475,16 @@ export const AGENT_TOOL_DEFS = [
   // convention — MCP's equivalents (session.ts) take image px.
   {
     name: "find_text",
-    description: "LOCATE a known string on a sheet — the complement to read_sheet_text (which returns what a region SAYS; this finds WHERE a string you already know sits). Case-insensitive substring match against each positioned text run. Whole-set aware — the sheet does not need to be open as a tab (unlike read_sheet_text/view_region). Optionally restrict to a region; results cap at limit (default 200), with count/truncated telling you exactly how much a tighter region or higher limit would recover.",
+    description: "LOCATE a known string — the complement to read_sheet_text (which returns what a region SAYS; this finds WHERE a string you already know sits). Case-insensitive substring match against each positioned text run. Pass sheet to search one page, or omit sheet to search the entire loaded set (each hit then carries its own sheet). Whole-set aware — sheets do not need to be open as tabs. Optionally restrict to a region on a single sheet; results cap at limit (default 200), with count/truncated/next_move telling you what to do next on zero hits.",
     input_schema: {
       type: "object",
       properties: {
-        sheet: { type: "string", description: "Sheet key, e.g. 'plan.pdf' or 'plan.pdf#2' — from list_sheets or sheet_graph." },
+        sheet: { type: "string", description: "Sheet to search (e.g. 'plan.pdf#2'); omit to search the entire loaded set." },
         q: { type: "string", description: "Text to find — a room number ('134'), a label fragment ('RECEPTION'), a schedule tag ('CPT-1')." },
         region: REGION_SCHEMA,
         limit: { type: "number", minimum: 1, maximum: 500, description: "Cap on hits returned (default 200)." },
       },
-      required: ["sheet", "q"],
+      required: ["q"],
     },
   },
   {
