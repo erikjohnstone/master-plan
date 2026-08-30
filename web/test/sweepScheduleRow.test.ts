@@ -11,7 +11,7 @@
 // every rotation/mirror, so a wrong transform is never accidentally right).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, leftoverLabeledOccs, typicalMultiplierNear, matchQuantity, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, isSheetCategoryTitle, spaceKeyIsLocated, assignMarkToViewport, type Point, type RoomSweepInstance, type SheetViewport, type TagOcc } from "../src/lib/symbolsweep.ts";
+import { fingerprintSymbol, sweepRatio, corroborateFingerprint, classifySweepMatches, leftoverLabeledOccs, typicalMultiplierNear, matchQuantity, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, dedupeCrossDisciplineRoomViews, disciplineOfSheetNumber, pickSameDisciplineCorroborator, isViewportTitle, viewportSpaceKey, detectSheetViewports, isSheetCategoryTitle, spaceKeyIsLocated, assignMarkToViewport, type Point, type RoomSweepInstance, type SheetViewport, type TagOcc } from "../src/lib/symbolsweep.ts";
 
 const SYMBOL: [number, number, number, number][] = [
   [0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0],  // square
@@ -235,6 +235,60 @@ test("classifySweepMatches: a leftover labeled occurrence on a sheet that alread
   assert.equal(r.matches.filter((m) => m.labeled_leftover).length, 1);
   assert.equal(r.text_only.length, 0, "the leftover left text_only once it was counted");
   assert.equal(matchQuantity(r.matches), 2);
+});
+
+test("markRoutingLabels / preferInstallTagOccs: a destination callout is dropped when a real install remains", () => {
+  const installAt: Point = [100, 100];
+  const routeAt: Point = [100, 130];
+  const occ: TagOcc[] = [tagNear(installAt, 10, "exact"), tagNear(routeAt, 10, "exact")];
+  const spans = [
+    { str: "EQ-1", x0: 85, y0: 100, x1: 95, y1: 110 },
+    { str: "EQ-1", x0: 85, y0: 130, x1: 95, y1: 140 },
+    { str: "DUCT DOWN TO", x0: 88, y0: 142, x1: 140, y1: 152 },
+  ];
+  const marked = markRoutingLabels(spans, occ);
+  assert.equal(marked.filter((o) => o.kind === "routing").length, 1);
+  assert.equal(marked.filter((o) => o.kind !== "routing").length, 1);
+  const split = preferInstallTagOccs(marked);
+  assert.equal(split.occ.length, 1, "the install tag remains");
+  assert.equal(split.routing.length, 1, "the destination mention is disclosed, not counted");
+  assert.ok(Math.abs(split.occ[0].cy - tagNear(installAt, 10).cy) < 1);
+});
+
+test("preferInstallTagOccs: if every occurrence is a routing mention, keep them (do not refuse a lone tagged unit)", () => {
+  const only: TagOcc[] = [tagNear([100, 100], 10, "routing")];
+  const split = preferInstallTagOccs(only);
+  assert.equal(split.occ.length, 1);
+  assert.equal(split.routing.length, 0);
+});
+
+test("classifySweepMatches: a routing-kind occurrence cannot claim a match", () => {
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const sheetSegs = place([{ at: [100, 100] }, { at: [400, 400] }]);
+  const occ = [tagNear([100, 100], 40, "exact"), tagNear([400, 400], 40, "routing")];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
+  assert.equal(matchQuantity(r.matches), 1, "the routing mention does not count as a second install");
+  assert.equal(r.matches.filter((m) => m.labeled_leftover).length, 0);
+  assert.ok(r.withheld.some((w) => /carries no/.test(w.reason)), "routing-site geometry cannot claim the mention, so it stays unlabeled");
+});
+
+test("classifySweepMatches: two unlabeled-as-routing installs still count as two", () => {
+  const anchorSegs = place([{ at: [100, 100] }]);
+  const anchor = tagNear([100, 100]);
+  const cf = corroborateFingerprint(anchorSegs, { w: 1000, h: 1000 }, anchor, null)!;
+  const sheetSegs = place([{ at: [100, 100] }, { at: [400, 400] }]);
+  const occ = [tagNear([100, 100], 40, "exact"), tagNear([400, 400], 40, "exact")];
+  const r = classifySweepMatches("T1", cf.fp, sheetSegs, { scale: 1, known: true }, occ, [], anchor.h, {});
+  assert.equal(matchQuantity(r.matches), 2, "real second units stay counted");
+});
+
+test("discloseRoutingLabels: appends withheld mentions without duplicating text_only", () => {
+  const routing: TagOcc[] = [tagNear([700, 700], 10, "routing")];
+  const already = discloseRoutingLabels([], routing);
+  assert.equal(already.length, 1);
+  assert.equal(discloseRoutingLabels(already, routing).length, 1);
 });
 
 test("classifySweepMatches: a bare leftover with no nearby marker stays text_only", () => {

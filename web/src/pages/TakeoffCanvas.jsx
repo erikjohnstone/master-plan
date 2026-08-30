@@ -65,7 +65,7 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // The Symbol tool (#264) — the canvas face for the sweep engine. The engine,
 // counter-examples, the luminance channel, and label corroboration all live
 // as pure web libs already; this file adds only the gesture and the review.
-import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, matchQuantity } from "../lib/symbolsweep";
+import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc, markRoutingLabels, preferInstallTagOccs, discloseRoutingLabels, matchQuantity } from "../lib/symbolsweep";
 import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib/mepconnectivity.ts";
 import { mepLayerSignal } from "../lib/mepsystems.ts";
 // Accuracy-hardening plan Phase 2 — on an unlayered/weakly-layered sheet, a
@@ -7172,7 +7172,7 @@ export default function TakeoffCanvas() {
       // never invoked unless fragmentedTagOcc's own unmodified search
       // already found nothing.
       const occ = merged.length ? merged : (fragmented.length ? fragmented : deepHyphenChainTagOcc(spans, mark).map((o) => ({ ...o, kind: "fragmented" })));
-      return occ.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
+      return markRoutingLabels(spans, occ).sort((a, b) => a.cy - b.cy || a.cx - b.cx);
     }
 
     // 1. every drawn occurrence of the tag, on every plan sheet in the set —
@@ -7180,8 +7180,12 @@ export default function TakeoffCanvas() {
     // needing it, not a human having opened the sheet as a tab (a no-op,
     // immediate cache hit, for a sheet that's actually rendered already).
     const occBySheet = [];
-    for (const key of planKeys) occBySheet.push({ key, occ: await occOf(key, t) });
+    for (const key of planKeys) {
+      const split = preferInstallTagOccs(await occOf(key, t));
+      occBySheet.push({ key, occ: split.occ, routing: split.routing });
+    }
     const totalOcc = occBySheet.reduce((n, e) => n + e.occ.length, 0);
+    const routingN = occBySheet.reduce((n, e) => n + e.routing.length, 0);
     if (!totalOcc) {
       return { error: `Schedule row "${t}" (${table} on ${tb.sheet}) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep.` };
     }
@@ -7238,13 +7242,13 @@ export default function TakeoffCanvas() {
     // classifySweepMatches carries the #186 size ratio and reports it.
     let totalFound = 0;
     const perSheet = [];
-    for (const { key, occ } of occBySheet) {
+    for (const { key, occ, routing } of occBySheet) {
       const dims = await ensureSheetGeometry(key);
       const segs = vectorSegsRef.current.get(key);
       if (!dims || !segs || !segs.length) { skipped.push({ sheet: key, role: "plan", reason: "no vector linework (likely a scan) — symbol matching reads drawn segments" }); continue; }
       const ratio = sweepRatio({ upp: agentUpp(anchorKey) }, { upp: agentUpp(key) });
       const sibSpans = [];
-      for (const k of siblings) for (const o of await occOf(key, k)) sibSpans.push({ key: k, cx: o.cx, cy: o.cy });
+      for (const k of siblings) for (const o of preferInstallTagOccs(await occOf(key, k)).occ) sibSpans.push({ key: k, cx: o.cx, cy: o.cy });
       let cls;
       const typSpans = await ensureTextSpans(key);
       try { cls = classifySweepMatches(t, fp, segs, ratio, occ, sibSpans, anchor.h, { ...sweepOpts, typSpans }); }
@@ -7254,7 +7258,7 @@ export default function TakeoffCanvas() {
       const matches = cls.matches.map((m) => ({ at: norm(m.at), score: m.score }));
       const excluded = cls.excluded.map((e) => ({ at: norm(e.at), tag: e.tag }));
       const withheld = cls.withheld.map((w) => ({ at: norm(w.at), score: w.score, reason: w.reason }));
-      const text_only = cls.text_only.map((o) => ({ at: norm(o.at) }));
+      const text_only = discloseRoutingLabels(cls.text_only, routing).map((o) => ({ at: norm(o.at) }));
       const sheetFound = matchQuantity(cls.matches);
       perSheet.push({
         sheet: key, found: sheetFound, matches,
@@ -7274,6 +7278,7 @@ export default function TakeoffCanvas() {
     if (rowRescaled.length) notes.push(`Size ratio applied from the sheets' own scales: ${rowRescaled.map((p) => `${p.sheet} ×${p.scaled.ratio}`).join(", ")} — the marker was resized from ${anchorKey} before matching.`);
     const rowAssumed = perSheet.filter((p) => p.scale_assumed && !p.found);
     if (rowAssumed.length) notes.push(`${rowAssumed.map((p) => p.sheet).join(", ")} found nothing and were swept at 1:1 — no scale is set on ${anchorKey} or on them, so a different drawn scale there is a live explanation for the zero. Set scale on both ends to rule it out.`);
+    if (routingN) notes.push(`${routingN} drawn occurrence(s) of "${t}" sit next to a duct/pipe destination or source callout and were withheld as routing labels, not installs; audit with view_region before treating one as a second unit.`);
 
     return {
       tag: t,
