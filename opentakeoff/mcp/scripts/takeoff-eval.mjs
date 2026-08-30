@@ -173,7 +173,7 @@ say("╚════════════════════════
 say("");
 say("set                        tags   exact    Σ|Δqty|   missing   false-add");
 say("──────────────────────────────────────────────────────────────────────────");
-const agg = { tags: 0, exact: 0, delta: 0, missing: 0, falseAdd: 0 };
+const agg = { tags: 0, exact: 0, delta: 0, missing: 0, falseAdd: 0, applicable: 0, applicableExact: 0, refusals: 0, correctRefusals: 0 };
 const failureAgg = new Map();
 for (const r of results) {
   if (r.error) { say(`${r.id.padEnd(26)} ERROR: ${r.error.slice(0, 60)}`); continue; }
@@ -184,6 +184,10 @@ for (const r of results) {
   agg.delta += score.summary.total_quantity_delta;
   agg.missing += score.missing.length;
   agg.falseAdd += score.falsely_added.length;
+  agg.applicable += score.summary.applicable_tags;
+  agg.applicableExact += score.summary.applicable_exact_matches;
+  agg.refusals += score.summary.expected_refusals;
+  agg.correctRefusals += score.summary.correct_refusals;
   for (const [type, n] of Object.entries(score.failure_breakdown)) failureAgg.set(type, (failureAgg.get(type) || 0) + n);
   say(`${r.id.padEnd(26)}${String(score.summary.total_tags).padStart(5)}   ${pct(score.summary.exact_match_pct)}   `
     + `${String(score.summary.total_quantity_delta).padStart(7)}   ${String(score.missing.length).padStart(7)}   ${String(score.falsely_added.length).padStart(9)}`);
@@ -191,6 +195,8 @@ for (const r of results) {
 say("──────────────────────────────────────────────────────────────────────────");
 say(`${"CORPUS".padEnd(26)}${String(agg.tags).padStart(5)}   ${pct(agg.tags ? agg.exact / agg.tags : 0)}   `
   + `${String(agg.delta).padStart(7)}   ${String(agg.missing).padStart(7)}   ${String(agg.falseAdd).padStart(9)}`);
+say(`applicable installed rows: ${agg.applicableExact}/${agg.applicable} exact (${pct(agg.applicable ? agg.applicableExact / agg.applicable : 0)})`);
+say(`expected honest refusals: ${agg.correctRefusals}/${agg.refusals} correct`);
 say("");
 
 // per-tag detail, worst first (largest |delta| first, then missing, then falsely-added)

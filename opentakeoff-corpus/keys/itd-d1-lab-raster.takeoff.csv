@@ -42,32 +42,32 @@
 # referencing page #3). Out of scope for the raster-refusal task this key
 # was built for.
 #
-tag,equipment_type,expected_quantity,sheets,notes
-EQ1,Aggregate wash station,2,itd-d1-lab-raster.pdf,"LAB EQUIPMENT LIST row, TAG=EQ1, QTY column=2. Read directly off the 300dpi render of itd-d1-lab-raster.pdf this session."
-EQ2,Asphalt bath with owner-provided shelf above,4,itd-d1-lab-raster.pdf,"TAG=EQ2, QTY column=4 (existing=1, new=3)."
-EQ3,Concrete bath,2,itd-d1-lab-raster.pdf,"TAG=EQ3, QTY column=2 (owner supplied=N, construction-manager supplied=Y, installed by Contractor, new=2)."
-EQ4,"""Not used"" schedule row (table's own literal equipment-name text)",1,itd-d1-lab-raster.pdf,"TAG=EQ4, EQUIPMENT NAME cell literally reads ""NOT USED"" with every other cell blank EXCEPT QTY=1 — visually re-confirmed at 600dpi this session (a real, odd-but-real drawn row, not a misread)."
-EQ5,Concrete grinder,1,itd-d1-lab-raster.pdf,"TAG=EQ5, QTY column=1."
-EQ6,Convection oven,4,itd-d1-lab-raster.pdf,"TAG=EQ6, QTY column=4 (all existing)."
-EQ7,Forney compression machine,1,itd-d1-lab-raster.pdf,"TAG=EQ7, QTY column=1."
-EQ8,Gilson porta screen,1,itd-d1-lab-raster.pdf,"TAG=EQ8, QTY column=1, VENTILATION=SNORKEL HOOD."
-EQ9,Gilson testing screen,1,itd-d1-lab-raster.pdf,"TAG=EQ9, QTY column=1, VENTILATION=SNORKEL HOOD."
-EQ10,Grieve bench oven,6,itd-d1-lab-raster.pdf,"TAG=EQ10, QTY column=6 (all new), VENTILATION=CANOPY HOOD."
-EQ11,Hamburg wheel tracker,1,itd-d1-lab-raster.pdf,"TAG=EQ11, QTY column=1 (new)."
-EQ12,Heated table,3,itd-d1-lab-raster.pdf,"TAG=EQ12, QTY column=3 (all new)."
-EQ13,Ideal CT,1,itd-d1-lab-raster.pdf,"TAG=EQ13, QTY column=1 (new)."
-EQ14,Infratest extractor,1,itd-d1-lab-raster.pdf,"TAG=EQ14, QTY column=1 (new), VENTILATION=CANOPY HOOD."
-EQ15,Instroteck corelok,3,itd-d1-lab-raster.pdf,"TAG=EQ15, QTY column=3 (existing=1, new=2)."
-EQ16,Instrotek coredry,3,itd-d1-lab-raster.pdf,"TAG=EQ16, QTY column=3 (existing=1, new=2)."
-EQ18,Mary Ann laboratory sifter,4,itd-d1-lab-raster.pdf,"TAG=EQ18, QTY column=4 (existing=2, new=2)."
-EQ19,NCAT lab oven,6,itd-d1-lab-raster.pdf,"TAG=EQ19, QTY column=6 (existing=4, new=2), VENTILATION=CANOPY HOOD."
-EQ20,Pine gyratory compactor,3,itd-d1-lab-raster.pdf,"TAG=EQ20, QTY column=3 (existing=2, new=1)."
-EQ21,Ploog compactor,1,itd-d1-lab-raster.pdf,"TAG=EQ21, QTY column=1 (existing)."
-EQ22,Proctor block,2,itd-d1-lab-raster.pdf,"TAG=EQ22, QTY column=2 (existing)."
-EQ23,"Rice table (Gilson vibro-deairator, pump saver, autorice controller, small compressor) with owner-provided shelf/stand",3,itd-d1-lab-raster.pdf,"TAG=EQ23, QTY column=3 (existing=2, new=1)."
-EQ24,Rotary evaporator,1,itd-d1-lab-raster.pdf,"TAG=EQ24, QTY column=1 (new), VENTILATION=CANOPY HOOD."
-EQ25,S.E. system,2,itd-d1-lab-raster.pdf,"TAG=EQ25, QTY column=2 (existing)."
-EQ26,Saw,1,itd-d1-lab-raster.pdf,"TAG=EQ26, QTY column=1 (existing)."
-EQ27,Scale,4,itd-d1-lab-raster.pdf,"TAG=EQ27, QTY column=4 (existing)."
-EQ28,Thermo chiller,1,itd-d1-lab-raster.pdf,"TAG=EQ28, QTY column=1 (new)."
-EQ29,Ultrasonic cleaner,1,itd-d1-lab-raster.pdf,"TAG=EQ29, QTY column=1 (existing)."
+tag,equipment_type,expected_quantity,sheets,notes,expected_status
+EQ1,Aggregate wash station,2,itd-d1-lab-raster.pdf,"LAB EQUIPMENT LIST row, TAG=EQ1, QTY column=2. Read directly off the 300dpi render of itd-d1-lab-raster.pdf this session.",not_in_output
+EQ2,Asphalt bath with owner-provided shelf above,4,itd-d1-lab-raster.pdf,"TAG=EQ2, QTY column=4 (existing=1, new=3).",not_in_output
+EQ3,Concrete bath,2,itd-d1-lab-raster.pdf,"TAG=EQ3, QTY column=2 (owner supplied=N, construction-manager supplied=Y, installed by Contractor, new=2).",not_in_output
+EQ4,"""Not used"" schedule row (table's own literal equipment-name text)",1,itd-d1-lab-raster.pdf,"TAG=EQ4, EQUIPMENT NAME cell literally reads ""NOT USED"" with every other cell blank EXCEPT QTY=1 — visually re-confirmed at 600dpi this session (a real, odd-but-real drawn row, not a misread).",not_in_output
+EQ5,Concrete grinder,1,itd-d1-lab-raster.pdf,"TAG=EQ5, QTY column=1.",not_in_output
+EQ6,Convection oven,4,itd-d1-lab-raster.pdf,"TAG=EQ6, QTY column=4 (all existing).",not_in_output
+EQ7,Forney compression machine,1,itd-d1-lab-raster.pdf,"TAG=EQ7, QTY column=1.",not_in_output
+EQ8,Gilson porta screen,1,itd-d1-lab-raster.pdf,"TAG=EQ8, QTY column=1, VENTILATION=SNORKEL HOOD.",not_in_output
+EQ9,Gilson testing screen,1,itd-d1-lab-raster.pdf,"TAG=EQ9, QTY column=1, VENTILATION=SNORKEL HOOD.",not_in_output
+EQ10,Grieve bench oven,6,itd-d1-lab-raster.pdf,"TAG=EQ10, QTY column=6 (all new), VENTILATION=CANOPY HOOD.",not_in_output
+EQ11,Hamburg wheel tracker,1,itd-d1-lab-raster.pdf,"TAG=EQ11, QTY column=1 (new).",not_in_output
+EQ12,Heated table,3,itd-d1-lab-raster.pdf,"TAG=EQ12, QTY column=3 (all new).",not_in_output
+EQ13,Ideal CT,1,itd-d1-lab-raster.pdf,"TAG=EQ13, QTY column=1 (new).",not_in_output
+EQ14,Infratest extractor,1,itd-d1-lab-raster.pdf,"TAG=EQ14, QTY column=1 (new), VENTILATION=CANOPY HOOD.",not_in_output
+EQ15,Instroteck corelok,3,itd-d1-lab-raster.pdf,"TAG=EQ15, QTY column=3 (existing=1, new=2).",not_in_output
+EQ16,Instrotek coredry,3,itd-d1-lab-raster.pdf,"TAG=EQ16, QTY column=3 (existing=1, new=2).",not_in_output
+EQ18,Mary Ann laboratory sifter,4,itd-d1-lab-raster.pdf,"TAG=EQ18, QTY column=4 (existing=2, new=2).",not_in_output
+EQ19,NCAT lab oven,6,itd-d1-lab-raster.pdf,"TAG=EQ19, QTY column=6 (existing=4, new=2), VENTILATION=CANOPY HOOD.",not_in_output
+EQ20,Pine gyratory compactor,3,itd-d1-lab-raster.pdf,"TAG=EQ20, QTY column=3 (existing=2, new=1).",not_in_output
+EQ21,Ploog compactor,1,itd-d1-lab-raster.pdf,"TAG=EQ21, QTY column=1 (existing).",not_in_output
+EQ22,Proctor block,2,itd-d1-lab-raster.pdf,"TAG=EQ22, QTY column=2 (existing).",not_in_output
+EQ23,"Rice table (Gilson vibro-deairator, pump saver, autorice controller, small compressor) with owner-provided shelf/stand",3,itd-d1-lab-raster.pdf,"TAG=EQ23, QTY column=3 (existing=2, new=1).",not_in_output
+EQ24,Rotary evaporator,1,itd-d1-lab-raster.pdf,"TAG=EQ24, QTY column=1 (new), VENTILATION=CANOPY HOOD.",not_in_output
+EQ25,S.E. system,2,itd-d1-lab-raster.pdf,"TAG=EQ25, QTY column=2 (existing).",not_in_output
+EQ26,Saw,1,itd-d1-lab-raster.pdf,"TAG=EQ26, QTY column=1 (existing).",not_in_output
+EQ27,Scale,4,itd-d1-lab-raster.pdf,"TAG=EQ27, QTY column=4 (existing).",not_in_output
+EQ28,Thermo chiller,1,itd-d1-lab-raster.pdf,"TAG=EQ28, QTY column=1 (new).",not_in_output
+EQ29,Ultrasonic cleaner,1,itd-d1-lab-raster.pdf,"TAG=EQ29, QTY column=1 (existing).",not_in_output

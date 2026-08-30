@@ -127,7 +127,7 @@
 # CV-HHW-BP-A, etc) — a third real prefix mismatch, same family as
 # FINDING #2's Pump-prefix mismatch.
 # ══════════════════════════════════════════════════════════════════════════
-tag,equipment_type,expected_quantity,sheets,notes
+tag,equipment_type,expected_quantity,sheets,notes,expected_status
 AHU-A1,Air handling unit (AHU),1,navfac-cherry-point-atc-mechanical.pdf#26;navfac-cherry-point-atc-mechanical.pdf#29,"AIR HANDLING UNIT SCHEDULE (sheet #42/M-601), MECH ROOM 152. plan-confirmed: real labeled rectangle in MECHANICAL ROOM 152 ENLARGED DUCT PLAN and SECTION 1 (M-401/#29, M-301/#26). Real narrative (M-002/#2) corroborates: '24/7 areas on the first floor', no redundant backup."
 AHU-A2,Air handling unit (AHU),1,navfac-cherry-point-atc-mechanical.pdf#26;navfac-cherry-point-atc-mechanical.pdf#29,"Same AHU SCHEDULE, MECH ROOM 151. plan-confirmed: real labeled rectangle in MECHANICAL ROOM 151 ENLARGED DUCT PLAN and SECTION (M-401/#29, M-301/#26)."
 AHU-M1,Air handling unit (AHU),1,navfac-cherry-point-atc-mechanical.pdf#30,"AIR HANDLING UNIT SCHEDULE (sheet #45/M-611), MITRACON 171 MECH. plan-confirmed: real labeled rectangle, MITRACON MECHANICAL ENLARGED PLANS (M-411/#30), both duct and pipe views."
@@ -151,7 +151,7 @@ SHHWP-A1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same PUMP SCHEDULE, S
 SHHWP-A2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same PUMP SCHEDULE — second real secondary HHW pump. plan-confirmed M-401/#29."
 HHWP-DOAH-A1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#26,"Same PUMP SCHEDULE, DOAH CIRCULATOR for DOAH-A1. plan-confirmed: real labeled circulator, MECHANICAL ROOM 152 SECTION 1 (M-301/#26) and M-401/#29."
 HHWP-DOAH-A2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#29,"Same PUMP SCHEDULE, DOAH CIRCULATOR for DOAH-A2. plan-confirmed M-401/#29 (room 151 pipe plan)."
-PCHWP-MT1,Pump,1,,"PUMP SCHEDULE (sheet #45/M-611). schedule-only this session (not individually re-confirmed on M-411's own crop, though the same sheet was rendered for other MITRACON pumps)."
+PCHWP-MT1,Pump,1,,"PUMP SCHEDULE (sheet #45/M-611). Schedule-only: no exact plan tag or installation note exists in the vector text. Production must return the schedule row and refuse an installed quantity rather than invent one.",refused
 SCHWP-M1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE, SECONDARY CHILLED WATER PUMP. plan-confirmed: real labeled pump, MITRACON MECHANICAL ENLARGED PIPE PLAN (M-411/#30)."
 SCHWP-M2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE — second real unit. plan-confirmed M-411/#30."
 PHHWP-M1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE, HEATING HOT WATER PRIMARY. plan-confirmed M-411/#30."
@@ -159,7 +159,7 @@ PHHWP-M2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE �
 SHHWP-M1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE, HEATING HOT WATER SECONDARY. plan-confirmed M-411/#30."
 SHHWP-M2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE — second real unit. plan-confirmed M-411/#30."
 HHWP-DOAH-M1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#30,"Same PUMP SCHEDULE, DOAH CIRCULATOR. plan-confirmed M-411/#30."
-HRHWP-MT1,Pump,1,,"PUMP SCHEDULE (sheet #45/M-611), PRIMARY HEAT RECOVERY HEATING HOT WATER PUMP, CHILLER MOUNTED END SUCTION. schedule-only this session."
+HRHWP-MT1,Pump,1,,"PUMP SCHEDULE (sheet #45/M-611), PRIMARY HEAT RECOVERY HEATING HOT WATER PUMP, CHILLER MOUNTED END SUCTION. Schedule-only: no exact plan tag or installation note exists in the vector text; installed quantity must be refused.",refused
 PHHWP-T1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#31,"PUMP SCHEDULE (sheet #48/M-621), PRIMARY HEATING HOT WATER. plan-confirmed: real labeled pump, ATCT MECHANICAL ENLARGED PIPE PLAN (M-421/#31)."
 PHHWP-T2,Pump,1,navfac-cherry-point-atc-mechanical.pdf#31,"Same PUMP SCHEDULE — second real unit. plan-confirmed M-421/#31."
 SCHWP-T1,Pump,1,navfac-cherry-point-atc-mechanical.pdf#31,"Same PUMP SCHEDULE, SECONDARY CHILLED WATER. plan-confirmed M-421/#31."
