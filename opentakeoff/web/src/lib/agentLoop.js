@@ -133,7 +133,7 @@ export function missingScheduleTitleScans(callLog, goal) {
   if (/\bFCU\b|fan[\s-]*coil/i.test(goal)) familyNeedles.push({ label: "FCU", titleRe: /FAN\s*COIL/i, title: "FAN COIL UNIT SCHEDULE" });
   if (/\bVAVs?\b|variable[\s-]*air|volume control box/i.test(goal)) familyNeedles.push({ label: "VAV", titleRe: /VARIABLE AIR VOLUME|\bVAV\b|VOLUME CONTROL BOX/i, title: "VARIABLE AIR VOLUME" });
   if (/\bair[\s-]*cooled chiller/i.test(goal)) familyNeedles.push({ label: "air-cooled chiller", titleRe: /AIR COOLED CHILLER/i, exclude: /HEAT RECOVERY/i, title: "AIR COOLED CHILLER SCHEDULE", minCount: 1 });
-  if (/\bheat[\s-]*recovery chiller/i.test(goal)) familyNeedles.push({ label: "heat-recovery chiller", titleRe: /HEAT RECOVERY/i, title: "HEAT RECOVERY CHILLER", minCount: 1 });
+  if (/\bheat[\s-]*recovery chiller/i.test(goal)) familyNeedles.push({ label: "heat-recovery chiller", titleRe: /HEAT RECOVERY/i, title: "AIR COOLED HEAT RECOVERY CHILLER", minCount: 1 });
   if (/\bboilers?\b/i.test(goal)) familyNeedles.push({ label: "boiler", titleRe: /BOILER/i, title: "BOILER SCHEDULE" });
   if (/\bpoints?\s*list\b|BAS\b/i.test(goal)) {
     const requireRe = namedPointsListTag
@@ -1206,7 +1206,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         FCU: "FAN COIL UNIT SCHEDULE",
         VAV: "VARIABLE AIR VOLUME",
         "air-cooled chiller": "AIR COOLED CHILLER SCHEDULE",
-        "heat-recovery chiller": "HEAT RECOVERY CHILLER",
+        "heat-recovery chiller": "AIR COOLED HEAT RECOVERY CHILLER",
         boiler: "BOILER SCHEDULE",
         "points-list": namedPointsListTag
           ? `POINTS LIST ${namedPointsListTag.split("/")[0]}`
@@ -1866,6 +1866,13 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       const missingTitles = missingScheduleTitleScans(callLog, goal);
       const scanSummaries = [];
       for (const title of missingTitles) {
+        // Skip titles already attempted (including zero-count) so a bad Exact
+        // needle cannot thrash the step cap forever.
+        const attempted = callLog.some(({ name, args }) =>
+          name === "query_table"
+          && String(args?.title || "").toUpperCase() === title.toUpperCase()
+          && (args?.row_key == null || String(args.row_key).trim() === ""));
+        if (attempted) continue;
         const args = { title };
         emit({ type: "tool_start", name: "query_table", args });
         let out;
@@ -1874,7 +1881,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
         if (out == null || typeof out !== "object") out = { result: out ?? null };
         callLog.push({ id: `auto_title_scan_${callLog.length}`, name: "query_table", args, out });
         emit({ type: "tool_end", name: "query_table", result: out });
-        if (!out.error) {
+        if (!out.error && Number(out.count) >= 1) {
           const sampleTitle = String(out.matches?.[0]?.title?.text || out.matches?.[0]?.title || title);
           scanSummaries.push(
             `${sampleTitle}: count=${out.count}`
@@ -1885,7 +1892,7 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       if (scanSummaries.length) {
         messages.push({
           role: "user",
-          content: `Auto title-scan results (copy these tool counts into the final answer; stop find_text browsing):\n${scanSummaries.join("\n")}\nEmit the COMPLETE takeoff answer now with every requested family count and cite MARK cells.`,
+          content: `Auto title-scan results (copy these tool counts into the final answer; stop find_text browsing):\n${scanSummaries.join("\n")}\nEmit the COMPLETE takeoff answer now with every requested family count and cite MARK cells. Do not call more tools unless Exact paint args are named.`,
         });
         emit({ type: "text", text: "[Loop nudge: title-scans completed — write the takeoff answer.]" });
         answerNudgeSent = true;
@@ -1905,7 +1912,14 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       });
       emit({ type: "text", text: "[Loop nudge: write the final answer now — stop inventory paint thrash.]" });
     }
-  }
+    // After a nudge, refuse further tool thrash — demand a text-only answer.
+    if (answerNudgeSent && !lastDraftText && iterations >= 36 && iterations % 6 === 0) {
+      messages.push({
+        role: "user",
+        content: "CRITICAL: Do NOT call any more tools. Reply with the COMPLETE takeoff answer as plain text only, using Auto title-scan / query_table counts already in this thread. Omit the word \"highlighted\" unless you are sure that exact cell was painted.",
+      });
+      emit({ type: "text", text: "[Loop nudge: text-only answer required — tools closed.]" });
+    }
   emit({ type: "max_iterations", limit: maxIterations });
   // Only surface a draft Answer if it already clears evidence gates — otherwise
   // a step-cap stop would publish a paint-only / incomplete takeoff as done.
