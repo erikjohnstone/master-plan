@@ -1072,7 +1072,7 @@ test("a lone unexplained token never mints a column — the sub-tier needs a par
 // MATERIAL | COMMENTS) extracted as 54 "finish" rows, so a finish code
 // colliding with a door mark would chain to a DOOR — a confidently wrong
 // product in the bid. Refused by title, and the drop is named.
-import { isMepEquipmentSchedule, isNonFinishSchedule, isReferenceOrSpecTable, isPointsListTitle, scheduleTableFromODL, type ODLTable } from "../src/lib/sheetgraph.ts";
+import { isMepEquipmentSchedule, isNonFinishSchedule, isReferenceOrSpecTable, isPointsListTitle, scheduleTableFromODL, hasPoweredEquipmentColumns, type ODLTable } from "../src/lib/sheetgraph.ts";
 
 test("isNonFinishSchedule: other families refuse, anything naming FINISH or MATERIAL is kept", () => {
   for (const t of ["DOOR SCHEDULE", "DOOR AND WINDOW SCHEDULE", "PARTITION SCHEDULE", "EQUIPMENT SCHEDULE", "LIGHTING SCHEDULE"]) {
@@ -1105,9 +1105,15 @@ test("isMepEquipmentSchedule: hydronic vessel titles, including smashed ALL-CAPS
   // CAD/ODL concatenation: family word glued to SCHEDULE, no spaces.
   assert.equal(isMepEquipmentSchedule("EPANSIONANDCOPRESSIONTANKSCHEDULE"), true);
   assert.equal(isMepEquipmentSchedule("AIRSEPARATORSCHEDULE"), true);
+  // Air-terminal boxes are the VAV family under a spelled-out title.
+  assert.equal(isMepEquipmentSchedule("AIR TERMINAL BOX SCHEDULE"), true);
+  assert.equal(isMepEquipmentSchedule("AIR TERMINAL UNIT SCHEDULE"), true);
+  assert.equal(isMepEquipmentSchedule("AIRTERMINALBOXSCHEDULE"), true);
   assert.equal(isMepEquipmentSchedule("FAN SCHEDULE"), false, "FAN is still not an MEP family word");
   assert.equal(isMepEquipmentSchedule("SOUND ATTENUATOR SCHEDULE"), false);
   assert.equal(isMepEquipmentSchedule("DOOR SCHEDULE"), false);
+  assert.equal(isMepEquipmentSchedule("TERMINAL BLOCK SCHEDULE"), false, "TERMINAL without AIR is not an HVAC air-terminal table");
+  assert.equal(isMepEquipmentSchedule("JUNCTION BOX SCHEDULE"), false, "BOX alone is not an HVAC air-terminal table");
 });
 
 test("a smashed EXPANSION TANK title reclassifies finish→equipment so ET-1 is a takeoff row", () => {
@@ -1169,6 +1175,134 @@ test("scheduleTableFromODL reclassifies a smashed tank title finish→equipment"
   assert.ok(built, "ODL adapter must keep the table");
   assert.equal(built!.kind, "equipment");
   assert.deepEqual(built!.rows.map((r) => r.key), ["ET-1"]);
+});
+
+test("scheduleTableFromODL: a sideways title plus smashed unit headers still yields equipment rows", () => {
+  // Real ODL shape: the printed title occupies one native column (row-span
+  // ≈ full row count, column-span 1) and each instance occupies another
+  // native column. After the existing 90° rotate, row 1 is the title and
+  // row 2 is MARK + smashed attribute labels (REGULATORSETCFM, REHEATMBH,
+  // MIN.CFM, …). Those labels used to miss the 40% header-vocab bar — the
+  // first full-coverage row was treated as data, headerEnd stayed at the
+  // title, and the adapter returned null even though every mark was in the
+  // grid. No project/sheet/tag names in production; this fixture is the
+  // general sideways + smashed-header shape.
+  let id = 1;
+  const cell = (row: number, col: number, text: string, rowspan = 1, colspan = 1) => ({
+    type: "table cell" as const,
+    id: id++,
+    "page number": 1,
+    "bounding box": [col * 40, row * 16, col * 40 + 36, row * 16 + 14],
+    "row number": row,
+    "column number": col,
+    "row span": rowspan,
+    "column span": colspan,
+    kids: [{ type: "paragraph", content: text }],
+  });
+  const marks = ["VAV-1", "VAV-2", "VAV-3"];
+  const attrs: [string, string, string, string][] = [
+    ["TRANE/VCEF", "TRANE/VCEF", "TRANE/VCEF", "MANUFACTURER/MODEL"],
+    ["14", "10", "6", "INLETDIA.(INCHES)"],
+    ["2170", "820", "360", "REGULATORSETCFM"],
+    ["870", "290", "360", "MIN.CFM"],
+    ["41.0", "13.7", "13.7", "REHEATMBH"],
+    ["12", "4", "4", "ELECTRICHEATERKW"],
+    ["480/3/60", "277/1/60", "277/1/60", "VOLTS/PH/HZ"],
+    ["DDC", "DDC", "DDC", "CONTROLS"],
+    ["30", "30", "30", "MAXNC"],
+    ["SEENOTES", "SEENOTES", "SEENOTES", "REMARKS"],
+  ];
+  const nRows = 1 + attrs.length; // title/mark row + attribute rows
+  const nCols = marks.length + 2; // instances + MARK + title
+  const rows: ODLTable["rows"] = [];
+  const titleRowCells = [
+    ...marks.slice().reverse().map((m, i) => cell(1, i + 1, m)),
+    cell(1, marks.length + 1, "MARK"),
+    cell(1, marks.length + 2, "AIRTERMINALBOXSCHEDULE", nRows, 1),
+  ];
+  rows.push({ type: "table row", "row number": 1, id: id++, cells: titleRowCells });
+  attrs.forEach((vals, ai) => {
+    const r = ai + 2;
+    rows.push({
+      type: "table row", "row number": r, id: id++,
+      cells: [
+        cell(r, 1, vals[2]),
+        cell(r, 2, vals[1]),
+        cell(r, 3, vals[0]),
+        cell(r, 4, vals[3]),
+      ],
+    });
+  });
+  const odl: ODLTable = {
+    type: "table",
+    id: 77,
+    "page number": 1,
+    "bounding box": [0, 0, nCols * 40, nRows * 16],
+    "number of rows": nRows,
+    "number of columns": nCols,
+    rows,
+  };
+  const built = scheduleTableFromODL(odl, "term.pdf#1", [1, 0, 0, 1, 0, 0]);
+  assert.ok(built, "sideways smashed-header table must not be dropped");
+  assert.equal(built!.kind, "equipment");
+  assert.deepEqual(built!.rows.map((r) => r.key).sort(), ["VAV-1", "VAV-2", "VAV-3"]);
+  assert.ok(built!.headers.some((h) => /CFM/.test(h)), `smashed REGULATORSETCFM must contribute a CFM header: ${built!.headers.join(" | ")}`);
+});
+
+test("scheduleTableFromODL: a catalog-anchor label still starts the header when other cells miss the vocab ratio", () => {
+  // MARK plus many non-vocabulary attribute names (obscure unit labels)
+  // used to fail the 40% header-vocab tie-break. The literal column name
+  // MARK/TAG/SYMBOL is itself the header signal — a data row would carry
+  // the instance tag, not the word MARK.
+  let id = 1;
+  const cell = (row: number, col: number, text: string, colspan = 1) => ({
+    type: "table cell" as const,
+    id: id++,
+    "page number": 1,
+    "bounding box": [col * 80, row * 20, col * 80 + 70, row * 20 + 16],
+    "row number": row,
+    "column number": col,
+    "row span": 1,
+    "column span": colspan,
+    kids: [{ type: "paragraph", content: text }],
+  });
+  const headers = ["MARK", "FOOBAR", "BAZQUUX", "QUXZYX", "WOGGLE", "REMARKS"];
+  const values = ["UT-1", "AA", "BB", "CC", "DD", "NOTE"];
+  const odl: ODLTable = {
+    type: "table",
+    id: 88,
+    "page number": 1,
+    "bounding box": [0, 0, 480, 60],
+    "number of rows": 3,
+    "number of columns": 6,
+    rows: [
+      { type: "table row", "row number": 1, id: id++, cells: [cell(1, 1, "UNIT SCHEDULE", 6)] },
+      { type: "table row", "row number": 2, id: id++, cells: headers.map((h, i) => cell(2, i + 1, h)) },
+      { type: "table row", "row number": 3, id: id++, cells: values.map((v, i) => cell(3, i + 1, v)) },
+    ],
+  };
+  const built = scheduleTableFromODL(odl, "anchor.pdf#1", [1, 0, 0, 1, 0, 0]);
+  assert.ok(built, "MARK as a column label must keep the table even when most headers miss vocabulary");
+  assert.deepEqual(built!.rows.map((r) => r.key), ["UT-1"]);
+});
+
+test("hasPoweredEquipmentColumns: smashed tails in remarks are not nameplate columns", () => {
+  // The ODL smashed-suffix walk must stay out of headerLabels. A material
+  // schedule remark like PREWATTS / FOOPHASE would otherwise count as
+  // WATTS+PHASE and flip the table to equipment-kind (no definition chain).
+  const spans = [
+    sp("MATERIAL SCHEDULE", 100, 20),
+    sp("CODE", 100, 50), sp("MATERIAL", 220, 50), sp("MANUFACTURER", 400, 50), sp("REMARKS", 600, 50),
+    sp("CPT-1", 100, 80), sp("CARPET TILE", 220, 80), sp("VENDOR-A", 400, 80), sp("PREWATTS FOOPHASE", 600, 80),
+  ];
+  const sheet: SheetSpans = { key: "mat.pdf#1", sheet_number: "A-601", spans };
+  const finish = extractAllTables(sheet, "finish");
+  assert.equal(finish.length, 1);
+  assert.equal(hasPoweredEquipmentColumns(spans, finish[0]), false);
+  const g = buildSheetGraph([sheet]);
+  const hit = g.tables.find((t) => t.title?.text === "MATERIAL SCHEDULE");
+  assert.ok(hit, "material schedule stays in the graph");
+  assert.equal(hit!.kind, "finish");
 });
 
 test("a DOOR SCHEDULE never becomes a finish table — and the drop is NAMED", () => {

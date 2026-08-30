@@ -788,6 +788,30 @@ const headerLabels = (s: string, vocab: string[]): string[] => {
   return out;
 };
 
+/** ODL-only: same as `headerLabels`, plus a trailing vocabulary word on a
+ * leftover smashed ALL-CAPS token (`REGULATORSETCFM` → CFM, `REHEATMBH` →
+ * MBH). Not used by the geometric extractor — suffix-matching free-text
+ * spans inside a table region would let a material/finish schedule's own
+ * prose trip `hasPoweredEquipmentColumns` (VOLTAGE/PHASE/AMPS as a tail).
+ * Whole-token hits still win (`REMARKS` is REMARKS, never MARK). Three
+ * letters minimum so two-letter units (ID/HP) cannot claim an arbitrary
+ * tail; longest suffix wins. */
+const headerLabelsSmashed = (s: string, vocab: string[]): string[] => {
+  const out = headerLabels(s, vocab);
+  if (out.length) return out;
+  const collapsed = norm(s).replace(ACRONYM_DOT_RE, "").replace(/\bCEILIING\b/g, "CEILING");
+  let best: string | null = null;
+  for (const tok of collapsed.split(/[^A-Z]+/)) {
+    if (!tok) continue;
+    for (const w of vocab) {
+      if (w.length < 3 || w.length >= tok.length) continue;
+      if (tok.endsWith(w) && (!best || w.length > best.length)) best = w;
+    }
+  }
+  return best ? [best] : [];
+};
+const headerLabelSmashed = (s: string, vocab: string[]): string | null => headerLabelsSmashed(s, vocab)[0] ?? null;
+
 // A real, found-live false-positive: baker-county-eoc's own sheet #27 draws a
 // free-text FINISH LEGEND (ACCESSORIES/BASE & TRIM/CEILING/FLOORING/WALLS —
 // per-material spec prose, "STYLE: LVT", "COLLECTION: iD LATITUDE STONE &
@@ -3164,10 +3188,17 @@ const MEP_EQUIPMENT_FAMILY_RE = new RegExp(`\\b(?:${MEP_EQUIPMENT_FAMILIES})S?\\
 // word-boundary family test misses that; the family word glued to
 // SCHEDULE is the same signal, not a second vocabulary.
 const MEP_EQUIPMENT_SMASHED_RE = new RegExp(`(?:${MEP_EQUIPMENT_FAMILIES})S?SCHEDULE`);
+// Air-terminal boxes are the same family as VAV, but many schedules never
+// print the letters V-A-V — they title the table AIR TERMINAL BOX / AIR
+// TERMINAL UNIT. "TERMINAL" or "BOX" alone is too generic (electrical
+// terminals, junction boxes); the AIR+TERMINAL pair is the HVAC name.
+const MEP_AIR_TERMINAL_RE = /\bAIR\s+TERMINALS?\b/;
+const MEP_AIR_TERMINAL_SMASHED_RE = /AIRTERMINALS?/;
 export const isMepEquipmentSchedule = (title: string): boolean => {
   const u = norm(title);
-  if (MEP_EQUIPMENT_FAMILY_RE.test(u)) return true;
-  return MEP_EQUIPMENT_SMASHED_RE.test(u.replace(/\s+/g, ""));
+  if (MEP_EQUIPMENT_FAMILY_RE.test(u) || MEP_AIR_TERMINAL_RE.test(u)) return true;
+  const smashed = u.replace(/\s+/g, "");
+  return MEP_EQUIPMENT_SMASHED_RE.test(smashed) || MEP_AIR_TERMINAL_SMASHED_RE.test(smashed);
 };
 
 // A real, standard cross-firm MEP title — "…CONNECTION SCHEDULE", "…
@@ -7314,8 +7345,14 @@ export function scheduleTableFromODL(
     if (!headerCandidateChecked) {
       headerCandidateChecked = true;
       const texts = [...ownCells].map(odlCellText).filter(Boolean);
-      const vocabHits = texts.filter((s) => headerLabels(s, ALL_HEADER_WORDS_ARR).length > 0).length;
-      if (texts.length && vocabHits / texts.length >= 0.4) { headerEnd = r + 1; continue; }
+      const vocabHits = texts.filter((s) => headerLabelsSmashed(s, ALL_HEADER_WORDS_ARR).length > 0).length;
+      // A cell that IS the catalog-anchor column name (MARK/TAG/SYMBOL/ID/
+      // CODE), not a device tag, is a header label. A data row carries the
+      // instance (VAV-1), never the word MARK. This is the same ambiguity
+      // the 40% vocab ratio was written for, and it still holds when the
+      // other cells are smashed unit compounds that miss the ratio.
+      const hasAnchorLabel = texts.some((s) => CATALOG_ANCHOR_WORDS.includes(norm(s)));
+      if (texts.length && (vocabHits / texts.length >= 0.4 || hasAnchorLabel)) { headerEnd = r + 1; continue; }
     }
     break; // first real data row
   }
@@ -7368,7 +7405,7 @@ export function scheduleTableFromODL(
   // band. Ties favor the more specific vocab (equipment, then room, then
   // finish) since a real equipment schedule's words are a proper superset
   // risk onto FINISH_HEADERS (MODEL/MANUFACTURER/REMARKS overlap both).
-  const hitCount = (vocab: string[]) => headers.filter((h) => headerLabel(h, vocab)).length;
+  const hitCount = (vocab: string[]) => headers.filter((h) => headerLabelSmashed(h, vocab)).length;
   const eqHits = hitCount(EQUIPMENT_HEADERS), rmHits = hitCount(ROOM_HEADERS), finHits = hitCount(FINISH_HEADERS);
   // room-finish needs real SURFACE columns, not just ROOM_HEADERS' own
   // generic words — a real DOOR SCHEDULE ("…FROM ROOM"/"…TO ROOM"/"DOOR
