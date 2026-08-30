@@ -315,18 +315,18 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         const tagCanon = tag.replace(/[^A-Z0-9]/g, "");
         if (!tagCanon || !finalCanonical.includes(tagCanon)) continue;
         const cells = {};
-        for (const { out } of callLog.filter(({ name }) => name === "query_table" || name === "sweep_schedule_row")) {
+        for (const { args, out } of callLog.filter(({ name }) =>
+          name === "query_table" || name === "sweep_schedule_row")) {
           const bags = [];
-          if (out?.row?.cells) bags.push(out.row.cells);
-          if (out?.row?.all_cells) bags.push(out.row.all_cells);
           for (const match of out?.matches || []) {
             if (String(match?.row?.key || "").toUpperCase() !== tag) continue;
             if (match?.row?.all_cells) bags.push(match.row.all_cells);
             if (match?.row?.cells) bags.push(match.row.cells);
           }
-          if (String(out?.tag || out?.row?.key || "").toUpperCase() === tag) {
-            if (out?.row?.cells) bags.push(out.row.cells);
+          const outTag = String(args?.tag || out?.tag || out?.row?.key || "").toUpperCase();
+          if (outTag === tag) {
             if (out?.row?.all_cells) bags.push(out.row.all_cells);
+            if (out?.row?.cells) bags.push(out.row.cells);
           }
           for (const bag of bags) {
             for (const [header, raw] of Object.entries(bag || {})) {
