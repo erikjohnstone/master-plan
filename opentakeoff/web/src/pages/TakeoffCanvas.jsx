@@ -796,6 +796,9 @@ export default function TakeoffCanvas() {
   // its clock instead of no-op'ing on an unchanged dep. setCommitMsg(text) is
   // a thin, stable-shaped wrapper so the ~48 call sites below stay untouched.
   const [commitMsgState, setCommitMsgState] = useState({ text: "" });
+  // Whole-set PDF text index progress (every page) — Agent/schedule workflows
+  // need this; viewport "Rendering sheet…" is NOT the same thing.
+  const [indexProgress, setIndexProgress] = useState({ done: 0, total: 0, phase: "idle" }); // idle | text | ready
   const commitMsg = commitMsgState.text;   // misnamed for history; just the message bar
   const setCommitMsg = (text) => setCommitMsgState({ text });
   // transient means transient: every message dismisses itself after ~6s (a
@@ -2067,6 +2070,7 @@ export default function TakeoffCanvas() {
   }, [docFor]);
 
   const indexWholeSet = useCallback(async (list) => {
+    const jobs = [];
     for (const { name, rev } of list) {
       let count = knownPagesRef.current[name];
       if (!count) {
@@ -2076,8 +2080,20 @@ export default function TakeoffCanvas() {
           rememberPages(name, count);
         } catch { continue; } // unreadable file — skip it, don't block the rest of the set
       }
-      for (let page = 1; page <= count; page++) await indexOneSheet(name, rev, page);
+      for (let page = 1; page <= count; page++) jobs.push({ name, rev, page });
     }
+    if (!jobs.length) {
+      setIndexProgress({ done: 0, total: 0, phase: "idle" });
+      return;
+    }
+    setIndexProgress({ done: 0, total: jobs.length, phase: "text" });
+    let done = 0;
+    for (const { name, rev, page } of jobs) {
+      await indexOneSheet(name, rev, page);
+      done += 1;
+      setIndexProgress({ done, total: jobs.length, phase: "text" });
+    }
+    setIndexProgress({ done: jobs.length, total: jobs.length, phase: "ready" });
   }, [docFor, indexOneSheet, rememberPages]);
 
   // Runs whenever the LOADED FILE LIST changes (a plan opened, a file added,
@@ -2088,7 +2104,10 @@ export default function TakeoffCanvas() {
   // (a Map.has() per sheet, no I/O) — only genuinely new/changed sheets do
   // real work.
   useEffect(() => {
-    if (!sheets.length) return;
+    if (!sheets.length) {
+      setIndexProgress({ done: 0, total: 0, phase: "idle" });
+      return;
+    }
     indexWholeSet(sheets);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- fires on the sheet LIST changing; indexWholeSet's own identity is stable enough not to need re-listing here
   }, [sheets]);
@@ -7219,6 +7238,7 @@ export default function TakeoffCanvas() {
       openTakeoff: () => setShowTakeoffData(true),
       lastCorpusTakeoff: () => lastCorpusTakeoffMeta,
       takeoffRowCount: () => agentTakeoffRows.length,
+      indexProgress: () => indexProgress,
       debugGraph: async () => {
         const g = await ensureAgentGraph();
         return {
@@ -12425,6 +12445,58 @@ export default function TakeoffCanvas() {
             {commitMsg}
           </span>
         )}
+        {indexProgress.total > 0 && indexProgress.phase !== "idle" && (() => {
+          const pct = Math.round((100 * indexProgress.done) / Math.max(1, indexProgress.total));
+          const indexing = indexProgress.phase === "text";
+          const tip = indexing
+            ? `Indexing PDF text ${indexProgress.done}/${indexProgress.total} (${pct}%). Agent and schedule workflows may miss pages until this finishes — wait for Indexed before running a full-set takeoff.`
+            : `PDF text index ready (${indexProgress.total} page${indexProgress.total === 1 ? "" : "s"}). Agent / schedule workflows can search the whole set.`;
+          return (
+            <span
+              title={tip}
+              data-index-progress
+              data-phase={indexProgress.phase}
+              data-done={indexProgress.done}
+              data-total={indexProgress.total}
+              style={{
+                marginLeft: 10, display: "inline-flex", alignItems: "center", gap: 8,
+                minWidth: 0, maxWidth: 280, color: indexing ? "var(--ink)" : "var(--c-positive)",
+              }}
+            >
+              <span style={{ opacity: 0.85, overflow: "hidden", textOverflow: "ellipsis" }}>
+                {indexing ? `Indexing ${indexProgress.done}/${indexProgress.total}` : `Indexed ${indexProgress.total}`}
+              </span>
+              <span
+                role="progressbar"
+                aria-valuemin={0}
+                aria-valuemax={indexProgress.total}
+                aria-valuenow={indexProgress.done}
+                aria-label="PDF text index progress"
+                style={{
+                  width: 64, height: 4, flex: "0 0 auto",
+                  background: "color-mix(in srgb, var(--ink) 18%, transparent)",
+                  borderRadius: 2, overflow: "hidden",
+                }}
+              >
+                <span style={{
+                  display: "block", height: "100%", width: `${pct}%`,
+                  background: indexing ? "var(--status-acc)" : "var(--c-positive)",
+                  transition: "width 120ms linear",
+                }} />
+              </span>
+              {indexing ? (
+                <span
+                  title="Warning: running Agent or schedule takeoffs before indexing finishes can miss sheets that are not in the text index yet."
+                  style={{
+                    flex: "0 0 auto", width: 14, height: 14, borderRadius: 7,
+                    border: "1px solid currentColor", fontSize: 10, lineHeight: "12px",
+                    textAlign: "center", opacity: 0.9, cursor: "help",
+                  }}
+                >!</span>
+              ) : null}
+            </span>
+          );
+        })()}
         <span style={{ marginLeft: "auto", display: "flex", gap: 12, opacity: 0.75 }} aria-live="polite">
           <span>{shapes.filter((s) => panelKeySet.has(s.sheet_id)).length} shapes</span>
           <span>{cloudMode ? "drive" : "local"}{saveState === "saving" ? " · saving…" : saveState === "saved" ? " · saved" : ""}</span>
