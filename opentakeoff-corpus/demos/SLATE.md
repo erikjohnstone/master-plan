@@ -19,7 +19,7 @@ sheets. If the evidence does not hold, replace the target before N=5 runs.
 
 ## D01 selection record
 
-Status: `LOCKED API 5/5 — UI MUST RE-PROVE under demo quality bar (intelligent prompt + full row values + answering-cell highlights, not mark-only flybys)`
+Status: `LOCKED — API 5/5; UI re-proved (full row values + answering-cell paints, 12 regions)`
 
 The target holds up. Independent graph extraction from the real NAVFAC PDF
 found the `AIR COOLED CHILLER SCHEDULE` and `CHW CONTROL VALVE SCHEDULE` on
@@ -33,11 +33,12 @@ The first rasterization also exposed and fixed an evidence-integrity blocker:
 the table renderer's old filenames omitted table identity, causing all nine
 page-44 table crops to overwrite one another. Unique evidence crops, typed
 ground truth and N=5 API gate are locked in
-`D01-chiller-plan-to-controls/`. The replacement 34.8-second production-UI
-recording shows the frozen prompt, live tools, complete answer, actual MS101
-plan tag, and both M-603 schedule rows highlighted. The artifact harness
-validated the final answer and saved the strict pass under
-`/opt/cursor/artifacts/`; D01 now counts toward ten.
+`D01-chiller-plan-to-controls/`. UI re-proof under the usefulness bar
+(intelligent prompt + every requested field + painted answering value cells)
+is saved as
+`/opt/cursor/artifacts/d01_ui_prompt_tools_answer_highlights_2026-08-30T05-09-16-177Z.webm`
+(12 painted regions on MS101 + M-603). Production gates stay
+methodology-general. D01 counts toward ten.
 
 ## D02 selection record
 
@@ -60,5 +61,4 @@ fields + each distinct answering value cell painted, including **3850 CFM**)
 is saved as
 `/opt/cursor/artifacts/d02_ui_prompt_tools_answer_highlights_2026-08-30T05-05-42-831Z.webm`
 (8 painted regions). Production gates stay methodology-general — no corpus
-hardcoding. D02 counts toward ten. Next: re-prove D01 under the same bar,
-then D03.
+hardcoding. D02 counts toward ten. Next: D03.
