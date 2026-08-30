@@ -343,7 +343,7 @@ export async function runToolCallingModel({
   tools,
   execute,
   fetchFn = fetch,
-  maxIterations = 12,
+  maxIterations = 18,
   seededToolCalls = [],
 }) {
   const messages = [
@@ -437,7 +437,7 @@ export async function runToolCallingModel({
         if (drawingErrors.length) {
           messages.push({
             role: "user",
-            content: `Your previous final response lacked drawing-text evidence: ${drawingErrors.join("; ")}. Call find_text/read_sheet_text for those fields if needed, then re-emit only after the exact source phrases are present in tool evidence.`,
+            content: `Your previous final response lacked drawing-text evidence: ${drawingErrors.join("; ")}. If a prior find_text/read_sheet_text hit already contains the required phrase, re-emit using that hit's sheet_id and bbox_px. Do not substitute schedule attribute strings. Only call find_text again when no prior hit contains the phrase.`,
           });
           continue;
         }
