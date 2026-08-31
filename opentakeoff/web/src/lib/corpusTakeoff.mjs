@@ -186,7 +186,7 @@ export const HVAC_EXCLUSIONS = [
 ];
 
 export const BAS_EXCLUSIONS = [
-  "Title-only Air Ops / MITRACON schematic points lists (non-extractable typed rows)",
+  "Title-only schematic points lists (non-extractable typed rows)",
   "HVAC equipment schedules (counted under T-HVAC-01)",
 ];
 

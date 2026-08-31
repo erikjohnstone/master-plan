@@ -251,7 +251,7 @@ const basTruth = {
     pages: basPages,
   },
   exclusions: [
-    "Title-only Air Ops / MITRACON schematic points lists (non-extractable typed rows)",
+    "Title-only schematic points lists (non-extractable typed rows)",
     "HVAC equipment schedules (counted under T-HVAC-01)",
   ],
   follow_up: {
