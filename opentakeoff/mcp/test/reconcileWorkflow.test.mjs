@@ -532,7 +532,7 @@ test("Baker MS reconcile: GRD+AHU+HP MATCH (glued row.key + comma-split parity)"
   assert.equal(hpScaffold.length, key.categories.HEAT_PUMP, "HP scaffold = compile (incl. AHU-pair halves)");
   assert.deepEqual(
     hpScaffold.map((r) => r.tag).sort(),
-    ["HP-1", "HP-2", "HP-3", "HP-5", "HP-6"],
+    ["HP-1", "HP-2", "HP-3", "HP-4", "HP-5", "HP-6"],
   );
 
   const ahuNeedle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "AHU");
@@ -552,8 +552,18 @@ test("Baker MS reconcile: GRD+AHU+HP MATCH (glued row.key + comma-split parity)"
   assert.equal(hp.rows.length, key.categories.HEAT_PUMP);
   assert.ok(
     hp.rows.every((r) => r.status === "MATCH"),
-    "Baker outdoor + indoor HP halves MATCH after glued rowKeyAnswersFor",
+    "Baker outdoor + indoor HP halves + ERV-paired HP-4 MATCH",
   );
+
+  const erv = await reconcileScheduleFamilyWithSweeps(
+    session,
+    graph,
+    familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "ERV"),
+    { evaluationFast: true },
+  );
+  assert.equal(erv.rows.length, key.categories.ERV);
+  assert.deepEqual(erv.rows.map((r) => r.tag), ["ERU-1"]);
+  assert.equal(erv.rows[0].status, "MATCH");
 
   const ahu = await reconcileScheduleFamilyWithSweeps(session, graph, ahuNeedle, {
     evaluationFast: true,

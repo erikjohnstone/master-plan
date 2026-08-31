@@ -295,6 +295,8 @@ export const HVAC_FAMILY_SPECS = {
   ERV: {
     titleRe: /ENERGY\s+RECOVERY\s+VENTILATOR|ENERGY\s+RECOVERY\s+UNIT|\bERV\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
+    // ERU-*/ERV-* only — SYMBOL "ERU-1, HP-4" comma-splits; HP half joins HEAT_PUMP.
+    keyRe: /^(?:ERU|ERV)[\s\-]/i,
   },
   FURNACE: {
     titleRe: /FURNACE\s+SCHEDULE|GAS[\s\-]*FIRED\s+.*FURNACE/i,
@@ -313,8 +315,9 @@ export const HVAC_FAMILY_SPECS = {
   },
   HEAT_PUMP: {
     titleRe: /HEAT\s+PUMP/i,
-    // ERV "(WITH HEAT PUMP)" stays in ERV — do not double-count ERU-* here.
-    exclude: /POINTS\s*LIST|DDC\s+POINTS|WATER\s+HEATER|CHILLER|ENERGY\s+RECOVERY/i,
+    // ENERGY RECOVERY schedules titled "(WITH HEAT PUMP)" carry outdoor HP-*
+    // halves (Baker ERU-1, HP-4). keyRe keeps only HP/CC/… so ERU-* stays on ERV.
+    exclude: /POINTS\s*LIST|DDC\s+POINTS|WATER\s+HEATER|CHILLER/i,
     // HP (not CHP); SCU/SAC multi-split; VRF indoor cassette CC-* / AH-* terminals.
     keyRe: /(?<![C])HP|^(?:SCU|SAC|CC|AH)[\s\-]/i,
     // Blank-title: only strong HP-* marks (Colville blank WSHP-1 is a chiller nameplate).

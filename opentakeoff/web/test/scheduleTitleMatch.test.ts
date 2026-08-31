@@ -842,9 +842,10 @@ test("MECHANICAL SPECIALTY EQUIPMENT + ductless comma marks (itd shape)", () => 
   assert.equal(hvac.categories.CONDENSING_UNIT.count, 1);
   assert.deepEqual(hvac.categories.CONDENSING_UNIT.items.map((i) => i.tag), ["DCU-1"]);
   assert.equal(hvac.categories.DUCT_MOUNTED_COIL.count, 2);
-  // Untagged ERV: do not inflate from SYMBOL comma list — keep row.key.
+  // ERV keyRe claims ERU-*; HP half from SYMBOL comma list joins HEAT_PUMP.
   assert.equal(hvac.categories.ERV.count, 1);
-  assert.equal(hvac.categories.ERV.items[0].tag, "ERU-1HP-4");
+  assert.equal(hvac.categories.ERV.items[0].tag, "ERU-1");
+  assert.ok(hvac.categories.HEAT_PUMP.items.some((i) => i.tag === "HP-4"));
 });
 
 test("WP1.4 split-system outdoor CU joins CONDENSING_UNIT without Carson B* filter", () => {
