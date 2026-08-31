@@ -172,3 +172,26 @@ test("reconcileSchedulePlan scoped API matches reconcileScheduleFamilyWithSweeps
   assert.equal(hit?.status, "MATCH");
   assert.equal(hit?.installed_qty, 1);
 });
+
+test("Orange County bulk VAV reconcile scaffold matches compile (DESIGNATION column)", async () => {
+  const keyPath = resolve(CROSS, "21_VA_OrangeCounty_PublicSafetyBldg.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const graph = await graphForPdf(pdf, key.set_id);
+  const compiled = compileCorpusTakeoff(null, graph, "hvac_equipment");
+  assert.equal(compiled.categories?.VAV?.count ?? 0, key.categories.VAV);
+
+  const rows = reconcileScheduleFamilyFromGraph(
+    graph,
+    familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV"),
+  );
+  assert.equal(rows.length, key.categories.VAV, "reconcile scaffold = compile VAV count");
+  assert.ok(rows.every((r) => r.scheduled_qty >= 1));
+  assert.ok(rows.every((r) => r.status === "SCHEDULE_ONLY"), "no sweep → schedule-only");
+  assert.ok(rows.some((r) => /^VAV-1-01$/i.test(r.tag)), "DESIGNATION-keyed VAV tag");
+});

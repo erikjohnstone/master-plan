@@ -256,7 +256,7 @@ VAV 9/9 MATCH via `window.__opentakeoff.reconcileSchedulePlan`.
 **DoD:**
 1. [x] `count_marks` / `sweep_schedule_row` (and agent wrappers) share one Session
    implementation — no geometric-only UI fork for quantity/cite answers.
-2. Background graph prewarm on upload: non-blocking “schedules indexing…”,
+2. [x] Background graph prewarm on upload: non-blocking “schedules indexing…”,
    cache `graphForPipeline`, never silent geometric-only for compile/reconcile.
 3. [x] Tests proving UI and MCP answers match on a frozen fixture for reconcile +
    valve compile **and** one non-NAVFAC compile lock from WP1.

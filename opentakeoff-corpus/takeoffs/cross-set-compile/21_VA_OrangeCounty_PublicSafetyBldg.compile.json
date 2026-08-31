@@ -1,0 +1,15 @@
+{
+  "set_id": "21_VA_OrangeCounty_PublicSafetyBldg",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/21_VA_OrangeCounty_PublicSafetyBldg.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk VA public-safety set — VAV TERMINAL BOX SCHEDULE with DESIGNATION column (32 VAV-1-xx / VAV-2-xx tags); heat-recovery chiller, pumps, unit heaters. WP1.4 wide-schedule banding fix.",
+  "categories": {
+    "VAV": 32,
+    "HEAT_RECOVERY_CHILLER": 1,
+    "PUMP": 1,
+    "UNIT_HEATER": 9
+  },
+  "totals": { "items": 43 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

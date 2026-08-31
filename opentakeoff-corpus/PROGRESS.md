@@ -298,10 +298,10 @@ reconcile, and plan joins.
 
 - **WP2 CLOSED:** `T-VALVE-01` **LOCKED MCP 5/5 · UI 5/5** (Gates 1–5 live via
   `CEREBRAS_API_KEY`); SLATE + GOAL amended for third takeoff ID.
-- **WP5 (partial close):** Production `/__ot/reconcile-schedule-plan` endpoint +
-  UI path (MCP → production HTTP); `planToolParity` CLI reconcile test; **browser
-  geometric fork removed** from `agentCountMarks` / `agentSweepScheduleRow` —
-  returns honest error when Session path unavailable.
+- **WP5 CLOSED:** Browser geometric fork removed; production HTTP for plan tools;
+  UI graph prewarm (`schedules indexing…`) + `prewarmGraphSmoke.test.mjs`.
+- **Bulk rescore (2026-08-31 post-fix):** MEAT **15** · WEAK **7** · ZERO **9** (31 vector sets).
+- **Orange County cross-set key:** 32 VAV + 43 HVAC items; reconcile scaffold test.
 - **WP1 title:** `DOAS` family spec; Valdosta 4→5 items; `VAV TERMINAL BOX` broadening.
 - **WP1.4 (partial):** Wide VAV schedule table-boundary fix — reference extraction on
   full sheet when column banding would split one schedule (Orange County
@@ -311,13 +311,6 @@ reconcile, and plan joins.
 - **WP4 CLOSED:** reconcile UI proof + golden fixtures; WORKFLOWS #51 PROVEN.
 - **WP6:** `test:workflows` **20/20**; `test:demos` **10/10**.
 - **Bulk rescore (2026-08-31):** MEAT **13** · WEAK **9** · ZERO **9** (31 vector sets).
-
-### Next queue (platform loop)
-
-1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 additional table-boundary misses on bulk WEAK sets (many ZEROs honest).
-3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
-4. WP5 graph prewarm on upload (DoD item 2 still open).
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 
