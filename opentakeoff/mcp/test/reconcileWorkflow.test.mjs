@@ -852,3 +852,29 @@ test("SDSU EngSciences FAN reconcile: all scheduled tags MATCH (lab EF + TEF/GX)
   assert.ok(result.rows.every((r) => (r.installed_qty || 0) >= 1));
   assert.ok(result.rows.every((r) => (r.plan_cites?.length || 0) >= 1));
 });
+
+test("Northport FAN reconcile: RF-1/RF-2 honest SCHEDULE_ONLY (no plan text)", async () => {
+  const keyPath = resolve(CROSS, "01_NY_VA_Northport_Dialysis_100CD.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "FAN");
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    evaluationFast: true,
+  });
+  assert.equal(result.rows.length, key.categories.FAN);
+  assert.deepEqual(result.rows.map((r) => r.tag).sort(), ["RF-1", "RF-2"]);
+  assert.ok(
+    result.rows.every((r) => r.status === "SCHEDULE_ONLY"),
+    `Northport RF honest SCHEDULE_ONLY (got ${result.rows.map((r) => r.tag + ":" + r.status).join(",")})`,
+  );
+  assert.ok(result.rows.every((r) => (r.installed_qty || 0) === 0));
+});
+

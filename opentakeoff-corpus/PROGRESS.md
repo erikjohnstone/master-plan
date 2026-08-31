@@ -369,8 +369,8 @@ reconcile, and plan joins.
 - **WP4 titled-first family collect (shared compile+reconcile):** `uniqueFamily` + reconcile scaffold claim titled schedules before blank/catch-all so Colville ERV-1 cites `ENERGY RECOVERY VENTILATOR SCHEDULE` (not blank seismic summary). Sheet-only prefer also narrows to the unique non-blank title. Colville ERV **MATCH**. Compile totals held: Colville 50, Carson 58, itd 93, Baker 21, Klamath 53, federal 103.
 - **WP1.4 ampersand equip marks (shared path):** `expandAmpersandEquipMarks` + prefer ampersand TAG over glued `row.key` — Northport `RF-1 & 2` → RF-1/RF-2 (FAN **1→2**, total **15→16**). Negatives: Colville 50, itd 93, Carson 58, Baker 21, federal 103.
 - **WP4 Hurlburt ATU spaced marks (shared path):** `rowKeyAnswersFor` strips revision/`N` prefixes (`NATUK1`↔`ATU K1`); `sweepScheduleRow` prefers the plan-drawn spaced MARK form. Hurlburt VAV **ATU K1/K2 MATCH** (was SCHEDULE_ONLY). Negatives: Carson prefer-schedule, Colville ERV, Baker EH, SDSU vacuum. `test:workflows` **43/43**.
-- **WP1.4 / BAS I/O LIST titles (shared path):** `isBasPointsListTitle` accepts `POINTS LIST` / `DDC POINTS` / `I/O LIST` / `IO LIST`; column-label `TAG` rows skipped; title-only schematics stay empty. Colville **bas_points 0→42** (I/O LIST WHITE STURGEON PLC). NAVFAC T-BAS-01 still **122** rows / 5 lists. Negatives: SDSU HVAC 208 / BAS 0.
-- **WP4 SDSU FAN MATCH lock:** all 5 scheduled FAN tags MATCH under `evaluationFast` (EF-1-ABC / EF-2-ABCD / TEF-1 / TEF-2 / GX-1). Northport RF-* remain honest SCHEDULE_ONLY (no plan text). `test:workflows` **44/44**.
+- **WP1.4 / BAS I/O LIST titles (shared path):** `isBasPointsListTitle` accepts POINTS LIST / DDC POINTS / I/O LIST / IO LIST; column-label TAG rows skipped; title-only schematics stay empty. Colville **bas_points 0→42** (I/O LIST WHITE STURGEON PLC). NAVFAC T-BAS-01 still **122** rows / 5 lists. Negatives: SDSU HVAC 208 / BAS 0.
+- **WP4 SDSU FAN MATCH lock:** all 5 scheduled FAN tags MATCH under `evaluationFast` (EF-1-ABC, EF-2-ABCD, TEF-1, TEF-2, GX-1). Northport RF-* remain honest SCHEDULE_ONLY (no plan text). `test:workflows` **44/44**.
 
 ### Next queue (platform loop)
 
