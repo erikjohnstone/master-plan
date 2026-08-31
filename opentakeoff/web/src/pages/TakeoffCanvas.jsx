@@ -804,6 +804,10 @@ export default function TakeoffCanvas() {
   // Whole-set PDF text index progress (every page) — Agent/schedule workflows
   // need this; viewport "Rendering sheet…" is NOT the same thing.
   const [indexProgress, setIndexProgress] = useState({ done: 0, total: 0, phase: "idle" }); // idle | text | ready
+  // Session+ODL sheet graph prewarm (WP5) — warms after text index, non-blocking.
+  const [graphPrewarm, setGraphPrewarm] = useState({ phase: "idle" }); // idle | warming | ready | error
+  const graphPrewarmSigRef = useRef("");
+  const graphPrewarmBusyRef = useRef(false);
   const commitMsg = commitMsgState.text;   // misnamed for history; just the message bar
   const setCommitMsg = (text) => setCommitMsgState({ text });
   // transient means transient: every message dismisses itself after ~6s (a
@@ -2111,6 +2115,8 @@ export default function TakeoffCanvas() {
   useEffect(() => {
     if (!sheets.length) {
       setIndexProgress({ done: 0, total: 0, phase: "idle" });
+      setGraphPrewarm({ phase: "idle" });
+      graphPrewarmSigRef.current = "";
       return;
     }
     indexWholeSet(sheets);
@@ -6931,6 +6937,49 @@ export default function TakeoffCanvas() {
     return await res.json();
   }
 
+  // Background Session+ODL graph prewarm once PDF text index is ready — Agent
+  // compile / query_table / reconcile hit a warm cache instead of cold-starting
+  // the production endpoint on first tool call (shared path with MCP).
+  useEffect(() => {
+    if (indexProgress.phase !== "ready" || !sheets.length) {
+      if (!sheets.length) setGraphPrewarm({ phase: "idle" });
+      return;
+    }
+    const sig = sheets.map((s) => `${s.name}:${s.rev ?? 1}`).join("|");
+    if (agentGraphCacheRef.current && agentGraphCacheKeyRef.current === sig
+      && agentGraphCacheRef.current.__production) {
+      graphPrewarmSigRef.current = sig;
+      setGraphPrewarm({ phase: "ready" });
+      return;
+    }
+    if (graphPrewarmBusyRef.current && graphPrewarmSigRef.current === sig) return;
+    graphPrewarmBusyRef.current = true;
+    graphPrewarmSigRef.current = sig;
+    setGraphPrewarm({ phase: "warming" });
+    let cancelled = false;
+    (async () => {
+      try {
+        const prod = await fetchProductionSheetGraph();
+        if (cancelled) return;
+        if (prod?.tables || prod?.available) {
+          prod.__production = true;
+          agentGraphCacheRef.current = prod;
+          agentGraphCacheKeyRef.current = sig;
+          setGraphPrewarm({ phase: "ready" });
+        } else {
+          setGraphPrewarm({ phase: "error", message: "empty graph" });
+        }
+      } catch (e) {
+        if (!cancelled) {
+          setGraphPrewarm({ phase: "error", message: String(e?.message || e) });
+        }
+      } finally {
+        graphPrewarmBusyRef.current = false;
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [indexProgress.phase, sheets]);
+
   async function ensureAgentGraph() {
     const sig = sheets.map((s) => `${s.name}:${s.rev ?? 1}`).join("|");
     if (agentGraphCacheRef.current && agentGraphCacheKeyRef.current === sig) return agentGraphCacheRef.current;
@@ -7290,6 +7339,7 @@ export default function TakeoffCanvas() {
       lastCorpusTakeoff: () => lastCorpusTakeoffMeta,
       takeoffRowCount: () => agentTakeoffRows.length,
       indexProgress: () => indexProgress,
+      graphPrewarm: () => graphPrewarm,
       debugGraph: async () => {
         const g = await ensureAgentGraph();
         return {
@@ -12611,7 +12661,11 @@ export default function TakeoffCanvas() {
               <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
                 {indexing
                   ? `Indexing ${pct}% · ${indexProgress.done}/${indexProgress.total} pages`
-                  : `Indexed 100% · ${indexProgress.total} pages`}
+                  : graphPrewarm.phase === "warming"
+                    ? `Indexed · schedules indexing…`
+                    : graphPrewarm.phase === "ready"
+                      ? `Indexed · schedules ready`
+                      : `Indexed 100% · ${indexProgress.total} pages`}
               </span>
               <span
                 role="progressbar"
