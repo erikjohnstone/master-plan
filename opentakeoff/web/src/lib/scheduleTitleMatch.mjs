@@ -60,9 +60,47 @@ export function scheduleTitleMatches(rawTitle, titleRe, exclude) {
 }
 
 /**
+ * Index of `needle` in `haystack` starting at a token boundary (start of string
+ * or after a non-alphanumeric). Rejects mid-token hits like DEHUMIDIFIER⊃HUMIDIFIER.
+ * @param {string} haystack already uppercased
+ * @param {string} needle already uppercased
+ * @returns {number} index or -1
+ */
+function indexAtTokenBoundary(haystack, needle) {
+  if (!needle) return 0;
+  let from = 0;
+  while (from <= haystack.length) {
+    const idx = haystack.indexOf(needle, from);
+    if (idx < 0) return -1;
+    if (idx === 0 || !/[A-Z0-9]/.test(haystack[idx - 1])) return idx;
+    from = idx + 1;
+  }
+  return -1;
+}
+
+/** Leading adjectives that still mean the same schedule family (ELECTRIC HUMIDIFIER). */
+const QUERY_SOFT_PREFIX_RE =
+  /^(?:ELECTRIC|HYDRONIC|GAS(?:[\s\-]*FIRED)?|LAB(?:ORATORY)?|GENERAL|PACKAGED|DEDICATED|OUTDOOR|INDOOR|HOT\s+WATER|CHILLED\s+WATER|SUPPLY|RETURN|EXHAUST)(?:\s+(?:ELECTRIC|HYDRONIC|GAS(?:[\s\-]*FIRED)?|LAB(?:ORATORY)?|GENERAL|PACKAGED|DEDICATED|OUTDOOR|INDOOR|HOT\s+WATER|CHILLED\s+WATER|SUPPLY|RETURN|EXHAUST))?$/i;
+
+/**
+ * Soft includes: token-boundary match, and if the needle is not title-leading,
+ * the prefix must be a known adjective — not a different equipment noun
+ * (CABINET UNIT HEATER ⊄ UNIT HEATER; DEHUMIDIFIER ⊄ HUMIDIFIER).
+ */
+function softNeedleIncludes(haystack, needle) {
+  const idx = indexAtTokenBoundary(haystack, needle);
+  if (idx < 0) return false;
+  if (idx === 0) return true;
+  const prefix = haystack.slice(0, idx).trim();
+  return QUERY_SOFT_PREFIX_RE.test(prefix);
+}
+
+/**
  * Soft title needle for query_table: exact / prefix / includes on spaced form,
  * then compact includes when the needle is long enough (≥8 compact chars).
  * Never soft-matches very short needles (avoids "FAN" → "FAN COIL").
+ * Token-boundary + adjective-prefix rules avoid DEHUMIDIFIER / CABINET UNIT HEATER
+ * false hits while keeping ELECTRIC HUMIDIFIER and no-space titles.
  * @param {string} rawTitle
  * @param {string} needle  already trimmed; may be empty
  * @returns {boolean}
@@ -78,17 +116,15 @@ export function queryTitleMatchesNeedle(rawTitle, needle) {
     return base.startsWith(`${titleNeedle} `) || spaced.startsWith(`${titleNeedle} `);
   }
   if (base.startsWith(`${titleNeedle} `) || spaced.startsWith(`${titleNeedle} `)) return true;
-  if (spaced.includes(titleNeedle) || base.includes(titleNeedle)) {
-    const idx = Math.min(
-      spaced.includes(titleNeedle) ? spaced.indexOf(titleNeedle) : 999,
-      base.includes(titleNeedle) ? base.indexOf(titleNeedle) : 999,
-    );
-    // Prefer title-leading matches (legacy behavior).
-    if (idx <= 8) return true;
-    if (spaced.includes(titleNeedle) || base.includes(titleNeedle)) return true;
+  if (softNeedleIncludes(spaced, titleNeedle) || softNeedleIncludes(base, titleNeedle)) {
+    return true;
   }
   const compactNeedle = compactScheduleTitle(titleNeedle);
   const compactTitle = compactScheduleTitle(rawTitle);
-  if (compactNeedle.length >= 8 && compactTitle.includes(compactNeedle)) return true;
+  // Compact soft match only when the needle is title-leading (idx 0) — no-space
+  // AIRHANDLINGUNITSCHEDULE — not mid-token DEHUMIDIFIER / CABINETUNITHEATER.
+  if (compactNeedle.length >= 8 && indexAtTokenBoundary(compactTitle, compactNeedle) === 0) {
+    return true;
+  }
   return false;
 }

@@ -1153,3 +1153,17 @@ test("query_table soft needle hits no-space titles for long needles", () => {
   assert.equal(queryTitleMatchesNeedle("FAN COIL UNIT SCHEDULE", "FAN SCHEDULE"), false);
   assert.equal(queryTitleMatchesNeedle("FAN SCHEDULE", "FAN SCHEDULE"), true);
 });
+
+test("query_table HUMIDIFIER needle does not soft-match DEHUMIDIFIER", () => {
+  assert.equal(queryTitleMatchesNeedle("HUMIDIFIER SCHEDULE", "HUMIDIFIER SCHEDULE"), true);
+  assert.equal(queryTitleMatchesNeedle("ELECTRIC HUMIDIFIER SCHEDULE", "HUMIDIFIER SCHEDULE"), true);
+  assert.equal(queryTitleMatchesNeedle("DEHUMIDIFIER SCHEDULE", "HUMIDIFIER SCHEDULE"), false);
+  assert.equal(queryTitleMatchesNeedle("DEHUMIDIFIERSCHEDULE", "HUMIDIFIER SCHEDULE"), false);
+  assert.equal(queryTitleMatchesNeedle("HUMIDIFIERSCHEDULE", "HUMIDIFIER SCHEDULE"), true);
+});
+
+test("query_table UNIT HEATER needle does not soft-match CABINET UNIT HEATER", () => {
+  assert.equal(queryTitleMatchesNeedle("UNIT HEATER SCHEDULE", "UNIT HEATER SCHEDULE"), true);
+  assert.equal(queryTitleMatchesNeedle("CABINET UNIT HEATER SCHEDULE", "UNIT HEATER SCHEDULE"), false);
+  assert.equal(queryTitleMatchesNeedle("ELECTRIC UNIT HEATER SCHEDULE", "UNIT HEATER SCHEDULE"), true);
+});

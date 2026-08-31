@@ -350,6 +350,7 @@ reconcile, and plan joins.
 - **WP1.4 SDSU/bldg5406 orphan batch (shared path):** FAN `TEF`/`GX` + LABORATORY EXHAUST title; ELECTRIC HUMIDIFIER `EH-*` (titledOnly); FILTER `F-#` (titledOnly, no split-system steal); LOUER OCR → LOUVER; EPANSION/COMPRESSION OCR → EXPANSION_TANK. SDSU **118→123**; bldg5406 **27→30**; Valdosta **16→17**. Negatives: Colville 50, itd 93, Carson 58, federal 103. Rejected: softener `BT-*` (double-counts Colville BUFFER_TANK). Fume-hood ECV deferred.
 - **WP1.4 Baker AHU + SDSU FUME_HOOD_DAMPER (shared path):** `AIR HANDLER HEAT PUMP` → AHU (comma-split with HEAT_PUMP HP-*); `normalizeEquipMark` strips SYMBOL CFM/size/room trailers (Baker GRD); titled `FUME HOOD … VAV … DAMPER` + `ECV-*` (titledOnly). Baker **17→20**; SDSU **123→181** (+58 ECV). Negatives: Colville 50, itd 93, Carson 58, Douglas 18, federal 103, Jeff City 32.
 - **WP1.4 ECAV + VFD + split AC/ACCU (shared path):** VAV `ECAV-*` on LAB CAV; `VARIABLE_FREQUENCY_DRIVE` titled `VFD-*`; FCU `AC-*` + CONDENSING `ACCU` on SPLIT SYSTEM slash compounds. SDSU **181→206**; Spokane **5→8**; bldg5406 **30→32**. Negatives: Colville 50, itd 93, Carson 58, St Louis 30, federal 103, Baker 20.
+- **query_table token-boundary soft match (shared path):** `HUMIDIFIER SCHEDULE` no longer matches `DEHUMIDIFIER SCHEDULE` (mid-token includes). ELECTRIC HUMIDIFIER / compact no-space titles still hit.
 
 ### Next queue (platform loop)
 
@@ -359,7 +360,6 @@ reconcile, and plan joins.
 4. WP4 deepen on Douglas / Klamath / SDSU VAV SCHEDULE_ONLY remainder (raise plan-text recall without unsafe heuristics; SDSU CAV mostly “cannot geometrically anchor”).
 5. Remaining WEAK ceilings: Suwannee (1 RTU honest), Kennebec (2 multi-split only).
 6. Optional: evaluate BlueprintParser_OS / drawings-ai digests as *complementary* LLM recall only — never as qty/cite truth (stay on Session+ODL).
-7. Pre-existing: `query_table` soft-matches DEHUMIDIFIER under HUMIDIFIER needle (fixture 24≠12) — word-boundary includes fix.
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 
