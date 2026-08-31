@@ -1,4 +1,4 @@
-# Next major goal loop — HVAC/BAS schedule↔plan golden
+# Next major goal loop — HVAC/BAS cross-set + reconcile golden
 
 **Status:** PLAN (for the upcoming implementation goal)  
 **Date:** 2026-08-31  
@@ -9,13 +9,24 @@ this plan — not invent a new softer one.
 
 ---
 
-## 1. Verdict (one sentence)
+## 1. Verdict (two co-equal pillars)
 
-The ~50-intent inventory is largely **routing + schedule-compile complete**; the
-needle-moving next loop is to make OpenTakeoff **golden at schedule↔plan
-reconciliation for HVAC equipment, control valves, and BAS points** — the work
-every serious MEP estimator treats as the bid-critical step, and where our
-product is closest but still incomplete.
+The ~50-intent inventory is largely **routing + schedule-compile complete on
+NAVFAC-shaped fixtures**. The needle-moving next loop has **two co-equal
+pillars** — neither is optional polish:
+
+1. **Cross-set compile reliability** — complete HVAC / BAS / valve / family
+   workflows must work on the **next** job’s titles and headers without
+   NAVFAC special cases. If demos “work on NAVFAC and die on the next set’s
+   titles,” we are not golden no matter how pretty reconcile looks.
+2. **Schedule↔plan reconciliation** — prove scheduled tags on the drawings,
+   name mismatches (`MATCH` / `SCHEDULE_ONLY` / `PLAN_ONLY` / honest refuse).
+   That is the bid-critical step every serious MEP estimator runs (Simpro /
+   Kamai / iBeam).
+
+**Order:** prove the path is set-agnostic **first**, then lock valves, raise
+plan-join recall, and ship reconcile on that same path — so reconcile cannot
+be a NAVFAC-only showcase.
 
 ---
 
@@ -34,29 +45,30 @@ product is closest but still incomplete.
 | Shared Session+ODL compile path | GOAL non-negotiable #11 |
 
 `WORKFLOWS.md` marks **#1–#50 ON_MAIN**. That means durable intents + fixture
-locks exist. It does **not** mean every row is N=5 Agent-UI golden, or that
-schedule↔plan joins are contractor-grade across sets.
+locks exist. It does **not** mean every row is N=5 Agent-UI golden, that
+compiles survive foreign schedule titles, or that schedule↔plan joins are
+contractor-grade across sets.
 
 ### Incomplete / weak (this is the loop)
 
 | Gap | Evidence | Why it matters |
 |---|---|---|
+| **Cross-set compile / title brittleness** | Hand `scheduleFamilyNeedles`; NAVFAC-centric locks; itd-d1-lab / federal-mech / weld-county under-keyed | Demo failure mode: works here, dies on next firm’s titles |
+| **Cross-set rowsym / join keys missing** | Those sets often “no key yet” in graph-eval | Cannot claim set-agnostic joins without rulers |
 | **`T-VALVE-01` N=5 card pending** | `CARD.md`: `AGENT UI PROVEN` · N=5 pending; SLATE still only HVAC+BAS | Core third commercial takeoff not fully locked |
 | **Row→symbol recall ~73%** | `SHEET-GRAPH-EVAL.md` Bessemer 11/15; SR/TG inline misses | “Installed qty” / plan link workflows lie or refuse too often |
-| **`sweep_inline_motif` not wired into `sweep_schedule_row`** | `INLINE-MOTIF-EVAL.md` explicit remaining work | Registers/grilles exist as a solved motif but don’t move production join recall |
-| **Cross-set rowsym / join keys missing** | itd-d1-lab, federal-mech, weld-county — “no key yet” | NAVFAC-only green ≠ set-agnostic golden |
-| **Schedule vs plan mismatches not a first-class deliverable** | Industry: reconcile every tag both ways; we mostly emit schedule qty *or* optional sweep | Competitors (Kamai, Simpro guidance, iBeam) treat reconciliation as the product |
-| **Plan-tool dual implementations** | GOAL follow-on: `count_marks` / `sweep_schedule_row` still not fully Session-unified | UI↔MCP parity debt on the join path |
+| **`sweep_inline_motif` not wired into `sweep_schedule_row`** | `INLINE-MOTIF-EVAL.md` explicit remaining work | Registers/grilles solved as motif but don’t move production join recall |
+| **Schedule vs plan mismatches not a first-class deliverable** | Industry: reconcile both ways; we emit schedule qty *or* optional sweep | Competitors treat reconciliation as the product |
+| **Plan-tool dual implementations** | GOAL follow-on: `count_marks` / `sweep_schedule_row` not fully Session-unified | UI↔MCP parity debt on the join path |
 | **Graph prewarm** | GOAL follow-on after lock | Cold Agent latency / geometric-only footguns |
-| **Title-needle brittleness** | Hand `scheduleFamilyNeedles` | Next firm’s schedule title fails family workflows without code edit |
 | **Legend→installed qty** | `REFUSED_NO_SCALE` by design on schematic legends | Do **not** make this the main loop — wrong physics |
 
 ### Explicit non-goals for this loop
 
 - Replacing or retuning ODL.
-- Expanding to 50 *new* chat intents (inventory is enough; deepen the ones that join).
-- Full duct LF / sheet-metal estimating (FastDUCT / WenDuct territory — later product lane).
-- Class-agnostic detectors, CLIP few-shot, bSDD ontology as primary work (not ready to move qty today).
+- Expanding to 50 *new* chat intents (inventory is enough; deepen compile + join).
+- Full duct LF / sheet-metal estimating (FastDUCT / WenDuct territory — later).
+- Class-agnostic detectors, CLIP few-shot, bSDD ontology as primary work.
 - Token proxies / Playwright sharding / Clipper — ops, not takeoff IQ.
 
 ---
@@ -70,7 +82,8 @@ calculators); Trimble MEP AI takeoff (scale + count + reconcile).
 
 ### What elite HVAC/BAS takeoff workflows actually do
 
-1. **Schedule-first quantities** for equipment / valves / points (we do this).
+1. **Schedule-first quantities** for equipment / valves / points (we do this —
+   must survive **any** US MEP set’s title phrasing).
 2. **Plan placement** for every tagged unit that is drawn (we partially do this).
 3. **Reconciliation both directions** — scheduled∖plan and plan∖scheduled —
    with mismatches surfaced for RFI / estimator judgment (we largely don’t).
@@ -79,27 +92,25 @@ calculators); Trimble MEP AI takeoff (scale + count + reconcile).
 5. **Multi-pass discipline** — sheet roles → quantities → joins → review —
    not one LLM dump (we have phase machines; join pass is underpowered).
 6. **BAS** = points lists + AI/AO/BI/BO rollups + disclose non-extractable
-   lists (we do); elite next step is **equipment↔point↔location** traces that
-   survive interrogation (D02 exists; deepen and cross-set).
+   lists (we do); deepen **equipment↔point↔location** across sets.
 7. **Valves** = schedule family (CHW/HHW) + served unit + Cv + **optional**
-   installed plan qty when asked — never invent plan cites (our doctrine —
-   finish N=5 lock).
+   installed plan qty when asked — never invent plan cites.
 
-**Implication:** OpenTakeoff already owns the schedule-compile lane that
-generic PDF chat apps don’t. The golden leap is becoming the tool that
-**proves schedule truth on the blueprints** and **names every mismatch**.
+**Implication:** Golden = **portable schedule truth** + **reconcile to drawings**.
+Either pillar alone is a half product.
 
 ---
 
 ## 4. Next goal loop objective (copy into `/goal`)
 
-> **HVAC/BAS RECONCILE GOLDEN:** Make schedule↔plan reconciliation
-> production-grade for HVAC equipment, control valves, and BAS points on the
-> shared UI+MCP path — lock `T-VALVE-01` N=5 both surfaces; raise durable
-> tagged plan-join recall by wiring inline motifs into `sweep_schedule_row`;
-> ship a first-class reconcile workflow (scheduled vs installed vs refused /
-> missing) with contractor cites; prove set-agnostic behavior with keyed
-> evals on ≥2 non-NAVFAC HVAC/BAS sets; keep all existing locks green.
+> **HVAC/BAS CROSS-SET + RECONCILE GOLDEN:** Make complete HVAC / BAS / valve /
+> family schedule compiles **reliably set-agnostic** (survive foreign titles /
+> headers on ≥2 non-NAVFAC keyed sets — co-equal with reconcile, not polish),
+> then make schedule↔plan reconciliation production-grade on the shared UI+MCP
+> path — lock `T-VALVE-01` N=5 both surfaces; raise durable tagged plan-join
+> recall by wiring inline motifs into `sweep_schedule_row`; ship a first-class
+> reconcile workflow (scheduled vs installed vs refused / missing) with
+> contractor cites; keep all existing locks green.
 > Set-agnostic only. Always tests. No ODL rewrite. No duct-LF scope creep.
 
 ---
@@ -109,15 +120,51 @@ generic PDF chat apps don’t. The golden leap is becoming the tool that
 Each package ends with **merge to `main`** only when its DoD is met. Do not
 batch “almost done.”
 
+**Pillar A = cross-set compile** · **Pillar B = reconcile / plan-join**.  
+WP1 is Pillar A on purpose: if we ship reconcile before portable compile, we
+risk a golden NAVFAC demo that dies on the next upload.
+
 ### WP0 — Charter lock (this doc)
 
 - [x] `NEXT_GOAL_LOOP.md` written from codebase + research
+- [x] Cross-set compile elevated to **co-equal** pillar and **WP1**
 - [ ] Implementation `/goal` cites this file as the bar
 
-### WP1 — Finish the third commercial takeoff: `T-VALVE-01` N=5
+### WP1 — Cross-set compile reliability (Pillar A — first)
 
-**Why first:** HVAC + BAS are LOCKED; valves are the remaining slate-class
-takeoff and already Agent-UI proven. Leaving N=5 pending undercuts “golden.”
+**Why first:** The failure mode “works on NAVFAC, dies on the next set’s
+titles” makes every other win fragile. GOAL hard-case rule: NAVFAC proves the
+path; other sets must work **without per-set tuning**. Corpus already has
+itd-d1-lab, federal-mech, weld-county under-instrumented.
+
+**DoD:**
+1. Author hand acceptance keys (from rendered sheets, **never** from tool
+   output) for **≥2 non-NAVFAC** HVAC/BAS sets covering at least:
+   - one complete or family HVAC schedule compile,
+   - one BAS points or points-list title-scan path **or** valve/equipment
+     schedule family,
+   - at least one honest refuse / non-extractable disclose case.
+2. `test:workflows` / compile locks / graph-eval report **scores** on those
+   sets — not “no key yet.”
+3. Soft title matching for schedule families: fuzzy and/or embedding assist
+   beside `scheduleFamilyNeedles` when regex misses — **must not** override a
+   confident exact title; **must** keep sibling exclusions (DOAH vs HANDLING,
+   air-cooled vs heat-recovery, etc.) with regression fixtures.
+4. Header / column miss classes: grow set-agnostic vocab from real failures
+   (sheetgraph `columnMapFor` path) — fixture counts only in tests.
+5. Any product fix from WP1 failures is set-agnostic (title signals, header
+   vocab, role heuristics) — **no** NAVFAC sheet IDs, building names, or
+   locked counts (396/122/163) in product code.
+6. NAVFAC `T-HVAC-01` / `T-BAS-01` remain green after changes.
+
+**Evidence:** eval/report tables in docs + CI/workflow suite hooks; listed
+non-NAVFAC set IDs and what each key covers.
+
+### WP2 — Finish the third commercial takeoff: `T-VALVE-01` N=5
+
+**Why here:** HVAC + BAS are LOCKED; valves are the remaining slate-class
+takeoff and already Agent-UI proven. Runs **after** WP1 so valve lock isn’t
+the only “done” story while cross-set compile still fails.
 
 **DoD:**
 1. Frozen `prompt.txt` (+ CHW/HHW variants if needed) unchanged during N=5.
@@ -129,7 +176,7 @@ takeoff and already Agent-UI proven. Leaving N=5 pending undercuts “golden.”
 
 **Evidence:** `runs/` + `export/` Run 5 + interrogation log + UI run changelog.
 
-### WP2 — Raise plan-join recall (wire what we already proved)
+### WP3 — Raise plan-join recall (wire what we already proved)
 
 **Why:** Documented 73.3% rowsym recall; `sweep_inline_motif` +
 `corroborateInlineMotif` exist but are **not** on the `sweep_schedule_row`
@@ -147,15 +194,18 @@ production path (`INLINE-MOTIF-EVAL.md`).
 4. Durable tests: unit + graph-eval rowsym; suite gate green.
 5. No set-specific thresholds hardcoded to one PDF’s pixel quirks beyond
    existing measured geometry constants justified in comments.
+6. Apply the same join path to ≥1 WP1 non-NAVFAC set key (rowsym or
+   reconcile precursor) — not Bessemer-only.
 
 **Evidence:** updated `SHEET-GRAPH-EVAL.md` / `INLINE-MOTIF-EVAL.md` numbers +
 CI/demo locks.
 
-### WP3 — First-class **reconcile** workflow (the product leap)
+### WP4 — First-class **reconcile** workflow (Pillar B — product leap)
 
 **Why:** Industry defines accuracy as schedule∩plan + explicit mismatches.
 Today estimators get schedule takeoff *or* ad-hoc sweeps — not a reconcile
-document.
+document. Ships only after portable compile (WP1) so reconcile is not
+NAVFAC theater.
 
 **Ship:**
 1. New intent in `takeoffWorkflow.js` (e.g. `schedule_plan_reconcile`) —
@@ -175,7 +225,7 @@ document.
 
 **DoD:**
 1. Intent + phase tests (≥5 phrasings).
-2. Fixture proof on NAVFAC **and** one other keyed set.
+2. Fixture proof on NAVFAC **and** ≥1 WP1 non-NAVFAC keyed set.
 3. Agent UI proof for at least one HVAC reconcile ask (Playwright or durable
    engine+golden equivalent if UI blocked — prefer UI once).
 4. `WORKFLOWS.md` row(s) added/updated; suite gate includes reconcile lock.
@@ -183,26 +233,6 @@ document.
 
 **Evidence:** golden fixture + interrogation-style negative cases
 (false-premise “all scheduled units are drawn” must fail honestly).
-
-### WP4 — Cross-set generalization keys (prove not NAVFAC-only)
-
-**Why:** GOAL hard-case rule — NAVFAC proves the path; smaller/other sets must
-work without per-set tuning. Corpus already has itd-d1-lab, federal-mech,
-weld-county without rowsym/reconcile keys.
-
-**DoD:**
-1. Author hand keys (from rendered sheets, never from tool output) for ≥2
-   non-NAVFAC sets covering: equipment schedule family, valve or VAV plan
-   join, and at least one refuse case.
-2. `graph-eval` / workflow suite reports scores — not “no key yet.”
-3. Any product fix from failures must be set-agnostic (title signals, motif
-   geometry, header vocab) — fixture counts stay in tests only.
-4. Soft title matching helper (optional but preferred): fuzzy / embedding
-   assist for `scheduleFamilyNeedles` when regex misses — must not override
-   a confident exact title; must ship with regression fixtures for sibling
-   exclusions (DOAH vs HANDLING, etc.).
-
-**Evidence:** eval report tables in docs + CI hooks where feasible.
 
 ### WP5 — Shared-path hygiene on the join lane
 
@@ -214,7 +244,7 @@ weld-county without rowsym/reconcile keys.
 2. Background graph prewarm on upload: non-blocking “schedules indexing…”,
    cache `graphForPipeline`, never silent geometric-only for compile/reconcile.
 3. Tests proving UI and MCP answers match on a frozen fixture for reconcile +
-   valve compile.
+   valve compile **and** one non-NAVFAC compile lock from WP1.
 
 **Evidence:** parity test + prewarm smoke; docs updated in GOAL follow-on
 section as done.
@@ -225,9 +255,10 @@ section as done.
 1. `npm run test:demos` + `test:workflows` + web workflow fixtures green.
 2. T-HVAC-01 / T-BAS-01 remain LOCKED (re-run spot gates if shared path
    touched).
-3. Re-open any `WORKFLOWS.md` row that regresses — fix before claiming WP
+3. WP1 non-NAVFAC compile keys stay green whenever later WPs land.
+4. Re-open any `WORKFLOWS.md` row that regresses — fix before claiming WP
    complete.
-4. Prefer durable engine/golden tests; Agent UI demos for chat-facing
+5. Prefer durable engine/golden tests; Agent UI demos for chat-facing
    reconcile + valve N=5 only — don’t re-burn 50 Playwrights.
 
 ---
@@ -236,19 +267,24 @@ section as done.
 
 The loop is complete **only when all are true**:
 
-1. **`T-VALVE-01` LOCKED** MCP 5/5 · UI 5/5.
-2. **Row→symbol / plan-join** recall meets WP2 bar with published numbers.
-3. **Reconcile workflow** ships on `main` with contractor columns + cites +
-   tests + at least one Agent UI proof.
-4. **≥2 non-NAVFAC** HVAC/BAS sets have keyed join/reconcile proof green.
+1. **Pillar A:** ≥2 non-NAVFAC HVAC/BAS sets have keyed **compile** proof
+   green; soft title / header generalization shipped with sibling-exclusion
+   regressions; NAVFAC HVAC/BAS locks still green.
+2. **`T-VALVE-01` LOCKED** MCP 5/5 · UI 5/5.
+3. **Row→symbol / plan-join** recall meets WP3 bar with published numbers
+   (including at least one non-NAVFAC join key).
+4. **Pillar B:** Reconcile workflow ships on `main` with contractor columns +
+   cites + tests + at least one Agent UI proof — proven on NAVFAC **and** a
+   WP1 set.
 5. **Shared-path** plan tools + prewarm DoD met.
-6. **Prior locks** HVAC/BAS + suite gate still green.
-7. An estimator can ask, on a fresh set: *“Reconcile the VAV schedule to the
-   plans”* (or equivalent) and get a **finished Takeoff-grade table** that
-   matches industry reconciliation practice — not chat scrap.
+6. **Prior locks** + suite gate still green.
+7. An estimator can upload a **non-NAVFAC** set and get a correct complete /
+   family compile **without** a code change for that job’s titles — **and**
+   can ask *“Reconcile the VAV schedule to the plans”* (or equivalent) and
+   get a finished Takeoff-grade reconcile table — not chat scrap.
 
-If any item is weak, incomplete, or only “consistent with” completion — the
-loop is **not** done.
+If either pillar is weak, incomplete, or only “consistent with” completion —
+the loop is **not** done.
 
 ---
 
@@ -256,11 +292,15 @@ loop is **not** done.
 
 ```text
 /goal Execute opentakeoff-corpus/takeoffs/NEXT_GOAL_LOOP.md in full:
+Pillar A first — cross-set compile reliability (≥2 non-NAVFAC keyed HVAC/BAS
+sets, soft title/header generalization, no NAVFAC-only product paths); then
 T-VALVE-01 N=5 lock; wire inline motif into sweep_schedule_row and hit the
 rowsym bar; ship HVAC/BAS/valve schedule↔plan reconcile workflow on shared
-UI+MCP path with contractor columns+cites; cross-set keyed proofs; shared-path
-plan-tool unify + graph prewarm; keep HVAC/BAS locks and suite gate green.
+UI+MCP path with contractor columns+cites (Pillar B, proven on NAVFAC + a
+WP1 set); shared-path plan-tool unify + graph prewarm; keep HVAC/BAS locks
+and suite gate green.
 Set-agnostic only. Always tests. No ODL rewrite. No duct-LF scope creep.
+Cross-set compile is co-equal with reconcile — not optional polish.
 ```
 
 ---
@@ -274,7 +314,9 @@ Set-agnostic only. Always tests. No ODL rewrite. No duct-LF scope creep.
 | Duct LF takeoff | Huge adjacent product; dilutes HVAC/BAS schedule+points golden |
 | Token / test infra | Doesn’t change estimator deliverable quality |
 | Ontology (bSDD) alone | Doesn’t place tags on plans |
+| Reconcile-only on NAVFAC | Golden theater — dies on next set’s titles |
 
-**This loop** turns OpenTakeoff from “great schedule compiler with demos” into
-“the HVAC/BAS takeoff that **reconciles to the drawings**” — the commercial
-bar Kamai/Simpro/iBeam describe, on our vector-grounded, cite-honest stack.
+**This loop** turns OpenTakeoff from “great NAVFAC schedule compiler with
+demos” into “the HVAC/BAS takeoff that **works on the next set** and
+**reconciles to the drawings**” — portable schedule truth + commercial
+reconciliation bar, on our vector-grounded, cite-honest stack.
