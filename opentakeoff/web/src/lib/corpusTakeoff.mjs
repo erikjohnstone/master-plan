@@ -624,7 +624,7 @@ export const HVAC_FAMILY_SPECS = {
 export const HVAC_EXCLUSIONS = [
   "VIBRATION ISOLATION SCHEDULE (accessory, not equipment units)",
   "FAN SOUND POWER LEVEL SCHEDULE (acoustic data, not equipment count)",
-  "POINTS LIST / DDC POINTS LIST (counted under T-BAS-01)",
+  "POINTS LIST / DDC POINTS LIST / I/O LIST (counted under T-BAS-01)",
   "GENERAL NOTES / PIPING CONSTRUCTION SCHEDULE",
 ];
 
@@ -632,6 +632,27 @@ export const BAS_EXCLUSIONS = [
   "Title-only schematic points lists (non-extractable typed rows)",
   "HVAC equipment schedules (counted under T-HVAC-01)",
 ];
+
+/**
+ * Shared UI+MCP gate for T-BAS-01 list titles.
+ * Covers NAVFAC-shaped POINTS/DDC lists and PLC panel I/O LIST / IO LIST
+ * schedules (device rows with analog/digital columns — not AI## MARK prefixes).
+ * Set-agnostic: no sheet IDs or locked counts.
+ */
+export function isBasPointsListTitle(title) {
+  const t = String(title || "").replace(/\s+/g, " ").trim();
+  if (!t) return false;
+  if (/\bPOINTS\s+LIST\b/i.test(t)) return true;
+  if (/\bDDC\s+POINTS\b/i.test(t)) return true;
+  if (/\bI\s*\/\s*O\s+LIST\b/i.test(t)) return true;
+  if (/\bIO\s+LIST\b/i.test(t)) return true;
+  return false;
+}
+
+/** Column-label rows that are not countable I/O or points marks. */
+function isBasPointsHeaderRow(tag) {
+  return !tag || /^(TAG|MARK|SYMBOL|POINT|DESCRIPTION|NOTES?)$/i.test(tag);
+}
 
 function sheetRecords(sessionOrSheets, graph) {
   if (Array.isArray(sessionOrSheets)) return sessionOrSheets;
@@ -664,7 +685,7 @@ export function compileHvacTakeoff(sessionOrSheets, graph) {
     const tables = (graph.tables || []).filter((t) => t.sheet === key);
     const titles = tables
       .map((t) => String(t.title?.text || ""))
-      .filter((t) => t && !/GENERAL NOTES|POINTS LIST|DDC POINTS|VIBRATION|SOUND POWER|PIPING CONSTRUCTION/i.test(t));
+      .filter((t) => t && !/GENERAL NOTES|VIBRATION|SOUND POWER|PIPING CONSTRUCTION/i.test(t) && !isBasPointsListTitle(t));
     return {
       sheet_id: key,
       sheet_number: sheet.sheetNumber ?? sheet.number ?? null,
@@ -700,11 +721,13 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
   const lists = [];
   for (const table of graph.tables || []) {
     const title = String(table.title?.text || "");
-    if (!/POINTS LIST|DDC POINTS/i.test(title)) continue;
+    if (!isBasPointsListTitle(title)) continue;
     const counts = { AI: 0, AO: 0, BI: 0, BO: 0, other: 0 };
     const items = [];
     for (const row of table.rows || []) {
       const tag = String(row.key || "").trim();
+      // Skip column-label rows (I/O LIST prints TAG as a data key).
+      if (isBasPointsHeaderRow(tag)) continue;
       const m = tag.toUpperCase().match(/^(AI|AO|BI|BO)\d/);
       if (m) counts[m[1]] += 1;
       else counts.other += 1;
@@ -724,10 +747,12 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
         cells,
       });
     }
+    // Empty after header skip → title-only schematic; disclose via exclusions, do not count.
+    if (items.length === 0) continue;
     lists.push({
       title,
       sheet_id: table.sheet,
-      rows: (table.rows || []).length,
+      rows: items.length,
       AI: counts.AI,
       AO: counts.AO,
       BI: counts.BI,
@@ -752,7 +777,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     const tables = (graph.tables || []).filter((t) => t.sheet === key);
     const titles = tables
       .map((t) => String(t.title?.text || ""))
-      .filter((t) => /POINTS LIST|DDC POINTS/i.test(t));
+      .filter((t) => isBasPointsListTitle(t));
     return {
       sheet_id: key,
       sheet_number: sheet.sheetNumber ?? sheet.number ?? null,
@@ -769,7 +794,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     sheet_count: sheets.length,
     categories: {
       points_lists: {
-        provenance: "Each extractable POINTS/DDC list title-scanned; AI/AO/BI/BO from MARK prefixes; title-only schematic lists excluded and disclosed.",
+        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO from MARK prefixes when present; column-label rows skipped; title-only schematic lists excluded and disclosed.",
         tolerance: { count: 0, point_type: 0 },
         lists,
         totals,

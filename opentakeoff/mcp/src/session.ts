@@ -5829,6 +5829,8 @@ export class Session {
       if (/^POINTS?\s+LIST\b/i.test(t)) return true;
       if (/^FCU WITH\b.+\bDDC POINTS LIST$/i.test(t)) return true;
       if (/^UNIT HEATER DDC POINTS LIST$/i.test(t)) return true;
+      // PLC panel I/O lists (same T-BAS-01 family as POINTS/DDC — set-agnostic).
+      if (/^I\s*\/\s*O\s+LIST\b/i.test(t) || /^IO\s+LIST\b/i.test(t)) return true;
     }
     return false;
   }

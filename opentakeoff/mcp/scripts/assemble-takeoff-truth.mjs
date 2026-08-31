@@ -211,7 +211,7 @@ for (const list of basLists) {
 const basFound = [];
 const basMissing = [];
 for (const s of basSampleTags) {
-  const hit = findRow(s.tag, /POINTS LIST|DDC POINTS/i);
+  const hit = findRow(s.tag, /\bPOINTS\s+LIST\b|\bDDC\s+POINTS\b|\bI\s*\/\s*O\s+LIST\b|\bIO\s+LIST\b/i);
   if (hit) basFound.push(s);
   else basMissing.push(s);
 }

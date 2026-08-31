@@ -827,3 +827,28 @@ test("Hurlburt VAV: NATUK1 schedule ↔ plan ATU K1/K2 MATCH", async () => {
   );
   assert.ok(result.rows.every((r) => (r.installed_qty || 0) >= 1));
 });
+
+test("SDSU EngSciences FAN reconcile: all scheduled tags MATCH (lab EF + TEF/GX)", async () => {
+  const keyPath = resolve(CROSS, "11_CA_SDSU_EngSciences_Complex_100SD.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "FAN");
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    evaluationFast: true,
+  });
+  assert.equal(result.rows.length, key.categories.FAN);
+  assert.ok(
+    result.rows.every((r) => r.status === "MATCH"),
+    `SDSU FAN all MATCH (got ${result.rows.map((r) => r.tag + ":" + r.status).join(",")})`,
+  );
+  assert.ok(result.rows.every((r) => (r.installed_qty || 0) >= 1));
+  assert.ok(result.rows.every((r) => (r.plan_cites?.length || 0) >= 1));
+});
