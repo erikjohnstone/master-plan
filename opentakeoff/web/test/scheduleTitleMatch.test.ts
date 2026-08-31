@@ -372,6 +372,35 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
     true,
   );
   assert.ok(HVAC_FAMILY_SPECS.UNIT_HEATER.keyRe!.test("EDH-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "WATER-TO-WATER HEAT EXCHANGER SCHEDULE",
+      HVAC_FAMILY_SPECS.HEAT_EXCHANGER.titleRe,
+      HVAC_FAMILY_SPECS.HEAT_EXCHANGER.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.HEAT_EXCHANGER.keyRe!.test("PHX-1"));
+  assert.ok(HVAC_FAMILY_SPECS.HEAT_EXCHANGER.keyRe!.test("HX-2"));
+  assert.equal(
+    scheduleTitleMatches(
+      "DUCT MOUNTED COIL SCHEDULE",
+      HVAC_FAMILY_SPECS.DUCT_MOUNTED_COIL.titleRe,
+      HVAC_FAMILY_SPECS.DUCT_MOUNTED_COIL.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.DUCT_MOUNTED_COIL.keyRe!.test("CC-1"));
+  assert.ok(HVAC_FAMILY_SPECS.DUCT_MOUNTED_COIL.keyRe!.test("HC-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "FLASH TANK SCHEDULE",
+      HVAC_FAMILY_SPECS.FLASH_TANK.titleRe,
+      HVAC_FAMILY_SPECS.FLASH_TANK.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.FLASH_TANK.keyRe!.test("FT-1"));
 });
 
 test("MISCELLANEOUS SCHEDULE yields only keyRe-gated family marks (set-agnostic)", () => {

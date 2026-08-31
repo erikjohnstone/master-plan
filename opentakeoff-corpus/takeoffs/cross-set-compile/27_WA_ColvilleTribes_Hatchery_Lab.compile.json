@@ -2,7 +2,7 @@
   "set_id": "27_WA_ColvilleTribes_Hatchery_Lab",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/27_WA_ColvilleTribes_Hatchery_Lab.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk hatchery — split-system FCU + ERV + fans + UH + FTR + AS-*/ET-* (keyRe drops LCV/TCV/DT junk) + BUFFER TANK (BT-*).",
+  "notes": "Bulk hatchery — split-system FCU + ERV + fans + UH + FTR + AS/ET + BT + blank-title HX-1A/1B/2A/2B.",
   "categories": {
     "FCU": 1,
     "ERV": 1,
@@ -12,9 +12,10 @@
     "FIN_TUBE_RADIATION": 1,
     "AIR_SEPARATOR": 2,
     "EXPANSION_TANK": 3,
-    "BUFFER_TANK": 4
+    "BUFFER_TANK": 4,
+    "HEAT_EXCHANGER": 4
   },
-  "totals": { "items": 23 },
+  "totals": { "items": 27 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }
