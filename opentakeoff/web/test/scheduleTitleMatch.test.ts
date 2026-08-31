@@ -86,6 +86,7 @@ test("VAV family matches AIR TERMINAL BOX and VOLUME CONTROL BOX", () => {
   const { titleRe, exclude } = HVAC_FAMILY_SPECS.VAV;
   assert.equal(scheduleTitleMatches("AIR TERMINAL BOX SCHEDULE", titleRe, exclude), true);
   assert.equal(scheduleTitleMatches("VOLUME CONTROL BOX SCHEDULE", titleRe, exclude), true);
+  assert.equal(scheduleTitleMatches("VAV TERMINAL BOX SCHEDULE", titleRe, exclude), true);
   assert.equal(scheduleTitleMatches("VARIABLE AIR VOLUME SCHEDULE", titleRe, exclude), true);
 });
 

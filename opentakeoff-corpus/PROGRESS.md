@@ -304,11 +304,13 @@ reconcile, and plan joins.
   `rowsymBessemer.regression.test.mjs`.
 - **WP4 CLOSED:** reconcile UI proof + golden fixtures; WORKFLOWS #51 PROVEN.
 - **WP6:** `test:workflows` **20/20**; `test:demos` **10/10**.
+- **Bulk rescore (2026-08-31):** MEAT **13** · WEAK **9** · ZERO **9** (31 vector sets).
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 continue columnMapFor probes on bulk WEAK sets (many ZEROs are honest).
+2. WP1.4 columnMapFor / table-boundary fixes on bulk WEAK sets (many ZEROs honest;
+   Orange County VAV table is extract-boundary miss, not title-only).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. WP5 eliminate local geometric fork entirely when production endpoint up.
 
