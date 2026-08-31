@@ -401,6 +401,15 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
     true,
   );
   assert.ok(HVAC_FAMILY_SPECS.FLASH_TANK.keyRe!.test("FT-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "WATER TREATMENT SCHEDULE",
+      HVAC_FAMILY_SPECS.WATER_TREATMENT.titleRe,
+      HVAC_FAMILY_SPECS.WATER_TREATMENT.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.WATER_TREATMENT.keyRe!.test("RO-1"));
 });
 
 test("MISCELLANEOUS SCHEDULE yields only keyRe-gated family marks (set-agnostic)", () => {

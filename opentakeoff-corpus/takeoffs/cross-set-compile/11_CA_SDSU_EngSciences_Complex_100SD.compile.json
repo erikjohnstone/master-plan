@@ -2,7 +2,7 @@
   "set_id": "11_CA_SDSU_EngSciences_Complex_100SD",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/11_CA_SDSU_EngSciences_Complex_100SD.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk campus lab — AHU/FCU/VAV+LAB CAV + pumps (VACUUM excluded) + HX/PHX + duct coils + flash tank + WS/EF/AS/ET/GRD/SOUND TRAP.",
+  "notes": "Bulk campus lab — AHU/FCU/VAV+LAB CAV + pumps (VACUUM excluded) + HX/PHX + duct coils + flash tank + RO water treatment + WS/EF/AS/ET/GRD/SOUND TRAP.",
   "categories": {
     "AHU": 3,
     "FCU": 18,
@@ -15,10 +15,11 @@
     "FLASH_TANK": 1,
     "HEAT_EXCHANGER": 4,
     "DUCT_MOUNTED_COIL": 2,
+    "WATER_TREATMENT": 1,
     "GRD": 3,
     "DUCT_SILENCER": 6
   },
-  "totals": { "items": 117 },
+  "totals": { "items": 118 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }
