@@ -182,6 +182,20 @@ test("RTU / ERV / furnace / heat-pump titles match set-agnostic families", () =>
     ),
     true,
   );
+  assert.equal(
+    scheduleTitleMatches(
+      "GRILLES, REGISTERS, AND DIFFUSERS SCHEDULE - PROJECT 4",
+      HVAC_FAMILY_SPECS.GRD.titleRe,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+      HVAC_FAMILY_SPECS.GRD.titleRe,
+    ),
+    true,
+  );
 });
 
 test("query_table soft needle hits no-space titles for long needles", () => {

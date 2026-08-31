@@ -196,7 +196,7 @@ test("Orange County bulk VAV reconcile scaffold matches compile (DESIGNATION col
   assert.ok(rows.some((r) => /^VAV-1-01$/i.test(r.tag)), "DESIGNATION-keyed VAV tag");
 });
 
-test("Orange County bulk VAV reconcile: sampled plan-drawn tags MATCH (WP1 cross-set)", async () => {
+test("Orange County bulk VAV reconcile: all 32 scheduled tags MATCH (WP1 cross-set)", async () => {
   const keyPath = resolve(CROSS, "21_VA_OrangeCounty_PublicSafetyBldg.compile.json");
   assert.ok(existsSync(keyPath));
   const key = JSON.parse(readFileSync(keyPath, "utf8"));
@@ -209,17 +209,17 @@ test("Orange County bulk VAV reconcile: sampled plan-drawn tags MATCH (WP1 cross
   await session.loadPlan(pdf);
   const graph = await session.graphForPipeline();
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
-  const sample = ["VAV-1-01", "VAV-1-10"];
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
-    tags: sample,
     evaluationFast: true,
   });
-  const byTag = new Map(result.rows.map((r) => [r.tag.toUpperCase(), r]));
-  for (const tag of sample) {
-    const row = byTag.get(tag);
-    assert.ok(row, `${tag} reconcile row`);
-    assert.equal(row.status, "MATCH", `${tag} installed reconcile on Orange County`);
-    assert.equal(row.installed_qty, 1);
-    assert.ok(row.plan_cites?.length >= 1, `${tag} plan cite`);
+  assert.equal(result.rows.length, key.categories.VAV, "reconcile rows = compile VAV count");
+  const match = result.rows.filter((r) => r.status === "MATCH");
+  assert.equal(match.length, key.categories.VAV, "every Orange County VAV is plan-drawn MATCH");
+  for (const row of match) {
+    assert.ok(row.installed_qty >= 1, `${row.tag} installed qty`);
+    assert.ok(row.plan_cites?.length >= 1, `${row.tag} plan cite`);
   }
+  // Digit+letter suffix unit also MATCH (VAV-1-21A / VAV-1-21B).
+  assert.ok(match.some((r) => /^VAV-1-21A$/i.test(r.tag)));
+  assert.ok(match.some((r) => /^VAV-1-21B$/i.test(r.tag)));
 });

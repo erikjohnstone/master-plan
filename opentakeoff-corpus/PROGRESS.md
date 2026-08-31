@@ -300,15 +300,16 @@ reconcile, and plan joins.
   `CEREBRAS_API_KEY`); SLATE + GOAL amended for third takeoff ID.
 - **WP5 CLOSED:** Browser geometric fork removed; production HTTP for plan tools;
   UI graph prewarm (`schedules indexing…`) + `prewarmGraphSmoke.test.mjs`.
-- **Bulk rescore (2026-08-31 post-CODE_RE):** MEAT **18** · WEAK **4** · ZERO **9** (31 vector sets; Hawthorn WEAK→MEAT).
+- **Bulk rescore (2026-08-31 post-GRD-plural):** MEAT **19** · WEAK **3** · ZERO **9** (31 vector sets; Hawthorn+Johnson WEAK→MEAT).
 - **Orange County cross-set key:** 32 VAV + 43 HVAC items; reconcile scaffold test.
 - **WP1 title:** `DOAS` family spec; Valdosta 4→5 items; `VAV TERMINAL BOX` broadening.
-- **WP1 bulk keys:** Johnson County (4), Kennebec (2), Northport (3), Spokane (5), Macon Bibb (5), Hawthorn (5) locked in `cross-set-compile/`.
+- **WP1 bulk keys:** Johnson County (7), Kennebec (2), Northport (3), Spokane (5), Macon Bibb (5), Hawthorn (5) locked in `cross-set-compile/`.
 - **WP1.4 keyRe broaden:** BOILER1 marks, blank-title FCU/EV/EF/RF fan-coil rows — federal-mech stays 96; two bulk WEAK→MEAT promotions.
 - **WP1.4 CODE_RE + EQUIP.TAG + banding orphans:** `AHU-1A`-style digit+letter suffixes; `EQUIP. TAG` own-identity; seam-gap spans assigned to nearest band + thin identity-band absorb. Hawthorn **1→5**.
+- **WP4 Orange County:** installed reconcile **32/32 VAV MATCH** (full census locked in `reconcileWorkflow.test.mjs`).
+- **WP1.4 GRD plurals:** `GRILLES, REGISTERS, AND DIFFUSERS` title — Johnson County **4→7** MEAT.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
-- **WP4 (Orange County):** installed reconcile on bulk WP1 set — VAV-1-01 / VAV-1-10 **MATCH** with plan cites (`reconcileWorkflow.test.mjs`).
 - **WP6:** `test:workflows` **23/23**; `test:demos` **10/10**.
 
 ### Next queue (platform loop)
@@ -316,7 +317,8 @@ reconcile, and plan joins.
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
 2. WP1.4 additional table-boundary misses on bulk WEAK sets (many ZEROs honest).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
-4. Orange County installed reconcile: **VAV-1-01 / VAV-1-10 MATCH** (2/32 plan-drawn; rest SCHEDULE_ONLY honest).
+4. Orange County installed reconcile: **32/32 VAV MATCH** (full census locked).
+5. Remaining WEAK: Suwannee (1 RTU honest), Kennebec (2), Northport (3); ZEROs mostly title-only/raster.
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 
