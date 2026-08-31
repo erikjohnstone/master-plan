@@ -1651,7 +1651,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       fan: /\bFANS?\b/gi,
       "points-list": /POINTS?\s*LIST|BAS\b|AHU-T1A/gi,
     }[label] || new RegExp(label, "gi"));
-    // Prefer specific multi-word spaced needles — never bare "AIR" (false-hits Air Ops).
+    // Prefer specific multi-word spaced needles — never bare "AIR" (false-hits building names).
     const spacedNeedle = (label) => ({
       FCU: "FCU",
       "DOAH unit": "DOAH",

@@ -847,7 +847,7 @@ export function isFinishedTakeoffSource(sourceTool) {
  * technical schedule columns (CFM, MBH, kW, …).
  *
  * When a corpus compile (`compile_corpus_takeoff`) is present, the Takeoff tab
- * is ONLY those finished line items (396 / 122) — spot-cite scrap may enrich
+ * is ONLY those finished line items — spot-cite scrap may enrich
  * attrs on those tags but must not invent extra tags or double EA.
  *
  * Without a finished-takeoff seed (compile / project_takeoff / takeoff_summary /
