@@ -675,3 +675,56 @@ test("Klamath FAN reconcile: blank-title KEF-1 SCHEDULE_ONLY under evaluationFas
   assert.deepEqual(result.rows.map((r) => r.tag), ["KEF-1"]);
   assert.equal(result.rows[0].status, "SCHEDULE_ONLY");
 });
+
+test("SDSU VACUUM_PUMP + WATER_SOFTENER MATCH; BRINE/FLASH SCHEDULE_ONLY", async () => {
+  const keyPath = resolve(CROSS, "11_CA_SDSU_EngSciences_Complex_100SD.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+
+  const vacuum = await reconcileScheduleFamilyWithSweeps(
+    session,
+    graph,
+    familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VACUUM_PUMP"),
+    { evaluationFast: true },
+  );
+  assert.equal(vacuum.rows.length, key.categories.VACUUM_PUMP);
+  assert.deepEqual(vacuum.rows.map((r) => r.tag), ["V-1"]);
+  assert.equal(vacuum.rows[0].status, "MATCH");
+  assert.ok((vacuum.rows[0].installed_qty || 0) >= 1);
+
+  const soft = await reconcileScheduleFamilyWithSweeps(
+    session,
+    graph,
+    familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "WATER_SOFTENER"),
+    { evaluationFast: true },
+  );
+  assert.equal(soft.rows.length, key.categories.WATER_SOFTENER);
+  assert.equal(soft.rows[0].status, "MATCH");
+
+  const brine = await reconcileScheduleFamilyWithSweeps(
+    session,
+    graph,
+    familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "BRINE_TANK"),
+    { evaluationFast: true },
+  );
+  assert.equal(brine.rows.length, key.categories.BRINE_TANK);
+  assert.deepEqual(brine.rows.map((r) => r.tag), ["BT-1"]);
+  assert.equal(brine.rows[0].status, "SCHEDULE_ONLY");
+
+  const flash = await reconcileScheduleFamilyWithSweeps(
+    session,
+    graph,
+    familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "FLASH_TANK"),
+    { evaluationFast: true },
+  );
+  assert.equal(flash.rows.length, key.categories.FLASH_TANK);
+  assert.equal(flash.rows[0].status, "SCHEDULE_ONLY");
+});
