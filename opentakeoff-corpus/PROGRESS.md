@@ -329,9 +329,9 @@ reconcile, and plan joins.
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 additional table-boundary misses on bulk WEAK sets (many ZEROs honest).
+2. WP1.4 additional table-boundary misses on bulk WEAK/ZERO sets (many ZEROs honest).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
-4. Orange County installed reconcile: **32/32 VAV MATCH**; Hawthorn AHU+CU **4/4 MATCH**; St Louis ATU **12/12 MATCH**.
+4. WP4 deepen on Douglas / Jeff City / Klamath (compile keys locked).
 5. Remaining WEAK: Suwannee (1 RTU honest), Kennebec (2); ZEROs mostly elevation/window/raster/unkeyed (FAA Ogden, Iowa State, VistaUSD, KCHA, …).
 
 Cloud dispatch and all subagent dispatch remain prohibited.
