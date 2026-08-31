@@ -3116,7 +3116,8 @@ export class Session {
     preferSheet?: string | null;
     preferTitle?: string | null;
   } = {}) {
-    let t = (tag || "").trim().toUpperCase().replace(/\s+/g, "");
+    let tRaw = (tag || "").trim().toUpperCase();
+    let t = tRaw.replace(/\s+/g, "");
     if (!t) throw new UserError('Pass a schedule-row tag as drawn, e.g. sweep_schedule_row { tag: "T1" }.');
     const graph = await this.ensureGraph();
     if (!graph.available) throw new UserError("This set has no text layer (a scan) — the sheet graph is unavailable, so schedule rows cannot be read.");
@@ -3126,7 +3127,7 @@ export class Session {
     // return vs exhaust service): that row ANSWERS for each mark, and the
     // sweep runs on the mark as drawn on the plans, not the compound key.
     const canonKey = (k: string) => (k || "").trim().toUpperCase().replace(/\s+/g, "");
-    let rowHits = graph.tables.flatMap((tb) => tb.rows.filter((r) => rowKeyAnswersFor(r.key, t)).map((r) => ({ tb, r })));
+    let rowHits = graph.tables.flatMap((tb) => tb.rows.filter((r) => rowKeyAnswersFor(r.key, t) || rowKeyAnswersFor(r.key, tRaw)).map((r) => ({ tb, r })));
     let scheduleAliasNote: string | null = null;
     if (!rowHits.length && /[A-Z]$/.test(t)) {
       // A plan can omit a schedule's redundant trailing unit digit when
@@ -3423,6 +3424,37 @@ export class Session {
     }
     const occOf = (sh: SheetState, key: string): TagOcc[] =>
       this.tagOccurrencesOnSheet(sh, key, airDeviceTable);
+    // Plan-drawn form may keep spaces / omit revision prefixes while the
+    // schedule row.key is glued (`NATUK1` vs plan `ATU K1` — Hurlburt). Prefer
+    // any identity form that is actually drawn before refusing no-plan-tag.
+    {
+      const planTagCandidates: string[] = [];
+      const addCand = (s: string | null | undefined) => {
+        const u = String(s || "").trim().toUpperCase();
+        if (!u) return;
+        if (!planTagCandidates.includes(u)) planTagCandidates.push(u);
+        const compact = u.replace(/\s+/g, "");
+        if (compact && !planTagCandidates.includes(compact)) planTagCandidates.push(compact);
+      };
+      addCand(tRaw);
+      addCand(t);
+      for (const [header, cell] of Object.entries(r.cells || {})) {
+        if (!/^(MARK|SYMBOL|TAG|EQUIP(?:\.?\s*TAG)?|DESIGNATION)$/i.test(header)) continue;
+        const raw = String(cell?.text || "").trim();
+        if (!raw) continue;
+        addCand(raw.replace(/^\(([NER])\)\s*/i, ""));
+      }
+      addCand(r.key);
+      const hasOcc = (key: string) => planSheets.some((sh) => occOf(sh, key).length > 0);
+      if (!hasOcc(t)) {
+        for (const cand of planTagCandidates) {
+          if (hasOcc(cand)) {
+            t = cand;
+            break;
+          }
+        }
+      }
+    }
     // Compound-key geometric fallback — a real, general bug distinct from
     // the row-LOOKUP layer above (rowKeyAnswersFor already resolves a
     // compound key like "AC-1/ACCU-1" or "R1/E1" fine): the literal joined

@@ -802,3 +802,28 @@ test("Colville ERV: titled-first cite → ERV-1 MATCH (not blank seismic AMBIGUO
   assert.equal(result.rows[0].status, "MATCH");
   assert.ok((result.rows[0].installed_qty || 0) >= 1);
 });
+
+test("Hurlburt VAV: NATUK1 schedule ↔ plan ATU K1/K2 MATCH", async () => {
+  const keyPath = resolve(CROSS, "03_FL_HurlburtField_ChildDevCenter.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    evaluationFast: true,
+  });
+  assert.equal(result.rows.length, key.categories.VAV);
+  assert.deepEqual(result.rows.map((r) => r.tag).sort(), ["ATU K1", "ATU K2"]);
+  assert.ok(
+    result.rows.every((r) => r.status === "MATCH"),
+    `Hurlburt ATU all MATCH (got ${result.rows.map((r) => r.tag + ":" + r.status).join(",")})`,
+  );
+  assert.ok(result.rows.every((r) => (r.installed_qty || 0) >= 1));
+});

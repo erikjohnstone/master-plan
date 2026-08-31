@@ -3370,10 +3370,20 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
 /** Does a schedule-row key answer for a mark? Exact, or one of a compound
  * key's parts: slash (`R1/E1`), comma (`AHU-1, HP-1`), or glued extraction
  * (`AHU-1HP-1` when SYMBOL lost the separator into `row.key`). Digit+letter
- * suffixes (`AHU-1A`) stay one mark — only split before a 2+ letter run. */
+ * suffixes (`AHU-1A`) stay one mark — only split before a 2+ letter run.
+ * Also strips revision prefixes (`(N)ATU K1`, glued `NATUK1`) so schedule
+ * lookup matches the mark as drawn on plans (Hurlburt ATU K1/K2). */
 export const rowKeyAnswersFor = (key: string, want: string): boolean => {
-  const c = norm(key).replace(/\s+/g, "");
-  const w = norm(want).replace(/\s+/g, "");
+  const stripRev = (s: string): string => {
+    let t = s;
+    t = t.replace(/^\(([NER])\)/, "");
+    // Glued N+equip when parentheses were dropped into row.key (NATUK1, NACC-2).
+    const glued = t.match(/^N((?:AHU|ATU|ACC|FCU|VAV|RTU|CU|EF|SF|RF|DOAS|ERV)[A-Z0-9\s\-].*)$/i);
+    if (glued) t = glued[1];
+    return t;
+  };
+  const c = stripRev(norm(key)).replace(/\s+/g, "");
+  const w = stripRev(norm(want)).replace(/\s+/g, "");
   if (!c || !w) return false;
   if (c === w) return true;
   const parts = new Set<string>();

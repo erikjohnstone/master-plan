@@ -307,6 +307,12 @@ test("a compound schedule-row key answers for each of its marks", () => {
   // Digit+letter suffixes must NOT split (CODE_RE AHU-1A).
   assert.equal(rowKeyAnswersFor("AHU-1A", "AHU-1"), false);
   assert.equal(rowKeyAnswersFor("AHU-1A", "AHU-1A"), true);
+  // Revision-prefix / glued N+equip row.keys answer for the mark as drawn
+  // (Hurlburt schedule NATUK1 ↔ plan "ATU K1").
+  assert.equal(rowKeyAnswersFor("NATUK1", "ATUK1"), true);
+  assert.equal(rowKeyAnswersFor("NATUK1", "ATU K1"), true);
+  assert.equal(rowKeyAnswersFor("NACC-2", "ACC-2"), true);
+  assert.equal(rowKeyAnswersFor("(N)ATU K1", "ATU K1"), true);
 });
 
 test("table extraction: header anchors, evidence per cell, titles found above", () => {
