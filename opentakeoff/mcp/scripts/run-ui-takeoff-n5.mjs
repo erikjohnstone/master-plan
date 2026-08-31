@@ -36,10 +36,14 @@ const TAKEOFFS = {
     dir: resolve(corpus, "takeoffs/T-BAS-01-navfac-points"),
     kind: "bas_points",
   },
+  "T-VALVE-01": {
+    dir: resolve(corpus, "takeoffs/T-VALVE-01-navfac-control-valves"),
+    kind: "control_valves",
+  },
 };
 
 if (!takeoffId || !TAKEOFFS[takeoffId]) {
-  console.error("usage: run-ui-takeoff-n5.mjs --takeoff T-HVAC-01|T-BAS-01 --runs 5");
+  console.error("usage: run-ui-takeoff-n5.mjs --takeoff T-HVAC-01|T-BAS-01|T-VALVE-01 --runs 5");
   process.exit(2);
 }
 

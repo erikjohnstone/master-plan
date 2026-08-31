@@ -4,6 +4,7 @@
  * Usage:
  *   node --import tsx scripts/run-takeoff.mjs --takeoff T-HVAC-01 --run 1 --cold
  *   node --import tsx scripts/run-takeoff.mjs --takeoff T-BAS-01 --runs 5
+ *   node --import tsx scripts/run-takeoff.mjs --takeoff T-VALVE-01 --runs 5 --export
  *   node --import tsx scripts/run-takeoff.mjs --takeoff T-HVAC-01 --run 5 --export
  */
 import { mkdirSync, writeFileSync, readFileSync, appendFileSync } from "node:fs";
@@ -31,7 +32,7 @@ const skipInterrogation = args.includes("--skip-interrogation");
 const groundSample = arg(args, "--ground-sample") ? Number(arg(args, "--ground-sample")) : 3;
 
 if (!takeoffId || (!runOne && !runsN)) {
-  console.error("usage: node --import tsx scripts/run-takeoff.mjs --takeoff T-HVAC-01|T-BAS-01 (--run N | --runs 5) [--cold] [--export] [--skip-interrogation]");
+  console.error("usage: node --import tsx scripts/run-takeoff.mjs --takeoff T-HVAC-01|T-BAS-01|T-VALVE-01 (--run N | --runs 5) [--cold] [--export] [--skip-interrogation]");
   process.exit(2);
 }
 
@@ -43,6 +44,10 @@ const TAKEOFFS = {
   "T-BAS-01": {
     dir: resolve(corpus, "takeoffs/T-BAS-01-navfac-points"),
     kind: "bas_points",
+  },
+  "T-VALVE-01": {
+    dir: resolve(corpus, "takeoffs/T-VALVE-01-navfac-control-valves"),
+    kind: "control_valves",
   },
 };
 

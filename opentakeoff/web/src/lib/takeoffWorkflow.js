@@ -299,8 +299,32 @@ export function scheduleFamilyNeedles(goal) {
   if (/\bpumps?\b/i.test(g)) {
     add({ label: "pump", title: "PUMP SCHEDULE", titleRe: /PUMP SCHEDULE/i });
   }
-  if (/\bRTUs?\b|rooftop|packaged/i.test(g)) {
-    add({ label: "RTU", title: "PACKAGED ROOFTOP", titleRe: /PACKAGED ROOFTOP|ROOFTOP/i });
+  if (/\bRTUs?\b|rooftop|packaged|roof[\s\-]*top\s+unit/i.test(g)) {
+    add({ label: "RTU", title: "ROOF TOP UNIT SCHEDULE", titleRe: /ROOF[\s\-]*TOP|PACKAGED\s+ROOFTOP|RTU\s+SCHEDULE/i });
+  }
+  if (/\bERVs?\b|energy\s+recovery/i.test(g)) {
+    add({
+      label: "ERV",
+      title: "ENERGY RECOVERY VENTILATOR SCHEDULE",
+      titleRe: /ENERGY\s+RECOVERY\s+VENTILATOR|ENERGY\s+RECOVERY\s+UNIT|\bERV\s+SCHEDULE/i,
+    });
+  }
+  if (/\bfurnaces?\b/i.test(g)) {
+    add({ label: "furnace", title: "FURNACE SCHEDULE", titleRe: /FURNACE\s+SCHEDULE|GAS[\s\-]*FIRED\s+.*FURNACE/i });
+  }
+  if (/\bcondensing\s+units?\b/i.test(g)) {
+    add({ label: "condensing unit", title: "CONDENSING UNIT SCHEDULE", titleRe: /CONDENSING\s+UNIT\s+SCHEDULE/i });
+  }
+  if (/\bheat\s+pumps?\b/i.test(g)) {
+    add({ label: "heat pump", title: "HEAT PUMP SCHEDULE", titleRe: /HEAT\s+PUMP/i });
+  }
+  if (/\boutdoor\s+air\s+units?\b|\bOAUs?\b/i.test(g) && !/\bDOAH\b|dedicated\s+outdoor/i.test(g)) {
+    add({
+      label: "outdoor air unit",
+      title: "OUTDOOR AIR UNIT SCHEDULE",
+      titleRe: /OUTDOOR\s+AIR\s+UNIT\s+SCHEDULE/i,
+      exclude: /DEDICATED\s+OUTDOOR\s+AIR/i,
+    });
   }
   if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s\-]*coil/i.test(g)) {
     add({ label: "fan", title: "FAN SCHEDULE", titleRe: /FAN SCHEDULE/i });

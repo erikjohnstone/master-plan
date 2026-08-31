@@ -1,0 +1,3240 @@
+{
+  "schema_version": 1,
+  "takeoff_id": "T-VALVE-01",
+  "kind": "control_valves",
+  "set_id": "navfac-cherry-point-atc",
+  "source_file": "raw/navfac-cherry-point-atc-mechanical.pdf",
+  "status": "TRUTH_BUILT",
+  "ground_truth_completed_before_model_runs": true,
+  "derivation": "Unique VALVE MARK rows on CHW/HHW CONTROL VALVE SCHEDULE pages via production Session graphForPipeline before N=5 lock runs. ≥25% stratified sample independently re-looked-up on schedules (hand_count_25pct).",
+  "sheet_count": 75,
+  "categories": {
+    "CHW_CONTROL_VALVE": {
+      "count": 64,
+      "tolerance": 0,
+      "building": {
+        "other": 2,
+        "M": 17,
+        "A": 21,
+        "T": 24
+      },
+      "provenance": "Unique VALVE MARK rows on CHW/HHW CONTROL VALVE SCHEDULE pages; columns = valve mark, served equipment (UNIT MARK), service, size, GPM, Cv, configuration.",
+      "items": [
+        {
+          "tag": "CV-CH-C-MT1",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            583.1999999999998,
+            1918.08,
+            617.7600000000002
+          ],
+          "building": null,
+          "description": "Serves CV-CH-C-MT1"
+        },
+        {
+          "tag": "CV-CH-C-MT2",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            617.7600000000002,
+            1918.08,
+            652.0799999999999
+          ],
+          "building": null,
+          "description": "Serves CV-CH-C-MT2"
+        },
+        {
+          "tag": "CV-AHU-A1-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            611.5239999999999,
+            3802.32,
+            646.0859999999998
+          ],
+          "building": "A",
+          "description": "Serves AHU-A1"
+        },
+        {
+          "tag": "CV-AHU-A2-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            646.0859999999998,
+            3802.32,
+            680.6460000000002
+          ],
+          "building": "A",
+          "description": "Serves AHU-A2"
+        },
+        {
+          "tag": "CV-CH-A1",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            680.6460000000002,
+            3802.32,
+            714.9659999999999
+          ],
+          "building": "A",
+          "description": "Serves CV-CH-A1"
+        },
+        {
+          "tag": "CV-CH-A2",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            714.9659999999999,
+            3802.32,
+            749.5239999999999
+          ],
+          "building": "A",
+          "description": "Serves CV-CH-A2"
+        },
+        {
+          "tag": "CV-CHW-BP-A",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            749.5239999999999,
+            3802.32,
+            784.0839999999998
+          ],
+          "building": "A",
+          "description": "Serves CV-CHW-BP-A"
+        },
+        {
+          "tag": "CV-DOAH-A1-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            784.0839999999998,
+            3802.32,
+            818.404
+          ],
+          "building": "A",
+          "description": "Serves DOAH-A1"
+        },
+        {
+          "tag": "CV-DOAH-A2-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            818.404,
+            3802.32,
+            852.9639999999999
+          ],
+          "building": "A",
+          "description": "Serves DOAH-A2"
+        },
+        {
+          "tag": "CV-FCU-A1-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            852.9639999999999,
+            3802.32,
+            887.5259999999998
+          ],
+          "building": "A",
+          "description": "Serves FCU-A1"
+        },
+        {
+          "tag": "CV-FCU-A2-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            887.5259999999998,
+            3802.32,
+            921.844
+          ],
+          "building": "A",
+          "description": "Serves FCU-A2"
+        },
+        {
+          "tag": "CV-FCU-A3-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            921.844,
+            3802.32,
+            956.404
+          ],
+          "building": "A",
+          "description": "Serves FCU-A3"
+        },
+        {
+          "tag": "CV-FCU-A4-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            956.404,
+            3802.32,
+            990.9639999999999
+          ],
+          "building": "A",
+          "description": "Serves FCU-A4"
+        },
+        {
+          "tag": "CV-FCU-A5-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            990.9639999999999,
+            3802.32,
+            1025.524
+          ],
+          "building": "A",
+          "description": "Serves FCU-A5"
+        },
+        {
+          "tag": "CV-FCU-A6-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            1025.524,
+            3802.32,
+            1059.844
+          ],
+          "building": "A",
+          "description": "Serves FCU-A6"
+        },
+        {
+          "tag": "CV-FCU-A7-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            1059.844,
+            3802.32,
+            1094.404
+          ],
+          "building": "A",
+          "description": "Serves FCU-A7"
+        },
+        {
+          "tag": "CV-FCU-A8A-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            1094.404,
+            3802.32,
+            1128.964
+          ],
+          "building": "A",
+          "description": "Serves FCU-A8A"
+        },
+        {
+          "tag": "CV-FCU-A8B-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            1128.964,
+            3802.32,
+            1163.284
+          ],
+          "building": "A",
+          "description": "Serves FCU-A8B"
+        },
+        {
+          "tag": "CV-FCU-A9-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            1163.284,
+            3802.32,
+            1197.844
+          ],
+          "building": "A",
+          "description": "Serves FCU-A9"
+        },
+        {
+          "tag": "CV-FCU-A10-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            1197.844,
+            3802.32,
+            1232.404
+          ],
+          "building": "A",
+          "description": "Serves FCU-A10"
+        },
+        {
+          "tag": "CV-FCU-A11-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            1232.404,
+            3802.32,
+            1266.964
+          ],
+          "building": "A",
+          "description": "Serves FCU-A11"
+        },
+        {
+          "tag": "CV-FCU-A12-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            1266.964,
+            3802.32,
+            1301.284
+          ],
+          "building": "A",
+          "description": "Serves FCU-A12"
+        },
+        {
+          "tag": "CV-FCU-A13-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3611.04,
+            1301.284,
+            3802.32,
+            1335.844
+          ],
+          "building": "A",
+          "description": "Serves FCU-A13"
+        },
+        {
+          "tag": "CV-AHU-M1-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            410.6399999999999,
+            1918.08,
+            445.1999999999998
+          ],
+          "building": "M",
+          "description": "Serves AHU-M1"
+        },
+        {
+          "tag": "CV-CHW-BP-M",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            652.0799999999999,
+            1918.08,
+            686.6399999999999
+          ],
+          "building": "M",
+          "description": "Serves CV-CHW-BP-M"
+        },
+        {
+          "tag": "CV-CRAH-M1A-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            445.1999999999998,
+            1918.08,
+            479.7600000000002
+          ],
+          "building": "M",
+          "description": "Serves CRAH-M1A"
+        },
+        {
+          "tag": "CV-CRAH-M1B-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            479.7600000000002,
+            1918.08,
+            514.3200000000002
+          ],
+          "building": "M",
+          "description": "Serves CRAH-M1B"
+        },
+        {
+          "tag": "CV-CRAH-M2A-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            514.3200000000002,
+            1918.08,
+            548.6399999999999
+          ],
+          "building": "M",
+          "description": "Serves CRAH-M2A"
+        },
+        {
+          "tag": "CV-CRAH-M2B-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            548.6399999999999,
+            1918.08,
+            583.1999999999998
+          ],
+          "building": "M",
+          "description": "Serves CRAH-M2B"
+        },
+        {
+          "tag": "CV-DOAH-M1-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            686.6399999999999,
+            1918.08,
+            721.1999999999998
+          ],
+          "building": "M",
+          "description": "Serves DOAH-M1"
+        },
+        {
+          "tag": "CV-FCU-M1A-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            721.1999999999998,
+            1918.08,
+            755.52
+          ],
+          "building": "M",
+          "description": "Serves FCU-M1A"
+        },
+        {
+          "tag": "CV-FCU-M1B-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            755.52,
+            1918.08,
+            790.0799999999999
+          ],
+          "building": "M",
+          "description": "Serves FCU-M1B"
+        },
+        {
+          "tag": "CV-FCU-M2A-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            790.0799999999999,
+            1918.08,
+            824.6399999999999
+          ],
+          "building": "M",
+          "description": "Serves FCU-M2A"
+        },
+        {
+          "tag": "CV-FCU-M2B-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            824.6399999999999,
+            1918.08,
+            859.1999999999998
+          ],
+          "building": "M",
+          "description": "Serves FCU-M2B"
+        },
+        {
+          "tag": "CV-FCU-M3-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            859.1999999999998,
+            1918.08,
+            893.52
+          ],
+          "building": "M",
+          "description": "Serves FCU-M3"
+        },
+        {
+          "tag": "CV-FCU-M4A-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            893.52,
+            1918.08,
+            928.0799999999999
+          ],
+          "building": "M",
+          "description": "Serves FCU-M4A"
+        },
+        {
+          "tag": "CV-FCU-M4B-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            928.0799999999999,
+            1918.08,
+            962.6399999999999
+          ],
+          "building": "M",
+          "description": "Serves FCU-M4B"
+        },
+        {
+          "tag": "CV-FCU-M5-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            962.6399999999999,
+            1918.08,
+            996.96
+          ],
+          "building": "M",
+          "description": "Serves FCU-M5"
+        },
+        {
+          "tag": "CV-FCU-M6-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            996.96,
+            1918.08,
+            1031.52
+          ],
+          "building": "M",
+          "description": "Serves FCU-M6"
+        },
+        {
+          "tag": "CV-FCU-M7-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            1709.52,
+            1031.52,
+            1918.08,
+            1066.08
+          ],
+          "building": "M",
+          "description": "Serves FCU-M7"
+        },
+        {
+          "tag": "AHU-T1A-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            1550.162,
+            3958.318,
+            1584.722
+          ],
+          "building": "T",
+          "description": "Serves AHU-T1A"
+        },
+        {
+          "tag": "AHU-T1B-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            1584.722,
+            3958.318,
+            1619.282
+          ],
+          "building": "T",
+          "description": "Serves AHU-T1B"
+        },
+        {
+          "tag": "CHW-BP-T",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            1688.162,
+            3958.318,
+            1722.722
+          ],
+          "building": "T",
+          "description": "Serves CV-CHW-BP-T"
+        },
+        {
+          "tag": "CRAH-T1A-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            1619.282,
+            3958.318,
+            1653.602
+          ],
+          "building": "T",
+          "description": "Serves CRAH-T1A"
+        },
+        {
+          "tag": "CRAH-T1B-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            1653.602,
+            3958.318,
+            1688.162
+          ],
+          "building": "T",
+          "description": "Serves CRAH-T1B"
+        },
+        {
+          "tag": "DOAH-T1-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            1722.722,
+            3958.318,
+            1757.282
+          ],
+          "building": "T",
+          "description": "Serves DOAH-T1"
+        },
+        {
+          "tag": "FCU-9-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            2102.1620000000003,
+            3958.318,
+            2136.482
+          ],
+          "building": "T",
+          "description": "Serves FCU-T9"
+        },
+        {
+          "tag": "FCU-T1-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            1757.282,
+            3958.318,
+            1791.602
+          ],
+          "building": "T",
+          "description": "Serves FCU-T1"
+        },
+        {
+          "tag": "FCU-T2-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            1791.602,
+            3958.318,
+            1826.162
+          ],
+          "building": "T",
+          "description": "Serves FCU-T2"
+        },
+        {
+          "tag": "FCU-T3-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            1826.162,
+            3958.318,
+            1860.722
+          ],
+          "building": "T",
+          "description": "Serves FCU-T3"
+        },
+        {
+          "tag": "FCU-T4-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            1860.722,
+            3958.318,
+            1895.042
+          ],
+          "building": "T",
+          "description": "Serves FCU-T4"
+        },
+        {
+          "tag": "FCU-T5A-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            1895.042,
+            3958.318,
+            1929.602
+          ],
+          "building": "T",
+          "description": "Serves FCU-T5A"
+        },
+        {
+          "tag": "FCU-T5B-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            1929.602,
+            3958.318,
+            1964.162
+          ],
+          "building": "T",
+          "description": "Serves FCU-T5B"
+        },
+        {
+          "tag": "FCU-T6-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            1964.162,
+            3958.318,
+            1998.482
+          ],
+          "building": "T",
+          "description": "Serves FCU-T6"
+        },
+        {
+          "tag": "FCU-T7A-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            1998.482,
+            3958.318,
+            2033.042
+          ],
+          "building": "T",
+          "description": "Serves FCU-T7A"
+        },
+        {
+          "tag": "FCU-T7B-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            2033.042,
+            3958.318,
+            2067.602
+          ],
+          "building": "T",
+          "description": "Serves FCU-T7B"
+        },
+        {
+          "tag": "FCU-T8-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            2067.602,
+            3958.318,
+            2102.1620000000003
+          ],
+          "building": "T",
+          "description": "Serves FCU-T8"
+        },
+        {
+          "tag": "FCU-T10-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            2136.482,
+            3958.318,
+            2171.042
+          ],
+          "building": "T",
+          "description": "Serves FCU-T10"
+        },
+        {
+          "tag": "FCU-T11-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            2171.042,
+            3958.318,
+            2205.602
+          ],
+          "building": "T",
+          "description": "Serves FCU-T11"
+        },
+        {
+          "tag": "FCU-T12-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            2205.602,
+            3958.318,
+            2239.922
+          ],
+          "building": "T",
+          "description": "Serves FCU-T12"
+        },
+        {
+          "tag": "FCU-T13-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            2239.922,
+            3958.318,
+            2274.482
+          ],
+          "building": "T",
+          "description": "Serves FCU-T13"
+        },
+        {
+          "tag": "FCU-T14-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            2274.482,
+            3958.318,
+            2309.042
+          ],
+          "building": "T",
+          "description": "Serves FCU-T14"
+        },
+        {
+          "tag": "FCU-T15-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            2309.042,
+            3958.318,
+            2343.36
+          ],
+          "building": "T",
+          "description": "Serves FCU-T15"
+        },
+        {
+          "tag": "FCU-T16-CHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "CHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            3785.28,
+            2343.36,
+            3958.318,
+            2377.922
+          ],
+          "building": "T",
+          "description": "Serves FCU-T16"
+        }
+      ]
+    },
+    "HHW_CONTROL_VALVE": {
+      "count": 99,
+      "tolerance": 0,
+      "building": {
+        "other": 2,
+        "A": 42,
+        "M": 33,
+        "T": 22
+      },
+      "provenance": "Unique VALVE MARK rows on CHW/HHW CONTROL VALVE SCHEDULE pages; columns = valve mark, served equipment (UNIT MARK), service, size, GPM, Cv, configuration.",
+      "items": [
+        {
+          "tag": "CV-CH-H-MT-1",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            445.1999999999998,
+            776.88,
+            479.7600000000002
+          ],
+          "building": null,
+          "description": "Serves CV-CH-H-MT-1"
+        },
+        {
+          "tag": "CV-CH-H-MT-2",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            479.7600000000002,
+            776.88,
+            514.3200000000002
+          ],
+          "building": null,
+          "description": "Serves CV-CH-H-MT-2"
+        },
+        {
+          "tag": "CV-CUH-A1-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            611.52,
+            2770.56,
+            646.0799999999999
+          ],
+          "building": "A",
+          "description": "Serves CUH-A1"
+        },
+        {
+          "tag": "CV-DOAH-A1-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            714.96,
+            2770.56,
+            749.52
+          ],
+          "building": "A",
+          "description": "Serves DOAH-A1"
+        },
+        {
+          "tag": "CV-DOAH-A2-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            749.52,
+            2770.56,
+            784.0799999999999
+          ],
+          "building": "A",
+          "description": "Serves DOAH-A2"
+        },
+        {
+          "tag": "CV-FCU-A1-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            784.0799999999999,
+            2770.56,
+            818.4000000000001
+          ],
+          "building": "A",
+          "description": "Serves FCU-A1"
+        },
+        {
+          "tag": "CV-FCU-A2-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            818.4000000000001,
+            2770.56,
+            852.96
+          ],
+          "building": "A",
+          "description": "Serves FCU-A2"
+        },
+        {
+          "tag": "CV-FCU-A6-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            852.96,
+            2770.56,
+            887.52
+          ],
+          "building": "A",
+          "description": "Serves FCU-A6"
+        },
+        {
+          "tag": "CV-FCU-A7-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            887.52,
+            2770.56,
+            921.8400000000001
+          ],
+          "building": "A",
+          "description": "Serves FCU-A7"
+        },
+        {
+          "tag": "CV-FCU-A8-A-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            921.8400000000001,
+            2770.56,
+            956.4000000000001
+          ],
+          "building": "A",
+          "description": "Serves FCU-A8A"
+        },
+        {
+          "tag": "CV-FCU-A8-B-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            956.4000000000001,
+            2770.56,
+            990.96
+          ],
+          "building": "A",
+          "description": "Serves FCU-A8B"
+        },
+        {
+          "tag": "CV-FCU-A10-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            990.96,
+            2770.56,
+            1025.52
+          ],
+          "building": "A",
+          "description": "Serves FCU-A9"
+        },
+        {
+          "tag": "CV-FCU-A12-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1025.52,
+            2770.56,
+            1059.8400000000001
+          ],
+          "building": "A",
+          "description": "Serves FCU-A12"
+        },
+        {
+          "tag": "CV-FCU-A13-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1059.8400000000001,
+            2770.56,
+            1094.4
+          ],
+          "building": "A",
+          "description": "Serves FCU-A13"
+        },
+        {
+          "tag": "CV-HHW-BP-A1",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            680.6399999999999,
+            2770.56,
+            714.96
+          ],
+          "building": "A",
+          "description": "Serves CV-HHW-BP-A1"
+        },
+        {
+          "tag": "CV-UH-A1-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1094.4,
+            2770.56,
+            1128.96
+          ],
+          "building": "A",
+          "description": "Serves UH-A1"
+        },
+        {
+          "tag": "CV-UH-A2-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1128.96,
+            2770.56,
+            1163.28
+          ],
+          "building": "A",
+          "description": "Serves UH-A2"
+        },
+        {
+          "tag": "CV-VAV-102-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1301.28,
+            2770.56,
+            1335.84
+          ],
+          "building": "A",
+          "description": "Serves VAV-A102"
+        },
+        {
+          "tag": "CV-VAV-A101-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1266.96,
+            2770.56,
+            1301.28
+          ],
+          "building": "A",
+          "description": "Serves VAV-A101"
+        },
+        {
+          "tag": "CV-VAV-A103-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1335.84,
+            2770.56,
+            1370.4
+          ],
+          "building": "A",
+          "description": "Serves VAV-A103"
+        },
+        {
+          "tag": "CV-VAV-A104-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1370.4,
+            2770.56,
+            1404.72
+          ],
+          "building": "A",
+          "description": "Serves VAV-A104"
+        },
+        {
+          "tag": "CV-VAV-A105-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1404.72,
+            2770.56,
+            1439.28
+          ],
+          "building": "A",
+          "description": "Serves VAV-A105"
+        },
+        {
+          "tag": "CV-VAV-A106A-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1439.28,
+            2770.56,
+            1473.84
+          ],
+          "building": "A",
+          "description": "Serves VAV-A106A"
+        },
+        {
+          "tag": "CV-VAV-A106B-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1473.84,
+            2770.56,
+            1508.16
+          ],
+          "building": "A",
+          "description": "Serves VAV-A106B"
+        },
+        {
+          "tag": "CV-VAV-A107-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1508.16,
+            2770.56,
+            1542.72
+          ],
+          "building": "A",
+          "description": "Serves VAV-A107"
+        },
+        {
+          "tag": "CV-VAV-A108A-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1542.72,
+            2770.56,
+            1577.28
+          ],
+          "building": "A",
+          "description": "Serves VAV-A108A"
+        },
+        {
+          "tag": "CV-VAV-A108B-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1577.28,
+            2770.56,
+            1611.84
+          ],
+          "building": "A",
+          "description": "Serves VAV-A108B"
+        },
+        {
+          "tag": "CV-VAV-A109-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1611.84,
+            2770.56,
+            1646.16
+          ],
+          "building": "A",
+          "description": "Serves VAV-A109"
+        },
+        {
+          "tag": "CV-VAV-A110-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1646.16,
+            2770.56,
+            1680.72
+          ],
+          "building": "A",
+          "description": "Serves VAV-A110"
+        },
+        {
+          "tag": "CV-VAV-A111-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1680.72,
+            2770.56,
+            1715.28
+          ],
+          "building": "A",
+          "description": "Serves VAV-A111"
+        },
+        {
+          "tag": "CV-VAV-A112-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1715.28,
+            2770.56,
+            1749.6
+          ],
+          "building": "A",
+          "description": "Serves VAV-A112"
+        },
+        {
+          "tag": "CV-VAV-A113-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1749.6,
+            2770.56,
+            1784.16
+          ],
+          "building": "A",
+          "description": "Serves VAV-A113"
+        },
+        {
+          "tag": "CV-VAV-A114-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1784.16,
+            2770.56,
+            1818.72
+          ],
+          "building": "A",
+          "description": "Serves VAV-A114"
+        },
+        {
+          "tag": "CV-VAV-A115-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1818.72,
+            2770.56,
+            1853.04
+          ],
+          "building": "A",
+          "description": "Serves VAV-A115"
+        },
+        {
+          "tag": "CV-VAV-A116-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1853.04,
+            2770.56,
+            1887.6
+          ],
+          "building": "A",
+          "description": "Serves VAV-A116"
+        },
+        {
+          "tag": "CV-VAV-A117-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1887.6,
+            2770.56,
+            1922.16
+          ],
+          "building": "A",
+          "description": "Serves VAV-A117"
+        },
+        {
+          "tag": "CV-VAV-A118-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1922.16,
+            2770.56,
+            1956.72
+          ],
+          "building": "A",
+          "description": "Serves VAV-A118"
+        },
+        {
+          "tag": "CV-VAV-A201-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1956.72,
+            2770.56,
+            1991.04
+          ],
+          "building": "A",
+          "description": "Serves VAV-A201"
+        },
+        {
+          "tag": "CV-VAV-A202-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            1991.04,
+            2770.56,
+            2025.6
+          ],
+          "building": "A",
+          "description": "Serves VAV-A202"
+        },
+        {
+          "tag": "CV-VAV-A203A-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            2025.6,
+            2770.56,
+            2060.16
+          ],
+          "building": "A",
+          "description": "Serves VAV-A203A"
+        },
+        {
+          "tag": "CV-VAV-A203B-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            2060.16,
+            2770.56,
+            2094.48
+          ],
+          "building": "A",
+          "description": "Serves VAV-A203B"
+        },
+        {
+          "tag": "CV-VAV-A204-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            2094.48,
+            2770.56,
+            2129.04
+          ],
+          "building": "A",
+          "description": "Serves VAV-A204"
+        },
+        {
+          "tag": "CV-VAV-A205-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            2129.04,
+            2770.56,
+            2163.6
+          ],
+          "building": "A",
+          "description": "Serves VAV-A205"
+        },
+        {
+          "tag": "CV-VAV-A206-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2562.96,
+            2163.6,
+            2770.56,
+            2197.92
+          ],
+          "building": "A",
+          "description": "Serves VAV-A206"
+        },
+        {
+          "tag": "CV-CUH-M1-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            410.6399999999999,
+            776.88,
+            445.1999999999998
+          ],
+          "building": "M",
+          "description": "Serves CUH-M1"
+        },
+        {
+          "tag": "CV-DOAH-M1-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            548.6399999999999,
+            776.88,
+            583.1999999999998
+          ],
+          "building": "M",
+          "description": "Serves DOAH-M1"
+        },
+        {
+          "tag": "CV-FCU-M3-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            583.1999999999998,
+            776.88,
+            617.7600000000002
+          ],
+          "building": "M",
+          "description": "Serves FCU-M3"
+        },
+        {
+          "tag": "CV-FCU-M5-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            617.7600000000002,
+            776.88,
+            652.0799999999999
+          ],
+          "building": "M",
+          "description": "Serves FCU-M5"
+        },
+        {
+          "tag": "CV-FCU-M6-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            652.0799999999999,
+            776.88,
+            686.6399999999999
+          ],
+          "building": "M",
+          "description": "Serves FCU-M6"
+        },
+        {
+          "tag": "CV-FCU-M7-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            686.6399999999999,
+            776.88,
+            721.1999999999998
+          ],
+          "building": "M",
+          "description": "Serves FCU-M7"
+        },
+        {
+          "tag": "CV-HHW-BP-M",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            514.3200000000002,
+            776.88,
+            548.6399999999999
+          ],
+          "building": "M",
+          "description": "Serves CV-HHW-BP-M"
+        },
+        {
+          "tag": "CV-UH-M1-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            721.1999999999998,
+            776.88,
+            755.52
+          ],
+          "building": "M",
+          "description": "Serves UH-M1"
+        },
+        {
+          "tag": "CV-VAV-M101-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            755.52,
+            776.88,
+            790.0799999999999
+          ],
+          "building": "M",
+          "description": "Serves VAV-M101"
+        },
+        {
+          "tag": "CV-VAV-M102-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            790.0799999999999,
+            776.88,
+            824.6399999999999
+          ],
+          "building": "M",
+          "description": "Serves VAV-M102"
+        },
+        {
+          "tag": "CV-VAV-M103-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            824.6399999999999,
+            776.88,
+            859.1999999999998
+          ],
+          "building": "M",
+          "description": "Serves VAV-M103"
+        },
+        {
+          "tag": "CV-VAV-M104-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            859.1999999999998,
+            776.88,
+            893.52
+          ],
+          "building": "M",
+          "description": "Serves VAV-M104"
+        },
+        {
+          "tag": "CV-VAV-M105-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            893.52,
+            776.88,
+            928.0799999999999
+          ],
+          "building": "M",
+          "description": "Serves VAV-M105"
+        },
+        {
+          "tag": "CV-VAV-M106-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            928.0799999999999,
+            776.88,
+            962.6399999999999
+          ],
+          "building": "M",
+          "description": "Serves VAV-M106"
+        },
+        {
+          "tag": "CV-VAV-M107-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            962.6399999999999,
+            776.88,
+            996.96
+          ],
+          "building": "M",
+          "description": "Serves VAV-M107"
+        },
+        {
+          "tag": "CV-VAV-M108-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            996.96,
+            776.88,
+            1031.52
+          ],
+          "building": "M",
+          "description": "Serves VAV-M108"
+        },
+        {
+          "tag": "CV-VAV-M109-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1031.52,
+            776.88,
+            1066.08
+          ],
+          "building": "M",
+          "description": "Serves VAV-M109"
+        },
+        {
+          "tag": "CV-VAV-M110-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1066.08,
+            776.88,
+            1100.6399999999999
+          ],
+          "building": "M",
+          "description": "Serves VAV-M110"
+        },
+        {
+          "tag": "CV-VAV-M111-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1100.6399999999999,
+            776.88,
+            1134.96
+          ],
+          "building": "M",
+          "description": "Serves VAV-M111"
+        },
+        {
+          "tag": "CV-VAV-M112-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1134.96,
+            776.88,
+            1169.52
+          ],
+          "building": "M",
+          "description": "Serves VAV-M112"
+        },
+        {
+          "tag": "CV-VAV-M113-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1169.52,
+            776.88,
+            1204.08
+          ],
+          "building": "M",
+          "description": "Serves VAV-M113"
+        },
+        {
+          "tag": "CV-VAV-M114-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1204.08,
+            776.88,
+            1238.4
+          ],
+          "building": "M",
+          "description": "Serves VAV-M114"
+        },
+        {
+          "tag": "CV-VAV-M115-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1238.4,
+            776.88,
+            1272.96
+          ],
+          "building": "M",
+          "description": "Serves VAV-M115"
+        },
+        {
+          "tag": "CV-VAV-M116-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1272.96,
+            776.88,
+            1307.52
+          ],
+          "building": "M",
+          "description": "Serves VAV-M116"
+        },
+        {
+          "tag": "CV-VAV-M117-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1307.52,
+            776.88,
+            1341.84
+          ],
+          "building": "M",
+          "description": "Serves VAV-M117"
+        },
+        {
+          "tag": "CV-VAV-M118-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1341.84,
+            776.88,
+            1376.4
+          ],
+          "building": "M",
+          "description": "Serves VAV-M118"
+        },
+        {
+          "tag": "CV-VAV-M119-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1376.4,
+            776.88,
+            1410.96
+          ],
+          "building": "M",
+          "description": "Serves VAV-M119"
+        },
+        {
+          "tag": "CV-VAV-M120-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1410.96,
+            776.88,
+            1445.52
+          ],
+          "building": "M",
+          "description": "Serves VAV-M120"
+        },
+        {
+          "tag": "CV-VAV-M121-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1445.52,
+            776.88,
+            1479.84
+          ],
+          "building": "M",
+          "description": "Serves VAV-M121"
+        },
+        {
+          "tag": "CV-VAV-M122-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1479.84,
+            776.88,
+            1514.4
+          ],
+          "building": "M",
+          "description": "Serves VAV-M122"
+        },
+        {
+          "tag": "CV-VAV-M123-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1514.4,
+            776.88,
+            1548.96
+          ],
+          "building": "M",
+          "description": "Serves VAV-M123"
+        },
+        {
+          "tag": "CV-VAV-M124-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1548.96,
+            776.88,
+            1583.28
+          ],
+          "building": "M",
+          "description": "Serves VAV-M124"
+        },
+        {
+          "tag": "CV-VAV-M125-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            566.4,
+            1583.28,
+            776.88,
+            1617.84
+          ],
+          "building": "M",
+          "description": "Serves VAV-M125"
+        },
+        {
+          "tag": "AHU-T1A-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            1550.16,
+            3095.04,
+            1584.72
+          ],
+          "building": "T",
+          "description": "Serves AHU-T1A"
+        },
+        {
+          "tag": "AHU-T1B-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            1584.72,
+            3095.04,
+            1619.28
+          ],
+          "building": "T",
+          "description": "Serves AHU-T1B"
+        },
+        {
+          "tag": "CUH-T1-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            1619.28,
+            3095.04,
+            1653.6
+          ],
+          "building": "T",
+          "description": "Serves CUH-T1"
+        },
+        {
+          "tag": "CUH-T2-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            1653.6,
+            3095.04,
+            1688.16
+          ],
+          "building": "T",
+          "description": "Serves CUH-T2"
+        },
+        {
+          "tag": "DOAH-T1-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            1722.72,
+            3095.04,
+            1757.28
+          ],
+          "building": "T",
+          "description": "Serves DOAH-T1"
+        },
+        {
+          "tag": "FCU-T2-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            1757.28,
+            3095.04,
+            1791.6
+          ],
+          "building": "T",
+          "description": "Serves FCU-T2"
+        },
+        {
+          "tag": "FCU-T3-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            1791.6,
+            3095.04,
+            1826.16
+          ],
+          "building": "T",
+          "description": "Serves FCU-T3"
+        },
+        {
+          "tag": "FCU-T4-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            1826.16,
+            3095.04,
+            1860.72
+          ],
+          "building": "T",
+          "description": "Serves FCU-T4"
+        },
+        {
+          "tag": "FCU-T6-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            1860.72,
+            3095.04,
+            1895.04
+          ],
+          "building": "T",
+          "description": "Serves FCU-T6"
+        },
+        {
+          "tag": "FCU-T7A-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            1895.04,
+            3095.04,
+            1929.6
+          ],
+          "building": "T",
+          "description": "Serves FCU-T7A"
+        },
+        {
+          "tag": "FCU-T7B-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            1929.6,
+            3095.04,
+            1964.16
+          ],
+          "building": "T",
+          "description": "Serves FCU-T7B"
+        },
+        {
+          "tag": "FCU-T8-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            1964.16,
+            3095.04,
+            1998.48
+          ],
+          "building": "T",
+          "description": "Serves FCU-T8"
+        },
+        {
+          "tag": "FCU-T9-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            1998.48,
+            3095.04,
+            2033.04
+          ],
+          "building": "T",
+          "description": "Serves FCU-T9"
+        },
+        {
+          "tag": "FCU-T10-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            2033.04,
+            3095.04,
+            2067.6
+          ],
+          "building": "T",
+          "description": "Serves FCU-T10"
+        },
+        {
+          "tag": "FCU-T11-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            2067.6,
+            3095.04,
+            2102.16
+          ],
+          "building": "T",
+          "description": "Serves FCU-T11"
+        },
+        {
+          "tag": "FCU-T12-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            2102.16,
+            3095.04,
+            2136.48
+          ],
+          "building": "T",
+          "description": "Serves FCU-T12"
+        },
+        {
+          "tag": "FCU-T13-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            2136.48,
+            3095.04,
+            2171.04
+          ],
+          "building": "T",
+          "description": "Serves FCU-T13"
+        },
+        {
+          "tag": "FCU-T14-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            2171.04,
+            3095.04,
+            2205.6
+          ],
+          "building": "T",
+          "description": "Serves FCU-T14"
+        },
+        {
+          "tag": "FCU-T15-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            2205.6,
+            3095.04,
+            2239.92
+          ],
+          "building": "T",
+          "description": "Serves FCU-T15"
+        },
+        {
+          "tag": "FCU-T16-HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            2239.92,
+            3095.04,
+            2274.48
+          ],
+          "building": "T",
+          "description": "Serves FCU-T16"
+        },
+        {
+          "tag": "HHW-BP-T",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            1688.16,
+            3095.04,
+            1722.72
+          ],
+          "building": "T",
+          "description": "Serves CV-HHW-BP-T"
+        },
+        {
+          "tag": "HHWC-DOAH-T1HHW",
+          "quantity": 1,
+          "unit": "EA",
+          "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+          "table_title": "HHW CONTROL VALVE SCHEDULE",
+          "bbox_px": [
+            2910.48,
+            2274.48,
+            3095.04,
+            2338.08
+          ],
+          "building": "T",
+          "description": "Serves HHWC-DOAH-T1"
+        }
+      ]
+    }
+  },
+  "hand_count_25pct": {
+    "ok": true,
+    "failures": 0,
+    "categories": {
+      "CHW_CONTROL_VALVE": {
+        "need": 16,
+        "sampled": 16,
+        "found": 16,
+        "missing": [],
+        "samples": [
+          {
+            "tag": "CV-CH-C-MT1",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-CH-A1",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-DOAH-A2-CHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-FCU-A4-CHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-FCU-A8A-CHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-FCU-A11-CHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-CHW-BP-M",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-CRAH-M2B-CHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-FCU-M2A-CHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-FCU-M4B-CHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "AHU-T1A-CHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CRAH-T1B-CHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "FCU-T2-CHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "FCU-T5B-CHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "FCU-T8-CHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "FCU-T13-CHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+            "table_title": "CHW CONTROL VALVE SCHEDULE"
+          }
+        ]
+      },
+      "HHW_CONTROL_VALVE": {
+        "need": 25,
+        "sampled": 25,
+        "found": 25,
+        "missing": [],
+        "samples": [
+          {
+            "tag": "CV-CH-H-MT-1",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-DOAH-A1-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-FCU-A6-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-FCU-A10-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-UH-A1-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-VAV-A103-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-VAV-A106B-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-VAV-A109-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-VAV-A113-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-VAV-A117-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-VAV-A203A-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-VAV-A206-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-FCU-M5-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-UH-M1-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-VAV-M104-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-VAV-M108-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-VAV-M112-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-VAV-M116-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-VAV-M120-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CV-VAV-M124-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "CUH-T1-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "FCU-T3-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "FCU-T7B-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "FCU-T11-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          },
+          {
+            "tag": "FCU-T15-HHW",
+            "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+            "table_title": "HHW CONTROL VALVE SCHEDULE"
+          }
+        ]
+      }
+    }
+  },
+  "page_accounting": {
+    "sheet_count": 75,
+    "pages_accounted_for": 75,
+    "empty_pages": 67,
+    "pages": [
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf",
+        "sheet_number": "M-001",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#2",
+        "sheet_number": "M-002",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#3",
+        "sheet_number": "MS101",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#4",
+        "sheet_number": "MS102",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#5",
+        "sheet_number": "MH100",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#6",
+        "sheet_number": "MH101",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#7",
+        "sheet_number": "MH102",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#8",
+        "sheet_number": "MH103",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#9",
+        "sheet_number": "MH104",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#10",
+        "sheet_number": "MH105",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#11",
+        "sheet_number": "MH106",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#12",
+        "sheet_number": "MH111",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#13",
+        "sheet_number": "MH112",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#14",
+        "sheet_number": "MH121",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#15",
+        "sheet_number": "MH122",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#16",
+        "sheet_number": "MH123",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#17",
+        "sheet_number": "MP100",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#18",
+        "sheet_number": "MP101",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#19",
+        "sheet_number": "MP102",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#20",
+        "sheet_number": "MP103",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#21",
+        "sheet_number": "MP104",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#22",
+        "sheet_number": "MP111",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#23",
+        "sheet_number": "MP121",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#24",
+        "sheet_number": "MP122",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#25",
+        "sheet_number": "MP123",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#26",
+        "sheet_number": "M-301",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#27",
+        "sheet_number": "M-311",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#28",
+        "sheet_number": "M-321",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#29",
+        "sheet_number": "M-401",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#30",
+        "sheet_number": "M-411",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#31",
+        "sheet_number": "M-421",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#32",
+        "sheet_number": "M-501",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#33",
+        "sheet_number": "M-502",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#34",
+        "sheet_number": "M-503",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#35",
+        "sheet_number": "M-504",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#36",
+        "sheet_number": "M-505",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#37",
+        "sheet_number": "M-506",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#38",
+        "sheet_number": "M-507",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#39",
+        "sheet_number": "M-508",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#40",
+        "sheet_number": "M-509",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#41",
+        "sheet_number": "M-510",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#42",
+        "sheet_number": "M-601",
+        "status": "has_hvac_equipment_schedule",
+        "titles": [
+          "AIR HANDLING UNIT SCHEDULE",
+          "DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 1",
+          "DEDICATED OUTDOOR AIR UNIT SCHEDULE 2 OF 2",
+          "FAN COIL UNIT SCHEDULE",
+          "PUMP SCHEDULE",
+          "BOILER SCHEDULE"
+        ]
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#43",
+        "sheet_number": "M-602",
+        "status": "has_hvac_equipment_schedule",
+        "titles": [
+          "CABINET UNIT HEATER SCHEDULE",
+          "UNIT HEATER SCHEDULE",
+          "HUMIDIFIER SCHEDULE",
+          "VARIABLE AIR VOLUME TERMINAL BOX"
+        ]
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#44",
+        "sheet_number": "M-603",
+        "status": "has_hvac_equipment_schedule",
+        "titles": [
+          "EXPANSION TANK SCHEDULE",
+          "AIR COOLED CHILLER SCHEDULE",
+          "HHW CONTROL VALVE SCHEDULE",
+          "FAN SCHEDULE",
+          "DEHUMIDIFIER SCHEDULE",
+          "AIR SEPARATOR SCHEDULE",
+          "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+          "CHW CONTROL VALVE SCHEDULE"
+        ]
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#45",
+        "sheet_number": "M-611",
+        "status": "has_hvac_equipment_schedule",
+        "titles": [
+          "AIR HANDLING UNIT SCHEDULE",
+          "FAN COIL UNIT SCHEDULE",
+          "PUMP SCHEDULE",
+          "UNIT HEATER SCHEDULE",
+          "AIR SEPARATOR SCHEDULE",
+          "AIR COOLED HEAT RECOVERY CHILLER SCHEDULE",
+          "COMPUTER ROOM AIR HANDLER TYPE SCHEDULE",
+          "BOILER SCHEDULE"
+        ]
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#46",
+        "sheet_number": "M-612",
+        "status": "has_hvac_equipment_schedule",
+        "titles": [
+          "RANGE HOOD SCHEDULE",
+          "VARIABLE AIR VOLUME TERMINAL BOX",
+          "DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 2",
+          "DEDICATED OUTDOOR AIR UNIT SCHEDULE 2 OF 2"
+        ]
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#47",
+        "sheet_number": "M-613",
+        "status": "has_hvac_equipment_schedule",
+        "titles": [
+          "HHW CONTROL VALVE SCHEDULE",
+          "CHW CONTROL VALVE SCHEDULE",
+          "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+          "DEHUMIDIFIER SCHEDULE",
+          "FAN SCHEDULE",
+          "CABINET UNIT HEATER SCHEDULE",
+          "HUMIDIFIER SCHEDULE",
+          "EXPANSION TANK SCHEDULE"
+        ]
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#48",
+        "sheet_number": "M-621",
+        "status": "has_hvac_equipment_schedule",
+        "titles": [
+          "FAN SCHEDULE",
+          "AIR HANDLING UNIT SCHEDULE",
+          "FAN COIL UNIT SCHEDULE",
+          "HUMIDIFIER SCHEDULE",
+          "COMPUTER ROOM AIR HANDLER TYPE SCHEDULE",
+          "CABINET UNIT HEATER SCHEDULE",
+          "PUMP SCHEDULE",
+          "BOILER SCHEDULE"
+        ]
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#49",
+        "sheet_number": "M-622",
+        "status": "has_hvac_equipment_schedule",
+        "titles": [
+          "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+          "DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE",
+          "HHW CONTROL VALVE SCHEDULE",
+          "DEHUMIDIFIER SCHEDULE",
+          "AIR SEPARATOR SCHEDULE",
+          "CHW CONTROL VALVE SCHEDULE",
+          "DUCT SILENCER SCHEDULE"
+        ]
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#50",
+        "sheet_number": "MI700",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#51",
+        "sheet_number": "MI701",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#52",
+        "sheet_number": "MI702",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#53",
+        "sheet_number": "MI703",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#54",
+        "sheet_number": "MI704",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#55",
+        "sheet_number": "MI705",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#56",
+        "sheet_number": "MI710",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#57",
+        "sheet_number": "MI711",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#58",
+        "sheet_number": "MI712",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#59",
+        "sheet_number": "MI713",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#60",
+        "sheet_number": "MI720",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#61",
+        "sheet_number": "MI721",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#62",
+        "sheet_number": "MI722",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#63",
+        "sheet_number": "MI723",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#64",
+        "sheet_number": "MI730",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#65",
+        "sheet_number": "MI731",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#66",
+        "sheet_number": "MI732",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#67",
+        "sheet_number": "MI740",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#68",
+        "sheet_number": "MI741",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#69",
+        "sheet_number": "MI742",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#70",
+        "sheet_number": "MI743",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#71",
+        "sheet_number": "MI744",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#72",
+        "sheet_number": "M-801",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#73",
+        "sheet_number": "M-802",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#74",
+        "sheet_number": "M-803",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      },
+      {
+        "sheet_id": "navfac-cherry-point-atc-mechanical.pdf#75",
+        "sheet_number": "M-804",
+        "status": "empty_for_hvac_equipment_schedules",
+        "titles": []
+      }
+    ]
+  },
+  "exclusions": [
+    "VIBRATION ISOLATION SCHEDULE (accessory, not equipment units)",
+    "FAN SOUND POWER LEVEL SCHEDULE (acoustic data, not equipment count)",
+    "POINTS LIST / DDC POINTS LIST (counted under T-BAS-01)",
+    "GENERAL NOTES / PIPING CONSTRUCTION SCHEDULE",
+    "Non-control-valve HVAC equipment (AHU, FCU, VAV, pumps, …) — use kind hvac_equipment for the full equipment takeoff"
+  ],
+  "totals": {
+    "categories": 2,
+    "items": 163
+  }
+}

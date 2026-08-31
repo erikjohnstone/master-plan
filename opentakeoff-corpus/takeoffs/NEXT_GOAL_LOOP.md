@@ -142,6 +142,15 @@ landed. Keyed acceptance under `takeoffs/cross-set-compile/` for
 `bldg5406-hvac-demo` (24), `federal-mech` (90), `itd-d1-lab` (35 + 9 HHW
 valves + honest BAS empty). NAVFAC HVAC/BAS locks still green.
 
+**Production bar (not optional):** A user uploading a US vector HVAC/BAS
+set must get a working complete takeoff on the **shared UI+MCP path**
+(`compile_corpus_takeoff` / Agent). Corpus keys and bulk sweeps are rulers
+for that path — eval-only compile that never reaches the Agent UI is not
+success. Bulk corpus (`opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets`, 30
+verified vector sets) is in-scope stress for Pillar A; zero-count sets
+drive set-agnostic family/title fixes (RTU, ERV, furnace, heat-pump,
+outdoor-air unit, …), not per-PDF hardcodes.
+
 **DoD:**
 1. [x] Author hand acceptance keys for **≥2 non-NAVFAC** HVAC/BAS sets
    (`cross-set-compile/*.compile.json`) covering HVAC compile, valve family

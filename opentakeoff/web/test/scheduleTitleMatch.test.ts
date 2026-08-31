@@ -109,6 +109,53 @@ test("FAN matches GENERAL/EXHAUST fan schedules but not fan-coil", () => {
   assert.equal(scheduleTitleMatches("FAN SOUND POWER LEVEL SCHEDULE", titleRe, exclude), false);
 });
 
+test("RTU / ERV / furnace / heat-pump titles match set-agnostic families", () => {
+  assert.equal(
+    scheduleTitleMatches("ROOF TOP UNIT SCHEDULE", HVAC_FAMILY_SPECS.RTU.titleRe, HVAC_FAMILY_SPECS.RTU.exclude),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (BID ALTERNATE 1)",
+      HVAC_FAMILY_SPECS.RTU.titleRe,
+      HVAC_FAMILY_SPECS.RTU.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "ENERGY RECOVERY VENTILATOR SCHEDULE",
+      HVAC_FAMILY_SPECS.ERV.titleRe,
+      HVAC_FAMILY_SPECS.ERV.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "2-STAGE, GAS FIRED FURNACE SCHEDULE",
+      HVAC_FAMILY_SPECS.FURNACE.titleRe,
+      HVAC_FAMILY_SPECS.FURNACE.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "MULTI-SPLIT HEAT PUMP OUTDOOR UNIT PERFORMANCE SCHEDULE",
+      HVAC_FAMILY_SPECS.HEAT_PUMP.titleRe,
+      HVAC_FAMILY_SPECS.HEAT_PUMP.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "OUTDOOR AIR UNIT SCHEDULE",
+      HVAC_FAMILY_SPECS.OUTDOOR_AIR_UNIT.titleRe,
+      HVAC_FAMILY_SPECS.OUTDOOR_AIR_UNIT.exclude,
+    ),
+    true,
+  );
+});
+
 test("query_table soft needle hits no-space titles for long needles", () => {
   assert.equal(
     queryTitleMatchesNeedle("AIRHANDLINGUNITSCHEDULE", "AIR HANDLING UNIT SCHEDULE"),

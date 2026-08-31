@@ -160,16 +160,45 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
  * Title patterns are set-agnostic US MEP phrasing (soft-matched via
  * scheduleTitleMatches). keyRe filters junk remarks rows when present; omit
  * when a schedule family's marks are not a single prefix convention.
+ *
+ * Bulk corpus gaps (RTU / ERV / furnace / condensing / outdoor-air / heat-pump)
+ * are first-class families here — same path the Agent UI calls for a user
+ * upload. Do not add per-PDF set IDs.
  */
 export const HVAC_FAMILY_SPECS = {
   AHU: { titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED|HYDRONIC\s+COIL|FAN\s+SCHEDULE/i, keyRe: /^AHU/i },
   DOAH_UNIT: { titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i, keyRe: /^DOAH/i },
   DOAH_HANDLING: { titleRe: /DEDICATED OUTDOOR AIR HANDLING/i, keyRe: /^DOAH/i },
+  // Common US school / light-commercial phrasing (not always "DOAH").
+  OUTDOOR_AIR_UNIT: {
+    titleRe: /OUTDOOR\s+AIR\s+UNIT\s+SCHEDULE/i,
+    exclude: /DEDICATED\s+OUTDOOR\s+AIR|POINTS\s*LIST|DDC/i,
+  },
   FCU: { titleRe: /FAN\s*COIL/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i },
   VAV: {
     titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|AIR TERMINAL BOX/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
-    keyRe: /^(?:VAV|ATB)[\s\-]/i,
+    keyRe: /^(?:VAV|ATB|VTU)[\s\-]/i,
+  },
+  RTU: {
+    titleRe: /ROOF[\s\-]*TOP\s+UNIT|PACKAGED\s+ROOFTOP|RTU\s+SCHEDULE|GAS[\s\-]*FIRED\s+DX\s+COOLING\s+ROOF\s+TOP/i,
+    exclude: /POINTS\s*LIST|DDC\s+POINTS|CONNECTION\s+SCHEDULE/i,
+  },
+  ERV: {
+    titleRe: /ENERGY\s+RECOVERY\s+VENTILATOR|ENERGY\s+RECOVERY\s+UNIT|\bERV\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
+  },
+  FURNACE: {
+    titleRe: /FURNACE\s+SCHEDULE|GAS[\s\-]*FIRED\s+.*FURNACE/i,
+    exclude: /POINTS\s*LIST|DDC\s+POINTS|WATER\s+HEATER/i,
+  },
+  CONDENSING_UNIT: {
+    titleRe: /CONDENSING\s+UNIT\s+SCHEDULE/i,
+    exclude: /AIR[\s\-]*COOLED\s+CHILLER|POINTS\s*LIST|DDC/i,
+  },
+  HEAT_PUMP: {
+    titleRe: /HEAT\s+PUMP/i,
+    exclude: /POINTS\s*LIST|DDC\s+POINTS|WATER\s+HEATER|CHILLER/i,
   },
   AIR_COOLED_CHILLER: {
     titleRe: /AIR[\s\-]*COOLED[\s\-]*CHILLER|CHILLER SCHEDULE/i,
@@ -183,7 +212,7 @@ export const HVAC_FAMILY_SPECS = {
   PUMP: { titleRe: /PUMP SCHEDULE/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i },
   FAN: {
     titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+)?FAN SCHEDULE/i,
-    exclude: /FAN\s*COIL|FAN\s+SOUND|AIR\s+HANDLING\s+UNIT\s+FAN|POINTS\s*LIST/i,
+    exclude: /FAN\s*COIL|FAN\s+SOUND|AIR\s+HANDLING\s+UNIT\s+FAN|POINTS\s*LIST|FURNACE/i,
   },
   CABINET_UNIT_HEATER: { titleRe: /CABINET UNIT HEATER/i },
   UNIT_HEATER: { titleRe: /UNIT HEATER SCHEDULE/i, exclude: /CABINET|POINTS\s*LIST|DDC/i },
@@ -206,7 +235,7 @@ export const HVAC_FAMILY_SPECS = {
   GRD: {
     titleRe: /GRILLE[,\s]*REGISTER[,\s]*(?:AND\s*)?DIFFUSER|DIFFUSER[\s\-]*GRILLE|DIFFUSER SCHEDULE/i,
   },
-  RANGE_HOOD: { titleRe: /RANGE HOOD SCHEDULE|CANOPY HOOD SCHEDULE/i },
+  RANGE_HOOD: { titleRe: /RANGE HOOD SCHEDULE|CANOPY HOOD SCHEDULE|RELIEF HOOD SCHEDULE|INTAKE HOOD SCHEDULE/i },
   DUCT_SILENCER: { titleRe: /DUCT SILENCER SCHEDULE|SILENCER SCHEDULE|SOUND ATTENUATOR SCHEDULE/i },
 };
 

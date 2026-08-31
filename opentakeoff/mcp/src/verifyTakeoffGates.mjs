@@ -97,10 +97,19 @@ function basItems(takeoff) {
   return out;
 }
 
+/** HVAC equipment + control-valve compiles share category/item gate shape. */
+function isCategoryTakeoff(kind) {
+  return kind === "hvac_equipment" || kind === "control_valves";
+}
+
+function categoryItems(takeoff) {
+  return isCategoryTakeoff(takeoff?.kind) ? hvacItems(takeoff) : basItems(takeoff);
+}
+
 function gate1Quantity(truth, result) {
   const failures = [];
   const checks = [];
-  if (truth.kind === "hvac_equipment") {
+  if (isCategoryTakeoff(truth.kind)) {
     for (const [name, tCat] of Object.entries(truth.categories || {})) {
       const rCat = result.categories?.[name];
       if (!rCat) {
@@ -153,7 +162,7 @@ function gate1Quantity(truth, result) {
 function gate2CiteForm(result, session) {
   const failures = [];
   const checks = [];
-  const items = result.kind === "hvac_equipment" ? hvacItems(result) : basItems(result);
+  const items = categoryItems(result);
   const sheets = new Map((session.sheetList?.() || []).map((s) => [s.key, s]));
   for (const item of items) {
     if (!item.sheet_id) {
@@ -181,7 +190,7 @@ async function gate3VectorGround(result, session, { samplePerCategory = null } =
   const failures = [];
   const checks = [];
   const byCat = new Map();
-  const items = result.kind === "hvac_equipment" ? hvacItems(result) : basItems(result);
+  const items = categoryItems(result);
   for (const item of items) {
     const key = item.category;
     if (!byCat.has(key)) byCat.set(key, []);
@@ -247,7 +256,7 @@ function gate4Completeness(truth, result) {
     }
   }
   // No duplicate tags within categories
-  if (result.kind === "hvac_equipment") {
+  if (isCategoryTakeoff(result.kind)) {
     for (const [name, cat] of Object.entries(result.categories || {})) {
       const seen = new Set();
       for (const item of cat.items || []) {
@@ -388,7 +397,7 @@ export async function gate5Interrogation(truth, result, { apiKey, model } = {}) 
 }
 
 function summarizeForProbe(result) {
-  if (result.kind === "hvac_equipment") {
+  if (isCategoryTakeoff(result.kind)) {
     return {
       kind: result.kind,
       categories: Object.fromEntries(Object.entries(result.categories).map(([k, v]) => [k, {
@@ -421,7 +430,7 @@ function summarizeForProbe(result) {
 
 function buildProbes(truth, result) {
   const probes = [];
-  if (truth.kind === "hvac_equipment") {
+  if (isCategoryTakeoff(truth.kind)) {
     // Spot-check the three largest present families (set-agnostic).
     const ranked = Object.entries(truth.categories || {})
       .map(([name, cat]) => ({ name, count: cat.count }))
@@ -436,9 +445,10 @@ function buildProbes(truth, result) {
     }
     const exclusionHint = (truth.exclusions || result.exclusions || [])[0]
       || "items outside this takeoff's declared exclusions";
+    const scopeLabel = truth.kind === "control_valves" ? "control-valve" : "HVAC equipment";
     probes.push({
       id: "neg-exclusion",
-      question: `Did you count the following as in-scope HVAC equipment units: "${exclusionHint}"? Answer yes or no.`,
+      question: `Did you count the following as in-scope ${scopeLabel} units: "${exclusionHint}"? Answer yes or no.`,
       expect: { answer_includes: ["no"] },
     });
     // False-premise: invent a category name that is not present on this set.
@@ -451,7 +461,9 @@ function buildProbes(truth, result) {
     });
     probes.push({
       id: "empty-pages",
-      question: "How many sheets are empty for HVAC equipment schedules on this set?",
+      question: truth.kind === "control_valves"
+        ? "How many sheets are empty for control-valve schedules on this set?"
+        : "How many sheets are empty for HVAC equipment schedules on this set?",
       expect: { number: truth.page_accounting.empty_pages },
     });
   } else {
