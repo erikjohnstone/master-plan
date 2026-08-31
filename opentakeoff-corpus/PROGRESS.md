@@ -304,7 +304,10 @@ reconcile, and plan joins.
   compile path; Gate 5 pending `CEREBRAS_API_KEY` on VM.
 - **WP3:** UI `sweep_schedule_row` inline-motif fallback wired (Session parity).
 - **WP4 (in progress):** `schedule_plan_reconcile` intent + shared
-  `schedulePlanReconcile.mjs` + MCP `reconcile_schedule_plan` tool.
+  `schedulePlanReconcile.mjs` + MCP `reconcile_schedule_plan` tool;
+  federal-mech VAV + itd HHW reconcile scaffold tests in `test:workflows`.
+- **Bulk family fix:** `WATER_HEATER` / `WATER_SOFTENER` — Hawthorn bulk set
+  0→1 HVAC (DWH-1 on gas water heater schedule).
 
 ### Next queue (platform loop)
 
