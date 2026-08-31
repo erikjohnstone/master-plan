@@ -1,0 +1,18 @@
+{
+  "set_id": "011_IL_VA_Hines_Finance_Center_Renovation",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/011_IL_VA_Hines_Finance_Center_Renovation.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 Hines VA \u2014 GRD only; EXISTING HEAT PUMP schedule rows are diffuser marks (honest WEAK).",
+  "categories": {
+    "GRD": 5
+  },
+  "totals": {
+    "items": 5
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

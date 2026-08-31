@@ -1,0 +1,39 @@
+{
+  "set_id": "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 ATC tower \u2014 large HVAC MEAT + BAS DDC lists (122 rows).",
+  "categories": {
+    "AHU": 5,
+    "DOAH_UNIT": 3,
+    "DOAH_HANDLING": 1,
+    "FCU": 42,
+    "VAV": 52,
+    "AIR_COOLED_CHILLER": 2,
+    "HEAT_RECOVERY_CHILLER": 2,
+    "BOILER": 6,
+    "PUMP": 26,
+    "FAN": 8,
+    "CABINET_UNIT_HEATER": 5,
+    "UNIT_HEATER": 6,
+    "CRAH": 6,
+    "DEHUMIDIFIER": 12,
+    "HUMIDIFIER": 12,
+    "AIR_SEPARATOR": 6,
+    "EXPANSION_TANK": 4,
+    "CHW_CONTROL_VALVE": 64,
+    "HHW_CONTROL_VALVE": 99,
+    "GRD": 30,
+    "RANGE_HOOD": 3,
+    "DUCT_SILENCER": 2
+  },
+  "totals": {
+    "items": 396
+  },
+  "bas_points": {
+    "rows": 122
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

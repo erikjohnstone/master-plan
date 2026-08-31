@@ -1,0 +1,22 @@
+{
+  "set_id": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/028_TX_Renovation_of_Building_615_Final_Design_Plans.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 Bldg 615 \u2014 DOAS OUTSIDE AIR + chiller/boiler/UH/FAN.",
+  "categories": {
+    "DOAS": 3,
+    "AIR_COOLED_CHILLER": 1,
+    "BOILER": 1,
+    "FAN": 3,
+    "UNIT_HEATER": 2
+  },
+  "totals": {
+    "items": 10
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

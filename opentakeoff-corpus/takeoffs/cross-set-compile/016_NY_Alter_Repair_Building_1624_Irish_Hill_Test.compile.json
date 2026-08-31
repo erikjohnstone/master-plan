@@ -1,0 +1,18 @@
+{
+  "set_id": "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 Irish Hill \u2014 single AHU (honest WEAK).",
+  "categories": {
+    "AHU": 1
+  },
+  "totals": {
+    "items": 1
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

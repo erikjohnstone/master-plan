@@ -55,3 +55,22 @@ Diverse single-file probes → set-agnostic FAN/UH/coil/BAS wideners → keys:
 
 Continue through remaining single-file sets, then multipart rejoins, until
 Vol2 coverage is complete or ceilings are documented.
+
+## Batch 2 (locked 2026-08-31)
+
+| Set | Tier | HVAC | BAS | Notes |
+|---|---|---:|---:|---|
+| 001 ATC Tower Air Ops | MEAT | 396 | 122 | large federal MEAT |
+| 004 MO interior/exterior reno | MEAT | 23 | 0 | GUH + RTU/DOAS |
+| 015 Submarine Pier 3 utility | MEAT | 47 | 39 | pier FCU/HP/BAS |
+| 018 Poultry Research Center | MEAT | 7 | 0 | HP/FAN/GRD |
+| 019 Eglin AFB contract docs | MEAT | 103 | 0 | VAV-heavy |
+| 024 Steam heating → RTU | MEAT | 4 | 0 | PACKAGED EQUIPMENT (RTU) |
+| 028 Bldg 615 reno | MEAT | 10 | 0 | DOAS OUTSIDE AIR |
+| 008 Unheated storage repair | WEAK | 3 | 0 | UH/louver only |
+| 011 Hines Finance Center | WEAK | 5 | 0 | GRD only (HP table = devices) |
+| 016 Irish Hill test | WEAK | 1 | 0 | single AHU |
+| 006 C-wing updates | ZERO | 0 | 0 | no HVAC tables |
+| 010 Monitoring/control design | ZERO | 0 | 0 | no HVAC tables |
+
+Shared-path adds this batch: RTU `PACKAGED EQUIPMENT SCHEDULE (RTU)`; UNIT_HEATER `GUH`/`NUH`; DOAS `DEDICATED OUTSIDE AIR SYSTEM`.

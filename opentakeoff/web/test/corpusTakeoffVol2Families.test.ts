@@ -6,6 +6,14 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { HVAC_FAMILY_SPECS } from "../src/lib/corpusTakeoff.mjs";
 
+describe("Vol2 RTU packaged title", () => {
+  it("matches PACKAGED EQUIPMENT SCHEDULE (RTU)", () => {
+    const { titleRe, keyRe } = HVAC_FAMILY_SPECS.RTU;
+    assert.equal(titleRe.test("PACKAGED EQUIPMENT SCHEDULE (RTU)"), true);
+    assert.equal(keyRe.test("RTU-101"), true);
+  });
+});
+
 describe("Vol2 FAN / UNIT_HEATER / DUCT_MOUNTED_COIL keyRe", () => {
   it("FAN accepts zone-lettered S-/R- marks, DSF, and EG", () => {
     const { keyRe } = HVAC_FAMILY_SPECS.FAN;
@@ -18,7 +26,7 @@ describe("Vol2 FAN / UNIT_HEATER / DUCT_MOUNTED_COIL keyRe", () => {
 
   it("UNIT_HEATER accepts ECUH / HWUH / EDH and duct-heater titles", () => {
     const { keyRe, titleRe } = HVAC_FAMILY_SPECS.UNIT_HEATER;
-    for (const m of ["ECUH-B1", "HWUH-A1", "EDH-1", "UH-1", "CUH-1"]) {
+    for (const m of ["ECUH-B1", "HWUH-A1", "EDH-1", "UH-1", "CUH-1", "GUH-1"]) {
       assert.equal(keyRe.test(m), true, m);
     }
     assert.equal(titleRe.test("ELECTRIC UNIT HEATER SCHEDULE"), true);

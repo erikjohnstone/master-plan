@@ -1,0 +1,19 @@
+{
+  "set_id": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 unheated storage \u2014 GUH/LOUVER only (honest WEAK).",
+  "categories": {
+    "UNIT_HEATER": 2,
+    "LOUVER": 1
+  },
+  "totals": {
+    "items": 3
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

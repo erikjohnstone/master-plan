@@ -1,0 +1,30 @@
+{
+  "set_id": "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 Eglin \u2014 AHU/FCU/VAV-heavy MEAT.",
+  "categories": {
+    "AHU": 1,
+    "FCU": 7,
+    "VAV": 58,
+    "CONDENSING_UNIT": 6,
+    "AIR_COOLED_CHILLER": 1,
+    "BOILER": 2,
+    "PUMP": 11,
+    "FAN": 4,
+    "UNIT_HEATER": 2,
+    "FIN_TUBE_RADIATION": 4,
+    "AIR_SEPARATOR": 2,
+    "DUCT_SILENCER": 2,
+    "LOUVERED_PENTHOUSE": 3
+  },
+  "totals": {
+    "items": 103
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

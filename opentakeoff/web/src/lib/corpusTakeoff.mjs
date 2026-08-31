@@ -313,7 +313,7 @@ export const HVAC_FAMILY_SPECS = {
   DOAH_UNIT: { titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i, keyRe: /^DOAH/i },
   DOAH_HANDLING: { titleRe: /DEDICATED OUTDOOR AIR HANDLING/i, keyRe: /^DOAH/i },
   DOAS: {
-    titleRe: /DOAS\s+UNIT|\bDOAS\b|DEDICATED\s+OUTDOOR\s+AIR\s+SYSTEM/i,
+    titleRe: /DOAS\s+UNIT|\bDOAS\b|DEDICATED\s+OUTDOORS?\s+AIR\s+SYSTEM|DEDICATED\s+OUTSIDE\s+AIR\s+SYSTEM/i,
     exclude: /POINTS\s*LIST|DDC|DEDICATED\s+OUTDOOR\s+AIR\s+HANDLING|DEDICATED\s+OUTDOOR\s+AIR\s+UNIT/i,
     keyRe: /^DOAS/i,
   },
@@ -340,8 +340,10 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^(?:VAV|ATB|VTU|ECAV|CAV|ATU)/i,
   },
   RTU: {
-    titleRe: /ROOF[\s\-]*TOP\s+UNIT|PACKAGED\s+ROOFTOP|RTU\s+SCHEDULE|GAS[\s\-]*FIRED\s+DX\s+COOLING\s+ROOF\s+TOP/i,
+    // PACKAGED EQUIPMENT SCHEDULE (RTU) — common finish/replacement sheets.
+    titleRe: /ROOF[\s\-]*TOP\s+UNIT|PACKAGED\s+ROOFTOP|PACKAGED\s+EQUIPMENT\s+SCHEDULE\s*\(?\s*RTU|RTU\s+SCHEDULE|GAS[\s\-]*FIRED\s+DX\s+COOLING\s+ROOF\s+TOP/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS|CONNECTION\s+SCHEDULE/i,
+    keyRe: /^RTU[\s\-]?/i,
   },
   ERV: {
     titleRe: /ENERGY\s+RECOVERY\s+VENTILATOR|ENERGY\s+RECOVERY\s+UNIT|\bERV\s+SCHEDULE/i,
@@ -463,8 +465,8 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /UNIT HEATER SCHEDULE|ELECTRIC\s+HEATERS?(?:\s+SCHEDULE)?|ELECTRIC\s+DUCT\s+HEATER|DUCT\s+HEATERS?(?:\s+SCHEDULE)?/i,
     exclude: /CABINET|POINTS\s*LIST|DDC/i,
     // UH/CUH/EH room heaters; EDH-* duct-mounted electric; ECUH-* electric
-    // cabinet/unit; HWUH-* hot-water unit heaters (lab / fire-science sets).
-    keyRe: /^(?:UH|CUH|EH|EDH|ECUH|HWUH|HUH|EUH)[\s\-]?/i,
+    // cabinet/unit; HWUH-* hot-water; GUH/NUH-* gas/natural unit heaters.
+    keyRe: /^(?:UH|CUH|EH|EDH|ECUH|HWUH|HUH|EUH|GUH|NUH)[\s\-]?/i,
   },
   // Electric radiant ceiling panels (school/courthouse schedules; ECP-* marks).
   RADIANT_CEILING_PANEL: {

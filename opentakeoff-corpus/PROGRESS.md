@@ -378,15 +378,13 @@ reconcile, and plan joins.
 - **WP1.4 / BAS I/O LIST ANALOG/DIGITAL rollup (shared path):** device rows without AI## MARK prefixes accumulate ANALOG→AI and DIGITAL→BI point totals (direction not distinguished). Colville **AI 0→33 · BI 0→21** (rows stay 42). NAVFAC T-BAS-01 still **122** rows / AI43 AO15 BI49 BO15.
 - **WP4 Northport FAN honest SO lock:** RF-1/RF-2 SCHEDULE_ONLY under `evaluationFast` (no drawable plan text) — ceiling documented beside SDSU FAN MATCH.
 - **Vol2 batch-1 intake (shared path):** FAN keyRe `S-A-*`/`R-A-*`/`DSF`/`EG`/`SEF`; UNIT_HEATER `ECUH`/`HWUH` + duct-heater titles; DUCT_MOUNTED_COIL `HWC`; BAS `DDC CONTROLLER INPUT/OUTPUT` titles. NIST **13→19**; Missoula **12→30**; Lab BAS **0→63** rows / 3 lists; APHIS **10→15**. Keys: 5 MEAT + 1 WEAK + 2 ZERO under `cross-set-compile/`. Unit + Vol2 acceptance **8/8**.
+- **Vol2 batch-2 intake (shared path):** RTU `PACKAGED EQUIPMENT SCHEDULE (RTU)` + `RTU-*` keyRe; UNIT_HEATER `GUH`/`NUH`; DOAS `DEDICATED OUTSIDE AIR SYSTEM`. Locked **12** more Vol2 keys (7 MEAT / 3 WEAK / 2 ZERO) including ATC tower **396** HVAC + **122** BAS. Vol2 keyed total **20**. Acceptance **12/12**. Suwannee RTU negative still **1**.
 
 ### Next queue (platform loop)
 
-1. **Vol2 full-volume Pillar A (active):** batch-1 **keyed** (8 sets: 5 MEAT /
-   1 WEAK / 2 ZERO) under `takeoffs/cross-set-compile/` after shared-path
-   FAN `S-A`/`R-A`/`DSF`/`EG`/`SEF`, UNIT_HEATER `ECUH`/`HWUH` + duct-heater
-   titles, DUCT_MOUNTED_COIL `HWC`, BAS `DDC CONTROLLER INPUT/OUTPUT` titles.
-   Continue probe → key → fix across remaining **74** INDEX sets (61
-   single-file + 13 multipart rejoins). Rubric: `takeoffs/VOL2_INTAKE.md`.
+1. **Vol2 full-volume Pillar A (active):** batches 1–2 keyed (**20**/82). Continue
+   probe → key → fix across remaining INDEX sets (single-file then multipart
+   rejoins). Rubric: `takeoffs/VOL2_INTAKE.md`.
 2. Merge branch stack → `main`; WORKFLOWS #51 ON_MAIN.
 3. WP1.4 remaining titled HVAC orphans largely exhausted on keyed MEAT sets (honest refuse: federal AHU fan schedules; Valdosta VRF; Life Sciences EQ-* non-HVAC; electrical/CCTV noise).
 4. WP3.3 TG bowtie dedicated detector (tracked follow-on; Bessemer TG already passes via inline motif).
