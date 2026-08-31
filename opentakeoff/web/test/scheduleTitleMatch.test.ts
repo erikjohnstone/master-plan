@@ -336,10 +336,11 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
   assert.ok(HVAC_FAMILY_SPECS.UNIT_HEATER.keyRe!.test("UH-01"));
   assert.ok(!HVAC_FAMILY_SPECS.UNIT_HEATER.keyRe!.test("MODEL"));
   assert.ok(HVAC_FAMILY_SPECS.AIR_SEPARATOR.keyRe!.test("AS-1"));
+  assert.ok(HVAC_FAMILY_SPECS.AIR_SEPARATOR.keyRe!.test("HS-1"));
   assert.ok(!HVAC_FAMILY_SPECS.AIR_SEPARATOR.keyRe!.test("LCV-1"));
   assert.ok(HVAC_FAMILY_SPECS.EXPANSION_TANK.keyRe!.test("ET-1"));
   assert.ok(HVAC_FAMILY_SPECS.EXPANSION_TANK.keyRe!.test("XT-2"));
-  assert.ok(!HVAC_FAMILY_SPECS.EXPANSION_TANK.keyRe!.test("DT-1"));
+  assert.ok(HVAC_FAMILY_SPECS.EXPANSION_TANK.keyRe!.test("DT-1"));
   assert.equal(
     scheduleTitleMatches(
       "ELECTRIC HEATERS",
@@ -502,7 +503,7 @@ test("EQUIPMENT SCHEDULE catch-all ORs blankKeyRe|keyRe (WSHP via HEAT_PUMP keyR
         { key: "WSHP-1", cells: { MARK: { text: "WSHP-1" } } },
         { key: "HWP-1", cells: { MARK: { text: "HWP-1" } } },
         { key: "CU-1", cells: { MARK: { text: "CU-1" } } },
-        { key: "BS-1", cells: { MARK: { text: "BS-1" } } },
+        { key: "LV-1", cells: { MARK: { text: "LV-1" } } },
       ],
     }],
   };
@@ -513,11 +514,60 @@ test("EQUIPMENT SCHEDULE catch-all ORs blankKeyRe|keyRe (WSHP via HEAT_PUMP keyR
   assert.equal(hvac.categories.HEAT_PUMP.items[0].tag, "WSHP-1");
   assert.equal(hvac.categories.PUMP.items[0].tag, "HWP-1");
   assert.equal(hvac.categories.CONDENSING_UNIT.items[0].tag, "CU-1");
-  // BS-1 has no family keyRe — stay orphan (no silent inflation).
+  // Louvers stay orphan (no family).
   for (const [fam, cat] of Object.entries(hvac.categories)) {
     if (["HEAT_PUMP", "PUMP", "CONDENSING_UNIT"].includes(fam)) continue;
     assert.equal(cat.count, 0, `unexpected ${fam}`);
   }
+});
+
+test("accessory families: pot feeder, GMU, strainer, bypass, BS booster, HS, DT", () => {
+  assert.equal(
+    scheduleTitleMatches(
+      "CHEMICAL POT FEEDER SCHEDULE",
+      HVAC_FAMILY_SPECS.CHEMICAL_POT_FEEDER.titleRe,
+      HVAC_FAMILY_SPECS.CHEMICAL_POT_FEEDER.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.CHEMICAL_POT_FEEDER.keyRe!.test("PF-1"));
+  assert.ok(HVAC_FAMILY_SPECS.GLYCOL_MAKEUP.keyRe!.test("GMU-2"));
+  assert.ok(HVAC_FAMILY_SPECS.STRAINER.keyRe!.test("STR-1"));
+  assert.ok(!HVAC_FAMILY_SPECS.STRAINER.keyRe!.test("FTR-1"));
+  assert.ok(HVAC_FAMILY_SPECS.BYPASS_CONTROL_VALVE.keyRe!.test("BCV-1"));
+  assert.ok(HVAC_FAMILY_SPECS.PUMP.blankKeyRe!.test("BS-1"));
+  assert.ok(HVAC_FAMILY_SPECS.AIR_SEPARATOR.keyRe!.test("HS-1"));
+  assert.ok(HVAC_FAMILY_SPECS.EXPANSION_TANK.keyRe!.test("DT-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "AIR COMPRESSOR SCHEDULE",
+      HVAC_FAMILY_SPECS.AIR_COMPRESSOR.titleRe,
+      HVAC_FAMILY_SPECS.AIR_COMPRESSOR.exclude,
+    ),
+    true,
+  );
+  assert.equal(HVAC_FAMILY_SPECS.AIR_COMPRESSOR.keyRe, undefined);
+});
+
+test("HYDRONIC ACCESSORIES claims PF/GMU/HS (Klamath shape)", () => {
+  const graph = {
+    tables: [{
+      kind: "equipment",
+      sheet: "m.pdf#5",
+      title: { text: "HYDRONIC ACCESSORIES" },
+      rows: [
+        { key: "AS-1", cells: { MARK: { text: "AS-1" } } },
+        { key: "HS-1", cells: { MARK: { text: "HS-1" } } },
+        { key: "GMU-1", cells: { MARK: { text: "GMU-1" } } },
+        { key: "PF-1", cells: { MARK: { text: "PF-1" } } },
+      ],
+    }],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.AIR_SEPARATOR.count, 2);
+  assert.equal(hvac.categories.GLYCOL_MAKEUP.count, 1);
+  assert.equal(hvac.categories.CHEMICAL_POT_FEEDER.count, 1);
+  assert.equal(hvac.totals.items, 4);
 });
 
 test("HYDRONIC ACCESSORIES catch-all claims AS/BT/ET (Klamath shape)", () => {
@@ -530,7 +580,7 @@ test("HYDRONIC ACCESSORIES catch-all claims AS/BT/ET (Klamath shape)", () => {
         { key: "AS-1", cells: { MARK: { text: "AS-1" } } },
         { key: "BT-1", cells: { MARK: { text: "BT-1" } } },
         { key: "ET-1", cells: { MARK: { text: "ET-1" } } },
-        { key: "GMU-1", cells: { MARK: { text: "GMU-1" } } },
+        { key: "JUNK-1", cells: { MARK: { text: "JUNK-1" } } },
       ],
     }],
   };
@@ -539,7 +589,6 @@ test("HYDRONIC ACCESSORIES catch-all claims AS/BT/ET (Klamath shape)", () => {
   assert.equal(hvac.categories.BUFFER_TANK.count, 1);
   assert.equal(hvac.categories.EXPANSION_TANK.count, 1);
   assert.equal(hvac.categories.AIR_SEPARATOR.items[0].tag, "AS-1");
-  // GMU has no family — stay orphan.
   assert.equal(hvac.totals.items, 3);
 });
 

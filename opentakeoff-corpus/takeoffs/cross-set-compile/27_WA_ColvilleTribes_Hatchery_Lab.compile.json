@@ -2,23 +2,25 @@
   "set_id": "27_WA_ColvilleTribes_Hatchery_Lab",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/27_WA_ColvilleTribes_Hatchery_Lab.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk hatchery — EQUIPMENT SCHEDULE catch-all claims WSHP-1 (HEAT_PUMP), CU-1 (CONDENSING_UNIT), HWP/CP/EP/BP pumps; plus titled FCU/ERV/fans/UH/FTR/AS/ET/BT/HX. Orphans BS-1/LV-* left unkeyed (no family).",
+  "notes": "EQUIPMENT catch-all WSHP/CU/pumps/BS booster; pot feeders; strainer STR-1; drawdown DT-1 on expansion schedule. Orphans: LV louvers, filter-panel FTR-1 collision left on FILTER schedule.",
   "categories": {
     "FCU": 1,
     "ERV": 1,
     "CONDENSING_UNIT": 1,
     "HEAT_PUMP": 1,
-    "PUMP": 13,
+    "PUMP": 14,
     "WATER_HEATER": 1,
     "FAN": 3,
     "UNIT_HEATER": 7,
     "FIN_TUBE_RADIATION": 1,
     "AIR_SEPARATOR": 2,
-    "EXPANSION_TANK": 3,
+    "EXPANSION_TANK": 4,
     "BUFFER_TANK": 4,
-    "HEAT_EXCHANGER": 4
+    "HEAT_EXCHANGER": 4,
+    "CHEMICAL_POT_FEEDER": 2,
+    "STRAINER": 1
   },
-  "totals": { "items": 42 },
+  "totals": { "items": 47 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }

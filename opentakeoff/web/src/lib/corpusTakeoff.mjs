@@ -310,7 +310,8 @@ export const HVAC_FAMILY_SPECS = {
   PUMP: {
     titleRe: /PUMP\s*SCHEDULE|PUPSCHEDULE|HYDRONIC\s+PUMPS?/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS|HEAT\s+PUMP|VACUUM/i,
-    blankKeyRe: /^(?:P|CP|CWP|HWP|HHWP|CHWP|CHP|HWRP|IWP|BP|SP|SCHWP|RP|PP|EP)[\s\-]?\d/i,
+    // BS-* = packaged booster pump systems on EQUIPMENT catch-all lists.
+    blankKeyRe: /^(?:P|CP|CWP|HWP|HHWP|CHWP|CHP|HWRP|IWP|BP|SP|SCHWP|RP|PP|EP|BS)[\s\-]?\d/i,
   },
   COOLING_TOWER: {
     titleRe: /COOLING\s+TOWER\s+SCHEDULE/i,
@@ -357,12 +358,14 @@ export const HVAC_FAMILY_SPECS = {
   // HUM-* (common) and bare H-* marks — require separator so HC-/HWP do not match.
   HUMIDIFIER: { titleRe: /HUMIDIFIER SCHEDULE/i, keyRe: /^(?:HUM|H)[\-]/i },
   AIR_SEPARATOR: {
-    titleRe: /AIR SEPARATOR SCHEDULE/i,
-    keyRe: /^AS[\s\-]/i,
+    // Hydraulic separators (HS-*) are air/dirt/hydraulic package vessels.
+    titleRe: /AIR SEPARATOR SCHEDULE|HYDRAULIC\s+SEPARATOR(?:\s+SCHEDULE)?/i,
+    keyRe: /^(?:AS|HS)[\s\-]/i,
   },
   EXPANSION_TANK: {
-    titleRe: /EXPANSION TANK SCHEDULE/i,
-    keyRe: /^(?:ET|XT)[\s\-]/i,
+    titleRe: /EXPANSION TANK SCHEDULE|DRAWDOWN\s+TANK\s+SCHEDULE/i,
+    // DT-* = booster drawdown / diaphragm tanks on expansion schedules.
+    keyRe: /^(?:ET|XT|DT)[\s\-]/i,
   },
   BUFFER_TANK: {
     titleRe: /BUFFER\s+TANK\s+SCHEDULE/i,
@@ -389,6 +392,29 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC|WATER\s+SOFTENER|WATER\s+HEATER/i,
     keyRe: /^(?:RO|WT|WTP)[\s\-]/i,
   },
+  // Chemical bypass / pot feeders (PF-*) — hydronic water treatment accessory.
+  CHEMICAL_POT_FEEDER: {
+    titleRe: /(?:CHEMICAL\s+)?POT\s+FEEDER(?:\s+SCHEDULE)?|CHEMICAL\s+BYPASS\s+FEEDER/i,
+    exclude: /POINTS\s*LIST|DDC/i,
+    keyRe: /^PF[\s\-]/i,
+  },
+  // Glycol makeup / dosing units (GMU-*).
+  GLYCOL_MAKEUP: {
+    titleRe: /GLYCOL\s+MAKE[\s\-]*UP(?:\s+UNIT)?(?:\s+SCHEDULE)?|\bGMU\b.*SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC/i,
+    keyRe: /^GMU[\s\-]/i,
+  },
+  // Basket / y-strainers (STR-*). Do not claim FTR-* (fin-tube or filter panels).
+  STRAINER: {
+    titleRe: /STRAINER\s+SCHEDULE|FILTER\s*&\s*STRAINER\s+SCHEDULE|FILTER\s+AND\s+STRAINER\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC|AIR\s+FILTER|WATER\s+FILTER\s+UNIT/i,
+    keyRe: /^STR[\s\-]/i,
+  },
+  AIR_COMPRESSOR: {
+    titleRe: /AIR\s+COMPRESSOR\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC|AIR\s+CONDITION/i,
+    // No keyRe — avoid catch-all stealing AC-* air-conditioners.
+  },
   // CHW / HHW from title signals (abbrev or spelled-out). Bypass valves stay out.
   CHW_CONTROL_VALVE: {
     titleRe: /(?:CHW|CHILLED\s*WATER).{0,40}CONTROL\s*VALVE|CONTROL\s*VALVE.{0,40}(?:CHW|CHILLED\s*WATER)/i,
@@ -399,6 +425,12 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT).{0,40}CONTROL\s*VALVE|CONTROL\s*VALVE.{0,40}(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT)/i,
     exclude: /BYPASS|CHW|CHILLED\s*WATER/i,
     identityHeaderRe: /VALVE\s*MARK/i,
+  },
+  BYPASS_CONTROL_VALVE: {
+    titleRe: /BYPASS\s+CONTROL\s+VALVE/i,
+    exclude: /POINTS\s*LIST|DDC/i,
+    keyRe: /^BCV[\s\-]/i,
+    identityHeaderRe: /(?:VALVE\s*MARK|SYMBOL)/i,
   },
   // Lab / cleanroom pressure-independent air valves (Phoenix-style SAV/GEV/SEV).
   // Not hydronic CHW/HHW control valves — stay out of CONTROL_VALVE_FAMILIES.
