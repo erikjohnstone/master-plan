@@ -281,6 +281,51 @@ test("Jeff City CST bulk VAV+FCU reconcile: all scheduled tags MATCH (WP1 cross-
   }
 });
 
+test("SDSU EngSciences AHU reconcile: all scheduled tags MATCH (dup-table collapse)", async () => {
+  const keyPath = resolve(CROSS, "11_CA_SDSU_EngSciences_Complex_100SD.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "AHU");
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    evaluationFast: true,
+  });
+  assert.equal(result.rows.length, key.categories.AHU);
+  assert.ok(result.rows.every((r) => r.status === "MATCH"), "SDSU AHU all MATCH after schedule-stem collapse");
+  for (const row of result.rows) {
+    assert.ok(row.installed_qty >= 1, `${row.tag} installed`);
+    assert.ok(row.plan_cites?.length >= 1, `${row.tag} plan cite`);
+  }
+});
+
+test("Douglas County DOAS reconcile: misc-schedule DOAS-30 MATCH", async () => {
+  const keyPath = resolve(CROSS, "25_WA_DouglasCounty_Courthouse_HVAC_DDC.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "DOAS");
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    evaluationFast: true,
+  });
+  assert.equal(result.rows.length, key.categories.DOAS);
+  assert.ok(result.rows.every((r) => r.status === "MATCH"));
+  assert.ok(result.rows.some((r) => /^DOAS-30$/i.test(r.tag)));
+});
+
 test("St Louis bulk VAV reconcile: all 12 ATU tags MATCH (WP1 cross-set)", async () => {
   const keyPath = resolve(CROSS, "05_MO_VA_StLouis_AHU_VAV_Replacement.compile.json");
   assert.ok(existsSync(keyPath));
