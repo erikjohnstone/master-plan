@@ -300,7 +300,7 @@ reconcile, and plan joins.
   `CEREBRAS_API_KEY`); SLATE + GOAL amended for third takeoff ID.
 - **WP5 CLOSED:** Browser geometric fork removed; production HTTP for plan tools;
   UI graph prewarm (`schedules indexing…`) + `prewarmGraphSmoke.test.mjs`.
-- **Bulk rescore (2026-08-31 post-StLouis/Valdosta):** MEAT **20** · WEAK **2** · ZERO **9** (St Louis ZERO→30; Valdosta 4→16; threshold h≥5).
+- **Bulk rescore (2026-08-31 tip `f99abf5`):** MEAT **20** · WEAK **2** · ZERO **9** (St Louis/Valdosta/Hurlburt/Colville/Baker promotions; Kennebec+Suwannee honest WEAK).
 - **Orange County cross-set key:** 32 VAV + 43 HVAC items; reconcile scaffold test.
 - **WP1 title:** `DOAS` family spec; Valdosta GRILLE SCHEDULE →16 items; `VAV TERMINAL BOX` broadening.
 - **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (27), Baker MS (22) locked.
