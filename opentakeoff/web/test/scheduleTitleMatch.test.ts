@@ -261,6 +261,15 @@ test("RTU / ERV / furnace / heat-pump titles match set-agnostic families", () =>
     true,
   );
   assert.ok(HVAC_FAMILY_SPECS.VAV.keyRe!.test("ATU-6-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "LAB CAV SCHEDULE",
+      HVAC_FAMILY_SPECS.VAV.titleRe,
+      HVAC_FAMILY_SPECS.VAV.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.VAV.keyRe!.test("CAV-NB-1"));
   assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("FCUC"));
   assert.ok(HVAC_FAMILY_SPECS.AHU.keyRe!.test("AC-57"));
   assert.equal(
