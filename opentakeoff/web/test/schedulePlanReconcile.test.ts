@@ -136,6 +136,36 @@ test("reconcile scaffold accepts reference-kind GRILLE SCHEDULE via row.key (com
   assert.ok(rows.every((r) => r.status === "SCHEDULE_ONLY"));
 });
 
+test("reconcile scaffold dedupes duplicate MARK extracts (compile parity)", () => {
+  const graph = {
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#4",
+        title: { text: "HEAT PUMP SCHEDULE - SPLIT SYSTEM TYPE" },
+        rows: [
+          { key: "HP-10", cells: { SYMBOL: { text: "HP-10" } } },
+          { key: "HP-20", cells: { SYMBOL: { text: "HP-20" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#4",
+        title: { text: "HEAT PUMP SCHEDULE - SPLIT SYSTEM TYPE" },
+        rows: [
+          { key: "HP-20", cells: { SYMBOL: { text: "HP-20" } } },
+        ],
+      },
+    ],
+  };
+  const rows = reconcileScheduleFamilyFromGraph(
+    graph,
+    { label: "HEAT_PUMP", titleRe: /HEAT\s+PUMP/i, keyRe: /(?<![C])HP/i },
+  );
+  assert.equal(rows.length, 2);
+  assert.deepEqual(rows.map((r) => r.tag).sort(), ["HP-10", "HP-20"]);
+});
+
 test("reconcileRowsToCsv emits contractor header row", () => {
   const csv = reconcileRowsToCsv([
     {

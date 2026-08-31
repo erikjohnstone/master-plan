@@ -314,6 +314,8 @@ reconcile, and plan joins.
 - **WP1.4 bare-TAG guard:** do not prefer grille type TAG over row.key (Colville FAN EF-* restored).
 - **WP1.4 family keyRe tighten (shared path):** FCU `FC-##`; HEAT_PUMP HP/SCU/SAC + exclude ENERGY RECOVERY; HRC `CH-`/`HRC`; PUMP `HYDRONIC PUMPS` + exclude HEAT PUMP; UNIT_HEATER EH/UH + ELECTRIC HEATERS; AS `^AS` / ET `^ET|^XT` — Orange **43→33**, Baker **26→17**, Colville **27→23**, Klamath **35** new key.
 - **WP1.4 VRF indoor + REF + EDH (shared path):** HEAT_PUMP `CC-*`/`AH-*` (not AHU); FAN `REF-*` relief; UNIT_HEATER `ELECTRIC DUCT HEATER`/`EDH-*` — Douglas **4→15** WEAK→MEAT; Jeff City CST **27** keyed.
+- **WP4 Jeff City CST:** VAV **9/9** + FCU **3/3 MATCH** (locked in `reconcileWorkflow.test.mjs`).
+- **WP4 reconcile tag dedupe:** scaffold drops duplicate MARK extracts (Douglas HP-20 double table) — parity with compile `uniqueFamily`.
 - **WP4 Orange County:** installed reconcile **32/32 VAV MATCH** (full census locked in `reconcileWorkflow.test.mjs`).
 - **WP4 Hawthorn:** AHU **2/2** + CU **2/2** MATCH (digit+letter tags on plan).
 - **WP4 St Louis:** VAV/ATU **12/12 MATCH** (AIR TERMINAL UNIT schedule ↔ plan).
