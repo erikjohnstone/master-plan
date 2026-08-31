@@ -941,7 +941,7 @@ test("WP1.4 FAN blank-title KEF kitchen exhaust (Klamath)", () => {
       },
     ],
   };
-  const hvac = compileCorpusTakeoff(null, graph, "hvac_equipment");
+  const hvac = compileHvacTakeoff(null, graph);
   assert.equal(hvac.categories.FAN.count, 1);
   assert.equal(hvac.categories.FAN.items[0].tag, "KEF-1");
 });
