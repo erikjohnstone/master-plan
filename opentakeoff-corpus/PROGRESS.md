@@ -291,6 +291,10 @@ reference cells, and graph row-symbol outcomes (commit `2cd532b`, 2026-08-29).
 **Charter:** `opentakeoff-corpus/takeoffs/NEXT_GOAL_LOOP.md` · **CreateGoal**
 set for autonomous iteration until the user stops the run.
 
+**Bulk corpus in scope:** Vol1 (`bulk/HVAC_BAS_Plan_Sets`, ~30) **+ Vol2
+entirety** (`bulk/HVAC_BAS_Plan_Sets_Vol2`, **all 82** INDEX sets — see
+`GOAL.md` §8 and `takeoffs/VOL2_INTAKE.md`).
+
 **Coordinator-only** — no cloud workers. Shared UI+MCP path for compile,
 reconcile, and plan joins.
 
@@ -376,13 +380,17 @@ reconcile, and plan joins.
 
 ### Next queue (platform loop)
 
-1. Merge branch stack → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 remaining titled HVAC orphans largely exhausted on keyed MEAT sets (honest refuse: federal AHU fan schedules; Valdosta VRF; Life Sciences EQ-* non-HVAC; electrical/CCTV noise).
-3. WP3.3 TG bowtie dedicated detector (tracked follow-on; Bessemer TG already passes via inline motif).
-4. WP4: Klamath FC/HP/DOAS still SCHEDULE_ONLY under evaluationFast (plan-text recall — tags not drawable text).
-5. BAS deepen only where real POINTS/I/O lists extract (bldg5406 HARDWAREPOINTS matrices are rollups, not row-per-point — defer).
-6. Remaining WEAK ceilings: Suwannee (1 RTU honest), Kennebec (2 multi-split only).
-7. Optional: evaluate BlueprintParser_OS / drawings-ai digests as *complementary* LLM recall only — never as qty/cite truth (stay on Session+ODL).
+1. **Vol2 full-volume Pillar A:** probe → key → set-agnostic fix across
+   **all 82** `HVAC_BAS_Plan_Sets_Vol2` INDEX sets (69 single-file + 13
+   multipart rejoins). Rubric: `takeoffs/VOL2_INTAKE.md`. Vol1 remains
+   in-scope. Batching is cadence only — not a sample-size cap.
+2. Merge branch stack → `main`; WORKFLOWS #51 ON_MAIN.
+3. WP1.4 remaining titled HVAC orphans largely exhausted on keyed MEAT sets (honest refuse: federal AHU fan schedules; Valdosta VRF; Life Sciences EQ-* non-HVAC; electrical/CCTV noise).
+4. WP3.3 TG bowtie dedicated detector (tracked follow-on; Bessemer TG already passes via inline motif).
+5. WP4: Klamath FC/HP/DOAS still SCHEDULE_ONLY under evaluationFast (plan-text recall — tags not drawable text).
+6. BAS deepen only where real POINTS/I/O lists extract (bldg5406 HARDWAREPOINTS matrices are rollups, not row-per-point — defer).
+7. Remaining WEAK ceilings: Suwannee (1 RTU honest), Kennebec (2 multi-split only).
+8. Optional: evaluate BlueprintParser_OS / drawings-ai digests as *complementary* LLM recall only — never as qty/cite truth (stay on Session+ODL).
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 

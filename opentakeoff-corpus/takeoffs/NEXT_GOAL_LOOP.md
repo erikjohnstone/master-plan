@@ -148,10 +148,19 @@ HVAC/BAS locks still green.
 set must get a working complete takeoff on the **shared UI+MCP path**
 (`compile_corpus_takeoff` / Agent). Corpus keys and bulk sweeps are rulers
 for that path — eval-only compile that never reaches the Agent UI is not
-success. Bulk corpus (`opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets`, 30
-verified vector sets) is in-scope stress for Pillar A; zero-count sets
-drive set-agnostic family/title fixes (RTU, ERV, furnace, heat-pump,
-outdoor-air unit, …), not per-PDF hardcodes.
+success. Bulk corpus in-scope for Pillar A stress:
+
+- **Vol1** — `opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets` (~30 verified
+  vector sets).
+- **Vol2** — `opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2` (**all 82**
+  INDEX sets: 69 single-file + multipart/split folders rejoined as needed).
+  Every Vol2 set is vector-dense with proven HVAC **and** BAS/controls
+  content. Intake rubric: `takeoffs/VOL2_INTAKE.md`.
+
+The entire Vol1+Vol2 inventory is the ruler — not a sample of Vol2.
+Zero-count / WEAK sets drive set-agnostic family/title/BAS fixes (RTU,
+ERV, furnace, heat-pump, outdoor-air unit, I/O LIST / DDC controller
+summaries, …), not per-PDF hardcodes. Batching remains process only.
 
 **DoD:**
 1. [x] Author hand acceptance keys for **≥2 non-NAVFAC** HVAC/BAS sets
@@ -315,15 +324,18 @@ the loop is **not** done.
 
 ```text
 /goal Execute opentakeoff-corpus/takeoffs/NEXT_GOAL_LOOP.md in full:
-Pillar A first — cross-set compile reliability (≥2 non-NAVFAC keyed HVAC/BAS
-sets, soft title/header generalization, no NAVFAC-only product paths); then
-T-VALVE-01 N=5 lock; wire inline motif into sweep_schedule_row and hit the
-rowsym bar; ship HVAC/BAS/valve schedule↔plan reconcile workflow on shared
-UI+MCP path with contractor columns+cites (Pillar B, proven on NAVFAC + a
-WP1 set); shared-path plan-tool unify + graph prewarm; keep HVAC/BAS locks
-and suite gate green.
+Pillar A first — cross-set compile reliability on the FULL bulk corpus
+(Vol1 ~30 sets + Vol2 all 82 INDEX sets under HVAC_BAS_Plan_Sets_Vol2;
+honest ZERO/WEAK OK; set-agnostic title/keyRe/BAS only — no per-PDF
+hardcodes); soft title/header generalization; no NAVFAC-only product paths;
+then T-VALVE-01 N=5 lock; wire inline motif into sweep_schedule_row and hit
+the rowsym bar; ship HVAC/BAS/valve schedule↔plan reconcile workflow on
+shared UI+MCP path with contractor columns+cites (Pillar B, proven on
+NAVFAC + a WP1 set); shared-path plan-tool unify + graph prewarm; keep
+HVAC/BAS locks and suite gate green.
 Set-agnostic only. Always tests. No ODL rewrite. No duct-LF scope creep.
 Cross-set compile is co-equal with reconcile — not optional polish.
+Vol2 is entire-volume stress, not a 5–10 set sample.
 ```
 
 ---

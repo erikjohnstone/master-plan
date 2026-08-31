@@ -1,11 +1,8 @@
 # OpenTakeoff HVAC/BAS Corpus — Goal, Method, and Current State
 
-Last updated: 2026-08-29, ~11:52am, after a session interruption (system
-restart at 3:30am; this Claude Code session resumed at 11:06am with the
-background workers and eval processes it had running lost — their real
-work already merged to git is intact and reflected below; anything still
-in-flight at the moment of interruption is marked PENDING/UNVERIFIED, not
-claimed as done).
+Last updated: 2026-08-31 — autonomous platform loop expanded to include the
+**full** Vol2 bulk corpus (82 INDEX sets) alongside Vol1; see §8. Older
+keyed-corpus history below is retained for provenance.
 
 ## Current execution policy (supersedes older worker references below)
 
@@ -289,13 +286,25 @@ daily.
 (no cloud workers). **Shared path mandatory** — UI and MCP consume the same
 Session + ODL pipeline.
 
-**Objective:** Set-agnostic compile across bulk US vector sets; production-grade
-schedule↔plan reconcile; `T-VALVE-01` N=5 lock; inline motif in
-`sweep_schedule_row`; Session-unified plan tools + graph prewarm; all locks green.
+**Objective:** Set-agnostic HVAC/BAS compile + schedule↔plan reconcile across
+the **full** bulk US vector corpus we benefit from — Vol1
+(`opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets`, ~30 verified sets) **and**
+Vol2 (`opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2`, **all 82 INDEX sets**:
+69 single-file PDFs plus multipart/split deliveries rejoined when needed).
+Every Vol2 set is vector-dense with proven HVAC **and** BAS/controls content;
+treat the entire volume as Pillar A stress, not a sample. Keep
+`T-VALVE-01` N=5 lock; inline motif in `sweep_schedule_row`; Session-unified
+plan tools + graph prewarm; all prior locks green.
+
+**Bulk policy:** Batching is only an operational cadence for probe → key →
+fix → negative-control. Scope is **not** “first 5–10 of Vol2.” Honest
+ZERO/WEAK compile totals remain correct when a set has no extractable HVAC
+schedule tables. Fixes stay set-agnostic on the shared path — never per-PDF
+hardcodes or corpus-id special cases.
 
 **Cadence:** Verified batches → update `PROGRESS.md` → `test:workflows` +
-focused tests; bulk corpus stress drives set-agnostic fixes (never per-PDF
-hardcodes).
+focused tests; full Vol1+Vol2 stress drives set-agnostic family/title/BAS
+fixes.
 
 Future corpus keys expand the proving ground without weakening the outcome
 model. Every gate remains forced-cold with full metric reporting. Continue
