@@ -615,6 +615,84 @@ test("FLOW_METER catch-all + CONTROL_DAMPER titled compile", () => {
   assert.equal(hvac.totals.items, 5);
 });
 
+test("LOUVER + LOUVERED_PENTHOUSE titled compile; FIN_TUBE titledOnly skips filter FTR", () => {
+  assert.equal(
+    scheduleTitleMatches(
+      "LOUVER SCHEDULE",
+      HVAC_FAMILY_SPECS.LOUVER.titleRe,
+      HVAC_FAMILY_SPECS.LOUVER.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE",
+      HVAC_FAMILY_SPECS.LOUVERED_PENTHOUSE.titleRe,
+      HVAC_FAMILY_SPECS.LOUVERED_PENTHOUSE.exclude,
+    ),
+    true,
+  );
+  assert.equal(HVAC_FAMILY_SPECS.FIN_TUBE_RADIATION.titledOnly, true);
+  assert.equal(HVAC_FAMILY_SPECS.FILTER.titledOnly, true);
+  const graph = {
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#1",
+        title: { text: "LOUVER SCHEDULE" },
+        rows: [
+          { key: "LV-1", cells: { MARK: { text: "LV-1" } } },
+          { key: "L-2", cells: { MARK: { text: "L-2" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#2",
+        title: { text: "PENTHOUSE SCHEDULE" },
+        rows: [{ key: "PH-1", cells: { MARK: { text: "PH-1" } } }],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#3",
+        title: { text: "FIN TUBE RADIATION SCHEDULE" },
+        rows: [{ key: "FTR-1", cells: { MARK: { text: "FTR-1" } } }],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#4",
+        title: { text: "FILTER & STRAINER SCHEDULE" },
+        rows: [
+          { key: "FTR-2", cells: { MARK: { text: "FTR-2" } } },
+          { key: "STR-1", cells: { MARK: { text: "STR-1" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#5",
+        title: { text: "" },
+        rows: [{ key: "FTR-9", cells: { MARK: { text: "FTR-9" } } }],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#6",
+        title: { text: "EQUIPMENT SCHEDULE" },
+        rows: [{ key: "FTR-8", cells: { MARK: { text: "FTR-8" } } }],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.LOUVER.count, 2);
+  assert.equal(hvac.categories.LOUVERED_PENTHOUSE.count, 1);
+  assert.equal(hvac.categories.FIN_TUBE_RADIATION.count, 1);
+  assert.equal(hvac.categories.FIN_TUBE_RADIATION.items[0].tag, "FTR-1");
+  assert.equal(hvac.categories.FILTER.count, 1);
+  assert.equal(hvac.categories.FILTER.items[0].tag, "FTR-2");
+  assert.equal(hvac.categories.STRAINER.count, 1);
+  // Blank + catch-all FTR must not inflate FIN_TUBE or FILTER.
+  assert.ok(!hvac.categories.FIN_TUBE_RADIATION.items.some((i) => /FTR-9|FTR-8/i.test(i.tag)));
+  assert.ok(!hvac.categories.FILTER.items.some((i) => /FTR-9|FTR-8/i.test(i.tag)));
+});
+
 test("HYDRONIC ACCESSORIES claims PF/GMU/HS (Klamath shape)", () => {
   const graph = {
     tables: [{

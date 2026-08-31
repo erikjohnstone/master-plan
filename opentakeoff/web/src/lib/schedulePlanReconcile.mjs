@@ -176,7 +176,11 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
     const keyGated = Boolean(keyRe || blankKeyRe);
     // Parity with compile uniqueFamily: blank-title OR catch-all equipment /
     // miscellaneous schedules only when the family has a keyRe/blankKeyRe.
-    if (!titleOk && !(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
+    // titledOnly families skip blank/catch-all (FIN_TUBE vs filter FTR).
+    if (!titleOk) {
+      if (needle?.titledOnly) continue;
+      if (!(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
+    }
     const filterRe = blankTitle ? blankGate : catchAllSchedule ? null : keyRe;
     for (const row of table.rows || []) {
       const tag = rowIdentityTag(row);

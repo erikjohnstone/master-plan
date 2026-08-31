@@ -106,7 +106,7 @@ export function normalizeEquipMark(raw) {
   return t.trim();
 }
 
-function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHeaderRe }) {
+function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHeaderRe, titledOnly }) {
   const keys = new Set();
   const items = [];
   for (const table of graph.tables || []) {
@@ -117,12 +117,16 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHead
     // (Transbay RAH-/WFU- tables extract without a recoverable caption).
     // MISCELLANEOUS / bare EQUIPMENT / SPECIALTY EQUIPMENT / HYDRONIC
     // ACCESSORIES: same gate — only families with keyRe may claim rows.
+    // titledOnly: skip blank/catch-all entirely (FIN_TUBE FTR vs filter panels).
     const titleOk = scheduleTitleMatches(title, titleRe, exclude);
     const blankTitle = !title.trim();
     const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i.test(title);
     const blankGate = blankKeyRe || keyRe;
     const keyGated = Boolean(keyRe || blankKeyRe);
-    if (!titleOk && !(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
+    if (!titleOk) {
+      if (titledOnly) continue;
+      if (!(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
+    }
     // keyRe filters titled rows (AHU/FCU); blankKeyRe only gates blank titles
     // (Carson CONDENSING UNIT uses B1/B2 marks — must not apply ACC/CU filter).
     // Catch-all tables: OR blankKeyRe|keyRe so HEAT_PUMP blankKeyRe (/^HP/)
@@ -352,6 +356,16 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /FIN[\s\-]*TUBE\s+RADIATION|FINNED\s+PIPE\s+RADIATION|FIN[\s\-]*TUBE\s+RADIATOR/i,
     exclude: /POINTS\s*LIST|DDC|CEILING\s+PANEL/i,
     keyRe: /^(?:FTR|FT)[\s\-]/i,
+    // Titled-only: FTR-* also appears on FILTER & STRAINER / vibration tables
+    // (Colville) and must not join via blank/catch-all keyRe.
+    titledOnly: true,
+  },
+  // Filter panels on FILTER & STRAINER / AIR FILTER schedules (FTR-* when not fin-tube).
+  FILTER: {
+    titleRe: /FILTER\s*&\s*STRAINER\s+SCHEDULE|FILTER\s+AND\s+STRAINER\s+SCHEDULE|AIR\s+FILTER\s+SCHEDULE|\bFILTER\s+SCHEDULE\b/i,
+    exclude: /POINTS\s*LIST|DDC|FIN[\s\-]*TUBE|WATER\s+FILTER\s+UNIT/i,
+    keyRe: /^FTR[\s\-]/i,
+    titledOnly: true,
   },
   CRAH: { titleRe: /COMPUTER ROOM AIR HANDLER|\bCRAH\b/i },
   DEHUMIDIFIER: { titleRe: /DEHUMIDIFIER SCHEDULE/i, keyRe: /^DH[\-]/i },
@@ -460,6 +474,17 @@ export const HVAC_FAMILY_SPECS = {
   },
   DUCT_SILENCER: {
     titleRe: /DUCT SILENCER SCHEDULE|SILENCER SCHEDULE|SOUND ATTENUATOR SCHEDULE|SOUND\s+TRAP\s+SCHEDULE/i,
+  },
+  // Wall / intake louvers (LV-* / L-*). Titled-only — no keyRe so catch-all
+  // cannot steal L-* lamp/luminaire marks.
+  LOUVER: {
+    titleRe: /\bLOUVER\s+SCHEDULE\b/i,
+    exclude: /PENTHOUSE|POINTS\s*LIST|DDC|LOUVERED/i,
+  },
+  // Roof penthouse / architectural louvered penthouse (PH-* / ALP-*).
+  LOUVERED_PENTHOUSE: {
+    titleRe: /(?:ARCHITECTURAL\s+)?LOUVERED\s+PENTHOUSE(?:\s+SCHEDULE)?|\bPENTHOUSE\s+SCHEDULE\b/i,
+    exclude: /POINTS\s*LIST|DDC/i,
   },
 };
 

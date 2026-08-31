@@ -302,7 +302,7 @@ reconcile, and plan joins.
   UI graph prewarm (`schedules indexing…`) + `prewarmGraphSmoke.test.mjs`.
 - **Bulk rescore (2026-08-31 tip `cdfded4`):** MEAT **20** · WEAK **2** · ZERO **9** (Douglas misc+VRF MEAT; SDSU 85; Kennebec+Suwannee honest WEAK).
 - **Orange County cross-set key:** 32 VAV + **33** HVAC items (BP-1 only; fake HRC/UH dropped); reconcile scaffold test.
-- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (**47**), Baker MS (**17**), Klamath (**50**), Douglas (**18**), Jeff City CST (**27**), **SDSU EngSciences (118)**, **MSU Life Sciences (5)**, bldg5406 (**27**), Carson (**58**), **itd-d1-lab (89)** locked.
+- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (**50**), Baker MS (**17**), Klamath (**50**), Douglas (**18**), Jeff City CST (**27**), **SDSU EngSciences (118)**, **MSU Life Sciences (5)**, bldg5406 (**27**), Carson (**58**), federal-mech (**103**), **itd-d1-lab (92)** locked.
 - **WP1.4 keyRe broaden:** BOILER1 marks, blank-title FCU/EV/EF/RF fan-coil rows — federal-mech later gains FIN_TUBE (100); two bulk WEAK→MEAT promotions.
 - **WP1.4 CODE_RE + EQUIP.TAG + banding orphans:** `AHU-1A`-style digit+letter suffixes; `EQUIP. TAG` own-identity; seam-gap spans assigned to nearest band + thin identity-band absorb. Hawthorn **1→5**.
 - **WP1.4 title hunt:** `\bSCHEDULE\b` (not SCHEDULED) — Northport AIR INLETS & OUTLETS recovers 12 GRD (**3→15**).
@@ -325,8 +325,9 @@ reconcile, and plan joins.
 - **WP1.4 gas-split indoor F-1:** FCU keyRe accepts `F-#` on split-system titles (not `CU-#`, preserves Colville/Carson) — itd **84→85**.
 - **WP1.4 hydronic accessories families (shared path):** CHEMICAL_POT_FEEDER (PF), GLYCOL_MAKEUP (GMU), STRAINER (STR), BYPASS_CONTROL_VALVE (BCV), AIR_COMPRESSOR (titled only); AIR_SEPARATOR+HS; EXPANSION_TANK+DT; PUMP blankKeyRe+BS — itd **85→88**; Klamath **45→50**; Colville **42→47**.
 - **WP1.4 FLOW_METER + CONTROL_DAMPER (shared path):** specialty `FM-*` catch-all (itd Onicon); titled `CONTROL DAMPER SCHEDULE` with OA/RA/EA/SA keyRe (Carson OA1/OA2; B1 building mark excluded) — itd **88→89**; Carson **56→58**. Negatives: Klamath 50, Colville 47, Baker 17, federal 100, SDSU 118, bldg5406 27.
+- **WP1.4 LOUVER / LOUVERED_PENTHOUSE / FILTER + FIN_TUBE titledOnly (shared path):** wall louvers; PH/ALP penthouses; FILTER `FTR-*` on FILTER & STRAINER; `titledOnly` stops blank/catch-all FIN_TUBE stealing Colville filter/vibration FTR — itd **89→92**; Colville **47→50**; federal **100→103**. Reid FIN_TUBE 4 unchanged.
 - **WP4 SDSU VAV sample MATCH lock:** `CAV-N2-2`/`CAV-S1-1`/`CAV-S1-6`/`CAV-S3-1` MATCH under `evaluationFast`; honest **4/65 MATCH · 61 SCHEDULE_ONLY** ceiling (tags not plan text).
-- **WP4 schedule-stem dup collapse:** same-sheet truncated title extracts (`…SCHEDULE` stem) no longer AMBIGUOUS — SDSU AHU **3/3 MATCH**; VAV **27/40 MATCH** (honest SCHEDULE_ONLY remainder).
+- **WP4 schedule-stem dup collapse:** same-sheet truncated title extracts (`…SCHEDULE` stem) no longer AMBIGUOUS — SDSU AHU **3/3 MATCH**; VAV sample MATCH locked (honest SCHEDULE_ONLY remainder).
 - **WP4 Douglas DOAS:** misc-schedule **DOAS-30 MATCH** locked.
 - **WP4 Jeff City CST:** VAV **9/9** + FCU **3/3 MATCH** (locked in `reconcileWorkflow.test.mjs`).
 - **WP4 reconcile tag dedupe:** scaffold drops duplicate MARK extracts (Douglas HP-20 double table) — parity with compile `uniqueFamily`.
@@ -340,12 +341,12 @@ reconcile, and plan joins.
 - **WP1 Suwannee key:** honest WEAK RTU:1 locked.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
-- **WP6:** `test:workflows` **33/33** after FLOW_METER/CONTROL_DAMPER + SDSU VAV sample (tip `4eb25ac`).
+- **WP6:** `test:workflows` pending after LOUVER/FILTER batch.
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 orphan titles: Colville LV louvers + filter-panel FTR-1 tag collision; itd CU-1 outdoor; federal AHU fan schedule excluded by design.
+2. WP1.4 orphan titles: itd CU-1 outdoor (split outdoor half — CONDENSING_UNIT cannot take titled keyRe without Carson B* loss); federal AHU fan schedule excluded by design.
 3. WP1.4 additional table-boundary misses on bulk WEAK/ZERO sets (many ZEROs honest — Augusta window, Iowa/Judson note spans).
 4. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 5. WP4 deepen on Douglas / Klamath / SDSU VAV SCHEDULE_ONLY remainder (raise plan-text recall without unsafe heuristics).
