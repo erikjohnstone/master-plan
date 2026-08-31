@@ -509,8 +509,18 @@ function buildProbes(truth, result) {
 
 function gradeProbe(probe, answer, truth, result) {
   if (probe.expect.number != null) {
-    const n = typeof answer.number === "number" ? answer.number : Number(String(answer.answer).match(/-?\d+/)?.[0]);
-    return Number.isFinite(n) && n === probe.expect.number;
+    if (typeof answer.number === "number" && Number.isFinite(answer.number)) {
+      return answer.number === probe.expect.number;
+    }
+    const text = String(answer.answer || "");
+    const parsed = Number(text.match(/-?\d+/)?.[0]);
+    if (Number.isFinite(parsed) && parsed === probe.expect.number) return true;
+    // Models often say "none" / "excluded" / "not present" for a zero-count
+    // phantom family instead of emitting number:0 — accept clear zero language.
+    if (probe.expect.number === 0) {
+      return /\b(0|zero|none|n\/?a|absent|excluded|not\s+present|does\s+not\s+exist|no\s+such)\b/i.test(text);
+    }
+    return false;
   }
   if (probe.expect.answer_includes) {
     const text = String(answer.answer || "").toLowerCase();

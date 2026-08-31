@@ -973,11 +973,22 @@ function skipSubHeaderContinuation(rows: GraphSpan[][], vocab: string[], from: n
 // bareLeadingType comment for the real reasoning.
 const CATALOG_ANCHOR_WORDS = ["ID", "MARK", "CODE", "SYMBOL", "TAG"];
 
+/** ITEM NO. / EQUIP NO. — own-identity key columns on VA / federal CUP
+ * schedules (Las Vegas CUP PUMP / COOLING TOWER). Kept OUT of
+ * CATALOG_ANCHOR_WORDS so bare ITEM/EQUIP never trip mergeBackward /
+ * finish vocab; matched only as the compound forms below. */
+const ITEM_NO_HEADER_RE = /^(?:ITEM|EQUIP\.?|EQUIPMENT)\s*(?:NO\.?|NUMBER|#)$/i;
+
+function isItemNoHeader(text: string | null | undefined): boolean {
+  return ITEM_NO_HEADER_RE.test(norm(text || "").replace(/\s+/g, " ").trim());
+}
+
 /** True when a header IS a bare catalog-anchor word (after `norm`) — the
  * row's OWN identity column, the same catalog-anchor bar every
  * equipment-kind table already keys off of. */
 export function isBareAnchorHeader(header: string | null | undefined): boolean {
-  return CATALOG_ANCHOR_WORDS.includes(norm(header || ""));
+  if (CATALOG_ANCHOR_WORDS.includes(norm(header || ""))) return true;
+  return isItemNoHeader(header);
 }
 
 /** True when a header carries a catalog-anchor word ALONGSIDE another word
@@ -993,6 +1004,9 @@ export function isBareAnchorHeader(header: string | null | undefined): boolean {
 export function isQualifiedAnchorHeader(header: string | null | undefined): boolean {
   const h = norm(header || "");
   if (!h || CATALOG_ANCHOR_WORDS.includes(h)) return false;
+  // ITEM NO / EQUIP NO are own-identity (VA schedules), not UNIT MARK-style
+  // cross-references.
+  if (isItemNoHeader(h)) return false;
   const toks = h.split(/\s+/).filter(Boolean);
   return toks.length > 1 && toks.some((t) => CATALOG_ANCHOR_WORDS.includes(t));
 }
@@ -3299,6 +3313,19 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
     const phrase = norm(raw).replace(/\s+/g, " ").trim();
     return NAME_KEY_RE.test(phrase) ? { key: phrase } : null;
   }
+  // Comma-grouped equipment marks in one ITEM NO cell — "CWP - 1,2,3,4,5"
+  // or "CT-1,2,3,4" (VA Las Vegas CUP pump / cooling-tower schedules). Mint
+  // slash-compound keys so one schedule row answers for every listed mark;
+  // trailing service prose glued into the same span ("… 5 CO") is dropped.
+  if (kind === "equipment") {
+    const grouped = norm(raw).replace(/\s+/g, " ").trim()
+      .match(/^([A-Z]{1,6})\s*[-–]\s*(\d+(?:\s*,\s*\d+)+)\b/);
+    if (grouped) {
+      const prefix = grouped[1];
+      const marks = grouped[2].split(/\s*,\s*/).map((n) => `${prefix}-${n}`);
+      if (marks.every((m) => CODE_RE.test(m))) return { key: marks.join("/") };
+    }
+  }
   const kept = norm(raw).replace(/[^A-Z0-9/-]/g, "");
   const key = kept.replace(/\//g, "");
   if (kind === "finish" || kind === "equipment") {
@@ -4568,6 +4595,9 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // of a table this vocabulary was never going to fully parse.
   const equipmentHeaderQualifies = (candAnchors: Anchor[], rowIndex: number): boolean => {
     if (candAnchors.some((a) => CATALOG_ANCHOR_WORDS.includes(a.label))) return true;
+    // VA / federal CUP: ITEM NO. / EQUIP NO. as the row's own identity
+    // column (Las Vegas CUP PUMP SCHEDULE) — compound forms only.
+    if ((rows[rowIndex] || []).some((t) => isItemNoHeader(t.str))) return true;
     const bareLeadingType = candAnchors[0]?.label === "TYPE" && candAnchors.length >= 8
       && headerHits(rows[rowIndex], vocab).length / Math.max(1, rows[rowIndex].length) >= 0.6;
     return bareLeadingType;
@@ -4601,6 +4631,26 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
     dataFrom = 0;
     titleFrom = rows.findIndex((r) => rowY(r) >= rot.top) - 1;
     if (titleFrom < -1) titleFrom = rows.length - 1;
+  }
+
+  // ITEM NO / EQUIP NO is not in EQUIPMENT_HEADERS (keeps bare ITEM/EQUIP out
+  // of vocabulary hits) but must still anchor the key column when it is the
+  // schedule's own identity header — inject after the vocab pass.
+  if (kind === "equipment") {
+    const itemSpans: GraphSpan[] = [];
+    for (const t of headerSpans) if (isItemNoHeader(t.str)) itemSpans.push(t);
+    // Parent / co-equal tiers above the deepest qualifying row.
+    if (flat) {
+      const top = flat.mergedTopIdx ?? flat.rowIndex;
+      for (let ri = top; ri <= flat.rowIndex; ri++) {
+        for (const t of rows[ri] || []) if (isItemNoHeader(t.str)) itemSpans.push(t);
+      }
+    }
+    for (const t of itemSpans) {
+      const x = centerX(t);
+      if (anchors.some((a) => a.label === "ITEM" || Math.abs(a.x - x) <= 8)) continue;
+      anchors = [...anchors, { label: "ITEM", x }].sort((a, b) => a.x - b.x);
+    }
   }
 
   // The region is what an agent is told to LOOK at, so it must bound THIS
@@ -6539,7 +6589,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
         // equipment-kind path in this file already enforces (a table with no
         // TAG/MARK/CODE/SYMBOL/ID column has no real key column an estimator
         // or symbol_sweep can chase, so a title match alone is not enough).
-        if (t.title && isMepEquipmentSchedule(t.title.text) && t.headers.some((h) => CATALOG_ANCHOR_WORDS.includes(norm(h)))) {
+        if (t.title && isMepEquipmentSchedule(t.title.text) && t.headers.some((h) => CATALOG_ANCHOR_WORDS.includes(norm(h)) || isItemNoHeader(h))) {
           notes.push(`${s.key}: "${t.title.text}" names a real MEP-equipment family but never independently cleared any kind's own row-vocabulary bar (its required rating word never co-occurs with its own anchor row) — reclassified from a structural reference read to equipment-kind.`);
           t.kind = "equipment";
           reclassified.add(t);
@@ -7729,7 +7779,7 @@ export function scheduleTableFromODL(
     // carry one extra recognized column (TYPE MARK / SENSIBLE MBH) that
     // clears the bar on its own — this promotion only ever fires for the
     // narrower case those two already skip.
-    kind = (isMepEquipmentSchedule(titleText) && headers.some((h) => CATALOG_ANCHOR_WORDS.includes(norm(h))))
+    kind = (isMepEquipmentSchedule(titleText) && headers.some((h) => CATALOG_ANCHOR_WORDS.includes(norm(h)) || isItemNoHeader(h)))
       ? "equipment"
       : "reference";
   }
