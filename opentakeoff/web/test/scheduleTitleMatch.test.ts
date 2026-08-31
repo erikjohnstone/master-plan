@@ -947,6 +947,49 @@ test("WP1.4 FAN blank-title KEF kitchen exhaust (Klamath)", () => {
   assert.equal(hvac.categories.FAN.items[0].tag, "KEF-1");
 });
 
+test("WP1.4 VACUUM_PUMP titled V-* (SDSU shape); hydronic PUMP excludes vacuum", () => {
+  assert.ok(HVAC_FAMILY_SPECS.VACUUM_PUMP.keyRe!.test("V-1"));
+  assert.ok(!HVAC_FAMILY_SPECS.VACUUM_PUMP.keyRe!.test("VAV-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "VACUUM PUMP SCHEDULE",
+      HVAC_FAMILY_SPECS.VACUUM_PUMP.titleRe,
+      HVAC_FAMILY_SPECS.VACUUM_PUMP.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "VACUUM PUMP SCHEDULE",
+      HVAC_FAMILY_SPECS.PUMP.titleRe,
+      HVAC_FAMILY_SPECS.PUMP.exclude,
+    ),
+    false,
+  );
+  const graph = {
+    sheets: [],
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#1",
+        title: { text: "VACUUM PUMP SCHEDULE" },
+        rows: [{ key: "V-1", cells: { ITEM: { text: "V-1" }, SERVICE: { text: "VACUUM" } } }],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#2",
+        title: { text: "PUMP SCHEDULE" },
+        rows: [{ key: "CHP-1", cells: { MARK: { text: "CHP-1" } } }],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.VACUUM_PUMP.count, 1);
+  assert.equal(hvac.categories.VACUUM_PUMP.items[0].tag, "V-1");
+  assert.equal(hvac.categories.PUMP.count, 1);
+  assert.equal(hvac.categories.PUMP.items[0].tag, "CHP-1");
+});
+
 test("WP1.4 TEF/GX fans, ELECTRIC HUMIDIFIER EH, FILTER F-#, LOUER OCR, EPANSION OCR", () => {
   assert.ok(HVAC_FAMILY_SPECS.FAN.keyRe!.test("TEF-1"));
   assert.ok(HVAC_FAMILY_SPECS.FAN.keyRe!.test("GX-1"));

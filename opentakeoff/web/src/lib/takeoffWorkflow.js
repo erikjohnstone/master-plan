@@ -214,7 +214,7 @@ export function classifyTakeoffIntent(goal) {
   if (goalAsksTakeoff(g) && (
     /\bschedule\b/i.test(g)
     || /\b(?:AHUs?|DOAHs?|DOAS|VAVs?|FCUs?|RTUs?|CRAHs?|CUHs?|UHs?)\b/i.test(g)
-    || /\b(?:chillers?|boilers?|pumps?|humidifiers?|dehumidifiers?)\b/i.test(g)
+    || /\b(?:chillers?|boilers?|pumps?|vacuum\s+pumps?|humidifiers?|dehumidifiers?)\b/i.test(g)
     || /\b(?:diffusers?|grilles?|registers?|air\s+separators?|expansion\s+tanks?)\b/i.test(g)
     || /\b(?:unit\s+heaters?|cabinet\s+unit\s+heaters?|fan[\s\-]*coils?|rooftop)\b/i.test(g)
     || /\b(?:dedicated\s+outdoor|computer[\s\-]*room)\b/i.test(g)
@@ -324,6 +324,14 @@ export function scheduleFamilyNeedles(goal) {
   }
   if (/\bpumps?\b/i.test(g)) {
     add({ label: "pump", title: "PUMP SCHEDULE", titleRe: /PUMP SCHEDULE/i });
+  }
+  if (/\bvacuum\s+pumps?\b/i.test(g)) {
+    add({
+      label: "vacuum pump",
+      title: "VACUUM PUMP SCHEDULE",
+      titleRe: /VACUUM\s+PUMP(?:\s+SCHEDULE)?/i,
+      exclude: /HEAT\s+PUMP|HYDRONIC/i,
+    });
   }
   if (/\bRTUs?\b|rooftop|packaged|roof[\s\-]*top\s+unit/i.test(g)) {
     add({ label: "RTU", title: "ROOF TOP UNIT SCHEDULE", titleRe: /ROOF[\s\-]*TOP|PACKAGED\s+ROOFTOP|RTU\s+SCHEDULE/i });

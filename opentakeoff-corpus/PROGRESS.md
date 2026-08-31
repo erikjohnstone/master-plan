@@ -302,7 +302,7 @@ reconcile, and plan joins.
   UI graph prewarm (`schedules indexing…`) + `prewarmGraphSmoke.test.mjs`.
 - **Bulk rescore (2026-08-31 tip `cdfded4`):** MEAT **20** · WEAK **2** · ZERO **9** (Douglas misc+VRF MEAT; SDSU 85; Kennebec+Suwannee honest WEAK).
 - **Orange County cross-set key:** 32 VAV + **33** HVAC items (BP-1 only; fake HRC/UH dropped); reconcile scaffold test.
-- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5→**8**), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (**50**), Baker MS (**21**), Klamath (**53**), Douglas (**18**), Jeff City CST (**32**), **SDSU EngSciences (206)**, **MSU Life Sciences (5)**, bldg5406 (**32**), Carson (**58**), federal-mech (**103**), **itd-d1-lab (93)** locked.
+- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5→**8**), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (**50**), Baker MS (**21**), Klamath (**53**), Douglas (**18**), Jeff City CST (**32**), **SDSU EngSciences (207)**, **MSU Life Sciences (5)**, bldg5406 (**32**), Carson (**58**), federal-mech (**103**), **itd-d1-lab (93)** locked.
 - **WP1.4 keyRe broaden:** BOILER1 marks, blank-title FCU/EV/EF/RF fan-coil rows — federal-mech later gains FIN_TUBE (100); two bulk WEAK→MEAT promotions.
 - **WP1.4 CODE_RE + EQUIP.TAG + banding orphans:** `AHU-1A`-style digit+letter suffixes; `EQUIP. TAG` own-identity; seam-gap spans assigned to nearest band + thin identity-band absorb. Hawthorn **1→5**.
 - **WP1.4 title hunt:** `\bSCHEDULE\b` (not SCHEDULED) — Northport AIR INLETS & OUTLETS recovers 12 GRD (**3→15**).
@@ -362,13 +362,14 @@ reconcile, and plan joins.
 - **WP4 Baker EH MATCH + Klamath KEF SO:** after shadow collapse, Baker UNIT_HEATER **4/4 MATCH**; Klamath blank-title KEF-1 honest SCHEDULE_ONLY under `evaluationFast`.
 - **WP4 glued compound rowKeyAnswersFor (shared path):** comma + glued `AHU-1HP-1` keys answer for each half (digit+letter suffixes like `AHU-1A` do not split). Baker AHU **3/3 MATCH** + indoor HP-1/2/3 MATCH (was false SCHEDULE_ONLY — sweep could not find the row).
 - **WP1.4 ERV keyRe + ERV-paired HP (shared path):** `ERU-*/ERV-*` keyRe comma-splits SYMBOL; HEAT_PUMP no longer excludes ENERGY RECOVERY titles so outdoor HP-* halves join. Baker **20→21** (HP-4); ERU-1 + HP-4 **MATCH**. Negatives: Colville 50, itd 93, federal 103, Klamath 53.
+- **WP1.4 VACUUM_PUMP (shared path):** titled `VACUUM PUMP SCHEDULE` + `V-*` (titledOnly; hydronic PUMP still excludes VACUUM). SDSU **206→207** (V-1). Negatives: Colville 50, itd 93, Carson 58, Baker 21, Klamath 53, federal 103.
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 remaining titled HVAC orphans on already-keyed MEAT sets (honest refuse: federal AHU fan/coil component schedules; Valdosta VRF rows unkeyed; Douglas model-number heat-pump keys).
+2. WP1.4 remaining titled HVAC orphans on already-keyed MEAT sets (honest refuse: federal AHU fan/coil component schedules; Valdosta VRF rows unkeyed; Douglas model-number heat-pump keys; Life Sciences EQ-* non-HVAC).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on; Bessemer TG already passes via inline motif).
-4. WP4: Klamath FC/HP/DOAS still SCHEDULE_ONLY under evaluationFast (plan-text recall).
+4. WP4: Klamath FC/HP/DOAS still SCHEDULE_ONLY under evaluationFast (plan-text recall — tags not drawable text).
 5. Remaining WEAK ceilings: Suwannee (1 RTU honest), Kennebec (2 multi-split only).
 6. Optional: evaluate BlueprintParser_OS / drawings-ai digests as *complementary* LLM recall only — never as qty/cite truth (stay on Session+ODL).
 

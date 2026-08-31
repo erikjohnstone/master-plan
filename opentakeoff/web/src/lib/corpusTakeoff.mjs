@@ -358,6 +358,14 @@ export const HVAC_FAMILY_SPECS = {
     // BS-* = packaged booster pump systems on EQUIPMENT catch-all lists.
     blankKeyRe: /^(?:P|CP|CWP|HWP|HHWP|CHWP|CHP|HWRP|IWP|BP|SP|SCHWP|RP|PP|EP|BS)[\s\-]?\d/i,
   },
+  // Lab / medical vacuum pumps on dedicated VACUUM PUMP schedules (SDSU V-1).
+  // Separate from hydronic PUMP (title exclude VACUUM) so V-* is not orphaned.
+  VACUUM_PUMP: {
+    titleRe: /VACUUM\s+PUMP(?:\s+SCHEDULE)?/i,
+    exclude: /POINTS\s*LIST|DDC|HEAT\s+PUMP|HYDRONIC|CONDENSER|CHILLED\s+WATER/i,
+    keyRe: /^V[\s\-]\d/i,
+    titledOnly: true,
+  },
   COOLING_TOWER: {
     titleRe: /COOLING\s+TOWER\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC/i,
