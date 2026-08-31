@@ -3175,11 +3175,27 @@ export class Session {
           ? normalized.replace(/\b\d+\s+OF\s+\d+\b/g, "").replace(/[^A-Z0-9]/g, "")
           : null;
       };
+      // Stem through the word SCHEDULE so truncated sibling extracts
+      // ("…HOT WATER REHEAT" vs "…HOT WATE") still collapse on one sheet.
+      const scheduleStem = (text: string | null | undefined): string | null => {
+        const normalized = (text || "").toUpperCase().replace(/\s+/g, " ").trim();
+        const m = normalized.match(/^(.*?SCHEDULE)\b/);
+        return m ? m[1].replace(/[^A-Z0-9]/g, "") : null;
+      };
       const collapsed: typeof rowHits = [];
       for (const hit of rowHits) {
         const family = partTitle(hit.tb.title?.text);
-        const prior = family ? collapsed.findIndex((candidate) =>
-          candidate.tb.sheet === hit.tb.sheet && partTitle(candidate.tb.title?.text) === family) : -1;
+        const stem = scheduleStem(hit.tb.title?.text);
+        const titleNorm = (hit.tb.title?.text || "").toUpperCase().replace(/\s+/g, " ").trim();
+        const prior = collapsed.findIndex((candidate) => {
+          if (candidate.tb.sheet !== hit.tb.sheet) return false;
+          const candFamily = partTitle(candidate.tb.title?.text);
+          if (family && candFamily && family === candFamily) return true;
+          const candStem = scheduleStem(candidate.tb.title?.text);
+          if (stem && candStem && stem === candStem) return true;
+          const candTitle = (candidate.tb.title?.text || "").toUpperCase().replace(/\s+/g, " ").trim();
+          return titleNorm.length > 0 && titleNorm === candTitle;
+        });
         if (prior >= 0) {
           if (Object.keys(hit.r.cells).length > Object.keys(collapsed[prior].r.cells).length) collapsed[prior] = hit;
         } else {
