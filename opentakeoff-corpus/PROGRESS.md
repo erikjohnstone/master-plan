@@ -296,25 +296,26 @@ reconcile, and plan joins.
 
 ### Batch accepted this session (independently verified on branch)
 
-- **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15)
-  forced-cold; `rowsymBessemer.regression.test.mjs` locks ≥90% bar;
-  `INLINE-MOTIF-EVAL.md` updated.
-- **WP5 partial:** `planToolParity.test.mjs` — reconcile installed_qty matches
-  `sweepScheduleRow` on D07 VAV tags; `count_marks` MCP-bridge-first on UI.
-- **WP6:** `test:workflows` **18/18** green; `test:demos` **10/10** golden verify.
-- **Pillar A / bulk compile:** (prior batch) 6 keyed cross-set sets; bulk 13/8/10.
-- **WP4:** federal-mech VAV MATCH + D07/D08 NAVFAC reconcile proofs; #51 PROVEN.
-- **WP2:** MCP N=5; UI Gates 1–4; Gate 5 blocked (no `CEREBRAS_API_KEY`).
+- **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
+  `rowsymBessemer.regression.test.mjs`.
+- **WP5:** Production Session endpoints `/__ot/sweep-schedule-row` + `/__ot/count-marks`
+  (same CLI as compile); UI Agent tries MCP → production HTTP → local fallback;
+  `planToolParity.test.mjs` on D07.
+- **WP1.4 partial:** `UNIT TAG` / `UNIT NO` own-identity headers in `sheetgraph.ts`
+  (WP1.4 column/header vocab); unit test green.
+- **WP4 partial:** `reconcileGolden.test.mjs` — D07 contractor CSV + MATCH/refuse bar.
+- **WP4 UI proof:** `playwright-reconcile-ui.mjs` — bldg5406 VAV reconcile 9/9 MATCH via
+  `window.__opentakeoff.reconcileSchedulePlan` (Agent tool path wired in TakeoffCanvas).
+- **WP6:** `test:workflows` **19/19**; `test:demos` **10/10** (prior batch).
+- **Prior batches:** 6 cross-set keys, federal VAV MATCH, reconcile #51 PROVEN.
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 header/column vocab from bulk failures (`columnMapFor`).
-3. WP2 UI Gate 5 when key available; T-VALVE CARD lock both surfaces.
-4. WP3.3 TG bowtie dedicated detector (tracked follow-on — rowsym key passes today).
-5. WP4 Agent UI reconcile proof (Playwright or durable equivalent).
-6. WP5 full Session-unify (eliminate UI geometric fork, not just MCP-bridge-first).
-7. WP1 bulk ZERO/WEAK family probes after merge.
+2. WP2 UI Gate 5 + T-VALVE CARD lock (needs `CEREBRAS_API_KEY`).
+3. WP1.4 continue columnMapFor probes on bulk WEAK sets (many ZEROs are honest).
+4. WP3.3 TG bowtie dedicated detector (tracked follow-on).
+5. WP5 eliminate local geometric fork entirely when production endpoint up.
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 

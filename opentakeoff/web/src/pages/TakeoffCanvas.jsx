@@ -122,7 +122,12 @@ import { detectCandidateRule, buildRuleFromSeed, applyRuleToProject } from "../l
 import { deriveTransitionRuns, transitionRefusal } from "../lib/transitions";
 import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, downloadText } from "../lib/totals.js";
 import { buildXlsx } from "../lib/xlsx.js";
-import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "../lib/corpusTakeoff.mjs";
+import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv, HVAC_FAMILY_SPECS } from "../lib/corpusTakeoff.mjs";
+import {
+  reconcileScheduleFamilyWithSweeps,
+  reconcileRowsToCsv,
+  familyNeedleFromSpecs,
+} from "../lib/schedulePlanReconcile.mjs";
 import { queryTable } from "../lib/queryTable.mjs";
 import { measurementBreakdown } from "../lib/measurementBreakdown.js";
 import { buildSheetDxf, dxfFileName, DXF_MIME } from "../lib/dxf.js";
@@ -7367,6 +7372,52 @@ export default function TakeoffCanvas() {
     };
   }
 
+  /** Schedule↔plan reconcile — shared schedulePlanReconcile + sweep_schedule_row path (WP4). */
+  async function agentReconcileSchedulePlan(opts = {}) {
+    const family = opts.family ? String(opts.family).trim() : null;
+    const remote = await agentMcpTool("reconcile_schedule_plan", { family });
+    if (remote && !remote.error) return remote;
+
+    const g = await ensureAgentGraph();
+    if (!g.available) {
+      return { error: "This set has no text layer (a scan) — reconcile needs schedule tables and plan sweeps." };
+    }
+    if (!family) {
+      return {
+        error: "Pass family to scope reconcile (e.g. VAV, FCU, AHU). Whole-set reconcile requires the MCP or production Session path.",
+      };
+    }
+    const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
+    if (!needle) {
+      return { rows: [], summary: { total: 0, match: 0, schedule_only: 0, plan_only: 0 }, family_filter: family };
+    }
+    const sessionAdapter = {
+      sweepScheduleRow: async (rowTag, sweepOpts) => {
+        const r = await agentSweepScheduleRow(rowTag, sweepOpts);
+        if (r?.error) throw new Error(r.error);
+        if (r.found != null) return r;
+        return {
+          found: r.total_found ?? 0,
+          sheets: (r.per_sheet || r.sheets || []).map((ps) => ({
+            sheet: ps.sheet,
+            matches: ps.matches || [],
+          })),
+        };
+      },
+    };
+    const result = await reconcileScheduleFamilyWithSweeps(sessionAdapter, g, needle, {
+      tags: opts.tags,
+      evaluationFast: opts.evaluationFast !== false,
+      sweepAll: !!opts.familySweepAll && !opts.tags?.length,
+    });
+    const csv = reconcileRowsToCsv(result.rows);
+    if (opts.download !== false && result.rows.length) {
+      const base = `${exportBaseName()}.reconcile-${(family || "all").toLowerCase()}`;
+      downloadText(`${base}.csv`, csv, "text/csv");
+    }
+    return { ...result, csv, path: "shared_session_sweep" };
+  }
+
   // Playwright / primary-agent UI demos call the same compile path the Agent
   // tool uses — no blueprint hardcoding; works on whatever plan is loaded.
   // Re-assigns every render so closures stay fresh. Do NOT delete in cleanup:
@@ -7374,6 +7425,7 @@ export default function TakeoffCanvas() {
   useEffect(() => {
     window.__opentakeoff = {
       compileCorpusTakeoff: (kind, opts) => agentCompileCorpusTakeoff(kind, opts),
+      reconcileSchedulePlan: (opts) => agentReconcileSchedulePlan(opts),
       showCompiledTakeoff,
       openAgent: () => setAgentOpen(true),
       openTakeoff: () => setShowTakeoffData(true),
@@ -7606,6 +7658,7 @@ export default function TakeoffCanvas() {
    * matching MCP's own sweep_schedule_row exactly — that's symbol_sweep's
    * own opt-in, not wired into this tool on either side. */
   async function agentSweepScheduleRow(tag, opts = {}) {
+    const t = canonMark(tag);
     const remote = await agentMcpTool("sweep_schedule_row", {
       tag,
       tagged_only: true,
@@ -7617,7 +7670,6 @@ export default function TakeoffCanvas() {
     if (prod && !prod.error) return prod;
     const g = await ensureAgentGraph();
     if (!g.available) return { error: "This set has no text layer (a scan) — schedule rows cannot be read." };
-    const t = canonMark(tag);
     if (!t) return { error: "Pass a schedule-row tag as drawn, e.g. sweep_schedule_row { tag: \"T1\" }." };
 
     const rowHits = g.tables.flatMap((tb) => tb.rows.filter((r) => rowKeyAnswersFor(r.key, t)).map((r) => ({ tb, r })));
@@ -8465,6 +8517,7 @@ export default function TakeoffCanvas() {
       exportTakeoff: agentExportTakeoff,
       exportReport: agentExportReport,
       compileCorpusTakeoff: agentCompileCorpusTakeoff,
+      reconcileSchedulePlan: agentReconcileSchedulePlan,
       countMarks: agentCountMarks,
       sweepScheduleRow: agentSweepScheduleRow,
       findText: agentFindText,

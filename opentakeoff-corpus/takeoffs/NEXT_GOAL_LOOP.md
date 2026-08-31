@@ -234,13 +234,17 @@ NAVFAC theater.
    honest disclose when not.
 6. Valve variant: schedule row ↔ plan installed when asked; never invent.
 
+**Status (impl branch, 2026-08-31):** Intent + shared module + MCP tool + golden
+fixtures green. Playwright UI proof (`playwright-reconcile-ui.mjs`) — bldg5406
+VAV 9/9 MATCH via `window.__opentakeoff.reconcileSchedulePlan`.
+
 **DoD:**
-1. Intent + phase tests (≥5 phrasings).
-2. Fixture proof on NAVFAC **and** ≥1 WP1 non-NAVFAC keyed set.
-3. Agent UI proof for at least one HVAC reconcile ask (Playwright or durable
+1. [x] Intent + phase tests (≥5 phrasings).
+2. [x] Fixture proof on NAVFAC **and** ≥1 WP1 non-NAVFAC keyed set.
+3. [x] Agent UI proof for at least one HVAC reconcile ask (Playwright or durable
    engine+golden equivalent if UI blocked — prefer UI once).
-4. `WORKFLOWS.md` row(s) added/updated; suite gate includes reconcile lock.
-5. Set-agnostic: no NAVFAC sheet IDs / locked counts in product code.
+4. [x] `WORKFLOWS.md` row(s) added/updated; suite gate includes reconcile lock.
+5. [x] Set-agnostic: no NAVFAC sheet IDs / locked counts in product code.
 
 **Evidence:** golden fixture + interrogation-style negative cases
 (false-premise “all scheduled units are drawn” must fail honestly).
