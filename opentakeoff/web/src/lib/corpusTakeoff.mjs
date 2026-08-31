@@ -343,6 +343,21 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC|EXPANSION/i,
     keyRe: /^BT[\s\-]/i,
   },
+  FLASH_TANK: {
+    titleRe: /FLASH\s+TANK\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC/i,
+    keyRe: /^FT[\s\-]/i,
+  },
+  HEAT_EXCHANGER: {
+    titleRe: /HEAT\s+EXCHANGER\s+SCHEDULE|WATER[\s\-]*TO[\s\-]*WATER\s+HEAT\s+EXCHANGER|SHELL\s+AND\s+TUBE\s+HEAT\s+EXCHANGER/i,
+    exclude: /POINTS\s*LIST|DDC/i,
+    keyRe: /^(?:HX|PHX|HE)[\s\-]/i,
+  },
+  DUCT_MOUNTED_COIL: {
+    titleRe: /DUCT\s+MOUNTED\s+COIL|HEATING\s+COIL\s+SCHEDULE|COOLING\s+COIL\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC|FAN\s*COIL|AIR\s+HANDLING/i,
+    keyRe: /^(?:CC|HC|RC)[\s\-]/i,
+  },
   // CHW / HHW from title signals (abbrev or spelled-out). Bypass valves stay out.
   CHW_CONTROL_VALVE: {
     titleRe: /(?:CHW|CHILLED\s*WATER).{0,40}CONTROL\s*VALVE|CONTROL\s*VALVE.{0,40}(?:CHW|CHILLED\s*WATER)/i,
