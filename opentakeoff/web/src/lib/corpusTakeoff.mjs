@@ -125,6 +125,11 @@ function uniqueFamily(graph, {
 }) {
   const keys = new Set();
   const items = [];
+  // Two passes: titled family schedules first, then blank/catch-all fallbacks.
+  // Same mark on a blank seismic summary and a titled ERV schedule (Colville)
+  // must cite the titled device definition — blank-first walk poisoned
+  // prefer-schedule sweeps.
+  for (const pass of [1, 2]) {
   for (const table of graph.tables || []) {
     const title = String(table.title?.text || "");
     // Soft title match: exact regex first, then compact (no-space) form so
@@ -140,7 +145,10 @@ function uniqueFamily(graph, {
     const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i.test(title);
     const blankGate = blankKeyRe || keyRe;
     const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
-    if (!titleOk && !altOk) {
+    if (titleOk || altOk) {
+      if (pass !== 1) continue;
+    } else {
+      if (pass !== 2) continue;
       if (titledOnly) continue;
       if (!(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
     }
@@ -223,6 +231,7 @@ function uniqueFamily(graph, {
       }
     }
   }
+  } // end titled-first / blank-fallback passes
   const building = { other: 0 };
   for (const item of items) {
     const code = item.building || buildingLetter(item.tag);

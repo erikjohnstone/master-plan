@@ -163,6 +163,9 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
   const blankKeyRe = needle?.blankKeyRe || null;
   const altTitleRe = needle?.altTitleRe || null;
   const altKeyRe = needle?.altKeyRe || null;
+  // Titled family schedules first (parity with compile uniqueFamily) so shared
+  // marks cite the device definition, not a blank/catch-all accessory row.
+  for (const pass of [1, 2]) {
   for (const table of graph?.tables || []) {
     const title = String(table.title?.text || "");
     // Parity with compile uniqueFamily: do not gate on table.kind.
@@ -183,7 +186,10 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
     // Parity with compile uniqueFamily: blank-title OR catch-all equipment /
     // miscellaneous schedules only when the family has a keyRe/blankKeyRe.
     // titledOnly families skip blank/catch-all (FIN_TUBE vs filter FTR).
-    if (!titleOk && !altOk) {
+    if (titleOk || altOk) {
+      if (pass !== 1) continue;
+    } else {
+      if (pass !== 2) continue;
       if (needle?.titledOnly) continue;
       if (!(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
     }
@@ -240,6 +246,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
       }
     }
   }
+  } // end titled-first / blank-fallback passes
   return rows;
 }
 

@@ -774,3 +774,31 @@ test("Carson prefer-schedule: shared B*/C* marks MATCH (unscoped stays AMBIGUOUS
     );
   }
 });
+
+test("Colville ERV: titled-first cite → ERV-1 MATCH (not blank seismic AMBIGUOUS)", async () => {
+  const keyPath = resolve(CROSS, "27_WA_ColvilleTribes_Hatchery_Lab.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "ERV");
+  const scaffold = reconcileScheduleFamilyFromGraph(graph, needle);
+  assert.equal(scaffold.length, key.categories.ERV);
+  assert.equal(scaffold[0].tag, "ERV-1");
+  assert.match(
+    String(scaffold[0].schedule_cite?.title || ""),
+    /ENERGY\s+RECOVERY\s+VENTILATOR/i,
+    "scaffold must cite titled ERV schedule, not blank seismic summary",
+  );
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    evaluationFast: true,
+  });
+  assert.equal(result.rows[0].status, "MATCH");
+  assert.ok((result.rows[0].installed_qty || 0) >= 1);
+});

@@ -3364,15 +3364,23 @@ export class Session {
         if (preferSheet && hit.tb.sheet !== preferSheet) return false;
         return titleMatches(hit.tb.title?.text);
       });
-      if (preferred.length === 1) {
+      let narrowed = preferred;
+      // Sheet-only preference (blank-title walk): when the caller did not name
+      // a title, prefer the unique non-blank titled schedule on that sheet so
+      // seismic/summary blanks do not stay tied with the real ERV schedule.
+      if (narrowed.length > 1 && !preferNorm) {
+        const titledOnly = narrowed.filter((hit) => titleNorm(hit.tb.title?.text));
+        if (titledOnly.length === 1) narrowed = titledOnly;
+      }
+      if (narrowed.length === 1) {
         const dropped = rowHits.length - 1;
         accessoryNote = [
           accessoryNote,
           `${dropped} other schedule row${dropped === 1 ? "" : "s"} also carry the key "${t}" but were excluded because the caller preferred "${preferTitleRaw || preferSheet}" (cross-family shared mark — not competing ambiguity for this sweep).`,
         ].filter(Boolean).join(" ");
-        rowHits = preferred;
-      } else if (preferred.length > 1) {
-        rowHits = preferred;
+        rowHits = narrowed;
+      } else if (narrowed.length > 1) {
+        rowHits = narrowed;
       }
     }
     if (rowHits.length > 1) {
