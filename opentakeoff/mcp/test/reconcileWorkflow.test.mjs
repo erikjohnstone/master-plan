@@ -303,6 +303,32 @@ test("Valdosta + St Louis GRD reconcile scaffold matches compile (reference-kind
   }
 });
 
+test("Hurlburt bulk AHU+FAN reconcile: all scheduled tags MATCH (WP1 cross-set)", async () => {
+  const keyPath = resolve(CROSS, "03_FL_HurlburtField_ChildDevCenter.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  for (const family of ["AHU", "FAN"]) {
+    const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
+    const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+      evaluationFast: true,
+    });
+    assert.equal(result.rows.length, key.categories[family], `${family} rows = compile`);
+    assert.ok(result.rows.every((r) => r.status === "MATCH"), `${family} all MATCH`);
+    for (const row of result.rows) {
+      assert.ok(row.installed_qty >= 1, `${row.tag} installed`);
+      assert.ok(row.plan_cites?.length >= 1, `${row.tag} plan cite`);
+    }
+  }
+});
+
 test("blank-title FAN tables join reconcile scaffold via keyRe (Macon Bibb shape)", async () => {
   const keyPath = resolve(CROSS, "23_GA_MaconBibb_RecreationCenter.compile.json");
   assert.ok(existsSync(keyPath));

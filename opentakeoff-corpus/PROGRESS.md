@@ -310,17 +310,18 @@ reconcile, and plan joins.
 - **WP1.4 RADIANT_CEILING_PANEL:** ECP-* family — Johnson **7→8**.
 - **WP1.4 St Louis / Valdosta families:** AHU `AC-*`; FCU `FCUC`; VAV `AIR TERMINAL UNIT`+`ATU-*`; GRD `AIR DEVICE`+`GRILLE SCHEDULE`.
 - **WP1.4 FIN_TUBE_RADIATION:** FINNED PIPE / FIN TUBE titles (FT-/FTR-*) — Reid Hall **8→12**; federal-mech **96→100**.
-- **WP1.4 (N)-prefix normalize:** strip `(N)/(E)` and glued `NACC`/`NATU` marks; CONDENSING `blankKeyRe` ACC/CU; Hurlburt **10→13**.
+- **WP1.4 (N)-prefix normalize:** strip `(N)/(E)` and glued `NACC`/`NATU` marks; CONDENSING `blankKeyRe` ACC/CU; Hurlburt **10→13**. NOTES: filter keeps Transbay at 10.
 - **WP4 Orange County:** installed reconcile **32/32 VAV MATCH** (full census locked in `reconcileWorkflow.test.mjs`).
 - **WP4 Hawthorn:** AHU **2/2** + CU **2/2** MATCH (digit+letter tags on plan).
 - **WP4 St Louis:** VAV/ATU **12/12 MATCH** (AIR TERMINAL UNIT schedule ↔ plan).
+- **WP4 Hurlburt:** AHU **2/2** + FAN **4/4 MATCH** (blank-title + (N)-normalized marks).
 - **WP4 reconcile↔compile parity:** family-only `reconcileSchedulePlan` uses HVAC needles; scaffold accepts reference-kind GRILLE + `row.key` (Valdosta/St Louis GRD).
 - **WP4 blank-title reconcile:** scaffold accepts blank-title+keyRe families (Macon Bibb FAN) — parity with compile `uniqueFamily`.
 - **WP1.4 GRD plurals:** `GRILLES, REGISTERS, AND DIFFUSERS` title — Johnson County **4→7** MEAT.
 - **WP1 Suwannee key:** honest WEAK RTU:1 locked.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
-- **WP6:** `test:workflows` **27/27**; `test:demos` **10/10**.
+- **WP6:** `test:workflows` **28/28**; `test:demos` **10/10**.
 
 ### Next queue (platform loop)
 
