@@ -326,7 +326,7 @@ reconcile, and plan joins.
 - **WP1.4 hydronic accessories families (shared path):** CHEMICAL_POT_FEEDER (PF), GLYCOL_MAKEUP (GMU), STRAINER (STR), BYPASS_CONTROL_VALVE (BCV), AIR_COMPRESSOR (titled only); AIR_SEPARATOR+HS; EXPANSION_TANK+DT; PUMP blankKeyRe+BS — itd **85→88**; Klamath **45→50**; Colville **42→47**.
 - **WP1.4 FLOW_METER + CONTROL_DAMPER (shared path):** specialty `FM-*` catch-all (itd Onicon); titled `CONTROL DAMPER SCHEDULE` with OA/RA/EA/SA keyRe (Carson OA1/OA2; B1 building mark excluded) — itd **88→89**; Carson **56→58**. Negatives: Klamath 50, Colville 47, Baker 17, federal 100, SDSU 118, bldg5406 27.
 - **WP1.4 LOUVER / LOUVERED_PENTHOUSE / FILTER + FIN_TUBE titledOnly (shared path):** wall louvers; PH/ALP penthouses; FILTER `FTR-*` on FILTER & STRAINER; `titledOnly` stops blank/catch-all FIN_TUBE stealing Colville filter/vibration FTR — itd **89→92**; Colville **47→50**; federal **100→103**. Reid FIN_TUBE 4 unchanged.
-- **WP4 SDSU VAV sample MATCH lock:** `CAV-N2-2`/`CAV-S1-1`/`CAV-S1-6`/`CAV-S3-1` MATCH under `evaluationFast`; honest **4/65 MATCH · 61 SCHEDULE_ONLY** ceiling (tags not plan text).
+- **WP4 SDSU VAV sample MATCH lock:** `CAV-N2-2`/`CAV-S1-1`/`CAV-S1-6`/`CAV-S3-1`/`ECAV-N2-1` MATCH under `evaluationFast`; honest SCHEDULE_ONLY remainder (tags not plan text).
 - **WP4 schedule-stem dup collapse:** same-sheet truncated title extracts (`…SCHEDULE` stem) no longer AMBIGUOUS — SDSU AHU **3/3 MATCH**; VAV sample MATCH locked (honest SCHEDULE_ONLY remainder).
 - **WP4 Douglas DOAS:** misc-schedule **DOAS-30 MATCH** locked.
 - **WP4 Jeff City CST:** VAV **9/9** + FCU **3/3 MATCH** (locked in `reconcileWorkflow.test.mjs`).
@@ -352,6 +352,7 @@ reconcile, and plan joins.
 - **WP1.4 ECAV + VFD + split AC/ACCU (shared path):** VAV `ECAV-*` on LAB CAV; `VARIABLE_FREQUENCY_DRIVE` titled `VFD-*`; FCU `AC-*` + CONDENSING `ACCU` on SPLIT SYSTEM slash compounds. SDSU **181→206**; Spokane **5→8**; bldg5406 **30→32**. Negatives: Colville 50, itd 93, Carson 58, St Louis 30, federal 103, Baker 20.
 - **query_table token-boundary soft match (shared path):** `HUMIDIFIER SCHEDULE` no longer matches `DEHUMIDIFIER SCHEDULE` (mid-token includes). ELECTRIC HUMIDIFIER / compact no-space titles still hit. CABINET UNIT HEATER no longer matches UNIT HEATER.
 - **WP1.4 SPLIT SYSTEM HEAT PUMPS → FCU (shared path):** indoor `FC-*` on split heat-pump titles (Klamath FC-01/02 beside HP-*). Klamath **50→52**. Negatives: Colville 50, itd 93, Baker 20, Douglas 18, Carson 58.
+- **WP4 SDSU ECAV reconcile sample:** plan-drawn `ECAV-N2-1` MATCH locked with CAV sample (honest SO remainder; many ECAV still cannot geometrically anchor).
 
 ### Next queue (platform loop)
 

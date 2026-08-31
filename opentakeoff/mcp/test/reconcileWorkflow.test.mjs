@@ -326,9 +326,10 @@ test("SDSU EngSciences AHU reconcile: all scheduled tags MATCH (dup-table collap
   }
 });
 
-test("SDSU EngSciences VAV reconcile: sampled plan-drawn CAV tags MATCH (honest SO ceiling)", async () => {
+test("SDSU EngSciences VAV reconcile: sampled plan-drawn CAV/ECAV tags MATCH (honest SO ceiling)", async () => {
   // evaluationFast: only tags drawable as text MATCH; remainder stay SCHEDULE_ONLY
-  // (most CAV marks are not plan text under fast sweep). Do not force higher.
+  // (most CAV/ECAV marks are not plan text under fast sweep). Do not force higher.
+  // ECAV-N2-1 is plan-drawn exhaust CAV (WP1.4 ECAV keyRe); ECAV-NB-1 stays SO.
   const keyPath = resolve(CROSS, "11_CA_SDSU_EngSciences_Complex_100SD.compile.json");
   assert.ok(existsSync(keyPath));
   const key = JSON.parse(readFileSync(keyPath, "utf8"));
@@ -341,7 +342,7 @@ test("SDSU EngSciences VAV reconcile: sampled plan-drawn CAV tags MATCH (honest 
   await session.loadPlan(pdf);
   const graph = await session.graphForPipeline();
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
-  const sample = ["CAV-N2-2", "CAV-S1-1", "CAV-S1-6", "CAV-S3-1"];
+  const sample = ["CAV-N2-2", "CAV-S1-1", "CAV-S1-6", "CAV-S3-1", "ECAV-N2-1"];
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     tags: sample,
     evaluationFast: true,
