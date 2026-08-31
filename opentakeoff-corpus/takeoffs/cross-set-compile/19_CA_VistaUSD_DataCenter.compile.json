@@ -1,0 +1,16 @@
+{
+  "set_id": "19_CA_VistaUSD_DataCenter",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/19_CA_VistaUSD_DataCenter.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Honest ZERO \u2014 0 extractable tables on vector set as shipped.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

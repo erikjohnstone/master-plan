@@ -146,6 +146,16 @@ test("WP1 keyed compile acceptance on ≥2 non-NAVFAC sets", async () => {
     "06_MO_NatlGuard_JeffCity_CST_Addition.compile.json",
     "11_CA_SDSU_EngSciences_Complex_100SD.compile.json",
     "13_MI_MSU_LifeSciences_LabRenovation.compile.json",
+    // Honest ZERO bulk ceilings — lock no silent HVAC inflation.
+    "02_UT_FAA_Ogden_AirTrafficControlTower.compile.json",
+    "07_MO_MSHP_TroopB_HVAC_Boilers_Controls.compile.json",
+    "08_ME_BGS_Augusta_EastCampus_Renovation.compile.json",
+    "15_IA_IowaState_Biorenewables_Lab.compile.json",
+    "19_CA_VistaUSD_DataCenter.compile.json",
+    "20_TX_JudsonISD_MEP_Upgrades_Pkg6.compile.json",
+    "28_WA_KCHA_PublicHousing_HVAC.compile.json",
+    "29_TX_JPS_Hospital_CentralPlant_Chiller.compile.json",
+    "D_25_CO_weld-mech-permit-set.compile.json",
   ];
   let scored = 0;
   for (const file of keys) {

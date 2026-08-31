@@ -329,7 +329,8 @@ test("SDSU EngSciences AHU reconcile: all scheduled tags MATCH (dup-table collap
 test("SDSU EngSciences VAV reconcile: sampled plan-drawn CAV/ECAV tags MATCH (honest SO ceiling)", async () => {
   // evaluationFast: only tags drawable as text MATCH; remainder stay SCHEDULE_ONLY
   // (most CAV/ECAV marks are not plan text under fast sweep). Do not force higher.
-  // ECAV-N2-1 is plan-drawn exhaust CAV (WP1.4 ECAV keyRe); ECAV-NB-1 stays SO.
+  // ECAV floor tags (N1/N2/S*) MATCH; basement NB/SB ECAV stay SCHEDULE_ONLY.
+  // Full ECAV census under evaluationFast: 16/25 MATCH · 9 SO (2026-08-31).
   const keyPath = resolve(CROSS, "11_CA_SDSU_EngSciences_Complex_100SD.compile.json");
   assert.ok(existsSync(keyPath));
   const key = JSON.parse(readFileSync(keyPath, "utf8"));
@@ -342,24 +343,33 @@ test("SDSU EngSciences VAV reconcile: sampled plan-drawn CAV/ECAV tags MATCH (ho
   await session.loadPlan(pdf);
   const graph = await session.graphForPipeline();
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
-  const sample = ["CAV-N2-2", "CAV-S1-1", "CAV-S1-6", "CAV-S3-1", "ECAV-N2-1"];
+  const sampleMatch = [
+    "CAV-N2-2", "CAV-S1-1", "CAV-S1-6", "CAV-S3-1",
+    "ECAV-N1-1", "ECAV-N2-1", "ECAV-N2-2", "ECAV-S1-1", "ECAV-S2-1", "ECAV-S3-1",
+  ];
+  const sampleSo = ["ECAV-NB-1"]; // swept negative control — not plan text
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
-    tags: sample,
+    tags: [...sampleMatch, ...sampleSo],
     evaluationFast: true,
   });
   assert.equal(result.rows.length, key.categories.VAV, "scaffold still returns all VAV rows");
   const byTag = new Map(result.rows.map((r) => [r.tag.toUpperCase(), r]));
-  for (const tag of sample) {
+  for (const tag of sampleMatch) {
     const row = byTag.get(tag);
     assert.ok(row, `${tag} reconcile row`);
     assert.equal(row.status, "MATCH", `${tag} installed reconcile on SDSU`);
     assert.ok(row.installed_qty >= 1, `${tag} installed`);
     assert.ok(row.plan_cites?.length >= 1, `${tag} plan cite`);
   }
+  for (const tag of sampleSo) {
+    const row = byTag.get(tag);
+    assert.ok(row, `${tag} reconcile row`);
+    assert.equal(row.status, "SCHEDULE_ONLY", `${tag} honest SCHEDULE_ONLY after sweep`);
+  }
   const match = result.rows.filter((r) => r.status === "MATCH");
   const so = result.rows.filter((r) => r.status === "SCHEDULE_ONLY");
-  assert.equal(match.length, sample.length, "fast sweep MATCH ceiling = sample");
-  assert.equal(so.length, key.categories.VAV - sample.length, "honest SCHEDULE_ONLY remainder");
+  assert.equal(match.length, sampleMatch.length, "fast sweep MATCH ceiling = sampleMatch");
+  assert.equal(so.length, key.categories.VAV - sampleMatch.length, "honest SCHEDULE_ONLY remainder");
 });
 
 test("Douglas County DOAS reconcile: misc-schedule DOAS-30 MATCH", async () => {

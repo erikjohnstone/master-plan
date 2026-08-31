@@ -1,0 +1,16 @@
+{
+  "set_id": "D_25_CO_weld-mech-permit-set",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/D_25_CO_weld-mech-permit-set.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Honest ZERO \u2014 insulation schedule only; no HVAC equipment unit schedules.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

@@ -352,14 +352,15 @@ reconcile, and plan joins.
 - **WP1.4 ECAV + VFD + split AC/ACCU (shared path):** VAV `ECAV-*` on LAB CAV; `VARIABLE_FREQUENCY_DRIVE` titled `VFD-*`; FCU `AC-*` + CONDENSING `ACCU` on SPLIT SYSTEM slash compounds. SDSU **181→206**; Spokane **5→8**; bldg5406 **30→32**. Negatives: Colville 50, itd 93, Carson 58, St Louis 30, federal 103, Baker 20.
 - **query_table token-boundary soft match (shared path):** `HUMIDIFIER SCHEDULE` no longer matches `DEHUMIDIFIER SCHEDULE` (mid-token includes). ELECTRIC HUMIDIFIER / compact no-space titles still hit. CABINET UNIT HEATER no longer matches UNIT HEATER.
 - **WP1.4 SPLIT SYSTEM HEAT PUMPS → FCU (shared path):** indoor `FC-*` on split heat-pump titles (Klamath FC-01/02 beside HP-*). Klamath **50→52**. Negatives: Colville 50, itd 93, Baker 20, Douglas 18, Carson 58.
-- **WP4 SDSU ECAV reconcile sample:** plan-drawn `ECAV-N2-1` MATCH locked with CAV sample (honest SO remainder; many ECAV still cannot geometrically anchor).
+- **WP4 SDSU ECAV reconcile sample:** plan-drawn floor ECAV (`N1/N2/S*`) MATCH locked with CAV sample; basement `ECAV-NB-1` swept negative → SCHEDULE_ONLY. Full ECAV census **16/25 MATCH · 9 SO** under `evaluationFast`.
+- **WP1 honest ZERO bulk keys:** Ogden, TroopB, Augusta, Iowa State, Vista, Judson, KCHA, JPS, weld-mech — compile totals **0** locked (no silent HVAC inflation). Re-probed 2026-08-31.
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 remaining titled HVAC orphans (honest refuse: federal AHU fan/coil component schedules; Valdosta VRF rows unkeyed); honest ZERO bulk ceilings unchanged.
-3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
-4. WP4 deepen on Douglas / Klamath / SDSU VAV SCHEDULE_ONLY remainder (raise plan-text recall without unsafe heuristics; SDSU CAV mostly “cannot geometrically anchor”).
+2. WP1.4 remaining titled HVAC orphans on already-keyed MEAT sets (honest refuse: federal AHU fan/coil component schedules; Valdosta VRF rows unkeyed).
+3. WP3.3 TG bowtie dedicated detector (tracked follow-on; Bessemer TG already passes via inline motif).
+4. WP4 deepen on Douglas / Klamath (FC/HP/DOAS all SCHEDULE_ONLY under evaluationFast — raise plan-text recall without unsafe heuristics).
 5. Remaining WEAK ceilings: Suwannee (1 RTU honest), Kennebec (2 multi-split only).
 6. Optional: evaluate BlueprintParser_OS / drawings-ai digests as *complementary* LLM recall only — never as qty/cite truth (stay on Session+ODL).
 

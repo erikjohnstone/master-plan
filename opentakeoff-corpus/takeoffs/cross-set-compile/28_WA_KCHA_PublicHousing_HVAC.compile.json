@@ -1,0 +1,16 @@
+{
+  "set_id": "28_WA_KCHA_PublicHousing_HVAC",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/28_WA_KCHA_PublicHousing_HVAC.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Honest ZERO \u2014 0 extractable tables on rejoined HVAC PDF.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

@@ -33,6 +33,15 @@ title phrasing (`AIRHANDLINGUNITSCHEDULE`, `GENERAL FAN SCHEDULE`,
 | `06_MO_NatlGuard_JeffCity_CST_Addition` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/06_MO_NatlGuard_JeffCity_CST_Addition.pdf` | Bulk FCU/VAV/RTU + ELECTRIC DUCT HEATER (EDH) |
 | `11_CA_SDSU_EngSciences_Complex_100SD` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/11_CA_SDSU_EngSciences_Complex_100SD.pdf` | Bulk campus AHU/FCU/VAV + pumps (VACUUM excluded) |
 | `13_MI_MSU_LifeSciences_LabRenovation` | `bulk/HVAC_BAS_Plan_Sets/13_MI_MSU_LifeSciences_LabRenovation.pdf` | Bulk GRD + transfer silencer |
+| `02_UT_FAA_Ogden_AirTrafficControlTower` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/02_UT_FAA_Ogden_AirTrafficControlTower.pdf` | Honest ZERO (no HVAC equipment tables) |
+| `07_MO_MSHP_TroopB_HVAC_Boilers_Controls` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/07_MO_MSHP_TroopB_HVAC_Boilers_Controls.pdf` | Honest ZERO (0 extractable tables) |
+| `08_ME_BGS_Augusta_EastCampus_Renovation` | `bulk/HVAC_BAS_Plan_Sets/08_ME_BGS_Augusta_EastCampus_Renovation.pdf` | Honest ZERO (window schedule only) |
+| `15_IA_IowaState_Biorenewables_Lab` | `bulk/HVAC_BAS_Plan_Sets/15_IA_IowaState_Biorenewables_Lab.pdf` | Honest ZERO (note/span tables only) |
+| `19_CA_VistaUSD_DataCenter` | `bulk/HVAC_BAS_Plan_Sets/19_CA_VistaUSD_DataCenter.pdf` | Honest ZERO (0 tables) |
+| `20_TX_JudsonISD_MEP_Upgrades_Pkg6` | `bulk/HVAC_BAS_Plan_Sets/20_TX_JudsonISD_MEP_Upgrades_Pkg6.pdf` | Honest ZERO (AHU/RTU note span only) |
+| `28_WA_KCHA_PublicHousing_HVAC` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/28_WA_KCHA_PublicHousing_HVAC.pdf` | Honest ZERO (0 tables) |
+| `29_TX_JPS_Hospital_CentralPlant_Chiller` | `bulk/HVAC_BAS_Plan_Sets/29_TX_JPS_Hospital_CentralPlant_Chiller.pdf` | Honest ZERO (0 tables) |
+| `D_25_CO_weld-mech-permit-set` | `bulk/HVAC_BAS_Plan_Sets/D_25_CO_weld-mech-permit-set.pdf` | Honest ZERO (insulation schedule only) |
 
 ## How counts were authored
 
