@@ -193,7 +193,7 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /OUTDOOR\s+AIR\s+UNIT\s+SCHEDULE/i,
     exclude: /DEDICATED\s+OUTDOOR\s+AIR|POINTS\s*LIST|DDC/i,
   },
-  FCU: { titleRe: /FAN\s*COIL/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i },
+  FCU: { titleRe: /FAN\s*COIL/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^(?:FCU|EV)[\s\-]/i },
   VAV: {
     titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
@@ -237,7 +237,7 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^(?:CH|ACC|PAC)[\s\-]/i,
   },
   HEAT_RECOVERY_CHILLER: { titleRe: /HEAT RECOVERY CHILLER/i, keyRe: /^CH/i },
-  BOILER: { titleRe: /BOILER/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^B[\s\-]/i },
+  BOILER: { titleRe: /BOILER/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^(?:B[\s\-]|BOILER)/i },
   // Pump marks vary widely (P-*, CP-*, CWP-*, HHWP-*, …) — count every row on
   // a pump schedule; do not hardcode one firm's prefix set.
   PUMP: { titleRe: /PUMP SCHEDULE/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i },
@@ -259,6 +259,7 @@ export const HVAC_FAMILY_SPECS = {
   FAN: {
     titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+)?FAN SCHEDULE/i,
     exclude: /FAN\s*COIL|FAN\s+SOUND|AIR\s+HANDLING\s+UNIT\s+FAN|POINTS\s*LIST|FURNACE/i,
+    keyRe: /^(?:EF|SF|RF|SPF|GEF|GCF|LEF|LF|GF|FAN)[\s\-]/i,
   },
   CABINET_UNIT_HEATER: { titleRe: /CABINET UNIT HEATER/i },
   UNIT_HEATER: { titleRe: /UNIT HEATER SCHEDULE/i, exclude: /CABINET|POINTS\s*LIST|DDC/i },

@@ -1,0 +1,14 @@
+{
+  "set_id": "23_GA_MaconBibb_RecreationCenter",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/23_GA_MaconBibb_RecreationCenter.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk recreation center — blank-title FCU/EF tables plus HEAT PUMP UNITS schedule; MEAT tier after FCU/FAN blank-title keyRe.",
+  "categories": {
+    "FCU": 1,
+    "HEAT_PUMP": 1,
+    "FAN": 3
+  },
+  "totals": { "items": 5 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

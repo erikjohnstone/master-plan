@@ -116,6 +116,19 @@ test("FAN matches GENERAL/EXHAUST fan schedules but not fan-coil", () => {
   assert.equal(scheduleTitleMatches("FAN SOUND POWER LEVEL SCHEDULE", titleRe, exclude), false);
 });
 
+test("WP1.4 family keyRe accepts BOILER1 and blank-title FCU/EF marks (set-agnostic)", () => {
+  const { keyRe: boilerKey } = HVAC_FAMILY_SPECS.BOILER;
+  const { keyRe: fcuKey } = HVAC_FAMILY_SPECS.FCU;
+  const { keyRe: fanKey } = HVAC_FAMILY_SPECS.FAN;
+  assert.ok(boilerKey!.test("BOILER1"));
+  assert.ok(boilerKey!.test("B-1"));
+  assert.ok(fcuKey!.test("FCU-1"));
+  assert.ok(fcuKey!.test("EV-3"));
+  assert.ok(fanKey!.test("EF-2"));
+  assert.ok(fanKey!.test("SPF-T1"));
+  assert.ok(!fanKey!.test("NOTES"));
+});
+
 test("RTU / ERV / furnace / heat-pump titles match set-agnostic families", () => {
   assert.equal(
     scheduleTitleMatches("ROOF TOP UNIT SCHEDULE", HVAC_FAMILY_SPECS.RTU.titleRe, HVAC_FAMILY_SPECS.RTU.exclude),

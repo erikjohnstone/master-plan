@@ -139,8 +139,10 @@ itd-d1-lab, federal-mech, weld-county under-instrumented.
 
 **Status (impl branch):** Soft title match + set-agnostic family broaden
 landed. Keyed acceptance under `takeoffs/cross-set-compile/` for
-`bldg5406-hvac-demo` (24), `federal-mech` (90), `itd-d1-lab` (35 + 9 HHW
-valves + honest BAS empty). NAVFAC HVAC/BAS locks still green.
+`bldg5406-hvac-demo` (24), `federal-mech` (96), `itd-d1-lab` (35 + 9 HHW
+valves + honest BAS empty). Family `keyRe` broadened for BOILER1 marks and
+blank-title FCU/EV/EF/RF rows (Spokane + Macon Bibb WEAK→MEAT). NAVFAC
+HVAC/BAS locks still green.
 
 **Production bar (not optional):** A user uploading a US vector HVAC/BAS
 set must get a working complete takeoff on the **shared UI+MCP path**
