@@ -17,6 +17,17 @@ function cellText(row, headerRe) {
   return "";
 }
 
+/** Sum positive integers under matching headers (PLC I/O LIST ANALOG/DIGITAL counts). */
+function sumNumericCells(row, headerRe) {
+  let sum = 0;
+  for (const [header, cell] of Object.entries(row.cells || {})) {
+    if (!headerRe.test(header)) continue;
+    const n = parseInt(String(cell?.text ?? cell ?? "").trim(), 10);
+    if (Number.isFinite(n) && n > 0) sum += n;
+  }
+  return sum;
+}
+
 function cellBbox(row, headerRe) {
   for (const [header, cell] of Object.entries(row.cells || {})) {
     if (headerRe.test(header) && Array.isArray(cell?.bbox)) return cell.bbox;
@@ -729,8 +740,22 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       // Skip column-label rows (I/O LIST prints TAG as a data key).
       if (isBasPointsHeaderRow(tag)) continue;
       const m = tag.toUpperCase().match(/^(AI|AO|BI|BO)\d/);
-      if (m) counts[m[1]] += 1;
-      else counts.other += 1;
+      if (m) {
+        counts[m[1]] += 1;
+      } else {
+        // PLC I/O LIST shape: device rows carry ANALOG/DIGITAL quantity cells
+        // (not AI## MARK prefixes). Roll those into AI/BI point totals — set-
+        // agnostic; INPUT/OUTPUT direction is not reliably extracted, so
+        // analog→AI and digital→BI is the disclosed convention.
+        const analog = sumNumericCells(row, /^ANALOG\b/i);
+        const digital = sumNumericCells(row, /^DIGITAL\b/i);
+        if (analog > 0 || digital > 0) {
+          counts.AI += analog;
+          counts.BI += digital;
+        } else {
+          counts.other += 1;
+        }
+      }
       const { cells, description } = scheduleAttrs(row);
       const tableBbox = Array.isArray(table.title?.bbox) && table.title.bbox.length === 4
         ? table.title.bbox
@@ -794,7 +819,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     sheet_count: sheets.length,
     categories: {
       points_lists: {
-        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO from MARK prefixes when present; column-label rows skipped; title-only schematic lists excluded and disclosed.",
+        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO from MARK prefixes when present; on I/O LIST device rows without MARK prefixes, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); column-label rows skipped; title-only schematic lists excluded and disclosed.",
         tolerance: { count: 0, point_type: 0 },
         lists,
         totals,
