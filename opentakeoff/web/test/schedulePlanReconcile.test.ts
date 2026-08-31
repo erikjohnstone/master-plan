@@ -115,6 +115,27 @@ test("reconcileScheduleFamilyFromGraph with sweep map", () => {
   assert.equal(rows[0].status, "MATCH");
 });
 
+test("reconcile scaffold accepts reference-kind GRILLE SCHEDULE via row.key (compile parity)", () => {
+  const graph = {
+    tables: [{
+      kind: "reference",
+      sheet: "m.pdf#4",
+      title: { text: "GRILLE SCHEDULE" },
+      rows: [
+        { key: "A", cells: { TYPE: { text: "SUPPLY" } } },
+        { key: "B", cells: { TYPE: { text: "RETURN" } } },
+      ],
+    }],
+  };
+  const rows = reconcileScheduleFamilyFromGraph(
+    graph,
+    { label: "GRD", titleRe: /GRILLE\s+SCHEDULE|AIR\s+DEVICE\s+SCHEDULE/i },
+  );
+  assert.equal(rows.length, 2);
+  assert.deepEqual(rows.map((r) => r.tag).sort(), ["A", "B"]);
+  assert.ok(rows.every((r) => r.status === "SCHEDULE_ONLY"));
+});
+
 test("reconcileRowsToCsv emits contractor header row", () => {
   const csv = reconcileRowsToCsv([
     {

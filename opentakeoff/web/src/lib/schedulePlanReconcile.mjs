@@ -67,7 +67,9 @@ function rowIdentityTag(row) {
       if (t) return t;
     }
   }
-  return null;
+  // Parity with compile uniqueFamily — extractor often puts the mark on row.key.
+  const key = String(row?.key || "").trim();
+  return key || null;
 }
 
 /**
@@ -154,7 +156,9 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
   const keyRe = needle?.keyRe || null;
   for (const table of graph?.tables || []) {
     const title = String(table.title?.text || "");
-    if (table.kind !== "equipment") continue;
+    // Parity with compile uniqueFamily: do not gate on table.kind.
+    // Title/keyRe already exclude finish/lighting/note tables; Valdosta
+    // GRILLE SCHEDULE extracts as reference-kind but is still schedule truth.
     // Match compile's uniqueFamily gate: titled soft-match OR blank title with
     // a family keyRe (Transbay/Macon Bibb blank-title RAH/FCU/EF tables).
     const titleOk = needle?.titleRe

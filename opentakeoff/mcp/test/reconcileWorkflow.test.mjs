@@ -283,6 +283,26 @@ test("St Louis bulk VAV reconcile: all 12 ATU tags MATCH (WP1 cross-set)", async
   }
 });
 
+test("Valdosta + St Louis GRD reconcile scaffold matches compile (reference-kind parity)", async () => {
+  for (const file of [
+    "22_GA_Valdosta_FireStation8_100CD.compile.json",
+    "05_MO_VA_StLouis_AHU_VAV_Replacement.compile.json",
+  ]) {
+    const keyPath = resolve(CROSS, file);
+    assert.ok(existsSync(keyPath));
+    const key = JSON.parse(readFileSync(keyPath, "utf8"));
+    const pdf = resolve(CORPUS, key.source_file);
+    if (!existsSync(pdf)) {
+      test.skip(`PDF missing: ${key.source_file}`);
+      return;
+    }
+    const graph = await graphForPdf(pdf, key.set_id);
+    const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "GRD");
+    const rows = reconcileScheduleFamilyFromGraph(graph, needle);
+    assert.equal(rows.length, key.categories.GRD, `${key.set_id} GRD scaffold = compile`);
+  }
+});
+
 test("blank-title FAN tables join reconcile scaffold via keyRe (Macon Bibb shape)", async () => {
   const keyPath = resolve(CROSS, "23_GA_MaconBibb_RecreationCenter.compile.json");
   assert.ok(existsSync(keyPath));

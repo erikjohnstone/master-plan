@@ -785,8 +785,10 @@ export async function reconcileSchedulePlan(session: Session, opts: {
   const family = opts.family ? String(opts.family).trim() : null;
   const tags = opts.tags?.length ? opts.tags.map((t) => String(t).trim()).filter(Boolean) : null;
 
-  // Scoped family reconcile — selective or family-wide sweeps without whole-set walk.
-  if (family && (tags?.length || opts.familySweepAll)) {
+  // Named family → shared HVAC_FAMILY_SPECS needle path (same gates as compile).
+  // Do not fall through to whole-set takeoff+string-filter: GRD/AIR DEVICE and
+  // reference-kind grille tables never matched "GRD" in equipment_type/title.
+  if (family) {
     const graph = await session.graphForPipeline();
     const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
     if (!needle) {
@@ -799,7 +801,8 @@ export async function reconcileSchedulePlan(session: Session, opts: {
     const scoped = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
       tags: tags ?? undefined,
       evaluationFast: opts.evaluationFast,
-      sweepAll: !!opts.familySweepAll && !tags?.length,
+      // Family-only (no tag list): sweep every schedule row unless caller opts out.
+      sweepAll: !tags?.length && opts.familySweepAll !== false,
     });
     return { ...scoped, takeoff_stats: undefined };
   }
