@@ -124,8 +124,10 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHead
     const filterRe = blankTitle ? blankGate : keyRe;
     for (const row of table.rows || []) {
       let tag = String(row.key || "").trim();
-      // Prefer MARK/TAG cell — often retains "(N)ACC-2" spacing lost in row.key.
-      const markCell = cellText(row, /^(MARK|TAG|SYMBOL|VALVE\s*MARK|UNIT\s*MARK|EQUIP(?:\.?\s*TAG)?|DESIGNATION|UNIT\s*NO|ITEM\s*NO)$/i);
+      // Prefer explicit MARK / EQUIP.TAG / DESIGNATION. Do NOT prefer bare TAG —
+      // Colville FAN SCHEDULE shares a TAG column with grille type codes (1S/2R)
+      // while row.key correctly holds EF-1.
+      const markCell = cellText(row, /^(MARK|SYMBOL|VALVE\s*MARK|UNIT\s*MARK|EQUIP(?:\.?\s*TAG)?|DESIGNATION|UNIT\s*NO|UNIT\s*TAG|ITEM\s*NO)$/i);
       if (markCell) tag = markCell;
       if (identityHeaderRe) {
         const ident = cellText(row, identityHeaderRe);

@@ -62,8 +62,9 @@ function scheduledQtyFromRow(row) {
 function rowIdentityTag(row) {
   const id = row?.identity?.text || row?.identity?.key;
   if (id) return normalizeEquipMark(id);
+  // Prefer MARK / EQUIP.TAG — bare TAG is often a grille type code on mixed sheets.
   for (const [header, cell] of Object.entries(row?.cells || {})) {
-    if (/^(MARK|TAG|SYMBOL|VALVE MARK|ID|KEY|UNIT MARK|EQUIP|DESIGNATION|UNIT NO|EQUIP NO|UNIT TAG|EQUIP\.?\s*TAG|ITEM NO)$/i.test(String(header || "").trim())) {
+    if (/^(MARK|SYMBOL|VALVE MARK|UNIT MARK|EQUIP|DESIGNATION|UNIT NO|EQUIP NO|UNIT TAG|EQUIP\.?\s*TAG|ITEM NO)$/i.test(String(header || "").trim())) {
       const t = String(cell?.text || "").trim();
       if (t) return normalizeEquipMark(t);
     }
