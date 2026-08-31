@@ -364,11 +364,12 @@ reconcile, and plan joins.
 - **WP1.4 ERV keyRe + ERV-paired HP (shared path):** `ERU-*/ERV-*` keyRe comma-splits SYMBOL; HEAT_PUMP no longer excludes ENERGY RECOVERY titles so outdoor HP-* halves join. Baker **20→21** (HP-4); ERU-1 + HP-4 **MATCH**. Negatives: Colville 50, itd 93, federal 103, Klamath 53.
 - **WP1.4 VACUUM_PUMP (shared path):** titled `VACUUM PUMP SCHEDULE` + `V-*` (titledOnly; hydronic PUMP still excludes VACUUM). SDSU **206→207** (V-1). Negatives: Colville 50, itd 93, Carson 58, Baker 21, Klamath 53, federal 103.
 - **WP1.4 BRINE_TANK (shared path):** titled softener/brine schedules + `BT-*` (titledOnly — Colville BUFFER_TANK BT-* unchanged). SDSU **207→208** (BT-1). Negatives: Colville 50 (BUFFER intact), itd 93, Carson 58, Baker 21.
+- **WP4 SDSU vacuum/softener MATCH:** `V-1` + `WS-1` MATCH under `evaluationFast`; brine `BT-1` + flash `FT-1` honest SCHEDULE_ONLY.
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 remaining titled HVAC orphans on already-keyed MEAT sets (honest refuse: federal AHU fan/coil component schedules; Valdosta VRF rows unkeyed; Douglas model-number heat-pump keys; Life Sciences EQ-* non-HVAC; Colville TCV junk on air-separator extract).
+2. WP1.4 remaining titled HVAC orphans largely exhausted on keyed MEAT sets (honest refuse: federal AHU fan schedules; Valdosta VRF; Life Sciences EQ-* non-HVAC; electrical/CCTV noise).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on; Bessemer TG already passes via inline motif).
 4. WP4: Klamath FC/HP/DOAS still SCHEDULE_ONLY under evaluationFast (plan-text recall — tags not drawable text).
 5. Remaining WEAK ceilings: Suwannee (1 RTU honest), Kennebec (2 multi-split only).
