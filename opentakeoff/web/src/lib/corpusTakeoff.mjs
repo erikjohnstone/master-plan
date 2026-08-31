@@ -221,8 +221,8 @@ export const HVAC_FAMILY_SPECS = {
     // Blank-title only — titled schedules may use set-local marks (Carson B1/B2).
     blankKeyRe: /^(?:OAU|MAU|OA)[\s\-]/i,
   },
-  // FCUC / FCUH style marks (cooling/heating suffix letter, no hyphen).
-  FCU: { titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^(?:FCU|EV)/i },
+  // FCUC / FCUH / FC-01 style marks (cooling/heating suffix or hyphenated FC).
+  FCU: { titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^(?:FCU|FC[\s\-]?\d|EV)/i },
   VAV: {
     titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
@@ -248,7 +248,12 @@ export const HVAC_FAMILY_SPECS = {
   },
   HEAT_PUMP: {
     titleRe: /HEAT\s+PUMP/i,
-    exclude: /POINTS\s*LIST|DDC\s+POINTS|WATER\s+HEATER|CHILLER/i,
+    // ERV "(WITH HEAT PUMP)" stays in ERV — do not double-count ERU-* here.
+    exclude: /POINTS\s*LIST|DDC\s+POINTS|WATER\s+HEATER|CHILLER|ENERGY\s+RECOVERY/i,
+    // Titled: HP not after C (drops CHP pumps); SCU/SAC multi-split outdoor/indoor.
+    keyRe: /(?<![C])HP|^(?:SCU|SAC)[\s\-]/i,
+    // Blank-title: only strong HP-* marks (Colville blank WSHP-1 is a chiller nameplate).
+    blankKeyRe: /^HP[\s\-]/i,
   },
   // Return / exhaust air handlers often titled RAH / without "AIR HANDLING UNIT".
   RAH: {
@@ -268,11 +273,15 @@ export const HVAC_FAMILY_SPECS = {
     // CH-/PAC- only — ACC-* is air-cooled condenser (CONDENSING_UNIT blankKeyRe).
     keyRe: /^(?:CH|PAC)[\s\-]/i,
   },
-  HEAT_RECOVERY_CHILLER: { titleRe: /HEAT RECOVERY CHILLER/i, keyRe: /^CH/i },
+  HEAT_RECOVERY_CHILLER: {
+    titleRe: /HEAT RECOVERY CHILLER/i,
+    // Require separator after CH so blank-title CHECK:/CHP-* junk is not stolen.
+    keyRe: /^(?:CH[\s\-]|HRC)/i,
+  },
   BOILER: { titleRe: /BOILER/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^(?:B[\s\-]|BOILER)/i },
   // Pump marks vary widely (P-*, CP-*, CWP-*, HHWP-*, …) — count every row on
   // a pump schedule; do not hardcode one firm's prefix set.
-  PUMP: { titleRe: /PUMP SCHEDULE/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i },
+  PUMP: { titleRe: /PUMP SCHEDULE|HYDRONIC\s+PUMPS?/i, exclude: /POINTS\s*LIST|DDC\s+POINTS|HEAT\s+PUMP/i },
   COOLING_TOWER: {
     titleRe: /COOLING\s+TOWER\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC/i,
@@ -295,8 +304,10 @@ export const HVAC_FAMILY_SPECS = {
   },
   CABINET_UNIT_HEATER: { titleRe: /CABINET UNIT HEATER/i },
   UNIT_HEATER: {
-    titleRe: /UNIT HEATER SCHEDULE|ELECTRIC\s+HEATER\s+SCHEDULE/i,
+    titleRe: /UNIT HEATER SCHEDULE|ELECTRIC\s+HEATERS?(?:\s+SCHEDULE)?/i,
     exclude: /CABINET|POINTS\s*LIST|DDC/i,
+    // Drop transposed-header garbage on broken extracts (Orange County).
+    keyRe: /^(?:UH|CUH|EH)[\s\-]?/i,
   },
   // Electric radiant ceiling panels (school/courthouse schedules; ECP-* marks).
   RADIANT_CEILING_PANEL: {
@@ -313,8 +324,14 @@ export const HVAC_FAMILY_SPECS = {
   CRAH: { titleRe: /COMPUTER ROOM AIR HANDLER|\bCRAH\b/i },
   DEHUMIDIFIER: { titleRe: /DEHUMIDIFIER SCHEDULE/i, keyRe: /^DH[\-]/i },
   HUMIDIFIER: { titleRe: /HUMIDIFIER SCHEDULE/i, keyRe: /^H[\-]/i },
-  AIR_SEPARATOR: { titleRe: /AIR SEPARATOR SCHEDULE/i },
-  EXPANSION_TANK: { titleRe: /EXPANSION TANK SCHEDULE/i },
+  AIR_SEPARATOR: {
+    titleRe: /AIR SEPARATOR SCHEDULE/i,
+    keyRe: /^AS[\s\-]/i,
+  },
+  EXPANSION_TANK: {
+    titleRe: /EXPANSION TANK SCHEDULE/i,
+    keyRe: /^(?:ET|XT)[\s\-]/i,
+  },
   BUFFER_TANK: {
     titleRe: /BUFFER\s+TANK\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC|EXPANSION/i,

@@ -285,6 +285,54 @@ test("RTU / ERV / furnace / heat-pump titles match set-agnostic families", () =>
   assert.ok(HVAC_FAMILY_SPECS.FIN_TUBE_RADIATION.keyRe!.test("FTR-2"));
 });
 
+test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", () => {
+  const hp = HVAC_FAMILY_SPECS.HEAT_PUMP;
+  assert.ok(hp.keyRe!.test("HP-5"));
+  assert.ok(hp.keyRe!.test("AHU-1HP-1"));
+  assert.ok(hp.keyRe!.test("SCU-1"));
+  assert.ok(hp.keyRe!.test("SAC-1"));
+  assert.ok(!hp.keyRe!.test("CHP-1"));
+  assert.ok(!hp.keyRe!.test("EH-1"));
+  assert.ok(hp.blankKeyRe!.test("HP-01"));
+  assert.ok(!hp.blankKeyRe!.test("WSHP-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "ENERGY RECOVERY UNIT SCHEDULE (WITH HEAT PUMP)",
+      hp.titleRe,
+      hp.exclude,
+    ),
+    false,
+  );
+  assert.equal(
+    scheduleTitleMatches("HYDRONIC PUMPS", HVAC_FAMILY_SPECS.PUMP.titleRe, HVAC_FAMILY_SPECS.PUMP.exclude),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches("HEAT PUMP SCHEDULE", HVAC_FAMILY_SPECS.PUMP.titleRe, HVAC_FAMILY_SPECS.PUMP.exclude),
+    false,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("FC-101"));
+  assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("FCU-1"));
+  assert.ok(!HVAC_FAMILY_SPECS.HEAT_RECOVERY_CHILLER.keyRe!.test("CHECK:"));
+  assert.ok(HVAC_FAMILY_SPECS.HEAT_RECOVERY_CHILLER.keyRe!.test("CH-1"));
+  assert.ok(HVAC_FAMILY_SPECS.UNIT_HEATER.keyRe!.test("EH-1"));
+  assert.ok(HVAC_FAMILY_SPECS.UNIT_HEATER.keyRe!.test("UH-01"));
+  assert.ok(!HVAC_FAMILY_SPECS.UNIT_HEATER.keyRe!.test("MODEL"));
+  assert.ok(HVAC_FAMILY_SPECS.AIR_SEPARATOR.keyRe!.test("AS-1"));
+  assert.ok(!HVAC_FAMILY_SPECS.AIR_SEPARATOR.keyRe!.test("LCV-1"));
+  assert.ok(HVAC_FAMILY_SPECS.EXPANSION_TANK.keyRe!.test("ET-1"));
+  assert.ok(HVAC_FAMILY_SPECS.EXPANSION_TANK.keyRe!.test("XT-2"));
+  assert.ok(!HVAC_FAMILY_SPECS.EXPANSION_TANK.keyRe!.test("DT-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "ELECTRIC HEATERS",
+      HVAC_FAMILY_SPECS.UNIT_HEATER.titleRe,
+      HVAC_FAMILY_SPECS.UNIT_HEATER.exclude,
+    ),
+    true,
+  );
+});
+
 test("query_table soft needle hits no-space titles for long needles", () => {
   assert.equal(
     queryTitleMatchesNeedle("AIRHANDLINGUNITSCHEDULE", "AIR HANDLING UNIT SCHEDULE"),

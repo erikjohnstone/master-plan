@@ -301,9 +301,8 @@ reconcile, and plan joins.
 - **WP5 CLOSED:** Browser geometric fork removed; production HTTP for plan tools;
   UI graph prewarm (`schedules indexing…`) + `prewarmGraphSmoke.test.mjs`.
 - **Bulk rescore (2026-08-31 tip `f99abf5`):** MEAT **20** · WEAK **2** · ZERO **9** (St Louis/Valdosta/Hurlburt/Colville/Baker promotions; Kennebec+Suwannee honest WEAK).
-- **Orange County cross-set key:** 32 VAV + 43 HVAC items; reconcile scaffold test.
-- **WP1 title:** `DOAS` family spec; Valdosta GRILLE SCHEDULE →16 items; `VAV TERMINAL BOX` broadening.
-- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (27), Baker MS (22) locked.
+- **Orange County cross-set key:** 32 VAV + **33** HVAC items (BP-1 only; fake HRC/UH dropped); reconcile scaffold test.
+- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (**23**), Baker MS (**17**), **Klamath (35)** locked.
 - **WP1.4 keyRe broaden:** BOILER1 marks, blank-title FCU/EV/EF/RF fan-coil rows — federal-mech later gains FIN_TUBE (100); two bulk WEAK→MEAT promotions.
 - **WP1.4 CODE_RE + EQUIP.TAG + banding orphans:** `AHU-1A`-style digit+letter suffixes; `EQUIP. TAG` own-identity; seam-gap spans assigned to nearest band + thin identity-band absorb. Hawthorn **1→5**.
 - **WP1.4 title hunt:** `\bSCHEDULE\b` (not SCHEDULED) — Northport AIR INLETS & OUTLETS recovers 12 GRD (**3→15**).
@@ -311,8 +310,9 @@ reconcile, and plan joins.
 - **WP1.4 St Louis / Valdosta families:** AHU `AC-*`; FCU `FCUC`; VAV `AIR TERMINAL UNIT`+`ATU-*`; GRD `AIR DEVICE`+`GRILLE SCHEDULE`.
 - **WP1.4 FIN_TUBE_RADIATION:** FINNED PIPE / FIN TUBE titles (FT-/FTR-*) — Reid Hall **8→12**; federal-mech **96→100**.
 - **WP1.4 (N)-prefix normalize:** strip `(N)/(E)` and glued `NACC`/`NATU` marks; CONDENSING `blankKeyRe` ACC/CU; Hurlburt **10→13**. NOTES: filter keeps Transbay at 10.
-- **WP1.4 MAU / split-system FCU / BUFFER_TANK:** makeup-air titles; SPLIT-SYSTEM AC→FCU; BT-* buffer tanks — Baker **26** (incl. ELECTRIC HEATER), Colville **27**; itd-d1-lab **35→44** (EH-1..9).
+- **WP1.4 MAU / split-system FCU / BUFFER_TANK:** makeup-air titles; SPLIT-SYSTEM AC→FCU; BT-* buffer tanks — Baker later re-keyed honest; Colville later AS/ET keyRe; itd-d1-lab **35→44** (EH-1..9).
 - **WP1.4 bare-TAG guard:** do not prefer grille type TAG over row.key (Colville FAN EF-* restored).
+- **WP1.4 family keyRe tighten (shared path):** FCU `FC-##`; HEAT_PUMP HP/SCU/SAC + exclude ENERGY RECOVERY; HRC `CH-`/`HRC`; PUMP `HYDRONIC PUMPS` + exclude HEAT PUMP; UNIT_HEATER EH/UH + ELECTRIC HEATERS; AS `^AS` / ET `^ET|^XT` — Orange **43→33**, Baker **26→17**, Colville **27→23**, Klamath **35** new key.
 - **WP4 Orange County:** installed reconcile **32/32 VAV MATCH** (full census locked in `reconcileWorkflow.test.mjs`).
 - **WP4 Hawthorn:** AHU **2/2** + CU **2/2** MATCH (digit+letter tags on plan).
 - **WP4 St Louis:** VAV/ATU **12/12 MATCH** (AIR TERMINAL UNIT schedule ↔ plan).

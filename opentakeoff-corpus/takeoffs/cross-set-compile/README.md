@@ -28,6 +28,7 @@ title phrasing (`AIRHANDLINGUNITSCHEDULE`, `GENERAL FAN SCHEDULE`,
 | `03_FL_HurlburtField_ChildDevCenter` | `bulk/HVAC_BAS_Plan_Sets/03_FL_HurlburtField_ChildDevCenter.pdf` | Bulk blank-title AHU/ATU/ACC with (N) revision prefixes |
 | `27_WA_ColvilleTribes_Hatchery_Lab` | `bulk/HVAC_BAS_Plan_Sets/27_WA_ColvilleTribes_Hatchery_Lab.pdf` | Bulk split-system FCU + buffer tanks + fin-tube |
 | `18_OR_BakerMS_HVAC_Electrical_FullSet` | `bulk/HVAC_BAS_Plan_Sets/18_OR_BakerMS_HVAC_Electrical_FullSet.pdf` | Bulk MAU makeup-air + heat pumps + GRD |
+| `14_OR_KlamathCC_LearningCtr_Mechanical` | `bulk/HVAC_BAS_Plan_Sets/14_OR_KlamathCC_LearningCtr_Mechanical.pdf` | Bulk FC-### fan coils + HYDRONIC PUMPS + HP + EH |
 
 ## How counts were authored
 

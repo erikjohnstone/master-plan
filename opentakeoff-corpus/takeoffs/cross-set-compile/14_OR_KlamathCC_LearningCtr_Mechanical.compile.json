@@ -1,0 +1,18 @@
+{
+  "set_id": "14_OR_KlamathCC_LearningCtr_Mechanical",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/14_OR_KlamathCC_LearningCtr_Mechanical.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk college — MAU + FC-### fan coils + HP split heat pumps + chiller/boilers + HYDRONIC PUMPS + ELECTRIC HEATERS. Locks FC[\\s-]?\\d FCU keyRe and HYDRONIC PUMPS title.",
+  "categories": {
+    "OUTDOOR_AIR_UNIT": 1,
+    "FCU": 18,
+    "HEAT_PUMP": 2,
+    "AIR_COOLED_CHILLER": 1,
+    "BOILER": 2,
+    "PUMP": 8,
+    "UNIT_HEATER": 3
+  },
+  "totals": { "items": 35 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

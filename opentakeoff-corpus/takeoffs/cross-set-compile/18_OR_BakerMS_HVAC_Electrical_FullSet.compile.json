@@ -2,17 +2,16 @@
   "set_id": "18_OR_BakerMS_HVAC_Electrical_FullSet",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/18_OR_BakerMS_HVAC_Electrical_FullSet.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk school — MAU + ERV + heat pumps + ELECTRIC HEATER (EH-*) + pumps/fans + GRD.",
+  "notes": "Bulk school — MAU + ERV (not double-counted as HEAT_PUMP) + outdoor/AHU heat pumps + ELECTRIC HEATER (EH-*) + fans + GRD. No separate pump schedule; prior PUMP:3 was heat-pump-title pollution.",
   "categories": {
     "OUTDOOR_AIR_UNIT": 1,
     "ERV": 1,
-    "HEAT_PUMP": 11,
-    "PUMP": 3,
+    "HEAT_PUMP": 5,
     "FAN": 2,
     "UNIT_HEATER": 4,
     "GRD": 4
   },
-  "totals": { "items": 26 },
+  "totals": { "items": 17 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }

@@ -2,14 +2,12 @@
   "set_id": "21_VA_OrangeCounty_PublicSafetyBldg",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/21_VA_OrangeCounty_PublicSafetyBldg.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk VA public-safety set — VAV TERMINAL BOX SCHEDULE with DESIGNATION column (32 VAV-1-xx / VAV-2-xx tags); heat-recovery chiller, pumps, unit heaters. WP1.4 wide-schedule banding fix.",
+  "notes": "Bulk VA public-safety — VAV TERMINAL BOX SCHEDULE DESIGNATION column (32 VAV-1-xx); DOMESTIC WATER BOOSTER PUMP BP-1. Prior HRC/UH rows were blank-title CHECK:/transposed-header garbage — dropped by keyRe tighteners.",
   "categories": {
     "VAV": 32,
-    "HEAT_RECOVERY_CHILLER": 1,
-    "PUMP": 1,
-    "UNIT_HEATER": 9
+    "PUMP": 1
   },
-  "totals": { "items": 43 },
+  "totals": { "items": 33 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }
