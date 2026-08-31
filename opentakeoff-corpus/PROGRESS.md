@@ -368,6 +368,7 @@ reconcile, and plan joins.
 - **WP4 prefer-schedule sweep (shared Session.sweepScheduleRow):** callers that already know the owning table (`preferSheet`/`preferTitle` from family reconcile scaffold + project-takeoff row walk) disambiguate shared building letters across distinct equipment schedules. Carson CONTROL_DAMPER/OAU/RTU/ERV/FURNACE/CONDENSING/RANGE_HOOD **all MATCH** under `evaluationFast` (was heavy AMBIGUOUS). Unscoped `sweep_schedule_row B1` still AMBIGUOUS (honest). Negatives: Baker EH, Klamath PUMP, SDSU vacuum/softener. `test:workflows` **41/41**.
 - **WP4 titled-first family collect (shared compile+reconcile):** `uniqueFamily` + reconcile scaffold claim titled schedules before blank/catch-all so Colville ERV-1 cites `ENERGY RECOVERY VENTILATOR SCHEDULE` (not blank seismic summary). Sheet-only prefer also narrows to the unique non-blank title. Colville ERV **MATCH**. Compile totals held: Colville 50, Carson 58, itd 93, Baker 21, Klamath 53, federal 103.
 - **WP1.4 ampersand equip marks (shared path):** `expandAmpersandEquipMarks` + prefer ampersand TAG over glued `row.key` — Northport `RF-1 & 2` → RF-1/RF-2 (FAN **1→2**, total **15→16**). Negatives: Colville 50, itd 93, Carson 58, Baker 21, federal 103.
+- **WP4 Hurlburt ATU spaced marks (shared path):** `rowKeyAnswersFor` strips revision/`N` prefixes (`NATUK1`↔`ATU K1`); `sweepScheduleRow` prefers the plan-drawn spaced MARK form. Hurlburt VAV **ATU K1/K2 MATCH** (was SCHEDULE_ONLY). Negatives: Carson prefer-schedule, Colville ERV, Baker EH, SDSU vacuum.
 
 ### Next queue (platform loop)
 
