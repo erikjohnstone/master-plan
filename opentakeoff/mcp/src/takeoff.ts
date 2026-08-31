@@ -26,7 +26,10 @@ import { isReferenceCrossTable, type ScheduleTable, type TableRow } from "../../
 import {
   reconcileRowsFromTakeoffItems,
   summarizeReconcile,
+  reconcileScheduleFamilyWithSweeps,
+  familyNeedleFromSpecs,
 } from "../../web/src/lib/schedulePlanReconcile.mjs";
+import { HVAC_FAMILY_SPECS } from "../../web/src/lib/corpusTakeoff.mjs";
 
 /** The structured failure taxonomy requested for this pipeline — classifies
  * WHY a tag's takeoff came out the way it did, distinct from a raw error
@@ -769,21 +772,46 @@ export async function buildLegendTakeoff(session: Session, opts: { categories?: 
 export async function reconcileSchedulePlan(session: Session, opts: {
   family?: string | null;
   categories?: string[] | null;
+  tags?: string[] | null;
   evaluationFast?: boolean;
+  /** When true with family, sweep every row in that family (not whole-set). */
+  familySweepAll?: boolean;
 } = {}): Promise<{
   rows: ReturnType<typeof reconcileRowsFromTakeoffItems>;
   summary: ReturnType<typeof summarizeReconcile>;
-  takeoff_stats: PlanSetTakeoff["stats"];
+  takeoff_stats?: PlanSetTakeoff["stats"];
   family_filter: string | null;
 }> {
+  const family = opts.family ? String(opts.family).trim() : null;
+  const tags = opts.tags?.length ? opts.tags.map((t) => String(t).trim()).filter(Boolean) : null;
+
+  // Scoped family reconcile — selective or family-wide sweeps without whole-set walk.
+  if (family && (tags?.length || opts.familySweepAll)) {
+    const graph = await session.graphForPipeline();
+    const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
+    if (!needle) {
+      return {
+        rows: [],
+        summary: summarizeReconcile([]),
+        family_filter: family,
+      };
+    }
+    const scoped = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+      tags: tags ?? undefined,
+      evaluationFast: opts.evaluationFast,
+      sweepAll: !!opts.familySweepAll && !tags?.length,
+    });
+    return { ...scoped, takeoff_stats: undefined };
+  }
+
   const takeoff = await buildPlanSetTakeoff(session, {
     categories: opts.categories ?? null,
     evaluationFast: opts.evaluationFast,
   });
   let items = takeoff.items;
-  const family = opts.family ? String(opts.family).trim() : null;
-  if (family) {
-    const famU = family.toUpperCase();
+  const familyFilter = family;
+  if (familyFilter) {
+    const famU = familyFilter.toUpperCase();
     items = items.filter((item) => {
       const eq = String(item.equipment_type || "").toUpperCase();
       const cat = String(item.category || "").toUpperCase();
@@ -799,6 +827,6 @@ export async function reconcileSchedulePlan(session: Session, opts: {
     rows,
     summary: summarizeReconcile(rows),
     takeoff_stats: takeoff.stats,
-    family_filter: family,
+    family_filter: familyFilter,
   };
 }

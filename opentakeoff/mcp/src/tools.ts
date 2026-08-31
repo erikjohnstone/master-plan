@@ -722,13 +722,25 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     inputSchema: {
       family: z.string().optional().describe('Optional family scope: VAV, FCU, AHU, pump, etc.'),
       categories: z.array(z.string()).optional().describe("Optional hvacTaxonomy category filter"),
+      tags: z.array(z.string()).optional().describe("Optional MARK tags to sweep (scoped reconcile — fast)"),
+      evaluation_fast: z.boolean().optional().describe("Use evaluation-fast sweep (corpus/demo speed)"),
+      family_sweep_all: z.boolean().optional().describe("When family set and tags omitted, sweep every row in that family only"),
       path: z.string().optional().describe("Optional JSON file path for the reconcile table"),
       export_path: z.string().optional().describe("Optional directory for reconcile.csv export"),
       overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
     },
     outputSchema: reconcileSchedulePlanOutput,
-  }, run("reconcile_schedule_plan", async ({ family, categories, path: outPath, export_path: exportPath, overwrite }) => {
-    const result = await reconcileSchedulePlan(session, { family: family ?? null, categories: categories ?? null });
+  }, run("reconcile_schedule_plan", async ({
+    family, categories, tags, evaluation_fast, family_sweep_all,
+    path: outPath, export_path: exportPath, overwrite,
+  }) => {
+    const result = await reconcileSchedulePlan(session, {
+      family: family ?? null,
+      categories: categories ?? null,
+      tags: tags ?? null,
+      evaluationFast: evaluation_fast,
+      familySweepAll: family_sweep_all,
+    });
     if (outPath) {
       await assertWritable(outPath, "json", overwrite);
       const { writeFile } = await import("node:fs/promises");

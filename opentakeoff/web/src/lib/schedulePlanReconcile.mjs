@@ -188,6 +188,70 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
   return rows;
 }
 
+/** Map user family word → schedule needle via HVAC_FAMILY_SPECS (set-agnostic). */
+export function familyNeedleFromSpecs(specs, family) {
+  const raw = String(family || "").trim();
+  if (!raw) return null;
+  const u = raw.toUpperCase();
+  const aliases = {
+    VAV: "VAV",
+    FCU: "FCU",
+    AHU: "AHU",
+    PUMP: "PUMP",
+    RTU: "RTU",
+    FAN: "FAN",
+  };
+  const key = aliases[u] || Object.keys(specs).find((k) =>
+    k === u || k.replace(/_/g, " ") === u.replace(/_/g, " "));
+  if (!key || !specs[key]) return null;
+  return { label: key.replace(/_/g, " "), ...specs[key] };
+}
+
+/**
+ * Reconcile one schedule family with selective sweep_schedule_row calls (shared Session path).
+ * @param {object} session Session with sweepScheduleRow(tag, opts)
+ * @param {object} graph
+ * @param {object} needle schedule family needle (titleRe, exclude, label)
+ * @param {{ tags?: string[], evaluationFast?: boolean, sweepAll?: boolean }} [opts]
+ */
+export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, opts = {}) {
+  const scaffold = reconcileScheduleFamilyFromGraph(graph, needle, new Map());
+  const tagFilter = opts.tags?.length
+    ? new Set(opts.tags.map((t) => String(t).trim().toUpperCase()))
+    : null;
+  const sweepAll = opts.sweepAll === true || (!tagFilter && opts.sweepAll !== false);
+  const sweepByTag = new Map();
+  for (const row of scaffold) {
+    const shouldSweep = tagFilter ? tagFilter.has(row.tag.toUpperCase()) : sweepAll;
+    if (!shouldSweep) continue;
+    try {
+      const r = await session.sweepScheduleRow(row.tag, {
+        commit: false,
+        evaluationFast: !!opts.evaluationFast,
+      });
+      sweepByTag.set(row.tag, {
+        installedQty: r.found ?? 0,
+        itemStatus: "resolved",
+        planCites: (r.sheets || []).flatMap((ps) =>
+          (ps.matches || []).map((m) => ({ sheet: ps.sheet, at: m.at })),
+        ),
+      });
+    } catch (e) {
+      sweepByTag.set(row.tag, {
+        installedQty: 0,
+        itemStatus: "refused",
+        reason: e?.message || String(e),
+      });
+    }
+  }
+  const rows = reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag);
+  return {
+    rows,
+    summary: summarizeReconcile(rows),
+    family_filter: needle?.label || null,
+  };
+}
+
 /** CSV header row for contractor reconcile export. */
 export const RECONCILE_CSV_HEADERS = [
   "Tag",
