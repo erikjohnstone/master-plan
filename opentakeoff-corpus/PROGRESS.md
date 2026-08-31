@@ -302,7 +302,7 @@ reconcile, and plan joins.
   UI graph prewarm (`schedules indexing…`) + `prewarmGraphSmoke.test.mjs`.
 - **Bulk rescore (2026-08-31 tip `cdfded4`):** MEAT **20** · WEAK **2** · ZERO **9** (Douglas misc+VRF MEAT; SDSU 85; Kennebec+Suwannee honest WEAK).
 - **Orange County cross-set key:** 32 VAV + **33** HVAC items (BP-1 only; fake HRC/UH dropped); reconcile scaffold test.
-- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (**50**), Baker MS (**17**), Klamath (**50**), Douglas (**18**), Jeff City CST (**27**), **SDSU EngSciences (118)**, **MSU Life Sciences (5)**, bldg5406 (**27**), Carson (**58**), federal-mech (**103**), **itd-d1-lab (92)** locked.
+- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (**50**), Baker MS (**20**), Klamath (**50**), Douglas (**18**), Jeff City CST (**32**), **SDSU EngSciences (181)**, **MSU Life Sciences (5)**, bldg5406 (**30**), Carson (**58**), federal-mech (**103**), **itd-d1-lab (93)** locked.
 - **WP1.4 keyRe broaden:** BOILER1 marks, blank-title FCU/EV/EF/RF fan-coil rows — federal-mech later gains FIN_TUBE (100); two bulk WEAK→MEAT promotions.
 - **WP1.4 CODE_RE + EQUIP.TAG + banding orphans:** `AHU-1A`-style digit+letter suffixes; `EQUIP. TAG` own-identity; seam-gap spans assigned to nearest band + thin identity-band absorb. Hawthorn **1→5**.
 - **WP1.4 title hunt:** `\bSCHEDULE\b` (not SCHEDULED) — Northport AIR INLETS & OUTLETS recovers 12 GRD (**3→15**).
@@ -348,15 +348,17 @@ reconcile, and plan joins.
 - **WP1.4 split outdoor CU/DCU (shared path):** `CONDENSING_UNIT.altTitleRe` + `altKeyRe` claims CU/DCU from SPLIT SYSTEM / DUCTLESS SPLIT SYMBOL columns without applying a CU filter to titled Carson B* CONDENSING UNIT schedules. DCU moved off FCU keyRe. itd-d1-lab **92→93** (CU-1 + DCU-1). Negatives: Carson 58/CU23, federal 103, Colville 50, Hurlburt 13, Hawthorn 5.
 - **WP1.4 CEILING_FAN (shared path):** titled `CEILING FAN SCHEDULE` + `CF-*` (FAN already excludes ceiling fans). Jeff City CST **29→32**. Honest ZERO bulk sets re-probed (Augusta window-only; Iowa/Judson note spans; TroopB/KCHA/Vista/Ogden rejoined still 0 HVAC tables).
 - **WP1.4 SDSU/bldg5406 orphan batch (shared path):** FAN `TEF`/`GX` + LABORATORY EXHAUST title; ELECTRIC HUMIDIFIER `EH-*` (titledOnly); FILTER `F-#` (titledOnly, no split-system steal); LOUER OCR → LOUVER; EPANSION/COMPRESSION OCR → EXPANSION_TANK. SDSU **118→123**; bldg5406 **27→30**; Valdosta **16→17**. Negatives: Colville 50, itd 93, Carson 58, federal 103. Rejected: softener `BT-*` (double-counts Colville BUFFER_TANK). Fume-hood ECV deferred.
+- **WP1.4 Baker AHU + SDSU FUME_HOOD_DAMPER (shared path):** `AIR HANDLER HEAT PUMP` → AHU (comma-split with HEAT_PUMP HP-*); `normalizeEquipMark` strips SYMBOL CFM/size/room trailers (Baker GRD); titled `FUME HOOD … VAV … DAMPER` + `ECV-*` (titledOnly). Baker **17→20**; SDSU **123→181** (+58 ECV). Negatives: Colville 50, itd 93, Carson 58, Douglas 18, federal 103, Jeff City 32.
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 fume-hood ECV / remaining titled orphans; honest ZERO bulk ceilings unchanged.
+2. WP1.4 remaining titled orphans / honest ZERO bulk ceilings unchanged.
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. WP4 deepen on Douglas / Klamath / SDSU VAV SCHEDULE_ONLY remainder (raise plan-text recall without unsafe heuristics; SDSU CAV mostly “cannot geometrically anchor”).
 5. Remaining WEAK ceilings: Suwannee (1 RTU honest), Kennebec (2 multi-split only).
 6. Optional: evaluate BlueprintParser_OS / drawings-ai digests as *complementary* LLM recall only — never as qty/cite truth (stay on Session+ODL).
+7. Pre-existing: `query_table` soft-matches DEHUMIDIFIER under HUMIDIFIER needle (fixture 24≠12) — word-boundary includes fix.
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 

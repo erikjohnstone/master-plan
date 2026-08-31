@@ -263,6 +263,9 @@ export function familyNeedleFromSpecs(specs, family) {
     "COOLING TOWER": "COOLING_TOWER",
     HEAT_PUMP: "HEAT_PUMP",
     "HEAT PUMP": "HEAT_PUMP",
+    FUME_HOOD_DAMPER: "FUME_HOOD_DAMPER",
+    "FUME HOOD DAMPER": "FUME_HOOD_DAMPER",
+    ECV: "FUME_HOOD_DAMPER",
   };
   const key = aliases[u] || Object.keys(specs).find((k) =>
     k === u || k.replace(/_/g, " ") === u.replace(/_/g, " "));

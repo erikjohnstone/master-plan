@@ -139,6 +139,13 @@ test("normalizeEquipMark strips (N)/(E) drawing revision prefixes", () => {
   assert.ok(HVAC_FAMILY_SPECS.VAV.keyRe!.test("ATUK1"));
 });
 
+test("normalizeEquipMark strips SYMBOL CFM/size/room trailers (Baker GRD)", () => {
+  assert.equal(normalizeEquipMark("G-2 CFM"), "G-2");
+  assert.equal(normalizeEquipMark("R-1 30x6"), "R-1");
+  assert.equal(normalizeEquipMark("EH-1 TOILET 135"), "EH-1");
+  assert.equal(normalizeEquipMark("AHU-1"), "AHU-1");
+});
+
 test("RTU / ERV / furnace / heat-pump titles match set-agnostic families", () => {
   assert.equal(
     scheduleTitleMatches("ROOF TOP UNIT SCHEDULE", HVAC_FAMILY_SPECS.RTU.titleRe, HVAC_FAMILY_SPECS.RTU.exclude),
@@ -993,6 +1000,81 @@ test("WP1.4 TEF/GX fans, ELECTRIC HUMIDIFIER EH, FILTER F-#, LOUER OCR, EPANSION
   assert.equal(hvac.categories.EXPANSION_TANK.items[0].tag, "ET-1");
   // FILTER titledOnly must not steal split-system indoor F-1.
   assert.equal(hvac.categories.FCU.items.some((i) => i.tag === "F-1"), true);
+});
+
+test("WP1.4 AIR HANDLER HEAT PUMP → AHU+HP comma-split; FUME_HOOD_DAMPER ECV", () => {
+  assert.equal(
+    scheduleTitleMatches(
+      "AIR HANDLER HEAT PUMP SCHEDULE (WITH ELECTRIC HEAT)",
+      HVAC_FAMILY_SPECS.AHU.titleRe,
+      HVAC_FAMILY_SPECS.AHU.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "FAN COIL UNIT SCHEDULE",
+      HVAC_FAMILY_SPECS.AHU.titleRe,
+      HVAC_FAMILY_SPECS.AHU.exclude,
+    ),
+    false,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "FUME HOOD VARIABLE AIR VOLUME DAMPER SCHEDULE",
+      HVAC_FAMILY_SPECS.FUME_HOOD_DAMPER.titleRe,
+      HVAC_FAMILY_SPECS.FUME_HOOD_DAMPER.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.FUME_HOOD_DAMPER.keyRe!.test("ECV-NB-1"));
+  assert.ok(!HVAC_FAMILY_SPECS.VAV.keyRe!.test("ECV-NB-1"));
+  const graph = {
+    sheets: [],
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#1",
+        title: { text: "AIR HANDLER HEAT PUMP SCHEDULE (WITH ELECTRIC HEAT)" },
+        rows: [
+          { key: "AHU-1HP-1", cells: { SYMBOL: { text: "AHU-1, HP-1" } } },
+          { key: "AHU-2HP-2", cells: { SYMBOL: { text: "AHU-2, HP-2" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#2",
+        title: { text: "SUPPLY GRILLE SCHEDULE" },
+        rows: [
+          { key: "G-1", cells: { SYMBOL: { text: "G-1" } } },
+          { key: "G-2", cells: { SYMBOL: { text: "G-2 CFM" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#3",
+        title: { text: "FUME HOOD VARIABLE AIR VOLUME DAMPER SCHEDULE" },
+        rows: [
+          { key: "ECV-NB-1", cells: { TAG: { text: "ECV-NB-1" } } },
+          { key: "ECV-NB-2", cells: { TAG: { text: "ECV-NB-2" } } },
+          { key: "NOTES", cells: { TAG: { text: "NOTES" } } },
+        ],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.AHU.count, 2);
+  assert.deepEqual(hvac.categories.AHU.items.map((i) => i.tag).sort(), ["AHU-1", "AHU-2"]);
+  assert.equal(hvac.categories.HEAT_PUMP.count, 2);
+  assert.deepEqual(hvac.categories.HEAT_PUMP.items.map((i) => i.tag).sort(), ["HP-1", "HP-2"]);
+  assert.equal(hvac.categories.GRD.count, 2);
+  assert.deepEqual(hvac.categories.GRD.items.map((i) => i.tag).sort(), ["G-1", "G-2"]);
+  assert.equal(hvac.categories.FUME_HOOD_DAMPER.count, 2);
+  assert.deepEqual(
+    hvac.categories.FUME_HOOD_DAMPER.items.map((i) => i.tag).sort(),
+    ["ECV-NB-1", "ECV-NB-2"],
+  );
+  assert.equal(hvac.categories.VAV.count, 0);
 });
 
 test("query_table soft needle hits no-space titles for long needles", () => {

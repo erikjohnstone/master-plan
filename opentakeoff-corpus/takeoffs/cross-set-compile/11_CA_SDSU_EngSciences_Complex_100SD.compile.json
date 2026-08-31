@@ -2,7 +2,7 @@
   "set_id": "11_CA_SDSU_EngSciences_Complex_100SD",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/11_CA_SDSU_EngSciences_Complex_100SD.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk campus lab — AHU/FCU/VAV+LAB CAV + pumps (VACUUM excluded) + HX/PHX + duct coils + flash tank + RO + WS/EF+TEF/GX + ELECTRIC HUMIDIFIER EH-1 + FILTER F-1 + AS/ET/GRD/SOUND TRAP. Fume-hood ECV dampers deferred.",
+  "notes": "Bulk campus lab — AHU/FCU/VAV+LAB CAV + pumps (VACUUM excluded) + HX/PHX + duct coils + flash tank + RO + WS/EF+TEF/GX + ELECTRIC HUMIDIFIER EH-1 + FILTER F-1 + AS/ET/GRD/SOUND TRAP + FUME HOOD VAV DAMPER ECV-* (58).",
   "categories": {
     "AHU": 3,
     "FCU": 18,
@@ -19,9 +19,10 @@
     "DUCT_MOUNTED_COIL": 2,
     "WATER_TREATMENT": 1,
     "GRD": 3,
-    "DUCT_SILENCER": 6
+    "DUCT_SILENCER": 6,
+    "FUME_HOOD_DAMPER": 58
   },
-  "totals": { "items": 123 },
+  "totals": { "items": 181 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }

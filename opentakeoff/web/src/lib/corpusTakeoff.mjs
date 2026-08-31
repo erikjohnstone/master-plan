@@ -103,6 +103,12 @@ export function normalizeEquipMark(raw) {
   // Glued forms when parentheses were dropped: NACC-2, NATUK1, NAHU-1.
   const glued = t.match(/^N((?:AHU|ATU|ACC|FCU|VAV|RTU|CU|EF|SF|RF|DOAS|ERV)[\s\-A-Z0-9].*)$/i);
   if (glued) t = glued[1];
+  // SYMBOL cells often append size/CFM/room: "G-2 CFM", "R-1 30x6", "EH-1 TOILET 135".
+  // Keep the leading mark when a space-separated trailer remains (Baker GRD).
+  const lead = t.match(/^([A-Za-z]{1,8}[\s\-]?\d+[A-Za-z]?(?:\/[A-Za-z0-9\-]+)*)\b/);
+  if (lead && /\s+\S/.test(t.slice(lead[0].length))) {
+    t = lead[1];
+  }
   return t.trim();
 }
 
@@ -243,7 +249,12 @@ function uniqueFamily(graph, {
  */
 export const HVAC_FAMILY_SPECS = {
   // AC-* marks appear on VA / hospital AIR HANDLING UNIT schedules (not only AHU-*).
-  AHU: { titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED|HYDRONIC\s+COIL|FAN\s+SCHEDULE/i, keyRe: /^(?:AHU|AC)[\s\-]/i },
+  // "AIR HANDLER HEAT PUMP" (Baker) is the indoor AHU half of a split HP pair.
+  AHU: {
+    titleRe: /AIR HANDLING UNIT|AIR\s+HANDLER(?:\s+HEAT\s+PUMP)?(?:\s+SCHEDULE)?/i,
+    exclude: /DEDICATED|HYDRONIC\s+COIL|FAN\s+SCHEDULE|FAN\s*COIL/i,
+    keyRe: /^(?:AHU|AC)[\s\-]/i,
+  },
   DOAH_UNIT: { titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i, keyRe: /^DOAH/i },
   DOAH_HANDLING: { titleRe: /DEDICATED OUTDOOR AIR HANDLING/i, keyRe: /^DOAH/i },
   DOAS: {
@@ -476,8 +487,17 @@ export const HVAC_FAMILY_SPECS = {
   // keyRe drops building-only marks (Carson B1 on the same table as OA1/OA2).
   CONTROL_DAMPER: {
     titleRe: /CONTROL\s+DAMPER\s+SCHEDULE/i,
-    exclude: /POINTS\s*LIST|DDC|FIRE\s+DAMPER|SMOKE\s+DAMPER/i,
+    exclude: /POINTS\s*LIST|DDC|FIRE\s+DAMPER|SMOKE\s+DAMPER|FUME\s+HOOD/i,
     keyRe: /^(?:OA|RA|EA|SA)[\s\-]?\d/i,
+  },
+  // Lab fume-hood exhaust control valves / VAV dampers (ECV-*). Titled-only —
+  // VAV titleRe also hits "VARIABLE AIR VOLUME" in these captions, but ECV
+  // marks fail VAV keyRe; claim them here instead of leaving orphans.
+  FUME_HOOD_DAMPER: {
+    titleRe: /FUME\s+HOOD.{0,40}(?:VARIABLE\s+AIR\s+VOLUME|VAV).{0,40}DAMPER|FUME\s+HOOD\s+DAMPER\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC|FIRE\s+DAMPER|SMOKE\s+DAMPER/i,
+    keyRe: /^ECV[\s\-]/i,
+    titledOnly: true,
   },
   // CHW / HHW from title signals (abbrev or spelled-out). Bypass valves stay out.
   CHW_CONTROL_VALVE: {
