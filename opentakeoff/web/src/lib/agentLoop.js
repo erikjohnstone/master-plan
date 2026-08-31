@@ -1472,12 +1472,20 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       }
     }
   }
-  // Narrow follow-ups: "how many ATCT fan coils … including FCU-T11?"
-  // must copy building_tag_counts.T from the FCU title-scan (A≠T; never swap).
-  const asksAtctFanCoilCount = /\bATCT\b/i.test(goal)
-    && /fan[\s\-]*coils?/i.test(goal)
+  // Narrow follow-ups: "how many … fan coils … including FCU-T11?"
+  // Copy building_tag_counts.<letter> from the FCU title-scan. Letter comes from
+  // tags in the goal (FCU-T11 → T) or "building X" — never a set-specific name map.
+  const asksFanCoilBuildingCount = /fan[\s\-]*coils?/i.test(goal)
     && /\b(?:how many|count|scheduled|including)\b/i.test(goal);
-  if (asksAtctFanCoilCount && finalText) {
+  const buildingLetterFromGoalTags = (() => {
+    const fromTag = [...String(goal || "").matchAll(/\b(?:FCU|AHU|VAV|DOAH|UH|CUH)-([A-Z])(?=\d)/gi)]
+      .map((m) => m[1].toUpperCase());
+    if (fromTag.length) return fromTag[fromTag.length - 1];
+    const fromBuilding = String(goal || "").match(/\bbuilding\s+([A-Z])\b/i);
+    return fromBuilding ? fromBuilding[1].toUpperCase() : null;
+  })();
+  if (asksFanCoilBuildingCount && buildingLetterFromGoalTags && finalText) {
+    const letter = buildingLetterFromGoalTags;
     const fcuScan = callLog.find(({ name, out, args }) => {
       if (name !== "query_table" || out?.error) return false;
       const q = out?.query || args || {};
@@ -1485,28 +1493,41 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         || q.column != null || q.cell_value != null || q.cell_contains != null;
       if (scoped) return false;
       const title = String(q.title || out.matches?.[0]?.title?.text || out.matches?.[0]?.title || "");
-      return /FAN\s*COIL/i.test(title) && out.building_tag_counts && Number.isFinite(Number(out.building_tag_counts.T));
+      return /FAN\s*COIL/i.test(title) && out.building_tag_counts
+        && Number.isFinite(Number(out.building_tag_counts[letter]));
     });
     if (!fcuScan) {
-      return "The goal asks how many ATCT fan coils are scheduled. Call query_table with title FAN COIL UNIT SCHEDULE (no row_key), then copy building_tag_counts.T as the ATCT total (A=Air Ops, T=ATCT — never swap).";
+      return `The goal asks for fan-coil counts for building ${letter} (from the named tag). Call query_table with title FAN COIL UNIT SCHEDULE (no row_key), then copy building_tag_counts.${letter} — do not swap letters.`;
     }
-    const tCount = Number(fcuScan.out.building_tag_counts.T);
-    const aCount = Number(fcuScan.out.building_tag_counts.A);
+    const wantCount = Number(fcuScan.out.building_tag_counts[letter]);
     const answerU = finalText.toUpperCase().replace(/[\u2010-\u2015\u2212]/g, "-");
-    const atctNear = (n) => new RegExp(
-      `(?:ATCT|T\\s*[=:]|T-TAG|T\\s+TAG)[^0-9]{0,48}\\b${n}\\b|\\b${n}\\b[^0-9]{0,48}(?:ATCT|T-TAG)`,
+    const letterNear = (n) => new RegExp(
+      `(?:building\\s+${letter}|\\b${letter}\\s*[=:]|${letter}-TAG|${letter}\\s+TAG|FCU-${letter})[^0-9]{0,48}\\b${n}\\b|\\b${n}\\b[^0-9]{0,48}(?:building\\s+${letter}|FCU-${letter}|\\b${letter}\\s*[=:])`,
       "i",
-    ).test(answerU);
-    if (!atctNear(tCount)) {
-      return `Tool evidence shows FAN COIL building_tag_counts.T=${tCount} (ATCT). Copy ATCT fan-coil count ${tCount} into the answer — A=Air Ops, T=ATCT; do not swap them.`;
+    ).test(answerU)
+      || new RegExp(`\\b${n}\\b`).test(answerU); // allow plain count when the ask is already scoped
+    // Prefer a count near the letter/tag; fall back to any mention of the exact total.
+    const hasWant = letterNear(wantCount) || new RegExp(`\\b${wantCount}\\b`).test(answerU);
+    if (!hasWant) {
+      return `Tool evidence shows FAN COIL building_tag_counts.${letter}=${wantCount}. Copy building ${letter} fan-coil count ${wantCount} into the answer — do not swap building letters.`;
     }
-    if (Number.isFinite(aCount) && aCount !== tCount && atctNear(aCount) && !atctNear(tCount)) {
-      return `The answer assigns Air Ops count ${aCount} to ATCT. building_tag_counts map A=Air Ops and T=ATCT=${tCount} — use T=${tCount} for ATCT fan coils.`;
+    // Catch classic swap: stating another building's count as this building's.
+    for (const [other, raw] of Object.entries(fcuScan.out.building_tag_counts || {})) {
+      if (other === letter || other === "other") continue;
+      const otherN = Number(raw);
+      if (!Number.isFinite(otherN) || otherN === wantCount) continue;
+      const claimsOtherAsThis = new RegExp(
+        `(?:building\\s+${letter}|FCU-${letter})[^0-9]{0,24}\\b${otherN}\\b`,
+        "i",
+      ).test(answerU);
+      if (claimsOtherAsThis && !new RegExp(`\\b${wantCount}\\b`).test(answerU)) {
+        return `The answer assigns building ${other} count ${otherN} to building ${letter}. building_tag_counts.${letter}=${wantCount} — use ${wantCount}.`;
+      }
     }
   }
   // Full-set schedule takeoffs must use title-scan query_table counts — not
   // the number of MARK cells painted for spot-check.
-  // Narrow follow-ups ("how many ATCT fan coils… including FCU-T11?") must NOT
+  // Narrow follow-ups ("how many … fan coils … including FCU-T11?") must NOT
   // trigger this gate — only multi-family inventory / takeoff asks do.
   // BAS points-list takeoffs name DOAH/AHU/FCU inside list titles — that must
   // not pull equipment-schedule families (DEDICATED OUTDOOR AIR UNIT, FAN COIL
@@ -1760,25 +1781,20 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
           || (label === "VAV" && /\bVAVs?[^\n.]{0,48}\bsplits?\b/i.test(goal))
           || (label === "AHU" && /\bAHUs?[^\n.]{0,48}\bsplits?\b/i.test(goal))
           || (label === "DOAH unit" && /\bDOAHs?[^\n.]{0,48}\bsplits?\b/i.test(goal));
-        const splitClause = (() => {
-          if (label === "FCU") {
-            const m = goal.match(
-              /((?:air\s*ops|mitracon|mtrac?on|ATCT)(?:\s+and\s+(?:air\s*ops|mitracon|mtrac?on|ATCT))?)\s+fan[\s\-]*coil\s+splits?/i,
-            );
-            return m ? m[0] : "";
-          }
-          if (label === "VAV") {
-            const m = goal.match(
-              /((?:air\s*ops|mitracon|mtrac?on|ATCT)(?:\s+and\s+(?:air\s*ops|mitracon|mtrac?on|ATCT))?)\s+VAV\s+splits?/i,
-            );
-            return m ? m[0] : "";
-          }
-          return "";
-        })();
         const wantedLetters = new Set();
-        if (/air\s*ops/i.test(splitClause)) wantedLetters.add("A");
-        if (/mitracon|mtrac?on/i.test(splitClause)) wantedLetters.add("M");
-        if (/\bATCT\b/i.test(splitClause)) wantedLetters.add("T");
+        // Letters named in the goal (building A, FCU-T11 → T) — set-agnostic.
+        for (const m of String(goal || "").matchAll(/\bbuilding\s+([A-Z])\b/gi)) {
+          wantedLetters.add(m[1].toUpperCase());
+        }
+        for (const m of String(goal || "").matchAll(/\b(?:FCU|AHU|VAV|DOAH)-([A-Z])(?=\d)/gi)) {
+          wantedLetters.add(m[1].toUpperCase());
+        }
+        // "splits" / "across buildings" with no named letter → enforce every letter key.
+        if (!wantedLetters.size && /\bsplits?\b|\bacross\s+buildings?\b/i.test(goal)) {
+          for (const letter of Object.keys(out.building_tag_counts || {})) {
+            if (letter !== "other") wantedLetters.add(letter);
+          }
+        }
         if (!goalAsksThisSplit) {
           // skip split enforcement for this family
         } else for (const [letter, n] of Object.entries(out.building_tag_counts)) {
@@ -1835,7 +1851,7 @@ export function agentSystemPrompt() {
     "- Be extremely, genuinely useful: whatever the goal asks — a full takeoff, an AHU characteristic, counting valves, a BAS trace, schedule attributes, cross-sheet joins — do that ask end-to-end. Return every requested field with evidence-backed values plus enough citation context to trust the answer. Paint ALL answering evidence on the sheets (value cells / row data / drawing text / counted marks), not only a tag mark. Partial answers and mark-only flybys are incomplete.",
     "- query_table and find_text search the whole loaded set — they do not require the sheet to be open as a canvas tab. Never refuse schedule cell values because a tab is closed; call query_table with row_key and copy row.all_cells, then highlight_citation.",
     "- COMPLETE set HVAC, BAS, or valve takeoff (goal says complete … takeoff of this set / these drawings / this blueprint set): call compile_corpus_takeoff FIRST — kind hvac_equipment for HVAC equipment, kind bas_points for BAS/DDC points, kind control_valves for a complete valve takeoff (CHW + HHW CONTROL VALVE SCHEDULE). When the goal asks for chilled-water / CHW only or hot-water / HHW only, also pass service=\"CHW\" or service=\"HHW\". That tool is the deterministic full-set answer (same Session+ODL path as MCP). Copy its totals / category_counts / list_counts / exclusions / empty_pages into the answer. Do NOT approximate the set total by crawling find_schedule, read_schedule, or title-scanning families one-by-one — that yields partial 10-row dumps with broken cites. After compile, spot-cite a few MARKs with query_table + highlight_citation only. For valves, report valve mark, served equipment (UNIT MARK), service (CHW/HHW), size, GPM, and ONE Cv per valve — never invent dual CHW CV + HHW CV columns on the same row.",
-    "- When asked for scheduled equipment or points-list row counts for NAMED families/lists (not a complete set compile), call query_table with the schedule title (no row_key and no cell_contains). Copy that tool result's count and building_tag_counts into the answer — do not re-sum sheet_graph page row totals by hand (continuation pages 1 OF 2 / 2 OF 2 repeat the same MARK keys). building_tag_counts letters map as A=Air Ops, M=MITRACON/Mitracon, T=ATCT — never swap them. When point_type_counts is present, copy AI/AO/BI/BO from it — do not burn iterations re-filtering the same title with cell_contains for each point type. Prefer one accurate title needle per asked family; when the goal distinguishes sibling titles (for example dedicated outdoor-air UNIT vs HANDLING schedules, or air-cooled vs heat-recovery chillers), query the title that matches what was asked rather than blending both. When the goal names a specific points list (for example AHU-T1A/TIB), put that tag in the query_table title — a bare POINTS LIST title can roll up sibling lists and double the row count. Then re-query specific row_key values for MARK/identity bboxes you must cite.",
+    "- When asked for scheduled equipment or points-list row counts for NAMED families/lists (not a complete set compile), call query_table with the schedule title (no row_key and no cell_contains). Copy that tool result's count and building_tag_counts into the answer — do not re-sum sheet_graph page row totals by hand (continuation pages 1 OF 2 / 2 OF 2 repeat the same MARK keys). building_tag_counts letters are building codes from tags (A/M/T/…) — never swap letters; when the goal names a tag like FCU-T11, use building_tag_counts.T for that building's total. When point_type_counts is present, copy AI/AO/BI/BO from it — do not burn iterations re-filtering the same title with cell_contains for each point type. Prefer one accurate title needle per asked family; when the goal distinguishes sibling titles (for example dedicated outdoor-air UNIT vs HANDLING schedules, or air-cooled vs heat-recovery chillers), query the title that matches what was asked rather than blending both. When the goal names a specific points list (for example AHU-T1A/TIB), put that tag in the query_table title — a bare POINTS LIST title can roll up sibling lists and double the row count. Then re-query specific row_key values for MARK/identity bboxes you must cite.",
     "- Sequencing for named-family count + cite goals (not complete-set compile): (1) list_sheets + sheet_graph once, (2) one title-scan query_table per requested family and copy count/building_tag_counts/point_type_counts, (3) only then re-query the named cite MARKs / points-list title and paint those cells, (4) write ONE final answer whose family totals match those tool counts (do not add a second contradictory totals table that recounts only painted MARKs). Do not paint every equipment row on a schedule, and do not dump full schedule tables into the answer.",
     "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Pass row_key, column, table_title, and value whenever known so the Agent source card title reads like \"VAV-1 · CFM = 350\" (not a naked \"350\"). Do not rely on auto-flying the canvas — the UI shows clickable expandable source cards; painting is enough. When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",
     "- The final Answer in chat must give the estimator MORE than enough to understand the workflow and act: every requested count/field with units, schedule titles and sheets, and clear structure. Prefer markdown tables and short labeled lists the UI can render (not a wall of prose or pipe-character dumps). Do not embed highlight_citation markup ids (【mk-…】) in chat — those belong on Source cards. Do not dump incidental inventory rows the goal did not ask for. Do not leave the usable answer only in Sources or highlights — chat is primary.",
