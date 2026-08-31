@@ -271,8 +271,9 @@ export function scheduleFamilyNeedles(goal) {
     add({
       label: "AHU",
       title: "AIR HANDLING UNIT SCHEDULE",
-      titleRe: /AIR HANDLING UNIT/i,
-      exclude: /DEDICATED/i,
+      // Baker "AIR HANDLER HEAT PUMP SCHEDULE" is the indoor AHU half.
+      titleRe: /AIR HANDLING UNIT|AIR\s+HANDLER(?:\s+HEAT\s+PUMP)?/i,
+      exclude: /DEDICATED|FAN\s*COIL/i,
     });
   }
   if (/\bDOAH\b|dedicated\s+outdoor|DOAS\b/i.test(g)) {
@@ -351,14 +352,36 @@ export function scheduleFamilyNeedles(goal) {
       exclude: /DEDICATED\s+OUTDOOR\s+AIR/i,
     });
   }
-  if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s\-]*coil/i.test(g)) {
+  if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s\-]*coil|ceiling\s+fan/i.test(g)) {
     add({ label: "fan", title: "FAN SCHEDULE", titleRe: /FAN SCHEDULE/i });
+  }
+  if (/\bceiling\s+fans?\b/i.test(g)) {
+    add({
+      label: "ceiling fan",
+      title: "CEILING FAN SCHEDULE",
+      titleRe: /CEILING\s+FAN\s+SCHEDULE/i,
+      exclude: /FAN\s*COIL|CABINET/i,
+    });
   }
   if (/\bdiffuser|grille|register|GRD\b/i.test(g)) {
     add({
       label: "diffuser",
       title: "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
       titleRe: /GRILLE,\s*REGISTER,\s*AND\s*DIFFUSER|DIFFUSER[\s\-]*GRILLE/i,
+    });
+  }
+  if (/\bfume\s+hood\s+damper|\bECVs?\b|fume\s+hood.{0,20}(?:VAV|damper)/i.test(g)) {
+    add({
+      label: "fume hood damper",
+      title: "FUME HOOD VARIABLE AIR VOLUME DAMPER SCHEDULE",
+      titleRe: /FUME\s+HOOD.{0,40}(?:VARIABLE\s+AIR\s+VOLUME|VAV).{0,40}DAMPER|FUME\s+HOOD\s+DAMPER\s+SCHEDULE/i,
+    });
+  }
+  if (/\bVFDs?\b|variable\s+frequency\s+drive/i.test(g)) {
+    add({
+      label: "VFD",
+      title: "VARIABLE FREQUENCY DRIVE SCHEDULE",
+      titleRe: /VARIABLE\s+FREQUENCY\s+DRIVE(?:\s+SCHEDULE)?|\bVFD\s+SCHEDULE/i,
     });
   }
   if (/\bdehumidif/i.test(g)) {

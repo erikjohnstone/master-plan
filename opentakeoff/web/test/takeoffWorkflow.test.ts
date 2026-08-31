@@ -6,6 +6,7 @@ import {
   classifyTakeoffIntent,
   corpusCompileKind,
   namedPointsListTitles,
+  scheduleFamilyNeedles,
   suggestedScheduleTitles,
   valveServiceFromGoal,
   advanceTakeoffWorkflow,
@@ -369,6 +370,8 @@ test("generic point list takeoff routes to corpus_bas compile (no spot_cites dea
 test("suggestedScheduleTitles maps family words to industry schedule needles", () => {
   const ahu = suggestedScheduleTitles("How many AHUs are on the air handling schedule?");
   assert.ok(ahu.some((t) => /AIR HANDLING/i.test(t)));
+  const ahuHandler = scheduleFamilyNeedles("AHU takeoff on air handler heat pump schedule");
+  assert.ok(ahuHandler.some((n) => n.titleRe.test("AIR HANDLER HEAT PUMP SCHEDULE (WITH ELECTRIC HEAT)")));
   const boiler = suggestedScheduleTitles("Boiler schedule takeoff — totals and capacity");
   assert.ok(boiler.some((t) => /BOILER/i.test(t)));
   const state = advanceTakeoffWorkflow(
@@ -392,6 +395,9 @@ test("remaining schedule families route + suggest query_table-viable titles", ()
     ["Cabinet unit heater takeoff", /CABINET UNIT HEATER SCHEDULE/i],
     ["Air separator schedule takeoff", /AIR SEPARATOR SCHEDULE/i],
     ["Expansion tank schedule takeoff", /EXPANSION TANK SCHEDULE/i],
+    ["Fume hood VAV damper / ECV schedule takeoff", /FUME HOOD VARIABLE AIR VOLUME DAMPER SCHEDULE/i],
+    ["VFD / variable frequency drive schedule takeoff", /VARIABLE FREQUENCY DRIVE SCHEDULE/i],
+    ["Ceiling fan schedule takeoff", /CEILING FAN SCHEDULE/i],
   ];
   for (const [goal, titleRe] of cases) {
     assert.equal(classifyTakeoffIntent(goal), "equipment_schedule", goal);

@@ -355,6 +355,7 @@ reconcile, and plan joins.
 - **WP4 SDSU ECAV reconcile sample:** plan-drawn floor ECAV (`N1/N2/S*`) MATCH locked with CAV sample; basement `ECAV-NB-1` swept negative → SCHEDULE_ONLY. Full ECAV census **16/25 MATCH · 9 SO** under `evaluationFast`.
 - **WP1 honest ZERO bulk keys:** Ogden, TroopB, Augusta, Iowa State, Vista, Judson, KCHA, JPS, weld-mech — compile totals **0** locked (no silent HVAC inflation). Re-probed 2026-08-31.
 - **WP4 Spokane VFD reconcile:** all 3 `VFD-*` SCHEDULE_ONLY under `evaluationFast` (honest — tags not plan text). SDSU CAV sample expanded (`S1-4/S1-7/S2-3/S3-3`).
+- **equipment_schedule needles (shared path):** FUME HOOD VAV DAMPER / ECV, VFD, CEILING FAN title suggestions; AHU needle accepts `AIR HANDLER HEAT PUMP`.
 
 ### Next queue (platform loop)
 
