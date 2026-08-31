@@ -130,33 +130,30 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHead
     const filterRe = blankTitle ? blankGate : catchAllSchedule ? null : keyRe;
     const catchAllFilter = catchAllSchedule;
     for (const row of table.rows || []) {
-      let tag = String(row.key || "").trim();
+      const rowKey = String(row.key || "").trim().replace(/^["'\s]+|["'\s]+$/g, "");
+      let tag = rowKey;
       // Prefer explicit MARK / EQUIP.TAG / DESIGNATION. Do NOT prefer bare TAG —
       // Colville FAN SCHEDULE shares a TAG column with grille type codes (1S/2R)
       // while row.key correctly holds EF-1.
       const markCell = cellText(row, /^(MARK|SYMBOL|VALVE\s*MARK|UNIT\s*MARK|EQUIP(?:\.?\s*TAG)?|DESIGNATION|UNIT\s*NO|UNIT\s*TAG|ITEM\s*NO)$/i);
-      if (markCell) tag = markCell;
+      if (markCell) tag = String(markCell).replace(/^["'\s]+|["'\s]+$/g, "").trim();
       if (identityHeaderRe) {
         const ident = cellText(row, identityHeaderRe);
-        if (ident) tag = ident;
+        if (ident) tag = String(ident).replace(/^["'\s]+|["'\s]+$/g, "").trim();
       }
-      // Expand slash/comma compounds (CWP-1/CWP-2, DFC-1 , DCU-1) and
-      // glued dual marks (DFC-1DCU-1) common on ductless-split extracts.
-      const slashParts = String(tag)
-        .split(/[/,]/)
-        .map((t) => t.trim())
+      // Always expand slash compounds (CWP-1/CWP-2). Comma-split only when a
+      // key filter can pick family marks (DFC-1 , DCU-1). Untagged titled
+      // families keep row.key when SYMBOL is a comma list (Baker ERU-1, HP-4).
+      const willFilter = Boolean(catchAllFilter || filterRe);
+      let working = tag;
+      if (!willFilter && /,/.test(tag) && rowKey && !/,/.test(rowKey)) {
+        working = rowKey;
+      }
+      const tagList = String(working)
+        .split(willFilter ? /[/,]/ : "/")
+        .map((t) => t.trim().replace(/^["'\s]+|["'\s]+$/g, ""))
         .filter(Boolean);
-      const tagList = [];
-      for (const part of slashParts.length ? slashParts : [tag]) {
-        const glued = String(part).match(/[A-Za-z]{1,8}[\s\-]?\d+[A-Za-z]?/g);
-        const norm = (s) => String(s).replace(/[\s\-]/g, "").toUpperCase();
-        if (glued && glued.length > 1 && glued.map(norm).join("") === norm(part)) {
-          tagList.push(...glued);
-        } else {
-          tagList.push(part);
-        }
-      }
-      for (const rawOne of tagList.length ? tagList : [tag]) {
+      for (const rawOne of tagList.length ? tagList : [working || tag]) {
         const one = normalizeEquipMark(rawOne);
         const canon = one.toUpperCase().replace(/\s+/g, "");
         if (!canon) continue;

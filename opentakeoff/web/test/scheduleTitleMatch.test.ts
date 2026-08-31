@@ -513,6 +513,14 @@ test("MECHANICAL SPECIALTY EQUIPMENT + ductless comma marks (itd shape)", () => 
           { key: "HC-2", cells: { MARK: { text: "HC-2" } } },
         ],
       },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#5",
+        title: { text: "ENERGY RECOVERY UNIT SCHEDULE (WITH HEAT PUMP)" },
+        rows: [
+          { key: "ERU-1HP-4", cells: { SYMBOL: { text: '"ERU-1, HP-4"' } } },
+        ],
+      },
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
@@ -521,6 +529,9 @@ test("MECHANICAL SPECIALTY EQUIPMENT + ductless comma marks (itd shape)", () => 
   assert.equal(hvac.categories.FCU.count, 2);
   assert.deepEqual(hvac.categories.FCU.items.map((i) => i.tag).sort(), ["DCU-1", "DFC-1"]);
   assert.equal(hvac.categories.DUCT_MOUNTED_COIL.count, 2);
+  // Untagged ERV: do not inflate from SYMBOL comma list — keep row.key.
+  assert.equal(hvac.categories.ERV.count, 1);
+  assert.equal(hvac.categories.ERV.items[0].tag, "ERU-1HP-4");
 });
 
 test("query_table soft needle hits no-space titles for long needles", () => {
