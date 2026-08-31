@@ -66,6 +66,9 @@ try {
   });
 
   if (reconciled?.error) await fail(`reconcile error: ${reconciled.error}`);
+  if (reconciled.path !== "production_session") {
+    await fail(`expected production_session path, got ${reconciled.path}`);
+  }
   if (!Array.isArray(reconciled?.rows) || !reconciled.rows.length) {
     await fail(`empty reconcile rows: ${JSON.stringify(reconciled)?.slice(0, 400)}`);
   }

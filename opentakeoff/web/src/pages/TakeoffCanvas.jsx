@@ -6911,6 +6911,22 @@ export default function TakeoffCanvas() {
     }
   }
 
+  async function fetchProductionReconcileSchedulePlan(opts = {}) {
+    const fields = {};
+    if (opts.family) fields.family = String(opts.family).trim();
+    if (opts.familySweepAll) fields.familySweepAll = "1";
+    if (opts.tags?.length) fields.tags = opts.tags.join(",");
+    const fd = await buildProductionFormData(fields);
+    if (!fd) return null;
+    try {
+      const res = await fetch("/__ot/reconcile-schedule-plan", { method: "POST", body: fd });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch {
+      return null;
+    }
+  }
+
   async function fetchProductionCorpusTakeoff(kind, opts = {}) {
     const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
     if (!names.length) throw new Error("No PDF loaded");
@@ -7377,6 +7393,16 @@ export default function TakeoffCanvas() {
     const family = opts.family ? String(opts.family).trim() : null;
     const remote = await agentMcpTool("reconcile_schedule_plan", { family });
     if (remote && !remote.error) return remote;
+
+    const prod = await fetchProductionReconcileSchedulePlan(opts);
+    if (prod && !prod.error && Array.isArray(prod.rows)) {
+      const csv = reconcileRowsToCsv(prod.rows);
+      if (opts.download !== false && prod.rows.length) {
+        const base = `${exportBaseName()}.reconcile-${(family || "all").toLowerCase()}`;
+        downloadText(`${base}.csv`, csv, "text/csv");
+      }
+      return { ...prod, csv, path: "production_session" };
+    }
 
     const g = await ensureAgentGraph();
     if (!g.available) {

@@ -6,6 +6,7 @@
  *   --mode compile --kind …   → compileCorpusTakeoff JSON on stdout
  *   --mode sweep --tag …      → Session.sweepScheduleRow JSON on stdout
  *   --mode count_marks        → Session.countMarks JSON on stdout
+ *   --mode reconcile          → reconcileSchedulePlan JSON on stdout
  *
  * Progress (compile walkthrough): lines on stderr of the form
  *   OT_PROGRESS\t{"phase":"…","message":"…"}\n
@@ -19,6 +20,7 @@ import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Session } from "../src/session.ts";
 import { compileCorpusTakeoff } from "../src/corpusTakeoff.mjs";
+import { reconcileSchedulePlan } from "../src/takeoff.ts";
 
 function argsOf(argv, name) {
   const out = [];
@@ -43,10 +45,13 @@ const kind = arg(process.argv, "--kind");
 const service = arg(process.argv, "--service");
 const sweepTag = arg(process.argv, "--tag");
 const marksCsv = arg(process.argv, "--marks");
+const family = arg(process.argv, "--family");
+const tagsCsv = arg(process.argv, "--tags");
+const familySweepAll = process.argv.includes("--family-sweep-all");
 const outPath = arg(process.argv, "--out");
 const pdfs = argsOf(process.argv, "--pdf").map((p) => resolve(p));
 if (!pdfs.length) {
-  console.error("usage: production-graph-cli.mjs --mode graph|compile|sweep|count_marks --pdf <path> [--pdf …] [--kind …] [--tag …] [--marks a,b] [--service CHW|HHW] [--out …]");
+  console.error("usage: production-graph-cli.mjs --mode graph|compile|sweep|count_marks|reconcile --pdf <path> [--pdf …] [--kind …] [--tag …] [--marks a,b] [--family VAV] [--tags a,b] [--family-sweep-all] [--service CHW|HHW] [--out …]");
   process.exit(2);
 }
 if (mode === "compile" && !kind) {
@@ -105,6 +110,21 @@ if (mode === "count_marks") {
     : undefined;
   progress("count", `Counting marks on shared Session path…`, { marks: marks?.length ?? "all" });
   const result = await session.countMarks({ marks });
+  process.stdout.write(`${JSON.stringify(result)}\n`);
+  process.exit(0);
+}
+
+if (mode === "reconcile") {
+  const tags = tagsCsv
+    ? tagsCsv.split(",").map((s) => s.trim()).filter(Boolean)
+    : null;
+  progress("reconcile", `Reconciling schedule to plan${family ? ` (${family})` : ""}…`, { family });
+  const result = await reconcileSchedulePlan(session, {
+    family,
+    tags,
+    evaluationFast: true,
+    familySweepAll,
+  });
   process.stdout.write(`${JSON.stringify(result)}\n`);
   process.exit(0);
 }

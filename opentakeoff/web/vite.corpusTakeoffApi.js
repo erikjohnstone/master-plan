@@ -6,6 +6,7 @@
  *   POST /__ot/compile-corpus-takeoff   → compileCorpusTakeoff on that graph
  *   POST /__ot/sweep-schedule-row       → Session.sweepScheduleRow (shared path)
  *   POST /__ot/count-marks              → Session.countMarks (shared path)
+ *   POST /__ot/reconcile-schedule-plan  → reconcileSchedulePlan (shared path)
  *
  * Same MCP Session.graphForPipeline() path every blueprint uses — not a
  * takeoff-only fork. Body: JSON { pdfPath } or multipart file(s) + kind.
@@ -70,7 +71,7 @@ export function resolveTsxLoader() {
   );
 }
 
-function runCli({ mode, kind, pdfPaths, outPath, service, tag, marks, onProgress }) {
+function runCli({ mode, kind, pdfPaths, outPath, service, tag, marks, family, tags, familySweepAll, onProgress }) {
   return new Promise((resolvePromise, reject) => {
     let tsxLoader;
     try {
@@ -86,6 +87,9 @@ function runCli({ mode, kind, pdfPaths, outPath, service, tag, marks, onProgress
     if (service) args.push("--service", String(service).toUpperCase());
     if (tag) args.push("--tag", tag);
     if (marks?.length) args.push("--marks", marks.join(","));
+    if (family) args.push("--family", family);
+    if (tags?.length) args.push("--tags", tags.join(","));
+    if (familySweepAll) args.push("--family-sweep-all");
     for (const p of pdfPaths) args.push("--pdf", p);
     if (outPath) args.push("--out", outPath);
     const child = spawn(process.execPath, args, {
@@ -198,6 +202,9 @@ async function resolvePdfs(req) {
   let service = null;
   let tag = null;
   let marks = null;
+  let family = null;
+  let tags = null;
+  let familySweepAll = false;
   let pdfPaths = [];
   let tmpDir = null;
   if (ctype.includes("multipart/form-data")) {
@@ -206,6 +213,9 @@ async function resolvePdfs(req) {
     service = mp.fields.service || null;
     tag = mp.fields.tag || null;
     marks = mp.fields.marks || null;
+    family = mp.fields.family || null;
+    tags = mp.fields.tags || null;
+    familySweepAll = mp.fields.familySweepAll === "1" || mp.fields.familySweepAll === "true";
     if (!mp.files.length) throw Object.assign(new Error("file required"), { status: 400 });
     tmpDir = await mkdtemp(join(tmpdir(), "ot-prod-graph-"));
     for (const f of mp.files) {
@@ -220,6 +230,9 @@ async function resolvePdfs(req) {
     service = body.service || null;
     tag = body.tag || null;
     marks = body.marks || null;
+    family = body.family || null;
+    tags = body.tags || null;
+    familySweepAll = !!body.familySweepAll;
     if (Array.isArray(body.pdfPaths) && body.pdfPaths.length) {
       pdfPaths = body.pdfPaths;
     } else if (body.pdfPath) {
@@ -228,7 +241,7 @@ async function resolvePdfs(req) {
       throw Object.assign(new Error("pdfPath or multipart file required"), { status: 400 });
     }
   }
-  return { kind, service, pdfPaths, tmpDir, tag, marks };
+  return { kind, service, pdfPaths, tmpDir, tag, marks, family, tags, familySweepAll };
 }
 
 function wantsProgressStream(req) {
@@ -254,7 +267,7 @@ async function handle(req, res, mode) {
   try {
     const resolved = await resolvePdfs(req);
     tmpDir = resolved.tmpDir;
-    const { kind, service, pdfPaths, tag, marks } = resolved;
+    const { kind, service, pdfPaths, tag, marks, family, tags, familySweepAll } = resolved;
     if (mode === "compile" && !kind) {
       return sendJson(res, 400, { error: "kind required" });
     }
@@ -277,6 +290,19 @@ async function handle(req, res, mode) {
         ? String(marks).split(",").map((m) => m.trim()).filter(Boolean)
         : undefined;
       const result = await runCli({ mode: "count_marks", pdfPaths, marks: markList });
+      return sendJson(res, 200, result);
+    }
+    if (mode === "reconcile") {
+      const tagList = tags
+        ? String(tags).split(",").map((t) => t.trim()).filter(Boolean)
+        : undefined;
+      const result = await runCli({
+        mode: "reconcile",
+        pdfPaths,
+        family: family || undefined,
+        tags: tagList,
+        familySweepAll,
+      });
       return sendJson(res, 200, result);
     }
     if (stream) {
@@ -332,6 +358,10 @@ export function corpusTakeoffApiPlugin() {
         if (req.url?.startsWith("/__ot/count-marks")) {
           if (req.method !== "POST") return sendJson(res, 405, { error: "POST only" });
           return handle(req, res, "count_marks");
+        }
+        if (req.url?.startsWith("/__ot/reconcile-schedule-plan")) {
+          if (req.method !== "POST") return sendJson(res, 405, { error: "POST only" });
+          return handle(req, res, "reconcile");
         }
         return next();
       });
