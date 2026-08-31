@@ -242,11 +242,11 @@ export const HVAC_FAMILY_SPECS = {
     blankKeyRe: /^(?:OAU|MAU|OA)[\s\-]/i,
   },
   // FCUC / FCUH / FC-01 style marks (cooling/heating suffix or hyphenated FC).
-  // DUCTLESS SPLIT high-wall (DFC/DCU) is the same commercial FCU family.
+  // DUCTLESS DFC/DCU; gas-split indoor F-# (outdoor CU stays CONDENSING_UNIT).
   FCU: {
     titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+SPLIT/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
-    keyRe: /^(?:FCU|FC[\s\-]?\d|EV|DFC|DCU)/i,
+    keyRe: /^(?:FCU|FC[\s\-]?\d|EV|DFC|DCU|F[\s\-]?\d)/i,
   },
   VAV: {
     titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE/i,

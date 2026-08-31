@@ -420,6 +420,8 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
   );
   assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("DFC-1"));
   assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("DCU-1"));
+  assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("F-1"));
+  assert.ok(!HVAC_FAMILY_SPECS.FCU.keyRe!.test("CU-1"));
   assert.equal(
     scheduleTitleMatches(
       "FLASH TANK SCHEDULE",

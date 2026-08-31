@@ -2,10 +2,10 @@
   "set_id": "itd-d1-lab",
   "source_file": "raw/itd-d1-lab-mechanical.pdf",
   "kind": "hvac_equipment",
-  "notes": "HHW control valves; HOT WATER REHEAT COIL HC-*; HUM-1; specialty AS/ET; ductless DFC/DCU; canopy+snorkel hoods; LAB_AIR_VALVE SAV/GEV/SEV (pressure-independent). Orphans: F-1CU-1, FM/PF, BCV-1, AC-1, louvers.",
+  "notes": "HHW control valves; HOT WATER REHEAT COIL HC-*; HUM-1; specialty AS/ET; ductless DFC/DCU; gas-split indoor F-1 (CU-1 outdoor left orphan — Carson B1/B2 forbids CONDENSING keyRe on titled schedules); canopy+snorkel hoods; LAB_AIR_VALVE SAV/GEV/SEV. Orphans: CU-1, FM/PF, BCV-1, AC-1, louvers.",
   "categories": {
     "AHU": 1,
-    "FCU": 2,
+    "FCU": 3,
     "BOILER": 2,
     "PUMP": 4,
     "FAN": 7,
@@ -20,7 +20,7 @@
     "RANGE_HOOD": 9,
     "DUCT_SILENCER": 1
   },
-  "totals": { "items": 84 },
+  "totals": { "items": 85 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 9, "categories": { "HHW_CONTROL_VALVE": 9 } }
 }
