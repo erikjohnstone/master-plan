@@ -365,6 +365,7 @@ reconcile, and plan joins.
 - **WP1.4 VACUUM_PUMP (shared path):** titled `VACUUM PUMP SCHEDULE` + `V-*` (titledOnly; hydronic PUMP still excludes VACUUM). SDSU **206→207** (V-1). Negatives: Colville 50, itd 93, Carson 58, Baker 21, Klamath 53, federal 103.
 - **WP1.4 BRINE_TANK (shared path):** titled softener/brine schedules + `BT-*` (titledOnly — Colville BUFFER_TANK BT-* unchanged). SDSU **207→208** (BT-1). Negatives: Colville 50 (BUFFER intact), itd 93, Carson 58, Baker 21.
 - **WP4 SDSU vacuum/softener MATCH:** `V-1` + `WS-1` MATCH under `evaluationFast`; brine `BT-1` + flash `FT-1` honest SCHEDULE_ONLY.
+- **WP4 prefer-schedule sweep (shared Session.sweepScheduleRow):** callers that already know the owning table (`preferSheet`/`preferTitle` from family reconcile scaffold + project-takeoff row walk) disambiguate shared building letters across distinct equipment schedules. Carson CONTROL_DAMPER/OAU/RTU/ERV/FURNACE/CONDENSING/RANGE_HOOD **all MATCH** under `evaluationFast` (was heavy AMBIGUOUS). Unscoped `sweep_schedule_row B1` still AMBIGUOUS (honest). Negatives: Baker EH, Klamath PUMP, SDSU vacuum/softener. `test:workflows` **41/41**.
 
 ### Next queue (platform loop)
 
