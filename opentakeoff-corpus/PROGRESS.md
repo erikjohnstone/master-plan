@@ -341,7 +341,7 @@ reconcile, and plan joins.
 - **WP1 Suwannee key:** honest WEAK RTU:1 locked.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
-- **WP6:** `test:workflows` pending after LOUVER/FILTER batch.
+- **WP6:** `test:workflows` **33/33** after LOUVER/FILTER + points-takeoff hang fix (tip `df0add5`).
 - **Agent hang fix (shared path):** generic “point list takeoff” → `corpus_bas` + `compile_corpus_takeoff kind=bas_points` (was deadlocking in `points_takeoff/spot_cites` while evidence gate demanded title-scan `POINTS LIST`). Defense: empty-title `points_takeoff` requires title_scans; evidence gate accepts bas compile.
 
 ### Next queue (platform loop)
