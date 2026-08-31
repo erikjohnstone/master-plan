@@ -253,6 +253,36 @@ test("Hawthorn bulk AHU+CU reconcile: all scheduled tags MATCH (WP1 cross-set)",
   }
 });
 
+test("St Louis bulk VAV reconcile: all 12 ATU tags MATCH (WP1 cross-set)", async () => {
+  const keyPath = resolve(CROSS, "05_MO_VA_StLouis_AHU_VAV_Replacement.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
+  assert.ok(needle, "VAV needle");
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    evaluationFast: true,
+  });
+  assert.equal(result.rows.length, key.categories.VAV, "reconcile rows = compile VAV");
+  assert.equal(
+    result.rows.filter((r) => r.status === "MATCH").length,
+    key.categories.VAV,
+    "every St Louis ATU is plan-drawn MATCH",
+  );
+  for (const row of result.rows) {
+    assert.ok(/^ATU-/i.test(row.tag), `${row.tag} is ATU mark`);
+    assert.ok(row.installed_qty >= 1, `${row.tag} installed qty`);
+    assert.ok(row.plan_cites?.length >= 1, `${row.tag} plan cite`);
+  }
+});
+
 test("blank-title FAN tables join reconcile scaffold via keyRe (Macon Bibb shape)", async () => {
   const keyPath = resolve(CROSS, "23_GA_MaconBibb_RecreationCenter.compile.json");
   assert.ok(existsSync(keyPath));

@@ -311,6 +311,7 @@ reconcile, and plan joins.
 - **WP1.4 St Louis / Valdosta families:** AHU `AC-*`; FCU `FCUC`; VAV `AIR TERMINAL UNIT`+`ATU-*`; GRD `AIR DEVICE`+`GRILLE SCHEDULE`.
 - **WP4 Orange County:** installed reconcile **32/32 VAV MATCH** (full census locked in `reconcileWorkflow.test.mjs`).
 - **WP4 Hawthorn:** AHU **2/2** + CU **2/2** MATCH (digit+letter tags on plan).
+- **WP4 St Louis:** VAV/ATU **12/12 MATCH** (AIR TERMINAL UNIT schedule ↔ plan).
 - **WP4 blank-title reconcile:** scaffold accepts blank-title+keyRe families (Macon Bibb FAN) — parity with compile `uniqueFamily`.
 - **WP1.4 GRD plurals:** `GRILLES, REGISTERS, AND DIFFUSERS` title — Johnson County **4→7** MEAT.
 - **WP1 Suwannee key:** honest WEAK RTU:1 locked.
@@ -323,7 +324,7 @@ reconcile, and plan joins.
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
 2. WP1.4 additional table-boundary misses on bulk WEAK sets (many ZEROs honest).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
-4. Orange County installed reconcile: **32/32 VAV MATCH**; Hawthorn AHU+CU **4/4 MATCH**.
+4. Orange County installed reconcile: **32/32 VAV MATCH**; Hawthorn AHU+CU **4/4 MATCH**; St Louis ATU **12/12 MATCH**.
 5. Remaining WEAK: Suwannee (1 RTU honest), Kennebec (2); ZEROs mostly elevation/window/raster/unkeyed (FAA Ogden, Iowa State, VistaUSD, KCHA, …).
 
 Cloud dispatch and all subagent dispatch remain prohibited.
