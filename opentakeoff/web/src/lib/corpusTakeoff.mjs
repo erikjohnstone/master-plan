@@ -358,6 +358,11 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC|FAN\s*COIL|AIR\s+HANDLING/i,
     keyRe: /^(?:CC|HC|RC)[\s\-]/i,
   },
+  WATER_TREATMENT: {
+    titleRe: /WATER\s+TREATMENT\s+SCHEDULE|REVERSE\s+OSMOSIS|\bRO\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC|WATER\s+SOFTENER|WATER\s+HEATER/i,
+    keyRe: /^(?:RO|WT|WTP)[\s\-]/i,
+  },
   // CHW / HHW from title signals (abbrev or spelled-out). Bypass valves stay out.
   CHW_CONTROL_VALVE: {
     titleRe: /(?:CHW|CHILLED\s*WATER).{0,40}CONTROL\s*VALVE|CONTROL\s*VALVE.{0,40}(?:CHW|CHILLED\s*WATER)/i,
