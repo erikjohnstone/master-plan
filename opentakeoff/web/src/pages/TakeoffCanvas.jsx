@@ -8721,15 +8721,17 @@ export default function TakeoffCanvas() {
       resolve_tag: "Resolving a tag…",
     };
     if (ev.type === "tool_start") setAgentStatus(STATUS[ev.name] || `Working (${ev.name})…`);
+    if (ev.type === "status" && ev.text) setAgentStatus(ev.text);
     if (ev.type === "done" || ev.type === "aborted" || ev.type === "error" || ev.type === "max_iterations") {
       setAgentStatus("");
     }
     const entry =
       ev.type === "text" ? { kind: "text", text: ev.text }
-      : ev.type === "tool_start" ? { kind: "tool", text: `→ ${ev.name}` }
+      : ev.type === "status" ? { kind: "status", text: ev.text }
+      : ev.type === "tool_start" ? { kind: "tool", text: ev.seeded ? `→ ${ev.name} (seeded index)` : `→ ${ev.name}` }
       : ev.type === "tool_end" ? (ev.result?.error
           ? { kind: "error", text: `✗ ${ev.name}: ${ev.result.error}` }
-          : { kind: "status", text: `✓ ${ev.name}` })
+          : { kind: "status", text: ev.seeded ? `✓ ${ev.name} (seeded index)` : `✓ ${ev.name}` })
       : ev.type === "error" ? { kind: "error", text: `Error: ${ev.message}` }
       : ev.type === "aborted" ? { kind: "status", text: "Stopped." }
       : ev.type === "max_iterations" ? { kind: "status", text: `Stopped at the ${ev.limit}-step cap — review what's staged.` }

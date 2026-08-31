@@ -7,7 +7,7 @@
 //   - malformed model output → {status:"error"} + an error event, never a throw.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { runAgentLoop, parseAssistantTurn, toProviderTools, agentSystemPrompt, MAX_AGENT_ITERATIONS, requiredEvidenceCorrection, toolsForGoal, missingNamedScheduleAttrs, appendNamedScheduleAttrs } from "../src/lib/agentLoop.js";
+import { runAgentLoop, parseAssistantTurn, toProviderTools, agentSystemPrompt, MAX_AGENT_ITERATIONS, requiredEvidenceCorrection, toolsForGoal, missingNamedScheduleAttrs, appendNamedScheduleAttrs, compactSheetGraphForAgent } from "../src/lib/agentLoop.js";
 
 const CFG_A = { endpoint: "http://localhost:9999", apiKey: "k", model: "mock", provider: "anthropic" };
 const CFG_O = { ...CFG_A, provider: "openai" };
@@ -1102,4 +1102,90 @@ test("parseAssistantTurn + toProviderTools are honest about shapes", () => {
   assert.deepEqual(Object.keys(a).sort(), ["description", "input_schema", "name"]);
   const [o] = toProviderTools("openai", TOOLS);
   assert.equal(o.type, "function");
+});
+
+test("compactSheetGraphForAgent keeps detected_scale and schedule titles", () => {
+  const compact = compactSheetGraphForAgent({
+    available: true,
+    sheets: [
+      {
+        sheet: "set.pdf#6",
+        role: "plan",
+        detected_scale: "1/8\" = 1'-0\"",
+        schedules: [{ kind: "equipment", title: "VAV SCHEDULE", rows: 12 }],
+      },
+      { sheet: "set.pdf#1", role: "unknown" },
+    ],
+  });
+  assert.equal(compact.sheet_count, 2);
+  assert.equal(compact.sheets[0].detected_scale, "1/8\" = 1'-0\"");
+  assert.equal(compact.sheets[0].schedules[0].title, "VAV SCHEDULE");
+  assert.deepEqual(compact.numeric_scales, [
+    { sheet: "set.pdf#6", detected_scale: "1/8\" = 1'-0\"" },
+  ]);
+  assert.match(compact.note, /Already computed|treat as read/i);
+});
+
+test("runAgentLoop seeds sheet_graph into the first model request without a model tool call", async () => {
+  const graph = {
+    available: true,
+    sheets: [
+      {
+        sheet: "set.pdf#2",
+        role: "schedule",
+        detected_scale: "1/4\" = 1'-0\"",
+        schedules: [{ kind: "equipment", title: "AHU SCHEDULE", rows: 3 }],
+      },
+    ],
+  };
+  const seedTools = [
+    ...TOOLS,
+    { name: "sheet_graph", description: "whole-set index", input_schema: { type: "object", properties: {} } },
+  ];
+  const executed: string[] = [];
+  const events: any[] = [];
+  const { fn, requests } = scriptedFetch([anthropicDone("Index already present.")]);
+  const res = await runAgentLoop({
+    cfg: CFG_A,
+    goal: "What schedules are on this set?",
+    tools: seedTools,
+    execute: (name) => {
+      executed.push(name);
+      if (name === "sheet_graph") return graph;
+      return {};
+    },
+    onEvent: (ev) => events.push(ev),
+    fetchFn: fn as any,
+  });
+  assert.equal(res.status, "done");
+  assert.deepEqual(executed, ["sheet_graph"]);
+  assert.ok(events.some((e) => e.type === "tool_start" && e.name === "sheet_graph" && e.seeded));
+  assert.ok(events.some((e) => e.type === "tool_end" && e.name === "sheet_graph" && e.seeded));
+  // First provider request already contains seeded tool_use + tool_result.
+  const msgs = requests[0].messages;
+  assert.equal(msgs[0].role, "user");
+  assert.equal(msgs[0].content, "What schedules are on this set?");
+  assert.equal(msgs[1].role, "assistant");
+  assert.equal(msgs[1].content[0].type, "tool_use");
+  assert.equal(msgs[1].content[0].name, "sheet_graph");
+  assert.equal(msgs[2].role, "user");
+  assert.equal(msgs[2].content[0].type, "tool_result");
+  assert.match(msgs[2].content[0].content[0].text, /AHU SCHEDULE/);
+  assert.match(msgs[2].content[0].content[0].text, /1\/4/);
+  assert.match(msgs[2].content[0].content[0].text, /detected_scale/);
+});
+
+test("runAgentLoop seedSheetGraph:false leaves the first request as goal-only", async () => {
+  const { fn, requests } = scriptedFetch([anthropicDone("ok")]);
+  let executed = 0;
+  await runAgentLoop({
+    cfg: CFG_A,
+    goal: "go",
+    tools: TOOLS,
+    seedSheetGraph: false,
+    execute: () => { executed++; return {}; },
+    fetchFn: fn as any,
+  });
+  assert.equal(executed, 0);
+  assert.deepEqual(requests[0].messages, [{ role: "user", content: "go" }]);
 });
