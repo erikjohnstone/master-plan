@@ -308,9 +308,16 @@ reconcile, and plan joins.
   2→43 HVAC items, 32 VAV tags); `DESIGNATION` added as catalog anchor.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
-- **WP4 CLOSED:** reconcile UI proof + golden fixtures; WORKFLOWS #51 PROVEN.
-- **WP6:** `test:workflows` **20/20**; `test:demos` **10/10**.
-- **Bulk rescore (2026-08-31):** MEAT **13** · WEAK **9** · ZERO **9** (31 vector sets).
+- **WP4 (Orange County):** installed reconcile on bulk WP1 set — VAV-1-01 / VAV-1-10 **MATCH** with plan cites (`reconcileWorkflow.test.mjs`).
+- **WP6:** `test:workflows` **23/23**; `test:demos` **10/10**.
+- **Bulk rescore (2026-08-31 post-fix):** MEAT **15** · WEAK **7** · ZERO **9** (31 vector sets).
+
+### Next queue (platform loop)
+
+1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
+2. WP1.4 additional table-boundary misses on bulk WEAK sets (many ZEROs honest).
+3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
+4. Orange County installed reconcile: **VAV-1-01 / VAV-1-10 MATCH** (2/32 plan-drawn; rest SCHEDULE_ONLY honest).
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 

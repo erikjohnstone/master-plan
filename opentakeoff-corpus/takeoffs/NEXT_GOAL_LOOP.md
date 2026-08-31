@@ -199,9 +199,11 @@ Federal-mech VAV reconcile MATCH satisfies WP3.6 non-NAVFAC join precursor.
    commit bar / withhold doctrine.
 2. [x] Bessemer (or successor) **rowsym recall ≥ 90%** on keyed tags, or every
    remaining miss is **named + expected refuse** in the key (no silent miss).
-3. [ ] Extend motif coverage for at least one additional disclosed gap family
+3. [x] Extend motif coverage for at least one additional disclosed gap family
    (e.g. TG bowtie) **or** keep TG as keyed expected-miss with a tracked
-   follow-on — do not claim coverage you don’t have.
+   follow-on — do not claim coverage you don’t have. **TG-1/TG-2 pass Bessemer
+   rowsym (15/15) via `sweep_schedule_row` inline fallback; dedicated bowtie
+   detector remains optional tracked follow-on (`INLINE-MOTIF-EVAL.md`).
 4. [x] Durable tests: unit + graph-eval rowsym; suite gate green.
 5. [x] No set-specific thresholds hardcoded to one PDF's pixel quirks beyond
    existing measured geometry constants justified in comments.

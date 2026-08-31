@@ -190,8 +190,36 @@ test("Orange County bulk VAV reconcile scaffold matches compile (DESIGNATION col
     graph,
     familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV"),
   );
-  assert.equal(rows.length, key.categories.VAV, "reconcile scaffold = compile VAV count");
+  assert.equal(rows.length, key.categories.VAV, "reconcile scaffold row count = compile VAV");
   assert.ok(rows.every((r) => r.scheduled_qty >= 1));
   assert.ok(rows.every((r) => r.status === "SCHEDULE_ONLY"), "no sweep → schedule-only");
   assert.ok(rows.some((r) => /^VAV-1-01$/i.test(r.tag)), "DESIGNATION-keyed VAV tag");
+});
+
+test("Orange County bulk VAV reconcile: sampled plan-drawn tags MATCH (WP1 cross-set)", async () => {
+  const keyPath = resolve(CROSS, "21_VA_OrangeCounty_PublicSafetyBldg.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
+  const sample = ["VAV-1-01", "VAV-1-10"];
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    tags: sample,
+    evaluationFast: true,
+  });
+  const byTag = new Map(result.rows.map((r) => [r.tag.toUpperCase(), r]));
+  for (const tag of sample) {
+    const row = byTag.get(tag);
+    assert.ok(row, `${tag} reconcile row`);
+    assert.equal(row.status, "MATCH", `${tag} installed reconcile on Orange County`);
+    assert.equal(row.installed_qty, 1);
+    assert.ok(row.plan_cites?.length >= 1, `${tag} plan cite`);
+  }
 });
