@@ -4,6 +4,8 @@
  * Modes:
  *   --mode graph              → write SheetGraph JSON to --out (or stdout if small)
  *   --mode compile --kind …   → compileCorpusTakeoff JSON on stdout
+ *   --mode sweep --tag …      → Session.sweepScheduleRow JSON on stdout
+ *   --mode count_marks        → Session.countMarks JSON on stdout
  *
  * Progress (compile walkthrough): lines on stderr of the form
  *   OT_PROGRESS\t{"phase":"…","message":"…"}\n
@@ -39,14 +41,20 @@ function progress(phase, message, extra = {}) {
 const mode = arg(process.argv, "--mode") || "graph";
 const kind = arg(process.argv, "--kind");
 const service = arg(process.argv, "--service");
+const sweepTag = arg(process.argv, "--tag");
+const marksCsv = arg(process.argv, "--marks");
 const outPath = arg(process.argv, "--out");
 const pdfs = argsOf(process.argv, "--pdf").map((p) => resolve(p));
 if (!pdfs.length) {
-  console.error("usage: production-graph-cli.mjs --mode graph|compile --pdf <path> [--pdf …] [--kind …] [--service CHW|HHW] [--out …]");
+  console.error("usage: production-graph-cli.mjs --mode graph|compile|sweep|count_marks --pdf <path> [--pdf …] [--kind …] [--tag …] [--marks a,b] [--service CHW|HHW] [--out …]");
   process.exit(2);
 }
 if (mode === "compile" && !kind) {
   console.error("--kind required for --mode compile");
+  process.exit(2);
+}
+if (mode === "sweep" && !sweepTag) {
+  console.error("--tag required for --mode sweep");
   process.exit(2);
 }
 
@@ -82,6 +90,28 @@ if (mode === "graph") {
     process.stdout.write(`${json}\n`);
   }
   process.exit(0);
+}
+
+if (mode === "sweep") {
+  progress("sweep", `Sweeping schedule row ${sweepTag} on shared Session path…`, { tag: sweepTag });
+  const result = await session.sweepScheduleRow(sweepTag, { evaluationFast: true });
+  process.stdout.write(`${JSON.stringify(result)}\n`);
+  process.exit(0);
+}
+
+if (mode === "count_marks") {
+  const marks = marksCsv
+    ? marksCsv.split(",").map((s) => s.trim()).filter(Boolean)
+    : undefined;
+  progress("count", `Counting marks on shared Session path…`, { marks: marks?.length ?? "all" });
+  const result = await session.countMarks({ marks });
+  process.stdout.write(`${JSON.stringify(result)}\n`);
+  process.exit(0);
+}
+
+if (mode !== "compile") {
+  console.error(`unknown --mode ${mode}`);
+  process.exit(2);
 }
 
 progress("compile", `Compiling ${kindLabel} takeoff from extracted schedules…`, { kind });

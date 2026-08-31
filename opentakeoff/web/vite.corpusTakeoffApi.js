@@ -4,6 +4,8 @@
  * Endpoints (dev server):
  *   POST /__ot/sheet-graph              → SheetGraph (geometric + ODL)
  *   POST /__ot/compile-corpus-takeoff   → compileCorpusTakeoff on that graph
+ *   POST /__ot/sweep-schedule-row       → Session.sweepScheduleRow (shared path)
+ *   POST /__ot/count-marks              → Session.countMarks (shared path)
  *
  * Same MCP Session.graphForPipeline() path every blueprint uses — not a
  * takeoff-only fork. Body: JSON { pdfPath } or multipart file(s) + kind.
@@ -68,7 +70,7 @@ export function resolveTsxLoader() {
   );
 }
 
-function runCli({ mode, kind, pdfPaths, outPath, service, onProgress }) {
+function runCli({ mode, kind, pdfPaths, outPath, service, tag, marks, onProgress }) {
   return new Promise((resolvePromise, reject) => {
     let tsxLoader;
     try {
@@ -82,6 +84,8 @@ function runCli({ mode, kind, pdfPaths, outPath, service, onProgress }) {
     const args = ["--import", importSpec, cli, "--mode", mode];
     if (kind) args.push("--kind", kind);
     if (service) args.push("--service", String(service).toUpperCase());
+    if (tag) args.push("--tag", tag);
+    if (marks?.length) args.push("--marks", marks.join(","));
     for (const p of pdfPaths) args.push("--pdf", p);
     if (outPath) args.push("--out", outPath);
     const child = spawn(process.execPath, args, {
@@ -192,12 +196,16 @@ async function resolvePdfs(req) {
   const ctype = req.headers["content-type"] || "";
   let kind;
   let service = null;
+  let tag = null;
+  let marks = null;
   let pdfPaths = [];
   let tmpDir = null;
   if (ctype.includes("multipart/form-data")) {
     const mp = await readMultipart(req);
     kind = mp.fields.kind;
     service = mp.fields.service || null;
+    tag = mp.fields.tag || null;
+    marks = mp.fields.marks || null;
     if (!mp.files.length) throw Object.assign(new Error("file required"), { status: 400 });
     tmpDir = await mkdtemp(join(tmpdir(), "ot-prod-graph-"));
     for (const f of mp.files) {
@@ -210,6 +218,8 @@ async function resolvePdfs(req) {
     const body = await readJson(req);
     kind = body.kind;
     service = body.service || null;
+    tag = body.tag || null;
+    marks = body.marks || null;
     if (Array.isArray(body.pdfPaths) && body.pdfPaths.length) {
       pdfPaths = body.pdfPaths;
     } else if (body.pdfPath) {
@@ -218,7 +228,7 @@ async function resolvePdfs(req) {
       throw Object.assign(new Error("pdfPath or multipart file required"), { status: 400 });
     }
   }
-  return { kind, service, pdfPaths, tmpDir };
+  return { kind, service, pdfPaths, tmpDir, tag, marks };
 }
 
 function wantsProgressStream(req) {
@@ -244,9 +254,12 @@ async function handle(req, res, mode) {
   try {
     const resolved = await resolvePdfs(req);
     tmpDir = resolved.tmpDir;
-    const { kind, service, pdfPaths } = resolved;
+    const { kind, service, pdfPaths, tag, marks } = resolved;
     if (mode === "compile" && !kind) {
       return sendJson(res, 400, { error: "kind required" });
+    }
+    if (mode === "sweep" && !tag) {
+      return sendJson(res, 400, { error: "tag required" });
     }
     if (mode === "graph") {
       const outPath = join(tmpDir || await mkdtemp(join(tmpdir(), "ot-graph-out-")), "graph.json");
@@ -254,6 +267,17 @@ async function handle(req, res, mode) {
       await runCli({ mode: "graph", pdfPaths, outPath });
       const raw = await readFile(outPath, "utf8");
       return sendJson(res, 200, raw);
+    }
+    if (mode === "sweep") {
+      const result = await runCli({ mode: "sweep", pdfPaths, tag });
+      return sendJson(res, 200, result);
+    }
+    if (mode === "count_marks") {
+      const markList = marks
+        ? String(marks).split(",").map((m) => m.trim()).filter(Boolean)
+        : undefined;
+      const result = await runCli({ mode: "count_marks", pdfPaths, marks: markList });
+      return sendJson(res, 200, result);
     }
     if (stream) {
       beginNdjson(res);
@@ -300,6 +324,14 @@ export function corpusTakeoffApiPlugin() {
         if (req.url?.startsWith("/__ot/compile-corpus-takeoff")) {
           if (req.method !== "POST") return sendJson(res, 405, { error: "POST only" });
           return handle(req, res, "compile");
+        }
+        if (req.url?.startsWith("/__ot/sweep-schedule-row")) {
+          if (req.method !== "POST") return sendJson(res, 405, { error: "POST only" });
+          return handle(req, res, "sweep");
+        }
+        if (req.url?.startsWith("/__ot/count-marks")) {
+          if (req.method !== "POST") return sendJson(res, 405, { error: "POST only" });
+          return handle(req, res, "count_marks");
         }
         return next();
       });

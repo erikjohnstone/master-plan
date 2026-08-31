@@ -6865,6 +6865,47 @@ export default function TakeoffCanvas() {
     return await res.json();
   }
 
+  /** Shared Session plan tools — same path as MCP (WP5). Falls back to local port when endpoint unavailable. */
+  async function buildProductionFormData(extraFields = {}) {
+    const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
+    if (!names.length) return null;
+    const fd = new FormData();
+    for (const [k, v] of Object.entries(extraFields)) {
+      if (v != null && v !== "") fd.append(k, String(v));
+    }
+    for (const name of names) {
+      const bytes = await store.loadPdfData(name);
+      fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
+    }
+    return fd;
+  }
+
+  async function fetchProductionSweepScheduleRow(tag) {
+    const fd = await buildProductionFormData({ tag });
+    if (!fd) return null;
+    try {
+      const res = await fetch("/__ot/sweep-schedule-row", { method: "POST", body: fd });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch {
+      return null;
+    }
+  }
+
+  async function fetchProductionCountMarks(marksOpt) {
+    const fields = {};
+    if (marksOpt?.length) fields.marks = marksOpt.join(",");
+    const fd = await buildProductionFormData(fields);
+    if (!fd) return null;
+    try {
+      const res = await fetch("/__ot/count-marks", { method: "POST", body: fd });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch {
+      return null;
+    }
+  }
+
   async function fetchProductionCorpusTakeoff(kind, opts = {}) {
     const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
     if (!names.length) throw new Error("No PDF loaded");
@@ -7424,6 +7465,8 @@ export default function TakeoffCanvas() {
   async function agentCountMarks(marksOpt) {
     const remote = await agentMcpTool("count_marks", marksOpt?.length ? { marks: marksOpt } : {});
     if (remote) return remote;
+    const prod = await fetchProductionCountMarks(marksOpt);
+    if (prod && !prod.error) return prod;
     const g = await ensureAgentGraph();
     if (!g.available) return { error: "This set has no text layer (a scan) — the census reads drawn tag text, so it cannot run. Try symbol_sweep on a seed instance instead." };
 
@@ -7570,6 +7613,8 @@ export default function TakeoffCanvas() {
       mirror: opts.mirror,
     });
     if (remote) return remote;
+    const prod = await fetchProductionSweepScheduleRow(t);
+    if (prod && !prod.error) return prod;
     const g = await ensureAgentGraph();
     if (!g.available) return { error: "This set has no text layer (a scan) — schedule rows cannot be read." };
     const t = canonMark(tag);

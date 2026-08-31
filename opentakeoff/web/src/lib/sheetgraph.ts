@@ -978,9 +978,19 @@ const CATALOG_ANCHOR_WORDS = ["ID", "MARK", "CODE", "SYMBOL", "TAG"];
  * CATALOG_ANCHOR_WORDS so bare ITEM/EQUIP never trip mergeBackward /
  * finish vocab; matched only as the compound forms below. */
 const ITEM_NO_HEADER_RE = /^(?:ITEM|EQUIP\.?|EQUIPMENT)\s*(?:NO\.?|NUMBER|#)$/i;
+/** UNIT TAG / UNIT NO — own-identity on bulk school/courthouse schedules. */
+const UNIT_TAG_HEADER_RE = /^UNIT\s*(?:TAG|NO\.?|NUMBER|#)$/i;
 
 function isItemNoHeader(text: string | null | undefined): boolean {
   return ITEM_NO_HEADER_RE.test(norm(text || "").replace(/\s+/g, " ").trim());
+}
+
+function isUnitTagHeader(text: string | null | undefined): boolean {
+  return UNIT_TAG_HEADER_RE.test(norm(text || "").replace(/\s+/g, " ").trim());
+}
+
+function isOwnIdentityEquipmentHeader(text: string | null | undefined): boolean {
+  return isItemNoHeader(text) || isUnitTagHeader(text);
 }
 
 /** True when a header IS a bare catalog-anchor word (after `norm`) — the
@@ -988,7 +998,7 @@ function isItemNoHeader(text: string | null | undefined): boolean {
  * equipment-kind table already keys off of. */
 export function isBareAnchorHeader(header: string | null | undefined): boolean {
   if (CATALOG_ANCHOR_WORDS.includes(norm(header || ""))) return true;
-  return isItemNoHeader(header);
+  return isOwnIdentityEquipmentHeader(header);
 }
 
 /** True when a header carries a catalog-anchor word ALONGSIDE another word
@@ -1004,9 +1014,9 @@ export function isBareAnchorHeader(header: string | null | undefined): boolean {
 export function isQualifiedAnchorHeader(header: string | null | undefined): boolean {
   const h = norm(header || "");
   if (!h || CATALOG_ANCHOR_WORDS.includes(h)) return false;
-  // ITEM NO / EQUIP NO are own-identity (VA schedules), not UNIT MARK-style
+  // ITEM NO / EQUIP NO / UNIT TAG are own-identity, not UNIT MARK-style
   // cross-references.
-  if (isItemNoHeader(h)) return false;
+  if (isOwnIdentityEquipmentHeader(h)) return false;
   const toks = h.split(/\s+/).filter(Boolean);
   return toks.length > 1 && toks.some((t) => CATALOG_ANCHOR_WORDS.includes(t));
 }
@@ -4597,7 +4607,7 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
     if (candAnchors.some((a) => CATALOG_ANCHOR_WORDS.includes(a.label))) return true;
     // VA / federal CUP: ITEM NO. / EQUIP NO. as the row's own identity
     // column (Las Vegas CUP PUMP SCHEDULE) — compound forms only.
-    if ((rows[rowIndex] || []).some((t) => isItemNoHeader(t.str))) return true;
+    if ((rows[rowIndex] || []).some((t) => isOwnIdentityEquipmentHeader(t.str))) return true;
     const bareLeadingType = candAnchors[0]?.label === "TYPE" && candAnchors.length >= 8
       && headerHits(rows[rowIndex], vocab).length / Math.max(1, rows[rowIndex].length) >= 0.6;
     return bareLeadingType;
@@ -4638,18 +4648,19 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // schedule's own identity header — inject after the vocab pass.
   if (kind === "equipment") {
     const itemSpans: GraphSpan[] = [];
-    for (const t of headerSpans) if (isItemNoHeader(t.str)) itemSpans.push(t);
+    for (const t of headerSpans) if (isOwnIdentityEquipmentHeader(t.str)) itemSpans.push(t);
     // Parent / co-equal tiers above the deepest qualifying row.
     if (flat) {
       const top = flat.mergedTopIdx ?? flat.rowIndex;
       for (let ri = top; ri <= flat.rowIndex; ri++) {
-        for (const t of rows[ri] || []) if (isItemNoHeader(t.str)) itemSpans.push(t);
+        for (const t of rows[ri] || []) if (isOwnIdentityEquipmentHeader(t.str)) itemSpans.push(t);
       }
     }
     for (const t of itemSpans) {
       const x = centerX(t);
-      if (anchors.some((a) => a.label === "ITEM" || Math.abs(a.x - x) <= 8)) continue;
-      anchors = [...anchors, { label: "ITEM", x }].sort((a, b) => a.x - b.x);
+      const label = isUnitTagHeader(t.str) ? "TAG" : "ITEM";
+      if (anchors.some((a) => a.label === label || Math.abs(a.x - x) <= 8)) continue;
+      anchors = [...anchors, { label, x }].sort((a, b) => a.x - b.x);
     }
   }
 
@@ -6589,7 +6600,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
         // equipment-kind path in this file already enforces (a table with no
         // TAG/MARK/CODE/SYMBOL/ID column has no real key column an estimator
         // or symbol_sweep can chase, so a title match alone is not enough).
-        if (t.title && isMepEquipmentSchedule(t.title.text) && t.headers.some((h) => CATALOG_ANCHOR_WORDS.includes(norm(h)) || isItemNoHeader(h))) {
+        if (t.title && isMepEquipmentSchedule(t.title.text) && t.headers.some((h) => isBareAnchorHeader(h))) {
           notes.push(`${s.key}: "${t.title.text}" names a real MEP-equipment family but never independently cleared any kind's own row-vocabulary bar (its required rating word never co-occurs with its own anchor row) — reclassified from a structural reference read to equipment-kind.`);
           t.kind = "equipment";
           reclassified.add(t);
@@ -7779,7 +7790,7 @@ export function scheduleTableFromODL(
     // carry one extra recognized column (TYPE MARK / SENSIBLE MBH) that
     // clears the bar on its own — this promotion only ever fires for the
     // narrower case those two already skip.
-    kind = (isMepEquipmentSchedule(titleText) && headers.some((h) => CATALOG_ANCHOR_WORDS.includes(norm(h)) || isItemNoHeader(h)))
+    kind = (isMepEquipmentSchedule(titleText) && headers.some((h) => isBareAnchorHeader(h)))
       ? "equipment"
       : "reference";
   }
@@ -7860,7 +7871,7 @@ export function scheduleTableFromODL(
     }
   }
 
-  const keyColIdx = headers.findIndex((h) => /^(SYMBOL|TAG|ID|MARK|CODE)$/.test(norm(h)));
+  const keyColIdx = headers.findIndex((h) => /^(SYMBOL|TAG|ID|MARK|CODE|UNIT TAG|UNIT NO|DESIGNATION)$/.test(norm(h)));
   const rows: TableRow[] = [];
   for (let r = headerEnd; r < R; r++) {
     const seen = new Set<ODLTableCell>();

@@ -10,7 +10,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, type GraphSpan, type SheetSpans, type SheetGraph, type TableBound, type ScheduleTable } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, type GraphSpan, type SheetSpans, type SheetGraph, type TableBound, type ScheduleTable } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
@@ -3042,4 +3042,11 @@ test("isReferenceCrossTable: OUTSIDE AIR flow-rate calc demotes without MODEL/MA
     "a genuine outdoor-air unit catalog states MODEL/MANUFACTURER and stays equipment");
   assert.equal(isReferenceCrossTable("FAN SCHEDULE", oaHeaders), false,
     "a title that does not name CONNECTION/CALCULATION/ISOLATION/OUTSIDE AIR is untouched");
+});
+
+test("UNIT TAG header is own-identity equipment anchor, not a qualified cross-reference (WP1.4)", () => {
+  assert.equal(isBareAnchorHeader("UNIT TAG"), true);
+  assert.equal(isQualifiedAnchorHeader("UNIT TAG"), false);
+  assert.equal(isBareAnchorHeader("UNIT NO"), true);
+  assert.equal(isQualifiedAnchorHeader("UNIT MARK"), true);
 });
