@@ -1,6 +1,6 @@
 # T-VALVE-01 — NAVFAC control valve takeoff (CHW + HHW)
 
-Status: `AGENT UI PROVEN` — frozen Agent prompt → Run → Takeoff panel 163 (N=5 card pending)
+Status: `MCP LOCKED 5/5` · UI compile path **5/5 Gates 1–4** (`/__ot/compile-corpus-takeoff`); UI Gate 5 pending `CEREBRAS_API_KEY` in this environment (MCP interrogation artifact on file).
 
 ## Set
 
