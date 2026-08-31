@@ -186,6 +186,14 @@ test("RTU / ERV / furnace / heat-pump titles match set-agnostic families", () =>
   );
   assert.equal(
     scheduleTitleMatches(
+      "ELECTRIC HEATER SCHEDULE",
+      HVAC_FAMILY_SPECS.UNIT_HEATER.titleRe,
+      HVAC_FAMILY_SPECS.UNIT_HEATER.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
       "GAS FIRED MAKE-UP AIR UNIT SCHEDULE",
       HVAC_FAMILY_SPECS.OUTDOOR_AIR_UNIT.titleRe,
       HVAC_FAMILY_SPECS.OUTDOOR_AIR_UNIT.exclude,

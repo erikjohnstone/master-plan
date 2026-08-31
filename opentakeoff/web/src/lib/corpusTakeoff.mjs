@@ -294,7 +294,10 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^(?:EF|SF|RF|SPF|GEF|GCF|LEF|LF|GF|FAN)[\s\-]/i,
   },
   CABINET_UNIT_HEATER: { titleRe: /CABINET UNIT HEATER/i },
-  UNIT_HEATER: { titleRe: /UNIT HEATER SCHEDULE/i, exclude: /CABINET|POINTS\s*LIST|DDC/i },
+  UNIT_HEATER: {
+    titleRe: /UNIT HEATER SCHEDULE|ELECTRIC\s+HEATER\s+SCHEDULE/i,
+    exclude: /CABINET|POINTS\s*LIST|DDC/i,
+  },
   // Electric radiant ceiling panels (school/courthouse schedules; ECP-* marks).
   RADIANT_CEILING_PANEL: {
     titleRe: /RADIANT\s+CEILING\s+PANEL|ELECTRIC\s+RADIANT/i,
