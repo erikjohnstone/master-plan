@@ -98,43 +98,57 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
     const title = String(table.title?.text || "");
     // Soft title match: exact regex first, then compact (no-space) form so
     // AIRHANDLINGUNITSCHEDULE still joins AIR HANDLING UNIT — set-agnostic.
-    if (!scheduleTitleMatches(title, titleRe, exclude)) continue;
+    // Blank titles: still accept when keyRe can identify family marks
+    // (Transbay RAH-/WFU- tables extract without a recoverable caption).
+    const titleOk = scheduleTitleMatches(title, titleRe, exclude);
+    const blankTitle = !title.trim();
+    if (!titleOk && !(blankTitle && keyRe)) continue;
     for (const row of table.rows || []) {
       let tag = String(row.key || "").trim();
       if (identityHeaderRe) {
         const ident = cellText(row, identityHeaderRe);
         if (ident) tag = ident;
       }
-      const canon = tag.toUpperCase().replace(/\s+/g, "");
-      if (!canon) continue;
-      if (keyRe && !keyRe.test(canon)) continue;
-      if (keys.has(canon)) continue;
-      keys.add(canon);
-      const bbox = identityHeaderRe
-        ? (cellBbox(row, identityHeaderRe) || cellBbox(row, /^MARK$/i) || row.identity?.bbox)
-        : (cellBbox(row, /^MARK$/i) || row.identity?.bbox || cellBbox(row, /./));
-      const { cells, description } = scheduleAttrs(row);
-      const unitMark = cellText(row, /^UNIT\s*MARK$/i) || null;
-      // Prefer UNIT MARK for building (valve marks often end in -CHW/-HHW).
-      const bldg = buildingLetter(unitMark) || buildingLetter(tag);
-      const rowBbox = rowCellsBbox(row);
-      const tableBbox = Array.isArray(table.title?.bbox) && table.title.bbox.length === 4
-        ? table.title.bbox
-        : (Array.isArray(table.region) && table.region.length === 4 ? table.region : null);
-      items.push({
-        tag,
-        quantity: 1,
-        unit: "EA",
-        sheet_id: table.sheet,
-        table_title: title.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim(),
-        bbox_px: bbox || null,
-        // Whole schedule row for cite paints — not just the MARK cell.
-        row_bbox_px: rowBbox || bbox || null,
-        table_bbox_px: tableBbox,
-        description: description || null,
-        building: bldg,
-        cells,
-      });
+      // Expand slash compounds (CWP-1/CWP-2) and comma-grouped ITEM NO cells
+      // that rowKeyOf already normalized to slash form.
+      const tagList = String(tag)
+        .split("/")
+        .map((t) => t.trim())
+        .filter(Boolean);
+      for (const one of tagList.length ? tagList : [tag]) {
+        const canon = one.toUpperCase().replace(/\s+/g, "");
+        if (!canon) continue;
+        // Footnote / notes rows that leaked into the key column.
+        if (/^NOTES?\d*$/i.test(canon)) continue;
+        if (keyRe && !keyRe.test(canon) && !keyRe.test(one)) continue;
+        if (keys.has(canon)) continue;
+        keys.add(canon);
+        const bbox = identityHeaderRe
+          ? (cellBbox(row, identityHeaderRe) || cellBbox(row, /^MARK$/i) || row.identity?.bbox)
+          : (cellBbox(row, /^MARK$/i) || row.identity?.bbox || cellBbox(row, /./));
+        const { cells, description } = scheduleAttrs(row);
+        const unitMark = cellText(row, /^UNIT\s*MARK$/i) || null;
+        // Prefer UNIT MARK for building (valve marks often end in -CHW/-HHW).
+        const bldg = buildingLetter(unitMark) || buildingLetter(one);
+        const rowBbox = rowCellsBbox(row);
+        const tableBbox = Array.isArray(table.title?.bbox) && table.title.bbox.length === 4
+          ? table.title.bbox
+          : (Array.isArray(table.region) && table.region.length === 4 ? table.region : null);
+        items.push({
+          tag: one,
+          quantity: 1,
+          unit: "EA",
+          sheet_id: table.sheet,
+          table_title: title.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim(),
+          bbox_px: bbox || null,
+          // Whole schedule row for cite paints — not just the MARK cell.
+          row_bbox_px: rowBbox || bbox || null,
+          table_bbox_px: tableBbox,
+          description: description || null,
+          building: bldg,
+          cells,
+        });
+      }
     }
   }
   const building = { other: 0 };
@@ -176,9 +190,9 @@ export const HVAC_FAMILY_SPECS = {
   },
   FCU: { titleRe: /FAN\s*COIL/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i },
   VAV: {
-    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|AIR TERMINAL BOX/i,
+    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|AIR TERMINAL BOX|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
-    keyRe: /^(?:VAV|ATB|VTU)[\s\-]/i,
+    keyRe: /^(?:VAV|ATB|VTU|CAV)[\s\-]/i,
   },
   RTU: {
     titleRe: /ROOF[\s\-]*TOP\s+UNIT|PACKAGED\s+ROOFTOP|RTU\s+SCHEDULE|GAS[\s\-]*FIRED\s+DX\s+COOLING\s+ROOF\s+TOP/i,
@@ -200,6 +214,18 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /HEAT\s+PUMP/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS|WATER\s+HEATER|CHILLER/i,
   },
+  // Return / exhaust air handlers often titled RAH / without "AIR HANDLING UNIT".
+  RAH: {
+    titleRe: /RETURN\s+AIR\s+HANDLER|RETURN\s+AIR\s+HANDLING|\bRAH\b.*SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC/i,
+    keyRe: /^RAH[\s\-]/i,
+  },
+  // Wash / water filter units (Transbay blank-title WFU-* rows).
+  WFU: {
+    titleRe: /WATER\s+FILTER|WASHER\s+FILTER|\bWFU\b.*SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC/i,
+    keyRe: /^WFU[\s\-]/i,
+  },
   AIR_COOLED_CHILLER: {
     titleRe: /AIR[\s\-]*COOLED[\s\-]*CHILLER|CHILLER SCHEDULE/i,
     exclude: /HEAT RECOVERY/i,
@@ -210,6 +236,11 @@ export const HVAC_FAMILY_SPECS = {
   // Pump marks vary widely (P-*, CP-*, CWP-*, HHWP-*, …) — count every row on
   // a pump schedule; do not hardcode one firm's prefix set.
   PUMP: { titleRe: /PUMP SCHEDULE/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i },
+  COOLING_TOWER: {
+    titleRe: /COOLING\s+TOWER\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC/i,
+    keyRe: /^CT[\s\-]/i,
+  },
   FAN: {
     titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+)?FAN SCHEDULE/i,
     exclude: /FAN\s*COIL|FAN\s+SOUND|AIR\s+HANDLING\s+UNIT\s+FAN|POINTS\s*LIST|FURNACE/i,
@@ -236,7 +267,9 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /GRILLE[,\s]*REGISTER[,\s]*(?:AND\s*)?DIFFUSER|DIFFUSER[\s\-]*GRILLE|DIFFUSER SCHEDULE/i,
   },
   RANGE_HOOD: { titleRe: /RANGE HOOD SCHEDULE|CANOPY HOOD SCHEDULE|RELIEF HOOD SCHEDULE|INTAKE HOOD SCHEDULE/i },
-  DUCT_SILENCER: { titleRe: /DUCT SILENCER SCHEDULE|SILENCER SCHEDULE|SOUND ATTENUATOR SCHEDULE/i },
+  DUCT_SILENCER: {
+    titleRe: /DUCT SILENCER SCHEDULE|SILENCER SCHEDULE|SOUND ATTENUATOR SCHEDULE|SOUND\s+TRAP\s+SCHEDULE/i,
+  },
 };
 
 export const HVAC_EXCLUSIONS = [
