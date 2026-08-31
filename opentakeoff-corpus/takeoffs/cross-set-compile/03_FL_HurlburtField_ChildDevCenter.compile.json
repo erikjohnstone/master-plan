@@ -1,0 +1,17 @@
+{
+  "set_id": "03_FL_HurlburtField_ChildDevCenter",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/03_FL_HurlburtField_ChildDevCenter.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk CDC — blank-title AHU + (N)ATU→ATU VAV + (N)ACC→ACC condensing + pump/fan/AS.",
+  "categories": {
+    "AHU": 2,
+    "VAV": 2,
+    "CONDENSING_UNIT": 1,
+    "PUMP": 3,
+    "FAN": 4,
+    "AIR_SEPARATOR": 1
+  },
+  "totals": { "items": 13 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

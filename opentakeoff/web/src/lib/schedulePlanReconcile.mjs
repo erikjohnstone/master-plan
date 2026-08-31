@@ -6,6 +6,7 @@
  * Set-agnostic — no sheet IDs or locked counts in product code.
  */
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
+import { normalizeEquipMark } from "./corpusTakeoff.mjs";
 
 /** @typedef {"MATCH"|"SCHEDULE_ONLY"|"PLAN_ONLY"|"REFUSED_NO_SCALE"|"REFUSED_NO_TEXT"|"AMBIGUOUS"} ReconcileStatus */
 
@@ -60,16 +61,16 @@ function scheduledQtyFromRow(row) {
 
 function rowIdentityTag(row) {
   const id = row?.identity?.text || row?.identity?.key;
-  if (id) return String(id).trim();
+  if (id) return normalizeEquipMark(id);
   for (const [header, cell] of Object.entries(row?.cells || {})) {
     if (/^(MARK|TAG|SYMBOL|VALVE MARK|ID|KEY|UNIT MARK|EQUIP|DESIGNATION|UNIT NO|EQUIP NO|UNIT TAG|EQUIP\.?\s*TAG|ITEM NO)$/i.test(String(header || "").trim())) {
       const t = String(cell?.text || "").trim();
-      if (t) return t;
+      if (t) return normalizeEquipMark(t);
     }
   }
   // Parity with compile uniqueFamily — extractor often puts the mark on row.key.
   const key = String(row?.key || "").trim();
-  return key || null;
+  return key ? normalizeEquipMark(key) : null;
 }
 
 /**
@@ -154,6 +155,7 @@ export function summarizeReconcile(rows) {
 export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new Map()) {
   const rows = [];
   const keyRe = needle?.keyRe || null;
+  const blankKeyRe = needle?.blankKeyRe || null;
   for (const table of graph?.tables || []) {
     const title = String(table.title?.text || "");
     // Parity with compile uniqueFamily: do not gate on table.kind.
@@ -167,12 +169,14 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         ? scheduleTitleMatches(title, needle.title, needle.exclude)
         : false);
     const blankTitle = !title.trim();
-    if (!titleOk && !(blankTitle && keyRe)) continue;
+    const blankGate = blankKeyRe || keyRe;
+    if (!titleOk && !(blankTitle && blankGate)) continue;
+    const filterRe = blankTitle ? blankGate : keyRe;
     for (const row of table.rows || []) {
       const tag = rowIdentityTag(row);
       if (!tag) continue;
       if (/^NOTES?\d*$/i.test(String(tag).trim())) continue;
-      if (keyRe && !keyRe.test(tag) && !keyRe.test(String(tag).toUpperCase().replace(/\s+/g, ""))) {
+      if (filterRe && !filterRe.test(tag) && !filterRe.test(String(tag).toUpperCase().replace(/\s+/g, ""))) {
         continue;
       }
       const scheduledQty = scheduledQtyFromRow(row);

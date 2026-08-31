@@ -138,6 +138,7 @@ test("WP1 keyed compile acceptance on ≥2 non-NAVFAC sets", async () => {
     "05_MO_VA_StLouis_AHU_VAV_Replacement.compile.json",
     "22_GA_Valdosta_FireStation8_100CD.compile.json",
     "12_MT_MSU_ReidHall_Renovation.compile.json",
+    "03_FL_HurlburtField_ChildDevCenter.compile.json",
   ];
   let scored = 0;
   for (const file of keys) {

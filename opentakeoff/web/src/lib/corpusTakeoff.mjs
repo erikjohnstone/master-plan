@@ -91,20 +91,42 @@ function buildingLetter(tag) {
   return buildingCodeFromTag(tag);
 }
 
-function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
+/**
+ * Drawing revision prefixes — "(N)" new, "(E)" existing, "(R)" relocated —
+ * often glue into extractor keys (NACC-2 from "(N)ACC-2"). Strip them so
+ * family keyRe matches set-agnostic ACC-/ATU-/AHU- marks.
+ */
+export function normalizeEquipMark(raw) {
+  let t = String(raw || "").trim();
+  if (!t) return t;
+  t = t.replace(/^\(([NER])\)\s*/i, "");
+  // Glued forms when parentheses were dropped: NACC-2, NATUK1, NAHU-1.
+  const glued = t.match(/^N((?:AHU|ATU|ACC|FCU|VAV|RTU|CU|EF|SF|RF|DOAS|ERV)[\s\-A-Z0-9].*)$/i);
+  if (glued) t = glued[1];
+  return t.trim();
+}
+
+function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHeaderRe }) {
   const keys = new Set();
   const items = [];
   for (const table of graph.tables || []) {
     const title = String(table.title?.text || "");
     // Soft title match: exact regex first, then compact (no-space) form so
     // AIRHANDLINGUNITSCHEDULE still joins AIR HANDLING UNIT — set-agnostic.
-    // Blank titles: still accept when keyRe can identify family marks
+    // Blank titles: still accept when keyRe/blankKeyRe can identify family marks
     // (Transbay RAH-/WFU- tables extract without a recoverable caption).
     const titleOk = scheduleTitleMatches(title, titleRe, exclude);
     const blankTitle = !title.trim();
-    if (!titleOk && !(blankTitle && keyRe)) continue;
+    const blankGate = blankKeyRe || keyRe;
+    if (!titleOk && !(blankTitle && blankGate)) continue;
+    // keyRe filters titled rows (AHU/FCU); blankKeyRe only gates blank titles
+    // (Carson CONDENSING UNIT uses B1/B2 marks — must not apply ACC/CU filter).
+    const filterRe = blankTitle ? blankGate : keyRe;
     for (const row of table.rows || []) {
       let tag = String(row.key || "").trim();
+      // Prefer MARK/TAG cell — often retains "(N)ACC-2" spacing lost in row.key.
+      const markCell = cellText(row, /^(MARK|TAG|SYMBOL|VALVE\s*MARK|UNIT\s*MARK|EQUIP(?:\.?\s*TAG)?|DESIGNATION|UNIT\s*NO|ITEM\s*NO)$/i);
+      if (markCell) tag = markCell;
       if (identityHeaderRe) {
         const ident = cellText(row, identityHeaderRe);
         if (ident) tag = ident;
@@ -115,12 +137,13 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
         .split("/")
         .map((t) => t.trim())
         .filter(Boolean);
-      for (const one of tagList.length ? tagList : [tag]) {
+      for (const rawOne of tagList.length ? tagList : [tag]) {
+        const one = normalizeEquipMark(rawOne);
         const canon = one.toUpperCase().replace(/\s+/g, "");
         if (!canon) continue;
         // Footnote / notes rows that leaked into the key column.
         if (/^NOTES?\d*$/i.test(canon)) continue;
-        if (keyRe && !keyRe.test(canon) && !keyRe.test(one)) continue;
+        if (filterRe && !filterRe.test(canon) && !filterRe.test(one)) continue;
         if (keys.has(canon)) continue;
         keys.add(canon);
         const bbox = identityHeaderRe
@@ -199,7 +222,7 @@ export const HVAC_FAMILY_SPECS = {
   VAV: {
     titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
-    keyRe: /^(?:VAV|ATB|VTU|CAV|ATU)[\s\-]/i,
+    keyRe: /^(?:VAV|ATB|VTU|CAV|ATU)/i,
   },
   RTU: {
     titleRe: /ROOF[\s\-]*TOP\s+UNIT|PACKAGED\s+ROOFTOP|RTU\s+SCHEDULE|GAS[\s\-]*FIRED\s+DX\s+COOLING\s+ROOF\s+TOP/i,
@@ -216,6 +239,8 @@ export const HVAC_FAMILY_SPECS = {
   CONDENSING_UNIT: {
     titleRe: /CONDENSING\s+UNIT(?:\s+SCHEDULE)?|AIR[\s\-]*COOLED\s+CONDENSING\s+UNIT/i,
     exclude: /AIR[\s\-]*COOLED\s+CHILLER|POINTS\s*LIST|DDC/i,
+    // Blank-title only — titled schedules use set-local marks (Carson B1/B2).
+    blankKeyRe: /^(?:CU|ACC)[\s\-]/i,
   },
   HEAT_PUMP: {
     titleRe: /HEAT\s+PUMP/i,
@@ -236,7 +261,8 @@ export const HVAC_FAMILY_SPECS = {
   AIR_COOLED_CHILLER: {
     titleRe: /AIR[\s\-]*COOLED[\s\-]*CHILLER|CHILLER SCHEDULE/i,
     exclude: /HEAT RECOVERY/i,
-    keyRe: /^(?:CH|ACC|PAC)[\s\-]/i,
+    // CH-/PAC- only — ACC-* is air-cooled condenser (CONDENSING_UNIT blankKeyRe).
+    keyRe: /^(?:CH|PAC)[\s\-]/i,
   },
   HEAT_RECOVERY_CHILLER: { titleRe: /HEAT RECOVERY CHILLER/i, keyRe: /^CH/i },
   BOILER: { titleRe: /BOILER/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^(?:B[\s\-]|BOILER)/i },

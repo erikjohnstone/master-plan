@@ -8,7 +8,7 @@ import {
   queryTitleMatchesNeedle,
   scheduleTitleMatches,
 } from "../src/lib/scheduleTitleMatch.mjs";
-import { HVAC_FAMILY_SPECS } from "../src/lib/corpusTakeoff.mjs";
+import { HVAC_FAMILY_SPECS, normalizeEquipMark } from "../src/lib/corpusTakeoff.mjs";
 
 test("compact form strips spaces and punctuation", () => {
   assert.equal(compactScheduleTitle("AIR HANDLING UNIT SCHEDULE"), "AIRHANDLINGUNITSCHEDULE");
@@ -127,6 +127,16 @@ test("WP1.4 family keyRe accepts BOILER1 and blank-title FCU/EF marks (set-agnos
   assert.ok(fanKey!.test("EF-2"));
   assert.ok(fanKey!.test("SPF-T1"));
   assert.ok(!fanKey!.test("NOTES"));
+});
+
+test("normalizeEquipMark strips (N)/(E) drawing revision prefixes", () => {
+  assert.equal(normalizeEquipMark("(N)ACC-2"), "ACC-2");
+  assert.equal(normalizeEquipMark("(N)ATU K1"), "ATU K1");
+  assert.equal(normalizeEquipMark("NACC-2"), "ACC-2");
+  assert.equal(normalizeEquipMark("NATUK1"), "ATUK1");
+  assert.equal(normalizeEquipMark("AHU-1"), "AHU-1");
+  assert.ok(HVAC_FAMILY_SPECS.CONDENSING_UNIT.blankKeyRe!.test("ACC-2"));
+  assert.ok(HVAC_FAMILY_SPECS.VAV.keyRe!.test("ATUK1"));
 });
 
 test("RTU / ERV / furnace / heat-pump titles match set-agnostic families", () => {
