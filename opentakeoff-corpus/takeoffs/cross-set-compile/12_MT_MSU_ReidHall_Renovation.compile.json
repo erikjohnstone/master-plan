@@ -1,0 +1,15 @@
+{
+  "set_id": "12_MT_MSU_ReidHall_Renovation",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/12_MT_MSU_ReidHall_Renovation.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk campus reno — dual-duct VAV + cabinet unit heaters + FINNED PIPE RADIATION (FT-*) + GRD.",
+  "categories": {
+    "VAV": 4,
+    "CABINET_UNIT_HEATER": 2,
+    "FIN_TUBE_RADIATION": 4,
+    "GRD": 2
+  },
+  "totals": { "items": 12 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

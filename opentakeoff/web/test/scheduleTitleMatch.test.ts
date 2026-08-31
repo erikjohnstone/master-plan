@@ -238,6 +238,16 @@ test("RTU / ERV / furnace / heat-pump titles match set-agnostic families", () =>
   );
   assert.ok(HVAC_FAMILY_SPECS.RADIANT_CEILING_PANEL.keyRe!.test("ECP-1"));
   assert.ok(!HVAC_FAMILY_SPECS.RADIANT_CEILING_PANEL.keyRe!.test("WCFV-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "FINNED PIPE RADIATION SCHEDULE",
+      HVAC_FAMILY_SPECS.FIN_TUBE_RADIATION.titleRe,
+      HVAC_FAMILY_SPECS.FIN_TUBE_RADIATION.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.FIN_TUBE_RADIATION.keyRe!.test("FT-1"));
+  assert.ok(HVAC_FAMILY_SPECS.FIN_TUBE_RADIATION.keyRe!.test("FTR-2"));
 });
 
 test("query_table soft needle hits no-space titles for long needles", () => {

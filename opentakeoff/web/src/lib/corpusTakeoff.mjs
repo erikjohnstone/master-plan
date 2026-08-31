@@ -271,6 +271,12 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC|HYDRONIC\s+RADIANT\s+FLOOR/i,
     keyRe: /^ECP[\s\-]/i,
   },
+  // Hydronic fin-tube / finned-pipe radiation (FTR-* or FT-* marks).
+  FIN_TUBE_RADIATION: {
+    titleRe: /FIN[\s\-]*TUBE\s+RADIATION|FINNED\s+PIPE\s+RADIATION|FIN[\s\-]*TUBE\s+RADIATOR/i,
+    exclude: /POINTS\s*LIST|DDC|CEILING\s+PANEL/i,
+    keyRe: /^(?:FTR|FT)[\s\-]/i,
+  },
   CRAH: { titleRe: /COMPUTER ROOM AIR HANDLER|\bCRAH\b/i },
   DEHUMIDIFIER: { titleRe: /DEHUMIDIFIER SCHEDULE/i, keyRe: /^DH[\-]/i },
   HUMIDIFIER: { titleRe: /HUMIDIFIER SCHEDULE/i, keyRe: /^H[\-]/i },
