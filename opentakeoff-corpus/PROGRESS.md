@@ -302,7 +302,7 @@ reconcile, and plan joins.
   UI graph prewarm (`schedules indexing…`) + `prewarmGraphSmoke.test.mjs`.
 - **Bulk rescore (2026-08-31 tip `cdfded4`):** MEAT **20** · WEAK **2** · ZERO **9** (Douglas misc+VRF MEAT; SDSU 85; Kennebec+Suwannee honest WEAK).
 - **Orange County cross-set key:** 32 VAV + **33** HVAC items (BP-1 only; fake HRC/UH dropped); reconcile scaffold test.
-- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (**23**), Baker MS (**17**), Klamath (**35**), Douglas (**15**), Jeff City CST (**27**), **SDSU EngSciences (85)**, **MSU Life Sciences (5)** locked.
+- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (**42**), Baker MS (**17**), Klamath (**36**), Douglas (**18**), Jeff City CST (**27**), **SDSU EngSciences (118)**, **MSU Life Sciences (5)**, bldg5406 (**27**) locked.
 - **WP1.4 keyRe broaden:** BOILER1 marks, blank-title FCU/EV/EF/RF fan-coil rows — federal-mech later gains FIN_TUBE (100); two bulk WEAK→MEAT promotions.
 - **WP1.4 CODE_RE + EQUIP.TAG + banding orphans:** `AHU-1A`-style digit+letter suffixes; `EQUIP. TAG` own-identity; seam-gap spans assigned to nearest band + thin identity-band absorb. Hawthorn **1→5**.
 - **WP1.4 title hunt:** `\bSCHEDULE\b` (not SCHEDULED) — Northport AIR INLETS & OUTLETS recovers 12 GRD (**3→15**).
@@ -319,6 +319,7 @@ reconcile, and plan joins.
 - **WP1.4 HEAT_EXCHANGER / DUCT_MOUNTED_COIL / FLASH_TANK:** shell-and-tube + water-to-water HX; duct-mounted CC/HC; FT-* flash tanks — SDSU **110→117**; Klamath **35→36**; Colville **23→27**.
 - **WP1.4 WATER_TREATMENT:** RO/WT marks on water-treatment schedules — SDSU **117→118** (RO-1).
 - **WP1.4 MISCELLANEOUS SCHEDULE gate:** keyRe-gated catch-all (compile + reconcile parity) — Douglas **15→18** (EH-20/30 + DOAS-30).
+- **WP1.4 EQUIPMENT SCHEDULE catch-all + PUMP blankKeyRe (shared path):** bare `EQUIPMENT SCHEDULE` joins MISC catch-all; catch-all ORs `blankKeyRe|keyRe` (WSHP via HEAT_PUMP keyRe); PUMP `blankKeyRe` only (IWP/HWRP/HHWP) so titled pump schedules stay complete; `PUPSCHEDULE` OCR soft-match — Colville **27→42**; bldg5406 **24→27**; Las Vegas/federal PUMP keys unchanged. Verified: `test:workflows` **32/32**, unit title/reconcile **25/25**.
 - **WP4 schedule-stem dup collapse:** same-sheet truncated title extracts (`…SCHEDULE` stem) no longer AMBIGUOUS — SDSU AHU **3/3 MATCH**; VAV **27/40 MATCH** (honest SCHEDULE_ONLY remainder).
 - **WP4 Douglas DOAS:** misc-schedule **DOAS-30 MATCH** locked.
 - **WP4 Jeff City CST:** VAV **9/9** + FCU **3/3 MATCH** (locked in `reconcileWorkflow.test.mjs`).
@@ -333,15 +334,16 @@ reconcile, and plan joins.
 - **WP1 Suwannee key:** honest WEAK RTU:1 locked.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
-- **WP6:** `test:workflows` **32/32** (tip `ae479ae` HX/coil/flash + SDSU 117); `test:demos` **10/10**.
+- **WP6:** `test:workflows` **32/32** (tip equip-catchall Colville 42 / bldg5406 27); prior HX/coil/flash + SDSU 118.
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 additional table-boundary misses on bulk WEAK/ZERO sets (many ZEROs honest — Augusta window, Iowa/Judson note spans).
-3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
-4. WP4 deepen on Douglas / Klamath / SDSU (compile keys locked).
-5. Remaining WEAK ceilings: Suwannee (1 RTU honest), Kennebec (2 multi-split only).
+2. WP1.4 orphan titles: Colville BS-1/LV-* (no family yet); itd-d1-lab reheat coils / ductless split; federal AHU fan schedule excluded by design.
+3. WP1.4 additional table-boundary misses on bulk WEAK/ZERO sets (many ZEROs honest — Augusta window, Iowa/Judson note spans).
+4. WP3.3 TG bowtie dedicated detector (tracked follow-on).
+5. WP4 deepen on Douglas / Klamath / SDSU VAV SCHEDULE_ONLY remainder.
+6. Remaining WEAK ceilings: Suwannee (1 RTU honest), Kennebec (2 multi-split only).
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 
