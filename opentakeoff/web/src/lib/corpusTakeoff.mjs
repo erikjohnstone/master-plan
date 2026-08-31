@@ -241,6 +241,16 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC/i,
     keyRe: /^CT[\s\-]/i,
   },
+  WATER_HEATER: {
+    titleRe: /(?:INSTANTANEOUS\s+)?(?:GAS\s+)?WATER\s+HEATER\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC|BOILER/i,
+    keyRe: /^(?:DWH|WH|WHW|EWH)[\s\-]/i,
+  },
+  WATER_SOFTENER: {
+    titleRe: /WATER\s+SOFTENER\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC/i,
+    keyRe: /^WS[\s\-]/i,
+  },
   FAN: {
     titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+)?FAN SCHEDULE/i,
     exclude: /FAN\s*COIL|FAN\s+SOUND|AIR\s+HANDLING\s+UNIT\s+FAN|POINTS\s*LIST|FURNACE/i,

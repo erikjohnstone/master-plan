@@ -400,6 +400,17 @@ export function scheduleFamilyNeedles(goal) {
       titleRe: /EXPANSION TANK SCHEDULE/i,
     });
   }
+  if (/\bwater\s+softener/i.test(g)) {
+    add({ label: "water softener", title: "WATER SOFTENER SCHEDULE", titleRe: /WATER\s+SOFTENER\s+SCHEDULE/i });
+  }
+  if (/\bwater\s+heater/i.test(g) && !/\bfurnace/i.test(g)) {
+    add({
+      label: "water heater",
+      title: "WATER HEATER SCHEDULE",
+      titleRe: /(?:INSTANTANEOUS\s+)?(?:GAS\s+)?WATER\s+HEATER\s+SCHEDULE/i,
+      exclude: /BOILER/i,
+    });
+  }
   if (/\bcontrol\s+valves?\b/i.test(g)) {
     add({
       label: "control valve",
