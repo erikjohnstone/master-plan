@@ -271,15 +271,17 @@ export const HVAC_FAMILY_SPECS = {
   },
   // FCUC / FCUH / FC-01 style marks (cooling/heating suffix or hyphenated FC).
   // DUCTLESS indoor DFC + gas-split indoor F-#; outdoor CU/DCU → CONDENSING_UNIT.
+  // Split-system indoor AC-* (bldg5406 AC-1/ACCU-1) — not AHU (AHU titles differ).
   FCU: {
     titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+SPLIT/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
-    keyRe: /^(?:FCU|FC[\s\-]?\d|EV|DFC|F[\s\-]?\d)/i,
+    keyRe: /^(?:FCU|FC[\s\-]?\d|EV|DFC|F[\s\-]?\d|AC[\s\-])/i,
   },
   VAV: {
     titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
-    keyRe: /^(?:VAV|ATB|VTU|CAV|ATU)/i,
+    // ECAV-* = lab exhaust CAV on LAB CAV schedules (SDSU); CAV/VAV/ATU/ATB/VTU indoor.
+    keyRe: /^(?:VAV|ATB|VTU|ECAV|CAV|ATU)/i,
   },
   RTU: {
     titleRe: /ROOF[\s\-]*TOP\s+UNIT|PACKAGED\s+ROOFTOP|RTU\s+SCHEDULE|GAS[\s\-]*FIRED\s+DX\s+COOLING\s+ROOF\s+TOP/i,
@@ -302,7 +304,7 @@ export const HVAC_FAMILY_SPECS = {
     // Split indoor/outdoor SYMBOL columns ("F-1 , CU-1" / "DFC-1 , DCU-1"):
     // claim outdoor marks only; primary CONDENSING UNIT titles stay unfiltered.
     altTitleRe: /SPLIT\s+SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+SPLIT/i,
-    altKeyRe: /^(?:CU|DCU)[\s\-]/i,
+    altKeyRe: /^(?:CU|DCU|ACCU)[\s\-]/i,
   },
   HEAT_PUMP: {
     titleRe: /HEAT\s+PUMP/i,
@@ -482,6 +484,13 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /(?:HYDRONIC\s+)?FLOW\s+METER(?:\s+SCHEDULE)?/i,
     exclude: /POINTS\s*LIST|DDC|AIR\s+FLOW|AIRFLOW/i,
     keyRe: /^FM[\s\-]/i,
+  },
+  // Motor VFDs on dedicated VARIABLE FREQUENCY DRIVE schedules (Spokane CT fans).
+  VARIABLE_FREQUENCY_DRIVE: {
+    titleRe: /VARIABLE\s+FREQUENCY\s+DRIVE(?:\s+SCHEDULE)?|\bVFD\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC/i,
+    keyRe: /^VFD[\s\-]/i,
+    titledOnly: true,
   },
   // Motorized OA/RA control dampers on dedicated CONTROL DAMPER schedules.
   // keyRe drops building-only marks (Carson B1 on the same table as OA1/OA2).

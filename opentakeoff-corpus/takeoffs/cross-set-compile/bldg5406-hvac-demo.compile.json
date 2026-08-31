@@ -2,10 +2,12 @@
   "set_id": "bldg5406-hvac-demo",
   "source_file": "raw/bldg5406-hvac-demo-mechanical.pdf",
   "kind": "hvac_equipment",
-  "notes": "No-space schedule titles (AIRHANDLINGUNITSCHEDULE, FANSCHEDULE, PACKAGEDAIRCOOLEDCHILLERSCHEDULE, GRILLE,REGISTERANDDIFFUSERSCHEDULE). Soft title match required. PUPSCHEDULE OCR miss → PUMP (CWP-1/2); blank-title CP-1 condensate pump via blankKeyRe. LOUERSCHEDULE OCR → LOUVER L-1/L-2; EPANSIONANDCOPRESSIONTANKSCHEDULE → ET-1.",
+  "notes": "No-space schedule titles (AIRHANDLINGUNITSCHEDULE, FANSCHEDULE, PACKAGEDAIRCOOLEDCHILLERSCHEDULE, GRILLE,REGISTERANDDIFFUSERSCHEDULE). Soft title match required. PUPSCHEDULE OCR miss → PUMP (CWP-1/2); blank-title CP-1 condensate pump via blankKeyRe. LOUERSCHEDULE OCR → LOUVER L-1/L-2; EPANSIONANDCOPRESSIONTANKSCHEDULE → ET-1. SPLITSYSTEMAIRCONDITIONINGUNITS AC-1/ACCU-1 → FCU + CONDENSING_UNIT (slash + ACCU altKeyRe).",
   "categories": {
     "AHU": 1,
     "VAV": 9,
+    "FCU": 1,
+    "CONDENSING_UNIT": 1,
     "AIR_COOLED_CHILLER": 1,
     "PUMP": 3,
     "FAN": 5,
@@ -14,7 +16,7 @@
     "GRD": 7,
     "LOUVER": 2
   },
-  "totals": { "items": 30 },
+  "totals": { "items": 32 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }

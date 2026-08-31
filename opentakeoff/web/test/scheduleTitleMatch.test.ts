@@ -1077,6 +1077,68 @@ test("WP1.4 AIR HANDLER HEAT PUMP → AHU+HP comma-split; FUME_HOOD_DAMPER ECV",
   assert.equal(hvac.categories.VAV.count, 0);
 });
 
+test("WP1.4 ECAV→VAV, VFD family, split AC/ACCU (bldg5406 shape)", () => {
+  assert.ok(HVAC_FAMILY_SPECS.VAV.keyRe!.test("ECAV-NB-1"));
+  assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("AC-1"));
+  assert.ok(!HVAC_FAMILY_SPECS.FCU.keyRe!.test("ACCU-1"));
+  assert.ok(HVAC_FAMILY_SPECS.CONDENSING_UNIT.altKeyRe!.test("ACCU-1"));
+  assert.ok(HVAC_FAMILY_SPECS.VARIABLE_FREQUENCY_DRIVE.keyRe!.test("VFD-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "VARIABLE FREQUENCY DRIVE SCHEDULE",
+      HVAC_FAMILY_SPECS.VARIABLE_FREQUENCY_DRIVE.titleRe,
+      HVAC_FAMILY_SPECS.VARIABLE_FREQUENCY_DRIVE.exclude,
+    ),
+    true,
+  );
+  const graph = {
+    sheets: [],
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#1",
+        title: { text: "LAB CAV SCHEDULE" },
+        rows: [
+          { key: "CAV-NB-1", cells: { MARK: { text: "CAV-NB-1" } } },
+          { key: "ECAV-NB-1", cells: { MARK: { text: "ECAV-NB-1" } } },
+          { key: "ECAV-NB-2", cells: { MARK: { text: "ECAV-NB-2" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#2",
+        title: { text: "SPLIT SYSTEM AIR CONDITIONING UNITS" },
+        rows: [{ key: "AC-1/ACCU-1", cells: { MARK: { text: "AC-1/ACCU-1" } } }],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#3",
+        title: { text: "VARIABLE FREQUENCY DRIVE SCHEDULE" },
+        rows: [
+          { key: "VFD-1", cells: { MARK: { text: "VFD-1" } } },
+          { key: "VFD-2", cells: { MARK: { text: "VFD-2" } } },
+          { key: "NOTES", cells: { MARK: { text: "NOTES" } } },
+        ],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.VAV.count, 3);
+  assert.deepEqual(
+    hvac.categories.VAV.items.map((i) => i.tag).sort(),
+    ["CAV-NB-1", "ECAV-NB-1", "ECAV-NB-2"],
+  );
+  assert.equal(hvac.categories.FCU.count, 1);
+  assert.equal(hvac.categories.FCU.items[0].tag, "AC-1");
+  assert.equal(hvac.categories.CONDENSING_UNIT.count, 1);
+  assert.equal(hvac.categories.CONDENSING_UNIT.items[0].tag, "ACCU-1");
+  assert.equal(hvac.categories.VARIABLE_FREQUENCY_DRIVE.count, 2);
+  assert.deepEqual(
+    hvac.categories.VARIABLE_FREQUENCY_DRIVE.items.map((i) => i.tag).sort(),
+    ["VFD-1", "VFD-2"],
+  );
+});
+
 test("query_table soft needle hits no-space titles for long needles", () => {
   assert.equal(
     queryTitleMatchesNeedle("AIRHANDLINGUNITSCHEDULE", "AIR HANDLING UNIT SCHEDULE"),

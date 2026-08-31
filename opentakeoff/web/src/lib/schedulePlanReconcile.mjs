@@ -266,6 +266,9 @@ export function familyNeedleFromSpecs(specs, family) {
     FUME_HOOD_DAMPER: "FUME_HOOD_DAMPER",
     "FUME HOOD DAMPER": "FUME_HOOD_DAMPER",
     ECV: "FUME_HOOD_DAMPER",
+    VARIABLE_FREQUENCY_DRIVE: "VARIABLE_FREQUENCY_DRIVE",
+    "VARIABLE FREQUENCY DRIVE": "VARIABLE_FREQUENCY_DRIVE",
+    VFD: "VARIABLE_FREQUENCY_DRIVE",
   };
   const key = aliases[u] || Object.keys(specs).find((k) =>
     k === u || k.replace(/_/g, " ") === u.replace(/_/g, " "));
