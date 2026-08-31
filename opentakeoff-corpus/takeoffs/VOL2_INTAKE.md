@@ -38,8 +38,20 @@ are documented with honest ZERO/WEAK evidence.
 6. Keys land under `takeoffs/cross-set-compile/` only after verified
    compile totals.
 
-## Batch 1 (started — not a scope cap)
+## Batch 1 (locked 2026-08-31)
 
-Chosen for diversity among INDEX `single file` deliveries (see probe log).
+Diverse single-file probes → set-agnostic FAN/UH/coil/BAS wideners → keys:
+
+| Set | Tier | HVAC | BAS rows | Notes |
+|---|---|---:|---:|---|
+| 017 NIST Gaithersburg HVAC Cooling | MEAT | 19 | 0 | S-A-* supply fans + coils |
+| 014 Missoula Fire Sciences | MEAT | 30 | 0 | ECUH/HWUH + DSF/SEF fans |
+| 021 Laboratory mechanical | MEAT | 64 | 63 | DDC CONTROLLER I/O titles |
+| 009 APHIS Plant Inspection | MEAT | 15 | 0 | EDH duct heaters |
+| 023 Salinity Lab chiller | MEAT | 5 | 0 | chiller/pump/buffer |
+| 013 Boiler phase-2 Bldg 29 | WEAK | 1 | 0 | VFD only (honest) |
+| 020 MSHP Troop C | ZERO | 0 | 0 | finish-only |
+| 100 Butler Tech RTU welding | ZERO | 0 | 0 | no HVAC tables |
+
 Continue through remaining single-file sets, then multipart rejoins, until
 Vol2 coverage is complete or ceilings are documented.

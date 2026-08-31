@@ -1,0 +1,20 @@
+{
+  "set_id": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 NIST cooling \u2014 SUPPLY FAN S-A-* + HEATING/COOLING COIL HC/CC-A-* + HUMIDIFIER. Zone-lettered FAN keyRe + DUCT_MOUNTED_COIL. RETURN FAN CFM-as-key rows stay unclaimed (honest).",
+  "categories": {
+    "FAN": 6,
+    "HUMIDIFIER": 1,
+    "DUCT_MOUNTED_COIL": 12
+  },
+  "totals": {
+    "items": 19
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

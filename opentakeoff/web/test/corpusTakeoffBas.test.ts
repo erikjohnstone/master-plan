@@ -14,6 +14,9 @@ describe("isBasPointsListTitle", () => {
     assert.equal(isBasPointsListTitle("FCU WITH COOLING COILS DDC POINTS LIST"), true);
     assert.equal(isBasPointsListTitle("I/O LIST WHITE STURGEON PLC"), true);
     assert.equal(isBasPointsListTitle("IO LIST PANEL A"), true);
+    assert.equal(isBasPointsListTitle("DDC CONTROLLER INPUT/OUTPUT SUMMARY"), true);
+    assert.equal(isBasPointsListTitle("DDC CONTROLLER INPUT/OUTPUT LEGEND"), true);
+    assert.equal(isBasPointsListTitle("CONTROLLER I/O SUMMARY"), true);
     assert.equal(isBasPointsListTitle("FAN SCHEDULE"), false);
     assert.equal(isBasPointsListTitle("RADIO LIST"), false);
     assert.equal(isBasPointsListTitle(""), false);

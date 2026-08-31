@@ -1,0 +1,18 @@
+{
+  "set_id": "013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 boiler phase-2 \u2014 only VFD schedule extractable (honest WEAK). FLOW METER DEVICES not HVAC family.",
+  "categories": {
+    "VARIABLE_FREQUENCY_DRIVE": 1
+  },
+  "totals": {
+    "items": 1
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

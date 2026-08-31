@@ -445,7 +445,9 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /FAN\s*COIL|FAN\s+SOUND|AIR\s+HANDLING\s+UNIT\s+FAN|POINTS\s*LIST|FURNACE|CEILING\s+FAN/i,
     // REF-* = relief; TEF-* toilet/transfer; GX-* general exhaust (lab);
     // KEF-* kitchen exhaust (blank-title hydronic/exhaust summaries — Klamath).
-    keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|TEF|GX|KEF|FAN)[\s\-]/i,
+    // S-A-* / R-A-* = supply/return fans on zone-lettered SUPPLY/RETURN FAN schedules
+    // (NIST-style); DSF-* = duct supply fans; EG-* = general exhaust; SEF-* = stair/smoke exhaust on HVAC FAN schedules.
+    keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|TEF|GX|KEF|DSF|EG|SEF|FAN|(?:S|R)-[A-Z]-)[\s\-]?/i,
   },
   // Destratification / room ceiling fans (CF-*). Separate from exhaust/supply FAN
   // — FAN titleRe already excludes CEILING FAN so these do not double-count.
@@ -457,10 +459,12 @@ export const HVAC_FAMILY_SPECS = {
   },
   CABINET_UNIT_HEATER: { titleRe: /CABINET UNIT HEATER/i },
   UNIT_HEATER: {
-    titleRe: /UNIT HEATER SCHEDULE|ELECTRIC\s+HEATERS?(?:\s+SCHEDULE)?|ELECTRIC\s+DUCT\s+HEATER/i,
+    // Connection-schedule duct-heater panels (EDH-*) use the same family marks.
+    titleRe: /UNIT HEATER SCHEDULE|ELECTRIC\s+HEATERS?(?:\s+SCHEDULE)?|ELECTRIC\s+DUCT\s+HEATER|DUCT\s+HEATERS?(?:\s+SCHEDULE)?/i,
     exclude: /CABINET|POINTS\s*LIST|DDC/i,
-    // UH/CUH/EH room heaters; EDH-* duct-mounted electric heaters.
-    keyRe: /^(?:UH|CUH|EH|EDH)[\s\-]?/i,
+    // UH/CUH/EH room heaters; EDH-* duct-mounted electric; ECUH-* electric
+    // cabinet/unit; HWUH-* hot-water unit heaters (lab / fire-science sets).
+    keyRe: /^(?:UH|CUH|EH|EDH|ECUH|HWUH|HUH|EUH)[\s\-]?/i,
   },
   // Electric radiant ceiling panels (school/courthouse schedules; ECP-* marks).
   RADIANT_CEILING_PANEL: {
@@ -527,7 +531,8 @@ export const HVAC_FAMILY_SPECS = {
   DUCT_MOUNTED_COIL: {
     titleRe: /DUCT\s+MOUNTED\s+COIL|HEATING\s+COIL\s+SCHEDULE|COOLING\s+COIL\s+SCHEDULE|HOT\s+WATER\s+REHEAT\s+COIL|REHEAT\s+COIL\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC|FAN\s*COIL|AIR\s+HANDLING|CONTROL\s+VALVE/i,
-    keyRe: /^(?:CC|HC|RC)[\s\-]/i,
+    // CC/HC/RC coils; HWC-* hot-water coils on AHU heating-coil schedules.
+    keyRe: /^(?:CC|HC|RC|HWC)[\s\-]?/i,
   },
   WATER_TREATMENT: {
     titleRe: /WATER\s+TREATMENT\s+SCHEDULE|REVERSE\s+OSMOSIS|\bRO\s+SCHEDULE/i,
@@ -657,6 +662,9 @@ export function isBasPointsListTitle(title) {
   if (/\bDDC\s+POINTS\b/i.test(t)) return true;
   if (/\bI\s*\/\s*O\s+LIST\b/i.test(t)) return true;
   if (/\bIO\s+LIST\b/i.test(t)) return true;
+  // Lab/VA DDC controller I/O summaries (device-point rows, not AI## MARK lists).
+  if (/\bDDC\s+CONTROLLER\s+INPUT\s*\/?\s*OUTPUT\b/i.test(t)) return true;
+  if (/\bCONTROLLER\s+I\s*\/?\s*O\s+(?:SUMMARY|LEGEND|LIST)\b/i.test(t)) return true;
   return false;
 }
 

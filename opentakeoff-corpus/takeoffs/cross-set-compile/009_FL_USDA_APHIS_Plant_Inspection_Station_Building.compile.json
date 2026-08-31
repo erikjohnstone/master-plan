@@ -1,0 +1,22 @@
+{
+  "set_id": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 APHIS plant inspection \u2014 AHU/chiller/pump/FAN + EQUIPMENT CONNECTION DUCT HEATERS EDH-* via UNIT_HEATER duct-heater title.",
+  "categories": {
+    "AHU": 2,
+    "AIR_COOLED_CHILLER": 1,
+    "PUMP": 2,
+    "FAN": 5,
+    "UNIT_HEATER": 5
+  },
+  "totals": {
+    "items": 15
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}
