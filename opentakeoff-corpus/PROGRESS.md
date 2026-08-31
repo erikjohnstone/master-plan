@@ -340,7 +340,7 @@ reconcile, and plan joins.
 - **WP1 Suwannee key:** honest WEAK RTU:1 locked.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
-- **WP6:** `test:workflows` after FLOW_METER/CONTROL_DAMPER + SDSU VAV sample (pending this batch tip).
+- **WP6:** `test:workflows` **33/33** after FLOW_METER/CONTROL_DAMPER + SDSU VAV sample (tip `4eb25ac`).
 
 ### Next queue (platform loop)
 
