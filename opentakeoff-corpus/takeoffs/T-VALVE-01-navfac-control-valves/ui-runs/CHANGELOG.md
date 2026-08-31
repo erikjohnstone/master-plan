@@ -13,3 +13,10 @@ Note: runs 1–5 after first FAIL used `--skip-interrogation` (no CEREBRAS_API_K
 Gates 1–4 via `/__ot/compile-corpus-takeoff`; Gate 5 live evidence remains MCP `interrogation/run-5.json`.
 
 LOCKED UI 5/5 (Gates 1–4 live; Gate 5 skipped) at 2026-08-31T02:41:05.526Z
+- run 1: PASS (28621ms) surface=takeoff_ui items/rows=163
+- run 2: PASS (25576ms) surface=takeoff_ui items/rows=163
+- run 3: PASS (25449ms) surface=takeoff_ui items/rows=163
+- run 4: PASS (25369ms) surface=takeoff_ui items/rows=163
+- run 5: PASS (25599ms) surface=takeoff_ui items/rows=163
+
+LOCKED UI 5/5 at 2026-08-31T03:55:17.689Z

@@ -107,7 +107,7 @@ extend tests with each workflow.** Re-run prior locks before merge.
 |---|---|---|---|
 | `T-HVAC-01` | HVAC equipment quantity takeoff | `navfac-cherry-point-atc` | `LOCKED` |
 | `T-BAS-01` | BAS / DDC points takeoff | `navfac-cherry-point-atc` | `LOCKED` — legend/unknown sheets with locked POINTS/DDC list titles get ODL without flipping every POINTS LIST mention to schedule (preserves 5 lists / 122). |
-| `T-VALVE-01` | Control valve takeoff (CHW+HHW schedules) | `navfac-cherry-point-atc` | `AGENT UI PROVEN` — 163 unique valve marks via frozen Agent prompt; contractor columns + cites; N=5 card pending |
+| `T-VALVE-01` | Control valve takeoff (CHW+HHW schedules) | `navfac-cherry-point-atc` | `LOCKED` (MCP 5/5 · UI 5/5) — 163 unique valve marks; contractor columns + cites |
 
 Maintain a living **~50-workflow inventory** in
 `takeoffs/WORKFLOWS.md`. This is a platform harden — not a single-demo

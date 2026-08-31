@@ -296,26 +296,21 @@ reconcile, and plan joins.
 
 ### Batch accepted this session (independently verified on branch)
 
+- **WP2 CLOSED:** `T-VALVE-01` **LOCKED MCP 5/5 · UI 5/5** (Gates 1–5 live via
+  `CEREBRAS_API_KEY`); SLATE + GOAL amended for third takeoff ID.
+- **WP5:** Production `/__ot/reconcile-schedule-plan` endpoint + UI path
+  (MCP → production HTTP → local fallback); `planToolParity` CLI reconcile test.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
-- **WP5:** Production Session endpoints `/__ot/sweep-schedule-row` + `/__ot/count-marks`
-  (same CLI as compile); UI Agent tries MCP → production HTTP → local fallback;
-  `planToolParity.test.mjs` on D07.
-- **WP1.4 partial:** `UNIT TAG` / `UNIT NO` own-identity headers in `sheetgraph.ts`
-  (WP1.4 column/header vocab); unit test green.
-- **WP4 partial:** `reconcileGolden.test.mjs` — D07 contractor CSV + MATCH/refuse bar.
-- **WP4 UI proof:** `playwright-reconcile-ui.mjs` — bldg5406 VAV reconcile 9/9 MATCH via
-  `window.__opentakeoff.reconcileSchedulePlan` (Agent tool path wired in TakeoffCanvas).
-- **WP6:** `test:workflows` **19/19**; `test:demos` **10/10** (prior batch).
-- **Prior batches:** 6 cross-set keys, federal VAV MATCH, reconcile #51 PROVEN.
+- **WP4 CLOSED:** reconcile UI proof + golden fixtures; WORKFLOWS #51 PROVEN.
+- **WP6:** `test:workflows` **20/20**; `test:demos` **10/10**.
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP2 UI Gate 5 + T-VALVE CARD lock (needs `CEREBRAS_API_KEY`).
-3. WP1.4 continue columnMapFor probes on bulk WEAK sets (many ZEROs are honest).
-4. WP3.3 TG bowtie dedicated detector (tracked follow-on).
-5. WP5 eliminate local geometric fork entirely when production endpoint up.
+2. WP1.4 continue columnMapFor probes on bulk WEAK sets (many ZEROs are honest).
+3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
+4. WP5 eliminate local geometric fork entirely when production endpoint up.
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 

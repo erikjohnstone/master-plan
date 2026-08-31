@@ -2,7 +2,7 @@
   "takeoff_id": "T-VALVE-01",
   "run": 4,
   "surface": "takeoff_ui",
-  "elapsed_ms": 25100,
+  "elapsed_ms": 25364,
   "pass": true,
   "gates": {
     "1": {
@@ -1081,13 +1081,118 @@
         {
           "gate": 5,
           "assertion": "INTERROGATION",
-          "ok": true,
-          "skipped": true
+          "id": "qty-hhw_control_valve",
+          "ok": true
+        },
+        {
+          "gate": 5,
+          "assertion": "INTERROGATION",
+          "id": "qty-chw_control_valve",
+          "ok": true
+        },
+        {
+          "gate": 5,
+          "assertion": "INTERROGATION",
+          "id": "neg-exclusion",
+          "ok": true
+        },
+        {
+          "gate": 5,
+          "assertion": "INTERROGATION",
+          "id": "false-absent-family",
+          "ok": true
+        },
+        {
+          "gate": 5,
+          "assertion": "INTERROGATION",
+          "id": "empty-pages",
+          "ok": true
         }
       ],
       "failures": [],
       "transcript": {
-        "skipped": true
+        "turns": [
+          {
+            "turn": 1,
+            "role": "interrogator",
+            "text": "How many unique scheduled tags are in category HHW_CONTROL_VALVE?\nHow many unique scheduled tags are in category CHW_CONTROL_VALVE?\nDid you count the following as in-scope control-valve units: \"VIBRATION ISOLATION SCHEDULE (accessory, not equipment units)\"? Answer yes or no.\nHow many unique scheduled tags are in category RTU?\nHow many sheets are empty for control-valve schedules on this set?"
+          },
+          {
+            "turn": 2,
+            "role": "takeoff",
+            "text": "{\n  \"answers\": [\n    {\n      \"id\": \"qty-hhw_control_valve\",\n      \"answer\": \"99\",\n      \"number\": null\n    },\n    {\n      \"id\": \"qty-chw_control_valve\",\n      \"answer\": \"64\",\n      \"number\": null\n    },\n    {\n      \"id\": \"neg-exclusion\",\n      \"answer\": \"no\",\n      \"number\": null\n    },\n    {\n      \"id\": \"false-absent-family\",\n      \"answer\": \"excluded\",\n      \"number\": null\n    },\n    {\n      \"id\": \"empty-pages\",\n      \"answer\": \"67\",\n      \"number\": null\n    }\n  ]\n}"
+          }
+        ],
+        "probes": [
+          {
+            "id": "qty-hhw_control_valve",
+            "question": "How many unique scheduled tags are in category HHW_CONTROL_VALVE?",
+            "expect": {
+              "number": 99
+            }
+          },
+          {
+            "id": "qty-chw_control_valve",
+            "question": "How many unique scheduled tags are in category CHW_CONTROL_VALVE?",
+            "expect": {
+              "number": 64
+            }
+          },
+          {
+            "id": "neg-exclusion",
+            "question": "Did you count the following as in-scope control-valve units: \"VIBRATION ISOLATION SCHEDULE (accessory, not equipment units)\"? Answer yes or no.",
+            "expect": {
+              "answer_includes": [
+                "no"
+              ]
+            }
+          },
+          {
+            "id": "false-absent-family",
+            "question": "How many unique scheduled tags are in category RTU?",
+            "expect": {
+              "number": 0
+            }
+          },
+          {
+            "id": "empty-pages",
+            "question": "How many sheets are empty for control-valve schedules on this set?",
+            "expect": {
+              "number": 67
+            }
+          }
+        ],
+        "model_answers": [
+          {
+            "id": "qty-hhw_control_valve",
+            "answer": "99",
+            "number": null
+          },
+          {
+            "id": "qty-chw_control_valve",
+            "answer": "64",
+            "number": null
+          },
+          {
+            "id": "neg-exclusion",
+            "answer": "no",
+            "number": null
+          },
+          {
+            "id": "false-absent-family",
+            "answer": "excluded",
+            "number": null
+          },
+          {
+            "id": "empty-pages",
+            "answer": "67",
+            "number": null
+          }
+        ],
+        "verdict": {
+          "ok": true,
+          "model": "gpt-oss-120b"
+        }
       }
     }
   },
@@ -18392,19 +18497,205 @@
           {
             "gate": 5,
             "assertion": "INTERROGATION",
-            "ok": true,
-            "skipped": true
+            "id": "qty-hhw_control_valve",
+            "ok": true
+          },
+          {
+            "gate": 5,
+            "assertion": "INTERROGATION",
+            "id": "qty-chw_control_valve",
+            "ok": true
+          },
+          {
+            "gate": 5,
+            "assertion": "INTERROGATION",
+            "id": "neg-exclusion",
+            "ok": true
+          },
+          {
+            "gate": 5,
+            "assertion": "INTERROGATION",
+            "id": "false-absent-family",
+            "ok": true
+          },
+          {
+            "gate": 5,
+            "assertion": "INTERROGATION",
+            "id": "empty-pages",
+            "ok": true
           }
         ],
         "failures": [],
         "transcript": {
-          "skipped": true
+          "turns": [
+            {
+              "turn": 1,
+              "role": "interrogator",
+              "text": "How many unique scheduled tags are in category HHW_CONTROL_VALVE?\nHow many unique scheduled tags are in category CHW_CONTROL_VALVE?\nDid you count the following as in-scope control-valve units: \"VIBRATION ISOLATION SCHEDULE (accessory, not equipment units)\"? Answer yes or no.\nHow many unique scheduled tags are in category RTU?\nHow many sheets are empty for control-valve schedules on this set?"
+            },
+            {
+              "turn": 2,
+              "role": "takeoff",
+              "text": "{\n  \"answers\": [\n    {\n      \"id\": \"qty-hhw_control_valve\",\n      \"answer\": \"99\",\n      \"number\": null\n    },\n    {\n      \"id\": \"qty-chw_control_valve\",\n      \"answer\": \"64\",\n      \"number\": null\n    },\n    {\n      \"id\": \"neg-exclusion\",\n      \"answer\": \"no\",\n      \"number\": null\n    },\n    {\n      \"id\": \"false-absent-family\",\n      \"answer\": \"excluded\",\n      \"number\": null\n    },\n    {\n      \"id\": \"empty-pages\",\n      \"answer\": \"67\",\n      \"number\": null\n    }\n  ]\n}"
+            }
+          ],
+          "probes": [
+            {
+              "id": "qty-hhw_control_valve",
+              "question": "How many unique scheduled tags are in category HHW_CONTROL_VALVE?",
+              "expect": {
+                "number": 99
+              }
+            },
+            {
+              "id": "qty-chw_control_valve",
+              "question": "How many unique scheduled tags are in category CHW_CONTROL_VALVE?",
+              "expect": {
+                "number": 64
+              }
+            },
+            {
+              "id": "neg-exclusion",
+              "question": "Did you count the following as in-scope control-valve units: \"VIBRATION ISOLATION SCHEDULE (accessory, not equipment units)\"? Answer yes or no.",
+              "expect": {
+                "answer_includes": [
+                  "no"
+                ]
+              }
+            },
+            {
+              "id": "false-absent-family",
+              "question": "How many unique scheduled tags are in category RTU?",
+              "expect": {
+                "number": 0
+              }
+            },
+            {
+              "id": "empty-pages",
+              "question": "How many sheets are empty for control-valve schedules on this set?",
+              "expect": {
+                "number": 67
+              }
+            }
+          ],
+          "model_answers": [
+            {
+              "id": "qty-hhw_control_valve",
+              "answer": "99",
+              "number": null
+            },
+            {
+              "id": "qty-chw_control_valve",
+              "answer": "64",
+              "number": null
+            },
+            {
+              "id": "neg-exclusion",
+              "answer": "no",
+              "number": null
+            },
+            {
+              "id": "false-absent-family",
+              "answer": "excluded",
+              "number": null
+            },
+            {
+              "id": "empty-pages",
+              "answer": "67",
+              "number": null
+            }
+          ],
+          "verdict": {
+            "ok": true,
+            "model": "gpt-oss-120b"
+          }
         }
       }
     },
     "failures": [],
     "interrogation": {
-      "skipped": true
+      "turns": [
+        {
+          "turn": 1,
+          "role": "interrogator",
+          "text": "How many unique scheduled tags are in category HHW_CONTROL_VALVE?\nHow many unique scheduled tags are in category CHW_CONTROL_VALVE?\nDid you count the following as in-scope control-valve units: \"VIBRATION ISOLATION SCHEDULE (accessory, not equipment units)\"? Answer yes or no.\nHow many unique scheduled tags are in category RTU?\nHow many sheets are empty for control-valve schedules on this set?"
+        },
+        {
+          "turn": 2,
+          "role": "takeoff",
+          "text": "{\n  \"answers\": [\n    {\n      \"id\": \"qty-hhw_control_valve\",\n      \"answer\": \"99\",\n      \"number\": null\n    },\n    {\n      \"id\": \"qty-chw_control_valve\",\n      \"answer\": \"64\",\n      \"number\": null\n    },\n    {\n      \"id\": \"neg-exclusion\",\n      \"answer\": \"no\",\n      \"number\": null\n    },\n    {\n      \"id\": \"false-absent-family\",\n      \"answer\": \"excluded\",\n      \"number\": null\n    },\n    {\n      \"id\": \"empty-pages\",\n      \"answer\": \"67\",\n      \"number\": null\n    }\n  ]\n}"
+        }
+      ],
+      "probes": [
+        {
+          "id": "qty-hhw_control_valve",
+          "question": "How many unique scheduled tags are in category HHW_CONTROL_VALVE?",
+          "expect": {
+            "number": 99
+          }
+        },
+        {
+          "id": "qty-chw_control_valve",
+          "question": "How many unique scheduled tags are in category CHW_CONTROL_VALVE?",
+          "expect": {
+            "number": 64
+          }
+        },
+        {
+          "id": "neg-exclusion",
+          "question": "Did you count the following as in-scope control-valve units: \"VIBRATION ISOLATION SCHEDULE (accessory, not equipment units)\"? Answer yes or no.",
+          "expect": {
+            "answer_includes": [
+              "no"
+            ]
+          }
+        },
+        {
+          "id": "false-absent-family",
+          "question": "How many unique scheduled tags are in category RTU?",
+          "expect": {
+            "number": 0
+          }
+        },
+        {
+          "id": "empty-pages",
+          "question": "How many sheets are empty for control-valve schedules on this set?",
+          "expect": {
+            "number": 67
+          }
+        }
+      ],
+      "model_answers": [
+        {
+          "id": "qty-hhw_control_valve",
+          "answer": "99",
+          "number": null
+        },
+        {
+          "id": "qty-chw_control_valve",
+          "answer": "64",
+          "number": null
+        },
+        {
+          "id": "neg-exclusion",
+          "answer": "no",
+          "number": null
+        },
+        {
+          "id": "false-absent-family",
+          "answer": "excluded",
+          "number": null
+        },
+        {
+          "id": "empty-pages",
+          "answer": "67",
+          "number": null
+        }
+      ],
+      "verdict": {
+        "ok": true,
+        "model": "gpt-oss-120b"
+      }
     }
   }
 }

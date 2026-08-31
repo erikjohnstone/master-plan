@@ -1,6 +1,6 @@
 # T-VALVE-01 — NAVFAC control valve takeoff (CHW + HHW)
 
-Status: `MCP LOCKED 5/5` · UI compile path **5/5 Gates 1–4** (`/__ot/compile-corpus-takeoff`); UI Gate 5 pending `CEREBRAS_API_KEY` in this environment (MCP interrogation artifact on file).
+Status: **`LOCKED (MCP 5/5 · UI 5/5)`** — Gates 1–5 on both surfaces (2026-08-31).
 
 ## Set
 

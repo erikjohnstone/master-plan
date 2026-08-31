@@ -55,7 +55,7 @@ contractor-grade across sets.
 |---|---|---|
 | **Cross-set compile / title brittleness** | Hand `scheduleFamilyNeedles`; NAVFAC-centric locks; itd-d1-lab / federal-mech / weld-county under-keyed | Demo failure mode: works here, dies on next firm’s titles |
 | **Cross-set rowsym / join keys missing** | Those sets often “no key yet” in graph-eval | Cannot claim set-agnostic joins without rulers |
-| **`T-VALVE-01` N=5 card pending** | `CARD.md`: `AGENT UI PROVEN` · N=5 pending; SLATE still only HVAC+BAS | Core third commercial takeoff not fully locked |
+| **`T-VALVE-01` N=5 card pending** | ~~`CARD.md`: `AGENT UI PROVEN` · N=5 pending~~ → **LOCKED MCP+UI 5/5** (2026-08-31) | Third commercial takeoff locked |
 | **Row→symbol recall ~73%** | `SHEET-GRAPH-EVAL.md` Bessemer 11/15; SR/TG inline misses | “Installed qty” / plan link workflows lie or refuse too often |
 | **`sweep_inline_motif` not wired into `sweep_schedule_row`** | `INLINE-MOTIF-EVAL.md` explicit remaining work | Registers/grilles solved as motif but don’t move production join recall |
 | **Schedule vs plan mismatches not a first-class deliverable** | Industry: reconcile both ways; we emit schedule qty *or* optional sweep | Competitors treat reconciliation as the product |
@@ -174,11 +174,11 @@ takeoff and already Agent-UI proven. Runs **after** WP1 so valve lock isn’t
 the only “done” story while cross-set compile still fails.
 
 **DoD:**
-1. Frozen `prompt.txt` (+ CHW/HHW variants if needed) unchanged during N=5.
-2. MCP compile N=5 and UI N=5 against `truth.json` — Gates 1–5.
-3. `CARD.md` → `LOCKED (MCP 5/5 · UI 5/5)`; SLATE amended if GOAL allows third ID.
-4. Regression: multi-prompt + compile lock stays in suite gate (#50).
-5. Contractor columns: Valve mark, UNIT MARK, Service, Size, GPM, **one Cv**,
+1. [x] Frozen `prompt.txt` (+ CHW/HHW variants if needed) unchanged during N=5.
+2. [x] MCP compile N=5 and UI N=5 against `truth.json` — Gates 1–5.
+3. [x] `CARD.md` → `LOCKED (MCP 5/5 · UI 5/5)`; SLATE amended if GOAL allows third ID.
+4. [x] Regression: multi-prompt + compile lock stays in suite gate (#50).
+5. [x] Contractor columns: Valve mark, UNIT MARK, Service, Size, GPM, **one Cv**,
    Configuration, Notes, Sheet cite — no dual Cv / markdown tags.
 
 **Evidence:** `runs/` + `export/` Run 5 + interrogation log + UI run changelog.
