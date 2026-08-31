@@ -300,7 +300,7 @@ reconcile, and plan joins.
   `CEREBRAS_API_KEY`); SLATE + GOAL amended for third takeoff ID.
 - **WP5 CLOSED:** Browser geometric fork removed; production HTTP for plan tools;
   UI graph prewarm (`schedules indexing…`) + `prewarmGraphSmoke.test.mjs`.
-- **Bulk rescore (2026-08-31 tip `aaf22f7`):** MEAT **19** · WEAK **3** · ZERO **9** (Douglas County WEAK@4 before VRF/REF fix; Kennebec+Suwannee honest WEAK).
+- **Bulk rescore (2026-08-31 tip `cdfded4`):** MEAT **20** · WEAK **2** · ZERO **9** (Douglas misc+VRF MEAT; SDSU 85; Kennebec+Suwannee honest WEAK).
 - **Orange County cross-set key:** 32 VAV + **33** HVAC items (BP-1 only; fake HRC/UH dropped); reconcile scaffold test.
 - **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (**23**), Baker MS (**17**), Klamath (**35**), Douglas (**15**), Jeff City CST (**27**), **SDSU EngSciences (85)**, **MSU Life Sciences (5)** locked.
 - **WP1.4 keyRe broaden:** BOILER1 marks, blank-title FCU/EV/EF/RF fan-coil rows — federal-mech later gains FIN_TUBE (100); two bulk WEAK→MEAT promotions.
