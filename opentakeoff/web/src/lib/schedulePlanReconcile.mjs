@@ -252,6 +252,8 @@ export function familyNeedleFromSpecs(specs, family) {
     PUMP: "PUMP",
     RTU: "RTU",
     FAN: "FAN",
+    CEILING_FAN: "CEILING_FAN",
+    "CEILING FAN": "CEILING_FAN",
     BOILER: "BOILER",
     ERV: "ERV",
     GRD: "GRD",

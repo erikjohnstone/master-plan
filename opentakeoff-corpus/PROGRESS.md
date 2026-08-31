@@ -346,13 +346,14 @@ reconcile, and plan joins.
 - **Scale + legend honesty (shared path):** `sheet_graph` now exposes per-sheet `detected_scale` (NAVFAC: 23 numeric notes while cover says AS NOTED). Evidence gate rejects AS-NOTED-only refuse when tools already found numeric scales; rejects valve-symbol answers that overclaim plan highlights from legend-only / few paints. System prompt + symbol_sweep workflow: legend ≠ plan.
 - **Force-read sheet index (agent surface):** `runAgentLoop` seeds a compact `sheet_graph` digest (roles, schedule titles/row counts, `detected_scale`) into the transcript before the first model turn — same pattern as the MCP demo runner. The model cannot skip calling the index; compaction keeps `detected_scale` (was previously stripped). Not a schedule-truth fork.
 - **WP1.4 split outdoor CU/DCU (shared path):** `CONDENSING_UNIT.altTitleRe` + `altKeyRe` claims CU/DCU from SPLIT SYSTEM / DUCTLESS SPLIT SYMBOL columns without applying a CU filter to titled Carson B* CONDENSING UNIT schedules. DCU moved off FCU keyRe. itd-d1-lab **92→93** (CU-1 + DCU-1). Negatives: Carson 58/CU23, federal 103, Colville 50, Hurlburt 13, Hawthorn 5.
+- **WP1.4 CEILING_FAN (shared path):** titled `CEILING FAN SCHEDULE` + `CF-*` (FAN already excludes ceiling fans). Jeff City CST **29→32**. Honest ZERO bulk sets re-probed (Augusta window-only; Iowa/Judson note spans; TroopB/KCHA/Vista/Ogden rejoined still 0 HVAC tables).
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 additional table-boundary misses on bulk WEAK/ZERO sets (many ZEROs honest — Augusta window, Iowa/Judson note spans).
+2. WP1.4 additional table-boundary misses on bulk WEAK/ZERO sets (many ZEROs honest — Augusta window, Iowa/Judson note spans; TroopB/Vista/KCHA/Ogden 0 extractable HVAC schedules).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
-4. WP4 deepen on Douglas / Klamath / SDSU VAV SCHEDULE_ONLY remainder (raise plan-text recall without unsafe heuristics).
+4. WP4 deepen on Douglas / Klamath / SDSU VAV SCHEDULE_ONLY remainder (raise plan-text recall without unsafe heuristics; SDSU CAV mostly “cannot geometrically anchor”).
 5. Remaining WEAK ceilings: Suwannee (1 RTU honest), Kennebec (2 multi-split only).
 6. Optional: evaluate BlueprintParser_OS / drawings-ai digests as *complementary* LLM recall only — never as qty/cite truth (stay on Session+ODL).
 

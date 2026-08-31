@@ -353,6 +353,14 @@ export const HVAC_FAMILY_SPECS = {
     // REF-* = relief fans (common on courthouse / DOAS sets).
     keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|FAN)[\s\-]/i,
   },
+  // Destratification / room ceiling fans (CF-*). Separate from exhaust/supply FAN
+  // — FAN titleRe already excludes CEILING FAN so these do not double-count.
+  CEILING_FAN: {
+    titleRe: /CEILING\s+FAN\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC|FAN\s*COIL|CABINET/i,
+    keyRe: /^CF[\s\-]/i,
+    titledOnly: true,
+  },
   CABINET_UNIT_HEATER: { titleRe: /CABINET UNIT HEATER/i },
   UNIT_HEATER: {
     titleRe: /UNIT HEATER SCHEDULE|ELECTRIC\s+HEATERS?(?:\s+SCHEDULE)?|ELECTRIC\s+DUCT\s+HEATER/i,

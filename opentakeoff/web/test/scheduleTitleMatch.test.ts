@@ -869,6 +869,53 @@ test("WP1.4 split-system outdoor CU joins CONDENSING_UNIT without Carson B* filt
   assert.equal(hvac.categories.FCU.items[0].tag, "F-1");
 });
 
+test("WP1.4 CEILING_FAN titled schedule (Jeff City shape); FAN excludes ceiling fans", () => {
+  assert.equal(
+    scheduleTitleMatches(
+      "CEILING FAN SCHEDULE",
+      HVAC_FAMILY_SPECS.CEILING_FAN.titleRe,
+      HVAC_FAMILY_SPECS.CEILING_FAN.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "CEILING FAN SCHEDULE",
+      HVAC_FAMILY_SPECS.FAN.titleRe,
+      HVAC_FAMILY_SPECS.FAN.exclude,
+    ),
+    false,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.CEILING_FAN.keyRe!.test("CF-1"));
+  assert.ok(!HVAC_FAMILY_SPECS.CEILING_FAN.keyRe!.test("EF-1"));
+  const graph = {
+    sheets: [],
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#1",
+        title: { text: "CEILING FAN SCHEDULE" },
+        rows: [
+          { key: "CF-1", cells: { MARK: { text: "CF-1" } } },
+          { key: "CF-2", cells: { MARK: { text: "CF-2" } } },
+          { key: "CF-3", cells: { MARK: { text: "CF-3" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#2",
+        title: { text: "EXHAUST FAN SCHEDULE" },
+        rows: [{ key: "EF-1", cells: { MARK: { text: "EF-1" } } }],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.CEILING_FAN.count, 3);
+  assert.deepEqual(hvac.categories.CEILING_FAN.items.map((i) => i.tag).sort(), ["CF-1", "CF-2", "CF-3"]);
+  assert.equal(hvac.categories.FAN.count, 1);
+  assert.equal(hvac.categories.FAN.items[0].tag, "EF-1");
+});
+
 test("query_table soft needle hits no-space titles for long needles", () => {
   assert.equal(
     queryTitleMatchesNeedle("AIRHANDLINGUNITSCHEDULE", "AIR HANDLING UNIT SCHEDULE"),
