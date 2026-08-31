@@ -381,6 +381,14 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC/i,
     keyRe: /^WS[\s\-]/i,
   },
+  // Brine / salt tanks listed on softener schedules (SDSU BT-1). titledOnly so
+  // blank/catch-all BT-* stay on BUFFER_TANK (Colville) and are not double-counted.
+  BRINE_TANK: {
+    titleRe: /BRINE\s+TANK(?:\s+SCHEDULE)?|WATER\s+SOFTENER\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC|BUFFER\s+TANK|EXPANSION\s+TANK/i,
+    keyRe: /^BT[\s\-]/i,
+    titledOnly: true,
+  },
   FAN: {
     titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+|RELIEF\s+|LABORATORY\s+EXHAUST\s+|KITCHEN\s+EXHAUST\s+)?FAN SCHEDULE/i,
     exclude: /FAN\s*COIL|FAN\s+SOUND|AIR\s+HANDLING\s+UNIT\s+FAN|POINTS\s*LIST|FURNACE|CEILING\s+FAN/i,
