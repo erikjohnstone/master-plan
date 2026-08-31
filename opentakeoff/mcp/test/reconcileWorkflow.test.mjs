@@ -511,3 +511,79 @@ test("Spokane VFD reconcile: all scheduled tags SCHEDULE_ONLY under evaluationFa
     "Spokane VFD honest SCHEDULE_ONLY (no plan-text anchors)",
   );
 });
+
+test("Baker MS reconcile: GRD+outdoor HP MATCH; AHU/indoor HP SCHEDULE_ONLY (comma-split parity)", async () => {
+  // Shared-path fix: SYMBOL "AHU-1, HP-1" must split after normalize (not before).
+  const keyPath = resolve(CROSS, "18_OR_BakerMS_HVAC_Electrical_FullSet.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+
+  const hpNeedle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "HEAT_PUMP");
+  const hpScaffold = reconcileScheduleFamilyFromGraph(graph, hpNeedle);
+  assert.equal(hpScaffold.length, key.categories.HEAT_PUMP, "HP scaffold = compile (incl. AHU-pair halves)");
+  assert.deepEqual(
+    hpScaffold.map((r) => r.tag).sort(),
+    ["HP-1", "HP-2", "HP-3", "HP-5", "HP-6"],
+  );
+
+  const ahuNeedle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "AHU");
+  const ahuScaffold = reconcileScheduleFamilyFromGraph(graph, ahuNeedle);
+  assert.equal(ahuScaffold.length, key.categories.AHU);
+  assert.deepEqual(ahuScaffold.map((r) => r.tag).sort(), ["AHU-1", "AHU-2", "AHU-3"]);
+
+  const grd = await reconcileScheduleFamilyWithSweeps(session, graph, familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "GRD"), {
+    evaluationFast: true,
+  });
+  assert.equal(grd.rows.length, key.categories.GRD);
+  assert.ok(grd.rows.every((r) => r.status === "MATCH"), "Baker GRD all MATCH");
+
+  const hp = await reconcileScheduleFamilyWithSweeps(session, graph, hpNeedle, {
+    tags: ["HP-5", "HP-6", "HP-1"],
+    evaluationFast: true,
+  });
+  const byHp = new Map(hp.rows.map((r) => [r.tag, r]));
+  assert.equal(byHp.get("HP-5")?.status, "MATCH");
+  assert.equal(byHp.get("HP-6")?.status, "MATCH");
+  assert.equal(byHp.get("HP-1")?.status, "SCHEDULE_ONLY", "indoor HP half not plan text");
+
+  const ahu = await reconcileScheduleFamilyWithSweeps(session, graph, ahuNeedle, {
+    evaluationFast: true,
+  });
+  assert.ok(ahu.rows.every((r) => r.status === "SCHEDULE_ONLY"), "Baker AHU honest SCHEDULE_ONLY");
+});
+
+test("Douglas HEAT_PUMP reconcile: VRF indoor + HP-30 MATCH; HP-10 SCHEDULE_ONLY", async () => {
+  const keyPath = resolve(CROSS, "25_WA_DouglasCounty_Courthouse_HVAC_DDC.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "HEAT_PUMP");
+  const sampleMatch = ["CC-8-1", "CC-15-2", "AH-30-8", "HP-30"];
+  const sampleSo = ["HP-10"];
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    tags: [...sampleMatch, ...sampleSo],
+    evaluationFast: true,
+  });
+  assert.equal(result.rows.length, key.categories.HEAT_PUMP);
+  const byTag = new Map(result.rows.map((r) => [r.tag, r]));
+  for (const tag of sampleMatch) {
+    assert.equal(byTag.get(tag)?.status, "MATCH", `${tag} MATCH`);
+    assert.ok((byTag.get(tag)?.installed_qty || 0) >= 1);
+  }
+  assert.equal(byTag.get("HP-10")?.status, "SCHEDULE_ONLY");
+});

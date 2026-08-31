@@ -144,6 +144,10 @@ test("normalizeEquipMark strips SYMBOL CFM/size/room trailers (Baker GRD)", () =
   assert.equal(normalizeEquipMark("R-1 30x6"), "R-1");
   assert.equal(normalizeEquipMark("EH-1 TOILET 135"), "EH-1");
   assert.equal(normalizeEquipMark("AHU-1"), "AHU-1");
+  // Comma compounds must survive for later family split (Baker AHU-1, HP-1).
+  assert.equal(normalizeEquipMark("AHU-1, HP-1"), "AHU-1, HP-1");
+  assert.equal(normalizeEquipMark("AHU-1 , HP-1"), "AHU-1 , HP-1");
+  assert.equal(normalizeEquipMark("ERU-1, HP-4"), "ERU-1, HP-4");
 });
 
 test("RTU / ERV / furnace / heat-pump titles match set-agnostic families", () => {

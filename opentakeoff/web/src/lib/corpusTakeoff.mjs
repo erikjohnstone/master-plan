@@ -105,9 +105,13 @@ export function normalizeEquipMark(raw) {
   if (glued) t = glued[1];
   // SYMBOL cells often append size/CFM/room: "G-2 CFM", "R-1 30x6", "EH-1 TOILET 135".
   // Keep the leading mark when a space-separated trailer remains (Baker GRD).
+  // Do NOT strip comma/slash compounds ("AHU-1, HP-1") — callers split those later.
   const lead = t.match(/^([A-Za-z]{1,8}[\s\-]?\d+[A-Za-z]?(?:\/[A-Za-z0-9\-]+)*)\b/);
-  if (lead && /\s+\S/.test(t.slice(lead[0].length))) {
-    t = lead[1];
+  if (lead) {
+    const rest = t.slice(lead[0].length);
+    if (/^\s+\S/.test(rest) && !/^[\s]*[,/]/.test(rest)) {
+      t = lead[1];
+    }
   }
   return t.trim();
 }

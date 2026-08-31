@@ -356,13 +356,14 @@ reconcile, and plan joins.
 - **WP1 honest ZERO bulk keys:** Ogden, TroopB, Augusta, Iowa State, Vista, Judson, KCHA, JPS, weld-mech — compile totals **0** locked (no silent HVAC inflation). Re-probed 2026-08-31.
 - **WP4 Spokane VFD reconcile:** all 3 `VFD-*` SCHEDULE_ONLY under `evaluationFast` (honest — tags not plan text). SDSU CAV sample expanded (`S1-4/S1-7/S2-3/S3-3`).
 - **equipment_schedule needles (shared path):** FUME HOOD VAV DAMPER / ECV, VFD, CEILING FAN title suggestions; AHU needle accepts `AIR HANDLER HEAT PUMP`.
+- **WP4 reconcile comma-split parity (shared path):** `normalizeEquipMark` no longer strips `AHU-1, HP-1` before split; `rowIdentityTag` returns raw marks (normalize after split, same as compile). Baker HEAT_PUMP scaffold **2→5** (HP-1..3 restored). Baker GRD **4/4 MATCH** + outdoor HP-5/6 MATCH locked; Douglas VRF/HP sample MATCH locked.
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
 2. WP1.4 remaining titled HVAC orphans on already-keyed MEAT sets (honest refuse: federal AHU fan/coil component schedules; Valdosta VRF rows unkeyed).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on; Bessemer TG already passes via inline motif).
-4. WP4 deepen on Douglas / Klamath (FC/HP/DOAS all SCHEDULE_ONLY under evaluationFast — raise plan-text recall without unsafe heuristics).
+4. WP4: Baker AHU/indoor HP and Klamath FC/HP/DOAS still SCHEDULE_ONLY under evaluationFast; Klamath/Baker EH AMBIGUOUS from duplicate schedule extracts — stem-collapse for sweep lookup.
 5. Remaining WEAK ceilings: Suwannee (1 RTU honest), Kennebec (2 multi-split only).
 6. Optional: evaluate BlueprintParser_OS / drawings-ai digests as *complementary* LLM recall only — never as qty/cite truth (stay on Session+ODL).
 

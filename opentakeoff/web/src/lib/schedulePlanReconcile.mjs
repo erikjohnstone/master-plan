@@ -60,18 +60,21 @@ function scheduledQtyFromRow(row) {
 }
 
 function rowIdentityTag(row) {
+  // Return RAW mark text — normalizeEquipMark runs AFTER comma/slash split
+  // (parity with compile uniqueFamily). Normalizing "AHU-1, HP-1" first would
+  // strip to "AHU-1" and drop the outdoor HP half.
   const id = row?.identity?.text || row?.identity?.key;
-  if (id) return normalizeEquipMark(id);
+  if (id) return String(id).trim();
   // Prefer MARK / EQUIP.TAG — bare TAG is often a grille type code on mixed sheets.
   for (const [header, cell] of Object.entries(row?.cells || {})) {
     if (/^(MARK|SYMBOL|VALVE MARK|UNIT MARK|EQUIP|DESIGNATION|UNIT NO|EQUIP NO|UNIT TAG|EQUIP\.?\s*TAG|ITEM NO)$/i.test(String(header || "").trim())) {
       const t = String(cell?.text || "").trim();
-      if (t) return normalizeEquipMark(t);
+      if (t) return t;
     }
   }
   // Parity with compile uniqueFamily — extractor often puts the mark on row.key.
   const key = String(row?.key || "").trim();
-  return key ? normalizeEquipMark(key) : null;
+  return key || null;
 }
 
 /**
