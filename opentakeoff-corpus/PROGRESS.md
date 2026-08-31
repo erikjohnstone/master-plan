@@ -338,7 +338,7 @@ reconcile, and plan joins.
 - **WP1 Suwannee key:** honest WEAK RTU:1 locked.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
-- **WP6:** `test:workflows` pending tip after accessory families (itd **88**, Klamath **50**, Colville **47**); prior tip cross-corpus **3/3** at itd 85.
+- **WP6:** `test:workflows` **32/32** after accessory families (itd **88**, Klamath **50**, Colville **47**).
 
 ### Next queue (platform loop)
 
