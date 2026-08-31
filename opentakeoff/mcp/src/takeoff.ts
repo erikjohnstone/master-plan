@@ -343,7 +343,12 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
     try {
       let r;
       try {
-        r = await session.sweepScheduleRow(tag, { commit: false, evaluationFast: opts.evaluationFast });
+        r = await session.sweepScheduleRow(tag, {
+          commit: false,
+          evaluationFast: opts.evaluationFast,
+          preferSheet: tb.sheet,
+          preferTitle: tb.title?.text ?? null,
+        });
       } catch (primary: any) {
         // Some drawings omit a schedule's redundant trailing unit digit
         // when only one device exists at that site (schedule ...-A1, plan
@@ -355,7 +360,12 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
         const alias = /[A-Z]\d$/i.test(tag) ? tag.slice(0, -1) : null;
         if (!alias || !/tag is not drawn on any plan sheet/i.test(primary?.message || String(primary))) throw primary;
         try {
-          r = await session.sweepScheduleRow(alias, { commit: false, evaluationFast: opts.evaluationFast });
+          r = await session.sweepScheduleRow(alias, {
+            commit: false,
+            evaluationFast: opts.evaluationFast,
+            preferSheet: tb.sheet,
+            preferTitle: tb.title?.text ?? null,
+          });
         } catch {
           // Alias lookup is an optional recovery attempt. If it cannot prove
           // a unique row and plan anchor, retain the original no-plan-tag

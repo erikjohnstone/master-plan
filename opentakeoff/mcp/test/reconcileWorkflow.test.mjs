@@ -728,3 +728,49 @@ test("SDSU VACUUM_PUMP + WATER_SOFTENER MATCH; BRINE/FLASH SCHEDULE_ONLY", async
   assert.equal(flash.rows.length, key.categories.FLASH_TANK);
   assert.equal(flash.rows[0].status, "SCHEDULE_ONLY");
 });
+
+test("Carson prefer-schedule: shared B*/C* marks MATCH (unscoped stays AMBIGUOUS)", async () => {
+  const keyPath = resolve(CROSS, "16_NV_CarsonValleyMS_HVAC_Replacement.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+
+  // Negative: bare sweep without a preferred schedule must still refuse
+  // cross-family building-letter collisions.
+  await assert.rejects(
+    () => session.sweepScheduleRow("B1", { evaluationFast: true }),
+    /ambiguous:.*schedule rows carry the key/i,
+  );
+
+  for (const fam of [
+    "CONTROL_DAMPER",
+    "OUTDOOR_AIR_UNIT",
+    "RTU",
+    "ERV",
+    "FURNACE",
+    "CONDENSING_UNIT",
+    "RANGE_HOOD",
+  ]) {
+    const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, fam);
+    assert.ok(needle, `${fam} needle`);
+    const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+      evaluationFast: true,
+    });
+    assert.equal(result.rows.length, key.categories[fam], `${fam} scaffold = compile`);
+    assert.ok(
+      result.rows.every((r) => r.status === "MATCH"),
+      `${fam} all MATCH after prefer-schedule (got ${[...new Set(result.rows.map((r) => r.status))].join(",")})`,
+    );
+    assert.ok(
+      result.rows.every((r) => (r.installed_qty || 0) >= 1),
+      `${fam} installed ≥ 1`,
+    );
+  }
+});

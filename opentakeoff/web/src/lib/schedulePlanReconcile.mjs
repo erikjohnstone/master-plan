@@ -300,6 +300,10 @@ export async function reconcileScheduleFamilyWithSweeps(session, graph, needle, 
       const r = await session.sweepScheduleRow(row.tag, {
         commit: false,
         evaluationFast: !!opts.evaluationFast,
+        // Shared building letters (Carson B1/C1) collide across furnace / CU /
+        // OAU / ERV / hood schedules. Prefer the scaffold's owning table.
+        preferSheet: row.schedule_cite?.sheet ?? null,
+        preferTitle: row.schedule_cite?.title ?? null,
       });
       sweepByTag.set(row.tag, {
         installedQty: r.found ?? 0,

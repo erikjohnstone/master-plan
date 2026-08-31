@@ -3108,6 +3108,13 @@ export class Session {
      * count remains complete; unlabeled/sibling near-match disclosure does
      * not, and the wire result states that distinction explicitly. */
     evaluationFast?: boolean;
+    /** When the caller already knows which schedule owns this mark (family
+     * reconcile scaffold / project-takeoff row walk), prefer that table so
+     * shared building letters across distinct equipment schedules (Carson
+     * B1 on furnace + CU + OAU) are not refused as AMBIGUOUS. Unscoped
+     * sweeps without a preference still refuse honest cross-family collisions. */
+    preferSheet?: string | null;
+    preferTitle?: string | null;
   } = {}) {
     let t = (tag || "").trim().toUpperCase().replace(/\s+/g, "");
     if (!t) throw new UserError('Pass a schedule-row tag as drawn, e.g. sweep_schedule_row { tag: "T1" }.');
@@ -3327,6 +3334,45 @@ export class Session {
         }).join(", ");
         accessoryNote = `${accessory.length} accessory schedule row${accessory.length === 1 ? "" : "s"} also carr${accessory.length === 1 ? "ies" : "y"} the key "${t}" and were excluded, not counted as competing ambiguity: ${excludedDesc}.`;
         rowHits = [candidates[0]];
+      }
+    }
+    // Caller-owned schedule preference (family reconcile / takeoff walk):
+    // building marks are often reused across distinct equipment schedules on
+    // the same sheet (furnace B1 ≠ condensing B1 ≠ OAU B1). When the caller
+    // already selected the owning table, keep only that hit. Never invent a
+    // preference — zero preferred survivors leave the collision AMBIGUOUS.
+    if (rowHits.length > 1 && (opts.preferTitle || opts.preferSheet)) {
+      const preferSheet = (opts.preferSheet || "").trim();
+      const preferTitleRaw = (opts.preferTitle || "").trim();
+      const titleNorm = (text: string | null | undefined) =>
+        (text || "").toUpperCase().replace(/\s+/g, " ").trim();
+      const scheduleStem = (text: string | null | undefined): string | null => {
+        const normalized = titleNorm(text);
+        const m = normalized.match(/^(.*?SCHEDULE)\b/);
+        return m ? m[1].replace(/[^A-Z0-9]/g, "") : null;
+      };
+      const preferNorm = titleNorm(preferTitleRaw);
+      const preferStem = scheduleStem(preferTitleRaw);
+      const titleMatches = (hitTitle: string | null | undefined): boolean => {
+        if (!preferNorm) return true;
+        const hitNorm = titleNorm(hitTitle);
+        if (hitNorm === preferNorm) return true;
+        const hitStem = scheduleStem(hitTitle);
+        return Boolean(preferStem && hitStem && preferStem === hitStem);
+      };
+      const preferred = rowHits.filter((hit) => {
+        if (preferSheet && hit.tb.sheet !== preferSheet) return false;
+        return titleMatches(hit.tb.title?.text);
+      });
+      if (preferred.length === 1) {
+        const dropped = rowHits.length - 1;
+        accessoryNote = [
+          accessoryNote,
+          `${dropped} other schedule row${dropped === 1 ? "" : "s"} also carry the key "${t}" but were excluded because the caller preferred "${preferTitleRaw || preferSheet}" (cross-family shared mark — not competing ambiguity for this sweep).`,
+        ].filter(Boolean).join(" ");
+        rowHits = preferred;
+      } else if (preferred.length > 1) {
+        rowHits = preferred;
       }
     }
     if (rowHits.length > 1) {
