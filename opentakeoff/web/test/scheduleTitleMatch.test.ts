@@ -209,7 +209,6 @@ test("RTU / ERV / furnace / heat-pump titles match set-agnostic families", () =>
     true,
   );
   assert.ok(HVAC_FAMILY_SPECS.BUFFER_TANK.keyRe!.test("BT-1"));
-});
   assert.equal(
     scheduleTitleMatches(
       "GRILLES, REGISTERS, AND DIFFUSERS SCHEDULE - PROJECT 4",
