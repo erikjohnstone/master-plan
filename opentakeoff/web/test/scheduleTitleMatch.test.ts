@@ -927,6 +927,25 @@ test("WP1.4 CEILING_FAN titled schedule (Jeff City shape); FAN excludes ceiling 
   assert.equal(hvac.categories.FAN.items[0].tag, "EF-1");
 });
 
+test("WP1.4 FAN blank-title KEF kitchen exhaust (Klamath)", () => {
+  assert.ok(HVAC_FAMILY_SPECS.FAN.keyRe!.test("KEF-1"));
+  assert.ok(HVAC_FAMILY_SPECS.FAN.titleRe.test("KITCHEN EXHAUST FAN SCHEDULE"));
+  const graph = {
+    sheets: [],
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "k.pdf#2",
+        title: { text: "" },
+        rows: [{ key: "KEF-1", cells: { MARK: { text: "KEF-1" }, CFM: { text: "2150" } } }],
+      },
+    ],
+  };
+  const hvac = compileCorpusTakeoff(null, graph, "hvac_equipment");
+  assert.equal(hvac.categories.FAN.count, 1);
+  assert.equal(hvac.categories.FAN.items[0].tag, "KEF-1");
+});
+
 test("WP1.4 TEF/GX fans, ELECTRIC HUMIDIFIER EH, FILTER F-#, LOUER OCR, EPANSION OCR", () => {
   assert.ok(HVAC_FAMILY_SPECS.FAN.keyRe!.test("TEF-1"));
   assert.ok(HVAC_FAMILY_SPECS.FAN.keyRe!.test("GX-1"));

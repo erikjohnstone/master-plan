@@ -357,7 +357,8 @@ reconcile, and plan joins.
 - **WP4 Spokane VFD reconcile:** all 3 `VFD-*` SCHEDULE_ONLY under `evaluationFast` (honest — tags not plan text). SDSU CAV sample expanded (`S1-4/S1-7/S2-3/S3-3`).
 - **equipment_schedule needles (shared path):** FUME HOOD VAV DAMPER / ECV, VFD, CEILING FAN title suggestions; AHU needle accepts `AIR HANDLER HEAT PUMP`.
 - **WP4 reconcile comma-split parity (shared path):** `normalizeEquipMark` no longer strips `AHU-1, HP-1` before split; `rowIdentityTag` returns raw marks (normalize after split, same as compile). Baker HEAT_PUMP scaffold **2→5** (HP-1..3 restored). Baker GRD **4/4 MATCH** + outdoor HP-5/6 MATCH locked; Douglas VRF/HP sample MATCH locked.
-- **WP4 same-sheet shadow-extract collapse (shared Session.sweepScheduleRow):** thinner same-sheet rows whose cell values are covered by a denser sibling are excluded (not AMBIGUOUS). Baker UNIT_HEATER EH-* and Klamath PUMP (untitled hydronic summary) leave AMBIGUOUS. Cross-sheet / equal-richness twins still refuse.
+- **WP4 same-sheet shadow-extract collapse (shared Session.sweepScheduleRow):** thinner same-sheet rows whose cell values are covered by a denser sibling are excluded (not AMBIGUOUS). Baker UNIT_HEATER EH-* and Klamath PUMP (untitled hydronic summary) no longer AMBIGUOUS. Cross-sheet / equal-richness twins still refuse.
+- **WP1.4 FAN KEF blank-title (shared path):** `KEF-*` kitchen exhaust on blank-title summaries + `KITCHEN EXHAUST FAN SCHEDULE` title signal. Klamath **52→53** (FAN:1). Negatives: SDSU FAN 5, federal FAN 4, itd FAN 7, Baker FAN 2.
 
 ### Next queue (platform loop)
 

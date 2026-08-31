@@ -369,10 +369,11 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^WS[\s\-]/i,
   },
   FAN: {
-    titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+|RELIEF\s+|LABORATORY\s+EXHAUST\s+)?FAN SCHEDULE/i,
+    titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+|RELIEF\s+|LABORATORY\s+EXHAUST\s+|KITCHEN\s+EXHAUST\s+)?FAN SCHEDULE/i,
     exclude: /FAN\s*COIL|FAN\s+SOUND|AIR\s+HANDLING\s+UNIT\s+FAN|POINTS\s*LIST|FURNACE|CEILING\s+FAN/i,
-    // REF-* = relief; TEF-* toilet/transfer exhaust; GX-* general exhaust (lab sets).
-    keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|TEF|GX|FAN)[\s\-]/i,
+    // REF-* = relief; TEF-* toilet/transfer; GX-* general exhaust (lab);
+    // KEF-* kitchen exhaust (blank-title hydronic/exhaust summaries — Klamath).
+    keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|TEF|GX|KEF|FAN)[\s\-]/i,
   },
   // Destratification / room ceiling fans (CF-*). Separate from exhaust/supply FAN
   // — FAN titleRe already excludes CEILING FAN so these do not double-count.

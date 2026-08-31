@@ -2,7 +2,7 @@
   "set_id": "14_OR_KlamathCC_LearningCtr_Mechanical",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/14_OR_KlamathCC_LearningCtr_Mechanical.pdf",
   "kind": "hvac_equipment",
-  "notes": "DOAS SYSTEM + MAU + FC (FAN COIL UNITS + SPLIT SYSTEM HEAT PUMPS indoor FC-01/02) + HP + chiller/boilers + pumps + EH + HYDRONIC ACCESSORIES (AS/HS/BT/ET/GMU/PF) + blank HX-1.",
+  "notes": "DOAS SYSTEM + MAU + FC (FAN COIL UNITS + SPLIT SYSTEM HEAT PUMPS indoor FC-01/02) + HP + chiller/boilers + pumps + EH + HYDRONIC ACCESSORIES (AS/HS/BT/ET/GMU/PF) + blank HX-1 + blank-title KEF-1 kitchen exhaust.",
   "categories": {
     "DOAS": 4,
     "OUTDOOR_AIR_UNIT": 1,
@@ -11,6 +11,7 @@
     "AIR_COOLED_CHILLER": 1,
     "BOILER": 2,
     "PUMP": 8,
+    "FAN": 1,
     "UNIT_HEATER": 3,
     "AIR_SEPARATOR": 2,
     "EXPANSION_TANK": 3,
@@ -19,7 +20,7 @@
     "CHEMICAL_POT_FEEDER": 2,
     "GLYCOL_MAKEUP": 2
   },
-  "totals": { "items": 52 },
+  "totals": { "items": 53 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }
