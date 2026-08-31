@@ -344,7 +344,7 @@ test("SDSU EngSciences VAV reconcile: sampled plan-drawn CAV/ECAV tags MATCH (ho
   const graph = await session.graphForPipeline();
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
   const sampleMatch = [
-    "CAV-N2-2", "CAV-S1-1", "CAV-S1-6", "CAV-S3-1",
+    "CAV-N2-2", "CAV-S1-1", "CAV-S1-4", "CAV-S1-6", "CAV-S1-7", "CAV-S2-3", "CAV-S3-1", "CAV-S3-3",
     "ECAV-N1-1", "ECAV-N2-1", "ECAV-N2-2", "ECAV-S1-1", "ECAV-S2-1", "ECAV-S3-1",
   ];
   const sampleSo = ["ECAV-NB-1"]; // swept negative control — not plan text
@@ -484,4 +484,30 @@ test("blank-title FAN tables join reconcile scaffold via keyRe (Macon Bibb shape
   assert.equal(rows.length, key.categories.FAN, "blank-title EF rows reach reconcile");
   assert.ok(rows.every((r) => /^EF-/i.test(r.tag)));
   assert.ok(rows.every((r) => r.status === "SCHEDULE_ONLY"));
+});
+
+test("Spokane VFD reconcile: all scheduled tags SCHEDULE_ONLY under evaluationFast (honest)", async () => {
+  // VFDs are schedule equipment; tags are not drawn as plan text on this CUP set.
+  const keyPath = resolve(CROSS, "30_WA_SpokaneTransit_CoolingTower.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VARIABLE_FREQUENCY_DRIVE");
+  assert.ok(needle, "VFD family needle");
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    evaluationFast: true,
+  });
+  assert.equal(result.rows.length, key.categories.VARIABLE_FREQUENCY_DRIVE);
+  assert.ok(result.rows.every((r) => /^VFD-/i.test(r.tag)));
+  assert.ok(
+    result.rows.every((r) => r.status === "SCHEDULE_ONLY"),
+    "Spokane VFD honest SCHEDULE_ONLY (no plan-text anchors)",
+  );
 });
