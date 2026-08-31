@@ -90,6 +90,12 @@ test("VAV family matches AIR TERMINAL BOX and VOLUME CONTROL BOX", () => {
   assert.equal(scheduleTitleMatches("VARIABLE AIR VOLUME SCHEDULE", titleRe, exclude), true);
 });
 
+test("DOAS unit schedule matches DOAS family", () => {
+  const { titleRe, exclude } = HVAC_FAMILY_SPECS.DOAS;
+  assert.equal(scheduleTitleMatches("DOAS UNIT SCHEDULE", titleRe, exclude), true);
+  assert.equal(scheduleTitleMatches("DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE", titleRe, exclude), false);
+});
+
 test("HHW control valve matches spelled-out hot-water parenthetical titles", () => {
   const { titleRe, exclude } = HVAC_FAMILY_SPECS.HHW_CONTROL_VALVE;
   assert.equal(

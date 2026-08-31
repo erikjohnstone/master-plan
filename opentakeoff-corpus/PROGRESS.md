@@ -298,8 +298,12 @@ reconcile, and plan joins.
 
 - **WP2 CLOSED:** `T-VALVE-01` **LOCKED MCP 5/5 · UI 5/5** (Gates 1–5 live via
   `CEREBRAS_API_KEY`); SLATE + GOAL amended for third takeoff ID.
-- **WP5:** Production `/__ot/reconcile-schedule-plan` endpoint + UI path
-  (MCP → production HTTP → local fallback); `planToolParity` CLI reconcile test.
+- **WP5 (partial close):** Production `/__ot/reconcile-schedule-plan` endpoint +
+  UI path (MCP → production HTTP); `planToolParity` CLI reconcile test; **browser
+  geometric fork removed** from `agentCountMarks` / `agentSweepScheduleRow` —
+  returns honest error when Session path unavailable.
+- **WP1 title:** `DOAS` family spec (`DOAS UNIT SCHEDULE`); Valdosta compile
+  4→5 items (DOAS-1); `VAV TERMINAL BOX` title broadening.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
 - **WP4 CLOSED:** reconcile UI proof + golden fixtures; WORKFLOWS #51 PROVEN.
@@ -312,7 +316,7 @@ reconcile, and plan joins.
 2. WP1.4 columnMapFor / table-boundary fixes on bulk WEAK sets (many ZEROs honest;
    Orange County VAV table is extract-boundary miss, not title-only).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
-4. WP5 eliminate local geometric fork entirely when production endpoint up.
+4. WP5 graph prewarm on upload (DoD item 2 still open).
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 

@@ -183,6 +183,11 @@ export const HVAC_FAMILY_SPECS = {
   AHU: { titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED|HYDRONIC\s+COIL|FAN\s+SCHEDULE/i, keyRe: /^AHU/i },
   DOAH_UNIT: { titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i, keyRe: /^DOAH/i },
   DOAH_HANDLING: { titleRe: /DEDICATED OUTDOOR AIR HANDLING/i, keyRe: /^DOAH/i },
+  DOAS: {
+    titleRe: /DOAS\s+UNIT|\bDOAS\b/i,
+    exclude: /POINTS\s*LIST|DDC|DEDICATED\s+OUTDOOR\s+AIR\s+HANDLING/i,
+    keyRe: /^DOAS/i,
+  },
   // Common US school / light-commercial phrasing (not always "DOAH").
   OUTDOOR_AIR_UNIT: {
     titleRe: /OUTDOOR\s+AIR\s+UNIT\s+SCHEDULE/i,
