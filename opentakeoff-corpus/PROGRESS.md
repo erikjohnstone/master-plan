@@ -299,23 +299,29 @@ reconcile, and plan joins.
 - **Pillar A / bulk compile:** ITEM NO / EQUIP NO identity keys; blank-title
   `keyRe` bootstrap; set-agnostic families (CAV→VAV, SOUND TRAP→DUCT_SILENCER,
   RAH, WFU, COOLING_TOWER); comma-grouped mark keys. Bulk rescore (31 sets):
-  meat **11→13**, zero **13→11**; Vegas CUP **0→16**, Transbay **0→10**.
+  meat **13**, weak **8**, zero **10**; Vegas CUP **16**, Transbay **10**.
+- **WP1 keys:** `04_NV_VA_LasVegas_CentralUtilityPlant` (16) + `26_CA_TransbayTower`
+  (10) acceptance JSON + `crossCorpusWorkflow` hook (6 non-NAVFAC/bulk keyed sets).
 - **WP2 T-VALVE-01:** MCP N=5 PASSED (163); UI Gates 1–4 N=5 via production
   compile path; Gate 5 pending `CEREBRAS_API_KEY` on VM.
 - **WP3:** UI `sweep_schedule_row` inline-motif fallback wired (Session parity).
-- **WP4 (in progress):** `schedule_plan_reconcile` intent + shared
-  `schedulePlanReconcile.mjs` + MCP `reconcile_schedule_plan` tool;
-  federal-mech VAV + itd HHW reconcile scaffold tests in `test:workflows`.
+- **WP4:** `schedule_plan_reconcile` + MCP `reconcile_schedule_plan` with scoped
+  tag sweeps; **installed MATCH** on D08 FCU + D07 VAV/EF + **federal-mech VAV**
+  (VAV-1/12/30/58); federal-mech/itd scaffold tests; WORKFLOWS #51 PROVEN.
+- **WP5 partial:** `count_marks` UI tries MCP bridge first (same pattern as
+  `sweep_schedule_row`); graph prewarm on upload landed earlier on branch.
 - **Bulk family fix:** `WATER_HEATER` / `WATER_SOFTENER` — Hawthorn bulk set
   0→1 HVAC (DWH-1 on gas water heater schedule).
 
 ### Next queue (platform loop)
 
-1. Finish WP4 fixture proof (NAVFAC + ≥1 cross-set compile key) + WORKFLOWS row.
-2. WP2 UI Gate 5 when interrogation key available; CARD/SLATE lock.
+1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
+2. WP2 UI Gate 5 when `CEREBRAS_API_KEY` available; CARD/SLATE lock.
 3. WP1 header/column vocab from bulk failures (`columnMapFor` path).
-4. WP5 Session-unify plan tools + graph prewarm on upload.
-5. WP6 full suite green after each batch; bulk rescore after family fixes.
+4. WP3 rowsym bar re-measure + Bessemer ≥90% or keyed expected-misses.
+5. WP5 full Session parity test fixture (UI↔MCP reconcile + compile).
+6. WP4 Agent UI reconcile proof (Playwright or durable equivalent).
+7. WP6 `test:demos` + bulk rescore after family fixes.
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 

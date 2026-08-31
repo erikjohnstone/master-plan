@@ -1,0 +1,14 @@
+{
+  "set_id": "26_CA_TransbayTower_Mechanical_64Sheets",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/26_CA_TransbayTower_Mechanical_64Sheets.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk high-rise mechanical — blank-title RAH-/WFU- tables, CAV→VAV, SOUND TRAP→DUCT_SILENCER. Proves foreign title/header shapes beyond NAVFAC.",
+  "categories": {
+    "VAV": 7,
+    "RAH": 2,
+    "WFU": 1
+  },
+  "totals": { "items": 10 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

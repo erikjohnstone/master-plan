@@ -11,7 +11,9 @@ title phrasing (`AIRHANDLINGUNITSCHEDULE`, `GENERAL FAN SCHEDULE`,
 |---|---|---|
 | `bldg5406-hvac-demo` | `raw/bldg5406-hvac-demo-mechanical.pdf` | HVAC family compile (incl. no-space titles) |
 | `federal-mech` | `raw/federal-attachment4-mechanical.pdf` | HVAC family compile (FCU/EV, pumps, fans, chiller) |
-| `itd-d1-lab` | `raw/itd-d1-lab-mechanical.pdf` | HVAC + HHW control-valve family + empty BAS disclose |
+| `16_NV_CarsonValleyMS_HVAC_Replacement` | `bulk/HVAC_BAS_Plan_Sets/16_NV_CarsonValleyMS_HVAC_Replacement.pdf` | Bulk school HVAC (furnace/condensing unit/RTU/ERV) |
+| `04_NV_VA_LasVegas_CentralUtilityPlant` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/04_NV_VA_LasVegas_CentralUtilityPlant.pdf` | Bulk CUP pumps + cooling towers |
+| `26_CA_TransbayTower_Mechanical_64Sheets` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/26_CA_TransbayTower_Mechanical_64Sheets.pdf` | Bulk high-rise RAH/WFU/VAV blank-title tables |
 
 ## How counts were authored
 

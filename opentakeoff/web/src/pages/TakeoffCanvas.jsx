@@ -7422,6 +7422,8 @@ export default function TakeoffCanvas() {
   const canonMark = (k) => (k || "").trim().toUpperCase().replace(/\s+/g, "");
 
   async function agentCountMarks(marksOpt) {
+    const remote = await agentMcpTool("count_marks", marksOpt?.length ? { marks: marksOpt } : {});
+    if (remote) return remote;
     const g = await ensureAgentGraph();
     if (!g.available) return { error: "This set has no text layer (a scan) — the census reads drawn tag text, so it cannot run. Try symbol_sweep on a seed instance instead." };
 

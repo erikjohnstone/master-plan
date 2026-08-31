@@ -87,6 +87,35 @@ test("itd-d1-lab reconcile scaffold covers HHW valve schedule rows", async () =>
   );
 });
 
+test("federal-mech VAV reconcile: sampled plan-drawn tags MATCH (WP1 cross-set)", async () => {
+  const keyPath = resolve(CROSS, "federal-mech.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
+  const sample = ["VAV-1", "VAV-12", "VAV-30", "VAV-58"];
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    tags: sample,
+    evaluationFast: true,
+  });
+  const byTag = new Map(result.rows.map((r) => [r.tag.toUpperCase(), r]));
+  for (const tag of sample) {
+    const row = byTag.get(tag);
+    assert.ok(row, `${tag} reconcile row`);
+    assert.equal(row.status, "MATCH", `${tag} installed reconcile on federal-mech`);
+    assert.equal(row.installed_qty, 1);
+    assert.ok(row.plan_cites?.length >= 1, `${tag} plan cite`);
+  }
+  assert.ok(result.summary.match >= sample.length);
+});
+
 test("D08 NAVFAC FCU reconcile: swept tags are MATCH (installed reconcile)", async () => {
   const { graph, session } = await loadFixtureSession(CORPUS, D08);
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "FCU");

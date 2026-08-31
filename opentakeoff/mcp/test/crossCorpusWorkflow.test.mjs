@@ -125,6 +125,8 @@ test("WP1 keyed compile acceptance on ≥2 non-NAVFAC sets", async () => {
     "itd-d1-lab.compile.json",
     // Bulk US vector set — same product compile path a user upload hits.
     "16_NV_CarsonValleyMS_HVAC_Replacement.compile.json",
+    "04_NV_VA_LasVegas_CentralUtilityPlant.compile.json",
+    "26_CA_TransbayTower_Mechanical_64Sheets.compile.json",
   ];
   let scored = 0;
   for (const file of keys) {
