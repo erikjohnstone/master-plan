@@ -302,7 +302,7 @@ reconcile, and plan joins.
   UI graph prewarm (`schedules indexing…`) + `prewarmGraphSmoke.test.mjs`.
 - **Bulk rescore (2026-08-31 tip `cdfded4`):** MEAT **20** · WEAK **2** · ZERO **9** (Douglas misc+VRF MEAT; SDSU 85; Kennebec+Suwannee honest WEAK).
 - **Orange County cross-set key:** 32 VAV + **33** HVAC items (BP-1 only; fake HRC/UH dropped); reconcile scaffold test.
-- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (**42**), Baker MS (**17**), Klamath (**36**), Douglas (**18**), Jeff City CST (**27**), **SDSU EngSciences (118)**, **MSU Life Sciences (5)**, bldg5406 (**27**) locked.
+- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (**42**), Baker MS (**17**), Klamath (**36**), Douglas (**18**), Jeff City CST (**27**), **SDSU EngSciences (118)**, **MSU Life Sciences (5)**, bldg5406 (**27**), **itd-d1-lab (58)** locked.
 - **WP1.4 keyRe broaden:** BOILER1 marks, blank-title FCU/EV/EF/RF fan-coil rows — federal-mech later gains FIN_TUBE (100); two bulk WEAK→MEAT promotions.
 - **WP1.4 CODE_RE + EQUIP.TAG + banding orphans:** `AHU-1A`-style digit+letter suffixes; `EQUIP. TAG` own-identity; seam-gap spans assigned to nearest band + thin identity-band absorb. Hawthorn **1→5**.
 - **WP1.4 title hunt:** `\bSCHEDULE\b` (not SCHEDULED) — Northport AIR INLETS & OUTLETS recovers 12 GRD (**3→15**).
@@ -335,12 +335,12 @@ reconcile, and plan joins.
 - **WP1 Suwannee key:** honest WEAK RTU:1 locked.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
-- **WP6:** `test:workflows` **32/32** (tip equip-catchall Colville 42 / bldg5406 27); prior HX/coil/flash + SDSU 118.
+- **WP6:** `test:workflows` **32/32** (tip itd-d1-lab 58 + equip catch-all; Baker ERV comma-split guard).
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 orphan titles: Colville BS-1/LV-* (no family yet); itd-d1-lab reheat coils / ductless split; federal AHU fan schedule excluded by design.
+2. WP1.4 orphan titles: Colville BS-1/LV-*; itd SN/SEV/SAV/GEV lab valves + F-1CU-1; federal AHU fan schedule excluded by design.
 3. WP1.4 additional table-boundary misses on bulk WEAK/ZERO sets (many ZEROs honest — Augusta window, Iowa/Judson note spans).
 4. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 5. WP4 deepen on Douglas / Klamath / SDSU VAV SCHEDULE_ONLY remainder.
