@@ -17,14 +17,15 @@ import {
   exportMarkedPdfOutput, listShapesOutput, deriveBaseOutput, deriveTransitionsOutput, importTakeoffOutput, applyRulesOutput, cutOutOutput,
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
   markVerdictOutput, deleteVerdictOutput,
-  sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, sweepScheduleRowOutput, countMarksOutput,
+  sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, reconcileSchedulePlanOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
 import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
 import { importTakeoff } from "./importing.ts";
-import { buildPlanSetTakeoff } from "./takeoff.ts";
+import { buildPlanSetTakeoff, buildLegendTakeoff, classifyLegendCaption, reconcileSchedulePlan } from "./takeoff.ts";
 import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "./corpusTakeoff.mjs";
+import { reconcileRowsToCsv } from "../../web/src/lib/schedulePlanReconcile.mjs";
 import {
   VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
 } from "../../web/src/lib/hvacTaxonomy.ts";
@@ -714,6 +715,37 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       compiled.export_path = null;
     }
     return compiled;
+  }));
+
+  server.registerTool("reconcile_schedule_plan", {
+    description: `Reconcile scheduled equipment tags to plan drawings — contractor-grade table with Tag, Family, Scheduled qty, Installed qty, Status (MATCH | SCHEDULE_ONLY | PLAN_ONLY | REFUSED_NO_SCALE | REFUSED_NO_TEXT | AMBIGUOUS), schedule cite, and plan cite(s). Walks every equipment schedule row through sweep_schedule_row on the shared Session path — never invents plan locations. Optional family filter (e.g. "VAV", "FCU", "AHU") scopes to one schedule family. Pass path to write JSON; export_path writes reconcile.csv. Read-only; does not commit canvas shapes. ${COORDS}`,
+    inputSchema: {
+      family: z.string().optional().describe('Optional family scope: VAV, FCU, AHU, pump, etc.'),
+      categories: z.array(z.string()).optional().describe("Optional hvacTaxonomy category filter"),
+      path: z.string().optional().describe("Optional JSON file path for the reconcile table"),
+      export_path: z.string().optional().describe("Optional directory for reconcile.csv export"),
+      overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
+    },
+    outputSchema: reconcileSchedulePlanOutput,
+  }, run("reconcile_schedule_plan", async ({ family, categories, path: outPath, export_path: exportPath, overwrite }) => {
+    const result = await reconcileSchedulePlan(session, { family: family ?? null, categories: categories ?? null });
+    if (outPath) {
+      await assertWritable(outPath, "json", overwrite);
+      const { writeFile } = await import("node:fs/promises");
+      await writeFile(outPath, JSON.stringify(result, null, 2));
+      (result as any).path = outPath;
+    } else {
+      (result as any).path = null;
+    }
+    if (exportPath) {
+      const { mkdir, writeFile } = await import("node:fs/promises");
+      await mkdir(exportPath, { recursive: true });
+      await writeFile(`${exportPath.replace(/\/$/, "")}/reconcile.csv`, reconcileRowsToCsv(result.rows));
+      (result as any).export_path = exportPath;
+    } else {
+      (result as any).export_path = null;
+    }
+    return result;
   }));
 
   server.registerTool("read_sheet_text", {

@@ -23,6 +23,10 @@ import type { Session } from "./session.ts";
 import { HVAC_TAXONOMY, type HvacComponent } from "../../web/src/lib/hvacTaxonomy.ts";
 import type { Point } from "../../web/src/lib/oneclick.ts";
 import { isReferenceCrossTable, type ScheduleTable, type TableRow } from "../../web/src/lib/sheetgraph.ts";
+import {
+  reconcileRowsFromTakeoffItems,
+  summarizeReconcile,
+} from "../../web/src/lib/schedulePlanReconcile.mjs";
 
 /** The structured failure taxonomy requested for this pipeline — classifies
  * WHY a tag's takeoff came out the way it did, distinct from a raw error
@@ -757,4 +761,44 @@ export async function buildLegendTakeoff(session: Session, opts: { categories?: 
     }
   }
   return result;
+}
+
+/** Schedule↔plan reconcile table for a loaded set — walks every equipment
+ * schedule row through sweep_schedule_row (via buildPlanSetTakeoff) and
+ * classifies MATCH / SCHEDULE_ONLY / REFUSED_* / AMBIGUOUS. Shared UI+MCP. */
+export async function reconcileSchedulePlan(session: Session, opts: {
+  family?: string | null;
+  categories?: string[] | null;
+  evaluationFast?: boolean;
+} = {}): Promise<{
+  rows: ReturnType<typeof reconcileRowsFromTakeoffItems>;
+  summary: ReturnType<typeof summarizeReconcile>;
+  takeoff_stats: PlanSetTakeoff["stats"];
+  family_filter: string | null;
+}> {
+  const takeoff = await buildPlanSetTakeoff(session, {
+    categories: opts.categories ?? null,
+    evaluationFast: opts.evaluationFast,
+  });
+  let items = takeoff.items;
+  const family = opts.family ? String(opts.family).trim() : null;
+  if (family) {
+    const famU = family.toUpperCase();
+    items = items.filter((item) => {
+      const eq = String(item.equipment_type || "").toUpperCase();
+      const cat = String(item.category || "").toUpperCase();
+      const title = String(item.schedule?.title || "").toUpperCase();
+      return eq.includes(famU) || cat.includes(famU) || title.includes(famU)
+        || (famU === "VAV" && /VOLUME CONTROL|AIR TERMINAL|VARIABLE AIR/i.test(title))
+        || (famU === "FCU" && /FAN\s*COIL/i.test(title))
+        || (famU === "AHU" && /AIR HANDLING/i.test(title));
+    });
+  }
+  const rows = reconcileRowsFromTakeoffItems(items, takeoff.failures);
+  return {
+    rows,
+    summary: summarizeReconcile(rows),
+    takeoff_stats: takeoff.stats,
+    family_filter: family,
+  };
 }

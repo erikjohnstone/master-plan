@@ -14,7 +14,7 @@
  * hardcode sheet numbers, building names, or locked counts.
  */
 
-/** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"project_takeoff"|"equipment_plan_join"|"cross_discipline_join"|"plan_link_refuse"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"symbol_sweep"|"connectivity"|"scale_refuse"|"generic"} TakeoffIntent */
+/** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"project_takeoff"|"equipment_plan_join"|"cross_discipline_join"|"plan_link_refuse"|"schedule_plan_reconcile"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"symbol_sweep"|"connectivity"|"scale_refuse"|"generic"} TakeoffIntent */
 
 /** Estimator phrasing: "takeoff", "take off", counts, rollups. */
 export function goalAsksTakeoff(g) {
@@ -145,6 +145,18 @@ export function classifyTakeoffIntent(goal) {
     && /\b(?:RTU|rooftop|packaged|mechanical|EQUIP)\b/i.test(g)
     && /\b(?:join|matching|connection|voltage|phases?)\b/i.test(g)) {
     return "cross_discipline_join";
+  }
+
+  // Schedule ↔ plan reconciliation (Pillar B) — before ad-hoc plan_link_refuse.
+  if (/\breconcile\b/i.test(g)
+    && /\b(?:plan|drawings?|installed|schedule|scheduled)\b/i.test(g)) {
+    return "schedule_plan_reconcile";
+  }
+  if (/\bscheduled\s+vs\s+installed\b/i.test(g)
+    || /\bon the schedule but not drawn\b/i.test(g)
+    || /\bwhich equipment is on the schedule but not drawn\b/i.test(g)
+    || /\bschedule[\s-]*only\b/i.test(g) && /\bplan[\s-]*only\b/i.test(g)) {
+    return "schedule_plan_reconcile";
   }
 
   // Schedule attrs + plan sweep with honest refuse when not drawn.
@@ -461,6 +473,8 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
     name === "query_table" && !out?.error && args?.row_key != null).length;
   const hasCorpusCompile = log.some(({ name, out }) =>
     name === "compile_corpus_takeoff" && !out?.error && (out?.takeoff_id || out?.kind));
+  const hasReconcile = log.some(({ name, out }) =>
+    name === "reconcile_schedule_plan" && !out?.error && Array.isArray(out?.rows));
   const hasSweep = log.some(({ name, out }) =>
     name === "sweep_schedule_row" && !out?.error);
   const titleScanCount = log.filter(({ name, out, args }) => {
@@ -715,6 +729,56 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
         phase: "answer",
         allowedTools: null,
         nextMove: "Emit joined mech + electrical attributes with cites from both schedules. No invented values.",
+        blockReason: null,
+      };
+    })());
+  }
+
+  if (intent === "schedule_plan_reconcile") {
+    const allowed = [
+      "list_sheets", "sheet_graph", "find_schedule", "query_table",
+      "reconcile_schedule_plan", "sweep_schedule_row", "highlight_citation",
+    ];
+    const suggested = suggestedScheduleTitles(goal).slice(0, 3);
+    const familyHint = suggested.length
+      ? ` Pass family from goal when calling reconcile_schedule_plan (needles: ${suggested.join("; ")}).`
+      : "";
+    return surveyThenTitleTools(hasGraph, (() => {
+      if (titleScanCount < 1 && !hasReconcile) {
+        return {
+          phase: "title_scans",
+          allowedTools: allowed,
+          nextMove: "Title-scan the named schedule family with query_table (title only) for scheduled count, "
+            + "then call reconcile_schedule_plan (optionally scoped with family=). "
+            + "Copy rows with Tag, Scheduled qty, Installed qty, Status, and cites — never invent plan hits."
+            + familyHint,
+          blockReason: null,
+        };
+      }
+      if (!hasReconcile && !hasSweep) {
+        return {
+          phase: "compile",
+          allowedTools: allowed,
+          nextMove: "Call reconcile_schedule_plan now for the full reconcile table, "
+            + "or sweep_schedule_row per tag if scoped to named MARKs only."
+            + familyHint,
+          blockReason: null,
+        };
+      }
+      if (paints < 1) {
+        return {
+          phase: "paint",
+          allowedTools: allowed,
+          nextMove: "highlight_citation on schedule MARK cells and successful plan hits from reconcile rows, "
+            + "including explicit SCHEDULE_ONLY / REFUSED statuses.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "Emit the reconcile table: Tag · Family · Scheduled qty · Installed qty · Status · cites. "
+          + "Surface every SCHEDULE_ONLY and REFUSED row honestly — do not claim all scheduled units are drawn.",
         blockReason: null,
       };
     })());

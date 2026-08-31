@@ -494,6 +494,20 @@ export const AGENT_TOOL_DEFS = [
     },
   },
   {
+    name: "reconcile_schedule_plan",
+    description: "Reconcile scheduled equipment tags to plan drawings on the loaded set. Returns contractor-grade rows: Tag, Family, Scheduled qty, Installed qty, Status (MATCH | SCHEDULE_ONLY | PLAN_ONLY | REFUSED_NO_SCALE | REFUSED_NO_TEXT | AMBIGUOUS), schedule cite, plan cite(s). Walks sweep_schedule_row on the shared Session path — never invents plan locations. Optional family scopes to one schedule family (VAV, FCU, AHU, pump, …). Prefer this over manual per-tag sweeps when the goal asks to reconcile a schedule to the plans.",
+    input_schema: {
+      type: "object",
+      properties: {
+        family: {
+          type: "string",
+          description: "Optional family scope, e.g. VAV, FCU, AHU, pump.",
+        },
+      },
+      required: [],
+    },
+  },
+  {
     name: "export_takeoff",
     description: "Export the current committed takeoff (all accepted shapes, not pending proposals) as a CSV — per-condition quantities with waste applied. Triggers a real file download in the estimator's browser; the tool result only confirms it happened. Refuses if nothing is committed yet.",
     input_schema: { type: "object", properties: {}, required: [] },
@@ -975,6 +989,20 @@ export async function executeAgentTool(ctx, name, args) {
           download: args.download !== false,
           service: args.service || null,
         });
+      }
+
+      case "reconcile_schedule_plan": {
+        if (typeof ctx.reconcileSchedulePlan !== "function") {
+          const remote = typeof ctx.mcpTool === "function"
+            ? await ctx.mcpTool("reconcile_schedule_plan", { family: args.family || null })
+            : null;
+          if (remote && !remote.error) return remote;
+          return {
+            error: "reconcile_schedule_plan is not wired in this session. "
+              + "Connect local MCP or use sweep_schedule_row per tag.",
+          };
+        }
+        return await ctx.reconcileSchedulePlan({ family: args.family || null });
       }
 
       case "export_takeoff":
