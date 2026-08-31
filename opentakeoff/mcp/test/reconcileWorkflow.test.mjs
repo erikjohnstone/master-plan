@@ -587,3 +587,61 @@ test("Douglas HEAT_PUMP reconcile: VRF indoor + HP-30 MATCH; HP-10 SCHEDULE_ONLY
   }
   assert.equal(byTag.get("HP-10")?.status, "SCHEDULE_ONLY");
 });
+
+test("Baker UNIT_HEATER reconcile: shadow extract collapse — no AMBIGUOUS EH-*", async () => {
+  // Thin "DUCTLESS MULTI-SPLIT…HEAT PUMP" fragment lists EH-* beside the real
+  // ELECTRIC HEATER SCHEDULE on the same sheet; value-covered shadow collapse
+  // keeps the denser heater row (shared Session.sweepScheduleRow path).
+  const keyPath = resolve(CROSS, "18_OR_BakerMS_HVAC_Electrical_FullSet.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "UNIT_HEATER");
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    evaluationFast: true,
+  });
+  assert.equal(result.rows.length, key.categories.UNIT_HEATER);
+  assert.ok(result.rows.every((r) => /^EH-/i.test(r.tag)));
+  assert.ok(
+    result.rows.every((r) => r.status !== "AMBIGUOUS"),
+    "Baker EH must not stay AMBIGUOUS after same-sheet shadow collapse",
+  );
+  assert.ok(
+    result.rows.every((r) => r.status === "SCHEDULE_ONLY" || r.status === "MATCH"),
+    "Baker EH honest SCHEDULE_ONLY or MATCH",
+  );
+});
+
+test("Klamath PUMP reconcile: untitled thin extract collapsed — no AMBIGUOUS", async () => {
+  // Untitled 6-col pump summary beside titled HYDRONIC PUMPS (same keys/values).
+  const keyPath = resolve(CROSS, "14_OR_KlamathCC_LearningCtr_Mechanical.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "PUMP");
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    evaluationFast: true,
+  });
+  assert.equal(result.rows.length, key.categories.PUMP);
+  assert.ok(
+    result.rows.every((r) => r.status !== "AMBIGUOUS"),
+    "Klamath pumps must not stay AMBIGUOUS after shadow collapse",
+  );
+  assert.ok(
+    result.rows.every((r) => r.status === "SCHEDULE_ONLY" || r.status === "MATCH"),
+  );
+});

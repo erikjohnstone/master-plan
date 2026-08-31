@@ -3204,6 +3204,41 @@ export class Session {
       }
       rowHits = collapsed;
     }
+    // Same-sheet shadow extracts: a thinner row whose cell values are covered
+    // by a richer same-sheet sibling is a duplicate/partial extract (untitled
+    // hydronic-pump summary beside "HYDRONIC PUMPS"; mis-associated thin
+    // fragment of electric heaters under a neighboring heat-pump title) — not
+    // a second device definition. Prefer the richer row. Never collapses
+    // cross-sheet twins or equal-richness collisions (merged addendum PDFs
+    // and two bare-anchor primary devices sharing a mark stay AMBIGUOUS).
+    if (rowHits.length > 1) {
+      const normVal = (text: string) => text.toUpperCase().replace(/\s+/g, " ").trim();
+      const cellVals = (row: { cells: Record<string, { text: string }> }) =>
+        Object.values(row.cells).map((c) => normVal(c?.text || "")).filter(Boolean);
+      const isShadowOf = (
+        thin: (typeof rowHits)[number],
+        rich: (typeof rowHits)[number],
+      ): boolean => {
+        if (thin.tb.sheet !== rich.tb.sheet) return false;
+        const thinN = Object.keys(thin.r.cells).length;
+        const richN = Object.keys(rich.r.cells).length;
+        // Require a clear richness gap so two real primary rows of similar
+        // width never silently pick a winner.
+        if (thinN >= richN || richN < thinN + 3) return false;
+        const richVals = cellVals(rich.r);
+        const thinVals = cellVals(thin.r);
+        if (!thinVals.length || !richVals.length) return false;
+        return thinVals.every((tv) =>
+          richVals.some((rv) => rv === tv || rv.includes(tv) || tv.includes(rv)));
+      };
+      const survivors = rowHits.filter(
+        (hit) => !rowHits.some((other) => other !== hit && isShadowOf(hit, other)),
+      );
+      if (survivors.length >= 1 && survivors.length < rowHits.length) {
+        accessoryNote = `${rowHits.length - survivors.length} same-sheet shadow extract(s) of denser schedule row(s) for "${t}" were excluded (partial/untitled duplicate — not a competing device).`;
+        rowHits = survivors;
+      }
+    }
     if (rowHits.length > 1) {
       const qualifiedQualifier = (header: string | null): string | null =>
         (header || "").toUpperCase().split(/\s+/)
