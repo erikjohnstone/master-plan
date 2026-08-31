@@ -278,10 +278,25 @@ that discloses its real limits.
 
 ## 8. Completion state and next expansion
 
-The current corpus goal is complete at 100% across takeoff outcomes,
-reference cells, and graph row-symbol outcomes. Future work should add new
-sets/documents and preserve this gate, not weaken the outcome model. Every
-future corpus gate remains forced-cold and reports takeoff, applicable
-installed rows, honest refusals, reference, graph, quantity delta, missing
-rows, and false additions together. Continue directly in the coordinator VM;
-do not dispatch workers or subagents.
+The **keyed corpus** goal is complete at 100% across takeoff outcomes,
+reference cells, and graph row-symbol outcomes. That is a proving ground,
+not the platform finish line — real shops upload unfamiliar blueprint sets
+daily.
+
+### Autonomous platform loop (2026-08-31+, runs until user halts)
+
+**Authority:** `opentakeoff-corpus/takeoffs/NEXT_GOAL_LOOP.md` · **Coordinator-only**
+(no cloud workers). **Shared path mandatory** — UI and MCP consume the same
+Session + ODL pipeline.
+
+**Objective:** Set-agnostic compile across bulk US vector sets; production-grade
+schedule↔plan reconcile; `T-VALVE-01` N=5 lock; inline motif in
+`sweep_schedule_row`; Session-unified plan tools + graph prewarm; all locks green.
+
+**Cadence:** Verified batches → update `PROGRESS.md` → `test:workflows` +
+focused tests; bulk corpus stress drives set-agnostic fixes (never per-PDF
+hardcodes).
+
+Future corpus keys expand the proving ground without weakening the outcome
+model. Every gate remains forced-cold with full metric reporting. Continue
+in the coordinator VM; do not dispatch workers or subagents.

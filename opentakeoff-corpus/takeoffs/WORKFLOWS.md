@@ -67,6 +67,7 @@ Fixture counts (396 / 122 / 163, building names, schedule titles) are
 | 48 | Multi-prompt phrase variants (valves) | ≥5 phrasings → same compile | corpus_valves | T-VALVE-01 | ON_MAIN |
 | 49 | Follow-up cite after takeoff | Spot-check MARK without destroying locked lines | agent loop | D10 follow-up intent lock | ON_MAIN |
 | 50 | Suite regression gate | Engine demos + golden verify + fixture proofs stay green; never ship N if 1…N−1 regress | `npm run test:demos` (cacache sheet-graph; warm ~30s) + `test:workflows` cross-corpus + web fixtures | D01–D10 + T-* + multi-set PDFs | ON_MAIN |
+| 51 | Schedule ↔ plan reconcile | Reconcile VAVs to plan; scheduled vs installed; schedule-only mismatches | `schedule_plan_reconcile` → `reconcile_schedule_plan` | schedulePlanReconcile.test + MCP tool | ROUTING |
 
 **Progress:** count `PROVEN` + `ON_MAIN` toward 50. Re-open a row if it regresses.
 **Tests always:** every PROVEN/ON_MAIN row must keep automated coverage; suite

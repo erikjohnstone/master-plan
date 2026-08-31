@@ -128,7 +128,7 @@ risk a golden NAVFAC demo that dies on the next upload.
 
 - [x] `NEXT_GOAL_LOOP.md` written from codebase + research
 - [x] Cross-set compile elevated to **co-equal** pillar and **WP1**
-- [ ] Implementation `/goal` cites this file as the bar
+- [x] Implementation `/goal` cites this file as the bar
 
 ### WP1 — Cross-set compile reliability (Pillar A — first)
 

@@ -281,13 +281,40 @@ Takeoff by set:
   - Final regressions pass: web 1,914/1,914 (3 intentional skips), MCP
     249/249, isolated dense-grid performance 3.09s, and both typechecks.
 
-## Verified completion
+## Verified completion (keyed corpus)
 
-The current corpus goal is complete. New sets should expand the key and rerun
-the same forced-cold outcome, reference, and graph gates.
+The current **keyed corpus** goal is complete at 100% across takeoff outcomes,
+reference cells, and graph row-symbol outcomes (commit `2cd532b`, 2026-08-29).
 
-Cloud dispatch and all subagent dispatch are prohibited by the user's
-2026-08-29 instruction. The coordinator VM is the only execution path.
+## Active overnight platform loop (2026-08-31+)
+
+**Charter:** `opentakeoff-corpus/takeoffs/NEXT_GOAL_LOOP.md` · **CreateGoal**
+set for autonomous iteration until the user stops the run.
+
+**Coordinator-only** — no cloud workers. Shared UI+MCP path for compile,
+reconcile, and plan joins.
+
+### Batch accepted this session (independently verified on branch)
+
+- **Pillar A / bulk compile:** ITEM NO / EQUIP NO identity keys; blank-title
+  `keyRe` bootstrap; set-agnostic families (CAV→VAV, SOUND TRAP→DUCT_SILENCER,
+  RAH, WFU, COOLING_TOWER); comma-grouped mark keys. Bulk rescore (31 sets):
+  meat **11→13**, zero **13→11**; Vegas CUP **0→16**, Transbay **0→10**.
+- **WP2 T-VALVE-01:** MCP N=5 PASSED (163); UI Gates 1–4 N=5 via production
+  compile path; Gate 5 pending `CEREBRAS_API_KEY` on VM.
+- **WP3:** UI `sweep_schedule_row` inline-motif fallback wired (Session parity).
+- **WP4 (in progress):** `schedule_plan_reconcile` intent + shared
+  `schedulePlanReconcile.mjs` + MCP `reconcile_schedule_plan` tool.
+
+### Next queue (platform loop)
+
+1. Finish WP4 fixture proof (NAVFAC + ≥1 cross-set compile key) + WORKFLOWS row.
+2. WP2 UI Gate 5 when interrogation key available; CARD/SLATE lock.
+3. WP1 header/column vocab from bulk failures (`columnMapFor` path).
+4. WP5 Session-unify plan tools + graph prewarm on upload.
+5. WP6 full suite green after each batch; bulk rescore after family fixes.
+
+Cloud dispatch and all subagent dispatch remain prohibited.
 
 ## Rejected or deferred approaches
 
@@ -299,11 +326,3 @@ Cloud dispatch and all subagent dispatch are prohibited by the user's
   the measured score gap.
 - OCR, raster vision, and learned symbol detection are out of the current
   user-authorized scope.
-
-## Next queue
-
-Select five non-overlapping fixes from the current evaluator output, using
-focused diagnostics between changes and one full corpus gate after the batch.
-Prioritize NAVFAC repeated views and air devices, Baker's remaining
-vector-backed deltas, and graph row-symbol misses; preserve exact sets and
-honest refusal behavior.
