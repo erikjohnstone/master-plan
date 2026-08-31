@@ -116,6 +116,26 @@ export function normalizeEquipMark(raw) {
   return t.trim();
 }
 
+/**
+ * Expand paired schedule marks joined by "&" (Northport "RF-1 & 2", "RF-1 & RF-2").
+ * Digits-only right half reuses the left prefix. Prose ("B & G MODEL") is unchanged.
+ */
+export function expandAmpersandEquipMarks(raw) {
+  const s = String(raw || "").trim();
+  if (!s || !/&/.test(s)) return [s];
+  const m = s.match(
+    /^([A-Za-z]{1,8})([\s\-]?)(\d+[A-Za-z]?)\s*&\s*(?:([A-Za-z]{1,8})([\s\-]?)?)?(\d+[A-Za-z]?)$/,
+  );
+  if (!m) return [s];
+  const [, p1, sep1, n1, p2, sep2, n2] = m;
+  const leftSep = sep1 || "-";
+  const left = `${p1}${leftSep}${n1}`.replace(/\s+/g, "");
+  const right = p2
+    ? `${p2}${sep2 || "-"}${n2}`.replace(/\s+/g, "")
+    : `${p1}${leftSep}${n2}`.replace(/\s+/g, "");
+  return [left, right];
+}
+
 function uniqueFamily(graph, {
   titleRe, exclude, keyRe, blankKeyRe, identityHeaderRe, titledOnly,
   // Secondary titles that need a stricter key filter than the primary titleRe
@@ -172,6 +192,16 @@ function uniqueFamily(graph, {
       // while row.key correctly holds EF-1.
       const markCell = cellText(row, /^(MARK|SYMBOL|VALVE\s*MARK|UNIT\s*MARK|EQUIP(?:\.?\s*TAG)?|DESIGNATION|UNIT\s*NO|UNIT\s*TAG|ITEM\s*NO)$/i);
       if (markCell) tag = String(markCell).replace(/^["'\s]+|["'\s]+$/g, "").trim();
+      // Ampersand-paired TAG ("RF-1 & 2") beats a glued row.key ("RF-12") — Northport
+      // blank return-fan schedule. Still never prefer bare grille-type TAG codes.
+      const tagCell = cellText(row, /^TAG$/i);
+      if (
+        tagCell
+        && /&/.test(tagCell)
+        && /^[A-Za-z]{1,8}[\s\-]?\d/i.test(tagCell.trim())
+      ) {
+        tag = String(tagCell).replace(/^["'\s]+|["'\s]+$/g, "").trim();
+      }
       if (identityHeaderRe) {
         const ident = cellText(row, identityHeaderRe);
         if (ident) tag = String(ident).replace(/^["'\s]+|["'\s]+$/g, "").trim();
@@ -187,7 +217,8 @@ function uniqueFamily(graph, {
       const tagList = String(working)
         .split(willFilter ? /[/,]/ : "/")
         .map((t) => t.trim().replace(/^["'\s]+|["'\s]+$/g, ""))
-        .filter(Boolean);
+        .filter(Boolean)
+        .flatMap((t) => expandAmpersandEquipMarks(t));
       for (const rawOne of tagList.length ? tagList : [working || tag]) {
         const one = normalizeEquipMark(rawOne);
         const canon = one.toUpperCase().replace(/\s+/g, "");

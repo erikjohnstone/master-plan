@@ -8,7 +8,7 @@ import {
   queryTitleMatchesNeedle,
   scheduleTitleMatches,
 } from "../src/lib/scheduleTitleMatch.mjs";
-import { HVAC_FAMILY_SPECS, normalizeEquipMark, compileHvacTakeoff } from "../src/lib/corpusTakeoff.mjs";
+import { HVAC_FAMILY_SPECS, normalizeEquipMark, expandAmpersandEquipMarks, compileHvacTakeoff } from "../src/lib/corpusTakeoff.mjs";
 
 test("compact form strips spaces and punctuation", () => {
   assert.equal(compactScheduleTitle("AIR HANDLING UNIT SCHEDULE"), "AIRHANDLINGUNITSCHEDULE");
@@ -148,6 +148,16 @@ test("normalizeEquipMark strips SYMBOL CFM/size/room trailers (Baker GRD)", () =
   assert.equal(normalizeEquipMark("AHU-1, HP-1"), "AHU-1, HP-1");
   assert.equal(normalizeEquipMark("AHU-1 , HP-1"), "AHU-1 , HP-1");
   assert.equal(normalizeEquipMark("ERU-1, HP-4"), "ERU-1, HP-4");
+});
+
+test("expandAmpersandEquipMarks splits paired schedule tags (Northport RF-1 & 2)", () => {
+  assert.deepEqual(expandAmpersandEquipMarks("RF-1 & 2"), ["RF-1", "RF-2"]);
+  assert.deepEqual(expandAmpersandEquipMarks("RF-1 & RF-2"), ["RF-1", "RF-2"]);
+  assert.deepEqual(expandAmpersandEquipMarks("RF-1&2"), ["RF-1", "RF-2"]);
+  assert.deepEqual(expandAmpersandEquipMarks("AHU-1 & AHU-2"), ["AHU-1", "AHU-2"]);
+  // Prose / non-identity must stay whole.
+  assert.deepEqual(expandAmpersandEquipMarks("B & G MODEL SRS-3F"), ["B & G MODEL SRS-3F"]);
+  assert.deepEqual(expandAmpersandEquipMarks("RF-12"), ["RF-12"]);
 });
 
 test("RTU / ERV / furnace / heat-pump titles match set-agnostic families", () => {

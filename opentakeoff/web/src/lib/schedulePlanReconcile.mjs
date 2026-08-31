@@ -6,7 +6,7 @@
  * Set-agnostic — no sheet IDs or locked counts in product code.
  */
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
-import { normalizeEquipMark } from "./corpusTakeoff.mjs";
+import { normalizeEquipMark, expandAmpersandEquipMarks } from "./corpusTakeoff.mjs";
 
 /** @typedef {"MATCH"|"SCHEDULE_ONLY"|"PLAN_ONLY"|"REFUSED_NO_SCALE"|"REFUSED_NO_TEXT"|"AMBIGUOUS"} ReconcileStatus */
 
@@ -71,6 +71,12 @@ function rowIdentityTag(row) {
       const t = String(cell?.text || "").trim();
       if (t) return t;
     }
+  }
+  // Ampersand-paired TAG ("RF-1 & 2") beats a glued row.key ("RF-12").
+  for (const [header, cell] of Object.entries(row?.cells || {})) {
+    if (!/^TAG$/i.test(String(header || "").trim())) continue;
+    const t = String(cell?.text || "").trim();
+    if (t && /&/.test(t) && /^[A-Za-z]{1,8}[\s\-]?\d/i.test(t)) return t;
   }
   // Parity with compile uniqueFamily — extractor often puts the mark on row.key.
   const key = String(row?.key || "").trim();
@@ -201,7 +207,10 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
       const willFilter = Boolean(catchAllSchedule || filterRe);
       const tagList = String(rawTag)
         .split(willFilter ? /[/,]/ : "/")
-        .map((t) => normalizeEquipMark(t.trim().replace(/^["'\s]+|["'\s]+$/g, "")))
+        .map((t) => t.trim().replace(/^["'\s]+|["'\s]+$/g, ""))
+        .filter(Boolean)
+        .flatMap((t) => expandAmpersandEquipMarks(t))
+        .map((t) => normalizeEquipMark(t))
         .filter(Boolean);
       for (const tag of (tagList.length ? tagList : [rawTag])) {
         if (/^NOTES?:?\d*$/i.test(String(tag).trim())) continue;
