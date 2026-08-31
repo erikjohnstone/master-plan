@@ -123,6 +123,8 @@ test("WP1 keyed compile acceptance on ≥2 non-NAVFAC sets", async () => {
     "bldg5406-hvac-demo.compile.json",
     "federal-mech.compile.json",
     "itd-d1-lab.compile.json",
+    // Bulk US vector set — same product compile path a user upload hits.
+    "16_NV_CarsonValleyMS_HVAC_Replacement.compile.json",
   ];
   let scored = 0;
   for (const file of keys) {
@@ -130,7 +132,10 @@ test("WP1 keyed compile acceptance on ≥2 non-NAVFAC sets", async () => {
     assert.ok(existsSync(keyPath), `missing acceptance key ${file}`);
     const key = JSON.parse(readFileSync(keyPath, "utf8"));
     const pdf = resolve(CORPUS, key.source_file);
-    if (!existsSync(pdf)) continue;
+    if (!existsSync(pdf)) {
+      console.log(`skip ${key.set_id} — PDF not present at ${key.source_file}`);
+      continue;
+    }
     scored += 1;
     const graph = await graphForPdf(pdf, key.set_id);
     const hvac = compileCorpusTakeoff(null, graph, "hvac_equipment");
