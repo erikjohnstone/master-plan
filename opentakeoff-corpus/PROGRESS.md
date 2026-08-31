@@ -315,6 +315,7 @@ reconcile, and plan joins.
 - **WP1.4 family keyRe tighten (shared path):** FCU `FC-##`; HEAT_PUMP HP/SCU/SAC + exclude ENERGY RECOVERY; HRC `CH-`/`HRC`; PUMP `HYDRONIC PUMPS` + exclude HEAT PUMP; UNIT_HEATER EH/UH + ELECTRIC HEATERS; AS `^AS` / ET `^ET|^XT` — Orange **43→33**, Baker **26→17**, Colville **27→23**, Klamath **35** new key.
 - **WP1.4 VRF indoor + REF + EDH (shared path):** HEAT_PUMP `CC-*`/`AH-*` (not AHU); FAN `REF-*` relief; UNIT_HEATER `ELECTRIC DUCT HEATER`/`EDH-*` — Douglas **4→15** WEAK→MEAT; Jeff City CST **27** keyed.
 - **WP1.4 PUMP VACUUM exclude:** drop `VACUUM PUMP SCHEDULE` from hydronic PUMP family — SDSU **85** keyed (was V-1 pollution).
+- **WP1.4 MISCELLANEOUS SCHEDULE gate:** keyRe-gated catch-all (compile + reconcile parity) — Douglas **15→18** (EH-20/30 + DOAS-30).
 - **WP4 Jeff City CST:** VAV **9/9** + FCU **3/3 MATCH** (locked in `reconcileWorkflow.test.mjs`).
 - **WP4 reconcile tag dedupe:** scaffold drops duplicate MARK extracts (Douglas HP-20 double table) — parity with compile `uniqueFamily`.
 - **WP4 Orange County:** installed reconcile **32/32 VAV MATCH** (full census locked in `reconcileWorkflow.test.mjs`).
@@ -327,15 +328,15 @@ reconcile, and plan joins.
 - **WP1 Suwannee key:** honest WEAK RTU:1 locked.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
-- **WP6:** `test:workflows` **29/29** (tip after Jeff City WP4 + MARK dedupe); `test:demos` **10/10**.
+- **WP6:** `test:workflows` **29/29** (tip `24de661` SDSU/VACUUM + prior Jeff City WP4); `test:demos` **10/10**.
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 additional table-boundary misses on bulk WEAK/ZERO sets (many ZEROs honest).
+2. WP1.4 additional table-boundary misses on bulk WEAK/ZERO sets (many ZEROs honest — Augusta window, Iowa/Judson note spans).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
-4. WP4 deepen on Douglas / Jeff City / Klamath (compile keys locked).
-5. Remaining WEAK: Suwannee (1 RTU honest), Kennebec (2); ZEROs mostly elevation/window/raster/unkeyed (FAA Ogden, Iowa State, VistaUSD, KCHA, …).
+4. WP4 deepen on Douglas / Klamath / SDSU (compile keys locked).
+5. Remaining WEAK ceilings: Suwannee (1 RTU honest), Kennebec (2 multi-split only).
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 

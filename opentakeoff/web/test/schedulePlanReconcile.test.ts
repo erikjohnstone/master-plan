@@ -166,6 +166,37 @@ test("reconcile scaffold dedupes duplicate MARK extracts (compile parity)", () =
   assert.deepEqual(rows.map((r) => r.tag).sort(), ["HP-10", "HP-20"]);
 });
 
+test("reconcile scaffold accepts MISCELLANEOUS SCHEDULE via keyRe (compile parity)", () => {
+  const graph = {
+    tables: [{
+      kind: "equipment",
+      sheet: "m.pdf#4",
+      title: { text: "MISCELLANEOUS SCHEDULE" },
+      rows: [
+        { key: "EH-20", cells: { SYMBOL: { text: "EH-20" } } },
+        { key: "DOAS-30", cells: { SYMBOL: { text: "DOAS-30" } } },
+        { key: "JUNK-1", cells: { SYMBOL: { text: "JUNK-1" } } },
+      ],
+    }],
+  };
+  const uh = reconcileScheduleFamilyFromGraph(
+    graph,
+    { label: "UNIT_HEATER", titleRe: /UNIT HEATER SCHEDULE/i, keyRe: /^(?:UH|CUH|EH|EDH)[\s\-]?/i },
+  );
+  assert.deepEqual(uh.map((r) => r.tag), ["EH-20"]);
+  const doas = reconcileScheduleFamilyFromGraph(
+    graph,
+    { label: "DOAS", titleRe: /DOAS\s+UNIT/i, keyRe: /^DOAS/i },
+  );
+  assert.deepEqual(doas.map((r) => r.tag), ["DOAS-30"]);
+  // Families without keyRe must not absorb misc catch-all rows.
+  const pump = reconcileScheduleFamilyFromGraph(
+    graph,
+    { label: "PUMP", titleRe: /PUMP SCHEDULE/i },
+  );
+  assert.equal(pump.length, 0);
+});
+
 test("reconcileRowsToCsv emits contractor header row", () => {
   const csv = reconcileRowsToCsv([
     {
