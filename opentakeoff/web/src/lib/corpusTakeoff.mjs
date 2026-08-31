@@ -140,7 +140,10 @@ function uniqueFamily(graph, {
     // forcing a CU filter onto primary CONDENSING UNIT schedules.
     // Catch-all tables: OR blankKeyRe|keyRe so HEAT_PUMP blankKeyRe (/^HP/)
     // does not shadow WSHP/GSHP matches that only keyRe accepts.
-    const titledFilter = (altOk && !titleOk && altKeyRe) ? altKeyRe : keyRe;
+    // Prefer altKeyRe whenever altTitleRe matched (ELECTRIC HUMIDIFIER EH-*,
+    // SPLIT outdoor CU-*). Primary titled CONDENSING UNIT stays unfiltered
+    // because altOk is false there.
+    const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
     const filterRe = blankTitle ? blankGate : catchAllSchedule ? null : titledFilter;
     const catchAllFilter = catchAllSchedule;
     for (const row of table.rows || []) {
@@ -348,10 +351,10 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^WS[\s\-]/i,
   },
   FAN: {
-    titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+|RELIEF\s+)?FAN SCHEDULE/i,
+    titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+|RELIEF\s+|LABORATORY\s+EXHAUST\s+)?FAN SCHEDULE/i,
     exclude: /FAN\s*COIL|FAN\s+SOUND|AIR\s+HANDLING\s+UNIT\s+FAN|POINTS\s*LIST|FURNACE|CEILING\s+FAN/i,
-    // REF-* = relief fans (common on courthouse / DOAS sets).
-    keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|FAN)[\s\-]/i,
+    // REF-* = relief; TEF-* toilet/transfer exhaust; GX-* general exhaust (lab sets).
+    keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|TEF|GX|FAN)[\s\-]/i,
   },
   // Destratification / room ceiling fans (CF-*). Separate from exhaust/supply FAN
   // — FAN titleRe already excludes CEILING FAN so these do not double-count.
@@ -383,24 +386,35 @@ export const HVAC_FAMILY_SPECS = {
     // (Colville) and must not join via blank/catch-all keyRe.
     titledOnly: true,
   },
-  // Filter panels on FILTER & STRAINER / AIR FILTER schedules (FTR-* when not fin-tube).
+  // Filter panels on FILTER & STRAINER / AIR FILTER / FILTER schedules.
+  // F-* on titled FILTER SCHEDULE (SDSU F-1); FTR-* on filter/strainer tables.
+  // titledOnly: do not claim F-# from split-system / catch-all lists.
   FILTER: {
     titleRe: /FILTER\s*&\s*STRAINER\s+SCHEDULE|FILTER\s+AND\s+STRAINER\s+SCHEDULE|AIR\s+FILTER\s+SCHEDULE|\bFILTER\s+SCHEDULE\b/i,
     exclude: /POINTS\s*LIST|DDC|FIN[\s\-]*TUBE|WATER\s+FILTER\s+UNIT/i,
-    keyRe: /^FTR[\s\-]/i,
+    keyRe: /^(?:FTR|F)[\s\-]?\d/i,
     titledOnly: true,
   },
   CRAH: { titleRe: /COMPUTER ROOM AIR HANDLER|\bCRAH\b/i },
   DEHUMIDIFIER: { titleRe: /DEHUMIDIFIER SCHEDULE/i, keyRe: /^DH[\-]/i },
-  // HUM-* (common) and bare H-* marks — require separator so HC-/HWP do not match.
-  HUMIDIFIER: { titleRe: /HUMIDIFIER SCHEDULE/i, keyRe: /^(?:HUM|H)[\-]/i },
+  // HUM-*; bare H-* on humidifier / blank titles. EH-* only via altTitleRe
+  // ELECTRIC HUMIDIFIER (EH on MISC stays UNIT_HEATER — Douglas EH-20/30).
+  HUMIDIFIER: {
+    titleRe: /HUMIDIFIER\s+SCHEDULE/i,
+    exclude: /DEHUMIDIFIER|POINTS\s*LIST|DDC/i,
+    keyRe: /^(?:HUM|H)[\-]/i,
+    altTitleRe: /ELECTRIC\s+HUMIDIFIER/i,
+    altKeyRe: /^(?:EH|HUM|H)[\-]/i,
+  },
   AIR_SEPARATOR: {
     // Hydraulic separators (HS-*) are air/dirt/hydraulic package vessels.
     titleRe: /AIR SEPARATOR SCHEDULE|HYDRAULIC\s+SEPARATOR(?:\s+SCHEDULE)?/i,
     keyRe: /^(?:AS|HS)[\s\-]/i,
   },
   EXPANSION_TANK: {
-    titleRe: /EXPANSION TANK SCHEDULE|DRAWDOWN\s+TANK\s+SCHEDULE/i,
+    // OCR: EPANSIONANDCOPRESSIONTANKSCHEDULE (bldg5406) — expansion + compression.
+    titleRe: /EXPANSION\s+TANK|COMPRESSION\s+TANK|EPANSION|DRAWDOWN\s+TANK\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC|BUFFER/i,
     // DT-* = booster drawdown / diaphragm tanks on expansion schedules.
     keyRe: /^(?:ET|XT|DT)[\s\-]/i,
   },
@@ -499,9 +513,9 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /DUCT SILENCER SCHEDULE|SILENCER SCHEDULE|SOUND ATTENUATOR SCHEDULE|SOUND\s+TRAP\s+SCHEDULE/i,
   },
   // Wall / intake louvers (LV-* / L-*). Titled-only — no keyRe so catch-all
-  // cannot steal L-* lamp/luminaire marks.
+  // cannot steal L-* lamp/luminaire marks. LOUER = OCR miss (bldg5406).
   LOUVER: {
-    titleRe: /\bLOUVER\s+SCHEDULE\b/i,
+    titleRe: /\bLOUVERS?\s*SCHEDULE\b|\bLOUER\s*SCHEDULE\b/i,
     exclude: /PENTHOUSE|POINTS\s*LIST|DDC|LOUVERED/i,
   },
   // Roof penthouse / architectural louvered penthouse (PH-* / ALP-*).

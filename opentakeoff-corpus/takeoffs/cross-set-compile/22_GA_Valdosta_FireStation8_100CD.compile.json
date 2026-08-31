@@ -2,14 +2,14 @@
   "set_id": "22_GA_Valdosta_FireStation8_100CD",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/22_GA_Valdosta_FireStation8_100CD.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk fire station — DOAS + recirculator pump + fans + GRILLE SCHEDULE type marks (A–F and siblings).",
+  "notes": "Bulk fire station — DOAS + recirculator pump + fans (EF + TEF toilet exhaust) + GRILLE SCHEDULE type marks (A–F and siblings).",
   "categories": {
     "DOAS": 1,
     "PUMP": 1,
-    "FAN": 2,
+    "FAN": 3,
     "GRD": 12
   },
-  "totals": { "items": 16 },
+  "totals": { "items": 17 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }

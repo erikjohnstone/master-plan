@@ -184,7 +184,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
       if (needle?.titledOnly) continue;
       if (!(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
     }
-    const titledFilter = (altOk && !titleOk && altKeyRe) ? altKeyRe : keyRe;
+    const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
     const filterRe = blankTitle ? blankGate : catchAllSchedule ? null : titledFilter;
     for (const row of table.rows || []) {
       const rawTag = rowIdentityTag(row);

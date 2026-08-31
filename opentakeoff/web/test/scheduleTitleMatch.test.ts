@@ -916,6 +916,85 @@ test("WP1.4 CEILING_FAN titled schedule (Jeff City shape); FAN excludes ceiling 
   assert.equal(hvac.categories.FAN.items[0].tag, "EF-1");
 });
 
+test("WP1.4 TEF/GX fans, ELECTRIC HUMIDIFIER EH, FILTER F-#, LOUER OCR, EPANSION OCR", () => {
+  assert.ok(HVAC_FAMILY_SPECS.FAN.keyRe!.test("TEF-1"));
+  assert.ok(HVAC_FAMILY_SPECS.FAN.keyRe!.test("GX-1"));
+  assert.ok(HVAC_FAMILY_SPECS.HUMIDIFIER.altKeyRe!.test("EH-1"));
+  assert.ok(!HVAC_FAMILY_SPECS.HUMIDIFIER.keyRe!.test("EH-1"));
+  assert.ok(HVAC_FAMILY_SPECS.FILTER.keyRe!.test("F-1"));
+  assert.ok(HVAC_FAMILY_SPECS.FILTER.keyRe!.test("FTR-1"));
+  assert.equal(
+    scheduleTitleMatches("LOUERSCHEDULE", HVAC_FAMILY_SPECS.LOUVER.titleRe, HVAC_FAMILY_SPECS.LOUVER.exclude),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "EPANSIONANDCOPRESSIONTANKSCHEDULE",
+      HVAC_FAMILY_SPECS.EXPANSION_TANK.titleRe,
+      HVAC_FAMILY_SPECS.EXPANSION_TANK.exclude,
+    ),
+    true,
+  );
+  const graph = {
+    sheets: [],
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#1",
+        title: { text: "EXHAUST FAN SCHEDULE" },
+        rows: [
+          { key: "TEF-1", cells: { MARK: { text: "TEF-1" } } },
+          { key: "GX-1", cells: { MARK: { text: "GX-1" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#2",
+        title: { text: "ELECTRIC HUMIDIFIER SCHEDULE" },
+        rows: [{ key: "EH-1", cells: { MARK: { text: "EH-1" } } }],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#3",
+        title: { text: "FILTER SCHEDULE" },
+        rows: [{ key: "F-1", cells: { MARK: { text: "F-1" } } }],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#4",
+        title: { text: "LOUERSCHEDULE" },
+        rows: [
+          { key: "L-1", cells: { MARK: { text: "L-1" } } },
+          { key: "L-2", cells: { MARK: { text: "L-2" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#5",
+        title: { text: "EPANSIONANDCOPRESSIONTANKSCHEDULE" },
+        rows: [{ key: "ET-1", cells: { MARK: { text: "ET-1" } } }],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#6",
+        title: { text: "SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE" },
+        rows: [{ key: "F-1CU-1", cells: { SYMBOL: { text: "F-1 , CU-1" } } }],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.deepEqual(hvac.categories.FAN.items.map((i) => i.tag).sort(), ["GX-1", "TEF-1"]);
+  assert.equal(hvac.categories.HUMIDIFIER.count, 1);
+  assert.equal(hvac.categories.HUMIDIFIER.items[0].tag, "EH-1");
+  assert.equal(hvac.categories.FILTER.count, 1);
+  assert.equal(hvac.categories.FILTER.items[0].tag, "F-1");
+  assert.equal(hvac.categories.LOUVER.count, 2);
+  assert.equal(hvac.categories.EXPANSION_TANK.count, 1);
+  assert.equal(hvac.categories.EXPANSION_TANK.items[0].tag, "ET-1");
+  // FILTER titledOnly must not steal split-system indoor F-1.
+  assert.equal(hvac.categories.FCU.items.some((i) => i.tag === "F-1"), true);
+});
+
 test("query_table soft needle hits no-space titles for long needles", () => {
   assert.equal(
     queryTitleMatchesNeedle("AIRHANDLINGUNITSCHEDULE", "AIR HANDLING UNIT SCHEDULE"),
