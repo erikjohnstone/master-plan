@@ -31,6 +31,8 @@ title phrasing (`AIRHANDLINGUNITSCHEDULE`, `GENERAL FAN SCHEDULE`,
 | `14_OR_KlamathCC_LearningCtr_Mechanical` | `bulk/HVAC_BAS_Plan_Sets/14_OR_KlamathCC_LearningCtr_Mechanical.pdf` | Bulk FC-### fan coils + HYDRONIC PUMPS + HP + EH |
 | `25_WA_DouglasCounty_Courthouse_HVAC_DDC` | `bulk/HVAC_BAS_Plan_Sets/25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf` | Bulk VRF indoor CC-*/AH-* + REF relief fans |
 | `06_MO_NatlGuard_JeffCity_CST_Addition` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/06_MO_NatlGuard_JeffCity_CST_Addition.pdf` | Bulk FCU/VAV/RTU + ELECTRIC DUCT HEATER (EDH) |
+| `11_CA_SDSU_EngSciences_Complex_100SD` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/11_CA_SDSU_EngSciences_Complex_100SD.pdf` | Bulk campus AHU/FCU/VAV + pumps (VACUUM excluded) |
+| `13_MI_MSU_LifeSciences_LabRenovation` | `bulk/HVAC_BAS_Plan_Sets/13_MI_MSU_LifeSciences_LabRenovation.pdf` | Bulk GRD + transfer silencer |
 
 ## How counts were authored
 

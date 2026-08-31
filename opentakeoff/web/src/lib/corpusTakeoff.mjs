@@ -281,7 +281,7 @@ export const HVAC_FAMILY_SPECS = {
   BOILER: { titleRe: /BOILER/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^(?:B[\s\-]|BOILER)/i },
   // Pump marks vary widely (P-*, CP-*, CWP-*, HHWP-*, …) — count every row on
   // a pump schedule; do not hardcode one firm's prefix set.
-  PUMP: { titleRe: /PUMP SCHEDULE|HYDRONIC\s+PUMPS?/i, exclude: /POINTS\s*LIST|DDC\s+POINTS|HEAT\s+PUMP/i },
+  PUMP: { titleRe: /PUMP SCHEDULE|HYDRONIC\s+PUMPS?/i, exclude: /POINTS\s*LIST|DDC\s+POINTS|HEAT\s+PUMP|VACUUM/i },
   COOLING_TOWER: {
     titleRe: /COOLING\s+TOWER\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC/i,

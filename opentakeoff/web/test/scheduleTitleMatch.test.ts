@@ -311,6 +311,14 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
     scheduleTitleMatches("HEAT PUMP SCHEDULE", HVAC_FAMILY_SPECS.PUMP.titleRe, HVAC_FAMILY_SPECS.PUMP.exclude),
     false,
   );
+  assert.equal(
+    scheduleTitleMatches("VACUUM PUMP SCHEDULE", HVAC_FAMILY_SPECS.PUMP.titleRe, HVAC_FAMILY_SPECS.PUMP.exclude),
+    false,
+  );
+  assert.equal(
+    scheduleTitleMatches("CONDENSATE PUMP SCHEDULE", HVAC_FAMILY_SPECS.PUMP.titleRe, HVAC_FAMILY_SPECS.PUMP.exclude),
+    true,
+  );
   assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("FC-101"));
   assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("FCU-1"));
   assert.ok(!HVAC_FAMILY_SPECS.HEAT_RECOVERY_CHILLER.keyRe!.test("CHECK:"));

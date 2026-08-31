@@ -1,0 +1,21 @@
+{
+  "set_id": "11_CA_SDSU_EngSciences_Complex_100SD",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/11_CA_SDSU_EngSciences_Complex_100SD.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk campus lab — AHU + two-pipe FCU + VAV-HW + hydronic/condensate/circulating pumps (VACUUM PUMP excluded) + WS + lab EF + AS/ET + diffuser types + SOUND TRAP. Locks VACUUM exclude on PUMP family.",
+  "categories": {
+    "AHU": 3,
+    "FCU": 18,
+    "VAV": 40,
+    "PUMP": 8,
+    "WATER_SOFTENER": 1,
+    "FAN": 2,
+    "AIR_SEPARATOR": 2,
+    "EXPANSION_TANK": 2,
+    "GRD": 3,
+    "DUCT_SILENCER": 6
+  },
+  "totals": { "items": 85 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}
