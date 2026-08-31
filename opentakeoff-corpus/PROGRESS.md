@@ -320,7 +320,7 @@ reconcile, and plan joins.
 - **WP1.4 WATER_TREATMENT:** RO/WT marks on water-treatment schedules — SDSU **117→118** (RO-1).
 - **WP1.4 MISCELLANEOUS SCHEDULE gate:** keyRe-gated catch-all (compile + reconcile parity) — Douglas **15→18** (EH-20/30 + DOAS-30).
 - **WP1.4 EQUIPMENT SCHEDULE catch-all + PUMP blankKeyRe (shared path):** bare `EQUIPMENT SCHEDULE` joins MISC catch-all; catch-all ORs `blankKeyRe|keyRe` (WSHP via HEAT_PUMP keyRe); PUMP `blankKeyRe` only (IWP/HWRP/HHWP) so titled pump schedules stay complete; `PUPSCHEDULE` OCR soft-match — Colville **27→42**; bldg5406 **24→27**; Las Vegas/federal PUMP keys unchanged. Verified: `test:workflows` **32/32**, unit title/reconcile **25/25**.
-- **WP1.4 itd-d1-lab orphans (shared path):** `HOT WATER REHEAT COIL`→DUCT_MOUNTED_COIL; `HUM-*` humidifier; `MECHANICAL SPECIALTY EQUIPMENT` catch-all AS/ET; ductless split DFC/DCU→FCU (comma + glued mark split) — itd **44→58**.
+- **WP1.4 itd-d1-lab orphans (shared path):** `HOT WATER REHEAT COIL`→DUCT_MOUNTED_COIL; `HUM-*` humidifier; `MECHANICAL SPECIALTY EQUIPMENT` catch-all AS/ET; ductless split DFC/DCU→FCU (comma-split when keyRe filters; Baker ERV keeps row.key) — itd **44→58**.
 - **WP4 schedule-stem dup collapse:** same-sheet truncated title extracts (`…SCHEDULE` stem) no longer AMBIGUOUS — SDSU AHU **3/3 MATCH**; VAV **27/40 MATCH** (honest SCHEDULE_ONLY remainder).
 - **WP4 Douglas DOAS:** misc-schedule **DOAS-30 MATCH** locked.
 - **WP4 Jeff City CST:** VAV **9/9** + FCU **3/3 MATCH** (locked in `reconcileWorkflow.test.mjs`).
