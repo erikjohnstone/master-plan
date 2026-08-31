@@ -971,7 +971,7 @@ function skipSubHeaderContinuation(rows: GraphSpan[][], vocab: string[], from: n
 // recognizes a genuinely TYPE-keyed table (baker-county-eoc-bidset.pdf#59's
 // LUMINAIRE SCHEDULE) a different, position-based way instead — see its
 // bareLeadingType comment for the real reasoning.
-const CATALOG_ANCHOR_WORDS = ["ID", "MARK", "CODE", "SYMBOL", "TAG"];
+const CATALOG_ANCHOR_WORDS = ["ID", "MARK", "CODE", "SYMBOL", "TAG", "DESIGNATION"];
 
 /** ITEM NO. / EQUIP NO. — own-identity key columns on VA / federal CUP
  * schedules (Las Vegas CUP PUMP / COOLING TOWER). Kept OUT of
@@ -6577,7 +6577,13 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     // — scoped to schedule-role sheets only, a real, disclosed scope limit
     // named in that section's own comment, not an oversight.
     if (role.role === "schedule") {
-      for (const bs of bands) for (const t of extractAllReferenceTables(bs, s)) {
+      // Wide single schedules (VAV TERMINAL BOX with DESIGNATION + performance
+      // sub-tiers spanning a column-band seam) must be read from the whole
+      // sheet: per-band reference extraction sees only a sub-tier fragment
+      // (decimal performance keys) while the title sits in the other band —
+      // real, measured on Orange County Public Safety bulk set #50.
+      const refSheets = bands.length > 1 ? [s] : bands;
+      for (const bs of refSheets) for (const t of extractAllReferenceTables(bs, s)) {
         // A structural "reference" read can be the ONLY successful
         // extraction of a genuine MEP-equipment schedule whose own required
         // rating word (GPM/EWT/LWT/…) never independently co-occurs with its

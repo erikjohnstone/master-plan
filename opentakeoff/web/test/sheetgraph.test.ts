@@ -3049,4 +3049,5 @@ test("UNIT TAG header is own-identity equipment anchor, not a qualified cross-re
   assert.equal(isQualifiedAnchorHeader("UNIT TAG"), false);
   assert.equal(isBareAnchorHeader("UNIT NO"), true);
   assert.equal(isQualifiedAnchorHeader("UNIT MARK"), true);
+  assert.equal(isBareAnchorHeader("DESIGNATION"), true);
 });

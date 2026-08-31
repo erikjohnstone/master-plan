@@ -302,8 +302,10 @@ reconcile, and plan joins.
   UI path (MCP → production HTTP); `planToolParity` CLI reconcile test; **browser
   geometric fork removed** from `agentCountMarks` / `agentSweepScheduleRow` —
   returns honest error when Session path unavailable.
-- **WP1 title:** `DOAS` family spec (`DOAS UNIT SCHEDULE`); Valdosta compile
-  4→5 items (DOAS-1); `VAV TERMINAL BOX` title broadening.
+- **WP1 title:** `DOAS` family spec; Valdosta 4→5 items; `VAV TERMINAL BOX` broadening.
+- **WP1.4 (partial):** Wide VAV schedule table-boundary fix — reference extraction on
+  full sheet when column banding would split one schedule (Orange County
+  2→43 HVAC items, 32 VAV tags); `DESIGNATION` added as catalog anchor.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
 - **WP4 CLOSED:** reconcile UI proof + golden fixtures; WORKFLOWS #51 PROVEN.
@@ -313,8 +315,7 @@ reconcile, and plan joins.
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 columnMapFor / table-boundary fixes on bulk WEAK sets (many ZEROs honest;
-   Orange County VAV table is extract-boundary miss, not title-only).
+2. WP1.4 additional table-boundary misses on bulk WEAK sets (many ZEROs honest).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. WP5 graph prewarm on upload (DoD item 2 still open).
 
