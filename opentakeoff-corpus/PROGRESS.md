@@ -360,13 +360,14 @@ reconcile, and plan joins.
 - **WP4 same-sheet shadow-extract collapse (shared Session.sweepScheduleRow):** thinner same-sheet rows whose cell values are covered by a denser sibling are excluded (not AMBIGUOUS). Baker UNIT_HEATER EH-* and Klamath PUMP (untitled hydronic summary) no longer AMBIGUOUS. Cross-sheet / equal-richness twins still refuse.
 - **WP1.4 FAN KEF blank-title (shared path):** `KEF-*` kitchen exhaust on blank-title summaries + `KITCHEN EXHAUST FAN SCHEDULE` title signal. Klamath **52→53** (FAN:1). Negatives: SDSU FAN 5, federal FAN 4, itd FAN 7, Baker FAN 2.
 - **WP4 Baker EH MATCH + Klamath KEF SO:** after shadow collapse, Baker UNIT_HEATER **4/4 MATCH**; Klamath blank-title KEF-1 honest SCHEDULE_ONLY under `evaluationFast`.
+- **WP4 glued compound rowKeyAnswersFor (shared path):** comma + glued `AHU-1HP-1` keys answer for each half (digit+letter suffixes like `AHU-1A` do not split). Baker AHU **3/3 MATCH** + indoor HP-1/2/3 MATCH (was false SCHEDULE_ONLY — sweep could not find the row).
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
 2. WP1.4 remaining titled HVAC orphans on already-keyed MEAT sets (honest refuse: federal AHU fan/coil component schedules; Valdosta VRF rows unkeyed; Douglas model-number heat-pump keys).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on; Bessemer TG already passes via inline motif).
-4. WP4: Baker AHU/indoor HP and Klamath FC/HP/DOAS still SCHEDULE_ONLY under evaluationFast (plan-text recall).
+4. WP4: Klamath FC/HP/DOAS still SCHEDULE_ONLY under evaluationFast (plan-text recall); Baker ERV comma compound scaffold tag.
 5. Remaining WEAK ceilings: Suwannee (1 RTU honest), Kennebec (2 multi-split only).
 6. Optional: evaluate BlueprintParser_OS / drawings-ai digests as *complementary* LLM recall only — never as qty/cite truth (stay on Session+ODL).
 

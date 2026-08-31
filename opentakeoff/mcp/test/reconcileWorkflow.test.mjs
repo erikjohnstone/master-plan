@@ -512,8 +512,9 @@ test("Spokane VFD reconcile: all scheduled tags SCHEDULE_ONLY under evaluationFa
   );
 });
 
-test("Baker MS reconcile: GRD+outdoor HP MATCH; AHU/indoor HP SCHEDULE_ONLY (comma-split parity)", async () => {
-  // Shared-path fix: SYMBOL "AHU-1, HP-1" must split after normalize (not before).
+test("Baker MS reconcile: GRD+AHU+HP MATCH (glued row.key + comma-split parity)", async () => {
+  // SYMBOL "AHU-1, HP-1" → compile halves; row.key may be glued "AHU-1HP-1".
+  // rowKeyAnswersFor must answer for each half so sweep/reconcile can MATCH.
   const keyPath = resolve(CROSS, "18_OR_BakerMS_HVAC_Electrical_FullSet.compile.json");
   assert.ok(existsSync(keyPath));
   const key = JSON.parse(readFileSync(keyPath, "utf8"));
@@ -546,18 +547,19 @@ test("Baker MS reconcile: GRD+outdoor HP MATCH; AHU/indoor HP SCHEDULE_ONLY (com
   assert.ok(grd.rows.every((r) => r.status === "MATCH"), "Baker GRD all MATCH");
 
   const hp = await reconcileScheduleFamilyWithSweeps(session, graph, hpNeedle, {
-    tags: ["HP-5", "HP-6", "HP-1"],
     evaluationFast: true,
   });
-  const byHp = new Map(hp.rows.map((r) => [r.tag, r]));
-  assert.equal(byHp.get("HP-5")?.status, "MATCH");
-  assert.equal(byHp.get("HP-6")?.status, "MATCH");
-  assert.equal(byHp.get("HP-1")?.status, "SCHEDULE_ONLY", "indoor HP half not plan text");
+  assert.equal(hp.rows.length, key.categories.HEAT_PUMP);
+  assert.ok(
+    hp.rows.every((r) => r.status === "MATCH"),
+    "Baker outdoor + indoor HP halves MATCH after glued rowKeyAnswersFor",
+  );
 
   const ahu = await reconcileScheduleFamilyWithSweeps(session, graph, ahuNeedle, {
     evaluationFast: true,
   });
-  assert.ok(ahu.rows.every((r) => r.status === "SCHEDULE_ONLY"), "Baker AHU honest SCHEDULE_ONLY");
+  assert.ok(ahu.rows.every((r) => r.status === "MATCH"), "Baker AHU MATCH after glued rowKeyAnswersFor");
+  assert.ok(ahu.rows.every((r) => (r.installed_qty || 0) >= 1));
 });
 
 test("Douglas HEAT_PUMP reconcile: VRF indoor + HP-30 MATCH; HP-10 SCHEDULE_ONLY", async () => {

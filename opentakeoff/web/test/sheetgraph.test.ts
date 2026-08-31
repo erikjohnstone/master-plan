@@ -295,6 +295,18 @@ test("a compound schedule-row key answers for each of its marks", () => {
   assert.equal(rowKeyAnswersFor("R1/E1", "E2"), false);
   assert.equal(rowKeyAnswersFor("S1", "S1"), true);
   assert.equal(rowKeyAnswersFor("S1", "S"), false);
+  // Comma compounds (Baker AIR HANDLER HEAT PUMP SYMBOL).
+  assert.equal(rowKeyAnswersFor("AHU-1, HP-1", "AHU-1"), true);
+  assert.equal(rowKeyAnswersFor("AHU-1, HP-1", "HP-1"), true);
+  // Glued extraction when separator is lost into row.key.
+  assert.equal(rowKeyAnswersFor("AHU-1HP-1", "AHU-1"), true);
+  assert.equal(rowKeyAnswersFor("AHU-1HP-1", "HP-1"), true);
+  assert.equal(rowKeyAnswersFor("ERU-1HP-4", "ERU-1"), true);
+  assert.equal(rowKeyAnswersFor("DFC-1DCU-1", "DCU-1"), true);
+  assert.equal(rowKeyAnswersFor("F-1CU-1", "F-1"), true);
+  // Digit+letter suffixes must NOT split (CODE_RE AHU-1A).
+  assert.equal(rowKeyAnswersFor("AHU-1A", "AHU-1"), false);
+  assert.equal(rowKeyAnswersFor("AHU-1A", "AHU-1A"), true);
 });
 
 test("table extraction: header anchors, evidence per cell, titles found above", () => {

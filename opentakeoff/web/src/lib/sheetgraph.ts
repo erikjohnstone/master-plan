@@ -3368,11 +3368,25 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
 }
 
 /** Does a schedule-row key answer for a mark? Exact, or one of a compound
- * key's slash-separated parts ("R1/E1" answers for "R1" and for "E1"). */
+ * key's parts: slash (`R1/E1`), comma (`AHU-1, HP-1`), or glued extraction
+ * (`AHU-1HP-1` when SYMBOL lost the separator into `row.key`). Digit+letter
+ * suffixes (`AHU-1A`) stay one mark — only split before a 2+ letter run. */
 export const rowKeyAnswersFor = (key: string, want: string): boolean => {
   const c = norm(key).replace(/\s+/g, "");
   const w = norm(want).replace(/\s+/g, "");
-  return c === w || c.split("/").filter(Boolean).includes(w);
+  if (!c || !w) return false;
+  if (c === w) return true;
+  const parts = new Set<string>();
+  for (const piece of c.split(/[/,]/).filter(Boolean)) {
+    parts.add(piece);
+    // Glued compounds: split before a new alphabetic mark start after a digit
+    // (`AHU-1HP-1`, `DFC-1DCU-1`, `F-1CU-1`, `ERU-1HP-4`). Require ≥2 letters
+    // so `AHU-1A` / `VAV-2B` digit+letter suffixes do not split.
+    for (const glued of piece.split(/(?<=\d)(?=[A-Z]{2,})/i)) {
+      if (glued) parts.add(glued);
+    }
+  }
+  return parts.has(w);
 };
 
 /** The number part of a row key — "A-134" and "134" both answer for 134. */
