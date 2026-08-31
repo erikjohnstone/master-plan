@@ -320,7 +320,7 @@ reconcile, and plan joins.
 - **WP4 Douglas DOAS:** misc-schedule **DOAS-30 MATCH** locked.
 - **WP4 Jeff City CST:** VAV **9/9** + FCU **3/3 MATCH** (locked in `reconcileWorkflow.test.mjs`).
 - **WP4 reconcile tag dedupe:** scaffold drops duplicate MARK extracts (Douglas HP-20 double table) — parity with compile `uniqueFamily`.
-- **WP4 Orange County:** installed reconcile **32/32 VAV MATCH** (full census locked in `reconcileWorkflow.test.mjs`).
+- **WP4 Orange County:** installed reconcile **32/32 VAV MATCH** + booster **BP-1 MATCH** (locked in `reconcileWorkflow.test.mjs`).
 - **WP4 Hawthorn:** AHU **2/2** + CU **2/2** MATCH (digit+letter tags on plan).
 - **WP4 St Louis:** VAV/ATU **12/12 MATCH** (AIR TERMINAL UNIT schedule ↔ plan).
 - **WP4 Hurlburt:** AHU **2/2** + FAN **4/4 MATCH** (blank-title + (N)-normalized marks).

@@ -224,6 +224,27 @@ test("Orange County bulk VAV reconcile: all 32 scheduled tags MATCH (WP1 cross-s
   assert.ok(match.some((r) => /^VAV-1-21B$/i.test(r.tag)));
 });
 
+test("Orange County booster pump BP-1 reconcile MATCH", async () => {
+  const keyPath = resolve(CROSS, "21_VA_OrangeCounty_PublicSafetyBldg.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "PUMP");
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    evaluationFast: true,
+  });
+  assert.equal(result.rows.length, key.categories.PUMP);
+  assert.ok(result.rows.every((r) => r.status === "MATCH"));
+  assert.ok(result.rows.some((r) => /^BP-1$/i.test(r.tag)));
+});
+
 test("Hawthorn bulk AHU+CU reconcile: all scheduled tags MATCH (WP1 cross-set)", async () => {
   const keyPath = resolve(CROSS, "10_MO_Hawthorn_PsychHospital_HVAC.compile.json");
   assert.ok(existsSync(keyPath));
