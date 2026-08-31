@@ -176,7 +176,7 @@ const REGION_SCHEMA = {
 export const AGENT_TOOL_DEFS = [
   {
     name: "list_sheets",
-    description: "List the sheets open on the canvas: key, title, pixel dimensions, and scale status. Tools only work on open sheets. A sheet without a scale set cannot be measured — say so and stop rather than guessing.",
+    description: "List the sheets open on the canvas: key, title, pixel dimensions, and scale status (scale_set, detected_label when the drawn note was read). Tools that measure or match symbols need a committed scale on that sheet. When asked to FIND the scale: also call sheet_graph — many sets print SCALE: AS NOTED on the cover/legend while plan sheets carry numeric notes (1/8\"=1'-0\", etc.) exposed as detected_scale on sheet_graph. Never conclude the whole set has no scale from one AS NOTED title block.",
     input_schema: { type: "object", properties: {}, required: [] },
   },
   {
@@ -448,7 +448,7 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "sheet_graph",
-    description: "Read the whole plan set's schedule tables and tags at once: every sheet's role (plan/schedule/legend/detail/...), every schedule table found (with kind, title, row count, region — normalized 0..1, same convention as read_schedule/view_region/classify_symbol's own region, feed straight through), room/equipment tags that corroborate as real, and tags that look like a number/mark but aren't. Use this FIRST when a goal references 'the schedule' generically, before hunting region-by-region with read_schedule. Unavailable (not empty) on a scanned set with no text layer.",
+    description: "Read the whole plan set's schedule tables and tags at once: every sheet's role (plan/schedule/legend/detail/...), optional detected_scale (numeric scale note read off that sheet's text — use this when the cover says AS NOTED), every schedule table found (with kind, title, row count, region — normalized 0..1, same convention as read_schedule/view_region/classify_symbol's own region, feed straight through), room/equipment tags that corroborate as real, and tags that look like a number/mark but aren't. Use this FIRST when a goal references 'the schedule' generically, before hunting region-by-region with read_schedule. Unavailable (not empty) on a scanned set with no text layer.",
     input_schema: { type: "object", properties: {}, required: [] },
   },
   {

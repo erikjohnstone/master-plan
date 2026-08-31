@@ -311,6 +311,90 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       }
     }
   }
+  // Find the scale: AS NOTED on one sheet must not abort the set. Prefer
+  // sheet_graph / list_sheets detected_scale|detected_label values.
+  {
+    const asksFindScale = /\b(?:find|locate|where(?:'s| is)|what(?:'s| is)|show)\b.{0,48}\bscale\b/i.test(goal)
+      || /\b(?:can you|please)\s+find\s+(?:the\s+)?scale\b/i.test(goal);
+    if (asksFindScale) {
+      const listOut = callLog.find(({ name, out }) => name === "list_sheets" && !out?.error)?.out;
+      const graphOut = callLog.find(({ name, out }) => name === "sheet_graph" && !out?.error)?.out;
+      if (!listOut && !graphOut) {
+        return 'The goal asks to find the scale. Call list_sheets and sheet_graph, then report every sheet that carries a numeric detected_label / detected_scale (e.g. 1/8"=1\'-0"). Do not stop at SCALE: AS NOTED on a cover or legend sheet.';
+      }
+      const detected = [];
+      for (const s of listOut?.sheets || (Array.isArray(listOut) ? listOut : []) || []) {
+        const label = s?.detected_label || s?.detected_scale || s?.detected?.label;
+        if (label && !/AS\s*NOTED/i.test(String(label))) {
+          detected.push({ sheet: s.sheet || s.key, label: String(label) });
+        }
+      }
+      for (const s of graphOut?.sheets || []) {
+        const label = s?.detected_scale || s?.detected_label;
+        if (label && !/AS\s*NOTED/i.test(String(label))) {
+          const sheet = s.sheet || s.key;
+          if (!detected.some((d) => d.sheet === sheet && d.label === String(label))) {
+            detected.push({ sheet, label: String(label) });
+          }
+        }
+      }
+      if (finalText) {
+        if (detected.length && /AS\s*NOTED/i.test(finalText)
+          && !/\d+\s*\/\s*\d+\s*"\s*=|1\s*:\s*\d+|\d+"\s*=\s*\d+/i.test(finalText)) {
+          const sample = detected.slice(0, 4).map((d) => `${d.sheet}: ${d.label}`).join("; ");
+          return `Tool evidence already found numeric scales on ${detected.length} sheet(s) (e.g. ${sample}). Do not refuse because another sheet says SCALE: AS NOTED — report those detected_scale / detected_label values and which sheets carry them, then the estimator can set_scale with that exact label.`;
+        }
+        if (detected.length
+          && !detected.some((d) => finalText.includes(d.label) || finalText.replace(/\s+/g, "").includes(d.label.replace(/\s+/g, "")))
+          && !/\d+\s*\/\s*\d+\s*"\s*=|1\s*:\s*\d+/i.test(finalText)) {
+          const sample = detected.slice(0, 4).map((d) => `${d.sheet}: ${d.label}`).join("; ");
+          return `Copy at least one numeric detected scale from the tools into the answer (e.g. ${sample}). AS NOTED alone is not a usable set_scale label.`;
+        }
+      } else if (detected.length === 0 && !graphOut) {
+        return "Call sheet_graph next — list_sheets alone may only cover open tabs. sheet_graph reports detected_scale across the loaded set.";
+      }
+    }
+  }
+  // Valve / legend symbol honesty: find_legend_symbols ≠ plan placements.
+  {
+    const asksValveSymbols = /\bvalve\s+symbols?\b/i.test(goal)
+      || /\bhighlight\b.{0,60}\bvalves?\b/i.test(goal)
+      || /\ball\s+(?:the\s+)?valve/i.test(goal)
+      || /\bfind\b.{0,40}\bvalve\s+symbols?\b/i.test(goal);
+    if (asksValveSymbols && finalText) {
+      const paints = callLog.filter(({ name, out }) =>
+        name === "highlight_citation" && !out?.error && Array.isArray(out?.bbox_px)).length;
+      const legendCalls = callLog.filter(({ name, out }) =>
+        name === "find_legend_symbols" && !out?.error);
+      const planSweeps = callLog.filter(({ name, out }) =>
+        (name === "symbol_sweep" || name === "match_reference_symbol") && !out?.error);
+      const planFound = planSweeps.reduce((n, { out }) => {
+        const found = Number(out?.found ?? out?.total_found ?? 0);
+        const matches = Array.isArray(out?.matches) ? out.matches.length : 0;
+        const shapes = Array.isArray(out?.shapes) ? out.shapes.length : 0;
+        const byName = Array.isArray(out?.results)
+          ? out.results.reduce((m, r) => m + Number(r?.found || r?.matches?.length || 0), 0)
+          : 0;
+        return n + Math.max(found, matches, shapes, byName);
+      }, 0);
+      const namedTypes = finalText.match(
+        /\b(?:GATE|GLOBE|BUTTERFLY|CHECK|RELIEF|BALL|PLUG|ANGLE|DRAIN|BALANCING|CONTROL)\s+VALVE\b/gi,
+      ) || [];
+      const uniqueTypes = [...new Set(namedTypes.map((t) => t.toUpperCase()))];
+      if (uniqueTypes.length >= 3 && paints <= 2) {
+        return `The answer names ${uniqueTypes.length} valve symbol types as highlighted, but only ${paints} highlight_citation paint(s) succeeded. Rewrite to describe ONLY the painted regions (or paint each claimed match). Do not invent plan highlights.`;
+      }
+      if (legendCalls.length && planFound === 0 && /\bhighlight/i.test(finalText) && uniqueTypes.length >= 2) {
+        return "find_legend_symbols only inventories legend glyphs — it does not find plan placements. Do not claim plan valve symbols were highlighted from legend entries alone. Seed symbol_sweep from a real plan instance (or call match_reference_symbol on a scaled plan sheet), or honestly say only legend glyphs were located.";
+      }
+      if (/\ball\s+(?:valve\s+)?symbols?\b.{0,40}\bhighlight/i.test(finalText)
+        || /\bhighlight(?:ed)?\s+all\b.{0,40}\bvalve/i.test(finalText)) {
+        if (planFound < 2 || paints < 2) {
+          return "Do not claim all valve symbols were highlighted unless plan sweeps returned multiple matches that you painted. Report the actual found counts from symbol_sweep / match_reference_symbol and disclose legend-only results separately.";
+        }
+      }
+    }
+  }
   if (/\binstalled\s+quantity\b/i.test(finalText)
     && /\b(?:single|one)\s+(?:schedule\s+)?(?:entry|row)\b|\b(?:schedule\s+)?row\b.{0,80}\bappears\s+(?:only\s+)?(?:once|one time)\b/i.test(finalText)) {
     return "The final answer describes installed quantity as a single/one schedule entry. That reasoning is invalid even when the numeric value happens to match. Attribute installed quantity only to the successful sweep/count result and remove schedule-row-count wording.";
@@ -1848,6 +1932,8 @@ export function agentSystemPrompt() {
     "Hard rules:",
     "- NEVER invent geometry. Rooms are measured by the one_click flood-fill engine; propose only the rings it returns.",
     "- NEVER assume a scale. If a sheet has no scale set, report that (the tool refusal tells you) and stop work on that sheet — the estimator must calibrate it.",
+    "- Finding the scale: call list_sheets AND sheet_graph. Many sets print SCALE: AS NOTED on a cover/legend while plan sheets carry numeric detected_scale / detected_label (e.g. 1/8\"=1'-0\"). Report those labels and sheets — never refuse the whole set because one title block says AS NOTED.",
+    "- find_legend_symbols inventories legend glyphs only — it does NOT find plan placements. Never claim plan valve/diffuser symbols were highlighted from legend rows alone. To find plan instances: set_scale on a plan sheet, then match_reference_symbol or symbol_sweep seeded from a real plan instance (not the legend glyph). Disclose legend-only results honestly.",
     "- Every proposal MUST cite evidence: the schedule row tag and/or the exact matched text token (a room tag or schedule cell) and/or the one_click seed. propose_shapes rejects uncited shapes.",
     "- You stage proposals only. A human reviews every shape at the accept gate; nothing you do commits a takeoff.",
     "",

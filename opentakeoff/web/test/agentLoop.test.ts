@@ -830,6 +830,75 @@ test("generic point list takeoff: evidence gate demands compile, then clears aft
   );
 });
 
+test("find-scale: AS NOTED must not hide numeric detected_scale from sheet_graph", () => {
+  const goal = "Can you find the scale?";
+  assert.match(
+    requiredEvidenceCorrection([], goal, "")!,
+    /list_sheets and sheet_graph|detected_scale/i,
+  );
+  const tools = [
+    {
+      name: "list_sheets",
+      out: {
+        sheets: [
+          { sheet: "set.pdf", scale_set: false },
+          { sheet: "set.pdf#6", scale_set: false, detected_label: "1/8\" = 1'-0\"" },
+        ],
+      },
+    },
+    {
+      name: "sheet_graph",
+      out: {
+        sheets: [
+          { sheet: "set.pdf", role: "unknown" },
+          { sheet: "set.pdf#6", role: "plan", detected_scale: "1/8\" = 1'-0\"" },
+          { sheet: "set.pdf#14", role: "plan", detected_scale: "1/4\" = 1'-0\"" },
+        ],
+      },
+    },
+  ];
+  assert.match(
+    requiredEvidenceCorrection(tools, goal,
+      "The drawing contains SCALE: AS NOTED rather than a numeric ratio, so I cannot locate valve symbols.")!,
+    /numeric scales|AS NOTED/i,
+  );
+  assert.equal(
+    requiredEvidenceCorrection(tools, goal,
+      "Cover says AS NOTED. Plan sheets carry detected scales: set.pdf#6 → 1/8\" = 1'-0\"; set.pdf#14 → 1/4\" = 1'-0\". Use set_scale with that exact label on the sheet you need."),
+    null,
+  );
+});
+
+test("valve symbols: legend-only paints cannot claim all valve types highlighted", () => {
+  const goal = "Scale is set, please go highlight all the valve symbols";
+  // Few paints vs many named types — catch overclaim even without legend tool.
+  assert.match(
+    requiredEvidenceCorrection([
+      { name: "highlight_citation", out: { bbox_px: [10, 20, 30, 40] } },
+      { name: "highlight_citation", out: { bbox_px: [50, 60, 70, 80] } },
+    ], goal,
+      "GATE VALVE · Highlighted\nGLOBE VALVE · Highlighted\nBUTTERFLY VALVE · Highlighted\nCHECK VALVE · Highlighted\nRELIEF VALVE · Highlighted"),
+    /only 2 highlight_citation|Do not invent plan highlights/i,
+  );
+  // Legend inventory + plenty of paints still must not claim plan placements
+  // without a plan sweep.
+  const paints = Array.from({ length: 6 }, (_, i) => ({
+    name: "highlight_citation",
+    out: { bbox_px: [i, i, i + 1, i + 1] },
+  }));
+  assert.match(
+    requiredEvidenceCorrection([
+      {
+        name: "find_legend_symbols",
+        out: { glyphs: [{ caption: "GATE VALVE" }, { caption: "GLOBE VALVE" }] },
+      },
+      ...paints,
+    ], goal,
+      "GATE VALVE · Highlighted\nGLOBE VALVE · Highlighted\nBUTTERFLY VALVE · Highlighted\nCHECK VALVE · Highlighted"),
+    /find_legend_symbols|legend glyphs|plan placements/i,
+  );
+});
+
 test("anthropic-style: scripted tool_use → tools execute → results pair up in ONE user message → done", async () => {
   const { fn, requests } = scriptedFetch([
     { // two parallel tool calls in one turn

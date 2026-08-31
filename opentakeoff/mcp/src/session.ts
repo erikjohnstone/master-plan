@@ -5737,16 +5737,21 @@ export class Session {
     const notes = rasterNotes.length ? [...g.notes, ...rasterNotes] : g.notes;
     return {
       available: g.available,
-      sheets: g.sheets.map((s) => ({
-        sheet: s.key, role: s.role, confidence: s.confidence,
-        ...(s.evidence ? { evidence: Session.wireEvidence(s.evidence) } : {}),
-        ...(s.building ? { building: s.building } : {}),
-        schedules: s.schedules.map((t) => ({
-          kind: t.kind, title: t.title, rows: t.rows, region: Session.wireBox(t.region),
-          ...(t.continues ? { continues: t.continues } : {}),
-          ...(t.rotated_headers ? { rotated_headers: true } : {}),
-        })),
-      })),
+      sheets: g.sheets.map((s) => {
+        const state = this.sheets.get(s.key);
+        const detected = state?.detected?.label || null;
+        return {
+          sheet: s.key, role: s.role, confidence: s.confidence,
+          ...(s.evidence ? { evidence: Session.wireEvidence(s.evidence) } : {}),
+          ...(s.building ? { building: s.building } : {}),
+          ...(detected ? { detected_scale: detected } : {}),
+          schedules: s.schedules.map((t) => ({
+            kind: t.kind, title: t.title, rows: t.rows, region: Session.wireBox(t.region),
+            ...(t.continues ? { continues: t.continues } : {}),
+            ...(t.rotated_headers ? { rotated_headers: true } : {}),
+          })),
+        };
+      }),
       rooms: g.rooms.map(Session.wireRoom),
       ...(g.unmatched_tags.length ? {
         unmatched_tags: g.unmatched_tags.map((u) => ({

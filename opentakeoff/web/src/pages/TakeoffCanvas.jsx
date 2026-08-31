@@ -7122,6 +7122,9 @@ export default function TakeoffCanvas() {
         sheet: s.key, role: s.role, confidence: s.confidence,
         ...(s.evidence ? { evidence: wireEvidence(s.evidence) } : {}),
         ...(s.building ? { building: s.building } : {}),
+        ...(agentStateRef.current.detectedScales[s.key]?.label
+          ? { detected_scale: agentStateRef.current.detectedScales[s.key].label }
+          : {}),
         schedules: s.schedules.map((t) => ({
           kind: t.kind, title: t.title, rows: t.rows, region: wireBoxNorm(t.region, dimsBySheet.get(s.key)),
           ...(t.continues ? { continues: t.continues } : {}),

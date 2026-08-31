@@ -878,17 +878,18 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
   if (intent === "symbol_sweep") {
     const allowed = [
       "list_sheets", "sheet_graph", "set_scale", "view_sheet", "view_region",
-      "symbol_sweep", "highlight_citation",
+      "find_legend_symbols", "match_reference_symbol", "symbol_sweep", "highlight_citation",
     ];
-    const hasSymbolSweep = (callLog || []).some(({ name, out }) =>
-      name === "symbol_sweep" && out && !out.error);
+    const hasPlanSweep = (callLog || []).some(({ name, out }) =>
+      (name === "symbol_sweep" || name === "match_reference_symbol") && out && !out.error);
     return surveyThenTitleTools(hasGraph, (() => {
-      if (!hasSymbolSweep) {
+      if (!hasPlanSweep) {
         return {
           phase: "spot_cites",
           allowedTools: allowed,
-          nextMove: "Marquee one real drawn instance as seed_rect and call symbol_sweep. "
-            + "Copy found/matches/withheld — never invent placements. Detail-seeded set scope needs scale on both ends.",
+          nextMove: "Do NOT treat find_legend_symbols as plan hits. On a scaled PLAN sheet, call match_reference_symbol "
+            + "(library valves) or marquee one real plan instance and call symbol_sweep. "
+            + "Copy found/matches/withheld — never invent placements. Disclose legend-only inventories separately.",
           blockReason: null,
         };
       }
@@ -896,14 +897,15 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
         return {
           phase: "paint",
           allowedTools: allowed,
-          nextMove: "highlight_citation (or commit) on accepted symbol matches, then answer with counts and withheld disclosures.",
+          nextMove: "highlight_citation (or commit) on accepted PLAN matches only, then answer with counts and withheld disclosures.",
           blockReason: null,
         };
       }
       return {
         phase: "answer",
         allowedTools: null,
-        nextMove: "Emit match counts, rotations/mirrors when present, and every withheld near-miss with its reason.",
+        nextMove: "Emit match counts from plan sweeps, rotations/mirrors when present, and every withheld near-miss with its reason. "
+          + "Never claim legend glyphs were plan placements.",
         blockReason: null,
       };
     })());
