@@ -295,9 +295,10 @@ export const HVAC_FAMILY_SPECS = {
   ERV: {
     titleRe: /ENERGY\s+RECOVERY\s+VENTILATOR|ENERGY\s+RECOVERY\s+UNIT|\bERV\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
-    // ERU-*/ERV-* preferred; bare letter+digits (Carson C1/C2) stay.
-    // HP-* halves of SYMBOL "ERU-1, HP-4" fail this gate and join HEAT_PUMP.
+    // Titled: ERU-*/ERV-* plus bare letter+digits (Carson C1/C2).
+    // Blank: only ERU/ERV — letter+digit blank gates steal finish A1/B1 (Johnson).
     keyRe: /^(?:ERU|ERV)[\s\-]|^[A-Z]\d{1,3}$/i,
+    blankKeyRe: /^(?:ERU|ERV)[\s\-]/i,
   },
   FURNACE: {
     titleRe: /FURNACE\s+SCHEDULE|GAS[\s\-]*FIRED\s+.*FURNACE/i,
