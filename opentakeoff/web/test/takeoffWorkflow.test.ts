@@ -343,6 +343,29 @@ test("single POINTS LIST title still routes to points_takeoff", () => {
   assert.match(state.nextMove || "", /POINTS LIST DOAH-TI/i);
 });
 
+test("generic point list takeoff routes to corpus_bas compile (no spot_cites deadlock)", () => {
+  const g = "Can you run a point list takeoff for me?";
+  assert.equal(namedPointsListTitles(g).length, 0);
+  assert.equal(corpusCompileKind(g), "bas_points");
+  assert.equal(classifyTakeoffIntent(g), "corpus_bas");
+  const state = advanceTakeoffWorkflow("corpus_bas", [
+    { name: "sheet_graph", out: { sheets: [{ id: "M-601" }] } },
+  ], g);
+  assert.equal(state.phase, "compile");
+  assert.ok(state.allowedTools?.includes("compile_corpus_takeoff"));
+  assert.equal(
+    isIllegalWorkflowTransition(state, "compile_corpus_takeoff", { kind: "bas_points" }),
+    false,
+  );
+  // Defense: if still on points_takeoff with empty titles, require title_scans
+  // (never jump straight to spot_cites).
+  const defensive = advanceTakeoffWorkflow("points_takeoff", [
+    { name: "sheet_graph", out: { sheets: [] } },
+  ], g);
+  assert.equal(defensive.phase, "title_scans");
+  assert.match(defensive.nextMove || "", /POINTS LIST|bas_points/i);
+});
+
 test("suggestedScheduleTitles maps family words to industry schedule needles", () => {
   const ahu = suggestedScheduleTitles("How many AHUs are on the air handling schedule?");
   assert.ok(ahu.some((t) => /AIR HANDLING/i.test(t)));

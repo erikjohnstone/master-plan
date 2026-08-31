@@ -806,6 +806,30 @@ test("installed quantity cannot finish without deterministic count evidence", ()
   `Point mark: AHU-1 HW VALVE POSITION (FEEDBACK) on set.pdf#65\nServes: ${narrative}\nPhysical section: AHU-1 / AHU-2 SECTION on set.pdf#28`), /BAS point mark|does not state that mark/);
 });
 
+test("generic point list takeoff: evidence gate demands compile, then clears after bas_points", () => {
+  const goal = "Can you run a point list takeoff for me?";
+  assert.match(
+    requiredEvidenceCorrection([], goal, "There are about 12 points on the list.")!,
+    /compile_corpus_takeoff.*bas_points/i,
+  );
+  assert.equal(
+    requiredEvidenceCorrection([
+      {
+        name: "compile_corpus_takeoff",
+        out: { kind: "bas_points", takeoff_id: "T-BAS-01", totals: { rows: 12 } },
+      },
+      {
+        name: "query_table",
+        args: { title: "POINTS LIST", row_key: "AI-1" },
+        out: { query: { title: "POINTS LIST", row_key: "AI-1" }, count: 1 },
+      },
+      { name: "highlight_citation", out: { bbox_px: [1, 2, 3, 4] } },
+    ], goal, "BAS points takeoff total: 12 rows from compile_corpus_takeoff (bas_points)."),
+    null,
+    "compiled bas_points must not re-demand title-scan POINTS LIST forever",
+  );
+});
+
 test("anthropic-style: scripted tool_use → tools execute → results pair up in ONE user message → done", async () => {
   const { fn, requests } = scriptedFetch([
     { // two parallel tool calls in one turn

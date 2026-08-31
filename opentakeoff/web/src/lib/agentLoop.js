@@ -304,7 +304,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
             + "pipeline can load TypeScript (tsx). Do not retry compile in a loop — fix the environment and re-run.";
         }
         return kind === "bas_points"
-          ? 'The goal asks for a complete BAS/DDC points takeoff of this set. Call compile_corpus_takeoff with kind="bas_points" now — do not approximate the set total by crawling schedules.'
+          ? 'The goal asks for a points-list / BAS takeoff. Call compile_corpus_takeoff with kind="bas_points" now — do not approximate the set total by crawling schedules with find_schedule / query_table.'
           : kind === "control_valves"
             ? 'The goal asks for a complete valve takeoff of this set. Call compile_corpus_takeoff with kind="control_valves" now — that returns every CONTROL VALVE SCHEDULE row (valve mark, served equipment, service, size, GPM, Cv). Do not approximate with a partial read_schedule or markdown table.'
             : 'The goal asks for a complete HVAC equipment takeoff of this set. Call compile_corpus_takeoff with kind="hvac_equipment" now — do not approximate the set total by crawling schedules.';
@@ -1549,6 +1549,16 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     || (pointsListTakeoff && /\b(?:row\s+count|breakdown|totals?)\b/i.test(goal))
   ) && familyTokens.test(goal);
   if (asksScheduleCounts && finalText) {
+    // Generic / corpus BAS compile is authoritative for points-list totals — do
+    // not demand a separate title-scan query_table (that deadlock is what hung
+    // "point list takeoff" in spot_cites).
+    const compiledBas = callLog.some(({ name, out }) =>
+      name === "compile_corpus_takeoff" && !out?.error
+      && (String(out?.kind || "") === "bas_points"
+        || String(out?.takeoff_id || "") === "T-BAS-01"));
+    if (pointsListTakeoff && compiledBas) {
+      // fall through — compile totals satisfy the points-list count gate
+    } else {
     const titleScans = callLog.filter(({ name, out, args }) => {
       if (name !== "query_table" || out?.error) return false;
       const q = out?.query || args || {};
@@ -1559,6 +1569,9 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return !scoped && Number.isFinite(Number(out?.count)) && Number(out.count) >= 1;
     });
     if (!titleScans.length) {
+      if (pointsListTakeoff && corpusCompileKind(goal) === "bas_points") {
+        return 'The goal asks for a points-list takeoff. Call compile_corpus_takeoff with kind="bas_points" now (or title-scan query_table title="POINTS LIST" with no row_key), then copy list totals into the answer.';
+      }
       return "The goal asks for scheduled equipment / points-list counts. Call query_table with each relevant schedule title (no row_key), then copy that result's count and building_tag_counts into the answer before finishing. Do not invent totals from the few MARK rows you painted for spot-check.";
     }
     const familyNeedles = [];
@@ -1821,6 +1834,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       && /(?:equipment totals|total scheduled units)/i.test(answerNorm)) {
       return "The answer includes both a title-scan/schedule-counts table and a second equipment-totals table. Keep ONE family-totals table that copies title-scan query_table counts — remove any second table that recounts only painted/spot-check MARKs.";
     }
+    } // end else (!compiledBas title-scan gate)
   }
   return null;
 }

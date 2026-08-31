@@ -81,7 +81,20 @@ export function namedEquipmentFamilyCount(goal) {
  */
 export function corpusCompileKind(goal) {
   const g = String(goal || "");
+  // Named multi-list demos stay on the points_takeoff title-scan path.
   if (namedPointsListTitles(g).length >= 2) return null;
+  // Generic "point(s) list takeoff" / "DDC points takeoff" with no named list
+  // titles → compile path. Without this, points_takeoff skips title_scans
+  // (empty namedTitles) and deadlocks in spot_cites while the evidence gate
+  // still demands query_table title="POINTS LIST".
+  // Do NOT steal multi-family project_takeoff prompts (D03) that mention a
+  // points list alongside HVAC equipment families.
+  if (namedPointsListTitles(g).length === 0
+    && namedEquipmentFamilyCount(g) === 0
+    && /\b(?:points?\s*list|DDC\s+points?(?:\s*list)?)\b/i.test(g)
+    && goalAsksTakeoff(g)) {
+    return "bas_points";
+  }
   if (!goalAsksCompleteSetTakeoff(g)) return null;
   if (/\b(?:BAS|DDC)\b/i.test(g) && /\bpoints?\b/i.test(g)) return "bas_points";
   if (/\b(?:control\s+)?valves?\b/i.test(g)) return "control_valves";
@@ -535,21 +548,49 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
 
   if (intent === "points_takeoff") {
     const titles = namedPointsListTitles(goal);
-    const missing = titles.filter((t) => !hasTitleScan(log, t));
-    const allowedBase = ["list_sheets", "sheet_graph", "find_schedule", "query_table", "highlight_citation"];
+    // Defense: never enter spot_cites with zero title-scan targets — a bare
+    // "points list takeoff" used to skip title_scans and hang on the evidence
+    // gate. Prefer corpus_bas for that phrasing; if we still land here, scan
+    // a generic POINTS LIST / DDC POINTS LIST title.
+    const scanTargets = titles.length
+      ? titles
+      : ["POINTS LIST", "DDC POINTS LIST"];
+    const missing = scanTargets.filter((t) => !hasTitleScan(log, t));
+    // One successful POINTS/DDC title-scan satisfies the generic fallback.
+    const genericFallback = titles.length === 0;
+    const missingEffective = genericFallback
+      ? (missing.length < scanTargets.length ? [] : missing)
+      : missing;
+    const allowedBase = ["list_sheets", "sheet_graph", "find_schedule", "query_table", "highlight_citation", "compile_corpus_takeoff"];
     if (!hasGraph) {
       return {
         phase: "survey",
-        allowedTools: ["list_sheets", "sheet_graph", "find_schedule"],
-        nextMove: "Call list_sheets and/or sheet_graph once, then title-scan each named POINTS/DDC list with query_table (no row_key, no cell_contains).",
+        allowedTools: ["list_sheets", "sheet_graph", "find_schedule", "compile_corpus_takeoff"],
+        nextMove: "Call list_sheets and/or sheet_graph once, then title-scan each named POINTS/DDC list with query_table (no row_key, no cell_contains). Or call compile_corpus_takeoff kind=bas_points for a full-set points compile.",
         blockReason: null,
       };
     }
-    if (missing.length) {
+    if (hasCorpusCompile) {
+      if (rowKeyCites < 1 || paints < 1) {
+        return {
+          phase: paints < 1 && rowKeyCites >= 1 ? "paint" : "spot_cites",
+          allowedTools: ["query_table", "highlight_citation"],
+          nextMove: "From the compile result, spot-check with query_table { row_key } + highlight_citation, then answer from compile list totals.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "Emit the complete takeoff answer from compile_corpus_takeoff bas_points totals. Cite painted MARKs. No more exploratory tools.",
+        blockReason: null,
+      };
+    }
+    if (missingEffective.length) {
       return {
         phase: "title_scans",
         allowedTools: allowedBase,
-        nextMove: `Title-scan these points lists with query_table (title only, no row_key/cell_contains): ${missing.slice(0, 5).join("; ")}. Copy count and point_type_counts from each result.`,
+        nextMove: `Title-scan these points lists with query_table (title only, no row_key/cell_contains): ${missingEffective.slice(0, 5).join("; ")}. Copy count and point_type_counts from each result. Alternatively call compile_corpus_takeoff with kind="bas_points".`,
         blockReason: null,
       };
     }
