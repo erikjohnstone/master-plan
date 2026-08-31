@@ -175,7 +175,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
     for (const row of table.rows || []) {
       const tag = rowIdentityTag(row);
       if (!tag) continue;
-      if (/^NOTES?\d*$/i.test(String(tag).trim())) continue;
+      if (/^NOTES?:?\d*$/i.test(String(tag).trim())) continue;
       if (filterRe && !filterRe.test(tag) && !filterRe.test(String(tag).toUpperCase().replace(/\s+/g, ""))) {
         continue;
       }

@@ -142,7 +142,7 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHead
         const canon = one.toUpperCase().replace(/\s+/g, "");
         if (!canon) continue;
         // Footnote / notes rows that leaked into the key column.
-        if (/^NOTES?\d*$/i.test(canon)) continue;
+        if (/^NOTES?:?\d*$/i.test(canon) || /^NOTES?:?$/i.test(one.trim())) continue;
         if (filterRe && !filterRe.test(canon) && !filterRe.test(one)) continue;
         if (keys.has(canon)) continue;
         keys.add(canon);
