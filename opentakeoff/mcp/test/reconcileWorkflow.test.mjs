@@ -253,6 +253,34 @@ test("Hawthorn bulk AHU+CU reconcile: all scheduled tags MATCH (WP1 cross-set)",
   }
 });
 
+test("Jeff City CST bulk VAV+FCU reconcile: all scheduled tags MATCH (WP1 cross-set)", async () => {
+  const keyPath = resolve(CROSS, "06_MO_NatlGuard_JeffCity_CST_Addition.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  for (const family of ["VAV", "FCU"]) {
+    const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
+    assert.ok(needle, `${family} needle`);
+    const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+      evaluationFast: true,
+    });
+    const expect = key.categories[family];
+    assert.equal(result.rows.length, expect, `${family} reconcile rows = compile`);
+    assert.ok(result.rows.every((r) => r.status === "MATCH"), `${family} all MATCH`);
+    for (const row of result.rows) {
+      assert.ok(row.installed_qty >= 1, `${row.tag} installed`);
+      assert.ok(row.plan_cites?.length >= 1, `${row.tag} plan cite`);
+    }
+  }
+});
+
 test("St Louis bulk VAV reconcile: all 12 ATU tags MATCH (WP1 cross-set)", async () => {
   const keyPath = resolve(CROSS, "05_MO_VA_StLouis_AHU_VAV_Replacement.compile.json");
   assert.ok(existsSync(keyPath));

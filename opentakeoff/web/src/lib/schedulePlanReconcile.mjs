@@ -155,6 +155,7 @@ export function summarizeReconcile(rows) {
  */
 export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new Map()) {
   const rows = [];
+  const seen = new Set();
   const keyRe = needle?.keyRe || null;
   const blankKeyRe = needle?.blankKeyRe || null;
   for (const table of graph?.tables || []) {
@@ -180,6 +181,11 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
       if (filterRe && !filterRe.test(tag) && !filterRe.test(String(tag).toUpperCase().replace(/\s+/g, ""))) {
         continue;
       }
+      // Parity with compile uniqueFamily — continuation / duplicate extracts
+      // of the same MARK must not inflate reconcile rows (Douglas HP-20).
+      const canon = String(tag).toUpperCase().replace(/\s+/g, "");
+      if (!canon || seen.has(canon)) continue;
+      seen.add(canon);
       const scheduledQty = scheduledQtyFromRow(row);
       const sweep = sweepByTag.get(tag) || {};
       const installedQty = sweep.installedQty ?? 0;
