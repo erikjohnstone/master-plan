@@ -11,6 +11,7 @@ import {
   advanceTakeoffWorkflow,
   isIllegalWorkflowTransition,
   workflowDirective,
+  scaleRefuseMessage,
 } from "../src/lib/takeoffWorkflow.js";
 import { readFileSync } from "node:fs";
 
@@ -26,7 +27,49 @@ test("classifyTakeoffIntent maps points-list takeoffs", () => {
     classifyTakeoffIntent("How many FCUs across Air Ops vs MITRACON buildings?"),
     "fcu_buildings",
   );
-  assert.equal(classifyTakeoffIntent("Trace AHU-1 connectivity"), "generic");
+  assert.equal(classifyTakeoffIntent("Trace AHU-1 connectivity"), "connectivity");
+});
+
+test("symbol_sweep / connectivity / scale_refuse intents are phrase-robust", () => {
+  assert.equal(
+    classifyTakeoffIntent("Find every instance of this plan symbol from the seed marquee"),
+    "symbol_sweep",
+  );
+  assert.equal(
+    classifyTakeoffIntent("Run a symbol_sweep on this valve seed across the set"),
+    "symbol_sweep",
+  );
+  assert.equal(
+    classifyTakeoffIntent("Trace which valve belongs to which equipment via drawn pipe connectivity"),
+    "connectivity",
+  );
+  assert.equal(
+    classifyTakeoffIntent("Refuse installed duct length on an unscaled sheet — set_scale first"),
+    "scale_refuse",
+  );
+  assert.equal(
+    scaleRefuseMessage("plan.pdf#3", "1/4\" = 1'-0\""),
+    "Set the scale for plan.pdf#3 first — use set_scale (detected: 1/4\" = 1'-0\").",
+  );
+  assert.equal(
+    scaleRefuseMessage("plan.pdf#3"),
+    "Set the scale for plan.pdf#3 first — use set_scale.",
+  );
+  const sweep = advanceTakeoffWorkflow("symbol_sweep", [
+    { name: "sheet_graph", out: { sheets: [] } },
+  ], "Find every instance of this symbol");
+  assert.equal(sweep.phase, "spot_cites");
+  assert.ok(sweep.allowedTools?.includes("symbol_sweep"));
+  assert.match(sweep.nextMove || "", /symbol_sweep|seed_rect/i);
+  const conn = advanceTakeoffWorkflow("connectivity", [
+    { name: "sheet_graph", out: { sheets: [] } },
+  ], "Trace valve to equipment connectivity");
+  assert.ok(conn.allowedTools?.includes("trace_connectivity"));
+  assert.match(conn.nextMove || "", /trace_connectivity/i);
+  const scale = advanceTakeoffWorkflow("scale_refuse", [
+    { name: "sheet_graph", out: { sheets: [] } },
+  ], "installed length on unscaled sheet");
+  assert.match(scale.nextMove || "", /set_scale|refuse/i);
 });
 
 test("complete set HVAC/BAS/valve goals route to corpus compile", () => {
@@ -312,6 +355,48 @@ test("suggestedScheduleTitles maps family words to industry schedule needles", (
   );
   assert.equal(state.phase, "title_scans");
   assert.match(state.nextMove || "", /VOLUME CONTROL|AIR TERMINAL|VARIABLE AIR/i);
+});
+
+test("remaining schedule families route + suggest query_table-viable titles", () => {
+  const cases = [
+    ["Pump schedule takeoff — counts and GPM/head", /PUMP SCHEDULE/i],
+    ["Boiler schedule takeoff — totals and capacity", /BOILER SCHEDULE/i],
+    ["Dedicated outdoor-air / DOAS schedule takeoff", /DEDICATED OUTDOOR AIR UNIT SCHEDULE/i],
+    ["Diffuser grille schedule takeoff", /GRILLE,\s*REGISTER,\s*AND\s*DIFFUSER/i],
+    ["Humidifier schedule takeoff", /HUMIDIFIER SCHEDULE/i],
+    ["CRAH / computer-room air handler schedule takeoff", /COMPUTER ROOM AIR HANDLER/i],
+    ["Unit heater schedule takeoff", /UNIT HEATER SCHEDULE/i],
+    ["Cabinet unit heater takeoff", /CABINET UNIT HEATER SCHEDULE/i],
+    ["Air separator schedule takeoff", /AIR SEPARATOR SCHEDULE/i],
+    ["Expansion tank schedule takeoff", /EXPANSION TANK SCHEDULE/i],
+  ];
+  for (const [goal, titleRe] of cases) {
+    assert.equal(classifyTakeoffIntent(goal), "equipment_schedule", goal);
+    const titles = suggestedScheduleTitles(goal);
+    assert.ok(titles.some((t) => titleRe.test(t)), `${goal} → ${titles.join("|")}`);
+    // query_table rejects short needles (<12) for substring matches — titles must be viable.
+    assert.ok(titles.every((t) => t.length >= 12), `${goal} short needle ${titles.join("|")}`);
+  }
+});
+
+test("D01–D10 follow-up prompts stay on durable intents (not remapped to unrelated families)", () => {
+  const cases = [
+    ["D03-hvac-bas-project-takeoff", "equipment_schedule"],
+    ["D04-vav-scope-rollup", "equipment_schedule"],
+    ["D05-rtu-mech-to-electrical", "cross_discipline_join"],
+    ["D08-fcu-cross-building", "equipment_schedule"],
+    ["D09-room-hvac-coordination", "room_coordination"],
+    ["D10-bas-points-takeoff", "points_takeoff"],
+  ];
+  for (const [dir, want] of cases) {
+    const truth = JSON.parse(readFileSync(
+      new URL(`../../../opentakeoff-corpus/demos/${dir}/truth.json`, import.meta.url),
+      "utf8",
+    ));
+    const fu = truth.follow_up?.prompt;
+    assert.ok(fu, dir);
+    assert.equal(classifyTakeoffIntent(fu), want, `${dir} follow-up`);
+  }
 });
 
 test("phrase variants keep D01/D05/D08/D10 intents stable", () => {

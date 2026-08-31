@@ -14,7 +14,7 @@
  * hardcode sheet numbers, building names, or locked counts.
  */
 
-/** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"project_takeoff"|"equipment_plan_join"|"cross_discipline_join"|"plan_link_refuse"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"generic"} TakeoffIntent */
+/** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"project_takeoff"|"equipment_plan_join"|"cross_discipline_join"|"plan_link_refuse"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"symbol_sweep"|"connectivity"|"scale_refuse"|"generic"} TakeoffIntent */
 
 /** Estimator phrasing: "takeoff", "take off", counts, rollups. */
 export function goalAsksTakeoff(g) {
@@ -163,12 +163,48 @@ export function classifyTakeoffIntent(goal) {
     return "bas_point_trace";
   }
 
-  if (/\b(?:schedule|AHU|DOAH|VAV|chiller|boiler|RTU)\b/i.test(g)
-    && goalAsksTakeoff(g)) {
+  // Every placement of one plan symbol from a seed marquee (not schedule MARK sweep).
+  if (/\bsymbol[_\s-]*sweep\b/i.test(g)
+    || (/\bsymbol\b/i.test(g) && /\b(?:seed|marquee|every\s+instance|every\s+placement|find\s+every)\b/i.test(g))
+    || /\bfind\s+every\s+instance\b/i.test(g)) {
+    return "symbol_sweep";
+  }
+
+  // Valve↔equipment (or pipe/duct) connectivity via drawn linework — not proximity.
+  if (/\bconnectivity\b/i.test(g)
+    || (/\btrace\b/i.test(g) && /\b(?:valve|pipe|duct|equipment|connect)\b/i.test(g)
+      && !/\bpoints?\s*list\b/i.test(g))) {
+    return "connectivity";
+  }
+
+  // Real-world installed qty / measure that must refuse when the sheet is unscaled.
+  if (/\b(?:unscaled|no\s+scale|set_scale|scale\s+first)\b/i.test(g)
+    || (/\b(?:installed\s+(?:qty|quantity|length)|linear\s+feet|\bLF\b|measure|duct\s+length)\b/i.test(g)
+      && /\b(?:scale|refuse|calibrat)\b/i.test(g))) {
+    return "scale_refuse";
+  }
+
+  // Named HVAC schedule-family takeoffs (pump, CRAH, diffuser, …) — phrase
+  // robust; industry family words, not set-specific schedule titles.
+  if (goalAsksTakeoff(g) && (
+    /\bschedule\b/i.test(g)
+    || /\b(?:AHUs?|DOAHs?|DOAS|VAVs?|FCUs?|RTUs?|CRAHs?|CUHs?|UHs?)\b/i.test(g)
+    || /\b(?:chillers?|boilers?|pumps?|humidifiers?|dehumidifiers?)\b/i.test(g)
+    || /\b(?:diffusers?|grilles?|registers?|air\s+separators?|expansion\s+tanks?)\b/i.test(g)
+    || /\b(?:unit\s+heaters?|cabinet\s+unit\s+heaters?|fan[\s\-]*coils?|rooftop)\b/i.test(g)
+    || /\b(?:dedicated\s+outdoor|computer[\s\-]*room)\b/i.test(g)
+  )) {
     return "equipment_schedule";
   }
 
   return "generic";
+}
+
+/** Honest unscaled-sheet refusal — same wording Session scaleGate uses. */
+export function scaleRefuseMessage(sheetKey, detectedLabel) {
+  const key = String(sheetKey || "this sheet");
+  const detected = detectedLabel ? ` (detected: ${detectedLabel})` : "";
+  return `Set the scale for ${key} first — use set_scale${detected}.`;
 }
 
 /** Extract explicit POINTS LIST / DDC list titles named in the goal. */
@@ -192,35 +228,168 @@ export function namedPointsListTitles(goal) {
  * @param {string} goal
  * @returns {string[]}
  */
-export function suggestedScheduleTitles(goal) {
+/**
+ * Schedule-family title-scan needles from goal phrasing.
+ * Titles must be long enough for query_table matching (≥12 chars / full
+ * industry schedule names) — short tokens like "CRAH"/"DIFFUSER" miss.
+ * @param {string} goal
+ * @returns {Array<{label:string,title:string,titleRe:RegExp,exclude?:RegExp,minCount?:number}>}
+ */
+export function scheduleFamilyNeedles(goal) {
   const g = String(goal || "");
+  /** @type {Array<{label:string,title:string,titleRe:RegExp,exclude?:RegExp,minCount?:number}>} */
   const out = [];
-  const add = (t) => { if (!out.includes(t)) out.push(t); };
-  if (/\bAHUs?\b/i.test(g)) add("AIR HANDLING UNIT SCHEDULE");
-  if (/\bDOAH\b|dedicated\s+outdoor|DOAS\b/i.test(g)) add("DEDICATED OUTDOOR AIR UNIT SCHEDULE");
-  if (/\bFCUs?\b|fan[\s\-]*coil/i.test(g)) add("FAN COIL UNIT SCHEDULE");
-  if (/\bVAVs?\b|volume\s+control\s+box|air\s+terminal\s+box/i.test(g)) {
-    add("VOLUME CONTROL BOX SCHEDULE");
-    add("AIR TERMINAL BOX SCHEDULE");
-    add("VARIABLE AIR VOLUME");
+  const add = (needle) => {
+    if (!out.some((n) => n.label === needle.label && n.title === needle.title)) out.push(needle);
+  };
+  if (/\bAHUs?\b/i.test(g)) {
+    add({
+      label: "AHU",
+      title: "AIR HANDLING UNIT SCHEDULE",
+      titleRe: /AIR HANDLING UNIT/i,
+      exclude: /DEDICATED/i,
+    });
   }
-  if (/\bair[\s\-]*cooled\s+chiller/i.test(g)) add("AIR COOLED CHILLER SCHEDULE");
-  if (/\bheat[\s\-]*recovery\s+chiller/i.test(g)) add("AIR COOLED HEAT RECOVERY CHILLER");
-  if (/\bchillers?\b/i.test(g) && !/\bair[\s\-]*cooled|heat[\s\-]*recovery/i.test(g)) add("CHILLER SCHEDULE");
-  if (/\bboilers?\b/i.test(g)) add("BOILER SCHEDULE");
-  if (/\bpumps?\b/i.test(g)) add("PUMP SCHEDULE");
-  if (/\bRTUs?\b|rooftop|packaged/i.test(g)) add("PACKAGED ROOFTOP");
-  if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s\-]*coil/i.test(g)) add("FAN SCHEDULE");
-  if (/\bdiffuser|grille|GRD\b/i.test(g)) add("DIFFUSER");
-  if (/\bhumidif/i.test(g)) add("HUMIDIFIER");
-  if (/\bdehumidif/i.test(g)) add("DEHUMIDIFIER");
-  if (/\bCRAH\b|computer[\s\-]*room/i.test(g)) add("CRAH");
-  if (/\bunit\s+heater|cabinet\s+unit\s+heater|CUH\b/i.test(g)) add("UNIT HEATER");
-  if (/\bair\s+separator/i.test(g)) add("AIR SEPARATOR");
-  if (/\bexpansion\s+tank/i.test(g)) add("EXPANSION TANK");
-  if (/\bcontrol\s+valves?\b/i.test(g)) add("CONTROL VALVE SCHEDULE");
-  if (/\bBYPASS\b/i.test(g) && /\bvalve/i.test(g)) add("BYPASS CONTROL VALVE SCHEDULE");
+  if (/\bDOAH\b|dedicated\s+outdoor|DOAS\b/i.test(g)) {
+    add({
+      label: "DOAH unit",
+      title: "DEDICATED OUTDOOR AIR UNIT SCHEDULE",
+      titleRe: /DEDICATED OUTDOOR AIR UNIT/i,
+      exclude: /HANDLING/i,
+    });
+  }
+  if (/\bFCUs?\b|fan[\s\-]*coil/i.test(g)) {
+    add({
+      label: "FCU",
+      title: "FAN COIL UNIT SCHEDULE",
+      titleRe: /FAN\s*COIL/i,
+      exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
+    });
+  }
+  if (/\bVAVs?\b|volume\s+control\s+box|air\s+terminal\s+box/i.test(g)) {
+    add({
+      label: "VAV",
+      title: "VOLUME CONTROL BOX SCHEDULE",
+      titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|AIR TERMINAL BOX/i,
+    });
+  }
+  if (/\bair[\s\-]*cooled\s+chiller/i.test(g)) {
+    add({
+      label: "air-cooled chiller",
+      title: "AIR COOLED CHILLER SCHEDULE",
+      titleRe: /AIR COOLED CHILLER/i,
+      exclude: /HEAT RECOVERY/i,
+      minCount: 1,
+    });
+  }
+  if (/\bheat[\s\-]*recovery\s+chiller/i.test(g)) {
+    add({
+      label: "heat-recovery chiller",
+      title: "AIR COOLED HEAT RECOVERY CHILLER",
+      titleRe: /HEAT RECOVERY/i,
+      minCount: 1,
+    });
+  }
+  if (/\bchillers?\b/i.test(g) && !/\bair[\s\-]*cooled|heat[\s\-]*recovery/i.test(g)) {
+    add({ label: "chiller", title: "CHILLER SCHEDULE", titleRe: /CHILLER SCHEDULE/i });
+  }
+  if (/\bboilers?\b/i.test(g)) {
+    add({ label: "boiler", title: "BOILER SCHEDULE", titleRe: /BOILER/i });
+  }
+  if (/\bpumps?\b/i.test(g)) {
+    add({ label: "pump", title: "PUMP SCHEDULE", titleRe: /PUMP SCHEDULE/i });
+  }
+  if (/\bRTUs?\b|rooftop|packaged/i.test(g)) {
+    add({ label: "RTU", title: "PACKAGED ROOFTOP", titleRe: /PACKAGED ROOFTOP|ROOFTOP/i });
+  }
+  if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s\-]*coil/i.test(g)) {
+    add({ label: "fan", title: "FAN SCHEDULE", titleRe: /FAN SCHEDULE/i });
+  }
+  if (/\bdiffuser|grille|register|GRD\b/i.test(g)) {
+    add({
+      label: "diffuser",
+      title: "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+      titleRe: /GRILLE,\s*REGISTER,\s*AND\s*DIFFUSER|DIFFUSER[\s\-]*GRILLE/i,
+    });
+  }
+  if (/\bdehumidif/i.test(g)) {
+    add({
+      label: "dehumidifier",
+      title: "DEHUMIDIFIER SCHEDULE",
+      titleRe: /DEHUMIDIFIER SCHEDULE/i,
+    });
+  } else if (/\bhumidif/i.test(g)) {
+    add({
+      label: "humidifier",
+      title: "HUMIDIFIER SCHEDULE",
+      titleRe: /HUMIDIFIER SCHEDULE/i,
+    });
+  }
+  if (/\bCRAH\b|computer[\s\-]*room/i.test(g)) {
+    add({
+      label: "CRAH",
+      title: "COMPUTER ROOM AIR HANDLER",
+      titleRe: /COMPUTER ROOM AIR HANDLER|\bCRAH\b/i,
+    });
+  }
+  if (/\bcabinet\s+unit\s+heater|\bCUHs?\b/i.test(g)) {
+    add({
+      label: "cabinet unit heater",
+      title: "CABINET UNIT HEATER SCHEDULE",
+      titleRe: /CABINET UNIT HEATER/i,
+    });
+  }
+  if (
+    (/\bunit\s+heater/i.test(g) && !/\bcabinet\s+unit\s+heater/i.test(g))
+    || (/\bUHs?\b/i.test(g) && !/\bCUHs?\b/i.test(g))
+  ) {
+    add({
+      label: "unit heater",
+      title: "UNIT HEATER SCHEDULE",
+      titleRe: /UNIT HEATER SCHEDULE/i,
+      exclude: /CABINET|DDC|POINTS/i,
+    });
+  }
+  if (/\bair\s+separator/i.test(g)) {
+    add({
+      label: "air separator",
+      title: "AIR SEPARATOR SCHEDULE",
+      titleRe: /AIR SEPARATOR SCHEDULE/i,
+    });
+  }
+  if (/\bexpansion\s+tank/i.test(g)) {
+    add({
+      label: "expansion tank",
+      title: "EXPANSION TANK SCHEDULE",
+      titleRe: /EXPANSION TANK SCHEDULE/i,
+    });
+  }
+  if (/\bcontrol\s+valves?\b/i.test(g)) {
+    add({
+      label: "control valve",
+      title: "CONTROL VALVE SCHEDULE",
+      titleRe: /CONTROL VALVE SCHEDULE/i,
+    });
+  }
+  if (/\bBYPASS\b/i.test(g) && /\bvalve/i.test(g)) {
+    add({
+      label: "bypass valve",
+      title: "BYPASS CONTROL VALVE SCHEDULE",
+      titleRe: /BYPASS CONTROL VALVE SCHEDULE/i,
+    });
+  }
   return out;
+}
+
+export function suggestedScheduleTitles(goal) {
+  const titles = scheduleFamilyNeedles(goal).map((n) => n.title);
+  // Extra VAV sibling needles for title-scan hints (same family, one gate label).
+  if (/\bVAVs?\b|volume\s+control\s+box|air\s+terminal\s+box/i.test(String(goal || ""))) {
+    for (const t of ["AIR TERMINAL BOX SCHEDULE", "VARIABLE AIR VOLUME"]) {
+      if (!titles.includes(t)) titles.push(t);
+    }
+  }
+  return [...new Set(titles)];
 }
 
 /**
@@ -561,6 +730,95 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
         phase: "answer",
         allowedTools: null,
         nextMove: "Emit schedule counts/attrs, plan cites where found, and explicit refusals where sweeps found nothing.",
+        blockReason: null,
+      };
+    })());
+  }
+
+  if (intent === "symbol_sweep") {
+    const allowed = [
+      "list_sheets", "sheet_graph", "set_scale", "view_sheet", "view_region",
+      "symbol_sweep", "highlight_citation",
+    ];
+    const hasSymbolSweep = (callLog || []).some(({ name, out }) =>
+      name === "symbol_sweep" && out && !out.error);
+    return surveyThenTitleTools(hasGraph, (() => {
+      if (!hasSymbolSweep) {
+        return {
+          phase: "spot_cites",
+          allowedTools: allowed,
+          nextMove: "Marquee one real drawn instance as seed_rect and call symbol_sweep. "
+            + "Copy found/matches/withheld — never invent placements. Detail-seeded set scope needs scale on both ends.",
+          blockReason: null,
+        };
+      }
+      if (paints < 1) {
+        return {
+          phase: "paint",
+          allowedTools: allowed,
+          nextMove: "highlight_citation (or commit) on accepted symbol matches, then answer with counts and withheld disclosures.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "Emit match counts, rotations/mirrors when present, and every withheld near-miss with its reason.",
+        blockReason: null,
+      };
+    })());
+  }
+
+  if (intent === "connectivity") {
+    const allowed = [
+      "list_sheets", "sheet_graph", "set_scale", "view_sheet", "view_region",
+      "symbol_sweep", "sweep_schedule_row", "trace_connectivity", "highlight_citation",
+    ];
+    const hasTrace = (callLog || []).some(({ name, out }) =>
+      name === "trace_connectivity" && out && !out.error);
+    return surveyThenTitleTools(hasGraph, (() => {
+      if (!hasTrace) {
+        return {
+          phase: "spot_cites",
+          allowedTools: allowed,
+          nextMove: "Sweep valve/equipment placements first, then trace_connectivity from a seed ON drawn pipe/duct linework. "
+            + "Never claim connectivity from proximity alone. Honor reached/ambiguous/dead_end/refused statuses.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "Report the walked status with cites. If ambiguous, name every candidate — never pick one. If refused, copy the tool reason.",
+        blockReason: null,
+      };
+    })());
+  }
+
+  if (intent === "scale_refuse") {
+    const allowed = [
+      "list_sheets", "sheet_graph", "set_scale", "measure_line", "measure_poly",
+      "one_click", "symbol_sweep", "sweep_schedule_row",
+    ];
+    const hasScale = (callLog || []).some(({ name, out }) =>
+      name === "set_scale" && out && !out.error);
+    const hasMeasure = (callLog || []).some(({ name, out }) =>
+      ["measure_line", "measure_poly", "one_click", "symbol_sweep", "sweep_schedule_row"].includes(name)
+      && out && !out.error);
+    return surveyThenTitleTools(hasGraph, (() => {
+      if (!hasScale && !hasMeasure) {
+        return {
+          phase: "survey",
+          allowedTools: allowed,
+          nextMove: "Call set_scale before any real-world installed length/area qty. "
+            + "If the sheet is unscaled, refuse with scaleRefuseMessage — never invent LF/SF from pixels.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "If tools refused for missing scale, copy that refusal verbatim. Otherwise emit the scaled measurement with sheet cite.",
         blockReason: null,
       };
     })());
