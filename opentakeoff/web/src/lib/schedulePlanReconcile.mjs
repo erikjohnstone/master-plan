@@ -151,14 +151,26 @@ export function summarizeReconcile(rows) {
  */
 export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new Map()) {
   const rows = [];
+  const keyRe = needle?.keyRe || null;
   for (const table of graph?.tables || []) {
     const title = String(table.title?.text || "");
     if (table.kind !== "equipment") continue;
-    if (needle?.titleRe && !scheduleTitleMatches(title, needle.titleRe, needle.exclude)) continue;
-    if (needle?.title && !scheduleTitleMatches(title, needle.title, needle.exclude)) continue;
+    // Match compile's uniqueFamily gate: titled soft-match OR blank title with
+    // a family keyRe (Transbay/Macon Bibb blank-title RAH/FCU/EF tables).
+    const titleOk = needle?.titleRe
+      ? scheduleTitleMatches(title, needle.titleRe, needle.exclude)
+      : (needle?.title
+        ? scheduleTitleMatches(title, needle.title, needle.exclude)
+        : false);
+    const blankTitle = !title.trim();
+    if (!titleOk && !(blankTitle && keyRe)) continue;
     for (const row of table.rows || []) {
       const tag = rowIdentityTag(row);
       if (!tag) continue;
+      if (/^NOTES?\d*$/i.test(String(tag).trim())) continue;
+      if (keyRe && !keyRe.test(tag) && !keyRe.test(String(tag).toUpperCase().replace(/\s+/g, ""))) {
+        continue;
+      }
       const scheduledQty = scheduledQtyFromRow(row);
       const sweep = sweepByTag.get(tag) || {};
       const installedQty = sweep.installedQty ?? 0;
@@ -200,6 +212,15 @@ export function familyNeedleFromSpecs(specs, family) {
     PUMP: "PUMP",
     RTU: "RTU",
     FAN: "FAN",
+    BOILER: "BOILER",
+    ERV: "ERV",
+    GRD: "GRD",
+    CONDENSING_UNIT: "CONDENSING_UNIT",
+    "CONDENSING UNIT": "CONDENSING_UNIT",
+    COOLING_TOWER: "COOLING_TOWER",
+    "COOLING TOWER": "COOLING_TOWER",
+    HEAT_PUMP: "HEAT_PUMP",
+    "HEAT PUMP": "HEAT_PUMP",
   };
   const key = aliases[u] || Object.keys(specs).find((k) =>
     k === u || k.replace(/_/g, " ") === u.replace(/_/g, " "));

@@ -243,7 +243,8 @@ NAVFAC theater.
 **Status (impl branch, 2026-08-31):** Intent + shared module + MCP tool + golden
 fixtures green. Playwright UI proof (`playwright-reconcile-ui.mjs`) — bldg5406
 VAV 9/9 MATCH via `window.__opentakeoff.reconcileSchedulePlan`. Orange County
-bulk WP1 set: **32/32 VAV MATCH** full census (`reconcileWorkflow.test.mjs`).
+bulk WP1 set: **32/32 VAV MATCH**. Hawthorn bulk: AHU **2/2** + CU **2/2** MATCH.
+Blank-title+keyRe families join reconcile scaffold (compile parity).
 
 **DoD:**
 1. [x] Intent + phase tests (≥5 phrasings).

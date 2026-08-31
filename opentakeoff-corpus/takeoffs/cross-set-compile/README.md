@@ -21,6 +21,7 @@ title phrasing (`AIRHANDLINGUNITSCHEDULE`, `GENERAL FAN SCHEDULE`,
 | `30_WA_SpokaneTransit_CoolingTower` | `bulk/HVAC_BAS_Plan_Sets/30_WA_SpokaneTransit_CoolingTower.pdf` | Bulk CUP boiler (BOILER1 mark) + pumps + cooling tower |
 | `23_GA_MaconBibb_RecreationCenter` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/23_GA_MaconBibb_RecreationCenter.pdf` | Bulk blank-title FCU/EF tables + heat pump schedule |
 | `10_MO_Hawthorn_PsychHospital_HVAC` | `bulk/HVAC_BAS_Plan_Sets/10_MO_Hawthorn_PsychHospital_HVAC.pdf` | Bulk AHU-1A/1B (digit+letter tags) + CU + water heater |
+| `17_FL_SuwanneeHS_Courtyard_100CD` | `bulk/HVAC_BAS_Plan_Sets/17_FL_SuwanneeHS_Courtyard_100CD.pdf` | Bulk school RTU only (AHU legend is not a schedule) |
 
 ## How counts were authored
 

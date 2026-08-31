@@ -307,18 +307,21 @@ reconcile, and plan joins.
 - **WP1.4 keyRe broaden:** BOILER1 marks, blank-title FCU/EV/EF/RF fan-coil rows — federal-mech stays 96; two bulk WEAK→MEAT promotions.
 - **WP1.4 CODE_RE + EQUIP.TAG + banding orphans:** `AHU-1A`-style digit+letter suffixes; `EQUIP. TAG` own-identity; seam-gap spans assigned to nearest band + thin identity-band absorb. Hawthorn **1→5**.
 - **WP4 Orange County:** installed reconcile **32/32 VAV MATCH** (full census locked in `reconcileWorkflow.test.mjs`).
+- **WP4 Hawthorn:** AHU **2/2** + CU **2/2** MATCH (digit+letter tags on plan).
+- **WP4 blank-title reconcile:** scaffold accepts blank-title+keyRe families (Macon Bibb FAN) — parity with compile `uniqueFamily`.
 - **WP1.4 GRD plurals:** `GRILLES, REGISTERS, AND DIFFUSERS` title — Johnson County **4→7** MEAT.
+- **WP1 Suwannee key:** honest WEAK RTU:1 locked.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
-- **WP6:** `test:workflows` **23/23**; `test:demos` **10/10**.
+- **WP6:** `test:workflows` **25/25**; `test:demos` **10/10**.
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
 2. WP1.4 additional table-boundary misses on bulk WEAK sets (many ZEROs honest).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
-4. Orange County installed reconcile: **32/32 VAV MATCH** (full census locked).
-5. Remaining WEAK: Suwannee (1 RTU honest), Kennebec (2), Northport (3); ZEROs mostly title-only/raster.
+4. Orange County installed reconcile: **32/32 VAV MATCH**; Hawthorn AHU+CU **4/4 MATCH**.
+5. Remaining WEAK: Suwannee (1 RTU honest), Kennebec (2), Northport (3); ZEROs mostly title-only/raster/unkeyed.
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 
