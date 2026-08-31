@@ -171,9 +171,13 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         ? scheduleTitleMatches(title, needle.title, needle.exclude)
         : false);
     const blankTitle = !title.trim();
+    const miscSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE/i.test(title);
     const blankGate = blankKeyRe || keyRe;
-    if (!titleOk && !(blankTitle && blankGate)) continue;
-    const filterRe = blankTitle ? blankGate : keyRe;
+    const keyGated = Boolean(keyRe || blankKeyRe);
+    // Parity with compile uniqueFamily: blank-title OR MISCELLANEOUS catch-all
+    // only when the family has a keyRe/blankKeyRe filter.
+    if (!titleOk && !(blankTitle && blankGate) && !(miscSchedule && keyGated)) continue;
+    const filterRe = blankTitle || miscSchedule ? blankGate : keyRe;
     for (const row of table.rows || []) {
       const tag = rowIdentityTag(row);
       if (!tag) continue;

@@ -365,6 +365,13 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
   assert.ok(HVAC_FAMILY_SPECS.UNIT_HEATER.keyRe!.test("EDH-1"));
 });
 
+test("MISCELLANEOUS SCHEDULE yields only keyRe-gated family marks (set-agnostic)", () => {
+  // Catch-all misc tables must not inflate families without keyRe (e.g. PUMP).
+  assert.equal(HVAC_FAMILY_SPECS.PUMP.keyRe, undefined);
+  assert.ok(HVAC_FAMILY_SPECS.UNIT_HEATER.keyRe!.test("EH-20"));
+  assert.ok(HVAC_FAMILY_SPECS.DOAS.keyRe!.test("DOAS-30"));
+});
+
 test("query_table soft needle hits no-space titles for long needles", () => {
   assert.equal(
     queryTitleMatchesNeedle("AIRHANDLINGUNITSCHEDULE", "AIR HANDLING UNIT SCHEDULE"),

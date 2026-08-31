@@ -115,13 +115,18 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHead
     // AIRHANDLINGUNITSCHEDULE still joins AIR HANDLING UNIT — set-agnostic.
     // Blank titles: still accept when keyRe/blankKeyRe can identify family marks
     // (Transbay RAH-/WFU- tables extract without a recoverable caption).
+    // MISCELLANEOUS SCHEDULE: same gate — only families with keyRe may claim
+    // rows (Douglas EH-*/DOAS-* on catch-all misc tables).
     const titleOk = scheduleTitleMatches(title, titleRe, exclude);
     const blankTitle = !title.trim();
+    const miscSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE/i.test(title);
     const blankGate = blankKeyRe || keyRe;
-    if (!titleOk && !(blankTitle && blankGate)) continue;
+    const keyGated = Boolean(keyRe || blankKeyRe);
+    if (!titleOk && !(blankTitle && blankGate) && !(miscSchedule && keyGated)) continue;
     // keyRe filters titled rows (AHU/FCU); blankKeyRe only gates blank titles
     // (Carson CONDENSING UNIT uses B1/B2 marks — must not apply ACC/CU filter).
-    const filterRe = blankTitle ? blankGate : keyRe;
+    // Misc catch-all tables always require the family keyRe/blankKeyRe filter.
+    const filterRe = blankTitle || miscSchedule ? blankGate : keyRe;
     for (const row of table.rows || []) {
       let tag = String(row.key || "").trim();
       // Prefer explicit MARK / EQUIP.TAG / DESIGNATION. Do NOT prefer bare TAG —
