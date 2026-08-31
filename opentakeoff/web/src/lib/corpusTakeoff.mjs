@@ -415,6 +415,19 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC|AIR\s+CONDITION/i,
     // No keyRe — avoid catch-all stealing AC-* air-conditioners.
   },
+  // Specialty hydronic flow meters (itd FM-1 Onicon) — catch-all via keyRe.
+  FLOW_METER: {
+    titleRe: /(?:HYDRONIC\s+)?FLOW\s+METER(?:\s+SCHEDULE)?/i,
+    exclude: /POINTS\s*LIST|DDC|AIR\s+FLOW|AIRFLOW/i,
+    keyRe: /^FM[\s\-]/i,
+  },
+  // Motorized OA/RA control dampers on dedicated CONTROL DAMPER schedules.
+  // keyRe drops building-only marks (Carson B1 on the same table as OA1/OA2).
+  CONTROL_DAMPER: {
+    titleRe: /CONTROL\s+DAMPER\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC|FIRE\s+DAMPER|SMOKE\s+DAMPER/i,
+    keyRe: /^(?:OA|RA|EA|SA)[\s\-]?\d/i,
+  },
   // CHW / HHW from title signals (abbrev or spelled-out). Bypass valves stay out.
   CHW_CONTROL_VALVE: {
     titleRe: /(?:CHW|CHILLED\s*WATER).{0,40}CONTROL\s*VALVE|CONTROL\s*VALVE.{0,40}(?:CHW|CHILLED\s*WATER)/i,

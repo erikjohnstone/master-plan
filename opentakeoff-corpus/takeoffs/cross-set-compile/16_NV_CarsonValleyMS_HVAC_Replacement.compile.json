@@ -2,16 +2,17 @@
   "set_id": "16_NV_CarsonValleyMS_HVAC_Replacement",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/16_NV_CarsonValleyMS_HVAC_Replacement.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk corpus school HVAC set — ERV, furnace, condensing unit, RTU alternate, outdoor air unit, hoods. Proves user-upload path beyond NAVFAC-shaped titles.",
+  "notes": "Bulk corpus school HVAC set — ERV, furnace, condensing unit, RTU alternate, outdoor air unit, hoods, CONTROL DAMPER OA1/OA2 (B1 building mark on same table excluded by keyRe). Proves user-upload path beyond NAVFAC-shaped titles.",
   "categories": {
     "OUTDOOR_AIR_UNIT": 2,
     "RTU": 4,
     "ERV": 2,
     "FURNACE": 21,
     "CONDENSING_UNIT": 23,
+    "CONTROL_DAMPER": 2,
     "RANGE_HOOD": 4
   },
-  "totals": { "items": 56 },
+  "totals": { "items": 58 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }

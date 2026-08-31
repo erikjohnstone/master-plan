@@ -547,6 +547,72 @@ test("accessory families: pot feeder, GMU, strainer, bypass, BS booster, HS, DT"
     true,
   );
   assert.equal(HVAC_FAMILY_SPECS.AIR_COMPRESSOR.keyRe, undefined);
+  assert.equal(
+    scheduleTitleMatches(
+      "HYDRONIC FLOW METER SCHEDULE",
+      HVAC_FAMILY_SPECS.FLOW_METER.titleRe,
+      HVAC_FAMILY_SPECS.FLOW_METER.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.FLOW_METER.keyRe!.test("FM-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "CONTROL DAMPER SCHEDULE",
+      HVAC_FAMILY_SPECS.CONTROL_DAMPER.titleRe,
+      HVAC_FAMILY_SPECS.CONTROL_DAMPER.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "FIRE DAMPER SCHEDULE",
+      HVAC_FAMILY_SPECS.CONTROL_DAMPER.titleRe,
+      HVAC_FAMILY_SPECS.CONTROL_DAMPER.exclude,
+    ),
+    false,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.CONTROL_DAMPER.keyRe!.test("OA1"));
+  assert.ok(HVAC_FAMILY_SPECS.CONTROL_DAMPER.keyRe!.test("OA-2"));
+  assert.ok(!HVAC_FAMILY_SPECS.CONTROL_DAMPER.keyRe!.test("B1"));
+});
+
+test("FLOW_METER catch-all + CONTROL_DAMPER titled compile", () => {
+  const graph = {
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#1",
+        title: { text: "MECHANICAL SPECIALTY EQUIPMENT SCHEDULE" },
+        rows: [
+          { key: "AS-1", cells: { MARK: { text: "AS-1" } } },
+          { key: "FM-1", cells: { MARK: { text: "FM-1" } } },
+          { key: "ET-1", cells: { MARK: { text: "ET-1" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#2",
+        title: { text: "CONTROL DAMPER SCHEDULE" },
+        rows: [
+          { key: "B1", cells: { MARK: { text: "B1" } } },
+          { key: "OA1", cells: { MARK: { text: "OA1" } } },
+          { key: "OA2", cells: { MARK: { text: "OA2" } } },
+        ],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.FLOW_METER.count, 1);
+  assert.equal(hvac.categories.FLOW_METER.items[0].tag, "FM-1");
+  assert.equal(hvac.categories.AIR_SEPARATOR.count, 1);
+  assert.equal(hvac.categories.EXPANSION_TANK.count, 1);
+  assert.equal(hvac.categories.CONTROL_DAMPER.count, 2);
+  assert.deepEqual(
+    hvac.categories.CONTROL_DAMPER.items.map((i) => i.tag).sort(),
+    ["OA1", "OA2"],
+  );
+  assert.equal(hvac.totals.items, 5);
 });
 
 test("HYDRONIC ACCESSORIES claims PF/GMU/HS (Klamath shape)", () => {

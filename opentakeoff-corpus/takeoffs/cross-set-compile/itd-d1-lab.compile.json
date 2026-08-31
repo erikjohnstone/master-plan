@@ -2,7 +2,7 @@
   "set_id": "itd-d1-lab",
   "source_file": "raw/itd-d1-lab-mechanical.pdf",
   "kind": "hvac_equipment",
-  "notes": "HHW + bypass BCV-1; reheat HC-*; HUM-1; specialty AS/ET/PF; ductless DFC/DCU + gas-split F-1; canopy+snorkel; LAB_AIR_VALVE; AIR_COMPRESSOR AC-1. Orphans: CU-1 outdoor, FM-1, louvers.",
+  "notes": "HHW + bypass BCV-1; reheat HC-*; HUM-1; specialty AS/ET/PF/FM; ductless DFC/DCU + gas-split F-1; canopy+snorkel; LAB_AIR_VALVE; AIR_COMPRESSOR AC-1. Orphans: CU-1 outdoor, louvers.",
   "categories": {
     "AHU": 1,
     "FCU": 3,
@@ -16,6 +16,7 @@
     "DUCT_MOUNTED_COIL": 9,
     "CHEMICAL_POT_FEEDER": 1,
     "AIR_COMPRESSOR": 1,
+    "FLOW_METER": 1,
     "HHW_CONTROL_VALVE": 9,
     "BYPASS_CONTROL_VALVE": 1,
     "LAB_AIR_VALVE": 21,
@@ -23,7 +24,7 @@
     "RANGE_HOOD": 9,
     "DUCT_SILENCER": 1
   },
-  "totals": { "items": 88 },
+  "totals": { "items": 89 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 9, "categories": { "HHW_CONTROL_VALVE": 9 } }
 }
