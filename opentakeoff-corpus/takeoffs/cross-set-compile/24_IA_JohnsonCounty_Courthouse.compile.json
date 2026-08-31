@@ -1,0 +1,14 @@
+{
+  "set_id": "24_IA_JohnsonCounty_Courthouse",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/24_IA_JohnsonCounty_Courthouse.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk courthouse HVAC — FCU, ERV, pump schedules on Project 4 sheets; honest WEAK tier (4 items).",
+  "categories": {
+    "FCU": 2,
+    "ERV": 1,
+    "PUMP": 1
+  },
+  "totals": { "items": 4 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

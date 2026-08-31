@@ -303,14 +303,11 @@ reconcile, and plan joins.
 - **Bulk rescore (2026-08-31 post-fix):** MEAT **15** · WEAK **7** · ZERO **9** (31 vector sets).
 - **Orange County cross-set key:** 32 VAV + 43 HVAC items; reconcile scaffold test.
 - **WP1 title:** `DOAS` family spec; Valdosta 4→5 items; `VAV TERMINAL BOX` broadening.
-- **WP1.4 (partial):** Wide VAV schedule table-boundary fix — reference extraction on
-  full sheet when column banding would split one schedule (Orange County
-  2→43 HVAC items, 32 VAV tags); `DESIGNATION` added as catalog anchor.
+- **WP1 bulk keys:** Johnson County (4), Kennebec (2), Northport (2) honest WEAK tiers locked in `cross-set-compile/`.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
 - **WP4 (Orange County):** installed reconcile on bulk WP1 set — VAV-1-01 / VAV-1-10 **MATCH** with plan cites (`reconcileWorkflow.test.mjs`).
 - **WP6:** `test:workflows` **23/23**; `test:demos` **10/10**.
-- **Bulk rescore (2026-08-31 post-fix):** MEAT **15** · WEAK **7** · ZERO **9** (31 vector sets).
 
 ### Next queue (platform loop)
 

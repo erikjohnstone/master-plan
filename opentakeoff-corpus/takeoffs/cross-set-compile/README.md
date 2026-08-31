@@ -14,6 +14,10 @@ title phrasing (`AIRHANDLINGUNITSCHEDULE`, `GENERAL FAN SCHEDULE`,
 | `16_NV_CarsonValleyMS_HVAC_Replacement` | `bulk/HVAC_BAS_Plan_Sets/16_NV_CarsonValleyMS_HVAC_Replacement.pdf` | Bulk school HVAC (furnace/condensing unit/RTU/ERV) |
 | `04_NV_VA_LasVegas_CentralUtilityPlant` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/04_NV_VA_LasVegas_CentralUtilityPlant.pdf` | Bulk CUP pumps + cooling towers |
 | `26_CA_TransbayTower_Mechanical_64Sheets` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/26_CA_TransbayTower_Mechanical_64Sheets.pdf` | Bulk high-rise RAH/WFU/VAV blank-title tables |
+| `21_VA_OrangeCounty_PublicSafetyBldg` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/21_VA_OrangeCounty_PublicSafetyBldg.pdf` | Bulk VA VAV (DESIGNATION column, 32 tags) |
+| `24_IA_JohnsonCounty_Courthouse` | `bulk/HVAC_BAS_Plan_Sets/24_IA_JohnsonCounty_Courthouse.pdf` | Bulk courthouse FCU/ERV/pump (honest WEAK) |
+| `09_ME_BGS_KennebecValleyCC_Renovation` | `bulk/HVAC_BAS_Plan_Sets/09_ME_BGS_KennebecValleyCC_Renovation.pdf` | Bulk multi-split heat pump performance schedules |
+| `01_NY_VA_Northport_Dialysis_100CD` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/01_NY_VA_Northport_Dialysis_100CD.pdf` | Bulk VA AHU + humidifier (title without SCHEDULE suffix) |
 
 ## How counts were authored
 
