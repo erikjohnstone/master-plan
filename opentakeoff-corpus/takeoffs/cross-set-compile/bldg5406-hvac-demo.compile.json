@@ -2,16 +2,17 @@
   "set_id": "bldg5406-hvac-demo",
   "source_file": "raw/bldg5406-hvac-demo-mechanical.pdf",
   "kind": "hvac_equipment",
-  "notes": "No-space schedule titles (AIRHANDLINGUNITSCHEDULE, FANSCHEDULE, PACKAGEDAIRCOOLEDCHILLERSCHEDULE, GRILLE,REGISTERANDDIFFUSERSCHEDULE). Soft title match required.",
+  "notes": "No-space schedule titles (AIRHANDLINGUNITSCHEDULE, FANSCHEDULE, PACKAGEDAIRCOOLEDCHILLERSCHEDULE, GRILLE,REGISTERANDDIFFUSERSCHEDULE). Soft title match required. PUPSCHEDULE OCR miss → PUMP (CWP-1/2); blank-title CP-1 condensate pump via blankKeyRe.",
   "categories": {
     "AHU": 1,
     "VAV": 9,
     "AIR_COOLED_CHILLER": 1,
+    "PUMP": 3,
     "FAN": 5,
     "AIR_SEPARATOR": 1,
     "GRD": 7
   },
-  "totals": { "items": 24 },
+  "totals": { "items": 27 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }

@@ -8,7 +8,7 @@ import {
   queryTitleMatchesNeedle,
   scheduleTitleMatches,
 } from "../src/lib/scheduleTitleMatch.mjs";
-import { HVAC_FAMILY_SPECS, normalizeEquipMark } from "../src/lib/corpusTakeoff.mjs";
+import { HVAC_FAMILY_SPECS, normalizeEquipMark, compileHvacTakeoff } from "../src/lib/corpusTakeoff.mjs";
 
 test("compact form strips spaces and punctuation", () => {
   assert.equal(compactScheduleTitle("AIR HANDLING UNIT SCHEDULE"), "AIRHANDLINGUNITSCHEDULE");
@@ -413,10 +413,46 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
 });
 
 test("MISCELLANEOUS SCHEDULE yields only keyRe-gated family marks (set-agnostic)", () => {
-  // Catch-all misc tables must not inflate families without keyRe (e.g. PUMP).
+  // Catch-all misc tables must not inflate untitled pump rows via keyRe —
+  // PUMP uses blankKeyRe only so titled PUMP SCHEDULE stays unfiltered.
   assert.equal(HVAC_FAMILY_SPECS.PUMP.keyRe, undefined);
+  assert.ok(HVAC_FAMILY_SPECS.PUMP.blankKeyRe!.test("HWP-1"));
+  assert.ok(HVAC_FAMILY_SPECS.PUMP.blankKeyRe!.test("IWP-1"));
+  assert.ok(HVAC_FAMILY_SPECS.PUMP.blankKeyRe!.test("HWRP-1"));
   assert.ok(HVAC_FAMILY_SPECS.UNIT_HEATER.keyRe!.test("EH-20"));
   assert.ok(HVAC_FAMILY_SPECS.DOAS.keyRe!.test("DOAS-30"));
+  assert.equal(
+    scheduleTitleMatches("PUPSCHEDULE", HVAC_FAMILY_SPECS.PUMP.titleRe, HVAC_FAMILY_SPECS.PUMP.exclude),
+    true,
+  );
+});
+
+test("EQUIPMENT SCHEDULE catch-all ORs blankKeyRe|keyRe (WSHP via HEAT_PUMP keyRe)", () => {
+  const graph = {
+    tables: [{
+      kind: "equipment",
+      sheet: "m.pdf#4",
+      title: { text: "EQUIPMENT SCHEDULE" },
+      rows: [
+        { key: "WSHP-1", cells: { MARK: { text: "WSHP-1" } } },
+        { key: "HWP-1", cells: { MARK: { text: "HWP-1" } } },
+        { key: "CU-1", cells: { MARK: { text: "CU-1" } } },
+        { key: "BS-1", cells: { MARK: { text: "BS-1" } } },
+      ],
+    }],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.HEAT_PUMP.count, 1);
+  assert.equal(hvac.categories.PUMP.count, 1);
+  assert.equal(hvac.categories.CONDENSING_UNIT.count, 1);
+  assert.equal(hvac.categories.HEAT_PUMP.items[0].tag, "WSHP-1");
+  assert.equal(hvac.categories.PUMP.items[0].tag, "HWP-1");
+  assert.equal(hvac.categories.CONDENSING_UNIT.items[0].tag, "CU-1");
+  // BS-1 has no family keyRe — stay orphan (no silent inflation).
+  for (const [fam, cat] of Object.entries(hvac.categories)) {
+    if (["HEAT_PUMP", "PUMP", "CONDENSING_UNIT"].includes(fam)) continue;
+    assert.equal(cat.count, 0, `unexpected ${fam}`);
+  }
 });
 
 test("query_table soft needle hits no-space titles for long needles", () => {

@@ -115,18 +115,20 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHead
     // AIRHANDLINGUNITSCHEDULE still joins AIR HANDLING UNIT — set-agnostic.
     // Blank titles: still accept when keyRe/blankKeyRe can identify family marks
     // (Transbay RAH-/WFU- tables extract without a recoverable caption).
-    // MISCELLANEOUS SCHEDULE: same gate — only families with keyRe may claim
-    // rows (Douglas EH-*/DOAS-* on catch-all misc tables).
+    // MISCELLANEOUS / bare EQUIPMENT SCHEDULE: same gate — only families with
+    // keyRe may claim rows (Douglas EH/DOAS; Colville WSHP/HWP master lists).
     const titleOk = scheduleTitleMatches(title, titleRe, exclude);
     const blankTitle = !title.trim();
-    const miscSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE/i.test(title);
+    const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?EQUIPMENT\s+SCHEDULE$/i.test(title);
     const blankGate = blankKeyRe || keyRe;
     const keyGated = Boolean(keyRe || blankKeyRe);
-    if (!titleOk && !(blankTitle && blankGate) && !(miscSchedule && keyGated)) continue;
+    if (!titleOk && !(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
     // keyRe filters titled rows (AHU/FCU); blankKeyRe only gates blank titles
     // (Carson CONDENSING UNIT uses B1/B2 marks — must not apply ACC/CU filter).
-    // Misc catch-all tables always require the family keyRe/blankKeyRe filter.
-    const filterRe = blankTitle || miscSchedule ? blankGate : keyRe;
+    // Catch-all tables: OR blankKeyRe|keyRe so HEAT_PUMP blankKeyRe (/^HP/)
+    // does not shadow WSHP/GSHP matches that only keyRe accepts.
+    const filterRe = blankTitle ? blankGate : catchAllSchedule ? null : keyRe;
+    const catchAllFilter = catchAllSchedule;
     for (const row of table.rows || []) {
       let tag = String(row.key || "").trim();
       // Prefer explicit MARK / EQUIP.TAG / DESIGNATION. Do NOT prefer bare TAG —
@@ -150,7 +152,13 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHead
         if (!canon) continue;
         // Footnote / notes rows that leaked into the key column.
         if (/^NOTES?:?\d*$/i.test(canon) || /^NOTES?:?$/i.test(one.trim())) continue;
-        if (filterRe && !filterRe.test(canon) && !filterRe.test(one)) continue;
+        if (catchAllFilter) {
+          const okBlank = blankKeyRe && (blankKeyRe.test(canon) || blankKeyRe.test(one));
+          const okKey = keyRe && (keyRe.test(canon) || keyRe.test(one));
+          if (!(okBlank || okKey)) continue;
+        } else if (filterRe && !filterRe.test(canon) && !filterRe.test(one)) {
+          continue;
+        }
         if (keys.has(canon)) continue;
         keys.add(canon);
         const bbox = identityHeaderRe
@@ -284,9 +292,14 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^(?:CH[\s\-]|HRC)/i,
   },
   BOILER: { titleRe: /BOILER/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^(?:B[\s\-]|BOILER)/i },
-  // Pump marks vary widely (P-*, CP-*, CWP-*, HHWP-*, …) — count every row on
-  // a pump schedule; do not hardcode one firm's prefix set.
-  PUMP: { titleRe: /PUMP SCHEDULE|HYDRONIC\s+PUMPS?/i, exclude: /POINTS\s*LIST|DDC\s+POINTS|HEAT\s+PUMP|VACUUM/i },
+  // Titled pump schedules keep every equipment row (IWP/HWRP/…). blankKeyRe
+  // only — claims HWP/CP/… from bare EQUIPMENT/MISC catch-all + blank titles
+  // without filtering titled PUMP SCHEDULE rows. PUPSCHEDULE = common OCR miss.
+  PUMP: {
+    titleRe: /PUMP\s*SCHEDULE|PUPSCHEDULE|HYDRONIC\s+PUMPS?/i,
+    exclude: /POINTS\s*LIST|DDC\s+POINTS|HEAT\s+PUMP|VACUUM/i,
+    blankKeyRe: /^(?:P|CP|CWP|HWP|HHWP|CHWP|CHP|HWRP|IWP|BP|SP|SCHWP|RP|PP|EP)[\s\-]?\d/i,
+  },
   COOLING_TOWER: {
     titleRe: /COOLING\s+TOWER\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC/i,

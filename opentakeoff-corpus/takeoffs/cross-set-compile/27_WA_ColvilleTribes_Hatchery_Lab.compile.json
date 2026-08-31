@@ -2,10 +2,13 @@
   "set_id": "27_WA_ColvilleTribes_Hatchery_Lab",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/27_WA_ColvilleTribes_Hatchery_Lab.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk hatchery — split-system FCU + ERV + fans + UH + FTR + AS/ET + BT + blank-title HX-1A/1B/2A/2B.",
+  "notes": "Bulk hatchery — EQUIPMENT SCHEDULE catch-all claims WSHP-1 (HEAT_PUMP), CU-1 (CONDENSING_UNIT), HWP/CP/EP/BP pumps; plus titled FCU/ERV/fans/UH/FTR/AS/ET/BT/HX. Orphans BS-1/LV-* left unkeyed (no family).",
   "categories": {
     "FCU": 1,
     "ERV": 1,
+    "CONDENSING_UNIT": 1,
+    "HEAT_PUMP": 1,
+    "PUMP": 13,
     "WATER_HEATER": 1,
     "FAN": 3,
     "UNIT_HEATER": 7,
@@ -15,7 +18,7 @@
     "BUFFER_TANK": 4,
     "HEAT_EXCHANGER": 4
   },
-  "totals": { "items": 27 },
+  "totals": { "items": 42 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }

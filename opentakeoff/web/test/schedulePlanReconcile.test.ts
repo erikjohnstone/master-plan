@@ -175,6 +175,7 @@ test("reconcile scaffold accepts MISCELLANEOUS SCHEDULE via keyRe (compile parit
       rows: [
         { key: "EH-20", cells: { SYMBOL: { text: "EH-20" } } },
         { key: "DOAS-30", cells: { SYMBOL: { text: "DOAS-30" } } },
+        { key: "HWP-1", cells: { SYMBOL: { text: "HWP-1" } } },
         { key: "JUNK-1", cells: { SYMBOL: { text: "JUNK-1" } } },
       ],
     }],
@@ -189,12 +190,40 @@ test("reconcile scaffold accepts MISCELLANEOUS SCHEDULE via keyRe (compile parit
     { label: "DOAS", titleRe: /DOAS\s+UNIT/i, keyRe: /^DOAS/i },
   );
   assert.deepEqual(doas.map((r) => r.tag), ["DOAS-30"]);
-  // Families without keyRe must not absorb misc catch-all rows.
+  // PUMP blankKeyRe claims hydronic marks on catch-all; junk stays out.
   const pump = reconcileScheduleFamilyFromGraph(
     graph,
-    { label: "PUMP", titleRe: /PUMP SCHEDULE/i },
+    {
+      label: "PUMP",
+      titleRe: /PUMP SCHEDULE/i,
+      blankKeyRe: /^(?:P|CP|CWP|HWP|HHWP|CHWP|CHP|HWRP|IWP|BP|SP|SCHWP|RP|PP|EP)[\s\-]?\d/i,
+    },
   );
-  assert.equal(pump.length, 0);
+  assert.deepEqual(pump.map((r) => r.tag), ["HWP-1"]);
+});
+
+test("reconcile EQUIPMENT SCHEDULE catch-all ORs blankKeyRe|keyRe", () => {
+  const graph = {
+    tables: [{
+      kind: "equipment",
+      sheet: "m.pdf#4",
+      title: { text: "EQUIPMENT SCHEDULE" },
+      rows: [
+        { key: "WSHP-1", cells: { MARK: { text: "WSHP-1" } } },
+        { key: "HP-10", cells: { MARK: { text: "HP-10" } } },
+      ],
+    }],
+  };
+  const rows = reconcileScheduleFamilyFromGraph(
+    graph,
+    {
+      label: "HEAT_PUMP",
+      titleRe: /HEAT\s+PUMP/i,
+      keyRe: /(?<![C])HP|^(?:SCU|SAC|CC|AH)[\s\-]/i,
+      blankKeyRe: /^HP[\s\-]/i,
+    },
+  );
+  assert.deepEqual(rows.map((r) => r.tag).sort(), ["HP-10", "WSHP-1"]);
 });
 
 test("reconcileRowsToCsv emits contractor header row", () => {
