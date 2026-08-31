@@ -115,11 +115,11 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHead
     // AIRHANDLINGUNITSCHEDULE still joins AIR HANDLING UNIT — set-agnostic.
     // Blank titles: still accept when keyRe/blankKeyRe can identify family marks
     // (Transbay RAH-/WFU- tables extract without a recoverable caption).
-    // MISCELLANEOUS / bare EQUIPMENT SCHEDULE: same gate — only families with
-    // keyRe may claim rows (Douglas EH/DOAS; Colville WSHP/HWP master lists).
+    // MISCELLANEOUS / bare EQUIPMENT / SPECIALTY EQUIPMENT / HYDRONIC
+    // ACCESSORIES: same gate — only families with keyRe may claim rows.
     const titleOk = scheduleTitleMatches(title, titleRe, exclude);
     const blankTitle = !title.trim();
-    const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$/i.test(title);
+    const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i.test(title);
     const blankGate = blankKeyRe || keyRe;
     const keyGated = Boolean(keyRe || blankKeyRe);
     if (!titleOk && !(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
@@ -230,8 +230,8 @@ export const HVAC_FAMILY_SPECS = {
   DOAH_UNIT: { titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i, keyRe: /^DOAH/i },
   DOAH_HANDLING: { titleRe: /DEDICATED OUTDOOR AIR HANDLING/i, keyRe: /^DOAH/i },
   DOAS: {
-    titleRe: /DOAS\s+UNIT|\bDOAS\b/i,
-    exclude: /POINTS\s*LIST|DDC|DEDICATED\s+OUTDOOR\s+AIR\s+HANDLING/i,
+    titleRe: /DOAS\s+UNIT|\bDOAS\b|DEDICATED\s+OUTDOOR\s+AIR\s+SYSTEM/i,
+    exclude: /POINTS\s*LIST|DDC|DEDICATED\s+OUTDOOR\s+AIR\s+HANDLING|DEDICATED\s+OUTDOOR\s+AIR\s+UNIT/i,
     keyRe: /^DOAS/i,
   },
   // Common US school / light-commercial phrasing (not always "DOAH").
@@ -400,10 +400,19 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /BYPASS|CHW|CHILLED\s*WATER/i,
     identityHeaderRe: /VALVE\s*MARK/i,
   },
+  // Lab / cleanroom pressure-independent air valves (Phoenix-style SAV/GEV/SEV).
+  // Not hydronic CHW/HHW control valves — stay out of CONTROL_VALVE_FAMILIES.
+  LAB_AIR_VALVE: {
+    titleRe: /PRESSURE\s+INDEPENDENT.{0,60}VALVE|(?:ROOM\s+SUPPLY|GENERAL\s+EXHAUST|SNORKEL\s+EXHAUST)\s+VALVE\s+SCHEDULE/i,
+    exclude: /BYPASS|HHW|CHW|HOT\s+WATER|CHILLED\s+WATER|REHEAT|POINTS\s*LIST|DDC/i,
+    keyRe: /^(?:SAV|GEV|SEV)[\s\-]/i,
+  },
   GRD: {
     titleRe: /GRILLES?[,\s]*REGISTERS?[,\s]*(?:AND\s*)?DIFFUSERS?|GRILLE\s+SCHEDULE|DIFFUSERS?[\s\-]*GRILLES?|DIFFUSER\s+SCHEDULE|AIR\s+DEVICE\s+SCHEDULE|AIR\s+INLETS?\s*(?:&|AND)\s*OUTLETS?/i,
   },
-  RANGE_HOOD: { titleRe: /RANGE HOOD SCHEDULE|CANOPY HOOD SCHEDULE|RELIEF HOOD SCHEDULE|INTAKE HOOD SCHEDULE/i },
+  RANGE_HOOD: {
+    titleRe: /RANGE HOOD SCHEDULE|CANOPY HOOD SCHEDULE|RELIEF HOOD SCHEDULE|INTAKE HOOD SCHEDULE|SNORKEL\s+HOOD\s+SCHEDULE/i,
+  },
   DUCT_SILENCER: {
     titleRe: /DUCT SILENCER SCHEDULE|SILENCER SCHEDULE|SOUND ATTENUATOR SCHEDULE|SOUND\s+TRAP\s+SCHEDULE/i,
   },

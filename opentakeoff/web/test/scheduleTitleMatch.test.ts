@@ -438,6 +438,41 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
     true,
   );
   assert.ok(HVAC_FAMILY_SPECS.WATER_TREATMENT.keyRe!.test("RO-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "DEDICATED OUTDOOR AIR SYSTEM",
+      HVAC_FAMILY_SPECS.DOAS.titleRe,
+      HVAC_FAMILY_SPECS.DOAS.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "DEDICATED OUTDOOR AIR UNIT SCHEDULE",
+      HVAC_FAMILY_SPECS.DOAS.titleRe,
+      HVAC_FAMILY_SPECS.DOAS.exclude,
+    ),
+    false,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "SNORKEL HOOD SCHEDULE",
+      HVAC_FAMILY_SPECS.RANGE_HOOD.titleRe,
+      HVAC_FAMILY_SPECS.RANGE_HOOD.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE",
+      HVAC_FAMILY_SPECS.LAB_AIR_VALVE.titleRe,
+      HVAC_FAMILY_SPECS.LAB_AIR_VALVE.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.LAB_AIR_VALVE.keyRe!.test("SAV-1"));
+  assert.ok(HVAC_FAMILY_SPECS.LAB_AIR_VALVE.keyRe!.test("GEV-3"));
+  assert.ok(HVAC_FAMILY_SPECS.LAB_AIR_VALVE.keyRe!.test("SEV-2"));
 });
 
 test("MISCELLANEOUS SCHEDULE yields only keyRe-gated family marks (set-agnostic)", () => {
@@ -481,6 +516,64 @@ test("EQUIPMENT SCHEDULE catch-all ORs blankKeyRe|keyRe (WSHP via HEAT_PUMP keyR
     if (["HEAT_PUMP", "PUMP", "CONDENSING_UNIT"].includes(fam)) continue;
     assert.equal(cat.count, 0, `unexpected ${fam}`);
   }
+});
+
+test("HYDRONIC ACCESSORIES catch-all claims AS/BT/ET (Klamath shape)", () => {
+  const graph = {
+    tables: [{
+      kind: "equipment",
+      sheet: "m.pdf#5",
+      title: { text: "HYDRONIC ACCESSORIES" },
+      rows: [
+        { key: "AS-1", cells: { MARK: { text: "AS-1" } } },
+        { key: "BT-1", cells: { MARK: { text: "BT-1" } } },
+        { key: "ET-1", cells: { MARK: { text: "ET-1" } } },
+        { key: "GMU-1", cells: { MARK: { text: "GMU-1" } } },
+      ],
+    }],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.AIR_SEPARATOR.count, 1);
+  assert.equal(hvac.categories.BUFFER_TANK.count, 1);
+  assert.equal(hvac.categories.EXPANSION_TANK.count, 1);
+  assert.equal(hvac.categories.AIR_SEPARATOR.items[0].tag, "AS-1");
+  // GMU has no family — stay orphan.
+  assert.equal(hvac.totals.items, 3);
+});
+
+test("LAB_AIR_VALVE + snorkel hood compile (itd shape)", () => {
+  const graph = {
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#12",
+        title: { text: "PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE" },
+        rows: [
+          { key: "SAV-1", cells: { MARK: { text: "SAV-1" } } },
+          { key: "SAV-2", cells: { MARK: { text: "SAV-2" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#12",
+        title: { text: "SNORKEL HOOD SCHEDULE" },
+        rows: [{ key: "SN-1", cells: { MARK: { text: "SN-1" } } }],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#5",
+        title: { text: "DEDICATED OUTDOOR AIR SYSTEM" },
+        rows: [
+          { key: "DOAS-1", cells: { MARK: { text: "DOAS-1" } } },
+          { key: "DOAS-2", cells: { MARK: { text: "DOAS-2" } } },
+        ],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.LAB_AIR_VALVE.count, 2);
+  assert.equal(hvac.categories.RANGE_HOOD.count, 1);
+  assert.equal(hvac.categories.DOAS.count, 2);
 });
 
 test("MECHANICAL SPECIALTY EQUIPMENT + ductless comma marks (itd shape)", () => {

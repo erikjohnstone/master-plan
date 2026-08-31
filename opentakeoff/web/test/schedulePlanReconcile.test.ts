@@ -226,6 +226,25 @@ test("reconcile EQUIPMENT SCHEDULE catch-all ORs blankKeyRe|keyRe", () => {
   assert.deepEqual(rows.map((r) => r.tag).sort(), ["HP-10", "WSHP-1"]);
 });
 
+test("reconcile HYDRONIC ACCESSORIES catch-all claims AS via keyRe", () => {
+  const graph = {
+    tables: [{
+      kind: "equipment",
+      sheet: "m.pdf#5",
+      title: { text: "HYDRONIC ACCESSORIES" },
+      rows: [
+        { key: "AS-1", cells: { MARK: { text: "AS-1" } } },
+        { key: "GMU-1", cells: { MARK: { text: "GMU-1" } } },
+      ],
+    }],
+  };
+  const rows = reconcileScheduleFamilyFromGraph(
+    graph,
+    { label: "AIR_SEPARATOR", titleRe: /AIR SEPARATOR SCHEDULE/i, keyRe: /^AS[\s\-]/i },
+  );
+  assert.deepEqual(rows.map((r) => r.tag), ["AS-1"]);
+});
+
 test("reconcileRowsToCsv emits contractor header row", () => {
   const csv = reconcileRowsToCsv([
     {

@@ -2,8 +2,9 @@
   "set_id": "14_OR_KlamathCC_LearningCtr_Mechanical",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/14_OR_KlamathCC_LearningCtr_Mechanical.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk college — MAU + FC-### + HP + chiller/boilers + HYDRONIC PUMPS + EH + blank-title HX-1.",
+  "notes": "Bulk college — DEDICATED OUTDOOR AIR SYSTEM DOAS-1..4 + MAU + FC-### + HP + chiller/boilers + HYDRONIC PUMPS + EH + HYDRONIC ACCESSORIES (AS/BT/ET) + blank-title HX-1. Orphans: GMU/HS/PF on accessories.",
   "categories": {
+    "DOAS": 4,
     "OUTDOOR_AIR_UNIT": 1,
     "FCU": 18,
     "HEAT_PUMP": 2,
@@ -11,9 +12,12 @@
     "BOILER": 2,
     "PUMP": 8,
     "UNIT_HEATER": 3,
+    "AIR_SEPARATOR": 1,
+    "EXPANSION_TANK": 3,
+    "BUFFER_TANK": 1,
     "HEAT_EXCHANGER": 1
   },
-  "totals": { "items": 36 },
+  "totals": { "items": 45 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }

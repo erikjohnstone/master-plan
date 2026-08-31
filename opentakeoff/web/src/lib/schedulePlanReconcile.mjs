@@ -171,7 +171,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
         ? scheduleTitleMatches(title, needle.title, needle.exclude)
         : false);
     const blankTitle = !title.trim();
-    const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$/i.test(title);
+    const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i.test(title);
     const blankGate = blankKeyRe || keyRe;
     const keyGated = Boolean(keyRe || blankKeyRe);
     // Parity with compile uniqueFamily: blank-title OR catch-all equipment /
