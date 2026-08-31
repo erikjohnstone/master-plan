@@ -137,28 +137,26 @@ titles” makes every other win fragile. GOAL hard-case rule: NAVFAC proves the
 path; other sets must work **without per-set tuning**. Corpus already has
 itd-d1-lab, federal-mech, weld-county under-instrumented.
 
-**DoD:**
-1. Author hand acceptance keys (from rendered sheets, **never** from tool
-   output) for **≥2 non-NAVFAC** HVAC/BAS sets covering at least:
-   - one complete or family HVAC schedule compile,
-   - one BAS points or points-list title-scan path **or** valve/equipment
-     schedule family,
-   - at least one honest refuse / non-extractable disclose case.
-2. `test:workflows` / compile locks / graph-eval report **scores** on those
-   sets — not “no key yet.”
-3. Soft title matching for schedule families: fuzzy and/or embedding assist
-   beside `scheduleFamilyNeedles` when regex misses — **must not** override a
-   confident exact title; **must** keep sibling exclusions (DOAH vs HANDLING,
-   air-cooled vs heat-recovery, etc.) with regression fixtures.
-4. Header / column miss classes: grow set-agnostic vocab from real failures
-   (sheetgraph `columnMapFor` path) — fixture counts only in tests.
-5. Any product fix from WP1 failures is set-agnostic (title signals, header
-   vocab, role heuristics) — **no** NAVFAC sheet IDs, building names, or
-   locked counts (396/122/163) in product code.
-6. NAVFAC `T-HVAC-01` / `T-BAS-01` remain green after changes.
+**Status (impl branch):** Soft title match + set-agnostic family broaden
+landed. Keyed acceptance under `takeoffs/cross-set-compile/` for
+`bldg5406-hvac-demo` (24), `federal-mech` (90), `itd-d1-lab` (35 + 9 HHW
+valves + honest BAS empty). NAVFAC HVAC/BAS locks still green.
 
-**Evidence:** eval/report tables in docs + CI/workflow suite hooks; listed
-non-NAVFAC set IDs and what each key covers.
+**DoD:**
+1. [x] Author hand acceptance keys for **≥2 non-NAVFAC** HVAC/BAS sets
+   (`cross-set-compile/*.compile.json`) covering HVAC compile, valve family
+   (itd HHW), and honest empty BAS disclose.
+2. [x] `crossCorpusWorkflow` keyed scores + suite hook (`test:workflows`).
+3. [x] Soft title matching (`scheduleTitleMatch.mjs`) beside family specs /
+   `query_table` — exact first; sibling excludes kept with unit fixtures.
+4. [ ] Header / column miss classes: grow set-agnostic vocab from real
+   failures (sheetgraph `columnMapFor` path) — fixture counts only in tests.
+5. [x] Product fixes set-agnostic (title signals / keyRe broaden) — no
+   NAVFAC sheet IDs or locked counts in product code.
+6. [x] NAVFAC `T-HVAC-01` / `T-BAS-01` remain green after changes.
+
+**Evidence:** `takeoffs/cross-set-compile/`; probe + keyed test logs;
+`test:workflows` includes `crossCorpusWorkflow.test.mjs`.
 
 ### WP2 — Finish the third commercial takeoff: `T-VALVE-01` N=5
 

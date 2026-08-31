@@ -1,10 +1,11 @@
 /**
  * Cross-corpus HVAC/BAS workflow invariants — set-agnostic.
  * Counts differ per drawing; structure and intent routing must not.
+ * WP1: keyed schedule-compile acceptance on ≥2 non-NAVFAC sets.
  * Uses the sheet-graph cache so multi-set coverage stays fast when warm.
  */
 import assert from "node:assert/strict";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -20,6 +21,7 @@ import {
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORPUS = resolve(HERE, "../../../opentakeoff-corpus");
 const SAMPLES = resolve(HERE, "../../samples");
+const CROSS = resolve(CORPUS, "takeoffs/cross-set-compile");
 
 const SETS = [
   {
@@ -60,7 +62,6 @@ async function graphForPdf(pdfPath, setId) {
 }
 
 test("phrase-robust corpus intents stay set-agnostic (no drawing names)", () => {
-  // Same phrases locked in web/test/takeoffWorkflow.test.ts — set-scoped, not set-named.
   assert.equal(
     corpusCompileKind("Do a complete HVAC equipment quantity takeoff of this set"),
     "hvac_equipment",
@@ -98,17 +99,15 @@ test("HVAC/BAS/valve compiles succeed structurally on every available corpus PDF
     assert.equal(graph.available, true, `${set.id} graph available`);
     assert.ok((graph.sheets || []).length >= 1, `${set.id} has sheets`);
 
-    const session = null; // compileCorpusTakeoff accepts null session for graph-only path
+    const session = null;
     for (const kind of ["hvac_equipment", "bas_points", "control_valves"]) {
       const result = compileCorpusTakeoff(session, graph, kind);
       assert.equal(result.kind, kind === "hvac_equipment" ? "hvac_equipment"
         : kind === "bas_points" ? "bas_points" : "control_valves", `${set.id} ${kind} kind`);
       assert.ok(result.totals && typeof result.totals === "object", `${set.id} ${kind} totals`);
-      // Must not invent negative / NaN counts.
       const n = result.totals.items ?? result.totals.rows ?? 0;
       assert.ok(Number.isFinite(n) && n >= 0, `${set.id} ${kind} non-negative total`);
       assert.ok(result.page_accounting?.sheet_count >= 1, `${set.id} ${kind} page accounting`);
-      // Honest empty-set disclosure when nothing matches — never pretend success with fake rows.
       if (n === 0) {
         assert.ok(
           result.status || result.page_accounting,
@@ -117,4 +116,49 @@ test("HVAC/BAS/valve compiles succeed structurally on every available corpus PDF
       }
     }
   }
+});
+
+test("WP1 keyed compile acceptance on ≥2 non-NAVFAC sets", async () => {
+  const keys = [
+    "bldg5406-hvac-demo.compile.json",
+    "federal-mech.compile.json",
+    "itd-d1-lab.compile.json",
+  ];
+  let scored = 0;
+  for (const file of keys) {
+    const keyPath = resolve(CROSS, file);
+    assert.ok(existsSync(keyPath), `missing acceptance key ${file}`);
+    const key = JSON.parse(readFileSync(keyPath, "utf8"));
+    const pdf = resolve(CORPUS, key.source_file);
+    if (!existsSync(pdf)) continue;
+    scored += 1;
+    const graph = await graphForPdf(pdf, key.set_id);
+    const hvac = compileCorpusTakeoff(null, graph, "hvac_equipment");
+    const bas = compileCorpusTakeoff(null, graph, "bas_points");
+    const valve = compileCorpusTakeoff(null, graph, "control_valves");
+
+    assert.equal(hvac.totals.items, key.totals.items, `${key.set_id} HVAC total`);
+    for (const [fam, n] of Object.entries(key.categories)) {
+      assert.equal(
+        hvac.categories?.[fam]?.count ?? 0,
+        n,
+        `${key.set_id} ${fam} count`,
+      );
+    }
+    // Families not listed in the key must stay zero (no silent inflation).
+    for (const [fam, cat] of Object.entries(hvac.categories || {})) {
+      if (key.categories[fam] != null) continue;
+      assert.equal(cat.count, 0, `${key.set_id} unexpected family ${fam}=${cat.count}`);
+    }
+
+    assert.equal(bas.totals.rows ?? bas.totals.items ?? 0, key.bas_points.rows,
+      `${key.set_id} BAS empty/honest disclose`);
+    assert.ok(bas.page_accounting?.sheet_count >= 1, `${key.set_id} BAS page accounting`);
+
+    assert.equal(valve.totals.items, key.control_valves.items, `${key.set_id} valve total`);
+    for (const [fam, n] of Object.entries(key.control_valves.categories || {})) {
+      assert.equal(valve.categories?.[fam]?.count ?? 0, n, `${key.set_id} valve ${fam}`);
+    }
+  }
+  assert.ok(scored >= 2, `need ≥2 non-NAVFAC keyed sets scored, got ${scored}`);
 });

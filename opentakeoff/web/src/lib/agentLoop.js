@@ -27,6 +27,7 @@ import {
   isIllegalWorkflowTransition,
   scheduleFamilyNeedles,
 } from "./takeoffWorkflow.js";
+import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
 
 // Full-set HVAC/BAS takeoffs need list/graph + several count queries + scoped
 // cite re-queries + paints; 32 was truncating D03 mid-gate. Keep a hard cap.
@@ -159,8 +160,7 @@ export function missingScheduleTitleScans(callLog, goal) {
   ].filter(Boolean).map(String).join(" ");
   return familyNeedles.filter((fam) => !titleScans.some(({ out }) => {
     const title = scanTitleFull(out);
-    if (!fam.titleRe.test(title)) return false;
-    if (fam.exclude && fam.exclude.test(title)) return false;
+    if (!scheduleTitleMatches(title, fam.titleRe, fam.exclude)) return false;
     if (fam.require && !fam.require.test(title)) return false;
     const min = fam.minCount ?? 1;
     if (Number(out.count) < min) return false;
@@ -1599,8 +1599,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     ].filter(Boolean).map(String).join(" ");
     const missingFamilies = familyNeedles.filter((fam) => !titleScans.some(({ out }) => {
       const title = scanTitleFull(out);
-      if (!fam.titleRe.test(title)) return false;
-      if (fam.exclude && fam.exclude.test(title)) return false;
+      if (!scheduleTitleMatches(title, fam.titleRe, fam.exclude)) return false;
       if (fam.require && !fam.require.test(title)) return false;
       const min = fam.minCount ?? 1;
       if (Number(out.count) < min) return false;

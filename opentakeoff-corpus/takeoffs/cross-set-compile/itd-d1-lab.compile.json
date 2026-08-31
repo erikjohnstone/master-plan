@@ -1,0 +1,19 @@
+{
+  "set_id": "itd-d1-lab",
+  "source_file": "raw/itd-d1-lab-mechanical.pdf",
+  "kind": "hvac_equipment",
+  "notes": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS) → HHW_CONTROL_VALVE; EXHAUST/LAB FAN SCHEDULE; CANOPY HOOD → RANGE_HOOD; DIFFUSER SCHEDULE → GRD. No extractable BAS points list on this mechanical PDF.",
+  "categories": {
+    "AHU": 1,
+    "BOILER": 2,
+    "PUMP": 4,
+    "FAN": 7,
+    "HHW_CONTROL_VALVE": 9,
+    "GRD": 7,
+    "RANGE_HOOD": 4,
+    "DUCT_SILENCER": 1
+  },
+  "totals": { "items": 35 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 9, "categories": { "HHW_CONTROL_VALVE": 9 } }
+}

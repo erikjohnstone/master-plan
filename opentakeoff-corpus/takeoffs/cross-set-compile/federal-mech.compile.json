@@ -1,0 +1,21 @@
+{
+  "set_id": "federal-mech",
+  "source_file": "raw/federal-attachment4-mechanical.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Sibling FCU titles (HOT WATER / DX) with EV-* marks; GENERAL FAN SCHEDULE; PUMP SCHEDULE with CP-*/CWP-* marks; CHILLER SCHEDULE (ELECTRIC AIR-COOLED); UNIT HEATER SCHEDULE (HOT WATER).",
+  "categories": {
+    "AHU": 1,
+    "FCU": 7,
+    "VAV": 58,
+    "AIR_COOLED_CHILLER": 1,
+    "BOILER": 2,
+    "PUMP": 11,
+    "FAN": 4,
+    "UNIT_HEATER": 2,
+    "AIR_SEPARATOR": 2,
+    "DUCT_SILENCER": 2
+  },
+  "totals": { "items": 90 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

@@ -6,6 +6,8 @@
  * Versioned: changing family rules after VALIDATING starts requires a truth
  * CHANGELOG + reset to 0/5.
  */
+import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
+
 export const CORPUS_TAKEOFF_VERSION = 1;
 
 function cellText(row, headerRe) {
@@ -94,8 +96,9 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
   const items = [];
   for (const table of graph.tables || []) {
     const title = String(table.title?.text || "");
-    if (!titleRe.test(title)) continue;
-    if (exclude && exclude.test(title)) continue;
+    // Soft title match: exact regex first, then compact (no-space) form so
+    // AIRHANDLINGUNITSCHEDULE still joins AIR HANDLING UNIT — set-agnostic.
+    if (!scheduleTitleMatches(title, titleRe, exclude)) continue;
     for (const row of table.rows || []) {
       let tag = String(row.key || "").trim();
       if (identityHeaderRe) {
@@ -152,30 +155,59 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
   };
 }
 
-/** Family extractors — keep in lockstep with build-takeoff-truth-inventory.mjs */
+/**
+ * Family extractors — keep in lockstep with build-takeoff-truth-inventory.mjs.
+ * Title patterns are set-agnostic US MEP phrasing (soft-matched via
+ * scheduleTitleMatches). keyRe filters junk remarks rows when present; omit
+ * when a schedule family's marks are not a single prefix convention.
+ */
 export const HVAC_FAMILY_SPECS = {
-  AHU: { titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED/i, keyRe: /^AHU/i },
+  AHU: { titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED|HYDRONIC\s+COIL|FAN\s+SCHEDULE/i, keyRe: /^AHU/i },
   DOAH_UNIT: { titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i, keyRe: /^DOAH/i },
   DOAH_HANDLING: { titleRe: /DEDICATED OUTDOOR AIR HANDLING/i, keyRe: /^DOAH/i },
-  FCU: { titleRe: /FAN\s*COIL\s*UNIT\s*SCHEDULE/i, keyRe: /^FCU/i },
-  VAV: { titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX/i, keyRe: /^VAV/i },
-  AIR_COOLED_CHILLER: { titleRe: /AIR COOLED CHILLER/i, exclude: /HEAT RECOVERY/i, keyRe: /^CH/i },
+  FCU: { titleRe: /FAN\s*COIL/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i },
+  VAV: {
+    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|AIR TERMINAL BOX/i,
+    exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
+    keyRe: /^(?:VAV|ATB)[\s\-]/i,
+  },
+  AIR_COOLED_CHILLER: {
+    titleRe: /AIR[\s\-]*COOLED[\s\-]*CHILLER|CHILLER SCHEDULE/i,
+    exclude: /HEAT RECOVERY/i,
+    keyRe: /^(?:CH|ACC|PAC)[\s\-]/i,
+  },
   HEAT_RECOVERY_CHILLER: { titleRe: /HEAT RECOVERY CHILLER/i, keyRe: /^CH/i },
-  BOILER: { titleRe: /BOILER SCHEDULE/i, keyRe: /^B[\-]/i },
-  PUMP: { titleRe: /PUMP SCHEDULE/i, keyRe: /P(?:CHWP|HHWP|HHW|SCHWP|SHHWP|HRHWP)|HHWP|PCHWP|PHHWP|SCHWP|SHHWP|HRHWP/i },
-  FAN: { titleRe: /^FAN SCHEDULE$/i },
+  BOILER: { titleRe: /BOILER/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^B[\s\-]/i },
+  // Pump marks vary widely (P-*, CP-*, CWP-*, HHWP-*, …) — count every row on
+  // a pump schedule; do not hardcode one firm's prefix set.
+  PUMP: { titleRe: /PUMP SCHEDULE/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i },
+  FAN: {
+    titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+)?FAN SCHEDULE/i,
+    exclude: /FAN\s*COIL|FAN\s+SOUND|AIR\s+HANDLING\s+UNIT\s+FAN|POINTS\s*LIST/i,
+  },
   CABINET_UNIT_HEATER: { titleRe: /CABINET UNIT HEATER/i },
-  UNIT_HEATER: { titleRe: /^UNIT HEATER SCHEDULE$/i },
-  CRAH: { titleRe: /COMPUTER ROOM AIR HANDLER/i },
+  UNIT_HEATER: { titleRe: /UNIT HEATER SCHEDULE/i, exclude: /CABINET|POINTS\s*LIST|DDC/i },
+  CRAH: { titleRe: /COMPUTER ROOM AIR HANDLER|\bCRAH\b/i },
   DEHUMIDIFIER: { titleRe: /DEHUMIDIFIER SCHEDULE/i, keyRe: /^DH[\-]/i },
   HUMIDIFIER: { titleRe: /HUMIDIFIER SCHEDULE/i, keyRe: /^H[\-]/i },
   AIR_SEPARATOR: { titleRe: /AIR SEPARATOR SCHEDULE/i },
   EXPANSION_TANK: { titleRe: /EXPANSION TANK SCHEDULE/i },
-  CHW_CONTROL_VALVE: { titleRe: /CHW CONTROL VALVE SCHEDULE/i, identityHeaderRe: /VALVE\s*MARK/i },
-  HHW_CONTROL_VALVE: { titleRe: /HHW CONTROL VALVE SCHEDULE/i, identityHeaderRe: /VALVE\s*MARK/i },
-  GRD: { titleRe: /GRILLE,\s*REGISTER,\s*AND\s*DIFFUSER/i },
-  RANGE_HOOD: { titleRe: /RANGE HOOD SCHEDULE/i },
-  DUCT_SILENCER: { titleRe: /DUCT SILENCER SCHEDULE/i },
+  // CHW / HHW from title signals (abbrev or spelled-out). Bypass valves stay out.
+  CHW_CONTROL_VALVE: {
+    titleRe: /(?:CHW|CHILLED\s*WATER).{0,40}CONTROL\s*VALVE|CONTROL\s*VALVE.{0,40}(?:CHW|CHILLED\s*WATER)/i,
+    exclude: /BYPASS/i,
+    identityHeaderRe: /VALVE\s*MARK/i,
+  },
+  HHW_CONTROL_VALVE: {
+    titleRe: /(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT).{0,40}CONTROL\s*VALVE|CONTROL\s*VALVE.{0,40}(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT)/i,
+    exclude: /BYPASS|CHW|CHILLED\s*WATER/i,
+    identityHeaderRe: /VALVE\s*MARK/i,
+  },
+  GRD: {
+    titleRe: /GRILLE[,\s]*REGISTER[,\s]*(?:AND\s*)?DIFFUSER|DIFFUSER[\s\-]*GRILLE|DIFFUSER SCHEDULE/i,
+  },
+  RANGE_HOOD: { titleRe: /RANGE HOOD SCHEDULE|CANOPY HOOD SCHEDULE/i },
+  DUCT_SILENCER: { titleRe: /DUCT SILENCER SCHEDULE|SILENCER SCHEDULE|SOUND ATTENUATOR SCHEDULE/i },
 };
 
 export const HVAC_EXCLUSIONS = [
