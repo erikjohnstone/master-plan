@@ -250,8 +250,8 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /HEAT\s+PUMP/i,
     // ERV "(WITH HEAT PUMP)" stays in ERV — do not double-count ERU-* here.
     exclude: /POINTS\s*LIST|DDC\s+POINTS|WATER\s+HEATER|CHILLER|ENERGY\s+RECOVERY/i,
-    // Titled: HP not after C (drops CHP pumps); SCU/SAC multi-split outdoor/indoor.
-    keyRe: /(?<![C])HP|^(?:SCU|SAC)[\s\-]/i,
+    // HP (not CHP); SCU/SAC multi-split; VRF indoor cassette CC-* / AH-* terminals.
+    keyRe: /(?<![C])HP|^(?:SCU|SAC|CC|AH)[\s\-]/i,
     // Blank-title: only strong HP-* marks (Colville blank WSHP-1 is a chiller nameplate).
     blankKeyRe: /^HP[\s\-]/i,
   },
@@ -298,16 +298,17 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^WS[\s\-]/i,
   },
   FAN: {
-    titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+)?FAN SCHEDULE/i,
-    exclude: /FAN\s*COIL|FAN\s+SOUND|AIR\s+HANDLING\s+UNIT\s+FAN|POINTS\s*LIST|FURNACE/i,
-    keyRe: /^(?:EF|SF|RF|SPF|GEF|GCF|LEF|LF|GF|FAN)[\s\-]/i,
+    titleRe: /(?:GENERAL\s+)?(?:EXHAUST\s+|SUPPLY\s+|RETURN\s+|LAB\s+EXHAUST\s+|RELIEF\s+)?FAN SCHEDULE/i,
+    exclude: /FAN\s*COIL|FAN\s+SOUND|AIR\s+HANDLING\s+UNIT\s+FAN|POINTS\s*LIST|FURNACE|CEILING\s+FAN/i,
+    // REF-* = relief fans (common on courthouse / DOAS sets).
+    keyRe: /^(?:EF|SF|RF|REF|SPF|GEF|GCF|LEF|LF|GF|FAN)[\s\-]/i,
   },
   CABINET_UNIT_HEATER: { titleRe: /CABINET UNIT HEATER/i },
   UNIT_HEATER: {
-    titleRe: /UNIT HEATER SCHEDULE|ELECTRIC\s+HEATERS?(?:\s+SCHEDULE)?/i,
+    titleRe: /UNIT HEATER SCHEDULE|ELECTRIC\s+HEATERS?(?:\s+SCHEDULE)?|ELECTRIC\s+DUCT\s+HEATER/i,
     exclude: /CABINET|POINTS\s*LIST|DDC/i,
-    // Drop transposed-header garbage on broken extracts (Orange County).
-    keyRe: /^(?:UH|CUH|EH)[\s\-]?/i,
+    // UH/CUH/EH room heaters; EDH-* duct-mounted electric heaters.
+    keyRe: /^(?:UH|CUH|EH|EDH)[\s\-]?/i,
   },
   // Electric radiant ceiling panels (school/courthouse schedules; ECP-* marks).
   RADIANT_CEILING_PANEL: {

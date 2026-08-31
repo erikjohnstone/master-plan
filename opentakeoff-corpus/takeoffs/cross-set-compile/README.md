@@ -29,6 +29,8 @@ title phrasing (`AIRHANDLINGUNITSCHEDULE`, `GENERAL FAN SCHEDULE`,
 | `27_WA_ColvilleTribes_Hatchery_Lab` | `bulk/HVAC_BAS_Plan_Sets/27_WA_ColvilleTribes_Hatchery_Lab.pdf` | Bulk split-system FCU + buffer tanks + fin-tube |
 | `18_OR_BakerMS_HVAC_Electrical_FullSet` | `bulk/HVAC_BAS_Plan_Sets/18_OR_BakerMS_HVAC_Electrical_FullSet.pdf` | Bulk MAU makeup-air + heat pumps + GRD |
 | `14_OR_KlamathCC_LearningCtr_Mechanical` | `bulk/HVAC_BAS_Plan_Sets/14_OR_KlamathCC_LearningCtr_Mechanical.pdf` | Bulk FC-### fan coils + HYDRONIC PUMPS + HP + EH |
+| `25_WA_DouglasCounty_Courthouse_HVAC_DDC` | `bulk/HVAC_BAS_Plan_Sets/25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf` | Bulk VRF indoor CC-*/AH-* + REF relief fans |
+| `06_MO_NatlGuard_JeffCity_CST_Addition` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/06_MO_NatlGuard_JeffCity_CST_Addition.pdf` | Bulk FCU/VAV/RTU + ELECTRIC DUCT HEATER (EDH) |
 
 ## How counts were authored
 

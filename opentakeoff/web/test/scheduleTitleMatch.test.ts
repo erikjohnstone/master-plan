@@ -331,6 +331,30 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
     ),
     true,
   );
+  // VRF indoor cassette / air-handler terminals on HEAT PUMP schedules.
+  assert.ok(HVAC_FAMILY_SPECS.HEAT_PUMP.keyRe!.test("CC-8-1"));
+  assert.ok(HVAC_FAMILY_SPECS.HEAT_PUMP.keyRe!.test("AH-30-8"));
+  assert.ok(!HVAC_FAMILY_SPECS.HEAT_PUMP.keyRe!.test("AHU-1"));
+  // Relief fans (REF-*) — RF alone must not require a hyphen after REF's E.
+  assert.ok(HVAC_FAMILY_SPECS.FAN.keyRe!.test("REF-1"));
+  assert.ok(HVAC_FAMILY_SPECS.FAN.keyRe!.test("EF-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "CEILING FAN SCHEDULE",
+      HVAC_FAMILY_SPECS.FAN.titleRe,
+      HVAC_FAMILY_SPECS.FAN.exclude,
+    ),
+    false,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "ELECTRIC DUCT HEATER SCHEDULE",
+      HVAC_FAMILY_SPECS.UNIT_HEATER.titleRe,
+      HVAC_FAMILY_SPECS.UNIT_HEATER.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.UNIT_HEATER.keyRe!.test("EDH-1"));
 });
 
 test("query_table soft needle hits no-space titles for long needles", () => {

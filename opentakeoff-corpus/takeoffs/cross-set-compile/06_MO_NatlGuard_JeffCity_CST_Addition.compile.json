@@ -1,0 +1,18 @@
+{
+  "set_id": "06_MO_NatlGuard_JeffCity_CST_Addition",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/06_MO_NatlGuard_JeffCity_CST_Addition.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk National Guard — FCU (FAN COIL UNT typo title) + VAV BOX + RTU ACU-6 + HP + UH + EDH duct heater + GRD plurals. Locks ELECTRIC DUCT HEATER → UNIT_HEATER.",
+  "categories": {
+    "FCU": 3,
+    "VAV": 9,
+    "RTU": 1,
+    "HEAT_PUMP": 2,
+    "FAN": 1,
+    "UNIT_HEATER": 4,
+    "GRD": 7
+  },
+  "totals": { "items": 27 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

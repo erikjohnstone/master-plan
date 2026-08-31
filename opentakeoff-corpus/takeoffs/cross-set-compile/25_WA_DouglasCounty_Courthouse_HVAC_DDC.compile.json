@@ -1,0 +1,14 @@
+{
+  "set_id": "25_WA_DouglasCounty_Courthouse_HVAC_DDC",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk courthouse — split + VRF outdoor HP-* + VRF indoor CC-*/AH-* terminals + CH-1 + REF-* relief fans. Locks VRF indoor cassette marks and REF fan prefix.",
+  "categories": {
+    "HEAT_PUMP": 12,
+    "AIR_COOLED_CHILLER": 1,
+    "FAN": 2
+  },
+  "totals": { "items": 15 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}
