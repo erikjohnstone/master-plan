@@ -990,6 +990,54 @@ test("WP1.4 VACUUM_PUMP titled V-* (SDSU shape); hydronic PUMP excludes vacuum",
   assert.equal(hvac.categories.PUMP.items[0].tag, "CHP-1");
 });
 
+test("WP1.4 BRINE_TANK on softener schedule (SDSU BT-1); Colville BUFFER BT untouched", () => {
+  assert.ok(HVAC_FAMILY_SPECS.BRINE_TANK.keyRe!.test("BT-1"));
+  assert.ok(HVAC_FAMILY_SPECS.BUFFER_TANK.keyRe!.test("BT-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "WATER SOFTENER SCHEDULE",
+      HVAC_FAMILY_SPECS.BRINE_TANK.titleRe,
+      HVAC_FAMILY_SPECS.BRINE_TANK.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "BUFFER TANK SCHEDULE",
+      HVAC_FAMILY_SPECS.BRINE_TANK.titleRe,
+      HVAC_FAMILY_SPECS.BRINE_TANK.exclude,
+    ),
+    false,
+  );
+  const graph = {
+    sheets: [],
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#1",
+        title: { text: "WATER SOFTENER SCHEDULE" },
+        rows: [
+          { key: "WS-1", cells: { ITEM: { text: "WS-1" } } },
+          { key: "BT-1", cells: { ITEM: { text: "BT-1" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#2",
+        title: { text: "BUFFER TANK SCHEDULE" },
+        rows: [{ key: "BT-2", cells: { MARK: { text: "BT-2" } } }],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.WATER_SOFTENER.count, 1);
+  assert.equal(hvac.categories.WATER_SOFTENER.items[0].tag, "WS-1");
+  assert.equal(hvac.categories.BRINE_TANK.count, 1);
+  assert.equal(hvac.categories.BRINE_TANK.items[0].tag, "BT-1");
+  assert.equal(hvac.categories.BUFFER_TANK.count, 1);
+  assert.equal(hvac.categories.BUFFER_TANK.items[0].tag, "BT-2");
+});
+
 test("WP1.4 TEF/GX fans, ELECTRIC HUMIDIFIER EH, FILTER F-#, LOUER OCR, EPANSION OCR", () => {
   assert.ok(HVAC_FAMILY_SPECS.FAN.keyRe!.test("TEF-1"));
   assert.ok(HVAC_FAMILY_SPECS.FAN.keyRe!.test("GX-1"));
