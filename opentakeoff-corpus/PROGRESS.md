@@ -302,7 +302,7 @@ reconcile, and plan joins.
   UI graph prewarm (`schedules indexing…`) + `prewarmGraphSmoke.test.mjs`.
 - **Bulk rescore (2026-08-31 tip `cdfded4`):** MEAT **20** · WEAK **2** · ZERO **9** (Douglas misc+VRF MEAT; SDSU 85; Kennebec+Suwannee honest WEAK).
 - **Orange County cross-set key:** 32 VAV + **33** HVAC items (BP-1 only; fake HRC/UH dropped); reconcile scaffold test.
-- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (**42**), Baker MS (**17**), Klamath (**45**), Douglas (**18**), Jeff City CST (**27**), **SDSU EngSciences (118)**, **MSU Life Sciences (5)**, bldg5406 (**27**), **itd-d1-lab (85)** locked.
+- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16), Reid (12), Hurlburt (13), Colville (**47**), Baker MS (**17**), Klamath (**50**), Douglas (**18**), Jeff City CST (**27**), **SDSU EngSciences (118)**, **MSU Life Sciences (5)**, bldg5406 (**27**), **itd-d1-lab (88)** locked.
 - **WP1.4 keyRe broaden:** BOILER1 marks, blank-title FCU/EV/EF/RF fan-coil rows — federal-mech later gains FIN_TUBE (100); two bulk WEAK→MEAT promotions.
 - **WP1.4 CODE_RE + EQUIP.TAG + banding orphans:** `AHU-1A`-style digit+letter suffixes; `EQUIP. TAG` own-identity; seam-gap spans assigned to nearest band + thin identity-band absorb. Hawthorn **1→5**.
 - **WP1.4 title hunt:** `\bSCHEDULE\b` (not SCHEDULED) — Northport AIR INLETS & OUTLETS recovers 12 GRD (**3→15**).
@@ -323,6 +323,7 @@ reconcile, and plan joins.
 - **WP1.4 itd-d1-lab orphans (shared path):** `HOT WATER REHEAT COIL`→DUCT_MOUNTED_COIL; `HUM-*` humidifier; `MECHANICAL SPECIALTY EQUIPMENT` catch-all AS/ET; ductless split DFC/DCU→FCU (comma-split when keyRe filters; Baker ERV keeps row.key) — itd **44→58**.
 - **WP1.4 LAB_AIR_VALVE + snorkel + DOAS SYSTEM + HYDRONIC ACCESSORIES (shared path):** pressure-independent SAV/GEV/SEV (HVAC only, not T-VALVE); SNORKEL HOOD→RANGE_HOOD; `DEDICATED OUTDOOR AIR SYSTEM`→DOAS; HYDRONIC ACCESSORIES catch-all AS/BT/ET — itd **58→84**; Klamath **36→45**.
 - **WP1.4 gas-split indoor F-1:** FCU keyRe accepts `F-#` on split-system titles (not `CU-#`, preserves Colville/Carson) — itd **84→85**.
+- **WP1.4 hydronic accessories families (shared path):** CHEMICAL_POT_FEEDER (PF), GLYCOL_MAKEUP (GMU), STRAINER (STR), BYPASS_CONTROL_VALVE (BCV), AIR_COMPRESSOR (titled only); AIR_SEPARATOR+HS; EXPANSION_TANK+DT; PUMP blankKeyRe+BS — itd **85→88**; Klamath **45→50**; Colville **42→47**.
 - **WP4 schedule-stem dup collapse:** same-sheet truncated title extracts (`…SCHEDULE` stem) no longer AMBIGUOUS — SDSU AHU **3/3 MATCH**; VAV **27/40 MATCH** (honest SCHEDULE_ONLY remainder).
 - **WP4 Douglas DOAS:** misc-schedule **DOAS-30 MATCH** locked.
 - **WP4 Jeff City CST:** VAV **9/9** + FCU **3/3 MATCH** (locked in `reconcileWorkflow.test.mjs`).
@@ -337,12 +338,12 @@ reconcile, and plan joins.
 - **WP1 Suwannee key:** honest WEAK RTU:1 locked.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
-- **WP6:** `test:workflows` **32/32** (tip LAB_AIR_VALVE/snorkel/DOAS SYSTEM/hydronic accessories — itd 84, Klamath 45).
+- **WP6:** `test:workflows` pending tip after accessory families (itd **88**, Klamath **50**, Colville **47**); prior tip cross-corpus **3/3** at itd 85.
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP1.4 orphan titles: Colville BS-1/LV-*; itd F-1CU-1 / FM/PF / BCV-1; Klamath GMU/HS/PF; federal AHU fan schedule excluded by design.
+2. WP1.4 orphan titles: Colville LV louvers + filter-panel FTR-1 tag collision; itd CU-1 outdoor / FM-1; federal AHU fan schedule excluded by design.
 3. WP1.4 additional table-boundary misses on bulk WEAK/ZERO sets (many ZEROs honest — Augusta window, Iowa/Judson note spans).
 4. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 5. WP4 deepen on Douglas / Klamath / SDSU VAV SCHEDULE_ONLY remainder.
