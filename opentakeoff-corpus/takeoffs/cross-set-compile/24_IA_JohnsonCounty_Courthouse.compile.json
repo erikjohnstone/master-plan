@@ -2,14 +2,15 @@
   "set_id": "24_IA_JohnsonCounty_Courthouse",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/24_IA_JohnsonCounty_Courthouse.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk courthouse HVAC — FCU/ERV/pump + GRILLES/REGISTERS/DIFFUSERS (plural title); MEAT after GRD plural titleRe.",
+  "notes": "Bulk courthouse — FCU/ERV/pump + GRILLES plurals + ELECTRIC RADIANT CEILING PANEL (ECP-1).",
   "categories": {
     "FCU": 2,
     "ERV": 1,
     "PUMP": 1,
-    "GRD": 3
+    "GRD": 3,
+    "RADIANT_CEILING_PANEL": 1
   },
-  "totals": { "items": 7 },
+  "totals": { "items": 8 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }

@@ -4861,7 +4861,7 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
     const inBand = rows[i].filter((t) => t.x >= x0 && t.x <= x1);
     if (!inBand.length) continue;
     budget--;
-    const hit = inBand.find((t) => (/SCHEDULE/.test(norm(t.str)) || isReferenceOrSpecTable(t.str)) && (t.h || 8) >= hdrH2 * BIG_FONT_RATIO2);
+    const hit = inBand.find((t) => (/\bSCHEDULE\b/.test(norm(t.str)) || isReferenceOrSpecTable(t.str)) && (t.h || 8) >= hdrH2 * BIG_FONT_RATIO2);
     if (hit) { title = { sheet: sheet.key, text: hit.str.trim(), bbox: bboxOf(hit) }; break; }
     if (inBand.length !== 1) continue;
     const t = inBand[0];
@@ -4878,7 +4878,7 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
       const inBand = rows[i].filter((t) => t.x >= x0 && t.x <= x1);
       if (!inBand.length) continue;
       budget--;
-      const hit = inBand.find((t) => /SCHEDULE/.test(norm(t.str)) || isReferenceOrSpecTable(t.str));
+      const hit = inBand.find((t) => /\bSCHEDULE\b/.test(norm(t.str)) || isReferenceOrSpecTable(t.str));
       if (hit) title = { sheet: sheet.key, text: hit.str.trim(), bbox: bboxOf(hit) };
     }
   }

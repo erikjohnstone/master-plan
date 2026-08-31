@@ -263,6 +263,12 @@ export const HVAC_FAMILY_SPECS = {
   },
   CABINET_UNIT_HEATER: { titleRe: /CABINET UNIT HEATER/i },
   UNIT_HEATER: { titleRe: /UNIT HEATER SCHEDULE/i, exclude: /CABINET|POINTS\s*LIST|DDC/i },
+  // Electric radiant ceiling panels (school/courthouse schedules; ECP-* marks).
+  RADIANT_CEILING_PANEL: {
+    titleRe: /RADIANT\s+CEILING\s+PANEL|ELECTRIC\s+RADIANT/i,
+    exclude: /POINTS\s*LIST|DDC|HYDRONIC\s+RADIANT\s+FLOOR/i,
+    keyRe: /^ECP[\s\-]/i,
+  },
   CRAH: { titleRe: /COMPUTER ROOM AIR HANDLER|\bCRAH\b/i },
   DEHUMIDIFIER: { titleRe: /DEHUMIDIFIER SCHEDULE/i, keyRe: /^DH[\-]/i },
   HUMIDIFIER: { titleRe: /HUMIDIFIER SCHEDULE/i, keyRe: /^H[\-]/i },
@@ -280,7 +286,7 @@ export const HVAC_FAMILY_SPECS = {
     identityHeaderRe: /VALVE\s*MARK/i,
   },
   GRD: {
-    titleRe: /GRILLES?[,\s]*REGISTERS?[,\s]*(?:AND\s*)?DIFFUSERS?|DIFFUSERS?[\s\-]*GRILLES?|DIFFUSER\s+SCHEDULE/i,
+    titleRe: /GRILLES?[,\s]*REGISTERS?[,\s]*(?:AND\s*)?DIFFUSERS?|DIFFUSERS?[\s\-]*GRILLES?|DIFFUSER\s+SCHEDULE|AIR\s+INLETS?\s*(?:&|AND)\s*OUTLETS?/i,
   },
   RANGE_HOOD: { titleRe: /RANGE HOOD SCHEDULE|CANOPY HOOD SCHEDULE|RELIEF HOOD SCHEDULE|INTAKE HOOD SCHEDULE/i },
   DUCT_SILENCER: {

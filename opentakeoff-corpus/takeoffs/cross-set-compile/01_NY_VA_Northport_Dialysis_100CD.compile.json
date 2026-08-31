@@ -2,13 +2,14 @@
   "set_id": "01_NY_VA_Northport_Dialysis_100CD",
   "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/01_NY_VA_Northport_Dialysis_100CD.pdf",
   "kind": "hvac_equipment",
-  "notes": "Bulk VA dialysis — AIR HANDLING UNIT (no SCHEDULE suffix) + humidifier H-3 + blank-title RF-12 return fan row.",
+  "notes": "Bulk VA dialysis — AHU + RF-12 + H-3 + AIR INLETS & OUTLETS (12 GRD). Title hunt must not steal numbered-note SCHEDULED prose.",
   "categories": {
     "AHU": 1,
+    "FAN": 1,
     "HUMIDIFIER": 1,
-    "FAN": 1
+    "GRD": 12
   },
-  "totals": { "items": 3 },
+  "totals": { "items": 15 },
   "bas_points": { "rows": 0 },
   "control_valves": { "items": 0 }
 }

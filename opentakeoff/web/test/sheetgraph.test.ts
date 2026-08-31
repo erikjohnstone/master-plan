@@ -3072,3 +3072,24 @@ test("WP1.4 CODE_RE accepts digit+letter unit suffixes (AHU-1A / CU-1B)", () => 
   assert.equal(tables.length, 1, `expected one AHU table, got ${tables.map((t) => t.title?.text).join(" | ")}`);
   assert.deepEqual(tables[0].rows.map((r) => r.key), ["AHU-1A", "AHU-1B", "CU-1A"]);
 });
+
+test("WP1.4 title hunt: SCHEDULED note prose must not steal the real title (Northport AIR INLETS shape)", () => {
+  const sp = (str: string, x: number, y: number, h = 8): GraphSpan => ({ str, x, y, w: str.length * 5, h });
+  const sched: SheetSpans = {
+    key: "inlets.pdf#1",
+    sheet_number: "M88",
+    spans: [
+      sp("AIR INLETS & OUTLETS", 100, 10, 14),
+      sp("10. AIRFLOWS SCHEDULED ARE FINAL BALANCING VALUES", 400, 28, 8),
+      sp("TAG", 0, 50), sp("SIZE", 100, 50), sp("CFM", 200, 50), sp("MCA", 300, 50), sp("MOCP", 400, 50), sp("VOLTAGE", 500, 50), sp("PHASE", 600, 50),
+      sp("D-1", 0, 80), sp("6", 100, 80), sp("60", 200, 80), sp("10", 300, 80), sp("15", 400, 80), sp("120", 500, 80), sp("1", 600, 80),
+      sp("R-1", 0, 100), sp("8", 100, 100), sp("80", 200, 100), sp("10", 300, 100), sp("15", 400, 100), sp("120", 500, 100), sp("1", 600, 100),
+    ],
+  };
+  const tables = extractAllTables(sched, "equipment");
+  assert.ok(tables.length >= 1, "equipment table extracted");
+  const hit = tables.find((t) => (t.rows || []).some((r) => r.key === "D-1"));
+  assert.ok(hit, "D-1 row present");
+  assert.match(String(hit!.title?.text || ""), /AIR INLETS/i);
+  assert.ok(!/AIRFLOWS SCHEDULED/i.test(String(hit!.title?.text || "")), "numbered SCHEDULED note must not be the title");
+});
