@@ -300,11 +300,12 @@ reconcile, and plan joins.
   `CEREBRAS_API_KEY`); SLATE + GOAL amended for third takeoff ID.
 - **WP5 CLOSED:** Browser geometric fork removed; production HTTP for plan tools;
   UI graph prewarm (`schedules indexing…`) + `prewarmGraphSmoke.test.mjs`.
-- **Bulk rescore (2026-08-31 post-fix):** MEAT **15** · WEAK **7** · ZERO **9** (31 vector sets).
+- **Bulk rescore (2026-08-31 post-CODE_RE):** MEAT **18** · WEAK **4** · ZERO **9** (31 vector sets; Hawthorn WEAK→MEAT).
 - **Orange County cross-set key:** 32 VAV + 43 HVAC items; reconcile scaffold test.
 - **WP1 title:** `DOAS` family spec; Valdosta 4→5 items; `VAV TERMINAL BOX` broadening.
-- **WP1 bulk keys:** Johnson County (4), Kennebec (2), Northport (3), Spokane (5), Macon Bibb (5) locked in `cross-set-compile/`.
+- **WP1 bulk keys:** Johnson County (4), Kennebec (2), Northport (3), Spokane (5), Macon Bibb (5), Hawthorn (5) locked in `cross-set-compile/`.
 - **WP1.4 keyRe broaden:** BOILER1 marks, blank-title FCU/EV/EF/RF fan-coil rows — federal-mech stays 96; two bulk WEAK→MEAT promotions.
+- **WP1.4 CODE_RE + EQUIP.TAG + banding orphans:** `AHU-1A`-style digit+letter suffixes; `EQUIP. TAG` own-identity; seam-gap spans assigned to nearest band + thin identity-band absorb. Hawthorn **1→5**.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
 - **WP4 (Orange County):** installed reconcile on bulk WP1 set — VAV-1-01 / VAV-1-10 **MATCH** with plan cites (`reconcileWorkflow.test.mjs`).

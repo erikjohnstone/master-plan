@@ -62,7 +62,7 @@ function rowIdentityTag(row) {
   const id = row?.identity?.text || row?.identity?.key;
   if (id) return String(id).trim();
   for (const [header, cell] of Object.entries(row?.cells || {})) {
-    if (/^(MARK|TAG|SYMBOL|VALVE MARK|ID|KEY|UNIT MARK|EQUIP|DESIGNATION|UNIT NO|EQUIP NO|UNIT TAG|EQUIP NO\.|ITEM NO|EQUIP NO)$/i.test(String(header || "").trim())) {
+    if (/^(MARK|TAG|SYMBOL|VALVE MARK|ID|KEY|UNIT MARK|EQUIP|DESIGNATION|UNIT NO|EQUIP NO|UNIT TAG|EQUIP\.?\s*TAG|ITEM NO)$/i.test(String(header || "").trim())) {
       const t = String(cell?.text || "").trim();
       if (t) return t;
     }

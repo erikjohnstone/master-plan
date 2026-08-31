@@ -1,0 +1,14 @@
+{
+  "set_id": "10_MO_Hawthorn_PsychHospital_HVAC",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/10_MO_Hawthorn_PsychHospital_HVAC.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk hospital cottages — AHU-1A/1B (digit+letter suffix) + CU-1A/1B + DWH-1; MEAT after CODE_RE + EQUIP.TAG + banding orphan fixes.",
+  "categories": {
+    "AHU": 2,
+    "CONDENSING_UNIT": 2,
+    "WATER_HEATER": 1
+  },
+  "totals": { "items": 5 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

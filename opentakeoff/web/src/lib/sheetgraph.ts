@@ -980,6 +980,10 @@ const CATALOG_ANCHOR_WORDS = ["ID", "MARK", "CODE", "SYMBOL", "TAG", "DESIGNATIO
 const ITEM_NO_HEADER_RE = /^(?:ITEM|EQUIP\.?|EQUIPMENT)\s*(?:NO\.?|NUMBER|#)$/i;
 /** UNIT TAG / UNIT NO — own-identity on bulk school/courthouse schedules. */
 const UNIT_TAG_HEADER_RE = /^UNIT\s*(?:TAG|NO\.?|NUMBER|#)$/i;
+/** EQUIP. TAG / EQUIP TAG — own-identity on bulk hospital / school schedules
+ * (Hawthorn Psych AHU SCHEDULE). Distinct from UNIT MARK / VALVE MARK
+ * (cross-references): EQUIP TAG names THIS row's equipment mark. */
+const EQUIP_TAG_HEADER_RE = /^EQUIP\.?\s*TAG$/i;
 
 function isItemNoHeader(text: string | null | undefined): boolean {
   return ITEM_NO_HEADER_RE.test(norm(text || "").replace(/\s+/g, " ").trim());
@@ -989,8 +993,12 @@ function isUnitTagHeader(text: string | null | undefined): boolean {
   return UNIT_TAG_HEADER_RE.test(norm(text || "").replace(/\s+/g, " ").trim());
 }
 
+function isEquipTagHeader(text: string | null | undefined): boolean {
+  return EQUIP_TAG_HEADER_RE.test(norm(text || "").replace(/\s+/g, " ").trim());
+}
+
 function isOwnIdentityEquipmentHeader(text: string | null | undefined): boolean {
-  return isItemNoHeader(text) || isUnitTagHeader(text);
+  return isItemNoHeader(text) || isUnitTagHeader(text) || isEquipTagHeader(text);
 }
 
 /** True when a header IS a bare catalog-anchor word (after `norm`) — the
@@ -1014,7 +1022,7 @@ export function isBareAnchorHeader(header: string | null | undefined): boolean {
 export function isQualifiedAnchorHeader(header: string | null | undefined): boolean {
   const h = norm(header || "");
   if (!h || CATALOG_ANCHOR_WORDS.includes(h)) return false;
-  // ITEM NO / EQUIP NO / UNIT TAG are own-identity, not UNIT MARK-style
+  // ITEM NO / EQUIP NO / UNIT TAG / EQUIP TAG are own-identity, not UNIT MARK-style
   // cross-references.
   if (isOwnIdentityEquipmentHeader(h)) return false;
   const toks = h.split(/\s+/).filter(Boolean);
@@ -3050,7 +3058,10 @@ function bandLimits(anchors: Anchor[]): { x0: number; x1: number; medGap: number
 // (this specific row already resolves correctly via a separate, working
 // mechanism this file does not touch) rather than silently taking it down
 // while chasing a different set's own real gap.
-const CODE_RE = /^(?:[A-Z]{1,4}[A-Z0-9]{0,4}|[A-Z]{1,6}(?:-(?:[A-Z][A-Z0-9]{0,5}|[0-9]{1,5})){1,4})$/;
+const CODE_RE = /^(?:[A-Z]{1,4}[A-Z0-9]{0,4}|[A-Z]{1,6}(?:-(?:[A-Z][A-Z0-9]{0,5}|[0-9]{1,5}[A-Z]{0,3})){1,4})$/;
+// Hyphen segments accept digit-leading unit suffixes with an optional letter
+// trail (AHU-1A / CU-1B / FCU-2A) — common US multi-cottage / multi-unit
+// marking. Pure letter segments (AHU-A1) and pure digits (AHU-1) unchanged.
 // Every recognized column-header word, across all three vocabularies —
 // a real device/finish tag is never itself the bare name of some table's
 // column (the same axiom bandDataRows' own keyIsOwnColumn check already
@@ -6473,15 +6484,78 @@ export function bandedSheets(sheet: SheetSpans, opts: ExtractOpts): SheetSpans[]
   kept.sort((a, b) => a.x0 - b.x0);
 
   const bounds = [-Infinity, ...kept.flatMap((s) => [s.x0, s.x1]).sort((a, b) => a - b), Infinity];
-  // bounds pairs up as (-Inf, s1.x0), (s1.x0, s1.x1) [the seam gap itself,
-  // always empty by construction — contributes nothing], (s1.x1, s2.x0), …
+  // bounds pairs up as (-Inf, s1.x0), (s1.x0, s1.x1) [the seam gap itself],
+  // (s1.x1, s2.x0), …  Seam gaps were assumed empty by density, but a real
+  // narrow column (Hawthorn Psych AHU SCHEDULE's MODEL at x≈2582) can sit
+  // inside a low-density "empty" run and would be dropped forever if we only
+  // keep the even pairs. Content bands are filled first; orphans whose
+  // center landed in a seam gap are then assigned to the nearest band.
   const bands: SheetSpans[] = [];
+  const bandRanges: Array<{ x0: number; x1: number }> = [];
   for (let i = 0; i + 1 < bounds.length; i += 2) {
     const [x0, x1] = [bounds[i], bounds[i + 1]];
     const bandSpans = sheet.spans.filter((s) => { const cx = centerX(s); return cx >= x0 && cx < x1; });
-    if (bandSpans.length) bands.push({ key: sheet.key, sheet_number: sheet.sheet_number, spans: bandSpans, ...(sheet.segs ? { segs: sheet.segs } : {}) });
+    if (bandSpans.length) {
+      bands.push({ key: sheet.key, sheet_number: sheet.sheet_number, spans: bandSpans, ...(sheet.segs ? { segs: sheet.segs } : {}) });
+      bandRanges.push({ x0, x1 });
+    }
   }
-  return bands.length > 1 ? bands.slice(0, MAX_COLUMN_BANDS) : [sheet];
+  if (bands.length <= 1) return [sheet];
+
+  const claimed = new Set(bands.flatMap((b) => b.spans));
+  for (const sp of sheet.spans) {
+    if (claimed.has(sp)) continue;
+    const cx = centerX(sp);
+    let best = 0;
+    let bestDist = Infinity;
+    for (let i = 0; i < bandRanges.length; i++) {
+      const { x0, x1 } = bandRanges[i];
+      const dist = cx < x0 ? x0 - cx : cx >= x1 ? cx - x1 : 0;
+      if (dist < bestDist) { bestDist = dist; best = i; }
+    }
+    bands[best].spans.push(sp);
+  }
+
+  // Multi-seam partitions can leave a thin middle band that holds only the
+  // identity columns (EQUIP. TAG / MANUFACTURER / AHU-1A) while MODEL and
+  // rating columns sit in the neighbor — neither side extracts alone
+  // (Hawthorn Psych #9 AIR HANDLING UNIT SCHEDULE, measured). Absorb a
+  // band that cannot produce a real table by itself into a neighbor only
+  // when the UNION newly produces a table (never collapse a failing body
+  // band into an unrelated complete schedule and re-contaminate it).
+  const probeOptsFinal: ExtractOpts = { ...opts, noForwardTierMerge: true };
+  let merged = true;
+  while (merged && bands.length > 1) {
+    merged = false;
+    for (let i = 0; i < bands.length; i++) {
+      if (sideHasRealTable(bands[i].spans, sheet.key, probeOptsFinal)) continue;
+      const candidates: number[] = [];
+      if (i > 0) candidates.push(i - 1);
+      if (i + 1 < bands.length) candidates.push(i + 1);
+      // Prefer the larger neighbor when both unions succeed.
+      candidates.sort((a, b) => bands[b].spans.length - bands[a].spans.length);
+      let into = -1;
+      for (const n of candidates) {
+        const unionSpans = [...bands[n].spans, ...bands[i].spans];
+        if (sideHasRealTable(unionSpans, sheet.key, probeOptsFinal)) {
+          into = n;
+          break;
+        }
+      }
+      if (into < 0) continue;
+      bands[into] = {
+        key: sheet.key,
+        sheet_number: sheet.sheet_number,
+        spans: [...bands[into].spans, ...bands[i].spans],
+        ...(sheet.segs ? { segs: sheet.segs } : {}),
+      };
+      bands.splice(i, 1);
+      merged = true;
+      break;
+    }
+  }
+
+  return bands.length > 1 ? bands.slice(0, MAX_COLUMN_BANDS) : (bands[0] ? [bands[0]] : [sheet]);
 }
 
 // ── the graph ───────────────────────────────────────────────────────────────
@@ -7877,7 +7951,7 @@ export function scheduleTableFromODL(
     }
   }
 
-  const keyColIdx = headers.findIndex((h) => /^(SYMBOL|TAG|ID|MARK|CODE|UNIT TAG|UNIT NO|DESIGNATION)$/.test(norm(h)));
+  const keyColIdx = headers.findIndex((h) => /^(SYMBOL|TAG|ID|MARK|CODE|UNIT TAG|UNIT NO|EQUIP TAG|EQUIP\. TAG|DESIGNATION)$/.test(norm(h)));
   const rows: TableRow[] = [];
   for (let r = headerEnd; r < R; r++) {
     const seen = new Set<ODLTableCell>();

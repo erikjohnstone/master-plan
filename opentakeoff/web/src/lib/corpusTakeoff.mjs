@@ -212,7 +212,7 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC\s+POINTS|WATER\s+HEATER/i,
   },
   CONDENSING_UNIT: {
-    titleRe: /CONDENSING\s+UNIT\s+SCHEDULE/i,
+    titleRe: /CONDENSING\s+UNIT(?:\s+SCHEDULE)?|AIR[\s\-]*COOLED\s+CONDENSING\s+UNIT/i,
     exclude: /AIR[\s\-]*COOLED\s+CHILLER|POINTS\s*LIST|DDC/i,
   },
   HEAT_PUMP: {

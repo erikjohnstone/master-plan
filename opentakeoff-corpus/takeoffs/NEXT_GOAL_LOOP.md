@@ -160,8 +160,10 @@ outdoor-air unit, …), not per-PDF hardcodes.
 2. [x] `crossCorpusWorkflow` keyed scores + suite hook (`test:workflows`).
 3. [x] Soft title matching (`scheduleTitleMatch.mjs`) beside family specs /
    `query_table` — exact first; sibling excludes kept with unit fixtures.
-4. [ ] Header / column miss classes: grow set-agnostic vocab from real
+4. [~] Header / column miss classes: grow set-agnostic vocab from real
    failures (sheetgraph `columnMapFor` path) — fixture counts only in tests.
+   Progress: `CODE_RE` digit+letter suffixes; `EQUIP. TAG` own-identity;
+   banding seam-gap orphans + thin identity-band absorb (Hawthorn AHU).
 5. [x] Product fixes set-agnostic (title signals / keyRe broaden) — no
    NAVFAC sheet IDs or locked counts in product code.
 6. [x] NAVFAC `T-HVAC-01` / `T-BAS-01` remain green after changes.

@@ -3050,4 +3050,25 @@ test("UNIT TAG header is own-identity equipment anchor, not a qualified cross-re
   assert.equal(isBareAnchorHeader("UNIT NO"), true);
   assert.equal(isQualifiedAnchorHeader("UNIT MARK"), true);
   assert.equal(isBareAnchorHeader("DESIGNATION"), true);
+  assert.equal(isBareAnchorHeader("EQUIP. TAG"), true);
+  assert.equal(isQualifiedAnchorHeader("EQUIP. TAG"), false);
+  assert.equal(isBareAnchorHeader("EQUIP TAG"), true);
+});
+
+test("WP1.4 CODE_RE accepts digit+letter unit suffixes (AHU-1A / CU-1B)", () => {
+  const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
+  const sched: SheetSpans = {
+    key: "ahu-suffix.pdf#1",
+    sheet_number: "M9",
+    spans: [
+      sp("AIR HANDLING UNIT SCHEDULE", 100, 10),
+      sp("EQUIP. TAG", 0, 40), sp("TYPE", 180, 40), sp("GPM", 260, 40), sp("MANUFACTURER", 360, 40), sp("REMARKS", 760, 40),
+      sp("AHU-1A", 0, 70), sp("DX", 180, 70), sp("10", 260, 70), sp("ACME", 360, 70), sp("1", 760, 70),
+      sp("AHU-1B", 0, 90), sp("DX", 180, 90), sp("10", 260, 90), sp("ACME", 360, 90), sp("1", 760, 90),
+      sp("CU-1A", 0, 110), sp("DX", 180, 110), sp("12", 260, 110), sp("ACME", 360, 110), sp("1", 760, 110),
+    ],
+  };
+  const tables = extractAllTables(sched, "equipment");
+  assert.equal(tables.length, 1, `expected one AHU table, got ${tables.map((t) => t.title?.text).join(" | ")}`);
+  assert.deepEqual(tables[0].rows.map((r) => r.key), ["AHU-1A", "AHU-1B", "CU-1A"]);
 });

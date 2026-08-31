@@ -20,6 +20,7 @@ title phrasing (`AIRHANDLINGUNITSCHEDULE`, `GENERAL FAN SCHEDULE`,
 | `01_NY_VA_Northport_Dialysis_100CD` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/01_NY_VA_Northport_Dialysis_100CD.pdf` | Bulk VA AHU + humidifier (title without SCHEDULE suffix) |
 | `30_WA_SpokaneTransit_CoolingTower` | `bulk/HVAC_BAS_Plan_Sets/30_WA_SpokaneTransit_CoolingTower.pdf` | Bulk CUP boiler (BOILER1 mark) + pumps + cooling tower |
 | `23_GA_MaconBibb_RecreationCenter` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/23_GA_MaconBibb_RecreationCenter.pdf` | Bulk blank-title FCU/EF tables + heat pump schedule |
+| `10_MO_Hawthorn_PsychHospital_HVAC` | `bulk/HVAC_BAS_Plan_Sets/10_MO_Hawthorn_PsychHospital_HVAC.pdf` | Bulk AHU-1A/1B (digit+letter tags) + CU + water heater |
 
 ## How counts were authored
 
