@@ -119,7 +119,7 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHead
     // keyRe may claim rows (Douglas EH/DOAS; Colville WSHP/HWP master lists).
     const titleOk = scheduleTitleMatches(title, titleRe, exclude);
     const blankTitle = !title.trim();
-    const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?EQUIPMENT\s+SCHEDULE$/i.test(title);
+    const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$/i.test(title);
     const blankGate = blankKeyRe || keyRe;
     const keyGated = Boolean(keyRe || blankKeyRe);
     if (!titleOk && !(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
@@ -140,12 +140,22 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHead
         const ident = cellText(row, identityHeaderRe);
         if (ident) tag = ident;
       }
-      // Expand slash compounds (CWP-1/CWP-2) and comma-grouped ITEM NO cells
-      // that rowKeyOf already normalized to slash form.
-      const tagList = String(tag)
-        .split("/")
+      // Expand slash/comma compounds (CWP-1/CWP-2, DFC-1 , DCU-1) and
+      // glued dual marks (DFC-1DCU-1) common on ductless-split extracts.
+      const slashParts = String(tag)
+        .split(/[/,]/)
         .map((t) => t.trim())
         .filter(Boolean);
+      const tagList = [];
+      for (const part of slashParts.length ? slashParts : [tag]) {
+        const glued = String(part).match(/[A-Za-z]{1,8}[\s\-]?\d+[A-Za-z]?/g);
+        const norm = (s) => String(s).replace(/[\s\-]/g, "").toUpperCase();
+        if (glued && glued.length > 1 && glued.map(norm).join("") === norm(part)) {
+          tagList.push(...glued);
+        } else {
+          tagList.push(part);
+        }
+      }
       for (const rawOne of tagList.length ? tagList : [tag]) {
         const one = normalizeEquipMark(rawOne);
         const canon = one.toUpperCase().replace(/\s+/g, "");
@@ -235,7 +245,12 @@ export const HVAC_FAMILY_SPECS = {
     blankKeyRe: /^(?:OAU|MAU|OA)[\s\-]/i,
   },
   // FCUC / FCUH / FC-01 style marks (cooling/heating suffix or hyphenated FC).
-  FCU: { titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^(?:FCU|FC[\s\-]?\d|EV)/i },
+  // DUCTLESS SPLIT high-wall (DFC/DCU) is the same commercial FCU family.
+  FCU: {
+    titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+SPLIT/i,
+    exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
+    keyRe: /^(?:FCU|FC[\s\-]?\d|EV|DFC|DCU)/i,
+  },
   VAV: {
     titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
@@ -342,7 +357,8 @@ export const HVAC_FAMILY_SPECS = {
   },
   CRAH: { titleRe: /COMPUTER ROOM AIR HANDLER|\bCRAH\b/i },
   DEHUMIDIFIER: { titleRe: /DEHUMIDIFIER SCHEDULE/i, keyRe: /^DH[\-]/i },
-  HUMIDIFIER: { titleRe: /HUMIDIFIER SCHEDULE/i, keyRe: /^H[\-]/i },
+  // HUM-* (common) and bare H-* marks — require separator so HC-/HWP do not match.
+  HUMIDIFIER: { titleRe: /HUMIDIFIER SCHEDULE/i, keyRe: /^(?:HUM|H)[\-]/i },
   AIR_SEPARATOR: {
     titleRe: /AIR SEPARATOR SCHEDULE/i,
     keyRe: /^AS[\s\-]/i,
@@ -367,8 +383,8 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^(?:HX|PHX|HE)[\s\-]/i,
   },
   DUCT_MOUNTED_COIL: {
-    titleRe: /DUCT\s+MOUNTED\s+COIL|HEATING\s+COIL\s+SCHEDULE|COOLING\s+COIL\s+SCHEDULE/i,
-    exclude: /POINTS\s*LIST|DDC|FAN\s*COIL|AIR\s+HANDLING/i,
+    titleRe: /DUCT\s+MOUNTED\s+COIL|HEATING\s+COIL\s+SCHEDULE|COOLING\s+COIL\s+SCHEDULE|HOT\s+WATER\s+REHEAT\s+COIL|REHEAT\s+COIL\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC|FAN\s*COIL|AIR\s+HANDLING|CONTROL\s+VALVE/i,
     keyRe: /^(?:CC|HC|RC)[\s\-]/i,
   },
   WATER_TREATMENT: {

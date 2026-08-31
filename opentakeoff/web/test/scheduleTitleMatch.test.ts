@@ -394,6 +394,34 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
   assert.ok(HVAC_FAMILY_SPECS.DUCT_MOUNTED_COIL.keyRe!.test("HC-1"));
   assert.equal(
     scheduleTitleMatches(
+      "HOT WATER REHEAT COIL SCHEDULE",
+      HVAC_FAMILY_SPECS.DUCT_MOUNTED_COIL.titleRe,
+      HVAC_FAMILY_SPECS.DUCT_MOUNTED_COIL.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)",
+      HVAC_FAMILY_SPECS.DUCT_MOUNTED_COIL.titleRe,
+      HVAC_FAMILY_SPECS.DUCT_MOUNTED_COIL.exclude,
+    ),
+    false,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.HUMIDIFIER.keyRe!.test("HUM-1"));
+  assert.ok(!HVAC_FAMILY_SPECS.HUMIDIFIER.keyRe!.test("HC-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE",
+      HVAC_FAMILY_SPECS.FCU.titleRe,
+      HVAC_FAMILY_SPECS.FCU.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("DFC-1"));
+  assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("DCU-1"));
+  assert.equal(
+    scheduleTitleMatches(
       "FLASH TANK SCHEDULE",
       HVAC_FAMILY_SPECS.FLASH_TANK.titleRe,
       HVAC_FAMILY_SPECS.FLASH_TANK.exclude,
@@ -453,6 +481,46 @@ test("EQUIPMENT SCHEDULE catch-all ORs blankKeyRe|keyRe (WSHP via HEAT_PUMP keyR
     if (["HEAT_PUMP", "PUMP", "CONDENSING_UNIT"].includes(fam)) continue;
     assert.equal(cat.count, 0, `unexpected ${fam}`);
   }
+});
+
+test("MECHANICAL SPECIALTY EQUIPMENT + ductless comma marks (itd shape)", () => {
+  const graph = {
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#14",
+        title: { text: "MECHANICAL SPECIALTY EQUIPMENT SCHEDULE" },
+        rows: [
+          { key: "AS-1", cells: { MARK: { text: "AS-1" } } },
+          { key: "ET-1", cells: { MARK: { text: "ET-1" } } },
+          { key: "FM-1", cells: { MARK: { text: "FM-1" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#14",
+        title: { text: "DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE" },
+        rows: [
+          { key: "DFC-1DCU-1", cells: { SYMBOL: { text: "DFC-1 , DCU-1" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#13",
+        title: { text: "HOT WATER REHEAT COIL SCHEDULE" },
+        rows: [
+          { key: "HC-1", cells: { MARK: { text: "HC-1" } } },
+          { key: "HC-2", cells: { MARK: { text: "HC-2" } } },
+        ],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.AIR_SEPARATOR.count, 1);
+  assert.equal(hvac.categories.EXPANSION_TANK.count, 1);
+  assert.equal(hvac.categories.FCU.count, 2);
+  assert.deepEqual(hvac.categories.FCU.items.map((i) => i.tag).sort(), ["DCU-1", "DFC-1"]);
+  assert.equal(hvac.categories.DUCT_MOUNTED_COIL.count, 2);
 });
 
 test("query_table soft needle hits no-space titles for long needles", () => {
