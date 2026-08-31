@@ -296,32 +296,25 @@ reconcile, and plan joins.
 
 ### Batch accepted this session (independently verified on branch)
 
-- **Pillar A / bulk compile:** ITEM NO / EQUIP NO identity keys; blank-title
-  `keyRe` bootstrap; set-agnostic families (CAV→VAV, SOUND TRAP→DUCT_SILENCER,
-  RAH, WFU, COOLING_TOWER); comma-grouped mark keys. Bulk rescore (31 sets):
-  meat **13**, weak **8**, zero **10**; Vegas CUP **16**, Transbay **10**.
-- **WP1 keys:** `04_NV_VA_LasVegas_CentralUtilityPlant` (16) + `26_CA_TransbayTower`
-  (10) acceptance JSON + `crossCorpusWorkflow` hook (6 non-NAVFAC/bulk keyed sets).
-- **WP2 T-VALVE-01:** MCP N=5 PASSED (163); UI Gates 1–4 N=5 via production
-  compile path; Gate 5 pending `CEREBRAS_API_KEY` on VM.
-- **WP3:** UI `sweep_schedule_row` inline-motif fallback wired (Session parity).
-- **WP4:** `schedule_plan_reconcile` + MCP `reconcile_schedule_plan` with scoped
-  tag sweeps; **installed MATCH** on D08 FCU + D07 VAV/EF + **federal-mech VAV**
-  (VAV-1/12/30/58); federal-mech/itd scaffold tests; WORKFLOWS #51 PROVEN.
-- **WP5 partial:** `count_marks` UI tries MCP bridge first (same pattern as
-  `sweep_schedule_row`); graph prewarm on upload landed earlier on branch.
-- **Bulk family fix:** `WATER_HEATER` / `WATER_SOFTENER` — Hawthorn bulk set
-  0→1 HVAC (DWH-1 on gas water heater schedule).
+- **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15)
+  forced-cold; `rowsymBessemer.regression.test.mjs` locks ≥90% bar;
+  `INLINE-MOTIF-EVAL.md` updated.
+- **WP5 partial:** `planToolParity.test.mjs` — reconcile installed_qty matches
+  `sweepScheduleRow` on D07 VAV tags; `count_marks` MCP-bridge-first on UI.
+- **WP6:** `test:workflows` **18/18** green; `test:demos` **10/10** golden verify.
+- **Pillar A / bulk compile:** (prior batch) 6 keyed cross-set sets; bulk 13/8/10.
+- **WP4:** federal-mech VAV MATCH + D07/D08 NAVFAC reconcile proofs; #51 PROVEN.
+- **WP2:** MCP N=5; UI Gates 1–4; Gate 5 blocked (no `CEREBRAS_API_KEY`).
 
 ### Next queue (platform loop)
 
 1. Merge branch → `main`; WORKFLOWS #51 ON_MAIN.
-2. WP2 UI Gate 5 when `CEREBRAS_API_KEY` available; CARD/SLATE lock.
-3. WP1 header/column vocab from bulk failures (`columnMapFor` path).
-4. WP3 rowsym bar re-measure + Bessemer ≥90% or keyed expected-misses.
-5. WP5 full Session parity test fixture (UI↔MCP reconcile + compile).
-6. WP4 Agent UI reconcile proof (Playwright or durable equivalent).
-7. WP6 `test:demos` + bulk rescore after family fixes.
+2. WP1.4 header/column vocab from bulk failures (`columnMapFor`).
+3. WP2 UI Gate 5 when key available; T-VALVE CARD lock both surfaces.
+4. WP3.3 TG bowtie dedicated detector (tracked follow-on — rowsym key passes today).
+5. WP4 Agent UI reconcile proof (Playwright or durable equivalent).
+6. WP5 full Session-unify (eliminate UI geometric fork, not just MCP-bridge-first).
+7. WP1 bulk ZERO/WEAK family probes after merge.
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 

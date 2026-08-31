@@ -185,23 +185,27 @@ the only “done” story while cross-set compile still fails.
 
 ### WP3 — Raise plan-join recall (wire what we already proved)
 
-**Why:** Documented 73.3% rowsym recall; `sweep_inline_motif` +
-`corroborateInlineMotif` exist but are **not** on the `sweep_schedule_row`
-production path (`INLINE-MOTIF-EVAL.md`).
+**Why:** Documented 73.3% rowsym recall before inline-motif wiring; see
+`INLINE-MOTIF-EVAL.md` for current numbers.
+
+**Status (impl branch, 2026-08-31):** Inline-motif fallback wired in
+`Session.sweepScheduleRow` + UI `agentSweepScheduleRow`. Bessemer rowsym
+recall **100.0%** (15/15) forced-cold; locked by `rowsymBessemer.regression.test.mjs`.
+Federal-mech VAV reconcile MATCH satisfies WP3.6 non-NAVFAC join precursor.
 
 **DoD:**
-1. Shared-path only: `sweepScheduleRow` / `agentSweepScheduleRow` (UI+MCP)
+1. [x] Shared-path only: `sweepScheduleRow` / `agentSweepScheduleRow` (UI+MCP)
    fall back to inline-motif corroboration when whole-shape fails — same
    commit bar / withhold doctrine.
-2. Bessemer (or successor) **rowsym recall ≥ 90%** on keyed tags, or every
+2. [x] Bessemer (or successor) **rowsym recall ≥ 90%** on keyed tags, or every
    remaining miss is **named + expected refuse** in the key (no silent miss).
-3. Extend motif coverage for at least one additional disclosed gap family
+3. [ ] Extend motif coverage for at least one additional disclosed gap family
    (e.g. TG bowtie) **or** keep TG as keyed expected-miss with a tracked
    follow-on — do not claim coverage you don’t have.
-4. Durable tests: unit + graph-eval rowsym; suite gate green.
-5. No set-specific thresholds hardcoded to one PDF’s pixel quirks beyond
+4. [x] Durable tests: unit + graph-eval rowsym; suite gate green.
+5. [x] No set-specific thresholds hardcoded to one PDF's pixel quirks beyond
    existing measured geometry constants justified in comments.
-6. Apply the same join path to ≥1 WP1 non-NAVFAC set key (rowsym or
+6. [x] Apply the same join path to ≥1 WP1 non-NAVFAC set key (rowsym or
    reconcile precursor) — not Bessemer-only.
 
 **Evidence:** updated `SHEET-GRAPH-EVAL.md` / `INLINE-MOTIF-EVAL.md` numbers +
