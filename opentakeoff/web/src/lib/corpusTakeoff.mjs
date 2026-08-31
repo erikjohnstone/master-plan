@@ -216,11 +216,13 @@ export const HVAC_FAMILY_SPECS = {
   },
   // Common US school / light-commercial phrasing (not always "DOAH").
   OUTDOOR_AIR_UNIT: {
-    titleRe: /OUTDOOR\s+AIR\s+UNIT\s+SCHEDULE/i,
+    titleRe: /OUTDOOR\s+AIR\s+UNIT\s+SCHEDULE|MAKE[\s\-]*UP\s+AIR\s+UNIT|MAKEUP\s+AIR\s+UNIT|\bMAU\s+SCHEDULE/i,
     exclude: /DEDICATED\s+OUTDOOR\s+AIR|POINTS\s*LIST|DDC/i,
+    // Blank-title only — titled schedules may use set-local marks (Carson B1/B2).
+    blankKeyRe: /^(?:OAU|MAU|OA)[\s\-]/i,
   },
   // FCUC / FCUH style marks (cooling/heating suffix letter, no hyphen).
-  FCU: { titleRe: /FAN\s*COIL/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^(?:FCU|EV)/i },
+  FCU: { titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^(?:FCU|EV)/i },
   VAV: {
     titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
@@ -310,6 +312,11 @@ export const HVAC_FAMILY_SPECS = {
   HUMIDIFIER: { titleRe: /HUMIDIFIER SCHEDULE/i, keyRe: /^H[\-]/i },
   AIR_SEPARATOR: { titleRe: /AIR SEPARATOR SCHEDULE/i },
   EXPANSION_TANK: { titleRe: /EXPANSION TANK SCHEDULE/i },
+  BUFFER_TANK: {
+    titleRe: /BUFFER\s+TANK\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC|EXPANSION/i,
+    keyRe: /^BT[\s\-]/i,
+  },
   // CHW / HHW from title signals (abbrev or spelled-out). Bypass valves stay out.
   CHW_CONTROL_VALVE: {
     titleRe: /(?:CHW|CHILLED\s*WATER).{0,40}CONTROL\s*VALVE|CONTROL\s*VALVE.{0,40}(?:CHW|CHILLED\s*WATER)/i,

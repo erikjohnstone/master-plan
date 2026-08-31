@@ -26,6 +26,8 @@ title phrasing (`AIRHANDLINGUNITSCHEDULE`, `GENERAL FAN SCHEDULE`,
 | `22_GA_Valdosta_FireStation8_100CD` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/22_GA_Valdosta_FireStation8_100CD.pdf` | Bulk fire station DOAS/pump/fan + GRILLE SCHEDULE |
 | `12_MT_MSU_ReidHall_Renovation` | `bulk/HVAC_BAS_Plan_Sets/12_MT_MSU_ReidHall_Renovation.pdf` | Bulk dual-duct VAV + CUH + FINNED PIPE RADIATION (FT-*) |
 | `03_FL_HurlburtField_ChildDevCenter` | `bulk/HVAC_BAS_Plan_Sets/03_FL_HurlburtField_ChildDevCenter.pdf` | Bulk blank-title AHU/ATU/ACC with (N) revision prefixes |
+| `27_WA_ColvilleTribes_Hatchery_Lab` | `bulk/HVAC_BAS_Plan_Sets/27_WA_ColvilleTribes_Hatchery_Lab.pdf` | Bulk split-system FCU + buffer tanks + fin-tube |
+| `18_OR_BakerMS_HVAC_Electrical_FullSet` | `bulk/HVAC_BAS_Plan_Sets/18_OR_BakerMS_HVAC_Electrical_FullSet.pdf` | Bulk MAU makeup-air + heat pumps + GRD |
 
 ## How counts were authored
 

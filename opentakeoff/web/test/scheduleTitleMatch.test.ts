@@ -186,12 +186,30 @@ test("RTU / ERV / furnace / heat-pump titles match set-agnostic families", () =>
   );
   assert.equal(
     scheduleTitleMatches(
-      "OUTDOOR AIR UNIT SCHEDULE",
+      "GAS FIRED MAKE-UP AIR UNIT SCHEDULE",
       HVAC_FAMILY_SPECS.OUTDOOR_AIR_UNIT.titleRe,
       HVAC_FAMILY_SPECS.OUTDOOR_AIR_UNIT.exclude,
     ),
     true,
   );
+  assert.equal(
+    scheduleTitleMatches(
+      "SPLIT-SYSTEM AIR CONDITIONING UNIT SCHEDULE",
+      HVAC_FAMILY_SPECS.FCU.titleRe,
+      HVAC_FAMILY_SPECS.FCU.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "BUFFER TANK SCHEDULE",
+      HVAC_FAMILY_SPECS.BUFFER_TANK.titleRe,
+      HVAC_FAMILY_SPECS.BUFFER_TANK.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.BUFFER_TANK.keyRe!.test("BT-1"));
+});
   assert.equal(
     scheduleTitleMatches(
       "GRILLES, REGISTERS, AND DIFFUSERS SCHEDULE - PROJECT 4",
