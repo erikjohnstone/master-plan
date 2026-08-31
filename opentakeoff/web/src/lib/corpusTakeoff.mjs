@@ -180,7 +180,8 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, identityHeaderRe }) {
  * upload. Do not add per-PDF set IDs.
  */
 export const HVAC_FAMILY_SPECS = {
-  AHU: { titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED|HYDRONIC\s+COIL|FAN\s+SCHEDULE/i, keyRe: /^AHU/i },
+  // AC-* marks appear on VA / hospital AIR HANDLING UNIT schedules (not only AHU-*).
+  AHU: { titleRe: /AIR HANDLING UNIT/i, exclude: /DEDICATED|HYDRONIC\s+COIL|FAN\s+SCHEDULE/i, keyRe: /^(?:AHU|AC)[\s\-]/i },
   DOAH_UNIT: { titleRe: /DEDICATED OUTDOOR AIR UNIT/i, exclude: /HANDLING/i, keyRe: /^DOAH/i },
   DOAH_HANDLING: { titleRe: /DEDICATED OUTDOOR AIR HANDLING/i, keyRe: /^DOAH/i },
   DOAS: {
@@ -193,11 +194,12 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /OUTDOOR\s+AIR\s+UNIT\s+SCHEDULE/i,
     exclude: /DEDICATED\s+OUTDOOR\s+AIR|POINTS\s*LIST|DDC/i,
   },
-  FCU: { titleRe: /FAN\s*COIL/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^(?:FCU|EV)[\s\-]/i },
+  // FCUC / FCUH style marks (cooling/heating suffix letter, no hyphen).
+  FCU: { titleRe: /FAN\s*COIL/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^(?:FCU|EV)/i },
   VAV: {
-    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL/i,
+    titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
-    keyRe: /^(?:VAV|ATB|VTU|CAV)[\s\-]/i,
+    keyRe: /^(?:VAV|ATB|VTU|CAV|ATU)[\s\-]/i,
   },
   RTU: {
     titleRe: /ROOF[\s\-]*TOP\s+UNIT|PACKAGED\s+ROOFTOP|RTU\s+SCHEDULE|GAS[\s\-]*FIRED\s+DX\s+COOLING\s+ROOF\s+TOP/i,
@@ -286,7 +288,7 @@ export const HVAC_FAMILY_SPECS = {
     identityHeaderRe: /VALVE\s*MARK/i,
   },
   GRD: {
-    titleRe: /GRILLES?[,\s]*REGISTERS?[,\s]*(?:AND\s*)?DIFFUSERS?|DIFFUSERS?[\s\-]*GRILLES?|DIFFUSER\s+SCHEDULE|AIR\s+INLETS?\s*(?:&|AND)\s*OUTLETS?/i,
+    titleRe: /GRILLES?[,\s]*REGISTERS?[,\s]*(?:AND\s*)?DIFFUSERS?|GRILLE\s+SCHEDULE|DIFFUSERS?[\s\-]*GRILLES?|DIFFUSER\s+SCHEDULE|AIR\s+DEVICE\s+SCHEDULE|AIR\s+INLETS?\s*(?:&|AND)\s*OUTLETS?/i,
   },
   RANGE_HOOD: { titleRe: /RANGE HOOD SCHEDULE|CANOPY HOOD SCHEDULE|RELIEF HOOD SCHEDULE|INTAKE HOOD SCHEDULE/i },
   DUCT_SILENCER: {

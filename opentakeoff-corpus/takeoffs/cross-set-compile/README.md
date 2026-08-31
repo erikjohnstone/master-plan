@@ -22,6 +22,8 @@ title phrasing (`AIRHANDLINGUNITSCHEDULE`, `GENERAL FAN SCHEDULE`,
 | `23_GA_MaconBibb_RecreationCenter` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/23_GA_MaconBibb_RecreationCenter.pdf` | Bulk blank-title FCU/EF tables + heat pump schedule |
 | `10_MO_Hawthorn_PsychHospital_HVAC` | `bulk/HVAC_BAS_Plan_Sets/10_MO_Hawthorn_PsychHospital_HVAC.pdf` | Bulk AHU-1A/1B (digit+letter tags) + CU + water heater |
 | `17_FL_SuwanneeHS_Courtyard_100CD` | `bulk/HVAC_BAS_Plan_Sets/17_FL_SuwanneeHS_Courtyard_100CD.pdf` | Bulk school RTU only (AHU legend is not a schedule) |
+| `05_MO_VA_StLouis_AHU_VAV_Replacement` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/05_MO_VA_StLouis_AHU_VAV_Replacement.pdf` | Bulk VA AC-57 AHU + FCUC + ATU terminals + AIR DEVICE GRD |
+| `22_GA_Valdosta_FireStation8_100CD` | `bulk/HVAC_BAS_Plan_Sets/_rejoined/22_GA_Valdosta_FireStation8_100CD.pdf` | Bulk fire station DOAS/pump/fan + GRILLE SCHEDULE |
 
 ## How counts were authored
 

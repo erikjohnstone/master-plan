@@ -205,6 +205,31 @@ test("RTU / ERV / furnace / heat-pump titles match set-agnostic families", () =>
   );
   assert.equal(
     scheduleTitleMatches(
+      "GRILLE SCHEDULE",
+      HVAC_FAMILY_SPECS.GRD.titleRe,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "AIR DEVICE SCHEDULE (SUPPLY)",
+      HVAC_FAMILY_SPECS.GRD.titleRe,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "SINGLE DUCT AIR TERMINAL UNIT SCHEDULE",
+      HVAC_FAMILY_SPECS.VAV.titleRe,
+      HVAC_FAMILY_SPECS.VAV.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.VAV.keyRe!.test("ATU-6-1"));
+  assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("FCUC"));
+  assert.ok(HVAC_FAMILY_SPECS.AHU.keyRe!.test("AC-57"));
+  assert.equal(
+    scheduleTitleMatches(
       "ELECTRIC RADIANT CEILING PANEL SCHEDULE - PROJECT 4",
       HVAC_FAMILY_SPECS.RADIANT_CEILING_PANEL.titleRe,
       HVAC_FAMILY_SPECS.RADIANT_CEILING_PANEL.exclude,

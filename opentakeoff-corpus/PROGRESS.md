@@ -300,14 +300,15 @@ reconcile, and plan joins.
   `CEREBRAS_API_KEY`); SLATE + GOAL amended for third takeoff ID.
 - **WP5 CLOSED:** Browser geometric fork removed; production HTTP for plan tools;
   UI graph prewarm (`schedules indexing…`) + `prewarmGraphSmoke.test.mjs`.
-- **Bulk rescore (2026-08-31 post-title-SCHEDULED):** MEAT **20** · WEAK **2** · ZERO **9** (Northport WEAK→MEAT via AIR INLETS & OUTLETS).
+- **Bulk rescore (2026-08-31 post-StLouis/Valdosta):** MEAT **20** · WEAK **2** · ZERO **9** (St Louis ZERO→30; Valdosta 4→16; threshold h≥5).
 - **Orange County cross-set key:** 32 VAV + 43 HVAC items; reconcile scaffold test.
-- **WP1 title:** `DOAS` family spec; Valdosta 4→5 items; `VAV TERMINAL BOX` broadening.
-- **WP1 bulk keys:** Johnson County (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1) locked.
+- **WP1 title:** `DOAS` family spec; Valdosta GRILLE SCHEDULE →16 items; `VAV TERMINAL BOX` broadening.
+- **WP1 bulk keys:** Johnson (8), Kennebec (2), Northport (15), Spokane (5), Macon Bibb (5), Hawthorn (5), Suwannee (1), St Louis (30), Valdosta (16) locked.
 - **WP1.4 keyRe broaden:** BOILER1 marks, blank-title FCU/EV/EF/RF fan-coil rows — federal-mech stays 96; two bulk WEAK→MEAT promotions.
 - **WP1.4 CODE_RE + EQUIP.TAG + banding orphans:** `AHU-1A`-style digit+letter suffixes; `EQUIP. TAG` own-identity; seam-gap spans assigned to nearest band + thin identity-band absorb. Hawthorn **1→5**.
 - **WP1.4 title hunt:** `\bSCHEDULE\b` (not SCHEDULED) — Northport AIR INLETS & OUTLETS recovers 12 GRD (**3→15**).
 - **WP1.4 RADIANT_CEILING_PANEL:** ECP-* family — Johnson **7→8**.
+- **WP1.4 St Louis / Valdosta families:** AHU `AC-*`; FCU `FCUC`; VAV `AIR TERMINAL UNIT`+`ATU-*`; GRD `AIR DEVICE`+`GRILLE SCHEDULE`.
 - **WP4 Orange County:** installed reconcile **32/32 VAV MATCH** (full census locked in `reconcileWorkflow.test.mjs`).
 - **WP4 Hawthorn:** AHU **2/2** + CU **2/2** MATCH (digit+letter tags on plan).
 - **WP4 blank-title reconcile:** scaffold accepts blank-title+keyRe families (Macon Bibb FAN) — parity with compile `uniqueFamily`.
@@ -323,7 +324,7 @@ reconcile, and plan joins.
 2. WP1.4 additional table-boundary misses on bulk WEAK sets (many ZEROs honest).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Orange County installed reconcile: **32/32 VAV MATCH**; Hawthorn AHU+CU **4/4 MATCH**.
-5. Remaining WEAK: Suwannee (1 RTU honest), Kennebec (2); ZEROs mostly title-only/raster/unkeyed.
+5. Remaining WEAK: Suwannee (1 RTU honest), Kennebec (2); ZEROs mostly elevation/window/raster/unkeyed (FAA Ogden, Iowa State, VistaUSD, KCHA, …).
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 
