@@ -420,9 +420,21 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
     true,
   );
   assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("DFC-1"));
-  assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("DCU-1"));
+  assert.ok(!HVAC_FAMILY_SPECS.FCU.keyRe!.test("DCU-1"));
   assert.ok(HVAC_FAMILY_SPECS.FCU.keyRe!.test("F-1"));
   assert.ok(!HVAC_FAMILY_SPECS.FCU.keyRe!.test("CU-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS)",
+      HVAC_FAMILY_SPECS.CONDENSING_UNIT.altTitleRe!,
+      HVAC_FAMILY_SPECS.CONDENSING_UNIT.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.CONDENSING_UNIT.altKeyRe!.test("CU-1"));
+  assert.ok(HVAC_FAMILY_SPECS.CONDENSING_UNIT.altKeyRe!.test("DCU-1"));
+  assert.ok(!HVAC_FAMILY_SPECS.CONDENSING_UNIT.altKeyRe!.test("F-1"));
+  assert.ok(!HVAC_FAMILY_SPECS.CONDENSING_UNIT.altKeyRe!.test("B1"));
   assert.equal(
     scheduleTitleMatches(
       "FLASH TANK SCHEDULE",
@@ -814,12 +826,47 @@ test("MECHANICAL SPECIALTY EQUIPMENT + ductless comma marks (itd shape)", () => 
   const hvac = compileHvacTakeoff(null, graph);
   assert.equal(hvac.categories.AIR_SEPARATOR.count, 1);
   assert.equal(hvac.categories.EXPANSION_TANK.count, 1);
-  assert.equal(hvac.categories.FCU.count, 2);
-  assert.deepEqual(hvac.categories.FCU.items.map((i) => i.tag).sort(), ["DCU-1", "DFC-1"]);
+  assert.equal(hvac.categories.FCU.count, 1);
+  assert.deepEqual(hvac.categories.FCU.items.map((i) => i.tag), ["DFC-1"]);
+  assert.equal(hvac.categories.CONDENSING_UNIT.count, 1);
+  assert.deepEqual(hvac.categories.CONDENSING_UNIT.items.map((i) => i.tag), ["DCU-1"]);
   assert.equal(hvac.categories.DUCT_MOUNTED_COIL.count, 2);
   // Untagged ERV: do not inflate from SYMBOL comma list — keep row.key.
   assert.equal(hvac.categories.ERV.count, 1);
   assert.equal(hvac.categories.ERV.items[0].tag, "ERU-1HP-4");
+});
+
+test("WP1.4 split-system outdoor CU joins CONDENSING_UNIT without Carson B* filter", () => {
+  const graph = {
+    sheets: [],
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#1",
+        title: { text: "CONDENSING UNIT SCHEDULE" },
+        rows: [
+          { key: "B1", cells: { MARK: { text: "B1" } } },
+          { key: "B2", cells: { MARK: { text: "B2" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#2",
+        title: { text: "SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS)" },
+        rows: [
+          { key: "F-1CU-1", cells: { SYMBOL: { text: "F-1 , CU-1" } } },
+        ],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.CONDENSING_UNIT.count, 3);
+  assert.deepEqual(
+    hvac.categories.CONDENSING_UNIT.items.map((i) => i.tag).sort(),
+    ["B1", "B2", "CU-1"],
+  );
+  assert.equal(hvac.categories.FCU.count, 1);
+  assert.equal(hvac.categories.FCU.items[0].tag, "F-1");
 });
 
 test("query_table soft needle hits no-space titles for long needles", () => {

@@ -158,6 +158,8 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
   const seen = new Set();
   const keyRe = needle?.keyRe || null;
   const blankKeyRe = needle?.blankKeyRe || null;
+  const altTitleRe = needle?.altTitleRe || null;
+  const altKeyRe = needle?.altKeyRe || null;
   for (const table of graph?.tables || []) {
     const title = String(table.title?.text || "");
     // Parity with compile uniqueFamily: do not gate on table.kind.
@@ -170,59 +172,69 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
       : (needle?.title
         ? scheduleTitleMatches(title, needle.title, needle.exclude)
         : false);
+    const altOk = Boolean(altTitleRe) && scheduleTitleMatches(title, altTitleRe, needle.exclude);
     const blankTitle = !title.trim();
     const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i.test(title);
     const blankGate = blankKeyRe || keyRe;
-    const keyGated = Boolean(keyRe || blankKeyRe);
+    const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
     // Parity with compile uniqueFamily: blank-title OR catch-all equipment /
     // miscellaneous schedules only when the family has a keyRe/blankKeyRe.
     // titledOnly families skip blank/catch-all (FIN_TUBE vs filter FTR).
-    if (!titleOk) {
+    if (!titleOk && !altOk) {
       if (needle?.titledOnly) continue;
       if (!(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
     }
-    const filterRe = blankTitle ? blankGate : catchAllSchedule ? null : keyRe;
+    const titledFilter = (altOk && !titleOk && altKeyRe) ? altKeyRe : keyRe;
+    const filterRe = blankTitle ? blankGate : catchAllSchedule ? null : titledFilter;
     for (const row of table.rows || []) {
-      const tag = rowIdentityTag(row);
-      if (!tag) continue;
-      if (/^NOTES?:?\d*$/i.test(String(tag).trim())) continue;
-      const canonTag = String(tag).toUpperCase().replace(/\s+/g, "");
-      if (catchAllSchedule) {
-        const okBlank = blankKeyRe && (blankKeyRe.test(tag) || blankKeyRe.test(canonTag));
-        const okKey = keyRe && (keyRe.test(tag) || keyRe.test(canonTag));
-        if (!(okBlank || okKey)) continue;
-      } else if (filterRe && !filterRe.test(tag) && !filterRe.test(canonTag)) {
-        continue;
+      const rawTag = rowIdentityTag(row);
+      if (!rawTag) continue;
+      const willFilter = Boolean(catchAllSchedule || filterRe);
+      const tagList = String(rawTag)
+        .split(willFilter ? /[/,]/ : "/")
+        .map((t) => normalizeEquipMark(t.trim().replace(/^["'\s]+|["'\s]+$/g, "")))
+        .filter(Boolean);
+      for (const tag of (tagList.length ? tagList : [rawTag])) {
+        if (/^NOTES?:?\d*$/i.test(String(tag).trim())) continue;
+        const canonTag = String(tag).toUpperCase().replace(/\s+/g, "");
+        if (catchAllSchedule) {
+          const okBlank = blankKeyRe && (blankKeyRe.test(tag) || blankKeyRe.test(canonTag));
+          const okKey = keyRe && (keyRe.test(tag) || keyRe.test(canonTag));
+          const okAlt = altKeyRe && (altKeyRe.test(tag) || altKeyRe.test(canonTag));
+          if (!(okBlank || okKey || okAlt)) continue;
+        } else if (filterRe && !filterRe.test(tag) && !filterRe.test(canonTag)) {
+          continue;
+        }
+        // Parity with compile uniqueFamily — continuation / duplicate extracts
+        // of the same MARK must not inflate reconcile rows (Douglas HP-20).
+        const canon = String(tag).toUpperCase().replace(/\s+/g, "");
+        if (!canon || seen.has(canon)) continue;
+        seen.add(canon);
+        const scheduledQty = scheduledQtyFromRow(row);
+        const sweep = sweepByTag.get(tag) || {};
+        const installedQty = sweep.installedQty ?? 0;
+        const status = classifyReconcileStatus({
+          scheduledQty,
+          installedQty,
+          itemStatus: sweep.itemStatus,
+          failureType: sweep.failureType,
+          reason: sweep.reason,
+        });
+        rows.push({
+          tag,
+          family: needle?.label || null,
+          scheduled_qty: scheduledQty,
+          installed_qty: installedQty,
+          status,
+          schedule_cite: {
+            sheet: table.sheet,
+            title: table.title?.text || null,
+            kind: table.kind,
+          },
+          plan_cites: sweep.planCites || [],
+          reason: sweep.reason || null,
+        });
       }
-      // Parity with compile uniqueFamily — continuation / duplicate extracts
-      // of the same MARK must not inflate reconcile rows (Douglas HP-20).
-      const canon = String(tag).toUpperCase().replace(/\s+/g, "");
-      if (!canon || seen.has(canon)) continue;
-      seen.add(canon);
-      const scheduledQty = scheduledQtyFromRow(row);
-      const sweep = sweepByTag.get(tag) || {};
-      const installedQty = sweep.installedQty ?? 0;
-      const status = classifyReconcileStatus({
-        scheduledQty,
-        installedQty,
-        itemStatus: sweep.itemStatus,
-        failureType: sweep.failureType,
-        reason: sweep.reason,
-      });
-      rows.push({
-        tag,
-        family: needle?.label || null,
-        scheduled_qty: scheduledQty,
-        installed_qty: installedQty,
-        status,
-        schedule_cite: {
-          sheet: table.sheet,
-          title: table.title?.text || null,
-          kind: table.kind,
-        },
-        plan_cites: sweep.planCites || [],
-        reason: sweep.reason || null,
-      });
     }
   }
   return rows;

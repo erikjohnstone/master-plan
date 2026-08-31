@@ -106,7 +106,13 @@ export function normalizeEquipMark(raw) {
   return t.trim();
 }
 
-function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHeaderRe, titledOnly }) {
+function uniqueFamily(graph, {
+  titleRe, exclude, keyRe, blankKeyRe, identityHeaderRe, titledOnly,
+  // Secondary titles that need a stricter key filter than the primary titleRe
+  // (e.g. SPLIT SYSTEM SYMBOL "F-1 , CU-1" → only CU-* for CONDENSING_UNIT,
+  // while titled CONDENSING UNIT SCHEDULE keeps set-local B1/B2 with no keyRe).
+  altTitleRe, altKeyRe,
+}) {
   const keys = new Set();
   const items = [];
   for (const table of graph.tables || []) {
@@ -119,19 +125,23 @@ function uniqueFamily(graph, { titleRe, exclude, keyRe, blankKeyRe, identityHead
     // ACCESSORIES: same gate — only families with keyRe may claim rows.
     // titledOnly: skip blank/catch-all entirely (FIN_TUBE FTR vs filter panels).
     const titleOk = scheduleTitleMatches(title, titleRe, exclude);
+    const altOk = Boolean(altTitleRe) && scheduleTitleMatches(title, altTitleRe, exclude);
     const blankTitle = !title.trim();
     const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i.test(title);
     const blankGate = blankKeyRe || keyRe;
-    const keyGated = Boolean(keyRe || blankKeyRe);
-    if (!titleOk) {
+    const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
+    if (!titleOk && !altOk) {
       if (titledOnly) continue;
       if (!(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
     }
     // keyRe filters titled rows (AHU/FCU); blankKeyRe only gates blank titles
     // (Carson CONDENSING UNIT uses B1/B2 marks — must not apply ACC/CU filter).
+    // altTitleRe hits use altKeyRe so split outdoor CU/DCU can join without
+    // forcing a CU filter onto primary CONDENSING UNIT schedules.
     // Catch-all tables: OR blankKeyRe|keyRe so HEAT_PUMP blankKeyRe (/^HP/)
     // does not shadow WSHP/GSHP matches that only keyRe accepts.
-    const filterRe = blankTitle ? blankGate : catchAllSchedule ? null : keyRe;
+    const titledFilter = (altOk && !titleOk && altKeyRe) ? altKeyRe : keyRe;
+    const filterRe = blankTitle ? blankGate : catchAllSchedule ? null : titledFilter;
     const catchAllFilter = catchAllSchedule;
     for (const row of table.rows || []) {
       const rowKey = String(row.key || "").trim().replace(/^["'\s]+|["'\s]+$/g, "");
@@ -246,11 +256,11 @@ export const HVAC_FAMILY_SPECS = {
     blankKeyRe: /^(?:OAU|MAU|OA)[\s\-]/i,
   },
   // FCUC / FCUH / FC-01 style marks (cooling/heating suffix or hyphenated FC).
-  // DUCTLESS DFC/DCU; gas-split indoor F-# (outdoor CU stays CONDENSING_UNIT).
+  // DUCTLESS indoor DFC + gas-split indoor F-#; outdoor CU/DCU → CONDENSING_UNIT.
   FCU: {
     titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+SPLIT/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
-    keyRe: /^(?:FCU|FC[\s\-]?\d|EV|DFC|DCU|F[\s\-]?\d)/i,
+    keyRe: /^(?:FCU|FC[\s\-]?\d|EV|DFC|F[\s\-]?\d)/i,
   },
   VAV: {
     titleRe: /VARIABLE AIR VOLUME|VOLUME CONTROL BOX|VAV\s+TERMINAL\s+BOX|AIR TERMINAL BOX|AIR\s+TERMINAL\s+UNIT|SINGLE\s+DUCT\s+AIR\s+TERMINAL|SINGLE\s+DUCT\s+CAV|CAV\s+EXHAUST\s+TERMINAL|CAV\s+TERMINAL|LAB\s+CAV|\bCAV\s+SCHEDULE/i,
@@ -272,8 +282,13 @@ export const HVAC_FAMILY_SPECS = {
   CONDENSING_UNIT: {
     titleRe: /CONDENSING\s+UNIT(?:\s+SCHEDULE)?|AIR[\s\-]*COOLED\s+CONDENSING\s+UNIT/i,
     exclude: /AIR[\s\-]*COOLED\s+CHILLER|POINTS\s*LIST|DDC/i,
-    // Blank-title only — titled schedules use set-local marks (Carson B1/B2).
+    // Blank-title only on primary titles — Carson titled B1/B2 must not be
+    // filtered by a CU/ACC keyRe.
     blankKeyRe: /^(?:CU|ACC)[\s\-]/i,
+    // Split indoor/outdoor SYMBOL columns ("F-1 , CU-1" / "DFC-1 , DCU-1"):
+    // claim outdoor marks only; primary CONDENSING UNIT titles stay unfiltered.
+    altTitleRe: /SPLIT\s+SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+SPLIT/i,
+    altKeyRe: /^(?:CU|DCU)[\s\-]/i,
   },
   HEAT_PUMP: {
     titleRe: /HEAT\s+PUMP/i,
