@@ -99,7 +99,7 @@ import { findLegendGlyphs } from "../lib/legendlearn.ts";
 // tapered duct run has no independent whole-shape perimeter of its own; see
 // inlinemotif.ts's own header comment for the real, measured reason
 // symbol_sweep's whole-shape fingerprint under-scores real siblings of it.
-import { fingerprintInlineMotif, sweepInlineMotif } from "../lib/inlinemotif.ts";
+import { fingerprintInlineMotif, sweepInlineMotif, corroborateInlineMotif, classifyInlineMotifMatches } from "../lib/inlinemotif.ts";
 import { labelPlacements } from "../lib/symbollabels";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
@@ -7616,25 +7616,62 @@ export default function TakeoffCanvas() {
       corro = { key: key2, segs: vectorSegsRef.current.get(key2) || [], occ: withOcc[1].occ };
     }
 
-    // 3. pad ladder + corroboration — the shared symbolsweep.ts function.
-    const anchored = corroborateFingerprint(
+    // 3. pad ladder + corroboration — whole-shape first (shared
+    // symbolsweep.ts), then hatch-fill inline motif when whole-shape fails
+    // (same Session.sweepScheduleRow fallback — WP3 UI↔MCP parity).
+    const wholeShape = corroborateFingerprint(
       anchorSegs,
       { w: anchorDims.w, h: anchorDims.h },
       anchor,
       corro ? { segs: corro.segs, occ: corro.occ, ratio: sweepRatio({ upp: agentUpp(anchorKey) }, { upp: agentUpp(corro.key) }) } : null,
       sweepOpts,
     );
-    if (!anchored) {
-      return {
-        error: corro
-          ? `Schedule row "${t}" cannot be anchored: the linework around its drawn tag on ${anchorKey} does not recur at the tag's other occurrences — no repeatable marker geometry to fingerprint. Marquee one instance with symbol_sweep instead.`
-          : `Schedule row "${t}" cannot be anchored: no fingerprintable marker linework sits around its drawn tag on ${anchorKey}. Marquee one instance with symbol_sweep instead.`,
-      };
+    let fp = wholeShape?.fp || null;
+    let corroborated = !!wholeShape?.corroborated;
+    let inlineFp = null;
+    if (!fp) {
+      const anchorMeta = segMetaRef.current.get(anchorKey);
+      if (!anchorMeta) {
+        return {
+          error: corro
+            ? `Schedule row "${t}" cannot be anchored: the linework around its drawn tag on ${anchorKey} does not recur at the tag's other occurrences — no repeatable marker geometry to fingerprint (tried whole-shape and hatch-fill). Marquee one instance with symbol_sweep instead.`
+            : `Schedule row "${t}" cannot be anchored: no fingerprintable marker linework sits around its drawn tag on ${anchorKey} (tried whole-shape and hatch-fill). Marquee one instance with symbol_sweep instead.`,
+        };
+      }
+      let corroInline = null;
+      if (corro?.segs?.length) {
+        const corroMeta = segMetaRef.current.get(corro.key);
+        if (corroMeta) {
+          corroInline = {
+            segs: corro.segs,
+            meta: corroMeta,
+            occ: corro.occ,
+            upp: agentUpp(corro.key) || null,
+          };
+        }
+      }
+      const inlineAnchored = corroborateInlineMotif(
+        anchorSegs,
+        anchorMeta,
+        { w: anchorDims.w, h: anchorDims.h },
+        anchor,
+        agentUpp(anchorKey) || null,
+        corroInline,
+      );
+      if (!inlineAnchored) {
+        return {
+          error: corro
+            ? `Schedule row "${t}" cannot be anchored: the linework around its drawn tag on ${anchorKey} does not recur at the tag's other occurrences — no repeatable marker geometry to fingerprint (tried whole-shape and hatch-fill). Marquee one instance with symbol_sweep instead.`
+            : `Schedule row "${t}" cannot be anchored: no fingerprintable marker linework sits around its drawn tag on ${anchorKey} (tried whole-shape and hatch-fill). Marquee one instance with symbol_sweep instead.`,
+        };
+      }
+      inlineFp = inlineAnchored.fp;
+      corroborated = inlineAnchored.corroborated;
     }
-    const { fp, corroborated } = anchored;
 
     // 4. the full plan-only sweep + tag corroboration per match, per sheet —
-    // classifySweepMatches carries the #186 size ratio and reports it.
+    // whole-shape uses classifySweepMatches (#186 size ratio); hatch-fill
+    // uses classifyInlineMotifMatches (size_score — same Session path).
     let totalFound = 0;
     const perSheet = [];
     for (const { key, occ } of occBySheet) {
@@ -7645,8 +7682,25 @@ export default function TakeoffCanvas() {
       const sibSpans = [];
       for (const k of siblings) for (const o of await occOf(key, k)) sibSpans.push({ key: k, cx: o.cx, cy: o.cy });
       let cls;
-      try { cls = classifySweepMatches(t, fp, segs, ratio, occ, sibSpans, anchor.h, sweepOpts); }
-      catch (e) { skipped.push({ sheet: key, role: "plan", reason: String(e?.message || e) }); continue; }
+      try {
+        if (fp) {
+          cls = classifySweepMatches(t, fp, segs, ratio, occ, sibSpans, anchor.h, sweepOpts);
+        } else {
+          const meta = segMetaRef.current.get(key);
+          if (!meta) { skipped.push({ sheet: key, role: "plan", reason: "no segment meta for hatch-fill sweep" }); continue; }
+          const inlineRes = sweepInlineMotif(inlineFp, segs, meta, agentUpp(key) || null);
+          const icls = classifyInlineMotifMatches(t, inlineRes, occ, sibSpans, anchor.h);
+          // Map inline shape onto the whole-shape result fields the wire
+          // response below already speaks (score ← size_score).
+          cls = {
+            matches: icls.matches.map((m) => ({ at: m.at, score: m.size_score })),
+            excluded: icls.excluded || [],
+            withheld: (icls.withheld || []).map((w) => ({ at: w.at, score: w.size_score, reason: w.reason })),
+            text_only: icls.text_only || [],
+            complete: icls.complete,
+          };
+        }
+      } catch (e) { skipped.push({ sheet: key, role: "plan", reason: String(e?.message || e) }); continue; }
 
       const norm = ([x, y]) => [+(x / dims.w).toFixed(5), +(y / dims.h).toFixed(5)];
       const matches = cls.matches.map((m) => ({ at: norm(m.at), score: m.score }));
@@ -7666,6 +7720,7 @@ export default function TakeoffCanvas() {
     }
 
     const notes = [];
+    if (inlineFp) notes.push(`Anchored via hatch-fill inline motif (whole-shape fingerprint failed) — size-based matching, not segment-count score; audit matches with view_region before trusting the count.`);
     if (!corroborated) notes.push(`The tag "${t}" is drawn ${totalOcc === 1 ? "exactly once" : "too sparsely to cross-check"} — the fingerprint could not corroborate at a second occurrence; audit the matches with view_region before trusting the count.`);
     const rowRescaled = perSheet.filter((p) => p.scaled);
     if (rowRescaled.length) notes.push(`Size ratio applied from the sheets' own scales: ${rowRescaled.map((p) => `${p.sheet} ×${p.scaled.ratio}`).join(", ")} — the marker was resized from ${anchorKey} before matching.`);
@@ -7675,7 +7730,7 @@ export default function TakeoffCanvas() {
     return {
       tag: t,
       row: { sheet: tb.sheet, key: r.key, table },
-      anchor: { sheet: anchorKey, at: [+anchor.cx.toFixed(1), +anchor.cy.toFixed(1)], corroborated, occurrences: totalOcc },
+      anchor: { sheet: anchorKey, at: [+anchor.cx.toFixed(1), +anchor.cy.toFixed(1)], corroborated, occurrences: totalOcc, ...(inlineFp ? { method: "inline_motif" } : {}) },
       total_found: totalFound,
       per_sheet: perSheet,
       ...(skipped.length ? { skipped } : {}),
