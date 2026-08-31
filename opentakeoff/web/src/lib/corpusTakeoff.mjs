@@ -272,8 +272,9 @@ export const HVAC_FAMILY_SPECS = {
   // FCUC / FCUH / FC-01 style marks (cooling/heating suffix or hyphenated FC).
   // DUCTLESS indoor DFC + gas-split indoor F-#; outdoor CU/DCU → CONDENSING_UNIT.
   // Split-system indoor AC-* (bldg5406 AC-1/ACCU-1) — not AHU (AHU titles differ).
+  // "SPLIT SYSTEM HEAT PUMPS" (Klamath) lists indoor FC-* beside outdoor HP-*.
   FCU: {
-    titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|DUCTLESS\s+SPLIT/i,
+    titleRe: /FAN\s*COIL|SPLIT[\s\-]*SYSTEM\s+AIR\s+CONDITIONING|SPLIT[\s\-]*SYSTEM\s+HEAT\s+PUMP|DUCTLESS\s+SPLIT/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS/i,
     keyRe: /^(?:FCU|FC[\s\-]?\d|EV|DFC|F[\s\-]?\d|AC[\s\-])/i,
   },

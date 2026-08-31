@@ -1139,6 +1139,38 @@ test("WP1.4 ECAV→VAV, VFD family, split AC/ACCU (bldg5406 shape)", () => {
   );
 });
 
+test("WP1.4 SPLIT SYSTEM HEAT PUMPS indoor FC joins FCU (Klamath shape)", () => {
+  assert.equal(
+    scheduleTitleMatches(
+      "SPLIT SYSTEM HEAT PUMPS",
+      HVAC_FAMILY_SPECS.FCU.titleRe,
+      HVAC_FAMILY_SPECS.FCU.exclude,
+    ),
+    true,
+  );
+  const graph = {
+    sheets: [],
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#1",
+        title: { text: "SPLIT SYSTEM HEAT PUMPS" },
+        rows: [
+          { key: "HP-01", cells: { MARK: { text: "HP-01" } } },
+          { key: "FC-01", cells: { MARK: { text: "FC-01" } } },
+          { key: "HP-02", cells: { MARK: { text: "HP-02" } } },
+          { key: "FC-02", cells: { MARK: { text: "FC-02" } } },
+        ],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.HEAT_PUMP.count, 2);
+  assert.deepEqual(hvac.categories.HEAT_PUMP.items.map((i) => i.tag).sort(), ["HP-01", "HP-02"]);
+  assert.equal(hvac.categories.FCU.count, 2);
+  assert.deepEqual(hvac.categories.FCU.items.map((i) => i.tag).sort(), ["FC-01", "FC-02"]);
+});
+
 test("query_table soft needle hits no-space titles for long needles", () => {
   assert.equal(
     queryTitleMatchesNeedle("AIRHANDLINGUNITSCHEDULE", "AIR HANDLING UNIT SCHEDULE"),
