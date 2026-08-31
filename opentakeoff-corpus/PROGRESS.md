@@ -330,7 +330,7 @@ reconcile, and plan joins.
 - **WP1 Suwannee key:** honest WEAK RTU:1 locked.
 - **WP3 CLOSED (except 3.3 TG bowtie follow-on):** Bessemer rowsym **100%** (15/15);
   `rowsymBessemer.regression.test.mjs`.
-- **WP6:** `test:workflows` **29/29** (tip `24de661` SDSU/VACUUM + prior Jeff City WP4); `test:demos` **10/10**.
+- **WP6:** `test:workflows` **31/31** (tip after SDSU AHU + Douglas DOAS reconcile locks); `test:demos` **10/10**.
 
 ### Next queue (platform loop)
 
