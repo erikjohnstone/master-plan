@@ -1,9 +1,9 @@
 {
-  "as_of": "2026-09-01T20:50:00Z",
+  "as_of": "2026-09-01T21:32:00Z",
   "width_phase": "complete",
   "depth_phase": "in_progress",
   "width_note": "Corpus material map closed: 112/112 BAS estimator_product census, 107/107 bas:0 plan-paint touched, 81/81 valve product census, 11/11 valve plan-paint width sample. Still 0 gt_locked — depth phase next.",
-  "depth_note": "Full plan-paint sweeps: 5 keyed BAS + 11 valve + 58 bas:0 inventory (batches 1–3). GT drafts patched depth_plan_paint_full; still 0 gt_locked.",
+  "depth_note": "PDF text audit (81/81): 70 compile-empty but 63/70 PDFs contain valve/damper signal; 17 have tabular schedule language compile still misses — extraction gap, not verified-empty. Next: widen set-agnostic valve table extraction on shared path.",
   "mandate": "Pillar C done only when EVERY bas_bearing and valve_bearing set has estimator takeoff + coordinator self-check + pipeline GT corroboration",
   "counts": {
     "vol1_sets": 30,
@@ -48,6 +48,7 @@
       "depth_bas_inventory_batch1": "/opt/cursor/artifacts/pillar-c-depth-bas-inventory-batch1.json",
       "depth_bas_inventory_batch2": "/opt/cursor/artifacts/pillar-c-depth-bas-inventory-batch2.json",
       "depth_bas_inventory_batch3": "/opt/cursor/artifacts/pillar-c-depth-bas-inventory-batch3.json",
+      "valve_pdf_text_scan": "/opt/cursor/artifacts/pillar-c-valve-pdf-text-scan-all.json",
       "valve_product_census": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
       "soo_deepen_batch": "/opt/cursor/artifacts/pillar-c-soo-present-not-row-extractable-probe.json",
       "plan_paint_inventory_expand": "/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-expand.json",
@@ -63,7 +64,15 @@
     "bas_inventory_drawing_verified_keyed": 5,
     "valve_product_census_sets": 81,
     "valve_with_printed_items": 11,
+    "valve_compile_empty_floors": 70,
     "valve_zero_floors": 70,
+    "valve_zero_floors_note": "compile-empty only — PDF text scan shows 0/81 valve-free; 63/70 compile-zero PDFs contain valve/damper content; 17 have schedule-language hits compile still misses",
+    "valve_pdf_text_scan_sets": 81,
+    "valve_pdf_text_scan_compile_empty": 70,
+    "valve_pdf_text_scan_pdf_has_signal": 63,
+    "valve_pdf_text_scan_tabular_language_compile_zero": 17,
+    "valve_pdf_text_scan_generic_only_compile_empty": 7,
+    "valve_pdf_text_scan_artifact": "/opt/cursor/artifacts/pillar-c-valve-pdf-text-scan-all.json",
     "soo_deepen_probed_sets": 3,
     "soo_points_list_text_without_tables": [
       "062_ID_ITD_District_1_Laboratory_Building_Mechanical"

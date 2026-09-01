@@ -1,5 +1,29 @@
 ## Active work
 
+### Pillar C valve audit — PDF text vs compile (2026-09-01 21:32 UTC)
+
+**Prior “70 honest valve zeros” was wrong.** Fast PDF text scan of all **81/81**
+valve-bearing sets (~2 min, pdfjs text layer — not full Session load):
+
+| Metric | Count |
+|---|---:|
+| `control_valves` compile finds rows | **11** |
+| Compile returns 0 | **70** |
+| PDFs with **zero** valve/damper text | **0** |
+| Compile-zero but PDF **has** valve/damper signal | **63** |
+| PDF text hits **VALVE SCHEDULE / CHW\|HHW CONTROL VALVE** but compile 0 | **17** |
+| Compile-zero with only generic plan legend terms (BV, SOV, …) | **7** |
+
+**Conclusion:** compile-empty ≠ verified-empty. Most “zero” sets have valve
+information in the PDF; the shared path is **not extracting** tabular valve
+schedules on those sets yet (title/table matching + some multipart/rejoin gaps).
+Do **not** treat compile-zero as Pillar C floor or GT lock.
+
+- **Script:** `opentakeoff/mcp/scripts/pillarCValvePdfTextScan.mjs`
+- **Artifact:** `/opt/cursor/artifacts/pillar-c-valve-pdf-text-scan-all.json`
+- **Next:** set-agnostic valve schedule extraction on the 63-gap sets (shared
+  `corpusTakeoff.mjs` title/keyRe + table association — no per-set hardcodes).
+
 ### Pillar C DEPTH phase started — full plan-paint sweeps (2026-09-01 21:00 UTC)
 
 **Width closed → depth uses material map.** Full target sweeps (not 8-tag samples); GT drafts patched with `depth_plan_paint_full`; still **0 gt_locked**.
@@ -14,7 +38,7 @@
 
 - **bas:0 inventory depth total:** **58/58** scored inventory sets full-swept (batches 1–3).
 - **Script:** `opentakeoff/mcp/scripts/pillarCDepthPlanPaint.mjs` — full sweep + GT draft patch on shared path.
-- **Remaining depth:** 70 valve zero floors, 49 bas zero floors, gap/SOO/GT lock per set.
+- **Remaining depth:** 70 valve compile-empty floors, 49 bas compile-empty floors (compile-only — not “no valves on job”), gap/SOO/GT lock per set.
 - **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
 
 ### Prior — WIDTH complete (2026-09-01 20:50 UTC)
@@ -26,7 +50,7 @@
 | **BAS `estimator_product` live census** | **112/112** | waves 1–7 incl. `/opt/cursor/artifacts/pillar-c-estimator-product-census-wave7.json` (6 keyed BAS + 089) |
 | **BAS inventory plan-paint (bas:0)** | **107/107 touched** (59 scored 8-tag samples, 48 skipped honest zero/no targets) | `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave7.json` (+ waves 1–6) |
 | **BAS inventory drawing verify** | **112/112** floors | `bas_inventory_drawing_verified_ids` |
-| **Valve product census** | **81/81** (11 printed / 70 zero) | `/opt/cursor/artifacts/pillar-c-valve-product-census-all.json` |
+| **Valve product census** | **81/81** (11 printed schedule rows / **70 compile-empty** — no tabular valve schedule extracted; valves may still exist on plans/specs) | `/opt/cursor/artifacts/pillar-c-valve-product-census-all.json` |
 | **Valve plan-paint width sample** | **11/11** printed sets (12-tag sample each; 6/11 with ≥1 MATCH) | `/opt/cursor/artifacts/pillar-c-valve-plan-paint-census-width.json` |
 
 - **Wave 7 plan-paint (10 bas:0):** **9 scored / 8 with MATCH** — 1 skipped (`057` honest zero inventory). Notable: Las Vegas 7/8, SDSU 7/8, Ames 8/8, Orange County 8/8.
@@ -793,12 +817,15 @@ zero-inventory floor from product census. Keyed printed-BAS sets also sampled
 (001/015/027/096 **20/20**; 021 **18/20** honest misses; 089 airport **13/20**).
 This is **not** Pillar C complete — SOO/I/O/spare/proofs + valve estimator + pipeline GT remain.
 
-**Valve product census — corpus-wide (2026-09-01, 81/81, still 0 locked):**
+**Valve product census + PDF text audit (2026-09-01, 81/81, still 0 locked):**
 Live `compileCorpusTakeoff(..., control_valves)` on every valve-bearing set.
-**11/81** have printed valve/damper items — exactly the keyed family sets (no new
-printed schedules beyond current set-agnostic title/keyRe). **70/81** honest zero
-valve floors. Contractor-column honesty already verified on the 11 keyed.
-Do **not** invent valve keys from equipment schedules. Artifact:
+**11/81** have printed valve/damper schedule rows — keyed family sets today.
+**70/81** compile-empty. **PDF text scan** (`pillarCValvePdfTextScan.mjs`, ~2 min):
+**0/81** PDFs valve/damper-text-free; **63/70** compile-zero PDFs still contain
+valve/damper signals; **17/70** hit tabular schedule language compile still misses.
+Compile-empty is an **extraction gap**, not verified-empty. Contractor-column
+honesty verified on the 11 keyed. Do **not** invent valve keys from equipment
+schedules. Artifacts: `/opt/cursor/artifacts/pillar-c-valve-pdf-text-scan-all.json`,
 `/opt/cursor/artifacts/pillar-c-valve-product-census-all.json`.
 
 **SOO deepen — present_not_row_extractable (2026-09-01, still 0 locked):**
@@ -812,7 +839,7 @@ Artifacts: `/opt/cursor/artifacts/pillar-c-*-soo-probe.json`,
 
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** inventory floors **112/112** + valve product census **81/81** (11 printed / 70 zero) but **0** estimator-complete;
+1. **Pillar C (corpus-deep):** inventory floors **112/112** + valve product census **81/81** (11 printed / 70 compile-empty) but **0** estimator-complete;
    deepen SOO/I/O/spare/proofs on keyed+SOO-present sets; expand valve contractor columns
    beyond 11 keyed; pipeline GT lock only when complete. Prior: 1. **Pillar C (corpus-deep):** Gap/SOO + valve columns + plan-paint census on keyed floor;
    BAS inventory floors **112/112** checked (drawing or honest zero) — **0 locked**. Next: extend inventory
