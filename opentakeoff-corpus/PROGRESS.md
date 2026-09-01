@@ -389,6 +389,7 @@ reconcile, and plan joins.
 - **Vol2 batch-7 intake (shared path):** Ran `REJOIN_full_sets.sh` (qpdf); locked **13**/13 multipart rejoins (3 MEAT / 5 WEAK / 3 ZERO) including chiller upgrade **32**, NY EHRM **18**, Jonesboro VRF **24**; LBNL honest ZERO (311 sheets). Workflow `graphForKey` prefers `_rejoined/` then merges `source_parts_dir`. Vol2 keyed total **82**/82 (all 13 multipart rejoins keyed, incl. PHX **64** + FL airport **20**).
 - **WP4 Vermillion County Jail VAV reconcile:** Vol2 **096** bulk **58/58 VAV MATCH** under `evaluationFast` (locked in `reconcileWorkflow.test.mjs`).
 - **WP4 Vol2 MEAT rejoin reconcile locks (012 chiller ACC/PUMP/VFD, 089 FL airport DOAS/HP/PUMP/WH/FAN, 088 PHX plant+terminal families):** multipart-aware `loadKeySession` helper; locked in `reconcileWorkflow.test.mjs`. `test:workflows` **50/50** green (2026-09-01).
+- **WP4 Vol2 bulk reconcile deepen:** Eglin **019** all 13 families MATCH (103 tags); Jonesboro **093** VRF+WH; Health Science **071** VAV; Miller **077** WSHP+GRD; ITD lab **062** bulk (93 tags, 1 FAN SO); pier **015** plant MATCH. Honest ceilings locked: **012** CT all SO; **089** FCU all SO; **088** VFD 2/11 MATCH · 9 SO. `test:workflows` **60/60** green (2026-09-01).
 
 ### Active goal (platform loop)
 
@@ -407,10 +408,8 @@ Authority: `GOAL.md` §8 · `takeoffs/NEXT_GOAL_LOOP.md`.
 
 ### Next queue (platform loop)
 
-1. **Finish Pillar B:** Run `test:workflows` on 012/089/088 reconcile locks;
-   document honest partial ceilings (PHX VFD 2/11, 089 FCU SO, 012 CT SO).
-2. **Pillar A tail:** WEAK→MEAT where probe finds real set-agnostic fixes;
-   confirm ZERO ceilings honest (27 Vol2 ZERO).
+1. **Pillar B tail:** More Vol2 MEAT singles (019/062/071 done); Klamath FC/HP/DOAS SCHEDULE_ONLY on Vol1.
+2. **Pillar A tail:** WEAK→MEAT where probe finds real set-agnostic fixes; confirm ZERO ceilings honest (27 Vol2 ZERO).
 3. **Merge branch stack → `main`** when A+B §6 metrics met; WORKFLOWS #51 ON_MAIN.
 4. **Pillar C (after A+B):** WP7 valve/damper/actuator depth + WP8 BAS points/SOO
    — grow from 4/82 Vol2 BAS rows and ~3/82 valve rows.
