@@ -2,25 +2,7 @@
   "set_id": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
   "gt_locked": false,
   "pillar_c_complete": false,
-  "equipment_inventory": {
-    "AHU": 1,
-    "FCU": 3,
-    "VAV": 58,
-    "AIR_COOLED_CHILLER": 2,
-    "BOILER": 2,
-    "PUMP": 10,
-    "FAN": 16,
-    "UNIT_HEATER": 5,
-    "AIR_SEPARATOR": 2,
-    "EXPANSION_TANK": 2,
-    "HEAT_EXCHANGER": 2,
-    "DUCT_MOUNTED_COIL": 4,
-    "GLYCOL_MAKEUP": 1,
-    "GRD": 9,
-    "DUCT_SILENCER": 6,
-    "LOUVER": 8,
-    "CONTROL_DAMPER": 24
-  },
+  "deepened_at": "2026-09-01T15:14:19.492Z",
   "printed_bas": {
     "rows": 231,
     "AI": 79,
@@ -31,132 +13,271 @@
     "trend": 204,
     "lists": [
       {
+        "idx": 0,
         "title": "SCHEDULE OF DDC POINTS",
         "n": 41,
-        "served": []
+        "served": {
+          "(none)": 41
+        },
+        "sampleTags": [
+          "AI-1",
+          "AI-2",
+          "AI-3",
+          "AI-4",
+          "AI-5"
+        ]
       },
       {
+        "idx": 1,
         "title": "SCHEDULE OF DDC POINTS",
         "n": 12,
-        "served": []
+        "served": {
+          "(none)": 12
+        },
+        "sampleTags": [
+          "AO-1",
+          "AO-1",
+          "BI-1",
+          "BI-1",
+          "BI-2"
+        ]
       },
       {
+        "idx": 2,
         "title": "SCHEDULE OF DDC POINTS",
         "n": 32,
-        "served": []
+        "served": {
+          "(none)": 32
+        },
+        "sampleTags": [
+          "AI-1",
+          "AI-2",
+          "AI-3",
+          "AI-4",
+          "AI-5"
+        ]
       },
       {
+        "idx": 3,
         "title": "SCHEDULE OF DDC POINTS",
         "n": 28,
-        "served": []
+        "served": {
+          "(none)": 28
+        },
+        "sampleTags": [
+          "AI-1",
+          "AI-2",
+          "AI-3",
+          "AI-4",
+          "AI-5"
+        ]
       },
       {
+        "idx": 4,
         "title": "SCHEDULE OF DDC POINTS",
         "n": 52,
-        "served": []
+        "served": {
+          "(none)": 52
+        },
+        "sampleTags": [
+          "AI-1",
+          "AI-2",
+          "AI-3",
+          "AI-4",
+          "AI-5"
+        ]
       },
       {
+        "idx": 5,
         "title": "SCHEDULE OF DDC POINTS",
         "n": 30,
-        "served": []
+        "served": {
+          "(none)": 30
+        },
+        "sampleTags": [
+          "AI-1",
+          "AI-2",
+          "AI-3",
+          "AI-4",
+          "AI-5"
+        ]
       },
       {
+        "idx": 6,
         "title": "SCHEDULE OF DDC POINTS",
         "n": 5,
-        "served": []
+        "served": {
+          "(none)": 5
+        },
+        "sampleTags": [
+          "BI-1",
+          "BO-1",
+          "BO-2",
+          "BO-3",
+          "BO-4"
+        ]
       },
       {
+        "idx": 7,
         "title": "SCHEDULE OF DDC POINTS",
         "n": 12,
-        "served": []
+        "served": {
+          "(none)": 12
+        },
+        "sampleTags": [
+          "AO-1",
+          "AO-1",
+          "BI-1",
+          "BI-1",
+          "BI-2"
+        ]
       },
       {
+        "idx": 8,
         "title": "SCHEDULE OF DDC POINTS",
         "n": 2,
-        "served": []
+        "served": {
+          "(none)": 2
+        },
+        "sampleTags": [
+          "BI-1",
+          "BO-1"
+        ]
       },
       {
+        "idx": 9,
         "title": "SCHEDULE OF DDC POINTS",
         "n": 17,
-        "served": [
-          "HRC-1"
+        "served": {
+          "HRC-1": 12,
+          "(none)": 5
+        },
+        "sampleTags": [
+          "AI-1",
+          "AI-2",
+          "AI-3",
+          "AI-4",
+          "AI-5"
         ]
       }
     ]
   },
+  "inventory": {
+    "AHU": {
+      "count": 1,
+      "tags": [
+        "AHU-4"
+      ]
+    },
+    "FCU": {
+      "count": 3,
+      "tags": [
+        "FCU-1",
+        "FCU-2",
+        "FCU-3"
+      ]
+    },
+    "VAV": {
+      "count": 58,
+      "tags": [
+        "VAV-1-1",
+        "VAV-1-2",
+        "VAV-1-3",
+        "VAV-1-4",
+        "VAV-1-5",
+        "VAV-1-6",
+        "VAV-1-7",
+        "VAV-1-8",
+        "VAV-2-1",
+        "VAV-2-2",
+        "VAV-2-3",
+        "VAV-2-4",
+        "VAV-2-5",
+        "VAV-2-6",
+        "VAV-2-7",
+        "VAV-2-9",
+        "VAV-2-10",
+        "VAV-2-11",
+        "VAV-2-12",
+        "VAV-2-13"
+      ],
+      "tag_count": 58
+    },
+    "FAN": {
+      "count": 16,
+      "tags": [
+        "EF-1A",
+        "EF-1B",
+        "EF-2A",
+        "EF-2B",
+        "GEF-1",
+        "GEF-2",
+        "KEF-1",
+        "RF-4A",
+        "RF-4B",
+        "SF-1A",
+        "SF-1B",
+        "SF-2A",
+        "SF-2B",
+        "SF-3",
+        "SF-4A",
+        "SF-4B"
+      ]
+    },
+    "CONTROL_DAMPER": {
+      "count": 24,
+      "tags": [
+        "JED-1-1",
+        "JED-1-2",
+        "JED-2-1",
+        "JED-2-2",
+        "JED-3-1",
+        "JED-3-2",
+        "JED-4-1",
+        "JED-4-2",
+        "JED-5-1",
+        "JED-5-2",
+        "JED-6-1",
+        "JED-6-2",
+        "PED-1-1",
+        "PED-1-2",
+        "PED-2-1"
+      ]
+    }
+  },
   "soo": {
     "status": "HONEST_REFUSE",
-    "table_titles": [
-      "SCHEDULE OF DDC POINTS",
-      "SCHEDULE OF DDC POINTS",
-      "SCHEDULE OF DDC POINTS",
-      "SCHEDULE OF DDC POINTS",
-      "SCHEDULE OF DDC POINTS",
-      "SCHEDULE OF DDC POINTS",
-      "SCHEDULE OF DDC POINTS",
-      "SCHEDULE OF DDC POINTS",
-      "SCHEDULE OF DDC POINTS",
-      "SCHEDULE OF DDC POINTS"
-    ],
-    "detail": "Title scan only — narrative SOO not used as points driver"
+    "detail": "No extractable SOO tables as points driver"
   },
   "labeled_estimate": {
-    "printed_rows": 231,
-    "unit_lists": [
+    "status": "HONEST_REFUSE_PARTIAL",
+    "reason": "9/10 lists are untitled-family SCHEDULE OF DDC POINTS without served_equipment join; cannot assign AHU/FCU/VAV qty×points without inventing type maps",
+    "unit_lists_only": [
       {
+        "idx": 9,
         "title": "SCHEDULE OF DDC POINTS",
         "n": 17,
-        "served": [
-          "HRC-1"
+        "served": {
+          "HRC-1": 12,
+          "(none)": 5
+        },
+        "sampleTags": [
+          "AI-1",
+          "AI-2",
+          "AI-3",
+          "AI-4",
+          "AI-5"
         ]
       }
     ],
-    "family_templates": [
-      {
-        "title": "SCHEDULE OF DDC POINTS",
-        "n": 41
-      },
-      {
-        "title": "SCHEDULE OF DDC POINTS",
-        "n": 12
-      },
-      {
-        "title": "SCHEDULE OF DDC POINTS",
-        "n": 32
-      },
-      {
-        "title": "SCHEDULE OF DDC POINTS",
-        "n": 28
-      },
-      {
-        "title": "SCHEDULE OF DDC POINTS",
-        "n": 52
-      },
-      {
-        "title": "SCHEDULE OF DDC POINTS",
-        "n": 30
-      },
-      {
-        "title": "SCHEDULE OF DDC POINTS",
-        "n": 5
-      },
-      {
-        "title": "SCHEDULE OF DDC POINTS",
-        "n": 12
-      },
-      {
-        "title": "SCHEDULE OF DDC POINTS",
-        "n": 2
-      }
-    ],
-    "note": "Multiply family templates × schedule qty only when coil/type split is extractable — else honest refuse"
+    "generic_list_rows": 231
   },
   "served_equipment_plan_paint": [
     {
       "tag": "HRC-1",
       "found": 1,
       "cites": 1,
-      "ok": true
+      "status": "MATCH"
     }
   ],
   "valves": {
@@ -171,35 +292,23 @@
         "refused_no_scale": 0,
         "refused_no_text": 0,
         "ambiguous": 0
-      },
-      "sample": [
-        {
-          "tag": "JED-1-1",
-          "status": "SCHEDULE_ONLY"
-        },
-        {
-          "tag": "JED-2-1",
-          "status": "SCHEDULE_ONLY"
-        },
-        {
-          "tag": "JED-3-1",
-          "status": "SCHEDULE_ONLY"
-        },
-        {
-          "tag": "JED-4-1",
-          "status": "SCHEDULE_ONLY"
-        },
-        {
-          "tag": "JED-5-1",
-          "status": "SCHEDULE_ONLY"
-        }
-      ]
+      }
     }
   },
-  "open_before_lock": [
-    "Family-template × qty estimate vs 231 printed (need type splits)",
-    "SOO deeper than title scan or permanent refuse",
-    "Coordinator drawing verification of damper MATCH + served paint",
-    "GT harness lock after self-check"
+  "verified": {
+    "bas_rows_match_key": true,
+    "damper_rows_match_key": true,
+    "HRC1_plan_paint": {
+      "tag": "HRC-1",
+      "found": 1,
+      "cites": 1,
+      "status": "MATCH"
+    }
+  },
+  "not_yet_verified": [
+    "Hand count of 231 DDC point rows against PDF sheets",
+    "Which generic DDC schedules map to which AHU/FCU/VAV/FAN equipment",
+    "Damper 12 SCHEDULE_ONLY tags: undrawn vs miss on plan",
+    "SOO narrative extractability beyond title scan"
   ]
 }

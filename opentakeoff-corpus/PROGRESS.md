@@ -455,10 +455,7 @@ hyphen point tags (`AI-1`) as equipment — joins CCC/P/MPAC/HPAC/FC. Plan paint
 MATCH: CCC-1/2, P-1/2, FC-3; MPAC/HPAC honest miss (no schedule row). CONTROL_DAMPER
 21/21 MATCH; ISOLATION_VALVE 13 MATCH / 2 SO. SOO refuse. Draft GT unlocked.
 
-**Vermillion 096 probe (PARTIAL):** BAS 231 rows (10 lists; 9 family templates, 1
-unit list with served `HRC-1` plan paint MATCH). SOO refuse. CONTROL_DAMPER 24
-rows = key; 12 MATCH / 12 SCHEDULE_ONLY (prior lock). Draft GT unlocked.
-
+**Vermillion 096 probe (PARTIAL, deepened):** BAS 231 across 10 generic "SCHEDULE OF DDC POINTS" lists; only HRC-1 has served_equipment (plan paint MATCH). AHU-4 / FCU×3 / VAV×58 / FAN×16 lack POINTS joins — qty×points refuse without inventing maps. CONTROL_DAMPER 24=key · 12 MATCH / 12 SO. SOO refuse. gt_locked false.
 
 ### Next queue (platform loop)
 
