@@ -1,0 +1,20 @@
+{
+  "set_id": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/041_IL_VA_Project_537_17_115_Sterile_Processing.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 sterile processing \u2014 thin FCU/PUMP/GRD (honest WEAK).",
+  "categories": {
+    "FCU": 2,
+    "PUMP": 1,
+    "GRD": 1
+  },
+  "totals": {
+    "items": 4
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

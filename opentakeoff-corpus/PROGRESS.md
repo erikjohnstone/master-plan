@@ -379,10 +379,11 @@ reconcile, and plan joins.
 - **WP4 Northport FAN honest SO lock:** RF-1/RF-2 SCHEDULE_ONLY under `evaluationFast` (no drawable plan text) — ceiling documented beside SDSU FAN MATCH.
 - **Vol2 batch-1 intake (shared path):** FAN keyRe `S-A-*`/`R-A-*`/`DSF`/`EG`/`SEF`; UNIT_HEATER `ECUH`/`HWUH` + duct-heater titles; DUCT_MOUNTED_COIL `HWC`; BAS `DDC CONTROLLER INPUT/OUTPUT` titles. NIST **13→19**; Missoula **12→30**; Lab BAS **0→63** rows / 3 lists; APHIS **10→15**. Keys: 5 MEAT + 1 WEAK + 2 ZERO under `cross-set-compile/`. Unit + Vol2 acceptance **8/8**.
 - **Vol2 batch-2 intake (shared path):** RTU `PACKAGED EQUIPMENT SCHEDULE (RTU)` + `RTU-*` keyRe; UNIT_HEATER `GUH`/`NUH`; DOAS `DEDICATED OUTSIDE AIR SYSTEM`. Locked **12** more Vol2 keys (7 MEAT / 3 WEAK / 2 ZERO) including ATC tower **396** HVAC + **122** BAS. Vol2 keyed total **20**. Acceptance **12/12**. Suwannee RTU negative still **1**.
+- **Vol2 batch-3 intake (shared path):** building-prefix `markCoreForKeyRe` (WHSE-ET-1→ET-1; reject catalog `TPLFY-EP15NEM4`); VRF_INDOOR/OUTDOOR; humidifier OCR/SH digit-gated; EXPANSION SYSTEM + zone-letter ET-A1; BUFFER GST-*. Locked **12** more Vol2 keys (5 MEAT / 2 WEAK / 5 ZERO) including warehouse **89** + chiller/VRF **15**. Vol2 keyed total **32**/82. Negatives: Orange `SHT. NO.`, Iowa `ETC.…`, Douglas model→EP pump, Missoula ET-A1 retained.
 
 ### Next queue (platform loop)
 
-1. **Vol2 full-volume Pillar A (active):** batches 1–2 keyed (**20**/82). Continue
+1. **Vol2 full-volume Pillar A (active):** batches 1–3 keyed (**32**/82). Continue
    probe → key → fix across remaining INDEX sets (single-file then multipart
    rejoins). Rubric: `takeoffs/VOL2_INTAKE.md`.
 2. Merge branch stack → `main`; WORKFLOWS #51 ON_MAIN.

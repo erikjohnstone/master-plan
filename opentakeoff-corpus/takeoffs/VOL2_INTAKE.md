@@ -74,3 +74,29 @@ Vol2 coverage is complete or ceilings are documented.
 | 010 Monitoring/control design | ZERO | 0 | 0 | no HVAC tables |
 
 Shared-path adds this batch: RTU `PACKAGED EQUIPMENT SCHEDULE (RTU)`; UNIT_HEATER `GUH`/`NUH`; DOAS `DEDICATED OUTSIDE AIR SYSTEM`.
+
+## Batch 3 (locked 2026-09-01)
+
+VA / sterile / boiler / EHRM probes → building-prefix strip + VRF / humidifier /
+expansion / buffer wideners → keys:
+
+| Set | Tier | HVAC | BAS | Notes |
+|---|---|---:|---:|---|
+| 031 MO VA warehouse reno | MEAT | 89 | 0 | WHSE-* prefix strip; AS-1 air separator |
+| 047 NC VA replace chillers | MEAT | 15 | 0 | VRF indoor/outdoor + expansion system + buffer GST |
+| 044 NY VA main boilers | MEAT | 28 | 0 | fire-tube boilers + plant pumps/fans |
+| 040 IL VA expand sterile | MEAT | 24 | 0 | UH/FAN/PUMP/GRD/louver |
+| 042 VA Patriot Cafe | MEAT | 6 | 0 | FAN + GRD (no humidifier schedule) |
+| 041 IL VA sterile processing | WEAK | 4 | 0 | thin FCU/PUMP/GRD |
+| 034 NC VA EHRM infra | WEAK | 2 | 0 | pumps only |
+| 029 ME BGS MEANG boiler | ZERO | 0 | 0 | no extractable HVAC tables |
+| 036 LA VA EHRM | ZERO | 0 | 0 | no HVAC equipment schedules |
+| 039 TX VA replace/upgrade | ZERO | 0 | 0 | no extractable HVAC tables |
+| 045 FL VA EHRM | ZERO | 0 | 0 | no HVAC equipment schedules |
+| 046 MI vet elevators | ZERO | 0 | 0 | no HVAC tables |
+
+Shared-path adds this batch: `markCoreForKeyRe` building-prefix strip (with
+catalog-model guard); VRF_INDOOR/OUTDOOR; humidifier OCR + SH-* (digit-gated);
+EXPANSION SYSTEM titles; BUFFER GST-*; zone-lettered ET-A1 / AS-A1 mark forms.
+Negatives kept honest: sheet header `SHT. NO.`, prose `ETC.…`, Trane model
+`TPLFY-EP15NEM4` must not inflate humidifier/expansion/pump.

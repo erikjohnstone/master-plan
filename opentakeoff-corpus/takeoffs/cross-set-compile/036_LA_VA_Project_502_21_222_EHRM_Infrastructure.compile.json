@@ -1,0 +1,16 @@
+{
+  "set_id": "036_LA_VA_Project_502_21_222_EHRM_Infrastructure",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/036_LA_VA_Project_502_21_222_EHRM_Infrastructure.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 EHRM \u2014 no HVAC equipment schedules (honest ZERO).",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "set_id": "034_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/034_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 EHRM \u2014 pumps only (honest WEAK).",
+  "categories": {
+    "PUMP": 2
+  },
+  "totals": {
+    "items": 2
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

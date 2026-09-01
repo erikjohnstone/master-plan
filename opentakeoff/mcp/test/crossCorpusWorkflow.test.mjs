@@ -177,6 +177,18 @@ test("WP1 keyed compile acceptance on ≥2 non-NAVFAC sets", async () => {
     "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.compile.json",
     "011_IL_VA_Hines_Finance_Center_Renovation.compile.json",
     "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.compile.json",
+    "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.compile.json",
+    "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.compile.json",
+    "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.compile.json",
+    "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.compile.json",
+    "041_IL_VA_Project_537_17_115_Sterile_Processing.compile.json",
+    "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.compile.json",
+    "034_NC_VA_Project_637_22_700_EHRM_Infrastructure.compile.json",
+    "029_ME_BGS_Project_3548_MEANG_Building_493_Boiler.compile.json",
+    "036_LA_VA_Project_502_21_222_EHRM_Infrastructure.compile.json",
+    "039_TX_VA_Project_580_22_201_Replace_and_Upgrade.compile.json",
+    "045_FL_VA_Project_516_21_107_EHRM_Infrastructure.compile.json",
+    "046_MI_Veterinary_Medical_Center_Replace_Elevators_3.compile.json",
   ];
   let scored = 0;
   for (const file of keys) {

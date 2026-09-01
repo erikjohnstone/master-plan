@@ -131,6 +131,37 @@ export function normalizeEquipMark(raw) {
  * Expand paired schedule marks joined by "&" (Northport "RF-1 & 2", "RF-1 & RF-2").
  * Digits-only right half reuses the left prefix. Prose ("B & G MODEL") is unchanged.
  */
+
+/**
+ * Optional building/area prefix on marks (WHSE-ET-1, AREA-AHU-1). Strip one
+ * leading TOKEN- when the remainder still looks like an equipment mark so
+ * family keyRe stays set-agnostic across multi-building schedules.
+ */
+export function markCoreForKeyRe(tag) {
+  const canon = String(tag || "").toUpperCase().replace(/\s+/g, "");
+  if (!canon) return canon;
+  // WHSE-ET-1 → ET-1; WHSE-SH1 → SH1. Remainder must start with a ≥2-letter
+  // family token so steam-trap ST-H-3 is NOT stripped to H-3 (false humidifier).
+  const stripped = canon.replace(/^[A-Z]{2,8}-(?=[A-Z]{2,8}[\s\-]?\d)/, "");
+  if (stripped === canon) return canon;
+  // Only accept building-prefix strip when the remainder is a short equip mark
+  // (ET-1, SH1, CC-15-6, S-A-1) — not catalog models (TPLFY-EP15NEM4 → EP15NEM4
+  // falsely matching PUMP blankKeyRe /^EP/).
+  if (/^[A-Z]{1,8}(?:-[A-Z]{1,8})*-?\d{1,4}(?:-[A-Z0-9]{1,4})?$/.test(stripped)) {
+    return stripped;
+  }
+  return canon;
+}
+
+function markMatchesKeyRe(re, one, canon) {
+  if (!re) return false;
+  if (re.test(canon) || re.test(one)) return true;
+  const core = markCoreForKeyRe(canon);
+  // Building-prefix strip (WHSE-ET-1 → ET-1) keeps family keyRe set-agnostic.
+  if (core !== canon && re.test(core)) return true;
+  return false;
+}
+
 export function expandAmpersandEquipMarks(raw) {
   const s = String(raw || "").trim();
   if (!s || !/&/.test(s)) return [s];
@@ -237,10 +268,10 @@ function uniqueFamily(graph, {
         // Footnote / notes rows that leaked into the key column.
         if (/^NOTES?:?\d*$/i.test(canon) || /^NOTES?:?$/i.test(one.trim())) continue;
         if (catchAllFilter) {
-          const okBlank = blankKeyRe && (blankKeyRe.test(canon) || blankKeyRe.test(one));
-          const okKey = keyRe && (keyRe.test(canon) || keyRe.test(one));
+          const okBlank = blankKeyRe && markMatchesKeyRe(blankKeyRe, one, canon);
+          const okKey = keyRe && markMatchesKeyRe(keyRe, one, canon);
           if (!(okBlank || okKey)) continue;
-        } else if (filterRe && !filterRe.test(canon) && !filterRe.test(one)) {
+        } else if (filterRe && !markMatchesKeyRe(filterRe, one, canon)) {
           continue;
         }
         if (keys.has(canon)) continue;
@@ -380,6 +411,20 @@ export const HVAC_FAMILY_SPECS = {
     blankKeyRe: /^HP[\s\-]/i,
   },
   // Return / exhaust air handlers often titled RAH / without "AIR HANDLING UNIT".
+  // VRF split indoor/outdoor unit schedules (IDU-*/ODU-* / IU-*/OU-*).
+  VRF_INDOOR: {
+    titleRe: /VRF\s+INDOOR(?:\s+UNIT)?(?:\s+SCHEDULE)?|VARIABLE\s+REFRIGERANT\s+FLOW\s+INDOOR/i,
+    exclude: /POINTS\s*LIST|DDC|OUTDOOR/i,
+    keyRe: /^(?:IDU|IU|VI)[\s\-]?/i,
+    titledOnly: true,
+  },
+  VRF_OUTDOOR: {
+    titleRe: /VRF\s+OUTDOOR(?:\s+UNIT)?(?:\s+SCHEDULE)?|VARIABLE\s+REFRIGERANT\s+FLOW\s+OUTDOOR/i,
+    exclude: /POINTS\s*LIST|DDC|INDOOR/i,
+    keyRe: /^(?:ODU|OU|VO)[\s\-]?/i,
+    titledOnly: true,
+  },
+
   RAH: {
     titleRe: /RETURN\s+AIR\s+HANDLER|RETURN\s+AIR\s+HANDLING|\bRAH\b.*SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC/i,
@@ -498,33 +543,40 @@ export const HVAC_FAMILY_SPECS = {
   // HUM-*; bare H-* on humidifier / blank titles. EH-* only via altTitleRe
   // ELECTRIC HUMIDIFIER (EH on MISC stays UNIT_HEATER — Douglas EH-20/30).
   HUMIDIFIER: {
-    titleRe: /HUMIDIFIER\s+SCHEDULE/i,
+    // OCR often drops the second I (HUMIDIFER); STEAM HUMIDIFIER schedules common.
+    titleRe: /HUMIDIFI?ER\s+SCHEDULE|STEAM\s+HUMIDIFI?ER/i,
     exclude: /DEHUMIDIFIER|POINTS\s*LIST|DDC/i,
-    keyRe: /^(?:HUM|H)[\-]/i,
-    altTitleRe: /ELECTRIC\s+HUMIDIFIER/i,
-    altKeyRe: /^(?:EH|HUM|H)[\-]/i,
+    // HUM/SH must include a digit (SH1/SH-1/SH-A1) so sheet headers like
+    // "SHT. NO." never match. Bare H-* still requires hyphen (H-A-3) so
+    // HC-/HP-/HWC-* coils are not stolen. WHSE-SH1 works via markCoreForKeyRe.
+    keyRe: /^(?:(?:HUM|SH)(?:[\s\-]+[A-Z]+)*[\s\-]*\d|H[\-])/i,
+    altTitleRe: /ELECTRIC\s+HUMIDIFI?ER/i,
+    altKeyRe: /^(?:(?:EH|HUM|SH)(?:[\s\-]+[A-Z]+)*[\s\-]*\d|H[\-])/i,
   },
   AIR_SEPARATOR: {
     // Hydraulic separators (HS-*) are air/dirt/hydraulic package vessels.
     titleRe: /AIR SEPARATOR SCHEDULE|HYDRAULIC\s+SEPARATOR(?:\s+SCHEDULE)?/i,
-    keyRe: /^(?:AS|HS)[\s\-]/i,
+    // AS-1 / AS-A1 / HS1 — digit required (not prose); optional zone letter.
+    keyRe: /^(?:AS|HS)(?:[\s\-]+[A-Z]+)*[\s\-]*\d/i,
   },
   EXPANSION_TANK: {
     // OCR: EPANSIONANDCOPRESSIONTANKSCHEDULE (bldg5406) — expansion + compression.
-    titleRe: /EXPANSION\s+TANK|COMPRESSION\s+TANK|EPANSION|DRAWDOWN\s+TANK\s+SCHEDULE/i,
+    // EXPANSION SYSTEM SCHEDULE is the same vessel family on chiller plants.
+    titleRe: /EXPANSION\s+TANK|EXPANSION\s+SYSTEM(?:\s+SCHEDULE)?|COMPRESSION\s+TANK|EPANSION|DRAWDOWN\s+TANK\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC|BUFFER/i,
-    // DT-* = booster drawdown / diaphragm tanks on expansion schedules.
-    keyRe: /^(?:ET|XT|DT)[\s\-]/i,
+    // ET-1 / ET-A1 / DT-* — digit required so "ETC. NOT SHOWN…" never matches.
+    keyRe: /^(?:ET|XT|DT)(?:[\s\-]+[A-Z]+)*[\s\-]*\d/i,
   },
   BUFFER_TANK: {
     titleRe: /BUFFER\s+TANK\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC|EXPANSION/i,
-    keyRe: /^BT[\s\-]/i,
+    // BT-*; GST-* glycol/storage vessels listed on buffer-tank schedules.
+    keyRe: /^(?:BT|GST)(?:[\s\-]+[A-Z]+)*[\s\-]*\d/i,
   },
   FLASH_TANK: {
     titleRe: /FLASH\s+TANK\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC/i,
-    keyRe: /^FT[\s\-]/i,
+    keyRe: /^FT(?:[\s\-]+[A-Z]+)*[\s\-]*\d/i,
   },
   HEAT_EXCHANGER: {
     titleRe: /HEAT\s+EXCHANGER\s+SCHEDULE|WATER[\s\-]*TO[\s\-]*WATER\s+HEAT\s+EXCHANGER|SHELL\s+AND\s+TUBE\s+HEAT\s+EXCHANGER/i,
@@ -534,8 +586,8 @@ export const HVAC_FAMILY_SPECS = {
   DUCT_MOUNTED_COIL: {
     titleRe: /DUCT\s+MOUNTED\s+COIL|HEATING\s+COIL\s+SCHEDULE|COOLING\s+COIL\s+SCHEDULE|HOT\s+WATER\s+REHEAT\s+COIL|REHEAT\s+COIL\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC|FAN\s*COIL|AIR\s+HANDLING|CONTROL\s+VALVE/i,
-    // CC/HC/RC coils; HWC-* hot-water coils on AHU heating-coil schedules.
-    keyRe: /^(?:CC|HC|RC|HWC)[\s\-]?/i,
+    // CC/HC/RC coils; HWC-* hot-water; PHC/RHC preheat/reheat coil marks.
+    keyRe: /^(?:CC|HC|RC|HWC|PHC|RHC)[\s\-]?/i,
   },
   WATER_TREATMENT: {
     titleRe: /WATER\s+TREATMENT\s+SCHEDULE|REVERSE\s+OSMOSIS|\bRO\s+SCHEDULE/i,

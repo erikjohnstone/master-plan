@@ -1,0 +1,23 @@
+{
+  "set_id": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 main boilers \u2014 fire-tube boilers + plant pumps/fans/UH/louvers.",
+  "categories": {
+    "CONDENSING_UNIT": 1,
+    "BOILER": 5,
+    "PUMP": 9,
+    "FAN": 7,
+    "UNIT_HEATER": 3,
+    "LOUVER": 3
+  },
+  "totals": {
+    "items": 28
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}
