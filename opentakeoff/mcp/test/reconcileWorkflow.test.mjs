@@ -891,6 +891,26 @@ test("Vol2 Bldg 615 reno 028: plant families honest SCHEDULE_ONLY", async (t) =>
   }
 });
 
+test("Vol2 WEAK leftovers: honest SCHEDULE_ONLY ceilings (066/033/067/078/013)", async (t) => {
+  const cases = [
+    ["066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.compile.json", ["HEAT_PUMP", "HUMIDIFIER", "GRD"]],
+    ["033_MN_VA_Project_656_18_301_Construct_Replace.compile.json", ["AHU", "PUMP"]],
+    ["067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.compile.json", ["HEAT_EXCHANGER", "GRD"]],
+    ["078_US_CP25028_MSU_Union_Sparty_Store_Renovations.compile.json", ["FAN"]],
+    ["013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.compile.json", ["VARIABLE_FREQUENCY_DRIVE"]],
+  ];
+  for (const [file, families] of cases) {
+    const ctx = await loadKeySessionOrSkip(t, resolve(CROSS, file));
+    if (!ctx) return;
+    const { key, session, graph } = ctx;
+    for (const family of families) {
+      await assertFamilyStatusCounts(session, graph, key, family, {
+        schedule_only: key.categories[family],
+      });
+    }
+  }
+});
+
 test("Vol2 Renne Library 075: AHU/HP/ERV/coil MATCH; GRD honest SO", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
