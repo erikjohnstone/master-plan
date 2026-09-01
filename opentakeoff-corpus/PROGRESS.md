@@ -413,6 +413,18 @@ UI+MCP parity, no corpus hardcodes.
 
 Authority: `GOAL.md` §8 · `takeoffs/NEXT_GOAL_LOOP.md`.
 
+### Bulk corpus staging (2026-09-01)
+
+- Vol1 + Vol2 HVAC/BAS plan-set PDFs restored on this VM from the public Drive
+  archives used by the prior coordinator (`1cDMOhgm6Ts_LIVm_AwIDKNzRoQmVz5Ma`,
+  `1HGWFUwHpNbI_8wEloYRyhMwCcOEbjCEE`).
+- On disk: `opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets` (977M) and
+  `…/HVAC_BAS_Plan_Sets_Vol2` (1.7G, multipart rejoined). All **113** bulk
+  `cross-set-compile` key `source_file` paths resolve.
+- Repro: `./scripts/stage-bulk-corpus.sh` (idempotent; `FORCE=1` to refresh).
+  PDFs stay gitignored — bake into the Cloud Agent environment snapshot so
+  new agents inherit them.
+
 ### Next queue (platform loop)
 
 1. **Pillar B / §6 judgment:** Vol2 + Vol1 plant reconcile dense (incl. Las Vegas CUP **04**, Colville **27** pumps/fans, WEAK MATCH leftovers). Klamath FC/HP/DOAS remain honest SO.
