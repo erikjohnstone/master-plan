@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-01T18:24:12Z",
+  "as_of": "2026-09-01T18:40:00Z",
   "mandate": "Pillar C done only when EVERY bas_bearing and valve_bearing set has estimator takeoff + coordinator self-check + pipeline GT corroboration",
   "counts": {
     "vol1_sets": 30,
@@ -13,7 +13,7 @@
     "gt_locked": 0
   },
   "verification_coverage": {
-    "note": "Pillar C corpus-complete mandate. Inventory floors 112/112 BAS + 81/81 valve product census. Printed POINTS scrape \u2260 done. Shared-path BAS plan_paint refuse_not_done gate + classifyBasServedSweepOutcome (SCHEDULE_ONLY / AMBIGUOUS honesty). Inventory plan-paint expand 6 bas:0 sets (4 with MATCH). Still 0 estimator_complete / gt_locked. preferTitle inventory re-census: Carson+Ames 8/8 MATCH each via sweepBasServedMark. Still 0 locked.",
+    "note": "Pillar C corpus-complete mandate. Inventory floors 112/112 BAS + 81/81 valve product census. Printed POINTS scrape \u2260 done. Shared-path BAS plan_paint refuse_not_done gate + classifyBasServedSweepOutcome (SCHEDULE_ONLY / AMBIGUOUS honesty). Inventory plan-paint expand 9 bas:0 sets with preferTitle (8 with MATCH; Klamath honest SCHEDULE_ONLY). Estimator product now emits plan_paint.targets prefer_schedule_title from HVAC table_title. PROOF/SPARE column headers absent on keyed probe — gates stay refuse. Still 0 estimator_complete / gt_locked.",
     "bas_gap_soo_drawing_verified": 5,
     "bas_inventory_drawing_verified_bas0": 58,
     "bas_keyed_drawing_sampled": 5,
@@ -38,7 +38,8 @@
       "valve_product_census": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
       "soo_deepen_batch": "/opt/cursor/artifacts/pillar-c-soo-present-not-row-extractable-probe.json",
       "plan_paint_inventory_expand": "/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-expand.json",
-      "spare_proof_disclose": "/opt/cursor/artifacts/pillar-c-spare-proof-disclose-batch.json"
+      "spare_proof_disclose": "/opt/cursor/artifacts/pillar-c-spare-proof-disclose-batch.json",
+      "proof_spare_column_header_probe": "/opt/cursor/artifacts/pillar-c-proof-spare-column-header-probe.json"
     },
     "soo_present_not_row_extractable_sets": [
       "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -54,11 +55,12 @@
     "soo_points_list_text_without_tables": [
       "062_ID_ITD_District_1_Laboratory_Building_Mechanical"
     ],
-    "plan_paint_census_inventory_expand_sets": 6,
-    "plan_paint_inventory_expand_with_match": 4,
+    "plan_paint_census_inventory_expand_sets": 9,
+    "plan_paint_inventory_expand_with_match": 8,
     "plan_paint_inventory_expand_artifact": "/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-expand.json",
     "plan_paint_preferTitle_recensus_sets": 2,
-    "plan_paint_preferTitle_artifact": "/opt/cursor/artifacts/pillar-c-plan-paint-preferTitle-recensus.json"
+    "plan_paint_preferTitle_artifact": "/opt/cursor/artifacts/pillar-c-plan-paint-preferTitle-recensus.json",
+    "proof_spare_column_headers_found_on_keyed_probe": 0
   },
   "bas_inventory_drawing_verified_ids": [
     "11_CA_SDSU_EngSciences_Complex_100SD",

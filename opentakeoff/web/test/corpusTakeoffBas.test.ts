@@ -116,6 +116,12 @@ describe("basEstimatorStatus", () => {
     assert.equal(bas.estimator_status.estimator_complete, false);
     assert.ok(bas.estimator_status.gates.some((g) => g.gate === "soo_derived_points" && g.status === "refuse_not_done"));
     assert.ok(bas.estimator_status.gates.some((g) => g.gate === "schedule_derived_estimate_not_merged"));
+    // Plan-paint targets carry HVAC table_title as prefer_schedule_title (never invented).
+    assert.equal(bas.estimator_product.plan_paint.status, "refuse_not_done");
+    assert.ok(Array.isArray(bas.estimator_product.plan_paint.targets));
+    assert.ok(bas.estimator_product.plan_paint.targets.some(
+      (t) => t.tag === "AHU-1" && /AIR HANDLING UNIT SCHEDULE/i.test(String(t.prefer_schedule_title || "")),
+    ));
   });
 });
 

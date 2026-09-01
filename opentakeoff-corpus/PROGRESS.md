@@ -1,11 +1,20 @@
 ## Active work
 
-### Pillar C — preferTitle inventory plan-paint (2026-09-01 18:24 UTC)
+### Pillar C — preferTitle inventory plan-paint expand + product hints (2026-09-01 18:40 UTC)
+
+- **Inventory plan-paint census (9 bas:0 sets) with `sweepBasServedMark` + HVAC `table_title` as `preferTitle`:**
+  - **8/9 with MATCH** (Orange County 8/8, Las Vegas 7/1, St Louis 7/1, Carson 8/8, Ames 8/8, Douglas 8/8, Hawthorn 5/5, SDSU 7/1).
+  - Klamath 14 remains honest **0 MATCH / 8 SCHEDULE_ONLY** (tags not drawable — refuse, not invented).
+  - Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-expand.json`.
+- **Shared product path:** `buildBasEstimatorProduct.plan_paint.targets[]` now carries `prefer_schedule_title` / `prefer_schedule_sheet` from HVAC `table_title` / `sheet_id`; Agent Takeoff emits `plan_paint_prefer_schedule_title` rows so the agent can pass them into `sweep_schedule_row` (UI+MCP already forward `prefer_schedule_title` → Session `preferTitle`).
+- **PROOF/SPARE column-header probe** on keyed BAS sets: no real PROOF/INTERLOCK/SPARE columns (CAPACITY false-positives only) — spare/proof gates stay `refuse_not_done`; free-text phrase hits remain disclose-only.
+- Unit tests **53/53** (`schedulePlanReconcile` + `corpusTakeoffBas` + `agentTakeoff`).
+- **Still 0/112 BAS and 0/81 valve** at `estimator_complete` / `gt_locked`. PreferTitle plan-paint ≠ Pillar C done.
+
+### Prior — preferTitle inventory plan-paint (2026-09-01 18:24 UTC)
 
 - **Shared helper `sweepBasServedMark`:** forwards `preferTitle` / `preferSheet` into `Session.sweepScheduleRow`, then `classifyBasServedSweepOutcome`. Cross-family building letters (Carson B1 on furnace + CU + OAU) resolve when the HVAC item already carries `table_title`.
 - **Re-census:** Carson 16 → **8/8 MATCH** (was 6 AMBIGUOUS); Ames 061 → **8/8 MATCH** (was 1 MATCH / 7 AMBIGUOUS). Still `refuse_not_done` / `gt_locked: false`.
-- Unit tests **53/53** (`schedulePlanReconcile` + `corpusTakeoffBas` + `agentTakeoff`).
-- **Still 0/112 BAS and 0/81 valve** at `estimator_complete` / `gt_locked`.
 - Artifacts: `/opt/cursor/artifacts/pillar-c-plan-paint-preferTitle-recensus.json`.
 
 ## Verified baseline

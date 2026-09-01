@@ -418,7 +418,17 @@ test("rowsFromCompiledTakeoff: BAS estimator_product estimate/gap/SOO rows are d
         typical_pct_per_point_type: { common: 15 },
         note: "policy disclose only",
       },
-      plan_paint: { status: "refuse_not_done", note: "paint required" },
+      plan_paint: {
+        status: "refuse_not_done",
+        note: "paint required",
+        targets: [
+          {
+            tag: "B1",
+            prefer_schedule_title: "2-STAGE, GAS FIRED FURNACE SCHEDULE",
+            prefer_schedule_sheet: "M-601",
+          },
+        ],
+      },
     },
     categories: {
       points_lists: {
@@ -440,6 +450,8 @@ test("rowsFromCompiledTakeoff: BAS estimator_product estimate/gap/SOO rows are d
   // Printed point row still present — estimate did not replace it.
   assert.ok(rows.some((r) => r.tag === "AI1" && r.field === "quantity"));
   assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "plan_paint" && r.value === "refuse_not_done"));
+  assert.ok(rows.some((r) => r.tag === "B1" && r.field === "plan_paint_prefer_schedule_title"
+    && /FURNACE SCHEDULE/i.test(String(r.value))));
 });
 
 test("compileAgentTakeoff: repeating BAS marks across lists stay separate lines", () => {

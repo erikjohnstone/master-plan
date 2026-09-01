@@ -1021,7 +1021,18 @@ export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
     const count = cat?.count ?? cat?.items?.length ?? 0;
     if (!count) continue;
     const tags = (cat.items || []).map((it) => String(it.tag || it.mark || "").trim()).filter(Boolean);
-    inventory.push({ family, count, tags: tags.slice(0, 40) });
+    // Plan-paint hints: prefer_schedule_title from the HVAC row's own table_title
+    // so cross-family building letters (Carson B1) resolve — never invent titles.
+    const plan_paint_targets = (cat.items || []).slice(0, 40).map((it) => {
+      const tag = String(it.tag || it.mark || "").trim();
+      if (!tag) return null;
+      return {
+        tag,
+        prefer_schedule_title: it.table_title || null,
+        prefer_schedule_sheet: it.sheet_id || null,
+      };
+    }).filter(Boolean);
+    inventory.push({ family, count, tags: tags.slice(0, 40), plan_paint_targets });
     const per = SCHEDULE_POINT_ESTIMATE_PER_UNIT[family];
     if (!per) continue;
     const famPoints = {
@@ -1122,7 +1133,8 @@ export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
     spare_io_policy: BAS_SPARE_IO_POLICY,
     plan_paint: {
       status: "refuse_not_done",
-      note: "Served-equipment / inventory plan MATCH or honest SCHEDULE_ONLY paint still required per mark — printed POINTS ≠ installed takeoff.",
+      note: "Served-equipment / inventory plan MATCH or honest SCHEDULE_ONLY paint still required per mark — printed POINTS ≠ installed takeoff. When sweeping inventory marks, pass prefer_schedule_title from plan_paint_targets (HVAC table_title) so cross-schedule building letters resolve; never invent plan qty.",
+      targets: inventory.flatMap((r) => r.plan_paint_targets || []).slice(0, 80),
     },
   };
 }
