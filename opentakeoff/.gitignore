@@ -5,6 +5,7 @@ node_modules/
 # Build output
 web/dist/
 **/dist/
+out/
 
 # Python (optional AI sandbox)
 __pycache__/
