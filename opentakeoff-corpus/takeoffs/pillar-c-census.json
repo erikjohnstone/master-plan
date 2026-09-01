@@ -3,7 +3,7 @@
   "width_phase": "complete",
   "depth_phase": "in_progress",
   "width_note": "Corpus material map closed: 112/112 BAS estimator_product census, 107/107 bas:0 plan-paint touched, 81/81 valve product census, 11/11 valve plan-paint width sample. Still 0 gt_locked — depth phase next.",
-  "depth_note": "Full plan-paint sweeps started: 5 keyed BAS + 11 valve + 20 bas:0 inventory batch 1; GT drafts patched depth_plan_paint_full; still 0 gt_locked.",
+  "depth_note": "Full plan-paint sweeps: 5 keyed BAS + 11 valve + 58 bas:0 inventory (batches 1–3). GT drafts patched depth_plan_paint_full; still 0 gt_locked.",
   "mandate": "Pillar C done only when EVERY bas_bearing and valve_bearing set has estimator takeoff + coordinator self-check + pipeline GT corroboration",
   "counts": {
     "vol1_sets": 30,
@@ -46,6 +46,8 @@
       "depth_bas_keyed_plan_paint": "/opt/cursor/artifacts/pillar-c-depth-bas-keyed-plan-paint.json",
       "depth_valve_plan_paint": "/opt/cursor/artifacts/pillar-c-depth-valve-plan-paint.json",
       "depth_bas_inventory_batch1": "/opt/cursor/artifacts/pillar-c-depth-bas-inventory-batch1.json",
+      "depth_bas_inventory_batch2": "/opt/cursor/artifacts/pillar-c-depth-bas-inventory-batch2.json",
+      "depth_bas_inventory_batch3": "/opt/cursor/artifacts/pillar-c-depth-bas-inventory-batch3.json",
       "valve_product_census": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
       "soo_deepen_batch": "/opt/cursor/artifacts/pillar-c-soo-present-not-row-extractable-probe.json",
       "plan_paint_inventory_expand": "/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-expand.json",
@@ -110,7 +112,13 @@
     "depth_plan_paint_keyed_bas_sets": 5,
     "depth_plan_paint_valve_sets": 11,
     "depth_plan_paint_bas_inventory_batch1_sets": 20,
-    "depth_plan_paint_bas_inventory_batch1_with_match": 18
+    "depth_plan_paint_bas_inventory_batch1_with_match": 18,
+    "depth_plan_paint_bas_inventory_batch2_sets": 20,
+    "depth_plan_paint_bas_inventory_batch2_with_match": 15,
+    "depth_plan_paint_bas_inventory_batch3_sets": 18,
+    "depth_plan_paint_bas_inventory_batch3_with_match": 9,
+    "depth_plan_paint_bas_inventory_total_sets": 58,
+    "depth_plan_paint_bas_inventory_total_with_match": 42
   },
   "bas_inventory_drawing_verified_ids": [
     "11_CA_SDSU_EngSciences_Complex_100SD",
