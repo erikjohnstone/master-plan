@@ -6585,6 +6585,26 @@ export function bandedSheets(sheet: SheetSpans, opts: ExtractOpts): SheetSpans[]
 // ── the graph ───────────────────────────────────────────────────────────────
 export interface SheetGraphSchedule { kind: TableKind; title: string; rows: number; region: Bbox; continues?: string; rotated_headers?: boolean }
 export interface SheetGraphSheet { key: string; role: SheetRole; confidence: number; evidence: Evidence | null; building?: string; schedules: SheetGraphSchedule[] }
+/** L3.5 topology summary per plan sheet (shared vector pipeline). */
+export interface SheetTopologySummary {
+  nodes: number;
+  edges: number;
+  layer_signal: string;
+  quant_grid_px: number;
+}
+
+/** Full L0–L5 vector pipeline disclosure (Session.graphForPipeline). */
+export interface VectorPipelineReport {
+  layers_run: string[];
+  l45_enabled: boolean;
+  tiles_sliced: number;
+  tables_added: number;
+  tables_replaced: number;
+  topology_sheets: number;
+  ocr_assists: number;
+  notes: string[];
+}
+
 export interface SheetGraph {
   available: boolean;                 // false = no text layer anywhere (a scanned set) — nothing half-populates
   sheets: SheetGraphSheet[];
@@ -6595,6 +6615,10 @@ export interface SheetGraph {
   buildings: string[];                // every building designator the set names, sorted
   revisions: RevisionMarker[];        // every delta/REV marker the set carries — the sheet is under revision where these sit
   notes: string[];                    // named gaps found while building — never silent drops
+  /** L3.5 MEP connectivity graph summaries keyed by sheet. */
+  vector_topology?: Record<string, SheetTopologySummary>;
+  /** Last vector pipeline run report (L0–L5 + L4.5 OCR/VLM assist). */
+  vector_pipeline?: VectorPipelineReport;
 }
 
 export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {

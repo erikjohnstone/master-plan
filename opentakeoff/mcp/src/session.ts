@@ -10,6 +10,8 @@ import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
 import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
+import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src/lib/vectorTakeoffPipeline.ts";
+import type { OcrRegionResult } from "../../web/src/lib/rasterTableAssist.ts";
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
  * one extraction's own region being tighter/looser than the other's (ODL's
@@ -5462,6 +5464,8 @@ export class Session {
   // clears it). The engine is pure (web/src/lib/sheetgraph.ts); this is the
   // span plumbing plus the wire shapes.
   private graph: SheetGraph | null = null;
+  /** Vector segments extracted during ensureGraph — fed to L2/L3.5 pipeline passes. */
+  private pipelineSegs = new Map<string, number[]>();
 
   private async ensureGraph(): Promise<SheetGraph> {
     if (!this.docs.size) throw new UserError("No plan loaded — call load_plan first.");
@@ -5496,12 +5500,100 @@ export class Session {
           }
         }
         inputs.push({ key: s.key, sheet_number: s.sheetNumber, spans, ...(segs?.length ? { segs } : {}) });
+        if (segs?.length) this.pipelineSegs.set(s.key, segs);
       }
       this.graph = buildSheetGraph(inputs);
       if (skippedHeavy) this.graph.notes.push(`drawn-delta hunt skipped on ${skippedHeavy} sheet(s) — the set's linework exceeded the vector budget; text revision markers (Δ2 / REV 2) were still read everywhere`);
-      await this.enhanceTablesWithODL(this.graph);
+      await this.runVectorTakeoffStack(this.graph);
     }
     return this.graph;
+  }
+
+  /** Full L0–L5 vector takeoff stack on the shared Session path (geometry-first;
+   * OCR/VLM assist when vector paths alone cannot reach schedule rows). */
+  private async runVectorTakeoffStack(g: SheetGraph): Promise<void> {
+    await runVectorTakeoffPipeline(g, {
+      runODL: (graph) => this.enhanceTablesWithODL(graph),
+      getSheetContexts: () => this.buildVectorSheetContexts(g),
+      sheetHasPointsListTitle: (key) => this.sheetHasPointsListTitle(key),
+      ocrRegion: (key, region) => this.ocrScheduleRegion(key, region),
+    });
+  }
+
+  private buildVectorSheetContexts(g: SheetGraph): VectorSheetContext[] {
+    const out: VectorSheetContext[] = [];
+    for (const sh of g.sheets) {
+      const state = this.sheets.get(sh.key);
+      if (!state) continue;
+      const spans: GraphSpan[] = (state.spans ?? textSpans(state.page)).map((span) => ({
+        str: span.str,
+        x: span.x0,
+        y: span.y0,
+        w: span.x1 - span.x0,
+        h: span.y1 - span.y0,
+        ...(span.rot ? { rot: span.rot } : {}),
+      }));
+      let segs: number[] | undefined = this.pipelineSegs.get(sh.key) ?? state.geo?.segs;
+      let rasterFrac = 0;
+      try {
+        const geo = state.geo;
+        if (geo && state.widthPx * state.heightPx > 0) {
+          rasterFrac = geo.imageArea / (state.widthPx * state.heightPx);
+        }
+      } catch { /* best-effort */ }
+      out.push({
+        key: sh.key,
+        role: sh.role,
+        spans,
+        ...(segs?.length ? { segs } : {}),
+        width: state.widthPx,
+        height: state.heightPx,
+        pageViewportTransform: state.page.viewport.transform,
+        rasterFrac,
+      });
+    }
+    return out;
+  }
+
+  /** L4.5 OCR assist — tesseract on a rendered schedule region (shared path). */
+  private async ocrScheduleRegion(
+    sheetKey: string,
+    region: [number, number, number, number],
+  ): Promise<OcrRegionResult | null> {
+    try {
+      const s = this.sheet(sheetKey);
+      const [x0, y0, x1, y1] = region;
+      const r = { x0, y0, x1, y1 };
+      const { png, width, height } = await s.page.renderRegionPng(
+        r,
+        Math.min(2048, Math.max(x1 - x0, y1 - y0)),
+      );
+      const Tesseract = (await import("tesseract.js")).default;
+      const { data } = await Tesseract.recognize(Buffer.from(png), "eng", {
+        logger: () => {},
+      });
+      const tess = data as {
+        text?: string;
+        words?: Array<{ text: string; confidence: number; bbox: { x0: number; y0: number; x1: number; y1: number } }>;
+      };
+      const sx = (x1 - x0) / Math.max(1, width);
+      const sy = (y1 - y0) / Math.max(1, height);
+      const words = (tess.words || [])
+        .filter((w: { text?: string; confidence?: number }) => w.text?.trim() && (w.confidence ?? 0) >= 40)
+        .map((w: { text: string; bbox: { x0: number; y0: number; x1: number; y1: number }; confidence: number }) => ({
+          text: w.text.trim(),
+          confidence: w.confidence,
+          bbox: [
+            x0 + w.bbox.x0 * sx,
+            y0 + w.bbox.y0 * sy,
+            x0 + w.bbox.x1 * sx,
+            y0 + w.bbox.y1 * sy,
+          ] as [number, number, number, number],
+        }));
+      return { words, fullText: String(tess.text || "") };
+    } catch {
+      return null;
+    }
   }
 
   /** Cross-checks every schedule-role sheet's tables against
