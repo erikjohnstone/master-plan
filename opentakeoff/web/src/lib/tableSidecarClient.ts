@@ -98,8 +98,12 @@ export async function pingTableSidecar(): Promise<{ ok: boolean; backends: strin
 }
 
 export async function extractTablesViaSidecar(params: SidecarExtractParams): Promise<SidecarTable[]> {
-  const result = await rpc<{ tables: SidecarTable[] }>("extract_tables", params as unknown as Record<string, unknown>);
-  return result?.tables ?? [];
+  try {
+    const result = await rpc<{ tables: SidecarTable[] }>("extract_tables", params as unknown as Record<string, unknown>);
+    return result?.tables ?? [];
+  } catch {
+    return [];
+  }
 }
 
 export async function shutdownTableSidecar(): Promise<void> {

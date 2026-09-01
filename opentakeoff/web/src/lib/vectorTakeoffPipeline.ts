@@ -19,6 +19,11 @@ import {
 import { extractScheduleTablesFromStreamGrid } from "./scheduleStreamFallback.ts";
 import { extractScheduleTablesFromSidecar } from "./scheduleTableSidecarAdapter.ts";
 import {
+  runPillarGapRecoveryForSheet,
+  sheetNeedsPillarGapRecovery,
+} from "./pillarGapRecovery.ts";
+import { sheetHasPointsListTitleSpans, sheetHasScheduleLanguage } from "./scheduleLanguageScan.ts";
+import {
   collapseEquivalentPrimaryTables,
   dedupCrossSourceTables,
   mergeExtractedTable,
@@ -101,7 +106,7 @@ function isScheduleTarget(ctx: VectorSheetContext, hooks: VectorPipelineHooks): 
   // Plan/demolition sheets embed equipment terms everywhere — keyword scan is not schedule signal there.
   if (ctx.role !== "legend" && ctx.role !== "unknown") return false;
   if (hooks.sheetHasPointsListTitle(ctx.key)) return true;
-  return sheetHasScheduleKeywords(ctx.spans);
+  return sheetHasScheduleLanguage(ctx.spans);
 }
 
 function mergeCandidates(
@@ -282,6 +287,23 @@ export async function runVectorTakeoffPipeline(
       runL2FallbacksForSheet(g, ctx, buildings, stats, touched);
     }
     await runL2SidecarForSheet(g, ctx, buildings, stats, touched, report);
+  }
+
+  // L2.5 — recover tables Pillars A–D missed when schedule language exists in vector text.
+  report.layers_run.push("L2.5:pillar-gap-recovery");
+  let gapTables = 0;
+  for (const ctx of contexts) {
+    if (!sheetNeedsPillarGapRecovery(g, ctx)) continue;
+    const mergeFn = (candidates: ScheduleTable[]) =>
+      mergeCandidates(g, candidates, ctx.key, stats, touched);
+    const n = await runPillarGapRecoveryForSheet(g, ctx, buildings, stats, touched, mergeFn);
+    if (n > 0) {
+      gapTables += n;
+      report.notes.push(`${ctx.key}: L2.5 pillar-gap recovery added ${n} table(s) from schedule/BAS/valve language.`);
+    }
+  }
+  if (gapTables) {
+    report.notes.push(`L2.5 pillar-gap recovery: ${gapTables} table(s) on shared vector path.`);
   }
 
   // L3 — plan symbol inventory runs at query time via sweep_schedule_row (shared path).

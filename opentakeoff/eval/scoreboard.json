@@ -1,6 +1,8 @@
 {
-  "as_of": null,
-  "note": "Initial scoreboard — run npm run eval after gold set is populated",
+  "as_of": "2026-09-01T23:16:08.595Z",
+  "note": "Scored from compile-key expectations + emitted takeoff.json corpus",
+  "corpus": "/workspace/opentakeoff-corpus",
+  "out_dir": "/workspace/opentakeoff/out",
   "metrics": {
     "grounding_coverage": null,
     "table_cell_f1": null,
@@ -19,9 +21,46 @@
     "seq_implied_point_f1": null,
     "discrepancy_prec": null,
     "determinism": null,
-    "corpus_pass_rate": null
+    "corpus_pass_rate": 0
   },
   "acceptance": {
-    "mvp": false
-  }
+    "mvp": false,
+    "emitted": 0,
+    "missing": 116,
+    "keys_total": 116
+  },
+  "sample_sets": [
+    {
+      "set_id": "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
+      "status": "missing_emit"
+    },
+    {
+      "set_id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+      "status": "missing_emit"
+    },
+    {
+      "set_id": "006_US_U2607_01_Interior_Renovations_C_Wing_Updates",
+      "status": "missing_emit"
+    },
+    {
+      "set_id": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+      "status": "missing_emit"
+    },
+    {
+      "set_id": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+      "status": "missing_emit"
+    },
+    {
+      "set_id": "010_US_WWYK240146_Design_Implement_Monitoring_Control",
+      "status": "missing_emit"
+    },
+    {
+      "set_id": "011_IL_VA_Hines_Finance_Center_Renovation",
+      "status": "missing_emit"
+    },
+    {
+      "set_id": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+      "status": "missing_emit"
+    }
+  ]
 }

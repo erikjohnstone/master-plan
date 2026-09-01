@@ -11,6 +11,7 @@ import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../
 import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
 import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src/lib/vectorTakeoffPipeline.ts";
+import { sheetHasPointsListTitleSpans } from "../../web/src/lib/scheduleLanguageScan.ts";
 import type { OcrRegionResult } from "../../web/src/lib/rasterTableAssist.ts";
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
@@ -5921,16 +5922,15 @@ export class Session {
     const state = this.sheets.get(sheetKey);
     const spans = state?.spans;
     if (!spans?.length) return false;
-    for (const sp of spans) {
-      const t = String(sp.str || "").replace(/\s+/g, " ").trim();
-      if (t.length < 10 || t.length > 90) continue;
-      if (/^POINTS?\s+LIST\b/i.test(t)) return true;
-      if (/^FCU WITH\b.+\bDDC POINTS LIST$/i.test(t)) return true;
-      if (/^UNIT HEATER DDC POINTS LIST$/i.test(t)) return true;
-      // PLC panel I/O lists (same T-BAS-01 family as POINTS/DDC — set-agnostic).
-      if (/^I\s*\/\s*O\s+LIST\b/i.test(t) || /^IO\s+LIST\b/i.test(t)) return true;
-    }
-    return false;
+    const mapped = spans.map((span) => ({
+      str: span.str,
+      x: span.x0,
+      y: span.y0,
+      w: span.x1 - span.x0,
+      h: span.y1 - span.y0,
+      ...(span.rot ? { rot: span.rot } : {}),
+    }));
+    return sheetHasPointsListTitleSpans(mapped);
   }
 
   /** Raw internal graph (full table rows/cells, not `sheetGraph()`'s own

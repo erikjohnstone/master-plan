@@ -1,3 +1,14 @@
+## 2026-09-01 — Pillar gap closure on vector stack (70 valve / 49 BAS zero floors)
+
+- **Goal updated** (`docs/GOAL.md`): explicit mandate to finish Pillars A–D extraction gaps through L0–L5, not regex-only or refuse weakening.
+- `scheduleLanguageScan.ts` — shared valve/BAS/schedule language scan (embedded AHU POINTS LIST, CHW valve schedule, I/O list).
+- `pillarGapRecovery.ts` — **L2.5** title-anchored stream + sidecar recovery when language exists but no valve/BAS-shaped table.
+- Wired into `vectorTakeoffPipeline.ts` + expanded `session.ts` points-list title detection.
+- `sequenceExtract.ts` + `topologyConsumer.ts` — P3 sequences + L3.5 topology summary on shared path.
+- `pillarGapAudit.mjs` — measures compile-zero floors vs graph valve/BAS rows + missing-target sheets.
+- `emit-corpus-takeoff.mjs` + `eval/runCorpusEval.mjs` — batch emit + scoreboard (in progress).
+- Next: run `pillarGapAudit` before/after on 17 tabular-language sets; corpus emit batch; eval gold.
+
 ## 2026-09-01 — P2 integrated on Pillars A/B/C/D (not a fork)
 
 - `gridClassify.mjs` — P2 grid typing delegates to L5 `isControlValveHeaderShape` / `isBasPointsListTable`.

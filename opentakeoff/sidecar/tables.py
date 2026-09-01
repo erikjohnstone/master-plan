@@ -262,7 +262,16 @@ def extract_tables(params: dict[str, Any]) -> dict[str, Any]:
         page = pdf.pages[page_num - 1]
         if bbox_hint and len(bbox_hint) == 4:
             x0, y0, x1, y1 = bbox_hint
-            page = page.within_bbox((x0, y0, x1, y1))
+            pb = page.bbox
+            cx0 = max(float(pb[0]), min(float(x0), float(pb[2])))
+            cy0 = max(float(pb[1]), min(float(y0), float(pb[3])))
+            cx1 = max(float(pb[0]), min(float(x1), float(pb[2])))
+            cy1 = max(float(pb[1]), min(float(y1), float(pb[3])))
+            if cx1 - cx0 > 8 and cy1 - cy0 > 8:
+                try:
+                    page = page.within_bbox((cx0, cy0, cx1, cy1))
+                except ValueError:
+                    pass
 
         for backend in want:
             if backend not in available:

@@ -21,6 +21,8 @@ import { compareSheetKeys } from "./sheetKey.ts";
 import { classifyGrid, classifyAllGrids } from "./gridClassify.mjs";
 import { pipelineHarnessSnapshot } from "./pipelineHarness.mjs";
 import { cellEvidence, normalizeTakeoffTag } from "./takeoffEvidence.mjs";
+import { extractSequencesFromGraph } from "./sequenceExtract.ts";
+import { enrichSystemTags, summarizeVectorTopology } from "./topologyConsumer.ts";
 
 export const PIPELINE_VERSION = "takeoff-estimator-v1";
 const DAMPER_FAMILIES = new Set(["CONTROL_DAMPER", "FUME_HOOD_DAMPER"]);
@@ -58,7 +60,11 @@ export function buildEstimatorTakeoffDocument(graph, opts = {}) {
   }
 
   const { controllers, points } = mapBasCompile(basCompile, tableIndex);
-  const systems = inferSystems(valves, dampers, points, basCompile);
+  const sequences = extractSequencesFromGraph(graph);
+  const enrichedValves = enrichSystemTags(valves, graph);
+  const enrichedDampers = enrichSystemTags(dampers, graph);
+  const enrichedPoints = enrichSystemTags(points, graph);
+  const systems = inferSystems(enrichedValves, enrichedDampers, enrichedPoints, basCompile);
   const discrepancies = buildDiscrepancies(harness, valveCompile, basCompile, opts.reconcileSummary);
 
   return {
@@ -69,11 +75,11 @@ export function buildEstimatorTakeoffDocument(graph, opts = {}) {
       pipelineVersion: PIPELINE_VERSION,
     },
     systems: sortByTag(systems),
-    valves: sortByTag(valves),
-    dampers: sortByTag(dampers),
+    valves: sortByTag(enrichedValves),
+    dampers: sortByTag(enrichedDampers),
     controllers: sortByTag(controllers),
-    points: sortByName(points),
-    sequences: [],
+    points: sortByName(enrichedPoints),
+    sequences,
     totals: buildTotals(valves, dampers, points, controllers),
     discrepancies,
     // Integrated pillar stack — not a fork; eval + GT harness consume these.
@@ -94,6 +100,7 @@ export function buildEstimatorTakeoffDocument(graph, opts = {}) {
       d_legend: opts.legendSummary || null,
     },
     pipeline_harness: harness,
+    pipeline_topology: summarizeVectorTopology(graph),
     grid_classifications: gridTypes,
   };
 }
