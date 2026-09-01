@@ -366,9 +366,18 @@ never invented.
 
 #### Research findings (mandatory gate — 2026-09-01; do not skip)
 
+**Engine architecture (2026-09-01 — supersedes regex-first fixes):** Commercial takeoff
+(Kamai, Trimble MEP, iBeam) parses **native PDF vector geometry** (text bboxes, line
+segments, scale) before any title/match rules. Regex/classification is Layer 5 only.
+Pillar C’s 70 compile-zero valve sets fail at **Layer 1/2 table extraction** or untitled
+grid classification — not because valves are absent from PDFs (0/81 PDFs lack valve text;
+63/81 compile-zero still have PDF signal). Full OSS stack + integration order:
+`takeoffs/VECTOR_TAKEOFF_ENGINE_RESEARCH.md`.
+
 Sources: Belimo / industry Cv practice; US MEP control-device schedule
 conventions; mechanical estimating takeoff scopes (isolation / balancing /
-control valves + dampers); ASHRAE-adjacent actuator schedule columns.
+control valves + dampers); ASHRAE-adjacent actuator schedule columns; Kamai vector
+geometry docs; OpenDataLoader-PDF; Camelot/gmft/pdfplumber; MEPdetect vector path.
 
 **What a real valve takeoff is (not “dump CHW+HHW control valve rows”):**
 

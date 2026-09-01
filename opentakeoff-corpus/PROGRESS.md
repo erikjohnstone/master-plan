@@ -1,5 +1,19 @@
 ## Active work
 
+### Vector takeoff engine research — commercial + OSS stack (2026-09-01 22:00 UTC)
+
+**User directive:** Regex/title tuning is not the engine. Commercial products (Kamai,
+Trimble MEP, iBeam) read **native PDF vector geometry** first; classification is downstream.
+
+**Deliverable:** `takeoffs/VECTOR_TAKEOFF_ENGINE_RESEARCH.md` — authoritative stack doc:
+- Commercial pipeline anatomy (L0–L5 layers)
+- Complete OSS stack by layer (ODL, pdfplumber, Camelot, gmft/TATR, MEPdetect, YOLOplan, …)
+- OpenTakeoff gap map: **Layer 1/2 extraction** fails on ~24+46 of 70 compile-zero valve sets
+- Recommended fix order on shared Session+ODL path (no regex-first, no ODL rewrite)
+
+**Paused:** Implementation remains stopped until explicit resume. Reverted uncommitted
+`corpusTakeoff.mjs` title/keyRe experiments (wrong layer).
+
 ### Pillar C valve audit — PDF text vs compile (2026-09-01 21:32 UTC)
 
 **Prior “70 honest valve zeros” was wrong.** Fast PDF text scan of all **81/81**
@@ -21,8 +35,9 @@ Do **not** treat compile-zero as Pillar C floor or GT lock.
 
 - **Script:** `opentakeoff/mcp/scripts/pillarCValvePdfTextScan.mjs`
 - **Artifact:** `/opt/cursor/artifacts/pillar-c-valve-pdf-text-scan-all.json`
-- **Next:** set-agnostic valve schedule extraction on the 63-gap sets (shared
-  `corpusTakeoff.mjs` title/keyRe + table association — no per-set hardcodes).
+- **Next (when resumed):** Layer 1/2 table extraction on the 63-gap sets — ODL coverage +
+  pdfplumber/Camelot fallback adapters into `ScheduleTable`, then header/mark classification.
+  See `takeoffs/VECTOR_TAKEOFF_ENGINE_RESEARCH.md`. **Not** regex-only `corpusTakeoff.mjs` tuning.
 
 ### Pillar C DEPTH phase started — full plan-paint sweeps (2026-09-01 21:00 UTC)
 
