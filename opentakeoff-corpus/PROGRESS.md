@@ -685,9 +685,17 @@ zero-inventory floor from product census. Keyed printed-BAS sets also sampled
 (001/015/027/096 **20/20**; 021 **18/20** honest misses; 089 airport **13/20**).
 This is **not** Pillar C complete — SOO/I/O/spare/proofs + valve estimator + pipeline GT remain.
 
+**Valve product census — corpus-wide (2026-09-01, 81/81, still 0 locked):**
+Live `compileCorpusTakeoff(..., control_valves)` on every valve-bearing set.
+**11/81** have printed valve/damper items — exactly the keyed family sets (no new
+printed schedules beyond current set-agnostic title/keyRe). **70/81** honest zero
+valve floors. Contractor-column honesty already verified on the 11 keyed.
+Do **not** invent valve keys from equipment schedules. Artifact:
+`/opt/cursor/artifacts/pillar-c-valve-product-census-all.json`.
+
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** inventory floors **112/112** checked but **0** estimator-complete;
+1. **Pillar C (corpus-deep):** inventory floors **112/112** + valve product census **81/81** (11 printed / 70 zero) but **0** estimator-complete;
    deepen SOO/I/O/spare/proofs on keyed+SOO-present sets; expand valve contractor columns
    beyond 11 keyed; pipeline GT lock only when complete. Prior: 1. **Pillar C (corpus-deep):** Gap/SOO + valve columns + plan-paint census on keyed floor;
    BAS inventory floors **112/112** checked (drawing or honest zero) — **0 locked**. Next: extend inventory

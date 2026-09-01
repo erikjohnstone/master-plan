@@ -20,5 +20,18 @@
     "sample_n": 0,
     "tables": 6,
     "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 0,
+    "families": [],
+    "contractor_gaps": [],
+    "estimator_complete": false,
+    "zero_valve_floor": true
+  },
+  "valve_zero_floor_verify": {
+    "at": "2026-09-01T17:56:31.163950+00:00",
+    "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
+    "printed_items": 0,
+    "gt_locked": false
   }
 }

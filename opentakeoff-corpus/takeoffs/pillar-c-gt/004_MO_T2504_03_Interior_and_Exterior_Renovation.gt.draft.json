@@ -2,7 +2,7 @@
   "set_id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
   "pillar_c_complete": false,
   "gt_locked": false,
-  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "note": "bas:0 \u2014 inventory/estimate floor only; Pillar C not complete",
   "estimator_product": {
     "printed_bas_rows": 0,
     "inventory_units": 12,
@@ -17,6 +17,19 @@
     "artifact": "/opt/cursor/artifacts/pillar-c-004-inventory-drawing-verify.json",
     "sample_pass": 12,
     "sample_n": 12,
+    "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 0,
+    "families": [],
+    "contractor_gaps": [],
+    "estimator_complete": false,
+    "zero_valve_floor": true
+  },
+  "valve_zero_floor_verify": {
+    "at": "2026-09-01T17:56:31.162917+00:00",
+    "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
+    "printed_items": 0,
     "gt_locked": false
   }
 }
