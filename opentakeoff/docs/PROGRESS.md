@@ -11,11 +11,11 @@
 
 ## 2026-09-01 — Corpus batch emit in progress
 
-- Fixed `emit-corpus-takeoff.mjs` CLI (`--corpus`, `--resume`, `--limit`, `--sets`).
-- `npm run emit:corpus` / `npm run eval:corpus` added to root package.json.
-- Full batch running: `emit-corpus-takeoff.mjs --resume` → `opentakeoff/out/<set_id>.takeoff.json` (116 keys).
-- Partial eval (3/116): `grounding_coverage=1.0`, `valve_rec=1.0` on emitted valve sets; `corpus_pass_rate=0.026`.
-- ~2–3 min/set — full corpus ~4–6h; re-run with `--resume` to continue after interruption.
+- Fixed `emit-corpus-takeoff.mjs` CLI (`--corpus`, `--resume`, `--limit`, `--sets`, `--shard i/n`).
+- Optimized: `cachedGraphForKey` only (no double Session PDF load); incremental summary.
+- Dual workers: `npm run emit:corpus:shard0` + `shard1` (~58 keys each).
+- Partial (4/116): `grounding_coverage=1.0`, `grid_type_acc=0.87`, `valve_rec=1.0`.
+- Cold graph build ~10–20 min/set; cached re-runs seconds. Re-run with `--resume`.
 
 ## 2026-09-01 — P2 integrated on Pillars A/B/C/D (not a fork)
 
