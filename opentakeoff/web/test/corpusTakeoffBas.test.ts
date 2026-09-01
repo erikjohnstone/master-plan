@@ -6,7 +6,9 @@ import { describe, it } from "node:test";
 import {
   basEstimatorStatus,
   compileBasTakeoff,
+  detectSooPresence,
   isBasPointsListTitle,
+  isSooNarrativeTitle,
   ocrFixEquipMark,
   equipMarkFromBasDescription,
   servedEquipmentFromBasRow,
@@ -74,6 +76,59 @@ describe("basEstimatorStatus", () => {
     assert.equal(bas.estimator_status.estimator_complete, false);
     assert.equal(bas.estimator_status.gt_locked, false);
     assert.ok(bas.estimator_status.gates.some((g) => g.status === "refuse_not_done"));
+  });
+
+  it("builds labeled schedule estimate + SOO/gap without merging into printed totals", () => {
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#1", number: 1 }],
+      tables: [
+        {
+          sheet: "set.pdf#1",
+          title: { text: "SEQUENCE OF OPERATIONS AHU" },
+          rows: [{ key: "NOTE", cells: {} }],
+        },
+        {
+          sheet: "set.pdf#1",
+          title: { text: "AIR HANDLING UNIT SCHEDULE" },
+          rows: [
+            { key: "AHU-1", cells: { MARK: { text: "AHU-1" } } },
+            { key: "AHU-2", cells: { MARK: { text: "AHU-2" } } },
+          ],
+        },
+        {
+          sheet: "set.pdf#1",
+          title: { text: "POINTS LIST AHU-1" },
+          rows: [
+            { key: "AI01", cells: { DESCRIPTION: { text: "SA TEMP" }, UNIT: { text: "AHU-1" } } },
+          ],
+        },
+      ],
+    });
+    assert.equal(bas.totals.rows, 1, "printed totals stay list-only");
+    assert.ok(bas.estimator_product);
+    assert.equal(bas.estimator_product.schedule_derived_estimate.label, "estimate_only");
+    assert.equal(bas.estimator_product.schedule_derived_estimate.never_merge_into_printed_truth, true);
+    assert.ok(bas.estimator_product.schedule_derived_estimate.totals.points > bas.totals.rows);
+    assert.equal(bas.estimator_product.soo.present, true);
+    assert.match(bas.estimator_product.soo.status, /not_row_extractable|present/);
+    assert.ok(bas.estimator_product.gap_vs_printed.inventory_without_printed_points_count >= 1);
+    assert.equal(bas.estimator_status.estimator_complete, false);
+    assert.ok(bas.estimator_status.gates.some((g) => g.gate === "soo_derived_points" && g.status === "refuse_not_done"));
+    assert.ok(bas.estimator_status.gates.some((g) => g.gate === "schedule_derived_estimate_not_merged"));
+  });
+});
+
+describe("isSooNarrativeTitle + detectSooPresence", () => {
+  it("detects SOO titles and never treats them as POINTS lists", () => {
+    assert.equal(isSooNarrativeTitle("SEQUENCE OF OPERATIONS"), true);
+    assert.equal(isSooNarrativeTitle("CONTROL SEQUENCE AHU-1"), true);
+    assert.equal(isBasPointsListTitle("SEQUENCE OF OPERATIONS"), false);
+    assert.equal(isBasPointsListTitle("AHU-1 POINT LIST TABLE"), false);
+    const soo = detectSooPresence({
+      tables: [{ title: { text: "SEQUENCE OF OPERATIONS — CHILLERS" }, sheet: "m#9" }],
+    });
+    assert.equal(soo.present, true);
+    assert.equal(soo.tabular_extractable, false);
   });
 });
 

@@ -361,6 +361,46 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
         }));
       }
     }
+    // Labeled schedule estimate + SOO/gap disclose — never merge into printed qty rows.
+    const product = compiled.estimator_product;
+    if (product) {
+      const inv = product.equipment_inventory?.unit_count ?? 0;
+      rows.push(makeTakeoffRow({
+        workflow, runId, tag: "BAS_ESTIMATOR", field: "equipment_inventory_units",
+        value: inv, unit: "EA", source_tool,
+        note: "Point-bearing HVAC schedule inventory — not printed POINTS truth",
+      }));
+      if (product.soo) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: "BAS_ESTIMATOR", field: "soo_status",
+          value: product.soo.status || "unknown",
+          source_tool,
+          note: product.soo.note || "SOO disclose — never invent points from narrative",
+        }));
+      }
+      const estPts = product.schedule_derived_estimate?.totals?.points;
+      if (estPts != null) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: "BAS_ESTIMATOR", field: "schedule_estimate_points",
+          value: estPts, unit: "EA", source_tool,
+          note: "estimate_only (qty×points/unit) — never merged into printed POINTS totals",
+        }));
+      }
+      const gap = product.gap_vs_printed?.inventory_without_printed_points_count ?? 0;
+      rows.push(makeTakeoffRow({
+        workflow, runId, tag: "BAS_ESTIMATOR", field: "inventory_points_gap",
+        value: gap, unit: "EA", source_tool,
+        note: "Inventory marks lacking printed POINTS joins — gap only, points not invented",
+      }));
+      if (product.spare_io_policy) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: "BAS_ESTIMATOR", field: "spare_io_policy",
+          value: `${product.spare_io_policy.typical_pct_per_point_type?.common ?? 15}% typical (policy disclose)`,
+          source_tool,
+          note: product.spare_io_policy.note || "Spare % never applied into printed totals",
+        }));
+      }
+    }
     const lists = compiled.categories?.points_lists?.lists || [];
     for (const list of lists) {
       const items = Array.isArray(list.items) ? list.items : [];

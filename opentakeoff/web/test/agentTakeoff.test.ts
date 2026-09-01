@@ -396,6 +396,50 @@ test("rowsFromCompiledTakeoff: BAS estimator_status refuse_not_done is not 'done
   assert.ok(!rows.some((r) => r.tag === "BAS_ESTIMATOR" && /printed_points_lists/.test(String(r.field))));
 });
 
+test("rowsFromCompiledTakeoff: BAS estimator_product estimate/gap/SOO rows are disclosed", () => {
+  const rows = rowsFromCompiledTakeoff({
+    takeoff_id: "T-BAS-01",
+    kind: "bas_points",
+    estimator_status: {
+      estimator_complete: false,
+      gt_locked: false,
+      meaning: "refuse_not_done = unfinished",
+      gates: [{ gate: "soo_derived_points", status: "refuse_not_done", note: "SOO refuse" }],
+    },
+    estimator_product: {
+      equipment_inventory: { unit_count: 5 },
+      soo: { status: "present_not_row_extractable", note: "SOO present, not typed" },
+      schedule_derived_estimate: {
+        label: "estimate_only",
+        totals: { points: 57 },
+      },
+      gap_vs_printed: { inventory_without_printed_points_count: 4 },
+      spare_io_policy: {
+        typical_pct_per_point_type: { common: 15 },
+        note: "policy disclose only",
+      },
+    },
+    categories: {
+      points_lists: {
+        lists: [{
+          title: "POINTS LIST AHU-1",
+          sheet_id: "c#1",
+          rows: 1,
+          items: [{ tag: "AI1", quantity: 1, sheet_id: "c#1", table_title: "POINTS LIST AHU-1" }],
+        }],
+        totals: { rows: 1, AI: 1, AO: 0, BI: 0, BO: 0 },
+      },
+    },
+  });
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "equipment_inventory_units" && r.value === 5));
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "soo_status" && /present_not_row_extractable/.test(String(r.value))));
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "schedule_estimate_points" && r.value === 57));
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "inventory_points_gap" && r.value === 4));
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "spare_io_policy" && /15%/.test(String(r.value))));
+  // Printed point row still present — estimate did not replace it.
+  assert.ok(rows.some((r) => r.tag === "AI1" && r.field === "quantity"));
+});
+
 test("compileAgentTakeoff: repeating BAS marks across lists stay separate lines", () => {
   // Same AI1 on two points lists must not collapse — MCP compile totals 122,
   // Takeoff UI must show 122 lines (shared corpusTakeoff identity).

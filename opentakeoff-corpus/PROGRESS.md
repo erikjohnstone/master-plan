@@ -516,13 +516,23 @@ cannot read a POINTS scrape as complete. Title near-miss scan: Northport bare
 `INPUT/OUTPUT SUMMARY` correctly rejected (system matrix ≠ typed points).
 **0 sets locked.**
 
+**Estimator product path (2026-09-01 — shared UI+MCP, still not C done):**
+`compileBasTakeoff` now attaches `estimator_product`: HVAC point-bearing
+inventory + SOO presence disclose (`present_not_row_extractable` / absent) +
+labeled `estimate_only` schedule qty×points/unit totals (never merged into
+printed `totals.rows`) + inventory↔printed gap report + ASHRAE G13 spare %
+policy note. Takeoff emits `BAS_ESTIMATOR` rows for inventory / SOO /
+estimate / gap / spare. Unit tests **36/36** green. Still **0 locked** —
+corpus-deep inventory+GT+plan paint remain open.
+
 ### Next queue (platform loop)
 
 1. **Pillar C (corpus-deep):** Keyed floor drawing-sampled — **5 BAS + 8 valve-only**
-   sets; **0 locked**. Refuse/stop gates = incomplete, not success. Next: expand
-   keys only when live compile finds real lists; deepen estimator (SOO/I/O/spare)
-   + lock only with self-check + pipeline GT. Post-WP8 `test:workflows` **104/104**
-   green (plumbing only — not C done).
+   sets; **0 locked**. Estimator product path exists on shared compile but is
+   not corpus-complete. Next: run inventory+estimate+gap on keyed BAS floor;
+   expand keys only when live compile finds real lists; lock only with
+   self-check + pipeline GT. Post-WP8 `test:workflows` **104/104** green
+   (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.

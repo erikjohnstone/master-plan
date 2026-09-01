@@ -917,14 +917,221 @@ export const BAS_EXCLUSIONS = [
 ];
 
 /**
+ * ASHRAE G13 / BMS estimating practice: spare I/O is a bid policy note
+ * (typically ~10–25% per point type). Never applied into printed totals.
+ */
+export const BAS_SPARE_IO_POLICY = {
+  label: "policy_disclose_only",
+  typical_pct_per_point_type: { min: 10, max: 25, common: 15 },
+  note: "ASHRAE Guideline 13 practice — spare % is a hardware bid disclose, never merged into POINTS LIST truth.",
+};
+
+/**
+ * Conservative schedule→points estimate templates (qty × points/unit).
+ * Labeled estimate_only — never merged into printed POINTS/I/O totals.
+ * Rough BMS estimating practice for common US MEP families; sets without a
+ * family template stay out of the estimate (honest gap, not invented).
+ */
+export const SCHEDULE_POINT_ESTIMATE_PER_UNIT = {
+  AHU: { AI: 8, AO: 3, BI: 6, BO: 4 },
+  DOAH_UNIT: { AI: 10, AO: 4, BI: 8, BO: 5 },
+  DOAH_HANDLING: { AI: 10, AO: 4, BI: 8, BO: 5 },
+  DOAS: { AI: 8, AO: 3, BI: 6, BO: 4 },
+  OUTDOOR_AIR_UNIT: { AI: 6, AO: 2, BI: 4, BO: 3 },
+  FCU: { AI: 3, AO: 1, BI: 2, BO: 2 },
+  VAV: { AI: 2, AO: 1, BI: 1, BO: 1 },
+  RTU: { AI: 6, AO: 2, BI: 4, BO: 3 },
+  CHILLER: { AI: 4, AO: 1, BI: 4, BO: 2 },
+  BOILER: { AI: 3, AO: 1, BI: 3, BO: 2 },
+  PUMP: { AI: 1, AO: 0, BI: 1, BO: 1 },
+  FAN: { AI: 1, AO: 0, BI: 1, BO: 1 },
+  HEAT_EXCHANGER: { AI: 2, AO: 0, BI: 1, BO: 0 },
+  COOLING_TOWER: { AI: 2, AO: 1, BI: 2, BO: 1 },
+};
+
+/** Point-bearing HVAC families used for inventory ↔ POINTS gap reports. */
+export const BAS_POINT_BEARING_FAMILIES = Object.keys(SCHEDULE_POINT_ESTIMATE_PER_UNIT);
+
+/**
+ * Sequence-of-operations / controls narrative titles (not typed POINTS rows).
+ * Presence is disclosed; points are never invented from SOO prose.
+ */
+export function isSooNarrativeTitle(title) {
+  const t = String(title || "").replace(/\s+/g, " ").trim();
+  if (!t) return false;
+  if (/\bSEQUENCES?\s+OF\s+OPERATIONS?\b/i.test(t)) return true;
+  if (/\bSEQUENCE\s+OF\s+CONTROL\b/i.test(t)) return true;
+  if (/\bCONTROL\s+SEQUENCES?\b/i.test(t)) return true;
+  if (/\bSYSTEM\s+OPERATION\s+SEQUENCES?\b/i.test(t)) return true;
+  if (/\bCONTROLS?\s+NARRATIVE\b/i.test(t)) return true;
+  // SOO-shaped "POINT LIST TABLE" captions (rejected by isBasPointsListTitle).
+  if (/\bPOINT\s+LIST\s+TABLE\b/i.test(t)) return true;
+  return false;
+}
+
+/**
+ * Scan schedule/table titles for SOO presence. Tabular SOO scoring is still
+ * refuse_not_done — narrative-only / raster never invents points.
+ */
+export function detectSooPresence(graph) {
+  const titles = [];
+  for (const table of graph?.tables || []) {
+    const title = String(table.title?.text || "").replace(/\s+/g, " ").trim();
+    if (!title || !isSooNarrativeTitle(title)) continue;
+    titles.push({
+      title: title.slice(0, 160),
+      sheet_id: table.sheet || null,
+      tabular_points: false,
+    });
+  }
+  if (!titles.length) {
+    return {
+      present: false,
+      status: "absent_or_not_detected",
+      tabular_extractable: false,
+      titles: [],
+      note: "No SOO / sequence-of-operations titles detected on extractable tables — refuse_not_done for SOO-derived points.",
+    };
+  }
+  return {
+    present: true,
+    status: "present_not_row_extractable",
+    tabular_extractable: false,
+    titles,
+    note: "SOO present but not a typed points source — refuse_not_done; never invent points from narrative.",
+  };
+}
+
+/**
+ * Labeled schedule-derived point estimate (qty × points/unit) + gap vs printed.
+ * Totals here are estimate_only — never merge into printed POINTS LIST truth.
+ *
+ * @param {object} hvacTakeoff compileHvacTakeoff result
+ * @param {object[]} basLists printed points lists from compileBasTakeoff
+ */
+export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
+  const soo = detectSooPresence(graph);
+  const inventory = [];
+  const estimateByFamily = [];
+  let estimateUnits = 0;
+  const estimateTotals = { AI: 0, AO: 0, BI: 0, BO: 0, points: 0 };
+
+  for (const family of BAS_POINT_BEARING_FAMILIES) {
+    const cat = hvacTakeoff?.categories?.[family];
+    const count = cat?.count ?? cat?.items?.length ?? 0;
+    if (!count) continue;
+    const tags = (cat.items || []).map((it) => String(it.tag || it.mark || "").trim()).filter(Boolean);
+    inventory.push({ family, count, tags: tags.slice(0, 40) });
+    const per = SCHEDULE_POINT_ESTIMATE_PER_UNIT[family];
+    if (!per) continue;
+    const famPoints = {
+      family,
+      units: count,
+      per_unit: { ...per },
+      estimated: {
+        AI: per.AI * count,
+        AO: per.AO * count,
+        BI: per.BI * count,
+        BO: per.BO * count,
+      },
+    };
+    famPoints.estimated.points = famPoints.estimated.AI + famPoints.estimated.AO
+      + famPoints.estimated.BI + famPoints.estimated.BO;
+    estimateByFamily.push(famPoints);
+    estimateUnits += count;
+    estimateTotals.AI += famPoints.estimated.AI;
+    estimateTotals.AO += famPoints.estimated.AO;
+    estimateTotals.BI += famPoints.estimated.BI;
+    estimateTotals.BO += famPoints.estimated.BO;
+    estimateTotals.points += famPoints.estimated.points;
+  }
+
+  const printedServed = new Set();
+  let printedRows = 0;
+  for (const list of basLists || []) {
+    for (const item of list.items || []) {
+      printedRows += 1;
+      const served = String(item.served_equipment || "").trim().toUpperCase();
+      if (served) printedServed.add(served);
+    }
+  }
+
+  const inventoryTags = new Set();
+  for (const row of inventory) {
+    for (const tag of row.tags || []) inventoryTags.add(String(tag).trim().toUpperCase());
+  }
+
+  const inventoryWithoutPrintedPoints = [];
+  for (const tag of inventoryTags) {
+    if (!tag) continue;
+    // Loose join: exact mark, or printed served contains mark / mark contains served token.
+    let hit = printedServed.has(tag);
+    if (!hit) {
+      for (const served of printedServed) {
+        if (served === tag || served.includes(tag) || tag.includes(served)) {
+          hit = true;
+          break;
+        }
+      }
+    }
+    if (!hit) inventoryWithoutPrintedPoints.push(tag);
+  }
+
+  const printedWithoutInventory = [];
+  for (const served of printedServed) {
+    let hit = inventoryTags.has(served);
+    if (!hit) {
+      for (const tag of inventoryTags) {
+        if (tag === served || tag.includes(served) || served.includes(tag)) {
+          hit = true;
+          break;
+        }
+      }
+    }
+    if (!hit) printedWithoutInventory.push(served);
+  }
+
+  return {
+    kind: "bas_estimator_product",
+    estimator_complete: false,
+    equipment_inventory: {
+      source: "compileHvacTakeoff",
+      point_bearing_families: inventory,
+      unit_count: inventory.reduce((n, r) => n + r.count, 0),
+    },
+    soo,
+    schedule_derived_estimate: {
+      label: "estimate_only",
+      never_merge_into_printed_truth: true,
+      template: "SCHEDULE_POINT_ESTIMATE_PER_UNIT",
+      units: estimateUnits,
+      by_family: estimateByFamily,
+      totals: estimateTotals,
+      note: "Equipment qty × typed points/unit — labeled estimate only; never silently merge into POINTS LIST totals.",
+    },
+    gap_vs_printed: {
+      printed_rows: printedRows,
+      printed_served_marks: printedServed.size,
+      inventory_marks: inventoryTags.size,
+      inventory_without_printed_points: inventoryWithoutPrintedPoints.slice(0, 60),
+      inventory_without_printed_points_count: inventoryWithoutPrintedPoints.length,
+      printed_served_without_inventory: printedWithoutInventory.slice(0, 60),
+      printed_served_without_inventory_count: printedWithoutInventory.length,
+      note: "Gap report only — does not invent POINTS rows for missing units.",
+    },
+    spare_io_policy: BAS_SPARE_IO_POLICY,
+  };
+}
+
+/**
  * Estimator-completeness disclosure for Pillar C (shared UI+MCP).
  * Printed POINTS/I/O rows alone are never a complete commercial BAS takeoff.
  * Each gate is open | refuse_not_done | n/a — refuse means unfinished work,
  * not a success metric or locked ceiling.
  *
- * @param {{ lists: object[], totals: object, sheets: object[] }} parts
+ * @param {{ lists: object[], totals: object, sheets: object[], product?: object }} parts
  */
-export function basEstimatorStatus({ lists, totals, sheets }) {
+export function basEstimatorStatus({ lists, totals, sheets, product = null }) {
   const rowCount = totals?.rows ?? 0;
   const listCount = lists?.length ?? 0;
   let withServed = 0;
@@ -943,17 +1150,26 @@ export function basEstimatorStatus({ lists, totals, sheets }) {
     {
       gate: "soo_derived_points",
       status: "refuse_not_done",
-      note: "SOO / sequence narratives are not a points source yet — refuse, not complete.",
+      note: product?.soo?.present
+        ? (product.soo.note || "SOO present but not row-extractable — refuse, not complete.")
+        : "SOO / sequence narratives are not a points source yet — refuse, not complete.",
     },
     {
       gate: "spare_io_capacity",
       status: "refuse_not_done",
-      note: "Spare / expansion I/O % not extracted from drawings — refuse, not complete.",
+      note: BAS_SPARE_IO_POLICY.note + " — refuse_not_done until controller spare is drawing-backed.",
     },
     {
       gate: "proofs_interlocks_alarms_trends_beyond_printed",
       status: "refuse_not_done",
       note: "Only printed ALARM/TREND columns are promoted; SOO proofs/interlocks remain open.",
+    },
+    {
+      gate: "schedule_derived_estimate_not_merged",
+      status: "open",
+      note: product?.schedule_derived_estimate
+        ? `Estimate_only ${product.schedule_derived_estimate.totals?.points ?? 0} pts across ${product.schedule_derived_estimate.units ?? 0} units — never merged into printed totals.`
+        : "Schedule-derived estimate path available as labeled estimate_only.",
     },
     {
       gate: "gt_lock",
@@ -987,6 +1203,28 @@ export function basEstimatorStatus({ lists, totals, sheets }) {
       note: `All ${withServed} printed rows carry served_equipment text; plan MATCH still required per unit.`,
     });
   }
+  const gapCount = product?.gap_vs_printed?.inventory_without_printed_points_count ?? 0;
+  if (gapCount > 0) {
+    open.push({
+      gate: "inventory_points_gap",
+      status: "open",
+      note: `${gapCount} inventory mark(s) lack printed POINTS/I/O joins — gap disclosed, points not invented.`,
+    });
+  }
+  const invUnits = product?.equipment_inventory?.unit_count ?? 0;
+  if (invUnits > 0) {
+    open.push({
+      gate: "equipment_inventory",
+      status: "open",
+      note: `${invUnits} point-bearing schedule unit(s) from HVAC compile — inventory only; not estimator-complete.`,
+    });
+  } else {
+    refuseNotDone.unshift({
+      gate: "equipment_inventory",
+      status: "refuse_not_done",
+      note: "No point-bearing HVAC schedule units extracted — equipment inventory incomplete.",
+    });
+  }
   return {
     estimator_complete: false,
     gt_locked: false,
@@ -994,6 +1232,9 @@ export function basEstimatorStatus({ lists, totals, sheets }) {
     printed_lists: printedLists,
     sheet_count: sheets?.length ?? 0,
     served_equipment: { with_join: withServed, without_join: withoutServed },
+    soo_status: product?.soo?.status || "unknown",
+    schedule_estimate_points: product?.schedule_derived_estimate?.totals?.points ?? null,
+    inventory_gap_count: gapCount,
     gates: [...open, ...refuseNotDone],
   };
 }
@@ -1200,7 +1441,9 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     };
   });
 
-  const estimator_status = basEstimatorStatus({ lists, totals, sheets });
+  const hvac = compileHvacTakeoff(sessionOrSheets, graph);
+  const estimator_product = buildBasEstimatorProduct(hvac, lists, graph);
+  const estimator_status = basEstimatorStatus({ lists, totals, sheets, product: estimator_product });
 
   return {
     schema_version: CORPUS_TAKEOFF_VERSION,
@@ -1210,7 +1453,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     sheet_count: sheets.length,
     categories: {
       points_lists: {
-        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO from MARK prefixes when present; on I/O LIST device rows without MARK prefixes, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; title-only schematic lists excluded and disclosed. Sequence-of-operations narratives are not a points source.",
+        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO from MARK prefixes when present; on I/O LIST device rows without MARK prefixes, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; title-only schematic lists excluded and disclosed. Sequence-of-operations narratives are not a points source. Schedule-derived qty×points/unit estimates are labeled estimate_only and never merged into these printed totals.",
         tolerance: { count: 0, point_type: 0 },
         lists,
         totals,
@@ -1230,6 +1473,8 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     },
     /** Pillar C: printed lists ≠ done. See gates with status refuse_not_done. */
     estimator_status,
+    /** Equipment inventory + SOO disclose + labeled estimate + gap — never merges into totals. */
+    estimator_product,
     page_accounting: {
       sheet_count: sheets.length,
       pages_accounted_for: pages.length,

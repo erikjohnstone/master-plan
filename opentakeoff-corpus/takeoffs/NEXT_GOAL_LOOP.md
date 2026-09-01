@@ -541,15 +541,22 @@ necessary but **not sufficient**. Pillar C must:
 
 *Estimator product bar (Pillar C incomplete until ALL corpus BAS + valve
 sets pass — do not stop at a sample):*
-8. [ ] **Equipment inventory** from schedules (shared HVAC compile) on **every**
+8. [~] **Equipment inventory** from schedules (shared HVAC compile) on **every**
    corpus BAS-bearing set — every served unit/device that owns points is listed
-   with qty + cite.
-9. [ ] **SOO / controls model** where vector-extractable: required sensors,
+   with qty + cite. **Plumbing:** `estimator_product.equipment_inventory` from
+   `compileHvacTakeoff` on every BAS compile (2026-09-01). Still open: every
+   bearing set verified + GT-locked.
+9. [~] **SOO / controls model** where vector-extractable: required sensors,
    commands, proofs, interlocks, alarms/trends per equipment type; honest
    refuse when narrative-only / raster — never invent points from SOO prose.
-10. [ ] **Typed points takeoff** = printed POINTS/I/O lists **plus** labeled
+   **Plumbing:** `detectSooPresence` discloses present_not_row_extractable;
+   SOO-derived points remain `refuse_not_done`. Tabular SOO scoring still open.
+10. [~] **Typed points takeoff** = printed POINTS/I/O lists **plus** labeled
     schedule/SOO-derived *estimate* path (qty × points/unit) with sources;
     gap report vs printed lists; spare % disclosed as policy note only.
+    **Shared-path plumbing landed 2026-09-01** (`estimator_product` on
+    `compileBasTakeoff` + Takeoff `BAS_ESTIMATOR` rows). Still open: corpus-wide
+    run + coordinator lock — estimate path ≠ Pillar C done.
 11. [ ] **Ground-truth harness for every corpus BAS set:** coordinator
     self-checks equipment inventory + typed point rollups + plan-grounding
     against the drawings; keyed harness locks that answer; pipeline scorer must
