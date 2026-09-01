@@ -4,7 +4,7 @@
  * here we prove schedule-side rows match compile counts without per-set hardcodes.
  */
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -36,6 +36,46 @@ async function graphForPdf(pdfPath, setId) {
       return session.graphForPipeline();
     },
   });
+}
+
+/** Prefer rejoined PDF; else merge Vol2 multipart parts (same as crossCorpusWorkflow). */
+async function loadKeySession(key) {
+  const primary = resolve(CORPUS, key.source_file);
+  if (existsSync(primary)) {
+    const session = new Session();
+    await session.loadPlan(primary);
+    return session;
+  }
+  const partsDir = key.source_parts_dir
+    ? resolve(CORPUS, key.source_parts_dir)
+    : null;
+  if (!partsDir || !existsSync(partsDir)) return null;
+  const parts = readdirSync(partsDir)
+    .filter((f) => f.endsWith(".pdf"))
+    .sort();
+  if (!parts.length) return null;
+  const session = new Session();
+  await session.loadPlan(resolve(partsDir, parts[0]));
+  for (let i = 1; i < parts.length; i++) {
+    await session.loadPlan(resolve(partsDir, parts[i]), { merge: true });
+  }
+  return session;
+}
+
+async function assertFamilyAllMatch(session, graph, key, family) {
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
+  assert.ok(needle, `${family} needle`);
+  const expect = key.categories[family];
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    evaluationFast: true,
+  });
+  assert.equal(result.rows.length, expect, `${key.set_id} ${family} reconcile rows`);
+  const match = result.rows.filter((r) => r.status === "MATCH");
+  assert.equal(match.length, expect, `${key.set_id} ${family} all MATCH`);
+  for (const row of match) {
+    assert.ok(row.installed_qty >= 1, `${row.tag} installed qty`);
+    assert.ok(row.plan_cites?.length >= 1, `${row.tag} plan cite`);
+  }
 }
 
 test("federal-mech VAV reconcile scaffold matches compile count (schedule side)", async () => {
@@ -269,6 +309,53 @@ test("Vermillion County Jail bulk VAV reconcile: all 58 scheduled tags MATCH (Vo
   for (const row of match) {
     assert.ok(row.installed_qty >= 1, `${row.tag} installed qty`);
     assert.ok(row.plan_cites?.length >= 1, `${row.tag} plan cite`);
+  }
+});
+
+test("Vol2 chiller upgrade 012: ACC + PUMP + VFD all MATCH (multipart rejoin)", async () => {
+  const keyPath = resolve(CROSS, "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const session = await loadKeySession(key);
+  if (!session) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const graph = await session.graphForPipeline();
+  for (const family of ["AIR_COOLED_CHILLER", "PUMP", "VARIABLE_FREQUENCY_DRIVE"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 FL airport 089: DOAS + FCU families with plan-drawn MATCH (multipart rejoin)", async () => {
+  const keyPath = resolve(CROSS, "089_FL_Airport_Terminal_and_Hangar_Development.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const session = await loadKeySession(key);
+  if (!session) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const graph = await session.graphForPipeline();
+  for (const family of ["DOAS", "HEAT_PUMP", "PUMP", "WATER_HEATER", "FAN"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 Phoenix Sky Harbor 088: plan-drawn plant + terminal families MATCH", async () => {
+  const keyPath = resolve(CROSS, "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const session = await loadKeySession(key);
+  if (!session) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const graph = await session.graphForPipeline();
+  for (const family of [
+    "AHU", "FCU", "CONDENSING_UNIT", "PUMP", "FAN", "CEILING_FAN", "UNIT_HEATER",
+  ]) {
+    await assertFamilyAllMatch(session, graph, key, family);
   }
 });
 
