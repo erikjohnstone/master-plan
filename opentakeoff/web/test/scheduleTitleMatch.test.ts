@@ -117,11 +117,21 @@ test("FAN matches GENERAL/EXHAUST fan schedules but not fan-coil", () => {
 });
 
 test("WP1.4 family keyRe accepts BOILER1 and blank-title FCU/EF marks (set-agnostic)", () => {
-  const { keyRe: boilerKey } = HVAC_FAMILY_SPECS.BOILER;
+  const { keyRe: boilerKey, titleRe: boilerTitle, exclude: boilerExclude } = HVAC_FAMILY_SPECS.BOILER;
   const { keyRe: fcuKey } = HVAC_FAMILY_SPECS.FCU;
   const { keyRe: fanKey } = HVAC_FAMILY_SPECS.FAN;
   assert.ok(boilerKey!.test("BOILER1"));
   assert.ok(boilerKey!.test("B-1"));
+  assert.equal(scheduleTitleMatches("HOT WATER BOILER", boilerTitle, boilerExclude), true);
+  assert.equal(scheduleTitleMatches("HOT WATER CONDENSING BOILER", boilerTitle, boilerExclude), true);
+  assert.equal(
+    scheduleTitleMatches("BOILER PLANT · FIRE TUBE STEAM BOILER SCHEDULE, PACKAGED TYPE", boilerTitle, boilerExclude),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches("BOILER PLANT · ISOLATION VALVE SCHEDULE", boilerTitle, boilerExclude),
+    false,
+  );
   assert.ok(fcuKey!.test("FCU-1"));
   assert.ok(fcuKey!.test("EV-3"));
   assert.ok(fanKey!.test("EF-2"));

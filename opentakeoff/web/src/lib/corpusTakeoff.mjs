@@ -454,11 +454,13 @@ export const HVAC_FAMILY_SPECS = {
     // Require separator after CH so blank-title CHECK:/CHP-* junk is not stolen.
     keyRe: /^(?:CH[\s\-]|HRC)/i,
   },
-  // Prefer "...BOILER SCHEDULE" over bare /BOILER/ so "BOILER PLANT · ISOLATION
-  // VALVE SCHEDULE" and pump boards do not claim B-* / "B GV-*" plant marks.
+  // Prefer boiler equipment captions over bare /BOILER/ so "BOILER PLANT ·
+  // ISOLATION VALVE SCHEDULE" and pump boards do not claim B-* / "B GV-*"
+  // plant marks. Keep "HOT WATER BOILER" / "HOT WATER CONDENSING BOILER"
+  // (Klamath / Antelope) and "...BOILER SCHEDULE" (VA plant).
   BOILER: {
-    titleRe: /BOILER\s+SCHEDULE/i,
-    exclude: /POINTS\s*LIST|DDC\s+POINTS|FUEL\s+OIL\s+PUMP|PUMP\s+SCHEDULE/i,
+    titleRe: /HOT\s+WATER(?:\s+CONDENSING)?\s+BOILER\b|BOILER\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC\s+POINTS|FUEL\s+OIL\s+PUMP|PUMP\s+SCHEDULE|ISOLATION\s+VALVE|VALVE\s+SCHEDULE|SAFETY\s+VALVE/i,
     keyRe: /^(?:B[\s\-]|BOILER)/i,
   },
   // Titled pump schedules keep every equipment row (IWP/HWRP/…). blankKeyRe
