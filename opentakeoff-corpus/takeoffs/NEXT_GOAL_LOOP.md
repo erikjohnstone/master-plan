@@ -544,8 +544,9 @@ sets pass — do not stop at a sample):*
 8. [~] **Equipment inventory** from schedules (shared HVAC compile) on **every**
    corpus BAS-bearing set — every served unit/device that owns points is listed
    with qty + cite. **Plumbing:** `estimator_product.equipment_inventory` from
-   `compileHvacTakeoff` on every BAS compile (2026-09-01). Still open: every
-   bearing set verified + GT-locked.
+   `compileHvacTakeoff` on every BAS compile (2026-09-01). **Census:** 15-set
+   expanded batch shows inventory+estimate on 11/15 bas:0 sets (SDSU 128 units);
+   still open: every bearing set verified + GT-locked.
 9. [~] **SOO / controls model** where vector-extractable: required sensors,
    commands, proofs, interlocks, alarms/trends per equipment type; honest
    refuse when narrative-only / raster — never invent points from SOO prose.

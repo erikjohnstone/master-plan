@@ -564,12 +564,23 @@ Examples: NAVFAC 001 missing only Actuator/Fail/Signal (Served/Size/GPM/Cv prese
 `/opt/cursor/artifacts/pillar-c-valve-estimator-columns-batch.json`.
 Corpus-deep C still **0 / ~112 BAS**, **0 / ~81 valve**.
 
+**Expanded estimator_product census (2026-09-01, 15 bearing sets, still 0 locked):**
+Live compile on controls/HVAC-named sets beyond the 5 keyed BAS floor — **0**
+new printed BAS lists (title gate + empty tables honest). **11/15** still emit
+inventory + labeled `estimate_only` + gap with `estimator_complete: false`
+(e.g. SDSU 11: inv 128 / est 708 / gap 78; Klamath 14: inv 37 / est 307;
+ITD 062: SOO `present_not_row_extractable`). Valve families continue to compile
+where schedules exist. Artifact:
+`/opt/cursor/artifacts/pillar-c-estimator-product-census-batch.json`.
+**No new BAS keys** — do not invent POINTS from equipment schedules.
+
 ### Next queue (platform loop)
 
 1. **Pillar C (corpus-deep):** Keyed BAS gap/SOO + valve column honesty drawing-backed —
-   **0 locked**. Next: plan-paint census for valves/BAS served; tabular SOO where
-   vector allows; expand keys only when live compile finds real lists; lock only
-   with self-check + pipeline GT on **every** BAS + valve set.
+   **0 locked**. Next: plan-paint census; drawing-backed inventory verify on
+   high-inventory bas:0 sets (SDSU/Klamath/…); tabular SOO where vector allows;
+   expand keys only when live compile finds real lists; lock only with
+   self-check + pipeline GT on **every** BAS + valve set.
    Post-WP8 `test:workflows` **104/104** green (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
