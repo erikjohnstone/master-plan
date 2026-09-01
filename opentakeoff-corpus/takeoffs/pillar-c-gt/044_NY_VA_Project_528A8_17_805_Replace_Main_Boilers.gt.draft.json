@@ -1,0 +1,58 @@
+{
+  "set_id": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+  "gt_locked": false,
+  "pillar_c_complete": false,
+  "drawing_verify": {
+    "at": "2026-09-01T15:36:43.990Z",
+    "kind": "valve_keyed",
+    "gt_locked": false,
+    "self_check": {
+      "valve_counts_match_key": true,
+      "valve_samples_honest": true,
+      "families_probed": 2
+    },
+    "family_results": {
+      "ISOLATION_VALVE": {
+        "key_count": 8,
+        "compile_count": 8,
+        "honest": {
+          "ok": 8,
+          "review": 0
+        },
+        "summary": {
+          "total": 8,
+          "match": 0,
+          "schedule_only": 8,
+          "plan_only": 0,
+          "refused_no_scale": 0,
+          "refused_no_text": 0,
+          "ambiguous": 0
+        }
+      },
+      "PRESSURE_SAFETY_VALVE": {
+        "key_count": 4,
+        "compile_count": 4,
+        "honest": {
+          "ok": 4,
+          "review": 0
+        },
+        "summary": {
+          "total": 4,
+          "match": 0,
+          "schedule_only": 4,
+          "plan_only": 0,
+          "refused_no_scale": 0,
+          "refused_no_text": 0,
+          "ambiguous": 0
+        }
+      }
+    },
+    "lock_recommendation": "KEEP gt_locked=false — valve/damper drawing sample honest vs reconcile, but corpus-deep C + estimator-complete remain",
+    "artifact": "/opt/cursor/artifacts/pillar-c-044-valve-drawing-verify.json"
+  },
+  "open_before_lock": [
+    "No BAS points keyed/compiled on this set (valve-only probe)",
+    "Estimator contractor columns / full hand-count may remain open",
+    "Pillar C corpus-deep — this set alone cannot complete C"
+  ]
+}

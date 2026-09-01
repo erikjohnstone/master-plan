@@ -1,0 +1,75 @@
+{
+  "set_id": "itd-d1-lab",
+  "gt_locked": false,
+  "pillar_c_complete": false,
+  "drawing_verify": {
+    "at": "2026-09-01T15:37:48.956Z",
+    "kind": "valve_keyed",
+    "gt_locked": false,
+    "self_check": {
+      "valve_counts_match_key": true,
+      "valve_samples_honest": true,
+      "families_probed": 3
+    },
+    "family_results": {
+      "HHW_CONTROL_VALVE": {
+        "key_count": 9,
+        "compile_count": 9,
+        "honest": {
+          "ok": 8,
+          "review": 0
+        },
+        "summary": {
+          "total": 9,
+          "match": 9,
+          "schedule_only": 0,
+          "plan_only": 0,
+          "refused_no_scale": 0,
+          "refused_no_text": 0,
+          "ambiguous": 0
+        }
+      },
+      "LAB_AIR_VALVE": {
+        "key_count": 21,
+        "compile_count": 21,
+        "honest": {
+          "ok": 8,
+          "review": 0
+        },
+        "summary": {
+          "total": 21,
+          "match": 21,
+          "schedule_only": 0,
+          "plan_only": 0,
+          "refused_no_scale": 0,
+          "refused_no_text": 0,
+          "ambiguous": 0
+        }
+      },
+      "BYPASS_CONTROL_VALVE": {
+        "key_count": 1,
+        "compile_count": 1,
+        "honest": {
+          "ok": 1,
+          "review": 0
+        },
+        "summary": {
+          "total": 1,
+          "match": 1,
+          "schedule_only": 0,
+          "plan_only": 0,
+          "refused_no_scale": 0,
+          "refused_no_text": 0,
+          "ambiguous": 0
+        }
+      }
+    },
+    "lock_recommendation": "KEEP gt_locked=false — valve/damper drawing sample honest vs reconcile, but corpus-deep C + estimator-complete remain",
+    "artifact": "/opt/cursor/artifacts/pillar-c-itd-d1-lab-valve-drawing-verify.json"
+  },
+  "open_before_lock": [
+    "No BAS points keyed/compiled on this set (valve-only probe)",
+    "Estimator contractor columns / full hand-count may remain open",
+    "Pillar C corpus-deep — this set alone cannot complete C"
+  ]
+}

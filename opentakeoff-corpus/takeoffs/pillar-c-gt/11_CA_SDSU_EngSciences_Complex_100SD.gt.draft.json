@@ -1,0 +1,58 @@
+{
+  "set_id": "11_CA_SDSU_EngSciences_Complex_100SD",
+  "gt_locked": false,
+  "pillar_c_complete": false,
+  "drawing_verify": {
+    "at": "2026-09-01T15:37:29.427Z",
+    "kind": "valve_keyed",
+    "gt_locked": false,
+    "self_check": {
+      "valve_counts_match_key": true,
+      "valve_samples_honest": true,
+      "families_probed": 2
+    },
+    "family_results": {
+      "FUME_HOOD_DAMPER": {
+        "key_count": 58,
+        "compile_count": 58,
+        "honest": {
+          "ok": 8,
+          "review": 0
+        },
+        "summary": {
+          "total": 58,
+          "match": 11,
+          "schedule_only": 47,
+          "plan_only": 0,
+          "refused_no_scale": 0,
+          "refused_no_text": 0,
+          "ambiguous": 0
+        }
+      },
+      "PRESSURE_REDUCING_VALVE": {
+        "key_count": 2,
+        "compile_count": 2,
+        "honest": {
+          "ok": 2,
+          "review": 0
+        },
+        "summary": {
+          "total": 2,
+          "match": 2,
+          "schedule_only": 0,
+          "plan_only": 0,
+          "refused_no_scale": 0,
+          "refused_no_text": 0,
+          "ambiguous": 0
+        }
+      }
+    },
+    "lock_recommendation": "KEEP gt_locked=false — valve/damper drawing sample honest vs reconcile, but corpus-deep C + estimator-complete remain",
+    "artifact": "/opt/cursor/artifacts/pillar-c-11-valve-drawing-verify.json"
+  },
+  "open_before_lock": [
+    "No BAS points keyed/compiled on this set (valve-only probe)",
+    "Estimator contractor columns / full hand-count may remain open",
+    "Pillar C corpus-deep — this set alone cannot complete C"
+  ]
+}

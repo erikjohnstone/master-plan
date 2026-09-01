@@ -490,13 +490,25 @@ Estimator-complete + corpus-deep C still **0 / 112 BAS**, **0 / 81 valve**.
 
 
 
+
+**Valve-keyed drawing floor (2026-09-01, all unlocked):** Completed drawing-backed
+valve/damper samples on remaining keyed valve-only sets: **040** PRV 5/5 SO;
+**044** ISO 8 + PSV 4 all SO; **053** HHW CV 38 (sample 8/8 SO); **062** / **itd-d1-lab**
+HHW CV 9 MATCH + LAB_AIR 21 MATCH + BYPASS 1 MATCH; **089** MIX 2 (1 MATCH/1 SO);
+**11** FUME_HOOD_DAMPER 58 (sample honest; 11 MATCH/47 SO) + PRV 2 MATCH; **16**
+CONTROL_DAMPER 2/2 MATCH. Counts matched keys; samples honest vs reconcile. Still
+`gt_locked: false` on every set. Artifacts: `/opt/cursor/artifacts/pillar-c-*-valve-drawing-verify.json`
++ `pillar-c-valve-keyed-batch-summary.json`.
+
+**Keyed floor status:** 5/5 BAS + 8/8 valve-only drawing-sampled · **0 locked**.
+Corpus-deep C still **0 / ~112 BAS**, **0 / ~81 valve** after key expansion.
+
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** All **5 keyed BAS** sets drawing-sampled (001/015/
-   021/027/096) — all still unlocked (0/112 BAS, 0/81 valve locked). Next: same
-   depth on remaining keyed valve-only sets, then expand keys to every BAS- and
-   valve-bearing set + estimator-complete (SOO/I/O/spare). Post-WP8
-   `test:workflows` **104/104** green (plumbing only — not C done).
+1. **Pillar C (corpus-deep):** Keyed floor drawing-sampled — **5 BAS + 8 valve-only**
+   sets; **0 locked**. Next: expand keys to every BAS- and valve-bearing set,
+   then estimator-complete (SOO/I/O/spare) + lock only with self-check + pipeline
+   GT. Post-WP8 `test:workflows` **104/104** green (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.
