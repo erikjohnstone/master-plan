@@ -1,0 +1,23 @@
+{
+  "set_id": "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades",
+  "gt_locked": false,
+  "pillar_c_complete": false,
+  "note": "bas:0 zero-inventory floor \u2014 no point-bearing HVAC inventory extractable; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 0,
+    "estimate_only_points": 0,
+    "never_merged_into_printed": true,
+    "gap_count": 0,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:32:09.487457+00:00",
+    "kind": "zero_inventory_floor",
+    "sample_pass": 0,
+    "sample_n": 0,
+    "tables": 5,
+    "gt_locked": false
+  }
+}

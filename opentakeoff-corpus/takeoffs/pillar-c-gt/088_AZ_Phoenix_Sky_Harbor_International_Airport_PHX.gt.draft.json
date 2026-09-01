@@ -1,0 +1,22 @@
+{
+  "set_id": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 31,
+    "estimate_only_points": 155,
+    "never_merged_into_printed": true,
+    "gap_count": 31,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:31:47.938Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-088-inventory-drawing-verify.json",
+    "sample_pass": 20,
+    "sample_n": 20,
+    "gt_locked": false
+  }
+}
