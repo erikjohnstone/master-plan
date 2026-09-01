@@ -430,7 +430,7 @@ Honest ceilings retained (not score-chased): Klamath FC/HP/DOAS SCHEDULE_ONLY un
 
 ### Next queue (platform loop)
 
-1. **Pillar C finish:** Full `test:workflows` after WP7+WP8; damper reconcile locks (WP7.2); tabular SOO only when vector-extractable.
+1. **Pillar C finish:** Full `test:workflows` after WP7+WP8 (in flight); tabular SOO only when vector-extractable; damper reconcile already locked on pier/Vermillion HVAC path.
 2. **Pillar D:** WP9 highlight-accuracy proofs for symbol counts.
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.

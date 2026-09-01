@@ -481,7 +481,8 @@ necessary but **not sufficient**. Pillar C must:
    122 · lab 63 · Colville 42 · pier 39 — already on shared path).
 2. [x] BAS workflow locks: T-BAS-01 green with WP8 rollups (alarm 44 / trend 32
    Yes-only on NAVFAC; AI/AO/BI/BO frozen 43/15/49/15); unit WP8 extras green
-   (No/- never inflate). Full `test:workflows` re-run after this batch still owed.
+   (No/- never inflate). Five bulk keys lock optional alarm/trend/hardwired/soft.
+   Full `test:workflows` re-run after this batch still owed.
 3. [x] SOO honest refuse documented (BAS_EXCLUSIONS + provenance: SOO is not a
    points source; POINTS LIST ≠ complete BAS takeoff). Tabular SOO scoring
    remains follow-on where vector-extractable.
