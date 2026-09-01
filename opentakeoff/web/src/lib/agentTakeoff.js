@@ -373,6 +373,33 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
             bbox_px: descBbox || item.bbox_px || null, source_tool,
           }));
         }
+        // Pillar C contractor columns — only when the compiler promoted printed values.
+        if (item.served_equipment) {
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag, field: "SERVED EQUIPMENT", value: item.served_equipment,
+            sheet_id: sheet, table_title: table, column: "SERVED EQUIPMENT",
+            bbox_px: item.bbox_px || null, source_tool,
+            note: "plan-join key for sweep_schedule_row / reconcile",
+          }));
+        }
+        if (item.alarm) {
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag, field: "ALARM", value: item.alarm,
+            sheet_id: sheet, table_title: table, column: "ALARM", source_tool,
+          }));
+        }
+        if (item.trend) {
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag, field: "TREND", value: item.trend,
+            sheet_id: sheet, table_title: table, column: "TREND", source_tool,
+          }));
+        }
+        if (item.wiring) {
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag, field: "WIRING", value: item.wiring,
+            sheet_id: sheet, table_title: table, column: "WIRING", source_tool,
+          }));
+        }
         const cells = item.cells || item.attrs || item.fields;
         if (cells && typeof cells === "object" && !Array.isArray(cells)) {
           for (const [header, raw] of Object.entries(cells)) {

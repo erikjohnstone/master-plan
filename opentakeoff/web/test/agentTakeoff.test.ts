@@ -343,7 +343,11 @@ test("rowsFromCompiledTakeoff: BAS points lists → POINT TYPE rows", () => {
           sheet_id: "c#2",
           rows: 2,
           items: [
-            { tag: "AI1", quantity: 1, sheet_id: "c#2", table_title: "AHU-1 POINTS LIST", description: "SA TEMP" },
+            {
+              tag: "AI1", quantity: 1, sheet_id: "c#2", table_title: "AHU-1 POINTS LIST",
+              description: "SA TEMP", served_equipment: "AHU-1", alarm: "Yes", trend: "15 MIN",
+              wiring: "hardwired",
+            },
             { tag: "BO2", quantity: 1, sheet_id: "c#2", table_title: "AHU-1 POINTS LIST" },
           ],
         }],
@@ -354,6 +358,10 @@ test("rowsFromCompiledTakeoff: BAS points lists → POINT TYPE rows", () => {
   assert.ok(rows.some((r) => r.tag === "AI1" && r.field === "POINT TYPE" && r.value === "AI"));
   assert.ok(rows.some((r) => r.tag === "BO2" && r.field === "POINT TYPE" && r.value === "BO"));
   assert.ok(rows.some((r) => r.tag === "AI1" && r.field === "DESCRIPTION" && /SA TEMP/.test(String(r.value))));
+  assert.ok(rows.some((r) => r.tag === "AI1" && r.field === "SERVED EQUIPMENT" && r.value === "AHU-1"));
+  assert.ok(rows.some((r) => r.tag === "AI1" && r.field === "ALARM" && r.value === "Yes"));
+  assert.ok(rows.some((r) => r.tag === "AI1" && r.field === "TREND" && /15 MIN/.test(String(r.value))));
+  assert.ok(rows.some((r) => r.tag === "AI1" && r.field === "WIRING" && r.value === "hardwired"));
 });
 
 test("compileAgentTakeoff: repeating BAS marks across lists stay separate lines", () => {
