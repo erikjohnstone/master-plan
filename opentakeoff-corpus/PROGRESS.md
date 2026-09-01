@@ -1,6 +1,12 @@
 ## Active work
 
-### Pillar C — inventory wave 3 + valve plan-paint census locks (2026-09-01 20:25 UTC)
+### Pillar C — inventory wave 4 census (2026-09-01 20:35 UTC)
+
+- **Inventory plan-paint wave 4 (18 bas:0 sets):** **9/18 with MATCH** on 8-tag samples. Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave4.json`. Running total **54 inventory sets** censused (waves 1–4).
+- **Valve regression expanded:** Pier 015 + ITD 062 keyed floors locked (≥10 MATCH each on full target sweep).
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
+
+### Prior — inventory wave 3 + valve plan-paint census locks (2026-09-01 20:25 UTC)
 
 - **Inventory plan-paint wave 3 (15 bas:0 sets):** **12/15 with MATCH** on 8-tag samples. Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave3.json`. Running total **36 inventory sets** censused (waves 1–3).
 - **Valve plan-paint sweep batch (11 keyed sets):** **6/11 with MATCH** on up-to-12-tag samples via `sweepBasServedMark` + schedule `table_title` prefer hints. Artifact: `/opt/cursor/artifacts/pillar-c-valve-plan-paint-census-sweep-batch.json`.

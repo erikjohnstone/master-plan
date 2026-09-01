@@ -94,7 +94,7 @@ async function censusOne(key, keyPath, { servedOnly = false } = {}) {
     ms: Math.round(performance.now() - started),
     gt_locked: false,
     printed_bas_rows: bas.totals.rows ?? bas.totals.items ?? 0,
-    inventory_units: product.inventory?.reduce((n, r) => n + (r.count || 0), 0) ?? 0,
+    inventory_units: product.equipment_inventory?.unit_count ?? 0,
     served_targets: servedOnly ? sample.length : undefined,
     sampled_tags: sample.length,
     tallies,

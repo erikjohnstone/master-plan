@@ -28,6 +28,18 @@ const VALVE_PLAN_PAINT_KEYS = [
     maxError: 0,
   },
   {
+    file: "015_VA_P_095_Replace_Submarine_Pier_3_Utility.compile.json",
+    minMatch: 10,
+    maxAmbiguous: 0,
+    maxError: 0,
+  },
+  {
+    file: "062_ID_ITD_District_1_Laboratory_Building_Mechanical.compile.json",
+    minMatch: 10,
+    maxAmbiguous: 0,
+    maxError: 0,
+  },
+  {
     file: "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.compile.json",
     minMatch: 1,
     maxAmbiguous: 0,

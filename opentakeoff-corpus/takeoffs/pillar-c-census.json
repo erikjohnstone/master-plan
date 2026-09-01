@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-01T20:25:00Z",
+  "as_of": "2026-09-01T20:35:00Z",
   "mandate": "Pillar C done only when EVERY bas_bearing and valve_bearing set has estimator takeoff + coordinator self-check + pipeline GT corroboration",
   "counts": {
     "vol1_sets": 30,
@@ -60,6 +60,16 @@
     "plan_paint_census_inventory_wave2_sets": 12,
     "plan_paint_inventory_wave2_with_match": 9,
     "plan_paint_inventory_wave2_artifact": "/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave2.json",
+    "plan_paint_census_inventory_wave3_sets": 15,
+    "plan_paint_inventory_wave3_with_match": 12,
+    "plan_paint_inventory_wave3_artifact": "/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave3.json",
+    "plan_paint_inventory_census_total_sets": 54,
+    "plan_paint_census_inventory_wave4_sets": 18,
+    "plan_paint_inventory_wave4_with_match": 9,
+    "plan_paint_inventory_wave4_artifact": "/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave4.json",
+    "valve_plan_paint_sweep_batch_sets": 11,
+    "valve_plan_paint_sweep_with_match": 6,
+    "valve_plan_paint_sweep_artifact": "/opt/cursor/artifacts/pillar-c-valve-plan-paint-census-sweep-batch.json",
     "plan_paint_inventory_expand_with_match": 8,
     "plan_paint_inventory_expand_artifact": "/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-expand.json",
     "plan_paint_preferTitle_recensus_sets": 2,
