@@ -491,24 +491,31 @@ necessary but **not sufficient**. Pillar C must:
 2. [x] BAS workflow locks: T-BAS-01 green with WP8 rollups (alarm 44 / trend 32
    Yes-only on NAVFAC; AI/AO/BI/BO frozen 43/15/49/15); unit WP8 extras green
    (No/- never inflate). Five bulk keys lock optional alarm/trend/hardwired/soft.
-   Full `test:workflows` re-run after this batch still owed.
+   Full `test:workflows` re-run after this batch still owed (~23 min in flight).
 3. [x] SOO honest refuse documented (BAS_EXCLUSIONS + provenance: SOO is not a
    points source; POINTS LIST ≠ complete BAS takeoff). Tabular SOO scoring
    remains follow-on where vector-extractable.
 4. [x] UI+MCP parity on bas_points compile (shared `compileBasTakeoff`).
 5. [x] Research implications reflected: printed ALARM / TREND / hardwired-vs-soft
    promoted when columns exist; never invent spare % or SOO-derived points.
+6. [x] `served_equipment` join key on BAS items (UNIT/EQUIPMENT/SERVED columns,
+   I/O device keys, or POINTS LIST title unit token — never invented); unit lock.
+7. [x] `corpus_bas` / `corpus_valves` workflows require plan sweep/reconcile +
+   highlight before answer (estimator takeoff ≠ schedule scrape).
+8. [ ] Bulk proofs: ≥3 sets where served_equipment / valve / damper marks
+   paint on plan via shared sweep (MATCH or honest SCHEDULE_ONLY) — next.
 
 **Implementation pointers (shared path — after §6 MET; 2026-09-01 survey):**
 - Module: `compileBasTakeoff` / `isBasPointsListTitle` / `basPointExtras` /
-  `printedBasFlag` in `corpusTakeoff.mjs`. Needles already cover POINTS LIST,
-  DDC POINTS, I/O LIST, CONTROLLER I/O, POINTS SCHEDULE; SOO-like “POINT LIST
-  TABLE” intentionally rejected.
-- Today: row + AI/AO/BI/BO totals from typed marks; I/O LIST device rows map
-  ANALOG→AI, DIGITAL→BI. Printed ALARM / TREND / WIRING|SIGNAL TYPE promoted
-  when header-exact and affirmative (Yes / HI/LO / intervals — not No/-).
-- Non-zero `bas_points.rows` keys today (5): Vermillion 096 (231), NAVFAC 001
-  (122), lab 021 (63), Colville 27 (42), pier 015 (39).
+  `printedBasFlag` / `servedEquipmentFromBasRow` in `corpusTakeoff.mjs`.
+  Needles already cover POINTS LIST, DDC POINTS, I/O LIST, CONTROLLER I/O,
+  POINTS SCHEDULE; SOO-like “POINT LIST TABLE” intentionally rejected.
+- Today: row + AI/AO/BI/BO totals; I/O LIST ANALOG→AI, DIGITAL→BI; ALARM/TREND
+  Yes-only; `served_equipment` for plan-join; workflow gate demands
+  `sweep_schedule_row` / `reconcile_schedule_plan` paint on corpus_bas/valves.
+- Bulk next: reuse `reconcileWorkflow` CONTROL_DAMPER / equipment MATCH pattern
+  for AHU/DOAS/FCU tags drawn from BAS `served_equipment` on NAVFAC + ≥2 Vol2
+  sets (pier / Vermillion / lab) — honest SCHEDULE_ONLY when not plan-text.
 - Spare % and SOO-derived points remain honest refuse / disclose — never invent.
 
 ### WP9 — Plan grounding depth (Pillar D — after A+B bar)
