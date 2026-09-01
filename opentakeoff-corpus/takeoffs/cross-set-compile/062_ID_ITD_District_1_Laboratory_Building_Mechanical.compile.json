@@ -2,7 +2,7 @@
   "set_id": "062_ID_ITD_District_1_Laboratory_Building_Mechanical",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 ITD D1 lab \u2014 rich HVAC + lab air valves.",
+  "notes": "[MEAT] Vol2 ITD D1 lab \u2014 rich HVAC + lab air valves + 9 HHW reheat CVs.",
   "categories": {
     "AHU": 1,
     "FCU": 2,
@@ -18,6 +18,7 @@
     "CHEMICAL_POT_FEEDER": 1,
     "AIR_COMPRESSOR": 1,
     "FLOW_METER": 1,
+    "HHW_CONTROL_VALVE": 9,
     "BYPASS_CONTROL_VALVE": 1,
     "LAB_AIR_VALVE": 21,
     "GRD": 7,
@@ -27,12 +28,12 @@
     "LOUVERED_PENTHOUSE": 1
   },
   "totals": {
-    "items": 84
+    "items": 93
   },
   "bas_points": {
     "rows": 0
   },
   "control_valves": {
-    "items": 0
+    "items": 9
   }
 }
