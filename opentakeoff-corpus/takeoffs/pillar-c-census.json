@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-01T18:21:40Z",
+  "as_of": "2026-09-01T18:24:12Z",
   "mandate": "Pillar C done only when EVERY bas_bearing and valve_bearing set has estimator takeoff + coordinator self-check + pipeline GT corroboration",
   "counts": {
     "vol1_sets": 30,
@@ -13,7 +13,7 @@
     "gt_locked": 0
   },
   "verification_coverage": {
-    "note": "Pillar C corpus-complete mandate. Inventory floors 112/112 BAS + 81/81 valve product census. Printed POINTS scrape \u2260 done. Shared-path BAS plan_paint refuse_not_done gate + classifyBasServedSweepOutcome (SCHEDULE_ONLY / AMBIGUOUS honesty). Inventory plan-paint expand 6 bas:0 sets (4 with MATCH). Still 0 estimator_complete / gt_locked.",
+    "note": "Pillar C corpus-complete mandate. Inventory floors 112/112 BAS + 81/81 valve product census. Printed POINTS scrape \u2260 done. Shared-path BAS plan_paint refuse_not_done gate + classifyBasServedSweepOutcome (SCHEDULE_ONLY / AMBIGUOUS honesty). Inventory plan-paint expand 6 bas:0 sets (4 with MATCH). Still 0 estimator_complete / gt_locked. preferTitle inventory re-census: Carson+Ames 8/8 MATCH each via sweepBasServedMark. Still 0 locked.",
     "bas_gap_soo_drawing_verified": 5,
     "bas_inventory_drawing_verified_bas0": 58,
     "bas_keyed_drawing_sampled": 5,
@@ -56,7 +56,9 @@
     ],
     "plan_paint_census_inventory_expand_sets": 6,
     "plan_paint_inventory_expand_with_match": 4,
-    "plan_paint_inventory_expand_artifact": "/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-expand.json"
+    "plan_paint_inventory_expand_artifact": "/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-expand.json",
+    "plan_paint_preferTitle_recensus_sets": 2,
+    "plan_paint_preferTitle_artifact": "/opt/cursor/artifacts/pillar-c-plan-paint-preferTitle-recensus.json"
   },
   "bas_inventory_drawing_verified_ids": [
     "11_CA_SDSU_EngSciences_Complex_100SD",

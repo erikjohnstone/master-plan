@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   classifyReconcileStatus,
   classifyBasServedSweepOutcome,
+  sweepBasServedMark,
   familyNeedleFromSpecs,
   reconcileRowsFromTakeoffItems,
   summarizeReconcile,
@@ -347,6 +348,35 @@ test("schedule_plan_reconcile intent is phrase-robust (≥5 phrasings)", () => {
   for (const p of phrases) {
     assert.equal(classifyTakeoffIntent(p), "schedule_plan_reconcile", p);
   }
+});
+
+
+test("sweepBasServedMark forwards preferTitle and classifies MATCH", async () => {
+  const calls = [];
+  const session = {
+    async sweepScheduleRow(tag, opts) {
+      calls.push({ tag, opts });
+      return { found: 2, sheets: [{ matches: [{}, {}] }] };
+    },
+  };
+  const out = await sweepBasServedMark(session, "B1", {
+    preferTitle: "2-STAGE, GAS FIRED FURNACE SCHEDULE",
+    evaluationFast: true,
+  });
+  assert.equal(out.status, "MATCH");
+  assert.equal(out.found, 2);
+  assert.equal(calls[0].tag, "B1");
+  assert.equal(calls[0].opts.preferTitle, "2-STAGE, GAS FIRED FURNACE SCHEDULE");
+});
+
+test("sweepBasServedMark maps ambiguous throw to AMBIGUOUS", async () => {
+  const session = {
+    async sweepScheduleRow() {
+      throw new Error('Ambiguous: 3 schedule rows carry the key "B1" — the same mark defined twice cannot seed one sweep.');
+    },
+  };
+  const out = await sweepBasServedMark(session, "B1");
+  assert.equal(out.status, "AMBIGUOUS");
 });
 
 test("schedule_plan_reconcile workflow advances survey → reconcile → paint", () => {

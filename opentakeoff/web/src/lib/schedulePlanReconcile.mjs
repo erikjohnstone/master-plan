@@ -148,6 +148,33 @@ function rowIdentityTag(row, identityHeaderRe = null) {
  * @param {Array<object>} [failures] TakeoffFailure[]
  * @returns {Array<object>}
  */
+
+/**
+ * Sweep a BAS served / HVAC inventory mark on the shared Session path.
+ * Pass preferTitle / preferSheet when the caller already knows the owning
+ * schedule (cross-family building letters like Carson B1 on furnace + CU +
+ * OAU) so the sweep does not refuse AMBIGUOUS when preference uniquely
+ * resolves. Never invents MATCH — outcome goes through classifyBasServedSweepOutcome.
+ *
+ * @param {object} session Session with sweepScheduleRow
+ * @param {string} tag
+ * @param {{ commit?: boolean, evaluationFast?: boolean, preferTitle?: string|null, preferSheet?: string|null }} [opts]
+ */
+export async function sweepBasServedMark(session, tag, opts = {}) {
+  try {
+    const result = await session.sweepScheduleRow(tag, {
+      commit: !!opts.commit,
+      evaluationFast: opts.evaluationFast !== false,
+      preferTitle: opts.preferTitle || null,
+      preferSheet: opts.preferSheet || null,
+    });
+    return classifyBasServedSweepOutcome({ result });
+  } catch (error) {
+    return classifyBasServedSweepOutcome({ error });
+  }
+}
+
+
 export function reconcileRowsFromTakeoffItems(items, failures = []) {
   const failByTag = new Map();
   for (const f of failures || []) {
