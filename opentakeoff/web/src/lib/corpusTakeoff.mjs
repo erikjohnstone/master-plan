@@ -1597,6 +1597,7 @@ export function buildValveEstimatorProduct({ categories, totals }) {
   let withFail = 0;
   let withSignal = 0;
   let itemCount = 0;
+  const planPaintTargets = [];
   for (const [name, cat] of Object.entries(categories || {})) {
     const items = cat.items || [];
     if (!items.length) continue;
@@ -1606,6 +1607,15 @@ export function buildValveEstimatorProduct({ categories, totals }) {
     for (const item of items) {
       itemCount += 1;
       const cells = item.cells || {};
+      const tag = String(item.tag || item.mark || "").trim();
+      if (tag) {
+        planPaintTargets.push({
+          tag,
+          family: name,
+          prefer_schedule_title: item.table_title || null,
+          prefer_schedule_sheet: item.sheet_id || null,
+        });
+      }
       const served = cells["Unit Mark"]?.text || cells["Served equipment"]?.text;
       const cv = cells.Cv?.text;
       const size = cells.Size?.text;
@@ -1657,7 +1667,8 @@ export function buildValveEstimatorProduct({ categories, totals }) {
     },
     plan_paint: {
       status: "refuse_not_done",
-      note: "Plan MATCH / SCHEDULE_ONLY paint still required per mark — printed schedule ≠ installed takeoff.",
+      note: "Plan MATCH / SCHEDULE_ONLY paint still required per mark — printed schedule ≠ installed takeoff. When sweeping valve/damper MARKs, pass prefer_schedule_title from targets (schedule table_title) when the same MARK appears on multiple schedules; never invent plan qty.",
+      targets: planPaintTargets.slice(0, 80),
     },
   };
 }

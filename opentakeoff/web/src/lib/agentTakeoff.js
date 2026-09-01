@@ -318,6 +318,19 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
             source_tool,
             note: vprod.plan_paint.note || "Plan paint still required",
           }));
+          for (const t of (vprod.plan_paint.targets || []).slice(0, 24)) {
+            if (!t?.tag) continue;
+            rows.push(makeTakeoffRow({
+              workflow, runId, tag: t.tag, field: "plan_paint_prefer_schedule_title",
+              value: t.prefer_schedule_title || "",
+              sheet_id: t.prefer_schedule_sheet || null,
+              table_title: t.prefer_schedule_title || null,
+              source_tool,
+              note: t.prefer_schedule_title
+                ? "Pass as prefer_schedule_title on sweep_schedule_row / reconcile — drawing-backed valve schedule table_title"
+                : "No table_title on valve row — sweep may AMBIGUOUS across families; refuse rather than invent",
+            }));
+          }
         }
       }
     }

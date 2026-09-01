@@ -675,6 +675,10 @@ test("control_valves compile includes isolation/damper families; CHW filter stay
   assert.equal(all.estimator_product.estimator_complete, false);
   assert.ok(all.estimator_product.printed_items >= 3);
   assert.equal(all.estimator_product.plan_paint.status, "refuse_not_done");
+  assert.ok(Array.isArray(all.estimator_product.plan_paint.targets));
+  assert.ok(all.estimator_product.plan_paint.targets.some(
+    (t) => t.tag && /CONTROL VALVE SCHEDULE/i.test(String(t.prefer_schedule_title || "")),
+  ));
   assert.ok(all.estimator_status.gates.some((g) => g.gate === "plan_paint" && g.status === "refuse_not_done"));
   assert.ok(all.estimator_status.gates.some((g) => g.gate === "gt_lock" && g.status === "refuse_not_done"));
   const chwOnly = compileControlValveTakeoff([], graph, { service: "CHW" });
@@ -704,7 +708,16 @@ test("rowsFromCompiledTakeoff: VALVE_ESTIMATOR refuse_not_done + product disclos
         missing_on_some_rows: ["Actuator", "Fail position"],
         note: "printed only",
       },
-      plan_paint: { status: "refuse_not_done", note: "paint required" },
+      plan_paint: {
+        status: "refuse_not_done",
+        note: "paint required",
+        targets: [{
+          tag: "CV-3",
+          family: "CHW_CONTROL_VALVE",
+          prefer_schedule_title: "CHW CONTROL VALVE SCHEDULE",
+          prefer_schedule_sheet: "m#1",
+        }],
+      },
     },
     categories: {
       CHW_CONTROL_VALVE: {
@@ -722,6 +735,8 @@ test("rowsFromCompiledTakeoff: VALVE_ESTIMATOR refuse_not_done + product disclos
   assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "printed_valve_items" && r.value === 3));
   assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "contractor_column_gaps" && /Actuator/.test(String(r.value))));
   assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "plan_paint" && r.value === "refuse_not_done"));
+  assert.ok(rows.some((r) => r.tag === "CV-3" && r.field === "plan_paint_prefer_schedule_title"
+    && /CHW CONTROL VALVE SCHEDULE/i.test(String(r.value))));
   assert.ok(rows.some((r) => r.tag === "CV-1" && r.field === "quantity"));
   assert.ok(!rows.some((r) => r.tag === "VALVE_ESTIMATOR" && /printed_valve_schedules/.test(String(r.field))));
 });
