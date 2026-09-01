@@ -11,12 +11,12 @@
       "lists": 3
     },
     "points_sample_pass": "25/25",
-    "lock_recommendation": "KEEP gt_locked=false \u2014 printed BAS sample green, estimator-complete + corpus-deep C remain",
+    "lock_recommendation": "KEEP gt_locked=false — printed BAS sample green, estimator-complete + corpus-deep C remain",
     "artifact": "/opt/cursor/artifacts/pillar-c-021-drawing-verify.json"
   },
   "open_before_lock": [
     "SOO / estimator-complete still open",
-    "Pillar C corpus-deep \u2014 set alone cannot complete C"
+    "Pillar C corpus-deep — set alone cannot complete C"
   ],
   "estimator_product": {
     "printed_bas_rows": 63,
@@ -57,7 +57,7 @@
     "gt_locked": false
   },
   "bas_plan_paint_census": {
-    "at": "2026-09-01T16:45:49.811Z",
+    "at": "2026-09-01T18:38:00.405Z",
     "artifact": "/opt/cursor/artifacts/pillar-c-021-bas-plan-paint-census.json",
     "served": 29,
     "match": 0,
@@ -66,14 +66,14 @@
     "gt_locked": false
   },
   "valve_plan_paint_census": {
-    "at": "2026-09-01T16:46:17.350Z",
+    "at": "2026-09-01T18:38:28.798Z",
     "artifact": "/opt/cursor/artifacts/pillar-c-021-valve-plan-paint-census.json",
     "match": 0,
     "schedule_only": 2,
     "items": 2,
     "gt_locked": false
   },
-  "note": "bas:0 \u2014 inventory/estimate floor only; Pillar C not complete",
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
   "inventory_drawing_verify": {
     "at": "2026-09-01T17:33:07.327Z",
     "artifact": "/opt/cursor/artifacts/pillar-c-021-inventory-drawing-verify.json",
@@ -95,7 +95,7 @@
           "tabular_points": false
         }
       ],
-      "note": "SOO present but not a typed points source \u2014 refuse_not_done; never invent points from narrative."
+      "note": "SOO present but not a typed points source — refuse_not_done; never invent points from narrative."
     },
     "phrase_hits": [
       {
@@ -148,7 +148,7 @@
       }
     ],
     "printed_bas": 63,
-    "note": "SOO deepen probe \u2014 still refuse_not_done for soo_derived_points; never invent points from narrative.",
+    "note": "SOO deepen probe — still refuse_not_done for soo_derived_points; never invent points from narrative.",
     "artifact": "/opt/cursor/artifacts/pillar-c-021-soo-probe.json",
     "gt_locked": false
   }

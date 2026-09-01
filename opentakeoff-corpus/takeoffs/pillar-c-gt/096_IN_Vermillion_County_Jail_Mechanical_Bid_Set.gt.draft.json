@@ -381,7 +381,7 @@
     "gt_locked": false
   },
   "bas_plan_paint_census": {
-    "at": "2026-09-01T16:46:06.370Z",
+    "at": "2026-09-01T18:38:17.413Z",
     "artifact": "/opt/cursor/artifacts/pillar-c-096-bas-plan-paint-census.json",
     "served": 1,
     "match": 1,
@@ -390,7 +390,7 @@
     "gt_locked": false
   },
   "valve_plan_paint_census": {
-    "at": "2026-09-01T16:47:02.408Z",
+    "at": "2026-09-01T18:39:16.015Z",
     "artifact": "/opt/cursor/artifacts/pillar-c-096-valve-plan-paint-census.json",
     "match": 12,
     "schedule_only": 12,

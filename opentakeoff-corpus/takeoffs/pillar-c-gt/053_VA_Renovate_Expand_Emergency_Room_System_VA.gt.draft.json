@@ -2,7 +2,7 @@
   "set_id": "053_VA_Renovate_Expand_Emergency_Room_System_VA",
   "gt_locked": false,
   "pillar_c_complete": false,
-  "note": "bas:0 zero-inventory floor from product census \u2014 Pillar C not complete",
+  "note": "bas:0 zero-inventory floor from product census — Pillar C not complete",
   "estimator_product": {
     "printed_bas_rows": 0,
     "inventory_units": 0,
@@ -19,6 +19,14 @@
     "sample_pass": 0,
     "sample_n": 0,
     "tables": 4,
+    "gt_locked": false
+  },
+  "valve_plan_paint_census": {
+    "at": "2026-09-01T18:38:44.975Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-053-valve-plan-paint-census.json",
+    "match": 0,
+    "schedule_only": 38,
+    "items": 38,
     "gt_locked": false
   }
 }

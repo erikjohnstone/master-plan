@@ -64,15 +64,15 @@
         }
       }
     },
-    "lock_recommendation": "KEEP gt_locked=false \u2014 valve/damper drawing sample honest vs reconcile, but corpus-deep C + estimator-complete remain",
+    "lock_recommendation": "KEEP gt_locked=false — valve/damper drawing sample honest vs reconcile, but corpus-deep C + estimator-complete remain",
     "artifact": "/opt/cursor/artifacts/pillar-c-062-valve-drawing-verify.json"
   },
   "open_before_lock": [
     "No BAS points keyed/compiled on this set (valve-only probe)",
     "Estimator contractor columns / full hand-count may remain open",
-    "Pillar C corpus-deep \u2014 this set alone cannot complete C",
-    "BAS POINTS LIST titles are SOO narrative (0 geometric tables) \u2014 refuse present_not_row_extractable",
-    "Plan-paint / spare / proof gates remain refuse_not_done \u2014 corpus-deep C incomplete"
+    "Pillar C corpus-deep — this set alone cannot complete C",
+    "BAS POINTS LIST titles are SOO narrative (0 geometric tables) — refuse present_not_row_extractable",
+    "Plan-paint / spare / proof gates remain refuse_not_done — corpus-deep C incomplete"
   ],
   "valve_estimator_product": {
     "printed_items": 31,
@@ -100,14 +100,14 @@
     "gt_locked": false
   },
   "valve_plan_paint_census": {
-    "at": "2026-09-01T16:46:40.900Z",
+    "at": "2026-09-01T18:38:53.559Z",
     "artifact": "/opt/cursor/artifacts/pillar-c-062-valve-plan-paint-census.json",
     "match": 31,
     "schedule_only": 0,
     "items": 31,
     "gt_locked": false
   },
-  "note": "bas:0 \u2014 inventory/estimate floor only; Pillar C not complete",
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
   "estimator_product": {
     "printed_bas_rows": 0,
     "inventory_units": 16,
@@ -140,7 +140,7 @@
       "AHU POINTS LIST"
     ],
     "extractable_tables_on_points_sheets": 0,
-    "note": "BOILER/VFD/AHU POINTS LIST text exists on sheets 18/19 but zero geometric tables extracted \u2014 refuse_not_done; do not invent points (no OCR/raster).",
+    "note": "BOILER/VFD/AHU POINTS LIST text exists on sheets 18/19 but zero geometric tables extracted — refuse_not_done; do not invent points (no OCR/raster).",
     "artifacts": [
       "/opt/cursor/artifacts/pillar-c-062-soo-probe.json",
       "/opt/cursor/artifacts/pillar-c-062-points-list-near-miss.json",
@@ -152,7 +152,7 @@
   "bas": {
     "printed_points_list": {
       "status": "absent_or_not_row_extractable",
-      "notes": "Sheets carry BOILER/VFD/AHU POINTS LIST titles in vector text, but findTables returns 0 geometric table rects \u2014 content is SOO narrative bullets (ENABLE/DISABLE, STATUS, ALARM), not typed hard I/O grids. Title gate would accept those phrases if table-backed; refuse present_not_row_extractable."
+      "notes": "Sheets carry BOILER/VFD/AHU POINTS LIST titles in vector text, but findTables returns 0 geometric table rects — content is SOO narrative bullets (ENABLE/DISABLE, STATUS, ALARM), not typed hard I/O grids. Title gate would accept those phrases if table-backed; refuse present_not_row_extractable."
     },
     "sequences_of_operation": {
       "status": "present_narrative_only",

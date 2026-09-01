@@ -7,6 +7,8 @@
   - Klamath 14 remains honest **0 MATCH / 8 SCHEDULE_ONLY** (tags not drawable — refuse, not invented).
   - Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-expand.json`.
 - **Shared product path:** `buildBasEstimatorProduct.plan_paint.targets[]` now carries `prefer_schedule_title` / `prefer_schedule_sheet` from HVAC `table_title` / `sheet_id`; Agent Takeoff emits `plan_paint_prefer_schedule_title` rows so the agent can pass them into `sweep_schedule_row` (UI+MCP already forward `prefer_schedule_title` → Session `preferTitle`).
+- **Valve parity:** `buildValveEstimatorProduct.plan_paint.targets[]` + Takeoff `plan_paint_prefer_schedule_title` rows for valve/damper MARKs (schedule `table_title` as prefer hint).
+- **Keyed valve plan-paint census re-run (11 sets):** reconcile sweeps with `preferTitle` from scaffold — e.g. NAVFAC 001 **3 MATCH / 160 SCHEDULE_ONLY** on 163 CHW+HHV rows; Carson 16 **2/2 MATCH** on dampers; SDSU 11 **13 MATCH / 47 SCHEDULE_ONLY** on 60 fume-hood dampers. All still `refuse_not_done` / `gt_locked: false`. Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-keyed-floor.json`.
 - **PROOF/SPARE column-header probe** on keyed BAS sets: no real PROOF/INTERLOCK/SPARE columns (CAPACITY false-positives only) — spare/proof gates stay `refuse_not_done`; free-text phrase hits remain disclose-only.
 - Unit tests **53/53** (`schedulePlanReconcile` + `corpusTakeoffBas` + `agentTakeoff`).
 - **Still 0/112 BAS and 0/81 valve** at `estimator_complete` / `gt_locked`. PreferTitle plan-paint ≠ Pillar C done.
