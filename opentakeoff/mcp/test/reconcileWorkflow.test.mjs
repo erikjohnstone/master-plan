@@ -473,6 +473,20 @@ test("Vol2 pier utility 015: plan-drawn FCU/pump/fan plant MATCH (louver/grd SO)
   }
 });
 
+test("Vol2 pier utility 015: motorized dampers all MATCH; isolation valves 13/15", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "015_VA_P_095_Replace_Submarine_Pier_3_Utility.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyAllMatch(session, graph, key, "CONTROL_DAMPER");
+  await assertFamilyStatusCounts(session, graph, key, "ISOLATION_VALVE", {
+    match: 13,
+    schedule_only: 2,
+  });
+});
+
 test("Vol2 chiller 012: cooling towers honest SCHEDULE_ONLY (plant not plan-drawn)", async (t) => {
   const ctx = await loadKeySessionOrSkip(
     t,
@@ -576,6 +590,44 @@ test("Vol2 IL sterile expand 040: GRD + fan + louver MATCH (UH/pump SO)", async 
   for (const family of ["GRD", "FAN", "LOUVER"]) {
     await assertFamilyAllMatch(session, graph, key, family);
   }
+});
+
+test("Vol2 IL sterile expand 040: PRV honest SCHEDULE_ONLY (tags not plan text)", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyStatusCounts(session, graph, key, "PRESSURE_REDUCING_VALVE", {
+    schedule_only: key.categories.PRESSURE_REDUCING_VALVE,
+  });
+});
+
+test("Vol2 FL airport 089: mixing valves honest partial — 1 MATCH · 1 SCHEDULE_ONLY", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "089_FL_Airport_Terminal_and_Hangar_Development.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyStatusCounts(session, graph, key, "MIXING_VALVE", {
+    match: 1,
+    schedule_only: 1,
+  });
+  assert.equal(key.categories.MIXING_VALVE, 2);
+});
+
+test("Vol2 lab 021: PRV honest SCHEDULE_ONLY (plant tags not plan text)", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "021_XX_Laboratory_building_mechanical_drawings_lab.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyStatusCounts(session, graph, key, "PRESSURE_REDUCING_VALVE", {
+    schedule_only: key.categories.PRESSURE_REDUCING_VALVE,
+  });
 });
 
 test("Vol2 Missoula Fire Sciences 014: UH/fan/AHU/boiler/ET all MATCH", async (t) => {
