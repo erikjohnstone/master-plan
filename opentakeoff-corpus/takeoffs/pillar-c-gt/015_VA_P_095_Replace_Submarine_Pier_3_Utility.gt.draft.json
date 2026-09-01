@@ -1,0 +1,122 @@
+{
+  "set_id": "015_VA_P_095_Replace_Submarine_Pier_3_Utility",
+  "gt_locked": false,
+  "pillar_c_complete": false,
+  "printed_bas": {
+    "rows": 39,
+    "AI": 24,
+    "AO": 8,
+    "BI": 4,
+    "BO": 3,
+    "alarm": 21,
+    "trend": 32
+  },
+  "soo": {
+    "status": "HONEST_REFUSE",
+    "detail": "No extractable SOO tables as points source"
+  },
+  "served_equipment_plan_paint": [
+    {
+      "tag": "CCC-1",
+      "found": 2,
+      "cites": 2,
+      "ok": true
+    },
+    {
+      "tag": "CCC-2",
+      "found": 3,
+      "cites": 3,
+      "ok": true
+    },
+    {
+      "tag": "P-1",
+      "found": 1,
+      "cites": 1,
+      "ok": true
+    },
+    {
+      "tag": "P-2",
+      "found": 1,
+      "cites": 1,
+      "ok": true
+    },
+    {
+      "tag": "MPAC-1",
+      "error": "No schedule row \"MPAC-1\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "ok": false
+    },
+    {
+      "tag": "MPAC-2",
+      "error": "No schedule row \"MPAC-2\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "ok": false
+    },
+    {
+      "tag": "MPAC-3",
+      "error": "No schedule row \"MPAC-3\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "ok": false
+    },
+    {
+      "tag": "MPAC-4",
+      "error": "No schedule row \"MPAC-4\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "ok": false
+    },
+    {
+      "tag": "HPAC-1",
+      "error": "No schedule row \"HPAC-1\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "ok": false
+    },
+    {
+      "tag": "HPAC-2",
+      "error": "No schedule row \"HPAC-2\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "ok": false
+    },
+    {
+      "tag": "HPAC-3",
+      "error": "No schedule row \"HPAC-3\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "ok": false
+    },
+    {
+      "tag": "FC-3",
+      "found": 1,
+      "cites": 1,
+      "ok": true
+    }
+  ],
+  "valves": {
+    "CONTROL_DAMPER": {
+      "key": 21,
+      "rows": 21,
+      "summary": {
+        "total": 21,
+        "match": 21,
+        "schedule_only": 0,
+        "plan_only": 0,
+        "refused_no_scale": 0,
+        "refused_no_text": 0,
+        "ambiguous": 0
+      }
+    },
+    "ISOLATION_VALVE": {
+      "key": 15,
+      "rows": 15,
+      "summary": {
+        "total": 15,
+        "match": 13,
+        "schedule_only": 2,
+        "plan_only": 0,
+        "refused_no_scale": 0,
+        "refused_no_text": 0,
+        "ambiguous": 0
+      }
+    }
+  },
+  "notes": [
+    "served_equipment no longer treats AI-1/BI-1 hyphen point tags as equipment",
+    "Equipment joins: CCC/P/MPAC/HPAC/FC with plan paint where drawable"
+  ],
+  "open_before_lock": [
+    "Estimator family×qty gap report",
+    "Coordinator drawing check",
+    "GT harness lock"
+  ]
+}

@@ -448,6 +448,11 @@ UH labeled estimate 11×6=66; FCU×qty **honest refuse**. Valve identity fix:
 reconcile now prefers `VALVE MARK` over `UNIT MARK` — HHW/CHW row counts match
 keys (64/64, 99/99); most valve marks honest **SCHEDULE_ONLY** (CV-* not plan
 text). Shared-path unit test green. Draft GT still `gt_locked: false`.
+**Pier 015 probe (PARTIAL):** BAS 39 rows; `served_equipment` no longer treats
+hyphen point tags (`AI-1`) as equipment — joins CCC/P/MPAC/HPAC/FC. Plan paint
+MATCH: CCC-1/2, P-1/2, FC-3; MPAC/HPAC honest miss (no schedule row). CONTROL_DAMPER
+21/21 MATCH; ISOLATION_VALVE 13 MATCH / 2 SO. SOO refuse. Draft GT unlocked.
+
 
 ### Next queue (platform loop)
 

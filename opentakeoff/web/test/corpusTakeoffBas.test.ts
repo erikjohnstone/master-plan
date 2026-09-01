@@ -217,6 +217,21 @@ describe("compileBasTakeoff I/O LIST", () => {
       ),
       "DOAH-T1",
     );
+    // Hyphenated AI-1 / BI-1 are point tags, not served equipment (pier shape).
+    assert.equal(
+      servedEquipmentFromBasRow(
+        { key: "AI-1", cells: { DESCRIPTION: { text: "SPACE TEMP" } } },
+        "UNIT HEATER POINTS LIST",
+      ),
+      null,
+    );
+    assert.equal(
+      servedEquipmentFromBasRow(
+        { key: "CCC-1", cells: { DESCRIPTION: { text: "CONDENSER" } } },
+        "CONDENSER WATER SYSTEM POINTS LIST",
+      ),
+      "CCC-1",
+    );
   });
 
   it("does not invent a list from a title-only schematic with no data rows", () => {

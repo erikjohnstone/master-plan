@@ -202,8 +202,13 @@ export function servedEquipmentFromBasRow(row, listTitle = "") {
   if (fromDesc) return fromDesc;
 
   const tag = String(row?.key || "").trim();
-  // I/O LIST device rows: key is the equipment/device, not AI##.
-  if (tag && !/^(AI|AO|BI|BO)\d/i.test(tag) && !isBasPointsHeaderRow(tag)) {
+  // I/O LIST device rows: key is the equipment/device, not AI## / AI-1 / AO 2.
+  // Hyphenated/spaced point tags must not become served_equipment (pier 015).
+  if (
+    tag
+    && !/^(AI|AO|BI|BO)[\s\-]?\d/i.test(tag)
+    && !isBasPointsHeaderRow(tag)
+  ) {
     return ocrFixEquipMark(normalizeEquipMark(tag) || tag);
   }
 
@@ -1023,7 +1028,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       const tag = String(row.key || "").trim();
       // Skip column-label rows (I/O LIST prints TAG as a data key).
       if (isBasPointsHeaderRow(tag)) continue;
-      const m = tag.toUpperCase().match(/^(AI|AO|BI|BO)\d/);
+      const m = tag.toUpperCase().match(/^(AI|AO|BI|BO)[\s\-]?\d/);
       if (m) {
         counts[m[1]] += 1;
       } else {

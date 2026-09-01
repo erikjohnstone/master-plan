@@ -72,72 +72,67 @@
     "detail": "No extractable SOO tables; narrative not a points source"
   },
   "labeled_estimate": {
+    "printed_points_list_rows": 122,
+    "unit_lists_points": 96,
     "uh_cuh_qty": 11,
     "uh_template_rows": 6,
-    "uh_estimate_points": 66,
-    "uh_gap_vs_printed_template": 60,
-    "fcu": "HONEST_REFUSE — cooling vs heat/cool split not in compile"
-  },
-  "valves": {
-    "chw": {
-      "name": "CHW_CONTROL_VALVE",
-      "rows": 64,
-      "key": 64,
-      "compile": 64,
-      "summary": {
-        "total": 64,
-        "match": 2,
-        "schedule_only": 62,
-        "plan_only": 0,
-        "refused_no_scale": 0,
-        "refused_no_text": 0,
-        "ambiguous": 0
-      },
-      "sample": [
-        "CV-AHU-M1-CHW",
-        "CV-CRAH-M1A-CHW",
-        "CV-CRAH-M1B-CHW",
-        "CV-CRAH-M2A-CHW",
-        "CV-CRAH-M2B-CHW"
+    "uh_estimate_if_all_use_template": 66,
+    "uh_gap_vs_one_printed_template": 60,
+    "fcu_qty": 42,
+    "fcu_cooling_template_rows": 9,
+    "fcu_heat_cool_template_rows": 11,
+    "fcu_estimate": null,
+    "fcu_status": "HONEST_REFUSE",
+    "fcu_detail": "Two FCU DDC templates (cooling-only 9 pts, heat+cool 11 pts) but HVAC compile has no coil-type split \u2014 cannot multiply 42 FCUs without inventing a split",
+    "doah_inventory_qty": 3,
+    "doah_printed_lists": 1,
+    "doah_gap_note": "Inventory DOAH_UNIT=3 but only POINTS LIST DOAH-T1 printed \u2014 other DOAHs may share template or lack lists; do not invent",
+    "ahu_inventory_qty": 5,
+    "ahu_printed_lists": 1,
+    "estimate_vs_printed_gap_report": {
+      "printed_truth_rows": 122,
+      "labeled_adders_disclosed": [
+        "UH template\u00d7qty gap +60 if all UH/CUH use 6-pt template"
       ],
-      "extra": [],
-      "missing": []
-    },
-    "hhw": {
-      "name": "HHW_CONTROL_VALVE",
-      "rows": 99,
-      "key": 99,
-      "compile": 99,
-      "summary": {
-        "total": 99,
-        "match": 1,
-        "schedule_only": 98,
-        "plan_only": 0,
-        "refused_no_scale": 0,
-        "refused_no_text": 0,
-        "ambiguous": 0
-      },
-      "sample": [
-        "CV-CUH-A1-HHW",
-        "CV-HHW-BP-A1",
-        "CV-DOAH-A1-HHW",
-        "CV-DOAH-A2-HHW",
-        "CV-FCU-A1-HHW"
-      ],
-      "extra": [],
-      "missing": []
+      "refused_adders": [
+        "FCU template\u00d7qty",
+        "SOO-derived points",
+        "unlisted DOAH/AHU template multiply without evidence"
+      ]
     }
   },
-  "served_equipment_plan_paint": [
-    "DOAH-T1",
-    "AHU-T1A",
-    "AHU-T1B"
-  ],
+  "valves": {
+    "CHW_CONTROL_VALVE": {
+      "compile_key": 64,
+      "reconcile_rows": 64,
+      "match": 2,
+      "schedule_only": 62,
+      "identity": "VALVE MARK",
+      "note": "CV-* marks mostly SCHEDULE_ONLY (not plan text)"
+    },
+    "HHW_CONTROL_VALVE": {
+      "compile_key": 99,
+      "reconcile_rows": 99,
+      "match": 1,
+      "schedule_only": 98,
+      "identity": "VALVE MARK",
+      "note": "Fixed UNIT MARK false identity; counts match key"
+    }
+  },
+  "served_equipment_plan_paint": {
+    "MATCH": [
+      "DOAH-T1",
+      "AHU-T1A",
+      "AHU-T1B"
+    ],
+    "status": "PARTIAL \u2014 unit-titled lists only"
+  },
   "open_before_lock": [
-    "Pipeline GT test asserting this harness",
-    "FCU coil-type split or permanent refuse documented in key",
-    "Confirm DOAH units beyond T1 vs single printed list",
-    "Valve MATCH/SCHEDULE_ONLY counts coordinator-verified on drawings after VALVE MARK identity fix"
+    "Pipeline lock for VALVE MARK identity + served_equipment paint regressions (plumbing)",
+    "FCU coil-type split extractable OR permanent refuse accepted in locked key notes",
+    "DOAH/AHU units beyond titled lists: disclose SCHEDULE_ONLY / missing list",
+    "Coordinator drawing spot-check of CHW/HHW SCHEDULE_ONLY ceiling",
+    "Same estimator depth on remaining BAS-keyed sets before claiming any set done"
   ],
   "notes": [
     "2026-09-01: schedulePlanReconcile rowIdentityTag prefers VALVE MARK / identityHeaderRe over UNIT MARK (HHW was keying CUH-A1 instead of CV-CUH-A1-HHW)."
