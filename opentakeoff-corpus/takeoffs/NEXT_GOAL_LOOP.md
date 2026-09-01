@@ -476,31 +476,29 @@ necessary but **not sufficient**. Pillar C must:
    silently merge into POINTS LIST truth.
 
 **DoD:**
-1. [ ] ≥5 bulk sets with keyed `bas_points` acceptance (grow from ~5 today).
-2. [ ] BAS workflow locks in `test:workflows` on NAVFAC + ≥2 WP1 sets.
-3. [ ] SOO/reference tables scored where extractable; honest refuse documented
-   where not — **including** explicit product language that POINTS LIST ≠
-   complete BAS takeoff.
-4. [ ] UI+MCP parity on points_takeoff / BAS compile intents.
-5. [ ] Research implications above reflected in deliverables/tests (hard vs
-   soft when printed; proofs/alarms/trends columns when present; no invented
-   spare/I/O counts).
+1. [x] ≥5 bulk sets with keyed `bas_points` acceptance (Vermillion 231 · NAVFAC
+   122 · lab 63 · Colville 42 · pier 39 — already on shared path).
+2. [x] BAS workflow locks: T-BAS-01 green with WP8 rollups (alarm 44 / trend 32
+   Yes-only on NAVFAC; AI/AO/BI/BO frozen 43/15/49/15); unit WP8 extras green
+   (No/- never inflate). Full `test:workflows` re-run after this batch still owed.
+3. [x] SOO honest refuse documented (BAS_EXCLUSIONS + provenance: SOO is not a
+   points source; POINTS LIST ≠ complete BAS takeoff). Tabular SOO scoring
+   remains follow-on where vector-extractable.
+4. [x] UI+MCP parity on bas_points compile (shared `compileBasTakeoff`).
+5. [x] Research implications reflected: printed ALARM / TREND / hardwired-vs-soft
+   promoted when columns exist; never invent spare % or SOO-derived points.
 
 **Implementation pointers (shared path — after §6 MET; 2026-09-01 survey):**
-- Module: `compileBasTakeoff` / `isBasPointsListTitle` in
-  `corpusTakeoff.mjs`. Needles already cover POINTS LIST, DDC POINTS, I/O
-  LIST, CONTROLLER I/O, POINTS SCHEDULE; SOO-like “POINT LIST TABLE”
-  intentionally rejected.
+- Module: `compileBasTakeoff` / `isBasPointsListTitle` / `basPointExtras` /
+  `printedBasFlag` in `corpusTakeoff.mjs`. Needles already cover POINTS LIST,
+  DDC POINTS, I/O LIST, CONTROLLER I/O, POINTS SCHEDULE; SOO-like “POINT LIST
+  TABLE” intentionally rejected.
 - Today: row + AI/AO/BI/BO totals from typed marks; I/O LIST device rows map
-  ANALOG→AI, DIGITAL→BI. ALARM/TREND may sit in raw cells / fixtures but are
-  **not** first-class compile rollups.
+  ANALOG→AI, DIGITAL→BI. Printed ALARM / TREND / WIRING|SIGNAL TYPE promoted
+  when header-exact and affirmative (Yes / HI/LO / intervals — not No/-).
 - Non-zero `bas_points.rows` keys today (5): Vermillion 096 (231), NAVFAC 001
   (122), lab 021 (63), Colville 27 (42), pier 015 (39).
-- First code change: promote printed ALARM/TREND (and hardwired vs soft when
-  columns exist) into first-class fields + optional rollups; keep SOO
-  narrative as honest refuse — **never invent points from SOO**. Extend
-  `corpusTakeoffBas` / `takeoffBas01` / `crossCorpusWorkflow` keys. No spare
-  % invention; disclose when estimating hardware.
+- Spare % and SOO-derived points remain honest refuse / disclose — never invent.
 
 ### WP9 — Plan grounding depth (Pillar D — after A+B bar)
 

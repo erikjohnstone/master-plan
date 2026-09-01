@@ -14,12 +14,17 @@ test("T-BAS-01 compiler matches frozen truth quantities and cites", async () => 
   const { graph, session } = await loadFixtureSession(CORPUS, TAKEOFF);
   const result = compileCorpusTakeoff(session, graph, "bas_points");
 
+  // Frozen AI/AO/BI/BO + WP8 affirmative ALARM/TREND rollups (Yes only; No/- ignored).
   assert.deepEqual(result.categories.points_lists.totals, {
     rows: 122,
     AI: 43,
     AO: 15,
     BI: 49,
     BO: 15,
+    alarm: 44,
+    trend: 32,
+    hardwired: 0,
+    soft: 0,
   });
   assert.equal(result.categories.points_lists.lists.length, 5);
   assert.equal(result.page_accounting.pages_accounted_for, 75);

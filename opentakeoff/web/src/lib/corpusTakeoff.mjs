@@ -84,6 +84,50 @@ function scheduleAttrs(row) {
 }
 
 /**
+ * Printed ALARM/TREND cells often say "No" / "-" for every row. Only promote
+ * affirmative / configured values — never treat a negation as an alarm/trend.
+ */
+export function printedBasFlag(raw) {
+  const s = String(raw ?? "").trim();
+  if (!s) return null;
+  if (/^(?:N|NO|NONE|NIL|FALSE|0|-|—|–|n\/?a)$/i.test(s)) return null;
+  return s;
+}
+
+/**
+ * First-class BAS point extras when the source table prints them (WP8).
+ * Never invent alarms/trends/hard-vs-soft — only promote printed columns.
+ * Header match is exact (ALARM / TREND / TREND LOG) so DESCRIPTION free-text
+ * and compound headers do not inflate rollups.
+ * @returns {{ alarm: string|null, trend: string|null, wiring: "hardwired"|"soft"|null }}
+ */
+export function basPointExtras(row) {
+  const alarm = printedBasFlag(cellText(row, /^\s*ALARMS?\s*$/i));
+  const trend = printedBasFlag(cellText(row, /^\s*TREND(?:\s*LOG)?S?\s*$/i));
+  // Hardwired vs soft/supervisory — only when the sheet distinguishes them.
+  // Do not scan POINT TYPE (usually AI/AO/BI/BO) or free-text DESCRIPTION.
+  const wiringRaw = (
+    cellText(row, /^\s*WIRING\s*$/i)
+    || cellText(row, /^\s*SIGNAL\s*TYPE\s*$/i)
+    || cellText(row, /^\s*(?:HARD\s*WIRED|HARDWIRED|CONNECTION)\s*$/i)
+    || ""
+  ).trim();
+  let wiring = null;
+  if (wiringRaw && !/^(?:N|NO|NONE|-|—|–|n\/?a)$/i.test(wiringRaw)) {
+    if (/\bHARD\s*WIRED\b|\bHARDWIRED\b|\bDISCRETE\b|\bFIELD\s*I\s*\/?\s*O\b/i.test(wiringRaw)) {
+      wiring = "hardwired";
+    } else if (/\bBACnet\b|\bMODBUS\b|\bSOFT\b|\bINTEGRATED\b|\bSUPERVISORY\b|\bNETWORK\b|\bSOFTWARE\b/i.test(wiringRaw)) {
+      wiring = "soft";
+    }
+  }
+  return {
+    alarm,
+    trend,
+    wiring,
+  };
+}
+
+/**
  * Building code from equipment / unit tags (set-agnostic): letter immediately
  * before digits in a hyphen segment (AHU-A1 → A, FCU-T12 → T), or a trailing
  * single letter (CV-CHW-BP-A → A). Not a project name map — callers display
@@ -765,6 +809,7 @@ export const HVAC_EXCLUSIONS = [
 export const BAS_EXCLUSIONS = [
   "Title-only schematic points lists (non-extractable typed rows)",
   "HVAC equipment schedules (counted under T-HVAC-01)",
+  "Sequence-of-operations / narrative controls text (not a typed points table — honest refuse, never invent points from SOO)",
 ];
 
 /**
@@ -873,6 +918,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     const title = String(table.title?.text || "");
     if (!isBasPointsListTitle(title)) continue;
     const counts = { AI: 0, AO: 0, BI: 0, BO: 0, other: 0 };
+    const extras = { alarm: 0, trend: 0, hardwired: 0, soft: 0 };
     const items = [];
     for (const row of table.rows || []) {
       const tag = String(row.key || "").trim();
@@ -896,6 +942,11 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
         }
       }
       const { cells, description } = scheduleAttrs(row);
+      const pointExtras = basPointExtras(row);
+      if (pointExtras.alarm) extras.alarm += 1;
+      if (pointExtras.trend) extras.trend += 1;
+      if (pointExtras.wiring === "hardwired") extras.hardwired += 1;
+      if (pointExtras.wiring === "soft") extras.soft += 1;
       const tableBbox = Array.isArray(table.title?.bbox) && table.title.bbox.length === 4
         ? table.title.bbox
         : (Array.isArray(table.region) && table.region.length === 4 ? table.region : null);
@@ -909,6 +960,9 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
         table_bbox_px: tableBbox,
         description: description || cellText(row, /DESCRIPTION/i) || null,
         cells,
+        alarm: pointExtras.alarm,
+        trend: pointExtras.trend,
+        wiring: pointExtras.wiring,
       });
     }
     // Empty after header skip → title-only schematic; disclose via exclusions, do not count.
@@ -921,6 +975,10 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       AO: counts.AO,
       BI: counts.BI,
       BO: counts.BO,
+      alarm: extras.alarm,
+      trend: extras.trend,
+      hardwired: extras.hardwired,
+      soft: extras.soft,
       items,
     });
   }
@@ -932,8 +990,12 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       AO: acc.AO + l.AO,
       BI: acc.BI + l.BI,
       BO: acc.BO + l.BO,
+      alarm: acc.alarm + (l.alarm || 0),
+      trend: acc.trend + (l.trend || 0),
+      hardwired: acc.hardwired + (l.hardwired || 0),
+      soft: acc.soft + (l.soft || 0),
     }),
-    { rows: 0, AI: 0, AO: 0, BI: 0, BO: 0 },
+    { rows: 0, AI: 0, AO: 0, BI: 0, BO: 0, alarm: 0, trend: 0, hardwired: 0, soft: 0 },
   );
 
   const pages = sheets.map((sheet) => {
@@ -958,7 +1020,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     sheet_count: sheets.length,
     categories: {
       points_lists: {
-        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO from MARK prefixes when present; on I/O LIST device rows without MARK prefixes, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); column-label rows skipped; title-only schematic lists excluded and disclosed.",
+        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO from MARK prefixes when present; on I/O LIST device rows without MARK prefixes, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present (never invented); column-label rows skipped; title-only schematic lists excluded and disclosed. Sequence-of-operations narratives are not a points source.",
         tolerance: { count: 0, point_type: 0 },
         lists,
         totals,
@@ -971,6 +1033,10 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       AO: totals.AO,
       BI: totals.BI,
       BO: totals.BO,
+      alarm: totals.alarm,
+      trend: totals.trend,
+      hardwired: totals.hardwired,
+      soft: totals.soft,
     },
     page_accounting: {
       sheet_count: sheets.length,

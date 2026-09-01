@@ -408,7 +408,7 @@ UI+MCP parity, no corpus hardcodes.
 |---|---|---|
 | **A — Cross-set compile** | Vol1 + Vol2 (82/82 INDEX) schedule compile | **§6 MET** — 82/82 Vol2 + Vol1 keys; soft titles + sibling-exclusion; T-HVAC-01/T-BAS-01 green; honest WEAK/ZERO stable |
 | **B — Reconcile** | Schedule↔plan with contractor columns+cites | **§6 MET** — on `main`; NAVFAC + Vol1/Vol2 bulk locks; Agent UI proof; WORKFLOWS **#51 ON_MAIN**; full `test:workflows` **104/104** |
-| **C — Valve + BAS depth** | Air/water valves, dampers, actuators; BAS points, I/O, SOO | **WP7 in progress** — `control_valves` expanded beyond CHW+HHW (dampers/ISO/PRV/lab-air); actuator columns when printed; MCP parity. WP8 next. T-BAS-01 122 ≠ complete BAS takeoff |
+| **C — Valve + BAS depth** | Air/water valves, dampers, actuators; BAS points, I/O, SOO | **WP7+WP8 shared path** — `control_valves` beyond CHW+HHW; `basPointExtras` promotes printed ALARM/TREND/wiring (Yes-only; NAVFAC alarm 44 / trend 32); SOO refuse; T-BAS-01 122 ≠ complete BAS takeoff |
 | **D — Grounding depth** | Symbol counts highlighted and accurate on plan | **Queued** — WP9 after C impl bar |
 
 Authority: `GOAL.md` · `takeoffs/NEXT_GOAL_LOOP.md`.
@@ -430,7 +430,7 @@ Honest ceilings retained (not score-chased): Klamath FC/HP/DOAS SCHEDULE_ONLY un
 
 ### Next queue (platform loop)
 
-1. **Pillar C / WP8:** Promote ALARM/TREND (+ hard vs soft when printed) in `compileBasTakeoff`; grow ≥5 BAS bulk keys; never invent SOO-derived points. Finish damper reconcile locks for WP7.2.
+1. **Pillar C finish:** Full `test:workflows` after WP7+WP8; damper reconcile locks (WP7.2); tabular SOO only when vector-extractable.
 2. **Pillar D:** WP9 highlight-accuracy proofs for symbol counts.
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.

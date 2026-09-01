@@ -100,6 +100,59 @@ describe("compileBasTakeoff I/O LIST", () => {
     assert.equal(bas.totals.BO, 1);
   });
 
+  it("promotes printed ALARM / TREND / hardwired-vs-soft columns (WP8); never invents them", () => {
+    const graph = {
+      sheets: [{ key: "set.pdf#8", number: 8 }],
+      tables: [
+        {
+          sheet: "set.pdf#8",
+          title: { text: "POINTS LIST AHU-2", bbox: [0, 0, 10, 10] },
+          rows: [
+            {
+              key: "AI10",
+              cells: {
+                DESCRIPTION: { text: "SA TEMP ALARM SENSOR" },
+                ALARM: { text: "HI/LO" },
+                TREND: { text: "15 MIN" },
+                WIRING: { text: "HARDWIRED" },
+              },
+            },
+            {
+              key: "AO01",
+              cells: {
+                DESCRIPTION: { text: "CHW VALVE" },
+                "SIGNAL TYPE": { text: "BACnet" },
+                ALARM: { text: "No" },
+                TREND: { text: "-" },
+              },
+            },
+            {
+              key: "BI03",
+              cells: { DESCRIPTION: { text: "SF STATUS" } },
+            },
+          ],
+        },
+      ],
+    };
+    const bas = compileBasTakeoff(null, graph);
+    assert.equal(bas.totals.rows, 3);
+    assert.equal(bas.totals.alarm, 1);
+    assert.equal(bas.totals.trend, 1);
+    assert.equal(bas.totals.hardwired, 1);
+    assert.equal(bas.totals.soft, 1);
+    const ai10 = bas.categories.points_lists.lists[0].items.find((i) => i.tag === "AI10");
+    assert.equal(ai10.alarm, "HI/LO");
+    assert.equal(ai10.trend, "15 MIN");
+    assert.equal(ai10.wiring, "hardwired");
+    const ao01 = bas.categories.points_lists.lists[0].items.find((i) => i.tag === "AO01");
+    assert.equal(ao01.wiring, "soft");
+    assert.equal(ao01.alarm, null);
+    assert.equal(ao01.trend, null);
+    const bi03 = bas.categories.points_lists.lists[0].items.find((i) => i.tag === "BI03");
+    assert.equal(bi03.wiring, null);
+    assert.ok(bas.exclusions.some((e) => /sequence-of-operations/i.test(e)));
+  });
+
   it("does not invent a list from a title-only schematic with no data rows", () => {
     const graph = {
       sheets: [{ key: "set.pdf#3", number: 3 }],
