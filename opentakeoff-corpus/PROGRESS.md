@@ -1,6 +1,20 @@
 ## Active work
 
-### Pillar C WIDTH complete — corpus material map closed (2026-09-01 20:50 UTC)
+### Pillar C DEPTH phase started — full plan-paint sweeps (2026-09-01 21:00 UTC)
+
+**Width closed → depth uses material map.** Full target sweeps (not 8-tag samples); GT drafts patched with `depth_plan_paint_full`; still **0 gt_locked**.
+
+| Depth batch | Sets | Full-sweep highlights | Artifact |
+|---|---|---|---|
+| **Keyed BAS** | **5/5** | 001 **116/120** MATCH; 015 **22/29**; 021 **0/73** honest SO; 096 **59/75**; 027 **45/64** | `/opt/cursor/artifacts/pillar-c-depth-bas-keyed-plan-paint.json` |
+| **Valve printed** | **11/11** | Pier **34/36** MATCH; Carson **2/2**; NAVFAC **2/80**; full targets not 12-tag sample | `/opt/cursor/artifacts/pillar-c-depth-valve-plan-paint.json` |
+| **bas:0 inventory batch 1** | **20/59** | **18/20 with MATCH** (SDSU, Eglin, Ames, Orange County, …) | `/opt/cursor/artifacts/pillar-c-depth-bas-inventory-batch1.json` |
+
+- **Script:** `opentakeoff/mcp/scripts/pillarCDepthPlanPaint.mjs` — full sweep + GT draft patch on shared path.
+- **Remaining depth:** bas:0 inventory batches 2–3 (~39 sets), 70 valve zero floors, SOO/gap/GT lock per set.
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
+
+### Prior — WIDTH complete (2026-09-01 20:50 UTC)
 
 **Order:** width = material (corpus truth map); depth = platform proof on that map. Width phase closed before any GT locks.
 
