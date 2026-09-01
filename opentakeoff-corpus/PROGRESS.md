@@ -408,7 +408,7 @@ UI+MCP parity, no corpus hardcodes.
 |---|---|---|
 | **A — Cross-set compile** | Vol1 + Vol2 (82/82 INDEX) schedule compile | **§6 MET** — 82/82 Vol2 + Vol1 keys; soft titles + sibling-exclusion; T-HVAC-01/T-BAS-01 green; honest WEAK/ZERO stable |
 | **B — Reconcile** | Schedule↔plan with contractor columns+cites | **§6 MET** — on `main`; NAVFAC + Vol1/Vol2 bulk locks; Agent UI proof; WORKFLOWS **#51 ON_MAIN**; full `test:workflows` **104/104** |
-| **C — Estimator takeoff + plan paint** | Points takeoffs (real method) + valves/dampers/actuators; every line plan-grounded with highlights | **In progress** — WP7/WP8 compile depth landed; **next = points↔equipment↔plan highlight core** (same depth valves/dampers). T-BAS-01 122 ≠ complete points takeoff |
+| **C — Estimator takeoff + plan paint** | Points takeoffs (real method) + valves/dampers/actuators; every line plan-grounded with highlights | **Not done** — WP7/WP8 printed-list plumbing only (alarm/trend, served_equipment join, workflow paint gate). Still owed: equipment inventory → SOO/I/O model → typed points (+ estimate path) → GT harness → plan paint on ≥3 sets. T-BAS-01 122 ≠ complete points takeoff |
 | **D — Symbol-count grounding** | Symbol counts highlighted and accurate on plan | **Queued** — WP9 after C takeoff+paint bar |
 
 Authority: `GOAL.md` · `takeoffs/NEXT_GOAL_LOOP.md`.
@@ -430,7 +430,7 @@ Honest ceilings retained (not score-chased): Klamath FC/HP/DOAS SCHEDULE_ONLY un
 
 ### Next queue (platform loop)
 
-1. **Pillar C (reframed):** Estimator-grade **points takeoff** + **valve/damper/actuator** takeoffs with **visible plan highlights** on served equipment — not POINTS LIST scrape alone. Full `test:workflows` after WP7+WP8 still in flight; then ship shared-path point↔equip↔plan paint locks.
+1. **Pillar C (real estimator bar):** Not list scrape. Inventory equipment from schedules → SOO/controls model where extractable → typed points takeoff (printed lists + labeled qty×points/unit estimate) → gap/spare disclose → **GT harness** on ≥3 sets → plan-ground every served unit/valve/damper with highlights. Full `test:workflows` after WP8 still in flight; plan-paint scaffold is evidence scaffolding only, not C done.
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.

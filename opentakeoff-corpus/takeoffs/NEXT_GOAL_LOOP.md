@@ -485,13 +485,15 @@ necessary but **not sufficient**. Pillar C must:
    points/unit) only as an explicitly labeled *estimate* with sources — never
    silently merge into POINTS LIST truth.
 
-**DoD:**
+**DoD (plumbing vs estimator product — do not conflate):**
+
+*Printed-list plumbing (necessary, not sufficient):*
 1. [x] ≥5 bulk sets with keyed `bas_points` acceptance (Vermillion 231 · NAVFAC
    122 · lab 63 · Colville 42 · pier 39 — already on shared path).
 2. [x] BAS workflow locks: T-BAS-01 green with WP8 rollups (alarm 44 / trend 32
    Yes-only on NAVFAC; AI/AO/BI/BO frozen 43/15/49/15); unit WP8 extras green
    (No/- never inflate). Five bulk keys lock optional alarm/trend/hardwired/soft.
-   Full `test:workflows` re-run after this batch still owed (~23 min in flight).
+   Full `test:workflows` re-run after WP8 batch still in flight (coordinator).
 3. [x] SOO honest refuse documented (BAS_EXCLUSIONS + provenance: SOO is not a
    points source; POINTS LIST ≠ complete BAS takeoff). Tabular SOO scoring
    remains follow-on where vector-extractable.
@@ -502,8 +504,23 @@ necessary but **not sufficient**. Pillar C must:
    I/O device keys, or POINTS LIST title unit token — never invented); unit lock.
 7. [x] `corpus_bas` / `corpus_valves` workflows require plan sweep/reconcile +
    highlight before answer (estimator takeoff ≠ schedule scrape).
-8. [ ] Bulk proofs: ≥3 sets where served_equipment / valve / damper marks
-   paint on plan via shared sweep (MATCH or honest SCHEDULE_ONLY) — next.
+
+*Estimator product bar (Pillar C incomplete until these are green):*
+8. [ ] **Equipment inventory** from schedules (shared HVAC compile) on ≥3 bulk
+   sets — every served unit/device that owns points is listed with qty + cite.
+9. [ ] **SOO / controls model** where vector-extractable: required sensors,
+   commands, proofs, interlocks, alarms/trends per equipment type; honest
+   refuse when narrative-only / raster — never invent points from SOO prose.
+10. [ ] **Typed points takeoff** = printed POINTS/I/O lists **plus** labeled
+    schedule/SOO-derived *estimate* path (qty × points/unit) with sources;
+    gap report vs printed lists; spare % disclosed as policy note only.
+11. [ ] **Ground-truth harness** on ≥3 sets: hand-verified (or key-locked)
+    expected equipment inventory + typed point rollups + plan-grounding
+    outcomes; scorer compares product output to that harness — not “122 rows
+    matched the POINTS LIST scrape.”
+12. [ ] Bulk plan paint: ≥3 sets where served_equipment / valve / damper marks
+    paint on plan via shared sweep (MATCH or honest SCHEDULE_ONLY) with
+    visible cites — same depth for valves/dampers/actuators.
 
 **Implementation pointers (shared path — after §6 MET; 2026-09-01 survey):**
 - Module: `compileBasTakeoff` / `isBasPointsListTitle` / `basPointExtras` /
