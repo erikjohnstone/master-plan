@@ -1,6 +1,20 @@
 ## Active work
 
-### Pillar C — graph preferTitle+sheet pairing clears Colville AMBIGUOUS (2026-09-01 19:00 UTC)
+### Pillar C — inventory wave 3 + valve plan-paint census locks (2026-09-01 20:25 UTC)
+
+- **Inventory plan-paint wave 3 (15 bas:0 sets):** **12/15 with MATCH** on 8-tag samples. Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave3.json`. Running total **36 inventory sets** censused (waves 1–3).
+- **Valve plan-paint sweep batch (11 keyed sets):** **6/11 with MATCH** on up-to-12-tag samples via `sweepBasServedMark` + schedule `table_title` prefer hints. Artifact: `/opt/cursor/artifacts/pillar-c-valve-plan-paint-census-sweep-batch.json`.
+- **Regression locks:** `valvePlanPaint.regression.test.mjs` — Carson **2/2 MATCH**, SDSU **≥8 MATCH**, NAVFAC **≥1 MATCH** (3/3 green).
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
+
+### Prior — plan_paint targets keep served marks + inventory wave 2 census (2026-09-01 20:15 UTC)
+
+- **Shared path fix:** `buildBasEstimatorProduct.plan_paint.targets` dedupes by `source::tag::title` (inventory no longer blocks served_equipment rows) and **prioritizes all served_equipment targets** before inventory samples in the 120-cap.
+- **Regression locks:** `basServedEquipmentPlanPaint.test.mjs` now sweeps full plan_paint target lists on keyed BAS sets — 001 **116/120 MATCH**, 015 **19/26**, 096 **59/75**, 027 **32/51 + 0 AMBIGUOUS**, 021 honest **0 MATCH / 29 SCHEDULE_ONLY** (5/5 green).
+- **Inventory plan-paint wave 2 (12 bas:0 sets):** **9/12 with MATCH** on 8-tag samples (NIST 6/6, Hurlburt 8/8, Reid 8/8, …). Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave2.json`.
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
+
+### Prior — graph preferTitle+sheet pairing clears Colville AMBIGUOUS (2026-09-01 19:00 UTC)
 
 - **Root cause:** inventory `sheet_id` pointed at blank reference table (#13) while graph-resolved `prefer_schedule_title` was `EQUIPMENT SCHEDULE` on #37 — mismatched preferSheet+preferTitle kept 11 tags AMBIGUOUS.
 - **Fix:** `planPaintPreferHint()` pairs graph-resolved title with owning sheet via `preferScheduleHintForEquipmentTag()`; never pairs graph title with wrong inventory sheet.
