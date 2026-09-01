@@ -9,7 +9,9 @@
     "typecheck": "turbo run typecheck",
     "test:shared-path": "turbo run test:shared-path",
     "test:workflows": "turbo run test:workflows",
-    "eval": "node scripts/eval.mjs"
+    "eval": "node scripts/eval.mjs",
+    "emit:corpus": "node --import tsx mcp/scripts/emit-corpus-takeoff.mjs --corpus ../opentakeoff-corpus --out out --resume",
+    "eval:corpus": "node eval/runCorpusEval.mjs ../opentakeoff-corpus --out out"
   },
   "devDependencies": {
     "turbo": "^2.5.4"
