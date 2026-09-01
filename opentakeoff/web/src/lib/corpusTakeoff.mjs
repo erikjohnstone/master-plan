@@ -114,6 +114,9 @@ export function normalizeEquipMark(raw) {
   // Glued forms when parentheses were dropped: NACC-2, NATUK1, NAHU-1.
   const glued = t.match(/^N((?:AHU|ATU|ACC|FCU|VAV|RTU|CU|EF|SF|RF|DOAS|ERV)[\s\-A-Z0-9].*)$/i);
   if (glued) t = glued[1];
+  // Building letter + space before equip mark (boiler-plant "B GV-7"). Require
+  // a ≥2-letter family token so "G 2 CFM" still reaches the trailer strip below.
+  t = t.replace(/^[A-Za-z]\s+(?=[A-Za-z]{2,8}[\s\-]?\d)/, "");
   // SYMBOL cells often append size/CFM/room: "G-2 CFM", "R-1 30x6", "EH-1 TOILET 135".
   // Keep the leading mark when a space-separated trailer remains (Baker GRD).
   // Do NOT strip comma/slash compounds ("AHU-1, HP-1") — callers split those later.
@@ -451,7 +454,13 @@ export const HVAC_FAMILY_SPECS = {
     // Require separator after CH so blank-title CHECK:/CHP-* junk is not stolen.
     keyRe: /^(?:CH[\s\-]|HRC)/i,
   },
-  BOILER: { titleRe: /BOILER/i, exclude: /POINTS\s*LIST|DDC\s+POINTS/i, keyRe: /^(?:B[\s\-]|BOILER)/i },
+  // Prefer "...BOILER SCHEDULE" over bare /BOILER/ so "BOILER PLANT · ISOLATION
+  // VALVE SCHEDULE" and pump boards do not claim B-* / "B GV-*" plant marks.
+  BOILER: {
+    titleRe: /BOILER\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC\s+POINTS|FUEL\s+OIL\s+PUMP|PUMP\s+SCHEDULE/i,
+    keyRe: /^(?:B[\s\-]|BOILER)/i,
+  },
   // Titled pump schedules keep every equipment row (IWP/HWRP/…). blankKeyRe
   // only — claims HWP/CP/… from bare EQUIPMENT/MISC catch-all + blank titles
   // without filtering titled PUMP SCHEDULE rows. PUPSCHEDULE = common OCR miss.
@@ -640,29 +649,39 @@ export const HVAC_FAMILY_SPECS = {
   },
   // Motorized OA/RA control dampers on dedicated CONTROL DAMPER schedules.
   // keyRe drops building-only marks (Carson B1 on the same table as OA1/OA2).
-  // altTitleRe: MOTORIZED DAMPER SCHEDULE + MD-* (pier / utility sets).
+  // Primary: CONTROL DAMPER SCHEDULE + OA/RA/EA/SA (Carson). Alt: MOTORIZED
+  // DAMPER SCHEDULE — MD-* plus other *D equipment marks (JED/PED/MAD/MOD),
+  // not OA/RA (those stay on the primary keyRe only).
   CONTROL_DAMPER: {
     titleRe: /CONTROL\s+DAMPER\s+SCHEDULE/i,
     altTitleRe: /MOTORIZED\s+DAMPER\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC|FIRE\s+DAMPER|SMOKE\s+DAMPER|FUME\s+HOOD/i,
     keyRe: /^(?:OA|RA|EA|SA)[\s\-]?\d/i,
-    altKeyRe: /^MD[\s\-]/i,
+    altKeyRe: /^[A-Z]{1,3}D[\s\-]?\d/i,
   },
-  // Bare VALVE SCHEDULE + VLV-* isolation marks (not CHW/HHW control valves —
-  // those stay on CHW_CONTROL_VALVE / HHW_CONTROL_VALVE with V-CHW / V-HHW).
+  // Isolation / gate / ball / shutoff on dedicated ISOLATION VALVE or bare
+  // VALVE SCHEDULE. Not CHW/HHW control valves (V-CHW / V-HHW stay on
+  // CHW_CONTROL_VALVE / HHW_CONTROL_VALVE via altKeyRe).
   ISOLATION_VALVE: {
     titleRe: /ISOLATION\s+VALVE\s+SCHEDULE/i,
     altTitleRe: /^(?:\(N\)\s*)?VALVE\s+SCHEDULE\b/i,
-    exclude: /CONTROL\s+VALVE|POINTS\s*LIST|DDC|PRESSURE\s+REDUC|MIXING|BYPASS/i,
-    keyRe: /^VLV[\s\-]/i,
+    exclude: /CONTROL\s+VALVE|POINTS\s*LIST|DDC|PRESSURE\s+REDUC|MIXING|BYPASS|SAFETY/i,
+    keyRe: /^(?:VLV|IV|ISO|GV|BV)[\s\-]/i,
     titledOnly: true,
   },
   PRESSURE_REDUCING_VALVE: {
     titleRe: /PRESSURE\s+REDUC(?:ING|TION)\s+VALVE\s+SCHEDULE/i,
     // Compact steam-station captions (SDSU "STEAM PRV" / bare PRV SCHEDULE).
     altTitleRe: /\bSTEAM\s+PRV\b|\bPRV\s+SCHEDULE\b/i,
-    exclude: /POINTS\s*LIST|DDC|FLASH\s+TANK/i,
+    exclude: /POINTS\s*LIST|DDC|FLASH\s+TANK|SAFETY/i,
     keyRe: /^PRV[\s\-]/i,
+    titledOnly: true,
+  },
+  // Steam/plant PSV schedules — distinct from PRV (do not collapse).
+  PRESSURE_SAFETY_VALVE: {
+    titleRe: /(?:STEAM\s+)?PRESSURE\s+SAFETY\s+VALVE\s+SCHEDULE|SAFETY\s+RELIEF\s+VALVE\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC|PRESSURE\s+REDUC/i,
+    keyRe: /^PSV[\s\-]/i,
     titledOnly: true,
   },
   MIXING_VALVE: {

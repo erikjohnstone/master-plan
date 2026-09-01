@@ -759,6 +759,27 @@ test("Vol2 main boilers 044: plant schedules honest SCHEDULE_ONLY", async (t) =>
   await assertFamilyStatusCounts(session, graph, key, "PUMP", {
     schedule_only: 8,
   }, { rows: 8 });
+  // Gate / isolation valves + steam PSVs are schedule-only (plant marks not plan text).
+  await assertFamilyStatusCounts(session, graph, key, "ISOLATION_VALVE", {
+    schedule_only: key.categories.ISOLATION_VALVE,
+  });
+  await assertFamilyStatusCounts(session, graph, key, "PRESSURE_SAFETY_VALVE", {
+    schedule_only: key.categories.PRESSURE_SAFETY_VALVE,
+  });
+});
+
+test("Vol2 Vermillion Jail 096: motorized dampers 12 MATCH / 12 SCHEDULE_ONLY", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  assert.equal(key.categories.CONTROL_DAMPER, 24);
+  await assertFamilyStatusCounts(session, graph, key, "CONTROL_DAMPER", {
+    match: 12,
+    schedule_only: 12,
+  });
 });
 
 test("Vol2 APHIS plant 009: AHU/ACC/pump/fan MATCH; UH 4/5", async (t) => {

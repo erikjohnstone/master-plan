@@ -135,6 +135,9 @@ test("normalizeEquipMark strips (N)/(E) drawing revision prefixes", () => {
   assert.equal(normalizeEquipMark("NACC-2"), "ACC-2");
   assert.equal(normalizeEquipMark("NATUK1"), "ATUK1");
   assert.equal(normalizeEquipMark("AHU-1"), "AHU-1");
+  // Building letter + space before equip mark (VA boiler plant "B GV-7").
+  assert.equal(normalizeEquipMark("B GV-7"), "GV-7");
+  assert.equal(normalizeEquipMark("A AHU-1"), "AHU-1");
   assert.ok(HVAC_FAMILY_SPECS.CONDENSING_UNIT.blankKeyRe!.test("ACC-2"));
   assert.ok(HVAC_FAMILY_SPECS.VAV.keyRe!.test("ATUK1"));
 });
@@ -663,6 +666,30 @@ test("MOTORIZED DAMPER + isolation/PRV/mixing valve titled compile", () => {
     true,
   );
   assert.ok(HVAC_FAMILY_SPECS.CONTROL_DAMPER.altKeyRe!.test("MD-1"));
+  assert.ok(HVAC_FAMILY_SPECS.CONTROL_DAMPER.altKeyRe!.test("JED-1-1"));
+  assert.ok(HVAC_FAMILY_SPECS.CONTROL_DAMPER.altKeyRe!.test("PED-2-1"));
+  assert.ok(!HVAC_FAMILY_SPECS.CONTROL_DAMPER.altKeyRe!.test("OA1"));
+  assert.ok(HVAC_FAMILY_SPECS.ISOLATION_VALVE.keyRe!.test("VLV-1"));
+  assert.ok(HVAC_FAMILY_SPECS.ISOLATION_VALVE.keyRe!.test("GV-1"));
+  assert.ok(HVAC_FAMILY_SPECS.ISOLATION_VALVE.keyRe!.test("IV-2"));
+  assert.ok(!HVAC_FAMILY_SPECS.ISOLATION_VALVE.keyRe!.test("V-CHW-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "BOILER PLANT · ISOLATION VALVE SCHEDULE",
+      HVAC_FAMILY_SPECS.ISOLATION_VALVE.titleRe,
+      HVAC_FAMILY_SPECS.ISOLATION_VALVE.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "STEAM PRESSURE SAFETY VALVE SCHEDULE",
+      HVAC_FAMILY_SPECS.PRESSURE_SAFETY_VALVE.titleRe,
+      HVAC_FAMILY_SPECS.PRESSURE_SAFETY_VALVE.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.PRESSURE_SAFETY_VALVE.keyRe!.test("PSV-1"));
   assert.equal(
     scheduleTitleMatches(
       "VALVE SCHEDULE",
@@ -728,6 +755,8 @@ test("MOTORIZED DAMPER + isolation/PRV/mixing valve titled compile", () => {
         rows: [
           { key: "MD-1", cells: { MARK: { text: "MD-1" } } },
           { key: "MD-2", cells: { MARK: { text: "MD-2" } } },
+          { key: "JED-1-1", cells: { MARK: { text: "JED-1-1" } } },
+          { key: "PED-2-1", cells: { MARK: { text: "PED-2-1" } } },
           { key: "OA1", cells: { MARK: { text: "OA1" } } },
         ],
       },
@@ -739,6 +768,16 @@ test("MOTORIZED DAMPER + isolation/PRV/mixing valve titled compile", () => {
           { key: "VLV-1", cells: { MARK: { text: "VLV-1" } } },
           { key: "VLV-2", cells: { MARK: { text: "VLV-2" } } },
           { key: "V-CHW-1", cells: { MARK: { text: "V-CHW-1" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#2b",
+        title: { text: "BOILER PLANT · ISOLATION VALVE SCHEDULE" },
+        rows: [
+          { key: "GV-1", cells: { MARK: { text: "GV-1" } } },
+          { key: "GV-2", cells: { MARK: { text: "GV-2" } } },
+          { key: "NOTES", cells: { MARK: { text: "NOTES" } } },
         ],
       },
       {
@@ -762,6 +801,16 @@ test("MOTORIZED DAMPER + isolation/PRV/mixing valve titled compile", () => {
       },
       {
         kind: "equipment",
+        sheet: "m.pdf#3c",
+        title: { text: "STEAM PRESSURE SAFETY VALVE SCHEDULE" },
+        rows: [
+          { key: "PSV-1", cells: { MARK: { text: "PSV-1" } } },
+          { key: "PSV-2", cells: { MARK: { text: "PSV-2" } } },
+          { key: "NOTES", cells: { MARK: { text: "NOTES" } } },
+        ],
+      },
+      {
+        kind: "equipment",
         sheet: "m.pdf#4",
         title: { text: "MIXING VALVE SCHEDULE" },
         rows: [
@@ -772,15 +821,15 @@ test("MOTORIZED DAMPER + isolation/PRV/mixing valve titled compile", () => {
     ],
   };
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.CONTROL_DAMPER.count, 2);
+  assert.equal(hvac.categories.CONTROL_DAMPER.count, 4);
   assert.deepEqual(
     hvac.categories.CONTROL_DAMPER.items.map((i) => i.tag).sort(),
-    ["MD-1", "MD-2"],
+    ["JED-1-1", "MD-1", "MD-2", "PED-2-1"],
   );
-  assert.equal(hvac.categories.ISOLATION_VALVE.count, 2);
+  assert.equal(hvac.categories.ISOLATION_VALVE.count, 4);
   assert.deepEqual(
     hvac.categories.ISOLATION_VALVE.items.map((i) => i.tag).sort(),
-    ["VLV-1", "VLV-2"],
+    ["GV-1", "GV-2", "VLV-1", "VLV-2"],
   );
   // Bare VALVE SCHEDULE + V-CHW still belongs to CHW control valves, not isolation.
   assert.equal(hvac.categories.CHW_CONTROL_VALVE.count, 1);
@@ -788,6 +837,11 @@ test("MOTORIZED DAMPER + isolation/PRV/mixing valve titled compile", () => {
   assert.deepEqual(
     hvac.categories.PRESSURE_REDUCING_VALVE.items.map((i) => i.tag).sort(),
     ["PRV-1", "PRV-1A", "PRV-1B", "PRV-2A"],
+  );
+  assert.equal(hvac.categories.PRESSURE_SAFETY_VALVE.count, 2);
+  assert.deepEqual(
+    hvac.categories.PRESSURE_SAFETY_VALVE.items.map((i) => i.tag).sort(),
+    ["PSV-1", "PSV-2"],
   );
   assert.equal(hvac.categories.MIXING_VALVE.count, 2);
 });

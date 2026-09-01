@@ -19,10 +19,11 @@
     "GLYCOL_MAKEUP": 1,
     "GRD": 9,
     "DUCT_SILENCER": 6,
-    "LOUVER": 8
+    "LOUVER": 8,
+    "CONTROL_DAMPER": 24
   },
   "totals": {
-    "items": 131
+    "items": 155
   },
   "bas_points": {
     "rows": 231

@@ -2,18 +2,20 @@
   "set_id": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 main boilers \u2014 fire-tube boilers + plant pumps/fans/UH/louvers + FHX heat exchangers.",
+  "notes": "[MEAT] Vol2 main boilers \u2014 fire-tube boilers + plant pumps/fans/UH/louvers + FHX heat exchangers; BOILER 4 (was inflated by B GV-* on plant isolation schedule).",
   "categories": {
     "CONDENSING_UNIT": 1,
-    "BOILER": 5,
+    "BOILER": 4,
     "PUMP": 9,
     "FAN": 7,
     "UNIT_HEATER": 3,
     "LOUVER": 3,
-    "HEAT_EXCHANGER": 2
+    "HEAT_EXCHANGER": 2,
+    "ISOLATION_VALVE": 8,
+    "PRESSURE_SAFETY_VALVE": 4
   },
   "totals": {
-    "items": 30
+    "items": 41
   },
   "bas_points": {
     "rows": 0

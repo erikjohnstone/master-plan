@@ -396,6 +396,7 @@ reconcile, and plan joins.
 - **Pillar B locks on new damper/valve families:** pier **015** CONTROL_DAMPER 21/21 MATCH · ISOLATION_VALVE 13 MATCH / 2 SO; sterile **040** PRV honest SO; FL airport **089** MIXING_VALVE 1 MATCH / 1 SO; lab **021** PRV honest SO. Focused reconcile locks green. `test:workflows` **97/97** after 021 PRV key fix (2026-09-01). Full `reconcileWorkflow` **86/86** with new locks.
 - **Pillar B WEAK leftover SO ceilings:** unlocked thin WEAK sets **066**/ **033**/ **067**/ **078**/ **013** locked as honest SCHEDULE_ONLY (HP/humidifier/GRD, AHU/pump, HX/GRD, FAN, VFD). No false MATCH inflation.
 - **Pillar A/B — STEAM PRV compact titles (shared path):** `PRESSURE_REDUCING_VALVE` altTitleRe `STEAM PRV` / `PRV SCHEDULE` (excludes FLASH TANK). SDSU **11** 208→210 (+2 PRV-1A/1B); reconcile **2/2 MATCH**. Unit + T-VALVE/BAS/HVAC-01 green.
+- **Pillar A/B — motorized *D dampers + plant isolation/PSV (shared path):** `CONTROL_DAMPER` altKeyRe `/^[A-Z]{1,3}D[\s\-]?\d/i` (JED/PED/MD on MOTORIZED DAMPER SCHEDULE; OA/RA stay primary-only); `ISOLATION_VALVE` keyRe adds `IV|ISO|GV|BV`; new `PRESSURE_SAFETY_VALVE` (`PSV-*`); `normalizeEquipMark` strips building-letter `"B GV-7"`; `BOILER` titleRe tightened to `BOILER SCHEDULE` (stops plant isolation false-claim). Key lifts: Vermillion **096** 131→155 (+24 CONTROL_DAMPER; reconcile 12 MATCH / 12 SO); main boilers **044** 30→41 (+8 ISOLATION honest SO, +4 PSV honest SO; BOILER 5→4 honest). Pier **015** unchanged. Unit + T-VALVE/BAS/HVAC-01 + focused reconcile green.
 
 ### Active goal (platform loop)
 
@@ -415,7 +416,7 @@ Authority: `GOAL.md` §8 · `takeoffs/NEXT_GOAL_LOOP.md`.
 ### Next queue (platform loop)
 
 1. **Pillar B / §6 judgment:** Vol2 + Vol1 plant reconcile dense (incl. Las Vegas CUP **04**, Colville **27** pumps/fans, WEAK MATCH leftovers). Klamath FC/HP/DOAS remain honest SO.
-2. **Pillar A tail:** WEAK→MEAT only when probe finds new extractable schedules (23 WEAK + 27 ZERO stable; BAS drift 0). Damper/isolation/PRV/mixing families compile on pier/sterile/airport MEAT keys; compact `STEAM PRV` titles on SDSU **11**.
+2. **Pillar A tail:** WEAK→MEAT only when probe finds new extractable schedules (23 WEAK + 27 ZERO stable; BAS drift 0). Damper/isolation/PRV/mixing/PSV families compile on pier/sterile/airport/jail/plant MEAT keys; compact `STEAM PRV` titles on SDSU **11**.
 3. **Merge branch stack → `main`** when A+B §6 metrics met; WORKFLOWS #51 ON_MAIN.
 4. **Pillar C (after A+B):** WP7 valve/damper/actuator depth + WP8 BAS points/SOO
    — grow from 4/82 Vol2 BAS rows and ~3/82 valve rows.
