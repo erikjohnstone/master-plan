@@ -570,8 +570,8 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
             "sweep_schedule_row", "reconcile_schedule_plan",
           ],
           nextMove: intent === "corpus_bas"
-            ? "From the bas_points compile, query_table { row_key } on typed points and note served_equipment (or I/O device tags). Then sweep_schedule_row / reconcile_schedule_plan so those units paint on plan. Highlight schedule cells + plan hits."
-            : "From the control_valves compile, query_table { row_key } on valve/damper MARKs. Then sweep_schedule_row / reconcile_schedule_plan so installed tags paint on plan. Highlight schedule cells + plan hits.",
+            ? "From the bas_points compile, query_table { row_key } on typed points and note served_equipment (or I/O device tags). Then sweep_schedule_row / reconcile_schedule_plan so those units paint on plan — when grounding HVAC inventory marks that share a building letter across schedules, pass prefer_schedule_title from the item's table_title. Highlight schedule cells + plan hits."
+            : "From the control_valves compile, query_table { row_key } on valve/damper MARKs. Then sweep_schedule_row / reconcile_schedule_plan so installed tags paint on plan — pass prefer_schedule_title when the same MARK appears on multiple valve/damper schedules. Highlight schedule cells + plan hits.",
           blockReason: null,
         };
       }
@@ -583,8 +583,8 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
             "query_table", "highlight_citation",
           ],
           nextMove: intent === "corpus_bas"
-            ? "Call sweep_schedule_row (or reconcile_schedule_plan) on served_equipment / device tags from the compile so plan locations paint. highlight_citation on schedule cells and plan hits. A POINTS LIST total without plan paint is not a finished points takeoff."
-            : "Call sweep_schedule_row (or reconcile_schedule_plan) on valve/damper MARKs from the compile so plan locations paint. highlight_citation on schedule + plan. Contractor valve takeoff needs plan grounding when tags are drawable.",
+            ? "Call sweep_schedule_row (or reconcile_schedule_plan) on served_equipment / device tags from the compile so plan locations paint. For inventory marks with a known table_title, pass prefer_schedule_title so cross-schedule building letters resolve (Carson-style) — never invent plan qty. highlight_citation on schedule cells and plan hits. A POINTS LIST total without plan paint is not a finished points takeoff."
+            : "Call sweep_schedule_row (or reconcile_schedule_plan) on valve/damper MARKs from the compile so plan locations paint. Pass prefer_schedule_title when MARK collides across schedules. highlight_citation on schedule + plan. Contractor valve takeoff needs plan grounding when tags are drawable.",
           blockReason: null,
         };
       }
