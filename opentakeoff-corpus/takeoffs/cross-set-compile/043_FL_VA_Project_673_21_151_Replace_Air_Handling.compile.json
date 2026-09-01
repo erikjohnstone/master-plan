@@ -1,0 +1,17 @@
+{
+  "set_id": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/043_FL_VA_Project_673_21_151_Replace_Air_Handling.pdf",
+  "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/043_FL_VA_Project_673_21_151_Replace_Air_Handling",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 multipart FL VA AHU replace \u2014 no extractable HVAC schedule tables (rejoined).",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

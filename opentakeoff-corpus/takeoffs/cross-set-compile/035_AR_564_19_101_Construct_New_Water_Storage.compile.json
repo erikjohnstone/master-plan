@@ -1,0 +1,19 @@
+{
+  "set_id": "035_AR_564_19_101_Construct_New_Water_Storage",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/035_AR_564_19_101_Construct_New_Water_Storage.pdf",
+  "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/035_AR_564_19_101_Construct_New_Water_Storage",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 multipart AR water storage \u2014 louver only (rejoined).",
+  "categories": {
+    "LOUVER": 1
+  },
+  "totals": {
+    "items": 1
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

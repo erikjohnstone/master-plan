@@ -385,11 +385,13 @@ reconcile, and plan joins.
 - **Vol2 batch-5 intake (shared path):** `DUCT_MOUNTED_COIL` accepts `ELECTRIC DUCT COIL` + `DH-*`. Locked **12** more Vol2 keys (1 MEAT / 5 WEAK / 6 ZERO) including Miller dining **14** + Renne Library **11**. Vol2 keyed total **56**/82.
 - **Warehouse HX recovery:** titled HEAT_EXCHANGER blankKeyRe path recovers WHSE-HX* — warehouse key **89→91**. HEAT_PUMP title still matches Baker-shaped `ENERGY RECOVERY … (WITH HEAT PUMP)` so outdoor HP-* halves compile; keyRe keeps ERU-* on ERV.
 - **Vol2 batch-6 intake (shared path):** Locked remaining **13** single-file INDEX sets (2 MEAT / 4 WEAK / 7 ZERO) including Town Offices **12** + Vermillion Jail **131** HVAC / **231** BAS. Vol2 keyed total **69**/82 (all single-file INDEX sets keyed; **13** multipart rejoins remain).
+- **044 HX recovery:** titled HEAT_EXCHANGER recovers FHX-* — main-boilers key **28→30**.
+- **Vol2 batch-7 intake (shared path):** Ran `REJOIN_full_sets.sh` (qpdf); locked **11**/13 multipart rejoins (3 MEAT / 5 WEAK / 3 ZERO) including chiller upgrade **32**, NY EHRM **18**, Jonesboro VRF **24**; LBNL honest ZERO (311 sheets). Workflow `graphForKey` prefers `_rejoined/` then merges `source_parts_dir`. Vol2 keyed total **82**/82 (all 13 multipart rejoins keyed, incl. PHX **64** + FL airport **20**).
 
 ### Next queue (platform loop)
 
-1. **Vol2 full-volume Pillar A (active):** batches 1–6 keyed (**69**/82). Next:
-   multipart INDEX rejoins (13 folders). Rubric: `takeoffs/VOL2_INTAKE.md`.
+1. **Vol2 full-volume Pillar A (active):** batches 1–7 keyed (**82**/82). Next:
+   Vol2 INDEX complete (**82**/82); deepen Pillar B reconcile on MEAT rejoins. Rubric: `takeoffs/VOL2_INTAKE.md`.
    Co-equal **Pillar B** stays gated by `test:workflows` (T-VALVE-01 N=5,
    reconcile locks, prefer-schedule / inline motif).
 2. Merge branch stack → `main`; WORKFLOWS #51 ON_MAIN.

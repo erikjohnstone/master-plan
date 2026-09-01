@@ -5,7 +5,7 @@
  * Uses the sheet-graph cache so multi-set coverage stays fast when warm.
  */
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -56,6 +56,31 @@ async function graphForPdf(pdfPath, setId) {
     compute: async () => {
       const session = new Session();
       await session.loadPlan(pdfPath);
+      return session.graphForPipeline();
+    },
+  });
+}
+
+/** Prefer rejoined PDF; else merge source_parts_dir pages (Vol2 multipart). */
+async function graphForKey(key) {
+  const primary = resolve(CORPUS, key.source_file);
+  if (existsSync(primary)) return graphForPdf(primary, key.set_id);
+  const partsDir = key.source_parts_dir
+    ? resolve(CORPUS, key.source_parts_dir)
+    : null;
+  if (!partsDir || !existsSync(partsDir)) return null;
+  const parts = readdirSync(partsDir)
+    .filter((f) => f.endsWith(".pdf"))
+    .sort();
+  if (!parts.length) return null;
+  return cachedSheetGraph(partsDir, {
+    identity: [key.set_id, "cross-corpus-parts", String(parts.length)],
+    compute: async () => {
+      const session = new Session();
+      await session.loadPlan(resolve(partsDir, parts[0]));
+      for (let i = 1; i < parts.length; i++) {
+        await session.loadPlan(resolve(partsDir, parts[i]), { merge: true });
+      }
       return session.graphForPipeline();
     },
   });
@@ -227,19 +252,35 @@ test("WP1 keyed compile acceptance on ≥2 non-NAVFAC sets", async () => {
     "095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC.compile.json",
     "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.compile.json",
     "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.compile.json",
+    // Vol2 batch-7 — multipart rejoins (prefer _rejoined/; else merge parts).
+    "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.compile.json",
+    "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.compile.json",
+    "032_PA_Construct_EHRM_Infrastructure_Upgrades.compile.json",
+    "033_MN_VA_Project_656_18_301_Construct_Replace.compile.json",
+    "035_AR_564_19_101_Construct_New_Water_Storage.compile.json",
+    "037_AR_VA_Project_598_19_118_Replace_21_Air_Handling.compile.json",
+    "038_NC_VA_Project_637_22_700_EHRM_Infrastructure.compile.json",
+    "043_FL_VA_Project_673_21_151_Replace_Air_Handling.compile.json",
+    "058_CA_Lawrence_Berkeley_National_Laboratory_Building.compile.json",
+    "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.compile.json",
+    "089_FL_Airport_Terminal_and_Hangar_Development.compile.json",
+    "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.compile.json",
+    "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.compile.json",
   ];
   let scored = 0;
   for (const file of keys) {
     const keyPath = resolve(CROSS, file);
     assert.ok(existsSync(keyPath), `missing acceptance key ${file}`);
     const key = JSON.parse(readFileSync(keyPath, "utf8"));
-    const pdf = resolve(CORPUS, key.source_file);
-    if (!existsSync(pdf)) {
-      console.log(`skip ${key.set_id} — PDF not present at ${key.source_file}`);
+    const graph = await graphForKey(key);
+    if (!graph) {
+      console.log(
+        `skip ${key.set_id} — no rejoined PDF at ${key.source_file}` +
+          (key.source_parts_dir ? ` and no parts at ${key.source_parts_dir}` : ""),
+      );
       continue;
     }
     scored += 1;
-    const graph = await graphForPdf(pdf, key.set_id);
     const hvac = compileCorpusTakeoff(null, graph, "hvac_equipment");
     const bas = compileCorpusTakeoff(null, graph, "bas_points");
     const valve = compileCorpusTakeoff(null, graph, "control_valves");

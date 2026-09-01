@@ -1,0 +1,17 @@
+{
+  "set_id": "038_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/038_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf",
+  "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/038_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 multipart NC VA EHRM \u2014 no extractable HVAC schedule tables (rejoined).",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

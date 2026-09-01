@@ -1,0 +1,22 @@
+{
+  "set_id": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf",
+  "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 multipart chiller upgrade \u2014 ACC + CT + pumps/VFDs (rejoined).",
+  "categories": {
+    "AIR_COOLED_CHILLER": 3,
+    "PUMP": 13,
+    "COOLING_TOWER": 3,
+    "VARIABLE_FREQUENCY_DRIVE": 13
+  },
+  "totals": {
+    "items": 32
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "set_id": "032_PA_Construct_EHRM_Infrastructure_Upgrades",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf",
+  "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/032_PA_Construct_EHRM_Infrastructure_Upgrades",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 multipart PA EHRM \u2014 single pump schedule hit (rejoined).",
+  "categories": {
+    "PUMP": 1
+  },
+  "totals": {
+    "items": 1
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

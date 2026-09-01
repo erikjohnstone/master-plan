@@ -1,0 +1,17 @@
+{
+  "set_id": "058_CA_Lawrence_Berkeley_National_Laboratory_Building",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/058_CA_Lawrence_Berkeley_National_Laboratory_Building.pdf",
+  "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/058_CA_Lawrence_Berkeley_National_Laboratory_Building",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 multipart LBNL building \u2014 311 sheets / thin tables, no HVAC schedule compile (rejoined).",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

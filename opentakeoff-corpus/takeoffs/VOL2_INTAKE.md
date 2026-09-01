@@ -167,3 +167,21 @@ Probe → keys only (no new family wideners required):
 Warehouse titled HX recovery also bumps **031** key **89→91** (WHSE-HX*).
 Vol2 keyed total **69**/82 — all single-file INDEX sets keyed; **13** multipart
 rejoins remain.
+
+
+## Batch 7 — multipart rejoins (11/13)
+
+`REJOIN_full_sets.sh` → `_rejoined/*.pdf`, then shared Session+ODL compile:
+
+| Set | Tier | HVAC | Notes |
+|---|---|---:|---|
+| 012 MO chiller upgrade | MEAT | 32 | ACC+CT+pumps/VFDs |
+| 030 NY VA EHRM | MEAT | 18 | FCU/pumps/GRD |
+| 093 Jonesboro HP | MEAT | 24 | VRF indoor/outdoor |
+| 032 / 033 / 035 / 037 / 098 | WEAK | 1–9 | thin schedule hits |
+| 088 Phoenix Sky Harbor | MEAT | 64 | dense HVAC schedules |
+| 089 FL airport terminal/hangar | MEAT | 20 | DOAS/FCU/HP/louvers |
+| 038 / 043 / 058 LBNL | ZERO | 0 | honest empty (LBNL 311 sheets) |
+
+Acceptance keys point at `_rejoined/` with `source_parts_dir` fallback merge.
+Vol2 keyed total **82**/82 — all **13** multipart rejoins keyed (PHX **64**, FL airport **20**).
