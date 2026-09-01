@@ -4,6 +4,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  basEstimatorStatus,
   compileBasTakeoff,
   isBasPointsListTitle,
   ocrFixEquipMark,
@@ -26,7 +27,53 @@ describe("isBasPointsListTitle", () => {
     assert.equal(isBasPointsListTitle("AHU-1 POINT LIST TABLE"), false);
     assert.equal(isBasPointsListTitle("FAN SCHEDULE"), false);
     assert.equal(isBasPointsListTitle("RADIO LIST"), false);
+    // Northport-shaped system I/O matrix (SYSTEM/INDICATION/ALARM/CONTROL) —
+    // not a typed POINTS/DDC list; accepting it would invent fake BAS rows.
+    assert.equal(isBasPointsListTitle("INPUT/OUTPUT SUMMARY"), false);
+    assert.equal(isBasPointsListTitle("INPUT OUTPUT SUMMARY"), false);
     assert.equal(isBasPointsListTitle(""), false);
+  });
+});
+
+describe("basEstimatorStatus", () => {
+  it("always marks estimator incomplete; refuse_not_done means unfinished work", () => {
+    const status = basEstimatorStatus({
+      lists: [{
+        items: [
+          { tag: "AI01", served_equipment: "AHU-1" },
+          { tag: "AO01" },
+        ],
+      }],
+      totals: { rows: 2 },
+      sheets: [{ key: "s#1" }],
+    });
+    assert.equal(status.estimator_complete, false);
+    assert.equal(status.gt_locked, false);
+    assert.match(status.meaning, /refuse_not_done/);
+    assert.equal(status.printed_lists, "partial_printed_only");
+    assert.equal(status.served_equipment.with_join, 1);
+    assert.equal(status.served_equipment.without_join, 1);
+    const byGate = Object.fromEntries(status.gates.map((g) => [g.gate, g.status]));
+    assert.equal(byGate.printed_points_lists, "open");
+    assert.equal(byGate.soo_derived_points, "refuse_not_done");
+    assert.equal(byGate.spare_io_capacity, "refuse_not_done");
+    assert.equal(byGate.gt_lock, "refuse_not_done");
+  });
+
+  it("compileBasTakeoff attaches estimator_status (printed lists ≠ Pillar C done)", () => {
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#1", number: 1 }],
+      tables: [{
+        sheet: "set.pdf#1",
+        title: { text: "POINTS LIST AHU-1", bbox: [0, 0, 10, 10] },
+        rows: [
+          { key: "AI01", cells: { DESCRIPTION: { text: "SA TEMP" }, UNIT: { text: "AHU-1" } } },
+        ],
+      }],
+    });
+    assert.equal(bas.estimator_status.estimator_complete, false);
+    assert.equal(bas.estimator_status.gt_locked, false);
+    assert.ok(bas.estimator_status.gates.some((g) => g.status === "refuse_not_done"));
   });
 });
 

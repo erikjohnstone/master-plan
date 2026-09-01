@@ -364,6 +364,38 @@ test("rowsFromCompiledTakeoff: BAS points lists → POINT TYPE rows", () => {
   assert.ok(rows.some((r) => r.tag === "AI1" && r.field === "WIRING" && r.value === "hardwired"));
 });
 
+test("rowsFromCompiledTakeoff: BAS estimator_status refuse_not_done is not 'done'", () => {
+  const rows = rowsFromCompiledTakeoff({
+    takeoff_id: "T-BAS-01",
+    kind: "bas_points",
+    estimator_status: {
+      estimator_complete: false,
+      gt_locked: false,
+      meaning: "refuse_not_done = unfinished Pillar C work, not a locked success/ceiling",
+      gates: [
+        { gate: "printed_points_lists", status: "open", note: "plumbing only" },
+        { gate: "soo_derived_points", status: "refuse_not_done", note: "SOO refuse — not complete" },
+        { gate: "gt_lock", status: "refuse_not_done", note: "GT not locked" },
+      ],
+    },
+    categories: {
+      points_lists: {
+        lists: [{
+          title: "POINTS LIST AHU-1",
+          sheet_id: "c#1",
+          rows: 1,
+          items: [{ tag: "AI1", quantity: 1, sheet_id: "c#1", table_title: "POINTS LIST AHU-1" }],
+        }],
+        totals: { rows: 1, AI: 1, AO: 0, BI: 0, BO: 0 },
+      },
+    },
+  });
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "estimator_complete" && /NO/.test(String(r.value))));
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "refuse:soo_derived_points" && r.value === "refuse_not_done"));
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "refuse:gt_lock"));
+  assert.ok(!rows.some((r) => r.tag === "BAS_ESTIMATOR" && /printed_points_lists/.test(String(r.field))));
+});
+
 test("compileAgentTakeoff: repeating BAS marks across lists stay separate lines", () => {
   // Same AI1 on two points lists must not collapse — MCP compile totals 122,
   // Takeoff UI must show 122 lines (shared corpusTakeoff identity).

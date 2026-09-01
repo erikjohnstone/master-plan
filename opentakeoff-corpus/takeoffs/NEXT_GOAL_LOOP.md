@@ -497,9 +497,10 @@ necessary but **not sufficient**. Pillar C must:
 - Surface **hard vs soft** when drawings distinguish them; never invent soft
   BACnet counts from schedules without evidence.
 - Prefer **equipment↔point↔location** joins when drawable; disclose schematic-only.
-- Document **honest ceiling**: a complete commercial BAS takeoff may require
-  SOO+schedule-derived I/O that PDFs don’t fully tabulate — do not score-chase
-  by hallucinating points; prefer disclosed gaps + spare-policy notes.
+- Document **where we refuse (not done)**: a complete commercial BAS takeoff may
+  require SOO+schedule-derived I/O that PDFs don’t fully tabulate — do not
+  score-chase by hallucinating points; prefer disclosed gaps + spare-policy
+  notes. Refuse/stop is unfinished work, never a locked success metric.
 
 **Ship (shared path):**
 1. Deepen `bas_points` extraction: POINTS LIST, I/O LIST, DDC CONTROLLER
@@ -604,7 +605,7 @@ legend honesty gates exist; this WP makes grounding the primary product bar.
    paints within measured tolerance.
 2. [ ] ≥3 bulk sets with locked count/reconcile grounding proofs.
 3. [ ] `test:workflows` + UI parity test on at least one count ask.
-4. [ ] Documented honest ceilings (exploded text, raster) — no silent misses.
+4. [ ] Documented refuse/stops (exploded text, raster) — unfinished work, no silent misses.
 
 ---
 

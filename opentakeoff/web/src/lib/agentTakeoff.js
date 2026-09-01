@@ -342,11 +342,30 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
   }
 
   if (compiled.kind === "bas_points" || compiled.categories?.points_lists) {
+    // Pillar C: surface refuse_not_done gates so printed POINTS ≠ "done".
+    const est = compiled.estimator_status;
+    if (est && Array.isArray(est.gates)) {
+      rows.push(makeTakeoffRow({
+        workflow, runId, tag: "BAS_ESTIMATOR", field: "estimator_complete",
+        value: est.estimator_complete ? "YES" : "NO — not Pillar C done",
+        source_tool,
+        note: est.meaning || "refuse_not_done = unfinished work, not a locked ceiling",
+      }));
+      for (const gate of est.gates) {
+        if (!gate || gate.status !== "refuse_not_done") continue;
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: "BAS_ESTIMATOR", field: `refuse:${gate.gate}`,
+          value: "refuse_not_done",
+          source_tool,
+          note: gate.note || "unfinished Pillar C work",
+        }));
+      }
+    }
     const lists = compiled.categories?.points_lists?.lists || [];
     for (const list of lists) {
       const items = Array.isArray(list.items) ? list.items : [];
       for (const item of items) {
-        const tag = item.tag || item.mark || null;
+        const tag = item.tag || item.mark || item.id || null;
         if (!tag) continue;
         const sheet = item.sheet_id || list.sheet_id || null;
         const table = item.table_title || list.title || null;
@@ -374,9 +393,10 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
           }));
         }
         // Pillar C contractor columns — only when the compiler promoted printed values.
-        if (item.served_equipment) {
+        const served = item.served_equipment || item.served_equipment || null;
+        if (served) {
           rows.push(makeTakeoffRow({
-            workflow, runId, tag, field: "SERVED EQUIPMENT", value: item.served_equipment,
+            workflow, runId, tag, field: "SERVED EQUIPMENT", value: served,
             sheet_id: sheet, table_title: table, column: "SERVED EQUIPMENT",
             bbox_px: item.bbox_px || null, source_tool,
             note: "plan-join key for sweep_schedule_row / reconcile",

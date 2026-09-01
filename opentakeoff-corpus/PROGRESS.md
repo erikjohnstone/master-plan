@@ -426,7 +426,9 @@ Authority: `GOAL.md` · `takeoffs/NEXT_GOAL_LOOP.md`.
 9. Fast workflow locks **12/12**.
 10. **Full `npm run test:workflows` green — 104 pass / 0 fail** (~36 min), including WP1 keyed Vol1+Vol2 compile. Log: `/opt/cursor/artifacts/workflows-full-suite.log`.
 
-Honest ceilings retained (not score-chased): Klamath FC/HP/DOAS SCHEDULE_ONLY under `evaluationFast`; WEAK/ZERO compile keys where no extractable tables; WP3.3 TG bowtie follow-on.
+**Where we refuse (not done — never a success metric):** Klamath FC/HP/DOAS
+SCHEDULE_ONLY under `evaluationFast`; WEAK/ZERO compile keys where no
+extractable tables; WP3.3 TG bowtie follow-on. Refuse/stop = unfinished work.
 
 ### Pillar C depth mandate (2026-09-01 — user)
 
@@ -503,12 +505,24 @@ CONTROL_DAMPER 2/2 MATCH. Counts matched keys; samples honest vs reconcile. Stil
 **Keyed floor status:** 5/5 BAS + 8/8 valve-only drawing-sampled · **0 locked**.
 Corpus-deep C still **0 / ~112 BAS**, **0 / ~81 valve** after key expansion.
 
+**Refuse language (2026-09-01 — user clarification):** Tables labeled “honest
+ceiling” / SCHEDULE_ONLY / SOO refuse are **unfinished work**, not locked truth.
+Prefer **“Where we refuse (not done)”**. Printed POINTS/I/O rows alone never
+mean Pillar C done. Shared-path `basEstimatorStatus` / `estimator_status` on
+every BAS compile now emits `estimator_complete: false`, `gt_locked: false`,
+and `refuse_not_done` gates (SOO points, spare I/O, proofs/interlocks beyond
+printed, GT lock). Takeoff panel surfaces `BAS_ESTIMATOR` refuse rows so UI
+cannot read a POINTS scrape as complete. Title near-miss scan: Northport bare
+`INPUT/OUTPUT SUMMARY` correctly rejected (system matrix ≠ typed points).
+**0 sets locked.**
+
 ### Next queue (platform loop)
 
 1. **Pillar C (corpus-deep):** Keyed floor drawing-sampled — **5 BAS + 8 valve-only**
-   sets; **0 locked**. Next: expand keys to every BAS- and valve-bearing set,
-   then estimator-complete (SOO/I/O/spare) + lock only with self-check + pipeline
-   GT. Post-WP8 `test:workflows` **104/104** green (plumbing only — not C done).
+   sets; **0 locked**. Refuse/stop gates = incomplete, not success. Next: expand
+   keys only when live compile finds real lists; deepen estimator (SOO/I/O/spare)
+   + lock only with self-check + pipeline GT. Post-WP8 `test:workflows` **104/104**
+   green (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.

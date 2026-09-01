@@ -913,8 +913,90 @@ export const HVAC_EXCLUSIONS = [
 export const BAS_EXCLUSIONS = [
   "Title-only schematic points lists (non-extractable typed rows)",
   "HVAC equipment schedules (counted under T-HVAC-01)",
-  "Sequence-of-operations / narrative controls text (not a typed points table — honest refuse, never invent points from SOO)",
+  "Sequence-of-operations / narrative controls text (not a typed points table — refuse / not done; never invent points from SOO)",
 ];
+
+/**
+ * Estimator-completeness disclosure for Pillar C (shared UI+MCP).
+ * Printed POINTS/I/O rows alone are never a complete commercial BAS takeoff.
+ * Each gate is open | refuse_not_done | n/a — refuse means unfinished work,
+ * not a success metric or locked ceiling.
+ *
+ * @param {{ lists: object[], totals: object, sheets: object[] }} parts
+ */
+export function basEstimatorStatus({ lists, totals, sheets }) {
+  const rowCount = totals?.rows ?? 0;
+  const listCount = lists?.length ?? 0;
+  let withServed = 0;
+  let withoutServed = 0;
+  for (const list of lists || []) {
+    for (const item of list.items || []) {
+      if (item?.served_equipment) withServed += 1;
+      else withoutServed += 1;
+    }
+  }
+  const printedLists = listCount === 0
+    ? "empty"
+    : (rowCount > 0 ? "partial_printed_only" : "title_only_excluded");
+  const open = [];
+  const refuseNotDone = [
+    {
+      gate: "soo_derived_points",
+      status: "refuse_not_done",
+      note: "SOO / sequence narratives are not a points source yet — refuse, not complete.",
+    },
+    {
+      gate: "spare_io_capacity",
+      status: "refuse_not_done",
+      note: "Spare / expansion I/O % not extracted from drawings — refuse, not complete.",
+    },
+    {
+      gate: "proofs_interlocks_alarms_trends_beyond_printed",
+      status: "refuse_not_done",
+      note: "Only printed ALARM/TREND columns are promoted; SOO proofs/interlocks remain open.",
+    },
+    {
+      gate: "gt_lock",
+      status: "refuse_not_done",
+      note: "Coordinator self-check + pipeline GT lock not granted for this compile alone.",
+    },
+  ];
+  if (printedLists === "empty") {
+    open.push({
+      gate: "extractable_points_lists",
+      status: "refuse_not_done",
+      note: "No extractable POINTS/DDC/I/O list titles on this set under current set-agnostic needles.",
+    });
+  } else {
+    open.push({
+      gate: "printed_points_lists",
+      status: "open",
+      note: `${listCount} list(s), ${rowCount} printed row(s) — necessary plumbing, not estimator-complete.`,
+    });
+  }
+  if (withoutServed > 0) {
+    open.push({
+      gate: "served_equipment_join",
+      status: "open",
+      note: `${withServed} rows with served_equipment; ${withoutServed} still unjoined — plan paint incomplete.`,
+    });
+  } else if (withServed > 0) {
+    open.push({
+      gate: "served_equipment_join",
+      status: "open",
+      note: `All ${withServed} printed rows carry served_equipment text; plan MATCH still required per unit.`,
+    });
+  }
+  return {
+    estimator_complete: false,
+    gt_locked: false,
+    meaning: "refuse_not_done = unfinished Pillar C work, not a locked success/ceiling",
+    printed_lists: printedLists,
+    sheet_count: sheets?.length ?? 0,
+    served_equipment: { with_join: withServed, without_join: withoutServed },
+    gates: [...open, ...refuseNotDone],
+  };
+}
 
 /**
  * Shared UI+MCP gate for T-BAS-01 list titles.
@@ -1118,6 +1200,8 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     };
   });
 
+  const estimator_status = basEstimatorStatus({ lists, totals, sheets });
+
   return {
     schema_version: CORPUS_TAKEOFF_VERSION,
     takeoff_id: "T-BAS-01",
@@ -1144,6 +1228,8 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       hardwired: totals.hardwired,
       soft: totals.soft,
     },
+    /** Pillar C: printed lists ≠ done. See gates with status refuse_not_done. */
+    estimator_status,
     page_accounting: {
       sheet_count: sheets.length,
       pages_accounted_for: pages.length,
