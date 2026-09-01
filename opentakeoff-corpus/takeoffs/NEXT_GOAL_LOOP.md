@@ -1,7 +1,7 @@
 # Next major goal loop — HVAC/BAS cross-set + reconcile golden
 
-**Status:** ACTIVE (Pillars A+B §6 MET; C impl in progress; D queued)  
-**Date:** 2026-08-31 (pillars C+D added 2026-09-01; C research 2026-09-01)  
+**Status:** ACTIVE (Pillars A+B §6 MET; C = estimator takeoff+plan-grounding; D queued)  
+**Date:** 2026-08-31 (pillars C+D added 2026-09-01; C research 2026-09-01; C reframed 2026-09-01)  
 **Authority:** `GOAL.md` + `WORKFLOWS.md` + live codebase + industry takeoff practice  
 
 This document is the **implementation charter**. The next `/goal` should execute
@@ -10,6 +10,14 @@ this plan — not invent a new softer one.
 **Foundation:** Trust and genuine agnostic blueprint workflows are our main
 goal and our foundation. Every pillar must stay on the shared Session+ODL path,
 set-agnostic, cite-honest, and production-ready on arbitrary uploads.
+
+**Pillar C product bar (2026-09-01 — estimator voice):** Nail the **core
+commercial takeoff workflows** the way an estimator actually works them —
+especially **points takeoffs** (SOO + equipment + hard/soft I/O + alarms/trends,
+not “scrape the POINTS LIST and call it done”), with **every served unit /
+device grounded on the plans with visible highlights**. Same depth for
+**valves, actuators, and dampers** (contractor columns + schedule↔plan paint).
+Thin compile stubs without plan grounding are not Pillar C done.
 
 ---
 
@@ -27,18 +35,19 @@ A+B success metrics (§6) are met:
 2. **Schedule↔plan reconciliation (Pillar B)** — prove scheduled tags on the
    drawings, name mismatches (`MATCH` / `SCHEDULE_ONLY` / `PLAN_ONLY` / honest
    refuse). That is the bid-critical step every serious MEP estimator runs.
-3. **Valve + BAS workflow depth (Pillar C)** — go **deep and truthful** on
-   valve takeoff workflows (air + water valves, dampers, actuators) **and** BAS
-   workflows (point lists, I/O rollups, sequence of operations,
-   equipment↔point↔location). Contractor-grade deliverables, not compile stubs.
-4. **Plan grounding depth (Pillar D)** — go **deep on grounding**: symbol
-   counts, mark sweeps, and “how many on plan” answers must be **highlighted
-   and accurate** — every cited location visible on the drawing, no
-   legend-only overclaim, no silent misses.
+3. **Estimator takeoff + plan grounding (Pillar C)** — nail **points takeoffs**
+   the way estimators run them (equipment inventory → SOO/I/O model → typed
+   points → alarms/trends/hard-vs-soft → spare disclose) **and** the same
+   depth for **valves / dampers / actuators**, with **schedule rows joined to
+   plan locations and painted highlights** on the drawings. Not compile stubs.
+4. **Symbol-count grounding depth (Pillar D)** — “how many VAVs/EFs on plan”
+   style **symbol counts** highlighted and accurate across ≥3 bulk proofs
+   (legend/schematic honesty retained). Pillar C already owns takeoff-line
+   plan paints for points/valves/dampers; D owns general symbol-count proofs.
 
 **Order:** prove the path is set-agnostic **first** (A), lock reconcile on that
-path (B), then deepen valve/BAS commercial workflows (C) and plan-grounding
-accuracy (D) — so depth cannot be NAVFAC-only theater.
+path (B), then nail estimator points/valve/damper takeoffs **with plan paints**
+(C), then broaden symbol-count highlight accuracy (D).
 
 ---
 

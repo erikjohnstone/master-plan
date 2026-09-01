@@ -367,6 +367,36 @@ test("generic point list takeoff routes to corpus_bas compile (no spot_cites dea
   assert.match(defensive.nextMove || "", /POINTS LIST|bas_points/i);
 });
 
+test("corpus_bas after compile requires plan paint on served_equipment (Pillar C)", () => {
+  const g = "Complete BAS points takeoff of this set";
+  const compiled = advanceTakeoffWorkflow("corpus_bas", [
+    { name: "sheet_graph", out: { sheets: [{ id: "M-601" }] } },
+    { name: "compile_corpus_takeoff", out: { kind: "bas_points", takeoff_id: "T-BAS-01" } },
+  ], g);
+  assert.equal(compiled.phase, "spot_cites");
+  assert.ok(compiled.allowedTools?.includes("sweep_schedule_row"));
+  assert.match(compiled.nextMove || "", /served_equipment|plan/i);
+
+  const cited = advanceTakeoffWorkflow("corpus_bas", [
+    { name: "sheet_graph", out: { sheets: [{ id: "M-601" }] } },
+    { name: "compile_corpus_takeoff", out: { kind: "bas_points", takeoff_id: "T-BAS-01" } },
+    { name: "query_table", args: { row_key: "AI01" }, out: { rows: [{ key: "AI01" }] } },
+  ], g);
+  assert.equal(cited.phase, "paint");
+  assert.ok(cited.allowedTools?.includes("sweep_schedule_row"));
+  assert.match(cited.nextMove || "", /plan paint|plan locations|finished points takeoff/i);
+
+  const grounded = advanceTakeoffWorkflow("corpus_bas", [
+    { name: "sheet_graph", out: { sheets: [{ id: "M-601" }] } },
+    { name: "compile_corpus_takeoff", out: { kind: "bas_points", takeoff_id: "T-BAS-01" } },
+    { name: "query_table", args: { row_key: "AI01" }, out: { rows: [{ key: "AI01" }] } },
+    { name: "sweep_schedule_row", out: { found: 1, sheets: [{ sheet: "M-101", matches: [{ at: [1, 2] }] }] } },
+    { name: "highlight_citation", out: { bbox_px: [0, 0, 10, 10] } },
+  ], g);
+  assert.equal(grounded.phase, "answer");
+  assert.match(grounded.nextMove || "", /served_equipment|painted plan/i);
+});
+
 test("suggestedScheduleTitles maps family words to industry schedule needles", () => {
   const ahu = suggestedScheduleTitles("How many AHUs are on the air handling schedule?");
   assert.ok(ahu.some((t) => /AIR HANDLING/i.test(t)));

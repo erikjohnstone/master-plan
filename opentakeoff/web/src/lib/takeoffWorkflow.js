@@ -559,6 +559,44 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
         blockReason: null,
       };
     }
+    // Pillar C: points / valve / damper takeoffs need plan paint on served marks —
+    // schedule scrape alone is incomplete.
+    if (intent === "corpus_bas" || intent === "corpus_valves") {
+      if (rowKeyCites < 1) {
+        return {
+          phase: "spot_cites",
+          allowedTools: [
+            "query_table", "highlight_citation", "find_text",
+            "sweep_schedule_row", "reconcile_schedule_plan",
+          ],
+          nextMove: intent === "corpus_bas"
+            ? "From the bas_points compile, query_table { row_key } on typed points and note served_equipment (or I/O device tags). Then sweep_schedule_row / reconcile_schedule_plan so those units paint on plan. Highlight schedule cells + plan hits."
+            : "From the control_valves compile, query_table { row_key } on valve/damper MARKs. Then sweep_schedule_row / reconcile_schedule_plan so installed tags paint on plan. Highlight schedule cells + plan hits.",
+          blockReason: null,
+        };
+      }
+      if (!hasSweep || paints < 1) {
+        return {
+          phase: "paint",
+          allowedTools: [
+            "sweep_schedule_row", "reconcile_schedule_plan",
+            "query_table", "highlight_citation",
+          ],
+          nextMove: intent === "corpus_bas"
+            ? "Call sweep_schedule_row (or reconcile_schedule_plan) on served_equipment / device tags from the compile so plan locations paint. highlight_citation on schedule cells and plan hits. A POINTS LIST total without plan paint is not a finished points takeoff."
+            : "Call sweep_schedule_row (or reconcile_schedule_plan) on valve/damper MARKs from the compile so plan locations paint. highlight_citation on schedule + plan. Contractor valve takeoff needs plan grounding when tags are drawable.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: intent === "corpus_bas"
+          ? "Emit the points takeoff from compile totals (AI/AO/BI/BO, alarm/trend when printed), list served_equipment joins, and cite painted plan marks. Disclose SOO/schematic-only gaps — never invent points or plan qty."
+          : "Emit the valve/damper takeoff from compile totals with contractor columns, installed plan qty from sweeps, and painted cites. Never invent plan qty.",
+        blockReason: null,
+      };
+    }
     if (rowKeyCites < 1 || paints < 1) {
       return {
         phase: paints < 1 && rowKeyCites >= 1 ? "paint" : "spot_cites",

@@ -128,6 +128,42 @@ export function basPointExtras(row) {
 }
 
 /**
+ * Served equipment for a BAS points row (Pillar C — estimator join key).
+ * Prefer printed UNIT/EQUIPMENT/SERVED columns; else I/O LIST device keys
+ * (HWP-1); else a unit token trailing "POINTS LIST …". Never invent.
+ * @returns {string|null}
+ */
+export function servedEquipmentFromBasRow(row, listTitle = "") {
+  const fromCell = (
+    cellText(row, /^\s*UNIT(?:\s*MARK|\s*TAG|\s*NO\.?)?\s*$/i)
+    || cellText(row, /^\s*EQUIP(?:MENT)?(?:\s*MARK|\s*TAG|\s*NO\.?)?\s*$/i)
+    || cellText(row, /^\s*SERVED(?:\s*(?:UNIT|EQUIP(?:MENT)?))?\s*$/i)
+    || cellText(row, /^\s*ASSOCIATED\s*EQUIP(?:MENT)?\s*$/i)
+    || ""
+  ).trim();
+  if (fromCell) return normalizeEquipMark(fromCell) || fromCell;
+
+  const tag = String(row?.key || "").trim();
+  // I/O LIST device rows: key is the equipment/device, not AI##.
+  if (tag && !/^(AI|AO|BI|BO)\d/i.test(tag) && !isBasPointsHeaderRow(tag)) {
+    return normalizeEquipMark(tag) || tag;
+  }
+
+  const title = String(listTitle || "").replace(/\s+/g, " ").trim();
+  const m = title.match(/\bPOINTS\s+LIST\s+(.+)$/i);
+  if (m) {
+    let rest = m[1].replace(/\s*(?:SCHEDULE|CONTINUATION|CONT'?D)\s*$/i, "").trim();
+    // "FCU WITH COOLING COILS DDC …" is a family caption, not a unit mark.
+    if (rest && !/^(?:WITH|FOR|AND)\b/i.test(rest) && !/\bWITH\b/i.test(rest)) {
+      // Keep first mark-like token (AHU-1 / DOAH-TI / AHU-T1A/T1B).
+      const tok = rest.match(/^([A-Z]{1,8}[\s\-]?\d*[A-Z0-9\/\-]*)/i);
+      if (tok) return normalizeEquipMark(tok[1]) || tok[1].trim();
+    }
+  }
+  return null;
+}
+
+/**
  * Building code from equipment / unit tags (set-agnostic): letter immediately
  * before digits in a hyphen segment (AHU-A1 → A, FCU-T12 → T), or a trailing
  * single letter (CV-CHW-BP-A → A). Not a project name map — callers display
@@ -943,6 +979,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       }
       const { cells, description } = scheduleAttrs(row);
       const pointExtras = basPointExtras(row);
+      const servedEquipment = servedEquipmentFromBasRow(row, title);
       if (pointExtras.alarm) extras.alarm += 1;
       if (pointExtras.trend) extras.trend += 1;
       if (pointExtras.wiring === "hardwired") extras.hardwired += 1;
@@ -963,6 +1000,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
         alarm: pointExtras.alarm,
         trend: pointExtras.trend,
         wiring: pointExtras.wiring,
+        served_equipment: servedEquipment,
       });
     }
     // Empty after header skip → title-only schematic; disclose via exclusions, do not count.
@@ -1020,7 +1058,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     sheet_count: sheets.length,
     categories: {
       points_lists: {
-        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO from MARK prefixes when present; on I/O LIST device rows without MARK prefixes, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present (never invented); column-label rows skipped; title-only schematic lists excluded and disclosed. Sequence-of-operations narratives are not a points source.",
+        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO from MARK prefixes when present; on I/O LIST device rows without MARK prefixes, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; title-only schematic lists excluded and disclosed. Sequence-of-operations narratives are not a points source.",
         tolerance: { count: 0, point_type: 0 },
         lists,
         totals,

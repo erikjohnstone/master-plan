@@ -144,13 +144,54 @@ describe("compileBasTakeoff I/O LIST", () => {
     assert.equal(ai10.alarm, "HI/LO");
     assert.equal(ai10.trend, "15 MIN");
     assert.equal(ai10.wiring, "hardwired");
+    assert.equal(ai10.served_equipment, "AHU-2");
     const ao01 = bas.categories.points_lists.lists[0].items.find((i) => i.tag === "AO01");
     assert.equal(ao01.wiring, "soft");
     assert.equal(ao01.alarm, null);
     assert.equal(ao01.trend, null);
+    assert.equal(ao01.served_equipment, "AHU-2");
     const bi03 = bas.categories.points_lists.lists[0].items.find((i) => i.tag === "BI03");
     assert.equal(bi03.wiring, null);
     assert.ok(bas.exclusions.some((e) => /sequence-of-operations/i.test(e)));
+  });
+
+  it("joins served_equipment from UNIT column, I/O device keys, and list title (Pillar C)", () => {
+    const graph = {
+      sheets: [{ key: "set.pdf#9", number: 9 }],
+      tables: [
+        {
+          sheet: "set.pdf#9",
+          title: { text: "POINTS LIST DOAH-TI", bbox: [0, 0, 10, 10] },
+          rows: [
+            {
+              key: "AI01",
+              cells: {
+                DESCRIPTION: { text: "OA TEMP" },
+                UNIT: { text: "DOAH-TI" },
+              },
+            },
+            {
+              key: "AI02",
+              cells: { DESCRIPTION: { text: "SA TEMP" } },
+            },
+          ],
+        },
+        {
+          sheet: "set.pdf#9",
+          title: { text: "I/O LIST WHITE STURGEON PLC", bbox: [0, 0, 10, 10] },
+          rows: [
+            { key: "TAG", cells: {} },
+            { key: "HWP-1", cells: { ANALOG: { text: "2" }, DIGITAL: { text: "1" } } },
+          ],
+        },
+      ],
+    };
+    const bas = compileBasTakeoff(null, graph);
+    const doah = bas.categories.points_lists.lists.find((l) => /DOAH/i.test(l.title));
+    assert.equal(doah.items.find((i) => i.tag === "AI01").served_equipment, "DOAH-TI");
+    assert.equal(doah.items.find((i) => i.tag === "AI02").served_equipment, "DOAH-TI");
+    const io = bas.categories.points_lists.lists.find((l) => /I\/O LIST/i.test(l.title));
+    assert.equal(io.items.find((i) => i.tag === "HWP-1").served_equipment, "HWP-1");
   });
 
   it("does not invent a list from a title-only schematic with no data rows", () => {

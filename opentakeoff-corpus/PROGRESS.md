@@ -408,8 +408,8 @@ UI+MCP parity, no corpus hardcodes.
 |---|---|---|
 | **A — Cross-set compile** | Vol1 + Vol2 (82/82 INDEX) schedule compile | **§6 MET** — 82/82 Vol2 + Vol1 keys; soft titles + sibling-exclusion; T-HVAC-01/T-BAS-01 green; honest WEAK/ZERO stable |
 | **B — Reconcile** | Schedule↔plan with contractor columns+cites | **§6 MET** — on `main`; NAVFAC + Vol1/Vol2 bulk locks; Agent UI proof; WORKFLOWS **#51 ON_MAIN**; full `test:workflows` **104/104** |
-| **C — Valve + BAS depth** | Air/water valves, dampers, actuators; BAS points, I/O, SOO | **WP7+WP8 shared path** — `control_valves` beyond CHW+HHW; damper reconcile aliases; `basPointExtras` Yes-only ALARM/TREND/wiring; 5 BAS keys lock alarm/trend (NAVFAC 44/32 · pier 21/32 · Vermillion 92/204 · lab/Colville 0/0); T-BAS-01 122 ≠ complete BAS takeoff |
-| **D — Grounding depth** | Symbol counts highlighted and accurate on plan | **Queued** — WP9 after C impl bar |
+| **C — Estimator takeoff + plan paint** | Points takeoffs (real method) + valves/dampers/actuators; every line plan-grounded with highlights | **In progress** — WP7/WP8 compile depth landed; **next = points↔equipment↔plan highlight core** (same depth valves/dampers). T-BAS-01 122 ≠ complete points takeoff |
+| **D — Symbol-count grounding** | Symbol counts highlighted and accurate on plan | **Queued** — WP9 after C takeoff+paint bar |
 
 Authority: `GOAL.md` · `takeoffs/NEXT_GOAL_LOOP.md`.
 
@@ -430,8 +430,8 @@ Honest ceilings retained (not score-chased): Klamath FC/HP/DOAS SCHEDULE_ONLY un
 
 ### Next queue (platform loop)
 
-1. **Pillar C finish:** Full `test:workflows` after WP7+WP8 (in flight); tabular SOO only when vector-extractable; damper reconcile already locked on pier/Vermillion HVAC path.
-2. **Pillar D:** WP9 highlight-accuracy proofs for symbol counts.
+1. **Pillar C (reframed):** Estimator-grade **points takeoff** + **valve/damper/actuator** takeoffs with **visible plan highlights** on served equipment — not POINTS LIST scrape alone. Full `test:workflows` after WP7+WP8 still in flight; then ship shared-path point↔equip↔plan paint locks.
+2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.
 
