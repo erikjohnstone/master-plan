@@ -8,9 +8,9 @@ import { HVAC_FAMILY_SPECS } from "../src/lib/corpusTakeoff.mjs";
 
 describe("Vol2 RTU packaged title", () => {
   it("matches PACKAGED EQUIPMENT SCHEDULE (RTU)", () => {
-    const { titleRe, keyRe } = HVAC_FAMILY_SPECS.RTU;
+    const { titleRe } = HVAC_FAMILY_SPECS.RTU;
     assert.equal(titleRe.test("PACKAGED EQUIPMENT SCHEDULE (RTU)"), true);
-    assert.equal(keyRe.test("RTU-101"), true);
+    assert.equal(titleRe.test("ROOFTOP UNIT SCHEDULE"), true);
   });
 });
 
