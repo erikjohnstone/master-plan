@@ -267,6 +267,11 @@ function uniqueFamily(graph, {
         if (!canon) continue;
         // Footnote / notes rows that leaked into the key column.
         if (/^NOTES?:?\d*$/i.test(canon) || /^NOTES?:?$/i.test(one.trim())) continue;
+        // Column-header labels extracted as data rows (Colville HX "MODEL"/"TAG").
+        if (isScheduleHeaderJunkMark(canon)) continue;
+        // Titled schedules with no keyRe keep set-local marks (B950A) but still
+        // require a digit so bare header words cannot inflate counts.
+        if (!catchAllFilter && !filterRe && !/\d/.test(canon)) continue;
         if (catchAllFilter) {
           const okBlank = blankKeyRe && markMatchesKeyRe(blankKeyRe, one, canon);
           const okKey = keyRe && markMatchesKeyRe(keyRe, one, canon);
@@ -737,6 +742,16 @@ export function isBasPointsListTitle(title) {
 /** Column-label rows that are not countable I/O or points marks. */
 function isBasPointsHeaderRow(tag) {
   return !tag || /^(TAG|MARK|SYMBOL|POINT|DESCRIPTION|NOTES?)$/i.test(tag);
+}
+
+/**
+ * Schedule column headers / schema labels that sometimes leak into row.key
+ * when ODL treats a header band as a data row. Not equipment marks.
+ */
+export function isScheduleHeaderJunkMark(canon) {
+  return /^(MODEL|TAG|MARK|TYPE|SYMBOL|DESCRIPTION|REMARKS?|NOTES?|SIZE|CAPACITY|MANUFACTURER|MANUF|QTY|QUANTITY|UNITS?|SERVICE|DESIGNATION|LOCATION|AREA|FLOOR|SHEET|HEADER|MIN\.?|MAX\.?)$/i.test(
+    String(canon || ""),
+  );
 }
 
 function sheetRecords(sessionOrSheets, graph) {

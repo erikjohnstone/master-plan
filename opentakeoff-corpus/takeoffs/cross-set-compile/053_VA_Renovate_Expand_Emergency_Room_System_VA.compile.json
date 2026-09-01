@@ -2,13 +2,13 @@
   "set_id": "053_VA_Renovate_Expand_Emergency_Room_System_VA",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/053_VA_Renovate_Expand_Emergency_Room_System_VA.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 VA ER expand \u2014 GRD + HHW valve schedule.",
+  "notes": "[MEAT] Vol2 VA ER expand \u2014 GRD + HHW valve schedule (38 valves); air-device CFM bands as GRD rows (no MIN. header).",
   "categories": {
     "HHW_CONTROL_VALVE": 38,
-    "GRD": 6
+    "GRD": 5
   },
   "totals": {
-    "items": 44
+    "items": 43
   },
   "bas_points": {
     "rows": 0

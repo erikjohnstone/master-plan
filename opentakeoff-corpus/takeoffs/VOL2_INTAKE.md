@@ -108,7 +108,7 @@ wideners → keys:
 
 | Set | Tier | HVAC | BAS | Notes |
 |---|---|---:|---:|---|
-| 053 VA ER expand | MEAT | 44 | 0 | GRD + HHW valve schedule (38 valves) |
+| 053 VA ER expand | MEAT | 43 | 0 | GRD CFM bands + HHW valve schedule (38 valves) |
 | 062 ITD D1 lab | MEAT | 93 | 0 | rich HVAC + lab air + 9 HHW reheat CVs |
 | 061 Ames Harley Wilhelm | MEAT | 23 | 0 | AHU/FCU/pump/fan/HX |
 | 071 ME Health Science | MEAT | 21 | 0 | VAV-heavy |

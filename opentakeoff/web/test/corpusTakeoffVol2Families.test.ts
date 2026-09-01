@@ -7,6 +7,7 @@ import { describe, it } from "node:test";
 import {
   HVAC_FAMILY_SPECS,
   markCoreForKeyRe,
+  isScheduleHeaderJunkMark,
 } from "../src/lib/corpusTakeoff.mjs";
 
 describe("Vol2 RTU packaged title", () => {
@@ -110,6 +111,13 @@ describe("Vol2 humidifier / expansion / buffer / VRF gates", () => {
     assert.equal(HVAC_FAMILY_SPECS.AIR_SEPARATOR.titleRe.test("AIR SEPARATORS"), true);
     assert.equal(HVAC_FAMILY_SPECS.AIR_SEPARATOR.keyRe.test("IAS-2-1"), true);
     assert.equal(HVAC_FAMILY_SPECS.HEAT_EXCHANGER.titleRe.test("(N) HEAT EXCHANGER SCHEDULE"), true);
+  });
+
+  it("schedule header junk marks (MODEL/TAG) are rejected; set-local HX marks kept", () => {
+    assert.equal(isScheduleHeaderJunkMark("MODEL"), true);
+    assert.equal(isScheduleHeaderJunkMark("TAG"), true);
+    assert.equal(isScheduleHeaderJunkMark("HX-1A"), false);
+    assert.equal(isScheduleHeaderJunkMark("B950A"), false);
   });
 
   it("HHW_CONTROL_VALVE altTitle claims bare VALVE SCHEDULE + V-HHW marks", () => {
