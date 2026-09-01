@@ -37,5 +37,27 @@
     "No BAS points keyed/compiled on this set (valve-only probe)",
     "Estimator contractor columns / full hand-count may remain open",
     "Pillar C corpus-deep — this set alone cannot complete C"
-  ]
+  ],
+  "valve_estimator_product": {
+    "printed_items": 38,
+    "families": [
+      "HHW_CONTROL_VALVE:38"
+    ],
+    "contractor_gaps": [
+      "Served equipment",
+      "GPM",
+      "Cv",
+      "Actuator",
+      "Fail position",
+      "Control signal"
+    ],
+    "estimator_complete": false
+  },
+  "valve_estimator_columns_verify": {
+    "at": "2026-09-01T16:30:08.708Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-053-valve-estimator-columns.json",
+    "missing_match": true,
+    "column_honesty": "7/7",
+    "gt_locked": false
+  }
 }

@@ -55,5 +55,26 @@
     "focus_n": 44,
     "soo_status_match": true,
     "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 2,
+    "families": [
+      "PRESSURE_REDUCING_VALVE:2"
+    ],
+    "contractor_gaps": [
+      "Size",
+      "Cv",
+      "Actuator",
+      "Fail position",
+      "Control signal"
+    ],
+    "estimator_complete": false
+  },
+  "valve_estimator_columns_verify": {
+    "at": "2026-09-01T16:29:52.793Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-021-valve-estimator-columns.json",
+    "missing_match": true,
+    "column_honesty": "7/7",
+    "gt_locked": false
   }
 }

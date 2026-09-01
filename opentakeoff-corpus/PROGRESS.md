@@ -554,14 +554,22 @@ sets. Method: tag on HVAC inventory, absent from POINTS list titles + printed
 Batch: `/opt/cursor/artifacts/pillar-c-estimator-gap-verify-keyed-floor.json`.
 Draft GTs patched with `estimator_product` + `estimator_gap_drawing_verify`;
 still `gt_locked: false` / `estimator_complete: false` on every set.
+
+**Valve estimator contractor-column honesty (2026-09-01, still 0 locked):**
+Recount of `normalizeControlValveCells` vs `estimator_product.contractor_column_coverage`
+on **11** keyed valve sets — **all_honest: true** (missing lists match; 7/7 columns).
+Examples: NAVFAC 001 missing only Actuator/Fail/Signal (Served/Size/GPM/Cv present);
+053 Size present; dampers/iso often missing served+size+Cv. Still
+`gt_locked: false`. Artifact:
+`/opt/cursor/artifacts/pillar-c-valve-estimator-columns-batch.json`.
 Corpus-deep C still **0 / ~112 BAS**, **0 / ~81 valve**.
 
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** Keyed BAS gap/SOO drawing-backed — **0 locked**.
-   Next: deepen estimator (tabular SOO where vector allows; valve contractor
-   columns + plan-paint census); expand keys only when live compile finds real
-   lists; lock only with self-check + pipeline GT on **every** BAS + valve set.
+1. **Pillar C (corpus-deep):** Keyed BAS gap/SOO + valve column honesty drawing-backed —
+   **0 locked**. Next: plan-paint census for valves/BAS served; tabular SOO where
+   vector allows; expand keys only when live compile finds real lists; lock only
+   with self-check + pipeline GT on **every** BAS + valve set.
    Post-WP8 `test:workflows` **104/104** green (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).

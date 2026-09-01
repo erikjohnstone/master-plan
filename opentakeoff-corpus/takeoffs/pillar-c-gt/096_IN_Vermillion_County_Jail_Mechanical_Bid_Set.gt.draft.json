@@ -377,5 +377,28 @@
     "focus_n": 60,
     "soo_status_match": true,
     "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 24,
+    "families": [
+      "CONTROL_DAMPER:24"
+    ],
+    "contractor_gaps": [
+      "Served equipment",
+      "Size",
+      "GPM",
+      "Cv",
+      "Actuator",
+      "Fail position",
+      "Control signal"
+    ],
+    "estimator_complete": false
+  },
+  "valve_estimator_columns_verify": {
+    "at": "2026-09-01T16:31:29.152Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-096-valve-estimator-columns.json",
+    "missing_match": true,
+    "column_honesty": "7/7",
+    "gt_locked": false
   }
 }

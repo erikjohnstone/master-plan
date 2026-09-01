@@ -404,5 +404,25 @@
     "focus_n": 6,
     "soo_status_match": true,
     "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 163,
+    "families": [
+      "CHW_CONTROL_VALVE:64",
+      "HHW_CONTROL_VALVE:99"
+    ],
+    "contractor_gaps": [
+      "Actuator",
+      "Fail position",
+      "Control signal"
+    ],
+    "estimator_complete": false
+  },
+  "valve_estimator_columns_verify": {
+    "at": "2026-09-01T16:29:45.267Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-001-valve-estimator-columns.json",
+    "missing_match": true,
+    "column_honesty": "7/7",
+    "gt_locked": false
   }
 }

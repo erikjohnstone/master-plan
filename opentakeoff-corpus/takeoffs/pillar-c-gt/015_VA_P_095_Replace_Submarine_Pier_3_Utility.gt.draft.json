@@ -193,5 +193,29 @@
     "focus_n": 14,
     "soo_status_match": true,
     "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 36,
+    "families": [
+      "ISOLATION_VALVE:15",
+      "CONTROL_DAMPER:21"
+    ],
+    "contractor_gaps": [
+      "Served equipment",
+      "Size",
+      "GPM",
+      "Cv",
+      "Actuator",
+      "Fail position",
+      "Control signal"
+    ],
+    "estimator_complete": false
+  },
+  "valve_estimator_columns_verify": {
+    "at": "2026-09-01T16:29:48.931Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-015-valve-estimator-columns.json",
+    "missing_match": true,
+    "column_honesty": "7/7",
+    "gt_locked": false
   }
 }

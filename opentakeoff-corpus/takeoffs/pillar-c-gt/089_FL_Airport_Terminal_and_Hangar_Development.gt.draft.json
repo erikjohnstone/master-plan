@@ -37,5 +37,27 @@
     "No BAS points keyed/compiled on this set (valve-only probe)",
     "Estimator contractor columns / full hand-count may remain open",
     "Pillar C corpus-deep — this set alone cannot complete C"
-  ]
+  ],
+  "valve_estimator_product": {
+    "printed_items": 2,
+    "families": [
+      "MIXING_VALVE:2"
+    ],
+    "contractor_gaps": [
+      "Served equipment",
+      "GPM",
+      "Cv",
+      "Actuator",
+      "Fail position",
+      "Control signal"
+    ],
+    "estimator_complete": false
+  },
+  "valve_estimator_columns_verify": {
+    "at": "2026-09-01T16:31:20.692Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-089-valve-estimator-columns.json",
+    "missing_match": true,
+    "column_honesty": "7/7",
+    "gt_locked": false
+  }
 }
