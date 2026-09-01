@@ -1,6 +1,14 @@
 ## Active work
 
-### Pillar C — served_equipment plan-paint + graph preferTitle fallback (2026-09-01 18:50 UTC)
+### Pillar C — graph preferTitle+sheet pairing clears Colville AMBIGUOUS (2026-09-01 19:00 UTC)
+
+- **Root cause:** inventory `sheet_id` pointed at blank reference table (#13) while graph-resolved `prefer_schedule_title` was `EQUIPMENT SCHEDULE` on #37 — mismatched preferSheet+preferTitle kept 11 tags AMBIGUOUS.
+- **Fix:** `planPaintPreferHint()` pairs graph-resolved title with owning sheet via `preferScheduleHintForEquipmentTag()`; never pairs graph title with wrong inventory sheet.
+- **Keyed BAS served re-census:** Colville **32 MATCH / 19 SCHEDULE_ONLY / 0 AMBIGUOUS** (was 21/19/11). Floor totals unchanged: 001 116/120, 015 19/26, 021 0/73, 096 59/75. Artifact: `/opt/cursor/artifacts/pillar-c-bas-plan-paint-preferTitle-recensus.json`.
+- **Platform tests:** web `npm test` **2098/2113 pass** (2 pre-existing unrelated fails: extractTable hyphen, mepconnectivity perf); targeted MCP regressions re-run this turn.
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
+
+### Prior — served_equipment plan-paint + graph preferTitle fallback (2026-09-01 18:50 UTC)
 
 - **Shared path:** `preferScheduleTitleForEquipmentTag()` scans graph tables when HVAC `table_title` is blank or a BAS I/O list title — resolves to owning equipment schedule (e.g. Colville HWP-1 → `EQUIPMENT SCHEDULE`, not `I/O LIST WHITE STURGEON PLC`). `buildBasEstimatorProduct.plan_paint.targets[]` now merges **inventory + unique served_equipment** marks with HVAC/graph preferTitle hints.
 - **Keyed BAS served plan-paint re-census (5 sets, `sweepBasServedMark` + product `preferTitle`):**
@@ -689,7 +697,7 @@ BAS `served_equipment` sweep with product `preferTitle` (full tag census):
 | 001 NAVFAC | 120 | **116** | 4 | 0 | partial (most units paint; 4 honest SO) |
 | 015 Pier | 26 | **19** | 7 | 0 | partial (pumps/fans largely MATCH) |
 | 021 Lab | 73 | 0 | **73** | 0 | honest SO ceiling (tags not on plans) |
-| 027 Colville | 51 | **21** | 19 | **11** | partial (11 AMBIGUOUS duplicate EQUIPMENT SCHEDULE keys) |
+| 027 Colville | 51 | **32** | 19 | **0** | partial (was 11 AMBIGUOUS — sheet pairing fix) |
 | 096 Vermillion | 75 | **59** | 16 | 0 | partial (VAV/FCU/AHU largely MATCH) |
 
 Artifact: `/opt/cursor/artifacts/pillar-c-bas-plan-paint-preferTitle-recensus.json`.

@@ -144,6 +144,34 @@ describe("basEstimatorStatus", () => {
       (t) => t.tag === "HWP-1" && /PUMP SCHEDULE/i.test(String(t.prefer_schedule_title || "")),
     ));
   });
+
+  it("plan_paint pairs graph-resolved title with owning sheet (not wrong inventory sheet)", () => {
+    const graph = {
+      sheets: [{ key: "set.pdf#13", number: 13 }, { key: "set.pdf#37", number: 37 }],
+      tables: [
+        {
+          sheet: "set.pdf#13",
+          title: { text: "", bbox: [0, 0, 10, 10] },
+          rows: [{ key: "HWP-1", cells: { TAG: { text: "HWP-1" }, EQUIPMENT: { text: "PUMP" } } }],
+        },
+        {
+          sheet: "set.pdf#37",
+          title: { text: "EQUIPMENT SCHEDULE", bbox: [0, 0, 10, 10] },
+          rows: [{ key: "HWP-1", cells: { ID: { text: "HWP-1" }, DESCRIPTION: { text: "HOT WATER PUMP" } } }],
+        },
+        {
+          sheet: "set.pdf#37",
+          title: { text: "I/O LIST WHITE STURGEON PLC", bbox: [0, 20, 10, 30] },
+          rows: [{ key: "HWP-1", cells: { COL1: { text: "HWP-1" } } }],
+        },
+      ],
+    };
+    const bas = compileBasTakeoff(null, graph);
+    const target = bas.estimator_product.plan_paint.targets.find((t) => t.tag === "HWP-1");
+    assert.ok(target, "served_equipment HWP-1 target emitted");
+    assert.match(String(target.prefer_schedule_title || ""), /EQUIPMENT SCHEDULE/i);
+    assert.equal(target.prefer_schedule_sheet, "set.pdf#37");
+  });
 });
 
 describe("isSooNarrativeTitle + detectSooPresence", () => {

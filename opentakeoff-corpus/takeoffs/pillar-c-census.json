@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-01T18:50:06Z",
+  "as_of": "2026-09-01T18:55:22Z",
   "mandate": "Pillar C done only when EVERY bas_bearing and valve_bearing set has estimator takeoff + coordinator self-check + pipeline GT corroboration",
   "counts": {
     "vol1_sets": 30,
@@ -13,7 +13,7 @@
     "gt_locked": 0
   },
   "verification_coverage": {
-    "note": "Pillar C corpus-complete mandate. Inventory floors 112/112 BAS + 81/81 valve product census. Printed POINTS scrape \u2260 done. Shared-path BAS plan_paint refuse_not_done gate + classifyBasServedSweepOutcome (SCHEDULE_ONLY / AMBIGUOUS honesty). Keyed BAS served plan-paint re-census with product preferTitle: 001 116/120 MATCH, 015 19/26, 021 0/73 honest SO, 027 21/51 + 11 AMBIGUOUS, 096 59/75. preferScheduleTitleForEquipmentTag graph fallback resolves I/O LIST titles to equipment schedules. PROOF/SPARE column headers absent on keyed probe — gates stay refuse. Still 0 estimator_complete / gt_locked.",
+    "note": "Pillar C corpus-complete mandate. Keyed BAS served plan-paint re-census with product preferTitle+sheet pairing: 001 116/120 MATCH, 015 19/26, 021 0/73 honest SO, 027 32/51 + 0 AMBIGUOUS (was 11), 096 59/75. planPaintPreferHint pairs graph title with owning sheet. Still 0 estimator_complete / gt_locked.",
     "bas_gap_soo_drawing_verified": 5,
     "bas_inventory_drawing_verified_bas0": 58,
     "bas_keyed_drawing_sampled": 5,
@@ -63,7 +63,7 @@
     "plan_paint_preferTitle_artifact": "/opt/cursor/artifacts/pillar-c-plan-paint-preferTitle-recensus.json",
     "plan_paint_bas_served_preferTitle_recensus_sets": 5,
     "plan_paint_bas_served_preferTitle_artifact": "/opt/cursor/artifacts/pillar-c-bas-plan-paint-preferTitle-recensus.json",
-    "plan_paint_bas_served_preferTitle_match_total": 215,
+    "plan_paint_bas_served_preferTitle_match_total": 226,
     "plan_paint_bas_served_preferTitle_targets_total": 345,
     "proof_spare_column_headers_found_on_keyed_probe": 0
   },

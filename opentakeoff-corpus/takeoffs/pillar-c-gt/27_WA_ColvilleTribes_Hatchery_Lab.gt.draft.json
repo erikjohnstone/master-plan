@@ -56,11 +56,11 @@
     "gt_locked": false
   },
   "bas_plan_paint_preferTitle_census": {
-    "at": "2026-09-01T18:49:52.661Z",
+    "at": "2026-09-01T18:55:22.596Z",
     "tallies": {
-      "MATCH": 21,
+      "MATCH": 32,
       "SCHEDULE_ONLY": 19,
-      "AMBIGUOUS": 11,
+      "AMBIGUOUS": 0,
       "ERROR": 0
     },
     "served_targets": 51,

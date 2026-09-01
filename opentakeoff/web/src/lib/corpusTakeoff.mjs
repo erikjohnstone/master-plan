@@ -970,15 +970,27 @@ export function isSooNarrativeTitle(title) {
 }
 
 /**
- * Resolve a schedule table_title for plan-paint preferTitle when the HVAC row
- * title is blank or the fallback is a BAS list (I/O LIST ≠ equipment owner).
+ * Resolve schedule table_title + sheet for plan-paint preferTitle/preferSheet when
+ * the HVAC row title is blank, wrong-sheet, or a BAS list (I/O LIST ≠ owner).
  * Scans graph tables for the tag on an equipment schedule — never invents tags.
+ * @returns {{ title: string|null, sheet_id: string|null }}
  */
-function preferScheduleTitleForEquipmentTag(graph, tag, fallbackTitle = null) {
+function preferScheduleHintForEquipmentTag(graph, tag, fallbackTitle = null) {
   const fb = String(fallbackTitle || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
-  if (fb && !isBasPointsListTitle(fb)) return fb;
+  if (fb && !isBasPointsListTitle(fb)) {
+    const want = String(tag || "").trim().toUpperCase();
+    for (const table of graph?.tables || []) {
+      const title = String(table.title?.text || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+      if (title !== fb) continue;
+      for (const row of table.rows || []) {
+        const key = String(row.key || row.identity?.text || row.identity?.key || "").trim().toUpperCase();
+        if (key === want) return { title: fb, sheet_id: table.sheet || null };
+      }
+    }
+    return { title: fb, sheet_id: null };
+  }
   const want = String(tag || "").trim().toUpperCase();
-  if (!want || !graph?.tables?.length) return null;
+  if (!want || !graph?.tables?.length) return { title: null, sheet_id: null };
   let generic = null;
   for (const table of graph.tables) {
     const title = String(table.title?.text || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
@@ -986,13 +998,34 @@ function preferScheduleTitleForEquipmentTag(graph, tag, fallbackTitle = null) {
     for (const row of table.rows || []) {
       const key = String(row.key || row.identity?.text || row.identity?.key || "").trim().toUpperCase();
       if (key !== want) continue;
+      const hint = { title, sheet_id: table.sheet || null };
       if (/SCHEDULE|EQUIPMENT|PUMP|BOILER|AHU|FCU|VAV|DOAS|RTU|FAN|CHILLER|VALVE|DAMPER/i.test(title)) {
-        return title;
+        return hint;
       }
-      generic = generic || title;
+      generic = generic || hint;
     }
   }
-  return generic;
+  return generic || { title: null, sheet_id: null };
+}
+
+/** @deprecated internal — use preferScheduleHintForEquipmentTag */
+function preferScheduleTitleForEquipmentTag(graph, tag, fallbackTitle = null) {
+  return preferScheduleHintForEquipmentTag(graph, tag, fallbackTitle).title;
+}
+
+/** Plan-paint preferTitle/preferSheet from HVAC row or graph scan (never wrong-sheet pairing). */
+function planPaintPreferHint(graph, tag, itemTableTitle = null, itemSheetId = null, listTitle = null) {
+  const tableTitle = String(itemTableTitle || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+  if (tableTitle && !isBasPointsListTitle(tableTitle)) {
+    return { prefer_schedule_title: tableTitle, prefer_schedule_sheet: itemSheetId || null };
+  }
+  const hint = preferScheduleHintForEquipmentTag(graph, tag, tableTitle || listTitle);
+  return {
+    prefer_schedule_title: hint.title,
+    // Graph-resolved title must pair with its owning sheet — inventory sheet_id
+    // may point at a blank reference table on another sheet (Colville CP-1).
+    prefer_schedule_sheet: hint.sheet_id || itemSheetId || null,
+  };
 }
 
 /**
@@ -1052,12 +1085,8 @@ export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
     const plan_paint_targets = (cat.items || []).slice(0, 40).map((it) => {
       const tag = String(it.tag || it.mark || "").trim();
       if (!tag) return null;
-      return {
-        tag,
-        prefer_schedule_title: it.table_title
-          || preferScheduleTitleForEquipmentTag(graph, tag, null),
-        prefer_schedule_sheet: it.sheet_id || null,
-      };
+      const hint = planPaintPreferHint(graph, tag, it.table_title, it.sheet_id);
+      return { tag, ...hint };
     }).filter(Boolean);
     inventory.push({ family, count, tags: tags.slice(0, 40), plan_paint_targets });
     const per = SCHEDULE_POINT_ESTIMATE_PER_UNIT[family];
@@ -1100,11 +1129,8 @@ export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
     for (const item of cat.items || []) {
       const tag = String(item.tag || item.mark || "").trim().toUpperCase();
       if (!tag || hvacByTag.has(tag)) continue;
-      hvacByTag.set(tag, {
-        prefer_schedule_title: item.table_title
-          || preferScheduleTitleForEquipmentTag(graph, tag, null),
-        prefer_schedule_sheet: item.sheet_id || null,
-      });
+      const hint = planPaintPreferHint(graph, tag, item.table_title, item.sheet_id);
+      hvacByTag.set(tag, hint);
     }
   }
 
@@ -1130,13 +1156,13 @@ export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
       const key = served.toUpperCase();
       if (servedSeen.has(key)) continue;
       servedSeen.add(key);
-      const hint = hvacByTag.get(key);
+      const hint = hvacByTag.get(key)
+        || planPaintPreferHint(graph, served, item.table_title, item.sheet_id, list.title);
       pushPlanPaintTarget({
         tag: served,
         source: "served_equipment",
-        prefer_schedule_title: hint?.prefer_schedule_title
-          || preferScheduleTitleForEquipmentTag(graph, served, item.table_title || list.title),
-        prefer_schedule_sheet: hint?.prefer_schedule_sheet || item.sheet_id || list.sheet_id || null,
+        prefer_schedule_title: hint.prefer_schedule_title,
+        prefer_schedule_sheet: hint.prefer_schedule_sheet || item.sheet_id || list.sheet_id || null,
       });
     }
   }
