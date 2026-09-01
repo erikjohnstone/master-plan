@@ -15,6 +15,42 @@ import {
   advanceTakeoffWorkflow,
 } from "../src/lib/takeoffWorkflow.js";
 
+
+test("row identity prefers VALVE MARK over UNIT MARK (Pillar C valve join)", () => {
+  const graph = {
+    tables: [
+      {
+        sheet: "set.pdf#10",
+        title: { text: "HHW CONTROL VALVE SCHEDULE" },
+        kind: "equipment",
+        rows: [
+          {
+            key: "CUH-A1",
+            cells: {
+              "UNIT MARK": { text: "CUH-A1" },
+              "VALVE MARK": { text: "CV-CUH-A1-HHW" },
+            },
+          },
+          {
+            key: "FCU-A1",
+            cells: {
+              "UNIT MARK": { text: "FCU-A1" },
+              "VALVE MARK": { text: "CV-FCU-A1-HHW" },
+            },
+          },
+        ],
+      },
+    ],
+  };
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "HHW_CONTROL_VALVE");
+  assert.ok(needle?.identityHeaderRe);
+  const rows = reconcileScheduleFamilyFromGraph(graph, needle);
+  assert.deepEqual(
+    rows.map((r) => r.tag).sort(),
+    ["CV-CUH-A1-HHW", "CV-FCU-A1-HHW"].sort(),
+  );
+});
+
 test("familyNeedleFromSpecs: CONTROL_DAMPER / MOTORIZED DAMPER aliases (WP7.2)", () => {
   for (const fam of ["CONTROL_DAMPER", "MOTORIZED DAMPER", "control damper", "motorized_damper"]) {
     const n = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, fam);

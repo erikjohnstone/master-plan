@@ -59,15 +59,32 @@ function scheduledQtyFromRow(row) {
   return 1;
 }
 
-function rowIdentityTag(row) {
+function rowIdentityTag(row, identityHeaderRe = null) {
   // Return RAW mark text — normalizeEquipMark runs AFTER comma/slash split
   // (parity with compile uniqueFamily). Normalizing "AHU-1, HP-1" first would
   // strip to "AHU-1" and drop the outdoor HP half.
   const id = row?.identity?.text || row?.identity?.key;
   if (id) return String(id).trim();
+  // Family-specific identity (e.g. VALVE MARK on HHW/CHW control-valve
+  // schedules) must beat UNIT MARK / row.key — Object.entries order would
+  // otherwise return the served equipment and inflate reconcile vs compile.
+  if (identityHeaderRe) {
+    for (const [header, cell] of Object.entries(row?.cells || {})) {
+      if (!identityHeaderRe.test(String(header || "").trim())) continue;
+      const t = String(cell?.text || "").trim();
+      if (t) return t;
+    }
+  }
+  // Prefer VALVE MARK before UNIT MARK when both columns exist (NAVFAC HHW/CHW).
+  for (const [header, cell] of Object.entries(row?.cells || {})) {
+    if (/^VALVE\s*MARK$/i.test(String(header || "").trim())) {
+      const t = String(cell?.text || "").trim();
+      if (t) return t;
+    }
+  }
   // Prefer MARK / EQUIP.TAG — bare TAG is often a grille type code on mixed sheets.
   for (const [header, cell] of Object.entries(row?.cells || {})) {
-    if (/^(MARK|SYMBOL|VALVE MARK|UNIT MARK|EQUIP|DESIGNATION|UNIT NO|EQUIP NO|UNIT TAG|EQUIP\.?\s*TAG|ITEM NO)$/i.test(String(header || "").trim())) {
+    if (/^(MARK|SYMBOL|UNIT MARK|EQUIP|DESIGNATION|UNIT NO|EQUIP NO|UNIT TAG|EQUIP\.?\s*TAG|ITEM NO)$/i.test(String(header || "").trim())) {
       const t = String(cell?.text || "").trim();
       if (t) return t;
     }
@@ -202,7 +219,7 @@ export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new
     const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
     const filterRe = blankTitle ? blankGate : catchAllSchedule ? null : titledFilter;
     for (const row of table.rows || []) {
-      const rawTag = rowIdentityTag(row);
+      const rawTag = rowIdentityTag(row, needle?.identityHeaderRe || null);
       if (!rawTag) continue;
       const willFilter = Boolean(catchAllSchedule || filterRe);
       const tagList = String(rawTag)

@@ -443,12 +443,11 @@ Artifact: `/opt/cursor/artifacts/pillar-c-corpus-census.json` ·
 `takeoffs/pillar-c-census.json`.
 
 **NAVFAC 001 deep probe (PARTIAL, not done):** HVAC inventory + printed BAS 122;
-`served_equipment` DOAH-T1/AHU-T1A/T1B plan paint MATCH; SOO **honest refuse**
-(no extractable sequence tables); UH labeled estimate 11×6=66 (+60 vs one
-printed template); FCU×qty **honest refuse** (no coil split); valve reconcile
-measured CHW 60 MATCH/4 SO · HHW 98 MATCH/5 SO (HHW rows 103 vs key 99 —
-unresolved before GT lock). Draft GT:
-`takeoffs/pillar-c-gt/001_…gt.draft.json` (`gt_locked: false`).
+`served_equipment` DOAH-T1/AHU-T1A/T1B plan paint MATCH; SOO **honest refuse**;
+UH labeled estimate 11×6=66; FCU×qty **honest refuse**. Valve identity fix:
+reconcile now prefers `VALVE MARK` over `UNIT MARK` — HHW/CHW row counts match
+keys (64/64, 99/99); most valve marks honest **SCHEDULE_ONLY** (CV-* not plan
+text). Shared-path unit test green. Draft GT still `gt_locked: false`.
 
 ### Next queue (platform loop)
 

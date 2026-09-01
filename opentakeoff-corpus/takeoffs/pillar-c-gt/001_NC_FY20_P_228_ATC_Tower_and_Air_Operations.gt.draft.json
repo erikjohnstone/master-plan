@@ -82,28 +82,50 @@
     "chw": {
       "name": "CHW_CONTROL_VALVE",
       "rows": 64,
+      "key": 64,
+      "compile": 64,
       "summary": {
         "total": 64,
-        "match": 60,
-        "schedule_only": 4,
+        "match": 2,
+        "schedule_only": 62,
         "plan_only": 0,
         "refused_no_scale": 0,
         "refused_no_text": 0,
         "ambiguous": 0
-      }
+      },
+      "sample": [
+        "CV-AHU-M1-CHW",
+        "CV-CRAH-M1A-CHW",
+        "CV-CRAH-M1B-CHW",
+        "CV-CRAH-M2A-CHW",
+        "CV-CRAH-M2B-CHW"
+      ],
+      "extra": [],
+      "missing": []
     },
     "hhw": {
       "name": "HHW_CONTROL_VALVE",
-      "rows": 103,
+      "rows": 99,
+      "key": 99,
+      "compile": 99,
       "summary": {
-        "total": 103,
-        "match": 98,
-        "schedule_only": 5,
+        "total": 99,
+        "match": 1,
+        "schedule_only": 98,
         "plan_only": 0,
         "refused_no_scale": 0,
         "refused_no_text": 0,
         "ambiguous": 0
-      }
+      },
+      "sample": [
+        "CV-CUH-A1-HHW",
+        "CV-HHW-BP-A1",
+        "CV-DOAH-A1-HHW",
+        "CV-DOAH-A2-HHW",
+        "CV-FCU-A1-HHW"
+      ],
+      "extra": [],
+      "missing": []
     }
   },
   "served_equipment_plan_paint": [
@@ -114,7 +136,10 @@
   "open_before_lock": [
     "Pipeline GT test asserting this harness",
     "FCU coil-type split or permanent refuse documented in key",
-    "Confirm DOAH units beyond T1 (inventory DOAH) vs single printed list",
-    "Valve SCHEDULE_ONLY vs MATCH counts coordinator-verified on drawings"
+    "Confirm DOAH units beyond T1 vs single printed list",
+    "Valve MATCH/SCHEDULE_ONLY counts coordinator-verified on drawings after VALVE MARK identity fix"
+  ],
+  "notes": [
+    "2026-09-01: schedulePlanReconcile rowIdentityTag prefers VALVE MARK / identityHeaderRe over UNIT MARK (HHW was keying CUH-A1 instead of CV-CUH-A1-HHW)."
   ]
 }
