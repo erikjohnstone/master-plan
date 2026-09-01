@@ -460,20 +460,24 @@ beyond printed 122, corpus-deep C. Artifacts:
 `/opt/cursor/artifacts/pillar-c-navfac-001-drawing-verify.{json,md}` · draft
 `takeoffs/pillar-c-gt/001_…gt.draft.json` `drawing_verify`.
 
-**Pier 015 probe (PARTIAL):** BAS 39 rows; `served_equipment` no longer treats
-hyphen point tags (`AI-1`) as equipment — joins CCC/P/MPAC/HPAC/FC. Plan paint
-MATCH: CCC-1/2, P-1/2, FC-3; MPAC/HPAC honest miss (no schedule row). CONTROL_DAMPER
-21/21 MATCH; ISOLATION_VALVE 13 MATCH / 2 SO. SOO refuse. Draft GT unlocked.
+**Pier 015 probe (PARTIAL, drawing-backed):** BAS 39=key; `served_equipment`
+joins CCC/P/MPAC/HPAC/FC (no longer treats `AI-1` hyphen points as equipment).
+Plan paint MATCH: CCC-1, CCC-2, P-1/2, FC-3; MPAC×4/HPAC×3 honest miss (no equipment
+schedule rows). CONTROL_DAMPER 21=key; ISOLATION_VALVE 15=key. Drawing verify
+2026-09-01: **25/25** POINTS cell sample; damper sample honest (MD-11 MATCH via
+sweep on plan #6; exact findText schedule-only noted); iso sample **8/8** MATCH
+with plan text; SOO refuse. Draft GT still `gt_locked: false`. Artifact:
+`/opt/cursor/artifacts/pillar-c-pier-015-drawing-verify.json`.
+
 
 **Vermillion 096 probe (PARTIAL, deepened):** BAS 231 across 10 generic "SCHEDULE OF DDC POINTS" lists; only HRC-1 has served_equipment (plan paint MATCH). AHU-4 / FCU×3 / VAV×58 / FAN×16 lack POINTS joins — qty×points refuse without inventing maps. CONTROL_DAMPER 24=key · 12 MATCH / 12 SO. SOO refuse. gt_locked false.
 
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** NAVFAC 001 drawing sample green but still unlocked
-   (FCU/SOO/estimator-complete + corpus-deep). Next: same drawing-backed depth on
-   Pier 015 + Vermillion 096, then remaining keyed BAS/valve sets, then expand
-   keys to every BAS- and valve-bearing set. Post-WP8 `test:workflows` **104/104**
-   green (plumbing only — not C done).
+1. **Pillar C (corpus-deep):** NAVFAC 001 + Pier 015 drawing samples green but
+   still unlocked. Next: Vermillion 096 same depth, then remaining keyed BAS/valve
+   sets, then expand keys to every BAS- and valve-bearing set. Post-WP8
+   `test:workflows` **104/104** green (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.

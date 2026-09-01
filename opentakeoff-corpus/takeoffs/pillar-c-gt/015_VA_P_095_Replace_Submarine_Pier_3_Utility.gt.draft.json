@@ -42,37 +42,37 @@
     },
     {
       "tag": "MPAC-1",
-      "error": "No schedule row \"MPAC-1\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"MPAC-1\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "MPAC-2",
-      "error": "No schedule row \"MPAC-2\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"MPAC-2\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "MPAC-3",
-      "error": "No schedule row \"MPAC-3\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"MPAC-3\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "MPAC-4",
-      "error": "No schedule row \"MPAC-4\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"MPAC-4\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "HPAC-1",
-      "error": "No schedule row \"HPAC-1\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"HPAC-1\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "HPAC-2",
-      "error": "No schedule row \"HPAC-2\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"HPAC-2\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "HPAC-3",
-      "error": "No schedule row \"HPAC-3\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"HPAC-3\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
@@ -115,8 +115,51 @@
     "Equipment joins: CCC/P/MPAC/HPAC/FC with plan paint where drawable"
   ],
   "open_before_lock": [
-    "Estimator family×qty gap report",
-    "Coordinator drawing check",
-    "GT harness lock"
-  ]
+    "SOO HONEST_REFUSE",
+    "MPAC/HPAC served tags have no equipment schedule rows \u2014 honest miss (not invent join)",
+    "Estimator family\u00d7qty / full drawing hand-count still open",
+    "Pillar C corpus-deep \u2014 Pier 015 alone cannot complete C"
+  ],
+  "drawing_verify": {
+    "at": "2026-09-01T15:29:43.994Z",
+    "gt_locked": false,
+    "self_check": {
+      "bas_rows_match_key": true,
+      "sample_points_pass": true,
+      "damper_count_match_key": true,
+      "iso_count_match_key": true,
+      "damper_sample_honest": true,
+      "iso_sample_honest": true,
+      "served_paint_partial": true,
+      "md11_sweep_note": true
+    },
+    "points_sample_pass": "25/25",
+    "damper_sample_honest": {
+      "ok": 8,
+      "review": 0,
+      "rule": "MATCH+installed counts ok even if exact findText is schedule-only (sweep may hit glyph/split text)"
+    },
+    "iso_sample_honest": {
+      "ok": 8,
+      "review": 0
+    },
+    "served_paint_match": [
+      "CCC-1",
+      "CCC-2",
+      "P-1",
+      "P-2",
+      "FC-3"
+    ],
+    "served_honest_miss": [
+      "MPAC-1",
+      "MPAC-2",
+      "MPAC-3",
+      "MPAC-4",
+      "HPAC-1",
+      "HPAC-2",
+      "HPAC-3"
+    ],
+    "lock_recommendation": "KEEP gt_locked=false \u2014 drawing sample green for printed BAS (25/25) + damper/iso honesty, but SOO refuse, MPAC/HPAC schedule-row miss, estimator-complete + corpus-deep C remain",
+    "artifact": "/opt/cursor/artifacts/pillar-c-pier-015-drawing-verify.json"
+  }
 }
