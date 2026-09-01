@@ -1,14 +1,24 @@
-# Vermillion 096 Pillar C GT draft — UNLOCKED
+# Vermillion 096 Pillar C GT draft — UNLOCKED (not complete)
 
-## Pipeline-verified
-- BAS rows 231 (key 231)
-- CONTROL_DAMPER 24 = key 24; {"total":24,"match":12,"schedule_only":12,"plan_only":0,"refused_no_scale":0,"refused_no_text":0,"ambiguous":0}
-- Served plan paint: [{"tag":"HRC-1","found":1,"cites":1,"status":"MATCH"}]
+## Drawing-backed verify (2026-09-01) — still `gt_locked: false`
 
-## Honest refuses / gaps
+| Check | Result |
+|---|---|
+| BAS rows vs key | 231 = 231 MATCH |
+| Stratified POINTS sample | **25/25 PASS** (10 generic SCHEDULE OF DDC POINTS lists) |
+| Served plan paint | **HRC-1 MATCH** only |
+| Inventory without POINTS joins | **78** units (AHU/FCU/VAV/FAN…) → qty×points **HONEST_REFUSE** |
+| CONTROL_DAMPER | 24 = key · sample **10/10** honest |
+| SOO | HONEST_REFUSE |
+
+Artifact: `/opt/cursor/artifacts/pillar-c-vermillion-096-drawing-verify.json`
+
+## Still blocks lock
+
+- Most DDC lists lack `served_equipment` — cannot invent unit maps
+- qty×points refuse for 78 inventory units
 - SOO refuse
-- 9/10 lists are generic SCHEDULE OF DDC POINTS with no served_equipment — cannot qty×points without inventing maps
-- Only HRC-1 joined as served equipment
+- Estimator-complete / corpus-deep C open
 
 ## Status
-gt_locked: false · pillar_c_complete: false
+`gt_locked: false` · `pillar_c_complete: false`

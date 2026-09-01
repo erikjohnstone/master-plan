@@ -310,5 +310,34 @@
     "Which generic DDC schedules map to which AHU/FCU/VAV/FAN equipment",
     "Damper 12 SCHEDULE_ONLY tags: undrawn vs miss on plan",
     "SOO narrative extractability beyond title scan"
+  ],
+  "drawing_verify": {
+    "at": "2026-09-01T15:31:54.502Z",
+    "gt_locked": false,
+    "self_check": {
+      "bas_rows_match_key": true,
+      "sample_points_pass": true,
+      "damper_count_match_key": true,
+      "damper_sample_honest": true,
+      "served_paint_partial_or_none_ok": true
+    },
+    "points_sample_pass": "25/25",
+    "damper_sample_honest": {
+      "ok": 10,
+      "review": 0
+    },
+    "served": [
+      "HRC-1"
+    ],
+    "inventory_without_points_count": 78,
+    "qty_times_points": "HONEST_REFUSE",
+    "lock_recommendation": "KEEP gt_locked=false — printed BAS sample green + damper honesty, but most lists lack served joins, qty×points refuse, SOO refuse, corpus-deep C remain",
+    "artifact": "/opt/cursor/artifacts/pillar-c-vermillion-096-drawing-verify.json"
+  },
+  "open_before_lock": [
+    "78 inventory units lack POINTS served joins — qty×points HONEST_REFUSE",
+    "SOO HONEST_REFUSE",
+    "Generic SCHEDULE OF DDC POINTS lists mostly lack served_equipment — estimator map open",
+    "Pillar C corpus-deep — Vermillion 096 alone cannot complete C"
   ]
 }

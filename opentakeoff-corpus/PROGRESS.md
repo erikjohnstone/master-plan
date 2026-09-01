@@ -470,14 +470,20 @@ with plan text; SOO refuse. Draft GT still `gt_locked: false`. Artifact:
 `/opt/cursor/artifacts/pillar-c-pier-015-drawing-verify.json`.
 
 
-**Vermillion 096 probe (PARTIAL, deepened):** BAS 231 across 10 generic "SCHEDULE OF DDC POINTS" lists; only HRC-1 has served_equipment (plan paint MATCH). AHU-4 / FCU×3 / VAV×58 / FAN×16 lack POINTS joins — qty×points refuse without inventing maps. CONTROL_DAMPER 24=key · 12 MATCH / 12 SO. SOO refuse. gt_locked false.
+**Vermillion 096 probe (PARTIAL, drawing-backed):** BAS 231=key across ~10 generic
+"SCHEDULE OF DDC POINTS" lists; only **HRC-1** has served_equipment (plan paint
+MATCH). Inventory without POINTS joins: **78** → qty×points HONEST_REFUSE.
+CONTROL_DAMPER 24=key · drawing sample **10/10** honest. POINTS cell sample
+**25/25 PASS**. SOO refuse. Draft GT still `gt_locked: false`. Artifact:
+`/opt/cursor/artifacts/pillar-c-vermillion-096-drawing-verify.json`.
+
 
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** NAVFAC 001 + Pier 015 drawing samples green but
-   still unlocked. Next: Vermillion 096 same depth, then remaining keyed BAS/valve
-   sets, then expand keys to every BAS- and valve-bearing set. Post-WP8
-   `test:workflows` **104/104** green (plumbing only — not C done).
+1. **Pillar C (corpus-deep):** NAVFAC 001 + Pier 015 + Vermillion 096 drawing
+   samples green but all still unlocked (0 sets locked). Next: remaining keyed
+   BAS/valve sets at same depth, then expand keys to every BAS- and valve-bearing
+   set. Post-WP8 `test:workflows` **104/104** green (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.
