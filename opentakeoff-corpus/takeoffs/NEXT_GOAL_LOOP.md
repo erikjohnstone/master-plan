@@ -379,9 +379,10 @@ keys are still the bar. Thin compile stubs ≠ commercial valve takeoff.
 1. [x] Air-side + water-side valve compile paths keyed on ≥3 bulk sets
    (Carson CONTROL_DAMPER 2 · pier ISO+damper 36 · ITD HHW+lab air 31 ·
    SDSU fume-hood+PRV 60 · Vermillion dampers 24 — plus NAVFAC CHW+HHW 163).
-2. [~] Damper/actuator families compile (CONTROL_DAMPER / FUME_HOOD_DAMPER in
-   valve kind; actuator/fail/signal columns when printed). Reconcile where
-   plan-drawn — follow-on for damper-specific reconcile locks.
+2. [x] Damper/actuator families compile (CONTROL_DAMPER / FUME_HOOD_DAMPER in
+   valve kind; actuator/fail/signal columns when printed). Reconcile aliases
+   for CONTROL_DAMPER / MOTORIZED DAMPER; pier + Vermillion CONTROL_DAMPER
+   locks already in `reconcileWorkflow.test.mjs`.
 3. [x] Unit + T-VALVE-01 locks green after expansion; MCP `control_valves`
    enum parity with UI. Full `test:workflows` re-run still owed after WP8.
 4. [x] No per-set hardcodes; honest empty when set has no extractable valve

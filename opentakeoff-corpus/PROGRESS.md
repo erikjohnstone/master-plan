@@ -408,7 +408,7 @@ UI+MCP parity, no corpus hardcodes.
 |---|---|---|
 | **A — Cross-set compile** | Vol1 + Vol2 (82/82 INDEX) schedule compile | **§6 MET** — 82/82 Vol2 + Vol1 keys; soft titles + sibling-exclusion; T-HVAC-01/T-BAS-01 green; honest WEAK/ZERO stable |
 | **B — Reconcile** | Schedule↔plan with contractor columns+cites | **§6 MET** — on `main`; NAVFAC + Vol1/Vol2 bulk locks; Agent UI proof; WORKFLOWS **#51 ON_MAIN**; full `test:workflows` **104/104** |
-| **C — Valve + BAS depth** | Air/water valves, dampers, actuators; BAS points, I/O, SOO | **WP7+WP8 shared path** — `control_valves` beyond CHW+HHW; `basPointExtras` promotes printed ALARM/TREND/wiring (Yes-only; NAVFAC alarm 44 / trend 32); SOO refuse; T-BAS-01 122 ≠ complete BAS takeoff |
+| **C — Valve + BAS depth** | Air/water valves, dampers, actuators; BAS points, I/O, SOO | **WP7+WP8 shared path** — `control_valves` beyond CHW+HHW; damper reconcile aliases; `basPointExtras` Yes-only ALARM/TREND/wiring; 5 BAS keys lock alarm/trend (NAVFAC 44/32 · pier 21/32 · Vermillion 92/204 · lab/Colville 0/0); T-BAS-01 122 ≠ complete BAS takeoff |
 | **D — Grounding depth** | Symbol counts highlighted and accurate on plan | **Queued** — WP9 after C impl bar |
 
 Authority: `GOAL.md` · `takeoffs/NEXT_GOAL_LOOP.md`.

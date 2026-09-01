@@ -20,7 +20,11 @@
     "items": 83
   },
   "bas_points": {
-    "rows": 39
+    "rows": 39,
+    "alarm": 21,
+    "trend": 32,
+    "hardwired": 0,
+    "soft": 0
   },
   "control_valves": {
     "items": 36,

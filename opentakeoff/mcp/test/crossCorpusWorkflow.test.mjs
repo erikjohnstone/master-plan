@@ -301,6 +301,15 @@ test("WP1 keyed compile acceptance on ≥2 non-NAVFAC sets", async () => {
 
     assert.equal(bas.totals.rows ?? bas.totals.items ?? 0, key.bas_points.rows,
       `${key.set_id} BAS empty/honest disclose`);
+    // WP8 optional rollups — only when the acceptance key locks them (never invent).
+    for (const field of ["alarm", "trend", "hardwired", "soft"]) {
+      if (key.bas_points[field] == null) continue;
+      assert.equal(
+        bas.totals[field] ?? 0,
+        key.bas_points[field],
+        `${key.set_id} BAS ${field}`,
+      );
+    }
     assert.ok(bas.page_accounting?.sheet_count >= 1, `${key.set_id} BAS page accounting`);
 
     assert.equal(valve.totals.items, key.control_valves.items, `${key.set_id} valve total`);
