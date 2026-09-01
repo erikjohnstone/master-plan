@@ -423,7 +423,8 @@ Authority: `GOAL.md` · `takeoffs/NEXT_GOAL_LOOP.md`.
 6. Shared-path: `planToolParity.test.mjs` + `prewarmGraphSmoke.test.mjs` pass.
 7. WORKFLOWS **#51** status → **ON_MAIN** on this branch (was PROVEN); merge stack already on `main`.
 8. Non-NAVFAC complete/family compile + reconcile proven via bulk keys + UI path (no per-job title hardcodes).
-9. **Still required:** full `opentakeoff/mcp` `npm run test:workflows` green on this VM with staged bulk PDFs — do **not** mark §6 MET until that finishes.
+9. Fast workflow locks reconfirmed 2026-09-01 (**12/12**): T-HVAC-01 / T-BAS-01 / T-VALVE-01 · Bessemer rowsym · planToolParity · prewarmGraphSmoke · reconcileGolden · D01/D08/D10 · sheetGraphCache. Log: `/opt/cursor/artifacts/workflows-fast-locks.log`.
+10. **Still required:** full `opentakeoff/mcp` `npm run test:workflows` green (crossCorpus keyed Vol1+Vol2 compile + full reconcileWorkflow) on this VM with staged bulk PDFs — do **not** mark §6 MET until that finishes.
 
 Honest ceilings retained (not score-chased): Klamath FC/HP/DOAS SCHEDULE_ONLY under `evaluationFast`; WEAK/ZERO compile keys where no extractable tables; WP3.3 TG bowtie follow-on.
 
