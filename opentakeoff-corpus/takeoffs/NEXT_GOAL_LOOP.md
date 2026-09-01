@@ -385,6 +385,24 @@ keys are still the bar. Thin compile stubs ≠ commercial valve takeoff.
 5. [ ] Research implications above reflected in deliverable columns + tests
    (Cv/GPM/actuator/served unit when printed; never invent plan qty).
 
+**Implementation pointers (shared path — after §6 MET; 2026-09-01 survey):**
+- Module: `opentakeoff/web/src/lib/corpusTakeoff.mjs` (MCP re-exports).
+- Today `compileControlValveTakeoff` / `CONTROL_VALVE_FAMILIES` = **CHW+HHW
+  only**; isolation/PRV/PSV/mixing/CONTROL_DAMPER/FUME_HOOD/LAB_AIR already
+  exist in `HVAC_FAMILY_SPECS` and score under `hvac_equipment` but are
+  **excluded** from `kind: "control_valves"`.
+- `normalizeControlValveCells` today: served unit · size · GPM · Cv ·
+  configuration · notes · service. Promote printed Actuator / Fail position /
+  control signal when present (already in `TAKEOFF_SPEC_ORDER` for panel).
+- MCP `compile_corpus_takeoff` enum still lacks `control_valves` — UI already
+  has it; close parity.
+- First bulk keys with `control_valves.items > 0`: NAVFAC 001 (163), VA ER 053
+  (38), ITD 062 / itd-d1-lab (9). Damper/ISO/PRV MEAT often sits in HVAC cats
+  with `control_valves.items = 0` — grow valve kind or family keys there.
+- First code change: expand valve-kind families set-agnostically + column
+  normalize; extend `takeoffValve01` / `crossCorpusWorkflow` / title-match
+  tests. No NAVFAC hardcodes.
+
 ### WP8 — BAS workflow depth (Pillar C — after A+B bar)
 
 **Why:** Only **~5** Vol2/bulk keys currently have `bas_points.rows > 0`
@@ -463,6 +481,22 @@ necessary but **not sufficient**. Pillar C must:
 5. [ ] Research implications above reflected in deliverables/tests (hard vs
    soft when printed; proofs/alarms/trends columns when present; no invented
    spare/I/O counts).
+
+**Implementation pointers (shared path — after §6 MET; 2026-09-01 survey):**
+- Module: `compileBasTakeoff` / `isBasPointsListTitle` in
+  `corpusTakeoff.mjs`. Needles already cover POINTS LIST, DDC POINTS, I/O
+  LIST, CONTROLLER I/O, POINTS SCHEDULE; SOO-like “POINT LIST TABLE”
+  intentionally rejected.
+- Today: row + AI/AO/BI/BO totals from typed marks; I/O LIST device rows map
+  ANALOG→AI, DIGITAL→BI. ALARM/TREND may sit in raw cells / fixtures but are
+  **not** first-class compile rollups.
+- Non-zero `bas_points.rows` keys today (5): Vermillion 096 (231), NAVFAC 001
+  (122), lab 021 (63), Colville 27 (42), pier 015 (39).
+- First code change: promote printed ALARM/TREND (and hardwired vs soft when
+  columns exist) into first-class fields + optional rollups; keep SOO
+  narrative as honest refuse — **never invent points from SOO**. Extend
+  `corpusTakeoffBas` / `takeoffBas01` / `crossCorpusWorkflow` keys. No spare
+  % invention; disclose when estimating hardware.
 
 ### WP9 — Plan grounding depth (Pillar D — after A+B bar)
 
