@@ -13,7 +13,12 @@ const scorePath = resolve(ROOT, "eval/scoreboard.json");
 
 const webTest = spawnSync(
   "node",
-  ["--import", "tsx", "--test", "test/scheduleTableSidecarAdapter.test.ts", "test/vectorTakeoffPipeline.test.ts"],
+  ["--import", "tsx", "--test",
+    "test/gridClassify.test.ts",
+    "test/estimatorTakeoffDocument.test.ts",
+    "test/pipelineHarness.test.ts",
+    "test/scheduleTableSidecarAdapter.test.ts",
+    "test/vectorTakeoffPipeline.test.ts"],
   { cwd: resolve(ROOT, "web"), stdio: "inherit" },
 );
 if (webTest.status !== 0) process.exit(webTest.status ?? 1);
