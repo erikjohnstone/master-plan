@@ -40,3 +40,10 @@ Artifact: `/opt/cursor/artifacts/pillar-c-021-estimator-gap-verify.json`
 
 ## Status
 `gt_locked: false` · `pillar_c_complete: false` · `estimator_complete: false`
+
+## SOO deepen (2026-09-01)
+- Status: `present_not_row_extractable`
+- Printed BAS: 63
+- Still **refuse_not_done** for SOO-derived points
+- `gt_locked: false`
+

@@ -31,5 +31,61 @@
     "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
     "printed_items": 0,
     "gt_locked": false
+  },
+  "soo_deepen_verify": {
+    "at": "2026-09-01T17:58:19.943435+00:00",
+    "status": "present_not_row_extractable",
+    "soo": {
+      "present": true,
+      "status": "present_not_row_extractable",
+      "tabular_extractable": false,
+      "titles": [
+        {
+          "title": "LIGHTING SEQUENCE OF OPERATION",
+          "sheet_id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#82",
+          "tabular_points": false
+        }
+      ],
+      "note": "SOO present but not a typed points source \u2014 refuse_not_done; never invent points from narrative."
+    },
+    "phrase_hits": [
+      {
+        "phrase": "SEQUENCE OF OPERATION",
+        "count": 9,
+        "sheets": [
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68",
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69",
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#73",
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#82"
+        ]
+      },
+      {
+        "phrase": "SEQUENCE OF OPERATIONS",
+        "count": 3,
+        "sheets": [
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#73",
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#82"
+        ]
+      },
+      {
+        "phrase": "CONTROL SEQUENCE",
+        "count": 3,
+        "sheets": [
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68",
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72"
+        ]
+      },
+      {
+        "phrase": "POINTS LIST",
+        "count": 1,
+        "sheets": [
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69"
+        ]
+      }
+    ],
+    "printed_bas": 0,
+    "note": "SOO deepen probe \u2014 still refuse_not_done for soo_derived_points; never invent points from narrative.",
+    "artifact": "/opt/cursor/artifacts/pillar-c-031-soo-probe.json",
+    "gt_locked": false
   }
 }

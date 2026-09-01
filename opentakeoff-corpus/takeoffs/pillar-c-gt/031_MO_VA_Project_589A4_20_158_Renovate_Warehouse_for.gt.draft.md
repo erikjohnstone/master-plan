@@ -16,3 +16,10 @@ Artifact: `/opt/cursor/artifacts/pillar-c-031-inventory-drawing-verify.json`
 
 ## Valve zero floor
 Printed valve items: **0** (product census). `gt_locked: false`.
+
+## SOO deepen (2026-09-01)
+- Status: `present_not_row_extractable`
+- Printed BAS: 0
+- Still **refuse_not_done** for SOO-derived points
+- `gt_locked: false`
+

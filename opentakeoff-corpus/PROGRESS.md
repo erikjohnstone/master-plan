@@ -693,6 +693,15 @@ valve floors. Contractor-column honesty already verified on the 11 keyed.
 Do **not** invent valve keys from equipment schedules. Artifact:
 `/opt/cursor/artifacts/pillar-c-valve-product-census-all.json`.
 
+**SOO deepen — present_not_row_extractable (2026-09-01, still 0 locked):**
+Coordinator drawing/text probe on 021 Lab, 031 Warehouse, 062 ITD Lab.
+- **062:** SOO title + live text `BOILER/VFD/AHU POINTS LIST` on sheets 18–19, but
+  **0 geometric tables** on those sheets → cannot promote to printed BAS without
+  OCR/raster (out of scope). Honest `present_not_row_extractable`.
+- **021 / 031:** SOO present / phrase hits; still refuse SOO-derived points.
+Artifacts: `/opt/cursor/artifacts/pillar-c-*-soo-probe.json`,
+`pillar-c-062-points-list-near-miss.json`, `pillar-c-062-points-list-title-assoc.json`.
+
 ### Next queue (platform loop)
 
 1. **Pillar C (corpus-deep):** inventory floors **112/112** + valve product census **81/81** (11 printed / 70 zero) but **0** estimator-complete;

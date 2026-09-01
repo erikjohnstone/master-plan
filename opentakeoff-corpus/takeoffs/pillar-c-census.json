@@ -35,7 +35,8 @@
       "estimator_product_census_wave4": "/opt/cursor/artifacts/pillar-c-estimator-product-census-wave4.json",
       "estimator_product_census_wave5": "/opt/cursor/artifacts/pillar-c-estimator-product-census-wave5.json",
       "estimator_product_census_wave6": "/opt/cursor/artifacts/pillar-c-estimator-product-census-wave6-final.json",
-      "valve_product_census": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json"
+      "valve_product_census": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
+      "soo_deepen_batch": "/opt/cursor/artifacts/pillar-c-soo-present-not-row-extractable-probe.json"
     },
     "soo_present_not_row_extractable_sets": [
       "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
@@ -46,7 +47,11 @@
     "bas_inventory_drawing_verified_keyed": 5,
     "valve_product_census_sets": 81,
     "valve_with_printed_items": 11,
-    "valve_zero_floors": 70
+    "valve_zero_floors": 70,
+    "soo_deepen_probed_sets": 3,
+    "soo_points_list_text_without_tables": [
+      "062_ID_ITD_District_1_Laboratory_Building_Mechanical"
+    ]
   },
   "bas_inventory_drawing_verified_ids": [
     "11_CA_SDSU_EngSciences_Complex_100SD",
