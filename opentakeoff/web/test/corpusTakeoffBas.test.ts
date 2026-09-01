@@ -6,6 +6,9 @@ import { describe, it } from "node:test";
 import {
   compileBasTakeoff,
   isBasPointsListTitle,
+  ocrFixEquipMark,
+  equipMarkFromBasDescription,
+  servedEquipmentFromBasRow,
 } from "../src/lib/corpusTakeoff.mjs";
 
 describe("isBasPointsListTitle", () => {
@@ -188,10 +191,32 @@ describe("compileBasTakeoff I/O LIST", () => {
     };
     const bas = compileBasTakeoff(null, graph);
     const doah = bas.categories.points_lists.lists.find((l) => /DOAH/i.test(l.title));
-    assert.equal(doah.items.find((i) => i.tag === "AI01").served_equipment, "DOAH-TI");
-    assert.equal(doah.items.find((i) => i.tag === "AI02").served_equipment, "DOAH-TI");
+    // OCR I→1 repair so plan paint joins DOAH-T1 on schedule.
+    assert.equal(doah.items.find((i) => i.tag === "AI01").served_equipment, "DOAH-T1");
+    assert.equal(doah.items.find((i) => i.tag === "AI02").served_equipment, "DOAH-T1");
     const io = bas.categories.points_lists.lists.find((l) => /I\/O LIST/i.test(l.title));
     assert.equal(io.items.find((i) => i.tag === "HWP-1").served_equipment, "HWP-1");
+  });
+
+  it("ocrFixEquipMark repairs I→1 and slash family inheritance (Pillar C join)", () => {
+    assert.equal(ocrFixEquipMark("DOAH-TI"), "DOAH-T1");
+    assert.equal(ocrFixEquipMark("AHU-T1A/TIB"), "AHU-T1A/AHU-T1B");
+    assert.equal(equipMarkFromBasDescription("AHU-T1B SA TEMPERATURE"), "AHU-T1B");
+    const row = {
+      key: "AI01",
+      cells: { DESCRIPTION: { text: "AHU-T1B HW VALVE POSITION (FEEDBACK)" } },
+    };
+    assert.equal(
+      servedEquipmentFromBasRow(row, "POINTS LIST AHU-T1A/TIB"),
+      "AHU-T1B",
+    );
+    assert.equal(
+      servedEquipmentFromBasRow(
+        { key: "AI01", cells: { DESCRIPTION: { text: "OA TEMP" } } },
+        "POINTS LIST DOAH-TI",
+      ),
+      "DOAH-T1",
+    );
   });
 
   it("does not invent a list from a title-only schematic with no data rows", () => {

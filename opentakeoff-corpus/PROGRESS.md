@@ -435,9 +435,27 @@ verify the right answer on each BAS set and each valve set, then corroborate
 via the shared-path pipeline / GT harness. Sample proofs and POINTS LIST
 scrapes do not satisfy the mandate.
 
+**Census (INDEX-derived, 2026-09-01):** Vol1+Vol2 = 112 sets. **BAS-bearing ≈112**
+(Vol2 all carry BAS terms; 5 currently keyed with `bas_points.rows>0`).
+**Valve/damper-bearing ≈81** (11 keyed with valve/damper family counts).
+Estimator-complete + self-check + pipeline GT: **0 / 112 BAS**, **0 / 81 valve**.
+Artifact: `/opt/cursor/artifacts/pillar-c-corpus-census.json` ·
+`takeoffs/pillar-c-census.json`.
+
+**NAVFAC 001 deep probe (in progress, not done):** HVAC inventory compiled;
+printed BAS 122; `served_equipment` OCR I→1 + description marks now join
+`DOAH-T1` / `AHU-T1A` / `AHU-T1B` with plan paint MATCH. Still open: SOO-derived
+points model, qty×points estimate vs printed gap, FCU/UH family expansion,
+full valve line self-check (64 CHW + 99 HHW), GT harness lock.
+Artifact: `/opt/cursor/artifacts/pillar-c-navfac-001-deep.md`.
+
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** Not list scrape. For **every** BAS set and **every** valve/damper/actuator set in the corpus: inventory equipment → SOO/controls model where extractable → typed takeoff (+ labeled estimate) → gap/spare disclose → plan paint → **coordinator self-check** against drawings → **pipeline GT corroboration**. Do not stop at ≥3 demos. Post-WP8 `test:workflows` **104/104** green (plumbing only).
+1. **Pillar C (corpus-deep):** Finish NAVFAC 001 estimator takeoff + GT harness
+   (self-check + pipeline lock), then same depth for remaining 4 keyed BAS sets,
+   then expand keys to every BAS-bearing set. Parallel track: every
+   valve/damper/actuator-bearing set. Post-WP8 `test:workflows` **104/104**
+   green (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.

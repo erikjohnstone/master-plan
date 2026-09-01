@@ -128,9 +128,54 @@ export function basPointExtras(row) {
 }
 
 /**
+ * Vector/CAD fonts often render digit 1 as letter I inside equipment marks
+ * (DOAH-TI → DOAH-T1, AHU-T1A/TIB → AHU-T1A/T1B). Set-agnostic glyph repair
+ * only — never invents a new family or unit that isn't already in the token.
+ */
+export function ocrFixEquipMark(raw) {
+  let t = String(raw || "").trim();
+  if (!t) return t;
+  // Slash compounds: AHU-T1A/TIB → fix each side; bare right side inherits family.
+  if (t.includes("/")) {
+    const parts = t.split("/").map((p) => p.trim()).filter(Boolean);
+    if (!parts.length) return t;
+    const left = ocrFixEquipMark(parts[0]);
+    const fam = left.match(/^([A-Za-z]{1,8})[\s\-]/)?.[1] || null;
+    const rest = parts.slice(1).map((p) => {
+      let side = p;
+      // "TIB" after "AHU-T1A" → "AHU-TIB" before I→1 repair.
+      if (fam && !/^[A-Za-z]{2,8}[\s\-]?\d/i.test(side) && /^[A-Za-z]/i.test(side)) {
+        side = `${fam}-${side}`;
+      }
+      return ocrFixEquipMark(side);
+    });
+    return [left, ...rest].join("/");
+  }
+  // After a hyphenated letter prefix, trailing I or Ix → 1 / 1x (TI→T1, TIB→T1B).
+  t = t.replace(/([A-Za-z]{1,8}-[A-Za-z]*)I([A-Za-z]?)$/i, (_, a, b) => `${a}1${b || ""}`);
+  return t;
+}
+
+/**
+ * Leading equipment mark in a points DESCRIPTION ("AHU-T1B SA TEMP…").
+ * Prefer this over title tokens when present — per-row truth on dual-unit lists.
+ */
+export function equipMarkFromBasDescription(description = "") {
+  const d = String(description || "").replace(/\s+/g, " ").trim();
+  if (!d) return null;
+  // Require a hyphenated equipment mark (AHU-T1B, DOAH-T1, FCU-A8). Reject
+  // filter ratings / prose ("MERV 8", "SPACE TEMPERATURE").
+  const m = d.match(/^([A-Z]{1,8}-[A-Z]*\d+[A-Z0-9]*)\b/i);
+  if (!m) return null;
+  return ocrFixEquipMark(normalizeEquipMark(m[1]) || m[1]);
+}
+
+/**
  * Served equipment for a BAS points row (Pillar C — estimator join key).
- * Prefer printed UNIT/EQUIPMENT/SERVED columns; else I/O LIST device keys
- * (HWP-1); else a unit token trailing "POINTS LIST …". Never invent.
+ * Prefer printed UNIT/EQUIPMENT/SERVED columns; else a mark leading the
+ * DESCRIPTION; else I/O LIST device keys (HWP-1); else a unit token trailing
+ * "POINTS LIST …". OCR I→1 repair applied so plan paint can join schedules.
+ * Never invent families or units absent from printed text.
  * @returns {string|null}
  */
 export function servedEquipmentFromBasRow(row, listTitle = "") {
@@ -141,12 +186,25 @@ export function servedEquipmentFromBasRow(row, listTitle = "") {
     || cellText(row, /^\s*ASSOCIATED\s*EQUIP(?:MENT)?\s*$/i)
     || ""
   ).trim();
-  if (fromCell) return normalizeEquipMark(fromCell) || fromCell;
+  if (fromCell) {
+    const n = ocrFixEquipMark(normalizeEquipMark(fromCell) || fromCell);
+    // Dual-unit UNIT cells are rare; if DESCRIPTION names one side, prefer it.
+    const fromDesc = equipMarkFromBasDescription(
+      cellText(row, /DESCRIPTION/i) || scheduleAttrs(row).description || "",
+    );
+    if (fromDesc && (fromCell.includes("/") || /\/|I$/i.test(fromCell))) return fromDesc;
+    return n;
+  }
+
+  const fromDesc = equipMarkFromBasDescription(
+    cellText(row, /DESCRIPTION/i) || scheduleAttrs(row).description || "",
+  );
+  if (fromDesc) return fromDesc;
 
   const tag = String(row?.key || "").trim();
   // I/O LIST device rows: key is the equipment/device, not AI##.
   if (tag && !/^(AI|AO|BI|BO)\d/i.test(tag) && !isBasPointsHeaderRow(tag)) {
-    return normalizeEquipMark(tag) || tag;
+    return ocrFixEquipMark(normalizeEquipMark(tag) || tag);
   }
 
   const title = String(listTitle || "").replace(/\s+/g, " ").trim();
@@ -157,7 +215,12 @@ export function servedEquipmentFromBasRow(row, listTitle = "") {
     if (rest && !/^(?:WITH|FOR|AND)\b/i.test(rest) && !/\bWITH\b/i.test(rest)) {
       // Keep first mark-like token (AHU-1 / DOAH-TI / AHU-T1A/T1B).
       const tok = rest.match(/^([A-Z]{1,8}[\s\-]?\d*[A-Z0-9\/\-]*)/i);
-      if (tok) return normalizeEquipMark(tok[1]) || tok[1].trim();
+      if (tok) {
+        const fixed = ocrFixEquipMark(normalizeEquipMark(tok[1]) || tok[1].trim());
+        // Slash title without per-row desc: return first side only (joinable).
+        if (fixed.includes("/")) return fixed.split("/")[0];
+        return fixed;
+      }
     }
   }
   return null;
