@@ -1,0 +1,22 @@
+{
+  "set_id": "14_OR_KlamathCC_LearningCtr_Mechanical",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 37,
+    "estimate_only_points": 307,
+    "never_merged_into_printed": true,
+    "gap_count": 37,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T16:43:22.628Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-14-inventory-drawing-verify.json",
+    "sample_pass": 15,
+    "sample_n": 15,
+    "gt_locked": false
+  }
+}

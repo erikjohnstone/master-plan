@@ -574,6 +574,11 @@ where schedules exist. Artifact:
 `/opt/cursor/artifacts/pillar-c-estimator-product-census-batch.json`.
 **No new BAS keys** — do not invent POINTS from equipment schedules.
 
+**bas:0 inventory drawing verify (2026-09-01, still 0 locked):** SDSU 11 inventory
+sample **20/20** on drawing (printed BAS 0); Klamath 14 **15/15** on drawing
+(printed BAS 0). Draft GT created/patched; `gt_locked: false`. Artifact:
+`/opt/cursor/artifacts/pillar-c-inventory-drawing-verify-batch.json`.
+
 ### Next queue (platform loop)
 
 1. **Pillar C (corpus-deep):** Keyed BAS gap/SOO + valve column honesty drawing-backed —
