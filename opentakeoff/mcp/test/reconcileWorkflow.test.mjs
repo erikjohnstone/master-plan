@@ -937,6 +937,95 @@ test("Vol2 Irish Hill 016: single AHU MATCH (honest WEAK)", async (t) => {
   await assertFamilyAllMatch(session, graph, key, "AHU");
 });
 
+test("Vol1 Las Vegas CUP 04: cooling towers MATCH; pumps 11/12", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "04_NV_VA_LasVegas_CentralUtilityPlant.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyAllMatch(session, graph, key, "COOLING_TOWER");
+  await assertFamilyStatusCounts(session, graph, key, "PUMP", {
+    match: 11,
+    schedule_only: 1,
+  });
+});
+
+test("Vol2 unheated repair 008: UH + louver all MATCH", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["UNIT_HEATER", "LOUVER"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 NC EHRM 034: pumps all MATCH", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "034_NC_VA_Project_637_22_700_EHRM_Infrastructure.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyAllMatch(session, graph, key, "PUMP");
+});
+
+test("Vol2 sterile expand 049: air compressors all MATCH", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyAllMatch(session, graph, key, "AIR_COMPRESSOR");
+});
+
+test("Vol2 sterile 041: GRD MATCH; FCU/pump honest SO", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "041_IL_VA_Project_537_17_115_Sterile_Processing.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyAllMatch(session, graph, key, "GRD");
+  for (const family of ["FCU", "PUMP"]) {
+    await assertFamilyStatusCounts(session, graph, key, family, {
+      schedule_only: key.categories[family],
+    });
+  }
+});
+
+test("Vol2 ITD D2 lab 069: plant families honest SCHEDULE_ONLY", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "069_ID_ITD_District_2_Laboratory_Heating_Upgrades.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["AHU", "BOILER", "PUMP", "VARIABLE_FREQUENCY_DRIVE"]) {
+    await assertFamilyStatusCounts(session, graph, key, family, {
+      schedule_only: key.categories[family],
+    });
+  }
+});
+
+test("Vol1 Colville hatchery 27: fans MATCH; pumps 13/14", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "27_WA_ColvilleTribes_Hatchery_Lab.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyAllMatch(session, graph, key, "FAN");
+  await assertFamilyStatusCounts(session, graph, key, "PUMP", {
+    match: 13,
+    schedule_only: 1,
+  });
+});
+
 test("Orange County booster pump BP-1 reconcile MATCH", async () => {
   const keyPath = resolve(CROSS, "21_VA_OrangeCounty_PublicSafetyBldg.compile.json");
   assert.ok(existsSync(keyPath));
