@@ -149,3 +149,21 @@ widener → keys:
 Shared-path adds this batch: `DUCT_MOUNTED_COIL` `ELECTRIC DUCT COIL` + `DH-*`;
 schedule header junk gate (`MODEL`/`TAG`/`MIN.`) without digit-forcing letter
 suffix marks (`CV-CHW-BP-A`). Vol2 keyed total **56**/82.
+
+## Batch 6 — remaining single-file INDEX (13)
+
+Probe → keys only (no new family wideners required):
+
+| Set | Tier | HVAC | BAS | Notes |
+|---|---|---:|---:|---|
+| 083 Town Offices facilities | MEAT | 12 | 0 | FCU/ERV/HP/GRD |
+| 096 Vermillion County Jail | MEAT | 131 | 231 | dense HVAC + BAS I/O |
+| 094 Orange County History | WEAK | 7 | 0 | AHU + ACC + CT |
+| 097 JVWTP chemical buildings | WEAK | 4 | 0 | OAU + UH + GRD |
+| 078 MSU Sparty store | WEAK | 1 | 0 | single FAN |
+| 092 Guaranteed Rate Field | WEAK | 1 | 0 | GRD only |
+| 080 / 082 / 084 / 086 / 087 / 091 / 095 | ZERO | 0 | 0 | no extractable HVAC tables |
+
+Warehouse titled HX recovery also bumps **031** key **89→91** (WHSE-HX*).
+Vol2 keyed total **69**/82 — all single-file INDEX sets keyed; **13** multipart
+rejoins remain.

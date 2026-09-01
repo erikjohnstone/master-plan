@@ -383,13 +383,15 @@ reconcile, and plan joins.
 - **Vol2 batch-4 intake (shared path):** PUMP hydronic titles without SCHEDULE; AIR_SEPARATOR plural + `IAS-*`; titled HEAT_EXCHANGER keeps set-local marks; HHW/CHW start-anchored bare `VALVE SCHEDULE` + `V-HHW*`/`V-CHW*` (unanchored form regressed NAVFAC 396→233 by forcing altKeyRe on CONTROL VALVE titles). Locked **12** more Vol2 keys (7 MEAT / 3 WEAK / 2 ZERO) including VA ER **43** (38 HHW valves; GRD drops header `MIN.`) + ITD lab **93** (incl. 9 HHW reheat CVs). Vol2 keyed total **44**/82.
 - **Schedule header junk gate (shared path):** reject `MODEL`/`TAG`/`MIN.`-class labels on titled schedules without keyRe (Colville HX was 6→4 false). Do **not** require digits on unfiltered titled marks — that dropped NAVFAC letter-suffix valves (`CV-CHW-BP-A`, 396→391 / 163→158).
 - **Vol2 batch-5 intake (shared path):** `DUCT_MOUNTED_COIL` accepts `ELECTRIC DUCT COIL` + `DH-*`. Locked **12** more Vol2 keys (1 MEAT / 5 WEAK / 6 ZERO) including Miller dining **14** + Renne Library **11**. Vol2 keyed total **56**/82.
+- **Warehouse HX recovery:** titled HEAT_EXCHANGER blankKeyRe path recovers WHSE-HX* — warehouse key **89→91**. HEAT_PUMP title still matches Baker-shaped `ENERGY RECOVERY … (WITH HEAT PUMP)` so outdoor HP-* halves compile; keyRe keeps ERU-* on ERV.
+- **Vol2 batch-6 intake (shared path):** Locked remaining **13** single-file INDEX sets (2 MEAT / 4 WEAK / 7 ZERO) including Town Offices **12** + Vermillion Jail **131** HVAC / **231** BAS. Vol2 keyed total **69**/82 (all single-file INDEX sets keyed; **13** multipart rejoins remain).
 
 ### Next queue (platform loop)
 
-1. **Vol2 full-volume Pillar A (active):** batches 1–5 keyed (**56**/82). Continue
-   probe → key → fix across remaining INDEX sets (single-file then multipart
-   rejoins). Rubric: `takeoffs/VOL2_INTAKE.md`. Co-equal **Pillar B** stays gated
-   by `test:workflows` (T-VALVE-01 N=5, reconcile locks, prefer-schedule / inline motif).
+1. **Vol2 full-volume Pillar A (active):** batches 1–6 keyed (**69**/82). Next:
+   multipart INDEX rejoins (13 folders). Rubric: `takeoffs/VOL2_INTAKE.md`.
+   Co-equal **Pillar B** stays gated by `test:workflows` (T-VALVE-01 N=5,
+   reconcile locks, prefer-schedule / inline motif).
 2. Merge branch stack → `main`; WORKFLOWS #51 ON_MAIN.
 3. WP1.4 remaining titled HVAC orphans largely exhausted on keyed MEAT sets (honest refuse: federal AHU fan schedules; Valdosta VRF; Life Sciences EQ-* non-HVAC; electrical/CCTV noise).
 4. WP3.3 TG bowtie dedicated detector (tracked follow-on; Bessemer TG already passes via inline motif).

@@ -325,14 +325,18 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
   assert.ok(!hp.keyRe!.test("EH-1"));
   assert.ok(hp.blankKeyRe!.test("HP-01"));
   assert.ok(!hp.blankKeyRe!.test("WSHP-1"));
+  // Baker-shaped ERU boards titled "(WITH HEAT PUMP)" intentionally match
+  // HEAT_PUMP so outdoor HP-* halves compile; keyRe keeps ERU-* on ERV.
   assert.equal(
     scheduleTitleMatches(
       "ENERGY RECOVERY UNIT SCHEDULE (WITH HEAT PUMP)",
       hp.titleRe,
       hp.exclude,
     ),
-    false,
+    true,
   );
+  assert.ok(hp.keyRe!.test("HP-4"));
+  assert.ok(!hp.keyRe!.test("ERU-1"));
   assert.equal(
     scheduleTitleMatches("HYDRONIC PUMPS", HVAC_FAMILY_SPECS.PUMP.titleRe, HVAC_FAMILY_SPECS.PUMP.exclude),
     true,
@@ -402,8 +406,9 @@ test("WP1.4 HEAT_PUMP / FCU / HRC / AS / ET keyRe tighteners (set-agnostic)", ()
     ),
     true,
   );
-  assert.ok(HVAC_FAMILY_SPECS.HEAT_EXCHANGER.keyRe!.test("PHX-1"));
-  assert.ok(HVAC_FAMILY_SPECS.HEAT_EXCHANGER.keyRe!.test("HX-2"));
+  // Titled HX boards keep set-local marks (no keyRe); blankKeyRe gates catch-all.
+  assert.ok(HVAC_FAMILY_SPECS.HEAT_EXCHANGER.blankKeyRe!.test("PHX-1"));
+  assert.ok(HVAC_FAMILY_SPECS.HEAT_EXCHANGER.blankKeyRe!.test("HX-2"));
   assert.equal(
     scheduleTitleMatches(
       "DUCT MOUNTED COIL SCHEDULE",

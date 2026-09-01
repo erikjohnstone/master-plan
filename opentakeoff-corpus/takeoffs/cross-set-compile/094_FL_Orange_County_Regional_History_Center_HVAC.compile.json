@@ -1,0 +1,20 @@
+{
+  "set_id": "094_FL_Orange_County_Regional_History_Center_HVAC",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/094_FL_Orange_County_Regional_History_Center_HVAC.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 Orange County Regional History Center \u2014 AHU + ACC + CT.",
+  "categories": {
+    "AHU": 5,
+    "AIR_COOLED_CHILLER": 1,
+    "COOLING_TOWER": 1
+  },
+  "totals": {
+    "items": 7
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

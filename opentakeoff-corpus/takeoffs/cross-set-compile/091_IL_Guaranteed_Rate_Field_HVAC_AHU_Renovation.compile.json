@@ -1,0 +1,16 @@
+{
+  "set_id": "091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 Guaranteed Rate Field AHU reno (091) \u2014 no extractable HVAC schedule tables.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "set_id": "086_CA_Contra_Costa_College_Early_Learning_Center",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/086_CA_Contra_Costa_College_Early_Learning_Center.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 Contra Costa Early Learning \u2014 no tables extracted.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

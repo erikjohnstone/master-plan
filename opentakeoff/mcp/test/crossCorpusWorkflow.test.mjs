@@ -213,6 +213,20 @@ test("WP1 keyed compile acceptance on ≥2 non-NAVFAC sets", async () => {
     "073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.compile.json",
     "075_MT_Renne_Library_Innovation_Learning_Studio.compile.json",
     "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.compile.json",
+    // Vol2 batch-6 — remaining single-file INDEX sets (MEAT/WEAK/honest ZERO).
+    "078_US_CP25028_MSU_Union_Sparty_Store_Renovations.compile.json",
+    "080_CA_Contra_Costa_College_Science_Center_Conference.compile.json",
+    "082_OR_Klamath_Community_College_Career_Learning.compile.json",
+    "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.compile.json",
+    "084_SC_H59_N054_FW_Building_112_Chiller_Addition.compile.json",
+    "086_CA_Contra_Costa_College_Early_Learning_Center.compile.json",
+    "087_US_Contra_Costa_College_Chiller_Replacement.compile.json",
+    "091_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.compile.json",
+    "092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.compile.json",
+    "094_FL_Orange_County_Regional_History_Center_HVAC.compile.json",
+    "095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC.compile.json",
+    "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.compile.json",
+    "097_UT_JVWTP_Chemical_Buildings_HVAC_Upgrades_Project.compile.json",
   ];
   let scored = 0;
   for (const file of keys) {

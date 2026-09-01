@@ -1,0 +1,16 @@
+{
+  "set_id": "080_CA_Contra_Costa_College_Science_Center_Conference",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/080_CA_Contra_Costa_College_Science_Center_Conference.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 Contra Costa Science Center conference \u2014 no HVAC schedule tables extracted.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

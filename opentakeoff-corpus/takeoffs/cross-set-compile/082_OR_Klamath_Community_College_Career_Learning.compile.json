@@ -1,0 +1,16 @@
+{
+  "set_id": "082_OR_Klamath_Community_College_Career_Learning",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/082_OR_Klamath_Community_College_Career_Learning.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 Klamath Career Learning \u2014 no extractable HVAC schedule tables.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

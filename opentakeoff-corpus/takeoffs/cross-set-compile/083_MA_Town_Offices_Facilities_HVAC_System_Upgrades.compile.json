@@ -1,0 +1,21 @@
+{
+  "set_id": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 Town Offices facilities HVAC \u2014 FCU/ERV/HP/GRD.",
+  "categories": {
+    "FCU": 4,
+    "ERV": 2,
+    "HEAT_PUMP": 2,
+    "GRD": 4
+  },
+  "totals": {
+    "items": 12
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "set_id": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 Vermillion County Jail mechanical bid \u2014 dense HVAC + BAS I/O lists.",
+  "categories": {
+    "AHU": 1,
+    "FCU": 3,
+    "VAV": 58,
+    "AIR_COOLED_CHILLER": 2,
+    "BOILER": 2,
+    "PUMP": 10,
+    "FAN": 16,
+    "UNIT_HEATER": 5,
+    "AIR_SEPARATOR": 2,
+    "EXPANSION_TANK": 2,
+    "HEAT_EXCHANGER": 2,
+    "DUCT_MOUNTED_COIL": 4,
+    "GLYCOL_MAKEUP": 1,
+    "GRD": 9,
+    "DUCT_SILENCER": 6,
+    "LOUVER": 8
+  },
+  "totals": {
+    "items": 131
+  },
+  "bas_points": {
+    "rows": 231
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

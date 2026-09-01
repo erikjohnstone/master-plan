@@ -1,0 +1,16 @@
+{
+  "set_id": "087_US_Contra_Costa_College_Chiller_Replacement",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/087_US_Contra_Costa_College_Chiller_Replacement.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 Contra Costa chiller replacement \u2014 no extractable HVAC schedule tables.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}
