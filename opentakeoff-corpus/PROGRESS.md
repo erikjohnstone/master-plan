@@ -449,6 +449,16 @@ reconcile now prefers `VALVE MARK` over `UNIT MARK` — HHW/CHW row counts match
 keys (64/64, 99/99); most valve marks honest **SCHEDULE_ONLY** (CV-* not plan
 text). Shared-path unit test green. Draft GT still `gt_locked: false`.
 **NAVFAC 001 deepening:** Coverage matrix — POINTS served only AHU-T1A/B + DOAH-T1; AHU-A/M and DOAH-A/M lack unit lists (honest gap). Plan-paint regression 3/3 PASS. Still unlocked.
+**NAVFAC 001 drawing-backed verify (2026-09-01, still unlocked):** D10 fixture
+(PDF byte-identical to Vol2 001) — D10 totals match; **25/25** stratified POINTS
+cell sample corroborated via `findText` (contiguous desc); AI10 follow-up +
+AHU-T1A/B 24/24/14 split match D10 truth; missing-unit POINTS refuse **6/6**
+(AHU-A1/A2/M1, DOAH-A1/A2/M1 — no POINTS LIST title/phrase); CV sample **12/12**
+schedule±legend only (legend ≠ plan paint; SCHEDULE_ONLY ceiling holds). Still
+blocks lock: FCU×42 coil multiply refuse, SOO refuse, estimator-complete BAS
+beyond printed 122, corpus-deep C. Artifacts:
+`/opt/cursor/artifacts/pillar-c-navfac-001-drawing-verify.{json,md}` · draft
+`takeoffs/pillar-c-gt/001_…gt.draft.json` `drawing_verify`.
 
 **Pier 015 probe (PARTIAL):** BAS 39 rows; `served_equipment` no longer treats
 hyphen point tags (`AI-1`) as equipment — joins CCC/P/MPAC/HPAC/FC. Plan paint
@@ -459,10 +469,10 @@ MATCH: CCC-1/2, P-1/2, FC-3; MPAC/HPAC honest miss (no schedule row). CONTROL_DA
 
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** Finish NAVFAC 001 estimator takeoff + GT harness
-   (self-check + pipeline lock), then same depth for remaining 4 keyed BAS sets,
-   then expand keys to every BAS-bearing set. Parallel track: every
-   valve/damper/actuator-bearing set. Post-WP8 `test:workflows` **104/104**
+1. **Pillar C (corpus-deep):** NAVFAC 001 drawing sample green but still unlocked
+   (FCU/SOO/estimator-complete + corpus-deep). Next: same drawing-backed depth on
+   Pier 015 + Vermillion 096, then remaining keyed BAS/valve sets, then expand
+   keys to every BAS- and valve-bearing set. Post-WP8 `test:workflows` **104/104**
    green (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
