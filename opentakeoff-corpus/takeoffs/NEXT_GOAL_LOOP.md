@@ -1,7 +1,8 @@
 # Next major goal loop — HVAC/BAS cross-set + reconcile golden
 
-**Status:** ACTIVE (Pillars A+B §6 MET; C = estimator takeoff+plan-grounding; D queued)  
-**Date:** 2026-08-31 (pillars C+D added 2026-09-01; C research 2026-09-01; C reframed 2026-09-01)  
+**Status:** ACTIVE (Pillars A+B §6 MET; C = corpus-deep estimator takeoff; D queued)  
+**Date:** 2026-08-31 (pillars C+D added 2026-09-01; C research 2026-09-01; C
+reframed 2026-09-01; **C depth = every corpus BAS + valve set** 2026-09-01)  
 **Authority:** `GOAL.md` + `WORKFLOWS.md` + live codebase + industry takeoff practice  
 
 This document is the **implementation charter**. The next `/goal` should execute
@@ -11,13 +12,36 @@ this plan — not invent a new softer one.
 goal and our foundation. Every pillar must stay on the shared Session+ODL path,
 set-agnostic, cite-honest, and production-ready on arbitrary uploads.
 
-**Pillar C product bar (2026-09-01 — estimator voice):** Nail the **core
-commercial takeoff workflows** the way an estimator actually works them —
-especially **points takeoffs** (SOO + equipment + hard/soft I/O + alarms/trends,
-not “scrape the POINTS LIST and call it done”), with **every served unit /
-device grounded on the plans with visible highlights**. Same depth for
-**valves, actuators, and dampers** (contractor columns + schedule↔plan paint).
-Thin compile stubs without plan grounding are not Pillar C done.
+**Pillar C product bar (2026-09-01 — DEEP / corpus-complete):**
+
+Pillar C is **not** “≥3 bulk demos” and **not** POINTS LIST / valve schedule
+scrape. It is **estimator-deep takeoff truth for every BAS set and every valve
+set in the corpus**, checked by the coordinator **and** corroborated by the
+pipeline (keyed GT harness + locks + workflow suite). Do **not** stop, and do
+**not** mark C done, until both are true for **all** of them.
+
+**BAS (every corpus set with BAS/controls content):**
+1. Inventory served equipment from schedules (qty + cite).
+2. Build / verify the points model the way an estimator does — SOO + equipment
+   + hard/soft I/O + proofs/interlocks + alarms/trends + spare disclose — not
+   “read the POINTS LIST and call it done.”
+3. Typed takeoff output with sources; labeled *estimate* path only when
+   schedule/SOO-derived and never silently merged into printed-list truth.
+4. Ground every served unit/device on plan with visible highlights (or honest
+   SCHEDULE_ONLY / refuse).
+5. **Self-check:** coordinator independently verifies the answer against the
+   drawings (equipment counts, point math, plan hits).
+6. **Pipeline corroboration:** GT harness / compile+reconcile locks agree with
+   that verified answer on the shared Session path.
+
+**Valves / dampers / actuators (every corpus set with those schedules):**
+Same depth — contractor columns (tag, service, size, GPM/Cv, actuator, served
+unit, cites), schedule↔plan paint, self-check + pipeline corroboration on
+**every** valve/damper/actuator-bearing set — not a NAVFAC-only or “≥3 keys”
+ceiling.
+
+Thin compile stubs, checklist plumbing, or a handful of green demos are **not**
+Pillar C done.
 
 ---
 
@@ -35,11 +59,11 @@ A+B success metrics (§6) are met:
 2. **Schedule↔plan reconciliation (Pillar B)** — prove scheduled tags on the
    drawings, name mismatches (`MATCH` / `SCHEDULE_ONLY` / `PLAN_ONLY` / honest
    refuse). That is the bid-critical step every serious MEP estimator runs.
-3. **Estimator takeoff + plan grounding (Pillar C)** — nail **points takeoffs**
-   the way estimators run them (equipment inventory → SOO/I/O model → typed
-   points → alarms/trends/hard-vs-soft → spare disclose) **and** the same
-   depth for **valves / dampers / actuators**, with **schedule rows joined to
-   plan locations and painted highlights** on the drawings. Not compile stubs.
+3. **Estimator takeoff + plan grounding (Pillar C)** — estimator-deep **points
+   takeoffs** and **valve / damper / actuator takeoffs** on **every** corpus
+   BAS set and **every** corpus valve set: equipment inventory → SOO/I/O model
+   → typed points / contractor columns → plan paint → **coordinator
+   self-check + pipeline GT corroboration**. Not compile stubs; not “≥3 demos.”
 4. **Symbol-count grounding depth (Pillar D)** — “how many VAVs/EFs on plan”
    style **symbol counts** highlighted and accurate across ≥3 bulk proofs
    (legend/schematic honesty retained). Pillar C already owns takeoff-line
@@ -368,8 +392,9 @@ control valves + dampers); ASHRAE-adjacent actuator schedule columns.
 
 **Product gap vs today:** `T-VALVE-01` locks NAVFAC CHW+HHW control valves well;
 Vol2 already surfaces damper/isolation/PRV/mixing/PSV/fume-hood on ~12 MEAT
-keys, but contractor-column depth + actuator workflows + ≥3 bulk acceptance
-keys are still the bar. Thin compile stubs ≠ commercial valve takeoff.
+keys. That is **plumbing**, not done. Pillar C valve bar = **every corpus set
+with valve/damper/actuator schedules**, self-checked + pipeline-corroborated.
+Thin compile stubs / ≥3 demos ≠ commercial valve takeoff.
 
 **Ship (set-agnostic shared path only):**
 1. Air + water valve families: isolation, control, balancing, check,
@@ -379,13 +404,14 @@ keys are still the bar. Thin compile stubs ≠ commercial valve takeoff.
    dampers, fume-hood dampers — reconcile-capable when plan text exists.
 3. Valve takeoff intent parity UI+MCP: contractor columns (mark, served unit,
    service, size, GPM, Cv, configuration, actuator, notes, sheet cite) +
-   optional plan highlight when user asks installed qty.
-4. Bulk acceptance keys on ≥3 non-NAVFAC sets with real valve schedules
-   (Vol2 HHW/CHW paths already started on itd/VA ER sets; pier/sterile/airport/
-   jail/plant MEAT keys already compile damper/isolation/PRV families).
+   plan highlight when drawable.
+4. **Corpus-complete acceptance:** every Vol1/Vol2 set that schedules valves /
+   dampers / actuators gets a keyed takeoff + plan-ground outcome (MATCH or
+   honest SCHEDULE_ONLY/refuse) — expand keys until the corpus is covered,
+   not stop at a sample of 3.
 
 **DoD:**
-1. [x] Air-side + water-side valve compile paths keyed on ≥3 bulk sets
+1. [x] Air-side + water-side valve compile paths keyed on multiple bulk sets
    (Carson CONTROL_DAMPER 2 · pier ISO+damper 36 · ITD HHW+lab air 31 ·
    SDSU fume-hood+PRV 60 · Vermillion dampers 24 — plus NAVFAC CHW+HHW 163).
 2. [x] Damper/actuator families compile (CONTROL_DAMPER / FUME_HOOD_DAMPER in
@@ -393,11 +419,18 @@ keys are still the bar. Thin compile stubs ≠ commercial valve takeoff.
    for CONTROL_DAMPER / MOTORIZED DAMPER; pier + Vermillion CONTROL_DAMPER
    locks already in `reconcileWorkflow.test.mjs`.
 3. [x] Unit + T-VALVE-01 locks green after expansion; MCP `control_valves`
-   enum parity with UI. Full `test:workflows` re-run still owed after WP8.
+   enum parity with UI. Full `test:workflows` **104/104** green post-WP8
+   (2026-09-01).
 4. [x] No per-set hardcodes; honest empty when set has no extractable valve
    tables (service=CHW|HHW still hydronic-only).
 5. [x] Research implications reflected: Cv/GPM/size/served unit + printed
    Actuator / Fail position / Control signal; never invent plan qty.
+6. [ ] **Every** corpus valve/damper/actuator-bearing set: contractor-column
+   takeoff keyed + coordinator self-check of counts/columns against drawings.
+7. [ ] **Every** such set: pipeline corroboration (GT/reconcile locks) matches
+   the self-checked answer; plan paint MATCH or honest SCHEDULE_ONLY/refuse.
+8. [ ] No “sample of 3 and declare victory” — corpus census of valve-bearing
+   sets tracked in PROGRESS until 100% covered.
 
 **Implementation pointers (shared path — after §6 MET; 2026-09-01 survey):**
 - Module: `opentakeoff/web/src/lib/corpusTakeoff.mjs` (MCP re-exports).
@@ -493,7 +526,7 @@ necessary but **not sufficient**. Pillar C must:
 2. [x] BAS workflow locks: T-BAS-01 green with WP8 rollups (alarm 44 / trend 32
    Yes-only on NAVFAC; AI/AO/BI/BO frozen 43/15/49/15); unit WP8 extras green
    (No/- never inflate). Five bulk keys lock optional alarm/trend/hardwired/soft.
-   Full `test:workflows` re-run after WP8 batch still in flight (coordinator).
+   Full `test:workflows` **104/104** green after WP8 batch (2026-09-01).
 3. [x] SOO honest refuse documented (BAS_EXCLUSIONS + provenance: SOO is not a
    points source; POINTS LIST ≠ complete BAS takeoff). Tabular SOO scoring
    remains follow-on where vector-extractable.
@@ -505,22 +538,29 @@ necessary but **not sufficient**. Pillar C must:
 7. [x] `corpus_bas` / `corpus_valves` workflows require plan sweep/reconcile +
    highlight before answer (estimator takeoff ≠ schedule scrape).
 
-*Estimator product bar (Pillar C incomplete until these are green):*
-8. [ ] **Equipment inventory** from schedules (shared HVAC compile) on ≥3 bulk
-   sets — every served unit/device that owns points is listed with qty + cite.
+*Estimator product bar (Pillar C incomplete until ALL corpus BAS + valve
+sets pass — do not stop at a sample):*
+8. [ ] **Equipment inventory** from schedules (shared HVAC compile) on **every**
+   corpus BAS-bearing set — every served unit/device that owns points is listed
+   with qty + cite.
 9. [ ] **SOO / controls model** where vector-extractable: required sensors,
    commands, proofs, interlocks, alarms/trends per equipment type; honest
    refuse when narrative-only / raster — never invent points from SOO prose.
 10. [ ] **Typed points takeoff** = printed POINTS/I/O lists **plus** labeled
     schedule/SOO-derived *estimate* path (qty × points/unit) with sources;
     gap report vs printed lists; spare % disclosed as policy note only.
-11. [ ] **Ground-truth harness** on ≥3 sets: hand-verified (or key-locked)
-    expected equipment inventory + typed point rollups + plan-grounding
-    outcomes; scorer compares product output to that harness — not “122 rows
-    matched the POINTS LIST scrape.”
-12. [ ] Bulk plan paint: ≥3 sets where served_equipment / valve / damper marks
-    paint on plan via shared sweep (MATCH or honest SCHEDULE_ONLY) with
-    visible cites — same depth for valves/dampers/actuators.
+11. [ ] **Ground-truth harness for every corpus BAS set:** coordinator
+    self-checks equipment inventory + typed point rollups + plan-grounding
+    against the drawings; keyed harness locks that answer; pipeline scorer must
+    match — not “122 rows matched the POINTS LIST scrape,” not “≥3 demos.”
+12. [ ] **Plan paint for every corpus BAS + valve/damper/actuator set:**
+    served_equipment / valve / damper marks paint via shared sweep (MATCH or
+    honest SCHEDULE_ONLY) with visible cites — census in PROGRESS until 100%.
+13. [ ] **Stop condition:** Pillar C done only when every BAS set and every
+    valve set in the corpus has (a) coordinator-verified right answer and
+    (b) pipeline corroboration on the shared path. Expand BAS/valve keys until
+    corpus coverage is complete (today ~5 BAS keys / ~12 valve-family keys —
+    those are the floor to deepen, then grow to every bearing set).
 
 **Implementation pointers (shared path — after §6 MET; 2026-09-01 survey):**
 - Module: `compileBasTakeoff` / `isBasPointsListTitle` / `basPointExtras` /
@@ -530,10 +570,16 @@ necessary but **not sufficient**. Pillar C must:
 - Today: row + AI/AO/BI/BO totals; I/O LIST ANALOG→AI, DIGITAL→BI; ALARM/TREND
   Yes-only; `served_equipment` for plan-join; workflow gate demands
   `sweep_schedule_row` / `reconcile_schedule_plan` paint on corpus_bas/valves.
-- Bulk next: reuse `reconcileWorkflow` CONTROL_DAMPER / equipment MATCH pattern
-  for AHU/DOAS/FCU tags drawn from BAS `served_equipment` on NAVFAC + ≥2 Vol2
-  sets (pier / Vermillion / lab) — honest SCHEDULE_ONLY when not plan-text.
-- Spare % and SOO-derived points remain honest refuse / disclose — never invent.
+- Corpus-deep next (estimator product — not plumbing): for **each** BAS and
+  valve-bearing set — (1) equipment inventory; (2) SOO/controls extract where
+  tabular; (3) labeled qty×points/unit estimate + gap vs printed POINTS/I/O;
+  (4) GT harness key locked to coordinator-verified truth; (5) plan paint.
+  Reuse `reconcileWorkflow` CONTROL_DAMPER / equipment MATCH patterns — honest
+  SCHEDULE_ONLY when not plan-text. Track census in PROGRESS; do not declare C
+  done on a subset.
+- Spare % and SOO-derived points remain honest refuse / disclose — never invent
+  and never silently merge estimates into POINTS LIST truth.
+- Post-WP8 `test:workflows` **104/104** green (2026-09-01) — plumbing only.
 
 ### WP9 — Plan grounding depth (Pillar D — after A+B bar)
 
@@ -586,13 +632,16 @@ The loop is complete **only when all are true**:
 
 ### Pillars C + D (after A+B)
 
-8. **Pillar C — Valves:** Air + water valve, damper, and actuator takeoff
-   workflows are production-grade on the shared path with contractor columns,
-   cites, optional plan highlights, and ≥3 bulk acceptance keys — truthful
-   empty when no valve tables.
-9. **Pillar C — BAS:** Point lists, I/O rollups, and extractable SOO/reference
-   content answered with reference-eval honesty on ≥5 bulk sets; equipment↔point
-   joins where drawable.
+8. **Pillar C — Valves (corpus-complete):** Air + water valve, damper, and
+   actuator takeoffs are production-grade on the shared path with contractor
+   columns, cites, and plan highlights for **every** corpus set that schedules
+   them — each answer coordinator-self-checked **and** pipeline-corroborated;
+   truthful empty when no valve tables. Sample-of-3 is not done.
+9. **Pillar C — BAS (corpus-complete):** Estimator-method points takeoffs
+   (equipment inventory → SOO/I/O model → typed points + estimate/gap → plan
+   paint) for **every** corpus BAS-bearing set — each answer
+   coordinator-self-checked **and** pipeline-corroborated via GT harness.
+   POINTS LIST scrape alone never counts as done.
 10. **Pillar D — Grounding:** Symbol counts and mark sweeps return **accurate
     quantities with visible plan highlights** on ≥3 bulk proofs; legend-only and
     unscaled refuses stay honest.
@@ -612,9 +661,11 @@ honest ZERO/WEAK OK; set-agnostic title/keyRe/BAS only); T-VALVE-01 N=5 lock;
 inline motif + rowsym bar; schedule↔plan reconcile with contractor columns+cites
 (proven on NAVFAC + bulk WP1/Vol2 sets); shared-path plan-tool unify + graph
 prewarm; keep HVAC/BAS locks and suite gate green.
-After A+B bar (§6): Pillar C — deep truthful valve (air/water/damper/actuator)
-+ BAS (points, I/O, SOO) workflows; Pillar D — deep grounding (symbol counts
-highlighted and accurate). Set-agnostic only. Always tests. No ODL rewrite.
+After A+B bar (§6): Pillar C — corpus-deep BAS + valve/damper/actuator
+takeoffs (estimator method); do not stop until every BAS set and every valve
+set has coordinator-verified truth corroborated by the pipeline GT harness;
+Pillar D — symbol-count highlight accuracy. Set-agnostic only. Always tests.
+No ODL rewrite. No cloud workers.
 ```
 
 ---

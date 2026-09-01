@@ -1,9 +1,9 @@
 # OpenTakeoff HVAC/BAS Corpus — Goal, Method, and Current State
 
-Last updated: 2026-09-01 — autonomous platform loop expanded to include the
-**full** Vol2 bulk corpus (82 INDEX sets) alongside Vol1; Pillars C and D
-added after A/B; see §8. Older keyed-corpus history below is retained for
-provenance.
+Last updated: 2026-09-01 — Pillar C raised to **corpus-complete** depth:
+every BAS set + every valve set must be coordinator-verified and
+pipeline-corroborated (see `takeoffs/NEXT_GOAL_LOOP.md`). A+B §6 MET;
+Vol2 full 82 INDEX still in scope. Older keyed-corpus history retained.
 
 ## Current execution policy (supersedes older worker references below)
 
@@ -302,7 +302,7 @@ Session + ODL pipeline.
 |---|---|---|
 | **A — Cross-set compile** | Set-agnostic HVAC/BAS/valve **schedule compile** across Vol1 (~31) + Vol2 (all 82 INDEX sets). Honest ZERO/WEAK when no extractable tables. | **Largely complete** — 82/82 Vol2 + Vol1 keyed; family/title/BAS depth continues on WEAK sets. |
 | **B — Schedule↔plan reconcile** | Contractor-grade reconcile (`MATCH` / `SCHEDULE_ONLY` / `PLAN_ONLY` / honest refuse) with cites; `T-VALVE-01` N=5; inline motif; Session-unified plan tools + prewarm. | **In progress** — workflow shipped; deepening Vol2 MEAT rejoin locks. |
-| **C — Valve + BAS workflow depth** | Go **deep and truthful** on valve takeoff workflows (air + water valves, dampers, actuators) **and** BAS workflows (point lists, I/O rollups, sequence of operations, equipment↔point↔location). Full contractor deliverables — not schedule stubs. | **Queued after A+B bar met** — see `NEXT_GOAL_LOOP.md` WP7–WP8. |
+| **C — Valve + BAS workflow depth** | **Corpus-complete** estimator-deep takeoffs for **every** BAS-bearing set and **every** valve/damper/actuator-bearing set: equipment inventory → SOO/I/O model → typed points / contractor columns → plan paint. Each set must be **coordinator self-checked** against drawings **and** **pipeline-corroborated** (GT harness + locks). Not POINTS LIST scrape; not a sample of 3 demos. | **Active after A+B §6 MET** — plumbing only so far; see `NEXT_GOAL_LOOP.md` WP7–WP8 deep DoD. |
 | **D — Plan grounding depth** | Go **deep on grounding**: symbol counts, mark sweeps, and “how many on plan” answers must be **highlighted and accurate** — every cited location visible, no legend-only overclaim, no silent misses. | **Queued after A+B bar met** — see `NEXT_GOAL_LOOP.md` WP9. |
 
 **Objective (Pillars A+B, current):** Set-agnostic HVAC/BAS compile +

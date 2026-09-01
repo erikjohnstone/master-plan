@@ -408,7 +408,7 @@ UI+MCP parity, no corpus hardcodes.
 |---|---|---|
 | **A — Cross-set compile** | Vol1 + Vol2 (82/82 INDEX) schedule compile | **§6 MET** — 82/82 Vol2 + Vol1 keys; soft titles + sibling-exclusion; T-HVAC-01/T-BAS-01 green; honest WEAK/ZERO stable |
 | **B — Reconcile** | Schedule↔plan with contractor columns+cites | **§6 MET** — on `main`; NAVFAC + Vol1/Vol2 bulk locks; Agent UI proof; WORKFLOWS **#51 ON_MAIN**; full `test:workflows` **104/104** |
-| **C — Estimator takeoff + plan paint** | Points takeoffs (real method) + valves/dampers/actuators; every line plan-grounded with highlights | **Not done** — WP7/WP8 printed-list plumbing only (alarm/trend, served_equipment join, workflow paint gate). Still owed: equipment inventory → SOO/I/O model → typed points (+ estimate path) → GT harness → plan paint on ≥3 sets. T-BAS-01 122 ≠ complete points takeoff |
+| **C — Estimator takeoff + plan paint** | Corpus-deep points + valve/damper/actuator takeoffs; every BAS set + every valve set self-checked and pipeline-corroborated | **Not done** — WP7/WP8 printed-list plumbing only. **Stop condition:** every corpus BAS set and every corpus valve set has coordinator-verified truth + GT/pipeline corroboration. Today ~5 BAS keys / ~12 valve-family keys are the floor to deepen, then expand to all bearing sets. T-BAS-01 122 ≠ complete points takeoff. `test:workflows` **104/104** green post-WP8 (plumbing). |
 | **D — Symbol-count grounding** | Symbol counts highlighted and accurate on plan | **Queued** — WP9 after C takeoff+paint bar |
 
 Authority: `GOAL.md` · `takeoffs/NEXT_GOAL_LOOP.md`.
@@ -428,9 +428,16 @@ Authority: `GOAL.md` · `takeoffs/NEXT_GOAL_LOOP.md`.
 
 Honest ceilings retained (not score-chased): Klamath FC/HP/DOAS SCHEDULE_ONLY under `evaluationFast`; WEAK/ZERO compile keys where no extractable tables; WP3.3 TG bowtie follow-on.
 
+### Pillar C depth mandate (2026-09-01 — user)
+
+Pillar C is **corpus-complete or it is not done**. Coordinator must personally
+verify the right answer on each BAS set and each valve set, then corroborate
+via the shared-path pipeline / GT harness. Sample proofs and POINTS LIST
+scrapes do not satisfy the mandate.
+
 ### Next queue (platform loop)
 
-1. **Pillar C (real estimator bar):** Not list scrape. Inventory equipment from schedules → SOO/controls model where extractable → typed points takeoff (printed lists + labeled qty×points/unit estimate) → gap/spare disclose → **GT harness** on ≥3 sets → plan-ground every served unit/valve/damper with highlights. Full `test:workflows` after WP8 still in flight; plan-paint scaffold is evidence scaffolding only, not C done.
+1. **Pillar C (corpus-deep):** Not list scrape. For **every** BAS set and **every** valve/damper/actuator set in the corpus: inventory equipment → SOO/controls model where extractable → typed takeoff (+ labeled estimate) → gap/spare disclose → plan paint → **coordinator self-check** against drawings → **pipeline GT corroboration**. Do not stop at ≥3 demos. Post-WP8 `test:workflows` **104/104** green (plumbing only).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.
