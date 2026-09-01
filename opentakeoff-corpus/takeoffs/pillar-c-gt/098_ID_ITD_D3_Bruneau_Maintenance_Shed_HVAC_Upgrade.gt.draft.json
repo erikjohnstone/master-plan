@@ -2,7 +2,7 @@
   "set_id": "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
   "pillar_c_complete": false,
   "gt_locked": false,
-  "note": "bas:0 \u2014 inventory/estimate floor only; Pillar C not complete",
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
   "estimator_product": {
     "printed_bas_rows": 0,
     "inventory_units": 5,
@@ -31,5 +31,23 @@
     "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
     "printed_items": 0,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:09:02.671Z",
+    "ms": 1718,
+    "printed_bas_rows": 0,
+    "inventory_units": 5,
+    "targets_total": 5,
+    "tallies": {
+      "MATCH": 5,
+      "SCHEDULE_ONLY": 0,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

@@ -28,5 +28,22 @@
     "schedule_only": 38,
     "items": 38,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "053_VA_Renovate_Expand_Emergency_Room_System_VA",
+    "kind": "valve_depth_plan_paint_full",
+    "at": "2026-09-01T20:53:15.282Z",
+    "ms": 4044,
+    "printed_items": 38,
+    "targets_total": 38,
+    "tallies": {
+      "MATCH": 0,
+      "SCHEDULE_ONLY": 38,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

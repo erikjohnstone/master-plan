@@ -2,7 +2,7 @@
   "set_id": "072_CA_CA07_2627_West_Valley_College_Science_Math",
   "pillar_c_complete": false,
   "gt_locked": false,
-  "note": "bas:0 \u2014 inventory/estimate floor only; Pillar C not complete",
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
   "estimator_product": {
     "printed_bas_rows": 0,
     "inventory_units": 11,
@@ -31,5 +31,23 @@
     "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
     "printed_items": 0,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "072_CA_CA07_2627_West_Valley_College_Science_Math",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:57:14.778Z",
+    "ms": 7607,
+    "printed_bas_rows": 0,
+    "inventory_units": 11,
+    "targets_total": 11,
+    "tallies": {
+      "MATCH": 10,
+      "SCHEDULE_ONLY": 1,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

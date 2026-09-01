@@ -415,5 +415,22 @@
     },
     "served_targets": 75,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+    "kind": "valve_depth_plan_paint_full",
+    "at": "2026-09-01T20:53:51.883Z",
+    "ms": 11075,
+    "printed_items": 24,
+    "targets_total": 24,
+    "tallies": {
+      "MATCH": 12,
+      "SCHEDULE_ONLY": 12,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

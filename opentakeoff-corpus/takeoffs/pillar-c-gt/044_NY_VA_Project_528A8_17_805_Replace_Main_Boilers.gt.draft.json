@@ -103,5 +103,23 @@
     "sample_pass": 13,
     "sample_n": 15,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:56:08.766Z",
+    "ms": 5021,
+    "printed_bas_rows": 0,
+    "inventory_units": 22,
+    "targets_total": 22,
+    "tallies": {
+      "MATCH": 0,
+      "SCHEDULE_ONLY": 22,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

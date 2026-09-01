@@ -103,5 +103,23 @@
     "schedule_only": 47,
     "items": 60,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "11_CA_SDSU_EngSciences_Complex_100SD",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:01:23.165Z",
+    "ms": 22580,
+    "printed_bas_rows": 0,
+    "inventory_units": 128,
+    "targets_total": 78,
+    "tallies": {
+      "MATCH": 47,
+      "SCHEDULE_ONLY": 31,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

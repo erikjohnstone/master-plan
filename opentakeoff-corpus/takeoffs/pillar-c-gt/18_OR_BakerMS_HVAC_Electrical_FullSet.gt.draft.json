@@ -18,5 +18,23 @@
     "sample_pass": 6,
     "sample_n": 6,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "18_OR_BakerMS_HVAC_Electrical_FullSet",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:09:22.132Z",
+    "ms": 2375,
+    "printed_bas_rows": 0,
+    "inventory_units": 6,
+    "targets_total": 6,
+    "tallies": {
+      "MATCH": 6,
+      "SCHEDULE_ONLY": 0,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

@@ -18,5 +18,23 @@
     "sample_pass": 5,
     "sample_n": 5,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "22_GA_Valdosta_FireStation8_100CD",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:09:32.077Z",
+    "ms": 9945,
+    "printed_bas_rows": 0,
+    "inventory_units": 5,
+    "targets_total": 5,
+    "tallies": {
+      "MATCH": 4,
+      "SCHEDULE_ONLY": 1,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

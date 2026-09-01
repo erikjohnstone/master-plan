@@ -2,7 +2,7 @@
   "set_id": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
   "pillar_c_complete": false,
   "gt_locked": false,
-  "note": "bas:0 \u2014 inventory/estimate floor only; Pillar C not complete",
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
   "estimator_product": {
     "printed_bas_rows": 0,
     "inventory_units": 6,
@@ -31,5 +31,23 @@
     "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
     "printed_items": 0,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:05:07.183Z",
+    "ms": 3650,
+    "printed_bas_rows": 0,
+    "inventory_units": 6,
+    "targets_total": 6,
+    "tallies": {
+      "MATCH": 6,
+      "SCHEDULE_ONLY": 0,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

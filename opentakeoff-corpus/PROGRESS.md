@@ -8,10 +8,13 @@
 |---|---|---|---|
 | **Keyed BAS** | **5/5** | 001 **116/120** MATCH; 015 **22/29**; 021 **0/73** honest SO; 096 **59/75**; 027 **45/64** | `/opt/cursor/artifacts/pillar-c-depth-bas-keyed-plan-paint.json` |
 | **Valve printed** | **11/11** | Pier **34/36** MATCH; Carson **2/2**; NAVFAC **2/80**; full targets not 12-tag sample | `/opt/cursor/artifacts/pillar-c-depth-valve-plan-paint.json` |
-| **bas:0 inventory batch 1** | **20/59** | **18/20 with MATCH** (SDSU, Eglin, Ames, Orange County, …) | `/opt/cursor/artifacts/pillar-c-depth-bas-inventory-batch1.json` |
+| **bas:0 inventory batch 1** | **20** | **18/20** with MATCH | `/opt/cursor/artifacts/pillar-c-depth-bas-inventory-batch1.json` |
+| **bas:0 inventory batch 2** | **20** | **15/20** with MATCH | `/opt/cursor/artifacts/pillar-c-depth-bas-inventory-batch2.json` |
+| **bas:0 inventory batch 3** | **18** | **9/18** with MATCH (Klamath honest SO, …) | `/opt/cursor/artifacts/pillar-c-depth-bas-inventory-batch3.json` |
 
+- **bas:0 inventory depth total:** **58/58** scored inventory sets full-swept (batches 1–3).
 - **Script:** `opentakeoff/mcp/scripts/pillarCDepthPlanPaint.mjs` — full sweep + GT draft patch on shared path.
-- **Remaining depth:** bas:0 inventory batches 2–3 (~39 sets), 70 valve zero floors, SOO/gap/GT lock per set.
+- **Remaining depth:** 70 valve zero floors, 49 bas zero floors, gap/SOO/GT lock per set.
 - **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
 
 ### Prior — WIDTH complete (2026-09-01 20:50 UTC)

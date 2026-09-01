@@ -18,5 +18,23 @@
     "sample_pass": 11,
     "sample_n": 11,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "03_FL_HurlburtField_ChildDevCenter",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:56:03.743Z",
+    "ms": 12829,
+    "printed_bas_rows": 0,
+    "inventory_units": 11,
+    "targets_total": 11,
+    "tallies": {
+      "MATCH": 11,
+      "SCHEDULE_ONLY": 0,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

@@ -18,5 +18,23 @@
     "sample_pass": 7,
     "sample_n": 7,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "26_CA_TransbayTower_Mechanical_64Sheets",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:10:20.834Z",
+    "ms": 19574,
+    "printed_bas_rows": 0,
+    "inventory_units": 7,
+    "targets_total": 7,
+    "tallies": {
+      "MATCH": 0,
+      "SCHEDULE_ONLY": 7,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

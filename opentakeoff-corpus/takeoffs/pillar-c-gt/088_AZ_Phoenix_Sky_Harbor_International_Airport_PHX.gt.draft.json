@@ -2,7 +2,7 @@
   "set_id": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
   "pillar_c_complete": false,
   "gt_locked": false,
-  "note": "bas:0 \u2014 inventory/estimate floor only; Pillar C not complete",
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
   "estimator_product": {
     "printed_bas_rows": 0,
     "inventory_units": 31,
@@ -31,5 +31,23 @@
     "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
     "printed_items": 0,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:01:00.585Z",
+    "ms": 216805,
+    "printed_bas_rows": 0,
+    "inventory_units": 31,
+    "targets_total": 31,
+    "tallies": {
+      "MATCH": 30,
+      "SCHEDULE_ONLY": 1,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

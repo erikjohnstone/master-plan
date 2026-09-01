@@ -2,7 +2,7 @@
   "set_id": "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04",
   "pillar_c_complete": false,
   "gt_locked": false,
-  "note": "bas:0 \u2014 inventory/estimate floor only; Pillar C not complete",
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
   "estimator_product": {
     "printed_bas_rows": 0,
     "inventory_units": 83,
@@ -31,5 +31,23 @@
     "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
     "printed_items": 0,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:55:12.576Z",
+    "ms": 5655,
+    "printed_bas_rows": 0,
+    "inventory_units": 83,
+    "targets_total": 65,
+    "tallies": {
+      "MATCH": 65,
+      "SCHEDULE_ONLY": 0,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

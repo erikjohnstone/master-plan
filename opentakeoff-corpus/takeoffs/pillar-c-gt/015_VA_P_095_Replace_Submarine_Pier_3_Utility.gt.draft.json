@@ -238,5 +238,22 @@
     },
     "served_targets": 26,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "015_VA_P_095_Replace_Submarine_Pier_3_Utility",
+    "kind": "valve_depth_plan_paint_full",
+    "at": "2026-09-01T20:52:49.590Z",
+    "ms": 5719,
+    "printed_items": 36,
+    "targets_total": 36,
+    "tallies": {
+      "MATCH": 34,
+      "SCHEDULE_ONLY": 2,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

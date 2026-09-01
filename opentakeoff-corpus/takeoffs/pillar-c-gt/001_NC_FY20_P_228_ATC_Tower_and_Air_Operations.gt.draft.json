@@ -439,5 +439,22 @@
     },
     "served_targets": 120,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
+    "kind": "valve_depth_plan_paint_full",
+    "at": "2026-09-01T20:52:43.871Z",
+    "ms": 15632,
+    "printed_items": 163,
+    "targets_total": 80,
+    "tallies": {
+      "MATCH": 2,
+      "SCHEDULE_ONLY": 78,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

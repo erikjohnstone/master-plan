@@ -163,5 +163,23 @@
   "drawing_backed_self_check": {
     "status": "in_progress",
     "notes": "Valve drawing sample previously honest. BAS printed POINTS scrape = 0; POINTS LIST titles are SOO narrative (0 tables). Inventory plan-paint expand recorded separately. estimator_complete false; gt_locked false."
+  },
+  "depth_plan_paint_full": {
+    "set_id": "062_ID_ITD_District_1_Laboratory_Building_Mechanical",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:56:47.974Z",
+    "ms": 4272,
+    "printed_bas_rows": 0,
+    "inventory_units": 16,
+    "targets_total": 16,
+    "tallies": {
+      "MATCH": 15,
+      "SCHEDULE_ONLY": 1,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

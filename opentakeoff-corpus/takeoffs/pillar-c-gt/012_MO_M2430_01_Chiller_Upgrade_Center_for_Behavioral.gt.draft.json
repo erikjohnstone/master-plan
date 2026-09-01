@@ -2,7 +2,7 @@
   "set_id": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
   "pillar_c_complete": false,
   "gt_locked": false,
-  "note": "bas:0 \u2014 inventory/estimate floor only; Pillar C not complete",
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
   "estimator_product": {
     "printed_bas_rows": 0,
     "inventory_units": 16,
@@ -31,5 +31,23 @@
     "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
     "printed_items": 0,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:55:03.452Z",
+    "ms": 12039,
+    "printed_bas_rows": 0,
+    "inventory_units": 16,
+    "targets_total": 16,
+    "tallies": {
+      "MATCH": 13,
+      "SCHEDULE_ONLY": 3,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

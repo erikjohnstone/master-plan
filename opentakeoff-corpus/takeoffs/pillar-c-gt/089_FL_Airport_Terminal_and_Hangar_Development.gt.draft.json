@@ -84,5 +84,23 @@
     "sample_pass": 13,
     "sample_n": 20,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "089_FL_Airport_Terminal_and_Hangar_Development",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:09:00.253Z",
+    "ms": 18086,
+    "printed_bas_rows": 0,
+    "inventory_units": 11,
+    "targets_total": 11,
+    "tallies": {
+      "MATCH": 4,
+      "SCHEDULE_ONLY": 7,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

@@ -18,5 +18,23 @@
     "sample_pass": 15,
     "sample_n": 15,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "21_VA_OrangeCounty_PublicSafetyBldg",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:01:46.465Z",
+    "ms": 18766,
+    "printed_bas_rows": 0,
+    "inventory_units": 33,
+    "targets_total": 33,
+    "tallies": {
+      "MATCH": 33,
+      "SCHEDULE_ONLY": 0,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

@@ -65,5 +65,23 @@
     },
     "served_targets": 51,
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "27_WA_ColvilleTribes_Hatchery_Lab",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:52:27.649Z",
+    "ms": 10603,
+    "printed_bas_rows": 42,
+    "inventory_units": 22,
+    "targets_total": 64,
+    "tallies": {
+      "MATCH": 45,
+      "SCHEDULE_ONLY": 19,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

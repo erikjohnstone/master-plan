@@ -2,7 +2,7 @@
   "set_id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
   "pillar_c_complete": false,
   "gt_locked": false,
-  "note": "bas:0 \u2014 inventory/estimate floor only; Pillar C not complete",
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
   "estimator_product": {
     "printed_bas_rows": 0,
     "inventory_units": 12,
@@ -46,7 +46,7 @@
           "tabular_points": false
         }
       ],
-      "note": "SOO present but not a typed points source \u2014 refuse_not_done; never invent points from narrative."
+      "note": "SOO present but not a typed points source — refuse_not_done; never invent points from narrative."
     },
     "phrase_hits": [
       {
@@ -84,8 +84,26 @@
       }
     ],
     "printed_bas": 0,
-    "note": "SOO deepen probe \u2014 still refuse_not_done for soo_derived_points; never invent points from narrative.",
+    "note": "SOO deepen probe — still refuse_not_done for soo_derived_points; never invent points from narrative.",
     "artifact": "/opt/cursor/artifacts/pillar-c-031-soo-probe.json",
     "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:55:50.914Z",
+    "ms": 15778,
+    "printed_bas_rows": 0,
+    "inventory_units": 12,
+    "targets_total": 12,
+    "tallies": {
+      "MATCH": 2,
+      "SCHEDULE_ONLY": 10,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }
