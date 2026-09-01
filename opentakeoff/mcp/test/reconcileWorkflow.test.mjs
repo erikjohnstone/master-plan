@@ -78,6 +78,32 @@ async function assertFamilyAllMatch(session, graph, key, family) {
   }
 }
 
+async function assertFamilyStatusCounts(session, graph, key, family, counts) {
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
+  assert.ok(needle, `${family} needle`);
+  const expect = key.categories[family];
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    evaluationFast: true,
+  });
+  assert.equal(result.rows.length, expect, `${key.set_id} ${family} reconcile rows`);
+  const sum = summarizeReconcile(result.rows);
+  for (const [status, n] of Object.entries(counts)) {
+    assert.equal(sum[status] ?? 0, n, `${key.set_id} ${family} ${status}`);
+  }
+}
+
+async function loadKeySessionOrSkip(t, keyPath) {
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const session = await loadKeySession(key);
+  if (!session) {
+    t.skip(`PDF/parts missing for ${key.set_id}`);
+    return null;
+  }
+  const graph = await session.graphForPipeline();
+  return { key, session, graph };
+}
+
 test("federal-mech VAV reconcile scaffold matches compile count (schedule side)", async () => {
   const keyPath = resolve(CROSS, "federal-mech.compile.json");
   assert.ok(existsSync(keyPath));
@@ -357,6 +383,132 @@ test("Vol2 Phoenix Sky Harbor 088: plan-drawn plant + terminal families MATCH", 
   ]) {
     await assertFamilyAllMatch(session, graph, key, family);
   }
+});
+
+test("Vol2 Eglin AFB 019: dense VAV set — all scheduled families MATCH", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of Object.keys(key.categories)) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 Jonesboro 093: VRF indoor/outdoor + WH all MATCH (multipart rejoin)", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["VRF_INDOOR", "VRF_OUTDOOR", "WATER_HEATER"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 Health Science 071: VAV + FAN all MATCH", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "071_ME_BGS_Project_3809_Health_Science_Center.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["VAV", "FAN"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 Miller dining 077: WSHP + GRD all MATCH", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["HEAT_PUMP", "GRD"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 ITD D1 lab 062: plan-drawn HVAC families MATCH (Vol2 bulk)", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "062_ID_ITD_District_1_Laboratory_Building_Mechanical.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  const allMatchFamilies = Object.keys(key.categories).filter((f) => f !== "FAN");
+  for (const family of allMatchFamilies) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 ITD D1 lab 062: one FAN tag honest SCHEDULE_ONLY under evaluationFast", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "062_ID_ITD_District_1_Laboratory_Building_Mechanical.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyStatusCounts(session, graph, key, "FAN", {
+    match: 6,
+    schedule_only: 1,
+  });
+});
+
+test("Vol2 pier utility 015: plan-drawn FCU/pump/fan plant MATCH (louver/grd SO)", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "015_VA_P_095_Replace_Submarine_Pier_3_Utility.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of [
+    "FCU", "CONDENSING_UNIT", "HEAT_PUMP", "PUMP", "FAN", "AIR_SEPARATOR", "EXPANSION_TANK",
+  ]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 chiller 012: cooling towers honest SCHEDULE_ONLY (plant not plan-drawn)", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyStatusCounts(session, graph, key, "COOLING_TOWER", {
+    schedule_only: key.categories.COOLING_TOWER,
+  });
+});
+
+test("Vol2 FL airport 089: FCU honest SCHEDULE_ONLY (tags not plan text)", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "089_FL_Airport_Terminal_and_Hangar_Development.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyStatusCounts(session, graph, key, "FCU", {
+    schedule_only: key.categories.FCU,
+  });
+});
+
+test("Vol2 PHX 088: VFD honest partial — 2 MATCH · 9 SCHEDULE_ONLY", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyStatusCounts(session, graph, key, "VARIABLE_FREQUENCY_DRIVE", {
+    match: 2,
+    schedule_only: 9,
+  });
+  assert.equal(key.categories.VARIABLE_FREQUENCY_DRIVE, 11);
 });
 
 test("Orange County booster pump BP-1 reconcile MATCH", async () => {
