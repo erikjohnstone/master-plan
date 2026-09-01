@@ -442,12 +442,13 @@ Estimator-complete + self-check + pipeline GT: **0 / 112 BAS**, **0 / 81 valve**
 Artifact: `/opt/cursor/artifacts/pillar-c-corpus-census.json` ·
 `takeoffs/pillar-c-census.json`.
 
-**NAVFAC 001 deep probe (in progress, not done):** HVAC inventory compiled;
-printed BAS 122; `served_equipment` OCR I→1 + description marks now join
-`DOAH-T1` / `AHU-T1A` / `AHU-T1B` with plan paint MATCH. Still open: SOO-derived
-points model, qty×points estimate vs printed gap, FCU/UH family expansion,
-full valve line self-check (64 CHW + 99 HHW), GT harness lock.
-Artifact: `/opt/cursor/artifacts/pillar-c-navfac-001-deep.md`.
+**NAVFAC 001 deep probe (PARTIAL, not done):** HVAC inventory + printed BAS 122;
+`served_equipment` DOAH-T1/AHU-T1A/T1B plan paint MATCH; SOO **honest refuse**
+(no extractable sequence tables); UH labeled estimate 11×6=66 (+60 vs one
+printed template); FCU×qty **honest refuse** (no coil split); valve reconcile
+measured CHW 60 MATCH/4 SO · HHW 98 MATCH/5 SO (HHW rows 103 vs key 99 —
+unresolved before GT lock). Draft GT:
+`takeoffs/pillar-c-gt/001_…gt.draft.json` (`gt_locked: false`).
 
 ### Next queue (platform loop)
 
