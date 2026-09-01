@@ -1,11 +1,18 @@
 ## Active work
 
-### Pillar C — inventory waves 5–6 + valve honest ceilings (2026-09-01 20:45 UTC)
+### Pillar C — SOO/spare/proof column probe on shared path (2026-09-01 20:50 UTC)
+
+- **Shared `probeBasProofSpareColumnHeaders()`:** scans BAS/I/O table headers for explicit PROOF/INTERLOCK/SPARE columns (CAPACITY-only false positives excluded); disclosed on `estimator_product.controls_column_probe` — never invents points.
+- **Keyed batch (5 sets):** SOO present on **021** only (`present_not_row_extractable`); **0/5** with real PROOF/SPARE column headers on BAS tables (prior CAPACITY hits confirmed false-positive). Artifact: `/opt/cursor/artifacts/pillar-c-soo-spare-proof-keyed-batch.json`.
+- **`corpusTakeoffBas` unit tests:** 15/15 green (+ probe regression).
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
+
+### Prior — inventory waves 5–6 + valve honest ceilings (2026-09-01 20:45 UTC)
 
 - **Census script fix:** explicit set IDs no longer wrongly filtered to `bas:0` only; skipped sets recorded with reason (`no_plan_paint_targets`, etc.).
 - **Wave 5 (20 requested):** **3 scored / 3 with MATCH** — 17 skipped (honest zero HVAC inventory in compile). Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave5.json`.
 - **Wave 6 (32 Vol2/EHRM):** **1 scored / 1 with MATCH** — 31 skipped (no inventory plan_paint targets). Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave6.json`.
-- **Inventory census total:** **57 sets with scored samples** (waves 1–4: 54 + wave 5–6: 3 new unique with inventory).
+- **Inventory census total:** **58 sets with scored samples** (waves 1–4: 54 + waves 5–6: 4 new unique with inventory).
 - **Valve locks expanded:** 021 honest **0 MATCH / all SCHEDULE_ONLY**; 096 **≥10 MATCH** on 24 valve marks (`valvePlanPaint.regression.test.mjs` **7/7**).
 - **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
 

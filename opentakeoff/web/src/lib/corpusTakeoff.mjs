@@ -1061,6 +1061,70 @@ export function detectSooPresence(graph) {
   };
 }
 
+function tableHeaderNames(table) {
+  if (Array.isArray(table?.headers) && table.headers.length) {
+    return table.headers.map((h) => String(h).replace(/\s+/g, " ").trim()).filter(Boolean);
+  }
+  const out = new Set();
+  for (const row of table?.rows || []) {
+    for (const h of Object.keys(row.cells || {})) {
+      const name = String(h).replace(/\s+/g, " ").trim();
+      if (name) out.add(name);
+    }
+  }
+  return [...out];
+}
+
+/**
+ * Strict column-header probe on BAS/I/O tables for PROOF/INTERLOCK/SPARE columns.
+ * CAPACITY-only false positives are excluded — only explicit spare/proof headers count.
+ * Presence is disclosed; points are never invented from column labels alone.
+ */
+export function probeBasProofSpareColumnHeaders(graph) {
+  const hits = [];
+  const proofHeaders = new Set();
+  const spareHeaders = new Set();
+  let basTables = 0;
+  for (const table of graph?.tables || []) {
+    const title = String(table.title?.text || "").replace(/\s+/g, " ").trim();
+    if (!title) continue;
+    const basTable = isBasPointsListTitle(title)
+      || /\bI\s*\/?\s*O\b|\bPOINTS?\s+LIST\b|\bDDC\s+CONTROLLER\b/i.test(title);
+    if (!basTable) continue;
+    basTables += 1;
+    const matched = [];
+    for (const header of tableHeaderNames(table)) {
+      const hu = header.toUpperCase();
+      if (/\bSPARE\b/.test(hu) && /\b(?:I\s*\/?\s*O|POINT|CAPACITY)\b/.test(hu)) {
+        spareHeaders.add(header);
+        matched.push({ kind: "spare_io", header });
+      } else if (/^(?:PROOF(?:\s+OF\s+\w+)?|INTERLOCK|HOA|HAND[\s-]*OFF[\s-]*AUTO|END\s*SW(?:ITCH)?|SAFETY|FIRE\s*SMOKE)$/.test(hu)) {
+        proofHeaders.add(header);
+        matched.push({ kind: "proof_interlock", header });
+      }
+    }
+    if (matched.length) {
+      hits.push({
+        title: title.slice(0, 160),
+        sheet_id: table.sheet || null,
+        matched,
+      });
+    }
+  }
+  const proof = [...proofHeaders];
+  const spare = [...spareHeaders];
+  return {
+    bas_tables_scanned: basTables,
+    proof_interlock_column_headers: proof,
+    spare_io_column_headers: spare,
+    hits,
+    status: proof.length || spare.length ? "printed_columns_present" : "no_proof_spare_columns",
+    note: proof.length || spare.length
+      ? "Printed PROOF/INTERLOCK/SPARE column headers detected — disclose only; refuse_not_done until row values are extractable points."
+      : "No PROOF/INTERLOCK/SPARE column headers on BAS/I/O tables — SOO-derived proofs/spares remain refuse_not_done.",
+  };
+}
+
 /**
  * Labeled schedule-derived point estimate (qty × points/unit) + gap vs printed.
  * Totals here are estimate_only — never merge into printed POINTS LIST truth.
@@ -1070,6 +1134,7 @@ export function detectSooPresence(graph) {
  */
 export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
   const soo = detectSooPresence(graph);
+  const controls_column_probe = probeBasProofSpareColumnHeaders(graph);
   const inventory = [];
   const estimateByFamily = [];
   let estimateUnits = 0;
@@ -1211,6 +1276,7 @@ export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
       unit_count: inventory.reduce((n, r) => n + r.count, 0),
     },
     soo,
+    controls_column_probe,
     schedule_derived_estimate: {
       label: "estimate_only",
       never_merge_into_printed_truth: true,
@@ -1291,7 +1357,9 @@ export function basEstimatorStatus({ lists, totals, sheets, product = null }) {
     {
       gate: "proofs_interlocks_alarms_trends_beyond_printed",
       status: "refuse_not_done",
-      note: "Only printed ALARM/TREND columns are promoted; SOO proofs/interlocks remain open.",
+      note: product?.controls_column_probe?.proof_interlock_column_headers?.length
+        ? `Printed proof/interlock columns (${product.controls_column_probe.proof_interlock_column_headers.join(", ")}) — row extract still refuse_not_done.`
+        : "Only printed ALARM/TREND columns are promoted; SOO proofs/interlocks remain open.",
     },
     {
       gate: "schedule_derived_estimate_not_merged",

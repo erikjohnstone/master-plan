@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-01T20:45:00Z",
+  "as_of": "2026-09-01T20:50:00Z",
   "mandate": "Pillar C done only when EVERY bas_bearing and valve_bearing set has estimator takeoff + coordinator self-check + pipeline GT corroboration",
   "counts": {
     "vol1_sets": 30,
@@ -86,7 +86,9 @@
     "plan_paint_bas_served_preferTitle_artifact": "/opt/cursor/artifacts/pillar-c-bas-plan-paint-preferTitle-recensus.json",
     "plan_paint_bas_served_preferTitle_match_total": 226,
     "plan_paint_bas_served_preferTitle_targets_total": 345,
-    "proof_spare_column_headers_found_on_keyed_probe": 0
+    "proof_spare_column_headers_found_on_keyed_probe": 0,
+    "soo_spare_proof_keyed_probe_artifact": "/opt/cursor/artifacts/pillar-c-soo-spare-proof-keyed-batch.json",
+    "soo_spare_proof_keyed_soo_present_sets": 1
   },
   "bas_inventory_drawing_verified_ids": [
     "11_CA_SDSU_EngSciences_Complex_100SD",

@@ -12,6 +12,7 @@ import {
   ocrFixEquipMark,
   equipMarkFromBasDescription,
   servedEquipmentFromBasRow,
+  probeBasProofSpareColumnHeaders,
 } from "../src/lib/corpusTakeoff.mjs";
 
 describe("isBasPointsListTitle", () => {
@@ -185,6 +186,29 @@ describe("isSooNarrativeTitle + detectSooPresence", () => {
     });
     assert.equal(soo.present, true);
     assert.equal(soo.tabular_extractable, false);
+  });
+});
+
+describe("probeBasProofSpareColumnHeaders", () => {
+  it("detects explicit PROOF/SPARE columns on BAS tables; ignores CAPACITY-only equipment headers", () => {
+    const probe = probeBasProofSpareColumnHeaders({
+      tables: [
+        {
+          sheet: "set.pdf#1",
+          title: { text: "AHU-1 POINTS LIST" },
+          headers: ["MARK", "PROOF", "SPARE I/O", "ALARM"],
+        },
+        {
+          sheet: "set.pdf#2",
+          title: { text: "AIR HANDLING UNIT SCHEDULE" },
+          headers: ["MARK", "CAPACITY (TONS)"],
+        },
+      ],
+    });
+    assert.equal(probe.status, "printed_columns_present");
+    assert.deepEqual(probe.proof_interlock_column_headers, ["PROOF"]);
+    assert.deepEqual(probe.spare_io_column_headers, ["SPARE I/O"]);
+    assert.equal(probe.hits.length, 1);
   });
 });
 
