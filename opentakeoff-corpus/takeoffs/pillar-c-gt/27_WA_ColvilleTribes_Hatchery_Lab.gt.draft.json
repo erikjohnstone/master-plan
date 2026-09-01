@@ -13,12 +13,38 @@
     },
     "points_sample_pass": "25/25",
     "bs1pnl_note": "Printed as BS-1 PNL",
-    "lock_recommendation": "KEEP gt_locked=false \u2014 printed BAS sample green (incl. BS-1PNL space-split), but most served tags lack schedule rows, SOO/estimator-complete + corpus-deep C remain",
+    "lock_recommendation": "KEEP gt_locked=false — printed BAS sample green (incl. BS-1PNL space-split), but most served tags lack schedule rows, SOO/estimator-complete + corpus-deep C remain",
     "artifact": "/opt/cursor/artifacts/pillar-c-27-drawing-verify.json"
   },
   "open_before_lock": [
     "Most served tags ERROR on sweepScheduleRow (no equipment schedule rows)",
     "SOO / estimator-complete BAS still open",
-    "Pillar C corpus-deep \u2014 set alone cannot complete C"
-  ]
+    "Pillar C corpus-deep — set alone cannot complete C"
+  ],
+  "estimator_product": {
+    "inventory_units": 22,
+    "estimate_only_points": 71,
+    "never_merged_into_printed": true,
+    "gap_count": 8,
+    "gap_sample": [
+      "FCU-1",
+      "BP-1",
+      "EF-1",
+      "EF-2",
+      "HX-1A",
+      "HX-1B",
+      "HX-2A",
+      "HX-2B"
+    ],
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "estimator_gap_drawing_verify": {
+    "at": "2026-09-01T16:22:25.204Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-027-estimator-gap-verify.json",
+    "focus_pass": 8,
+    "focus_n": 8,
+    "soo_status_match": true,
+    "gt_locked": false
+  }
 }

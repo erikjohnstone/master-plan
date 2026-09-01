@@ -339,5 +339,43 @@
     "SOO HONEST_REFUSE",
     "Generic SCHEDULE OF DDC POINTS lists mostly lack served_equipment — estimator map open",
     "Pillar C corpus-deep — Vermillion 096 alone cannot complete C"
-  ]
+  ],
+  "estimator_product": {
+    "inventory_units": 92,
+    "estimate_only_points": 437,
+    "never_merged_into_printed": true,
+    "gap_count": 74,
+    "gap_sample": [
+      "AHU-4",
+      "FCU-1",
+      "FCU-2",
+      "FCU-3",
+      "VAV-1-1",
+      "VAV-1-2",
+      "VAV-1-3",
+      "VAV-1-4",
+      "VAV-1-5",
+      "VAV-1-6",
+      "VAV-1-7",
+      "VAV-1-8",
+      "VAV-2-1",
+      "VAV-2-2",
+      "VAV-2-3",
+      "VAV-2-4",
+      "VAV-2-5",
+      "VAV-2-6",
+      "VAV-2-7",
+      "VAV-2-9"
+    ],
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "estimator_gap_drawing_verify": {
+    "at": "2026-09-01T16:22:33.920Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-096-estimator-gap-verify.json",
+    "focus_pass": 60,
+    "focus_n": 60,
+    "soo_status_match": true,
+    "gt_locked": false
+  }
 }

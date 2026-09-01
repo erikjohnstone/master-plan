@@ -42,37 +42,37 @@
     },
     {
       "tag": "MPAC-1",
-      "error": "No schedule row \"MPAC-1\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"MPAC-1\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "MPAC-2",
-      "error": "No schedule row \"MPAC-2\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"MPAC-2\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "MPAC-3",
-      "error": "No schedule row \"MPAC-3\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"MPAC-3\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "MPAC-4",
-      "error": "No schedule row \"MPAC-4\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"MPAC-4\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "HPAC-1",
-      "error": "No schedule row \"HPAC-1\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"HPAC-1\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "HPAC-2",
-      "error": "No schedule row \"HPAC-2\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"HPAC-2\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "HPAC-3",
-      "error": "No schedule row \"HPAC-3\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"HPAC-3\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
@@ -116,9 +116,9 @@
   ],
   "open_before_lock": [
     "SOO HONEST_REFUSE",
-    "MPAC/HPAC served tags have no equipment schedule rows \u2014 honest miss (not invent join)",
-    "Estimator family\u00d7qty / full drawing hand-count still open",
-    "Pillar C corpus-deep \u2014 Pier 015 alone cannot complete C"
+    "MPAC/HPAC served tags have no equipment schedule rows — honest miss (not invent join)",
+    "Estimator family×qty / full drawing hand-count still open",
+    "Pillar C corpus-deep — Pier 015 alone cannot complete C"
   ],
   "drawing_verify": {
     "at": "2026-09-01T15:29:43.994Z",
@@ -159,7 +159,39 @@
       "HPAC-2",
       "HPAC-3"
     ],
-    "lock_recommendation": "KEEP gt_locked=false \u2014 drawing sample green for printed BAS (25/25) + damper/iso honesty, but SOO refuse, MPAC/HPAC schedule-row miss, estimator-complete + corpus-deep C remain",
+    "lock_recommendation": "KEEP gt_locked=false — drawing sample green for printed BAS (25/25) + damper/iso honesty, but SOO refuse, MPAC/HPAC schedule-row miss, estimator-complete + corpus-deep C remain",
     "artifact": "/opt/cursor/artifacts/pillar-c-pier-015-drawing-verify.json"
+  },
+  "estimator_product": {
+    "inventory_units": 17,
+    "estimate_only_points": 71,
+    "never_merged_into_printed": true,
+    "gap_count": 14,
+    "gap_sample": [
+      "FC-1",
+      "FC-2",
+      "FC-4",
+      "P-3",
+      "P-4",
+      "P-5",
+      "P-6",
+      "EF-1",
+      "EF-2",
+      "EF-3",
+      "EF-4",
+      "EF-5",
+      "EF-6",
+      "EF-7"
+    ],
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "estimator_gap_drawing_verify": {
+    "at": "2026-09-01T16:21:04.415Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-015-estimator-gap-verify.json",
+    "focus_pass": 14,
+    "focus_n": 14,
+    "soo_status_match": true,
+    "gt_locked": false
   }
 }

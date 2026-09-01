@@ -538,11 +538,30 @@ rows. Unit tests **37/37** green.
 All five: `estimator_complete: false`, `gt_locked: false`. Artifact:
 `/opt/cursor/artifacts/pillar-c-keyed-bas-valve-estimator-floor.json`.
 
+**Keyed BAS estimator gap/SOO drawing verify (2026-09-01, still 0 locked):**
+Coordinator corroborated inventory↔printed gaps + SOO status on all 5 keyed BAS
+sets. Method: tag on HVAC inventory, absent from POINTS list titles + printed
+`served_equipment`, SOO status match. **Never locks GT.**
+
+| Set | Gap verify | SOO | Artifact |
+|---|---|---|---|
+| 001 NAVFAC | **6/6** AHU-A/M + DOAH-A/M | absent match | `pillar-c-001-estimator-gap-verify` |
+| 015 Pier | **14/14** all gap tags | absent match | `pillar-c-015-estimator-gap-verify` |
+| 021 Lab | **44/44** all gap tags | present_not_row_extractable match | `pillar-c-021-estimator-gap-verify` |
+| 027 Colville | **8/8** all gap tags | absent match | `pillar-c-027-estimator-gap-verify` |
+| 096 Vermillion | **60/60** of 74 (product sample cap) | absent match | `pillar-c-096-estimator-gap-verify` |
+
+Batch: `/opt/cursor/artifacts/pillar-c-estimator-gap-verify-keyed-floor.json`.
+Draft GTs patched with `estimator_product` + `estimator_gap_drawing_verify`;
+still `gt_locked: false` / `estimator_complete: false` on every set.
+Corpus-deep C still **0 / ~112 BAS**, **0 / ~81 valve**.
+
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** Keyed floor has estimator_product numbers — **0 locked**.
-   Next: drawing-backed self-check of inventory/gap on each keyed set; expand keys
-   only when live compile finds real lists; lock only with self-check + pipeline GT.
+1. **Pillar C (corpus-deep):** Keyed BAS gap/SOO drawing-backed — **0 locked**.
+   Next: deepen estimator (tabular SOO where vector allows; valve contractor
+   columns + plan-paint census); expand keys only when live compile finds real
+   lists; lock only with self-check + pipeline GT on **every** BAS + valve set.
    Post-WP8 `test:workflows` **104/104** green (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).

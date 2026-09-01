@@ -557,10 +557,13 @@ sets pass — do not stop at a sample):*
     **Shared-path plumbing landed 2026-09-01** (`estimator_product` on
     `compileBasTakeoff` + Takeoff `BAS_ESTIMATOR` rows). Still open: corpus-wide
     run + coordinator lock — estimate path ≠ Pillar C done.
-11. [ ] **Ground-truth harness for every corpus BAS set:** coordinator
+11. [~] **Ground-truth harness for every corpus BAS set:** coordinator
     self-checks equipment inventory + typed point rollups + plan-grounding
     against the drawings; keyed harness locks that answer; pipeline scorer must
     match — not “122 rows matched the POINTS LIST scrape,” not “≥3 demos.”
+    **Partial (2026-09-01):** keyed BAS floor (5/5) has drawing-backed
+    estimator gap + SOO corroboration (`pillar-c-*-estimator-gap-verify`);
+    drafts still `gt_locked: false` — not corpus-complete.
 12. [ ] **Plan paint for every corpus BAS + valve/damper/actuator set:**
     served_equipment / valve / damper marks paint via shared sweep (MATCH or
     honest SCHEDULE_ONLY) with visible cites — census in PROGRESS until 100%.

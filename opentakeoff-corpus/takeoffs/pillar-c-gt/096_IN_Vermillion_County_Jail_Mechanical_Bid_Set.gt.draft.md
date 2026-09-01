@@ -13,12 +13,25 @@
 
 Artifact: `/opt/cursor/artifacts/pillar-c-vermillion-096-drawing-verify.json`
 
-## Still blocks lock
+## Estimator product gap/SOO (2026-09-01) — still unlocked
+
+| Check | Result |
+|---|---|
+| Printed BAS | 231 |
+| Inventory units | 92 |
+| Estimate_only pts | 437 (never merged) |
+| Gap count | 74 |
+| Gap sample verify | **60/60 PASS** (product returns first 60 of 74 tags) |
+| SOO | `absent_or_not_detected` match |
+
+Artifact: `/opt/cursor/artifacts/pillar-c-096-estimator-gap-verify.json`
+
+## Still blocks lock (Where we refuse — not done)
 
 - Most DDC lists lack `served_equipment` — cannot invent unit maps
-- qty×points refuse for 78 inventory units
+- qty×points / inventory gap refuse for remaining units
 - SOO refuse
 - Estimator-complete / corpus-deep C open
 
 ## Status
-`gt_locked: false` · `pillar_c_complete: false`
+`gt_locked: false` · `pillar_c_complete: false` · `estimator_complete: false`

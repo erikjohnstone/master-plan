@@ -17,5 +17,43 @@
   "open_before_lock": [
     "SOO / estimator-complete still open",
     "Pillar C corpus-deep — set alone cannot complete C"
-  ]
+  ],
+  "estimator_product": {
+    "inventory_units": 44,
+    "estimate_only_points": 279,
+    "never_merged_into_printed": true,
+    "gap_count": 44,
+    "gap_sample": [
+      "AHU-1",
+      "AHU-2",
+      "AHU-3",
+      "AHU-4",
+      "AHU-5",
+      "AHU-6",
+      "FCU-1",
+      "FCU-2",
+      "FCU-3",
+      "B-1A",
+      "B-1B",
+      "B-2A",
+      "B-2B",
+      "CP-1",
+      "CP-2",
+      "CP-3",
+      "CP-4",
+      "CP-5",
+      "CP-6",
+      "P-1AB"
+    ],
+    "soo_status": "present_not_row_extractable",
+    "estimator_complete": false
+  },
+  "estimator_gap_drawing_verify": {
+    "at": "2026-09-01T16:21:08.137Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-021-estimator-gap-verify.json",
+    "focus_pass": 44,
+    "focus_n": 44,
+    "soo_status_match": true,
+    "gt_locked": false
+  }
 }

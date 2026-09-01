@@ -366,5 +366,43 @@
     },
     "lock_recommendation": "KEEP gt_locked=false — printed BAS sample green + missing-unit refuse confirmed, but estimator-complete BAS/SOO/FCU multiply and full CV audit remain; corpus-deep C not satisfied",
     "artifact": "/opt/cursor/artifacts/pillar-c-navfac-001-drawing-verify.json"
+  },
+  "estimator_product": {
+    "inventory_units": 143,
+    "estimate_only_points": 965,
+    "never_merged_into_printed": true,
+    "gap_count": 125,
+    "gap_sample": [
+      "AHU-A1",
+      "AHU-A2",
+      "AHU-M1",
+      "DOAH-A1",
+      "DOAH-A2",
+      "DOAH-M1",
+      "FCU-A1",
+      "FCU-A2",
+      "FCU-A3",
+      "FCU-A4",
+      "FCU-A5",
+      "FCU-A6",
+      "FCU-A7",
+      "FCU-A8A",
+      "FCU-A8B",
+      "FCU-A9",
+      "FCU-A10",
+      "FCU-A11",
+      "FCU-A12",
+      "FCU-A13"
+    ],
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "estimator_gap_drawing_verify": {
+    "at": "2026-09-01T16:21:01.057Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-001-estimator-gap-verify.json",
+    "focus_pass": 6,
+    "focus_n": 6,
+    "soo_status_match": true,
+    "gt_locked": false
   }
 }
