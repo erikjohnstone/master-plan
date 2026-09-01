@@ -404,5 +404,16 @@
     "sample_pass": 20,
     "sample_n": 20,
     "gt_locked": false
+  },
+  "bas_plan_paint_preferTitle_census": {
+    "at": "2026-09-01T18:50:06.378Z",
+    "tallies": {
+      "MATCH": 59,
+      "SCHEDULE_ONLY": 16,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "served_targets": 75,
+    "gt_locked": false
   }
 }

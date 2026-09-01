@@ -123,6 +123,27 @@ describe("basEstimatorStatus", () => {
       (t) => t.tag === "AHU-1" && /AIR HANDLING UNIT SCHEDULE/i.test(String(t.prefer_schedule_title || "")),
     ));
   });
+
+  it("plan_paint targets include unique served_equipment with HVAC preferTitle", () => {
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#1", number: 1 }],
+      tables: [
+        {
+          sheet: "set.pdf#1",
+          title: { text: "DOMESTIC HOT WATER PUMP SCHEDULE", bbox: [0, 0, 10, 10] },
+          rows: [{ key: "HWP-1", cells: { MARK: { text: "HWP-1" } } }],
+        },
+        {
+          sheet: "set.pdf#1",
+          title: { text: "I/O LIST WHITE STURGEON PLC", bbox: [0, 20, 10, 30] },
+          rows: [{ key: "HWP-1", cells: { TAG: { text: "HWP-1" }, DESCRIPTION: { text: "PUMP RUN" } } }],
+        },
+      ],
+    });
+    assert.ok(bas.estimator_product.plan_paint.targets.some(
+      (t) => t.tag === "HWP-1" && /PUMP SCHEDULE/i.test(String(t.prefer_schedule_title || "")),
+    ));
+  });
 });
 
 describe("isSooNarrativeTitle + detectSooPresence", () => {

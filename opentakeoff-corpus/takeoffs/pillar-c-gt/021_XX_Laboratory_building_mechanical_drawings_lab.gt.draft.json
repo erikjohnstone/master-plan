@@ -151,5 +151,16 @@
     "note": "SOO deepen probe — still refuse_not_done for soo_derived_points; never invent points from narrative.",
     "artifact": "/opt/cursor/artifacts/pillar-c-021-soo-probe.json",
     "gt_locked": false
+  },
+  "bas_plan_paint_preferTitle_census": {
+    "at": "2026-09-01T18:49:45.162Z",
+    "tallies": {
+      "MATCH": 0,
+      "SCHEDULE_ONLY": 73,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "served_targets": 73,
+    "gt_locked": false
   }
 }

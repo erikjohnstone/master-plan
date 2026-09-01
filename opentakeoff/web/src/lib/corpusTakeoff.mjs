@@ -970,6 +970,32 @@ export function isSooNarrativeTitle(title) {
 }
 
 /**
+ * Resolve a schedule table_title for plan-paint preferTitle when the HVAC row
+ * title is blank or the fallback is a BAS list (I/O LIST ≠ equipment owner).
+ * Scans graph tables for the tag on an equipment schedule — never invents tags.
+ */
+function preferScheduleTitleForEquipmentTag(graph, tag, fallbackTitle = null) {
+  const fb = String(fallbackTitle || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+  if (fb && !isBasPointsListTitle(fb)) return fb;
+  const want = String(tag || "").trim().toUpperCase();
+  if (!want || !graph?.tables?.length) return null;
+  let generic = null;
+  for (const table of graph.tables) {
+    const title = String(table.title?.text || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+    if (!title || isBasPointsListTitle(title)) continue;
+    for (const row of table.rows || []) {
+      const key = String(row.key || row.identity?.text || row.identity?.key || "").trim().toUpperCase();
+      if (key !== want) continue;
+      if (/SCHEDULE|EQUIPMENT|PUMP|BOILER|AHU|FCU|VAV|DOAS|RTU|FAN|CHILLER|VALVE|DAMPER/i.test(title)) {
+        return title;
+      }
+      generic = generic || title;
+    }
+  }
+  return generic;
+}
+
+/**
  * Scan schedule/table titles for SOO presence. Tabular SOO scoring is still
  * refuse_not_done — narrative-only / raster never invents points.
  */
@@ -1028,7 +1054,8 @@ export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
       if (!tag) return null;
       return {
         tag,
-        prefer_schedule_title: it.table_title || null,
+        prefer_schedule_title: it.table_title
+          || preferScheduleTitleForEquipmentTag(graph, tag, null),
         prefer_schedule_sheet: it.sheet_id || null,
       };
     }).filter(Boolean);
@@ -1064,6 +1091,53 @@ export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
       printedRows += 1;
       const served = String(item.served_equipment || "").trim().toUpperCase();
       if (served) printedServed.add(served);
+    }
+  }
+
+  // HVAC tag → schedule title for plan-paint preferTitle (pumps, AHUs, …).
+  const hvacByTag = new Map();
+  for (const cat of Object.values(hvacTakeoff?.categories || {})) {
+    for (const item of cat.items || []) {
+      const tag = String(item.tag || item.mark || "").trim().toUpperCase();
+      if (!tag || hvacByTag.has(tag)) continue;
+      hvacByTag.set(tag, {
+        prefer_schedule_title: item.table_title
+          || preferScheduleTitleForEquipmentTag(graph, tag, null),
+        prefer_schedule_sheet: item.sheet_id || null,
+      });
+    }
+  }
+
+  const targetSeen = new Set();
+  const planPaintTargets = [];
+  const pushPlanPaintTarget = (t) => {
+    if (!t?.tag) return;
+    const key = `${String(t.tag).toUpperCase()}::${String(t.prefer_schedule_title || "").toUpperCase()}`;
+    if (targetSeen.has(key)) return;
+    targetSeen.add(key);
+    planPaintTargets.push(t);
+  };
+  for (const row of inventory) {
+    for (const t of row.plan_paint_targets || []) {
+      pushPlanPaintTarget({ ...t, source: "inventory" });
+    }
+  }
+  const servedSeen = new Set();
+  for (const list of basLists || []) {
+    for (const item of list.items || []) {
+      const served = String(item.served_equipment || "").trim();
+      if (!served || /^(AI|AO|BI|BO)[\s-]?\d/i.test(served)) continue;
+      const key = served.toUpperCase();
+      if (servedSeen.has(key)) continue;
+      servedSeen.add(key);
+      const hint = hvacByTag.get(key);
+      pushPlanPaintTarget({
+        tag: served,
+        source: "served_equipment",
+        prefer_schedule_title: hint?.prefer_schedule_title
+          || preferScheduleTitleForEquipmentTag(graph, served, item.table_title || list.title),
+        prefer_schedule_sheet: hint?.prefer_schedule_sheet || item.sheet_id || list.sheet_id || null,
+      });
     }
   }
 
@@ -1133,8 +1207,8 @@ export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
     spare_io_policy: BAS_SPARE_IO_POLICY,
     plan_paint: {
       status: "refuse_not_done",
-      note: "Served-equipment / inventory plan MATCH or honest SCHEDULE_ONLY paint still required per mark — printed POINTS ≠ installed takeoff. When sweeping inventory marks, pass prefer_schedule_title from plan_paint_targets (HVAC table_title) so cross-schedule building letters resolve; never invent plan qty.",
-      targets: inventory.flatMap((r) => r.plan_paint_targets || []).slice(0, 80),
+      note: "Served-equipment / inventory plan MATCH or honest SCHEDULE_ONLY paint still required per mark — printed POINTS ≠ installed takeoff. When sweeping served_equipment or inventory marks, pass prefer_schedule_title from plan_paint targets (HVAC table_title or owning POINTS/I/O list) so cross-schedule collisions resolve; never invent plan qty.",
+      targets: planPaintTargets.slice(0, 120),
     },
   };
 }

@@ -1,6 +1,19 @@
 ## Active work
 
-### Pillar C — preferTitle inventory plan-paint expand + product hints (2026-09-01 18:40 UTC)
+### Pillar C — served_equipment plan-paint + graph preferTitle fallback (2026-09-01 18:50 UTC)
+
+- **Shared path:** `preferScheduleTitleForEquipmentTag()` scans graph tables when HVAC `table_title` is blank or a BAS I/O list title — resolves to owning equipment schedule (e.g. Colville HWP-1 → `EQUIPMENT SCHEDULE`, not `I/O LIST WHITE STURGEON PLC`). `buildBasEstimatorProduct.plan_paint.targets[]` now merges **inventory + unique served_equipment** marks with HVAC/graph preferTitle hints.
+- **Keyed BAS served plan-paint re-census (5 sets, `sweepBasServedMark` + product `preferTitle`):**
+  - 001 NAVFAC **116 MATCH / 4 SCHEDULE_ONLY** (120 served targets; was 3/3 sample).
+  - 015 Pier **19 MATCH / 7 SCHEDULE_ONLY** (26 targets).
+  - 021 Lab **0 MATCH / 73 SCHEDULE_ONLY** (73 targets — tags not drawable on plans; honest ceiling).
+  - 027 Colville **21 MATCH / 19 SCHEDULE_ONLY / 11 AMBIGUOUS** (51 targets; was 17 MATCH / **25 ERROR** — preferTitle clears thrown errors; 11 AMBIGUOUS remain on duplicate keys in generic `EQUIPMENT SCHEDULE`).
+  - 096 Vermillion **59 MATCH / 16 SCHEDULE_ONLY** (75 targets).
+  - Artifact: `/opt/cursor/artifacts/pillar-c-bas-plan-paint-preferTitle-recensus.json`.
+- Unit tests **13/13** `corpusTakeoffBas` (+ served_equipment preferTitle target test).
+- **Still 0/112 BAS and 0/81 valve** at `estimator_complete` / `gt_locked`. Full served-target plan-paint ≠ Pillar C done.
+
+### Prior — preferTitle inventory plan-paint expand + product hints (2026-09-01 18:40 UTC)
 
 - **Inventory plan-paint census (9 bas:0 sets) with `sweepBasServedMark` + HVAC `table_title` as `preferTitle`:**
   - **8/9 with MATCH** (Orange County 8/8, Las Vegas 7/1, St Louis 7/1, Carson 8/8, Ames 8/8, Douglas 8/8, Hawthorn 5/5, SDSU 7/1).
@@ -669,15 +682,17 @@ Artifacts: `/opt/cursor/artifacts/pillar-c-estimator-product-census-wave2.json`,
 
 **Plan-paint census — keyed floor (2026-09-01, still 0 locked):**
 
-BAS `served_equipment` sweep (full tag census, not sample):
+BAS `served_equipment` sweep with product `preferTitle` (full tag census):
 
-| Set | Served | MATCH | ERROR | Status |
-|---|---:|---:|---:|---|
-| 001 NAVFAC | 3 | **3** | 0 | partial (DOAH-T1, AHU-T1A/B) |
-| 015 Pier | 12 | **5** | 7 | refuse (MPAC/HPAC schedule-row miss) |
-| 021 Lab | 29 | 0 | **29** | refuse (I/O SUMMARY not geometrically anchored) |
-| 027 Colville | 42 | **17** | 25 | refuse (ambiguous HWP-* keys) |
-| 096 Vermillion | 1 | **1** | 0 | partial (HRC-1 only) |
+| Set | Targets | MATCH | SO | AMB | Status |
+|---|---:|---:|---:|---:|---|
+| 001 NAVFAC | 120 | **116** | 4 | 0 | partial (most units paint; 4 honest SO) |
+| 015 Pier | 26 | **19** | 7 | 0 | partial (pumps/fans largely MATCH) |
+| 021 Lab | 73 | 0 | **73** | 0 | honest SO ceiling (tags not on plans) |
+| 027 Colville | 51 | **21** | 19 | **11** | partial (11 AMBIGUOUS duplicate EQUIPMENT SCHEDULE keys) |
+| 096 Vermillion | 75 | **59** | 16 | 0 | partial (VAV/FCU/AHU largely MATCH) |
+
+Artifact: `/opt/cursor/artifacts/pillar-c-bas-plan-paint-preferTitle-recensus.json`.
 
 Valve reconcile rollup (MATCH / SCHEDULE_ONLY):
 
