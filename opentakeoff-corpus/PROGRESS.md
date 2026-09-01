@@ -389,7 +389,8 @@ reconcile, and plan joins.
 - **Vol2 batch-7 intake (shared path):** Ran `REJOIN_full_sets.sh` (qpdf); locked **13**/13 multipart rejoins (3 MEAT / 5 WEAK / 3 ZERO) including chiller upgrade **32**, NY EHRM **18**, Jonesboro VRF **24**; LBNL honest ZERO (311 sheets). Workflow `graphForKey` prefers `_rejoined/` then merges `source_parts_dir`. Vol2 keyed total **82**/82 (all 13 multipart rejoins keyed, incl. PHX **64** + FL airport **20**).
 - **WP4 Vermillion County Jail VAV reconcile:** Vol2 **096** bulk **58/58 VAV MATCH** under `evaluationFast` (locked in `reconcileWorkflow.test.mjs`).
 - **WP4 Vol2 MEAT rejoin reconcile locks (012 chiller ACC/PUMP/VFD, 089 FL airport DOAS/HP/PUMP/WH/FAN, 088 PHX plant+terminal families):** multipart-aware `loadKeySession` helper; locked in `reconcileWorkflow.test.mjs`. `test:workflows` **50/50** green (2026-09-01).
-- **WP4 Vol2 bulk reconcile deepen:** Eglin **019** all 13 families MATCH (103 tags); Jonesboro **093** VRF+WH; Health Science **071** VAV; Miller **077** WSHP+GRD; ITD lab **062** bulk (93 tags, 1 FAN SO); pier **015** plant MATCH; MO **004** RTU; NC **047** VRF plant; Ames **061**; History **094**; IL **040** GRD; Missoula **014**; ATC **001** VAV+FCU+GRD (124 tags). Honest ceilings: **012** CT; **089** FCU; **088** VFD 2/11; **Klamath Vol1** FCU/DOAS/HP all SO (tags not plan text). `test:workflows` **68/68** green (2026-09-01).
+- **WP4 Vol2 bulk reconcile deepen:** Eglin **019** (103 tags); Jonesboro **093**; Health Science **071**; Miller **077**; ITD **062**; pier **015**; MO **004**; NC **047**; Ames **061**; History **094**; IL **040**; Missoula **014**; ATC **001** VAV+FCU+GRD; **018** poultry; **083** Town Offices; **031** warehouse GRD 12/59; **053** VA ER valves SO + GRD 2/6; **023** Salinity + **044** boilers honest SO; Klamath FCU/DOAS/HP SO; **012** CT; **089** FCU; **088** VFD 2/11. `test:workflows` pending re-run.
+- **Pillar A ZERO/WEAK audit (2026-09-01):** all **23** WEAK keys match live compile (no drift); all **27** ZERO Vol2 keys stay at **0** HVAC items (no silent inflation).
 
 ### Active goal (platform loop)
 
@@ -399,7 +400,7 @@ UI+MCP parity, no corpus hardcodes.
 
 | Pillar | Scope | Status |
 |---|---|---|
-| **A — Cross-set compile** | Vol1 + Vol2 (82/82 INDEX) schedule compile | **Largely complete** — keys keyed; WEAK→MEAT fixes continue |
+| **A — Cross-set compile** | Vol1 + Vol2 (82/82 INDEX) schedule compile | **Largely complete** — 23 WEAK + 27 ZERO keys audited 2026-09-01 (zero drift/inflation) |
 | **B — Reconcile** | Schedule↔plan with contractor columns+cites | **In progress** — deepen Vol2 MEAT locks |
 | **C — Valve + BAS depth** | Air/water valves, dampers, actuators; BAS points, I/O, SOO | **Queued** — WP7–WP8 after §6 A+B bar |
 | **D — Grounding depth** | Symbol counts highlighted and accurate on plan | **Queued** — WP9 after §6 A+B bar |

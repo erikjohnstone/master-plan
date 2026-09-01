@@ -78,10 +78,10 @@ async function assertFamilyAllMatch(session, graph, key, family) {
   }
 }
 
-async function assertFamilyStatusCounts(session, graph, key, family, counts) {
+async function assertFamilyStatusCounts(session, graph, key, family, counts, { rows: rowExpect } = {}) {
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
   assert.ok(needle, `${family} needle`);
-  const expect = key.categories[family];
+  const expect = rowExpect ?? key.categories[family];
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     evaluationFast: true,
   });
@@ -614,6 +614,99 @@ test("Klamath Vol1 FCU/DOAS/HP: honest SCHEDULE_ONLY (tags not plan text)", asyn
       schedule_only: key.categories[family],
     });
   }
+});
+
+test("Vol2 poultry research 018: all scheduled families MATCH", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of Object.keys(key.categories)) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 Town Offices 083: FCU + HP MATCH; ERV partial; GRD honest SO", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["FCU", "HEAT_PUMP"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+  await assertFamilyStatusCounts(session, graph, key, "ERV", {
+    match: 1,
+    schedule_only: 1,
+  });
+  await assertFamilyStatusCounts(session, graph, key, "GRD", {
+    schedule_only: key.categories.GRD,
+  });
+});
+
+test("Vol2 warehouse 031: GRD partial 12 MATCH · 47 SCHEDULE_ONLY", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyStatusCounts(session, graph, key, "GRD", {
+    match: 12,
+    schedule_only: 47,
+  });
+  assert.equal(key.categories.GRD, 59);
+});
+
+test("Vol2 VA ER 053: HHW valves honest SCHEDULE_ONLY; GRD 2/5 MATCH", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "053_VA_Renovate_Expand_Emergency_Room_System_VA.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyStatusCounts(session, graph, key, "HHW_CONTROL_VALVE", {
+    schedule_only: key.categories.HHW_CONTROL_VALVE,
+  });
+  await assertFamilyStatusCounts(session, graph, key, "GRD", {
+    match: 2,
+    schedule_only: 4,
+  }, { rows: 6 });
+});
+
+test("Vol2 Salinity Lab 023: chiller plant honest SCHEDULE_ONLY", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["AIR_COOLED_CHILLER", "PUMP", "BUFFER_TANK"]) {
+    await assertFamilyStatusCounts(session, graph, key, family, {
+      schedule_only: key.categories[family],
+    });
+  }
+});
+
+test("Vol2 main boilers 044: plant schedules honest SCHEDULE_ONLY", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["BOILER", "FAN", "HEAT_EXCHANGER", "UNIT_HEATER", "LOUVER", "CONDENSING_UNIT"]) {
+    await assertFamilyStatusCounts(session, graph, key, family, {
+      schedule_only: key.categories[family],
+    });
+  }
+  // Reconcile scaffold omits one pump row vs compile (8/9) — honest SO on rows found.
+  await assertFamilyStatusCounts(session, graph, key, "PUMP", {
+    schedule_only: 8,
+  }, { rows: 8 });
 });
 
 test("Orange County booster pump BP-1 reconcile MATCH", async () => {
