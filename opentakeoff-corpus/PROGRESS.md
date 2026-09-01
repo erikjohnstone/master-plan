@@ -1,6 +1,15 @@
 ## Active work
 
-### Pillar C — inventory wave 4 census (2026-09-01 20:35 UTC)
+### Pillar C — inventory waves 5–6 + valve honest ceilings (2026-09-01 20:45 UTC)
+
+- **Census script fix:** explicit set IDs no longer wrongly filtered to `bas:0` only; skipped sets recorded with reason (`no_plan_paint_targets`, etc.).
+- **Wave 5 (20 requested):** **3 scored / 3 with MATCH** — 17 skipped (honest zero HVAC inventory in compile). Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave5.json`.
+- **Wave 6 (32 Vol2/EHRM):** **1 scored / 1 with MATCH** — 31 skipped (no inventory plan_paint targets). Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave6.json`.
+- **Inventory census total:** **57 sets with scored samples** (waves 1–4: 54 + wave 5–6: 3 new unique with inventory).
+- **Valve locks expanded:** 021 honest **0 MATCH / all SCHEDULE_ONLY**; 096 **≥10 MATCH** on 24 valve marks (`valvePlanPaint.regression.test.mjs` **7/7**).
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
+
+### Prior — inventory wave 4 census (2026-09-01 20:35 UTC)
 
 - **Inventory plan-paint wave 4 (18 bas:0 sets):** **9/18 with MATCH** on 8-tag samples. Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave4.json`. Running total **54 inventory sets** censused (waves 1–4).
 - **Valve regression expanded:** Pier 015 + ITD 062 keyed floors locked (≥10 MATCH each on full target sweep).

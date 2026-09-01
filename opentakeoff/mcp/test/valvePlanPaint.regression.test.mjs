@@ -45,6 +45,19 @@ const VALVE_PLAN_PAINT_KEYS = [
     maxAmbiguous: 0,
     maxError: 0,
   },
+  {
+    file: "021_XX_Laboratory_building_mechanical_drawings_lab.compile.json",
+    minMatch: 0,
+    maxAmbiguous: 0,
+    maxError: 0,
+    allScheduleOnly: true,
+  },
+  {
+    file: "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.compile.json",
+    minMatch: 10,
+    maxAmbiguous: 0,
+    maxError: 0,
+  },
 ];
 
 function tally(rows) {
@@ -88,5 +101,10 @@ for (const spec of VALVE_PLAN_PAINT_KEYS) {
     assert.ok(tallies.MATCH >= spec.minMatch, `${key.set_id}: need ≥${spec.minMatch} MATCH, got ${tallies.MATCH}`);
     assert.ok(tallies.AMBIGUOUS <= spec.maxAmbiguous, `${key.set_id}: AMBIGUOUS ${tallies.AMBIGUOUS}`);
     assert.ok(tallies.ERROR <= spec.maxError, `${key.set_id}: ERROR ${tallies.ERROR}`);
+    if (spec.allScheduleOnly) {
+      assert.equal(tallies.MATCH, 0, `${key.set_id}: honest zero MATCH ceiling`);
+      assert.equal(tallies.SCHEDULE_ONLY + tallies.MATCH, targets.length,
+        `${key.set_id}: every valve mark honestly classified`);
+    }
   });
 }

@@ -47,7 +47,6 @@ async function censusOne(key, keyPath, { servedOnly = false } = {}) {
     return { set_id: key.set_id, skip: "pdf_or_parts_missing" };
   }
   const { session, graph } = loaded;
-  const hvac = compileCorpusTakeoff(null, graph, "hvac_equipment");
   const bas = compileCorpusTakeoff(null, graph, "bas_points");
   const product = bas.estimator_product;
   if (!product?.plan_paint?.targets?.length) {
@@ -56,7 +55,6 @@ async function censusOne(key, keyPath, { servedOnly = false } = {}) {
 
   let targets = product.plan_paint.targets;
   if (servedOnly) {
-    // Keyed BAS: sweep full plan_paint target list (inventory + served_equipment).
     targets = product.plan_paint.targets;
   } else {
     targets = targets.filter((t) => t.source === "inventory");
@@ -105,15 +103,17 @@ async function censusOne(key, keyPath, { servedOnly = false } = {}) {
 }
 
 const keys = compileKeys().filter(({ key }) => {
-  if (filterIds.size && !filterIds.has(key.set_id)) return false;
+  if (filterIds.size) return filterIds.has(key.set_id);
   if (mode === "keyed-served") return (key.bas_points?.rows ?? 0) > 0;
   return (key.bas_points?.rows ?? 0) === 0;
 });
 
 const results = [];
+const skipped = [];
 for (const { key, keyPath } of keys) {
   const row = await censusOne(key, keyPath, { servedOnly: mode === "keyed-served" });
-  if (!row.skip) results.push(row);
+  if (row.skip) skipped.push(row);
+  else results.push(row);
 }
 
 const out = {
@@ -122,8 +122,10 @@ const out = {
   note: "Pillar C plan-paint census — shared sweepBasServedMark + preferTitle/sheet; still 0 locked",
   locked: 0,
   n: results.length,
+  skipped_n: skipped.length,
   with_match: results.filter((r) => (r.tallies?.MATCH ?? 0) > 0).length,
   results,
+  skipped,
 };
 
 const outPath = process.env.PILLAR_C_ARTIFACT
