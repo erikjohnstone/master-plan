@@ -653,6 +653,107 @@ test("FLOW_METER catch-all + CONTROL_DAMPER titled compile", () => {
   assert.equal(hvac.totals.items, 5);
 });
 
+test("MOTORIZED DAMPER + isolation/PRV/mixing valve titled compile", () => {
+  assert.equal(
+    scheduleTitleMatches(
+      "MOTORIZED DAMPER SCHEDULE",
+      HVAC_FAMILY_SPECS.CONTROL_DAMPER.altTitleRe!,
+      HVAC_FAMILY_SPECS.CONTROL_DAMPER.exclude,
+    ),
+    true,
+  );
+  assert.ok(HVAC_FAMILY_SPECS.CONTROL_DAMPER.altKeyRe!.test("MD-1"));
+  assert.equal(
+    scheduleTitleMatches(
+      "VALVE SCHEDULE",
+      HVAC_FAMILY_SPECS.ISOLATION_VALVE.altTitleRe!,
+      HVAC_FAMILY_SPECS.ISOLATION_VALVE.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "PRESSURE REDUCING VALVE SCHEDULE",
+      HVAC_FAMILY_SPECS.ISOLATION_VALVE.altTitleRe!,
+      HVAC_FAMILY_SPECS.ISOLATION_VALVE.exclude,
+    ),
+    false,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "PRESSURE REDUCING VALVE SCHEDULE",
+      HVAC_FAMILY_SPECS.PRESSURE_REDUCING_VALVE.titleRe,
+      HVAC_FAMILY_SPECS.PRESSURE_REDUCING_VALVE.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "MIXING VALVE SCHEDULE",
+      HVAC_FAMILY_SPECS.MIXING_VALVE.titleRe,
+      HVAC_FAMILY_SPECS.MIXING_VALVE.exclude,
+    ),
+    true,
+  );
+  const graph = {
+    tables: [
+      {
+        kind: "equipment",
+        sheet: "m.pdf#1",
+        title: { text: "MOTORIZED DAMPER SCHEDULE" },
+        rows: [
+          { key: "MD-1", cells: { MARK: { text: "MD-1" } } },
+          { key: "MD-2", cells: { MARK: { text: "MD-2" } } },
+          { key: "OA1", cells: { MARK: { text: "OA1" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#2",
+        title: { text: "VALVE SCHEDULE" },
+        rows: [
+          { key: "VLV-1", cells: { MARK: { text: "VLV-1" } } },
+          { key: "VLV-2", cells: { MARK: { text: "VLV-2" } } },
+          { key: "V-CHW-1", cells: { MARK: { text: "V-CHW-1" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#3",
+        title: { text: "PRESSURE REDUCING VALVE SCHEDULE" },
+        rows: [
+          { key: "PRV-1", cells: { MARK: { text: "PRV-1" } } },
+          { key: "PRV-2A", cells: { MARK: { text: "PRV-2A" } } },
+        ],
+      },
+      {
+        kind: "equipment",
+        sheet: "m.pdf#4",
+        title: { text: "MIXING VALVE SCHEDULE" },
+        rows: [
+          { key: "MX-1", cells: { MARK: { text: "MX-1" } } },
+          { key: "MV-2", cells: { MARK: { text: "MV-2" } } },
+        ],
+      },
+    ],
+  };
+  const hvac = compileHvacTakeoff(null, graph);
+  assert.equal(hvac.categories.CONTROL_DAMPER.count, 2);
+  assert.deepEqual(
+    hvac.categories.CONTROL_DAMPER.items.map((i) => i.tag).sort(),
+    ["MD-1", "MD-2"],
+  );
+  assert.equal(hvac.categories.ISOLATION_VALVE.count, 2);
+  assert.deepEqual(
+    hvac.categories.ISOLATION_VALVE.items.map((i) => i.tag).sort(),
+    ["VLV-1", "VLV-2"],
+  );
+  // Bare VALVE SCHEDULE + V-CHW still belongs to CHW control valves, not isolation.
+  assert.equal(hvac.categories.CHW_CONTROL_VALVE.count, 1);
+  assert.equal(hvac.categories.PRESSURE_REDUCING_VALVE.count, 2);
+  assert.equal(hvac.categories.MIXING_VALVE.count, 2);
+});
+
 test("LOUVER + LOUVERED_PENTHOUSE titled compile; FIN_TUBE titledOnly skips filter FTR", () => {
   assert.equal(
     scheduleTitleMatches(

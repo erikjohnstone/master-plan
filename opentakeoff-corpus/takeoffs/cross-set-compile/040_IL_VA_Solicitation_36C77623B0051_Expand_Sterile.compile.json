@@ -2,16 +2,17 @@
   "set_id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 sterile expand \u2014 UH/FAN/PUMP/GRD/louver MEAT.",
+  "notes": "[MEAT] Vol2 sterile expand — UH/FAN/PUMP/GRD/louver + PRV schedule.",
   "categories": {
     "PUMP": 2,
     "FAN": 6,
     "UNIT_HEATER": 6,
+    "PRESSURE_REDUCING_VALVE": 5,
     "GRD": 8,
     "LOUVER": 2
   },
   "totals": {
-    "items": 24
+    "items": 29
   },
   "bas_points": {
     "rows": 0

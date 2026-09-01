@@ -391,8 +391,8 @@ reconcile, and plan joins.
 - **WP4 Vol2 MEAT rejoin reconcile locks (012 chiller ACC/PUMP/VFD, 089 FL airport DOAS/HP/PUMP/WH/FAN, 088 PHX plant+terminal families):** multipart-aware `loadKeySession` helper; locked in `reconcileWorkflow.test.mjs`. `test:workflows` **50/50** green (2026-09-01).
 - **WP4 Vol2 MEAT reconcile sweep (unlocked leftovers):** APHIS **009** AHU/ACC/pump/fan MATCH (UH 4/5); NIST **017** fan+humidifier MATCH (duct coils SO); MO steam **024** RTU 4/4; Patriot Cafe **042** GRD 5/5; LAMBDA **060** duct coils MATCH · GRD 6/10; West Valley **072/074** FAN 10/11 + ERV; lab **021** + Bldg615 **028** honest plant SO. WEAK BAS drift audit: **0**. `test:workflows` **83/83** green (2026-09-01).
 - **WP4 WEAK/MEAT reconcile deepen:** Renne **075** AHU/HP/ERV/coil MATCH (GRD SO); JVWTP **097** all MATCH; Bruneau **098** FCU/fan/UH MATCH; Harrison **063** GRD MATCH; Antelope **068** boiler MATCH; NY EHRM **030** pumps 14/15; Irish Hill **016** AHU MATCH. `test:workflows` **90/90** green (2026-09-01).
-- **WP4 Vol1 plant + WEAK remainder:** Las Vegas CUP **04** CT MATCH · pumps 11/12; Colville **27** fans MATCH · pumps 13/14; unheated **008** UH+louver; NC EHRM **034** pumps; sterile **049** compressors; sterile **041** GRD; ITD D2 **069** honest plant SO. `test:workflows` pending.
-- **WP4 Vol1 plant + WEAK remainder:** Las Vegas CUP **04** CT MATCH · pumps 11/12; Colville **27** fans MATCH · pumps 13/14; unheated **008** UH+louver; NC EHRM **034** pumps; sterile **049** compressors; sterile **041** GRD; ITD D2 **069** honest plant SO. `test:workflows` pending.
+- **WP4 Vol1 plant + WEAK remainder:** Las Vegas CUP **04** CT MATCH · pumps 11/12; Colville **27** fans MATCH · pumps 13/14; unheated **008** UH+louver; NC EHRM **034** pumps; sterile **049** compressors; sterile **041** GRD; ITD D2 **069** honest plant SO. `test:workflows` **97/97** green (2026-09-01).
+- **Pillar A deepen — dampers/valves + POINTS SCHEDULE (shared path):** `CONTROL_DAMPER` altTitleRe `MOTORIZED DAMPER SCHEDULE` + `MD-*`; `ISOLATION_VALVE` (bare `VALVE SCHEDULE` + `VLV-*`), `PRESSURE_REDUCING_VALVE` (`PRV-*`), `MIXING_VALVE` (`MX-*`/`MV-*`); `isBasPointsListTitle` accepts `POINTS SCHEDULE` (not SOO “point list table”). Key lifts: pier **015** 47→83 (+21 MD +15 VLV), sterile **040** 24→29 (+5 PRV), FL airport **089** 20→22 (+2 MX). Vermillion **096** BAS unchanged (231). Negatives: T-VALVE/BAS/HVAC-01 locked. Prep for Pillar C — not commercial valve/BAS workflows yet.
 
 ### Active goal (platform loop)
 
@@ -412,7 +412,7 @@ Authority: `GOAL.md` §8 · `takeoffs/NEXT_GOAL_LOOP.md`.
 ### Next queue (platform loop)
 
 1. **Pillar B / §6 judgment:** Vol2 + Vol1 plant reconcile dense (incl. Las Vegas CUP **04**, Colville **27** pumps/fans, WEAK MATCH leftovers). Klamath FC/HP/DOAS remain honest SO.
-2. **Pillar A tail:** WEAK→MEAT only when probe finds new extractable schedules (23 WEAK + 27 ZERO stable; BAS drift 0).
+2. **Pillar A tail:** WEAK→MEAT only when probe finds new extractable schedules (23 WEAK + 27 ZERO stable; BAS drift 0). Damper/isolation/PRV/mixing families now compile on pier/sterile/airport MEAT keys.
 3. **Merge branch stack → `main`** when A+B §6 metrics met; WORKFLOWS #51 ON_MAIN.
 4. **Pillar C (after A+B):** WP7 valve/damper/actuator depth + WP8 BAS points/SOO
    — grow from 4/82 Vol2 BAS rows and ~3/82 valve rows.

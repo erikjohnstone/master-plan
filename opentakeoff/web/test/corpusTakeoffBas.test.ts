@@ -17,6 +17,10 @@ describe("isBasPointsListTitle", () => {
     assert.equal(isBasPointsListTitle("DDC CONTROLLER INPUT/OUTPUT SUMMARY"), true);
     assert.equal(isBasPointsListTitle("DDC CONTROLLER INPUT/OUTPUT LEGEND"), true);
     assert.equal(isBasPointsListTitle("CONTROLLER I/O SUMMARY"), true);
+    assert.equal(isBasPointsListTitle("MISCELLANEOUS POINTS SCHEDULE"), true);
+    assert.equal(isBasPointsListTitle("POINTS SCHEDULE"), true);
+    // SOO narrative captions — not extractable typed points rows.
+    assert.equal(isBasPointsListTitle("AHU-1 POINT LIST TABLE"), false);
     assert.equal(isBasPointsListTitle("FAN SCHEDULE"), false);
     assert.equal(isBasPointsListTitle("RADIO LIST"), false);
     assert.equal(isBasPointsListTitle(""), false);

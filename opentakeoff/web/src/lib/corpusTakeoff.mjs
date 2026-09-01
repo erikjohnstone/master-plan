@@ -640,10 +640,34 @@ export const HVAC_FAMILY_SPECS = {
   },
   // Motorized OA/RA control dampers on dedicated CONTROL DAMPER schedules.
   // keyRe drops building-only marks (Carson B1 on the same table as OA1/OA2).
+  // altTitleRe: MOTORIZED DAMPER SCHEDULE + MD-* (pier / utility sets).
   CONTROL_DAMPER: {
     titleRe: /CONTROL\s+DAMPER\s+SCHEDULE/i,
+    altTitleRe: /MOTORIZED\s+DAMPER\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC|FIRE\s+DAMPER|SMOKE\s+DAMPER|FUME\s+HOOD/i,
     keyRe: /^(?:OA|RA|EA|SA)[\s\-]?\d/i,
+    altKeyRe: /^MD[\s\-]/i,
+  },
+  // Bare VALVE SCHEDULE + VLV-* isolation marks (not CHW/HHW control valves —
+  // those stay on CHW_CONTROL_VALVE / HHW_CONTROL_VALVE with V-CHW / V-HHW).
+  ISOLATION_VALVE: {
+    titleRe: /ISOLATION\s+VALVE\s+SCHEDULE/i,
+    altTitleRe: /^(?:\(N\)\s*)?VALVE\s+SCHEDULE\b/i,
+    exclude: /CONTROL\s+VALVE|POINTS\s*LIST|DDC|PRESSURE\s+REDUC|MIXING|BYPASS/i,
+    keyRe: /^VLV[\s\-]/i,
+    titledOnly: true,
+  },
+  PRESSURE_REDUCING_VALVE: {
+    titleRe: /PRESSURE\s+REDUC(?:ING|TION)\s+VALVE\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC/i,
+    keyRe: /^PRV[\s\-]/i,
+    titledOnly: true,
+  },
+  MIXING_VALVE: {
+    titleRe: /MIXING\s+VALVE\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC/i,
+    keyRe: /^(?:MX|MV)[\s\-]/i,
+    titledOnly: true,
   },
   // Lab fume-hood exhaust control valves / VAV dampers (ECV-*). Titled-only —
   // VAV titleRe also hits "VARIABLE AIR VOLUME" in these captions, but ECV
@@ -736,6 +760,9 @@ export function isBasPointsListTitle(title) {
   // Lab/VA DDC controller I/O summaries (device-point rows, not AI## MARK lists).
   if (/\bDDC\s+CONTROLLER\s+INPUT\s*\/?\s*OUTPUT\b/i.test(t)) return true;
   if (/\bCONTROLLER\s+I\s*\/?\s*O\s+(?:SUMMARY|LEGEND|LIST)\b/i.test(t)) return true;
+  // MISCELLANEOUS POINTS SCHEDULE / POINTS SCHEDULE (not SOO "point list table"
+  // narratives — those lack the SCHEDULE token after POINTS).
+  if (/\bPOINTS?\s+SCHEDULE\b/i.test(t)) return true;
   return false;
 }
 
