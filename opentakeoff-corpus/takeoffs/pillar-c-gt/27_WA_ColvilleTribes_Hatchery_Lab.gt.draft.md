@@ -25,6 +25,13 @@ Artifact: `/opt/cursor/artifacts/pillar-c-27-drawing-verify.json`
 
 Artifact: `/opt/cursor/artifacts/pillar-c-027-estimator-gap-verify.json`
 
+## Plan-paint census (2026-09-01) — still unlocked
+
+| Check | Result |
+|---|---|
+| BAS served | 42 tags · **17 MATCH** / 25 ERROR (ambiguous HWP-* keys) |
+| MATCH sample | EP-4, EF-3, PIT/TCV/FIT instrument tags |
+
 ## Still blocks lock (Where we refuse — not done)
 
 - SOO refuse

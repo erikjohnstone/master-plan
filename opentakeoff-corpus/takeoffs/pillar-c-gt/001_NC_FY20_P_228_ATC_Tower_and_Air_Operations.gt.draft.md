@@ -30,6 +30,16 @@ Artifact: `/opt/cursor/artifacts/pillar-c-navfac-001-drawing-verify.json`
 
 Artifact: `/opt/cursor/artifacts/pillar-c-001-estimator-gap-verify.json`
 
+## Plan-paint census (2026-09-01) — still unlocked
+
+| Check | Result |
+|---|---|
+| BAS served tags | 3 · **3 MATCH** / 0 ERROR |
+| Valve reconcile | 163 items · **3 MATCH** / 160 SCHEDULE_ONLY |
+| Status | `refuse_not_done` (CV plan paint mostly SO — honest) |
+
+Artifacts: `pillar-c-001-bas-plan-paint-census.json` · `pillar-c-001-valve-plan-paint-census.json`
+
 ## Still blocks lock (Where we refuse — not done)
 
 - FCU 42 × templates: **refuse_not_done** (no coil-type split)

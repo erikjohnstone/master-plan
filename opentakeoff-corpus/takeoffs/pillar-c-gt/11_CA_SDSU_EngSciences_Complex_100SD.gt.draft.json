@@ -95,5 +95,13 @@
     "sample_pass": 20,
     "sample_n": 20,
     "gt_locked": false
+  },
+  "valve_plan_paint_census": {
+    "at": "2026-09-01T16:47:17.555Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-11-valve-plan-paint-census.json",
+    "match": 13,
+    "schedule_only": 47,
+    "items": 60,
+    "gt_locked": false
   }
 }

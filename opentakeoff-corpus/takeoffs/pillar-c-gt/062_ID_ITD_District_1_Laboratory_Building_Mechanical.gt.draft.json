@@ -96,5 +96,13 @@
     "missing_match": true,
     "column_honesty": "7/7",
     "gt_locked": false
+  },
+  "valve_plan_paint_census": {
+    "at": "2026-09-01T16:46:40.900Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-062-valve-plan-paint-census.json",
+    "match": 31,
+    "schedule_only": 0,
+    "items": 31,
+    "gt_locked": false
   }
 }

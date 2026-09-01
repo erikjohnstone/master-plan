@@ -27,6 +27,15 @@ Artifact: `/opt/cursor/artifacts/pillar-c-pier-015-drawing-verify.json`
 
 Artifact: `/opt/cursor/artifacts/pillar-c-015-estimator-gap-verify.json`
 
+## Plan-paint census (2026-09-01) — still unlocked
+
+| Check | Result |
+|---|---|
+| BAS served | 12 tags · **5 MATCH** / 7 ERROR (MPAC/HPAC miss) |
+| Valve reconcile | 36 · **34 MATCH** / 2 SO |
+
+Artifacts: `pillar-c-015-bas-plan-paint-census.json` · `pillar-c-015-valve-plan-paint-census.json`
+
 ## Still blocks lock (Where we refuse — not done)
 
 - SOO refuse

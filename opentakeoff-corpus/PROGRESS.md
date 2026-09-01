@@ -579,13 +579,39 @@ sample **20/20** on drawing (printed BAS 0); Klamath 14 **15/15** on drawing
 (printed BAS 0). Draft GT created/patched; `gt_locked: false`. Artifact:
 `/opt/cursor/artifacts/pillar-c-inventory-drawing-verify-batch.json`.
 
+**Plan-paint census — keyed floor (2026-09-01, still 0 locked):**
+
+BAS `served_equipment` sweep (full tag census, not sample):
+
+| Set | Served | MATCH | ERROR | Status |
+|---|---:|---:|---:|---|
+| 001 NAVFAC | 3 | **3** | 0 | partial (DOAH-T1, AHU-T1A/B) |
+| 015 Pier | 12 | **5** | 7 | refuse (MPAC/HPAC schedule-row miss) |
+| 021 Lab | 29 | 0 | **29** | refuse (I/O SUMMARY not geometrically anchored) |
+| 027 Colville | 42 | **17** | 25 | refuse (ambiguous HWP-* keys) |
+| 096 Vermillion | 1 | **1** | 0 | partial (HRC-1 only) |
+
+Valve reconcile rollup (MATCH / SCHEDULE_ONLY):
+
+| Set | Items | MATCH | SO | Notes |
+|---|---:|---:|---:|---|
+| 001 NAVFAC | 163 | 3 | 160 | CV mostly schedule-only (honest) |
+| 015 Pier | 36 | 34 | 2 | iso/damper largely plan-text |
+| 062 ITD lab | 31 | **31** | 0 | full MATCH |
+| 16 Carson | 2 | **2** | 0 | dampers MATCH |
+| 053 ER | 38 | 0 | **38** | all SO (honest) |
+| 11 SDSU | 60 | 13 | 47 | hood dampers mostly SO |
+
+Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-keyed-floor.json`.
+`estimator_product.plan_paint` stays **`refuse_not_done`** until corpus-complete.
+Regression: `basServedEquipmentPlanPaint.test.mjs` **3/3** green.
+
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** Keyed BAS gap/SOO + valve column honesty drawing-backed —
-   **0 locked**. Next: plan-paint census; drawing-backed inventory verify on
-   high-inventory bas:0 sets (SDSU/Klamath/…); tabular SOO where vector allows;
-   expand keys only when live compile finds real lists; lock only with
-   self-check + pipeline GT on **every** BAS + valve set.
+1. **Pillar C (corpus-deep):** Gap/SOO + valve columns + plan-paint census on keyed floor —
+   **0 locked**. Next: drawing-backed inventory on more bas:0 sets; tabular SOO where
+   vector allows; expand keys only when live compile finds real lists; lock only
+   with self-check + pipeline GT on **every** BAS + valve set.
    Post-WP8 `test:workflows` **104/104** green (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).

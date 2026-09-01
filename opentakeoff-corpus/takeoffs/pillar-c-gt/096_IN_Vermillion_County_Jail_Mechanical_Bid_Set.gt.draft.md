@@ -26,6 +26,15 @@ Artifact: `/opt/cursor/artifacts/pillar-c-vermillion-096-drawing-verify.json`
 
 Artifact: `/opt/cursor/artifacts/pillar-c-096-estimator-gap-verify.json`
 
+## Plan-paint census (2026-09-01) — still unlocked
+
+| Check | Result |
+|---|---|
+| BAS served | 1 tag · **1 MATCH** (HRC-1 only) |
+| Valve reconcile | 24 · **12 MATCH** / 12 SO |
+
+Artifacts: `pillar-c-096-bas-plan-paint-census.json` · `pillar-c-096-valve-plan-paint-census.json`
+
 ## Still blocks lock (Where we refuse — not done)
 
 - Most DDC lists lack `served_equipment` — cannot invent unit maps

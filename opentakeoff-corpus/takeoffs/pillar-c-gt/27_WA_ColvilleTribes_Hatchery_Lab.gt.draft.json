@@ -46,5 +46,14 @@
     "focus_n": 8,
     "soo_status_match": true,
     "gt_locked": false
+  },
+  "bas_plan_paint_census": {
+    "at": "2026-09-01T16:45:56.915Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-027-bas-plan-paint-census.json",
+    "served": 42,
+    "match": 17,
+    "miss": 0,
+    "error": 25,
+    "gt_locked": false
   }
 }

@@ -25,6 +25,13 @@ Artifact: `/opt/cursor/artifacts/pillar-c-021-drawing-verify.json`
 
 Artifact: `/opt/cursor/artifacts/pillar-c-021-estimator-gap-verify.json`
 
+## Plan-paint census (2026-09-01) — still unlocked
+
+| Check | Result |
+|---|---|
+| BAS served | 29 tags · **0 MATCH** / 29 ERROR (I/O SUMMARY not anchored) |
+| Valve reconcile | 2 · 0 MATCH / 2 SO |
+
 ## Still blocks lock (Where we refuse — not done)
 
 - SOO present but not row-extractable

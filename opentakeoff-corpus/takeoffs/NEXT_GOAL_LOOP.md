@@ -565,9 +565,12 @@ sets pass — do not stop at a sample):*
     **Partial (2026-09-01):** keyed BAS floor (5/5) has drawing-backed
     estimator gap + SOO corroboration (`pillar-c-*-estimator-gap-verify`);
     drafts still `gt_locked: false` — not corpus-complete.
-12. [ ] **Plan paint for every corpus BAS + valve/damper/actuator set:**
+12. [~] **Plan paint for every corpus BAS + valve/damper/actuator set:**
     served_equipment / valve / damper marks paint via shared sweep (MATCH or
     honest SCHEDULE_ONLY) with visible cites — census in PROGRESS until 100%.
+    **Partial (2026-09-01):** keyed floor census recorded — BAS served
+    MATCH/ERROR tallies + valve reconcile MATCH/SO rollups; all still
+    `refuse_not_done` / `gt_locked: false` (`pillar-c-plan-paint-census-keyed-floor.json`).
 13. [ ] **Stop condition:** Pillar C done only when every BAS set and every
     valve set in the corpus has (a) coordinator-verified right answer and
     (b) pipeline corroboration on the shared path. Expand BAS/valve keys until

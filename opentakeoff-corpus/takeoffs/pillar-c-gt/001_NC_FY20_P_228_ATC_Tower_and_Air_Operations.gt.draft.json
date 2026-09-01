@@ -424,5 +424,22 @@
     "missing_match": true,
     "column_honesty": "7/7",
     "gt_locked": false
+  },
+  "bas_plan_paint_census": {
+    "at": "2026-09-01T16:45:41.714Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-001-bas-plan-paint-census.json",
+    "served": 3,
+    "match": 3,
+    "miss": 0,
+    "error": 0,
+    "gt_locked": false
+  },
+  "valve_plan_paint_census": {
+    "at": "2026-09-01T16:46:09.220Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-001-valve-plan-paint-census.json",
+    "match": 3,
+    "schedule_only": 160,
+    "items": 163,
+    "gt_locked": false
   }
 }
