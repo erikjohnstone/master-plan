@@ -34,6 +34,10 @@
     "rows": 122
   },
   "control_valves": {
-    "items": 0
+    "items": 163,
+    "categories": {
+      "CHW_CONTROL_VALVE": 64,
+      "HHW_CONTROL_VALVE": 99
+    }
   }
 }
