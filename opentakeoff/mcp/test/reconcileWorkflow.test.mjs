@@ -511,6 +511,111 @@ test("Vol2 PHX 088: VFD honest partial — 2 MATCH · 9 SCHEDULE_ONLY", async (t
   assert.equal(key.categories.VARIABLE_FREQUENCY_DRIVE, 11);
 });
 
+test("Vol2 MO renovation 004: RTU + DOAS + plant aux all MATCH", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "004_MO_T2504_03_Interior_and_Exterior_Renovation.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["RTU", "DOAS", "PUMP", "WATER_SOFTENER", "UNIT_HEATER"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 NC VRF chiller 047: plant + VRF families all MATCH (GRD SO)", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of [
+    "VRF_INDOOR", "VRF_OUTDOOR", "AIR_COOLED_CHILLER", "HEAT_RECOVERY_CHILLER",
+    "PUMP", "EXPANSION_TANK", "BUFFER_TANK", "GLYCOL_MAKEUP",
+  ]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 Ames Harley Wilhelm 061: AHU/FCU/fan/HX MATCH; pump 6/7", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["FAN", "AHU", "FCU", "HEAT_EXCHANGER"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+  await assertFamilyStatusCounts(session, graph, key, "PUMP", {
+    match: 6,
+    schedule_only: 1,
+  });
+});
+
+test("Vol2 Orange County History 094: AHU + chiller plant all MATCH", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "094_FL_Orange_County_Regional_History_Center_HVAC.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["AHU", "AIR_COOLED_CHILLER", "COOLING_TOWER"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 IL sterile expand 040: GRD + fan + louver MATCH (UH/pump SO)", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["GRD", "FAN", "LOUVER"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 Missoula Fire Sciences 014: UH/fan/AHU/boiler/ET all MATCH", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["UNIT_HEATER", "FAN", "AHU", "BOILER", "EXPANSION_TANK"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Vol2 ATC tower 001: VAV + FCU + GRD all MATCH (federal MEAT)", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["VAV", "FCU", "GRD"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+});
+
+test("Klamath Vol1 FCU/DOAS/HP: honest SCHEDULE_ONLY (tags not plan text)", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "14_OR_KlamathCC_LearningCtr_Mechanical.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["FCU", "DOAS", "HEAT_PUMP"]) {
+    await assertFamilyStatusCounts(session, graph, key, family, {
+      schedule_only: key.categories[family],
+    });
+  }
+});
+
 test("Orange County booster pump BP-1 reconcile MATCH", async () => {
   const keyPath = resolve(CROSS, "21_VA_OrangeCounty_PublicSafetyBldg.compile.json");
   assert.ok(existsSync(keyPath));
