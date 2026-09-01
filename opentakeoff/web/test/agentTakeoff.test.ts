@@ -418,6 +418,7 @@ test("rowsFromCompiledTakeoff: BAS estimator_product estimate/gap/SOO rows are d
         typical_pct_per_point_type: { common: 15 },
         note: "policy disclose only",
       },
+      plan_paint: { status: "refuse_not_done", note: "paint required" },
     },
     categories: {
       points_lists: {
@@ -438,6 +439,7 @@ test("rowsFromCompiledTakeoff: BAS estimator_product estimate/gap/SOO rows are d
   assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "spare_io_policy" && /15%/.test(String(r.value))));
   // Printed point row still present — estimate did not replace it.
   assert.ok(rows.some((r) => r.tag === "AI1" && r.field === "quantity"));
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "plan_paint" && r.value === "refuse_not_done"));
 });
 
 test("compileAgentTakeoff: repeating BAS marks across lists stay separate lines", () => {

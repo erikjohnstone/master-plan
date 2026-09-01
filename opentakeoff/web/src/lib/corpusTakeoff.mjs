@@ -1120,6 +1120,10 @@ export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
       note: "Gap report only — does not invent POINTS rows for missing units.",
     },
     spare_io_policy: BAS_SPARE_IO_POLICY,
+    plan_paint: {
+      status: "refuse_not_done",
+      note: "Served-equipment / inventory plan MATCH or honest SCHEDULE_ONLY paint still required per mark — printed POINTS ≠ installed takeoff.",
+    },
   };
 }
 
@@ -1147,6 +1151,12 @@ export function basEstimatorStatus({ lists, totals, sheets, product = null }) {
     : (rowCount > 0 ? "partial_printed_only" : "title_only_excluded");
   const open = [];
   const refuseNotDone = [
+    {
+      gate: "plan_paint",
+      status: "refuse_not_done",
+      note: product?.plan_paint?.note
+        || "Served-equipment / inventory plan MATCH or honest SCHEDULE_ONLY still required — refuse, not complete.",
+    },
     {
       gate: "soo_derived_points",
       status: "refuse_not_done",

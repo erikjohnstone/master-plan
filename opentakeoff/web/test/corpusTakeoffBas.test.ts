@@ -57,6 +57,7 @@ describe("basEstimatorStatus", () => {
     assert.equal(status.served_equipment.without_join, 1);
     const byGate = Object.fromEntries(status.gates.map((g) => [g.gate, g.status]));
     assert.equal(byGate.printed_points_lists, "open");
+    assert.equal(byGate.plan_paint, "refuse_not_done");
     assert.equal(byGate.soo_derived_points, "refuse_not_done");
     assert.equal(byGate.spare_io_capacity, "refuse_not_done");
     assert.equal(byGate.gt_lock, "refuse_not_done");

@@ -70,7 +70,9 @@
   "open_before_lock": [
     "No BAS points keyed/compiled on this set (valve-only probe)",
     "Estimator contractor columns / full hand-count may remain open",
-    "Pillar C corpus-deep \u2014 this set alone cannot complete C"
+    "Pillar C corpus-deep \u2014 this set alone cannot complete C",
+    "BAS POINTS LIST titles are SOO narrative (0 geometric tables) \u2014 refuse present_not_row_extractable",
+    "Plan-paint / spare / proof gates remain refuse_not_done \u2014 corpus-deep C incomplete"
   ],
   "valve_estimator_product": {
     "printed_items": 31,
@@ -145,5 +147,21 @@
       "/opt/cursor/artifacts/pillar-c-062-points-list-title-assoc.json"
     ],
     "gt_locked": false
+  },
+  "updated_at": "2026-09-01T18:21:40Z",
+  "bas": {
+    "printed_points_list": {
+      "status": "absent_or_not_row_extractable",
+      "notes": "Sheets carry BOILER/VFD/AHU POINTS LIST titles in vector text, but findTables returns 0 geometric table rects \u2014 content is SOO narrative bullets (ENABLE/DISABLE, STATUS, ALARM), not typed hard I/O grids. Title gate would accept those phrases if table-backed; refuse present_not_row_extractable."
+    },
+    "sequences_of_operation": {
+      "status": "present_narrative_only",
+      "notes": "SOO sheets present; points-list language is narrative bullets under SOO, not extractable typed I/O."
+    },
+    "estimator_complete": false
+  },
+  "drawing_backed_self_check": {
+    "status": "in_progress",
+    "notes": "Valve drawing sample previously honest. BAS printed POINTS scrape = 0; POINTS LIST titles are SOO narrative (0 tables). Inventory plan-paint expand recorded separately. estimator_complete false; gt_locked false."
   }
 }

@@ -3,6 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   classifyReconcileStatus,
+  classifyBasServedSweepOutcome,
   familyNeedleFromSpecs,
   reconcileRowsFromTakeoffItems,
   summarizeReconcile,
@@ -102,6 +103,28 @@ test("classifyReconcileStatus: MATCH, SCHEDULE_ONLY, REFUSED, AMBIGUOUS", () => 
     }),
     "PLAN_ONLY",
   );
+});
+
+test("classifyBasServedSweepOutcome: unanchored I/O tags → SCHEDULE_ONLY (not ERROR)", () => {
+  const so = classifyBasServedSweepOutcome({
+    error: new Error('Schedule row "AFMS-1" (DDC CONTROLLER INPUT/OUTPUT SUMMARY) cannot be geometrically anchored — its tag is not drawn on any plan sheet'),
+  });
+  assert.equal(so.status, "SCHEDULE_ONLY");
+  assert.equal(so.found, 0);
+
+  const match = classifyBasServedSweepOutcome({
+    result: { found: 1, sheets: [{ matches: [{ sheet: "m#2" }] }] },
+  });
+  assert.equal(match.status, "MATCH");
+  assert.equal(match.cites, 1);
+
+  const miss = classifyBasServedSweepOutcome({ result: { found: 0, sheets: [] } });
+  assert.equal(miss.status, "SCHEDULE_ONLY");
+  const amb = classifyBasServedSweepOutcome({
+    error: new Error('Ambiguous: 2 schedule rows carry the key "AHU-A" — the same mark defined twice cannot seed one sweep.'),
+  });
+  assert.equal(amb.status, "AMBIGUOUS");
+
 });
 
 test("reconcileRowsFromTakeoffItems maps takeoff items to contractor columns", () => {

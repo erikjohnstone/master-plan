@@ -1,8 +1,12 @@
-# Corpus goal progress
+## Active work
 
-This is the coordinator's durable, auditable handoff for `GOAL.md`. Update it
-only from independently reproduced results; worker reports remain provisional
-until verification.
+### Pillar C — plan-paint expand + BAS plan_paint gate (2026-09-01 18:21 UTC)
+
+- **Shared path:** `buildBasEstimatorProduct` / `basEstimatorStatus` now disclose `plan_paint: refuse_not_done` (parity with valves); Takeoff emits `BAS_ESTIMATOR` plan_paint row. `classifyBasServedSweepOutcome` maps unanchored tags → `SCHEDULE_ONLY` and multi-schedule collisions → `AMBIGUOUS` (never fake MATCH / never treat ambiguity as crash ERROR).
+- **Inventory plan-paint expand (6 bas:0 sets):** 21 Orange County 8/8 MATCH; 04 Las Vegas CUP 7 MATCH · 1 SO; 05 St Louis 7 MATCH · 1 SO; 14 Klamath 8/8 SCHEDULE_ONLY; 16 Carson 6 AMBIGUOUS (building letters); 061 Ames 1 MATCH · 7 AMBIGUOUS. Still `refuse_not_done` / `gt_locked: false`.
+- **062 ITD:** POINTS LIST titles = SOO narrative bullets with **0 geometric tables** — honest `present_not_row_extractable`.
+- **Still 0/112 BAS and 0/81 valve** at `estimator_complete` / `gt_locked`. Corpus-complete mandate unchanged.
+- Artifacts: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-expand.json`, unit log `/opt/cursor/artifacts/pillar-c-plan-paint-unit2.log`.
 
 ## Verified baseline
 

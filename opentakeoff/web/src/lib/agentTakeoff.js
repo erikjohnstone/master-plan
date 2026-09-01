@@ -446,6 +446,14 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
           note: product.spare_io_policy.note || "Spare % never applied into printed totals",
         }));
       }
+      if (product.plan_paint) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: "BAS_ESTIMATOR", field: "plan_paint",
+          value: product.plan_paint.status || "refuse_not_done",
+          source_tool,
+          note: product.plan_paint.note || "Plan paint still required",
+        }));
+      }
     }
     const lists = compiled.categories?.points_lists?.lists || [];
     for (const list of lists) {
