@@ -1,0 +1,27 @@
+{
+  "as_of": null,
+  "note": "Initial scoreboard — run npm run eval after gold set is populated",
+  "metrics": {
+    "grounding_coverage": null,
+    "table_cell_f1": null,
+    "grid_type_acc": null,
+    "valve_prec": null,
+    "valve_rec": null,
+    "valve_attr_acc": null,
+    "damper_prec": null,
+    "damper_rec": null,
+    "damper_attr_acc": null,
+    "point_prec": null,
+    "point_rec": null,
+    "point_type_acc": null,
+    "io_total_abs_err": null,
+    "seq_section_f1": null,
+    "seq_implied_point_f1": null,
+    "discrepancy_prec": null,
+    "determinism": null,
+    "corpus_pass_rate": null
+  },
+  "acceptance": {
+    "mvp": false
+  }
+}

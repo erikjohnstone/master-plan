@@ -8,7 +8,8 @@
   "scripts": {
     "typecheck": "turbo run typecheck",
     "test:shared-path": "turbo run test:shared-path",
-    "test:workflows": "turbo run test:workflows"
+    "test:workflows": "turbo run test:workflows",
+    "eval": "node scripts/eval.mjs"
   },
   "devDependencies": {
     "turbo": "^2.5.4"
