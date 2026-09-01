@@ -1,0 +1,22 @@
+{
+  "set_id": "22_GA_Valdosta_FireStation8_100CD",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 5,
+    "estimate_only_points": 33,
+    "never_merged_into_printed": true,
+    "gap_count": 5,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:05:07.333Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-22-inventory-drawing-verify.json",
+    "sample_pass": 5,
+    "sample_n": 5,
+    "gt_locked": false
+  }
+}

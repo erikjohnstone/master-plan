@@ -1,0 +1,22 @@
+{
+  "set_id": "01_NY_VA_Northport_Dialysis_100CD",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 3,
+    "estimate_only_points": 27,
+    "never_merged_into_printed": true,
+    "gap_count": 3,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:04:25.729Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-01-inventory-drawing-verify.json",
+    "sample_pass": 3,
+    "sample_n": 3,
+    "gt_locked": false
+  }
+}

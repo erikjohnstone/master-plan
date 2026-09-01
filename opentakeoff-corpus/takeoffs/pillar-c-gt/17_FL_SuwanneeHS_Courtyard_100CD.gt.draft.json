@@ -1,0 +1,22 @@
+{
+  "set_id": "17_FL_SuwanneeHS_Courtyard_100CD",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 1,
+    "estimate_only_points": 15,
+    "never_merged_into_printed": true,
+    "gap_count": 1,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:04:46.214Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-17-inventory-drawing-verify.json",
+    "sample_pass": 1,
+    "sample_n": 1,
+    "gt_locked": false
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "set_id": "03_FL_HurlburtField_ChildDevCenter",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 11,
+    "estimate_only_points": 73,
+    "never_merged_into_printed": true,
+    "gap_count": 11,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:04:34.319Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-03-inventory-drawing-verify.json",
+    "sample_pass": 11,
+    "sample_n": 11,
+    "gt_locked": false
+  }
+}
