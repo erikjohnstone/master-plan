@@ -982,13 +982,31 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
   };
 }
 
-/** Control / bypass valve schedules only (subset of HVAC equipment families). */
-export const CONTROL_VALVE_FAMILIES = ["CHW_CONTROL_VALVE", "HHW_CONTROL_VALVE"];
+/**
+ * Valve / damper / air-valve families for kind=control_valves (Pillar C / WP7).
+ * CHW+HHW remain the hydronic core (T-VALVE-01); additional US MEP families are
+ * first-class when their schedules extract — never invent rows.
+ * Service filter CHW|HHW still scopes to the matching hydronic family only.
+ */
+export const CONTROL_VALVE_FAMILIES = [
+  "CHW_CONTROL_VALVE",
+  "HHW_CONTROL_VALVE",
+  "BYPASS_CONTROL_VALVE",
+  "ISOLATION_VALVE",
+  "PRESSURE_REDUCING_VALVE",
+  "PRESSURE_SAFETY_VALVE",
+  "MIXING_VALVE",
+  "CONTROL_DAMPER",
+  "FUME_HOOD_DAMPER",
+  "LAB_AIR_VALVE",
+];
 
 /**
  * Contractor-facing valve row fields from a schedule row's cells.
  * One Cv / size / GPM / served unit per valve — never invent dual CHW+HHW Cv
  * columns on the same line (those came from bad agent markdown merges).
+ * Promote printed Actuator / Fail position / control signal when present
+ * (WP7 research); never invent missing actuator fields.
  */
 export function normalizeControlValveCells(item, service) {
   const cells = item?.cells && typeof item.cells === "object" ? item.cells : {};
@@ -1010,11 +1028,14 @@ export function normalizeControlValveCells(item, service) {
   take(/^UNIT\s*MARK$/i, "Unit Mark");
   if (out["Unit Mark"]) out["Served equipment"] = { ...out["Unit Mark"] };
   else take(/SERVED|EQUIPMENT\s*MARK/i, "Served equipment");
-  take(/VALVE\s*SIZE|PIPE\s*SIZE|^\s*SIZE\s*$/i, "Size");
+  take(/VALVE\s*SIZE|PIPE\s*SIZE|DAMPER\s*SIZE|^\s*SIZE\s*$/i, "Size");
   take(/FLOWRATE|\bFLOW\b|\bGPM\b/i, "GPM");
   // Exactly one Cv — the schedule column is "CV", not "CHW CV" / "HHW CV".
   take(/^\s*C[Vv]\s*$/i, "Cv");
   take(/CONFIGURATION|CONFIG/i, "Configuration");
+  take(/\bACTUATOR\b|ACTUATION/i, "Actuator");
+  take(/FAIL\s*POSITION|FAIL[\s\-]?SAFE|SPRING[\s\-]?RETURN/i, "Fail position");
+  take(/CONTROL\s*SIGNAL|SIGNAL\s*TYPE|INPUT\s*SIGNAL|0[\s\-]?10\s*V|4[\s\-]?20\s*M\s*A|3[\s\-]?15\s*P\s*S\s*I/i, "Control signal");
   take(/^NOTES$/i, "Notes");
   if (service) {
     // Label only — never borrow the whole table region as a "Service" cite.
@@ -1038,11 +1059,16 @@ export function compileControlValveTakeoff(sessionOrSheets, graph, opts = {}) {
   const wantService = opts.service ? String(opts.service).toUpperCase() : null;
   const categories = {};
   for (const name of CONTROL_VALVE_FAMILIES) {
-    if (wantService === "CHW" && !/^CHW/i.test(name)) continue;
-    if (wantService === "HHW" && !/^HHW/i.test(name)) continue;
+    // CHW|HHW service filter keeps hydronic-only scope (T-VALVE-01 / phrase
+    // "chilled-water valve takeoff"); air-side + isolation families appear
+    // when the goal asks for a complete valve takeoff (no service filter).
+    if (wantService === "CHW" && name !== "CHW_CONTROL_VALVE") continue;
+    if (wantService === "HHW" && name !== "HHW_CONTROL_VALVE") continue;
     const cat = full.categories?.[name];
     if (!cat) continue;
-    const service = /^CHW/i.test(name) ? "CHW" : /^HHW/i.test(name) ? "HHW" : null;
+    const service = name === "CHW_CONTROL_VALVE" ? "CHW"
+      : name === "HHW_CONTROL_VALVE" ? "HHW"
+      : null;
     const items = (cat.items || []).map((item) => {
       const cells = normalizeControlValveCells(item, service);
       const served = cells["Unit Mark"]?.text || cells["Served equipment"]?.text || null;
@@ -1060,8 +1086,9 @@ export function compileControlValveTakeoff(sessionOrSheets, graph, opts = {}) {
       ...cat,
       count: items.length,
       items,
-      provenance: "Unique VALVE MARK rows on CHW/HHW CONTROL VALVE SCHEDULE pages; "
-        + "columns = valve mark, served equipment (UNIT MARK), service, size, GPM, Cv, configuration.",
+      provenance: "Unique MARK rows on valve/damper/air-valve schedules; "
+        + "columns = mark, served equipment, service (when hydronic), size, GPM, Cv, "
+        + "configuration, actuator / fail position / control signal when printed.",
     };
   }
   const itemCount = Object.values(categories).reduce((n, c) => n + (c.items?.length || 0), 0);
@@ -1078,8 +1105,11 @@ export function compileControlValveTakeoff(sessionOrSheets, graph, opts = {}) {
     },
     exclusions: [
       ...HVAC_EXCLUSIONS,
-      "Non-control-valve HVAC equipment (AHU, FCU, VAV, pumps, …) — use kind hvac_equipment for the full equipment takeoff",
-      ...(wantService ? [`${wantService === "CHW" ? "HHW" : "CHW"} CONTROL VALVE SCHEDULE (filtered out — goal asked for ${wantService} only)`] : []),
+      "Non-valve HVAC equipment (AHU, FCU, VAV, pumps, …) — use kind hvac_equipment for the full equipment takeoff",
+      ...(wantService ? [
+        `${wantService === "CHW" ? "HHW" : "CHW"} CONTROL VALVE SCHEDULE (filtered out — goal asked for ${wantService} only)`,
+        "Isolation / PRV / damper / lab-air valve families (filtered out — hydronic service scope)",
+      ] : []),
     ],
   };
 }

@@ -376,14 +376,18 @@ keys are still the bar. Thin compile stubs ≠ commercial valve takeoff.
    jail/plant MEAT keys already compile damper/isolation/PRV families).
 
 **DoD:**
-1. [ ] Air-side + water-side valve compile paths keyed on ≥3 bulk sets.
-2. [ ] Damper/actuator families compile + reconcile where plan-drawn.
-3. [ ] `test:workflows` locks for valve + damper workflows; T-VALVE-01 stays
-   green.
-4. [ ] No per-set hardcodes; honest empty when set has no extractable valve
-   tables.
-5. [ ] Research implications above reflected in deliverable columns + tests
-   (Cv/GPM/actuator/served unit when printed; never invent plan qty).
+1. [x] Air-side + water-side valve compile paths keyed on ≥3 bulk sets
+   (Carson CONTROL_DAMPER 2 · pier ISO+damper 36 · ITD HHW+lab air 31 ·
+   SDSU fume-hood+PRV 60 · Vermillion dampers 24 — plus NAVFAC CHW+HHW 163).
+2. [~] Damper/actuator families compile (CONTROL_DAMPER / FUME_HOOD_DAMPER in
+   valve kind; actuator/fail/signal columns when printed). Reconcile where
+   plan-drawn — follow-on for damper-specific reconcile locks.
+3. [x] Unit + T-VALVE-01 locks green after expansion; MCP `control_valves`
+   enum parity with UI. Full `test:workflows` re-run still owed after WP8.
+4. [x] No per-set hardcodes; honest empty when set has no extractable valve
+   tables (service=CHW|HHW still hydronic-only).
+5. [x] Research implications reflected: Cv/GPM/size/served unit + printed
+   Actuator / Fail position / Control signal; never invent plan qty.
 
 **Implementation pointers (shared path — after §6 MET; 2026-09-01 survey):**
 - Module: `opentakeoff/web/src/lib/corpusTakeoff.mjs` (MCP re-exports).

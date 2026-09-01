@@ -506,6 +506,77 @@ test("normalizeControlValveCells: one Cv + served equipment, never dual CHW/HHW 
   assert.equal(cells["HHW CV"], undefined);
 });
 
+test("normalizeControlValveCells: promote printed actuator / fail / signal (WP7)", () => {
+  const cells = normalizeControlValveCells({
+    cells: {
+      "UNIT MARK": { text: "VAV-1", bbox: null },
+      "VALVE SIZE": { text: "1/2", bbox: null },
+      ACTUATOR: { text: "24V ELECTRIC", bbox: [1, 2, 3, 4] },
+      "FAIL POSITION": { text: "NO", bbox: null },
+      "CONTROL SIGNAL": { text: "0-10V", bbox: null },
+      CV: { text: "1.2", bbox: null },
+    },
+  }, null);
+  assert.equal(cells.Actuator?.text, "24V ELECTRIC");
+  assert.equal(cells["Fail position"]?.text, "NO");
+  assert.equal(cells["Control signal"]?.text, "0-10V");
+  assert.equal(cells.Cv?.text, "1.2");
+  assert.equal(cells.Service, undefined);
+});
+
+test("control_valves compile includes isolation/damper families; CHW filter stays hydronic", () => {
+  const graph = {
+    tables: [
+      {
+        sheet: "m.pdf#1",
+        title: { text: "CHW CONTROL VALVE SCHEDULE", bbox: [0, 0, 10, 10] },
+        rows: [{
+          key: "CV-1",
+          cells: {
+            "VALVE MARK": { text: "CV-1", bbox: [1, 1, 2, 2] },
+            "UNIT MARK": { text: "AHU-1", bbox: null },
+            CV: { text: "4", bbox: null },
+          },
+          identity: { bbox: [1, 1, 2, 2] },
+        }],
+      },
+      {
+        sheet: "m.pdf#2",
+        title: { text: "ISOLATION VALVE SCHEDULE", bbox: [0, 0, 10, 10] },
+        rows: [{
+          key: "IV-1",
+          cells: {
+            "VALVE MARK": { text: "IV-1", bbox: [3, 3, 4, 4] },
+            "UNIT MARK": { text: "CH-1", bbox: null },
+          },
+          identity: { bbox: [3, 3, 4, 4] },
+        }],
+      },
+      {
+        sheet: "m.pdf#3",
+        title: { text: "CONTROL DAMPER SCHEDULE", bbox: [0, 0, 10, 10] },
+        rows: [{
+          key: "OA-1",
+          cells: {
+            "DAMPER MARK": { text: "OA-1", bbox: [5, 5, 6, 6] },
+            ACTUATOR: { text: "ELECTRIC", bbox: null },
+          },
+          identity: { bbox: [5, 5, 6, 6] },
+        }],
+      },
+    ],
+  };
+  const all = compileControlValveTakeoff([], graph);
+  assert.ok((all.categories.CHW_CONTROL_VALVE?.count || 0) >= 1);
+  assert.ok((all.categories.ISOLATION_VALVE?.count || 0) >= 1);
+  assert.ok((all.categories.CONTROL_DAMPER?.count || 0) >= 1);
+  assert.ok(all.totals.items >= 3);
+  const chwOnly = compileControlValveTakeoff([], graph, { service: "CHW" });
+  assert.equal(chwOnly.categories.ISOLATION_VALVE, undefined);
+  assert.equal(chwOnly.categories.CONTROL_DAMPER, undefined);
+  assert.ok((chwOnly.categories.CHW_CONTROL_VALVE?.count || 0) >= 1);
+});
+
 test("control_valves compile → panel lines with cites; dual-Cv scrap dropped", () => {
   const compiled = compileControlValveTakeoff([], {
     tables: [

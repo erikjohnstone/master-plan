@@ -2,7 +2,7 @@
   "set_id": "015_VA_P_095_Replace_Submarine_Pier_3_Utility",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 pier utility — FCU/HP/FAN/LOUVER + motorized dampers/isolation valves + BAS 39.",
+  "notes": "[MEAT] Vol2 pier utility \u2014 FCU/HP/FAN/LOUVER + motorized dampers/isolation valves + BAS 39.",
   "categories": {
     "FCU": 4,
     "CONDENSING_UNIT": 1,
@@ -23,6 +23,10 @@
     "rows": 39
   },
   "control_valves": {
-    "items": 0
+    "items": 36,
+    "categories": {
+      "ISOLATION_VALVE": 15,
+      "CONTROL_DAMPER": 21
+    }
   }
 }

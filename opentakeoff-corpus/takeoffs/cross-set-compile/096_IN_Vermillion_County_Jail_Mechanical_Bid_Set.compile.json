@@ -29,6 +29,9 @@
     "rows": 231
   },
   "control_valves": {
-    "items": 0
+    "items": 24,
+    "categories": {
+      "CONTROL_DAMPER": 24
+    }
   }
 }

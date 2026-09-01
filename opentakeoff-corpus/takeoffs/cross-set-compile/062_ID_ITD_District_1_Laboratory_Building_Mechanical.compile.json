@@ -34,6 +34,11 @@
     "rows": 0
   },
   "control_valves": {
-    "items": 9
+    "items": 31,
+    "categories": {
+      "HHW_CONTROL_VALVE": 9,
+      "LAB_AIR_VALVE": 21,
+      "BYPASS_CONTROL_VALVE": 1
+    }
   }
 }

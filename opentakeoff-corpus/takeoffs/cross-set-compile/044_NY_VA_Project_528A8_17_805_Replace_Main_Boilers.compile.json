@@ -21,6 +21,10 @@
     "rows": 0
   },
   "control_valves": {
-    "items": 0
+    "items": 12,
+    "categories": {
+      "ISOLATION_VALVE": 8,
+      "PRESSURE_SAFETY_VALVE": 4
+    }
   }
 }

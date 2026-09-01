@@ -3,7 +3,7 @@
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/089_FL_Airport_Terminal_and_Hangar_Development.pdf",
   "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/089_FL_Airport_Terminal_and_Hangar_Development",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 multipart FL airport terminal/hangar — DOAS/FCU/HP/louvers + mixing valves (rejoined).",
+  "notes": "[MEAT] Vol2 multipart FL airport terminal/hangar \u2014 DOAS/FCU/HP/louvers + mixing valves (rejoined).",
   "categories": {
     "DOAS": 1,
     "FCU": 7,
@@ -21,6 +21,9 @@
     "rows": 0
   },
   "control_valves": {
-    "items": 0
+    "items": 2,
+    "categories": {
+      "MIXING_VALVE": 2
+    }
   }
 }

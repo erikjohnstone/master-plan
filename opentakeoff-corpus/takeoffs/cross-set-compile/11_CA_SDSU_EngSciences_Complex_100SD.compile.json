@@ -32,6 +32,10 @@
     "rows": 0
   },
   "control_valves": {
-    "items": 0
+    "items": 60,
+    "categories": {
+      "FUME_HOOD_DAMPER": 58,
+      "PRESSURE_REDUCING_VALVE": 2
+    }
   }
 }

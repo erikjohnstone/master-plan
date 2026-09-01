@@ -2,7 +2,7 @@
   "set_id": "021_XX_Laboratory_building_mechanical_drawings_lab",
   "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/021_XX_Laboratory_building_mechanical_drawings_lab.pdf",
   "kind": "hvac_equipment",
-  "notes": "[MEAT] Vol2 lab mechanical — rich HVAC MEAT + PRV schedule + DDC CONTROLLER INPUT/OUTPUT SUMMARY/LEGEND → BAS lists=3 rows=63 (device tags, AI/BI rollup not MARK-prefix).",
+  "notes": "[MEAT] Vol2 lab mechanical \u2014 rich HVAC MEAT + PRV schedule + DDC CONTROLLER INPUT/OUTPUT SUMMARY/LEGEND \u2192 BAS lists=3 rows=63 (device tags, AI/BI rollup not MARK-prefix).",
   "categories": {
     "AHU": 6,
     "FCU": 3,
@@ -23,6 +23,9 @@
     "rows": 63
   },
   "control_valves": {
-    "items": 0
+    "items": 2,
+    "categories": {
+      "PRESSURE_REDUCING_VALVE": 2
+    }
   }
 }
