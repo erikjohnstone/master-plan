@@ -1,6 +1,23 @@
 ## Active work
 
-### Pillar C — SOO/spare/proof column probe on shared path (2026-09-01 20:50 UTC)
+### Pillar C WIDTH complete — corpus material map closed (2026-09-01 20:50 UTC)
+
+**Order:** width = material (corpus truth map); depth = platform proof on that map. Width phase closed before any GT locks.
+
+| Width track | Coverage | Artifact |
+|---|---|---|
+| **BAS `estimator_product` live census** | **112/112** | waves 1–7 incl. `/opt/cursor/artifacts/pillar-c-estimator-product-census-wave7.json` (6 keyed BAS + 089) |
+| **BAS inventory plan-paint (bas:0)** | **107/107 touched** (59 scored 8-tag samples, 48 skipped honest zero/no targets) | `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave7.json` (+ waves 1–6) |
+| **BAS inventory drawing verify** | **112/112** floors | `bas_inventory_drawing_verified_ids` |
+| **Valve product census** | **81/81** (11 printed / 70 zero) | `/opt/cursor/artifacts/pillar-c-valve-product-census-all.json` |
+| **Valve plan-paint width sample** | **11/11** printed sets (12-tag sample each; 6/11 with ≥1 MATCH) | `/opt/cursor/artifacts/pillar-c-valve-plan-paint-census-width.json` |
+
+- **Wave 7 plan-paint (10 bas:0):** **9 scored / 8 with MATCH** — 1 skipped (`057` honest zero inventory). Notable: Las Vegas 7/8, SDSU 7/8, Ames 8/8, Orange County 8/8.
+- **Wave 7 estimator_product (6 keyed BAS + 089):** all 6 emit inventory + printed BAS where keyed; **5/6 printed BAS**, **5/6 valve items**.
+- **Script:** `opentakeoff/mcp/scripts/pillarCEstimatorProductCensus.mjs` — reusable width census on shared path.
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked` — width ≠ depth; extreme depth phase is next.
+
+### Prior — SOO/spare/proof column probe on shared path (2026-09-01 20:50 UTC)
 
 - **Shared `probeBasProofSpareColumnHeaders()`:** scans BAS/I/O table headers for explicit PROOF/INTERLOCK/SPARE columns (CAPACITY-only false positives excluded); disclosed on `estimator_product.controls_column_probe` — never invents points.
 - **Keyed batch (5 sets):** SOO present on **021** only (`present_not_row_extractable`); **0/5** with real PROOF/SPARE column headers on BAS tables (prior CAPACITY hits confirmed false-positive). Artifact: `/opt/cursor/artifacts/pillar-c-soo-spare-proof-keyed-batch.json`.
