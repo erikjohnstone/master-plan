@@ -1,0 +1,19 @@
+{
+  "set_id": "063_MT_Harrison_Hall_Extruder_Lab_132_Renovation",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/063_MT_Harrison_Hall_Extruder_Lab_132_Renovation.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 Harrison extruder lab \u2014 thin VAV/GRD.",
+  "categories": {
+    "VAV": 2,
+    "GRD": 2
+  },
+  "totals": {
+    "items": 4
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

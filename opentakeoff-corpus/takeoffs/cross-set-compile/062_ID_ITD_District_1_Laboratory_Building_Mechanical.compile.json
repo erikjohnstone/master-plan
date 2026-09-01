@@ -1,0 +1,38 @@
+{
+  "set_id": "062_ID_ITD_District_1_Laboratory_Building_Mechanical",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 ITD D1 lab \u2014 rich HVAC + lab air valves.",
+  "categories": {
+    "AHU": 1,
+    "FCU": 2,
+    "CONDENSING_UNIT": 2,
+    "BOILER": 2,
+    "PUMP": 4,
+    "FAN": 7,
+    "UNIT_HEATER": 9,
+    "HUMIDIFIER": 1,
+    "AIR_SEPARATOR": 1,
+    "EXPANSION_TANK": 1,
+    "DUCT_MOUNTED_COIL": 9,
+    "CHEMICAL_POT_FEEDER": 1,
+    "AIR_COMPRESSOR": 1,
+    "FLOW_METER": 1,
+    "BYPASS_CONTROL_VALVE": 1,
+    "LAB_AIR_VALVE": 21,
+    "GRD": 7,
+    "RANGE_HOOD": 9,
+    "DUCT_SILENCER": 1,
+    "LOUVER": 2,
+    "LOUVERED_PENTHOUSE": 1
+  },
+  "totals": {
+    "items": 84
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "set_id": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 West Valley STEM classroom \u2014 ERV/FAN/GRD.",
+  "categories": {
+    "ERV": 1,
+    "FAN": 11,
+    "GRD": 1
+  },
+  "totals": {
+    "items": 13
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

@@ -103,4 +103,23 @@ describe("Vol2 humidifier / expansion / buffer / VRF gates", () => {
     assert.equal(HVAC_FAMILY_SPECS.VRF_INDOOR.keyRe.test("IDU-1"), true);
     assert.equal(HVAC_FAMILY_SPECS.VRF_OUTDOOR.keyRe.test("ODU-1"), true);
   });
+
+  it("PUMP / AIR_SEPARATOR / HEAT_EXCHANGER accept Vol2 title forms", () => {
+    assert.equal(HVAC_FAMILY_SPECS.PUMP.titleRe.test("HEATING HOT WATER PUMP"), true);
+    assert.equal(HVAC_FAMILY_SPECS.PUMP.titleRe.test("HEAT PUMP"), false);
+    assert.equal(HVAC_FAMILY_SPECS.AIR_SEPARATOR.titleRe.test("AIR SEPARATORS"), true);
+    assert.equal(HVAC_FAMILY_SPECS.AIR_SEPARATOR.keyRe.test("IAS-2-1"), true);
+    assert.equal(HVAC_FAMILY_SPECS.HEAT_EXCHANGER.titleRe.test("(N) HEAT EXCHANGER SCHEDULE"), true);
+  });
+
+  it("HHW_CONTROL_VALVE altTitle claims bare VALVE SCHEDULE + V-HHW marks", () => {
+    const { altTitleRe, altKeyRe } = HVAC_FAMILY_SPECS.HHW_CONTROL_VALVE;
+    assert.equal(altTitleRe.test("VALVE SCHEDULE"), true);
+    assert.equal(altTitleRe.test("(N) VALVE SCHEDULE"), true);
+    // Must not steal primary CHW/HHW CONTROL VALVE SCHEDULE matching.
+    assert.equal(altTitleRe.test("CHW CONTROL VALVE SCHEDULE"), false);
+    assert.equal(altTitleRe.test("HHW CONTROL VALVE SCHEDULE"), false);
+    assert.equal(altKeyRe.test("V-HHWR-11"), true);
+    assert.equal(altKeyRe.test("V-CHW-1"), false);
+  });
 });

@@ -1,0 +1,20 @@
+{
+  "set_id": "072_CA_CA07_2627_West_Valley_College_Science_Math",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/072_CA_CA07_2627_West_Valley_College_Science_Math.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 West Valley Science/Math \u2014 ERV/FAN/GRD.",
+  "categories": {
+    "ERV": 1,
+    "FAN": 11,
+    "GRD": 1
+  },
+  "totals": {
+    "items": 13
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

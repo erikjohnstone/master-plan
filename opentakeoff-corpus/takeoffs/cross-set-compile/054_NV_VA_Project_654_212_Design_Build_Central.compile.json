@@ -1,0 +1,16 @@
+{
+  "set_id": "054_NV_VA_Project_654_212_Design_Build_Central",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/054_NV_VA_Project_654_212_Design_Build_Central.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 NV VA central \u2014 no extractable HVAC schedules.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

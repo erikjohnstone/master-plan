@@ -100,3 +100,28 @@ catalog-model guard); VRF_INDOOR/OUTDOOR; humidifier OCR + SH-* (digit-gated);
 EXPANSION SYSTEM titles; BUFFER GST-*; zone-lettered ET-A1 / AS-A1 mark forms.
 Negatives kept honest: sheet header `SHT. NO.`, prose `ETC.…`, Trane model
 `TPLFY-EP15NEM4` must not inflate humidifier/expansion/pump.
+
+## Batch 4 (locked 2026-09-01)
+
+Lab / college / VA / process-skid probes → hydronic title + bare valve-schedule
+wideners → keys:
+
+| Set | Tier | HVAC | BAS | Notes |
+|---|---|---:|---:|---|
+| 053 VA ER expand | MEAT | 44 | 0 | GRD + HHW valve schedule (38 valves) |
+| 062 ITD D1 lab | MEAT | 84 | 0 | rich HVAC + lab air valves |
+| 061 Ames Harley Wilhelm | MEAT | 23 | 0 | AHU/FCU/pump/fan/HX |
+| 071 ME Health Science | MEAT | 21 | 0 | VAV-heavy |
+| 060 ASC LAMBDA | MEAT | 13 | 0 | duct coils + GRD |
+| 072 West Valley Science/Math | MEAT | 13 | 0 | ERV/FAN/GRD |
+| 074 West Valley STEM classroom | MEAT | 13 | 0 | ERV/FAN/GRD |
+| 068 AVC Applied Arts | WEAK | 8 | 0 | boiler/pump/AS/ET |
+| 063 Harrison extruder lab | WEAK | 4 | 0 | thin VAV/GRD |
+| 067 SLAC process CW skid | WEAK | 3 | 0 | HX + GRD |
+| 054 NV VA central | ZERO | 0 | 0 | no extractable HVAC schedules |
+| 056 NY VA pharmacy | ZERO | 0 | 0 | no extractable HVAC schedules |
+
+Shared-path adds this batch: PUMP `HEATING HOT WATER PUMP` titles; AIR_SEPARATOR
+plural/`IAS-*`; HEAT_EXCHANGER titled marks without HX-only keyRe; HHW/CHW bare
+`^(?:\(N\)\s*)?VALVE SCHEDULE` + `V-HHW*`/`V-CHW*` altTitle/altKey (start-anchored
+so NAVFAC `CHW CONTROL VALVE SCHEDULE` keeps primary matching).

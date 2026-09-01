@@ -1,0 +1,19 @@
+{
+  "set_id": "071_ME_BGS_Project_3809_Health_Science_Center",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/071_ME_BGS_Project_3809_Health_Science_Center.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 ME Health Science \u2014 VAV-heavy.",
+  "categories": {
+    "VAV": 20,
+    "FAN": 1
+  },
+  "totals": {
+    "items": 21
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

@@ -452,7 +452,8 @@ export const HVAC_FAMILY_SPECS = {
   // only — claims HWP/CP/… from bare EQUIPMENT/MISC catch-all + blank titles
   // without filtering titled PUMP SCHEDULE rows. PUPSCHEDULE = common OCR miss.
   PUMP: {
-    titleRe: /PUMP\s*SCHEDULE|PUPSCHEDULE|HYDRONIC\s+PUMPS?/i,
+    // Also match untitled-suffix hydronic pump boards (HEATING HOT WATER PUMP).
+    titleRe: /PUMP\s*SCHEDULE|PUPSCHEDULE|HYDRONIC\s+PUMPS?|(?:HEATING\s+)?(?:HOT|CHILLED)\s+WATER\s+PUMP/i,
     exclude: /POINTS\s*LIST|DDC\s+POINTS|HEAT\s+PUMP|VACUUM/i,
     // BS-* = packaged booster pump systems on EQUIPMENT catch-all lists.
     blankKeyRe: /^(?:P|CP|CWP|HWP|HHWP|CHWP|CHP|HWRP|IWP|BP|SP|SCHWP|RP|PP|EP|BS)[\s\-]?\d/i,
@@ -554,10 +555,10 @@ export const HVAC_FAMILY_SPECS = {
     altKeyRe: /^(?:(?:EH|HUM|SH)(?:[\s\-]+[A-Z]+)*[\s\-]*\d|H[\-])/i,
   },
   AIR_SEPARATOR: {
-    // Hydraulic separators (HS-*) are air/dirt/hydraulic package vessels.
-    titleRe: /AIR SEPARATOR SCHEDULE|HYDRAULIC\s+SEPARATOR(?:\s+SCHEDULE)?/i,
-    // AS-1 / AS-A1 / HS1 — digit required (not prose); optional zone letter.
-    keyRe: /^(?:AS|HS)(?:[\s\-]+[A-Z]+)*[\s\-]*\d/i,
+    // Hydraulic separators (HS-*); "AIR SEPARATORS" boards without SCHEDULE.
+    titleRe: /AIR\s+SEPARATORS?(?:\s+SCHEDULE)?|HYDRAULIC\s+SEPARATOR(?:\s+SCHEDULE)?/i,
+    // AS-/IAS-/HS- — digit required (not prose); optional zone letter.
+    keyRe: /^(?:I?AS|HS)(?:[\s\-]+[A-Z]+)*[\s\-]*\d/i,
   },
   EXPANSION_TANK: {
     // OCR: EPANSIONANDCOPRESSIONTANKSCHEDULE (bldg5406) — expansion + compression.
@@ -579,9 +580,11 @@ export const HVAC_FAMILY_SPECS = {
     keyRe: /^FT(?:[\s\-]+[A-Z]+)*[\s\-]*\d/i,
   },
   HEAT_EXCHANGER: {
-    titleRe: /HEAT\s+EXCHANGER\s+SCHEDULE|WATER[\s\-]*TO[\s\-]*WATER\s+HEAT\s+EXCHANGER|SHELL\s+AND\s+TUBE\s+HEAT\s+EXCHANGER/i,
+    // "(N) HEAT EXCHANGER SCHEDULE" and shell-and-tube / water-to-water boards.
+    titleRe: /HEAT\s+EXCHANGER(?:\s+SCHEDULE)?|WATER[\s\-]*TO[\s\-]*WATER\s+HEAT\s+EXCHANGER|SHELL\s+AND\s+TUBE\s+HEAT\s+EXCHANGER/i,
     exclude: /POINTS\s*LIST|DDC/i,
-    keyRe: /^(?:HX|PHX|HE)[\s\-]/i,
+    // HX/PHX/HE on catch-all; titled HX schedules keep set-local marks (B950A).
+    blankKeyRe: /^(?:HX|PHX|HE)[\s\-]/i,
   },
   DUCT_MOUNTED_COIL: {
     titleRe: /DUCT\s+MOUNTED\s+COIL|HEATING\s+COIL\s+SCHEDULE|COOLING\s+COIL\s+SCHEDULE|HOT\s+WATER\s+REHEAT\s+COIL|REHEAT\s+COIL\s+SCHEDULE/i,
@@ -651,11 +654,19 @@ export const HVAC_FAMILY_SPECS = {
     titleRe: /(?:CHW|CHILLED\s*WATER).{0,40}CONTROL\s*VALVE|CONTROL\s*VALVE.{0,40}(?:CHW|CHILLED\s*WATER)/i,
     exclude: /BYPASS/i,
     identityHeaderRe: /VALVE\s*MARK/i,
+    // Bare "VALVE SCHEDULE" only — must NOT match "CHW CONTROL VALVE SCHEDULE"
+    // or altKeyRe would replace primary matching and drop NAVFAC marks.
+    altTitleRe: /^(?:\(N\)\s*)?VALVE\s+SCHEDULE\b/i,
+    altKeyRe: /^V[\s\-]?CHW/i,
   },
   HHW_CONTROL_VALVE: {
     titleRe: /(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT).{0,40}CONTROL\s*VALVE|CONTROL\s*VALVE.{0,40}(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT)/i,
     exclude: /BYPASS|CHW|CHILLED\s*WATER/i,
     identityHeaderRe: /VALVE\s*MARK/i,
+    // Bare "VALVE SCHEDULE" + V-HHW* / V-HHWR* (VA ER). Start-anchored so
+    // "HHW CONTROL VALVE SCHEDULE" keeps primary titleRe matching.
+    altTitleRe: /^(?:\(N\)\s*)?VALVE\s+SCHEDULE\b/i,
+    altKeyRe: /^V[\s\-]?HHW/i,
   },
   BYPASS_CONTROL_VALVE: {
     titleRe: /BYPASS\s+CONTROL\s+VALVE/i,
