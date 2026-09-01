@@ -709,6 +709,136 @@ test("Vol2 main boilers 044: plant schedules honest SCHEDULE_ONLY", async (t) =>
   }, { rows: 8 });
 });
 
+test("Vol2 APHIS plant 009: AHU/ACC/pump/fan MATCH; UH 4/5", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["AHU", "AIR_COOLED_CHILLER", "PUMP", "FAN"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+  await assertFamilyStatusCounts(session, graph, key, "UNIT_HEATER", {
+    match: 4,
+    schedule_only: 1,
+  });
+});
+
+test("Vol2 NIST 017: fan + humidifier MATCH; duct coils honest SO", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["FAN", "HUMIDIFIER"]) {
+    await assertFamilyAllMatch(session, graph, key, family);
+  }
+  await assertFamilyStatusCounts(session, graph, key, "DUCT_MOUNTED_COIL", {
+    schedule_only: key.categories.DUCT_MOUNTED_COIL,
+  });
+});
+
+test("Vol2 MO steam units 024: all RTU MATCH", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyAllMatch(session, graph, key, "RTU");
+});
+
+test("Vol2 Patriot Cafe 042: GRD all MATCH; FAN honest SO", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyAllMatch(session, graph, key, "GRD");
+  await assertFamilyStatusCounts(session, graph, key, "FAN", {
+    schedule_only: key.categories.FAN,
+  });
+});
+
+test("Vol2 LAMBDA 060: duct coils MATCH; GRD 6/10", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyAllMatch(session, graph, key, "DUCT_MOUNTED_COIL");
+  await assertFamilyStatusCounts(session, graph, key, "GRD", {
+    match: 6,
+    schedule_only: 4,
+  });
+});
+
+test("Vol2 West Valley Science 072: FAN 10/11 + ERV MATCH; GRD SO", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "072_CA_CA07_2627_West_Valley_College_Science_Math.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyAllMatch(session, graph, key, "ERV");
+  await assertFamilyStatusCounts(session, graph, key, "FAN", {
+    match: 10,
+    schedule_only: 1,
+  });
+  await assertFamilyStatusCounts(session, graph, key, "GRD", {
+    schedule_only: key.categories.GRD,
+  });
+});
+
+test("Vol2 West Valley STEM 074: FAN 10/11 + ERV MATCH; GRD SO", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "074_CA_West_Valley_College_STEM_Classroom_HVAC.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  await assertFamilyAllMatch(session, graph, key, "ERV");
+  await assertFamilyStatusCounts(session, graph, key, "FAN", {
+    match: 10,
+    schedule_only: 1,
+  });
+  await assertFamilyStatusCounts(session, graph, key, "GRD", {
+    schedule_only: key.categories.GRD,
+  });
+});
+
+test("Vol2 lab mech 021: HVAC families honest SCHEDULE_ONLY (BAS-keyed set)", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "021_XX_Laboratory_building_mechanical_drawings_lab.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["AHU", "FCU", "PUMP", "FAN", "BOILER", "GRD"]) {
+    await assertFamilyStatusCounts(session, graph, key, family, {
+      schedule_only: key.categories[family],
+    });
+  }
+});
+
+test("Vol2 Bldg 615 reno 028: plant families honest SCHEDULE_ONLY", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "028_TX_Renovation_of_Building_615_Final_Design_Plans.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
+  for (const family of ["DOAS", "AIR_COOLED_CHILLER", "BOILER", "FAN", "UNIT_HEATER"]) {
+    await assertFamilyStatusCounts(session, graph, key, family, {
+      schedule_only: key.categories[family],
+    });
+  }
+});
+
 test("Orange County booster pump BP-1 reconcile MATCH", async () => {
   const keyPath = resolve(CROSS, "21_VA_OrangeCounty_PublicSafetyBldg.compile.json");
   assert.ok(existsSync(keyPath));

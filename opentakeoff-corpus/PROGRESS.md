@@ -389,8 +389,7 @@ reconcile, and plan joins.
 - **Vol2 batch-7 intake (shared path):** Ran `REJOIN_full_sets.sh` (qpdf); locked **13**/13 multipart rejoins (3 MEAT / 5 WEAK / 3 ZERO) including chiller upgrade **32**, NY EHRM **18**, Jonesboro VRF **24**; LBNL honest ZERO (311 sheets). Workflow `graphForKey` prefers `_rejoined/` then merges `source_parts_dir`. Vol2 keyed total **82**/82 (all 13 multipart rejoins keyed, incl. PHX **64** + FL airport **20**).
 - **WP4 Vermillion County Jail VAV reconcile:** Vol2 **096** bulk **58/58 VAV MATCH** under `evaluationFast` (locked in `reconcileWorkflow.test.mjs`).
 - **WP4 Vol2 MEAT rejoin reconcile locks (012 chiller ACC/PUMP/VFD, 089 FL airport DOAS/HP/PUMP/WH/FAN, 088 PHX plant+terminal families):** multipart-aware `loadKeySession` helper; locked in `reconcileWorkflow.test.mjs`. `test:workflows` **50/50** green (2026-09-01).
-- **WP4 Vol2 bulk reconcile deepen:** Eglin **019** (103 tags); Jonesboro **093**; Health Science **071**; Miller **077**; ITD **062**; pier **015**; MO **004**; NC **047**; Ames **061**; History **094**; IL **040**; Missoula **014**; ATC **001** VAV+FCU+GRD; **018** poultry; **083** Town Offices; **031** warehouse GRD 12/59; **053** VA ER valves SO + GRD 2/6; **023** Salinity + **044** boilers honest SO; Klamath FCU/DOAS/HP SO; **012** CT; **089** FCU; **088** VFD 2/11. `test:workflows` pending re-run.
-- **Pillar A ZERO/WEAK audit (2026-09-01):** all **23** WEAK keys match live compile (no drift); all **27** ZERO Vol2 keys stay at **0** HVAC items (no silent inflation).
+- **WP4 Vol2 MEAT reconcile sweep (unlocked leftovers):** APHIS **009** AHU/ACC/pump/fan MATCH (UH 4/5); NIST **017** fan+humidifier MATCH (duct coils SO); MO steam **024** RTU 4/4; Patriot Cafe **042** GRD 5/5; LAMBDA **060** duct coils MATCH · GRD 6/10; West Valley **072/074** FAN 10/11 + ERV; lab **021** + Bldg615 **028** honest plant SO. WEAK BAS drift audit: **0**. `test:workflows` pending.
 
 ### Active goal (platform loop)
 
@@ -409,8 +408,8 @@ Authority: `GOAL.md` §8 · `takeoffs/NEXT_GOAL_LOOP.md`.
 
 ### Next queue (platform loop)
 
-1. **Pillar B tail:** Vol2 singles largely locked (001/004/014/040/047/061/094 + prior); Klamath FC/HP/DOAS documented honest SO.
-2. **Pillar A tail:** WEAK→MEAT where probe finds real set-agnostic fixes; confirm ZERO ceilings honest (27 Vol2 ZERO).
+1. **Pillar B tail:** Vol2 MEAT largely locked; partial ceilings documented (warehouse GRD, VA ER valves, plant-only sets).
+2. **Pillar A tail:** WEAK→MEAT only when probe finds new extractable schedules (23 WEAK + 27 ZERO audited — stable).
 3. **Merge branch stack → `main`** when A+B §6 metrics met; WORKFLOWS #51 ON_MAIN.
 4. **Pillar C (after A+B):** WP7 valve/damper/actuator depth + WP8 BAS points/SOO
    — grow from 4/82 Vol2 BAS rows and ~3/82 valve rows.
