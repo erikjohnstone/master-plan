@@ -517,22 +517,33 @@ cannot read a POINTS scrape as complete. Title near-miss scan: Northport bare
 **0 sets locked.**
 
 **Estimator product path (2026-09-01 — shared UI+MCP, still not C done):**
-`compileBasTakeoff` now attaches `estimator_product`: HVAC point-bearing
-inventory + SOO presence disclose (`present_not_row_extractable` / absent) +
-labeled `estimate_only` schedule qty×points/unit totals (never merged into
-printed `totals.rows`) + inventory↔printed gap report + ASHRAE G13 spare %
-policy note. Takeoff emits `BAS_ESTIMATOR` rows for inventory / SOO /
-estimate / gap / spare. Unit tests **36/36** green. Still **0 locked** —
-corpus-deep inventory+GT+plan paint remain open.
+`compileBasTakeoff` attaches `estimator_product`: HVAC point-bearing inventory +
+SOO presence disclose + labeled `estimate_only` schedule qty×points/unit totals
+(never merged into printed `totals.rows`) + inventory↔printed gap + ASHRAE G13
+spare % policy note. `compileControlValveTakeoff` attaches parallel
+`estimator_product` / `estimator_status` (contractor-column coverage, plan-paint
+`refuse_not_done`, gt_lock). Takeoff emits `BAS_ESTIMATOR` and `VALVE_ESTIMATOR`
+rows. Unit tests **37/37** green.
+
+**Keyed BAS floor live product (2026-09-01, still 0 locked):**
+
+| Set | Printed BAS | Inventory | Estimate_only pts | Gap | SOO | Valves | Valve column gaps |
+|---|---:|---:|---:|---:|---|---:|---|
+| 001 NAVFAC | 122 | 143 | 965 | 125 | absent/not detected | 163 | Actuator/Fail/Signal |
+| 015 Pier | 39 | 17 | 71 | 14 | absent | 36 | Served/Size/GPM/Cv |
+| 021 Lab | 63 | 44 | 279 | 44 | present_not_row_extractable | 2 | Size/Cv/Actuator/Fail |
+| 027 Colville | 42 | 22 | 71 | 8 | absent | 0 | — |
+| 096 Vermillion | 231 | 92 | 437 | 74 | absent | 24 | Served/Size/GPM/Cv |
+
+All five: `estimator_complete: false`, `gt_locked: false`. Artifact:
+`/opt/cursor/artifacts/pillar-c-keyed-bas-valve-estimator-floor.json`.
 
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** Keyed floor drawing-sampled — **5 BAS + 8 valve-only**
-   sets; **0 locked**. Estimator product path exists on shared compile but is
-   not corpus-complete. Next: run inventory+estimate+gap on keyed BAS floor;
-   expand keys only when live compile finds real lists; lock only with
-   self-check + pipeline GT. Post-WP8 `test:workflows` **104/104** green
-   (plumbing only — not C done).
+1. **Pillar C (corpus-deep):** Keyed floor has estimator_product numbers — **0 locked**.
+   Next: drawing-backed self-check of inventory/gap on each keyed set; expand keys
+   only when live compile finds real lists; lock only with self-check + pipeline GT.
+   Post-WP8 `test:workflows` **104/104** green (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.

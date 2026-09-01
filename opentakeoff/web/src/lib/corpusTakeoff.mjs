@@ -1547,6 +1547,152 @@ export function normalizeControlValveCells(item, service) {
   return out;
 }
 
+/** Contractor columns that a commercial valve takeoff expects when printed. */
+export const VALVE_CONTRACTOR_COLUMNS = [
+  "Served equipment",
+  "Size",
+  "GPM",
+  "Cv",
+  "Actuator",
+  "Fail position",
+  "Control signal",
+];
+
+/**
+ * Pillar C valve estimator disclose — printed valve/damper rows alone are never
+ * a complete commercial valve takeoff (plan paint + actuator completeness + GT).
+ * refuse_not_done = unfinished work, not a locked ceiling.
+ *
+ * @param {{ categories: object, totals: object }} parts
+ */
+export function buildValveEstimatorProduct({ categories, totals }) {
+  const familyRollup = [];
+  let withServed = 0;
+  let withCv = 0;
+  let withSize = 0;
+  let withGpm = 0;
+  let withActuator = 0;
+  let withFail = 0;
+  let withSignal = 0;
+  let itemCount = 0;
+  for (const [name, cat] of Object.entries(categories || {})) {
+    const items = cat.items || [];
+    if (!items.length) continue;
+    let famServed = 0;
+    let famCv = 0;
+    let famAct = 0;
+    for (const item of items) {
+      itemCount += 1;
+      const cells = item.cells || {};
+      const served = cells["Unit Mark"]?.text || cells["Served equipment"]?.text;
+      const cv = cells.Cv?.text;
+      const size = cells.Size?.text;
+      const gpm = cells.GPM?.text;
+      const act = cells.Actuator?.text;
+      const fail = cells["Fail position"]?.text;
+      const signal = cells["Control signal"]?.text;
+      if (served) { withServed += 1; famServed += 1; }
+      if (cv) { withCv += 1; famCv += 1; }
+      if (size) withSize += 1;
+      if (gpm) withGpm += 1;
+      if (act) { withActuator += 1; famAct += 1; }
+      if (fail) withFail += 1;
+      if (signal) withSignal += 1;
+    }
+    familyRollup.push({
+      family: name,
+      count: items.length,
+      with_served: famServed,
+      with_cv: famCv,
+      with_actuator: famAct,
+    });
+  }
+  const missingContractor = [];
+  if (itemCount > 0) {
+    if (withServed < itemCount) missingContractor.push("Served equipment");
+    if (withSize < itemCount) missingContractor.push("Size");
+    if (withGpm < itemCount) missingContractor.push("GPM");
+    if (withCv < itemCount) missingContractor.push("Cv");
+    if (withActuator < itemCount) missingContractor.push("Actuator");
+    if (withFail < itemCount) missingContractor.push("Fail position");
+    if (withSignal < itemCount) missingContractor.push("Control signal");
+  }
+  return {
+    kind: "valve_estimator_product",
+    estimator_complete: false,
+    printed_items: itemCount || totals?.items || 0,
+    families: familyRollup,
+    contractor_column_coverage: {
+      served_equipment: withServed,
+      size: withSize,
+      gpm: withGpm,
+      cv: withCv,
+      actuator: withActuator,
+      fail_position: withFail,
+      control_signal: withSignal,
+      missing_on_some_rows: missingContractor,
+      note: "Coverage of printed schedule columns only — never invent missing Cv/actuator/GPM.",
+    },
+    plan_paint: {
+      status: "refuse_not_done",
+      note: "Plan MATCH / SCHEDULE_ONLY paint still required per mark — printed schedule ≠ installed takeoff.",
+    },
+  };
+}
+
+/**
+ * @param {{ product?: object, totals?: object }} parts
+ */
+export function valveEstimatorStatus({ product = null, totals = null } = {}) {
+  const items = product?.printed_items ?? totals?.items ?? 0;
+  const open = [];
+  const refuseNotDone = [
+    {
+      gate: "plan_paint",
+      status: "refuse_not_done",
+      note: "Valve/damper plan paint MATCH or honest SCHEDULE_ONLY still required — refuse, not complete.",
+    },
+    {
+      gate: "actuator_fail_signal_complete",
+      status: "refuse_not_done",
+      note: "Actuator / fail / signal only when printed; missing columns stay refuse_not_done — never invent.",
+    },
+    {
+      gate: "gt_lock",
+      status: "refuse_not_done",
+      note: "Coordinator self-check + pipeline GT lock not granted for this valve compile alone.",
+    },
+  ];
+  if (items === 0) {
+    open.push({
+      gate: "extractable_valve_schedules",
+      status: "refuse_not_done",
+      note: "No extractable valve/damper/air-valve schedule rows under current set-agnostic families.",
+    });
+  } else {
+    open.push({
+      gate: "printed_valve_schedules",
+      status: "open",
+      note: `${items} printed valve/damper row(s) — necessary plumbing, not estimator-complete.`,
+    });
+  }
+  const missing = product?.contractor_column_coverage?.missing_on_some_rows || [];
+  if (missing.length) {
+    open.push({
+      gate: "contractor_column_gaps",
+      status: "open",
+      note: `Printed rows missing some of: ${missing.join(", ")} — disclose only, do not invent.`,
+    });
+  }
+  return {
+    estimator_complete: false,
+    gt_locked: false,
+    meaning: "refuse_not_done = unfinished Pillar C valve work, not a locked success/ceiling",
+    printed_items: items,
+    gates: [...open, ...refuseNotDone],
+  };
+}
+
 /**
  * Deterministic CHW + HHW control-valve takeoff for "complete valve takeoff"
  * goals. Same Session+ODL family extractors as T-HVAC-01, filtered to valves,
@@ -1595,6 +1741,12 @@ export function compileControlValveTakeoff(sessionOrSheets, graph, opts = {}) {
     };
   }
   const itemCount = Object.values(categories).reduce((n, c) => n + (c.items?.length || 0), 0);
+  const totals = {
+    categories: Object.keys(categories).length,
+    items: itemCount,
+  };
+  const estimator_product = buildValveEstimatorProduct({ categories, totals });
+  const estimator_status = valveEstimatorStatus({ product: estimator_product, totals });
   return {
     ...full,
     takeoff_id: "T-VALVE-01",
@@ -1602,10 +1754,10 @@ export function compileControlValveTakeoff(sessionOrSheets, graph, opts = {}) {
     compiler: "corpusTakeoff.compileControlValveTakeoff",
     service_filter: wantService || null,
     categories,
-    totals: {
-      categories: Object.keys(categories).length,
-      items: itemCount,
-    },
+    totals,
+    /** Pillar C: printed valve rows ≠ done. */
+    estimator_status,
+    estimator_product,
     exclusions: [
       ...HVAC_EXCLUSIONS,
       "Non-valve HVAC equipment (AHU, FCU, VAV, pumps, …) — use kind hvac_equipment for the full equipment takeoff",

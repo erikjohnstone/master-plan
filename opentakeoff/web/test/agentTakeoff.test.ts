@@ -655,10 +655,61 @@ test("control_valves compile includes isolation/damper families; CHW filter stay
   assert.ok((all.categories.ISOLATION_VALVE?.count || 0) >= 1);
   assert.ok((all.categories.CONTROL_DAMPER?.count || 0) >= 1);
   assert.ok(all.totals.items >= 3);
+  assert.equal(all.estimator_status.estimator_complete, false);
+  assert.equal(all.estimator_status.gt_locked, false);
+  assert.ok(all.estimator_product);
+  assert.equal(all.estimator_product.estimator_complete, false);
+  assert.ok(all.estimator_product.printed_items >= 3);
+  assert.equal(all.estimator_product.plan_paint.status, "refuse_not_done");
+  assert.ok(all.estimator_status.gates.some((g) => g.gate === "plan_paint" && g.status === "refuse_not_done"));
+  assert.ok(all.estimator_status.gates.some((g) => g.gate === "gt_lock" && g.status === "refuse_not_done"));
   const chwOnly = compileControlValveTakeoff([], graph, { service: "CHW" });
   assert.equal(chwOnly.categories.ISOLATION_VALVE, undefined);
   assert.equal(chwOnly.categories.CONTROL_DAMPER, undefined);
   assert.ok((chwOnly.categories.CHW_CONTROL_VALVE?.count || 0) >= 1);
+  assert.equal(chwOnly.estimator_status.estimator_complete, false);
+});
+
+test("rowsFromCompiledTakeoff: VALVE_ESTIMATOR refuse_not_done + product disclosed", () => {
+  const rows = rowsFromCompiledTakeoff({
+    takeoff_id: "T-VALVE-01",
+    kind: "control_valves",
+    estimator_status: {
+      estimator_complete: false,
+      gt_locked: false,
+      meaning: "refuse_not_done = unfinished valve work",
+      gates: [
+        { gate: "printed_valve_schedules", status: "open", note: "plumbing" },
+        { gate: "plan_paint", status: "refuse_not_done", note: "paint required" },
+        { gate: "gt_lock", status: "refuse_not_done", note: "not locked" },
+      ],
+    },
+    estimator_product: {
+      printed_items: 3,
+      contractor_column_coverage: {
+        missing_on_some_rows: ["Actuator", "Fail position"],
+        note: "printed only",
+      },
+      plan_paint: { status: "refuse_not_done", note: "paint required" },
+    },
+    categories: {
+      CHW_CONTROL_VALVE: {
+        count: 1,
+        items: [{
+          tag: "CV-1", quantity: 1, sheet_id: "m#1", table_title: "CHW CONTROL VALVE SCHEDULE",
+          cells: { Cv: { text: "4" }, "Served equipment": { text: "AHU-1" } },
+        }],
+      },
+    },
+  });
+  assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "estimator_complete" && /NO/.test(String(r.value))));
+  assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "refuse:plan_paint" && r.value === "refuse_not_done"));
+  assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "refuse:gt_lock"));
+  assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "printed_valve_items" && r.value === 3));
+  assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "contractor_column_gaps" && /Actuator/.test(String(r.value))));
+  assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "plan_paint" && r.value === "refuse_not_done"));
+  assert.ok(rows.some((r) => r.tag === "CV-1" && r.field === "quantity"));
+  assert.ok(!rows.some((r) => r.tag === "VALVE_ESTIMATOR" && /printed_valve_schedules/.test(String(r.field))));
 });
 
 test("control_valves compile → panel lines with cites; dual-Cv scrap dropped", () => {

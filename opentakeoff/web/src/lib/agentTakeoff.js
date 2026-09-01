@@ -275,6 +275,52 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
 
   if (compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
     || (compiled.categories && !compiled.categories.points_lists)) {
+    // Pillar C: valve estimator disclose — printed schedules ≠ commercial done.
+    if (compiled.kind === "control_valves") {
+      const vest = compiled.estimator_status;
+      if (vest && Array.isArray(vest.gates)) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: "VALVE_ESTIMATOR", field: "estimator_complete",
+          value: vest.estimator_complete ? "YES" : "NO — not Pillar C done",
+          source_tool,
+          note: vest.meaning || "refuse_not_done = unfinished valve work, not a locked ceiling",
+        }));
+        for (const gate of vest.gates) {
+          if (!gate || gate.status !== "refuse_not_done") continue;
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag: "VALVE_ESTIMATOR", field: `refuse:${gate.gate}`,
+            value: "refuse_not_done",
+            source_tool,
+            note: gate.note || "unfinished Pillar C valve work",
+          }));
+        }
+      }
+      const vprod = compiled.estimator_product;
+      if (vprod) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: "VALVE_ESTIMATOR", field: "printed_valve_items",
+          value: vprod.printed_items ?? 0, unit: "EA", source_tool,
+          note: "Printed valve/damper rows — plumbing only",
+        }));
+        const cov = vprod.contractor_column_coverage;
+        if (cov) {
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag: "VALVE_ESTIMATOR", field: "contractor_column_gaps",
+            value: (cov.missing_on_some_rows || []).join(", ") || "none",
+            source_tool,
+            note: cov.note || "Printed-column coverage only — never invent missing fields",
+          }));
+        }
+        if (vprod.plan_paint) {
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag: "VALVE_ESTIMATOR", field: "plan_paint",
+            value: vprod.plan_paint.status || "refuse_not_done",
+            source_tool,
+            note: vprod.plan_paint.note || "Plan paint still required",
+          }));
+        }
+      }
+    }
     for (const [catName, cat] of Object.entries(compiled.categories || {})) {
       if (catName === "points_lists" || !cat || typeof cat !== "object") continue;
       const items = Array.isArray(cat.items) ? cat.items : [];
