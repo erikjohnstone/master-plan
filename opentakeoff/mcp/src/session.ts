@@ -822,6 +822,11 @@ export class Session {
     return this.docs.get(file)?.path ?? null;
   }
 
+  /** Absolute PDF path for a sheet key (L2 Python sidecar). */
+  pdfPathFor(sheetKey: string): string | null {
+    return this.pathFor(this.fileFor(sheetKey));
+  }
+
   sheet(name: string): SheetState {
     if (!this.docs.size) throw new UserError("No plan loaded — call load_plan first.");
     const hit = this.sheets.get(name);
@@ -5549,6 +5554,7 @@ export class Session {
         width: state.widthPx,
         height: state.heightPx,
         pageViewportTransform: state.page.viewport.transform,
+        pdfPath: this.pdfPathFor(sh.key) ?? undefined,
         rasterFrac,
       });
     }

@@ -1,0 +1,2 @@
+pdfplumber>=0.11.0
+camelot-py[cv]>=0.11.0; platform_system != "Windows"

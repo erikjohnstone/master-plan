@@ -17,6 +17,7 @@ import {
   sheetHasScheduleKeywords,
 } from "./scheduleGridFallback.ts";
 import { extractScheduleTablesFromStreamGrid } from "./scheduleStreamFallback.ts";
+import { extractScheduleTablesFromSidecar } from "./scheduleTableSidecarAdapter.ts";
 import {
   collapseEquivalentPrimaryTables,
   dedupCrossSourceTables,
@@ -42,6 +43,8 @@ export interface VectorSheetContext {
   width: number;
   height: number;
   pageViewportTransform: number[];
+  /** Absolute PDF path for L2 Python sidecar. */
+  pdfPath?: string;
   /** 0..1 embedded raster fraction — triggers L4.5 when tables missing. */
   rasterFrac?: number;
 }
@@ -143,6 +146,29 @@ function runL2FallbacksForSheet(
   }
 }
 
+async function runL2SidecarForSheet(
+  g: SheetGraph,
+  ctx: VectorSheetContext,
+  buildings: Set<string>,
+  stats: MergeExtractedStats,
+  touched: Set<string>,
+  report: VectorPipelineReport,
+): Promise<void> {
+  if (sheetTableCount(g, ctx.key) > 0) return;
+  if (!ctx.pdfPath) return;
+  const candidates = await extractScheduleTablesFromSidecar({
+    pdfPath: ctx.pdfPath,
+    sheetKey: ctx.key,
+    spans: ctx.spans,
+    segs: ctx.segs,
+    pageViewportTransform: ctx.pageViewportTransform,
+    buildings,
+  });
+  if (!candidates.length) return;
+  mergeCandidates(g, candidates, ctx.key, stats, touched);
+  report.notes.push(`${ctx.key}: L2 sidecar recovered ${candidates.length} table(s) via Python backends.`);
+}
+
 async function runL45OcrAssist(
   g: SheetGraph,
   ctx: VectorSheetContext,
@@ -238,7 +264,7 @@ export async function runVectorTakeoffPipeline(
   const contexts = hooks.getSheetContexts();
 
   // L1.5 + L2 fallbacks
-  report.layers_run.push("L1.5:tiling", "L2:line-grid", "L2:stream-grid");
+  report.layers_run.push("L1.5:tiling", "L2:line-grid", "L2:stream-grid", "L2:sidecar");
   for (const ctx of contexts) {
     if (!isScheduleTarget(ctx, hooks)) continue;
     sourceSpansBySheet.set(ctx.key, ctx.spans);
@@ -255,6 +281,7 @@ export async function runVectorTakeoffPipeline(
     if (existing === 0) {
       runL2FallbacksForSheet(g, ctx, buildings, stats, touched);
     }
+    await runL2SidecarForSheet(g, ctx, buildings, stats, touched, report);
   }
 
   // L3 — plan symbol inventory runs at query time via sweep_schedule_row (shared path).
