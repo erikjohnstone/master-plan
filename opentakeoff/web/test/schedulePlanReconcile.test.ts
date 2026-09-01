@@ -3,15 +3,28 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   classifyReconcileStatus,
+  familyNeedleFromSpecs,
   reconcileRowsFromTakeoffItems,
   summarizeReconcile,
   reconcileScheduleFamilyFromGraph,
   reconcileRowsToCsv,
 } from "../src/lib/schedulePlanReconcile.mjs";
+import { HVAC_FAMILY_SPECS } from "../src/lib/corpusTakeoff.mjs";
 import {
   classifyTakeoffIntent,
   advanceTakeoffWorkflow,
 } from "../src/lib/takeoffWorkflow.js";
+
+test("familyNeedleFromSpecs: CONTROL_DAMPER / MOTORIZED DAMPER aliases (WP7.2)", () => {
+  for (const fam of ["CONTROL_DAMPER", "MOTORIZED DAMPER", "control damper", "motorized_damper"]) {
+    const n = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, fam);
+    assert.ok(n, fam);
+    assert.match(n.label, /CONTROL DAMPER/i);
+  }
+  const hood = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "ECV");
+  assert.ok(hood);
+  assert.match(hood.label, /FUME HOOD DAMPER/i);
+});
 
 test("classifyReconcileStatus: MATCH, SCHEDULE_ONLY, REFUSED, AMBIGUOUS", () => {
   assert.equal(
