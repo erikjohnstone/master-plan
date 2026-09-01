@@ -1,7 +1,7 @@
 # Next major goal loop — HVAC/BAS cross-set + reconcile golden
 
-**Status:** ACTIVE (Pillars A+B in flight; C+D chartered)  
-**Date:** 2026-08-31 (pillars C+D added 2026-09-01)  
+**Status:** ACTIVE (Pillars A+B at §6 verification; C research landed; C+D impl next)  
+**Date:** 2026-08-31 (pillars C+D added 2026-09-01; C research 2026-09-01)  
 **Authority:** `GOAL.md` + `WORKFLOWS.md` + live codebase + industry takeoff practice  
 
 This document is the **implementation charter**. The next `/goal` should execute
@@ -89,8 +89,11 @@ contractor-grade across sets.
 
 Sources synthesized: Simpro commercial HVAC takeoff guide; Kamai mechanical
 takeoff; iBeam schedule-to-plan reconciliation; BuildCrux multi-pass HVAC AI
-workflow; controls/BAS points practice (ASHRAE G13-style I/O, MEPBase points
-calculators); Trimble MEP AI takeoff (scale + count + reconcile).
+workflow; Trimble MEP AI takeoff (scale + count + reconcile); **ASHRAE
+Guideline 13** (BAS specifying / spare I/O); **NISTIR 4606** (GSA DDC BAS guide
+spec — alarms/trends/commands in point schedules); **ASHRAE G36** sequences;
+ControlsHub DDC I/O list design; MEPBase BMS points calculators; Belimo Cv
+practice; US MEP control-valve / damper schedule conventions.
 
 ### What elite HVAC/BAS takeoff workflows actually do
 
@@ -98,19 +101,25 @@ calculators); Trimble MEP AI takeoff (scale + count + reconcile).
    must survive **any** US MEP set’s title phrasing).
 2. **Plan placement** for every tagged unit that is drawn (we partially do this).
 3. **Reconciliation both directions** — scheduled∖plan and plan∖scheduled —
-   with mismatches surfaced for RFI / estimator judgment (we largely don’t).
+   with mismatches surfaced for RFI / estimator judgment (Pillar B now ships).
 4. **Honest refuse** when tag isn’t drawable text / sheet unscaled (we do —
    keep).
 5. **Multi-pass discipline** — sheet roles → quantities → joins → review —
-   not one LLM dump (we have phase machines; join pass is underpowered).
-6. **BAS** = points lists + AI/AO/BI/BO rollups + disclose non-extractable
-   lists (we do); deepen **equipment↔point↔location** across sets.
-7. **Valves** = schedule family (CHW/HHW) + served unit + Cv + **optional**
-   installed plan qty when asked — never invent plan cites.
+   not one LLM dump (we have phase machines; join pass still deepening).
+6. **BAS (Pillar C — research gate):** SOO + equipment schedules → point
+   schedule → **I/O list** (hardwired AI/AO/BI/BO) separate from soft/BACnet
+   supervisory points; include proofs, interlocks, HOA, alarms, trends; apply
+   **10–25% spare per type**; POINTS LIST extraction alone (e.g. NAVFAC **122**)
+   is **not** a complete BAS takeoff — see WP8 research.
+7. **Valves (Pillar C — research gate):** air + water families with contractor
+   columns (tag, service, size, GPM, Cv, actuator, served unit, cites) across
+   schedules and drawings; dampers/actuators first-class; never invent plan qty
+   — see WP7 research.
 
 **Implication:** Golden = **portable schedule truth** + **reconcile to drawings**
-+ **truthful valve/BAS commercial workflows** + **accurate highlighted plan
-grounding**. Any single pillar alone is a half product.
++ **truthful valve/BAS commercial workflows** (SOO/I/O-aware, not list-scrap)
++ **accurate highlighted plan grounding**. Any single pillar alone is a half
+product.
 
 ---
 
@@ -322,6 +331,37 @@ need CHW/HHW **and** air-side isolation/control devices with served unit, Cv,
 configuration, schedule cite, and optional plan-installed qty when drawable —
 never invented.
 
+#### Research findings (mandatory gate — 2026-09-01; do not skip)
+
+Sources: Belimo / industry Cv practice; US MEP control-device schedule
+conventions; mechanical estimating takeoff scopes (isolation / balancing /
+control valves + dampers); ASHRAE-adjacent actuator schedule columns.
+
+**What a real valve takeoff is (not “dump CHW+HHW control valve rows”):**
+
+1. **Families across media** — water (CHW/HHW/CW/HW/steam/condensate) **and**
+   air (control dampers, fire/smoke, VAV terminal, fume-hood / ECV). Isolation,
+   control, balancing, check, PRV/PSV, mixing, triple-duty, bypass — each is a
+   distinct commercial line when the set schedules it.
+2. **Contractor columns** (schedule + P&ID/plan cross-check): Tag · Service ·
+   Size · Type/config (2-way/3-way, etc.) · Design GPM · Cv · Actuator
+   (electric/pneumatic, power, signal 0–10V / 4–20mA / 3–15psi) · Served unit ·
+   Fail position · Schedule cite · optional Plan installed qty/cites when
+   drawable. Never invent plan qty.
+3. **Cv is first-class** — `Cv = Q × √(SG/ΔP)`; authority typically ~0.3–0.5.
+   Takeoff must **extract printed Cv/GPM/size**, not re-size valves from
+   physics in product code.
+4. **Actuators are separate commercial scope** when schedules/specs call them
+   out (damper actuators, valve actuators, fail-safe ratings) — do not collapse
+   into a single “valve row” if the drawing separates them.
+5. **Reconcile both ways** when tags are plan-text — same Pillar B statuses;
+   schematic-only / unscaled sheets stay honest refuse.
+
+**Product gap vs today:** `T-VALVE-01` locks NAVFAC CHW+HHW control valves well;
+Vol2 already surfaces damper/isolation/PRV/mixing/PSV/fume-hood on ~12 MEAT
+keys, but contractor-column depth + actuator workflows + ≥3 bulk acceptance
+keys are still the bar. Thin compile stubs ≠ commercial valve takeoff.
+
 **Ship (set-agnostic shared path only):**
 1. Air + water valve families: isolation, control, balancing, check,
    pressure-reducing, triple-duty, etc. — title/keyRe from real US MEP sets,
@@ -329,10 +369,11 @@ never invented.
 2. Damper + actuator workflows: control dampers, fire/smoke, VAV terminal
    dampers, fume-hood dampers — reconcile-capable when plan text exists.
 3. Valve takeoff intent parity UI+MCP: contractor columns (mark, served unit,
-   service, size, GPM, Cv, configuration, notes, sheet cite) + optional
-   plan highlight when user asks installed qty.
+   service, size, GPM, Cv, configuration, actuator, notes, sheet cite) +
+   optional plan highlight when user asks installed qty.
 4. Bulk acceptance keys on ≥3 non-NAVFAC sets with real valve schedules
-   (Vol2 HHW/CHW paths already started on itd/VA ER sets).
+   (Vol2 HHW/CHW paths already started on itd/VA ER sets; pier/sterile/airport/
+   jail/plant MEAT keys already compile damper/isolation/PRV families).
 
 **DoD:**
 1. [ ] Air-side + water-side valve compile paths keyed on ≥3 bulk sets.
@@ -341,13 +382,59 @@ never invented.
    green.
 4. [ ] No per-set hardcodes; honest empty when set has no extractable valve
    tables.
+5. [ ] Research implications above reflected in deliverable columns + tests
+   (Cv/GPM/actuator/served unit when printed; never invent plan qty).
 
 ### WP8 — BAS workflow depth (Pillar C — after A+B bar)
 
-**Why:** Only **4/82** Vol2 keys currently have `bas_points.rows > 0`. BAS is
-half the “HVAC/BAS” product: point lists, I/O rollups, DDC summaries, and
-sequence-of-operations content must be **truthful reference-table answers**
-with equipment↔point↔location joins where tools allow.
+**Why:** Only **~5** Vol2/bulk keys currently have `bas_points.rows > 0`
+(NAVFAC 122, pier 39, lab 63, Vermillion 231, Colville 42). BAS is half the
+“HVAC/BAS” product — and **reading POINTS LIST tables alone is not a complete
+BAS takeoff**.
+
+#### Research findings (mandatory gate — 2026-09-01; do not skip)
+
+Sources: ASHRAE Guideline 13 (specifying BAS / spare I/O practice); NISTIR 4606
+(GSA DDC BAS guide specification — points must include monitoring, control,
+command, strategy, **alarm**, and **trend** requirements); ASHRAE Guideline 36
+(high-performance sequences); industry DDC I/O list guides (ControlsHub /
+MEPBase BMS points calculators); CSE / BACnet hardwired vs soft-point practice.
+
+**Hard truth — `T-BAS-01`’s 122 POINTS LIST rows is necessary but ridiculously
+incomplete as a “BAS takeoff”:**
+
+| Layer | What industry counts | What OpenTakeoff does today |
+|---|---|---|
+| Published POINTS / DDC lists | Row-per-point AI/AO/BI/BO when printed | **Yes** — T-BAS-01 / `bas_points` compile |
+| **Sequence of operation (SOO)** | Drives which points must exist (modes, safeties, resets, interlocks) | Partial / weak — narrative SOO not a takeoff driver |
+| **Hardwired I/O vs soft/supervisory** | Terminals (AI/AO/BI/BO/pulse) vs BACnet/Modbus integrated / calculated setpoints | Typed counts when table has types; **no** hard-vs-soft architecture split |
+| **Proofs / interlocks / HOA** | Fan/pump proof, end switches, VFD fault, fire/smoke, Hand-Off-Auto | Only if present as list rows — often missed in “points list only” mindset |
+| **Alarms + trends** | NISTIR 4606 requires alarm + trend-log requirements in point schedules | Not first-class takeoff columns |
+| **Equipment-schedule-derived points** | Qty × points/unit from AHU/VAV/FCU/plant schedules when no full list | Not implemented as product path |
+| **Spare capacity** | ASHRAE G13 practice **10–25%** spare **per point type per controller** (often ~15–20%) | Not in deliverable; must disclose when estimating hardware |
+| **Panel / controller architecture** | Local vs remote I/O, expansion modules, licensing soft points | Out of scope for qty-from-PDF unless drawings expose it — honest disclose |
+
+**Estimating workflow elites actually run:**
+
+1. Inventory plant + terminal equipment from schedules (Pillar A).
+2. Read SOO / control diagrams → required sensors, commands, proofs, safeties.
+3. Build or verify a **point schedule** (operational model).
+4. Derive **I/O list** (hardware landings) separately from soft/supervisory points.
+5. Apply spare policy; map to controller/module counts for bid.
+6. Cross-check published POINTS/I/O LIST sheets against that model — gaps = RFI.
+
+**Product implication for WP8:** Growing `bas_points.rows > 0` from ~5 keys is
+necessary but **not sufficient**. Pillar C must:
+
+- Keep truthful extraction of every printed POINTS/I/O/DDC list (set-agnostic).
+- Add **SOO/reference extractable tables** where vector text allows; honest
+  refuse when narrative-only / raster.
+- Surface **hard vs soft** when drawings distinguish them; never invent soft
+  BACnet counts from schedules without evidence.
+- Prefer **equipment↔point↔location** joins when drawable; disclose schematic-only.
+- Document **honest ceiling**: a complete commercial BAS takeoff may require
+  SOO+schedule-derived I/O that PDFs don’t fully tabulate — do not score-chase
+  by hallucinating points; prefer disclosed gaps + spare-policy notes.
 
 **Ship (shared path):**
 1. Deepen `bas_points` extraction: POINTS LIST, I/O LIST, DDC CONTROLLER
@@ -356,17 +443,26 @@ with equipment↔point↔location joins where tools allow.
 2. BAS takeoff + reconcile variants: point mark → equipment tag → plan
    location when drawable; honest disclose when schematic-only.
 3. Sequence-of-operations / controls narrative tables where vector-extractable
-   — reference-eval exact cells, not LLM summaries.
+   — reference-eval exact cells, not LLM summaries. Where SOO is not
+   tabular, disclose “SOO present but not row-extractable” rather than
+   pretending POINTS LIST = full BAS takeoff.
 4. Rollups (AI/AO/BI/BO totals) only when the source table supports them;
    refuse rollups-from-matrices that are not row-per-point (bldg5406
-   HARDWAREPOINTS).
+   HARDWAREPOINTS). Separate hardwired vs integrated/soft when columns exist.
+5. Optional **schedule-derived point estimate** path (equipment qty × typed
+   points/unit) only as an explicitly labeled *estimate* with sources — never
+   silently merge into POINTS LIST truth.
 
 **DoD:**
-1. [ ] ≥5 bulk sets with keyed `bas_points` acceptance (grow from 4/82).
+1. [ ] ≥5 bulk sets with keyed `bas_points` acceptance (grow from ~5 today).
 2. [ ] BAS workflow locks in `test:workflows` on NAVFAC + ≥2 WP1 sets.
 3. [ ] SOO/reference tables scored where extractable; honest refuse documented
-   where not.
+   where not — **including** explicit product language that POINTS LIST ≠
+   complete BAS takeoff.
 4. [ ] UI+MCP parity on points_takeoff / BAS compile intents.
+5. [ ] Research implications above reflected in deliverables/tests (hard vs
+   soft when printed; proofs/alarms/trends columns when present; no invented
+   spare/I/O counts).
 
 ### WP9 — Plan grounding depth (Pillar D — after A+B bar)
 

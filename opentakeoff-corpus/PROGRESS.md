@@ -406,24 +406,33 @@ UI+MCP parity, no corpus hardcodes.
 
 | Pillar | Scope | Status |
 |---|---|---|
-| **A — Cross-set compile** | Vol1 + Vol2 (82/82 INDEX) schedule compile | **Largely complete** — 23 WEAK + 27 ZERO keys audited 2026-09-01 (zero drift/inflation) |
-| **B — Reconcile** | Schedule↔plan with contractor columns+cites | **Near §6 bar** — Vol2 MEAT + high-value WEAK locks; honest SO ceilings documented |
-| **C — Valve + BAS depth** | Air/water valves, dampers, actuators; BAS points, I/O, SOO | **Queued** — WP7–WP8 after §6 A+B bar |
-| **D — Grounding depth** | Symbol counts highlighted and accurate on plan | **Queued** — WP9 after §6 A+B bar |
+| **A — Cross-set compile** | Vol1 + Vol2 (82/82 INDEX) schedule compile | **§6 pending full suite** — keys + locks green; awaiting green `npm run test:workflows` before claiming MET |
+| **B — Reconcile** | Schedule↔plan with contractor columns+cites | **§6 pending full suite** — locks + UI proof on `main`; WORKFLOWS **#51 → ON_MAIN** when suite verifies |
+| **C — Valve + BAS depth** | Air/water valves, dampers, actuators; BAS points, I/O, SOO | **Research landed** in `takeoffs/NEXT_GOAL_LOOP.md` WP7/WP8 (2026-09-01). Impl next after A+B §6. T-BAS-01’s 122 POINTS LIST rows is **not** a complete BAS takeoff |
+| **D — Grounding depth** | Symbol counts highlighted and accurate on plan | **Queued** — WP9 after C impl bar |
 
-Authority: `GOAL.md` §8 · `takeoffs/NEXT_GOAL_LOOP.md`.
+Authority: `GOAL.md` · `takeoffs/NEXT_GOAL_LOOP.md`.
+
+### §6 A+B gate evidence (2026-09-01 coordinator — partial until suite green)
+
+1. Pillar A: Vol2 INDEX **82/82** compile keys + Vol1; core suite `T-HVAC-01` / `T-BAS-01` LOCKED (spot-checked).
+2. `T-VALVE-01` LOCKED MCP+UI 5/5 (reconfirmed in core suite).
+3. WP3: Bessemer rowsym ≥90% (`rowsymBessemer.regression.test.mjs` pass).
+4. Pillar B: `reconcileWorkflow.test.mjs` locks include Las Vegas CUP **04**, Colville **27** pumps/fans, Vol2 WEAK leftovers honest SO, Klamath FC/HP/DOAS honest SO; Orange County / Vermillion Jail VAV MATCH; Playwright `playwright-reconcile-ui.mjs` Agent UI proof.
+5. Shared-path: `planToolParity.test.mjs` + `prewarmGraphSmoke.test.mjs` pass.
+6. WORKFLOWS **#51** status → **ON_MAIN** on this branch (was PROVEN); merge stack already on `main`.
+7. Non-NAVFAC complete/family compile + reconcile proven via bulk keys + UI path (no per-job title hardcodes).
+8. **Still required:** full `opentakeoff/mcp` `npm run test:workflows` green on this VM with staged bulk PDFs — do **not** mark §6 MET until that finishes.
+
+Honest ceilings retained (not score-chased): Klamath FC/HP/DOAS SCHEDULE_ONLY under `evaluationFast`; WEAK/ZERO compile keys where no extractable tables; WP3.3 TG bowtie follow-on.
 
 ### Next queue (platform loop)
 
-1. **Pillar B / §6 judgment:** Vol2 + Vol1 plant reconcile dense (incl. Las Vegas CUP **04**, Colville **27** pumps/fans, WEAK MATCH leftovers). Klamath FC/HP/DOAS remain honest SO.
-2. **Pillar A tail:** WEAK→MEAT only when probe finds new extractable schedules (23 WEAK + 27 ZERO stable; BAS drift 0). Damper/isolation/PRV/mixing/PSV families compile on pier/sterile/airport/jail/plant MEAT keys; compact `STEAM PRV` titles on SDSU **11**.
-3. **Merge branch stack → `main`** when A+B §6 metrics met; WORKFLOWS #51 ON_MAIN.
-4. **Pillar C (after A+B):** WP7 valve/damper/actuator depth + WP8 BAS points/SOO
-   — grow from 4/82 Vol2 BAS rows and ~3/82 valve rows.
-5. **Pillar D (after A+B):** WP9 highlight-accuracy proofs for symbol counts.
-6. WP3.3 TG bowtie dedicated detector (tracked follow-on).
-7. WP4: Klamath FC/HP/DOAS still SCHEDULE_ONLY under evaluationFast.
-8. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.
+1. **Finish A+B §6:** wait for / fix `test:workflows`; then flip Pillar A/B to **§6 MET**.
+2. **Pillar C impl (research done):** WP7 valve/damper/actuator depth + WP8 BAS depth on shared path — grow beyond POINTS-LIST-only and thin valve stubs; ≥3 valve + ≥5 BAS bulk keys; SOO/hard-vs-soft honesty per WP8 research.
+3. **Pillar D:** WP9 highlight-accuracy proofs for symbol counts.
+4. WP3.3 TG bowtie dedicated detector (tracked follow-on).
+5. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 
