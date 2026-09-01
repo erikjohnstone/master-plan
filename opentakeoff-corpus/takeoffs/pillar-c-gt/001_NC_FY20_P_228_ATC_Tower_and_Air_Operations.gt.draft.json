@@ -368,32 +368,11 @@
     "artifact": "/opt/cursor/artifacts/pillar-c-navfac-001-drawing-verify.json"
   },
   "estimator_product": {
+    "printed_bas_rows": 122,
     "inventory_units": 143,
     "estimate_only_points": 965,
     "never_merged_into_printed": true,
     "gap_count": 125,
-    "gap_sample": [
-      "AHU-A1",
-      "AHU-A2",
-      "AHU-M1",
-      "DOAH-A1",
-      "DOAH-A2",
-      "DOAH-M1",
-      "FCU-A1",
-      "FCU-A2",
-      "FCU-A3",
-      "FCU-A4",
-      "FCU-A5",
-      "FCU-A6",
-      "FCU-A7",
-      "FCU-A8A",
-      "FCU-A8B",
-      "FCU-A9",
-      "FCU-A10",
-      "FCU-A11",
-      "FCU-A12",
-      "FCU-A13"
-    ],
     "soo_status": "absent_or_not_detected",
     "estimator_complete": false
   },
@@ -440,6 +419,14 @@
     "match": 3,
     "schedule_only": 160,
     "items": 163,
+    "gt_locked": false
+  },
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:33:00.135Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-001-inventory-drawing-verify.json",
+    "sample_pass": 20,
+    "sample_n": 20,
     "gt_locked": false
   }
 }

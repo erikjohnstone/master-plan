@@ -679,10 +679,18 @@ Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-keyed-floor.json`.
 `estimator_product.plan_paint` stays **`refuse_not_done`** until corpus-complete.
 Regression: `basServedEquipmentPlanPaint.test.mjs` **3/3** green.
 
+**bas inventory floors — corpus-wide (2026-09-01, 112/112 floors checked, still 0 locked):**
+Every BAS-bearing set now has either a drawing-backed inventory sample or an honest
+zero-inventory floor from product census. Keyed printed-BAS sets also sampled
+(001/015/027/096 **20/20**; 021 **18/20** honest misses; 089 airport **13/20**).
+This is **not** Pillar C complete — SOO/I/O/spare/proofs + valve estimator + pipeline GT remain.
+
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** Gap/SOO + valve columns + plan-paint census on keyed floor;
-   bas:0 inventory drawing verify on **57** sets (+7 zero-inventory floors) — **0 locked**. Next: extend inventory
+1. **Pillar C (corpus-deep):** inventory floors **112/112** checked but **0** estimator-complete;
+   deepen SOO/I/O/spare/proofs on keyed+SOO-present sets; expand valve contractor columns
+   beyond 11 keyed; pipeline GT lock only when complete. Prior: 1. **Pillar C (corpus-deep):** Gap/SOO + valve columns + plan-paint census on keyed floor;
+   BAS inventory floors **112/112** checked (drawing or honest zero) — **0 locked**. Next: extend inventory
    + plan-paint to more bearing sets; tabular SOO where vector allows; expand keys only
    when live compile finds real lists; lock only with self-check + pipeline GT on
    **every** BAS + valve set.

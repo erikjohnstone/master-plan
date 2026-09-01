@@ -22,20 +22,11 @@
     "Pillar C corpus-deep — set alone cannot complete C"
   ],
   "estimator_product": {
+    "printed_bas_rows": 42,
     "inventory_units": 22,
     "estimate_only_points": 71,
     "never_merged_into_printed": true,
     "gap_count": 8,
-    "gap_sample": [
-      "FCU-1",
-      "BP-1",
-      "EF-1",
-      "EF-2",
-      "HX-1A",
-      "HX-1B",
-      "HX-2A",
-      "HX-2B"
-    ],
     "soo_status": "absent_or_not_detected",
     "estimator_complete": false
   },
@@ -54,6 +45,14 @@
     "match": 17,
     "miss": 0,
     "error": 25,
+    "gt_locked": false
+  },
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:32:47.546Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-27-inventory-drawing-verify.json",
+    "sample_pass": 20,
+    "sample_n": 20,
     "gt_locked": false
   }
 }
