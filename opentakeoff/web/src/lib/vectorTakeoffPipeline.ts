@@ -55,16 +55,50 @@ export interface VectorPipelineHooks {
   ocrRegion?: (sheetKey: string, region: [number, number, number, number]) => Promise<OcrRegionResult | null>;
 }
 
+const OCR_ENV = typeof process !== "undefined" && process.env?.OPENTAKEOFF_PIPELINE_OCR === "1";
+const MAX_TILES_PER_SHEET = 4;
+
+function scheduleKeywordRegion(
+  spans: GraphSpan[],
+  width: number,
+  height: number,
+): [number, number, number, number] | null {
+  const hits = spans.filter((sp) => {
+    const t = String(sp.str || "").replace(/\s+/g, " ").trim();
+    return t.length >= 6 && t.length <= 120 && sheetHasScheduleKeywords([sp]);
+  });
+  if (!hits.length) return null;
+  let x0 = Infinity;
+  let y0 = Infinity;
+  let x1 = -Infinity;
+  let y1 = -Infinity;
+  for (const h of hits) {
+    x0 = Math.min(x0, h.x);
+    y0 = Math.min(y0, h.y);
+    x1 = Math.max(x1, h.x + h.w);
+    y1 = Math.max(y1, h.y + h.h);
+  }
+  const padX = 48;
+  const padY = 32;
+  const bandH = Math.min(1200, height - y0);
+  return [
+    Math.max(0, x0 - padX),
+    Math.max(0, y0 - padY),
+    Math.min(width, x1 + padX),
+    Math.min(height, y1 + bandH),
+  ];
+}
+
 function sheetTableCount(g: SheetGraph, sheetKey: string): number {
   return g.tables.filter((t) => t.sheet === sheetKey).length;
 }
 
 function isScheduleTarget(ctx: VectorSheetContext, hooks: VectorPipelineHooks): boolean {
-  return (
-    ctx.role === "schedule"
-    || ((ctx.role === "legend" || ctx.role === "unknown") && hooks.sheetHasPointsListTitle(ctx.key))
-    || sheetHasScheduleKeywords(ctx.spans)
-  );
+  if (ctx.role === "schedule") return true;
+  // Plan/demolition sheets embed equipment terms everywhere — keyword scan is not schedule signal there.
+  if (ctx.role !== "legend" && ctx.role !== "unknown") return false;
+  if (hooks.sheetHasPointsListTitle(ctx.key)) return true;
+  return sheetHasScheduleKeywords(ctx.spans);
 }
 
 function mergeCandidates(
@@ -119,12 +153,14 @@ async function runL45OcrAssist(
   report: VectorPipelineReport,
 ): Promise<void> {
   if (!hooks.ocrRegion) return;
+  if (!OCR_ENV) return;
   if (sheetTableCount(g, ctx.key) > 0) return;
   if (!isScheduleTarget(ctx, hooks)) return;
   const rasterFrac = ctx.rasterFrac ?? 0;
-  if (rasterFrac < 0.08 && !sheetHasScheduleKeywords(ctx.spans)) return;
+  if (rasterFrac < 0.12) return;
 
-  const region: [number, number, number, number] = [0, 0, ctx.width, ctx.height];
+  const region = scheduleKeywordRegion(ctx.spans, ctx.width, ctx.height)
+    ?? [0, 0, ctx.width, Math.min(ctx.height, 1400)];
   let ocr: OcrRegionResult | null = null;
   try {
     ocr = await hooks.ocrRegion(ctx.key, region);
@@ -181,7 +217,7 @@ export async function runVectorTakeoffPipeline(
 ): Promise<VectorPipelineReport> {
   const report: VectorPipelineReport = {
     layers_run: ["L0:ingest", "L1:spans+segments", "L2:geometric"],
-    l45_enabled: true,
+    l45_enabled: OCR_ENV,
     tiles_sliced: 0,
     tables_added: 0,
     tables_replaced: 0,
@@ -208,13 +244,15 @@ export async function runVectorTakeoffPipeline(
     sourceSpansBySheet.set(ctx.key, ctx.spans);
 
     const existing = sheetTableCount(g, ctx.key);
-    const tiles = slicePageTiles(ctx.width, ctx.height);
+    const tiles = existing === 0 ? slicePageTiles(ctx.width, ctx.height) : [];
     report.tiles_sliced += tiles.length;
 
-    if (tiles.length && (existing === 0 || sheetHasScheduleKeywords(ctx.spans))) {
-      for (const tile of tiles) runL2FallbacksForSheet(g, ctx, buildings, stats, touched, tile);
+    if (tiles.length) {
+      for (const tile of tiles.slice(0, MAX_TILES_PER_SHEET)) {
+        runL2FallbacksForSheet(g, ctx, buildings, stats, touched, tile);
+      }
     }
-    if (sheetTableCount(g, ctx.key) === 0) {
+    if (existing === 0) {
       runL2FallbacksForSheet(g, ctx, buildings, stats, touched);
     }
   }

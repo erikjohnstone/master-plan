@@ -20,6 +20,10 @@ const LINE_AXIS_TOL = 2.5;
 const GRID_CLUSTER_TOL = 4;
 const MIN_GRID_ROWS = 3;
 const MIN_GRID_COLS = 2;
+/** Skip ruled-grid on dense plan linework; stream fallback may still run on spans. */
+export const MAX_LINE_GRID_SEGMENTS = 8000;
+/** Cap axis lines before O(n^4) grid search — plan tiles can yield hundreds of rules. */
+const MAX_AXIS_LINES = 48;
 
 /** Schedule-bearing language — gate fallback to sheets that plausibly carry tables. */
 const SCHEDULE_KEYWORD_RE =
@@ -85,6 +89,15 @@ function extractAxisLines(segs: number[]): { h: AxisLine[]; v: AxisLine[] } {
     }
   }
   return { h: clusterAxisLines(hRaw, "h"), v: clusterAxisLines(vRaw, "v") };
+}
+
+function capAxisLines(lines: AxisLine[]): AxisLine[] {
+  if (lines.length <= MAX_AXIS_LINES) return lines;
+  return lines
+    .slice()
+    .sort((a, b) => (b.end - b.start) - (a.end - a.start))
+    .slice(0, MAX_AXIS_LINES)
+    .sort((a, b) => a.pos - b.pos);
 }
 
 function clusterAxisLines(lines: AxisLine[], axis: "h" | "v"): AxisLine[] {
@@ -294,10 +307,11 @@ export function extractScheduleTablesFromLineGrid(
   opts: LineGridExtractOpts,
 ): ScheduleTable[] {
   if (!segs?.length) return [];
+  if (segs.length / 4 > MAX_LINE_GRID_SEGMENTS) return [];
   if (!opts.force && !sheetHasScheduleKeywords(spans)) return [];
 
   const { h, v } = extractAxisLines(segs);
-  const grids = findRuledGrids(h, v);
+  const grids = findRuledGrids(capAxisLines(h), capAxisLines(v));
   if (!grids.length) return [];
 
   const inv = invertViewportTransform(opts.pageViewportTransform);
