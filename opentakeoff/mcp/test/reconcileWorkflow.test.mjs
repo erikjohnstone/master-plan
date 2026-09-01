@@ -224,6 +224,54 @@ test("Orange County bulk VAV reconcile: all 32 scheduled tags MATCH (WP1 cross-s
   assert.ok(match.some((r) => /^VAV-1-21B$/i.test(r.tag)));
 });
 
+test("Vermillion County Jail bulk VAV reconcile scaffold matches compile", async () => {
+  const keyPath = resolve(CROSS, "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const graph = await graphForPdf(pdf, key.set_id);
+  const compiled = compileCorpusTakeoff(null, graph, "hvac_equipment");
+  assert.equal(compiled.categories?.VAV?.count ?? 0, key.categories.VAV);
+
+  const rows = reconcileScheduleFamilyFromGraph(
+    graph,
+    familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV"),
+  );
+  assert.equal(rows.length, key.categories.VAV, "reconcile scaffold row count = compile VAV");
+  assert.ok(rows.every((r) => r.scheduled_qty >= 1));
+  assert.ok(rows.every((r) => r.status === "SCHEDULE_ONLY"), "no sweep → schedule-only");
+  assert.ok(rows.some((r) => /^VAV-1-1$/i.test(r.tag)), "VAV-1-* schedule tags");
+});
+
+test("Vermillion County Jail bulk VAV reconcile: all 58 scheduled tags MATCH (Vol2 WP1)", async () => {
+  const keyPath = resolve(CROSS, "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.compile.json");
+  assert.ok(existsSync(keyPath));
+  const key = JSON.parse(readFileSync(keyPath, "utf8"));
+  const pdf = resolve(CORPUS, key.source_file);
+  if (!existsSync(pdf)) {
+    test.skip(`PDF missing: ${key.source_file}`);
+    return;
+  }
+  const session = new Session();
+  await session.loadPlan(pdf);
+  const graph = await session.graphForPipeline();
+  const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
+  const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+    evaluationFast: true,
+  });
+  assert.equal(result.rows.length, key.categories.VAV, "reconcile rows = compile VAV count");
+  const match = result.rows.filter((r) => r.status === "MATCH");
+  assert.equal(match.length, key.categories.VAV, "every Vermillion VAV is plan-drawn MATCH");
+  for (const row of match) {
+    assert.ok(row.installed_qty >= 1, `${row.tag} installed qty`);
+    assert.ok(row.plan_cites?.length >= 1, `${row.tag} plan cite`);
+  }
+});
+
 test("Orange County booster pump BP-1 reconcile MATCH", async () => {
   const keyPath = resolve(CROSS, "21_VA_OrangeCounty_PublicSafetyBldg.compile.json");
   assert.ok(existsSync(keyPath));

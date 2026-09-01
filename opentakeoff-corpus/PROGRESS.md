@@ -386,12 +386,12 @@ reconcile, and plan joins.
 - **Warehouse HX recovery:** titled HEAT_EXCHANGER blankKeyRe path recovers WHSE-HX* — warehouse key **89→91**. HEAT_PUMP title still matches Baker-shaped `ENERGY RECOVERY … (WITH HEAT PUMP)` so outdoor HP-* halves compile; keyRe keeps ERU-* on ERV.
 - **Vol2 batch-6 intake (shared path):** Locked remaining **13** single-file INDEX sets (2 MEAT / 4 WEAK / 7 ZERO) including Town Offices **12** + Vermillion Jail **131** HVAC / **231** BAS. Vol2 keyed total **69**/82 (all single-file INDEX sets keyed; **13** multipart rejoins remain).
 - **044 HX recovery:** titled HEAT_EXCHANGER recovers FHX-* — main-boilers key **28→30**.
-- **Vol2 batch-7 intake (shared path):** Ran `REJOIN_full_sets.sh` (qpdf); locked **11**/13 multipart rejoins (3 MEAT / 5 WEAK / 3 ZERO) including chiller upgrade **32**, NY EHRM **18**, Jonesboro VRF **24**; LBNL honest ZERO (311 sheets). Workflow `graphForKey` prefers `_rejoined/` then merges `source_parts_dir`. Vol2 keyed total **82**/82 (all 13 multipart rejoins keyed, incl. PHX **64** + FL airport **20**).
+- **Vol2 batch-7 intake (shared path):** Ran `REJOIN_full_sets.sh` (qpdf); locked **13**/13 multipart rejoins (3 MEAT / 5 WEAK / 3 ZERO) including chiller upgrade **32**, NY EHRM **18**, Jonesboro VRF **24**; LBNL honest ZERO (311 sheets). Workflow `graphForKey` prefers `_rejoined/` then merges `source_parts_dir`. Vol2 keyed total **82**/82 (all 13 multipart rejoins keyed, incl. PHX **64** + FL airport **20**).
+- **WP4 Vermillion County Jail VAV reconcile:** Vol2 **096** bulk **58/58 VAV MATCH** under `evaluationFast` (locked in `reconcileWorkflow.test.mjs`).
 
 ### Next queue (platform loop)
 
-1. **Vol2 full-volume Pillar A (active):** batches 1–7 keyed (**82**/82). Next:
-   Vol2 INDEX complete (**82**/82); deepen Pillar B reconcile on MEAT rejoins. Rubric: `takeoffs/VOL2_INTAKE.md`.
+1. **Vol2 INDEX compile keys complete (82/82).** Pillar B deepen on other Vol2 MEAT rejoins (PHX **64**, chiller **32**, …); Klamath FC/HP/DOAS still SCHEDULE_ONLY on Vol1. Rubric: `takeoffs/VOL2_INTAKE.md`.
    Co-equal **Pillar B** stays gated by `test:workflows` (T-VALVE-01 N=5,
    reconcile locks, prefer-schedule / inline motif).
 2. Merge branch stack → `main`; WORKFLOWS #51 ON_MAIN.
