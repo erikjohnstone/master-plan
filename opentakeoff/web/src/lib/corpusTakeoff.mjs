@@ -313,6 +313,61 @@ function markMatchesKeyRe(re, one, canon) {
   return false;
 }
 
+/**
+ * L5 geometry: concatenate column headers from table.headers and row-0 cell keys.
+ * Used to classify untitled schedule grids by header shape — not title regex alone.
+ */
+export function tableHeaderBlob(table) {
+  const seen = new Set();
+  const parts = [];
+  const push = (raw) => {
+    const t = String(raw || "").replace(/\s+/g, " ").trim();
+    if (!t) return;
+    const key = t.toUpperCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    parts.push(t);
+  };
+  for (const h of table?.headers || []) push(h);
+  const first = (table?.rows || [])[0];
+  if (first?.cells) {
+    for (const header of Object.keys(first.cells)) push(header);
+  }
+  return parts.join(" ").toUpperCase();
+}
+
+/** True when every required header-token regex matches the table header blob. */
+export function headerShapeMatches(table, requiredRes) {
+  const blob = tableHeaderBlob(table);
+  if (!blob.trim()) return false;
+  const reqs = Array.isArray(requiredRes) ? requiredRes : [requiredRes];
+  return reqs.every((re) => re.test(blob));
+}
+
+/** Untitled hydronic control-valve grid (TAG + GPM/Cv/SERVED/MODEL — not BAS I/O). */
+export function isControlValveHeaderShape(table) {
+  const blob = tableHeaderBlob(table);
+  if (!blob) return false;
+  if (/\b(?:AI|AO|BI|BO)\b/.test(blob) && !/\b(?:GPM|\bCV\b)\b/.test(blob)) return false;
+  return headerShapeMatches(table, [
+    /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+    /\b(?:GPM|\bCV\b|SERVED|MANUFACTURER|MODEL|SIZE|ACTUATOR|FLOW)\b/,
+  ]);
+}
+
+/** Infer schedule service from header blob + sample marks on untitled valve tables. */
+function inferValveServiceFromTable(table) {
+  const blob = tableHeaderBlob(table);
+  if (/\b(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT|STEAM)\b/.test(blob)) return "HHW";
+  if (/\b(?:CHW|CHILLED\s*WATER|COOLING\s*WATER)\b/.test(blob)) return "CHW";
+  for (const row of table?.rows || []) {
+    const tag = String(row.key || cellText(row, /^(?:TAG|MARK|VALVE\s*MARK)$/i) || "").trim();
+    if (/HHW|REHEAT|HW/i.test(tag)) return "HHW";
+    if (/CHW|CW/i.test(tag)) return "CHW";
+  }
+  return "CHW";
+}
+
 export function expandAmpersandEquipMarks(raw) {
   const s = String(raw || "").trim();
   if (!s || !/&/.test(s)) return [s];
@@ -330,7 +385,8 @@ export function expandAmpersandEquipMarks(raw) {
 }
 
 function uniqueFamily(graph, {
-  titleRe, exclude, keyRe, blankKeyRe, identityHeaderRe, titledOnly,
+  titleRe, exclude, keyRe, blankKeyRe, blankHeaderRes, blankServiceHint,
+  identityHeaderRe, titledOnly,
   // Secondary titles that need a stricter key filter than the primary titleRe
   // (e.g. SPLIT SYSTEM SYMBOL "F-1 , CU-1" → only CU-* for CONDENSING_UNIT,
   // while titled CONDENSING UNIT SCHEDULE keeps set-local B1/B2 with no keyRe).
@@ -358,12 +414,23 @@ function uniqueFamily(graph, {
     const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i.test(title);
     const blankGate = blankKeyRe || keyRe;
     const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
+    const headerValveShape = blankTitle && isControlValveHeaderShape(table);
     if (titleOk || altOk) {
       if (pass !== 1) continue;
     } else {
       if (pass !== 2) continue;
       if (titledOnly) continue;
-      if (!(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
+      const blankHeaderOk = !blankHeaderRes || headerShapeMatches(table, blankHeaderRes) || headerValveShape;
+      if (blankTitle && blankGate) {
+        if (!blankHeaderOk) continue;
+        if (blankServiceHint && headerValveShape) {
+          const inferred = inferValveServiceFromTable(table);
+          if (blankServiceHint === "CHW" && inferred === "HHW") continue;
+          if (blankServiceHint === "HHW" && inferred !== "HHW") continue;
+        }
+      } else if (!(catchAllSchedule && keyGated)) {
+        continue;
+      }
     }
     // keyRe filters titled rows (AHU/FCU); blankKeyRe only gates blank titles
     // (Carson CONDENSING UNIT uses B1/B2 marks — must not apply ACC/CU filter).
@@ -808,6 +875,11 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC|FIRE\s+DAMPER|SMOKE\s+DAMPER|FUME\s+HOOD/i,
     keyRe: /^(?:OA|RA|EA|SA)[\s\-]?\d/i,
     altKeyRe: /^[A-Z]{1,3}D[\s\-]?\d/i,
+    blankKeyRe: /^(?:MD|CD|DMP|OA|RA|EA|SA)[\s\-]/i,
+    blankHeaderRes: [
+      /\b(?:TAG|MARK|SYMBOL)\b/,
+      /\b(?:DAMPER|ACTUATOR|SIZE|AIRFLOW|CFM)\b/,
+    ],
   },
   // Isolation / gate / ball / shutoff on dedicated ISOLATION VALVE or bare
   // VALVE SCHEDULE. Not CHW/HHW control valves (V-CHW / V-HHW stay on
@@ -817,7 +889,11 @@ export const HVAC_FAMILY_SPECS = {
     altTitleRe: /^(?:\(N\)\s*)?VALVE\s+SCHEDULE\b/i,
     exclude: /CONTROL\s+VALVE|POINTS\s*LIST|DDC|PRESSURE\s+REDUC|MIXING|BYPASS|SAFETY/i,
     keyRe: /^(?:VLV|IV|ISO|GV|BV)[\s\-]/i,
-    titledOnly: true,
+    blankKeyRe: /^(?:VLV|IV|ISO|GV|BV)[\s\-]/i,
+    blankHeaderRes: [
+      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      /\b(?:SIZE|MANUFACTURER|MODEL|SERVICE)\b/,
+    ],
   },
   PRESSURE_REDUCING_VALVE: {
     titleRe: /PRESSURE\s+REDUC(?:ING|TION)\s+VALVE\s+SCHEDULE/i,
@@ -837,8 +913,12 @@ export const HVAC_FAMILY_SPECS = {
   MIXING_VALVE: {
     titleRe: /MIXING\s+VALVE\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC/i,
-    keyRe: /^(?:MX|MV)[\s\-]/i,
-    titledOnly: true,
+    keyRe: /^(?:MX|MV|TMV)[\s\-]/i,
+    blankKeyRe: /^(?:MX|MV|TMV)[\s\-]/i,
+    blankHeaderRes: [
+      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      /\b(?:SIZE|MANUFACTURER|MODEL|MIXING)\b/,
+    ],
   },
   // Lab fume-hood exhaust control valves / VAV dampers (ECV-*). Titled-only —
   // VAV titleRe also hits "VARIABLE AIR VOLUME" in these captions, but ECV
@@ -852,21 +932,29 @@ export const HVAC_FAMILY_SPECS = {
   // CHW / HHW from title signals (abbrev or spelled-out). Bypass valves stay out.
   CHW_CONTROL_VALVE: {
     titleRe: /(?:CHW|CHILLED\s*WATER).{0,40}CONTROL\s*VALVE|CONTROL\s*VALVE.{0,40}(?:CHW|CHILLED\s*WATER)/i,
-    exclude: /BYPASS/i,
+    exclude: /BYPASS|HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT/i,
     identityHeaderRe: /VALVE\s*MARK/i,
-    // Bare "VALVE SCHEDULE" only — must NOT match "CHW CONTROL VALVE SCHEDULE"
-    // or altKeyRe would replace primary matching and drop NAVFAC marks.
     altTitleRe: /^(?:\(N\)\s*)?VALVE\s+SCHEDULE\b/i,
     altKeyRe: /^V[\s\-]?CHW/i,
+    blankKeyRe: /^CV[\s\-]/i,
+    blankServiceHint: "CHW",
+    blankHeaderRes: [
+      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      /\b(?:GPM|\bCV\b|SERVED|MANUFACTURER|MODEL|SIZE|FLOW)\b/,
+    ],
   },
   HHW_CONTROL_VALVE: {
     titleRe: /(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT).{0,40}CONTROL\s*VALVE|CONTROL\s*VALVE.{0,40}(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT)/i,
     exclude: /BYPASS|CHW|CHILLED\s*WATER/i,
     identityHeaderRe: /VALVE\s*MARK/i,
-    // Bare "VALVE SCHEDULE" + V-HHW* / V-HHWR* (VA ER). Start-anchored so
-    // "HHW CONTROL VALVE SCHEDULE" keeps primary titleRe matching.
     altTitleRe: /^(?:\(N\)\s*)?VALVE\s+SCHEDULE\b/i,
     altKeyRe: /^V[\s\-]?HHW/i,
+    blankKeyRe: /^CV[\s\-]/i,
+    blankServiceHint: "HHW",
+    blankHeaderRes: [
+      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      /\b(?:GPM|\bCV\b|SERVED|MANUFACTURER|MODEL|SIZE|FLOW|HHW|REHEAT|HOT\s*WATER)\b/,
+    ],
   },
   BYPASS_CONTROL_VALVE: {
     titleRe: /BYPASS\s+CONTROL\s+VALVE/i,
@@ -1458,6 +1546,34 @@ export function isBasPointsListTitle(title) {
   return false;
 }
 
+/**
+ * L5 geometry: untitled BAS / I/O grids — header shape, not title regex alone.
+ * Requires point/I/O column tokens and rejects valve-schedule header shapes.
+ */
+export function isBasPointsListTable(table) {
+  const title = String(table?.title?.text || "").replace(/\s+/g, " ").trim();
+  if (isBasPointsListTitle(title)) return true;
+  if (title) return false;
+  if (isControlValveHeaderShape(table)) return false;
+  const blob = tableHeaderBlob(table);
+  if (!blob) return false;
+  if (/\b(?:GPM|\bCV\b)\b/.test(blob) && /\bSERVED\b/.test(blob)) return false;
+  return headerShapeMatches(table, [
+    /\b(?:TAG|MARK|POINT|DESCRIPTION|DEVICE)\b/,
+    /\b(?:AI|AO|BI|BO|ANALOG|DIGITAL|INPUT|OUTPUT|I\s*\/\s*O)\b/,
+  ]);
+}
+
+/** Display title for header-inferred BAS tables (never used as a family regex). */
+export function inferBasListTitle(table) {
+  const blob = tableHeaderBlob(table);
+  if (/\bI\s*\/\s*O\s+LIST\b|\bIO\s+LIST\b/i.test(blob)) return "I/O LIST (header-inferred)";
+  if (/\bDDC\s+CONTROLLER\b/i.test(blob)) return "DDC CONTROLLER I/O (header-inferred)";
+  if (/\bPOINTS?\s+SCHEDULE\b/i.test(blob)) return "POINTS SCHEDULE (header-inferred)";
+  if (/\bPOINTS?\s+LIST\b/i.test(blob)) return "POINTS LIST (header-inferred)";
+  return "BAS POINTS TABLE (header-inferred)";
+}
+
 /** Column-label rows that are not countable I/O or points marks. */
 function isBasPointsHeaderRow(tag) {
   return !tag || /^(TAG|MARK|SYMBOL|POINT|DESCRIPTION|NOTES?)$/i.test(tag);
@@ -1539,8 +1655,9 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
   const sheets = sheetRecords(sessionOrSheets, graph);
   const lists = [];
   for (const table of graph.tables || []) {
-    const title = String(table.title?.text || "");
-    if (!isBasPointsListTitle(title)) continue;
+    const rawTitle = String(table.title?.text || "");
+    if (!isBasPointsListTitle(rawTitle) && !isBasPointsListTable(table)) continue;
+    const title = rawTitle.trim() || inferBasListTitle(table);
     const counts = { AI: 0, AO: 0, BI: 0, BO: 0, other: 0 };
     const extras = { alarm: 0, trend: 0, hardwired: 0, soft: 0 };
     const items = [];
@@ -1628,8 +1745,13 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     const key = sheet.key;
     const tables = (graph.tables || []).filter((t) => t.sheet === key);
     const titles = tables
-      .map((t) => String(t.title?.text || ""))
-      .filter((t) => isBasPointsListTitle(t));
+      .map((t) => {
+        const raw = String(t.title?.text || "").trim();
+        if (isBasPointsListTitle(raw)) return raw;
+        if (isBasPointsListTable(t)) return inferBasListTitle(t);
+        return "";
+      })
+      .filter(Boolean);
     return {
       sheet_id: key,
       sheet_number: sheet.sheetNumber ?? sheet.number ?? null,
