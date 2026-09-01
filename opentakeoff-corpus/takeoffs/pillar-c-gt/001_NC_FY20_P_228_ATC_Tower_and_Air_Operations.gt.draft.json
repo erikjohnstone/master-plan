@@ -136,5 +136,211 @@
   ],
   "notes": [
     "2026-09-01: schedulePlanReconcile rowIdentityTag prefers VALVE MARK / identityHeaderRe over UNIT MARK (HHW was keying CUH-A1 instead of CV-CUH-A1-HHW)."
-  ]
+  ],
+  "coverage": {
+    "AHU": {
+      "inventory": 5,
+      "tags": [
+        "AHU-A1",
+        "AHU-A2",
+        "AHU-M1",
+        "AHU-T1A",
+        "AHU-T1B"
+      ],
+      "in_points_served": [
+        "AHU-T1A",
+        "AHU-T1B"
+      ],
+      "missing_unit_lists": [
+        "AHU-A1",
+        "AHU-A2",
+        "AHU-M1"
+      ]
+    },
+    "DOAH": {
+      "DOAH_UNIT_inventory": 3,
+      "DOAH_UNIT_tags": [
+        "DOAH-A1",
+        "DOAH-A2",
+        "DOAH-M1"
+      ],
+      "DOAH_HANDLING_inventory": 1,
+      "DOAH_HANDLING_tags": [
+        "DOAH-T1"
+      ],
+      "in_points_served": [
+        "DOAH-T1"
+      ],
+      "missing_unit_lists": [
+        "DOAH-A1",
+        "DOAH-A2",
+        "DOAH-M1"
+      ],
+      "note": "Only tower DOAH-T1 has a POINTS LIST; A/M building DOAHs lack unit lists \u2014 do not invent templates"
+    },
+    "FCU": {
+      "inventory": 42,
+      "templates": [
+        {
+          "title": "FCU WITH COOLING COILS DDC POINTS LIST",
+          "n": 9
+        },
+        {
+          "title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+          "n": 11
+        }
+      ],
+      "estimate": "HONEST_REFUSE \u2014 no coil-type split"
+    },
+    "UH_CUH": {
+      "inventory": 11,
+      "template_rows": 6,
+      "labeled_estimate": 66
+    }
+  },
+  "verified": {
+    "printed_bas_rows": 122,
+    "rollups": {
+      "AI": 43,
+      "AO": 15,
+      "BI": 49,
+      "BO": 15,
+      "alarm": 44,
+      "trend": 32
+    },
+    "served_plan_paint": [
+      {
+        "tag": "DOAH-T1",
+        "found": 1,
+        "cites": 1,
+        "sheets": [
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#3",
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#4",
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#5",
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#6",
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#7"
+        ],
+        "status": "MATCH"
+      },
+      {
+        "tag": "AHU-T1B",
+        "found": 1,
+        "cites": 1,
+        "sheets": [
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#3",
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#4",
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#5",
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#6",
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#7"
+        ],
+        "status": "MATCH"
+      },
+      {
+        "tag": "AHU-T1A",
+        "found": 1,
+        "cites": 1,
+        "sheets": [
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#3",
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#4",
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#5",
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#6",
+          "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#7"
+        ],
+        "status": "MATCH"
+      }
+    ],
+    "soo": "HONEST_REFUSE",
+    "fcu_multiply": "HONEST_REFUSE",
+    "valves_row_counts_match_keys": {
+      "CHW": 64,
+      "HHW": 99
+    },
+    "not_yet_verified": [
+      "Every CV-* valve highlight on drawings (most SCHEDULE_ONLY)",
+      "Hand count of each POINTS LIST row against PDF sheet",
+      "FCU cooling vs heat/cool headcount on schedules",
+      "Whether unlisted AHU/DOAH units share templates or lack DDC lists",
+      "Alarm/trend cell-by-cell vs PDF"
+    ]
+  },
+  "lists_detail": [
+    {
+      "title": "POINTS LIST DOAH-TI",
+      "n": 34,
+      "byServed": {
+        "DOAH-T1": {
+          "n": 34,
+          "AI": 13,
+          "AO": 4,
+          "BI": 13,
+          "BO": 4
+        }
+      }
+    },
+    {
+      "title": "POINTS LIST AHU-T1A/TIB",
+      "n": 62,
+      "byServed": {
+        "AHU-T1B": {
+          "n": 24,
+          "AI": 8,
+          "AO": 3,
+          "BI": 10,
+          "BO": 3
+        },
+        "AHU-T1A": {
+          "n": 38,
+          "AI": 13,
+          "AO": 4,
+          "BI": 16,
+          "BO": 5
+        }
+      }
+    },
+    {
+      "title": "FCU WITH COOLING COILS DDC POINTS LIST",
+      "n": 9,
+      "byServed": {
+        "(none)": {
+          "n": 9,
+          "AI": 3,
+          "AO": 1,
+          "BI": 4,
+          "BO": 1
+        }
+      }
+    },
+    {
+      "title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+      "n": 11,
+      "byServed": {
+        "(none)": {
+          "n": 11,
+          "AI": 4,
+          "AO": 2,
+          "BI": 4,
+          "BO": 1
+        }
+      }
+    },
+    {
+      "title": "UNIT HEATER DDC POINTS LIST",
+      "n": 6,
+      "byServed": {
+        "(none)": {
+          "n": 6,
+          "AI": 2,
+          "AO": 1,
+          "BI": 2,
+          "BO": 1
+        }
+      }
+    }
+  ],
+  "deepened_at": "2026-09-01T15:12:51.866Z",
+  "pipeline_regressions": {
+    "bas_served_equipment_plan_paint_3sets": "PASS",
+    "valve_mark_identity": "PASS",
+    "T_BAS_01": "PASS"
+  }
 }

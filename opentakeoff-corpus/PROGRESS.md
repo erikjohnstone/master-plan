@@ -448,6 +448,8 @@ UH labeled estimate 11×6=66; FCU×qty **honest refuse**. Valve identity fix:
 reconcile now prefers `VALVE MARK` over `UNIT MARK` — HHW/CHW row counts match
 keys (64/64, 99/99); most valve marks honest **SCHEDULE_ONLY** (CV-* not plan
 text). Shared-path unit test green. Draft GT still `gt_locked: false`.
+**NAVFAC 001 deepening:** Coverage matrix — POINTS served only AHU-T1A/B + DOAH-T1; AHU-A/M and DOAH-A/M lack unit lists (honest gap). Plan-paint regression 3/3 PASS. Still unlocked.
+
 **Pier 015 probe (PARTIAL):** BAS 39 rows; `served_equipment` no longer treats
 hyphen point tags (`AI-1`) as equipment — joins CCC/P/MPAC/HPAC/FC. Plan paint
 MATCH: CCC-1/2, P-1/2, FC-3; MPAC/HPAC honest miss (no schedule row). CONTROL_DAMPER
