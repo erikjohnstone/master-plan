@@ -419,10 +419,11 @@ Authority: `GOAL.md` · `takeoffs/NEXT_GOAL_LOOP.md`.
 2. `T-VALVE-01` LOCKED MCP+UI 5/5 (reconfirmed in core suite).
 3. WP3: Bessemer rowsym ≥90% (`rowsymBessemer.regression.test.mjs` pass).
 4. Pillar B: `reconcileWorkflow.test.mjs` locks include Las Vegas CUP **04**, Colville **27** pumps/fans, Vol2 WEAK leftovers honest SO, Klamath FC/HP/DOAS honest SO; Orange County / Vermillion Jail VAV MATCH; Playwright `playwright-reconcile-ui.mjs` Agent UI proof.
-5. Shared-path: `planToolParity.test.mjs` + `prewarmGraphSmoke.test.mjs` pass.
-6. WORKFLOWS **#51** status → **ON_MAIN** on this branch (was PROVEN); merge stack already on `main`.
-7. Non-NAVFAC complete/family compile + reconcile proven via bulk keys + UI path (no per-job title hardcodes).
-8. **Still required:** full `opentakeoff/mcp` `npm run test:workflows` green on this VM with staged bulk PDFs — do **not** mark §6 MET until that finishes.
+5. **§6 judgment leftovers reconfirmed 2026-09-01 (focused 7/7):** Orange County VAV **32/32 MATCH** · Vermillion Jail VAV **58/58 MATCH** · Klamath FCU/DOAS/HP honest SO · Vol2 WEAK leftovers honest SO · Las Vegas CUP **04** CT MATCH · pumps **11/12** · Colville **27** fans MATCH · pumps **13/14** · Colville ERV-1 MATCH. Log: `/opt/cursor/artifacts/s6-leftovers-reconcile.log`.
+6. Shared-path: `planToolParity.test.mjs` + `prewarmGraphSmoke.test.mjs` pass.
+7. WORKFLOWS **#51** status → **ON_MAIN** on this branch (was PROVEN); merge stack already on `main`.
+8. Non-NAVFAC complete/family compile + reconcile proven via bulk keys + UI path (no per-job title hardcodes).
+9. **Still required:** full `opentakeoff/mcp` `npm run test:workflows` green on this VM with staged bulk PDFs — do **not** mark §6 MET until that finishes.
 
 Honest ceilings retained (not score-chased): Klamath FC/HP/DOAS SCHEDULE_ONLY under `evaluationFast`; WEAK/ZERO compile keys where no extractable tables; WP3.3 TG bowtie follow-on.
 
