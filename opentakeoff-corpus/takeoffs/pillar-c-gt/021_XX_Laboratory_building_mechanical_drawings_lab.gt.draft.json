@@ -1,0 +1,21 @@
+{
+  "set_id": "021_XX_Laboratory_building_mechanical_drawings_lab",
+  "gt_locked": false,
+  "pillar_c_complete": false,
+  "drawing_verify": {
+    "at": "2026-09-01T15:34:14.757Z",
+    "gt_locked": false,
+    "self_check": {
+      "bas_rows_match_key": true,
+      "sample_points_pass": true,
+      "lists": 3
+    },
+    "points_sample_pass": "25/25",
+    "lock_recommendation": "KEEP gt_locked=false — printed BAS sample green, estimator-complete + corpus-deep C remain",
+    "artifact": "/opt/cursor/artifacts/pillar-c-021-drawing-verify.json"
+  },
+  "open_before_lock": [
+    "SOO / estimator-complete still open",
+    "Pillar C corpus-deep — set alone cannot complete C"
+  ]
+}

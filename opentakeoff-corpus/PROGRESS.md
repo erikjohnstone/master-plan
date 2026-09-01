@@ -477,13 +477,26 @@ CONTROL_DAMPER 24=key · drawing sample **10/10** honest. POINTS cell sample
 **25/25 PASS**. SOO refuse. Draft GT still `gt_locked: false`. Artifact:
 `/opt/cursor/artifacts/pillar-c-vermillion-096-drawing-verify.json`.
 
+**Lab 021 drawing-backed (PARTIAL, unlocked):** BAS 63=key · POINTS sample **25/25**
+from DDC I/O legend/summary (ignore narrative chiller "POINT LIST TABLE"). Served
+tags lack equipment schedule rows (honest sweep ERROR). PRV×2 keyed. SOO open.
+
+**Colville 027 drawing-backed (PARTIAL, unlocked):** BAS 42=key · I/O LIST WHITE
+STURGEON PLC · sample **25/25** (BS-1PNL printed as "BS-1 PNL"). EP-4 paint MATCH;
+most served tags no schedule rows. No valve families keyed. SOO open.
+
+**Keyed BAS floor (5/5) drawing-sampled, 0 locked:** 001, 015, 021, 027, 096.
+Estimator-complete + corpus-deep C still **0 / 112 BAS**, **0 / 81 valve**.
+
+
 
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** NAVFAC 001 + Pier 015 + Vermillion 096 drawing
-   samples green but all still unlocked (0 sets locked). Next: remaining keyed
-   BAS/valve sets at same depth, then expand keys to every BAS- and valve-bearing
-   set. Post-WP8 `test:workflows` **104/104** green (plumbing only — not C done).
+1. **Pillar C (corpus-deep):** All **5 keyed BAS** sets drawing-sampled (001/015/
+   021/027/096) — all still unlocked (0/112 BAS, 0/81 valve locked). Next: same
+   depth on remaining keyed valve-only sets, then expand keys to every BAS- and
+   valve-bearing set + estimator-complete (SOO/I/O/spare). Post-WP8
+   `test:workflows` **104/104** green (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.

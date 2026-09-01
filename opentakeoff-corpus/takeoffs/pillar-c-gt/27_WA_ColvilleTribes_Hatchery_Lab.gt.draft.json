@@ -1,0 +1,24 @@
+{
+  "set_id": "27_WA_ColvilleTribes_Hatchery_Lab",
+  "gt_locked": false,
+  "pillar_c_complete": false,
+  "drawing_verify": {
+    "at": "2026-09-01T15:34:21.623Z",
+    "gt_locked": false,
+    "self_check": {
+      "bas_rows_match_key": true,
+      "sample_points_pass": true,
+      "lists": 1,
+      "bs1pnl_space_split_note": true
+    },
+    "points_sample_pass": "25/25",
+    "bs1pnl_note": "Printed as BS-1 PNL",
+    "lock_recommendation": "KEEP gt_locked=false \u2014 printed BAS sample green (incl. BS-1PNL space-split), but most served tags lack schedule rows, SOO/estimator-complete + corpus-deep C remain",
+    "artifact": "/opt/cursor/artifacts/pillar-c-27-drawing-verify.json"
+  },
+  "open_before_lock": [
+    "Most served tags ERROR on sweepScheduleRow (no equipment schedule rows)",
+    "SOO / estimator-complete BAS still open",
+    "Pillar C corpus-deep \u2014 set alone cannot complete C"
+  ]
+}
