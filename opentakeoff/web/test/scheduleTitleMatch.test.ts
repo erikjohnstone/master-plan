@@ -689,6 +689,30 @@ test("MOTORIZED DAMPER + isolation/PRV/mixing valve titled compile", () => {
   );
   assert.equal(
     scheduleTitleMatches(
+      "STEAM PRV",
+      HVAC_FAMILY_SPECS.PRESSURE_REDUCING_VALVE.altTitleRe!,
+      HVAC_FAMILY_SPECS.PRESSURE_REDUCING_VALVE.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "PRV SCHEDULE",
+      HVAC_FAMILY_SPECS.PRESSURE_REDUCING_VALVE.altTitleRe!,
+      HVAC_FAMILY_SPECS.PRESSURE_REDUCING_VALVE.exclude,
+    ),
+    true,
+  );
+  assert.equal(
+    scheduleTitleMatches(
+      "FLASH TANK SCHEDULE",
+      HVAC_FAMILY_SPECS.PRESSURE_REDUCING_VALVE.altTitleRe!,
+      HVAC_FAMILY_SPECS.PRESSURE_REDUCING_VALVE.exclude,
+    ),
+    false,
+  );
+  assert.equal(
+    scheduleTitleMatches(
       "MIXING VALVE SCHEDULE",
       HVAC_FAMILY_SPECS.MIXING_VALVE.titleRe,
       HVAC_FAMILY_SPECS.MIXING_VALVE.exclude,
@@ -728,6 +752,16 @@ test("MOTORIZED DAMPER + isolation/PRV/mixing valve titled compile", () => {
       },
       {
         kind: "equipment",
+        sheet: "m.pdf#3b",
+        title: { text: "STEAM PRV" },
+        rows: [
+          { key: "PRV-1A", cells: { MARK: { text: "PRV-1A" } } },
+          { key: "PRV-1B", cells: { MARK: { text: "PRV-1B" } } },
+          { key: "NOTES", cells: { MARK: { text: "NOTES" } } },
+        ],
+      },
+      {
+        kind: "equipment",
         sheet: "m.pdf#4",
         title: { text: "MIXING VALVE SCHEDULE" },
         rows: [
@@ -750,7 +784,11 @@ test("MOTORIZED DAMPER + isolation/PRV/mixing valve titled compile", () => {
   );
   // Bare VALVE SCHEDULE + V-CHW still belongs to CHW control valves, not isolation.
   assert.equal(hvac.categories.CHW_CONTROL_VALVE.count, 1);
-  assert.equal(hvac.categories.PRESSURE_REDUCING_VALVE.count, 2);
+  assert.equal(hvac.categories.PRESSURE_REDUCING_VALVE.count, 4);
+  assert.deepEqual(
+    hvac.categories.PRESSURE_REDUCING_VALVE.items.map((i) => i.tag).sort(),
+    ["PRV-1", "PRV-1A", "PRV-1B", "PRV-2A"],
+  );
   assert.equal(hvac.categories.MIXING_VALVE.count, 2);
 });
 

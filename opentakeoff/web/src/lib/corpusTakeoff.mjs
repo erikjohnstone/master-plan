@@ -659,7 +659,9 @@ export const HVAC_FAMILY_SPECS = {
   },
   PRESSURE_REDUCING_VALVE: {
     titleRe: /PRESSURE\s+REDUC(?:ING|TION)\s+VALVE\s+SCHEDULE/i,
-    exclude: /POINTS\s*LIST|DDC/i,
+    // Compact steam-station captions (SDSU "STEAM PRV" / bare PRV SCHEDULE).
+    altTitleRe: /\bSTEAM\s+PRV\b|\bPRV\s+SCHEDULE\b/i,
+    exclude: /POINTS\s*LIST|DDC|FLASH\s+TANK/i,
     keyRe: /^PRV[\s\-]/i,
     titledOnly: true,
   },

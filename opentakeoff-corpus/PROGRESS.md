@@ -395,6 +395,7 @@ reconcile, and plan joins.
 - **Pillar A deepen — dampers/valves + POINTS SCHEDULE (shared path):** `CONTROL_DAMPER` altTitleRe `MOTORIZED DAMPER SCHEDULE` + `MD-*`; `ISOLATION_VALVE` (bare `VALVE SCHEDULE` + `VLV-*`), `PRESSURE_REDUCING_VALVE` (`PRV-*`), `MIXING_VALVE` (`MX-*`/`MV-*`); `isBasPointsListTitle` accepts `POINTS SCHEDULE` (not SOO “point list table”). Key lifts: pier **015** 47→83 (+21 MD +15 VLV), sterile **040** 24→29 (+5 PRV), FL airport **089** 20→22 (+2 MX), lab **021** 64→66 (+2 PRV). Vermillion **096** BAS unchanged (231). Negatives: T-VALVE/BAS/HVAC-01 locked. Prep for Pillar C — not commercial valve/BAS workflows yet.
 - **Pillar B locks on new damper/valve families:** pier **015** CONTROL_DAMPER 21/21 MATCH · ISOLATION_VALVE 13 MATCH / 2 SO; sterile **040** PRV honest SO; FL airport **089** MIXING_VALVE 1 MATCH / 1 SO; lab **021** PRV honest SO. Focused reconcile locks green. `test:workflows` **97/97** after 021 PRV key fix (2026-09-01). Full `reconcileWorkflow` **86/86** with new locks.
 - **Pillar B WEAK leftover SO ceilings:** unlocked thin WEAK sets **066**/ **033**/ **067**/ **078**/ **013** locked as honest SCHEDULE_ONLY (HP/humidifier/GRD, AHU/pump, HX/GRD, FAN, VFD). No false MATCH inflation.
+- **Pillar A/B — STEAM PRV compact titles (shared path):** `PRESSURE_REDUCING_VALVE` altTitleRe `STEAM PRV` / `PRV SCHEDULE` (excludes FLASH TANK). SDSU **11** 208→210 (+2 PRV-1A/1B); reconcile **2/2 MATCH**. Unit + T-VALVE/BAS/HVAC-01 green.
 
 ### Active goal (platform loop)
 
