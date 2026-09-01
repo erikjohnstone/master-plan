@@ -4,38 +4,6 @@ The repository-wide mission is defined by `opentakeoff-corpus/GOAL.md`. Read it
 before planning work anywhere in this repository. `opentakeoff/AGENTS.md`
 continues to govern implementation and verification inside `opentakeoff/`.
 
-## Product positioning — durable authority (not a startup)
-
-**This is not a startup product and must not be planned as one.**
-
-OpenTakeoff is being built as a **Siemens tool** that Siemens gives **for free**
-to:
-
-- Siemens estimating teams
-- Siemens direct sellers
-- mechanical / controls contractors in the Siemens channel
-
-**Phase 1 — takeoff brain.** Deterministic, near-immediate HVAC/BAS/valve
-schedule compile + schedule↔plan reconcile on real PDF sets (shared
-Session+ODL path). That is the wedge and the current corpus loop.
-
-**Phase 2 — Siemens product matching.** Legitimate matching logic from
-takeoff quantities / marks / schedule attributes onto the **Siemens product
-set** (spec Siemens, not a generic multi-vendor estimating marketplace).
-
-**Commercial shape:** unpaid / free tool · Siemens-spec bias · speed-to-takeoff
-first · catalog match second. Do **not** optimize for competing with paid
-horizontal takeoff startups (Togal, Kamai, Rebar, et al.) on CSI-assembly
-estimating OS features unless those features directly serve Siemens-channel
-takeoff → Siemens-product match.
-
-**Corpus note:** `GOAL.md` still forbids Siemens-supplied drawings as *test*
-fixtures (public sets only). That is evaluation hygiene, not product identity.
-
-When strategy conflicts arise (Brick/Haystack, CSI MasterFormat spine, paid
-estimating parity, multi-vendor catalogs), prefer decisions that make
-**free Siemens-channel takeoff → Siemens product match** more true.
-
 ## Shared production path — mandatory pre-change gate
 
 **Before every code addition, removal, or change, ask and answer:**
