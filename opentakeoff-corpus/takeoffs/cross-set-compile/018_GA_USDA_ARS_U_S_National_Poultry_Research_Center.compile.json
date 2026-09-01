@@ -1,0 +1,22 @@
+{
+  "set_id": "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 poultry research \u2014 HP/FAN/GRD/LOUVER/compressor.",
+  "categories": {
+    "HEAT_PUMP": 1,
+    "FAN": 1,
+    "AIR_COMPRESSOR": 1,
+    "GRD": 3,
+    "LOUVER": 1
+  },
+  "totals": {
+    "items": 7
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

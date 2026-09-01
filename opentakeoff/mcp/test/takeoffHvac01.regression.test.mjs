@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { dirname, resolve } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "../src/corpusTakeoff.mjs";
+import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv, HVAC_FAMILY_SPECS } from "../src/corpusTakeoff.mjs";
 import { verifyTakeoffGates, loadTruth } from "../src/verifyTakeoffGates.mjs";
 import { loadFixtureSession } from "./helpers/loadFixtureGraph.mjs";
 
@@ -15,7 +15,7 @@ test("T-HVAC-01 compiler matches frozen truth quantities and cites", async () =>
   const result = compileCorpusTakeoff(session, graph, "hvac_equipment");
 
   assert.equal(result.totals.items, 396);
-  assert.equal(Object.keys(result.categories).length, 22);
+  assert.equal(Object.keys(result.categories).length, Object.keys(HVAC_FAMILY_SPECS).length);
   assert.equal(result.categories.AHU.count, truth.categories.AHU.count);
   assert.equal(result.categories.FCU.count, truth.categories.FCU.count);
   assert.equal(result.categories.VAV.count, truth.categories.VAV.count);

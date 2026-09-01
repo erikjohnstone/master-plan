@@ -1,0 +1,16 @@
+{
+  "set_id": "20_TX_JudsonISD_MEP_Upgrades_Pkg6",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/20_TX_JudsonISD_MEP_Upgrades_Pkg6.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Honest ZERO \u2014 note span 'THE APPLICABLE AHU/RTU' only; no performance equipment schedule.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

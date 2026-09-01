@@ -1,0 +1,15 @@
+{
+  "set_id": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/05_MO_VA_StLouis_AHU_VAV_Replacement.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk VA St Louis — AHU mark AC-57, FCUC fan-coil type, ATU-* air terminals, AIR DEVICE schedules (S/R/E).",
+  "categories": {
+    "AHU": 1,
+    "FCU": 1,
+    "VAV": 12,
+    "GRD": 16
+  },
+  "totals": { "items": 30 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

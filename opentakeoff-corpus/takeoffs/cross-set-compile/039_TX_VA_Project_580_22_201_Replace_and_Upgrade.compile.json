@@ -1,0 +1,16 @@
+{
+  "set_id": "039_TX_VA_Project_580_22_201_Replace_and_Upgrade",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/039_TX_VA_Project_580_22_201_Replace_and_Upgrade.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 replace/upgrade \u2014 no extractable HVAC tables (honest ZERO).",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

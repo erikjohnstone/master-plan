@@ -1,0 +1,16 @@
+{
+  "set_id": "02_UT_FAA_Ogden_AirTrafficControlTower",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/02_UT_FAA_Ogden_AirTrafficControlTower.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Honest ZERO \u2014 rejoined set has floor/mullion schedules only; no HVAC equipment tables extract.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

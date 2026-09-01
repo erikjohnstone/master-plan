@@ -1,0 +1,18 @@
+{
+  "set_id": "049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 IL VA sterile expand \u2014 air compressors only.",
+  "categories": {
+    "AIR_COMPRESSOR": 2
+  },
+  "totals": {
+    "items": 2
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

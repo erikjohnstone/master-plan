@@ -1,0 +1,16 @@
+{
+  "set_id": "15_IA_IowaState_Biorenewables_Lab",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/15_IA_IowaState_Biorenewables_Lab.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Honest ZERO \u2014 tables present are note/span extracts, not HVAC equipment schedules.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

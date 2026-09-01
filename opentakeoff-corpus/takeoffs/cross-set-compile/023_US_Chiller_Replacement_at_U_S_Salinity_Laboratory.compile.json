@@ -1,0 +1,20 @@
+{
+  "set_id": "023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 salinity lab chiller replacement \u2014 AIR_COOLED_CHILLER + PUMP + BUFFER_TANK.",
+  "categories": {
+    "AIR_COOLED_CHILLER": 2,
+    "PUMP": 2,
+    "BUFFER_TANK": 1
+  },
+  "totals": {
+    "items": 5
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

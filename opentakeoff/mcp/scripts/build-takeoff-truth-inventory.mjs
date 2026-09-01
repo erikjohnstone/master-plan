@@ -111,7 +111,7 @@ const hvac = {
 const pointsLists = [];
 for (const table of graph.tables) {
   const title = String(table.title?.text || "");
-  if (!/POINTS LIST|DDC POINTS/i.test(title)) continue;
+  if (!/\bPOINTS\s+LIST\b|\bDDC\s+POINTS\b|\bI\s*\/\s*O\s+LIST\b|\bIO\s+LIST\b/i.test(title)) continue;
   const counts = { AI: 0, AO: 0, BI: 0, BO: 0, other: 0 };
   const items = [];
   for (const row of table.rows || []) {
@@ -140,10 +140,11 @@ const pageMap = sheets.map((sheet) => {
   const tables = graph.tables.filter((t) => t.sheet === sheet.key);
   const hvacTitles = tables
     .map((t) => String(t.title?.text || ""))
-    .filter((t) => t && !/GENERAL NOTES|POINTS LIST|DDC POINTS|VIBRATION|SOUND POWER|PIPING CONSTRUCTION/i.test(t));
+    .filter((t) => t && !/GENERAL NOTES|VIBRATION|SOUND POWER|PIPING CONSTRUCTION/i.test(t)
+      && !/\bPOINTS\s+LIST\b|\bDDC\s+POINTS\b|\bI\s*\/\s*O\s+LIST\b|\bIO\s+LIST\b/i.test(t));
   const basTitles = tables
     .map((t) => String(t.title?.text || ""))
-    .filter((t) => /POINTS LIST|DDC POINTS/i.test(t));
+    .filter((t) => /\bPOINTS\s+LIST\b|\bDDC\s+POINTS\b|\bI\s*\/\s*O\s+LIST\b|\bIO\s+LIST\b/i.test(t));
   return {
     sheet_id: sheet.key,
     sheet_number: sheet.number || null,

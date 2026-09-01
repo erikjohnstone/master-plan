@@ -1,0 +1,16 @@
+{
+  "set_id": "084_SC_H59_N054_FW_Building_112_Chiller_Addition",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/084_SC_H59_N054_FW_Building_112_Chiller_Addition.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 Building 112 chiller addition \u2014 no extractable HVAC schedule tables.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

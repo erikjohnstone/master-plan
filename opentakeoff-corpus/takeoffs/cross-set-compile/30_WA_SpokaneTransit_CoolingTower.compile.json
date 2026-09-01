@@ -1,0 +1,15 @@
+{
+  "set_id": "30_WA_SpokaneTransit_CoolingTower",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/30_WA_SpokaneTransit_CoolingTower.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk CUP HVAC — closed cooling tower, hydronic boiler (BOILER1 mark), HVAC pumps, and VARIABLE FREQUENCY DRIVE schedule (VFD-1..3).",
+  "categories": {
+    "BOILER": 1,
+    "PUMP": 3,
+    "COOLING_TOWER": 1,
+    "VARIABLE_FREQUENCY_DRIVE": 3
+  },
+  "totals": { "items": 8 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

@@ -1,0 +1,21 @@
+{
+  "set_id": "093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades.pdf",
+  "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/093_ME_BGS_Project_3845_Jonesboro_Heat_Pump_Upgrades",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 multipart Jonesboro heat pump \u2014 VRF indoor/outdoor + WH (rejoined).",
+  "categories": {
+    "VRF_INDOOR": 20,
+    "VRF_OUTDOOR": 3,
+    "WATER_HEATER": 1
+  },
+  "totals": {
+    "items": 24
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

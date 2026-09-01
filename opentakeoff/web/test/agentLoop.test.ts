@@ -7,7 +7,7 @@
 //   - malformed model output → {status:"error"} + an error event, never a throw.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { runAgentLoop, parseAssistantTurn, toProviderTools, agentSystemPrompt, MAX_AGENT_ITERATIONS, requiredEvidenceCorrection, toolsForGoal, missingNamedScheduleAttrs, appendNamedScheduleAttrs } from "../src/lib/agentLoop.js";
+import { runAgentLoop, parseAssistantTurn, toProviderTools, agentSystemPrompt, MAX_AGENT_ITERATIONS, requiredEvidenceCorrection, toolsForGoal, missingNamedScheduleAttrs, appendNamedScheduleAttrs, compactSheetGraphForAgent } from "../src/lib/agentLoop.js";
 
 const CFG_A = { endpoint: "http://localhost:9999", apiKey: "k", model: "mock", provider: "anthropic" };
 const CFG_O = { ...CFG_A, provider: "openai" };
@@ -806,6 +806,99 @@ test("installed quantity cannot finish without deterministic count evidence", ()
   `Point mark: AHU-1 HW VALVE POSITION (FEEDBACK) on set.pdf#65\nServes: ${narrative}\nPhysical section: AHU-1 / AHU-2 SECTION on set.pdf#28`), /BAS point mark|does not state that mark/);
 });
 
+test("generic point list takeoff: evidence gate demands compile, then clears after bas_points", () => {
+  const goal = "Can you run a point list takeoff for me?";
+  assert.match(
+    requiredEvidenceCorrection([], goal, "There are about 12 points on the list.")!,
+    /compile_corpus_takeoff.*bas_points/i,
+  );
+  assert.equal(
+    requiredEvidenceCorrection([
+      {
+        name: "compile_corpus_takeoff",
+        out: { kind: "bas_points", takeoff_id: "T-BAS-01", totals: { rows: 12 } },
+      },
+      {
+        name: "query_table",
+        args: { title: "POINTS LIST", row_key: "AI-1" },
+        out: { query: { title: "POINTS LIST", row_key: "AI-1" }, count: 1 },
+      },
+      { name: "highlight_citation", out: { bbox_px: [1, 2, 3, 4] } },
+    ], goal, "BAS points takeoff total: 12 rows from compile_corpus_takeoff (bas_points)."),
+    null,
+    "compiled bas_points must not re-demand title-scan POINTS LIST forever",
+  );
+});
+
+test("find-scale: AS NOTED must not hide numeric detected_scale from sheet_graph", () => {
+  const goal = "Can you find the scale?";
+  assert.match(
+    requiredEvidenceCorrection([], goal, "")!,
+    /list_sheets and sheet_graph|detected_scale/i,
+  );
+  const tools = [
+    {
+      name: "list_sheets",
+      out: {
+        sheets: [
+          { sheet: "set.pdf", scale_set: false },
+          { sheet: "set.pdf#6", scale_set: false, detected_label: "1/8\" = 1'-0\"" },
+        ],
+      },
+    },
+    {
+      name: "sheet_graph",
+      out: {
+        sheets: [
+          { sheet: "set.pdf", role: "unknown" },
+          { sheet: "set.pdf#6", role: "plan", detected_scale: "1/8\" = 1'-0\"" },
+          { sheet: "set.pdf#14", role: "plan", detected_scale: "1/4\" = 1'-0\"" },
+        ],
+      },
+    },
+  ];
+  assert.match(
+    requiredEvidenceCorrection(tools, goal,
+      "The drawing contains SCALE: AS NOTED rather than a numeric ratio, so I cannot locate valve symbols.")!,
+    /numeric scales|AS NOTED/i,
+  );
+  assert.equal(
+    requiredEvidenceCorrection(tools, goal,
+      "Cover says AS NOTED. Plan sheets carry detected scales: set.pdf#6 → 1/8\" = 1'-0\"; set.pdf#14 → 1/4\" = 1'-0\". Use set_scale with that exact label on the sheet you need."),
+    null,
+  );
+});
+
+test("valve symbols: legend-only paints cannot claim all valve types highlighted", () => {
+  const goal = "Scale is set, please go highlight all the valve symbols";
+  // Few paints vs many named types — catch overclaim even without legend tool.
+  assert.match(
+    requiredEvidenceCorrection([
+      { name: "highlight_citation", out: { bbox_px: [10, 20, 30, 40] } },
+      { name: "highlight_citation", out: { bbox_px: [50, 60, 70, 80] } },
+    ], goal,
+      "GATE VALVE · Highlighted\nGLOBE VALVE · Highlighted\nBUTTERFLY VALVE · Highlighted\nCHECK VALVE · Highlighted\nRELIEF VALVE · Highlighted"),
+    /only 2 highlight_citation|Do not invent plan highlights/i,
+  );
+  // Legend inventory + plenty of paints still must not claim plan placements
+  // without a plan sweep.
+  const paints = Array.from({ length: 6 }, (_, i) => ({
+    name: "highlight_citation",
+    out: { bbox_px: [i, i, i + 1, i + 1] },
+  }));
+  assert.match(
+    requiredEvidenceCorrection([
+      {
+        name: "find_legend_symbols",
+        out: { glyphs: [{ caption: "GATE VALVE" }, { caption: "GLOBE VALVE" }] },
+      },
+      ...paints,
+    ], goal,
+      "GATE VALVE · Highlighted\nGLOBE VALVE · Highlighted\nBUTTERFLY VALVE · Highlighted\nCHECK VALVE · Highlighted"),
+    /find_legend_symbols|legend glyphs|plan placements/i,
+  );
+});
+
 test("anthropic-style: scripted tool_use → tools execute → results pair up in ONE user message → done", async () => {
   const { fn, requests } = scriptedFetch([
     { // two parallel tool calls in one turn
@@ -1009,4 +1102,90 @@ test("parseAssistantTurn + toProviderTools are honest about shapes", () => {
   assert.deepEqual(Object.keys(a).sort(), ["description", "input_schema", "name"]);
   const [o] = toProviderTools("openai", TOOLS);
   assert.equal(o.type, "function");
+});
+
+test("compactSheetGraphForAgent keeps detected_scale and schedule titles", () => {
+  const compact = compactSheetGraphForAgent({
+    available: true,
+    sheets: [
+      {
+        sheet: "set.pdf#6",
+        role: "plan",
+        detected_scale: "1/8\" = 1'-0\"",
+        schedules: [{ kind: "equipment", title: "VAV SCHEDULE", rows: 12 }],
+      },
+      { sheet: "set.pdf#1", role: "unknown" },
+    ],
+  });
+  assert.equal(compact.sheet_count, 2);
+  assert.equal(compact.sheets[0].detected_scale, "1/8\" = 1'-0\"");
+  assert.equal(compact.sheets[0].schedules[0].title, "VAV SCHEDULE");
+  assert.deepEqual(compact.numeric_scales, [
+    { sheet: "set.pdf#6", detected_scale: "1/8\" = 1'-0\"" },
+  ]);
+  assert.match(compact.note, /Already computed|treat as read/i);
+});
+
+test("runAgentLoop seeds sheet_graph into the first model request without a model tool call", async () => {
+  const graph = {
+    available: true,
+    sheets: [
+      {
+        sheet: "set.pdf#2",
+        role: "schedule",
+        detected_scale: "1/4\" = 1'-0\"",
+        schedules: [{ kind: "equipment", title: "AHU SCHEDULE", rows: 3 }],
+      },
+    ],
+  };
+  const seedTools = [
+    ...TOOLS,
+    { name: "sheet_graph", description: "whole-set index", input_schema: { type: "object", properties: {} } },
+  ];
+  const executed: string[] = [];
+  const events: any[] = [];
+  const { fn, requests } = scriptedFetch([anthropicDone("Index already present.")]);
+  const res = await runAgentLoop({
+    cfg: CFG_A,
+    goal: "What schedules are on this set?",
+    tools: seedTools,
+    execute: (name) => {
+      executed.push(name);
+      if (name === "sheet_graph") return graph;
+      return {};
+    },
+    onEvent: (ev) => events.push(ev),
+    fetchFn: fn as any,
+  });
+  assert.equal(res.status, "done");
+  assert.deepEqual(executed, ["sheet_graph"]);
+  assert.ok(events.some((e) => e.type === "tool_start" && e.name === "sheet_graph" && e.seeded));
+  assert.ok(events.some((e) => e.type === "tool_end" && e.name === "sheet_graph" && e.seeded));
+  // First provider request already contains seeded tool_use + tool_result.
+  const msgs = requests[0].messages;
+  assert.equal(msgs[0].role, "user");
+  assert.equal(msgs[0].content, "What schedules are on this set?");
+  assert.equal(msgs[1].role, "assistant");
+  assert.equal(msgs[1].content[0].type, "tool_use");
+  assert.equal(msgs[1].content[0].name, "sheet_graph");
+  assert.equal(msgs[2].role, "user");
+  assert.equal(msgs[2].content[0].type, "tool_result");
+  assert.match(msgs[2].content[0].content[0].text, /AHU SCHEDULE/);
+  assert.match(msgs[2].content[0].content[0].text, /1\/4/);
+  assert.match(msgs[2].content[0].content[0].text, /detected_scale/);
+});
+
+test("runAgentLoop seedSheetGraph:false leaves the first request as goal-only", async () => {
+  const { fn, requests } = scriptedFetch([anthropicDone("ok")]);
+  let executed = 0;
+  await runAgentLoop({
+    cfg: CFG_A,
+    goal: "go",
+    tools: TOOLS,
+    seedSheetGraph: false,
+    execute: () => { executed++; return {}; },
+    fetchFn: fn as any,
+  });
+  assert.equal(executed, 0);
+  assert.deepEqual(requests[0].messages, [{ role: "user", content: "go" }]);
 });

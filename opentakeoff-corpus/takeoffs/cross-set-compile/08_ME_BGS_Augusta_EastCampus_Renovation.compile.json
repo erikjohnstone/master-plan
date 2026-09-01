@@ -1,0 +1,16 @@
+{
+  "set_id": "08_ME_BGS_Augusta_EastCampus_Renovation",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/08_ME_BGS_Augusta_EastCampus_Renovation.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Honest ZERO \u2014 window schedule only; no HVAC equipment schedules.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

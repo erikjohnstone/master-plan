@@ -1,0 +1,16 @@
+{
+  "set_id": "056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/056_NY_VA_Project_632_19_106_Renovate_Pharmacy_Spaces.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 NY VA pharmacy \u2014 no extractable HVAC schedules.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "set_id": "033_MN_VA_Project_656_18_301_Construct_Replace",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/033_MN_VA_Project_656_18_301_Construct_Replace.pdf",
+  "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/033_MN_VA_Project_656_18_301_Construct_Replace",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 multipart MN VA construct/replace \u2014 AHU+pumps (rejoined).",
+  "categories": {
+    "AHU": 1,
+    "PUMP": 2
+  },
+  "totals": {
+    "items": 3
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

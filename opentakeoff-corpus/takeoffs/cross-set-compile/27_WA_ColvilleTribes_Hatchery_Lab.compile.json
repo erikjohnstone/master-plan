@@ -1,0 +1,27 @@
+{
+  "set_id": "27_WA_ColvilleTribes_Hatchery_Lab",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/27_WA_ColvilleTribes_Hatchery_Lab.pdf",
+  "kind": "hvac_equipment",
+  "notes": "EQUIPMENT catch-all WSHP/CU/pumps/BS booster; pot feeders; strainer STR-1; FILTER FTR-1 on FILTER & STRAINER (FIN_TUBE titledOnly — no blank/catch-all FTR); LOUVER LV-*. BAS: I/O LIST WHITE STURGEON PLC → 42 device rows (TAG skipped); ANALOG/DIGITAL cells roll to AI=33 / BI=21.",
+  "categories": {
+    "FCU": 1,
+    "ERV": 1,
+    "CONDENSING_UNIT": 1,
+    "HEAT_PUMP": 1,
+    "PUMP": 14,
+    "WATER_HEATER": 1,
+    "FAN": 3,
+    "UNIT_HEATER": 7,
+    "FILTER": 1,
+    "AIR_SEPARATOR": 2,
+    "EXPANSION_TANK": 4,
+    "BUFFER_TANK": 4,
+    "HEAT_EXCHANGER": 4,
+    "CHEMICAL_POT_FEEDER": 2,
+    "STRAINER": 1,
+    "LOUVER": 3
+  },
+  "totals": { "items": 50 },
+  "bas_points": { "rows": 42 },
+  "control_valves": { "items": 0 }
+}

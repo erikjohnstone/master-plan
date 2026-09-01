@@ -1,11 +1,9 @@
 # OpenTakeoff HVAC/BAS Corpus — Goal, Method, and Current State
 
-Last updated: 2026-08-29, ~11:52am, after a session interruption (system
-restart at 3:30am; this Claude Code session resumed at 11:06am with the
-background workers and eval processes it had running lost — their real
-work already merged to git is intact and reflected below; anything still
-in-flight at the moment of interruption is marked PENDING/UNVERIFIED, not
-claimed as done).
+Last updated: 2026-09-01 — autonomous platform loop expanded to include the
+**full** Vol2 bulk corpus (82 INDEX sets) alongside Vol1; Pillars C and D
+added after A/B; see §8. Older keyed-corpus history below is retained for
+provenance.
 
 ## Current execution policy (supersedes older worker references below)
 
@@ -278,10 +276,56 @@ that discloses its real limits.
 
 ## 8. Completion state and next expansion
 
-The current corpus goal is complete at 100% across takeoff outcomes,
-reference cells, and graph row-symbol outcomes. Future work should add new
-sets/documents and preserve this gate, not weaken the outcome model. Every
-future corpus gate remains forced-cold and reports takeoff, applicable
-installed rows, honest refusals, reference, graph, quantity delta, missing
-rows, and false additions together. Continue directly in the coordinator VM;
-do not dispatch workers or subagents.
+The **keyed corpus** goal is complete at 100% across takeoff outcomes,
+reference cells, and graph row-symbol outcomes. That is a proving ground,
+not the platform finish line — real shops upload unfamiliar blueprint sets
+daily.
+
+### Autonomous platform loop (2026-08-31+, runs until user halts)
+
+**Foundation (non-negotiable):** **Trust and genuine agnostic blueprint
+workflows are our main goal and our foundation.** Every answer must be
+deterministic, cite-backed, and set-agnostic — the same shared Session+ODL
+path for UI and MCP, honest refusal when evidence is missing, no
+corpus-specific hardcodes, no answer-steering prompts, no inflated scores.
+Portable schedule truth + accurate plan grounding + commercial-grade
+deliverables on *any* real upload is the product bar; the corpus is how we
+prove it.
+
+**Authority:** `opentakeoff-corpus/takeoffs/NEXT_GOAL_LOOP.md` · **Coordinator-only**
+(no cloud workers). **Shared path mandatory** — UI and MCP consume the same
+Session + ODL pipeline.
+
+**Four pillars (sequenced):**
+
+| Pillar | Scope | Status |
+|---|---|---|
+| **A — Cross-set compile** | Set-agnostic HVAC/BAS/valve **schedule compile** across Vol1 (~31) + Vol2 (all 82 INDEX sets). Honest ZERO/WEAK when no extractable tables. | **Largely complete** — 82/82 Vol2 + Vol1 keyed; family/title/BAS depth continues on WEAK sets. |
+| **B — Schedule↔plan reconcile** | Contractor-grade reconcile (`MATCH` / `SCHEDULE_ONLY` / `PLAN_ONLY` / honest refuse) with cites; `T-VALVE-01` N=5; inline motif; Session-unified plan tools + prewarm. | **In progress** — workflow shipped; deepening Vol2 MEAT rejoin locks. |
+| **C — Valve + BAS workflow depth** | Go **deep and truthful** on valve takeoff workflows (air + water valves, dampers, actuators) **and** BAS workflows (point lists, I/O rollups, sequence of operations, equipment↔point↔location). Full contractor deliverables — not schedule stubs. | **Queued after A+B bar met** — see `NEXT_GOAL_LOOP.md` WP7–WP8. |
+| **D — Plan grounding depth** | Go **deep on grounding**: symbol counts, mark sweeps, and “how many on plan” answers must be **highlighted and accurate** — every cited location visible, no legend-only overclaim, no silent misses. | **Queued after A+B bar met** — see `NEXT_GOAL_LOOP.md` WP9. |
+
+**Objective (Pillars A+B, current):** Set-agnostic HVAC/BAS compile +
+schedule↔plan reconcile across the **full** bulk US vector corpus — Vol1
+(`opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets`, ~30 verified sets) **and**
+Vol2 (`opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2`, **all 82 INDEX sets**:
+69 single-file PDFs plus multipart/split deliveries rejoined when needed).
+Every Vol2 set is vector-dense with proven HVAC **and** BAS/controls content;
+treat the entire volume as Pillar A stress, not a sample. Keep
+`T-VALVE-01` N=5 lock; inline motif in `sweep_schedule_row`; Session-unified
+plan tools + graph prewarm; all prior locks green.
+
+**Bulk policy:** Batching is only an operational cadence for probe → key →
+fix → negative-control. Scope is **not** “first 5–10 of Vol2.” Honest
+ZERO/WEAK compile totals remain correct when a set has no extractable HVAC
+schedule tables. Fixes stay set-agnostic on the shared path — never per-PDF
+hardcodes or corpus-id special cases.
+
+**Cadence:** Verified batches → update `PROGRESS.md` → `test:workflows` +
+focused tests; full Vol1+Vol2 stress drives set-agnostic family/title/BAS
+fixes. Pillars C and D start only when A+B success metrics in
+`NEXT_GOAL_LOOP.md` §6 are independently verified.
+
+Future corpus keys expand the proving ground without weakening the outcome
+model. Every gate remains forced-cold with full metric reporting. Continue
+in the coordinator VM; do not dispatch workers or subagents.

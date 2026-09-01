@@ -6,6 +6,7 @@
  * / point_type_counts in the UI — import this.
  */
 import { rowKeyAnswersFor } from "./sheetgraph.ts";
+import { queryTitleMatchesNeedle } from "./scheduleTitleMatch.mjs";
 
 /**
  * @param {object} graph - SheetGraph with .tables / .available
@@ -42,21 +43,7 @@ export function queryTable(graph, opts = {}) {
   const valueNeedle = cell_value?.trim().toUpperCase().replace(/\s+/g, " ");
   const containsNeedle = cell_contains?.trim().toUpperCase().replace(/\s+/g, " ");
 
-  const titleMatches = (rawTitle) => {
-    if (!titleNeedle) return true;
-    const t = (rawTitle || "").toUpperCase().replace(/\s+/g, " ").trim();
-    if (!t) return false;
-    const base = t.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
-    if (base === titleNeedle || t === titleNeedle) return true;
-    if (titleNeedle.length < 12) return false;
-    if (base.startsWith(`${titleNeedle} `) || t.startsWith(`${titleNeedle} `)) return true;
-    if (!t.includes(titleNeedle) && !base.includes(titleNeedle)) return false;
-    const idx = Math.min(
-      t.includes(titleNeedle) ? t.indexOf(titleNeedle) : 999,
-      base.includes(titleNeedle) ? base.indexOf(titleNeedle) : 999,
-    );
-    return idx === 0;
-  };
+  const titleMatches = (rawTitle) => queryTitleMatchesNeedle(rawTitle, titleNeedle || "");
 
   const allRaw = (graph.tables || []).flatMap((table) => {
     if (!titleMatches(table.title?.text || "")) return [];
@@ -121,8 +108,8 @@ export function queryTable(graph, opts = {}) {
 
   const familyKeyRe = (titleStr) => {
     const t = String(titleStr || "").toUpperCase();
-    if (/VOLUME CONTROL BOX|VARIABLE AIR VOLUME/.test(t)) return /^VAV[\s\-]/i;
-    if (/FAN\s*COIL/.test(t)) return /^FCU[\s\-]/i;
+    if (/VOLUME CONTROL BOX|VARIABLE AIR VOLUME|AIR TERMINAL BOX/.test(t)) return /^VAV[\s\-]/i;
+    if (/FAN\s*COIL/.test(t)) return /^(?:FCU|EV)[\s\-]/i;
     if (/AIR HANDLING UNIT/.test(t) && !/DEDICATED/.test(t)) return /^AHU[\s\-]/i;
     if (/DEDICATED OUTDOOR AIR/.test(t)) return /^DOAH[\s\-]/i;
     if (/BOILER/.test(t)) return /^B[\s\-]/i;

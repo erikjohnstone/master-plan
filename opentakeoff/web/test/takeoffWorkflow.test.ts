@@ -6,6 +6,7 @@ import {
   classifyTakeoffIntent,
   corpusCompileKind,
   namedPointsListTitles,
+  scheduleFamilyNeedles,
   suggestedScheduleTitles,
   valveServiceFromGoal,
   advanceTakeoffWorkflow,
@@ -343,9 +344,34 @@ test("single POINTS LIST title still routes to points_takeoff", () => {
   assert.match(state.nextMove || "", /POINTS LIST DOAH-TI/i);
 });
 
+test("generic point list takeoff routes to corpus_bas compile (no spot_cites deadlock)", () => {
+  const g = "Can you run a point list takeoff for me?";
+  assert.equal(namedPointsListTitles(g).length, 0);
+  assert.equal(corpusCompileKind(g), "bas_points");
+  assert.equal(classifyTakeoffIntent(g), "corpus_bas");
+  const state = advanceTakeoffWorkflow("corpus_bas", [
+    { name: "sheet_graph", out: { sheets: [{ id: "M-601" }] } },
+  ], g);
+  assert.equal(state.phase, "compile");
+  assert.ok(state.allowedTools?.includes("compile_corpus_takeoff"));
+  assert.equal(
+    isIllegalWorkflowTransition(state, "compile_corpus_takeoff", { kind: "bas_points" }),
+    false,
+  );
+  // Defense: if still on points_takeoff with empty titles, require title_scans
+  // (never jump straight to spot_cites).
+  const defensive = advanceTakeoffWorkflow("points_takeoff", [
+    { name: "sheet_graph", out: { sheets: [] } },
+  ], g);
+  assert.equal(defensive.phase, "title_scans");
+  assert.match(defensive.nextMove || "", /POINTS LIST|bas_points/i);
+});
+
 test("suggestedScheduleTitles maps family words to industry schedule needles", () => {
   const ahu = suggestedScheduleTitles("How many AHUs are on the air handling schedule?");
   assert.ok(ahu.some((t) => /AIR HANDLING/i.test(t)));
+  const ahuHandler = scheduleFamilyNeedles("AHU takeoff on air handler heat pump schedule");
+  assert.ok(ahuHandler.some((n) => n.titleRe.test("AIR HANDLER HEAT PUMP SCHEDULE (WITH ELECTRIC HEAT)")));
   const boiler = suggestedScheduleTitles("Boiler schedule takeoff — totals and capacity");
   assert.ok(boiler.some((t) => /BOILER/i.test(t)));
   const state = advanceTakeoffWorkflow(
@@ -369,6 +395,9 @@ test("remaining schedule families route + suggest query_table-viable titles", ()
     ["Cabinet unit heater takeoff", /CABINET UNIT HEATER SCHEDULE/i],
     ["Air separator schedule takeoff", /AIR SEPARATOR SCHEDULE/i],
     ["Expansion tank schedule takeoff", /EXPANSION TANK SCHEDULE/i],
+    ["Fume hood VAV damper / ECV schedule takeoff", /FUME HOOD VARIABLE AIR VOLUME DAMPER SCHEDULE/i],
+    ["VFD / variable frequency drive schedule takeoff", /VARIABLE FREQUENCY DRIVE SCHEDULE/i],
+    ["Ceiling fan schedule takeoff", /CEILING FAN SCHEDULE/i],
   ];
   for (const [goal, titleRe] of cases) {
     assert.equal(classifyTakeoffIntent(goal), "equipment_schedule", goal);

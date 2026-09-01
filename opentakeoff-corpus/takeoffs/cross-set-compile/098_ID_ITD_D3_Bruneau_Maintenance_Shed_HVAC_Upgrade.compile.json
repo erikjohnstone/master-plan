@@ -1,0 +1,21 @@
+{
+  "set_id": "098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade.pdf",
+  "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/098_ID_ITD_D3_Bruneau_Maintenance_Shed_HVAC_Upgrade",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 multipart Bruneau shed HVAC \u2014 FCU/fan/UH (rejoined).",
+  "categories": {
+    "FCU": 2,
+    "FAN": 3,
+    "UNIT_HEATER": 4
+  },
+  "totals": {
+    "items": 9
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

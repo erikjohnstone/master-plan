@@ -1,0 +1,16 @@
+{
+  "set_id": "006_US_U2607_01_Interior_Renovations_C_Wing_Updates",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/006_US_U2607_01_Interior_Renovations_C_Wing_Updates.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 C-wing \u2014 no extractable HVAC tables (honest ZERO).",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

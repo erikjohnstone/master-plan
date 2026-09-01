@@ -1,0 +1,24 @@
+{
+  "set_id": "federal-mech",
+  "source_file": "raw/federal-attachment4-mechanical.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Sibling FCU titles (HOT WATER / DX) with EV-* marks; GENERAL FAN SCHEDULE; PUMP SCHEDULE; CHILLER; UNIT HEATER; AIR-COOLED CONDENSING UNIT; FIN TUBE RADIATION (FTR-*); ARCHITECTURAL LOUVERED PENTHOUSE (ALP-*). AHU fan schedule still excluded by design.",
+  "categories": {
+    "AHU": 1,
+    "FCU": 7,
+    "VAV": 58,
+    "CONDENSING_UNIT": 6,
+    "AIR_COOLED_CHILLER": 1,
+    "BOILER": 2,
+    "PUMP": 11,
+    "FAN": 4,
+    "UNIT_HEATER": 2,
+    "FIN_TUBE_RADIATION": 4,
+    "AIR_SEPARATOR": 2,
+    "DUCT_SILENCER": 2,
+    "LOUVERED_PENTHOUSE": 3
+  },
+  "totals": { "items": 103 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

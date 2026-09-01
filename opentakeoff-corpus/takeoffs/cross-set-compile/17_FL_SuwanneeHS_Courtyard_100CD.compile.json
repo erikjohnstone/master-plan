@@ -1,0 +1,12 @@
+{
+  "set_id": "17_FL_SuwanneeHS_Courtyard_100CD",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/17_FL_SuwanneeHS_Courtyard_100CD.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk school courtyard — ROOF TOP UNIT SCHEDULE only (1 RTU). AHU/VTU legend on sheet 13 is not a performance schedule (honest WEAK).",
+  "categories": {
+    "RTU": 1
+  },
+  "totals": { "items": 1 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

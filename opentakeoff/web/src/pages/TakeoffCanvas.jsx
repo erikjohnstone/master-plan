@@ -99,7 +99,7 @@ import { findLegendGlyphs } from "../lib/legendlearn.ts";
 // tapered duct run has no independent whole-shape perimeter of its own; see
 // inlinemotif.ts's own header comment for the real, measured reason
 // symbol_sweep's whole-shape fingerprint under-scores real siblings of it.
-import { fingerprintInlineMotif, sweepInlineMotif } from "../lib/inlinemotif.ts";
+import { fingerprintInlineMotif, sweepInlineMotif, corroborateInlineMotif, classifyInlineMotifMatches } from "../lib/inlinemotif.ts";
 import { labelPlacements } from "../lib/symbollabels";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
@@ -122,7 +122,12 @@ import { detectCandidateRule, buildRuleFromSeed, applyRuleToProject } from "../l
 import { deriveTransitionRuns, transitionRefusal } from "../lib/transitions";
 import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, downloadText } from "../lib/totals.js";
 import { buildXlsx } from "../lib/xlsx.js";
-import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "../lib/corpusTakeoff.mjs";
+import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv, HVAC_FAMILY_SPECS } from "../lib/corpusTakeoff.mjs";
+import {
+  reconcileScheduleFamilyWithSweeps,
+  reconcileRowsToCsv,
+  familyNeedleFromSpecs,
+} from "../lib/schedulePlanReconcile.mjs";
 import { queryTable } from "../lib/queryTable.mjs";
 import { measurementBreakdown } from "../lib/measurementBreakdown.js";
 import { buildSheetDxf, dxfFileName, DXF_MIME } from "../lib/dxf.js";
@@ -804,6 +809,10 @@ export default function TakeoffCanvas() {
   // Whole-set PDF text index progress (every page) — Agent/schedule workflows
   // need this; viewport "Rendering sheet…" is NOT the same thing.
   const [indexProgress, setIndexProgress] = useState({ done: 0, total: 0, phase: "idle" }); // idle | text | ready
+  // Session+ODL sheet graph prewarm (WP5) — warms after text index, non-blocking.
+  const [graphPrewarm, setGraphPrewarm] = useState({ phase: "idle" }); // idle | warming | ready | error
+  const graphPrewarmSigRef = useRef("");
+  const graphPrewarmBusyRef = useRef(false);
   const commitMsg = commitMsgState.text;   // misnamed for history; just the message bar
   const setCommitMsg = (text) => setCommitMsgState({ text });
   // transient means transient: every message dismisses itself after ~6s (a
@@ -2111,6 +2120,8 @@ export default function TakeoffCanvas() {
   useEffect(() => {
     if (!sheets.length) {
       setIndexProgress({ done: 0, total: 0, phase: "idle" });
+      setGraphPrewarm({ phase: "idle" });
+      graphPrewarmSigRef.current = "";
       return;
     }
     indexWholeSet(sheets);
@@ -6859,6 +6870,63 @@ export default function TakeoffCanvas() {
     return await res.json();
   }
 
+  /** Shared Session plan tools — same path as MCP (WP5). Falls back to local port when endpoint unavailable. */
+  async function buildProductionFormData(extraFields = {}) {
+    const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
+    if (!names.length) return null;
+    const fd = new FormData();
+    for (const [k, v] of Object.entries(extraFields)) {
+      if (v != null && v !== "") fd.append(k, String(v));
+    }
+    for (const name of names) {
+      const bytes = await store.loadPdfData(name);
+      fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
+    }
+    return fd;
+  }
+
+  async function fetchProductionSweepScheduleRow(tag) {
+    const fd = await buildProductionFormData({ tag });
+    if (!fd) return null;
+    try {
+      const res = await fetch("/__ot/sweep-schedule-row", { method: "POST", body: fd });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch {
+      return null;
+    }
+  }
+
+  async function fetchProductionCountMarks(marksOpt) {
+    const fields = {};
+    if (marksOpt?.length) fields.marks = marksOpt.join(",");
+    const fd = await buildProductionFormData(fields);
+    if (!fd) return null;
+    try {
+      const res = await fetch("/__ot/count-marks", { method: "POST", body: fd });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch {
+      return null;
+    }
+  }
+
+  async function fetchProductionReconcileSchedulePlan(opts = {}) {
+    const fields = {};
+    if (opts.family) fields.family = String(opts.family).trim();
+    if (opts.familySweepAll) fields.familySweepAll = "1";
+    if (opts.tags?.length) fields.tags = opts.tags.join(",");
+    const fd = await buildProductionFormData(fields);
+    if (!fd) return null;
+    try {
+      const res = await fetch("/__ot/reconcile-schedule-plan", { method: "POST", body: fd });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch {
+      return null;
+    }
+  }
+
   async function fetchProductionCorpusTakeoff(kind, opts = {}) {
     const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
     if (!names.length) throw new Error("No PDF loaded");
@@ -6930,6 +6998,49 @@ export default function TakeoffCanvas() {
     }
     return await res.json();
   }
+
+  // Background Session+ODL graph prewarm once PDF text index is ready — Agent
+  // compile / query_table / reconcile hit a warm cache instead of cold-starting
+  // the production endpoint on first tool call (shared path with MCP).
+  useEffect(() => {
+    if (indexProgress.phase !== "ready" || !sheets.length) {
+      if (!sheets.length) setGraphPrewarm({ phase: "idle" });
+      return;
+    }
+    const sig = sheets.map((s) => `${s.name}:${s.rev ?? 1}`).join("|");
+    if (agentGraphCacheRef.current && agentGraphCacheKeyRef.current === sig
+      && agentGraphCacheRef.current.__production) {
+      graphPrewarmSigRef.current = sig;
+      setGraphPrewarm({ phase: "ready" });
+      return;
+    }
+    if (graphPrewarmBusyRef.current && graphPrewarmSigRef.current === sig) return;
+    graphPrewarmBusyRef.current = true;
+    graphPrewarmSigRef.current = sig;
+    setGraphPrewarm({ phase: "warming" });
+    let cancelled = false;
+    (async () => {
+      try {
+        const prod = await fetchProductionSheetGraph();
+        if (cancelled) return;
+        if (prod?.tables || prod?.available) {
+          prod.__production = true;
+          agentGraphCacheRef.current = prod;
+          agentGraphCacheKeyRef.current = sig;
+          setGraphPrewarm({ phase: "ready" });
+        } else {
+          setGraphPrewarm({ phase: "error", message: "empty graph" });
+        }
+      } catch (e) {
+        if (!cancelled) {
+          setGraphPrewarm({ phase: "error", message: String(e?.message || e) });
+        }
+      } finally {
+        graphPrewarmBusyRef.current = false;
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [indexProgress.phase, sheets]);
 
   async function ensureAgentGraph() {
     const sig = sheets.map((s) => `${s.name}:${s.rev ?? 1}`).join("|");
@@ -7011,6 +7122,9 @@ export default function TakeoffCanvas() {
         sheet: s.key, role: s.role, confidence: s.confidence,
         ...(s.evidence ? { evidence: wireEvidence(s.evidence) } : {}),
         ...(s.building ? { building: s.building } : {}),
+        ...(agentStateRef.current.detectedScales[s.key]?.label
+          ? { detected_scale: agentStateRef.current.detectedScales[s.key].label }
+          : {}),
         schedules: s.schedules.map((t) => ({
           kind: t.kind, title: t.title, rows: t.rows, region: wireBoxNorm(t.region, dimsBySheet.get(s.key)),
           ...(t.continues ? { continues: t.continues } : {}),
@@ -7277,6 +7391,62 @@ export default function TakeoffCanvas() {
     };
   }
 
+  /** Schedule↔plan reconcile — shared schedulePlanReconcile + sweep_schedule_row path (WP4). */
+  async function agentReconcileSchedulePlan(opts = {}) {
+    const family = opts.family ? String(opts.family).trim() : null;
+    const remote = await agentMcpTool("reconcile_schedule_plan", { family });
+    if (remote && !remote.error) return remote;
+
+    const prod = await fetchProductionReconcileSchedulePlan(opts);
+    if (prod && !prod.error && Array.isArray(prod.rows)) {
+      const csv = reconcileRowsToCsv(prod.rows);
+      if (opts.download !== false && prod.rows.length) {
+        const base = `${exportBaseName()}.reconcile-${(family || "all").toLowerCase()}`;
+        downloadText(`${base}.csv`, csv, "text/csv");
+      }
+      return { ...prod, csv, path: "production_session" };
+    }
+
+    const g = await ensureAgentGraph();
+    if (!g.available) {
+      return { error: "This set has no text layer (a scan) — reconcile needs schedule tables and plan sweeps." };
+    }
+    if (!family) {
+      return {
+        error: "Pass family to scope reconcile (e.g. VAV, FCU, AHU). Whole-set reconcile requires the MCP or production Session path.",
+      };
+    }
+    const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
+    if (!needle) {
+      return { rows: [], summary: { total: 0, match: 0, schedule_only: 0, plan_only: 0 }, family_filter: family };
+    }
+    const sessionAdapter = {
+      sweepScheduleRow: async (rowTag, sweepOpts) => {
+        const r = await agentSweepScheduleRow(rowTag, sweepOpts);
+        if (r?.error) throw new Error(r.error);
+        if (r.found != null) return r;
+        return {
+          found: r.total_found ?? 0,
+          sheets: (r.per_sheet || r.sheets || []).map((ps) => ({
+            sheet: ps.sheet,
+            matches: ps.matches || [],
+          })),
+        };
+      },
+    };
+    const result = await reconcileScheduleFamilyWithSweeps(sessionAdapter, g, needle, {
+      tags: opts.tags,
+      evaluationFast: opts.evaluationFast !== false,
+      sweepAll: !!opts.familySweepAll && !opts.tags?.length,
+    });
+    const csv = reconcileRowsToCsv(result.rows);
+    if (opts.download !== false && result.rows.length) {
+      const base = `${exportBaseName()}.reconcile-${(family || "all").toLowerCase()}`;
+      downloadText(`${base}.csv`, csv, "text/csv");
+    }
+    return { ...result, csv, path: "shared_session_sweep" };
+  }
+
   // Playwright / primary-agent UI demos call the same compile path the Agent
   // tool uses — no blueprint hardcoding; works on whatever plan is loaded.
   // Re-assigns every render so closures stay fresh. Do NOT delete in cleanup:
@@ -7284,12 +7454,14 @@ export default function TakeoffCanvas() {
   useEffect(() => {
     window.__opentakeoff = {
       compileCorpusTakeoff: (kind, opts) => agentCompileCorpusTakeoff(kind, opts),
+      reconcileSchedulePlan: (opts) => agentReconcileSchedulePlan(opts),
       showCompiledTakeoff,
       openAgent: () => setAgentOpen(true),
       openTakeoff: () => setShowTakeoffData(true),
       lastCorpusTakeoff: () => lastCorpusTakeoffMeta,
       takeoffRowCount: () => agentTakeoffRows.length,
       indexProgress: () => indexProgress,
+      graphPrewarm: () => graphPrewarm,
       debugGraph: async () => {
         const g = await ensureAgentGraph();
         return {
@@ -7372,115 +7544,14 @@ export default function TakeoffCanvas() {
   const canonMark = (k) => (k || "").trim().toUpperCase().replace(/\s+/g, "");
 
   async function agentCountMarks(marksOpt) {
-    const g = await ensureAgentGraph();
-    if (!g.available) return { error: "This set has no text layer (a scan) — the census reads drawn tag text, so it cannot run. Try symbol_sweep on a seed instance instead." };
-
-    const rowCite = new Map();
-    for (const tb of g.tables) {
-      const table = tb.title?.text || `${tb.kind} schedule`;
-      for (const row of tb.rows) {
-        for (const part of canonMark(row.key).split("/").filter(Boolean)) {
-          if (!rowCite.has(part)) rowCite.set(part, { sheet: tb.sheet, key: row.key, table });
-        }
-      }
-    }
-    let marks;
-    if (marksOpt?.length) {
-      marks = [...new Set(marksOpt.map(canonMark).filter(Boolean))];
-    } else {
-      marks = [...rowCite.keys()].filter((k) => MARK_RE.test(k)).sort();
-      if (!marks.length) return { error: "No mark-shaped schedule row keys in the set to census — state the marks yourself, e.g. marks: [\"S1\", \"R1\"]." };
-    }
-
-    const roleOf = new Map(g.sheets.map((s) => [s.key, s.role]));
-    const panels = agentStateRef.current.panels.filter((p) => p.img.w);
-    const skipped = [];
-    const planPanels = [];
-    for (const p of panels) {
-      const role = roleOf.get(p.key) ?? "unknown";
-      if (role === "plan") planPanels.push(p);
-      else skipped.push({ sheet: p.key, role, reason: role === "unknown" ? "role unknown — tags here are not censused" : `a ${role} sheet — tags here are reference text, never installed work` });
-    }
-    if (!planPanels.length) return { error: "No plan-role sheet is open — sheet_graph shows each open sheet's role and evidence." };
-
-    const tableRegionsBySheet = new Map();
-    for (const tb of g.tables) {
-      const arr = tableRegionsBySheet.get(tb.sheet) || [];
-      arr.push(tb.region);
-      tableRegionsBySheet.set(tb.sheet, arr);
-    }
-
-    const perMark = new Map(marks.map((m) => [m, { counted: [], withheld: [] }]));
-    let excludedInTables = 0;
-    const perSheetRows = [];
-
-    for (const p of planPanels) {
-      const spans = await ensureTextSpans(p.key);
-      const regions = tableRegionsBySheet.get(p.key) || [];
-      const values = spans.filter((sp) => VAL_RE.test(sp.str.trim()));
-      const segs = vectorSegsRef.current.get(p.key);
-      const counts = {};
-      for (const m of marks) {
-        const rec = perMark.get(m);
-        for (const sp of spans) {
-          if (canonMark(sp.str) !== m) continue;
-          const cx = (sp.x0 + sp.x1) / 2, cy = (sp.y0 + sp.y1) / 2;
-          const h = Math.max(sp.y1 - sp.y0, 6);
-          if (regions.some((r) => cx >= r[0] && cx <= r[2] && cy >= r[1] && cy <= r[3])) { excludedInTables++; continue; }
-          const at = [+(cx / p.img.w).toFixed(5), +(cy / p.img.h).toFixed(5)];
-          // Two real pairing shapes — see mcp/src/session.ts's countMarks for
-          // the full real-corpus measurement (kept in lockstep, tool-parity):
-          // a value stacked BELOW the tag, or a value beside it on the SAME
-          // baseline in a two-cell box row ("CD-1 | 85", real, found live on
-          // the baker-county-eoc corpus through this very agent).
-          const paired = values.find((v) =>
-            (Math.abs((v.x0 + v.x1) / 2 - cx) <= Math.max(sp.x1 - sp.x0, 1.5 * h) &&
-             v.y0 >= sp.y1 - 0.4 * h && v.y0 <= sp.y1 + 2.4 * h) ||
-            (Math.abs(v.y0 - sp.y0) <= 0.3 * h &&
-             v.x0 >= sp.x1 - 0.2 * h && v.x0 - sp.x1 <= 1.5 * h));
-          if (paired) {
-            rec.counted.push({ at, value: paired.str.trim(), sheet: p.key });
-            counts[m] = (counts[m] || 0) + 1;
-          } else {
-            let n = 0;
-            if (segs) {
-              const pad = 2.5 * h;
-              const bx0 = sp.x0 - pad, by0 = sp.y0 - pad, bx1 = sp.x1 + pad, by1 = sp.y1 + pad;
-              for (let i = 0; i + 3 < segs.length && n < 3; i += 4) {
-                if (segs[i] >= bx0 && segs[i] <= bx1 && segs[i + 1] >= by0 && segs[i + 1] <= by1 &&
-                    segs[i + 2] >= bx0 && segs[i + 2] <= bx1 && segs[i + 3] >= by0 && segs[i + 3] <= by1) n++;
-              }
-            }
-            rec.withheld.push({
-              at, sheet: p.key,
-              reason: n >= 3
-                ? "tag amid linework but no paired value — may be a device labeled without one, or a legend/detail reference; look before counting it"
-                : "bare tag text — no paired value, no adjacent linework; likely a note mention, not an instance",
-            });
-          }
-        }
-      }
-      perSheetRows.push({ sheet: p.key, counts });
-    }
-
-    const cap = (a, n) => (a.length > n ? { list: a.slice(0, n), elided: a.length - n } : { list: a, elided: 0 });
+    const remote = await agentMcpTool("count_marks", marksOpt?.length ? { marks: marksOpt } : {});
+    if (remote) return remote;
+    const prod = await fetchProductionCountMarks(marksOpt);
+    if (prod && !prod.error) return prod;
     return {
-      marks: marks.map((m) => {
-        const rec = perMark.get(m);
-        const cite = rowCite.get(m);
-        const c = cap(rec.counted, 150);
-        const w = cap(rec.withheld, 60);
-        return {
-          mark: m, count: rec.counted.length,
-          ...(cite ? { row: cite } : { unscheduled: true }),
-          occurrences: c.list, ...(c.elided ? { occurrences_elided: c.elided } : {}),
-          withheld: w.list, ...(w.elided ? { withheld_elided: w.elided } : {}),
-        };
-      }),
-      total: [...perMark.values()].reduce((n, r) => n + r.counted.length, 0),
-      per_sheet: perSheetRows,
-      ...(excludedInTables ? { excluded_in_tables: excludedInTables } : {}),
-      skipped,
+      error: "Production count_marks (Session path) unavailable. "
+        + "Use the MCP bridge (opentakeoff_mcp_endpoint) or ensure /__ot/count-marks is reachable — "
+        + "the browser geometric fork is disabled for quantity/cite parity with MCP.",
     };
   }
 
@@ -7511,6 +7582,7 @@ export default function TakeoffCanvas() {
    * matching MCP's own sweep_schedule_row exactly — that's symbol_sweep's
    * own opt-in, not wired into this tool on either side. */
   async function agentSweepScheduleRow(tag, opts = {}) {
+    const t = canonMark(tag);
     const remote = await agentMcpTool("sweep_schedule_row", {
       tag,
       tagged_only: true,
@@ -7518,168 +7590,12 @@ export default function TakeoffCanvas() {
       mirror: opts.mirror,
     });
     if (remote) return remote;
-    const g = await ensureAgentGraph();
-    if (!g.available) return { error: "This set has no text layer (a scan) — schedule rows cannot be read." };
-    const t = canonMark(tag);
-    if (!t) return { error: "Pass a schedule-row tag as drawn, e.g. sweep_schedule_row { tag: \"T1\" }." };
-
-    const rowHits = g.tables.flatMap((tb) => tb.rows.filter((r) => rowKeyAnswersFor(r.key, t)).map((r) => ({ tb, r })));
-    if (!rowHits.length) {
-      const found = g.tables.map((x) => {
-        const keys = x.rows.map((row) => row.key).slice(0, 12).join(", ");
-        return `${x.kind} on ${x.sheet} (${x.rows.length} rows: ${keys}${x.rows.length > 12 ? ", …" : ""})`;
-      }).join(" | ");
-      return { error: `No schedule row "${t}" in the set — tables found: ${found || "none"}.` };
-    }
-    if (rowHits.length > 1) return { error: `Ambiguous: ${rowHits.length} schedule rows carry the key "${t}" — the same mark defined twice cannot seed one sweep. Marquee the marker yourself with symbol_sweep.` };
-    const { tb, r } = rowHits[0];
-    const table = tb.title?.text || `${tb.kind} schedule`;
-    const siblings = [...new Set(g.tables.flatMap((x) => x.rows.flatMap((row) => canonMark(row.key).split("/").filter(Boolean))))].filter((k) => k !== t).sort();
-
-    // Whole-set (maturity plan Phase 1, item 4): every PLAN-role sheet
-    // sheet_graph knows about, not just whichever happen to be rendered
-    // right now — the schedule tag itself says which sheets to check
-    // (g.sheets, built from the whole-set text index), so this no longer
-    // waits on a human having opened/arranged them as tabs first.
-    const skipped = [];
-    const planKeys = [];
-    const ordOf = new Map(g.sheets.map((s, i) => [s.key, i]));
-    for (const s of g.sheets) {
-      if (s.role === "plan") planKeys.push(s.key);
-      else skipped.push({ sheet: s.key, role: s.role, reason: s.role === "unknown" ? "role unknown — instances here are not counted" : `a ${s.role} sheet — instances here are reference drawings, never installed work` });
-    }
-    if (!planKeys.length) return { error: "No plan-role sheet in the set — sheet_graph shows every sheet's role and evidence." };
-
-    async function occOf(key, mark) {
-      const spans = await ensureTextSpans(key);
-      const exact = spans.filter((sp) => canonMark(sp.str) === mark)
-        .map((sp) => ({ cx: (sp.x0 + sp.x1) / 2, cy: (sp.y0 + sp.y1) / 2, h: Math.max(sp.y1 - sp.y0, 6), bbox: [sp.x0, sp.y0, sp.x1, sp.y1] }));
-      // compoundTagOcc's own single-span compound labels ("R1 /C-11") can
-      // never coincide with an exact match's own span (equality vs.
-      // strictly-longer), so it's merged in ALONGSIDE exact unconditionally
-      // — mirrors mcp/src/session.ts's identical fix, both sides calling the
-      // SAME symbolsweep.ts functions so they can never silently disagree.
-      const merged = [...exact, ...compoundTagOcc(spans, mark)];
-      // Fallback only — a real drawn tag ALSO, separately, routinely splits
-      // across multiple SHORTER text runs (see fragmentedTagOcc's own header
-      // comment for the two real, different-shaped cases this was found
-      // against), and never fires when exact/compound already found
-      // something.
-      const fragmented = fragmentedTagOcc(spans, mark);
-      // Third tier — mirrors mcp/src/session.ts's identical fix: a SEPARATE
-      // deeper same-row chain (deepHyphenChainTagOcc's own header comment),
-      // never invoked unless fragmentedTagOcc's own unmodified search
-      // already found nothing.
-      const occ = merged.length ? merged : (fragmented.length ? fragmented : deepHyphenChainTagOcc(spans, mark));
-      return occ.sort((a, b) => a.cy - b.cy || a.cx - b.cx);
-    }
-
-    // 1. every drawn occurrence of the tag, on every plan sheet in the set —
-    // geometry stays lazy and per-sheet, but the TRIGGER is this tool
-    // needing it, not a human having opened the sheet as a tab (a no-op,
-    // immediate cache hit, for a sheet that's actually rendered already).
-    const occBySheet = [];
-    for (const key of planKeys) occBySheet.push({ key, occ: await occOf(key, t) });
-    const totalOcc = occBySheet.reduce((n, e) => n + e.occ.length, 0);
-    if (!totalOcc) {
-      return { error: `Schedule row "${t}" (${table} on ${tb.sheet}) cannot be geometrically anchored — its tag is not drawn on any plan sheet, and a fingerprint is never guessed from text alone. If the marker is drawn untagged, marquee one instance with symbol_sweep.` };
-    }
-
-    // 2. anchor sheet = the plan sheet with the MOST occurrences (declared
-    // sheet order breaks ties) so corroboration can run on the anchor's own
-    // sheet whenever the set allows it; anchor occurrence = first in
-    // reading order. Deterministic throughout.
-    const withOcc = occBySheet.filter((e) => e.occ.length > 0)
-      .sort((a, b) => b.occ.length - a.occ.length || ordOf.get(a.key) - ordOf.get(b.key));
-    const anchorKey = withOcc[0].key;
-    const anchor = withOcc[0].occ[0];
-    const anchorDims = await ensureSheetGeometry(anchorKey);
-    const anchorSegs = vectorSegsRef.current.get(anchorKey);
-    if (!anchorDims || !anchorSegs || !anchorSegs.length) {
-      return { error: `${anchorKey} carries the tag "${t}" but no vector linework — the marker cannot be fingerprinted on a scan.` };
-    }
-    const sweepOpts = { rotations: opts.rotations !== false, mirror: opts.mirror !== false };
-
-    // corroborators: the tag's OTHER occurrences — same sheet when it has
-    // them, else the next sheet that does; a tag drawn exactly once has
-    // none. The corroborator may live on ANOTHER sheet, so it carries that
-    // sheet's own segs: the probe has to cross the same size ratio the real
-    // sweep will (#186), or a fingerprint gets rejected as "doesn't recur"
-    // for the sole reason that the two plan sheets are drawn at different
-    // scales.
-    let corro = null;
-    if (withOcc[0].occ.length > 1) {
-      corro = { key: anchorKey, segs: anchorSegs, occ: withOcc[0].occ.slice(1) };
-    } else if (withOcc.length > 1) {
-      const key2 = withOcc[1].key;
-      await ensureSheetGeometry(key2);
-      corro = { key: key2, segs: vectorSegsRef.current.get(key2) || [], occ: withOcc[1].occ };
-    }
-
-    // 3. pad ladder + corroboration — the shared symbolsweep.ts function.
-    const anchored = corroborateFingerprint(
-      anchorSegs,
-      { w: anchorDims.w, h: anchorDims.h },
-      anchor,
-      corro ? { segs: corro.segs, occ: corro.occ, ratio: sweepRatio({ upp: agentUpp(anchorKey) }, { upp: agentUpp(corro.key) }) } : null,
-      sweepOpts,
-    );
-    if (!anchored) {
-      return {
-        error: corro
-          ? `Schedule row "${t}" cannot be anchored: the linework around its drawn tag on ${anchorKey} does not recur at the tag's other occurrences — no repeatable marker geometry to fingerprint. Marquee one instance with symbol_sweep instead.`
-          : `Schedule row "${t}" cannot be anchored: no fingerprintable marker linework sits around its drawn tag on ${anchorKey}. Marquee one instance with symbol_sweep instead.`,
-      };
-    }
-    const { fp, corroborated } = anchored;
-
-    // 4. the full plan-only sweep + tag corroboration per match, per sheet —
-    // classifySweepMatches carries the #186 size ratio and reports it.
-    let totalFound = 0;
-    const perSheet = [];
-    for (const { key, occ } of occBySheet) {
-      const dims = await ensureSheetGeometry(key);
-      const segs = vectorSegsRef.current.get(key);
-      if (!dims || !segs || !segs.length) { skipped.push({ sheet: key, role: "plan", reason: "no vector linework (likely a scan) — symbol matching reads drawn segments" }); continue; }
-      const ratio = sweepRatio({ upp: agentUpp(anchorKey) }, { upp: agentUpp(key) });
-      const sibSpans = [];
-      for (const k of siblings) for (const o of await occOf(key, k)) sibSpans.push({ key: k, cx: o.cx, cy: o.cy });
-      let cls;
-      try { cls = classifySweepMatches(t, fp, segs, ratio, occ, sibSpans, anchor.h, sweepOpts); }
-      catch (e) { skipped.push({ sheet: key, role: "plan", reason: String(e?.message || e) }); continue; }
-
-      const norm = ([x, y]) => [+(x / dims.w).toFixed(5), +(y / dims.h).toFixed(5)];
-      const matches = cls.matches.map((m) => ({ at: norm(m.at), score: m.score }));
-      const excluded = cls.excluded.map((e) => ({ at: norm(e.at), tag: e.tag }));
-      const withheld = cls.withheld.map((w) => ({ at: norm(w.at), score: w.score, reason: w.reason }));
-      const text_only = cls.text_only.map((o) => ({ at: norm(o.at) }));
-      perSheet.push({
-        sheet: key, found: matches.length, matches,
-        ...(excluded.length ? { excluded } : {}),
-        ...(withheld.length ? { withheld } : {}),
-        ...(text_only.length ? { text_only } : {}),
-        complete: cls.complete,
-        ...(cls.scaled ? { scaled: cls.scaled } : {}),
-        ...(ratio.known ? {} : { scale_assumed: `no scale set on ${anchorKey} or this sheet — swept at 1:1` }),
-      });
-      totalFound += matches.length;
-    }
-
-    const notes = [];
-    if (!corroborated) notes.push(`The tag "${t}" is drawn ${totalOcc === 1 ? "exactly once" : "too sparsely to cross-check"} — the fingerprint could not corroborate at a second occurrence; audit the matches with view_region before trusting the count.`);
-    const rowRescaled = perSheet.filter((p) => p.scaled);
-    if (rowRescaled.length) notes.push(`Size ratio applied from the sheets' own scales: ${rowRescaled.map((p) => `${p.sheet} ×${p.scaled.ratio}`).join(", ")} — the marker was resized from ${anchorKey} before matching.`);
-    const rowAssumed = perSheet.filter((p) => p.scale_assumed && !p.found);
-    if (rowAssumed.length) notes.push(`${rowAssumed.map((p) => p.sheet).join(", ")} found nothing and were swept at 1:1 — no scale is set on ${anchorKey} or on them, so a different drawn scale there is a live explanation for the zero. Set scale on both ends to rule it out.`);
-
+    const prod = await fetchProductionSweepScheduleRow(t);
+    if (prod && !prod.error) return prod;
     return {
-      tag: t,
-      row: { sheet: tb.sheet, key: r.key, table },
-      anchor: { sheet: anchorKey, at: [+anchor.cx.toFixed(1), +anchor.cy.toFixed(1)], corroborated, occurrences: totalOcc },
-      total_found: totalFound,
-      per_sheet: perSheet,
-      ...(skipped.length ? { skipped } : {}),
-      ...(notes.length ? { note: notes.join(" ") } : {}),
+      error: "Production sweep_schedule_row (Session path) unavailable. "
+        + "Use the MCP bridge (opentakeoff_mcp_endpoint) or ensure /__ot/sweep-schedule-row is reachable — "
+        + "the browser geometric fork is disabled for quantity/cite parity with MCP.",
     };
   }
 
@@ -8313,6 +8229,7 @@ export default function TakeoffCanvas() {
       exportTakeoff: agentExportTakeoff,
       exportReport: agentExportReport,
       compileCorpusTakeoff: agentCompileCorpusTakeoff,
+      reconcileSchedulePlan: agentReconcileSchedulePlan,
       countMarks: agentCountMarks,
       sweepScheduleRow: agentSweepScheduleRow,
       findText: agentFindText,
@@ -8804,15 +8721,17 @@ export default function TakeoffCanvas() {
       resolve_tag: "Resolving a tag…",
     };
     if (ev.type === "tool_start") setAgentStatus(STATUS[ev.name] || `Working (${ev.name})…`);
+    if (ev.type === "status" && ev.text) setAgentStatus(ev.text);
     if (ev.type === "done" || ev.type === "aborted" || ev.type === "error" || ev.type === "max_iterations") {
       setAgentStatus("");
     }
     const entry =
       ev.type === "text" ? { kind: "text", text: ev.text }
-      : ev.type === "tool_start" ? { kind: "tool", text: `→ ${ev.name}` }
+      : ev.type === "status" ? { kind: "status", text: ev.text }
+      : ev.type === "tool_start" ? { kind: "tool", text: ev.seeded ? `→ ${ev.name} (seeded index)` : `→ ${ev.name}` }
       : ev.type === "tool_end" ? (ev.result?.error
           ? { kind: "error", text: `✗ ${ev.name}: ${ev.result.error}` }
-          : { kind: "status", text: `✓ ${ev.name}` })
+          : { kind: "status", text: ev.seeded ? `✓ ${ev.name} (seeded index)` : `✓ ${ev.name}` })
       : ev.type === "error" ? { kind: "error", text: `Error: ${ev.message}` }
       : ev.type === "aborted" ? { kind: "status", text: "Stopped." }
       : ev.type === "max_iterations" ? { kind: "status", text: `Stopped at the ${ev.limit}-step cap — review what's staged.` }
@@ -12556,7 +12475,11 @@ export default function TakeoffCanvas() {
               <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
                 {indexing
                   ? `Indexing ${pct}% · ${indexProgress.done}/${indexProgress.total} pages`
-                  : `Indexed 100% · ${indexProgress.total} pages`}
+                  : graphPrewarm.phase === "warming"
+                    ? `Indexed · schedules indexing…`
+                    : graphPrewarm.phase === "ready"
+                      ? `Indexed · schedules ready`
+                      : `Indexed 100% · ${indexProgress.total} pages`}
               </span>
               <span
                 role="progressbar"

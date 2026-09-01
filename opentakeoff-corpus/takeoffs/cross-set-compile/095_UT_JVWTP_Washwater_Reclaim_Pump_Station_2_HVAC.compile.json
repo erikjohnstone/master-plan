@@ -1,0 +1,16 @@
+{
+  "set_id": "095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 JVWTP washwater reclaim PS2 \u2014 no tables extracted.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

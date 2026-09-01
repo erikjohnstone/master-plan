@@ -23,6 +23,13 @@ import type { Session } from "./session.ts";
 import { HVAC_TAXONOMY, type HvacComponent } from "../../web/src/lib/hvacTaxonomy.ts";
 import type { Point } from "../../web/src/lib/oneclick.ts";
 import { isReferenceCrossTable, type ScheduleTable, type TableRow } from "../../web/src/lib/sheetgraph.ts";
+import {
+  reconcileRowsFromTakeoffItems,
+  summarizeReconcile,
+  reconcileScheduleFamilyWithSweeps,
+  familyNeedleFromSpecs,
+} from "../../web/src/lib/schedulePlanReconcile.mjs";
+import { HVAC_FAMILY_SPECS } from "../../web/src/lib/corpusTakeoff.mjs";
 
 /** The structured failure taxonomy requested for this pipeline — classifies
  * WHY a tag's takeoff came out the way it did, distinct from a raw error
@@ -336,7 +343,12 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
     try {
       let r;
       try {
-        r = await session.sweepScheduleRow(tag, { commit: false, evaluationFast: opts.evaluationFast });
+        r = await session.sweepScheduleRow(tag, {
+          commit: false,
+          evaluationFast: opts.evaluationFast,
+          preferSheet: tb.sheet,
+          preferTitle: tb.title?.text ?? null,
+        });
       } catch (primary: any) {
         // Some drawings omit a schedule's redundant trailing unit digit
         // when only one device exists at that site (schedule ...-A1, plan
@@ -348,7 +360,12 @@ export async function buildPlanSetTakeoff(session: Session, opts: {
         const alias = /[A-Z]\d$/i.test(tag) ? tag.slice(0, -1) : null;
         if (!alias || !/tag is not drawn on any plan sheet/i.test(primary?.message || String(primary))) throw primary;
         try {
-          r = await session.sweepScheduleRow(alias, { commit: false, evaluationFast: opts.evaluationFast });
+          r = await session.sweepScheduleRow(alias, {
+            commit: false,
+            evaluationFast: opts.evaluationFast,
+            preferSheet: tb.sheet,
+            preferTitle: tb.title?.text ?? null,
+          });
         } catch {
           // Alias lookup is an optional recovery attempt. If it cannot prove
           // a unique row and plan anchor, retain the original no-plan-tag
@@ -757,4 +774,72 @@ export async function buildLegendTakeoff(session: Session, opts: { categories?: 
     }
   }
   return result;
+}
+
+/** Schedule↔plan reconcile table for a loaded set — walks every equipment
+ * schedule row through sweep_schedule_row (via buildPlanSetTakeoff) and
+ * classifies MATCH / SCHEDULE_ONLY / REFUSED_* / AMBIGUOUS. Shared UI+MCP. */
+export async function reconcileSchedulePlan(session: Session, opts: {
+  family?: string | null;
+  categories?: string[] | null;
+  tags?: string[] | null;
+  evaluationFast?: boolean;
+  /** When true with family, sweep every row in that family (not whole-set). */
+  familySweepAll?: boolean;
+} = {}): Promise<{
+  rows: ReturnType<typeof reconcileRowsFromTakeoffItems>;
+  summary: ReturnType<typeof summarizeReconcile>;
+  takeoff_stats?: PlanSetTakeoff["stats"];
+  family_filter: string | null;
+}> {
+  const family = opts.family ? String(opts.family).trim() : null;
+  const tags = opts.tags?.length ? opts.tags.map((t) => String(t).trim()).filter(Boolean) : null;
+
+  // Named family → shared HVAC_FAMILY_SPECS needle path (same gates as compile).
+  // Do not fall through to whole-set takeoff+string-filter: GRD/AIR DEVICE and
+  // reference-kind grille tables never matched "GRD" in equipment_type/title.
+  if (family) {
+    const graph = await session.graphForPipeline();
+    const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
+    if (!needle) {
+      return {
+        rows: [],
+        summary: summarizeReconcile([]),
+        family_filter: family,
+      };
+    }
+    const scoped = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
+      tags: tags ?? undefined,
+      evaluationFast: opts.evaluationFast,
+      // Family-only (no tag list): sweep every schedule row unless caller opts out.
+      sweepAll: !tags?.length && opts.familySweepAll !== false,
+    });
+    return { ...scoped, takeoff_stats: undefined };
+  }
+
+  const takeoff = await buildPlanSetTakeoff(session, {
+    categories: opts.categories ?? null,
+    evaluationFast: opts.evaluationFast,
+  });
+  let items = takeoff.items;
+  const familyFilter = family;
+  if (familyFilter) {
+    const famU = familyFilter.toUpperCase();
+    items = items.filter((item) => {
+      const eq = String(item.equipment_type || "").toUpperCase();
+      const cat = String(item.category || "").toUpperCase();
+      const title = String(item.schedule?.title || "").toUpperCase();
+      return eq.includes(famU) || cat.includes(famU) || title.includes(famU)
+        || (famU === "VAV" && /VOLUME CONTROL|AIR TERMINAL|VARIABLE AIR/i.test(title))
+        || (famU === "FCU" && /FAN\s*COIL/i.test(title))
+        || (famU === "AHU" && /AIR HANDLING/i.test(title));
+    });
+  }
+  const rows = reconcileRowsFromTakeoffItems(items, takeoff.failures);
+  return {
+    rows,
+    summary: summarizeReconcile(rows),
+    takeoff_stats: takeoff.stats,
+    family_filter: familyFilter,
+  };
 }

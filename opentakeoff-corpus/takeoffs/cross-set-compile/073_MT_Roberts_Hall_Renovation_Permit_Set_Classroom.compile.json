@@ -1,0 +1,16 @@
+{
+  "set_id": "073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 Roberts Hall classroom \u2014 finish/lighting only (no HVAC schedules).",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

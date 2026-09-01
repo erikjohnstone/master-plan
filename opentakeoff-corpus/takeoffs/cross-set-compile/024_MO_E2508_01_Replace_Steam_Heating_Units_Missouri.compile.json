@@ -1,0 +1,18 @@
+{
+  "set_id": "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 steam\u2192RTU replacement \u2014 PACKAGED EQUIPMENT SCHEDULE (RTU) title gate.",
+  "categories": {
+    "RTU": 4
+  },
+  "totals": {
+    "items": 4
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

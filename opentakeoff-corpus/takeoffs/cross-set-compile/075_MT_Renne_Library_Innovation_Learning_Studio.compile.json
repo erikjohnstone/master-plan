@@ -1,0 +1,22 @@
+{
+  "set_id": "075_MT_Renne_Library_Innovation_Learning_Studio",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/075_MT_Renne_Library_Innovation_Learning_Studio.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 Renne Library studio \u2014 mini-split/ERV/HP/GRD + electric duct coil.",
+  "categories": {
+    "AHU": 2,
+    "ERV": 1,
+    "HEAT_PUMP": 2,
+    "DUCT_MOUNTED_COIL": 1,
+    "GRD": 5
+  },
+  "totals": {
+    "items": 11
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

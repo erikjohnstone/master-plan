@@ -17,14 +17,15 @@ import {
   exportMarkedPdfOutput, listShapesOutput, deriveBaseOutput, deriveTransitionsOutput, importTakeoffOutput, applyRulesOutput, cutOutOutput,
   annotateOutput, listAnnotationsOutput, linkAnnotationOutput,
   markVerdictOutput, deleteVerdictOutput,
-  sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, sweepScheduleRowOutput, countMarksOutput,
+  sheetGraphOutput, resolveTagOutput, findScheduleOutput, queryTableOutput, projectTakeoffOutput, compileCorpusTakeoffOutput, reconcileSchedulePlanOutput, sweepScheduleRowOutput, countMarksOutput,
   exportDxfOutput, traceConnectivityOutput, matchReferenceSymbolOutput, findLegendSymbolsOutput, sweepInlineMotifOutput,
 } from "./outputs.ts";
 import { exportMarkedPdf } from "./marked.ts";
 import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
 import { importTakeoff } from "./importing.ts";
-import { buildPlanSetTakeoff } from "./takeoff.ts";
+import { buildPlanSetTakeoff, buildLegendTakeoff, classifyLegendCaption, reconcileSchedulePlan } from "./takeoff.ts";
 import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "./corpusTakeoff.mjs";
+import { reconcileRowsToCsv } from "../../web/src/lib/schedulePlanReconcile.mjs";
 import {
   VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
 } from "../../web/src/lib/hvacTaxonomy.ts";
@@ -264,6 +265,8 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       mirror: z.boolean().default(true).describe("Also match mirrored markers"),
       tolerance_px: z.number().positive().max(20).default(2).describe("Endpoint match tolerance in image px (default 2 — CAD jitter, not drift)"),
       tagged_only: z.boolean().default(false).describe("Search every sheet carrying the exact tag and skip sheets that cannot contribute a tagged count; faster, but unlabeled near-match auditing is explicitly incomplete"),
+      prefer_schedule_sheet: z.string().optional().describe("When the same mark appears on multiple schedules (shared building letter), prefer the row on this sheet key"),
+      prefer_schedule_title: z.string().optional().describe("When the same mark appears on multiple schedules, prefer the row whose table title matches (exact or …SCHEDULE stem)"),
     },
     outputSchema: sweepScheduleRowOutput,
   }, run("sweep_schedule_row", (a) => session.sweepScheduleRow(a.tag, {
@@ -272,6 +275,8 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     mirror: a.mirror,
     tolerancePx: a.tolerance_px,
     evaluationFast: a.tagged_only,
+    preferSheet: a.prefer_schedule_sheet,
+    preferTitle: a.prefer_schedule_title,
   })));
 
   server.registerTool("trace_connectivity", {
@@ -714,6 +719,49 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
       compiled.export_path = null;
     }
     return compiled;
+  }));
+
+  server.registerTool("reconcile_schedule_plan", {
+    description: `Reconcile scheduled equipment tags to plan drawings — contractor-grade table with Tag, Family, Scheduled qty, Installed qty, Status (MATCH | SCHEDULE_ONLY | PLAN_ONLY | REFUSED_NO_SCALE | REFUSED_NO_TEXT | AMBIGUOUS), schedule cite, and plan cite(s). Walks every equipment schedule row through sweep_schedule_row on the shared Session path — never invents plan locations. Optional family filter (e.g. "VAV", "FCU", "AHU") scopes to one schedule family. Pass path to write JSON; export_path writes reconcile.csv. Read-only; does not commit canvas shapes. ${COORDS}`,
+    inputSchema: {
+      family: z.string().optional().describe('Optional family scope: VAV, FCU, AHU, pump, etc.'),
+      categories: z.array(z.string()).optional().describe("Optional hvacTaxonomy category filter"),
+      tags: z.array(z.string()).optional().describe("Optional MARK tags to sweep (scoped reconcile — fast)"),
+      evaluation_fast: z.boolean().optional().describe("Use evaluation-fast sweep (corpus/demo speed)"),
+      family_sweep_all: z.boolean().optional().describe("When family set and tags omitted, sweep every row in that family only"),
+      path: z.string().optional().describe("Optional JSON file path for the reconcile table"),
+      export_path: z.string().optional().describe("Optional directory for reconcile.csv export"),
+      overwrite: z.boolean().optional().describe(OVERWRITE_DESC),
+    },
+    outputSchema: reconcileSchedulePlanOutput,
+  }, run("reconcile_schedule_plan", async ({
+    family, categories, tags, evaluation_fast, family_sweep_all,
+    path: outPath, export_path: exportPath, overwrite,
+  }) => {
+    const result = await reconcileSchedulePlan(session, {
+      family: family ?? null,
+      categories: categories ?? null,
+      tags: tags ?? null,
+      evaluationFast: evaluation_fast,
+      familySweepAll: family_sweep_all,
+    });
+    if (outPath) {
+      await assertWritable(outPath, "json", overwrite);
+      const { writeFile } = await import("node:fs/promises");
+      await writeFile(outPath, JSON.stringify(result, null, 2));
+      (result as any).path = outPath;
+    } else {
+      (result as any).path = null;
+    }
+    if (exportPath) {
+      const { mkdir, writeFile } = await import("node:fs/promises");
+      await mkdir(exportPath, { recursive: true });
+      await writeFile(`${exportPath.replace(/\/$/, "")}/reconcile.csv`, reconcileRowsToCsv(result.rows));
+      (result as any).export_path = exportPath;
+    } else {
+      (result as any).export_path = null;
+    }
+    return result;
   }));
 
   server.registerTool("read_sheet_text", {

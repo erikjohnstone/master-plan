@@ -3108,8 +3108,16 @@ export class Session {
      * count remains complete; unlabeled/sibling near-match disclosure does
      * not, and the wire result states that distinction explicitly. */
     evaluationFast?: boolean;
+    /** When the caller already knows which schedule owns this mark (family
+     * reconcile scaffold / project-takeoff row walk), prefer that table so
+     * shared building letters across distinct equipment schedules (Carson
+     * B1 on furnace + CU + OAU) are not refused as AMBIGUOUS. Unscoped
+     * sweeps without a preference still refuse honest cross-family collisions. */
+    preferSheet?: string | null;
+    preferTitle?: string | null;
   } = {}) {
-    let t = (tag || "").trim().toUpperCase().replace(/\s+/g, "");
+    let tRaw = (tag || "").trim().toUpperCase();
+    let t = tRaw.replace(/\s+/g, "");
     if (!t) throw new UserError('Pass a schedule-row tag as drawn, e.g. sweep_schedule_row { tag: "T1" }.');
     const graph = await this.ensureGraph();
     if (!graph.available) throw new UserError("This set has no text layer (a scan) — the sheet graph is unavailable, so schedule rows cannot be read.");
@@ -3119,7 +3127,7 @@ export class Session {
     // return vs exhaust service): that row ANSWERS for each mark, and the
     // sweep runs on the mark as drawn on the plans, not the compound key.
     const canonKey = (k: string) => (k || "").trim().toUpperCase().replace(/\s+/g, "");
-    let rowHits = graph.tables.flatMap((tb) => tb.rows.filter((r) => rowKeyAnswersFor(r.key, t)).map((r) => ({ tb, r })));
+    let rowHits = graph.tables.flatMap((tb) => tb.rows.filter((r) => rowKeyAnswersFor(r.key, t) || rowKeyAnswersFor(r.key, tRaw)).map((r) => ({ tb, r })));
     let scheduleAliasNote: string | null = null;
     if (!rowHits.length && /[A-Z]$/.test(t)) {
       // A plan can omit a schedule's redundant trailing unit digit when
@@ -3175,11 +3183,27 @@ export class Session {
           ? normalized.replace(/\b\d+\s+OF\s+\d+\b/g, "").replace(/[^A-Z0-9]/g, "")
           : null;
       };
+      // Stem through the word SCHEDULE so truncated sibling extracts
+      // ("…HOT WATER REHEAT" vs "…HOT WATE") still collapse on one sheet.
+      const scheduleStem = (text: string | null | undefined): string | null => {
+        const normalized = (text || "").toUpperCase().replace(/\s+/g, " ").trim();
+        const m = normalized.match(/^(.*?SCHEDULE)\b/);
+        return m ? m[1].replace(/[^A-Z0-9]/g, "") : null;
+      };
       const collapsed: typeof rowHits = [];
       for (const hit of rowHits) {
         const family = partTitle(hit.tb.title?.text);
-        const prior = family ? collapsed.findIndex((candidate) =>
-          candidate.tb.sheet === hit.tb.sheet && partTitle(candidate.tb.title?.text) === family) : -1;
+        const stem = scheduleStem(hit.tb.title?.text);
+        const titleNorm = (hit.tb.title?.text || "").toUpperCase().replace(/\s+/g, " ").trim();
+        const prior = collapsed.findIndex((candidate) => {
+          if (candidate.tb.sheet !== hit.tb.sheet) return false;
+          const candFamily = partTitle(candidate.tb.title?.text);
+          if (family && candFamily && family === candFamily) return true;
+          const candStem = scheduleStem(candidate.tb.title?.text);
+          if (stem && candStem && stem === candStem) return true;
+          const candTitle = (candidate.tb.title?.text || "").toUpperCase().replace(/\s+/g, " ").trim();
+          return titleNorm.length > 0 && titleNorm === candTitle;
+        });
         if (prior >= 0) {
           if (Object.keys(hit.r.cells).length > Object.keys(collapsed[prior].r.cells).length) collapsed[prior] = hit;
         } else {
@@ -3187,6 +3211,41 @@ export class Session {
         }
       }
       rowHits = collapsed;
+    }
+    // Same-sheet shadow extracts: a thinner row whose cell values are covered
+    // by a richer same-sheet sibling is a duplicate/partial extract (untitled
+    // hydronic-pump summary beside "HYDRONIC PUMPS"; mis-associated thin
+    // fragment of electric heaters under a neighboring heat-pump title) — not
+    // a second device definition. Prefer the richer row. Never collapses
+    // cross-sheet twins or equal-richness collisions (merged addendum PDFs
+    // and two bare-anchor primary devices sharing a mark stay AMBIGUOUS).
+    if (rowHits.length > 1) {
+      const normVal = (text: string) => text.toUpperCase().replace(/\s+/g, " ").trim();
+      const cellVals = (row: { cells: Record<string, { text: string }> }) =>
+        Object.values(row.cells).map((c) => normVal(c?.text || "")).filter(Boolean);
+      const isShadowOf = (
+        thin: (typeof rowHits)[number],
+        rich: (typeof rowHits)[number],
+      ): boolean => {
+        if (thin.tb.sheet !== rich.tb.sheet) return false;
+        const thinN = Object.keys(thin.r.cells).length;
+        const richN = Object.keys(rich.r.cells).length;
+        // Require a clear richness gap so two real primary rows of similar
+        // width never silently pick a winner.
+        if (thinN >= richN || richN < thinN + 3) return false;
+        const richVals = cellVals(rich.r);
+        const thinVals = cellVals(thin.r);
+        if (!thinVals.length || !richVals.length) return false;
+        return thinVals.every((tv) =>
+          richVals.some((rv) => rv === tv || rv.includes(tv) || tv.includes(rv)));
+      };
+      const survivors = rowHits.filter(
+        (hit) => !rowHits.some((other) => other !== hit && isShadowOf(hit, other)),
+      );
+      if (survivors.length >= 1 && survivors.length < rowHits.length) {
+        accessoryNote = `${rowHits.length - survivors.length} same-sheet shadow extract(s) of denser schedule row(s) for "${t}" were excluded (partial/untitled duplicate — not a competing device).`;
+        rowHits = survivors;
+      }
     }
     if (rowHits.length > 1) {
       const qualifiedQualifier = (header: string | null): string | null =>
@@ -3278,6 +3337,53 @@ export class Session {
         rowHits = [candidates[0]];
       }
     }
+    // Caller-owned schedule preference (family reconcile / takeoff walk):
+    // building marks are often reused across distinct equipment schedules on
+    // the same sheet (furnace B1 ≠ condensing B1 ≠ OAU B1). When the caller
+    // already selected the owning table, keep only that hit. Never invent a
+    // preference — zero preferred survivors leave the collision AMBIGUOUS.
+    if (rowHits.length > 1 && (opts.preferTitle || opts.preferSheet)) {
+      const preferSheet = (opts.preferSheet || "").trim();
+      const preferTitleRaw = (opts.preferTitle || "").trim();
+      const titleNorm = (text: string | null | undefined) =>
+        (text || "").toUpperCase().replace(/\s+/g, " ").trim();
+      const scheduleStem = (text: string | null | undefined): string | null => {
+        const normalized = titleNorm(text);
+        const m = normalized.match(/^(.*?SCHEDULE)\b/);
+        return m ? m[1].replace(/[^A-Z0-9]/g, "") : null;
+      };
+      const preferNorm = titleNorm(preferTitleRaw);
+      const preferStem = scheduleStem(preferTitleRaw);
+      const titleMatches = (hitTitle: string | null | undefined): boolean => {
+        if (!preferNorm) return true;
+        const hitNorm = titleNorm(hitTitle);
+        if (hitNorm === preferNorm) return true;
+        const hitStem = scheduleStem(hitTitle);
+        return Boolean(preferStem && hitStem && preferStem === hitStem);
+      };
+      const preferred = rowHits.filter((hit) => {
+        if (preferSheet && hit.tb.sheet !== preferSheet) return false;
+        return titleMatches(hit.tb.title?.text);
+      });
+      let narrowed = preferred;
+      // Sheet-only preference (blank-title walk): when the caller did not name
+      // a title, prefer the unique non-blank titled schedule on that sheet so
+      // seismic/summary blanks do not stay tied with the real ERV schedule.
+      if (narrowed.length > 1 && !preferNorm) {
+        const titledOnly = narrowed.filter((hit) => titleNorm(hit.tb.title?.text));
+        if (titledOnly.length === 1) narrowed = titledOnly;
+      }
+      if (narrowed.length === 1) {
+        const dropped = rowHits.length - 1;
+        accessoryNote = [
+          accessoryNote,
+          `${dropped} other schedule row${dropped === 1 ? "" : "s"} also carry the key "${t}" but were excluded because the caller preferred "${preferTitleRaw || preferSheet}" (cross-family shared mark — not competing ambiguity for this sweep).`,
+        ].filter(Boolean).join(" ");
+        rowHits = narrowed;
+      } else if (narrowed.length > 1) {
+        rowHits = narrowed;
+      }
+    }
     if (rowHits.length > 1) {
       throw new UserError(`Ambiguous: ${rowHits.length} schedule rows carry the key "${t}" — the same mark defined twice cannot seed one sweep. Marquee the marker yourself with symbol_sweep.`);
     }
@@ -3318,6 +3424,37 @@ export class Session {
     }
     const occOf = (sh: SheetState, key: string): TagOcc[] =>
       this.tagOccurrencesOnSheet(sh, key, airDeviceTable);
+    // Plan-drawn form may keep spaces / omit revision prefixes while the
+    // schedule row.key is glued (`NATUK1` vs plan `ATU K1` — Hurlburt). Prefer
+    // any identity form that is actually drawn before refusing no-plan-tag.
+    {
+      const planTagCandidates: string[] = [];
+      const addCand = (s: string | null | undefined) => {
+        const u = String(s || "").trim().toUpperCase();
+        if (!u) return;
+        if (!planTagCandidates.includes(u)) planTagCandidates.push(u);
+        const compact = u.replace(/\s+/g, "");
+        if (compact && !planTagCandidates.includes(compact)) planTagCandidates.push(compact);
+      };
+      addCand(tRaw);
+      addCand(t);
+      for (const [header, cell] of Object.entries(r.cells || {})) {
+        if (!/^(MARK|SYMBOL|TAG|EQUIP(?:\.?\s*TAG)?|DESIGNATION)$/i.test(header)) continue;
+        const raw = String(cell?.text || "").trim();
+        if (!raw) continue;
+        addCand(raw.replace(/^\(([NER])\)\s*/i, ""));
+      }
+      addCand(r.key);
+      const hasOcc = (key: string) => planSheets.some((sh) => occOf(sh, key).length > 0);
+      if (!hasOcc(t)) {
+        for (const cand of planTagCandidates) {
+          if (hasOcc(cand)) {
+            t = cand;
+            break;
+          }
+        }
+      }
+    }
     // Compound-key geometric fallback — a real, general bug distinct from
     // the row-LOOKUP layer above (rowKeyAnswersFor already resolves a
     // compound key like "AC-1/ACCU-1" or "R1/E1" fine): the literal joined
@@ -5692,6 +5829,8 @@ export class Session {
       if (/^POINTS?\s+LIST\b/i.test(t)) return true;
       if (/^FCU WITH\b.+\bDDC POINTS LIST$/i.test(t)) return true;
       if (/^UNIT HEATER DDC POINTS LIST$/i.test(t)) return true;
+      // PLC panel I/O lists (same T-BAS-01 family as POINTS/DDC — set-agnostic).
+      if (/^I\s*\/\s*O\s+LIST\b/i.test(t) || /^IO\s+LIST\b/i.test(t)) return true;
     }
     return false;
   }
@@ -5721,16 +5860,21 @@ export class Session {
     const notes = rasterNotes.length ? [...g.notes, ...rasterNotes] : g.notes;
     return {
       available: g.available,
-      sheets: g.sheets.map((s) => ({
-        sheet: s.key, role: s.role, confidence: s.confidence,
-        ...(s.evidence ? { evidence: Session.wireEvidence(s.evidence) } : {}),
-        ...(s.building ? { building: s.building } : {}),
-        schedules: s.schedules.map((t) => ({
-          kind: t.kind, title: t.title, rows: t.rows, region: Session.wireBox(t.region),
-          ...(t.continues ? { continues: t.continues } : {}),
-          ...(t.rotated_headers ? { rotated_headers: true } : {}),
-        })),
-      })),
+      sheets: g.sheets.map((s) => {
+        const state = this.sheets.get(s.key);
+        const detected = state?.detected?.label || null;
+        return {
+          sheet: s.key, role: s.role, confidence: s.confidence,
+          ...(s.evidence ? { evidence: Session.wireEvidence(s.evidence) } : {}),
+          ...(s.building ? { building: s.building } : {}),
+          ...(detected ? { detected_scale: detected } : {}),
+          schedules: s.schedules.map((t) => ({
+            kind: t.kind, title: t.title, rows: t.rows, region: Session.wireBox(t.region),
+            ...(t.continues ? { continues: t.continues } : {}),
+            ...(t.rotated_headers ? { rotated_headers: true } : {}),
+          })),
+        };
+      }),
       rooms: g.rooms.map(Session.wireRoom),
       ...(g.unmatched_tags.length ? {
         unmatched_tags: g.unmatched_tags.map((u) => ({

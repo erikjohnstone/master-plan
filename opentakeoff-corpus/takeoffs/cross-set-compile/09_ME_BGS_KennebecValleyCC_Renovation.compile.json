@@ -1,0 +1,12 @@
+{
+  "set_id": "09_ME_BGS_KennebecValleyCC_Renovation",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/09_ME_BGS_KennebecValleyCC_Renovation.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk multi-split heat pump performance schedules (SCU/SAC tags); honest WEAK tier.",
+  "categories": {
+    "HEAT_PUMP": 2
+  },
+  "totals": { "items": 2 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

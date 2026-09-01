@@ -1,6 +1,6 @@
 # T-VALVE-01 — NAVFAC control valve takeoff (CHW + HHW)
 
-Status: `AGENT UI PROVEN` — frozen Agent prompt → Run → Takeoff panel 163 (N=5 card pending)
+Status: **`LOCKED (MCP 5/5 · UI 5/5)`** — Gates 1–5 on both surfaces (2026-08-31).
 
 ## Set
 

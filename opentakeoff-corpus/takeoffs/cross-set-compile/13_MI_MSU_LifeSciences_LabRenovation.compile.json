@@ -1,0 +1,13 @@
+{
+  "set_id": "13_MI_MSU_LifeSciences_LabRenovation",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/13_MI_MSU_LifeSciences_LabRenovation.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk lab reno — REGISTER/GRILLE/DIFFUSER + TRANSFER SILENCER (DUCT_SILENCER family). Honest small MEAT.",
+  "categories": {
+    "GRD": 4,
+    "DUCT_SILENCER": 1
+  },
+  "totals": { "items": 5 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

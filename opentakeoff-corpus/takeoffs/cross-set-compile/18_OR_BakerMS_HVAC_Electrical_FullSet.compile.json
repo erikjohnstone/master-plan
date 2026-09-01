@@ -1,0 +1,18 @@
+{
+  "set_id": "18_OR_BakerMS_HVAC_Electrical_FullSet",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/18_OR_BakerMS_HVAC_Electrical_FullSet.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk school — MAU + ERV ERU-1 (keyRe) + outdoor HP-4 from ERV WITH HEAT PUMP comma-split + AHU heat pumps (AIR HANDLER HEAT PUMP AHU-* + HP-*) + ELECTRIC HEATER (EH-*) + fans + GRD. HEAT_PUMP:6 includes HP-4.",
+  "categories": {
+    "OUTDOOR_AIR_UNIT": 1,
+    "AHU": 3,
+    "ERV": 1,
+    "HEAT_PUMP": 6,
+    "FAN": 2,
+    "UNIT_HEATER": 4,
+    "GRD": 4
+  },
+  "totals": { "items": 21 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

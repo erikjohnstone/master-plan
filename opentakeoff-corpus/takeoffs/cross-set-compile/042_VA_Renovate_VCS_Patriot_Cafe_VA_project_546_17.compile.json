@@ -1,0 +1,19 @@
+{
+  "set_id": "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 Patriot Cafe — FAN + GRD (no humidifier schedule; prior SH/H overmatch dropped).",
+  "categories": {
+    "FAN": 1,
+    "GRD": 5
+  },
+  "totals": {
+    "items": 6
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

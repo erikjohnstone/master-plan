@@ -1,0 +1,20 @@
+{
+  "set_id": "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 Barnard lithography lab \u2014 HP + humidifier + GRD.",
+  "categories": {
+    "HEAT_PUMP": 1,
+    "HUMIDIFIER": 1,
+    "GRD": 4
+  },
+  "totals": {
+    "items": 6
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

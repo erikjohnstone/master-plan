@@ -27,6 +27,7 @@ import {
   isIllegalWorkflowTransition,
   scheduleFamilyNeedles,
 } from "./takeoffWorkflow.js";
+import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
 
 // Full-set HVAC/BAS takeoffs need list/graph + several count queries + scoped
 // cite re-queries + paints; 32 was truncating D03 mid-gate. Keep a hard cap.
@@ -159,8 +160,7 @@ export function missingScheduleTitleScans(callLog, goal) {
   ].filter(Boolean).map(String).join(" ");
   return familyNeedles.filter((fam) => !titleScans.some(({ out }) => {
     const title = scanTitleFull(out);
-    if (!fam.titleRe.test(title)) return false;
-    if (fam.exclude && fam.exclude.test(title)) return false;
+    if (!scheduleTitleMatches(title, fam.titleRe, fam.exclude)) return false;
     if (fam.require && !fam.require.test(title)) return false;
     const min = fam.minCount ?? 1;
     if (Number(out.count) < min) return false;
@@ -304,10 +304,94 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
             + "pipeline can load TypeScript (tsx). Do not retry compile in a loop — fix the environment and re-run.";
         }
         return kind === "bas_points"
-          ? 'The goal asks for a complete BAS/DDC points takeoff of this set. Call compile_corpus_takeoff with kind="bas_points" now — do not approximate the set total by crawling schedules.'
+          ? 'The goal asks for a points-list / BAS takeoff. Call compile_corpus_takeoff with kind="bas_points" now — do not approximate the set total by crawling schedules with find_schedule / query_table.'
           : kind === "control_valves"
             ? 'The goal asks for a complete valve takeoff of this set. Call compile_corpus_takeoff with kind="control_valves" now — that returns every CONTROL VALVE SCHEDULE row (valve mark, served equipment, service, size, GPM, Cv). Do not approximate with a partial read_schedule or markdown table.'
             : 'The goal asks for a complete HVAC equipment takeoff of this set. Call compile_corpus_takeoff with kind="hvac_equipment" now — do not approximate the set total by crawling schedules.';
+      }
+    }
+  }
+  // Find the scale: AS NOTED on one sheet must not abort the set. Prefer
+  // sheet_graph / list_sheets detected_scale|detected_label values.
+  {
+    const asksFindScale = /\b(?:find|locate|where(?:'s| is)|what(?:'s| is)|show)\b.{0,48}\bscale\b/i.test(goal)
+      || /\b(?:can you|please)\s+find\s+(?:the\s+)?scale\b/i.test(goal);
+    if (asksFindScale) {
+      const listOut = callLog.find(({ name, out }) => name === "list_sheets" && !out?.error)?.out;
+      const graphOut = callLog.find(({ name, out }) => name === "sheet_graph" && !out?.error)?.out;
+      if (!listOut && !graphOut) {
+        return 'The goal asks to find the scale. Call list_sheets and sheet_graph, then report every sheet that carries a numeric detected_label / detected_scale (e.g. 1/8"=1\'-0"). Do not stop at SCALE: AS NOTED on a cover or legend sheet.';
+      }
+      const detected = [];
+      for (const s of listOut?.sheets || (Array.isArray(listOut) ? listOut : []) || []) {
+        const label = s?.detected_label || s?.detected_scale || s?.detected?.label;
+        if (label && !/AS\s*NOTED/i.test(String(label))) {
+          detected.push({ sheet: s.sheet || s.key, label: String(label) });
+        }
+      }
+      for (const s of graphOut?.sheets || []) {
+        const label = s?.detected_scale || s?.detected_label;
+        if (label && !/AS\s*NOTED/i.test(String(label))) {
+          const sheet = s.sheet || s.key;
+          if (!detected.some((d) => d.sheet === sheet && d.label === String(label))) {
+            detected.push({ sheet, label: String(label) });
+          }
+        }
+      }
+      if (finalText) {
+        if (detected.length && /AS\s*NOTED/i.test(finalText)
+          && !/\d+\s*\/\s*\d+\s*"\s*=|1\s*:\s*\d+|\d+"\s*=\s*\d+/i.test(finalText)) {
+          const sample = detected.slice(0, 4).map((d) => `${d.sheet}: ${d.label}`).join("; ");
+          return `Tool evidence already found numeric scales on ${detected.length} sheet(s) (e.g. ${sample}). Do not refuse because another sheet says SCALE: AS NOTED — report those detected_scale / detected_label values and which sheets carry them, then the estimator can set_scale with that exact label.`;
+        }
+        if (detected.length
+          && !detected.some((d) => finalText.includes(d.label) || finalText.replace(/\s+/g, "").includes(d.label.replace(/\s+/g, "")))
+          && !/\d+\s*\/\s*\d+\s*"\s*=|1\s*:\s*\d+/i.test(finalText)) {
+          const sample = detected.slice(0, 4).map((d) => `${d.sheet}: ${d.label}`).join("; ");
+          return `Copy at least one numeric detected scale from the tools into the answer (e.g. ${sample}). AS NOTED alone is not a usable set_scale label.`;
+        }
+      } else if (detected.length === 0 && !graphOut) {
+        return "Call sheet_graph next — list_sheets alone may only cover open tabs. sheet_graph reports detected_scale across the loaded set.";
+      }
+    }
+  }
+  // Valve / legend symbol honesty: find_legend_symbols ≠ plan placements.
+  {
+    const asksValveSymbols = /\bvalve\s+symbols?\b/i.test(goal)
+      || /\bhighlight\b.{0,60}\bvalves?\b/i.test(goal)
+      || /\ball\s+(?:the\s+)?valve/i.test(goal)
+      || /\bfind\b.{0,40}\bvalve\s+symbols?\b/i.test(goal);
+    if (asksValveSymbols && finalText) {
+      const paints = callLog.filter(({ name, out }) =>
+        name === "highlight_citation" && !out?.error && Array.isArray(out?.bbox_px)).length;
+      const legendCalls = callLog.filter(({ name, out }) =>
+        name === "find_legend_symbols" && !out?.error);
+      const planSweeps = callLog.filter(({ name, out }) =>
+        (name === "symbol_sweep" || name === "match_reference_symbol") && !out?.error);
+      const planFound = planSweeps.reduce((n, { out }) => {
+        const found = Number(out?.found ?? out?.total_found ?? 0);
+        const matches = Array.isArray(out?.matches) ? out.matches.length : 0;
+        const shapes = Array.isArray(out?.shapes) ? out.shapes.length : 0;
+        const byName = Array.isArray(out?.results)
+          ? out.results.reduce((m, r) => m + Number(r?.found || r?.matches?.length || 0), 0)
+          : 0;
+        return n + Math.max(found, matches, shapes, byName);
+      }, 0);
+      const namedTypes = finalText.match(
+        /\b(?:GATE|GLOBE|BUTTERFLY|CHECK|RELIEF|BALL|PLUG|ANGLE|DRAIN|BALANCING|CONTROL)\s+VALVE\b/gi,
+      ) || [];
+      const uniqueTypes = [...new Set(namedTypes.map((t) => t.toUpperCase()))];
+      if (uniqueTypes.length >= 3 && paints <= 2) {
+        return `The answer names ${uniqueTypes.length} valve symbol types as highlighted, but only ${paints} highlight_citation paint(s) succeeded. Rewrite to describe ONLY the painted regions (or paint each claimed match). Do not invent plan highlights.`;
+      }
+      if (legendCalls.length && planFound === 0 && /\bhighlight/i.test(finalText) && uniqueTypes.length >= 2) {
+        return "find_legend_symbols only inventories legend glyphs — it does not find plan placements. Do not claim plan valve symbols were highlighted from legend entries alone. Seed symbol_sweep from a real plan instance (or call match_reference_symbol on a scaled plan sheet), or honestly say only legend glyphs were located.";
+      }
+      if (/\ball\s+(?:valve\s+)?symbols?\b.{0,40}\bhighlight/i.test(finalText)
+        || /\bhighlight(?:ed)?\s+all\b.{0,40}\bvalve/i.test(finalText)) {
+        if (planFound < 2 || paints < 2) {
+          return "Do not claim all valve symbols were highlighted unless plan sweeps returned multiple matches that you painted. Report the actual found counts from symbol_sweep / match_reference_symbol and disclose legend-only results separately.";
+        }
       }
     }
   }
@@ -1549,6 +1633,16 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     || (pointsListTakeoff && /\b(?:row\s+count|breakdown|totals?)\b/i.test(goal))
   ) && familyTokens.test(goal);
   if (asksScheduleCounts && finalText) {
+    // Generic / corpus BAS compile is authoritative for points-list totals — do
+    // not demand a separate title-scan query_table (that deadlock is what hung
+    // "point list takeoff" in spot_cites).
+    const compiledBas = callLog.some(({ name, out }) =>
+      name === "compile_corpus_takeoff" && !out?.error
+      && (String(out?.kind || "") === "bas_points"
+        || String(out?.takeoff_id || "") === "T-BAS-01"));
+    if (pointsListTakeoff && compiledBas) {
+      // fall through — compile totals satisfy the points-list count gate
+    } else {
     const titleScans = callLog.filter(({ name, out, args }) => {
       if (name !== "query_table" || out?.error) return false;
       const q = out?.query || args || {};
@@ -1559,6 +1653,9 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       return !scoped && Number.isFinite(Number(out?.count)) && Number(out.count) >= 1;
     });
     if (!titleScans.length) {
+      if (pointsListTakeoff && corpusCompileKind(goal) === "bas_points") {
+        return 'The goal asks for a points-list takeoff. Call compile_corpus_takeoff with kind="bas_points" now (or title-scan query_table title="POINTS LIST" with no row_key), then copy list totals into the answer.';
+      }
       return "The goal asks for scheduled equipment / points-list counts. Call query_table with each relevant schedule title (no row_key), then copy that result's count and building_tag_counts into the answer before finishing. Do not invent totals from the few MARK rows you painted for spot-check.";
     }
     const familyNeedles = [];
@@ -1599,8 +1696,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     ].filter(Boolean).map(String).join(" ");
     const missingFamilies = familyNeedles.filter((fam) => !titleScans.some(({ out }) => {
       const title = scanTitleFull(out);
-      if (!fam.titleRe.test(title)) return false;
-      if (fam.exclude && fam.exclude.test(title)) return false;
+      if (!scheduleTitleMatches(title, fam.titleRe, fam.exclude)) return false;
       if (fam.require && !fam.require.test(title)) return false;
       const min = fam.minCount ?? 1;
       if (Number(out.count) < min) return false;
@@ -1822,6 +1918,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       && /(?:equipment totals|total scheduled units)/i.test(answerNorm)) {
       return "The answer includes both a title-scan/schedule-counts table and a second equipment-totals table. Keep ONE family-totals table that copies title-scan query_table counts — remove any second table that recounts only painted/spot-check MARKs.";
     }
+    } // end else (!compiledBas title-scan gate)
   }
   return null;
 }
@@ -1835,6 +1932,8 @@ export function agentSystemPrompt() {
     "Hard rules:",
     "- NEVER invent geometry. Rooms are measured by the one_click flood-fill engine; propose only the rings it returns.",
     "- NEVER assume a scale. If a sheet has no scale set, report that (the tool refusal tells you) and stop work on that sheet — the estimator must calibrate it.",
+    "- Finding the scale: Prefer the seeded sheet_graph digest (and list_sheets). Many sets print SCALE: AS NOTED on a cover/legend while plan sheets carry numeric detected_scale / detected_label (e.g. 1/8\"=1'-0\"). Report those labels and sheets — never refuse the whole set because one title block says AS NOTED.",
+    "- find_legend_symbols inventories legend glyphs only — it does NOT find plan placements. Never claim plan valve/diffuser symbols were highlighted from legend rows alone. To find plan instances: set_scale on a plan sheet, then match_reference_symbol or symbol_sweep seeded from a real plan instance (not the legend glyph). Disclose legend-only results honestly.",
     "- Every proposal MUST cite evidence: the schedule row tag and/or the exact matched text token (a room tag or schedule cell) and/or the one_click seed. propose_shapes rejects uncited shapes.",
     "- You stage proposals only. A human reviews every shape at the accept gate; nothing you do commits a takeoff.",
     "",
@@ -1852,7 +1951,7 @@ export function agentSystemPrompt() {
     "- query_table and find_text search the whole loaded set — they do not require the sheet to be open as a canvas tab. Never refuse schedule cell values because a tab is closed; call query_table with row_key and copy row.all_cells, then highlight_citation.",
     "- COMPLETE set HVAC, BAS, or valve takeoff (goal says complete … takeoff of this set / these drawings / this blueprint set): call compile_corpus_takeoff FIRST — kind hvac_equipment for HVAC equipment, kind bas_points for BAS/DDC points, kind control_valves for a complete valve takeoff (CHW + HHW CONTROL VALVE SCHEDULE). When the goal asks for chilled-water / CHW only or hot-water / HHW only, also pass service=\"CHW\" or service=\"HHW\". That tool is the deterministic full-set answer (same Session+ODL path as MCP). Copy its totals / category_counts / list_counts / exclusions / empty_pages into the answer. Do NOT approximate the set total by crawling find_schedule, read_schedule, or title-scanning families one-by-one — that yields partial 10-row dumps with broken cites. After compile, spot-cite a few MARKs with query_table + highlight_citation only. For valves, report valve mark, served equipment (UNIT MARK), service (CHW/HHW), size, GPM, and ONE Cv per valve — never invent dual CHW CV + HHW CV columns on the same row.",
     "- When asked for scheduled equipment or points-list row counts for NAMED families/lists (not a complete set compile), call query_table with the schedule title (no row_key and no cell_contains). Copy that tool result's count and building_tag_counts into the answer — do not re-sum sheet_graph page row totals by hand (continuation pages 1 OF 2 / 2 OF 2 repeat the same MARK keys). building_tag_counts letters are building codes from tags (A/M/T/…) — never swap letters; when the goal names a tag like FCU-T11, use building_tag_counts.T for that building's total. When point_type_counts is present, copy AI/AO/BI/BO from it — do not burn iterations re-filtering the same title with cell_contains for each point type. Prefer one accurate title needle per asked family; when the goal distinguishes sibling titles (for example dedicated outdoor-air UNIT vs HANDLING schedules, or air-cooled vs heat-recovery chillers), query the title that matches what was asked rather than blending both. When the goal names a specific points list (for example AHU-T1A/TIB), put that tag in the query_table title — a bare POINTS LIST title can roll up sibling lists and double the row count. Then re-query specific row_key values for MARK/identity bboxes you must cite.",
-    "- Sequencing for named-family count + cite goals (not complete-set compile): (1) list_sheets + sheet_graph once, (2) one title-scan query_table per requested family and copy count/building_tag_counts/point_type_counts, (3) only then re-query the named cite MARKs / points-list title and paint those cells, (4) write ONE final answer whose family totals match those tool counts (do not add a second contradictory totals table that recounts only painted MARKs). Do not paint every equipment row on a schedule, and do not dump full schedule tables into the answer.",
+    "- Sequencing for named-family count + cite goals (not complete-set compile): (1) read the seeded sheet_graph digest (re-call sheet_graph only if missing/stale), (2) one title-scan query_table per requested family and copy count/building_tag_counts/point_type_counts, (3) only then re-query the named cite MARKs / points-list title and paint those cells, (4) write ONE final answer whose family totals match those tool counts (do not add a second contradictory totals table that recounts only painted MARKs). Do not paint every equipment row on a schedule, and do not dump full schedule tables into the answer.",
     "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Pass row_key, column, table_title, and value whenever known so the Agent source card title reads like \"VAV-1 · CFM = 350\" (not a naked \"350\"). Do not rely on auto-flying the canvas — the UI shows clickable expandable source cards; painting is enough. When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",
     "- The final Answer in chat must give the estimator MORE than enough to understand the workflow and act: every requested count/field with units, schedule titles and sheets, and clear structure. Prefer markdown tables and short labeled lists the UI can render (not a wall of prose or pipe-character dumps). Do not embed highlight_citation markup ids (【mk-…】) in chat — those belong on Source cards. Do not dump incidental inventory rows the goal did not ask for. Do not leave the usable answer only in Sources or highlights — chat is primary.",
     "- Never draw or request overlay label text that would cover the cited cell value; the highlight is a frame around readable blueprint text.",
@@ -1871,8 +1970,66 @@ export function agentSystemPrompt() {
     "- resolve_tag resolves room-finish relationships only. Never use it to locate scheduled HVAC/BAS equipment.",
     "- read_schedule/find_schedule return two DIFFERENT kinds of name and they are never interchangeable: `headers` names the table's own COLUMNS (e.g. \"SYMBOL\", \"REMARKS\" as column labels), while each entry in `rows` has its own `key` naming that ONE ROW (e.g. \"AC-1\"). A word appearing in `headers` does NOT mean a row exists with that word as its key — check `rows[].key` directly, never infer a row's existence from a column name alone.",
     "",
-    "Working method: list_sheets first. Use sheet_graph to orient across the entire loaded set, then query_table for cited equipment/reference cells or read_schedule for a known region; use find_text and view_region to locate and show plan evidence. Match or create conditions, measure rooms with one_click, then stage propose_shapes with evidence. Then summarize what you proposed and what you could not do, and stop. If you are blocked (no scale, sheet not open, nothing matches), say so plainly and stop rather than guessing.",
+    "Working method: A compact whole-set sheet_graph digest is usually seeded into this conversation before your first turn (schedules, roles, detected_scale) — treat that as already-read index; do not spend a turn re-calling sheet_graph unless it is missing or you need a refresh. Then query_table for cited equipment/reference cells or read_schedule for a known region; use find_text and view_region to locate and show plan evidence. Match or create conditions, measure rooms with one_click, then stage propose_shapes with evidence. Then summarize what you proposed and what you could not do, and stop. If you are blocked (no scale, sheet not open, nothing matches), say so plainly and stop rather than guessing.",
   ].join("\n");
+}
+
+/**
+ * Compact whole-set sheet_graph for agent context / bootstrap seed.
+ * Keeps roles, schedule titles+row counts, and detected_scale — drops spans
+ * and evidence blobs that blow the context window.
+ * Shared-path decision: NO — agent-surface orchestration only; schedule truth
+ * still comes from Session+ODL sheet_graph / query_table.
+ */
+export function compactSheetGraphForAgent(data, { maxSheets = 40 } = {}) {
+  const sheetsIn = Array.isArray(data?.sheets) ? data.sheets : [];
+  const sheets = sheetsIn.slice(0, maxSheets).map((s) => {
+    const sheet = s.sheet || s.key || s.id || s.name;
+    const detected = s.detected_scale || s.detected_label || s.detected?.label;
+    return {
+      sheet,
+      ...(s.title || s.name || s.label ? { title: s.title || s.name || s.label } : {}),
+      role: s.role,
+      ...(detected ? { detected_scale: detected } : {}),
+      schedules: Array.isArray(s.schedules)
+        ? s.schedules.map((sch) => ({
+          kind: sch.kind,
+          title: typeof sch.title === "string" ? sch.title : (sch.title?.text || sch.title),
+          rows: sch.rows ?? sch.row_count,
+        }))
+        : undefined,
+    };
+  });
+  const numeric_scales = sheets
+    .filter((s) => s.detected_scale)
+    .map((s) => ({ sheet: s.sheet, detected_scale: s.detected_scale }));
+  return {
+    ...(typeof data?.available === "boolean" ? { available: data.available } : {}),
+    sheet_count: sheetsIn.length,
+    sheets,
+    ...(numeric_scales.length ? { numeric_scales } : {}),
+    ...(sheetsIn.length > maxSheets ? { sheets_omitted: sheetsIn.length - maxSheets } : {}),
+    note: "Whole-set sheet index (roles + schedule titles/row counts + detected_scale). Already computed — treat as read; use query_table/find_schedule for row detail. Re-call sheet_graph only if this digest is missing or stale.",
+  };
+}
+
+function appendSeededAssistantToolCall(provider, messages, call) {
+  if (provider === "anthropic") {
+    messages.push({
+      role: "assistant",
+      content: [{ type: "tool_use", id: call.id, name: call.name, input: call.args || {} }],
+    });
+    return;
+  }
+  messages.push({
+    role: "assistant",
+    content: null,
+    tool_calls: [{
+      id: call.id,
+      type: "function",
+      function: { name: call.name, arguments: JSON.stringify(call.args || {}) },
+    }],
+  });
 }
 
 // ── provider translation ─────────────────────────────────────────────────────
@@ -1935,18 +2092,7 @@ const resultText = (out) => {
   // Other tools (sweep_schedule_row, symbol_sweep, load_plan, …) also return a
   // `sheets` array; treating them as a graph strips found/tag evidence.
   if (typeof payload?.available === "boolean" && Array.isArray(payload?.sheets) && payload.sheets.length > 0) {
-    payload = {
-      sheet_count: payload.sheets.length,
-      sheets: payload.sheets.slice(0, 40).map((s) => ({
-        key: s.key || s.id || s.sheet || s.name,
-        title: s.title || s.name || s.label || undefined,
-        role: s.role,
-        schedules: Array.isArray(s.schedules)
-          ? s.schedules.map((sch) => ({ kind: sch.kind, title: sch.title, rows: sch.rows }))
-          : undefined,
-      })),
-      note: "sheet_graph compacted; use query_table/find_schedule for schedule titles",
-    };
+    payload = compactSheetGraphForAgent(payload);
   }
   // Keep sweep_schedule_row count evidence; drop empty plan-sheet audit rows
   // before the hard char cap can slice through tag_citations.
@@ -2095,11 +2241,12 @@ function appendToolResults(provider, messages, results) {
  *   signal?: AbortSignal,
  *   maxIterations?: number,
  *   priorMessages?: Array<{ role: "user" | "assistant", content: string }>,
+ *   seedSheetGraph?: boolean,
  *   fetchFn?: typeof fetch,
  * }} opts
  * @returns {Promise<{ status: "done" | "aborted" | "error" | "max_iterations", text?: string, message?: string, iterations: number }>}
  */
-export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal, maxIterations = MAX_AGENT_ITERATIONS, fetchFn, priorMessages = [] }) {
+export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal, maxIterations = MAX_AGENT_ITERATIONS, fetchFn, priorMessages = [], seedSheetGraph = true }) {
   const provider = cfg?.provider === "anthropic" ? "anthropic" : "openai";
   const emit = (ev) => { try { onEvent?.(ev); } catch { /* a status listener must never kill the run */ } };
   const takeoffIntent = classifyTakeoffIntent(goal);
@@ -2112,10 +2259,38 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
       .map((m) => ({ role: m.role, content: m.content }))
     : [];
   const messages = [...history, { role: "user", content: goal }];
-  // Seed workflow directive so the first turn follows the state machine.
+  // Deterministic honesty backstop, generalized (see agentVerifiers.js's own
+  // header for the real, live-observed history this comes from): every real
+  // tool call this run makes is logged here, across every loop iteration,
+  // so `runVerifiers` can check the WHOLE run's evidence — not just prompt
+  // rules the model can choose to ignore — before the final answer is shown.
+  /** @type {Array<{ id: string, name: string, args: unknown, out: unknown }>} */
+  const callLog = [];
+  // Force-read the whole-set index: seed a compact sheet_graph into the
+  // transcript BEFORE the first model turn (same pattern as MCP demo runner).
+  // The model cannot "forget" to call sheet_graph — the digest is already here.
+  // Only when sheet_graph is in the tool set (production agent / demos).
+  const hasSheetGraphTool = (tools || []).some((t) => t && t.name === "sheet_graph");
+  if (seedSheetGraph && hasSheetGraphTool) {
+    emit({ type: "status", text: "Loading whole-set sheet index…" });
+    let graphOut;
+    try { graphOut = await execute("sheet_graph", {}); }
+    catch (e) { graphOut = { error: String((e && e.message) || e) }; }
+    if (graphOut == null || typeof graphOut !== "object") graphOut = { result: graphOut ?? null };
+    if (!graphOut.error && Array.isArray(graphOut.sheets) && graphOut.sheets.length > 0) {
+      const call = { id: "seed_sheet_graph", name: "sheet_graph", args: {} };
+      emit({ type: "tool_start", name: "sheet_graph", args: {}, seeded: true });
+      callLog.push({ id: call.id, name: call.name, args: {}, out: graphOut });
+      appendSeededAssistantToolCall(provider, messages, call);
+      appendToolResults(provider, messages, [{ call, out: graphOut }]);
+      emit({ type: "tool_end", name: "sheet_graph", result: compactSheetGraphForAgent(graphOut), seeded: true });
+    }
+  }
+  // Seed workflow directive AFTER the index seed so survey→title_scan advances
+  // when sheet_graph is already in the call log.
   let lastWorkflowPhase = "";
   {
-    const initialWf = advanceTakeoffWorkflow(takeoffIntent, [], goal);
+    const initialWf = advanceTakeoffWorkflow(takeoffIntent, callLog, goal);
     lastWorkflowPhase = initialWf.phase;
     const directive = workflowDirective(takeoffIntent, initialWf);
     if (directive) {
@@ -2125,13 +2300,6 @@ export async function runAgentLoop({ cfg, goal, tools, execute, onEvent, signal,
   }
   let iterations = 0;
   const aborted = () => { emit({ type: "aborted" }); return { status: /** @type {const} */ ("aborted"), iterations }; };
-  // Deterministic honesty backstop, generalized (see agentVerifiers.js's own
-  // header for the real, live-observed history this comes from): every real
-  // tool call this run makes is logged here, across every loop iteration,
-  // so `runVerifiers` can check the WHOLE run's evidence — not just prompt
-  // rules the model can choose to ignore — before the final answer is shown.
-  /** @type {Array<{ id: string, name: string, args: unknown, out: unknown }>} */
-  const callLog = [];
   let lastDraftText = "";
   let lastWordingCorrection = "";
   let wordingCorrectionStreak = 0;

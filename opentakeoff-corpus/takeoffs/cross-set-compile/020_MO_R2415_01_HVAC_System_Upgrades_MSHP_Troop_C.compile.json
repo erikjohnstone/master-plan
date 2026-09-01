@@ -1,0 +1,16 @@
+{
+  "set_id": "020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 MSHP Troop C \u2014 finish-schedule-only; no extractable HVAC equipment tables (honest ZERO).",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

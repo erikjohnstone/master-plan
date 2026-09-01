@@ -103,6 +103,46 @@ export const compileCorpusTakeoffOutput = {
   export_path: z.string().nullable().optional(),
 };
 
+/** Schedule ↔ plan reconciliation table (contractor columns + cites). */
+export const reconcileSchedulePlanOutput = {
+  family_filter: z.string().nullable(),
+  summary: z.object({
+    total: z.number().int(),
+    match: z.number().int(),
+    schedule_only: z.number().int(),
+    plan_only: z.number().int(),
+    refused_no_scale: z.number().int(),
+    refused_no_text: z.number().int(),
+    ambiguous: z.number().int(),
+  }),
+  takeoff_stats: z.object({
+    schedule_rows_total: z.number().int(),
+    resolved: z.number().int(),
+    refused: z.number().int(),
+    errored: z.number().int(),
+    total_drawn_instances: z.number().int(),
+  }).passthrough(),
+  rows: z.array(z.object({
+    tag: z.string(),
+    family: z.string().nullable(),
+    scheduled_qty: z.number().int(),
+    installed_qty: z.number().int(),
+    status: z.enum(["MATCH", "SCHEDULE_ONLY", "PLAN_ONLY", "REFUSED_NO_SCALE", "REFUSED_NO_TEXT", "AMBIGUOUS"]),
+    schedule_cite: z.object({
+      sheet: z.string(),
+      title: z.string().nullable(),
+      kind: z.string().optional(),
+    }).nullable(),
+    plan_cites: z.array(z.object({
+      sheet: z.string(),
+      at: z.array(z.number()).optional(),
+    })),
+    reason: z.string().nullable().optional(),
+  })),
+  path: z.string().nullable().optional(),
+  export_path: z.string().nullable().optional(),
+};
+
 /** Complete production query surface for an unattended plan-set takeoff. */
 export const projectTakeoffOutput = {
   set_files: z.array(z.string()),

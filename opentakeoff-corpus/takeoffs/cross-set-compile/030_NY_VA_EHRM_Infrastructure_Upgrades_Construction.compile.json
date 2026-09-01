@@ -1,0 +1,21 @@
+{
+  "set_id": "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/_rejoined/030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf",
+  "source_parts_dir": "bulk/HVAC_BAS_Plan_Sets_Vol2/030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 multipart NY VA EHRM \u2014 FCU/pumps/GRD (rejoined).",
+  "categories": {
+    "FCU": 1,
+    "PUMP": 14,
+    "GRD": 3
+  },
+  "totals": {
+    "items": 18
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

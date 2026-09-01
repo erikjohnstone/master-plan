@@ -1,0 +1,28 @@
+{
+  "set_id": "021_XX_Laboratory_building_mechanical_drawings_lab",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/021_XX_Laboratory_building_mechanical_drawings_lab.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 lab mechanical — rich HVAC MEAT + PRV schedule + DDC CONTROLLER INPUT/OUTPUT SUMMARY/LEGEND → BAS lists=3 rows=63 (device tags, AI/BI rollup not MARK-prefix).",
+  "categories": {
+    "AHU": 6,
+    "FCU": 3,
+    "AIR_COOLED_CHILLER": 1,
+    "HEAT_RECOVERY_CHILLER": 1,
+    "BOILER": 4,
+    "PUMP": 12,
+    "FAN": 19,
+    "UNIT_HEATER": 2,
+    "PRESSURE_REDUCING_VALVE": 2,
+    "GRD": 6,
+    "DUCT_SILENCER": 10
+  },
+  "totals": {
+    "items": 66
+  },
+  "bas_points": {
+    "rows": 63
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

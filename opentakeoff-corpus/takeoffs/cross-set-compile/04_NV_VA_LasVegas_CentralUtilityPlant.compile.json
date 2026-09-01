@@ -1,0 +1,13 @@
+{
+  "set_id": "04_NV_VA_LasVegas_CentralUtilityPlant",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/04_NV_VA_LasVegas_CentralUtilityPlant.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Bulk VA central utility plant — PUMP SCHEDULE + COOLING TOWER SCHEDULE with comma-grouped EQUIP NO keys (CT-1,2,3,4). Proves CUP-style hydronic titles on upload path.",
+  "categories": {
+    "PUMP": 12,
+    "COOLING_TOWER": 4
+  },
+  "totals": { "items": 16 },
+  "bas_points": { "rows": 0 },
+  "control_valves": { "items": 0 }
+}

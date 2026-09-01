@@ -971,13 +971,42 @@ function skipSubHeaderContinuation(rows: GraphSpan[][], vocab: string[], from: n
 // recognizes a genuinely TYPE-keyed table (baker-county-eoc-bidset.pdf#59's
 // LUMINAIRE SCHEDULE) a different, position-based way instead — see its
 // bareLeadingType comment for the real reasoning.
-const CATALOG_ANCHOR_WORDS = ["ID", "MARK", "CODE", "SYMBOL", "TAG"];
+const CATALOG_ANCHOR_WORDS = ["ID", "MARK", "CODE", "SYMBOL", "TAG", "DESIGNATION"];
+
+/** ITEM NO. / EQUIP NO. — own-identity key columns on VA / federal CUP
+ * schedules (Las Vegas CUP PUMP / COOLING TOWER). Kept OUT of
+ * CATALOG_ANCHOR_WORDS so bare ITEM/EQUIP never trip mergeBackward /
+ * finish vocab; matched only as the compound forms below. */
+const ITEM_NO_HEADER_RE = /^(?:ITEM|EQUIP\.?|EQUIPMENT)\s*(?:NO\.?|NUMBER|#)$/i;
+/** UNIT TAG / UNIT NO — own-identity on bulk school/courthouse schedules. */
+const UNIT_TAG_HEADER_RE = /^UNIT\s*(?:TAG|NO\.?|NUMBER|#)$/i;
+/** EQUIP. TAG / EQUIP TAG — own-identity on bulk hospital / school schedules
+ * (Hawthorn Psych AHU SCHEDULE). Distinct from UNIT MARK / VALVE MARK
+ * (cross-references): EQUIP TAG names THIS row's equipment mark. */
+const EQUIP_TAG_HEADER_RE = /^EQUIP\.?\s*TAG$/i;
+
+function isItemNoHeader(text: string | null | undefined): boolean {
+  return ITEM_NO_HEADER_RE.test(norm(text || "").replace(/\s+/g, " ").trim());
+}
+
+function isUnitTagHeader(text: string | null | undefined): boolean {
+  return UNIT_TAG_HEADER_RE.test(norm(text || "").replace(/\s+/g, " ").trim());
+}
+
+function isEquipTagHeader(text: string | null | undefined): boolean {
+  return EQUIP_TAG_HEADER_RE.test(norm(text || "").replace(/\s+/g, " ").trim());
+}
+
+function isOwnIdentityEquipmentHeader(text: string | null | undefined): boolean {
+  return isItemNoHeader(text) || isUnitTagHeader(text) || isEquipTagHeader(text);
+}
 
 /** True when a header IS a bare catalog-anchor word (after `norm`) — the
  * row's OWN identity column, the same catalog-anchor bar every
  * equipment-kind table already keys off of. */
 export function isBareAnchorHeader(header: string | null | undefined): boolean {
-  return CATALOG_ANCHOR_WORDS.includes(norm(header || ""));
+  if (CATALOG_ANCHOR_WORDS.includes(norm(header || ""))) return true;
+  return isOwnIdentityEquipmentHeader(header);
 }
 
 /** True when a header carries a catalog-anchor word ALONGSIDE another word
@@ -993,6 +1022,9 @@ export function isBareAnchorHeader(header: string | null | undefined): boolean {
 export function isQualifiedAnchorHeader(header: string | null | undefined): boolean {
   const h = norm(header || "");
   if (!h || CATALOG_ANCHOR_WORDS.includes(h)) return false;
+  // ITEM NO / EQUIP NO / UNIT TAG / EQUIP TAG are own-identity, not UNIT MARK-style
+  // cross-references.
+  if (isOwnIdentityEquipmentHeader(h)) return false;
   const toks = h.split(/\s+/).filter(Boolean);
   return toks.length > 1 && toks.some((t) => CATALOG_ANCHOR_WORDS.includes(t));
 }
@@ -3026,7 +3058,10 @@ function bandLimits(anchors: Anchor[]): { x0: number; x1: number; medGap: number
 // (this specific row already resolves correctly via a separate, working
 // mechanism this file does not touch) rather than silently taking it down
 // while chasing a different set's own real gap.
-const CODE_RE = /^(?:[A-Z]{1,4}[A-Z0-9]{0,4}|[A-Z]{1,6}(?:-(?:[A-Z][A-Z0-9]{0,5}|[0-9]{1,5})){1,4})$/;
+const CODE_RE = /^(?:[A-Z]{1,4}[A-Z0-9]{0,4}|[A-Z]{1,6}(?:-(?:[A-Z][A-Z0-9]{0,5}|[0-9]{1,5}[A-Z]{0,3})){1,4})$/;
+// Hyphen segments accept digit-leading unit suffixes with an optional letter
+// trail (AHU-1A / CU-1B / FCU-2A) — common US multi-cottage / multi-unit
+// marking. Pure letter segments (AHU-A1) and pure digits (AHU-1) unchanged.
 // Every recognized column-header word, across all three vocabularies —
 // a real device/finish tag is never itself the bare name of some table's
 // column (the same axiom bandDataRows' own keyIsOwnColumn check already
@@ -3299,6 +3334,19 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
     const phrase = norm(raw).replace(/\s+/g, " ").trim();
     return NAME_KEY_RE.test(phrase) ? { key: phrase } : null;
   }
+  // Comma-grouped equipment marks in one ITEM NO cell — "CWP - 1,2,3,4,5"
+  // or "CT-1,2,3,4" (VA Las Vegas CUP pump / cooling-tower schedules). Mint
+  // slash-compound keys so one schedule row answers for every listed mark;
+  // trailing service prose glued into the same span ("… 5 CO") is dropped.
+  if (kind === "equipment") {
+    const grouped = norm(raw).replace(/\s+/g, " ").trim()
+      .match(/^([A-Z]{1,6})\s*[-–]\s*(\d+(?:\s*,\s*\d+)+)\b/);
+    if (grouped) {
+      const prefix = grouped[1];
+      const marks = grouped[2].split(/\s*,\s*/).map((n) => `${prefix}-${n}`);
+      if (marks.every((m) => CODE_RE.test(m))) return { key: marks.join("/") };
+    }
+  }
   const kept = norm(raw).replace(/[^A-Z0-9/-]/g, "");
   const key = kept.replace(/\//g, "");
   if (kind === "finish" || kind === "equipment") {
@@ -3320,11 +3368,35 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
 }
 
 /** Does a schedule-row key answer for a mark? Exact, or one of a compound
- * key's slash-separated parts ("R1/E1" answers for "R1" and for "E1"). */
+ * key's parts: slash (`R1/E1`), comma (`AHU-1, HP-1`), or glued extraction
+ * (`AHU-1HP-1` when SYMBOL lost the separator into `row.key`). Digit+letter
+ * suffixes (`AHU-1A`) stay one mark — only split before a 2+ letter run.
+ * Also strips revision prefixes (`(N)ATU K1`, glued `NATUK1`) so schedule
+ * lookup matches the mark as drawn on plans (Hurlburt ATU K1/K2). */
 export const rowKeyAnswersFor = (key: string, want: string): boolean => {
-  const c = norm(key).replace(/\s+/g, "");
-  const w = norm(want).replace(/\s+/g, "");
-  return c === w || c.split("/").filter(Boolean).includes(w);
+  const stripRev = (s: string): string => {
+    let t = s;
+    t = t.replace(/^\(([NER])\)/, "");
+    // Glued N+equip when parentheses were dropped into row.key (NATUK1, NACC-2).
+    const glued = t.match(/^N((?:AHU|ATU|ACC|FCU|VAV|RTU|CU|EF|SF|RF|DOAS|ERV)[A-Z0-9\s\-].*)$/i);
+    if (glued) t = glued[1];
+    return t;
+  };
+  const c = stripRev(norm(key)).replace(/\s+/g, "");
+  const w = stripRev(norm(want)).replace(/\s+/g, "");
+  if (!c || !w) return false;
+  if (c === w) return true;
+  const parts = new Set<string>();
+  for (const piece of c.split(/[/,]/).filter(Boolean)) {
+    parts.add(piece);
+    // Glued compounds: split before a new alphabetic mark start after a digit
+    // (`AHU-1HP-1`, `DFC-1DCU-1`, `F-1CU-1`, `ERU-1HP-4`). Require ≥2 letters
+    // so `AHU-1A` / `VAV-2B` digit+letter suffixes do not split.
+    for (const glued of piece.split(/(?<=\d)(?=[A-Z]{2,})/i)) {
+      if (glued) parts.add(glued);
+    }
+  }
+  return parts.has(w);
 };
 
 /** The number part of a row key — "A-134" and "134" both answer for 134. */
@@ -4568,6 +4640,9 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // of a table this vocabulary was never going to fully parse.
   const equipmentHeaderQualifies = (candAnchors: Anchor[], rowIndex: number): boolean => {
     if (candAnchors.some((a) => CATALOG_ANCHOR_WORDS.includes(a.label))) return true;
+    // VA / federal CUP: ITEM NO. / EQUIP NO. as the row's own identity
+    // column (Las Vegas CUP PUMP SCHEDULE) — compound forms only.
+    if ((rows[rowIndex] || []).some((t) => isOwnIdentityEquipmentHeader(t.str))) return true;
     const bareLeadingType = candAnchors[0]?.label === "TYPE" && candAnchors.length >= 8
       && headerHits(rows[rowIndex], vocab).length / Math.max(1, rows[rowIndex].length) >= 0.6;
     return bareLeadingType;
@@ -4601,6 +4676,27 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
     dataFrom = 0;
     titleFrom = rows.findIndex((r) => rowY(r) >= rot.top) - 1;
     if (titleFrom < -1) titleFrom = rows.length - 1;
+  }
+
+  // ITEM NO / EQUIP NO is not in EQUIPMENT_HEADERS (keeps bare ITEM/EQUIP out
+  // of vocabulary hits) but must still anchor the key column when it is the
+  // schedule's own identity header — inject after the vocab pass.
+  if (kind === "equipment") {
+    const itemSpans: GraphSpan[] = [];
+    for (const t of headerSpans) if (isOwnIdentityEquipmentHeader(t.str)) itemSpans.push(t);
+    // Parent / co-equal tiers above the deepest qualifying row.
+    if (flat) {
+      const top = flat.mergedTopIdx ?? flat.rowIndex;
+      for (let ri = top; ri <= flat.rowIndex; ri++) {
+        for (const t of rows[ri] || []) if (isOwnIdentityEquipmentHeader(t.str)) itemSpans.push(t);
+      }
+    }
+    for (const t of itemSpans) {
+      const x = centerX(t);
+      const label = isUnitTagHeader(t.str) ? "TAG" : "ITEM";
+      if (anchors.some((a) => a.label === label || Math.abs(a.x - x) <= 8)) continue;
+      anchors = [...anchors, { label, x }].sort((a, b) => a.x - b.x);
+    }
   }
 
   // The region is what an agent is told to LOOK at, so it must bound THIS
@@ -4789,7 +4885,7 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
     const inBand = rows[i].filter((t) => t.x >= x0 && t.x <= x1);
     if (!inBand.length) continue;
     budget--;
-    const hit = inBand.find((t) => (/SCHEDULE/.test(norm(t.str)) || isReferenceOrSpecTable(t.str)) && (t.h || 8) >= hdrH2 * BIG_FONT_RATIO2);
+    const hit = inBand.find((t) => (/\bSCHEDULE\b/.test(norm(t.str)) || isReferenceOrSpecTable(t.str)) && (t.h || 8) >= hdrH2 * BIG_FONT_RATIO2);
     if (hit) { title = { sheet: sheet.key, text: hit.str.trim(), bbox: bboxOf(hit) }; break; }
     if (inBand.length !== 1) continue;
     const t = inBand[0];
@@ -4806,7 +4902,7 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
       const inBand = rows[i].filter((t) => t.x >= x0 && t.x <= x1);
       if (!inBand.length) continue;
       budget--;
-      const hit = inBand.find((t) => /SCHEDULE/.test(norm(t.str)) || isReferenceOrSpecTable(t.str));
+      const hit = inBand.find((t) => /\bSCHEDULE\b/.test(norm(t.str)) || isReferenceOrSpecTable(t.str));
       if (hit) title = { sheet: sheet.key, text: hit.str.trim(), bbox: bboxOf(hit) };
     }
   }
@@ -6412,15 +6508,78 @@ export function bandedSheets(sheet: SheetSpans, opts: ExtractOpts): SheetSpans[]
   kept.sort((a, b) => a.x0 - b.x0);
 
   const bounds = [-Infinity, ...kept.flatMap((s) => [s.x0, s.x1]).sort((a, b) => a - b), Infinity];
-  // bounds pairs up as (-Inf, s1.x0), (s1.x0, s1.x1) [the seam gap itself,
-  // always empty by construction — contributes nothing], (s1.x1, s2.x0), …
+  // bounds pairs up as (-Inf, s1.x0), (s1.x0, s1.x1) [the seam gap itself],
+  // (s1.x1, s2.x0), …  Seam gaps were assumed empty by density, but a real
+  // narrow column (Hawthorn Psych AHU SCHEDULE's MODEL at x≈2582) can sit
+  // inside a low-density "empty" run and would be dropped forever if we only
+  // keep the even pairs. Content bands are filled first; orphans whose
+  // center landed in a seam gap are then assigned to the nearest band.
   const bands: SheetSpans[] = [];
+  const bandRanges: Array<{ x0: number; x1: number }> = [];
   for (let i = 0; i + 1 < bounds.length; i += 2) {
     const [x0, x1] = [bounds[i], bounds[i + 1]];
     const bandSpans = sheet.spans.filter((s) => { const cx = centerX(s); return cx >= x0 && cx < x1; });
-    if (bandSpans.length) bands.push({ key: sheet.key, sheet_number: sheet.sheet_number, spans: bandSpans, ...(sheet.segs ? { segs: sheet.segs } : {}) });
+    if (bandSpans.length) {
+      bands.push({ key: sheet.key, sheet_number: sheet.sheet_number, spans: bandSpans, ...(sheet.segs ? { segs: sheet.segs } : {}) });
+      bandRanges.push({ x0, x1 });
+    }
   }
-  return bands.length > 1 ? bands.slice(0, MAX_COLUMN_BANDS) : [sheet];
+  if (bands.length <= 1) return [sheet];
+
+  const claimed = new Set(bands.flatMap((b) => b.spans));
+  for (const sp of sheet.spans) {
+    if (claimed.has(sp)) continue;
+    const cx = centerX(sp);
+    let best = 0;
+    let bestDist = Infinity;
+    for (let i = 0; i < bandRanges.length; i++) {
+      const { x0, x1 } = bandRanges[i];
+      const dist = cx < x0 ? x0 - cx : cx >= x1 ? cx - x1 : 0;
+      if (dist < bestDist) { bestDist = dist; best = i; }
+    }
+    bands[best].spans.push(sp);
+  }
+
+  // Multi-seam partitions can leave a thin middle band that holds only the
+  // identity columns (EQUIP. TAG / MANUFACTURER / AHU-1A) while MODEL and
+  // rating columns sit in the neighbor — neither side extracts alone
+  // (Hawthorn Psych #9 AIR HANDLING UNIT SCHEDULE, measured). Absorb a
+  // band that cannot produce a real table by itself into a neighbor only
+  // when the UNION newly produces a table (never collapse a failing body
+  // band into an unrelated complete schedule and re-contaminate it).
+  const probeOptsFinal: ExtractOpts = { ...opts, noForwardTierMerge: true };
+  let merged = true;
+  while (merged && bands.length > 1) {
+    merged = false;
+    for (let i = 0; i < bands.length; i++) {
+      if (sideHasRealTable(bands[i].spans, sheet.key, probeOptsFinal)) continue;
+      const candidates: number[] = [];
+      if (i > 0) candidates.push(i - 1);
+      if (i + 1 < bands.length) candidates.push(i + 1);
+      // Prefer the larger neighbor when both unions succeed.
+      candidates.sort((a, b) => bands[b].spans.length - bands[a].spans.length);
+      let into = -1;
+      for (const n of candidates) {
+        const unionSpans = [...bands[n].spans, ...bands[i].spans];
+        if (sideHasRealTable(unionSpans, sheet.key, probeOptsFinal)) {
+          into = n;
+          break;
+        }
+      }
+      if (into < 0) continue;
+      bands[into] = {
+        key: sheet.key,
+        sheet_number: sheet.sheet_number,
+        spans: [...bands[into].spans, ...bands[i].spans],
+        ...(sheet.segs ? { segs: sheet.segs } : {}),
+      };
+      bands.splice(i, 1);
+      merged = true;
+      break;
+    }
+  }
+
+  return bands.length > 1 ? bands.slice(0, MAX_COLUMN_BANDS) : (bands[0] ? [bands[0]] : [sheet]);
 }
 
 // ── the graph ───────────────────────────────────────────────────────────────
@@ -6516,7 +6675,13 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     // — scoped to schedule-role sheets only, a real, disclosed scope limit
     // named in that section's own comment, not an oversight.
     if (role.role === "schedule") {
-      for (const bs of bands) for (const t of extractAllReferenceTables(bs, s)) {
+      // Wide single schedules (VAV TERMINAL BOX with DESIGNATION + performance
+      // sub-tiers spanning a column-band seam) must be read from the whole
+      // sheet: per-band reference extraction sees only a sub-tier fragment
+      // (decimal performance keys) while the title sits in the other band —
+      // real, measured on Orange County Public Safety bulk set #50.
+      const refSheets = bands.length > 1 ? [s] : bands;
+      for (const bs of refSheets) for (const t of extractAllReferenceTables(bs, s)) {
         // A structural "reference" read can be the ONLY successful
         // extraction of a genuine MEP-equipment schedule whose own required
         // rating word (GPM/EWT/LWT/…) never independently co-occurs with its
@@ -6539,7 +6704,7 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
         // equipment-kind path in this file already enforces (a table with no
         // TAG/MARK/CODE/SYMBOL/ID column has no real key column an estimator
         // or symbol_sweep can chase, so a title match alone is not enough).
-        if (t.title && isMepEquipmentSchedule(t.title.text) && t.headers.some((h) => CATALOG_ANCHOR_WORDS.includes(norm(h)))) {
+        if (t.title && isMepEquipmentSchedule(t.title.text) && t.headers.some((h) => isBareAnchorHeader(h))) {
           notes.push(`${s.key}: "${t.title.text}" names a real MEP-equipment family but never independently cleared any kind's own row-vocabulary bar (its required rating word never co-occurs with its own anchor row) — reclassified from a structural reference read to equipment-kind.`);
           t.kind = "equipment";
           reclassified.add(t);
@@ -7729,7 +7894,7 @@ export function scheduleTableFromODL(
     // carry one extra recognized column (TYPE MARK / SENSIBLE MBH) that
     // clears the bar on its own — this promotion only ever fires for the
     // narrower case those two already skip.
-    kind = (isMepEquipmentSchedule(titleText) && headers.some((h) => CATALOG_ANCHOR_WORDS.includes(norm(h))))
+    kind = (isMepEquipmentSchedule(titleText) && headers.some((h) => isBareAnchorHeader(h)))
       ? "equipment"
       : "reference";
   }
@@ -7810,7 +7975,7 @@ export function scheduleTableFromODL(
     }
   }
 
-  const keyColIdx = headers.findIndex((h) => /^(SYMBOL|TAG|ID|MARK|CODE)$/.test(norm(h)));
+  const keyColIdx = headers.findIndex((h) => /^(SYMBOL|TAG|ID|MARK|CODE|UNIT TAG|UNIT NO|EQUIP TAG|EQUIP\. TAG|DESIGNATION)$/.test(norm(h)));
   const rows: TableRow[] = [];
   for (let r = headerEnd; r < R; r++) {
     const seen = new Set<ODLTableCell>();

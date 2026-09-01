@@ -1,0 +1,187 @@
+# Volume 2 intake rubric — HVAC/BAS Plan Sets Vol2
+
+**Source:** Google Drive archive `HVAC_BAS_Plan_Sets_Vol2` (82 verified vector
+sets · HVAC **and** BAS/controls proven · no Vol1 repeats).  
+**On disk:** `opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/` (gitignored,
+same as Vol1 bulk). INDEX: `INDEX.md` / `INDEX.csv`.  
+**Authority:** `GOAL.md` §8 · `NEXT_GOAL_LOOP.md` Pillar A — corpus is a
+*ruler*, not a score farm.
+
+## Scope (full volume)
+
+**All 82 INDEX sets are in-scope** for Pillar A stress and set-agnostic
+compile/BAS deepen. That is the product goal — not a pilot sample.
+
+| Delivery (INDEX) | Count | How we use it |
+|---|---:|---|
+| Single file | 69 | Probe / key / fix directly |
+| Split multipart folders | 13 | In-scope; rejoin via `REJOIN_full_sets.sh` / originals when whole-set compile is needed |
+
+Batching (probe → key → shared-path fix → negatives) is **operational
+cadence only**. It does **not** shrink scope to “first 5–10.” Prefer
+diverse geo/building types early so title/`keyRe`/BAS gaps generalize
+faster, then continue until the volume is covered or remaining ceilings
+are documented with honest ZERO/WEAK evidence.
+
+## Rules (set-agnostic only)
+
+1. **Entire Vol2 is in goal scope** (see `GOAL.md` §8). Do not treat
+   unkeyed sets as out of scope.
+2. Prefer single-file deliveries first for speed; do not skip multipart
+   sets permanently — rejoin when they block coverage.
+3. **Honest ZERO/WEAK** is correct when no extractable HVAC schedule
+   tables (or BAS points lists) exist — lock `0` / WEAK, do not inflate.
+4. **Fixes must be shared-path** (`corpusTakeoff` / `Session` / reconcile)
+   — no Vol2 hardcodes, no per-set IDs in product code.
+5. After each batch: focused compile + reconcile probes, negatives on
+   existing MEAT locks, update `PROGRESS.md`.
+6. Keys land under `takeoffs/cross-set-compile/` only after verified
+   compile totals.
+
+## Batch 1 (locked 2026-08-31)
+
+Diverse single-file probes → set-agnostic FAN/UH/coil/BAS wideners → keys:
+
+| Set | Tier | HVAC | BAS rows | Notes |
+|---|---|---:|---:|---|
+| 017 NIST Gaithersburg HVAC Cooling | MEAT | 19 | 0 | S-A-* supply fans + coils |
+| 014 Missoula Fire Sciences | MEAT | 30 | 0 | ECUH/HWUH + DSF/SEF fans |
+| 021 Laboratory mechanical | MEAT | 64 | 63 | DDC CONTROLLER I/O titles |
+| 009 APHIS Plant Inspection | MEAT | 15 | 0 | EDH duct heaters |
+| 023 Salinity Lab chiller | MEAT | 5 | 0 | chiller/pump/buffer |
+| 013 Boiler phase-2 Bldg 29 | WEAK | 1 | 0 | VFD only (honest) |
+| 020 MSHP Troop C | ZERO | 0 | 0 | finish-only |
+| 100 Butler Tech RTU welding | ZERO | 0 | 0 | no HVAC tables |
+
+Continue through remaining single-file sets, then multipart rejoins, until
+Vol2 coverage is complete or ceilings are documented.
+
+## Batch 2 (locked 2026-08-31)
+
+| Set | Tier | HVAC | BAS | Notes |
+|---|---|---:|---:|---|
+| 001 ATC Tower Air Ops | MEAT | 396 | 122 | large federal MEAT |
+| 004 MO interior/exterior reno | MEAT | 23 | 0 | GUH + RTU/DOAS |
+| 015 Submarine Pier 3 utility | MEAT | 47 | 39 | pier FCU/HP/BAS |
+| 018 Poultry Research Center | MEAT | 7 | 0 | HP/FAN/GRD |
+| 019 Eglin AFB contract docs | MEAT | 103 | 0 | VAV-heavy |
+| 024 Steam heating → RTU | MEAT | 4 | 0 | PACKAGED EQUIPMENT (RTU) |
+| 028 Bldg 615 reno | MEAT | 10 | 0 | DOAS OUTSIDE AIR |
+| 008 Unheated storage repair | WEAK | 3 | 0 | UH/louver only |
+| 011 Hines Finance Center | WEAK | 5 | 0 | GRD only (HP table = devices) |
+| 016 Irish Hill test | WEAK | 1 | 0 | single AHU |
+| 006 C-wing updates | ZERO | 0 | 0 | no HVAC tables |
+| 010 Monitoring/control design | ZERO | 0 | 0 | no HVAC tables |
+
+Shared-path adds this batch: RTU `PACKAGED EQUIPMENT SCHEDULE (RTU)`; UNIT_HEATER `GUH`/`NUH`; DOAS `DEDICATED OUTSIDE AIR SYSTEM`.
+
+## Batch 3 (locked 2026-09-01)
+
+VA / sterile / boiler / EHRM probes → building-prefix strip + VRF / humidifier /
+expansion / buffer wideners → keys:
+
+| Set | Tier | HVAC | BAS | Notes |
+|---|---|---:|---:|---|
+| 031 MO VA warehouse reno | MEAT | 89 | 0 | WHSE-* prefix strip; AS-1 air separator |
+| 047 NC VA replace chillers | MEAT | 15 | 0 | VRF indoor/outdoor + expansion system + buffer GST |
+| 044 NY VA main boilers | MEAT | 28 | 0 | fire-tube boilers + plant pumps/fans |
+| 040 IL VA expand sterile | MEAT | 24 | 0 | UH/FAN/PUMP/GRD/louver |
+| 042 VA Patriot Cafe | MEAT | 6 | 0 | FAN + GRD (no humidifier schedule) |
+| 041 IL VA sterile processing | WEAK | 4 | 0 | thin FCU/PUMP/GRD |
+| 034 NC VA EHRM infra | WEAK | 2 | 0 | pumps only |
+| 029 ME BGS MEANG boiler | ZERO | 0 | 0 | no extractable HVAC tables |
+| 036 LA VA EHRM | ZERO | 0 | 0 | no HVAC equipment schedules |
+| 039 TX VA replace/upgrade | ZERO | 0 | 0 | no extractable HVAC tables |
+| 045 FL VA EHRM | ZERO | 0 | 0 | no HVAC equipment schedules |
+| 046 MI vet elevators | ZERO | 0 | 0 | no HVAC tables |
+
+Shared-path adds this batch: `markCoreForKeyRe` building-prefix strip (with
+catalog-model guard); VRF_INDOOR/OUTDOOR; humidifier OCR + SH-* (digit-gated);
+EXPANSION SYSTEM titles; BUFFER GST-*; zone-lettered ET-A1 / AS-A1 mark forms.
+Negatives kept honest: sheet header `SHT. NO.`, prose `ETC.…`, Trane model
+`TPLFY-EP15NEM4` must not inflate humidifier/expansion/pump.
+
+## Batch 4 (locked 2026-09-01)
+
+Lab / college / VA / process-skid probes → hydronic title + bare valve-schedule
+wideners → keys:
+
+| Set | Tier | HVAC | BAS | Notes |
+|---|---|---:|---:|---|
+| 053 VA ER expand | MEAT | 43 | 0 | GRD CFM bands + HHW valve schedule (38 valves) |
+| 062 ITD D1 lab | MEAT | 93 | 0 | rich HVAC + lab air + 9 HHW reheat CVs |
+| 061 Ames Harley Wilhelm | MEAT | 23 | 0 | AHU/FCU/pump/fan/HX |
+| 071 ME Health Science | MEAT | 21 | 0 | VAV-heavy |
+| 060 ASC LAMBDA | MEAT | 13 | 0 | duct coils + GRD |
+| 072 West Valley Science/Math | MEAT | 13 | 0 | ERV/FAN/GRD |
+| 074 West Valley STEM classroom | MEAT | 13 | 0 | ERV/FAN/GRD |
+| 068 AVC Applied Arts | WEAK | 8 | 0 | boiler/pump/AS/ET |
+| 063 Harrison extruder lab | WEAK | 4 | 0 | thin VAV/GRD |
+| 067 SLAC process CW skid | WEAK | 3 | 0 | HX + GRD |
+| 054 NV VA central | ZERO | 0 | 0 | no extractable HVAC schedules |
+| 056 NY VA pharmacy | ZERO | 0 | 0 | no extractable HVAC schedules |
+
+Shared-path adds this batch: PUMP `HEATING HOT WATER PUMP` titles; AIR_SEPARATOR
+plural/`IAS-*`; HEAT_EXCHANGER titled marks without HX-only keyRe; HHW/CHW bare
+`^(?:\(N\)\s*)?VALVE SCHEDULE` + `V-HHW*`/`V-CHW*` altTitle/altKey (start-anchored
+so NAVFAC `CHW CONTROL VALVE SCHEDULE` keeps primary matching).
+
+## Batch 5 (locked 2026-09-01)
+
+VA sterile / energy / EHRM + MT campus + ITD D2 probes → electric duct-coil
+widener → keys:
+
+| Set | Tier | HVAC | BAS | Notes |
+|---|---|---:|---:|---|
+| 077 Miller dining | MEAT | 14 | 0 | WSHP + GRD |
+| 075 Renne Library studio | WEAK | 11 | 0 | mini-split/ERV/HP/GRD + DH-1 duct coil |
+| 069 ITD D2 lab heating | WEAK | 11 | 0 | AHU/boiler/pump/VFD |
+| 066 Barnard lithography | WEAK | 6 | 0 | HP + humidifier + GRD |
+| 049 IL VA sterile expand | WEAK | 2 | 0 | air compressors only |
+| 050 IL VA sterile processing | WEAK | 1 | 0 | thin GRD |
+| 048 NY VA main boilers | ZERO | 0 | 0 | no extractable HVAC tables |
+| 052 IL VA sterile alt | ZERO | 0 | 0 | no extractable HVAC tables |
+| 055 VA EHRM infra | ZERO | 0 | 0 | no extractable HVAC tables |
+| 057 VA energy upgrade | ZERO | 0 | 0 | no extractable HVAC tables |
+| 064 Leon Johnson room | ZERO | 0 | 0 | no extractable HVAC tables |
+| 073 Roberts classroom | ZERO | 0 | 0 | finish/lighting only |
+
+Shared-path adds this batch: `DUCT_MOUNTED_COIL` `ELECTRIC DUCT COIL` + `DH-*`;
+schedule header junk gate (`MODEL`/`TAG`/`MIN.`) without digit-forcing letter
+suffix marks (`CV-CHW-BP-A`). Vol2 keyed total **56**/82.
+
+## Batch 6 — remaining single-file INDEX (13)
+
+Probe → keys only (no new family wideners required):
+
+| Set | Tier | HVAC | BAS | Notes |
+|---|---|---:|---:|---|
+| 083 Town Offices facilities | MEAT | 12 | 0 | FCU/ERV/HP/GRD |
+| 096 Vermillion County Jail | MEAT | 131 | 231 | dense HVAC + BAS I/O |
+| 094 Orange County History | WEAK | 7 | 0 | AHU + ACC + CT |
+| 097 JVWTP chemical buildings | WEAK | 4 | 0 | OAU + UH + GRD |
+| 078 MSU Sparty store | WEAK | 1 | 0 | single FAN |
+| 092 Guaranteed Rate Field | WEAK | 1 | 0 | GRD only |
+| 080 / 082 / 084 / 086 / 087 / 091 / 095 | ZERO | 0 | 0 | no extractable HVAC tables |
+
+Warehouse titled HX recovery also bumps **031** key **89→91** (WHSE-HX*).
+Vol2 keyed total **69**/82 — all single-file INDEX sets keyed; **13** multipart
+rejoins remain.
+
+
+## Batch 7 — multipart rejoins (11/13)
+
+`REJOIN_full_sets.sh` → `_rejoined/*.pdf`, then shared Session+ODL compile:
+
+| Set | Tier | HVAC | Notes |
+|---|---|---:|---|
+| 012 MO chiller upgrade | MEAT | 32 | ACC+CT+pumps/VFDs |
+| 030 NY VA EHRM | MEAT | 18 | FCU/pumps/GRD |
+| 093 Jonesboro HP | MEAT | 24 | VRF indoor/outdoor |
+| 032 / 033 / 035 / 037 / 098 | WEAK | 1–9 | thin schedule hits |
+| 088 Phoenix Sky Harbor | MEAT | 64 | dense HVAC schedules |
+| 089 FL airport terminal/hangar | MEAT | 20 | DOAS/FCU/HP/louvers |
+| 038 / 043 / 058 LBNL | ZERO | 0 | honest empty (LBNL 311 sheets) |
+
+Acceptance keys point at `_rejoined/` with `source_parts_dir` fallback merge.
+Vol2 keyed total **82**/82 — all **13** multipart rejoins keyed (PHX **64**, FL airport **20**).

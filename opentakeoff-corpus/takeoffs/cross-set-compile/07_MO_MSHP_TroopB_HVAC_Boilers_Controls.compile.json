@@ -1,0 +1,16 @@
+{
+  "set_id": "07_MO_MSHP_TroopB_HVAC_Boilers_Controls",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets/_rejoined/07_MO_MSHP_TroopB_HVAC_Boilers_Controls.pdf",
+  "kind": "hvac_equipment",
+  "notes": "Honest ZERO \u2014 0 extractable tables on rejoined mechanical PDF (controls/boiler set without schedule text layer usable by sheet graph).",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

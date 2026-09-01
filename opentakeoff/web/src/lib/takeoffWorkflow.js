@@ -14,7 +14,7 @@
  * hardcode sheet numbers, building names, or locked counts.
  */
 
-/** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"project_takeoff"|"equipment_plan_join"|"cross_discipline_join"|"plan_link_refuse"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"symbol_sweep"|"connectivity"|"scale_refuse"|"generic"} TakeoffIntent */
+/** @typedef {"corpus_hvac"|"corpus_bas"|"corpus_valves"|"points_takeoff"|"fcu_buildings"|"valve_join"|"project_takeoff"|"equipment_plan_join"|"cross_discipline_join"|"plan_link_refuse"|"schedule_plan_reconcile"|"equipment_schedule"|"room_coordination"|"bas_point_trace"|"symbol_sweep"|"connectivity"|"scale_refuse"|"generic"} TakeoffIntent */
 
 /** Estimator phrasing: "takeoff", "take off", counts, rollups. */
 export function goalAsksTakeoff(g) {
@@ -81,7 +81,20 @@ export function namedEquipmentFamilyCount(goal) {
  */
 export function corpusCompileKind(goal) {
   const g = String(goal || "");
+  // Named multi-list demos stay on the points_takeoff title-scan path.
   if (namedPointsListTitles(g).length >= 2) return null;
+  // Generic "point(s) list takeoff" / "DDC points takeoff" with no named list
+  // titles → compile path. Without this, points_takeoff skips title_scans
+  // (empty namedTitles) and deadlocks in spot_cites while the evidence gate
+  // still demands query_table title="POINTS LIST".
+  // Do NOT steal multi-family project_takeoff prompts (D03) that mention a
+  // points list alongside HVAC equipment families.
+  if (namedPointsListTitles(g).length === 0
+    && namedEquipmentFamilyCount(g) === 0
+    && /\b(?:points?\s*list|DDC\s+points?(?:\s*list)?)\b/i.test(g)
+    && goalAsksTakeoff(g)) {
+    return "bas_points";
+  }
   if (!goalAsksCompleteSetTakeoff(g)) return null;
   if (/\b(?:BAS|DDC)\b/i.test(g) && /\bpoints?\b/i.test(g)) return "bas_points";
   if (/\b(?:control\s+)?valves?\b/i.test(g)) return "control_valves";
@@ -147,6 +160,18 @@ export function classifyTakeoffIntent(goal) {
     return "cross_discipline_join";
   }
 
+  // Schedule ↔ plan reconciliation (Pillar B) — before ad-hoc plan_link_refuse.
+  if (/\breconcile\b/i.test(g)
+    && /\b(?:plan|drawings?|installed|schedule|scheduled)\b/i.test(g)) {
+    return "schedule_plan_reconcile";
+  }
+  if (/\bscheduled\s+vs\s+installed\b/i.test(g)
+    || /\bon the schedule but not drawn\b/i.test(g)
+    || /\bwhich equipment is on the schedule but not drawn\b/i.test(g)
+    || /\bschedule[\s-]*only\b/i.test(g) && /\bplan[\s-]*only\b/i.test(g)) {
+    return "schedule_plan_reconcile";
+  }
+
   // Schedule attrs + plan sweep with honest refuse when not drawn.
   if (/\b(?:sweep|plan)\b/i.test(g)
     && /\b(?:refuse|not drawn|honest|invent plan)\b/i.test(g)
@@ -189,7 +214,7 @@ export function classifyTakeoffIntent(goal) {
   if (goalAsksTakeoff(g) && (
     /\bschedule\b/i.test(g)
     || /\b(?:AHUs?|DOAHs?|DOAS|VAVs?|FCUs?|RTUs?|CRAHs?|CUHs?|UHs?)\b/i.test(g)
-    || /\b(?:chillers?|boilers?|pumps?|humidifiers?|dehumidifiers?)\b/i.test(g)
+    || /\b(?:chillers?|boilers?|pumps?|vacuum\s+pumps?|humidifiers?|dehumidifiers?)\b/i.test(g)
     || /\b(?:diffusers?|grilles?|registers?|air\s+separators?|expansion\s+tanks?)\b/i.test(g)
     || /\b(?:unit\s+heaters?|cabinet\s+unit\s+heaters?|fan[\s\-]*coils?|rooftop)\b/i.test(g)
     || /\b(?:dedicated\s+outdoor|computer[\s\-]*room)\b/i.test(g)
@@ -246,8 +271,9 @@ export function scheduleFamilyNeedles(goal) {
     add({
       label: "AHU",
       title: "AIR HANDLING UNIT SCHEDULE",
-      titleRe: /AIR HANDLING UNIT/i,
-      exclude: /DEDICATED/i,
+      // Baker "AIR HANDLER HEAT PUMP SCHEDULE" is the indoor AHU half.
+      titleRe: /AIR HANDLING UNIT|AIR\s+HANDLER(?:\s+HEAT\s+PUMP)?/i,
+      exclude: /DEDICATED|FAN\s*COIL/i,
     });
   }
   if (/\bDOAH\b|dedicated\s+outdoor|DOAS\b/i.test(g)) {
@@ -299,17 +325,71 @@ export function scheduleFamilyNeedles(goal) {
   if (/\bpumps?\b/i.test(g)) {
     add({ label: "pump", title: "PUMP SCHEDULE", titleRe: /PUMP SCHEDULE/i });
   }
-  if (/\bRTUs?\b|rooftop|packaged/i.test(g)) {
-    add({ label: "RTU", title: "PACKAGED ROOFTOP", titleRe: /PACKAGED ROOFTOP|ROOFTOP/i });
+  if (/\bvacuum\s+pumps?\b/i.test(g)) {
+    add({
+      label: "vacuum pump",
+      title: "VACUUM PUMP SCHEDULE",
+      titleRe: /VACUUM\s+PUMP(?:\s+SCHEDULE)?/i,
+      exclude: /HEAT\s+PUMP|HYDRONIC/i,
+    });
   }
-  if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s\-]*coil/i.test(g)) {
+  if (/\bRTUs?\b|rooftop|packaged|roof[\s\-]*top\s+unit/i.test(g)) {
+    add({ label: "RTU", title: "ROOF TOP UNIT SCHEDULE", titleRe: /ROOF[\s\-]*TOP|PACKAGED\s+ROOFTOP|RTU\s+SCHEDULE/i });
+  }
+  if (/\bERVs?\b|energy\s+recovery/i.test(g)) {
+    add({
+      label: "ERV",
+      title: "ENERGY RECOVERY VENTILATOR SCHEDULE",
+      titleRe: /ENERGY\s+RECOVERY\s+VENTILATOR|ENERGY\s+RECOVERY\s+UNIT|\bERV\s+SCHEDULE/i,
+    });
+  }
+  if (/\bfurnaces?\b/i.test(g)) {
+    add({ label: "furnace", title: "FURNACE SCHEDULE", titleRe: /FURNACE\s+SCHEDULE|GAS[\s\-]*FIRED\s+.*FURNACE/i });
+  }
+  if (/\bcondensing\s+units?\b/i.test(g)) {
+    add({ label: "condensing unit", title: "CONDENSING UNIT SCHEDULE", titleRe: /CONDENSING\s+UNIT\s+SCHEDULE/i });
+  }
+  if (/\bheat\s+pumps?\b/i.test(g)) {
+    add({ label: "heat pump", title: "HEAT PUMP SCHEDULE", titleRe: /HEAT\s+PUMP/i });
+  }
+  if (/\boutdoor\s+air\s+units?\b|\bOAUs?\b/i.test(g) && !/\bDOAH\b|dedicated\s+outdoor/i.test(g)) {
+    add({
+      label: "outdoor air unit",
+      title: "OUTDOOR AIR UNIT SCHEDULE",
+      titleRe: /OUTDOOR\s+AIR\s+UNIT\s+SCHEDULE/i,
+      exclude: /DEDICATED\s+OUTDOOR\s+AIR/i,
+    });
+  }
+  if (/\b(?:exhaust\s+)?fans?\b/i.test(g) && !/\bfan[\s\-]*coil|ceiling\s+fan/i.test(g)) {
     add({ label: "fan", title: "FAN SCHEDULE", titleRe: /FAN SCHEDULE/i });
+  }
+  if (/\bceiling\s+fans?\b/i.test(g)) {
+    add({
+      label: "ceiling fan",
+      title: "CEILING FAN SCHEDULE",
+      titleRe: /CEILING\s+FAN\s+SCHEDULE/i,
+      exclude: /FAN\s*COIL|CABINET/i,
+    });
   }
   if (/\bdiffuser|grille|register|GRD\b/i.test(g)) {
     add({
       label: "diffuser",
       title: "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
       titleRe: /GRILLE,\s*REGISTER,\s*AND\s*DIFFUSER|DIFFUSER[\s\-]*GRILLE/i,
+    });
+  }
+  if (/\bfume\s+hood\s+damper|\bECVs?\b|fume\s+hood.{0,20}(?:VAV|damper)/i.test(g)) {
+    add({
+      label: "fume hood damper",
+      title: "FUME HOOD VARIABLE AIR VOLUME DAMPER SCHEDULE",
+      titleRe: /FUME\s+HOOD.{0,40}(?:VARIABLE\s+AIR\s+VOLUME|VAV).{0,40}DAMPER|FUME\s+HOOD\s+DAMPER\s+SCHEDULE/i,
+    });
+  }
+  if (/\bVFDs?\b|variable\s+frequency\s+drive/i.test(g)) {
+    add({
+      label: "VFD",
+      title: "VARIABLE FREQUENCY DRIVE SCHEDULE",
+      titleRe: /VARIABLE\s+FREQUENCY\s+DRIVE(?:\s+SCHEDULE)?|\bVFD\s+SCHEDULE/i,
     });
   }
   if (/\bdehumidif/i.test(g)) {
@@ -362,6 +442,17 @@ export function scheduleFamilyNeedles(goal) {
       label: "expansion tank",
       title: "EXPANSION TANK SCHEDULE",
       titleRe: /EXPANSION TANK SCHEDULE/i,
+    });
+  }
+  if (/\bwater\s+softener/i.test(g)) {
+    add({ label: "water softener", title: "WATER SOFTENER SCHEDULE", titleRe: /WATER\s+SOFTENER\s+SCHEDULE/i });
+  }
+  if (/\bwater\s+heater/i.test(g) && !/\bfurnace/i.test(g)) {
+    add({
+      label: "water heater",
+      title: "WATER HEATER SCHEDULE",
+      titleRe: /(?:INSTANTANEOUS\s+)?(?:GAS\s+)?WATER\s+HEATER\s+SCHEDULE/i,
+      exclude: /BOILER/i,
     });
   }
   if (/\bcontrol\s+valves?\b/i.test(g)) {
@@ -437,6 +528,8 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
     name === "query_table" && !out?.error && args?.row_key != null).length;
   const hasCorpusCompile = log.some(({ name, out }) =>
     name === "compile_corpus_takeoff" && !out?.error && (out?.takeoff_id || out?.kind));
+  const hasReconcile = log.some(({ name, out }) =>
+    name === "reconcile_schedule_plan" && !out?.error && Array.isArray(out?.rows));
   const hasSweep = log.some(({ name, out }) =>
     name === "sweep_schedule_row" && !out?.error);
   const titleScanCount = log.filter(({ name, out, args }) => {
@@ -486,21 +579,49 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
 
   if (intent === "points_takeoff") {
     const titles = namedPointsListTitles(goal);
-    const missing = titles.filter((t) => !hasTitleScan(log, t));
-    const allowedBase = ["list_sheets", "sheet_graph", "find_schedule", "query_table", "highlight_citation"];
+    // Defense: never enter spot_cites with zero title-scan targets — a bare
+    // "points list takeoff" used to skip title_scans and hang on the evidence
+    // gate. Prefer corpus_bas for that phrasing; if we still land here, scan
+    // a generic POINTS LIST / DDC POINTS LIST title.
+    const scanTargets = titles.length
+      ? titles
+      : ["POINTS LIST", "DDC POINTS LIST"];
+    const missing = scanTargets.filter((t) => !hasTitleScan(log, t));
+    // One successful POINTS/DDC title-scan satisfies the generic fallback.
+    const genericFallback = titles.length === 0;
+    const missingEffective = genericFallback
+      ? (missing.length < scanTargets.length ? [] : missing)
+      : missing;
+    const allowedBase = ["list_sheets", "sheet_graph", "find_schedule", "query_table", "highlight_citation", "compile_corpus_takeoff"];
     if (!hasGraph) {
       return {
         phase: "survey",
-        allowedTools: ["list_sheets", "sheet_graph", "find_schedule"],
-        nextMove: "Call list_sheets and/or sheet_graph once, then title-scan each named POINTS/DDC list with query_table (no row_key, no cell_contains).",
+        allowedTools: ["list_sheets", "sheet_graph", "find_schedule", "compile_corpus_takeoff"],
+        nextMove: "Call list_sheets and/or sheet_graph once, then title-scan each named POINTS/DDC list with query_table (no row_key, no cell_contains). Or call compile_corpus_takeoff kind=bas_points for a full-set points compile.",
         blockReason: null,
       };
     }
-    if (missing.length) {
+    if (hasCorpusCompile) {
+      if (rowKeyCites < 1 || paints < 1) {
+        return {
+          phase: paints < 1 && rowKeyCites >= 1 ? "paint" : "spot_cites",
+          allowedTools: ["query_table", "highlight_citation"],
+          nextMove: "From the compile result, spot-check with query_table { row_key } + highlight_citation, then answer from compile list totals.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "Emit the complete takeoff answer from compile_corpus_takeoff bas_points totals. Cite painted MARKs. No more exploratory tools.",
+        blockReason: null,
+      };
+    }
+    if (missingEffective.length) {
       return {
         phase: "title_scans",
         allowedTools: allowedBase,
-        nextMove: `Title-scan these points lists with query_table (title only, no row_key/cell_contains): ${missing.slice(0, 5).join("; ")}. Copy count and point_type_counts from each result.`,
+        nextMove: `Title-scan these points lists with query_table (title only, no row_key/cell_contains): ${missingEffective.slice(0, 5).join("; ")}. Copy count and point_type_counts from each result. Alternatively call compile_corpus_takeoff with kind="bas_points".`,
         blockReason: null,
       };
     }
@@ -696,6 +817,56 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
     })());
   }
 
+  if (intent === "schedule_plan_reconcile") {
+    const allowed = [
+      "list_sheets", "sheet_graph", "find_schedule", "query_table",
+      "reconcile_schedule_plan", "sweep_schedule_row", "highlight_citation",
+    ];
+    const suggested = suggestedScheduleTitles(goal).slice(0, 3);
+    const familyHint = suggested.length
+      ? ` Pass family from goal when calling reconcile_schedule_plan (needles: ${suggested.join("; ")}).`
+      : "";
+    return surveyThenTitleTools(hasGraph, (() => {
+      if (titleScanCount < 1 && !hasReconcile) {
+        return {
+          phase: "title_scans",
+          allowedTools: allowed,
+          nextMove: "Title-scan the named schedule family with query_table (title only) for scheduled count, "
+            + "then call reconcile_schedule_plan (optionally scoped with family=). "
+            + "Copy rows with Tag, Scheduled qty, Installed qty, Status, and cites — never invent plan hits."
+            + familyHint,
+          blockReason: null,
+        };
+      }
+      if (!hasReconcile && !hasSweep) {
+        return {
+          phase: "compile",
+          allowedTools: allowed,
+          nextMove: "Call reconcile_schedule_plan now for the full reconcile table, "
+            + "or sweep_schedule_row per tag if scoped to named MARKs only."
+            + familyHint,
+          blockReason: null,
+        };
+      }
+      if (paints < 1) {
+        return {
+          phase: "paint",
+          allowedTools: allowed,
+          nextMove: "highlight_citation on schedule MARK cells and successful plan hits from reconcile rows, "
+            + "including explicit SCHEDULE_ONLY / REFUSED statuses.",
+          blockReason: null,
+        };
+      }
+      return {
+        phase: "answer",
+        allowedTools: null,
+        nextMove: "Emit the reconcile table: Tag · Family · Scheduled qty · Installed qty · Status · cites. "
+          + "Surface every SCHEDULE_ONLY and REFUSED row honestly — do not claim all scheduled units are drawn.",
+        blockReason: null,
+      };
+    })());
+  }
+
   if (intent === "plan_link_refuse") {
     const allowed = [
       "list_sheets", "sheet_graph", "find_schedule", "query_table",
@@ -738,17 +909,18 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
   if (intent === "symbol_sweep") {
     const allowed = [
       "list_sheets", "sheet_graph", "set_scale", "view_sheet", "view_region",
-      "symbol_sweep", "highlight_citation",
+      "find_legend_symbols", "match_reference_symbol", "symbol_sweep", "highlight_citation",
     ];
-    const hasSymbolSweep = (callLog || []).some(({ name, out }) =>
-      name === "symbol_sweep" && out && !out.error);
+    const hasPlanSweep = (callLog || []).some(({ name, out }) =>
+      (name === "symbol_sweep" || name === "match_reference_symbol") && out && !out.error);
     return surveyThenTitleTools(hasGraph, (() => {
-      if (!hasSymbolSweep) {
+      if (!hasPlanSweep) {
         return {
           phase: "spot_cites",
           allowedTools: allowed,
-          nextMove: "Marquee one real drawn instance as seed_rect and call symbol_sweep. "
-            + "Copy found/matches/withheld — never invent placements. Detail-seeded set scope needs scale on both ends.",
+          nextMove: "Do NOT treat find_legend_symbols as plan hits. On a scaled PLAN sheet, call match_reference_symbol "
+            + "(library valves) or marquee one real plan instance and call symbol_sweep. "
+            + "Copy found/matches/withheld — never invent placements. Disclose legend-only inventories separately.",
           blockReason: null,
         };
       }
@@ -756,14 +928,15 @@ export function advanceTakeoffWorkflow(intent, callLog, goal) {
         return {
           phase: "paint",
           allowedTools: allowed,
-          nextMove: "highlight_citation (or commit) on accepted symbol matches, then answer with counts and withheld disclosures.",
+          nextMove: "highlight_citation (or commit) on accepted PLAN matches only, then answer with counts and withheld disclosures.",
           blockReason: null,
         };
       }
       return {
         phase: "answer",
         allowedTools: null,
-        nextMove: "Emit match counts, rotations/mirrors when present, and every withheld near-miss with its reason.",
+        nextMove: "Emit match counts from plan sweeps, rotations/mirrors when present, and every withheld near-miss with its reason. "
+          + "Never claim legend glyphs were plan placements.",
         blockReason: null,
       };
     })());
