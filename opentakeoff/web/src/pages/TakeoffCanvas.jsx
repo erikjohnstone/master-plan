@@ -2742,13 +2742,13 @@ export default function TakeoffCanvas() {
   const exportProfileFile = async () => {
     try {
       const p = await buildProfile();
-      downloadText("opentakeoff-profile.otprofile", JSON.stringify(p, null, 2), "application/json");
-      setCommitMsg(`Exported opentakeoff-profile.otprofile — ${profileSummary(p)}. Import it on another machine to carry your setup over.`);
+      downloadText("takeoff-profile.otprofile", JSON.stringify(p, null, 2), "application/json");
+      setCommitMsg(`Exported takeoff-profile.otprofile — ${profileSummary(p)}. Import it on another machine to carry your setup over.`);
     } catch (e) { setCommitMsg(`Couldn't export profile: ${e?.message || e}`); }
   };
   const backupProfileFile = async () => {
     const backup = await buildProfile();
-    downloadText("opentakeoff-profile-backup.otprofile", JSON.stringify(backup, null, 2), "application/json");
+    downloadText("takeoff-profile-backup.otprofile", JSON.stringify(backup, null, 2), "application/json");
   };
   const importProfileFile = async (file) => {
     if (!file) return;
@@ -2757,7 +2757,7 @@ export default function TakeoffCanvas() {
       await backupProfileFile();
       const n = await applyProfile(p);
       await refreshLibraries();
-      setCommitMsg(`Applied profile${p.name ? ` "${p.name}"` : ""} — ${n.templates} condition template${n.templates === 1 ? "" : "s"}, ${n.materials} material${n.materials === 1 ? "" : "s"}, ${n.stamps} stamp${n.stamps === 1 ? "" : "s"}, ${n.reportTemplates} report template${n.reportTemplates === 1 ? "" : "s"}. Your previous setup downloaded as opentakeoff-profile-backup.otprofile.`);
+      setCommitMsg(`Applied profile${p.name ? ` "${p.name}"` : ""} — ${n.templates} condition template${n.templates === 1 ? "" : "s"}, ${n.materials} material${n.materials === 1 ? "" : "s"}, ${n.stamps} stamp${n.stamps === 1 ? "" : "s"}, ${n.reportTemplates} report template${n.reportTemplates === 1 ? "" : "s"}. Your previous setup downloaded as takeoff-profile-backup.otprofile.`);
     } catch (e) {
       setCommitMsg(String(e?.message || "").startsWith("Couldn't") ? e.message : `Couldn't apply profile: ${e?.message || e}`);
     }
@@ -2767,7 +2767,7 @@ export default function TakeoffCanvas() {
       await backupProfileFile();
       await resetProfileDefaults();
       await refreshLibraries();
-      setCommitMsg("Profile reset to stock defaults — your previous setup downloaded as opentakeoff-profile-backup.otprofile (Import profile restores it). Project takeoffs are untouched.");
+      setCommitMsg("Profile reset to stock defaults — your previous setup downloaded as takeoff-profile-backup.otprofile (Import profile restores it). Project takeoffs are untouched.");
     } catch (e) { setCommitMsg(`Couldn't reset profile: ${e?.message || e}`); }
   };
 
@@ -5842,7 +5842,7 @@ export default function TakeoffCanvas() {
   // idempotent. The store sanitizes on save, so a malformed file can't wedge us.
   function exportStamps() {
     const data = JSON.stringify({ schema: "opentakeoff.stamp_library.v1", ...stampLibRef.current }, null, 2);
-    downloadBytes("opentakeoff-stamps.json", new TextEncoder().encode(data), "application/json");
+    downloadBytes("takeoff-stamps.json", new TextEncoder().encode(data), "application/json");
   }
   async function importStamps(file) {
     try {
@@ -10161,7 +10161,7 @@ export default function TakeoffCanvas() {
             and nothing important is ever past the right edge. paddingTop 16
             keeps the cluster captions (top:-13) inside the scroll box. */}
         <div data-topbar-scroll style={{ display: "flex", gap: 7, alignItems: "center", flex: "1 1 0", minWidth: 0, padding: "16px 0 0", overflowX: "auto", overflowY: "hidden", scrollbarWidth: "thin", overscrollBehaviorX: "contain" }}>
-        <strong style={{ fontFamily: "var(--f-display)", fontSize: 15, color: "var(--ink)", letterSpacing: "-0.02em" }}>open<span style={{ fontStyle: "italic", color: "var(--cobalt)" }}>takeoff</span></strong>
+        <strong style={{ fontFamily: "var(--f-display)", fontSize: 15, color: "var(--ink)", letterSpacing: "-0.02em" }}>Takeoff</strong>
         <button type="button" onClick={() => fileInputRef.current?.click()} title="Open plans — PDF, image, or a .zip plan set (or just drag them onto the canvas)"
           style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: "1px solid var(--ink)", background: "var(--ink)", color: "var(--paper-bright)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
           <Icon name="plus" size={14} />Open</button>

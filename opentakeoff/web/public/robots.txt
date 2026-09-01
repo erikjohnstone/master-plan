@@ -1,4 +1,4 @@
-# OpenTakeoff is open to all crawlers — human search and AI agents alike.
+# Allow crawlers — human search and AI agents alike.
 User-agent: *
 Allow: /
 
@@ -20,4 +20,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://opentakeoff.kentucky-ai.com/sitemap.xml
+Sitemap: /sitemap.xml
