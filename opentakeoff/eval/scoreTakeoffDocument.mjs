@@ -51,6 +51,9 @@ export function scoreCorpusTakeoffs(corpusRoot, outDir, opts = {}) {
   let seqExpected = 0;
   let seqHit = 0;
 
+  let gridTyped = 0;
+  let gridTotal = 0;
+
   for (const key of keys) {
     if (filter && !filter.has(key.set_id)) continue;
     const doc = loadTakeoffDoc(outDir, key.set_id);
@@ -87,6 +90,10 @@ export function scoreCorpusTakeoffs(corpusRoot, outDir, opts = {}) {
       seqExpected += 1;
       if ((doc.sequences || []).length > 0) seqHit += 1;
     }
+    for (const g of doc.grid_classifications || []) {
+      gridTotal += 1;
+      if (g.type && g.type !== "OTHER") gridTyped += 1;
+    }
     perSet.push({
       set_id: key.set_id,
       status: "scored",
@@ -103,7 +110,7 @@ export function scoreCorpusTakeoffs(corpusRoot, outDir, opts = {}) {
   const metrics = {
     grounding_coverage: groundingN ? groundingSum / groundingN : null,
     table_cell_f1: null,
-    grid_type_acc: null,
+    grid_type_acc: gridTotal ? gridTyped / gridTotal : null,
     valve_prec: null,
     valve_rec: valveExpected ? valveHit / valveExpected : null,
     valve_attr_acc: null,

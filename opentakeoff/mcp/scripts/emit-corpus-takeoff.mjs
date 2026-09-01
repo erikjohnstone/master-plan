@@ -10,7 +10,7 @@ import { dirname, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 import { fileURLToPath } from "node:url";
 import { buildEstimatorTakeoffDocument } from "../../web/src/lib/estimatorTakeoffDocument.mjs";
-import { loadCachedKeySession } from "../test/helpers/loadKeySession.mjs";
+import { cachedGraphForKey } from "../test/helpers/loadKeySession.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_CORPUS = resolve(HERE, "../../../opentakeoff-corpus");
@@ -23,12 +23,20 @@ function parseArgs(argv) {
   let limit = null;
   let resume = false;
   let sets = null;
+  let shardIndex = null;
+  let shardCount = null;
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--corpus") corpus = argv[++i];
     else if (a === "--out") out = argv[++i];
     else if (a === "--limit") limit = Number(argv[++i]);
     else if (a === "--sets") sets = argv[++i];
+    else if (a === "--shard") {
+      const spec = argv[++i] || "";
+      const [si, sc] = spec.split("/").map(Number);
+      shardIndex = si;
+      shardCount = sc;
+    }
     else if (a === "--resume") resume = true;
     else if (a === "--help" || a === "-h") {
       console.error("usage: emit-corpus-takeoff.mjs --corpus DIR [--out DIR] [--limit N] [--resume] [--sets id1,id2]");
@@ -42,11 +50,13 @@ function parseArgs(argv) {
     limit: Number.isFinite(limit) && limit > 0 ? limit : null,
     resume,
     filterIds: sets ? new Set(sets.split(",").map((s) => s.trim()).filter(Boolean)) : new Set(),
+    shardIndex: Number.isFinite(shardIndex) ? shardIndex : null,
+    shardCount: Number.isFinite(shardCount) && shardCount > 0 ? shardCount : null,
   };
 }
 
 const opts = parseArgs(process.argv.slice(2));
-const { corpusRoot, outDir, limit, resume, filterIds } = opts;
+const { corpusRoot, outDir, limit, resume, filterIds, shardIndex, shardCount } = opts;
 
 const CACHE_ID = "emit-takeoff-v1";
 const crossDir = resolve(corpusRoot, "takeoffs/cross-set-compile");
@@ -58,7 +68,12 @@ if (!existsSync(crossDir)) {
 const keys = readdirSync(crossDir)
   .filter((f) => f.endsWith(".compile.json"))
   .map((f) => JSON.parse(readFileSync(resolve(crossDir, f), "utf8")))
-  .filter((k) => !filterIds.size || filterIds.has(k.set_id));
+  .sort((a, b) => a.set_id.localeCompare(b.set_id))
+  .filter((k) => !filterIds.size || filterIds.has(k.set_id))
+  .filter((k, idx) => {
+    if (shardCount == null || shardIndex == null) return true;
+    return idx % shardCount === shardIndex;
+  });
 
 mkdirSync(outDir, { recursive: true });
 
@@ -68,9 +83,8 @@ async function emitOne(key) {
     return { set_id: key.set_id, out: outPath, skip: "already_exists" };
   }
 
-  const loaded = await loadCachedKeySession(corpusRoot, key, CACHE_ID);
-  if (!loaded) return { set_id: key.set_id, skip: "pdf_or_parts_missing" };
-  const { graph } = loaded;
+  const graph = await cachedGraphForKey(corpusRoot, key, CACHE_ID);
+  if (!graph) return { set_id: key.set_id, skip: "pdf_or_parts_missing" };
 
   let sha256 = null;
   const pdfPath = resolve(corpusRoot, key.source_file);
@@ -104,6 +118,26 @@ const results = [];
 const skipped = [];
 const todo = limit ? keys.slice(0, limit) : keys;
 
+function writeSummary() {
+  const summary = {
+    ok: true,
+    corpus: corpusRoot,
+    out: outDir,
+    ms: Math.round(performance.now() - started),
+    emitted: results.length,
+    skipped: skipped.length,
+    resumed_skipped: skipped.filter((s) => s.skip === "already_exists").length,
+    keys_total: keys.length,
+    todo: todo.length,
+    in_progress: true,
+  };
+  writeFileSync(
+    resolve(outDir, "_emit-summary.json"),
+    `${JSON.stringify({ ...summary, results, skipped }, null, 2)}\n`,
+  );
+  return summary;
+}
+
 for (let i = 0; i < todo.length; i++) {
   const key = todo[i];
   try {
@@ -115,24 +149,13 @@ for (let i = 0; i < todo.length; i++) {
     } else {
       results.push(row);
     }
-    if ((i + 1) % 1 === 0 || i + 1 === todo.length) {
-      console.error(`emit ${i + 1}/${todo.length} ${key.set_id} — ok ${results.length} skip ${skipped.length}`);
-    }
+    console.error(`emit ${i + 1}/${todo.length} ${key.set_id} — ok ${results.length} skip ${skipped.length}`);
+    if ((i + 1) % 1 === 0) writeSummary();
   } catch (e) {
     skipped.push({ set_id: key.set_id, skip: "error", detail: String(e?.message || e).slice(0, 200) });
+    writeSummary();
   }
 }
 
-const summary = {
-  ok: true,
-  corpus: corpusRoot,
-  out: outDir,
-  ms: Math.round(performance.now() - started),
-  emitted: results.length,
-  skipped: skipped.length,
-  resumed_skipped: skipped.filter((s) => s.skip === "already_exists").length,
-  keys_total: keys.length,
-  todo: todo.length,
-};
-writeFileSync(resolve(outDir, "_emit-summary.json"), `${JSON.stringify({ ...summary, results, skipped }, null, 2)}\n`);
+const summary = { ...writeSummary(), in_progress: false, shard: shardCount != null ? `${shardIndex}/${shardCount}` : null };
 console.log(JSON.stringify(summary, null, 2));

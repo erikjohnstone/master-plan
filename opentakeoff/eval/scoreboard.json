@@ -1,12 +1,12 @@
 {
-  "as_of": "2026-09-01T23:23:18.843Z",
+  "as_of": "2026-09-01T23:42:54.382Z",
   "note": "Scored from compile-key expectations + emitted takeoff.json corpus",
   "corpus": "/workspace/opentakeoff-corpus",
   "out_dir": "/workspace/opentakeoff/out",
   "metrics": {
     "grounding_coverage": 1,
     "table_cell_f1": null,
-    "grid_type_acc": null,
+    "grid_type_acc": 0.8679245283018868,
     "valve_prec": null,
     "valve_rec": 1,
     "valve_attr_acc": null,
@@ -21,12 +21,12 @@
     "seq_implied_point_f1": null,
     "discrepancy_prec": null,
     "determinism": null,
-    "corpus_pass_rate": 0.02586206896551724
+    "corpus_pass_rate": 0.034482758620689655
   },
   "acceptance": {
     "mvp": false,
-    "emitted": 3,
-    "missing": 113,
+    "emitted": 4,
+    "missing": 112,
     "keys_total": 116
   },
   "sample_sets": [
@@ -65,7 +65,14 @@
     },
     {
       "set_id": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
-      "status": "missing_emit"
+      "status": "scored",
+      "expected_valves": 0,
+      "actual_valves": 0,
+      "expected_bas": 0,
+      "actual_bas": 0,
+      "sequences": 0,
+      "grounding": null,
+      "grid_types": 7
     },
     {
       "set_id": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
