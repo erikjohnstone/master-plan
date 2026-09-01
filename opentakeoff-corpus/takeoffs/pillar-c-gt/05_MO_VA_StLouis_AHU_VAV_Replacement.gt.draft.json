@@ -1,22 +1,22 @@
 {
-  "set_id": "14_OR_KlamathCC_LearningCtr_Mechanical",
+  "set_id": "05_MO_VA_StLouis_AHU_VAV_Replacement",
   "pillar_c_complete": false,
   "gt_locked": false,
   "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
   "estimator_product": {
     "printed_bas_rows": 0,
-    "inventory_units": 37,
-    "estimate_only_points": 307,
+    "inventory_units": 14,
+    "estimate_only_points": 89,
     "never_merged_into_printed": true,
-    "gap_count": 37,
+    "gap_count": 14,
     "soo_status": "absent_or_not_detected",
     "estimator_complete": false
   },
   "inventory_drawing_verify": {
-    "at": "2026-09-01T16:49:55.649Z",
-    "artifact": "/opt/cursor/artifacts/pillar-c-14-inventory-drawing-verify.json",
-    "sample_pass": 15,
-    "sample_n": 15,
+    "at": "2026-09-01T16:50:23.016Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-05-inventory-drawing-verify.json",
+    "sample_pass": 14,
+    "sample_n": 14,
     "gt_locked": false
   }
 }

@@ -66,5 +66,22 @@
     "schedule_only": 5,
     "items": 5,
     "gt_locked": false
+  },
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 8,
+    "estimate_only_points": 24,
+    "never_merged_into_printed": true,
+    "gap_count": 8,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T16:50:44.722Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-040-inventory-drawing-verify.json",
+    "sample_pass": 8,
+    "sample_n": 8,
+    "gt_locked": false
   }
 }

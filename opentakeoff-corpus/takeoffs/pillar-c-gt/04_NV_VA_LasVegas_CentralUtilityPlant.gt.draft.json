@@ -1,22 +1,22 @@
 {
-  "set_id": "14_OR_KlamathCC_LearningCtr_Mechanical",
+  "set_id": "04_NV_VA_LasVegas_CentralUtilityPlant",
   "pillar_c_complete": false,
   "gt_locked": false,
   "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
   "estimator_product": {
     "printed_bas_rows": 0,
-    "inventory_units": 37,
-    "estimate_only_points": 307,
+    "inventory_units": 16,
+    "estimate_only_points": 60,
     "never_merged_into_printed": true,
-    "gap_count": 37,
+    "gap_count": 16,
     "soo_status": "absent_or_not_detected",
     "estimator_complete": false
   },
   "inventory_drawing_verify": {
-    "at": "2026-09-01T16:49:55.649Z",
-    "artifact": "/opt/cursor/artifacts/pillar-c-14-inventory-drawing-verify.json",
-    "sample_pass": 15,
-    "sample_n": 15,
+    "at": "2026-09-01T16:50:31.767Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-04-inventory-drawing-verify.json",
+    "sample_pass": 16,
+    "sample_n": 16,
     "gt_locked": false
   }
 }

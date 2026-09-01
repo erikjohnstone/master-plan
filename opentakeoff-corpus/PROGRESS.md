@@ -579,6 +579,21 @@ sample **20/20** on drawing (printed BAS 0); Klamath 14 **15/15** on drawing
 (printed BAS 0). Draft GT created/patched; `gt_locked: false`. Artifact:
 `/opt/cursor/artifacts/pillar-c-inventory-drawing-verify-batch.json`.
 
+**bas:0 inventory expanded (2026-09-01, 8 sets, still 0 locked):**
+
+| Set | Inv | Est pts | Sample on drawing | SOO |
+|---|---:|---:|---|---|
+| 11 SDSU | 128 | 708 | **20/20** | absent |
+| 14 Klamath | 37 | 307 | **15/15** | absent |
+| 062 ITD | 16 | 88 | **16/16** | present_not_row_extractable |
+| 05 St Louis | 14 | 89 | **14/14** | absent |
+| 04 Las Vegas CUP | 16 | 60 | **16/16** | absent |
+| 044 Boilers | 22 | 90 | **13/15** (FOP-2/34 miss) | absent |
+| 040 Sterile | 8 | 24 | **8/8** | absent |
+| 25 Douglas | 3 | 27 | **3/3** | absent |
+
+All printed BAS 0 · estimate_only never merged · **0 locked**. Same batch artifact.
+
 **Plan-paint census — keyed floor (2026-09-01, still 0 locked):**
 
 BAS `served_equipment` sweep (full tag census, not sample):

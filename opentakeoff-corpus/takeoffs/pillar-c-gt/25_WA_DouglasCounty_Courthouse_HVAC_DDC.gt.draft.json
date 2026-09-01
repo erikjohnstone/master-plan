@@ -1,22 +1,22 @@
 {
-  "set_id": "14_OR_KlamathCC_LearningCtr_Mechanical",
+  "set_id": "25_WA_DouglasCounty_Courthouse_HVAC_DDC",
   "pillar_c_complete": false,
   "gt_locked": false,
   "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
   "estimator_product": {
     "printed_bas_rows": 0,
-    "inventory_units": 37,
-    "estimate_only_points": 307,
+    "inventory_units": 3,
+    "estimate_only_points": 27,
     "never_merged_into_printed": true,
-    "gap_count": 37,
+    "gap_count": 3,
     "soo_status": "absent_or_not_detected",
     "estimator_complete": false
   },
   "inventory_drawing_verify": {
-    "at": "2026-09-01T16:49:55.649Z",
-    "artifact": "/opt/cursor/artifacts/pillar-c-14-inventory-drawing-verify.json",
-    "sample_pass": 15,
-    "sample_n": 15,
+    "at": "2026-09-01T16:50:45.974Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-25-inventory-drawing-verify.json",
+    "sample_pass": 3,
+    "sample_n": 3,
     "gt_locked": false
   }
 }
