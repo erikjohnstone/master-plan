@@ -1,0 +1,22 @@
+{
+  "set_id": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 6,
+    "estimate_only_points": 18,
+    "never_merged_into_printed": true,
+    "gap_count": 6,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T16:51:51.718Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-017-inventory-drawing-verify.json",
+    "sample_pass": 6,
+    "sample_n": 6,
+    "gt_locked": false
+  }
+}

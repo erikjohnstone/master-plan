@@ -579,7 +579,7 @@ sample **20/20** on drawing (printed BAS 0); Klamath 14 **15/15** on drawing
 (printed BAS 0). Draft GT created/patched; `gt_locked: false`. Artifact:
 `/opt/cursor/artifacts/pillar-c-inventory-drawing-verify-batch.json`.
 
-**bas:0 inventory expanded (2026-09-01, 8 sets, still 0 locked):**
+**bas:0 inventory expanded (2026-09-01, 11 sets, still 0 locked):**
 
 | Set | Inv | Est pts | Sample on drawing | SOO |
 |---|---:|---:|---|---|
@@ -591,6 +591,9 @@ sample **20/20** on drawing (printed BAS 0); Klamath 14 **15/15** on drawing
 | 044 Boilers | 22 | 90 | **13/15** (FOP-2/34 miss) | absent |
 | 040 Sterile | 8 | 24 | **8/8** | absent |
 | 25 Douglas | 3 | 27 | **3/3** | absent |
+| 10 Hawthorn | 2 | 42 | **2/2** | absent |
+| 017 NIST | 6 | 18 | **6/6** | absent |
+| 16 Carson | 6 | 90 | **6/6** | absent |
 
 All printed BAS 0 · estimate_only never merged · **0 locked**. Same batch artifact.
 
@@ -623,10 +626,11 @@ Regression: `basServedEquipmentPlanPaint.test.mjs` **3/3** green.
 
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** Gap/SOO + valve columns + plan-paint census on keyed floor —
-   **0 locked**. Next: drawing-backed inventory on more bas:0 sets; tabular SOO where
-   vector allows; expand keys only when live compile finds real lists; lock only
-   with self-check + pipeline GT on **every** BAS + valve set.
+1. **Pillar C (corpus-deep):** Gap/SOO + valve columns + plan-paint census on keyed floor;
+   bas:0 inventory drawing verify on **11** sets — **0 locked**. Next: extend inventory
+   + plan-paint to more bearing sets; tabular SOO where vector allows; expand keys only
+   when live compile finds real lists; lock only with self-check + pipeline GT on
+   **every** BAS + valve set.
    Post-WP8 `test:workflows` **104/104** green (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).

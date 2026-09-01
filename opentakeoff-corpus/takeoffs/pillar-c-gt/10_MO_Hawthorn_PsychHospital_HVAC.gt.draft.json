@@ -1,0 +1,22 @@
+{
+  "set_id": "10_MO_Hawthorn_PsychHospital_HVAC",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 2,
+    "estimate_only_points": 42,
+    "never_merged_into_printed": true,
+    "gap_count": 2,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T16:51:49.140Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-10-inventory-drawing-verify.json",
+    "sample_pass": 2,
+    "sample_n": 2,
+    "gt_locked": false
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-01T14:55Z",
+  "as_of": "2026-09-01T16:52Z",
   "mandate": "Pillar C done only when EVERY bas_bearing and valve_bearing set has estimator takeoff + coordinator self-check + pipeline GT corroboration",
   "counts": {
     "vol1_sets": 30,
@@ -9,8 +9,42 @@
     "bas_estimator_done": 0,
     "valve_bearing": 81,
     "valve_keyed_families": 11,
-    "valve_estimator_done": 0
+    "valve_estimator_done": 0,
+    "gt_locked": 0
   },
+  "verification_coverage": {
+    "note": "Coordinator drawing-backed checks + shared-path product census; none lock GT until full estimator self-check + pipeline GT on every set",
+    "bas_gap_soo_drawing_verified": 5,
+    "bas_inventory_drawing_verified_bas0": 11,
+    "bas_keyed_drawing_sampled": 5,
+    "valve_contractor_column_honesty_verified": 11,
+    "valve_keyed_drawing_sampled": 11,
+    "valve_itd_d1_lab_drawing_sampled": 1,
+    "estimator_product_live_census_sets": 15,
+    "plan_paint_census_keyed_bas_sets": 5,
+    "plan_paint_census_keyed_valve_sets": 11,
+    "gt_draft_files": 19,
+    "artifacts": {
+      "gap_soo_batch": "/opt/cursor/artifacts/pillar-c-estimator-gap-verify-keyed-floor.json",
+      "inventory_batch": "/opt/cursor/artifacts/pillar-c-inventory-drawing-verify-batch.json",
+      "valve_columns_batch": "/opt/cursor/artifacts/pillar-c-valve-estimator-columns-batch.json",
+      "estimator_product_census": "/opt/cursor/artifacts/pillar-c-estimator-product-census-batch.json",
+      "plan_paint_census": "/opt/cursor/artifacts/pillar-c-plan-paint-census-keyed-floor.json"
+    }
+  },
+  "bas_inventory_drawing_verified_ids": [
+    "11_CA_SDSU_EngSciences_Complex_100SD",
+    "14_OR_KlamathCC_LearningCtr_Mechanical",
+    "062_ID_ITD_District_1_Laboratory_Building_Mechanical",
+    "05_MO_VA_StLouis_AHU_VAV_Replacement",
+    "04_NV_VA_LasVegas_CentralUtilityPlant",
+    "044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers",
+    "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
+    "25_WA_DouglasCounty_Courthouse_HVAC_DDC",
+    "10_MO_Hawthorn_PsychHospital_HVAC",
+    "16_NV_CarsonValleyMS_HVAC_Replacement",
+    "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling"
+  ],
   "bas_keyed_ids": [
     "27_WA_ColvilleTribes_Hatchery_Lab",
     "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
