@@ -579,7 +579,7 @@ sample **20/20** on drawing (printed BAS 0); Klamath 14 **15/15** on drawing
 (printed BAS 0). Draft GT created/patched; `gt_locked: false`. Artifact:
 `/opt/cursor/artifacts/pillar-c-inventory-drawing-verify-batch.json`.
 
-**bas:0 inventory expanded (2026-09-01, 42 sets, still 0 locked):**
+**bas:0 inventory expanded (2026-09-01, 53 sets, still 0 locked):**
 
 | Set | Inv | Est pts | Sample on drawing | SOO |
 |---|---:|---:|---|---|
@@ -625,12 +625,24 @@ sample **20/20** on drawing (printed BAS 0); Klamath 14 **15/15** on drawing
 | 041 Sterile IL | 3 | 19 | **3/3** | absent |
 | 042 Patriot Cafe | 1 | 3 | **1/1** | absent |
 | 047 Chillers NC | 3 | 9 | **3/3** | absent |
+| 061 Ames Wilhelm | 23 | 92 | **20/20** | absent |
+| 063 Harrison Extruder | 2 | 10 | **2/2** | absent |
+| 067 SLAC PCW | 2 | 6 | **2/2** | absent |
+| 068 Antelope Valley | 4 | 18 | **3/4** (1 miss) | absent |
+| 069 ITD D2 Lab | 9 | 57 | **9/9** | absent |
+| 071 Health Science ME | 21 | 103 | **20/20** | absent |
+| 072 West Valley Sci | 11 | 33 | **11/11** | absent |
+| 074 West Valley STEM | 11 | 33 | **11/11** | absent |
+| 075 Renne Library | 2 | 42 | **2/2** | absent |
+| 078 Sparty Store | 1 | 3 | **1/1** | absent |
+| 083 Town Offices MA | 4 | 32 | **4/4** | absent |
 
 All printed BAS 0 · estimate_only never merged · **0 locked**. Same batch artifact.
 Wave-2 product census (18 more bearing sets): **11/18** inventory-bearing, **0** new printed BAS lists.
 Wave-3 product census (18 more): **11/18** inventory-bearing, **0** new printed BAS lists.
 Wave-4 product census (20 more): **9/20** inventory-bearing, **0** new printed BAS lists;
 031 Warehouse SOO `present_not_row_extractable` (same class as ITD 062).
+Wave-5 product census (24 more): **11/24** inventory-bearing, **0** new printed BAS lists.
 Artifacts: `/opt/cursor/artifacts/pillar-c-estimator-product-census-wave2.json`,
 `/opt/cursor/artifacts/pillar-c-estimator-product-census-wave3.json`.
 
@@ -664,7 +676,7 @@ Regression: `basServedEquipmentPlanPaint.test.mjs` **3/3** green.
 ### Next queue (platform loop)
 
 1. **Pillar C (corpus-deep):** Gap/SOO + valve columns + plan-paint census on keyed floor;
-   bas:0 inventory drawing verify on **42** sets — **0 locked**. Next: extend inventory
+   bas:0 inventory drawing verify on **53** sets — **0 locked**. Next: extend inventory
    + plan-paint to more bearing sets; tabular SOO where vector allows; expand keys only
    when live compile finds real lists; lock only with self-check + pipeline GT on
    **every** BAS + valve set.

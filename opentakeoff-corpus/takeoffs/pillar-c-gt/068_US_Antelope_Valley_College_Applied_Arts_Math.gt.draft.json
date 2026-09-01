@@ -1,0 +1,22 @@
+{
+  "set_id": "068_US_Antelope_Valley_College_Applied_Arts_Math",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 4,
+    "estimate_only_points": 18,
+    "never_merged_into_printed": true,
+    "gap_count": 4,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:20:29.737Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-068-inventory-drawing-verify.json",
+    "sample_pass": 3,
+    "sample_n": 4,
+    "gt_locked": false
+  }
+}
