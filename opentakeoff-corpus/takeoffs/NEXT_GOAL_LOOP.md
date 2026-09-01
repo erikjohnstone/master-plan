@@ -1,32 +1,44 @@
 # Next major goal loop — HVAC/BAS cross-set + reconcile golden
 
-**Status:** PLAN (for the upcoming implementation goal)  
-**Date:** 2026-08-31  
+**Status:** ACTIVE (Pillars A+B in flight; C+D chartered)  
+**Date:** 2026-08-31 (pillars C+D added 2026-09-01)  
 **Authority:** `GOAL.md` + `WORKFLOWS.md` + live codebase + industry takeoff practice  
 
 This document is the **implementation charter**. The next `/goal` should execute
 this plan — not invent a new softer one.
 
+**Foundation:** Trust and genuine agnostic blueprint workflows are our main
+goal and our foundation. Every pillar must stay on the shared Session+ODL path,
+set-agnostic, cite-honest, and production-ready on arbitrary uploads.
+
 ---
 
-## 1. Verdict (two co-equal pillars)
+## 1. Verdict (four pillars — A/B now, C/D after A+B bar)
 
 The ~50-intent inventory is largely **routing + schedule-compile complete on
-NAVFAC-shaped fixtures**. The needle-moving next loop has **two co-equal
-pillars** — neither is optional polish:
+NAVFAC-shaped fixtures**. The needle-moving loop has **four pillars** in
+sequence — A and B are co-equal and current; C and D deepen the product once
+A+B success metrics (§6) are met:
 
-1. **Cross-set compile reliability** — complete HVAC / BAS / valve / family
-   workflows must work on the **next** job’s titles and headers without
+1. **Cross-set compile reliability (Pillar A)** — complete HVAC / BAS / valve /
+   family workflows must work on the **next** job’s titles and headers without
    NAVFAC special cases. If demos “work on NAVFAC and die on the next set’s
    titles,” we are not golden no matter how pretty reconcile looks.
-2. **Schedule↔plan reconciliation** — prove scheduled tags on the drawings,
-   name mismatches (`MATCH` / `SCHEDULE_ONLY` / `PLAN_ONLY` / honest refuse).
-   That is the bid-critical step every serious MEP estimator runs (Simpro /
-   Kamai / iBeam).
+2. **Schedule↔plan reconciliation (Pillar B)** — prove scheduled tags on the
+   drawings, name mismatches (`MATCH` / `SCHEDULE_ONLY` / `PLAN_ONLY` / honest
+   refuse). That is the bid-critical step every serious MEP estimator runs.
+3. **Valve + BAS workflow depth (Pillar C)** — go **deep and truthful** on
+   valve takeoff workflows (air + water valves, dampers, actuators) **and** BAS
+   workflows (point lists, I/O rollups, sequence of operations,
+   equipment↔point↔location). Contractor-grade deliverables, not compile stubs.
+4. **Plan grounding depth (Pillar D)** — go **deep on grounding**: symbol
+   counts, mark sweeps, and “how many on plan” answers must be **highlighted
+   and accurate** — every cited location visible on the drawing, no
+   legend-only overclaim, no silent misses.
 
-**Order:** prove the path is set-agnostic **first**, then lock valves, raise
-plan-join recall, and ship reconcile on that same path — so reconcile cannot
-be a NAVFAC-only showcase.
+**Order:** prove the path is set-agnostic **first** (A), lock reconcile on that
+path (B), then deepen valve/BAS commercial workflows (C) and plan-grounding
+accuracy (D) — so depth cannot be NAVFAC-only theater.
 
 ---
 
@@ -96,21 +108,27 @@ calculators); Trimble MEP AI takeoff (scale + count + reconcile).
 7. **Valves** = schedule family (CHW/HHW) + served unit + Cv + **optional**
    installed plan qty when asked — never invent plan cites.
 
-**Implication:** Golden = **portable schedule truth** + **reconcile to drawings**.
-Either pillar alone is a half product.
+**Implication:** Golden = **portable schedule truth** + **reconcile to drawings**
++ **truthful valve/BAS commercial workflows** + **accurate highlighted plan
+grounding**. Any single pillar alone is a half product.
 
 ---
 
 ## 4. Next goal loop objective (copy into `/goal`)
 
-> **HVAC/BAS CROSS-SET + RECONCILE GOLDEN:** Make complete HVAC / BAS / valve /
-> family schedule compiles **reliably set-agnostic** (survive foreign titles /
-> headers on ≥2 non-NAVFAC keyed sets — co-equal with reconcile, not polish),
-> then make schedule↔plan reconciliation production-grade on the shared UI+MCP
-> path — lock `T-VALVE-01` N=5 both surfaces; raise durable tagged plan-join
-> recall by wiring inline motifs into `sweep_schedule_row`; ship a first-class
-> reconcile workflow (scheduled vs installed vs refused / missing) with
-> contractor cites; keep all existing locks green.
+> **HVAC/BAS TRUST + AGNOSTIC BLUEPRINT WORKFLOWS (Pillars A–D):** Trust and
+> genuine agnostic blueprint workflows are our foundation. **Pillar A+B (now):**
+> Make complete HVAC / BAS / valve / family schedule compiles **reliably
+> set-agnostic** (survive foreign titles / headers on the full Vol1+Vol2 bulk
+> corpus — co-equal with reconcile, not polish), then make schedule↔plan
+> reconciliation production-grade on the shared UI+MCP path — lock
+> `T-VALVE-01` N=5 both surfaces; raise durable tagged plan-join recall by
+> wiring inline motifs into `sweep_schedule_row`; ship reconcile with contractor
+> columns+cites; keep all existing locks green. **Pillar C (after A+B):** Deep,
+> truthful valve takeoff workflows (air/water valves, dampers, actuators) and
+> deep BAS workflows (point lists, I/O, sequence of operations,
+> equipment↔point↔location). **Pillar D (after A+B):** Deep plan grounding —
+> symbol counts and mark answers **highlighted and accurate** on the drawing.
 > Set-agnostic only. Always tests. No ODL rewrite. No duct-LF scope creep.
 
 ---
@@ -120,9 +138,11 @@ Either pillar alone is a half product.
 Each package ends with **merge to `main`** only when its DoD is met. Do not
 batch “almost done.”
 
-**Pillar A = cross-set compile** · **Pillar B = reconcile / plan-join**.  
+**Pillar A = cross-set compile** · **Pillar B = reconcile / plan-join** ·
+**Pillar C = valve + BAS workflow depth** · **Pillar D = plan grounding depth**.  
 WP1 is Pillar A on purpose: if we ship reconcile before portable compile, we
-risk a golden NAVFAC demo that dies on the next upload.
+risk a golden NAVFAC demo that dies on the next upload. WP7–WP9 (C/D) start
+only after §6 A+B metrics are independently verified.
 
 ### WP0 — Charter lock (this doc)
 
@@ -293,21 +313,103 @@ section as done.
 5. Prefer durable engine/golden tests; Agent UI demos for chat-facing
    reconcile + valve N=5 only — don’t re-burn 50 Playwrights.
 
+### WP7 — Valve workflow depth (Pillar C — after A+B bar)
+
+**Why:** Schedule compile for valves exists (`T-VALVE-01` LOCKED), but bulk
+Vol2 shows most sets still at **0 valve rows** — and air-side valves,
+dampers, and actuators are not yet first-class commercial workflows. Estimators
+need CHW/HHW **and** air-side isolation/control devices with served unit, Cv,
+configuration, schedule cite, and optional plan-installed qty when drawable —
+never invented.
+
+**Ship (set-agnostic shared path only):**
+1. Air + water valve families: isolation, control, balancing, check,
+   pressure-reducing, triple-duty, etc. — title/keyRe from real US MEP sets,
+   not NAVFAC-only.
+2. Damper + actuator workflows: control dampers, fire/smoke, VAV terminal
+   dampers, fume-hood dampers — reconcile-capable when plan text exists.
+3. Valve takeoff intent parity UI+MCP: contractor columns (mark, served unit,
+   service, size, GPM, Cv, configuration, notes, sheet cite) + optional
+   plan highlight when user asks installed qty.
+4. Bulk acceptance keys on ≥3 non-NAVFAC sets with real valve schedules
+   (Vol2 HHW/CHW paths already started on itd/VA ER sets).
+
+**DoD:**
+1. [ ] Air-side + water-side valve compile paths keyed on ≥3 bulk sets.
+2. [ ] Damper/actuator families compile + reconcile where plan-drawn.
+3. [ ] `test:workflows` locks for valve + damper workflows; T-VALVE-01 stays
+   green.
+4. [ ] No per-set hardcodes; honest empty when set has no extractable valve
+   tables.
+
+### WP8 — BAS workflow depth (Pillar C — after A+B bar)
+
+**Why:** Only **4/82** Vol2 keys currently have `bas_points.rows > 0`. BAS is
+half the “HVAC/BAS” product: point lists, I/O rollups, DDC summaries, and
+sequence-of-operations content must be **truthful reference-table answers**
+with equipment↔point↔location joins where tools allow.
+
+**Ship (shared path):**
+1. Deepen `bas_points` extraction: POINTS LIST, I/O LIST, DDC CONTROLLER
+   INPUT/OUTPUT, alarm/trend columns — set-agnostic title needles (Colville
+   I/O LIST pattern, not NAVFAC-only).
+2. BAS takeoff + reconcile variants: point mark → equipment tag → plan
+   location when drawable; honest disclose when schematic-only.
+3. Sequence-of-operations / controls narrative tables where vector-extractable
+   — reference-eval exact cells, not LLM summaries.
+4. Rollups (AI/AO/BI/BO totals) only when the source table supports them;
+   refuse rollups-from-matrices that are not row-per-point (bldg5406
+   HARDWAREPOINTS).
+
+**DoD:**
+1. [ ] ≥5 bulk sets with keyed `bas_points` acceptance (grow from 4/82).
+2. [ ] BAS workflow locks in `test:workflows` on NAVFAC + ≥2 WP1 sets.
+3. [ ] SOO/reference tables scored where extractable; honest refuse documented
+   where not.
+4. [ ] UI+MCP parity on points_takeoff / BAS compile intents.
+
+### WP9 — Plan grounding depth (Pillar D — after A+B bar)
+
+**Why:** Users asking “how many VAVs on plan” or “count the EF symbols” need
+**accurate quantities with visible highlights** — every cite must point at real
+geometry on the plan sheet, not legend-only or schedule-only overclaim. Scale +
+legend honesty gates exist; this WP makes grounding the primary product bar.
+
+**Ship (shared path):**
+1. `count_marks` / symbol_sweep / reconcile plan cites: every reported
+   installed qty has ≥1 verifiable plan highlight (bbox or sweep path) on the
+   cited sheet.
+2. Agent/UI paint parity: Takeoff tab and canvas show the same highlights MCP
+   returns.
+3. Negative controls: legend-only, schematic-only, and `REFUSED_NO_SCALE`
+   sheets must not produce false plan counts.
+4. Bulk acceptance: keyed symbol-count proofs on ≥3 sets spanning grilles,
+   fans, valves, and terminal units.
+
+**DoD:**
+1. [ ] Highlight-accuracy fixture suite (engine/golden) — qty matches visible
+   paints within measured tolerance.
+2. [ ] ≥3 bulk sets with locked count/reconcile grounding proofs.
+3. [ ] `test:workflows` + UI parity test on at least one count ask.
+4. [ ] Documented honest ceilings (exploded text, raster) — no silent misses.
+
 ---
 
 ## 6. Success metric (when this loop is “golden”)
 
 The loop is complete **only when all are true**:
 
-1. **Pillar A:** ≥2 non-NAVFAC HVAC/BAS sets have keyed **compile** proof
-   green; soft title / header generalization shipped with sibling-exclusion
-   regressions; NAVFAC HVAC/BAS locks still green.
+### Pillars A + B (current gate)
+
+1. **Pillar A:** Vol1+Vol2 bulk compile keys green (82/82 Vol2 + Vol1); soft
+   title / header generalization shipped with sibling-exclusion regressions;
+   NAVFAC HVAC/BAS locks still green.
 2. **`T-VALVE-01` LOCKED** MCP 5/5 · UI 5/5.
 3. **Row→symbol / plan-join** recall meets WP3 bar with published numbers
    (including at least one non-NAVFAC join key).
 4. **Pillar B:** Reconcile workflow ships on `main` with contractor columns +
-   cites + tests + at least one Agent UI proof — proven on NAVFAC **and** a
-   WP1 set.
+   cites + tests + at least one Agent UI proof — proven on NAVFAC **and**
+   multiple WP1/Vol2 bulk sets.
 5. **Shared-path** plan tools + prewarm DoD met.
 6. **Prior locks** + suite gate still green.
 7. An estimator can upload a **non-NAVFAC** set and get a correct complete /
@@ -315,7 +417,20 @@ The loop is complete **only when all are true**:
    can ask *“Reconcile the VAV schedule to the plans”* (or equivalent) and
    get a finished Takeoff-grade reconcile table — not chat scrap.
 
-If either pillar is weak, incomplete, or only “consistent with” completion —
+### Pillars C + D (after A+B)
+
+8. **Pillar C — Valves:** Air + water valve, damper, and actuator takeoff
+   workflows are production-grade on the shared path with contractor columns,
+   cites, optional plan highlights, and ≥3 bulk acceptance keys — truthful
+   empty when no valve tables.
+9. **Pillar C — BAS:** Point lists, I/O rollups, and extractable SOO/reference
+   content answered with reference-eval honesty on ≥5 bulk sets; equipment↔point
+   joins where drawable.
+10. **Pillar D — Grounding:** Symbol counts and mark sweeps return **accurate
+    quantities with visible plan highlights** on ≥3 bulk proofs; legend-only and
+    unscaled refuses stay honest.
+
+If any pillar is weak, incomplete, or only “consistent with” completion —
 the loop is **not** done.
 
 ---
@@ -323,19 +438,16 @@ the loop is **not** done.
 ## 7. Suggested `/goal` one-liner for the implementation agent
 
 ```text
-/goal Execute opentakeoff-corpus/takeoffs/NEXT_GOAL_LOOP.md in full:
-Pillar A first — cross-set compile reliability on the FULL bulk corpus
-(Vol1 ~30 sets + Vol2 all 82 INDEX sets under HVAC_BAS_Plan_Sets_Vol2;
-honest ZERO/WEAK OK; set-agnostic title/keyRe/BAS only — no per-PDF
-hardcodes); soft title/header generalization; no NAVFAC-only product paths;
-then T-VALVE-01 N=5 lock; wire inline motif into sweep_schedule_row and hit
-the rowsym bar; ship HVAC/BAS/valve schedule↔plan reconcile workflow on
-shared UI+MCP path with contractor columns+cites (Pillar B, proven on
-NAVFAC + a WP1 set); shared-path plan-tool unify + graph prewarm; keep
-HVAC/BAS locks and suite gate green.
-Set-agnostic only. Always tests. No ODL rewrite. No duct-LF scope creep.
-Cross-set compile is co-equal with reconcile — not optional polish.
-Vol2 is entire-volume stress, not a 5–10 set sample.
+/goal Execute opentakeoff-corpus/takeoffs/NEXT_GOAL_LOOP.md in full.
+Foundation: trust + genuine agnostic blueprint workflows on shared UI+MCP path.
+Pillar A+B now — cross-set compile on FULL Vol1+Vol2 bulk (82/82 Vol2 INDEX;
+honest ZERO/WEAK OK; set-agnostic title/keyRe/BAS only); T-VALVE-01 N=5 lock;
+inline motif + rowsym bar; schedule↔plan reconcile with contractor columns+cites
+(proven on NAVFAC + bulk WP1/Vol2 sets); shared-path plan-tool unify + graph
+prewarm; keep HVAC/BAS locks and suite gate green.
+After A+B bar (§6): Pillar C — deep truthful valve (air/water/damper/actuator)
++ BAS (points, I/O, SOO) workflows; Pillar D — deep grounding (symbol counts
+highlighted and accurate). Set-agnostic only. Always tests. No ODL rewrite.
 ```
 
 ---
@@ -352,6 +464,7 @@ Vol2 is entire-volume stress, not a 5–10 set sample.
 | Reconcile-only on NAVFAC | Golden theater — dies on next set’s titles |
 
 **This loop** turns OpenTakeoff from “great NAVFAC schedule compiler with
-demos” into “the HVAC/BAS takeoff that **works on the next set** and
-**reconciles to the drawings**” — portable schedule truth + commercial
-reconciliation bar, on our vector-grounded, cite-honest stack.
+demos” into “the HVAC/BAS takeoff that **works on the next set**, **reconciles
+to the drawings**, **delivers truthful valve/BAS commercial workflows**, and
+**grounds every symbol count on the plan**” — trust + agnostic blueprint
+workflows on our vector-grounded, cite-honest stack.

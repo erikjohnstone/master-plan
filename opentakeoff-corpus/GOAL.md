@@ -1,8 +1,9 @@
 # OpenTakeoff HVAC/BAS Corpus — Goal, Method, and Current State
 
-Last updated: 2026-08-31 — autonomous platform loop expanded to include the
-**full** Vol2 bulk corpus (82 INDEX sets) alongside Vol1; see §8. Older
-keyed-corpus history below is retained for provenance.
+Last updated: 2026-09-01 — autonomous platform loop expanded to include the
+**full** Vol2 bulk corpus (82 INDEX sets) alongside Vol1; Pillars C and D
+added after A/B; see §8. Older keyed-corpus history below is retained for
+provenance.
 
 ## Current execution policy (supersedes older worker references below)
 
@@ -282,12 +283,30 @@ daily.
 
 ### Autonomous platform loop (2026-08-31+, runs until user halts)
 
+**Foundation (non-negotiable):** **Trust and genuine agnostic blueprint
+workflows are our main goal and our foundation.** Every answer must be
+deterministic, cite-backed, and set-agnostic — the same shared Session+ODL
+path for UI and MCP, honest refusal when evidence is missing, no
+corpus-specific hardcodes, no answer-steering prompts, no inflated scores.
+Portable schedule truth + accurate plan grounding + commercial-grade
+deliverables on *any* real upload is the product bar; the corpus is how we
+prove it.
+
 **Authority:** `opentakeoff-corpus/takeoffs/NEXT_GOAL_LOOP.md` · **Coordinator-only**
 (no cloud workers). **Shared path mandatory** — UI and MCP consume the same
 Session + ODL pipeline.
 
-**Objective:** Set-agnostic HVAC/BAS compile + schedule↔plan reconcile across
-the **full** bulk US vector corpus we benefit from — Vol1
+**Four pillars (sequenced):**
+
+| Pillar | Scope | Status |
+|---|---|---|
+| **A — Cross-set compile** | Set-agnostic HVAC/BAS/valve **schedule compile** across Vol1 (~31) + Vol2 (all 82 INDEX sets). Honest ZERO/WEAK when no extractable tables. | **Largely complete** — 82/82 Vol2 + Vol1 keyed; family/title/BAS depth continues on WEAK sets. |
+| **B — Schedule↔plan reconcile** | Contractor-grade reconcile (`MATCH` / `SCHEDULE_ONLY` / `PLAN_ONLY` / honest refuse) with cites; `T-VALVE-01` N=5; inline motif; Session-unified plan tools + prewarm. | **In progress** — workflow shipped; deepening Vol2 MEAT rejoin locks. |
+| **C — Valve + BAS workflow depth** | Go **deep and truthful** on valve takeoff workflows (air + water valves, dampers, actuators) **and** BAS workflows (point lists, I/O rollups, sequence of operations, equipment↔point↔location). Full contractor deliverables — not schedule stubs. | **Queued after A+B bar met** — see `NEXT_GOAL_LOOP.md` WP7–WP8. |
+| **D — Plan grounding depth** | Go **deep on grounding**: symbol counts, mark sweeps, and “how many on plan” answers must be **highlighted and accurate** — every cited location visible, no legend-only overclaim, no silent misses. | **Queued after A+B bar met** — see `NEXT_GOAL_LOOP.md` WP9. |
+
+**Objective (Pillars A+B, current):** Set-agnostic HVAC/BAS compile +
+schedule↔plan reconcile across the **full** bulk US vector corpus — Vol1
 (`opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets`, ~30 verified sets) **and**
 Vol2 (`opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2`, **all 82 INDEX sets**:
 69 single-file PDFs plus multipart/split deliveries rejoined when needed).
@@ -304,7 +323,8 @@ hardcodes or corpus-id special cases.
 
 **Cadence:** Verified batches → update `PROGRESS.md` → `test:workflows` +
 focused tests; full Vol1+Vol2 stress drives set-agnostic family/title/BAS
-fixes.
+fixes. Pillars C and D start only when A+B success metrics in
+`NEXT_GOAL_LOOP.md` §6 are independently verified.
 
 Future corpus keys expand the proving ground without weakening the outcome
 model. Every gate remains forced-cold with full metric reporting. Continue
