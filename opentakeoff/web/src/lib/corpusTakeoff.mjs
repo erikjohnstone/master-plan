@@ -1138,7 +1138,7 @@ export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
   const planPaintTargets = [];
   const pushPlanPaintTarget = (t) => {
     if (!t?.tag) return;
-    const key = `${String(t.tag).toUpperCase()}::${String(t.prefer_schedule_title || "").toUpperCase()}`;
+    const key = `${String(t.source || "unknown")}::${String(t.tag).toUpperCase()}::${String(t.prefer_schedule_title || "").toUpperCase()}`;
     if (targetSeen.has(key)) return;
     targetSeen.add(key);
     planPaintTargets.push(t);
@@ -1234,7 +1234,14 @@ export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
     plan_paint: {
       status: "refuse_not_done",
       note: "Served-equipment / inventory plan MATCH or honest SCHEDULE_ONLY paint still required per mark — printed POINTS ≠ installed takeoff. When sweeping served_equipment or inventory marks, pass prefer_schedule_title from plan_paint targets (HVAC table_title or owning POINTS/I/O list) so cross-schedule collisions resolve; never invent plan qty.",
-      targets: planPaintTargets.slice(0, 120),
+      targets: (() => {
+        const served = planPaintTargets.filter((t) => t.source === "served_equipment");
+        const inventoryT = planPaintTargets.filter((t) => t.source === "inventory");
+        // Keyed BAS sets can have 100+ served marks — never drop them for inventory samples.
+        const cap = 120;
+        const room = Math.max(0, cap - served.length);
+        return [...served, ...inventoryT.slice(0, room)];
+      })(),
     },
   };
 }

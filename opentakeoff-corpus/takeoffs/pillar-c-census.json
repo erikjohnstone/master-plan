@@ -57,6 +57,9 @@
       "062_ID_ITD_District_1_Laboratory_Building_Mechanical"
     ],
     "plan_paint_census_inventory_expand_sets": 9,
+    "plan_paint_census_inventory_wave2_sets": 12,
+    "plan_paint_inventory_wave2_with_match": 9,
+    "plan_paint_inventory_wave2_artifact": "/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave2.json",
     "plan_paint_inventory_expand_with_match": 8,
     "plan_paint_inventory_expand_artifact": "/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-expand.json",
     "plan_paint_preferTitle_recensus_sets": 2,
