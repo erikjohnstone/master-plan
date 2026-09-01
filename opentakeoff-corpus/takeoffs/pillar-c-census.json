@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-01T17:20Z",
+  "as_of": "2026-09-01T17:45Z",
   "mandate": "Pillar C done only when EVERY bas_bearing and valve_bearing set has estimator takeoff + coordinator self-check + pipeline GT corroboration",
   "counts": {
     "vol1_sets": 30,
@@ -15,15 +15,15 @@
   "verification_coverage": {
     "note": "Coordinator drawing-backed checks + shared-path product census; none lock GT until full estimator self-check + pipeline GT on every set",
     "bas_gap_soo_drawing_verified": 5,
-    "bas_inventory_drawing_verified_bas0": 33,
+    "bas_inventory_drawing_verified_bas0": 42,
     "bas_keyed_drawing_sampled": 5,
     "valve_contractor_column_honesty_verified": 11,
     "valve_keyed_drawing_sampled": 11,
     "valve_itd_d1_lab_drawing_sampled": 1,
-    "estimator_product_live_census_sets": 51,
+    "estimator_product_live_census_sets": 71,
     "plan_paint_census_keyed_bas_sets": 5,
     "plan_paint_census_keyed_valve_sets": 11,
-    "gt_draft_files": 41,
+    "gt_draft_files": 50,
     "artifacts": {
       "gap_soo_batch": "/opt/cursor/artifacts/pillar-c-estimator-gap-verify-keyed-floor.json",
       "inventory_batch": "/opt/cursor/artifacts/pillar-c-inventory-drawing-verify-batch.json",
@@ -31,8 +31,13 @@
       "estimator_product_census": "/opt/cursor/artifacts/pillar-c-estimator-product-census-batch.json",
       "plan_paint_census": "/opt/cursor/artifacts/pillar-c-plan-paint-census-keyed-floor.json",
       "estimator_product_census_wave2": "/opt/cursor/artifacts/pillar-c-estimator-product-census-wave2.json",
-      "estimator_product_census_wave3": "/opt/cursor/artifacts/pillar-c-estimator-product-census-wave3.json"
-    }
+      "estimator_product_census_wave3": "/opt/cursor/artifacts/pillar-c-estimator-product-census-wave3.json",
+      "estimator_product_census_wave4": "/opt/cursor/artifacts/pillar-c-estimator-product-census-wave4.json"
+    },
+    "soo_present_not_row_extractable_sets": [
+      "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+      "062_ID_ITD_District_1_Laboratory_Building_Mechanical"
+    ]
   },
   "bas_inventory_drawing_verified_ids": [
     "11_CA_SDSU_EngSciences_Complex_100SD",
@@ -67,7 +72,16 @@
     "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04",
     "023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory",
     "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri",
-    "028_TX_Renovation_of_Building_615_Final_Design_Plans"
+    "028_TX_Renovation_of_Building_615_Final_Design_Plans",
+    "030_NY_VA_EHRM_Infrastructure_Upgrades_Construction",
+    "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+    "032_PA_Construct_EHRM_Infrastructure_Upgrades",
+    "033_MN_VA_Project_656_18_301_Construct_Replace",
+    "034_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+    "037_AR_VA_Project_598_19_118_Replace_21_Air_Handling",
+    "041_IL_VA_Project_537_17_115_Sterile_Processing",
+    "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17",
+    "047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU"
   ],
   "bas_keyed_ids": [
     "27_WA_ColvilleTribes_Hatchery_Lab",

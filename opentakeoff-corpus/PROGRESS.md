@@ -579,7 +579,7 @@ sample **20/20** on drawing (printed BAS 0); Klamath 14 **15/15** on drawing
 (printed BAS 0). Draft GT created/patched; `gt_locked: false`. Artifact:
 `/opt/cursor/artifacts/pillar-c-inventory-drawing-verify-batch.json`.
 
-**bas:0 inventory expanded (2026-09-01, 33 sets, still 0 locked):**
+**bas:0 inventory expanded (2026-09-01, 42 sets, still 0 locked):**
 
 | Set | Inv | Est pts | Sample on drawing | SOO |
 |---|---:|---:|---|---|
@@ -616,10 +616,21 @@ sample **20/20** on drawing (printed BAS 0); Klamath 14 **15/15** on drawing
 | 023 Salinity | 2 | 6 | **2/2** | absent |
 | 024 Steam Heat | 4 | 60 | **4/4** | absent |
 | 028 Bldg 615 | 7 | 81 | **7/7** | absent |
+| 030 EHRM NY | 15 | 50 | **15/15** | absent |
+| 031 Warehouse MO | 12 | 54 | **12/12** | present_not_row_extractable |
+| 032 EHRM PA | 1 | 3 | **1/1** | absent |
+| 033 Construct MN | 3 | 27 | **3/3** | absent |
+| 034 EHRM NC | 2 | 6 | **2/2** | absent |
+| 037 AHU AR | 1 | 3 | **1/1** | absent |
+| 041 Sterile IL | 3 | 19 | **3/3** | absent |
+| 042 Patriot Cafe | 1 | 3 | **1/1** | absent |
+| 047 Chillers NC | 3 | 9 | **3/3** | absent |
 
 All printed BAS 0 · estimate_only never merged · **0 locked**. Same batch artifact.
 Wave-2 product census (18 more bearing sets): **11/18** inventory-bearing, **0** new printed BAS lists.
 Wave-3 product census (18 more): **11/18** inventory-bearing, **0** new printed BAS lists.
+Wave-4 product census (20 more): **9/20** inventory-bearing, **0** new printed BAS lists;
+031 Warehouse SOO `present_not_row_extractable` (same class as ITD 062).
 Artifacts: `/opt/cursor/artifacts/pillar-c-estimator-product-census-wave2.json`,
 `/opt/cursor/artifacts/pillar-c-estimator-product-census-wave3.json`.
 
@@ -653,7 +664,7 @@ Regression: `basServedEquipmentPlanPaint.test.mjs` **3/3** green.
 ### Next queue (platform loop)
 
 1. **Pillar C (corpus-deep):** Gap/SOO + valve columns + plan-paint census on keyed floor;
-   bas:0 inventory drawing verify on **33** sets — **0 locked**. Next: extend inventory
+   bas:0 inventory drawing verify on **42** sets — **0 locked**. Next: extend inventory
    + plan-paint to more bearing sets; tabular SOO where vector allows; expand keys only
    when live compile finds real lists; lock only with self-check + pipeline GT on
    **every** BAS + valve set.
