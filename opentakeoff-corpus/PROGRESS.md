@@ -415,7 +415,7 @@ Authority: `GOAL.md` §8 · `takeoffs/NEXT_GOAL_LOOP.md`.
 ### Next queue (platform loop)
 
 1. **Pillar B / §6 judgment:** Vol2 + Vol1 plant reconcile dense (incl. Las Vegas CUP **04**, Colville **27** pumps/fans, WEAK MATCH leftovers). Klamath FC/HP/DOAS remain honest SO.
-2. **Pillar A tail:** WEAK→MEAT only when probe finds new extractable schedules (23 WEAK + 27 ZERO stable; BAS drift 0). Damper/isolation/PRV/mixing families now compile on pier/sterile/airport MEAT keys.
+2. **Pillar A tail:** WEAK→MEAT only when probe finds new extractable schedules (23 WEAK + 27 ZERO stable; BAS drift 0). Damper/isolation/PRV/mixing families compile on pier/sterile/airport MEAT keys; compact `STEAM PRV` titles on SDSU **11**.
 3. **Merge branch stack → `main`** when A+B §6 metrics met; WORKFLOWS #51 ON_MAIN.
 4. **Pillar C (after A+B):** WP7 valve/damper/actuator depth + WP8 BAS points/SOO
    — grow from 4/82 Vol2 BAS rows and ~3/82 valve rows.
