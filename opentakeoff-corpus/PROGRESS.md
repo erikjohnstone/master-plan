@@ -381,13 +381,15 @@ reconcile, and plan joins.
 - **Vol2 batch-2 intake (shared path):** RTU `PACKAGED EQUIPMENT SCHEDULE (RTU)` + `RTU-*` keyRe; UNIT_HEATER `GUH`/`NUH`; DOAS `DEDICATED OUTSIDE AIR SYSTEM`. Locked **12** more Vol2 keys (7 MEAT / 3 WEAK / 2 ZERO) including ATC tower **396** HVAC + **122** BAS. Vol2 keyed total **20**. Acceptance **12/12**. Suwannee RTU negative still **1**.
 - **Vol2 batch-3 intake (shared path):** building-prefix `markCoreForKeyRe` (WHSE-ET-1→ET-1; reject catalog `TPLFY-EP15NEM4`); VRF_INDOOR/OUTDOOR; humidifier OCR/SH digit-gated; EXPANSION SYSTEM + zone-letter ET-A1; BUFFER GST-*. Locked **12** more Vol2 keys (5 MEAT / 2 WEAK / 5 ZERO) including warehouse **89** + chiller/VRF **15**. Vol2 keyed total **32**/82. Negatives: Orange `SHT. NO.`, Iowa `ETC.…`, Douglas model→EP pump, Missoula ET-A1 retained.
 - **Vol2 batch-4 intake (shared path):** PUMP hydronic titles without SCHEDULE; AIR_SEPARATOR plural + `IAS-*`; titled HEAT_EXCHANGER keeps set-local marks; HHW/CHW start-anchored bare `VALVE SCHEDULE` + `V-HHW*`/`V-CHW*` (unanchored form regressed NAVFAC 396→233 by forcing altKeyRe on CONTROL VALVE titles). Locked **12** more Vol2 keys (7 MEAT / 3 WEAK / 2 ZERO) including VA ER **43** (38 HHW valves; GRD drops header `MIN.`) + ITD lab **93** (incl. 9 HHW reheat CVs). Vol2 keyed total **44**/82.
-- **Schedule header junk gate (shared path):** reject `MODEL`/`TAG`/`MIN.`-class labels on titled schedules without keyRe (Colville HX was 6→4 false); require a digit for unfiltered titled marks so set-local `B950A` still counts.
+- **Schedule header junk gate (shared path):** reject `MODEL`/`TAG`/`MIN.`-class labels on titled schedules without keyRe (Colville HX was 6→4 false). Do **not** require digits on unfiltered titled marks — that dropped NAVFAC letter-suffix valves (`CV-CHW-BP-A`, 396→391 / 163→158).
+- **Vol2 batch-5 intake (shared path):** `DUCT_MOUNTED_COIL` accepts `ELECTRIC DUCT COIL` + `DH-*`. Locked **12** more Vol2 keys (1 MEAT / 5 WEAK / 6 ZERO) including Miller dining **14** + Renne Library **11**. Vol2 keyed total **56**/82.
 
 ### Next queue (platform loop)
 
-1. **Vol2 full-volume Pillar A (active):** batches 1–4 keyed (**44**/82). Continue
+1. **Vol2 full-volume Pillar A (active):** batches 1–5 keyed (**56**/82). Continue
    probe → key → fix across remaining INDEX sets (single-file then multipart
-   rejoins). Rubric: `takeoffs/VOL2_INTAKE.md`.
+   rejoins). Rubric: `takeoffs/VOL2_INTAKE.md`. Co-equal **Pillar B** stays gated
+   by `test:workflows` (T-VALVE-01 N=5, reconcile locks, prefer-schedule / inline motif).
 2. Merge branch stack → `main`; WORKFLOWS #51 ON_MAIN.
 3. WP1.4 remaining titled HVAC orphans largely exhausted on keyed MEAT sets (honest refuse: federal AHU fan schedules; Valdosta VRF; Life Sciences EQ-* non-HVAC; electrical/CCTV noise).
 4. WP3.3 TG bowtie dedicated detector (tracked follow-on; Bessemer TG already passes via inline motif).

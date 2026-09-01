@@ -1,0 +1,16 @@
+{
+  "set_id": "052_IL_VA_Project_537_17_115_Sterile_Processing",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/052_IL_VA_Project_537_17_115_Sterile_Processing.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 IL VA sterile processing alt \u2014 no extractable HVAC tables.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

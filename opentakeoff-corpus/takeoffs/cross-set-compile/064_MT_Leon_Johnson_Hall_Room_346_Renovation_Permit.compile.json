@@ -1,0 +1,16 @@
+{
+  "set_id": "064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[ZERO] Vol2 Leon Johnson room reno \u2014 no extractable HVAC tables.",
+  "categories": {},
+  "totals": {
+    "items": 0
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

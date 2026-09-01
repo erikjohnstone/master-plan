@@ -105,6 +105,12 @@ describe("Vol2 humidifier / expansion / buffer / VRF gates", () => {
     assert.equal(HVAC_FAMILY_SPECS.VRF_OUTDOOR.keyRe.test("ODU-1"), true);
   });
 
+  it("DUCT_MOUNTED_COIL accepts ELECTRIC DUCT COIL + DH-* marks", () => {
+    assert.equal(HVAC_FAMILY_SPECS.DUCT_MOUNTED_COIL.titleRe.test("ELECTRIC DUCT COIL SCHEDULE"), true);
+    assert.equal(HVAC_FAMILY_SPECS.DUCT_MOUNTED_COIL.keyRe.test("DH-1"), true);
+    assert.equal(HVAC_FAMILY_SPECS.DUCT_MOUNTED_COIL.exclude.test("ELECTRIC DUCT HEATER"), true);
+  });
+
   it("PUMP / AIR_SEPARATOR / HEAT_EXCHANGER accept Vol2 title forms", () => {
     assert.equal(HVAC_FAMILY_SPECS.PUMP.titleRe.test("HEATING HOT WATER PUMP"), true);
     assert.equal(HVAC_FAMILY_SPECS.PUMP.titleRe.test("HEAT PUMP"), false);
@@ -116,8 +122,11 @@ describe("Vol2 humidifier / expansion / buffer / VRF gates", () => {
   it("schedule header junk marks (MODEL/TAG) are rejected; set-local HX marks kept", () => {
     assert.equal(isScheduleHeaderJunkMark("MODEL"), true);
     assert.equal(isScheduleHeaderJunkMark("TAG"), true);
+    assert.equal(isScheduleHeaderJunkMark("MIN."), true);
     assert.equal(isScheduleHeaderJunkMark("HX-1A"), false);
     assert.equal(isScheduleHeaderJunkMark("B950A"), false);
+    // Letter-suffixed building tags (no digits) must not be treated as junk.
+    assert.equal(isScheduleHeaderJunkMark("CV-CHW-BP-A"), false);
   });
 
   it("HHW_CONTROL_VALVE altTitle claims bare VALVE SCHEDULE + V-HHW marks", () => {

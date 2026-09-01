@@ -268,10 +268,9 @@ function uniqueFamily(graph, {
         // Footnote / notes rows that leaked into the key column.
         if (/^NOTES?:?\d*$/i.test(canon) || /^NOTES?:?$/i.test(one.trim())) continue;
         // Column-header labels extracted as data rows (Colville HX "MODEL"/"TAG").
+        // Do NOT require a digit here — NAVFAC valve marks like CV-CHW-BP-A are
+        // letter-suffixed building tags with no digits.
         if (isScheduleHeaderJunkMark(canon)) continue;
-        // Titled schedules with no keyRe keep set-local marks (B950A) but still
-        // require a digit so bare header words cannot inflate counts.
-        if (!catchAllFilter && !filterRe && !/\d/.test(canon)) continue;
         if (catchAllFilter) {
           const okBlank = blankKeyRe && markMatchesKeyRe(blankKeyRe, one, canon);
           const okKey = keyRe && markMatchesKeyRe(keyRe, one, canon);
@@ -592,10 +591,11 @@ export const HVAC_FAMILY_SPECS = {
     blankKeyRe: /^(?:HX|PHX|HE)[\s\-]/i,
   },
   DUCT_MOUNTED_COIL: {
-    titleRe: /DUCT\s+MOUNTED\s+COIL|HEATING\s+COIL\s+SCHEDULE|COOLING\s+COIL\s+SCHEDULE|HOT\s+WATER\s+REHEAT\s+COIL|REHEAT\s+COIL\s+SCHEDULE/i,
-    exclude: /POINTS\s*LIST|DDC|FAN\s*COIL|AIR\s+HANDLING|CONTROL\s+VALVE/i,
-    // CC/HC/RC coils; HWC-* hot-water; PHC/RHC preheat/reheat coil marks.
-    keyRe: /^(?:CC|HC|RC|HWC|PHC|RHC)[\s\-]?/i,
+    // Electric duct-coil boards (DH-*) sit with hydronic CC/HC/RHC schedules.
+    titleRe: /DUCT\s+MOUNTED\s+COIL|ELECTRIC\s+DUCT\s+COIL|HEATING\s+COIL\s+SCHEDULE|COOLING\s+COIL\s+SCHEDULE|HOT\s+WATER\s+REHEAT\s+COIL|REHEAT\s+COIL\s+SCHEDULE/i,
+    exclude: /POINTS\s*LIST|DDC|FAN\s*COIL|AIR\s+HANDLING|CONTROL\s+VALVE|DUCT\s+HEATER/i,
+    // CC/HC/RC coils; HWC-* hot-water; PHC/RHC preheat/reheat; DH-* electric duct coil.
+    keyRe: /^(?:CC|HC|RC|HWC|PHC|RHC|DH)[\s\-]?/i,
   },
   WATER_TREATMENT: {
     titleRe: /WATER\s+TREATMENT\s+SCHEDULE|REVERSE\s+OSMOSIS|\bRO\s+SCHEDULE/i,

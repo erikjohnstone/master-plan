@@ -201,6 +201,18 @@ test("WP1 keyed compile acceptance on ≥2 non-NAVFAC sets", async () => {
     "071_ME_BGS_Project_3809_Health_Science_Center.compile.json",
     "072_CA_CA07_2627_West_Valley_College_Science_Math.compile.json",
     "074_CA_West_Valley_College_STEM_Classroom_HVAC.compile.json",
+    "048_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.compile.json",
+    "049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.compile.json",
+    "050_IL_VA_Project_537_17_115_Sterile_Processing.compile.json",
+    "052_IL_VA_Project_537_17_115_Sterile_Processing.compile.json",
+    "055_US_VA_Project_673_20_107_EHRM_Infrastructure.compile.json",
+    "057_US_VA_Project_626_15_106_Upgrade_Energy.compile.json",
+    "064_MT_Leon_Johnson_Hall_Room_346_Renovation_Permit.compile.json",
+    "066_MT_Barnard_Hall_111_Lithography_Lab_Renovation.compile.json",
+    "069_ID_ITD_District_2_Laboratory_Heating_Upgrades.compile.json",
+    "073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.compile.json",
+    "075_MT_Renne_Library_Innovation_Learning_Studio.compile.json",
+    "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.compile.json",
   ];
   let scored = 0;
   for (const file of keys) {

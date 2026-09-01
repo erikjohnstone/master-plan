@@ -125,3 +125,27 @@ Shared-path adds this batch: PUMP `HEATING HOT WATER PUMP` titles; AIR_SEPARATOR
 plural/`IAS-*`; HEAT_EXCHANGER titled marks without HX-only keyRe; HHW/CHW bare
 `^(?:\(N\)\s*)?VALVE SCHEDULE` + `V-HHW*`/`V-CHW*` altTitle/altKey (start-anchored
 so NAVFAC `CHW CONTROL VALVE SCHEDULE` keeps primary matching).
+
+## Batch 5 (locked 2026-09-01)
+
+VA sterile / energy / EHRM + MT campus + ITD D2 probes → electric duct-coil
+widener → keys:
+
+| Set | Tier | HVAC | BAS | Notes |
+|---|---|---:|---:|---|
+| 077 Miller dining | MEAT | 14 | 0 | WSHP + GRD |
+| 075 Renne Library studio | WEAK | 11 | 0 | mini-split/ERV/HP/GRD + DH-1 duct coil |
+| 069 ITD D2 lab heating | WEAK | 11 | 0 | AHU/boiler/pump/VFD |
+| 066 Barnard lithography | WEAK | 6 | 0 | HP + humidifier + GRD |
+| 049 IL VA sterile expand | WEAK | 2 | 0 | air compressors only |
+| 050 IL VA sterile processing | WEAK | 1 | 0 | thin GRD |
+| 048 NY VA main boilers | ZERO | 0 | 0 | no extractable HVAC tables |
+| 052 IL VA sterile alt | ZERO | 0 | 0 | no extractable HVAC tables |
+| 055 VA EHRM infra | ZERO | 0 | 0 | no extractable HVAC tables |
+| 057 VA energy upgrade | ZERO | 0 | 0 | no extractable HVAC tables |
+| 064 Leon Johnson room | ZERO | 0 | 0 | no extractable HVAC tables |
+| 073 Roberts classroom | ZERO | 0 | 0 | finish/lighting only |
+
+Shared-path adds this batch: `DUCT_MOUNTED_COIL` `ELECTRIC DUCT COIL` + `DH-*`;
+schedule header junk gate (`MODEL`/`TAG`/`MIN.`) without digit-forcing letter
+suffix marks (`CV-CHW-BP-A`). Vol2 keyed total **56**/82.

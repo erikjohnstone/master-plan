@@ -1,0 +1,19 @@
+{
+  "set_id": "077_MT_Miller_Dining_Auxiliaries_Offices_HVAC",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/077_MT_Miller_Dining_Auxiliaries_Offices_HVAC.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[MEAT] Vol2 Miller dining \u2014 WSHP + GRD.",
+  "categories": {
+    "HEAT_PUMP": 8,
+    "GRD": 6
+  },
+  "totals": {
+    "items": 14
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}

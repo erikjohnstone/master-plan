@@ -1,0 +1,21 @@
+{
+  "set_id": "069_ID_ITD_District_2_Laboratory_Heating_Upgrades",
+  "source_file": "bulk/HVAC_BAS_Plan_Sets_Vol2/069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf",
+  "kind": "hvac_equipment",
+  "notes": "[WEAK] Vol2 ITD D2 lab heating \u2014 AHU/boiler/pump/VFD.",
+  "categories": {
+    "AHU": 1,
+    "BOILER": 2,
+    "PUMP": 6,
+    "VARIABLE_FREQUENCY_DRIVE": 2
+  },
+  "totals": {
+    "items": 11
+  },
+  "bas_points": {
+    "rows": 0
+  },
+  "control_valves": {
+    "items": 0
+  }
+}
