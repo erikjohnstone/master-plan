@@ -185,10 +185,162 @@ rejoined multipart set (“311 sheets / thin tables”).
 
 ---
 
-## 4. Complete open-source stack (recommended layers)
+## 4. Production-ready OS architecture stack (v2 — validated 2026-09-01)
 
-This is a **full stack a Kamai-class deterministic pipeline can be built from today**
-without proprietary models. Items marked **(in repo)** are already integrated.
+This is the **complete, production-oriented stack** for massive US vector HVAC/BAS
+blueprints — incorporating scale/tiling (🌟 L1.5), topology tracing (🌟 L3.5),
+cross-source dedup reconcile (L4), and optional local VLM for untabled assets (🌟 L4.5).
+Web-research validated against SAHI, Shapely/NetworkX/momepy, pdfplumber spatial joins,
+ConstructDrawingAI, TakeoffLens, MEPdetect, and Qwen2-VL / Llama 3.2 Vision licensing.
+
+| Layer | OSS components | Purpose |
+|---|---|---|
+| **L0 Ingest** | **pdf.js** (in repo), **pdfminer.six**, **Aspicio** `@aspicio/core` (MIT) | Extract PDF object streams, fonts, vector paths, embedded rasters. PyMuPDF only if AGPL licensed for your deployment. |
+| **L1 Vector primitives** | **pdfplumber**, **pdfminer.six**, Session **`GraphSpan` + segments** (in repo) | Flatten `moveTo`/`lineTo`/rect streams into normalized 2D coordinate arrays with bboxes. |
+| **🌟 L1.5 Scaling & tiling** | **OpenCV** tile split, **SAHI** (`obss/sahi`, MIT), **Shapely** affines | Slice gigapixel sheets into overlapping tiles; maintain **page-space transform matrix** to map model outputs back to exact PDF coordinates. |
+| **L2 Table detection** | **ODL + sheetgraph** (in repo), **Camelot** lattice/stream, **pdfplumber**, **gmft/TATR** | Detect grid structures + cell bboxes; **spatial join** maps L1 character midpoints inside cell bounds (pdfplumber `char_in_bbox` pattern). |
+| **L3 Plan symbols** | **`sweep_schedule_row`** (in repo), **MEPdetect** vector path, **YOLOplan** / SAHI+YOLO | Locate valves, dampers, terminals, equipment tags on layout canvas. Vector text sweep **first**; vision only when text layer absent. |
+| **🌟 L3.5 Topology graph** | **Shapely** spatial ops, **NetworkX**, **momepy** `gdf_to_nx`, MEPdetect segment trace | Connect symbols to linework; trace duct/pipe/conduit context (damper → duct segment → fan). **Must use buffer tolerance — see §4.6.** |
+| **L4 Reconcile** | **`reconcileWorkflow`** (in repo), IoU/GREEDYNMM dedup | Schedule↔plan join; **resolve overlaps** where L3 vector heuristics and L3 vision both hit the same asset. |
+| **🌟 L4.5 Unstructured VLM** | **Qwen2-VL-7B** (Apache-2.0), **Llama 3.2 Vision 11B** (Meta community license) | Read **local visual crops** around untabled assets to tie floating labels/flags/notes to asset IDs. **Not on GOAL deterministic path — see §4.7.** |
+| **L5 Classify** | Header geometry + mark shape + column role map; **Pydantic** / structured parser | Final sanitization: `"300×200 MD-1 (NC)"` → `{size, tag, fail}`. Regex is one signal here, not the engine. |
+
+### 4.1 L1.5 — Scaling & tiling (research notes)
+
+**Problem:** E-size / 4000×3000+ blueprint pages exceed YOLO/TATR context; downsampling loses
+small symbols (VAV tags, damper marks, grille IDs).
+
+**Validated approach:**
+
+1. **Scale from title block first** — read numeric scale from vector text (OpenTakeoff
+   `detected_scale` already on shared path). All tile math stays in **PDF user space** until
+   the last mile.
+2. **Overlapping tiles** — industry default ~25–50% overlap ([SAHI docs](https://github.com/obss/sahi/blob/main/docs/predict.md),
+   [Flip-n-Slide multi-overlap strategy](https://arxiv.org/pdf/2404.10927)). Prevents symbols
+   bisected at tile edges from being lost.
+3. **SAHI over raw OpenCV loops** — [SAHI](https://github.com/obss/sahi) (MIT) wraps slice →
+   detect → **shift predictions back** via `shift_amount` + `full_shape` on each
+   `ObjectPrediction`. Post-merge via GREEDYNMM/NMS at configurable IoU/IOS threshold.
+4. **Shapely affine** — store per-tile `(offset_x, offset_y, scale)`; map tile bboxes → page
+   bboxes with `shapely.affinity.affine_transform` before merge.
+
+**OpenTakeoff fit:** Batch sidecar for Pillar D symbol sweeps on huge sheets; primary valve/BAS
+path (Pillar C) still schedule-table-first — tiling is secondary until L2 recall is fixed.
+
+### 4.2 L2 — Spatial join (pdfplumber pattern → ScheduleTable adapter)
+
+pdfplumber’s table extractor is the reference implementation for **geometry-first cell fill**:
+
+```python
+# pdfplumber/table.py — char midpoint inside cell bbox
+v_mid = (char["top"] + char["bottom"]) / 2
+h_mid = (char["x0"] + char["x1"]) / 2
+return (h_mid >= x0) and (h_mid < x1) and (v_mid >= top) and (v_mid < bottom)
+```
+
+**Production rule:** never OCR cell text if vector characters exist inside the cell bbox.
+Camelot `flavor='ml'` and gmft follow the same principle — model finds structure, **PDF text
+layer fills values** (no hallucinated Cv/GPM).
+
+**Adapter contract:** all L2 backends emit the same `ScheduleTable` / ODL grid types
+(`sheetgraph.ts` adapter ~7327). One graph slot; no MCP-only fork.
+
+### 4.3 🌟 L3.5 — Topology graph (research notes)
+
+**Purpose:** Answer “what system is this damper on?” — not just “count MD-1.”
+
+**Validated OSS patterns:**
+
+| Source | Mechanism |
+|---|---|
+| **MEPdetect vector path** | Isolates conductors by pen/lineweight; arrowhead polygon geometry; segment connectivity with gap tolerance |
+| **NetworkX + momepy** | [Primal graph from line intersections](https://networkx.org/documentation/stable/auto_examples/geospatial/plot_lines.html) — nodes at junctions, edges = duct/pipe segments |
+| **ConstructDrawingAI L1** | Symbol detection + **connectivity graph** on P&ID/architectural/electrical drawings |
+| **IfcOpenShell voxel toolkit** | Dilate/erode for clearance-aware 3D routing (BIM path — reference for tolerance thinking) |
+
+**OpenTakeoff near-term:** extend existing `sweep_schedule_row` + inline motifs with optional
+**served-duct context** (which AHU/zone text appears nearest on same sheet) before full graph
+routing. Full NetworkX duct tracing is Pillar D+ / duct-LF deferred scope.
+
+### 4.4 L4 — Cross-source dedup reconcile
+
+When both **vector text sweep** (L3) and **YOLO detection** (L3 vision) find the same asset:
+
+1. Project both to page-space bboxes.
+2. Merge if IoU ≥ τ or IOS ≥ τ (SAHI default postprocess — tunable per trade).
+3. Prefer **vector text tag** as canonical ID when present (deterministic, citeable).
+4. Vision-only hits → `PLAN_ONLY` or `UNCERTAIN` until schedule row or human confirms.
+5. Feed merged inventory into existing **`reconcileWorkflow`** MATCH / SCHEDULE_ONLY statuses.
+
+This mirrors iBeam’s schedule↔plan mismatch surfacing — extended to **dual perception sources**.
+
+### 4.5 🌟 L4.5 — Local VLM (research + GOAL gate)
+
+**What the models do:**
+
+| Model | License | Fit |
+|---|---|---|
+| **Qwen2-VL-7B-Instruct** | **Apache-2.0** ([Qwen2-VL](https://qwen2.org/vl/)) | Local crop → structured JSON for floating labels near untabled symbols |
+| **Qwen2.5-VL-7B** | Apache-2.0 | Successor; better table OCR in crops ([Labellerr comparison](https://www.labellerr.com/blog/qwen-2-5-vl-vs-llama-3-2/)) |
+| **Llama 3.2 Vision 11B** | Meta community license | Strong DocVQA; check redistribution terms for your product |
+| **TakeoffLens** (reference arch) | — | MCP workflow: vector first, high-res tiling + vision **only for raster scans** |
+
+**⚠ OpenTakeoff GOAL conflict:** `GOAL.md` mandates a **deterministic, non-LLM pipeline** and
+states **“OCR and vision remain out of scope.”** Therefore:
+
+- **L4.5 is NOT on the shared corpus scoring path** until GOAL scope is explicitly reopened.
+- Permitted use today: **offline coordinator assist** on raster-only fixtures with
+  `present_not_row_extractable` / `REFUSED` disclose — output labeled *estimate*, never merged
+  into locked GT without vector corroboration.
+- If reopened: crop = tight bbox around L3 detection + 20% margin; prompt → **Pydantic schema**
+  (L5); require matching vector text or schedule row before `MATCH`.
+
+### 4.6 Architectural pitfall — topology buffer tolerance (mandatory)
+
+> Do not rely on strict geometric intersection for MEP connectivity. Draftsmen leave
+> pixel-wide gaps between lines and symbols that look connected to the human eye but fail
+> `.intersects()` at zero tolerance.
+
+**Production pattern (Shapely):**
+
+```python
+from shapely.geometry import Point, LineString
+from shapely import buffer
+
+TOL_PTS = 2.0  # PDF points — tune from scale (≈1–3 mm at 1/4"=1'-0")
+
+def symbol_touches_line(symbol_centroid, duct_line):
+    node = Point(symbol_centroid).buffer(TOL_PTS)
+    corridor = buffer(duct_line, TOL_PTS, cap_style="flat", join_style="mitre")
+    return node.intersects(corridor)
+```
+
+**Calibration:** derive `TOL_PTS` from sheet scale — e.g. 2 mm real at 1/8"=1'-0" ≈ 0.75 pt
+at 72 dpi PDF space, but **empirical tune on corpus** (Bessemer rowsym fixtures). MEPdetect’s
+vector path uses lineweight bands + gap bridging for the same reason.
+
+**Anti-patterns:** pure `.intersects()` without buffer; graph edges on every line crossing
+(grid lines ≠ duct); treating legend hatches as duct centerlines.
+
+### 4.7 L5 — Structured classification (beyond regex)
+
+Layer 5 stack:
+
+1. **Header token sets** — `TAG|GPM|Cv|SERVED|AI|AO|BI|BO` geometry (fixes 013 blank-title valves).
+2. **Mark-shape grammars** — `CV-\d`, `MD-\d`, `VAV-\d` on column-0 cells.
+3. **`columnMapFor`** — contractor columns (actuator, fail position, trend/alarm).
+4. **Pydantic / JSON Schema validation** — parse composite size strings into typed fields;
+   refuse rows that fail schema rather than silently dropping.
+
+Regex lives inside L5 as **one signal**, not the primary engine.
+
+---
+
+## 4b. Complete open-source stack (layer detail — v1 reference)
+
+This is the **full stack a Kamai-class deterministic pipeline can be built from today**
+without proprietary models. Items marked **(in repo)** are already integrated. **§4 v2 table
+above is authoritative for production architecture; this section retains component-level detail.**
 
 ### Layer 0 — Document ingest
 
@@ -275,12 +427,17 @@ YOLO. Symbol detectors matter for Pillar D plan counts and reconcile paints.
 ### 5.1 Deterministic MEP schedule takeoff (closest to OpenTakeoff GOAL)
 
 ```
-pdf.js Session load
-  → sheetgraph.extractAllTables + ODL adapter
-  → [fallback] pdfplumber/Camelot/gmft → ScheduleTable adapter
-  → corpusTakeoff family + column classify
-  → reconcileWorkflow plan join
+pdf.js Session load (L0)
+  → GraphSpan + segments (L1)
+  → [optional] SAHI tiles for huge plan pages (L1.5)
+  → sheetgraph.extractAllTables + ODL adapter (L2)
+  → [fallback] pdfplumber/Camelot/gmft → ScheduleTable adapter (L2 spatial join)
+  → corpusTakeoff header/mark classify + Pydantic sanitize (L5)
+  → sweep_schedule_row plan join (L3)
+  → [optional] Shapely+NetworkX topology context (L3.5)
+  → reconcileWorkflow + cross-source dedup (L4)
   → structured JSON + bbox cites
+  → [raster-only disclose path] local VLM crop assist (L4.5 — not scored)
 ```
 
 **Repos to study/implement against:**

@@ -7,6 +7,8 @@ Trimble MEP, iBeam) read **native PDF vector geometry** first; classification is
 
 **Deliverable:** `takeoffs/VECTOR_TAKEOFF_ENGINE_RESEARCH.md` — authoritative stack doc:
 - Commercial pipeline anatomy (L0–L5 layers)
+- **v2 production stack** with 🌟 L1.5 (SAHI/OpenCV tiling), L3.5 (Shapely/NetworkX topology),
+  L4.5 (local VLM — GOAL-gated), topology buffer pitfall, cross-source dedup reconcile
 - Complete OSS stack by layer (ODL, pdfplumber, Camelot, gmft/TATR, MEPdetect, YOLOplan, …)
 - OpenTakeoff gap map: **Layer 1/2 extraction** fails on ~24+46 of 70 compile-zero valve sets
 - Recommended fix order on shared Session+ODL path (no regex-first, no ODL rewrite)
