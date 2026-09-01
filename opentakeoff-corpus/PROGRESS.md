@@ -13,8 +13,22 @@ Trimble MEP, iBeam) read **native PDF vector geometry** first; classification is
 - OpenTakeoff gap map: **Layer 1/2 extraction** fails on ~24+46 of 70 compile-zero valve sets
 - Recommended fix order on shared Session+ODL path (no regex-first, no ODL rewrite)
 
-**Paused:** Implementation remains stopped until explicit resume. Reverted uncommitted
-`corpusTakeoff.mjs` title/keyRe experiments (wrong layer).
+**Paused:** Implementation active — L5 header-geometry layer landing on shared path.
+
+### L5 header-geometry classifier (2026-09-01 22:10 UTC)
+
+**Shared-path Layer 5 (on recovered geometry, not regex-only):**
+- `tableHeaderBlob` / `headerShapeMatches` / `isControlValveHeaderShape`
+- Untitled valve grids: `blankKeyRe` + `blankHeaderRes` + `blankServiceHint` on
+  CHW/HHW/ISO/MIXING/CONTROL_DAMPER families
+- Untitled BAS grids: `isBasPointsListTable` + `inferBasListTitle` in `compileBasTakeoff`
+
+**Verified:** `013_MO_T2523` real graph — **0 → 5** `CHW_CONTROL_VALVE` rows from blank-title
+`TAG|MANUFACTURER|MODEL|SERVED|GPM|SIZE` grid (CV-* marks). T-VALVE-01 lock still green.
+Tests: `corpusTakeoffHeaderGeometry.test.ts` **4/4**; `corpusTakeoffBas.test.ts` **19/19**.
+
+**Next stack wiring:** L2 pdfplumber fallback adapter → ScheduleTable; ODL coverage on thin sets;
+GT harness census re-run across 81 valve + 112 BAS sets.
 
 ### Pillar C valve audit — PDF text vs compile (2026-09-01 21:32 UTC)
 
