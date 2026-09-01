@@ -406,35 +406,34 @@ UI+MCP parity, no corpus hardcodes.
 
 | Pillar | Scope | Status |
 |---|---|---|
-| **A — Cross-set compile** | Vol1 + Vol2 (82/82 INDEX) schedule compile | **§6 pending full suite** — keys + locks green; awaiting green `npm run test:workflows` before claiming MET |
-| **B — Reconcile** | Schedule↔plan with contractor columns+cites | **§6 pending full suite** — locks + UI proof on `main`; WORKFLOWS **#51 → ON_MAIN** when suite verifies |
-| **C — Valve + BAS depth** | Air/water valves, dampers, actuators; BAS points, I/O, SOO | **Research landed** in `takeoffs/NEXT_GOAL_LOOP.md` WP7/WP8 (2026-09-01). Impl next after A+B §6. T-BAS-01’s 122 POINTS LIST rows is **not** a complete BAS takeoff |
+| **A — Cross-set compile** | Vol1 + Vol2 (82/82 INDEX) schedule compile | **§6 MET** — 82/82 Vol2 + Vol1 keys; soft titles + sibling-exclusion; T-HVAC-01/T-BAS-01 green; honest WEAK/ZERO stable |
+| **B — Reconcile** | Schedule↔plan with contractor columns+cites | **§6 MET** — on `main`; NAVFAC + Vol1/Vol2 bulk locks; Agent UI proof; WORKFLOWS **#51 ON_MAIN**; full `test:workflows` **104/104** |
+| **C — Valve + BAS depth** | Air/water valves, dampers, actuators; BAS points, I/O, SOO | **Impl next** — research + pointers in WP7/WP8. T-BAS-01’s 122 POINTS LIST rows is **not** a complete BAS takeoff |
 | **D — Grounding depth** | Symbol counts highlighted and accurate on plan | **Queued** — WP9 after C impl bar |
 
 Authority: `GOAL.md` · `takeoffs/NEXT_GOAL_LOOP.md`.
 
-### §6 A+B gate evidence (2026-09-01 coordinator — partial until suite green)
+### §6 A+B gate evidence (2026-09-01 coordinator — **MET**)
 
-1. Pillar A: Vol2 INDEX **82/82** compile keys + Vol1; core suite `T-HVAC-01` / `T-BAS-01` LOCKED (spot-checked).
-2. `T-VALVE-01` LOCKED MCP+UI 5/5 (reconfirmed in core suite).
+1. Pillar A: Vol2 INDEX **82/82** compile keys + Vol1; `T-HVAC-01` / `T-BAS-01` LOCKED.
+2. `T-VALVE-01` LOCKED MCP+UI 5/5.
 3. WP3: Bessemer rowsym ≥90% (`rowsymBessemer.regression.test.mjs` pass).
-4. Pillar B: `reconcileWorkflow.test.mjs` locks include Las Vegas CUP **04**, Colville **27** pumps/fans, Vol2 WEAK leftovers honest SO, Klamath FC/HP/DOAS honest SO; Orange County / Vermillion Jail VAV MATCH; Playwright `playwright-reconcile-ui.mjs` Agent UI proof.
-5. **§6 judgment leftovers reconfirmed 2026-09-01 (focused 7/7):** Orange County VAV **32/32 MATCH** · Vermillion Jail VAV **58/58 MATCH** · Klamath FCU/DOAS/HP honest SO · Vol2 WEAK leftovers honest SO · Las Vegas CUP **04** CT MATCH · pumps **11/12** · Colville **27** fans MATCH · pumps **13/14** · Colville ERV-1 MATCH. Log: `/opt/cursor/artifacts/s6-leftovers-reconcile.log`.
-6. Shared-path: `planToolParity.test.mjs` + `prewarmGraphSmoke.test.mjs` pass.
-7. WORKFLOWS **#51** status → **ON_MAIN** on this branch (was PROVEN); merge stack already on `main`.
-8. Non-NAVFAC complete/family compile + reconcile proven via bulk keys + UI path (no per-job title hardcodes).
-9. Fast workflow locks reconfirmed 2026-09-01 (**12/12**): T-HVAC-01 / T-BAS-01 / T-VALVE-01 · Bessemer rowsym · planToolParity · prewarmGraphSmoke · reconcileGolden · D01/D08/D10 · sheetGraphCache. Log: `/opt/cursor/artifacts/workflows-fast-locks.log`.
-10. **Still required:** full `opentakeoff/mcp` `npm run test:workflows` green (crossCorpus keyed Vol1+Vol2 compile + full reconcileWorkflow) on this VM with staged bulk PDFs — do **not** mark §6 MET until that finishes.
+4. Pillar B: reconcile locks include Las Vegas CUP **04**, Colville **27** pumps/fans, Vol2 WEAK leftovers honest SO, Klamath FC/HP/DOAS honest SO; Orange County / Vermillion Jail VAV MATCH; Playwright Agent UI proof.
+5. §6 judgment leftovers focused **7/7** (Orange County 32/32 · Vermillion 58/58 · Klamath honest SO · WEAK SO · Las Vegas CUP 04 · Colville 27 · Colville ERV-1).
+6. Shared-path: `planToolParity` + `prewarmGraphSmoke` pass.
+7. WORKFLOWS **#51** → **ON_MAIN**; merge stack on `main`.
+8. Non-NAVFAC complete/family compile + reconcile via bulk keys + UI path (no per-job title hardcodes).
+9. Fast workflow locks **12/12**.
+10. **Full `npm run test:workflows` green — 104 pass / 0 fail** (~36 min), including WP1 keyed Vol1+Vol2 compile. Log: `/opt/cursor/artifacts/workflows-full-suite.log`.
 
 Honest ceilings retained (not score-chased): Klamath FC/HP/DOAS SCHEDULE_ONLY under `evaluationFast`; WEAK/ZERO compile keys where no extractable tables; WP3.3 TG bowtie follow-on.
 
 ### Next queue (platform loop)
 
-1. **Finish A+B §6:** wait for / fix `test:workflows`; then flip Pillar A/B to **§6 MET**.
-2. **Pillar C impl (research done):** WP7 valve/damper/actuator depth + WP8 BAS depth on shared path — grow beyond POINTS-LIST-only and thin valve stubs; ≥3 valve + ≥5 BAS bulk keys; SOO/hard-vs-soft honesty per WP8 research.
-3. **Pillar D:** WP9 highlight-accuracy proofs for symbol counts.
-4. WP3.3 TG bowtie dedicated detector (tracked follow-on).
-5. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.
+1. **Pillar C impl:** WP7 valve/damper/actuator depth + WP8 BAS depth on shared path — expand `control_valves` beyond CHW+HHW; promote Actuator/Fail/signal + ALARM/TREND when printed; ≥3 valve + ≥5 BAS bulk keys; never invent SOO-derived points.
+2. **Pillar D:** WP9 highlight-accuracy proofs for symbol counts.
+3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
+4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.
 
 Cloud dispatch and all subagent dispatch remain prohibited.
 

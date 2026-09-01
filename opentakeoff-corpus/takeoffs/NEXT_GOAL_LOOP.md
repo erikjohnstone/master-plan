@@ -1,6 +1,6 @@
 # Next major goal loop — HVAC/BAS cross-set + reconcile golden
 
-**Status:** ACTIVE (Pillars A+B at §6 verification; C research landed; C+D impl next)  
+**Status:** ACTIVE (Pillars A+B §6 MET; C impl in progress; D queued)  
 **Date:** 2026-08-31 (pillars C+D added 2026-09-01; C research 2026-09-01)  
 **Authority:** `GOAL.md` + `WORKFLOWS.md` + live codebase + industry takeoff practice  
 
