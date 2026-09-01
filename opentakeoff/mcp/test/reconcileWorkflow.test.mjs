@@ -9,8 +9,6 @@ import { dirname, resolve } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { compileCorpusTakeoff } from "../src/corpusTakeoff.mjs";
-import { cachedSheetGraph } from "../scripts/sheetGraphCache.mjs";
-import { Session } from "../src/session.ts";
 import { reconcileSchedulePlan } from "../src/takeoff.ts";
 import {
   reconcileScheduleFamilyFromGraph,
@@ -20,6 +18,11 @@ import {
 } from "../../web/src/lib/schedulePlanReconcile.mjs";
 import { HVAC_FAMILY_SPECS } from "../../web/src/lib/corpusTakeoff.mjs";
 import { loadFixtureSession } from "./helpers/loadFixtureGraph.mjs";
+import {
+  cachedGraphForPdf as graphForPdf,
+  loadCachedKeySession,
+  loadCachedKeySessionOrSkip,
+} from "./helpers/loadKeySession.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORPUS = resolve(HERE, "../../../opentakeoff-corpus");
@@ -27,39 +30,10 @@ const CROSS = resolve(CORPUS, "takeoffs/cross-set-compile");
 const D07 = resolve(CORPUS, "demos/D07-vav-plan-link-fan-refuse");
 const D08 = resolve(CORPUS, "demos/D08-fcu-cross-building");
 
-async function graphForPdf(pdfPath, setId) {
-  return cachedSheetGraph(pdfPath, {
-    identity: [setId, "reconcile-fixture"],
-    compute: async () => {
-      const session = new Session();
-      await session.loadPlan(pdfPath);
-      return session.graphForPipeline();
-    },
-  });
-}
-
-/** Prefer rejoined PDF; else merge Vol2 multipart parts (same as crossCorpusWorkflow). */
+/** @deprecated use loadCachedKeySession — session-only callers migrate to { session, graph }. */
 async function loadKeySession(key) {
-  const primary = resolve(CORPUS, key.source_file);
-  if (existsSync(primary)) {
-    const session = new Session();
-    await session.loadPlan(primary);
-    return session;
-  }
-  const partsDir = key.source_parts_dir
-    ? resolve(CORPUS, key.source_parts_dir)
-    : null;
-  if (!partsDir || !existsSync(partsDir)) return null;
-  const parts = readdirSync(partsDir)
-    .filter((f) => f.endsWith(".pdf"))
-    .sort();
-  if (!parts.length) return null;
-  const session = new Session();
-  await session.loadPlan(resolve(partsDir, parts[0]));
-  for (let i = 1; i < parts.length; i++) {
-    await session.loadPlan(resolve(partsDir, parts[i]), { merge: true });
-  }
-  return session;
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  return loaded?.session ?? null;
 }
 
 async function assertFamilyAllMatch(session, graph, key, family) {
@@ -93,15 +67,7 @@ async function assertFamilyStatusCounts(session, graph, key, family, counts, { r
 }
 
 async function loadKeySessionOrSkip(t, keyPath) {
-  assert.ok(existsSync(keyPath));
-  const key = JSON.parse(readFileSync(keyPath, "utf8"));
-  const session = await loadKeySession(key);
-  if (!session) {
-    t.skip(`PDF/parts missing for ${key.set_id}`);
-    return null;
-  }
-  const graph = await session.graphForPipeline();
-  return { key, session, graph };
+  return loadCachedKeySessionOrSkip(t, CORPUS, keyPath);
 }
 
 test("federal-mech VAV reconcile scaffold matches compile count (schedule side)", async () => {
@@ -162,9 +128,12 @@ test("federal-mech VAV reconcile: sampled plan-drawn tags MATCH (WP1 cross-set)"
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
   const sample = ["VAV-1", "VAV-12", "VAV-30", "VAV-58"];
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
@@ -271,9 +240,12 @@ test("Orange County bulk VAV reconcile: all 32 scheduled tags MATCH (WP1 cross-s
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     evaluationFast: true,
@@ -322,9 +294,12 @@ test("Vermillion County Jail bulk VAV reconcile: all 58 scheduled tags MATCH (Vo
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     evaluationFast: true,
@@ -338,46 +313,37 @@ test("Vermillion County Jail bulk VAV reconcile: all 58 scheduled tags MATCH (Vo
   }
 });
 
-test("Vol2 chiller upgrade 012: ACC + PUMP + VFD all MATCH (multipart rejoin)", async () => {
-  const keyPath = resolve(CROSS, "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.compile.json");
-  assert.ok(existsSync(keyPath));
-  const key = JSON.parse(readFileSync(keyPath, "utf8"));
-  const session = await loadKeySession(key);
-  if (!session) {
-    test.skip(`PDF/parts missing for ${key.set_id}`);
-    return;
-  }
-  const graph = await session.graphForPipeline();
+test("Vol2 chiller upgrade 012: ACC + PUMP + VFD all MATCH (multipart rejoin)", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
   for (const family of ["AIR_COOLED_CHILLER", "PUMP", "VARIABLE_FREQUENCY_DRIVE"]) {
     await assertFamilyAllMatch(session, graph, key, family);
   }
 });
 
-test("Vol2 FL airport 089: DOAS + FCU families with plan-drawn MATCH (multipart rejoin)", async () => {
-  const keyPath = resolve(CROSS, "089_FL_Airport_Terminal_and_Hangar_Development.compile.json");
-  assert.ok(existsSync(keyPath));
-  const key = JSON.parse(readFileSync(keyPath, "utf8"));
-  const session = await loadKeySession(key);
-  if (!session) {
-    test.skip(`PDF/parts missing for ${key.set_id}`);
-    return;
-  }
-  const graph = await session.graphForPipeline();
+test("Vol2 FL airport 089: DOAS + FCU families with plan-drawn MATCH (multipart rejoin)", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "089_FL_Airport_Terminal_and_Hangar_Development.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
   for (const family of ["DOAS", "HEAT_PUMP", "PUMP", "WATER_HEATER", "FAN"]) {
     await assertFamilyAllMatch(session, graph, key, family);
   }
 });
 
-test("Vol2 Phoenix Sky Harbor 088: plan-drawn plant + terminal families MATCH", async () => {
-  const keyPath = resolve(CROSS, "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.compile.json");
-  assert.ok(existsSync(keyPath));
-  const key = JSON.parse(readFileSync(keyPath, "utf8"));
-  const session = await loadKeySession(key);
-  if (!session) {
-    test.skip(`PDF/parts missing for ${key.set_id}`);
-    return;
-  }
-  const graph = await session.graphForPipeline();
+test("Vol2 Phoenix Sky Harbor 088: plan-drawn plant + terminal families MATCH", async (t) => {
+  const ctx = await loadKeySessionOrSkip(
+    t,
+    resolve(CROSS, "088_AZ_Phoenix_Sky_Harbor_International_Airport_PHX.compile.json"),
+  );
+  if (!ctx) return;
+  const { key, session, graph } = ctx;
   for (const family of [
     "AHU", "FCU", "CONDENSING_UNIT", "PUMP", "FAN", "CEILING_FAN", "UNIT_HEATER",
   ]) {
@@ -1128,9 +1094,12 @@ test("Orange County booster pump BP-1 reconcile MATCH", async () => {
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "PUMP");
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     evaluationFast: true,
@@ -1149,9 +1118,12 @@ test("Hawthorn bulk AHU+CU reconcile: all scheduled tags MATCH (WP1 cross-set)",
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
 
   for (const family of ["AHU", "CONDENSING_UNIT"]) {
     const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
@@ -1178,9 +1150,12 @@ test("Jeff City CST bulk VAV+FCU reconcile: all scheduled tags MATCH (WP1 cross-
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   for (const family of ["VAV", "FCU"]) {
     const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
     assert.ok(needle, `${family} needle`);
@@ -1206,9 +1181,12 @@ test("SDSU EngSciences AHU reconcile: all scheduled tags MATCH (dup-table collap
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "AHU");
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     evaluationFast: true,
@@ -1234,9 +1212,12 @@ test("SDSU EngSciences VAV reconcile: sampled plan-drawn CAV/ECAV tags MATCH (ho
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
   const sampleMatch = [
     "CAV-N2-2", "CAV-S1-1", "CAV-S1-4", "CAV-S1-6", "CAV-S1-7", "CAV-S2-3", "CAV-S3-1", "CAV-S3-3",
@@ -1276,9 +1257,12 @@ test("Douglas County DOAS reconcile: misc-schedule DOAS-30 MATCH", async () => {
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "DOAS");
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     evaluationFast: true,
@@ -1297,9 +1281,12 @@ test("St Louis bulk VAV reconcile: all 12 ATU tags MATCH (WP1 cross-set)", async
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
   assert.ok(needle, "VAV needle");
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
@@ -1347,9 +1334,12 @@ test("Hurlburt bulk AHU+FAN reconcile: all scheduled tags MATCH (WP1 cross-set)"
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   for (const family of ["AHU", "FAN"]) {
     const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
     const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
@@ -1391,9 +1381,12 @@ test("Spokane VFD reconcile: all scheduled tags SCHEDULE_ONLY under evaluationFa
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VARIABLE_FREQUENCY_DRIVE");
   assert.ok(needle, "VFD family needle");
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
@@ -1418,9 +1411,12 @@ test("Baker MS reconcile: GRD+AHU+HP MATCH (glued row.key + comma-split parity)"
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
 
   const hpNeedle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "HEAT_PUMP");
   const hpScaffold = reconcileScheduleFamilyFromGraph(graph, hpNeedle);
@@ -1476,9 +1472,12 @@ test("Douglas HEAT_PUMP reconcile: VRF indoor + HP-30 MATCH; HP-10 SCHEDULE_ONLY
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "HEAT_PUMP");
   const sampleMatch = ["CC-8-1", "CC-15-2", "AH-30-8", "HP-30"];
   const sampleSo = ["HP-10"];
@@ -1507,9 +1506,12 @@ test("Baker UNIT_HEATER reconcile: shadow extract collapse — EH-* MATCH", asyn
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "UNIT_HEATER");
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     evaluationFast: true,
@@ -1533,9 +1535,12 @@ test("Klamath PUMP reconcile: untitled thin extract collapsed — no AMBIGUOUS",
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "PUMP");
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     evaluationFast: true,
@@ -1559,9 +1564,12 @@ test("Klamath FAN reconcile: blank-title KEF-1 SCHEDULE_ONLY under evaluationFas
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "FAN");
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     evaluationFast: true,
@@ -1580,9 +1588,12 @@ test("SDSU VACUUM_PUMP + WATER_SOFTENER MATCH; BRINE/FLASH SCHEDULE_ONLY", async
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
 
   const vacuum = await reconcileScheduleFamilyWithSweeps(
     session,
@@ -1633,9 +1644,12 @@ test("Carson prefer-schedule: shared B*/C* marks MATCH (unscoped stays AMBIGUOUS
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
 
   // Negative: bare sweep without a preferred schedule must still refuse
   // cross-family building-letter collisions.
@@ -1679,9 +1693,12 @@ test("Colville ERV: titled-first cite → ERV-1 MATCH (not blank seismic AMBIGUO
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "ERV");
   const scaffold = reconcileScheduleFamilyFromGraph(graph, needle);
   assert.equal(scaffold.length, key.categories.ERV);
@@ -1707,9 +1724,12 @@ test("Hurlburt VAV: NATUK1 schedule ↔ plan ATU K1/K2 MATCH", async () => {
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "VAV");
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     evaluationFast: true,
@@ -1732,9 +1752,12 @@ test("SDSU EngSciences FAN reconcile: all scheduled tags MATCH (lab EF + TEF/GX)
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "FAN");
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     evaluationFast: true,
@@ -1757,9 +1780,12 @@ test("SDSU EngSciences STEAM PRV reconcile: PRV-1A/1B both MATCH", async () => {
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "PRESSURE_REDUCING_VALVE");
   assert.ok(needle, "PRESSURE_REDUCING_VALVE needle");
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
@@ -1784,9 +1810,12 @@ test("Northport FAN reconcile: RF-1/RF-2 honest SCHEDULE_ONLY (no plan text)", a
     test.skip(`PDF missing: ${key.source_file}`);
     return;
   }
-  const session = new Session();
-  await session.loadPlan(pdf);
-  const graph = await session.graphForPipeline();
+  const loaded = await loadCachedKeySession(CORPUS, key);
+  if (!loaded) {
+    test.skip(`PDF/parts missing for ${key.set_id}`);
+    return;
+  }
+  const { session, graph } = loaded;
   const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, "FAN");
   const result = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
     evaluationFast: true,
