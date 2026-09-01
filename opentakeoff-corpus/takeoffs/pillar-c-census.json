@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-01T17:05Z",
+  "as_of": "2026-09-01T17:20Z",
   "mandate": "Pillar C done only when EVERY bas_bearing and valve_bearing set has estimator takeoff + coordinator self-check + pipeline GT corroboration",
   "counts": {
     "vol1_sets": 30,
@@ -15,22 +15,23 @@
   "verification_coverage": {
     "note": "Coordinator drawing-backed checks + shared-path product census; none lock GT until full estimator self-check + pipeline GT on every set",
     "bas_gap_soo_drawing_verified": 5,
-    "bas_inventory_drawing_verified_bas0": 22,
+    "bas_inventory_drawing_verified_bas0": 33,
     "bas_keyed_drawing_sampled": 5,
     "valve_contractor_column_honesty_verified": 11,
     "valve_keyed_drawing_sampled": 11,
     "valve_itd_d1_lab_drawing_sampled": 1,
-    "estimator_product_live_census_sets": 33,
+    "estimator_product_live_census_sets": 51,
     "plan_paint_census_keyed_bas_sets": 5,
     "plan_paint_census_keyed_valve_sets": 11,
-    "gt_draft_files": 30,
+    "gt_draft_files": 41,
     "artifacts": {
       "gap_soo_batch": "/opt/cursor/artifacts/pillar-c-estimator-gap-verify-keyed-floor.json",
       "inventory_batch": "/opt/cursor/artifacts/pillar-c-inventory-drawing-verify-batch.json",
       "valve_columns_batch": "/opt/cursor/artifacts/pillar-c-valve-estimator-columns-batch.json",
       "estimator_product_census": "/opt/cursor/artifacts/pillar-c-estimator-product-census-batch.json",
       "plan_paint_census": "/opt/cursor/artifacts/pillar-c-plan-paint-census-keyed-floor.json",
-      "estimator_product_census_wave2": "/opt/cursor/artifacts/pillar-c-estimator-product-census-wave2.json"
+      "estimator_product_census_wave2": "/opt/cursor/artifacts/pillar-c-estimator-product-census-wave2.json",
+      "estimator_product_census_wave3": "/opt/cursor/artifacts/pillar-c-estimator-product-census-wave3.json"
     }
   },
   "bas_inventory_drawing_verified_ids": [
@@ -55,7 +56,18 @@
     "22_GA_Valdosta_FireStation8_100CD",
     "23_GA_MaconBibb_RecreationCenter",
     "24_IA_JohnsonCounty_Courthouse",
-    "26_CA_TransbayTower_Mechanical_64Sheets"
+    "26_CA_TransbayTower_Mechanical_64Sheets",
+    "30_WA_SpokaneTransit_CoolingTower",
+    "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+    "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+    "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+    "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+    "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test",
+    "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
+    "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04",
+    "023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory",
+    "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri",
+    "028_TX_Renovation_of_Building_615_Final_Design_Plans"
   ],
   "bas_keyed_ids": [
     "27_WA_ColvilleTribes_Hatchery_Lab",

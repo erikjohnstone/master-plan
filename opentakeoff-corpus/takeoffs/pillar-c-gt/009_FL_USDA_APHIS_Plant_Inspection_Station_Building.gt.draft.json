@@ -1,0 +1,22 @@
+{
+  "set_id": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 9,
+    "estimate_only_points": 63,
+    "never_merged_into_printed": true,
+    "gap_count": 9,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:10:10.798Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-009-inventory-drawing-verify.json",
+    "sample_pass": 9,
+    "sample_n": 9,
+    "gt_locked": false
+  }
+}

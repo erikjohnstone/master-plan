@@ -1,0 +1,22 @@
+{
+  "set_id": "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 14,
+    "estimate_only_points": 90,
+    "never_merged_into_printed": true,
+    "gap_count": 14,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:10:20.698Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-014-inventory-drawing-verify.json",
+    "sample_pass": 14,
+    "sample_n": 14,
+    "gt_locked": false
+  }
+}

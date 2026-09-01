@@ -579,7 +579,7 @@ sample **20/20** on drawing (printed BAS 0); Klamath 14 **15/15** on drawing
 (printed BAS 0). Draft GT created/patched; `gt_locked: false`. Artifact:
 `/opt/cursor/artifacts/pillar-c-inventory-drawing-verify-batch.json`.
 
-**bas:0 inventory expanded (2026-09-01, 22 sets, still 0 locked):**
+**bas:0 inventory expanded (2026-09-01, 33 sets, still 0 locked):**
 
 | Set | Inv | Est pts | Sample on drawing | SOO |
 |---|---:|---:|---|---|
@@ -605,10 +605,23 @@ sample **20/20** on drawing (printed BAS 0); Klamath 14 **15/15** on drawing
 | 23 Macon Bibb | 4 | 17 | **4/4** | absent |
 | 24 Johnson Co | 3 | 19 | **3/3** | absent |
 | 26 Transbay | 7 | 35 | **7/7** | absent |
+| 30 Spokane Transit | 5 | 24 | **4/5** (1 miss) | absent |
+| 004 Interior Reno | 12 | 138 | **12/12** | absent |
+| 009 APHIS | 9 | 63 | **9/9** | absent |
+| 012 Chiller Behavioral | 16 | 57 | **15/15** | absent |
+| 014 Missoula Fire | 14 | 90 | **14/14** | absent |
+| 016 Irish Hill | 1 | 21 | **1/1** | absent |
+| 018 Poultry | 1 | 3 | **1/1** | absent |
+| 019 Eglin | 83 | 430 | **20/20** | absent |
+| 023 Salinity | 2 | 6 | **2/2** | absent |
+| 024 Steam Heat | 4 | 60 | **4/4** | absent |
+| 028 Bldg 615 | 7 | 81 | **7/7** | absent |
 
 All printed BAS 0 · estimate_only never merged · **0 locked**. Same batch artifact.
 Wave-2 product census (18 more bearing sets): **11/18** inventory-bearing, **0** new printed BAS lists.
-Artifact: `/opt/cursor/artifacts/pillar-c-estimator-product-census-wave2.json`.
+Wave-3 product census (18 more): **11/18** inventory-bearing, **0** new printed BAS lists.
+Artifacts: `/opt/cursor/artifacts/pillar-c-estimator-product-census-wave2.json`,
+`/opt/cursor/artifacts/pillar-c-estimator-product-census-wave3.json`.
 
 **Plan-paint census — keyed floor (2026-09-01, still 0 locked):**
 
@@ -640,7 +653,7 @@ Regression: `basServedEquipmentPlanPaint.test.mjs` **3/3** green.
 ### Next queue (platform loop)
 
 1. **Pillar C (corpus-deep):** Gap/SOO + valve columns + plan-paint census on keyed floor;
-   bas:0 inventory drawing verify on **22** sets — **0 locked**. Next: extend inventory
+   bas:0 inventory drawing verify on **33** sets — **0 locked**. Next: extend inventory
    + plan-paint to more bearing sets; tabular SOO where vector allows; expand keys only
    when live compile finds real lists; lock only with self-check + pipeline GT on
    **every** BAS + valve set.

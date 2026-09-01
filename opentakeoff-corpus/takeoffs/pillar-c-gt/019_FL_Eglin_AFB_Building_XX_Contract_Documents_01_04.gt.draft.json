@@ -1,0 +1,22 @@
+{
+  "set_id": "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 83,
+    "estimate_only_points": 430,
+    "never_merged_into_printed": true,
+    "gap_count": 65,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:10:33.854Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-019-inventory-drawing-verify.json",
+    "sample_pass": 20,
+    "sample_n": 20,
+    "gt_locked": false
+  }
+}
