@@ -8,7 +8,11 @@ Trimble MEP, iBeam) read **native PDF vector geometry** first; classification is
 **Deliverable:** `takeoffs/VECTOR_TAKEOFF_ENGINE_RESEARCH.md` — authoritative stack doc:
 - Commercial pipeline anatomy (L0–L5 layers)
 - **v2 production stack** with 🌟 L1.5 (SAHI/OpenCV tiling), L3.5 (Shapely/NetworkX topology),
-  L4.5 (local VLM — GOAL-gated), topology buffer pitfall, cross-source dedup reconcile
+- **Vector stack wired (2026-09-01):** `vectorTakeoffPipeline.ts` orchestrates L0–L5
+  on `Session.graphForPipeline`: L1.5 tiling, L2 geo+ODL+line-grid+stream fallbacks,
+  L3.5 MEP topology, L4 dedup reconcile, **L4.5 OCR/VLM assist ON** (`rasterTableAssist.ts`,
+  `Session.ocrScheduleRegion`). GOAL policy updated — OCR/AI in scope when beneficial.
+  L5 header-geometry in `corpusTakeoff.mjs`. Next: corpus GT harness + compile census.
 - Complete OSS stack by layer (ODL, pdfplumber, Camelot, gmft/TATR, MEPdetect, YOLOplan, …)
 - OpenTakeoff gap map: **Layer 1/2 extraction** fails on ~24+46 of 70 compile-zero valve sets
 - Recommended fix order on shared Session+ODL path (no regex-first, no ODL rewrite)
@@ -863,7 +867,8 @@ schedules. Artifacts: `/opt/cursor/artifacts/pillar-c-valve-pdf-text-scan-all.js
 Coordinator drawing/text probe on 021 Lab, 031 Warehouse, 062 ITD Lab.
 - **062:** SOO title + live text `BOILER/VFD/AHU POINTS LIST` on sheets 18–19, but
   **0 geometric tables** on those sheets → cannot promote to printed BAS without
-  OCR/raster (out of scope). Honest `present_not_row_extractable`.
+- OCR/raster/VLM assist is ON the shared pipeline when vector paths fail; honest
+  `present_not_row_extractable` when all layers refuse.
 - **021 / 031:** SOO present / phrase hits; still refuse SOO-derived points.
 Artifacts: `/opt/cursor/artifacts/pillar-c-*-soo-probe.json`,
 `pillar-c-062-points-list-near-miss.json`, `pillar-c-062-points-list-title-assoc.json`.
@@ -892,5 +897,5 @@ Cloud dispatch and all subagent dispatch remain prohibited.
 - Taxonomy-only score fix: equipment-table rows are already swept regardless
   of taxonomy classification. Prefix additions improve labels but do not close
   the measured score gap.
-- OCR, raster vision, and learned symbol detection are out of the current
-  user-authorized scope.
+- OCR, raster vision, learned symbol detection, and local VLM are ON the shared
+  vector pipeline when they genuinely improve recall — vector-first always.

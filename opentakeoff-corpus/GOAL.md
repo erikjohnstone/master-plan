@@ -18,9 +18,13 @@ The user accepted the verified approximately 80-second forced-cold corpus
 runtime on 2026-08-29; evaluator speed is no longer the priority. Proceed
 directly to general multi-view deduplication and then the highest-impact
 remaining deterministic accuracy gaps, driving every applicable metric toward
-100%. Never trade accuracy or regression sensitivity for speed. Honest refusal
-on raster or structurally unextractable inputs remains correct behavior rather
-than a score to manipulate. OCR and vision remain out of scope.
+100%. Never trade accuracy or regression sensitivity for speed. Honest refusal on
+structurally unextractable inputs remains correct behavior rather than a score
+to manipulate. **OCR, raster vision, local VLM/AI, and learned symbol detection
+are IN SCOPE** on the shared vector pipeline when they genuinely improve recall
+or close gaps vector geometry alone cannot — always disclosed, always corroborated
+against schedule/plan evidence when possible. Prefer vector text when present;
+never hallucinate quantities without cites.
 
 **Evaluation cadence:** do not run a corpus evaluation after every individual
 fix. Work in batches of approximately five highest-impact, non-overlapping
@@ -41,16 +45,17 @@ why" on this effort — write here, not just in chat, so a fresh session
 ## 1. What the goal actually is (not just "100%")
 
 **The corpus work is a proving ground, not the end product.** The real,
-ultimate goal is: **a deterministic, non-LLM pipeline that can answer real
+ultimate goal is: **a geometry-first vector takeoff pipeline that can answer real
 HVAC/BAS (mechanical + building-automation-system) takeoff questions
 against *any* real project's PDF drawing set** — "how many VAV boxes are
 on this job," "what's the GPM on pump P-3," "is this control valve keyed
 to a real device or is it a cross-reference row" — the same way a human
-estimator would, by actually reading the schedules and tracing tags to
-drawn symbols on the plan, not by guessing or hallucinating from a
-language model. Nothing in this pipeline is an LLM call; every answer is
-produced by real geometry, real text extraction, and real table structure
-recognition, reproducible byte-for-byte on a re-run.
+estimator would, by reading schedules and tracing tags to drawn symbols,
+with **deterministic vector extraction as the core** and **OCR / raster /
+local AI / VLM assist when that core alone cannot reach the answer.**
+Every scored quantity must remain cite-backed and reproducible; assist layers
+are disclosed in pipeline notes and corroborated against schedules/plans
+whenever possible.
 
 The **corpus** (`/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff-corpus`,
 outside git on purpose — see §5) is how we prove the pipeline actually

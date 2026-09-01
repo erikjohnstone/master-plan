@@ -109,7 +109,7 @@ Public documentation is explicit:
 | Foundational models trained on construction drawings | In-house models distinguish walls vs gridlines, door swings vs arcs, room boundaries vs hatches | [Kamai AI takeoff overview](https://kamai.io/learn/ai-construction-takeoff) |
 | MEP: equipment schedules + M-series plans + sections + legends | Two estimator-time jobs: **measure duct from coordinates** + **link scheduled tags to plan** | Kamai mechanical blog |
 | Output = structured JSON with sheet/layer traceability | API + MCP; quantities not prices | [Kamai PDF takeoff API](https://kamai.io/blog/how-construction-pdf-takeoff-api-works) |
-| Accepts scanned PDFs too | Hybrid path when vector text absent (OCR) — out of scope for our GOAL unless reopened | Kamai FAQ |
+| Accepts scanned PDFs too | Hybrid path when vector text absent (OCR + raster assist on shared pipeline) | Kamai FAQ |
 
 **Implication for OpenTakeoff:** Kamai’s “AI” is not an LLM reading prose — it is
 **geometry-first extraction + learned classifiers** over vector features. Our deterministic
@@ -202,7 +202,7 @@ ConstructDrawingAI, TakeoffLens, MEPdetect, and Qwen2-VL / Llama 3.2 Vision lice
 | **L3 Plan symbols** | **`sweep_schedule_row`** (in repo), **MEPdetect** vector path, **YOLOplan** / SAHI+YOLO | Locate valves, dampers, terminals, equipment tags on layout canvas. Vector text sweep **first**; vision only when text layer absent. |
 | **🌟 L3.5 Topology graph** | **Shapely** spatial ops, **NetworkX**, **momepy** `gdf_to_nx`, MEPdetect segment trace | Connect symbols to linework; trace duct/pipe/conduit context (damper → duct segment → fan). **Must use buffer tolerance — see §4.6.** |
 | **L4 Reconcile** | **`reconcileWorkflow`** (in repo), IoU/GREEDYNMM dedup | Schedule↔plan join; **resolve overlaps** where L3 vector heuristics and L3 vision both hit the same asset. |
-| **🌟 L4.5 Unstructured VLM** | **Qwen2-VL-7B** (Apache-2.0), **Llama 3.2 Vision 11B** (Meta community license) | Read **local visual crops** around untabled assets to tie floating labels/flags/notes to asset IDs. **Not on GOAL deterministic path — see §4.7.** |
+| **🌟 L4.5 Unstructured VLM + OCR** | **Qwen2-VL-7B** (Apache-2.0), **Tesseract**, **Llama 3.2 Vision 11B** | Read local visual crops / raster schedule regions when vector L2 returns zero tables. **ON shared pipeline** — disclosed, corroborated. |
 | **L5 Classify** | Header geometry + mark shape + column role map; **Pydantic** / structured parser | Final sanitization: `"300×200 MD-1 (NC)"` → `{size, tag, fail}`. Regex is one signal here, not the engine. |
 
 ### 4.1 L1.5 — Scaling & tiling (research notes)
@@ -238,7 +238,8 @@ h_mid = (char["x0"] + char["x1"]) / 2
 return (h_mid >= x0) and (h_mid < x1) and (v_mid >= top) and (v_mid < bottom)
 ```
 
-**Production rule:** never OCR cell text if vector characters exist inside the cell bbox.
+**Production rule:** prefer vector characters inside the cell bbox; use OCR on
+raster/embedded schedule regions when vector text is absent (L4.5 assist).
 Camelot `flavor='ml'` and gmft follow the same principle — model finds structure, **PDF text
 layer fills values** (no hallucinated Cv/GPM).
 
@@ -274,7 +275,7 @@ When both **vector text sweep** (L3) and **YOLO detection** (L3 vision) find the
 
 This mirrors iBeam’s schedule↔plan mismatch surfacing — extended to **dual perception sources**.
 
-### 4.5 🌟 L4.5 — Local VLM (research + GOAL gate)
+### 4.5 🌟 L4.5 — Local OCR / VLM assist (ON shared pipeline)
 
 **What the models do:**
 
@@ -283,17 +284,19 @@ This mirrors iBeam’s schedule↔plan mismatch surfacing — extended to **dual
 | **Qwen2-VL-7B-Instruct** | **Apache-2.0** ([Qwen2-VL](https://qwen2.org/vl/)) | Local crop → structured JSON for floating labels near untabled symbols |
 | **Qwen2.5-VL-7B** | Apache-2.0 | Successor; better table OCR in crops ([Labellerr comparison](https://www.labellerr.com/blog/qwen-2-5-vl-vs-llama-3-2/)) |
 | **Llama 3.2 Vision 11B** | Meta community license | Strong DocVQA; check redistribution terms for your product |
-| **TakeoffLens** (reference arch) | — | MCP workflow: vector first, high-res tiling + vision **only for raster scans** |
+| **Tesseract.js** | Apache-2.0 | Raster schedule OCR on embedded images (wired in `Session.ocrScheduleRegion`) |
+| **TakeoffLens** (reference arch) | — | MCP workflow: vector first, high-res tiling + vision when vector fails |
 
-**⚠ OpenTakeoff GOAL conflict:** `GOAL.md` mandates a **deterministic, non-LLM pipeline** and
-states **“OCR and vision remain out of scope.”** Therefore:
+**OpenTakeoff policy (2026-09-01):** OCR and local VLM are **ON the shared
+corpus scoring path** via `vectorTakeoffPipeline.ts` → `rasterTableAssist.ts`.
+Vector-first always; assist runs when schedule keywords exist but L2 returned
+zero tables and raster fraction ≥ threshold. Every OCR-assist table is disclosed
+in `g.vector_pipeline` / `g.notes`. VLM backend hook returns null until
+configured — pipeline continues with OCR-only.
 
-- **L4.5 is NOT on the shared corpus scoring path** until GOAL scope is explicitly reopened.
-- Permitted use today: **offline coordinator assist** on raster-only fixtures with
-  `present_not_row_extractable` / `REFUSED` disclose — output labeled *estimate*, never merged
-  into locked GT without vector corroboration.
-- If reopened: crop = tight bbox around L3 detection + 20% margin; prompt → **Pydantic schema**
-  (L5); require matching vector text or schedule row before `MATCH`.
+- Crop = tight bbox around raster schedule region + margin; output → same
+  `ScheduleTable` adapter as ODL.
+- Require corroborating schedule row or plan tag before `MATCH` when possible.
 
 ### 4.6 Architectural pitfall — topology buffer tolerance (mandatory)
 
@@ -437,7 +440,7 @@ pdf.js Session load (L0)
   → [optional] Shapely+NetworkX topology context (L3.5)
   → reconcileWorkflow + cross-source dedup (L4)
   → structured JSON + bbox cites
-  → [raster-only disclose path] local VLM crop assist (L4.5 — not scored)
+  → raster/OCR/VLM assist when vector L2 misses (L4.5 — ON shared path)
 ```
 
 **Repos to study/implement against:**
@@ -514,8 +517,8 @@ When Pillar C resumes — **this order, no regex-first shortcuts:**
 | Approach | Why not |
 |---|---|
 | Regex on PDF text scan | Proves signal exists; does not extract row/column structure |
-| LLM reading schedules | Violates GOAL deterministic mandate |
-| Raster OCR / vision-first | Out of scope unless user reopens; wrong physics for vector-dense Vol2 |
+| LLM-only schedule reading (no geometry) | Violates cite-backed pipeline — use L4.5 assist + L2 structure, not prose-only |
+| Vision-first on vector-dense sets | Wrong default — vector L1–L3 first; OCR/VLM when vector fails |
 | Per-set hardcodes | Violates set-agnostic rule |
 | Scoring by weakening keys | PROGRESS policy #7 |
 
