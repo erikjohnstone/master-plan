@@ -4,6 +4,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  buildBasEstimatorProduct,
   compileBasTakeoff,
   compileControlValveTakeoff,
   compileEmbeddedCoilGaps,
@@ -151,6 +152,53 @@ describe("scope exclusion disclosure (real, per-graph — not static boilerplate
     const graph = { sheets: [{ key: "s1", number: "M1.0" }], tables: [] };
     const valve = compileControlValveTakeoff(null, graph);
     assert.ok(valve.exclusions.some((e) => /architectural/i.test(e)));
+  });
+});
+
+describe("BAS points inventory<->printed reconciliation (word-boundary matching)", () => {
+  it("AHU-1's inventory point is NOT false-matched against a printed points list that only serves AHU-10", () => {
+    const hvacTakeoff = {
+      categories: {
+        AHU: {
+          count: 2,
+          items: [
+            { tag: "AHU-1", sheet_id: "s1", table_title: "AIR HANDLING UNIT SCHEDULE" },
+            { tag: "AHU-10", sheet_id: "s1", table_title: "AIR HANDLING UNIT SCHEDULE" },
+          ],
+        },
+      },
+    };
+    const basLists = [{ items: [{ served_equipment: "AHU-10", tag: "AO-1" }] }];
+    const graph = { sheets: [], tables: [] };
+    const product = buildBasEstimatorProduct(hvacTakeoff, basLists, graph);
+    const gap = product.gap_vs_printed;
+    assert.ok(
+      gap.inventory_without_printed_points.includes("AHU-1"),
+      "AHU-1 has no real printed points and must show as a real gap",
+    );
+    assert.ok(
+      !gap.inventory_without_printed_points.includes("AHU-10"),
+      "AHU-10 has a real, exact printed match and must NOT show as a gap",
+    );
+  });
+
+  it("printed AHU-1 served-equipment is NOT false-matched against inventory that only has AHU-10", () => {
+    const hvacTakeoff = {
+      categories: {
+        AHU: {
+          count: 1,
+          items: [{ tag: "AHU-10", sheet_id: "s1", table_title: "AIR HANDLING UNIT SCHEDULE" }],
+        },
+      },
+    };
+    const basLists = [{ items: [{ served_equipment: "AHU-1", tag: "AO-1" }] }];
+    const graph = { sheets: [], tables: [] };
+    const product = buildBasEstimatorProduct(hvacTakeoff, basLists, graph);
+    const gap = product.gap_vs_printed;
+    assert.ok(
+      gap.printed_served_without_inventory.includes("AHU-1"),
+      "printed AHU-1 has no matching inventory and must show as a real gap",
+    );
   });
 });
 
