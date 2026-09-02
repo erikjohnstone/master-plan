@@ -223,6 +223,37 @@ on this effort:**
    wasted, and the fix is to start the next real piece of work the
    moment a background job is kicked off, not after it reports back.
 
+9. **A row's own `row.key` is an upstream banded GUESS, not ground truth —
+   verify it against the row's own cells before trusting it as a tag.**
+   Real, found-live bug (2026-09-02): `021_XX_Laboratory_building`'s real
+   `AIR TERMINAL UNIT SCHEDULE` (sheet #13) has a REMARKS column that wraps
+   across multiple physical text lines and incidentally mentions a
+   cross-referenced PUMP tag ("P-1A,B") that is NOT the row's own
+   equipment — `sheetgraph.ts`'s row-key banding (`rowKeyOf`/
+   `keyColumnBand`) picked that up as `row.key`, even though the row's own
+   real identity ("VVR2 - 12") sat right there in its own MARK cell,
+   unused. Worse, the SAME real wrapped-REMARKS shape merged two real
+   rows' worth of numeric-column data into one `TableRow` object elsewhere
+   in the same table (`GPM: "0.7 1.2"`, two real units concatenated,
+   unattributable to either). `corpusTakeoff.mjs`'s `extractEmbeddedCoils`
+   was hardened at the point this was found — prefer an explicit
+   TAG/MARK/SYMBOL cell over `row.key` when the row has one, and reject a
+   numeric cell carrying more than one number token as evidence of a
+   merged row rather than reporting an unattributable value — both real,
+   tested (`corpusTakeoffHeaderGeometry.test.ts`), shipped fixes. The
+   deeper bug (the row-banding/segmentation logic in `sheetgraph.ts`
+   itself) is NOT fixed — it's real, confirmed, and affects every
+   consumer of a table shaped this way, not just this one detector;
+   queued as a separate task (`task_10174a20`) rather than patched inline
+   under time pressure, because `sheetgraph.ts` is a cache-invalidating
+   L0-L4.5 file (any edit costs a full corpus rebuild, previously measured
+   at ~9.5 hours) and the real fix needs to be scoped and tested broadly,
+   not rushed. The generalizable lesson: `row.key` earns trust from being
+   usually-derived-from-the-real-tag-column, not from any guarantee — the
+   moment a row also carries its own explicit TAG/MARK/SYMBOL cell, that
+   cell is more directly grounded and any extractor reading tags should
+   prefer it.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is

@@ -347,6 +347,60 @@ describe("embedded coil detection (AHU/RTU/FCU schedules, not just valve schedul
     assert.equal(heating.gpm, "15.0");
   });
 
+  it("prefers a row's own real MARK cell over a wrong upstream row.key (real bug, 021_XX sheet #13's AIR TERMINAL UNIT SCHEDULE)", () => {
+    // Real, found-live bug 2026-09-02: sheetgraph.ts's row-key banding
+    // picked up "P-1AB" -- a PUMP cross-reference mentioned incidentally
+    // inside this row's own wrapped REMARKS text ("...P-1A,B PENTHOUSE
+    // EAST...") -- as row.key, even though the row's own real identity
+    // ("VVR2 - 12") sits right there in its own MARK cell. row.key is a
+    // generically-banded guess; an explicitly-labeled MARK/TAG cell
+    // present on the SAME row is more directly grounded and must win.
+    const table = {
+      sheet: "021xx#13", title: { text: "AIR TERMINAL UNIT SCHEDULE" },
+      headers: ["MARK", "CFM", "NOISE CRITERIA (NC) DISCH", "MBH", "GPM", "ROW", "REMARKS"],
+      rows: [{
+        key: "P-2AB", // the real, wrong upstream key -- a different unit's pump cross-reference
+        cells: {
+          REMARKS: { text: "P-2A,B PENTHOUSE EAST W/ SA-12 1" },
+          MARK: { text: "VVR2 - 12" },
+          CFM: { text: "1100" },
+          MBH: { text: "20.8" },
+          GPM: { text: "1.2" },
+          ROW: { text: "2" },
+        },
+      }],
+    };
+    const found = extractEmbeddedCoils(table);
+    assert.equal(found.length, 1);
+    assert.equal(found[0].tag, "VVR2 - 12", "the row's own MARK cell, not the wrong upstream row.key");
+  });
+
+  it("rejects a coil row whose numeric cell holds TWO merged values (real bug: wrapped REMARKS threw off upstream row segmentation, merging two real rows into one)", () => {
+    // Real, found-live bug 2026-09-02: the same real table's row 0 has
+    // every numeric column doubled -- "650 800" (CFM), "0.7 1.2" (GPM),
+    // "2 2" (ROW) -- two real VAV units merged into one TableRow object by
+    // the upstream table extraction. That GPM cannot be attributed to
+    // either real unit; reporting it as one clean coil instance would be
+    // worse than not reporting it at all.
+    const table = {
+      sheet: "021xx#13", title: { text: "AIR TERMINAL UNIT SCHEDULE" },
+      headers: ["MARK", "CFM", "MBH", "GPM", "ROW", "REMARKS"],
+      rows: [{
+        key: "P-1AB",
+        cells: {
+          REMARKS: { text: "0.8 P-1A,B PENTHOUSE EAST 0.8" },
+          MARK: { text: "VVR2 - 8 VVR2 - 10" },
+          CFM: { text: "650 800" },
+          MBH: { text: "12.3 15.1" },
+          GPM: { text: "0.7 1.2" },
+          ROW: { text: "2 2" },
+        },
+      }],
+    };
+    const found = extractEmbeddedCoils(table);
+    assert.equal(found.length, 0, "a doubled/merged GPM cell is real evidence of a corrupted row, not one clean coil instance");
+  });
+
   it("extracts from 019_FL_Eglin_AFB's real header format (bare EWT/LWT + qualified 'FLOW GPM', no shared prefix)", () => {
     // Real, found-live gap 2026-09-02: bare "EWT"/"LWT" compute an empty
     // prefix, but "FLOW GPM" computes prefix "FLOW" — different strings,

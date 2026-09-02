@@ -556,9 +556,23 @@ export function extractEmbeddedCoils(table) {
 
   const results = [];
   for (const row of table?.rows || []) {
-    const tag = String(
-      row?.key || cellText(row, /^(?:TAG|MARK|SYMBOL|EQUIP(?:\.?\s*TAG)?|UNIT\s*(?:MARK|TAG|NO)?)$/i) || "",
-    ).trim();
+    // Real, found-live bug (2026-09-02, 021_XX_Laboratory_building's own
+    // AIR TERMINAL UNIT SCHEDULE, sheet #13): row.key is an upstream,
+    // BANDED guess (sheetgraph.ts's rowKeyOf) — not always right. Measured
+    // directly: this table's own REMARKS column wraps across multiple
+    // physical lines ("0.8 / P-1A,B PENTHOUSE EAST / 0.8") and mentions a
+    // cross-referenced PUMP tag ("P-1A,B") that isn't this row's own
+    // equipment at all — the row's real identity is its own MARK column
+    // ("VVR2 - 8 VVR2 - 10"). row.key picked up "P-1AB" (the pump
+    // cross-reference) as this row's tag; the real MARK cell sat right
+    // there, unused. An explicit, present TAG/MARK/SYMBOL cell for THIS
+    // row is always more directly grounded than a generically-banded key,
+    // so it's checked FIRST now — row.key is only a fallback for rows with
+    // no such column at all (still correct there: e.g. this same table's
+    // sibling AHU schedule has no exact "TAG"/"MARK" header match and
+    // relies on row.key, unaffected by this reordering).
+    const TAG_CELL_RE = /^(?:TAG|MARK|SYMBOL|EQUIP(?:\.?\s*TAG)?|UNIT\s*(?:MARK|TAG|NO)?)$/i;
+    const tag = String(cellText(row, TAG_CELL_RE) || row?.key || "").trim();
     const served = cellText(row, /SERVED|AREA/i);
     for (const block of coilBlocks) {
       const findCell = (re) => {
@@ -570,8 +584,17 @@ export function extractEmbeddedCoils(table) {
       const gpmCell = findCell(COIL_GPM_RE);
       const gpm = gpmCell ? String(gpmCell.text ?? gpmCell ?? "").trim() : "";
       // Real numeric flow required — a blank/dash placeholder row isn't a
-      // real coil instance, just an unused schedule row.
-      if (!gpm || !/[0-9]/.test(gpm)) continue;
+      // real coil instance, just an unused schedule row. Exactly ONE
+      // numeric token required, not just "contains a digit": the same real
+      // 021_XX table's row 0 shows two real rows merged into one cell
+      // object by the upstream table extraction (wrapped REMARKS threw off
+      // row segmentation) — GPM came back "0.7 1.2", two real units'
+      // values concatenated with a space, unattributable to either. That
+      // is real, structural evidence the row itself is corrupted, not one
+      // clean coil instance — skip it rather than report a number that
+      // can't be traced to a real single unit.
+      const gpmNums = gpm.match(/\d+(?:\.\d+)?/g) || [];
+      if (gpmNums.length !== 1) continue;
       const ewtCell = findCell(/E\.?W\.?T\.?|ENTERING\s+WATER/i);
       const lwtCell = findCell(/L\.?W\.?T\.?|LEAVING\s+WATER/i);
       results.push({
