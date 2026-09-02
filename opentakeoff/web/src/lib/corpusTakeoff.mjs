@@ -7,8 +7,34 @@
  * CHANGELOG + reset to 0/5.
  */
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
+import { VALVES, ACTUATORS, DAMPERS } from "./hvacTaxonomy.ts";
 
 export const CORPUS_TAKEOFF_VERSION = 1;
+
+// Real, hand-verified valve/damper/actuator tag prefixes from hvacTaxonomy.ts
+// (evidence-disclosed, cross-corpus) — the structural signal that
+// distinguishes a genuine valve/damper schedule from any other equipment
+// schedule sharing the same generic TAG+MODEL/SIZE/MANUFACTURER header
+// shape. VAV/CAV/FPT air-terminal prefixes are deliberately excluded — a
+// VAV box is not a valve, even though its own schedule can share the same
+// header columns.
+const VALVE_DAMPER_TAG_PREFIXES = [...VALVES, ...ACTUATORS, ...DAMPERS]
+  .flatMap((c) => c.tagPrefixes)
+  .filter(Boolean);
+
+/** True when at least one row's own key starts with a real, hand-verified
+ * valve/damper/actuator tag prefix — mark-SHAPE corroboration, not a title
+ * string match. This is what actually distinguishes "CV-7" (a real control
+ * valve mark) from "RTU-1" (a rooftop unit that merely shares the same
+ * generic TAG/GPM/SIZE/MODEL header columns). */
+export function hasValveOrDamperMark(table) {
+  for (const row of table?.rows || []) {
+    const key = String(row?.key || "").trim().toUpperCase();
+    if (!key) continue;
+    if (VALVE_DAMPER_TAG_PREFIXES.some((p) => key.startsWith(p.toUpperCase()))) return true;
+  }
+  return false;
+}
 
 function cellText(row, headerRe) {
   for (const [header, cell] of Object.entries(row.cells || {})) {
@@ -344,11 +370,26 @@ export function headerShapeMatches(table, requiredRes) {
   return reqs.every((re) => re.test(blob));
 }
 
-/** Untitled hydronic control-valve grid (TAG + GPM/Cv/SERVED/MODEL — not BAS I/O). */
+/**
+ * Untitled hydronic control-valve grid (TAG + GPM/Cv/SERVED/MODEL — not BAS
+ * I/O). This header shape alone is NOT valve-specific — a generic equipment
+ * schedule (RTU, AHU, boiler, ...) commonly shares the exact same
+ * TAG/MODEL/SIZE/MANUFACTURER columns, so a real RTU sample this project
+ * found (024_MO_E2508_01) false-positived here (harness snapshot, not
+ * production compile — production's per-family uniqueFamily already
+ * refused it correctly, but this shared shape gate is also what
+ * gridClassify.mjs's classifyGrid uses to LABEL a table, so hardening it
+ * generally, not just re-checking downstream, is the real fix). Since this
+ * function exists specifically for the UNTITLED case (no title text to
+ * corroborate against), require row-key mark-SHAPE corroboration against
+ * the real, hand-verified valve/damper/actuator prefixes in
+ * hvacTaxonomy.ts — structure confirming structure, never a title regex.
+ */
 export function isControlValveHeaderShape(table) {
   const blob = tableHeaderBlob(table);
   if (!blob) return false;
   if (/\b(?:AI|AO|BI|BO)\b/.test(blob) && !/\b(?:GPM|\bCV\b)\b/.test(blob)) return false;
+  if (!hasValveOrDamperMark(table)) return false;
   return headerShapeMatches(table, [
     /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
     /\b(?:GPM|\bCV\b|SERVED|MANUFACTURER|MODEL|SIZE|ACTUATOR|FLOW)\b/,

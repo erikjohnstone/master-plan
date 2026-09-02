@@ -6,6 +6,7 @@ import {
   isBasPointsListTable,
   isBasPointsListTitle,
   isControlValveHeaderShape,
+  hasValveOrDamperMark,
   tableHeaderBlob,
 } from "./corpusTakeoff.mjs";
 import { compareSheetKeys } from "./sheetKey.ts";
@@ -105,6 +106,21 @@ export function classifyGrid(table) {
     scores.VALVE_SCHEDULE += 0.5;
     scores.DAMPER_SCHEDULE += 0.5;
     scores.EQUIPMENT_SCHEDULE += 0.3;
+  }
+
+  // VALVE_LEX/DAMPER_LEX/ACTUATOR_LEX share generic equipment-schedule
+  // columns (SIZE, MANUFACTURER, MODEL, SERVED, FLOW) with any other
+  // family's schedule — a real RTU/AHU/boiler table can out-score on those
+  // alone with zero real valve/damper content (found live on this
+  // project's own corpus: 024_MO_E2508_01's RTU schedule). A real printed
+  // title (title_valve/title_damper signal, added above) is strong enough
+  // evidence on its own; absent that, require row-key mark-shape
+  // corroboration against hvacTaxonomy.ts's real prefixes before letting
+  // these families win the ranking.
+  if (!signals.includes("title_valve") && !signals.includes("title_damper") && !hasValveOrDamperMark(table)) {
+    scores.VALVE_SCHEDULE = 0;
+    scores.DAMPER_SCHEDULE = 0;
+    scores.ACTUATOR_SCHEDULE = 0;
   }
 
   const ranked = Object.entries(scores)

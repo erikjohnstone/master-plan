@@ -14,6 +14,18 @@ const UNTITLED_VALVE = {
   rows: [{ key: "CV-7", cells: { TAG: { text: "CV-7" }, GPM: { text: "120" } } }],
 };
 
+// Real shape found in this project's own live corpus run (024_MO_E2508_01,
+// "PACKAGED EQUIPMENT SCHEDULE (RTU)"): shares the exact same generic
+// TAG/MANUFACTURER/MODEL/SERVED/GPM/SIZE header shape as a real valve
+// schedule, but its rows are RTU marks, not valve/damper marks.
+const UNTITLED_RTU = {
+  sheet: "set.pdf#6",
+  kind: "equipment",
+  title: { text: "" },
+  headers: ["TAG", "MANUFACTURER", "MODEL", "SERVED", "GPM", "SIZE"],
+  rows: [{ key: "RTU-1", cells: { TAG: { text: "RTU-1" }, GPM: { text: "0" } } }],
+};
+
 const BAS_GRID = {
   sheet: "set.pdf#8",
   kind: "equipment",
@@ -28,6 +40,12 @@ describe("gridClassify", () => {
     const g = classifyGrid(UNTITLED_VALVE);
     assert.equal(g.type, "VALVE_SCHEDULE");
     assert.ok(g.score >= 0.9);
+  });
+
+  it("does NOT classify a generic untitled equipment grid (RTU) as a valve schedule just because it shares TAG/MODEL/SIZE columns", () => {
+    assert.equal(isControlValveHeaderShape(UNTITLED_RTU), false);
+    const g = classifyGrid(UNTITLED_RTU);
+    assert.notEqual(g.type, "VALVE_SCHEDULE");
   });
 
   it("classifies BAS points lists via existing isBasPointsListTitle", () => {
