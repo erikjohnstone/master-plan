@@ -111,6 +111,28 @@ on this effort:**
    this large out to run alone (`kill -STOP`/`-CONT` other shards to pause
    without losing their progress, don't kill them) before concluding it's
    a distinct bug rather than scale.
+7. **A valve/damper/actuator or BAS takeoff is never "search for a table
+   with a matching title" — that model is explicitly banned, not a
+   simplification to fall back on under time pressure.** Real HVAC/BAS
+   information lives in at least 8 real, distinct places — see
+   `takeoffs/HVAC_BAS_DOMAIN_MAP.md`, required reading, not optional
+   background: dedicated tagged schedules, coil data embedded inside a
+   broader equipment schedule with zero separate valve schedule anywhere
+   in the set (real, confirmed: `001_NC_FY20_P_228_ATC_Tower_and_Air_
+   Operations`), tables cross-referenced by a join column, riser diagrams,
+   control schematics, drawn plan/detail symbols, the architectural
+   fire-rated wall plan (fire/smoke damper counts are NOT authoritative
+   from mechanical sheets alone), and a separate specifications book (CSI
+   23 09 00 / 23 09 93 — points lists and Sequences of Operation are
+   real, standardized spec sections, not just drawing content). A "0
+   found" answer is only honest when every reachable source was checked
+   AND every source the platform structurally cannot reach (no
+   architectural sheets attached, no spec book attached) is disclosed as
+   an explicit exclusion on the output — never silently absorbed into a
+   plausible-looking zero. Regressing to "did we find a table titled
+   valve/points schedule" is exactly the failure this rule exists to
+   prevent, and doing it again under time or resource pressure is not an
+   acceptable shortcut.
 
 ## Current execution policy (supersedes older worker references below)
 
