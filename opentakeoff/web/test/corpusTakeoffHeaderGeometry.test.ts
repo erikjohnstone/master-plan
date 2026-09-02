@@ -10,6 +10,7 @@ import {
   compileEmbeddedCoilGaps,
   extractEmbeddedCoils,
   headerShapeMatches,
+  inferValveServiceFromTable,
   isBasPointsListTable,
   isControlValveHeaderShape,
   scopeExclusionsForGraph,
@@ -126,6 +127,26 @@ describe("titled-but-service-unqualified valve schedule compile (074-shaped)", (
       .map((i) => i.tag);
     assert.ok(tags.some((t) => /^CV-1$/i.test(t)));
     assert.ok(tags.some((t) => /^CV-2$/i.test(t)));
+  });
+});
+
+describe("inferValveServiceFromTable (word-boundary matching, not substring)", () => {
+  it("infers CHW, not HHW, for a row tag containing CHW as a substring of itself", () => {
+    // Real bug, found and fixed 2026-09-02 in self-review: bare /HW/i
+    // tested against "CHW-1" matches, because "CHW-1" contains "HW" as a
+    // substring — so a genuinely chilled-water valve fell through to the
+    // HHW bucket, exactly backwards. Real, corroborating evidence this
+    // convention exists in the corpus: Eglin AFB's own real PUMP SCHEDULE
+    // uses "CHWP-"/"HWP-" prefixes for exactly this distinction (see
+    // hvacTaxonomy.ts's Pump entry) — a valve schedule using an analogous
+    // CHW-prefixed tag is a real, not hypothetical, risk.
+    const table = { title: { text: "" }, headers: ["TAG"], rows: [{ key: "CHW-1", cells: {} }] };
+    assert.equal(inferValveServiceFromTable(table), "CHW");
+  });
+
+  it("still infers HHW for a real hot-water tag", () => {
+    const table = { title: { text: "" }, headers: ["TAG"], rows: [{ key: "HHW-1", cells: {} }] };
+    assert.equal(inferValveServiceFromTable(table), "HHW");
   });
 });
 

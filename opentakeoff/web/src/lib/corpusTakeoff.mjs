@@ -588,14 +588,19 @@ export function extractEmbeddedCoils(table) {
 }
 
 /** Infer schedule service from header blob + sample marks on untitled valve tables. */
-function inferValveServiceFromTable(table) {
+export function inferValveServiceFromTable(table) {
   const blob = tableHeaderBlob(table);
   if (/\b(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT|STEAM)\b/.test(blob)) return "HHW";
   if (/\b(?:CHW|CHILLED\s*WATER|COOLING\s*WATER)\b/.test(blob)) return "CHW";
+  // Real bug, found and fixed 2026-09-02 in self-review: bare /HW/i tested
+  // against a real row tag like "CHW-1" matches — "CHW-1" contains "HW" as
+  // a substring — so a genuinely chilled-water valve fell through to the
+  // HHW bucket, exactly backwards. Word boundaries, and the more specific
+  // CHW/CW check tried first as defense in depth.
   for (const row of table?.rows || []) {
     const tag = String(row.key || cellText(row, /^(?:TAG|MARK|VALVE\s*MARK)$/i) || "").trim();
-    if (/HHW|REHEAT|HW/i.test(tag)) return "HHW";
-    if (/CHW|CW/i.test(tag)) return "CHW";
+    if (/\bCHW\b|\bCW\b/i.test(tag)) return "CHW";
+    if (/\bHHW\b|REHEAT|\bHW\b/i.test(tag)) return "HHW";
   }
   return "CHW";
 }
