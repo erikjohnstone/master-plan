@@ -50,10 +50,37 @@ SANITY_MIN_FILL = 0.60
 # failed; else the (detector, formatter) tuple.
 _GMFT_MODELS: Any = None
 
+# huggingface_hub retries a blocked/unreachable connection with real backoff
+# delays (observed: multi-minute) before finally raising — fine on a real
+# deployment fetching a genuinely slow host, but on a network policy that
+# flat-out denies the connection (this sandbox; possibly some production
+# deployments too) that turns "gmft isn't reachable" into a multi-minute
+# stall on every sidecar process that ever calls extract_tables with no
+# tables found upstream. Pre-flight a short, non-retrying connectivity probe
+# so the failure mode is always fast, never a hang — same graceful-absence
+# behavior either way, just without the tax.
+def _hf_hub_reachable() -> bool:
+    # A raw TCP connect can succeed even when an HTTP-layer gateway/proxy
+    # policy denies the actual request (observed in this project's own CI
+    # sandbox: TCP connect succeeds, then every real HTTPS request 403s at
+    # the CONNECT) — so probe with an actual HTTP request through whatever
+    # proxy config urllib picks up from the environment, not a bare socket.
+    import urllib.request
+
+    try:
+        req = urllib.request.Request("https://huggingface.co/api/models", method="HEAD")
+        urllib.request.urlopen(req, timeout=2.0)
+        return True
+    except Exception:
+        return False
+
 
 def _gmft_models():
     global _GMFT_MODELS
     if _GMFT_MODELS is None:
+        if not _hf_hub_reachable():
+            _GMFT_MODELS = False
+            return None
         try:
             from gmft.auto import AutoTableDetector, AutoTableFormatter
 
