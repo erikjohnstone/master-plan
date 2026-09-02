@@ -1,2 +1,15 @@
 pdfplumber>=0.11.0
 camelot-py[cv]>=0.11.0; platform_system != "Windows"
+# pypdfium2 already arrives transitively via pdfplumber, but is pinned here
+# explicitly since it's also the rasterizer gmft-tatr uses directly (below) —
+# BSD-3/Apache-2.0 dual-licensed, no AGPL exposure (unlike PyMuPDF).
+pypdfium2>=5.9.0
+# Fallback C — Microsoft Table Transformer (TATR) via gmft, for borderless
+# grids the ruled/geometric backends above miss. Last rung in BACKEND_ORDER;
+# only reached when vector-lines/pdfplumber/camelot all return nothing on a
+# page whose vector-text gate already passed (see rasterTableAssist.ts /
+# GOAL policy — never a raster-first shortcut). MIT-licensed. Pulls in
+# `transformers` + `torch` as real, non-trivial dependencies (CPU-only is
+# fine for inference) — install this only where that weight is acceptable;
+# the sidecar degrades gracefully (backend simply absent) without it.
+gmft>=0.4.0

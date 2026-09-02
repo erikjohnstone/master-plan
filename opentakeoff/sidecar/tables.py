@@ -13,6 +13,14 @@ Request params for extract_tables:
   bboxHint?: [x0, y0, x1, y1]  # pdfplumber top-left page coords
   explicitLines?: { horizontal: [[x0,y0,x1,y1],...], vertical: [...] }
   backends?: str[]  # default tries all available in priority order
+
+Backend priority (first hit wins, see BACKEND_ORDER): vector-lines and the two
+pdfplumber strategies, then camelot lattice/stream, then — only if every one
+of those found nothing — gmft-tatr (Fallback C: Microsoft Table Transformer
+for borderless grids). gmft needs `pip install gmft` (pulls in transformers +
+torch) and fetches its checkpoint from Hugging Face Hub on first use; if
+either isn't available it's simply absent from `backends`/silently yields no
+tables, same as pdfplumber/camelot when uninstalled.
 """
 from __future__ import annotations
 
@@ -27,11 +35,32 @@ BACKEND_ORDER = [
     "pdfplumber-lines_strict",
     "camelot-lattice",
     "camelot-stream",
+    "gmft-tatr",
 ]
 
 SANITY_MIN_ROWS = 2
 SANITY_MIN_COLS = 2
 SANITY_MIN_FILL = 0.60
+
+# Lazy singletons for gmft's TATR detector/formatter — loading the checkpoint
+# (fetched from Hugging Face Hub on first use) costs real time, so load it at
+# most once per sidecar process, and remember a load failure (e.g. no network
+# route to huggingface.co, or a first-time-only cache miss) so we don't retry
+# it on every request. `None` = not yet attempted; `False` = attempted and
+# failed; else the (detector, formatter) tuple.
+_GMFT_MODELS: Any = None
+
+
+def _gmft_models():
+    global _GMFT_MODELS
+    if _GMFT_MODELS is None:
+        try:
+            from gmft.auto import AutoTableDetector, AutoTableFormatter
+
+            _GMFT_MODELS = (AutoTableDetector(), AutoTableFormatter())
+        except Exception:
+            _GMFT_MODELS = False
+    return _GMFT_MODELS or None
 
 
 def _reply(obj: dict[str, Any]) -> None:
@@ -59,6 +88,16 @@ def _available_backends() -> list[str]:
         import camelot  # noqa: F401
 
         out.extend(["camelot-lattice", "camelot-stream"])
+    except ImportError:
+        pass
+    try:
+        import gmft  # noqa: F401
+        import gmft.pdf_bindings.pdfium  # noqa: F401
+
+        # Package presence only — the TATR checkpoint itself is fetched
+        # lazily (and may still fail, e.g. no route to huggingface.co) on
+        # the first real extract_tables call; see _gmft_models().
+        out.append("gmft-tatr")
     except ImportError:
         pass
     return out
@@ -241,6 +280,92 @@ def _extract_camelot(pdf_path: str, page_num: int, flavor: str) -> list[dict[str
         if _passes_sanity(built):
             out.append(built)
     return out
+
+
+def _extract_gmft(pdf_path: str, page_num: int, bbox_hint: list[float] | None) -> list[dict[str, Any]]:
+    """Fallback C — Microsoft Table Transformer (TATR) via gmft, for borderless
+    grids none of the geometric/ruled backends above found. Only ever reached
+    when every earlier backend in BACKEND_ORDER returned nothing (see the
+    `break`-on-first-hit loop in extract_tables), and never on a scanned-only
+    page — callers gate this sidecar on the same vector-text presence check
+    used everywhere else on the shared path (rasterTableAssist.ts / GOAL
+    policy), so this still isn't a raster-first shortcut."""
+    models = _gmft_models()
+    if not models:
+        return []
+    detector, formatter = models
+
+    from gmft.pdf_bindings.pdfium import PyPDFium2Document
+
+    doc = PyPDFium2Document(pdf_path)
+    try:
+        try:
+            page = doc.get_page(page_num - 1)
+        except Exception:
+            return []
+
+        try:
+            cropped = detector.extract(page)
+        except Exception:
+            return []
+
+        if bbox_hint and len(bbox_hint) == 4:
+            hx0, hy0, hx1, hy1 = bbox_hint
+
+            def _overlaps(b: Any) -> bool:
+                return not (b[2] < hx0 - 4 or b[0] > hx1 + 4 or b[3] < hy0 - 4 or b[1] > hy1 + 4)
+
+            cropped = [c for c in cropped if _overlaps(c.bbox)]
+
+        out: list[dict[str, Any]] = []
+        for ct in cropped:
+            try:
+                df = formatter.extract(ct).df()
+            except Exception:
+                continue
+            rows, cols = df.shape
+            if rows < SANITY_MIN_ROWS or cols < SANITY_MIN_COLS:
+                continue
+            x0, y0, x1, y1 = ct.bbox
+            cell_w = max(1.0, (x1 - x0) / max(1, cols))
+            cell_h = max(1.0, (y1 - y0) / max(1, rows))
+            cells: list[dict[str, Any]] = []
+            for ri in range(rows):
+                for ci in range(cols):
+                    text = str(df.iat[ri, ci]).strip()
+                    if text.lower() == "nan":
+                        text = ""
+                    cx0 = x0 + ci * cell_w
+                    cy0 = y0 + ri * cell_h
+                    cells.append(
+                        {
+                            "row": ri,
+                            "col": ci,
+                            "rowSpan": 1,
+                            "colSpan": 1,
+                            "text": text,
+                            "bbox": [cx0, cy0, cx0 + cell_w, cy0 + cell_h],
+                            # TATR is a learned layout detector, not an OCR
+                            # confidence score — kept conservative so this
+                            # backend only ever fills a true gap and never
+                            # outranks a vector or ruled-grid extraction.
+                            "confidence": 0.55 if text else 0.3,
+                        }
+                    )
+            built = {
+                "source": "gmft-tatr",
+                "score": 0.55,
+                "page": page_num,
+                "rows": rows,
+                "cols": cols,
+                "cells": cells,
+                "bbox": [float(x0), float(y0), float(x1), float(y1)],
+            }
+            if _passes_sanity(built):
+                out.append(built)
+        return out
+    finally:
+        doc.close()
 
 
 def extract_tables(params: dict[str, Any]) -> dict[str, Any]:
