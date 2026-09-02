@@ -228,6 +228,38 @@ describe("embedded coil detection (AHU/RTU/FCU schedules, not just valve schedul
     assert.equal(found.length, 0, "GPM without a paired EWT/LWT is not a coil block");
   });
 
+  it("extracts from itd-d1-lab's real header format (period-separated E.W.T./L.W.T., generic 'FLUID PERFORMANCE' prefix)", () => {
+    // Real header text, verified 2026-09-02 against itd-d1-lab-mechanical.pdf's
+    // own HOT WATER REHEAT COIL SCHEDULE — a genuinely different real-world
+    // convention from 001_NC's "PREHEAT COIL GPM" style (no coil-specific
+    // word in the prefix at all, periods instead of bare letters).
+    const table = {
+      sheet: "d1lab#13",
+      title: { text: "HOT WATER REHEAT COIL SCHEDULE" },
+      headers: [
+        "SYMBOL", "AREA / SUPPLY VALVE SERVED", "CAPACITY (MBH)", "CFM", "E.A.T. (°F)", "L.A.T. (°F)",
+        "AIR P.D. (IN W.C.)", "FLUID PERFORMANCE E.W.T.", "FLUID PERFORMANCE L.W.T.", "FLUID PERFORMANCE GPM",
+        "FLUID P.D. (FT)", "ROWS", "FPI W", "MANUFACTURER AND MODEL", "REMARKS",
+      ],
+      rows: [{
+        key: "HC-1",
+        cells: {
+          SYMBOL: { text: "HC-1" },
+          "AREA / SUPPLY VALVE SERVED": { text: "RESIDENCY LAB 131 / SAV-1" },
+          "FLUID PERFORMANCE E.W.T.": { text: "140.0" },
+          "FLUID PERFORMANCE L.W.T.": { text: "122.2" },
+          "FLUID PERFORMANCE GPM": { text: "9.0" },
+        },
+      }],
+    };
+    const found = extractEmbeddedCoils(table);
+    assert.equal(found.length, 1);
+    assert.equal(found[0].tag, "HC-1");
+    assert.equal(found[0].gpm, "9.0");
+    assert.equal(found[0].ewt, "140.0");
+    assert.equal(found[0].lwt, "122.2");
+  });
+
   it("compileEmbeddedCoilGaps discloses the AHU coil as a real gap when no valve schedule exists", () => {
     const graph = { sheets: [{ key: "set.pdf#14" }], tables: [AHU_TABLE_WITH_EMBEDDED_COIL] };
     const result = compileEmbeddedCoilGaps(null, graph);
