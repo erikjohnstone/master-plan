@@ -2,7 +2,7 @@
   "set_id": "052_IL_VA_Project_537_17_115_Sterile_Processing",
   "gt_locked": false,
   "pillar_c_complete": false,
-  "note": "bas:0 zero-inventory floor from product census \u2014 Pillar C not complete",
+  "note": "bas:0 zero-inventory floor from product census — Pillar C not complete",
   "estimator_product": {
     "printed_bas_rows": 0,
     "inventory_units": 0,
@@ -33,5 +33,78 @@
     "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
     "printed_items": 0,
     "gt_locked": false
+  },
+  "pipeline_harness": {
+    "set_id": "052_IL_VA_Project_537_17_115_Sterile_Processing",
+    "ms": 21499,
+    "sheets": 17,
+    "graph_tables_total": 0,
+    "graph_table_kinds": {
+      "equipment": 0,
+      "finish": 0,
+      "reference": 0,
+      "room-finish": 0,
+      "unknown": 0
+    },
+    "graph_valve": {
+      "tables": 0,
+      "rows": 0,
+      "valve_marks": 0,
+      "table_titles": []
+    },
+    "graph_bas": {
+      "tables": 0,
+      "rows": 0,
+      "table_titles": []
+    },
+    "compile_valve_items": 0,
+    "compile_bas_rows": 0,
+    "compile_valve_families": [
+      "CHW_CONTROL_VALVE",
+      "HHW_CONTROL_VALVE",
+      "BYPASS_CONTROL_VALVE",
+      "ISOLATION_VALVE",
+      "PRESSURE_REDUCING_VALVE",
+      "PRESSURE_SAFETY_VALVE",
+      "MIXING_VALVE",
+      "CONTROL_DAMPER",
+      "FUME_HOOD_DAMPER",
+      "LAB_AIR_VALVE"
+    ],
+    "valve_graph_without_compile": false,
+    "bas_graph_without_compile": false,
+    "compile_without_graph_valve": false,
+    "vector_pipeline": {
+      "layers_run": [
+        "L0:ingest",
+        "L1:spans+segments",
+        "L2:geometric",
+        "L2:ODL",
+        "L1.5:tiling",
+        "L2:line-grid",
+        "L2:stream-grid",
+        "L2:sidecar",
+        "L2.5:pillar-gap-recovery",
+        "L3:sweep_schedule_row@query",
+        "L3.5:topology",
+        "L4:reconcile-dedup",
+        "L4.5:ocr-vlm-assist",
+        "L5:classify@compile"
+      ],
+      "l45_enabled": false,
+      "tiles_sliced": 0,
+      "tables_added": 0,
+      "tables_replaced": 0,
+      "topology_sheets": 9,
+      "ocr_assists": 0,
+      "notes": []
+    },
+    "pipeline_notes": [
+      "Vector pipeline L3.5: MEP topology graph built on 9 plan sheet(s)."
+    ],
+    "gt_locked": false,
+    "cache_identity": "vector-pipeline-v1",
+    "corroboration": "pipeline_graph_and_compile",
+    "note": "Graph valve/BAS table recall + compile on shared vector stack — not coordinator-verified alone"
   }
 }
