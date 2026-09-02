@@ -288,6 +288,36 @@ on this effort:**
     window, run the full re-prewarm once after, rather than bleeding this
     cost out edit by edit across a long session.
 
+11. **OPEN, SCOPED, NOT STARTED: isolate graph-building code from feature
+    code so an unrelated edit stops invalidating the whole corpus's cache.**
+    Direct follow-on from rule 10's real incident. `session.ts` is 6,210
+    lines — `graphForPipeline()` (the one method whose output the cache
+    actually stores) sits in the same file as dozens of unrelated feature
+    methods (`symbolSweep`, `findLegendGlyphs`, `placeCount`, `viewSheet`,
+    `traceConnectivity`, ...). `sourceDigest()` hashes the whole file, so
+    editing ANY of those unrelated methods (as `seed_point` did) busts the
+    cache key for every one of the 116 real sets, exactly as rule 10
+    describes. The naive fix — hand-pick a smaller file list — is NOT
+    safe: that is literally what caused the FIRST invalidation incident
+    this session (`vectorTakeoffPipeline.ts` missing from a manual list,
+    the cache silently serving STALE graphs — worse than over-invalidating,
+    because it fails silently). The real fix has to separate
+    `graphForPipeline` and its true dependency chain into file(s) the
+    digest can cover completely, without a fragile hand-maintained
+    include list — likely extracting `graphForPipeline` out of the
+    monolithic `Session` class, or moving the larger share of unrelated
+    feature methods out into their own file(s) instead. Two attempts to
+    queue this as a spawn_task both timed out (tool-side, not a content
+    problem) — written here instead so it isn't lost. Test BOTH
+    directions before landing it: a change to an extracted feature file
+    must leave the cache key unchanged, and a change to the real
+    graph-building file must still change it (that second case not
+    changing would silently reintroduce the exact stale-graph bug rule
+    10 already paid for once). Landing this fix is itself one more
+    L0-L4.5 edit — do it as a single deliberate change, with the real
+    full re-prewarm run immediately after under the new stable code, not
+    bled out incrementally.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
