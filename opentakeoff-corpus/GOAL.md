@@ -87,6 +87,18 @@ on this effort:**
    a new family or drafting convention the corpus hasn't already proven —
    corpus evidence beats generic web results when they conflict, but skip
    neither.
+6. **A giant set is not a broken set — never assume a heavy PDF is a bug
+   without a real, isolated retry.** `01_NY_VA_Northport_Dialysis_100CD`
+   (162 sheets, 6-part rejoined) repeatedly OOM-killed itself and neighbor
+   processes when built concurrently with anything else heavy. Retested
+   2026-09-02 in genuine isolation (nothing else running): succeeded
+   cleanly in ~36 minutes (162 sheets, 12 tables). It was never broken —
+   it's real scale that needs real, uncontested compute time. Under this
+   sandbox's ~4-core/15GB ceiling, do not run more than ~2 heavy
+   Node+JVM(+Python gmft sidecar) processes concurrently, and pull a set
+   this large out to run alone (`kill -STOP`/`-CONT` other shards to pause
+   without losing their progress, don't kill them) before concluding it's
+   a distinct bug rather than scale.
 
 ## Current execution policy (supersedes older worker references below)
 
