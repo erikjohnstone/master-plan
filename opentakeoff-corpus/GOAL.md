@@ -7,6 +7,18 @@ Vol2 full 82 INDEX still in scope. Older keyed-corpus history retained.
 
 ## Platform mandate (2026-09-02 expansion) — read first, every session
 
+**Read `takeoffs/HVAC_BAS_DOMAIN_MAP.md` before any valve/damper/actuator
+or BAS points/SOO extraction or ground-truth work.** It is the real,
+web-researched-plus-corpus-verified map of every place this information
+actually lives on real jobs — dedicated schedules, embedded-in-equipment-
+schedule coil data, riser diagrams, control schematics, drawn symbols, and
+what's structurally out of reach (architectural sheets for fire/smoke
+damper counts, a separate specifications book) and must be disclosed as an
+exclusion rather than silently absorbed into a plausible-looking zero.
+"Look for a table titled valve schedule" or "look for a table titled
+points list" is not a complete model of where this data lives — treating
+it as complete is a production-readiness bug.
+
 The end goal is **not** "100% on this corpus." It is a **general-purpose,
 production-grade HVAC/BAS takeoff platform** — valve/damper/actuator
 takeoffs, BAS points-list takeoffs, and sequence-of-operations takeoffs, all
