@@ -45,6 +45,48 @@ on this effort:**
    exists, even partially — extend it on the shared path instead. Grep
    broadly, read the module, run its existing tests, before writing new
    code that might duplicate it.
+3. **A census pass over `graph.tables` is not ground truth.** Real ground
+   truth means an agent actually rendered the page and looked at it —
+   `session.renderSheetPng`, eyes on the image, checked against what the
+   compiler claims. The automated census/prewarm scripts prove the pipeline
+   ran without crashing and report what the table-classifier found; they do
+   **not** prove the finding is correct. Do not conflate "N sets have a
+   `pipeline_harness` block" with "N sets have verified ground truth" —
+   say which one you mean, every time.
+4. **Fixed symbol libraries do not generalize — the legend-read path is the
+   real design, use it first.** `match_reference_symbol` matches against a
+   small, hand-seeded library built from ONE project's own drafting
+   convention (originally Eglin AFB) — real, measured evidence
+   (2026-09-02, `itd-d1-lab-mechanical.pdf`) shows it returns **zero**
+   matches on a different drafter's real, correctly-drawn control-valve
+   glyph (a bowtie body + **rounded dome actuator cap**, vs. the library's
+   **square** M-box) even though the set has real, schedule-verified valve
+   content. A zero from `match_reference_symbol` is not evidence of
+   absence — it is evidence that the library doesn't cover this sheet's own
+   convention. The actual generalized answer already exists in the
+   codebase: `find_legend_symbols` (`findLegendGlyphs` in `session.ts`)
+   auto-detects this **sheet's own** glyph+caption pairs from its own
+   legend, no fixed library, no per-firm hardcoding — read the set's own
+   legend first, then sweep from what it actually draws. Treat the fixed
+   library as a fallback/corroboration signal, not the primary path, until
+   this is fixed platform-wide.
+5. **Schedule data is not always where you'd expect it, and this varies by
+   drafter.** Valve/coil/actuator data can be (a) one fused, deeply
+   merged-header AHU/RTU schedule with everything in it (a disclosed,
+   still-unparsed gap on the Eglin AFB set — see `hvacTaxonomy.ts`'s AHU
+   note), (b) split across several cross-referenced tables (D-1 Lab: `HOT
+   WATER REHEAT COIL SCHEDULE` and `CONTROL VALVE SCHEDULE` are two
+   separate tables joined by a `HOT WATER COIL` column, confirmed by direct
+   inspection 2026-09-02), or (c) never tabulated at all, only drawn as
+   symbols. Before writing or trusting ground truth for a family
+   (valve/damper/actuator/BAS), check the corpus directly for how *this*
+   drafter actually laid it out — do not assume the D-1 Lab shape, the
+   Eglin AFB shape, or any other single set's shape is universal. Web
+   research on real HVAC/BAS documentation conventions (ASHRAE-adjacent
+   guidance, real spec/schedule examples) is required before writing GT for
+   a new family or drafting convention the corpus hasn't already proven —
+   corpus evidence beats generic web results when they conflict, but skip
+   neither.
 
 ## Current execution policy (supersedes older worker references below)
 
