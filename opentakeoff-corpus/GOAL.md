@@ -240,15 +240,26 @@ on this effort:**
    TAG/MARK/SYMBOL cell over `row.key` when the row has one, and reject a
    numeric cell carrying more than one number token as evidence of a
    merged row rather than reporting an unattributable value — both real,
-   tested (`corpusTakeoffHeaderGeometry.test.ts`), shipped fixes. The
-   deeper bug (the row-banding/segmentation logic in `sheetgraph.ts`
-   itself) is NOT fixed — it's real, confirmed, and affects every
-   consumer of a table shaped this way, not just this one detector;
-   queued as a separate task (`task_10174a20`) rather than patched inline
-   under time pressure, because `sheetgraph.ts` is a cache-invalidating
-   L0-L4.5 file (any edit costs a full corpus rebuild, previously measured
-   at ~9.5 hours) and the real fix needs to be scoped and tested broadly,
-   not rushed. The generalizable lesson: `row.key` earns trust from being
+   tested (`corpusTakeoffHeaderGeometry.test.ts`), shipped fixes.
+   **UPDATE, same day**: the deeper bug (row-banding/segmentation in
+   `sheetgraph.ts` itself, `task_10174a20`) is now ALSO fixed, at its
+   real source — traced with a temporary debug probe against the real
+   corpus (not guessed), reverted before landing anything. The
+   wrapped-REMARKS theory above was wrong: the real cause was `CODE_RE`'s
+   own compound-tag prefix (`[A-Z]{1,6}`, letters only) rejecting a real
+   letter+digit tag prefix (`VVR2-8`, a riser/zone-numbered terminal-unit
+   convention) outright, which orphaned every one of those rows and let
+   them glue onto whichever nearby row sat closest by y-position — the
+   actual source of both symptoms described above. Fix is purely
+   additive (existing letter-only prefix untouched, a second
+   `[A-Z]{1,4}[0-9]{1,2}` shape added alongside it); 101/101 existing
+   `sheetgraph.test.ts` tests still pass, 1 new one added, 102/102 total.
+   Landed deliberately, not rushed under time pressure — sequenced this
+   way specifically because the corpus cache was already mostly cold
+   (2/116 warm, rule 10), so the marginal cost of one more L0-L4.5 edit
+   was low; fixing known bugs now, before the eventual full re-prewarm,
+   beats fixing them after and invalidating that prewarm too. The
+   generalizable lesson: `row.key` earns trust from being
    usually-derived-from-the-real-tag-column, not from any guarantee — the
    moment a row also carries its own explicit TAG/MARK/SYMBOL cell, that
    cell is more directly grounded and any extractor reading tags should
