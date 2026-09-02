@@ -258,7 +258,7 @@
   },
   "pipeline_harness": {
     "set_id": "015_VA_P_095_Replace_Submarine_Pier_3_Utility",
-    "ms": 112651,
+    "ms": 52,
     "sheets": 27,
     "graph_tables_total": 32,
     "graph_table_kinds": {

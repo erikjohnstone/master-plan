@@ -52,7 +52,7 @@
   },
   "pipeline_harness": {
     "set_id": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
-    "ms": 720821,
+    "ms": 21,
     "sheets": 29,
     "graph_tables_total": 5,
     "graph_table_kinds": {

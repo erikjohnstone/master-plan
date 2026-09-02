@@ -36,7 +36,7 @@
   },
   "pipeline_harness": {
     "set_id": "006_US_U2607_01_Interior_Renovations_C_Wing_Updates",
-    "ms": 69,
+    "ms": 63,
     "sheets": 37,
     "graph_tables_total": 1,
     "graph_table_kinds": {

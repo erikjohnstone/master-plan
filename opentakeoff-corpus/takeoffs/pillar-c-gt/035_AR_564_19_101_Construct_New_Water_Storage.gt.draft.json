@@ -36,7 +36,7 @@
   },
   "pipeline_harness": {
     "set_id": "035_AR_564_19_101_Construct_New_Water_Storage",
-    "ms": 725926,
+    "ms": 9,
     "sheets": 67,
     "graph_tables_total": 5,
     "graph_table_kinds": {

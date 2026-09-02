@@ -52,7 +52,7 @@
   },
   "pipeline_harness": {
     "set_id": "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri",
-    "ms": 17089,
+    "ms": 4,
     "sheets": 15,
     "graph_tables_total": 1,
     "graph_table_kinds": {

@@ -104,7 +104,7 @@
   },
   "pipeline_harness": {
     "set_id": "040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile",
-    "ms": 572008,
+    "ms": 36,
     "sheets": 48,
     "graph_tables_total": 22,
     "graph_table_kinds": {

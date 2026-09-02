@@ -36,7 +36,7 @@
   },
   "pipeline_harness": {
     "set_id": "038_NC_VA_Project_637_22_700_EHRM_Infrastructure",
-    "ms": 196530,
+    "ms": 11,
     "sheets": 54,
     "graph_tables_total": 5,
     "graph_table_kinds": {

@@ -23,7 +23,7 @@
   },
   "pipeline_harness": {
     "set_id": "020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C",
-    "ms": 42250,
+    "ms": 7,
     "sheets": 22,
     "graph_tables_total": 2,
     "graph_table_kinds": {

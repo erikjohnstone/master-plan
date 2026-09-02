@@ -52,7 +52,7 @@
   },
   "pipeline_harness": {
     "set_id": "032_PA_Construct_EHRM_Infrastructure_Upgrades",
-    "ms": 206476,
+    "ms": 44,
     "sheets": 85,
     "graph_tables_total": 9,
     "graph_table_kinds": {

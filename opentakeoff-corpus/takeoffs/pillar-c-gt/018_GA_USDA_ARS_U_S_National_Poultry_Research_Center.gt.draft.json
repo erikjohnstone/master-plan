@@ -52,7 +52,7 @@
   },
   "pipeline_harness": {
     "set_id": "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
-    "ms": 1181335,
+    "ms": 27,
     "sheets": 25,
     "graph_tables_total": 12,
     "graph_table_kinds": {

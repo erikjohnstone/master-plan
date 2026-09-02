@@ -36,7 +36,7 @@
   },
   "pipeline_harness": {
     "set_id": "043_FL_VA_Project_673_21_151_Replace_Air_Handling",
-    "ms": 3403312,
+    "ms": 8,
     "sheets": 33,
     "graph_tables_total": 3,
     "graph_table_kinds": {
