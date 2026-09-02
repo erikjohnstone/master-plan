@@ -133,6 +133,25 @@ on this effort:**
    valve/points schedule" is exactly the failure this rule exists to
    prevent, and doing it again under time or resource pressure is not an
    acceptable shortcut.
+8. **Never sit idle waiting on a background rebuild, census, or scan —
+   there is always real platform work to do in parallel, and doing it is
+   mandatory, not optional.** A cold graph rebuild, a corpus scan, a
+   render — none of these need the coordinator's attention while they
+   run; they need a monitor and nothing else. Real work that needs zero
+   warm cache and zero corpus access is always available: write/extend a
+   detector against a synthetic fixture built from real header text
+   already seen tonight (exactly how `extractEmbeddedCoils` and
+   `scopeExclusionsForGraph` were built and test-verified 2026-09-02,
+   entirely offline, then spot-checked against one real set once
+   something was actually warm), wire an already-built compile function
+   into the MCP tool / CLI / UI agent paths it's still missing from, add
+   the exclusion-disclosure a real finding calls for, tighten a test,
+   read and act on `HVAC_BAS_DOMAIN_MAP.md`'s still-open items. Reporting
+   "still waiting on X" with no code shipped in the same stretch is a
+   failure mode this rule exists to name and prevent, not a status
+   update — if nothing shippable came out of a wait, that wait was
+   wasted, and the fix is to start the next real piece of work the
+   moment a background job is kicked off, not after it reports back.
 
 ## Current execution policy (supersedes older worker references below)
 
