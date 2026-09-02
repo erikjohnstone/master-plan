@@ -6,6 +6,8 @@ import { describe, it } from "node:test";
 import {
   compileBasTakeoff,
   compileControlValveTakeoff,
+  compileEmbeddedCoilGaps,
+  extractEmbeddedCoils,
   headerShapeMatches,
   isBasPointsListTable,
   isControlValveHeaderShape,
@@ -133,5 +135,94 @@ describe("untitled BAS grid compile", () => {
     const lists = bas.categories.points_lists.lists;
     assert.equal(lists.length, 1);
     assert.match(lists[0].title, /header-inferred/i);
+  });
+});
+
+// Real, found-live gap (2026-09-02, 001_NC_FY20_P_228_ATC_Tower_and_Air_
+// Operations): the actual real header text from that set's own AIR
+// HANDLING UNIT SCHEDULE — no separate valve schedule exists anywhere in
+// the set, so this coil data is the ONLY record a control valve exists.
+const AHU_TABLE_WITH_EMBEDDED_COIL = {
+  sheet: "set.pdf#14",
+  kind: "equipment",
+  title: { text: "AIR HANDLING UNIT SCHEDULE" },
+  headers: [
+    "SYMBOL", "AREA SERVED", "COOLING COIL DATA GPM", "COOLING COIL DATA EWT °F",
+    "COOLING COIL DATA LWT °F", "HEATING COIL DATA GPM", "HEATING COIL DATA EWT °F",
+    "HEATING COIL DATA LWT °F", "MANUFACTURER AND MODEL",
+  ],
+  rows: [
+    {
+      key: "AHU-1",
+      cells: {
+        SYMBOL: { text: "AHU-1" },
+        "AREA SERVED": { text: "LABS" },
+        "COOLING COIL DATA GPM": { text: "42.0" },
+        "COOLING COIL DATA EWT °F": { text: "44.0" },
+        "COOLING COIL DATA LWT °F": { text: "56.0" },
+        "HEATING COIL DATA GPM": { text: "18.0" },
+        "HEATING COIL DATA EWT °F": { text: "140.0" },
+        "HEATING COIL DATA LWT °F": { text: "120.0" },
+      },
+    },
+  ],
+};
+
+// Negative control: a pump schedule's own GPM column with no paired
+// EWT/LWT under the same header prefix must NOT be mistaken for a coil —
+// GPM alone is not enough.
+const PUMP_TABLE_NO_COIL = {
+  sheet: "set.pdf#15",
+  kind: "equipment",
+  title: { text: "PUMP SCHEDULE" },
+  headers: ["TAG", "SERVED", "GPM", "HEAD (FT)"],
+  rows: [
+    { key: "P-1", cells: { TAG: { text: "P-1" }, SERVED: { text: "HHW LOOP" }, GPM: { text: "120" }, "HEAD (FT)": { text: "60" } } },
+  ],
+};
+
+describe("embedded coil detection (AHU/RTU/FCU schedules, not just valve schedules)", () => {
+  it("extracts real coil GPM/EWT/LWT from an AHU schedule row with no separate valve schedule", () => {
+    const found = extractEmbeddedCoils(AHU_TABLE_WITH_EMBEDDED_COIL);
+    assert.equal(found.length, 2, "cooling coil + heating coil, one AHU-1 row");
+    const cooling = found.find((c) => /COOLING/i.test(c.coilLabel));
+    const heating = found.find((c) => /HEATING/i.test(c.coilLabel));
+    assert.ok(cooling, "cooling coil block found");
+    assert.equal(cooling.tag, "AHU-1");
+    assert.equal(cooling.gpm, "42.0");
+    assert.equal(cooling.ewt, "44.0");
+    assert.equal(cooling.lwt, "56.0");
+    assert.ok(heating, "heating coil block found");
+    assert.equal(heating.gpm, "18.0");
+  });
+
+  it("does not mistake a pump schedule's bare GPM column for a coil", () => {
+    const found = extractEmbeddedCoils(PUMP_TABLE_NO_COIL);
+    assert.equal(found.length, 0, "GPM without a paired EWT/LWT is not a coil block");
+  });
+
+  it("compileEmbeddedCoilGaps discloses the AHU coil as a real gap when no valve schedule exists", () => {
+    const graph = { sheets: [{ key: "set.pdf#14" }], tables: [AHU_TABLE_WITH_EMBEDDED_COIL] };
+    const result = compileEmbeddedCoilGaps(null, graph);
+    assert.equal(result.totals.coils_found, 2);
+    assert.equal(result.totals.gaps, 2, "no separate valve schedule in this graph — both coils are real gaps");
+    assert.ok(result.gaps.every((g) => g.has_scheduled_valve === false));
+    assert.ok(result.gaps.some((g) => g.tag === "AHU-1" && /COOLING/i.test(g.coilLabel)));
+  });
+
+  it("compileEmbeddedCoilGaps marks a coil corroborated when a matching valve IS scheduled", () => {
+    const valveTable = {
+      sheet: "set.pdf#13",
+      kind: "equipment",
+      title: { text: "HHW CONTROL VALVE SCHEDULE" },
+      headers: ["TAG", "SERVED", "GPM", "SIZE"],
+      rows: [
+        { key: "CV-1", cells: { TAG: { text: "CV-1" }, SERVED: { text: "AHU-1" }, GPM: { text: "18.0" }, SIZE: { text: '1"' } } },
+      ],
+    };
+    const graph = { sheets: [{ key: "set.pdf#13" }, { key: "set.pdf#14" }], tables: [valveTable, AHU_TABLE_WITH_EMBEDDED_COIL] };
+    const result = compileEmbeddedCoilGaps(null, graph);
+    assert.equal(result.totals.coils_found, 2);
+    assert.ok(result.totals.gaps < 2, "at least one coil should now be corroborated by the real scheduled valve");
   });
 });

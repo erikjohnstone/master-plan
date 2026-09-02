@@ -396,6 +396,95 @@ export function isControlValveHeaderShape(table) {
   ]);
 }
 
+// ── embedded coil detection (equipment schedules, not just valve schedules) ──
+// Real, found-live gap (2026-09-02, 001_NC_FY20_P_228_ATC_Tower_and_Air_
+// Operations): real hydronic coil performance data (GPM + EWT/LWT) is
+// drawn directly inside an AHU/RTU/FCU equipment-schedule ROW on some real
+// drafters' sets, with no separate valve/coil schedule anywhere in the
+// set — the equipment row IS the only record a control valve exists.
+// "Look for a valve table" cannot find this by construction: there is no
+// valve table. A coil that needs hydronic flow control always implies a
+// control valve — that's physics, not a drafting convention — so
+// detection has to walk every equipment schedule's own header shape for
+// coil sub-blocks, never gated on the table already being believed to be
+// about valves.
+const COIL_MARKER_RE = /\bGPM\b|\bE\.?W\.?T\.?\b|\bL\.?W\.?T\.?\b|ENTERING\s+WATER|LEAVING\s+WATER|CAPACITY\s*\(MBH\)|FLUID\s+P\.?D\.?|PRESSURE\s+DROP|\bROWS\b|\bFPI\b|COIL\s+SIZE|PIPING\s+RUNOUT/i;
+const COIL_GPM_RE = /\bGPM\b/i;
+const COIL_WATER_TEMP_RE = /\bE\.?W\.?T\.?\b|\bL\.?W\.?T\.?\b|ENTERING\s+WATER|LEAVING\s+WATER/i;
+
+/** Header text with the first coil-data marker token (and everything from
+ * it onward) stripped, so "PREHEAT COIL GPM" and "PREHEAT COIL EWT °F"
+ * both normalize to the shared prefix "PREHEAT COIL" — real structural
+ * grouping of columns that belong to the same coil sub-block, never a
+ * title match. */
+function coilPrefixFor(header) {
+  const h = String(header || "").toUpperCase();
+  const m = h.match(COIL_MARKER_RE);
+  if (!m) return null;
+  return h.slice(0, m.index).replace(/\s+/g, " ").trim();
+}
+
+/**
+ * Find hydronic coil sub-column blocks inside ANY table — structural
+ * (header co-occurrence under a shared prefix), never gated on the
+ * table's own title or "kind". A block only counts when GPM AND a water
+ * temperature column (EWT or LWT) share the same prefix: GPM alone (a
+ * pump schedule, an unrelated flow spec) is not enough — that pairing is
+ * what distinguishes real hydronic coil performance data from any other
+ * GPM column that happens to sit on the same sheet.
+ */
+export function extractEmbeddedCoils(table) {
+  const headers = new Set();
+  for (const h of table?.headers || []) headers.add(String(h));
+  for (const row of table?.rows || []) for (const h of Object.keys(row?.cells || {})) headers.add(h);
+  const byPrefix = new Map();
+  for (const h of headers) {
+    const prefix = coilPrefixFor(h);
+    if (prefix === null) continue;
+    if (!byPrefix.has(prefix)) byPrefix.set(prefix, []);
+    byPrefix.get(prefix).push(h);
+  }
+  const coilBlocks = [];
+  for (const [prefix, hs] of byPrefix) {
+    if (!hs.some((h) => COIL_GPM_RE.test(h))) continue;
+    if (!hs.some((h) => COIL_WATER_TEMP_RE.test(h))) continue;
+    coilBlocks.push({ prefix, headers: hs });
+  }
+  if (!coilBlocks.length) return [];
+
+  const results = [];
+  for (const row of table?.rows || []) {
+    const tag = String(
+      row?.key || cellText(row, /^(?:TAG|MARK|SYMBOL|EQUIP(?:\.?\s*TAG)?|UNIT\s*(?:MARK|TAG|NO)?)$/i) || "",
+    ).trim();
+    const served = cellText(row, /SERVED|AREA/i);
+    for (const block of coilBlocks) {
+      const findCell = (re) => {
+        for (const [header, cell] of Object.entries(row?.cells || {})) {
+          if (block.headers.includes(header) && re.test(header)) return cell;
+        }
+        return null;
+      };
+      const gpmCell = findCell(COIL_GPM_RE);
+      const gpm = gpmCell ? String(gpmCell.text ?? gpmCell ?? "").trim() : "";
+      // Real numeric flow required — a blank/dash placeholder row isn't a
+      // real coil instance, just an unused schedule row.
+      if (!gpm || !/[0-9]/.test(gpm)) continue;
+      const ewtCell = findCell(/E\.?W\.?T\.?|ENTERING\s+WATER/i);
+      const lwtCell = findCell(/L\.?W\.?T\.?|LEAVING\s+WATER/i);
+      results.push({
+        tag: tag || null,
+        served: served || null,
+        coilLabel: block.prefix || "COIL",
+        gpm,
+        ewt: ewtCell ? String(ewtCell.text ?? ewtCell ?? "").trim() : null,
+        lwt: lwtCell ? String(lwtCell.text ?? lwtCell ?? "").trim() : null,
+      });
+    }
+  }
+  return results;
+}
+
 /** Infer schedule service from header blob + sample marks on untitled valve tables. */
 function inferValveServiceFromTable(table) {
   const blob = tableHeaderBlob(table);
@@ -2163,6 +2252,66 @@ export function compileControlValveTakeoff(sessionOrSheets, graph, opts = {}) {
         "Isolation / PRV / damper / lab-air valve families (filtered out — hydronic service scope)",
       ] : []),
     ],
+  };
+}
+
+/**
+ * Real coils imply real control valves (physics), whether or not a
+ * dedicated valve schedule exists for them. This walks EVERY table in the
+ * graph (not just tables already believed to be valve schedules) for
+ * embedded coil data (extractEmbeddedCoils), then checks whether the
+ * existing tag/schedule-based control-valve compile already accounts for
+ * each one — by tag or served-area text match. A coil with no matching
+ * scheduled valve is a real, evidence-cited gap: disclosed, never
+ * silently dropped, and never invented as a fabricated valve tag or size.
+ * Real, found-live motivating case (2026-09-02):
+ * 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations's own AIR HANDLING UNIT
+ * SCHEDULE and DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE both embed
+ * real coil GPM/EWT/LWT data with no separate valve schedule anywhere in
+ * the set.
+ */
+export function compileEmbeddedCoilGaps(sessionOrSheets, graph) {
+  const valveCompile = compileControlValveTakeoff(sessionOrSheets, graph);
+  const scheduledValveText = new Set();
+  for (const cat of Object.values(valveCompile.categories || {})) {
+    for (const item of cat.items || []) {
+      if (item.tag) scheduledValveText.add(String(item.tag).toUpperCase());
+      const served = item.cells?.["Served equipment"]?.text || item.description || "";
+      if (served) scheduledValveText.add(String(served).toUpperCase());
+    }
+  }
+  const scheduledList = [...scheduledValveText];
+
+  const coils = [];
+  for (const table of graph?.tables || []) {
+    for (const coil of extractEmbeddedCoils(table)) {
+      const keys = [coil.tag, coil.served].filter(Boolean).map((s) => s.toUpperCase());
+      const hasScheduledValve = keys.some(
+        (k) => scheduledList.some((v) => v.includes(k) || k.includes(v)),
+      );
+      coils.push({
+        ...coil,
+        sheet: table.sheet,
+        source_table_title: table.title?.text || null,
+        has_scheduled_valve: hasScheduledValve,
+      });
+    }
+  }
+  const gaps = coils.filter((c) => !c.has_scheduled_valve);
+  return {
+    takeoff_id: "T-VALVE-EMBEDDED-01",
+    kind: "embedded_coil_valve_gaps",
+    compiler: "corpusTakeoff.compileEmbeddedCoilGaps",
+    note: "Real coil hydronic performance data (GPM + EWT/LWT) found "
+      + "embedded inside equipment schedules (AHU/RTU/FCU/etc.), "
+      + "cross-referenced against the tag/schedule-based control-valve "
+      + "compile. A coil requiring hydronic flow control always implies a "
+      + "control valve — entries in `gaps` have no matching scheduled "
+      + "valve found; disclosed with real evidence, never invented as a "
+      + "fabricated tag.",
+    totals: { coils_found: coils.length, gaps: gaps.length },
+    coils,
+    gaps,
   };
 }
 
