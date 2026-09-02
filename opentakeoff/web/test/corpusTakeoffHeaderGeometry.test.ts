@@ -401,6 +401,28 @@ describe("embedded coil detection (AHU/RTU/FCU schedules, not just valve schedul
     assert.equal(found.length, 0, "a doubled/merged GPM cell is real evidence of a corrupted row, not one clean coil instance");
   });
 
+  it("captures the coil's serving equipment from a SYSTEM column, not just SERVED/AREA (real gap: Eglin AFB's AIR HANDLING UNIT HYDRONIC COIL SCHEDULE)", () => {
+    // Real, found-live gap 2026-09-02: this real table's serving-equipment
+    // column is literally named "SYSTEM" ("AHU-1") -- real, correct data
+    // sitting in plain sight that `served` came back null for, because the
+    // detector only recognized SERVED/AREA as that column's name.
+    const table = {
+      sheet: "eglin#14", title: { text: "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE" },
+      headers: ["TYPE", "SYSTEM", "CAPACITY MBH", "GPM", "EWT", "LWT"],
+      rows: [{
+        key: "CHWC",
+        cells: {
+          TYPE: { text: "CHWC" }, SYSTEM: { text: "AHU-1" },
+          "CAPACITY MBH": { text: "1267" }, GPM: { text: "252.20" },
+          EWT: { text: "44" }, LWT: { text: "54" },
+        },
+      }],
+    };
+    const found = extractEmbeddedCoils(table);
+    assert.equal(found.length, 1);
+    assert.equal(found[0].served, "AHU-1");
+  });
+
   it("extracts from 019_FL_Eglin_AFB's real header format (bare EWT/LWT + qualified 'FLOW GPM', no shared prefix)", () => {
     // Real, found-live gap 2026-09-02: bare "EWT"/"LWT" compute an empty
     // prefix, but "FLOW GPM" computes prefix "FLOW" — different strings,

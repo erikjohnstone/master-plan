@@ -573,7 +573,15 @@ export function extractEmbeddedCoils(table) {
     // relies on row.key, unaffected by this reordering).
     const TAG_CELL_RE = /^(?:TAG|MARK|SYMBOL|EQUIP(?:\.?\s*TAG)?|UNIT\s*(?:MARK|TAG|NO)?)$/i;
     const tag = String(cellText(row, TAG_CELL_RE) || row?.key || "").trim();
-    const served = cellText(row, /SERVED|AREA/i);
+    // Real, found-live gap (2026-09-02, Eglin AFB's own AIR HANDLING UNIT
+    // HYDRONIC COIL SCHEDULE): the coil's own serving equipment is right
+    // there in the row (SYSTEM: "AHU-1"), real and correct, but the column
+    // is named SYSTEM, not SERVED/AREA — served came back null on a row
+    // that had the answer sitting in plain sight. Anchored to the exact
+    // header (not a bare substring test) for the same reason TAG_CELL_RE
+    // is anchored: an unrelated header that merely CONTAINS one of these
+    // words must never be read as the serving-equipment column.
+    const served = cellText(row, /^(?:SERVED|SERVES|AREA|SYSTEM)$/i);
     for (const block of coilBlocks) {
       const findCell = (re) => {
         for (const [header, cell] of Object.entries(row?.cells || {})) {
