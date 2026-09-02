@@ -5,7 +5,7 @@
  *
  *   node --import tsx scripts/prewarm-corpus-graph.mjs --corpus DIR [--shard i/n] [--limit N]
  */
-import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 import { fileURLToPath } from "node:url";
@@ -66,5 +66,6 @@ const summary = {
   shard: shardSpec ?? null,
 };
 const outPath = resolve(HERE, "../../out", `_prewarm-${shardSpec || "all"}.json`);
+mkdirSync(dirname(outPath), { recursive: true });
 writeFileSync(outPath, `${JSON.stringify({ ...summary, results, skipped }, null, 2)}\n`);
 console.log(JSON.stringify(summary, null, 2));
