@@ -318,6 +318,39 @@ on this effort:**
     full re-prewarm run immediately after under the new stable code, not
     bled out incrementally.
 
+12. **OPEN, SCOPED, NOT STARTED: steam heating coils are invisible to
+    `extractEmbeddedCoils` at every layer, and the reason is a real
+    column-boundary bug, not a missing regex.** Found live 2026-09-02,
+    `05_MO_VA_StLouis_AHU_VAV_Replacement.pdf#39`'s real
+    `STEAM HEATING COIL SCHEDULE` — confirmed by rendering the actual
+    page, not guessed from extracted text. Real column structure, left
+    to right: `SYSTEM | AIRFLOW(CFM,[L/s]) | MAX FACE VELOCITY | MAX APD
+    | EAT | MAX LAT | TOTAL MIN CAPACITY(MBH,[kW]) | STEAM: ENT CONT
+    VALVE(PSIG,[kPa]) | ENT COIL(PSIG,[kPa]) | FLOW(LBS/HR,[kg/HR]) |
+    STEAM TRAP MARK | COIL SIZE`. Two distinct, real problems, not one:
+    (a) `SYSTEM` — the row's own real equipment tag, the leftmost real
+    column on the page — never makes it into the extracted table at
+    all; `row.key` falls back to the AIRFLOW value instead (several
+    rows read as identical only because they share specs, not because
+    they're actually the same row duplicated — no way to tell without
+    the real tag). (b) `TOTAL MIN CAPACITY`'s real 2 sub-values (MBH,
+    kW) come back as 3 tokens in its cell — the extra one belongs to
+    `STEAM`'s own first sub-field, which is exactly why `STEAM`'s own
+    cell text doesn't cleanly decompose into its real 6 sub-values
+    either. This is a genuine COLUMN-boundary bug in the upstream table
+    structure recognition — the same class of defect as rule 3's
+    row-banding bug (`task_10174a20`), just on the other axis. Do NOT
+    regex-guess a token position to extract LBS/HR from the shifted
+    `STEAM` cell text — a confidently wrong flow number is worse than
+    admitting none. Real fix needs the column-boundary bug addressed at
+    its source (likely alongside or informing the row-banding fix,
+    since both are upstream table-structure-recognition problems), not
+    a per-table-shape parser hacked onto `extractEmbeddedCoils`. Once
+    that's fixed, admitting steam coils into `hasCoilSignal` is the
+    easy part (an LBS/HR-based signal parallel to the existing GPM
+    one) — the hard part, done here, was refusing to fake the harder
+    part.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
