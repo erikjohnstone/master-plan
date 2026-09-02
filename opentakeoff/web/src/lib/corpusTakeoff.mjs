@@ -8,6 +8,39 @@
  */
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
 import { VALVES, ACTUATORS, DAMPERS } from "./hvacTaxonomy.ts";
+import { disciplineOfSheetNumber } from "./symbolsweep.ts";
+
+/**
+ * Real, evidence-based scope exclusions computed from THIS graph — never
+ * static boilerplate copy-pasted across sets. Per HVAC_BAS_DOMAIN_MAP.md
+ * (2026-09-02, GOAL.md rule 7): fire/smoke damper counts are only
+ * authoritative when cross-checked against the architectural fire-rated
+ * wall plan; this platform ingests mechanical-discipline PDFs, and when
+ * the loaded set carries zero real "A"-prefixed (AIA discipline) sheets,
+ * that cross-check is structurally impossible and must be disclosed —
+ * never silently absorbed into a plausible-looking damper count. Same
+ * principle for a separate specifications book: this platform can only
+ * see what's actually in the uploaded PDF(s).
+ */
+export function scopeExclusionsForGraph(graph) {
+  const exclusions = [];
+  const sheets = graph?.sheets || [];
+  const hasArchSheets = sheets.some(
+    (s) => disciplineOfSheetNumber(s?.number ?? s?.sheetNumber) === "A",
+  );
+  if (!hasArchSheets) {
+    exclusions.push(
+      "No architectural sheets in this upload — fire/smoke damper counts are from mechanical sheets only; "
+      + "a complete count requires cross-checking the architectural fire-rated wall plan, not present in this set.",
+    );
+  }
+  exclusions.push(
+    "Valve/damper type or performance requirements and commissioning/TAB scope that exist only in a separate "
+    + "specifications book (CSI Division 23) are out of scope unless that book is part of this upload — this "
+    + "platform can only see what was actually provided.",
+  );
+  return exclusions;
+}
 
 export const CORPUS_TAKEOFF_VERSION = 1;
 
@@ -2251,6 +2284,7 @@ export function compileControlValveTakeoff(sessionOrSheets, graph, opts = {}) {
         `${wantService === "CHW" ? "HHW" : "CHW"} CONTROL VALVE SCHEDULE (filtered out — goal asked for ${wantService} only)`,
         "Isolation / PRV / damper / lab-air valve families (filtered out — hydronic service scope)",
       ] : []),
+      ...scopeExclusionsForGraph(graph),
     ],
   };
 }
@@ -2371,8 +2405,7 @@ export function compileEmbeddedCoilGaps(sessionOrSheets, graph) {
     exclusions: [
       "Riser-diagram valve-instance counts (not yet mined as a source)",
       "Control-schematic device↔point linkage (not yet a dedicated extraction path)",
-      "Fire/smoke damper counts require architectural fire-rated wall plan cross-check (not in scope of a mechanical-only PDF)",
-      "Valve type/commissioning/TAB requirements that exist only in a separate specifications book, when one is not attached to this set",
+      ...scopeExclusionsForGraph(graph),
     ],
     coils,
     gaps,

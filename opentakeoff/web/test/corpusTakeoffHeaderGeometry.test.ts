@@ -11,6 +11,7 @@ import {
   headerShapeMatches,
   isBasPointsListTable,
   isControlValveHeaderShape,
+  scopeExclusionsForGraph,
   tableHeaderBlob,
 } from "../src/lib/corpusTakeoff.mjs";
 
@@ -124,6 +125,32 @@ describe("titled-but-service-unqualified valve schedule compile (074-shaped)", (
       .map((i) => i.tag);
     assert.ok(tags.some((t) => /^CV-1$/i.test(t)));
     assert.ok(tags.some((t) => /^CV-2$/i.test(t)));
+  });
+});
+
+describe("scope exclusion disclosure (real, per-graph — not static boilerplate)", () => {
+  it("discloses the architectural fire-rated-wall-plan gap when the set has no A-prefixed sheets", () => {
+    const graph = { sheets: [{ key: "s1", number: "M1.0" }, { key: "s2", number: "M2.0" }], tables: [] };
+    const exclusions = scopeExclusionsForGraph(graph);
+    assert.ok(exclusions.some((e) => /architectural/i.test(e) && /fire.?rated/i.test(e)));
+  });
+
+  it("does NOT falsely claim the architectural gap when the set actually has an A-prefixed sheet", () => {
+    const graph = { sheets: [{ key: "s1", number: "M1.0" }, { key: "s2", number: "A2.1" }], tables: [] };
+    const exclusions = scopeExclusionsForGraph(graph);
+    assert.ok(!exclusions.some((e) => /architectural/i.test(e) && /fire.?rated/i.test(e)));
+  });
+
+  it("always discloses the separate-specifications-book gap (platform can only see what's uploaded)", () => {
+    const graph = { sheets: [{ key: "s1", number: "M1.0" }], tables: [] };
+    const exclusions = scopeExclusionsForGraph(graph);
+    assert.ok(exclusions.some((e) => /specifications book/i.test(e)));
+  });
+
+  it("compileControlValveTakeoff carries the real exclusion in its own output", () => {
+    const graph = { sheets: [{ key: "s1", number: "M1.0" }], tables: [] };
+    const valve = compileControlValveTakeoff(null, graph);
+    assert.ok(valve.exclusions.some((e) => /architectural/i.test(e)));
   });
 });
 
