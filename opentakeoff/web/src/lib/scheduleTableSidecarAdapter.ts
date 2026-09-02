@@ -132,12 +132,14 @@ function sidecarTableToOdl(table: SidecarTable, inv: number[]): ODLTable {
     const rowCells = table.cells.filter((c) => c.row === r).sort((a, b) => a.col - b.col);
     rows.push({
       type: "table row",
+      id: r + 1,
       "row number": r + 1,
       cells: rowCells.map((c) => sidecarCellToOdl(c, cellId++, inv)),
     });
   }
   return {
     type: "table",
+    id: 1,
     "page number": table.page,
     "bounding box": projectBboxToOdl(table.bbox, inv),
     "number of rows": table.rows,
