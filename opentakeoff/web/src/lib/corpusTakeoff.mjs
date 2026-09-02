@@ -69,6 +69,24 @@ export function hasValveOrDamperMark(table) {
   return false;
 }
 
+/**
+ * Real bug, found and fixed 2026-09-02 in compileEmbeddedCoilGaps, then
+ * found present TWICE MORE (BAS points inventory↔printed reconciliation)
+ * by sweeping the codebase for the same pattern once the first instance
+ * was understood: plain String.includes() is a substring match with no
+ * word boundary — "AHU-10".includes("AHU-1") === true — which silently
+ * treats two DIFFERENT tags as the same one and hides a real gap behind
+ * a false "already accounted for". Any tag/mark reconciliation across
+ * this codebase should use this, never a bare .includes() on tag text.
+ */
+function tagMatches(needle, haystack) {
+  const n = String(needle || "");
+  const h = String(haystack || "");
+  if (!n || !h) return false;
+  const escaped = n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(?:^|[^A-Z0-9])${escaped}(?:[^A-Z0-9]|$)`).test(h);
+}
+
 function cellText(row, headerRe) {
   for (const [header, cell] of Object.entries(row.cells || {})) {
     if (headerRe.test(header)) return String(cell?.text || "").trim();
@@ -1538,7 +1556,7 @@ export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
     let hit = printedServed.has(tag);
     if (!hit) {
       for (const served of printedServed) {
-        if (served === tag || served.includes(tag) || tag.includes(served)) {
+        if (served === tag || tagMatches(tag, served) || tagMatches(served, tag)) {
           hit = true;
           break;
         }
@@ -1552,7 +1570,7 @@ export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
     let hit = inventoryTags.has(served);
     if (!hit) {
       for (const tag of inventoryTags) {
-        if (tag === served || tag.includes(served) || served.includes(tag)) {
+        if (tag === served || tagMatches(served, tag) || tagMatches(tag, served)) {
           hit = true;
           break;
         }
@@ -2340,9 +2358,6 @@ export function compileEmbeddedCoilGaps(sessionOrSheets, graph) {
   // corroboration that would silently hide a real gap. Word-boundary
   // matching so a tag only matches its own whole occurrence, never a
   // numeric prefix of a different tag.
-  const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const tagMatches = (needle, haystack) => new RegExp(`(?:^|[^A-Z0-9])${escapeRe(needle)}(?:[^A-Z0-9]|$)`).test(haystack);
-
   const coils = [];
   for (const table of graph?.tables || []) {
     for (const coil of extractEmbeddedCoils(table)) {
