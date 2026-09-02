@@ -7296,7 +7296,11 @@ export default function TakeoffCanvas() {
         ? (compiled.categories?.points_lists?.lists || []).map((l) => ({
           title: l.title, rows: l.rows, AI: l.AI, AO: l.AO, BI: l.BI, BO: l.BO,
         }))
-        : null,
+        : compiled.kind === "sequences"
+          ? (compiled.categories?.sequences?.list || []).map((s) => ({
+            title: s.title, system_tag: s.system_tag, status: s.status, section_count: s.section_count,
+          }))
+          : null,
     });
     const rows = rowsFromCompiledTakeoff(compiled, {
       workflow: meta.workflow || compiled.takeoff_id || "corpus takeoff",
@@ -7375,7 +7379,9 @@ export default function TakeoffCanvas() {
       exclusions: compiled.exclusions,
       category_count: compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
         ? Object.keys(compiled.categories || {}).length
-        : (compiled.categories?.points_lists?.lists || []).length,
+        : compiled.kind === "sequences"
+          ? (compiled.categories?.sequences?.list || []).length
+          : (compiled.categories?.points_lists?.lists || []).length,
       category_counts: compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
         ? Object.fromEntries(Object.entries(compiled.categories || {}).map(([k, v]) => [k, v.count]))
         : null,
@@ -7383,7 +7389,11 @@ export default function TakeoffCanvas() {
         ? (compiled.categories?.points_lists?.lists || []).map((l) => ({
           title: l.title, rows: l.rows, AI: l.AI, AO: l.AO, BI: l.BI, BO: l.BO,
         }))
-        : null,
+        : compiled.kind === "sequences"
+          ? (compiled.categories?.sequences?.list || []).map((s) => ({
+            title: s.title, system_tag: s.system_tag, status: s.status, section_count: s.section_count,
+          }))
+          : null,
       downloaded: downloads,
       // Panel is the production surface — fed by showCompiledTakeoff above.
       ui_takeoff_open: true,

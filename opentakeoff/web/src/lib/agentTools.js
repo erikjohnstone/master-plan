@@ -471,13 +471,13 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "compile_corpus_takeoff",
-    description: "PRIMARY tool for a COMPLETE HVAC, BAS, or control-valve takeoff of the loaded set. kind hvac_equipment (T-HVAC-01), bas_points (T-BAS-01), or control_valves (T-VALVE-01: CHW+HHW CONTROL VALVE SCHEDULE — valve mark, served equipment, service, size, GPM, Cv). Returns deterministic category/list counts, totals, exclusions, and empty-page accounting (same Session+ODL path as MCP). Opens TakeoffDataPanel with the finished takeoff. Prefer this over crawling find_schedule/query_table/read_schedule family-by-family when the goal asks for a complete set takeoff. Not for installed drawing counts (use sweep_schedule_row). download true (default) also downloads the workbook.",
+    description: "PRIMARY tool for a COMPLETE HVAC, BAS, control-valve, or sequence-of-operations takeoff of the loaded set. kind hvac_equipment (T-HVAC-01), bas_points (T-BAS-01), control_valves (T-VALVE-01: CHW+HHW CONTROL VALVE SCHEDULE — valve mark, served equipment, service, size, GPM, Cv), or sequences (T-SOO-01: every SOO/control-sequence table or narrative-title hit, with section text and per-cell citations — never derives typed I/O points from the prose, that stays refuse_not_done on bas_points). Returns deterministic category/list counts, totals, exclusions, and empty-page accounting (same Session+ODL path as MCP). Opens TakeoffDataPanel with the finished takeoff. Prefer this over crawling find_schedule/query_table/read_schedule family-by-family when the goal asks for a complete set takeoff. Not for installed drawing counts (use sweep_schedule_row). download true (default) also downloads the workbook.",
     input_schema: {
       type: "object",
       properties: {
         kind: {
           type: "string",
-          enum: ["hvac_equipment", "bas_points", "control_valves", "T-HVAC-01", "T-BAS-01", "T-VALVE-01"],
+          enum: ["hvac_equipment", "bas_points", "control_valves", "sequences", "T-HVAC-01", "T-BAS-01", "T-VALVE-01", "T-SOO-01"],
           description: "Which takeoff to compile.",
         },
         download: {
@@ -983,7 +983,7 @@ export async function executeAgentTool(ctx, name, args) {
 
       case "compile_corpus_takeoff": {
         const kind = (args.kind || "").trim();
-        if (!kind) return { error: "Pass kind: \"hvac_equipment\" / \"T-HVAC-01\", \"bas_points\" / \"T-BAS-01\", or \"control_valves\" / \"T-VALVE-01\"." };
+        if (!kind) return { error: "Pass kind: \"hvac_equipment\" / \"T-HVAC-01\", \"bas_points\" / \"T-BAS-01\", \"control_valves\" / \"T-VALVE-01\", or \"sequences\" / \"T-SOO-01\"." };
         if (typeof ctx.compileCorpusTakeoff !== "function") {
           return { error: "compile_corpus_takeoff is not wired in this session." };
         }

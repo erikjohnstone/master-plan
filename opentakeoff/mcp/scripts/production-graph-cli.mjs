@@ -20,6 +20,7 @@ import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Session } from "../src/session.ts";
 import { compileCorpusTakeoff } from "../src/corpusTakeoff.mjs";
+import { compileSequencesTakeoff } from "../../web/src/lib/sequenceExtract.ts";
 import { reconcileSchedulePlan } from "../src/takeoff.ts";
 
 function argsOf(argv, name) {
@@ -66,6 +67,7 @@ if (mode === "sweep" && !sweepTag) {
 const kindLabel = kind === "bas_points" ? "BAS points"
   : kind === "control_valves" ? "control valves"
   : kind === "hvac_equipment" ? "HVAC equipment"
+  : (kind === "sequences" || kind === "T-SOO-01") ? "sequences-of-operations"
   : (kind || "takeoff");
 
 progress("load", `Loading ${pdfs.length} plan PDF${pdfs.length === 1 ? "" : "s"}…`, { pdf_count: pdfs.length });
@@ -135,7 +137,9 @@ if (mode !== "compile") {
 }
 
 progress("compile", `Compiling ${kindLabel} takeoff from extracted schedules…`, { kind });
-const compiled = compileCorpusTakeoff(session, graph, kind, service ? { service } : {});
+const compiled = (kind === "sequences" || kind === "T-SOO-01")
+  ? compileSequencesTakeoff(session, graph)
+  : compileCorpusTakeoff(session, graph, kind, service ? { service } : {});
 const totals = compiled?.totals || {};
 const items = totals.items ?? totals.rows ?? null;
 progress("done", items != null

@@ -2217,6 +2217,21 @@ export function takeoffWorkbookSheets(takeoff, { interrogationLog = null } = {})
       const short = String(list.title).replace(/\s+/g, " ").slice(0, 28);
       sheets.push({ name: short, rows });
     }
+  } else if (takeoff.kind === "sequences") {
+    const list = takeoff.categories?.sequences?.list || [];
+    const rollup = [
+      ["title", "system_tag", "status", "sheet_id", "section_count"],
+      ...list.map((s) => [s.title, s.system_tag, s.status, s.sheet_id, s.section_count]),
+    ];
+    sheets.push({ name: "ROLLUP", rows: rollup });
+    for (const seq of list) {
+      const rows = [["heading", "body", "sheet_id"]];
+      for (const section of seq.sections || []) {
+        rows.push([section.heading, section.body, seq.sheet_id]);
+      }
+      const short = String(seq.title).replace(/\s+/g, " ").slice(0, 28) || `seq_${seq.id}`;
+      sheets.push({ name: short, rows });
+    }
   }
   if (interrogationLog) {
     const rows = [["turn", "role", "text"]];

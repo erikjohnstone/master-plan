@@ -25,6 +25,7 @@ import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
 import { importTakeoff } from "./importing.ts";
 import { buildPlanSetTakeoff, buildLegendTakeoff, classifyLegendCaption, reconcileSchedulePlan } from "./takeoff.ts";
 import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "./corpusTakeoff.mjs";
+import { compileSequencesTakeoff } from "../../web/src/lib/sequenceExtract.ts";
 import { reconcileRowsToCsv } from "../../web/src/lib/schedulePlanReconcile.mjs";
 import {
   VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
@@ -680,16 +681,18 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   }));
 
   server.registerTool("compile_corpus_takeoff", {
-    description: `Compile a full HVAC schedule-quantity, BAS points-list, or control-valve/damper takeoff from the loaded plan set's extractable tables — unique scheduled MARK/VALVE MARK tags per equipment family (T-HVAC-01), extractable POINTS/DDC list rows with AI/AO/BI/BO (T-BAS-01), or valve/damper/air-valve schedules with contractor columns (T-VALVE-01: mark, served unit, service, size, GPM, Cv, actuator when printed). This is schedule/list quantity, not installed drawing counts (use project_takeoff for those). Returns categories, item cites with bboxes, page accounting (empty pages explicit), and exclusions. Pass path to write JSON; pass export_path to also write CSV tabs (+ XLSX when available) under that directory. Read-only; does not commit canvas shapes. ${COORDS}`,
+    description: `Compile a full HVAC schedule-quantity, BAS points-list, control-valve/damper, or sequence-of-operations takeoff from the loaded plan set's extractable tables — unique scheduled MARK/VALVE MARK tags per equipment family (T-HVAC-01), extractable POINTS/DDC list rows with AI/AO/BI/BO (T-BAS-01), valve/damper/air-valve schedules with contractor columns (T-VALVE-01: mark, served unit, service, size, GPM, Cv, actuator when printed), or every SOO/control-sequence table or narrative-title hit with section text and per-cell citations (T-SOO-01 / "sequences" — never derives typed I/O points from the prose; that stays refuse_not_done on the bas_points path). This is schedule/list quantity, not installed drawing counts (use project_takeoff for those). Returns categories, item cites with bboxes, page accounting (empty pages explicit), and exclusions. Pass path to write JSON; pass export_path to also write CSV tabs (+ XLSX when available) under that directory. Read-only; does not commit canvas shapes. ${COORDS}`,
     inputSchema: {
       kind: z.enum([
         "hvac_equipment",
         "bas_points",
         "control_valves",
+        "sequences",
         "T-HVAC-01",
         "T-BAS-01",
         "T-VALVE-01",
-      ]).describe("Which corpus takeoff to compile (HVAC equipment, BAS points, or control valves/dampers)"),
+        "T-SOO-01",
+      ]).describe("Which corpus takeoff to compile (HVAC equipment, BAS points, control valves/dampers, or sequences-of-operations)"),
       service: z.enum(["CHW", "HHW"]).optional().describe(
         "Optional for control_valves / T-VALVE-01: only CHW or only HHW control-valve schedules. Omit for the full valve/damper takeoff.",
       ),
@@ -701,7 +704,9 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     outputSchema: compileCorpusTakeoffOutput,
   }, run("compile_corpus_takeoff", async ({ kind, service, detail, path: outPath, export_path: exportPath, overwrite }) => {
     const graph = await session.graphForPipeline();
-    const compiled = compileCorpusTakeoff(session, graph, kind, service ? { service } : {});
+    const compiled: any = (kind === "sequences" || kind === "T-SOO-01")
+      ? compileSequencesTakeoff(session, graph)
+      : compileCorpusTakeoff(session, graph, kind, service ? { service } : {});
     if (detail !== "full") {
       compiled.page_accounting = {
         ...compiled.page_accounting,

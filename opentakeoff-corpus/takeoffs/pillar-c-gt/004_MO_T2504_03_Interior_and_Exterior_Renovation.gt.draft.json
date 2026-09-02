@@ -49,5 +49,89 @@
     "estimator_complete": false,
     "gt_locked": false,
     "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  },
+  "pipeline_harness": {
+    "set_id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+    "ms": 240656,
+    "sheets": 51,
+    "graph_tables_total": 13,
+    "graph_table_kinds": {
+      "equipment": 8,
+      "finish": 4,
+      "reference": 1,
+      "room-finish": 0,
+      "unknown": 0
+    },
+    "graph_valve": {
+      "tables": 12,
+      "rows": 32,
+      "valve_marks": 0,
+      "table_titles": [
+        "WATER SOFTENER SCHEDULE",
+        "GAS WATER HEATER SCHEDULE",
+        "DESIGN AND CONSTRUCTION",
+        "GREASE INTERCEPTOR SCHEDULE",
+        "STORAGE TANK SCHEDULE",
+        "HOT WATER RETURN PUMP SCHEDULE",
+        "NATURAL GAS UNIT HEATER SCHEDULE",
+        "AIR DEVICE SCHEDULE"
+      ]
+    },
+    "graph_bas": {
+      "tables": 0,
+      "rows": 0,
+      "table_titles": []
+    },
+    "compile_valve_items": 0,
+    "compile_bas_rows": 0,
+    "compile_valve_families": [
+      "CHW_CONTROL_VALVE",
+      "HHW_CONTROL_VALVE",
+      "BYPASS_CONTROL_VALVE",
+      "ISOLATION_VALVE",
+      "PRESSURE_REDUCING_VALVE",
+      "PRESSURE_SAFETY_VALVE",
+      "MIXING_VALVE",
+      "CONTROL_DAMPER",
+      "FUME_HOOD_DAMPER",
+      "LAB_AIR_VALVE"
+    ],
+    "valve_graph_without_compile": true,
+    "bas_graph_without_compile": false,
+    "compile_without_graph_valve": false,
+    "vector_pipeline": {
+      "layers_run": [
+        "L0:ingest",
+        "L1:spans+segments",
+        "L2:geometric",
+        "L2:ODL",
+        "L1.5:tiling",
+        "L2:line-grid",
+        "L2:stream-grid",
+        "L2:sidecar",
+        "L2.5:pillar-gap-recovery",
+        "L3:sweep_schedule_row@query",
+        "L3.5:topology",
+        "L4:reconcile-dedup",
+        "L4.5:ocr-vlm-assist",
+        "L5:classify@compile"
+      ],
+      "l45_enabled": false,
+      "tiles_sliced": 96,
+      "tables_added": 0,
+      "tables_replaced": 0,
+      "topology_sheets": 25,
+      "ocr_assists": 0,
+      "notes": [
+        "Cell bbox snap: 13 table(s) re-grounded onto source spans."
+      ]
+    },
+    "pipeline_notes": [
+      "Vector pipeline L3.5: MEP topology graph built on 25 plan sheet(s)."
+    ],
+    "gt_locked": false,
+    "cache_identity": "vector-stack-table-recall-v1",
+    "corroboration": "pipeline_graph_and_compile",
+    "note": "Graph valve/BAS table recall + compile on shared vector stack — not coordinator-verified alone"
   }
 }

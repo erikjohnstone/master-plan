@@ -5,6 +5,47 @@ every BAS set + every valve set must be coordinator-verified and
 pipeline-corroborated (see `takeoffs/NEXT_GOAL_LOOP.md`). A+B §6 MET;
 Vol2 full 82 INDEX still in scope. Older keyed-corpus history retained.
 
+## Platform mandate (2026-09-02 expansion) — read first, every session
+
+The end goal is **not** "100% on this corpus." It is a **general-purpose,
+production-grade HVAC/BAS takeoff platform** — valve/damper/actuator
+takeoffs, BAS points-list takeoffs, and sequence-of-operations takeoffs, all
+fully grounded (cite-backed to sheet+bbox) — that works on **any real
+mechanical blueprint set** that carries this information, reachable
+end-to-end through the agent path (UI Agent panel and MCP), not just the
+named sets in this corpus. The corpus (now 100+ real vector PDFs across
+Vol1+Vol2) is the proving ground and the source of real ground truth to
+build against — it is explicitly not the finish line. A fix that only works
+because it recognizes a specific PDF, tag, or corpus id is a regression
+against this goal even if it raises a score.
+
+**Two standing working rules, non-negotiable, apply to every future session
+on this effort:**
+
+1. **Regex is never the classification engine — structure is.** Table
+   detection, family classification, and row admission must be decided by
+   geometry and structure first: table shape, header/column layout, mark
+   pattern *by position/shape* (column-0 admits a family, not a string
+   match against a name list), cross-source corroboration (schedule ↔ plan
+   ↔ SOO), and OCR/VLM assist when vector structure genuinely can't decide.
+   Regex may **confirm** a structural finding (a title phrase, a header
+   token) but must never be the sole thing standing between "found" and
+   "not found." A fix that only adds a regex pattern without first
+   establishing structural detection is treating a symptom, not the
+   disease — see `takeoffs/VECTOR_TAKEOFF_ENGINE_RESEARCH.md` §1 for why
+   this specifically was the original mistake being corrected.
+2. **Audit before you build.** Before implementing anything for an
+   uncertain requirement, search the actual codebase exhaustively first —
+   this platform is large and mature, and the capability being reached for
+   may already exist, partially or fully, under a name you didn't expect
+   (e.g. `sequenceExtract.ts` already does real SOO section extraction with
+   evidence; `estimatorTakeoffDocument.mjs`, `reconcileWorkflow`,
+   `hvacTaxonomy.ts`, `gridClassify.mjs`, `queryTable.mjs` already carry
+   real structure). Never re-implement or fork something that already
+   exists, even partially — extend it on the shared path instead. Grep
+   broadly, read the module, run its existing tests, before writing new
+   code that might duplicate it.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
