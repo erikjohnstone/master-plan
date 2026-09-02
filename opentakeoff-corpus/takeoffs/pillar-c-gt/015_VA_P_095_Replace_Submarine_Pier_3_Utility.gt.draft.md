@@ -14,7 +14,29 @@
 
 Artifact: `/opt/cursor/artifacts/pillar-c-pier-015-drawing-verify.json`
 
-## Still blocks lock
+## Estimator product gap/SOO (2026-09-01) — still unlocked
+
+| Check | Result |
+|---|---|
+| Printed BAS | 39 |
+| Inventory units | 17 |
+| Estimate_only pts | 71 (never merged) |
+| Gap count | 14 |
+| Gap verify (all) | **14/14 PASS** (FC-1/2/4, P-3..6, EF-1..7) |
+| SOO | `absent_or_not_detected` match |
+
+Artifact: `/opt/cursor/artifacts/pillar-c-015-estimator-gap-verify.json`
+
+## Plan-paint census (2026-09-01) — still unlocked
+
+| Check | Result |
+|---|---|
+| BAS served | 12 tags · **5 MATCH** / 7 ERROR (MPAC/HPAC miss) |
+| Valve reconcile | 36 · **34 MATCH** / 2 SO |
+
+Artifacts: `pillar-c-015-bas-plan-paint-census.json` · `pillar-c-015-valve-plan-paint-census.json`
+
+## Still blocks lock (Where we refuse — not done)
 
 - SOO refuse
 - MPAC/HPAC no schedule rows — cannot invent joins
@@ -22,4 +44,4 @@ Artifact: `/opt/cursor/artifacts/pillar-c-pier-015-drawing-verify.json`
 - Pillar C corpus-deep — one set cannot complete C
 
 ## Status
-`gt_locked: false` · `pillar_c_complete: false`
+`gt_locked: false` · `pillar_c_complete: false` · `estimator_complete: false`

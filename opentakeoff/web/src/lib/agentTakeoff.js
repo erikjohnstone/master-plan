@@ -275,6 +275,65 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
 
   if (compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
     || (compiled.categories && !compiled.categories.points_lists)) {
+    // Pillar C: valve estimator disclose — printed schedules ≠ commercial done.
+    if (compiled.kind === "control_valves") {
+      const vest = compiled.estimator_status;
+      if (vest && Array.isArray(vest.gates)) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: "VALVE_ESTIMATOR", field: "estimator_complete",
+          value: vest.estimator_complete ? "YES" : "NO — not Pillar C done",
+          source_tool,
+          note: vest.meaning || "refuse_not_done = unfinished valve work, not a locked ceiling",
+        }));
+        for (const gate of vest.gates) {
+          if (!gate || gate.status !== "refuse_not_done") continue;
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag: "VALVE_ESTIMATOR", field: `refuse:${gate.gate}`,
+            value: "refuse_not_done",
+            source_tool,
+            note: gate.note || "unfinished Pillar C valve work",
+          }));
+        }
+      }
+      const vprod = compiled.estimator_product;
+      if (vprod) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: "VALVE_ESTIMATOR", field: "printed_valve_items",
+          value: vprod.printed_items ?? 0, unit: "EA", source_tool,
+          note: "Printed valve/damper rows — plumbing only",
+        }));
+        const cov = vprod.contractor_column_coverage;
+        if (cov) {
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag: "VALVE_ESTIMATOR", field: "contractor_column_gaps",
+            value: (cov.missing_on_some_rows || []).join(", ") || "none",
+            source_tool,
+            note: cov.note || "Printed-column coverage only — never invent missing fields",
+          }));
+        }
+        if (vprod.plan_paint) {
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag: "VALVE_ESTIMATOR", field: "plan_paint",
+            value: vprod.plan_paint.status || "refuse_not_done",
+            source_tool,
+            note: vprod.plan_paint.note || "Plan paint still required",
+          }));
+          for (const t of (vprod.plan_paint.targets || []).slice(0, 24)) {
+            if (!t?.tag) continue;
+            rows.push(makeTakeoffRow({
+              workflow, runId, tag: t.tag, field: "plan_paint_prefer_schedule_title",
+              value: t.prefer_schedule_title || "",
+              sheet_id: t.prefer_schedule_sheet || null,
+              table_title: t.prefer_schedule_title || null,
+              source_tool,
+              note: t.prefer_schedule_title
+                ? "Pass as prefer_schedule_title on sweep_schedule_row / reconcile — drawing-backed valve schedule table_title"
+                : "No table_title on valve row — sweep may AMBIGUOUS across families; refuse rather than invent",
+            }));
+          }
+        }
+      }
+    }
     for (const [catName, cat] of Object.entries(compiled.categories || {})) {
       if (catName === "points_lists" || !cat || typeof cat !== "object") continue;
       const items = Array.isArray(cat.items) ? cat.items : [];
@@ -342,11 +401,93 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
   }
 
   if (compiled.kind === "bas_points" || compiled.categories?.points_lists) {
+    // Pillar C: surface refuse_not_done gates so printed POINTS ≠ "done".
+    const est = compiled.estimator_status;
+    if (est && Array.isArray(est.gates)) {
+      rows.push(makeTakeoffRow({
+        workflow, runId, tag: "BAS_ESTIMATOR", field: "estimator_complete",
+        value: est.estimator_complete ? "YES" : "NO — not Pillar C done",
+        source_tool,
+        note: est.meaning || "refuse_not_done = unfinished work, not a locked ceiling",
+      }));
+      for (const gate of est.gates) {
+        if (!gate || gate.status !== "refuse_not_done") continue;
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: "BAS_ESTIMATOR", field: `refuse:${gate.gate}`,
+          value: "refuse_not_done",
+          source_tool,
+          note: gate.note || "unfinished Pillar C work",
+        }));
+      }
+    }
+    // Labeled schedule estimate + SOO/gap disclose — never merge into printed qty rows.
+    const product = compiled.estimator_product;
+    if (product) {
+      const inv = product.equipment_inventory?.unit_count ?? 0;
+      rows.push(makeTakeoffRow({
+        workflow, runId, tag: "BAS_ESTIMATOR", field: "equipment_inventory_units",
+        value: inv, unit: "EA", source_tool,
+        note: "Point-bearing HVAC schedule inventory — not printed POINTS truth",
+      }));
+      if (product.soo) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: "BAS_ESTIMATOR", field: "soo_status",
+          value: product.soo.status || "unknown",
+          source_tool,
+          note: product.soo.note || "SOO disclose — never invent points from narrative",
+        }));
+      }
+      const estPts = product.schedule_derived_estimate?.totals?.points;
+      if (estPts != null) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: "BAS_ESTIMATOR", field: "schedule_estimate_points",
+          value: estPts, unit: "EA", source_tool,
+          note: "estimate_only (qty×points/unit) — never merged into printed POINTS totals",
+        }));
+      }
+      const gap = product.gap_vs_printed?.inventory_without_printed_points_count ?? 0;
+      rows.push(makeTakeoffRow({
+        workflow, runId, tag: "BAS_ESTIMATOR", field: "inventory_points_gap",
+        value: gap, unit: "EA", source_tool,
+        note: "Inventory marks lacking printed POINTS joins — gap only, points not invented",
+      }));
+      if (product.spare_io_policy) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: "BAS_ESTIMATOR", field: "spare_io_policy",
+          value: `${product.spare_io_policy.typical_pct_per_point_type?.common ?? 15}% typical (policy disclose)`,
+          source_tool,
+          note: product.spare_io_policy.note || "Spare % never applied into printed totals",
+        }));
+      }
+      if (product.plan_paint) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag: "BAS_ESTIMATOR", field: "plan_paint",
+          value: product.plan_paint.status || "refuse_not_done",
+          source_tool,
+          note: product.plan_paint.note || "Plan paint still required",
+        }));
+        // Surface prefer_schedule_title hints so the agent can sweep inventory
+        // marks without cross-family AMBIGUOUS (Carson-style) — never invent.
+        for (const t of (product.plan_paint.targets || []).slice(0, 24)) {
+          if (!t?.tag) continue;
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag: t.tag, field: "plan_paint_prefer_schedule_title",
+            value: t.prefer_schedule_title || "",
+            sheet_id: t.prefer_schedule_sheet || null,
+            table_title: t.prefer_schedule_title || null,
+            source_tool,
+            note: t.prefer_schedule_title
+              ? "Pass as prefer_schedule_title on sweep_schedule_row / reconcile — drawing-backed HVAC table_title"
+              : "No table_title on inventory row — sweep may AMBIGUOUS across families; refuse rather than invent",
+          }));
+        }
+      }
+    }
     const lists = compiled.categories?.points_lists?.lists || [];
     for (const list of lists) {
       const items = Array.isArray(list.items) ? list.items : [];
       for (const item of items) {
-        const tag = item.tag || item.mark || null;
+        const tag = item.tag || item.mark || item.id || null;
         if (!tag) continue;
         const sheet = item.sheet_id || list.sheet_id || null;
         const table = item.table_title || list.title || null;
@@ -374,9 +515,10 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
           }));
         }
         // Pillar C contractor columns — only when the compiler promoted printed values.
-        if (item.served_equipment) {
+        const served = item.served_equipment || item.served_equipment || null;
+        if (served) {
           rows.push(makeTakeoffRow({
-            workflow, runId, tag, field: "SERVED EQUIPMENT", value: item.served_equipment,
+            workflow, runId, tag, field: "SERVED EQUIPMENT", value: served,
             sheet_id: sheet, table_title: table, column: "SERVED EQUIPMENT",
             bbox_px: item.bbox_px || null, source_tool,
             note: "plan-join key for sweep_schedule_row / reconcile",

@@ -1,0 +1,40 @@
+{
+  "set_id": "18_OR_BakerMS_HVAC_Electrical_FullSet",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 6,
+    "estimate_only_points": 84,
+    "never_merged_into_printed": true,
+    "gap_count": 6,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:04:47.757Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-18-inventory-drawing-verify.json",
+    "sample_pass": 6,
+    "sample_n": 6,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "18_OR_BakerMS_HVAC_Electrical_FullSet",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:09:22.132Z",
+    "ms": 2375,
+    "printed_bas_rows": 0,
+    "inventory_units": 6,
+    "targets_total": 6,
+    "tallies": {
+      "MATCH": 6,
+      "SCHEDULE_ONLY": 0,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
+}

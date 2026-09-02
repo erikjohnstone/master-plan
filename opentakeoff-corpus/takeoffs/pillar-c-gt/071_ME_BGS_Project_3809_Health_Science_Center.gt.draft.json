@@ -1,0 +1,53 @@
+{
+  "set_id": "071_ME_BGS_Project_3809_Health_Science_Center",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 21,
+    "estimate_only_points": 103,
+    "never_merged_into_printed": true,
+    "gap_count": 21,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:20:39.122Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-071-inventory-drawing-verify.json",
+    "sample_pass": 20,
+    "sample_n": 20,
+    "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 0,
+    "families": [],
+    "contractor_gaps": [],
+    "estimator_complete": false,
+    "zero_valve_floor": true
+  },
+  "valve_zero_floor_verify": {
+    "at": "2026-09-01T17:56:31.169587+00:00",
+    "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
+    "printed_items": 0,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "071_ME_BGS_Project_3809_Health_Science_Center",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:57:07.170Z",
+    "ms": 10807,
+    "printed_bas_rows": 0,
+    "inventory_units": 21,
+    "targets_total": 21,
+    "tallies": {
+      "MATCH": 21,
+      "SCHEDULE_ONLY": 0,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
+}

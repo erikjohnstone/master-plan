@@ -366,5 +366,95 @@
     },
     "lock_recommendation": "KEEP gt_locked=false — printed BAS sample green + missing-unit refuse confirmed, but estimator-complete BAS/SOO/FCU multiply and full CV audit remain; corpus-deep C not satisfied",
     "artifact": "/opt/cursor/artifacts/pillar-c-navfac-001-drawing-verify.json"
+  },
+  "estimator_product": {
+    "printed_bas_rows": 122,
+    "inventory_units": 143,
+    "estimate_only_points": 965,
+    "never_merged_into_printed": true,
+    "gap_count": 125,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "estimator_gap_drawing_verify": {
+    "at": "2026-09-01T16:21:01.057Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-001-estimator-gap-verify.json",
+    "focus_pass": 6,
+    "focus_n": 6,
+    "soo_status_match": true,
+    "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 163,
+    "families": [
+      "CHW_CONTROL_VALVE:64",
+      "HHW_CONTROL_VALVE:99"
+    ],
+    "contractor_gaps": [
+      "Actuator",
+      "Fail position",
+      "Control signal"
+    ],
+    "estimator_complete": false
+  },
+  "valve_estimator_columns_verify": {
+    "at": "2026-09-01T16:29:45.267Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-001-valve-estimator-columns.json",
+    "missing_match": true,
+    "column_honesty": "7/7",
+    "gt_locked": false
+  },
+  "bas_plan_paint_census": {
+    "at": "2026-09-01T18:37:52.456Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-001-bas-plan-paint-census.json",
+    "served": 3,
+    "match": 3,
+    "miss": 0,
+    "error": 0,
+    "gt_locked": false
+  },
+  "valve_plan_paint_census": {
+    "at": "2026-09-01T18:38:20.381Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-001-valve-plan-paint-census.json",
+    "match": 3,
+    "schedule_only": 160,
+    "items": 163,
+    "gt_locked": false
+  },
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:33:00.135Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-001-inventory-drawing-verify.json",
+    "sample_pass": 20,
+    "sample_n": 20,
+    "gt_locked": false
+  },
+  "bas_plan_paint_preferTitle_census": {
+    "at": "2026-09-01T18:55:06.222Z",
+    "tallies": {
+      "MATCH": 116,
+      "SCHEDULE_ONLY": 4,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "served_targets": 120,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
+    "kind": "valve_depth_plan_paint_full",
+    "at": "2026-09-01T20:52:43.871Z",
+    "ms": 15632,
+    "printed_items": 163,
+    "targets_total": 80,
+    "tallies": {
+      "MATCH": 2,
+      "SCHEDULE_ONLY": 78,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

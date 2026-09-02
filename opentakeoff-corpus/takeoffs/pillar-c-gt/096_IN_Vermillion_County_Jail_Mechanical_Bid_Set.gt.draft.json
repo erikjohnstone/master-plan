@@ -339,5 +339,98 @@
     "SOO HONEST_REFUSE",
     "Generic SCHEDULE OF DDC POINTS lists mostly lack served_equipment — estimator map open",
     "Pillar C corpus-deep — Vermillion 096 alone cannot complete C"
-  ]
+  ],
+  "estimator_product": {
+    "printed_bas_rows": 231,
+    "inventory_units": 92,
+    "estimate_only_points": 437,
+    "never_merged_into_printed": true,
+    "gap_count": 74,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "estimator_gap_drawing_verify": {
+    "at": "2026-09-01T16:22:33.920Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-096-estimator-gap-verify.json",
+    "focus_pass": 60,
+    "focus_n": 60,
+    "soo_status_match": true,
+    "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 24,
+    "families": [
+      "CONTROL_DAMPER:24"
+    ],
+    "contractor_gaps": [
+      "Served equipment",
+      "Size",
+      "GPM",
+      "Cv",
+      "Actuator",
+      "Fail position",
+      "Control signal"
+    ],
+    "estimator_complete": false
+  },
+  "valve_estimator_columns_verify": {
+    "at": "2026-09-01T16:31:29.152Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-096-valve-estimator-columns.json",
+    "missing_match": true,
+    "column_honesty": "7/7",
+    "gt_locked": false
+  },
+  "bas_plan_paint_census": {
+    "at": "2026-09-01T18:38:17.413Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-096-bas-plan-paint-census.json",
+    "served": 1,
+    "match": 1,
+    "miss": 0,
+    "error": 0,
+    "gt_locked": false
+  },
+  "valve_plan_paint_census": {
+    "at": "2026-09-01T18:39:16.015Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-096-valve-plan-paint-census.json",
+    "match": 12,
+    "schedule_only": 12,
+    "items": 24,
+    "gt_locked": false
+  },
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:33:15.753Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-096-inventory-drawing-verify.json",
+    "sample_pass": 20,
+    "sample_n": 20,
+    "gt_locked": false
+  },
+  "bas_plan_paint_preferTitle_census": {
+    "at": "2026-09-01T18:55:36.306Z",
+    "tallies": {
+      "MATCH": 59,
+      "SCHEDULE_ONLY": 16,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "served_targets": 75,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set",
+    "kind": "valve_depth_plan_paint_full",
+    "at": "2026-09-01T20:53:51.883Z",
+    "ms": 11075,
+    "printed_items": 24,
+    "targets_total": 24,
+    "tallies": {
+      "MATCH": 12,
+      "SCHEDULE_ONLY": 12,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
 }

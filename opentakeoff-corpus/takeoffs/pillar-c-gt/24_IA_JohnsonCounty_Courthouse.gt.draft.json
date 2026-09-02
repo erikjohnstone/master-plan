@@ -1,0 +1,40 @@
+{
+  "set_id": "24_IA_JohnsonCounty_Courthouse",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 3,
+    "estimate_only_points": 19,
+    "never_merged_into_printed": true,
+    "gap_count": 3,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:05:29.173Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-24-inventory-drawing-verify.json",
+    "sample_pass": 3,
+    "sample_n": 3,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "24_IA_JohnsonCounty_Courthouse",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:12:09.680Z",
+    "ms": 4382,
+    "printed_bas_rows": 0,
+    "inventory_units": 3,
+    "targets_total": 3,
+    "tallies": {
+      "MATCH": 1,
+      "SCHEDULE_ONLY": 2,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
+}

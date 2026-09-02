@@ -1,0 +1,40 @@
+{
+  "set_id": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 14,
+    "estimate_only_points": 89,
+    "never_merged_into_printed": true,
+    "gap_count": 14,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T16:50:23.016Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-05-inventory-drawing-verify.json",
+    "sample_pass": 14,
+    "sample_n": 14,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "05_MO_VA_StLouis_AHU_VAV_Replacement",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:56:34.717Z",
+    "ms": 12540,
+    "printed_bas_rows": 0,
+    "inventory_units": 14,
+    "targets_total": 14,
+    "tallies": {
+      "MATCH": 12,
+      "SCHEDULE_ONLY": 2,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
+}

@@ -530,13 +530,15 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "sweep_schedule_row",
-    description: "Mint the search seed FROM a schedule row's own drawn tag, instead of you marqueeing an instance — reads the row (via resolve_tag's same tables) and sweeps every PLAN-role sheet in the whole set, not just whichever happen to be open right now. Anchors on the plan sheet with the most drawn occurrences of the tag, fingerprints the marker geometry around it, and — where the tag is drawn more than once anywhere in the set — CORROBORATES that fingerprint against a second occurrence (possibly on a different, differently-scaled sheet) before trusting it; a fingerprint that never recurs is refused rather than swept. Sweeps every plan sheet with the size ratio read from each sheet's own committed scale (a marker seeded on a 1/8\" plan and swept across a 1-1/2\"-detail sheet is resized accordingly; an unset scale on either end is disclosed, never silently assumed). A match is counted only when the marker geometry AND the row's own tag agree (a marker matching the shape but labeled with a sibling row's tag is excluded and named; a shape match with no nearby tag is withheld as a question; a drawn tag occurrence with no matching geometry nearby is reported text_only). Refuses rather than guesses when the tag isn't in any schedule, is ambiguous across tables, or has no fingerprintable linework that corroborates. This tool only FINDS matches; use place_count or propose_shapes to stage the ones you want counted.",
+    description: "Mint the search seed FROM a schedule row's own drawn tag, instead of you marqueeing an instance — reads the row (via resolve_tag's same tables) and sweeps every PLAN-role sheet in the whole set, not just whichever happen to be open right now. Anchors on the plan sheet with the most drawn occurrences of the tag, fingerprints the marker geometry around it, and — where the tag is drawn more than once anywhere in the set — CORROBORATES that fingerprint against a second occurrence (possibly on a different, differently-scaled sheet) before trusting it; a fingerprint that never recurs is refused rather than swept. Sweeps every plan sheet with the size ratio read from each sheet's own committed scale (a marker seeded on a 1/8\" plan and swept across a 1-1/2\"-detail sheet is resized accordingly; an unset scale on either end is disclosed, never silently assumed). A match is counted only when the marker geometry AND the row's own tag agree (a marker matching the shape but labeled with a sibling row's tag is excluded and named; a shape match with no nearby tag is withheld as a question; a drawn tag occurrence with no matching geometry nearby is reported text_only). Refuses rather than guesses when the tag isn't in any schedule, is ambiguous across tables, or has no fingerprintable linework that corroborates. When the same building letter appears on multiple equipment schedules (furnace + CU + OAU), pass prefer_schedule_title from the HVAC item's table_title (or prefer_schedule_sheet) so the sweep uniquely resolves — same Session preferTitle path MCP already uses; never invent plan hits. This tool only FINDS matches; use place_count or propose_shapes to stage the ones you want counted.",
     input_schema: {
       type: "object",
       properties: {
         tag: { type: "string", description: "The schedule row's key exactly as drawn, e.g. 'PRV-1', 'CV-3', or 'VAV-12'." },
         rotations: { type: "boolean", description: "Also match 90/180/270-rotated markers. Default true." },
         mirror: { type: "boolean", description: "Also match mirrored markers. Default true." },
+        prefer_schedule_title: { type: "string", description: "When the same mark appears on multiple schedules, prefer the row whose table title matches (exact or …SCHEDULE stem). Pass HVAC compile table_title for inventory / served-equipment plan paint." },
+        prefer_schedule_sheet: { type: "string", description: "When the same mark appears on multiple schedules, prefer the row on this sheet key." },
       },
       required: ["tag"],
     },
@@ -1017,7 +1019,14 @@ export async function executeAgentTool(ctx, name, args) {
       case "sweep_schedule_row": {
         const tag = (args.tag || "").trim();
         if (!tag) return { error: "Pass a tag, e.g. sweep_schedule_row { tag: \"PRV-1\" }." };
-        return await ctx.sweepScheduleRow(tag, { rotations: args.rotations, mirror: args.mirror });
+        return await ctx.sweepScheduleRow(tag, {
+          rotations: args.rotations,
+          mirror: args.mirror,
+          // Cross-family building letters (Carson B1 on furnace+CU+OAU): pass
+          // HVAC table_title so Session preferTitle uniquely resolves — never invent.
+          preferTitle: args.prefer_schedule_title || null,
+          preferSheet: args.prefer_schedule_sheet || null,
+        });
       }
 
       // ── Phase 4 ───────────────────────────────────────────────────────────

@@ -1,0 +1,53 @@
+{
+  "set_id": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 11,
+    "estimate_only_points": 33,
+    "never_merged_into_printed": true,
+    "gap_count": 11,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:20:51.819Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-074-inventory-drawing-verify.json",
+    "sample_pass": 11,
+    "sample_n": 11,
+    "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 0,
+    "families": [],
+    "contractor_gaps": [],
+    "estimator_complete": false,
+    "zero_valve_floor": true
+  },
+  "valve_zero_floor_verify": {
+    "at": "2026-09-01T17:56:31.169974+00:00",
+    "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
+    "printed_items": 0,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "074_CA_West_Valley_College_STEM_Classroom_HVAC",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:57:23.779Z",
+    "ms": 9001,
+    "printed_bas_rows": 0,
+    "inventory_units": 11,
+    "targets_total": 11,
+    "tallies": {
+      "MATCH": 10,
+      "SCHEDULE_ONLY": 1,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
+}

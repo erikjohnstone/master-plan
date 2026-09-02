@@ -1,0 +1,40 @@
+{
+  "set_id": "04_NV_VA_LasVegas_CentralUtilityPlant",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 16,
+    "estimate_only_points": 60,
+    "never_merged_into_printed": true,
+    "gap_count": 16,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T16:50:31.767Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-04-inventory-drawing-verify.json",
+    "sample_pass": 16,
+    "sample_n": 16,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "04_NV_VA_LasVegas_CentralUtilityPlant",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:56:22.177Z",
+    "ms": 13410,
+    "printed_bas_rows": 0,
+    "inventory_units": 16,
+    "targets_total": 16,
+    "tallies": {
+      "MATCH": 15,
+      "SCHEDULE_ONLY": 1,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "set_id": "034_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 2,
+    "estimate_only_points": 6,
+    "never_merged_into_printed": true,
+    "gap_count": 2,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:14:54.904Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-034-inventory-drawing-verify.json",
+    "sample_pass": 2,
+    "sample_n": 2,
+    "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 0,
+    "families": [],
+    "contractor_gaps": [],
+    "estimator_complete": false,
+    "zero_valve_floor": true
+  },
+  "valve_zero_floor_verify": {
+    "at": "2026-09-01T17:56:31.165724+00:00",
+    "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
+    "printed_items": 0,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "034_NC_VA_Project_637_22_700_EHRM_Infrastructure",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:11:13.516Z",
+    "ms": 7688,
+    "printed_bas_rows": 0,
+    "inventory_units": 2,
+    "targets_total": 2,
+    "tallies": {
+      "MATCH": 2,
+      "SCHEDULE_ONLY": 0,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
+}

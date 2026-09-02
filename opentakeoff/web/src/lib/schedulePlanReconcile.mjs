@@ -41,12 +41,54 @@ export function classifyReconcileStatus({
     return "SCHEDULE_ONLY";
   }
   if (scheduledQty > 0 && installedQty === 0) {
-    if (/not drawn on any plan/i.test(r)) return "SCHEDULE_ONLY";
+    if (/not drawn on any plan|cannot be geometrically anchored/i.test(r)) return "SCHEDULE_ONLY";
     if (itemStatus === "refused") return "SCHEDULE_ONLY";
     return "SCHEDULE_ONLY";
   }
   if (installedQty > 0 && scheduledQty === 0) return "PLAN_ONLY";
   return "SCHEDULE_ONLY";
+}
+
+/**
+ * Classify a BAS served-equipment / inventory sweep outcome for plan paint.
+ * Unanchorable tags (I/O device keys not on a schedule row, or not drawn on
+ * plan) are honest SCHEDULE_ONLY — never ERROR and never invented MATCH.
+ *
+ * @param {{ result?: object|null, error?: Error|string|null }} p
+ * @returns {{ status: ReconcileStatus|"ERROR", found: number, cites: number, reason?: string }}
+ */
+export function classifyBasServedSweepOutcome({ result = null, error = null } = {}) {
+  if (error) {
+    const msg = String(error?.message || error);
+    const status = classifyReconcileStatus({
+      scheduledQty: 1,
+      installedQty: 0,
+      itemStatus: "refused",
+      reason: msg,
+    });
+    // classifyReconcileStatus maps unanchored/not-drawn to SCHEDULE_ONLY.
+    if (status === "SCHEDULE_ONLY" || /cannot be geometrically anchored|not drawn on any plan/i.test(msg)) {
+      return { status: "SCHEDULE_ONLY", found: 0, cites: 0, reason: msg.slice(0, 240) };
+    }
+    if (status === "AMBIGUOUS" || /ambiguous:/i.test(msg)) {
+      return { status: "AMBIGUOUS", found: 0, cites: 0, reason: msg.slice(0, 240) };
+    }
+    if (status === "REFUSED_NO_SCALE" || status === "REFUSED_NO_TEXT") {
+      return { status, found: 0, cites: 0, reason: msg.slice(0, 240) };
+    }
+    return { status: "ERROR", found: 0, cites: 0, reason: msg.slice(0, 240) };
+  }
+  const found = Number(result?.found ?? 0) || 0;
+  const cites = (result?.sheets || []).flatMap((ps) => ps.matches || []).length;
+  if (found >= 1 && cites >= 1) {
+    return { status: "MATCH", found, cites };
+  }
+  return {
+    status: "SCHEDULE_ONLY",
+    found,
+    cites,
+    reason: "no_plan_hits",
+  };
 }
 
 function scheduledQtyFromRow(row) {
@@ -106,6 +148,33 @@ function rowIdentityTag(row, identityHeaderRe = null) {
  * @param {Array<object>} [failures] TakeoffFailure[]
  * @returns {Array<object>}
  */
+
+/**
+ * Sweep a BAS served / HVAC inventory mark on the shared Session path.
+ * Pass preferTitle / preferSheet when the caller already knows the owning
+ * schedule (cross-family building letters like Carson B1 on furnace + CU +
+ * OAU) so the sweep does not refuse AMBIGUOUS when preference uniquely
+ * resolves. Never invents MATCH — outcome goes through classifyBasServedSweepOutcome.
+ *
+ * @param {object} session Session with sweepScheduleRow
+ * @param {string} tag
+ * @param {{ commit?: boolean, evaluationFast?: boolean, preferTitle?: string|null, preferSheet?: string|null }} [opts]
+ */
+export async function sweepBasServedMark(session, tag, opts = {}) {
+  try {
+    const result = await session.sweepScheduleRow(tag, {
+      commit: !!opts.commit,
+      evaluationFast: opts.evaluationFast !== false,
+      preferTitle: opts.preferTitle || null,
+      preferSheet: opts.preferSheet || null,
+    });
+    return classifyBasServedSweepOutcome({ result });
+  } catch (error) {
+    return classifyBasServedSweepOutcome({ error });
+  }
+}
+
+
 export function reconcileRowsFromTakeoffItems(items, failures = []) {
   const failByTag = new Map();
   for (const f of failures || []) {

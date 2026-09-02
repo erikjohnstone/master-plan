@@ -366,9 +366,18 @@ never invented.
 
 #### Research findings (mandatory gate — 2026-09-01; do not skip)
 
+**Engine architecture (2026-09-01 — supersedes regex-first fixes):** Commercial takeoff
+(Kamai, Trimble MEP, iBeam) parses **native PDF vector geometry** (text bboxes, line
+segments, scale) before any title/match rules. Regex/classification is Layer 5 only.
+Pillar C’s 70 compile-zero valve sets fail at **Layer 1/2 table extraction** or untitled
+grid classification — not because valves are absent from PDFs (0/81 PDFs lack valve text;
+63/81 compile-zero still have PDF signal). Full OSS stack + integration order:
+`takeoffs/VECTOR_TAKEOFF_ENGINE_RESEARCH.md`.
+
 Sources: Belimo / industry Cv practice; US MEP control-device schedule
 conventions; mechanical estimating takeoff scopes (isolation / balancing /
-control valves + dampers); ASHRAE-adjacent actuator schedule columns.
+control valves + dampers); ASHRAE-adjacent actuator schedule columns; Kamai vector
+geometry docs; OpenDataLoader-PDF; Camelot/gmft/pdfplumber; MEPdetect vector path.
 
 **What a real valve takeoff is (not “dump CHW+HHW control valve rows”):**
 
@@ -497,9 +506,10 @@ necessary but **not sufficient**. Pillar C must:
 - Surface **hard vs soft** when drawings distinguish them; never invent soft
   BACnet counts from schedules without evidence.
 - Prefer **equipment↔point↔location** joins when drawable; disclose schematic-only.
-- Document **honest ceiling**: a complete commercial BAS takeoff may require
-  SOO+schedule-derived I/O that PDFs don’t fully tabulate — do not score-chase
-  by hallucinating points; prefer disclosed gaps + spare-policy notes.
+- Document **where we refuse (not done)**: a complete commercial BAS takeoff may
+  require SOO+schedule-derived I/O that PDFs don’t fully tabulate — do not
+  score-chase by hallucinating points; prefer disclosed gaps + spare-policy
+  notes. Refuse/stop is unfinished work, never a locked success metric.
 
 **Ship (shared path):**
 1. Deepen `bas_points` extraction: POINTS LIST, I/O LIST, DDC CONTROLLER
@@ -540,22 +550,36 @@ necessary but **not sufficient**. Pillar C must:
 
 *Estimator product bar (Pillar C incomplete until ALL corpus BAS + valve
 sets pass — do not stop at a sample):*
-8. [ ] **Equipment inventory** from schedules (shared HVAC compile) on **every**
+8. [~] **Equipment inventory** from schedules (shared HVAC compile) on **every**
    corpus BAS-bearing set — every served unit/device that owns points is listed
-   with qty + cite.
-9. [ ] **SOO / controls model** where vector-extractable: required sensors,
+   with qty + cite. **Plumbing:** `estimator_product.equipment_inventory` from
+   `compileHvacTakeoff` on every BAS compile (2026-09-01). **Census:** 15-set
+   expanded batch shows inventory+estimate on 11/15 bas:0 sets (SDSU 128 units);
+   still open: every bearing set verified + GT-locked.
+9. [~] **SOO / controls model** where vector-extractable: required sensors,
    commands, proofs, interlocks, alarms/trends per equipment type; honest
    refuse when narrative-only / raster — never invent points from SOO prose.
-10. [ ] **Typed points takeoff** = printed POINTS/I/O lists **plus** labeled
+   **Plumbing:** `detectSooPresence` discloses present_not_row_extractable;
+   SOO-derived points remain `refuse_not_done`. Tabular SOO scoring still open.
+10. [~] **Typed points takeoff** = printed POINTS/I/O lists **plus** labeled
     schedule/SOO-derived *estimate* path (qty × points/unit) with sources;
     gap report vs printed lists; spare % disclosed as policy note only.
-11. [ ] **Ground-truth harness for every corpus BAS set:** coordinator
+    **Shared-path plumbing landed 2026-09-01** (`estimator_product` on
+    `compileBasTakeoff` + Takeoff `BAS_ESTIMATOR` rows). Still open: corpus-wide
+    run + coordinator lock — estimate path ≠ Pillar C done.
+11. [~] **Ground-truth harness for every corpus BAS set:** coordinator
     self-checks equipment inventory + typed point rollups + plan-grounding
     against the drawings; keyed harness locks that answer; pipeline scorer must
     match — not “122 rows matched the POINTS LIST scrape,” not “≥3 demos.”
-12. [ ] **Plan paint for every corpus BAS + valve/damper/actuator set:**
+    **Partial (2026-09-01):** keyed BAS floor (5/5) has drawing-backed
+    estimator gap + SOO corroboration (`pillar-c-*-estimator-gap-verify`);
+    drafts still `gt_locked: false` — not corpus-complete.
+12. [~] **Plan paint for every corpus BAS + valve/damper/actuator set:**
     served_equipment / valve / damper marks paint via shared sweep (MATCH or
     honest SCHEDULE_ONLY) with visible cites — census in PROGRESS until 100%.
+    **Partial (2026-09-01):** keyed floor census recorded — BAS served
+    MATCH/ERROR tallies + valve reconcile MATCH/SO rollups; all still
+    `refuse_not_done` / `gt_locked: false` (`pillar-c-plan-paint-census-keyed-floor.json`).
 13. [ ] **Stop condition:** Pillar C done only when every BAS set and every
     valve set in the corpus has (a) coordinator-verified right answer and
     (b) pipeline corroboration on the shared path. Expand BAS/valve keys until
@@ -604,7 +628,7 @@ legend honesty gates exist; this WP makes grounding the primary product bar.
    paints within measured tolerance.
 2. [ ] ≥3 bulk sets with locked count/reconcile grounding proofs.
 3. [ ] `test:workflows` + UI parity test on at least one count ask.
-4. [ ] Documented honest ceilings (exploded text, raster) — no silent misses.
+4. [ ] Documented refuse/stops (exploded text, raster) — unfinished work, no silent misses.
 
 ---
 

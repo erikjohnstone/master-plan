@@ -64,6 +64,15 @@ jobs:
           cache-dependency-path: |
             web/package-lock.json
             mcp/package-lock.json
+      - uses: actions/cache@v4
+        if: matrix.os == 'ubuntu-latest'
+        with:
+          path: |
+            ~/.cache/opentakeoff-sheet-graph
+            ~/.cache/opentakeoff-eval
+          key: opentakeoff-test-cache-${{ hashFiles('mcp/src/**', 'mcp/scripts/**', 'web/src/lib/**') }}
+          restore-keys: |
+            opentakeoff-test-cache-
       - run: npm ci
         working-directory: web
       - run: npm ci
@@ -78,6 +87,39 @@ jobs:
         working-directory: mcp
       - run: npm run smoke:dist
         working-directory: mcp
+
+  # WP1 + reconcile workflow regressions — sharded for wall-clock; shares warm graph/eval cache.
+  mcp-workflows:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: mcp/package-lock.json
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/opentakeoff-sheet-graph
+            ~/.cache/opentakeoff-eval
+          key: opentakeoff-test-cache-${{ hashFiles('mcp/src/**', 'mcp/scripts/**', 'web/src/lib/**') }}
+          restore-keys: |
+            opentakeoff-test-cache-
+      - run: npm ci
+        working-directory: web
+      - run: npm ci
+        working-directory: mcp
+      - name: Workflow regressions (shard ${{ matrix.shard }}/4)
+        working-directory: mcp
+        env:
+          TEST_SHARD: ${{ matrix.shard }}/4
+        run: npm run test:workflows
 
   # Publishing the MCP server is fully unattended ONCE an mcp-v* tag exists —
   # but nothing ever checked that a change to mcp/ came with a version bump, so

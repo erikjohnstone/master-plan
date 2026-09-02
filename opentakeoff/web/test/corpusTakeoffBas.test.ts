@@ -4,11 +4,15 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  basEstimatorStatus,
   compileBasTakeoff,
+  detectSooPresence,
   isBasPointsListTitle,
+  isSooNarrativeTitle,
   ocrFixEquipMark,
   equipMarkFromBasDescription,
   servedEquipmentFromBasRow,
+  probeBasProofSpareColumnHeaders,
 } from "../src/lib/corpusTakeoff.mjs";
 
 describe("isBasPointsListTitle", () => {
@@ -26,7 +30,185 @@ describe("isBasPointsListTitle", () => {
     assert.equal(isBasPointsListTitle("AHU-1 POINT LIST TABLE"), false);
     assert.equal(isBasPointsListTitle("FAN SCHEDULE"), false);
     assert.equal(isBasPointsListTitle("RADIO LIST"), false);
+    // Northport-shaped system I/O matrix (SYSTEM/INDICATION/ALARM/CONTROL) —
+    // not a typed POINTS/DDC list; accepting it would invent fake BAS rows.
+    assert.equal(isBasPointsListTitle("INPUT/OUTPUT SUMMARY"), false);
+    assert.equal(isBasPointsListTitle("INPUT OUTPUT SUMMARY"), false);
     assert.equal(isBasPointsListTitle(""), false);
+  });
+});
+
+describe("basEstimatorStatus", () => {
+  it("always marks estimator incomplete; refuse_not_done means unfinished work", () => {
+    const status = basEstimatorStatus({
+      lists: [{
+        items: [
+          { tag: "AI01", served_equipment: "AHU-1" },
+          { tag: "AO01" },
+        ],
+      }],
+      totals: { rows: 2 },
+      sheets: [{ key: "s#1" }],
+    });
+    assert.equal(status.estimator_complete, false);
+    assert.equal(status.gt_locked, false);
+    assert.match(status.meaning, /refuse_not_done/);
+    assert.equal(status.printed_lists, "partial_printed_only");
+    assert.equal(status.served_equipment.with_join, 1);
+    assert.equal(status.served_equipment.without_join, 1);
+    const byGate = Object.fromEntries(status.gates.map((g) => [g.gate, g.status]));
+    assert.equal(byGate.printed_points_lists, "open");
+    assert.equal(byGate.plan_paint, "refuse_not_done");
+    assert.equal(byGate.soo_derived_points, "refuse_not_done");
+    assert.equal(byGate.spare_io_capacity, "refuse_not_done");
+    assert.equal(byGate.gt_lock, "refuse_not_done");
+  });
+
+  it("compileBasTakeoff attaches estimator_status (printed lists ≠ Pillar C done)", () => {
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#1", number: 1 }],
+      tables: [{
+        sheet: "set.pdf#1",
+        title: { text: "POINTS LIST AHU-1", bbox: [0, 0, 10, 10] },
+        rows: [
+          { key: "AI01", cells: { DESCRIPTION: { text: "SA TEMP" }, UNIT: { text: "AHU-1" } } },
+        ],
+      }],
+    });
+    assert.equal(bas.estimator_status.estimator_complete, false);
+    assert.equal(bas.estimator_status.gt_locked, false);
+    assert.ok(bas.estimator_status.gates.some((g) => g.status === "refuse_not_done"));
+  });
+
+  it("builds labeled schedule estimate + SOO/gap without merging into printed totals", () => {
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#1", number: 1 }],
+      tables: [
+        {
+          sheet: "set.pdf#1",
+          title: { text: "SEQUENCE OF OPERATIONS AHU" },
+          rows: [{ key: "NOTE", cells: {} }],
+        },
+        {
+          sheet: "set.pdf#1",
+          title: { text: "AIR HANDLING UNIT SCHEDULE" },
+          rows: [
+            { key: "AHU-1", cells: { MARK: { text: "AHU-1" } } },
+            { key: "AHU-2", cells: { MARK: { text: "AHU-2" } } },
+          ],
+        },
+        {
+          sheet: "set.pdf#1",
+          title: { text: "POINTS LIST AHU-1" },
+          rows: [
+            { key: "AI01", cells: { DESCRIPTION: { text: "SA TEMP" }, UNIT: { text: "AHU-1" } } },
+          ],
+        },
+      ],
+    });
+    assert.equal(bas.totals.rows, 1, "printed totals stay list-only");
+    assert.ok(bas.estimator_product);
+    assert.equal(bas.estimator_product.schedule_derived_estimate.label, "estimate_only");
+    assert.equal(bas.estimator_product.schedule_derived_estimate.never_merge_into_printed_truth, true);
+    assert.ok(bas.estimator_product.schedule_derived_estimate.totals.points > bas.totals.rows);
+    assert.equal(bas.estimator_product.soo.present, true);
+    assert.match(bas.estimator_product.soo.status, /not_row_extractable|present/);
+    assert.ok(bas.estimator_product.gap_vs_printed.inventory_without_printed_points_count >= 1);
+    assert.equal(bas.estimator_status.estimator_complete, false);
+    assert.ok(bas.estimator_status.gates.some((g) => g.gate === "soo_derived_points" && g.status === "refuse_not_done"));
+    assert.ok(bas.estimator_status.gates.some((g) => g.gate === "schedule_derived_estimate_not_merged"));
+    // Plan-paint targets carry HVAC table_title as prefer_schedule_title (never invented).
+    assert.equal(bas.estimator_product.plan_paint.status, "refuse_not_done");
+    assert.ok(Array.isArray(bas.estimator_product.plan_paint.targets));
+    assert.ok(bas.estimator_product.plan_paint.targets.some(
+      (t) => t.tag === "AHU-1" && /AIR HANDLING UNIT SCHEDULE/i.test(String(t.prefer_schedule_title || "")),
+    ));
+  });
+
+  it("plan_paint targets include unique served_equipment with HVAC preferTitle", () => {
+    const bas = compileBasTakeoff(null, {
+      sheets: [{ key: "set.pdf#1", number: 1 }],
+      tables: [
+        {
+          sheet: "set.pdf#1",
+          title: { text: "DOMESTIC HOT WATER PUMP SCHEDULE", bbox: [0, 0, 10, 10] },
+          rows: [{ key: "HWP-1", cells: { MARK: { text: "HWP-1" } } }],
+        },
+        {
+          sheet: "set.pdf#1",
+          title: { text: "I/O LIST WHITE STURGEON PLC", bbox: [0, 20, 10, 30] },
+          rows: [{ key: "HWP-1", cells: { TAG: { text: "HWP-1" }, DESCRIPTION: { text: "PUMP RUN" } } }],
+        },
+      ],
+    });
+    assert.ok(bas.estimator_product.plan_paint.targets.some(
+      (t) => t.tag === "HWP-1" && /PUMP SCHEDULE/i.test(String(t.prefer_schedule_title || "")),
+    ));
+  });
+
+  it("plan_paint pairs graph-resolved title with owning sheet (not wrong inventory sheet)", () => {
+    const graph = {
+      sheets: [{ key: "set.pdf#13", number: 13 }, { key: "set.pdf#37", number: 37 }],
+      tables: [
+        {
+          sheet: "set.pdf#13",
+          title: { text: "", bbox: [0, 0, 10, 10] },
+          rows: [{ key: "HWP-1", cells: { TAG: { text: "HWP-1" }, EQUIPMENT: { text: "PUMP" } } }],
+        },
+        {
+          sheet: "set.pdf#37",
+          title: { text: "EQUIPMENT SCHEDULE", bbox: [0, 0, 10, 10] },
+          rows: [{ key: "HWP-1", cells: { ID: { text: "HWP-1" }, DESCRIPTION: { text: "HOT WATER PUMP" } } }],
+        },
+        {
+          sheet: "set.pdf#37",
+          title: { text: "I/O LIST WHITE STURGEON PLC", bbox: [0, 20, 10, 30] },
+          rows: [{ key: "HWP-1", cells: { COL1: { text: "HWP-1" } } }],
+        },
+      ],
+    };
+    const bas = compileBasTakeoff(null, graph);
+    const target = bas.estimator_product.plan_paint.targets.find((t) => t.tag === "HWP-1");
+    assert.ok(target, "served_equipment HWP-1 target emitted");
+    assert.match(String(target.prefer_schedule_title || ""), /EQUIPMENT SCHEDULE/i);
+    assert.equal(target.prefer_schedule_sheet, "set.pdf#37");
+  });
+});
+
+describe("isSooNarrativeTitle + detectSooPresence", () => {
+  it("detects SOO titles and never treats them as POINTS lists", () => {
+    assert.equal(isSooNarrativeTitle("SEQUENCE OF OPERATIONS"), true);
+    assert.equal(isSooNarrativeTitle("CONTROL SEQUENCE AHU-1"), true);
+    assert.equal(isBasPointsListTitle("SEQUENCE OF OPERATIONS"), false);
+    assert.equal(isBasPointsListTitle("AHU-1 POINT LIST TABLE"), false);
+    const soo = detectSooPresence({
+      tables: [{ title: { text: "SEQUENCE OF OPERATIONS — CHILLERS" }, sheet: "m#9" }],
+    });
+    assert.equal(soo.present, true);
+    assert.equal(soo.tabular_extractable, false);
+  });
+});
+
+describe("probeBasProofSpareColumnHeaders", () => {
+  it("detects explicit PROOF/SPARE columns on BAS tables; ignores CAPACITY-only equipment headers", () => {
+    const probe = probeBasProofSpareColumnHeaders({
+      tables: [
+        {
+          sheet: "set.pdf#1",
+          title: { text: "AHU-1 POINTS LIST" },
+          headers: ["MARK", "PROOF", "SPARE I/O", "ALARM"],
+        },
+        {
+          sheet: "set.pdf#2",
+          title: { text: "AIR HANDLING UNIT SCHEDULE" },
+          headers: ["MARK", "CAPACITY (TONS)"],
+        },
+      ],
+    });
+    assert.equal(probe.status, "printed_columns_present");
+    assert.deepEqual(probe.proof_interlock_column_headers, ["PROOF"]);
+    assert.deepEqual(probe.spare_io_column_headers, ["SPARE I/O"]);
+    assert.equal(probe.hits.length, 1);
   });
 });
 

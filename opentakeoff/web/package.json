@@ -11,6 +11,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test test/*.test.ts",
+    "test:shared-path": "node --import tsx --test test/corpusTakeoffBas.test.ts test/schedulePlanReconcile.test.ts test/agentTakeoff.test.ts test/agentTools.test.ts test/corpusTakeoffVol2Families.test.ts",
     "bench": "node --import tsx bench/run.mts",
     "bench:callouts": "node --import tsx bench/callouts.mts",
     "bench:batch": "node --import tsx bench/batch.mts",

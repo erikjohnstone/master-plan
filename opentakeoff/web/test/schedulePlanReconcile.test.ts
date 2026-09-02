@@ -3,6 +3,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   classifyReconcileStatus,
+  classifyBasServedSweepOutcome,
+  sweepBasServedMark,
   familyNeedleFromSpecs,
   reconcileRowsFromTakeoffItems,
   summarizeReconcile,
@@ -102,6 +104,28 @@ test("classifyReconcileStatus: MATCH, SCHEDULE_ONLY, REFUSED, AMBIGUOUS", () => 
     }),
     "PLAN_ONLY",
   );
+});
+
+test("classifyBasServedSweepOutcome: unanchored I/O tags → SCHEDULE_ONLY (not ERROR)", () => {
+  const so = classifyBasServedSweepOutcome({
+    error: new Error('Schedule row "AFMS-1" (DDC CONTROLLER INPUT/OUTPUT SUMMARY) cannot be geometrically anchored — its tag is not drawn on any plan sheet'),
+  });
+  assert.equal(so.status, "SCHEDULE_ONLY");
+  assert.equal(so.found, 0);
+
+  const match = classifyBasServedSweepOutcome({
+    result: { found: 1, sheets: [{ matches: [{ sheet: "m#2" }] }] },
+  });
+  assert.equal(match.status, "MATCH");
+  assert.equal(match.cites, 1);
+
+  const miss = classifyBasServedSweepOutcome({ result: { found: 0, sheets: [] } });
+  assert.equal(miss.status, "SCHEDULE_ONLY");
+  const amb = classifyBasServedSweepOutcome({
+    error: new Error('Ambiguous: 2 schedule rows carry the key "AHU-A" — the same mark defined twice cannot seed one sweep.'),
+  });
+  assert.equal(amb.status, "AMBIGUOUS");
+
 });
 
 test("reconcileRowsFromTakeoffItems maps takeoff items to contractor columns", () => {
@@ -324,6 +348,35 @@ test("schedule_plan_reconcile intent is phrase-robust (≥5 phrasings)", () => {
   for (const p of phrases) {
     assert.equal(classifyTakeoffIntent(p), "schedule_plan_reconcile", p);
   }
+});
+
+
+test("sweepBasServedMark forwards preferTitle and classifies MATCH", async () => {
+  const calls = [];
+  const session = {
+    async sweepScheduleRow(tag, opts) {
+      calls.push({ tag, opts });
+      return { found: 2, sheets: [{ matches: [{}, {}] }] };
+    },
+  };
+  const out = await sweepBasServedMark(session, "B1", {
+    preferTitle: "2-STAGE, GAS FIRED FURNACE SCHEDULE",
+    evaluationFast: true,
+  });
+  assert.equal(out.status, "MATCH");
+  assert.equal(out.found, 2);
+  assert.equal(calls[0].tag, "B1");
+  assert.equal(calls[0].opts.preferTitle, "2-STAGE, GAS FIRED FURNACE SCHEDULE");
+});
+
+test("sweepBasServedMark maps ambiguous throw to AMBIGUOUS", async () => {
+  const session = {
+    async sweepScheduleRow() {
+      throw new Error('Ambiguous: 3 schedule rows carry the key "B1" — the same mark defined twice cannot seed one sweep.');
+    },
+  };
+  const out = await sweepBasServedMark(session, "B1");
+  assert.equal(out.status, "AMBIGUOUS");
 });
 
 test("schedule_plan_reconcile workflow advances survey → reconcile → paint", () => {

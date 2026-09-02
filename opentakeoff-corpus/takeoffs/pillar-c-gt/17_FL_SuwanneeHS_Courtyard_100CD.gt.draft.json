@@ -1,0 +1,40 @@
+{
+  "set_id": "17_FL_SuwanneeHS_Courtyard_100CD",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 1,
+    "estimate_only_points": 15,
+    "never_merged_into_printed": true,
+    "gap_count": 1,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:04:46.214Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-17-inventory-drawing-verify.json",
+    "sample_pass": 1,
+    "sample_n": 1,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "17_FL_SuwanneeHS_Courtyard_100CD",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:12:05.297Z",
+    "ms": 2720,
+    "printed_bas_rows": 0,
+    "inventory_units": 1,
+    "targets_total": 1,
+    "tallies": {
+      "MATCH": 1,
+      "SCHEDULE_ONLY": 0,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
+}

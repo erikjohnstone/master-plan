@@ -31,6 +31,11 @@ non-obvious.
 
 When working autonomously toward the corpus goal:
 
+**No subagents.** The coordinator alone implements, runs shell commands, profiles,
+and verifies. Do not dispatch `Task` subagents (`explore`, `debug`, `computerUse`,
+etc.), cloud workers, or any delegated agent for corpus-goal work unless the user
+explicitly re-enables delegation.
+
 1. Keep implementation, testing, and integration on the coordinator VM as the
    critical path. Do not dispatch cloud workers unless the user explicitly
    re-enables them; repeated cloud-state failures made them negative expected
@@ -54,8 +59,10 @@ When working autonomously toward the corpus goal:
 7. Never improve a score by changing a key/scorer, hardcoding a corpus
    identifier, weakening a threshold, or collapsing genuinely distinct
    devices. Prefer an honest documented ceiling to an unsafe heuristic.
-8. Do not prioritize OCR, raster vision, or learned symbol detection until the
-   user explicitly reopens that scope.
+8. Use OCR, raster vision, learned symbol detection, and local VLM/AI on
+   the shared vector pipeline (`Session.graphForPipeline` / `vectorTakeoffPipeline.ts`)
+   when vector extraction alone cannot reach the answer — disclosed, cite-backed,
+   corroborated against schedule/plan evidence when possible. Vector-first always.
 9. Keep `opentakeoff-corpus/PROGRESS.md` current with verified baselines,
    active work, accepted changes, rejected approaches, and the next queue.
 10. Continue until `GOAL.md` is satisfied or the remaining ceiling has been

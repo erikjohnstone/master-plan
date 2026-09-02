@@ -382,3 +382,24 @@ test("pickAgentEvidence: null-safe, array-safe, whitelist-only", () => {
   assert.equal(pickAgentEvidence({ junk: 1 }), null);
   assert.deepEqual(pickAgentEvidence({ matched_text: "RM 204", junk: 1 }), { matched_text: "RM 204" });
 });
+
+test("sweep_schedule_row forwards prefer_schedule_title to Session preferTitle", async () => {
+  const calls: unknown[] = [];
+  const { ctx } = makeCtx({
+    sweepScheduleRow: async (tag: string, opts: unknown) => {
+      calls.push({ tag, opts });
+      return { found: 1, sheets: [] };
+    },
+  });
+  const out = await executeAgentTool(ctx as never, "sweep_schedule_row", {
+    tag: "B1",
+    prefer_schedule_title: "2-STAGE, GAS FIRED FURNACE SCHEDULE",
+    prefer_schedule_sheet: "M-601",
+  });
+  assert.ok(!(out as { error?: string }).error);
+  assert.equal((calls[0] as { tag: string }).tag, "B1");
+  const opts = (calls[0] as { opts: Record<string, unknown> }).opts;
+  assert.equal(opts.preferTitle, "2-STAGE, GAS FIRED FURNACE SCHEDULE");
+  assert.equal(opts.preferSheet, "M-601");
+});
+

@@ -42,37 +42,37 @@
     },
     {
       "tag": "MPAC-1",
-      "error": "No schedule row \"MPAC-1\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"MPAC-1\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "MPAC-2",
-      "error": "No schedule row \"MPAC-2\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"MPAC-2\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "MPAC-3",
-      "error": "No schedule row \"MPAC-3\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"MPAC-3\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "MPAC-4",
-      "error": "No schedule row \"MPAC-4\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"MPAC-4\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "HPAC-1",
-      "error": "No schedule row \"HPAC-1\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"HPAC-1\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "HPAC-2",
-      "error": "No schedule row \"HPAC-2\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"HPAC-2\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
       "tag": "HPAC-3",
-      "error": "No schedule row \"HPAC-3\" in the set \u2014 tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
+      "error": "No schedule row \"HPAC-3\" in the set — tables found: equipment on 015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9 (6 ",
       "ok": false
     },
     {
@@ -116,9 +116,9 @@
   ],
   "open_before_lock": [
     "SOO HONEST_REFUSE",
-    "MPAC/HPAC served tags have no equipment schedule rows \u2014 honest miss (not invent join)",
-    "Estimator family\u00d7qty / full drawing hand-count still open",
-    "Pillar C corpus-deep \u2014 Pier 015 alone cannot complete C"
+    "MPAC/HPAC served tags have no equipment schedule rows — honest miss (not invent join)",
+    "Estimator family×qty / full drawing hand-count still open",
+    "Pillar C corpus-deep — Pier 015 alone cannot complete C"
   ],
   "drawing_verify": {
     "at": "2026-09-01T15:29:43.994Z",
@@ -159,7 +159,101 @@
       "HPAC-2",
       "HPAC-3"
     ],
-    "lock_recommendation": "KEEP gt_locked=false \u2014 drawing sample green for printed BAS (25/25) + damper/iso honesty, but SOO refuse, MPAC/HPAC schedule-row miss, estimator-complete + corpus-deep C remain",
+    "lock_recommendation": "KEEP gt_locked=false — drawing sample green for printed BAS (25/25) + damper/iso honesty, but SOO refuse, MPAC/HPAC schedule-row miss, estimator-complete + corpus-deep C remain",
     "artifact": "/opt/cursor/artifacts/pillar-c-pier-015-drawing-verify.json"
+  },
+  "estimator_product": {
+    "printed_bas_rows": 39,
+    "inventory_units": 17,
+    "estimate_only_points": 71,
+    "never_merged_into_printed": true,
+    "gap_count": 14,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "estimator_gap_drawing_verify": {
+    "at": "2026-09-01T16:21:04.415Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-015-estimator-gap-verify.json",
+    "focus_pass": 14,
+    "focus_n": 14,
+    "soo_status_match": true,
+    "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 36,
+    "families": [
+      "ISOLATION_VALVE:15",
+      "CONTROL_DAMPER:21"
+    ],
+    "contractor_gaps": [
+      "Served equipment",
+      "Size",
+      "GPM",
+      "Cv",
+      "Actuator",
+      "Fail position",
+      "Control signal"
+    ],
+    "estimator_complete": false
+  },
+  "valve_estimator_columns_verify": {
+    "at": "2026-09-01T16:29:48.931Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-015-valve-estimator-columns.json",
+    "missing_match": true,
+    "column_honesty": "7/7",
+    "gt_locked": false
+  },
+  "bas_plan_paint_census": {
+    "at": "2026-09-01T18:37:56.556Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-015-bas-plan-paint-census.json",
+    "served": 12,
+    "match": 5,
+    "miss": 0,
+    "error": 7,
+    "gt_locked": false
+  },
+  "valve_plan_paint_census": {
+    "at": "2026-09-01T18:38:25.025Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-015-valve-plan-paint-census.json",
+    "match": 34,
+    "schedule_only": 2,
+    "items": 36,
+    "gt_locked": false
+  },
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:33:03.525Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-015-inventory-drawing-verify.json",
+    "sample_pass": 20,
+    "sample_n": 20,
+    "gt_locked": false
+  },
+  "bas_plan_paint_preferTitle_census": {
+    "at": "2026-09-01T18:55:10.942Z",
+    "tallies": {
+      "MATCH": 19,
+      "SCHEDULE_ONLY": 7,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "served_targets": 26,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "015_VA_P_095_Replace_Submarine_Pier_3_Utility",
+    "kind": "valve_depth_plan_paint_full",
+    "at": "2026-09-01T20:52:49.590Z",
+    "ms": 5719,
+    "printed_items": 36,
+    "targets_total": 36,
+    "tallies": {
+      "MATCH": 34,
+      "SCHEDULE_ONLY": 2,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
   }
 }

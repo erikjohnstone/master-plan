@@ -13,12 +13,75 @@
     },
     "points_sample_pass": "25/25",
     "bs1pnl_note": "Printed as BS-1 PNL",
-    "lock_recommendation": "KEEP gt_locked=false \u2014 printed BAS sample green (incl. BS-1PNL space-split), but most served tags lack schedule rows, SOO/estimator-complete + corpus-deep C remain",
+    "lock_recommendation": "KEEP gt_locked=false — printed BAS sample green (incl. BS-1PNL space-split), but most served tags lack schedule rows, SOO/estimator-complete + corpus-deep C remain",
     "artifact": "/opt/cursor/artifacts/pillar-c-27-drawing-verify.json"
   },
   "open_before_lock": [
     "Most served tags ERROR on sweepScheduleRow (no equipment schedule rows)",
     "SOO / estimator-complete BAS still open",
-    "Pillar C corpus-deep \u2014 set alone cannot complete C"
-  ]
+    "Pillar C corpus-deep — set alone cannot complete C"
+  ],
+  "estimator_product": {
+    "printed_bas_rows": 42,
+    "inventory_units": 22,
+    "estimate_only_points": 71,
+    "never_merged_into_printed": true,
+    "gap_count": 8,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "estimator_gap_drawing_verify": {
+    "at": "2026-09-01T16:22:25.204Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-027-estimator-gap-verify.json",
+    "focus_pass": 8,
+    "focus_n": 8,
+    "soo_status_match": true,
+    "gt_locked": false
+  },
+  "bas_plan_paint_census": {
+    "at": "2026-09-01T18:38:07.743Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-027-bas-plan-paint-census.json",
+    "served": 42,
+    "match": 17,
+    "miss": 0,
+    "error": 25,
+    "gt_locked": false
+  },
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:32:47.546Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-27-inventory-drawing-verify.json",
+    "sample_pass": 20,
+    "sample_n": 20,
+    "gt_locked": false
+  },
+  "bas_plan_paint_preferTitle_census": {
+    "at": "2026-09-01T18:55:22.596Z",
+    "tallies": {
+      "MATCH": 32,
+      "SCHEDULE_ONLY": 19,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "served_targets": 51,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "27_WA_ColvilleTribes_Hatchery_Lab",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:52:27.649Z",
+    "ms": 10603,
+    "printed_bas_rows": 42,
+    "inventory_units": 22,
+    "targets_total": 64,
+    "tallies": {
+      "MATCH": 45,
+      "SCHEDULE_ONLY": 19,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
 }

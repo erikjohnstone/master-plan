@@ -17,13 +17,36 @@ Source: demos/D10-bas-points-takeoff (PDF byte-identical to Vol2 001).
 
 Artifact: `/opt/cursor/artifacts/pillar-c-navfac-001-drawing-verify.json`
 
-## Still blocks lock (honest)
+## Estimator product gap/SOO (2026-09-01) — still unlocked
 
-- FCU 42 × templates: **HONEST REFUSE** (no coil-type split)
+| Check | Result |
+|---|---|
+| Printed BAS | 122 |
+| Inventory units | 143 |
+| Estimate_only pts | 965 (never merged into printed) |
+| Gap count | 125 |
+| Focus gap AHU-A/M + DOAH-A/M | **6/6 PASS** (on inventory, no POINTS title/served) |
+| SOO | `absent_or_not_detected` match |
+
+Artifact: `/opt/cursor/artifacts/pillar-c-001-estimator-gap-verify.json`
+
+## Plan-paint census (2026-09-01) — still unlocked
+
+| Check | Result |
+|---|---|
+| BAS served tags | 3 · **3 MATCH** / 0 ERROR |
+| Valve reconcile | 163 items · **3 MATCH** / 160 SCHEDULE_ONLY |
+| Status | `refuse_not_done` (CV plan paint mostly SO — honest) |
+
+Artifacts: `pillar-c-001-bas-plan-paint-census.json` · `pillar-c-001-valve-plan-paint-census.json`
+
+## Still blocks lock (Where we refuse — not done)
+
+- FCU 42 × templates: **refuse_not_done** (no coil-type split)
 - UH/CUH labeled estimate only: 11×6=66 (not merged into printed truth)
-- SOO: **HONEST REFUSE**
+- SOO: **refuse_not_done**
 - Printed BAS 122 is schedule-list floor — estimator-complete BAS (SOO/I/O/spare) open
 - Pillar C requires every corpus BAS + valve set — one set cannot complete C
 
 ## Status
-`gt_locked: false` · `pillar_c_complete: false`
+`gt_locked: false` · `pillar_c_complete: false` · `estimator_complete: false`

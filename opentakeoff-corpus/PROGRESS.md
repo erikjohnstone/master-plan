@@ -1,8 +1,173 @@
-# Corpus goal progress
+## Active work
 
-This is the coordinator's durable, auditable handoff for `GOAL.md`. Update it
-only from independently reproduced results; worker reports remain provisional
-until verification.
+### Vector takeoff engine research — commercial + OSS stack (2026-09-01 22:00 UTC)
+
+**User directive:** Regex/title tuning is not the engine. Commercial products (Kamai,
+Trimble MEP, iBeam) read **native PDF vector geometry** first; classification is downstream.
+
+**Deliverable:** `takeoffs/VECTOR_TAKEOFF_ENGINE_RESEARCH.md` — authoritative stack doc:
+- Commercial pipeline anatomy (L0–L5 layers)
+- **v2 production stack** with 🌟 L1.5 (SAHI/OpenCV tiling), L3.5 (Shapely/NetworkX topology),
+- **Vector stack wired (2026-09-01):** `vectorTakeoffPipeline.ts` orchestrates L0–L5
+  on `Session.graphForPipeline`: L1.5 tiling, L2 geo+ODL+line-grid+stream fallbacks,
+  L3.5 MEP topology, L4 dedup reconcile, **L4.5 OCR/VLM assist ON** (`rasterTableAssist.ts`,
+  `Session.ocrScheduleRegion`). GOAL policy updated — OCR/AI in scope when beneficial.
+  L5 header-geometry in `corpusTakeoff.mjs`. Next: corpus GT harness + compile census.
+- Complete OSS stack by layer (ODL, pdfplumber, Camelot, gmft/TATR, MEPdetect, YOLOplan, …)
+- OpenTakeoff gap map: **Layer 1/2 extraction** fails on ~24+46 of 70 compile-zero valve sets
+- Recommended fix order on shared Session+ODL path (no regex-first, no ODL rewrite)
+
+**Paused:** Implementation active — L5 header-geometry layer landing on shared path.
+
+### L5 header-geometry classifier (2026-09-01 22:10 UTC)
+
+**Shared-path Layer 5 (on recovered geometry, not regex-only):**
+- `tableHeaderBlob` / `headerShapeMatches` / `isControlValveHeaderShape`
+- Untitled valve grids: `blankKeyRe` + `blankHeaderRes` + `blankServiceHint` on
+  CHW/HHW/ISO/MIXING/CONTROL_DAMPER families
+- Untitled BAS grids: `isBasPointsListTable` + `inferBasListTitle` in `compileBasTakeoff`
+
+**Verified:** `013_MO_T2523` real graph — **0 → 5** `CHW_CONTROL_VALVE` rows from blank-title
+`TAG|MANUFACTURER|MODEL|SERVED|GPM|SIZE` grid (CV-* marks). T-VALVE-01 lock still green.
+Tests: `corpusTakeoffHeaderGeometry.test.ts` **4/4**; `corpusTakeoffBas.test.ts` **19/19**.
+
+**Next stack wiring:** L2 pdfplumber fallback adapter → ScheduleTable; ODL coverage on thin sets;
+GT harness census re-run across 81 valve + 112 BAS sets.
+
+### Pillar C valve audit — PDF text vs compile (2026-09-01 21:32 UTC)
+
+**Prior “70 honest valve zeros” was wrong.** Fast PDF text scan of all **81/81**
+valve-bearing sets (~2 min, pdfjs text layer — not full Session load):
+
+| Metric | Count |
+|---|---:|
+| `control_valves` compile finds rows | **11** |
+| Compile returns 0 | **70** |
+| PDFs with **zero** valve/damper text | **0** |
+| Compile-zero but PDF **has** valve/damper signal | **63** |
+| PDF text hits **VALVE SCHEDULE / CHW\|HHW CONTROL VALVE** but compile 0 | **17** |
+| Compile-zero with only generic plan legend terms (BV, SOV, …) | **7** |
+
+**Conclusion:** compile-empty ≠ verified-empty. Most “zero” sets have valve
+information in the PDF; the shared path is **not extracting** tabular valve
+schedules on those sets yet (title/table matching + some multipart/rejoin gaps).
+Do **not** treat compile-zero as Pillar C floor or GT lock.
+
+- **Script:** `opentakeoff/mcp/scripts/pillarCValvePdfTextScan.mjs`
+- **Artifact:** `/opt/cursor/artifacts/pillar-c-valve-pdf-text-scan-all.json`
+- **Next (when resumed):** Layer 1/2 table extraction on the 63-gap sets — ODL coverage +
+  pdfplumber/Camelot fallback adapters into `ScheduleTable`, then header/mark classification.
+  See `takeoffs/VECTOR_TAKEOFF_ENGINE_RESEARCH.md`. **Not** regex-only `corpusTakeoff.mjs` tuning.
+
+### Pillar C DEPTH phase started — full plan-paint sweeps (2026-09-01 21:00 UTC)
+
+**Width closed → depth uses material map.** Full target sweeps (not 8-tag samples); GT drafts patched with `depth_plan_paint_full`; still **0 gt_locked**.
+
+| Depth batch | Sets | Full-sweep highlights | Artifact |
+|---|---|---|---|
+| **Keyed BAS** | **5/5** | 001 **116/120** MATCH; 015 **22/29**; 021 **0/73** honest SO; 096 **59/75**; 027 **45/64** | `/opt/cursor/artifacts/pillar-c-depth-bas-keyed-plan-paint.json` |
+| **Valve printed** | **11/11** | Pier **34/36** MATCH; Carson **2/2**; NAVFAC **2/80**; full targets not 12-tag sample | `/opt/cursor/artifacts/pillar-c-depth-valve-plan-paint.json` |
+| **bas:0 inventory batch 1** | **20** | **18/20** with MATCH | `/opt/cursor/artifacts/pillar-c-depth-bas-inventory-batch1.json` |
+| **bas:0 inventory batch 2** | **20** | **15/20** with MATCH | `/opt/cursor/artifacts/pillar-c-depth-bas-inventory-batch2.json` |
+| **bas:0 inventory batch 3** | **18** | **9/18** with MATCH (Klamath honest SO, …) | `/opt/cursor/artifacts/pillar-c-depth-bas-inventory-batch3.json` |
+
+- **bas:0 inventory depth total:** **58/58** scored inventory sets full-swept (batches 1–3).
+- **Script:** `opentakeoff/mcp/scripts/pillarCDepthPlanPaint.mjs` — full sweep + GT draft patch on shared path.
+- **Remaining depth:** 70 valve compile-empty floors, 49 bas compile-empty floors (compile-only — not “no valves on job”), gap/SOO/GT lock per set.
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
+
+### Prior — WIDTH complete (2026-09-01 20:50 UTC)
+
+**Order:** width = material (corpus truth map); depth = platform proof on that map. Width phase closed before any GT locks.
+
+| Width track | Coverage | Artifact |
+|---|---|---|
+| **BAS `estimator_product` live census** | **112/112** | waves 1–7 incl. `/opt/cursor/artifacts/pillar-c-estimator-product-census-wave7.json` (6 keyed BAS + 089) |
+| **BAS inventory plan-paint (bas:0)** | **107/107 touched** (59 scored 8-tag samples, 48 skipped honest zero/no targets) | `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave7.json` (+ waves 1–6) |
+| **BAS inventory drawing verify** | **112/112** floors | `bas_inventory_drawing_verified_ids` |
+| **Valve product census** | **81/81** (11 printed schedule rows / **70 compile-empty** — no tabular valve schedule extracted; valves may still exist on plans/specs) | `/opt/cursor/artifacts/pillar-c-valve-product-census-all.json` |
+| **Valve plan-paint width sample** | **11/11** printed sets (12-tag sample each; 6/11 with ≥1 MATCH) | `/opt/cursor/artifacts/pillar-c-valve-plan-paint-census-width.json` |
+
+- **Wave 7 plan-paint (10 bas:0):** **9 scored / 8 with MATCH** — 1 skipped (`057` honest zero inventory). Notable: Las Vegas 7/8, SDSU 7/8, Ames 8/8, Orange County 8/8.
+- **Wave 7 estimator_product (6 keyed BAS + 089):** all 6 emit inventory + printed BAS where keyed; **5/6 printed BAS**, **5/6 valve items**.
+- **Script:** `opentakeoff/mcp/scripts/pillarCEstimatorProductCensus.mjs` — reusable width census on shared path.
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked` — width ≠ depth; extreme depth phase is next.
+
+### Prior — SOO/spare/proof column probe on shared path (2026-09-01 20:50 UTC)
+
+- **Shared `probeBasProofSpareColumnHeaders()`:** scans BAS/I/O table headers for explicit PROOF/INTERLOCK/SPARE columns (CAPACITY-only false positives excluded); disclosed on `estimator_product.controls_column_probe` — never invents points.
+- **Keyed batch (5 sets):** SOO present on **021** only (`present_not_row_extractable`); **0/5** with real PROOF/SPARE column headers on BAS tables (prior CAPACITY hits confirmed false-positive). Artifact: `/opt/cursor/artifacts/pillar-c-soo-spare-proof-keyed-batch.json`.
+- **`corpusTakeoffBas` unit tests:** 15/15 green (+ probe regression).
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
+
+### Prior — inventory waves 5–6 + valve honest ceilings (2026-09-01 20:45 UTC)
+
+- **Census script fix:** explicit set IDs no longer wrongly filtered to `bas:0` only; skipped sets recorded with reason (`no_plan_paint_targets`, etc.).
+- **Wave 5 (20 requested):** **3 scored / 3 with MATCH** — 17 skipped (honest zero HVAC inventory in compile). Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave5.json`.
+- **Wave 6 (32 Vol2/EHRM):** **1 scored / 1 with MATCH** — 31 skipped (no inventory plan_paint targets). Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave6.json`.
+- **Inventory census total:** **58 sets with scored samples** (waves 1–4: 54 + waves 5–6: 4 new unique with inventory).
+- **Valve locks expanded:** 021 honest **0 MATCH / all SCHEDULE_ONLY**; 096 **≥10 MATCH** on 24 valve marks (`valvePlanPaint.regression.test.mjs` **7/7**).
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
+
+### Prior — inventory wave 4 census (2026-09-01 20:35 UTC)
+
+- **Inventory plan-paint wave 4 (18 bas:0 sets):** **9/18 with MATCH** on 8-tag samples. Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave4.json`. Running total **54 inventory sets** censused (waves 1–4).
+- **Valve regression expanded:** Pier 015 + ITD 062 keyed floors locked (≥10 MATCH each on full target sweep).
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
+
+### Prior — inventory wave 3 + valve plan-paint census locks (2026-09-01 20:25 UTC)
+
+- **Inventory plan-paint wave 3 (15 bas:0 sets):** **12/15 with MATCH** on 8-tag samples. Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave3.json`. Running total **36 inventory sets** censused (waves 1–3).
+- **Valve plan-paint sweep batch (11 keyed sets):** **6/11 with MATCH** on up-to-12-tag samples via `sweepBasServedMark` + schedule `table_title` prefer hints. Artifact: `/opt/cursor/artifacts/pillar-c-valve-plan-paint-census-sweep-batch.json`.
+- **Regression locks:** `valvePlanPaint.regression.test.mjs` — Carson **2/2 MATCH**, SDSU **≥8 MATCH**, NAVFAC **≥1 MATCH** (3/3 green).
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
+
+### Prior — plan_paint targets keep served marks + inventory wave 2 census (2026-09-01 20:15 UTC)
+
+- **Shared path fix:** `buildBasEstimatorProduct.plan_paint.targets` dedupes by `source::tag::title` (inventory no longer blocks served_equipment rows) and **prioritizes all served_equipment targets** before inventory samples in the 120-cap.
+- **Regression locks:** `basServedEquipmentPlanPaint.test.mjs` now sweeps full plan_paint target lists on keyed BAS sets — 001 **116/120 MATCH**, 015 **19/26**, 096 **59/75**, 027 **32/51 + 0 AMBIGUOUS**, 021 honest **0 MATCH / 29 SCHEDULE_ONLY** (5/5 green).
+- **Inventory plan-paint wave 2 (12 bas:0 sets):** **9/12 with MATCH** on 8-tag samples (NIST 6/6, Hurlburt 8/8, Reid 8/8, …). Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-wave2.json`.
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
+
+### Prior — graph preferTitle+sheet pairing clears Colville AMBIGUOUS (2026-09-01 19:00 UTC)
+
+- **Root cause:** inventory `sheet_id` pointed at blank reference table (#13) while graph-resolved `prefer_schedule_title` was `EQUIPMENT SCHEDULE` on #37 — mismatched preferSheet+preferTitle kept 11 tags AMBIGUOUS.
+- **Fix:** `planPaintPreferHint()` pairs graph-resolved title with owning sheet via `preferScheduleHintForEquipmentTag()`; never pairs graph title with wrong inventory sheet.
+- **Keyed BAS served re-census:** Colville **32 MATCH / 19 SCHEDULE_ONLY / 0 AMBIGUOUS** (was 21/19/11). Floor totals unchanged: 001 116/120, 015 19/26, 021 0/73, 096 59/75. Artifact: `/opt/cursor/artifacts/pillar-c-bas-plan-paint-preferTitle-recensus.json`.
+- **Platform tests:** web `npm test` **2098/2113 pass** (2 pre-existing unrelated fails: extractTable hyphen, mepconnectivity perf); targeted MCP regressions re-run this turn.
+- **Still 0/112 BAS · 0/81 valve** at `estimator_complete` / `gt_locked`.
+
+### Prior — served_equipment plan-paint + graph preferTitle fallback (2026-09-01 18:50 UTC)
+
+- **Shared path:** `preferScheduleTitleForEquipmentTag()` scans graph tables when HVAC `table_title` is blank or a BAS I/O list title — resolves to owning equipment schedule (e.g. Colville HWP-1 → `EQUIPMENT SCHEDULE`, not `I/O LIST WHITE STURGEON PLC`). `buildBasEstimatorProduct.plan_paint.targets[]` now merges **inventory + unique served_equipment** marks with HVAC/graph preferTitle hints.
+- **Keyed BAS served plan-paint re-census (5 sets, `sweepBasServedMark` + product `preferTitle`):**
+  - 001 NAVFAC **116 MATCH / 4 SCHEDULE_ONLY** (120 served targets; was 3/3 sample).
+  - 015 Pier **19 MATCH / 7 SCHEDULE_ONLY** (26 targets).
+  - 021 Lab **0 MATCH / 73 SCHEDULE_ONLY** (73 targets — tags not drawable on plans; honest ceiling).
+  - 027 Colville **21 MATCH / 19 SCHEDULE_ONLY / 11 AMBIGUOUS** (51 targets; was 17 MATCH / **25 ERROR** — preferTitle clears thrown errors; 11 AMBIGUOUS remain on duplicate keys in generic `EQUIPMENT SCHEDULE`).
+  - 096 Vermillion **59 MATCH / 16 SCHEDULE_ONLY** (75 targets).
+  - Artifact: `/opt/cursor/artifacts/pillar-c-bas-plan-paint-preferTitle-recensus.json`.
+- Unit tests **13/13** `corpusTakeoffBas` (+ served_equipment preferTitle target test).
+- **Still 0/112 BAS and 0/81 valve** at `estimator_complete` / `gt_locked`. Full served-target plan-paint ≠ Pillar C done.
+
+### Prior — preferTitle inventory plan-paint expand + product hints (2026-09-01 18:40 UTC)
+
+- **Inventory plan-paint census (9 bas:0 sets) with `sweepBasServedMark` + HVAC `table_title` as `preferTitle`:**
+  - **8/9 with MATCH** (Orange County 8/8, Las Vegas 7/1, St Louis 7/1, Carson 8/8, Ames 8/8, Douglas 8/8, Hawthorn 5/5, SDSU 7/1).
+  - Klamath 14 remains honest **0 MATCH / 8 SCHEDULE_ONLY** (tags not drawable — refuse, not invented).
+  - Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-inventory-expand.json`.
+- **Shared product path:** `buildBasEstimatorProduct.plan_paint.targets[]` now carries `prefer_schedule_title` / `prefer_schedule_sheet` from HVAC `table_title` / `sheet_id`; Agent Takeoff emits `plan_paint_prefer_schedule_title` rows so the agent can pass them into `sweep_schedule_row` (UI+MCP already forward `prefer_schedule_title` → Session `preferTitle`).
+- **Valve parity:** `buildValveEstimatorProduct.plan_paint.targets[]` + Takeoff `plan_paint_prefer_schedule_title` rows for valve/damper MARKs (schedule `table_title` as prefer hint).
+- **Keyed valve plan-paint census re-run (11 sets):** reconcile sweeps with `preferTitle` from scaffold — e.g. NAVFAC 001 **3 MATCH / 160 SCHEDULE_ONLY** on 163 CHW+HHV rows; Carson 16 **2/2 MATCH** on dampers; SDSU 11 **13 MATCH / 47 SCHEDULE_ONLY** on 60 fume-hood dampers. All still `refuse_not_done` / `gt_locked: false`. Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-keyed-floor.json`.
+- **PROOF/SPARE column-header probe** on keyed BAS sets: no real PROOF/INTERLOCK/SPARE columns (CAPACITY false-positives only) — spare/proof gates stay `refuse_not_done`; free-text phrase hits remain disclose-only.
+- Unit tests **53/53** (`schedulePlanReconcile` + `corpusTakeoffBas` + `agentTakeoff`).
+- **Still 0/112 BAS and 0/81 valve** at `estimator_complete` / `gt_locked`. PreferTitle plan-paint ≠ Pillar C done.
+
+### Prior — preferTitle inventory plan-paint (2026-09-01 18:24 UTC)
+
+- **Shared helper `sweepBasServedMark`:** forwards `preferTitle` / `preferSheet` into `Session.sweepScheduleRow`, then `classifyBasServedSweepOutcome`. Cross-family building letters (Carson B1 on furnace + CU + OAU) resolve when the HVAC item already carries `table_title`.
+- **Re-census:** Carson 16 → **8/8 MATCH** (was 6 AMBIGUOUS); Ames 061 → **8/8 MATCH** (was 1 MATCH / 7 AMBIGUOUS). Still `refuse_not_done` / `gt_locked: false`.
+- Artifacts: `/opt/cursor/artifacts/pillar-c-plan-paint-preferTitle-recensus.json`.
 
 ## Verified baseline
 
@@ -426,7 +591,9 @@ Authority: `GOAL.md` · `takeoffs/NEXT_GOAL_LOOP.md`.
 9. Fast workflow locks **12/12**.
 10. **Full `npm run test:workflows` green — 104 pass / 0 fail** (~36 min), including WP1 keyed Vol1+Vol2 compile. Log: `/opt/cursor/artifacts/workflows-full-suite.log`.
 
-Honest ceilings retained (not score-chased): Klamath FC/HP/DOAS SCHEDULE_ONLY under `evaluationFast`; WEAK/ZERO compile keys where no extractable tables; WP3.3 TG bowtie follow-on.
+**Where we refuse (not done — never a success metric):** Klamath FC/HP/DOAS
+SCHEDULE_ONLY under `evaluationFast`; WEAK/ZERO compile keys where no
+extractable tables; WP3.3 TG bowtie follow-on. Refuse/stop = unfinished work.
 
 ### Pillar C depth mandate (2026-09-01 — user)
 
@@ -503,17 +670,240 @@ CONTROL_DAMPER 2/2 MATCH. Counts matched keys; samples honest vs reconcile. Stil
 **Keyed floor status:** 5/5 BAS + 8/8 valve-only drawing-sampled · **0 locked**.
 Corpus-deep C still **0 / ~112 BAS**, **0 / ~81 valve** after key expansion.
 
+**Refuse language (2026-09-01 — user clarification):** Tables labeled “honest
+ceiling” / SCHEDULE_ONLY / SOO refuse are **unfinished work**, not locked truth.
+Prefer **“Where we refuse (not done)”**. Printed POINTS/I/O rows alone never
+mean Pillar C done. Shared-path `basEstimatorStatus` / `estimator_status` on
+every BAS compile now emits `estimator_complete: false`, `gt_locked: false`,
+and `refuse_not_done` gates (SOO points, spare I/O, proofs/interlocks beyond
+printed, GT lock). Takeoff panel surfaces `BAS_ESTIMATOR` refuse rows so UI
+cannot read a POINTS scrape as complete. Title near-miss scan: Northport bare
+`INPUT/OUTPUT SUMMARY` correctly rejected (system matrix ≠ typed points).
+**0 sets locked.**
+
+**Estimator product path (2026-09-01 — shared UI+MCP, still not C done):**
+`compileBasTakeoff` attaches `estimator_product`: HVAC point-bearing inventory +
+SOO presence disclose + labeled `estimate_only` schedule qty×points/unit totals
+(never merged into printed `totals.rows`) + inventory↔printed gap + ASHRAE G13
+spare % policy note. `compileControlValveTakeoff` attaches parallel
+`estimator_product` / `estimator_status` (contractor-column coverage, plan-paint
+`refuse_not_done`, gt_lock). Takeoff emits `BAS_ESTIMATOR` and `VALVE_ESTIMATOR`
+rows. Unit tests **37/37** green.
+
+**Keyed BAS floor live product (2026-09-01, still 0 locked):**
+
+| Set | Printed BAS | Inventory | Estimate_only pts | Gap | SOO | Valves | Valve column gaps |
+|---|---:|---:|---:|---:|---|---:|---|
+| 001 NAVFAC | 122 | 143 | 965 | 125 | absent/not detected | 163 | Actuator/Fail/Signal |
+| 015 Pier | 39 | 17 | 71 | 14 | absent | 36 | Served/Size/GPM/Cv |
+| 021 Lab | 63 | 44 | 279 | 44 | present_not_row_extractable | 2 | Size/Cv/Actuator/Fail |
+| 027 Colville | 42 | 22 | 71 | 8 | absent | 0 | — |
+| 096 Vermillion | 231 | 92 | 437 | 74 | absent | 24 | Served/Size/GPM/Cv |
+
+All five: `estimator_complete: false`, `gt_locked: false`. Artifact:
+`/opt/cursor/artifacts/pillar-c-keyed-bas-valve-estimator-floor.json`.
+
+**Keyed BAS estimator gap/SOO drawing verify (2026-09-01, still 0 locked):**
+Coordinator corroborated inventory↔printed gaps + SOO status on all 5 keyed BAS
+sets. Method: tag on HVAC inventory, absent from POINTS list titles + printed
+`served_equipment`, SOO status match. **Never locks GT.**
+
+| Set | Gap verify | SOO | Artifact |
+|---|---|---|---|
+| 001 NAVFAC | **6/6** AHU-A/M + DOAH-A/M | absent match | `pillar-c-001-estimator-gap-verify` |
+| 015 Pier | **14/14** all gap tags | absent match | `pillar-c-015-estimator-gap-verify` |
+| 021 Lab | **44/44** all gap tags | present_not_row_extractable match | `pillar-c-021-estimator-gap-verify` |
+| 027 Colville | **8/8** all gap tags | absent match | `pillar-c-027-estimator-gap-verify` |
+| 096 Vermillion | **60/60** of 74 (product sample cap) | absent match | `pillar-c-096-estimator-gap-verify` |
+
+Batch: `/opt/cursor/artifacts/pillar-c-estimator-gap-verify-keyed-floor.json`.
+Draft GTs patched with `estimator_product` + `estimator_gap_drawing_verify`;
+still `gt_locked: false` / `estimator_complete: false` on every set.
+
+**Valve estimator contractor-column honesty (2026-09-01, still 0 locked):**
+Recount of `normalizeControlValveCells` vs `estimator_product.contractor_column_coverage`
+on **11** keyed valve sets — **all_honest: true** (missing lists match; 7/7 columns).
+Examples: NAVFAC 001 missing only Actuator/Fail/Signal (Served/Size/GPM/Cv present);
+053 Size present; dampers/iso often missing served+size+Cv. Still
+`gt_locked: false`. Artifact:
+`/opt/cursor/artifacts/pillar-c-valve-estimator-columns-batch.json`.
+Corpus-deep C still **0 / ~112 BAS**, **0 / ~81 valve**.
+
+**Expanded estimator_product census (2026-09-01, 15 bearing sets, still 0 locked):**
+Live compile on controls/HVAC-named sets beyond the 5 keyed BAS floor — **0**
+new printed BAS lists (title gate + empty tables honest). **11/15** still emit
+inventory + labeled `estimate_only` + gap with `estimator_complete: false`
+(e.g. SDSU 11: inv 128 / est 708 / gap 78; Klamath 14: inv 37 / est 307;
+ITD 062: SOO `present_not_row_extractable`). Valve families continue to compile
+where schedules exist. Artifact:
+`/opt/cursor/artifacts/pillar-c-estimator-product-census-batch.json`.
+**No new BAS keys** — do not invent POINTS from equipment schedules.
+
+**bas:0 inventory drawing verify (2026-09-01, still 0 locked):** SDSU 11 inventory
+sample **20/20** on drawing (printed BAS 0); Klamath 14 **15/15** on drawing
+(printed BAS 0). Draft GT created/patched; `gt_locked: false`. Artifact:
+`/opt/cursor/artifacts/pillar-c-inventory-drawing-verify-batch.json`.
+
+**bas:0 inventory expanded (2026-09-01, 57 inventory + 7 zero floors = 64 floors, still 0 locked):**
+
+| Set | Inv | Est pts | Sample on drawing | SOO |
+|---|---:|---:|---|---|
+| 11 SDSU | 128 | 708 | **20/20** | absent |
+| 14 Klamath | 37 | 307 | **15/15** | absent |
+| 062 ITD | 16 | 88 | **16/16** | present_not_row_extractable |
+| 05 St Louis | 14 | 89 | **14/14** | absent |
+| 04 Las Vegas CUP | 16 | 60 | **16/16** | absent |
+| 044 Boilers | 22 | 90 | **13/15** (FOP-2/34 miss) | absent |
+| 040 Sterile | 8 | 24 | **8/8** | absent |
+| 25 Douglas | 3 | 27 | **3/3** | absent |
+| 10 Hawthorn | 2 | 42 | **2/2** | absent |
+| 017 NIST | 6 | 18 | **6/6** | absent |
+| 16 Carson | 6 | 90 | **6/6** | absent |
+| 01 Northport | 3 | 27 | **3/3** | absent |
+| 03 Hurlburt | 11 | 73 | **11/11** | absent |
+| 06 Jeff City CST | 14 | 87 | **14/14** | absent |
+| 12 Reid Hall | 4 | 20 | **4/4** | absent |
+| 17 Suwannee | 1 | 15 | **1/1** | absent |
+| 18 Baker MS | 6 | 84 | **6/6** | absent |
+| 21 Orange County | 33 | 163 | **15/15** | absent |
+| 22 Valdosta FS8 | 5 | 33 | **5/5** | absent |
+| 23 Macon Bibb | 4 | 17 | **4/4** | absent |
+| 24 Johnson Co | 3 | 19 | **3/3** | absent |
+| 26 Transbay | 7 | 35 | **7/7** | absent |
+| 30 Spokane Transit | 5 | 24 | **4/5** (1 miss) | absent |
+| 004 Interior Reno | 12 | 138 | **12/12** | absent |
+| 009 APHIS | 9 | 63 | **9/9** | absent |
+| 012 Chiller Behavioral | 16 | 57 | **15/15** | absent |
+| 014 Missoula Fire | 14 | 90 | **14/14** | absent |
+| 016 Irish Hill | 1 | 21 | **1/1** | absent |
+| 018 Poultry | 1 | 3 | **1/1** | absent |
+| 019 Eglin | 83 | 430 | **20/20** | absent |
+| 023 Salinity | 2 | 6 | **2/2** | absent |
+| 024 Steam Heat | 4 | 60 | **4/4** | absent |
+| 028 Bldg 615 | 7 | 81 | **7/7** | absent |
+| 030 EHRM NY | 15 | 50 | **15/15** | absent |
+| 031 Warehouse MO | 12 | 54 | **12/12** | present_not_row_extractable |
+| 032 EHRM PA | 1 | 3 | **1/1** | absent |
+| 033 Construct MN | 3 | 27 | **3/3** | absent |
+| 034 EHRM NC | 2 | 6 | **2/2** | absent |
+| 037 AHU AR | 1 | 3 | **1/1** | absent |
+| 041 Sterile IL | 3 | 19 | **3/3** | absent |
+| 042 Patriot Cafe | 1 | 3 | **1/1** | absent |
+| 047 Chillers NC | 3 | 9 | **3/3** | absent |
+| 061 Ames Wilhelm | 23 | 92 | **20/20** | absent |
+| 063 Harrison Extruder | 2 | 10 | **2/2** | absent |
+| 067 SLAC PCW | 2 | 6 | **2/2** | absent |
+| 068 Antelope Valley | 4 | 18 | **3/4** (1 miss) | absent |
+| 069 ITD D2 Lab | 9 | 57 | **9/9** | absent |
+| 071 Health Science ME | 21 | 103 | **20/20** | absent |
+| 072 West Valley Sci | 11 | 33 | **11/11** | absent |
+| 074 West Valley STEM | 11 | 33 | **11/11** | absent |
+| 075 Renne Library | 2 | 42 | **2/2** | absent |
+| 078 Sparty Store | 1 | 3 | **1/1** | absent |
+| 083 Town Offices MA | 4 | 32 | **4/4** | absent |
+| 088 Sky Harbor | 31 | 155 | **20/20** | absent |
+| 094 Orange Hist | 6 | 111 | **6/6** | absent |
+| 097 JVWTP Chem | 1 | 15 | **1/1** | absent |
+| 098 Bruneau Shed | 5 | 25 | **5/5** | absent |
+
+All printed BAS 0 · estimate_only never merged · **0 locked**. Same batch artifact.
+Wave-2 product census (18 more bearing sets): **11/18** inventory-bearing, **0** new printed BAS lists.
+Wave-3 product census (18 more): **11/18** inventory-bearing, **0** new printed BAS lists.
+Wave-4 product census (20 more): **9/20** inventory-bearing, **0** new printed BAS lists;
+031 Warehouse SOO `present_not_row_extractable` (same class as ITD 062).
+Wave-5 product census (24 more): **11/24** inventory-bearing, **0** new printed BAS lists.
+Wave-6 final remaining pool (11): **4** inventory (all green) + **7** honest zero-inventory floors;
+**0** new printed BAS lists. Remaining-pool census complete for bearing names.
+Artifacts: `/opt/cursor/artifacts/pillar-c-estimator-product-census-wave2.json`,
+`/opt/cursor/artifacts/pillar-c-estimator-product-census-wave3.json`.
+
+**Plan-paint census — keyed floor (2026-09-01, still 0 locked):**
+
+BAS `served_equipment` sweep with product `preferTitle` (full tag census):
+
+| Set | Targets | MATCH | SO | AMB | Status |
+|---|---:|---:|---:|---:|---|
+| 001 NAVFAC | 120 | **116** | 4 | 0 | partial (most units paint; 4 honest SO) |
+| 015 Pier | 26 | **19** | 7 | 0 | partial (pumps/fans largely MATCH) |
+| 021 Lab | 73 | 0 | **73** | 0 | honest SO ceiling (tags not on plans) |
+| 027 Colville | 51 | **32** | 19 | **0** | partial (was 11 AMBIGUOUS — sheet pairing fix) |
+| 096 Vermillion | 75 | **59** | 16 | 0 | partial (VAV/FCU/AHU largely MATCH) |
+
+Artifact: `/opt/cursor/artifacts/pillar-c-bas-plan-paint-preferTitle-recensus.json`.
+
+Valve reconcile rollup (MATCH / SCHEDULE_ONLY):
+
+| Set | Items | MATCH | SO | Notes |
+|---|---:|---:|---:|---|
+| 001 NAVFAC | 163 | 3 | 160 | CV mostly schedule-only (honest) |
+| 015 Pier | 36 | 34 | 2 | iso/damper largely plan-text |
+| 062 ITD lab | 31 | **31** | 0 | full MATCH |
+| 16 Carson | 2 | **2** | 0 | dampers MATCH |
+| 053 ER | 38 | 0 | **38** | all SO (honest) |
+| 11 SDSU | 60 | 13 | 47 | hood dampers mostly SO |
+
+Artifact: `/opt/cursor/artifacts/pillar-c-plan-paint-census-keyed-floor.json`.
+`estimator_product.plan_paint` stays **`refuse_not_done`** until corpus-complete.
+Regression: `basServedEquipmentPlanPaint.test.mjs` **3/3** green.
+
+**bas inventory floors — corpus-wide (2026-09-01, 112/112 floors checked, still 0 locked):**
+Every BAS-bearing set now has either a drawing-backed inventory sample or an honest
+zero-inventory floor from product census. Keyed printed-BAS sets also sampled
+(001/015/027/096 **20/20**; 021 **18/20** honest misses; 089 airport **13/20**).
+This is **not** Pillar C complete — SOO/I/O/spare/proofs + valve estimator + pipeline GT remain.
+
+**Valve product census + PDF text audit (2026-09-01, 81/81, still 0 locked):**
+Live `compileCorpusTakeoff(..., control_valves)` on every valve-bearing set.
+**11/81** have printed valve/damper schedule rows — keyed family sets today.
+**70/81** compile-empty. **PDF text scan** (`pillarCValvePdfTextScan.mjs`, ~2 min):
+**0/81** PDFs valve/damper-text-free; **63/70** compile-zero PDFs still contain
+valve/damper signals; **17/70** hit tabular schedule language compile still misses.
+Compile-empty is an **extraction gap**, not verified-empty. Contractor-column
+honesty verified on the 11 keyed. Do **not** invent valve keys from equipment
+schedules. Artifacts: `/opt/cursor/artifacts/pillar-c-valve-pdf-text-scan-all.json`,
+`/opt/cursor/artifacts/pillar-c-valve-product-census-all.json`.
+
+**SOO deepen — present_not_row_extractable (2026-09-01, still 0 locked):**
+Coordinator drawing/text probe on 021 Lab, 031 Warehouse, 062 ITD Lab.
+- **062:** SOO title + live text `BOILER/VFD/AHU POINTS LIST` on sheets 18–19, but
+  **0 geometric tables** on those sheets → cannot promote to printed BAS without
+- OCR/raster/VLM assist is ON the shared pipeline when vector paths fail; honest
+  `present_not_row_extractable` when all layers refuse.
+- **021 / 031:** SOO present / phrase hits; still refuse SOO-derived points.
+Artifacts: `/opt/cursor/artifacts/pillar-c-*-soo-probe.json`,
+`pillar-c-062-points-list-near-miss.json`, `pillar-c-062-points-list-title-assoc.json`.
+
 ### Next queue (platform loop)
 
-1. **Pillar C (corpus-deep):** Keyed floor drawing-sampled — **5 BAS + 8 valve-only**
-   sets; **0 locked**. Next: expand keys to every BAS- and valve-bearing set,
-   then estimator-complete (SOO/I/O/spare) + lock only with self-check + pipeline
-   GT. Post-WP8 `test:workflows` **104/104** green (plumbing only — not C done).
+1. **Pillar C (corpus-deep):** inventory floors **112/112** + valve product census **81/81** (11 printed / 70 compile-empty) but **0** estimator-complete;
+   deepen SOO/I/O/spare/proofs on keyed+SOO-present sets; expand valve contractor columns
+   beyond 11 keyed; pipeline GT lock only when complete. Prior: 1. **Pillar C (corpus-deep):** Gap/SOO + valve columns + plan-paint census on keyed floor;
+   BAS inventory floors **112/112** checked (drawing or honest zero) — **0 locked**. Next: extend inventory
+   + plan-paint to more bearing sets; tabular SOO where vector allows; expand keys only
+   when live compile finds real lists; lock only with self-check + pipeline GT on
+   **every** BAS + valve set.
+   Post-WP8 `test:workflows` **104/104** green (plumbing only — not C done).
 2. **Pillar D:** WP9 symbol-count highlight-accuracy proofs (≥3 bulk).
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.
 
-Cloud dispatch and all subagent dispatch remain prohibited.
+Cloud dispatch and all subagent dispatch remain prohibited (2026-09-02: user
+directed coordinator-only — no `Task` / `computerUse` / cloud workers).
+
+### Active: L0–L5 takeoff JSON batch emit (2026-09-02)
+
+**Policy:** coordinator-only; prewarm-first (see `GOAL.md` § execution policy).
+
+| Step | Command | Status |
+| --- | --- | --- |
+| 1 Prewarm ×4 | `prewarm:corpus:shard{0..3}` sidecar off | **in progress** |
+| 2 Emit ×4 | `emit:corpus:shard{0..3}` `--resume` | pending warm cache |
+| 3 Gap pass | `emit:gap` sidecar on | pending base 116 |
+| 4 Scoreboard | `npm run eval:corpus` | pending 116/116 files |
+
+Target: **116** `opentakeoff/out/<set_id>.takeoff.json` via shared
+`Session.graphForPipeline` + `buildEstimatorTakeoffDocument`. MVP gates remain
+honest (`corpus_pass_rate ≥ 0.95` not claimed until measured).
 
 ## Rejected or deferred approaches
 
@@ -523,5 +913,5 @@ Cloud dispatch and all subagent dispatch remain prohibited.
 - Taxonomy-only score fix: equipment-table rows are already swept regardless
   of taxonomy classification. Prefix additions improve labels but do not close
   the measured score gap.
-- OCR, raster vision, and learned symbol detection are out of the current
-  user-authorized scope.
+- OCR, raster vision, learned symbol detection, and local VLM are ON the shared
+  vector pipeline when they genuinely improve recall — vector-first always.

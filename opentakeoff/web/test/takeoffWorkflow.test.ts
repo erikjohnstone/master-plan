@@ -376,6 +376,7 @@ test("corpus_bas after compile requires plan paint on served_equipment (Pillar C
   assert.equal(compiled.phase, "spot_cites");
   assert.ok(compiled.allowedTools?.includes("sweep_schedule_row"));
   assert.match(compiled.nextMove || "", /served_equipment|plan/i);
+  assert.match(compiled.nextMove || "", /prefer_schedule_title/i);
 
   const cited = advanceTakeoffWorkflow("corpus_bas", [
     { name: "sheet_graph", out: { sheets: [{ id: "M-601" }] } },
@@ -384,7 +385,7 @@ test("corpus_bas after compile requires plan paint on served_equipment (Pillar C
   ], g);
   assert.equal(cited.phase, "paint");
   assert.ok(cited.allowedTools?.includes("sweep_schedule_row"));
-  assert.match(cited.nextMove || "", /plan paint|plan locations|finished points takeoff/i);
+  assert.match(cited.nextMove || "", /plan paint|plan locations|finished points takeoff|prefer_schedule_title/i);
 
   const grounded = advanceTakeoffWorkflow("corpus_bas", [
     { name: "sheet_graph", out: { sheets: [{ id: "M-601" }] } },

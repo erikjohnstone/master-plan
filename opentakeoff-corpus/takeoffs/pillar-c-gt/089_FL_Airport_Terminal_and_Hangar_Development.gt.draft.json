@@ -37,5 +37,70 @@
     "No BAS points keyed/compiled on this set (valve-only probe)",
     "Estimator contractor columns / full hand-count may remain open",
     "Pillar C corpus-deep — this set alone cannot complete C"
-  ]
+  ],
+  "valve_estimator_product": {
+    "printed_items": 2,
+    "families": [
+      "MIXING_VALVE:2"
+    ],
+    "contractor_gaps": [
+      "Served equipment",
+      "GPM",
+      "Cv",
+      "Actuator",
+      "Fail position",
+      "Control signal"
+    ],
+    "estimator_complete": false
+  },
+  "valve_estimator_columns_verify": {
+    "at": "2026-09-01T16:31:20.692Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-089-valve-estimator-columns.json",
+    "missing_match": true,
+    "column_honesty": "7/7",
+    "gt_locked": false
+  },
+  "valve_plan_paint_census": {
+    "at": "2026-09-01T18:39:06.369Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-089-valve-plan-paint-census.json",
+    "match": 1,
+    "schedule_only": 1,
+    "items": 2,
+    "gt_locked": false
+  },
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 11,
+    "estimate_only_points": 86,
+    "never_merged_into_printed": true,
+    "gap_count": 11,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:33:27.650Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-089-inventory-drawing-verify.json",
+    "sample_pass": 13,
+    "sample_n": 20,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "089_FL_Airport_Terminal_and_Hangar_Development",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:09:00.253Z",
+    "ms": 18086,
+    "printed_bas_rows": 0,
+    "inventory_units": 11,
+    "targets_total": 11,
+    "tallies": {
+      "MATCH": 4,
+      "SCHEDULE_ONLY": 7,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
 }

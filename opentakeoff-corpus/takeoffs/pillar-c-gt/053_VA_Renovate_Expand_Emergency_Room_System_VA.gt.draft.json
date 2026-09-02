@@ -2,40 +2,48 @@
   "set_id": "053_VA_Renovate_Expand_Emergency_Room_System_VA",
   "gt_locked": false,
   "pillar_c_complete": false,
-  "drawing_verify": {
-    "at": "2026-09-01T15:36:48.246Z",
-    "kind": "valve_keyed",
-    "gt_locked": false,
-    "self_check": {
-      "valve_counts_match_key": true,
-      "valve_samples_honest": true,
-      "families_probed": 1
-    },
-    "family_results": {
-      "HHW_CONTROL_VALVE": {
-        "key_count": 38,
-        "compile_count": 38,
-        "honest": {
-          "ok": 8,
-          "review": 0
-        },
-        "summary": {
-          "total": 38,
-          "match": 0,
-          "schedule_only": 38,
-          "plan_only": 0,
-          "refused_no_scale": 0,
-          "refused_no_text": 0,
-          "ambiguous": 0
-        }
-      }
-    },
-    "lock_recommendation": "KEEP gt_locked=false — valve/damper drawing sample honest vs reconcile, but corpus-deep C + estimator-complete remain",
-    "artifact": "/opt/cursor/artifacts/pillar-c-053-valve-drawing-verify.json"
+  "note": "bas:0 zero-inventory floor from product census — Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 0,
+    "estimate_only_points": 0,
+    "never_merged_into_printed": true,
+    "gap_count": 0,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
   },
-  "open_before_lock": [
-    "No BAS points keyed/compiled on this set (valve-only probe)",
-    "Estimator contractor columns / full hand-count may remain open",
-    "Pillar C corpus-deep — this set alone cannot complete C"
-  ]
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:32:36.875121+00:00",
+    "kind": "zero_inventory_floor",
+    "from_census": true,
+    "sample_pass": 0,
+    "sample_n": 0,
+    "tables": 4,
+    "gt_locked": false
+  },
+  "valve_plan_paint_census": {
+    "at": "2026-09-01T18:38:44.975Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-053-valve-plan-paint-census.json",
+    "match": 0,
+    "schedule_only": 38,
+    "items": 38,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "053_VA_Renovate_Expand_Emergency_Room_System_VA",
+    "kind": "valve_depth_plan_paint_full",
+    "at": "2026-09-01T20:53:15.282Z",
+    "ms": 4044,
+    "printed_items": 38,
+    "targets_total": 38,
+    "tallies": {
+      "MATCH": 0,
+      "SCHEDULE_ONLY": 38,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
 }

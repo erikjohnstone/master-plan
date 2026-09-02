@@ -1,0 +1,109 @@
+{
+  "set_id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 12,
+    "estimate_only_points": 54,
+    "never_merged_into_printed": true,
+    "gap_count": 12,
+    "soo_status": "present_not_row_extractable",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:14:28.916Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-031-inventory-drawing-verify.json",
+    "sample_pass": 12,
+    "sample_n": 12,
+    "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 0,
+    "families": [],
+    "contractor_gaps": [],
+    "estimator_complete": false,
+    "zero_valve_floor": true
+  },
+  "valve_zero_floor_verify": {
+    "at": "2026-09-01T17:56:31.165337+00:00",
+    "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
+    "printed_items": 0,
+    "gt_locked": false
+  },
+  "soo_deepen_verify": {
+    "at": "2026-09-01T17:58:19.943435+00:00",
+    "status": "present_not_row_extractable",
+    "soo": {
+      "present": true,
+      "status": "present_not_row_extractable",
+      "tabular_extractable": false,
+      "titles": [
+        {
+          "title": "LIGHTING SEQUENCE OF OPERATION",
+          "sheet_id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#82",
+          "tabular_points": false
+        }
+      ],
+      "note": "SOO present but not a typed points source — refuse_not_done; never invent points from narrative."
+    },
+    "phrase_hits": [
+      {
+        "phrase": "SEQUENCE OF OPERATION",
+        "count": 9,
+        "sheets": [
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68",
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69",
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#73",
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#82"
+        ]
+      },
+      {
+        "phrase": "SEQUENCE OF OPERATIONS",
+        "count": 3,
+        "sheets": [
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#73",
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#82"
+        ]
+      },
+      {
+        "phrase": "CONTROL SEQUENCE",
+        "count": 3,
+        "sheets": [
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#68",
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#72"
+        ]
+      },
+      {
+        "phrase": "POINTS LIST",
+        "count": 1,
+        "sheets": [
+          "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#69"
+        ]
+      }
+    ],
+    "printed_bas": 0,
+    "note": "SOO deepen probe — still refuse_not_done for soo_derived_points; never invent points from narrative.",
+    "artifact": "/opt/cursor/artifacts/pillar-c-031-soo-probe.json",
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:55:50.914Z",
+    "ms": 15778,
+    "printed_bas_rows": 0,
+    "inventory_units": 12,
+    "targets_total": 12,
+    "tallies": {
+      "MATCH": 2,
+      "SCHEDULE_ONLY": 10,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
+}

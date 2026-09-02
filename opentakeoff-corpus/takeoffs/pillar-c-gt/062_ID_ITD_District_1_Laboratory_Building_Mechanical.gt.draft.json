@@ -70,6 +70,116 @@
   "open_before_lock": [
     "No BAS points keyed/compiled on this set (valve-only probe)",
     "Estimator contractor columns / full hand-count may remain open",
-    "Pillar C corpus-deep — this set alone cannot complete C"
-  ]
+    "Pillar C corpus-deep — this set alone cannot complete C",
+    "BAS POINTS LIST titles are SOO narrative (0 geometric tables) — refuse present_not_row_extractable",
+    "Plan-paint / spare / proof gates remain refuse_not_done — corpus-deep C incomplete"
+  ],
+  "valve_estimator_product": {
+    "printed_items": 31,
+    "families": [
+      "HHW_CONTROL_VALVE:9",
+      "BYPASS_CONTROL_VALVE:1",
+      "LAB_AIR_VALVE:21"
+    ],
+    "contractor_gaps": [
+      "Served equipment",
+      "Size",
+      "GPM",
+      "Cv",
+      "Actuator",
+      "Fail position",
+      "Control signal"
+    ],
+    "estimator_complete": false
+  },
+  "valve_estimator_columns_verify": {
+    "at": "2026-09-01T16:30:11.470Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-062-valve-estimator-columns.json",
+    "missing_match": true,
+    "column_honesty": "7/7",
+    "gt_locked": false
+  },
+  "valve_plan_paint_census": {
+    "at": "2026-09-01T18:38:53.559Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-062-valve-plan-paint-census.json",
+    "match": 31,
+    "schedule_only": 0,
+    "items": 31,
+    "gt_locked": false
+  },
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 16,
+    "estimate_only_points": 88,
+    "never_merged_into_printed": true,
+    "gap_count": 16,
+    "soo_status": "present_not_row_extractable",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T16:50:13.818Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-062-inventory-drawing-verify.json",
+    "sample_pass": 16,
+    "sample_n": 16,
+    "gt_locked": false
+  },
+  "soo_deepen_verify": {
+    "at": "2026-09-01T17:58:19.940728+00:00",
+    "status": "present_not_row_extractable",
+    "soo_titles": [
+      {
+        "title": "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION",
+        "sheet_id": "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#20",
+        "tabular_points": false
+      }
+    ],
+    "points_list_text_titles": [
+      "BOILER POINTS LIST",
+      "VFD POINTS LIST",
+      "AHU POINTS LIST"
+    ],
+    "extractable_tables_on_points_sheets": 0,
+    "note": "BOILER/VFD/AHU POINTS LIST text exists on sheets 18/19 but zero geometric tables extracted — refuse_not_done; do not invent points (no OCR/raster).",
+    "artifacts": [
+      "/opt/cursor/artifacts/pillar-c-062-soo-probe.json",
+      "/opt/cursor/artifacts/pillar-c-062-points-list-near-miss.json",
+      "/opt/cursor/artifacts/pillar-c-062-points-list-title-assoc.json"
+    ],
+    "gt_locked": false
+  },
+  "updated_at": "2026-09-01T18:21:40Z",
+  "bas": {
+    "printed_points_list": {
+      "status": "absent_or_not_row_extractable",
+      "notes": "Sheets carry BOILER/VFD/AHU POINTS LIST titles in vector text, but findTables returns 0 geometric table rects — content is SOO narrative bullets (ENABLE/DISABLE, STATUS, ALARM), not typed hard I/O grids. Title gate would accept those phrases if table-backed; refuse present_not_row_extractable."
+    },
+    "sequences_of_operation": {
+      "status": "present_narrative_only",
+      "notes": "SOO sheets present; points-list language is narrative bullets under SOO, not extractable typed I/O."
+    },
+    "estimator_complete": false
+  },
+  "drawing_backed_self_check": {
+    "status": "in_progress",
+    "notes": "Valve drawing sample previously honest. BAS printed POINTS scrape = 0; POINTS LIST titles are SOO narrative (0 tables). Inventory plan-paint expand recorded separately. estimator_complete false; gt_locked false."
+  },
+  "depth_plan_paint_full": {
+    "set_id": "062_ID_ITD_District_1_Laboratory_Building_Mechanical",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:56:47.974Z",
+    "ms": 4272,
+    "printed_bas_rows": 0,
+    "inventory_units": 16,
+    "targets_total": 16,
+    "tallies": {
+      "MATCH": 15,
+      "SCHEDULE_ONLY": 1,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
 }

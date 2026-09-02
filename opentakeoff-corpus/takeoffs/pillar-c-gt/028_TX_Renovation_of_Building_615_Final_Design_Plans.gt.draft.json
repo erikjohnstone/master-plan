@@ -1,0 +1,53 @@
+{
+  "set_id": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 7,
+    "estimate_only_points": 81,
+    "never_merged_into_printed": true,
+    "gap_count": 7,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:10:36.078Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-028-inventory-drawing-verify.json",
+    "sample_pass": 7,
+    "sample_n": 7,
+    "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 0,
+    "families": [],
+    "contractor_gaps": [],
+    "estimator_complete": false,
+    "zero_valve_floor": true
+  },
+  "valve_zero_floor_verify": {
+    "at": "2026-09-01T17:56:31.164941+00:00",
+    "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
+    "printed_items": 0,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "028_TX_Renovation_of_Building_615_Final_Design_Plans",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:08:24.175Z",
+    "ms": 785,
+    "printed_bas_rows": 0,
+    "inventory_units": 7,
+    "targets_total": 7,
+    "tallies": {
+      "MATCH": 0,
+      "SCHEDULE_ONLY": 7,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
+}

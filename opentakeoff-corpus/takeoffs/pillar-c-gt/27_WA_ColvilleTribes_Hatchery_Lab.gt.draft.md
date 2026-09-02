@@ -11,3 +11,32 @@
 | SOO | open / refuse |
 
 Artifact: `/opt/cursor/artifacts/pillar-c-27-drawing-verify.json`
+
+## Estimator product gap/SOO (2026-09-01) — still unlocked
+
+| Check | Result |
+|---|---|
+| Printed BAS | 42 |
+| Inventory units | 22 |
+| Estimate_only pts | 71 (never merged) |
+| Gap count | 8 |
+| Gap verify (all) | **8/8 PASS** (FCU-1, BP-1, EF-1/2, HX-1A/1B/2A/2B) |
+| SOO | `absent_or_not_detected` match |
+
+Artifact: `/opt/cursor/artifacts/pillar-c-027-estimator-gap-verify.json`
+
+## Plan-paint census (2026-09-01) — still unlocked
+
+| Check | Result |
+|---|---|
+| BAS served | 42 tags · **17 MATCH** / 25 ERROR (ambiguous HWP-* keys) |
+| MATCH sample | EP-4, EF-3, PIT/TCV/FIT instrument tags |
+
+## Still blocks lock (Where we refuse — not done)
+
+- SOO refuse
+- Inventory gap vs printed I/O LIST
+- Estimator-complete + corpus-deep C remain
+
+## Status
+`gt_locked: false` · `pillar_c_complete: false` · `estimator_complete: false`

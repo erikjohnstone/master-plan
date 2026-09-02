@@ -1,0 +1,15 @@
+{
+  "note": "Gold expectations derived from takeoffs/cross-set-compile/*.compile.json — not hand-authored per-tag keys yet.",
+  "source": "takeoffs/cross-set-compile",
+  "fields": {
+    "control_valves.items": "valve_rec denominator when > 0",
+    "bas_points.rows": "point_rec denominator when > 0",
+    "soo_present": "seq_section_f1 denominator from pillar C SOO disclose"
+  },
+  "acceptance_gates": {
+    "corpus_pass_rate_min": 0.95,
+    "grounding_coverage_min": 0.5,
+    "valve_rec_min": 0.6,
+    "point_rec_min": 0.5
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "set_id": "095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC",
+  "gt_locked": false,
+  "pillar_c_complete": false,
+  "note": "bas:0 zero-inventory floor \u2014 no point-bearing HVAC inventory extractable; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 0,
+    "estimate_only_points": 0,
+    "never_merged_into_printed": true,
+    "gap_count": 0,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:32:09.487529+00:00",
+    "kind": "zero_inventory_floor",
+    "sample_pass": 0,
+    "sample_n": 0,
+    "tables": 0,
+    "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 0,
+    "families": [],
+    "contractor_gaps": [],
+    "estimator_complete": false,
+    "zero_valve_floor": true
+  },
+  "valve_zero_floor_verify": {
+    "at": "2026-09-01T17:56:31.171892+00:00",
+    "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
+    "printed_items": 0,
+    "gt_locked": false
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "as_of": "2026-09-01T23:42:54.382Z",
+  "note": "Scored from compile-key expectations + emitted takeoff.json corpus",
+  "corpus": "/workspace/opentakeoff-corpus",
+  "out_dir": "/workspace/opentakeoff/out",
+  "metrics": {
+    "grounding_coverage": 1,
+    "table_cell_f1": null,
+    "grid_type_acc": 0.8679245283018868,
+    "valve_prec": null,
+    "valve_rec": 1,
+    "valve_attr_acc": null,
+    "damper_prec": null,
+    "damper_rec": null,
+    "damper_attr_acc": null,
+    "point_prec": null,
+    "point_rec": 0,
+    "point_type_acc": null,
+    "io_total_abs_err": null,
+    "seq_section_f1": null,
+    "seq_implied_point_f1": null,
+    "discrepancy_prec": null,
+    "determinism": null,
+    "corpus_pass_rate": 0.034482758620689655
+  },
+  "acceptance": {
+    "mvp": false,
+    "emitted": 4,
+    "missing": 112,
+    "keys_total": 116
+  },
+  "sample_sets": [
+    {
+      "set_id": "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
+      "status": "scored",
+      "expected_valves": 163,
+      "actual_valves": 163,
+      "expected_bas": 122,
+      "actual_bas": 0,
+      "sequences": 0,
+      "grounding": 1,
+      "grid_types": 85
+    },
+    {
+      "set_id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+      "status": "scored",
+      "expected_valves": 0,
+      "actual_valves": 0,
+      "expected_bas": 0,
+      "actual_bas": 0,
+      "sequences": 0,
+      "grounding": null,
+      "grid_types": 13
+    },
+    {
+      "set_id": "006_US_U2607_01_Interior_Renovations_C_Wing_Updates",
+      "status": "scored",
+      "expected_valves": 0,
+      "actual_valves": 0,
+      "expected_bas": 0,
+      "actual_bas": 0,
+      "sequences": 0,
+      "grounding": null,
+      "grid_types": 1
+    },
+    {
+      "set_id": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+      "status": "scored",
+      "expected_valves": 0,
+      "actual_valves": 0,
+      "expected_bas": 0,
+      "actual_bas": 0,
+      "sequences": 0,
+      "grounding": null,
+      "grid_types": 7
+    },
+    {
+      "set_id": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+      "status": "missing_emit"
+    },
+    {
+      "set_id": "010_US_WWYK240146_Design_Implement_Monitoring_Control",
+      "status": "missing_emit"
+    },
+    {
+      "set_id": "011_IL_VA_Hines_Finance_Center_Renovation",
+      "status": "missing_emit"
+    },
+    {
+      "set_id": "012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral",
+      "status": "missing_emit"
+    }
+  ]
+}

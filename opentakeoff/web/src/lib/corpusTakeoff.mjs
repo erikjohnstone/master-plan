@@ -313,6 +313,61 @@ function markMatchesKeyRe(re, one, canon) {
   return false;
 }
 
+/**
+ * L5 geometry: concatenate column headers from table.headers and row-0 cell keys.
+ * Used to classify untitled schedule grids by header shape — not title regex alone.
+ */
+export function tableHeaderBlob(table) {
+  const seen = new Set();
+  const parts = [];
+  const push = (raw) => {
+    const t = String(raw || "").replace(/\s+/g, " ").trim();
+    if (!t) return;
+    const key = t.toUpperCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    parts.push(t);
+  };
+  for (const h of table?.headers || []) push(h);
+  const first = (table?.rows || [])[0];
+  if (first?.cells) {
+    for (const header of Object.keys(first.cells)) push(header);
+  }
+  return parts.join(" ").toUpperCase();
+}
+
+/** True when every required header-token regex matches the table header blob. */
+export function headerShapeMatches(table, requiredRes) {
+  const blob = tableHeaderBlob(table);
+  if (!blob.trim()) return false;
+  const reqs = Array.isArray(requiredRes) ? requiredRes : [requiredRes];
+  return reqs.every((re) => re.test(blob));
+}
+
+/** Untitled hydronic control-valve grid (TAG + GPM/Cv/SERVED/MODEL — not BAS I/O). */
+export function isControlValveHeaderShape(table) {
+  const blob = tableHeaderBlob(table);
+  if (!blob) return false;
+  if (/\b(?:AI|AO|BI|BO)\b/.test(blob) && !/\b(?:GPM|\bCV\b)\b/.test(blob)) return false;
+  return headerShapeMatches(table, [
+    /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+    /\b(?:GPM|\bCV\b|SERVED|MANUFACTURER|MODEL|SIZE|ACTUATOR|FLOW)\b/,
+  ]);
+}
+
+/** Infer schedule service from header blob + sample marks on untitled valve tables. */
+function inferValveServiceFromTable(table) {
+  const blob = tableHeaderBlob(table);
+  if (/\b(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT|STEAM)\b/.test(blob)) return "HHW";
+  if (/\b(?:CHW|CHILLED\s*WATER|COOLING\s*WATER)\b/.test(blob)) return "CHW";
+  for (const row of table?.rows || []) {
+    const tag = String(row.key || cellText(row, /^(?:TAG|MARK|VALVE\s*MARK)$/i) || "").trim();
+    if (/HHW|REHEAT|HW/i.test(tag)) return "HHW";
+    if (/CHW|CW/i.test(tag)) return "CHW";
+  }
+  return "CHW";
+}
+
 export function expandAmpersandEquipMarks(raw) {
   const s = String(raw || "").trim();
   if (!s || !/&/.test(s)) return [s];
@@ -330,7 +385,8 @@ export function expandAmpersandEquipMarks(raw) {
 }
 
 function uniqueFamily(graph, {
-  titleRe, exclude, keyRe, blankKeyRe, identityHeaderRe, titledOnly,
+  titleRe, exclude, keyRe, blankKeyRe, blankHeaderRes, blankServiceHint,
+  identityHeaderRe, titledOnly,
   // Secondary titles that need a stricter key filter than the primary titleRe
   // (e.g. SPLIT SYSTEM SYMBOL "F-1 , CU-1" → only CU-* for CONDENSING_UNIT,
   // while titled CONDENSING UNIT SCHEDULE keeps set-local B1/B2 with no keyRe).
@@ -358,12 +414,23 @@ function uniqueFamily(graph, {
     const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i.test(title);
     const blankGate = blankKeyRe || keyRe;
     const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
+    const headerValveShape = blankTitle && isControlValveHeaderShape(table);
     if (titleOk || altOk) {
       if (pass !== 1) continue;
     } else {
       if (pass !== 2) continue;
       if (titledOnly) continue;
-      if (!(blankTitle && blankGate) && !(catchAllSchedule && keyGated)) continue;
+      const blankHeaderOk = !blankHeaderRes || headerShapeMatches(table, blankHeaderRes) || headerValveShape;
+      if (blankTitle && blankGate) {
+        if (!blankHeaderOk) continue;
+        if (blankServiceHint && headerValveShape) {
+          const inferred = inferValveServiceFromTable(table);
+          if (blankServiceHint === "CHW" && inferred === "HHW") continue;
+          if (blankServiceHint === "HHW" && inferred !== "HHW") continue;
+        }
+      } else if (!(catchAllSchedule && keyGated)) {
+        continue;
+      }
     }
     // keyRe filters titled rows (AHU/FCU); blankKeyRe only gates blank titles
     // (Carson CONDENSING UNIT uses B1/B2 marks — must not apply ACC/CU filter).
@@ -808,6 +875,11 @@ export const HVAC_FAMILY_SPECS = {
     exclude: /POINTS\s*LIST|DDC|FIRE\s+DAMPER|SMOKE\s+DAMPER|FUME\s+HOOD/i,
     keyRe: /^(?:OA|RA|EA|SA)[\s\-]?\d/i,
     altKeyRe: /^[A-Z]{1,3}D[\s\-]?\d/i,
+    blankKeyRe: /^(?:MD|CD|DMP|OA|RA|EA|SA)[\s\-]/i,
+    blankHeaderRes: [
+      /\b(?:TAG|MARK|SYMBOL)\b/,
+      /\b(?:DAMPER|ACTUATOR|SIZE|AIRFLOW|CFM)\b/,
+    ],
   },
   // Isolation / gate / ball / shutoff on dedicated ISOLATION VALVE or bare
   // VALVE SCHEDULE. Not CHW/HHW control valves (V-CHW / V-HHW stay on
@@ -817,7 +889,11 @@ export const HVAC_FAMILY_SPECS = {
     altTitleRe: /^(?:\(N\)\s*)?VALVE\s+SCHEDULE\b/i,
     exclude: /CONTROL\s+VALVE|POINTS\s*LIST|DDC|PRESSURE\s+REDUC|MIXING|BYPASS|SAFETY/i,
     keyRe: /^(?:VLV|IV|ISO|GV|BV)[\s\-]/i,
-    titledOnly: true,
+    blankKeyRe: /^(?:VLV|IV|ISO|GV|BV)[\s\-]/i,
+    blankHeaderRes: [
+      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      /\b(?:SIZE|MANUFACTURER|MODEL|SERVICE)\b/,
+    ],
   },
   PRESSURE_REDUCING_VALVE: {
     titleRe: /PRESSURE\s+REDUC(?:ING|TION)\s+VALVE\s+SCHEDULE/i,
@@ -837,8 +913,12 @@ export const HVAC_FAMILY_SPECS = {
   MIXING_VALVE: {
     titleRe: /MIXING\s+VALVE\s+SCHEDULE/i,
     exclude: /POINTS\s*LIST|DDC/i,
-    keyRe: /^(?:MX|MV)[\s\-]/i,
-    titledOnly: true,
+    keyRe: /^(?:MX|MV|TMV)[\s\-]/i,
+    blankKeyRe: /^(?:MX|MV|TMV)[\s\-]/i,
+    blankHeaderRes: [
+      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      /\b(?:SIZE|MANUFACTURER|MODEL|MIXING)\b/,
+    ],
   },
   // Lab fume-hood exhaust control valves / VAV dampers (ECV-*). Titled-only —
   // VAV titleRe also hits "VARIABLE AIR VOLUME" in these captions, but ECV
@@ -852,21 +932,29 @@ export const HVAC_FAMILY_SPECS = {
   // CHW / HHW from title signals (abbrev or spelled-out). Bypass valves stay out.
   CHW_CONTROL_VALVE: {
     titleRe: /(?:CHW|CHILLED\s*WATER).{0,40}CONTROL\s*VALVE|CONTROL\s*VALVE.{0,40}(?:CHW|CHILLED\s*WATER)/i,
-    exclude: /BYPASS/i,
+    exclude: /BYPASS|HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT/i,
     identityHeaderRe: /VALVE\s*MARK/i,
-    // Bare "VALVE SCHEDULE" only — must NOT match "CHW CONTROL VALVE SCHEDULE"
-    // or altKeyRe would replace primary matching and drop NAVFAC marks.
     altTitleRe: /^(?:\(N\)\s*)?VALVE\s+SCHEDULE\b/i,
     altKeyRe: /^V[\s\-]?CHW/i,
+    blankKeyRe: /^CV[\s\-]/i,
+    blankServiceHint: "CHW",
+    blankHeaderRes: [
+      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      /\b(?:GPM|\bCV\b|SERVED|MANUFACTURER|MODEL|SIZE|FLOW)\b/,
+    ],
   },
   HHW_CONTROL_VALVE: {
     titleRe: /(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT).{0,40}CONTROL\s*VALVE|CONTROL\s*VALVE.{0,40}(?:HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT)/i,
     exclude: /BYPASS|CHW|CHILLED\s*WATER/i,
     identityHeaderRe: /VALVE\s*MARK/i,
-    // Bare "VALVE SCHEDULE" + V-HHW* / V-HHWR* (VA ER). Start-anchored so
-    // "HHW CONTROL VALVE SCHEDULE" keeps primary titleRe matching.
     altTitleRe: /^(?:\(N\)\s*)?VALVE\s+SCHEDULE\b/i,
     altKeyRe: /^V[\s\-]?HHW/i,
+    blankKeyRe: /^CV[\s\-]/i,
+    blankServiceHint: "HHW",
+    blankHeaderRes: [
+      /\b(?:TAG|MARK|VALVE\s*MARK)\b/,
+      /\b(?:GPM|\bCV\b|SERVED|MANUFACTURER|MODEL|SIZE|FLOW|HHW|REHEAT|HOT\s*WATER)\b/,
+    ],
   },
   BYPASS_CONTROL_VALVE: {
     titleRe: /BYPASS\s+CONTROL\s+VALVE/i,
@@ -913,8 +1001,528 @@ export const HVAC_EXCLUSIONS = [
 export const BAS_EXCLUSIONS = [
   "Title-only schematic points lists (non-extractable typed rows)",
   "HVAC equipment schedules (counted under T-HVAC-01)",
-  "Sequence-of-operations / narrative controls text (not a typed points table — honest refuse, never invent points from SOO)",
+  "Sequence-of-operations / narrative controls text (not a typed points table — refuse / not done; never invent points from SOO)",
 ];
+
+/**
+ * ASHRAE G13 / BMS estimating practice: spare I/O is a bid policy note
+ * (typically ~10–25% per point type). Never applied into printed totals.
+ */
+export const BAS_SPARE_IO_POLICY = {
+  label: "policy_disclose_only",
+  typical_pct_per_point_type: { min: 10, max: 25, common: 15 },
+  note: "ASHRAE Guideline 13 practice — spare % is a hardware bid disclose, never merged into POINTS LIST truth.",
+};
+
+/**
+ * Conservative schedule→points estimate templates (qty × points/unit).
+ * Labeled estimate_only — never merged into printed POINTS/I/O totals.
+ * Rough BMS estimating practice for common US MEP families; sets without a
+ * family template stay out of the estimate (honest gap, not invented).
+ */
+export const SCHEDULE_POINT_ESTIMATE_PER_UNIT = {
+  AHU: { AI: 8, AO: 3, BI: 6, BO: 4 },
+  DOAH_UNIT: { AI: 10, AO: 4, BI: 8, BO: 5 },
+  DOAH_HANDLING: { AI: 10, AO: 4, BI: 8, BO: 5 },
+  DOAS: { AI: 8, AO: 3, BI: 6, BO: 4 },
+  OUTDOOR_AIR_UNIT: { AI: 6, AO: 2, BI: 4, BO: 3 },
+  FCU: { AI: 3, AO: 1, BI: 2, BO: 2 },
+  VAV: { AI: 2, AO: 1, BI: 1, BO: 1 },
+  RTU: { AI: 6, AO: 2, BI: 4, BO: 3 },
+  CHILLER: { AI: 4, AO: 1, BI: 4, BO: 2 },
+  BOILER: { AI: 3, AO: 1, BI: 3, BO: 2 },
+  PUMP: { AI: 1, AO: 0, BI: 1, BO: 1 },
+  FAN: { AI: 1, AO: 0, BI: 1, BO: 1 },
+  HEAT_EXCHANGER: { AI: 2, AO: 0, BI: 1, BO: 0 },
+  COOLING_TOWER: { AI: 2, AO: 1, BI: 2, BO: 1 },
+};
+
+/** Point-bearing HVAC families used for inventory ↔ POINTS gap reports. */
+export const BAS_POINT_BEARING_FAMILIES = Object.keys(SCHEDULE_POINT_ESTIMATE_PER_UNIT);
+
+/**
+ * Sequence-of-operations / controls narrative titles (not typed POINTS rows).
+ * Presence is disclosed; points are never invented from SOO prose.
+ */
+export function isSooNarrativeTitle(title) {
+  const t = String(title || "").replace(/\s+/g, " ").trim();
+  if (!t) return false;
+  if (/\bSEQUENCES?\s+OF\s+OPERATIONS?\b/i.test(t)) return true;
+  if (/\bSEQUENCE\s+OF\s+CONTROL\b/i.test(t)) return true;
+  if (/\bCONTROL\s+SEQUENCES?\b/i.test(t)) return true;
+  if (/\bSYSTEM\s+OPERATION\s+SEQUENCES?\b/i.test(t)) return true;
+  if (/\bCONTROLS?\s+NARRATIVE\b/i.test(t)) return true;
+  // SOO-shaped "POINT LIST TABLE" captions (rejected by isBasPointsListTitle).
+  if (/\bPOINT\s+LIST\s+TABLE\b/i.test(t)) return true;
+  return false;
+}
+
+/**
+ * Resolve schedule table_title + sheet for plan-paint preferTitle/preferSheet when
+ * the HVAC row title is blank, wrong-sheet, or a BAS list (I/O LIST ≠ owner).
+ * Scans graph tables for the tag on an equipment schedule — never invents tags.
+ * @returns {{ title: string|null, sheet_id: string|null }}
+ */
+function preferScheduleHintForEquipmentTag(graph, tag, fallbackTitle = null) {
+  const fb = String(fallbackTitle || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+  if (fb && !isBasPointsListTitle(fb)) {
+    const want = String(tag || "").trim().toUpperCase();
+    for (const table of graph?.tables || []) {
+      const title = String(table.title?.text || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+      if (title !== fb) continue;
+      for (const row of table.rows || []) {
+        const key = String(row.key || row.identity?.text || row.identity?.key || "").trim().toUpperCase();
+        if (key === want) return { title: fb, sheet_id: table.sheet || null };
+      }
+    }
+    return { title: fb, sheet_id: null };
+  }
+  const want = String(tag || "").trim().toUpperCase();
+  if (!want || !graph?.tables?.length) return { title: null, sheet_id: null };
+  let generic = null;
+  for (const table of graph.tables) {
+    const title = String(table.title?.text || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+    if (!title || isBasPointsListTitle(title)) continue;
+    for (const row of table.rows || []) {
+      const key = String(row.key || row.identity?.text || row.identity?.key || "").trim().toUpperCase();
+      if (key !== want) continue;
+      const hint = { title, sheet_id: table.sheet || null };
+      if (/SCHEDULE|EQUIPMENT|PUMP|BOILER|AHU|FCU|VAV|DOAS|RTU|FAN|CHILLER|VALVE|DAMPER/i.test(title)) {
+        return hint;
+      }
+      generic = generic || hint;
+    }
+  }
+  return generic || { title: null, sheet_id: null };
+}
+
+/** @deprecated internal — use preferScheduleHintForEquipmentTag */
+function preferScheduleTitleForEquipmentTag(graph, tag, fallbackTitle = null) {
+  return preferScheduleHintForEquipmentTag(graph, tag, fallbackTitle).title;
+}
+
+/** Plan-paint preferTitle/preferSheet from HVAC row or graph scan (never wrong-sheet pairing). */
+function planPaintPreferHint(graph, tag, itemTableTitle = null, itemSheetId = null, listTitle = null) {
+  const tableTitle = String(itemTableTitle || "").replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim();
+  if (tableTitle && !isBasPointsListTitle(tableTitle)) {
+    return { prefer_schedule_title: tableTitle, prefer_schedule_sheet: itemSheetId || null };
+  }
+  const hint = preferScheduleHintForEquipmentTag(graph, tag, tableTitle || listTitle);
+  return {
+    prefer_schedule_title: hint.title,
+    // Graph-resolved title must pair with its owning sheet — inventory sheet_id
+    // may point at a blank reference table on another sheet (Colville CP-1).
+    prefer_schedule_sheet: hint.sheet_id || itemSheetId || null,
+  };
+}
+
+/**
+ * Scan schedule/table titles for SOO presence. Tabular SOO scoring is still
+ * refuse_not_done — narrative-only / raster never invents points.
+ */
+export function detectSooPresence(graph) {
+  const titles = [];
+  for (const table of graph?.tables || []) {
+    const title = String(table.title?.text || "").replace(/\s+/g, " ").trim();
+    if (!title || !isSooNarrativeTitle(title)) continue;
+    titles.push({
+      title: title.slice(0, 160),
+      sheet_id: table.sheet || null,
+      tabular_points: false,
+    });
+  }
+  if (!titles.length) {
+    return {
+      present: false,
+      status: "absent_or_not_detected",
+      tabular_extractable: false,
+      titles: [],
+      note: "No SOO / sequence-of-operations titles detected on extractable tables — refuse_not_done for SOO-derived points.",
+    };
+  }
+  return {
+    present: true,
+    status: "present_not_row_extractable",
+    tabular_extractable: false,
+    titles,
+    note: "SOO present but not a typed points source — refuse_not_done; never invent points from narrative.",
+  };
+}
+
+function tableHeaderNames(table) {
+  if (Array.isArray(table?.headers) && table.headers.length) {
+    return table.headers.map((h) => String(h).replace(/\s+/g, " ").trim()).filter(Boolean);
+  }
+  const out = new Set();
+  for (const row of table?.rows || []) {
+    for (const h of Object.keys(row.cells || {})) {
+      const name = String(h).replace(/\s+/g, " ").trim();
+      if (name) out.add(name);
+    }
+  }
+  return [...out];
+}
+
+/**
+ * Strict column-header probe on BAS/I/O tables for PROOF/INTERLOCK/SPARE columns.
+ * CAPACITY-only false positives are excluded — only explicit spare/proof headers count.
+ * Presence is disclosed; points are never invented from column labels alone.
+ */
+export function probeBasProofSpareColumnHeaders(graph) {
+  const hits = [];
+  const proofHeaders = new Set();
+  const spareHeaders = new Set();
+  let basTables = 0;
+  for (const table of graph?.tables || []) {
+    const title = String(table.title?.text || "").replace(/\s+/g, " ").trim();
+    if (!title) continue;
+    const basTable = isBasPointsListTitle(title)
+      || /\bI\s*\/?\s*O\b|\bPOINTS?\s+LIST\b|\bDDC\s+CONTROLLER\b/i.test(title);
+    if (!basTable) continue;
+    basTables += 1;
+    const matched = [];
+    for (const header of tableHeaderNames(table)) {
+      const hu = header.toUpperCase();
+      if (/\bSPARE\b/.test(hu) && /\b(?:I\s*\/?\s*O|POINT|CAPACITY)\b/.test(hu)) {
+        spareHeaders.add(header);
+        matched.push({ kind: "spare_io", header });
+      } else if (/^(?:PROOF(?:\s+OF\s+\w+)?|INTERLOCK|HOA|HAND[\s-]*OFF[\s-]*AUTO|END\s*SW(?:ITCH)?|SAFETY|FIRE\s*SMOKE)$/.test(hu)) {
+        proofHeaders.add(header);
+        matched.push({ kind: "proof_interlock", header });
+      }
+    }
+    if (matched.length) {
+      hits.push({
+        title: title.slice(0, 160),
+        sheet_id: table.sheet || null,
+        matched,
+      });
+    }
+  }
+  const proof = [...proofHeaders];
+  const spare = [...spareHeaders];
+  return {
+    bas_tables_scanned: basTables,
+    proof_interlock_column_headers: proof,
+    spare_io_column_headers: spare,
+    hits,
+    status: proof.length || spare.length ? "printed_columns_present" : "no_proof_spare_columns",
+    note: proof.length || spare.length
+      ? "Printed PROOF/INTERLOCK/SPARE column headers detected — disclose only; refuse_not_done until row values are extractable points."
+      : "No PROOF/INTERLOCK/SPARE column headers on BAS/I/O tables — SOO-derived proofs/spares remain refuse_not_done.",
+  };
+}
+
+/**
+ * Labeled schedule-derived point estimate (qty × points/unit) + gap vs printed.
+ * Totals here are estimate_only — never merge into printed POINTS LIST truth.
+ *
+ * @param {object} hvacTakeoff compileHvacTakeoff result
+ * @param {object[]} basLists printed points lists from compileBasTakeoff
+ */
+export function buildBasEstimatorProduct(hvacTakeoff, basLists, graph) {
+  const soo = detectSooPresence(graph);
+  const controls_column_probe = probeBasProofSpareColumnHeaders(graph);
+  const inventory = [];
+  const estimateByFamily = [];
+  let estimateUnits = 0;
+  const estimateTotals = { AI: 0, AO: 0, BI: 0, BO: 0, points: 0 };
+
+  for (const family of BAS_POINT_BEARING_FAMILIES) {
+    const cat = hvacTakeoff?.categories?.[family];
+    const count = cat?.count ?? cat?.items?.length ?? 0;
+    if (!count) continue;
+    const tags = (cat.items || []).map((it) => String(it.tag || it.mark || "").trim()).filter(Boolean);
+    // Plan-paint hints: prefer_schedule_title from the HVAC row's own table_title
+    // so cross-family building letters (Carson B1) resolve — never invent titles.
+    const plan_paint_targets = (cat.items || []).slice(0, 40).map((it) => {
+      const tag = String(it.tag || it.mark || "").trim();
+      if (!tag) return null;
+      const hint = planPaintPreferHint(graph, tag, it.table_title, it.sheet_id);
+      return { tag, ...hint };
+    }).filter(Boolean);
+    inventory.push({ family, count, tags: tags.slice(0, 40), plan_paint_targets });
+    const per = SCHEDULE_POINT_ESTIMATE_PER_UNIT[family];
+    if (!per) continue;
+    const famPoints = {
+      family,
+      units: count,
+      per_unit: { ...per },
+      estimated: {
+        AI: per.AI * count,
+        AO: per.AO * count,
+        BI: per.BI * count,
+        BO: per.BO * count,
+      },
+    };
+    famPoints.estimated.points = famPoints.estimated.AI + famPoints.estimated.AO
+      + famPoints.estimated.BI + famPoints.estimated.BO;
+    estimateByFamily.push(famPoints);
+    estimateUnits += count;
+    estimateTotals.AI += famPoints.estimated.AI;
+    estimateTotals.AO += famPoints.estimated.AO;
+    estimateTotals.BI += famPoints.estimated.BI;
+    estimateTotals.BO += famPoints.estimated.BO;
+    estimateTotals.points += famPoints.estimated.points;
+  }
+
+  const printedServed = new Set();
+  let printedRows = 0;
+  for (const list of basLists || []) {
+    for (const item of list.items || []) {
+      printedRows += 1;
+      const served = String(item.served_equipment || "").trim().toUpperCase();
+      if (served) printedServed.add(served);
+    }
+  }
+
+  // HVAC tag → schedule title for plan-paint preferTitle (pumps, AHUs, …).
+  const hvacByTag = new Map();
+  for (const cat of Object.values(hvacTakeoff?.categories || {})) {
+    for (const item of cat.items || []) {
+      const tag = String(item.tag || item.mark || "").trim().toUpperCase();
+      if (!tag || hvacByTag.has(tag)) continue;
+      const hint = planPaintPreferHint(graph, tag, item.table_title, item.sheet_id);
+      hvacByTag.set(tag, hint);
+    }
+  }
+
+  const targetSeen = new Set();
+  const planPaintTargets = [];
+  const pushPlanPaintTarget = (t) => {
+    if (!t?.tag) return;
+    const key = `${String(t.source || "unknown")}::${String(t.tag).toUpperCase()}::${String(t.prefer_schedule_title || "").toUpperCase()}`;
+    if (targetSeen.has(key)) return;
+    targetSeen.add(key);
+    planPaintTargets.push(t);
+  };
+  for (const row of inventory) {
+    for (const t of row.plan_paint_targets || []) {
+      pushPlanPaintTarget({ ...t, source: "inventory" });
+    }
+  }
+  const servedSeen = new Set();
+  for (const list of basLists || []) {
+    for (const item of list.items || []) {
+      const served = String(item.served_equipment || "").trim();
+      if (!served || /^(AI|AO|BI|BO)[\s-]?\d/i.test(served)) continue;
+      const key = served.toUpperCase();
+      if (servedSeen.has(key)) continue;
+      servedSeen.add(key);
+      const hint = hvacByTag.get(key)
+        || planPaintPreferHint(graph, served, item.table_title, item.sheet_id, list.title);
+      pushPlanPaintTarget({
+        tag: served,
+        source: "served_equipment",
+        prefer_schedule_title: hint.prefer_schedule_title,
+        prefer_schedule_sheet: hint.prefer_schedule_sheet || item.sheet_id || list.sheet_id || null,
+      });
+    }
+  }
+
+  const inventoryTags = new Set();
+  for (const row of inventory) {
+    for (const tag of row.tags || []) inventoryTags.add(String(tag).trim().toUpperCase());
+  }
+
+  const inventoryWithoutPrintedPoints = [];
+  for (const tag of inventoryTags) {
+    if (!tag) continue;
+    // Loose join: exact mark, or printed served contains mark / mark contains served token.
+    let hit = printedServed.has(tag);
+    if (!hit) {
+      for (const served of printedServed) {
+        if (served === tag || served.includes(tag) || tag.includes(served)) {
+          hit = true;
+          break;
+        }
+      }
+    }
+    if (!hit) inventoryWithoutPrintedPoints.push(tag);
+  }
+
+  const printedWithoutInventory = [];
+  for (const served of printedServed) {
+    let hit = inventoryTags.has(served);
+    if (!hit) {
+      for (const tag of inventoryTags) {
+        if (tag === served || tag.includes(served) || served.includes(tag)) {
+          hit = true;
+          break;
+        }
+      }
+    }
+    if (!hit) printedWithoutInventory.push(served);
+  }
+
+  return {
+    kind: "bas_estimator_product",
+    estimator_complete: false,
+    equipment_inventory: {
+      source: "compileHvacTakeoff",
+      point_bearing_families: inventory,
+      unit_count: inventory.reduce((n, r) => n + r.count, 0),
+    },
+    soo,
+    controls_column_probe,
+    schedule_derived_estimate: {
+      label: "estimate_only",
+      never_merge_into_printed_truth: true,
+      template: "SCHEDULE_POINT_ESTIMATE_PER_UNIT",
+      units: estimateUnits,
+      by_family: estimateByFamily,
+      totals: estimateTotals,
+      note: "Equipment qty × typed points/unit — labeled estimate only; never silently merge into POINTS LIST totals.",
+    },
+    gap_vs_printed: {
+      printed_rows: printedRows,
+      printed_served_marks: printedServed.size,
+      inventory_marks: inventoryTags.size,
+      inventory_without_printed_points: inventoryWithoutPrintedPoints.slice(0, 60),
+      inventory_without_printed_points_count: inventoryWithoutPrintedPoints.length,
+      printed_served_without_inventory: printedWithoutInventory.slice(0, 60),
+      printed_served_without_inventory_count: printedWithoutInventory.length,
+      note: "Gap report only — does not invent POINTS rows for missing units.",
+    },
+    spare_io_policy: BAS_SPARE_IO_POLICY,
+    plan_paint: {
+      status: "refuse_not_done",
+      note: "Served-equipment / inventory plan MATCH or honest SCHEDULE_ONLY paint still required per mark — printed POINTS ≠ installed takeoff. When sweeping served_equipment or inventory marks, pass prefer_schedule_title from plan_paint targets (HVAC table_title or owning POINTS/I/O list) so cross-schedule collisions resolve; never invent plan qty.",
+      targets: (() => {
+        const served = planPaintTargets.filter((t) => t.source === "served_equipment");
+        const inventoryT = planPaintTargets.filter((t) => t.source === "inventory");
+        // Keyed BAS sets can have 100+ served marks — never drop them for inventory samples.
+        const cap = 120;
+        const room = Math.max(0, cap - served.length);
+        return [...served, ...inventoryT.slice(0, room)];
+      })(),
+    },
+  };
+}
+
+/**
+ * Estimator-completeness disclosure for Pillar C (shared UI+MCP).
+ * Printed POINTS/I/O rows alone are never a complete commercial BAS takeoff.
+ * Each gate is open | refuse_not_done | n/a — refuse means unfinished work,
+ * not a success metric or locked ceiling.
+ *
+ * @param {{ lists: object[], totals: object, sheets: object[], product?: object }} parts
+ */
+export function basEstimatorStatus({ lists, totals, sheets, product = null }) {
+  const rowCount = totals?.rows ?? 0;
+  const listCount = lists?.length ?? 0;
+  let withServed = 0;
+  let withoutServed = 0;
+  for (const list of lists || []) {
+    for (const item of list.items || []) {
+      if (item?.served_equipment) withServed += 1;
+      else withoutServed += 1;
+    }
+  }
+  const printedLists = listCount === 0
+    ? "empty"
+    : (rowCount > 0 ? "partial_printed_only" : "title_only_excluded");
+  const open = [];
+  const refuseNotDone = [
+    {
+      gate: "plan_paint",
+      status: "refuse_not_done",
+      note: product?.plan_paint?.note
+        || "Served-equipment / inventory plan MATCH or honest SCHEDULE_ONLY still required — refuse, not complete.",
+    },
+    {
+      gate: "soo_derived_points",
+      status: "refuse_not_done",
+      note: product?.soo?.present
+        ? (product.soo.note || "SOO present but not row-extractable — refuse, not complete.")
+        : "SOO / sequence narratives are not a points source yet — refuse, not complete.",
+    },
+    {
+      gate: "spare_io_capacity",
+      status: "refuse_not_done",
+      note: BAS_SPARE_IO_POLICY.note + " — refuse_not_done until controller spare is drawing-backed.",
+    },
+    {
+      gate: "proofs_interlocks_alarms_trends_beyond_printed",
+      status: "refuse_not_done",
+      note: product?.controls_column_probe?.proof_interlock_column_headers?.length
+        ? `Printed proof/interlock columns (${product.controls_column_probe.proof_interlock_column_headers.join(", ")}) — row extract still refuse_not_done.`
+        : "Only printed ALARM/TREND columns are promoted; SOO proofs/interlocks remain open.",
+    },
+    {
+      gate: "schedule_derived_estimate_not_merged",
+      status: "open",
+      note: product?.schedule_derived_estimate
+        ? `Estimate_only ${product.schedule_derived_estimate.totals?.points ?? 0} pts across ${product.schedule_derived_estimate.units ?? 0} units — never merged into printed totals.`
+        : "Schedule-derived estimate path available as labeled estimate_only.",
+    },
+    {
+      gate: "gt_lock",
+      status: "refuse_not_done",
+      note: "Coordinator self-check + pipeline GT lock not granted for this compile alone.",
+    },
+  ];
+  if (printedLists === "empty") {
+    open.push({
+      gate: "extractable_points_lists",
+      status: "refuse_not_done",
+      note: "No extractable POINTS/DDC/I/O list titles on this set under current set-agnostic needles.",
+    });
+  } else {
+    open.push({
+      gate: "printed_points_lists",
+      status: "open",
+      note: `${listCount} list(s), ${rowCount} printed row(s) — necessary plumbing, not estimator-complete.`,
+    });
+  }
+  if (withoutServed > 0) {
+    open.push({
+      gate: "served_equipment_join",
+      status: "open",
+      note: `${withServed} rows with served_equipment; ${withoutServed} still unjoined — plan paint incomplete.`,
+    });
+  } else if (withServed > 0) {
+    open.push({
+      gate: "served_equipment_join",
+      status: "open",
+      note: `All ${withServed} printed rows carry served_equipment text; plan MATCH still required per unit.`,
+    });
+  }
+  const gapCount = product?.gap_vs_printed?.inventory_without_printed_points_count ?? 0;
+  if (gapCount > 0) {
+    open.push({
+      gate: "inventory_points_gap",
+      status: "open",
+      note: `${gapCount} inventory mark(s) lack printed POINTS/I/O joins — gap disclosed, points not invented.`,
+    });
+  }
+  const invUnits = product?.equipment_inventory?.unit_count ?? 0;
+  if (invUnits > 0) {
+    open.push({
+      gate: "equipment_inventory",
+      status: "open",
+      note: `${invUnits} point-bearing schedule unit(s) from HVAC compile — inventory only; not estimator-complete.`,
+    });
+  } else {
+    refuseNotDone.unshift({
+      gate: "equipment_inventory",
+      status: "refuse_not_done",
+      note: "No point-bearing HVAC schedule units extracted — equipment inventory incomplete.",
+    });
+  }
+  return {
+    estimator_complete: false,
+    gt_locked: false,
+    meaning: "refuse_not_done = unfinished Pillar C work, not a locked success/ceiling",
+    printed_lists: printedLists,
+    sheet_count: sheets?.length ?? 0,
+    served_equipment: { with_join: withServed, without_join: withoutServed },
+    soo_status: product?.soo?.status || "unknown",
+    schedule_estimate_points: product?.schedule_derived_estimate?.totals?.points ?? null,
+    inventory_gap_count: gapCount,
+    gates: [...open, ...refuseNotDone],
+  };
+}
 
 /**
  * Shared UI+MCP gate for T-BAS-01 list titles.
@@ -936,6 +1544,34 @@ export function isBasPointsListTitle(title) {
   // narratives — those lack the SCHEDULE token after POINTS).
   if (/\bPOINTS?\s+SCHEDULE\b/i.test(t)) return true;
   return false;
+}
+
+/**
+ * L5 geometry: untitled BAS / I/O grids — header shape, not title regex alone.
+ * Requires point/I/O column tokens and rejects valve-schedule header shapes.
+ */
+export function isBasPointsListTable(table) {
+  const title = String(table?.title?.text || "").replace(/\s+/g, " ").trim();
+  if (isBasPointsListTitle(title)) return true;
+  if (title) return false;
+  if (isControlValveHeaderShape(table)) return false;
+  const blob = tableHeaderBlob(table);
+  if (!blob) return false;
+  if (/\b(?:GPM|\bCV\b)\b/.test(blob) && /\bSERVED\b/.test(blob)) return false;
+  return headerShapeMatches(table, [
+    /\b(?:TAG|MARK|POINT|DESCRIPTION|DEVICE)\b/,
+    /\b(?:AI|AO|BI|BO|ANALOG|DIGITAL|INPUT|OUTPUT|I\s*\/\s*O)\b/,
+  ]);
+}
+
+/** Display title for header-inferred BAS tables (never used as a family regex). */
+export function inferBasListTitle(table) {
+  const blob = tableHeaderBlob(table);
+  if (/\bI\s*\/\s*O\s+LIST\b|\bIO\s+LIST\b/i.test(blob)) return "I/O LIST (header-inferred)";
+  if (/\bDDC\s+CONTROLLER\b/i.test(blob)) return "DDC CONTROLLER I/O (header-inferred)";
+  if (/\bPOINTS?\s+SCHEDULE\b/i.test(blob)) return "POINTS SCHEDULE (header-inferred)";
+  if (/\bPOINTS?\s+LIST\b/i.test(blob)) return "POINTS LIST (header-inferred)";
+  return "BAS POINTS TABLE (header-inferred)";
 }
 
 /** Column-label rows that are not countable I/O or points marks. */
@@ -1019,8 +1655,9 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
   const sheets = sheetRecords(sessionOrSheets, graph);
   const lists = [];
   for (const table of graph.tables || []) {
-    const title = String(table.title?.text || "");
-    if (!isBasPointsListTitle(title)) continue;
+    const rawTitle = String(table.title?.text || "");
+    if (!isBasPointsListTitle(rawTitle) && !isBasPointsListTable(table)) continue;
+    const title = rawTitle.trim() || inferBasListTitle(table);
     const counts = { AI: 0, AO: 0, BI: 0, BO: 0, other: 0 };
     const extras = { alarm: 0, trend: 0, hardwired: 0, soft: 0 };
     const items = [];
@@ -1108,8 +1745,13 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     const key = sheet.key;
     const tables = (graph.tables || []).filter((t) => t.sheet === key);
     const titles = tables
-      .map((t) => String(t.title?.text || ""))
-      .filter((t) => isBasPointsListTitle(t));
+      .map((t) => {
+        const raw = String(t.title?.text || "").trim();
+        if (isBasPointsListTitle(raw)) return raw;
+        if (isBasPointsListTable(t)) return inferBasListTitle(t);
+        return "";
+      })
+      .filter(Boolean);
     return {
       sheet_id: key,
       sheet_number: sheet.sheetNumber ?? sheet.number ?? null,
@@ -1117,6 +1759,10 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       titles,
     };
   });
+
+  const hvac = compileHvacTakeoff(sessionOrSheets, graph);
+  const estimator_product = buildBasEstimatorProduct(hvac, lists, graph);
+  const estimator_status = basEstimatorStatus({ lists, totals, sheets, product: estimator_product });
 
   return {
     schema_version: CORPUS_TAKEOFF_VERSION,
@@ -1126,7 +1772,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
     sheet_count: sheets.length,
     categories: {
       points_lists: {
-        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO from MARK prefixes when present; on I/O LIST device rows without MARK prefixes, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; title-only schematic lists excluded and disclosed. Sequence-of-operations narratives are not a points source.",
+        provenance: "Each extractable POINTS/DDC/I/O list title-scanned; AI/AO/BI/BO from MARK prefixes when present; on I/O LIST device rows without MARK prefixes, ANALOG/DIGITAL quantity cells roll into AI/BI (direction not distinguished); printed ALARM / TREND / hardwired-vs-soft columns promoted when present (never invented); served_equipment from UNIT/EQUIPMENT/SERVED columns, I/O device keys, or POINTS LIST title unit token when printed (plan paint joins on that mark — never invented); column-label rows skipped; title-only schematic lists excluded and disclosed. Sequence-of-operations narratives are not a points source. Schedule-derived qty×points/unit estimates are labeled estimate_only and never merged into these printed totals.",
         tolerance: { count: 0, point_type: 0 },
         lists,
         totals,
@@ -1144,6 +1790,10 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       hardwired: totals.hardwired,
       soft: totals.soft,
     },
+    /** Pillar C: printed lists ≠ done. See gates with status refuse_not_done. */
+    estimator_status,
+    /** Equipment inventory + SOO disclose + labeled estimate + gap — never merges into totals. */
+    estimator_product,
     page_accounting: {
       sheet_count: sheets.length,
       pages_accounted_for: pages.length,
@@ -1216,6 +1866,163 @@ export function normalizeControlValveCells(item, service) {
   return out;
 }
 
+/** Contractor columns that a commercial valve takeoff expects when printed. */
+export const VALVE_CONTRACTOR_COLUMNS = [
+  "Served equipment",
+  "Size",
+  "GPM",
+  "Cv",
+  "Actuator",
+  "Fail position",
+  "Control signal",
+];
+
+/**
+ * Pillar C valve estimator disclose — printed valve/damper rows alone are never
+ * a complete commercial valve takeoff (plan paint + actuator completeness + GT).
+ * refuse_not_done = unfinished work, not a locked ceiling.
+ *
+ * @param {{ categories: object, totals: object }} parts
+ */
+export function buildValveEstimatorProduct({ categories, totals }) {
+  const familyRollup = [];
+  let withServed = 0;
+  let withCv = 0;
+  let withSize = 0;
+  let withGpm = 0;
+  let withActuator = 0;
+  let withFail = 0;
+  let withSignal = 0;
+  let itemCount = 0;
+  const planPaintTargets = [];
+  for (const [name, cat] of Object.entries(categories || {})) {
+    const items = cat.items || [];
+    if (!items.length) continue;
+    let famServed = 0;
+    let famCv = 0;
+    let famAct = 0;
+    for (const item of items) {
+      itemCount += 1;
+      const cells = item.cells || {};
+      const tag = String(item.tag || item.mark || "").trim();
+      if (tag) {
+        planPaintTargets.push({
+          tag,
+          family: name,
+          prefer_schedule_title: item.table_title || null,
+          prefer_schedule_sheet: item.sheet_id || null,
+        });
+      }
+      const served = cells["Unit Mark"]?.text || cells["Served equipment"]?.text;
+      const cv = cells.Cv?.text;
+      const size = cells.Size?.text;
+      const gpm = cells.GPM?.text;
+      const act = cells.Actuator?.text;
+      const fail = cells["Fail position"]?.text;
+      const signal = cells["Control signal"]?.text;
+      if (served) { withServed += 1; famServed += 1; }
+      if (cv) { withCv += 1; famCv += 1; }
+      if (size) withSize += 1;
+      if (gpm) withGpm += 1;
+      if (act) { withActuator += 1; famAct += 1; }
+      if (fail) withFail += 1;
+      if (signal) withSignal += 1;
+    }
+    familyRollup.push({
+      family: name,
+      count: items.length,
+      with_served: famServed,
+      with_cv: famCv,
+      with_actuator: famAct,
+    });
+  }
+  const missingContractor = [];
+  if (itemCount > 0) {
+    if (withServed < itemCount) missingContractor.push("Served equipment");
+    if (withSize < itemCount) missingContractor.push("Size");
+    if (withGpm < itemCount) missingContractor.push("GPM");
+    if (withCv < itemCount) missingContractor.push("Cv");
+    if (withActuator < itemCount) missingContractor.push("Actuator");
+    if (withFail < itemCount) missingContractor.push("Fail position");
+    if (withSignal < itemCount) missingContractor.push("Control signal");
+  }
+  return {
+    kind: "valve_estimator_product",
+    estimator_complete: false,
+    printed_items: itemCount || totals?.items || 0,
+    families: familyRollup,
+    contractor_column_coverage: {
+      served_equipment: withServed,
+      size: withSize,
+      gpm: withGpm,
+      cv: withCv,
+      actuator: withActuator,
+      fail_position: withFail,
+      control_signal: withSignal,
+      missing_on_some_rows: missingContractor,
+      note: "Coverage of printed schedule columns only — never invent missing Cv/actuator/GPM.",
+    },
+    plan_paint: {
+      status: "refuse_not_done",
+      note: "Plan MATCH / SCHEDULE_ONLY paint still required per mark — printed schedule ≠ installed takeoff. When sweeping valve/damper MARKs, pass prefer_schedule_title from targets (schedule table_title) when the same MARK appears on multiple schedules; never invent plan qty.",
+      targets: planPaintTargets.slice(0, 80),
+    },
+  };
+}
+
+/**
+ * @param {{ product?: object, totals?: object }} parts
+ */
+export function valveEstimatorStatus({ product = null, totals = null } = {}) {
+  const items = product?.printed_items ?? totals?.items ?? 0;
+  const open = [];
+  const refuseNotDone = [
+    {
+      gate: "plan_paint",
+      status: "refuse_not_done",
+      note: "Valve/damper plan paint MATCH or honest SCHEDULE_ONLY still required — refuse, not complete.",
+    },
+    {
+      gate: "actuator_fail_signal_complete",
+      status: "refuse_not_done",
+      note: "Actuator / fail / signal only when printed; missing columns stay refuse_not_done — never invent.",
+    },
+    {
+      gate: "gt_lock",
+      status: "refuse_not_done",
+      note: "Coordinator self-check + pipeline GT lock not granted for this valve compile alone.",
+    },
+  ];
+  if (items === 0) {
+    open.push({
+      gate: "extractable_valve_schedules",
+      status: "refuse_not_done",
+      note: "No extractable valve/damper/air-valve schedule rows under current set-agnostic families.",
+    });
+  } else {
+    open.push({
+      gate: "printed_valve_schedules",
+      status: "open",
+      note: `${items} printed valve/damper row(s) — necessary plumbing, not estimator-complete.`,
+    });
+  }
+  const missing = product?.contractor_column_coverage?.missing_on_some_rows || [];
+  if (missing.length) {
+    open.push({
+      gate: "contractor_column_gaps",
+      status: "open",
+      note: `Printed rows missing some of: ${missing.join(", ")} — disclose only, do not invent.`,
+    });
+  }
+  return {
+    estimator_complete: false,
+    gt_locked: false,
+    meaning: "refuse_not_done = unfinished Pillar C valve work, not a locked success/ceiling",
+    printed_items: items,
+    gates: [...open, ...refuseNotDone],
+  };
+}
+
 /**
  * Deterministic CHW + HHW control-valve takeoff for "complete valve takeoff"
  * goals. Same Session+ODL family extractors as T-HVAC-01, filtered to valves,
@@ -1264,6 +2071,12 @@ export function compileControlValveTakeoff(sessionOrSheets, graph, opts = {}) {
     };
   }
   const itemCount = Object.values(categories).reduce((n, c) => n + (c.items?.length || 0), 0);
+  const totals = {
+    categories: Object.keys(categories).length,
+    items: itemCount,
+  };
+  const estimator_product = buildValveEstimatorProduct({ categories, totals });
+  const estimator_status = valveEstimatorStatus({ product: estimator_product, totals });
   return {
     ...full,
     takeoff_id: "T-VALVE-01",
@@ -1271,10 +2084,10 @@ export function compileControlValveTakeoff(sessionOrSheets, graph, opts = {}) {
     compiler: "corpusTakeoff.compileControlValveTakeoff",
     service_filter: wantService || null,
     categories,
-    totals: {
-      categories: Object.keys(categories).length,
-      items: itemCount,
-    },
+    totals,
+    /** Pillar C: printed valve rows ≠ done. */
+    estimator_status,
+    estimator_product,
     exclusions: [
       ...HVAC_EXCLUSIONS,
       "Non-valve HVAC equipment (AHU, FCU, VAV, pumps, …) — use kind hvac_equipment for the full equipment takeoff",

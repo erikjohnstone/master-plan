@@ -1,0 +1,53 @@
+{
+  "set_id": "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 4,
+    "estimate_only_points": 60,
+    "never_merged_into_printed": true,
+    "gap_count": 4,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:10:35.501Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-024-inventory-drawing-verify.json",
+    "sample_pass": 4,
+    "sample_n": 4,
+    "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 0,
+    "families": [],
+    "contractor_gaps": [],
+    "estimator_complete": false,
+    "zero_valve_floor": true
+  },
+  "valve_zero_floor_verify": {
+    "at": "2026-09-01T17:56:31.164797+00:00",
+    "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
+    "printed_items": 0,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:08:23.390Z",
+    "ms": 1030,
+    "printed_bas_rows": 0,
+    "inventory_units": 4,
+    "targets_total": 4,
+    "tallies": {
+      "MATCH": 4,
+      "SCHEDULE_ONLY": 0,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
+}

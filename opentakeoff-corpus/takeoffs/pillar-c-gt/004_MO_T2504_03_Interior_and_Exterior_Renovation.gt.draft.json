@@ -1,0 +1,53 @@
+{
+  "set_id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 12,
+    "estimate_only_points": 138,
+    "never_merged_into_printed": true,
+    "gap_count": 12,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:09:51.672Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-004-inventory-drawing-verify.json",
+    "sample_pass": 12,
+    "sample_n": 12,
+    "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 0,
+    "families": [],
+    "contractor_gaps": [],
+    "estimator_complete": false,
+    "zero_valve_floor": true
+  },
+  "valve_zero_floor_verify": {
+    "at": "2026-09-01T17:56:31.162917+00:00",
+    "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
+    "printed_items": 0,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "004_MO_T2504_03_Interior_and_Exterior_Renovation",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T20:54:51.412Z",
+    "ms": 10286,
+    "printed_bas_rows": 0,
+    "inventory_units": 12,
+    "targets_total": 12,
+    "tallies": {
+      "MATCH": 11,
+      "SCHEDULE_ONLY": 1,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
+}

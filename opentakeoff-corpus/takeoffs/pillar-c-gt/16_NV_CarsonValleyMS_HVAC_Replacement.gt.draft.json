@@ -37,5 +37,71 @@
     "No BAS points keyed/compiled on this set (valve-only probe)",
     "Estimator contractor columns / full hand-count may remain open",
     "Pillar C corpus-deep — this set alone cannot complete C"
-  ]
+  ],
+  "valve_estimator_product": {
+    "printed_items": 2,
+    "families": [
+      "CONTROL_DAMPER:2"
+    ],
+    "contractor_gaps": [
+      "Served equipment",
+      "Size",
+      "GPM",
+      "Cv",
+      "Actuator",
+      "Fail position",
+      "Control signal"
+    ],
+    "estimator_complete": false
+  },
+  "valve_estimator_columns_verify": {
+    "at": "2026-09-01T16:32:20.618Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-16-valve-estimator-columns.json",
+    "missing_match": true,
+    "column_honesty": "7/7",
+    "gt_locked": false
+  },
+  "valve_plan_paint_census": {
+    "at": "2026-09-01T18:39:40.289Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-16-valve-plan-paint-census.json",
+    "match": 2,
+    "schedule_only": 0,
+    "items": 2,
+    "gt_locked": false
+  },
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 6,
+    "estimate_only_points": 90,
+    "never_merged_into_printed": true,
+    "gap_count": 5,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T16:53:25.767Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-16-inventory-drawing-verify.json",
+    "sample_pass": 6,
+    "sample_n": 6,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "16_NV_CarsonValleyMS_HVAC_Replacement",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:09:19.756Z",
+    "ms": 10746,
+    "printed_bas_rows": 0,
+    "inventory_units": 6,
+    "targets_total": 6,
+    "tallies": {
+      "MATCH": 6,
+      "SCHEDULE_ONLY": 0,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
 }

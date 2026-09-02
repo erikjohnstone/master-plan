@@ -364,6 +364,96 @@ test("rowsFromCompiledTakeoff: BAS points lists → POINT TYPE rows", () => {
   assert.ok(rows.some((r) => r.tag === "AI1" && r.field === "WIRING" && r.value === "hardwired"));
 });
 
+test("rowsFromCompiledTakeoff: BAS estimator_status refuse_not_done is not 'done'", () => {
+  const rows = rowsFromCompiledTakeoff({
+    takeoff_id: "T-BAS-01",
+    kind: "bas_points",
+    estimator_status: {
+      estimator_complete: false,
+      gt_locked: false,
+      meaning: "refuse_not_done = unfinished Pillar C work, not a locked success/ceiling",
+      gates: [
+        { gate: "printed_points_lists", status: "open", note: "plumbing only" },
+        { gate: "soo_derived_points", status: "refuse_not_done", note: "SOO refuse — not complete" },
+        { gate: "gt_lock", status: "refuse_not_done", note: "GT not locked" },
+      ],
+    },
+    categories: {
+      points_lists: {
+        lists: [{
+          title: "POINTS LIST AHU-1",
+          sheet_id: "c#1",
+          rows: 1,
+          items: [{ tag: "AI1", quantity: 1, sheet_id: "c#1", table_title: "POINTS LIST AHU-1" }],
+        }],
+        totals: { rows: 1, AI: 1, AO: 0, BI: 0, BO: 0 },
+      },
+    },
+  });
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "estimator_complete" && /NO/.test(String(r.value))));
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "refuse:soo_derived_points" && r.value === "refuse_not_done"));
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "refuse:gt_lock"));
+  assert.ok(!rows.some((r) => r.tag === "BAS_ESTIMATOR" && /printed_points_lists/.test(String(r.field))));
+});
+
+test("rowsFromCompiledTakeoff: BAS estimator_product estimate/gap/SOO rows are disclosed", () => {
+  const rows = rowsFromCompiledTakeoff({
+    takeoff_id: "T-BAS-01",
+    kind: "bas_points",
+    estimator_status: {
+      estimator_complete: false,
+      gt_locked: false,
+      meaning: "refuse_not_done = unfinished",
+      gates: [{ gate: "soo_derived_points", status: "refuse_not_done", note: "SOO refuse" }],
+    },
+    estimator_product: {
+      equipment_inventory: { unit_count: 5 },
+      soo: { status: "present_not_row_extractable", note: "SOO present, not typed" },
+      schedule_derived_estimate: {
+        label: "estimate_only",
+        totals: { points: 57 },
+      },
+      gap_vs_printed: { inventory_without_printed_points_count: 4 },
+      spare_io_policy: {
+        typical_pct_per_point_type: { common: 15 },
+        note: "policy disclose only",
+      },
+      plan_paint: {
+        status: "refuse_not_done",
+        note: "paint required",
+        targets: [
+          {
+            tag: "B1",
+            prefer_schedule_title: "2-STAGE, GAS FIRED FURNACE SCHEDULE",
+            prefer_schedule_sheet: "M-601",
+          },
+        ],
+      },
+    },
+    categories: {
+      points_lists: {
+        lists: [{
+          title: "POINTS LIST AHU-1",
+          sheet_id: "c#1",
+          rows: 1,
+          items: [{ tag: "AI1", quantity: 1, sheet_id: "c#1", table_title: "POINTS LIST AHU-1" }],
+        }],
+        totals: { rows: 1, AI: 1, AO: 0, BI: 0, BO: 0 },
+      },
+    },
+  });
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "equipment_inventory_units" && r.value === 5));
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "soo_status" && /present_not_row_extractable/.test(String(r.value))));
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "schedule_estimate_points" && r.value === 57));
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "inventory_points_gap" && r.value === 4));
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "spare_io_policy" && /15%/.test(String(r.value))));
+  // Printed point row still present — estimate did not replace it.
+  assert.ok(rows.some((r) => r.tag === "AI1" && r.field === "quantity"));
+  assert.ok(rows.some((r) => r.tag === "BAS_ESTIMATOR" && r.field === "plan_paint" && r.value === "refuse_not_done"));
+  assert.ok(rows.some((r) => r.tag === "B1" && r.field === "plan_paint_prefer_schedule_title"
+    && /FURNACE SCHEDULE/i.test(String(r.value))));
+});
+
 test("compileAgentTakeoff: repeating BAS marks across lists stay separate lines", () => {
   // Same AI1 on two points lists must not collapse — MCP compile totals 122,
   // Takeoff UI must show 122 lines (shared corpusTakeoff identity).
@@ -579,10 +669,76 @@ test("control_valves compile includes isolation/damper families; CHW filter stay
   assert.ok((all.categories.ISOLATION_VALVE?.count || 0) >= 1);
   assert.ok((all.categories.CONTROL_DAMPER?.count || 0) >= 1);
   assert.ok(all.totals.items >= 3);
+  assert.equal(all.estimator_status.estimator_complete, false);
+  assert.equal(all.estimator_status.gt_locked, false);
+  assert.ok(all.estimator_product);
+  assert.equal(all.estimator_product.estimator_complete, false);
+  assert.ok(all.estimator_product.printed_items >= 3);
+  assert.equal(all.estimator_product.plan_paint.status, "refuse_not_done");
+  assert.ok(Array.isArray(all.estimator_product.plan_paint.targets));
+  assert.ok(all.estimator_product.plan_paint.targets.some(
+    (t) => t.tag && /CONTROL VALVE SCHEDULE/i.test(String(t.prefer_schedule_title || "")),
+  ));
+  assert.ok(all.estimator_status.gates.some((g) => g.gate === "plan_paint" && g.status === "refuse_not_done"));
+  assert.ok(all.estimator_status.gates.some((g) => g.gate === "gt_lock" && g.status === "refuse_not_done"));
   const chwOnly = compileControlValveTakeoff([], graph, { service: "CHW" });
   assert.equal(chwOnly.categories.ISOLATION_VALVE, undefined);
   assert.equal(chwOnly.categories.CONTROL_DAMPER, undefined);
   assert.ok((chwOnly.categories.CHW_CONTROL_VALVE?.count || 0) >= 1);
+  assert.equal(chwOnly.estimator_status.estimator_complete, false);
+});
+
+test("rowsFromCompiledTakeoff: VALVE_ESTIMATOR refuse_not_done + product disclosed", () => {
+  const rows = rowsFromCompiledTakeoff({
+    takeoff_id: "T-VALVE-01",
+    kind: "control_valves",
+    estimator_status: {
+      estimator_complete: false,
+      gt_locked: false,
+      meaning: "refuse_not_done = unfinished valve work",
+      gates: [
+        { gate: "printed_valve_schedules", status: "open", note: "plumbing" },
+        { gate: "plan_paint", status: "refuse_not_done", note: "paint required" },
+        { gate: "gt_lock", status: "refuse_not_done", note: "not locked" },
+      ],
+    },
+    estimator_product: {
+      printed_items: 3,
+      contractor_column_coverage: {
+        missing_on_some_rows: ["Actuator", "Fail position"],
+        note: "printed only",
+      },
+      plan_paint: {
+        status: "refuse_not_done",
+        note: "paint required",
+        targets: [{
+          tag: "CV-3",
+          family: "CHW_CONTROL_VALVE",
+          prefer_schedule_title: "CHW CONTROL VALVE SCHEDULE",
+          prefer_schedule_sheet: "m#1",
+        }],
+      },
+    },
+    categories: {
+      CHW_CONTROL_VALVE: {
+        count: 1,
+        items: [{
+          tag: "CV-1", quantity: 1, sheet_id: "m#1", table_title: "CHW CONTROL VALVE SCHEDULE",
+          cells: { Cv: { text: "4" }, "Served equipment": { text: "AHU-1" } },
+        }],
+      },
+    },
+  });
+  assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "estimator_complete" && /NO/.test(String(r.value))));
+  assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "refuse:plan_paint" && r.value === "refuse_not_done"));
+  assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "refuse:gt_lock"));
+  assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "printed_valve_items" && r.value === 3));
+  assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "contractor_column_gaps" && /Actuator/.test(String(r.value))));
+  assert.ok(rows.some((r) => r.tag === "VALVE_ESTIMATOR" && r.field === "plan_paint" && r.value === "refuse_not_done"));
+  assert.ok(rows.some((r) => r.tag === "CV-3" && r.field === "plan_paint_prefer_schedule_title"
+    && /CHW CONTROL VALVE SCHEDULE/i.test(String(r.value))));
+  assert.ok(rows.some((r) => r.tag === "CV-1" && r.field === "quantity"));
+  assert.ok(!rows.some((r) => r.tag === "VALVE_ESTIMATOR" && /printed_valve_schedules/.test(String(r.field))));
 });
 
 test("control_valves compile → panel lines with cites; dual-Cv scrap dropped", () => {

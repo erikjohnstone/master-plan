@@ -1,0 +1,53 @@
+{
+  "set_id": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+  "pillar_c_complete": false,
+  "gt_locked": false,
+  "note": "bas:0 — inventory/estimate floor only; Pillar C not complete",
+  "estimator_product": {
+    "printed_bas_rows": 0,
+    "inventory_units": 4,
+    "estimate_only_points": 32,
+    "never_merged_into_printed": true,
+    "gap_count": 4,
+    "soo_status": "absent_or_not_detected",
+    "estimator_complete": false
+  },
+  "inventory_drawing_verify": {
+    "at": "2026-09-01T17:21:01.229Z",
+    "artifact": "/opt/cursor/artifacts/pillar-c-083-inventory-drawing-verify.json",
+    "sample_pass": 4,
+    "sample_n": 4,
+    "gt_locked": false
+  },
+  "valve_estimator_product": {
+    "printed_items": 0,
+    "families": [],
+    "contractor_gaps": [],
+    "estimator_complete": false,
+    "zero_valve_floor": true
+  },
+  "valve_zero_floor_verify": {
+    "at": "2026-09-01T17:56:31.170735+00:00",
+    "artifact": "/opt/cursor/artifacts/pillar-c-valve-product-census-all.json",
+    "printed_items": 0,
+    "gt_locked": false
+  },
+  "depth_plan_paint_full": {
+    "set_id": "083_MA_Town_Offices_Facilities_HVAC_System_Upgrades",
+    "kind": "bas_depth_plan_paint_full",
+    "at": "2026-09-01T21:08:42.167Z",
+    "ms": 1042,
+    "printed_bas_rows": 0,
+    "inventory_units": 4,
+    "targets_total": 4,
+    "tallies": {
+      "MATCH": 4,
+      "SCHEDULE_ONLY": 0,
+      "AMBIGUOUS": 0,
+      "ERROR": 0
+    },
+    "estimator_complete": false,
+    "gt_locked": false,
+    "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  }
+}
