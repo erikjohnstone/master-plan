@@ -887,7 +887,23 @@ Artifacts: `/opt/cursor/artifacts/pillar-c-*-soo-probe.json`,
 3. WP3.3 TG bowtie dedicated detector (tracked follow-on).
 4. Optional: BlueprintParser_OS as complementary LLM recall only — never qty/cite truth.
 
-Cloud dispatch and all subagent dispatch remain prohibited.
+Cloud dispatch and all subagent dispatch remain prohibited (2026-09-02: user
+directed coordinator-only — no `Task` / `computerUse` / cloud workers).
+
+### Active: L0–L5 takeoff JSON batch emit (2026-09-02)
+
+**Policy:** coordinator-only; prewarm-first (see `GOAL.md` § execution policy).
+
+| Step | Command | Status |
+| --- | --- | --- |
+| 1 Prewarm ×4 | `prewarm:corpus:shard{0..3}` sidecar off | **in progress** |
+| 2 Emit ×4 | `emit:corpus:shard{0..3}` `--resume` | pending warm cache |
+| 3 Gap pass | `emit:gap` sidecar on | pending base 116 |
+| 4 Scoreboard | `npm run eval:corpus` | pending 116/116 files |
+
+Target: **116** `opentakeoff/out/<set_id>.takeoff.json` via shared
+`Session.graphForPipeline` + `buildEstimatorTakeoffDocument`. MVP gates remain
+honest (`corpus_pass_rate ≥ 0.95` not claimed until measured).
 
 ## Rejected or deferred approaches
 

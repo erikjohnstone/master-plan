@@ -46,3 +46,19 @@ existing Pillar A compile + Pillar B reconcile + Pillar C GT harness run unchang
 | `valve_graph_without_compile` / `bas_graph_without_compile` | Trend down batch-over-batch |
 | Every compile row has cell bbox cite | Keep (Pillar A) |
 | `out/<set_id>.takeoff.json` for corpus | `emit-corpus-takeoff.mjs` |
+
+## Batch emit policy (coordinator-only, prewarm-first)
+
+**No subagents.** The coordinator alone runs shell/tmux workers — no `Task`,
+`computerUse`, or cloud workers for this batch.
+
+Bulk emit must **not** cold-build `graphForPipeline()` inline per set. Order:
+
+1. **Prewarm** — four shards, sidecar off: `npm run prewarm:corpus:shard{0,1,2,3}`
+   from `opentakeoff/` (runs in `mcp/` via `node --import tsx`).
+2. **Emit** — four shards, `--resume`: `npm run emit:corpus:shard{0,1,2,3}`.
+   Warm cache → seconds per set → `out/<set_id>.takeoff.json`.
+3. **Scoreboard** — `npm run eval:corpus` after 116/116 files exist.
+
+Do not restart workers mid-build (cache writes only after a full graph completes).
+See also `opentakeoff-corpus/GOAL.md` § execution policy.

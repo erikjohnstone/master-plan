@@ -11,6 +11,7 @@ import { performance } from "node:perf_hooks";
 import { fileURLToPath } from "node:url";
 import { buildEstimatorTakeoffDocument } from "../../web/src/lib/estimatorTakeoffDocument.mjs";
 import { cachedGraphForKey } from "../test/helpers/loadKeySession.mjs";
+import { VECTOR_PIPELINE_CACHE_ID } from "./graphCacheConstants.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_CORPUS = resolve(HERE, "../../../opentakeoff-corpus");
@@ -58,7 +59,7 @@ function parseArgs(argv) {
 const opts = parseArgs(process.argv.slice(2));
 const { corpusRoot, outDir, limit, resume, filterIds, shardIndex, shardCount } = opts;
 
-const CACHE_ID = "emit-takeoff-v1";
+const CACHE_ID = VECTOR_PIPELINE_CACHE_ID;
 const crossDir = resolve(corpusRoot, "takeoffs/cross-set-compile");
 if (!existsSync(crossDir)) {
   console.error(`missing cross-set-compile dir: ${crossDir}`);

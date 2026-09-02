@@ -31,6 +31,11 @@ non-obvious.
 
 When working autonomously toward the corpus goal:
 
+**No subagents.** The coordinator alone implements, runs shell commands, profiles,
+and verifies. Do not dispatch `Task` subagents (`explore`, `debug`, `computerUse`,
+etc.), cloud workers, or any delegated agent for corpus-goal work unless the user
+explicitly re-enables delegation.
+
 1. Keep implementation, testing, and integration on the coordinator VM as the
    critical path. Do not dispatch cloud workers unless the user explicitly
    re-enables them; repeated cloud-state failures made them negative expected

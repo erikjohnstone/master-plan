@@ -7,12 +7,35 @@ Vol2 full 82 INDEX still in scope. Older keyed-corpus history retained.
 
 ## Current execution policy (supersedes older worker references below)
 
-As explicitly directed on 2026-08-29, this goal is **coordinator-only**.
-Do not dispatch worker agents or subagents. The coordinator implements,
-tests, profiles, and verifies changes directly in this Cloud VM. Any worker
-that was already running when this policy was recorded is not part of the
-critical path, and its output must not be integrated. This policy supersedes
-the historical coordinator/worker descriptions retained later in this file.
+As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
+**coordinator-only — no subagents**. Do not dispatch worker agents, cloud
+workers, or Cursor `Task` subagents (`explore`, `debug`, `computerUse`, etc.).
+The coordinator implements, tests, profiles, and verifies changes directly in
+this Cloud VM. Any worker that was already running when this policy was recorded
+is not part of the critical path, and its output must not be integrated. This
+policy supersedes the historical coordinator/worker descriptions retained later
+in this file.
+
+### Batch `out/*.takeoff.json` emit (116 compile keys) — prewarm-first
+
+Bulk emit must **not** cold-build `graphForPipeline()` inline per set (that
+path alone can stretch to many hours with restarts and no warm cache). Use this
+order on the coordinator VM only:
+
+1. **Prewarm** — four parallel shards, sidecar off:
+   `OPENTAKEOFF_TABLE_SIDECAR=0 npm run prewarm:corpus:shard{0,1,2,3}` from
+   `opentakeoff/` (cwd `mcp/` for `node --import tsx`). Finishes the
+   content-addressed sheet-graph cache once per PDF.
+2. **Emit** — four parallel shards, `--resume`, sidecar off:
+   `npm run emit:corpus:shard{0,1,2,3}`. With warm cache this is seconds per
+   set; writes `opentakeoff/out/<set_id>.takeoff.json`.
+3. **Gap pass** — targeted compile-zero valve/BAS sets only:
+   `npm run emit:gap` (`OPENTAKEOFF_TABLE_SIDECAR=1`, cache bust where needed
+   for L2.5 pillar-gap recovery).
+
+Do not interleave prewarm and emit on the same sets without `--resume`, and do
+not restart workers mid-build (cache writes only after a full graph completes).
+After all 116 files exist, run `npm run eval:corpus` for the scoreboard.
 
 The user accepted the verified approximately 80-second forced-cold corpus
 runtime on 2026-08-29; evaluator speed is no longer the priority. Proceed
