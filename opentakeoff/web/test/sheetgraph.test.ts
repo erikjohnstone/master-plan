@@ -3091,6 +3091,40 @@ test("WP1.4 CODE_RE accepts digit+letter unit suffixes (AHU-1A / CU-1B)", () => 
   assert.deepEqual(tables[0].rows.map((r) => r.key), ["AHU-1A", "AHU-1B", "CU-1A"]);
 });
 
+test("CODE_RE accepts a letter+digit prefix before the hyphen (real bug: 021_XX's own VVR2-8/VVR2-10 riser-numbered terminal units)", () => {
+  // Real, found-live gap (2026-09-02), traced with a temporary debug probe
+  // against the real corpus, not guessed: 021_XX_Laboratory_building's own
+  // AIR TERMINAL UNIT SCHEDULE tags its rows "VVR2 - 8", "VVR2 - 10" etc —
+  // a real riser/zone-numbered terminal-unit convention. rowKeyOf's own
+  // punctuation strip normalizes the spacing fine ("VVR2-8"), but CODE_RE's
+  // compound-tag prefix (`[A-Z]{1,6}`) is letters-only and rejects "VVR2"
+  // outright because of its own trailing digit — every one of these rows
+  // came back unkeyed, became an orphan, and got glued onto whichever
+  // nearby row sat closest by y-position. That's the true source of two
+  // real, already-shipped downstream symptoms found and worked around in
+  // corpusTakeoff.mjs this same session (a wrong tag pulled from a
+  // different row's own text; two real rows' numeric values merged into
+  // one) — this is the fix at the actual source, not another workaround.
+  const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
+  const sched: SheetSpans = {
+    key: "vvr-riser.pdf#1",
+    sheet_number: "M40",
+    spans: [
+      sp("SINGLE DUCT AIR TERMINAL UNIT SCHEDULE", 100, 10),
+      sp("EQUIP. TAG", 0, 40), sp("TYPE", 180, 40), sp("GPM", 260, 40), sp("MANUFACTURER", 360, 40), sp("REMARKS", 760, 40),
+      sp("VVR1 - 5", 0, 70), sp("VAV", 180, 70), sp("0.18", 260, 70), sp("TITUS", 360, 70), sp("1", 760, 70),
+      sp("VVR2 - 8", 0, 90), sp("VAV", 180, 90), sp("0.3", 260, 90), sp("TITUS", 360, 90), sp("1", 760, 90),
+      sp("VVR2 - 10", 0, 110), sp("VAV", 180, 110), sp("0.32", 260, 110), sp("TITUS", 360, 110), sp("1", 760, 110),
+    ],
+  };
+  const tables = extractAllTables(sched, "equipment");
+  assert.equal(tables.length, 1, `expected one terminal-unit table, got ${tables.map((t) => t.title?.text).join(" | ")}`);
+  assert.deepEqual(tables[0].rows.map((r) => r.key), ["VVR1-5", "VVR2-8", "VVR2-10"], "every riser-numbered tag must key its own row, none unkeyed/orphaned");
+  const byKey = Object.fromEntries(tables[0].rows.map((r) => [r.key, r.cells]));
+  assert.equal(byKey["VVR2-8"].GPM.text, "0.3", "VVR2-8's own real value, not merged with a neighbor's");
+  assert.equal(byKey["VVR2-10"].GPM.text, "0.32");
+});
+
 test("WP1.4 title hunt: SCHEDULED note prose must not steal the real title (Northport AIR INLETS shape)", () => {
   const sp = (str: string, x: number, y: number, h = 8): GraphSpan => ({ str, x, y, w: str.length * 5, h });
   const sched: SheetSpans = {

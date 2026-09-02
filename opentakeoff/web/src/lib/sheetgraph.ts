@@ -3058,7 +3058,25 @@ function bandLimits(anchors: Anchor[]): { x0: number; x1: number; medGap: number
 // (this specific row already resolves correctly via a separate, working
 // mechanism this file does not touch) rather than silently taking it down
 // while chasing a different set's own real gap.
-const CODE_RE = /^(?:[A-Z]{1,4}[A-Z0-9]{0,4}|[A-Z]{1,6}(?:-(?:[A-Z][A-Z0-9]{0,5}|[0-9]{1,5}[A-Z]{0,3})){1,4})$/;
+// Real, found-live gap (2026-09-02, 021_XX_Laboratory_building's own
+// AIR TERMINAL UNIT SCHEDULE): traced with a temporary debug probe, not
+// guessed — every real row keyed "VVR2 - 8", "VVR2 - 10", "VVR2 - 12" (a
+// real riser/zone-numbered terminal-unit convention) came back
+// rowKeyOf=null. Spacing around the hyphen is not the cause (norm() strips
+// it fine, leaving "VVR2-8"); the real cause is the compound-tag branch's
+// own prefix, `[A-Z]{1,6}` — LETTERS ONLY — which "VVR2" fails outright
+// because its own trailing "2" is a digit. Every unkeyed row that fails
+// here becomes an orphan (bandDataRows) and gets glued onto whichever
+// nearby real row sits closest by y-position — the exact mechanism behind
+// two real, already-shipped downstream symptoms this session found and
+// patched around in corpusTakeoff.mjs (a wrong tag pulled from a
+// different row's own text, and two real rows' numeric values merged into
+// one) without knowing this was the true source. Purely additive: the
+// existing letter-only prefix (`[A-Z]{1,6}`) is untouched, so every
+// already-matching real tag (AHU-1, EF-1, CV-1, M-601, ...) matches
+// identically; a second prefix shape (`[A-Z]{1,4}[0-9]{1,2}`, e.g. VVR2,
+// SF10, T1) is added alongside it, not merged into or replacing it.
+const CODE_RE = /^(?:[A-Z]{1,4}[A-Z0-9]{0,4}|(?:[A-Z]{1,6}|[A-Z]{1,4}[0-9]{1,2})(?:-(?:[A-Z][A-Z0-9]{0,5}|[0-9]{1,5}[A-Z]{0,3})){1,4})$/;
 // Hyphen segments accept digit-leading unit suffixes with an optional letter
 // trail (AHU-1A / CU-1B / FCU-2A) — common US multi-cottage / multi-unit
 // marking. Pure letter segments (AHU-A1) and pure digits (AHU-1) unchanged.
