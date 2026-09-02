@@ -99,6 +99,32 @@ on this effort:**
    unsolved friction point for anything without either an interactive
    agent-UI click or sharper-than-tonight's visual tooling — named
    honestly as still open, not silently worked around.
+   **Real, measured follow-up (2026-09-02): the exact-geometry engine
+   itself is NOT the "misses wide-open unambiguous symbols" gap.** Built a
+   real seedRect (coordinate math done by hand: view-render px → zoom
+   0.302469 → native image px, `session.viewSheet` used to visually
+   verify the crop at every step before trusting it, not eyeballed
+   blind) around one real "EH-1" electric-heater hexagon on
+   `itd-d1-lab-mechanical.pdf#3`, then ran a real `scope: "sheet"`
+   `symbolSweep`. Result: 29 matches at score **1.0**, 1 withheld at
+   0.763. Manually confirmed by coordinate cross-check that both other
+   real EH instances on the sheet (EH-2, sitting immediately adjacent —
+   exactly the "nothing to confuse it" case — and EH-3, elsewhere on the
+   sheet) are IN that 1.0 list, not missed. Manually inspected the one
+   withheld hit: it is a genuinely different device (an "SA-1"
+   supply-air hexagon with an attached tag circle) that legitimately
+   shares EH's hexagon outline — correctly held back at 0.763, not
+   falsely counted, not silently dropped. Conclusion: for a real, clean,
+   correctly-seeded case, `symbol_sweep`'s matcher works exactly as
+   designed. The real, demonstrated gap is upstream of the matcher — the
+   manual, error-prone, three-coordinate-space seeding workflow this test
+   itself had to do by hand (view px → zoom → native image px) — not the
+   matching math. This does not prove there is no algorithmic miss
+   anywhere in the corpus (rotated/mirrored/noisy/cross-scale cases were
+   not tested here) — say that limit out loud too. Full result saved:
+   `symbolsweep-result.json` pattern reproducible via
+   `session.sheet(name).widthPx/heightPx` + `session.viewSheet` to
+   iteratively narrow a region before calling `session.symbolSweep`.
 5. **Schedule data is not always where you'd expect it, and this varies by
    drafter.** Valve/coil/actuator data can be (a) one fused, deeply
    merged-header AHU/RTU schedule with everything in it (a disclosed,
