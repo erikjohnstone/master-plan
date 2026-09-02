@@ -2298,10 +2298,33 @@ export function compileEmbeddedCoilGaps(sessionOrSheets, graph) {
     }
   }
   const gaps = coils.filter((c) => !c.has_scheduled_valve);
+
+  const sheetKeys = Array.isArray(graph?.sheets)
+    ? graph.sheets.map((s) => ({ key: s.key || s.sheet || s.id, number: s.sheetNumber ?? s.number ?? null }))
+    : [];
+  const coilsBySheet = new Map();
+  for (const c of coils) {
+    const list = coilsBySheet.get(c.sheet) || [];
+    list.push(c);
+    coilsBySheet.set(c.sheet, list);
+  }
+  const pages = sheetKeys.map((s) => {
+    const here = coilsBySheet.get(s.key) || [];
+    return {
+      sheet_id: s.key,
+      sheet_number: s.number,
+      status: here.length === 0 ? "empty_for_embedded_coils" : "has_embedded_coil",
+      coils_on_sheet: here.length,
+      gaps_on_sheet: here.filter((c) => !c.has_scheduled_valve).length,
+    };
+  });
+
   return {
+    schema_version: 1,
     takeoff_id: "T-VALVE-EMBEDDED-01",
     kind: "embedded_coil_valve_gaps",
     compiler: "corpusTakeoff.compileEmbeddedCoilGaps",
+    sheet_count: sheetKeys.length,
     note: "Real coil hydronic performance data (GPM + EWT/LWT) found "
       + "embedded inside equipment schedules (AHU/RTU/FCU/etc.), "
       + "cross-referenced against the tag/schedule-based control-valve "
@@ -2309,7 +2332,48 @@ export function compileEmbeddedCoilGaps(sessionOrSheets, graph) {
       + "control valve — entries in `gaps` have no matching scheduled "
       + "valve found; disclosed with real evidence, never invented as a "
       + "fabricated tag.",
+    categories: {
+      embedded_coil_gaps: {
+        provenance: "extractEmbeddedCoils structural detector (header "
+          + "co-occurrence: GPM + EWT/LWT under a shared prefix) over "
+          + "every table in the graph, cross-referenced against "
+          + "compileControlValveTakeoff by tag/served-area text.",
+        totals: { coils_found: coils.length, gaps: gaps.length },
+        // Real rows for the shared rowsFromCompiledTakeoff grounding path
+        // (canvas highlights, cite-backed columns) — only the real gaps
+        // (has_scheduled_valve: false) surface as takeoff items; a
+        // corroborated coil is already represented by its own scheduled
+        // valve row and would double-count if it appeared here too.
+        items: gaps.map((g) => ({
+          tag: g.tag || `${g.coilLabel}@${g.sheet}`,
+          sheet_id: g.sheet,
+          table_title: g.source_table_title,
+          quantity: 1,
+          unit: "EA",
+          description: `Embedded ${g.coilLabel} — GPM ${g.gpm}${g.ewt ? `, EWT ${g.ewt}` : ""}${g.lwt ? `, LWT ${g.lwt}` : ""} — no matching scheduled valve found`,
+          cells: {
+            "COIL LABEL": { text: g.coilLabel },
+            GPM: { text: g.gpm },
+            ...(g.ewt ? { EWT: { text: g.ewt } } : {}),
+            ...(g.lwt ? { LWT: { text: g.lwt } } : {}),
+            SERVED: { text: g.served || "" },
+          },
+        })),
+      },
+    },
     totals: { coils_found: coils.length, gaps: gaps.length },
+    page_accounting: {
+      sheet_count: sheetKeys.length,
+      pages_accounted_for: pages.length,
+      empty_pages: pages.filter((p) => p.status.startsWith("empty")).length,
+      pages,
+    },
+    exclusions: [
+      "Riser-diagram valve-instance counts (not yet mined as a source)",
+      "Control-schematic device↔point linkage (not yet a dedicated extraction path)",
+      "Fire/smoke damper counts require architectural fire-rated wall plan cross-check (not in scope of a mechanical-only PDF)",
+      "Valve type/commissioning/TAB requirements that exist only in a separate specifications book, when one is not attached to this set",
+    ],
     coils,
     gaps,
   };

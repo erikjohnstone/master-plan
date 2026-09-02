@@ -7300,7 +7300,11 @@ export default function TakeoffCanvas() {
           ? (compiled.categories?.sequences?.list || []).map((s) => ({
             title: s.title, system_tag: s.system_tag, status: s.status, section_count: s.section_count,
           }))
-          : null,
+          : compiled.kind === "embedded_coil_valve_gaps"
+            ? (compiled.gaps || []).map((g) => ({
+              tag: g.tag, served: g.served, coil: g.coilLabel, gpm: g.gpm, sheet: g.sheet,
+            }))
+            : null,
     });
     const rows = rowsFromCompiledTakeoff(compiled, {
       workflow: meta.workflow || compiled.takeoff_id || "corpus takeoff",
@@ -7381,7 +7385,9 @@ export default function TakeoffCanvas() {
         ? Object.keys(compiled.categories || {}).length
         : compiled.kind === "sequences"
           ? (compiled.categories?.sequences?.list || []).length
-          : (compiled.categories?.points_lists?.lists || []).length,
+          : compiled.kind === "embedded_coil_valve_gaps"
+            ? (compiled.gaps || []).length
+            : (compiled.categories?.points_lists?.lists || []).length,
       category_counts: compiled.kind === "hvac_equipment" || compiled.kind === "control_valves"
         ? Object.fromEntries(Object.entries(compiled.categories || {}).map(([k, v]) => [k, v.count]))
         : null,
@@ -7393,7 +7399,11 @@ export default function TakeoffCanvas() {
           ? (compiled.categories?.sequences?.list || []).map((s) => ({
             title: s.title, system_tag: s.system_tag, status: s.status, section_count: s.section_count,
           }))
-          : null,
+          : compiled.kind === "embedded_coil_valve_gaps"
+            ? (compiled.gaps || []).map((g) => ({
+              tag: g.tag, served: g.served, coil: g.coilLabel, gpm: g.gpm, sheet: g.sheet,
+            }))
+            : null,
       downloaded: downloads,
       // Panel is the production surface — fed by showCompiledTakeoff above.
       ui_takeoff_open: true,

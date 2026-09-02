@@ -87,7 +87,7 @@ const extractedTable = z.object({
 /** Schedule / points-list quantity takeoff (corpus T-HVAC-01 / T-BAS-01). */
 export const compileCorpusTakeoffOutput = {
   takeoff_id: z.string(),
-  kind: z.enum(["hvac_equipment", "bas_points", "control_valves", "sequences"]),
+  kind: z.enum(["hvac_equipment", "bas_points", "control_valves", "sequences", "embedded_coil_valve_gaps"]),
   compiler: z.string(),
   sheet_count: z.number().int(),
   totals: z.record(z.string(), z.number()).optional(),
