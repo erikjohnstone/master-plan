@@ -8,6 +8,20 @@
  * Key = cache version + engine source digest + PDF identity (sha256 when
  * known, else path+size+mtime). Set OPENTAKEOFF_GRAPH_NO_CACHE=1 for cold
  * benchmarks. Deliberately set-agnostic — any PDF path works.
+ *
+ * The source digest must cover exactly the L0-L4.5 graph-BUILD path
+ * (sheetgraph.ts, vectorTakeoffPipeline.ts, mcp/src) — never the L5
+ * classify/compile layer (corpusTakeoff.mjs, queryTable.mjs). Real, found-
+ * live cost (2026-09-02): corpusTakeoff.mjs was in this list, so every
+ * classification-only fix (e.g. widening which schedule titles a valve
+ * family admits) silently invalidated the ENTIRE corpus's warm graph
+ * cache — hours of real prewarm work discarded for a change that never
+ * touches how a graph is built, only how its already-built tables get
+ * classified afterward. Conversely vectorTakeoffPipeline.ts (the real
+ * pipeline entry point) was missing from this list entirely, meaning a
+ * genuine pipeline change could silently serve a stale cached graph.
+ * Both fixed together. If a change belongs to L5, it must never appear
+ * here; if it belongs to L0-L4.5, it must.
  */
 import { createHash } from "node:crypto";
 import { readFile, readdir, stat } from "node:fs/promises";
@@ -39,8 +53,7 @@ function sourceDigest() {
       ...await sourceFiles(join(MCP_ROOT, "src")),
       join(HERE, "sheetGraphCache.mjs"),
       join(WEB_LIB, "sheetgraph.ts"),
-      join(WEB_LIB, "corpusTakeoff.mjs"),
-      join(WEB_LIB, "queryTable.mjs"),
+      join(WEB_LIB, "vectorTakeoffPipeline.ts"),
       join(MCP_ROOT, "package.json"),
       join(MCP_ROOT, "package-lock.json"),
     ].sort();
