@@ -1519,6 +1519,48 @@ test("symbol_sweep: exact counts on the fixture — matches, rotation/mirror fla
   assert.deepEqual(again.data, r.data);
 });
 
+// seed_point (2026-09-02) — the plan-sheet analog of find_legend_symbols'
+// own clustering, generalized off legend captions: a single point resolves
+// to a tight seed rect via the sheet's own connected linework, no marquee
+// coordinates required. Built after a REAL, measured seed on
+// itd-d1-lab-mechanical.pdf#3 needed hand-reconstructing three coordinate
+// spaces (rendered-view px -> zoom -> native image px) just to build one
+// seed_rect — this is the fix for that workflow, not a new algorithm: the
+// downstream sweep is untouched, only the seeding step changes.
+test("symbol_sweep seed_point: a click near (not on) the seed instance resolves the same real sweep as the hand-marqueed seed_rect", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SYMPLAN });
+  const viaRect = await call(client, "symbol_sweep", { sheet: SYMKEY, seed_rect: SEED_RECT });
+  assert.equal(viaRect.isError, false);
+
+  // a rough click near the seed's own reported center (223.9, 1004), not its
+  // exact rect corners — the whole point is not needing exact coordinates
+  const viaPoint = await call(client, "symbol_sweep", { sheet: SYMKEY, seed_point: [230, 1000] });
+  assert.equal(viaPoint.isError, false);
+  assert.equal(viaPoint.data.found, viaRect.data.found, "seed_point must find the same real matches as the hand-marqueed seed_rect");
+  assert.equal(viaPoint.data.seed.segments, viaRect.data.seed.segments);
+  assert.deepEqual(
+    viaPoint.data.matches.map((m: any) => m.at).sort(),
+    viaRect.data.matches.map((m: any) => m.at).sort(),
+  );
+});
+
+test("symbol_sweep seed_point: a click far from any linework refuses with a named reason, never guesses a rect", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SYMPLAN });
+  const r = await call(client, "symbol_sweep", { sheet: SYMKEY, seed_point: [50, 50] });
+  assert.equal(r.isError, true);
+  assert.match(r.data.error, /No compact, connected glyph found near seed_point/);
+});
+
+test("symbol_sweep: neither seed_rect nor seed_point is refused, not silently defaulted", async () => {
+  const client = await pair();
+  await call(client, "load_plan", { path: SYMPLAN });
+  const r = await call(client, "symbol_sweep", { sheet: SYMKEY });
+  assert.equal(r.isError, true);
+  assert.match(r.data.error, /needs either seed_rect.*or seed_point/);
+});
+
 // #259, reported by @FrankAtGHub: the seed legitimately matches things you do
 // not mean, because drafting reuses one generic shape for several devices —
 // his case was a wall-mounted data outlet drawn as a plain triangle whose

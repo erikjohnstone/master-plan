@@ -125,6 +125,33 @@ on this effort:**
    `symbolsweep-result.json` pattern reproducible via
    `session.sheet(name).widthPx/heightPx` + `session.viewSheet` to
    iteratively narrow a region before calling `session.symbolSweep`.
+   **The workflow gap itself is now closed, generalized, not patched
+   one-off (2026-09-02):** `symbol_sweep` (MCP tool, session.ts,
+   agentTools.js/TakeoffCanvas.jsx UI-agent path) now accepts `seed_point`
+   as an alternative to `seed_rect` — one point (image px / normalized
+   0..1 in the UI layer), no marqueeing, no manual coordinate math. It
+   resolves via a new `findGlyphNear` (`legendlearn.ts`), which reuses
+   `find_legend_symbols`' own real-junction-aware, grid-line-stripping
+   `clusterSegments` union-find — the SAME connected-component engine,
+   generalized off legend captions entirely (this is the actual answer to
+   "would a graph library like networkx help": the graph technique
+   — connected components over a segment-adjacency graph — was already
+   the right idea and was already hand-implemented in-repo; a Python
+   graph library would be the wrong language for this Node/TS pipeline
+   AND would still need the same CAD-domain tuning — grid-line stripping,
+   glyph-shape filtering, spatial bucketing — that `clusterSegments`
+   already has, so reuse-and-generalize beat adding a dependency).
+   Refuses (never guesses) when no compact glyph-shaped cluster sits
+   within snapping range of the point. Downstream sweep logic (scoring,
+   rotation/mirror, withheld/rejected, labels, scale, commit) is
+   completely untouched — only the seeding step changed. 20 real tests
+   (16 legendlearn.test.ts incl. 4 new `findGlyphNear` cases mirroring the
+   real adjacent-EH-1/EH-2 case exactly — score 1.0 on the real twin,
+   duct-line correctly excluded, null on a genuine miss, snap-from-a-
+   rough-click; 3 new tools.test.ts MCP-layer cases incl. `seed_point`
+   producing the IDENTICAL real sweep result as the hand-marqueed
+   `seed_rect` on the same fixture) — all passing, zero regressions on
+   the 18 pre-existing symbol_sweep tests.
 5. **Schedule data is not always where you'd expect it, and this varies by
    drafter.** Valve/coil/actuator data can be (a) one fused, deeply
    merged-header AHU/RTU schedule with everything in it (a disclosed,

@@ -25,8 +25,8 @@
 // long column-divider rule line must never be read as a glyph.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { findLegendGlyphs, type LegendSpan } from "../src/lib/legendlearn.ts";
-import { fingerprintSymbol } from "../src/lib/symbolsweep.ts";
+import { findLegendGlyphs, findGlyphNear, type LegendSpan } from "../src/lib/legendlearn.ts";
+import { fingerprintSymbol, matchSymbol } from "../src/lib/symbolsweep.ts";
 
 const seg = (ax: number, ay: number, bx: number, by: number) => [ax, ay, bx, by];
 const flat = (segs: number[][]): number[] => segs.flat();
@@ -233,4 +233,63 @@ test("findLegendGlyphs: the returned rect captures the WHOLE glyph when fed into
   assert.equal(glyphs.length, 1);
   const fp = fingerprintSymbol(segs, glyphs[0].rect);
   assert.equal(fp.segments, rawSegs.length, `expected all ${rawSegs.length} real glyph segments to survive fingerprintSymbol via the detected rect, got ${fp.segments} — the rect is clipping real linework the noding grid quantized away from the raw coordinates`);
+});
+
+// findGlyphNear (2026-09-02) — the plan-sheet analog of findLegendGlyphs'
+// own clustering, generalized off legend captions entirely. Built directly
+// after a REAL, measured symbol_sweep seed on itd-d1-lab-mechanical.pdf#3
+// required hand-reconstructing three coordinate spaces (rendered-view px ->
+// zoom factor -> native image px) and eyeballing a crop to build one tight
+// rect around one "EH-1" hexagon — that manual crop-and-reverse-math
+// workflow is exactly what this function replaces: a single point near a
+// symbol resolves to a tight seed rect automatically, same connectivity
+// engine, no caption required. The fixture below mirrors that real case:
+// two identical glyphs joined by a long duct-run line (stripped as
+// background structure, same gridLineMinPx logic legend clustering uses),
+// "nothing to confuse it" — exactly the adjacent-duplicate case that real
+// D-1 Lab test (EH-1 seeded, EH-2 scored 1.0) was built to answer.
+const MAX_GLYPH = 120;
+function ductJoinedGlyphPair(): { segs: number[]; a: [number, number]; b: [number, number] } {
+  const A = controlValveGlyph(100, 100);   // bbox roughly x:97-127, y:100-164
+  const B = controlValveGlyph(400, 100);   // same shape, far enough apart
+  // a long "duct run" connecting them — well over 2*MAX_GLYPH (240) so it's
+  // stripped as background structure before clustering, exactly like a real
+  // ruled table border or a real duct line in legendlearn's own grid-strip.
+  const duct = [seg(127, 120, 400, 120)];
+  return { segs: flat([...A, ...B, ...duct]), a: [112, 130], b: [412, 130] };
+}
+
+test("findGlyphNear: a click near one glyph of an adjacent identical pair resolves a rect capturing ONLY that glyph's real segments, duct line excluded", () => {
+  const { segs, a } = ductJoinedGlyphPair();
+  const rawA = controlValveGlyph(100, 100);
+  const found = findGlyphNear(segs, a, { maxGlyphDimPx: MAX_GLYPH });
+  assert.ok(found, "expected a glyph cluster near the click point");
+  const fp = fingerprintSymbol(segs, found!.rect);
+  assert.equal(fp.segments, rawA.length, `expected exactly the ${rawA.length} real segments of the clicked glyph, got ${fp.segments} — either the duct line leaked in or the glyph got clipped`);
+});
+
+test("findGlyphNear: seeding from a click-resolved rect on one glyph finds its real, unambiguous twin at score 1.0 — the real 'adjacent duplicate, nothing to confuse it' case", () => {
+  const { segs, a } = ductJoinedGlyphPair();
+  const seedFound = findGlyphNear(segs, a, { maxGlyphDimPx: MAX_GLYPH });
+  assert.ok(seedFound);
+  const fp = fingerprintSymbol(segs, seedFound!.rect);
+  const res = matchSymbol(fp, segs, { excludeCenter: fp.center });
+  assert.equal(res.matches.length, 1, `expected exactly 1 match (the twin glyph), got ${res.matches.length}`);
+  assert.equal(res.matches[0].score, 1, "the real, unambiguous twin must score a perfect 1.0, not land in withheld or get missed");
+});
+
+test("findGlyphNear: a click far from any linework refuses (null), never guesses a rect", () => {
+  const { segs } = ductJoinedGlyphPair();
+  const found = findGlyphNear(segs, [900, 900], { maxGlyphDimPx: MAX_GLYPH });
+  assert.equal(found, null);
+});
+
+test("findGlyphNear: a click just outside the glyph's own bbox still snaps to it (rough clicks are the whole point)", () => {
+  const { segs, a } = ductJoinedGlyphPair();
+  const rawA = controlValveGlyph(100, 100);
+  const offPoint: [number, number] = [a[0] - 25, a[1] - 25];
+  const found = findGlyphNear(segs, offPoint, { maxGlyphDimPx: MAX_GLYPH });
+  assert.ok(found, "expected a nearby click to still snap to the glyph");
+  const fp = fingerprintSymbol(segs, found!.rect);
+  assert.equal(fp.segments, rawA.length);
 });

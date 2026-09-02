@@ -392,3 +392,59 @@ export function findLegendGlyphs(
   }
   return out;
 }
+
+/** Find the compact, real-junction-clustered glyph nearest a single point —
+ * the plan-sheet analog of findLegendGlyphs' own clustering, generalized off
+ * legend captions entirely. A real, measured symbol_sweep seed (2026-09-02,
+ * itd-d1-lab-mechanical.pdf#3) required hand-reconstructing THREE coordinate
+ * spaces (rendered-view px -> zoom factor -> native image px) and eyeballing
+ * a crop to find one tight rect around one hexagon — that manual crop-and-
+ * reverse-math workflow is exactly what this function replaces. It does NOT
+ * need a caption or a legend sheet: same connectivity engine
+ * (clusterSegments — real-junction-aware union-find, grid-line stripping,
+ * spatially bucketed), same compact-glyph shape test (looksLikeGlyph); only
+ * the caption-pairing step is dropped, since a plan-sheet seed needs a
+ * tight, correct bbox around ONE connected symbol, not a label. A rough
+ * click (from view_sheet, or an agent-UI marquee's own centroid) is enough —
+ * this snaps to the nearest real linework cluster, it does not require the
+ * click to land exactly on a stroke. Returns null (never guesses a rect out
+ * of thin air) when no compact glyph-shaped component's bbox lies within
+ * `maxSnapPx` of the point — the caller's own refusal names that in the
+ * click's own terms, matching symbol_sweep's existing refusal doctrine. */
+export function findGlyphNear(
+  segs: number[], point: Point,
+  opts: { maxGlyphDimPx?: number; maxSnapPx?: number } = {},
+): { rect: [Point, Point]; segments: number } | null {
+  const maxGlyphDimPx = opts.maxGlyphDimPx ?? 80;
+  const maxSnapPx = opts.maxSnapPx ?? maxGlyphDimPx * 1.5;
+  if (!segs.length) return null;
+  const [px, py] = point;
+  // Bound the region fed to clusterSegments to keep this cheap on a dense
+  // real plan sheet (tens of thousands of segments) — same reasoning as
+  // segmentsNearCaptions above, just centered on the click instead of a
+  // caption's own left edge.
+  const pad = maxGlyphDimPx * 2 + maxSnapPx;
+  const region: number[] = [];
+  for (let i = 0; i < segs.length; i += 4) {
+    const ax = segs[i], ay = segs[i + 1], bx = segs[i + 2], by = segs[i + 3];
+    if (Math.min(ax, bx) > px + pad || Math.max(ax, bx) < px - pad) continue;
+    if (Math.min(ay, by) > py + pad || Math.max(ay, by) < py - pad) continue;
+    region.push(ax, ay, bx, by);
+  }
+  if (!region.length) return null;
+  const { components, gridPx } = clusterSegments(region, maxGlyphDimPx);
+  let best: { x0: number; y0: number; x1: number; y1: number; edges: number } | null = null;
+  let bestDist = Infinity;
+  for (const c of components) {
+    if (!looksLikeGlyph(c, c.edges, maxGlyphDimPx)) continue;
+    // distance from the point to the component's own bbox — 0 when the
+    // click already lands inside it
+    const dx = Math.max(c.x0 - px, 0, px - c.x1);
+    const dy = Math.max(c.y0 - py, 0, py - c.y1);
+    const dist = Math.hypot(dx, dy);
+    if (dist < bestDist) { bestDist = dist; best = c; }
+  }
+  if (!best || bestDist > maxSnapPx) return null;
+  const pad2 = gridPx / 2; // same half-grid pad findLegendGlyphs uses, and for the same reason (#44's quantized-bbox bug)
+  return { rect: [[best.x0 - pad2, best.y0 - pad2], [best.x1 + pad2, best.y1 + pad2]], segments: best.edges };
+}

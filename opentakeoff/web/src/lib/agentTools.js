@@ -293,18 +293,19 @@ export const AGENT_TOOL_DEFS = [
   },
   {
     name: "symbol_sweep",
-    description: "Find EVERY instance of a repeated plan symbol (a valve, a diffuser, any drafted glyph) from ONE example. Give a tight seed_rect around a single instance — only vector segments FULLY inside it define the symbol, so a loose rect that swallows wall linework fingerprints the wall, not the symbol. Deterministic geometry, not vision: each placement scores as the length-weighted fraction of the seed's segments reproduced, under rotation/mirroring (both on by default — plan symbols get rotated). Score >= 0.92 is a match; 0.75-0.92 comes back in `withheld` with a reason — a near-match is a question to look at (view_region), never a silent commit. Refuses on a sheet with no vector linework (a scan) — say so rather than guessing. This tool only FINDS matches; use place_count or propose_shapes (measure_role: count) to stage them for review, one call per accepted match or batch.",
+    description: "Find EVERY instance of a repeated plan symbol (a valve, a diffuser, any drafted glyph) from ONE example. Give a tight seed_rect around a single instance — only vector segments FULLY inside it define the symbol, so a loose rect that swallows wall linework fingerprints the wall, not the symbol. DON'T HAND-CROP A RECT: pass seed_point_norm instead — one point (normalized 0..1) anywhere on or near the instance — and the sheet's OWN connected linework at that point is clustered into the tight seed automatically (real-junction-aware, the same clustering find_legend_symbols uses on a legend, generalized off captions). Refused, never guessed, if no compact glyph-shaped cluster sits near the point. Exactly one of seed_rect_norm / seed_point_norm is required. Deterministic geometry, not vision: each placement scores as the length-weighted fraction of the seed's segments reproduced, under rotation/mirroring (both on by default — plan symbols get rotated). Score >= 0.92 is a match; 0.75-0.92 comes back in `withheld` with a reason — a near-match is a question to look at (view_region), never a silent commit. Refuses on a sheet with no vector linework (a scan) — say so rather than guessing. This tool only FINDS matches; use place_count or propose_shapes (measure_role: count) to stage them for review, one call per accepted match or batch.",
     input_schema: {
       type: "object",
       properties: {
         sheet: { type: "string" },
-        seed_rect_norm: { ...REGION_SCHEMA, description: "Tight marquee around ONE example instance, normalized 0..1." },
+        seed_rect_norm: { ...REGION_SCHEMA, description: "Tight marquee around ONE example instance, normalized 0..1. Omit and pass seed_point_norm instead when you only have a rough point, not exact corners." },
+        seed_point_norm: { type: "array", items: { type: "number" }, description: "[x,y] normalized 0..1 — one point on/near a single example instance. The sheet's own connected linework there is auto-clustered into a tight seed rect. Use this instead of seed_rect_norm unless you have exact corner coordinates." },
         rotations: { type: "boolean", description: "Also match 90/180/270-rotated placements. Default true." },
         mirror: { type: "boolean", description: "Also match mirrored placements. Default true." },
         tolerance_px: { type: "number", minimum: 0.1, maximum: 20, description: "Endpoint match tolerance in image px. Default 2 (CAD jitter, not drift)." },
         luminance_tolerance: { type: "number", minimum: 0, maximum: 254, description: "Optional stroke-luminance gate (0=black..255=white) for flattened exports where a real device and a background twin are geometrically identical but drawn in different pen colors." },
       },
-      required: ["sheet", "seed_rect_norm"],
+      required: ["sheet"],
     },
   },
   {
@@ -893,11 +894,15 @@ export async function executeAgentTool(ctx, name, args) {
 
       case "symbol_sweep": {
         if (!ctx.sheetDims(args.sheet)) return { error: `Sheet ${args.sheet} isn't open on the canvas — pick one from list_sheets.` };
-        return await ctx.symbolSweep(args.sheet, clampRegion(args.seed_rect_norm), {
+        if (!args.seed_rect_norm && !(Array.isArray(args.seed_point_norm) && args.seed_point_norm.length === 2)) {
+          return { error: "Pass either seed_rect_norm (marquee two corners) or seed_point_norm ([x,y], one click near the symbol)." };
+        }
+        return await ctx.symbolSweep(args.sheet, args.seed_rect_norm ? clampRegion(args.seed_rect_norm) : null, {
           rotations: args.rotations !== false,
           mirror: args.mirror !== false,
           tolerancePx: args.tolerance_px,
           luminanceTolerance: args.luminance_tolerance,
+          pointNorm: args.seed_point_norm,
         });
       }
 

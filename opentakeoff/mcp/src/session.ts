@@ -171,7 +171,7 @@ import { HVAC_REF_SHAPES } from "../../web/src/lib/hvacRefShapes.ts";
 // compact glyphs, pair each with its own caption); the caller feeds each
 // result straight into symbol_sweep (scope: "set") exactly as if a human
 // had marqueed it — the already-tested sweep engine is reused untouched.
-import { findLegendGlyphs, type LegendSpan } from "../../web/src/lib/legendlearn.ts";
+import { findLegendGlyphs, findGlyphNear, type LegendSpan } from "../../web/src/lib/legendlearn.ts";
 // Accuracy-hardening plan Phase 4 — a register/grille mark embedded within a
 // tapered duct run has no independent whole-shape perimeter of its own
 // (symbolsweep.ts's own matchSymbol whole-shape fingerprint measurably
@@ -2446,7 +2446,15 @@ export class Session {
    * commit is ONE undo step: the gesture the agent made was "sweep the set",
    * and taking it back should not require one undo per sheet. */
   async symbolSweep(name: string, opts: {
-    seedRect: [Point, Point];
+    seedRect?: [Point, Point];
+    /** A single click near the symbol instead of a marqueed rect — resolved
+     * against the sheet's OWN connected linework (findGlyphNear, the same
+     * real-junction-aware clustering find_legend_symbols uses on a legend,
+     * generalized off captions) into a tight seed rect automatically. Kills
+     * the manual crop-and-reverse-coordinate-math workflow a real seed
+     * otherwise takes (measured 2026-09-02: three coordinate spaces by
+     * hand for one seed). Ignored when seed_rect is given. */
+    seedPoint?: Point;
     condition?: string;
     commit?: boolean;
     scope?: "sheet" | "set";
@@ -2477,11 +2485,23 @@ export class Session {
     if (!geo.segs.length) {
       throw new UserError("This sheet has no vector linework (likely a scan) — symbol matching reads the drawn segments; raster fallback not yet available in the MCP server.");
     }
+    let seedRectIn: [Point, Point];
+    if (opts.seedRect) {
+      seedRectIn = opts.seedRect;
+    } else if (opts.seedPoint) {
+      const found = findGlyphNear(geo.segs, opts.seedPoint);
+      if (!found) {
+        throw new UserError(`No compact, connected glyph found near seed_point [${opts.seedPoint[0]}, ${opts.seedPoint[1]}] on ${s.key} — click closer to the symbol's own linework (a point inside or touching its strokes), or marquee it directly with seed_rect instead. A miss here means the geometry near this point isn't shaped like a compact glyph (it fused with something bigger, like a duct run or a table rule), not that nothing is drawn there.`);
+      }
+      seedRectIn = found.rect;
+    } else {
+      throw new UserError("symbol_sweep needs either seed_rect (marquee two corners around one instance) or seed_point (click once near the symbol — the sheet's own connected linework resolves the tight rect automatically).");
+    }
     const clampX = (v: number) => Math.max(0, Math.min(v, s.widthPx));
     const clampY = (v: number) => Math.max(0, Math.min(v, s.heightPx));
     const rect: [Point, Point] = [
-      [clampX(opts.seedRect[0][0]), clampY(opts.seedRect[0][1])],
-      [clampX(opts.seedRect[1][0]), clampY(opts.seedRect[1][1])],
+      [clampX(seedRectIn[0][0]), clampY(seedRectIn[0][1])],
+      [clampX(seedRectIn[1][0]), clampY(seedRectIn[1][1])],
     ];
     if (!(Math.abs(rect[1][0] - rect[0][0]) >= 1 && Math.abs(rect[1][1] - rect[0][1]) >= 1)) {
       throw new UserError(`Empty seed rect — need two distinct corners in image px inside the sheet (${s.widthPx} × ${s.heightPx}).`);

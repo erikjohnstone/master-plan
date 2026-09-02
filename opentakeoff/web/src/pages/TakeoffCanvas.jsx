@@ -94,7 +94,7 @@ import { HVAC_REF_SHAPES } from "../lib/hvacRefShapes.ts";
 // national HVAC symbol standard exists, so a bigger fixed reference-shape
 // library never scales to every firm's own house legend. findLegendGlyphs
 // auto-detects a job's own legend rows instead of requiring one.
-import { findLegendGlyphs } from "../lib/legendlearn.ts";
+import { findLegendGlyphs, findGlyphNear } from "../lib/legendlearn.ts";
 // Accuracy-hardening plan Phase 4 — a register/grille mark embedded within a
 // tapered duct run has no independent whole-shape perimeter of its own; see
 // inlinemotif.ts's own header comment for the real, measured reason
@@ -6466,10 +6466,27 @@ export default function TakeoffCanvas() {
     if (!p) return { error: `Sheet ${key} isn't rendered yet — try again in a moment.` };
     const segs = vectorSegsRef.current.get(key);
     if (!segs || !segs.length) return { error: "This sheet has no vector linework (likely a scan) — symbol_sweep reads drawn segments. Try view_region to look at it instead." };
-    const rect = [
-      [rectNorm.x0 * p.img.w, rectNorm.y0 * p.img.h],
-      [rectNorm.x1 * p.img.w, rectNorm.y1 * p.img.h],
-    ];
+    let rect;
+    if (rectNorm) {
+      rect = [
+        [rectNorm.x0 * p.img.w, rectNorm.y0 * p.img.h],
+        [rectNorm.x1 * p.img.w, rectNorm.y1 * p.img.h],
+      ];
+    } else if (Array.isArray(opts.pointNorm) && opts.pointNorm.length === 2) {
+      // seed_point_norm: no marquee — snap to the sheet's own connected
+      // linework at this point (findGlyphNear, real-junction-aware
+      // clustering, same engine find_legend_symbols uses on a legend). This
+      // is the fix for the manual crop-and-reverse-coordinate-math seeding
+      // workflow (measured cost 2026-09-02: 3 coordinate spaces by hand).
+      const point = [opts.pointNorm[0] * p.img.w, opts.pointNorm[1] * p.img.h];
+      const found = findGlyphNear(segs, point);
+      if (!found) {
+        return { error: `No compact, connected glyph found near seed_point_norm [${opts.pointNorm[0]}, ${opts.pointNorm[1]}] on ${key} — click closer to the symbol's own linework, or marquee it with seed_rect_norm instead.` };
+      }
+      rect = found.rect;
+    } else {
+      return { error: "symbol_sweep needs either a seed_rect_norm marquee or a seed_point_norm click." };
+    }
     const lum = segLumRef.current.get(key);
     let res;
     try {
