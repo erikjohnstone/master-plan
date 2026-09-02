@@ -276,6 +276,56 @@ describe("embedded coil detection (AHU/RTU/FCU schedules, not just valve schedul
     assert.equal(found.length, 0, "GPM without a paired EWT/LWT is not a coil block");
   });
 
+  it("extracts from 021_XX's real AIR TERMINAL UNIT SCHEDULE (MBH+GPM+ROW, no water temp)", () => {
+    // Real, found-live gap 2026-09-02: this table has no EWT/LWT at all --
+    // just MARK/CFM/MBH/GPM/ROW. Capacity + flow + physical row count is
+    // itself a real, coil-specific structural signature (a pump or valve
+    // schedule never reports "ROW") -- the second admission gate exists
+    // exactly for this real shape.
+    const table = {
+      sheet: "021xx#2", title: { text: "AIR TERMINAL UNIT SCHEDULE" },
+      headers: ["REMARKS", "MARK", "CFM", "NOISE CRITERIA (NC) DISCH", "MBH", "GPM", "ROW"],
+      rows: [{ key: "VAV-1", cells: { MARK: { text: "VAV-1" }, MBH: { text: "12" }, GPM: { text: "1.2" }, ROW: { text: "1" } } }],
+    };
+    const found = extractEmbeddedCoils(table);
+    assert.equal(found.length, 1);
+    assert.equal(found[0].tag, "VAV-1");
+    assert.equal(found[0].gpm, "1.2");
+    assert.equal(found[0].ewt, null);
+  });
+
+  it("extracts from 021_XX's real AIR HANDLING UNIT SCHEDULE (literal 'COIL' word + GPM, no water temp or rows)", () => {
+    // Real, found-live gap 2026-09-02: "COOLING COIL DATA FLOW (GPM)" has
+    // neither a water temp nor a row count -- just capacity + GPM -- but
+    // the word COIL is right there in the header text. Third admission
+    // gate: GPM co-occurring with a header that literally names a coil.
+    const table = {
+      sheet: "021xx#1", title: { text: "AIR HANDLING UNIT SCHEDULE" },
+      headers: [
+        "UNIT NO.", "COOLING COIL DATA TOTAL CAPACITY (MBH)", "COOLING COIL DATA FLOW (GPM)",
+        "HEATING COIL DATA TOTAL CAPACITY (MBH)", "HEATING COIL DATA FLOW (GPM)",
+      ],
+      rows: [{
+        key: "AHU-1",
+        cells: {
+          "UNIT NO.": { text: "AHU-1" },
+          "COOLING COIL DATA TOTAL CAPACITY (MBH)": { text: "120" },
+          "COOLING COIL DATA FLOW (GPM)": { text: "24.0" },
+          "HEATING COIL DATA TOTAL CAPACITY (MBH)": { text: "80" },
+          "HEATING COIL DATA FLOW (GPM)": { text: "15.0" },
+        },
+      }],
+    };
+    const found = extractEmbeddedCoils(table);
+    assert.equal(found.length, 2, "cooling coil + heating coil, both on AHU-1's row");
+    const cooling = found.find((c) => /COOLING/i.test(c.coilLabel));
+    const heating = found.find((c) => /HEATING/i.test(c.coilLabel));
+    assert.ok(cooling && heating);
+    assert.equal(cooling.gpm, "24.0");
+    assert.equal(cooling.coilLabel, "COOLING COIL DATA FLOW", "trailing punctuation from the strip point must be trimmed");
+    assert.equal(heating.gpm, "15.0");
+  });
+
   it("extracts from 019_FL_Eglin_AFB's real header format (bare EWT/LWT + qualified 'FLOW GPM', no shared prefix)", () => {
     // Real, found-live gap 2026-09-02: bare "EWT"/"LWT" compute an empty
     // prefix, but "FLOW GPM" computes prefix "FLOW" — different strings,

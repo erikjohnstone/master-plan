@@ -459,9 +459,41 @@ export function isControlValveHeaderShape(table) {
 // detection has to walk every equipment schedule's own header shape for
 // coil sub-blocks, never gated on the table already being believed to be
 // about valves.
-const COIL_MARKER_RE = /\bGPM\b|\bE\.?W\.?T\.?\b|\bL\.?W\.?T\.?\b|ENTERING\s+WATER|LEAVING\s+WATER|CAPACITY\s*\(MBH\)|FLUID\s+P\.?D\.?|PRESSURE\s+DROP|\bROWS\b|\bFPI\b|COIL\s+SIZE|PIPING\s+RUNOUT/i;
+const COIL_MARKER_RE = /\bGPM\b|\bE\.?W\.?T\.?\b|\bL\.?W\.?T\.?\b|ENTERING\s+WATER|LEAVING\s+WATER|CAPACITY\s*\(MBH\)|FLUID\s+P\.?D\.?|PRESSURE\s+DROP|\bROWS?\b|\bFPI\b|COIL\s+SIZE|PIPING\s+RUNOUT|\bMBH\b/i;
 const COIL_GPM_RE = /\bGPM\b/i;
 const COIL_WATER_TEMP_RE = /\bE\.?W\.?T\.?\b|\bL\.?W\.?T\.?\b|ENTERING\s+WATER|LEAVING\s+WATER/i;
+// Real, found-live gap (2026-09-02, 021_XX_Laboratory_building's own AIR
+// HANDLING UNIT SCHEDULE and AIR TERMINAL UNIT SCHEDULE): a real coil can
+// report GPM + capacity (MBH) + physical row count with NO water-temp
+// columns at all — the design EWT/LWT is a fixed system-wide value stated
+// once elsewhere, not repeated per-unit. GPM+CAPACITY+ROWS together is
+// itself a real, coil-specific structural signature (a pump or a valve
+// schedule never reports "ROWS" — that's a heat-exchanger-coil-only term)
+// — a second, independent admission gate alongside GPM+water-temp, not a
+// replacement for it.
+const COIL_CAPACITY_RE = /\bMBH\b|CAPACITY/i;
+const COIL_ROWS_RE = /\bROWS?\b/i;
+// Real, found-live gap (2026-09-02, same 021_XX AIR HANDLING UNIT
+// SCHEDULE): "COOLING COIL DATA FLOW (GPM)" has neither a water temp nor
+// a row count — just capacity + GPM — but the word "COIL" is right there
+// in the header text itself. A third, independent admission gate: GPM
+// co-occurring with a header that literally says "COIL" is real, explicit
+// textual evidence, the same kind of header-vocabulary signal already
+// used for valve detection (GPM/CV/SERVED), not a title-string guess.
+const COIL_WORD_RE = /\bCOIL\b/i;
+
+/** True when a header set carries any real admission signature for a
+ * hydronic coil block: GPM + a water temperature, GPM + capacity + row
+ * count, or GPM + a header that literally names a coil. Shared by both
+ * the prefix-grouped pass and the whole-table fallback so the gates never
+ * drift apart. */
+function hasCoilSignal(hs) {
+  const hasGpm = hs.some((h) => COIL_GPM_RE.test(h));
+  if (!hasGpm) return false;
+  if (hs.some((h) => COIL_WATER_TEMP_RE.test(h))) return true;
+  if (hs.some((h) => COIL_CAPACITY_RE.test(h)) && hs.some((h) => COIL_ROWS_RE.test(h))) return true;
+  return hs.some((h) => COIL_WORD_RE.test(h));
+}
 
 /** Header text with the first coil-data marker token (and everything from
  * it onward) stripped, so "PREHEAT COIL GPM" and "PREHEAT COIL EWT °F"
@@ -472,7 +504,10 @@ function coilPrefixFor(header) {
   const h = String(header || "").toUpperCase();
   const m = h.match(COIL_MARKER_RE);
   if (!m) return null;
-  return h.slice(0, m.index).replace(/\s+/g, " ").trim();
+  // Trailing punctuation left dangling by the strip point ("COOLING COIL
+  // DATA FLOW (GPM)" strips at "GPM", leaving a bare "(" behind) is never
+  // part of a real distinguishing prefix — trim it along with whitespace.
+  return h.slice(0, m.index).replace(/[\s([{,/-]+$/, "").trim();
 }
 
 /**
@@ -497,8 +532,7 @@ export function extractEmbeddedCoils(table) {
   }
   const coilBlocks = [];
   for (const [prefix, hs] of byPrefix) {
-    if (!hs.some((h) => COIL_GPM_RE.test(h))) continue;
-    if (!hs.some((h) => COIL_WATER_TEMP_RE.test(h))) continue;
+    if (!hasCoilSignal(hs)) continue;
     coilBlocks.push({ prefix, headers: hs });
   }
   // Real, found-live gap (2026-09-02, 019_FL_Eglin_AFB's own AIR HANDLING
@@ -510,11 +544,11 @@ export function extractEmbeddedCoils(table) {
   // only matters when MULTIPLE coil types share one row (001_NC's
   // "PREHEAT COIL" vs "COOLING COIL DATA"); when it finds nothing at all,
   // fall back to treating the WHOLE table's headers as a single implicit
-  // group — still gated on the same GPM + water-temp co-occurrence, just
-  // without requiring a literal shared prefix string.
+  // group — still gated on the same real coil signal, just without
+  // requiring a literal shared prefix string.
   if (!coilBlocks.length) {
     const all = [...headers];
-    if (all.some((h) => COIL_GPM_RE.test(h)) && all.some((h) => COIL_WATER_TEMP_RE.test(h))) {
+    if (hasCoilSignal(all)) {
       coilBlocks.push({ prefix: null, headers: all });
     }
   }
