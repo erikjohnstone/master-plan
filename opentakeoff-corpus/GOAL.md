@@ -81,7 +81,24 @@ on this effort:**
    legend, no fixed library, no per-firm hardcoding — read the set's own
    legend first, then sweep from what it actually draws. Treat the fixed
    library as a fallback/corroboration signal, not the primary path, until
-   this is fixed platform-wide.
+   this is fixed platform-wide. Real, measured evidence 2026-09-02 on
+   `013_MO_T2523_01`'s own controls legend: `find_legend_symbols` correctly
+   captured 26 distinct, correctly-labeled valve/actuator glyphs off one
+   real legend sheet (`CONTROL VALVE (TWO-WAY, MOTORIZED)`,
+   `PRESSURE REDUCING VALVE`, etc.) — the mechanism is real and rich, not
+   theoretical. **But a captured legend rect cannot be fed straight into
+   `symbol_sweep`'s seed** — confirmed by real refusal on two different
+   sets (`itd-d1-lab-mechanical.pdf`, `013_MO_T2523_01`): a legend is drawn
+   at its own illustrative scale, essentially never has a stated scale of
+   its own, and `set_scale {use_detected:true}` fails on it for exactly
+   that reason. This is the tool correctly refusing to guess, not a bug —
+   the real workflow is legend-as-visual-reference (read the caption, look
+   at the shape) → marquee ONE real instance actually drawn to scale on a
+   plan sheet → sweep from that seed. Finding that real on-plan pixel
+   location for a small, densely-packed CAD symbol is itself a real,
+   unsolved friction point for anything without either an interactive
+   agent-UI click or sharper-than-tonight's visual tooling — named
+   honestly as still open, not silently worked around.
 5. **Schedule data is not always where you'd expect it, and this varies by
    drafter.** Valve/coil/actuator data can be (a) one fused, deeply
    merged-header AHU/RTU schedule with everything in it (a disclosed,
