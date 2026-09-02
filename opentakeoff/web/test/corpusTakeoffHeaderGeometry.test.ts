@@ -78,6 +78,53 @@ describe("untitled valve grid compile (013-shaped)", () => {
   });
 });
 
+// Real, found-live gap (2026-09-02, 074_CA_West_Valley_College_STEM_
+// Classroom_HVAC): a table titled "EQUIPMENT CONTROL VALVES" — real,
+// mark-corroborated control valves — has no CHW/HHW/BYPASS qualifier in its
+// own title, so it failed every family's titleRe *and* was denied the
+// blank-title service-inference fallback solely because it has SOME title
+// text. isGenericControlValveTitle + the uniqueFamily wiring fix this,
+// scoped to CHW_CONTROL_VALVE/HHW_CONTROL_VALVE only.
+const TITLED_GENERIC_VALVE_TABLE = {
+  sheet: "set.pdf#9",
+  kind: "equipment",
+  title: { text: "EQUIPMENT CONTROL VALVES" },
+  headers: ["TAG", "MANUFACTURER", "MODEL", "SERVED", "GPM", "SIZE"],
+  rows: [
+    {
+      key: "CV-1",
+      cells: {
+        TAG: { text: "CV-1" },
+        SERVED: { text: "AHU-1 HW COIL" },
+        GPM: { text: "14" },
+        SIZE: { text: '1"' },
+      },
+    },
+    {
+      key: "CV-2",
+      cells: {
+        TAG: { text: "CV-2" },
+        SERVED: { text: "AHU-2 HW COIL" },
+        GPM: { text: "9" },
+        SIZE: { text: '3/4"' },
+      },
+    },
+  ],
+};
+
+describe("titled-but-service-unqualified valve schedule compile (074-shaped)", () => {
+  it("extracts CV-* control valves from a titled table with no CHW/HHW/BYPASS qualifier", () => {
+    const graph = { sheets: [{ key: "set.pdf#9" }], tables: [TITLED_GENERIC_VALVE_TABLE] };
+    const valve = compileControlValveTakeoff(null, graph);
+    assert.ok(valve.totals.items >= 2, "CV-1 and CV-2 both claimed despite the generic title");
+    const tags = Object.values(valve.categories)
+      .flatMap((c) => c?.items || [])
+      .map((i) => i.tag);
+    assert.ok(tags.some((t) => /^CV-1$/i.test(t)));
+    assert.ok(tags.some((t) => /^CV-2$/i.test(t)));
+  });
+});
+
 describe("untitled BAS grid compile", () => {
   it("accepts header-inferred POINTS/I/O grids without a title caption", () => {
     const graph = { sheets: [{ key: "set.pdf#8" }], tables: [UNTITLED_BAS_TABLE] };

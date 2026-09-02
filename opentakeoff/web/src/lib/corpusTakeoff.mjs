@@ -409,6 +409,24 @@ function inferValveServiceFromTable(table) {
   return "CHW";
 }
 
+// Real, found-live gap (2026-09-02, 074_CA_West_Valley_College_STEM_Classroom_HVAC):
+// a table titled "EQUIPMENT CONTROL VALVES" — real, schedule-verified control
+// valves, mark-corroborated — has NO service qualifier in its own title (no
+// CHW/CHILLED WATER, no HHW/HOT WATER/HEATING WATER/REHEAT, no BYPASS), so it
+// fails every family's specific titleRe *and* is denied the blank-title
+// fallback in uniqueFamily solely because it has SOME title text. A titled
+// control-valve table that doesn't name its own service is exactly the same
+// shape of problem as an untitled one — service has to come from the table's
+// own header/mark content either way. Generalized, set-agnostic (title text
+// varies by drafter — "CONTROL VALVES", "CONTROL VALVE SCHEDULE",
+// "EQUIPMENT CONTROL VALVES" all qualify), not this one PDF's fix.
+export function isGenericControlValveTitle(title) {
+  const t = String(title || "");
+  if (!/\bCONTROL\s+VALVES?\b/i.test(t)) return false;
+  if (/BYPASS|CHW|CHILLED\s*WATER|HHW|HOT\s*WATER|HEATING\s*WATER|REHEAT/i.test(t)) return false;
+  return true;
+}
+
 export function expandAmpersandEquipMarks(raw) {
   const s = String(raw || "").trim();
   if (!s || !/&/.test(s)) return [s];
@@ -452,17 +470,25 @@ function uniqueFamily(graph, {
     const titleOk = scheduleTitleMatches(title, titleRe, exclude);
     const altOk = Boolean(altTitleRe) && scheduleTitleMatches(title, altTitleRe, exclude);
     const blankTitle = !title.trim();
+    // A titled-but-service-unqualified "CONTROL VALVE(S)" table is the same
+    // problem as a blank title for CHW_CONTROL_VALVE/HHW_CONTROL_VALVE
+    // specifically (blankServiceHint set) — service still has to come from
+    // header/mark content either way, never invented from a title that
+    // doesn't state it. Scoped to blankServiceHint families only so no other
+    // family's blank-title handling (LOUVER, FIN_TUBE, etc.) is touched.
+    const genericValveTitle = Boolean(blankServiceHint) && !blankTitle
+      && isGenericControlValveTitle(title);
     const catchAllSchedule = /MISCELLANEOUS(?:\s+EQUIPMENT)?\s+SCHEDULE|^(?:MECHANICAL\s+)?(?:SPECIALTY\s+)?EQUIPMENT\s+SCHEDULE$|^HYDRONIC\s+ACCESSORIES(?:\s+SCHEDULE)?$/i.test(title);
     const blankGate = blankKeyRe || keyRe;
     const keyGated = Boolean(keyRe || blankKeyRe || altKeyRe);
-    const headerValveShape = blankTitle && isControlValveHeaderShape(table);
+    const headerValveShape = (blankTitle || genericValveTitle) && isControlValveHeaderShape(table);
     if (titleOk || altOk) {
       if (pass !== 1) continue;
     } else {
       if (pass !== 2) continue;
       if (titledOnly) continue;
       const blankHeaderOk = !blankHeaderRes || headerShapeMatches(table, blankHeaderRes) || headerValveShape;
-      if (blankTitle && blankGate) {
+      if ((blankTitle || genericValveTitle) && blankGate) {
         if (!blankHeaderOk) continue;
         if (blankServiceHint && headerValveShape) {
           const inferred = inferValveServiceFromTable(table);
@@ -483,7 +509,7 @@ function uniqueFamily(graph, {
     // SPLIT outdoor CU-*). Primary titled CONDENSING UNIT stays unfiltered
     // because altOk is false there.
     const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
-    const filterRe = blankTitle ? blankGate : catchAllSchedule ? null : titledFilter;
+    const filterRe = (blankTitle || genericValveTitle) ? blankGate : catchAllSchedule ? null : titledFilter;
     const catchAllFilter = catchAllSchedule;
     for (const row of table.rows || []) {
       const rowKey = String(row.key || "").trim().replace(/^["'\s]+|["'\s]+$/g, "");
