@@ -13,12 +13,19 @@ import { fileURLToPath } from "node:url";
 import { compileCorpusTakeoff } from "../src/corpusTakeoff.mjs";
 import { cachedGraphForKey } from "../test/helpers/loadKeySession.mjs";
 import { pipelineHarnessSnapshot } from "../../web/src/lib/pipelineHarness.mjs";
+import { VECTOR_PIPELINE_CACHE_ID } from "./graphCacheConstants.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORPUS = resolve(HERE, "../../../opentakeoff-corpus");
 const CROSS = resolve(CORPUS, "takeoffs/cross-set-compile");
 const GT_DIR = resolve(CORPUS, "takeoffs/pillar-c-gt");
-const CACHE_ID = "vector-stack-table-recall-v1";
+// Was its own private "vector-stack-table-recall-v1" string — meant this
+// script's cold builds never benefited from (or contributed to) the shared
+// graph cache prewarm-corpus-graph.mjs/emit-corpus-takeoff.mjs use, so every
+// set was paying the full cold-build cost on every run regardless of
+// prewarming. graphCacheConstants.mjs's own comment says all corpus tools
+// must share this identity — this one didn't.
+const CACHE_ID = VECTOR_PIPELINE_CACHE_ID;
 
 const mode = process.argv[2];
 const filterIds = new Set(process.argv.slice(3));
