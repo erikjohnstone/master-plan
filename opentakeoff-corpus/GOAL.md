@@ -254,6 +254,40 @@ on this effort:**
    cell is more directly grounded and any extractor reading tags should
    prefer it.
 
+10. **"Warm" is a claim about a specific codebase state, not a durable fact
+    — a single L0-L4.5 edit invalidates it for every NEW process, silently.**
+    Real, measured 2026-09-02: mid-session, `symbolSweep`'s `seed_point`
+    feature required editing `mcp/src/session.ts` — an L0-L4.5 file, part
+    of `sheetGraphCache.mjs`'s own `sourceDigest()` (every file under
+    `mcp/src/**` is hashed into the cache key by design, so the cache
+    *correctly* invalidates on a real pipeline change). The moment that
+    commit landed, every previously-warm entry (a 76-of-116-set corpus
+    scan had been running against, real progress, hours of real compute)
+    became unreachable to any FRESH process computing the digest against
+    the new file content — measured directly by probing all 116 real sets
+    with `cachedSheetGraph`'s own real key logic afterward: only 2/116
+    read as warm (the two sets a script happened to rebuild fresh AFTER
+    the edit). A single already-running long-lived process is NOT
+    affected — it memoizes `sourceDigest()` once at its own start and
+    stays internally consistent for its own lifetime (confirmed: the
+    76-set scan kept running fine, un-broken, on its own frozen digest) —
+    but that process's own "warm" reads are then invisible/unreachable to
+    every OTHER process, including a restart of the same scan. Real cost
+    of not knowing this: reporting "76/116 sets are warm" as if durable,
+    when the true, current, cross-process answer was "2/116," would have
+    been a real false status report, not a rounding error. The rule: after
+    ANY edit to `mcp/src/**`, `web/src/lib/sheetgraph.ts`, or
+    `vectorTakeoffPipeline.ts`, treat the whole corpus as cold again for
+    every process that hasn't rebuilt since that exact edit — verify real
+    warm/cold state with a fresh, cross-process probe
+    (`cachedSheetGraph(pdfPath, { identity, compute: () => { throw ... } })`
+    — a compute that throws proves a MISS without ever doing real work;
+    reaching the return means a real HIT) before reporting a warm count,
+    never by re-quoting an earlier-session number or a still-running
+    process's own progress log. Batch L0-L4.5 changes into one deliberate
+    window, run the full re-prewarm once after, rather than bleeding this
+    cost out edit by edit across a long session.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
