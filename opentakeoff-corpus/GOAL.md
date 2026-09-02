@@ -389,6 +389,35 @@ on this effort:**
     one) — the hard part, done here, was refusing to fake the harder
     part.
 
+13. **Correction, same day: the deterministic table/geometry engine was
+    never the real gap — do not repeat the overstatement.** Mid-session,
+    reasoning from rule 9/12's real bugs (`CODE_RE`, row-banding, the
+    steam-coil columns), the case for training table-structure ML got
+    overstated into "the deterministic table engine can't parse tables
+    reliably." Real evidence says otherwise: a real user takeoff done on
+    this platform BEFORE any of tonight's fixes was already, in the
+    user's own words, "pretty solid" — and every real bug found tonight
+    was narrow and bounded (a specific tag-prefix shape, a specific
+    wrapped-cell layout), not a systemic failure. Checked directly
+    against Kamai's own published technical description
+    ([kamai.io/technology](https://kamai.io/technology)) rather than
+    assumed: "Every measurement computed from the drawing's native
+    geometry — not estimated. This deterministic approach is fundamental
+    to their architecture, as opposed to probabilistic methods used by
+    other takeoff tools." Their own trained models' stated job is
+    narrower than "replace the table/geometry engine" — CLASSIFYING what
+    a piece of vector geometry IS across drafting conventions ("a wall
+    centerline from a gridline, a door swing from a decorative arc"),
+    feeding a still-deterministic downstream computation, not an
+    end-to-end learned replacement. The real, structural ML gap on this
+    platform stays exactly what it was before this got overstated:
+    cross-firm SYMBOL/element recognition without a seed (the
+    `seed_point`/RT-DETR case) — never generalized into "therefore the
+    table engine needs replacing too." Keep this distinction sharp going
+    forward: a real, narrow, fixable bug found in the deterministic
+    engine is evidence of exactly that — narrow and fixable — not
+    evidence the architecture itself is inadequate.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
