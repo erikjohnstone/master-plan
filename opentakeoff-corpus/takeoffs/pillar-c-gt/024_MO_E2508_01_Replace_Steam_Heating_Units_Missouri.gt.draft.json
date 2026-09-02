@@ -52,7 +52,7 @@
   },
   "pipeline_harness": {
     "set_id": "024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri",
-    "ms": 56,
+    "ms": 17089,
     "sheets": 15,
     "graph_tables_total": 1,
     "graph_table_kinds": {
@@ -63,12 +63,10 @@
       "unknown": 0
     },
     "graph_valve": {
-      "tables": 1,
-      "rows": 4,
+      "tables": 0,
+      "rows": 0,
       "valve_marks": 0,
-      "table_titles": [
-        "PACKAGED EQUIPMENT SCHEDULE (RTU)"
-      ]
+      "table_titles": []
     },
     "graph_bas": {
       "tables": 0,
@@ -89,7 +87,7 @@
       "FUME_HOOD_DAMPER",
       "LAB_AIR_VALVE"
     ],
-    "valve_graph_without_compile": true,
+    "valve_graph_without_compile": false,
     "bas_graph_without_compile": false,
     "compile_without_graph_valve": false,
     "vector_pipeline": {
@@ -124,7 +122,7 @@
       "Vector pipeline L3.5: MEP topology graph built on 5 plan sheet(s)."
     ],
     "gt_locked": false,
-    "cache_identity": "vector-stack-table-recall-v1",
+    "cache_identity": "vector-pipeline-v1",
     "corroboration": "pipeline_graph_and_compile",
     "note": "Graph valve/BAS table recall + compile on shared vector stack — not coordinator-verified alone"
   }

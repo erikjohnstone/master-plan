@@ -49,5 +49,85 @@
     "estimator_complete": false,
     "gt_locked": false,
     "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  },
+  "pipeline_harness": {
+    "set_id": "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center",
+    "ms": 1181335,
+    "sheets": 25,
+    "graph_tables_total": 12,
+    "graph_table_kinds": {
+      "equipment": 9,
+      "finish": 0,
+      "reference": 2,
+      "room-finish": 1,
+      "unknown": 0
+    },
+    "graph_valve": {
+      "tables": 0,
+      "rows": 0,
+      "valve_marks": 0,
+      "table_titles": []
+    },
+    "graph_bas": {
+      "tables": 1,
+      "rows": 2,
+      "table_titles": [
+        "(header-inferred BAS grid)"
+      ]
+    },
+    "compile_valve_items": 0,
+    "compile_bas_rows": 2,
+    "compile_valve_families": [
+      "CHW_CONTROL_VALVE",
+      "HHW_CONTROL_VALVE",
+      "BYPASS_CONTROL_VALVE",
+      "ISOLATION_VALVE",
+      "PRESSURE_REDUCING_VALVE",
+      "PRESSURE_SAFETY_VALVE",
+      "MIXING_VALVE",
+      "CONTROL_DAMPER",
+      "FUME_HOOD_DAMPER",
+      "LAB_AIR_VALVE"
+    ],
+    "valve_graph_without_compile": false,
+    "bas_graph_without_compile": false,
+    "compile_without_graph_valve": false,
+    "vector_pipeline": {
+      "layers_run": [
+        "L0:ingest",
+        "L1:spans+segments",
+        "L2:geometric",
+        "L2:ODL",
+        "L1.5:tiling",
+        "L2:line-grid",
+        "L2:stream-grid",
+        "L2:sidecar",
+        "L2.5:pillar-gap-recovery",
+        "L3:sweep_schedule_row@query",
+        "L3.5:topology",
+        "L4:reconcile-dedup",
+        "L4.5:ocr-vlm-assist",
+        "L5:classify@compile"
+      ],
+      "l45_enabled": false,
+      "tiles_sliced": 72,
+      "tables_added": 1,
+      "tables_replaced": 0,
+      "topology_sheets": 13,
+      "ocr_assists": 0,
+      "notes": [
+        "018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf#21: L2 sidecar recovered 1 table(s) via Python backends.",
+        "Cell bbox snap: 12 table(s) re-grounded onto source spans."
+      ]
+    },
+    "pipeline_notes": [
+      "OpenDataLoader-PDF cross-check: 3 table(s) replaced with a more complete extraction, 5 table(s) recovered that the geometric pass missed entirely (6 sheet(s) affected).",
+      "Vector pipeline L2 fallbacks: 0 table(s) replaced, 1 table(s) added (7 sheet(s)).",
+      "Vector pipeline L3.5: MEP topology graph built on 13 plan sheet(s)."
+    ],
+    "gt_locked": false,
+    "cache_identity": "vector-pipeline-v1",
+    "corroboration": "pipeline_graph_and_compile",
+    "note": "Graph valve/BAS table recall + compile on shared vector stack — not coordinator-verified alone"
   }
 }
