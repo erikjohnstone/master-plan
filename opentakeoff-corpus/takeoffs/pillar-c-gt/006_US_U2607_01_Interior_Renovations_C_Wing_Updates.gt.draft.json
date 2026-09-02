@@ -36,7 +36,7 @@
   },
   "pipeline_harness": {
     "set_id": "006_US_U2607_01_Interior_Renovations_C_Wing_Updates",
-    "ms": 125695,
+    "ms": 69,
     "sheets": 37,
     "graph_tables_total": 1,
     "graph_table_kinds": {
@@ -106,7 +106,7 @@
       "Vector pipeline L3.5: MEP topology graph built on 8 plan sheet(s)."
     ],
     "gt_locked": false,
-    "cache_identity": "vector-stack-table-recall-v1",
+    "cache_identity": "vector-pipeline-v1",
     "corroboration": "pipeline_graph_and_compile",
     "note": "Graph valve/BAS table recall + compile on shared vector stack — not coordinator-verified alone"
   }
