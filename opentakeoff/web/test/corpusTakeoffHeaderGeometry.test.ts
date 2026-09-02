@@ -228,6 +228,35 @@ describe("embedded coil detection (AHU/RTU/FCU schedules, not just valve schedul
     assert.equal(found.length, 0, "GPM without a paired EWT/LWT is not a coil block");
   });
 
+  it("extracts from 019_FL_Eglin_AFB's real header format (bare EWT/LWT + qualified 'FLOW GPM', no shared prefix)", () => {
+    // Real, found-live gap 2026-09-02: bare "EWT"/"LWT" compute an empty
+    // prefix, but "FLOW GPM" computes prefix "FLOW" — different strings,
+    // so exact-prefix grouping alone missed this real table entirely
+    // (extractEmbeddedCoils found 0 before this fix). This table only
+    // ever describes ONE coil per row, so there was never a need for a
+    // disambiguating prefix in the first place — the whole-table fallback
+    // exists exactly for this shape.
+    const table = {
+      sheet: "eglin19#5",
+      title: { text: "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE" },
+      headers: [
+        "TYPE", "SYSTEM", "DESIGN AIR FLOW CFM", "CAPACITY MBH", "EWT °F", "LWT °F", "FLOW GPM",
+        "MAX AIR PD I.W.G", "WATER MAX PD FT. H2O", "REMARKS",
+      ],
+      rows: [{
+        key: "AHU-1-HC",
+        cells: { TYPE: { text: "HEATING" }, "EWT °F": { text: "180" }, "LWT °F": { text: "160" }, "FLOW GPM": { text: "12.5" } },
+      }],
+    };
+    const found = extractEmbeddedCoils(table);
+    assert.equal(found.length, 1);
+    assert.equal(found[0].tag, "AHU-1-HC");
+    assert.equal(found[0].gpm, "12.5");
+    assert.equal(found[0].ewt, "180");
+    assert.equal(found[0].lwt, "160");
+    assert.equal(found[0].coilLabel, "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE");
+  });
+
   it("extracts from itd-d1-lab's real header format (period-separated E.W.T./L.W.T., generic 'FLUID PERFORMANCE' prefix)", () => {
     // Real header text, verified 2026-09-02 against itd-d1-lab-mechanical.pdf's
     // own HOT WATER REHEAT COIL SCHEDULE — a genuinely different real-world

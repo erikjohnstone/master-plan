@@ -483,6 +483,23 @@ export function extractEmbeddedCoils(table) {
     if (!hs.some((h) => COIL_WATER_TEMP_RE.test(h))) continue;
     coilBlocks.push({ prefix, headers: hs });
   }
+  // Real, found-live gap (2026-09-02, 019_FL_Eglin_AFB's own AIR HANDLING
+  // UNIT HYDRONIC COIL SCHEDULE): bare "EWT"/"LWT" columns compute an
+  // empty prefix, but "FLOW GPM" computes prefix "FLOW" — different
+  // strings for columns that plainly belong to the same one-coil-per-row
+  // schedule, because there's no OTHER coil type on the same table
+  // needing a disambiguating prefix in the first place. Prefix-grouping
+  // only matters when MULTIPLE coil types share one row (001_NC's
+  // "PREHEAT COIL" vs "COOLING COIL DATA"); when it finds nothing at all,
+  // fall back to treating the WHOLE table's headers as a single implicit
+  // group — still gated on the same GPM + water-temp co-occurrence, just
+  // without requiring a literal shared prefix string.
+  if (!coilBlocks.length) {
+    const all = [...headers];
+    if (all.some((h) => COIL_GPM_RE.test(h)) && all.some((h) => COIL_WATER_TEMP_RE.test(h))) {
+      coilBlocks.push({ prefix: null, headers: all });
+    }
+  }
   if (!coilBlocks.length) return [];
 
   const results = [];
@@ -508,7 +525,7 @@ export function extractEmbeddedCoils(table) {
       results.push({
         tag: tag || null,
         served: served || null,
-        coilLabel: block.prefix || "COIL",
+        coilLabel: block.prefix || String(table?.title?.text || "").trim() || "COIL",
         gpm,
         ewt: ewtCell ? String(ewtCell.text ?? ewtCell ?? "").trim() : null,
         lwt: lwtCell ? String(lwtCell.text ?? lwtCell ?? "").trim() : null,
