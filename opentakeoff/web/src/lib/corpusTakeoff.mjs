@@ -583,13 +583,29 @@ export function extractEmbeddedCoils(table) {
     // words must never be read as the serving-equipment column.
     const served = cellText(row, /^(?:SERVED|SERVES|AREA|SYSTEM)$/i);
     for (const block of coilBlocks) {
-      const findCell = (re) => {
+      // Real, found-live bug (2026-09-02, 05_MO_VA_StLouis's own SINGLE
+      // DUCT AIR TERMINAL UNIT SCHEDULE): this table's real header row is
+      // "EWT HW | EWT ELEC | EWT NONE | EWT | GPM | EWT COIL" — three
+      // checkbox-style reheat-TYPE indicator columns ("EWT HW" etc., real
+      // values "YES"/blank, nothing to do with temperature) sitting right
+      // next to the one real numeric EWT column. The old findCell returned
+      // the FIRST header matching the regex by column order, so it grabbed
+      // "EWT HW" and reported ewt: "YES" — a temperature field can never
+      // legitimately be that. Try every header matching the regex in
+      // order, but only accept one whose own cell text actually looks
+      // numeric — a checkbox/label column never does, a real temperature
+      // or flow value always does. Applies to gpm too, for the same reason
+      // (a decoy non-numeric column sharing "GPM" in its name is the same
+      // failure mode, just not yet observed live for that field).
+      const findNumericCell = (re) => {
         for (const [header, cell] of Object.entries(row?.cells || {})) {
-          if (block.headers.includes(header) && re.test(header)) return cell;
+          if (!block.headers.includes(header) || !re.test(header)) continue;
+          const text = String(cell?.text ?? cell ?? "").trim();
+          if (/\d/.test(text)) return cell;
         }
         return null;
       };
-      const gpmCell = findCell(COIL_GPM_RE);
+      const gpmCell = findNumericCell(COIL_GPM_RE);
       const gpm = gpmCell ? String(gpmCell.text ?? gpmCell ?? "").trim() : "";
       // Real numeric flow required — a blank/dash placeholder row isn't a
       // real coil instance, just an unused schedule row. Exactly ONE
@@ -603,8 +619,8 @@ export function extractEmbeddedCoils(table) {
       // can't be traced to a real single unit.
       const gpmNums = gpm.match(/\d+(?:\.\d+)?/g) || [];
       if (gpmNums.length !== 1) continue;
-      const ewtCell = findCell(/E\.?W\.?T\.?|ENTERING\s+WATER/i);
-      const lwtCell = findCell(/L\.?W\.?T\.?|LEAVING\s+WATER/i);
+      const ewtCell = findNumericCell(/E\.?W\.?T\.?|ENTERING\s+WATER/i);
+      const lwtCell = findNumericCell(/L\.?W\.?T\.?|LEAVING\s+WATER/i);
       results.push({
         tag: tag || null,
         served: served || null,

@@ -423,6 +423,35 @@ describe("embedded coil detection (AHU/RTU/FCU schedules, not just valve schedul
     assert.equal(found[0].served, "AHU-1");
   });
 
+  it("prefers a numeric EWT/GPM candidate over a decoy checkbox column sharing the same name (real bug: 05_MO_VA_StLouis's SINGLE DUCT AIR TERMINAL UNIT SCHEDULE)", () => {
+    // Real, found-live bug 2026-09-02: this real table's own header row is
+    // "EWT HW | EWT ELEC | EWT NONE | EWT | GPM | EWT COIL" -- three
+    // checkbox-style reheat-TYPE indicator columns (real values "YES"/"NO")
+    // sitting right next to the one real numeric EWT temperature column and
+    // a fourth decoy ("EWT COIL": "NONE") after it. The real row (verified
+    // against the raw extracted cells): EWT HW=YES, EWT ELEC=NO,
+    // EWT NONE=NO, EWT=200, GPM=0.3, EWT COIL=NONE. The old code took the
+    // FIRST header matching the EWT regex by column order and reported
+    // ewt: "YES" -- a temperature field can never legitimately be that.
+    const table = {
+      sheet: "05mo#40", title: { text: "SINGLE DUCT AIR TERMINAL UNIT SCHEDULE" },
+      headers: ["MARK", "SERVED", "SIZE", "CFM", "TYPE", "EWT HW", "EWT ELEC", "EWT NONE", "EWT", "GPM", "EWT COIL"],
+      rows: [{
+        key: "ATU-6-1",
+        cells: {
+          MARK: { text: "ATU-6-1" }, SERVED: { text: "A601" }, SIZE: { text: "6\"" },
+          CFM: { text: "325" }, TYPE: { text: "VAV" },
+          "EWT HW": { text: "YES" }, "EWT ELEC": { text: "NO" }, "EWT NONE": { text: "NO" },
+          EWT: { text: "200" }, GPM: { text: "0.3" }, "EWT COIL": { text: "NONE" },
+        },
+      }],
+    };
+    const found = extractEmbeddedCoils(table);
+    assert.equal(found.length, 1);
+    assert.equal(found[0].ewt, "200", "the real numeric EWT column, not the YES/NO reheat-type checkboxes flanking it");
+    assert.equal(found[0].gpm, "0.3");
+  });
+
   it("extracts from 019_FL_Eglin_AFB's real header format (bare EWT/LWT + qualified 'FLOW GPM', no shared prefix)", () => {
     // Real, found-live gap 2026-09-02: bare "EWT"/"LWT" compute an empty
     // prefix, but "FLOW GPM" computes prefix "FLOW" — different strings,
