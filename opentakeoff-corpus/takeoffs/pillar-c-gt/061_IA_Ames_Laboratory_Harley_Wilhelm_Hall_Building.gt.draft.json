@@ -49,5 +49,83 @@
     "estimator_complete": false,
     "gt_locked": false,
     "note": "Full target sweep — depth phase; refuse_not_done until estimator_complete gates close"
+  },
+  "pipeline_harness": {
+    "set_id": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+    "ms": 524424,
+    "sheets": 71,
+    "graph_tables_total": 17,
+    "graph_table_kinds": {
+      "equipment": 13,
+      "finish": 0,
+      "reference": 4,
+      "room-finish": 0,
+      "unknown": 0
+    },
+    "graph_valve": {
+      "tables": 1,
+      "rows": 11,
+      "valve_marks": 11,
+      "table_titles": [
+        "VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE"
+      ]
+    },
+    "graph_bas": {
+      "tables": 0,
+      "rows": 0,
+      "table_titles": []
+    },
+    "compile_valve_items": 0,
+    "compile_bas_rows": 0,
+    "compile_valve_families": [
+      "CHW_CONTROL_VALVE",
+      "HHW_CONTROL_VALVE",
+      "BYPASS_CONTROL_VALVE",
+      "ISOLATION_VALVE",
+      "PRESSURE_REDUCING_VALVE",
+      "PRESSURE_SAFETY_VALVE",
+      "MIXING_VALVE",
+      "CONTROL_DAMPER",
+      "FUME_HOOD_DAMPER",
+      "LAB_AIR_VALVE"
+    ],
+    "valve_graph_without_compile": true,
+    "bas_graph_without_compile": false,
+    "compile_without_graph_valve": false,
+    "vector_pipeline": {
+      "layers_run": [
+        "L0:ingest",
+        "L1:spans+segments",
+        "L2:geometric",
+        "L2:ODL",
+        "L1.5:tiling",
+        "L2:line-grid",
+        "L2:stream-grid",
+        "L2:sidecar",
+        "L2.5:pillar-gap-recovery",
+        "L3:sweep_schedule_row@query",
+        "L3.5:topology",
+        "L4:reconcile-dedup",
+        "L4.5:ocr-vlm-assist",
+        "L5:classify@compile"
+      ],
+      "l45_enabled": false,
+      "tiles_sliced": 105,
+      "tables_added": 0,
+      "tables_replaced": 0,
+      "topology_sheets": 53,
+      "ocr_assists": 0,
+      "notes": [
+        "Cell bbox snap: 17 table(s) re-grounded onto source spans."
+      ]
+    },
+    "pipeline_notes": [
+      "OpenDataLoader-PDF cross-check: 3 table(s) replaced with a more complete extraction, 9 table(s) recovered that the geometric pass missed entirely (5 sheet(s) affected).",
+      "Vector pipeline L3.5: MEP topology graph built on 53 plan sheet(s)."
+    ],
+    "gt_locked": false,
+    "cache_identity": "vector-pipeline-v1",
+    "corroboration": "pipeline_graph_and_compile",
+    "note": "Graph valve/BAS table recall + compile on shared vector stack — not coordinator-verified alone"
   }
 }
