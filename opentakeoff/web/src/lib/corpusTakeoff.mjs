@@ -2316,12 +2316,22 @@ export function compileEmbeddedCoilGaps(sessionOrSheets, graph) {
   }
   const scheduledList = [...scheduledValveText];
 
+  // Real, found-live bug (2026-09-02, caught in self-review before this
+  // shipped further): plain .includes() substring matching would mark
+  // AHU-1's coil as already having a scheduled valve when the schedule
+  // only lists AHU-10 ("AHU-10".includes("AHU-1") === true) — a false
+  // corroboration that would silently hide a real gap. Word-boundary
+  // matching so a tag only matches its own whole occurrence, never a
+  // numeric prefix of a different tag.
+  const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const tagMatches = (needle, haystack) => new RegExp(`(?:^|[^A-Z0-9])${escapeRe(needle)}(?:[^A-Z0-9]|$)`).test(haystack);
+
   const coils = [];
   for (const table of graph?.tables || []) {
     for (const coil of extractEmbeddedCoils(table)) {
       const keys = [coil.tag, coil.served].filter(Boolean).map((s) => s.toUpperCase());
       const hasScheduledValve = keys.some(
-        (k) => scheduledList.some((v) => v.includes(k) || k.includes(v)),
+        (k) => scheduledList.some((v) => tagMatches(k, v) || tagMatches(v, k)),
       );
       coils.push({
         ...coil,

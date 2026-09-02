@@ -269,6 +269,32 @@ describe("embedded coil detection (AHU/RTU/FCU schedules, not just valve schedul
     assert.ok(result.gaps.some((g) => g.tag === "AHU-1" && /COOLING/i.test(g.coilLabel)));
   });
 
+  it("does NOT false-corroborate AHU-1's coil against a valve schedule that only lists AHU-10", () => {
+    // Real, found-live bug caught in self-review 2026-09-02: plain
+    // substring matching ("AHU-10".includes("AHU-1") === true) would
+    // silently hide a real gap. Word-boundary matching must reject this.
+    const ahu1Coil = {
+      sheet: "set.pdf#14", kind: "equipment", title: { text: "AIR HANDLING UNIT SCHEDULE" },
+      headers: ["SYMBOL", "COOLING COIL DATA GPM", "COOLING COIL DATA EWT °F", "COOLING COIL DATA LWT °F"],
+      rows: [{ key: "AHU-1", cells: {
+        SYMBOL: { text: "AHU-1" },
+        "COOLING COIL DATA GPM": { text: "42.0" },
+        "COOLING COIL DATA EWT °F": { text: "44.0" },
+        "COOLING COIL DATA LWT °F": { text: "56.0" },
+      } }],
+    };
+    const valveForAhu10 = {
+      sheet: "set.pdf#13", kind: "equipment", title: { text: "HHW CONTROL VALVE SCHEDULE" },
+      headers: ["TAG", "SERVED", "GPM", "SIZE"],
+      rows: [{ key: "CV-10", cells: { TAG: { text: "CV-10" }, SERVED: { text: "AHU-10" }, GPM: { text: "40.0" }, SIZE: { text: '1"' } } }],
+    };
+    const graph = { sheets: [{ key: "set.pdf#13" }, { key: "set.pdf#14" }], tables: [valveForAhu10, ahu1Coil] };
+    const result = compileEmbeddedCoilGaps(null, graph);
+    assert.equal(result.totals.coils_found, 1);
+    assert.equal(result.totals.gaps, 1, "AHU-1's coil must NOT be false-corroborated by AHU-10's valve");
+    assert.equal(result.gaps[0].tag, "AHU-1");
+  });
+
   it("compileEmbeddedCoilGaps marks a coil corroborated when a matching valve IS scheduled", () => {
     const valveTable = {
       sheet: "set.pdf#13",
