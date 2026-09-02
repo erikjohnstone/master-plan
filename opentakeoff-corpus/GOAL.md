@@ -254,6 +254,33 @@ on this effort:**
    cell is more directly grounded and any extractor reading tags should
    prefer it.
 
+9a. **Two more real, shipped `extractEmbeddedCoils` fixes from the same
+    verification stretch — written here because they'd only otherwise
+    live in a commit message, and this file is the ledger, not `git log`.**
+    (1) Real, found-live gap (2026-09-02, Eglin AFB's own
+    `AIR HANDLING UNIT HYDRONIC COIL SCHEDULE`): a coil's serving
+    equipment was right there in the row (`SYSTEM: "AHU-1"`, real and
+    correct) but `served` came back null, because the detector only
+    recognized `SERVED`/`AREA` as that column's name. Fixed by widening
+    the header match to include `SYSTEM`, anchored to the exact header
+    (never a bare substring test) for the same reason `TAG_CELL_RE` is
+    anchored. (2) Real, found-live bug (2026-09-02,
+    `05_MO_VA_StLouis_AHU_VAV_Replacement`'s own
+    `SINGLE DUCT AIR TERMINAL UNIT SCHEDULE`): its real header row is
+    `EWT HW | EWT ELEC | EWT NONE | EWT | GPM | EWT COIL` — three
+    checkbox-style reheat-type indicator columns (real values YES/NO)
+    sitting right next to the one real numeric EWT column, plus a fourth
+    decoy after it. The detector took the FIRST header matching the EWT
+    regex by column order and reported `ewt: "YES"` — a temperature
+    field can never legitimately be that. Verified against the real raw
+    row (`EWT HW=YES, EWT ELEC=NO, EWT NONE=NO, EWT=200, GPM=0.3,
+    EWT COIL=NONE`) before and after the fix. Fixed by trying every
+    header matching the regex in order but only accepting one whose own
+    cell value actually looks numeric — applied to GPM too, same failure
+    mode, not yet observed live for that field but the same fix covers
+    it. Both real, both tested (`corpusTakeoffHeaderGeometry.test.ts`),
+    both shipped.
+
 10. **"Warm" is a claim about a specific codebase state, not a durable fact
     — a single L0-L4.5 edit invalidates it for every NEW process, silently.**
     Real, measured 2026-09-02: mid-session, `symbolSweep`'s `seed_point`
