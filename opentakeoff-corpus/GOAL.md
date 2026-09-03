@@ -1215,6 +1215,45 @@ on this effort:**
     corruption rather than a missing/fabricated quantity), documented
     for completeness rather than urgency. NOT STARTED.
 
+26. **OPEN, SCOPED, NOT STARTED, LIKELY CORPUS-WIDE: the drawing's own
+    title-block/approval-stamp area (present on essentially every real
+    sheet) gets misread as a real data table by the structural
+    (vocabulary-free) reference reader — confirmed 3 times across 2
+    sheets on 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test alone,
+    and directly reinforces rule 24(a)'s independent finding on a
+    different set.**
+
+    Found doing genuinely verified per-set work.
+    `graph.tables` carries `[reference] "Rome Research Site"` (2 rows,
+    sheet #4) — "Rome Research Site" is the drawing's own PROJECT
+    LOCATION name from its title block, not a real schedule title; its
+    "rows" are really `DRAWING NO:`/`SHEET:`/`FACILITY NO:`/`DATE:`
+    label:value pairs from the same title block, boxed the way a real
+    ruled table is. A SECOND, `(no title)` fabricated table (2 rows,
+    also sheet #4) reads the title block's own approval-routing stamp
+    (`RIOCC:`/`RIOCO:`/`RIOCV:`/`DATE`, real Air Force base-level review
+    codes, not project data) — and this EXACT same fabricated shape
+    recurs VERBATIM on sheet #19 (the title block is drawn identically
+    on every sheet of a real drawing set, so this false positive fires
+    once per sheet, not once per document).
+
+    Root cause hypothesis (not yet confirmed via debug trace): the
+    structural reference reader gates on a boxed/ruled-line region with
+    label:value-shaped rows — a title block satisfies both, purely
+    structurally, with no real signal distinguishing "administrative
+    metadata repeated on every sheet" from "a real schedule." Given a
+    title block is close to universal on real AEC drawing sheets, this
+    is very likely a corpus-wide source of false-positive "tables" (not
+    a data-loss risk, but real noise a downstream consumer or estimator
+    has to filter out by hand). NOT STARTED. Real next step: a debug
+    trace of what structural signal fires for a title block region,
+    then a refusal condition scoped to that signal (e.g., a candidate
+    block sitting inside the sheet's own drawing-border/stamp region, or
+    whose "rows" are single label:value pairs with no repeated real
+    column structure across rows) — cross-reference with rule 24(a) once
+    a fix is designed, since both are the same underlying false-positive
+    class.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
