@@ -26,6 +26,7 @@ confirmed correct behavior on a real artifact).
 | 006_US_U2607_01_Interior_Renovations_C_Wing_Updates | verified-open | 21 |
 | 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated | verified-open | 22 |
 | 009_FL_USDA_APHIS_Plant_Inspection_Station_Building | verified-open | 23 |
+| 010_US_WWYK240146_Design_Implement_Monitoring_Control | verified-clean | — (0 real tables confirmed correct: sequence-of-operations narrative only, no real schedules anywhere in 31 pages) |
 
 All other set_ids in `takeoffs/cross-set-compile/*.compile.json` are
 `pending` — not yet individually cell-by-cell verified this effort. Update
