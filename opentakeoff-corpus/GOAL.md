@@ -2465,6 +2465,46 @@ on this effort:**
     for a dedicated pass per this file's own established rule-30
     precedent.
 
+39. **OPEN, SCOPED, NOT STARTED, MEDIUM SEVERITY: a correctly-extracted,
+    correctly-titled, cell-accurate real table contributes ZERO to
+    `compile_corpus_takeoff`'s category counts because its real title
+    doesn't match any tracked category vocabulary — a compile-LAYER
+    taxonomy gap, not an extraction bug.**
+
+    Found doing genuinely verified per-set work,
+    089_FL_Airport_Terminal_and_Hangar_Development.pdf#136's own real
+    VRF SYSTEM SCHEDULE. Real ground truth confirmed cell-exact against
+    the page: 12 real VRF indoor air-handling units (`AC-1` through
+    `AC-12`, real CFM/capacity/model/weight/electrical data, e.g. `AC-1`
+    TRANE TPEFYP008MA143A, 300 CFM, 7.2 MBH cooling) each carrying its
+    own nested real outdoor heat-pump unit sub-columns where a real one
+    is assigned (`HP-1` on `AC-1`'s row, 26.7 SEER, 192.6 MBH cooling,
+    TRANE TUHYP2164BN40AN; `CU-1` on `AC-12`'s row, 19.8 SEER, TRANE
+    PUZ-A30NHA7) — 12 real air handlers plus 2 real distinct heat-pump/
+    condensing units, all genuinely present in one wide, correctly-
+    structured, correctly-titled real table. Extraction: `graph.tables`
+    carries this exact table, title and all 12 rows and every real cell
+    value intact — this is NOT an extraction failure, root-caused by
+    direct inspection of the compile step: `compile_corpus_takeoff`'s
+    category vocabulary matches table titles against known category
+    names (AHU, FCU, HEAT_PUMP, etc.) and "VRF SYSTEM SCHEDULE" matches
+    none of them, so all 12 real air handlers and both real heat pumps
+    are invisible to every tracked category — compile.json's own FCU:7
+    and HEAT_PUMP:1 expectations for this document remain unexplained by
+    anything found on a targeted real-document search (the closest real
+    matches are a single-row INDOOR DX DOAS FAN COIL UNIT SCHEDULE and
+    this VRF table's own 2 real heat-pump sub-rows), suggesting
+    compile.json's own pre-scan may be stale/imprecise here rather than
+    the extraction being wrong — consistent with pre-scan inaccuracy
+    already confirmed elsewhere this session (sets 078, 083).
+
+    NOT STARTED — this needs a scoped decision (add "VRF"/"AIR HANDLER"
+    as first-class tracked categories vs. folding VRF indoor units into
+    the existing FCU bucket by heuristic) rather than a same-tick patch,
+    and a corpus-wide check for how many other real documents use "VRF
+    SYSTEM SCHEDULE" or similarly-named real titles that fall through
+    the same gap before committing to one mapping.
+
 ### Real, understood build-time characteristic (not a bug): Tesseract OCR
 fallback can make a single set's on-demand build take 45-90+ minutes
 
