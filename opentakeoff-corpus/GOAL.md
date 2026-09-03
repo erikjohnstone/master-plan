@@ -1702,6 +1702,21 @@ on this effort:**
     this file for a future, dedicated pass — not attempted here, same
     reasoning as every confirmation above.
 
+    7th/8th real confirmation, same day:
+    060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#24's own
+    real AIR CONDITIONING UNIT SCHEDULE (real unit `432ACU01-A1`,
+    duct-mounted cooling/heating coil data) is totally absent from
+    `graph.tables` on an 83-page dense real document; separately,
+    061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58's own
+    real EXPANSION TANK SCHEDULE (`ET-A`/`ET-B`/`ET-C`) is likewise
+    totally absent — real page text shows it interleaved directly
+    beside the immediately adjacent AIR/DIRT SEPARATOR SCHEDULE, which
+    itself extracts correctly (3/3 real rows) — the exact "one of two
+    adjacent dense tables survives, the other doesn't" shape this
+    entry already tracks, now confirmed a 4th time on a document whose
+    OTHER 8+ real schedules on the identical page all extract
+    correctly.
+
 31. **FIXED 2026-09-03: the row-key column picker unconditionally
     trusts the LEFTMOST real column — when a real document splits its
     own equipment tag into a short TYPE PREFIX column + a separate
