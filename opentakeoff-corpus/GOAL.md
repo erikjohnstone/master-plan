@@ -1529,6 +1529,58 @@ on this effort:**
     25/26 given how directly it corrupts real equipment electrical specs
     with silently wrong values.
 
+    CORRECTION, same day, real coordinate trace (not the row-continuation
+    mechanism this rule first assumed by analogy with rule 23): the VFD
+    SCHEDULE's "DATE" cell traces to a FALSE HEADER ANCHOR, not a
+    row-scan running past its own table. Real coordinates (pdfplumber,
+    page 27): the real PANELBOARD SCHEDULE's own descriptive header
+    sentence "120/208 VOLTAGE 3 PHASE 4 WIRE X 125 MAIN BREAKER..." sits
+    at top≈157, x≈1576 for the word "VOLTAGE" — in the SAME y-band as
+    the real VFD table's own header row (its real per-unit columns are
+    actually "SERVES HP VOLTS PHASE HZ ENCLOSURE", a DIFFERENT word,
+    "VOLTS" not "VOLTAGE", at a different x). Because "VOLTAGE" is a
+    real, plausible equipment-vocab hit, it got minted as a VFD column
+    anchor at x≈1576 anyway. Then the real PANELBOARD row
+    "1/31/25 DATE COPPER BUSSING SOLID NEUTRAL FLUSH PANELBOARD L1E"
+    sits at top≈223, x=1575 for "DATE" — only 4px in y from
+    VFD-PCHP-1's own real row (top≈227) and nearly x-identical to the
+    false anchor — so ordinary same-row/same-column cell attribution
+    (working exactly as designed) puts "DATE" in that cell. The bug is
+    upstream of row/cell attribution: header-anchor selection accepts a
+    vocab-hit word without checking it belongs to the SAME table's own
+    real header row (as opposed to any nearby same-page text in a
+    similar y-band that happens to use a shared vocabulary word) — a
+    different, more precise mechanism than rule 23's "row-scan has no
+    distance bound" hypothesis, even though both produce the same
+    symptom class (unrelated adjacent table's real text ending up in
+    this table's cells). Real next step: trace which header-anchor
+    function accepted "VOLTAGE" here (likely `harvestBareVocabAboveTiers`
+    / `harvestNumericSubHeaders` / `subTierAnchors` — the tier-harvesting
+    family that scans for vocab hits near a header row) and add a check
+    that a harvested anchor's own row of origin is plausibly part of
+    THIS table's real header band, not just anywhere in a loose y
+    tolerance.
+
+    Checked `harvestNumericSubHeaders` and `harvestBareVocabAboveTiers`
+    directly: both already carry an explicit established-X-span bound
+    for exactly this reason (their own comments name the same "side-by-
+    side table at the same Y band" risk) — so this specific instance is
+    NOT those two. Confirmed instead this connects to an
+    ALREADY-DISCLOSED, deliberately-NOT-fixed risk area: `headerHits`'s
+    own doc comment (this file, above `skipSubHeaderContinuation`) names
+    "TYPE"/"VOLTAGE"/"PHASE" as bare vocab words that broke a DIFFERENT
+    real table (federal-mech CH-1, sheet #14's CHILLER SCHEDULE) via the
+    same mechanism — a bare vocab hit terminating/misdirecting header
+    discovery — and documents that a locally-correct fix for that case
+    was tried and REVERTED after it silently broke a different real
+    table elsewhere in the corpus. Same exact vocab words, a different
+    manifestation (there: a false EARLY STOP on real header rows,
+    corrupting `dataFrom`; here: a false ANCHOR mint pulling in an
+    unrelated block's text) — strong independent confirmation this is
+    genuinely shared, high-blast-radius code (every equipment-kind table
+    in the corpus goes through it), not a narrow one-line fix. Left NOT
+    STARTED on purpose rather than risk a repeat of that exact revert.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
