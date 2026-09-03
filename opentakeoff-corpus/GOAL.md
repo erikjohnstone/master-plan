@@ -1671,6 +1671,37 @@ on this effort:**
     header is unusually deep/wide, independent of how many real rows
     the table has.
 
+    5th/6th real confirmation, 2026-09-03, via the structural reference-
+    kind path specifically (a NEW concrete symptom for this same
+    mechanism): 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU
+    .pdf#21's own HEAT TRACE SCHEDULE and
+    053_VA_Renovate_Expand_Emergency_Room_System_VA.pdf#12's own AIR
+    DEVICE SCHEDULE (RETURN) / AIR DEVICE SCHEDULE (SUPPLY) each show
+    their OWN real 2nd header tier misread as the table's FIRST DATA
+    ROW — `row.key` reads a literal header fragment ("CIRCUIT NUMBER",
+    "MIN.") and every cell in that phantom row reads more header
+    fragments ("(°F)", "MIN. MAX. MAX. APD"). The real data row(s)
+    below still extract, just with the phantom row prepended and, on
+    the Heat Trace case, several real values glued into single cells.
+    Same document (053), separate and more severe: the real SINGLE
+    DUCT AIR TERMINAL UNIT SCHEDULE (20 real units, `TU26-11` through
+    `TU26-72`, confirmed via direct page text) loses 11 of 20 real
+    rows (55%) — the 9 survivors' own cell data is confirmed correct
+    cell-by-cell, so this is a pure ROW-COUNT truncation, not a
+    corruption; the extracted region's own Y-span (`342.9` to `622.1`,
+    ~280px) is far too short for 20 real rows, consistent with the
+    scan stopping early against a neighboring table's own header on
+    the same dense page. The real SERIES FAN POWERED AIR TERMINAL UNIT
+    SCHEDULE (1 real row) and AIR DEVICE SCHEDULE (EXHAUST) (2 real
+    rows) on the SAME page are entirely absent — the same fully-
+    dropped shape already established above, now a 3rd/4th and 5th/6th
+    real document. This one real page alone reproduces 3 of this
+    file's own already-named dense-multi-schedule-page symptom shapes
+    at once (total drop, severe truncation, header-as-phantom-row),
+    reinforcing this is the single highest-value remaining item in
+    this file for a future, dedicated pass — not attempted here, same
+    reasoning as every confirmation above.
+
 31. **FIXED 2026-09-03: the row-key column picker unconditionally
     trusts the LEFTMOST real column — when a real document splits its
     own equipment tag into a short TYPE PREFIX column + a separate
