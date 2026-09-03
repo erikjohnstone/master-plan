@@ -1081,6 +1081,54 @@ on this effort:**
     regression test proving existing digit-numbered room-finish tables
     are unaffected before landing.
 
+23. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: an equipment table's own
+    row-scan absorbs an ADJACENT, unrelated equipment table's own marks
+    as fake extra rows once its own real rows run out —
+    009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18's own
+    real AIR COOLED CHILLER SCHEDULE (1 real chiller) reports 5 rows,
+    4 of them fabricated from the neighbouring FAN SCHEDULE's own real
+    EF-1/EF-2/EF-3/EF-5 marks.**
+
+    Found doing genuinely verified per-set work, fifth set picked up
+    this session. Real page 18 ground truth (pdfplumber): `CH-1` (the
+    real, only chiller) sits at x≈886, y≈644 — the CHILLER SCHEDULE's own
+    real single row. `EF-1` through `EF-6` (the FAN SCHEDULE's own real
+    marks) sit at a COMPLETELY DIFFERENT x≈1687, y≈698-778 — a separate
+    table's own column, not this one's. Extraction: `graph.tables`
+    carries `[equipment] "AIR COOLED CHILLER SCHEDULE"` with 5 rows —
+    `CH-1` (real, populated) plus `EF-1`/`EF-2`/`EF-3` (empty `{}` cells,
+    pure garbage) and `EF-5` (its own NOTES cell holds stray prose from a
+    totally different note). A takeoff built on this counts 5 chillers
+    where there is genuinely 1 — a severe, silent quantity-accuracy
+    failure, not a cosmetic one.
+
+    Root cause (not yet confirmed via a debug trace, inferred from the
+    real coordinate evidence above): the chiller table's own row-scan
+    does not stop once its own real rows are exhausted — it continues
+    scanning DOWNWARD in y for more `CODE_RE`-shaped candidate key
+    tokens, and a neighbouring, unrelated table's own real marks
+    (`EF-1`, etc., which independently satisfy `CODE_RE`'s own generic
+    equipment-tag shape) get accepted as additional rows of THIS table
+    even though they sit at a wildly different x — nowhere near this
+    table's own established MARK-anchor x. This looks like the KEY
+    column has no equivalent of the DATA columns' own `anchorRadii`
+    "anomalously wide gap" refusal (the real, already-shipped guard the
+    BYPASS CONTROL VALVE SCHEDULE fix relies on) — that guard protects
+    non-key columns from bleeding in un-modeled data, but apparently
+    nothing bounds how far in x (or how far past the table's own real
+    row extent) a NEW row's own key token is allowed to be found.
+
+    NOT STARTED. Real next step: a debug trace of the row-scan's own
+    termination/continuation logic (where a candidate row is accepted or
+    the scan stops) to confirm this hypothesis before designing a fix —
+    likely a distance-from-established-anchor bound on the KEY column
+    itself, mirroring `anchorRadii`'s existing DATA-column guard. High
+    value: this shape (two equipment schedules stacked/adjacent on one
+    dense sheet, one shorter than the other) is a common real MEP-sheet
+    layout, not a one-off — worth confirming against a second affected
+    set once root-caused, same discipline as rules 17/18's own
+    "don't generalize from one" standard.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
