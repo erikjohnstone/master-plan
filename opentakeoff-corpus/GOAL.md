@@ -1457,6 +1457,78 @@ on this effort:**
     same-tick fix; a real, systemic gap worth being honest about rather
     than silently reporting 30 real devices with zero real point data.
 
+29. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY (3rd/4th real confirmation
+    of rule 23's cross-table-bleed root cause, now on FABRICATED cell
+    VALUES not just fabricated ROWS):
+    012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#27's own
+    real VFD SCHEDULE absorbs values from an entirely different,
+    unrelated PANELBOARD SCHEDULE sharing the same dense page — real
+    VFD rows get fake VOLTAGE/TYPE/PHASE values like "DATE",
+    "1920", "NEMA ENCLOSURE", "CORRIDOR RECEPTS", "PUMP 'P-1'".**
+
+    Found doing genuinely verified per-set work, the 20th-ish set picked
+    up this session. Real page 27 ground truth (pdfplumber): the real
+    VFD SCHEDULE has exactly 13 rows, each cleanly
+    TAG MANUFACTURER MODEL LOAD HP VOLTS PHASE HZ ENCLOSURE NOTES —
+    e.g. "VFD-CWP-1 SCHNEIDER SFD212 CWP-1 30 480 3 60 NEMA 1 1-5". A
+    COMPLETELY UNRELATED real PANELBOARD SCHEDULE (electrical branch-
+    circuit loads: "1 CORRIDOR RECEPTS 1080 R 20 1 20 1 M 1920 WATER
+    HEATER 1&2 2", "15 PUMP 'P-1' 1920 M 20 1 20*** 1 MI 500 FIRE DOOR
+    RELEASE 16", etc.) is laid out on the SAME page, its rows
+    interleaved line-by-line with the VFD table's own rows in the raw
+    text stream. Extraction: `graph.tables` carries `[equipment] "VFD
+    SCHEDULE:"` with all 13 real tags/manufacturers/models correct, but
+    several rows' VOLTAGE/TYPE/PHASE cells hold real words that
+    are 100% real PANELBOARD SCHEDULE content, not VFD data:
+    VFD-PCHP-1's VOLTAGE is literally "DATE" (from the panelboard's
+    own "1/31/25 DATE" revision stamp); VFD-SHWP-2's PHASE is
+    "1920" and TYPE is "'P-1'" (both lifted verbatim from panel
+    circuit 15's real load description). A takeoff reading these cells
+    reports fabricated garbage as real equipment electrical data — worse
+    than rule 23's fabricated-ROW case, because here the row identity
+    (tag/manufacturer/model) is genuinely correct and the corruption is
+    silent, cell-level, and easy to mistake for real data.
+
+    The SAME page also shows a milder 3rd instance on the COOLING TOWER
+    SCHEDULE (page 19): its own extracted headers include four separate
+    "MANUFACTURER ..." labels ("MANUFACTURER FANS",
+    "MANUFACTURER MOTORS", "MANUFACTURER TOTAL", bare
+    "MANUFACTURER") even though the real Cooling Tower Schedule's own
+    header row has no header column named that — "MANUFACTURER" is
+    real text bleeding in from the SAME page's cooling-tower VENDOR
+    address stamp ("3540 NE Ralph Powell Rd., Ste. B ... Lee's Summit,
+    MO 64064") sitting between/around the schedule's own two-tier
+    header, and only 2 of the Cooling Tower Schedule's real 14 columns
+    (EAT, and OCP mislabeled as "MANUFACTURER TOTAL") retain any real
+    per-row value at all — near-total data loss, not just corruption.
+    The WATER-COOLED CHILLER SCHEDULE (also page 19) shows a related but
+    distinct symptom: roughly half its real columns (CAPACITY,
+    refrigerant type, unit weight, WIDTH, several dimensions, OCP) are
+    silently dropped, and several header labels are glued strings of 3-5
+    real column headers concatenated
+    ("MODEL NO. CHILLER TYPE CAPACITY FLUID MIN. DESIGN TYPE") — this
+    document's real header text is ALSO unusually letter-spaced (e.g.
+    real "FLUID" arrives as 5 separate same-row PDF text items F, L,
+    U, I, D each ~6-7px apart, confirmed via extract_words()),
+    which may compound the same underlying column-anchor confusion on
+    an already-dense, multi-tier, cross-table-adjacent header — this
+    Missouri "MO_" state-project CAD export style has already shown
+    unusual letter-spacing in TITLE-BLOCK text elsewhere this session
+    (rule 17/set 029's finding); this is the first time it's been
+    confirmed corrupting real SCHEDULE DATA, not just decorative text.
+
+    NOT STARTED — same reason as rule 23: root-causing and safely fixing
+    the row/column-continuation logic that lets one table's own scan
+    absorb a geometrically-adjacent, unrelated table's real marks needs
+    a debug trace of the actual continuation/termination decision before
+    a fix is attempted, and this page is dense enough (3+ schedules
+    interleaved in the same header band) that a rushed fix risks a new
+    regression more than it risks leaving this open. Real next step when
+    picked up: same as rule 23's, but now with THREE corroborating real
+    documents (009, 012 x2) — worth prioritizing over rules 20/21/22/24/
+    25/26 given how directly it corrupts real equipment electrical specs
+    with silently wrong values.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
