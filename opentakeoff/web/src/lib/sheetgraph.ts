@@ -4983,7 +4983,21 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
     if ((t.h || 8) < hdrH2 * BIG_FONT_RATIO2) continue;
     const s = norm(t.str);
     if (!s || /\d/.test(s) || !/^[A-Z][A-Z .,'’&()/-]*$/.test(s)) continue;
-    if (s.split(/\s+/).filter(Boolean).length < 3) continue;
+    // 2 words, not 3 — ONLY here, where the big-font check just above
+    // already gated this candidate. Real, found live (2026-09-03):
+    // 013_MO_T2523_01's own "CONTROL VALVES" table title (2 words, no
+    // "SCHEDULE") never qualified — CONTROL/VALVES render at ~2x the
+    // header row's own token height (25px vs 12.5px, confirmed against
+    // the real rendered page), comfortably clearing BIG_FONT_RATIO2,
+    // but the 3-word floor rejected it regardless, and the table
+    // extracted with no title at all. Genuine real titles this short are
+    // common in this domain (CONTROL VALVES, EXHAUST FANS, HEAT PUMPS,
+    // UNIT HEATERS) — a real title, not the false-positive risk the
+    // 3-word floor was guarding against, which is why this loosening is
+    // scoped to ONLY the already-big-font-gated STAGE 1 branch. STAGE 3
+    // below (no font-size signal at all) keeps its original 3-word floor
+    // untouched — that path has no other safety net to lean on.
+    if (s.split(/\s+/).filter(Boolean).length < 2) continue;
     title = { sheet: sheet.key, text: t.str.trim(), bbox: bboxOf(t) };
   }
   // STAGE 2 — the original, unwidened search, untouched: exactly the prior

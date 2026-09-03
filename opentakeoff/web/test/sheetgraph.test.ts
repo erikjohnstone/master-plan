@@ -3230,3 +3230,52 @@ test("WP1.4 title hunt: SCHEDULED note prose must not steal the real title (Nort
   assert.match(String(hit!.title?.text || ""), /AIR INLETS/i);
   assert.ok(!/AIRFLOWS SCHEDULED/i.test(String(hit!.title?.text || "")), "numbered SCHEDULED note must not be the title");
 });
+
+test("title hunt: a genuine 2-word BIG-FONT title (no \"SCHEDULE\" word) is not dropped (real bug: 013_MO_T2523_01's own CONTROL VALVES table)", () => {
+  // Real, found-live gap (2026-09-03), root-caused against the actual
+  // rendered page, not guessed: 013_MO_T2523_01_Replace_Boilers_Phase_2's
+  // own "CONTROL VALVES" table title never qualified as a title candidate
+  // at all — it names no "SCHEDULE" word, and the STAGE 1 big-font
+  // fallback's own word-count floor required 3+ words. Confirmed against
+  // real page coordinates: CONTROL/VALVES render at height 25 vs the
+  // header row's own 12.5 (ratio 2.0, comfortably clearing
+  // BIG_FONT_RATIO2=1.6) — a real, big-font, genuine title, just short.
+  // Real HVAC table titles this short are common (CONTROL VALVES, EXHAUST
+  // FANS, HEAT PUMPS, UNIT HEATERS) — loosened the STAGE 1 floor from 3
+  // words to 2, scoped to ONLY that branch since it already has the
+  // big-font gate as its real safety net; STAGE 3's own 3-word floor
+  // (no font-size signal at all) is untouched.
+  const sp = (str: string, x: number, y: number, h = 8): GraphSpan => ({ str, x, y, w: str.length * 5, h });
+  const sched: SheetSpans = {
+    key: "cv.pdf#1",
+    sheet_number: "M20",
+    spans: [
+      sp("CONTROL VALVES", 100, 10, 25),
+      sp("TAG", 0, 60, 12.5), sp("MANUFACTURER", 100, 60, 12.5), sp("MODEL", 300, 60, 12.5), sp("GPM", 450, 60, 12.5),
+      sp("CV-1", 0, 90, 12.5), sp("BELIMO", 100, 90, 12.5), sp("B-100", 300, 90, 12.5), sp("2.5", 450, 90, 12.5),
+      sp("CV-2", 0, 110, 12.5), sp("BELIMO", 100, 110, 12.5), sp("B-100", 300, 110, 12.5), sp("2.5", 450, 110, 12.5),
+    ],
+  };
+  const tables = extractAllTables(sched, "equipment");
+  const hit = tables.find((t) => (t.rows || []).some((r) => r.key === "CV-1"));
+  assert.ok(hit, "CV-1 row present");
+  assert.equal(hit!.title?.text, "CONTROL VALVES", `real 2-word big-font title must be found, got: ${hit!.title?.text}`);
+
+  // Negative control: a 2-word phrase at ORDINARY (header-scale) font must
+  // still be refused — the big-font gate, not the word count alone, is
+  // what makes a short title safe to accept.
+  const schedSmallFont: SheetSpans = {
+    key: "cv2.pdf#1",
+    sheet_number: "M21",
+    spans: [
+      sp("SOME NOTE", 100, 10, 8),
+      sp("TAG", 0, 60, 12.5), sp("MANUFACTURER", 100, 60, 12.5), sp("MODEL", 300, 60, 12.5), sp("GPM", 450, 60, 12.5),
+      sp("CV-9", 0, 90, 12.5), sp("BELIMO", 100, 90, 12.5), sp("B-100", 300, 90, 12.5), sp("2.5", 450, 90, 12.5),
+      sp("CV-8", 0, 110, 12.5), sp("BELIMO", 100, 110, 12.5), sp("B-100", 300, 110, 12.5), sp("2.5", 450, 110, 12.5),
+    ],
+  };
+  const tables2 = extractAllTables(schedSmallFont, "equipment");
+  const hit2 = tables2.find((t) => (t.rows || []).some((r) => r.key === "CV-9"));
+  assert.ok(hit2, "CV-9 row present");
+  assert.notEqual(hit2!.title?.text, "SOME NOTE", "an ordinary-font 2-word phrase must NOT be accepted as a title — the big-font gate is the real safety net, not word count alone");
+});
