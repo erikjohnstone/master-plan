@@ -1856,6 +1856,62 @@ on this effort:**
     per-set build (this file's own experience this session: 032, 033,
     and now 036 all had wrong or stale `[WEAK]`/`[ZERO]` labels).
 
+34. **FIXED 2026-09-03: `CODE_RE` rejected a real "floor digit(s) +
+    area letter + room digit(s)" equipment mark shape (e.g. "1A137"),
+    silently dropping 16 of 51 real rows on
+    038_NC_VA_Project_637_22_700's own MECHANICAL EQUIPMENT SCHEDULE.**
+
+    Found doing genuinely verified per-set work — confirmed against
+    real page coordinates, not guessed. Real ground truth (pdfplumber,
+    page 54): 51 real rows (`47-CP-1`, `47-CRAC-1A`, `47-IDU-1A137`,
+    `47-IDU-A301`, ... `47-ODU-BF107`), all in the SAME real column
+    (x ≈ 200-210), continuous y-order — one physical table, not two
+    side-by-side blocks. Extraction, before this fix: only 35 of the
+    51 real rows became rows — specifically every `47-IDU-A301`/
+    `47-IDU-BC118A`-style (letter-first suffix) mark kept, every
+    `47-IDU-1A137`/`47-ODU-2B212`-style (a real floor+area+room
+    building-numbering convention: floor "1", area "A", room "137")
+    mark silently dropped, no trace, no corruption — 31% real row
+    loss on a real, dollar-significant equipment schedule.
+
+    Root cause, confirmed by reading `rowKeyOf`'s own equipment branch:
+    the row's real building prefix ("47-") already strips correctly via
+    the existing VA/GSA building-prefix mechanism (rule from
+    2026-09-03, St Louis VA's own "1-RH-1" fix) — the actual failure is
+    one level deeper, in `CODE_RE` itself, on the REMAINING
+    "IDU-1A137" string. `CODE_RE`'s hyphen-segment alternatives were
+    `[A-Z][A-Z0-9]{0,5}` (must start with a letter) and
+    `[0-9]{1,5}[A-Z]{0,3}` (digits, then only letters, never a digit
+    again) — neither accepts "1A137" (digit, letter, THEN more digits).
+    Mathematically confirmed (not assumed) via direct regex testing
+    before touching the file.
+
+    Fix: a third hyphen-segment alternative,
+    `[0-9]{1,2}[A-Z][0-9]{2,4}[A-Z]{0,2}`, purely additive — every
+    already-matching shape (`AHU-1`, `VVR2-8`, `IDU-A301`,
+    `IDU-BC118A`, ...) is untouched. Deliberately required 2-4 digits
+    after the letter (not 1) so a real, corpus-found false-positive
+    risk this file already guards elsewhere — a "2X4"/"1X4" LUMINAIRE
+    SIZE callout (this file's own LED LUMINAIRE SCHEDULE test fixture)
+    — stays refused: "2X4" has only ONE digit after its own letter, one
+    short of this new shape's own requirement. Verified against BOTH
+    directions before shipping: the real corpus set now shows all 51
+    real rows (up from 35, confirmed via `allkeys.mjs` against the live
+    page), and a new test proves the "2X4" dimension-callout shape
+    still refuses to become a false key (placed directly in a MARK
+    column, not just as a description value).
+
+    Full test suite run before commit: `sheetgraph.test.ts` (109/109
+    pass, including 2 new tests for this exact shape), plus the
+    corpus-wide regression suites (`corpusTakeoffBas.test.ts`,
+    `corpusTakeoffHeaderGeometry.test.ts`,
+    `corpusTakeoffVol2Families.test.ts`, 54/54 pass) — zero regressions.
+    One PRE-EXISTING failure in `equiptags.test.ts`
+    ("PCHWP-MT1 in CUH-T1 (joined)") was confirmed unrelated: reproduced
+    identically on the unmodified base commit via `git stash`, so it is
+    not this fix's regression and was left alone rather than folded
+    into an unrelated change.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is

@@ -3130,7 +3130,28 @@ function bandLimits(anchors: Anchor[]): { x0: number; x1: number; medGap: number
 // already-matching real tag (AHU-1, EF-1, CV-1, M-601, ...) matches
 // identically; a second prefix shape (`[A-Z]{1,4}[0-9]{1,2}`, e.g. VVR2,
 // SF10, T1) is added alongside it, not merged into or replacing it.
-const CODE_RE = /^(?:[A-Z]{1,4}[A-Z0-9]{0,4}|(?:[A-Z]{1,6}|[A-Z]{1,4}[0-9]{1,2})(?:-(?:[A-Z][A-Z0-9]{0,5}|[0-9]{1,5}[A-Z]{0,3})){1,4})$/;
+// Real, found-live gap (2026-09-03, 038_NC_VA_Project_637_22_700's own
+// MECHANICAL EQUIPMENT SCHEDULE): confirmed against real page geometry, not
+// guessed — 16 of 51 real rows (47-IDU-1A137, 47-ODU-2B212, 47-IDU-2E202A,
+// ...) never became rows at all, while their siblings on the SAME table
+// (47-IDU-A301, 47-IDU-BC118A, ...) keyed fine. The real difference: a
+// "floor digit(s) + area letter + room digit(s)" tag — a common real
+// building-numbering convention (floor "1", area "A", room "137") — has a
+// DIGIT immediately before the letter in its own hyphen segment ("1A137"),
+// which neither existing hyphen-segment shape accepts (`[A-Z][A-Z0-9]{0,5}`
+// requires a letter first; `[0-9]{1,5}[A-Z]{0,3}` requires digits then only
+// letters, never digits again after). A third hyphen-segment shape —
+// `[0-9]{1,2}[A-Z][0-9]{2,4}[A-Z]{0,2}` — accepts this floor/area/room
+// convention (an optional trailing room-letter suffix too, "2E202A")
+// without opening the door to a real, corpus-found false positive this
+// file already guards elsewhere: a "2X4"/"1X4" LUMINAIRE SIZE callout
+// (this file's own LED LUMINAIRE SCHEDULE test fixture) is digit+letter+
+// ONE digit, one short of this new shape's own 2-4-digit room-number
+// requirement — deliberately NOT loosened to 1, so "2X4" keeps failing
+// CODE_RE exactly as before. Purely additive, same discipline as this
+// regex's own two prior real-gap fixes documented above: every already-
+// matching shape (AHU-1, VVR2-8, IDU-A301, IDU-BC118A, ...) is untouched.
+const CODE_RE = /^(?:[A-Z]{1,4}[A-Z0-9]{0,4}|(?:[A-Z]{1,6}|[A-Z]{1,4}[0-9]{1,2})(?:-(?:[A-Z][A-Z0-9]{0,5}|[0-9]{1,5}[A-Z]{0,3}|[0-9]{1,2}[A-Z][0-9]{2,4}[A-Z]{0,2})){1,4})$/;
 // Hyphen segments accept digit-leading unit suffixes with an optional letter
 // trail (AHU-1A / CU-1B / FCU-2A) — common US multi-cottage / multi-unit
 // marking. Pure letter segments (AHU-A1) and pure digits (AHU-1) unchanged.

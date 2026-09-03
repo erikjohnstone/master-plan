@@ -3288,6 +3288,64 @@ test("rowKeyOf accepts a real VA/GSA numbered-building prefix before an equipmen
   assert.equal(withoutBuilding.length, 0, "an unconfirmed digit prefix must not be guessed at — real refusal, not a fabricated key");
 });
 
+test("rowKeyOf accepts a real floor+area+room mark (digit before the letter) alongside its letter-first siblings (real bug: 038_NC_VA_Project_637_22_700's own MECHANICAL EQUIPMENT SCHEDULE)", () => {
+  // Real, found-live gap (2026-09-03), confirmed against real page
+  // coordinates: 16 of 51 real rows on this one real table (47-IDU-1A137,
+  // 47-ODU-2B212, 47-IDU-2E202A, ...) never became rows at all, while
+  // their siblings on the SAME table (47-IDU-A301, 47-IDU-BC118A, ...)
+  // keyed fine — both shapes sit in the same real column, same building
+  // prefix "47", confirmed via real word coordinates (same x, continuous
+  // y order, not a second table). The real difference is a DIGIT
+  // immediately before the letter in the mark's own hyphen segment
+  // ("1A137" — floor "1", area "A", room "137") — a shape CODE_RE's own
+  // two hyphen-segment alternatives both reject (one requires a letter
+  // first, the other requires only letters after the digits, never a
+  // digit again). Fixture mirrors the real shape: both a floor+area+room
+  // mark ("47-IDU-1A137") and a letter-first sibling ("47-IDU-A301") in
+  // the same real table, same building prefix, exactly as drawn.
+  const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
+  const sched: SheetSpans = {
+    key: "floor-area-room.pdf#1",
+    sheet_number: "E501",
+    spans: [
+      sp("MECHANICAL EQUIPMENT SCHEDULE", 100, 10),
+      sp("MARK", 0, 40), sp("MANUFACTURER", 200, 40), sp("VOLTAGE", 500, 40), sp("MCA", 600, 40),
+      sp("47-IDU-1A137", 0, 70), sp("MITSUBISHI", 200, 70), sp("208", 500, 70), sp("4", 600, 70),
+      sp("47-IDU-A301", 0, 90), sp("MITSUBISHI", 200, 90), sp("208", 500, 90), sp("4", 600, 90),
+    ],
+  };
+  const buildings = new Set(["47"]);
+  const table = extractTable(sched, "equipment", { buildings })!;
+  assert.ok(table, "the real vocabulary anchors are enough to clear the bar");
+  assert.deepEqual(
+    table.rows.map((r) => r.key).sort(),
+    ["47-IDU-1A137", "47-IDU-A301"],
+    "both the floor+area+room mark and its letter-first sibling must key their own real rows, full mark kept",
+  );
+
+  // The real "2X4"/"1X4" LUMINAIRE SIZE callout this file's own LED
+  // LUMINAIRE SCHEDULE test uses (a description value, never a real key)
+  // must keep failing CODE_RE — this new shape requires 2-4 room digits
+  // after the letter, one more than "2X4"'s single trailing digit, so a
+  // dimension callout in the KEY column's own position must not be
+  // mistaken for a floor+area+room mark. Placed directly in the MARK
+  // column (not just as a description value elsewhere) to prove the
+  // refusal, not assume it.
+  const sizeCallout: SheetSpans = {
+    key: "size-callout.pdf#1",
+    sheet_number: "E501",
+    spans: [
+      sp("LED LUMINAIRE SCHEDULE", 100, 10),
+      sp("MARK", 0, 40), sp("MANUFACTURER", 200, 40), sp("VOLTAGE", 500, 40), sp("MCA", 600, 40),
+      sp("R1", 0, 70), sp("FLUXWERX", 200, 70), sp("120", 500, 70), sp("2", 600, 70),
+      sp("2X4", 0, 90), sp("FLUXWERX", 200, 90), sp("120", 500, 90), sp("2", 600, 90),
+    ],
+  };
+  const calloutTable = extractTable(sizeCallout, "equipment", { buildings: new Set(["47"]) })!;
+  assert.ok(calloutTable, "the real vocabulary anchors are enough to clear the bar");
+  assert.deepEqual(calloutTable.rows.map((r) => r.key), ["R1"], "a real dimension/size callout ('2X4') in the key column must not become a false key or row");
+});
+
 test("bandDataRows: a trailing 'NOTES:' caption is refused as a phantom row, not real data (real bug: 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling's own HEATING COIL SCHEDULE)", () => {
   // Real, found-live gap (2026-09-03): "NOTES" passes CODE_RE's own generic
   // 1-4-letters-plus-more-alnum shape, so a trailing "NOTES:" section
