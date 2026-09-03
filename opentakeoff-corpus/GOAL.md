@@ -1581,6 +1581,37 @@ on this effort:**
     in the corpus goes through it), not a narrow one-line fix. Left NOT
     STARTED on purpose rather than risk a repeat of that exact revert.
 
+    5th real confirmation, 2026-09-03, a NEW contamination SOURCE (a
+    valve/pipe-fitting LEGEND graphic, not another schedule table):
+    087_US_Contra_Costa_College_Chiller_Replacement.pdf#1 (sheet titled
+    "LEGEND, AND SCHEDULES") crams a full valve-symbol legend graphic
+    between THREE real schedule tables — a circulating-pump schedule, the
+    real AIR-COOLED CHILLER SCHEDULE (1 real row, `ACCH-1`, CARRIER
+    30RB120, 120.1 TONS, 287 GPM, 54/44 EWT/LWT, 16.87 EER, confirmed
+    exact via direct page text), and a real pump schedule (`PCH-1`/
+    `PCH-2`, B&G SERIES e-1531 pumps). Extraction: `graph.tables` carries
+    only 2 tables total, both `"(no title)"` — the ACCH-1 chiller data
+    itself is cell-exact correct but its real title
+    ("AIR-COOLED CHILLER SCHEDULE") was never attached, so
+    `compile_corpus_takeoff`'s category counter can't see it — this
+    single real document has a real chiller and compile.json's own
+    pre-scan still reads "[ZERO]" as a result, a direct real-world
+    consequence of the missing-title symptom already on record elsewhere
+    in this file. The pump table is worse: real `PCH-1`/`PCH-2` values
+    survive but merged cell-for-cell with legend text lifted verbatim
+    from the SAME page's valve-symbol legend ("REDUCER CONCENTRIC
+    ALIGNMENT GUIDE... SENSOR WELL AUTOMATIC AIR VENT W/SOV PETE'S
+    PLUG... SHEET NUMBER... DRAWING NUMBER...", none of it real pump
+    data), and a fully FABRICATED third row keyed `"G8"` (a real detail-
+    callout/grid-reference token from the legend, not a real pump tag)
+    appears with no real counterpart on the page at all — the same
+    "fabricated ROW" symptom rule 23 named, now confirmed against a
+    LEGEND GRAPHIC as the contamination source rather than a second
+    schedule table, on top of the already-confirmed "fabricated CELL
+    VALUES" symptom. Same root-cause class as every confirmation above
+    (dense page, no distance/ownership bound on what nearby real text a
+    table's own scan can absorb) — NOT attempted here, same reasoning.
+
 30. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: formalizing an already-
     disclosed-but-never-numbered limitation — a real 5-6-tier-deep
     header defeats header/key detection in two DIFFERENT concrete ways
