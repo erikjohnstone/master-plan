@@ -1405,6 +1405,58 @@ on this effort:**
     `if (!rows.length) return null;` behavior. Both real corpus
     instances of this bug (017 and 018) are now FIXED.
 
+28. **OPEN, SCOPED, ARCHITECTURAL LIMITATION (not a quick bug — a real
+    capability gap): a DDC CONTROLLER INPUT/OUTPUT SUMMARY's own real
+    I/O-type matrix marks are drawn as VECTOR SHAPES (circles/
+    checkmarks), never text — this text-based pipeline cannot read them
+    at all, and never will without a genuinely new capability.**
+
+    Found doing genuinely verified per-set work on
+    021_XX_Laboratory_building_mechanical_drawings_lab.pdf#19. Real
+    ground truth: this sheet draws a classic DDC "points matrix" —
+    device TAG ID / DESCRIPTION down the left, ~32 real I/O-type column
+    headers across the top (ANALOG IN TEMPERATURE, BINARY OUT ON/OFF,
+    TRENDING TREND EVERY 5 MINUTES, …), with a small circle/checkmark
+    drawn at each (device, I/O-type) intersection that genuinely applies
+    — a real, common HVAC/BAS controls-schedule convention. Extraction:
+    `graph.tables` carries `[equipment] "DDC CONTROLLER INPUT/OUTPUT
+    SUMMARY"` (30 rows, all 30 real device tags/descriptions correctly
+    read) with all ~32 of its own real I/O-type columns present — but
+    EVERY SINGLE DATA CELL in those columns is empty. Not one real mark
+    survived. A second, smaller fragment of the same real table (3 more
+    rows, likely a second system's own matrix) shows the identical total
+    emptiness.
+
+    Root cause, confirmed directly against the real PDF (not assumed):
+    `p.extract_words()` finds NO "X"/"●"/"•"/"○" or any other plausible
+    mark GLYPH anywhere near a real marked cell (AFMS-1's own row) — but
+    the SAME row band has 18 real, unfilled `curve` objects (this page
+    has 1753 curves total) sitting at real column x-positions. The real
+    marks are drawn as VECTOR GRAPHIC SHAPES (small circles, most likely
+    filled/outlined per device to indicate that I/O type applies), never
+    as a text character at all. This file's entire table-reading
+    architecture — both `bandDataRows` (vector/geometric) and
+    `scheduleTableFromODL` (OCR/vision, which reads TEXT PDF paragraphs)
+    — only ever looks at TEXT. A real, present, machine-readable mark
+    drawn as pure vector geometry with no accompanying text is
+    structurally invisible to either path today.
+
+    This is architecturally similar to set 020's raster-only finding
+    (rule captured in `VERIFICATION_LEDGER.md`) in that BOTH are genuine
+    capability gaps, not code bugs to patch — but the underlying data
+    IS real, vector, and in principle machine-readable here (unlike a
+    scanned raster image), so a genuinely new capability — detecting a
+    filled/marked shape within a known column's own x-range on a given
+    row, the same geometric reasoning this file already does for TEXT
+    columns — could recover it. Given the corpus-wide "OCR, raster
+    vision, local VLM/AI, and learned symbol detection are IN SCOPE"
+    standing policy (this file's own execution-policy section), a
+    vision-based read of this exact matrix shape is the most plausible
+    real path forward, not a geometric text-extraction fix. NOT
+    STARTED — flagged for a dedicated future design pass, not a
+    same-tick fix; a real, systemic gap worth being honest about rather
+    than silently reporting 30 real devices with zero real point data.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is

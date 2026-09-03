@@ -35,6 +35,7 @@ confirmed correct behavior on a real artifact).
 | 018_GA_USDA_ARS_U_S_National_Poultry_Research_Center | verified-fixed | 27 (2nd real confirmation, ODL-path fix verified here) |
 | 019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04 | verified-open | 26 (3rd confirmation + worse real-data-contamination variant) |
 | 020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C | not-a-bug | — (M-601/M-602 HVAC SCHEDULES sheets are genuinely raster/scanned — 3568 embedded images, 68 real text chars on page 12; confirmed unreadable via both vector and OCR-sidecar paths in this environment; honest 2-table output is correct, not a code gap; pre-existing pillar-c-gt draft already flagged this unresolved) |
+| 021_XX_Laboratory_building_mechanical_drawings_lab | verified-open | 28 (new architectural finding: I/O matrix marks are vector shapes, not text) + rules 24/26-class false positives (PLAIN OUTLET / W/WIND SCREEN, non-tabular piping-diagram content misread as tables) |
 
 All other set_ids in `takeoffs/cross-set-compile/*.compile.json` are
 `pending` — not yet individually cell-by-cell verified this effort. Update
