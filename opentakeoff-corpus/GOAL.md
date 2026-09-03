@@ -990,6 +990,51 @@ on this effort:**
     reminder that title-hunt/header-parent fixes are easy to get subtly
     wrong without one.
 
+21. **OPEN, SCOPED, ATTEMPTED AND REVERTED (2026-09-03): a real, LOW-
+    priority (non-HVAC) door-schedule bug —
+    006_US_U2607_01_Interior_Renovations_C_Wing_Updates.pdf#17 merges TWO
+    genuinely separate real door schedules into one `graph.tables` entry,
+    and the second one's own repeated header row survives as a phantom
+    row literally keyed "MARK".**
+
+    Found doing genuinely verified per-set work, third set picked up this
+    session. Real page ground truth (pdfplumber): the sheet draws "AREA
+    1C16L DOOR SCHEDULE" (6 real doors, C105.1-C112) directly above "AREA
+    1C16H DOOR SCHEDULE EXISTING WOOD FRAMED PARTITION" (its own real
+    doors, C113 onward) — TWO real, differently-titled tables. This whole
+    document has NO real HVAC/mechanical schedules at all (confirmed by
+    scanning every page for "SCHEDULE" — only door/plumbing/architectural
+    content), so this is real but lower-priority for this platform's
+    actual HVAC/BAS takeoff scope than the equipment/reference bugs above.
+
+    Extraction produces ONE combined `[finish] "(no title)"` table, 19
+    rows, with the second schedule's own repeated header row surviving
+    as a phantom row (`{"MARK":"MARK","WIDTH":"WIDTH",...}`) spliced
+    between the two real groups — a real door literally tagged "MARK" is
+    never real data.
+
+    A fix was attempted: filter any row whose key exactly matches one of
+    the table's own header labels, added at `extractTableAt`'s own final
+    table-construction site. Tested against a synthetic fixture (didn't
+    reproduce the real termination behavior — the row scan stopped
+    early in the minimal fixture regardless of spacing, unlike the real
+    document) and against the real document (rebuilt fresh, confirmed via
+    debug instrumentation that the filter's own `headerLabelSet` DID
+    contain "MARK" — but the phantom row survived anyway, meaning the
+    row is not produced at the construction site the fix targeted;
+    `extractAllTables`'s own multi-call structure — the primary
+    `extractTableAt` scan, plus `extractSideTables`, both of which
+    ultimately call `extractTableAt` and so should be covered — did not
+    explain it either within the time spent). Rather than ship a fix
+    that measurably does not change the real document's own output,
+    reverted both the code change and its regression test cleanly
+    (`git checkout HEAD --`), confirmed 106/106 clean afterward. NOT
+    FIXED. Real next step: a proper debug trace (not assumption) of
+    which extraction/merge pass actually produces this specific
+    combined 19-row table, before attempting another fix — deferred as
+    lower-priority given this document's own real scope is entirely
+    outside HVAC/BAS.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is

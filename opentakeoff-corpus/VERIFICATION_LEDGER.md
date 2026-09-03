@@ -23,6 +23,7 @@ confirmed correct behavior on a real artifact).
 | 01_NY_VA_Northport_Dialysis_100CD | verified-open | 14 |
 | 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations | verified-open | 19 |
 | 004_MO_T2504_03_Interior_and_Exterior_Renovation | verified-open | 17, 20 |
+| 006_US_U2607_01_Interior_Renovations_C_Wing_Updates | verified-open | 21 |
 
 All other set_ids in `takeoffs/cross-set-compile/*.compile.json` are
 `pending` — not yet individually cell-by-cell verified this effort. Update
