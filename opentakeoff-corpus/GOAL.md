@@ -1860,6 +1860,30 @@ on this effort:**
     mechanism as every confirmation above — NOT attempted here, same
     reasoning.
 
+    12th real confirmation, same day, the SMALLEST real document yet to
+    hit this rule — a single real 1-row table, total loss:
+    095_UT_JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC.pdf#2 (sheet
+    "H-001 MECHANICAL SYMBOL LEGEND AND SCHEDULES", an 8-page document)
+    carries one real ROOFTOP PACKAGED AIR CONDITIONING UNIT schedule with
+    exactly 1 real row (`AC-WW`, confirmed via direct page text: 2,000
+    ACFM, 0.5 ESP, 420/57 sens/gross MBH cooling, 80KW heater, 460V/3PH/
+    60HZ, 24 SEER2, Carrier model 50FE-A06). The real header above it is
+    ~9 physical lines deep AND interleaved with a full duct/damper/valve
+    SYMBOL LEGEND on the same page (matching this rule's own original
+    federal-mech CH-1 precedent almost exactly — a 9-line-deep header
+    silently dropping a table to fully empty). Extraction: `graph.tables`
+    is completely empty — 0 tables total for the ENTIRE document.
+    Real-world consequence: compile.json's own `[ZERO]` label for this
+    document is WRONG — it reads as having no real HVAC equipment at
+    all, when a real, single, correctly-tagged rooftop AC unit exists
+    with complete real cell data. Smallest, cleanest reproduction of
+    this rule's root cause yet (one table, one row, one page) — worth
+    keeping as the reference case for a future dedicated pass, since it
+    isolates the deep-header/legend-interleaving mechanism without any
+    of the other confounding density this rule's other confirmations
+    carry. NOT attempted here, same reasoning as every confirmation
+    above.
+
 31. **FIXED 2026-09-03: the row-key column picker unconditionally
     trusts the LEFTMOST real column — when a real document splits its
     own equipment tag into a short TYPE PREFIX column + a separate
