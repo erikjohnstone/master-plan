@@ -1657,6 +1657,74 @@ on this effort:**
     collision), this and rule 29 are the two most valuable open items
     in this file for a future, dedicated pass.
 
+31. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: the row-key column
+    picker unconditionally trusts the LEFTMOST real column — when a
+    real document splits its own equipment tag into a short TYPE
+    PREFIX column + a separate EQUIPMENT NUMBER SUFFIX column, every
+    row in the table collapses onto the SAME shared key.**
+
+    Found doing genuinely verified per-set work on
+    032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf — a real, pervasive
+    pattern across EVERY equipment table in this document. Real ground
+    truth: the SPLIT SYSTEM INDOOR UNIT (EVAPORATOR) SCHEDULE has 38
+    real, distinct units, each with a real, unique tag split across TWO
+    adjacent columns — `TYPE` ("AC", a genuinely non-unique 2-letter
+    prefix shared by every row) and `EQUIPMENT NUMBER` ("1-A001D",
+    "1-A154A", ... — the real per-unit differentiator), confirmed via
+    `extract_words()` (38 real `AC 1-...`/`AC 2-...`/`AC 21-...`/
+    `AC 30-...` rows). Extraction: `graph.tables` carries this table
+    with the right ROW COUNT (38) and fully correct CELL DATA in every
+    column (spot-checked row-by-row against the real page — TAG,
+    MANUFACTURER, MODEL, CFM, capacities, all exact) — but `row.key` is
+    the literal string `"AC"` for ALL 38 rows, a total collision. The
+    companion SPLIT SYSTEM OUTDOOR UNIT (CONDENSER) SCHEDULE shows the
+    identical pattern (`row.key` = `"ACCU"` for all 38 real, distinct
+    outdoor units). The SAME document's smaller equipment tables show
+    the identical mechanism: MECHANICAL - EXISTING/NEW COMPUTER ROOM
+    AIR CONDITIONER SCHEDULE (`row.key` = `"DCRAC"`/`"NCRAC"` for all 4
+    rows each), PUMP SCHEDULE (`row.key` = `"NP"` for both real pumps
+    "A" and "B"), EXPANSION TANK SCHEDULE (`"NET"` for both), CLOSED
+    CIRCUIT DRY COOLER, existing and new (`"DDC"`/`"NDC"` for both) —
+    every real equipment table in this document uses the same real
+    "(D)/(N) prefix in TYPE, real differentiator in EQUIPMENT NUMBER"
+    convention, and every one collides the same way.
+
+    Root cause, confirmed by reading the actual code: `bandDataRows`'s
+    own `isKeyedRow` (this file, `sheetgraph.ts`) takes the FIRST token
+    within the table's established x-range as the key candidate,
+    passed straight to `rowKeyOf` — there is no check that this
+    leftmost column is a genuine, unique identifier (a real `MARK`/
+    `TAG`/`ID`/`CODE`/`SYMBOL`/`DESIGNATION` — `CATALOG_ANCHOR_WORDS`'
+    own list) rather than an ordinary, non-unique DATA column like
+    `TYPE` that merely happens to pass `CODE_RE`'s own loose shape.
+    `keyColumnBand` (used by the generic/reference-table path,
+    `bandGenericDataRows`) makes the exact same unconditional
+    `anchors[0]` assumption. Neither `EQUIPMENT_HEADERS` nor
+    `CATALOG_ANCHOR_WORDS` (nor `scheduleTableFromODL`'s own
+    `keyColIdx` regex, `sheetgraph.ts`) recognizes "EQUIPMENT NUMBER"/
+    "EQUIP. NO."/"UNIT NUMBER"-style headers as a real key-designating
+    column at all — so even a fix that preferred a catalog-anchor
+    column over the naive leftmost one would still miss this specific,
+    real, corpus-found header wording.
+
+    NOT STARTED — `bandDataRows`'s `isKeyedRow`/key-column selection
+    and `keyColumnBand` are both foundational, shared logic used by
+    essentially every equipment/finish/room-finish/generic table in the
+    corpus; changing the "leftmost anchor is always the key" default
+    risks the same class of wide regression this file has already
+    recorded once (rule 29/30's own precedent). A real fix likely needs
+    two independent, careful pieces — (1) recognize "EQUIPMENT NUMBER"
+    and its real synonyms as a catalog-anchor-strength header word, (2)
+    prefer a recognized catalog-anchor column over a merely-CODE_RE-
+    shaped leftmost column when one exists and sits near the table's
+    own left edge — validated across a full corpus regression sweep,
+    not a same-tick patch. Real-world value is high: this specific
+    "short TYPE prefix + separate NUMBER suffix" convention affected
+    EVERY equipment table in this one document (76+ real units across
+    two of them alone), and is a plausible, common real MEP-schedule
+    shape worth checking for elsewhere in the corpus once a fix is
+    designed.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
