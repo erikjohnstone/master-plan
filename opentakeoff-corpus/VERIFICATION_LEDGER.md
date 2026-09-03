@@ -135,6 +135,10 @@ confirmed correct behavior on a real artifact).
 | 09_ME_BGS_KennebecValleyCC_Renovation | verified-clean | — (compile.json's own "honest WEAK tier" confirmed correct: HEAT_PUMP:2 matches the real 1 outdoor unit (SCU-1, cell-exact against real page 7 — 12.2 MBH cooling, R-454B, Mitsubishi PUY-AK12NL) + 1 indoor unit (MULTI-SPLIT HEAT PUMP INDOOR UNIT PERFORMANCE SCHEDULE) = 2 real distinct units total, matching compile.json's own SCU/SAC-tag documentation) |
 | 100_OH_Butler_Tech_RTU_Welding_Source_Capture | verified-clean | — (compile.json's own "[ZERO] honest ZERO" confirmed correct: this small 7-page document shows RTU-1/RTU-2/RTU-3 only as plan callouts (floor plan device symbols, gas piping detail) — no real schedule TABLE with tag/capacity/electrical data exists anywhere in the document to extract) |
 
+| 10_MO_Hawthorn_PsychHospital_HVAC | verified-clean | — (all 3 tracked categories confirmed exact: AHU:2, CONDENSING_UNIT:2, WATER_HEATER:1 (DWH-1, cell-exact against real page 9 — AO Smith ATI-540H-N, 140°F, 199 MBH input, 94% eff). Matches compile.json's own documented CODE_RE + EQUIP.TAG digit+letter-suffix test case) |
+| 12_MT_MSU_ReidHall_Renovation | verified-clean | — (all 4 tracked categories confirmed exact: VAV:4 (VAV-1/VAV-2 cell-exact against real page 28 — Price DDS dual-duct units), CABINET_UNIT_HEATER:2, FIN_TUBE_RADIATION:4, GRD:2. Real WINDOW SCHEDULE (7 rows) and LUMINAIRE SCHEDULE (18 rows) correctly untracked (non-HVAC)) |
+| 13_MI_MSU_LifeSciences_LabRenovation | verified-clean | — (both tracked categories confirmed exact: GRD:4 (R-1/S-1/S-2 etc, cell-exact against real page 26 — Titus 3FL/TMS models), DUCT_SILENCER:1 (TS-1, Price XTU). Matches compile.json's own documented "honest small MEAT" characterization) |
+
 All other set_ids in `takeoffs/cross-set-compile/*.compile.json` are
 `pending` — not yet individually cell-by-cell verified this effort. Update
 this table as each one is picked up.
