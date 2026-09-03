@@ -18,7 +18,13 @@ function arg(name) {
   const i = args.indexOf(name);
   return i >= 0 ? args[i + 1] : null;
 }
-const corpusRoot = resolve(arg("--corpus") || "../../../opentakeoff-corpus");
+// Real bug, found live (2026-09-03): HERE was computed but never used
+// here — resolve() with a single relative-path argument resolves against
+// process.cwd(), not the script's own directory, so --corpus defaulted
+// correctly only when invoked from one specific cwd. Anchored to HERE so
+// it works regardless of the caller's cwd, matching every other prewarm/
+// probe script in this directory (see cachedGraphForKey's own callers).
+const corpusRoot = resolve(HERE, arg("--corpus") || "../../../opentakeoff-corpus");
 const limit = arg("--limit") ? Number(arg("--limit")) : null;
 const shardSpec = arg("--shard");
 const [shardIndex, shardCount] = shardSpec ? shardSpec.split("/").map(Number) : [null, null];
