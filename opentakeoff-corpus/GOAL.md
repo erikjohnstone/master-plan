@@ -1830,6 +1830,36 @@ on this effort:**
     same-table variant of the identical family, not an isolated
     one-off worth risking a same-tick patch on.
 
+    11th real confirmation, same day, all FOUR already-named symptom
+    shapes on ONE real page at once, plus a new region-collapse detail:
+    092_IL_Guaranteed_Rate_Field_HVAC_AHU_Renovation.pdf#11 stacks 5 real
+    schedules (AIR COOLED CHILLER SCHEDULE (CH), FAN COIL SCHEDULE -
+    (2-PIPE CHILLED WATER) (FCU), AUTOMATIC CONTROL DAMPER SCHEDULE
+    (ACD), CONDENSING UNIT SCHEDULE (CU), GRILLES REGISTERS AND DIFFUSER
+    SCHEDULE — all confirmed via direct page text). Extraction: only GRD
+    survives clean. The real FAN COIL SCHEDULE (5 real rows, `FCU-1`
+    through `FCU-5`, real Carrier models/CFM/capacities, all cell-exact
+    correct — confirmed via direct page text) DOES extract, but with NO
+    TITLE and a `region` of literal `[0,0,0,0]` — the row/cell data
+    pipeline succeeded completely while the SAME table's own bounding-box
+    computation collapsed to all-zero, a distinct new failure signature
+    not on record elsewhere in this file (every prior "missing title"
+    confirmation still carried a real, non-zero region). The real AIR
+    COOLED CHILLER SCHEDULE (1 real row, `CH`, Daikin AWV026A, confirmed
+    via direct page text) survives only as 3 garbled `[reference]`-kind
+    rows with generic placeholder headers (`"(LBS)"`,`"(MBH)"`,`"(IN)"`)
+    and several real values glued into one cell (`"373.5 2 SCROLL"`) —
+    the already-documented reference-kind-garbling shape. The real
+    AUTOMATIC CONTROL DAMPER SCHEDULE and CONDENSING UNIT SCHEDULE are
+    fully, silently absent from `graph.tables` — the already-documented
+    total-silent-loss shape, now on TWO more real tables. Real-world
+    consequence: compile.json's own pre-scan tracks only `GRD:1` for
+    this entire document — a real 5-row FCU family, a real chiller, and
+    an unknown number of real condensing units are completely invisible
+    to the takeoff. Same underlying shared header/tier-detection
+    mechanism as every confirmation above — NOT attempted here, same
+    reasoning.
+
 31. **FIXED 2026-09-03: the row-key column picker unconditionally
     trusts the LEFTMOST real column — when a real document splits its
     own equipment tag into a short TYPE PREFIX column + a separate
