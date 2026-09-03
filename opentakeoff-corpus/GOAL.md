@@ -1254,6 +1254,45 @@ on this effort:**
     a fix is designed, since both are the same underlying false-positive
     class.
 
+27. **HIGH-VALUE SYNTHESIS: rules 21, 23, and this new NOTES-caption
+    finding are very likely THE SAME missing guard — `bandDataRows`'s
+    own main row-scan has no distance-bounded stopping condition, so it
+    keeps accepting anything `CODE_RE`-shaped anywhere below/near a
+    table's real rows, regardless of how far away or how unrelated.**
+
+    New finding (017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf,
+    THREE separate tables — the heating coil table on #12, and two more
+    on #13): each real table's own trailing "NOTES:" section caption
+    gets swept in as a phantom LAST row, with `"NOTES:"` as literally
+    every single column's value. Root cause, read directly in
+    `bandDataRows`'s own main loop (`sheetgraph.ts`, the `for (let i =
+    Math.max(cfg.fromIdx, 0); i < toIdx; i++)` loop): `rowKeyOf`'s
+    `CODE_RE` first alternative (`[A-Z]{1,4}[A-Z0-9]{0,4}`) accepts
+    "NOTES" (4 letters + 1 more) as a plausible equipment/finish code —
+    the same over-permissive shape rule 12 already had to special-case
+    once (digit-prefixed marks) — so a trailing caption reads as a valid
+    new row's own key, and the loop has no independent check for "this
+    candidate sits implausibly far past the table's own last real row"
+    before accepting it.
+
+    This is the SAME missing guard as rule 23 (the chiller schedule
+    absorbing a neighbouring fan schedule's own marks — no x/y distance
+    bound on what counts as "still this table") and very likely rule 21
+    too (a repeated header row surviving as data — same "the scan never
+    independently decides it has reached the real end of the table"
+    gap). A single real fix — bound `bandDataRows`'s own row acceptance
+    to a real distance from the table's own established row pitch/
+    extent (not just "is this text CODE_RE-shaped"), mirroring the
+    already-shipped `anchorRadii` DATA-column distance guard but applied
+    to the ROW dimension instead of the column dimension — is a strong
+    candidate to close three independently-found real bugs at once, not
+    three separate patches. NOT STARTED, but this is now the single
+    highest-priority architectural target from this session's own
+    per-set verification work: a debug trace of `bandDataRows`'s own
+    loop against ANY of the three real reproductions above (this one is
+    the cleanest — a single, easily-isolated caption token) is the right
+    starting point, before touching rules 21 or 23 individually.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is

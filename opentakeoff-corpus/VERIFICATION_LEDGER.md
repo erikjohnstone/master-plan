@@ -31,6 +31,7 @@ confirmed correct behavior on a real artifact).
 | 014_MT_USDA_Forest_Service_Missoula_Fire_Sciences | verified-open | 21 (2nd confirmation) |
 | 015_VA_P_095_Replace_Submarine_Pier_3_Utility | verified-open | 25 (low severity — otherwise clean) |
 | 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test | verified-open | 26 (likely corpus-wide) |
+| 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling | verified-open | 27 (connects rules 21 + 23) |
 
 All other set_ids in `takeoffs/cross-set-compile/*.compile.json` are
 `pending` — not yet individually cell-by-cell verified this effort. Update
