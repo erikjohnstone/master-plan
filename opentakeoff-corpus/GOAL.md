@@ -452,6 +452,30 @@ on this effort:**
     second option is the actually-correct one; the scan was always a
     stopgap for a cold corpus, not the real detection strategy.
 
+15. **CLOSED, NOT A BUG: SDSU's all-dash
+    `VARIABLE AIR VOLUME TERMINAL UNIT SCHEDULE-HOT WATER REHEAT` table is
+    genuinely dashed on the real printed page.** Last of the 4 remaining
+    unverified scan hits from rule 14's sweep. Verified via the gold
+    standard, not inference: pulled real page text straight out of
+    `11_CA_SDSU_EngSciences_Complex_100SD__part03_p65-96.pdf` (global page
+    81, local index 16) with `pdfplumber`, no OpenTakeoff pipeline
+    involved at all. The real page shows ~40 `VAV-*` rows (`VAV-NB-1`,
+    `VAV-N1-1`, `VAV-SB-1` ... `VAV-S3-12`) each with a real TAG, real
+    SPACE SERVED, and one real airflow number (e.g. `VAV-N1-1` `MEETING`
+    `1,740`) — but every single COOL MAX/MIN, HEAT MAX, coil PD, WPD,
+    valve PORTS/CV, and WT column is a literal `-` on the page itself, for
+    every row, with no exceptions. This is a 100% Schematic Design
+    submittal (filename ends `_100SD`) — the reheat-coil sizing/selection
+    columns are placeholders because that engineering hasn't happened yet
+    at SD phase, not a table our extraction is failing to read. Confirms:
+    no fix needed here, and — same as rule 14 — the shipped detector
+    logic was never in question; this was purely a "does the real drawing
+    actually have the data" question, now answered directly from the
+    drawing. This closes the 4-set verification sweep from rule 14 (Ames
+    Laboratory: clean; ITD District 2: clean; Vermillion County Jail: real
+    gap in the scan net, not the detector, see rule 14; SDSU: clean,
+    genuinely incomplete SD-phase drawing).
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
