@@ -1736,6 +1736,39 @@ on this effort:**
     own key set includes the 3 phantom rows the clean copy doesn't
     have.
 
+    10th real confirmation, same day, ANOTHER new concrete symptom
+    shape: 083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4's
+    real COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE has 3 real rows
+    (`HP-1`/`HP-2`/`HP-3`, confirmed via direct page text — HP-1 LIBRARY
+    DAIKEN RXLQ144TATJU 144/162 MBH, HP-2 NURSE DAIKEN RXYMQ36PVJU
+    36/40 MBH, HP-3 SWEGON DAIKEN RXTQ60TAVJUA 57.5/57 MBH). Extraction:
+    `graph.tables` carries this table with only 2 rows (`HP-2`, `HP-3`)
+    — HP-1 is not dropped outright, it is SWALLOWED INTO THE HEADER
+    ROW ITSELF: the reported `headers` array reads
+    `["TAG NO. HP-1","SERVED FAN COIL(S) LIBRARY","MANUFACTURER
+    DAIKEN","MODEL NO. RXLQ144TATJU", ...]` — every real header label
+    concatenated with HP-1's own real cell value for that column
+    (`"MBH COOL 144"`, `"WEIGHT OPERATING 1446 LBS"`, etc). Root cause:
+    on this real page, HP-1's own ELECTRICAL DATA sub-columns
+    (VOLTS/PHASE/MCA/MOCP = "208 3 60.8 70") sit on their OWN separate
+    source text line, positioned before the line carrying the rest of
+    HP-1's row (TAG/MFR/MODEL/MBH/WEIGHT/REMARKS) — a real per-row line
+    split the header/sub-header tier-walk (`findHeaderRow` +
+    `skipSubHeaderContinuation`, the same functions implicated in every
+    prior confirmation of this rule) misreads as one more header
+    continuation line, then folds the following real data line into
+    that same (now-bloated) header instead of starting row 1. A 3-row
+    table silently becomes a 2-row table with a corrupted header, not
+    a dropped table — a fourth distinct symptom shape for the same
+    underlying shared header/tier-detection machinery (after: near-
+    total row loss with a plausible survivor; row-key collision;
+    contaminated-and-duplicated adjacent table). NOT fixed here, same
+    reasoning as every prior confirmation: `findHeaderRow`/
+    `skipSubHeaderContinuation` are shared, high-blast-radius code with
+    a documented regression precedent, and this is a same-page,
+    same-table variant of the identical family, not an isolated
+    one-off worth risking a same-tick patch on.
+
 31. **FIXED 2026-09-03: the row-key column picker unconditionally
     trusts the LEFTMOST real column — when a real document splits its
     own equipment tag into a short TYPE PREFIX column + a separate
