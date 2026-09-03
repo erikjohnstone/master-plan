@@ -3206,6 +3206,46 @@ test("findHeaderRow's ambiguous-duplicate-column path resolves a duplicate leaf 
   assert.equal(r1.cells["STEAM TRAP MARK"].text, "TP28-1", "the second MARK column's own real data must not be dropped or misrouted");
 });
 
+test("rowKeyOf splits a real '&'-joined twin-unit mark into two answerable keys (real bug: 023_US_Chiller_Replacement's own CH-1&2/CHWP1&2)", () => {
+  // Real, found-live gap (2026-09-03): "&" fails the general character
+  // allow-list, so a real twin-unit row like "CH-1&2" (two identical
+  // chillers sharing one schedule row) collapsed into one glued,
+  // unsplittable key "CH-12" — never answering for the real "CH-1" or
+  // "CH-2" tags drawn on the actual plan. Both real shapes covered: with
+  // a hyphen (CH-1&2) and without one (CHWP1&2, confirmed against the
+  // real page's own word coordinates — genuinely no hyphen in the source).
+  const sched: SheetSpans = {
+    key: "amp.pdf#1", sheet_number: "M601",
+    spans: [
+      sp("AIR COOLED CHILLER SCHEDULE", 100, 10),
+      sp("MARK", 0, 40), sp("MANUFACTURER", 180, 40), sp("TYPE", 360, 40), sp("TONS", 500, 40),
+      sp("CH-1&2", 0, 70), sp("TRANE", 180, 70), sp("SCROLL", 360, 70), sp("132", 500, 70),
+    ],
+  };
+  const tab = extractTable(sched, "equipment")!;
+  assert.ok(tab, "the real vocabulary anchors are enough to clear the bar");
+  assert.equal(tab.rows.length, 1, "one real physical row, both marks answerable from it");
+  const row = tab.rows[0];
+  assert.equal(row.key, "CH-1/CH-2", "both real marks are kept, hyphen preserved exactly as drawn");
+  assert.ok(rowKeyAnswersFor(row.key, "CH-1"), "CH-1 must be answerable from this row");
+  assert.ok(rowKeyAnswersFor(row.key, "CH-2"), "CH-2 must be answerable from this row");
+
+  const schedNoHyphen: SheetSpans = {
+    key: "amp2.pdf#1", sheet_number: "M601",
+    spans: [
+      sp("PUMP SCHEDULE", 100, 10),
+      sp("MARK", 0, 40), sp("MANUFACTURER", 180, 40), sp("TYPE", 360, 40), sp("GPM", 500, 40),
+      sp("CHWP1&2", 0, 70), sp("TACO", 180, 70), sp("END-SUCTION", 360, 70), sp("530", 500, 70),
+    ],
+  };
+  const tab2 = extractTable(schedNoHyphen, "equipment")!;
+  assert.ok(tab2, "the real vocabulary anchors are enough to clear the bar");
+  const row2 = tab2.rows[0];
+  assert.equal(row2.key, "CHWP1/CHWP2", "the no-hyphen real shape is kept exactly as drawn, not invented");
+  assert.ok(rowKeyAnswersFor(row2.key, "CHWP1"));
+  assert.ok(rowKeyAnswersFor(row2.key, "CHWP2"));
+});
+
 test("rowKeyOf accepts a real VA/GSA numbered-building prefix before an equipment mark, when the sheet's own text confirms the building (real bug: St Louis VA's own 1-RH-1/1-AC-15/1-SHC-28 tags)", () => {
   // Real, found-live gap (2026-09-03), traced empirically (byte-identical
   // pipeline output before/after a different fix proved this was the real

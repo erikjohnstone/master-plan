@@ -3418,6 +3418,25 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
       const marks = grouped[2].split(/\s*,\s*/).map((n) => `${prefix}-${n}`);
       if (marks.every((m) => CODE_RE.test(m))) return { key: marks.join("/") };
     }
+    // Twin identical units sharing one row, joined with "&" instead of a
+    // comma — real, corpus-found live: 023_US_Chiller_Replacement_at_U_S_
+    // Salinity_Laboratory's own real "CH-1&2" (chillers, hyphenated) and
+    // "CHWP1&2" (pumps, NO hyphen between prefix and numbers — both real,
+    // drawn-as-is shapes, confirmed against the real page's own word
+    // coordinates). The hyphen is OPTIONAL and preserved per-mark exactly
+    // as drawn (never invented) — "CH-1&2" keys "CH-1/CH-2", "CHWP1&2"
+    // keys "CHWP1/CHWP2". Without this, `&` fails the general character
+    // allow-list below and the whole compound collapses into one glued,
+    // unsplittable key ("CH-12") that never answers for either real mark
+    // again (rowKeyAnswersFor's own compound-splitting only handles "/",
+    // ",", and a clean digit-then-letters glued boundary — none of which
+    // "CH-12" has).
+    const amp = norm(raw).replace(/\s+/g, "").match(/^([A-Z]{1,6})(-?)(\d+)&(\d+)\b/);
+    if (amp) {
+      const [, prefix, dash, n1, n2] = amp;
+      const marks = [`${prefix}${dash}${n1}`, `${prefix}${dash}${n2}`];
+      if (marks.every((m) => CODE_RE.test(m))) return { key: marks.join("/") };
+    }
   }
   const kept = norm(raw).replace(/[^A-Z0-9/-]/g, "");
   const key = kept.replace(/\//g, "");
