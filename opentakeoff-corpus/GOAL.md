@@ -1677,6 +1677,37 @@ on this effort:**
     bound on row-scan) — NOT attempted here, same reasoning as every
     confirmation above.
 
+    8th real confirmation, same day, TWO independent real bleeds on
+    ONE document, both correctly self-healing at the compile layer:
+    27_WA_ColvilleTribes_Hatchery_Lab.pdf#15's own real AIR SEPARATOR
+    SCHEDULE (2 real rows, `AS-1`/`AS-2`, confirmed cell-exact) also
+    carries 7 fabricated rows (`TCV-105`, `EVX24-SR`, `TCV-110A`,
+    `LRB24-SR-T` ×2, `LCV-135`, `ARX24-3`) bled in from the adjacent
+    real CONTROL VALVE SCHEDULE — real Belimo actuator model numbers
+    ("BELIMO G780+", "B2050QPW-N+") glued into a REMARKS-only cell.
+    Separately, #13's own real FAN SCHEDULE (3 real rows, `EF-1`/`EF-2`/
+    `EF-3`, real Greenheck axial/inline fans) carries 4 fabricated rows
+    bled in from the adjacent real GRILLES, REGISTERS, DIFFUSERS
+    SCHEDULE — its own header literally reads "...GRILLES, REGISTERS,
+    DIFFUSERS SCHEDULE SIZE" glued onto the FAN SCHEDULE's own header
+    array, and real register tags (`1S`/`2S`/`1R`/`2R`/`1E`) appear as
+    phantom fan rows. In BOTH cases compile.json's own tracked counts
+    (`AIR_SEPARATOR:2`, `FAN:3`) come out CORRECT despite the
+    contamination — the compile-level key/category filter happens to
+    reject the bled-in rows here, unlike rule 30's 7th confirmation
+    where the equivalent bleed changed the real count. Worth recording
+    precisely because it shows the SAME root mechanism can be either
+    silently self-correcting or corpus-visibly wrong depending on
+    whether the bled-in rows happen to match the target category's own
+    key pattern — a real reason not to treat "the compile count came
+    out right" as proof a table extracted cleanly. Same document,
+    separately: the real MODULAR HEAT RECOVERY CHILLER SCHEDULE (sheet
+    #14) survives with its correct title AND a correct, real 15-column
+    header, but ZERO data rows — a new, more precise variant of the
+    total-row-loss shape (previously: table entirely absent; here: the
+    title/header survive intact but every row is gone). NOT attempted
+    here, same reasoning as every confirmation above.
+
 30. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: formalizing an already-
     disclosed-but-never-numbered limitation — a real 5-6-tier-deep
     header defeats header/key detection in two DIFFERENT concrete ways
@@ -1918,6 +1949,31 @@ on this effort:**
     of the other confounding density this rule's other confirmations
     carry. NOT attempted here, same reasoning as every confirmation
     above.
+
+    13th real confirmation, same day, a NEW row-key symptom — the key
+    picker grabs a FRAGMENT of the adjacent manufacturer name instead of
+    the real tag, on top of near-total table loss:
+    28_WA_KCHA_PublicHousing_HVAC.pdf#2 carries two real, adjacent
+    schedules side by side: a real FAN SCHEDULE (`EF-5` Cook 210SQN-HP
+    building exhaust, `SF-6` Cook 210SQN-B building supply) and a real
+    PUMP SCHEDULE (`CP-4` Armstrong 1205-000.7, Recovery Coils/Attic,
+    43.5 GPM, 20 FT head — all confirmed via direct page text, and
+    confirmed via a full-document `CP-*`/`EF-*`/`SF-*` regex scan that
+    these are the ONLY 3 real HVAC items in the whole 9-page document).
+    Extraction: `graph.tables` carries exactly ONE table — a `(no
+    title)` 1-row read of the pump row, with `region:[0,0,0,0]` (the
+    same zero-region signature as rules 11/12's confirmations) — and its
+    `row.key` is literally `"ARMSTR"`, a truncated fragment of
+    "ARMSTRONG" (the MANUFACTURER cell's own text), not the real tag
+    `CP-4` sitting in the adjacent column. Both real fans (`EF-5`,
+    `SF-6`) are completely absent — the already-documented total-
+    silent-loss shape, now confirmed a 3rd/4th time. Real-world
+    consequence: compile.json's own `[ZERO]` label for this document is
+    WRONG — a real pump AND two real fans exist, and even the one
+    surviving row is keyed on a manufacturer-name fragment rather than
+    its own real, adjacent, unambiguous tag. Same underlying shared
+    header/tier-detection and key-column-selection machinery as every
+    confirmation above — NOT attempted here, same reasoning.
 
 31. **FIXED 2026-09-03: the row-key column picker unconditionally
     trusts the LEFTMOST real column — when a real document splits its
