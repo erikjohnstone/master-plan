@@ -984,12 +984,27 @@ Production-viable means: any estimator uploads any real PDF — one this
 project has never seen — and gets a correct, complete takeoff, full stop.
 
 **What this changes in practice:**
-- The 116-set prewarm (in progress as of this rule) is **infrastructure
-  for this goal, not the goal itself** — a warm cache is what makes
-  iterating on real verified takeoffs fast instead of a ~10-minute toll
-  per set per check. Once warm, the real work is the verification sweep
-  itself: real render-and-compare passes across every set's real tables,
-  the same depth as rule 12's St Louis work, not a spot-check sample.
+- **CORRECTED same session, by direct user pushback — the batch 116-set
+  prewarm was the WRONG infrastructure for this phase, and running it
+  was a mistake, not a prerequisite.** The reasoning that killed it:
+  `sourceDigest()` hashes the whole L0-L4.5 build path, so ANY real fix
+  (and this phase produces one every single set-verification pass, by
+  design — that's the whole point) invalidates every set warmed before
+  it. A giant parallel batch-prewarm run during ACTIVE code-churn pays a
+  huge, continuously-resetting cost for sets nobody has even looked at
+  yet, while doing nothing to speed up the actual bottleneck (a human/
+  agent's own verification time, not compute time) — and it was also
+  the direct cause of two real OOM kills fighting for memory against
+  itself. Both 2-shard processes were killed for good reason.
+  The real, right-sized infrastructure for THIS phase: build **one set
+  at a time**, only the set currently being verified, on demand
+  (`OPENTAKEOFF_GRAPH_NO_CACHE=1` or a throwaway identity is fine — the
+  ~10 minute cost is paid once, for the set actually under the
+  microscope, not for 115 others nobody's looking at). A real batch
+  prewarm across the full corpus is worth doing again ONLY once the code
+  has genuinely stabilized — no more real bugs turning up — as a
+  production/demo-speed optimization, not as bug-hunting infrastructure.
+  Don't reach for it again until then.
 - Stop treating "Pillar A largely complete" as license to move on to
   Pillar B/C/D-shaped work before the compile side is actually bug-clean.
   A table compiling without a crash is not the bar; a table whose every
