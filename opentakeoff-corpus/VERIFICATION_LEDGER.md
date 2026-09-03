@@ -38,6 +38,7 @@ confirmed correct behavior on a real artifact).
 | 021_XX_Laboratory_building_mechanical_drawings_lab | verified-open | 28 (new architectural finding: I/O matrix marks are vector shapes, not text) + rules 24/26-class false positives (PLAIN OUTLET / W/WIND SCREEN, non-tabular piping-diagram content misread as tables) |
 | 023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory | verified-fixed | new: "&"-joined twin-unit marks (CH-1&2, CHWP1&2) now split into answerable compound keys |
 | 024_MO_E2508_01_Replace_Steam_Heating_Units_Missouri | verified-clean | — (only 1 real table exists: the project replaces old steam units WITH new RTUs, so PACKAGED EQUIPMENT SCHEDULE (RTU) is the complete real scope, not a gap; confirmed via whole-document scan, all 4 rows/31 columns clean) |
+| 029_ME_BGS_Project_3548_MEANG_Building_493_Boiler | not-a-bug | — (real sheet ME601 "MECHANICAL & ELECTRICAL SCHEDULES" exists but its real content is essentially unreadable: only 460 real text chars — all title-block — on the whole page, but 14007 real vector curves and dense clusters of tiny line segments in the schedule's own body area; this looks like text rendered as vector GLYPH OUTLINES rather than real text characters, a 3rd distinct unreadability mechanism this session (raster images on set 020, meaningful vector shapes on set 021, now outlined-text vectors here) — a genuine capability gap, honest 0-table output is correct) |
 
 All other set_ids in `takeoffs/cross-set-compile/*.compile.json` are
 `pending` — not yet individually cell-by-cell verified this effort. Update
