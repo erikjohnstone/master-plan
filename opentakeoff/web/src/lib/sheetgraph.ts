@@ -3897,6 +3897,54 @@ export function promoteLeadingEngineeringUnits(headers: string[], rows: TableRow
   return out;
 }
 
+// Real, found-live gap (2026-09-03, 032_PA_Construct_EHRM_Infrastructure's
+// own SPLIT SYSTEM INDOOR/OUTDOOR UNIT SCHEDULEs, and 6 more real equipment
+// tables on the SAME document): this file's own key-column selection is
+// always the table's own leftmost real column (bandLimits/keyColumnBand,
+// unconditionally `anchors[0]`) — right for the overwhelming corpus
+// majority, where that column IS the real unique tag (MARK, TAG, ID). But a
+// real, corpus-found convention splits the tag itself across TWO adjacent
+// columns instead — a short TYPE prefix ("AC", "NP", "NET" — genuinely
+// shared by every row) then a separate NUMBER/TAG suffix column ("1-A001D",
+// "A", "B" — the real per-row differentiator). Confirmed live: 38 real,
+// distinct Split System Indoor units all keyed the identical literal "AC".
+// Changing WHICH anchor bandDataRows treats as the key column is not this
+// fix — that assumption is structural, used throughout this whole function
+// (column banding, continuation adoption, region math), not one narrow
+// decision point, and retrofitting it risks the same class of corpus-wide
+// regression this file has already recorded once. A REAL key collision
+// within one table, discovered only after row-banding is already correct,
+// is unambiguous evidence something more specific exists — resolved here,
+// after the fact, cell data untouched.
+// Scoped narrowly to avoid the real, corpus-found dual-row-per-unit
+// convention (031_MO_VA's own FAN SCHEDULE: the SAME real fan legitimately
+// gets two rows, "SELECTION CRITERIA" / "OPERATING CONDITION", the SAME
+// key on purpose) — that shape's own per-row differentiator sits in
+// REMARKS or a raw numeric column (CFM, TSP), never a header actually
+// naming an identifier ("NUMBER", "NO.", "TAG", "MARK", "ID"), so it never
+// clears this function's own header-name gate.
+const KEY_DIFFERENTIATOR_HEADER_RE = /\b(NUMBER|NO\.?|TAG|MARK|ID)\b/;
+export function resolveKeyCollisions(rows: TableRow[]): TableRow[] {
+  const byKey = new Map<string, TableRow[]>();
+  for (const row of rows) {
+    if (!byKey.has(row.key)) byKey.set(row.key, []);
+    byKey.get(row.key)!.push(row);
+  }
+  for (const group of byKey.values()) {
+    if (group.length < 2) continue;
+    const headerLabels = Object.keys(group[0].cells);
+    const candidate = headerLabels.find((h) => {
+      if (!KEY_DIFFERENTIATOR_HEADER_RE.test(h)) return false;
+      const vals = group.map((r) => r.cells[h]?.text?.trim());
+      if (vals.some((v) => !v)) return false;
+      return new Set(vals).size === vals.length;
+    });
+    if (!candidate) continue;
+    for (const row of group) row.key = `${row.key} ${row.cells[candidate].text.trim()}`;
+  }
+  return rows;
+}
+
 function bandDataRows(
   rows: GraphSpan[][],
   anchors: Anchor[],
@@ -4476,7 +4524,7 @@ function bandDataRows(
     }
     return true;
   });
-  return { out: cleanOut, region };
+  return { out: resolveKeyCollisions(cleanOut), region };
 }
 
 // A row that would itself qualify as SOME table's header — checked against
@@ -8270,6 +8318,17 @@ export function scheduleTableFromODL(
   if (!rows.length) return null;
   const promotedHeaders = promoteLeadingEngineeringUnits(headers, rows);
   headers.splice(0, headers.length, ...promotedHeaders);
+  // Real, found-live gap (2026-09-03, 032_PA_Construct_EHRM_Infrastructure's
+  // own SPLIT SYSTEM INDOOR/OUTDOOR UNIT SCHEDULEs) — same real shape as
+  // `bandDataRows`' own `resolveKeyCollisions` fix (this file), confirmed
+  // via THIS ODL path specifically (a debug rebuild of the real document
+  // showed the geometric-path fix had zero effect here — same "which path
+  // actually produced this real table" lesson rule 27's own fix already
+  // learned once). Applied identically: a real key collision within one
+  // table, discovered only after every row's own cells are already
+  // correct, is unambiguous evidence a more specific per-row differentiator
+  // column exists.
+  resolveKeyCollisions(rows);
 
   const region = odlBboxToProjectSpace(t["bounding box"], pageViewportTransform);
   const built: ScheduleTable = {

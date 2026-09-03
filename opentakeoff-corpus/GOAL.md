@@ -1671,11 +1671,11 @@ on this effort:**
     header is unusually deep/wide, independent of how many real rows
     the table has.
 
-31. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: the row-key column
-    picker unconditionally trusts the LEFTMOST real column — when a
-    real document splits its own equipment tag into a short TYPE
-    PREFIX column + a separate EQUIPMENT NUMBER SUFFIX column, every
-    row in the table collapses onto the SAME shared key.**
+31. **FIXED 2026-09-03: the row-key column picker unconditionally
+    trusts the LEFTMOST real column — when a real document splits its
+    own equipment tag into a short TYPE PREFIX column + a separate
+    EQUIPMENT NUMBER SUFFIX column, every row in the table collapses
+    onto the SAME shared key.**
 
     Found doing genuinely verified per-set work on
     032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf — a real, pervasive
@@ -1721,23 +1721,51 @@ on this effort:**
     column over the naive leftmost one would still miss this specific,
     real, corpus-found header wording.
 
-    NOT STARTED — `bandDataRows`'s `isKeyedRow`/key-column selection
-    and `keyColumnBand` are both foundational, shared logic used by
-    essentially every equipment/finish/room-finish/generic table in the
-    corpus; changing the "leftmost anchor is always the key" default
-    risks the same class of wide regression this file has already
-    recorded once (rule 29/30's own precedent). A real fix likely needs
-    two independent, careful pieces — (1) recognize "EQUIPMENT NUMBER"
-    and its real synonyms as a catalog-anchor-strength header word, (2)
-    prefer a recognized catalog-anchor column over a merely-CODE_RE-
-    shaped leftmost column when one exists and sits near the table's
-    own left edge — validated across a full corpus regression sweep,
-    not a same-tick patch. Real-world value is high: this specific
-    "short TYPE prefix + separate NUMBER suffix" convention affected
-    EVERY equipment table in this one document (76+ real units across
-    two of them alone), and is a plausible, common real MEP-schedule
-    shape worth checking for elsewhere in the corpus once a fix is
-    designed.
+    Fix, deliberately NOT the "change which anchor is the key column"
+    approach first sketched here: `bandDataRows`'s `isKeyedRow` and
+    `keyColumnBand` both treat "leftmost anchor is the key column" as a
+    STRUCTURAL assumption threaded through the whole function (column
+    banding, continuation adoption, region math), not one narrow
+    decision point — retrofitting it risks exactly the wide regression
+    this file has already recorded once (rules 29/30's own precedent).
+    Instead: `resolveKeyCollisions` (`sheetgraph.ts`), a small, pure,
+    ADDITIVE post-process — given a table's own already-correctly-
+    banded rows (cell data untouched), group by `row.key`; for any real
+    collision (2+ rows sharing one key), look for a column whose header
+    names an identifier (`/\b(NUMBER|NO\.?|TAG|MARK|ID)\b/`) with
+    non-empty, ALL-DISTINCT values across the colliding group, and
+    compose `"${key} ${value}"` — the exact form actually drawn on the
+    real page ("AC 1-A001D"). Deliberately does NOT touch which anchor
+    is structurally "the key column," so every other real table's
+    existing behavior is unchanged.
+
+    Applied to BOTH real extraction paths — confirmed necessary, not
+    assumed: a debug rebuild of the real document after wiring this
+    into `bandDataRows` alone showed ZERO effect on the real corpus
+    set (`resolveKeyCollisions` never even ran on the table that
+    mattered), the same "which path actually produced this real table"
+    lesson rule 27's own fix already learned once. Traced and confirmed
+    this real table comes through `scheduleTableFromODL` (the ODL/
+    vision-sidecar path) — wired there too, and the real document then
+    recovered fully.
+
+    Verified against the real corpus before shipping: all 6 affected
+    real tables on 032_PA_Construct_EHRM_Infrastructure_Upgrades.pdf now
+    key correctly (`AC 1-A001D`/`AC 1-A154A`/... for all 38 real Split
+    System Indoor units; `ACCU 3-121`/... for all 38 real Outdoor
+    units; `DCRAC AC-A1`/`AC-A2`/`AC-B1`/`AC-B2`; `NCRAC` the same;
+    `NP A`/`NP B`; `NET A`/`NET B`; `DDC A`/`DDC B`; `NDC A`/`NDC B`).
+    Re-verified rule 34's own fix (038's MECHANICAL EQUIPMENT SCHEDULE,
+    51 real rows) and 031's own real dual-row-per-unit convention
+    (WHSE-SF1/WHSE-RF1, the SAME real fan legitimately keyed twice) both
+    stayed byte-identical — zero regression from this addition. Full
+    `sheetgraph.test.ts` (110/110) plus the corpus-wide regression
+    suites (`corpusTakeoffBas`, `corpusTakeoffHeaderGeometry`,
+    `corpusTakeoffVol2Families`, `scheduleTableSidecarAdapter`,
+    `equiptags`, `hvacTaxonomy`, `scheduleBridge`,
+    `vectorTakeoffPipeline`) pass, one pre-existing, unrelated failure
+    (`equiptags.test.ts`'s own "PCHWP-MT1 in CUH-T1") reproduced
+    identically on the unmodified base commit.
 
 32. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: a whole real page's 3
     real HVAC schedules (8 real units total) are ALL silently dropped

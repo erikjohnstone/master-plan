@@ -10,7 +10,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, type GraphSpan, type SheetSpans, type SheetGraph, type TableBound, type ScheduleTable } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, type GraphSpan, type SheetSpans, type SheetGraph, type TableBound, type ScheduleTable, type TableRow } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
@@ -3384,6 +3384,64 @@ test("bandDataRows: a trailing 'NOTES:' caption is refused as a phantom row, not
   const naTab = extractTable(naSched, "room-finish")!;
   assert.ok(naTab, "a real row repeating a legitimate short value must still extract");
   assert.equal(naTab.rows.length, 1, "the real N/A row must not be dropped");
+});
+
+test("resolveKeyCollisions composes a real split TYPE+NUMBER tag into an answerable key (real bug: 032_PA_Construct_EHRM_Infrastructure's own SPLIT SYSTEM INDOOR/OUTDOOR UNIT SCHEDULEs, 6 more real equipment tables on the same document)", () => {
+  // Real, found-live gap (2026-09-03): this real document splits its own
+  // equipment tag across TWO columns (TYPE="AC", a short prefix shared by
+  // every row; EQUIPMENT NUMBER="1-A001D"/"1-A154A", the real per-row
+  // differentiator) instead of drawing it as one glued mark. The key
+  // column is always this file's own leftmost real column (TYPE here) —
+  // every one of 38 real, distinct units collided onto the identical
+  // literal key "AC". Confirmed live (2026-09-03) that the real bug comes
+  // through the ODL path (`scheduleTableFromODL`), not the geometric one
+  // (`bandDataRows`) — a debug rebuild of the real document showed the
+  // geometric-path fix had zero effect — so `resolveKeyCollisions` is
+  // tested directly here, decoupled from either path's own header-
+  // qualification machinery, with real corpus verification (both paths
+  // now call this same function) covering the end-to-end integration.
+  const cell = (text: string): { text: string; bbox: [number, number, number, number] } => ({ text, bbox: [0, 0, 0, 0] });
+  const row = (key: string, cells: Record<string, string>): TableRow => ({
+    key, sheet: "set.pdf#2", cells: Object.fromEntries(Object.entries(cells).map(([k, v]) => [k, cell(v)])),
+  });
+  const rows: TableRow[] = [
+    row("AC", { TYPE: "AC", "EQUIPMENT NUMBER": "1-A001D", MANUFACTURER: "LIEBERT" }),
+    row("AC", { TYPE: "AC", "EQUIPMENT NUMBER": "1-A154A", MANUFACTURER: "LIEBERT" }),
+  ];
+  const resolved = resolveKeyCollisions(rows);
+  assert.deepEqual(
+    resolved.map((r) => r.key),
+    ["AC 1-A001D", "AC 1-A154A"],
+    "each real, distinct unit must key its own row, not collide on the shared TYPE prefix",
+  );
+  assert.ok(rowKeyAnswersFor(resolved[0].key, "AC 1-A001D"));
+  assert.ok(rowKeyAnswersFor(resolved[1].key, "AC 1-A154A"));
+
+  // The real dual-row-per-unit convention (031_MO_VA's own FAN SCHEDULE:
+  // the SAME real fan legitimately gets two rows, "SELECTION CRITERIA" /
+  // "OPERATING CONDITION", the SAME key on purpose) must NOT be split —
+  // its own per-row differentiator sits in REMARKS/a numeric column, never
+  // a header actually naming an identifier, so this fix must leave it
+  // alone.
+  const dualRows: TableRow[] = [
+    row("WHSE-SF1", { MARK: "WHSE-SF1", MANUFACTURER: "TRANE", CFM: "13500", REMARKS: "SELECTION CRITERIA" }),
+    row("WHSE-SF1", { MARK: "WHSE-SF1", MANUFACTURER: "TRANE", CFM: "11250", REMARKS: "OPERATING CONDITION" }),
+  ];
+  const dualResolved = resolveKeyCollisions(dualRows);
+  assert.deepEqual(
+    dualResolved.map((r) => r.key),
+    ["WHSE-SF1", "WHSE-SF1"],
+    "a real dual-row-per-unit convention must keep its own shared key, not be split apart",
+  );
+
+  // A collision with no differentiator column at all (neither the real
+  // shape above nor the dual-row-per-unit one) must be left untouched,
+  // not thrown or guessed at.
+  const noCandidate: TableRow[] = [
+    row("X", { MARK: "X", MANUFACTURER: "TRANE" }),
+    row("X", { MARK: "X", MANUFACTURER: "CARRIER" }),
+  ];
+  assert.deepEqual(resolveKeyCollisions(noCandidate).map((r) => r.key), ["X", "X"], "no identifier-named column to differentiate on — left alone, never guessed at");
 });
 
 test("WP1.4 title hunt: SCHEDULED note prose must not steal the real title (Northport AIR INLETS shape)", () => {
