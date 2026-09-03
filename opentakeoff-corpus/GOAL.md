@@ -1798,6 +1798,64 @@ on this effort:**
     dollar-significant real HVAC scope item, and this same 3-schedule-
     plus-title-block page shape is plausibly common corpus-wide.
 
+33. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: a real page with 4
+    dense, adjacent HVAC schedules loses 2 of them entirely and MERGES
+    two real, distinct rows of a 3rd into one garbled row — 15 real
+    VRV indoor units collapse to 1.**
+
+    Found doing genuinely verified per-set work on
+    036_LA_VA_Project_502_21_222_EHRM_Infrastructure.pdf#63 — this
+    corpus's own `compile.json` census called this set `[ZERO]` ("no
+    HVAC equipment schedules, honest ZERO"), which is simply WRONG:
+    real ground truth (pdfplumber) is FOUR real HVAC schedules on this
+    one page/section — VRV- AIR-COOLED CONDENSING UNIT SCHEDULE (2 real
+    units, `07-A-CU-1`, `09-A-CU-1`), VRV- INDOOR UNIT SCHEDULE (15
+    real units, `07-B-EU-1` through `09-3-EU-1`, each a real, distinct
+    room/tonnage/capacity), COMPUTER ROOM AIR CONDITIONING (1 real
+    indoor/outdoor pair, `07-EVAP-1`/`07-COND-1`), and DUCTLESS SPLIT
+    SYSTEM SCHEDULE (further real rows, `01-1-DAC-1`/`01-1-CU-1`
+    onward). Extraction: `graph.tables` carries only 2 of the 4 —
+    VRV- AIR-COOLED CONDENSING UNIT SCHEDULE and DUCTLESS SPLIT SYSTEM
+    SCHEDULE are ENTIRELY ABSENT (same shape as rule 32/30's total-drop
+    pattern). Worse and NEW: VRV- INDOOR UNIT SCHEDULE's real 15 rows
+    collapse to exactly ONE row whose cells hold TWO real rows' worth
+    of data glued together — `TAG`: `"07-B-EU-1 07-1-EU-1"`, `ROOM`:
+    `"TR 017 TR 1A-184A"`, `HEATING CAPACITY TOTAL`: `"27,335 27,335"`
+    — the first two of the 15 real rows MERGED into one, the other 13
+    (87%) vanished with no trace. COMPUTER ROOM AIR CONDITIONING keeps
+    the right row COUNT (1) but its own real INDOOR/OUTDOOR column
+    groups get scrambled together: `"ELECTRICAL VOLTS"` cell holds
+    `"07-COND-1 95 88.50 90 208 3"` — the real OUTDOOR UNIT's own MARK
+    NO. plus several unrelated real numeric values, all glued into one
+    cell that should hold just the indoor unit's voltage.
+
+    This is a NEW symptom distinct from rules 29/30/32 — those show a
+    table's rows either surviving cleanly, dropping entirely, or (rule
+    32) getting replaced by fabricated title-block content. Here two
+    REAL, adjacent rows of the SAME real table get glued into one,
+    which reads differently from a simple "only the Nth row survived"
+    truncation (compare rule 30's FCU case, which kept exactly ONE
+    clean, uncorrupted row) — closer in kind to the "STOREFRONT P-1"
+    merged-DATA-CELL shape `bandDataRows` already documents handling at
+    the column level, but here manifesting across an entire ROW.
+
+    NOT STARTED — same reasoning as rules 29/30/32: this is a real,
+    severe, high-value finding (15 real VRV indoor units — genuinely
+    common, dollar-significant HVAC scope — collapsed to 1 merged row)
+    on shared, foundational row/table-detection code, and a same-tick
+    fix risks the same class of regression this file has already
+    recorded (rules 29/30's own precedent). Real next step: a debug
+    trace of why 4 real, densely-packed schedules on one page/section
+    only ever produce 2 table objects, and why the VRV Indoor Unit
+    table's own row-scan glued its first two real rows together instead
+    of treating them as separate rows or dropping the second cleanly.
+    Also flags a corpus-wide process note: this set's own `compile.json`
+    `[ZERO]` label was itself wrong (real content exists) — the
+    `[WEAK]`/`[ZERO]` labels already used to prioritize sets earlier
+    this session should not be trusted as ground truth without a real
+    per-set build (this file's own experience this session: 032, 033,
+    and now 036 all had wrong or stale `[WEAK]`/`[ZERO]` labels).
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
