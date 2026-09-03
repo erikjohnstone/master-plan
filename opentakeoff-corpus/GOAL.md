@@ -1717,6 +1717,25 @@ on this effort:**
     OTHER 8+ real schedules on the identical page all extract
     correctly.
 
+    9th real confirmation, same day, a NEW concrete symptom shape:
+    069_ID_ITD_District_2_Laboratory_Heating_Upgrades.pdf#5's own real
+    EXISTING CONDENSING HOT WATER BOILER SCHEDULE (2 real rows,
+    `B-1(E)`/`B-2(E)`) sits directly beside the real NEW PUMP SCHEDULE
+    (both titles print on the SAME physical line). Both extract
+    correctly on their own — but a SECOND, garbled Boiler Schedule
+    duplicate ALSO forms, containing the 2 real boiler rows (thin cell
+    data) plus 3 PHANTOM rows (`BP-1`/`BP-2`/`CWP-1`) that are actually
+    rows bled in from the adjacent Pump Schedule. Unlike the prior
+    confirmations (one table entirely dropped), here BOTH real tables
+    survive — one cleanly, the other contaminated AND duplicated — a
+    new concrete failure mode for the same underlying dense-adjacent-
+    table mechanism. The correct, complete copy already exists
+    alongside the garbled one, so real severity is a redundant garbled
+    duplicate, not a missing value; the exact-key-set dedup (rules
+    37/38) correctly refuses to collapse them since the garbled copy's
+    own key set includes the 3 phantom rows the clean copy doesn't
+    have.
+
 31. **FIXED 2026-09-03: the row-key column picker unconditionally
     trusts the LEFTMOST real column — when a real document splits its
     own equipment tag into a short TYPE PREFIX column + a separate
