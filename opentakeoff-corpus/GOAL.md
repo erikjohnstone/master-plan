@@ -1191,6 +1191,30 @@ on this effort:**
     (e.g., treat a header token identical to a value seen printed
     beneath EVERY data row as a unit suffix, not a new column).
 
+25. **OPEN, SCOPED, NOT STARTED, LOW SEVERITY: real NOTES-list text
+    bleeds into MARK/TYPE/CFM cells on
+    015_VA_P_095_Replace_Submarine_Pier_3_Utility's own real
+    "GATEHOUSE MINI-SPLIT SYSTEM HEAT PUMP SCHEDULE" (mark DSS-4).**
+
+    Found doing genuinely verified per-set work — otherwise this is one
+    of the cleanest sets checked this session: 32 tables, every one
+    correctly titled, no phantom rows, no 0-row entries. The single real
+    exception: DSS-4's own row shows `MARK: "DSS-4 1. 2. 3. 4. 5."`,
+    `TYPE: "WALL-MOUNTED GUARD BOOTH"`, `CFM: "370 PROVIDE POWER AND
+    CONTROL WIRING FROM OUTDOOR UNIT TO INDOOR UNIT"` — the table's own
+    numbered NOTES list underneath bled into 3 different cells. The
+    SAME real table shape, correctly extracted for the main-building
+    units (DSS-1/DSS-2/DSS-3, same sheet-family, real clean `NOTES:
+    "1,2,3,4"` cells with no bleed), suggests this smaller "GATEHOUSE"
+    variant table is missing some of the real columns the main version
+    has (fewer real vocabulary anchors recognized), so the un-modeled
+    NOTES text has nowhere safe to land and spills into whatever
+    anchors DO exist — the same general "un-modeled column" bleed
+    family `anchorRadii` already guards against elsewhere, evidently not
+    covering this specific shape. Low severity (a single row, cosmetic
+    corruption rather than a missing/fabricated quantity), documented
+    for completeness rather than urgency. NOT STARTED.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
