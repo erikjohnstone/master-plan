@@ -1035,6 +1035,52 @@ on this effort:**
     lower-priority given this document's own real scope is entirely
     outside HVAC/BAS.
 
+22. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: `ROW_KEY_RE`'s digit-first
+    requirement drops 11 of 12 real rooms (92% real row loss) from
+    008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated's own real
+    ROOM FINISH SCHEDULE — every room in this real building is
+    letter-keyed ("A" through "K"), not numbered.**
+
+    Found doing genuinely verified per-set work, fourth set picked up
+    this session. Real page 16 ground truth (pdfplumber): the real ROOM
+    FINISH SCHEDULE lists room `101` (an access hallway) plus rooms `A`
+    through `K` (11 real "STORAGE SPACE" rooms in this metal building,
+    room `I` marked "NOT USED" with real dashed cells — still a real,
+    disclosed row, not a gap) — 12 real rows total, real headers NUMBER/
+    NAME/FLOOR/BASE/WALLS(N/S/E/W)/CEIL/NOTES all populated for every
+    one of them. Extraction: `graph.tables` carries exactly ONE row
+    (`101`) for this table — the other 11 are silently gone, no
+    disclosure.
+
+    Root cause, confirmed by reading `rowKeyOf`'s own room-finish branch:
+    `ROW_KEY_RE = /^\d{1,3}[A-Z]{0,2}$/` requires a LEADING DIGIT (1-3
+    digits, optional 0-2 trailing letters) — the mirror-image shape of
+    rule 12's original bug (`CODE_RE`'s letter-first requirement
+    rejecting digit-prefixed equipment marks). `QUALIFIED_KEY_RE =
+    /^([A-Z]{1,2})-(\d{1,3}[A-Z]{0,2})$/` (the room-finish branch's own
+    existing letter-BUILDING-before-digit-ROOM fallback) also requires a
+    trailing digit after its dash. Neither pattern has any path for a
+    bare letter-only room key ("A", "B", …, "K") — real, common in
+    simple/small buildings (this one has no numbered rooms in its
+    "STORAGE SPACE" wing at all), and this real gap is a genuine data-
+    loss bug, not a cosmetic one: 92% of a real room finish schedule's
+    own rows vanish with zero disclosure.
+
+    NOT STARTED. Real next step, matching rule 12's own established
+    discipline (never accept an unconfirmed shape without a
+    corroborating signal, not a blanket loosening): a bare letter-only
+    key is a much weaker signal on its own than a digit-prefixed one
+    (far more likely to collide with a stray single-letter callout
+    elsewhere on a sheet) — a naive `ROW_KEY_RE` loosening to accept any
+    `[A-Z]{1,2}` risks real false positives on OTHER real room-finish
+    tables that this session has not yet audited. Needs its own
+    corroborating signal before shipping (e.g., scoped to rows already
+    inside an already-qualified room-finish table's own confirmed row
+    band with full column coverage — NAME/FLOOR/BASE/WALLS/CEIL all
+    populated — rather than loosening the bare regex globally), and a
+    regression test proving existing digit-numbered room-finish tables
+    are unaffected before landing.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
