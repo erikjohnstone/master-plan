@@ -762,6 +762,37 @@ on this effort:**
     per this session's own "verified until redundant" standard, not
     generalizing from a sample of one.
 
+    **UPDATE 2026-09-03: a SECOND real corpus set confirmed with the same
+    doubled/mirrored-content pattern —
+    004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31.** Real word
+    coordinates (pdfplumber): this page's real THERMOSTATIC MIXING VALVE
+    SCHEDULE title sits at `THERMOSTATIC`/`MIXING` x≈447/571, y≈1683 —
+    directly above its own real table (MARK header at x≈230, y≈1713.5).
+    The SAME "THERMOSTATIC"/"MIXING" text ALSO appears duplicated at
+    negative x-coordinates (x≈-967/-905, y≈1620-1632) — off the visible
+    page entirely, the same "content exists twice at distinct coordinate
+    clusters" signature as 013_MO_T2523_01. And a genuinely UNRELATED
+    phrase, "DESIGN"/"CONSTRUCTION" (the drawing title-block's own agency
+    name — "…MANAGEMENT, DESIGN AND CONSTRUCTION…" — normally a rotated
+    sidebar block), lands at x≈1040/1147, y≈1693.2 — only 10px below the
+    real title's own y, roughly 600-700px to its right. This is real,
+    live-measured evidence that the title-hunt's real bug (`extractTable`
+    picking up "DESIGN AND CONSTRUCTION" as this table's title instead of
+    "THERMOSTATIC MIXING VALVE SCHEDULE") is caused by the SAME doubled-
+    content mechanism as 013_MO_T2523_01's own CONTROL VALVES/FLOW METER
+    DEVICES case: a stray, unrelated title-block phrase gets planted at
+    almost the exact same y as the real table's own title, close enough
+    in the title-hunt's own lookback window to out-compete it. Both
+    confirmed sets so far are Missouri "MO_T"-prefixed state projects
+    (013 = MO_T2523, 004 = MO_T2504) — narrows the earlier "one firm's
+    export convention" guess to "shared across at least Missouri state-
+    agency CAD/plot toolchain projects," not proven corpus-wide but no
+    longer a sample of one either. STILL NOT FIXED — this update is
+    confirmation evidence for rule 17's own stated prerequisite, not a
+    fix; the real next step (a debug trace of the title-hunt's own scan
+    start point and lookback window, per rule 17's original text above)
+    is still the right next move before attempting anything.
+
 18. **028_TX_Renovation_of_Building_615: real "&" header-connector bug
     fixed (kept, general improvement) — but it does NOT fully recover
     this set's own NOISE CONTROL DUCT SILENCER SCHEDULE. The real
@@ -913,6 +944,51 @@ on this effort:**
     next step: bound the structural header-row scan's own width to
     something tied to the candidate block's real column count/spacing,
     not the full page.
+
+20. **OPEN, SCOPED, NOT STARTED: 004_MO_T2504_03's own real GAS WATER
+    HEATER SCHEDULE loses 4 real columns entirely and shows a WRONG value
+    in a real REMARKS cell — genuine data corruption, not just a cosmetic
+    header issue.**
+
+    Found doing genuinely verified per-set work, second set picked up
+    this session (`VERIFICATION_LEDGER.md`). Real page 31 ground truth
+    (pdfplumber): `MARK MANUFACTURER MODEL TANK VOLUME HEAT SOURCE MBH
+    [ELECTRICAL: VOLTAGE, PHASE, FREQ] REMARKS` — real row `GWH-1
+    LOCHINVAR AWN286PM ST-1 GAS 285 120 1 60 ALL`. Extracted:
+    `headers: ["MARK","MANUFACTURER","MODEL","GAS WATER HEATER SCHEDULE
+    MBH","REMARKS"]`, row cells `MODEL="AWN286PM"`, `MBH="285"`,
+    `REMARKS="60"`. TANK VOLUME ("ST-1"), HEAT SOURCE ("GAS"), and the
+    whole ELECTRICAL group (VOLTAGE "120", PHASE "1") are silently
+    dropped — no column, no note, no disclosure — and REMARKS shows "60"
+    (the real FREQ value) instead of the real REMARKS value "ALL": a
+    genuinely WRONG value in a real, populated cell, not just a missing
+    one. VOLTAGE and PHASE ARE in `EQUIPMENT_HEADERS` (unlike TANK VOLUME/
+    HEAT SOURCE, which have no vocabulary representation at all) — so
+    their own real un-recognized-parent ("ELECTRICAL") likely defeats
+    anchor recognition here the same way ROOFTOP UNIT SCHEDULE on the
+    SAME sheet correctly keeps its own "ELECTRICAL PHASE"/"ELECTRICAL
+    MCA" parent — worth comparing the two tables' real column density/
+    gap ratios directly (same shape as the already-fixed BYPASS CONTROL
+    VALVE anchorRadii bug, rule in this file's own earlier history) before
+    assuming a new root cause. The `"GAS WATER HEATER SCHEDULE MBH"`
+    header (title text glued onto a real leaf column) is very likely the
+    SAME parent-mislabeling family as rule 12's already-fixed
+    `parentLabelOver`/`parentPhraseOver` bug, or a fresh variant of it
+    where the table's own TITLE (not a neighbouring vocabulary word) gets
+    picked as the wrong "parent" for an ambiguous/duplicate leaf — this
+    set's own ROOFTOP UNIT SCHEDULE shows the identical shape
+    (`"ROOFTOP UNIT SCHEDULE EAT"`/`"ROOFTOP UNIT SCHEDULE LAT"`, both
+    real COOLING-tier EAT/LAT columns, while the real HEATING-tier
+    EAT/LAT correctly keep "HEATING" as their own parent) — six of this
+    one set's fourteen tables show some version of this pattern
+    (WATER SOFTENER — clean; GAS WATER HEATER, GREASE INTERCEPTOR,
+    NATURAL GAS UNIT HEATER, AIR DEVICE, ROOFTOP UNIT — all affected),
+    so this is a real, systemic, high-value target, not a one-off. NOT
+    STARTED: needs its own debug trace of `findHeaderRow`'s own duplicate-
+    column disambiguation path against this real table before attempting
+    a fix — the CONTROL VALVES precedent (rule 17) is the standing
+    reminder that title-hunt/header-parent fixes are easy to get subtly
+    wrong without one.
 
 ## Current execution policy (supersedes older worker references below)
 
