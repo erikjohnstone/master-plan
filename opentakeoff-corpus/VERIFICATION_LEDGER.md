@@ -74,6 +74,8 @@ confirmed correct behavior on a real artifact).
 
 | 057_US_VA_Project_626_15_106_Upgrade_Energy | verified-clean | — (compile.json's own "[ZERO]" note is correct, confirmed by direct inspection: a genuinely tiny 6-page real energy-upgrade excerpt with ZERO mentions of the word "SCHEDULE" anywhere. Honest 0-table output is correct) |
 
+| 055_US_VA_Project_673_20_107_EHRM_Infrastructure | verified-clean | — (compile.json's own "[ZERO] no extractable HVAC tables" note is correct in spirit, confirmed by direct inspection: this document's real content is a low-voltage/IT/security TECHNOLOGY EQUIPMENT SCHEDULE — cameras, access control, network racks, UPS, patch panels, ~28 real items — genuinely no HVAC content anywhere in the 11-page excerpt, matching "EHRM Infrastructure" = Electronic Health Record Modernization's own IT-upgrade scope. Real, low-priority, non-HVAC, NOT investigated further: the real TECHNOLOGY EQUIPMENT SCHEDULE fragments into 2 table objects (21+6 rows) instead of one — same low-priority "dense page, non-tracked category" family already noted for set 049's own PLUMBING MATERIAL LIST fragmentation, out of this corpus's own HVAC-category census) |
+
 All other set_ids in `takeoffs/cross-set-compile/*.compile.json` are
 `pending` — not yet individually cell-by-cell verified this effort. Update
 this table as each one is picked up.
