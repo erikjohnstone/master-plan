@@ -1,9 +1,55 @@
 # OpenTakeoff HVAC/BAS Corpus — Goal, Method, and Current State
 
+Last updated: 2026-09-03 — **THE ACTIVE GOAL, direct from the user,
+overriding everything below it in this file, including the "Four
+pillars" sequencing and the batch prewarm approach — read this before
+anything else:**
+
+> Disregard pillars A through D, they are bullshit. The only goal is
+> finding all the bugs and making this platform production viable so
+> that any estimator can upload a next pdf and get a takeoff. That's it.
+> End of story. All the bugs need to be ironed out, the tail of this
+> corpus complete. Verified takeoffs until it seems redundant... until we
+> can run an accurate FULL TAKEOFF not "looks okay" this app is fucking
+> useless.
+
+**In practice:** pick one real set at a time, build it on demand (never
+a batch prewarm — see below), render its real pages, verify every real
+table cell-by-cell against them — not "compiled without error," not
+"looks plausible" — find every real bug that way, root-cause it against
+the actual page geometry, fix it minimally, write a regression test for
+the exact real shape, run the full test suite (not just the new test) to
+protect every set already working from the new fix, commit with the real
+before/after evidence, move to the next set. Repeat until a verification
+pass on a new set stops turning up anything the existing fixes don't
+already handle. That is the only definition of done — a full, accurate,
+correct takeoff on real, unfamiliar PDFs, not a metric or a pillar gate.
+
+**No batch prewarm.** A batch prewarm across the whole corpus was tried
+and killed same day — it's a production-speed optimization for a
+*stable* codebase, and this phase is not that: every real fix (which
+this loop produces on essentially every set) invalidates the whole
+prewarm cache by design, so running one during active bug-hunting is
+pure overhead that produces nothing but memory pressure (it caused two
+real OOM kills) for sets nobody has even looked at yet. Build one set at
+a time, only the one actually under the microscope, on demand.
+
+Full detail, the complete reasoning, and the running log of real fixes
+found this way live in **"THE REAL MANDATE" in §8 below** (search for
+that heading) — this header is the short version; that section is the
+authoritative one, plus rules 1-17 elsewhere in this file are the actual
+running record of bugs found and fixed under it. The "Four pillars"
+material still in this file (§8) is kept only as historical engineering-
+shape reference — it is not the priority, it never resumes being the
+priority unless the user says so again directly.
+
+---
+
 Last updated: 2026-09-01 — Pillar C raised to **corpus-complete** depth:
 every BAS set + every valve set must be coordinator-verified and
 pipeline-corroborated (see `takeoffs/NEXT_GOAL_LOOP.md`). A+B §6 MET;
 Vol2 full 82 INDEX still in scope. Older keyed-corpus history retained.
+**(Historical — see the active goal above.)**
 
 ## Platform mandate (2026-09-02 expansion) — read first, every session
 
