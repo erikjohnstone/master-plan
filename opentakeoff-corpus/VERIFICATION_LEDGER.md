@@ -1,0 +1,27 @@
+# Per-set verification ledger
+
+Durable state for the real mandate (GOAL.md top / rule "THE REAL MANDATE"):
+pick one real set at a time, build on demand, render real pages, verify
+every real table cell-by-cell, root-cause and fix real bugs, test, commit
+with real before/after evidence, move on. This file exists so a fresh loop
+tick (or a fresh session) can see progress without re-deriving it from
+GOAL.md prose. 116 real compile-key sets total (see
+`takeoffs/cross-set-compile/*.compile.json`).
+
+Status values: `pending` (not yet verified this effort), `verified-clean`
+(cell-by-cell checked, no real bug found), `verified-fixed` (bug found and
+fixed, see GOAL.md rule N), `verified-open` (real bug found, root-caused,
+NOT yet fixed — see GOAL.md rule N for why), `not-a-bug` (investigated,
+confirmed correct behavior on a real artifact).
+
+| set_id | status | GOAL.md rule |
+|---|---|---|
+| 05_MO_VA_StLouis_AHU_VAV_Replacement | verified-fixed | 12 |
+| 11_CA_SDSU_EngSciences_Complex_100SD | not-a-bug | 15 |
+| 013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29 | verified-open | 17 |
+| 028_TX_Renovation_of_Building_615_Final_Design_Plans | verified-open | 18 |
+| 01_NY_VA_Northport_Dialysis_100CD | verified-open | 14 |
+
+All other set_ids in `takeoffs/cross-set-compile/*.compile.json` are
+`pending` — not yet individually cell-by-cell verified this effort. Update
+this table as each one is picked up.
