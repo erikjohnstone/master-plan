@@ -4983,21 +4983,30 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
     if ((t.h || 8) < hdrH2 * BIG_FONT_RATIO2) continue;
     const s = norm(t.str);
     if (!s || /\d/.test(s) || !/^[A-Z][A-Z .,'’&()/-]*$/.test(s)) continue;
-    // 2 words, not 3 — ONLY here, where the big-font check just above
-    // already gated this candidate. Real, found live (2026-09-03):
-    // 013_MO_T2523_01's own "CONTROL VALVES" table title (2 words, no
-    // "SCHEDULE") never qualified — CONTROL/VALVES render at ~2x the
-    // header row's own token height (25px vs 12.5px, confirmed against
-    // the real rendered page), comfortably clearing BIG_FONT_RATIO2,
-    // but the 3-word floor rejected it regardless, and the table
-    // extracted with no title at all. Genuine real titles this short are
-    // common in this domain (CONTROL VALVES, EXHAUST FANS, HEAT PUMPS,
-    // UNIT HEATERS) — a real title, not the false-positive risk the
-    // 3-word floor was guarding against, which is why this loosening is
-    // scoped to ONLY the already-big-font-gated STAGE 1 branch. STAGE 3
-    // below (no font-size signal at all) keeps its original 3-word floor
-    // untouched — that path has no other safety net to lean on.
-    if (s.split(/\s+/).filter(Boolean).length < 2) continue;
+    // REVERTED same day (2026-09-03) — real regression found, not
+    // theoretical. Tried loosening this to 2 words for 013_MO_T2523_01's
+    // own real, big-font, 2-word "CONTROL VALVES" title (confirmed: 25px
+    // vs the header row's own 12.5px, clearing BIG_FONT_RATIO2) — that
+    // part of the diagnosis stands, the fix does not. Verified against
+    // the REAL rebuilt pipeline output, not assumed: on the SAME sheet, a
+    // separate, unrelated "FLOW METER DEVICES" table (also real, also
+    // big-font — 25px, ALREADY 3+ words, so it already qualified under
+    // the untouched floor) got its own real title stolen — one of its
+    // extraction fragments latched onto "CONTROL VALVES" (a farther,
+    // wrong, unrelated table's title) instead of its own real, closer
+    // "FLOW METER DEVICES". Root cause not yet pinned down (this sheet's
+    // own page content is independently confirmed doubled/part-mirrored
+    // — a real authoring artifact, see GOAL.md — which is the likely
+    // culprit: some extraction pass here is anchored to a duplicate/
+    // ghost copy of the header row, at an x/y that puts "FLOW METER
+    // DEVICES" out of its own in-band lookback while "CONTROL VALVES"
+    // stays in reach). A wrong, confidently-stated title on real data is
+    // worse than the honest gap this was meant to close — reverted
+    // rather than shipped unproven. Real fix needs to explain why a
+    // valid, closer, already-qualifying 3-word candidate got skipped
+    // before touching the word-count floor again, not just retry the
+    // same loosening. See GOAL.md for the full writeup.
+    if (s.split(/\s+/).filter(Boolean).length < 3) continue;
     title = { sheet: sheet.key, text: t.str.trim(), bbox: bboxOf(t) };
   }
   // STAGE 2 — the original, unwidened search, untouched: exactly the prior

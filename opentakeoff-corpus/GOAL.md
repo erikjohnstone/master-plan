@@ -649,6 +649,73 @@ on this effort:**
     logic already read this session) with a real debug trace against
     this exact fixture, not a guess.
 
+17. **OPEN, SCOPED, PARTIALLY REVERTED (2026-09-03): a real 2-word
+    big-font title gap exists on `013_MO_T2523_01`'s own "CONTROL
+    VALVES" table, and a fix was tried, found to cause a real regression
+    elsewhere on the SAME sheet, and reverted rather than shipped.**
+    Found doing genuinely verified per-set work (this session's own real
+    mandate, see above) — not a synthetic exercise: extracted this real
+    set's own `graph.tables`, found two tables with `title: null` and a
+    third whose "title" was literally a stray NOTES sentence ("DESIGN
+    PRESSURE DROP IS MINIMUM ALLOWABLE PRESSURE DROP THROUGH CONTROL
+    VALVE. ACTUAL PRESSURE DROP MAY VARY."). Rendered the real page:
+    the genuine title is "CONTROL VALVES" — 2 words, no "SCHEDULE" word,
+    but confirmed BIG FONT (25px vs the header row's own 12.5px, ratio
+    2.0, clearing `findHeaderRow`'s own `BIG_FONT_RATIO2=1.6` gate) —
+    the title-shape fallback's 3-word floor was the only thing rejecting
+    it, and real HVAC titles this short are common (CONTROL VALVES,
+    EXHAUST FANS, HEAT PUMPS, UNIT HEATERS).
+
+    First fix: loosened ONLY the already-big-font-gated STAGE 1 branch's
+    floor from 3 words to 2. Tested clean (105/105 `sheetgraph.test.ts`,
+    309/309 broader suite) and landed. Then, following through on the
+    REAL mandate ("verified until it seems redundant" — not stopping at
+    green tests), rebuilt the actual set fresh
+    (`identity: [set_id, "onDemandVerify"]`, real PDF, not a synthetic
+    fixture) to confirm the fix against the real document. It DID fix
+    the intended table — but it ALSO broke a different, unrelated
+    "FLOW METER DEVICES" table on the SAME sheet: that table is real,
+    also big-font (25px), and was ALREADY 3+ words — it should never
+    have been touched by a 2-word loosening at all — yet one of its own
+    extraction fragments had its own real, closer title STOLEN by the
+    farther, wrong "CONTROL VALVES" instead. A confidently wrong title
+    on real data is strictly worse than the honest gap this was meant to
+    close, so the word-count floor was reverted to 3 (restoring the
+    pre-fix, safe-but-incomplete behavior), the regression test rewritten
+    to assert the CURRENT correct-but-incomplete behavior (`title: null`,
+    not a guess), and 105/105 + 309/309 reconfirmed clean post-revert.
+
+    Real, not-yet-pinned-down suspect: this exact sheet's own page
+    content is independently confirmed doubled and PART-MIRRORED — a
+    real authoring artifact, verified directly (not assumed): whole text
+    blocks on this page read backwards character-by-character when
+    extracted in the obvious reading order (e.g. "HHWR" comes back as
+    "RWHH", and the standard engineering professional-seal disclaimer
+    block is fully reversed), and multiple real strings ("CONTROL
+    VALVES" itself, "GAS CONNECTED", "HVAC MATERIAL") each appear at 2-4
+    distinct coordinate clusters on the same page. The likely real
+    mechanism: one of "FLOW METER DEVICES"'s own extraction fragments is
+    anchored to a duplicate/ghost copy of its header row, at a position
+    whose title-hunt lookback window no longer reaches its own real,
+    closer title — reaching the wrong, farther "CONTROL VALVES" instead,
+    which stays in reach regardless. Not confirmed by a real debug trace
+    yet (out of scope for this rule's own investigation) — a real next
+    step, not a guess to build on.
+
+    STILL OPEN. Real next step, in order: (1) get a real debug trace of
+    exactly which row/anchor `extractTableAt` starts its title-hunt scan
+    from for the "FLOW METER DEVICES" fragment that loses its title, to
+    confirm or refute the duplicate-anchor hypothesis above; (2) only
+    once that's confirmed, design a fix that explains WHY a valid,
+    closer, already-qualifying 3-word candidate got skipped — not another
+    loosening of the word-count floor, which is not what's actually
+    broken. This document's own doubled/mirrored-content structure may
+    be a narrow, low-generalization edge case (one firm's export
+    convention) rather than a corpus-wide pattern — worth confirming
+    against a second affected set before investing in a general fix,
+    per this session's own "verified until redundant" standard, not
+    generalizing from a sample of one.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
