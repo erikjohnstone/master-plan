@@ -418,6 +418,40 @@ on this effort:**
     engine is evidence of exactly that — narrow and fixable — not
     evidence the architecture itself is inadequate.
 
+14. **OPEN, SCOPED, NOT STARTED: the exploratory scan's own title net misses
+    "AHU"-abbreviated schedule titles, and this likely under-covers the
+    whole 76-set corpus, not just one set.** Found live 2026-09-03
+    verifying `096_IN_Vermillion_County_Jail`'s real hit
+    (`AIR HANDLING UNIT SYSTEM INDEX SCHEDULE`, correctly 0 coils — a
+    real mark-cross-reference index table, same pattern as St Louis's
+    own AHU summary). Digging further found the set's REAL coil data
+    sitting in two separate, correctly-titled tables the scan's own
+    `AHU_RTU_RE` (`/\bAIR\s+HANDLING\s+UNIT\b|.../i`) never matched at
+    all — `AHU CHILLED WATER COOLING COIL SCHEDULE` and
+    `AHU HEATING WATER COIL SCHEDULE` — because both use the abbreviation
+    "AHU", never spelling out "AIR HANDLING UNIT". Confirmed the SHIPPED
+    detector (`extractEmbeddedCoils`) is NOT the problem — it's
+    title-agnostic by design (gates on header content only, never table
+    title, per rule 7) — called directly against both real tables it
+    correctly found all 4/4 real coils in each, real clean tags (CC-1
+    through CC-4, PHC-1 through PHC-4) matching the index table's own
+    cross-references, real plausible GPM values. The gap is entirely in
+    the throwaway exploratory scan script's own loose net, which was
+    never meant to be the real detection path (it exists to surface
+    candidate sets for human/agent verification, `extractEmbeddedCoils`
+    is the real, shipped detector) — but since that script is what
+    picked which of the 76 sets got a real HIT line at all, any OTHER
+    set in the corpus using "AHU" instead of spelling out "AIR HANDLING
+    UNIT" in a table title likely never got flagged as a candidate in
+    the first place, real coil data and all. Real fix: either widen the
+    scan's own regex (cheap, but it's still just a candidate-surfacing
+    net, not the real detector) or — better, and consistent with rule 7
+    — stop relying on a title-gated scan to find candidates at all, and
+    instead run the real, title-agnostic `extractEmbeddedCoils` header
+    check directly across every table in the corpus once it's warm. The
+    second option is the actually-correct one; the scan was always a
+    stopgap for a cold corpus, not the real detection strategy.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
