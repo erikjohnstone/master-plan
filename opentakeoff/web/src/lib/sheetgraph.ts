@@ -4614,13 +4614,27 @@ function bandDataRows(
   // repeats a short value across several columns (a real, corpus-found
   // regression this exact scoping fixes: a real SPECIFICATION INDEX row
   // reading "N/A" in three different columns) is never caught.
+  // A SECOND real shape of the same caption, found live (2026-09-03):
+  // 044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21's own real
+  // FAN SCHEDULE, GENERATOR FUEL OIL PUMP SCHEDULE, and BOILER PLANT ·
+  // PACKAGED DEAERATOR TANK SCHEDULE each end with the exact same phantom
+  // last row, but the real page draws the caption as a BARE "NOTES" — no
+  // trailing colon at all (it is the section's own heading, printed once,
+  // with the numbered note list starting on the line below it) — so the
+  // colon-only guard above never catches it. Not opened up to "any bare
+  // repeated word" (that would risk the same real "N/A" regression this
+  // file's own comment above already fixed once) — scoped to literally the
+  // word "NOTES" alone, the one specific token this codebase already
+  // established (see the comment above) is never a legitimate real data
+  // VALUE anywhere in this corpus, colon or not.
+  const isCaptionText = (text: string): boolean => /:$/.test(text) || /^NOTES$/i.test(text);
   const cleanOut = out.filter((row) => {
     const texts = Object.values(row.cells).map((c) => c.text.trim()).filter(Boolean);
     if (texts.length < 3) return true;
     const counts = new Map<string, number>();
     for (const t of texts) counts.set(t, (counts.get(t) ?? 0) + 1);
     for (const [text, count] of counts) {
-      if (count >= 3 && /:$/.test(text)) return false;
+      if (count >= 3 && isCaptionText(text)) return false;
     }
     return true;
   });
@@ -5503,7 +5517,7 @@ const GENERIC_MAX_TOKEN_LEN = 60;
  * fragments) means a single token containing a digit is not on its own
  * disqualifying; a header ROW's own digit-freeness (checked once, together)
  * is the real, corpus-measured signal — see isGenericHeaderRow. */
-function isGenericHeaderToken(raw: string): boolean {
+export function isGenericHeaderToken(raw: string): boolean {
   const s = (raw || "").trim();
   if (!s || s.length > GENERIC_MAX_TOKEN_LEN) return false;
   // A bare "&" is a real, common header-phrase connector, drawn as its own
@@ -5519,6 +5533,26 @@ function isGenericHeaderToken(raw: string): boolean {
   if (!/[A-Z]/.test(s)) return false;
   if (REFERENCE_RE.test(norm(s))) return false;
   if (LABEL_VALUE_COLON_RE.test(s)) return false;
+  // A single span containing the word "SCHEDULE" is always a real TABLE
+  // TITLE in this corpus, never a column header label — checked live: zero
+  // hits for "SCHEDULE" across EQUIPMENT_HEADERS/FINISH_HEADERS/ROOM_HEADERS'
+  // combined vocabulary, every real title in this corpus's own evidence
+  // this session uses it, no real header column ever has. Real bug, found
+  // live: 044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#24's own
+  // two side-by-side schedule TITLES ("BOILER PLANT · ISOLATION VALVE
+  // SCHEDULE" / "BOILER PLANT · FUEL OIL METER SCHEDULE") sit at the exact
+  // same physical row height — two independent single-span titles, each
+  // atop its own half of a dense 2-column page — and clusterRows merges
+  // them into ONE 2-token row that isGenericHeaderRow's own "2+ shape-
+  // qualified, digit-free tokens = a real header row" test (its own comment
+  // explicitly assumed 2+ tokens means 2+ real COLUMNS of one table, not
+  // two unrelated titles landing at the same height) can't tell apart from
+  // a genuine 2-column header. expandGenericHeaderBlock then seeds a
+  // garbled cross-table header block from it, and the real Isolation Valve
+  // Schedule (27 real GV-* rows, confirmed via extract_words()) is never
+  // independently found — totally, silently dropped, the same "no trace at
+  // all" symptom rule 30 already documents for a different mechanism.
+  if (/\bSCHEDULE\b/.test(s)) return false;
   return true;
 }
 /** A header-shaped ROW: 2+ real cells (a lone single-span line is a title or
@@ -8409,7 +8443,12 @@ export function scheduleTableFromODL(
         const counts = new Map<string, number>();
         for (const t of cellTexts) counts.set(t, (counts.get(t) ?? 0) + 1);
         let isCaption = false;
-        for (const [text, count] of counts) if (count >= 3 && /:$/.test(text)) { isCaption = true; break; }
+        // Bare "NOTES" (no colon) added alongside the colon-suffixed shape
+        // — see bandDataRows' own comment on this same file for the real
+        // document that needed it; kept consistent across both paths per
+        // rule 31/33's own "which path actually produced this table"
+        // caution, not because this ODL path has its own confirmed case.
+        for (const [text, count] of counts) if (count >= 3 && (/:$/.test(text) || /^NOTES$/i.test(text))) { isCaption = true; break; }
         if (isCaption) continue;
       }
     }

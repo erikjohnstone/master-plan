@@ -1985,6 +1985,213 @@ on this effort:**
     not this fix's regression and was left alone rather than folded
     into an unrelated change.
 
+35. **PARTIALLY FIXED 2026-09-03: a real dense 2-column page's side-by-side
+    schedule TITLES land at the same physical row height and get misread
+    as a genuine header row, contributing to the total silent loss of a
+    real 27-row Isolation Valve Schedule on
+    044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#24.**
+
+    Found doing genuinely verified per-set work. Real ground truth
+    (pdfplumber, page 24): a real BOILER PLANT · ISOLATION VALVE SCHEDULE
+    (27 real gate valves, `GV-1` through `GV-28` with `GV-16A`/`GV-16B`
+    and a few numbers unused) sits in the page's LEFT column; the RIGHT
+    column stacks BOILER PLANT · FUEL OIL METER SCHEDULE, GENERATOR DAY
+    TANK SCHEDULE, and a condensate-pump schedule. Extraction:
+    `graph.tables` carries ZERO trace of the Isolation Valve Schedule
+    anywhere — no fragment, no garbled entry, nothing — while every OTHER
+    real schedule on the same 4-page dense boiler-plant spread (pages
+    21-24: Fire Tube Steam Boiler, Fan, Steam Unit Heater, Economizer,
+    Louver, ACCU, Steam Pressure Safety Valve, Steam Trap, Feed Water
+    Meter — 19/19 and 8/8 confirmed exact) extracted correctly.
+
+    Root-caused via direct debug tracing (temporary probes on the real
+    document, not guessed) through THREE layers:
+
+    (a) `clusterRows` groups spans by Y only — it has no notion of the
+    page's own two independently-drafted column strips. The real
+    "BOILER PLANT · ISOLATION VALVE SCHEDULE" title (left column) and
+    "BOILER PLANT · FUEL OIL METER SCHEDULE" title (right column) print
+    at the exact same physical row height, so they merge into ONE
+    2-token row. `isGenericHeaderRow` (the vocabulary-free structural
+    "reference" pass's own anchor test — reached because this table's
+    real header, MARK/LOCATION/SYSTEM AND/OR SERVICE/TYPE/REPLACE-NEW/
+    PIPE SIZE/VALVE SIZE/TEMP. TYPE/REMARKS, clears none of
+    EQUIPMENT_REQUIRED's own vocabulary, so equipment-kind refuses it)
+    requires only "2+ shape-qualified, digit-free tokens" — built
+    assuming 2+ tokens always means 2+ real COLUMNS of one table, never
+    two unrelated titles landing at the same height. Confirmed live:
+    before a fix, `isGenericHeaderRow` returned true for this exact
+    merged title row on the real document.
+
+    FIXED (this part): `isGenericHeaderToken` now refuses any single
+    span containing the word "SCHEDULE" — checked against
+    EQUIPMENT_HEADERS/FINISH_HEADERS/ROOM_HEADERS' combined vocabulary
+    (zero hits for that word in any of them; every real title in this
+    corpus's own evidence this session ends with it, no real column
+    header ever uses it), so it is a real table TITLE, never a header
+    cell, whenever it appears alone. Purely additive — verified via a
+    direct unit test on the exported pure function (both real title
+    strings from this page, plus a general "any title ending in
+    SCHEDULE" case) alongside a negative control (ordinary real header
+    labels — MARK, LOCATION, TYPE, REMARKS, etc. — still qualify
+    exactly as before). 192/193 corpus-wide regression tests pass (the
+    1 failure is the same pre-existing, confirmed-unrelated
+    `equiptags.test.ts` case rule 34 already named).
+
+    NOT FULLY FIXED: this table's real HEADER rows (not just its
+    title) ALSO land at the same physical row height as the right
+    column's own header — confirmed live, a SECOND merged row
+    ("MARK|LOCATION|SYSTEM AND/OR SERVICE|TYPE|REPLACE / NEW|TEMP.
+    TYPE|REMARKS|SIZE|FLOW|FLOW", mixing both tables' real column
+    labels) still forms after the title fix, and downstream data-row
+    banding on that merged anchor set contaminates real data rows too
+    (a real `GV-1` row observed with the right column's own unit-row
+    tokens, "PSIG GPM INCH INCH...", glued onto its own tail). After
+    rule 36's own (unrelated) bare-"NOTES" phantom-row fix shipped the
+    same day, a rebuild shows this table now RECOVERS a real partial
+    result — 8 of 27 real rows (`GV-1` through `GV-9`, minus the
+    never-used `GV-8`), correctly titled and equipment-kind, up from
+    zero — a welcome side effect (removing the phantom-NOTES row
+    apparently unblocked enough of the banding logic for SOME real
+    rows to clear the earlier `banded.out.length < 2` refusal), but
+    the cross-column contamination itself is still live: `GV-4`'s and
+    `GV-5`'s own real cells carry garbled "SIZE" values bled in from
+    the right column's Fuel Oil Meter Schedule ("BOILER 3 FUEL OIL"/
+    "BOILER 4 FUEL OIL"), and `GV-7`'s own MARK cell reads "B GV-7"
+    with a stray contaminating letter plus a whole NOTES paragraph
+    glued into its REMARKS/SIZE cell. `GV-10` through `GV-28` are
+    still entirely missing. This
+    codebase already has a purpose-built mechanism for exactly this
+    page shape — `bandedSheets`/`columnBandCandidates`, which proves a
+    real 2-up column seam geometrically (a >=100px-wide, ~90%-empty
+    x-corridor across the sheet's own content rows) AND validates each
+    side independently produces a real table before ever splitting
+    anything — but a live debug probe confirms it returns exactly 1
+    band (no seam) for this real page, so page 24 runs whole/unsplit
+    for every kind. Compounding this: even where `bandedSheets` DOES
+    validate a seam elsewhere in the corpus, the structural
+    "reference"-kind pass (the ONLY kind that would ever independently
+    find this specific table, since its own header clears no
+    vocabulary bar) is DELIBERATELY excluded from using the split
+    bands at all (`buildSheetGraph`'s own `const refSheets = bands.length
+    > 1 ? [s] : bands`) — a documented tradeoff for a different real
+    table shape (a wide single schedule whose sub-tiers span a seam,
+    Orange County Public Safety bulk set #50) that, as a side effect,
+    means reference-kind NEVER benefits from column-splitting on ANY
+    real 2-up sheet, seam or no seam.
+
+    NOT STARTED (both remaining pieces): recalibrating
+    `columnBandCandidates`' own geometric thresholds (MIN_GAP/
+    EMPTY_FRAC/XBUCKET) to also validate this real page's seam is
+    shared, corpus-wide-tuned code with its own on-record history of
+    false positives/negatives that shaped its current values — not a
+    same-tick patch without measuring the real seam width here against
+    the corpus's other real 2-up sheets. Extending reference-kind to
+    also use validated bands trades this real bug for possibly
+    reopening the Orange County wide-schedule case that mechanism
+    exists to protect, without a regression check against that real
+    document. Both need a dedicated pass, not a rushed one — the same
+    standing precedent rule 30 already established for this file's
+    shared header/column-detection code.
+
+    Same document, separate mechanism, also open: the real STEAM
+    PRESSURE REDUCING VALVE SCHEDULE (page 23, BPRV-1/PRV-19/PRV-25
+    with 4 real sub-rows/PRV-26 with 2 real sub-rows, 8 real physical
+    rows total) fragments into 3 separate, each-incomplete table
+    objects — one correct-but-collapsed (PRV-19/PRV-25/PRV-26 present
+    but PRV-25's/PRV-26's own sub-rows collapse to 1 each), one titled
+    only by its own misread column-header text ("PILOT OPERATED BACK
+    PRESSURE REGULATOR") holding just BPRV-1, and one under the SAME
+    misread title holding 3 of PRV-25's real 4 sub-rows with visibly
+    garbled cell text (a NOTES paragraph glued into the MARK cell).
+    Same "extremely dense multi-schedule page" family as rules 29/30/
+    32/33/40, not yet root-caused to a specific mechanism — noted here
+    for a future pass, not fixed.
+
+    Two more real, separately-confirmed symptoms on this SAME document,
+    both also open: (a) page 23's STEAM METER SCHEDULE — real ground
+    truth 8 rows (`SM1` through `SM8`) — loses `SM1` specifically:
+    its own real row values (`B-1`, `STEAM`, `125`, `23000`, `207`,
+    `8"`, `8"`, `48`, `24`, `100:1`) get absorbed into the table's own
+    HEADERS instead of becoming its own data row (`headers` reads
+    `"MARK SM1"`, `"AREA/EQUIPMENT SERVICE B-1"`, ... — SM1's real
+    values glued onto the column labels as if a units sub-tier), so
+    `graph.tables` shows only 7 real rows (`SM2`-`SM8`). A different
+    code path than (a)/(b) above (header-tier promotion mistaking a
+    real FIRST data row for a units continuation, not a column-band
+    merge) — not yet root-caused to a specific line. (b) page 24's
+    CONDENSATE PUMP (real: 1 unit, `CP-1`) extracts TWICE — once
+    correctly as equipment-kind (`CP-1`, all real cells verified
+    correct against the page), and once as a redundant, WORSE
+    reference-kind duplicate of the identical real table: keyed `"2"`
+    (the real `# OF PUMP` value used as the row key instead of `MARK`)
+    with a SECOND row that is pure title-block/footer text ("Drawing
+    Title"/"Project Title REPLACE MAIN BOILERS"/"MECHANICAL SCHEDULES")
+    misread as data — the already-documented rule 26 title-block-
+    misread pattern, on a table that should never have been re-found
+    under a second kind at all. Both noted for a future pass, neither
+    fixed this tick — this document alone has now surfaced 4 distinct
+    real bug mechanisms in one on-demand build (rules 35's two parts,
+    36, and these two), all consistent with an unusually dense, 4-page,
+    multi-schedule-per-page real layout stressing every part of this
+    file's own header/column/row-banding machinery at once.
+
+36. **FIXED 2026-09-03: a real trailing "NOTES" section caption with NO
+    colon (unlike every previously-fixed case) still passed CODE_RE and
+    became a phantom last row, on THREE separate real tables on
+    044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21.**
+
+    Found doing genuinely verified per-set work, cell-by-cell against
+    the real page. This corpus already has a fix (same-file precedent,
+    017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf) for a real
+    trailing "NOTES:" caption reading as a fake extra row — but that
+    fix is deliberately scoped to a COLON-suffixed shape only (a real
+    data value essentially never ends with ":", the safety signal that
+    lets it avoid catching a legitimate repeated short value like
+    "N/A"). This real document draws the exact same section-heading
+    caption WITHOUT a trailing colon — a bare "NOTES" line, with the
+    numbered note list starting on the next physical line — so the
+    existing guard never caught it. Real, confirmed via direct
+    cell-by-cell inspection: FAN SCHEDULE's real 7 units (`EF-1`
+    through `EF-6`, `SF-1`) gained an 8th phantom row keyed "NOTES"
+    with every cell reading the literal text "NOTES"; GENERATOR FUEL
+    OIL PUMP SCHEDULE's real 1 row (`FOP-1, 2`) gained the identical
+    2nd phantom row; BOILER PLANT · PACKAGED DEAERATOR TANK SCHEDULE's
+    real 1 row (`DA-1`) gained the identical 2nd phantom row — the
+    same mechanism, independently confirmed on 3 real tables on one
+    page.
+
+    Fix: the existing colon-only guard (in both `bandDataRows` and the
+    ODL-sidecar row-banding path — same file, same "which path
+    actually produced this table" caution rules 31/33 already
+    established, applied to both for consistency even though only the
+    geometric path was directly confirmed on this real document)
+    additionally refuses a >=3×-repeated cell value that is exactly
+    the word "NOTES" (case-insensitive), matched as a whole word — not
+    opened up to "any repeated bare word," which would risk
+    reintroducing the exact real regression the colon-only scoping
+    already fixed once (a real SPECIFICATION INDEX row legitimately
+    repeating "N/A" across several columns). Verified: FAN SCHEDULE now
+    shows exactly 7 real rows (up from 8), GENERATOR FUEL OIL PUMP
+    SCHEDULE and PACKAGED DEAERATOR TANK SCHEDULE each show exactly 1
+    (down from 2) — all three match real ground truth exactly. New
+    regression test mirrors the existing colon-suffixed test's own
+    structure (a real table, a bare-"NOTES" phantom row, plus the same
+    "N/A" negative control re-run against the new bare-word shape to
+    prove it still refuses to fire on a legitimate repeated value).
+    113/113 `sheetgraph.test.ts` tests pass; corpus-wide regression
+    suite unaffected (same 1 pre-existing `equiptags.test.ts` failure
+    named in rules 34/35, confirmed unrelated).
+
+    Unexpected but real side effect: this fix alone, with no change to
+    rule 35's own column-seam mechanism, recovered the SAME
+    document's Isolation Valve Schedule from a total 0-row absence to
+    a real (if still incomplete — see rule 35's own updated entry) 8
+    real rows — evidence the phantom-NOTES row was ALSO interfering
+    with `bandGenericDataRows`'s own `banded.out.length < 2` real-grid-
+    must-repeat check on the structural reference-kind pass, on top of
+    corrupting the 3 tables it was directly confirmed on.
+
 ### Real, understood build-time characteristic (not a bug): Tesseract OCR
 fallback can make a single set's on-demand build take 45-90+ minutes
 

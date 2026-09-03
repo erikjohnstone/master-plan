@@ -10,7 +10,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, type GraphSpan, type SheetSpans, type SheetGraph, type TableBound, type ScheduleTable, type TableRow } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, type GraphSpan, type SheetSpans, type SheetGraph, type TableBound, type ScheduleTable, type TableRow } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
@@ -2911,6 +2911,50 @@ test("reference kind negative control: ordinary numbered notes prose is never mi
   assert.ok(!g.tables.some((t) => t.kind === "reference"), "ordinary note prose never qualifies as a header row");
 });
 
+test("isGenericHeaderToken: a single-span real TABLE TITLE never qualifies as a header cell (real bug: 044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers's own dense 2-column page 24)", () => {
+  // Real, found-live gap (2026-09-03), traced with a direct debug probe
+  // against the real document, not guessed: page 24 of this real set stacks
+  // TWO independent schedules side by side — "BOILER PLANT · ISOLATION
+  // VALVE SCHEDULE" (left column, 27 real GV-* rows) and "BOILER PLANT ·
+  // FUEL OIL METER SCHEDULE" (right column) — and their own titles print at
+  // the exact same physical row height. clusterRows is Y-only, so it merges
+  // both single-span titles into ONE 2-token row; isGenericHeaderRow's own
+  // "2+ shape-qualified, digit-free tokens = a real header row" test (built
+  // assuming 2+ tokens means 2+ real COLUMNS of one table) read that merged
+  // title pair as a genuine header anchor, confirmed live via a temporary
+  // debug probe: before this fix, `isGenericHeaderRow` returned true for
+  // that exact merged row on the real document; after, false. This pass
+  // (extractReferenceTableAt) is reached because the real Isolation Valve
+  // Schedule's own header (MARK/LOCATION/SYSTEM AND/OR SERVICE/TYPE/
+  // REPLACE-NEW/PIPE SIZE/VALVE SIZE/TEMP. TYPE/REMARKS) clears none of
+  // EQUIPMENT_REQUIRED's own vocabulary (no voltage/amps/gpm/hp/mbh/…), so
+  // equipment-kind refuses it — the vocabulary-free structural reference
+  // pass is the only one that would ever independently find it.
+  //
+  // Every real title measured across this corpus's own evidence this
+  // session ends in "SCHEDULE"; zero hits for that word across
+  // EQUIPMENT_HEADERS/FINISH_HEADERS/ROOM_HEADERS' combined vocabulary — no
+  // real column header ever uses it — so excluding it from
+  // isGenericHeaderToken is safe on that account. (This narrow fix does NOT
+  // fully recover the real table: the deeper mechanism — bandedSheets'
+  // own column-seam detector never validating a seam for this specific
+  // real page, so the reference-kind pass still runs on the whole,
+  // unsplit sheet where both tables' real 2+-token HEADER rows — not just
+  // their titles — also land at the same height and merge — is tracked
+  // separately, not started, in GOAL.md.)
+  assert.equal(isGenericHeaderToken("BOILER PLANT · ISOLATION VALVE SCHEDULE"), false,
+    "a real single-span table TITLE is never mistaken for a header cell");
+  assert.equal(isGenericHeaderToken("BOILER PLANT · FUEL OIL METER SCHEDULE"), false,
+    "the same real shape from the OTHER side of the same page");
+  assert.equal(isGenericHeaderToken("AIR HANDLING UNIT SCHEDULE"), false,
+    "any real title ending in SCHEDULE, not just this specific real pair");
+  // Negative controls — real, short column-label tokens (none contain the
+  // word SCHEDULE) still qualify exactly as before this fix.
+  for (const label of ["MARK", "LOCATION", "SYSTEM AND/OR SERVICE", "TYPE", "REMARKS", "VALVE SIZE IN."]) {
+    assert.equal(isGenericHeaderToken(label), true, `an ordinary real header label must still qualify: ${label}`);
+  }
+});
+
 test("reference kind negative control: a single real data row never qualifies — a real table's own grid must repeat", () => {
   // Real, corpus-found bug (itd-d1-lab-mechanical.pdf#21, confirmed by
   // direct render — see sheetgraph.ts's own comment above the
@@ -3375,6 +3419,46 @@ test("bandDataRows: a trailing 'NOTES:' caption is refused as a phantom row, not
   // regression this exact scoping (colon-suffixed labels only) fixes.
   const naSched: SheetSpans = {
     key: "na-repeat.pdf#1", sheet_number: "M13",
+    spans: [
+      sp("SPECIFICATION INDEX", 100, 10),
+      sp("NO", 0, 40), sp("NAME", 150, 40), sp("FLOOR", 300, 40), sp("BASE", 450, 40), sp("WALL", 600, 40),
+      sp("201", 0, 70), sp("SEE SPEC", 150, 70), sp("N/A", 300, 70), sp("N/A", 450, 70), sp("N/A", 600, 70),
+    ],
+  };
+  const naTab = extractTable(naSched, "room-finish")!;
+  assert.ok(naTab, "a real row repeating a legitimate short value must still extract");
+  assert.equal(naTab.rows.length, 1, "the real N/A row must not be dropped");
+});
+
+test("bandDataRows: a trailing BARE 'NOTES' caption (no colon) is also refused as a phantom row (real bug: 044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers's own FAN SCHEDULE, GENERATOR FUEL OIL PUMP SCHEDULE, and PACKAGED DEAERATOR TANK SCHEDULE)", () => {
+  // Real, found-live gap (2026-09-03): the colon-only guard above catches a
+  // real "NOTES:" caption, but this real document draws its own section
+  // heading as a BARE "NOTES" — no trailing colon — immediately below the
+  // last real data row, with the numbered note list starting on the NEXT
+  // line. Confirmed via a real cell-by-cell dump against the live document:
+  // FAN SCHEDULE's real 7th row (SF-1) was followed by an 8th "row" whose
+  // every cell read the literal text "NOTES"; the same shape ended
+  // GENERATOR FUEL OIL PUMP SCHEDULE (1 real row + this phantom) and
+  // PACKAGED DEAERATOR TANK SCHEDULE (1 real row + this phantom).
+  const sched: SheetSpans = {
+    key: "bare-notes-cap.pdf#1", sheet_number: "M21",
+    spans: [
+      sp("FAN SCHEDULE", 100, 10),
+      sp("MARK", 0, 40), sp("CFM", 150, 40), sp("MBH", 300, 40), sp("EAT", 450, 40),
+      sp("EF-1", 0, 70), sp("5000", 150, 70), sp("912", 300, 70), sp("0", 450, 70),
+      sp("EF-2", 0, 90), sp("5000", 150, 90), sp("1119", 300, 90), sp("0", 450, 90),
+      sp("NOTES", 0, 120), sp("NOTES", 150, 120), sp("NOTES", 300, 120), sp("NOTES", 450, 120),
+    ],
+  };
+  const tab = extractTable(sched, "equipment")!;
+  assert.ok(tab, "the real table itself must still extract");
+  assert.deepEqual(tab.rows.map((r) => r.key), ["EF-1", "EF-2"], `the trailing bare NOTES caption must never appear as a row: ${tab.rows.map((r) => r.key).join(", ")}`);
+
+  // A real row that legitimately repeats a short, non-caption value must
+  // still NOT be caught — same negative control as the colon-suffixed case
+  // above, confirming "NOTES" is matched as a whole word, not a substring.
+  const naSched: SheetSpans = {
+    key: "na-repeat-2.pdf#1", sheet_number: "M22",
     spans: [
       sp("SPECIFICATION INDEX", 100, 10),
       sp("NO", 0, 40), sp("NAME", 150, 40), sp("FLOOR", 300, 40), sp("BASE", 450, 40), sp("WALL", 600, 40),
