@@ -2192,6 +2192,58 @@ on this effort:**
     must-repeat check on the structural reference-kind pass, on top of
     corrupting the 3 tables it was directly confirmed on.
 
+37. **FIXED 2026-09-03: a TITLE-LESS extraction of a real equipment table
+    survives as a spurious duplicate alongside its own correctly-titled
+    read of the SAME table, because the existing dedup pass required
+    BOTH sides to carry a title — 045_FL_VA_Project_516_21_107_EHRM_
+    Infrastructure.pdf#21's own CHILLED WATER FAN COIL UNIT SCHEDULE.**
+
+    Found doing genuinely verified per-set work; compile.json's own
+    "[ZERO]" label for this document was wrong. Real ground truth
+    (pdfplumber, page 21): 9 real fan coil units (`FCU1-1-1` through
+    `FCU4-1-24`), confirmed by the real page's own note ("TYPICAL OF 9
+    FAN COIL UNITS"). Extraction produced TWO table objects for the
+    identical 9 real row keys: a correct one, with the real title and
+    the full real 11-column header (including COOLING COIL SENSIBLE/
+    TOTAL CAPACITY); and a second, `title: null` fragment with a
+    merged/collapsed 8-column header that silently drops the real
+    capacity columns entirely — cell-by-cell confirmed as a strictly
+    worse read of the SAME real table, not a different real table.
+
+    Root-caused (not guessed) by reading `mcp/src/session.ts`'s own
+    existing `collapseEquivalentPrimaryTables` — a real, already-
+    working dedup pass, but its identity key is `sheet + normalized
+    title + exact row-key set`, and its own entry loop skips any
+    candidate with `!table.title` outright, so a title-less duplicate
+    never even enters the identity map it collapses against. Directly
+    ruled out `extractAllQuarterTurnedTables` as the source (disabling
+    it via a temporary env-gated probe left the duplicate unchanged) —
+    the actual producing extractor was not pinned down further, since
+    the fix does not need to know which one it is.
+
+    Fix: a second pass in the same function, reusing the file's OWN
+    already-established "exact key-set equality, same sheet, non-
+    reference kind" trust signal (`matchByKeySet`'s own precedent,
+    same file — used elsewhere specifically because two independent
+    reads of the same real table can land on wildly different regions
+    or one can lack a title, yet their real row keys still agree
+    exactly) to remove a title-less loser whenever its key set exactly
+    matches an already-kept, already-titled table on the same sheet.
+    Deliberately one-directional: never collapses two title-less
+    tables against each other (no stable signal to prefer one over the
+    other), so a real, coincidental key overlap between two genuinely
+    different untitled tables is never touched. `collapseEquivalent
+    PrimaryTables` exported for direct testing; new test (`mcp/test/
+    session.test.ts`) covers the real duplicate shape, a negative
+    control (two title-less tables with disjoint keys — never
+    collapsed), and a negative control for reference-kind tables
+    (matching `matchByKeySet`'s own established exclusion). Verified
+    on the real document: exactly 1 correct table now, 9/9 rows,
+    cell-by-cell exact. 18/18 `session.test.ts` tests pass; 193/194
+    corpus-wide regression tests pass (the 1 failure is the same
+    pre-existing, confirmed-unrelated `equiptags.test.ts` case rules
+    34-36 already named).
+
 ### Real, understood build-time characteristic (not a bug): Tesseract OCR
 fallback can make a single set's on-demand build take 45-90+ minutes
 

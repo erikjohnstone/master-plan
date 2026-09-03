@@ -3,7 +3,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
-import { Session, ANN_SCHEMA } from "../src/session.ts";
+import { Session, ANN_SCHEMA, collapseEquivalentPrimaryTables } from "../src/session.ts";
+import type { ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 
 const PLAN = fileURLToPath(new URL("../../demo/sample-plan.pdf", import.meta.url));
 const KEY = "sample-plan.pdf";
@@ -320,4 +321,64 @@ test("assignmentDisclosure: null for all-human, mixed counts, and the pointInPol
     "Finish assignment: 2 schedule-resolved · 1 agent-asserted · 3 pending human review",
   );
   assert.match(assignmentDisclosure(mixed, [otherSheet])!, / · 1 room withheld/);
+});
+
+// ── collapseEquivalentPrimaryTables: title-less exact-key-set duplicate ────
+test("collapseEquivalentPrimaryTables also removes a TITLE-LESS duplicate whose row-key set exactly matches an already-titled table (real bug: 045_FL_VA_Project_516_21_107_EHRM_Infrastructure's own CHILLED WATER FAN COIL UNIT SCHEDULE)", () => {
+  const bbox: [number, number, number, number] = [0, 0, 1, 1];
+  const cell = (text: string) => ({ text, bbox });
+  const row = (key: string, cells: Record<string, string>) => ({
+    key, sheet: "045.pdf#21",
+    cells: Object.fromEntries(Object.entries(cells).map(([k, v]) => [k, cell(v)])),
+  });
+  const keys = ["FCU1-1-1", "FCU1-3-4", "FCU1-5-3", "FCU1-7-2", "FCU2-1-7", "FCU2-4-16", "FCU2-6-19", "FCU3-1-17", "FCU4-1-24"];
+  // The real, correct extraction: a genuine title, the full real header set
+  // (11 real columns including COOLING COIL SENSIBLE/TOTAL CAPACITY).
+  const titled: ScheduleTable = {
+    kind: "equipment", sheet: "045.pdf#21",
+    title: { text: "CHILLED WATER FAN COIL UNIT SCHEDULE", bbox },
+    headers: ["MARK", "MANUFACTURER", "MODEL", "SUPPLY AIR (CFM)", "OUTSIDE AIR (CFM)", "ESP (IN-WG)",
+      "SENSIBLE CAPACITY (BTU/H)", "TOTAL CAPACITY (BTU/H)", "FLOW (GPM)", "MAX PD (FT-H2O)", "REMARKS"],
+    rows: keys.map((k) => row(k, { MARK: k, MANUFACTURER: "CARRIER", MODEL: "42CG-10", "SUPPLY AIR (CFM)": "1000" })),
+    region: bbox,
+  };
+  // The real, confirmed-live duplicate: same 9 real row keys, no title, a
+  // merged/collapsed 8-column header (real columns lost, not just renamed).
+  const untitled: ScheduleTable = {
+    kind: "equipment", sheet: "045.pdf#21",
+    title: null,
+    headers: ["MARK", "MANUFACTURER", "MODEL", "SUPPLY AIR OUTSIDE AIR ESP CAPACITY CAPACITY FLOW MAX PD CFM", "ESP CFM", "ESP", "GPM", "REMARKS"],
+    rows: keys.map((k) => row(k, { MARK: k, MANUFACTURER: "CARRIER", MODEL: "42CG-10" })),
+    region: bbox,
+  };
+  const tables = [titled, untitled];
+  const removed = collapseEquivalentPrimaryTables(tables);
+  assert.equal(removed, 1, "exactly the title-less duplicate must be removed");
+  assert.equal(tables.length, 1);
+  assert.equal(tables[0], titled, "the already-titled, richer read survives — never the title-less loser");
+
+  // Negative control: two DIFFERENT title-less tables on the same sheet that
+  // happen to share no title but ALSO share no key overlap — must never be
+  // touched (no false collapse of genuinely unrelated tables).
+  const otherUntitled: ScheduleTable = {
+    kind: "equipment", sheet: "045.pdf#21", title: null,
+    headers: ["MARK", "SIZE"],
+    rows: [row("EF-1", { MARK: "EF-1", SIZE: "12x12" })],
+    region: bbox,
+  };
+  const noMatch = [titled, otherUntitled];
+  assert.equal(collapseEquivalentPrimaryTables(noMatch), 0, "a title-less table with a genuinely different key set is never collapsed");
+  assert.equal(noMatch.length, 2);
+
+  // Negative control: a REFERENCE-kind table must never be matched against,
+  // titled or not — a real cross-reference/connection table sharing one
+  // device's tag with its own primary schedule is a genuinely different
+  // real table (matchByKeySet's own established precedent, same file).
+  const refTable: ScheduleTable = {
+    kind: "reference", sheet: "045.pdf#21", title: null,
+    headers: ["MARK"], rows: keys.map((k) => row(k, { MARK: k })), region: bbox,
+  };
+  const refPair = [titled, refTable];
+  assert.equal(collapseEquivalentPrimaryTables(refPair), 0, "a reference-kind table is never treated as a duplicate of a primary schedule");
+  assert.equal(refPair.length, 2);
 });

@@ -87,14 +87,19 @@ function matchByKeySet(tables: ScheduleTable[], sheetKey: string, built: Schedul
  * ODL table before exact keys are consulted; same sheet + normalized title +
  * exact key set identifies the duplicate without conflating accessory
  * reference tables or complementary numbered schedule sections. */
-function collapseEquivalentPrimaryTables(tables: ScheduleTable[]): number {
+export function collapseEquivalentPrimaryTables(tables: ScheduleTable[]): number {
   const seen = new Map<string, number>();
   const remove = new Set<number>();
+  const keySetOf = (table: ScheduleTable): string[] | null => {
+    if (table.kind === "reference" || !table.rows.length) return null;
+    const keys = [...new Set(table.rows.map((row) => row.key))].sort();
+    return keys.length === table.rows.length ? keys : null; // an already-ambiguous set is not a clean identity
+  };
   for (let i = 0; i < tables.length; i++) {
     const table = tables[i];
-    if (table.kind === "reference" || !table.title || !table.rows.length) continue;
-    const keys = [...new Set(table.rows.map((row) => row.key))].sort();
-    if (keys.length !== table.rows.length) continue;
+    if (!table.title) continue;
+    const keys = keySetOf(table);
+    if (!keys) continue;
     const title = table.title.text.toUpperCase().replace(/[^A-Z0-9]/g, "");
     const identity = `${table.sheet}\0${title}\0${keys.join("\0")}`;
     const prior = seen.get(identity);
@@ -109,6 +114,41 @@ function collapseEquivalentPrimaryTables(tables: ScheduleTable[]): number {
     } else {
       remove.add(i);
     }
+  }
+  // A SECOND real shape of the same duplicate, found live (2026-09-03):
+  // 045_FL_VA_Project_516_21_107_EHRM_Infrastructure.pdf#21's own real
+  // CHILLED WATER FAN COIL UNIT SCHEDULE (9 real FCU-* units) extracts
+  // correctly, WITH its own real title — and a second, garbled, TITLE-LESS
+  // fragment of the identical table (same sheet, same 9 real row keys
+  // exactly, a merged/collapsed header losing real columns like COOLING
+  // COIL SENSIBLE/TOTAL CAPACITY) also lands in `tables`, surviving the
+  // pass above untouched because that pass's own title-based identity
+  // requires BOTH sides to carry a real title — `!table.title` skips a
+  // title-less candidate outright, so it never even enters `seen`. Not yet
+  // root-caused to which extractor produces the title-less copy (confirmed,
+  // by direct testing, NOT `extractAllQuarterTurnedTables`), so this stays
+  // additive rather than trying to suppress it at the source. Reuses the
+  // SAME "EXACT key-set equality, same sheet, non-reference kind" trust
+  // signal `matchByKeySet` (this file, above) already established is
+  // sufficient on its own to identify two independent reads of the SAME
+  // real table even without a title match — scoped to only ever REMOVE a
+  // title-less loser against an already-titled, already-kept winner, never
+  // two title-less tables against each other (no stable identity to prefer
+  // one over the other by), so a real, coincidentally key-matching pair of
+  // DIFFERENT untitled tables is never touched.
+  const titledKeptKeys = new Map<string, number>(); // "sheet\0key\0key\0..." → index into `tables`
+  for (let i = 0; i < tables.length; i++) {
+    if (remove.has(i) || !tables[i].title) continue;
+    const keys = keySetOf(tables[i]);
+    if (!keys) continue;
+    titledKeptKeys.set(`${tables[i].sheet}\0${keys.join("\0")}`, i);
+  }
+  for (let i = 0; i < tables.length; i++) {
+    if (remove.has(i) || tables[i].title) continue;
+    const keys = keySetOf(tables[i]);
+    if (!keys) continue;
+    const winner = titledKeptKeys.get(`${tables[i].sheet}\0${keys.join("\0")}`);
+    if (winner != null) remove.add(i);
   }
   if (!remove.size) return 0;
   const kept = tables.filter((_, index) => !remove.has(index));
