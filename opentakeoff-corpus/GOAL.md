@@ -1657,6 +1657,20 @@ on this effort:**
     collision), this and rule 29 are the two most valuable open items
     in this file for a future, dedicated pass.
 
+    4th real confirmation, same day:
+    033_MN_VA_Project_656_18_301_Construct_Replace.pdf#68's own real
+    AIR HANDLING UNIT SCHEDULE (a single real unit, `AHU-6`, with an
+    extremely wide real data row — 50+ real values spanning fan, coil,
+    heating, cooling, electrical, and humidifier data in one row,
+    confirmed via `extract_words()`) is TOTALLY ABSENT from
+    `graph.tables` — not even the 1-of-N-survives pattern (a) above,
+    zero trace of it at all. Matches the federal-mech CH-1 "fully
+    dropped" symptom shape exactly, on a real single-row table this
+    time rather than a multi-row one — reinforcing this is a real,
+    recurring, corpus-wide pattern whenever a real schedule's own
+    header is unusually deep/wide, independent of how many real rows
+    the table has.
+
 31. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: the row-key column
     picker unconditionally trusts the LEFTMOST real column — when a
     real document splits its own equipment tag into a short TYPE
