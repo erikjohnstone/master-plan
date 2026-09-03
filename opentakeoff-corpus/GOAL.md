@@ -1985,6 +1985,35 @@ on this effort:**
     not this fix's regression and was left alone rather than folded
     into an unrelated change.
 
+### Real, understood build-time characteristic (not a bug): Tesseract OCR
+fallback can make a single set's on-demand build take 45-90+ minutes
+
+Found investigating 043_FL_VA_Project_673_21_151_Replace_Air_Handling — a
+33-page document whose build ran well past every prior set's own build time
+this session (900s/1800s/2700s timeouts all exceeded). Root-caused via
+direct process inspection (`ps`, CPU%-over-time) and isolated component
+timing, not guessed: `Session.ocrScheduleRegion` (`mcp/src/session.ts`)
+runs `tesseract.js` — a LOCAL, offline, WASM OCR engine, never a network
+call — as a per-region fallback recovery pass over schedule regions the
+vector path can't fully resolve. Ruled out the other two candidate causes
+directly: (1) OpenDataLoader-PDF (the ODL sidecar) is NOT the bottleneck —
+tested in isolation, all 33 real pages processed in 30.5s, 136 tables; (2)
+this specific document's own slowness reproduced identically on the
+UNMODIFIED base commit (a temporary before/after A/B swap of
+`sheetgraph.ts`), so it is a real, pre-existing pipeline characteristic,
+not a regression from this session's own rules 31/33/34 fixes. Tesseract's
+own per-region OCR cost is genuinely CPU-bound and can legitimately total
+tens of minutes on a document needing OCR recovery across MANY schedule
+regions — real, slow, not stuck/hung. A future tick hitting an
+unusually long on-demand build should check for this same signature
+(steadily declining `ps`-reported CPU% with stable memory — a burst of
+real work followed by a long CPU-light tail) before assuming a hang, and
+just use a longer timeout (60-90+ min) rather than re-diagnosing from
+scratch. NOT a candidate for a same-tick fix — a hard timeout/circuit-
+breaker on the OCR fallback pass would trade real-recovery completeness
+for speed, a real product tradeoff to make deliberately, not as a
+side-effect of one slow set's own on-demand verification.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
