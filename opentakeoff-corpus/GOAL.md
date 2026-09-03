@@ -2244,6 +2244,68 @@ on this effort:**
     pre-existing, confirmed-unrelated `equiptags.test.ts` case rules
     34-36 already named).
 
+38. **FIXED 2026-09-03: a TITLED reference-kind duplicate of an equipment-
+    kind table survived the existing title-based dedup pass because it
+    unconditionally excluded reference-kind tables, even when both
+    sides carry the exact same real title — 047_NC_VA_Project_558_22_172_
+    Replace_Chillers_in_AHU.pdf#27's own DISCONNECT SCHEDULE.**
+
+    Found doing genuinely verified per-set work, same day as rule 37 on
+    the same reconciliation code. Real ground truth: 3 real disconnects
+    (`DS ODU-1`, `TS IDU-1`, `TS IDU-2`). Extraction produced TWO table
+    objects, BOTH correctly titled "DISCONNECT SCHEDULE": a reference-
+    kind read (the vocabulary-free structural pass, whose row key is the
+    page's own literal text — "DS ODU-1", WITH its real internal space)
+    and an equipment-kind read (`rowKeyOf`-derived, which strips the
+    internal space when joining a multi-token real mark into one
+    CODE_RE-matching key — "DSODU-1"). `collapseEquivalentPrimaryTables`'s
+    existing title-based pass never considered them the same identity for
+    two compounding reasons: it excludes reference-kind tables
+    unconditionally, and even without that exclusion the two sides' own
+    keys differ by whitespace alone.
+
+    Root-caused (not guessed) that the reference-kind exclusion here is
+    NOT the same real protection `matchByRegionOverlap`'s own comment
+    documents (a genuinely DIFFERENT real cross-reference/connection
+    table sharing one device's tag with its own primary schedule,
+    baker-county-eoc-bidset.pdf#60's own MECHANICAL EQUIPMENT CONNECTION
+    SCHEDULE) — that real risk is about a DIFFERENT title colliding on a
+    shared tag; this case has the exact SAME real title on both sides.
+
+    Fix: the title-keyed identity pass now allows reference-kind tables
+    to participate (only there — the title-LESS second pass rule 37 added
+    stays exactly as narrow as it was, still excluding reference-kind,
+    since a title-less shared-tag collision is exactly the higher-risk
+    shape that exclusion protects against), and compares row keys with
+    internal whitespace stripped (`rowKeyOf`'s own real, deterministic
+    normalization behavior) so the two paths' otherwise-identical real
+    keys actually match. A genuinely different real cross-reference
+    table's own DIFFERENT title still lands in a different identity
+    bucket — completely untouched, verified by a new negative-control
+    test built directly from `matchByRegionOverlap`'s own documented
+    precedent case. New test in `mcp/test/session.test.ts` covers the
+    real DISCONNECT SCHEDULE shape plus that negative control. 19/19
+    `session.test.ts` tests pass. Verified on the real document: the
+    duplicate is gone, exactly 1 correct table remains (15 tables total,
+    down from 16). 193/194 corpus-wide regression tests pass (the 1
+    failure is the same pre-existing, confirmed-unrelated
+    `equiptags.test.ts` case rules 34-37 already named).
+
+    Same document, separate mechanisms, both open (not fixed this
+    tick): (a) the real PUMP SCHEDULE (3 real pumps, P-1/P-2/P-3, with
+    real GPM/HEAD/IMPELLER/electrical data) is entirely absent from
+    `graph.tables` — the same total-silent-loss symptom already
+    documented for rule 30/35, on yet another extremely dense, many-
+    schedules-stacked-on-one-page real sheet (this page alone stacks 9
+    distinct real schedules). (b) the real HEAT TRACE SCHEDULE's own
+    reference-kind read misreads its SECOND header tier as a DATA row
+    (`row.key = "CIRCUIT NUMBER"`, every cell reading a header-fragment
+    like `"(°F)"` or `"PIPE SIZE (IN) PIPE LENGTH (FT)"`) — the real
+    `HT-1` row is present but with several real values glued together
+    into single cells. Both real, both precisely documented, both left
+    for a dedicated pass per this file's own established rule-30
+    precedent.
+
 ### Real, understood build-time characteristic (not a bug): Tesseract OCR
 fallback can make a single set's on-demand build take 45-90+ minutes
 

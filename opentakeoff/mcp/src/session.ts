@@ -95,10 +95,41 @@ export function collapseEquivalentPrimaryTables(tables: ScheduleTable[]): number
     const keys = [...new Set(table.rows.map((row) => row.key))].sort();
     return keys.length === table.rows.length ? keys : null; // an already-ambiguous set is not a clean identity
   };
+  // A THIRD real shape of the same duplicate, found live (2026-09-03):
+  // 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#27's own real
+  // DISCONNECT SCHEDULE (3 real devices: DS ODU-1, TS IDU-1, TS IDU-2)
+  // extracts TWICE — once as reference-kind (the vocabulary-free structural
+  // pass, which uses the real page's own literal text as each row's key —
+  // "DS ODU-1", WITH its own internal space) and once as equipment-kind
+  // (which derives its key through `rowKeyOf`, and that derivation strips
+  // the internal space when joining a multi-token real mark into one
+  // CODE_RE-matching key — "DSODU-1"). BOTH copies carry the exact same
+  // real title, "DISCONNECT SCHEDULE" — the pass above never even
+  // considered them for the same identity, because `keySetOf` excludes
+  // reference-kind unconditionally (a real, deliberate protection
+  // elsewhere in this file — see `matchByRegionOverlap`'s own comment on
+  // a genuinely DIFFERENT real cross-reference/connection table that can
+  // legitimately share one device's tag with its own primary schedule,
+  // baker-county-eoc-bidset.pdf#60's own MECHANICAL EQUIPMENT CONNECTION
+  // SCHEDULE) — but that real risk is about a DIFFERENT title colliding on
+  // a shared tag, not a genuinely IDENTICAL title. Scoped narrowly to
+  // exactly that distinction: reference-kind tables ARE allowed into this
+  // title-keyed identity map (never the title-LESS second pass below,
+  // which stays exactly as narrow as rule 37 established it), and keys are
+  // compared with internal whitespace stripped (rowKeyOf's own real,
+  // deterministic normalization behavior) so the two paths' otherwise-
+  // identical real keys actually match. A genuine cross-reference table's
+  // own DIFFERENT real title still lands in a different `seen` bucket —
+  // completely untouched.
+  const keySetForTitleMatch = (table: ScheduleTable): string[] | null => {
+    if (!table.rows.length) return null;
+    const keys = [...new Set(table.rows.map((row) => row.key.replace(/\s+/g, "")))].sort();
+    return keys.length === table.rows.length ? keys : null;
+  };
   for (let i = 0; i < tables.length; i++) {
     const table = tables[i];
     if (!table.title) continue;
-    const keys = keySetOf(table);
+    const keys = keySetForTitleMatch(table);
     if (!keys) continue;
     const title = table.title.text.toUpperCase().replace(/[^A-Z0-9]/g, "");
     const identity = `${table.sheet}\0${title}\0${keys.join("\0")}`;

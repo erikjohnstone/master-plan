@@ -382,3 +382,63 @@ test("collapseEquivalentPrimaryTables also removes a TITLE-LESS duplicate whose 
   assert.equal(collapseEquivalentPrimaryTables(refPair), 0, "a reference-kind table is never treated as a duplicate of a primary schedule");
   assert.equal(refPair.length, 2);
 });
+
+test("collapseEquivalentPrimaryTables also removes a TITLED reference-kind duplicate of an equipment-kind table when both share the same real title and whitespace-normalized key set (real bug: 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU's own DISCONNECT SCHEDULE)", () => {
+  const bbox: [number, number, number, number] = [0, 0, 1, 1];
+  const cell = (text: string) => ({ text, bbox });
+  const row = (key: string, cells: Record<string, string>) => ({
+    key, sheet: "047.pdf#27",
+    cells: Object.fromEntries(Object.entries(cells).map(([k, v]) => [k, cell(v)])),
+  });
+  const headers = ["DISC NAME", "TYPE OF EQUIPMENT", "VOLTAGE RATING", "ENCLOSURE RATING", "DISC. AMP/POLE", "FUSE/BREAKER SIZE", "STARTER SIZE", "DISCONNECT NOTES"];
+  // The real reference-kind read: the vocabulary-free structural pass uses
+  // the page's own literal text as each row's key — "DS ODU-1", WITH its
+  // real internal space.
+  const referenceRead: ScheduleTable = {
+    kind: "reference", sheet: "047.pdf#27",
+    title: { text: "DISCONNECT SCHEDULE", bbox },
+    headers,
+    rows: [
+      row("DS ODU-1", { "DISC NAME": "DS ODU-1", "TYPE OF EQUIPMENT": "DISCONNECT SWITCH", "VOLTAGE RATING": "600V" }),
+      row("TS IDU-1", { "DISC NAME": "TS IDU-1", "TYPE OF EQUIPMENT": "TOGGLE SWITCH", "VOLTAGE RATING": "277V" }),
+      row("TS IDU-2", { "DISC NAME": "TS IDU-2", "TYPE OF EQUIPMENT": "TOGGLE SWITCH", "VOLTAGE RATING": "277V" }),
+    ],
+    region: bbox,
+  };
+  // The real equipment-kind read: rowKeyOf strips the internal space when
+  // joining a multi-token real mark into one CODE_RE-matching key —
+  // "DSODU-1", the identical real device, no space.
+  const equipmentRead: ScheduleTable = {
+    kind: "equipment", sheet: "047.pdf#27",
+    title: { text: "DISCONNECT SCHEDULE", bbox },
+    headers,
+    rows: [
+      row("DSODU-1", { "DISC NAME": "DS ODU-1", "TYPE OF EQUIPMENT": "DISCONNECT SWITCH", "VOLTAGE RATING": "600V", "ENCLOSURE RATING": "NEMA 3R" }),
+      row("TSIDU-1", { "DISC NAME": "TS IDU-1", "TYPE OF EQUIPMENT": "TOGGLE SWITCH", "VOLTAGE RATING": "277V", "ENCLOSURE RATING": "NEMA 12" }),
+      row("TSIDU-2", { "DISC NAME": "TS IDU-2", "TYPE OF EQUIPMENT": "TOGGLE SWITCH", "VOLTAGE RATING": "277V", "ENCLOSURE RATING": "NEMA 12" }),
+    ],
+    region: bbox,
+  };
+  const tables = [referenceRead, equipmentRead];
+  const removed = collapseEquivalentPrimaryTables(tables);
+  assert.equal(removed, 1, "exactly the weaker duplicate must be removed");
+  assert.equal(tables.length, 1);
+  assert.equal(tables[0], equipmentRead, "the richer read (more populated cells) survives");
+
+  // Negative control: a genuinely DIFFERENT real cross-reference table
+  // (its own distinct title) sharing one device's tag with a primary
+  // schedule must never be collapsed — matchByRegionOverlap's own
+  // established precedent (baker-county-eoc-bidset.pdf#60's own real
+  // MECHANICAL EQUIPMENT CONNECTION SCHEDULE), preserved here because the
+  // identity requires the SAME normalized title, not just the same keys.
+  const crossRef: ScheduleTable = {
+    kind: "reference", sheet: "047.pdf#27",
+    title: { text: "MECHANICAL EQUIPMENT CONNECTION SCHEDULE", bbox },
+    headers: ["MARK", "CONNECTED TO"],
+    rows: [row("DS ODU-1", { MARK: "DS ODU-1", "CONNECTED TO": "ODU-1" }), row("TS IDU-1", { MARK: "TS IDU-1", "CONNECTED TO": "IDU-1" }), row("TS IDU-2", { MARK: "TS IDU-2", "CONNECTED TO": "IDU-2" })],
+    region: bbox,
+  };
+  const diffTitlePair = [equipmentRead, crossRef];
+  assert.equal(collapseEquivalentPrimaryTables(diffTitlePair), 0, "a genuinely different real cross-reference table with its own title is never collapsed, even sharing every key");
+  assert.equal(diffTitlePair.length, 2);
+});
