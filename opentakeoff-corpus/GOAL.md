@@ -1612,6 +1612,36 @@ on this effort:**
     (dense page, no distance/ownership bound on what nearby real text a
     table's own scan can absorb) — NOT attempted here, same reasoning.
 
+    6th real confirmation, same day, the most severe shape yet — an
+    ENTIRE real 8-row table interleaved wholesale into another, both
+    real, both correctly-titled:
+    089_FL_Airport_Terminal_and_Hangar_Development.pdf#136 lays out 4
+    real schedule tables in a 2x2 grid (FAN SCHEDULE top-left, ELECTRIC
+    UNIT HEATER SCHEDULE top-right, INDOOR DX DOAS FAN COIL UNIT
+    SCHEDULE bottom-left, LOUVER SCHEDULE bottom-right — confirmed via
+    direct page text). Real ground truth: FAN SCHEDULE has 3 real rows
+    (`EF-1`, `EF-2`, `IF-1`); ELECTRIC UNIT HEATER SCHEDULE has 8 real
+    rows (`EUH-1` through `EUH-8`, all QMARK IUH1024). Because both
+    tables print their own row bands at the SAME y-positions (real
+    side-by-side page layout), `graph.tables` carries ONE table titled
+    `"FAN SCHEDULE"` with the two real tables' rows INTERLEAVED in
+    y-order (`EF-1`, `EUH-1`, `EF-2`, `EUH-2`, `IF-1`, `EUH-3`...
+    `EUH-8` — 11 rows total) and a glued header combining both real
+    tables' own columns (`MARK`,`TYPE`,`ESP`,`FLA`,`PHASE` from FAN
+    SCHEDULE plus `TAG`,`AIRFLOW MFR.`,`MODEL`,`KW`,... from ELECTRIC
+    UNIT HEATER SCHEDULE in one header array). Real-world consequence:
+    compile.json's own pre-scan reads `FAN:2` (undercounting the real
+    3 fans) and has NO category at all for the 8 real electric unit
+    heaters — an entire real equipment family present on the page is
+    completely invisible to the takeoff, not merely miscounted, because
+    it was never its own table to begin with. This is a step beyond
+    every prior confirmation: not corrupted cell values (5th) or a
+    fabricated phantom row (rule 23), but two REAL, correctly-titled,
+    equal-standing tables merged into one under only ONE of their two
+    real titles. Same underlying mechanism (dense page, no
+    distance/ownership bound on row-scan) — NOT attempted here, same
+    reasoning as every confirmation above.
+
 30. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: formalizing an already-
     disclosed-but-never-numbered limitation — a real 5-6-tier-deep
     header defeats header/key detection in two DIFFERENT concrete ways
