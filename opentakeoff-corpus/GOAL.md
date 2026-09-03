@@ -1642,6 +1642,41 @@ on this effort:**
     distance/ownership bound on row-scan) — NOT attempted here, same
     reasoning as every confirmation above.
 
+    7th real confirmation, same day, THREE distinct real schedule types
+    merged into one untitled table (the most sources yet in a single
+    confirmation), with a large real row loss on top:
+    096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#22 is an
+    extremely dense sheet carrying a real VAV BOX SCHEDULE, part of the
+    real SIDEWALL GRILLE SCHEDULE, and real BAS DDC points, all stacked
+    together. Real ground truth (confirmed via `extract_words()` regex
+    scan of the actual page): exactly 58 real, distinct VAV tags
+    (`VAV-1-1` through `VAV-1-8`, `VAV-2-1` through `VAV-2-31` with one
+    real gap at `VAV-2-24`, `VAV-4-1` through `VAV-4-21`) — matching
+    compile.json's own `VAV:58` exactly. Extraction: `graph.tables`
+    carries one `"(no title)"` table (52 rows) that mixes THREE real,
+    unrelated row families under one header: only 20 of the 58 real VAV
+    rows (`VAV-1-1`..`VAV-1-8`, `VAV-2-1`..`VAV-2-13`, itself missing
+    `VAV-2-8`) survive in it — the remaining 38 real VAV rows
+    (`VAV-2-14` onward, all of `VAV-4-*`) are absent entirely; PLUS 6
+    real `SWG-*` (sidewall grille) rows duplicating part of the
+    separately, correctly-titled "SIDEWALL GRILLE SCHEDULE" (7 rows) a
+    few tables later — the already-documented contaminated-duplicate-
+    survives-alongside-clean-copy shape; PLUS 16 real BAS DDC points
+    (`AI-1`..`AI-16`, confirmed real via their own cell data — e.g.
+    `AI-1`: "RETURN FAN B VOLUME", trend+graphic flags set — genuine
+    Analog Input points, not fabricated) that duplicate part of this
+    same document's separately-titled "SCHEDULE OF DDC POINTS" tables
+    elsewhere. Real-world consequence: compile.json's real `VAV:58`
+    expectation is drastically undercounted in what actually reaches
+    `graph.tables` (at most 20 of 58 real VAV rows are even present,
+    all under no title at all), while a real, unrelated equipment
+    family (grilles) and a real, unrelated BAS-points family are both
+    partially duplicated into the same corrupted table. The most
+    sources merged into one false table of any confirmation on record
+    — same underlying mechanism (dense page, no distance/ownership
+    bound on row-scan) — NOT attempted here, same reasoning as every
+    confirmation above.
+
 30. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: formalizing an already-
     disclosed-but-never-numbered limitation — a real 5-6-tier-deep
     header defeats header/key detection in two DIFFERENT concrete ways
