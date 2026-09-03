@@ -1129,6 +1129,56 @@ on this effort:**
     set once root-caused, same discipline as rules 17/18's own
     "don't generalize from one" standard.
 
+24. **OPEN, SCOPED, NOT STARTED: two real, distinct bugs on
+    011_IL_VA_Hines_Finance_Center_Renovation — a FALSE-POSITIVE
+    fabricated "ROOM FINISH SCHEDULE" (a 1-row garbage table on a page
+    that only references an external sheet this PDF export never
+    included), and a phantom column on the real "EXISTING HEAT PUMP
+    SCHEDULE" from a per-row repeated unit suffix.**
+
+    Found doing genuinely verified per-set work, sixth set picked up
+    this session.
+
+    (a) `graph.tables` carries `[room-finish] "ROOM FINISH SCHEDULE"`
+    with 1 nonsensical row (`key: "7"`, cells `{"NORTH":"7"}`) and an
+    enormous ~3900px-tall region on sheet #8. Real page ground truth
+    (pdfplumber): sheet #8 (and sheet #10) are architectural finish-
+    LEGEND/floor-plan pages that each contain the sentence "REFERENCE
+    SHEET AE-102 FOR ROOM FINISH SCHEDULE" — the real, tabular room
+    finish schedule lives on sheet AE-102, which this corpus PDF simply
+    does not include (a partial/MEP-focused export). There is no real
+    table to find on either page — the extraction fabricated one from
+    stray `ROOM_HEADERS`-vocabulary words (BASE/NORTH/EAST/SOUTH/WEST)
+    scattered across the floor-plan graphic's own legend text, not a
+    real header row. A false positive is a different, arguably worse
+    failure mode than the row-loss bugs elsewhere in this file: it
+    reports data that does not exist, rather than honestly showing
+    nothing.
+
+    (b) `[equipment] "EXISTING HEAT PUMP SCHEDULE"` (15 real rows,
+    otherwise correctly keyed and populated) carries a genuine data
+    column "AIRFLOW" (values like `"205 CFM"`, unit suffix included)
+    directly followed by a SEPARATE, phantom "CFM" header holding small
+    unrelated values (`"50"`, `"35"`, …) — real page coordinates confirm
+    the word "CFM" is printed as a per-row UNIT SUFFIX directly under
+    "AIRFLOW" at nearly the same x, repeated on every single data row
+    (not a real second header), which got mistaken for its own column.
+    The real column those small values (50/35/35/30/25…) actually belong
+    to (likely FLA or MCA, not present in the extracted headers at all)
+    is not yet identified.
+
+    NOT STARTED. (a) is likely fixable narrowly — a candidate room-
+    finish "table" whose own header-vocab hits are all scattered,
+    non-adjacent single tokens with no real ruled/boxed structure near
+    them should be held to a stricter bar before being emitted at all
+    (this file's own comment history already applies a similar
+    "reference never wins on ambiguous structural signal" principle
+    elsewhere — worth reusing, not reinventing). (b) needs a debug trace
+    of the real header-row token positions around "AIRFLOW"/"CFM" to
+    confirm the per-row-unit-suffix hypothesis before designing a fix
+    (e.g., treat a header token identical to a value seen printed
+    beneath EVERY data row as a unit suffix, not a new column).
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
