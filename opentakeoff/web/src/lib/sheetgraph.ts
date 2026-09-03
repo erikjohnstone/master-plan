@@ -5292,6 +5292,15 @@ const GENERIC_MAX_TOKEN_LEN = 60;
 function isGenericHeaderToken(raw: string): boolean {
   const s = (raw || "").trim();
   if (!s || s.length > GENERIC_MAX_TOKEN_LEN) return false;
+  // A bare "&" is a real, common header-phrase connector, drawn as its own
+  // separate span ("LOCATION & SERVES", real corpus find, 028_TX_Renovation_
+  // of_Building_615's own NOISE CONTROL DUCT SILENCER SCHEDULE) — without
+  // this, the letter-requirement below rejects it outright, which fails
+  // the WHOLE row (isGenericHeaderRow requires every token to qualify), so
+  // one connector symbol silently dropped the entire real table: never
+  // extracted under ANY kind, no note, no disclosure. Scoped to exactly
+  // "&" — the one real shape found live — not opened up to every symbol.
+  if (s === "&") return true;
   if (/[a-z]/.test(s)) return false;
   if (!/[A-Z]/.test(s)) return false;
   if (REFERENCE_RE.test(norm(s))) return false;

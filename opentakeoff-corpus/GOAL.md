@@ -762,6 +762,77 @@ on this effort:**
     per this session's own "verified until redundant" standard, not
     generalizing from a sample of one.
 
+18. **028_TX_Renovation_of_Building_615: real "&" header-connector bug
+    fixed (kept, general improvement) — but it does NOT fully recover
+    this set's own NOISE CONTROL DUCT SILENCER SCHEDULE. The real
+    blocker there is a deeper, confirmed, still-open 2-up table-merging
+    issue in the structural (vocabulary-free) reference-kind reader.**
+
+    Found doing genuinely verified per-set work on 028_TX's real page 1.
+    `graph.tables` was missing this sheet's own real NOISE CONTROL DUCT
+    SILENCER SCHEDULE entirely (7 tables extracted, silencer schedule not
+    among them, zero disclosure/note).
+
+    Fix #1 (real, tested, KEPT): `isGenericHeaderRow`/
+    `isGenericHeaderToken` (the structural reference-kind reader, used
+    when a table has no VOCABULARY match) required every header token to
+    contain ≥1 letter A-Z. A bare "&" token (e.g. a header phrase like
+    "LOCATION & SERVES" or "SYSTEM & TYPE" split into 3 separate spans by
+    the extractor) has no letter, so it failed the check and silently
+    killed the WHOLE header row — and with it, the whole table. Fixed
+    narrowly in `isGenericHeaderToken`: `if (s === "&") return true;` as
+    the first check. Regression test added (`sheetgraph.test.ts`, reuses
+    the proven bessemer `REF_TABLE_SPANS` fixture with "SYSTEM TYPE" split
+    into "SYSTEM"/"&"/"TYPE" to isolate the "&" token as the only
+    variable). 106/106 `sheetgraph.test.ts` + 310/310 broader suite clean.
+    This is a real, general correctness improvement — kept regardless of
+    what follows below.
+
+    Rebuilt the real 028_TX set fresh after landing the fix
+    (`identity: [set_id, "onDemandVerify"]`) to confirm against the real
+    document, per this session's own "don't trust green tests alone"
+    standard. Result: **unchanged** — same 7 tables, silencer schedule
+    still missing. So the "&" bug, while real, was not this set's actual
+    blocker.
+
+    Debug-traced the real extraction directly against 028_TX's own page 1
+    (temporary `DEBUG_REF2` instrumentation around `isGenericHeaderRow`,
+    fully reverted after use, confirmed via `git diff` + a clean 106/106
+    rerun). Found the real cause:
+
+    - pdf.js (the actual pipeline's own text extraction) merges
+      "LOCATION & SERVES" into ONE combined span — unlike pdfplumber
+      (used for my own ground-truth verification reads), which splits it
+      into 3 separate word tokens. So on the real document, the "&" was
+      never actually a standalone token in the first place — a useful
+      methodology caveat: pdfplumber-based verification can show a
+      different token shape than what the real pipeline sees.
+    - The real NOISE CONTROL DUCT SILENCER SCHEDULE and a second,
+      unrelated EXTERNAL STATIC PRESSURE SCHEDULE sit side-by-side on the
+      same sheet, sharing the same row-cluster y-band. The header-row /
+      block-detection step in `extractReferenceTableAt` merges BOTH
+      tables' header rows into a single candidate block, because they
+      cluster on the same y-band regardless of x-position.
+    - The `alreadyVocab`/`blockHasCatalogAnchor` guard (skips a candidate
+      block if it looks like it belongs to a VOCABULARY-driven table
+      instead of the vocab-free structural reader) then checks vocabulary
+      across the WHOLE merged block, not scoped to either table's own
+      x-range. The ESP schedule's own portion legitimately has a MARK
+      catalog-anchor and qualifies under EQUIPMENT_HEADERS — so the guard
+      fires for the ENTIRE merged block, causing the reference-kind pass
+      to skip BOTH tables. The silencer schedule has no vocabulary
+      representation of its own, so it is dropped with zero disclosure.
+
+    STILL OPEN — no fix attempted yet. Real next step: scope
+    `alreadyVocab`'s vocabulary check to each table's own relevant
+    x-range within the merged block (or investigate why `bandedSheets`
+    doesn't already split this sheet into separate column-bands before
+    block detection reaches this point) — not a workaround, an actual fix
+    to the block-merging logic itself. Deferred rather than force-fixed
+    this tick, per this session's own "don't sink unlimited time in one
+    outlier, keep the per-set loop moving" discipline — revisit if a
+    second corpus set shows the same 2-up side-by-side-schedule shape.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is

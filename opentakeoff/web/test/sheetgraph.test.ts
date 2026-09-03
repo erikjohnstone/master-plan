@@ -2748,6 +2748,44 @@ test("reference kind: a real, vocabulary-free schedule table extracts correctly 
   assert.equal(r2.cells["INSULATION OR LINER THICKNESS"]?.text, "1\"");
 });
 
+test("reference kind: a bare \"&\" header-phrase connector no longer kills the whole row (real bug: 028_TX_Renovation_of_Building_615's own NOISE CONTROL DUCT SILENCER SCHEDULE)", () => {
+  // Real, found-live gap (2026-09-03), traced with a temporary debug probe
+  // against a synthetic reproduction, not guessed: 028_TX's own real
+  // "LOCATION & SERVES" column header draws "&" as its own separate span.
+  // isGenericHeaderToken required at least one A-Z letter in EVERY token —
+  // "&" has none — and isGenericHeaderRow requires EVERY token in the row
+  // to qualify, so one connector symbol failed the WHOLE header row. The
+  // real table (real quantities: duct silencer counts, sizes, locations)
+  // was never extracted under ANY kind and never even disclosed as a
+  // dropped/refused table — a silent, total loss of real quantity data.
+  // Same real bessemer fixture as the test above, with ONLY "SYSTEM TYPE"
+  // split into "SYSTEM" / "&" / "TYPE" as three real separate spans (the
+  // same real shape "LOCATION" / "&" / "SERVES" takes) — everything else
+  // (segs, other tiers, data rows) is untouched, proven-working geometry,
+  // isolating the "&" token as the only variable.
+  const sheet: SheetSpans = {
+    key: "ref-amp.pdf#1", sheet_number: "M601",
+    spans: [
+      rh("DUCTWORK INSULATION SCHEDULE", 153, 41, 342),
+      rh("INSULATION OR", 815, 76, 148),
+      rh("INSULATION", 665, 87, 115),
+      rh("SYSTEM", 153, 98, 62), rh("&", 220, 98, 15), rh("TYPE", 240, 98, 45), rh("LINER", 861, 98, 57),
+      rh("TYPE", 698, 109, 49),
+      rh("THICKNESS", 835, 120, 109),
+      rh("SUPPLY DUCTS (EXTERNALLY INSULATED)", 153, 173, 393), rh("D-1, D-2, D-6", 666, 173, 112), rh("1-1/2\"", 864, 173, 49),
+      rh("EXHAUST DUCTS WITHIN 10 FEET OF EXTERIOR", 153, 199, 441),
+      rh("D-1, D-2", 687, 210, 70), rh("1\"", 880, 210, 17),
+      rh("OPENINGS", 153, 220, 99),
+    ],
+    segs: REF_TABLE_RULE,
+  };
+  const g = buildSheetGraph([sheet]);
+  const tab = g.tables.find((t) => t.kind === "reference");
+  assert.ok(tab, "a real header row containing a bare \"&\" connector must still extract, not vanish entirely");
+  assert.ok(tab!.headers.some((h) => /SYSTEM/.test(h)), `the SYSTEM column must survive: ${tab?.headers?.join(" | ")}`);
+  assert.equal(tab!.rows.length, 2, "both real data rows must still be present");
+});
+
 test("reference kind: button subrows do not corrupt their spanning control-station row", () => {
   const spans: GraphSpan[] = [
     rh("ELECTRICAL SCHEDULES", 900, -60, 220),
