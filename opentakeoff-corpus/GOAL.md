@@ -953,7 +953,60 @@ reference cells, and graph row-symbol outcomes. That is a proving ground,
 not the platform finish line — real shops upload unfamiliar blueprint sets
 daily.
 
-### Autonomous platform loop (2026-08-31+, runs until user halts)
+### THE REAL MANDATE (2026-09-03, supersedes the Pillar A–D framing below)
+
+**The user overrode the Pillar A–D structure directly, in these words:**
+"Disregard pillars a through d, they are bullshit... The only goal is
+finding all the bugs and making this platform production viable so that
+any estimator can upload a next pdf and get a takeoff. That's it. End of
+story. All the bugs need to be ironed out, the tail of this corpus
+complete. Verified takeoffs until it seems redundant. That's what we
+need... until we can run an accurate FULL TAKEOFF not 'looks okay' this
+app is fucking useless."
+
+Pillars A–D (kept below for historical/structural reference only — the
+WP7–WP9 depth criteria they point to are still real engineering shape, not
+discarded busywork) were an AI-authored sequencing structure. The user's
+own reason for wanting them — people actually trusting and using this
+platform — is real and unchanged; what's rejected is treating pillar-gate
+completion as a stand-in for that trust, when the real test is simpler and
+harder: **does a genuinely verified, cell-by-cell-checked, cite-backed
+takeoff come out the other end of an unfamiliar real PDF, every time.**
+
+**The actual, sole, current goal:** corpus-complete bug eradication via
+real verified takeoffs — not "compiled without error," not "looks
+plausible" — the same standard this session's own St Louis investigation
+set: render the actual page, compare cell-by-cell, find the real root
+cause, fix it, prove the fix with a real before/after against the actual
+PDF. Repeat per set, across the full corpus, until new bugs stop turning
+up (redundancy is the actual stopping signal, not a metric threshold).
+Production-viable means: any estimator uploads any real PDF — one this
+project has never seen — and gets a correct, complete takeoff, full stop.
+
+**What this changes in practice:**
+- The 116-set prewarm (in progress as of this rule) is **infrastructure
+  for this goal, not the goal itself** — a warm cache is what makes
+  iterating on real verified takeoffs fast instead of a ~10-minute toll
+  per set per check. Once warm, the real work is the verification sweep
+  itself: real render-and-compare passes across every set's real tables,
+  the same depth as rule 12's St Louis work, not a spot-check sample.
+- Stop treating "Pillar A largely complete" as license to move on to
+  Pillar B/C/D-shaped work before the compile side is actually bug-clean.
+  A table compiling without a crash is not the bar; a table whose every
+  cell has been checked against the rendered page is.
+- Bug-hunting priority is corpus coverage depth, not pillar sequencing —
+  don't defer a real, findable table-extraction bug because it "belongs"
+  to a later pillar. Rules 3, 9, 12, and 16 in this file are the real
+  template: find it live, root-cause it against the real page, fix it,
+  prove it, write it down — repeated across the whole corpus, not four
+  sequenced phases.
+- "Redundant" is the real stopping condition per set/table-shape: once a
+  verification pass on a new set stops turning up anything the existing
+  fixes don't already handle, that shape of the corpus is done. Not
+  before.
+
+<details><summary>Pillar A–D structure (superseded above; kept as
+engineering-shape reference, not the driving priority)</summary>
 
 **Foundation (non-negotiable):** **Trust and genuine agnostic blueprint
 workflows are our main goal and our foundation.** Every answer must be
@@ -977,27 +1030,13 @@ Session + ODL pipeline.
 | **C — Valve + BAS workflow depth** | **Corpus-complete** estimator-deep takeoffs for **every** BAS-bearing set and **every** valve/damper/actuator-bearing set: equipment inventory → SOO/I/O model → typed points / contractor columns → plan paint. Each set must be **coordinator self-checked** against drawings **and** **pipeline-corroborated** (GT harness + locks). Not POINTS LIST scrape; not a sample of 3 demos. | **Active after A+B §6 MET** — plumbing only so far; see `NEXT_GOAL_LOOP.md` WP7–WP8 deep DoD. |
 | **D — Plan grounding depth** | Go **deep on grounding**: symbol counts, mark sweeps, and “how many on plan” answers must be **highlighted and accurate** — every cited location visible, no legend-only overclaim, no silent misses. | **Queued after A+B bar met** — see `NEXT_GOAL_LOOP.md` WP9. |
 
-**Objective (Pillars A+B, current):** Set-agnostic HVAC/BAS compile +
-schedule↔plan reconcile across the **full** bulk US vector corpus — Vol1
-(`opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets`, ~30 verified sets) **and**
-Vol2 (`opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2`, **all 82 INDEX sets**:
-69 single-file PDFs plus multipart/split deliveries rejoined when needed).
-Every Vol2 set is vector-dense with proven HVAC **and** BAS/controls content;
-treat the entire volume as Pillar A stress, not a sample. Keep
-`T-VALVE-01` N=5 lock; inline motif in `sweep_schedule_row`; Session-unified
-plan tools + graph prewarm; all prior locks green.
-
 **Bulk policy:** Batching is only an operational cadence for probe → key →
 fix → negative-control. Scope is **not** “first 5–10 of Vol2.” Honest
 ZERO/WEAK compile totals remain correct when a set has no extractable HVAC
 schedule tables. Fixes stay set-agnostic on the shared path — never per-PDF
 hardcodes or corpus-id special cases.
 
-**Cadence:** Verified batches → update `PROGRESS.md` → `test:workflows` +
-focused tests; full Vol1+Vol2 stress drives set-agnostic family/title/BAS
-fixes. Pillars C and D start only when A+B success metrics in
-`NEXT_GOAL_LOOP.md` §6 are independently verified.
-
 Future corpus keys expand the proving ground without weakening the outcome
 model. Every gate remains forced-cold with full metric reporting. Continue
 in the coordinator VM; do not dispatch workers or subagents.
+</details>
