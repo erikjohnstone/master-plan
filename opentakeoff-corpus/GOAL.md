@@ -1739,6 +1739,65 @@ on this effort:**
     shape worth checking for elsewhere in the corpus once a fix is
     designed.
 
+32. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: a whole real page's 3
+    real HVAC schedules (8 real units total) are ALL silently dropped
+    and REPLACED by one wholly fabricated table built from the same
+    page's own title-block/firm-address stamp text.**
+
+    Found doing genuinely verified per-set work on
+    035_AR_564_19_101_Construct_New_Water_Storage.pdf#46. Real ground
+    truth (pdfplumber, full page text): this ONE page carries three
+    real HVAC schedules — HVAC -- DUCTLESS SPLIT CONDENSER SCHEDULE (3
+    real units, `DSCU-1`/`DSCU-2`/`DSCU-3`, each with real MANUFACTURER/
+    MODEL/VOLTAGE/MCA/MOCP data), HVAC -- DUCTLESS SPLIT FAN COIL
+    SCHEDULE (3 real units, `DSFC-1`/`DSFC-2`/`DSFC-3`, real CFM/BTU/H/
+    VOLTAGE data), and HVAC -- LOUVER SCHEDULE (2 real units, `LI-1`
+    and `LE-2` — NOT the 1 this corpus's own `compile.json` census
+    already (separately, wrongly) recorded for this set, so even the
+    pre-existing census undercounted this page). Extraction:
+    `graph.tables` carries NONE of the 3 real tables — zero trace of
+    any DSCU, DSFC, LI, or LE mark anywhere. In their place, ONE
+    single-row `[equipment] "HVAC -- LOUVER SCHEDULE"` table exists,
+    but its own row is entirely FABRICATED from this same page's real
+    title-block/firm-stamp text (visible at the very bottom of the
+    real page, unrelated to any schedule): `row.key` is `"SUITE210"`
+    and its cells hold real address/approval-stamp fragments —
+    `"Johnson Danforth & Associates ... 2200 N. RODNEY PARHAM ROAD,
+    LITTLE ROCK, AR 72212"`, `"and Facilities Approved: Project
+    Director Management"` — literally the architect/engineer firm's
+    own real address and the VA's own standard approval-block wording,
+    not one real louver dimension or manufacturer name anywhere in it.
+
+    This combines two failure classes this file already tracks
+    separately, worse than either alone: rule 26's title-block-misread
+    pattern (there, stamp text usually CONTAMINATES a real table's
+    otherwise-correct data or forms its own small phantom row/table
+    alongside real ones still present) and rule 30's deep-header
+    silent-drop pattern (there, a real table vanishes but nothing takes
+    its place). Here, THREE real, in-scope, corpus-relevant equipment
+    tables (with real dollar-value HVAC content: split system
+    condensers and fan coils, a genuinely common real building-scope
+    item) are completely invisible, and the ONE table that does appear
+    in their place is 100% fabricated from unrelated stamp text — the
+    worst-case shape for a downstream takeoff: not just missing data,
+    but a plausible-looking WRONG table standing in for it.
+
+    NOT STARTED — real next step: a debug trace of why THIS specific
+    page's real schedule region never clears whatever bar
+    `extractTableAt`/`bandDataRows` requires (real headers here are
+    2-3 tiers, "DESIGNATION"/"COOLING DATA"/"ELECTRICAL DATA" and
+    similar — deep enough to plausibly connect to rule 30's mechanism,
+    but not yet confirmed against this specific real page), separately
+    from why the title-block/stamp region gets misread as a schedule's
+    OWN header/data at all when the real schedules failed to attach
+    to anything (a candidate: whatever "fallback to nearest plausible
+    header-shaped text on the page" behavior exists, if any, needs to
+    exclude the page's own title-block region outright — the same
+    region rule 26 already knows produces false real-looking tables).
+    High real value: split-system condensers/fan-coils are a common,
+    dollar-significant real HVAC scope item, and this same 3-schedule-
+    plus-title-block page shape is plausibly common corpus-wide.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
