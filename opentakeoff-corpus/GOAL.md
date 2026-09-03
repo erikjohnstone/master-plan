@@ -1254,6 +1254,37 @@ on this effort:**
     a fix is designed, since both are the same underlying false-positive
     class.
 
+    **CONFIRMED AGAIN, a THIRD real document, plus a WORSE variant:**
+    019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf shows the
+    identical title-block/revision-stamp false positive 3 separate
+    times, titled "ELECTRONIC SECURITY / TELECOMMUNICATIONS" (a nearby
+    real spec-section heading, not the table's own content) — real
+    "rows" are `ISSUED FOR`/`REV DATE` pairs like `CONTRACT DOCUMENTS`/
+    `01.04.2019`, `DRAWING TITLE`/`MECHANICAL SCHEDULES`,
+    `SCALE`/`10822.000` — the sheet's own real title-block revision log,
+    not project data, recurring once per sheet exactly as rule 26
+    predicted. This is now 3 independently-confirmed real documents
+    (011, 016, 019), no longer a narrow edge case by any reasonable bar.
+
+    Also found on this SAME document, a WORSE, related variant: a REAL
+    table (the sheet's own genuine EXPANSION TANK SCHEDULE, real Bell &
+    Gossett B-300/B-200 bladder tanks, real temperature/pressure/size
+    data) had its OWN title stolen by "IMEG Corporation" (the design
+    firm's own name, from the SAME title block) — AND its own real
+    rightmost data column got real title-block text bled into it: cell
+    values literally read "2882 106th Street" / "Suite 100 MODEL
+    REMARKS Des Moines, Iowa 50322" / "B-300 515.334.9906" — the firm's
+    own real office address and phone number, physically close to this
+    table's own wide `REMARKS`-family column on a dense sheet. Unlike
+    the pure false-positive fabricated tables above, this is REAL
+    equipment data with REAL title-block text bled directly into a
+    populated cell — a step worse: this is the exact same class of bug
+    as rule 26's core finding, but manifesting as data corruption on a
+    real, otherwise-correct table rather than only ever a fully bogus
+    extra one. Reinforces that a real fix here is worth real priority,
+    not further deferral, once picked up — the title-block region isn't
+    just producing noise tables, it can corrupt real ones too.
+
 27. **HIGH-VALUE SYNTHESIS: rules 21, 23, and this new NOTES-caption
     finding are very likely THE SAME missing guard — `bandDataRows`'s
     own main row-scan has no distance-bounded stopping condition, so it

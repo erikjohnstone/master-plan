@@ -33,6 +33,7 @@ confirmed correct behavior on a real artifact).
 | 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test | verified-open | 26 (likely corpus-wide) |
 | 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling | verified-fixed | 27 (both vector + ODL-path fixes shipped) |
 | 018_GA_USDA_ARS_U_S_National_Poultry_Research_Center | verified-fixed | 27 (2nd real confirmation, ODL-path fix verified here) |
+| 019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04 | verified-open | 26 (3rd confirmation + worse real-data-contamination variant) |
 
 All other set_ids in `takeoffs/cross-set-compile/*.compile.json` are
 `pending` — not yet individually cell-by-cell verified this effort. Update
