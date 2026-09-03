@@ -1581,6 +1581,82 @@ on this effort:**
     in the corpus goes through it), not a narrow one-line fix. Left NOT
     STARTED on purpose rather than risk a repeat of that exact revert.
 
+30. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: formalizing an already-
+    disclosed-but-never-numbered limitation — a real 5-6-tier-deep
+    header defeats header/key detection in two DIFFERENT concrete ways
+    on the SAME real document
+    (030_NY_VA_EHRM_Infrastructure_Upgrades_Construction.pdf), 93% real
+    row loss on one table and row-KEY COLLISION on another.**
+
+    Found doing genuinely verified per-set work. This document's real
+    HVAC schedules use unusually deep nested headers — up to 6 physical
+    tiers (e.g. Chilled Beam Schedule: title → "COOLING COIL"/"HEATING
+    COIL" → "PRESSURE DROP.../MAX ALLOWABLE NC" → "EQUIPMENT
+    TAG"/"BASIS OF DESIGN"/... → "EWT °F"/"LWT °F"/... → "RATE
+    (GPM)"/"(BTU/H)"/... — six real lines before the first real data
+    row). Two real tables on this document break in different,
+    concrete ways:
+
+    (a) TWO-PIPE FAN COIL UNIT SCHEDULE (page 84): real ground truth is
+    14 real fan coil units (`001-FCU-01-CG06A` through `001-FCU-13-
+    C907`, `002-FCU-01-BT03`, `ROME-FCU-01-G120`), confirmed via
+    `extract_words()`. Extraction: `graph.tables` carries this table
+    with exactly ONE row — `ROME-FCU-01-G120`, the LAST real row —
+    with headers including literal placeholder labels `COL23`-`COL27`
+    and a region spanning y ≈ -1548 to 3996 (off the TOP of the page
+    and nearly its full height), evidence the anchor/tier-harvest walk
+    got badly confused across this table's own real depth. 13 of 14
+    real units (93%) are silently dropped — worse than a merely empty
+    table, because the 1 real survivor makes the result look plausible.
+
+    (b) CHILLED BEAM SCHEDULE (page 85): real ground truth is 5 real
+    chilled beams (`001-CB-01-DC1` through `001-CB-05-DC3`), each with
+    a real, distinct `EQUIPMENT TAG`. Extraction: `graph.tables`
+    carries 5 rows (right COUNT) but wrong KEYS — `row.key` is `"200"`,
+    `"200"`, `"200"`, `"125"`, `"125"` (the real `PRIMARY AIR (CFM)`
+    value for each row) instead of the real `EQUIPMENT TAG` — the key
+    column detector picked a NUMERIC data column instead of the real
+    tag column. Real, distinct rows collapse to 2 unique keys; a
+    key-based takeoff lookup (`rowKeyAnswersFor` and friends) would
+    read this as 2 chilled beams where there are genuinely 5. Cell
+    values are also jumbled (`"RATE (GPM)": "200 58 70.1 75 1"` —
+    several real column values glued into one cell) and headers are
+    meaningless fragments (`"(BTU/H) (2)"`).
+
+    CRAC UNIT SCHEDULE, HEAT TRACE SCHEDULE, ROOF DRAIN AND OVERFLOW
+    SCHEDULE, and GRILLE AND DIFFUSER SCHEDULE on the SAME document all
+    verified CLEAN against their real pages — so this is not "every
+    table on a dense page breaks," specifically the two DEEPEST-header
+    real tables on this document do.
+
+    This formalizes (not a new discovery, a corpus-wide confirmation)
+    an ALREADY-DISCLOSED, deliberately-NOT-fixed limitation this file's
+    own code documents inline (`headerHits`'s doc comment, above
+    `skipSubHeaderContinuation`, in `sheetgraph.ts`): federal-mech
+    CH-1's own real CHILLER SCHEDULE (sheet #14) has a real header NINE
+    physical lines deep and is silently dropped to a fully empty table
+    for the same class of reason, and that comment explicitly records
+    that a locally-correct deep-tier-walk fix was tried and REVERTED
+    after it broke a different real table elsewhere in the corpus. This
+    is now a SECOND real document (030) independently hitting the same
+    depth limitation, with two NEW, more dangerous symptom shapes (near-
+    total silent row loss that still looks plausible; row-key collision
+    that silently under-counts) rather than the fully-empty-table
+    symptom already on record.
+
+    NOT STARTED — same reason the disclosed comment gives: this is
+    shared, high-blast-radius header/key-detection code used by every
+    equipment-kind table in the corpus, with a real, recorded precedent
+    of a plausible local fix causing a regression elsewhere. A real fix
+    needs a full audit of how deep real corpus headers actually get
+    (this file already has 3 confirmed real depths: federal-mech's own
+    9 lines, and 030's own 5-6 lines on two different tables) before
+    committing to a specific tier-walk depth increase, plus a full
+    corpus regression sweep — not a same-tick patch. Given three real
+    confirmations now and the severity (93% row loss; silent key
+    collision), this and rule 29 are the two most valuable open items
+    in this file for a future, dedicated pass.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
