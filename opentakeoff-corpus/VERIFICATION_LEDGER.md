@@ -28,6 +28,7 @@ confirmed correct behavior on a real artifact).
 | 009_FL_USDA_APHIS_Plant_Inspection_Station_Building | verified-open | 23 |
 | 010_US_WWYK240146_Design_Implement_Monitoring_Control | verified-clean | — (0 real tables confirmed correct: sequence-of-operations narrative only, no real schedules anywhere in 31 pages) |
 | 011_IL_VA_Hines_Finance_Center_Renovation | verified-open | 24 |
+| 014_MT_USDA_Forest_Service_Missoula_Fire_Sciences | verified-open | 21 (2nd confirmation) |
 
 All other set_ids in `takeoffs/cross-set-compile/*.compile.json` are
 `pending` — not yet individually cell-by-cell verified this effort. Update

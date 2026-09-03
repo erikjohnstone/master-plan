@@ -1035,6 +1035,18 @@ on this effort:**
     lower-priority given this document's own real scope is entirely
     outside HVAC/BAS.
 
+    **CONFIRMED AGAIN, independently, 2026-09-03:**
+    014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4's own real
+    hot-water-unit-heater weight/area-served table (`(no title)`, 9 rows)
+    carries the exact same shape — a literal `{"MARK":"MARK","MANF.":
+    "THERMAL"}` phantom row bleeding through mid-table, plus two more
+    stray note-fragment phantom rows (`"NOTES:"`/`"CONTROLS:"`). This is
+    a genuinely SEPARATE HVAC-scope document (unlike 006's own door
+    schedule, entirely outside this platform's real focus) — real
+    evidence this bug is not narrow to one low-priority set, and worth
+    real priority on a future pass, not further deferral once picked up
+    again.
+
 22. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: `ROW_KEY_RE`'s digit-first
     requirement drops 11 of 12 real rooms (92% real row loss) from
     008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated's own real
