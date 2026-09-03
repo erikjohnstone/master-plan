@@ -356,38 +356,156 @@ on this effort:**
     full re-prewarm run immediately after under the new stable code, not
     bled out incrementally.
 
-12. **OPEN, SCOPED, NOT STARTED: steam heating coils are invisible to
-    `extractEmbeddedCoils` at every layer, and the reason is a real
-    column-boundary bug, not a missing regex.** Found live 2026-09-02,
+12. **CORRECTED 2026-09-03, STILL OPEN: steam heating coils are invisible
+    to `extractEmbeddedCoils`, and the original diagnosis below (same
+    day, 2026-09-02) was WRONG about where the bug lives.** Original
+    text is preserved struck through further down for the record. Real,
+    re-diagnosed via actual pipeline output (not code-reading alone) on
     `05_MO_VA_StLouis_AHU_VAV_Replacement.pdf#39`'s real
-    `STEAM HEATING COIL SCHEDULE` — confirmed by rendering the actual
-    page, not guessed from extracted text. Real column structure, left
-    to right: `SYSTEM | AIRFLOW(CFM,[L/s]) | MAX FACE VELOCITY | MAX APD
-    | EAT | MAX LAT | TOTAL MIN CAPACITY(MBH,[kW]) | STEAM: ENT CONT
-    VALVE(PSIG,[kPa]) | ENT COIL(PSIG,[kPa]) | FLOW(LBS/HR,[kg/HR]) |
-    STEAM TRAP MARK | COIL SIZE`. Two distinct, real problems, not one:
-    (a) `SYSTEM` — the row's own real equipment tag, the leftmost real
-    column on the page — never makes it into the extracted table at
-    all; `row.key` falls back to the AIRFLOW value instead (several
-    rows read as identical only because they share specs, not because
-    they're actually the same row duplicated — no way to tell without
-    the real tag). (b) `TOTAL MIN CAPACITY`'s real 2 sub-values (MBH,
-    kW) come back as 3 tokens in its cell — the extra one belongs to
-    `STEAM`'s own first sub-field, which is exactly why `STEAM`'s own
-    cell text doesn't cleanly decompose into its real 6 sub-values
-    either. This is a genuine COLUMN-boundary bug in the upstream table
+    `STEAM HEATING COIL SCHEDULE`, real column order confirmed by
+    rendering the actual page with real coordinates:
+    `MARK | TYPE | LOCATION | SERVICE | SYSTEM | AIRFLOW(CFM,[L/s]) |
+    MAX FACE VELOCITY(FPM,[M/s]) | MAX APD(IN WC,[Pa]) | EAT(°F,[°C]) |
+    MAX LAT(°F,[°C]) | TOTAL MIN CAPACITY(MBH,[kW]) | STEAM → {ENT CONT
+    VALVE, ENT COIL, FLOW} → {PSIG[kPa], PSIG[kPa], LBS/HR[kg/HR]} (a
+    genuine 3-tier nested sub-header) | STEAM TRAP MARK | COIL SIZE |
+    NOTES` — 17 real columns, not the ~12 the original entry assumed.
+
+    First real finding: this table's own leaf header row has TWO
+    separate columns both literally labeled "MARK" (the row's own
+    equipment tag, and — 100px away — "STEAM TRAP MARK", disambiguated
+    only by a real parent phrase, "STEAM TRAP", sitting one tier above
+    the second). Traced live in `findHeaderRow`'s own duplicate-label
+    handling (sheetgraph.ts): the disambiguating parent lookup
+    (`parentLabelOver`) only recognizes a VOCABULARY word as a parent —
+    "STEAM TRAP" isn't in `EQUIPMENT_HEADERS`, so the lookup returns
+    null, the second MARK collides with the first, and its whole column
+    silently drops. The file's own comment on `parentPhraseOver` (the
+    phrase-aware sibling function, already used elsewhere) explicitly
+    named this exact call site as a known, deliberately-untested gap
+    ("widening it there was never measured"). Fixed for real: switched
+    that one call site to `parentPhraseOver`, with a real bug of its
+    own caught and fixed along the way (its floor-bound parameter isn't
+    computed the same way `parentLabelOver`'s is — the naive swap
+    regressed the ROOM FINISH SCHEDULE's own FLOOR FINISH/CEILING
+    FINISH duplicate-column test, caught by the full 102-test
+    `sheetgraph.test.ts` suite, root-caused to an empty search-row
+    range, fixed by replicating `parentLabelOver`'s own clamp at the
+    call site). 102/102 `sheetgraph.test.ts` + 26/26
+    `corpusTakeoffHeaderGeometry.test.ts` pass. This part is REAL and
+    SHIPPED.
+
+    Second, more important finding: that fix, real as it is, does
+    **NOT** fix the actual corpus symptom — confirmed by re-running the
+    real pipeline against the real PDF (cache-bypassed,
+    `OPENTAKEOFF_GRAPH_NO_CACHE=1`, so this cost real build time, not
+    guessed) before and after the fix: the extracted output is
+    BYTE-IDENTICAL either way. Root cause: this table never reaches the
+    equipment-kind vocabulary path (`findHeaderRow` with
+    `EQUIPMENT_HEADERS`) at all — it's classified `kind: "reference"`,
+    meaning it falls all the way through to the vocabulary-FREE
+    structural fallback reader (`extractReferenceTableAt`, see the
+    section above `extractAllTables` for what that kind is and why it
+    exists). That reader's own header-block detection
+    (`isGenericHeaderRow`/`expandGenericHeaderBlock`) settles on the
+    WRONG tier as "the header" — the MID tier (`AIRFLOW | MAX FACE
+    VELOCITY | MAX APD | EAT | MAX LAT | TOTAL MIN CAPACITY | STEAM`,
+    7 cells) rather than the true LEAF tier underneath it (the one
+    carrying MARK/TYPE/LOCATION/SERVICE/SYSTEM and every real unit
+    sub-label) — confirmed directly: the extracted table's first "data"
+    row is literally the leaf row's own units (`key: "CFM"`,
+    `AIRFLOW: "CFM [L/s]"`), and neighboring header cells show real
+    cross-column text bleed (`TOTAL MIN CAPACITY`'s own cell text comes
+    back as `"ENT CONT VALVE MBH [kW] PSIG"`, sub-tier tokens from the
+    ADJACENT STEAM group). Unlike the equipment-kind vocab path
+    (`findHeaderRow`'s own explicit "the LOWEST tier defines the
+    columns" descent loop), the structural reference reader has no
+    proven analogous deepest-tier-wins mechanism for this shape — a
+    genuinely different code path (`extractReferenceTableAt`/
+    `clusterGenericColumns`) from the one the original entry (and this
+    entry's first fix) targeted.
+
+    THIRD finding, traced live while building the equipment-kind
+    regression test above — this is the real, load-bearing reason the
+    table never reaches equipment-kind at all: `CODE_RE` (and
+    `rowKeyOf`'s equipment/finish branch generally) requires a row's key
+    to START WITH A LETTER — every alternative in the regex begins
+    `[A-Z]`. St Louis VA's own real equipment marks on THIS table are
+    building-number-PREFIXED (`1-RH-1`, `1-AC-15`, `1-SHC-28`,
+    `1-TP28-1` — a real, common VA/GSA numbered-building tagging
+    convention, confirmed against the rendered page, not assumed).
+    Confirmed directly: `CODE_RE.test("1-RH-1")` is `false` — a leading
+    digit is rejected outright, unconditionally, for EVERY row on this
+    table. `rowKeyOf` is handed `banded[0].str` with no upstream
+    building-prefix stripping (`bandDataRows`'s own call site, no
+    special-case). So every one of this table's rows fails to key,
+    `isKeyedRow` fails table-wide, the equipment-kind candidate never
+    qualifies at all, and the table falls through to the vocabulary-free
+    "reference" reader entirely — tying together BOTH earlier symptoms
+    (the missing MARK/TYPE/LOCATION/SERVICE/SYSTEM columns and the
+    STEAM sub-tier text bleed) into this one, deeper cause. Reproduced
+    directly, isolated from every other factor: an otherwise-identical
+    synthetic fixture using `VVR1-5`-style (letter-first) keys extracts
+    cleanly; swapping only the key shape to `1-RH-1`-style
+    (digit-first) drops it to 0 tables. This is likely NOT unique to
+    this one table — the SAME real document's own `AIR HANDLING UNIT
+    SCHEDULE` uses the identical `1-AC-15`/`1-AC-28`/`1-AC-36`
+    convention, not yet checked at the time of writing whether it keys
+    correctly today (real next action, not assumed either way).
+
+    A real, safe-looking fix exists and is worth recording precisely
+    rather than guessing at later: `rowKeyOf`'s room-finish branch
+    already solves the mirror-image shape (`QUALIFIED_KEY_RE`,
+    `[A-Z]{1,2}-\d{1,3}[A-Z]{0,2}`, a LETTER-building before a digit
+    room number, e.g. `A-134`) by requiring the prefix be a building
+    this sheet's own text already confirmed exists
+    (`buildings?.has(q[1])` — the `buildings` Set, built from real
+    `BUILDING n`/`BLDG n` text mentions via `buildingMentions`/
+    `BUILDING_RE`, already threaded through as a parameter every
+    `rowKeyOf` call site passes). The equipment/finish branch could gain
+    the inverse: strip a leading `\d{1,2}-` prefix, require
+    `buildings?.has(prefix)`, then test `CODE_RE` against the REMAINDER
+    only — keeping the FULL original string (prefix included) as the
+    actual row key, since that is what is really drawn on the plan and
+    what any cross-reference elsewhere in the pipeline (installation
+    notes, symbol_sweep tag matching) needs to match against, not a
+    trimmed guess.
+
+    STILL OPEN — deliberately NOT landed this session. Two real reasons,
+    not caution for its own sake: (1) unconfirmed whether `buildings`
+    actually contains `"1"` for this real St Louis sheet — if the set's
+    own text never literally prints "BUILDING 1" near this data, the
+    sketched fix above would be a correctly-designed no-op against the
+    very case it targets, and landing it blind risks exactly the kind
+    of unverified "fix" this project's own standing rule refuses; (2)
+    this is row-keying code shared by every equipment/finish table in
+    the ENTIRE corpus, not scoped to one table — the caching incident
+    (rule 10) already paid once for underestimating a shared-code
+    change's real blast radius, and this one is wider than that.  Real
+    next step, in order: confirm `buildings` for this real set (cheap —
+    already computed inside the graph `buildFromInputs` builds, just
+    needs reading back); if present, implement the sketch above behind
+    the SAME test discipline already used for CODE_RE and
+    `parentPhraseOver` this session (synthetic fixture, full
+    `sheetgraph.test.ts`, then a real cache-bypassed rebuild proving the
+    actual STEAM HEATING COIL SCHEDULE now keys and classifies
+    equipment-kind); if `buildings` does NOT contain it, the real fix is
+    different (a bare digit-prefix convention with no explicit
+    "BUILDING n" mention anywhere to validate against) and needs its own
+    fresh, evidence-first diagnosis, not a guess bolted onto this one.
+
+    <details><summary>Original 2026-09-02 diagnosis (kept for the
+    record — wrong about WHERE the bug lives, not that a bug exists)</summary>
+
+    ~~This is a genuine COLUMN-boundary bug in the upstream table
     structure recognition — the same class of defect as rule 3's
-    row-banding bug (`task_10174a20`), just on the other axis. Do NOT
-    regex-guess a token position to extract LBS/HR from the shifted
-    `STEAM` cell text — a confidently wrong flow number is worse than
-    admitting none. Real fix needs the column-boundary bug addressed at
-    its source (likely alongside or informing the row-banding fix,
-    since both are upstream table-structure-recognition problems), not
-    a per-table-shape parser hacked onto `extractEmbeddedCoils`. Once
-    that's fixed, admitting steam coils into `hasCoilSignal` is the
-    easy part (an LBS/HR-based signal parallel to the existing GPM
-    one) — the hard part, done here, was refusing to fake the harder
-    part.
+    row-banding bug (`task_10174a20`), just on the other axis.~~ The
+    original entry described the symptom accurately (SYSTEM/MARK
+    missing, TOTAL MIN CAPACITY cell corrupted) but assumed the
+    equipment-kind vocabulary path was the one failing. It never was:
+    that table falls through to the "reference" kind before the
+    equipment path's own column-boundary logic even runs.
+    </details>
 
 13. **Correction, same day: the deterministic table/geometry engine was
     never the real gap — do not repeat the overstatement.** Mid-session,

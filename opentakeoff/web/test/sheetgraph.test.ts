@@ -3125,6 +3125,49 @@ test("CODE_RE accepts a letter+digit prefix before the hyphen (real bug: 021_XX'
   assert.equal(byKey["VVR2-10"].GPM.text, "0.32");
 });
 
+test("findHeaderRow's ambiguous-duplicate-column path resolves a duplicate leaf label by a non-vocabulary parent PHRASE, not just a vocabulary word (real bug: St Louis VA's own STEAM HEATING COIL SCHEDULE)", () => {
+  // Real, found-live gap (2026-09-03): a table with two separate columns
+  // both literally labeled "MARK" — the row's own equipment tag, and a
+  // second "STEAM TRAP MARK" sitting under a real parent phrase, "STEAM
+  // TRAP", one tier above it. findHeaderRow's own duplicate-label handling
+  // (dup.has(h.label) path) disambiguates by looking for a parent — but it
+  // called parentLabelOver, which only recognizes a VOCABULARY word as a
+  // parent. "STEAM TRAP" names no word in EQUIPMENT_HEADERS, so the lookup
+  // returned null, the second MARK collided with the first, and its whole
+  // column silently dropped. parentPhraseOver (already used elsewhere in
+  // this file for exactly this "a real parent isn't always vocabulary"
+  // shape) is vocabulary-first, phrase-second — switched to it here.
+  //
+  // Row keys here are deliberately letter-first (RH-1, not St Louis's own
+  // real building-prefixed 1-RH-1) — isolating THIS fix from the separate,
+  // still-open building-prefix gap this same investigation found (CODE_RE
+  // rejects a leading digit outright; see this rule's own GOAL.md entry).
+  // That gap is real but is not what this test covers.
+  const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 6, h: 8 });
+  const sched: SheetSpans = {
+    key: "steam-coil.pdf#1",
+    sheet_number: "MP101",
+    spans: [
+      sp("STEAM HEATING COIL SCHEDULE", 100, 10),
+      // a real phrase parent, non-vocabulary — sits one tier above the
+      // SECOND "MARK" only, exactly the real shape found live
+      sp("STEAM", 500, 40), sp("TRAP", 540, 40),
+      // leaf row: two columns both hit vocabulary word "MARK"
+      sp("MARK", 0, 70), sp("TYPE", 120, 70), sp("GPM", 240, 70), sp("MANUFACTURER", 360, 70), sp("MARK", 500, 70),
+      sp("RH-1", 0, 95), sp("DUCT", 120, 95), sp("2.5", 240, 95), sp("TRANE", 360, 95), sp("TP28-1", 500, 95),
+      sp("RH-2", 0, 115), sp("DUCT", 120, 115), sp("3.1", 240, 115), sp("TRANE", 360, 115), sp("TP28-2", 500, 115),
+      sp("RH-3", 0, 135), sp("DUCT", 120, 135), sp("2.9", 240, 135), sp("TRANE", 360, 135), sp("TP28-3", 500, 135),
+    ],
+  };
+  const tables = extractAllTables(sched, "equipment");
+  assert.equal(tables.length, 1, `expected one steam coil table, got ${tables.map((t) => t.title?.text).join(" | ")}`);
+  assert.ok(tables[0].headers.includes("MARK"), `the row's own bare MARK must survive: ${tables[0].headers.join(" | ")}`);
+  assert.ok(tables[0].headers.includes("STEAM TRAP MARK"), `the second MARK must take its real, non-vocabulary parent's name, not vanish: ${tables[0].headers.join(" | ")}`);
+  const r1 = tables[0].rows.find((r) => r.key === "RH-1")!;
+  assert.ok(r1, "the row's own real MARK must still key its own row");
+  assert.equal(r1.cells["STEAM TRAP MARK"].text, "TP28-1", "the second MARK column's own real data must not be dropped or misrouted");
+});
+
 test("WP1.4 title hunt: SCHEDULED note prose must not steal the real title (Northport AIR INLETS shape)", () => {
   const sp = (str: string, x: number, y: number, h = 8): GraphSpan => ({ str, x, y, w: str.length * 5, h });
   const sched: SheetSpans = {

@@ -1623,7 +1623,17 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
       // become FLOOR FINISH and CEILING FINISH) …
       if (dup.has(h.label) && !SURFACE_WORDS.has(h.label) && label === h.label) {
         const hi = j + 1 < hits.length ? hits[j + 1].span.x : Infinity;
-        const parent = parentLabelOver(rows, idx, i, h.span.x, hi, vocab);
+        // parentPhraseOver takes its floor bound literally (no internal
+        // Math.min against hdrIdx-8 the way parentLabelOver's own topIdx
+        // param gets clamped) — replicate that clamp here so this call
+        // searches the identical row range parentLabelOver always did.
+        // Skipping this reduces the search window to nothing whenever i
+        // (topIdx) lands at or above hdrIdx-8, which real 2-tier headers
+        // hit constantly (own regression: ROOM FINISH SCHEDULE's own
+        // FLOOR FINISH/CEILING FINISH duplicate-column resolution went
+        // silently unmatched — floor==hdrIdx-1+1, an empty loop range).
+        const floorIdx = Math.max(0, Math.min(i, idx - 8));
+        const parent = parentPhraseOver(rows, idx, floorIdx, h.span.x, hi, vocab);
         if (parent && parent !== h.label) label = `${parent} ${h.label}`;
       }
       // … and failing that, a cell naming more than one vocabulary word falls
@@ -1840,6 +1850,46 @@ function parentLabelOver(rows: GraphSpan[][], hdrIdx: number, topIdx: number, gx
 // ambiguous-duplicate-column path, and widening it there was never
 // measured — kept exactly as it already was, tested, everywhere else.
 const PHRASE_RE = /^[A-Z][A-Z0-9 .,'&()/-]{1,40}$/;
+// A real caption is routinely drawn as more than one text-showing run even
+// though it reads as one phrase ("STEAM" + "TRAP", St Louis VA's own real
+// STEAM TRAP MARK column) — pdf.js/this project's own span extraction does
+// not always coalesce adjacent words the way a single combined span (this
+// file's own OUTSIDE AIR/ENTERING (AIR) tests, both minted as ONE span) can
+// mask. Runs of adjacent, phrase-shaped, non-vocabulary tokens on the SAME
+// physical row are combined into one candidate phrase here — gapped by a
+// real WORD-spacing scale (a few characters), not this row's own COLUMN
+// pitch, so two genuinely separate header words sharing a row (a real,
+// common shape — this file is full of multi-column tiers) are never welded
+// into one false phrase. Bounded to non-vocabulary, PHRASE_RE-shaped runs
+// only — a vocabulary word beside a phrase fragment never joins the run
+// (headerLabel's own per-token check, immediately below, already claims it
+// first and returns early).
+const WORD_GAP_SCALE = 2.5;
+function phraseRunsInRow(row: GraphSpan[]): Array<{ text: string; x0: number; x1: number }> {
+  const sorted = [...row].sort((a, b) => a.x - b.x);
+  const groups: GraphSpan[][] = [];
+  let cur: GraphSpan[] = [];
+  for (const t of sorted) {
+    const s = norm(t.str);
+    const wordShaped = PHRASE_RE.test(s) && !/^\(.*\)$/.test(s);
+    if (!wordShaped) {
+      if (cur.length) groups.push(cur);
+      cur = [];
+      continue;
+    }
+    const last = cur[cur.length - 1];
+    const gap = last ? t.x - (last.x + (last.w || 0)) : 0;
+    if (last && gap > (last.h || 8) * WORD_GAP_SCALE) { groups.push(cur); cur = [t]; }
+    else cur.push(t);
+  }
+  if (cur.length) groups.push(cur);
+  return groups.map((g) => ({
+    text: g.map((t) => norm(t.str)).join(" "),
+    x0: Math.min(...g.map((t) => t.x)),
+    x1: Math.max(...g.map((t) => t.x + (t.w || 0))),
+  }));
+}
+
 function parentPhraseOver(rows: GraphSpan[][], hdrIdx: number, floorIdx: number, gx0: number, gx1: number, vocab: string[]): string | null {
   const width = Math.max(Math.min(gx1, gx0 + 4000) - gx0, 1);
   const hs = rows[hdrIdx].map((t) => t.h || 8).sort((a, b) => a - b);
@@ -1856,10 +1906,14 @@ function parentPhraseOver(rows: GraphSpan[][], hdrIdx: number, floorIdx: number,
       if (!inInterval && !overlaps) continue;
       const lbl = headerLabel(t.str, vocab);
       if (lbl) return lbl;   // a recognized vocabulary parent always wins first
-      const s = norm(t.str);
-      if (!PHRASE_RE.test(s) || /^\(.*\)$/.test(s)) continue;   // a bare unit fragment names nothing
+    }
+    for (const run of phraseRunsInRow(rows[j])) {
+      const cx = (run.x0 + run.x1) / 2;
+      const inInterval = cx >= gx0 && cx < gx1;
+      const overlaps = Math.min(run.x1, gx1) - Math.max(run.x0, gx0) > width * 0.3;
+      if (!inInterval && !overlaps) continue;
       const d = (hy - rowY(rows[j])) * 1000 + Math.abs(cx - (gx0 + gx1) / 2);
-      if (!phrase || d < phrase.d) phrase = { text: s, d };
+      if (!phrase || d < phrase.d) phrase = { text: run.text, d };
     }
   }
   return phrase?.text ?? null;
