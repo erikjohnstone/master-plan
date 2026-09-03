@@ -3431,7 +3431,26 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
     // otherwise pass CODE_RE and bury the compound)
     const parts = kept.split("/").filter(Boolean);
     if (parts.length > 1 && parts.every((p) => CODE_RE.test(p))) return { key: parts.join("/") };
-    return CODE_RE.test(key) ? { key } : null;
+    if (CODE_RE.test(key)) return { key };
+    // A real VA/GSA numbered-building PREFIX before the equipment/finish
+    // code itself — "1-RH-1", "1-AC-15", "1-SHC-28" (building "1"'s reheat
+    // coil 1 / AHU 15 / steam coil 28), found live (2026-09-03) on
+    // 05_MO_VA_StLouis_AHU_VAV_Replacement's own STEAM HEATING COIL and AIR
+    // HANDLING UNIT SCHEDULEs, both real, rendered, confirmed by direct
+    // page geometry. CODE_RE is letter-first by design — a bare digit
+    // prefix is otherwise indistinguishable from a stray dimension/callout
+    // number glued onto the front of a cell — so this only fires when the
+    // digit prefix names a building THIS SHEET's own text already confirmed
+    // exists (`buildingMentions`/`buildings`, the exact discipline the
+    // room-finish branch below already uses for its own mirror-image shape,
+    // a LETTER building before a digit room number). The FULL printed mark,
+    // prefix included, is kept as the row's real key — that is what is
+    // actually drawn on the plan and what any cross-reference elsewhere
+    // (installation notes, symbol_sweep tag matching) needs to match
+    // against, never a trimmed guess.
+    const bm = key.match(/^(\d{1,2})-([A-Z].*)$/);
+    if (bm && buildings?.has(bm[1]) && CODE_RE.test(bm[2])) return { key, building: bm[1] };
+    return null;
   }
   if (ROW_KEY_RE.test(key)) return { key };
   const q = key.match(QUALIFIED_KEY_RE);

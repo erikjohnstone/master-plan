@@ -356,9 +356,10 @@ on this effort:**
     full re-prewarm run immediately after under the new stable code, not
     bled out incrementally.
 
-12. **CORRECTED 2026-09-03, STILL OPEN: steam heating coils are invisible
-    to `extractEmbeddedCoils`, and the original diagnosis below (same
-    day, 2026-09-02) was WRONG about where the bug lives.** Original
+12. **FIXED 2026-09-03 (corrected once, then actually landed): steam
+    heating coils were invisible to `extractEmbeddedCoils`, and the
+    original diagnosis below (same day, 2026-09-02) was WRONG about
+    where the bug lives.** Original
     text is preserved struck through further down for the record. Real,
     re-diagnosed via actual pipeline output (not code-reading alone) on
     `05_MO_VA_StLouis_AHU_VAV_Replacement.pdf#39`'s real
@@ -447,52 +448,75 @@ on this effort:**
     directly, isolated from every other factor: an otherwise-identical
     synthetic fixture using `VVR1-5`-style (letter-first) keys extracts
     cleanly; swapping only the key shape to `1-RH-1`-style
-    (digit-first) drops it to 0 tables. This is likely NOT unique to
-    this one table — the SAME real document's own `AIR HANDLING UNIT
-    SCHEDULE` uses the identical `1-AC-15`/`1-AC-28`/`1-AC-36`
-    convention, not yet checked at the time of writing whether it keys
-    correctly today (real next action, not assumed either way).
+    (digit-first) drops it to 0 tables. Confirmed NOT unique to this one
+    table — the SAME real document's own `AIR HANDLING UNIT SCHEDULE`
+    uses the identical `1-AC-15`/`1-AC-28`/`1-AC-36` convention and
+    keyed only 1 of its real 4 rows (`AC-57`, the one row with no
+    prefix) before this fix.
 
-    A real, safe-looking fix exists and is worth recording precisely
-    rather than guessing at later: `rowKeyOf`'s room-finish branch
-    already solves the mirror-image shape (`QUALIFIED_KEY_RE`,
+    FIXED, for real, and verified against the actual corpus, not just
+    synthetic fixtures. `rowKeyOf`'s room-finish branch already solves
+    the mirror-image shape (`QUALIFIED_KEY_RE`,
     `[A-Z]{1,2}-\d{1,3}[A-Z]{0,2}`, a LETTER-building before a digit
     room number, e.g. `A-134`) by requiring the prefix be a building
     this sheet's own text already confirmed exists
     (`buildings?.has(q[1])` — the `buildings` Set, built from real
     `BUILDING n`/`BLDG n` text mentions via `buildingMentions`/
     `BUILDING_RE`, already threaded through as a parameter every
-    `rowKeyOf` call site passes). The equipment/finish branch could gain
-    the inverse: strip a leading `\d{1,2}-` prefix, require
-    `buildings?.has(prefix)`, then test `CODE_RE` against the REMAINDER
-    only — keeping the FULL original string (prefix included) as the
-    actual row key, since that is what is really drawn on the plan and
-    what any cross-reference elsewhere in the pipeline (installation
-    notes, symbol_sweep tag matching) needs to match against, not a
-    trimmed guess.
+    `rowKeyOf` call site). Extended the equipment/finish branch with the
+    inverse: strip a leading `\d{1,2}-` prefix, require
+    `buildings?.has(prefix)`, test `CODE_RE` against the REMAINDER only
+    — keeping the FULL original string (prefix included) as the actual
+    row key, since that is what is really drawn on the plan and what any
+    cross-reference elsewhere in the pipeline needs to match against.
 
-    STILL OPEN — deliberately NOT landed this session. Two real reasons,
-    not caution for its own sake: (1) unconfirmed whether `buildings`
-    actually contains `"1"` for this real St Louis sheet — if the set's
-    own text never literally prints "BUILDING 1" near this data, the
-    sketched fix above would be a correctly-designed no-op against the
-    very case it targets, and landing it blind risks exactly the kind
-    of unverified "fix" this project's own standing rule refuses; (2)
-    this is row-keying code shared by every equipment/finish table in
-    the ENTIRE corpus, not scoped to one table — the caching incident
-    (rule 10) already paid once for underestimating a shared-code
-    change's real blast radius, and this one is wider than that.  Real
-    next step, in order: confirm `buildings` for this real set (cheap —
-    already computed inside the graph `buildFromInputs` builds, just
-    needs reading back); if present, implement the sketch above behind
-    the SAME test discipline already used for CODE_RE and
-    `parentPhraseOver` this session (synthetic fixture, full
-    `sheetgraph.test.ts`, then a real cache-bypassed rebuild proving the
-    actual STEAM HEATING COIL SCHEDULE now keys and classifies
-    equipment-kind); if `buildings` does NOT contain it, the real fix is
-    different (a bare digit-prefix convention with no explicit
-    "BUILDING n" mention anywhere to validate against) and needs its own
-    fresh, evidence-first diagnosis, not a guess bolted onto this one.
+    Confirmed viable before writing a line of code, not assumed: real
+    document text search found `"BUILDING 1"` 158 times across
+    `05_MO_VA_StLouis_AHU_VAV_Replacement.pdf` (pdfplumber, independent
+    of the pipeline). Landed with the same discipline as every other fix
+    this session — synthetic-fixture regression test first (104/104
+    `sheetgraph.test.ts`, including a real refusal-control asserting an
+    UNCONFIRMED digit prefix must NOT be guessed at), then 272/272 across
+    the broader targeted suite — and THEN, only after both, a real
+    cache-bypassed rebuild (`OPENTAKEOFF_GRAPH_NO_CACHE=1`) against the
+    actual PDF, before/after compared, not assumed:
+
+    | Table | Before | After |
+    |---|---|---|
+    | `AIR HANDLING UNIT SCHEDULE` | `kind: equipment`, 1 row (`AC-57` only) | `kind: equipment`, **4** rows: `1-AC-15, 1-AC-28, 1-AC-36, AC-57` |
+    | `STEAM HEATING COIL SCHEDULE` | `kind: reference` (garbled fallback, see the THIRD finding above), 14 corrupted rows | `kind: equipment`, **12** correctly-keyed rows: `1-RH-1`..`1-RH-9`, `1-SHC-28`, `1-SHC-36`, `1-SHC-57` |
+
+    Both tables' real header sets are now rich and correct (MARK, TYPE,
+    LOCATION, SERVICE, SYSTEM, AIRFLOW, MAX FACE VELOCITY, MAX APD, EAT,
+    MAX LAT, TOTAL MIN CAPACITY, the full STEAM sub-tier, STEAM TRAP
+    MARK, COIL SIZE, NOTES on the steam table) — this is the SAME fix
+    that also resolved the earlier "reference"-kind fallback finding:
+    once every row keys, the equipment-kind vocabulary path qualifies on
+    its own merits and the table never falls through to the lower-
+    fidelity structural reader at all, exactly as this rule's own "real
+    next step" note predicted.
+
+    One minor, honest residue, not hidden: the STEAM TRAP MARK column's
+    real header now reads `"STEAM STEAM TRAP MARK"` — a doubled prefix
+    from a separate, pre-existing, unrelated system-name-prefixing
+    convention (applied to every column under a `STEAM`-titled table)
+    layering on top of this rule's own `parentPhraseOver`/
+    `phraseRunsInRow` fix, which already correctly names the column
+    `"STEAM TRAP MARK"` on its own. This is a label duplication only —
+    the real DATA under that column (`1-TP28-1` etc.) is present and
+    correctly keyed, confirmed by the real row count and keys above. Not
+    chased further this session (a different, unrelated code path, low
+    severity, cosmetic); real next step if picked up: find where a
+    STEAM-titled table's own column-naming applies its system prefix and
+    make it idempotent against a label that already starts with the same
+    word.
+
+    Row-keying is genuinely shared code across the whole corpus (rule
+    10's own caching lesson applies) — the real corpus rebuild above is
+    real evidence this fix is additive and safe for the one document it
+    was tested against, but the FULL 116-set prewarm (not yet run this
+    session — see rule 10/11's own state) is the real, broader
+    confirmation still owed before calling this corpus-wide-safe.
 
     <details><summary>Original 2026-09-02 diagnosis (kept for the
     record — wrong about WHERE the bug lives, not that a bug exists)</summary>
@@ -593,6 +617,37 @@ on this effort:**
     Laboratory: clean; ITD District 2: clean; Vermillion County Jail: real
     gap in the scan net, not the detector, see rule 14; SDSU: clean,
     genuinely incomplete SD-phase drawing).
+
+16. **OPEN, SCOPED, NOT STARTED, PRE-EXISTING (not caused by this
+    session's own work): finish-kind row keys don't include a real
+    mark drawn as several glyph-split, abutting text spans across
+    multiple hyphens.** Found while verifying rule 12's fix (below), NOT
+    part of that fix — confirmed via `git stash`/checkout against
+    commit `ee554e8` (before any of this rule's own changes touched
+    `sheetgraph.ts`) that this failure already existed. Real, already-
+    written test: `opentakeoff/web/test/equiptags.test.ts`, "extractTable:
+    finish-table row keys include joined multi-hyphen marks". Fixture:
+    a real glyph-split pump tag drawn as three abutting spans
+    (`"PCHWP"` w=25, `"-"` w=4 at a 1px gap, `"MT1"` w=15) and a
+    4-hyphen abbreviation stack similarly split — real drafting shapes
+    this project already has other, working glyph-fragment-joining
+    logic for elsewhere (`fragmentedTagOcc` et al. in symbolsweep.ts).
+    Expected: `extractTable(sheet, "finish")`'s row keys include the
+    JOINED marks (`"PCHWP-MT1"`, `"CV-CHW-BP-T"`), with the unjoined
+    fragments (`"PCHWP"`, `"CV"`) explicitly NOT keying a row. Actual:
+    the joined keys never appear. Confirmed NOT a `CODE_RE` problem —
+    `CODE_RE.test("PCHWP-MT1")` is `true` in isolation — the failure is
+    upstream, in whatever combines (or fails to combine) the raw
+    abutting spans into one cell string before `rowKeyOf` ever sees it.
+    Root cause not traced (out of scope for this rule's own
+    investigation — spawn_task timed out twice trying to queue this as
+    a separate task, same tool-side issue GOAL.md rule 11 already
+    recorded, written here instead so it isn't lost). Real next step:
+    trace where a table's own key-column spans get joined across a tight
+    gap (`bandDataRows`'s own cell-assembly path is the likely site,
+    parallel to the SAME session's own `splitOverflowWords`/`addOne`
+    logic already read this session) with a real debug trace against
+    this exact fixture, not a guess.
 
 ## Current execution policy (supersedes older worker references below)
 

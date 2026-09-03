@@ -3168,6 +3168,48 @@ test("findHeaderRow's ambiguous-duplicate-column path resolves a duplicate leaf 
   assert.equal(r1.cells["STEAM TRAP MARK"].text, "TP28-1", "the second MARK column's own real data must not be dropped or misrouted");
 });
 
+test("rowKeyOf accepts a real VA/GSA numbered-building prefix before an equipment mark, when the sheet's own text confirms the building (real bug: St Louis VA's own 1-RH-1/1-AC-15/1-SHC-28 tags)", () => {
+  // Real, found-live gap (2026-09-03), traced empirically (byte-identical
+  // pipeline output before/after a different fix proved this was the real
+  // blocker, not guessed): CODE_RE is letter-first by design — every
+  // alternative starts `[A-Z]` — so a real VA/GSA numbered-building prefix
+  // ("1-RH-1", "1-AC-15", "1-SHC-28") fails outright, table-wide, on EVERY
+  // row of a schedule using this real, common convention. Confirmed live:
+  // St Louis VA's own real AIR HANDLING UNIT SCHEDULE keyed only 1 of its
+  // real rows ("AC-57", no prefix) — every "1-AC-*" row silently dropped.
+  // Building "1" is confirmed real via buildingMentions (158 "BUILDING 1"
+  // hits across the real document) — the same discipline the room-finish
+  // branch already uses for its own mirror-image shape (a LETTER building
+  // before a digit room number) is extended here for a DIGIT building
+  // before a letter-starting equipment/finish code. The FULL printed mark
+  // (prefix included) is kept as the row's real key.
+  const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
+  const sched: SheetSpans = {
+    key: "bldg-prefix.pdf#1",
+    sheet_number: "MP101",
+    spans: [
+      sp("BUILDING 1 REHEAT COIL SCHEDULE", 100, 10),
+      sp("MARK", 0, 40), sp("TYPE", 180, 40), sp("GPM", 260, 40), sp("MANUFACTURER", 360, 40), sp("REMARKS", 760, 40),
+      sp("1-RH-1", 0, 70), sp("DUCT", 180, 70), sp("2.5", 260, 70), sp("TRANE", 360, 70), sp("1", 760, 70),
+      sp("1-RH-2", 0, 90), sp("DUCT", 180, 90), sp("3.1", 260, 90), sp("TRANE", 360, 90), sp("1", 760, 90),
+      sp("1-RH-3", 0, 110), sp("DUCT", 180, 110), sp("2.9", 260, 110), sp("TRANE", 360, 110), sp("1", 760, 110),
+    ],
+  };
+  const buildings = new Set(["1"]);
+  const withBuilding = extractAllTables(sched, "equipment", { buildings });
+  assert.equal(withBuilding.length, 1, `expected one table once building "1" is known: ${withBuilding.map((t) => t.title?.text).join(" | ")}`);
+  assert.deepEqual(withBuilding[0].rows.map((r) => r.key), ["1-RH-1", "1-RH-2", "1-RH-3"], "every building-prefixed mark must key its own row, full mark kept (prefix included)");
+  assert.equal(withBuilding[0].rows.find((r) => r.key === "1-RH-2")!.cells.GPM.text, "3.1");
+
+  // Without a confirmed building, the same digit prefix must NOT be
+  // guessed at — a bare leading digit is otherwise indistinguishable from
+  // a stray dimension/callout number, and this table's title alone must
+  // never be read as proof (the real discriminator is buildingMentions,
+  // not this).
+  const withoutBuilding = extractAllTables(sched, "equipment", {});
+  assert.equal(withoutBuilding.length, 0, "an unconfirmed digit prefix must not be guessed at — real refusal, not a fabricated key");
+});
+
 test("WP1.4 title hunt: SCHEDULED note prose must not steal the real title (Northport AIR INLETS shape)", () => {
   const sp = (str: string, x: number, y: number, h = 8): GraphSpan => ({ str, x, y, w: str.length * 5, h });
   const sched: SheetSpans = {
