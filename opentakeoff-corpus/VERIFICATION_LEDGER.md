@@ -21,6 +21,7 @@ confirmed correct behavior on a real artifact).
 | 013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29 | verified-open | 17 |
 | 028_TX_Renovation_of_Building_615_Final_Design_Plans | verified-open | 18 |
 | 01_NY_VA_Northport_Dialysis_100CD | verified-open | 14 |
+| 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations | verified-open | 19 |
 
 All other set_ids in `takeoffs/cross-set-compile/*.compile.json` are
 `pending` — not yet individually cell-by-cell verified this effort. Update

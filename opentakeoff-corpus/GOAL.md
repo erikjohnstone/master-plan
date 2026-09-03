@@ -833,6 +833,70 @@ on this effort:**
     outlier, keep the per-set loop moving" discipline — revisit if a
     second corpus set shows the same 2-up side-by-side-schedule shape.
 
+19. **FIXED 2026-09-03: 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations's own
+    VARIABLE AIR VOLUME TERMINAL BOX (25 real rows, sheet #46) had a garbled,
+    duplicate "reference"-kind ghost sitting right alongside it in
+    `graph.tables`, unlabeled and undisclosed.**
+
+    Found doing genuinely verified per-set work (first set picked up under
+    the real mandate's own per-set loop, tracked in the new
+    `VERIFICATION_LEDGER.md`). `graph.tables` carried a
+    `[reference] "(no title)" — 25 rows` entry alongside the real, correctly
+    titled `[equipment] "VARIABLE AIR VOLUME TERMINAL BOX" — 25 rows` on the
+    SAME sheet — same real row count, headers a garbled fragment of a real
+    GENERAL NOTES sentence ("ABBREVIATIONS AND NOTES.") glued onto real
+    column captions ("DESIGN OA", "FAN AIRFLOW", …), rows keyed by stray
+    numeric fragments instead of real VAV marks. Confirmed against the real
+    page (pdfplumber render): only ONE real VAV table exists there — this
+    was a genuine duplicate extraction of the same physical table, not a
+    second real table.
+
+    Root cause, confirmed via `region` dumps of both fragments: a
+    "reference"-kind (vocabulary-free structural) scan independently
+    re-read the SAME physical table region, picking up a nearby GENERAL
+    NOTES span as a phantom rightmost header column — which pulled its own
+    bbox's right edge 412px past the real, correctly-extracted equipment
+    table's own right edge. The existing region-containment dedup pass
+    (pass 1c in `buildSheetGraph`, itself added for an earlier real
+    duplicate-extraction bug) only collapses a "reference" fragment whose
+    region is ≥98% contained within an already-kept real table's own — this
+    one measured only 86.6% contained, so it survived untouched.
+
+    Fix: an ADDITIONAL, narrowly-scoped signal in the same dedup pass — a
+    "reference" fragment with an EXACT row-count match to a same-sheet
+    non-reference claimer, combined with a lower (70%, not 98%) containment
+    bar, is also collapsed. Two genuinely independent real tables sharing
+    both an exact row count AND 70%+ of their own bbox area on one sheet is
+    not a coincidence a real MEP sheet produces; row count is a signal the
+    existing 98%-bar check has no access to. Scoped to `rows.length > 0` so
+    it never fires on two unrelated 0-row tables.
+
+    Verified against the real document (not just green tests): rebuilt
+    001_NC_FY20_P_228_ATC_Tower_and_Air_Operations fresh before and after
+    the fix — diffed the full 84-table list, and exactly one line changed:
+    the garbled `(no title)` duplicate is gone, nothing else on any other
+    sheet moved. 106/106 `sheetgraph.test.ts` clean, no regression.
+
+    A from-scratch synthetic unit fixture for this exact interaction was
+    attempted and abandoned after several tries: constructing two
+    independently-extracting fragments (one equipment-kind, one
+    reference-kind) that overlap by a controlled 70-98% turned out to
+    fight the pipeline's own (correct) safeguards — a "reference" scan
+    naturally refuses to fire at all over a region a vocabulary pass
+    already claims cleanly (`alreadyVocab`), and a synthetic equipment
+    table with few, widely-spaced anchors sweeps ANY nearby span into its
+    own row scan as "unmodeled column bleed" rather than leaving it for a
+    separate reference read to find — both real, existing, working
+    behaviors this test would have needed to defeat non-representatively.
+    Regression protection for this fix rests on the real-corpus before/after
+    diff above (exact, minimal, confirmed) plus the full existing suite
+    (106/106, unchanged) — not a synthetic fixture. Still open: the SAME
+    sheet's own "VIBRATION ISOLATION SCHEDULE" (0-row phantom with
+    unrelated ESP/MARK/TYPE/NOTES headers, sitting beside the correct
+    11-row extraction) is a DIFFERENT real bug on this same sheet, not
+    covered by this fix (0-row fragments are deliberately excluded from
+    the new check) — deferred to a future pass on this same set.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is

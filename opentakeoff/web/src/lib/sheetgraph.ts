@@ -7096,6 +7096,28 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
       for (const t of group) {
         if (t.kind !== "reference" || drop.has(t)) continue;
         if (realClaimers.some((c) => contains(c.region, t.region))) { drop.add(t); continue; }
+        // A reference fragment whose own row COUNT exactly matches a real
+        // claimer's on the SAME sheet, and whose region substantially (not
+        // near-totally) overlaps that claimer's, is real, corpus-found live
+        // (001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#46's own real
+        // VARIABLE AIR VOLUME TERMINAL BOX, 25 rows): a "reference"-kind
+        // read of the SAME physical table picks up a stray GENERAL NOTES
+        // span ("ABBREVIATIONS AND NOTES.") as a phantom rightmost header
+        // column, which pulls its own bbox's right edge past the real
+        // table's own — measured live, only 86.6% contained, short of the
+        // 98% bar just above, so it survived as a garbled, column-
+        // misaligned duplicate of a table already correctly extracted under
+        // "equipment". Two genuinely independent real tables sharing BOTH
+        // an exact row count AND 70%+ of their own bbox area on one sheet is
+        // not a coincidence a real MEP sheet produces — row count is a
+        // strong, narrow signal the 98%-bar check above has no access to,
+        // so this stays scoped to an exact row-count match (`t.rows.length
+        // > 0` — a 0-row fragment matching another 0-row table proves
+        // nothing) rather than a general loosening of the containment bar.
+        if (
+          t.rows.length > 0 &&
+          realClaimers.some((c) => c.rows.length === t.rows.length && contains(c.region, t.region, 0.3))
+        ) { drop.add(t); continue; }
         // A DROPPED named table's own region is held to a looser bar here
         // (10%, not 2%) than an already-extracted, kept table's region —
         // real, measured live: itd-d1-lab-mechanical.pdf#28's own dropped
