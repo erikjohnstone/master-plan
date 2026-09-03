@@ -1826,10 +1826,10 @@ on this effort:**
     dollar-significant real HVAC scope item, and this same 3-schedule-
     plus-title-block page shape is plausibly common corpus-wide.
 
-33. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: a real page with 4
-    dense, adjacent HVAC schedules loses 2 of them entirely and MERGES
-    two real, distinct rows of a 3rd into one garbled row — 15 real
-    VRV indoor units collapse to 1.**
+33. **PARTIALLY FIXED 2026-09-03: a real page with 4 dense, adjacent
+    HVAC schedules loses 2 of them entirely and MERGES two real,
+    distinct rows of a 3rd into one garbled row — 15 real VRV indoor
+    units collapse to 1.**
 
     Found doing genuinely verified per-set work on
     036_LA_VA_Project_502_21_222_EHRM_Infrastructure.pdf#63 — this
@@ -1867,22 +1867,67 @@ on this effort:**
     merged-DATA-CELL shape `bandDataRows` already documents handling at
     the column level, but here manifesting across an entire ROW.
 
-    NOT STARTED — same reasoning as rules 29/30/32: this is a real,
-    severe, high-value finding (15 real VRV indoor units — genuinely
-    common, dollar-significant HVAC scope — collapsed to 1 merged row)
-    on shared, foundational row/table-detection code, and a same-tick
-    fix risks the same class of regression this file has already
-    recorded (rules 29/30's own precedent). Real next step: a debug
-    trace of why 4 real, densely-packed schedules on one page/section
-    only ever produce 2 table objects, and why the VRV Indoor Unit
-    table's own row-scan glued its first two real rows together instead
-    of treating them as separate rows or dropping the second cleanly.
-    Also flags a corpus-wide process note: this set's own `compile.json`
-    `[ZERO]` label was itself wrong (real content exists) — the
-    `[WEAK]`/`[ZERO]` labels already used to prioritize sets earlier
-    this session should not be trusted as ground truth without a real
-    per-set build (this file's own experience this session: 032, 033,
-    and now 036 all had wrong or stale `[WEAK]`/`[ZERO]` labels).
+    The MERGED-ROW half is FIXED. Root cause, confirmed by a direct
+    debug trace (not guessed): the merge happens in the VECTOR path
+    (`bandDataRows`, not `scheduleTableFromODL`) — `clusterRows` grouped
+    two real physical rows' own spans into one Y-band, so every cell's
+    text concatenated both real rows' values, space-joined
+    (`"07-B-EU-1 07-1-EU-1"`, `"TR 017 TR 1A-184A"`,
+    `"27,335 27,335"`). Deliberately did NOT touch `clusterRows` itself
+    (shared, foundational, used by every table in the corpus — the same
+    regression risk this file has already recorded once). Instead added
+    `splitMergedRows` (`sheetgraph.ts`), a small, pure, ADDITIVE post-
+    process in the same family as rule 31's `resolveKeyCollisions`: for
+    each row, find the cell whose text starts with `row.key`, and check
+    whether its own words divide evenly into 2+ groups that EACH
+    independently resolve via `rowKeyOf` to a DIFFERENT valid mark (the
+    same "every piece independently answers `rowKeyOf`" bar the real
+    "&"/comma compound-key mechanisms already trust) — if so, and ONLY
+    if EVERY OTHER cell in the row also divides evenly by that same
+    count, unwind the one row into N real rows. A row failing either
+    check is left completely untouched.
+
+    While debugging this, found and fixed a SEPARATE, narrower
+    `rowKeyOf` gap the split couldn't recover from on its own: a real
+    THREE-level compound tag (building "07", floor/zone "1", equipment
+    "EU-1", printed `"07-1-EU-1"`) failed the existing VA/GSA building-
+    prefix mechanism (2026-09-03, St Louis VA's own fix, above) outright
+    — that mechanism only recognizes a two-level "building-EQUIPMENT"
+    shape (digit(s), hyphen, then a LETTER); a bare digit floor/zone
+    segment between the building and the real equipment code is the
+    SAME "digit immediately before a letter" gap class rule 34's own
+    `CODE_RE` fix closed once already, just at a different position in
+    this same mark. Fixed with a second, narrowly-scoped hyphen pattern
+    (`bmFloor`) requiring the SAME confirmed-building check as the
+    original — never a bare, unconfirmed digit. Also found and fixed a
+    related normalization gap while verifying: this real document's own
+    drawing index reads "BUILDING 9", never "BUILDING 09", yet the real
+    per-unit tags on the same sheet are zero-padded ("09-1-EU-1") —
+    `isConfirmedBuilding` now checks both padded and unpadded forms.
+
+    Verified against the real corpus before shipping: VRV- INDOOR UNIT
+    SCHEDULE now shows all 15 real rows (was 1), exact match to real
+    ground truth. DUCTLESS SPLIT SYSTEM SCHEDULE — previously entirely
+    absent — now recovers 30 real rows across 9 different real
+    buildings (`01`-`07`, `8`, `13`-`16`, `45`, `46`, `49`), the SAME
+    3-level tag shape appearing throughout. Full `sheetgraph.test.ts`
+    (111/111) plus the corpus-wide regression suites pass; sets 038 and
+    032's own earlier fixes re-verified byte-identical, zero regression.
+
+    STILL OPEN: VRV- AIR-COOLED CONDENSING UNIT SCHEDULE remains
+    entirely absent — checked directly, its own real header is 9+
+    physical lines deep (`ELECTRICAL` → `COOLING CAPACITY`/`HEATING
+    CAPACITY`/`CONNECTION`/`EFFICIENCY` → ...), matching rule 30's
+    already-documented deep-header-tier limitation, not this session's
+    row-merge/building-prefix mechanism — left for that rule's own
+    future pass, not re-attempted here. COMPUTER ROOM AIR CONDITIONING's
+    own scrambled INDOOR/OUTDOOR column-group cell (unrelated mechanism,
+    a real column-attribution mixup, not a row merge) also remains open.
+    Also flags a corpus-wide process note, still true: this set's own
+    `compile.json` `[ZERO]` label was itself wrong (real content
+    exists) — the `[WEAK]`/`[ZERO]` labels used to prioritize sets
+    earlier this session should never be trusted without a real
+    per-set build (032, 033, and 036 all had wrong or stale labels).
 
 34. **FIXED 2026-09-03: `CODE_RE` rejected a real "floor digit(s) +
     area letter + room digit(s)" equipment mark shape (e.g. "1A137"),

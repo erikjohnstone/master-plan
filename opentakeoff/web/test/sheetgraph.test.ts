@@ -10,7 +10,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, type GraphSpan, type SheetSpans, type SheetGraph, type TableBound, type ScheduleTable, type TableRow } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, type GraphSpan, type SheetSpans, type SheetGraph, type TableBound, type ScheduleTable, type TableRow } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
@@ -3442,6 +3442,87 @@ test("resolveKeyCollisions composes a real split TYPE+NUMBER tag into an answera
     row("X", { MARK: "X", MANUFACTURER: "CARRIER" }),
   ];
   assert.deepEqual(resolveKeyCollisions(noCandidate).map((r) => r.key), ["X", "X"], "no identifier-named column to differentiate on — left alone, never guessed at");
+});
+
+test("splitMergedRows unwinds two real rows clustered into one, and rowKeyOf accepts a real 3-level building-floor-equipment tag (real bug: 036_LA_VA_Project_502_21_222's own VRV- INDOOR UNIT SCHEDULE and DUCTLESS SPLIT SYSTEM SCHEDULE)", () => {
+  // Real, found-live gap (2026-09-03): a dense real page clustered TWO
+  // real physical rows into one `clusterRows` Y-band — every cell's own
+  // text then concatenated both real rows' values, space-joined
+  // ("07-B-EU-1 07-1-EU-1", "TR 017 TR 1A-184A", "27,335 27,335"). Real
+  // ground truth: 15 real distinct VRV indoor units on this one table;
+  // only 1 merged row ever appeared before this fix.
+  const cell = (text: string): { text: string; bbox: [number, number, number, number] } => ({ text, bbox: [0, 0, 0, 0] });
+  const row = (key: string, cells: Record<string, string>): TableRow => ({
+    key, sheet: "set.pdf#63", cells: Object.fromEntries(Object.entries(cells).map(([k, v]) => [k, cell(v)])),
+  });
+  const buildings = new Set(["07"]);
+  const merged: TableRow[] = [
+    row("07-B-EU-1", {
+      TAG: "07-B-EU-1 07-1-EU-1",
+      ROOM: "TR 017 TR 1A-184A",
+      TYPE: "Wall Mounted Unit Wall Mounted Unit",
+      "HEATING CAPACITY TOTAL": "27,335 27,335",
+      AMPS: "0.6 0.6",
+    }),
+  ];
+  const split = splitMergedRows(merged, "equipment", buildings, false);
+  assert.deepEqual(split.map((r) => r.key), ["07-B-EU-1", "07-1-EU-1"], "two real, distinct rows must be recovered, not left glued together");
+  assert.equal(split[0].cells.ROOM.text, "TR 017", "each recovered row's own cells must carry only its own real value");
+  assert.equal(split[1].cells.ROOM.text, "TR 1A-184A");
+  assert.equal(split[0].cells.AMPS.text, "0.6");
+  assert.equal(split[1].cells.AMPS.text, "0.6");
+
+  // An ordinary, unmerged row (any real single-mark row) must never be
+  // split — the double-agreement bar (every word-group independently
+  // answers rowKeyOf AND every other cell divides evenly by the same
+  // count) is specific enough that a real MANUFACTURER/REMARKS cell with
+  // an unrelated even word count must not trip it.
+  const ordinary: TableRow[] = [
+    row("EF-1", { TAG: "EF-1", MANUFACTURER: "GREENHECK MODEL", CFM: "1200" }),
+  ];
+  assert.deepEqual(splitMergedRows(ordinary, "equipment", buildings, false).map((r) => r.key), ["EF-1"], "an ordinary single-mark row must never be split");
+
+  // A row whose OTHER cells don't divide evenly by the same count found
+  // in the identity cell must be left completely untouched — never a
+  // partial/guessed split.
+  const uneven: TableRow[] = [
+    row("07-B-EU-1", { TAG: "07-B-EU-1 07-1-EU-1", REMARKS: "ONE SHARED NOTE" }),
+  ];
+  assert.deepEqual(splitMergedRows(uneven, "equipment", buildings, false).map((r) => r.key), ["07-B-EU-1"], "an uneven cell (REMARKS: 3 words, not divisible by 2) must refuse the whole split");
+
+  // rowKeyOf's own real 3-level building-floor-equipment gap this fix
+  // also closes: 036's own DUCTLESS SPLIT SYSTEM SCHEDULE uses the same
+  // shape ("07-1-DAC-1" — building 07, floor 1, equipment DAC-1) via
+  // extractTable directly, confirming the whole pipeline recovers it.
+  const sched: SheetSpans = {
+    key: "floor-tag.pdf#1", sheet_number: "M602",
+    spans: [
+      sp("DUCTLESS SPLIT SYSTEM SCHEDULE", 100, 10),
+      sp("MARK", 0, 40), sp("MANUFACTURER", 150, 40), sp("VOLTAGE", 350, 40), sp("PHASE", 500, 40),
+      sp("07-1-DAC-1", 0, 70), sp("SAMSUNG", 150, 70), sp("208", 350, 70), sp("1", 500, 70),
+      sp("07-1-DAC-2", 0, 90), sp("SAMSUNG", 150, 90), sp("208", 350, 90), sp("1", 500, 90),
+    ],
+  };
+  const tab = extractTable(sched, "equipment", { buildings })!;
+  assert.ok(tab, "the real vocabulary anchors are enough to clear the bar");
+  assert.deepEqual(tab.rows.map((r) => r.key), ["07-1-DAC-1", "07-1-DAC-2"], "the real 3-level building-floor-equipment tag must key its own row");
+
+  // The real "BUILDING 9" (not "09") drawing-index wording this fix also
+  // accepts — a confirmed building recorded either zero-padded or not
+  // must both resolve the same real, zero-padded per-unit tag.
+  const unpaddedBuildings = new Set(["9"]);
+  const paddedSched: SheetSpans = {
+    key: "floor-tag2.pdf#1", sheet_number: "M602",
+    spans: [
+      sp("DUCTLESS SPLIT SYSTEM SCHEDULE", 100, 10),
+      sp("MARK", 0, 40), sp("MANUFACTURER", 150, 40), sp("VOLTAGE", 350, 40), sp("PHASE", 500, 40),
+      sp("09-1-DAC-1", 0, 70), sp("SAMSUNG", 150, 70), sp("208", 350, 70), sp("1", 500, 70),
+      sp("09-2-DAC-1", 0, 90), sp("SAMSUNG", 150, 90), sp("208", 350, 90), sp("1", 500, 90),
+    ],
+  };
+  const paddedTab = extractTable(paddedSched, "equipment", { buildings: unpaddedBuildings })!;
+  assert.ok(paddedTab, "the real vocabulary anchors are enough to clear the bar");
+  assert.deepEqual(paddedTab.rows.map((r) => r.key), ["09-1-DAC-1", "09-2-DAC-1"], "a zero-padded tag must resolve against an unpadded confirmed building");
 });
 
 test("WP1.4 title hunt: SCHEDULED note prose must not steal the real title (Northport AIR INLETS shape)", () => {

@@ -3488,8 +3488,39 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
     // actually drawn on the plan and what any cross-reference elsewhere
     // (installation notes, symbol_sweep tag matching) needs to match
     // against, never a trimmed guess.
+    // A confirmed building can be recorded either zero-padded ("07") or
+    // not ("7") depending on how THAT sheet's own text happens to print
+    // it — real, found live (2026-09-03, same VRV- INDOOR UNIT SCHEDULE
+    // as the two comments below): this document's own drawing index reads
+    // "BUILDING 9", never "BUILDING 09", yet the real per-unit tags on
+    // this sheet are zero-padded ("09-1-EU-1"). Checking both forms is
+    // the ONLY change here — the building must still be a real, already-
+    // confirmed one either way, never a bare unconfirmed digit.
+    const isConfirmedBuilding = (b: string): boolean => !!buildings && (buildings.has(b) || buildings.has(b.replace(/^0+(?=\d)/, "")));
     const bm = key.match(/^(\d{1,2})-([A-Z].*)$/);
-    if (bm && buildings?.has(bm[1]) && CODE_RE.test(bm[2])) return { key, building: bm[1] };
+    if (bm && isConfirmedBuilding(bm[1]) && CODE_RE.test(bm[2])) return { key, building: bm[1] };
+    // Real, found-live gap (2026-09-03,
+    // 036_LA_VA_Project_502_21_222_EHRM_Infrastructure's own VRV- INDOOR
+    // UNIT SCHEDULE): a real THREE-level compound tag — building "07",
+    // floor/zone "1", equipment "EU-1" — printed as "07-1-EU-1". `bm`
+    // above only recognizes the two-level "building-EQUIPMENT" shape
+    // (digit(s), hyphen, then a LETTER); a bare digit floor/zone segment
+    // between the building and the real equipment code fails it outright
+    // (the same "digit immediately before a letter" gap class rule 34's
+    // own CODE_RE fix already closed once, at a different position in
+    // this same mark). Confirmed by direct trace against the real
+    // document: `rowKeyOf("07-1-EU-1", ...)` returned null while its real
+    // sibling `rowKeyOf("07-B-EU-1", ...)` (a LETTER floor/zone, "B")
+    // already worked fine via `bm` above.
+    // Scoped as narrowly as `bm` itself already is: the OUTER digit
+    // prefix must still name a confirmed real building (never a bare,
+    // unconfirmed digit — the same discipline `bm`'s own comment states),
+    // and the optional middle floor/zone segment is capped to 1-2 digits
+    // (matching the building segment's own cap) so this can never eat an
+    // ordinary multi-digit dimension/quantity number that happens to
+    // precede a real equipment code elsewhere.
+    const bmFloor = key.match(/^(\d{1,2})-(\d{1,2})-([A-Z].*)$/);
+    if (bmFloor && isConfirmedBuilding(bmFloor[1]) && CODE_RE.test(bmFloor[3])) return { key, building: bmFloor[1] };
     return null;
   }
   if (ROW_KEY_RE.test(key)) return { key };
@@ -3923,6 +3954,75 @@ export function promoteLeadingEngineeringUnits(headers: string[], rows: TableRow
 // REMARKS or a raw numeric column (CFM, TSP), never a header actually
 // naming an identifier ("NUMBER", "NO.", "TAG", "MARK", "ID"), so it never
 // clears this function's own header-name gate.
+// Real, found-live gap (2026-09-03,
+// 036_LA_VA_Project_502_21_222_EHRM_Infrastructure's own VRV- INDOOR UNIT
+// SCHEDULE): a real page densely packing 4 HVAC schedules can cluster TWO
+// real physical rows' own spans into ONE `clusterRows` Y-band — every
+// cell's own text then concatenates both real rows' values, space-joined
+// ("07-B-EU-1 07-1-EU-1", "TR 017 TR 1A-184A", "27,335 27,335"), and 13 of
+// the real table's 15 rows vanish with them (only the first 2 real rows
+// merge into this one; the rest never band at all — a separate, deeper
+// issue this fix does not address). Detected and reversed here, POST-hoc,
+// the same discipline as `resolveKeyCollisions` — never touches the row-
+// clustering/banding logic itself (deep, shared, high-blast-radius, and
+// this file already has a recorded precedent of a locally-plausible fix
+// there causing a wider regression) — only unwinds a row whose own cells
+// give strong, cross-checked evidence of being two real rows glued
+// together.
+// Scoped tightly against a real false-positive risk: a genuinely ordinary
+// row must never be split. The signal required is a DOUBLE agreement, not
+// one: (1) the row's own identity cell (whichever cell's text starts with
+// `row.key`) splits, word-group by word-group, into 2+ pieces that EACH
+// independently resolve via `rowKeyOf` to a DIFFERENT valid mark — a
+// coincidence essentially impossible for an ordinary single-mark cell,
+// the same "every piece independently answers `rowKeyOf`" bar the real
+// "&"/comma compound-key mechanisms already trust elsewhere in this file
+// — AND (2) EVERY OTHER cell's own word count divides evenly by that same
+// count, with no partial/uneven split anywhere in the row. A row failing
+// either check is left completely untouched, never partially guessed at.
+export function splitMergedRows(
+  rows: TableRow[], kind: "room-finish" | "finish" | "equipment", buildings: Set<string> | undefined, nameKeyed: boolean,
+): TableRow[] {
+  const out: TableRow[] = [];
+  for (const row of rows) {
+    const idHeader = Object.keys(row.cells).find((h) => row.cells[h].text.trim().startsWith(row.key));
+    const idWords = idHeader ? row.cells[idHeader].text.trim().split(/\s+/).filter(Boolean) : [];
+    let marks: string[] | null = null;
+    for (let n = 2; n <= idWords.length; n++) {
+      if (idWords.length % n !== 0) continue;
+      const size = idWords.length / n;
+      const candidates: string[] = [];
+      let ok = true;
+      for (let g = 0; g < n && ok; g++) {
+        const keyed = rowKeyOf(idWords.slice(g * size, (g + 1) * size).join(" "), kind, buildings, nameKeyed);
+        if (!keyed) { ok = false; break; }
+        candidates.push(keyed.key);
+      }
+      if (ok && new Set(candidates).size === n) { marks = candidates; break; }
+    }
+    if (!marks) { out.push(row); continue; }
+    const n = marks.length;
+    const groupsByHeader = new Map<string, string[][]>();
+    let allDivisible = true;
+    for (const [header, cell] of Object.entries(row.cells)) {
+      const words = cell.text.trim().split(/\s+/).filter(Boolean);
+      if (!words.length) { groupsByHeader.set(header, Array.from({ length: n }, () => [] as string[])); continue; }
+      if (words.length % n !== 0) { allDivisible = false; break; }
+      const size = words.length / n;
+      const groups: string[][] = [];
+      for (let g = 0; g < n; g++) groups.push(words.slice(g * size, (g + 1) * size));
+      groupsByHeader.set(header, groups);
+    }
+    if (!allDivisible) { out.push(row); continue; }
+    for (let g = 0; g < n; g++) {
+      const cells: Record<string, TableCell> = {};
+      for (const [header, cell] of Object.entries(row.cells)) cells[header] = { ...cell, text: groupsByHeader.get(header)![g].join(" ") };
+      out.push({ ...row, key: marks[g], cells });
+    }
+  }
+  return out;
+}
+
 const KEY_DIFFERENTIATOR_HEADER_RE = /\b(NUMBER|NO\.?|TAG|MARK|ID)\b/;
 export function resolveKeyCollisions(rows: TableRow[]): TableRow[] {
   const byKey = new Map<string, TableRow[]>();
@@ -4524,7 +4624,7 @@ function bandDataRows(
     }
     return true;
   });
-  return { out: resolveKeyCollisions(cleanOut), region };
+  return { out: resolveKeyCollisions(splitMergedRows(cleanOut, kind, buildings, nameKeyed)), region };
 }
 
 // A row that would itself qualify as SOME table's header — checked against
