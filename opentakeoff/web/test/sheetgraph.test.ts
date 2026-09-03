@@ -3248,6 +3248,46 @@ test("rowKeyOf accepts a real VA/GSA numbered-building prefix before an equipmen
   assert.equal(withoutBuilding.length, 0, "an unconfirmed digit prefix must not be guessed at — real refusal, not a fabricated key");
 });
 
+test("bandDataRows: a trailing 'NOTES:' caption is refused as a phantom row, not real data (real bug: 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling's own HEATING COIL SCHEDULE)", () => {
+  // Real, found-live gap (2026-09-03): "NOTES" passes CODE_RE's own generic
+  // 1-4-letters-plus-more-alnum shape, so a trailing "NOTES:" section
+  // caption below a real table reads as a plausible new row's own key —
+  // and every column ends up crediting that same literal "NOTES:" text.
+  // Real, corpus-found: three separate real tables on this one real sheet
+  // (HEATING COIL, STEAM TRAP-style, HUMIDIFIER schedules) each ended with
+  // this exact phantom row. Fixture mirrors the real shape: 2 genuine rows
+  // with real, DIFFERENT per-column data, then a trailing "NOTES:" token
+  // repeated under every column exactly the way the real page draws it.
+  const sched: SheetSpans = {
+    key: "notes-cap.pdf#1", sheet_number: "M12",
+    spans: [
+      sp("HEATING COIL SCHEDULE", 100, 10),
+      sp("MARK", 0, 40), sp("CFM", 150, 40), sp("MBH", 300, 40), sp("EAT", 450, 40),
+      sp("HC-A-1", 0, 70), sp("15,795", 150, 70), sp("912", 300, 70), sp("0", 450, 70),
+      sp("HC-A-2", 0, 90), sp("19,490", 150, 90), sp("1,119", 300, 90), sp("0", 450, 90),
+      sp("NOTES:", 0, 120), sp("NOTES:", 150, 120), sp("NOTES:", 300, 120), sp("NOTES:", 450, 120),
+    ],
+  };
+  const tab = extractTable(sched, "equipment")!;
+  assert.ok(tab, "the real table itself must still extract");
+  assert.deepEqual(tab.rows.map((r) => r.key), ["HC-A-1", "HC-A-2"], `the trailing NOTES: caption must never appear as a row: ${tab.rows.map((r) => r.key).join(", ")}`);
+
+  // A real row that legitimately repeats a short, non-caption value (e.g.
+  // "N/A") across several columns must NOT be caught by this — real
+  // regression this exact scoping (colon-suffixed labels only) fixes.
+  const naSched: SheetSpans = {
+    key: "na-repeat.pdf#1", sheet_number: "M13",
+    spans: [
+      sp("SPECIFICATION INDEX", 100, 10),
+      sp("NO", 0, 40), sp("NAME", 150, 40), sp("FLOOR", 300, 40), sp("BASE", 450, 40), sp("WALL", 600, 40),
+      sp("201", 0, 70), sp("SEE SPEC", 150, 70), sp("N/A", 300, 70), sp("N/A", 450, 70), sp("N/A", 600, 70),
+    ],
+  };
+  const naTab = extractTable(naSched, "room-finish")!;
+  assert.ok(naTab, "a real row repeating a legitimate short value must still extract");
+  assert.equal(naTab.rows.length, 1, "the real N/A row must not be dropped");
+});
+
 test("WP1.4 title hunt: SCHEDULED note prose must not steal the real title (Northport AIR INLETS shape)", () => {
   const sp = (str: string, x: number, y: number, h = 8): GraphSpan => ({ str, x, y, w: str.length * 5, h });
   const sched: SheetSpans = {

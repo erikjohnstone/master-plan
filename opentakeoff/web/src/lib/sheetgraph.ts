@@ -4410,7 +4410,33 @@ function bandDataRows(
       if (joined !== cell.text) row.cells[label] = { text: joined, bbox: cell.bbox };
     }
   }
-  return { out, region };
+  // A row whose own cell values are almost entirely the SAME repeated
+  // COLON-SUFFIXED LABEL text is not a real row of genuinely different
+  // per-column data — it is a single wide caption (a real "NOTES:" section
+  // header drawn below the table) that CODE_RE happily accepted as a
+  // plausible row key ("NOTES" passes CODE_RE's own generic 1-4-letters-
+  // plus-more-alnum shape, the same over-permissive shape rule 12 already
+  // special-cased once for digit-prefixed marks) — real, corpus-found live:
+  // 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf's own real
+  // HEATING COIL, STEAM TRAP, and HUMIDIFIER schedules each ended with a
+  // phantom last row keyed "NOTES", every one of its own cells reading the
+  // literal text "NOTES:". Scoped tightly to a trailing-colon shape (a real
+  // data VALUE essentially never ends with ":" — "N/A", "-", "ALL", a real
+  // repeated short value, none of them do) so a real row that legitimately
+  // repeats a short value across several columns (a real, corpus-found
+  // regression this exact scoping fixes: a real SPECIFICATION INDEX row
+  // reading "N/A" in three different columns) is never caught.
+  const cleanOut = out.filter((row) => {
+    const texts = Object.values(row.cells).map((c) => c.text.trim()).filter(Boolean);
+    if (texts.length < 3) return true;
+    const counts = new Map<string, number>();
+    for (const t of texts) counts.set(t, (counts.get(t) ?? 0) + 1);
+    for (const [text, count] of counts) {
+      if (count >= 3 && /:$/.test(text)) return false;
+    }
+    return true;
+  });
+  return { out: cleanOut, region };
 }
 
 // A row that would itself qualify as SOME table's header — checked against

@@ -1293,6 +1293,48 @@ on this effort:**
     the cleanest — a single, easily-isolated caption token) is the right
     starting point, before touching rules 21 or 23 individually.
 
+    **UPDATE, same day: a targeted `bandDataRows` fix was shipped for
+    the VECTOR pipeline (real, tested, kept) — but does NOT resolve
+    017's own specific instance, confirmed via debug trace to come
+    through the ODL/OCR sidecar path instead, not `bandDataRows` at
+    all.** Fix: a row whose own cell values are almost entirely the
+    SAME repeated COLON-SUFFIXED text (>=3 identical cells ending in
+    ":") is refused as a phantom caption row, not real data — scoped to
+    the colon-suffix shape specifically after a first, broader version
+    (any 3+ identical cells) caused a real regression on a legitimate
+    "N/A"-repeated row in the existing test suite, caught before
+    shipping. Regression test added (both the real NOTES-caption shape
+    and the N/A-repeat false-positive it must not catch). 107/107
+    clean.
+
+    Rebuilt 017 fresh to confirm — the phantom rows were STILL present.
+    Added temporary debug instrumentation directly inside
+    `bandDataRows`'s own filter (confirmed reverted after use, clean
+    106→107 rerun): it never fired at all for this document, meaning
+    `bandDataRows` never even sees a "NOTES" key row for these three
+    tables. Read `extractTableAt`'s own body end to end: nothing
+    modifies `out` between `bandDataRows`'s return and the final table
+    object — ruling out a post-hoc row addition in the vector path.
+    Corrected conclusion: these three specific "(no title)" tables are
+    real ODL/OCR-sidecar output (`scheduleTableFromODL`), NOT vector-
+    pipeline output — supported by their own real header text (verbose,
+    exact-drawn-text labels like "OUTLET BACK PRESSURE (PSIG)" with no
+    overlap in `EQUIPMENT_HEADERS`' own vocabulary, yet still classified
+    "equipment" kind, impossible via the vector reader's own vocab-gated
+    classification) and by one of the three carrying ODL's own known
+    `COL19`/`COL20` generic-column-fallback signature (already
+    documented as a genuine, accepted ODL limitation elsewhere in this
+    file, set 008's own findings).
+
+    The shipped `bandDataRows` fix is real and kept (protects the vector
+    path against this exact class of bug wherever it DOES occur there —
+    the rule 23 chiller/fan case remains vector-path and may still
+    benefit from a related, not-yet-designed fix). 017's own real
+    instance needs the EQUIVALENT filter added to
+    `scheduleTableFromODL`'s own row-construction instead (around its
+    `colLabel`/`odlCellText` handling) — NOT STARTED, real next step for
+    a future pass.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
