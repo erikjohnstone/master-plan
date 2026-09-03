@@ -895,7 +895,24 @@ on this effort:**
     unrelated ESP/MARK/TYPE/NOTES headers, sitting beside the correct
     11-row extraction) is a DIFFERENT real bug on this same sheet, not
     covered by this fix (0-row fragments are deliberately excluded from
-    the new check) — deferred to a future pass on this same set.
+    the new check). Root-caused (not yet fixed): confirmed via the real
+    page's own word coordinates that "ESP" comes from a totally unrelated
+    footnote 1400+ px to the LEFT — DEDICATED OUTDOOR AIR UNIT SCHEDULE's
+    own note "4. ESP INCLUDES 0.5 IN WG FOR MERV 8 & 0.7 IN WG FOR MERV 13
+    LOADING." — which happens to sit in the SAME y-band as the real
+    VIBRATION ISOLATION SCHEDULE's own header row (both ~y=1013-1032 on
+    the real page, in different page columns). The structural reference
+    reader's header-row scan is not bounded to a plausible column width —
+    it swept the ENTIRE page width at that y, mixed the stray "ESP" token
+    with a SUBSET of the real header ("MARK"/"TYPE"/"NOTES", dropping
+    "BASE"/"ISOLATOR"/"MINIMUM"/"DEFLECTION"), and produced a garbled,
+    0-row phantom. Lower severity than the fix above (no real data is
+    duplicated, since it has 0 rows) — pure noise in `graph.tables`, not a
+    quantity-accuracy risk. Deferred to a future pass on this same set,
+    per this session's "don't sink unlimited time in one outlier" — real
+    next step: bound the structural header-row scan's own width to
+    something tied to the candidate block's real column count/spacing,
+    not the full page.
 
 ## Current execution policy (supersedes older worker references below)
 
