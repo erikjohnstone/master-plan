@@ -8200,6 +8200,31 @@ export function scheduleTableFromODL(
       const bbox = srcCell ? odlBboxToProjectSpace(srcCell["bounding box"], pageViewportTransform) : odlBboxToProjectSpace(t["bounding box"], pageViewportTransform);
       cells[headers[c]] = { text: texts[c], bbox };
     }
+    // A row whose own cell values are almost entirely the SAME repeated
+    // colon-suffixed label is not a real row of genuinely different
+    // per-column data — it is a single wide caption (a "NOTES:" section
+    // header drawn below the table) that ODL's own grid happens to carve
+    // into one cell per column, and `rowKeyOf` happily accepts "NOTES" as
+    // a plausible row key the same way the geometric extractor's own
+    // `bandDataRows` did (see that fix's own comment, same file) — real,
+    // corpus-found live on TWO separate real documents this session
+    // (017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf and
+    // 018_GA_USDA_ARS_U_S_National_Poultry_Research_Center.pdf), each via
+    // THIS ODL path specifically, not the geometric one — confirmed by a
+    // debug trace showing the geometric fix's own filter never even saw
+    // these rows. Same tight scoping as that fix (>=3 identical cells,
+    // trailing colon only) for the same reason: a real data VALUE
+    // essentially never ends with ":".
+    {
+      const cellTexts = Object.values(cells).map((c) => c.text.trim()).filter(Boolean);
+      if (cellTexts.length >= 3) {
+        const counts = new Map<string, number>();
+        for (const t of cellTexts) counts.set(t, (counts.get(t) ?? 0) + 1);
+        let isCaption = false;
+        for (const [text, count] of counts) if (count >= 3 && /:$/.test(text)) { isCaption = true; break; }
+        if (isCaption) continue;
+      }
+    }
     rows.push({ key: keyRes.key, sheet: sheetKey, ...(keyRes.building ? { building: keyRes.building } : {}), cells });
   }
   if (!rows.length) return null;

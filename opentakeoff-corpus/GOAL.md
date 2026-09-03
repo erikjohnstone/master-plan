@@ -1335,6 +1335,45 @@ on this effort:**
     `colLabel`/`odlCellText` handling) — NOT STARTED, real next step for
     a future pass.
 
+    **RESOLVED, same day: the ODL-side fix was shipped and verified
+    against a SECOND real document (018_GA_USDA_ARS_U_S_National_
+    Poultry_Research_Center.pdf), confirming the ODL sidecar is
+    genuinely the recurring real source of this bug, not an isolated
+    017-only case.** Set 018's own real build (BEFORE any fix) showed
+    the identical phantom-NOTES-row shape across FOUR separate real
+    equipment tables (EXHAUST FAN, GRILLE/REGISTER/DIFFUSER, LOUVER,
+    and WATER SOURCE HEAT PUMP PART 2 OF 2 — this last one had
+    LITERALLY NOTHING but the phantom row, no real data at all). A
+    debug trace (added, used, cleanly reverted) confirmed — exactly as
+    with 017 — that `bandDataRows`'s own filter never even sees these
+    rows, and the earlier "real vocab overlap implies vector path"
+    heuristic was WRONG: ODL's own flattened header text can overlap
+    `EQUIPMENT_HEADERS` vocabulary just as easily as the vector reader's
+    own anchors can, so vocab overlap alone never distinguishes the two
+    paths — only a direct trace of which function's own row-scan
+    actually processes the row does.
+
+    Fix shipped directly in `scheduleTableFromODL`'s own row-
+    construction loop (`sheetgraph.ts`, right before `rows.push(...)`),
+    the exact real point ODL turns one ROW of its OWN GRID into a real
+    `TableRow` — same tight scoping as the vector-side fix (>=3 cells
+    holding the IDENTICAL colon-suffixed text). 107/107
+    `sheetgraph.test.ts` clean (no existing ODL-path unit tests exist in
+    this suite to model a synthetic fixture on, and building one from
+    scratch risked repeating the earlier fixture-engineering trap from
+    rule 21's own investigation — real corpus before/after evidence
+    across TWO documents is the regression protection here instead, the
+    same discipline already established for rule 19).
+
+    Verified against 018's real rebuild: every one of the four
+    contaminated tables lost EXACTLY one row (the phantom NOTES row,
+    confirmed via a clean diff of the full table list) and nothing else
+    moved; WATER SOURCE HEAT PUMP PART 2 OF 2 — which had ONLY the
+    phantom row — correctly disappeared entirely rather than surviving
+    as a bogus empty table, matching this function's own existing
+    `if (!rows.length) return null;` behavior. Both real corpus
+    instances of this bug (017 and 018) are now FIXED.
+
 ## Current execution policy (supersedes older worker references below)
 
 As explicitly directed on 2026-08-29 and reaffirmed 2026-09-02, this goal is
