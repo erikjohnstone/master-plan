@@ -7,6 +7,7 @@
  * CHANGELOG + reset to 0/5.
  */
 import { scheduleTitleMatches } from "./scheduleTitleMatch.mjs";
+import { scheduledQtyStatusFromRow } from "./schedulePlanReconcile.mjs";
 import { VALVES, ACTUATORS, DAMPERS } from "./hvacTaxonomy.ts";
 import { disciplineOfSheetNumber } from "./symbolsweep.ts";
 
@@ -816,12 +817,30 @@ function uniqueFamily(graph, {
         // Prefer UNIT MARK for building (valve marks often end in -CHW/-HHW).
         const bldg = buildingLetter(unitMark) || buildingLetter(one);
         const rowBbox = rowCellsBbox(row);
-        const tableBbox = Array.isArray(table.title?.bbox) && table.title.bbox.length === 4
+        // table_bbox_px is the SCHEDULE's own region — a ~200x20px title
+        // caption is not "the table" for a citation highlight to paint.
+        // title_bbox_px carries the caption separately for anyone who
+        // specifically wants it (unchanged meaning, just its own field now).
+        const tableBbox = Array.isArray(table.region) && table.region.length === 4 ? table.region : null;
+        const titleBbox = Array.isArray(table.title?.bbox) && table.title.bbox.length === 4
           ? table.title.bbox
-          : (Array.isArray(table.region) && table.region.length === 4 ? table.region : null);
+          : null;
+        // scheduled_qty/installed_qty/status/qty_kind are ADDITIVE — quantity
+        // stays exactly what it always was (one schedule row) so every scored
+        // key keeps reading the same field. scheduled_qty is the printed QTY
+        // cell when this table has one (the OTHER, real meaning of quantity);
+        // installed_qty/status stay null until a reconcile_schedule_plan pass
+        // merges plan-drawn counts onto this same tag — status here is a
+        // compile-time-only disclosure (not a ReconcileStatus value) and is
+        // superseded once that merge happens.
+        const qtyStatus = scheduledQtyStatusFromRow(row);
         items.push({
           tag: one,
           quantity: 1,
+          scheduled_qty: qtyStatus.qty,
+          installed_qty: null,
+          status: qtyStatus.refused ? "REFUSED_UNPARSEABLE_QTY" : null,
+          qty_kind: "scheduled",
           unit: "EA",
           sheet_id: table.sheet,
           table_title: title.replace(/\s+\d+\s+OF\s+\d+\s*$/i, "").trim(),
@@ -829,9 +848,11 @@ function uniqueFamily(graph, {
           // Whole schedule row for cite paints — not just the MARK cell.
           row_bbox_px: rowBbox || bbox || null,
           table_bbox_px: tableBbox,
+          title_bbox_px: titleBbox,
           description: description || null,
           building: bldg,
           cells,
+          ...(qtyStatus.refused ? { reason: qtyStatus.reason } : {}),
         });
       }
     }
@@ -1965,7 +1986,10 @@ export function compileHvacTakeoff(sessionOrSheets, graph) {
       empty_pages: pages.filter((p) => p.status.startsWith("empty")).length,
       pages,
     },
-    exclusions: HVAC_EXCLUSIONS,
+    // Valve/coil compiles already disclose the same architectural-sheet gap
+    // (control_valves ships CONTROL_DAMPER/FUME_HOOD_DAMPER too) — HVAC must
+    // carry it for the same categories, not report damper counts silently.
+    exclusions: [...HVAC_EXCLUSIONS, ...scopeExclusionsForGraph(graph)],
   };
 }
 
@@ -2007,23 +2031,33 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       if (pointExtras.trend) extras.trend += 1;
       if (pointExtras.wiring === "hardwired") extras.hardwired += 1;
       if (pointExtras.wiring === "soft") extras.soft += 1;
-      const tableBbox = Array.isArray(table.title?.bbox) && table.title.bbox.length === 4
+      // table_bbox_px is the SCHEDULE's own region, not its title caption —
+      // see the same fix's comment at uniqueFamily's item construction.
+      const tableBbox = Array.isArray(table.region) && table.region.length === 4 ? table.region : null;
+      const titleBbox = Array.isArray(table.title?.bbox) && table.title.bbox.length === 4
         ? table.title.bbox
-        : (Array.isArray(table.region) && table.region.length === 4 ? table.region : null);
+        : null;
+      const qtyStatus2 = scheduledQtyStatusFromRow(row);
       items.push({
         tag,
         quantity: 1,
+        scheduled_qty: qtyStatus2.qty,
+        installed_qty: null,
+        status: qtyStatus2.refused ? "REFUSED_UNPARSEABLE_QTY" : null,
+        qty_kind: "scheduled",
         unit: "EA",
         sheet_id: table.sheet,
         table_title: title,
         bbox_px: cellBbox(row, /^MARK/i) || row.identity?.bbox || null,
         table_bbox_px: tableBbox,
+        title_bbox_px: titleBbox,
         description: description || cellText(row, /DESCRIPTION/i) || null,
         cells,
         alarm: pointExtras.alarm,
         trend: pointExtras.trend,
         wiring: pointExtras.wiring,
         served_equipment: servedEquipment,
+        ...(qtyStatus2.refused ? { reason: qtyStatus2.reason } : {}),
       });
     }
     // Empty after header skip → title-only schematic; disclose via exclusions, do not count.
@@ -2118,7 +2152,7 @@ export function compileBasTakeoff(sessionOrSheets, graph) {
       empty_pages: pages.filter((p) => p.status.startsWith("empty")).length,
       pages,
     },
-    exclusions: BAS_EXCLUSIONS,
+    exclusions: [...BAS_EXCLUSIONS, ...scopeExclusionsForGraph(graph)],
   };
 }
 
@@ -2514,11 +2548,19 @@ export function compileEmbeddedCoilGaps(sessionOrSheets, graph) {
         // (has_scheduled_valve: false) surface as takeoff items; a
         // corroborated coil is already represented by its own scheduled
         // valve row and would double-count if it appeared here too.
+        // No real schedule row backs a gap (it is an INFERRED absence, one
+        // per coil instance) — scheduled_qty is always exactly 1 by
+        // construction here, not read off a QTY column; still additive
+        // alongside the unchanged quantity field.
         items: gaps.map((g) => ({
           tag: g.tag || `${g.coilLabel}@${g.sheet}`,
           sheet_id: g.sheet,
           table_title: g.source_table_title,
           quantity: 1,
+          scheduled_qty: 1,
+          installed_qty: null,
+          status: null,
+          qty_kind: "scheduled",
           unit: "EA",
           description: `Embedded ${g.coilLabel} — GPM ${g.gpm}${g.ewt ? `, EWT ${g.ewt}` : ""}${g.lwt ? `, LWT ${g.lwt}` : ""} — no matching scheduled valve found`,
           cells: {
@@ -2600,13 +2642,17 @@ export function takeoffWorkbookSheets(takeoff, { interrogationLog = null } = {})
         if (aa !== bb) return aa - bb;
         return String(a).localeCompare(String(b));
       });
-      const rows = [["tag", "description", "qty", "unit", "building", "sheet_id", "table_title", ...attrKeys, "bbox_px"]];
+      const rows = [["tag", "description", "qty", "unit", "scheduled_qty", "installed_qty", "status", "qty_kind", "building", "sheet_id", "table_title", ...attrKeys, "bbox_px"]];
       for (const item of cat.items || []) {
         rows.push([
           item.tag,
           item.description || "",
           item.quantity,
           item.unit,
+          item.scheduled_qty ?? "",
+          item.installed_qty ?? "",
+          item.status ?? "",
+          item.qty_kind ?? "",
           item.building || "",
           item.sheet_id,
           item.table_title,
@@ -2643,7 +2689,7 @@ export function takeoffWorkbookSheets(takeoff, { interrogationLog = null } = {})
         }
       }
       attrKeys.sort((a, b) => String(a).localeCompare(String(b)));
-      const rows = [["tag", "point_type", "description", "qty", "unit", "sheet_id", "table_title", ...attrKeys, "bbox_px"]];
+      const rows = [["tag", "point_type", "description", "qty", "unit", "scheduled_qty", "installed_qty", "status", "qty_kind", "sheet_id", "table_title", ...attrKeys, "bbox_px"]];
       for (const item of list.items || []) {
         const pt = String(item.tag || "").toUpperCase().match(/^(AI|AO|BI|BO)/)?.[1] || "";
         rows.push([
@@ -2652,6 +2698,10 @@ export function takeoffWorkbookSheets(takeoff, { interrogationLog = null } = {})
           item.description || "",
           item.quantity,
           item.unit,
+          item.scheduled_qty ?? "",
+          item.installed_qty ?? "",
+          item.status ?? "",
+          item.qty_kind ?? "",
           item.sheet_id,
           item.table_title,
           ...attrKeys.map((k) => {
@@ -2666,6 +2716,41 @@ export function takeoffWorkbookSheets(takeoff, { interrogationLog = null } = {})
       const short = String(list.title).replace(/\s+/g, " ").slice(0, 28);
       sheets.push({ name: short, rows });
     }
+  } else if (takeoff.kind === "embedded_coil_valve_gaps") {
+    const items = takeoff.categories?.embedded_coil_gaps?.items || [];
+    const rollup = [
+      ["tag", "sheet_id", "table_title", "qty", "unit", "scheduled_qty", "installed_qty", "status", "qty_kind", "description"],
+      ...items.map((item) => [
+        item.tag, item.sheet_id, item.table_title, item.quantity, item.unit,
+        item.scheduled_qty ?? "", item.installed_qty ?? "", item.status ?? "", item.qty_kind ?? "",
+        item.description || "",
+      ]),
+    ];
+    sheets.push({ name: "ROLLUP", rows: rollup });
+    const attrKeys = [];
+    const seenAttr = new Set();
+    for (const item of items) {
+      for (const k of Object.keys(item.cells || {})) {
+        const nk = String(k).toUpperCase();
+        if (seenAttr.has(nk)) continue;
+        seenAttr.add(nk);
+        attrKeys.push(k);
+      }
+    }
+    attrKeys.sort((a, b) => String(a).localeCompare(String(b)));
+    const rows = [["tag", "sheet_id", "table_title", ...attrKeys]];
+    for (const item of items) {
+      rows.push([
+        item.tag, item.sheet_id, item.table_title,
+        ...attrKeys.map((k) => {
+          const c = item.cells?.[k];
+          if (c == null) return "";
+          if (typeof c === "object") return c.text ?? "";
+          return c;
+        }),
+      ]);
+    }
+    sheets.push({ name: "EMBEDDED_COIL_GAPS", rows });
   } else if (takeoff.kind === "sequences") {
     const list = takeoff.categories?.sequences?.list || [];
     const rollup = [

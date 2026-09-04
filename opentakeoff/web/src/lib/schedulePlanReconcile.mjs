@@ -91,14 +91,46 @@ export function classifyBasServedSweepOutcome({ result = null, error = null } = 
   };
 }
 
-function scheduledQtyFromRow(row) {
+/**
+ * Read a printed QTY/QUANTITY/NO./COUNT/# cell off a schedule row — the
+ * scheduled quantity a printed table actually states, as opposed to "one
+ * schedule row exists" — plus whether that reading is a genuine refusal
+ * (the column exists but its cell will not parse as a positive integer) as
+ * distinct from the column being genuinely absent (no such row exists to be
+ * ambiguous about). "1" is returned either way for callers that only want a
+ * number; `refused`/`reason` let a caller disclose the difference instead of
+ * silently guessing on a printed-but-unparseable cell.
+ *
+ * Tolerates BOTH real row shapes in this codebase: a sheetgraph.ts TableRow's
+ * `cells` (`{ header: { text, bbox } }`) and a mcp/src/takeoff.ts TakeoffItem's
+ * `schedule_row` (`{ header: string }`, flat text, no bbox) — a cell entry is
+ * read as `cell.text` when it's an object, else as the entry itself.
+ * @param {{ cells?: Record<string, { text?: string } | string> }} row
+ * @returns {{ qty: number, refused: boolean, reason: string|null }}
+ */
+export function scheduledQtyStatusFromRow(row) {
   for (const [header, cell] of Object.entries(row?.cells || {})) {
-    if (/^(QTY|QUANTITY|NO\.|COUNT|#)$/i.test(String(header || "").trim())) {
-      const n = parseInt(String(cell?.text || "").trim(), 10);
-      if (Number.isFinite(n) && n > 0) return n;
-    }
+    if (!/^(QTY|QUANTITY|NO\.|COUNT|#)$/i.test(String(header || "").trim())) continue;
+    const text = cell && typeof cell === "object" ? cell.text : cell;
+    const raw = String(text || "").trim();
+    if (!raw) continue; // blank cell under a QTY header — no printed value to refuse on
+    const n = parseInt(raw, 10);
+    if (Number.isFinite(n) && n > 0) return { qty: n, refused: false, reason: null };
+    return { qty: 1, refused: true, reason: `QTY column present but unparseable ("${raw}")` };
   }
-  return 1;
+  return { qty: 1, refused: false, reason: null };
+}
+
+/**
+ * Bare-number convenience over {@link scheduledQtyStatusFromRow} for the two
+ * existing reconcile producers, which have no status/reason column to carry
+ * a refusal disclosure — exported so corpusTakeoff.mjs's compile path reads
+ * the SAME quantity reconcile does, two producers, one meaning, never two.
+ * @param {{ cells?: Record<string, { text?: string } | string> }} row
+ * @returns {number}
+ */
+export function scheduledQtyFromRow(row) {
+  return scheduledQtyStatusFromRow(row).qty;
 }
 
 function rowIdentityTag(row, identityHeaderRe = null) {
@@ -181,7 +213,12 @@ export function reconcileRowsFromTakeoffItems(items, failures = []) {
     if (f?.tag) failByTag.set(f.tag, f);
   }
   return (items || []).map((item) => {
-    const scheduledQty = 1;
+    // item.schedule_row is TakeoffItem's raw extracted cell data (flat
+    // { header: string }, mcp/src/takeoff.ts:75) when the item came from a
+    // real schedule row — read its printed QTY cell exactly like the compile
+    // path does; a synthesized/legend-only item with no backing row still
+    // defaults to 1 (one row = one unit), unchanged.
+    const scheduledQty = item.schedule_row ? scheduledQtyFromRow({ cells: item.schedule_row }) : 1;
     const installedQty = item.status === "resolved" ? (item.quantity ?? 0) : 0;
     const fail = failByTag.get(item.tag);
     const status = classifyReconcileStatus({
@@ -245,7 +282,9 @@ export function summarizeReconcile(rows) {
  * Schedule-side reconcile scaffold from extracted graph tables (no plan sweep).
  * Used when sweeps are supplied separately via sweepByTag map.
  * @param {object} graph sheet graph
- * @param {{ label?: string, title?: string, titleRe?: RegExp, exclude?: RegExp }} needle
+ * @param {{ label?: string, title?: string, titleRe?: RegExp, exclude?: RegExp,
+ *   keyRe?: RegExp, blankKeyRe?: RegExp, altTitleRe?: RegExp, altKeyRe?: RegExp,
+ *   identityHeaderRe?: RegExp, titledOnly?: boolean }} needle
  * @param {Map<string, { installedQty?: number, itemStatus?: string, reason?: string, failureType?: string, planCites?: object[] }>} [sweepByTag]
  */
 export function reconcileScheduleFamilyFromGraph(graph, needle, sweepByTag = new Map()) {

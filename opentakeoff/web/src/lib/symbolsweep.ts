@@ -2011,8 +2011,11 @@ export function classifySweepMatches(
 // caller and layers.ts's DISCIPLINES table already trust — extracted here so
 // both the corroborator gate and the redundant-view collapse share one read,
 // never two that could silently drift.
-export function disciplineOfSheetNumber(sheetNumber: string | null | undefined): string | null {
-  const m = /^[A-Z]{1,3}/.exec((sheetNumber || "").trim().toUpperCase());
+export function disciplineOfSheetNumber(sheetNumber: string | number | null | undefined): string | null {
+  // Some sheet-number fixtures/graphs carry a bare numeric page ordinal
+  // rather than a printed discipline-prefixed designation ("M101") — a
+  // number has no discipline prefix to find, never a crash to throw.
+  const m = /^[A-Z]{1,3}/.exec(String(sheetNumber ?? "").trim().toUpperCase());
   return m ? m[0] : null;
 }
 
