@@ -1055,7 +1055,8 @@ on this effort:**
     something tied to the candidate block's real column count/spacing,
     not the full page.
 
-20. **(a)/(b)/(d) OPEN, (c) FIXED 2026-09-04: 004_MO_T2504_03's own real GAS WATER
+20. **(b)/(c)/(d) FIXED, (a) PARTIALLY FIXED 2026-09-04 (commits 04de9e2,
+    387532b — see "REAL FIX (a)(b)(d)" at the end): 004_MO_T2504_03's own real GAS WATER
     HEATER SCHEDULE loses 4 real columns entirely and shows a WRONG value
     in a real REMARKS cell — genuine data corruption, not just a cosmetic
     header issue.**
@@ -1188,6 +1189,40 @@ on this effort:**
     for this table — the title text is gone from the header, exactly as
     fixed. (a), (b), and (d) remain OPEN, tracked separately above — this
     fix does not touch or attempt any of them.
+
+    **REAL FIX (a)(b)(d), 2026-09-04 (commits 04de9e2 then 387532b).** Real
+    measured geometry — a THREE-ROW stagger, parent ABOVE the main row and a
+    second leaf row BELOW it:
+
+      y=1272.7                                        ELECTRICAL
+      y=1290.3  MARK MANUFACTURER MODEL TANK VOLUME HEAT SOURCE MBH  REMARKS
+      y=1308.0                                   VOLTAGE PHASE FREQ
+      y=1342.6  GWH-1 LOCHINVAR AWN286PM ST-1 GAS 285 120  1   60   ALL
+
+    (b) needed no new tier logic at all. mergeForwardCoEqualTier already
+    handles this shape and already ran here, but requires minHits (3)
+    recognized words on the row and scored 2 — VOLTAGE and PHASE were in
+    EQUIPMENT_HEADERS, FREQ was not. Adding FREQ let the existing merge fire.
+
+    (d) was NOT a cross-table bleed as this rule speculated. "60" is the real
+    FREQ value and landed in REMARKS only because FREQ had no column of its
+    own. Recovering (b) corrected it to the real "ALL" with no separate fix.
+
+    (a) is HALF fixed. SOURCE was added and recovers HEAT SOURCE. TANK was
+    added too, and the corpus sweep caught it MERGING TWO REAL TABLES on
+    047_NC_VA#2 — "TANK" let a row qualify into the GLYCOL MAKEUP SYSTEM
+    SCHEDULE header, which then swallowed the neighbouring EXPANSION SYSTEM
+    SCHEDULE and its real ET-1 row entirely. TANK was removed (387532b);
+    exactly the corpus-wide collision this rule's own (a) predicted. TANK
+    VOLUME ("ST-1") therefore stays unrecovered — 9 of the row's 10 real
+    columns extract correctly. VOLUME was never added, per this rule's own
+    warning about VOLUME CONTROL BOX SCHEDULE.
+
+    Full 34-set corpus sweep after the TANK removal: one document changed,
+    gains only (004's GAS WATER HEATER gains SOURCE/VOLTAGE/PHASE/FREQ, and
+    its WATER SOFTENER SCHEDULE gains GPM/VOLTAGE/PHASE/FREQ from the same
+    staggered tier).
+
 
 21. **FIXED 2026-09-04 (was: OPEN, SCOPED, ATTEMPTED AND REVERTED 2026-09-03): a real, LOW-
     priority (non-HVAC) door-schedule bug —
@@ -2919,7 +2954,9 @@ on this effort:**
     three real schedules now extracting it no longer stands in for them.
 
 
-33. **PARTIALLY FIXED 2026-09-03: a real page with 4 dense, adjacent
+33. **MOSTLY FIXED — merged rows 2026-09-03, the 15->1 row loss 2026-09-04
+    (commit 7b1ad27, see "REAL FIX" at the end); two of the four tables are
+    still absent. Originally: a real page with 4 dense, adjacent
     HVAC schedules loses 2 of them entirely and MERGES two real,
     distinct rows of a 3rd into one garbled row — 15 real VRV indoor
     units collapse to 1.**
@@ -3021,6 +3058,33 @@ on this effort:**
     exists) — the `[WEAK]`/`[ZERO]` labels used to prioritize sets
     earlier this session should never be trusted without a real
     per-set build (032, 033, and 036 all had wrong or stale labels).
+
+    **REAL FIX, 2026-09-04 (commit 7b1ad27).** The 15->1 collapse is NOT the
+    row-merging this rule attributes it to — that was a separate, already
+    fixed symptom. It is a row-KEY refusal, one level deeper than rule 30's.
+
+    Live trace: all FIFTEEN real EU tags are present and evenly stacked
+    (x=3232, y 966..1351) and ALL fall inside the range the extractor
+    actually walked (dataFrom=20, toIdx=38). Fourteen were refused one at a
+    time at the key gate. The single survivor, "07-B-EU-1", survived only
+    because a LETTER follows its facility number; every other tag carries a
+    numeric FLOOR segment ("07-1-EU-1", "09-3-EU-1") which rule 30's own
+    facility rule did not admit. Fixed by accepting facility + numeric floor
+    + a multi-segment letter-led code, on shape.
+
+    Result: VRV- INDOOR UNIT SCHEDULE 1 -> 15 rows (this rule's own recorded
+    ground truth exactly), and DUCTLESS SPLIT SYSTEM SCHEDULE — which this
+    rule records as ENTIRELY ABSENT — now extracts with 34 real DAC rows
+    (recovered by rule 30's fix, then extended by this one). Canary sweep:
+    one document changed, gains only.
+
+    STILL OPEN: VRV- AIR-COOLED CONDENSING UNIT SCHEDULE and COMPUTER ROOM
+    AIR CONDITIONING remain absent. Their real keys are the three-segment
+    "07-EVAP-1"/"07-COND-1", which this gate would only admit by loosening to
+    where the deliberately-refused "1-RH-1" is also guessed at. That needs
+    the confirmed-building path to work on this sheet, not a looser shape
+    rule.
+
 
 34. **FIXED 2026-09-03: `CODE_RE` rejected a real "floor digit(s) +
     area letter + room digit(s)" equipment mark shape (e.g. "1A137"),
@@ -3228,6 +3292,36 @@ on this effort:**
     36, and these two), all consistent with an unusually dense, 4-page,
     multi-schedule-per-page real layout stressing every part of this
     file's own header/column/row-banding machinery at once.
+
+    **SHARPENED DIAGNOSIS 2026-09-04 — attempted, reverted, NOT fixed.** The
+    title half of this rule is fixed (the real ISOLATION VALVE SCHEDULE now
+    extracts at all, 9 rows, where this rule records ZERO trace). The
+    remaining row loss was traced to TWO INDEPENDENT causes, which is why a
+    single fix did not close it:
+
+    (1) BAND ORDER. `banded` is treated throughout bandDataRows as X-ordered
+    (banded[0] is the row's key cell, compared against anchors[0]), and
+    clusterRows does produce that order — but the join pass run first
+    re-sorts by (y, x). On this two-column page the strips print at very
+    slightly different baselines, so they interleave and a RIGHT-hand token
+    lands at banded[0]: measured, banded[0] = "MAIN HEADER" at x=781, or a
+    NOTES sentence at x=3153, while the row's own real GV tag sat at x=483
+    in position 8. rowKeyOf refuses the intruder and the real row is dropped.
+    The nine rows that DO extract are exactly those with no neighbouring-strip
+    text at their own height.
+
+    (2) SCAN RANGE. Independently, the table's own row range is truncated —
+    the real 27 valves span the full page but the scan runs rows 7..27 and
+    stops around GV-20, so even rows that would key are never reached.
+
+    Restoring the X-order invariant was implemented and REVERTED: it recovers
+    GV-1..GV-7/GV-9 (8 rows) but loses GV-16A..GV-28, netting 8 where the
+    current code gets 9 — a lateral move, not an improvement, so it was not
+    shipped. A real fix has to address (2) as well, and the ordering change
+    is corpus-wide (every table's banded rows) so it needs its own sweep.
+    Recorded here so the next attempt starts from these two causes rather
+    than re-deriving them.
+
 
 36. **FIXED 2026-09-03: a real trailing "NOTES" section caption with NO
     colon (unlike every previously-fixed case) still passed CODE_RE and
