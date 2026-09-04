@@ -94,7 +94,24 @@ function matchByTitle(tables: ScheduleTable[], sheetKey: string, built: Schedule
   for (let i = 0; i < tables.length; i++) {
     const t = tables[i];
     if (t.sheet !== sheetKey) continue;
-    if ((t.title?.text || "").trim().toUpperCase() === want) return i;
+    if ((t.title?.text || "").trim().toUpperCase() !== want) continue;
+    // A shared title is NOT enough on its own. One real schedule is often
+    // printed as several CONTINUATION CHUNKS down or across a sheet, every
+    // chunk repeating the same printed title while carrying entirely
+    // different rows — real, measured on
+    // 049_IL_VA_Solicitation_36C77623B0051_Expand_Sterile#3, whose real
+    // PLUMBING MATERIAL LIST arrives as four chunks (10 + 13 + 5 + 3 = 31
+    // real plumbing marks). Treating those as duplicates of each other
+    // discards 18 real rows. Caught by the corpus sweep on the first
+    // version of this matcher, which did exactly that.
+    //
+    // Two reads of ONE table always occupy the same place on the sheet, so
+    // require the regions to intersect AT ALL. That is deliberately a far
+    // weaker bar than matchByRegionOverlap's own 40% — the whole reason
+    // this matcher exists is that one of the two regions may be wrong —
+    // but it still separates "same table, two reads" from "same title,
+    // different chunk", which never overlap.
+    if (bboxOverlapRatio(t.region, built.region) > 0) return i;
   }
   return -1;
 }
