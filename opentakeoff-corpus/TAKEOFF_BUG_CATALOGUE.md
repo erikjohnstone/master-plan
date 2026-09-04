@@ -36,7 +36,7 @@ every eval read 100%. Every bug below was invisible to that gate.
 | B-4 | Prose fragments recorded as schedule titles | 3+ documents | false structural inference |
 | B-5 | A new header-token rejection killed a whole real table | −12 real cells on federal-mech | self-inflicted; whole-row guard |
 | B-6 | A page drawing the same table twice at TWO SCALES (~0.83x) | 013_MO p23, 2 tables lost | fused scaled duplicate |
-| B-7 | Deep multi-tier header with repeating leaf labels | 034_NC p42, 2 tables lost | header-block rejection |
+| B-7 | 034_NC p42 loses DOOR + ROOM FINISH SCHEDULE — **cause NOT yet established** | 2 tables lost | first hypothesis disconfirmed |
 | B-8 | Side-by-side tables with NO empty gutter — seam-based banding cannot split them | 046_MI p22 + 044_NY p24 (rule 35a): 1 table lost, 19 of 27 rows lost | **same bug as GOAL.md rule 35(a)** |
 
 ---
@@ -278,9 +278,35 @@ expander treats a many-token cluster as "not a wrapped label" and rejects it,
 so the block never qualifies. This is the architectural room-finish shape the
 finish-kind vocabulary exists for, yet nothing extracts it.
 
-**Shape of the fix.** A repeating leaf label under distinct parents is the
-SIGNATURE of a real multi-tier header, not a disqualifier. Cluster by
-(parent-span, leaf) rather than by leaf text alone.
+**STATUS: NOT ROOT-CAUSED. The first hypothesis was tested and does not
+hold.** I claimed the header-block expander rejects this because a many-token
+cluster reads as "not a wrapped label". Measuring the actual header band
+(28 spans above the title at y=2184):
+
+```
+MATL   x6   at x = 3902, 5218, 4127, 4408, 4705, 4990
+FIN    x5   at x = 5327, 4279, 4564, 4872, 5134
+distinct x-anchors (20px buckets): 28
+header tiers (10px buckets):        5      (MAX_GENERIC_HEADER_LINES is 6)
+```
+
+Those repeats are **six separate single-token clusters at six different x
+positions**, not one cluster holding six tokens — so the over-full-cluster
+rejection cannot be what fires. And 5 tiers is inside the 6-tier cap, so tier
+depth is not it either. The hypothesis is disconfirmed.
+
+**Open alternative, not yet confirmed.** Two outlier spans sit far outside the
+table's own column range (x 3100..5640): `"D"` at **x=180** and `"D"` at
+**x=5968** — almost certainly drawing-grid labels at the sheet margins. If
+they fall inside the header band, `bandLimits` stretches the x-band across the
+whole page and the table's real column structure is swamped. Confirming this
+needs the extractor traced on the real page, which is a heavy job; it is
+queued behind B0.
+
+**Do not build against either reading until one is measured true.** Two other
+hypotheses in this catalogue (B-6's "constant offset", B-8's "rule 18 already
+covers it") were equally plausible, equally grounded in real coordinates, and
+equally wrong.
 
 ### B-8 UPDATE — measured: rule 18's bands fix does NOT reach it, and this is rule 35(a)
 
