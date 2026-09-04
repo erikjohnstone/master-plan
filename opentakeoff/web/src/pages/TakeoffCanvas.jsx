@@ -932,6 +932,20 @@ export default function TakeoffCanvas() {
   // not plain module-body lets.
   const agentGraphCacheRef = useRef(null);
   const agentGraphCacheKeyRef = useRef(null);
+  // Real bug, found running an actual UI-path takeoff (not a unit test): the
+  // background graphPrewarm effect and any caller of ensureAgentGraph()
+  // (debugGraph, query_table, …) each independently check agentGraphCacheRef
+  // for an ALREADY-RESOLVED graph — neither has any notion of a fetch already
+  // IN FLIGHT, so calling one while the other's own fetchProductionSheetGraph
+  // is still pending starts a SECOND, fully redundant server-side Session+ODL
+  // rebuild of the exact same document (confirmed live: two production-graph-
+  // cli.mjs subprocesses spawned for one debugGraph() call on a real corpus
+  // PDF). Real cost: doubles the wait on the app's own most expensive
+  // operation for no reason, worse the heavier the document. Fixed via
+  // getOrFetchProductionGraph's own in-flight-promise memoization below —
+  // the prewarm effect and ensureAgentGraph both route through it now,
+  // so a fetch already underway is awaited, never duplicated.
+  const agentGraphInFlightRef = useRef(null);
   // ensureSheetGeometry's dims cache — sheetKey → {w,h} at RENDER_SCALE, for
   // sheets whose geometry was extracted on demand rather than rendered.
   const pageDimsRef = useRef(new Map());
@@ -7016,6 +7030,34 @@ export default function TakeoffCanvas() {
     return await res.json();
   }
 
+  // Single real fetch per (sig), however many callers want the production
+  // graph at once — see agentGraphInFlightRef's own comment for the real bug
+  // this closes. A resolved cache hit returns synchronously (well, in a
+  // microtask); an in-flight fetch for the SAME sig is awaited, never
+  // duplicated; only a genuinely new sig starts a new server round trip.
+  async function getOrFetchProductionGraph(sig) {
+    if (agentGraphCacheRef.current && agentGraphCacheKeyRef.current === sig) {
+      return agentGraphCacheRef.current;
+    }
+    if (agentGraphInFlightRef.current && agentGraphInFlightRef.current.sig === sig) {
+      return agentGraphInFlightRef.current.promise;
+    }
+    const promise = (async () => {
+      const prod = await fetchProductionSheetGraph();
+      if (!(prod?.tables || prod?.available)) throw new Error("empty graph");
+      prod.__production = true;
+      agentGraphCacheRef.current = prod;
+      agentGraphCacheKeyRef.current = sig;
+      return prod;
+    })();
+    agentGraphInFlightRef.current = { sig, promise };
+    try {
+      return await promise;
+    } finally {
+      if (agentGraphInFlightRef.current?.promise === promise) agentGraphInFlightRef.current = null;
+    }
+  }
+
   // Background Session+ODL graph prewarm once PDF text index is ready — Agent
   // compile / query_table / reconcile hit a warm cache instead of cold-starting
   // the production endpoint on first tool call (shared path with MCP).
@@ -7038,16 +7080,9 @@ export default function TakeoffCanvas() {
     let cancelled = false;
     (async () => {
       try {
-        const prod = await fetchProductionSheetGraph();
+        await getOrFetchProductionGraph(sig);
         if (cancelled) return;
-        if (prod?.tables || prod?.available) {
-          prod.__production = true;
-          agentGraphCacheRef.current = prod;
-          agentGraphCacheKeyRef.current = sig;
-          setGraphPrewarm({ phase: "ready" });
-        } else {
-          setGraphPrewarm({ phase: "error", message: "empty graph" });
-        }
+        setGraphPrewarm({ phase: "ready" });
       } catch (e) {
         if (!cancelled) {
           setGraphPrewarm({ phase: "error", message: String(e?.message || e) });
@@ -7065,13 +7100,7 @@ export default function TakeoffCanvas() {
     // Prefer the shared production Session+ODL graph (same as MCP) for every
     // blueprint — sheet_graph / query_table / compile all see identical tables.
     try {
-      const prod = await fetchProductionSheetGraph();
-      if (prod?.tables || prod?.available) {
-        prod.__production = true;
-        agentGraphCacheRef.current = prod;
-        agentGraphCacheKeyRef.current = sig;
-        return prod;
-      }
+      return await getOrFetchProductionGraph(sig);
     } catch (e) {
       console.warn("[ensureAgentGraph] production Session+ODL unavailable; geometric fallback:", e?.message || e);
     }
