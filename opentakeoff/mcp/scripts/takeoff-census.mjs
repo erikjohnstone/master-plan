@@ -49,6 +49,8 @@ const tmp = join(outDir, "_extracts");
 mkdirSync(tmp, { recursive: true });
 const rawDir = join(outDir, "raw");
 mkdirSync(rawDir, { recursive: true });
+const graphDir = join(outDir, "graphs");
+mkdirSync(graphDir, { recursive: true });
 
 const KINDS = ["hvac_equipment", "control_valves", "bas_points", "sequences"];
 const pdfs = readFileSync(listFile, "utf8").split("\n").map((s) => s.trim()).filter(Boolean);
@@ -193,6 +195,14 @@ for (const pdf of pdfs) {
     rec.sheet_count = graph?.sheets?.length ?? 0;
     rec.table_count = graph?.tables?.length ?? 0;
     rec.table_titles = (graph?.tables || []).map((x) => (typeof x.title === "object" && x.title ? x.title.text : x.title) ?? null);
+    // Persist the SHEET GRAPH itself — the compiler's real input. compileCorpusTakeoff
+    // runs from a graph alone (sheetRecords' own "no Session present" path), so a
+    // committed graph per document lets an agent with NO access to the PDFs — the
+    // bulk corpus exists on exactly one machine — compile and census all 90
+    // documents anyway. Graphs are 10-140KB; the whole corpus is a few MB. Any
+    // graph is a pipeline OUTPUT and is never ground truth; it is a fixture for
+    // testing what the compiler does with what extraction produced.
+    writeFileSync(join(graphDir, name + ".graph.json"), JSON.stringify(graph));
 
     for (const kind of KINDS) {
       const k0 = Date.now();
