@@ -1274,10 +1274,12 @@ on this effort:**
     (e.g., treat a header token identical to a value seen printed
     beneath EVERY data row as a unit suffix, not a new column).
 
-25. **OPEN, SCOPED, NOT STARTED, LOW SEVERITY: real NOTES-list text
+25. **CORRECTED 2026-09-04, FOLDED INTO RULE 30: real NOTES-list text
     bleeds into MARK/TYPE/CFM cells on
     015_VA_P_095_Replace_Submarine_Pier_3_Utility's own real
-    "GATEHOUSE MINI-SPLIT SYSTEM HEAT PUMP SCHEDULE" (mark DSS-4).**
+    "DUCTLESS SPLIT SYSTEM SCHEDULE" (page 9, mark DSS-4) — root cause
+    is rule 30's own dense-multi-tier-header defeat, not a standalone
+    "un-modeled column" bug.**
 
     Found doing genuinely verified per-set work — otherwise this is one
     of the cleanest sets checked this session: 32 tables, every one
@@ -1285,18 +1287,31 @@ on this effort:**
     exception: DSS-4's own row shows `MARK: "DSS-4 1. 2. 3. 4. 5."`,
     `TYPE: "WALL-MOUNTED GUARD BOOTH"`, `CFM: "370 PROVIDE POWER AND
     CONTROL WIRING FROM OUTDOOR UNIT TO INDOOR UNIT"` — the table's own
-    numbered NOTES list underneath bled into 3 different cells. The
-    SAME real table shape, correctly extracted for the main-building
-    units (DSS-1/DSS-2/DSS-3, same sheet-family, real clean `NOTES:
-    "1,2,3,4"` cells with no bleed), suggests this smaller "GATEHOUSE"
-    variant table is missing some of the real columns the main version
-    has (fewer real vocabulary anchors recognized), so the un-modeled
-    NOTES text has nowhere safe to land and spills into whatever
-    anchors DO exist — the same general "un-modeled column" bleed
-    family `anchorRadii` already guards against elsewhere, evidently not
-    covering this specific shape. Low severity (a single row, cosmetic
-    corruption rather than a missing/fabricated quantity), documented
-    for completeness rather than urgency. NOT STARTED.
+    numbered NOTES list underneath bled into 3 different cells.
+
+    CORRECTION (2026-09-04): the original write-up mis-identified the
+    table as "GATEHOUSE MINI-SPLIT SYSTEM HEAT PUMP SCHEDULE" and
+    guessed the smaller table was simply missing columns. Re-verified
+    against real ground truth (`extract_words()` on page 9, plus a
+    full-document `DSS-4` scan): DSS-4's real table is actually
+    "DUCTLESS SPLIT SYSTEM SCHEDULE" on page 9 — a DIFFERENT table from
+    the GATEHOUSE-titled schedules on page 20 (those hold HP-1/SS-1/
+    DSS-3, all clean, no bleed). DSS-1/DSS-2's clean `NOTES: "1,2,3,4"`
+    rows live in yet a THIRD table, "MINI-SPLIT-SYSTEM HEAT PUMPS
+    SCHEDULE" on page 18. The real root cause is not a missing-column
+    gap: page 9's own header is a genuine 3-tier stack (group/mid/units
+    rows) with real leaf columns only ~80-110px apart, and extraction
+    collapses 4-5 of those real adjacent columns into one merged anchor
+    each (e.g. `"TOTAL AIRFLOW FAN MOTOR TOTAL COOLING SENSIBLE MBH"`),
+    dropping the real header count from ~26 (confirmed on page 18's
+    clean sibling table, same real column set) to 16. With that many
+    real columns merged away, the NOTES list has nowhere modeled to
+    land. This is rule 30's own dense-multi-tier-header-defeat
+    mechanism (see rule 30's 14th confirmation) — not a separate bug.
+    Tracked and fixed there; this entry stays for the record of the
+    correction. Low severity (a single row, cosmetic corruption rather
+    than a missing/fabricated quantity) is still accurate. NOT
+    STARTED — same reasoning as rule 30's other confirmations.
 
 26. **OPEN, SCOPED, NOT STARTED, LIKELY CORPUS-WIDE: the drawing's own
     title-block/approval-stamp area (present on essentially every real
@@ -2057,6 +2072,45 @@ on this effort:**
     its own real, adjacent, unambiguous tag. Same underlying shared
     header/tier-detection and key-column-selection machinery as every
     confirmation above — NOT attempted here, same reasoning.
+
+    14th real confirmation, same mechanism, discovered while root-
+    causing what rule 25 (below) originally mis-scoped as an isolated
+    "un-modeled column" bleed — real ground truth
+    (015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#9's own
+    "DUCTLESS SPLIT SYSTEM SCHEDULE", confirmed via direct
+    `extract_words()`) shows the real table title is one line (top=594)
+    but its real header is a genuine 3-tier stack: a group tier
+    (top=624: "SUPPLY FAN DATA" / "COOLING" / "HEATING" / "INDOOR UNIT
+    ELECTRICAL" / "OUTDOOR UNIT ELECTRICAL"), a mid tier (top=641-649:
+    "TOTAL AIRFLOW" / "FAN MOTOR" / "TOTAL COOLING" / "SENSIBLE" /
+    "MIN EFFICIENCY" / "HEATING CAPACITY" ×2 / "EAT DB"), and a units
+    tier (top=649-657: "(CFM)" / "(WATTS)" / "(MBH)" / "COOLING (MBH)" /
+    "(SEER)" / "AT 47°F (MBH)" / "AT 17°F (MBH)" / "(°F)" / "FLA" /
+    "MCA" / "VOLTS" / "PH" / "HZ" / "NOTES"), with real leaf columns
+    packed only ~80-110px apart (e.g. "TOTAL AIRFLOW (CFM)" at x≈412,
+    "FAN MOTOR (WATTS)" at x≈519, "TOTAL COOLING (MBH)" at x≈597,
+    "SENSIBLE COOLING (MBH)" at x≈685 — 4 genuinely distinct real
+    columns inside a ~320px span). Extraction collapses all 4 of those
+    into ONE anchor labeled `"TOTAL AIRFLOW FAN MOTOR TOTAL COOLING
+    SENSIBLE MBH"`, and does the same to the HEATING/EAT DB group
+    (`"MIN EFFICIENCY HEATING CAPACITY HEATING CAPACITY EAT DB MBH"`) —
+    real header count drops from ~26 leaf columns (confirmed present on
+    the SAME set's own equivalent clean table, page 18's
+    "MINI-SPLIT-SYSTEM HEAT PUMPS SCHEDULE", which reaches all 26 with
+    the identical real column set) down to 16 extracted anchors on this
+    3-tier page-9 sibling. With that many real columns merged away, the
+    row's own real overflow text (the table's numbered NOTES list) has
+    nowhere modeled to land and bleeds into whichever narrow anchors
+    remain — `DSS-4`'s row reads `MARK: "DSS-4 1. 2. 3. 4. 5."`, `TYPE:
+    "WALL-MOUNTED GUARD BOOTH"`, `CFM: "370 PROVIDE POWER AND CONTROL
+    WIRING FROM OUTDOOR UNIT TO INDOOR UNIT"` — this is the exact
+    symptom rule 25 originally documented, but the root cause is this
+    rule's own header-tier collapse (too many real leaf columns too
+    close together across 3 stacked tiers), not a standalone "missing
+    columns, anchorRadii doesn't cover this shape" bug. Rule 25 is
+    folded into this rule and should not be tracked as a separate fix —
+    see rule 25's own updated text below. NOT attempted here, same
+    reasoning as every confirmation above.
 
 31. **FIXED 2026-09-03: the row-key column picker unconditionally
     trusts the LEFTMOST real column — when a real document splits its
