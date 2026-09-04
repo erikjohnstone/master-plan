@@ -342,3 +342,62 @@ The held-out split runs over the real 90-document list:
 Codex must `git pull` before each session: the extraction loop is actively
 editing `sheetgraph.ts`, and extraction changes move REFERENCE-CELL scores.
 They have not moved the TAKEOFF table, which is why Loop A is anchored to it.
+
+### Loop A — GIT AND CROSS-LOOP COORDINATION (local, with GitHub access)
+
+Replaces the four-line GIT block. With real repo access the two loops are not
+blind to each other, and this is how they stay in sync.
+
+```
+════ GIT ═══════════════════════════════════════════════════════════════
+  Remote   https://github.com/erikjohnstone/master-plan  (origin)
+  Base     add-gmft-fallback-c   ← the EXTRACTION loop pushes here, often
+                                   (~32 commits in one working day)
+  Yours    branch off it, e.g. codex/takeoff-compiler. Push that. Never push
+           to add-gmft-fallback-c, main, or cache-backup.
+  Never force-push. Never rewrite shared history.
+  No PR unless the user asks.
+
+  BEFORE EVERY WORK SESSION, and before quoting any measurement:
+      git fetch origin
+      git merge origin/add-gmft-fallback-c      (merge, never rebase — the
+                                                 base branch is shared)
+      git log --oneline HEAD@{1}..HEAD          (what landed under you)
+  Extraction fixes move REFERENCE-CELL scores. They have not moved the
+  TAKEOFF table, which is why Loop A anchors to that table. If a pull DOES
+  move the takeoff table, your baseline is stale: re-run measure A, adopt the
+  new numbers, and say so before continuing.
+
+  COMMIT MESSAGES ARE THE ENGINEERING RECORD, not labels. This repo's
+  convention, which you must follow: a scoped subject
+  ("fix(corpus-takeoff): …"), then a body that states the ROOT CAUSE, the
+  EVIDENCE that established it (real coordinates, real counts), and WHAT
+  EVERY NUMBER DID before and after. Look at recent commits for the shape.
+  A one-line message loses the only durable explanation of why a change is
+  correct.
+
+════ CROSS-LOOP COORDINATION ═══════════════════════════════════════════
+  opentakeoff-corpus/TAKEOFF_BUG_CATALOGUE.md is the shared channel. Both
+  loops append to it; neither rewrites the other's entries.
+
+  READ IT before each session. The extraction loop logs findings there that
+  change your work, e.g.:
+    - B-6/B-7/B-8: three extraction-side recall bugs (a schedule drawn at two
+      scales; sheet-margin grid labels qualifying as header rows; side-by-side
+      tables with no gutter). Documents these affect will show missing tables
+      in YOUR census too — that is not a compiler bug, do not chase it.
+    - B-5: a header guard that cost 12 real reference cells. The lesson
+      recorded there — that any new rejection in a whole-row guard can kill an
+      entire table — applies to compiler guards as well.
+
+  WRITE TO IT whenever you find something outside your ownership: a wrong
+  graph, a table the compiler receives malformed, an extraction-side signature
+  (PROSE_AS_TITLE, NO_TABLES_AT_ALL, DOCUMENT_FAILED). Give the evidence and
+  the document, then move on. Do not fix it, and do not work around it in the
+  compiler — a compiler workaround for an extraction bug is invisible debt
+  that breaks when the real fix lands.
+
+  If a measurement of yours disagrees with a number in this file, say so
+  loudly rather than silently adopting yours. Both loops quoting different
+  baselines is how two agents drift apart.
+```
