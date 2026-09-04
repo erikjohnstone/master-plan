@@ -1894,7 +1894,8 @@ function phraseRunsInRow(row: GraphSpan[]): Array<{ text: string; x0: number; x1
 function parentPhraseOver(rows: GraphSpan[][], hdrIdx: number, floorIdx: number, gx0: number, gx1: number, vocab: string[]): string | null {
   const width = Math.max(Math.min(gx1, gx0 + 4000) - gx0, 1);
   const hs = rows[hdrIdx].map((t) => t.h || 8).sort((a, b) => a - b);
-  const near = Math.max(24, (hs[hs.length >> 1] || 8) * 4);
+  const hdrH = hs[hs.length >> 1] || 8;
+  const near = Math.max(24, hdrH * 4);
   const hy = rowY(rows[hdrIdx]);
   const floor = Math.max(0, floorIdx);
   let phrase: { text: string; d: number } | null = null;
@@ -1913,6 +1914,28 @@ function parentPhraseOver(rows: GraphSpan[][], hdrIdx: number, floorIdx: number,
       const inInterval = cx >= gx0 && cx < gx1;
       const overlaps = Math.min(run.x1, gx1) - Math.max(run.x0, gx0) > width * 0.3;
       if (!inInterval && !overlaps) continue;
+      // Same real bug as genuineParentOver, same fix (GOAL.md rule 20(c)),
+      // confirmed live on a SIBLING function this function's own fix never
+      // covered: a table's own big-font TITLE routinely spans wide enough to
+      // satisfy this loop's pure geometric overlap/distance check against
+      // almost every leaf column beneath it, same as any real parent phrase
+      // would — nothing here previously distinguished the two. Real,
+      // corpus-found (004_MO_T2504_03, live debug trace): GREASE INTERCEPTOR
+      // SCHEDULE / EXPANSION TANK SCHEDULE / THERMOSTATIC MIXING VALVE
+      // SCHEDULE / HOT WATER RETURN PUMP SCHEDULE / AIR DEVICE SCHEDULE each
+      // had their OWN title text glued onto one or more of their own real
+      // leaf columns (e.g. "AIR DEVICE SCHEDULE SIZE" instead of plain
+      // "SIZE") — every one of the wrongly-grabbed runs measured ~2x this
+      // row's own real header height, the exact ratio genuineParentOver's own
+      // GENUINE_PARENT_BIG_FONT_RATIO guard already exists to reject.
+      // Reusing that same, already-tested constant here. (This same
+      // document's own ROOFTOP UNIT SCHEDULE shows an analogous "…EAT"/"…LAT"
+      // corruption too, but a live trace showed it never reaches THIS
+      // function at all — a separate call site's own bug, tracked apart.)
+      const runH = Math.max(0, ...rows[j]
+        .filter((t) => run.text.includes(norm(t.str)))
+        .map((t) => t.h || 8));
+      if (runH >= hdrH * GENUINE_PARENT_BIG_FONT_RATIO) continue;
       const d = (hy - rowY(rows[j])) * 1000 + Math.abs(cx - (gx0 + gx1) / 2);
       if (!phrase || d < phrase.d) phrase = { text: run.text, d };
     }

@@ -3891,6 +3891,60 @@ test("a table's own big-font TITLE never becomes a leaf column's parent, however
   assert.ok(tab!.headers.includes("MBH"), `MBH must survive as its own plain column: got ${JSON.stringify(tab!.headers)}`);
 });
 
+test("a table's own big-font TITLE never becomes a duplicate column's parent either, same bug as rule 20(c) but a sibling function (GOAL.md rule 20(c), extended, fixed 2026-09-04)", () => {
+  // Real bug, found running the actual UI path against a real corpus PDF
+  // (this session's own explicit UI-path verification pass, not a unit
+  // test) — a second, sibling instance of rule 20(c)'s exact bug that its
+  // original fix never covered. `genuineParentOver` (rule 20(c)'s own fix
+  // target) resolves a parent for a "loose run" of zero-vocabulary tokens;
+  // `parentPhraseOver` is a SEPARATE function, called instead when an
+  // already-vocabulary-matched header LABEL is ambiguous (two "SIZE"
+  // columns, resolved via the "…takes its parent's name" path a few lines
+  // above this file's own `dup.has(h.label)` branch) — same missing-guard
+  // shape, same real symptom, different call site rule 20(c)'s own fix
+  // never touched.
+  //
+  // Confirmed live (not guessed): a real, unmodified rebuild of
+  // 004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf via the actual
+  // production CLI (same Session+ODL path the UI and MCP both use), with
+  // temporary DEBUG_R20C tracing in parentPhraseOver's own phrase-fallback
+  // loop, showed SIX real tables on this one document each having their
+  // own title text glued onto a real column this same way — GREASE
+  // INTERCEPTOR SCHEDULE, EXPANSION TANK SCHEDULE, THERMOSTATIC MIXING
+  // VALVE SCHEDULE, HOT WATER RETURN PUMP SCHEDULE, AIR DEVICE SCHEDULE
+  // (real real-document header seen: ["MARK","MATERIAL","SIZE","AIR DEVICE
+  // SCHEDULE SIZE","REMARKS"] — its own SECOND "SIZE" column mislabeled),
+  // ROOFTOP UNIT SCHEDULE — every wrongly-grabbed run measured ~2x that
+  // row's own real header height, the exact ratio genuineParentOver's own
+  // GENUINE_PARENT_BIG_FONT_RATIO guard already exists to reject.
+  //
+  // Fixed the identical way, reusing the SAME already-tested constant: a
+  // phrase-run candidate at or above GENUINE_PARENT_BIG_FONT_RATIO-scale of
+  // the header row's own font is refused before it can ever become the
+  // fallback "nearest phrase" answer. This fixture mirrors the real
+  // AIR DEVICE SCHEDULE page's own real proportions (title ~2x the header
+  // row's font, positioned to horizontally overlap the SECOND, duplicate
+  // SIZE column exactly the way the real title does) — verified to
+  // actually reproduce the bug with the fix disabled before this test was
+  // written, per this session's own fixture-verification discipline.
+  const sp3 = (str: string, x: number, y: number, h = 9.5): GraphSpan => ({ str, x, y, w: str.length * 5, h });
+  const sched: SheetSpans = {
+    key: "ads.pdf#39",
+    sheet_number: "M602",
+    spans: [
+      sp3("AIR DEVICE SCHEDULE", 560, 0, 19),
+      sp3("MARK", 0, 34.6), sp3("MANUFACTURER", 100, 34.6), sp3("MODEL", 300, 34.6),
+      sp3("SIZE", 450, 34.6), sp3("SIZE", 600, 34.6), sp3("MBH", 750, 34.6), sp3("REMARKS", 900, 34.6),
+      sp3("ADS-1", 0, 66), sp3("TITUS", 100, 66), sp3("300RL", 300, 66),
+      sp3("24X24", 450, 66), sp3("12X12", 600, 66), sp3("400", 750, 66), sp3("ALL", 900, 66),
+    ],
+  };
+  const tab = extractTable(sched, "equipment");
+  assert.ok(tab, "the real ADS-1 row alone is enough to clear the bar");
+  assert.ok(!tab!.headers.some((h) => /SCHEDULE/.test(h)), `no header may carry the table's own title text: got ${JSON.stringify(tab!.headers)}`);
+  assert.equal(tab!.headers.filter((h) => h === "SIZE").length, 1, `exactly one real "SIZE" column survives (the confusable duplicate is honestly dropped, never mislabeled): got ${JSON.stringify(tab!.headers)}`);
+});
+
 test("room-finish: a bare letter-only room key is kept when the row is genuinely populated, refused when it isn't (GOAL.md rule 22, fixed 2026-09-04)", () => {
   // Real, HIGH SEVERITY bug: 008_MO_T2331_01_Repair_to_Interior_Exterior_
   // Unheated's own real ROOM FINISH SCHEDULE lists room 101 (numbered)
