@@ -35,7 +35,7 @@ every eval read 100%. Every bug below was invisible to that gate.
 | B-3 | Row key falls back to a count column when a table has no MARK | 23 real silencers reported as 2 | false structural inference |
 | B-4 | Prose fragments recorded as schedule titles | 3+ documents | false structural inference |
 | B-5 | A new header-token rejection killed a whole real table | −12 real cells on federal-mech | self-inflicted; whole-row guard |
-| B-6 | A page drawing the same table twice at a constant offset | 013_MO p23, 2 tables lost | fused duplicate |
+| B-6 | A page drawing the same table twice at TWO SCALES (~0.83x) | 013_MO p23, 2 tables lost | fused scaled duplicate |
 | B-7 | Deep multi-tier header with repeating leaf labels | 034_NC p42, 2 tables lost | header-block rejection |
 | B-8 | Side-by-side tables with NO empty gutter — seam-based banding cannot split them | 046_MI p22 + 044_NY p24 (rule 35a): 1 table lost, 19 of 27 rows lost | **same bug as GOAL.md rule 35(a)** |
 
@@ -223,11 +223,40 @@ y=305  [1937]"VFD-1" [2033]"CROSS TIE HHW CTP" [2636]"480" [2972]"3" [3064]"25"
 `clusterRows` groups by Y alone, so the two copies fuse into incoherent rows
 and no coherent header block ever forms.
 
-**Shape of the fix.** Detect a translated duplicate of a span set (identical
-strings at a constant (dx, dy) offset) and keep one copy. Structural and
-general — shadow-drawn content is a real drafting artefact, not a quirk of
-this sheet. Must not fire on a genuinely repeated header tier (a continuation
-page) — the discriminator is the CONSTANT offset across many spans.
+**CORRECTED — the duplicate is SCALED, not translated.** The first reading
+("constant +500x/+20y offset") was wrong, and testing it before building
+caught that: across all 227 strings appearing exactly twice on the page, the
+single most common rounded (dx, dy) accounts for just **7 of them (3%)** —
+and those seven are the architect's title-block text, not the schedule.
+
+The offsets shrink as x grows (TAG +511, NAME +465, MANUFACTURER +419), which
+is a scale relationship, not a translation. A least-squares fit over the 33
+duplicate pairs inside the schedule's own y-band:
+
+```
+x' = 0.8298 * x + 720.8
+text-height ratio (copy/original), median: 0.815
+every pair: h 28.1 -> 22.9
+```
+
+The x-scale and the independently-measured text-height ratio agree to within
+2%. So the page draws the same VFD schedule **twice at two different scales**
+— full size and ~82% — a plot-scale / detail-view artefact. `clusterRows`
+interleaves the two copies' rows by Y and no coherent header block forms.
+
+**Shape of the fix.** Detect a SCALED duplicate span set: strings that appear
+twice whose x-positions fit an affine `x' = a*x + b` AND whose text-height
+ratio independently equals `a`. Keep the larger copy. The height-ratio
+corroboration is what makes it safe — it distinguishes a re-drawn copy from a
+genuinely repeated header tier on a continuation page, where the type size is
+identical (ratio 1.0). Purely structural, no vocabulary, no document
+recognition.
+
+**Method note worth keeping.** The first hypothesis was plausible, came from
+real coordinates, and was still wrong. It survived one reading of the data and
+died on the second. The rule that caught it: state the hypothesis as a
+measurable claim ("the offset is constant") and measure it before writing any
+code against it.
 
 ### B-7 — a deep multi-tier header with repeating sub-labels
 
