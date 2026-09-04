@@ -5329,8 +5329,11 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // ever searched.
   const ANOMALOUS_REGION_HEIGHT_RATIO = 40;
   if (out.length <= 1 && region) {
-    const hdrY0 = Math.min(...headerSpans.map((t) => t.y));
-    const hdrY1 = Math.max(...headerSpans.map((t) => t.y + (t.h || 0)));
+    // A manual reduce, not Math.min(...spread) — a spread call blows the
+    // engine's own argument-count limit on a large array (V8: ~65k), a real
+    // risk `headerSpans` is not otherwise guaranteed safe from.
+    let hdrY0 = Infinity, hdrY1 = -Infinity;
+    for (const t of headerSpans) { if (t.y < hdrY0) hdrY0 = t.y; const b = t.y + (t.h || 0); if (b > hdrY1) hdrY1 = b; }
     const [, , , ry1] = region;
     if (ry1 - hdrY0 > hdrLineH * ANOMALOUS_REGION_HEIGHT_RATIO
       && !hasNearbyRuledLine(sheet.segs, hdrBand.x0, hdrBand.x1, hdrY0, hdrY1)) {
