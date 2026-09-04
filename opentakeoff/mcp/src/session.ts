@@ -66,6 +66,39 @@ function matchByRegionOverlap(tables: ScheduleTable[], sheetKey: string, region:
  * bidset.pdf#60's own MECHANICAL EQUIPMENT CONNECTION SCHEDULE), never the
  * same table mis-bounded, and must stay a separate table for that same
  * accessory-narrowing tier to correctly exclude. */
+/** Last-resort match for two extractions of the SAME real table that agree on
+ * a real printed TITLE but on nothing else this file can compare.
+ *
+ * Region overlap is the primary matcher and is deliberately preferred, but it
+ * cannot fire when one of the two regions is simply wrong: ODL reports a
+ * table "bounding box" that on some real sheets transforms to a region taller
+ * than the page itself (real, measured on
+ * 030_NY_VA_EHRM_Infrastructure_Upgrades_Construction#84/85: y -1548..3996
+ * for a real table whose own cells span y 2240..2306). matchByKeySet cannot
+ * fire either when the two reads disagree about the key column — which is
+ * exactly the case worth deduping, since that disagreement is the reason one
+ * copy is the good one (real EQUIPMENT TAGs, 001-CRAC-01-DC2) and the other
+ * is not (numeric PRIMARY AIR values, '72'/'72'). Without this, BOTH survive
+ * into g.tables and a takeoff sees the same real units twice.
+ *
+ * Deliberately the narrowest form of title matching. `matchByRegionOverlap`'s
+ * own comment warns against matching on title text, and that warning is about
+ * TITLE-LESS tables borrowing a neighbour's title — so this requires BOTH
+ * sides to carry a real, non-empty printed title, on the same sheet, equal
+ * after normalization. A title-less table can never match here, and two
+ * genuinely different real schedules on one sheet do not share a printed
+ * title. It runs only after both stronger matchers have come up empty. */
+function matchByTitle(tables: ScheduleTable[], sheetKey: string, built: ScheduleTable): number {
+  const want = (built.title?.text || "").trim().toUpperCase();
+  if (!want) return -1;
+  for (let i = 0; i < tables.length; i++) {
+    const t = tables[i];
+    if (t.sheet !== sheetKey) continue;
+    if ((t.title?.text || "").trim().toUpperCase() === want) return i;
+  }
+  return -1;
+}
+
 function matchByKeySet(tables: ScheduleTable[], sheetKey: string, built: ScheduleTable): number {
   if (built.kind === "reference" || !built.rows.length) return -1;
   const builtKeys = new Set(built.rows.map((r) => r.key));
@@ -5793,6 +5826,7 @@ export class Session {
         // for a "reference"-kind candidate (see its own comment above).
         let existingIdx = matchByRegionOverlap(g.tables, sheetKey, built.region);
         if (existingIdx < 0) existingIdx = matchByKeySet(g.tables, sheetKey, built);
+        if (existingIdx < 0) existingIdx = matchByTitle(g.tables, sheetKey, built);
         if (existingIdx >= 0) {
           const existing = g.tables[existingIdx];
           const a = tableCompleteness(existing), b = tableCompleteness(built);
