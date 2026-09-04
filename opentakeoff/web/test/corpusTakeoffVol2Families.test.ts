@@ -105,6 +105,29 @@ describe("Vol2 humidifier / expansion / buffer / VRF gates", () => {
     assert.equal(HVAC_FAMILY_SPECS.VRF_OUTDOOR.keyRe.test("ODU-1"), true);
   });
 
+  // GOAL.md rule 39: 089_FL_Airport_Terminal_and_Hangar_Development's real
+  // "VRF SYSTEM SCHEDULE" lists 12 real indoor air handlers (AC-1..AC-12)
+  // in one combined table, not the split VRF INDOOR/OUTDOOR titled shape
+  // above — titleRe alone can't reach it, so it needs the same
+  // altTitleRe/altKeyRe split-title mechanism already proven for
+  // CONDENSING_UNIT's CU/DCU marks.
+  it("VRF_INDOOR altTitleRe/altKeyRe reach AC-* rows on a combined VRF SYSTEM SCHEDULE", () => {
+    const { altTitleRe, altKeyRe, titleRe } = HVAC_FAMILY_SPECS.VRF_INDOOR;
+    assert.ok(altTitleRe, "VRF_INDOOR must declare altTitleRe");
+    assert.ok(altKeyRe, "VRF_INDOOR must declare altKeyRe");
+    assert.equal(altTitleRe!.test("VRF SYSTEM SCHEDULE"), true);
+    // The combined title must NOT also satisfy the split-schedule primary
+    // titleRe — these are two different real table shapes.
+    assert.equal(titleRe.test("VRF SYSTEM SCHEDULE"), false);
+    assert.equal(altKeyRe!.test("AC-1"), true);
+    assert.equal(altKeyRe!.test("AC-12"), true);
+    // Do not let the alt path steal unrelated AC-prefixed marks from a
+    // different real family sharing the same page (e.g. AHU's own AC-*
+    // convention on a genuinely different titled table) — altKeyRe only
+    // ever applies when altTitleRe itself matched this exact table's title.
+    assert.equal(altKeyRe!.test("ACCU-1"), false);
+  });
+
   it("DUCT_MOUNTED_COIL accepts ELECTRIC DUCT COIL + DH-* marks", () => {
     assert.equal(HVAC_FAMILY_SPECS.DUCT_MOUNTED_COIL.titleRe.test("ELECTRIC DUCT COIL SCHEDULE"), true);
     assert.equal(HVAC_FAMILY_SPECS.DUCT_MOUNTED_COIL.keyRe.test("DH-1"), true);

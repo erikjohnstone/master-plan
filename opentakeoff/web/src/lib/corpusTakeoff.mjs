@@ -944,10 +944,18 @@ export const HVAC_FAMILY_SPECS = {
   },
   // Return / exhaust air handlers often titled RAH / without "AIR HANDLING UNIT".
   // VRF split indoor/outdoor unit schedules (IDU-*/ODU-* / IU-*/OU-*).
+  // A SINGLE combined "VRF SYSTEM SCHEDULE" (089 Airport Terminal/Hangar) lists
+  // real indoor air-handler rows (AC-1..AC-12) with nested outdoor heat-pump
+  // sub-columns in the SAME row, rather than split INDOOR/OUTDOOR titled
+  // tables — titleRe alone can't reach it (no "INDOOR"/"OUTDOOR" in the
+  // title), so it needs its own altTitleRe/altKeyRe path, same mechanism
+  // already proven for CONDENSING_UNIT's split CU/DCU marks (GOAL.md rule 39).
   VRF_INDOOR: {
     titleRe: /VRF\s+INDOOR(?:\s+UNIT)?(?:\s+SCHEDULE)?|VARIABLE\s+REFRIGERANT\s+FLOW\s+INDOOR/i,
     exclude: /POINTS\s*LIST|DDC|OUTDOOR/i,
     keyRe: /^(?:IDU|IU|VI)[\s\-]?/i,
+    altTitleRe: /VRF\s+SYSTEM\s+SCHEDULE/i,
+    altKeyRe: /^AC[\s\-]/i,
     titledOnly: true,
   },
   VRF_OUTDOOR: {
