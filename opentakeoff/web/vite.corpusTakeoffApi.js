@@ -71,7 +71,7 @@ export function resolveTsxLoader() {
   );
 }
 
-function runCli({ mode, kind, pdfPaths, outPath, service, tag, marks, family, tags, familySweepAll, onProgress }) {
+function runCli({ mode, kind, pdfPaths, outPath, service, tag, marks, family, tags, familySweepAll, evaluationFast, onProgress }) {
   return new Promise((resolvePromise, reject) => {
     let tsxLoader;
     try {
@@ -90,6 +90,7 @@ function runCli({ mode, kind, pdfPaths, outPath, service, tag, marks, family, ta
     if (family) args.push("--family", family);
     if (tags?.length) args.push("--tags", tags.join(","));
     if (familySweepAll) args.push("--family-sweep-all");
+    if (evaluationFast) args.push("--evaluation-fast");
     for (const p of pdfPaths) args.push("--pdf", p);
     if (outPath) args.push("--out", outPath);
     const child = spawn(process.execPath, args, {
@@ -205,6 +206,7 @@ async function resolvePdfs(req) {
   let family = null;
   let tags = null;
   let familySweepAll = false;
+  let evaluationFast = false;
   let pdfPaths = [];
   let tmpDir = null;
   if (ctype.includes("multipart/form-data")) {
@@ -216,6 +218,7 @@ async function resolvePdfs(req) {
     family = mp.fields.family || null;
     tags = mp.fields.tags || null;
     familySweepAll = mp.fields.familySweepAll === "1" || mp.fields.familySweepAll === "true";
+    evaluationFast = mp.fields.evaluationFast === "1" || mp.fields.evaluationFast === "true";
     if (!mp.files.length) throw Object.assign(new Error("file required"), { status: 400 });
     tmpDir = await mkdtemp(join(tmpdir(), "ot-prod-graph-"));
     for (const f of mp.files) {
@@ -233,6 +236,7 @@ async function resolvePdfs(req) {
     family = body.family || null;
     tags = body.tags || null;
     familySweepAll = !!body.familySweepAll;
+    evaluationFast = !!body.evaluationFast;
     if (Array.isArray(body.pdfPaths) && body.pdfPaths.length) {
       pdfPaths = body.pdfPaths;
     } else if (body.pdfPath) {
@@ -241,7 +245,7 @@ async function resolvePdfs(req) {
       throw Object.assign(new Error("pdfPath or multipart file required"), { status: 400 });
     }
   }
-  return { kind, service, pdfPaths, tmpDir, tag, marks, family, tags, familySweepAll };
+  return { kind, service, pdfPaths, tmpDir, tag, marks, family, tags, familySweepAll, evaluationFast };
 }
 
 function wantsProgressStream(req) {
@@ -267,7 +271,7 @@ async function handle(req, res, mode) {
   try {
     const resolved = await resolvePdfs(req);
     tmpDir = resolved.tmpDir;
-    const { kind, service, pdfPaths, tag, marks, family, tags, familySweepAll } = resolved;
+    const { kind, service, pdfPaths, tag, marks, family, tags, familySweepAll, evaluationFast } = resolved;
     if (mode === "compile" && !kind) {
       return sendJson(res, 400, { error: "kind required" });
     }
@@ -282,7 +286,7 @@ async function handle(req, res, mode) {
       return sendJson(res, 200, raw);
     }
     if (mode === "sweep") {
-      const result = await runCli({ mode: "sweep", pdfPaths, tag });
+      const result = await runCli({ mode: "sweep", pdfPaths, tag, evaluationFast });
       return sendJson(res, 200, result);
     }
     if (mode === "count_marks") {
@@ -302,6 +306,7 @@ async function handle(req, res, mode) {
         family: family || undefined,
         tags: tagList,
         familySweepAll,
+        evaluationFast,
       });
       return sendJson(res, 200, result);
     }

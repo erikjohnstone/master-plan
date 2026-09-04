@@ -48,6 +48,13 @@ const marksCsv = arg(process.argv, "--marks");
 const family = arg(process.argv, "--family");
 const tagsCsv = arg(process.argv, "--tags");
 const familySweepAll = process.argv.includes("--family-sweep-all");
+// MCP's own real default is exhaustive (sweep_schedule_row's tagged_only
+// z.boolean().default(false), mcp/src/tools.ts) — every caller through this
+// CLI (both HTTP-bridged UI reconcile/sweep calls and direct script calls)
+// was unconditionally getting the faster, less-thorough mode regardless of
+// what was asked, so the UI and MCP could disagree on an installed count
+// from the same tag. Opt-in flag now, matching the real default.
+const evaluationFast = process.argv.includes("--evaluation-fast");
 const outPath = arg(process.argv, "--out");
 const pdfs = argsOf(process.argv, "--pdf").map((p) => resolve(p));
 if (!pdfs.length) {
@@ -101,7 +108,7 @@ if (mode === "graph") {
 
 if (mode === "sweep") {
   progress("sweep", `Sweeping schedule row ${sweepTag} on shared Session path…`, { tag: sweepTag });
-  const result = await session.sweepScheduleRow(sweepTag, { evaluationFast: true });
+  const result = await session.sweepScheduleRow(sweepTag, { evaluationFast });
   process.stdout.write(`${JSON.stringify(result)}\n`);
   process.exit(0);
 }
@@ -124,7 +131,7 @@ if (mode === "reconcile") {
   const result = await reconcileSchedulePlan(session, {
     family,
     tags,
-    evaluationFast: true,
+    evaluationFast,
     familySweepAll,
   });
   process.stdout.write(`${JSON.stringify(result)}\n`);

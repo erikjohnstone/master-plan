@@ -6916,8 +6916,10 @@ export default function TakeoffCanvas() {
     return fd;
   }
 
-  async function fetchProductionSweepScheduleRow(tag) {
-    const fd = await buildProductionFormData({ tag });
+  async function fetchProductionSweepScheduleRow(tag, opts = {}) {
+    const fields = { tag };
+    if (opts.evaluationFast) fields.evaluationFast = "1";
+    const fd = await buildProductionFormData(fields);
     if (!fd) return null;
     try {
       const res = await fetch("/__ot/sweep-schedule-row", { method: "POST", body: fd });
@@ -7457,11 +7459,30 @@ export default function TakeoffCanvas() {
     };
   }
 
+  /** Push reconcile rows into the Takeoff panel — the ONLY thing this tool
+   * used to do was download a standalone CSV; the rows never reached
+   * agentTakeoffRows at all, so scheduled_qty/installed_qty/status never
+   * showed up next to a compiled line for the same tag. Mirrors
+   * showCompiledTakeoff's own pattern (EAV rows → mergeTakeoffRows). */
+  function pushReconcileToTakeoffPanel(result, family) {
+    if (!result || result.error || !Array.isArray(result.rows) || !result.rows.length) return;
+    const rows = rowsFromToolResult("reconcile_schedule_plan", { family }, result, {
+      workflow: `reconcile ${family || "all"}`,
+    });
+    if (rows.length) {
+      setAgentTakeoffRows((prev) => mergeTakeoffRows(prev, rows));
+      setShowTakeoffData(true);
+    }
+  }
+
   /** Schedule↔plan reconcile — shared schedulePlanReconcile + sweep_schedule_row path (WP4). */
   async function agentReconcileSchedulePlan(opts = {}) {
     const family = opts.family ? String(opts.family).trim() : null;
     const remote = await agentMcpTool("reconcile_schedule_plan", { family });
-    if (remote && !remote.error) return remote;
+    if (remote && !remote.error) {
+      pushReconcileToTakeoffPanel(remote, family);
+      return remote;
+    }
 
     const prod = await fetchProductionReconcileSchedulePlan(opts);
     if (prod && !prod.error && Array.isArray(prod.rows)) {
@@ -7470,6 +7491,7 @@ export default function TakeoffCanvas() {
         const base = `${exportBaseName()}.reconcile-${(family || "all").toLowerCase()}`;
         downloadText(`${base}.csv`, csv, "text/csv");
       }
+      pushReconcileToTakeoffPanel(prod, family);
       return { ...prod, csv, path: "production_session" };
     }
 
@@ -7484,7 +7506,7 @@ export default function TakeoffCanvas() {
     }
     const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
     if (!needle) {
-      return { rows: [], summary: { total: 0, match: 0, schedule_only: 0, plan_only: 0 }, family_filter: family };
+      return { rows: [], summary: { total: 0, match: 0, schedule_only: 0, plan_only: 0, refused_no_scale: 0, refused_no_text: 0, ambiguous: 0 }, family_filter: family };
     }
     const sessionAdapter = {
       sweepScheduleRow: async (rowTag, sweepOpts) => {
@@ -7510,6 +7532,7 @@ export default function TakeoffCanvas() {
       const base = `${exportBaseName()}.reconcile-${(family || "all").toLowerCase()}`;
       downloadText(`${base}.csv`, csv, "text/csv");
     }
+    pushReconcileToTakeoffPanel(result, family);
     return { ...result, csv, path: "shared_session_sweep" };
   }
 
@@ -7653,14 +7676,24 @@ export default function TakeoffCanvas() {
    * own opt-in, not wired into this tool on either side. */
   async function agentSweepScheduleRow(tag, opts = {}) {
     const t = canonMark(tag);
+    // MCP's own default is exhaustive (tagged_only: false — search every
+    // sheet, unlabeled-near-match auditing included); this bridge used to
+    // hardcode the faster, less-thorough tagged_only:true unconditionally,
+    // so the UI and MCP could produce different installed counts from the
+    // same tool call. reconcileScheduleFamilyWithSweeps's own opts pass
+    // `evaluationFast` (mcp/src/tools.ts's own name for the same knob via
+    // `evaluationFast: a.tagged_only`) — accept either name here so a
+    // caller using MCP's naming and a caller using this bridge's own prior
+    // naming both work.
+    const taggedOnly = opts.tagged_only ?? opts.evaluationFast ?? false;
     const remote = await agentMcpTool("sweep_schedule_row", {
       tag,
-      tagged_only: true,
+      tagged_only: taggedOnly,
       rotations: opts.rotations,
       mirror: opts.mirror,
     });
     if (remote) return remote;
-    const prod = await fetchProductionSweepScheduleRow(t);
+    const prod = await fetchProductionSweepScheduleRow(t, { evaluationFast: taggedOnly });
     if (prod && !prod.error) return prod;
     return {
       error: "Production sweep_schedule_row (Session path) unavailable. "
