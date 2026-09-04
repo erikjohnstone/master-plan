@@ -10,6 +10,14 @@ Aug-29 eval artefact in this repo reads **78.4%**; today's committed result is
 **94.8%** takeoff. GOAL.md §3's "100%" cites a commit not in this history.
 Baselines below are the measured ones.
 
+Both loops are bound by the same four laws, and **both now carry a held-out
+tier** — Loop B a 50-document sweep, Loop A a ~22-document split of the graph
+fixtures. The first draft of Loop A stated L2 ("a fix that only works because
+it recognises a document is a regression even if the score rises") but gave it
+no enforcement: its DONE measured only the sets and documents it develops
+against, so tuning to them would have counted as finished. A law without a
+mechanism is decoration.
+
 ---
 
 ## LOOP A — Codex: compiler, agent contract, export
@@ -136,14 +144,43 @@ BRANCH    branch FROM add-gmft-fallback-c. Own branch. No PR unless asked.
       navfac's 21 false-adds at qty 51/52 (CD-*, RG-*, EG-*).
   Q6  Whatever B surfaces next, compiler-side, largest document count first.
 
+════ HELD-OUT TIER — the mechanism that makes L2 real ══════════════════
+  L2 forbids a fix that only works because it recognises a document. Stating
+  that law without a mechanism enforces nothing. So SPLIT the corpus ONCE,
+  before you start, and never look at the held-out half while fixing:
+
+    sort opentakeoff-corpus/graphs/*.graph.json, take every 4th file into
+    /tmp/heldout-graphs/ (about 22 of 90). Write the list to
+    opentakeoff-corpus/reports/CODEX_HELDOUT.txt and COMMIT it, so the split
+    is a matter of record and cannot drift to flatter a result.
+
+  DEVELOP against the other ~68 only. Never read a held-out finding while a
+  fix is in progress; never tune to one.
+  VALIDATE by running the census over the held-out set ONLY at the end of a
+  fix, after it already passes on the development set:
+      node --import tsx scripts/takeoff-census.mjs \
+         /tmp/heldout-graphs /tmp/census-heldout --from-graphs
+  A signature that is silent on the development set but still fires on the
+  held-out set means the fix recognised documents rather than structure.
+  That is a FAILED fix, not a partial one — revert and re-root-cause.
+
+  NEW-DOCUMENT TEST, at the very end: ask the user for one real HVAC/BAS PDF
+  that is in NO tier of this corpus, and compile all four kinds on it. This
+  is the only test that measures the actual goal. Report exactly what it
+  produces, including everything it refuses.
+
 ════ DONE ══════════════════════════════════════════════════════════════
   A: CORPUS 541/541 · Σ|Δqty| 0 · missing 0 · false-add 0, with installed_qty
      coming from reconcile on every set, not from a row count
-  B: every compiler-side detector silent across all 90 documents
+  B: every compiler-side detector silent across the ~68 development documents
+  B-HELD-OUT: every compiler-side detector ALSO silent across the ~22
+     held-out documents, which were never read during any fix
   C: green
   AND sequences compiles on every document that carries SOO text
   AND every catalogue entry has a structural root cause written down
-  NOT done at "the number went up."
+  AND the new-document test runs and its output is reported honestly
+  NOT done at "the number went up." NOT done while any signature survives
+  only on the held-out half.
 
 ════ LAWS (GOAL.md "Platform mandate") ═════════════════════════════════
   L1  Regex never classifies — structure does. Regex may CONFIRM.
