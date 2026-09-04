@@ -22,7 +22,7 @@ confirmed correct behavior on a real artifact).
 | 028_TX_Renovation_of_Building_615_Final_Design_Plans | verified-open | 18 |
 | 01_NY_VA_Northport_Dialysis_100CD | verified-open | 14 |
 | 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations | verified-open | 19 |
-| 004_MO_T2504_03_Interior_and_Exterior_Renovation | verified-open | 17 (own bug, separate from 013's — the "DESIGN AND CONSTRUCTION" title theft — confirmed still open and unaffected by rule 17's 2026-09-04 fix, since it doesn't go through the loosened branch), 20 |
+| 004_MO_T2504_03_Interior_and_Exterior_Renovation | verified-open | 17 (own bug, separate from 013's — the "DESIGN AND CONSTRUCTION" title theft — confirmed still open and unaffected by rule 17's 2026-09-04 fix, since it doesn't go through the loosened branch), 20 (sub-item (c) fixed 2026-09-04, real-document rebuild confirms GAS WATER HEATER SCHEDULE's MBH header is now clean; (a)/(b)/(d) still open) |
 | 006_US_U2607_01_Interior_Renovations_C_Wing_Updates | verified-open | 21 |
 | 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated | verified-open | 22 |
 | 009_FL_USDA_APHIS_Plant_Inspection_Station_Building | verified-open | 23 (fixed 2026-09-04 via code trace + fixture test; real-document rebuild for this specific set did not finish within session — recheck first on next pass) |

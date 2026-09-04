@@ -3840,3 +3840,53 @@ test("title hunt: an ordinary-font 2-word phrase is still correctly refused (GOA
   assert.ok(hit, "CV-1 row present");
   assert.equal(hit!.title, null, `an ordinary-font 2-word phrase must not become a title: got ${JSON.stringify(hit!.title?.text)}`);
 });
+
+test("a table's own big-font TITLE never becomes a leaf column's parent, however close it lands (GOAL.md rule 20(c), fixed 2026-09-04)", () => {
+  // Real bug, found doing genuinely verified per-set work on
+  // 004_MO_T2504_03_Interior_and_Exterior_Renovation's own real "GAS WATER
+  // HEATER SCHEDULE" table: extracted headers came back
+  // ["MARK","MANUFACTURER","MODEL","GAS WATER HEATER SCHEDULE MBH","REMARKS"]
+  // — the table's own title text glued onto a real column. Confirmed by a
+  // real live debug trace (not guessed): TANK and HEAT SOURCE — the table's
+  // own real columns with zero vocabulary representation (GOAL.md rule
+  // 20(a)) — cluster into a "loose" 2-token run right beside the real
+  // vocabulary-recognized columns, and `genuineParentOver`, called to
+  // resolve that run's own group parent, found no qualifying nearby
+  // vocabulary or phrase and fell through to its own geometric-overlap
+  // phrase search — which a real title, spanning the table's ENTIRE width,
+  // satisfies for almost any column beneath it (its own `boxGap` check has
+  // no notion of the CANDIDATE's own font size, only raw horizontal
+  // distance), so the title text — at ~2x the header row's own font height
+  // (confirmed live: real title 19px vs the real header row's own 9.5px) —
+  // won over the correct "no real parent here" answer, close enough (34.6px,
+  // confirmed live) to clear this function's own `near` reach. Real,
+  // corpus-found (rule 20's own count): six of this set's fourteen tables
+  // show some version of this pattern.
+  //
+  // Fixed the same way rule 17's own title hunt already is: any candidate at
+  // or above BIG_FONT_RATIO-scale of the header row's own font is refused as
+  // a parent outright, before the geometric-overlap/phrase-shape checks ever
+  // run — a genuine parent tier renders at roughly the same size as the leaf
+  // tier it labels; the table's own title never does. This fixture mirrors
+  // the real page's own real proportions (font heights, row gaps) directly —
+  // verified to actually reproduce the bug with the fix disabled before this
+  // test was written, per this session's own fixture-verification discipline.
+  const sp = (str: string, x: number, y: number, h = 8): GraphSpan => ({ str, x, y, w: str.length * 5, h });
+  const sched: SheetSpans = {
+    key: "gwh.pdf#31",
+    sheet_number: "M601",
+    spans: [
+      sp("GAS WATER HEATER SCHEDULE", 400, 0, 19),
+      sp("MARK", 0, 34.6, 9.5), sp("MANUFACTURER", 100, 34.6, 9.5), sp("MODEL", 300, 34.6, 9.5),
+      sp("TANK", 450, 34.6, 9.5), sp("SOURCE", 550, 34.6, 9.5),
+      sp("MBH", 650, 34.6, 9.5), sp("REMARKS", 900, 34.6, 9.5),
+      sp("GWH-1", 0, 66, 9.5), sp("LOCHINVAR", 100, 66, 9.5), sp("AWN286PM", 300, 66, 9.5),
+      sp("ST-1", 450, 66, 9.5), sp("GAS", 550, 66, 9.5),
+      sp("285", 650, 66, 9.5), sp("ALL", 900, 66, 9.5),
+    ],
+  };
+  const tab = extractTable(sched, "equipment");
+  assert.ok(tab, "the real GWH-1 row alone is enough to clear the bar");
+  assert.ok(!tab!.headers.some((h) => /SCHEDULE/.test(h)), `no header may carry the table's own title text: got ${JSON.stringify(tab!.headers)}`);
+  assert.ok(tab!.headers.includes("MBH"), `MBH must survive as its own plain column: got ${JSON.stringify(tab!.headers)}`);
+});

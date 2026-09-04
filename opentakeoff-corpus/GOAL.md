@@ -1055,7 +1055,7 @@ on this effort:**
     something tied to the candidate block's real column count/spacing,
     not the full page.
 
-20. **OPEN, SCOPED, NOT STARTED: 004_MO_T2504_03's own real GAS WATER
+20. **(a)/(b)/(d) OPEN, (c) FIXED 2026-09-04: 004_MO_T2504_03's own real GAS WATER
     HEATER SCHEDULE loses 4 real columns entirely and shows a WRONG value
     in a real REMARKS cell — genuine data corruption, not just a cosmetic
     header issue.**
@@ -1154,6 +1154,40 @@ on this effort:**
     consider in isolation once (a)/(b)/(d) are scoped. Reclassified from
     "OPEN, SCOPED, NOT STARTED" to reflect this is now four tracked
     sub-items, not one.
+
+    (c) FIXED 2026-09-04. Real live debug trace (console.error tracing,
+    scoped to this exact document, temporarily instrumented and removed
+    once root-caused) confirmed the exact mechanism: TANK and HEAT SOURCE
+    — (a)'s own zero-vocabulary columns — cluster into a "loose" 2-token
+    run beside the table's own recognized columns, and `genuineParentOver`
+    (called by `subTierAnchors` to resolve that run's own group parent)
+    found no qualifying nearby vocabulary or phrase and fell through to
+    its own geometric-overlap phrase search. That search's `boxGap` check
+    is pure horizontal distance with no notion of the CANDIDATE's own font
+    size — a real title, drawn across the table's ENTIRE width, satisfies
+    it for almost any column beneath it. Real, live-measured: the title
+    renders at 19px against the header row's own 9.5px (ratio 2.0), sitting
+    34.6px above — just inside this function's own `near` reach — and won
+    out over the correct "no real parent here" answer, producing "GAS WATER
+    HEATER SCHEDULE TANK" (verified via a fixture built from these exact
+    real proportions, with the fix temporarily disabled to confirm it
+    actually reproduces the bug before landing).
+
+    Fixed the same way rule 17's own title hunt already is: `genuineParentOver`
+    now refuses any candidate at or above a `BIG_FONT_RATIO`-scale of the
+    header row's own font as a parent outright, before its geometric-overlap
+    or phrase-shape checks ever run — a genuine parent tier renders at
+    roughly the same size as the leaf tier it labels; a table's own title
+    never does. Narrowly scoped to `genuineParentOver` alone (the confirmed
+    call site) — `parentLabelOver`/`parentPhraseOver`/`chainedParentAbove`
+    were also live-traced during this investigation and never fired for
+    this bug, so left untouched. 121/121 `sheetgraph.test.ts`, 262/262
+    broader targeted suite. Real-document verification: a real, non-debug,
+    default-identity rebuild of `004_MO_T2504_03` confirms the actual
+    pipeline now returns `["MARK","MANUFACTURER","MODEL","MBH","REMARKS"]`
+    for this table — the title text is gone from the header, exactly as
+    fixed. (a), (b), and (d) remain OPEN, tracked separately above — this
+    fix does not touch or attempt any of them.
 
 21. **OPEN, SCOPED, ATTEMPTED AND REVERTED (2026-09-03): a real, LOW-
     priority (non-HVAC) door-schedule bug —

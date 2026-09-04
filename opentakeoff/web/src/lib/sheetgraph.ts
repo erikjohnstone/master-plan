@@ -1932,10 +1932,26 @@ function parentPhraseOver(rows: GraphSpan[][], hdrIdx: number, floorIdx: number,
 // past the true absence of a parent into an unrelated neighbour's own real
 // column. Same vocabulary-first, phrase-second precedence as parentPhraseOver.
 const GENUINE_OVERLAP_TOL = 20;
+// A real parent tier renders at roughly the same font size as the leaf tier
+// it labels; the table's own TITLE never should, however close its own
+// printed box happens to land — a title routinely spans the table's ENTIRE
+// width, so `boxGap` alone (a pure horizontal-distance check, no width
+// awareness) reads it as "touching" almost every leaf column beneath it,
+// title included. Same signal rule 17's own title hunt already leans on
+// (BIG_FONT_RATIO2) applied here. Real, corpus-found (GOAL.md rule 20(c)):
+// 004_MO_T2504_03's own GAS WATER HEATER SCHEDULE table — TANK and HEAT
+// SOURCE (zero vocabulary representation, rule 20(a)) cluster into a loose
+// 2-token run this function is called to find a group parent for; the real
+// header row's own font is 9.5px, the wrongly-grabbed title's real font is
+// 19px (ratio 2.0, confirmed live via debug trace), sitting only 34.6px
+// above — well inside this function's own `near` reach on this document's
+// own tightly-packed multi-schedule page.
+const GENUINE_PARENT_BIG_FONT_RATIO = 1.6;
 function genuineParentOver(rows: GraphSpan[][], hdrIdx: number, topIdx: number, t: GraphSpan, vocab: string[]): string | null {
   const boxGap = (a: GraphSpan, b: GraphSpan) => Math.max(0, a.x - (b.x + (b.w || 0)), b.x - (a.x + (a.w || 0)));
   const hs = rows[hdrIdx].map((x) => x.h || 8).sort((a, b) => a - b);
-  const near = Math.max(24, (hs[hs.length >> 1] || 8) * 4);
+  const hdrH = hs[hs.length >> 1] || 8;
+  const near = Math.max(24, hdrH * 4);
   const hy = rowY(rows[hdrIdx]);
   const floorIdx = Math.max(0, Math.min(topIdx, hdrIdx - 8));
   let phrase: { text: string; d: number } | null = null;
@@ -1944,6 +1960,7 @@ function genuineParentOver(rows: GraphSpan[][], hdrIdx: number, topIdx: number, 
     for (const cand of rows[j]) {
       const gap = boxGap(t, cand);
       if (gap > GENUINE_OVERLAP_TOL) continue;
+      if ((cand.h || 8) >= hdrH * GENUINE_PARENT_BIG_FONT_RATIO) continue;
       const lbl = headerLabel(cand.str, vocab);
       if (lbl) return lbl;   // a recognized vocabulary parent always wins first, nearest row first
       const s = norm(cand.str);
