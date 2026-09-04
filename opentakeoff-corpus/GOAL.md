@@ -1148,6 +1148,34 @@ on this effort:**
     regression test proving existing digit-numbered room-finish tables
     are unaffected before landing.
 
+    ARCHITECTURE TRACE 2026-09-04: read `rowKeyOf`'s room-finish branch
+    (`ROW_KEY_RE`/`QUALIFIED_KEY_RE` at their point of use), `bandDataRows`,
+    and its `isKeyedRow`/`orphans` machinery to find where the "full
+    column coverage" corroborating signal this entry's own fix guidance
+    calls for could actually be threaded in. Confirmed this document's
+    real table is MIXED (`101` digit-keyed alongside `A`-`K` letter-
+    keyed in the SAME table), which rules out the simplest safe design
+    (a per-table `letterKeyed` flag decided once from the header, the
+    same pattern `nameKeyed` already uses) — a per-table flag can't
+    distinguish this table from one where a stray digit-free key really
+    is sheet noise. The row-level fix this entry calls for needs each
+    candidate row's OTHER columns checked before its key is judged, but
+    `rowKeyOf` currently only ever sees the leading token — column
+    binning (`bandDataRows`' own `cols`) happens using `isKeyedRow` as
+    an INPUT gate, so a row's key already has to pass before its other
+    cells are even binned; the natural-looking place to retrofit this
+    (`orphans`) turns out to be a different mechanism entirely — rows
+    whose key already failed get pushed there so their tokens can later
+    be MERGED into an already-accepted nearby row (wrapped-content
+    handling), not to stand as their own new row. A correct fix needs
+    the row-acceptance ordering itself changed (bin first, THEN judge a
+    weak key using the bin's own completeness), not a threaded flag —
+    real, architectural work, not a quick patch, and squarely the kind
+    of shared-code reordering this file's own history says to be most
+    careful with. NOT attempted this tick — recorded so this analysis
+    is not lost, picked up again with a clean pass at the reordering
+    specifically, not another attempt at a flag-based shortcut.
+
 23. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: an equipment table's own
     row-scan absorbs an ADJACENT, unrelated equipment table's own marks
     as fake extra rows once its own real rows run out —
