@@ -4439,6 +4439,28 @@ function bandDataRows(
     // something else — a legend, a room tag drawn beside the schedule —
     // otherwise joins the table and shows up as a duplicate key.
     if (cols && Math.abs((cols.coord === "left" ? banded[0].x : centerX(banded[0])) - cols.cols[0].start) > keyTol) continue;
+    // The check above only ever runs once `cols` — a real, DATA-recovered
+    // column map — exists, which itself needs several real rows to fit one
+    // (columnStarts' own FIT_FLOOR). A table with only 0-1 real rows never
+    // gets one, so this whole alignment guard was silently skipped for the
+    // sparsest, most vulnerable tables — GOAL.md rule 23, real, corpus-
+    // found: 009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18's
+    // own real "AIR COOLED CHILLER SCHEDULE" (one real row, CH-1, MARK
+    // anchor x≈886) absorbed the adjacent FAN SCHEDULE's own real EF-1/
+    // EF-2/EF-3/EF-5 marks (x≈1687) as 4 fake extra rows. Not caught by
+    // the table's own [x0,x1] band either — that band is deliberately WIDE
+    // on its own right edge so a real wrapped REMARKS/NOTES value is never
+    // truncated (bandLimits' own WIDE_LAST comment), and that same margin
+    // reaches straight into the neighbouring table's own key column. Falls
+    // back to the table's own HEADER anchor position/pitch — the only real
+    // "where does this table's key column start" signal left once there is
+    // no data-recovered map — with the same half-gap-tolerance style
+    // already used above, measured between the first two header anchors
+    // instead of two recovered column starts.
+    if (!cols && anchors.length > 1) {
+      const sparseKeyTol = Math.max(8, (anchors[1].x - anchors[0].x) * 0.5);
+      if (Math.abs(centerX(banded[0]) - anchors[0].x) > sparseKeyTol) continue;
+    }
     // continuation adoption: a keyed row whose key column does not line up
     // with the base's belongs to some OTHER structure — skipped, never merged
     if (cfg.keyAlign && Math.abs(centerX(banded[0]) - cfg.keyAlign.x) > cfg.keyAlign.tol) continue;

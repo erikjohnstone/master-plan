@@ -377,11 +377,17 @@ test("room-finish: the SAME scattered-legend shape is kept when a real ruled lin
   // Proves the gate is a real structural corroboration check, not a blanket
   // sparse-table refusal — same fixture as above, but this time with a
   // real ruled line spanning the header row, exactly like extractReferenceTableAt's
-  // own already-shipped "positive" counterpart test.
+  // own already-shipped "positive" counterpart test. The row sits under the
+  // table's own KEY anchor (BASE, x=100) rather than near NORTH — isolating
+  // rule 24(a)'s own ruled-line/region-height gate from rule 23's separate
+  // sparse-table key-column-alignment gate (GOAL.md rule 23; a row that
+  // doesn't even align with its own key column is refused by THAT check
+  // regardless of ruled-line evidence, same as the real fabricated 011
+  // document's own "7" row — this test is about rule 24(a) alone).
   const spans: GraphSpan[] = [
     sp("REFERENCE SHEET AE-102 FOR ROOM FINISH SCHEDULE", 100, 20),
     sp("BASE", 100, 60), sp("NORTH", 300, 60), sp("EAST", 500, 60), sp("SOUTH", 700, 60), sp("WEST", 900, 60),
-    sp("7", 300, 500),
+    sp("7", 100, 500),
   ];
   const sheet: SheetSpans = {
     key: "legend.pdf#9", sheet_number: "A-109", spans,
@@ -389,6 +395,35 @@ test("room-finish: the SAME scattered-legend shape is kept when a real ruled lin
   };
   const rf = extractTable(sheet, "room-finish");
   assert.ok(rf, "a real nearby ruled line corroborates the table — kept, same as extractReferenceTableAt's own gate");
+});
+
+test("equipment: a sparse (1-row) table does not absorb an adjacent table's own key-shaped mark (GOAL.md rule 23)", () => {
+  // Real, corpus-found: 009_FL_USDA_APHIS_Plant_Inspection_Station_Building
+  // .pdf#18's own real "AIR COOLED CHILLER SCHEDULE" (1 real row, CH-1)
+  // absorbed the adjacent FAN SCHEDULE's own real EF-1/EF-2/EF-3/EF-5 marks
+  // as 4 fake extra rows — 5 rows reported where there is genuinely 1 real
+  // chiller. Root cause: the key-column-alignment guard only runs once a
+  // real, DATA-recovered column map (`cols`) exists, which itself needs
+  // several real rows to fit one — a table with only 1 real row never gets
+  // one, so the guard was silently skipped for exactly the sparsest tables.
+  // The table's own [x0,x1] band doesn't catch it either — REMARKS (a
+  // WIDE_LAST column) deliberately earns a generous right margin (up to 3x
+  // the table's own median column gap) so a real wrapped remark is never
+  // truncated, and that same margin reaches straight into the neighbouring
+  // table's own key column.
+  const spans: GraphSpan[] = [
+    sp("AIR COOLED CHILLER SCHEDULE", 0, 0),
+    sp("MARK", 0, 40), sp("MANUFACTURER", 150, 40), sp("MODEL", 400, 40), sp("TONS", 650, 40), sp("REMARKS", 900, 40),
+    sp("CH-1", 0, 60), sp("TRANE", 150, 60), sp("CGAM-100", 400, 60), sp("100", 650, 60), sp("1,2,3", 900, 60),
+    // the adjacent, unrelated FAN SCHEDULE's own real MARK column, far to
+    // the right — inside REMARKS' own generous [x0,x1] reach but nowhere
+    // near this table's own real key column (x=0)
+    sp("EF-1", 1600, 60),
+  ];
+  const sheet: SheetSpans = { key: "chiller.pdf#18", sheet_number: "M601", spans };
+  const tab = extractTable(sheet, "equipment");
+  assert.ok(tab, "the real chiller table still extracts");
+  assert.deepEqual(tab!.rows.map((r) => r.key), ["CH-1"], "EF-1 never mints a fake extra row");
 });
 
 test("room tags pair the stacked name; schedule sheets never mint phantom rooms", () => {

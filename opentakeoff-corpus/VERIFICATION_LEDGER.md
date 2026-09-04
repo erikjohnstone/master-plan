@@ -25,7 +25,7 @@ confirmed correct behavior on a real artifact).
 | 004_MO_T2504_03_Interior_and_Exterior_Renovation | verified-open | 17, 20 |
 | 006_US_U2607_01_Interior_Renovations_C_Wing_Updates | verified-open | 21 |
 | 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated | verified-open | 22 |
-| 009_FL_USDA_APHIS_Plant_Inspection_Station_Building | verified-open | 23 |
+| 009_FL_USDA_APHIS_Plant_Inspection_Station_Building | verified-open | 23 (fixed 2026-09-04 via code trace + fixture test; real-document rebuild for this specific set did not finish within session — recheck first on next pass) |
 | 010_US_WWYK240146_Design_Implement_Monitoring_Control | verified-clean | — (0 real tables confirmed correct: sequence-of-operations narrative only, no real schedules anywhere in 31 pages) |
 | 011_IL_VA_Hines_Finance_Center_Renovation | verified-open | 24(b) (24(a)'s fabricated ROOM FINISH SCHEDULE fixed 2026-09-04) |
 | 014_MT_USDA_Forest_Service_Missoula_Fire_Sciences | verified-open | 21 (2nd confirmation) |

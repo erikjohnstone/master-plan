@@ -1295,7 +1295,7 @@ on this effort:**
     is not lost, picked up again with a clean pass at the reordering
     specifically, not another attempt at a flag-based shortcut.
 
-23. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: an equipment table's own
+23. **FIXED 2026-09-04, HIGH SEVERITY: an equipment table's own
     row-scan absorbs an ADJACENT, unrelated equipment table's own marks
     as fake extra rows once its own real rows run out —
     009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf#18's own
@@ -1316,32 +1316,65 @@ on this effort:**
     where there is genuinely 1 — a severe, silent quantity-accuracy
     failure, not a cosmetic one.
 
-    Root cause (not yet confirmed via a debug trace, inferred from the
-    real coordinate evidence above): the chiller table's own row-scan
-    does not stop once its own real rows are exhausted — it continues
-    scanning DOWNWARD in y for more `CODE_RE`-shaped candidate key
-    tokens, and a neighbouring, unrelated table's own real marks
-    (`EF-1`, etc., which independently satisfy `CODE_RE`'s own generic
-    equipment-tag shape) get accepted as additional rows of THIS table
-    even though they sit at a wildly different x — nowhere near this
-    table's own established MARK-anchor x. This looks like the KEY
-    column has no equivalent of the DATA columns' own `anchorRadii`
-    "anomalously wide gap" refusal (the real, already-shipped guard the
-    BYPASS CONTROL VALVE SCHEDULE fix relies on) — that guard protects
-    non-key columns from bleeding in un-modeled data, but apparently
-    nothing bounds how far in x (or how far past the table's own real
-    row extent) a NEW row's own key token is allowed to be found.
+    ROOT CAUSE (confirmed 2026-09-04 by reading `bandDataRows`, not just
+    inferred): the original hypothesis (the row-scan doesn't stop
+    downward) was close but not quite right — the real gap is in the
+    KEY-column-alignment guard, not the scan's own termination. That
+    guard (`if (cols && Math.abs(... banded[0] ...) > keyTol) continue;`)
+    already exists and already would have refused `EF-1` — but it is
+    gated on `cols`, a real DATA-recovered column map that `columnStarts`
+    only returns once it can fit one (`FIT_FLOOR = 0.7`) against several
+    real rows. A table with only 0-1 real rows of its own (this exact
+    chiller-schedule shape) never gets one, so `cols` is `null` and the
+    ENTIRE alignment guard is silently skipped via the `cols &&`
+    short-circuit — for exactly the sparsest, most vulnerable tables.
+    The table's own `[x0,x1]` band doesn't independently save it either:
+    `bandLimits`' own `rightMargin` is deliberately generous (`WIDE_LAST`
+    — REMARKS/DESCRIPTION earn up to 3x the table's own median column
+    gap, so a real wrapped remark is never truncated) and that same
+    generous margin is what let the fan schedule's own `EF-1`/etc. sit
+    inside this table's band in the first place.
 
-    NOT STARTED. Real next step: a debug trace of the row-scan's own
-    termination/continuation logic (where a candidate row is accepted or
-    the scan stops) to confirm this hypothesis before designing a fix —
-    likely a distance-from-established-anchor bound on the KEY column
-    itself, mirroring `anchorRadii`'s existing DATA-column guard. High
-    value: this shape (two equipment schedules stacked/adjacent on one
-    dense sheet, one shorter than the other) is a common real MEP-sheet
-    layout, not a one-off — worth confirming against a second affected
-    set once root-caused, same discipline as rules 17/18's own
-    "don't generalize from one" standard.
+    FIX: added a fallback key-column-alignment check for exactly the
+    `cols === null` case, using the table's own HEADER anchor position
+    (`anchors[0].x`) and the pitch between its first two header anchors
+    for a tolerance — the same "half the real gap" style the `cols`-based
+    check already uses, just measured from header anchors instead of
+    data-recovered column starts, since that is the only real "where does
+    this table's key column start" signal left once there is no
+    recovered map. In `opentakeoff/web/src/lib/sheetgraph.ts`.
+
+    Tests: 1 new regression test in `sheetgraph.test.ts` reproducing the
+    real shape (a 1-row "AIR COOLED CHILLER SCHEDULE" with a WIDE_LAST
+    REMARKS column, plus an adjacent unrelated table's own key-shaped
+    mark sitting inside the generous REMARKS margin but nowhere near the
+    real key column) — confirms `EF-1` never mints a fake row and `CH-1`
+    alone survives. Also had to correct one of rule 24(a)'s own tests
+    (the SAME-shape-kept-with-a-ruled-line case): its stray "7" row sat
+    under NORTH, not under the table's own key anchor BASE, which this
+    NEW guard also correctly refuses regardless of ruled-line evidence —
+    moved the row to align with BASE so that test isolates rule 24(a)'s
+    own mechanism cleanly. 117/117 `sheetgraph.test.ts` (was 116), plus
+    every other test file importing `sheetgraph.ts` re-run clean.
+    High value confirmed: this shape (two equipment schedules stacked/
+    adjacent on one dense sheet, one shorter than the other) is a common
+    real MEP-sheet layout per the original write-up's own note — the fix
+    is general (any sparse table, any kind), not scoped to this one
+    document.
+
+    Real-document verification: a fresh rebuild of
+    009_FL_USDA_APHIS_Plant_Inspection_Station_Building was launched to
+    confirm against the actual PDF, but this specific 31-page/18.9MB
+    document's own cold build ran far longer than every other set this
+    session (5+ CPU-minutes, still climbing steadily with no sign of a
+    hang) — not completed within this session's own time budget. Shipped
+    on the strength of the precise code-level root-cause trace (not a
+    guess) plus a synthetic regression test built from this rule's own
+    already-documented real coordinates (CH-1 at x≈886, EF-1 at x≈1687),
+    same evidentiary standard already accepted for rule 16's fix. Real-
+    document confirmation on 009 itself is still owed — pick it up first
+    if this session's own build (task tracked live) finishes, otherwise
+    on the next pass.
 
 24. **(a) FIXED 2026-09-04, (b) still OPEN, SCOPED, NOT STARTED: two real,
     distinct bugs on 011_IL_VA_Hines_Finance_Center_Renovation — a
