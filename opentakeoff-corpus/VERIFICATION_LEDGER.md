@@ -23,12 +23,12 @@ confirmed correct behavior on a real artifact).
 | 01_NY_VA_Northport_Dialysis_100CD | verified-open | 14 |
 | 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations | verified-open | 19 |
 | 004_MO_T2504_03_Interior_and_Exterior_Renovation | verified-open | 17 (own bug, separate from 013's — the "DESIGN AND CONSTRUCTION" title theft — confirmed still open and unaffected by rule 17's 2026-09-04 fix, since it doesn't go through the loosened branch), 20 (sub-item (c) fixed 2026-09-04, real-document rebuild confirms GAS WATER HEATER SCHEDULE's MBH header is now clean; (a)/(b)/(d) still open) |
-| 006_US_U2607_01_Interior_Renovations_C_Wing_Updates | verified-open | 21 |
+| 006_US_U2607_01_Interior_Renovations_C_Wing_Updates | verified-fixed | 21 (fixed 2026-09-04 in scheduleStreamFallback.ts, the real L2 stream-fallback injection point — not buildSheetGraph, which returns 0 tables for this doc; real-document rebuild confirms 34 real door rows, 0 phantom "MARK" rows) |
 | 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated | verified-open | 22 |
 | 009_FL_USDA_APHIS_Plant_Inspection_Station_Building | verified-open | 23 (fixed 2026-09-04 via code trace + fixture test; real-document rebuild for this specific set did not finish within session — recheck first on next pass) |
 | 010_US_WWYK240146_Design_Implement_Monitoring_Control | verified-clean | — (0 real tables confirmed correct: sequence-of-operations narrative only, no real schedules anywhere in 31 pages) |
 | 011_IL_VA_Hines_Finance_Center_Renovation | verified-open | 24(b) (low severity — header text only, real data all correct; 24(a)'s fabricated ROOM FINISH SCHEDULE fixed 2026-09-04) |
-| 014_MT_USDA_Forest_Service_Missoula_Fire_Sciences | verified-open | 21 (2nd confirmation) |
+| 014_MT_USDA_Forest_Service_Missoula_Fire_Sciences | verified-open | 21 (2nd confirmation; likely fixed by the same 2026-09-04 scheduleStreamFallback.ts fix, same mechanism — not independently re-verified this pass, real next step if picked up again) |
 | 015_VA_P_095_Replace_Submarine_Pier_3_Utility | verified-open | 30 (14th confirmation, low severity here — otherwise clean; was mis-scoped as rule 25, corrected 2026-09-04) |
 | 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test | verified-open | 26 fixed 2026-09-04 (fixture-verified; real-document rebuild for this set stalled twice this session — recheck first on next pass) |
 | 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling | verified-fixed | 27 (both vector + ODL-path fixes shipped) |

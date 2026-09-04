@@ -1189,7 +1189,7 @@ on this effort:**
     fixed. (a), (b), and (d) remain OPEN, tracked separately above — this
     fix does not touch or attempt any of them.
 
-21. **OPEN, SCOPED, ATTEMPTED AND REVERTED (2026-09-03): a real, LOW-
+21. **FIXED 2026-09-04 (was: OPEN, SCOPED, ATTEMPTED AND REVERTED 2026-09-03): a real, LOW-
     priority (non-HVAC) door-schedule bug —
     006_US_U2607_01_Interior_Renovations_C_Wing_Updates.pdf#17 merges TWO
     genuinely separate real door schedules into one `graph.tables` entry,
@@ -1329,6 +1329,62 @@ on this effort:**
     didn't; that mismatch is the most concrete lead left), rather than
     another round of `console.error` sprinkled through the same three
     functions already exhaustively ruled out above.
+
+    **FIXED 2026-09-04, third debug-trace session — real injection point
+    finally pinned down, and it was NEVER inside `buildSheetGraph` at
+    all.** Following this rule's own "real next step" (a debugger-style
+    trace at `bandedSheets`/the `bands` loop, not another sweep through
+    the same three already-ruled-out functions), instrumented
+    `buildSheetGraph`'s own real fragment-push site (`fragments.push(t)`,
+    confirmed this time to be the SAME site the whole finish/equipment/
+    room-finish loop uses — the earlier "pass 1 fragments.push" the
+    2026-09-04 SECOND DEEP TRACE instrumented was a DIFFERENT site, the
+    structural-reference-only push inside the `role.role === "schedule"`
+    block, which a `kind: "finish"` door schedule never reaches at all —
+    the real, previously-unexplained root of why neither prior round's
+    prints ever fired). Rebuilt fresh: `buildSheetGraph` returns
+    `fragments.length=0`, `tables.length=0` for this ENTIRE 37-sheet
+    document — it produces ZERO tables here, full stop. The real
+    19-/34-row table with its phantom "MARK" row is built ENTIRELY by
+    the separate L0-L5 vector takeoff pipeline's own L2 fallback stage
+    (`runVectorTakeoffPipeline` → `runL2FallbacksForSheet`, a wholly
+    different file, `vectorTakeoffPipeline.ts`, never examined by either
+    prior session).
+    
+    Traced one level further, live: `extractScheduleTablesFromStreamGrid`
+    (`scheduleStreamFallback.ts`) — the "L2 stream-mode" borderless-grid
+    fallback — is the real source. It finds ONE header row (the first row
+    in the sheet clearing its own `HEADER_WORDS` vocabulary bar, ≥3 hits)
+    and then treats EVERY subsequent row as data, all the way to the end
+    of the sheet, with no notion that a SECOND real table might start
+    partway through. Real, live-measured: the untiled whole-page pass
+    read 36 rows straight through BOTH real door schedules, with the
+    second one's own repeated header row (another clean ≥3-hit MARK/TYPE
+    match) landing as an ordinary data row twice over (once per tiled
+    pass, once whole-page) — exactly the reported symptom.
+    
+    Fixed narrowly, in `scheduleStreamFallback.ts` alone: a candidate
+    data row that ALSO clears the identical header-word bar used to find
+    the table's own first header row is refused as data (skipped, not
+    counted — the scan continues past it, absorbing the second table's
+    own real rows into the same combined read) — a row shaped like a
+    header is never real data, whichever table it belongs to. 128/128
+    the touched test files (`sheetgraph.test.ts` + `vectorTakeoffPipeline
+    .test.ts`), 263/263 broader targeted suite. Regression test built
+    from the real page's own header vocabulary, verified with the fix
+    temporarily disabled to actually reproduce the exact phantom-row
+    shape before landing.
+    
+    Real-document verification: a real, non-debug, default-identity
+    rebuild of 006 confirms `graph.tables`' own sheet#17 entry now carries
+    34 real door-mark keys (up from 19 — MORE real rows recovered, not
+    fewer, since the scan no longer needs anything to terminate it early)
+    and zero occurrences of a bare `"MARK"` key. `014_MT_USDA_Forest
+    _Service_Missoula_Fire_Sciences`'s own independent confirmation of
+    this exact shape (this rule's own 2026-09-03 update) is very likely
+    fixed by the same change (same fallback, same mechanism) — not
+    independently re-verified this pass, real next step if this doc is
+    ever picked up again.
 
 22. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: `ROW_KEY_RE`'s digit-first
     requirement drops 11 of 12 real rooms (92% real row loss) from

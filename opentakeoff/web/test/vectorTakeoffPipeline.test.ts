@@ -45,6 +45,49 @@ describe("L2 stream fallback", () => {
     assert.ok(tables.length >= 1, "stream grid should produce a table");
     assert.ok(tables[0].rows.length >= 1);
   });
+
+  it("a second real schedule's own repeated header row never survives as a phantom data row (GOAL.md rule 21, fixed 2026-09-04)", () => {
+    // Real bug, found doing genuinely verified per-set work:
+    // 006_US_U2607_01_Interior_Renovations_C_Wing_Updates.pdf#17 draws TWO
+    // genuinely separate real door schedules stacked on one sheet ("AREA
+    // 1C16L DOOR SCHEDULE" then "AREA 1C16H DOOR SCHEDULE …", each its own
+    // real MARK/WIDTH/HEIGHT/… header). This fallback's own row scan finds
+    // ONE header row (the first to clear its own HEADER_WORDS bar) and then
+    // treats EVERY row after it as data all the way to the end of the
+    // sheet — no notion of a second table at all — so the second real
+    // schedule's own repeated header row survives as an ordinary data row:
+    // a literal `{"MARK":"MARK","WIDTH":"WIDTH",…}` row spliced mid-table.
+    // Root-caused via a real live debug trace across THREE prior sessions'
+    // worth of investigation inside sheetgraph.ts's own buildSheetGraph
+    // (all of it a dead end — that function returns ZERO fragments for
+    // this entire document) before this fallback, a wholly separate file,
+    // was finally identified as the real source.
+    //
+    // Fixed narrowly: a candidate data row that ALSO clears the identical
+    // header-word bar used to find the table's own first header row is
+    // refused as data (skipped, not counted, scan continues) — a row
+    // shaped like a header is never real data, whichever table it belongs
+    // to. Mirrors the real page's own header vocabulary (MARK/TYPE, each
+    // recognized by this fallback's own HEADER_WORDS list) repeated
+    // verbatim between the two real schedules.
+    const spans: GraphSpan[] = [];
+    const headers = ["MARK", "TYPE", "MODEL", "SIZE"];
+    const put = (vals: string[], y: number) => vals.forEach((v, i) => spans.push({ str: v, x: 40 + i * 80, y, w: 30, h: 10 }));
+    put(headers, 100);
+    put(["C101", "HM", "M1", "36"], 130);
+    put(["C102", "HM", "M1", "36"], 160);
+    put(headers, 190); // the second real schedule's own repeated header row
+    put(["C201", "WD", "M2", "32"], 220);
+    put(["C202", "WD", "M2", "32"], 250);
+    const tables = extractScheduleTablesFromStreamGrid(spans, "doors.pdf#17", {
+      pageViewportTransform: [2, 0, 0, 2, 0, 0],
+      force: true,
+    });
+    assert.ok(tables.length >= 1, "stream grid should produce a table");
+    const keys = tables[0].rows.map((r) => r.key);
+    assert.ok(!keys.includes("MARK"), `a repeated header row must never survive as a phantom "MARK" data row: got ${JSON.stringify(keys)}`);
+    assert.deepEqual(keys, ["C101", "C102", "C201", "C202"], `all 4 real doors must still be present, header row skipped cleanly: got ${JSON.stringify(keys)}`);
+  });
 });
 
 describe("L2 line grid fallback safety", () => {

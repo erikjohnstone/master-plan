@@ -182,6 +182,18 @@ export function extractScheduleTablesFromStreamGrid(
   let y0 = Math.min(...headerRow.map((s) => s.y));
   let y1 = Math.max(...headerRow.map((s) => s.y + s.h));
   for (let i = headerIdx + 1; i < rows.length; i++) {
+    // A real, dense sheet routinely stacks a SECOND, genuinely separate
+    // schedule directly beneath the first (real, corpus-found: 006's own
+    // two AREA DOOR SCHEDULEs, one per repair phase) — this fallback has no
+    // notion of a second table at all, so its own scan runs straight
+    // through the second table's own repeated header row and keeps it as
+    // an ordinary data row (a real, literal "MARK"-keyed row landing
+    // mid-table). Refused by the SAME shape signal that found `headerIdx`
+    // in the first place — a row hitting the identical header-word bar is
+    // a header, never real data, whichever table it belongs to.
+    const blob = rows[i].map((s) => s.str).join(" ");
+    const headerHits = (blob.match(new RegExp(HEADER_WORDS.source, "gi")) || []).length;
+    if (headerHits >= 3) continue;
     const texts = assignRowToColumns(rows[i], colXs);
     if (texts.filter(Boolean).length < 2) continue;
     if (texts.every((t) => !t.trim())) continue;
