@@ -83,7 +83,18 @@ for (const pdf of pdfs) {
     rec.error = String(e?.message || e).slice(0, 300);
   }
   results.push(rec);
+  // Write after EVERY document, not once at the end. Real, this session: a
+  // 52-document baseline run reached document 48 of 52 and then hit its own
+  // `timeout` wrapper — and because the only write was down here, ninety
+  // minutes of extraction across 47 finished documents would have been lost
+  // whole. This corpus contains individual sets the VERIFICATION_LEDGER
+  // already records as never finishing in a normal session, so a long run
+  // meeting its deadline mid-document is the expected case, not the freak
+  // one. Writing incrementally makes a killed run degrade into a PARTIAL
+  // result (still diffable for every document it did reach) instead of
+  // nothing at all. The cost is one small serialize per document against
+  // minutes of PDF work — irrelevant.
+  writeFileSync(outFile, JSON.stringify(results, null, 2));
   console.error(`done ${name}: ${rec.tables.length} tables${rec.error ? " ERR:" + rec.error : ""}`);
 }
-writeFileSync(outFile, JSON.stringify(results, null, 2));
-console.error(`wrote ${outFile}`);
+console.error(`wrote ${outFile} (${results.length} document(s))`);
