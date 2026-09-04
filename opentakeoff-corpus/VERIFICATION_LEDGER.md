@@ -18,11 +18,11 @@ confirmed correct behavior on a real artifact).
 |---|---|---|
 | 05_MO_VA_StLouis_AHU_VAV_Replacement | verified-fixed | 12 |
 | 11_CA_SDSU_EngSciences_Complex_100SD | not-a-bug | 15 |
-| 013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29 | verified-open | 17 |
+| 013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29 | verified-fixed | 17 (fixed 2026-09-04 via real live debug trace + pre-fix control comparison + fixture tests; a full end-to-end `graph.tables` rebuild confirmation is still owed — this document has its own pre-existing, unrelated cold-build instability, confirmed identical on pre-fix code — recheck first on next pass) |
 | 028_TX_Renovation_of_Building_615_Final_Design_Plans | verified-open | 18 |
 | 01_NY_VA_Northport_Dialysis_100CD | verified-open | 14 |
 | 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations | verified-open | 19 |
-| 004_MO_T2504_03_Interior_and_Exterior_Renovation | verified-open | 17, 20 |
+| 004_MO_T2504_03_Interior_and_Exterior_Renovation | verified-open | 17 (own bug, separate from 013's — the "DESIGN AND CONSTRUCTION" title theft — confirmed still open and unaffected by rule 17's 2026-09-04 fix, since it doesn't go through the loosened branch), 20 |
 | 006_US_U2607_01_Interior_Renovations_C_Wing_Updates | verified-open | 21 |
 | 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated | verified-open | 22 |
 | 009_FL_USDA_APHIS_Plant_Inspection_Station_Building | verified-open | 23 (fixed 2026-09-04 via code trace + fixture test; real-document rebuild for this specific set did not finish within session — recheck first on next pass) |

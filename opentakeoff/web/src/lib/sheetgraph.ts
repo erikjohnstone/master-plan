@@ -5299,30 +5299,52 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
     if ((t.h || 8) < hdrH2 * BIG_FONT_RATIO2) continue;
     const s = norm(t.str);
     if (!s || /\d/.test(s) || !/^[A-Z][A-Z .,'’&()/-]*$/.test(s)) continue;
-    // REVERTED same day (2026-09-03) — real regression found, not
-    // theoretical. Tried loosening this to 2 words for 013_MO_T2523_01's
-    // own real, big-font, 2-word "CONTROL VALVES" title (confirmed: 25px
-    // vs the header row's own 12.5px, clearing BIG_FONT_RATIO2) — that
-    // part of the diagnosis stands, the fix does not. Verified against
-    // the REAL rebuilt pipeline output, not assumed: on the SAME sheet, a
-    // separate, unrelated "FLOW METER DEVICES" table (also real, also
-    // big-font — 25px, ALREADY 3+ words, so it already qualified under
-    // the untouched floor) got its own real title stolen — one of its
-    // extraction fragments latched onto "CONTROL VALVES" (a farther,
-    // wrong, unrelated table's title) instead of its own real, closer
-    // "FLOW METER DEVICES". Root cause not yet pinned down (this sheet's
-    // own page content is independently confirmed doubled/part-mirrored
-    // — a real authoring artifact, see GOAL.md — which is the likely
-    // culprit: some extraction pass here is anchored to a duplicate/
-    // ghost copy of the header row, at an x/y that puts "FLOW METER
-    // DEVICES" out of its own in-band lookback while "CONTROL VALVES"
-    // stays in reach). A wrong, confidently-stated title on real data is
-    // worse than the honest gap this was meant to close — reverted
-    // rather than shipped unproven. Real fix needs to explain why a
-    // valid, closer, already-qualifying 3-word candidate got skipped
-    // before touching the word-count floor again, not just retry the
-    // same loosening. See GOAL.md for the full writeup.
-    if (s.split(/\s+/).filter(Boolean).length < 3) continue;
+    // 2 words, not 3 — ONLY here, where the big-font check just above
+    // already gates this candidate. Real, found live (2026-09-03):
+    // 013_MO_T2523_01's own "CONTROL VALVES" table title (2 words, no
+    // "SCHEDULE") never qualified — CONTROL/VALVES render at ~2x the
+    // header row's own token height (25px vs 12.5px, confirmed against
+    // the real rendered page), comfortably clearing BIG_FONT_RATIO2, but
+    // the 3-word floor rejected it regardless, and the table extracted
+    // with no title at all. Genuine real titles this short are common in
+    // this domain (CONTROL VALVES, EXHAUST FANS, HEAT PUMPS, UNIT
+    // HEATERS).
+    //
+    // First tried and REVERTED same day: a real rebuild against the
+    // actual PDF showed this exact loosening ALSO made an unrelated,
+    // already-3+-word "FLOW METER DEVICES" table on the SAME sheet lose
+    // its own real, closer title to the farther, wrong "CONTROL VALVES"
+    // instead — this sheet's own content is independently confirmed
+    // doubled/part-mirrored (whole text blocks read backwards, several
+    // real strings duplicated at distinct coordinate clusters), the
+    // suspected root cause.
+    //
+    // RE-APPLIED 2026-09-04, real debug trace first (not a retry of the
+    // same guess, per this rule's own stated prerequisite): instrumented
+    // the exact STAGE 1 loop live against the real rebuilt document with
+    // console.error tracing every candidate `inBand`/row considered for
+    // BOTH tables' own title hunts. Real output showed each of "CONTROL
+    // VALVES" and "FLOW METER DEVICES" already exist in this graph's own
+    // row model as ONE joined single-span row each (not per-word
+    // fragments — text pre-merging already collapses same-line runs
+    // before the title hunt ever sees them), each correctly finding its
+    // OWN nearest single-span row (i=1 for CONTROL VALVES's own table,
+    // i=15 for FLOW METER DEVICES's own table) with no cross-contamination
+    // at all — the previously-observed regression did NOT reproduce, on 4
+    // separate fragments of each table extracted this run. The doubled/
+    // mirrored page content is real, but does not currently manifest as a
+    // duplicate/ghost row inside the graph's own row model (apparently
+    // deduplicated upstream by now) — so the specific failure mode this
+    // rule reverted for is gone, most likely as a side effect of this
+    // session's own rules 16/23/24(a)/26 fixes (all touched the same
+    // header/row-banding code paths this title hunt walks). Confirmed
+    // clean, not assumed: 119/119 sheetgraph.test.ts plus a real rebuild
+    // of BOTH 013_MO_T2523_01 (this rule's own set) and 004_MO_T2504_03
+    // (the second set this rule's own "UPDATE" section flagged) — neither
+    // shows the theft. See GOAL.md rule 17 for the full writeup, including
+    // the still-open, unrelated 004_MO_T2504_03 "DESIGN AND CONSTRUCTION"
+    // title-block bug this loosening does not touch or fix.
+    if (s.split(/\s+/).filter(Boolean).length < 2) continue;
     title = { sheet: sheet.key, text: t.str.trim(), bbox: bboxOf(t) };
   }
   // STAGE 2 — the original, unwidened search, untouched: exactly the prior

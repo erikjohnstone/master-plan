@@ -730,7 +730,7 @@ on this effort:**
     already-shipped, already-trusted join used in two other production
     paths — not a new, unproven mechanism.
 
-17. **OPEN, SCOPED, PARTIALLY REVERTED (2026-09-03): a real 2-word
+17. **FIXED 2026-09-04 (was: OPEN, SCOPED, PARTIALLY REVERTED 2026-09-03): a real 2-word
     big-font title gap exists on `013_MO_T2523_01`'s own "CONTROL
     VALVES" table, and a fix was tried, found to cause a real regression
     elsewhere on the SAME sheet, and reverted rather than shipped.**
@@ -827,6 +827,81 @@ on this effort:**
     fix; the real next step (a debug trace of the title-hunt's own scan
     start point and lookback window, per rule 17's original text above)
     is still the right next move before attempting anything.
+
+    **FIXED 2026-09-04, real debug trace obtained first, exactly per
+    this rule's own stated prerequisite — not another guess.**
+    Temporarily re-instrumented the live STAGE 1 loop (`console.error`
+    tracing, scoped to this exact sheet only) and re-applied the EXACT
+    same word-floor-2 diff that was reverted on 2026-09-03 (confirmed
+    identical via `git show` of both the original fix commit and its
+    revert), then cold-rebuilt the real `013_MO_T2523_01` PDF fresh
+    against current HEAD (which now includes this session's own rules
+    16/23/24(a)/26 fixes, all landed AFTER the original revert). Real,
+    live output: on 4 separate real extraction attempts across the sheet
+    (2 for "CONTROL VALVES", 2 for "FLOW METER DEVICES"), each table's
+    own title-hunt correctly walked to and matched its OWN nearest
+    single-span title row — `i=1` ("CONTROL VALVES", h=50) for the
+    CONTROL VALVES table, `i=15` ("FLOW METER DEVICES", h=41.6) for the
+    FLOW METER DEVICES table — with zero cross-contamination in any
+    attempt. The previously-observed theft did not reproduce.
+
+    Real root cause of why it doesn't reproduce anymore: this graph's own
+    row model already merges each same-line text run into ONE joined
+    span before the title hunt ever sees it (confirmed directly in the
+    trace — "CONTROL VALVES" and "FLOW METER DEVICES" each appear as a
+    single `inBand` token, not per-word fragments), so the STAGE 1
+    "exactly one in-band token" gate (`inBand.length !== 1`) already
+    isolates each candidate correctly; the sheet's own doubled/part-
+    mirrored page content (real, independently confirmed via pdfplumber —
+    see the original writeup above) is real but does not currently
+    surface as a duplicate/ghost ROW inside the graph's own model, most
+    likely because it now gets deduplicated upstream by one of the
+    rules 16/23/24(a)/26 fixes (all touch the exact same header/row-
+    banding code paths this title hunt walks) — not proven which one
+    specifically, and not worth the added risk of narrowing further
+    given the fix itself is now clean.
+
+    Landed: re-applied the identical word-floor-2 diff (3→2, STAGE 1
+    branch only, still gated by the same `BIG_FONT_RATIO2` big-font
+    check — nothing else changed), with the full original code comment
+    replaced by this rule's real history. Rewrote the standing regression
+    test to assert the NOW-correct behavior (`title.text === "CONTROL
+    VALVES"`, not `null`), and added a new negative-control test proving
+    the font gate — not word count alone — is what keeps this safe (an
+    ordinary-font 2-word phrase is still correctly refused).
+    120/120 `sheetgraph.test.ts`, 261/261 broader targeted suite, both
+    clean.
+
+    Real-document verification, honestly scoped: a real, non-debug,
+    default-identity rebuild of `013_MO_T2523_01` was run twice post-fix;
+    both times the "CONTROL VALVES" equipment table correctly carried its
+    real title. A full end-to-end confirmation that `graph.tables` STILL
+    contains the "FLOW METER DEVICES" table (not just correctly-titled if
+    present, but present at all) could not be completed — this exact
+    document has an independent, PRE-EXISTING full-rebuild instability
+    (confirmed directly: an identical fresh rebuild of the UNCHANGED,
+    pre-fix committed code via `git stash` shows the SAME symptom, a
+    fresh cold build of this specific ~30+-page, doubled-content PDF
+    silently truncates to only a handful of page-20 tables, sometimes
+    stalling outright with no CPU progress for 10+ real minutes — not
+    something this fix introduced). Given (a) the exhaustive live debug
+    trace above already directly proves the title-hunt mechanism itself
+    is correct with no cross-contamination in 4 separate real attempts,
+    and (b) this same "ship on rigorous trace + test evidence, flag the
+    live full-rebuild gap honestly" standard was already used for rules
+    23 and 26 this session — shipping now rather than blocking
+    indefinitely on this one document's own known instability. Full
+    `graph.tables` end-to-end reconfirmation on 013 is still owed
+    (tracked in VERIFICATION_LEDGER.md) next time this document
+    cold-builds cleanly.
+
+    Also reconfirmed, unaffected as expected: `004_MO_T2504_03`'s own
+    separate, already-documented "DESIGN AND CONSTRUCTION" title-block
+    bug (real rebuild post-fix) is UNCHANGED — that table's own real
+    title is already 3+ words, so it never goes through the loosened
+    2-word branch at all. That bug remains real, separate, and STILL
+    OPEN — likely the same family as rules 29/30 (cross-table/header-
+    tier bleed from this doc's own doubled content), not attempted here.
 
 18. **028_TX_Renovation_of_Building_615: real "&" header-connector bug
     fixed (kept, general improvement) — but it does NOT fully recover

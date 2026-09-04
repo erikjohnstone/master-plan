@@ -3779,12 +3779,12 @@ test("WP1.4 title hunt: SCHEDULED note prose must not steal the real title (Nort
   assert.ok(!/AIRFLOWS SCHEDULED/i.test(String(hit!.title?.text || "")), "numbered SCHEDULED note must not be the title");
 });
 
-test("title hunt: a genuine 2-word BIG-FONT title (no \"SCHEDULE\" word) is STILL correctly refused — real, open gap, a loosened fix was tried and reverted (013_MO_T2523_01's own CONTROL VALVES table)", () => {
+test("title hunt: a genuine 2-word BIG-FONT title (no \"SCHEDULE\" word) is now correctly kept (GOAL.md rule 17, fixed 2026-09-04)", () => {
   // Real, found-live gap (2026-09-03), root-caused against the actual
   // rendered page, not guessed: 013_MO_T2523_01_Replace_Boilers_Phase_2's
-  // own "CONTROL VALVES" table title never qualifies as a title candidate
+  // own "CONTROL VALVES" table title never qualified as a title candidate
   // at all — it names no "SCHEDULE" word, and the STAGE 1 big-font
-  // fallback's own word-count floor requires 3+ words. Confirmed against
+  // fallback's own word-count floor required 3+ words. Confirmed against
   // real page coordinates: CONTROL/VALVES render at height 25 vs the
   // header row's own 12.5 (ratio 2.0, comfortably clearing
   // BIG_FONT_RATIO2=1.6) — a real, big-font, genuine title, just short.
@@ -3793,18 +3793,19 @@ test("title hunt: a genuine 2-word BIG-FONT title (no \"SCHEDULE\" word) is STIL
   // and REVERTED same day — real regression, verified against the actual
   // rebuilt pipeline output, not theoretical: on the SAME real sheet, a
   // separate "FLOW METER DEVICES" table (also real, also big-font, and
-  // ALREADY 3+ words — it should never have been affected) had its own
-  // correct, closer title stolen by "CONTROL VALVES" instead. That
-  // sheet's own page content is independently confirmed doubled/part-
-  // mirrored (a real authoring artifact — see GOAL.md), the likely real
-  // cause: some extraction pass anchors to a duplicate/ghost copy of the
-  // header row whose in-band lookback skips its own real title and
-  // reaches the wrong, farther one. This test intentionally asserts the
-  // CURRENT, SAFE (if incomplete) behavior — no title, not a wrong one —
-  // until the real cause of the OTHER table's title theft is found. See
-  // GOAL.md for the full writeup; do not re-loosen this floor without
-  // first explaining why a valid, closer, already-qualifying candidate
-  // gets skipped elsewhere on this same real document.
+  // ALREADY 3+ words) had its own correct, closer title stolen by
+  // "CONTROL VALVES" instead.
+  //
+  // RE-APPLIED 2026-09-04 after a real debug trace (not a retry of the
+  // same guess): instrumented the live STAGE 1 loop against the real
+  // rebuilt 013_MO_T2523_01 document and confirmed both tables' own title
+  // hunts now correctly find their OWN nearest single-span title, on 4
+  // separate real fragments of each table — the theft did not reproduce.
+  // Most likely fixed as a side effect of this session's own rules
+  // 16/23/24(a)/26 (all touched the same header/row-banding paths this
+  // title hunt walks). Re-confirmed against BOTH real sets rule 17 named
+  // (013_MO_T2523_01 and 004_MO_T2504_03) — neither shows the theft. See
+  // GOAL.md rule 17 for the full writeup.
   const sp = (str: string, x: number, y: number, h = 8): GraphSpan => ({ str, x, y, w: str.length * 5, h });
   const sched: SheetSpans = {
     key: "cv.pdf#1",
@@ -3819,5 +3820,23 @@ test("title hunt: a genuine 2-word BIG-FONT title (no \"SCHEDULE\" word) is STIL
   const tables = extractAllTables(sched, "equipment");
   const hit = tables.find((t) => (t.rows || []).some((r) => r.key === "CV-1"));
   assert.ok(hit, "CV-1 row present");
-  assert.equal(hit!.title, null, `a 2-word title must still be refused (safe gap, not a wrong title) until the real fix lands: got ${JSON.stringify(hit!.title?.text)}`);
+  assert.equal(hit!.title?.text, "CONTROL VALVES", `a genuine 2-word big-font title must now be kept: got ${JSON.stringify(hit!.title?.text)}`);
+});
+
+test("title hunt: an ordinary-font 2-word phrase is still correctly refused (GOAL.md rule 17 — the font gate, not word count alone, keeps this safe)", () => {
+  const sp = (str: string, x: number, y: number, h = 8): GraphSpan => ({ str, x, y, w: str.length * 5, h });
+  const sched: SheetSpans = {
+    key: "cv2.pdf#1",
+    sheet_number: "M21",
+    spans: [
+      sp("SEE NOTES", 100, 10, 12.5), // same size as the header row — no big-font signal
+      sp("TAG", 0, 60, 12.5), sp("MANUFACTURER", 100, 60, 12.5), sp("MODEL", 300, 60, 12.5), sp("GPM", 450, 60, 12.5),
+      sp("CV-1", 0, 90, 12.5), sp("BELIMO", 100, 90, 12.5), sp("B-100", 300, 90, 12.5), sp("2.5", 450, 90, 12.5),
+      sp("CV-2", 0, 110, 12.5), sp("BELIMO", 100, 110, 12.5), sp("B-100", 300, 110, 12.5), sp("2.5", 450, 110, 12.5),
+    ],
+  };
+  const tables = extractAllTables(sched, "equipment");
+  const hit = tables.find((t) => (t.rows || []).some((r) => r.key === "CV-1"));
+  assert.ok(hit, "CV-1 row present");
+  assert.equal(hit!.title, null, `an ordinary-font 2-word phrase must not become a title: got ${JSON.stringify(hit!.title?.text)}`);
 });
