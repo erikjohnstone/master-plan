@@ -1269,6 +1269,120 @@ function nearestGroupLabelAbove(rows: GraphSpan[][], vocab: string[], ceilIdx: n
  * eligible; "HEATING"/"COOLING" are exactly that on the real fixture,
  * verified against the real spans, not invented. No qualifying parent, no
  * anchor: an unexplained parenthesized fragment never mints a column. */
+// A settled header row can contain a SIDE-BY-SIDE NEIGHBOUR TABLE's text.
+// `clusterRows` deliberately keeps a row together across baseline jitter
+// (`tol = max(0.35·h, 3)`), which on a dense sheet also welds a neighbouring
+// table's own header/descriptive line into this row when the two baselines
+// land inside that tolerance. Every vocabulary hit in the welded row then
+// mints a column for whichever table settled here, and ordinary (correctly
+// working) same-row cell attribution fills those false columns with the
+// NEIGHBOUR's real text — GOAL.md rule 29's confirmed shape.
+//
+// Real, live-traced (012_MO_M2430_01#27's VFD SCHEDULE): the real header is
+// TAG NO / MANUFACTURER / MODEL / NOTES at y=314.70, x 1943-2958. An
+// unrelated PANELBOARD SCHEDULE's sentence ("120/208 VOLTAGE 3 PHASE 4 WIRE
+// ...") sits at y=309.50, x 3076-4410. "VOLTAGE" and "PHASE" were minted as
+// VFD columns and filled with "PUMP" / "150 1176 1920".
+//
+// The discriminator is a VERTICAL WHITESPACE CORRIDOR through the table's own
+// DATA, not baseline agreement. Baselines cannot separate these: measured on
+// real corpus pages, ONE real header row's own labels legitimately vary by up
+// to 1.2·h in y (019_FL_Eglin's own coil header prints I.W.G/GPM/CFM/LENGTH/
+// MBH across 15.5px at h=12.7, its sub-groups mutually x-disjoint), while
+// rule 29's real intruder sat only 0.29·h away — the intruder is RELATIVELY
+// TIGHTER than real headers are, so no y threshold can tell them apart. A
+// first attempt at this fix grouped hits by baseline and was caught by the
+// corpus sweep dropping real columns (GPM) and a whole real LUMINAIRE
+// SCHEDULE; that approach is unsound and is not what this does.
+//
+// What IS reliable: two tables printed side by side are separated by a band
+// of whitespace running down the page, while two columns of the SAME table
+// have that table's own data between them — even when no header word was
+// recognized for the columns in between (exactly 012's case: the real
+// SERVES/HP/VOLTS/HZ/ENCLOSURE columns are unrecognized, yet their real data
+// fills the space between MODEL and NOTES, so that wide internal gap is
+// correctly NOT read as a table boundary). So: find a gap between adjacent
+// header hits that no data row below crosses, and refuse the hits beyond it.
+const CORRIDOR_MIN_RATIO = 5;      // an inter-table gutter, not a wide column
+const CORRIDOR_DATA_ROWS = 16;
+const CORRIDOR_PAD = 2;
+const CORRIDOR_LINE_RATIO = 0.25;  // "a different printed line", tightly
+function hitsBeforeNeighbourCorridor(
+  rows: GraphSpan[][], hdrIdx: number,
+  hits: Array<{ label: string; span: GraphSpan }>,
+  vocab: string[], required: string[], minHits: number, wide: boolean,
+): Array<{ label: string; span: GraphSpan }> {
+  if (hits.length < 2) return hits;
+  // The gutter is found across EVERY token on the welded row, not just the
+  // vocabulary hits: the neighbour's own non-vocabulary words ("120/208")
+  // sit between the two tables and would otherwise hide the real gap.
+  const toks = [...rows[hdrIdx]].sort((a, b) => a.x - b.x);
+  if (toks.length < 2) return hits;
+  const hs = [...hits.map((h) => h.span.h || 8)].sort((a, b) => a - b);
+  const hdrH = hs[hs.length >> 1] || 8;
+  const below = rows.slice(hdrIdx + 1, hdrIdx + 1 + CORRIDOR_DATA_ROWS);
+  for (let i = 0; i < toks.length - 1; i++) {
+    const leftEnd = Math.max(...toks.slice(0, i + 1).map((t) => t.x + (t.w || 0)));
+    const rightStart = toks[i + 1].x;
+    // (1) a real gutter's worth of clear space …
+    if (rightStart - leftEnd < hdrH * CORRIDOR_MIN_RATIO) continue;
+    // (2) … that none of this table's own data ever reaches into. A merely
+    // wide gap between two columns of ONE table is crossed by the data of
+    // the columns in between, even when no header word was recognized for
+    // them — exactly 012's real MODEL→NOTES gap, which is WIDER than the
+    // real inter-table gutter on the same page and must not split anything.
+    const lo = leftEnd + CORRIDOR_PAD, hi = rightStart - CORRIDOR_PAD;
+    if (below.some((r) => r.some((t) => t.x + (t.w || 0) > lo && t.x < hi))) continue;
+    // (3) … AND the far side sits on a DIFFERENT printed line. Neither
+    // signal is safe alone: one real header row's own labels legitimately
+    // vary in baseline by over 1.2·h while remaining mutually x-disjoint
+    // (019_FL_Eglin's own coil header), and a real neighbour table can sit
+    // only 0.29·h away (012). Requiring BOTH is what separates them, and is
+    // why a first attempt using baselines alone was caught by the corpus
+    // sweep dropping real columns and a whole real table.
+    // Compared between the two tokens FLANKING the gutter, never between
+    // side averages: an average is skewed by whatever else shares the row,
+    // which on this very shape is the neighbour's own text.
+    if (Math.abs(toks[i].y - toks[i + 1].y) < hdrH * CORRIDOR_LINE_RATIO) continue;
+    const inLeft = (h: { span: GraphSpan }) => h.span.x + (h.span.w || 0) / 2 <= leftEnd;
+    const left = hits.filter(inLeft), right = hits.filter((h) => !inLeft(h));
+    if (!left.length || !right.length) continue;
+    const anchored = (g: typeof hits) => g.some((h) => CATALOG_ANCHOR_WORDS.includes(h.label));
+    const keep = anchored(left) !== anchored(right)
+      ? (anchored(left) ? left : right)
+      : (left.length >= right.length ? left : right);
+    // Never let this guard be the reason a table stops being a table. If the
+    // side we would keep cannot qualify on its own, then the far side is
+    // carrying real, load-bearing columns for THIS table (a genuine parent
+    // tier printed in the gap between two leaf columns looks exactly like a
+    // neighbour otherwise), so leave the row completely alone.
+    const seenKeep = new Set(keep.map((h) => h.label));
+    // Does the side we would keep still hold this table's own required
+    // vocabulary — inside ITS OWN column band? Asking only about the header
+    // row is too strict: a real table's rating words often live one tier
+    // DOWN (012's own SERVES/HP/VOLTS/PHASE sub-tier, confirmed live), and
+    // asking about the whole row is too loose, since that is precisely where
+    // the neighbour's words are. Band-scoped, header row plus the tiers just
+    // below, is the question that actually means "this table stands alone".
+    const bandLo = Math.min(...keep.map((h) => h.span.x)) - hdrH;
+    const bandHi = Math.max(...keep.map((h) => h.span.x + (h.span.w || 0))) + hdrH;
+    const inBandRequired = rows
+      .slice(hdrIdx, hdrIdx + 1 + CORRIDOR_DATA_ROWS)
+      .some((r) => r.some((t) => {
+        const cx = t.x + (t.w || 0) / 2;
+        if (cx < bandLo || cx > bandHi) return false;
+        const lbl = headerLabel(t.str, vocab);
+        return !!lbl && required.includes(lbl);
+      }));
+    const keepStandsAlone = seenKeep.size >= minHits
+      && (required.some((r) => seenKeep.has(r)) || inBandRequired);
+    if (!keepStandsAlone) continue;
+    const keepSet = new Set(keep);
+    return hits.filter((h) => keepSet.has(h));
+  }
+  return hits;
+}
+
 function harvestSkippedTierAnchors(rows: GraphSpan[][], vocab: string[], hdrIdx: number, skipEnd: number): Anchor[] {
   const hits: Array<{ label: string; span: GraphSpan; rowIdx: number }> = [];
   const counts = new Map<string, number>();
@@ -1591,6 +1705,10 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
       idx = next;
       hits = headerHits(rows[idx], vocab);
     }
+    // GOAL.md rule 29: the settled row may be a clusterRows weld of this
+    // table's own header and a side-by-side neighbour's. Refuse the
+    // neighbour's hits before they can mint columns.
+    hits = hitsBeforeNeighbourCorridor(rows, idx, hits, vocab, required, minHits, !!opts.equipmentTierMerge);
     // A label repeated in the row (two FINISH columns) is ambiguous on its
     // own and takes its parent's name: FLOOR FINISH, CEILING FINISH. The
     // parent is the label above whose centre falls inside THIS column's own

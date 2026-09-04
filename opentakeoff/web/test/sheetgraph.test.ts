@@ -3945,6 +3945,92 @@ test("a table's own big-font TITLE never becomes a duplicate column's parent eit
   assert.equal(tab!.headers.filter((h) => h === "SIZE").length, 1, `exactly one real "SIZE" column survives (the confusable duplicate is honestly dropped, never mislabeled): got ${JSON.stringify(tab!.headers)}`);
 });
 
+test("a side-by-side neighbour table's own printed line never mints columns for this one (GOAL.md rule 29, fixed 2026-09-04)", () => {
+  // Real, HIGH SEVERITY, corpus-found and live-traced on
+  // 012_MO_M2430_01_Chiller_Upgrade#27's own real VFD SCHEDULE. Geometry
+  // below mirrors the real page's own measured coordinates exactly:
+  //
+  //   real VFD header line   y=314.70, h=18.2, x 1943..2958
+  //     TAG NO / MANUFACTURER / MODEL / NOTES
+  //   unrelated PANELBOARD   y=309.50, h=18.2, x 3076..3489
+  //     "120/208 VOLTAGE 3 PHASE 4 WIRE ..."  (a descriptive sentence,
+  //     belonging to a DIFFERENT real schedule laid out beside this one)
+  //
+  // The two lines are 5.2px apart, which is INSIDE clusterRows' own merge
+  // tolerance for this text height (max(0.35*18.2, 3) = 6.37px), so they
+  // arrive as ONE row. Before this fix every vocabulary hit in that welded
+  // row minted a column for whichever table settled there, so the panelboard
+  // sentence's own "VOLTAGE" and "PHASE" became VFD columns — and ordinary,
+  // correctly-working same-row cell attribution then filled them with the
+  // neighbour's real text ("PUMP", "150 1176 1920"), reporting panelboard
+  // wiring as this VFD's real electrical specs. Confirmed live before the
+  // fix, on the real page, via a debug trace of the anchor-mint site.
+  //
+  // The guard needs BOTH halves of the real geometry (a distinct printed
+  // line AND an x-extent disjoint from this table's own), so the asserts
+  // below cover both directions: the neighbour is refused, and a genuinely
+  // multi-tier header that OVERLAPS in x is left completely alone.
+  const sp4 = (str: string, x: number, y: number, h = 18.2): GraphSpan => ({ str, x, y, w: str.length * 9, h });
+  const sched: SheetSpans = {
+    key: "vfd.pdf#27",
+    sheet_number: "M-601",
+    spans: [
+      sp4("VFD SCHEDULE", 1943, 270, 30),
+      // this table's own real header line
+      sp4("TAG NO", 1943, 314.7), sp4("MANUFACTURER", 2075, 314.7),
+      sp4("MODEL", 2273, 314.7), sp4("HP", 2500, 314.7), sp4("NOTES", 2895, 314.7),
+      // the NEIGHBOUR schedule's own descriptive line, 5.2px above and
+      // horizontally clear of this table entirely
+      sp4("120/208", 3076, 309.5), sp4("VOLTAGE", 3152, 309.5),
+      sp4("3", 3395, 309.5), sp4("PHASE", 3439, 309.5),
+      // real VFD data
+      sp4("VFD-CWP-1", 1943, 350), sp4("SCHNEIDER", 2075, 350),
+      sp4("SFD212", 2273, 350), sp4("30", 2500, 350), sp4("1-5", 2895, 350),
+      sp4("VFD-CWP-2", 1943, 385), sp4("SCHNEIDER", 2075, 385),
+      sp4("SFD212", 2273, 385), sp4("30", 2500, 385), sp4("1-5", 2895, 385),
+      // the neighbour's own real data, in its own x-band
+      sp4("CORRIDOR RECEPTS", 3076, 350), sp4("1920", 3439, 350),
+    ],
+  };
+  const tab = extractTable(sched, "equipment");
+  assert.ok(tab, "the real VFD rows are enough to clear the bar");
+  assert.ok(!tab!.headers.includes("VOLTAGE"),
+    `the neighbour's VOLTAGE must never become a column here: got ${JSON.stringify(tab!.headers)}`);
+  assert.ok(!tab!.headers.includes("PHASE"),
+    `the neighbour's PHASE must never become a column here: got ${JSON.stringify(tab!.headers)}`);
+  const blob = JSON.stringify(tab!.rows);
+  assert.ok(!/CORRIDOR RECEPTS/.test(blob),
+    `no neighbour text may reach this table's cells: got ${blob}`);
+  assert.ok(tab!.headers.includes("MANUFACTURER") && tab!.headers.includes("MODEL"),
+    `this table's own real columns must survive untouched: got ${JSON.stringify(tab!.headers)}`);
+});
+
+test("an OVERLAPPING second header tier is left alone — the rule 29 guard is not a blanket same-row filter", () => {
+  // The other half of the discriminator, asserted directly so a future
+  // change can't quietly widen the guard into "drop anything not on the
+  // majority line". Here the upper tier sits 5px above (a distinct printed
+  // line, exactly like the neighbour above) but its x-extent OVERLAPS the
+  // leaf tier's — the real shape of a genuine two-tier header — so every
+  // one of its labels must still be available to the table.
+  const sp5 = (str: string, x: number, y: number, h = 18.2): GraphSpan => ({ str, x, y, w: str.length * 9, h });
+  const sched: SheetSpans = {
+    key: "twotier.pdf#1",
+    sheet_number: "M-602",
+    spans: [
+      sp5("PUMP SCHEDULE", 100, 40, 30),
+      // parent tier, 5px above the leaf tier and INSIDE its x-range
+      sp5("VOLTAGE", 500, 95),
+      sp5("TAG", 100, 100), sp5("MANUFACTURER", 250, 100), sp5("PHASE", 700, 100),
+      sp5("P-1", 100, 140), sp5("BELL", 250, 140), sp5("208", 500, 140), sp5("3", 700, 140),
+      sp5("P-2", 100, 175), sp5("BELL", 250, 175), sp5("208", 500, 175), sp5("3", 700, 175),
+    ],
+  };
+  const tab = extractTable(sched, "equipment");
+  assert.ok(tab, "a real two-tier pump schedule still extracts");
+  assert.ok(tab!.headers.includes("VOLTAGE"),
+    `an overlapping real parent tier must NOT be filtered: got ${JSON.stringify(tab!.headers)}`);
+});
+
 test("room-finish: a bare letter-only room key is kept when the row is genuinely populated, refused when it isn't (GOAL.md rule 22, fixed 2026-09-04)", () => {
   // Real, HIGH SEVERITY bug: 008_MO_T2331_01_Repair_to_Interior_Exterior_
   // Unheated's own real ROOM FINISH SCHEDULE lists room 101 (numbered)
