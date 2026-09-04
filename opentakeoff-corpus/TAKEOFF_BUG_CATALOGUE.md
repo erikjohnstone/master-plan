@@ -36,7 +36,7 @@ every eval read 100%. Every bug below was invisible to that gate.
 | B-4 | Prose fragments recorded as schedule titles | 3+ documents | false structural inference |
 | B-5 | A new header-token rejection killed a whole real table | −12 real cells on federal-mech | self-inflicted; whole-row guard |
 | B-6 | A page drawing the same table twice at TWO SCALES (~0.83x) | 013_MO p23, 2 tables lost | fused scaled duplicate |
-| B-7 | 034_NC p42 loses DOOR + ROOM FINISH SCHEDULE — **cause NOT yet established** | 2 tables lost | first hypothesis disconfirmed |
+| B-7 | Sheet-margin GRID REFERENCE labels (A-F at both page edges) qualify as header rows and stretch the x-band page-wide | 034_NC p42, 2 tables lost; **corpus-scale hazard** | strongly supported, trace pending |
 | B-8 | Side-by-side tables with NO empty gutter — seam-based banding cannot split them | 046_MI p22 + 044_NY p24 (rule 35a): 1 table lost, 19 of 27 rows lost | **same bug as GOAL.md rule 35(a)** |
 
 ---
@@ -303,10 +303,45 @@ whole page and the table's real column structure is swamped. Confirming this
 needs the extractor traced on the real page, which is a heavy job; it is
 queued behind B0.
 
-**Do not build against either reading until one is measured true.** Two other
+**The alternative is now STRONGLY SUPPORTED by measurement** (though still not
+confirmed by tracing the extractor itself, which is a heavy job). The page
+carries **six** sheet-margin grid-reference rows, and every one of them
+satisfies `isGenericHeaderRow`:
+
+```
+y~444   "A"@188  "A"@5968        y~2268  "D"@188  "D"@5968   <- inside the
+y~1044  "B"@188  "B"@5968        y~2868  "E"@188  "E"@5968      ROOM FINISH
+y~1656  "C"@188  "C"@5968        y~3480  "F"@188  "F"@5968      header band
+```
+
+Each row is 2 tokens (clearing the 2-cell floor), each token is a single
+uppercase letter (clearing `isGenericHeaderToken`: has A-Z, no lowercase, no
+digit, under the length cap, not a reference lead-in, no colon, no
+"SCHEDULE"). The `D` row at y~2268 falls squarely inside the ROOM FINISH
+SCHEDULE's own header band (2184..2334). Absorbed into the header block, its
+tokens become anchors at x=188 and x=5968, so `bandLimits` reports
+**x 188..5986 — the full page width** — instead of the table's real
+x 3100..5640, and the table's actual column structure is swamped.
+
+**Why this matters far beyond one document.** A-F (or 1-8) grid references
+running down both margins are a near-universal large-format drafting
+convention. Any sheet using them presents a header-shaped 2-token row at
+regular vertical intervals, page-wide. This is a corpus-scale hazard, not a
+034_NC quirk.
+
+**Shape of the fix.** Recognise sheet-margin grid references structurally and
+exclude them from header candidacy: 1-2 character tokens, sitting in the
+outer few percent of the page width, appearing as a REGULAR VERTICAL SEQUENCE
+(here six rows at ~600px pitch, letters advancing A->F) mirrored on both
+margins. The regular sequence plus the mirrored x-positions is what makes it
+safe — a real 2-column table header is neither periodic down the page nor
+pinned to both sheet edges.
+
+**Still to confirm:** that this is what actually rejects the table, by tracing
+`expandGenericHeaderBlock` on the real page. Queued behind B0. Two other
 hypotheses in this catalogue (B-6's "constant offset", B-8's "rule 18 already
 covers it") were equally plausible, equally grounded in real coordinates, and
-equally wrong.
+equally wrong — so this stays a hypothesis until the trace agrees.
 
 ### B-8 UPDATE — measured: rule 18's bands fix does NOT reach it, and this is rule 35(a)
 
