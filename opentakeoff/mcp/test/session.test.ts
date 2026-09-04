@@ -336,7 +336,7 @@ test("collapseEquivalentPrimaryTables also removes a TITLE-LESS duplicate whose 
   // (11 real columns including COOLING COIL SENSIBLE/TOTAL CAPACITY).
   const titled: ScheduleTable = {
     kind: "equipment", sheet: "045.pdf#21",
-    title: { text: "CHILLED WATER FAN COIL UNIT SCHEDULE", bbox },
+    title: { text: "CHILLED WATER FAN COIL UNIT SCHEDULE", bbox, sheet: "045.pdf#21" },
     headers: ["MARK", "MANUFACTURER", "MODEL", "SUPPLY AIR (CFM)", "OUTSIDE AIR (CFM)", "ESP (IN-WG)",
       "SENSIBLE CAPACITY (BTU/H)", "TOTAL CAPACITY (BTU/H)", "FLOW (GPM)", "MAX PD (FT-H2O)", "REMARKS"],
     rows: keys.map((k) => row(k, { MARK: k, MANUFACTURER: "CARRIER", MODEL: "42CG-10", "SUPPLY AIR (CFM)": "1000" })),
@@ -396,7 +396,7 @@ test("collapseEquivalentPrimaryTables also removes a TITLED reference-kind dupli
   // real internal space.
   const referenceRead: ScheduleTable = {
     kind: "reference", sheet: "047.pdf#27",
-    title: { text: "DISCONNECT SCHEDULE", bbox },
+    title: { text: "DISCONNECT SCHEDULE", bbox, sheet: "047.pdf#27" },
     headers,
     rows: [
       row("DS ODU-1", { "DISC NAME": "DS ODU-1", "TYPE OF EQUIPMENT": "DISCONNECT SWITCH", "VOLTAGE RATING": "600V" }),
@@ -410,7 +410,7 @@ test("collapseEquivalentPrimaryTables also removes a TITLED reference-kind dupli
   // "DSODU-1", the identical real device, no space.
   const equipmentRead: ScheduleTable = {
     kind: "equipment", sheet: "047.pdf#27",
-    title: { text: "DISCONNECT SCHEDULE", bbox },
+    title: { text: "DISCONNECT SCHEDULE", bbox, sheet: "047.pdf#27" },
     headers,
     rows: [
       row("DSODU-1", { "DISC NAME": "DS ODU-1", "TYPE OF EQUIPMENT": "DISCONNECT SWITCH", "VOLTAGE RATING": "600V", "ENCLOSURE RATING": "NEMA 3R" }),
@@ -433,7 +433,7 @@ test("collapseEquivalentPrimaryTables also removes a TITLED reference-kind dupli
   // identity requires the SAME normalized title, not just the same keys.
   const crossRef: ScheduleTable = {
     kind: "reference", sheet: "047.pdf#27",
-    title: { text: "MECHANICAL EQUIPMENT CONNECTION SCHEDULE", bbox },
+    title: { text: "MECHANICAL EQUIPMENT CONNECTION SCHEDULE", bbox, sheet: "047.pdf#27" },
     headers: ["MARK", "CONNECTED TO"],
     rows: [row("DS ODU-1", { MARK: "DS ODU-1", "CONNECTED TO": "ODU-1" }), row("TS IDU-1", { MARK: "TS IDU-1", "CONNECTED TO": "IDU-1" }), row("TS IDU-2", { MARK: "TS IDU-2", "CONNECTED TO": "IDU-2" })],
     region: bbox,

@@ -613,7 +613,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
   }, run("query_table", async ({ title, row_key, column, cell_value, cell_contains, limit }) => {
     const graph = await session.graphForPipeline();
     const result = queryTable(graph, { title, row_key, column, cell_value, cell_contains, limit });
-    if (result.error) throw new UserError(result.error);
+    if ("error" in result) throw new UserError(result.error);
     return result;
   }));
 
