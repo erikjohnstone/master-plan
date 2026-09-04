@@ -3787,6 +3787,37 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
     // precede a real equipment code elsewhere.
     const bmFloor = key.match(/^(\d{1,2})-(\d{1,2})-([A-Z].*)$/);
     if (bmFloor && isConfirmedBuilding(bmFloor[1]) && CODE_RE.test(bmFloor[3])) return { key, building: bmFloor[1] };
+    // A real VA facility-prefixed equipment tag whose own SHAPE is already
+    // unambiguous — "001-FCU-01-CG06A", "001-CRAC-01-DC2", "001-CU-01-ROOF"
+    // (facility 001's fan coil 01 in room CG06A, and so on). Real,
+    // corpus-found and live-traced on
+    // 030_NY_VA_EHRM_Infrastructure_Upgrades_Construction#84/85: THIRTEEN of
+    // this document's fourteen real fan coil units were refused here and
+    // silently dropped, leaving the one tag that happens to lead with
+    // letters ("ROME-FCU-01-G120") as the table's only surviving row — the
+    // 93% row loss GOAL.md rule 30 records, which had been attributed to
+    // header DEPTH and is in fact this key gate. The same refusal empties
+    // this document's real CONDENSING UNIT, GRAVITY VENTILATOR and CRAC
+    // UNIT schedules outright.
+    //
+    // The two prefixed forms above deliberately require the digits to name
+    // a building THIS SHEET's own text confirms, because "1-RH-1" alone
+    // cannot be told from a stray dimension or callout glued to the front of
+    // a cell. That reasoning does not extend to this shape: a leading number
+    // followed by a THREE-segment letter-led code ("FCU-01-CG06A") is not a
+    // dimension, a callout, or a fraction under any reading — "2-1/2" keys
+    // to "2-12" and has no letter-led remainder at all, "10-20-30" has no
+    // letter segment anywhere, and the two-segment "1-RH-1" shape the
+    // building gate above exists for is deliberately left to it. So this
+    // accepts on shape rather than on an
+    // external confirmation the sheet may simply never print: on this real
+    // document the building set comes back EMPTY (confirmed by trace), so
+    // widening the digit count alone would have recovered nothing. The
+    // building is NOT recorded, precisely because nothing confirmed it —
+    // the full printed mark is kept as the key, which is what is drawn on
+    // the plan and what any cross-reference has to match.
+    const bmFacility = key.match(/^\d{1,4}-([A-Z][A-Z0-9]*(?:-[A-Z0-9]+){2,})$/);
+    if (bmFacility && CODE_RE.test(bmFacility[1])) return { key };
     return null;
   }
   if (ROW_KEY_RE.test(key)) return { key };
