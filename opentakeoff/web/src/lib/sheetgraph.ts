@@ -3185,6 +3185,28 @@ const CODE_RE = /^(?:[A-Z]{1,4}[A-Z0-9]{0,4}|(?:[A-Z]{1,6}|[A-Z]{1,4}[0-9]{1,2})
 const ALL_HEADER_WORDS = new Set<string>([...ROOM_HEADERS, ...FINISH_HEADERS, ...EQUIPMENT_HEADERS]);
 const ROW_KEY_RE = /^\d{1,3}[A-Z]{0,2}$/;
 const QUALIFIED_KEY_RE = /^([A-Z]{1,2})-(\d{1,3}[A-Z]{0,2})$/;
+// A bare 1-2 letter room key ("A".."K") — real, common in small/simple
+// buildings that number no rooms at all (GOAL.md rule 22, real: 008_MO_
+// T2331_01's own metal-building STORAGE SPACE wing, rooms A-K, no digits
+// anywhere in this table). A far weaker signal alone than a digit-prefixed
+// key — a bare single letter collides easily with a stray callout/revision
+// bubble elsewhere on a dense sheet — so this is NEVER accepted on its own;
+// only alongside a real corroborating signal (see ROOM_LETTER_MIN_FILL
+// below) that this specific row is actually populated like this table's
+// own real data, not sheet noise wearing a room-shaped key.
+const ROOM_LETTER_KEY_RE = /^[A-Z]{1,2}$/;
+// A real room-finish row fills MOST of its table's own columns (this
+// table's real rows: NUMBER/NAME/FLOOR/BASE/WALLS N|S|E|W/CEIL/NOTES, 9
+// of 9 populated even for the "NOT USED" row — dashes still count as
+// real, disclosed cells, not blanks). A stray single-letter callout
+// bubble sitting alone in this table's own x-band has nothing else
+// in-band on its own row — comfortably below any real fill ratio. Kept
+// deliberately conservative (half the table's own real column count) —
+// this is a corroborating signal, not a data-completeness requirement;
+// a genuinely sparse real row (a NOT USED room with only NUMBER+NOTES
+// populated) must still not slip under a stray callout's own guard.
+const ROOM_LETTER_MIN_FILL = 0.5;
+const ROOM_LETTER_MIN_ANCHORS = 4;
 // A NAME-keyed room-finish sub-table: a real, distinct drafting convention
 // (confirmed live on this project's own sample-finish-plan.pdf, sheet 2's
 // "ROOM FINISH SCHEDULE - PATIENT ROOMS (TYPICAL)") where the table carries
@@ -3478,7 +3500,7 @@ export function hasPoweredEquipmentColumns(spans: GraphSpan[], table: ScheduleTa
   return hits.size >= 2;
 }
 
-function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", buildings?: Set<string>, nameKeyed = false): { key: string; building?: string } | null {
+function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", buildings?: Set<string>, nameKeyed = false, roomFill?: { inBand: number; anchors: number }): { key: string; building?: string } | null {
   // A NAME-keyed table's key column IS its NAME column — the only sensible
   // reading of a leading token there is a room-type phrase, not a digit tag
   // this table has no column for. Spaces are the whole point of a phrase
@@ -3587,6 +3609,15 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
   if (ROW_KEY_RE.test(key)) return { key };
   const q = key.match(QUALIFIED_KEY_RE);
   if (q && buildings?.has(q[1])) return { key, building: q[1] };
+  // GOAL.md rule 22: a bare letter-only room key ("A" through "K", no
+  // digit anywhere) — real in a small building whose rooms are never
+  // numbered — only alongside real corroboration that THIS row is
+  // actually populated like this table's own data, never on the shape
+  // alone. See ROOM_LETTER_KEY_RE/ROOM_LETTER_MIN_FILL's own comments.
+  if (roomFill && ROOM_LETTER_KEY_RE.test(key) && roomFill.anchors >= ROOM_LETTER_MIN_ANCHORS
+    && roomFill.inBand >= roomFill.anchors * ROOM_LETTER_MIN_FILL) {
+    return { key };
+  }
   return null;
 }
 
@@ -4133,8 +4164,9 @@ function bandDataRows(
   // leading in-band token reads as a key, same test the main loop below
   // uses to accept a row) get a vote in that recovery — see columnMapFor.
   const isKeyedRow = (row: GraphSpan[]): boolean => {
-    const first = row.find((t) => t.x >= x0 && t.x <= x1 && revisionOf(t.str) == null);
-    return !!first && !!rowKeyOf(first.str, kind, buildings, nameKeyed);
+    const inBand = row.filter((t) => t.x >= x0 && t.x <= x1 && revisionOf(t.str) == null);
+    const first = inBand[0];
+    return !!first && !!rowKeyOf(first.str, kind, buildings, nameKeyed, { inBand: inBand.length, anchors: anchors.length });
   };
   const cols = columnStarts(rows, anchors, cfg, x0, x1, isKeyedRow, orphanXs);
   // A key belongs to the key column when it sits nearer that column's start
@@ -4390,7 +4422,7 @@ function bandDataRows(
       if (t.x >= x0 && t.x <= x1) banded.push(t);
     }
     if (!banded.length) continue;
-    const keyed = rowKeyOf(banded[0].str, kind, buildings, nameKeyed);
+    const keyed = rowKeyOf(banded[0].str, kind, buildings, nameKeyed, { inBand: banded.length, anchors: anchors.length });
     if (!keyed) { orphans.push({ toks: banded, y: rowY(rows[i]) }); continue; }
     // CODE_RE's digit-free branch (letters only, optionally hyphenated, ≤8
     // chars total) is shaped exactly like an ordinary short English phrase —
@@ -4925,12 +4957,14 @@ function findSparseKeyedBoundary(
   kind: "room-finish" | "finish" | "equipment",
   buildings: Set<string> | undefined,
   nameKeyed: boolean,
+  anchorsCount: number,
 ): number {
   const candidates: Array<{ i: number; y: number }> = [];
   for (let i = dataFrom; i < cap; i++) {
     if (rowY(rows[i]) <= belowY) continue;
-    const first = rows[i].find((t) => t.x >= x0 && t.x <= x1 && revisionOf(t.str) == null);
-    if (!first || !rowKeyOf(first.str, kind, buildings, nameKeyed)) continue;
+    const inBand = rows[i].filter((t) => t.x >= x0 && t.x <= x1 && revisionOf(t.str) == null);
+    const first = inBand[0];
+    if (!first || !rowKeyOf(first.str, kind, buildings, nameKeyed, { inBand: inBand.length, anchors: anchorsCount })) continue;
     candidates.push({ i, y: rowY(rows[i]) });
   }
   if (candidates.length < 2) return cap;
@@ -5193,7 +5227,7 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
   // boundary that turns up nothing is discarded in favor of the wide result.
   if (toIdx >= cap) {
     const nameKeyed = kind === "room-finish" && anchors[0]?.label === "NAME";
-    const tightIdx = findSparseKeyedBoundary(rows, dataFrom, cap, hdrBand.x0, hdrBand.x1, dataBelowY, kind, opts.buildings, nameKeyed);
+    const tightIdx = findSparseKeyedBoundary(rows, dataFrom, cap, hdrBand.x0, hdrBand.x1, dataBelowY, kind, opts.buildings, nameKeyed, anchors.length);
     if (tightIdx < toIdx) {
       const tightBanded = bandDataRows(rows, anchors, kind, sheet.key, opts.buildings, { fromIdx: dataFrom, toIdx: tightIdx, belowY: dataBelowY, deltas: opts.deltas, headerSpans: fullHeaderSpans });
       if (tightBanded.out.length > 0) { toIdx = tightIdx; banded = tightBanded; }
@@ -8604,7 +8638,16 @@ export function scheduleTableFromODL(
     }
     if (texts.every((s: string) => !s.trim())) continue; // blank spacer row
     const rawKey = texts[keyColIdx >= 0 ? keyColIdx : 0] || "";
-    const keyRes = rowKeyOf(rawKey, kind === "room-finish" ? "room-finish" : kind === "equipment" ? "equipment" : "finish", opts.buildings);
+    // GOAL.md rule 22: ODL already knows this row's own real column grid —
+    // a far cleaner corroboration signal than the geometric extractor's own
+    // banded-token heuristic (see rowKeyOf's own comment) for the same bare
+    // letter-only room-key case. Real, corpus-found: 008_MO_T2331_01's own
+    // ROOM FINISH SCHEDULE — without this, ODL's own read of the SAME table
+    // (only "101" survives its own digit-first-only key check) was judged
+    // "more complete" by the cross-check reconcile pass and silently
+    // REPLACED the geometric extractor's own correct, fuller read.
+    const filledCells = texts.filter((s: string) => s.trim()).length;
+    const keyRes = rowKeyOf(rawKey, kind === "room-finish" ? "room-finish" : kind === "equipment" ? "equipment" : "finish", opts.buildings, false, { inBand: filledCells, anchors: C });
     if (!keyRes) continue; // no recognizable row key — refuse rather than mint a fake row
     const cells: Record<string, TableCell> = {};
     for (let c = 0; c < C; c++) {

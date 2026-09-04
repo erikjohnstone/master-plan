@@ -1386,7 +1386,7 @@ on this effort:**
     independently re-verified this pass, real next step if this doc is
     ever picked up again.
 
-22. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: `ROW_KEY_RE`'s digit-first
+22. **FIXED 2026-09-04 (was: OPEN, SCOPED, NOT STARTED, HIGH SEVERITY): `ROW_KEY_RE`'s digit-first
     requirement drops 11 of 12 real rooms (92% real row loss) from
     008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated's own real
     ROOM FINISH SCHEDULE — every room in this real building is
@@ -1459,6 +1459,90 @@ on this effort:**
     careful with. NOT attempted this tick — recorded so this analysis
     is not lost, picked up again with a clean pass at the reordering
     specifically, not another attempt at a flag-based shortcut.
+
+    **FIXED 2026-09-04 — the "bin first" reordering this entry's own
+    architecture trace called for turned out NOT to be necessary.** Real
+    signal was already available at every row-acceptance site WITHOUT
+    reordering: `bandDataRows`' own main loop already has `banded` (the
+    row's full in-band token list) available BEFORE any column binning
+    happens — a candidate row's own "does this look genuinely populated"
+    completeness signal, at no reorder cost. `rowKeyOf` gained a 5th,
+    optional `roomFill: { inBand, anchors }` parameter: a bare 1-2 letter
+    key ("A" through "K") is accepted ONLY when the row's own in-band
+    token count clears half its table's own real anchor count (never on
+    the shape alone — a bare letter collides easily with a stray callout/
+    revision bubble, exactly the risk this entry's own earlier text
+    named). Threaded through the 3 real row-acceptance sites that matter:
+    `bandDataRows`' own `isKeyedRow` (column-recovery voting),
+    `bandDataRows`' own main row-construction loop, and
+    `findSparseKeyedBoundary` (the table's own end-boundary pacer — left
+    unfixed, this alone would have kept truncating the table right after
+    "101", cutting the real letter rows off before the main loop ever
+    saw them).
+
+    Real-document verification found a SECOND, independent blocker, not
+    originally scoped, and fixed too: a live debug trace showed the
+    geometric extractor's own row-construction correctly recovered ALL 7
+    of the letter-keyed rooms this fixture-verifiable fix predicts
+    (B/D/F/H/J/K plus 101 — A/C/E/G/I were separately lost to a THIRD,
+    real, `banded[0]`-ordering bug, below) — yet `graph.tables`' own
+    FINAL output still showed only `101`. Root cause: the separate L2 ODL
+    (OpenDataLoader-PDF) cross-check pass extracts this exact table a
+    SECOND time, independently, via `scheduleTableFromODL`'s own
+    `rowKeyOf` call — which had NOT been threaded with the same
+    `roomFill` corroboration — so ODL's own read also lost every
+    letter-keyed room, and the reconcile pass's own "prefer the more
+    complete extraction" logic judged ODL's (wrongly) 1-row read as
+    winning over the geometric extractor's own correct 7-row read,
+    silently REPLACING it (`graph.notes`: "OpenDataLoader-PDF cross-
+    check: 1 table(s) replaced with a more complete extraction"). Fixed
+    the same way, at ODL's own row-construction site — and there the
+    corroboration signal is even cleaner than the geometric path's own
+    heuristic: ODL already parses the table into a real, explicit grid,
+    so "how many of this row's own real columns are filled" is exact
+    (`texts.filter(Boolean).length` against the grid's own real column
+    count `C`), not estimated.
+
+    Real-document verification, both fixes landed: a real, non-debug,
+    fresh cold rebuild of 008 now returns
+    `["101","A","B","C","D","E","F","G","H","I","J","K"]` — all 12 real
+    rows, including room `I` ("NOT USED", still a real disclosed dashed
+    row) — exactly matching this entry's own real ground truth. 122/122
+    `sheetgraph.test.ts`, 264/264 broader targeted suite. Regression test
+    (a mixed digit-/letter-keyed table plus a stray single-letter callout
+    that must NOT be kept) verified, with the fix temporarily disabled,
+    to actually reproduce the original 92%-loss shape before landing.
+
+    **A THIRD, real, separate bug found but NOT fixed this pass, flagged
+    honestly rather than silently worked around:** during the live debug
+    trace above, 5 of the 11 real letter rooms (A/C/E/G/I — every OTHER
+    one) were shown losing their own leading letter token entirely at the
+    geometric extractor's own row-construction site, `banded[0]` reading
+    as that row's OWN NAME-cell text ("STORAGE SPACE") instead of its
+    real key ("A") — NOT a `rowKeyOf` acceptance failure (this entry's own
+    fix, above) but a token-ORDERING bug one layer up. Root-caused: `rows[i]`
+    arrives at `bandDataRows` already x-sorted (`clusterRows`' own final
+    `.sort((a,b) => a.x-b.x)`), but `joinGraphSpans` → `joinHyphenatedTags`
+    (equiptags.ts) re-sorts its OWN output by `(y0, x0)` — Y FIRST — before
+    returning; two tokens on the same real physical row whose own printed
+    y differs by even a sub-pixel jitter (real, measured: "A" at
+    top≈1043.5 vs "STORAGE" at top≈1043.4, a 0.1px difference) then sort
+    in the WRONG relative order, silently breaking the x-order invariant
+    every downstream `banded[0]` read (this function has at least 4 of
+    them) depends on. This table's own final read is unaffected in
+    practice ONLY because ODL's own independent, grid-based extraction
+    (see above) now wins the reconcile and doesn't share this ordering
+    dependency at all — a document with no ODL-recoverable read of the
+    same table would still lose these rows. NOT fixed here:
+    `joinHyphenatedTags` is shared by 3 real callers (`scheduleParse.ts`,
+    `symbollabels.ts`, this file), each with its own established, tested
+    behavior — exactly the shared-code blast-radius risk this entry's own
+    original text already named, just one layer deeper than expected.
+    Real next step: change `joinHyphenatedTags`' own final sort
+    (equiptags.ts, `return out.sort(...)`) to tolerate real same-row y-jitter
+    (a coarse y-bucket before the x tie-break, not a raw `y0` comparison)
+    rather than reordering `bandDataRows` itself — with regression
+    coverage across all 3 real callers before landing, not just this one.
 
 23. **FIXED 2026-09-04, HIGH SEVERITY: an equipment table's own
     row-scan absorbs an ADJACENT, unrelated equipment table's own marks

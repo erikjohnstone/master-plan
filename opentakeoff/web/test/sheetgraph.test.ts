@@ -3890,3 +3890,46 @@ test("a table's own big-font TITLE never becomes a leaf column's parent, however
   assert.ok(!tab!.headers.some((h) => /SCHEDULE/.test(h)), `no header may carry the table's own title text: got ${JSON.stringify(tab!.headers)}`);
   assert.ok(tab!.headers.includes("MBH"), `MBH must survive as its own plain column: got ${JSON.stringify(tab!.headers)}`);
 });
+
+test("room-finish: a bare letter-only room key is kept when the row is genuinely populated, refused when it isn't (GOAL.md rule 22, fixed 2026-09-04)", () => {
+  // Real, HIGH SEVERITY bug: 008_MO_T2331_01_Repair_to_Interior_Exterior_
+  // Unheated's own real ROOM FINISH SCHEDULE lists room 101 (numbered)
+  // plus rooms A through K (11 real "STORAGE SPACE" rooms in this metal
+  // building — no numbered rooms in that wing at all). `ROW_KEY_RE`
+  // requires a leading digit, so all 11 letter-keyed rooms silently
+  // vanished — 92% real row loss, no disclosure.
+  //
+  // Fixed narrowly, per this rule's own ARCHITECTURE TRACE: a bare 1-2
+  // letter key is accepted ONLY alongside real corroboration that the row
+  // is actually populated like this table's own data (at least half its
+  // real columns filled) — never on the shape alone, which collides
+  // easily with a stray callout/revision bubble elsewhere on a dense
+  // sheet. The corroboration signal (in-band token count vs. this
+  // table's own anchor count) was already available at every row-
+  // acceptance site via the row's own already-banded tokens — no reorder
+  // of the column-binning pipeline needed, contrary to this rule's own
+  // earlier (2026-09-04) architecture-trace worry.
+  const sp2 = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
+  const sheet: SheetSpans = {
+    key: "rfs.pdf#16",
+    sheet_number: "A601",
+    spans: [
+      sp2("ROOM FINISH SCHEDULE", 100, 40),
+      sp2("NO", 100, 60), sp2("NAME", 160, 60), sp2("FLOOR", 300, 60), sp2("BASE", 400, 60), sp2("WALL", 500, 60),
+      sp2("101", 100, 80), sp2("HALLWAY", 160, 80), sp2("CPT-1", 300, 80), sp2("RB-1", 400, 80), sp2("P-1", 500, 80),
+      sp2("A", 100, 100), sp2("STORAGE SPACE", 160, 100), sp2("SC", 300, 100), sp2("—", 400, 100), sp2("P-2", 500, 100),
+      sp2("B", 100, 120), sp2("STORAGE SPACE", 160, 120), sp2("SC", 300, 120), sp2("—", 400, 120), sp2("P-2", 500, 120),
+      // room I: NOT USED, still a real, fully-disclosed dashed row
+      sp2("I", 100, 140), sp2("STORAGE SPACE", 160, 140), sp2("—", 300, 140), sp2("—", 400, 140), sp2("—", 500, 140),
+      // a stray single-letter callout bubble sitting alone in this table's
+      // own x-band, nothing else on its own row — must NOT be kept
+      sp2("X", 100, 160),
+      sp2("C", 100, 180), sp2("STORAGE SPACE", 160, 180), sp2("SC", 300, 180), sp2("—", 400, 180), sp2("P-2", 500, 180),
+    ],
+  };
+  const rf = extractTable(sheet, "room-finish")!;
+  const keys = rf.rows.map((r) => r.key).sort();
+  assert.deepEqual(keys, ["101", "A", "B", "C", "I"], `real letter-keyed rooms must survive, the bare callout "X" must not: got ${JSON.stringify(keys)}`);
+  assert.equal(rf.rows.find((r) => r.key === "A")!.cells.NAME.text, "STORAGE SPACE");
+  assert.equal(rf.rows.find((r) => r.key === "I")!.cells.FLOOR.text, "—", "the NOT USED room stays a real, disclosed dashed row");
+});
