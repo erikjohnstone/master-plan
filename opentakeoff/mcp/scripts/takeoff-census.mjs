@@ -33,15 +33,20 @@ import { openPdf } from "../src/pdf.ts";
 import { Session } from "../src/session.ts";
 import { compileCorpusTakeoff } from "../src/corpusTakeoff.mjs";
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync, readdirSync } from "node:fs";
 import { basename, join } from "node:path";
 
 const listFile = process.argv[2];
 const outDir = process.argv[3];
 const pagesIdx = process.argv.indexOf("--pages");
 const MAX_PAGES = pagesIdx >= 0 ? Number(process.argv[pagesIdx + 1]) : 0;
+// --from-graphs: <list.txt> is a DIRECTORY of *.graph.json fixtures instead of
+// PDF paths. No PDF, no Java, no Python sidecar — the compiler runs from the
+// graph alone (sheetRecords' own "no Session present" path). This is how an
+// agent without the bulk corpus censuses all 90 documents.
+const FROM_GRAPHS = process.argv.includes("--from-graphs");
 if (!listFile || !outDir) {
-  console.error("usage: takeoff-census.mjs <list.txt> <outDir> [--pages N]");
+  console.error("usage: takeoff-census.mjs <list.txt|graphDir> <outDir> [--pages N] [--from-graphs]");
   process.exit(2);
 }
 mkdirSync(outDir, { recursive: true });
@@ -53,7 +58,9 @@ const graphDir = join(outDir, "graphs");
 mkdirSync(graphDir, { recursive: true });
 
 const KINDS = ["hvac_equipment", "control_valves", "bas_points", "sequences"];
-const pdfs = readFileSync(listFile, "utf8").split("\n").map((s) => s.trim()).filter(Boolean);
+const pdfs = FROM_GRAPHS
+  ? readdirSync(listFile).filter((f) => f.endsWith(".graph.json")).sort().map((f) => join(listFile, f))
+  : readFileSync(listFile, "utf8").split("\n").map((s) => s.trim()).filter(Boolean);
 
 /** Every item a compiled takeoff emitted, flattened out of whichever shape
  * that kind uses (categories[].items for equipment/valves, lines/items for
@@ -163,12 +170,16 @@ const census = [];
 const findings = [];
 
 for (const pdf of pdfs) {
-  const name = basename(pdf).replace(/\.pdf$/i, "");
-  const rec = { pdf: name, path: pdf, scope: MAX_PAGES ? "pages" : "whole", pages: null, ms: {}, kinds: {}, error: null };
+  const name = basename(pdf).replace(/\.graph\.json$/i, "").replace(/\.pdf$/i, "");
+  const rec = { pdf: name, path: pdf, scope: FROM_GRAPHS ? "graph-fixture" : MAX_PAGES ? "pages" : "whole", pages: null, ms: {}, kinds: {}, error: null };
   const t0 = Date.now();
   try {
     let target = pdf;
-    if (MAX_PAGES) {
+    let session = null;
+    let graph = null;
+    if (FROM_GRAPHS) {
+      graph = JSON.parse(readFileSync(pdf, "utf8"));
+    } else if (MAX_PAGES) {
       const doc = await openPdf(pdf);
       const scored = [];
       for (let p = 1; p <= doc.numPages; p++) {
@@ -188,9 +199,11 @@ for (const pdf of pdfs) {
       execFileSync("qpdf", [pdf, "--pages", ".", hits.join(","), "--", target]);
     }
 
-    const session = new Session();
-    await session.loadPlan(target);
-    const graph = await session.graphForPipeline();
+    if (!FROM_GRAPHS) {
+      session = new Session();
+      await session.loadPlan(target);
+      graph = await session.graphForPipeline();
+    }
     rec.ms.graph = Date.now() - t0;
     rec.sheet_count = graph?.sheets?.length ?? 0;
     rec.table_count = graph?.tables?.length ?? 0;
@@ -202,7 +215,7 @@ for (const pdf of pdfs) {
     // documents anyway. Graphs are 10-140KB; the whole corpus is a few MB. Any
     // graph is a pipeline OUTPUT and is never ground truth; it is a fixture for
     // testing what the compiler does with what extraction produced.
-    writeFileSync(join(graphDir, name + ".graph.json"), JSON.stringify(graph));
+    if (!FROM_GRAPHS) writeFileSync(join(graphDir, name + ".graph.json"), JSON.stringify(graph));
 
     for (const kind of KINDS) {
       const k0 = Date.now();
