@@ -664,8 +664,7 @@ on this effort:**
     gap in the scan net, not the detector, see rule 14; SDSU: clean,
     genuinely incomplete SD-phase drawing).
 
-16. **OPEN, SCOPED, NOT STARTED, PRE-EXISTING (not caused by this
-    session's own work): finish-kind row keys don't include a real
+16. **FIXED 2026-09-04: finish-kind row keys don't include a real
     mark drawn as several glyph-split, abutting text spans across
     multiple hyphens.** Found while verifying rule 12's fix (below), NOT
     part of that fix — confirmed via `git stash`/checkout against
@@ -682,18 +681,54 @@ on this effort:**
     JOINED marks (`"PCHWP-MT1"`, `"CV-CHW-BP-T"`), with the unjoined
     fragments (`"PCHWP"`, `"CV"`) explicitly NOT keying a row. Actual:
     the joined keys never appear. Confirmed NOT a `CODE_RE` problem —
-    `CODE_RE.test("PCHWP-MT1")` is `true` in isolation — the failure is
-    upstream, in whatever combines (or fails to combine) the raw
-    abutting spans into one cell string before `rowKeyOf` ever sees it.
-    Root cause not traced (out of scope for this rule's own
-    investigation — spawn_task timed out twice trying to queue this as
-    a separate task, same tool-side issue GOAL.md rule 11 already
-    recorded, written here instead so it isn't lost). Real next step:
-    trace where a table's own key-column spans get joined across a tight
-    gap (`bandDataRows`'s own cell-assembly path is the likely site,
-    parallel to the SAME session's own `splitOverflowWords`/`addOne`
-    logic already read this session) with a real debug trace against
-    this exact fixture, not a guess.
+    `CODE_RE.test("PCHWP-MT1")` is `true` in isolation — the failure was
+    upstream, in whatever combined (or failed to combine) the raw
+    abutting spans into one cell string before `rowKeyOf` ever saw it.
+
+    ROOT CAUSE (traced 2026-09-04): `bandDataRows`'s own per-physical-
+    row loop iterates `rows[i]`'s raw spans directly — never running them
+    through the SAME `joinGraphSpans`/`joinHyphenatedTags` glyph-join
+    machinery (`equiptags.ts`) already proven safe and shipped in
+    `scheduleParse.ts` and `symbollabels.ts`. So `banded[0].str` — the
+    token `rowKeyOf` tests to key the row — only ever sees the FIRST raw
+    fragment ("PCHWP"), which fails `rowKeyOf` (no hyphen), and the whole
+    row silently fell to the orphan-fold pool. A SECOND, separate bug sat
+    behind the first: even once joined, a genuine 3+-segment digit-free
+    abbreviation stack ("CV-CHW-BP-T") was still caught by the older
+    "digit-free key = suspect ordinary phrase" guard (meant to catch
+    "MAXIMUM"/"CFM"/"SILENCER"-shaped false positives) and dropped
+    outright, since that guard had no way to distinguish a real
+    abbreviation stack from a bare English word.
+
+    FIX: (1) `bandDataRows` now runs `rows[i]` through `joinGraphSpans`
+    before banding — it glues a run of abutting spans back into ONE
+    token only when the concatenation itself is `isEquipTag`-shaped, so
+    an ordinary hyphenated English phrase drawn as separate spans is
+    never touched, and unmerged spans keep their original object
+    identity (the delta/marker lookup by reference just below is
+    unaffected). (2) the digit-free "suspect ordinary phrase" guard now
+    exempts a key that is itself `isEquipTag`-shaped (the SAME asymmetry
+    `isEquipTag` already encodes: a bare 2-segment digit-free mark stays
+    suspect since `isEquipTag` requires a digit there; 3+ segments are a
+    real abbreviation stack, digit or not) — reusing an already-vetted
+    classifier rather than inventing a new one. Both changes are in
+    `opentakeoff/web/src/lib/sheetgraph.ts`. Tests: the existing
+    fixture-based regression test now passes (6/6 `equiptags.test.ts`),
+    and every test file that imports `sheetgraph.ts` was re-run clean —
+    113/113 `sheetgraph.test.ts`, plus `symbolsweep.test.ts` (38),
+    `scheduleParse.test.ts` (6), `corpusTakeoffBas/HeaderGeometry/
+    Vol2Families.test.ts` (55), `detectRooms.test.ts` (25),
+    `scheduleTitleMatch.test.ts` (36), `symbolLabels.test.ts` (7),
+    `hvacTaxonomy.test.ts` (6), `scheduleBridge.test.ts` (7),
+    `vectorTakeoffPipeline.test.ts` (6), `agentTools.test.ts` (32) — no
+    regressions. No single real corpus document was pinned down carrying
+    this exact glyph-split shape (this rule was found via a fixture, not
+    a live document, per its own original write-up) — the fixture's own
+    geometry mirrors the SAME real CAD glyph-split behavior this
+    project's `fragmentedTagOcc` (symbolsweep.ts) already handles
+    elsewhere for drawn symbol tags, and `joinGraphSpans` is the same
+    already-shipped, already-trusted join used in two other production
+    paths — not a new, unproven mechanism.
 
 17. **OPEN, SCOPED, PARTIALLY REVERTED (2026-09-03): a real 2-word
     big-font title gap exists on `013_MO_T2523_01`'s own "CONTROL

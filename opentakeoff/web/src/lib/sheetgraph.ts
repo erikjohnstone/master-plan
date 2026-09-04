@@ -21,6 +21,7 @@
 // serves (sheet_context.text.spans).
 
 import { ROOM_LABEL_RE } from "./detectRooms";
+import { isEquipTag, joinGraphSpans } from "./equiptags";
 
 /** rot: text rotation in degrees, clockwise in device space (y down). Absent
  * or 0 = horizontal; 90/270 = a quarter-turn — the rotated-header case. When
@@ -4305,7 +4306,19 @@ function bandDataRows(
   for (let i = Math.max(cfg.fromIdx, 0); i < toIdx; i++) {
     if (rowY(rows[i]) <= cfg.belowY) continue;
     const banded: GraphSpan[] = [];
-    for (const t of rows[i]) {
+    // CAD exports sometimes draw one real multi-hyphen mark as several
+    // abutting glyph-split spans ("PCHWP" + "-" + "MT1") rather than one PDF
+    // text run — joinGraphSpans (equiptags.ts, already proven safe in
+    // scheduleParse.ts/symbollabels.ts) glues a run back together ONLY when
+    // the concatenation itself is tag-shaped (isEquipTag), so an ordinary
+    // hyphenated English phrase drawn as separate spans is never touched.
+    // Without this, banded[0] below sees only the FIRST glyph fragment
+    // ("PCHWP"), rowKeyOf rejects it (no hyphen), and the whole row silently
+    // falls to the orphan-fold pool instead of minting its own real row
+    // keyed "PCHWP-MT1" (GOAL.md rule 16). Unmerged spans keep their
+    // original object identity (equiptags.ts's own origin map), so the
+    // delta/marker lookup by reference just below is unaffected.
+    for (const t of joinGraphSpans(rows[i])) {
       const tri = cfg.deltas?.get(t);
       const rev = tri ? norm(t.str) : revisionOf(t.str);
       // a delta usually sits in the MARGIN beside its row — outside the data
@@ -4370,7 +4383,17 @@ function bandDataRows(
       const hasDigit = /\d/.test(keyed.key);
       let isHeaderFragment = false;
       if (!hasDigit) {
-        isHeaderFragment = true;
+        // A genuine 3+-segment hyphenated abbreviation stack ("CV-CHW-BP-T")
+        // is isEquipTag-shaped exactly like a real tag with no digit needed
+        // — the SAME asymmetry isEquipTag (equiptags.ts) already encodes: a
+        // bare 2-segment digit-free mark stays suspect (isEquipTag requires
+        // a digit there), but 3+ short segments are a real abbreviation
+        // stack, digit or not. Without this exemption every such mark —
+        // including one the glyph-join above (GOAL.md rule 16) just
+        // correctly reassembled from CAD glyph splits — gets treated
+        // exactly like a bare English phrase ("MAXIMUM", "SILENCER") and
+        // dropped outright rather than kept as its own real row.
+        isHeaderFragment = !isEquipTag(keyed.key);
       } else if (!keyed.key.includes("-")) {
         const prefix = keyed.key.match(/^[A-Z]+/)?.[0] ?? "";
         isHeaderFragment = prefix.length >= 3 && ALL_HEADER_WORDS.has(prefix);
