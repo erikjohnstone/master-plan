@@ -1343,12 +1343,12 @@ on this effort:**
     set once root-caused, same discipline as rules 17/18's own
     "don't generalize from one" standard.
 
-24. **OPEN, SCOPED, NOT STARTED: two real, distinct bugs on
-    011_IL_VA_Hines_Finance_Center_Renovation — a FALSE-POSITIVE
-    fabricated "ROOM FINISH SCHEDULE" (a 1-row garbage table on a page
-    that only references an external sheet this PDF export never
-    included), and a phantom column on the real "EXISTING HEAT PUMP
-    SCHEDULE" from a per-row repeated unit suffix.**
+24. **(a) FIXED 2026-09-04, (b) still OPEN, SCOPED, NOT STARTED: two real,
+    distinct bugs on 011_IL_VA_Hines_Finance_Center_Renovation — a
+    FALSE-POSITIVE fabricated "ROOM FINISH SCHEDULE" (a 1-row garbage
+    table on a page that only references an external sheet this PDF
+    export never included), and a phantom column on the real "EXISTING
+    HEAT PUMP SCHEDULE" from a per-row repeated unit suffix.**
 
     Found doing genuinely verified per-set work, sixth set picked up
     this session.
@@ -1381,17 +1381,54 @@ on this effort:**
     to (likely FLA or MCA, not present in the extracted headers at all)
     is not yet identified.
 
-    NOT STARTED. (a) is likely fixable narrowly — a candidate room-
-    finish "table" whose own header-vocab hits are all scattered,
-    non-adjacent single tokens with no real ruled/boxed structure near
-    them should be held to a stricter bar before being emitted at all
-    (this file's own comment history already applies a similar
-    "reference never wins on ambiguous structural signal" principle
-    elsewhere — worth reusing, not reinventing). (b) needs a debug trace
-    of the real header-row token positions around "AIRFLOW"/"CFM" to
-    confirm the per-row-unit-suffix hypothesis before designing a fix
-    (e.g., treat a header token identical to a value seen printed
-    beneath EVERY data row as a unit suffix, not a new column).
+    (b) STILL NOT STARTED — needs a debug trace of the real header-row
+    token positions around "AIRFLOW"/"CFM" to confirm the per-row-unit-
+    suffix hypothesis before designing a fix (e.g., treat a header token
+    identical to a value seen printed beneath EVERY data row as a unit
+    suffix, not a new column).
+
+    (a) FIX (2026-09-04): reused the same real structural corroboration
+    `extractReferenceTableAt` already requires for its own vocabulary-
+    free reads (`hasNearbyRuledLine`) as an ADDITIONAL, narrowly-scoped
+    gate in the shared `extractTableAt` (used by room-finish/finish/
+    equipment alike) — a candidate table with `out.length <= 1` AND a
+    region anomalously tall relative to this document's own real header
+    text-line height (`hdrLineH * 40`) now also needs a real ruled line
+    near its own HEADER row (not the whole, possibly-anomalous region —
+    see below) before being accepted; a genuinely sparse-but-real single-
+    row table (common in this corpus, e.g. itd-d1-lab-mechanical.pdf#14's
+    own DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE) is untouched,
+    since `out.length <= 1` alone never triggers the refusal.
+
+    First version of this fix searched the ruled-line check against the
+    table's own FULL region (header through the fabricated "row"), which
+    does NOT work: `hasNearbyRuledLine`'s own `pad` scales with the
+    height of whatever window it searches, so on this exact ~3900px-tall
+    fabricated region the search window became ~7800px tall — almost
+    certainly finding SOME unrelated horizontal line on a dense
+    architectural sheet and defeating the very check meant to catch this
+    case (confirmed live: did not refuse the real document at all).
+    Fixed by searching only the HEADER's own small, fixed-size bbox
+    instead — the anomaly is entirely in how far below the header the
+    (fabricated) row was found, so the header's own real ruled-border
+    corroboration is the right, narrow question to ask.
+
+    Tests: 3 new regression tests in `sheetgraph.test.ts` (single real
+    row + small region + real ruled line → kept; the real fabricated
+    shape + no ruled line → refused; the SAME fabricated shape + a real
+    ruled line present → kept, proving the gate is a genuine structural
+    check, not a blanket sparse-table refusal) — 116/116 `sheetgraph.
+    test.ts` (was 113), plus every other test file importing
+    `sheetgraph.ts` re-run clean (equiptags, hvacTaxonomy, scheduleBridge,
+    vectorTakeoffPipeline, agentTools, corpusTakeoffBas/HeaderGeometry/
+    Vol2Families, detectRooms, scheduleTitleMatch, symbolsweep,
+    symbolLabels, scheduleParse). Verified against the real document:
+    rebuilt 011_IL_VA_Hines_Finance_Center_Renovation fresh (full
+    `graph.tables` dump) — the fabricated "ROOM FINISH SCHEDULE" is gone;
+    `graph.tables` now carries exactly its 5 real tables (ROOM SCHEDULE -
+    LIFE SAFETY, DIFFUSER/REGISTER/GRILLE SCHEDULE, EXISTING HEAT PUMP
+    SCHEDULE — rule 24(b)'s own still-open table, PLUMBING FIXTURE
+    SCHEDULE, LIGHT FIXTURE SCHEDULE).
 
 25. **CORRECTED 2026-09-04, FOLDED INTO RULE 30: real NOTES-list text
     bleeds into MARK/TYPE/CFM cells on

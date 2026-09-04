@@ -329,6 +329,68 @@ test("table extraction: header anchors, evidence per cell, titles found above", 
   assert.equal(extractTable(planSheet, "room-finish"), null);
 });
 
+test("room-finish: a genuine, real single-row table (small region, real ruled line nearby) is kept", () => {
+  // Narrow-scoping proof for the anomalous-region-height refusal below: a
+  // real single-row schedule (real, corpus-found precedent: itd-d1-lab-
+  // mechanical.pdf#14's own DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,
+  // exactly one row) must never be refused just for being sparse — only a
+  // sparse table whose OWN region is also anomalously tall is ever in
+  // scope, and this table's header-to-row gap is ordinary.
+  const spans: GraphSpan[] = [
+    sp("ROOM FINISH SCHEDULE", 100, 20),
+    sp("NO", 100, 40), sp("NAME", 160, 40), sp("FLOOR", 300, 40), sp("BASE", 400, 40), sp("WALL", 500, 40),
+    sp("101", 100, 60), sp("OFFICE", 160, 60), sp("CPT-1", 300, 60), sp("RB-1", 400, 60), sp("P-1", 500, 60),
+  ];
+  const sheet: SheetSpans = { key: "single.pdf#1", sheet_number: "A-601", spans };
+  const rf = extractTable(sheet, "room-finish");
+  assert.ok(rf, "a real single-row table, close-set, is still extracted");
+  assert.equal(rf!.rows.length, 1);
+  assert.equal(rf!.rows[0].key, "101");
+});
+
+test("room-finish: refuses a fabricated table from scattered legend vocabulary with no nearby ruled line (GOAL.md rule 24(a))", () => {
+  // Real, corpus-found: 011_IL_VA_Hines_Finance_Center_Renovation.pdf#8's
+  // own "ROOM FINISH SCHEDULE" is entirely fabricated — the real schedule
+  // lives on sheet AE-102, which this PDF export never includes. The sheet
+  // itself only carries the cross-reference sentence "REFERENCE SHEET
+  // AE-102 FOR ROOM FINISH SCHEDULE" (title-hunt latches onto its own
+  // "ROOM FINISH SCHEDULE" tail) plus a floor-plan's own compass/finish-
+  // legend text (BASE/NORTH/EAST/SOUTH/WEST — real ROOM_HEADERS words,
+  // scattered, never a real header row) and a stray room-number callout
+  // ("7") that happens to sit near "NORTH" far below. Real extracted shape:
+  // exactly 1 row, region ~3900px tall for this document's own ~8-14px
+  // text height — reproduced here at the same order-of-magnitude ratio.
+  const spans: GraphSpan[] = [
+    sp("REFERENCE SHEET AE-102 FOR ROOM FINISH SCHEDULE", 100, 20),
+    sp("BASE", 100, 60), sp("NORTH", 300, 60), sp("EAST", 500, 60), sp("SOUTH", 700, 60), sp("WEST", 900, 60),
+    // the stray room-number plan callout, far below — real gap, not adjacent
+    sp("7", 300, 500),
+  ];
+  const sheet: SheetSpans = {
+    key: "legend.pdf#8", sheet_number: "A-108", spans,
+    segs: [4000, 4000, 4100, 4000], // present, but nowhere near this table
+  };
+  assert.equal(extractTable(sheet, "room-finish"), null, "no real ruled border nearby a wildly disproportionate region — refused, not fabricated");
+});
+
+test("room-finish: the SAME scattered-legend shape is kept when a real ruled line sits near it", () => {
+  // Proves the gate is a real structural corroboration check, not a blanket
+  // sparse-table refusal — same fixture as above, but this time with a
+  // real ruled line spanning the header row, exactly like extractReferenceTableAt's
+  // own already-shipped "positive" counterpart test.
+  const spans: GraphSpan[] = [
+    sp("REFERENCE SHEET AE-102 FOR ROOM FINISH SCHEDULE", 100, 20),
+    sp("BASE", 100, 60), sp("NORTH", 300, 60), sp("EAST", 500, 60), sp("SOUTH", 700, 60), sp("WEST", 900, 60),
+    sp("7", 300, 500),
+  ];
+  const sheet: SheetSpans = {
+    key: "legend.pdf#9", sheet_number: "A-109", spans,
+    segs: [0, 55, 1000, 55], // a real ruled line right under the header row
+  };
+  const rf = extractTable(sheet, "room-finish");
+  assert.ok(rf, "a real nearby ruled line corroborates the table — kept, same as extractReferenceTableAt's own gate");
+});
+
 test("room tags pair the stacked name; schedule sheets never mint phantom rooms", () => {
   const tags = roomTags(planSheet);
   assert.deepEqual(tags.map((t) => [t.tag, t.name]).sort(), [["101", "OFFICE"], ["102", "WORKROOM"], ["103", "CORRIDOR"], ["104", "STORAGE"]]);

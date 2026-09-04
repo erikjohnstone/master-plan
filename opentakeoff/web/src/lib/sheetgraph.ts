@@ -5284,6 +5284,59 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
       title = { sheet: sheet.key, text: t.str.trim(), bbox: bboxOf(t) };
     }
   }
+  // A real table's own region is bounded by its own real rows — a header
+  // plus a genuine single data row spans a handful of the table's own line
+  // heights, never hundreds. GOAL.md rule 24(a), real, corpus-found:
+  // 011_IL_VA_Hines_Finance_Center_Renovation.pdf#8's own "ROOM FINISH
+  // SCHEDULE" is entirely fabricated — the real schedule lives on sheet
+  // AE-102, which this PDF export never includes; the sheet itself only
+  // carries the cross-reference sentence "REFERENCE SHEET AE-102 FOR ROOM
+  // FINISH SCHEDULE" plus a floor-plan's own compass/finish-legend text
+  // (BASE/NORTH/EAST/SOUTH/WEST — real ROOM_HEADERS vocabulary words,
+  // scattered incidentally, never a real header row) and a stray room-number
+  // callout ("7") that happens to sit near "NORTH". `qualifies()`'s own
+  // vocabulary-density bar (>=4 distinct hits, one of them required) has no
+  // way to tell that apart from a genuine header row, and the digit-bearing
+  // key ("7", a real room-number SHAPE) clears every existing digit-free
+  // noise guard elsewhere in this file — real, measured: this fabricated
+  // table's own region spans ~3900px (`hdrLineH`-relative: ~100x this same
+  // document's own real text-line height) for exactly ONE row, versus a
+  // genuine single-row table (real, corpus-found precedent: itd-d1-lab-
+  // mechanical.pdf#14's own DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE,
+  // one real row, DFC-1) whose region never exceeds a handful of line
+  // heights. Scoped to exactly that narrow shape — `out.length <= 1` alone
+  // is common and legitimate (real single-row schedules exist throughout
+  // this corpus) and is never refused on its own; only a region THIS
+  // disproportionate additionally needs the same real structural
+  // corroboration `extractReferenceTableAt` already requires for its own
+  // vocabulary-free reads (`hasNearbyRuledLine`, unchanged, reused as-is —
+  // it already fails OPEN when a sheet's own vector geometry was never
+  // extracted, so a genuine table on a budget-skipped sheet is never
+  // refused for a reason it has no way to clear).
+  //
+  // The ruled-line check is run against the HEADER's OWN compact bbox
+  // (`hdrBand`/`headerSpans`), never the full (possibly anomalous) region —
+  // `hasNearbyRuledLine`'s own `pad` scales with the height of whatever
+  // window it is asked to search, so searching the whole 3900px-tall
+  // region for THIS exact bug would search a ~7800px vertical band on a
+  // dense architectural sheet and almost certainly find SOME unrelated
+  // horizontal line, defeating the very check meant to catch this case
+  // (confirmed live: the first version of this fix, scoped to the full
+  // region, did not refuse the real 011_IL_VA_Hines document at all). A
+  // real table's own header sits directly on or beside its own ruled
+  // border; the anomaly is entirely in how far below it the (fabricated)
+  // "row" was found, so only the header's own small, fixed-size bbox is
+  // ever searched.
+  const ANOMALOUS_REGION_HEIGHT_RATIO = 40;
+  if (out.length <= 1 && region) {
+    const hdrY0 = Math.min(...headerSpans.map((t) => t.y));
+    const hdrY1 = Math.max(...headerSpans.map((t) => t.y + (t.h || 0)));
+    const [, , , ry1] = region;
+    if (ry1 - hdrY0 > hdrLineH * ANOMALOUS_REGION_HEIGHT_RATIO
+      && !hasNearbyRuledLine(sheet.segs, hdrBand.x0, hdrBand.x1, hdrY0, hdrY1)) {
+      return { table: null, nextIdx: toIdx };
+    }
+  }
   const table: ScheduleTable = { kind, sheet: sheet.key, title, headers: anchors.map((a) => a.label), rows: out, region: region!, anchors };
   if (rotated) table.rotated_headers = true;
   return { table, nextIdx: toIdx };
