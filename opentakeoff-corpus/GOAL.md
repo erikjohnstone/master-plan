@@ -1625,7 +1625,8 @@ on this effort:**
     if this session's own build (task tracked live) finishes, otherwise
     on the next pass.
 
-24. **(a) FIXED 2026-09-04, (b) still OPEN, SCOPED, NOT STARTED: two real,
+24. **(a) FIXED 2026-09-04, (b) FIXED 2026-09-04 (commit e01973b — see
+    "REAL FIX (b)" at the end of this rule): two real,
     distinct bugs on 011_IL_VA_Hines_Finance_Center_Renovation — a
     FALSE-POSITIVE fabricated "ROOM FINISH SCHEDULE" (a 1-row garbage
     table on a page that only references an external sheet this PDF
@@ -1731,6 +1732,22 @@ on this effort:**
     LIFE SAFETY, DIFFUSER/REGISTER/GRILLE SCHEDULE, EXISTING HEAT PUMP
     SCHEDULE — rule 24(b)'s own still-open table, PLUMBING FIXTURE
     SCHEDULE, LIGHT FIXTURE SCHEDULE).
+
+    **REAL FIX (b), 2026-09-04 (commit e01973b).** Confirmed by trace that
+    "OA CFM" arrives as a SINGLE text span; headerLabel resolves a span to
+    its canonical vocabulary word, so the "OA" qualifier was dropped on the
+    way to the anchor's label. Everything else about the table was already
+    right (15 real rows, both columns present and correctly banded).
+
+    Fix kept deliberately tight, because canonicalizing to the vocabulary
+    word is this file's design and widening it generally would rename headers
+    corpus-wide: the qualifier is preserved only for the four AIR SERVICES
+    whose presence changes which quantity a rating word names (OA/EA/SA/RA),
+    and only for an exactly-two-word span whose second word IS the matched
+    vocabulary word. "DESIGN AIRFLOW" and longer phrases are untouched.
+    Verified: header goes [... AIRFLOW, CFM, ...] -> [... AIRFLOW, OA CFM,
+    ...] with AIRFLOW="205 CFM" and OA CFM="50"; corpus sweep 0 changed.
+
 
 25. **CORRECTED 2026-09-04, FOLDED INTO RULE 30: real NOTES-list text
     bleeds into MARK/TYPE/CFM cells on
@@ -2060,7 +2077,11 @@ on this effort:**
     same-tick fix; a real, systemic gap worth being honest about rather
     than silently reporting 30 real devices with zero real point data.
 
-29. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY (3rd/4th real confirmation
+29. **FIXED 2026-09-04 (commit da2b9a1) — see "REAL FIX" at the end of this
+    rule. The diagnosis recorded below across eight confirmations was
+    CORRECT about the symptom and WRONG about the mechanism; the correction
+    is documented there rather than by rewriting the history above.
+    (was: OPEN, SCOPED, NOT STARTED, HIGH SEVERITY) (3rd/4th real confirmation
     of rule 23's cross-table-bleed root cause, now on FABRICATED cell
     VALUES not just fabricated ROWS):
     012_MO_M2430_01_Chiller_Upgrade_Center_for_Behavioral.pdf#27's own
@@ -2344,7 +2365,37 @@ on this effort:**
     strength of code-reading alone, exactly the standard every other real
     fix in this file was held to.
 
-30. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: formalizing an already-
+    **REAL FIX, 2026-09-04 (commit da2b9a1).** The code-level candidate this
+    rule recorded (findHeaderRow's tier-descent envelope loop) is WRONG:
+    instrumenting that exact loop against the real page produced ZERO hits
+    for these anchors. They are minted at the ordinary main anchor site.
+
+    Real mechanism, live-traced on 012#27: the real VFD header line (TAG NO /
+    MANUFACTURER / MODEL / NOTES) sits at y=314.70 spanning x 1943-2958; the
+    PANELBOARD's own descriptive sentence sits at y=309.50 spanning x
+    3076-4410. They are 5.2px apart — INSIDE clusterRows' own 6.37px merge
+    tolerance for this text height — so they arrive as ONE row, and every
+    vocabulary hit in it mints a column.
+
+    Discriminator shipped: a vertical whitespace CORRIDOR through the table's
+    own data (gutter >= 5*h, never crossed by a data row below, plus a
+    baseline break >= 0.25*h between the flanking tokens), with a safety net
+    requiring the kept side to still carry its required vocabulary inside its
+    own column band. Baselines alone CANNOT work and this is worth recording:
+    one real header row on 019_FL_Eglin legitimately spans 15.5px (1.2*h) of
+    baseline variation with mutually x-disjoint sub-groups, while this rule's
+    real intruder sits 0.29*h away — the intruder is RELATIVELY TIGHTER than
+    real headers are. Two earlier attempts were caught by the corpus sweep
+    (a baseline-grouping version destroyed a real LUMINAIRE SCHEDULE and a
+    GPM column; a loose-corridor version cost an AIR COOLED CHILLER SCHEDULE
+    and CFM/RPM/HP on 021_XX). Verified: 012#27's fabricated VOLTAGE/TYPE/
+    PHASE columns and all panelboard cell text gone; corpus sweep over 34
+    real sets 0 changed / 0 diff lines; 324/324 targeted suite.
+
+
+30. **FIXED 2026-09-04 (commit 598aac5) — and NOT by the deep-header
+    mechanism this rule assumed throughout. See "REAL FIX" at the end.
+    (was: OPEN, SCOPED, NOT STARTED, HIGH SEVERITY) formalizing an already-
     disclosed-but-never-numbered limitation — a real 5-6-tier-deep
     header defeats header/key detection in two DIFFERENT concrete ways
     on the SAME real document
@@ -2650,6 +2701,39 @@ on this effort:**
     see rule 25's own updated text below. NOT attempted here, same
     reasoning as every confirmation above.
 
+    **REAL FIX, 2026-09-04 (commit 598aac5). This is NOT a header-depth
+    problem.** Live trace of the row-key decision on 030#84/85:
+    `001-FCU-01-CG06A` REFUSED, `001-FCU-02-C106A` REFUSED, ... 13 of 14
+    refused, while `ROME-FCU-01-G120` was ACCEPTED. The lone survivor this
+    rule records is not a coincidence — it is the only tag on the page whose
+    first segment is alphabetic. CODE_RE's hyphenated branch requires a
+    letter-led first segment, so every "001-" prefixed real tag fails it, and
+    the two existing numbered-building paths cap the prefix at \d{1,2} AND
+    require a confirmed building (this document's building set comes back
+    EMPTY, so widening the digit cap alone recovers nothing).
+
+    Fix: accept a numeric facility prefix on SHAPE where shape is already
+    unambiguous — digits then a THREE-segment letter-led code. The ambiguous
+    two-segment "1-RH-1" case is deliberately left to the existing
+    confirmed-building gate, whose standing test still passes.
+
+    Verified: 030#84/85 goes 4 tables -> 16. TWO-PIPE FAN COIL UNIT SCHEDULE
+    1 row -> 14 (this rule's own recorded ground truth exactly). CHILLED BEAM
+    SCHEDULE now keys on its real EQUIPMENT TAG (001-CB-01-DC1 ...) instead
+    of the colliding PRIMARY AIR values 200/200/200/125/125 recorded as
+    30(b). Ten further real schedules recovered from nothing (condensing
+    unit, gravity ventilator, heat pump, pressure relief damper, blast
+    suppression damper, dehumidifier, louver, humidifier, fire damper, DOAS).
+    Corpus sweep over 34 real sets: PURELY ADDITIVE, no table/header/row
+    lost, plus two more real schedules recovered on 036_LA_VA.
+
+    STILL OPEN on this document: 030's CRAC UNIT and CHILLED BEAM schedules
+    now appear TWICE — the recovered correctly-keyed ODL copy alongside the
+    older geometric copy that still carries numeric keys. Those bad copies
+    are pre-existing and untouched by this fix; deduplicating them is real
+    remaining work.
+
+
 31. **FIXED 2026-09-03: the row-key column picker unconditionally
     trusts the LEFTMOST real column — when a real document splits its
     own equipment tag into a short TYPE PREFIX column + a separate
@@ -2746,7 +2830,9 @@ on this effort:**
     (`equiptags.test.ts`'s own "PCHWP-MT1 in CUH-T1") reproduced
     identically on the unmodified base commit.
 
-32. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: a whole real page's 3
+32. **FIXED 2026-09-04 (commit 004f62a) — and NOT by either mechanism this
+    rule proposed. See "REAL FIX" at the end.
+    (was: OPEN, SCOPED, NOT STARTED, HIGH SEVERITY) a whole real page's 3
     real HVAC schedules (8 real units total) are ALL silently dropped
     and REPLACED by one wholly fabricated table built from the same
     page's own title-block/firm-address stamp text.**
@@ -2804,6 +2890,34 @@ on this effort:**
     High real value: split-system condensers/fan-coils are a common,
     dollar-significant real HVAC scope item, and this same 3-schedule-
     plus-title-block page shape is plausibly common corpus-wide.
+
+    **REAL FIX, 2026-09-04 (commit 004f62a). Neither proposed mechanism was
+    right.** Trace of 035#46 shows every earlier stage already correct: the
+    page is /Rotate 270 but pdf.js's viewport un-rotates it cleanly (composed
+    spans come back upright); all three schedules are found; their headers
+    qualify; anchors and column bands are right. ONLY the row-key gate
+    refuses them — and because it refuses EVERY row, each table is dropped
+    whole, which is why the page appeared to carry no tables rather than bad
+    ones.
+
+    Real mechanism: these schedules print the family in a TYPE column and the
+    instance number in a separate MARK column, so the key cell alone is
+    "DSCU" — legitimately digit-free — and the digit-free guard
+    (isHeaderFragment = !isEquipTag(key)), which exists to reject header
+    fragments like SYMBOL/TOTAL, cannot tell those from a real family code
+    whose number lives one column over. Fix: compose the mark as printed
+    ("DSCU" + "1" -> "DSCU-1"), only when the table has its own real MARK
+    column to the RIGHT of the key and that cell holds a bare small integer.
+
+    Verified: 0 tables -> 3, keys exactly this rule's recorded ground truth —
+    DSCU-1/2/3, DSFC-1/2/3, LI-1/LE-2 (all 8 real units, including the second
+    louver this corpus's own compile.json census undercounted). Corpus sweep
+    over 34 real sets: 0 changed / 0 diff lines.
+
+    STILL OPEN: the fabricated title-block table (row keyed "SUITE210") does
+    not appear on this page in isolation and was not addressed. With the
+    three real schedules now extracting it no longer stands in for them.
+
 
 33. **PARTIALLY FIXED 2026-09-03: a real page with 4 dense, adjacent
     HVAC schedules loses 2 of them entirely and MERGES two real,
