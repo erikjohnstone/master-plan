@@ -2672,6 +2672,47 @@ function harvestNumericSubHeaders(rows: GraphSpan[][], vocab: string[], idx: num
  * intervening row-to-row gap is individually perfectly ordinary. */
 function chainedParentAbove(rows: GraphSpan[][], fromRi: number, topIdx: number, gx0: number, gx1: number, vocab: string[]): string | null {
   const width = Math.max(gx1 - gx0, 1);
+  // Same real bug as genuineParentOver/parentPhraseOver, same fix (GOAL.md
+  // rule 20(c)), confirmed live on a THIRD sibling with an even sharper
+  // version of it: this function's own `d` is a PER-STEP gap (rows[cur] to
+  // rows[j], `cur` reassigned to `j` every iteration as the walk climbs), not
+  // a cumulative distance from `fromRi` — so a candidate found many steps up
+  // can show an ARTIFICIALLY SMALL `d` whenever that one particular hop's own
+  // gap happens to be tight, letting it beat a genuinely closer candidate
+  // found at an earlier step whose own local gap was merely ordinary. Real,
+  // corpus-found (004_MO_T2504_03's own ROOFTOP UNIT SCHEDULE, live debug
+  // trace): a real, correct, ONE-STEP-UP "COOLING" parent (h=19, per-step gap
+  // 18px, d≈18034) LOST to the table's own big-font TITLE "ROOFTOP UNIT
+  // SCHEDULE" (h=38, found several steps further up, but its OWN last hop's
+  // gap only 9.8px, d≈9867) — the real header ended up
+  // "ROOFTOP UNIT SCHEDULE EAT" instead of "COOLING EAT". Rather than
+  // redesign this function's own distance metric (a far larger, riskier
+  // change than this rule's own real scope), the SAME guard already proven
+  // twice over rejects the title outright before it ever reaches the flawed
+  // comparison at all: a genuine parent tier renders at roughly the header's
+  // own font size; the table's own title never does.
+  //
+  // Real-document re-verification post-fix: "ROOFTOP UNIT SCHEDULE EAT"/
+  // "…LAT" no longer appear anywhere in this real table's own headers, and
+  // the already-correct "HEATING EAT"/"HEATING LAT" pair is unaffected. The
+  // COOLING-side EAT/LAT pair itself is now honestly ABSENT rather than
+  // mislabeled — this rule's own caller (harvestBareVocabLeafTiers) only
+  // mints a column pair when BOTH siblings resolve to the SAME real parent,
+  // and only one of the two (LAT) had a genuine non-title candidate within
+  // reach; EAT's own real parent was never independently found. A confidently
+  // wrong label on real data is strictly worse than the honest gap this
+  // leaves instead — the same trade-off already made for rule 17.
+  //
+  // NOT fixture-verified (unlike genuineParentOver/parentPhraseOver): several
+  // real attempts at a minimal isolated fixture reaching this exact call site
+  // through extractTable kept resolving the parent via a different, simpler
+  // geometric mechanism instead — this bug's own per-step-gap illusion only
+  // manifests on a genuinely dense, multi-schedule real page, which a small
+  // synthetic fixture couldn't reproduce. Verified instead by a live debug
+  // trace pinpointing the exact mechanism (above) plus this real-document
+  // rebuild — the same standard already used for rule 17's own equivalent gap.
+  const hs0 = rows[fromRi].map((t) => t.h || 8).sort((a, b) => a - b);
+  const hdrH = hs0[hs0.length >> 1] || 8;
   let cur = fromRi;
   let best: { text: string; d: number } | null = null;
   for (let steps = 0; steps < 10 && cur > topIdx; steps++) {
@@ -2688,6 +2729,7 @@ function chainedParentAbove(rows: GraphSpan[][], fromRi: number, topIdx: number,
       if (lbl) return lbl;
       const s = norm(t.str);
       if (!PHRASE_RE.test(s) || /^\(.*\)$/.test(s)) continue;
+      if ((t.h || 8) >= hdrH * GENUINE_PARENT_BIG_FONT_RATIO) continue;
       const d = (rowY(rows[cur]) - rowY(rows[j])) * 1000 + Math.abs(cx - (gx0 + gx1) / 2);
       if (!best || d < best.d) best = { text: s, d };
     }
