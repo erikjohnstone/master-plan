@@ -2311,6 +2311,39 @@ on this effort:**
     title/header survive intact but every row is gone). NOT attempted
     here, same reasoning as every confirmation above.
 
+    A NEW, real, CODE-LEVEL CANDIDATE for the 1st confirmation's own exact
+    mechanism (the VFD SCHEDULE's "VOLTAGE"-from-PANELBOARD false anchor),
+    found 2026-09-04 by reading `findHeaderRow`'s own tier-descent envelope
+    loop directly, but NOT yet confirmed by a live debug trace against the
+    real document — recorded honestly as a lead, not a finding, per this
+    session's own standing discipline never to claim confirmed-when-not.
+    The loop (`if (idx > i) { … for (let j = i; j < idx; j++) for (const h
+    of headerHits(rows[j], vocab)) … }`, existing comment: "picks up a
+    parent-tier row's own bare vocabulary hits… across the i..idx-1 window
+    a real tier-descent actually walked through") mints a brand-new anchor
+    for ANY vocab hit in that row range that is not already close to an
+    EXISTING anchor (`halfPitch`, an EXCLUSION check against anchors
+    already minted) — it has NO corresponding INCLUSION check that the
+    hit's own x-position falls inside this table's own established column
+    band (`x0`/`x1`, from `bandLimits(anchors)`, available at every other
+    anchor-minting site in this file). A same-y-band, unrelated table's own
+    header/descriptive text (confirmed real for this exact case: the
+    PANELBOARD SCHEDULE's own "…VOLTAGE 3 PHASE 4 WIRE…" sentence sits at
+    the same y-band as the VFD table's own header, per this rule's own
+    earlier real-coordinate trace) would pass this loop's only real guard
+    (not already close to an anchor already minted) with no x-band check
+    at all — exactly the shape needed to explain the confirmed symptom.
+    Real next step: instrument this exact loop (as this session already
+    started — the instrumentation was written and then reverted, unused,
+    when 012's own real PDF proved too heavy to cold-build in reasonable
+    time this session, a real, disclosed environment limitation, not a
+    finding) and confirm "VOLTAGE" is actually minted here, at this exact
+    site, before designing a fix — the fix itself, if confirmed, is likely
+    narrow (add the missing `cx >= x0 && cx <= x1` check, mirroring every
+    other anchor site in this file) but must not be shipped on the
+    strength of code-reading alone, exactly the standard every other real
+    fix in this file was held to.
+
 30. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: formalizing an already-
     disclosed-but-never-numbered limitation — a real 5-6-tier-deep
     header defeats header/key detection in two DIFFERENT concrete ways
