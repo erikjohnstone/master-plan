@@ -1402,17 +1402,37 @@ on this effort:**
     reports data that does not exist, rather than honestly showing
     nothing.
 
-    (b) `[equipment] "EXISTING HEAT PUMP SCHEDULE"` (15 real rows,
-    otherwise correctly keyed and populated) carries a genuine data
-    column "AIRFLOW" (values like `"205 CFM"`, unit suffix included)
-    directly followed by a SEPARATE, phantom "CFM" header holding small
-    unrelated values (`"50"`, `"35"`, …) — real page coordinates confirm
-    the word "CFM" is printed as a per-row UNIT SUFFIX directly under
-    "AIRFLOW" at nearly the same x, repeated on every single data row
-    (not a real second header), which got mistaken for its own column.
-    The real column those small values (50/35/35/30/25…) actually belong
-    to (likely FLA or MCA, not present in the extracted headers at all)
-    is not yet identified.
+    (b) CORRECTED 2026-09-04 — the original hypothesis was wrong; this is
+    real but much narrower than first scoped. `[equipment] "EXISTING
+    HEAT PUMP SCHEDULE"` (15 real rows, otherwise correctly keyed and
+    populated) carries `AIRFLOW: "205 CFM"` (unit suffix included — this
+    part is genuinely correct, faithful to the real printed page, same
+    "unit baked into the value" convention used throughout this corpus)
+    directly followed by a header simply labeled `"CFM"` holding real,
+    correct per-row values (`"50"`, `"35"`, …). Re-verified against the
+    real page directly (`extract_words()`, page #16, not inferred from
+    coordinates alone this time): the real header row reads, left to
+    right, "…HEATING CAPACITY | DESIGN AIRFLOW | OA CFM |
+    VOLTAGE/PHASE…" — "DESIGN AIRFLOW" and "OA CFM" are TWO real,
+    genuinely distinct column headers sitting side by side on the SAME
+    header line (not one column with a stray repeated unit suffix, and
+    not a phantom/fabricated column at all). The extraction correctly
+    splits them into two anchors and correctly bands each row's own
+    real DESIGN AIRFLOW value (205, 365, 290…) and real OA (outside-air)
+    CFM value (50, 35, 35…) into the right column, cell for cell — real,
+    verified, ZERO data corruption or misplacement anywhere in this
+    table. The ONLY actual defect: the second anchor's own header LABEL
+    lost its "OA" qualifier word during header-phrase segmentation,
+    reading bare `"CFM"` instead of the real `"OA CFM"` — a header-text
+    completeness bug, not a row/cell-data bug. Low severity: a takeoff
+    built on this table's own real quantities is entirely correct;
+    only the printed column NAME for one column is incomplete. Likely
+    the same header-word-clustering machinery already flagged
+    repeatedly this session (parentLabelOver/headerLabel family, shared
+    with rule 30's own tier-merge mechanism) — deferred alongside that
+    family rather than risked for a purely cosmetic single-word fix.
+    NOT STARTED as a code fix; this correction itself is the real
+    progress for this tick.
 
     (b) STILL NOT STARTED — needs a debug trace of the real header-row
     token positions around "AIRFLOW"/"CFM" to confirm the per-row-unit-

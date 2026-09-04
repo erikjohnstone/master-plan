@@ -27,7 +27,7 @@ confirmed correct behavior on a real artifact).
 | 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated | verified-open | 22 |
 | 009_FL_USDA_APHIS_Plant_Inspection_Station_Building | verified-open | 23 (fixed 2026-09-04 via code trace + fixture test; real-document rebuild for this specific set did not finish within session — recheck first on next pass) |
 | 010_US_WWYK240146_Design_Implement_Monitoring_Control | verified-clean | — (0 real tables confirmed correct: sequence-of-operations narrative only, no real schedules anywhere in 31 pages) |
-| 011_IL_VA_Hines_Finance_Center_Renovation | verified-open | 24(b) (24(a)'s fabricated ROOM FINISH SCHEDULE fixed 2026-09-04) |
+| 011_IL_VA_Hines_Finance_Center_Renovation | verified-open | 24(b) (low severity — header text only, real data all correct; 24(a)'s fabricated ROOM FINISH SCHEDULE fixed 2026-09-04) |
 | 014_MT_USDA_Forest_Service_Missoula_Fire_Sciences | verified-open | 21 (2nd confirmation) |
 | 015_VA_P_095_Replace_Submarine_Pier_3_Utility | verified-open | 30 (14th confirmation, low severity here — otherwise clean; was mis-scoped as rule 25, corrected 2026-09-04) |
 | 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test | verified-open | 26 (likely corpus-wide) |
