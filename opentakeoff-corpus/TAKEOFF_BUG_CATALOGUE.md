@@ -34,6 +34,7 @@ every eval read 100%. Every bug below was invisible to that gate.
 | B-2 | `sequences` takeoff has no compiler entry — throws | every document | absence |
 | B-3 | Row key falls back to a count column when a table has no MARK | 23 real silencers reported as 2 | false structural inference |
 | B-4 | Prose fragments recorded as schedule titles | 3+ documents | false structural inference |
+| B-5 | A new header-token rejection killed a whole real table | −12 real cells on federal-mech | self-inflicted; whole-row guard |
 
 ---
 
@@ -132,6 +133,63 @@ a prose line FILLS its column band (89%-113% measured) while a real title does n
 measured). A sentence-terminating period is a second, independent signal.
 
 ---
+
+---
+
+### B-5 — a new header-token rejection killed a whole real table (SELF-INFLICTED, found by Loop B0)
+
+**Severity: this one was mine, shipped, and my own gate would have caught it.**
+
+**What happened.** Rule 18 (commit `e256975`) added
+`if (/:$/.test(s)) return false;` to `isGenericHeaderToken`, to kill a fake
+13-row table mined from two side-by-side SEQUENCE OF OPERATION prose columns
+on itd-d1-lab#20 (its "header" labels were `"WORKSTATION."` and
+`"SHALL SEQUENCE THE FOLLOWING:"`).
+
+**Measured cost.** Reference-cell scores, pre-today (`08f8559`) vs HEAD:
+
+| set | cells | before | after |
+|---|---|---|---|
+| itd-d1-lab | 34 | 11.8% | **41.2%** (+10 cells) |
+| federal-mech | 31 | 100.0% | **61.3%** (−12 cells) |
+
+federal-attachment4-mechanical.pdf#15's `ARCHITECTURAL LOUVERED PENTHOUSE
+SCHEDULE` (ALP-1/ALP-2/ALP-3) disappeared **entirely**, and two fabricated
+title-block tables took its place: `"IMEG Corporation"` (the engineering
+firm's name) with row keys `MINIMUM / LOCATION / BLADDER / BLADDER`, and
+`"ELECTRONIC SECURITY / TELECOMMUNICATIONS"` keyed
+`CONTRACT DOCUMENTS / DESIGN DEVELOPMENT / DRAWING TITLE / SCALE`.
+
+**Root cause — and it is a trap this codebase already documented.** There is
+**no colon-terminated token anywhere in the ALP header band** (measured
+directly: the two header tiers are `ROOF OPENING / PENTHOUSE THROAT SIZE /
+DESIGN AIR FLOW / MAXIMUM AIR PD` over `CFM / I.W.G / TAG / SYSTEM / LOCATION
+/ LENGTH / WIDTH / LENGTH / WIDTH / HEIGHT / MANUFACTURER / MODEL / REMARKS`).
+The rule breaks the table **indirectly**: `isGenericHeaderRow` requires EVERY
+token in a row to qualify, so one new rejection anywhere on the sheet
+disqualifies a whole candidate header row, which shifts where
+`extractAllReferenceTables` advances `fromIdx`, and a junk title-block region
+then swallows the ALP band (note `LOCATION` — a real ALP header — appearing as
+a row key of the `"IMEG Corporation"` table).
+
+This is the **identical failure mode** rule 18's own history records for the
+bare `"&"` connector: one token failing `isGenericHeaderToken` silently killed
+an entire real table. Any new rejection in that function is a whole-table risk.
+
+**Fix.** Require ≥3 words AND a trailing colon:
+`if (/:$/.test(s) && norm(s).split(/\s+/).filter(Boolean).length >= 3) return false;`
+`"SHALL SEQUENCE THE FOLLOWING:"` is a prose clause (4 words); a real column
+label is not. Verified on both documents: federal recovers ALP-1/2/3, itd's
+fabricated prose table stays dead.
+
+**The process failure, recorded because it matters more than the bug.** The
+two-tier sweep gate (regression + held-out) exists in this repo specifically to
+catch a locally-correct fix breaking a different real table elsewhere. It was
+built earlier the same session — and rule 18 was committed **without running
+it**, pushed at a stop-hook prompt while the sweeps were still in flight. The
+gate would have shown federal's ALP as a `LOST` table before the commit landed.
+No extraction change ships again without the gate completing first.
+
 
 ## How these connect
 

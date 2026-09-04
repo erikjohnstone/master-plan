@@ -6068,7 +6068,7 @@ export function isGenericHeaderToken(raw: string): boolean {
   // "OPERATING MODE:"/"UNOCCUPIED MODE:" labels (already named in
   // extractReferenceTableAt's own title-hunt comment) are the same shape and
   // the same non-header.
-  if (/:$/.test(s)) return false;
+  if (/:$/.test(s) && norm(s).split(/\s+/).filter(Boolean).length >= 3) return false;
   // A single span containing the word "SCHEDULE" is always a real TABLE
   // TITLE in this corpus, never a column header label — checked live: zero
   // hits for "SCHEDULE" across EQUIPMENT_HEADERS/FINISH_HEADERS/ROOM_HEADERS'
