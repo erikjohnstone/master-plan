@@ -990,6 +990,61 @@ on this effort:**
     reminder that title-hunt/header-parent fixes are easy to get subtly
     wrong without one.
 
+    DEBUG TRACE COMPLETED 2026-09-04 (per the note above), real
+    coordinates via direct `extract_words()` against the live page —
+    this reclassifies the entry from "one bug" to FOUR distinct real
+    sub-bugs, at least one of which is genuinely as risky as rule 30's
+    own family, not a quick isolated fix:
+
+    (a) TANK VOLUME / HEAT SOURCE genuinely have zero vocabulary
+    representation — confirmed `headerLabels` matches SINGLE WORDS only
+    (splits each cell on non-letter runs, checks each token against
+    `vocab.includes(w)`), so recovering them means adding bare words
+    (`TANK`, `SOURCE`, and/or `VOLUME`/`HEAT`) to the shared, corpus-wide
+    `EQUIPMENT_HEADERS` array — real collision risk: `VOLUME` in
+    particular is generic enough to appear in unrelated real titles
+    elsewhere in the corpus (e.g. `VOLUME CONTROL BOX SCHEDULE`, a real
+    VAV title already in this file), and `headerHits` runs on every row,
+    not just inside a table already known to be a water heater schedule.
+    Needs a real corpus-wide collision check before landing, not assumed
+    safe from one document.
+
+    (b) VOLTAGE/PHASE are NOT missing because of a parent-recognition
+    failure as originally guessed — real coordinates show them on their
+    OWN row, ~9px below the row carrying MARK/MANUFACTURER/MODEL/TANK/
+    VOLUME/SOURCE/MBH/REMARKS, with their real parent ELECTRICAL sitting
+    on ANOTHER row ABOVE that same main row. A genuine 3-row stagger
+    (parent above, main leaf row, second leaf row below) that inverts
+    the normal parent-above/children-below assumption `findHeaderRow`'s
+    own tier-descent walk is built around. This is a geometric tier-
+    merge case in the SAME family as rule 30, not a vocabulary gap —
+    the highest-risk piece of this entry.
+
+    (c) The title-bleed onto MBH (`"GAS WATER HEATER SCHEDULE MBH"`) is
+    confirmed real: MBH's own parent-search window, finding no
+    vocabulary-recognized phrase between it and the table title (~35px
+    above the header row), keeps walking up past the header row itself
+    and grabs the title text three rows up. A distinct bug from (a)/(b),
+    needs its own upper bound on how far a parent search may climb past
+    the header row it started from.
+
+    (d) REMARKS showing the wrong value ("60" instead of "ALL") has NOT
+    been root-caused yet — real coordinates show "60" and "ALL" both
+    exist as real values in the SAME x-column band across the several
+    near-identical stacked schedules on this dense page, raising a real
+    possibility this is ANOTHER instance of rule 29's cross-table-bleed
+    family (a neighboring, near-identical table's own REMARKS value
+    landing in this table's cell) rather than a header-tier bug at all —
+    needs its own dedicated trace before assuming which family it's in.
+
+    Given (b) touches the same high-blast-radius tier-descent code as
+    rule 30 and (a) carries a real, unverified corpus-wide collision
+    risk, this entry does NOT get a same-tick fix despite the debug
+    trace being done — (c) is the one piece here narrow enough to
+    consider in isolation once (a)/(b)/(d) are scoped. Reclassified from
+    "OPEN, SCOPED, NOT STARTED" to reflect this is now four tracked
+    sub-items, not one.
+
 21. **OPEN, SCOPED, ATTEMPTED AND REVERTED (2026-09-03): a real, LOW-
     priority (non-HVAC) door-schedule bug —
     006_US_U2607_01_Interior_Renovations_C_Wing_Updates.pdf#17 merges TWO
