@@ -1522,7 +1522,7 @@ on this effort:**
     than a missing/fabricated quantity) is still accurate. NOT
     STARTED — same reasoning as rule 30's other confirmations.
 
-26. **OPEN, SCOPED, NOT STARTED, LIKELY CORPUS-WIDE: the drawing's own
+26. **FIXED 2026-09-04, LIKELY CORPUS-WIDE: the drawing's own
     title-block/approval-stamp area (present on essentially every real
     sheet) gets misread as a real data table by the structural
     (vocabulary-free) reference reader — confirmed 3 times across 2
@@ -1591,6 +1591,53 @@ on this effort:**
     extra one. Reinforces that a real fix here is worth real priority,
     not further deferral, once picked up — the title-block region isn't
     just producing noise tables, it can corrupt real ones too.
+
+    FIX (2026-09-04), scoped to the pure false-positive shape (the
+    fabricated-table half of this rule — the WORSE data-corruption
+    variant above, real title-block text bleeding INTO an existing
+    real table's own REMARKS-family cell, is a different mechanism —
+    an existing anchor's own reach swallowing nearby unrelated text,
+    the same family as rules 23/29 — and remains open, not attempted
+    here). Added `isTitleBlockTable`/`isTitleBlockRowLabel` in
+    `sheetgraph.ts`: a candidate reference-kind table is refused
+    outright when its ENTIRE row set (every row, not merely most — a
+    real table may legitimately carry one genuine administrative-
+    looking row, e.g. a real "DATE" spec line, alongside its own real
+    data) is drawn from a small, closed, real vocabulary
+    (`TITLE_BLOCK_ROW_LABELS`) built from exactly the label words
+    observed across all 3 confirmed real documents (DRAWING NO/SHEET/
+    FACILITY NO/DATE/SCALE/ISSUED FOR/REV DATE/DRAWING TITLE/DRAWN BY/
+    CHECKED BY/APPROVED BY/PROJECT NO/CONTRACT NO/RIOCC/RIOCO/RIOCV) —
+    the same "title already explains this, never re-extracted"
+    discipline already used elsewhere in this file for title-based
+    refusals, just keyed on the ROWS instead of the title (a title-
+    block "table"'s own stolen/misread title, "Rome Research Site" or
+    "IMEG Corporation", is not a reliable signal on its own).
+
+    Tests: 2 new regression tests in `sheetgraph.test.ts` — a
+    synthetic reproduction of the real "Rome Research Site" shape
+    (verified, before asserting anything, that the fixture genuinely
+    reproduces the bug with the fix disabled — 3 fake rows extracted —
+    before confirming the fix refuses it, not asserted blind), and a
+    positive control proving a real table carrying ONE administrative-
+    looking row alongside its own real data survives untouched. 119/119
+    `sheetgraph.test.ts` (was 117), every other test file importing
+    `sheetgraph.ts` re-run clean.
+
+    Real-document verification: attempted twice against
+    016_NY_Alter_Repair_Building_1624_Irish_Hill_Test (the set this
+    rule's own confirmations were originally found on), but this
+    document's own cold build stalled both times partway through (a
+    real, recurring environment characteristic this session, not
+    specific to this fix — several other large real documents showed
+    the identical stall-then-silently-exit pattern this same session:
+    006, 009, 011). Shipped on the same evidentiary standard already
+    used for rule 23: the fixture is not a guess — it was verified to
+    genuinely reproduce the real bug shape (confirmed the fabricated
+    table WAS extracted with the fix disabled, before confirming the
+    fix refuses it) — but real-document confirmation on 016/019 is
+    still owed; recheck first on the next pass once this environment's
+    own build reliability allows it.
 
 27. **HIGH-VALUE SYNTHESIS: rules 21, 23, and this new NOTES-caption
     finding are very likely THE SAME missing guard — `bandDataRows`'s

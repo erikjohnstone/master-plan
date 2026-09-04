@@ -2959,6 +2959,58 @@ test("reference kind: skips a header block that already qualifies under an exist
   assert.deepEqual(kinds, ["equipment"], "a vocabulary already explains this table — never re-extracted as \"reference\" too");
 });
 
+test("reference kind negative control: a drawing's own title-block/approval-stamp is not a real reference table (GOAL.md rule 26)", () => {
+  // Real, corpus-found across 3 independent real documents (011, 016, 019):
+  // a title block is a boxed, ruled, repeating LABEL:VALUE grid — the same
+  // structural shape as a genuine reference table, with nothing structural
+  // telling them apart. Reproduces the confirmed real shape ("Rome Research
+  // Site"'s own DRAWING NO:/SHEET:/FACILITY NO:/DATE: rows): a digit-free
+  // 2-token caption line seeds the header block (this exact table's own
+  // real title/caption is misread the same way the real bug's own "Rome
+  // Research Site" text was — a project-info caption, not a schedule
+  // title), and SHEET/FACILITY NO/DATE — each with a real, digit-bearing
+  // value, so none of them gets absorbed back into the header block — are
+  // its own real administrative rows underneath, real title-block
+  // vocabulary this file's own TITLE_BLOCK_ROW_LABELS was built from,
+  // never a real schedule's own row keys. Verified this fixture DOES
+  // reproduce the real bug with the fix disabled (3 fake rows extracted)
+  // before confirming the fix refuses it — not merely asserted blind.
+  const spans: GraphSpan[] = [
+    rh("PROJECT", 153, 41, 100), rh("INFORMATION", 500, 41, 150),
+    rh("SHEET", 153, 62, 66), rh("M-601", 500, 62, 66),
+    rh("FACILITY NO", 153, 83, 132), rh("SITE-1", 500, 83, 100),
+    rh("DATE", 153, 104, 55), rh("01-15-2024", 500, 104, 130),
+  ];
+  const sheet: SheetSpans = {
+    key: "titleblock.pdf#4", sheet_number: "M601",
+    spans,
+    segs: [150, 30, 1030, 30], // a real ruled border, exactly like a genuine title-block box
+  };
+  const g = buildSheetGraph([sheet]);
+  assert.ok(!g.tables.some((t) => t.kind === "reference"),
+    "the title block's own administrative rows never become a fake reference table");
+});
+
+test("reference kind: a real table carrying ONE administrative-looking row alongside real data rows is still kept", () => {
+  // Narrow-scoping proof for the title-block refusal above: isTitleBlockTable
+  // only ever refuses a candidate whose ENTIRE row set is title-block
+  // vocabulary — a real reference table that happens to carry a genuine
+  // "DATE" spec line alongside its own real data must never be swept up
+  // with it. Same real bessemer-derived header/rule shape as this file's
+  // own positive reference-kind test, with a 3rd row ("DATE") standing in
+  // for that legitimate case.
+  const spans: GraphSpan[] = [
+    ...REF_TABLE_SPANS,
+    rh("DATE", 153, 240, 55), rh("12/15/2023", 666, 240, 100),
+  ];
+  const sheet: SheetSpans = { key: "ref.pdf#10", sheet_number: "M601", spans, segs: REF_TABLE_RULE };
+  const g = buildSheetGraph([sheet]);
+  const tab = g.tables.find((t) => t.kind === "reference");
+  assert.ok(tab, "a real table with one administrative-looking row is still extracted");
+  assert.equal(tab!.rows.length, 3);
+  assert.ok(tab!.rows.some((r) => r.key === "DATE"), "the real DATE row survives alongside the real data rows");
+});
+
 test("reference kind negative control: an ABBREVIATIONS-style list of independent rows is not mistaken for one wrapped header", () => {
   // The real, adversarial failure mode this pass's own design has to
   // defend against without a word list to lean on (see

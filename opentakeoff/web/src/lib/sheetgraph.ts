@@ -3276,6 +3276,49 @@ export const isReferenceOrSpecTable = (title: string): boolean => {
   return true;
 };
 
+// A drawing's own title-block/approval-stamp area — present on essentially
+// every real sheet, drawn identically once per sheet — is a boxed, ruled
+// region with real LABEL:VALUE-shaped "rows" (a real administrative label
+// beside a real value), satisfying extractReferenceTableAt's own purely
+// structural qualification bar (boxed + label:value rows + a repeating
+// grid) with nothing distinguishing it from a genuine reference table.
+// GOAL.md rule 26, real, corpus-found across 3 independent real documents
+// (011, 016, 019 — not a one-off): "Rome Research Site" (the drawing's own
+// PROJECT LOCATION, not a title) with rows "DRAWING NO:"/"SHEET:"/
+// "FACILITY NO:"/"DATE:"; a SECOND fabricated table on the same sheet
+// reading the approval-routing stamp ("RIOCC:"/"RIOCO:"/"RIOCV:"); and,
+// recurring VERBATIM once per sheet on a third document, "ISSUED FOR"/
+// "REV DATE" rows like "CONTRACT DOCUMENTS"/"01.04.2019",
+// "DRAWING TITLE"/"MECHANICAL SCHEDULES", "SCALE"/"10822.000" — the
+// sheet's own real title-block revision log. Every one of these real row
+// keys is drawn from the SAME small, closed, real administrative
+// vocabulary — never an equipment tag, room number, or finish code — so a
+// candidate table whose OWN row keys are almost entirely this vocabulary
+// is refused outright, the same "title already explains this, never
+// re-extracted" discipline already applied by title-based refusals
+// elsewhere in this file, just keyed on the ROWS instead of the title
+// (a title-block "table"'s own stolen/misread title is not a reliable
+// signal — real, found live: one instance's title read the nearby
+// design firm's own name, "IMEG Corporation", not any title-block word
+// at all).
+const TITLE_BLOCK_ROW_LABELS = new Set([
+  "DRAWING NO", "DRAWING NUMBER", "DRAWING TITLE", "SHEET", "SHEET NO",
+  "SHEET NUMBER", "SHEET TITLE", "FACILITY NO", "FACILITY NUMBER",
+  "PROJECT NO", "PROJECT NUMBER", "CONTRACT NO", "CONTRACT NUMBER",
+  "DATE", "SCALE", "ISSUED FOR", "REV DATE", "REVISION DATE",
+  "DRAWN BY", "CHECKED BY", "APPROVED BY", "DESIGNED BY",
+  "RIOCC", "RIOCO", "RIOCV",
+]);
+const isTitleBlockRowLabel = (key: string): boolean =>
+  TITLE_BLOCK_ROW_LABELS.has(norm(key).replace(/:+$/, "").trim());
+// Every row, not merely most: a real reference table this rule must never
+// touch can legitimately carry ONE administrative-looking row (a genuine
+// "DATE" spec line) alongside its own real data rows — only a candidate
+// whose ENTIRE row set is this vocabulary, with no real data row anywhere,
+// is the title-block shape this rule exists to catch.
+const isTitleBlockTable = (rows: TableRow[]): boolean =>
+  rows.length > 0 && rows.every((r) => isTitleBlockRowLabel(r.key));
+
 
 // The NARROW subset of OTHER_FAMILY_RE that names a real MEP mechanical-
 // equipment family, not an architectural one — real, found live (itd-d1-lab-
@@ -6302,6 +6345,14 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     // discriminator the mandate above asked for, not a corpus-specific
     // title/tag hack.
     if (banded.out.length < 2) return { table: null, nextIdx: toIdx };
+    // GOAL.md rule 26: a boxed, ruled, repeating-grid region whose own rows
+    // are ENTIRELY drawn from the sheet's own title-block/approval-stamp
+    // administrative vocabulary (DRAWING NO/SHEET/DATE/SCALE/…) is that
+    // title block, not a real reference table — see isTitleBlockTable's
+    // own comment for the real, corpus-found evidence. Refused the same
+    // way an empty/too-sparse candidate is: `table: null`, real `nextIdx`,
+    // so the caller skips past it and keeps scanning the rest of the sheet.
+    if (isTitleBlockTable(banded.out)) return { table: null, nextIdx: toIdx };
     const promotedHeaders = promoteLeadingEngineeringUnits(anchors.map((a) => a.label), banded.out);
     for (let i = 0; i < anchors.length; i++) anchors[i].label = promotedHeaders[i];
 

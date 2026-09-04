@@ -30,10 +30,10 @@ confirmed correct behavior on a real artifact).
 | 011_IL_VA_Hines_Finance_Center_Renovation | verified-open | 24(b) (low severity — header text only, real data all correct; 24(a)'s fabricated ROOM FINISH SCHEDULE fixed 2026-09-04) |
 | 014_MT_USDA_Forest_Service_Missoula_Fire_Sciences | verified-open | 21 (2nd confirmation) |
 | 015_VA_P_095_Replace_Submarine_Pier_3_Utility | verified-open | 30 (14th confirmation, low severity here — otherwise clean; was mis-scoped as rule 25, corrected 2026-09-04) |
-| 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test | verified-open | 26 (likely corpus-wide) |
+| 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test | verified-open | 26 fixed 2026-09-04 (fixture-verified; real-document rebuild for this set stalled twice this session — recheck first on next pass) |
 | 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling | verified-fixed | 27 (both vector + ODL-path fixes shipped) |
 | 018_GA_USDA_ARS_U_S_National_Poultry_Research_Center | verified-fixed | 27 (2nd real confirmation, ODL-path fix verified here) |
-| 019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04 | verified-open | 26 (3rd confirmation + worse real-data-contamination variant) |
+| 019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04 | verified-open | 26's pure-false-positive half fixed 2026-09-04; the worse real-data-contamination variant (title-block text bled into a real EXPANSION TANK SCHEDULE's REMARKS column) remains open, not attempted |
 | 020_MO_R2415_01_HVAC_System_Upgrades_MSHP_Troop_C | not-a-bug | — (M-601/M-602 HVAC SCHEDULES sheets are genuinely raster/scanned — 3568 embedded images, 68 real text chars on page 12; confirmed unreadable via both vector and OCR-sidecar paths in this environment; honest 2-table output is correct, not a code gap; pre-existing pillar-c-gt draft already flagged this unresolved) |
 | 021_XX_Laboratory_building_mechanical_drawings_lab | verified-open | 28 (new architectural finding: I/O matrix marks are vector shapes, not text) + rules 24/26-class false positives (PLAIN OUTLET / W/WIND SCREEN, non-tabular piping-diagram content misread as tables) |
 | 023_US_Chiller_Replacement_at_U_S_Salinity_Laboratory | verified-fixed | new: "&"-joined twin-unit marks (CH-1&2, CHWP1&2) now split into answerable compound keys |
