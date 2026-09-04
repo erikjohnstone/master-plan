@@ -6054,6 +6054,21 @@ export function isGenericHeaderToken(raw: string): boolean {
   if (!/[A-Z]/.test(s)) return false;
   if (REFERENCE_RE.test(norm(s))) return false;
   if (LABEL_VALUE_COLON_RE.test(s)) return false;
+  // …and the same field-label prose with its VALUE on the next physical
+  // line, which LABEL_VALUE_COLON_RE alone cannot see (it requires a
+  // non-space character after the colon). A real column label never ends in
+  // a colon — the colon IS the "what follows is the value" mark, the shape
+  // of a prose lead-in rather than of a column head. Real, corpus-found:
+  // itd-d1-lab-mechanical.pdf#20's own two side-by-side SEQUENCE OF
+  // OPERATION prose columns mined a fake 13-row "table" whose two header
+  // labels were "WORKSTATION." and "SHALL SEQUENCE THE FOLLOWING:" and whose
+  // every cell was a full sentence (confirmed by direct render); rejecting
+  // the colon-terminated label leaves one anchor, below this pass's own
+  // 2-column floor, and takes the whole fake table with it. This sheet's own
+  // "OPERATING MODE:"/"UNOCCUPIED MODE:" labels (already named in
+  // extractReferenceTableAt's own title-hunt comment) are the same shape and
+  // the same non-header.
+  if (/:$/.test(s)) return false;
   // A single span containing the word "SCHEDULE" is always a real TABLE
   // TITLE in this corpus, never a column header label — checked live: zero
   // hits for "SCHEDULE" across EQUIPMENT_HEADERS/FINISH_HEADERS/ROOM_HEADERS'
@@ -6280,7 +6295,21 @@ function hasNearbyRuledLine(segs: ArrayLike<number> | undefined, x0: number, x1:
     if (Math.abs(sy1 - sy0) > 2) continue;
     const my = (sy0 + sy1) / 2;
     if (my < y0 - pad || my > y1 + pad) continue;
-    const overlap = Math.min(sx1, x1) - Math.max(sx0, x0);
+    // A path segment carries a DIRECTION, not a sorted interval: whichever
+    // way the drafter's own polyline happened to be walked is the order its
+    // endpoints land in here. Measured on
+    // 028_TX_Renovation_of_Building_615#1, this is not an edge case — 4436
+    // of its 8816 horizontal segments are stored RIGHT-to-left, more than
+    // half — and a raw Math.min(sx1, ·) - Math.max(sx0, ·) on a reversed
+    // segment yields a NEGATIVE overlap, so every one of them reads as "no
+    // rule here". On that sheet the widest real rule across the NOISE
+    // CONTROL DUCT SILENCER SCHEDULE's own header band scored -36 instead of
+    // its true 2205 (against a 1355 bar), this gate refused the whole table,
+    // and 16 real rows were dropped with zero disclosure (GOAL.md rule 18).
+    // Normalizing is unconditionally correct — a segment already stored
+    // left-to-right is unchanged by it.
+    const lo = Math.min(sx0, sx1), hi = Math.max(sx0, sx1);
+    const overlap = Math.min(hi, x1) - Math.max(lo, x0);
     if (overlap >= width * 0.6) return true;
   }
   return false;
@@ -6343,7 +6372,23 @@ function keyColumnBand(anchors: Anchor[]): { x: number; tol: number } {
 // (keyColumnBand — the same band bandGenericDataRows itself keys new rows
 // against) — a real data CELL mid-sentence that happens to reference "1)"
 // as an option number, sitting in some OTHER column, must never trip this.
-const GENERIC_OUTLINE_MARKER_RE = /^(\d{1,2}(\.\d{1,2}){0,3}\.?|[A-Za-z]\.|\d{1,2}\))$/;
+// The marker's own PUNCTUATION is REQUIRED, not optional. Measured on the
+// very sheets this guard was built for (itd-d1-lab-mechanical.pdf#20/#21:
+// 85 and 52 marker-shaped spans respectively), EVERY real outline marker
+// carries it — "1." x24, "a." x23, "2." x14, "b." x7, "1)" x11, plus
+// "A."/"B."/"E."/"3." — and not ONE is a bare digit, so requiring it
+// costs this guard nothing it was built to catch. A bare 1-2 digit token
+// in a table's key column is the opposite thing: a real COUNT. Real,
+// corpus-found (GOAL.md rule 18),
+// 028_TX_Renovation_of_Building_615#1's own NOISE CONTROL DUCT SILENCER
+// SCHEDULE, whose FIRST column is literally "QTY." and whose 16 real data
+// rows each open with a bare "1" or "2": the optional-dot form read row 1
+// as an outline marker and ended the table AT its own first data row, so
+// the scan banded nothing but the "FIRST FLOOR" section label, fell under
+// the 2-row repeating-grid floor, and the whole schedule was dropped with
+// zero disclosure. Multi-level forms still need no TRAILING dot ("2.1") —
+// they already carry an internal one, which a count never does.
+const GENERIC_OUTLINE_MARKER_RE = /^(\d{1,2}\.(\d{1,2}\.?){0,3}|[A-Za-z]\.|\d{1,2}\))$/;
 
 function isGenericOutlineMarkerRow(row: GraphSpan[], keyColX: number, keyTol: number): boolean {
   const toks = row.filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null);
@@ -6787,13 +6832,48 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     // caption that starts in-band and simply runs on past the table's own
     // right edge.
     const overlapsBand = (t: GraphSpan): boolean => t.x <= x1 && t.x + (t.w || 0) >= x0;
+    // A BODY-SIZED caption is also real, and on a sheet with no big-font
+    // caption at all the big-font-only walk above sails straight PAST it and
+    // grabs an unrelated one further up. Real, corpus-found (GOAL.md rule
+    // 18), 028_TX_Renovation_of_Building_615#1: the NOISE CONTROL DUCT
+    // SILENCER SCHEDULE's own title is typed at 29.9px — the sheet's body
+    // height, the same as its own header row — one row above the header,
+    // and 5 rows further up sits "DUCT SILENCER DETAIL" at 49.9px, the
+    // caption of an unrelated ISO-view DETAIL drawing. The big-font test
+    // preferred the detail caption and mis-titled the whole table.
+    //
+    // The discriminator that separates a body-sized TITLE from the ordinary
+    // body PROSE this pass's own comment (above) warns about is measured,
+    // not assumed: a prose line FILLS its column, a title does not. Across
+    // both real cases here — the 028 title vs. itd-d1-lab-mechanical.pdf#20's
+    // own SEQUENCE OF OPERATION prose, the exact sheet that motivated the
+    // big-font rule — the real title spans 29% of its table's own column
+    // band while EVERY prose line within this walk's own 5-row budget spans
+    // 89%-113% of it (measured: 792/801, 895/801, 907/801, 826/894, 938/894,
+    // 792/894, 895/894). A 0.8 bar sits between with room on both sides. The
+    // sentence-terminating period is a second, independent check on the same
+    // question (a real caption is a noun phrase, never a sentence) — cheap
+    // insurance for a paragraph's own short LAST line, which is the one
+    // prose shape narrow enough to slip the width test.
+    //
+    // Big-font still wins outright and still overruns freely (see
+    // `overlapsBand`) — this only adds a second way for the SAME
+    // nearest-first walk to accept, so a table that already found its title
+    // here finds the identical one.
+    const TITLE_BAND_FILL_MAX = 0.8;
+    const bandW = x1 - x0;
     let title: Evidence | null = null;
     for (let k = block.top - 1, budget = 5; k >= 0 && budget > 0 && !title; k--) {
       const inBand = rows[k].filter(overlapsBand);
       if (!inBand.length) continue;
       budget--;
-      if (inBand.length !== 1 || !isTitleShaped(inBand[0]) || (inBand[0].h || 8) < hdrH * BIG_FONT_RATIO) continue;
-      title = { sheet: sheet.key, text: inBand[0].str.trim(), bbox: bboxOf(inBand[0]) };
+      if (inBand.length !== 1 || !isTitleShaped(inBand[0])) continue;
+      const tok = inBand[0];
+      const big = (tok.h || 8) >= hdrH * BIG_FONT_RATIO;
+      const narrow = bandW > 0 && (tok.w || 0) < bandW * TITLE_BAND_FILL_MAX
+        && !/\.$/.test(tok.str.trim());
+      if (!big && !narrow) continue;
+      title = { sheet: sheet.key, text: tok.str.trim(), bbox: bboxOf(tok) };
     }
     // The downward pass reads the ORIGINAL, un-banded sheet (`fullSheet`,
     // when the caller has it — buildSheetGraph's real extraction call always
@@ -6858,6 +6938,16 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     return { table, nextIdx: toIdx };
   }
   return null;
+}
+
+/** Do two page-space boxes share any area at all? Used to suppress a
+ * per-band reference read of a table the whole-sheet read already produced
+ * — a containment test is too strict (the two reads band to slightly
+ * different column limits, so neither box need contain the other), while
+ * plain intersection is exactly the question being asked: is this the same
+ * physical region of the sheet? */
+function bboxesIntersect(a: Bbox, b: Bbox): boolean {
+  return a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
 }
 
 /** Every structural "reference" table on a sheet — mirrors extractAllTables'
@@ -7604,8 +7694,41 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
       // sheet: per-band reference extraction sees only a sub-tier fragment
       // (decimal performance keys) while the title sits in the other band —
       // real, measured on Orange County Public Safety bulk set #50.
-      const refSheets = bands.length > 1 ? [s] : bands;
+      //
+      // …but a 2-up sheet ALSO carries tables the whole-sheet read can never
+      // see, so read BOTH and let the whole-sheet result win on overlap.
+      // Real, corpus-found (GOAL.md rule 18),
+      // 028_TX_Renovation_of_Building_615#1: the NOISE CONTROL DUCT SILENCER
+      // SCHEDULE (x 271..2911) and the EXTERNAL STATIC PRESSURE SCHEDULE
+      // (x 3221..4437) print their header tiers at the SAME Y, so on the
+      // whole sheet they cluster into ONE header block — and the ESP side
+      // legitimately carries a MARK catalog anchor, so this vocabulary-free
+      // pass's own `alreadyVocab` guard (which asks about the WHOLE block)
+      // vetoed BOTH. The silencer schedule has no vocabulary of its own and
+      // so reached the graph through no other path either: 16 real rows,
+      // dropped with zero disclosure. Second real find, same change:
+      // itd-d1-lab-mechanical.pdf#20's own LAB VENTILATION WITH SNORKEL HOOD
+      // table (2 rows — SAV-8/SEV-2/HC-8/CV-8, confirmed by direct render)
+      // sits in the RIGHT band of a sheet whose whole-sheet read only ever
+      // found the LEFT band's table.
+      //
+      // Splitting that merged block on an x-gutter was tried first and is
+      // NOT sound — measured on this very block, the inter-table gutter is
+      // 150px while the silencer table's OWN widest intra-table column gaps
+      // are 212px and 208px, so no gap threshold separates them. The bands
+      // this sheet was already cut into DO separate them correctly (that is
+      // what bandedSheets is for), so the fix is to stop throwing that read
+      // away.
+      //
+      // Whole-sheet first so it wins ties; a band table is kept only when it
+      // doesn't overlap one the whole-sheet read already produced, which
+      // leaves the VAV case above (a band fragment of a table the whole
+      // sheet reads correctly) suppressed exactly as before.
+      const refSheets = bands.length > 1 ? [s, ...bands] : bands;
+      const wholeRefRegions: Bbox[] = [];
       for (const bs of refSheets) for (const t of extractAllReferenceTables(bs, s)) {
+        if (bs === s) wholeRefRegions.push(t.region);
+        else if (wholeRefRegions.some((r) => bboxesIntersect(r, t.region))) continue;
         // A structural "reference" read can be the ONLY successful
         // extraction of a genuine MEP-equipment schedule whose own required
         // rating word (GPM/EWT/LWT/…) never independently co-occurs with its
