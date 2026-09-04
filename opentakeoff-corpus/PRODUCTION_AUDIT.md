@@ -24,12 +24,33 @@ BAS points, and sequences of operation?*
    sees the weakest one. **Nothing else matters until there is one takeoff line
    that carries `scheduled_qty`, `installed_qty`, and a reconcile status.**
 
-2. **Recall is unmeasured and it is the biggest hole.** 11 of 52 swept
-   documents (21%) return **zero tables** from their four densest schedule
-   pages — pages with 400–1800 vector text items and "SCHEDULE" printed 1–9
-   times each. These are not scans. They are extraction failures on vector
-   pages. The eval cannot see them: its ground-truth keys are scoped to "every
-   row `sheetGraph()` finds," so a table never found never enters the key.
+2. **Recall is unmeasured — and the first measurement of it indicted my own
+   instrument, not the extractor.** 11 of 52 swept documents returned zero
+   tables from their densest schedule pages, which I first reported as a 21%
+   recall failure. Probing all 11 directly (text-only, per page) shows that
+   number is **wrong and mostly my page-scorer's fault**: it ranks pages by
+   counting the word SCHEDULE, so it selected an abbreviations legend
+   ("SCHED  SCHEDULE" — 010_US p2), general-notes prose ("CONTRACTOR SHALL
+   SCHEDULE AND EXECUTE" — 013_MO p5/18/19), pipe specification text
+   ("SCHEDULE 40 STEEL" — 029_ME p6), and a drawing callout ("DOOR AS
+   SCHEDULED, REFER TO DOOR SCHEDULE" — 034_NC p16/17/18). Zero tables on
+   those pages is **correct behaviour**.
+
+   Only **3 of the 11 are genuine misses**, and they are real: 013_MO p23
+   (VARIABLE FREQUENCY DRIVE SCHEDULE, h=32 title with TAG/NAME/MANUFACTURER/
+   VOLTAGE/PHASE/FUSE-CB/HP headers, plus HVAC PIPING MATERIAL SCHEDULE),
+   034_NC p42 (DOOR SCHEDULE + ROOM FINISH SCHEDULE, both h=50 with full
+   headers), and 046_MI p22 (LIGHTING FIXTURE SCHEDULE, h=38). Two of those
+   three are architectural/electrical rather than HVAC — arguably out of a
+   mechanical takeoff's scope, but they must be **disclosed** rather than
+   silently dropped.
+
+   The structural point survives intact and is untouched by the correction:
+   the eval **cannot see recall at all**, because its keys are scoped to
+   "every row `sheetGraph()` finds," so a table never found never enters a
+   key. What changed is the size of the hole, not its existence — and the
+   lesson is that a page-selection heuristic is itself an instrument that
+   needs validating before its output is quoted as a defect rate (see G4).
 
 3. **Ground truth covers 7 of 90 documents, and none of it covers valves,
    BAS points, or sequences.** The 28 key files score HVAC equipment tags,
@@ -117,9 +138,14 @@ The named failures are exactly the classes the census found independently:
   SERIES, ROUND EXTRA HEAVY DUTY CAST IRON TOP…`) at qty 7 — prose keyed as a row.
 
 ### 2.3 Unscored corpus (52-document sweep, 4 densest schedule pages each)
-- 338 tables extracted. **11 documents yield 0 tables; 1 has no schedule-word
-  pages at all.** All 11 are vector (400–1800 text items/page). Extraction
-  failures, not raster.
+- 338 tables extracted. 11 documents yield 0 tables; 1 has no schedule-word
+  pages at all. All 11 are vector (400–1800 text items/page) — not raster.
+  **CORRECTED after direct per-page probing (see §0.2): 8 of those 11 are
+  page-selection artefacts, not extraction failures — the scorer picked
+  abbreviations legends, general-notes prose, pipe specs and callouts that
+  merely contain the word SCHEDULE. 3 are genuine misses (013_MO p23,
+  034_NC p42, 046_MI p22).** The earlier "21% recall failure" figure was
+  wrong; it measured my own page-scorer.
 - 40 tables (12%) have no title; 15 have prose-looking titles.
 - Row keys (2,158): **71.6% tag-shaped**, **8.0% bare numbers** (a count column
   used as the identity — the class that turned 23 silencers into 2), 1.4% prose
