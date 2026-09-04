@@ -35,6 +35,9 @@ every eval read 100%. Every bug below was invisible to that gate.
 | B-3 | Row key falls back to a count column when a table has no MARK | 23 real silencers reported as 2 | false structural inference |
 | B-4 | Prose fragments recorded as schedule titles | 3+ documents | false structural inference |
 | B-5 | A new header-token rejection killed a whole real table | −12 real cells on federal-mech | self-inflicted; whole-row guard |
+| B-6 | A page drawing the same table twice at a constant offset | 013_MO p23, 2 tables lost | fused duplicate |
+| B-7 | Deep multi-tier header with repeating leaf labels | 034_NC p42, 2 tables lost | header-block rejection |
+| B-8 | 3+ side-by-side tables fused by Y-clustering | 046_MI p22, 1 table lost | same class as rule 18 |
 
 ---
 
@@ -189,6 +192,91 @@ built earlier the same session — and rule 18 was committed **without running
 it**, pushed at a stop-hook prompt while the sweeps were still in flight. The
 gate would have shown federal's ALP as a `LOST` table before the commit landed.
 No extraction change ships again without the gate completing first.
+
+
+---
+
+## B1 recall findings — the three genuine zero-table misses
+
+Found by probing all 11 zero-table documents page by page (text-only). Eight
+were my own page-scorer's fault (see the audit's §0.2 correction). These three
+are real, and each has a **different** structural cause — worth stating,
+because "the extractor missed a table" is not one bug.
+
+### B-6 — a page that draws the same table TWICE, offset
+
+**Where:** `013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29` p23.
+Real tables present: `VARIABLE FREQUENCY DRIVE SCHEDULE` (title h=32.1) and
+`HVAC PIPING MATERIAL SCHEDULE` (h=35.6). Extraction returns **zero tables**.
+
+**Measured cause.** The page renders the whole schedule twice, offset by
+roughly **+500 in x and +12..30 in y** — a shadow/bold draw or a stacked
+overlay. Both copies are live text spans:
+
+```
+y=184  [1417]"TAG"   [3265]"FEEDER"        y=215  [1928]"TAG"   [3432]"FEEDER"
+y=193  [1662]"NAME"  [1914]"MANUFACTURER"  y=225  [2127]"NAME"  [2333]"MANUFACTURER"
+y=291  [1428]"VFD-1" [1545]"CROSS TIE HHW CTP" [2287]"480" [2699]"3" [2813]"25"
+y=305  [1937]"VFD-1" [2033]"CROSS TIE HHW CTP" [2636]"480" [2972]"3" [3064]"25"
+```
+
+`clusterRows` groups by Y alone, so the two copies fuse into incoherent rows
+and no coherent header block ever forms.
+
+**Shape of the fix.** Detect a translated duplicate of a span set (identical
+strings at a constant (dx, dy) offset) and keep one copy. Structural and
+general — shadow-drawn content is a real drafting artefact, not a quirk of
+this sheet. Must not fire on a genuinely repeated header tier (a continuation
+page) — the discriminator is the CONSTANT offset across many spans.
+
+### B-7 — a deep multi-tier header with repeating sub-labels
+
+**Where:** `034_NC_VA_Project_637_22_700_EHRM_Infrastructure` p42.
+Real: `DOOR SCHEDULE` (h=50.4) and `ROOM FINISH SCHEDULE` (h=50.5). Zero tables.
+
+**Measured cause.** ROOM FINISH SCHEDULE carries a **four-tier** header whose
+leaf labels repeat under every parent:
+
+```
+y=2249  BASE            WALLS                    CEILING          (tier 1, spanning)
+y=2283  LEVEL RM NO AREA RM NAME FLR  NORTH EAST SOUTH WEST  COMMENTS
+y=2301  MATL HT                                   MATL FIN HT
+y=2318  MATL FIN  MATL FIN  MATL FIN  MATL FIN
+```
+
+`MATL` appears at six distinct x positions, `FIN` at five. The header-block
+expander treats a many-token cluster as "not a wrapped label" and rejects it,
+so the block never qualifies. This is the architectural room-finish shape the
+finish-kind vocabulary exists for, yet nothing extracts it.
+
+**Shape of the fix.** A repeating leaf label under distinct parents is the
+SIGNATURE of a real multi-tier header, not a disqualifier. Cluster by
+(parent-span, leaf) rather than by leaf text alone.
+
+### B-8 — three-plus side-by-side tables fused by Y-clustering
+
+**Where:** `046_MI_Veterinary_Medical_Center_Replace_Elevators_3` p22.
+Real: `LIGHTING FIXTURE SCHEDULE` (h=37.7, x 2577..3143), headers
+`TYPE / MANUFACTURER / CATALOG NO. / DESCRIPTION AND … / DIMMING INFO /
+DRIVER / MOUNTING / FIXTURE HEIGHT` at y=1251. Zero tables.
+
+**Measured cause.** Unrelated tables occupy the SAME y-band at lower x — a
+symbols legend (`ELECTRIC UNIT HEATER`, `NURSE CALL`, `WALL MOUNTED SPEAKER`,
+`ULTRASONIC SENSOR` at x 151..1200) and an occupancy-sensor list. Row
+clustering fuses all of them into one row set.
+
+This is the SAME class as GOAL.md rule 18's 028_TX two-up sheet, but with
+three-plus tables rather than two. Rule 18's fix (read the whole sheet AND its
+column bands, whole sheet winning on overlap) may already reach this — it must
+be re-measured on this page before anything new is built, per standing rule 3
+(audit before you build).
+
+**Also worth recording:** two of the three genuine misses (DOOR SCHEDULE,
+ROOM FINISH SCHEDULE, LIGHTING FIXTURE SCHEDULE) are architectural/electrical
+rather than mechanical. An HVAC/BAS takeoff arguably should not COUNT them —
+but silently not extracting them is different from disclosing them, and the
+domain map is explicit that a set without architectural sheets carries a
+fire/smoke damper undercount risk. Recall and scope are separate questions.
 
 
 ## How these connect
