@@ -1137,6 +1137,90 @@ on this effort:**
     real priority on a future pass, not further deferral once picked up
     again.
 
+    **SECOND DEEP TRACE, 2026-09-04 (post-pass fix phase, per the
+    standing "fix everything" mandate) — still NOT FIXED, but the search
+    space is now substantially narrower than the 2026-09-03 attempt
+    left it.** Rebuilt 006 and 014_MT fresh (source-hash cache correctly
+    invalidated by every edit below, confirmed via repeated "CACHE MISS"
+    lines) and instrumented `sheetgraph.ts` live, one hypothesis at a
+    time, reverting cleanly between each (`git checkout --` back to the
+    rule-16-fix commit after every round, never left mid-experiment):
+    - Every row `bandDataRows` itself ever constructs (`const row:
+      TableRow = { key: keyed.key, ... }`, its ONE construction site)
+      was logged unconditionally, for every call, across the WHOLE
+      006 document (244 rows total) — zero have key `"MARK"`.
+    - The SAME check on `bandGenericDataRows`'s own construction site
+      (`reference` kind) — 1028 rows total, zero `"MARK"`.
+    - `splitMergedRows` — the one OTHER place a `TableRow`-shaped object
+      gets created (`out.push({ ...row, key: marks[g], cells })`,
+      exactly the shape that could mint a `"MARK"`-keyed row from a
+      genuinely clustered pair of physical lines) — instrumented to log
+      every time it actually performs a split anywhere in the document:
+      zero splits performed, anywhere, in the whole build.
+    - `resolveKeyCollisions` — the only OTHER place in the whole file a
+      `row.key` is ever reassigned in place — only ever APPENDS
+      (`` `${row.key} ${...}` ``), and the phantom row's actual key,
+      checked at the raw-byte level (`cat -A`/`od -c` on the log line),
+      is the exact 4-byte string `MARK` with no leading space — rules
+      out an empty-key-plus-append explanation too.
+    - `cleanOut` (bandDataRows's own post-filter array, immediately
+      before `splitMergedRows`/`resolveKeyCollisions` run) was logged
+      for every finish-kind call on this document: the SECOND door
+      schedule's own call cleanly returns `["C113","C1131",...]` with NO
+      `"MARK"` and no contamination from the first schedule's own
+      C105.1-C112 keys — confirming table A and table B genuinely ARE
+      two separate, individually-clean `bandDataRows` calls, not one
+      call whose scan ran too far.
+    - Every finish-kind fragment on this sheet, at BOTH the "pass 1"
+      `fragments.push` site and the "pass 2" continuation-merge decision
+      site in `buildSheetGraph` — unconditionally logged (not filtered
+      on carrying a `"MARK"` row) — produced ZERO log lines at either
+      site for sheet 006#17, despite `cleanOut` (one call earlier in the
+      SAME pipeline) proving finish-kind extraction genuinely runs and
+      returns real rows for this exact sheet. This last result is
+      itself unexplained — either fragments for this specific untitled,
+      cross-schedule-adjacent table reach `fragments`/`tables` through
+      code this trace never instrumented, or the fragment object's own
+      `.sheet`/`.kind` fields differ from what every other checkpoint
+      showed at the point these two prints ran.
+    Net: the phantom row is confirmed to NOT come from either of the
+    file's two `TableRow` literal-construction sites, NOT from
+    `splitMergedRows`, and NOT from `resolveKeyCollisions`'s in-place
+    mutation — the only three places in `sheetgraph.ts` that can produce
+    or rename a row's key — and yet `graph.tables`' own final output
+    unambiguously carries it, confirmed on every single rebuild this
+    session (never once absent). The 19-row combined table's own
+    `headers` array independently corroborates real cross-table
+    contamination regardless of this exact row's own origin: it lists
+    `"TYPE"` and `"MATERIAL"` TWICE (`["MARK","WIDTH","HEIGHT",
+    "THICKNESS","TYPE","MATERIAL","HARDWARE","TYPE","MATERIAL","FIELD
+    COMMENTS"]`) — two DIFFERENT anchors sharing the same label text,
+    which only happens when two structurally-different real header rows
+    (table A's own 7 columns, table B's own 7 mostly-overlapping-but-
+    not-identical columns) both fed the SAME table's anchor set. This
+    document's own builds also ran markedly slower on every successive
+    debug round (CPU time climbing from ~20s to 90s+ across the
+    session's own instrumented rebuilds, cause not identified) — worth
+    a note for whoever picks this up next, in case it is its own real
+    signal rather than incidental load.
+
+    Genuinely deep, not a quick fix: two independent debug-trace
+    sessions (2026-09-03's and this one) have now each spent real,
+    substantial effort and neither has pinned the exact injection point.
+    Per the standing mandate this remains open and owed a real fix, not
+    permanently deferred — but shipping a guess here risks the exact
+    kind of confidently-wrong-title/row regression this file's own
+    `anchorRadii`/`parentLabelOver` comments already warn about
+    repeatedly. Real next step for whoever resumes this: instrument with
+    an actual debugger/breakpoint at `buildSheetGraph`'s own `bandedSheets`
+    call and the `bands` loop specifically (untested this round —
+    `bandedSheets` produces the per-band `SheetSpans` objects consumed by
+    both the "pass 1" fragment loop AND, structurally, wherever the
+    two prints at the very end of this trace should have fired but
+    didn't; that mismatch is the most concrete lead left), rather than
+    another round of `console.error` sprinkled through the same three
+    functions already exhaustively ruled out above.
+
 22. **OPEN, SCOPED, NOT STARTED, HIGH SEVERITY: `ROW_KEY_RE`'s digit-first
     requirement drops 11 of 12 real rooms (92% real row loss) from
     008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated's own real
