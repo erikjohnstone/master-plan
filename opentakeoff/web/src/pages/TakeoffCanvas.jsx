@@ -7528,7 +7528,7 @@ export default function TakeoffCanvas() {
       takeoffRowCount: () => agentTakeoffRows.length,
       indexProgress: () => indexProgress,
       graphPrewarm: () => graphPrewarm,
-      debugGraph: async () => {
+      debugGraph: async (opts) => {
         const g = await ensureAgentGraph();
         return {
           available: g.available,
@@ -7538,6 +7538,10 @@ export default function TakeoffCanvas() {
             sheet: t.sheet,
             title: t.title?.text || t.title || null,
             rows: (t.rows || []).length,
+            // opts.full: real verification (per-set cell-level audits, UI-path
+            // spot-checks) needs the actual header row, not just a row count —
+            // opt-in only, keeps the default payload small for normal callers.
+            ...(opts?.full ? { headers: t.headers || null } : {}),
           })),
         };
       },

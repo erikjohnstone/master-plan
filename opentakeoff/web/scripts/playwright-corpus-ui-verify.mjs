@@ -12,17 +12,24 @@
  * a look). No video/screenshots kept — this is meant for quick, repeatable
  * spot-checks against real documents, not a recorded demo.
  *
- * Usage: node scripts/playwright-corpus-ui-verify.mjs <baseUrl> <pdfPath> [kind1,kind2,...]
+ * Usage: node scripts/playwright-corpus-ui-verify.mjs <baseUrl> <pdfPath> [kind1,kind2,...] [--full]
  * Example: node scripts/playwright-corpus-ui-verify.mjs http://localhost:5173/ \
  *   ../../opentakeoff-corpus/bulk/HVAC_BAS_Plan_Sets_Vol2/006_....pdf control_valves,hvac_equipment
+ *
+ * --full includes each table's real header row (not just its row count) —
+ * opt-in since it makes the output much larger; use it when a real
+ * cell-level check needs to see actual column labels (e.g. confirming a
+ * parent/header-tier fix didn't corrupt a column name like "MBH").
  */
 import { chromium } from "playwright";
 
 const baseUrl = process.argv[2] || "http://localhost:5173/";
 const pdfPath = process.argv[3];
-const kinds = (process.argv[4] || "").split(",").filter(Boolean);
+const rest = process.argv.slice(4);
+const full = rest.includes("--full");
+const kinds = (rest.find((a) => a !== "--full") || "").split(",").filter(Boolean);
 if (!pdfPath) {
-  throw new Error("usage: node scripts/playwright-corpus-ui-verify.mjs <baseUrl> <pdfPath> [kinds]");
+  throw new Error("usage: node scripts/playwright-corpus-ui-verify.mjs <baseUrl> <pdfPath> [kinds] [--full]");
 }
 
 const browser = await chromium.launch({
@@ -83,13 +90,13 @@ try {
   result.steps.push({ step: "load", graphReady });
 
   log("debugGraph start");
-  const dbg = await page.evaluate(async () => {
+  const dbg = await page.evaluate(async (fullOpt) => {
     try {
-      return await window.__opentakeoff.debugGraph();
+      return await window.__opentakeoff.debugGraph({ full: fullOpt });
     } catch (e) {
       return { error: String(e?.message || e) };
     }
-  });
+  }, full);
   log("debugGraph done", dbg?.table_count, dbg?.error);
   result.debugGraph = dbg;
 
