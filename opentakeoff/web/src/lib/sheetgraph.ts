@@ -4700,6 +4700,44 @@ function bandDataRows(
         // exactly like a bare English phrase ("MAXIMUM", "SILENCER") and
         // dropped outright rather than kept as its own real row.
         isHeaderFragment = !isEquipTag(keyed.key);
+        // A real mark PRINTED ACROSS TWO COLUMNS. Some real schedules give
+        // the family its own TYPE column and the instance number its own
+        // MARK column, so the row's key cell alone is legitimately
+        // digit-free ("DSCU") and the number sits one column over ("1") —
+        // the real unit is DSCU-1, drawn as two cells. Without composing
+        // them, the key cell reads exactly like the header fragments this
+        // digit-free guard exists to reject, and EVERY row of the table is
+        // dropped, taking the whole table with it.
+        //
+        // Real, corpus-found and live-traced (GOAL.md rule 32,
+        // 035_AR_564_19_101_Construct_New_Water_Storage#46): all three of
+        // that page's real schedules — DUCTLESS SPLIT CONDENSER
+        // (DSCU-1/2/3), DUCTLESS SPLIT FAN COIL (DSFC-1/2/3) and LOUVER
+        // (LI-1, LE-2) — extracted as ZERO tables for exactly this reason.
+        // Their headers, anchors and column bands were all confirmed
+        // correct by trace; only the key gate refused them, which is why
+        // the page appeared to have no tables at all rather than bad ones.
+        //
+        // Deliberately narrow: this only fires when the table has its OWN
+        // real MARK column (a header word this file already knows) sitting
+        // to the right of the key column, and only when that cell holds a
+        // bare small integer. The composed key is the mark as printed, so
+        // it matches any cross-reference elsewhere on the set.
+        if (isHeaderFragment && CODE_RE.test(keyed.key)) {
+          const keyX = banded[0].x + (banded[0].w || 0) / 2;
+          const markAnchor = anchors.find((a) => a.label === "MARK" && a.x > keyX);
+          if (markAnchor) {
+            let best: GraphSpan | null = null, bestD = Infinity;
+            for (const t of banded.slice(1)) {
+              const d = Math.abs(t.x + (t.w || 0) / 2 - markAnchor.x);
+              if (d < bestD) { bestD = d; best = t; }
+            }
+            if (best && /^\d{1,3}$/.test(norm(best.str))) {
+              keyed.key = `${keyed.key}-${norm(best.str)}`;
+              isHeaderFragment = false;
+            }
+          }
+        }
       } else if (!keyed.key.includes("-")) {
         const prefix = keyed.key.match(/^[A-Z]+/)?.[0] ?? "";
         isHeaderFragment = prefix.length >= 3 && ALL_HEADER_WORDS.has(prefix);
