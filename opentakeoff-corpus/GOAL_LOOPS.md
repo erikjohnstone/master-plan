@@ -315,3 +315,30 @@ WHERE     the cloud box that holds opentakeoff-corpus/bulk/ (re-stageable
 ════ BLOCKED ═══════════════════════════════════════════════════════════
   catalogue with evidence → next queue item → never stall
 ```
+
+---
+
+## Loop A — LOCAL VARIANT (Codex on the user's own machine)
+
+Codex runs locally at `/Users/erikjohnstone/Desktop/MASTER PLAN`, tied to the
+user's GitHub, with full filesystem access. That changes three things versus
+the cloud version above, and the local brief supersedes it:
+
+1. **The whole corpus is already on disk.** `opentakeoff-corpus/bulk/` (~1.7GB,
+   81 documents) and `raw/` (9) are gitignored but present, so the census runs
+   against REAL PDFs (`--pages 8`) rather than committed graph fixtures. Verify
+   the counts first (~69 Vol2, ~12 Vol1, 9 raw); `./scripts/stage-bulk-corpus.sh`
+   re-downloads if short.
+2. **Toolchain must be verified before any number is quoted.** `java` for
+   OpenDataLoader (L2) and `pdfplumber`/`camelot` for the Python table sidecar.
+   Missing either degrades extraction SILENTLY — a weaker pipeline measured
+   without knowing it.
+3. **Paths contain a space** ("MASTER PLAN") — quote every shell path.
+
+The held-out split runs over the real 90-document list:
+`awk 'NR%4==0' /tmp/all90.txt > /tmp/heldout22.txt`, remainder to
+`/tmp/dev68.txt`, held-out list committed to `reports/CODEX_HELDOUT.txt`.
+
+Codex must `git pull` before each session: the extraction loop is actively
+editing `sheetgraph.ts`, and extraction changes move REFERENCE-CELL scores.
+They have not moved the TAKEOFF table, which is why Loop A is anchored to it.
