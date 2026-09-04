@@ -719,7 +719,7 @@ const FINISH_HEADERS = ["CODE", "MARK", "SYMBOL", "ID", "MATERIAL", "MANUFACTURE
 // scope even after its rows extracted correctly. Restores the tie-break
 // this file's own kind-classification comment already documents as the
 // intended behavior ("ties favor the more specific vocab, equipment").
-const EQUIPMENT_HEADERS = ["ID", "MARK", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "RPM", "ESP", "EQUIPMENT", "VELOCITY", "AIRFLOW", "SIZE", "FPM", "LENGTH", "TYPE", "MOUNTING", "CCT", "CRI", "DRIVER", "DIMMING", "LENS", "FINISH", "NOTES", "LUMENS", "SERVED", "PRESSURE"];
+const EQUIPMENT_HEADERS = ["ID", "MARK", "SYMBOL", "TAG", "MODEL", "MANUFACTURER", "DESCRIPTION", "REMARKS", "VOLTAGE", "PHASE", "WATTS", "KW", "AMPS", "FLA", "MCA", "MOCP", "FREQ", "TANK", "SOURCE", "CFM", "GPM", "HP", "TONS", "MBH", "EER", "SEER", "EAT", "LAT", "EWT", "LWT", "RPM", "ESP", "EQUIPMENT", "VELOCITY", "AIRFLOW", "SIZE", "FPM", "LENGTH", "TYPE", "MOUNTING", "CCT", "CRI", "DRIVER", "DIMMING", "LENS", "FINISH", "NOTES", "LUMENS", "SERVED", "PRESSURE"];
 // Hoisted out of extractTableAt (module-level, not a local) so the
 // structural "reference" pass (below extractAllTables) can check "would
 // THIS candidate header already qualify under an EXISTING vocabulary" off
