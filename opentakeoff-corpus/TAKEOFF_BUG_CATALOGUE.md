@@ -37,7 +37,7 @@ every eval read 100%. Every bug below was invisible to that gate.
 | B-5 | A new header-token rejection killed a whole real table | −12 real cells on federal-mech | self-inflicted; whole-row guard |
 | B-6 | A page drawing the same table twice at a constant offset | 013_MO p23, 2 tables lost | fused duplicate |
 | B-7 | Deep multi-tier header with repeating leaf labels | 034_NC p42, 2 tables lost | header-block rejection |
-| B-8 | 3+ side-by-side tables fused by Y-clustering | 046_MI p22, 1 table lost | same class as rule 18 |
+| B-8 | Side-by-side tables with NO empty gutter — seam-based banding cannot split them | 046_MI p22 + 044_NY p24 (rule 35a): 1 table lost, 19 of 27 rows lost | **same bug as GOAL.md rule 35(a)** |
 
 ---
 
@@ -252,6 +252,42 @@ finish-kind vocabulary exists for, yet nothing extracts it.
 **Shape of the fix.** A repeating leaf label under distinct parents is the
 SIGNATURE of a real multi-tier header, not a disqualifier. Cluster by
 (parent-span, leaf) rather than by leaf text alone.
+
+### B-8 UPDATE — measured: rule 18's bands fix does NOT reach it, and this is rule 35(a)
+
+Audited before building, per standing rule 3. An x-density probe of
+046_MI p22 (596 spans, page width ~5039, 50px buckets):
+
+```
+corridors >= 100px wide and fully empty:  0..150   4050..4450   4600..4700
+```
+
+The legend block ends around x=1200 and the LIGHTING FIXTURE SCHEDULE's own
+header row starts at x=1916 — but **there is no empty corridor between
+them**, because the occupancy-sensor list (OS3/OS4/OS5 with their
+descriptions) occupies x=1125..1400+ and fills the gap. `columnBandCandidates`
+requires a >=100px-wide, ~90%-empty corridor across the sheet's content rows;
+it finds none here, returns a single band, and rule 18's bands-union read
+therefore has no split to use. **B-8 needs different work.**
+
+**And it is not a new bug.** GOAL.md rule 35(a) records the identical
+mechanism on 044_NY page 24: *"a live debug probe confirms it returns exactly
+1 band (no seam) for this real page."* There the cost is the 27-row BOILER
+PLANT ISOLATION VALVE SCHEDULE returning 8 rows with cross-column
+contamination; here it is a whole LIGHTING FIXTURE SCHEDULE returning
+nothing. Same root cause, two documents, two different visible symptoms —
+which is why rule 35 lists "recalibrating columnBandCandidates' own geometric
+thresholds" as NOT STARTED and explicitly warns the thresholds are
+corpus-wide-tuned with a history of false positives.
+
+**So the real fix is not a threshold nudge.** A seam is the wrong primitive
+when tables are packed with no gutter. What separates these tables is that
+each has its own INTERNAL column grid — consistent x-anchors repeating down
+its own rows — while the space between two tables has no such alignment.
+Grouping header tokens by shared column structure, rather than carving the
+page at an empty corridor, decides it without needing a gutter to exist. That
+also subsumes rule 18's 028_TX case (which happened to have a gutter) rather
+than competing with it.
 
 ### B-8 — three-plus side-by-side tables fused by Y-clustering
 
