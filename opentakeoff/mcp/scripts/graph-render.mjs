@@ -4,32 +4,54 @@
 // the score mean anything.
 //
 //   node --import tsx scripts/graph-render.mjs <corpus-dir> <setId> [--bands N]
+//   node --import tsx scripts/graph-render.mjs <corpus-dir> --pdf <path> [label] [--bands N]
+//
+// The --pdf form is the look-before-you-register escape hatch: any PDF on
+// disk (a bulk document not yet in sets.json) can be rendered without a
+// sets.json entry first. [label] names the output files (default: the PDF's
+// own basename); the registered-setId form below is completely unchanged.
 //
 // Writes renders/<setId>-<sheet>-<n>.png. Schedule sheets are cropped to the
 // tables the graph found (plus generous margin) and split into horizontal
 // bands so the type stays legible; plan sheets render whole.
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { basename, join, resolve } from "node:path";
 import { resolveSetFiles } from "./corpusFiles.mjs";
 import { Session } from "../src/session.ts";
 
 const args = process.argv.slice(2);
-const [corpusDir, setId] = args.filter((a) => !a.startsWith("--"));
+const pdfArgIdx = args.indexOf("--pdf");
+const pdfPath = pdfArgIdx >= 0 ? args[pdfArgIdx + 1] : null;
+const positional = args.filter((a, i) => !a.startsWith("--") && !(pdfArgIdx >= 0 && i === pdfArgIdx + 1));
+const [corpusDir, setIdArg] = positional;
 const bandsArg = args.indexOf("--bands");
 const BANDS = bandsArg >= 0 ? Number(args[bandsArg + 1]) : 3;
-if (!corpusDir || !setId) {
-  console.error("usage: node --import tsx scripts/graph-render.mjs <corpus-dir> <setId> [--bands N]");
+if (!corpusDir || (!pdfPath && !setIdArg)) {
+  console.error(
+    "usage: node --import tsx scripts/graph-render.mjs <corpus-dir> <setId> [--bands N]\n"
+    + "       node --import tsx scripts/graph-render.mjs <corpus-dir> --pdf <path> [label] [--bands N]",
+  );
   process.exit(2);
 }
 const corpus = resolve(corpusDir);
-const spec = JSON.parse(readFileSync(join(corpus, "sets.json"), "utf8"));
-const set = spec.sets.find((s) => s.id === setId);
-if (!set) { console.error(`no set "${setId}"`); process.exit(2); }
+
+let files, setId;
+if (pdfPath) {
+  // Escape hatch: an arbitrary PDF path, not a registered set — nothing else
+  // below (region-cropping, banding, filename slugging) needs to know that.
+  files = [resolve(pdfPath)];
+  setId = setIdArg || basename(pdfPath).replace(/\.pdf$/i, "");
+} else {
+  const spec = JSON.parse(readFileSync(join(corpus, "sets.json"), "utf8"));
+  const set = spec.sets.find((s) => s.id === setIdArg);
+  if (!set) { console.error(`no set "${setIdArg}"`); process.exit(2); }
+  setId = setIdArg;
+  files = resolveSetFiles(corpus, spec, set);
+}
 const outDir = join(corpus, "renders");
 mkdirSync(outDir, { recursive: true });
 
 const s = new Session();
-const files = resolveSetFiles(corpus, spec, set);
 for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
 const g = await s.sheetGraph();
 

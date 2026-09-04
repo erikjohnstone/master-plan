@@ -39,7 +39,7 @@
 // pipeline output; this script is just the corpus-walking CLI shell around it.
 import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { resolveSetFiles } from "./corpusFiles.mjs";
+import { resolveSetFiles, validateSets } from "./corpusFiles.mjs";
 import { cachedEvalResult } from "./evalCache.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
@@ -85,6 +85,7 @@ if (!corpusDir) {
 }
 const corpus = resolve(corpusDir);
 const spec = JSON.parse(readFileSync(join(corpus, "sets.json"), "utf8"));
+validateSets(spec);
 
 const pct = (n) => (n * 100).toFixed(1).padStart(5) + "%";
 

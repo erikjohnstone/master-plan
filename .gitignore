@@ -10,7 +10,9 @@ opentakeoff-corpus/renders/
 opentakeoff-corpus/demos/**/runs/
 opentakeoff-corpus/demos/**/local-host-run.json
 opentakeoff-corpus/raw/
-opentakeoff-corpus/keys/
+# NOT opentakeoff-corpus/keys/ — ground truth must survive a checkout.
+# Removed 2026-09-04: a new key file was invisible to `git status` here,
+# the exact trap the corpus's own read-only-keys rule assumes can't happen.
 opentakeoff-corpus/takeoffs/**/runs/
 opentakeoff-corpus/bulk/
 opentakeoff/mcp/scripts/_tmp_*/

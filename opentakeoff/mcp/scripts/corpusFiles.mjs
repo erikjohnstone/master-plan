@@ -17,6 +17,28 @@
 import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 
+/** A set entry needs an id (unique, used for filenames and CLI lookup) and a
+ * files[] list — everything else is prose. Fails loudly and by name instead
+ * of the bare `TypeError: set.files.map` a malformed entry used to produce. */
+export function validateSets(spec) {
+  const seen = new Set();
+  for (const set of spec.sets ?? []) {
+    if (!set || typeof set !== "object") {
+      throw new Error(`sets.json: a "sets" entry is not an object: ${JSON.stringify(set)}`);
+    }
+    if (!set.id || typeof set.id !== "string") {
+      throw new Error(`sets.json: a set is missing a string "id": ${JSON.stringify(set).slice(0, 120)}`);
+    }
+    if (seen.has(set.id)) {
+      throw new Error(`sets.json: duplicate set id "${set.id}"`);
+    }
+    seen.add(set.id);
+    if (!Array.isArray(set.files) || !set.files.length) {
+      throw new Error(`sets.json: set "${set.id}" has no non-empty "files" array`);
+    }
+  }
+}
+
 export function resolveSetFiles(corpus, spec, set) {
   const recorded = [set.root, spec.root].filter(Boolean);
   const parent = dirname(corpus);
@@ -25,6 +47,12 @@ export function resolveSetFiles(corpus, spec, set) {
     ...recorded, // authoring machine — checked first, so nothing changes there
     join(corpus, "raw"), // the corpus's own raw/ (the normal on-disk layout)
     corpus, // a flat corpus dir
+    // Bulk documents live in place rather than being copied into raw/ — a set
+    // registers by pointing at one of these, never by duplicating the PDF.
+    join(corpus, "bulk", "HVAC_BAS_Plan_Sets"),
+    join(corpus, "bulk", "HVAC_BAS_Plan_Sets", "_rejoined"),
+    join(corpus, "bulk", "HVAC_BAS_Plan_Sets_Vol2"),
+    join(corpus, "bulk", "HVAC_BAS_Plan_Sets_Vol2", "_rejoined"),
   ];
 
   // Re-anchor each recorded absolute root by its trailing path segments onto

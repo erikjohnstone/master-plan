@@ -33,7 +33,7 @@
 //
 import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { resolveSetFiles } from "./corpusFiles.mjs";
+import { resolveSetFiles, validateSets } from "./corpusFiles.mjs";
 import { cachedEvalResult } from "./evalCache.mjs";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
@@ -56,6 +56,7 @@ if (!corpusDir) {
 }
 const corpus = resolve(corpusDir);
 const spec = JSON.parse(readFileSync(join(corpus, "sets.json"), "utf8"));
+validateSets(spec);
 
 // ── the ruler ───────────────────────────────────────────────────────────────
 /** Canonical surface names. The parser's own labels change as it learns to
@@ -113,6 +114,17 @@ const f1 = (p, r) => (p + r ? (2 * p * r) / (p + r) : 0);
 
 // ── run one set ─────────────────────────────────────────────────────────────
 async function evalSetUncached(set) {
+  // Keyless short-circuit (mirrors takeoff-eval.mjs's own): a set with none
+  // of this scorer's three key files pays no pipeline cost at all — before
+  // this, a keyless registration ran the full Session/ODL extract just to
+  // report nothing but "unlabelled" at the end.
+  const hasAnyKey = existsSync(join(corpus, "keys", `${set.id}.csv`))
+    || existsSync(join(corpus, "keys", `${set.id}.tags.csv`))
+    || existsSync(join(corpus, "keys", `${set.id}.rowsym.csv`));
+  if (!hasAnyKey) {
+    return { id: set.id, gc: set.gc, project: set.project, unlabelled: true, reported: 0, misses: [] };
+  }
+
   const s = new Session();
   const files = resolveSetFiles(corpus, spec, set);
   for (let i = 0; i < files.length; i++) await s.loadPlan(files[i], { merge: i > 0 });
