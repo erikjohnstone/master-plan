@@ -2610,8 +2610,8 @@ on this effort:**
     for a dedicated pass per this file's own established rule-30
     precedent.
 
-39. **OPEN, SCOPED, NOT STARTED, MEDIUM SEVERITY: a correctly-extracted,
-    correctly-titled, cell-accurate real table contributes ZERO to
+39. **FIXED 2026-09-04: a correctly-extracted, correctly-titled,
+    cell-accurate real table contributed ZERO to
     `compile_corpus_takeoff`'s category counts because its real title
     doesn't match any tracked category vocabulary — a compile-LAYER
     taxonomy gap, not an extraction bug.**
@@ -2643,12 +2643,33 @@ on this effort:**
     the extraction being wrong — consistent with pre-scan inaccuracy
     already confirmed elsewhere this session (sets 078, 083).
 
-    NOT STARTED — this needs a scoped decision (add "VRF"/"AIR HANDLER"
-    as first-class tracked categories vs. folding VRF indoor units into
-    the existing FCU bucket by heuristic) rather than a same-tick patch,
-    and a corpus-wide check for how many other real documents use "VRF
-    SYSTEM SCHEDULE" or similarly-named real titles that fall through
-    the same gap before committing to one mapping.
+    FIX: added `altTitleRe: /VRF\s+SYSTEM\s+SCHEDULE/i` +
+    `altKeyRe: /^AC[\s\-]/i` to the existing `VRF_INDOOR` family spec in
+    `web/src/lib/corpusTakeoff.mjs` — the same split-title mechanism
+    already proven safe for `CONDENSING_UNIT`'s CU/DCU marks, chosen over
+    inventing a new category (the scoped decision this entry originally
+    called for): VRF_INDOOR already existed and already carries the
+    right semantics for these rows, it just couldn't reach this one real
+    title shape. New regression test in
+    `web/test/corpusTakeoffVol2Families.test.ts` covers the exact real
+    shape (altTitleRe matches "VRF SYSTEM SCHEDULE" but NOT the primary
+    split-schedule titleRe; altKeyRe matches AC-1/AC-12 but not an
+    unrelated ACCU-1 mark). `corpusTakeoff*.test.ts` (55/55),
+    `scheduleTitleMatch.test.ts` (36/36), `sheetgraph.test.ts` (113/113)
+    all pass. Verified against the real document via the same
+    `compile_corpus_takeoff` path production uses
+    (`compile-corpus-takeoff-cli.mjs`): `VRF_INDOOR` on
+    089_FL_Airport_Terminal_and_Hangar_Development went from `count: 0`
+    to `count: 12`, with `items` carrying exactly the real tags
+    `AC-1`..`AC-12`. The nested outdoor heat-pump sub-marks (`HP-1` on
+    `AC-1`'s row, `CU-1` on `AC-12`'s row) are a SEPARATE, NOT-YET-FIXED
+    piece of this same finding — they live in secondary cell values
+    within an already-claimed row, not as their own row keys, and no
+    existing family-spec mechanism reads a secondary named cell as an
+    independent tag for a DIFFERENT category; recovering them needs new,
+    more careful design (a generalizable "nested sub-mark" extraction,
+    not a one-off), left explicitly open rather than folded into this
+    fix.
 
 ### Real, understood build-time characteristic (not a bug): Tesseract OCR
 fallback can make a single set's on-demand build take 45-90+ minutes
