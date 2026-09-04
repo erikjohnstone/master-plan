@@ -12,7 +12,8 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
 import { Session } from "../src/session.ts";
-import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv } from "../src/corpusTakeoff.mjs";
+import { takeoffWorkbookSheets, rowsToCsv } from "../src/corpusTakeoff.mjs";
+import { compileTakeoff as compileCorpusTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
 import { verifyTakeoffGates, loadTruth } from "../src/verifyTakeoffGates.mjs";
 
 function arg(args, name) {

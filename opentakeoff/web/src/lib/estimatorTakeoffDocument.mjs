@@ -87,7 +87,7 @@ export function buildEstimatorTakeoffDocument(graph, opts = {}) {
       a_compile: {
         takeoff_ids: { valve: valveCompile.takeoff_id, bas: basCompile.takeoff_id },
         valve_families: Object.keys(valveCompile.categories || {}),
-        bas_lists: (basCompile.lists || []).length,
+        bas_lists: basLists(basCompile).length,
         hvac_available: true,
       },
       b_reconcile: opts.reconcileSummary || null,
@@ -172,10 +172,16 @@ function mapValveOrDamperItem(item, cells, tableIndex, isDamper, family) {
   };
 }
 
+/** compileBasTakeoff nests its lists at categories.points_lists.lists, not
+ * a top-level `lists` — this is the one place that knows that path. */
+function basLists(basCompile) {
+  return basCompile?.categories?.points_lists?.lists || [];
+}
+
 function mapBasCompile(basCompile, tableIndex) {
   const controllers = [];
   const points = [];
-  for (const list of basCompile.lists || []) {
+  for (const list of basLists(basCompile)) {
     const tableId = tableIdFor(tableIndex, list.sheet_id, list.title);
     const ctrlTag = inferControllerTag(list.title);
     controllers.push({
@@ -327,7 +333,7 @@ function inferSystems(valves, dampers, points, basCompile) {
   };
   for (const v of valves) add(v.systemTag, inferSystemKind(v.systemTag), null);
   for (const d of dampers) add(d.systemTag, inferSystemKind(d.systemTag), null);
-  for (const list of basCompile.lists || []) {
+  for (const list of basLists(basCompile)) {
     for (const item of list.items || []) {
       if (item.served_equipment) add(item.served_equipment, inferSystemKind(item.served_equipment), null);
     }

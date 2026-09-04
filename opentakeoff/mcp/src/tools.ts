@@ -24,8 +24,8 @@ import { exportMarkedPdf } from "./marked.ts";
 import { assertWritable, OVERWRITE_DESC } from "./safewrite.ts";
 import { importTakeoff } from "./importing.ts";
 import { buildPlanSetTakeoff, buildLegendTakeoff, classifyLegendCaption, reconcileSchedulePlan } from "./takeoff.ts";
-import { compileCorpusTakeoff, compileEmbeddedCoilGaps, takeoffWorkbookSheets, rowsToCsv } from "./corpusTakeoff.mjs";
-import { compileSequencesTakeoff } from "../../web/src/lib/sequenceExtract.ts";
+import { takeoffWorkbookSheets, rowsToCsv } from "./corpusTakeoff.mjs";
+import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
 import { reconcileRowsToCsv } from "../../web/src/lib/schedulePlanReconcile.mjs";
 import {
   VALVES, ACTUATORS, DAMPERS, AIR_TERMINALS, MAJOR_EQUIPMENT, SENSORS, type HvacComponent,
@@ -709,11 +709,7 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     outputSchema: compileCorpusTakeoffOutput,
   }, run("compile_corpus_takeoff", async ({ kind, service, detail, path: outPath, export_path: exportPath, overwrite }) => {
     const graph = await session.graphForPipeline();
-    const compiled: any = (kind === "sequences" || kind === "T-SOO-01")
-      ? compileSequencesTakeoff(session, graph)
-      : (kind === "embedded_coil_gaps" || kind === "T-VALVE-EMBEDDED-01")
-      ? compileEmbeddedCoilGaps(session, graph)
-      : compileCorpusTakeoff(session, graph, kind, service ? { service } : {});
+    const compiled: any = compileTakeoff(session, graph, kind, service ? { service } : {});
     if (detail !== "full") {
       compiled.page_accounting = {
         ...compiled.page_accounting,

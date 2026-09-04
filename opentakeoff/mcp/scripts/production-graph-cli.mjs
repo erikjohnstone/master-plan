@@ -19,8 +19,7 @@
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Session } from "../src/session.ts";
-import { compileCorpusTakeoff, compileEmbeddedCoilGaps } from "../src/corpusTakeoff.mjs";
-import { compileSequencesTakeoff } from "../../web/src/lib/sequenceExtract.ts";
+import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
 import { reconcileSchedulePlan } from "../src/takeoff.ts";
 
 function argsOf(argv, name) {
@@ -138,11 +137,7 @@ if (mode !== "compile") {
 }
 
 progress("compile", `Compiling ${kindLabel} takeoff from extracted schedules…`, { kind });
-const compiled = (kind === "sequences" || kind === "T-SOO-01")
-  ? compileSequencesTakeoff(session, graph)
-  : (kind === "embedded_coil_gaps" || kind === "T-VALVE-EMBEDDED-01")
-  ? compileEmbeddedCoilGaps(session, graph)
-  : compileCorpusTakeoff(session, graph, kind, service ? { service } : {});
+const compiled = compileTakeoff(session, graph, kind, service ? { service } : {});
 const totals = compiled?.totals || {};
 const items = totals.items ?? totals.rows ?? null;
 progress("done", items != null

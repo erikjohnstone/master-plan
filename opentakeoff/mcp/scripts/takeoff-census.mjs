@@ -31,7 +31,7 @@
  */
 import { openPdf } from "../src/pdf.ts";
 import { Session } from "../src/session.ts";
-import { compileCorpusTakeoff } from "../src/corpusTakeoff.mjs";
+import { compileTakeoff as compileCorpusTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync, readdirSync } from "node:fs";
 import { basename, join } from "node:path";

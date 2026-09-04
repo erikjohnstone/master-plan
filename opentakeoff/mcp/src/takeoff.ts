@@ -789,7 +789,7 @@ export async function reconcileSchedulePlan(session: Session, opts: {
 } = {}): Promise<{
   rows: ReturnType<typeof reconcileRowsFromTakeoffItems>;
   summary: ReturnType<typeof summarizeReconcile>;
-  takeoff_stats?: PlanSetTakeoff["stats"];
+  takeoff_stats: PlanSetTakeoff["stats"];
   family_filter: string | null;
 }> {
   const family = opts.family ? String(opts.family).trim() : null;
@@ -801,11 +801,20 @@ export async function reconcileSchedulePlan(session: Session, opts: {
   if (family) {
     const graph = await session.graphForPipeline();
     const needle = familyNeedleFromSpecs(HVAC_FAMILY_SPECS, family);
+    // takeoff_stats is whole-set-sweep bookkeeping (buildPlanSetTakeoff's own
+    // stats) that a family-scoped reconcile never computes — declared
+    // required on the wire (mcp/src/outputs.ts) because a caller with no
+    // notion of "family scope" should never see it silently vanish, so a
+    // real zero object goes out here rather than `undefined`. The TS return
+    // type below and that Zod schema now agree on required, not just one of
+    // them claiming optional.
+    const emptyStats = { schedule_rows_total: 0, resolved: 0, refused: 0, errored: 0, total_drawn_instances: 0 };
     if (!needle) {
       return {
         rows: [],
         summary: summarizeReconcile([]),
         family_filter: family,
+        takeoff_stats: emptyStats,
       };
     }
     const scoped = await reconcileScheduleFamilyWithSweeps(session, graph, needle, {
@@ -814,7 +823,7 @@ export async function reconcileSchedulePlan(session: Session, opts: {
       // Family-only (no tag list): sweep every schedule row unless caller opts out.
       sweepAll: !tags?.length && opts.familySweepAll !== false,
     });
-    return { ...scoped, takeoff_stats: undefined };
+    return { ...scoped, takeoff_stats: emptyStats };
   }
 
   const takeoff = await buildPlanSetTakeoff(session, {

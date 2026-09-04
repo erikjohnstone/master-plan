@@ -86,6 +86,7 @@ const extractedTable = z.object({
 
 /** Schedule / points-list quantity takeoff (corpus T-HVAC-01 / T-BAS-01). */
 export const compileCorpusTakeoffOutput = {
+  schema_version: z.number().optional(),
   takeoff_id: z.string(),
   kind: z.enum(["hvac_equipment", "bas_points", "control_valves", "sequences", "embedded_coil_valve_gaps"]),
   compiler: z.string(),
@@ -99,6 +100,14 @@ export const compileCorpusTakeoffOutput = {
     pages: z.array(z.any()).optional(),
   }).passthrough(),
   exclusions: z.array(z.string()),
+  /** Pillar-C disclosure: printed rows counted ≠ done. Emitted by
+   * compileBasTakeoff / compileControlValveTakeoff; shape intentionally
+   * loose here (see buildBasEstimatorProduct/buildValveEstimatorProduct in
+   * web/src/lib/corpusTakeoff.mjs) — declared so a schema-typed client at
+   * least learns this field exists, not left invisible under z.any(). */
+  estimator_status: z.any().optional(),
+  estimator_product: z.any().optional(),
+  service_filter: z.string().nullable().optional(),
   path: z.string().nullable().optional(),
   export_path: z.string().nullable().optional(),
 };
@@ -127,7 +136,11 @@ export const reconcileSchedulePlanOutput = {
     family: z.string().nullable(),
     scheduled_qty: z.number().int(),
     installed_qty: z.number().int(),
-    status: z.enum(["MATCH", "SCHEDULE_ONLY", "PLAN_ONLY", "REFUSED_NO_SCALE", "REFUSED_NO_TEXT", "AMBIGUOUS"]),
+    // ERROR: classifyBasServedSweepOutcome's own outcome for a sweep that
+    // threw something none of the other named refusals recognized
+    // (web/src/lib/schedulePlanReconcile.mjs) — a real producible value the
+    // enum was missing.
+    status: z.enum(["MATCH", "SCHEDULE_ONLY", "PLAN_ONLY", "REFUSED_NO_SCALE", "REFUSED_NO_TEXT", "AMBIGUOUS", "ERROR"]),
     schedule_cite: z.object({
       sheet: z.string(),
       title: z.string().nullable(),

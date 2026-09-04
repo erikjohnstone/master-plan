@@ -193,18 +193,76 @@ export function rowsFromToolResult(name, args = {}, result = {}, meta = {}) {
     }
   }
 
-  if (name === "count_marks" && typeof data.found === "number") {
-    rows.push(makeTakeoffRow({
-      workflow, runId, tag: args.marks?.[0] || null, field: "mark_count",
-      value: data.found, unit: "EA", source_tool: name,
-    }));
+  if (name === "count_marks") {
+    for (const m of data.marks || []) {
+      if (typeof m?.count !== "number") continue;
+      rows.push(makeTakeoffRow({
+        workflow, runId, tag: m.mark || null, field: "mark_count",
+        value: m.count, unit: "EA",
+        sheet_id: m.row?.sheet || null, table_title: m.row?.table || null,
+        source_tool: name,
+      }));
+    }
+    if (typeof data.total === "number") {
+      rows.push(makeTakeoffRow({
+        workflow, runId, field: "count_marks_total", value: data.total,
+        unit: "EA", source_tool: name,
+      }));
+    }
+  }
+
+  // Reconcile is the only tool that carries BOTH quantity meanings and a
+  // real plan-drawn status per tag — before this case existed, its rows
+  // downloaded to a standalone CSV and never reached here at all (the
+  // receiving sockets, field === "plan_status" / "plan_tag" in
+  // compileAgentTakeoff below, existed and were simply never fed).
+  if (name === "reconcile_schedule_plan") {
+    for (const row of data.rows || []) {
+      if (!row?.tag) continue;
+      const tag = row.tag;
+      const scheduleSheet = row.schedule_cite?.sheet || null;
+      const scheduleTitle = row.schedule_cite?.title || null;
+      const planCite = row.plan_cites?.[0] || null;
+      if (typeof row.scheduled_qty === "number") {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag, field: "scheduled_quantity", value: row.scheduled_qty, unit: "EA",
+          sheet_id: scheduleSheet, table_title: scheduleTitle, source_tool: name,
+        }));
+      }
+      // table_title is the line's GROUPING identity (takeoffLineKey groups by
+      // tag+table_title) — every row for this tag carries the SCHEDULE's
+      // title here even when the field's own value/sheet is plan-side, the
+      // same convention sweep_schedule_row's own installed_quantity row
+      // already uses (table_title: data.row?.table, not the plan sheet).
+      if (typeof row.installed_qty === "number") {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag, field: "installed_quantity", value: row.installed_qty, unit: "EA",
+          sheet_id: planCite?.sheet || null, table_title: scheduleTitle,
+          bbox_px: planCite?.at || null, source_tool: name,
+        }));
+      }
+      if (row.status) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag, field: "plan_status", value: row.status,
+          sheet_id: scheduleSheet, table_title: scheduleTitle,
+          note: row.reason || null, source_tool: name,
+        }));
+      }
+      if (planCite?.sheet) {
+        rows.push(makeTakeoffRow({
+          workflow, runId, tag, field: "plan_tag", value: tag,
+          sheet_id: planCite.sheet, table_title: scheduleTitle,
+          bbox_px: planCite.at || null, source_tool: name,
+        }));
+      }
+    }
   }
 
   if (name === "compile_corpus_takeoff") {
     rows.push(...rowsFromCompiledTakeoff(data, { workflow, runId, source_tool: name }));
   }
 
-  if (name === "takeoff_summary" || name === "project_takeoff") {
+  if (name === "project_takeoff") {
     for (const item of data.items || data.equipment || data.legend_items || data.points || []) {
       const tag = item.tag || item.mark || item.id || item.point || null;
       const qty = item.quantity ?? item.qty ?? item.found ?? (tag ? 1 : null);
@@ -336,6 +394,31 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
     }
     for (const [catName, cat] of Object.entries(compiled.categories || {})) {
       if (catName === "points_lists" || !cat || typeof cat !== "object") continue;
+      // Sequences use `cat.list`, not `cat.items` (sequenceExtract.ts's own
+      // envelope) — no tag/quantity to speak of, so this is its own shape
+      // rather than forcing it through the equipment-item loop below, which
+      // silently produced zero rows for kind:"sequences" before this.
+      if (catName === "sequences") {
+        for (const seq of Array.isArray(cat.list) ? cat.list : []) {
+          const tag = seq.system_tag || seq.id || null;
+          if (!tag) continue;
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag, field: "sequence_status", value: seq.status || "unknown",
+            sheet_id: seq.sheet_id || null, table_title: seq.title || null,
+            source_tool, note: `${seq.section_count ?? (seq.sections || []).length} section(s)`,
+          }));
+          for (const section of seq.sections || []) {
+            if (!section?.heading) continue;
+            const cite = section.evidence?.[0] || null;
+            rows.push(makeTakeoffRow({
+              workflow, runId, tag, field: section.heading, value: section.body || "",
+              sheet_id: seq.sheet_id || null, table_title: seq.title || null,
+              bbox_px: cite?.bbox || null, source_tool,
+            }));
+          }
+        }
+        continue;
+      }
       const items = Array.isArray(cat.items) ? cat.items : [];
       for (const item of items) {
         const tag = item.tag || item.mark || null;
@@ -350,6 +433,13 @@ export function rowsFromCompiledTakeoff(compiled, meta = {}) {
           row_bbox_px: item.row_bbox_px || null,
           source_tool, note: catName,
         }));
+        if (typeof item.scheduled_qty === "number") {
+          rows.push(makeTakeoffRow({
+            workflow, runId, tag, field: "scheduled_quantity",
+            value: item.scheduled_qty, unit: item.unit || "EA",
+            sheet_id: sheet, table_title: table, source_tool,
+          }));
+        }
         rows.push(makeTakeoffRow({
           workflow, runId, tag, field: "equipment_type", value: catName,
           sheet_id: sheet, table_title: table, source_tool,
@@ -858,6 +948,14 @@ export function takeoffLeadColumns(lines = []) {
   if (has((l) => l.qty != null && l.qty !== "")) {
     cols.push({ key: "qty", label: "Qty" });
     if (has((l) => l.unit)) cols.push({ key: "unit", label: "Unit" });
+    // Only when the underlying source is actually known — a compile-only
+    // takeoff with no reconcile run never shows these, so the common case
+    // stays exactly as compact as before.
+    if (has((l) => l.qty_kind)) cols.push({ key: "qty_kind", label: "Qty basis" });
+    if (has((l) => l.scheduled_qty != null)) cols.push({ key: "scheduled_qty", label: "Scheduled qty" });
+    if (has((l) => l.installed_qty != null)) cols.push({ key: "installed_qty", label: "Installed qty" });
+    // status already has its own trailing "Status" column on every export
+    // (compiledTakeoffToCsv etc.) — not duplicated as a lead column here.
   }
   if (has((l) => l.manufacturer)) cols.push({ key: "manufacturer", label: "Manufacturer" });
   if (has((l) => l.model)) cols.push({ key: "model", label: "Model" });
@@ -985,6 +1083,9 @@ export function lineLeadValue(line, key) {
   if (key === "unit") return line.unit || "";
   if (key === "manufacturer") return line.manufacturer || "";
   if (key === "model") return line.model || "";
+  if (key === "qty_kind") return line.qty_kind || "";
+  if (key === "scheduled_qty") return line.scheduled_qty ?? "";
+  if (key === "installed_qty") return line.installed_qty ?? "";
   return "";
 }
 
@@ -1004,10 +1105,14 @@ function takeoffLineKey(tag, tableTitle, field) {
  */
 export function isFinishedTakeoffSource(sourceTool) {
   const t = String(sourceTool || "");
+  // takeoff_summary's conditions[]/rows[] are canvas area/length/count
+  // CONDITIONS (the flooring/finish surface) — never schedule tag/qty rows,
+  // so it was never actually producing seed rows here (field-name mismatch,
+  // see rowsFromToolResult); dropped rather than force-fit.
   return t === "compile_corpus_takeoff"
-    || t === "takeoff_summary"
     || t === "project_takeoff"
-    || t === "sweep_schedule_row";
+    || t === "sweep_schedule_row"
+    || t === "reconcile_schedule_plan";
 }
 
 /**
@@ -1074,6 +1179,8 @@ export function compileAgentTakeoff(rows = []) {
         qty: null,
         unit: null,
         qty_kind: null,
+        scheduled_qty: null,
+        installed_qty: null,
         schedule_sheet_id: null,
         plan_sheet_id: null,
         table_title: null,
@@ -1150,6 +1257,19 @@ export function compileAgentTakeoff(rows = []) {
         g.qty = n;
         g.unit = row.unit || "EA";
         g.qty_kind = "installed";
+        g.installed_qty = n;
+      }
+    } else if (field === "scheduled_quantity") {
+      const n = asNumber(row.value);
+      if (n != null) {
+        g.scheduled_qty = n;
+        // Only claim the headline qty/qty_kind when nothing more specific
+        // (an actual drawn/installed count) already has.
+        if (g.qty_kind !== "installed") {
+          g.qty = n;
+          g.unit = row.unit || "EA";
+          g.qty_kind = "scheduled";
+        }
       }
     } else if (field === "quantity") {
       const n = asNumber(row.value);
@@ -1225,10 +1345,10 @@ export function compileAgentTakeoff(rows = []) {
   const lines = [];
   for (const g of groups.values()) {
     // With a corpus compile locked, never invent qty for attr-only junk tags.
+    // Never invent a quantity — a tag with attributes but no printed qty
+    // anywhere is a real gap to disclose, not a defaulted "1".
     if (g.tag && g.qty == null && Object.keys(g.attrs).length && !corpusLocked) {
-      g.qty = 1;
-      g.unit = "EA";
-      g.qty_kind = "scheduled";
+      g.notes.push("No printed or drawn quantity found for this tag — refused, not defaulted");
     }
     if (g.qty == null && !g.tag) continue; // drop empty junk
     if (corpusLocked && (g.qty == null || !g.tag)) continue;
@@ -1304,6 +1424,8 @@ export function compileAgentTakeoff(rows = []) {
       qty: g.qty,
       unit: g.unit || (g.qty != null ? "EA" : null),
       qty_kind: g.qty_kind,
+      scheduled_qty: g.scheduled_qty,
+      installed_qty: g.installed_qty,
       specs,
       spec_cites,
       plan_sheet_id: g.plan_sheet_id || null,
