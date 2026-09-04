@@ -3843,6 +3843,33 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
     // the plan and what any cross-reference has to match.
     const bmFacility = key.match(/^\d{1,4}-([A-Z][A-Z0-9]*(?:-[A-Z0-9]+){2,})$/);
     if (bmFacility && CODE_RE.test(bmFacility[1])) return { key };
+    // The same real tag with a numeric FLOOR/zone segment between the
+    // facility and the equipment code — "07-1-EU-1" is facility 07, floor 1,
+    // energy unit 1. `bmFloor` above knows this three-level shape but gates
+    // it on a building the sheet's own text confirms, and that gate is what
+    // silently empties real tables when the sheet never prints the building
+    // number in a form the scan recognizes.
+    //
+    // Real, corpus-found and live-traced (GOAL.md rule 33,
+    // 036_LA_VA_Project_502_21_222_EHRM_Infrastructure#63): its real VRV-
+    // INDOOR UNIT SCHEDULE lists FIFTEEN real units, all present and evenly
+    // stacked on the page (x=3232, y 966..1351). Exactly ONE extracted —
+    // "07-B-EU-1" — and only because a LETTER happens to follow its
+    // facility number. The other fourteen ("07-1-EU-1", "07-2-EU-1",
+    // "09-3-EU-1", ...) carry a numeric floor instead and were refused here,
+    // one at a time, inside a scan range that already covered every one of
+    // them. That is this rule's recorded "15 real VRV indoor units collapse
+    // to 1", and it is a key gate, not the row-merge the rule first blamed.
+    //
+    // Accepted on shape for the same reason as the two-level form above: a
+    // number, a small number, then a MULTI-SEGMENT letter-led code is not a
+    // dimension, a callout or a fraction under any reading. Four segments of
+    // that shape is if anything MORE specific than the two-level case, so
+    // one hyphen group after the letter-led head is enough here. The
+    // ambiguous "1-RH-1" still matches neither branch and still belongs to
+    // the confirmed-building gate above.
+    const bmFacilityFloor = key.match(/^\d{1,4}-\d{1,3}-([A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+)$/);
+    if (bmFacilityFloor && CODE_RE.test(bmFacilityFloor[1])) return { key };
     return null;
   }
   if (ROW_KEY_RE.test(key)) return { key };
