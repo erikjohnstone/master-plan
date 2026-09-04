@@ -972,6 +972,9 @@ function skipSubHeaderContinuation(rows: GraphSpan[][], vocab: string[], from: n
 // recognizes a genuinely TYPE-keyed table (baker-county-eoc-bidset.pdf#59's
 // LUMINAIRE SCHEDULE) a different, position-based way instead — see its
 // bareLeadingType comment for the real reasoning.
+// Real air services whose qualifier changes WHICH quantity a rating word
+// names (GOAL.md rule 24(b)): outside, exhaust, supply, return air.
+const AIR_SERVICE_QUALIFIERS = new Set(["OA", "EA", "SA", "RA"]);
 const CATALOG_ANCHOR_WORDS = ["ID", "MARK", "CODE", "SYMBOL", "TAG", "DESIGNATION"];
 
 /** ITEM NO. / EQUIP NO. — own-identity key columns on VA / federal CUP
@@ -1722,6 +1725,28 @@ function findHeaderRow(rows: GraphSpan[][], vocab: string[], required: string[],
     for (let j = 0; j < hits.length; j++) {
       const h = hits[j];
       let label = h.label;
+      // An AIR-SERVICE qualifier printed with its own rating word is part of
+      // the column's real identity, not decoration: "OA CFM" is the outside-
+      // air quantity, a different real number from the unit's own airflow.
+      // headerLabel resolves a span to its canonical vocabulary word, so
+      // "OA CFM" arrives here as plain "CFM" and the qualifier is lost —
+      // real, corpus-found (GOAL.md rule 24(b)),
+      // 011_IL_VA_Hines_Finance_Center_Renovation#16's own EXISTING HEAT
+      // PUMP SCHEDULE, whose real header row reads
+      // "... DESIGN AIRFLOW | OA CFM | VOLTAGE/PHASE ...". Both columns are
+      // real, both extract correct per-row values (205 CFM design, 50 OA),
+      // and the printed name of the second was the only thing wrong — a
+      // takeoff reading a bare "CFM" beside an AIRFLOW column cannot tell
+      // which service it is. Deliberately the four air services only, and
+      // only for an exactly-two-word span whose second word IS the matched
+      // vocabulary word, so no ordinary qualifier ("DESIGN AIRFLOW") and no
+      // longer phrase changes shape.
+      {
+        const words = norm(h.span.str).split(/\s+/);
+        if (words.length === 2 && AIR_SERVICE_QUALIFIERS.has(words[0]) && words[1] === h.label) {
+          label = `${words[0]} ${h.label}`;
+        }
+      }
       // An ambiguous label prefers a MORE SPECIFIC word from its own SAME
       // span first, before ever guessing at a parent — real, found live
       // (Baker County EOC's own Room Finish Schedule): every OTHER
