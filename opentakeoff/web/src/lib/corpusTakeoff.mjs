@@ -687,6 +687,66 @@ export function expandAmpersandEquipMarks(raw) {
   return [left, right];
 }
 
+/** B-3: does this table's row-key column actually IDENTIFY its rows, or is it
+ * a COUNT column the key-column pick landed on because it happens to sit
+ * leftmost? sheetgraph keys a reference table from `anchors[0]` — its
+ * left-most column — which is right for the overwhelming majority of real
+ * schedules (MARK/TAG/SYMBOL lead) and wrong for a table that carries no
+ * identifier column at all.
+ *
+ * The property that actually distinguishes the two is CARDINALITY, not
+ * position: an identifier is near-unique per row and tag-shaped; a count
+ * column is a handful of small integers repeated down the page.
+ *
+ * Real, measured (028_TX_Renovation_of_Building_615 p1, the B-3 page): its
+ * NOISE CONTROL DUCT SILENCER SCHEDULE's column 0 is literally "QTY." —
+ * 16 real rows keyed 2,1,1,1,1,1,2,1,1,1,1,2,2,2,2,2, i.e. TWO distinct
+ * values across sixteen rows (ratio 0.125). Deduping by that key collapsed
+ * the whole table to 2 items keyed "1" and "2" — 23 real silencers reported
+ * as 2. A real MARK column scores ratio 1.0 and is untouched by this test.
+ *
+ * Returns the header of the column that SHOULD identify these rows (chosen
+ * by cardinality among the table's own populated columns), or null when the
+ * key column is a genuine identifier — in which case nothing changes. */
+const B3_COUNT_KEY_RE = /^\d{1,3}$/;
+function identifierColumnByCardinality(table) {
+  const rows = table?.rows || [];
+  // Under 3 rows there is no cardinality to measure — refuse rather than guess.
+  if (rows.length < 3) return null;
+  const keys = rows.map((r) => String(r.key || "").trim());
+  // Only a column that is ENTIRELY bare small integers is a count column.
+  // Real reference-table keys in this corpus are letter+hyphen+digit tags or
+  // short noun phrases — "never bare digits" (see genericRowKeyOf's own
+  // outline-marker comment in sheetgraph.ts).
+  if (!keys.every((k) => B3_COUNT_KEY_RE.test(k))) return null;
+  if (new Set(keys).size / rows.length > 0.5) return null;   // high-cardinality integers could be real
+  // High cardinality alone is not enough — the catalogue's own fix shape says
+  // "high-cardinality AND TAG-SHAPED", and dropping the second half picks a
+  // measurement column: on this very table AIR VELOCITY (FPM) is 16-of-16
+  // distinct and scored higher than the real identifier, keying a silencer
+  // "60". A real identifier carries LETTERS (a tag, or a noun phrase like
+  // "GROUP REHEARSAL 123 - SUPPLY/RETURN"); a measurement column is bare
+  // numerics with units. Walk the table's OWN header order and take the
+  // first column that qualifies — by drafting convention the identifier
+  // leads, and every later near-unique column is data about it.
+  for (const header of table.headers || []) {
+    if (!header || /^QTY\.?$/i.test(header.trim())) continue;
+    const vals = rows.map((r) => String(r.cells?.[header]?.text || "").trim()).filter(Boolean);
+    if (vals.length < rows.length * 0.8) continue;           // must be populated on nearly every row
+    const lettered = vals.filter((v) => /[A-Za-z]/.test(v)).length;
+    if (lettered < vals.length * 0.8) continue;              // a measurement column, not an identifier
+    // 0.6, measured on this table's own columns: the count column scores
+    // 0.19 (3 distinct of 16) and the real identifier 0.75 (12 of 16 — a
+    // location legitimately repeats when two silencers serve one room, so
+    // demanding near-uniqueness rejects the very column we want). A MARK
+    // column on an ordinary schedule scores 1.0.
+    if (new Set(vals).size / rows.length >= 0.6) return header;
+  }
+  // No near-unique lettered column either — this table genuinely cannot
+  // identify its own rows, so refuse the override rather than inventing one.
+  return null;
+}
+
 function uniqueFamily(graph, {
   titleRe, exclude, keyRe, blankKeyRe, blankHeaderRes, blankServiceHint,
   identityHeaderRe, titledOnly,
@@ -755,9 +815,21 @@ function uniqueFamily(graph, {
     const titledFilter = (altOk && altKeyRe) ? altKeyRe : keyRe;
     const filterRe = (blankTitle || genericValveTitle) ? blankGate : catchAllSchedule ? null : titledFilter;
     const catchAllFilter = catchAllSchedule;
+    // B-3: when the key column is a COUNT column, identify rows by the
+    // highest-cardinality column instead, and never dedupe on the count —
+    // two rows both reading "1" are two physical silencers, not one tag
+    // seen twice. Computed once per table; null for every ordinary
+    // MARK/TAG-led schedule, which is therefore completely unaffected.
+    const countKeyedIdentCol = identifierColumnByCardinality(table);
+    let rowIdx = -1;
     for (const row of table.rows || []) {
+      rowIdx++;
       const rowKey = String(row.key || "").trim().replace(/^["'\s]+|["'\s]+$/g, "");
       let tag = rowKey;
+      if (countKeyedIdentCol) {
+        const ident = String(row.cells?.[countKeyedIdentCol]?.text || "").trim();
+        if (ident) tag = ident;
+      }
       // Prefer explicit MARK / EQUIP.TAG / DESIGNATION. Do NOT prefer bare TAG —
       // Colville FAN SCHEDULE shares a TAG column with grille type codes (1S/2R)
       // while row.key correctly holds EF-1.
@@ -785,7 +857,14 @@ function uniqueFamily(graph, {
       if (!willFilter && /,/.test(tag) && rowKey && !/,/.test(rowKey)) {
         working = rowKey;
       }
-      const tagList = String(working)
+      // A count-keyed table's identifier is a descriptive NOUN PHRASE
+      // ("GROUP REHEARSAL 123 - SUPPLY/RETURN"), never a compound tag list —
+      // splitting it on "/" the way CWP-1/CWP-2 is split shreds one real
+      // silencer into two bogus lines ("GROUP REHEARSAL 123 - SUPPLY" and
+      // "RETURN"), measured: 16 real rows became 31 items.
+      const tagList = countKeyedIdentCol
+        ? [String(working).trim()].filter(Boolean)
+        : String(working)
         .split(willFilter ? /[/,]/ : "/")
         .map((t) => t.trim().replace(/^["'\s]+|["'\s]+$/g, ""))
         .filter(Boolean)
@@ -807,8 +886,19 @@ function uniqueFamily(graph, {
         } else if (filterRe && !markMatchesKeyRe(filterRe, one, canon)) {
           continue;
         }
-        if (keys.has(canon)) continue;
-        keys.add(canon);
+        // B-3: a count-keyed table emits one line per PHYSICAL ROW. Its rows
+        // are not tag-identified, so cross-row dedupe would collapse real,
+        // distinct pieces of equipment (16 real silencers -> 2). Ordinary
+        // tag-keyed tables keep the dedupe exactly as before.
+        if (countKeyedIdentCol) {
+          // Still counted — a category's `count` is keys.size — but keyed per
+          // PHYSICAL ROW so two rows reading the same location stay two real
+          // silencers instead of collapsing into one.
+          keys.add(`${canon}#${table.sheet}#${rowIdx}`);
+        } else {
+          if (keys.has(canon)) continue;
+          keys.add(canon);
+        }
         const bbox = identityHeaderRe
           ? (cellBbox(row, identityHeaderRe) || cellBbox(row, /^MARK$/i) || row.identity?.bbox)
           : (cellBbox(row, /^MARK$/i) || row.identity?.bbox || cellBbox(row, /./));

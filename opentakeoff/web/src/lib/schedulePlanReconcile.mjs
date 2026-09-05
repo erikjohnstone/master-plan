@@ -110,7 +110,13 @@ export function classifyBasServedSweepOutcome({ result = null, error = null } = 
  */
 export function scheduledQtyStatusFromRow(row) {
   for (const [header, cell] of Object.entries(row?.cells || {})) {
-    if (!/^(QTY|QUANTITY|NO\.|COUNT|#)$/i.test(String(header || "").trim())) continue;
+    // The trailing period is a real drafting spelling, not a typo — this
+    // pattern already admits "NO." for exactly that reason, and "QTY." was
+    // simply missing: 028_TX_Renovation_of_Building_615's own NOISE CONTROL
+    // DUCT SILENCER SCHEDULE heads its count column "QTY.", so every one of
+    // its 16 rows refused its printed count and reported 1 instead (16
+    // silencers where the sheet prints 23).
+    if (!/^(QTY|QUANTITY|COUNT|NO|#)\.?$/i.test(String(header || "").trim())) continue;
     const text = cell && typeof cell === "object" ? cell.text : cell;
     const raw = String(text || "").trim();
     if (!raw) continue; // blank cell under a QTY header — no printed value to refuse on

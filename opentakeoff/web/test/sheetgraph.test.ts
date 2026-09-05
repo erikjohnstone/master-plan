@@ -4073,3 +4073,58 @@ test("room-finish: a bare letter-only room key is kept when the row is genuinely
   assert.equal(rf.rows.find((r) => r.key === "A")!.cells.NAME.text, "STORAGE SPACE");
   assert.equal(rf.rows.find((r) => r.key === "I")!.cells.FLOOR.text, "—", "the NOT USED room stays a real, disclosed dashed row");
 });
+
+// ── B-7 (034_NC_VA_Project_637_22_700_EHRM_Infrastructure p42) ─────────────
+// The catalogue recorded B-7 as NOT root-caused, with a "sheet-margin grid
+// labels stretch the x-band" hypothesis. Tracing the real extractor on the
+// real page found TWO stacked causes, and the recorded hypothesis was only
+// the second: the page produced ZERO tables, and the margin tokens were
+// never what blocked it — removing them changed nothing, the block still
+// refused earlier, at clusterGenericColumnsOnce's own depth cap.
+//
+// Real captured spans (no PDF bytes), same idiom as m601-spans.json, so this
+// runs without the gitignored bulk corpus.
+const B7_P42 = JSON.parse(
+  readFileSync(new URL("./fixtures/b7-034nc-p42.spans.json", import.meta.url), "utf8"),
+) as { key: string; sheet_number: string; spans: GraphSpan[] };
+
+test("B-7: 034_NC p42 extracts its two real schedules (was ZERO tables)", () => {
+  // PRIMARY cause: the ROOM FINISH SCHEDULE's four-tier header repeats its
+  // leaf labels — MATL at six distinct x, FIN at five. Their measured column
+  // gutter (min 47px = 1.84 x h) sits UNDER clusterGenericColumnsOnce's own
+  // tol (medH 25.6 * GENERIC_COLUMN_GAP_FACTOR 5 = 128), so plain
+  // single-linkage chained 7 tokens — four of them on ONE tier — into a
+  // single "column", tripped MAX_GENERIC_COLUMN_DEPTH, returned null, and
+  // the whole page refused. A column is a VERTICAL STACK: two tokens on one
+  // tier are two columns, unless separated by only a word space.
+  const g = buildSheetGraph([{ key: B7_P42.key, sheet_number: B7_P42.sheet_number, spans: B7_P42.spans }]);
+  const titles = g.tables.map((t) => t.title?.text || "");
+  const door = g.tables.find((t) => /DOOR SCHEDULE/.test(t.title?.text || ""));
+  const rfs = g.tables.find((t) => /ROOM FINISH SCHEDULE/.test(t.title?.text || ""));
+  assert.ok(door, `DOOR SCHEDULE must extract: got [${titles.join(" | ")}]`);
+  assert.ok(rfs, `ROOM FINISH SCHEDULE must extract: got [${titles.join(" | ")}]`);
+  assert.ok(door!.rows.length >= 15, `DOOR SCHEDULE's real rows: got ${door!.rows.length}`);
+  assert.ok(rfs!.rows.length >= 15, `ROOM FINISH SCHEDULE's real rows: got ${rfs!.rows.length}`);
+  assert.ok(door!.rows.some((r) => r.key === "BC131A"), "a real door mark must key its own row");
+});
+
+test("B-7: sheet-margin grid locators never enter a header or stretch the band", () => {
+  // SECONDARY cause, real but masked behind the refusal above: "A".."F" at
+  // x=188 and x=5968 down BOTH page edges at a 608px pitch (page x-extent
+  // 188..5986). Each pair is 2 single uppercase tokens, so it clears
+  // isGenericHeaderToken and isGenericHeaderRow's 2-cell floor outright. The
+  // "D" pair at y=2265 lands inside the RFS header band (2184..2334);
+  // absorbed, it contributed anchors at x=188/5968 so bandLimits reported
+  // the FULL PAGE WIDTH. Measured before the fix: headers came back carrying
+  // "D" and "D (2)", region x 188..5986, and 15 real rows collapsed into 3
+  // that swept in the sheet's own title block.
+  const g = buildSheetGraph([{ key: B7_P42.key, sheet_number: B7_P42.sheet_number, spans: B7_P42.spans }]);
+  const rfs = g.tables.find((t) => /ROOM FINISH SCHEDULE/.test(t.title?.text || ""))!;
+  assert.ok(rfs, "the table must extract");
+  assert.ok(!rfs.headers.some((h) => /^[A-F]( \(\d+\))?$/.test(h.trim())),
+    `a bare grid letter must never become a column: ${rfs.headers.join(" | ")}`);
+  assert.ok(rfs.region[0] > 1000, `band must not reach the left page edge: x0=${rfs.region[0]}`);
+  assert.ok(rfs.region[2] < 5900, `band must not reach the right page edge: x1=${rfs.region[2]}`);
+  assert.ok(!rfs.rows.some((r) => /Revisions:|ARCHITECT\/ENGINEER/.test(r.key)),
+    "the sheet title block must never be swept in as a data row");
+});

@@ -6099,6 +6099,62 @@ export function isGenericHeaderToken(raw: string): boolean {
  * row (not per token) so a row that mixes a clean label with a digit-
  * bearing value (the exact shape of this table's own real data rows) is
  * never mistaken for more header. */
+/** Sheet-margin DRAWING-GRID references — the A-F / 1-8 column-and-row
+ * locators printed down both edges of a large-format sheet, a near-universal
+ * drafting convention. Structurally they are indistinguishable from a real
+ * 2-column header ROW at the token level (a single uppercase letter clears
+ * isGenericHeaderToken outright, and a left+right pair clears
+ * isGenericHeaderRow's own 2-cell floor), so they must be recognised from
+ * the PAGE, not from the row: what a real header is never simultaneously is
+ * (a) pinned to BOTH sheet edges, (b) mirrored — the same label at each
+ * edge, at the same height, and (c) PERIODIC down the page.
+ *
+ * Real, measured (034_NC_VA_Project_637_22_700_EHRM_Infrastructure p42, the
+ * B-7 page): "A".."F" at x=188 and x=5968 (page x-extent 188..5986), at
+ * y = 440, 1048, 1656, 2265, 2873, 3481 — a pitch of 608/608/609/608/608.
+ * The "D" pair at y=2265 lands inside the ROOM FINISH SCHEDULE's own header
+ * band (2184..2334); absorbed into the header block it contributes anchors
+ * at x=188 and x=5968, so bandLimits reports x 188..5986 — the FULL PAGE
+ * WIDTH — instead of the table's real x≈3050..5765, and the table's own
+ * column structure is swamped (measured: headers came back carrying "D" and
+ * "D (2)", and 15 real rows collapsed into 3 garbage ones that swept in the
+ * title block).
+ *
+ * All three tests are required together, deliberately: any one alone would
+ * risk a real short header cell (a genuine "NO"/"HT" column near a page
+ * edge). Three or more mirrored pairs at a regular pitch is a sequence, not
+ * a coincidence. */
+function sheetMarginGridTokens(spans: GraphSpan[]): Set<GraphSpan> {
+  const out = new Set<GraphSpan>();
+  if (spans.length < 8) return out;
+  let pageX0 = Infinity, pageX1 = -Infinity;
+  for (const s of spans) { pageX0 = Math.min(pageX0, s.x); pageX1 = Math.max(pageX1, s.x + (s.w || 0)); }
+  const width = pageX1 - pageX0;
+  if (!(width > 0)) return out;
+  const margin = width * 0.05;
+  const isLocator = (s: GraphSpan) => {
+    const t = (s.str || "").trim();
+    return t.length >= 1 && t.length <= 2 && /^[A-Z0-9]+$/.test(t);
+  };
+  const left = spans.filter((s) => isLocator(s) && s.x <= pageX0 + margin);
+  const right = spans.filter((s) => isLocator(s) && s.x + (s.w || 0) >= pageX1 - margin);
+  if (!left.length || !right.length) return out;
+  const pairs: { y: number; l: GraphSpan; r: GraphSpan }[] = [];
+  for (const l of left) {
+    const label = (l.str || "").trim();
+    const m = right.find((r) => (r.str || "").trim() === label && Math.abs(r.y - l.y) <= Math.max(8, l.h || 8));
+    if (m) pairs.push({ y: l.y, l, r: m });
+  }
+  if (pairs.length < 3) return out;
+  pairs.sort((a, b) => a.y - b.y);
+  const gaps = pairs.slice(1).map((p, i) => p.y - pairs[i].y);
+  const med = [...gaps].sort((a, b) => a - b)[gaps.length >> 1];
+  if (!(med > 0)) return out;
+  if (!gaps.every((g) => Math.abs(g - med) <= med * 0.25)) return out;
+  for (const p of pairs) { out.add(p.l); out.add(p.r); }
+  return out;
+}
+
 function isGenericHeaderRow(row: GraphSpan[]): boolean {
   const toks = row.filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null);
   if (toks.length < 2) return false;
@@ -6206,7 +6262,52 @@ function clusterGenericColumnsOnce(tokens: GraphSpan[]): Anchor[] | null {
   const clusters: GraphSpan[][] = [];
   for (const t of sorted) {
     const last = clusters[clusters.length - 1];
-    if (last && centerX(t) - centerX(last[last.length - 1]) <= tol) last.push(t);
+    // A column is a VERTICAL STACK, never a horizontal run: a wrapped column
+    // header puts ONE fragment per tier at nearly the same x ("INSULATION"
+    // above "TYPE"), so two tokens sharing a physical tier are BY DEFINITION
+    // two different columns, whatever their x-gap. Testing that structural
+    // property — rather than trusting x-proximity alone — is what keeps
+    // single-linkage from chaining a dense header into one mega-cluster.
+    //
+    // Real, measured (034_NC_VA_Project_637_22_700_EHRM_Infrastructure p42,
+    // the B-7 page): its ROOM FINISH SCHEDULE carries a four-tier header
+    // whose leaf labels repeat under every parent — MATL at six distinct x,
+    // FIN at five. Their inter-column pitch (29-145px) sits UNDER this
+    // block's own tol (medH 25.6 * 5 = 128), so plain single-linkage chained
+    // 7 tokens into one "column" — [MATL@4408/y2318, EAST@4457/y2283,
+    // FIN@4564/y2318, WALLS@4593/y2249, MATL@4705/y2318, SOUTH@4746/y2283,
+    // FIN@4872/y2318], four of them on ONE tier — tripping
+    // MAX_GENERIC_COLUMN_DEPTH and returning null, so the whole real table
+    // was refused: zero tables extracted from that page. With the tier test
+    // the same block yields 17 clusters, deepest 3, and the table extracts.
+    //
+    // This also corrects the catalogue's own B-7 hypothesis, which blamed
+    // sheet-margin grid labels ("D"@188/"D"@5968) for stretching the x-band.
+    // Traced on the real page: those tokens ARE absorbed into the header
+    // block, but removing them changes nothing — the block still refuses
+    // here, before bandLimits is ever reached. Margin absorption is real and
+    // is not what drops the table.
+    //
+    // …with the one real exception, which is what makes this safe: a column
+    // label can be several WORDS on one tier ("LOCATION & SERVES", real on
+    // this same 028_TX silencer schedule, whose "&" draws as its own span).
+    // Words of one label and two different columns are cleanly separable by
+    // the size of the gap, measured on both real shapes:
+    //
+    //   word gap inside one label   0.26 x h   (5px at h=19, the "&" case)
+    //   real column gutter, MINIMUM 1.84 x h   (47px at h=25.6, 034_NC p42;
+    //                                           typical 2-24 x h)
+    //
+    // A 1.0 x h threshold sits between them with ~4x headroom on the word
+    // side and never reaches the smallest real gutter measured.
+    //
+    // h * 0.6 is this file's own same-tier idiom (see clusterGenericColumns'
+    // isSpanning, which uses the identical tolerance against the block's
+    // top tier).
+    const prev = last?.[last.length - 1];
+    const sharesTier = last != null && last.some((u) => Math.abs(u.y - t.y) <= h * 0.6);
+    const wordGap = prev != null && t.x - (prev.x + (prev.w || 0)) <= h;
+    if (last && (!sharesTier || wordGap) && centerX(t) - centerX(last[last.length - 1]) <= tol) last.push(t);
     else clusters.push([t]);
   }
   if (clusters.some((c) => c.length > MAX_GENERIC_COLUMN_DEPTH)) return null;
@@ -6679,7 +6780,12 @@ function bandGenericDataRows(
  * `kind`/`vocab`/`required` parameters, since there is nothing to gate a
  * header on besides the structural signals above. */
 function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?: SheetSpans): { table: ScheduleTable | null; nextIdx: number } | null {
-  const horiz = sheet.spans.filter((s) => !isVertical(s));
+  // Drop sheet-margin drawing-grid locators before ANY row is clustered:
+  // they are page furniture, never table content, and left in they read as
+  // a header row at every pitch interval down the page (see
+  // sheetMarginGridTokens for the measured 034_NC p42 case).
+  const gridLocators = sheetMarginGridTokens(sheet.spans);
+  const horiz = sheet.spans.filter((s) => !isVertical(s) && !gridLocators.has(s));
   const rows = clusterRows(horiz);
   // Lazy — only built the one time a candidate's own upward title-hunt
   // comes up empty and a downward big-font search is actually attempted.
@@ -6816,10 +6922,33 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     const hdrHeights = block.tokens.map((t) => t.h || 8).sort((a, b) => a - b);
     const hdrH = hdrHeights[hdrHeights.length >> 1] || 8;
     const BIG_FONT_RATIO = 1.6;
+    const titleBandW = Math.max(1, x1 - x0);
     const isTitleShaped = (t: GraphSpan): boolean => {
       const s = norm(t.str);
       if (!s || /\d/.test(s) || !/^[A-Z][A-Z .,'’&()/-]*$/.test(s)) return false;
-      return s.split(/\s+/).filter(Boolean).length >= 2;
+      if (s.split(/\s+/).filter(Boolean).length < 2) return false;
+      // B-4: this shape test admits "." in its own character class, so a
+      // SENTENCE passes it as readily as a caption — real, found live by the
+      // census's PROSE_AS_TITLE detector, which recorded "CONSTRUCTION
+      // DOCUMENTS AND THE SITE CONDITIONS." and "AND A …" as schedule titles
+      // in page_accounting. Two independent structural signals separate the
+      // two shapes, neither of them domain vocabulary:
+      //
+      // 1. A real schedule caption never OPENS with a conjunction or article.
+      //    "AND A …" is the middle of a sentence that wrapped onto its own
+      //    line, not a title.
+      if (/^(AND|OR|THE|OF|WITH|FOR|TO|IN|A)\b/.test(s)) return false;
+      // 2. A prose line FILLS its column band (measured 89-113% of it) while
+      //    a real caption does not (29% measured). Required TOGETHER with a
+      //    sentence-terminating period, deliberately: a genuine big-font
+      //    caption legitimately runs WIDER than the table it captions (see
+      //    the interval-overlap comment just below, measured on the itd-d1-lab
+      //    lab-ventilation caption), so band-fill alone would reject real
+      //    titles; and a short caption that merely ends in a period is not
+      //    prose. Only a line that is BOTH sentence-terminated AND band-
+      //    filling is refused.
+      if (/\.$/.test(s) && (t.w || 0) >= titleBandW * 0.8) return false;
+      return true;
     };
     // A genuine big-font caption routinely reads WIDER than the table it
     // captions (real, measured: "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM

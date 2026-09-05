@@ -111,16 +111,41 @@ had zero coverage before this pass.
 
 | id | bug | scale | where |
 |---|---|---|---|
-| **B-3** | Row key falls back to a count column when a table has no MARK | 23 real silencers → **2** | `corpusTakeoff.mjs` |
-| **B-4** | Prose fragments recorded as schedule titles | 3+ documents | title hunt |
 | **B-6** | A page drawing the same schedule at two scales (0.83×) fuses into unreadable rows | 013_MO p23 | `clusterRows` |
-| **B-7** | Sheet-margin grid labels (`A`–`F` at both page edges) qualify as header rows and stretch the column band page-wide | 034_NC p42; **near-universal drafting convention** | `isGenericHeaderRow` |
 | **B-8** | Side-by-side tables with no empty gutter cannot be split | 046_MI p22 + 044_NY p24 (19 of 27 rows lost) | `columnBandCandidates` |
 | **B-9** | Two consecutive rows bracketing an in-table category sub-header dropped | `demo/sample-finish-plan.pdf` MATERIAL SCHEDULE, 2 real rows missing | row-clustering, not yet root-caused |
+| **B-10** | A full-width section banner bands into a data column, polluting that row's cell | 028_TX p1: one QTY cell reads `"SECOND FLOOR 2"` (22 read of a printed 23, refused and disclosed) | data banding |
 
 Full evidence, root causes and fix shapes: `TAKEOFF_BUG_CATALOGUE.md`.
 
-**Fixed this pass** (were B-1 and B-2 here before):
+**Fixed 2026-09-05 — the shared structural discriminator.** The bug
+catalogue's own "How these connect" synthesis named one defect behind several
+entries: *the pipeline infers what something IS from where it SITS or what it
+LOOKS like, without testing the claim.* Three entries were closed by naming
+the distinguishing property and measuring it, rather than by three separate
+patches:
+
+- **B-3** — an identifier column is high-cardinality **and lettered**; a count
+  column is low-cardinality small integers (measured on the cited page: count
+  column 0.19, real identifier 0.75, an ordinary MARK column 1.0). A table
+  with no identifier emits one line per physical row instead of deduping.
+  `028_TX` silencer schedule: **2 items → 16 lines**, 22 units read + 1
+  disclosed refusal (the 23rd is B-10, refused rather than guessed).
+- **B-4** — a real caption never opens with a conjunction/article, and prose
+  both fills its band *and* ends in a period (a wide big-font caption does
+  only the first; a short title ending in a period does only the second).
+- **B-7** — **the catalogue's recorded hypothesis was disconfirmed by the
+  trace it asked for.** Margin grid locators are absorbed, but removing them
+  changes nothing: the page died earlier, at the column-clustering depth cap,
+  because single-linkage x-proximity chained same-tier tokens into one
+  "column". A column is a vertical stack. Both causes were real and stacked;
+  `034_NC` p42: **0 tables → 3** (DOOR SCHEDULE 16 rows, ROOM FINISH SCHEDULE
+  17 rows, bands no longer page-wide).
+
+Each carries a regression test over real captured spans, verified to fail on
+the pre-fix tree.
+
+**Fixed earlier this pass** (were B-1 and B-2 here before):
 - **B-1** (a printed QTY column was never read) — fixed additively: see §4,
   `scheduled_qty` now reads it by header identity. The legacy `quantity`
   field stays hardcoded `1` on purpose, so no scored key row's score moves.
@@ -129,13 +154,13 @@ Full evidence, root causes and fix shapes: `TAKEOFF_BUG_CATALOGUE.md`.
 
 ## 6. What to do next, in order
 
-1. **B-3** — one quantity model's other half: choose the row identifier by
-   cardinality rather than position when no MARK/TAG column exists, so a
-   count column never gets deduped as if it were the mark.
-2. **B-7** — margin grid labels. Corpus-scale, and cheap to recognise.
-3. **B-6, B-8, B-9** — scaled-duplicate detection; splitting gutterless
+1. **B-6, B-8** — scaled-duplicate detection; splitting gutterless
    side-by-side tables by internal column structure rather than an empty
-   corridor; the category-sub-header row-drop (not yet root-caused).
+   corridor.
+2. **B-9, B-10** — the category-sub-header row-drop (not yet root-caused) and
+   the section banner that bands into a data column. Both are the same
+   "test the property, don't trust the position" shape as the three closed
+   on 2026-09-05.
 4. **Ground truth at scale** — recall-tier keys for the other 111 bulk sets
    (the tier now exists, §2; one authored so far), which is ~10× cheaper than
    cell-level and the only tier that catches a whole-table miss.

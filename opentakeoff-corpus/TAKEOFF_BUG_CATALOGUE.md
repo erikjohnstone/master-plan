@@ -32,13 +32,14 @@ every eval read 100%. Every bug below was invisible to that gate.
 |----|-----|----------------|-------|
 | B-1 | Printed QTY column never read; every quantity hardcoded `1` | 496 items on one document; every kind, every document | absence |
 | B-2 | `sequences` takeoff has no compiler entry — throws | every document | absence |
-| B-3 | Row key falls back to a count column when a table has no MARK | 23 real silencers reported as 2 | false structural inference |
-| B-4 | Prose fragments recorded as schedule titles | 3+ documents | false structural inference |
+| B-3 | ~~Row key falls back to a count column when a table has no MARK~~ **FIXED 2026-09-05** | 23 real silencers reported as 2 -> 16 lines, 22 read + 1 disclosed refusal | false structural inference |
+| B-4 | ~~Prose fragments recorded as schedule titles~~ **FIXED 2026-09-05** | 3+ documents | false structural inference |
 | B-5 | A new header-token rejection killed a whole real table | −12 real cells on federal-mech | self-inflicted; whole-row guard |
 | B-6 | A page drawing the same table twice at TWO SCALES (~0.83x) | 013_MO p23, 2 tables lost | fused scaled duplicate |
-| B-7 | Sheet-margin GRID REFERENCE labels (A-F at both page edges) qualify as header rows and stretch the x-band page-wide | 034_NC p42, 2 tables lost; **corpus-scale hazard** | strongly supported, trace pending |
+| B-7 | ~~Sheet-margin GRID REFERENCE labels...~~ **FIXED 2026-09-05 — and the recorded hypothesis was only HALF of it** | 034_NC p42: 0 tables -> 3 (DOOR SCHEDULE 16 rows, ROOM FINISH SCHEDULE 17 rows) | TWO stacked causes; see below |
 | B-8 | Side-by-side tables with NO empty gutter — seam-based banding cannot split them | 046_MI p22 + 044_NY p24 (rule 35a): 1 table lost, 19 of 27 rows lost | **same bug as GOAL.md rule 35(a)** |
 | B-9 | Two consecutive rows bracketing a category sub-header (a bare-single-character CODE row, then the row right after the header) silently dropped from an otherwise-fine multi-section table | `demo/sample-finish-plan.pdf` MATERIAL SCHEDULE: "C / CONCRETE SEALER" and "RB-1 / RESILIENT BASE" both missing; every OTHER section's own first row (CPT-1, P-1, PLAM-1, ACT-1, PR-1) extracts fine | row-clustering gap around an in-table category divider |
+| B-10 | A full-width section BANNER inside a table bands into a data column, polluting that row's cell | 028_TX p1 silencer schedule: one QTY cell reads "SECOND FLOOR 2", so its printed count refuses (22 read of a printed 23) | banner row not excluded from data banding |
 
 ---
 
@@ -112,10 +113,35 @@ silencers reported as 2.
 (`DS-AHU-T1-RA`, `DS-AHU-T1-SA`) because that table *has* a MARK column. B-3 is specific to
 tables with no identifier column — not universal.
 
-**Fix shape (not applied):** choose the identifier column **structurally** — an identifier
+**Fix shape:** choose the identifier column **structurally** — an identifier
 is high-cardinality and tag-shaped; a count column is low-cardinality small integers. When a
 table has no identifier column at all, do not dedupe by tag: emit one line per physical row
 and carry its quantity. The silencer case then yields 16 lines totalling 23 units.
+
+**FIXED 2026-09-05** (`corpusTakeoff.mjs identifierColumnByCardinality`,
+`schedulePlanReconcile.mjs` QTY header). Measured on the real page, and both
+halves of the fix-shape were needed — plus a third the shape did not name:
+
+- **Cardinality alone picks the wrong column.** The first attempt took the
+  highest-cardinality column and keyed a silencer `"60"`: AIR FLOW (CFM) is
+  16-of-16 distinct and outscores the real identifier. The "AND TAG-SHAPED"
+  half is load-bearing — requiring the column's values to carry LETTERS, and
+  walking the table's own header order (an identifier leads by convention),
+  selects LOCATION & SERVES.
+- **Near-uniqueness is too strict.** LOCATION & SERVES is 12 distinct of 16
+  (0.75) because a location legitimately repeats when two silencers serve one
+  room. Measured separation: count column 0.19, real identifier 0.75, an
+  ordinary MARK column 1.0 — threshold set at 0.6.
+- **The printed count still would not parse.** `scheduledQtyStatusFromRow`
+  matched `QTY` but not `QTY.`; the pattern already admitted `NO.`, so the
+  trailing period was simply missing. Without this the 16 lines each read 1.
+
+**Result: 16 lines (was 2). 22 units read + 1 disclosed refusal.** The 23rd
+unit is NOT reachable here and is not papered over: that row's QTY cell reads
+`"SECOND FLOOR 2"` because a section banner bands into the column (now
+catalogued as B-10), so the parse refuses with
+`REFUSED_UNPARSEABLE_QTY` rather than regex-scraping a trailing digit.
+Regression: `web/test/countKeyedSchedule.test.ts` (real captured spans).
 
 ---
 
@@ -132,9 +158,22 @@ a fake 13-row "table" out of two side-by-side SEQUENCE OF OPERATION prose column
 "headers" were `"WORKSTATION."` and `"SHALL SEQUENCE THE FOLLOWING:"`. Same disease, three
 appearances.
 
-**Fix shape (not applied):** the measured discriminator from the rule-18 work generalizes —
+**Fix shape:** the measured discriminator from the rule-18 work generalizes —
 a prose line FILLS its column band (89%-113% measured) while a real title does not (29%
 measured). A sentence-terminating period is a second, independent signal.
+
+**FIXED 2026-09-05** (`sheetgraph.ts isTitleShaped`). That shape test admits
+`.` in its own character class, so a SENTENCE passed it as readily as a
+caption. Two independent structural signals now refuse one, neither of them
+domain vocabulary:
+
+- A real caption never OPENS with a conjunction or article — that is exactly
+  what `"AND A …"` is, the middle of a wrapped sentence.
+- Band-fill AND a sentence-terminating period, required TOGETHER. Band-fill
+  alone would reject real titles: a genuine big-font caption legitimately runs
+  WIDER than the table it captions (measured on itd-d1-lab's lab-ventilation
+  caption, x 578-2154 against a ~360-1160 column band), and a short caption
+  that merely ends in a period is not prose.
 
 ---
 
@@ -344,6 +383,74 @@ hypotheses in this catalogue (B-6's "constant offset", B-8's "rule 18 already
 covers it") were equally plausible, equally grounded in real coordinates, and
 equally wrong — so this stays a hypothesis until the trace agrees.
 
+---
+
+**TRACED AND RESOLVED 2026-09-05 — the trace did NOT agree, and this entry is
+the third hypothesis in this file to die that way.** The extractor was run on
+the real page with its own (temporarily exported) functions over the real
+spans, exactly as this section demanded.
+
+**What the hypothesis got right.** The margin locators are real and they ARE
+absorbed. "A".."F" sit at x=188 and x=5968 (page x-extent 188..5986) at
+y = 440, 1048, 1656, 2265, 2873, 3481 — a pitch of 608/608/609/608/608. Every
+one clears `isGenericHeaderToken`; the pairs at y=440 and y=2265 clear
+`isGenericHeaderRow`; and the y=2265 pair falls inside the ROOM FINISH
+SCHEDULE's own header band and IS pulled into the header block (measured:
+`MARGIN TOKENS ABSORBED: 2 — "D"@188 "D"@5968`).
+
+**What it got wrong — and this is the whole point.** Absorption is not what
+dropped the table. Removing the margin tokens entirely changes nothing:
+
+```
+WITH margin tokens    -> clusterGenericColumnsOnce = null (REFUSED)
+WITHOUT margin tokens -> clusterGenericColumnsOnce = null (REFUSED)
+```
+
+The block dies at the column-clustering depth cap and never reaches
+`bandLimits` at all, so the predicted page-wide band could not have been the
+cause of a page that produced ZERO tables.
+
+**The actual primary cause.** `clusterGenericColumnsOnce` clusters column
+anchors by single-linkage x-proximity with `tol = max(60, medH * 5)` = 128px
+here. This header's leaf labels repeat under every parent (MATL at six
+distinct x, FIN at five) and their real column gutters — measured minimum
+**47px = 1.84 x h** — sit UNDER that tolerance, so single-linkage chained
+them transitively into one "column":
+
+```
+[MATL@4408/y2318, EAST@4457/y2283, FIN@4564/y2318, WALLS@4593/y2249,
+ MATL@4705/y2318, SOUTH@4746/y2283, FIN@4872/y2318]     <- 7 tokens, 4 on ONE tier
+```
+
+7 > `MAX_GENERIC_COLUMN_DEPTH` (4), so the function returned null and the
+whole page refused. **A column is a VERTICAL STACK: two tokens sharing a
+physical tier are two columns, whatever their x-gap.** The one real exception
+is a multi-word label on one tier ("LOCATION & SERVES", whose "&" draws as its
+own span) — separable by gap size, measured: word gap **0.26 x h**, minimum
+real gutter **1.84 x h**, threshold set at 1.0 x h.
+
+**Both causes are real; the recorded one was simply second in line**, masked
+behind the refusal. With the tier guard alone the page yields 2 tables but the
+ROOM FINISH SCHEDULE comes back with `D` / `D (2)` among its headers, region
+x 188..5986 (the full page width, exactly as predicted), and 15 real rows
+collapsed into 3 that swept in the sheet's own title block. Both fixes
+together: **0 tables -> 3** (DOOR SCHEDULE 16 rows, ROOM FINISH SCHEDULE 17
+rows, regions x 3051..5765 and x 3051..5824).
+
+Fixes: `sheetgraph.ts clusterGenericColumnsOnce` (tier guard + word-gap
+exception) and `sheetgraph.ts sheetMarginGridTokens` (mirrored + periodic +
+short-token locators dropped before any row is clustered). Regressions:
+two tests in `web/test/sheetgraph.test.ts` over real captured spans
+(`test/fixtures/b7-034nc-p42.spans.json`), both verified to fail on the
+pre-fix tree.
+
+**Method note worth keeping, again.** Three hypotheses in this file have now
+been plausible, grounded in real measured coordinates, and wrong. The rule
+that caught all three: state the hypothesis as a claim that can be falsified
+by measurement, then measure it — here, "remove the thing you blame and see
+whether the symptom goes away" took one trace run and overturned a conclusion
+that had already been written down as "strongly supported".
+
 ### B-8 UPDATE — measured: rule 18's bands fix does NOT reach it, and this is rule 35(a)
 
 Audited before building, per standing rule 3. An x-density probe of
@@ -448,6 +555,31 @@ around it silently; `conformance.test.ts` names this bug explicitly at the
 one assertion it affects rather than weakening the check.
 
 
+### B-10 — a full-width section BANNER bands into a data column
+
+**Where:** `028_TX_Renovation_of_Building_615` p1, NOISE CONTROL DUCT SILENCER
+SCHEDULE. Found while closing B-3, not by the census.
+
+**Measured:** the table's QTY. cells read
+`["2","1","1","1","1","1","2","1","1","1","1","2","2","2","SECOND FLOOR 2","2"]`.
+The 15th is polluted: the sheet prints a full-width section banner
+("SECOND FLOOR") between two groups of rows, and that banner's text bands into
+the narrow QTY column of the row beneath it rather than being recognised as a
+divider spanning the whole table.
+
+**Consequence:** that row's printed count will not parse, so the takeoff
+refuses it (`REFUSED_UNPARSEABLE_QTY`, reason quoting the polluted cell) and
+the schedule reports 22 of a printed 23 — correctly disclosed, but one real
+unit short. Extracting the trailing digit by regex would be exactly the
+"regex as the classification engine" this project forbids, so it is left
+refused until the banner is recognised structurally.
+
+**Fix shape (not applied):** a row whose single token spans most of the
+table's own x-band, sits between data rows, and populates no other column is a
+SECTION BANNER — exclude it from data banding (it is the same "test the
+property that distinguishes it" move as B-4's band-fill title test, applied to
+a row rather than a caption).
+
 ## How these connect
 
 Two distinct classes, and the split matters for how they get fixed.
@@ -462,6 +594,17 @@ path segment assumed to run left-to-right (half of them do not), a bare `"2"` as
 an outline marker (it was a quantity), column 0 assumed to be an identifier, and a lone
 all-caps span assumed to be a title. B-3 and B-4 are two more instances of exactly that
 pattern.
+
+**CONFIRMED 2026-09-05, and it reaches further than the two entries this
+paragraph originally named.** B-7 turned out to be a fourth instance once
+traced: `clusterGenericColumnsOnce` infers "these tokens are one column" from
+x-proximity alone, without testing the property that actually distinguishes a
+column — that it is a VERTICAL STACK rather than a horizontal run. B-10 is a
+fifth: a section banner is treated as a data row because of where it sits.
+Every fix applied this pass is the same move — name the distinguishing
+property and measure it: cardinality-plus-letters for an identifier column
+(B-3), band-fill-plus-terminal-period for a title (B-4), same-tier separation
+for a column (B-7), mirrored-and-periodic for page furniture (B-7).
 
 The through-line: **the pipeline infers what something IS from where it SITS or what it
 LOOKS like, without testing the claim.** GOAL.md's standing rule 1 already names this —
