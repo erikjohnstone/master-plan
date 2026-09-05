@@ -1,0 +1,28 @@
+# 013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page with PyMuPDF and reading
+# every schedule table by eye, then taking the exact title strings from the
+# page's own text layer so nothing here is a transcription. NOTHING comes from
+# the pipeline's own output.
+#
+# Scope: sheet 1 (G-000 COVER) only. Not a full-document key.
+#
+# The note column is a FLAG, not prose: the only value it carries is
+# "unruled", meaning the table is drawn with no ruling at all and no vector
+# method can reach it. Prose belongs in these header comments — a scorer that
+# tests for a substring must not trip over an explanation.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, untitled tables (this tier matches on
+# title), and the sheet's own name printed in the title block — "Drawing Title:
+# MECHANICAL SCHEDULES" is what the sheet is called, not a table on it.
+#
+# A cover sheet. Its only table is the DRAWING INDEX at lower right,
+# and that is set as two columns of plain text with no ruling at all.
+# Every SCHEDULE-shaped string on this page (MECHANICAL SCHEDULES,
+# ELECTRICAL DIAGRAMS & SCHEDULES, MEP SYMBOLS LEGEND, ...) is a ROW
+# of that index naming another sheet.
+sheet,table_title,note
+013_MO_T2523_01_Replace_Boilers_Phase_2_Building_29.pdf,DRAWING INDEX,unruled — no grid drawn; out of reach of any vector method

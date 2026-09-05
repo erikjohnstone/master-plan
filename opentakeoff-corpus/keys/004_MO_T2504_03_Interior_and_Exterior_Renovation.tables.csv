@@ -1,0 +1,32 @@
+# 004_MO_T2504_03_Interior_and_Exterior_Renovation.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page with PyMuPDF and reading
+# every schedule table by eye, then taking the exact title strings from the
+# page's own text layer so nothing here is a transcription. NOTHING comes from
+# the pipeline's own output.
+#
+# Scope: sheet 31 (P-601 PLUMBING SCHEDULES) only. Not a full-document key.
+#
+# The note column is a FLAG, not prose: the only value it carries is
+# "unruled", meaning the table is drawn with no ruling at all and no vector
+# method can reach it. Prose belongs in these header comments — a scorer that
+# tests for a substring must not trip over an explanation.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, untitled tables (this tier matches on
+# title), and the sheet's own name printed in the title block — "Drawing Title:
+# MECHANICAL SCHEDULES" is what the sheet is called, not a table on it.
+#
+# PLUMBING SCHEDULES is the SHEET TITLE field in the right-hand title block.
+sheet,table_title,note
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,PLUMBING FIXTURE SCHEDULE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,WATER SOFTENER SCHEDULE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,SUMP PUMP SCHEDULE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,HOT WATER RETURN PUMP SCHEDULE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,GAS WATER HEATER SCHEDULE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,THERMOSTATIC MIXING VALVE SCHEDULE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,GREASE INTERCEPTOR SCHEDULE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,EXPANSION TANK SCHEDULE,
+004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf#31,STORAGE TANK SCHEDULE,

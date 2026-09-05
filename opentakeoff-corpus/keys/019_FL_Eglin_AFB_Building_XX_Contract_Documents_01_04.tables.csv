@@ -1,0 +1,30 @@
+# 019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page with PyMuPDF and reading
+# every schedule table by eye, then taking the exact title strings from the
+# page's own text layer so nothing here is a transcription. NOTHING comes from
+# the pipeline's own output.
+#
+# Scope: sheet 15 (M7.2 MECHANICAL SCHEDULES) only. Not a full-document key.
+#
+# The note column is a FLAG, not prose: the only value it carries is
+# "unruled", meaning the table is drawn with no ruling at all and no vector
+# method can reach it. Prose belongs in these header comments — a scorer that
+# tests for a substring must not trip over an explanation.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, untitled tables (this tier matches on
+# title), and the sheet's own name printed in the title block — "Drawing Title:
+# MECHANICAL SCHEDULES" is what the sheet is called, not a table on it.
+sheet,table_title,note
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,"GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,HOT WATER FAN COIL UNIT SCHEDULE,
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,AIR-COOLED CONDENSING UNIT SCHEDULE,
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,EXPANSION TANK SCHEDULE,
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,DX FAN COIL UNIT SCHEDULE,
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,UNIT HEATER SCHEDULE (HOT WATER),
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,FIN TUBE RADIATION SCHEDULE,
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE,

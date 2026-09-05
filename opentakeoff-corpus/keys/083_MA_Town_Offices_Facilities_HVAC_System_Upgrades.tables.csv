@@ -1,0 +1,37 @@
+# 083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page with PyMuPDF and reading
+# every schedule table by eye, then taking the exact title strings from the
+# page's own text layer so nothing here is a transcription. NOTHING comes from
+# the pipeline's own output.
+#
+# Scope: sheet 4 (H0.2 HVAC SCHEDULES) only. Not a full-document key.
+#
+# The note column is a FLAG, not prose: the only value it carries is
+# "unruled", meaning the table is drawn with no ruling at all and no vector
+# method can reach it. Prose belongs in these header comments — a scorer that
+# tests for a substring must not trip over an explanation.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, untitled tables (this tier matches on
+# title), and the sheet's own name printed in the title block — "Drawing Title:
+# MECHANICAL SCHEDULES" is what the sheet is called, not a table on it.
+#
+# NINE tables, EIGHT distinct titles: ENERGY RECOVERY VENTILATOR
+# SCHEDULE is printed twice — a one-row ERV-1 table upper left and a
+# wide one across the foot of the sheet. This tier matches on title,
+# so it can only score the pair as one; noted here so the count is
+# not mistaken for a miscount.
+# PIPE MATERIAL TABLE says TABLE, not SCHEDULE, and is a ruled grid.
+# HVAC SCHEDULES top left is the sheet title.
+sheet,table_title,note
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA DX FAN COIL UNIT SCHEDULE,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,HVAC POWER EQUIPMENT SCHEDULE,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,COMMON AREA - AIR COOLED HEAT PUMP SCHEDULE,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,"REGISTER, GRILLE & DIFFUSER SCHEDULE",
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ENERGY RECOVERY VENTILATOR SCHEDULE,printed twice on this sheet
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,PIPE MATERIAL TABLE,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,INSULATION TYPE SCHEDULE,
+083_MA_Town_Offices_Facilities_HVAC_System_Upgrades.pdf#4,ELECTRIC HEATING COIL SCHEDULE,

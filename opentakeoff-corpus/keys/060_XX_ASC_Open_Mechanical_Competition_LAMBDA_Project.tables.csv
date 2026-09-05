@@ -16,6 +16,11 @@
 # sheets it covers is exactly what the format supports. Do not extend this file
 # from pipeline output.
 #
+# The note column is a FLAG, not prose: the only value it carries is
+# "unruled", meaning the table is drawn with no ruling at all and no vector
+# method can reach it. Prose belongs in these header comments — a scorer that
+# tests for a substring must not trip over an explanation.
+#
 # Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
 # legends and symbol/abbreviation keys, notes blocks (even ruled ones),
 # indented spec prose under a heading, and untitled tables (this tier matches

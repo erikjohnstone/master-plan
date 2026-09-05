@@ -1,0 +1,31 @@
+# 015_VA_P_095_Replace_Submarine_Pier_3_Utility.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page with PyMuPDF and reading
+# every schedule table by eye, then taking the exact title strings from the
+# page's own text layer so nothing here is a transcription. NOTHING comes from
+# the pipeline's own output.
+#
+# Scope: sheet 20 (AM603 GATEHOUSE - MECHANICAL SCHEDULES) only. Not a full-document key.
+#
+# The note column is a FLAG, not prose: the only value it carries is
+# "unruled", meaning the table is drawn with no ruling at all and no vector
+# method can reach it. Prose belongs in these header comments — a scorer that
+# tests for a substring must not trip over an explanation.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, untitled tables (this tier matches on
+# title), and the sheet's own name printed in the title block — "Drawing Title:
+# MECHANICAL SCHEDULES" is what the sheet is called, not a table on it.
+#
+# GATEHOUSE - MECHANICAL SCHEDULES is the sheet title, set rotated in
+# the NAVFAC title block down the right edge.
+sheet,table_title,note
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#20,GATEHOUSE FAN SCHEDULE,
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#20,GATEHOUSE SPLIT SYSTEM AIR CONDITIONER HEAT PUMP SCHEDULE,
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#20,GATEHOUSE HEAT PUMP SCHEDULE,
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#20,MOTORIZED DAMPER SCHEDULE,
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#20,"GATEHOUSE GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#20,GATEHOUSE GRAVITY INTAKE VENT SCHEDULE,
+015_VA_P_095_Replace_Submarine_Pier_3_Utility.pdf#20,GATEHOUSE MINI - SPLIT SYSTEM HEAT PUMP SCHEDULE,

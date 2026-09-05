@@ -1,0 +1,37 @@
+# 040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page with PyMuPDF and reading
+# every schedule table by eye, then taking the exact title strings from the
+# page's own text layer so nothing here is a transcription. NOTHING comes from
+# the pipeline's own output.
+#
+# Scope: sheet 47 (M600 MECHANICAL SCHEDULES) only. Not a full-document key.
+#
+# The note column is a FLAG, not prose: the only value it carries is
+# "unruled", meaning the table is drawn with no ruling at all and no vector
+# method can reach it. Prose belongs in these header comments — a scorer that
+# tests for a substring must not trip over an explanation.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, untitled tables (this tier matches on
+# title), and the sheet's own name printed in the title block — "Drawing Title:
+# MECHANICAL SCHEDULES" is what the sheet is called, not a table on it.
+#
+# SCHEDULE GENERAL NOTES is a lettered notes block, not a grid.
+# MECHANICAL SCHEDULES is the Drawing Title field of the VA title
+# block at the foot of the sheet — the sheet's own name.
+sheet,table_title,note
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,AIR HANDLING UNIT SCHEDULE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,GRILLES REGISTERS & DIFFUSERS SCHEDULE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,TRAP SCHEDULE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNIT HEATER SCHEDULE - HOT WATER,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,UNFIRED CLEAN STEAM GENERATOR SCHEDULE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,FAN SCHEDULE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,DUCTWORK SCHEDULE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PUMP SCHEDULE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,CONDENSATE PUMP TRAP PACKAGED SCHEDULE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,PRESSURE REDUCING VALVE SCHEDULE,
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE,

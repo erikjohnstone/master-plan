@@ -1,0 +1,32 @@
+# 074_CA_West_Valley_College_STEM_Classroom_HVAC.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page with PyMuPDF and reading
+# every schedule table by eye, then taking the exact title strings from the
+# page's own text layer so nothing here is a transcription. NOTHING comes from
+# the pipeline's own output.
+#
+# Scope: sheet 24 (M001 GENERAL NOTES, LEGEND, ABBREVIATIONS AND SHEET INDEX) only. Not a full-document key.
+#
+# The note column is a FLAG, not prose: the only value it carries is
+# "unruled", meaning the table is drawn with no ruling at all and no vector
+# method can reach it. Prose belongs in these header comments — a scorer that
+# tests for a substring must not trip over an explanation.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, untitled tables (this tier matches on
+# title), and the sheet's own name printed in the title block — "Drawing Title:
+# MECHANICAL SCHEDULES" is what the sheet is called, not a table on it.
+#
+# GENERAL LEGEND, DUCTWORK LEGEND, PIPING LEGEND, CONTROL LEGEND,
+# ABBREVIATIONS and CONTROL ABBREVIATIONS are symbol/abbreviation
+# keys — excluded by this tier's convention. They are also drawn
+# with no ruling whatsoever: a title, an underline, and two columns
+# of type held apart by whitespace.
+# SHEET INDEX is a genuine table and is likewise unruled, so it is
+# recorded here and marked. Nothing on this sheet is reachable by a
+# vector method, and both vectorgrid and pdfplumber-lines correctly
+# emit nothing.
+sheet,table_title,note
+074_CA_West_Valley_College_STEM_Classroom_HVAC.pdf#24,SHEET INDEX,unruled — no grid drawn; out of reach of any vector method

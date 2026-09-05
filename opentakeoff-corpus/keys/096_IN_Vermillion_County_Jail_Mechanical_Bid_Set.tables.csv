@@ -1,0 +1,32 @@
+# 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page with PyMuPDF and reading
+# every schedule table by eye, then taking the exact title strings from the
+# page's own text layer so nothing here is a transcription. NOTHING comes from
+# the pipeline's own output.
+#
+# Scope: sheet 19 (M600 SCHEDULES - MECHANICAL) only. Not a full-document key.
+#
+# The note column is a FLAG, not prose: the only value it carries is
+# "unruled", meaning the table is drawn with no ruling at all and no vector
+# method can reach it. Prose belongs in these header comments — a scorer that
+# tests for a substring must not trip over an explanation.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, untitled tables (this tier matches on
+# title), and the sheet's own name printed in the title block — "Drawing Title:
+# MECHANICAL SCHEDULES" is what the sheet is called, not a table on it.
+#
+# Every row rule on this sheet is drawn per cell, and the pieces
+# disagree in the second decimal — see vectorgrid._snap_grid.
+sheet,table_title,note
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AIR HANDLING UNIT SYSTEM INDEX SCHEDULE,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU RETURN/EXHAUST FAN SCHEDULE,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU CHILLED WATER COOLING COIL SCHEDULE,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU HEATING WATER COIL SCHEDULE,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU PLATE AND FRAME HEAT EXCHANGER SCHEDULE,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU AIR FILTER SCHEDULE,
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SOUND ATTENUATOR SCHEDULE,

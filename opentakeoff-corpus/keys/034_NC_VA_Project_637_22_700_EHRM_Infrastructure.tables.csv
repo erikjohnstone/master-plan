@@ -1,0 +1,32 @@
+# 034_NC_VA_Project_637_22_700_EHRM_Infrastructure.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page with PyMuPDF and reading
+# every schedule table by eye, then taking the exact title strings from the
+# page's own text layer so nothing here is a transcription. NOTHING comes from
+# the pipeline's own output.
+#
+# Scope: sheet 2 (47-GI002 SHEET INDEX) only. Not a full-document key.
+#
+# The note column is a FLAG, not prose: the only value it carries is
+# "unruled", meaning the table is drawn with no ruling at all and no vector
+# method can reach it. Prose belongs in these header comments — a scorer that
+# tests for a substring must not trip over an explanation.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, untitled tables (this tier matches on
+# title), and the sheet's own name printed in the title block — "Drawing Title:
+# MECHANICAL SCHEDULES" is what the sheet is called, not a table on it.
+#
+# ONE table, printed as three columns each repeating the title, so the
+# title occurs three times on the sheet. Its ruled row groups are
+# separated by UNRULED section labels (BLDG 47, 01 - GENERAL,
+# 07-STRUCTURAL, ...), which cut the drawn grid into a dozen blocks —
+# a human reads one table, the geometry holds many. This is the one
+# genuine vectorgrid miss left on the held-out set.
+# PLUMBING SCHEDULES, MECHANICAL SCHEDULES, PANEL SCHEDULES and
+# ELECTRICAL SCHEDULES appear on this sheet as ROWS of the index —
+# they are the names of other sheets, not tables on this one.
+sheet,table_title,note
+034_NC_VA_Project_637_22_700_EHRM_Infrastructure.pdf#2,SHEET INDEX - BLDG 47,

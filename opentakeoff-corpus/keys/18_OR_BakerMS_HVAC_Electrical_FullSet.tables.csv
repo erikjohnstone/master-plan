@@ -1,0 +1,33 @@
+# 18_OR_BakerMS_HVAC_Electrical_FullSet.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page with PyMuPDF and reading
+# every schedule table by eye, then taking the exact title strings from the
+# page's own text layer so nothing here is a transcription. NOTHING comes from
+# the pipeline's own output.
+#
+# Scope: sheet 18 (M5.1 SCHEDULES) only. Not a full-document key.
+#
+# The note column is a FLAG, not prose: the only value it carries is
+# "unruled", meaning the table is drawn with no ruling at all and no vector
+# method can reach it. Prose belongs in these header comments — a scorer that
+# tests for a substring must not trip over an explanation.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, untitled tables (this tier matches on
+# title), and the sheet's own name printed in the title block — "Drawing Title:
+# MECHANICAL SCHEDULES" is what the sheet is called, not a table on it.
+#
+# OUTDOOR HEAT PUMP UNITS and INDOOR FAN COIL UNITS are the two
+# banded halves of DUCTLESS MULTI-SPLIT SYSTEM HEAT PUMP UNIT
+# SCHEDULE, not tables in their own right.
+sheet,table_title,note
+18_OR_BakerMS_HVAC_Electrical_FullSet.pdf#18,AIR HANDLER HEAT PUMP SCHEDULE (WITH ELECTRIC HEAT),
+18_OR_BakerMS_HVAC_Electrical_FullSet.pdf#18,SUPPLY GRILLE SCHEDULE,
+18_OR_BakerMS_HVAC_Electrical_FullSet.pdf#18,RETURN & EXHAUST GRILLE SCHEDULE,
+18_OR_BakerMS_HVAC_Electrical_FullSet.pdf#18,ENERGY RECOVERY UNIT SCHEDULE (WITH HEAT PUMP),
+18_OR_BakerMS_HVAC_Electrical_FullSet.pdf#18,GAS FIRED MAKE-UP AIR UNIT SCHEDULE,
+18_OR_BakerMS_HVAC_Electrical_FullSet.pdf#18,ELECTRIC HEATER SCHEDULE,
+18_OR_BakerMS_HVAC_Electrical_FullSet.pdf#18,DUCTLESS MULTI-SPLIT SYSTEM HEAT PUMP UNIT SCHEDULE,
+18_OR_BakerMS_HVAC_Electrical_FullSet.pdf#18,EXHAUST FAN SCHEDULE,

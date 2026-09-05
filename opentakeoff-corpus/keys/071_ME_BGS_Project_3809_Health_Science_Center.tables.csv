@@ -1,0 +1,29 @@
+# 071_ME_BGS_Project_3809_Health_Science_Center.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page with PyMuPDF and reading
+# every schedule table by eye, then taking the exact title strings from the
+# page's own text layer so nothing here is a transcription. NOTHING comes from
+# the pipeline's own output.
+#
+# Scope: sheet 7 (A0.1 LEGENDS, SYMBOLS, NOTES, PARTITION TYPES) only. Not a full-document key.
+#
+# The note column is a FLAG, not prose: the only value it carries is
+# "unruled", meaning the table is drawn with no ruling at all and no vector
+# method can reach it. Prose belongs in these header comments — a scorer that
+# tests for a substring must not trip over an explanation.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, untitled tables (this tier matches on
+# title), and the sheet's own name printed in the title block — "Drawing Title:
+# MECHANICAL SCHEDULES" is what the sheet is called, not a table on it.
+#
+# NO scorable tables. SYMBOLS LEGEND, GRAPHICS LEGEND, CEILING LEGEND,
+# GENERAL PARTITION NOTES & KEYING LEGEND and TABLE OF ABBREVIATIONS
+# are legends and abbreviation keys, all unruled. The partition-type
+# schedules on the right half ARE ruled grids, but they are titled only
+# by their tag (S_A, SF_F, SF_A, S_S1) and this tier matches on title,
+# so an untitled table is unscorable here. Recorded as an empty key so
+# the sheet counts as covered rather than unexamined.
+sheet,table_title,note

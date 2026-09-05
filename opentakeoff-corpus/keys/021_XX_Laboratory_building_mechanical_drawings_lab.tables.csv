@@ -1,0 +1,42 @@
+# 021_XX_Laboratory_building_mechanical_drawings_lab.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page with PyMuPDF and reading
+# every schedule table by eye, then taking the exact title strings from the
+# page's own text layer so nothing here is a transcription. NOTHING comes from
+# the pipeline's own output.
+#
+# Scope: sheet 13 (M-601 SCHEDULES) only. Not a full-document key.
+#
+# The note column is a FLAG, not prose: the only value it carries is
+# "unruled", meaning the table is drawn with no ruling at all and no vector
+# method can reach it. Prose belongs in these header comments — a scorer that
+# tests for a substring must not trip over an explanation.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, untitled tables (this tier matches on
+# title), and the sheet's own name printed in the title block — "Drawing Title:
+# MECHANICAL SCHEDULES" is what the sheet is called, not a table on it.
+#
+# The two AIR VALVES tables carry no SCHEDULE in their title and the
+# SUPPLY AIR VALVE title runs to 98 characters; both are ruled
+# schedules and both are counted. A title-shaped regex misses them,
+# which is precisely why this tier is authored by eye.
+sheet,table_title,note
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,AIR HANDLING UNIT SCHEDULE,
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,BOILER SCHEDULE,
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,"SUPPLY AIR VALVE (SAV), HOOD EXHAUST AIR VALVE (HEV), AND GENERAL EXHAUST AIR VALVE (EAV) SCHEDULE",
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,SOUND ATTENUATOR SCHEDULE,
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN SCHEDULE,
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,WEST WING LAB AND LAB SUPPORT AIR VALVES,
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,EAST WING LAB AND LAB SUPPORT AIR VALVES,
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,UNIT HEATER SCHEDULE,
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,AIR TERMINAL UNIT SCHEDULE,
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,TANK SCHEDULE,
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,AIR DEVICE SCHEDULE,
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,PUMP SCHEDULE,
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,AIR COOLED CHILLER SCHEDULE,
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,PRESSURE REDUCING VALVE SCHEDULE,
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,ICE STORAGE TANK SCHEDULE,
