@@ -54,8 +54,13 @@ def slot(pdf: Path, table: dict) -> tuple[dict, int, int, int]:
 
     -> (cell -> [chars], assigned, orphan, straddle)
     """
+    from vectorgrid import page_origin
     with pdfplumber.open(pdf) as doc:
         chars = doc.pages[0].chars
+        ox, oy = page_origin(doc.pages[0])
+    if ox or oy:
+        chars = [dict(c, x0=c["x0"] - ox, x1=c["x1"] - ox,
+                      top=c["top"] - oy, bottom=c["bottom"] - oy) for c in chars]
 
     x0, top, x1, bot = table["bbox"]
     inside = [c for c in chars

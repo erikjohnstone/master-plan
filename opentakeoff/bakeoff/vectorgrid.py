@@ -95,6 +95,28 @@ def _q(v: float) -> float:
     return round(round(float(v) / Q) * Q, 2)
 
 
+def page_origin(page) -> tuple:
+    """The MediaBox corner pdfplumber measures everything from.
+
+    A PDF page's MediaBox does not have to start at (0,0), and on real CAD
+    output it often does not: 009_FL…#30 and 078_US…#23 are
+    (-1512, 1080, 1512, 3240). pdfplumber reports raw MediaBox coordinates, so
+    every char, line and rect on those sheets comes back shifted by
+    (+1512, -1080) from where the page actually is. PyMuPDF and every renderer
+    normalise to (0,0,W,H), so the two disagree by a constant.
+
+    Nothing internal notices, which is exactly what makes it dangerous: the
+    captions are shifted by the same amount as the regions, so the extractor
+    matches them to each other happily and scores a clean 5/5 while every
+    coordinate it emits is 1512pt off the page. It only shows up the moment a
+    coordinate leaves this process — to crop a render, to highlight a cell in
+    the UI, to hand a region to OCR. 32 of the 122 keyed tables sit on pages
+    whose space is not the page's own.
+    """
+    mb = page.mediabox
+    return float(mb[0]), float(mb[1])
+
+
 def segments_from_page(page) -> list[tuple]:
     """Axis-aligned rules as (x0, y0, x1, y1, width), top-left origin.
 
@@ -104,9 +126,11 @@ def segments_from_page(page) -> list[tuple]:
     — skipping it loses most of the grid on some sheets.
     """
     segs: list[tuple] = []
+    ox, oy = page_origin(page)
 
     def add(x0, y0, x1, y1, w):
-        x0, y0, x1, y1 = _q(x0), _q(y0), _q(x1), _q(y1)
+        x0, y0 = _q(x0 - ox), _q(y0 - oy)
+        x1, y1 = _q(x1 - ox), _q(y1 - oy)
         dx, dy = abs(x1 - x0), abs(y1 - y0)
         if dx <= AXIS_TOL and dy >= MIN_LEN:            # vertical
             x = _q((x0 + x1) / 2)

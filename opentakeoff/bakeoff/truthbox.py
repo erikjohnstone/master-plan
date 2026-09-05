@@ -128,6 +128,33 @@ def do_sheet(set_id: str, page: int, scale: float) -> int:
     return done
 
 
+def do_full(set_id: str, page: int, scale: float) -> int:
+    """The whole sheet, every proposal drawn. Cheaper to audit than N crops
+    when a sheet's tables are all suspect, and it also shows a table the
+    extractor placed somewhere absurd, which a per-table crop hides by
+    construction (it crops AROUND the proposal)."""
+    import pdfplumber
+    pdf = single_page_pdf(find_pdf(set_id), page)
+    titles = next(t for s, p, t in keyed_sheets() if s == set_id and p == page)
+    caps = caption_boxes(pdf, titles)
+    tables = find_tables(str(pdf), 1)["tables"]
+    owners = region_owners([t["bbox"] for t in tables], caps)
+    with pdfplumber.open(pdf) as doc:
+        W, H = float(doc.pages[0].width), float(doc.pages[0].height)
+    png = OUT / f"{set_id[:24]}_p{page}_FULL.png"
+    crop = (0.0, 0.0, W, H)
+    render(find_pdf(set_id), page, crop, png, scale)
+    overlay(png, crop, scale,
+            [(b, t[:26]) for b, t in owners.items()])
+    print(f"  {png}   {len(owners)}/{len(titles)} proposals drawn, page {W:.0f}x{H:.0f}")
+    for b, t in sorted(owners.items(), key=lambda kv: kv[0][1]):
+        print(f"     ({b[0]:7.0f},{b[1]:7.0f})-({b[2]:7.0f},{b[3]:7.0f})  {t[:46]}")
+    for t in titles:
+        if t not in owners.values():
+            print(f"     -- NO PROPOSAL: {t[:46]}")
+    return 1
+
+
 def screen() -> int:
     """Which proposals need EYES on them, and which are safe to spot-check.
 
@@ -184,6 +211,46 @@ def screen() -> int:
     return 0
 
 
+HEADER = "sheet,table_title,x0,top,x1,bot,provenance\n"
+
+
+def accept(set_id: str, page: int, note: str) -> int:
+    """Record the current proposals for one sheet as ground truth.
+
+    ONLY call this for a sheet whose overlay has actually been looked at. The
+    provenance column says so, and it says at what scale — a box confirmed on a
+    0.75x whole-sheet render is confirmed to about five points, not to one, and
+    a later reader is entitled to know which. Where a proposal was wrong, the
+    row is corrected by hand afterwards and its provenance changed to
+    `corrected`; the file is the record, not this function.
+    """
+    pdf = single_page_pdf(find_pdf(set_id), page)
+    titles = next(t for s, p, t in keyed_sheets() if s == set_id and p == page)
+    caps = caption_boxes(pdf, titles)
+    owners = region_owners([t["bbox"] for t in find_tables(str(pdf), 1)["tables"]], caps)
+    sheet = f"{set_id}.pdf" if page == 1 else f"{set_id}.pdf#{page}"
+
+    kp = CORPUS / "keys" / f"{set_id}.tableboxes.csv"
+    rows = []
+    if kp.exists():
+        rows = [r for r in csv.reader(kp.read_text().splitlines())
+                if r and r[0] not in ("sheet",) and r[0] != sheet]
+    n = 0
+    for t in titles:
+        b = next((r for r, ti in owners.items() if ti == t), None)
+        if b is None:
+            rows.append([sheet, t, "", "", "", "", "NOT LOCATED — needs authoring by hand"])
+            continue
+        rows.append([sheet, t, f"{b[0]:.1f}", f"{b[1]:.1f}", f"{b[2]:.1f}", f"{b[3]:.1f}", note])
+        n += 1
+    rows.sort(key=lambda r: (r[0], r[1]))
+    with kp.open("w") as f:
+        f.write(HEADER)
+        csv.writer(f).writerows(rows)
+    print(f"  wrote {n} boxes for {sheet} -> {kp.name}  ({note})")
+    return 0
+
+
 def status() -> int:
     print(f"{'sheet':46s} {'tables':>7s} {'authored':>9s}")
     for set_id, page, titles in keyed_sheets():
@@ -205,15 +272,22 @@ def main() -> int:
     ap.add_argument("--sheet", nargs=2, metavar=("SET_ID", "PAGE"))
     ap.add_argument("--sheets", action="store_true")
     ap.add_argument("--screen", action="store_true")
+    ap.add_argument("--full", action="store_true")
+    ap.add_argument("--accept", metavar="PROVENANCE",
+                    help="record this sheet's proposals as truth; only after looking")
     ap.add_argument("--scale", type=float, default=1.4)
     a = ap.parse_args()
+    if a.accept:
+        if not a.sheet:
+            ap.error("--accept needs --sheet SET_ID PAGE")
+        return accept(a.sheet[0], int(a.sheet[1]), a.accept)
     if a.screen:
         return screen()
     if a.sheets:
         return status()
     if not a.sheet:
         ap.error("give --sheet SET_ID PAGE, or --sheets")
-    n = do_sheet(a.sheet[0], int(a.sheet[1]), a.scale)
+    n = (do_full if a.full else do_sheet)(a.sheet[0], int(a.sheet[1]), a.scale)
     print(f"\n{n} crops written to {OUT}")
     return 0
 

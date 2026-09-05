@@ -195,8 +195,16 @@ def caption_boxes(pdf: Path, titles: list[str]) -> dict[str, tuple | None]:
     carry is reported as such — it is not the extractor's fault and must not be
     counted against it."""
     import pdfplumber
+    from vectorgrid import page_origin
     with pdfplumber.open(pdf) as d:
         words = d.pages[0].extract_words(use_text_flow=False, keep_blank_chars=False)
+        ox, oy = page_origin(d.pages[0])
+    # Same normalisation the geometry gets — see vectorgrid.page_origin. If the
+    # captions were shifted and the regions were not (or the reverse) nothing
+    # would ever match; both must be in the page's own space.
+    for w in words:
+        w["x0"] -= ox; w["x1"] -= ox
+        w["top"] -= oy; w["bottom"] -= oy
     lines: dict[int, list] = {}
     for w in words:
         lines.setdefault(round(w["top"] / 3), []).append(w)
