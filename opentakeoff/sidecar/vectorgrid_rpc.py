@@ -134,11 +134,19 @@ def extract_grid(pdf_path: str, page_no: int = 1) -> dict:
             "straddle": straddle,
         })
 
+    diag = found.get("diagnostics", {})
     return {
         "space": "pdf-points-topleft",
         "page": page_no,
+        # The page box every coordinate above is measured in, so a consumer in
+        # another process can check our space against its own instead of
+        # assuming it. A CropBox that differs from the MediaBox, or a renderer
+        # that normalises to a different corner, shows up here as a size
+        # disagreement rather than as silently displaced boxes.
+        "pageWidth": diag.get("page_w"),
+        "pageHeight": diag.get("page_h"),
         "tables": out,
-        "diagnostics": found.get("diagnostics", {}),
+        "diagnostics": diag,
     }
 
 

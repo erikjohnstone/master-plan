@@ -704,12 +704,16 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
         segs = _snap_grid(segments_from_page(page))
         chars = page.chars
         page_w, page_h = float(page.width), float(page.height)
+        page_ox, page_oy = page_origin(page)
 
     rasters = [{"bbox": b, "cells": [], "n_cells": 0, "raster": True}
                for b in raster_regions(pdf_path, page_no)]
 
     if not segs:
-        return {"tables": rasters, "diagnostics": {"segments": 0, "rasters": len(rasters)}}
+        return {"tables": rasters,
+                "diagnostics": {"segments": 0, "rasters": len(rasters),
+                                "page_w": page_w, "page_h": page_h,
+                                "origin": [page_ox, page_oy]}}
 
     widx = _weight_index(segs)
     hmap = _h_index(segs)
@@ -977,6 +981,7 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
         "diagnostics": {
             "segments": len(segs), "cells": len(cells), "chars": len(chars),
             "rasters": len(rasters),
+            "page_w": page_w, "page_h": page_h, "origin": [page_ox, page_oy],
             "border_weight": bw, "weights": sorted({round(w, 2) for *_r, w in segs})[:8],
             "dangles": len(dangles.geoms), "cut_edges": len(cuts.geoms),
             "invalid_rings": len(invalid.geoms),
