@@ -486,10 +486,25 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
                 ca, cb = cols_of(groups[ka]), cols_of(groups[kb])
                 inter = len({c for c in ca if any(abs(c - d) <= 2 for d in cb)})
                 jacc = inter / max(1, min(len(ca), len(cb)))
-                if jacc >= 0.6:                      # same columns => one table
-                    groups[ka].extend(groups.pop(kb))
-                    merged = True
-                    break
+                if jacc < 0.6:                       # divergent columns => two tables
+                    continue
+                # A MERGE MUST NOT MAKE THE BLOCK LESS TABLE-SHAPED. Reuniting a
+                # table that was sheared at its header band leaves it
+                # tessellating; anything that drops the combined block below the
+                # regularity gate was never the same table. Measured on
+                # 001_NC#49: OUTDOOR AIR SCHEDULE tessellates on its own (50
+                # faces, fill 0.278) and the merge dragged it to fill 0.186,
+                # under the gate — so the sheet's only clean recovery of that
+                # schedule was thrown away by the step meant to repair splits.
+                both = groups[ka] + groups[kb]
+                rs = {round(cells[i].bounds[1]) for i in both}
+                cs = {round(cells[i].bounds[0]) for i in both}
+                if len(both) < len(rs) * len(cs) * MIN_FILL_RATIO:
+                    continue
+                groups[ka] = both
+                groups.pop(kb)
+                merged = True
+                break
             if merged:
                 break
 

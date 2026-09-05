@@ -222,8 +222,60 @@ def caption_boxes(pdf: Path, titles: list[str]) -> dict[str, tuple | None]:
                     break
             if hit:
                 break
+        if hit is None:
+            hit = _wrapped_caption(lines, want)
         out[t] = hit
     return out
+
+
+def _wrapped_caption(lines: dict, want: str) -> tuple | None:
+    """A caption printed on two lines is still that caption.
+
+    Titles on these sheets are centred over their table and wrap when they are
+    long: 12_MT#11 draws SINGLE-PLATE SHEAR / CONNECTION SCHEDULE as two
+    stacked runs, 21pt type on 26pt leading. A single-line matcher reports the
+    caption as absent from the text layer, which counts as unfindable rather
+    than as a miss — on that sheet it wrote off one of three tables before any
+    extractor ran.
+
+    The join must be exactly the wanted title, the two runs must be vertically
+    adjacent and must overlap horizontally, so this can find a caption a
+    single-line match missed but never invent one.
+    """
+    bands = [(min(w["top"] for w in ws), max(w["bottom"] for w in ws),
+              sorted(ws, key=lambda w: w["x0"])) for ws in lines.values()]
+    bands.sort()
+    for ai, (a_top, a_bot, top) in enumerate(bands):
+        a_h = max(a_bot - a_top, 1.0)
+        for b_top, _b_bot, bot in bands[ai + 1:]:
+            if b_top <= a_bot:
+                continue
+            # Leading is proportional to type size, so the gap separating two
+            # lines of one title from two unrelated rows is too — a fixed point
+            # threshold either misses a display-type title or swallows the row
+            # under a small one. Pair by GEOMETRY, not by list order: on a
+            # drawing sheet a dozen unrelated bands sit between a title's two
+            # lines in top order.
+            if b_top - a_bot > 0.9 * a_h:
+                break
+            for i in range(len(top)):
+                for j in range(i + 1, len(top) + 1):
+                    head = norm(" ".join(w["text"] for w in top[i:j]))
+                    if not want.startswith(head + " "):
+                        continue
+                    hx0 = min(w["x0"] for w in top[i:j]); hx1 = max(w["x1"] for w in top[i:j])
+                    for k in range(len(bot)):
+                        for m in range(k + 1, len(bot) + 1):
+                            run = top[i:j] + bot[k:m]
+                            if norm(" ".join(w["text"] for w in run)) != want:
+                                continue
+                            tx0 = min(w["x0"] for w in bot[k:m])
+                            tx1 = max(w["x1"] for w in bot[k:m])
+                            if min(hx1, tx1) - max(hx0, tx0) <= 0:
+                                continue      # side by side, not stacked
+                            return (min(hx0, tx0), a_top, max(hx1, tx1),
+                                    max(w["bottom"] for w in bot[k:m]))
+    return None
 
 
 def score(regions, caps) -> list[str]:
