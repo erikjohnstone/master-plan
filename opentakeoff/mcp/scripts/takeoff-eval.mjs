@@ -107,7 +107,7 @@ async function evalSetUncached(set) {
   }); // "all" — scorer only needs row-tag-claimed placements; whole-sheet unlabeled disclosure is intentionally omitted
 
   const score = hasTakeoffKey
-    ? scoreTakeoff(takeoff, parseTakeoffKeyCsv(readFileSync(takeoffKeyPath, "utf8")))
+    ? scoreTakeoff(takeoff, parseTakeoffKeyCsv(readFileSync(takeoffKeyPath, "utf8"), takeoffKeyPath))
     : null;
   const reference = hasReferenceKey
     ? scoreReference(takeoff.extracted_tables, parseReferenceKeyCsv(readFileSync(referenceKeyPath, "utf8")))
@@ -244,7 +244,15 @@ if (withReference) {
 }
 
 if (writeReport) {
-  const p = join(corpus, "reports", `TAKEOFF-EVAL-${new Date(spec.stamp ?? Date.now()).toISOString().slice(0, 10)}.txt`);
+  // Date-only names overwrote a second same-day run silently (this file
+  // itself was clobbered exactly that way earlier today — a real B-5
+  // regression score got overwritten by a later, corrected run with no
+  // record either version ever existed). HHmm keeps a same-day rerun
+  // as its own file without spec.stamp callers (fixture tests pinning a
+  // specific date) losing their exact filename.
+  const stampIso = new Date(spec.stamp ?? Date.now()).toISOString();
+  const stampName = spec.stamp ? stampIso.slice(0, 10) : `${stampIso.slice(0, 10)}_${stampIso.slice(11, 16).replace(":", "")}`;
+  const p = join(corpus, "reports", `TAKEOFF-EVAL-${stampName}.txt`);
   writeFileSync(p, lines.join("\n"));
   console.error(`\nwrote ${p}`);
 }

@@ -1,0 +1,136 @@
+╔══════════════════════════════════════════════════════════════════════════
+║ PROJECT-LEVEL TAKEOFF — scored against real sets
+╚══════════════════════════════════════════════════════════════════════════
+
+set                        tags   exact    Σ|Δqty|   missing   false-add
+──────────────────────────────────────────────────────────────────────────
+bessemer                     10   100.0%         0         0           0
+itd-d1-lab                  116    91.4%        30         2           6
+federal-mech                102    92.2%         8         8           2
+navfac-cherry-point-atc     217    97.2%        11         0          21
+bldg5406-hvac-demo           28   100.0%         0         0           0
+baker-county-eoc             40    90.0%         0         4           0
+itd-d1-lab-raster            28   100.0%         0         0           0
+──────────────────────────────────────────────────────────────────────────
+CORPUS                      541    94.8%        49        14          29
+applicable installed rows: 476/499 exact ( 95.4%)
+expected honest refusals: 9/14 correct
+
+── itd-d1-lab — real mismatches ──
+  TP-2       expected=12  actual=23  Δ=+11  status=resolved
+  US-1       expected=1  actual=7  Δ=+6  status=resolved
+  TD-1       expected=2  actual=7  Δ=+5  status=resolved
+  FS-1       expected=1  actual=3  Δ=+2  status=resolved
+  FS-2       expected=7  actual=9  Δ=+2  status=resolved
+  DFC-1      expected=1  actual=0  Δ=-1  status=not_in_output
+  F-1        expected=1  actual=0  Δ=-1  status=not_in_output
+  ES-1       expected=1  actual=2  Δ=+1  status=resolved
+  SS-1       expected=2  actual=1  Δ=-1  status=resolved
+  ET-1       expected=0  actual=1  Δ=0  status=resolved
+  DFC-1      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  F-1        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  D-1        FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  GCO JAY R. SMITH 4220 SERIES, ROUND EXTRA HEAVY DUTY CAST IRON TOP. FURNISH WITH WITH ABS PLUG. COVER TO BE INSCRIBED "SAN". FALSELY ADDED — qty=7, type=(unclassified), the key never mentions this tag
+  GCO JAY R. SMITH 4250 SERIES, ROUND FLANGED HOUSING WITH HEAVY DUTY CAST IRON COVER. FURNISH WITH ABS PLUG. COVER TO BE INSCRIBED "SAN". FALSELY ADDED — qty=7, type=(unclassified), the key never mentions this tag
+  RP-2       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  SA-1       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  TP-1       FALSELY ADDED — qty=2, type=(unclassified), the key never mentions this tag
+
+── federal-mech — real mismatches ──
+  VAV-16     expected=1  actual=0  Δ=-1  status=not_in_output
+  VAV-17     expected=1  actual=0  Δ=-1  status=not_in_output
+  VAV-43     expected=1  actual=0  Δ=-1  status=not_in_output
+  FCU-1      expected=1  actual=0  Δ=-1  status=not_in_output
+  CU-1       expected=1  actual=0  Δ=-1  status=not_in_output
+  CU-2       expected=1  actual=0  Δ=-1  status=not_in_output
+  CU-3       expected=1  actual=0  Δ=-1  status=not_in_output
+  CU-5       expected=1  actual=0  Δ=-1  status=not_in_output
+  VAV-16     MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  VAV-17     MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  VAV-43     MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  FCU-1      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  CU-1       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  CU-2       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  CU-3       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  CU-5       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  FTR-1B     FALSELY ADDED — qty=1, type=Fin-tube radiator, the key never mentions this tag
+  FTR-2B     FALSELY ADDED — qty=1, type=Fin-tube radiator, the key never mentions this tag
+
+── navfac-cherry-point-atc — real mismatches ──
+  LD-1       expected=6  actual=3  Δ=-3  status=resolved
+  RG-12      expected=3  actual=5  Δ=+2  status=resolved
+  RG-13      expected=1  actual=3  Δ=+2  status=resolved
+  RG-9       expected=4  actual=6  Δ=+2  status=resolved
+  LD-3       expected=3  actual=2  Δ=-1  status=resolved
+  RG-11      expected=5  actual=6  Δ=+1  status=resolved
+  CD-1       FALSELY ADDED — qty=52, type=Fire/smoke damper (combination), the key never mentions this tag
+  CD-2       FALSELY ADDED — qty=44, type=Fire/smoke damper (combination), the key never mentions this tag
+  CD-3       FALSELY ADDED — qty=16, type=Fire/smoke damper (combination), the key never mentions this tag
+  CD-4       FALSELY ADDED — qty=4, type=Fire/smoke damper (combination), the key never mentions this tag
+  CD-5       FALSELY ADDED — qty=6, type=Fire/smoke damper (combination), the key never mentions this tag
+  EG-1       FALSELY ADDED — qty=18, type=Return grille, the key never mentions this tag
+  EG-2       FALSELY ADDED — qty=6, type=Return grille, the key never mentions this tag
+  EG-3       FALSELY ADDED — qty=8, type=Return grille, the key never mentions this tag
+  RG-1       FALSELY ADDED — qty=51, type=Return grille, the key never mentions this tag
+  RG-2       FALSELY ADDED — qty=13, type=Return grille, the key never mentions this tag
+  RG-3       FALSELY ADDED — qty=13, type=Return grille, the key never mentions this tag
+  RG-4       FALSELY ADDED — qty=12, type=Return grille, the key never mentions this tag
+  RG-5       FALSELY ADDED — qty=6, type=Return grille, the key never mentions this tag
+  RG-6       FALSELY ADDED — qty=51, type=Return grille, the key never mentions this tag
+  RG-7       FALSELY ADDED — qty=15, type=Return grille, the key never mentions this tag
+  RG-8       FALSELY ADDED — qty=9, type=Return grille, the key never mentions this tag
+  TG-1       FALSELY ADDED — qty=17, type=Transfer grille, the key never mentions this tag
+  TG-2       FALSELY ADDED — qty=2, type=Transfer grille, the key never mentions this tag
+  TG-3       FALSELY ADDED — qty=7, type=Transfer grille, the key never mentions this tag
+  FCU-T11    FALSELY ADDED — qty=1, type=Fan coil unit (FCU), the key never mentions this tag
+  SG-1       FALSELY ADDED — qty=17, type=(unclassified), the key never mentions this tag
+
+── baker-county-eoc — real mismatches ──
+  RTU-01     expected=0  actual=0  Δ=0  status=not_in_output
+  RTU-02     expected=0  actual=0  Δ=0  status=not_in_output
+  EAC-1      expected=0  actual=0  Δ=0  status=not_in_output
+  EAC-2      expected=0  actual=0  Δ=0  status=not_in_output
+  RTU-01     MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  RTU-02     MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EAC-1      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EAC-2      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+
+── failure-type breakdown (TakeoffFailure[], every set) ──
+    63×  REFUSED_NO_SCALE
+    52×  SYMBOL_FALSE_NEGATIVE
+     2×  AMBIGUOUS_ROW_KEY
+     1×  TABLE_DISCOVERY_FAILURE
+
+╔══════════════════════════════════════════════════════════════════════════
+║ REFERENCE-TABLE EXTRACTION — reused from the takeoff pass
+╚══════════════════════════════════════════════════════════════════════════
+
+set                        cells   exact
+──────────────────────────────────────────
+bessemer                      12   100.0%
+itd-d1-lab                    34    41.2%
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "SUPPLY AIR VALVE": expected "SAV-7" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "GENERAL EXHAUST VALVE": expected "GEV-5" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "SNORKEL EXHAUST VALVE": expected "SEV-5" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "REHEAT VALVE": expected "HC-7" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "HEATING COIL": expected "CV-7" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "SUPPLY AIR VALVE": expected "SAV-3" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "GENERAL EXHAUST VALVE": expected "GEV-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "SNORKEL EXHAUST VALVE": expected "SEV-3" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "REHEAT VALVE": expected "HC-3" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "HEATING COIL": expected "CV-3" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "SUPPLY AIR VALVE": expected "SAV-9" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "GENERAL EXHAUST VALVE": expected "GEV-2" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "SNORKEL EXHAUST VALVE": expected "N/A" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "REHEAT VALVE": expected "HC-9" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "HEATING COIL": expected "CV-9" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "SUPPLY AIR VALVE": expected "SAV-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "GENERAL EXHAUST VALVE": expected "GEV-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "SNORKEL EXHAUST VALVE": expected "SEV-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "REHEAT VALVE": expected "HC-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "HEATING COIL": expected "CV-1" got (missing)
+federal-mech                  31   100.0%
+navfac-cherry-point-atc       31   100.0%
+bldg5406-hvac-demo             0   100.0%
+baker-county-eoc              21   100.0%
+itd-d1-lab-raster              0   100.0%

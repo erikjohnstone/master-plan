@@ -20,7 +20,7 @@
     "prewarm:corpus:shard1": "OPENTAKEOFF_TABLE_SIDECAR=0 node --import tsx mcp/scripts/prewarm-corpus-graph.mjs --corpus ../opentakeoff-corpus --shard 1/4",
     "prewarm:corpus:shard2": "OPENTAKEOFF_TABLE_SIDECAR=0 node --import tsx mcp/scripts/prewarm-corpus-graph.mjs --corpus ../opentakeoff-corpus --shard 2/4",
     "prewarm:corpus:shard3": "OPENTAKEOFF_TABLE_SIDECAR=0 node --import tsx mcp/scripts/prewarm-corpus-graph.mjs --corpus ../opentakeoff-corpus --shard 3/4",
-    "eval:corpus": "node eval/runCorpusEval.mjs ../opentakeoff-corpus --out out"
+    "eval:document-scoreboard": "node eval/runCorpusEval.mjs ../opentakeoff-corpus --out out"
   },
   "devDependencies": {
     "turbo": "^2.5.4"

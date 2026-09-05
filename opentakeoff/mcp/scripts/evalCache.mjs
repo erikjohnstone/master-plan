@@ -17,7 +17,13 @@ async function sourceFiles(root) {
   for (const entry of await readdir(root, { withFileTypes: true })) {
     const path = join(root, entry.name);
     if (entry.isDirectory()) out.push(...await sourceFiles(path));
-    else if ([".ts", ".mjs"].includes(extname(entry.name))) out.push(path);
+    // .js matters here too: session.ts/marked.ts/importing.ts import real
+    // engine modules under web/src/lib with a plain .js extension
+    // (geometry.js, cutout.js, approvals.js, totals.js, rollTakeoff.js,
+    // importTakeoff.js, markedset.js) — omitting it left every one of those
+    // invisible to this digest, so an edit to any of them silently served a
+    // stale cached score.
+    else if ([".ts", ".mjs", ".js"].includes(extname(entry.name))) out.push(path);
   }
   return out;
 }
@@ -27,8 +33,17 @@ function sourceDigest() {
   sourceDigestPromise ??= (async () => {
     const files = [
       ...await sourceFiles(join(MCP_ROOT, "src")),
-      ...await sourceFiles(HERE),
       ...await sourceFiles(WEB_LIB),
+      // Explicit files only, never a directory scan of mcp/scripts (~70
+      // files): the two scorers that call cachedEvalResult (takeoff-eval.mjs,
+      // graph-eval.mjs) each import exactly corpusFiles.mjs and this module
+      // from scripts/ — nothing else. Scanning the whole directory meant
+      // editing any of the ~70 other scripts here, including a dead probe
+      // nothing imports, discarded every cached result for every set (same
+      // failure class sheetGraphCache.mjs's own header documents and this
+      // mirrors its explicit-file fix for).
+      join(HERE, "evalCache.mjs"),
+      join(HERE, "corpusFiles.mjs"),
       join(MCP_ROOT, "package.json"),
       join(MCP_ROOT, "package-lock.json"),
       join(WEB_ROOT, "package.json"),
@@ -38,7 +53,11 @@ function sourceDigest() {
     hash.update(process.version);
     for (const path of files) {
       hash.update(path);
-      hash.update(await readFile(path));
+      try {
+        hash.update(await readFile(path));
+      } catch {
+        hash.update("(missing)");
+      }
     }
     return hash.digest("hex");
   })();

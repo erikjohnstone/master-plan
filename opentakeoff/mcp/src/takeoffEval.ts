@@ -63,7 +63,7 @@ export const canonTag = (t: string): string => (t || "").trim().toUpperCase().re
  * is "#" is a comment and a blank line is skipped. Both let a key file carry
  * the kind of header block bessemer.takeoff.csv actually has (how each
  * number was verified) without smuggling it into the data rows. */
-export function parseTakeoffKeyCsv(text: string): TakeoffKeyRow[] {
+export function parseTakeoffKeyCsv(text: string, path = "<key>"): TakeoffKeyRow[] {
   const lines = text.split(/\r?\n/).filter((l) => l.trim() && !/^\s*#/.test(l));
   if (lines.length < 2) return [];
   const splitCsv = (l: string): string[] => {
@@ -85,6 +85,14 @@ export function parseTakeoffKeyCsv(text: string): TakeoffKeyRow[] {
   const idx = (name: string) => head.indexOf(name);
   const iTag = idx("tag"), iType = idx("equipment_type"), iQty = idx("expected_quantity"),
     iSheets = idx("sheets"), iNotes = idx("notes"), iStatus = idx("expected_status");
+  // A missing/misspelled required column used to default every row to
+  // tag:"" / expected_quantity:0 via the ?? "" fallbacks below — silent, and
+  // indistinguishable from a real key stating "expected 0". Fail loudly and
+  // by name instead.
+  const missing = [iTag < 0 && "tag", iQty < 0 && "expected_quantity"].filter(Boolean);
+  if (missing.length) {
+    throw new Error(`${path}: missing required column(s) ${missing.join(", ")} — header reads: ${head.join(",")}`);
+  }
   return lines.slice(1).map((l) => {
     const c = splitCsv(l);
     return {

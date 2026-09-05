@@ -1,0 +1,19 @@
+╔══════════════════════════════════════════════════════════════════════════
+║ SHEET GRAPH — scored against real sets
+╚══════════════════════════════════════════════════════════════════════════
+
+set                        cell P    cell R   cell F1     tag P    tag R   reported  rowsym R
+────────────────────────────────────────────────────────────────────────────────────────────
+bessemer                      —        —        —         —        —       0     100.0%
+itd-d1-lab                    —        —        —         —        —       4     100.0%
+federal-mech                  —        —        —         —        —      83     100.0%
+navfac-cherry-point-atc       —        —        —         —        —       0     100.0%
+bldg5406-hvac-demo            —        —        —         —        —       6     100.0%
+baker-county-eoc          100.0%   100.0%   100.0%      —        —      13     100.0%
+itd-d1-lab-raster             —        —        —         —        —       0       0.0%
+────────────────────────────────────────────────────────────────────────────────────────────
+CORPUS                    100.0%   100.0%   100.0%    0.0%     0.0%              100.0%
+
+cells   91 right · 0 wrong · 0 missed
+tags    0 real · 0 not-rooms reported · 0 real rooms missed
+rowsym  138 found on the plan as expected · 0 unexpectedly resolved · 0 real drawn symbols NOT anchored by sweep_schedule_row

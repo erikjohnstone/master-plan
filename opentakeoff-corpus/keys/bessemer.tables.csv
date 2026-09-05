@@ -1,0 +1,38 @@
+# bessemer.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs (Phase 5 of the foundation-cohesion plan).
+#
+# Unlike every other key for this set (bessemer.takeoff.csv,
+# bessemer.reference.csv), this key does NOT start from the pipeline's own
+# output — it is authored by rendering the two real sheets full-page
+# (Session.sheet(key).page.renderPng) and reading every schedule table title
+# by eye, independent of what sheetGraph() extracted. That is the whole point
+# of this tier: the other keys are scoped to tables the pipeline already
+# found, so a table it never sees at all cannot appear in them.
+#
+# Scope: sheets #2 and #8 of bessemer-mechanical-bidset.pdf only (the two
+# sheets this session actually rendered and read). Not a full-document key —
+# a partial recall key for the sheets it covers is exactly what the format
+# supports; do not extend this file from pipeline output alone.
+#
+# Confirmed live (2026-09-04): sheet #2 draws THREE schedule tables; the
+# pipeline's own sheetGraph() finds only two of them — "PLUMBING FIXTURE
+# SCHEDULE" (ID/ADA/DESCRIPTION/MANUFACTURER/MODEL NUMBER/... columns, rows
+# FD-1 and WB-1) is real ink on the page and is never extracted at all. Sheet
+# #8 draws EIGHT; the pipeline finds seven, missing "VENTILATION CALCULATION
+# SCHEDULE - R-2, R-3 OR R-4 OCCUPANCIES, THREE STORIES OR LESS" (the large
+# room-airflow table, top-left of the sheet). Both misses are catalogued as
+# a new bug, B-9's sibling class, worth its own investigation later — this
+# key exists to keep them visible in every future eval run rather than
+# silently invisible the way the takeoff/reference tiers left them.
+sheet,table_title,note
+bessemer-mechanical-bidset.pdf#2,PLUMBING PIPE INSULATION SCHEDULE,
+bessemer-mechanical-bidset.pdf#2,PIPING INSULATION SCHEDULE,
+bessemer-mechanical-bidset.pdf#2,PLUMBING FIXTURE SCHEDULE,pipeline currently MISSES this one entirely — real table on the page
+bessemer-mechanical-bidset.pdf#8,"VENTILATION CALCULATION SCHEDULE - R-2, R-3 OR R-4 OCCUPANCIES, THREE STORIES OR LESS",pipeline currently MISSES this one entirely — real table on the page
+bessemer-mechanical-bidset.pdf#8,DUCTWORK INSULATION SCHEDULE,
+bessemer-mechanical-bidset.pdf#8,DUCTWORK INSULATION TYPE SCHEDULE,
+bessemer-mechanical-bidset.pdf#8,ELECTRIC WALL HEATER SCHEDULE,
+bessemer-mechanical-bidset.pdf#8,ELECTRIC BASEBOARD HEATER SCHEDULE,
+bessemer-mechanical-bidset.pdf#8,"DIFFUSER, GRILLE, REGISTER SCHEDULE",
+bessemer-mechanical-bidset.pdf#8,VARIABLE REFRIGERANT PACKAGED HEAT PUMP,
+bessemer-mechanical-bidset.pdf#8,FAN SCHEDULE,

@@ -54,6 +54,22 @@ function sourceDigest() {
       join(HERE, "sheetGraphCache.mjs"),
       join(WEB_LIB, "sheetgraph.ts"),
       join(WEB_LIB, "vectorTakeoffPipeline.ts"),
+      // sheetgraph.ts's own direct L0-L4.5 dependencies, missing until now —
+      // an edit to either served a stale cached graph silently.
+      join(WEB_LIB, "detectRooms.ts"),
+      join(WEB_LIB, "equiptags.ts"),
+      // The nine modules vectorTakeoffPipeline.ts itself imports (ODL/
+      // sidecar/OCR/pillar-gap/schedule-fallback hooks) — same failure mode:
+      // real pipeline changes here previously invalidated nothing.
+      join(WEB_LIB, "mepconnectivity.ts"),
+      join(WEB_LIB, "pageTileGrid.ts"),
+      join(WEB_LIB, "pillarGapRecovery.ts"),
+      join(WEB_LIB, "rasterTableAssist.ts"),
+      join(WEB_LIB, "scheduleGridFallback.ts"),
+      join(WEB_LIB, "scheduleLanguageScan.ts"),
+      join(WEB_LIB, "scheduleStreamFallback.ts"),
+      join(WEB_LIB, "scheduleTableSidecarAdapter.ts"),
+      join(WEB_LIB, "tableExtractorReconcile.ts"),
       join(MCP_ROOT, "package.json"),
       join(MCP_ROOT, "package-lock.json"),
     ].sort();

@@ -1,6 +1,9 @@
 // One command for the complete scored corpus loop. Takeoff and reference
 // metrics share one pipeline pass; graph evaluation remains separate because
-// it performs additional room/tag/row-symbol scoring.
+// it performs additional room/tag/row-symbol scoring; table-recall is the
+// recall-tier check (does the pipeline find a table at all, independent of
+// whether it scores it right) and is cheap/no-op until a *.tables.csv key
+// exists for a set.
 //
 //   node --import tsx scripts/corpus-eval.mjs <corpus-dir> [setId ...] [--report]
 import { spawn } from "node:child_process";
@@ -38,12 +41,13 @@ function run(label, script, scriptArgs) {
 
 const started = performance.now();
 try {
-  // Both scorers are independent readers. Run them together so the default
-  // two-worker fan-out in each script fills all four CPU cores instead of
-  // leaving half the machine idle and paying the two passes serially.
+  // All three scorers are independent readers. Run them together so the
+  // default two-worker fan-out in each script fills all four CPU cores
+  // instead of leaving half the machine idle and paying the passes serially.
   await Promise.all([
     run("takeoff + reference", "takeoff-eval.mjs", [...args, "--with-reference"]),
     run("sheet graph", "graph-eval.mjs", args.filter((arg) => arg !== "--with-reference")),
+    run("table recall", "table-recall-eval.mjs", args.filter((arg) => arg !== "--with-reference" && arg !== "--report")),
   ]);
   console.error(`\n=== complete corpus evaluation finished in ${((performance.now() - started) / 1000).toFixed(1)}s ===`);
 } catch (error) {

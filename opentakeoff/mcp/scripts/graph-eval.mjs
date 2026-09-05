@@ -92,7 +92,10 @@ const canonTag = (t) => String(t ?? "").trim().toUpperCase().replace(/\s+/g, "")
 
 function readCsv(path) {
   if (!existsSync(path)) return null;
-  const lines = readFileSync(path, "utf8").split(/\r?\n/).filter((l) => l.trim());
+  // "#"-comment lines, same convention takeoffEval.ts's parseTakeoffKeyCsv
+  // already uses — this reader previously turned a "# how these were
+  // verified" header block into a literal, garbage data row.
+  const lines = readFileSync(path, "utf8").split(/\r?\n/).filter((l) => l.trim() && !/^\s*#/.test(l));
   if (lines.length < 2) return [];
   const head = lines[0].split(",").map((h) => h.trim().toLowerCase());
   return lines.slice(1).map((l) => {
@@ -333,7 +336,15 @@ if (bins.size) {
 }
 
 if (writeReport) {
-  const p = join(corpus, "reports", `EVAL-${new Date(spec.stamp ?? Date.now()).toISOString().slice(0, 10)}.txt`);
+  // Date-only names overwrote a second same-day run silently (this file
+  // itself was clobbered exactly that way earlier today — a real B-5
+  // regression score got overwritten by a later, corrected run with no
+  // record either version ever existed). HHmm keeps a same-day rerun
+  // as its own file without spec.stamp callers (fixture tests pinning a
+  // specific date) losing their exact filename.
+  const stampIso = new Date(spec.stamp ?? Date.now()).toISOString();
+  const stampName = spec.stamp ? stampIso.slice(0, 10) : `${stampIso.slice(0, 10)}_${stampIso.slice(11, 16).replace(":", "")}`;
+  const p = join(corpus, "reports", `EVAL-${stampName}.txt`);
   writeFileSync(p, lines.join("\n"));
   console.error(`\nwrote ${p}`);
 }
