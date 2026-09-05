@@ -1,0 +1,197 @@
+# coverage: AHU SUPPLY FAN SCHEDULE | complete
+# 096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.cells.csv — CELL-tier ground truth. One row per NON-EMPTY drawn cell,
+# transcribed by eye from a 2.6x render in two halves (clips 1230,470,760x195
+# and 1980,470,720x195) plus the title and notes bands above the grid.
+# row/col are 0-based indices into the table AS DRAWN, a spanning cell counted
+# once at its top-left. Empty drawn cells are not recorded.
+#
+# This table was chosen because it is the hard shape, not the easy one:
+#   - two levels of header, with PRESSURE OF EACH FAN, WHEEL, MOTOR and DESIGN
+#     REFERENCE spanning bands over the columns beneath them, and MARK,
+#     LOCATION, AIRFLOW, TYPE, CLASS, FAN RPM, MAX. BHP/KW, VARIABLE CONTROL
+#     TYPE and REMARKS spanning DOWNWARD through both header rows
+#   - DIRECT DRIVE (YES/NO) does NOT span both header rows though MARK,
+#     LOCATION, AIRFLOW, TYPE, CLASS, FAN RPM, MAX. BHP/KW, VARIABLE CONTROL
+#     TYPE and REMARKS all do — the box above it is empty. Transcribed wrongly
+#     the first time and corrected against the drawn cell at (2243,534)-(2338,566):
+#     an eye reads a two-line heading as a tall cell, and the ruling says otherwise
+#   - SINGLE POINT is one cell spanning MCA and MOCP in every data row, so the
+#     data rows carry 21 values across 22 columns
+#   - every row rule is drawn per cell with the pieces disagreeing in the second
+#     decimal, which is what vectorgrid._snap_grid exists for
+sheet,table_title,row,col,text
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,0,0,AHU SUPPLY FAN SCHEDULE
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,1,0,1. PROVIDE UNIT MOUNTED DISCONNECT SWITCH. 2. FAN SHALL HAVE OUTLET GUARD. 3. FAN SHALL HAVE BLANK-OFF PLATE PROVIDED BY MANUFACTURER FOR FAN ISOLATION
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,2,0,MARK
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,2,1,LOCATION
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,2,2,AIRFLOW
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,2,3,PRESSURE OF EACH FAN
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,2,5,TYPE
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,2,6,CLASS
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,2,7,WHEEL
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,2,9,FAN RPM
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,2,10,MAX. BHP/KW
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,2,11,VARIABLE CONTROL TYPE
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,2,12,MOTOR
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,3,18,DIRECT DRIVE (YES/NO)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,2,19,DESIGN REFERENCE
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,2,21,REMARKS
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,3,3,ESP (IN. W.G.)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,3,4,TSP (IN. W.G.)
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,3,7,TYPE
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,3,8,DIA
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,3,12,HP/KW
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,3,13,RPM
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,3,14,VOLT
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,3,15,PH
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,3,16,MCA
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,3,17,MOCP
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,3,19,MANUFACTURER
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,3,20,MODEL
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,0,SF-1A
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,1,DOAS-1
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,2,4500
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,3,2.00
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,4,5.55
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,5,PLENUM
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,6,II
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,7,SWSI
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,8,450
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,9,2493
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,10,5.6
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,11,VFD
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,12,7.5
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,13,1800
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,14,460
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,15,3
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,16,SINGLE POINT
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,18,YES
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,19,GREENHECK
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,20,-
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,4,21,"1,2,3"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,0,SF-1B
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,1,DOAS-1
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,2,4500
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,3,2.00
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,4,5.55
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,5,PLENUM
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,6,II
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,7,SWSI
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,8,450
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,9,2493
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,10,5.6
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,11,VFD
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,12,7.5
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,13,1800
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,14,460
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,15,3
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,16,SINGLE POINT
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,18,YES
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,19,GREENHECK
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,20,-
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,5,21,"1,2,3"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,0,SF-2A
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,1,DOAS-2
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,2,6000
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,3,2.00
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,4,5.97
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,5,PLENUM
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,6,II
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,7,SWSI
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,8,500
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,9,2314
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,10,8
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,11,VFD
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,12,10
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,13,1800
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,14,460
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,15,3
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,16,SINGLE POINT
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,18,YES
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,19,GREENHECK
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,20,-
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,6,21,"1,2,3"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,0,SF-2B
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,1,DOAS-2
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,2,6000
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,3,2.00
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,4,5.97
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,5,PLENUM
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,6,II
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,7,SWSI
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,8,500
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,9,2314
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,10,8
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,11,VFD
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,12,10
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,13,1800
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,14,460
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,15,3
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,16,SINGLE POINT
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,18,YES
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,19,GREENHECK
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,20,-
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,7,21,"1,2,3"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,0,SF-3
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,1,DOAS-3
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,2,3000
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,3,1.50
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,4,4.20
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,5,PLENUM
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,6,II
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,7,SWSI
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,8,135
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,9,3660
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,10,3.41
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,11,VFD
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,12,5
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,13,3600
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,14,460
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,15,3
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,16,SINGLE POINT
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,18,YES
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,19,LAU
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,20,DDPG2
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,8,21,"1,2,3"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,0,SF-4A
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,1,AHU-4
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,2,4000
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,3,2.00
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,4,3.85
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,5,PLENUM
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,6,II
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,7,SWSI
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,8,122
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,9,4243
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,10,4.84
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,11,VFD
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,12,5
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,13,3600
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,14,460
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,15,3
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,16,SINGLE POINT
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,18,YES
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,19,LAU
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,20,DDPG2
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,9,21,"1,2,3"
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,0,SF-4B
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,1,AHU-4
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,2,4000
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,3,2.00
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,4,3.85
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,5,PLENUM
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,6,II
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,7,SWSI
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,8,122
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,9,4243
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,10,4.84
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,11,VFD
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,12,5
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,13,3600
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,14,460
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,15,3
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,16,SINGLE POINT
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,18,YES
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,19,LAU
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,20,DDPG2
+096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf#19,AHU SUPPLY FAN SCHEDULE,10,21,"1,2,3"

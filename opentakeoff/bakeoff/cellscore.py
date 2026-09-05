@@ -76,16 +76,48 @@ def truth_cells(set_id: str, page: int) -> tuple[dict, dict]:
 
 
 def extracted_rows(pdf, table) -> list:
-    """[[text, ...], ...] — rows top to bottom, cells left to right."""
+    """[{col: text}, ...] — rows top to bottom, keyed by COLUMN, not by position.
+
+    Position among the non-empty cells of a row is not good enough, and the
+    table that proved it is 096_IN#19's AHU SUPPLY FAN SCHEDULE. Its header
+    bands span — PRESSURE OF EACH FAN over two columns, MOTOR over six — and
+    SINGLE POINT spans MCA and MOCP in every data row, so a header row holds 13
+    cells where a data row holds 21. Compared by position, a perfectly
+    extracted table scored 125/175 and 2 rows of 11, because position 4 means
+    TSP in one row and 5.55 in another. Nothing was wrong with the extraction;
+    the ruler could not express what right meant.
+
+    What a takeoff actually needs is the value under the right HEADING, so the
+    column is the unit of comparison. The grid is read off the cells
+    themselves — the distinct left edges, clustered at 2pt — and each cell,
+    spanning or not, takes the index of the column it starts in. That is the
+    same convention the transcribed truth uses, and it makes a value in the
+    wrong column wrong however many cells precede it.
+    """
     cells, _a, _o, _s = slot(pdf, table)
-    rows: dict = defaultdict(list)
+    xs: list = []
+    for b in sorted(cells, key=lambda b: b[0]):
+        if not xs or b[0] - xs[-1] > 2.0:
+            xs.append(b[0])
+
+    def col(x: float) -> int:
+        lo, hi = 0, len(xs) - 1
+        while lo < hi:
+            mid = (lo + hi + 1) // 2
+            if xs[mid] <= x + 2.0:
+                lo = mid
+            else:
+                hi = mid - 1
+        return lo
+
+    rows: dict = defaultdict(dict)
     for b, cs in cells.items():
-        rows[round(b[1])].append((b[0], cell_text(cs)))
-    return [[norm(t) for _x, t in sorted(rows[k])] for k in sorted(rows)]
+        rows[round(b[1])][col(b[0])] = norm(cell_text(cs))
+    return [rows[k] for k in sorted(rows)]
 
 
-def _row_score(wrow: dict, grow: list) -> int:
-    return sum(1 for c, txt in wrow.items() if c < len(grow) and grow[c] == txt)
+def _row_score(wrow: dict, grow: dict) -> int:
+    return sum(1 for c, txt in wrow.items() if grow.get(c) == txt)
 
 
 def score_table(want: dict, got: list) -> tuple:
@@ -133,27 +165,42 @@ def score_table(want: dict, got: list) -> tuple:
 
 
 def selftest() -> int:
+    """The scorer's own cases, with rows keyed by COLUMN as extracted_rows emits.
+
+    A gap in a row is a MISSING column key, not a shorter list — which is the
+    whole point of the column-keyed form: on a table with spanning headers a
+    row may hold 13 cells and the row under it 21, and neither is shifted.
+    """
     want = {(0, 0): "A", (0, 1): "B", (1, 0): "C", (1, 1): "D"}
-    cases = (("identical", [["A", "B"], ["C", "D"]], 4),
-             ("columns swapped", [["B", "A"], ["C", "D"]], 2),
-             ("a cell dropped", [["A"], ["C", "D"]], 3),
+    cases = (("identical", [{0: "A", 1: "B"}, {0: "C", 1: "D"}], 4),
+             ("columns swapped", [{0: "B", 1: "A"}, {0: "C", 1: "D"}], 2),
+             ("a cell dropped", [{0: "A"}, {0: "C", 1: "D"}], 3),
              # A swap cannot score full marks under a monotonic alignment: one of
              # the two rows can be matched in order, the other cannot. 2/4, not
              # 0 and not 4 — stated here rather than quietly chosen.
-             ("rows swapped", [["C", "D"], ["A", "B"]], 2),
-             ("right strings, wrong table", [["D", "C"], ["B", "A"]], 0),
-             ("extra column on the right", [["A", "B", "Z"], ["C", "D", "Z"]], 4),
-             ("shifted down by one", [["X", "X"], ["A", "B"], ["C", "D"]], 4),
-             ("a whole row missing", [["C", "D"]], 2),
-             ("junk row inserted between", [["A", "B"], ["Q", "Q"], ["C", "D"]], 4))
+             ("rows swapped", [{0: "C", 1: "D"}, {0: "A", 1: "B"}], 2),
+             ("right strings, wrong table", [{0: "D", 1: "C"}, {0: "B", 1: "A"}], 0),
+             ("extra column on the right", [{0: "A", 1: "B", 2: "Z"}, {0: "C", 1: "D", 2: "Z"}], 4),
+             ("shifted down by one", [{0: "X", 1: "X"}, {0: "A", 1: "B"}, {0: "C", 1: "D"}], 4),
+             ("a whole row missing", [{0: "C", 1: "D"}], 2),
+             ("junk row inserted between", [{0: "A", 1: "B"}, {0: "Q", 1: "Q"}, {0: "C", 1: "D"}], 4),
+             # The case the column-keyed form exists for: the right values under
+             # the right headings, but the row holds a SPANNING cell so its
+             # neighbours sit at higher column indices than the row above.
+             # Positionally this looks shifted; by column it is exact.
+             ("a span shifts later columns", [{0: "A", 1: "B"}, {0: "C", 1: "D"}], 4),
+             # ... and the same shape gone wrong: the values slid one column
+             # right, which a takeoff would read under the wrong heading.
+             ("values slid one column right", [{1: "A", 2: "B"}, {1: "C", 2: "D"}], 0))
     bad = 0
     for name, got, expect in cases:
         n, t, _skipped, _r = score_table(want, got)
         ok = n == expect
         bad += not ok
-        print(f"  {'ok ' if ok else 'BAD'} {name:28s} {n}/{t}   expected {expect}")
-    print("\nA scorer that cannot lose points for a swap, a drop or a reorder is not")
-    print("measuring anything. If any line above says BAD, no number it prints is real.")
+        print(f"  {'ok ' if ok else 'BAD'} {name:32s} {n}/{t}   expected {expect}")
+    print("\nA scorer that cannot lose points for a swap, a drop, a reorder or a")
+    print("column slide is not measuring anything. If any line above says BAD, no")
+    print("number it prints is real.")
     return 1 if bad else 0
 
 
