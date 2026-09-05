@@ -1,0 +1,36 @@
+# coverage: DRAWING LIST | partial
+# 08_ME ... .cells.csv — CELL-tier ground truth, transcribed by eye from a 1.1x
+# render of the DRAWING LIST. PARTIAL: the header plus the first 8 of 49 data
+# rows. Recorded as SHEET NUMBER and SHEET NAME being SEPARATE cells, which is
+# what a reader sees, even though the drawing rules no vertical between them —
+# the information is two columns and a takeoff needs it that way. The ruling
+# graph faithfully returns one cell, so this table is where geometric fidelity
+# and useful extraction come apart.
+sheet,table_title,row,col,text
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,0,0,SHEET NUMBER
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,0,1,SHEET NAME
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,0,2,SCALE
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,1,0,G 000
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,1,1,CODE INFORMATION AND ASSEMBLIES
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,1,2,AS SHOWN
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,2,0,H 200
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,2,1,BASEMENT PLAN ASBESTOS ABATEMENT
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,2,2,1/8” = 1’-0”
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,3,0,D 101
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,3,1,FIRST FLOOR DEMOLITION AND PHASING PLAN
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,3,2,1/8” = 1’-0”
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,4,0,D 201
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,4,1,SOUTH AND EAST ELEVATIONS DEMOLITION
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,4,2,1/8” = 1’-0”
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,5,0,D 202
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,5,1,NORTH AND WEST ELEVATIONS DEMOLITION
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,5,2,1/8” = 1’-0”
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,6,0,A 101
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,6,1,FIRST FLOOR PLAN
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,6,2,1/8” = 1’-0”
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,7,0,A 102
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,7,1,SECOND FLOOR PLAN
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,7,2,1/8” = 1’-0”
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,8,0,A 103
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,8,1,THIRD FLOOR PLAN
+08_ME_BGS_Augusta_EastCampus_Renovation.pdf,DRAWING LIST,8,2,1/8” = 1’-0”

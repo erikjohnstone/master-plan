@@ -1,0 +1,43 @@
+# coverage: HELICAL PIER SCHEDULE | complete
+# coverage: FOOTING SCHEDULE | complete
+# coverage: COLUMN SCHEDULE | complete
+# 073_MT ... .cells.csv — CELL-tier ground truth. One row per NON-EMPTY drawn cell,
+# transcribed by eye from a 3.4x render (crop 2080,505,285,250). row/col are
+# 0-based indices into the table AS DRAWN, a spanning cell counted once at its
+# top-left. Empty drawn cells are not recorded: they carry no information, and a
+# text-match scorer cannot find them.
+sheet,table_title,row,col,text
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,HELICAL PIER SCHEDULE,0,0,HELICAL PIER SCHEDULE
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,HELICAL PIER SCHEDULE,1,0,TAG
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,HELICAL PIER SCHEDULE,1,1,COMP
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,HELICAL PIER SCHEDULE,1,2,TENSION
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,HELICAL PIER SCHEDULE,1,3,LATERAL
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,HELICAL PIER SCHEDULE,1,4,NOTES
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,HELICAL PIER SCHEDULE,2,0,HP-1
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,HELICAL PIER SCHEDULE,2,1,25K
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,HELICAL PIER SCHEDULE,2,2,0K
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,HELICAL PIER SCHEDULE,2,3,0K
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,0,0,FOOTING SCHEDULE
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,1,0,TAG
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,1,1,DEPTH
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,1,2,Width
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,1,3,REINFORCEMENT
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,1,4,T.O. FTG ELEV
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,2,0,F1
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,2,1,"12"""
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,2,2,"60"""
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,2,3,"#4 BARS @ 12"" OC EA WAY T&B"
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,2,4,"(-)5'-0"" - VIF"
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,3,0,F2
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,3,1,"12"""
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,3,2,"48"""
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,3,3,"#4 BARS @ 12"" OC EA WAY T&B"
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,FOOTING SCHEDULE,3,4,"(-)5'-0"" - VIF"
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,COLUMN SCHEDULE,0,0,COLUMN SCHEDULE
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,COLUMN SCHEDULE,1,0,TAG
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,COLUMN SCHEDULE,1,1,SIZE
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,COLUMN SCHEDULE,1,2,MATERIAL
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,COLUMN SCHEDULE,1,3,NOTES
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,COLUMN SCHEDULE,2,0,C1
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,COLUMN SCHEDULE,2,1,HSS4X4X1/4
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf#21,COLUMN SCHEDULE,2,2,STEEL
