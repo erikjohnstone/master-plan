@@ -106,6 +106,28 @@ def extract_grid(pdf_path: str, page_no: int = 1) -> dict:
         if not cells:
             continue
 
+        # A DRAWN CELL THAT IS EMPTY IS STILL PART OF THE GRID. slot() returns
+        # only the faces that received words, which is right for scoring text
+        # but wrong for describing structure: a data row with one blank cell
+        # then looks like it does not cover every column, and a consumer
+        # deciding "header tier or data row" by coverage reads the whole row as
+        # a header. Measured on 096_IN#19's AHU CHILLED WATER COOLING COIL
+        # SCHEDULE — 20 drawn columns, 19 filled in every data row — where that
+        # cost all four data rows and the table with them.
+        #
+        # A face that slot() SPLIT (split_unruled_columns divides a cell whose
+        # column of siblings all leave the same gap) must not come back as a
+        # third, overlapping cell, so a face is only added when no returned
+        # cell's centre lies inside it.
+        centres = [((k[0] + k[2]) / 2, (k[1] + k[3]) / 2) for k in cells]
+        for face in t["cells"]:
+            if face in cells:
+                continue
+            if any(face[0] <= cx <= face[2] and face[1] <= cy <= face[3]
+                   for cx, cy in centres):
+                continue
+            cells[face] = []
+
         xs = _axis(b[0] for b in cells)
         ys = _axis(b[1] for b in cells)
 
@@ -122,12 +144,14 @@ def extract_grid(pdf_path: str, page_no: int = 1) -> dict:
                 "bbox": [float(b[0]), float(b[1]), float(b[2]), float(b[3])],
             })
         emitted.sort(key=lambda c: (c["row"], c["col"]))
+        with_text = sum(1 for c in emitted if c["text"])
 
         out.append({
             "bbox": bbox,
             "rows": len(ys),
             "cols": len(xs),
             "cells": emitted,
+            "cellsWithText": with_text,
             "raster": False,
             "assigned": assigned,
             "orphan": orphan,

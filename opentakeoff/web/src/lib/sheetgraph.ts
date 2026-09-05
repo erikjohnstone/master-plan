@@ -8984,9 +8984,22 @@ export function scheduleTableFromODL(
   t: ODLTable,
   sheetKey: string,
   pageViewportTransform: number[],
-  opts: { buildings?: Set<string>; sourceSpans?: GraphSpan[] } = {},
+  opts: {
+    buildings?: Set<string>;
+    sourceSpans?: GraphSpan[];
+    /** Called with the reason when this function refuses a table. The refusal
+     * discipline here is deliberate and stays exactly as it is; this only
+     * makes it AUDIBLE. A caller comparing two extraction engines otherwise
+     * sees "no table" and cannot tell a region that was never found from a
+     * region that was found and then declined, which are different problems
+     * with different fixes. */
+    reject?: (reason: string) => void;
+  } = {},
 ): ScheduleTable | null {
-  if (t["number of rows"] < 2 || t["number of columns"] < 2) return null;
+  const refuse = (reason: string): null => { opts.reject?.(reason); return null; };
+  if (t["number of rows"] < 2 || t["number of columns"] < 2) {
+    return refuse(`grid too small: ${t["number of rows"]}x${t["number of columns"]}`);
+  }
   if (hasRowOrientedTitle(t, t["number of rows"])) t = rotateODLTable90(t);
   const R = t["number of rows"], C = t["number of columns"];
 
@@ -9071,8 +9084,35 @@ export function scheduleTableFromODL(
       if (cell && cell["row number"] - 1 === r) ownCells.add(cell);
     }
     if (!ownCells.size) { headerEnd = r + 1; continue; } // fully blank spacer row
-    const grouped = [...ownCells].some((cl) => (cl["column span"] || 1) > 1 || (cl["row span"] || 1) > 1);
-    const fullCoverage = ownCells.size >= C;
+    // COVERAGE IS ABOUT COLUMNS, NOT CELL COUNT. A row of 21 own cells one of
+    // which spans two columns covers all 22 — counting cells instead calls it
+    // partial. With no spans anywhere the two counts are identical, so this
+    // changes nothing for a span-free grid; it only matters where spans exist,
+    // which is exactly where the old count was wrong.
+    const coveredCols = new Set<number>();
+    for (let c = 0; c < C; c++) {
+      const cell = grid[r][c];
+      if (cell && cell["row number"] - 1 === r) coveredCols.add(c);
+    }
+    const spanning = [...ownCells].filter((cl) => (cl["column span"] || 1) > 1 || (cl["row span"] || 1) > 1);
+    const fullCoverage = coveredCols.size >= C;
+    // A SPAN IN A DATA ROW IS RARE BUT REAL, and the claim above that it
+    // "can never occur in a real per-item data row" is measurably false:
+    // 096_IN_Vermillion_County_Jail#19's AHU SUPPLY FAN SCHEDULE prints
+    // SINGLE POINT across MCA and MOCP in EVERY one of its seven data rows
+    // (a single-point power connection genuinely is one value for two
+    // columns). Under "any span makes this a header tier" the loop swallowed
+    // all seven, concatenated their values into the column labels — header 0
+    // came back as "MARK SF-1A SF-1B SF-2A SF-2B SF-3 SF-4A SF-4B" — and the
+    // table was refused for having no data rows. Nine of the ten schedules on
+    // that sheet failed this way.
+    //
+    // What separates a real grouping tier from a data row that happens to
+    // span is PROPORTION, not presence. That table's own first header tier is
+    // 13 spanning cells out of 15; its data rows are 1 out of 21. A genuine
+    // tier exists TO group, so grouping is most of what it does.
+    const grouped = spanning.length > 0
+      && (!fullCoverage || spanning.length * 4 >= ownCells.size);
     if (grouped || !fullCoverage) { headerEnd = r + 1; continue; }
     if (!headerCandidateChecked) {
       headerCandidateChecked = true;
@@ -9082,7 +9122,7 @@ export function scheduleTableFromODL(
     }
     break; // first real data row
   }
-  if (headerEnd <= bodyStart) return null;
+  if (headerEnd <= bodyStart) return refuse("no header block above the data");
 
   // Compound per-column header label: concatenate each header row's OWN
   // cell text for that column top-to-bottom, deduping a cell that continues
@@ -9194,7 +9234,7 @@ export function scheduleTableFromODL(
   // than a genuine schedule) — recovers them the same general way, with no
   // new vocabulary or corpus-specific carve-out.
   if (kind === "unknown") {
-    if (!titleText.trim()) return null;
+    if (!titleText.trim()) return refuse("unknown kind and no title");
     // Same title-family gate as the geometric extractor's own finish→
     // equipment reclassification (isMepEquipmentSchedule, above extractAllTables),
     // reached from the OTHER direction — a table that never independently
@@ -9226,7 +9266,7 @@ export function scheduleTableFromODL(
     // missing the equipment rating-word bar; dropping them here makes the ODL
     // path less capable than the same table's geometric path.
     if (isMepEquipmentSchedule(titleText)) kind = "equipment";
-    else return null;
+    else return refuse(`finish kind but the title is not a finish schedule: ${titleText}`);
   }
 
   // A real, standard cross-firm MEP title — "…CONNECTION SCHEDULE" (electrical
@@ -9368,7 +9408,7 @@ export function scheduleTableFromODL(
     }
     rows.push({ key: keyRes.key, sheet: sheetKey, ...(keyRes.building ? { building: keyRes.building } : {}), cells });
   }
-  if (!rows.length) return null;
+  if (!rows.length) return refuse(`no keyed data rows (kind ${kind}, key column ${keyColIdx < 0 ? "col 0" : JSON.stringify(headers[keyColIdx])}, headers ${JSON.stringify(headers.slice(0, 3))})`);
   const promotedHeaders = promoteLeadingEngineeringUnits(headers, rows);
   headers.splice(0, headers.length, ...promotedHeaders);
   // Real, found-live gap (2026-09-03, 032_PA_Construct_EHRM_Infrastructure's
