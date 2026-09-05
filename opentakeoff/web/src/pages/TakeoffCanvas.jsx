@@ -75,7 +75,7 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // The Symbol tool (#264) — the canvas face for the sweep engine. The engine,
 // counter-examples, the luminance channel, and label corroboration all live
 // as pure web libs already; this file adds only the gesture and the review.
-import { sweepSymbols, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc } from "../lib/symbolsweep";
+import { sweepSymbols, fingerprintSymbol, assertDistinctiveSymbolSeed, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc } from "../lib/symbolsweep";
 import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib/mepconnectivity.ts";
 import { mepLayerSignal } from "../lib/mepsystems.ts";
 // Accuracy-hardening plan Phase 2 — on an unlayered/weakly-layered sheet, a
@@ -94,13 +94,13 @@ import { HVAC_REF_SHAPES } from "../lib/hvacRefShapes.ts";
 // national HVAC symbol standard exists, so a bigger fixed reference-shape
 // library never scales to every firm's own house legend. findLegendGlyphs
 // auto-detects a job's own legend rows instead of requiring one.
-import { findLegendGlyphs, findGlyphNear } from "../lib/legendlearn.ts";
+import { findLegendGlyphs, findGlyphNear, legendLearnStatus } from "../lib/legendlearn.ts";
 // Accuracy-hardening plan Phase 4 — a register/grille mark embedded within a
 // tapered duct run has no independent whole-shape perimeter of its own; see
 // inlinemotif.ts's own header comment for the real, measured reason
 // symbol_sweep's whole-shape fingerprint under-scores real siblings of it.
 import { fingerprintInlineMotif, sweepInlineMotif, corroborateInlineMotif, classifyInlineMotifMatches } from "../lib/inlinemotif.ts";
-import { labelPlacements } from "../lib/symbollabels";
+import { labelPlacements, reconcileSweepLabels, LABEL_CORROBORATION_SCORE_LOW } from "../lib/symbollabels";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
 // is set) — the owner's call, 2026-08-24: it serves no purpose on the sheet.
@@ -4801,8 +4801,14 @@ export default function TakeoffCanvas() {
     if (!segs || !segs.length) { setCommitMsg("This sheet has no vector linework (likely a scan) — the Symbol tool reads drawn segments."); return; }
     const lum = segLumRef.current.get(key);
     let res;
+    let seedName = null;
+    let spans = null;
     try {
-      res = sweepSymbols(segs, rect, lum ? { lum } : {});
+      const fp = fingerprintSymbol(segs, rect, lum);
+      assertDistinctiveSymbolSeed(fp);
+      spans = await ensureTextSpans(key);
+      seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
+      res = sweepSymbols(segs, rect, { ...(lum ? { lum } : {}), ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}) });
     } catch (e) {
       // the engine's refusals (empty marquee, region-sized marquee) are
       // instructions, exactly as the MCP surfaces them
@@ -4811,12 +4817,21 @@ export default function TakeoffCanvas() {
     }
     let labels = [];
     try {
-      const spans = await ensureTextSpans(key);
+      spans = spans || await ensureTextSpans(key);
       labels = labelPlacements(
         [res.seed.center, ...res.matches.map((m) => m.at), ...res.withheld.map((w) => w.at)],
-        spans, segs, lum,
+        spans, segs, lum, { preferredLabel: seedName?.label, preferredFamily: seedName?.family, scores: [1, ...res.matches.map((m) => m.score), ...res.withheld.map((w) => w.score)], symbolInkLengthPx: res.seed.length_px },
       );
     } catch { labels = []; }
+    const seedLabel = labels[0] || null;
+    const rawMatchCount = res.matches.length;
+    const corrected = reconcileSweepLabels(
+      seedLabel,
+      res.matches, res.matches.map((_, i) => labels[1 + i] || null),
+      res.withheld, res.withheld.map((_, i) => labels[1 + rawMatchCount + i] || null),
+    );
+    res = { ...res, matches: corrected.matches, withheld: corrected.withheld };
+    labels = [seedLabel, ...corrected.matchLabels, ...corrected.withheldLabels];
     const L = (i) => labels[i] || null;
     const nM = res.matches.length;
     // One physical spot, ONE question. The engine discloses every rotational
@@ -6503,25 +6518,41 @@ export default function TakeoffCanvas() {
     }
     const lum = segLumRef.current.get(key);
     let res;
+    let seedName = null;
+    let spans = null;
     try {
+      const fp = fingerprintSymbol(segs, rect, lum);
+      assertDistinctiveSymbolSeed(fp);
+      spans = await ensureTextSpans(key);
+      seedName = labelPlacements([fp.center], spans, segs, lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] || null;
       res = sweepSymbols(segs, rect, {
         rotations: opts.rotations !== false,
         mirror: opts.mirror !== false,
         ...(opts.tolerancePx != null ? { tolPx: opts.tolerancePx } : {}),
         ...(lum ? { lum } : {}),
         ...(opts.luminanceTolerance != null ? { lumTol: opts.luminanceTolerance } : {}),
+        ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
       });
     } catch (e) {
       return { error: String((e && e.message) || e) };
     }
     let labels = [];
     try {
-      const spans = await ensureTextSpans(key);
+      spans = spans || await ensureTextSpans(key);
       labels = labelPlacements(
         [res.seed.center, ...res.matches.map((m) => m.at), ...res.withheld.map((w) => w.at)],
-        spans, segs, lum,
+        spans, segs, lum, { preferredLabel: seedName?.label, preferredFamily: seedName?.family, scores: [1, ...res.matches.map((m) => m.score), ...res.withheld.map((w) => w.score)], symbolInkLengthPx: res.seed.length_px },
       );
     } catch { labels = []; }
+    const seedLabel = labels[0] || null;
+    const rawMatchCount = res.matches.length;
+    const corrected = reconcileSweepLabels(
+      seedLabel,
+      res.matches, res.matches.map((_, i) => labels[1 + i] || null),
+      res.withheld, res.withheld.map((_, i) => labels[1 + rawMatchCount + i] || null),
+    );
+    res = { ...res, matches: corrected.matches, withheld: corrected.withheld };
+    labels = [seedLabel, ...corrected.matchLabels, ...corrected.withheldLabels];
     const L = (i) => labels[i]?.label || null;
     const norm = ([x, y]) => [+(x / p.img.w).toFixed(5), +(y / p.img.h).toFixed(5)];
     const nM = res.matches.length;
@@ -6532,6 +6563,7 @@ export default function TakeoffCanvas() {
       rejected: (res.rejected || []).map((r) => ({ at: norm(r.at), reason: r.reason || "excluded" })),
       complete: res.complete,
       dropped: res.candidates?.dropped || 0,
+      ...((corrected.promoted || corrected.demoted) ? { label_corroboration: { promoted: corrected.promoted, demoted: corrected.demoted } } : {}),
     };
   }
 
@@ -6607,13 +6639,25 @@ export default function TakeoffCanvas() {
       nodingFailed = true;
     }
     const norm = ([x, y]) => [+(x / p.img.w).toFixed(5), +(y / p.img.h).toFixed(5)];
+    const support = nodingFailed ? {
+      status: "unsupported_geometry",
+      note: "This sheet's vector linework could not be reliably clustered, so zero learned rows is unsupported rather than an empty legend. Marquee a verified plan occurrence with symbol_sweep and keep this sheet in review.",
+    } : legendLearnStatus(segs, spans, glyphs);
     return {
-      glyphs: glyphs.map((g) => ({ caption: g.caption, rect_norm: [...norm(g.rect[0]), ...norm(g.rect[1])], segments: g.segments })),
-      ...(!glyphs.length ? {
-        note: nodingFailed
-          ? "This sheet's own linework could not be reliably noded for glyph clustering (a real, dense-CAD-geometry edge case, not a missing legend) — no glyphs detected as a result. Marquee one instance directly with symbol_sweep instead."
-          : "No (glyph, caption) row pairs were detected on this sheet — it may not be a legend, or its rows may not fit this detector's own compact-glyph/adjacent-caption assumptions. This is not an error: a sheet with no real legend falls back to the ordinary symbol_sweep workflow (marquee one real occurrence anywhere and sweep from it).",
-      } : {}),
+      status: support.status,
+      glyphs: glyphs.map((g) => ({
+        caption: g.caption,
+        caption_bbox_norm: [...norm(g.caption_bbox[0]), ...norm(g.caption_bbox[1])],
+        rect_norm: [...norm(g.rect[0]), ...norm(g.rect[1])],
+        segments: g.segments,
+        aligned_rows: g.aligned_rows,
+        heading: g.heading,
+        kind: g.kind,
+        seedable: g.seedable,
+        ...(g.seed_warning ? { seed_warning: g.seed_warning } : {}),
+        ...(g.member_rects ? { member_rects_norm: g.member_rects.map((rect) => [...norm(rect[0]), ...norm(rect[1])]) } : {}),
+      })),
+      ...(support.note ? { note: support.note } : {}),
     };
   }
 

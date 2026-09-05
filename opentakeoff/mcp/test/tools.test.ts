@@ -1839,16 +1839,26 @@ test("find_legend_symbols: real T-junction glyphs, split/wrapped captions, and a
 
   const r = await call(client, "find_legend_symbols", { sheet: LEGENDKEY });
   assert.equal(r.isError, false);
-  assert.equal(r.data.glyphs.length, 3, "the 2 control-valve rows + the 1 damper row — never the divider, never the orphan KW/KILOWATTS pair");
+  assert.equal(r.data.status, "ok");
+  assert.equal(r.data.glyphs.length, 4, "the 2 control-valve rows + damper + multi-variant row — never the divider, never the orphan KW/KILOWATTS pair");
 
   const byCaption = Object.fromEntries(r.data.glyphs.map((g: any) => [g.caption, g]));
   assert.ok(byCaption["2 - WAY ELECTRIC CONTROL VALVE"], "a caption split into several real text runs, merged correctly");
   assert.ok(byCaption["2-WAY CONTROL VALVE WITH INTEGRAL THERMOSTAT"], "a caption WRAPPED across two physical lines, merged correctly");
   assert.ok(byCaption["PARALLEL BLADE DAMPER"], "a second, independent glyph family, correctly found and labeled");
+  const group = byCaption["3-WAY, 2-WAY CONTROL VALVE"];
+  assert.ok(group, "a multi-variant row is preserved as legend truth");
+  assert.equal(group.kind, "symbol_group");
+  assert.equal(group.seedable, false);
+  assert.equal(group.member_rects.length, 2, "both independently meaningful variant boxes are disclosed");
+  assert.match(group.seed_warning, /anchor each intended identity separately/i);
 
   // every rect is real, image-px, and directly usable as symbol_sweep's
   // own seed_rect — feed one straight through and confirm it actually works
   const cv = byCaption["2 - WAY ELECTRIC CONTROL VALVE"];
+  assert.deepEqual(cv.caption_bbox.length, 4, "caption ownership is returned as an exact bbox");
+  assert.ok(cv.aligned_rows >= 2, "row includes repeated-column evidence");
+  assert.match(cv.heading, /SYMBOL/i, "row includes the heading that admitted its layout");
   const swept = await call(client, "symbol_sweep", { sheet: LEGENDKEY, seed_rect: [[cv.rect[0], cv.rect[1]], [cv.rect[2], cv.rect[3]]] });
   assert.equal(swept.isError, false, "the detected rect is a real, valid seed_rect — no manual marqueeing needed");
 
@@ -1870,10 +1880,11 @@ test("find_legend_symbols: a sheet with real linework but nothing legend-shaped 
   await call(client, "load_plan", { path: VALVEPLAN });
   const r = await call(client, "find_legend_symbols", { sheet: VALVEKEY });
   assert.equal(r.isError, false);
+  assert.equal(r.data.status, "no_rows");
   // the valve-precision fixture's own gate/ball valves have NO nearby
   // caption text at all, so nothing pairs — an honest empty result
   assert.equal(r.data.glyphs.length, 0);
-  assert.ok(r.data.note && /no real legend falls back to the ordinary symbol_sweep/.test(r.data.note));
+  assert.ok(r.data.note && /No structurally corroborated|do not interpret it as proof/i.test(r.data.note));
 });
 
 // ── sweep_inline_motif, real end-to-end (accuracy-hardening plan Phase 4) ──
@@ -2224,7 +2235,7 @@ test("symbol_sweep labels: a leader names the seed, an adjacent token names a ma
   // seed = drain A at pt (150,400) → px [300..368, 384..424]
   const r = await call(client, "symbol_sweep", { sheet: SYMLBLKEY, seed_rect: [[296, 380], [372, 428]] });
   assert.equal(r.isError, false);
-  assert.equal(r.data.found, 2, "B and C — identical glyphs");
+  assert.equal(r.data.found, 1, "only unlabeled B remains in the FD1 count; differently tagged FD2 is withheld");
 
   // the seed's own tag came down its leader line
   assert.equal(r.data.seed.label, "FD1");
@@ -2232,14 +2243,16 @@ test("symbol_sweep labels: a leader names the seed, an adjacent token names a ma
 
   // C — pt y 150, so the BOTTOM half in image px — is named by the token
   // written beside it
-  const c = r.data.matches.find((m: any) => m.at[1] > 600);
+  const c = r.data.withheld.find((m: any) => m.at[1] > 600);
   assert.equal(c.label, "FD2");
   assert.equal(c.label_via, "adjacent");
+  assert.match(c.reason, /outside the seed family/);
 
   // B carries nothing — and the reply says so in words
   const b = r.data.matches.find((m: any) => m.at[1] < 600);
   assert.equal(b.label, undefined, "no label reaches B");
   assert.match(r.data.note, /carry NO label/, "a shape-only count in a labeled family is flagged");
+  assert.match(r.data.note, /withheld because the drawing gives them a different tag/, "the sibling tag changes disposition explicitly");
   assert.match(r.data.note, /"FD1"/, "the family identity is named");
 
   // determinism
@@ -2255,14 +2268,17 @@ test("symbol_sweep labels: adjacent tags on the diamond markers — same tag con
   const r = await call(client, "symbol_sweep", { sheet: "symbol-set.pdf", seed_rect: [[270, 794], [330, 854]] });
   assert.equal(r.isError, false);
   assert.equal(r.data.seed.label, "T1", "the tag drawn inside the seed's own bubble");
-  assert.equal(r.data.found, 4, "the four other diamonds on the floor plan");
+  assert.equal(r.data.found, 3, "the two T1 siblings and unlabeled marker count; differently tagged T2 is withheld");
 
   const tags = r.data.matches.map((m: any) => m.label ?? null).sort((a: any, b: any) => String(a).localeCompare(String(b)));
-  assert.deepEqual(tags, ["T1", "T1", "T2", null].sort((a, b) => String(a).localeCompare(String(b))),
-    "two T1 siblings, the T2, and the unlabeled marker");
+  assert.deepEqual(tags, ["T1", "T1", null].sort((a, b) => String(a).localeCompare(String(b))),
+    "two T1 siblings and the unlabeled marker");
+  const t2 = r.data.withheld.find((m: any) => m.label === "T2");
+  assert.ok(t2, "the sibling diamond remains auditable in withheld");
+  assert.match(t2.reason, /outside the seed family/);
   // drafting reuses one bubble shape across tags — the geometry matched T2,
   // the drawing disagrees, and the reply says to check it
-  assert.match(r.data.note, /names differently \(T2\)/);
+  assert.match(r.data.note, /withheld because the drawing gives them a different tag/);
   assert.match(r.data.note, /carry NO label/, "the unlabeled marker is the other flag");
 });
 

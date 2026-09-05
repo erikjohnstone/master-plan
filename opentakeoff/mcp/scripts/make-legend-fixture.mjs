@@ -16,7 +16,10 @@
 //     failed against the real sheet and JTS-based noding was needed;
 //   - a long horizontal rule line (a column divider), which must NOT be
 //     read as a glyph;
-//   - two independent, unrelated (glyph, caption) pairs on the same sheet.
+//   - two independent, unrelated (glyph, caption) pairs on the same sheet;
+//   - a row containing two substantial valve variants, which must be
+//     disclosed as a non-seedable symbol group rather than a Frankenstein
+//     seed around both symbols or an arbitrary single member.
 //
 // Deterministic byte output; re-run only to change the fixture:
 //   node scripts/make-legend-fixture.mjs
@@ -76,6 +79,11 @@ function damperGlyph(px, py) {
 const content = [
   "1 w",
   "40 40 720 720 re S",
+  // Production Legend Learn now requires the repeated rows to belong to a
+  // real legend/symbol section (or clear a much stronger headerless-row
+  // quorum). Keep the end-to-end fixture honest by drawing the section
+  // heading a real legend sheet would have.
+  text("CONTROL SYMBOLS", 80, 745, 16),
 
   // Row 1: control valve glyph, caption split into 3 real text runs on one
   // line ("2" + "-" + "WAY ELECTRIC CONTROL VALVE") — mirrors the real
@@ -102,9 +110,15 @@ const content = [
   ...damperGlyph(100, 420),
   text("PARALLEL BLADE DAMPER", 155, 405, 12),
 
+  // Row 4: two independently meaningful inline variants under one caption.
+  // The row is valid legend truth, but its union is not one plan symbol.
+  ...controlValveGlyph(100, 340),
+  ...controlValveGlyph(140, 340),
+  text("3-WAY, 2-WAY CONTROL VALVE", 170, 325, 12),
+
   // A caption with NO nearby glyph at all (a bare abbreviation-style
   // entry) — must be silently ignored, not force-paired with anything.
-  text("KW", 100, 300, 10), text("KILOWATTS", 400, 300, 10),
+  text("KW", 100, 230, 10), text("KILOWATTS", 400, 230, 10),
 ].join("\n");
 
 const objects = [

@@ -54,6 +54,15 @@ test("mergeProposals invariant: every output pair is separated by more than merg
   }
 });
 
+test("transform-equivalent peaks inside the production six-pixel radius are one placement", () => {
+  // White Sturgeon M-101: mirrored readings of one circular tank landed 5.4
+  // px apart at the default 2 px tolerance. Both are excellent readings, but
+  // they are the same physical tank and must never become two count markers.
+  const out = mergeProposals([P(100, 100, 1, 0), P(105.4, 100, 0.972, 4)], 6);
+  assert.equal(out.length, 1);
+  assert.equal(out[0].score, 1);
+});
+
 // ── sweep-level: the invariant holds on ink, and adjacency survives ─────────
 function lcg(seed: number) {
   let s = seed >>> 0;

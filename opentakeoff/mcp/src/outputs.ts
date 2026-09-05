@@ -369,8 +369,9 @@ const sweepPlacement = {
   rotation: z.number().describe("Detected rotation in degrees (0 | 90 | 180 | 270)"),
   mirrored: z.boolean(),
   extra: z.number().optional().describe("Richer-variant disclosure: the fraction of the seed's total length found as UNMATCHED extra linework fully inside this placement's footprint, present when past the 0.30 bar — the classic grille-counted-as-register shape; LOOK at these first. Under variant_guard such placements demote to withheld instead of matching"),
-  label: z.string().optional().describe("The drawing's own tag for this placement (#308) — a fixture token written beside it or connected by a drawn leader (e.g. \"P-7\", \"FD1\"). Disclosure, never a recount: a match with NO label in a labeled family was counted on shape alone (look before trusting), and a withheld row carrying the seed's own tag is the drawing vouching for it"),
+  label: z.string().optional().describe("The drawing's own tag for this placement (#308) — a fixture token written beside it or connected by a drawn leader (e.g. \"P-7\", \"FD1\"). The tag corroborates already-detected vector geometry: same-family near-matches may promote, while geometry labeled as a sibling family is withheld; text alone never creates a placement"),
   label_via: z.enum(["adjacent", "leader"]).optional().describe("How the tag reached this placement: written beside it, or followed along a drawn leader line (leader-following arms only on multi-pen sheets, where the annotation pen separates from the work)"),
+  label_bbox: z.tuple([z.number(), z.number(), z.number(), z.number()]).optional().describe("Exact [x0, y0, x1, y1] image-pixel box of the text run that supplied label — auditable proof that this physical placement owns the closest intended tag, rather than merely sharing its family"),
 };
 
 /** A placement a counter-example rejected (#259, reported by @FrankAtGHub).
@@ -463,6 +464,7 @@ export const symbolSweepOutput = {
     length_px: z.number().describe("Total seed linework length, image px"),
     label: z.string().optional().describe("The drawing's own tag for the seed instance (#308) — the family's identity, e.g. seeding a drain the sheet labels \"P-7\""),
     label_via: z.enum(["adjacent", "leader"]).optional(),
+    label_bbox: z.tuple([z.number(), z.number(), z.number(), z.number()]).optional().describe("Exact image-pixel text-run box that supplied the seed label"),
   }),
   rejected: z.array(sweepRejected).optional().describe("Sheet scope only. Placements the geometry accepted and a counter-example refused (#259) — NEVER counted in found, and never silent: each says which negative did it and what it saw. Reinstate one by hand with place_count at its `at` if you disagree"),
   negatives: sweepNegatives.optional().describe("What each `exclude` rect was read as, in the order you passed them (#259)"),
@@ -498,19 +500,26 @@ export const matchReferenceSymbolOutput = {
 };
 
 /** find_legend_symbols (accuracy-hardening plan Phase 1) — auto-detect
- * every (glyph, caption) row on a legend sheet. No fixed library, nothing
- * hand-digitized: real vector segments clustered (real-junction-aware) and
- * paired with each row's own real caption text. Each `rect` feeds straight
- * into symbol_sweep's own `seed_rect` (scope: "set") — this tool only
- * detects, it never sweeps. */
+ * structurally corroborated (glyph, caption) rows on a legend sheet. No
+ * fixed library: real vector segments are paired with their own caption
+ * text and exact evidence. It detects only; plan anchoring and sweeping are
+ * separate, and routed-system line styles are non-seedable for EA counts. */
 export const findLegendSymbolsOutput = {
   sheet: z.string(),
+  status: z.enum(["ok", "no_rows", "unsupported_caption_text", "unsupported_geometry"]).describe("ok only when rows were structurally corroborated; unsupported_* means zero rows must not be interpreted as an empty legend"),
   glyphs: z.array(z.object({
     caption: z.string().describe("The row's own caption, exactly as drawn (whitespace-normalized)"),
-    rect: z.tuple([z.number(), z.number(), z.number(), z.number()]).describe("[x0, y0, x1, y1], image px — feed straight into symbol_sweep's own seed_rect"),
+    caption_bbox: z.tuple([z.number(), z.number(), z.number(), z.number()]).describe("[x0, y0, x1, y1], image px — exact text bbox proving which run(s) own this caption"),
+    rect: z.tuple([z.number(), z.number(), z.number(), z.number()]).describe("[x0, y0, x1, y1], image px — exact legend-scale geometry evidence; corroborate a plan-scale occurrence before sweeping"),
     segments: z.number().int().describe("Real linework inside the glyph's own bbox — informational only, a rough proxy for how much ink is here"),
-  })).describe("One entry per detected (glyph, caption) row, in no particular order"),
-  note: z.string().optional().describe("Present when nothing was detected — not necessarily an error: a sheet with no real legend falls back to the ordinary symbol_sweep workflow"),
+    aligned_rows: z.number().int().describe("Number of rows supporting the same repeated glyph/caption column — structural evidence, not a probability"),
+    heading: z.string().nullable().describe("Nearby LEGEND/SYMBOL/NOTATION heading that supports this row, or null when the stronger headerless-layout quorum was met"),
+    kind: z.enum(["symbol", "symbol_group", "line_style", "annotation", "control_function"]).describe("symbol is one discrete glyph; symbol_group contains multiple substantial inline variants; line_style is routed-system truth; annotation is a drafting/reference convention; control_function is BAS point/command/logic/sequence truth. Only symbol may proceed to plan-anchor corroboration"),
+    seedable: z.boolean().describe("Whether this learned rect may proceed to discrete-symbol plan-anchor corroboration"),
+    seed_warning: z.string().optional().describe("Present when the row must not be passed to a discrete EA symbol sweep"),
+    member_rects: z.array(z.tuple([z.number(), z.number(), z.number(), z.number()])).optional().describe("Connected member boxes in image px when the row's visual evidence is disconnected; symbol_group members are variants to anchor separately"),
+  })).describe("One entry per structurally corroborated (glyph, caption) row, deterministic reading order"),
+  note: z.string().optional().describe("Present when nothing was detected. Read status: unsupported_* is a capability gap, while no_rows is only no structurally corroborated rows on this sheet — neither proves the project has no symbols"),
 };
 
 /** sweep_inline_motif (accuracy-hardening plan Phase 4) — a register/grille
