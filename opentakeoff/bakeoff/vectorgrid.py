@@ -63,6 +63,11 @@ AXIS_TOL = 0.60      # a stroke this close to axis-aligned is a rule
 MIN_LEN = 3.0        # shorter strokes are tick marks, hatching, arrowheads
 THIN_RECT = 1.6      # a filled rect thinner than this IS a line (CAD idiom)
 MIN_CELL_AREA = 12.0 # below this a face is a rounding artefact, not a cell
+MIN_CELL_SIDE = 2.0  # a face thinner than this in EITHER axis is a slot between two
+                     # coincident rules, not a cell — and it BRIDGES what it lies between
+MAX_CELL_FRAC = 0.02  # above this share of the page a face is furniture, not a cell
+MAX_CELL_HFRAC = 0.10 # a face taller than this share of the page is blank sheet, not a row
+MIN_FILL_RATIO = 0.20 # n_cells vs rows*cols — a table tessellates, a plan does not
 
 
 def _q(v: float) -> float:
@@ -113,7 +118,27 @@ def segments_from_page(page) -> list[tuple]:
     # sheet that draws six; decompose the curves and the grid appears.
     for cv in page.curves:
         pts = cv.get("pts") or []
+        if len(pts) < 2:
+            continue
         lw = float(cv.get("linewidth") or 0.0)
+        xs = [p[0] for p in pts]; ys = [p[1] for p in pts]
+        cw, ch = max(xs) - min(xs), max(ys) - min(ys)
+
+        # A THIN FILLED POLYGON IS A RULE, not a shape. CAD exporters emit a
+        # cell wall as a filled sliver quad — measured on 017_MD…#14, whose
+        # grid is 295 such curves, e.g. (1918,97)-(1918,98)-(2791,97): one unit
+        # tall across 873 wide, linewidth 0. Decomposed edge-by-edge that reads
+        # as 0.07 degrees off horizontal and every axis test rejects it, so the
+        # sheet yielded 289 segments and ZERO of its six schedules. Collapse to
+        # a centreline exactly as thin rects are, and take the sliver's own
+        # thickness as its pen weight.
+        if ch <= THIN_RECT and cw >= MIN_LEN:
+            add(min(xs), (min(ys) + max(ys)) / 2, max(xs), (min(ys) + max(ys)) / 2, max(lw, ch))
+            continue
+        if cw <= THIN_RECT and ch >= MIN_LEN:
+            add((min(xs) + max(xs)) / 2, min(ys), (min(xs) + max(xs)) / 2, max(ys), max(lw, cw))
+            continue
+
         for (ax, ay), (bx, by) in zip(pts, pts[1:]):
             add(ax, ay, bx, by, lw)
 
@@ -150,6 +175,7 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
         page = doc.pages[page_no - 1]
         segs = segments_from_page(page)
         chars = page.chars
+        page_w, page_h = float(page.width), float(page.height)
 
     if not segs:
         return {"tables": [], "diagnostics": {"segments": 0}}
@@ -167,7 +193,38 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
     parts = list(noded.geoms) if hasattr(noded, "geoms") else [noded]
     polys, cuts, dangles, invalid = polygonize_full(parts)
 
-    cells = [g for g in polys.geoms if g.area >= MIN_CELL_AREA]
+    # A face larger than this is page furniture — the sheet border, a viewport,
+    # a detail frame — not a table cell. Leaving them in is not a cosmetic
+    # problem: measured on 073_MT…#21, the drawing frame forms one 2176x1637
+    # face that unions with everything inside it, swallowing all three margin
+    # schedules and scoring 0/3 on a sheet whose tables are perfectly drawn.
+    #
+    # A SLIVER FACE IS A WELD, and it is the reason a perfectly drawn schedule
+    # can vanish. When a table's own border is drawn 0.5pt inside the sheet
+    # margin — routine, because the schedule block and the border come from
+    # different CAD layers — the gap between the two rules polygonises into a
+    # face 0.5 x 30, area 15, which clears MIN_CELL_AREA and then unions the
+    # table to the drawing frame. Measured on 073_MT…#21: three margin
+    # schedules, faces all present and exact, chained through two such slivers
+    # at x 2356.4-2356.9 into a 65-face frame group spanning (180,46)-(2356,1683)
+    # that the tessellation test then correctly rejects — 0/3 on a sheet whose
+    # tables are drawn better than most. No cell holding text is 2pt across.
+    page_area = max(1.0, float(page_w) * float(page_h))
+    cells = []
+    for g in polys.geoms:
+        if not (MIN_CELL_AREA <= g.area <= page_area * MAX_CELL_FRAC):
+            continue
+        gx0, gy0, gx1, gy1 = g.bounds
+        if min(gx1 - gx0, gy1 - gy0) < MIN_CELL_SIDE:
+            continue
+        # ... and neither is a tall blank. A cell's height is bounded by the
+        # text it holds: even a merged multi-line header is a few line-heights.
+        # The blank sheet BETWEEN two stacked blocks is not, and it welds them
+        # exactly as a sliver does — on 073_MT…#21 the 270x341 gap between the
+        # title block and the first schedule chained both into one region.
+        if gy1 - gy0 > page_h * MAX_CELL_HFRAC:
+            continue
+        cells.append(g)
     if not cells:
         return {"tables": [], "diagnostics": {"segments": len(segs), "cells": 0}}
 
@@ -269,9 +326,39 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
             if merged:
                 break
 
+    import os as _os
+    _dbg = _os.environ.get("VG_DEBUG")
     tables = []
     for members in groups.values():
+        if _dbg:
+            _b = [cells[i].bounds for i in members]
+            _rs = {round(x[1]) for x in _b}; _cs = {round(x[0]) for x in _b}
+            print(f"GROUP n={len(members):4d} rows={len(_rs):3d} cols={len(_cs):3d} "
+                  f"fill={len(members)/max(1,len(_rs)*len(_cs)):.3f} "
+                  f"bbox=({min(x[0] for x in _b):.0f},{min(x[1] for x in _b):.0f})->"
+                  f"({max(x[2] for x in _b):.0f},{max(x[3] for x in _b):.0f})", file=sys.stderr)
         if len(members) < 4:              # a real schedule is a grid, not a box
+            continue
+        # GRID-NESS. A table divides in BOTH axes. A single column-strip is a
+        # sliver of one, and emitting it both costs precision and blocks the
+        # real table from matching its caption — measured on 08_ME…#1, where
+        # the only region recovered for DRAWING LIST was a 197pt-wide
+        # right-hand checkbox column. Kasar (ICDAR 2013) classifies candidate
+        # ruled regions on exactly this kind of cheap geometric feature.
+        colset = {round(cells[i].bounds[0]) for i in members}
+        rowset = {round(cells[i].bounds[1]) for i in members}
+        if len(colset) < 2 or len(rowset) < 2:
+            continue
+        # REGULARITY. A table TESSELLATES: its cells sit on a small number of
+        # shared row and column coordinates, so n_cells is close to
+        # n_rows x n_cols. Scattered plan linework produces almost as many
+        # distinct coordinates as it does faces, so the same ratio collapses.
+        # This is the computable form of Jandhyala et al.'s (2009) admissible
+        # tessellation, and it is what separates a schedule from the drawing it
+        # sits next to — measured on 073_MT#21, where 65 faces spread across
+        # the whole framing plan chained into one region and buried all three
+        # margin schedules.
+        if len(members) < len(rowset) * len(colset) * MIN_FILL_RATIO:
             continue
         xs0, ys0, xs1, ys1 = zip(*(cells[i].bounds for i in members))
         tables.append({
