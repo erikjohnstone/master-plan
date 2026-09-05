@@ -5,6 +5,9 @@ L2 table extraction sidecar — JSON-RPC 2.0 over newline-delimited JSON on stdi
 Methods:
   ping          → { "ok": true, "backends": [...] }
   extract_tables → { "tables": SidecarTable[] }
+  extract_grid  → { "space": "pdf-points-topleft", "tables": VectorGridTable[] }
+                  the measured vectorgrid extractor (see vectorgrid_rpc.py);
+                  params { pdfPath, page }
   shutdown      → exit 0
 
 Request params for extract_tables:
@@ -459,6 +462,12 @@ def handle(req: dict[str, Any]) -> None:
             _ok(req_id, {"ok": True, "backends": _available_backends()})
         elif method == "extract_tables":
             _ok(req_id, extract_tables(params))
+        elif method == "extract_grid":
+            # Imported lazily and only here: vectorgrid needs shapely and
+            # pymupdf, and a deployment without them must still serve
+            # ping/extract_tables rather than failing at process start.
+            from vectorgrid_rpc import extract_grid_rpc
+            _ok(req_id, extract_grid_rpc(params))
         elif method == "shutdown":
             _ok(req_id, {"ok": True})
             sys.exit(0)

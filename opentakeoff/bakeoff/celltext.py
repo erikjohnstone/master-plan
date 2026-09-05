@@ -50,7 +50,7 @@ from boxfit import keyed_sheets                               # noqa: E402
 from vectorgrid import find_tables                            # noqa: E402
 
 
-def page_words(pdf: Path) -> list:
+def page_words(pdf: Path, page_no: int = 1) -> list:
     """Words in our coordinate space, in the document's own reading order.
 
     THE TEXT ENGINE IS MuPDF, NOT PDFMINER, and the reason is measured. Judging
@@ -78,7 +78,7 @@ def page_words(pdf: Path) -> list:
     curves there — so this changes the text source only.
     """
     with pymupdf.open(pdf) as doc:
-        page = doc[0]
+        page = doc[page_no - 1]
         rot = page.rotation_matrix
         out = []
         for x0, y0, x1, y1, w, blk, ln, wn in page.get_text("words"):
@@ -88,7 +88,7 @@ def page_words(pdf: Path) -> list:
     return out
 
 
-def slot(pdf: Path, table: dict) -> tuple[dict, int, int, int]:
+def slot(pdf: Path, table: dict, page_no: int = 1) -> tuple[dict, int, int, int]:
     """Words of this table's region, dropped into its faces.
 
     -> (cell -> [words], assigned, orphan, straddle)
@@ -99,7 +99,7 @@ def slot(pdf: Path, table: dict) -> tuple[dict, int, int, int]:
     "TOTAL HEAT T REJECTION". A glyph can fall on the wrong side of a wall; a
     word is placed by its own centre, once.
     """
-    words = page_words(pdf)
+    words = page_words(pdf, page_no)
     x0, top, x1, bot = table["bbox"]
     inside = [w for w in words
               if x0 <= (w[0] + w[2]) / 2 <= x1
