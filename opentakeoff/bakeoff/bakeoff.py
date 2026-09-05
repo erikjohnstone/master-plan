@@ -237,6 +237,14 @@ def score(regions, caps) -> list[str]:
     region start below the caption and scored Docling 0/13 on a page where it
     had in fact bracketed eleven of the thirteen captions — the rule was
     measuring which library draws its box where, not which one found the table.
+
+    A region that ENDS above the caption is excluded whatever the top says. The
+    +140 window is generous enough that a 29pt-tall region — the trailing rows
+    of the table above — can sit entirely above a caption and still claim it:
+    measured on 001_NC#49, where DEHUMIDIFIER SCHEDULE and AIR SEPARATOR
+    SCHEDULE each collected a stray band belonging to the schedule above and
+    were scored SPLIT for it. Nothing that finishes before the title starts is
+    that title's table.
     """
     hits = []
     for title, cp in caps.items():
@@ -247,6 +255,8 @@ def score(regions, caps) -> list[str]:
         cmid = (ctop + cbot) / 2
         for (x0, top, x1, bot) in regions:
             if cmid < top - 60 or cmid > top + 140:      # caption belongs to THIS region's top
+                continue
+            if cmid > bot + 5:                           # ... and the region outlives it
                 continue
             if min(x1, cx1) - max(x0, cx0) >= cw * 0.5:   # and shares its band
                 hits.append(title)

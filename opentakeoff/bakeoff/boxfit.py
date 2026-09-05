@@ -157,7 +157,7 @@ def main() -> int:
             cmid = (ctop + cbot) / 2
             for r in regions:
                 x0, top, x1, bot = r
-                if cmid < top - 60 or cmid > top + 140:
+                if cmid < top - 60 or cmid > top + 140 or cmid > bot + 5:
                     continue
                 if min(x1, cx1) - max(x0, cx0) >= cw * 0.5:
                     match[t].append(r)
