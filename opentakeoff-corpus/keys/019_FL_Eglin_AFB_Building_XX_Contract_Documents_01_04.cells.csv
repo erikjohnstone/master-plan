@@ -1,0 +1,85 @@
+# coverage: SILENCER SCHEDULE | complete
+# 019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.cells.csv — CELL-tier ground truth, transcribed by eye from a 2.47x
+# render of the table's own bbox in two halves, with the octave-band headers
+# re-read at 7x. row/col are 0-based indices into the table AS DRAWN, a spanning
+# cell counted once at its top-left. Empty drawn cells are not recorded — the
+# REMARKS column is drawn and empty in both data rows.
+#
+# What this table adds:
+#   - a heading that is nearly all punctuation, DYNAMIC INSERTION LOSS BY
+#     OCTAVE BAND (DB RE 10^(-12)) W, spanning eight columns
+#   - feet-and-inches and inch marks as data: 7' - 0", 70", 40", 36"
+#   - RETANGULAR, spelled that way ON THE DRAWING. Truth is what is drawn, not
+#     what was meant; an extractor that "corrects" it is wrong.
+#   - octave bands 2 and 3 carry ONLY the digit. Bands 1 and 4 through 8 all
+#     name their frequency (63 HZ, 500 HZ, 1,000 HZ ...), so 125 HZ and 250 HZ
+#     are simply missing from the sheet. Checked at 7x against the drawn cells
+#     (1902,1647)-(1974,1678) and (1974,1647)-(2046,1678): the cells hold the
+#     digit and nothing else. This is a defect in the DRAWING, and recording it
+#     faithfully is the point — a takeoff that invents the two frequencies is
+#     inventing data.
+sheet,table_title,row,col,text
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,0,0,SILENCER SCHEDULE
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,1,0,TAG
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,1,1,SYSTEM
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,1,2,LOCATION
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,1,3,TYPE
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,1,4,DESIGN AIR FLOW CFM
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,1,5,FACE VELOCITY FPM
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,1,6,MAXIMUM AIR PD I.W.G.
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,1,7,DUCT SIZE
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,1,9,LENGTH
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,1,10,DYNAMIC INSERTION LOSS BY OCTAVE BAND (DB RE 10^(-12)) W
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,1,18,MANUFACTURER
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,1,19,MODEL
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,1,20,REMARKS
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,2,7,WIDTH
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,2,8,HEIGHT
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,2,10,1 63 HZ
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,2,11,2
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,2,12,3
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,2,13,4 500 HZ
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,2,14,"5 1,000 HZ"
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,2,15,"6 2,000 HZ"
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,2,16,"7 4,000 HZ"
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,2,17,"8 8,000 HZ"
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,0,S-1
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,1,AHU-1
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,2,MAIN SUPPLY
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,3,DISSIPATIVE RETANGULAR
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,4,22000
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,5,1140
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,6,0.25
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,7,"70"""
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,8,"40"""
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,9,"7' - 0"""
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,18,VIBRO ACOUSTICS
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,19,RD-MV-F4
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,10,62
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,11,57
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,12,50
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,13,48
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,14,51
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,15,52
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,16,45
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,3,17,35
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,0,S-2
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,1,AHU-1
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,2,MAIN RETURN
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,3,DISSIPATIVE RETANGULAR
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,4,18500
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,5,1060
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,6,0.25
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,7,"70"""
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,8,"36"""
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,9,"7' - 0"""
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,18,VIBRO ACOUSTICS
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,19,RD-MV-F4
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,10,58
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,11,55
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,12,53
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,13,55
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,14,57
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,15,57
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,16,47
+019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf#15,SILENCER SCHEDULE,4,17,34
