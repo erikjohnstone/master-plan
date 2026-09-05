@@ -27,8 +27,9 @@ All three are already vector-native and all three share one defect: they
 enumerate MINIMAL RECTANGLES and then group cells that share a corner. That
 (a) returns None for every spanning cell, and (b) fuses any two tables that
 share a ruling line — which is exactly the adjacency failure this corpus is
-full of (measured: 7 merged regions, 27 truncated, 10 fragmented out of 122
-keyed tables for pdfplumber-lines_strict, 45.9% clean).
+full of (measured, 122 keyed tables, pdfplumber-lines_strict: 7 merged, 10
+fragmented, 5 overrunning, 68.0% clean, 80.3% recall — against 2, 4, 2, 89.3%
+and 95.9% here).
 
 Two changes fix both:
 
@@ -40,6 +41,12 @@ Two changes fix both:
      method can use it (tabula-java's source literally reads
      `// TODO: how to implement color filter?`). We have it exactly, so cell
      adjacency is cut wherever the shared wall is a border-weight stroke.
+
+And one thing the ruling graph cannot do anything about: a schedule pasted in
+as a PICTURE of a spreadsheet has no strokes at all. Those get their placement
+rectangle emitted instead — see raster_regions(). Six of the 122 keyed tables
+are of that kind, all on one sheet, which is what caps the vector path at
+116/122 before a single OCR call.
 
     python3 vectorgrid.py <pdf> <page>            # inspect one sheet
     (or import find_tables() — bakeoff.py registers it as a backend)
@@ -68,6 +75,17 @@ MIN_CELL_SIDE = 2.0  # a face thinner than this in EITHER axis is a slot between
 MAX_CELL_FRAC = 0.02  # above this share of the page a face is furniture, not a cell
 MAX_CELL_HFRAC = 0.10 # a face taller than this share of the page is blank sheet, not a row
 MIN_FILL_RATIO = 0.20 # n_cells vs rows*cols — a table tessellates, a plan does not
+
+# A schedule pasted in as a PICTURE OF A SPREADSHEET has no strokes to read, so
+# no vector method can see it — but the placement rectangle of the image is
+# exact, and that rectangle IS the table region. Emitting it is the honest
+# answer: it tells a downstream extractor precisely where to run OCR instead of
+# silently returning nothing. Qualifying as one needs both tests, because
+# either alone matches ordinary page art:
+RASTER_MIN_AREA = 100_000.0  # pt^2 — roughly 5 x 4 inches placed; smaller is a logo
+RASTER_MIN_PPP = 4.0         # source pixels per placed point. A screenshot of a
+                             # spreadsheet is downsampled hard on placement (8-10
+                             # measured); a photo or a rendering sits near 1.
 
 
 def _q(v: float) -> float:
@@ -125,13 +143,14 @@ def segments_from_page(page) -> list[tuple]:
         cw, ch = max(xs) - min(xs), max(ys) - min(ys)
 
         # A THIN FILLED POLYGON IS A RULE, not a shape. CAD exporters emit a
-        # cell wall as a filled sliver quad — measured on 017_MD…#14, whose
-        # grid is 295 such curves, e.g. (1918,97)-(1918,98)-(2791,97): one unit
-        # tall across 873 wide, linewidth 0. Decomposed edge-by-edge that reads
-        # as 0.07 degrees off horizontal and every axis test rejects it, so the
-        # sheet yielded 289 segments and ZERO of its six schedules. Collapse to
-        # a centreline exactly as thin rects are, and take the sliver's own
-        # thickness as its pen weight.
+        # cell wall as a filled sliver quad — e.g. on 017_MD…#14,
+        # (1918,97)-(1918,98)-(2791,97): one unit tall across 873 wide,
+        # linewidth 0. Decomposed edge-by-edge that reads as 0.07 degrees off
+        # horizontal and every axis test rejects it, so the wall disappears.
+        # Collapse to a centreline exactly as thin rects are, and take the
+        # sliver's own thickness as its pen weight. This is how most grids in
+        # this corpus are actually drawn: 4145 of 27_WA…#15's 7235 curves are
+        # such slivers, 540 of 09_ME…#7's, 365 of 078_US…#23's.
         if ch <= THIN_RECT and cw >= MIN_LEN:
             add(min(xs), (min(ys) + max(ys)) / 2, max(xs), (min(ys) + max(ys)) / 2, max(lw, ch))
             continue
@@ -143,6 +162,43 @@ def segments_from_page(page) -> list[tuple]:
             add(ax, ay, bx, by, lw)
 
     return segs
+
+
+def raster_regions(pdf_path: str, page_no: int = 1) -> list[tuple]:
+    """Placement rects of embedded images that are pictures of tables.
+
+    Measured on 017_MD…#14: all six VENTILATION SCHEDULEs on that sheet are
+    Excel screenshots (the render still shows their "Add Rows" / "Delete Row"
+    form buttons and the red cell-comment triangles). pdfplumber sees 15
+    segments inside an 873x570 table box — the outer border and two dividers —
+    and PyMuPDF's own path list agrees, because the grid is not in the content
+    stream at all. Those six were six of vectorgrid's eleven corpus misses, and
+    no amount of work on the ruling graph could ever have found them; scanning
+    all 24 keyed sheets, they are also the ONLY six of the 122 keyed tables that
+    are raster, which puts the vector path's true ceiling on this corpus at
+    116/122.
+
+    Uses PyMuPDF because pdfplumber does not expose image placement rects.
+    """
+    try:
+        import pymupdf
+    except ImportError:
+        return []
+    out = []
+    with pymupdf.open(pdf_path) as doc:
+        page = doc[page_no - 1]
+        rot = page.rotation_matrix
+        for im in page.get_images(full=True):
+            px_w, px_h = im[2], im[3]
+            for r in page.get_image_rects(im[0]):
+                rr = r * rot            # image rects come back pre-rotation
+                w, h = rr.x1 - rr.x0, rr.y1 - rr.y0
+                if w <= 0 or h <= 0 or w * h < RASTER_MIN_AREA:
+                    continue
+                if (px_w / w + px_h / h) / 2 < RASTER_MIN_PPP:
+                    continue
+                out.append((rr.x0, rr.y0, rr.x1, rr.y1))
+    return out
 
 
 def _weight_index(segs: list[tuple]) -> dict:
@@ -177,8 +233,11 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
         chars = page.chars
         page_w, page_h = float(page.width), float(page.height)
 
+    rasters = [{"bbox": b, "cells": [], "n_cells": 0, "raster": True}
+               for b in raster_regions(pdf_path, page_no)]
+
     if not segs:
-        return {"tables": [], "diagnostics": {"segments": 0}}
+        return {"tables": rasters, "diagnostics": {"segments": 0, "rasters": len(rasters)}}
 
     widx = _weight_index(segs)
     bw = _border_weight(segs)
@@ -226,7 +285,8 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
             continue
         cells.append(g)
     if not cells:
-        return {"tables": [], "diagnostics": {"segments": len(segs), "cells": 0}}
+        return {"tables": rasters,
+                "diagnostics": {"segments": len(segs), "cells": 0, "rasters": len(rasters)}}
 
     # Adjacency, CUT at border-weight walls. Two schedules stacked on a shared
     # rule stay separate because that shared rule is drawn heavy.
@@ -366,12 +426,24 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
             "cells": [cells[i].bounds for i in members],
             "n_cells": len(members),
         })
+    # A raster region never overlaps a ruled one on the same table (there are no
+    # rules inside a picture), but a picture pasted OVER linework can. Keep the
+    # ruled region when one already covers the same ground.
+    for r in rasters:
+        rx0, ry0, rx1, ry1 = r["bbox"]
+        area = max(1.0, (rx1 - rx0) * (ry1 - ry0))
+        if any(max(0.0, min(t["bbox"][2], rx1) - max(t["bbox"][0], rx0))
+               * max(0.0, min(t["bbox"][3], ry1) - max(t["bbox"][1], ry0)) > area * 0.5
+               for t in tables):
+            continue
+        tables.append(r)
     tables.sort(key=lambda t: (t["bbox"][1], t["bbox"][0]))
 
     return {
         "tables": tables,
         "diagnostics": {
             "segments": len(segs), "cells": len(cells), "chars": len(chars),
+            "rasters": len(rasters),
             "border_weight": bw, "weights": sorted({round(w, 2) for *_r, w in segs})[:8],
             "dangles": len(dangles.geoms), "cut_edges": len(cuts.geoms),
             "invalid_rings": len(invalid.geoms),

@@ -75,10 +75,16 @@ def ruled_row_below(hs, vs, region, limit):
     """Is there a real table row between the region's bottom edge and `limit`?
 
     Real means: a horizontal rule covering at least half the region's width,
-    AND a vertical cell wall inside the region's x-span that runs from at or
-    above the region's bottom edge down to at least that rule. Both halves are
-    load-bearing — the rule alone matches a REMARKS underline, and the wall
-    alone matches the leader line of a callout.
+    AND a vertical COLUMN wall — strictly inside the region's x-span, not one of
+    its own edges — running from at or above the region's bottom edge down to
+    that rule. All three conditions carry weight. The rule alone matches a
+    REMARKS underline. Any wall matches a box drawn around notes: on 017_MD#14
+    each pasted schedule sits inside a frame that also holds a NOTES block, and
+    the frame's own left and right edges reach the rule under the notes, so
+    without the interior test every correct region on that sheet reads SHORT.
+    Requiring an interior wall means a genuine extra ROW, divided into columns.
+    (A single-column table's lost row is invisible to this test; there are none
+    in the key set.)
     """
     x0, _top, x1, bot = region
     w = max(x1 - x0, 1.0)
@@ -88,9 +94,13 @@ def ruled_row_below(hs, vs, region, limit):
         if min(hx1, x1) - max(hx0, x0) < w * 0.5:
             continue
         for vy0, vy1, vx in vs:
-            if not (x0 - 2 <= vx <= x1 + 2):
+            if not (x0 + 2 < vx < x1 - 2):
                 continue
-            if vy0 <= bot + 4 and vy1 >= hy - 2:
+            # The wall must CROSS the bottom edge, not merely exist below it.
+            # Continuity is the whole point: a column wall straddling the cut is
+            # the same table carrying on, while structure that merely starts
+            # lower down is the NEXT table and must not count against this one.
+            if vy0 <= bot - 2 and vy1 >= bot + 6 and vy1 <= hy + 2:
                 return True
     return False
 
