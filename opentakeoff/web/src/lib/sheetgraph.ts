@@ -7846,6 +7846,11 @@ export interface VectorPipelineReport {
   topology_sheets: number;
   ocr_assists: number;
   notes: string[];
+  /** How many tables each extraction stage actually put into the graph. With
+   * vectorgrid running first every later stage is already suppressed on the
+   * sheets it wins, so a stage's count here IS its residual reach — the
+   * evidence for keeping it or retiring it. */
+  stage_contributions?: Record<string, number>;
   /** L2-VG. Present whenever the vectorgrid engine ran at all — in `shadow`
    * it is the whole record of what it WOULD have produced, since nothing it
    * finds is merged in that mode. `refused` counts sheets whose page box

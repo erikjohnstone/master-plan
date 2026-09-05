@@ -114,14 +114,39 @@ function isScheduleTarget(ctx: VectorSheetContext, hooks: VectorPipelineHooks): 
   return sheetHasScheduleLanguage(ctx.spans);
 }
 
+/** Which stage a table came from, so retiring one is a measurement and not an
+ * argument. Running vectorgrid first already SUPPRESSES the stages below on
+ * every sheet it wins (each returns early once the sheet has tables), so what
+ * they still contribute here IS their residual reach — the only number that
+ * can justify keeping them. */
+let mergeStage = "unattributed";
+
+function withStage<T>(stage: string, fn: () => T): T {
+  const prev = mergeStage;
+  mergeStage = stage;
+  try {
+    return fn();
+  } finally {
+    mergeStage = prev;
+  }
+}
+
 function mergeCandidates(
   g: SheetGraph,
   candidates: ScheduleTable[],
   sheetKey: string,
   stats: MergeExtractedStats,
   touched: Set<string>,
+  report?: VectorPipelineReport,
 ): void {
-  for (const built of candidates) mergeExtractedTable(g, built, sheetKey, stats, touched);
+  for (const built of candidates) {
+    const before = stats.added + stats.recovered;
+    mergeExtractedTable(g, built, sheetKey, stats, touched);
+    if (report && stats.added + stats.recovered > before) {
+      const ledger = report.stage_contributions ?? (report.stage_contributions = {});
+      ledger[mergeStage] = (ledger[mergeStage] ?? 0) + 1;
+    }
+  }
 }
 
 function runL2FallbacksForSheet(
@@ -130,6 +155,7 @@ function runL2FallbacksForSheet(
   buildings: Set<string>,
   stats: MergeExtractedStats,
   touched: Set<string>,
+  report: VectorPipelineReport,
   tile?: PageTile,
 ): void {
   const spans = tile ? clipSpansToTile(ctx.spans, tile) : ctx.spans;
@@ -144,7 +170,8 @@ function runL2FallbacksForSheet(
   const lineCandidates = extractScheduleTablesFromLineGrid(spans, segs, sheetKey, baseOpts);
   for (const t of lineCandidates) {
     if (tile) t.region = tileLocalToPage(t.region, tile);
-    mergeCandidates(g, [t], sheetKey, stats, touched);
+    withStage(tile ? "line-grid(tiled)" : "line-grid",
+      () => mergeCandidates(g, [t], sheetKey, stats, touched, report));
   }
 
   if (sheetTableCount(g, sheetKey) === 0 || lineCandidates.length === 0) {
@@ -152,7 +179,8 @@ function runL2FallbacksForSheet(
     for (const t of streamCandidates) {
       if (tile) t.region = tileLocalToPage(t.region, tile);
     }
-    mergeCandidates(g, streamCandidates, sheetKey, stats, touched);
+    withStage(tile ? "stream-grid(tiled)" : "stream-grid",
+      () => mergeCandidates(g, streamCandidates, sheetKey, stats, touched, report));
   }
 }
 
@@ -218,7 +246,7 @@ async function runL2VectorGridForSheet(
   rec.declined += res.skipped;
   rec.rasters += res.rasters;
   if (mode === "shadow" || !res.tables.length) return;
-  mergeCandidates(g, res.tables, ctx.key, stats, touched);
+  withStage("vectorgrid", () => mergeCandidates(g, res.tables, ctx.key, stats, touched, report));
 }
 
 async function runL2SidecarForSheet(
@@ -240,7 +268,7 @@ async function runL2SidecarForSheet(
     buildings,
   });
   if (!candidates.length) return;
-  mergeCandidates(g, candidates, ctx.key, stats, touched);
+  withStage("python-sidecar", () => mergeCandidates(g, candidates, ctx.key, stats, touched, report));
   report.notes.push(`${ctx.key}: L2 sidecar recovered ${candidates.length} table(s) via Python backends.`);
 }
 
@@ -371,11 +399,11 @@ export async function runVectorTakeoffPipeline(
 
     if (tiles.length) {
       for (const tile of tiles.slice(0, MAX_TILES_PER_SHEET)) {
-        runL2FallbacksForSheet(g, ctx, buildings, stats, touched, tile);
+        runL2FallbacksForSheet(g, ctx, buildings, stats, touched, report, tile);
       }
     }
     if (existing === 0) {
-      runL2FallbacksForSheet(g, ctx, buildings, stats, touched);
+      runL2FallbacksForSheet(g, ctx, buildings, stats, touched, report);
     }
     await runL2SidecarForSheet(g, ctx, buildings, stats, touched, report);
   }
@@ -386,7 +414,7 @@ export async function runVectorTakeoffPipeline(
   for (const ctx of contexts) {
     if (!sheetNeedsPillarGapRecovery(g, ctx)) continue;
     const mergeFn = (candidates: ScheduleTable[]) =>
-      mergeCandidates(g, candidates, ctx.key, stats, touched);
+      withStage("pillar-gap", () => mergeCandidates(g, candidates, ctx.key, stats, touched, report));
     const n = await runPillarGapRecoveryForSheet(g, ctx, buildings, stats, touched, mergeFn);
     if (n > 0) {
       gapTables += n;
