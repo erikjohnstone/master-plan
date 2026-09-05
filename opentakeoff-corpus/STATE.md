@@ -314,10 +314,109 @@ one-column slide is scored wrong.
   below would hand every backend false matches corpus-wide to buy one table.
   Recorded in the key, counted as a miss.
 
-**And what none of this measures: production.** `vectorgrid.py` lives in
-`opentakeoff/bakeoff/`. The production path is `sheetgraph.ts` →
-`vectorTakeoffPipeline.ts`, and vectorgrid is NOT wired into it. Nothing an
-estimator runs today touches this code.
+### 2b. It is wired into production now, behind a flag that defaults to off
+
+`OPENTAKEOFF_VECTORGRID` ∈ `off | shadow | on`. `off` is the default and the
+engine never runs, so a baseline is byte-for-byte the old behaviour. `shadow`
+runs it on every sheet, records what it WOULD have produced, and merges
+nothing — verified byte-identical to `off` on 096_IN#19, which is what makes an
+A/B honest. `on` makes its tables the answer.
+
+The path: `sidecar/tables.py` gained an `extract_grid` method
+(`sidecar/vectorgrid_rpc.py`) that turns vectorgrid's faces into an
+(row, col, rowSpan, colSpan) grid using the same rule `cellscore.py` scores
+against. `web/src/lib/vectorGridAdapter.ts` converts that to ODL and hands it
+to the existing `scheduleTableFromODL`, so title, header tiers, row keys,
+`kind` and building all come from code that already exists. It merges through
+the existing `mergeExtractedTable` bar, so `duplicateKeyCount` still stands
+between a denser read and symbol sweep's hard AMBIGUOUS refusal.
+
+It runs at L1.8 — after ODL, before every other fallback. After ODL so its
+tables must WIN on the merge bar rather than pre-empt; before the rest because
+every stage below returns early once a sheet has tables, so on the sheets
+vectorgrid wins, tiling, the line grid, the stream grid and the Python sidecar
+stop running without anything being deleted.
+
+COORDINATES: `project_px = vectorgrid_pt × hypot(t[0], t[1])`, no offset and no
+rotation term, verified against pdf.js's own viewport on a /Rotate 0 page with
+a negative MediaBox (009_FL#30 → `[2,0,0,-2,3024,2160]`) and a /Rotate 90 page
+(009_FL#7 → `[0,2,2,0,0,0]`). Python reports the page box it measured in and a
+sheet whose box × scale is not the viewport is REFUSED with a reason, naming a
+size disagreement separately from a rotation one. `scheduleTableSidecarAdapter`
+gets this wrong today — it inverts the viewport and hands the result to a
+function that maps it forward through the same matrix, so its cells stay in raw
+points, a consistent 2× error its identity-transform unit test cannot see.
+
+### 2c. Production, measured with the same rulers
+
+`headtohead.py` scores both engines on the same hand-transcribed cells, placing
+each engine's cells into the DRAWN grid by their own coordinates. `prodocr.py`
+points the pixel judge at production.
+
+| ruler | vectorgrid | production |
+|---|---|---|
+| transcribed cells, right text right cell | **905/905** | 336/905 (37.1%) |
+| data rows only | **477/477** | 328/477 (68.8%) |
+| cells confirmed by pixel OCR, 33 sheets | **16,067** of 18,189 | 7,077 of 8,430 |
+| tables found, 8 HVAC sheets | **79/79** | 66/79 |
+
+Production's dominant failure is COLUMN FUSION, which is worse than a gap
+because it looks like data: `"2,985 0.25"` for a CFM and a static pressure,
+`"5 55.4 149"` for three values, `"3 42.1"` for a phase and an MCA. 021_XX#13's
+FAN COIL UNIT SCHEDULE draws 8 rows × 19 columns; production reports 24 rows
+and 6 headers and scores 0 of 82.
+
+The pixel judge is GENEROUS to production — it asks "is this the text in this
+box", so a fused cell is confirmed. `headtohead.py` is the strict one.
+
+### 2d. Two bugs the accurate grid exposed in the shared classifier
+
+Neither is in vectorgrid. Both were reachable all along and only fired once
+something handed `scheduleTableFromODL` spans it could trust.
+
+- **A span in a data row is real.** The header-block rule treated any spanning
+  cell as proof of a grouping tier — its comment said a span "can never occur
+  in a real per-item data row". 096_IN#19's AHU SUPPLY FAN SCHEDULE prints
+  SINGLE POINT across MCA and MOCP in every data row. All seven were swallowed
+  into the header labels (`headers[0]` read `"MARK SF-1A SF-1B SF-2A SF-2B
+  SF-3 SF-4A SF-4B"`) and the table refused for having no data. Nine of ten
+  schedules on that sheet failed this way. Proportion, not presence, is the
+  discriminator: that table's first header tier is 13 spanning cells of 15, its
+  data rows 1 of 21. Coverage is now counted by columns, not cells.
+- **An empty drawn cell is still part of the grid.** `slot()` returns only
+  faces that received words. 096_IN#19's AHU CHILLED WATER COOLING COIL
+  SCHEDULE draws 20 columns and fills 19, so every data row looked partial and
+  fed the bug above.
+
+That sheet went 1 table → 8. Both fixes help the OLD extractors too, so part of
+the original production gap was classification, not extraction.
+
+### 2e. Known limits, recorded not hidden
+
+- **Electrical panelboard schedules are refused**, and it is structural, not a
+  bug to patch. 009_FL#30's panels are 42 × 19; a 3-pole breaker's description
+  and wire and trip cells span three physical rows, so no data row covers every
+  column. `scheduleTableFromODL` assumes one row = one item with every column
+  its own value. A panelboard is a different table genre. Nothing consumes them
+  in the HVAC/BAS/valve takeoffs today.
+- **`ROOM NO.`-keyed tables are refused.** 021_XX#13's 88-row and 75-row room
+  air-valve schedules classify as `equipment` with clean headers, but `CODE_RE`
+  is letter-first by design and a bare room number fails it. Accepting bare
+  numerics would risk duplicate keys corpus-wide, which is a hard AMBIGUOUS
+  refusal downstream — a change that needs its own measurement, not a hunch.
+- **The 2 of 212 with no in-table title** (031_MO HEADER SECTION, 08_ME DRAWING
+  LIST) are unscored by `headtohead.py` for BOTH engines: the scorer identifies
+  a table by its own title cell.
+
+### 2f. Indexing
+
+`cachedSheetGraph` is now called from production, uploads go to a
+content-addressed spool named by their sha256 instead of a per-request
+mkdtemp (which made both the ODL and graph caches miss every time), and the
+UI prewarm no longer queues behind the browser's text indexing. The engine
+selection is part of the cache key — without it a warm `off` graph is served
+to an `on` run and an A/B compares a cached old answer against itself.
+Measured on 019_FL#15: cold 5723 ms, warm 1940 ms, byte-identical.
 
 ## 3. The other 112 documents
 
