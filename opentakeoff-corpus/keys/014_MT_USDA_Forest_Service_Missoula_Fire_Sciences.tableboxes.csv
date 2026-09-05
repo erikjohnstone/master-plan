@@ -1,0 +1,16 @@
+# 014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.tableboxes.csv — BOX-tier ground truth for boxscore.py.
+#
+# HELD-OUT SAMPLE. These tables were drawn at random from the 98 held-out
+# tables (seed 20260905) and each edge was chosen by a human from the
+# CANDIDATE RULES the page itself carries — every horizontal rule near the top
+# and bottom that spans at least 80% of the table, every vertical near the left
+# and right — WITHOUT the extractor's own box in view. Agreeing with it
+# afterwards therefore means something.
+#
+# Two of the fifteen first-pass picks were WRONG, both mine, both caught by
+# re-reading the pixels at 9x, and both recorded below. Reading an edge off a
+# whole-sheet render is not good enough: at sheet scale a 13pt row is four
+# pixels.
+sheet,table_title,x0,top,x1,bot,provenance
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,EXPANSION TANK SCHEDULE,108.84,689.88,1384.08,838.80,"adjudicated by eye from the page's own candidate rules, blind to the extractor's choice"
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,HOT WATER CABINET UNIT HEATER SCHEDULE,1059.00,51.36,2287.32,224.52,"adjudicated by eye from the page's own candidate rules, blind to the extractor's choice; corrected at 9x: the title sits BELOW 51.36, the band above it is empty"
