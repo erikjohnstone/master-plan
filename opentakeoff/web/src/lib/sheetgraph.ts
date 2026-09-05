@@ -6385,6 +6385,65 @@ function clusterGenericColumns(tokens: GraphSpan[]): Anchor[] {
  * gate entirely rather than refuse — the same graceful-degradation posture
  * this file already takes elsewhere; the shape + repeated-column-alignment
  * signals still apply on their own. */
+/** Is a SINGLE data row drawn inside real cell walls?
+ *
+ * A one-row candidate is where the generic reader is least able to lean on
+ * repetition, so it leans on the drafting instead: a real schedule row is
+ * boxed — ruled off from its header above, closed below, and cut into the
+ * header's own columns by verticals. A control schematic's scattered callouts
+ * that happen to line up for one line have none of that geometry; its dense
+ * linework runs through the labels, not around them in a grid.
+ *
+ * Deliberately STRICTER than hasNearbyRuledLine, which fails OPEN when a
+ * sheet supplies no segs: here no linework means the question cannot be
+ * answered, and an unanswerable one-row candidate is refused exactly as it
+ * was before this test existed.
+ */
+function singleRowSitsInDrawnGrid(
+  segs: ArrayLike<number> | undefined, x0: number, x1: number,
+  anchors: { x: number }[], region: Bbox | null | undefined,
+): boolean {
+  if (!segs || !segs.length || !region) return false;
+  const width = x1 - x0;
+  if (!(width > 0)) return false;
+  const [, ry0, , ry1] = region;
+  const rowH = Math.max(6, ry1 - ry0);
+  const pad = rowH * 1.2;
+
+  let above = false, below = false;
+  const verticals: number[] = [];
+  const nSeg = Math.floor(segs.length / 4);
+  for (let i = 0; i < nSeg; i++) {
+    const sx0 = segs[i * 4], sy0 = segs[i * 4 + 1], sx1 = segs[i * 4 + 2], sy1 = segs[i * 4 + 3];
+    // Endpoint order is the drafter's polyline direction, not a sorted
+    // interval — normalise both axes, same reason hasNearbyRuledLine does.
+    const lx = Math.min(sx0, sx1), hx = Math.max(sx0, sx1);
+    const ly = Math.min(sy0, sy1), hy = Math.max(sy0, sy1);
+    if (hy - ly <= 2) {                                  // horizontal rule
+      if (Math.min(hx, x1) - Math.max(lx, x0) < width * 0.6) continue;
+      const my = (ly + hy) / 2;
+      if (my <= ry0 && my >= ry0 - pad) above = true;
+      else if (my >= ry1 && my <= ry1 + pad) below = true;
+    } else if (hx - lx <= 2) {                           // vertical rule
+      // must actually cut this row, not merely pass near it
+      if (ly > ry0 + rowH * 0.25 || hy < ry1 - rowH * 0.25) continue;
+      const mx = (lx + hx) / 2;
+      if (mx < x0 - 2 || mx > x1 + 2) continue;
+      verticals.push(mx);
+    }
+  }
+  if (!above || !below) return false;
+  // The verticals must be the HEADER's own columns, not stray linework: at
+  // least two distinct column walls, each landing near a column anchor.
+  const tol = Math.max(12, width * 0.02);
+  const walls = new Set<number>();
+  for (const mx of verticals) {
+    const near = anchors.find((a) => Math.abs(a.x - mx) <= Math.max(tol, width * 0.06));
+    if (near) walls.add(Math.round(near.x));
+  }
+  return walls.size >= 2;
+}
+
 function hasNearbyRuledLine(segs: ArrayLike<number> | undefined, x0: number, x1: number, y0: number, y1: number): boolean {
   if (!segs || !segs.length) return true;
   const width = x1 - x0;
@@ -6779,6 +6838,34 @@ function bandGenericDataRows(
  * a caller can resume past it) but with zero vocabulary threading: no
  * `kind`/`vocab`/`required` parameters, since there is nothing to gate a
  * header on besides the structural signals above. */
+/** Regions the room-finish / finish / equipment passes ACTUALLY produce on a
+ * sheet — the evidence `alreadyVocab` needs before standing down for one of
+ * them. Memoised per sheet object: `extractAllReferenceTables` walks the same
+ * sheet once per candidate block, and each band-sheet is asked at most once.
+ * `opts` is deliberately omitted — buildings/deltas annotate rows, they never
+ * decide WHETHER a table is produced, so the claim test does not depend on
+ * them and the memo stays keyed on the sheet alone. No cycle: extractAllTables
+ * never reaches back into the reference pass. */
+const kindClaimedRegions = new WeakMap<SheetSpans, Bbox[]>();
+function claimedRegionsFor(sheet: SheetSpans): Bbox[] {
+  let hit = kindClaimedRegions.get(sheet);
+  if (hit) return hit;
+  hit = [];
+  for (const kind of ["room-finish", "finish", "equipment"] as const) {
+    for (const t of extractAllTables(sheet, kind)) if (t.region) hit.push(t.region);
+  }
+  kindClaimedRegions.set(sheet, hit);
+  return hit;
+}
+function blockIsClaimedByAKindPass(sheet: SheetSpans, block: { tokens: GraphSpan[] }): boolean {
+  if (!block.tokens.length) return false;
+  const bx0 = Math.min(...block.tokens.map((t) => t.x));
+  const bx1 = Math.max(...block.tokens.map((t) => t.x + (t.w || 0)));
+  const by0 = Math.min(...block.tokens.map((t) => t.y));
+  const by1 = Math.max(...block.tokens.map((t) => t.y + (t.h || 0)));
+  return claimedRegionsFor(sheet).some((r) => bboxesIntersect(r, [bx0, by0, bx1, by1]));
+}
+
 function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?: SheetSpans): { table: ScheduleTable | null; nextIdx: number } | null {
   // Drop sheet-margin drawing-grid locators before ANY row is clustered:
   // they are page furniture, never table content, and left in they read as
@@ -6833,7 +6920,27 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
       qualifies(headerHits(r, ROOM_HEADERS), ROOM_FINISH_REQUIRED, ROOM_FINISH_MIN_HITS)
       || qualifies(headerHits(r, FINISH_HEADERS), FINISH_REQUIRED, OTHER_KIND_MIN_HITS))
       || blockHasCatalogAnchor;
-    if (alreadyVocab) continue;
+    // …and vocabulary is a claim about what the OTHER pass would do, never
+    // evidence that it did it. Deferring on the claim alone drops the table
+    // out of the graph entirely whenever the claim is wrong, with no
+    // disclosure anywhere — measured live on
+    // 13_MI_MSU_LifeSciences_LabRenovation.pdf#28 (E-002 SCHEDULES), whose
+    // FIRE ALARM DEVICES / DATA DEVICE / three WIRING DEVICES schedules all
+    // print a SYMBOL|DESCRIPTION|MANUFACTURER|CATALOG NO.|REMARKS header:
+    // that clears FINISH_REQUIRED, so this pass stood down for the finish
+    // pass — which extracts ZERO tables on that sheet (the finish hunt wants
+    // finish/material rows, and these carry catalog rows), and drops each one
+    // again by title as a non-finish schedule. Five real, cleanly ruled
+    // tables reached the graph through no path at all. The same shape is the
+    // single largest miss class in the 23-document recall sample.
+    //
+    // So test the claim: stand down only where one of those passes ACTUALLY
+    // produces a table covering this header block. Where it does, the guard's
+    // original reason still holds exactly (bessemer's ELECTRIC WALL HEATER
+    // SCHEDULE is re-found by this pass's structural signals, and the richer-
+    // fragment dedup that follows is the coin-flip the comment above
+    // describes); where it does not, there is nothing to defer TO.
+    if (alreadyVocab && blockIsClaimedByAKindPass(sheet, block)) continue;
     const anchors = clusterGenericColumns(block.tokens);
     if (anchors.length < 2) continue;
     const { x0, x1 } = bandLimits(anchors);
@@ -6872,7 +6979,24 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     // repeating at least once; this is the generic, vocabulary-free
     // discriminator the mandate above asked for, not a corpus-specific
     // title/tag hack.
-    if (banded.out.length < 2) return { table: null, nextIdx: toIdx };
+    // …but "repeats at least once" is a PROXY for the grid, not the grid, and
+    // the corpus says the proxy is wrong far more often than it is right: in
+    // the 23-document recall sample a one-data-row schedule is ordinary, not
+    // exceptional — 7 of 11 tables on 016_NY#18, 9 of 15 on 067_CA#8, 5 of 13
+    // on 061_IA#58, both tables on 09_ME#7. One piece of equipment gets one
+    // row; that is a normal schedule, not a schematic.
+    //
+    // So test the grid itself. What a drafted table has and a schematic's
+    // coincidental one-line alignment does not is DRAWN CELL WALLS around
+    // that row: a rule separating it from its header, a rule closing it off
+    // below, and verticals cutting it into the same columns the header
+    // claims. singleRowSitsInDrawnGrid asks for exactly that, and refuses
+    // when the sheet supplied no linework at all to ask about — a page with
+    // no segs cannot distinguish the two, and the old refusal is the safe
+    // answer there.
+    if (banded.out.length < 1) return { table: null, nextIdx: toIdx };
+    if (banded.out.length < 2 && !singleRowSitsInDrawnGrid(sheet.segs, x0, x1, anchors, banded.region))
+      return { table: null, nextIdx: toIdx };
     // GOAL.md rule 26: a boxed, ruled, repeating-grid region whose own rows
     // are ENTIRELY drawn from the sheet's own title-block/approval-stamp
     // administrative vocabulary (DRAWING NO/SHEET/DATE/SCALE/…) is that

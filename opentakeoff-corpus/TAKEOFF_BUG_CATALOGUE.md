@@ -40,6 +40,16 @@ every eval read 100%. Every bug below was invisible to that gate.
 | B-8 | Side-by-side tables with NO empty gutter — seam-based banding cannot split them | 046_MI p22 + 044_NY p24 (rule 35a): 1 table lost, 19 of 27 rows lost | **same bug as GOAL.md rule 35(a)** |
 | B-9 | Two consecutive rows bracketing a category sub-header (a bare-single-character CODE row, then the row right after the header) silently dropped from an otherwise-fine multi-section table | `demo/sample-finish-plan.pdf` MATERIAL SCHEDULE: "C / CONCRETE SEALER" and "RB-1 / RESILIENT BASE" both missing; every OTHER section's own first row (CPT-1, P-1, PLAM-1, ACT-1, PR-1) extracts fine | row-clustering gap around an in-table category divider |
 | B-10 | A full-width section BANNER inside a table bands into a data column, polluting that row's cell | 028_TX p1 silencer schedule: one QTY cell reads "SECOND FLOOR 2", so its printed count refuses (22 read of a printed 23) | banner row not excluded from data banding |
+| B-11 | The generic reader stands down for another kind's pass on VOCABULARY ALONE — and that pass then extracts nothing | 13_MI p28: 5 of 6 real tables reach the graph through no path at all | false structural inference (untested claim) |
+| B-12 | A schedule with exactly ONE data row is refused, because "a real table repeats" | ordinary, not exceptional: 7 of 11 tables on 016_NY p18, 9 of 15 on 067_CA p8, 5 of 13 on 061_IA p58, both on 09_ME p7 | proxy used in place of the property |
+| B-13 | Data rows whose cells WRAP to several printed lines are never banded into rows | 13_MI p28 FIRE ALARM DEVICES SCHEDULE: header accepted, `banded=0` | open — not yet fixed |
+
+**These three came out of the recall tier, which is the only tier that can
+see them.** Every other key in this corpus is scoped to tables the pipeline
+already found, so a table it never constructs cannot appear in any of them —
+B-11/B-12/B-13 were invisible to a 94.8%-exact scoreboard. See
+`keys/*.tables.csv` (23 documents, 122 ground-truth tables, authored by
+rendering sheets and reading them by eye).
 
 ---
 
@@ -579,6 +589,83 @@ table's own x-band, sits between data rows, and populates no other column is a
 SECTION BANNER — exclude it from data banding (it is the same "test the
 property that distinguishes it" move as B-4's band-fill title test, applied to
 a row rather than a caption).
+
+---
+
+### B-11 — standing down for a pass that never comes
+
+**Measured 2026-09-05 on `13_MI_MSU_LifeSciences_LabRenovation.pdf#28`
+(E-002 SCHEDULES).** The sheet draws six schedule tables. The pipeline
+extracted one.
+
+Five of them — FIRE ALARM DEVICES, DATA DEVICE, and three WIRING DEVICES
+schedules — print the same header:
+`SYMBOL | DESCRIPTION | MANUFACTURER | CATALOG NO. | REMARKS`.
+
+`extractReferenceTableAt`'s `alreadyVocab` guard reads `SYMBOL` + enough
+supporting hits, concludes the finish-kind pass owns this table, and skips it.
+Traced live, the finish pass's own answer on that sheet is:
+
+```
+room-finish: 0
+finish:      0
+equipment:   1   ("LUMINAIRE SCHEDULE")
+reference:   0
+```
+
+The finish pass extracts **nothing** — its hunt wants finish/material rows
+and these carry catalog rows — and where it does build such a table it drops
+it again by title as a non-finish schedule. So five real, cleanly ruled
+tables reached the graph through no path at all, with no note, no refusal,
+no disclosure. The guard was not wrong to exist (its own comment records the
+real bessemer collision it prevents); it was wrong to treat a **claim about
+what another pass would do** as evidence that it did it.
+
+**Fix (2026-09-05):** stand down only where one of those passes ACTUALLY
+produces a table whose region covers this header block
+(`blockIsClaimedByAKindPass`, memoised per sheet). Where a pass really does
+own the table the guard behaves exactly as before; where nothing owns it,
+there is nothing to defer to. Same move as B-3/B-4/B-7 and as the earlier
+`blockHasCatalogAnchor` fix on the equipment side of this very guard: test
+the claim instead of inferring it.
+
+---
+
+### B-12 — a one-row schedule is a schedule
+
+`if (banded.out.length < 2) return { table: null, … }` refused every
+single-data-row candidate, on the reasoning that "a real table's own grid
+REPEATS." That guard was added against a real failure — a control
+schematic's scattered callouts coincidentally aligning for exactly one line
+— but repetition is a **proxy** for the grid, not the grid, and the corpus
+says the proxy is wrong far more often than it is right. One-row schedules
+are ordinary drafting: one piece of equipment, one row.
+
+Counted on the sheets read for the recall keys: 7 of 11 tables on
+016_NY p18, 9 of 15 on 067_CA p8, 5 of 13 on 061_IA p58, and both tables on
+09_ME p7 carry exactly one data row. On 09_ME p7 the pipeline finds ZERO
+tables on a page whose text layer is clean and complete — adding one
+synthetic duplicate data row makes a table appear immediately.
+
+**Fix (2026-09-05):** test the grid itself. `singleRowSitsInDrawnGrid` asks
+for the cell walls a drafted table has and a coincidental alignment does not
+— a rule separating the row from its header, a rule closing it below, and at
+least two verticals cutting it at the header's own column anchors. It is
+deliberately stricter than `hasNearbyRuledLine`, which fails OPEN when a
+sheet supplies no linework: with no segs the question cannot be answered, and
+the old refusal is the safe answer.
+
+---
+
+### B-13 — wrapped multi-line cells are never banded (OPEN)
+
+Same sheet, 13_MI p28. With B-11 fixed the FIRE ALARM DEVICES SCHEDULE's
+header block is accepted (5 anchors, ruled line present) and then
+`bandGenericDataRows` returns **0 rows**. Its DESCRIPTION and REMARKS cells
+wrap over two to four printed lines each, and the SYMBOL column is a drawn
+glyph with no text at all, so the row-clustering pass sees continuation
+fragments rather than rows. Not fixed here; recorded with its evidence so it
+is not rediscovered from scratch.
 
 ## How these connect
 
