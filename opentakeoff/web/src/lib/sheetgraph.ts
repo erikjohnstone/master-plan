@@ -7851,6 +7851,12 @@ export interface VectorPipelineReport {
    * sheets it wins, so a stage's count here IS its residual reach — the
    * evidence for keeping it or retiring it. */
   stage_contributions?: Record<string, number>;
+  /** The same thing, named: every table that entered the graph, with the
+   * stage that produced it. Counts decide nothing; these are what you read. */
+  stage_tables?: Array<{
+    stage: string; sheet: string; title: string | null; kind: string;
+    headers: number; rows: number; region: Bbox;
+  }>;
   /** L2-VG. Present whenever the vectorgrid engine ran at all — in `shadow`
    * it is the whole record of what it WOULD have produced, since nothing it
    * finds is merged in that mode. `refused` counts sheets whose page box

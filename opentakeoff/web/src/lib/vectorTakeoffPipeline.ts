@@ -4,29 +4,13 @@
  * L4.5 VLM slot is ON — returns null when no backend configured.
  */
 import { buildMepGraph } from "./mepconnectivity.ts";
-import {
-  clipSegsToTile,
-  clipSpansToTile,
-  slicePageTiles,
-  tileLocalToPage,
-  type PageTile,
-} from "./pageTileGrid.ts";
 import { scheduleTableFromOcrRegion, type OcrRegionResult } from "./rasterTableAssist.ts";
-import {
-  extractScheduleTablesFromLineGrid,
-  sheetHasScheduleKeywords,
-} from "./scheduleGridFallback.ts";
-import { extractScheduleTablesFromStreamGrid } from "./scheduleStreamFallback.ts";
-import { extractScheduleTablesFromSidecar } from "./scheduleTableSidecarAdapter.ts";
+import { sheetHasScheduleKeywords } from "./scheduleGridFallback.ts";
 import {
   VectorGridSpaceError,
   extractScheduleTablesFromVectorGrid,
 } from "./vectorGridAdapter.ts";
 import { vectorGridAvailable, vectorGridMode } from "./vectorGridClient.ts";
-import {
-  runPillarGapRecoveryForSheet,
-  sheetNeedsPillarGapRecovery,
-} from "./pillarGapRecovery.ts";
 import { sheetHasPointsListTitleSpans, sheetHasScheduleLanguage } from "./scheduleLanguageScan.ts";
 import {
   collapseEquivalentPrimaryTables,
@@ -69,7 +53,6 @@ export interface VectorPipelineHooks {
 }
 
 const OCR_ENV = typeof process !== "undefined" && process.env?.OPENTAKEOFF_PIPELINE_OCR === "1";
-const MAX_TILES_PER_SHEET = 4;
 
 function scheduleKeywordRegion(
   spans: GraphSpan[],
@@ -145,42 +128,21 @@ function mergeCandidates(
     if (report && stats.added + stats.recovered > before) {
       const ledger = report.stage_contributions ?? (report.stage_contributions = {});
       ledger[mergeStage] = (ledger[mergeStage] ?? 0) + 1;
+      // Name the table too, not just the count. "Six tables come from the old
+      // extractors" is not a fact anyone can act on; "these six, on these
+      // sheets, with these headers" is — and deciding whether they are real
+      // tables the new engine missed or junk it correctly declined is the
+      // whole of the retirement decision.
+      (report.stage_tables ?? (report.stage_tables = [])).push({
+        stage: mergeStage,
+        sheet: sheetKey,
+        title: built.title?.text ?? null,
+        kind: built.kind,
+        headers: built.headers.length,
+        rows: built.rows.length,
+        region: built.region,
+      });
     }
-  }
-}
-
-function runL2FallbacksForSheet(
-  g: SheetGraph,
-  ctx: VectorSheetContext,
-  buildings: Set<string>,
-  stats: MergeExtractedStats,
-  touched: Set<string>,
-  report: VectorPipelineReport,
-  tile?: PageTile,
-): void {
-  const spans = tile ? clipSpansToTile(ctx.spans, tile) : ctx.spans;
-  const segs = tile && ctx.segs ? clipSegsToTile(ctx.segs, tile) : ctx.segs;
-  const sheetKey = ctx.key;
-  const baseOpts = {
-    buildings,
-    sourceSpans: ctx.spans,
-    pageViewportTransform: ctx.pageViewportTransform,
-  };
-
-  const lineCandidates = extractScheduleTablesFromLineGrid(spans, segs, sheetKey, baseOpts);
-  for (const t of lineCandidates) {
-    if (tile) t.region = tileLocalToPage(t.region, tile);
-    withStage(tile ? "line-grid(tiled)" : "line-grid",
-      () => mergeCandidates(g, [t], sheetKey, stats, touched, report));
-  }
-
-  if (sheetTableCount(g, sheetKey) === 0 || lineCandidates.length === 0) {
-    const streamCandidates = extractScheduleTablesFromStreamGrid(spans, sheetKey, baseOpts);
-    for (const t of streamCandidates) {
-      if (tile) t.region = tileLocalToPage(t.region, tile);
-    }
-    withStage(tile ? "stream-grid(tiled)" : "stream-grid",
-      () => mergeCandidates(g, streamCandidates, sheetKey, stats, touched, report));
   }
 }
 
@@ -247,29 +209,6 @@ async function runL2VectorGridForSheet(
   rec.rasters += res.rasters;
   if (mode === "shadow" || !res.tables.length) return;
   withStage("vectorgrid", () => mergeCandidates(g, res.tables, ctx.key, stats, touched, report));
-}
-
-async function runL2SidecarForSheet(
-  g: SheetGraph,
-  ctx: VectorSheetContext,
-  buildings: Set<string>,
-  stats: MergeExtractedStats,
-  touched: Set<string>,
-  report: VectorPipelineReport,
-): Promise<void> {
-  if (sheetTableCount(g, ctx.key) > 0) return;
-  if (!ctx.pdfPath) return;
-  const candidates = await extractScheduleTablesFromSidecar({
-    pdfPath: ctx.pdfPath,
-    sheetKey: ctx.key,
-    spans: ctx.spans,
-    segs: ctx.segs,
-    pageViewportTransform: ctx.pageViewportTransform,
-    buildings,
-  });
-  if (!candidates.length) return;
-  withStage("python-sidecar", () => mergeCandidates(g, candidates, ctx.key, stats, touched, report));
-  report.notes.push(`${ctx.key}: L2 sidecar recovered ${candidates.length} table(s) via Python backends.`);
 }
 
 async function runL45OcrAssist(
@@ -387,46 +326,31 @@ export async function runVectorTakeoffPipeline(
     }
   }
 
-  // L1.5 + L2 fallbacks
-  report.layers_run.push("L1.5:tiling", "L2:line-grid", "L2:stream-grid", "L2:sidecar");
+  // L1.5 TILING, L2 LINE-GRID, L2 STREAM-GRID, L2 SIDECAR AND L2.5 PILLAR-GAP
+  // ARE RETIRED. See src/lib/attic/README.md — they are unwired, not deleted.
+  //
+  // They were kept until there was a measurement rather than a hunch. The
+  // stage ledger over 30 keyed corpus sheets, engine on: vectorgrid 65 tables,
+  // stream-grid(tiled) 2, pillar-gap 2, line-grid(tiled) 1, stream-grid 1,
+  // python-sidecar 0. Then the six were READ, and not one was a real table
+  // vectorgrid had missed:
+  //
+  //   014_MT#4   pillar-gap returns two tables that DUPLICATE vectorgrid's
+  //              own, with fewer headers — same keys HWCH-A1..HWCH-B1, 6
+  //              headers against 18. A row key in two tables is the hard
+  //              AMBIGUOUS refusal at session.ts:3541. That is not clutter,
+  //              it is a live hazard, and it was firing.
+  //   072_CA#25  stream-grid, keys SYMBOL|FD|M — the header row read as data.
+  //   074_CA#24  line-grid keyed SYMBOL; stream-grid keyed D|I|QJ|II, one
+  //              region spanning nearly the whole sheet.
+  //
+  // Retiring them removes a bug rather than a capability. ODL still runs (the
+  // only engine that reads an unruled table) and so does the L4.5 OCR assist
+  // for genuinely rastered sheets, which vectorgrid reports and cannot read.
   for (const ctx of contexts) {
     if (!isScheduleTarget(ctx, hooks)) continue;
     sourceSpansBySheet.set(ctx.key, ctx.spans);
-
-    const existing = sheetTableCount(g, ctx.key);
-    const tiles = existing === 0 ? slicePageTiles(ctx.width, ctx.height) : [];
-    report.tiles_sliced += tiles.length;
-
-    if (tiles.length) {
-      for (const tile of tiles.slice(0, MAX_TILES_PER_SHEET)) {
-        runL2FallbacksForSheet(g, ctx, buildings, stats, touched, report, tile);
-      }
-    }
-    if (existing === 0) {
-      runL2FallbacksForSheet(g, ctx, buildings, stats, touched, report);
-    }
-    await runL2SidecarForSheet(g, ctx, buildings, stats, touched, report);
   }
-
-  // L2.5 — recover tables Pillars A–D missed when schedule language exists in vector text.
-  report.layers_run.push("L2.5:pillar-gap-recovery");
-  let gapTables = 0;
-  for (const ctx of contexts) {
-    if (!sheetNeedsPillarGapRecovery(g, ctx)) continue;
-    const mergeFn = (candidates: ScheduleTable[]) =>
-      withStage("pillar-gap", () => mergeCandidates(g, candidates, ctx.key, stats, touched, report));
-    const n = await runPillarGapRecoveryForSheet(g, ctx, buildings, stats, touched, mergeFn);
-    if (n > 0) {
-      gapTables += n;
-      report.notes.push(`${ctx.key}: L2.5 pillar-gap recovery added ${n} table(s) from schedule/BAS/valve language.`);
-    }
-  }
-  if (gapTables) {
-    report.notes.push(`L2.5 pillar-gap recovery: ${gapTables} table(s) on shared vector path.`);
-  }
-
-  // L3 — plan symbol inventory runs at query time via sweep_schedule_row (shared path).
-  report.layers_run.push("L3:sweep_schedule_row@query");
 
   // L3.5 topology
   report.layers_run.push("L3.5:topology");
