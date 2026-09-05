@@ -136,6 +136,12 @@ def bk_docling(pdf: Path):
     from docling.document_converter import DocumentConverter, PdfFormatOption
     from docling.datamodel.base_models import InputFormat
     from docling.datamodel.pipeline_options import PdfPipelineOptions
+    from docling_core.types.doc import CoordOrigin
+    import pdfplumber
+
+    with pdfplumber.open(pdf) as d:
+        H = float(d.pages[0].height)
+
     opts = PdfPipelineOptions()
     opts.do_ocr = False                      # our text layer is clean and complete
     opts.do_table_structure = True
@@ -146,8 +152,16 @@ def bk_docling(pdf: Path):
     for t in doc.tables:
         for prov in (t.prov or []):
             bb = prov.bbox
-            # docling bbox origin depends on coord_origin; normalise to top-left
-            top, bot = (bb.t, bb.b) if bb.t < bb.b else (bb.b, bb.t)
+            # Docling reports BOTTOMLEFT origin (verified live on 061_IA#58:
+            # coord_origin=CoordOrigin.BOTTOMLEFT, t=2092 > b=1820 on a 2160pt
+            # page, i.e. `t` is the upper edge measured from the page bottom).
+            # Merely ordering t/b without flipping the origin mirrors every
+            # region vertically and silently loses real matches — it scored
+            # docling 3/13 here before this was caught.
+            if bb.coord_origin == CoordOrigin.BOTTOMLEFT:
+                top, bot = H - max(bb.t, bb.b), H - min(bb.t, bb.b)
+            else:
+                top, bot = min(bb.t, bb.b), max(bb.t, bb.b)
             regions.append((bb.l, top, bb.r, bot))
     return regions, f"{len(doc.tables)} tables"
 
@@ -179,25 +193,50 @@ def caption_boxes(pdf: Path, titles: list[str]) -> dict[str, tuple | None]:
         want, hit = norm(t), None
         for _, ws in lines.items():
             ws = sorted(ws, key=lambda w: w["x0"])
-            if want in norm(" ".join(w["text"] for w in ws)):
-                hit = (min(w["x0"] for w in ws), min(w["top"] for w in ws),
-                       max(w["x1"] for w in ws), max(w["bottom"] for w in ws))
+            # Match a CONTIGUOUS RUN of words, not "is this substring anywhere
+            # in the line". Two captions routinely share a y on these sheets
+            # (SHELL AND TUBE HEAT EXCHANGER on the left, HYDRONIC PUMP on the
+            # right of 061_IA#58) — matching the whole line hands both titles
+            # the same box, which is the left one's, so the right-hand table
+            # can never match any region and scores a false miss.
+            for i in range(len(ws)):
+                for j in range(i + 1, len(ws) + 1):
+                    if norm(" ".join(w["text"] for w in ws[i:j])) == want:
+                        run = ws[i:j]
+                        hit = (min(w["x0"] for w in run), min(w["top"] for w in run),
+                               max(w["x1"] for w in run), max(w["bottom"] for w in run))
+                        break
+                if hit:
+                    break
+            if hit:
                 break
         out[t] = hit
     return out
 
 
 def score(regions, caps) -> list[str]:
+    """A region matches a caption when the caption sits at the TOP of it —
+    either just above it, or inside its upper band.
+
+    Both cases are real and a fair test must accept both: camelot and
+    pdfplumber return the grid only, so their region starts below the caption,
+    while Docling's region CONTAINS the caption (measured on 061_IA#58: region
+    top=68 against caption top=83). An earlier version of this demanded the
+    region start below the caption and scored Docling 0/13 on a page where it
+    had in fact bracketed eleven of the thirteen captions — the rule was
+    measuring which library draws its box where, not which one found the table.
+    """
     hits = []
     for title, cp in caps.items():
         if not cp:
             continue
-        cx0, _ctop, cx1, cbot = cp
+        cx0, ctop, cx1, cbot = cp
         cw = max(cx1 - cx0, 1)
+        cmid = (ctop + cbot) / 2
         for (x0, top, x1, bot) in regions:
-            if top < cbot - 2 or top > cbot + 120:      # must sit DIRECTLY under the caption
+            if cmid < top - 60 or cmid > top + 140:      # caption belongs to THIS region's top
                 continue
-            if min(x1, cx1) - max(x0, cx0) >= cw * 0.5:  # and share its band
+            if min(x1, cx1) - max(x0, cx0) >= cw * 0.5:   # and shares its band
                 hits.append(title)
                 break
     return hits
