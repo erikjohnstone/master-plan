@@ -108,6 +108,105 @@ recall — **32% is not the pipeline's recall number** and must not be quoted as
 one. The full-Session recall figure across all 24 keyed documents is the next
 measurement to run.
 
+### 2a. The region-proposal bake-off — 121/122 clean boxes
+
+`opentakeoff/bakeoff/` scores any table extractor against those same 122 keyed
+tables. Two rulers: `bakeoff.py` asks whether a region landed under a keyed
+caption (recall); `boxfit.py` asks whether the BOX WAS RIGHT, which recall
+cannot see — a box clipped to two rows of a twelve-row schedule and a box that
+swallows the schedule below it both score a hit.
+
+`vectorgrid.py` is the answer that came out of the five research sweeps:
+segments straight from the content stream (pdfplumber), noded into a planar
+graph (shapely), faces taken as cells (`polygonize_full`), blocks as connected
+components cut at border-weight strokes. Nothing is rasterised, so stroke
+width survives to be used as signal — which no published method can do.
+
+| 122 keyed tables | CLEAN | recall | mrg | spl | ovr | sht | regions |
+|---|---|---|---|---|---|---|---|
+| **vectorgrid** | **121  99.2%** | **121  99.2%** | 0 | 0 | 0 | 0 | 363 |
+| pdfplumber-lines | 99  81.1% | 114  93.4% | 10 | 10 | 5 | 0 | 446 |
+| pdfplumber-lines_strict | 89  73.0% | 100  82.0% | 7 | 7 | 4 | 0 | 249 |
+| camelot-stream | — | 80  65.6% | — | — | — | — | 105 |
+| docling | — | 12/13 on one sheet | — | — | — | — | 174 s/page |
+
+```
+cd opentakeoff/bakeoff && python3 boxfit.py --backend vectorgrid
+```
+
+The whole gap is in the two columns a recall count cannot see. pdfplumber
+finds 114 of 122 tables — close — and hands back 10 boxes containing two
+schedules each and 10 tables torn across regions. An extractor trusting those
+interleaves two schedules or loses half of one, silently.
+
+What made the difference, in the order it was found and each measured on the
+sheet named:
+
+1. **Curve decomposition.** pdfminer types a path as `LTLine` only for two
+   points and `LTRect` only for a closed axis-aligned four; every other
+   polyline collapses to one `LTCurve`. 4145 of `27_WA#15`'s 7235 curves are
+   thin filled slivers used as cell walls. 43.4% → 51.6% clean.
+2. **A sliver face and a tall blank face are WELDS.** A border drawn 0.5pt
+   inside the sheet margin leaves a 0.5 × 30 face that unions a schedule to
+   the drawing frame; the blank sheet between two blocks does the same at
+   270 × 341. `073_MT#21`'s three margin schedules were perfectly drawn and
+   scored 0/3. 53.3% → 63.1%.
+3. **Six of the 122 tables are PICTURES.** All six `017_MD#14` VENTILATION
+   SCHEDULEs are Excel screenshots — the render still shows their "Add Rows"
+   buttons. pdfplumber sees 15 segments inside an 873 × 570 table box and
+   PyMuPDF agrees. Their image placement rectangles are emitted instead
+   (`raster_regions()`), which is where a downstream OCR call belongs. The
+   ruling graph alone tops out at 116/122. 77.9% → 89.3%.
+4. **The dangles `polygonize` discards are the table's extent.** A row rule
+   spans its table and a column wall spans its table, so a block widens to the
+   span of the rules its cells sit on — majority vote, no chaining, and the
+   vertical widening stops at any block-spanning rule so stacked schedules
+   sharing a column wall cannot fuse. `08_ME#1`'s DRAWING LIST closes faces
+   only in its checkbox strip, 340pt right of its caption and 212pt below it.
+   89.3% → 91.0%.
+5. **A merge must leave a block tessellating.** The column-divergence
+   merge-back fused `001_NC#49`'s OUTDOOR AIR SCHEDULE (fill 0.278) with the
+   block below and dropped it to 0.186, under the regularity gate — the step
+   meant to repair splits threw away the sheet's one clean recovery.
+6. **A second title band is a second table.** A schedule opens with an
+   undivided full-width row and then divides into columns, so an undivided
+   full-width row part-way down a block is a second table's title.
+   `073_MT#21` draws HELICAL PIER over FOOTING on the same 0.48 pen, where no
+   weight threshold can ever part them. MERGED 2 → 0. 95.9% → 97.5%.
+
+**Four of the fixes were to the RULER, not the extractor**, and each one had
+been counting correct boxes as wrong:
+
+- SHORT was inferred from caption spacing. On `061_IA#58` it called 7 of 13
+  regions truncated; rendering the crops showed all 13 exact — HUMIDIFIER
+  SCHEDULE is a caption, two header rows and one data row, then a REMARKS note
+  and 73pt of blank sheet. That ruler rewards swallowing whitespace. Replaced
+  with a content test (a ruled row still standing below the box), with a
+  truncation sweep as its control: silent at the true bottom, firing 1pt below.
+- A region that ENDS above a caption was still claiming it. All four remaining
+  SPLITs were this.
+- One region now has ONE owner, the nearest caption above it.
+- Both flat tolerances are now proportional — the caption gap to type size,
+  "interior wall" to region width.
+
+Each ruler fix moved the pdfplumber baseline too (45.9% → 73.0% over the
+sequence), which is how they were checked for being fair rather than
+self-serving.
+
+**One table is unfixable without breaking the ruler.** `067_CA#8` prints
+PCW RISER DIAGRAM SCHEDULE - HUTCH 1.3 BELOW its table, as detail 2. Allowing
+captions below would hand every backend false matches corpus-wide to buy one
+table. Recorded in the key, counted as a miss.
+
+**What this does NOT measure.** 363 regions for 122 keyed tables. The keys
+record schedules only, so most of the surplus is real tables nobody keyed
+(title blocks, legends, note grids) — but the number is not precision and must
+not be quoted as one. Blocking bad merges (item 5) cost 320 → 349 regions
+deliberately: a fragment a downstream extractor can ignore is cheaper than a
+schedule it never sees. **And nothing here reads a CELL yet** — vectorgrid
+proposes regions and their faces; slotting text into those faces is the next
+step, and is also the answer to B-13.
+
 ## 3. The other 112 documents
 
 The corpus is **7 scored sets, 112 bulk sets (215 files, 30 in
