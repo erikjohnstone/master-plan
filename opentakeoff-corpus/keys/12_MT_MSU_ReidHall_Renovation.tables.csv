@@ -1,0 +1,26 @@
+# 12_MT_MSU_ReidHall_Renovation.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page
+# (mcp/scripts/render-page-crop.mjs, scale 1) and reading every schedule table
+# by eye. NOTHING here comes from the pipeline's own output — that is the whole
+# point of this tier: every other key for this corpus is scoped to tables
+# sheetgraph.ts already found, so a table it never sees cannot appear in them.
+#
+# Scope: sheets 11 (S5.0 STANDARD STEEL DETAILS) and 25 (A601 DOOR & WINDOW SCHEDULE) only. Not a full-document key; a partial recall key for the
+# sheets it covers is exactly what the format supports. Do not extend this file
+# from pipeline output.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, and untitled tables (this tier matches
+# on title, so an untitled table is unscorable here).
+#
+# Sheet 11 also carries detail-callout captions that read like table titles ("3 SINGLE-PLATE SHEAR CONNECTION SCHEDULE", "5 STEEL COLUMN BASE PLATE SCHEDULE", "7 STANDARD METAL DECK SCHEDULE AND FASTENING LAYOUTS") printed BELOW their detail cells — captions for the detail, not titles of the tables. Sheet 25's DOOR HARDWARE GROUPS is an indented text list, not a grid.
+sheet,table_title,note
+12_MT_MSU_ReidHall_Renovation.pdf#11,SINGLE-PLATE SHEAR CONNECTION SCHEDULE,7 data rows; title printed inside the table's own box
+12_MT_MSU_ReidHall_Renovation.pdf#11,STEEL COL. BASE PLATE SCHEDULE,3 data rows + blank ruled rows
+12_MT_MSU_ReidHall_Renovation.pdf#11,STEEL DECK SCHEDULE,ONE data row
+12_MT_MSU_ReidHall_Renovation.pdf#25,WINDOW SCHEDULE,8 data rows
+12_MT_MSU_ReidHall_Renovation.pdf#25,DOOR SCHEDULE,11 data rows
+12_MT_MSU_ReidHall_Renovation.pdf#25,SIGNAGE SCHEDULE,10 data rows

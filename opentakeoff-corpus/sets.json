@@ -6,14 +6,18 @@
       "gc": "unknown (public federal-style bid set)",
       "project": "Bessemer mechanical bid set — apartment building electric heat / exhaust / register schedules",
       "root": "/Users/erikjohnstone/Desktop/MASTER PLAN/opentakeoff/samples",
-      "files": ["bessemer-mechanical-bidset.pdf"],
+      "files": [
+        "bessemer-mechanical-bidset.pdf"
+      ],
       "provenance": "Already committed in-repo (samples/bessemer-mechanical-bidset.pdf) as the project's pinned small demo/fixture sample. Source lineage: a public federal-style residential mechanical bid set (Iron Belle Apartments, Bucknell Enterprises, Bessemer MI — U.P. Engineers & Architects). Redistribution terms not independently re-verified for this corpus entry beyond its existing in-repo status; treat as the one pre-existing exception, not a precedent."
     },
     {
       "id": "itd-d1-lab",
       "gc": "Miller Stauffer Architects / Musgrove Engineering",
       "project": "D-1 Testing Laboratory, 600 W Prairie Ave, Coeur d'Alene, ID 83814 — HVAC bid set, 5/13/2024 (Idaho Transportation Department non-highway construction project)",
-      "files": ["itd-d1-lab-mechanical.pdf"],
+      "files": [
+        "itd-d1-lab-mechanical.pdf"
+      ],
       "note": "Real drawn valve/damper diversity — richest VALVE text density of the 3 new sets (353 hits) with distinct GATE VALVE / BALL VALVE / CHECK VALVE / BUTTERFLY vocabulary all present, plus a real, dense HVAC floor plan (sheet M1.0, hexagonal diffuser/damper symbols, ductwork, a real 'LAB EQUIPMENT LIST' schedule).",
       "provenance": "Downloaded 2026-08-26 from a public, no-login apps.itd.idaho.gov URL (Idaho Transportation Department's own non-highway construction projects PDF archive), posted for open competitive bidding. NOT independently confirmed as public-domain or licensed for redistribution beyond the bidding purpose it was posted for — the drawings are a private AE firm's (Miller Stauffer Architects / Musgrove Engineering) work product, not a government-authored work; a state agency posting it for bidders does not itself grant a redistribution license. Kept OUTSIDE the git repo for exactly this reason, used here for local measurement/testing only, never republished."
     },
@@ -21,7 +25,9 @@
       "id": "federal-mech",
       "gc": "unknown (federal solicitation attachment)",
       "project": "A federal-government facility mechanical set — richest VAV/AHU density of the 3 new sets (VAV×371, AHU×61, BOILER×93, CHILLER×26)",
-      "files": ["federal-attachment4-mechanical.pdf"],
+      "files": [
+        "federal-attachment4-mechanical.pdf"
+      ],
       "note": "VAV/AHU-heavy design — the category this corpus specifically needed. 24 sheets, ~511K vector segments.",
       "provenance": "Downloaded 2026-08-26 from a public, no-login imlive.s3.amazonaws.com URL (a bid-document hosting service federal agencies commonly use for solicitation attachments), posted for open competitive bidding. Same redistribution caveat as itd-d1-lab above — not independently confirmed as public-domain; kept external, local-use only."
     },
@@ -29,7 +35,9 @@
       "id": "navfac-cherry-point-atc",
       "gc": "unknown (NAVFAC federal solicitation attachment)",
       "project": "NAVFAC FY20 P-228 ATC Tower & Air Operations Building, MCAS Cherry Point, NC — a Marine Corps Air Station air-traffic-control tower/air-ops building, a building type distinct from every other set in this corpus",
-      "files": ["navfac-cherry-point-atc-mechanical.pdf"],
+      "files": [
+        "navfac-cherry-point-atc-mechanical.pdf"
+      ],
       "note": "The densest real HVAC/BAS set in this corpus: 75 sheets, EVERY page confirmed real vector text (63,630 total text items, ~848/page). Beats every existing set's own density on every metric — AHU×254, VAV×386, BOILER×130, CHILLER×226, PUMP×313, VALVE×319, DAMPER×255. Sheet M-603 'AIR OPS - MECHANICAL SCHEDULES' carries a real AIR COOLED CHILLER SCHEDULE and FAN SCHEDULE; also carries real BAS/DDC points content (AI/AO/BI/BO tags, points schedules) — this corpus's own real prior gap on the 'BAS' half of HVAC/BAS. Sourced specifically to replace weld-county-permit (below, retired) as an active corpus member: a genuinely vector-CAD set proving the pipeline, not a raster-embedded one. Sanity-loaded through the real pipeline before being added: 75/75 sheets, 46 equipment-kind + 5 reference tables extracted with zero crashes.",
       "provenance": "Downloaded 2026-08-28 from a public, no-login imlive.s3.amazonaws.com URL (the same federal solicitation-attachment hosting pattern as the existing federal-mech entry), posted for open competitive bidding. Same redistribution caveat as this corpus's other non-bessemer sets — not independently confirmed as public-domain; kept external, local-use only."
     },
@@ -37,7 +45,9 @@
       "id": "bldg5406-hvac-demo",
       "gc": "unknown (federal solicitation attachment)",
       "project": "Building 5406 — mechanical HVAC demolition + new-work set, an apparent military NDI/radiography-lab-type facility (exact base unconfirmed from the excerpt)",
-      "files": ["bldg5406-hvac-demo-mechanical.pdf"],
+      "files": [
+        "bldg5406-hvac-demo-mechanical.pdf"
+      ],
       "note": "20 real vector-text sheets (of 22 total, 2 trailing blank). Sheet M-601 'MECHANICAL SCHEDULES' carries a real AIR TERMINAL BOX SCHEDULE (VAV-1..9, TRANE/VCEF, real CFM/reheat-MBH/electric-heater-kW/DDC-controls columns) and a FAN SCHEDULE (EF-1, GREENHECK). Thinner than navfac-cherry-point-atc but a solid, genuinely different real set. HONEST, DISCLOSED FINDING from its own sanity-load: the current pipeline extracts ZERO tables from it (0 of the real schedules confirmed present by direct inspection) — a real, not-yet-diagnosed gap, kept in the corpus specifically BECAUSE it's real signal, not smoothed over before adding.",
       "provenance": "Downloaded 2026-08-28 from a public, no-login imlive.s3.amazonaws.com URL, same hosting pattern as navfac-cherry-point-atc and the existing federal-mech entry, posted for open competitive bidding. Same redistribution caveat as this corpus's other non-bessemer sets — kept external, local-use only."
     },
@@ -45,7 +55,9 @@
       "id": "baker-county-eoc",
       "gc": "unknown",
       "project": "Baker County Sheriff's Office — new ~3,863 SF Operations Center addition (communications room, expanded 911 dispatch), 3410 K Street, Baker City, OR 97814 — verified directly from the set's own title-sheet text this session, not assumed from the filename alone",
-      "files": ["baker-county-eoc-bidset.pdf"],
+      "files": [
+        "baker-county-eoc-bidset.pdf"
+      ],
       "note": "MAJOR real find (accuracy-hardening plan, this session): the FIRST and ONLY set in this corpus confirmed to carry a real architectural ROOM FINISH SCHEDULE (sheet #27, 13 real rows, headers NUMBER/ROOM/FLOOR/BASE/WALLS FINISH by direction) — every other set in this corpus (bessemer included) is mechanical-only with zero room-finish content (ledger item 8). 65 sheets total, 18 real plan-role sheets, 189 real rooms already resolved by sheet_graph. Wired into sets.json (ledger item 10's own 'S' step) but a real, visually-verified `.csv` room-finish key has NOT been built yet — that's the real, actionable next step this finding unblocks.",
       "provenance": "Present in the corpus raw/ directory already (triaged in an earlier session, before this one's own context) — exact download date/source URL not recorded and not independently re-verified this session; the real project content itself (address, scope, sheet count) WAS directly read and confirmed from the PDF's own title sheet this session, not merely assumed from the filename. Same redistribution caveat as this corpus's other non-bessemer sets applies by default (a real, likely-private AE firm's bid-set work product, posted for competitive bidding, not confirmed public-domain) until a real source URL is recovered or re-confirmed."
     },
@@ -53,8 +65,217 @@
       "id": "itd-d1-lab-raster",
       "gc": "Miller Stauffer Architects / Musgrove Engineering",
       "project": "The SAME real D-1 Testing Laboratory HVAC plan sheet (M1.0) as itd-d1-lab, above — SYNTHETICALLY flattened to an image-only page (mcp/scripts/make-corpus-raster-variant.mjs, the same technique make-scan-fixture.mjs uses for the repo's own bundled raster fixture): zero vector linework, zero text layer, real HVAC drafting density in the pixels. Built, not sourced — no separate real scanned MEP set was found; this exercises the honest has_vector_linework:false fallback path against genuinely dense real content instead of a generic floor plan.",
-      "files": ["itd-d1-lab-raster.pdf"],
+      "files": [
+        "itd-d1-lab-raster.pdf"
+      ],
       "provenance": "Derived locally from itd-d1-lab-mechanical.pdf (same source, same caveat) — never itself downloaded from anywhere. Kept external for the same reason as its source."
+    },
+    {
+      "id": "12_MT_MSU_ReidHall_Renovation",
+      "project": "Bulk corpus document 12_MT_MSU_ReidHall_Renovation — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "files": [
+        "12_MT_MSU_ReidHall_Renovation.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "24_IA_JohnsonCounty_Courthouse",
+      "project": "Bulk corpus document 24_IA_JohnsonCounty_Courthouse — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "files": [
+        "24_IA_JohnsonCounty_Courthouse.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "27_WA_ColvilleTribes_Hatchery_Lab",
+      "project": "Bulk corpus document 27_WA_ColvilleTribes_Hatchery_Lab — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "files": [
+        "27_WA_ColvilleTribes_Hatchery_Lab.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "16_NV_CarsonValleyMS_HVAC_Replacement",
+      "project": "Bulk corpus document 16_NV_CarsonValleyMS_HVAC_Replacement — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "files": [
+        "16_NV_CarsonValleyMS_HVAC_Replacement.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "13_MI_MSU_LifeSciences_LabRenovation",
+      "project": "Bulk corpus document 13_MI_MSU_LifeSciences_LabRenovation — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "files": [
+        "13_MI_MSU_LifeSciences_LabRenovation.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "03_FL_HurlburtField_ChildDevCenter",
+      "project": "Bulk corpus document 03_FL_HurlburtField_ChildDevCenter — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "files": [
+        "03_FL_HurlburtField_ChildDevCenter.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "08_ME_BGS_Augusta_EastCampus_Renovation",
+      "project": "Bulk corpus document 08_ME_BGS_Augusta_EastCampus_Renovation — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "files": [
+        "08_ME_BGS_Augusta_EastCampus_Renovation.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "15_IA_IowaState_Biorenewables_Lab",
+      "project": "Bulk corpus document 15_IA_IowaState_Biorenewables_Lab — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "files": [
+        "15_IA_IowaState_Biorenewables_Lab.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "09_ME_BGS_KennebecValleyCC_Renovation",
+      "project": "Bulk corpus document 09_ME_BGS_KennebecValleyCC_Renovation — Vol1 (bulk/HVAC_BAS_Plan_Sets)",
+      "files": [
+        "09_ME_BGS_KennebecValleyCC_Renovation.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for",
+      "project": "Bulk corpus document 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "files": [
+        "031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "078_US_CP25028_MSU_Union_Sparty_Store_Renovations",
+      "project": "Bulk corpus document 078_US_CP25028_MSU_Union_Sparty_Store_Renovations — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "files": [
+        "078_US_CP25028_MSU_Union_Sparty_Store_Renovations.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations",
+      "project": "Bulk corpus document 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "files": [
+        "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building",
+      "project": "Bulk corpus document 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "files": [
+        "061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test",
+      "project": "Bulk corpus document 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "files": [
+        "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project",
+      "project": "Bulk corpus document 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "files": [
+        "060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "041_IL_VA_Project_537_17_115_Sterile_Processing",
+      "project": "Bulk corpus document 041_IL_VA_Project_537_17_115_Sterile_Processing — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "files": [
+        "041_IL_VA_Project_537_17_115_Sterile_Processing.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17",
+      "project": "Bulk corpus document 042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17 — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "files": [
+        "042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom",
+      "project": "Bulk corpus document 073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "files": [
+        "073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated",
+      "project": "Bulk corpus document 008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "files": [
+        "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling",
+      "project": "Bulk corpus document 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "files": [
+        "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "009_FL_USDA_APHIS_Plant_Inspection_Station_Building",
+      "project": "Bulk corpus document 009_FL_USDA_APHIS_Plant_Inspection_Station_Building — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "files": [
+        "009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid",
+      "project": "Bulk corpus document 067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "files": [
+        "067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
+    },
+    {
+      "id": "062_ID_ITD_District_1_Laboratory_Building_Mechanical",
+      "project": "Bulk corpus document 062_ID_ITD_District_1_Laboratory_Building_Mechanical — Vol2 (bulk/HVAC_BAS_Plan_Sets_Vol2)",
+      "files": [
+        "062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf"
+      ],
+      "note": "Registered 2026-09-05 to carry a RECALL-tier key (keys/<id>.tables.csv) authored by rendering named sheets and reading every schedule table by eye. Only the sheets named in that key are ground-truthed; the rest of the document is unscored. No takeoff/reference key exists for this set, so corpus-eval prints it as unlabelled in those tiers.",
+      "provenance": "Bulk HVAC/BAS plan-set corpus, downloaded from public agency bid postings. Kept OUTSIDE the git repo (bulk/ is gitignored); used for local measurement only, never republished."
     }
   ],
   "retired": [
@@ -62,7 +283,9 @@
       "id": "weld-county-permit",
       "gc": "unknown (AutoCAD-plotted permit set)",
       "project": "Weld County, Colorado — mechanical permit set (RTU-heavy: RTU×20, VAV×13, DAMPER×31)",
-      "files": ["weld-county-mechanical-permit.pdf"],
+      "files": [
+        "weld-county-mechanical-permit.pdf"
+      ],
       "note": "Smallest of the original 3 new real sets (8 sheets, ~63K segments) — rooftop-unit-heavy, a device family the other two barely mention.",
       "provenance": "Downloaded 2026-08-26 from a public, no-login www.weld.gov URL (Weld County's own purchasing-department document archive), posted for open competitive bidding. Same redistribution caveat as this corpus's other non-bessemer sets — kept external, local-use only.",
       "retired_reason": "2026-08-28: retired from the ACTIVE vector-PDF corpus — every real equipment schedule on this set (RTU/fan/heater/split-system/condensing-unit) lives on 2 RASTER-EMBEDDED sheets (confirmed via zero find_text hits despite a crisp-looking render — a high-DPI scan can look clean while carrying no real text at all), making it a poor fit for a corpus meant to prove/harden a VECTOR-PDF (real embedded text+geometry) pipeline. Real ground-truth keys (keys/weld-county-permit.{takeoff,reference,rowsym}.csv) and the eval scores they produced (3.8% takeoff exact, 16.7% reference, 0.0% rowsym recall) are KEPT, not deleted — this set is the intended first real member of a future OCR/raster-specific corpus, not discarded. The raw PDF stays in raw/ for that future use; it is simply no longer in the active `sets` list above. CORRECTION (same day, after independent verification): this note originally claimed the set's own remaining RTU1-x-H 'LOCAL VAV BOX SCHEDULE' gap was 'a real vector-text sub-schedule... fixed in production code' — that claim was written before the fix was actually verified and turned out to be WRONG. Direct, rigorous re-diagnosis (pdf.js operator-list inspection showing a real paintImageXObject at that exact table's bbox, plus re-rendering that bbox to confirm pixel-for-pixel) proved this table is ALSO a raster-embedded picture, not vector text — the same underlying limitation as the set's other 2 raster sheets, just a small inset on a plan-role sheet. The real fix shipped instead: `rasterScheduleNotes` (mcp/src/session.ts) now also fires on any sheet, any role, whose single largest embedded image clears a 1% area floor (`RASTER_SOLO_IMG_MIN_FRAC`, web/src/lib/rastermask.ts) — a small pasted-picture table now gets honestly named wherever it appears, not just on schedule-role sheets failing a whole-sheet threshold. weld-county-permit's own eval scores are correctly UNCHANGED by this fix (the data was never recoverable); the value is the general disclosure capability, verified against the full corpus with zero regressions."

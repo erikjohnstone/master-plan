@@ -1,0 +1,26 @@
+# 062_ID_ITD_District_1_Laboratory_Building_Mechanical.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page
+# (mcp/scripts/render-page-crop.mjs, scale 1) and reading every schedule table
+# by eye. NOTHING here comes from the pipeline's own output — that is the whole
+# point of this tier: every other key for this corpus is scoped to tables
+# sheetgraph.ts already found, so a table it never sees cannot appear in them.
+#
+# Scope: sheet 13 (M5.1 MECHANICAL SCHEDULES) only. Not a full-document key; a partial recall key for the
+# sheets it covers is exactly what the format supports. Do not extend this file
+# from pipeline output.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, and untitled tables (this tier matches
+# on title, so an untitled table is unscorable here).
+sheet,table_title,note
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,CONDENSING HOT WATER BOILER SCHEDULE,2 data rows
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,HOT WATER REHEAT COIL SCHEDULE,9 data rows
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS),9 data rows
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,HUMIDIFIER SCHEDULE,ONE data row (HUM-1)
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,LAB EXHAUST FAN SCHEDULE,ONE data row (LEF-1)
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,DIFFUSER SCHEDULE,7 data rows
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,RETURN & EXHAUST GRILLE SCHEDULE,4 data rows
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,ONE data row (BCV-1)

@@ -1,0 +1,33 @@
+# 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page
+# (mcp/scripts/render-page-crop.mjs, scale 1) and reading every schedule table
+# by eye. NOTHING here comes from the pipeline's own output — that is the whole
+# point of this tier: every other key for this corpus is scoped to tables
+# sheetgraph.ts already found, so a table it never sees cannot appear in them.
+#
+# Scope: sheet 58 (M-601 MECHANICAL SCHEDULES) only. Not a full-document key; a partial recall key for the
+# sheets it covers is exactly what the format supports. Do not extend this file
+# from pipeline output.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, and untitled tables (this tier matches
+# on title, so an untitled table is unscorable here).
+#
+# Five of these thirteen tables carry exactly one data row.
+sheet,table_title,note
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE,ONE data row (AHU-A); vertical column headers
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.),ONE data row; vertical column headers
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",ONE data row (HRU-A)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HUMIDIFIER SCHEDULE,ONE data row (HUM-A)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,BID ALTERNATE #1 WATER-TO-WATER HEAT PUMP/CHILLER SCHEDULE,ONE data row (WWHP-A)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,2 data rows
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,HYDRONIC PUMP SCHEDULE,7 data rows
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,BID ALTERNATE #2 EXHAUST FAN SCHEDULE,2 data rows
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,EXPANSION TANK SCHEDULE,3 data rows
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,AIR/DIRT SEPARATOR SCHEDULE,3 data rows
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE,11 data rows
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,STEAM TRAP SCHEDULE,2 data rows
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,FAN COIL UNIT SCHEDULE,ONE data row (FCU-A)

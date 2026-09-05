@@ -1,0 +1,30 @@
+# 001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page
+# (mcp/scripts/render-page-crop.mjs, scale 1) and reading every schedule table
+# by eye. NOTHING here comes from the pipeline's own output — that is the whole
+# point of this tier: every other key for this corpus is scoped to tables
+# sheetgraph.ts already found, so a table it never sees cannot appear in them.
+#
+# Scope: sheet 49 (M-622 MECHANICAL SCHEDULES) only. Not a full-document key; a partial recall key for the
+# sheets it covers is exactly what the format supports. Do not extend this file
+# from pipeline output.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, and untitled tables (this tier matches
+# on title, so an untitled table is unscorable here).
+sheet,table_title,note
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#49,DUCT CONSTRUCTION SCHEDULE,
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#49,PIPING CONSTRUCTION SCHEDULE,4 data rows
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#49,OUTDOOR AIR SCHEDULE,
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#49,DEDICATED OUTDOOR AIR HANDLING UNIT SCHEDULE,ONE data row (DOAH-T1); wide banded header
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#49,DEHUMIDIFIER SCHEDULE,3 data rows
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#49,VIBRATION ISOLATION SCHEDULE,
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#49,HHW CONTROL VALVE SCHEDULE,
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#49,CHW CONTROL VALVE SCHEDULE,
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#49,AIR SEPARATOR SCHEDULE,2 data rows
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#49,DUCT SILENCER SCHEDULE,2 data rows
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#49,"GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf#49,FAN SOUND POWER LEVEL SCHEDULE,

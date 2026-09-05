@@ -1,0 +1,35 @@
+# 067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page
+# (mcp/scripts/render-page-crop.mjs, scale 1) and reading every schedule table
+# by eye. NOTHING here comes from the pipeline's own output — that is the whole
+# point of this tier: every other key for this corpus is scoped to tables
+# sheetgraph.ts already found, so a table it never sees cannot appear in them.
+#
+# Scope: sheet 8 (M7.0 MECHANICAL SCHEDULES) only. Not a full-document key; a partial recall key for the
+# sheets it covers is exactly what the format supports. Do not extend this file
+# from pipeline output.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, and untitled tables (this tier matches
+# on title, so an untitled table is unscorable here).
+#
+# Nine of these fifteen tables carry exactly one data row. The four blocks under detail 1 NEH PCW FLOW DEMAND are untitled and not scorable by this tier.
+sheet,table_title,note
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) PUMP SCHEDULE,2 data rows
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,PRESSURE TESTING REQUIREMENTS,4 data rows
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,GRILLE SCHEDULE,ONE data row (RG-1)
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,REHEAT COIL SCHEDULES (RELOCATED),ONE data row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,AIR HANDLING UNIT SCHEDULE (EXISTING),ONE data row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,PIPE INSTALLATION SCHEDULE,6 data rows
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) HEAT EXCHANGER SCHEDULE,ONE data row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) VFD SCHEDULE,2 data rows
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,DUCT INSTALLATION SCHEDULE,2 data rows
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,(N) COMPRESSED AIR REGULATOR,ONE data row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,HUTCH 1.3 PCW RISER UTILITY SCHEDULE,~24 data rows
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,PCW AIR SEPARATOR SCHEDULE,ONE data row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,PCW POT FEEDER SCHEDULE,ONE data row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,PCW EXPANSION TANK SCHEDULE,ONE data row
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf#8,PCW FILTER SCHEDULE,ONE data row

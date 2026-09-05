@@ -1,0 +1,23 @@
+# 16_NV_CarsonValleyMS_HVAC_Replacement.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page
+# (mcp/scripts/render-page-crop.mjs, scale 1) and reading every schedule table
+# by eye. NOTHING here comes from the pipeline's own output — that is the whole
+# point of this tier: every other key for this corpus is scoped to tables
+# sheetgraph.ts already found, so a table it never sees cannot appear in them.
+#
+# Scope: sheet 3 (M0.02 MECHANICAL SCHEDULES) only. Not a full-document key; a partial recall key for the
+# sheets it covers is exactly what the format supports. Do not extend this file
+# from pipeline output.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, and untitled tables (this tier matches
+# on title, so an untitled table is unscorable here).
+sheet,table_title,note
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,EVAPORATOR COIL SCHEDULE,
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,2 data rows
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,2 data rows

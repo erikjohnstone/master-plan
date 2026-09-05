@@ -1,0 +1,21 @@
+# 03_FL_HurlburtField_ChildDevCenter.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page
+# (mcp/scripts/render-page-crop.mjs, scale 1) and reading every schedule table
+# by eye. NOTHING here comes from the pipeline's own output — that is the whole
+# point of this tier: every other key for this corpus is scoped to tables
+# sheetgraph.ts already found, so a table it never sees cannot appear in them.
+#
+# Scope: sheet 41 (I3 FINISH SCHEDULE AND LEGEND) only. Not a full-document key; a partial recall key for the
+# sheets it covers is exactly what the format supports. Do not extend this file
+# from pipeline output.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, and untitled tables (this tier matches
+# on title, so an untitled table is unscorable here).
+#
+# FINISH INDEX, ABBREVIATIONS and REMARKS/GENERAL NOTES are indexes and prose, not grids.
+sheet,table_title,note
+03_FL_HurlburtField_ChildDevCenter.pdf#41,ROOM FINISH SCHEDULE,28 data rows

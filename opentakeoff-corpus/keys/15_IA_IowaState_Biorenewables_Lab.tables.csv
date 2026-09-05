@@ -1,0 +1,20 @@
+# 15_IA_IowaState_Biorenewables_Lab.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page
+# (mcp/scripts/render-page-crop.mjs, scale 1) and reading every schedule table
+# by eye. NOTHING here comes from the pipeline's own output — that is the whole
+# point of this tier: every other key for this corpus is scoped to tables
+# sheetgraph.ts already found, so a table it never sees cannot appear in them.
+#
+# Scope: sheet 8 (M1 FIRST FLOOR MECHANICAL) only. Not a full-document key; a partial recall key for the
+# sheets it covers is exactly what the format supports. Do not extend this file
+# from pipeline output.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, and untitled tables (this tier matches
+# on title, so an untitled table is unscorable here).
+#
+# ZERO schedule tables on this sheet. "LIST OF MATERIALS - HVAC/PIPING" and "LIST OF MATERIALS - PLUMBING" are indented spec prose under a single header rule, and SYMBOLS LIST is a legend — all three are recall-scan candidates that are NOT tables. Recorded here in prose because the key format has no way to express "this sheet has none".
+sheet,table_title,note

@@ -1,0 +1,22 @@
+# 09_ME_BGS_KennebecValleyCC_Renovation.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page
+# (mcp/scripts/render-page-crop.mjs, scale 1) and reading every schedule table
+# by eye. NOTHING here comes from the pipeline's own output — that is the whole
+# point of this tier: every other key for this corpus is scoped to tables
+# sheetgraph.ts already found, so a table it never sees cannot appear in them.
+#
+# Scope: sheet 7 (M201 MECHANICAL DETAILS AND LEGEND) only. Not a full-document key; a partial recall key for the
+# sheets it covers is exactly what the format supports. Do not extend this file
+# from pipeline output.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, and untitled tables (this tier matches
+# on title, so an untitled table is unscorable here).
+#
+# MECHANICAL AND PLUMBING SYMBOLS AND ABBREVIATIONS LEGEND is a legend. Its text is also not in the text layer at all (the whole page carries 145 spans), so it is invisible to a text-layer extractor either way.
+sheet,table_title,note
+09_ME_BGS_KennebecValleyCC_Renovation.pdf#7,MULTI-SPLIT HEAT PUMP OUTDOOR UNIT PERFORMANCE SCHEDULE,ONE data row (SCU-1); 4-tier banded header; text layer is clean and complete
+09_ME_BGS_KennebecValleyCC_Renovation.pdf#7,MULTI-SPLIT HEAT PUMP INDOOR UNIT PERFORMANCE SCHEDULE,ONE data row (SAC-1); 4-tier banded header

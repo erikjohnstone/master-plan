@@ -1,0 +1,31 @@
+# 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page
+# (mcp/scripts/render-page-crop.mjs, scale 1) and reading every schedule table
+# by eye. NOTHING here comes from the pipeline's own output — that is the whole
+# point of this tier: every other key for this corpus is scoped to tables
+# sheetgraph.ts already found, so a table it never sees cannot appear in them.
+#
+# Scope: sheet 18 (M-601 SCHEDULES) only. Not a full-document key; a partial recall key for the
+# sheets it covers is exactly what the format supports. Do not extend this file
+# from pipeline output.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, and untitled tables (this tier matches
+# on title, so an untitled table is unscorable here).
+#
+# Seven of these eleven tables carry exactly one data row.
+sheet,table_title,note
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR HANDLING UNIT SCHEDULE,ONE data row (AHU-1)
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FIN TUBE RADIATION SCHEDULE,ONE data row (FT-A)
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,EXPANSION TANK SCHEDULE,ONE data row (ET-1)
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,CONVECTOR SCHEDULE,ONE data row (C-1)
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,CONTROL DAMPER SCHEDULE (CD),9 data rows
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,"DIFFUSER, REGISTER AND GRILLE SCHEDULE",4 data rows
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,ONE data row (ACCU-1)
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,BOILER SCHEDULE (EXISTING),ONE data row (B-1 & 2)
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,PUMP SCHEDULE,2 data rows
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,FAN SCHEDULE,2 data rows
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,STATIONARY ROOF VENTILATOR SCHEDULE,ONE data row (SRV-1)

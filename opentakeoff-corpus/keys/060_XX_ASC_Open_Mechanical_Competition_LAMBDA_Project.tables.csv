@@ -1,0 +1,21 @@
+# 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page
+# (mcp/scripts/render-page-crop.mjs, scale 1) and reading every schedule table
+# by eye. NOTHING here comes from the pipeline's own output — that is the whole
+# point of this tier: every other key for this corpus is scoped to tables
+# sheetgraph.ts already found, so a table it never sees cannot appear in them.
+#
+# Scope: sheet 75 (E-801 ELECTRICAL PANEL SCHEDULES) only. Not a full-document key; a partial recall key for the
+# sheets it covers is exactly what the format supports. Do not extend this file
+# from pipeline output.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, and untitled tables (this tier matches
+# on title, so an untitled table is unscorable here).
+#
+# The sheet draws SIX panel-schedule blocks, five captioned "PANELBOARD SCHEDULE" and one "SCHEDULE". The recall tier matches on title, so repeated identical titles on one sheet cannot be scored separately — only one row is recorded for the repeated title, and this key therefore UNDERSTATES the sheet's table count by four. A per-region recall format would be needed to score them individually.
+sheet,table_title,note
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.pdf#75,PANELBOARD SCHEDULE,drawn 5x on this sheet; scorable only once by title

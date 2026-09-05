@@ -1,0 +1,26 @@
+# 017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.tables.csv — RECALL-tier ground-truth key for
+# mcp/scripts/table-recall-eval.mjs.
+#
+# Authored 2026-09-05 by rendering the sheet full-page
+# (mcp/scripts/render-page-crop.mjs, scale 1) and reading every schedule table
+# by eye. NOTHING here comes from the pipeline's own output — that is the whole
+# point of this tier: every other key for this corpus is scoped to tables
+# sheetgraph.ts already found, so a table it never sees cannot appear in them.
+#
+# Scope: sheet 14 (M-601 SCHEDULES - MECHANICAL, MEZZANINE A) only. Not a full-document key; a partial recall key for the
+# sheets it covers is exactly what the format supports. Do not extend this file
+# from pipeline output.
+#
+# Counted as a table: a titled, ruled, repeating-grid schedule. NOT counted:
+# legends and symbol/abbreviation keys, notes blocks (even ruled ones),
+# indented spec prose under a heading, and untitled tables (this tier matches
+# on title, so an untitled table is unscorable here).
+#
+# Each block also carries an untitled summary sub-table (Occupant Diversity / Total Required Outdoor Air) below the grid; not separately scorable.
+sheet,table_title,note
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#14,ACU-A-6 VENTILATION SCHEDULE,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#14,ACU-A-4 VENTILATION SCHEDULE,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#14,ACU-A-1 VENTILATION SCHEDULE,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#14,ACU-A-5 VENTILATION SCHEDULE,
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#14,ACU-A-2 VENTILATION SCHEDULE,2 data rows + totals
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf#14,ACU-A-3 VENTILATION SCHEDULE,
