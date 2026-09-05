@@ -156,7 +156,7 @@ import { buildRasterMask, RASTER_MIN_IMG_FRAC, RASTER_MIN_SEGS, RASTER_RDP_EPS, 
 // scale-unpinned masks here, so an MCP trace and a canvas click at the same
 // seed measured DIFFERENT square footage under the same origin.method.
 import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed, type LabelBBox } from "../../web/src/lib/detectRooms.ts";
-import { fingerprintSymbol, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, familyQuorumFragmentedTagOcc, splitHyphenTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, typicalCountMultiplier, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, isIndividuallyMarkedEquipmentSchedule, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
+import { fingerprintSymbol, assertDistinctiveSymbolSeed, matchSymbol, buildNegative, SWEEP_TOL_PX, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, familyQuorumFragmentedTagOcc, splitHyphenTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, typicalCountMultiplier, dedupeCrossDisciplineRoomViews, dedupeAlignedSameSheetViews, disciplineOfSheetNumber, planLevelOfTitle, pickSameDisciplineCorroborator, prefersTagClaimCoverage, isIndividuallyMarkedEquipmentSchedule, hasSymbolSweepPlanEvidence, type SweepOptions, type SymbolFingerprint, type SymbolMatchResult, type SweepMatch, type SweepWithheld, type SweepRejected, type SymbolNegative, type TagOcc, type RoomSweepInstance, type RedundantRoomView, type TaggedViewLandmark, type TaggedViewCaption, type TagClaimCoverage } from "../../web/src/lib/symbolsweep.ts";
 // Accuracy-hardening plan Phase 0 — the deterministic reference-shape library
 // (hand-digitized real HVAC valve/damper geometry) had a real engine
 // (matchAgainstLibrary above) with ZERO live callers anywhere in this
@@ -168,10 +168,10 @@ import { HVAC_REF_SHAPES } from "../../web/src/lib/hvacRefShapes.ts";
 // national HVAC symbol standard exists, so a bigger FIXED reference-shape
 // library never scales to every firm's own house legend. findLegendGlyphs
 // does the new work only (cluster a legend sheet's own vector segments into
-// compact glyphs, pair each with its own caption); the caller feeds each
-// result straight into symbol_sweep (scope: "set") exactly as if a human
-// had marqueed it — the already-tested sweep engine is reused untouched.
-import { findLegendGlyphs, type LegendSpan } from "../../web/src/lib/legendlearn.ts";
+// compact glyphs, pair each with its own caption, and disclose structural
+// support). Discrete glyphs still need a corroborated plan-scale occurrence
+// before symbol_sweep; routed-system line keys are explicitly non-seedable.
+import { findLegendGlyphs, legendLearnStatus, type LegendSpan } from "../../web/src/lib/legendlearn.ts";
 // Accuracy-hardening plan Phase 4 — a register/grille mark embedded within a
 // tapered duct run has no independent whole-shape perimeter of its own
 // (symbolsweep.ts's own matchSymbol whole-shape fingerprint measurably
@@ -193,7 +193,7 @@ import { mepLayerSignal } from "../../web/src/lib/mepsystems.ts";
 // here exactly as netroom.js's room detector already uses it, as a fallback
 // exclusion source for ensureMepGraph below.
 import { networkWallSegs } from "../../web/src/lib/wallnetwork.ts";
-import { labelPlacements, type PlacementLabel } from "../../web/src/lib/symbollabels.ts";
+import { placementLabelFamily, labelPlacements, reconcileSweepLabels, LABEL_CORROBORATION_SCORE_LOW, type PlacementLabel } from "../../web/src/lib/symbollabels.ts";
 import { buildSnapGrid, nearestSnap, closedMetrics, openLen } from "../../web/src/lib/geometry.js";
 import { deriveTransitionRuns, type SheetFrame, type TransitionSourceShape } from "../../web/src/lib/transitions.ts";
 // Real polygon boolean subtraction (#137/#206) — the canvas's own module, so a
@@ -2348,9 +2348,15 @@ export class Session {
    * resolution lives in web/src/lib/symbollabels.ts (shared with the canvas
    * Symbol tool, #264); this just lines the answers back up with the rows
    * they belong to. */
-  private sweepLabels(spans: TextSpan[], geo: { segs: number[]; lum?: Uint8Array }, seedCenter: Point | null, matches: SweepMatch[], withheld: SweepWithheld[]) {
+  private sweepLabels(spans: TextSpan[], geo: { segs: number[]; lum?: Uint8Array }, seedCenter: Point | null, matches: SweepMatch[], withheld: SweepWithheld[], preferredLabel?: string, symbolInkLengthPx?: number) {
     const centers: Point[] = [...(seedCenter ? [seedCenter as Point] : []), ...matches.map((m) => m.at), ...withheld.map((w) => w.at)];
-    const named = labelPlacements(centers, spans, geo.segs, geo.lum);
+    const discoveredSeed = seedCenter ? labelPlacements([seedCenter], spans, geo.segs, geo.lum, { scores: [1], symbolInkLengthPx })[0] : null;
+    const named = labelPlacements(centers, spans, geo.segs, geo.lum, {
+      preferredLabel: discoveredSeed?.label ?? preferredLabel,
+      ...(discoveredSeed?.family ? { preferredFamily: placementLabelFamily(discoveredSeed) } : {}),
+      scores: [...(seedCenter ? [1] : []), ...matches.map((m) => m.score), ...withheld.map((w) => w.score)],
+      symbolInkLengthPx,
+    });
     const off = seedCenter ? 1 : 0;
     return {
       seed: seedCenter ? named[0] : null,
@@ -2359,29 +2365,41 @@ export class Session {
     };
   }
 
-  private static labelFields(l: PlacementLabel | null | undefined): { label?: string; label_via?: "adjacent" | "leader" } {
-    return l ? { label: l.label, label_via: l.via } : {};
+  private static labelFields(l: PlacementLabel | null | undefined): { label?: string; label_via?: "adjacent" | "leader"; label_bbox?: [number, number, number, number] } {
+    return l ? {
+      label: l.label,
+      label_via: l.via,
+      ...(l.token_bbox ? { label_bbox: l.token_bbox.map(round1) as [number, number, number, number] } : {}),
+    } : {};
   }
 
   /** The label findings worth a sentence, in both directions (#308): a match
    * with no label in a labeled family is a shape-only count to look at; a
    * withheld row carrying the seed's own tag is the drawing vouching for it;
    * a withheld row carrying a different tag is a sibling fixture, answered. */
-  private static sweepLabelNote(lbl: { seed: PlacementLabel | null; matches: (PlacementLabel | null)[]; withheld: (PlacementLabel | null)[] }): string | null {
+  private static sweepLabelNote(
+    lbl: { seed: PlacementLabel | null; matches: (PlacementLabel | null)[]; withheld: (PlacementLabel | null)[] },
+    corrected: { promoted: number; demoted: number } = { promoted: 0, demoted: 0 },
+  ): string | null {
     const parts: string[] = [];
     const seedTag = lbl.seed?.label;
+    if (corrected.promoted) parts.push(`${corrected.promoted} vector near-match(es) were promoted because the drawing gives them the seed tag "${seedTag}".`);
+    if (corrected.demoted) parts.push(`${corrected.demoted} geometry match(es) were withheld because the drawing gives them a different tag than the seed.`);
     const anyLabeled = !!seedTag || lbl.matches.some(Boolean);
     const unlabeledMatches = lbl.matches.filter((l) => !l).length;
     if (anyLabeled && unlabeledMatches) {
       parts.push(`${unlabeledMatches} committed match(es) carry NO label while this family is labeled${seedTag ? ` (the seed reads "${seedTag}")` : ""} — counted on shape alone; view_sheet them before trusting the total.`);
     }
     if (seedTag) {
-      const diffMatches = [...new Set(lbl.matches.filter((l): l is PlacementLabel => !!l && l.label !== seedTag).map((l) => l.label))];
-      if (diffMatches.length) parts.push(`Committed match(es) the drawing names differently (${diffMatches.join(", ")}) — the geometry matched but the tag disagrees; check they belong in this count, or exclude one as a counter-example.`);
-      const same = lbl.withheld.filter((l) => l && l.label === seedTag).length;
-      const others = [...new Set(lbl.withheld.filter((l): l is PlacementLabel => !!l && l.label !== seedTag).map((l) => l.label))];
-      if (same) parts.push(`${same} withheld placement(s) carry the seed's own tag "${seedTag}" — the drawing says they are real; look, then place_count.`);
-      if (others.length) parts.push(`Withheld placements the drawing names differently (${others.join(", ")}) are sibling fixtures, not missed counts.`);
+      const family = placementLabelFamily(lbl.seed!);
+      const instanceMatches = [...new Set(lbl.matches.filter((l): l is PlacementLabel => !!l && l.label !== seedTag && placementLabelFamily(l) === family).map((l) => l.label))];
+      if (instanceMatches.length) parts.push(`Matched equipment instances were attached to their own drawing tags (${instanceMatches.join(", ")}) within the seed family "${family}".`);
+      const diffMatches = [...new Set(lbl.matches.filter((l): l is PlacementLabel => !!l && placementLabelFamily(l) !== family).map((l) => l.label))];
+      if (diffMatches.length) parts.push(`Committed match(es) fall outside the seed label family (${diffMatches.join(", ")}); check they belong in this count, or exclude one as a counter-example.`);
+      const same = lbl.withheld.filter((l) => l && placementLabelFamily(l) === family).length;
+      const others = [...new Set(lbl.withheld.filter((l): l is PlacementLabel => !!l && placementLabelFamily(l) !== family).map((l) => l.label))];
+      if (same) parts.push(`${same} withheld placement(s) carry the seed label family "${family}" — the drawing says they are real; look, then place_count.`);
+      if (others.length) parts.push(`Withheld placements outside the seed label family (${others.join(", ")}) are sibling fixtures, not missed counts.`);
     }
     return parts.length ? parts.join(" ") : null;
   }
@@ -2502,6 +2520,7 @@ export class Session {
     let fp: SymbolFingerprint;
     try {
       fp = fingerprintSymbol(geo.segs, rect, geo.lum);
+      assertDistinctiveSymbolSeed(fp);
     } catch (e) {
       // the engine's refusals (empty marquee, region-sized marquee) are
       // user-facing instructions, not crashes
@@ -2537,12 +2556,21 @@ export class Session {
     };
 
     if (scope === "sheet") {
-      const res = matchSymbol(fp, geo.segs, { ...sweepOpts, lum: geo.lum, excludeCenter: fp.center, ...(negatives.length ? { negatives } : {}) });
-      // #308 — the drawing's own names. For a labeled family the sheet says
-      // what each placement IS (a tag written beside it, or connected by a
-      // leader); resolved as disclosure on every row, never a recount.
       if (!s.spans) s.spans = textSpans(s.page);
-      const lbl = this.sweepLabels(s.spans, geo, fp.center, res.matches, res.withheld);
+      const seedHint = labelPlacements([fp.center], s.spans, geo.segs, geo.lum, { scores: [1], symbolInkLengthPx: fp.totalLen })[0] ?? null;
+      const rawRes = matchSymbol(fp, geo.segs, {
+        ...sweepOpts, lum: geo.lum, excludeCenter: fp.center,
+        ...(seedHint ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
+        ...(negatives.length ? { negatives } : {}),
+      });
+      // #308 — the drawing's own names. For a labeled family the sheet says
+      // what each already-geometric placement IS (a tag written beside it, or
+      // connected by a leader). Text may corroborate/demote geometry but can
+      // never manufacture a placement without vector evidence.
+      const rawLbl = this.sweepLabels(s.spans, geo, fp.center, rawRes.matches, rawRes.withheld, undefined, fp.totalLen);
+      const corrected = reconcileSweepLabels(rawLbl.seed, rawRes.matches, rawLbl.matches, rawRes.withheld, rawLbl.withheld);
+      const res: SymbolMatchResult = { ...rawRes, matches: corrected.matches, withheld: corrected.withheld };
+      const lbl = { seed: rawLbl.seed, matches: corrected.matchLabels, withheld: corrected.withheldLabels };
       let committed: { committed: number; shape_ids: string[]; condition: string; ea_total: number } | undefined;
       if (opts.commit && (res.matches.length || opts.commitSeed)) {
         // #296 — commit_seed puts the seed instance first in the SAME batch:
@@ -2565,7 +2593,7 @@ export class Session {
           }))],
         });
       }
-      const labelNote = Session.sweepLabelNote(lbl);
+      const labelNote = Session.sweepLabelNote(lbl, corrected);
       return {
         scope,
         found: res.matches.length,
@@ -2575,6 +2603,7 @@ export class Session {
         ...(res.rejected.length ? { rejected: res.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
         ...(res.negatives ? { negatives: res.negatives.filter((n) => !!n).map((n) => ({ mode: n!.mode, segments: n!.segments, center: [round1(n!.center[0]), round1(n!.center[1])] as [number, number] })) } : {}),
         ...(res.lum_gate ? { lum_gate: res.lum_gate } : {}),
+        ...((corrected.promoted || corrected.demoted) ? { label_corroboration: { promoted: corrected.promoted, demoted: corrected.demoted } } : {}),
         candidates: res.candidates,
         complete: res.complete,
         ...(committed ? {
@@ -2598,11 +2627,44 @@ export class Session {
     }
 
     // ── scope "set" ────────────────────────────────────────────────────────
-    const graph = await this.ensureGraph();
-    if (!graph.available) {
+    // Set-wide symbol matching needs only page ROLES. Do not route this
+    // read-only classification through ensureGraph(): that path deliberately
+    // builds the entire L0-L5 schedule/table pipeline (including the Python
+    // table sidecar), which is unrelated to symbol location and can turn a
+    // simple multi-page sweep into a table-extraction wait. The same pure
+    // role classifier used by sheetgraph is sufficient and keeps symbol
+    // sweep independent from all table machinery.
+    const roleOf = new Map<string, ReturnType<typeof classifySheetRole>["role"]>();
+    let hasTextLayer = false;
+    for (const sh of this.sheetList()) {
+      if (!sh.spans) sh.spans = textSpans(sh.page);
+      const spans = sh.spans.map((t) => ({
+        str: t.str,
+        x: t.x0,
+        y: t.y0,
+        w: t.x1 - t.x0,
+        h: t.y1 - t.y0,
+        ...(t.rot ? { rot: t.rot } : {}),
+      }));
+      if (spans.some((span) => span.str.trim())) hasTextLayer = true;
+      const genericRole = classifySheetRole({ key: sh.key, sheet_number: sh.sheetNumber, spans }).role;
+      // Some CAD-to-PDF writers fragment the visible title into adjacent text
+      // runs. Keep this recovery local to set-wide symbol sweep: widening the
+      // shared graph classifier here would also change schedule/table paths,
+      // which are intentionally unrelated to symbol location.
+      const classified = genericRole === "unknown" && hasSymbolSweepPlanEvidence(spans, sh.widthPx, sh.heightPx)
+        ? "plan"
+        : genericRole;
+      // A cover/index page often prints every plan title in its sheet list;
+      // those quoted titles can outvote its symbol legend in the generic role
+      // classifier. For counting, the page's own exact COVER PAGE/SHEET title
+      // is decisive: any symbols there are references, never installations.
+      const cover = spans.some((span) => /^(?:[A-Z][A-Z &/.-]* )?COVER (?:PAGE|SHEET)$/.test(span.str.trim().toUpperCase()));
+      roleOf.set(sh.key, cover ? "legend" : classified);
+    }
+    if (!hasTextLayer) {
       throw new UserError("This set has no text layer, so sheet ROLES are unknown — a set-wide sweep counts PLAN sheets only, and it will not guess which sheets those are. Sweep each sheet explicitly with scope 'sheet'.");
     }
-    const roleOf = new Map(graph.sheets.map((g) => [g.key, g.role] as const));
     const seedRole = roleOf.get(s.key) ?? "unknown";
     const seedSource: "instance" | "detail_sheet" = seedRole === "plan" ? "instance" : "detail_sheet";
 
@@ -2611,7 +2673,9 @@ export class Session {
     // matching would be a slow way to say the same thing.
     this.requireCrossScale(s, seedRole, this.sheetList().filter((sh) => (roleOf.get(sh.key) ?? "unknown") === "plan"));
 
-    const perSheet: { state: SheetState; matches: SweepMatch[]; withheld: SweepWithheld[]; rejected: SweepRejected[]; candidates: { considered: number; dropped: number }; complete: boolean; elapsed_ms: number; scale: { scale: number; known: boolean }; scaled?: NonNullable<SymbolMatchResult["scaled"]>; lum_gate?: NonNullable<SymbolMatchResult["lum_gate"]>; labels: { seed: PlacementLabel | null; matches: (PlacementLabel | null)[]; withheld: (PlacementLabel | null)[] } }[] = [];
+    if (!s.spans) s.spans = textSpans(s.page);
+    const seedLbl = this.sweepLabels(s.spans, geo, fp.center, [], [], undefined, fp.totalLen).seed;
+    const perSheet: { state: SheetState; matches: SweepMatch[]; withheld: SweepWithheld[]; rejected: SweepRejected[]; candidates: { considered: number; dropped: number }; complete: boolean; elapsed_ms: number; scale: { scale: number; known: boolean }; scaled?: NonNullable<SymbolMatchResult["scaled"]>; lum_gate?: NonNullable<SymbolMatchResult["lum_gate"]>; labels: { seed: PlacementLabel | null; matches: (PlacementLabel | null)[]; withheld: (PlacementLabel | null)[] }; label_corroboration: { promoted: number; demoted: number } }[] = [];
     const skipped: { sheet: string; role: string; reason: string }[] = [];
     for (const sh of this.sheetList()) {
       const role = roleOf.get(sh.key) ?? "unknown";
@@ -2641,6 +2705,7 @@ export class Session {
           lum: g2.lum,
           ...(ratio.scale === 1 ? {} : { scale: ratio.scale }),
           ...(sh.key === s.key ? { excludeCenter: fp.center } : {}),
+          ...(seedLbl ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}),
           ...(negatives.length ? { negatives } : {}),
         });
       } catch (e) {
@@ -2654,8 +2719,22 @@ export class Session {
       const elapsed_ms = Math.round(Number(process.hrtime.bigint() - t0) / 1e4) / 100;
       // #308 — each target sheet's own text names its own placements
       if (!sh.spans) sh.spans = textSpans(sh.page);
-      const labels = this.sweepLabels(sh.spans, g2, null, res.matches, res.withheld);
-      perSheet.push({ state: sh, ...res, elapsed_ms, scale: ratio, labels });
+      // On the seed plan, keep the seed center in the one-to-one label
+      // assignment even though it is excluded from the count. Otherwise its
+      // own unique tag is left free to promote a second transform peak from a
+      // neighboring/overlapped instance — a real FCU-5 set-wide overcount.
+      const rawLabels = this.sweepLabels(sh.spans, g2, sh.key === s.key ? fp.center : null, res.matches, res.withheld, seedLbl?.label, fp.totalLen * ratio.scale);
+      // A small fingerprint that is distinctive on its seed sheet may be
+      // ordinary title-block/detail geometry elsewhere in a large set. When
+      // the seed is named, set scope therefore requires every counted target
+      // to carry a same-family drawing tag; unlabeled geometry stays visible
+      // in withheld for review. Sheet scope preserves its established
+      // geometry-only behavior because nearby unlabeled repetitions there
+      // are often the intended takeoff.
+      const corrected = reconcileSweepLabels(seedLbl, res.matches, rawLabels.matches, res.withheld, rawLabels.withheld, { requireLabel: !!seedLbl });
+      res = { ...res, matches: corrected.matches, withheld: corrected.withheld };
+      const labels = { seed: null, matches: corrected.matchLabels, withheld: corrected.withheldLabels };
+      perSheet.push({ state: sh, ...res, elapsed_ms, scale: ratio, labels, label_corroboration: { promoted: corrected.promoted, demoted: corrected.demoted } });
     }
 
     const found = perSheet.reduce((n, p) => n + p.matches.length, 0);
@@ -2713,13 +2792,15 @@ export class Session {
       notes.push(`${lumRejectedTotal} placement(s) the geometry would have committed were pulled under the bar by your stated luminance tolerance — each is named per sheet in lum_gate.at. Look before trusting the gate: a symbol somebody redrew in a different pen fails it honestly.`);
     }
     // #308 — the seed's tag from its own sheet, and one aggregate label note
-    if (!s.spans) s.spans = textSpans(s.page);
-    const seedLbl = this.sweepLabels(s.spans, geo, fp.center, [], []).seed;
+    const labelCorrections = perSheet.reduce((a, p) => ({
+      promoted: a.promoted + p.label_corroboration.promoted,
+      demoted: a.demoted + p.label_corroboration.demoted,
+    }), { promoted: 0, demoted: 0 });
     const labelNote = Session.sweepLabelNote({
       seed: seedLbl,
       matches: perSheet.flatMap((p) => p.labels.matches),
       withheld: perSheet.flatMap((p) => p.labels.withheld),
-    });
+    }, labelCorrections);
     if (labelNote) notes.push(labelNote);
     return {
       scope,
@@ -2734,6 +2815,7 @@ export class Session {
         withheld: p.withheld.map((w, i) => ({ at: [round1(w.at[0]), round1(w.at[1])], score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.extra !== undefined ? { extra: w.extra } : {}), ...Session.labelFields(p.labels.withheld[i]), reason: w.reason })),
         ...(p.rejected.length ? { rejected: p.rejected.map((r) => ({ at: [round1(r.at[0]), round1(r.at[1])], score: r.score, rotation: r.rotation, mirrored: r.mirrored, by: r.by + 1, mode: r.mode, evidence: r.evidence, reason: r.reason })) } : {}),
         ...(p.lum_gate ? { lum_gate: p.lum_gate } : {}),
+        ...((p.label_corroboration.promoted || p.label_corroboration.demoted) ? { label_corroboration: p.label_corroboration } : {}),
         candidates: p.candidates,
         complete: p.complete,
         elapsed_ms: p.elapsed_ms,
@@ -2791,12 +2873,10 @@ export class Session {
   }
 
   /** find_legend_symbols (accuracy-hardening plan Phase 1) — auto-detect
-   * every (glyph, caption) row on a legend sheet, real vector geometry
-   * clustered and paired with its own real caption text, no marqueeing.
-   * Each result's `rect` feeds straight into symbol_sweep's own seed_rect
-   * (scope: "set") — this tool does the detection only, never sweeps
-   * itself, so the already-tested cross-scale/refusal machinery in
-   * symbol_sweep is reused untouched, not duplicated. Sheet-role-agnostic
+   * structurally corroborated (glyph, caption) rows on a legend sheet,
+   * with exact geometry and caption-ownership evidence. This tool detects
+   * only. Discrete glyphs require a real plan-scale anchor before sweeping;
+   * line-style and drafting-annotation rows are legend truth but never discrete EA seeds. Sheet-role-agnostic
    * by design: call sheet_graph first to find the real legend sheet(s);
    * this tool clusters whatever sheet it's pointed at. */
   async findLegendGlyphs(name: string) {
@@ -2827,18 +2907,26 @@ export class Session {
       glyphs = [];
       nodingFailed = true;
     }
+    const support = nodingFailed ? {
+      status: "unsupported_geometry" as const,
+      note: "This sheet's vector linework could not be reliably clustered, so zero learned rows is unsupported rather than an empty legend. Marquee a verified plan occurrence with symbol_sweep and keep this sheet in review.",
+    } : legendLearnStatus(geo.segs, spans, glyphs);
     return {
       sheet: s.key,
+      status: support.status,
       glyphs: glyphs.map((g) => ({
         caption: g.caption,
+        caption_bbox: [round1(g.caption_bbox[0][0]), round1(g.caption_bbox[0][1]), round1(g.caption_bbox[1][0]), round1(g.caption_bbox[1][1])] as [number, number, number, number],
         rect: [round1(g.rect[0][0]), round1(g.rect[0][1]), round1(g.rect[1][0]), round1(g.rect[1][1])] as [number, number, number, number],
         segments: g.segments,
+        aligned_rows: g.aligned_rows,
+        heading: g.heading,
+        kind: g.kind,
+        seedable: g.seedable,
+        ...(g.seed_warning ? { seed_warning: g.seed_warning } : {}),
+        ...(g.member_rects ? { member_rects: g.member_rects.map((rect) => [round1(rect[0][0]), round1(rect[0][1]), round1(rect[1][0]), round1(rect[1][1])] as [number, number, number, number]) } : {}),
       })),
-      ...(!glyphs.length ? {
-        note: nodingFailed
-          ? "This sheet's own linework could not be reliably noded for glyph clustering (a real, dense-CAD-geometry edge case, not a missing legend) — no glyphs detected as a result. Marquee one instance directly with symbol_sweep instead."
-          : "No (glyph, caption) row pairs were detected on this sheet — it may not be a legend, or its rows may not fit this detector's own compact-glyph/adjacent-caption assumptions. This is not an error: a sheet with no real legend falls back to the ordinary symbol_sweep workflow (marquee one real occurrence anywhere and sweep from it).",
-      } : {}),
+      ...(support.note ? { note: support.note } : {}),
     };
   }
 

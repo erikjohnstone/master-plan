@@ -3,7 +3,57 @@
 // tolerance behavior, decoy rejection, determinism, and the reported work cap.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { sweepSymbols, fingerprintSymbol, matchSymbol, scaleFingerprint, fragmentedTagOcc, familyQuorumFragmentedTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, type Point, type FlatSpan } from "../src/lib/symbolsweep.ts";
+import { sweepSymbols, fingerprintSymbol, assertDistinctiveSymbolSeed, matchSymbol, scaleFingerprint, fragmentedTagOcc, familyQuorumFragmentedTagOcc, deepHyphenChainTagOcc, familySuffixTagOcc, compoundTagOcc, hasSymbolSweepPlanTitle, hasSymbolSweepPlanEvidence, type Point, type FlatSpan, type SymbolSweepRoleSpan } from "../src/lib/symbolsweep.ts";
+
+test("set sweep recognizes an exporter-fragmented discipline plan title without trusting an index row", () => {
+  const fragmented: SymbolSweepRoleSpan[] = [
+    { str: "MECHANICAL", x: 100, y: 900, w: 82, h: 12 },
+    { str: "VENTILATION -", x: 186, y: 900, w: 104, h: 12 },
+    { str: "BASEMENT PLAN - AREA 1", x: 294, y: 900, w: 175, h: 12 },
+  ];
+  assert.equal(hasSymbolSweepPlanTitle(fragmented), true);
+  assert.equal(hasSymbolSweepPlanTitle([
+    { str: "M5.01", x: 40, y: 100, w: 36, h: 10 },
+    { str: "MECHANICAL FLOOR PLAN", x: 82, y: 100, w: 150, h: 10 },
+  ]), false, "a sheet-index row is not the page's own plan title");
+  assert.equal(hasSymbolSweepPlanTitle([
+    { str: "SEE MECHANICAL FLOOR PLAN", x: 100, y: 100, w: 190, h: 10 },
+  ]), false, "a reference note is not a title");
+  assert.equal(hasSymbolSweepPlanTitle([
+    { str: "MECHANICAL EQUIPMENT SCHEDULE", x: 100, y: 100, w: 220, h: 10 },
+  ]), false, "a schedule remains outside installed-work counting");
+});
+
+test("set sweep recognizes generalized HVAC field-plan evidence but not aligned schedule columns", () => {
+  const field: SymbolSweepRoleSpan[] = [
+    { str: "MATCHLINE", x: 100, y: 500, w: 70, h: 12 },
+    { str: "VAV-1", x: 120, y: 120, w: 42, h: 12 },
+    { str: "VAV-2", x: 700, y: 650, w: 42, h: 12 },
+    { str: "175 CFM", x: 180, y: 160, w: 55, h: 12 },
+    { str: "220 CFM", x: 680, y: 220, w: 55, h: 12 },
+    { str: "90 CFM", x: 350, y: 620, w: 48, h: 12 },
+    { str: "1,100 CFM", x: 760, y: 700, w: 66, h: 12 },
+  ];
+  assert.equal(hasSymbolSweepPlanEvidence(field, 1000, 800), true,
+    "MATCHLINE plus repeated equipment/flow annotations is plan-field evidence");
+
+  const denseField: SymbolSweepRoleSpan[] = [];
+  const schedule: SymbolSweepRoleSpan[] = [];
+  for (let i = 0; i < 10; i++) {
+    denseField.push(
+      { str: `CV-${i + 1}`, x: 80 + (i % 5) * 180, y: 80 + Math.floor(i / 5) * 460, w: 42, h: 12 },
+      { str: `${i + 1}.5 GPM`, x: 130 + (i % 5) * 180, y: 120 + Math.floor(i / 5) * 460, w: 58, h: 12 },
+    );
+    schedule.push(
+      { str: `CV-${i + 1}`, x: 100, y: 100 + i * 45, w: 42, h: 12 },
+      { str: `${i + 1}.5 GPM`, x: 500, y: 100 + i * 45, w: 58, h: 12 },
+    );
+  }
+  assert.equal(hasSymbolSweepPlanEvidence(denseField, 1000, 800), true,
+    "independently dispersed tag and flow evidence identifies a dense field plan");
+  assert.equal(hasSymbolSweepPlanEvidence(schedule, 1000, 800), false,
+    "aligned MARK and GPM columns remain a schedule, not installed work");
+});
 
 // The test symbol — deliberately ASYMMETRIC under every rotation and mirror:
 // a 20×20 square, ONE diagonal, and a stub off the right side. Local coords,
@@ -64,6 +114,19 @@ test("a grid of identical clusters: exact count, seed excluded, deterministic or
   assert.deepEqual(centers, [...centers].sort((a, b) => a[0] - b[0] || a[1] - b[1]), "reading order");
   const again = sweepSymbols(segs, RECT);
   assert.deepEqual(again, r, "same input, same result, byte for byte");
+});
+
+test("the same drawn symbol still matches when every target line is split into PDF subpaths", () => {
+  const split = SYMBOL.flatMap(([ax, ay, bx, by]) => {
+    const mx = (ax + bx) / 2, my = (ay + by) / 2;
+    return [[ax, ay, mx, my], [mx, my, bx, by]] as [number, number, number, number][];
+  });
+  const segs = place([{ at: [0, 0] }, { at: [100, 0], segs: split }]);
+  const r = sweepSymbols(segs, RECT);
+  assert.equal(r.matches.length, 1);
+  assert.equal(r.withheld.length, 0);
+  assert.ok(r.matches[0].score >= 0.92, `split-path line-body coverage: ${r.matches[0].score}`);
+  assert.ok(Math.abs(r.matches[0].at[0] - 112) <= 2, "reported at the symbol centroid, not a subpath midpoint");
 });
 
 test("candidate regions preserve in-window scores while pruning whole-sheet work", () => {
@@ -180,6 +243,31 @@ test("an empty seed rect refuses with instruction, not a crash", () => {
   // a rect edge slicing the symbol: crossing segments don't count as the
   // symbol, and here NOTHING sits fully inside — same refusal
   assert.throws(() => sweepSymbols(segs, [[-5, -5], [10, 10]]), /fully inside the seed rect/);
+});
+
+test("interactive seed distinctiveness refuses line fragments but accepts a compact closed symbol", () => {
+  const twoStroke = fingerprintSymbol([
+    0, 0, 18, 0,
+    9, -5, 9, 5,
+  ], [[-2, -7], [20, 7]]);
+  assert.throws(() => assertDistinctiveSymbolSeed(twoStroke), /only 2 vector segments/);
+
+  const openFive = fingerprintSymbol([
+    0, 0, 10, 0,
+    10, 0, 16, 6,
+    16, 6, 22, 0,
+    22, 0, 32, 0,
+    16, 6, 16, 14,
+  ], [[-2, -2], [34, 16]]);
+  assert.throws(() => assertDistinctiveSymbolSeed(openFive), /only 5 open vector segments/);
+
+  const triangle = fingerprintSymbol([
+    0, 20, 12, 0,
+    12, 0, 24, 20,
+    24, 20, 0, 20,
+  ], [[-2, -2], [26, 22]]);
+  assert.doesNotThrow(() => assertDistinctiveSymbolSeed(triangle));
+  assert.doesNotThrow(() => assertDistinctiveSymbolSeed(fingerprintSymbol(place([{ at: [0, 0] }]), RECT)));
 });
 
 // ── phase 2: fingerprint on one sheet, match on another ─────────────────────

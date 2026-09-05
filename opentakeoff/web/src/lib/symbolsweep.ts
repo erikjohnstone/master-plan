@@ -22,12 +22,13 @@
 //      would have if that segment were this anchor, per symmetry transform.
 //      Several anchors, deliberately: a placement stays discoverable even
 //      when one of its segments is drawn perturbed (the near-miss case whose
-//      whole point is to be REPORTED).
-//   3. SCORE — for each candidate placement, each transformed seed segment
-//      looks up a sheet segment whose endpoints both sit within tolPx (either
-//      orientation) via an endpoint grid. Score = length-weighted fraction of
-//      seed segments matched — a long wall-side matching counts more than a
-//      tick mark.
+//      whole point is to be REPORTED). Junction anchors add proposals when an
+//      export splits every corresponding target line into subpaths.
+//   3. SCORE — for each candidate placement, each transformed seed segment is
+//      checked both endpoint-to-endpoint and by oriented line-body coverage.
+//      The latter treats one drawn line split into several collinear PDF paths
+//      as the same ink. Score = length-weighted fraction of seed linework
+//      covered — a long wall-side matching counts more than a tick mark.
 //   4. CLASSIFY — score ≥ scoreHigh is a match; [scoreLow, scoreHigh) is a
 //      WITHHELD near-match with a reason (a question the caller can answer
 //      with a look, never a silent commit or a silent drop); below is not the
@@ -68,6 +69,109 @@
 // sweepSymbols composes the two on one sheet, unchanged.
 
 export type Point = [number, number];
+
+/** Minimal text-run shape used only to decide which pages a SET-wide symbol
+ * sweep may count. PDF exporters commonly split a visible sheet title into
+ * several adjacent runs (for example "MECHANICAL" + "VENTILATION -" +
+ * "BASEMENT PLAN - AREA 1"). The shared sheet graph intentionally classifies
+ * each run independently; symbol sweep must not make an obvious plan vanish
+ * merely because that title was fragmented by the exporter.
+ *
+ * This helper is deliberately narrower than a general sheet classifier. It
+ * only vouches for a short, same-line title that STARTS with an AEC discipline
+ * and contains PLAN. Cover/index protection remains the caller's job, and no
+ * schedule/table classification passes through here. */
+export interface SymbolSweepRoleSpan {
+  str: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  rot?: number;
+}
+
+const SYMBOL_SWEEP_PLAN_TITLE_RE = /^(?:MECHANICAL|HVAC|DUCTWORK|PIPING|PLUMBING|ELECTRICAL|LIGHTING|POWER|SPRINKLER|FIRE PROTECTION|ARCHITECTURAL|FLOOR|CEILING|ROOF|SITE|EQUIPMENT)\b(?=.{0,80}\bPLAN\b)/;
+
+function isSymbolSweepPlanTitle(text: string): boolean {
+  const title = text
+    .trim()
+    .toUpperCase()
+    .replace(/[\u2010-\u2015]/g, "-")
+    .replace(/\s+/g, " ");
+  return title.length >= 8 && title.length <= 96 && SYMBOL_SWEEP_PLAN_TITLE_RE.test(title);
+}
+
+export function hasSymbolSweepPlanTitle(spans: SymbolSweepRoleSpan[]): boolean {
+  const runs = spans
+    .filter((span) => span.str.trim() && Number.isFinite(span.x) && Number.isFinite(span.y)
+      && Number.isFinite(span.w) && Number.isFinite(span.h) && span.h > 0)
+    .map((span) => ({ ...span, str: span.str.trim(), rot: span.rot ?? 0 }));
+  // Build only short, visually contiguous runs on one baseline. Starting the
+  // regex at the discipline word prevents a sheet-list row such as
+  // "M5.01  MECHANICAL FLOOR PLAN" from turning its index/cover into a plan.
+  const ordered = [...runs].sort((a, b) => (a.rot - b.rot) || (a.y - b.y) || (a.x - b.x));
+  for (let i = 0; i < ordered.length; i++) {
+    const first = ordered[i];
+    const previous = ordered[i - 1];
+    const prefixedBySheetNumber = !!previous
+      && previous.rot === first.rot
+      && /^(?:[A-Z]{1,3}[-.]?)?\d{1,3}(?:\.\d{1,2})?[A-Z]?$/.test(previous.str.trim().toUpperCase())
+      && Math.abs((previous.y + previous.h / 2) - (first.y + first.h / 2)) <= Math.max(3, Math.min(previous.h, first.h) * 0.65)
+      && first.x - (previous.x + previous.w) <= Math.max(previous.h, first.h) * 8;
+    if (prefixedBySheetNumber) continue;
+    let text = first.str;
+    if (isSymbolSweepPlanTitle(text)) return true;
+    let right = first.x + first.w;
+    const cy = first.y + first.h / 2;
+    for (let j = i + 1; j < ordered.length && j <= i + 7; j++) {
+      const next = ordered[j];
+      if (next.rot !== first.rot) break;
+      const nextCy = next.y + next.h / 2;
+      if (Math.abs(nextCy - cy) > Math.max(3, Math.min(first.h, next.h) * 0.65)) break;
+      const gap = next.x - right;
+      if (gap < -Math.max(first.h, next.h) || gap > Math.max(first.h, next.h) * 8) break;
+      text += ` ${next.str}`;
+      right = Math.max(right, next.x + next.w);
+      if (text.length > 96) break;
+      if (isSymbolSweepPlanTitle(text)) return true;
+    }
+  }
+  return false;
+}
+
+/** Conservative HVAC/BAS field-plan recovery for PDFs whose visible title is
+ * outlined vector glyphs and therefore absent from the text layer. This is
+ * evidence, not a project vocabulary: either a real MATCHLINE is accompanied
+ * by several field annotations, or repeated equipment tags and flow values
+ * are independently dispersed in both page axes. A schedule's aligned MARK
+ * and CFM/GPM columns fail that dispersion test even when it contains dozens
+ * of rows. */
+export function hasSymbolSweepPlanEvidence(
+  spans: SymbolSweepRoleSpan[],
+  width: number,
+  height: number,
+): boolean {
+  if (hasSymbolSweepPlanTitle(spans)) return true;
+  if (!(width > 0 && height > 0)) return false;
+
+  const normalized = spans.map((span) => ({
+    ...span,
+    text: span.str.trim().toUpperCase().replace(/\s+/g, " "),
+  }));
+  const fieldTags = normalized.filter((span) => /^[A-Z]{1,6}-[A-Z0-9]+(?:[.-][A-Z0-9]+)*$/.test(span.text));
+  const flows = normalized.filter((span) => /\b\d[\d,.]*\s*(?:CFM|GPM)\b/.test(span.text));
+  const hasMatchline = normalized.some((span) => /^MATCH\s*LINE$/.test(span.text));
+  if (hasMatchline && fieldTags.length >= 2 && flows.length >= 4) return true;
+  if (fieldTags.length < 6 || flows.length < 8) return false;
+
+  const dispersed = (items: typeof normalized): boolean => {
+    const xs = items.map((span) => span.x + span.w / 2);
+    const ys = items.map((span) => span.y + span.h / 2);
+    return Math.max(...xs) - Math.min(...xs) >= width * 0.20
+      && Math.max(...ys) - Math.min(...ys) >= height * 0.20;
+  };
+  return dispersed(fieldTags) && dispersed(flows);
+}
 
 export interface SweepOptions {
   /** Also try 90/180/270 rotated placements (default true — symbols rotate on plans). */
@@ -183,6 +287,57 @@ export interface SweepResult {
 export const SWEEP_TOL_PX = 2;
 export const SWEEP_SCORE_HIGH = 0.92;
 export const SWEEP_SCORE_LOW = 0.75;
+
+/** Refuse an interactive marquee that is too weak to identify a physical
+ * symbol. A one/two-stroke fragment (or a tiny open three-to-five-stroke
+ * scribble) can occur hundreds of times in pipework, borders, dimensions and
+ * text outlines while still scoring 1.000. That is not a low-confidence
+ * count; it is an under-specified question, so make the caller include the
+ * rest of the symbol. Kept separate from fingerprintSymbol because automatic
+ * schedule anchoring legitimately probes partial local motifs internally. */
+export function assertDistinctiveSymbolSeed(fp: SymbolFingerprint): void {
+  if (fp.segments < 3) {
+    throw new Error(`The seed contains only ${fp.segments} vector segment${fp.segments === 1 ? "" : "s"} — too little geometry to identify one physical symbol. Tighten the marquee around the complete symbol, including its body rather than a pipe, leader, border, or text fragment.`);
+  }
+  if (fp.segments > 5) return;
+
+  // Endpoint topology, with the ordinary sweep tolerance as the node merge
+  // radius. A triangle/square/bowtie remains a legitimate compact seed; an
+  // open tick, corner, zigzag, or bit of lettering does not become an
+  // identifier merely because it happens to contain three-to-five strokes.
+  const nodes: Point[] = [];
+  const nodeFor = (p: Point): number => {
+    const found = nodes.findIndex((n) => Math.hypot(n[0] - p[0], n[1] - p[1]) <= SWEEP_TOL_PX);
+    if (found >= 0) return found;
+    nodes.push(p);
+    return nodes.length - 1;
+  };
+  const edges = new Set<string>();
+  for (const [ax, ay, bx, by] of fp.rel) {
+    const a = nodeFor([ax, ay]), b = nodeFor([bx, by]);
+    if (a === b) continue;
+    edges.add(a < b ? `${a}:${b}` : `${b}:${a}`);
+  }
+  const adj = nodes.map(() => [] as number[]);
+  for (const edge of edges) {
+    const [a, b] = edge.split(":").map(Number);
+    adj[a].push(b); adj[b].push(a);
+  }
+  let hasCycle = false;
+  const seen = new Set<number>();
+  const visit = (at: number, parent: number): void => {
+    seen.add(at);
+    for (const next of adj[at]) {
+      if (next === parent) continue;
+      if (seen.has(next)) { hasCycle = true; continue; }
+      visit(next, at);
+    }
+  };
+  for (let i = 0; i < nodes.length && !hasCycle; i++) if (!seen.has(i)) visit(i, -1);
+  if (!hasCycle) {
+    throw new Error(`The seed contains only ${fp.segments} open vector segments with no closed body — too generic for a trustworthy sheet-wide symbol count. Expand the marquee to include the complete symbol outline or another connected identifying feature.`);
+  }
+}
 /** The richer-variant bar (field report: grilles / vents / registers
  * confused). Recall alone cannot tell a symbol from a RICHER variant: a
  * supply register is a grille plus louver lines, so against a grille seed it
@@ -321,6 +476,43 @@ interface SheetMatchIndex {
   lengths: Float64Array;
   lenBucket: Map<number, number[]>;
   endpointGrids: Map<number, EndpointGrid>;
+  junctionIndexes: Map<number, Junction[]>;
+}
+
+interface Junction { x: number; y: number; dirs: number[] }
+
+const undirectedAngle = (dy: number, dx: number): number => {
+  let a = Math.atan2(dy, dx) % Math.PI;
+  if (a < 0) a += Math.PI;
+  return a;
+};
+
+const angleDelta = (a: number, b: number): number => {
+  const d = Math.abs(a - b);
+  return Math.min(d, Math.PI - d);
+};
+
+/** Endpoint junctions clustered at the stated matching tolerance. Original
+ * CAD corners survive when every side is split into multiple PDF paths, so
+ * their incident direction signatures complement whole-segment anchors. */
+function buildJunctions(segs: number[], tol: number): Junction[] {
+  const q = Math.max(tol, 0.5);
+  const buckets = new Map<string, { sx: number; sy: number; n: number; dirs: number[] }>();
+  const add = (x: number, y: number, dx: number, dy: number): void => {
+    const key = `${Math.round(x / q)}:${Math.round(y / q)}`;
+    let b = buckets.get(key);
+    if (!b) { b = { sx: 0, sy: 0, n: 0, dirs: [] }; buckets.set(key, b); }
+    b.sx += x; b.sy += y; b.n++;
+    const a = undirectedAngle(dy, dx);
+    if (!b.dirs.some((old) => angleDelta(old, a) <= 0.04)) b.dirs.push(a);
+  };
+  for (let i = 0; i < (segs.length >> 2); i++) {
+    const ax = segs[i * 4], ay = segs[i * 4 + 1], bx = segs[i * 4 + 2], by = segs[i * 4 + 3];
+    const dx = bx - ax, dy = by - ay;
+    if (Math.hypot(dx, dy) < MIN_SEG_LEN) continue;
+    add(ax, ay, dx, dy); add(bx, by, dx, dy);
+  }
+  return [...buckets.values()].map((b) => ({ x: b.sx / b.n, y: b.sy / b.n, dirs: b.dirs.sort((a, c) => a - c) }));
 }
 
 const MAX_TOLERANCE_INDEXES_PER_SHEET = 8;
@@ -340,7 +532,7 @@ function sheetMatchIndex(segs: number[], tol: number): SheetMatchIndex & { grid:
       if (entries) entries.push(i);
       else lenBucket.set(bucket, [i]);
     }
-    cached = { lengths, lenBucket, endpointGrids: new Map() };
+    cached = { lengths, lenBucket, endpointGrids: new Map(), junctionIndexes: new Map() };
     sheetMatchIndexes.set(segs, cached);
   }
   let grid = cached.endpointGrids.get(tol);
@@ -351,6 +543,16 @@ function sheetMatchIndex(segs: number[], tol: number): SheetMatchIndex & { grid:
     }
   }
   return { ...cached, grid };
+}
+
+function sheetJunctions(segs: number[], tol: number): Junction[] {
+  const idx = sheetMatchIndex(segs, tol);
+  let out = idx.junctionIndexes.get(tol);
+  if (!out) {
+    out = buildJunctions(segs, tol);
+    if (idx.junctionIndexes.size < MAX_TOLERANCE_INDEXES_PER_SHEET) idx.junctionIndexes.set(tol, out);
+  }
+  return out;
 }
 
 /** A symbol's fingerprint, detached from the sheet it was marqueed on:
@@ -628,8 +830,8 @@ class BodyGrid {
   }
   private key(cx: number, cy: number): number { return cx * 73856093 ^ cy * 19349663; }
   /** Segment indices whose body passes through the cell holding (x, y) or any neighbour. */
-  near(x: number, y: number): number[] {
-    const out: number[] = [];
+  near(x: number, y: number, out: number[] = []): number[] {
+    out.length = 0;
     const cx = Math.floor(x / this.cell), cy = Math.floor(y / this.cell);
     for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
       const a = this.cells.get(this.key(cx + dx, cy + dy));
@@ -898,10 +1100,17 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   // Each (anchor, transform, matching sheet segment, endpoint pairing)
   // proposes ONE candidate centroid. Both endpoint mappings must agree on the
   // centroid within tolerance, or the sheet segment merely shares a length.
-  type Cand = { tx: number; ty: number; xf: number };
-  const proposals: Cand[] = [];
-  const seen = new Set<string>();
+  type Cand = { tx: number; ty: number; xf: number; residual: number };
+  const proposalMap = new Map<string, Cand>();
   const quant = Math.max(tol, 1);
+  const propose = (tx: number, ty: number, xf: number, residual: number): void => {
+    if (!insideRequestedRegion(tx, ty)) return;
+    const key = `${xf}:${Math.round(tx / quant)}:${Math.round(ty / quant)}`;
+    const old = proposalMap.get(key);
+    if (!old || residual < old.residual || (residual === old.residual && (ty < old.ty || (ty === old.ty && tx < old.tx)))) {
+      proposalMap.set(key, { tx, ty, xf, residual });
+    }
+  };
   for (let xi = 0; xi < xforms.length; xi++) {
     const { m } = xforms[xi];
     for (const anc of anchors) {
@@ -916,15 +1125,52 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
           const c2x = qx - bx, c2y = qy - by;
           if (Math.abs(c1x - c2x) > 2 * tol || Math.abs(c1y - c2y) > 2 * tol) continue;
           const tx = (c1x + c2x) / 2, ty = (c1y + c2y) / 2;
-          if (!insideRequestedRegion(tx, ty)) continue;
-          const key = `${xi}:${Math.round(tx / quant)}:${Math.round(ty / quant)}`;
-          if (seen.has(key)) continue;
-          seen.add(key);
-          proposals.push({ tx, ty, xf: xi });
+          propose(tx, ty, xi, Math.hypot(c1x - c2x, c1y - c2y));
         }
       }
     }
   }
+
+  // Whole-segment anchors disappear when a target export splits every drawn
+  // side into subpaths. Junction direction signatures survive that export.
+  // Use the two most structured seed junctions and require every incident
+  // direction to occur at a target junction before it may vote.
+  const seedFlat = rel.flatMap((r) => [r[0], r[1], r[2], r[3]]);
+  const seedJunctions = buildJunctions(seedFlat, tol)
+    .filter((j) => j.dirs.length >= 2)
+    .sort((a, b) => b.dirs.length - a.dirs.length || Math.hypot(b.x, b.y) - Math.hypot(a.x, a.y) || a.y - b.y || a.x - b.x)
+    .slice(0, 2);
+  if (seedJunctions.length) {
+    const targets = sheetJunctions(segs, tol);
+    const angleTol = Math.PI / 12;
+    for (let xi = 0; xi < xforms.length; xi++) {
+      const { m } = xforms[xi];
+      for (const sj of seedJunctions) {
+        const anchor = apply(m, sj.x, sj.y);
+        const dirs = sj.dirs.map((a) => {
+          const v = apply(m, Math.cos(a), Math.sin(a));
+          return undirectedAngle(v[1], v[0]);
+        });
+        for (const tj of targets) {
+          if (tj.dirs.length < dirs.length) continue;
+          const unused = new Set(tj.dirs.map((_, i) => i));
+          let residual = 0, compatible = true;
+          for (const a of dirs) {
+            let best = -1, bestD = Infinity;
+            for (const k of unused) {
+              const d = angleDelta(a, tj.dirs[k]);
+              if (d < bestD) { bestD = d; best = k; }
+            }
+            if (best < 0 || bestD > angleTol) { compatible = false; break; }
+            unused.delete(best); residual += bestD;
+          }
+          if (compatible) propose(tj.x - anchor[0], tj.y - anchor[1], xi, residual);
+        }
+      }
+    }
+  }
+
+  const proposals = [...proposalMap.values()];
 
   // Deterministic scoring order (reading order, then transform preference),
   // so the cap — when it bites — always drops the same placements and the
@@ -935,6 +1181,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
 
   // ── 3. score ───────────────────────────────────────────────────────────────
   const scratch: number[] = [];
+  const bodyScratch: number[] = [];
   const tol2 = tol * tol;
   const near = (x1: number, y1: number, x2: number, y2: number): boolean =>
     (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) <= tol2;
@@ -947,6 +1194,11 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   const lumGate = sheetLum && sheetLum.length && fpS.lum && typeof lumTol === "number" && lumTol >= 0 && lumTol < 255;
   const lumOk = (j: number, k: number): boolean =>
     !lumGate || Math.abs((sheetLum as Uint8Array)[j] - (fpS.lum as number[])[k]) <= (lumTol as number);
+  const body = new BodyGrid(segs, Math.max(2 * tol, 4));
+  // Line-body equivalence is for export segmentation, not shape morphing.
+  // Six degrees admits drafting jitter while keeping a visibly different
+  // diagonal in the near-match lane (the synthetic 7.4° variant contract).
+  const angleCos = Math.cos(Math.PI / 30);
   const scoreAt = (m: [number, number, number, number], tx: number, ty: number, ungated?: { v: number }): number => {
     let matched = 0, matchedAny = 0;
     for (let k = 0; k < rel.length; k++) {
@@ -962,8 +1214,29 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
           if (lumOk(j, k)) { hit = true; break; }
         }
       }
-      if (hit) matched += r[4];
-      if (hitAny) matchedAny += r[4];
+      // Oriented line-body coverage: one seed line may be represented by
+      // several collinear target paths. Sampling apportions the seed line's
+      // own length, while the direction gate prevents an incidental crossing
+      // from answering for the line it crosses.
+      const sdx = bx - ax, sdy = by - ay, sLen = Math.hypot(sdx, sdy);
+      const steps = Math.max(1, Math.ceil(r[4] / Math.max(tol, 1)));
+      let covered = 0, coveredAny = 0;
+      for (let si = 0; si <= steps; si++) {
+        const f = si / steps, x = ax + sdx * f, y = ay + sdy * f;
+        let sample = false, sampleAny = false;
+        for (const j of body.near(x, y, bodyScratch)) {
+          const px = segs[j * 4], py = segs[j * 4 + 1], qx = segs[j * 4 + 2], qy = segs[j * 4 + 3];
+          const tdx = qx - px, tdy = qy - py, tLen = Math.hypot(tdx, tdy);
+          if (!tLen || Math.abs((sdx * tdx + sdy * tdy) / (sLen * tLen)) < angleCos) continue;
+          if (distToSeg(x, y, px, py, qx, qy) > tol) continue;
+          sampleAny = true;
+          if (lumOk(j, k)) { sample = true; break; }
+        }
+        if (sample) covered++;
+        if (sampleAny) coveredAny++;
+      }
+      matched += Math.max(hit ? r[4] : 0, r[4] * covered / (steps + 1));
+      matchedAny += Math.max(hitAny ? r[4] : 0, r[4] * coveredAny / (steps + 1));
     }
     if (ungated) ungated.v = matchedAny / totalLen;
     return matched / totalLen;
@@ -983,15 +1256,22 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   // anchors and transforms, and a count that says 16 for 8 phantoms is a
   // count nobody can check against the sheet.
   const lumOut: Point[] = [];
+  const proposalFloor = Math.min(scoreLow, 0.45);
   for (let k = 0; k < considered; k++) {
     const c = proposals[k];
     const score = scoreAt(xforms[c.xf].m, c.tx, c.ty, lumGate ? ungated : undefined);
     if (lumGate && ungated.v >= scoreHigh && score < scoreHigh) lumOut.push([c.tx, c.ty]);
-    if (score < scoreLow) continue;
+    if (score < proposalFloor) continue;
     scored.push({ at: [c.tx, c.ty], score, rotation: xforms[c.xf].rotation, mirrored: xforms[c.xf].mirrored, xf: c.xf });
   }
-  const mergeR = Math.max(2 * tol, 4);
-  const kept = mergeProposals(scored, mergeR);
+  // One physical placement can cast transform-equivalent peaks a little
+  // farther apart than two tolerances when the seed centroid is eccentric.
+  // The White Sturgeon tank array measured 4.3-5.4 px separations at tol=2:
+  // 23 real non-seed tanks became 37 rows under the old 4 px radius. Three
+  // tolerances collapses those same-ink readings while remaining far below
+  // the 25 px abutting-real-instance separation locked by sweepCoalesce.
+  const mergeR = Math.max(3 * tol, 4);
+  const preliminary = mergeProposals(scored, mergeR);
 
   // Shadow suppression. A partially-symmetric symbol reads ALMOST as itself
   // under the wrong transform — square + diagonal without the stub — at a
@@ -1002,6 +1282,42 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
   // or to an accepted match is the same ink read sideways, and listing it as
   // withheld would bury the real near-misses in symmetry noise.
   const suppressR = Math.max(mergeR, fpS.footprint / 2);
+  // A symmetric variant can cast one reading from each side of its true
+  // center (the real CD-1 simpler block does exactly this). When two or more
+  // provisional readings occupy one non-overlap footprint, their median is a
+  // transform-independent center hypothesis. Score it under every allowed
+  // transform; this adds one placement hypothesis, never a label or a count.
+  const consensus: Scored[] = [];
+  const visited = new Set<number>();
+  for (let root = 0; root < preliminary.length; root++) {
+    if (visited.has(root)) continue;
+    // Fixed-radius around the best remaining reading, not transitive
+    // connectivity: a chain of unrelated low-score plan marks must not walk
+    // the cluster across a dense room.
+    const cluster: Scored[] = [preliminary[root]];
+    visited.add(root);
+    for (let j = root + 1; j < preliminary.length; j++) {
+      if (visited.has(j)) continue;
+      if (Math.hypot(preliminary[root].at[0] - preliminary[j].at[0], preliminary[root].at[1] - preliminary[j].at[1]) <= suppressR) {
+        visited.add(j); cluster.push(preliminary[j]);
+      }
+    }
+    if (cluster.length < 2) continue;
+    const xs = cluster.map((s) => s.at[0]).sort((a, b) => a - b);
+    const ys = cluster.map((s) => s.at[1]).sort((a, b) => a - b);
+    const mid = (a: number[]): number => a.length % 2 ? a[a.length >> 1] : (a[a.length / 2 - 1] + a[a.length / 2]) / 2;
+    const tx = mid(xs), ty = mid(ys);
+    if (cluster.some((s) => Math.hypot(s.at[0] - tx, s.at[1] - ty) <= mergeR)) continue;
+    let best: Scored | null = null;
+    for (let xi = 0; xi < xforms.length; xi++) {
+      const score = scoreAt(xforms[xi].m, tx, ty);
+      if (score < proposalFloor) continue;
+      const row: Scored = { at: [tx, ty], score, rotation: xforms[xi].rotation, mirrored: xforms[xi].mirrored, xf: xi };
+      if (!best || row.score > best.score || (row.score === best.score && row.xf < best.xf)) best = row;
+    }
+    if (best) consensus.push(best);
+  }
+  const kept = mergeProposals([...preliminary, ...consensus], mergeR).filter((s) => s.score >= scoreLow);
   const ex = opts.excludeCenter;
   const away = ex ? kept.filter((s) => Math.hypot(s.at[0] - ex[0], s.at[1] - ex[1]) > suppressR) : kept;
 
@@ -1054,7 +1370,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
     : negRects.map((r) => buildNegative(fp, segs, r, { ...opts, exclude: undefined, negatives: undefined }));
   const liveNegs = negatives.filter((neg): neg is SymbolNegative => !!neg);
   const needsBody = liveNegs.some((neg) => neg.mode === "crossing");
-  const body = needsBody ? new BodyGrid(segs, Math.max(32, fpS.footprint)) : null;
+  const crossingBody = needsBody ? new BodyGrid(segs, Math.max(32, fpS.footprint)) : null;
   // how much of a negative's discriminating linework is present at a placement
   const evidenceOne = (neg: SymbolNegative, m: [number, number, number, number], tx: number, ty: number): number => {
     let found = 0;
@@ -1075,7 +1391,7 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
         // the whole chord. A broken line — the fixture drawn over the grid —
         // has no such segment, which is the whole discriminator.
         let covered = false;
-        for (const j of body!.near((ax + bx) / 2, (ay + by) / 2)) {
+        for (const j of crossingBody!.near((ax + bx) / 2, (ay + by) / 2)) {
           const px = segs[j * 4], py = segs[j * 4 + 1], qx = segs[j * 4 + 2], qy = segs[j * 4 + 3];
           if (distToSeg(ax, ay, px, py, qx, qy) <= tol && distToSeg(bx, by, px, py, qx, qy) <= tol) { covered = true; break; }
         }
@@ -1169,8 +1485,12 @@ export function matchSymbol(fp: SymbolFingerprint, segs: number[], opts: MatchOp
       if (px < bx0 || px > bx1 || py < by0 || py > by1 || qx < bx0 || qx > bx1 || qy < by0 || qy > by1) continue;
       let covered = false;
       for (const t of placed) {
+        const sdx = t[2] - t[0], sdy = t[3] - t[1], tdx = qx - px, tdy = qy - py;
+        const sLen = Math.hypot(sdx, sdy), tLen = Math.hypot(tdx, tdy);
+        if (!sLen || !tLen || Math.abs((sdx * tdx + sdy * tdy) / (sLen * tLen)) < angleCos) continue;
         if ((near(px, py, t[0], t[1]) && near(qx, qy, t[2], t[3]))
-          || (near(qx, qy, t[0], t[1]) && near(px, py, t[2], t[3]))) { covered = true; break; }
+          || (near(qx, qy, t[0], t[1]) && near(px, py, t[2], t[3]))
+          || (distToSeg(px, py, t[0], t[1], t[2], t[3]) <= tol && distToSeg(qx, qy, t[0], t[1], t[2], t[3]) <= tol)) { covered = true; break; }
       }
       if (!covered) extraLen += segLen(segs, j);
     }
