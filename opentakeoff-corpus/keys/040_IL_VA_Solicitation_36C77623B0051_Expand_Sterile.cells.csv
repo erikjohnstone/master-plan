@@ -1,0 +1,47 @@
+# coverage: LOUVER SCHEDULE | complete
+#
+# 040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.cells.csv — CELL-tier ground truth.
+# HELD OUT, second sample — drawn by seed 770231 from the 162 keyed tables
+# holding 12-130 cells that the first sample had not taken. Every cell read off
+# a render of the table and checked against what the extractor returned; where
+# the two differed the RENDER decided. 277 of 277 matched.
+#
+# row/col are 0-based indices into the table AS DRAWN, a spanning cell counted
+# once at its top-left. Empty drawn cells are not recorded.
+sheet,table_title,row,col,text
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,0,0,LOUVER SCHEDULE
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,1,0,NOTES: 1. FINISH AND COLOR SELECTION BY ARCHITECT. 2. COORDINATE EXACT LOUVER DIMENSIONS WITH OPENING SIZES SHOWN ON ARCHITECTURAL AND STRUCTURAL DRAWINGS. 3. LOUVERS SHALL BE BLAST PROOF.
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,2,0,SYMBOL
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,2,1,AREA SERVED
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,2,2,CFM
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,2,3,SIZE (INCHES)
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,2,5,FREE AREA VELOCITY
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,2,6,S.P. IN. W.C.
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,2,7,FINISH
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,2,8,MANUFACTUR ER
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,2,9,MODEL
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,2,10,REMARKS
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,3,3,WIDTH
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,3,4,HEIGHT
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,4,0,OAL-1
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,4,1,OUTSIDE AIR
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,4,2,5000
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,4,3,36
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,4,4,60
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,4,5,675
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,4,6,0.10
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,4,7,NOTE 1
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,4,8,RUSKIN
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,4,9,BL520DD
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,4,10,"NOTES 2, 3"
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,5,0,OAL-2
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,5,1,OUTSIDE AIR
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,5,2,8700
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,5,3,48
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,5,4,72
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,5,5,750
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,5,6,0.10
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,5,7,NOTE 1
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,5,8,RUSKIN
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,5,9,BL520DD
+040_IL_VA_Solicitation_36C77623B0051_Expand_Sterile.pdf#47,LOUVER SCHEDULE,5,10,"NOTES 2, 3"

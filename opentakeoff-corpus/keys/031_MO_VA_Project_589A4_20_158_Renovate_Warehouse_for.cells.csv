@@ -1,0 +1,23 @@
+# coverage: HEADER SECTION SCHEDULE | complete
+#
+# 031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.cells.csv — CELL-tier ground truth.
+# HELD OUT, second sample — drawn by seed 770231 from the 162 keyed tables
+# holding 12-130 cells that the first sample had not taken. Every cell read off
+# a render of the table and checked against what the extractor returned; where
+# the two differed the RENDER decided. 277 of 277 matched.
+#
+# row/col are 0-based indices into the table AS DRAWN, a spanning cell counted
+# once at its top-left. Empty drawn cells are not recorded.
+sheet,table_title,row,col,text
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39,HEADER SECTION SCHEDULE,0,0,OPENING
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39,HEADER SECTION SCHEDULE,0,1,HEADER
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39,HEADER SECTION SCHEDULE,0,2,JAMB STUDS
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39,HEADER SECTION SCHEDULE,1,0,"UP TO 4'-0"""
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39,HEADER SECTION SCHEDULE,1,1,"2-6"" 18 GA"
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39,HEADER SECTION SCHEDULE,1,2,(2) 20 GA
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39,HEADER SECTION SCHEDULE,2,0,"4'-0"" TO 8'-0"""
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39,HEADER SECTION SCHEDULE,2,1,"2-8"" 16 GA"
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39,HEADER SECTION SCHEDULE,2,2,(3) 20 GA
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39,HEADER SECTION SCHEDULE,3,0,"8'-0"" TO 12'-0"""
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39,HEADER SECTION SCHEDULE,3,1,"2-8"" 16 GA"
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39,HEADER SECTION SCHEDULE,3,2,(4) 20 GA

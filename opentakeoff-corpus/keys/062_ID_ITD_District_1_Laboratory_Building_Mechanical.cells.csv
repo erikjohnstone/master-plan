@@ -1,0 +1,38 @@
+# coverage: BYPASS CONTROL VALVE SCHEDULE | complete
+#
+# 062_ID_ITD_District_1_Laboratory_Building_Mechanical.cells.csv — CELL-tier ground truth.
+# HELD OUT, second sample — drawn by seed 770231 from the 162 keyed tables
+# holding 12-130 cells that the first sample had not taken. Every cell read off
+# a render of the table and checked against what the extractor returned; where
+# the two differed the RENDER decided. 277 of 277 matched.
+#
+# row/col are 0-based indices into the table AS DRAWN, a spanning cell counted
+# once at its top-left. Empty drawn cells are not recorded.
+sheet,table_title,row,col,text
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,0,0,BYPASS CONTROL VALVE SCHEDULE
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,1,0,SYMBOL
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,1,1,SERVES
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,1,2,VALVE TYPE
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,1,3,OPERATION
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,1,4,FLUID
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,1,5,FLOW (GPM)
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,1,6,FLOW RANGE (GPM)
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,1,7,P.D. (PSI)
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,1,8,MAXIMUM P.D. (PSI)
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,1,9,SIZE (IN)
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,1,10,CONTROL
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,1,11,MANUFACTURER AND MODEL
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,1,12,REMARKS
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,2,0,BCV-1
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,2,1,HEATING WATER SYSTEM
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,2,2,PRESSURE INDEPENDENT
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,2,3,2-WAY MODULATING
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,2,4,100% WATER
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,2,5,25
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,2,6,19-110
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,2,7,2.7
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,2,8,5.0
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,2,9,2.0
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,2,10,REFER TO THE CONTROL SCHEMATICS
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,2,11,B&G ULTRA SETTER
+062_ID_ITD_District_1_Laboratory_Building_Mechanical.pdf#13,BYPASS CONTROL VALVE SCHEDULE,2,12,"1 , 2 , 3"

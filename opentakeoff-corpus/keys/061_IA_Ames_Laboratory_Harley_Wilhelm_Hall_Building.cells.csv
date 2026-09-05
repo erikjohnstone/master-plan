@@ -1,0 +1,121 @@
+# coverage: SHELL AND TUBE HEAT EXCHANGER SCHEDULE | complete
+# coverage: BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE | complete
+#
+# 061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.cells.csv — CELL-tier ground truth.
+# HELD OUT, second sample — drawn by seed 770231 from the 162 keyed tables
+# holding 12-130 cells that the first sample had not taken. Every cell read off
+# a render of the table and checked against what the extractor returned; where
+# the two differed the RENDER decided. 277 of 277 matched.
+#
+# row/col are 0-based indices into the table AS DRAWN, a spanning cell counted
+# once at its top-left. Empty drawn cells are not recorded.
+sheet,table_title,row,col,text
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,0,0,SHELL AND TUBE HEAT EXCHANGER SCHEDULE
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,1,0,DESIGNATION
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,1,1,MANUFACTURER
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,1,2,MODEL
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,1,3,WEIGHT (LBS)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,1,4,PASSES
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,1,5,DIAMETER (IN.)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,1,6,LENGTH (FT.)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,1,7,SHELL SIDE
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,1,10,TUBE SIDE
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,2,7,FLUID
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,2,8,CAPACITY (LBS/H)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,2,9,PRESSURE (PSI)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,2,10,FLUID
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,2,11,CAPACITY (MBH)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,2,12,FLOW RATE (GPM)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,2,13,E.W.T./L.W.T. (°F/°F)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,2,14,W.P.D. (FT. H2O)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,0,HX-A-1
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,1,TACO
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,2,E10208-S
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,3,415
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,4,2
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,5,10
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,6,4
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,7,STEAM
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,8,3256.8
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,9,12
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,10,WATER
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,11,3093.0
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,12,250
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,13,95/120
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,3,14,1.6
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,0,HX-A-2
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,1,TACO
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,2,E10208-S
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,3,415
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,4,2
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,5,10
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,6,4
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,7,STEAM
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,8,3256.8
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,9,12
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,10,WATER
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,11,3093.0
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,12,250
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,13,95/120
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,SHELL AND TUBE HEAT EXCHANGER SCHEDULE,4,14,1.6
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",0,0,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,0,DESIGNATION
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,1,MANUFACTURER
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,2,OPERATING WEIGHT (LBS.)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,3,AIRFLOW RATE (CFM)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,4,FLUID TYPE
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,5,COIL QUANTITY
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,6,ROWS
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,7,FPI
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,8,FACE VELOCITY (FPM)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,9,W.P.D. (FT. H2O)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,10,A.P.D. (IN. W.C.)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,11,WINTER PERFORMANCE - NO HEAT PUMP
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,15,SUMMER PERFORMANCE - NO HEAT PUMP
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,20,WINTER PERFORMANCE - HEAT PUMP
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",1,24,SUMMER PERFORMANCE - HEAT PUMP
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,11,TOTAL CAPACITY (MBH)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,12,ENTERING/ LEAVING D.B. (°F/°F)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,13,FLOW RATE (GPM)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,14,E.W.T./L.W.T. (°F/°F)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,15,TOTAL CAPACITY (MBH)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,16,SENSIBLE CAPACITY (MBH)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,17,ENTERING/ LEAVING D.B. (°F/°F)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,18,FLOW RATE (GPM)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,19,E.W.T./L.W.T. (°F/°F)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,20,TOTAL CAPACITY (MBH)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,21,ENTERING/ LEAVING D.B. (°F/°F)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,22,FLOW RATE (GPM)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,23,E.W.T./L.W.T. (°F/°F)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,24,TOTAL CAPACITY (MBH)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,25,ENTERING/ LEAVING D.B. (°F/°F)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,26,FLOW RATE (GPM)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",2,27,E.W.T./L.W.T. (°F/°F)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,0,HRU-A
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,1,HAAKON
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,2,"14,350"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,3,"18,000"
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,4,30% PG
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,5,6
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,6,6
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,7,12
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,8,152.4
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,9,20.6
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,10,0.12
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,11,284.7
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,12,68.0/53.5
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,13,150.0
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,14,51.6/55.6
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,15,67.5
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,16,67.5
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,17,75.0/78.5
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,18,150.0
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,19,78.7/77.8
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,20,633.5
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,21,68.0/35.8
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,22,150.0
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,23,33.0/41.8
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,24,893.4
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,25,75.0/120.9
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,26,150.0
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building.pdf#58,"BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",3,27,122.0/109.6
