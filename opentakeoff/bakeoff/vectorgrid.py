@@ -538,7 +538,13 @@ def _widen_along_col_rules(vmap, hmap, gx0, gy0, gx1, gy1, cols) -> tuple:
     return (gx0, gy0, gx1, gy1)
 
 
-def _split_at_title_bands(members, cells) -> list[list]:
+def vbounds_of(members, cells) -> tuple:
+    b = [cells[i].bounds for i in members]
+    return (min(x[0] for x in b), min(x[1] for x in b),
+            max(x[2] for x in b), max(x[3] for x in b))
+
+
+def _split_at_title_bands(members, cells, chars=()) -> list[list]:
     """Break a block wherever a SECOND title band begins.
 
     A schedule opens with an undivided full-width row — the band its title is
@@ -574,8 +580,63 @@ def _split_at_title_bands(members, cells) -> list[list]:
         return x1 - x0 >= width * 0.9
 
     full = {k: undivided(k) for k in keys}
+
+    # A BAND FULL OF BODY TEXT IS A ROW, NOT A TITLE, and this is what keeps the
+    # rule honest on a table that labels its own bands.
+    #
+    # 040_IL#47's AIR HANDLING UNIT SCHEDULE is a two-column label/value sheet
+    # banded SUPPLY FAN, HEATING COIL - STEAM, COOLING COIL - CHILLED WATER,
+    # FILTER, HUMIDIFIER. The mid rule is absent across each band header, so the
+    # tall label strip and the band row polygonise as ONE L-shaped face whose
+    # bbox spans the full width — an undivided full-width row by the test above,
+    # five times over, and the schedule came out as six pieces.
+    #
+    # Measured over every title-band cut this corpus makes (27 of them), the two
+    # cases separate cleanly on the TYPE, which is what a reader uses:
+    #
+    #   genuine   18_OR#18  2.01x body type  ("INDOOR FAN COIL UNITS")
+    #             008_MO#16 1.33x            ("OVERHEAD DOOR SCHEDULE")
+    #             009_FL#30, 073_MT#21, 031_MO#39 — band EMPTY, a spacer over
+    #             the title beneath it
+    #   spurious  040_IL#47 1.00x, five times, holding "CONTROLLER/STARTER",
+    #             "MAX. A.P.D. IN. W.C.", "W.P.D. FEET HEAD" — body text, and
+    #             2.9 to 11.9 row-heights tall because the face is an L
+    #
+    # So a cut stands where the band is empty, or its type is larger than the
+    # block's, or the band is shallow (under two rows — 042_VA#9 cuts on a 0.4
+    # row-high band of body text and needs to). It is refused only for a band
+    # that is BOTH body-sized text AND two or more rows deep, which no title is.
+    def body_type(x0, y0, x1, y1) -> float | None:
+        g = sorted(c["height"] for c in chars
+                   if x0 <= (c["x0"] + c["x1"]) / 2 <= x1
+                   and y0 <= (c["top"] + c["bottom"]) / 2 <= y1)
+        return g[len(g) // 2] if g else None
+
     cuts = [k for idx, k in enumerate(keys)
             if idx > 0 and full[k] and not full[keys[idx - 1]]]
+
+    # THE TEST VETOES THE WHOLE SPLIT; it does not filter individual cuts.
+    # Dropping one cut and keeping the rest is worse than either extreme: on
+    # 047_NC#21 the AIR DEVICE SCHEDULE has band labels SUPPLY AIR and RETURN
+    # AIR one row deep and a NOTES band six rows deep, and the original code
+    # got the right answer by accident — it cut at all three, one piece came out
+    # too small, and the whole split was refused. Filtering only the NOTES cut
+    # left three pieces that each looked like a table, and turned one clean
+    # region into three overlapping ones.
+    #
+    # What the evidence actually says is simpler: a block that LABELS ITS OWN
+    # BANDS in body-sized type is one table, and must not be cut anywhere.
+    if chars and cuts:
+        hs = sorted(cells[i].bounds[3] - cells[i].bounds[1] for i in members)
+        medrow = hs[len(hs) // 2] or 1.0
+        base = body_type(*vbounds_of(members, cells))
+        for k in cuts:
+            b0 = cells[rows[k][0]].bounds
+            t = body_type(*b0)
+            if (base is not None and t is not None
+                    and t < base * 1.15 and (b0[3] - b0[1]) >= medrow * 2.0):
+                return [members]
+
     if not cuts:
         return [members]
 
@@ -847,7 +908,7 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
     import os as _os
     _dbg = _os.environ.get("VG_DEBUG")
     tables = []
-    blocks = [p for m in groups.values() for p in _split_at_title_bands(m, cells)]
+    blocks = [p for m in groups.values() for p in _split_at_title_bands(m, cells, chars)]
     for members in blocks:
         if _dbg:
             _b = [cells[i].bounds for i in members]
