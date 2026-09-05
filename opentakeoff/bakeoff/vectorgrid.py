@@ -61,6 +61,7 @@ from collections import defaultdict
 
 import pdfplumber
 import pymupdf
+from bisect import bisect_left
 from shapely import node, polygonize_full
 from shapely.geometry import MultiLineString
 
@@ -326,6 +327,102 @@ def _image_is_a_table(doc, xref: int) -> bool:
         return False
 
 
+SNAP_TOL = 0.30      # coordinates this close are the same rule, drawn twice
+SNAP_OVERLAP = 1.0   # ... unless they run alongside each other, which makes them two
+
+
+def _snap_grid(segs: list[tuple], tol: float = SNAP_TOL) -> list[tuple]:
+    """Close the hairline gaps that stop a drawn table from polygonising.
+
+    A face is a cell only if its four walls actually MEET. CAD exporters
+    routinely emit a schedule as one little stroked rectangle per cell rather
+    than as full-width rules, and the rectangles do not agree with each other
+    to the last decimal: measured on 096_IN#19, the row rule under the MOTOR
+    columns is drawn at y 579.48 for the HP/KW cell, y 579.47 for the RPM cell
+    beside it and y 579.48 again for the next — one hundredth of a point apart.
+    node() dutifully keeps them as three distinct lines, so the RPM cell has no
+    closed boundary, no face is made for it, and the column is simply absent
+    from the arrangement. The consequence is not one lost cell: the hole
+    disconnects the faces to its left from the faces to its right, the table
+    arrives as three side-by-side blocks, and the caption can only be owned by
+    one of them. That page emitted 22 regions for 8 schedules; snapping brings
+    it to 10, and every schedule to its caption.
+
+    TWO RULES THAT RUN ALONGSIDE EACH OTHER ARE TWO RULES, however close. This
+    is the whole difficulty, and getting it wrong is worse than not snapping at
+    all. On 073_MT#21 the sheet frame runs down x 2356.44 for the full height
+    of the page, and the schedules in the right margin draw their own right
+    border at x 2356.32 and x 2356.56 — a tenth of a point either side of it.
+    Merging those three coordinates hands every margin block a wall in common
+    with the frame, faces close along it, and FOUNDATION FRAMING PLAN KEYNOTES
+    welds onto HELICAL PIER SCHEDULE below it (measured: the box grew 120pt
+    upward and two of the 122 keyed boxes went wrong). The distinction is not
+    distance, it is OVERLAP: rules drawn per cell TILE — their spans along the
+    other axis meet end to end and never lie side by side — whereas a border
+    drawn just inside a frame runs beside it for hundreds of points. So a
+    coordinate joins a cluster only when nothing at that coordinate overlaps
+    anything already in it by more than SNAP_OVERLAP.
+
+    Clustering against the cluster HEAD, not the previous value, stops a ladder
+    of coordinates tol apart from chaining into one. The tolerance is far below
+    anything a table can mean — MIN_CELL_SIDE is 2.0pt — so a seam this closes
+    was never a cell.
+
+    Endpoints are snapped to the rule coordinates too, without a vote of their
+    own: the same rounding crosses axes, and on 096_IN#19 the wall sits at
+    x 2058.36 while the row rule beside it starts at x 2058.37.
+    """
+    def heads(rules: dict) -> dict:
+        """rules: coordinate -> list of (lo, hi) spans on the other axis."""
+        out: dict = {}
+        acc: dict = {}                       # head -> spans accumulated
+        for v in sorted(rules):
+            for h in sorted(acc, key=lambda h: abs(h - v)):
+                if abs(v - h) > tol:
+                    continue
+                if any(min(a1, b1) - max(a0, b0) > SNAP_OVERLAP
+                       for a0, a1 in rules[v] for b0, b1 in acc[h]):
+                    continue                 # runs alongside: a separate rule
+                out[v] = h
+                acc[h].extend(rules[v])
+                break
+            else:
+                out[v] = v
+                acc[v] = list(rules[v])
+        return out
+
+    vr: dict = {}
+    hr: dict = {}
+    for x0, y0, x1, y1, _w in segs:
+        if abs(x1 - x0) < abs(y1 - y0):
+            vr.setdefault(x0, []).append((min(y0, y1), max(y0, y1)))
+        else:
+            hr.setdefault(y0, []).append((min(x0, x1), max(x0, x1)))
+    mx, my = heads(vr), heads(hr)
+
+    hx, hy = sorted(set(mx.values())), sorted(set(my.values()))
+
+    def to(m: dict, hs: list, v: float) -> float:
+        if v in m:
+            return m[v]
+        i = bisect_left(hs, v)
+        best = None
+        for j in (i - 1, i):
+            if 0 <= j < len(hs):
+                dd = abs(hs[j] - v)
+                if dd <= tol and (best is None or dd < best[0]):
+                    best = (dd, hs[j])
+        return best[1] if best else v
+
+    out = []
+    for x0, y0, x1, y1, w in segs:
+        a, b, c, d = to(mx, hx, x0), to(my, hy, y0), to(mx, hx, x1), to(my, hy, y1)
+        if a == c and b == d:
+            continue                         # snapped away to a point
+        out.append((a, b, c, d, w))
+    return out
+
+
 def _weight_index(segs: list[tuple]) -> dict:
     """Stroke weight looked up by quantised (axis, position) — so a polygon
     edge can be traced back to the pen that drew it."""
@@ -543,7 +640,7 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
     """-> {tables: [{bbox, cells:[bbox], n_cells}], diagnostics: {...}}"""
     with pdfplumber.open(pdf_path) as doc:
         page = doc.pages[page_no - 1]
-        segs = segments_from_page(page)
+        segs = _snap_grid(segments_from_page(page))
         chars = page.chars
         page_w, page_h = float(page.width), float(page.height)
 
