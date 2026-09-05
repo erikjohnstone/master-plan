@@ -62,6 +62,18 @@ This number is unchanged by the entire foundation-cohesion pass (Sept 2026):
 the one-takeoff-line contract, the eval/cache fixes, and every test added
 were verified additive-by-construction against this exact scored corpus.
 
+**Re-verified 2026-09-05 after B-11 and B-12** (cold cache, both sheetgraph
+changes in the tree): every set matches the table above exactly, and the
+corpus totals — 541 tags, 94.8% exact, Σ|Δqty| 49, 14 missing, 29 false-add —
+are identical. Recall went up and nothing precision-side moved.
+
+One process note worth keeping, because it nearly produced a false alarm: the
+first run of this gate printed **513 tags / 94.5%** and looked like a
+regression. It was not. `bldg5406-hvac-demo` had been left off the command
+line (a mistyped set id), and 513 + its 28 = 541; the 0.3% was just the mean
+with a 100% set removed. Read the PER-SET rows before believing a corpus
+delta — the total moves for boring reasons.
+
 **A recall tier now exists alongside it** (`keys/<id>.tables.csv`,
 `mcp/scripts/table-recall-eval.mjs`), because every key above is scoped to
 tables the pipeline already found — none of them can catch a schedule table
