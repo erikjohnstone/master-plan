@@ -108,7 +108,7 @@ recall — **32% is not the pipeline's recall number** and must not be quoted as
 one. The full-Session recall figure across all 24 keyed documents is the next
 measurement to run.
 
-### 2a. The table bake-off — 122/122 boxes, 100% on held-out sheets, cells judged by three rulers
+### 2a. The table bake-off — 137/137 boxes and 640/640 cells, held out on both
 
 `opentakeoff/bakeoff/` scores any table extractor against those same 122 keyed
 tables. Two rulers: `bakeoff.py` asks whether a region landed under a keyed
@@ -131,10 +131,19 @@ Boundary — the WORST of the four edges — within 4pt, after TableSense
 (AAAI 2019), because IoU@0.5 passes a box that has clipped two rows off a
 twelve-row schedule.
 
-| against 122 hand-authored boxes | CORRECT (EoB ≤ 4pt) | mean IoU |
+| against 137 hand-authored boxes | CORRECT (EoB ≤ 4pt) | mean IoU |
 |---|---|---|
-| **vectorgrid** | **122/122  100%** | **0.9992** |
-| pdfplumber-lines_strict | 76/122  62.3% | — |
+| **vectorgrid** | **137/137  100%** | **0.9993** |
+| pdfplumber-lines_strict | 76/122 on the original 122  62.3% | — |
+
+15 of those 137 are HELD OUT and were authored so that agreeing with the
+extractor means something: drawn at random from the 98 held-out tables, then
+each edge chosen by a human from the CANDIDATE RULES the page itself carries,
+with the extractor's box not in view. **Two of my fifteen first-pass picks were
+wrong and the extractor was right both times** — I read a title band 15pt too
+high on `014_MT#4`, and on `019_FL#15` I would have clipped the EV-6 data row.
+An edge read off a whole-sheet render is not good enough: at sheet scale a 13pt
+row is four pixels.
 
 ```
 cd opentakeoff/bakeoff && python3 boxscore.py            # the 122 authored boxes
@@ -231,7 +240,7 @@ found and misread is worthless.
 
 | ruler | coverage | result |
 |---|---|---|
-| hand-transcribed truth (`cellscore.py`) | 390 cells, 7 tables | **390/390 cells, 38/38 rows** |
+| hand-transcribed truth (`cellscore.py`) | 640 cells, 13 tables | **640/640 cells, 67/67 rows** |
 | second text engine (`cellaudit.py`, pdfminer) | 9,602 cells | 97.96% agree |
 | **pixel OCR** (`cellocr.py`, RapidOCR) | **18,189 cells, 369 tables** | **88.33% confirmed** |
 
@@ -257,6 +266,25 @@ Twice the HAND TRUTH was the thing that was wrong, both the same trap — a
 two-line heading read as a cell spanning both header rows when the ruling says
 otherwise (`DIRECT DRIVE (YES/NO)` on `096_IN#19`, `COMPRESSORS` on
 `016_NY#18`). Both corrections are written into the keys with the reason.
+
+**HELD OUT ON THE CELL SIDE TOO, and it paid for itself immediately.** Six
+tables were drawn by seed 9051 from the 168 keyed tables holding 12-130 cells —
+not chosen, so neither the easy ones nor the ones already fixed — and every
+cell was read off a render and checked against what the extractor returned.
+**249 of 250 matched, and the one that did not is a class.** `014_MT#4`'s PUMP
+SCHEDULE holds a REMARKS list beside an ELECTRICAL DATA note in ONE cell, and
+reading line by line spliced the second into the middle of the first. 25 of the
+175 multi-line cells in this corpus (14.3%) are set that way. Fixed in
+`celltext._side_by_side_blocks`; 250/250 after.
+
+The first version of that fix broke something else, and the pixel judge caught
+it: `060_XX#75`'s panelboard header is a LABEL/VALUE FORM — BUS ENTRY | B,
+FDR. BREAKER | 600 — where reading line by line correctly pairs each label with
+its value, and block by block emits four labels then four values. It cost 4
+cells of agreement across four panelboards. A form's columns run together, one
+line on the left for every line on the right; a seven-line REMARKS list beside
+a three-line note does not. The split now stands only where the line counts
+differ.
 
 **The cell ruler was wrong before the extractor was.** It compared a row's
 cells BY POSITION among the non-empty ones, which is fine until a header spans:
