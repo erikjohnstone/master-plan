@@ -15,7 +15,7 @@ A takeoff is the act of measuring quantities off a construction drawing—how mu
 much wall, how many fixtures, at what scale, on which sheet. OpenTakeoff is an open-source
 engine for doing that, with two front ends over identical geometry:
 
-- **A stdio MCP server** (`npx -y opentakeoff-mcp`)—40 tools plus browsable sheet resources.
+- **A stdio MCP server** (`npx -y opentakeoff-mcp`)—50 tools plus browsable sheet resources.
   An agent opens a plan, reads the title block, sets the scale, floods the rooms, checks its own
   work on a rendered overlay, and hands back a marked-up planset.
 - **A browser canvas**—client-only React. An estimator drags in a plan set and traces it. No

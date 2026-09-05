@@ -1,5 +1,8 @@
 # HVAC/BAS Takeoff Demo Suite
 
+> **Superseded.** The current mandate lives in `opentakeoff-corpus/GOAL.md` —
+> read that first. Kept here for its engineering record.
+
 ## Mission
 
 Ship ten demos covering the real work of an HVAC/BAS estimator. Each demo must

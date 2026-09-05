@@ -1,8 +1,18 @@
 # opentakeoff eval corpus
 
-This directory lives OUTSIDE the opentakeoff git repo, per the convention `docs/SHEET-GRAPH-EVAL.md`
-already established: real plan sets are never committed. See that doc for the room-finish
+This directory is committed in the same repo as `opentakeoff/` — `sets.json`, `keys/`,
+`takeoffs/`, `demos/`, and this file are all tracked by git. What is **not** committed is the
+real plan-set PDF *bytes*: `raw/` and `bulk/` are gitignored (`.gitignore`) because most of
+these sets were pulled from a public bidding posting, not a redistribution license — see
+"Licensing/provenance" below. `keys/` (the hand-authored ground truth) is deliberately **not**
+gitignored — a key must survive a checkout. See `docs/SHEET-GRAPH-EVAL.md` for the room-finish
 cell/tag metrics `mcp/scripts/graph-eval.mjs` scores by default.
+
+**`sets.json` is the one live registry** — the id/file list below is historical narrative
+(why each set was picked), not a substitute for it, and it can drift (e.g. `weld-county-permit`
+below was retired and is no longer in `sets.json`, but stays in this table as sourcing history).
+Bulk documents (`bulk/HVAC_BAS_Plan_Sets*`, 112 sets / 215 files, un-keyed) register the same way
+without copying PDFs anywhere — see `resolveSetFiles` in `mcp/scripts/corpusFiles.mjs`.
 
 ## Sets (added 2026-08-26, HVAC/BAS maturity plan Phase 1)
 
@@ -11,17 +21,19 @@ cell/tag metrics `mcp/scripts/graph-eval.mjs` scores by default.
 | `bessemer` | the repo's own pinned sample (`samples/bessemer-mechanical-bidset.pdf`) | already in-repo; the only set with a hand-authored, independently-verified `rowsym` key so far |
 | `itd-d1-lab` | D-1 Testing Laboratory HVAC bid set, Coeur d'Alene ID | richest real valve-type text diversity (GATE/BALL/CHECK VALVE, BUTTERFLY all present) |
 | `federal-mech` | a federal facility mechanical set | richest VAV/AHU density (VAV×371, AHU×61) — the category this corpus specifically needed |
-| `weld-county-permit` | Weld County, CO mechanical permit set | RTU-heavy (RTU×20) — a device family the other two barely mention |
+| `weld-county-permit` *(retired — no longer in `sets.json`)* | Weld County, CO mechanical permit set | RTU-heavy (RTU×20) — a device family the other two barely mention |
 | `itd-d1-lab-raster` | the SAME real `itd-d1-lab` HVAC plan sheet, synthetically flattened to image-only | no real scanned (no-vector-layer) MEP set was found; built via `mcp/scripts/make-corpus-raster-variant.mjs` (the same technique the repo's own bundled `scanned-plan.pdf` fixture uses) so the honest `has_vector_linework:false` fallback path is exercised against real HVAC drafting density, not a generic floor plan |
 | `navfac-cherry-point-atc` | NAVFAC FY20 P-228 ATC Tower & Air Operations Building, MCAS Cherry Point, NC (added 2026-08-28) | the densest real HVAC/BAS set in this corpus — 75 sheets, real vector text confirmed on every page; THREE real, separately-tagged buildings/areas (Air Ops, MITRACON, ATCT) sharing one drawing set; carries a real AIR COOLED CHILLER SCHEDULE and this corpus's first real BAS/DDC points-list content (AI/AO/BI/BO tags) — sourced to replace `weld-county-permit` (below, retired) as an active, genuinely vector-CAD corpus member |
 
-**Licensing/provenance — read before adding a set's PDF to `git`, ever:** every one of the 3 newly
-downloaded sets was pulled from a public, no-login government/agency URL, posted for open
+**Licensing/provenance — read before removing a PDF from `.gitignore`, ever:** every one of the 3
+newly downloaded sets was pulled from a public, no-login government/agency URL, posted for open
 competitive bidding. That is NOT the same as a redistribution license — the drawings are a private
 AE firm's work product, not a government-authored work, and a state/federal agency posting them for
-bidders does not itself grant permission to republish them. They are kept here, outside the repo,
-for local measurement/testing only. See `sets.json`'s own `provenance` field per set for the exact
-source URL context. `navfac-cherry-point-atc` follows the same real caveat — see its own `sets.json`
+bidders does not itself grant permission to republish them. Their PDF bytes are kept out of git
+(gitignored under `raw/`/`bulk/`), local-measurement-only, for exactly this reason — the corpus
+*metadata* (this directory, `sets.json`, `keys/`) is committed; the *drawings* are not.
+See `sets.json`'s own `provenance` field per set for the exact source URL context.
+`navfac-cherry-point-atc` follows the same real caveat — see its own `sets.json`
 provenance entry.
 
 ## New metric this session: row-to-symbol linking (`*.rowsym.csv`)

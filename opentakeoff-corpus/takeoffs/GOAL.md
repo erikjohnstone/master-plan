@@ -1,5 +1,9 @@
 # /takeoff — Full HVAC/BAS Quantity Takeoff (N=5 Validated)
 
+> **Superseded.** The current mandate lives in `opentakeoff-corpus/GOAL.md` —
+> read that first. Kept here for its engineering record; the "Active goal"
+> line below is no longer true.
+
 **Active goal.** Name: `takeoff`.  
 Prior demo-suite goal archived at `goals/ARCHIVED_D01_D10_DEMO_SUITE.md`.
 

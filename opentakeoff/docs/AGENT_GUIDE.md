@@ -113,6 +113,16 @@ Between steps 3 and 4, `list_shapes` is the cheap inventory—ids, sheets, condi
 quantities, room labels, review state, and where each finish tag came from (`schedule` or
 `asserted`)—without pulling a whole `export_takeoff` payload.
 
+**A schedule-driven HVAC/BAS document is a different path, not a variant of the five steps
+above.** It never traces shapes: `compile_corpus_takeoff { kind }` reads the equipment/BAS/valve
+schedule tables directly off the sheet graph and returns one compiled envelope (`categories`,
+`totals`, `page_accounting`, `exclusions`) per kind. Follow it with `reconcile_schedule_plan
+{ family? }`, which cross-references the compiled schedule rows against what is actually swept
+drawn on the plan sheets and returns one row per tag carrying `scheduled_qty`, `installed_qty`,
+and a `status` (matched / schedule-only / plan-only / …) with citations both ways. Report both
+quantities and the status per line — never just the schedule count — the same "never a numbers
+report alone" discipline as the standard finish above.
+
 ## 4. Withheld is not a failure — it is the answer
 
 Four tools measure things they then decline to commit, and say why. The arrays they hand back are
@@ -165,7 +175,7 @@ rooms share 34 LF of wall would be a wrong number with a machine's confidence be
 
 ## 6. Staged tool exposure
 
-By default every client gets all 40 tool schemas on `tools/list`—the flat contract every
+By default every client gets all 50 tool schemas on `tools/list`—the flat contract every
 published client already expects.
 
 Forty descriptions is real token weight for a session that may never touch half of them, so the

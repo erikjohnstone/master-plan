@@ -1,5 +1,10 @@
 # Next major goal loop — HVAC/BAS cross-set + reconcile golden
 
+> **Superseded.** The current mandate lives in `opentakeoff-corpus/GOAL.md` —
+> read that first ("Disregard pillars A through D, they are bullshit").
+> The "Status: ACTIVE" / pillars framing below is no longer true; kept for
+> its engineering record.
+
 **Status:** ACTIVE (Pillars A+B §6 MET; C = corpus-deep estimator takeoff; D queued)  
 **Date:** 2026-08-31 (pillars C+D added 2026-09-01; C research 2026-09-01; C
 reframed 2026-09-01; **C depth = every corpus BAS + valve set** 2026-09-01)  

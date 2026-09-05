@@ -34,7 +34,7 @@ Register the server with your MCP client (any stdio client):
 Never point a client config at `npm start`—npm's banner goes to stdout,
 which is the MCP wire. `node --import tsx` is the whole invocation.
 
-By default the server hands every client all forty tool schemas at once. Set
+By default the server hands every client all fifty tool schemas at once. Set
 `OPENTAKEOFF_MCP_STAGED_TOOLS=1` in the server's environment to stage the
 surface instead: only the setup tools start enabled, and the agent opens the
 `measure` / `revise` / `handoff` groups on demand with `open_tool_stage` as
@@ -44,7 +44,7 @@ client that honors `tools/list_changed`; leave it unset otherwise.
 
 ## What the agent gets
 
-Forty tools, in the order an agent tends to reach for them:
+Fifty tools, in the order an agent tends to reach for them:
 
 - **Open and orient**—`load_plan`, `sheet_info` (including the sheet's PDF
   layer table—Optional Content Groups with a classified role, confidence,
@@ -90,6 +90,18 @@ Forty tools, in the order an agent tends to reach for them:
   MARK column too, and a finish code chaining to a door mark is a confidently
     wrong product—with the refusal named in `notes`. How this is measured, what
   it scores, and what it still cannot read: [docs/SHEET-GRAPH-EVAL.md](SHEET-GRAPH-EVAL.md)
+- **Schedule-driven takeoffs (HVAC/BAS)**—`compile_corpus_takeoff { kind }`
+  reads an equipment, BAS-points, or control-valve schedule straight off the
+  sheet graph—no shape-tracing—and returns one compiled envelope per kind
+  (`categories`, `totals`, `page_accounting`, `exclusions`). Follow it with
+  `reconcile_schedule_plan { family? }`, which cross-references those
+  schedule rows against what a symbol sweep actually finds drawn on the plan
+  sheets: one row per tag, carrying `scheduled_qty` (the printed schedule
+  count), `installed_qty` (drawn instances swept from the plan), and a
+  `status` (matched / schedule-only / plan-only / …), citing both the
+  schedule row and the plan ink. Report both quantities and the status per
+  line, never the schedule count alone—the same discipline as `export_report`
+  below.
 - **Measure**—`one_click`, `detect_rooms` (both take `layers {include,
   exclude}` to override the sheet's stated layer roles for a call),
   `measure_polygon`, `measure_line`, `measure_surface` (wall SF: an open run

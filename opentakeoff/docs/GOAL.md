@@ -1,5 +1,8 @@
 # Estimator takeoff goal (authoritative)
 
+> **Superseded.** Despite the title, the current mandate lives in
+> `opentakeoff-corpus/GOAL.md` — read that first.
+
 See the full mission, output schema (`out/<file>.takeoff.json`), work plan P1–P7,
 eval harness, acceptance gates, and iteration protocol in the agent goal document
 armed via `/goal`.
@@ -58,7 +61,7 @@ Bulk emit must **not** cold-build `graphForPipeline()` inline per set. Order:
    from `opentakeoff/` (runs in `mcp/` via `node --import tsx`).
 2. **Emit** — four shards, `--resume`: `npm run emit:corpus:shard{0,1,2,3}`.
    Warm cache → seconds per set → `out/<set_id>.takeoff.json`.
-3. **Scoreboard** — `npm run eval:corpus` after 116/116 files exist.
+3. **Scoreboard** — `npm run eval:document-scoreboard` after 116/116 files exist. (Renamed from `eval:corpus` — that name collided with mcp/'s own `eval:corpus`, the actual hand-keyed 7-set scored corpus; this script's own gold is pipeline output, see opentakeoff-corpus/STATE.md.)
 
 Do not restart workers mid-build (cache writes only after a full graph completes).
 See also `opentakeoff-corpus/GOAL.md` § execution policy.

@@ -15,7 +15,7 @@ OpenTakeoff is a **client-only React app**: a PDF construction-takeoff canvas fo
 Shared = sheet graph (geometric + ODL), `compile_corpus_takeoff`, `query_table`,
 `find_schedule`, `resolve_tag`, `sheet_graph`, and plan-schedule tools as they
 are extracted (`count_marks`, `sweep_schedule_row`, …). See also root
-`AGENTS.md` and `opentakeoff-corpus/takeoffs/GOAL.md`.
+`AGENTS.md` and `opentakeoff-corpus/GOAL.md` (the current mandate — `takeoffs/GOAL.md` is superseded).
 
 ## Run / build / check
 

@@ -63,7 +63,10 @@ Plus **revision clouds**, which remain arc-chain linework these detectors do not
 
 ## Running it, and adding a set
 
-The corpus lives **outside this repo**—real plan sets are never committed. Point the scorer at a directory holding `sets.json` plus `keys/<id>.csv` and `keys/<id>.tags.csv`:
+The corpus directory (`opentakeoff-corpus/`) is committed in this same repo — `sets.json`, `keys/`,
+and this doc all are. What's excluded is the plan-set PDF *bytes* (`raw/`/`bulk/` are gitignored;
+most sets were sourced from a public bidding posting, not a redistribution license — see
+`opentakeoff-corpus/README.md`). Point the scorer at a directory holding `sets.json` plus `keys/<id>.csv` and `keys/<id>.tags.csv`:
 
 ```bash
 node --import tsx scripts/graph-eval.mjs <corpus-dir> [setId ...] [--report]
