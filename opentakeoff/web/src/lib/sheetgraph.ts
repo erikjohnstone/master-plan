@@ -7846,6 +7846,23 @@ export interface VectorPipelineReport {
   topology_sheets: number;
   ocr_assists: number;
   notes: string[];
+  /** L2-VG. Present whenever the vectorgrid engine ran at all — in `shadow`
+   * it is the whole record of what it WOULD have produced, since nothing it
+   * finds is merged in that mode. `refused` counts sheets whose page box
+   * disagreed with the viewport or whose engine failed: those are neither
+   * successes nor "no tables here", and collapsing them into either is how a
+   * broken engine comes to look like an empty drawing. */
+  vectorgrid?: {
+    mode: "shadow" | "on";
+    sheets: number;
+    tables: number;
+    cells: number;
+    /** Regions found whose shape the schedule classifier declined. */
+    declined: number;
+    rasters: number;
+    refused: number;
+    ms: number;
+  };
 }
 
 export interface SheetGraph {
