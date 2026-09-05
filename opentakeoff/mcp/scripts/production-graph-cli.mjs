@@ -16,8 +16,10 @@
  *   node --import tsx scripts/production-graph-cli.mjs \
  *     --mode graph|compile --pdf /abs/plan.pdf [--pdf …] [--kind …] [--out /path.json]
  */
-import { writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { cachedSheetGraph } from "./sheetGraphCache.mjs";
 import { Session } from "../src/session.ts";
 import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
 import { reconcileSchedulePlan } from "../src/takeoff.ts";
@@ -86,7 +88,20 @@ for (let i = 1; i < pdfs.length; i++) {
 }
 
 progress("graph", "Building Session + ODL sheet graph (schedules, roles, tables)…");
-const graph = await session.graphForPipeline();
+// THE INDEX. cachedSheetGraph is content-addressed on the PDF bytes plus the
+// engine source digest, and until now it was called only by tests — every
+// upload and every corpus run rebuilt a graph it already had. A whole set is
+// minutes of ODL and extraction; a re-open should be instant.
+//
+// Every PDF in a merged set is part of the identity: two sets that happen to
+// share a first file are not the same document.
+const shaOf = (p) => createHash("sha256").update(readFileSync(p)).digest("hex");
+const graph = await cachedSheetGraph(pdfs[0], {
+  expectedSha256: shaOf(pdfs[0]),
+  identity: pdfs.slice(1).map(shaOf),
+  compute: () => session.graphForPipeline(),
+});
+session.seedPipelineGraph?.(graph);
 const sheetCount = Array.isArray(graph?.sheets) ? graph.sheets.length : 0;
 const tableCount = Array.isArray(graph?.tables) ? graph.tables.length : 0;
 progress("graph", `Sheet graph ready — ${sheetCount} sheet${sheetCount === 1 ? "" : "s"}, ${tableCount} schedule table${tableCount === 1 ? "" : "s"}.`, {

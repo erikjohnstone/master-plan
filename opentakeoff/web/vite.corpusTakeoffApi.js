@@ -11,9 +11,10 @@
  * Same MCP Session.graphForPipeline() path every blueprint uses — not a
  * takeoff-only fork. Body: JSON { pdfPath } or multipart file(s) + kind.
  */
-import { mkdtemp, writeFile, rm, readFile } from "node:fs/promises";
+import { mkdtemp, mkdir, writeFile, rm, readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { createHash } from "node:crypto";
+import { homedir, tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
@@ -220,11 +221,27 @@ async function resolvePdfs(req) {
     familySweepAll = mp.fields.familySweepAll === "1" || mp.fields.familySweepAll === "true";
     evaluationFast = mp.fields.evaluationFast === "1" || mp.fields.evaluationFast === "true";
     if (!mp.files.length) throw Object.assign(new Error("file required"), { status: 400 });
-    tmpDir = await mkdtemp(join(tmpdir(), "ot-prod-graph-"));
+    // A CONTENT-ADDRESSED SPOOL, NOT A FRESH TEMP DIR.
+    //
+    // Every upload used to land in its own mkdtemp and be deleted in the
+    // `finally` below. Both caches downstream key on the resolved path (the
+    // ODL cache on path+size+mtime, the sheet-graph cache on path when no
+    // sha is supplied), so every request missed BOTH — the same blueprint,
+    // re-opened, re-spawned the JVM and rebuilt the whole graph from nothing.
+    // That is the difference between an estimator waiting minutes and waiting
+    // not at all, and it was invisible because a miss is only ever slow, never
+    // wrong.
+    //
+    // Named by the bytes' own sha256, so the same document is the same path
+    // forever, written once, and never deleted with the request that brought
+    // it. `tmpDir` stays null for this branch precisely so the cleanup below
+    // leaves the spool alone.
+    const spool = join(process.env.XDG_CACHE_HOME || join(homedir(), ".cache"), "opentakeoff-uploads");
+    await mkdir(spool, { recursive: true });
     for (const f of mp.files) {
-      const name = f.filename.replace(/[^\w.-]+/g, "_") || "plan.pdf";
-      const pdfPath = join(tmpDir, name);
-      await writeFile(pdfPath, f.bytes);
+      const sha = createHash("sha256").update(f.bytes).digest("hex");
+      const pdfPath = join(spool, `${sha}.pdf`);
+      if (!existsSync(pdfPath)) await writeFile(pdfPath, f.bytes);
       pdfPaths.push(pdfPath);
     }
   } else {

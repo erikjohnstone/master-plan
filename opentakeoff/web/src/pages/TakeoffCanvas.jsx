@@ -7104,12 +7104,23 @@ export default function TakeoffCanvas() {
     }
   }
 
-  // Background Session+ODL graph prewarm once PDF text index is ready — Agent
-  // compile / query_table / reconcile hit a warm cache instead of cold-starting
-  // the production endpoint on first tool call (shared path with MCP).
+  // Background Session+ODL graph prewarm — the blueprint is extracted and
+  // indexed AS SOON AS IT IS LOADED, so Agent compile / query_table /
+  // reconcile hit a warm graph instead of cold-starting the production
+  // endpoint on the first tool call (shared path with MCP).
+  //
+  // It no longer waits for `indexProgress.phase === "ready"`. That gate made
+  // extraction QUEUE BEHIND the browser's own text indexing for no reason:
+  // the server re-opens the PDF file itself and reads nothing the browser
+  // produced, so the two are independent work and belong in parallel. On a
+  // 26-page set that is the difference between the estimator's first question
+  // being answered from a warm index and waiting through both passes in
+  // series. Server-side the result is content-addressed on the PDF's own
+  // sha256, so a reload or a re-upload of the same set is a cache hit rather
+  // than a rebuild.
   useEffect(() => {
-    if (indexProgress.phase !== "ready" || !sheets.length) {
-      if (!sheets.length) setGraphPrewarm({ phase: "idle" });
+    if (!sheets.length) {
+      setGraphPrewarm({ phase: "idle" });
       return;
     }
     const sig = sheets.map((s) => `${s.name}:${s.rev ?? 1}`).join("|");
@@ -7138,7 +7149,7 @@ export default function TakeoffCanvas() {
       }
     })();
     return () => { cancelled = true; };
-  }, [indexProgress.phase, sheets]);
+  }, [sheets]);
 
   async function ensureAgentGraph() {
     const sig = sheets.map((s) => `${s.name}:${s.rev ?? 1}`).join("|");
