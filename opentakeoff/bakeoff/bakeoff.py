@@ -166,7 +166,19 @@ def bk_docling(pdf: Path):
     return regions, f"{len(doc.tables)} tables"
 
 
+def bk_vectorgrid(pdf: Path):
+    """Our ruling-graph pipeline — faces of the drawn arrangement, split on
+    stroke weight. The only backend here that never rasterises and never
+    infers structure from text position."""
+    from vectorgrid import find_tables
+    out = find_tables(str(pdf), 1)
+    d = out["diagnostics"]
+    return ([t["bbox"] for t in out["tables"]],
+            f"segs={d.get('segments')} cells={d.get('cells')} bw={d.get('border_weight')}")
+
+
 BACKENDS = {
+    "vectorgrid":              bk_vectorgrid,
     "pdfplumber-lines":        lambda p: bk_pdfplumber(p, "lines"),
     "pdfplumber-lines_strict": lambda p: bk_pdfplumber(p, "lines_strict"),
     "camelot-lattice":         lambda p: bk_camelot(p, "lattice"),
