@@ -211,6 +211,111 @@ def _weight_index(segs: list[tuple]) -> dict:
     return idx
 
 
+def _h_index(segs: list[tuple]) -> dict:
+    """Horizontal rules bucketed by rounded y, for the row-span widening."""
+    idx: dict = defaultdict(list)
+    for x0, y0, x1, y1, _w in segs:
+        if y0 == y1:
+            idx[round(y0)].append((x0, x1))
+    return idx
+
+
+def _widen_along_row_rules(hmap, gx0, gy0, gx1, gy1, rows) -> tuple:
+    """Widen a block to the true span of the row rules its cells sit on.
+
+    A table whose rows are ruled all the way across but whose VERTICALS stop
+    partway is not a rare shape — it is the standard drawing list. Measured on
+    08_ME…#1: 49 rows of SHEET NUMBER / SHEET NAME / SCALE / a checkbox block,
+    with the row rules spanning the whole 656pt table and the only verticals in
+    the 197pt checkbox strip at the right. polygonize closes faces only inside
+    that strip (49 x 5, fill 1.000 — a perfect little grid), and throws the rest
+    of every row rule away as a dangle. The region then sits 340pt to the right
+    of its own caption and matches nothing.
+
+    The dangles are the missing information. A row rule spans its table, so the
+    rules the block already sits on say how wide the table really is. Only rules
+    that themselves reach into the block's x-span count — no transitive chaining
+    along touching linework — and a majority of rows must agree before the edge
+    moves, so one long stray rule crossing a table cannot drag it open.
+    """
+    lo_votes, hi_votes = [], []
+    for ry in rows:
+        lo, hi = gx0, gx1
+        for k in (ry - 1, ry, ry + 1):
+            for a, b in hmap.get(k, ()):
+                if b >= gx0 - 2 and a <= gx1 + 2:      # touches the block
+                    lo = min(lo, a); hi = max(hi, b)
+        lo_votes.append(lo); hi_votes.append(hi)
+
+    n = max(1, len(rows))
+    ext = [v for v in lo_votes if v < gx0 - 4]
+    if len(ext) >= n * 0.6:
+        gx0 = sorted(ext)[len(ext) // 2]
+    ext = [v for v in hi_votes if v > gx1 + 4]
+    if len(ext) >= n * 0.6:
+        gx1 = sorted(ext)[len(ext) // 2]
+    return (gx0, gy0, gx1, gy1)
+
+
+def _v_index(segs: list[tuple]) -> dict:
+    """Vertical rules bucketed by rounded x, for the column-span widening."""
+    idx: dict = defaultdict(list)
+    for x0, y0, x1, y1, _w in segs:
+        if x0 == x1:
+            idx[round(x0)].append((y0, y1))
+    return idx
+
+
+def _widen_along_col_rules(vmap, hmap, gx0, gy0, gx1, gy1, cols) -> tuple:
+    """The same argument as _widen_along_row_rules, turned ninety degrees.
+
+    A column wall spans its table, so when the header band is ruled vertically
+    but not horizontally its faces never close and the block starts below its
+    own header. On 08_ME…#1 all six checkbox walls begin at y=403.7, directly
+    under the DRAWING LIST caption, while the first closed row is at 617.9 —
+    212pt lower, far enough that the caption no longer sits at the top of the
+    region and the table matches nothing.
+
+    Extending vertically is more dangerous than extending horizontally, because
+    stacked schedules routinely share one continuous column wall and following
+    it would fuse them. So the extension stops at the first rule that spans the
+    block: a full-width horizontal between here and there is another table's
+    border, and nothing may cross it.
+    """
+    w = max(gx1 - gx0, 1.0)
+
+    def blocked(a, b):
+        """Is there a block-spanning horizontal strictly inside (a, b)?"""
+        for k in range(int(a) - 1, int(b) + 2):
+            for hx0, hx1 in hmap.get(k, ()):
+                y = k
+                if a + 2 < y < b - 2 and min(hx1, gx1) - max(hx0, gx0) >= w * 0.6:
+                    return True
+        return False
+
+    top_votes, bot_votes = [], []
+    for cx in cols:
+        top, bot = gy0, gy1
+        for k in (cx - 1, cx, cx + 1):
+            for a, b in vmap.get(k, ()):
+                if b >= gy0 - 2 and a <= gy1 + 2:      # touches the block
+                    top = min(top, a); bot = max(bot, b)
+        top_votes.append(top); bot_votes.append(bot)
+
+    n = max(1, len(cols))
+    ext = [v for v in top_votes if v < gy0 - 4]
+    if len(ext) >= n * 0.6:
+        cand = sorted(ext)[len(ext) // 2]
+        if not blocked(cand, gy0):
+            gy0 = cand
+    ext = [v for v in bot_votes if v > gy1 + 4]
+    if len(ext) >= n * 0.6:
+        cand = sorted(ext)[len(ext) // 2]
+        if not blocked(gy1, cand):
+            gy1 = cand
+    return (gx0, gy0, gx1, gy1)
+
+
 def _border_weight(segs: list[tuple]) -> float | None:
     """The pen that draws table borders, if this sheet uses more than one.
 
@@ -240,6 +345,8 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
         return {"tables": rasters, "diagnostics": {"segments": 0, "rasters": len(rasters)}}
 
     widx = _weight_index(segs)
+    hmap = _h_index(segs)
+    vmap = _v_index(segs)
     bw = _border_weight(segs)
 
     # Faces of the arrangement. node() splits every stroke at every crossing —
@@ -421,8 +528,14 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
         if len(members) < len(rowset) * len(colset) * MIN_FILL_RATIO:
             continue
         xs0, ys0, xs1, ys1 = zip(*(cells[i].bounds for i in members))
+        bbox = _widen_along_row_rules(hmap, min(xs0), min(ys0), max(xs1), max(ys1),
+                                      sorted({round(cells[i].bounds[1]) for i in members} |
+                                             {round(cells[i].bounds[3]) for i in members}))
+        bbox = _widen_along_col_rules(vmap, hmap, *bbox,
+                                      sorted({round(cells[i].bounds[0]) for i in members} |
+                                             {round(cells[i].bounds[2]) for i in members}))
         tables.append({
-            "bbox": (min(xs0), min(ys0), max(xs1), max(ys1)),
+            "bbox": bbox,
             "cells": [cells[i].bounds for i in members],
             "n_cells": len(members),
         })
