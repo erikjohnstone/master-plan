@@ -111,6 +111,8 @@ def main() -> int:
     ap.add_argument("--zoom", type=float, default=4.0)
     ap.add_argument("--show", type=int, default=40)
     ap.add_argument("--dump", help="write every disagreement to this TSV for triage")
+    ap.add_argument("--all", action="store_true",
+                    help="judge EVERY region, not only those owning a keyed caption")
     a = ap.parse_args()
 
     tot = dict(tables=0, cells=0, agree=0, spacing=0, ocr_blank=0)
@@ -129,8 +131,17 @@ def main() -> int:
         s_cells = s_agree = s_tables = 0
         for t in tables:
             title = owners.get(t["bbox"])
-            if not title or not t["cells"]:
+            # A REGION THAT OWNS NO KEYED CAPTION STILL HOLDS CELLS, and skipping
+            # it makes the audit flatter than the truth. Measured: 156 such
+            # regions across the keyed sheets carry 1,110 cells with text, 6.1%
+            # of everything extracted — 060_XX#75 draws four panelboard
+            # schedules and the key names one, 034_NC#2 sets its sheet index in
+            # three columns and only the first owns the title, 083_MA#4 prints
+            # ENERGY RECOVERY VENTILATOR SCHEDULE twice. Those cells are real
+            # extraction output and belong in the number.
+            if not t["cells"] or (not title and not a.all):
                 continue
+            title = title or f'(unkeyed region at {t["bbox"][0]:.0f},{t["bbox"][1]:.0f})'
             s_tables += 1
             ours_by_cell, _a, _o, _s = slot(pdf, t)
             theirs = ocr_cells(pdf, t, a.zoom)

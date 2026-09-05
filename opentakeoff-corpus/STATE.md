@@ -108,7 +108,7 @@ recall — **32% is not the pipeline's recall number** and must not be quoted as
 one. The full-Session recall figure across all 24 keyed documents is the next
 measurement to run.
 
-### 2a. The region-proposal bake-off — 121/122 clean boxes
+### 2a. The table bake-off — 122/122 boxes, 100% on held-out sheets, cells judged by three rulers
 
 `opentakeoff/bakeoff/` scores any table extractor against those same 122 keyed
 tables. Two rulers: `bakeoff.py` asks whether a region landed under a keyed
@@ -122,16 +122,24 @@ graph (shapely), faces taken as cells (`polygonize_full`), blocks as connected
 components cut at border-weight strokes. Nothing is rasterised, so stroke
 width survives to be used as signal — which no published method can do.
 
-| 122 keyed tables | CLEAN | recall | mrg | spl | ovr | sht | regions |
-|---|---|---|---|---|---|---|---|
-| **vectorgrid** | **121  99.2%** | **121  99.2%** | 0 | 0 | 0 | 0 | 363 |
-| pdfplumber-lines | 99  81.1% | 114  93.4% | 10 | 10 | 5 | 0 | 446 |
-| pdfplumber-lines_strict | 89  73.0% | 100  82.0% | 7 | 7 | 4 | 0 | 249 |
-| camelot-stream | — | 80  65.6% | — | — | — | — | 105 |
-| docling | — | 12/13 on one sheet | — | — | — | — | 174 s/page |
+THE RULER IS NOW A MEASURED BOX, NOT AN INFERENCE. `boxfit.py`'s verdicts were
+an argument I wrote and changed four times with the score rising each time. All
+122 boxes are now hand-authored off renders in `keys/<id>.tableboxes.csv`, and
+`boxscore.py` asks the only question that cannot be argued with: how far is
+each emitted edge from the edge a human measured. CORRECT means Error-of-
+Boundary — the WORST of the four edges — within 4pt, after TableSense
+(AAAI 2019), because IoU@0.5 passes a box that has clipped two rows off a
+twelve-row schedule.
+
+| against 122 hand-authored boxes | CORRECT (EoB ≤ 4pt) | mean IoU |
+|---|---|---|
+| **vectorgrid** | **122/122  100%** | **0.9992** |
+| pdfplumber-lines_strict | 76/122  62.3% | — |
 
 ```
-cd opentakeoff/bakeoff && python3 boxfit.py --backend vectorgrid
+cd opentakeoff/bakeoff && python3 boxscore.py            # the 122 authored boxes
+cd opentakeoff/bakeoff && python3 cellscore.py           # hand-transcribed cells
+cd opentakeoff/bakeoff && python3 cellocr.py --all       # every cell vs pixel OCR
 ```
 
 The whole gap is in the two columns a recall count cannot see. pdfplumber
@@ -198,14 +206,90 @@ PCW RISER DIAGRAM SCHEDULE - HUTCH 1.3 BELOW its table, as detail 2. Allowing
 captions below would hand every backend false matches corpus-wide to buy one
 table. Recorded in the key, counted as a miss.
 
-**What this does NOT measure.** 363 regions for 122 keyed tables. The keys
-record schedules only, so most of the surplus is real tables nobody keyed
-(title blocks, legends, note grids) — but the number is not precision and must
-not be quoted as one. Blocking bad merges (item 5) cost 320 → 349 regions
-deliberately: a fragment a downstream extractor can ignore is cheaper than a
-schedule it never sees. **And nothing here reads a CELL yet** — vectorgrid
-proposes regions and their faces; slotting text into those faces is the next
-step, and is also the answer to B-13.
+**HELD OUT: 97/97.** 100% on the sheets it was tuned against measures fit as
+much as skill, so 15 unkeyed sheets were chosen by a text-layer scan and then
+READ — every table counted off a full-sheet render, every title taken from the
+page's own text layer. 100 tables, 39 documents keyed in total, 222 tables.
+
+| 15 sheets never used for tuning | ruled tables found |
+|---|---|
+| **vectorgrid** | **97/97  100%** |
+| pdfplumber-lines_strict | 87/97  89.7% |
+
+Reading them is what made the number mean anything. The scan proposed 117
+"tables"; 22 are not tables — MECHANICAL SCHEDULES on three of those sheets is
+the Drawing Title field of the sheet's own title block, and every
+SCHEDULE-shaped string on `013_MO#1` is a ROW of a cover-sheet drawing index.
+Against that denominator both engines scored 42/76, a dead heat that was an
+artefact of counting phantoms. The keys also record what a vector method
+structurally cannot reach: `074_CA#24`, `072_CA#25` and `013_MO#1` draw their
+legends and sheet indexes with NO ruling at all, and both engines correctly
+emit nothing there.
+
+**CELLS, by three rulers.** Region proposal is a third of the problem; a table
+found and misread is worthless.
+
+| ruler | coverage | result |
+|---|---|---|
+| hand-transcribed truth (`cellscore.py`) | 390 cells, 7 tables | **390/390 cells, 38/38 rows** |
+| second text engine (`cellaudit.py`, pdfminer) | 9,602 cells | 97.96% agree |
+| **pixel OCR** (`cellocr.py`, RapidOCR) | **18,189 cells, 369 tables** | **88.33% confirmed** |
+
+The third ruler exists because the first two share a blind spot: pdfminer and
+MuPDF both parse the same content stream, so a fault in the stream itself — a
+bad ToUnicode map, a symbol font — is invisible to both and they agree,
+confidently, and are both wrong. RapidOCR reads the rendered ink and shares
+nothing downstream of the PDF.
+
+All 2,122 disagreements were classified and the class that could indict us was
+read in full. "OCR saw more than we did" is the signature of dropped table
+data: 64 of 18,189, every one OCR's — it drags a neighbour's text across a
+wall, doubles itself, reads the two arcs of a hand-drawn CALLOUT BUBBLE as
+parentheses (`078_US#23`, nine times), and reads a logo's stars as text. The
+other classes are the same story: 863 cells where OCR read nothing hold a dash;
+the commonest same-length substitutions are `-`→`二` (a CJK glyph), `Ø`→`0`,
+`”`→`"` and `6`→`9`, that last checked against the pixels at 9x on `001_NC#49`
+where the drawing plainly says 6. **Zero confirmed cases of this extractor
+dropping or misreading a cell.** 88.33% is a floor on us, not a ceiling: it is
+how much a second modality could confirm.
+
+Twice the HAND TRUTH was the thing that was wrong, both the same trap — a
+two-line heading read as a cell spanning both header rows when the ruling says
+otherwise (`DIRECT DRIVE (YES/NO)` on `096_IN#19`, `COMPRESSORS` on
+`016_NY#18`). Both corrections are written into the keys with the reason.
+
+**The cell ruler was wrong before the extractor was.** It compared a row's
+cells BY POSITION among the non-empty ones, which is fine until a header spans:
+on `096_IN#19` a PERFECTLY extracted 22-column schedule scored 125/175, because
+position 4 means TSP in one row and 5.55 in another. Comparison is now on the
+table's own column grid, and `cellscore.py --selftest` fails if a span or a
+one-column slide is scored wrong.
+
+**KNOWN LIMITS, with prevalence measured rather than guessed.**
+
+- `040_IL#47` AIR HANDLING UNIT SCHEDULE. The mid rule is absent at each band
+  header, so the tall label strip and the band row form one L-shaped face and
+  every label in the band lands in one cell while the values sit in their own —
+  `26,000` with no way to know it is CFM. The same table also emits as 6
+  regions. Cells spanning 3+ row lines while holding 3+ text lines, corpus
+  wide: **3 of 18,189**, and two of those are legitimate 3-line headers.
+- Form blocks. `060_XX#75`'s panelboard header is `PANEL ___590A11A-63A___
+  BLDG. ___432___ VOLTS ___480___` on fill-in underlines with no verticals, so
+  it is one 300-character cell. Cells with 3+ interior fill-in underlines:
+  **15 of 18,189**, of which ~4 are genuine form blocks.
+- Text that overflows its own cell. `031_MO#39` prints `1'-4 1/8"` with the
+  cell wall falling between `1` and `/8`, so the fraction is placed in the
+  neighbouring cell by its centre. Words sticking out of the cell they were
+  placed in: **67 of 34,129 (0.20%)**, nearly all on `24_IA#15`, whose columns
+  are 2-3pt wide.
+- `067_CA#8` prints its caption BELOW the table, as detail 2. Allowing captions
+  below would hand every backend false matches corpus-wide to buy one table.
+  Recorded in the key, counted as a miss.
+
+**And what none of this measures: production.** `vectorgrid.py` lives in
+`opentakeoff/bakeoff/`. The production path is `sheetgraph.ts` →
+`vectorTakeoffPipeline.ts`, and vectorgrid is NOT wired into it. Nothing an
+estimator runs today touches this code.
 
 ## 3. The other 112 documents
 
