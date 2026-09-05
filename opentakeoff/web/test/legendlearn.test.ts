@@ -620,6 +620,26 @@ test("findLegendGlyphs: a disconnected glyph cannot donate one fragment to the p
   assert.equal(glyphs[0].segments, 2);
 });
 
+test("findLegendGlyphs: a disconnected glyph fragment cannot erase line one of its own three-line caption", () => {
+  // Both fragments sit on line two's physical row. The closer fragment wins
+  // line two; one-to-one ownership gives the other fragment line one. When
+  // geometry recovery reunites them, all three wrap lines must survive.
+  const smallBox = (x: number): number[][] => [
+    seg(x, 105, x + 20, 105), seg(x + 20, 105, x + 20, 125),
+    seg(x + 20, 125, x, 125), seg(x, 125, x, 105),
+  ];
+  const segs = flat([...smallBox(100), ...smallBox(130)]);
+  const spans: LegendSpan[] = [
+    { text: "CONCENTRIC SQUARE TO", x0: 200, y0: 80, x1: 390, y1: 100 },
+    { text: "ROUND", x0: 200, y0: 103, x1: 260, y1: 123 },
+    { text: "TRANSITION", x0: 200, y0: 126, x1: 300, y1: 146 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxWrapGapPx: 8 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].caption, "CONCENTRIC SQUARE TO ROUND TRANSITION");
+  assert.deepEqual(glyphs[0].caption_bbox, [[200, 80], [390, 146]]);
+});
+
 test("findLegendGlyphs: two substantial inline variants are one auditable, non-seedable symbol group", () => {
   const segs = flat([
     ...controlValveGlyph(100, 100),
@@ -856,6 +876,14 @@ test("findLegendGlyphs: routing conventions and equipment callouts are annotatio
     "HOME RUN",
     "FEEDER CALLOUT",
     "MECHANICAL EQUIPMENT CALLOUT",
+    "DUCTWORK BREAK",
+    "DUCTWORK OR PIPING RISE",
+    "INTAKE OR EXHAUST",
+    "DIRECTION OF AIRFLOW",
+    "FLOW DIRECTION",
+    "DOWNWARD DIRECTION OF SLOPED PIPING",
+    "NEW TO EXISTING CONNECTION POINT",
+    "SLOPE PIPE IN DIRECTION OF ARROW",
   ];
   const segs = flat(captions.flatMap((_, index) => controlValveGlyph(100, 100 + index * 200)));
   const spans: LegendSpan[] = [
@@ -865,6 +893,77 @@ test("findLegendGlyphs: routing conventions and equipment callouts are annotatio
   const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 120 });
   assert.deepEqual(glyphs.map((glyph) => glyph.caption), captions);
   assert.ok(glyphs.every((glyph) => glyph.kind === "annotation" && glyph.seedable === false));
+});
+
+test("findLegendGlyphs: routed-medium captions keep hooked solid swatches out of discrete EA sweeps", () => {
+  const captions = ["CHILLED WATER SUPPLY", "DOMESTIC COLD WATER (CW)", "STORM DRAIN"];
+  const segs = flat(captions.flatMap((_, index) => [
+    seg(100, 100 + index * 100, 200, 100 + index * 100),
+    seg(200, 100 + index * 100, 200, 120 + index * 100),
+    seg(200, 120 + index * 100, 100, 120 + index * 100),
+    seg(100, 120 + index * 100, 100, 100 + index * 100),
+  ]));
+  const spans: LegendSpan[] = captions.map((text, index) => ({
+    text, x0: 240, y0: 100 + index * 100, x1: 440, y1: 120 + index * 100,
+  }));
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), captions);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "line_style" && glyph.seedable === false));
+});
+
+test("findLegendGlyphs: a device located in piping remains a discrete symbol, not a routed medium", () => {
+  const segs = flat(controlValveGlyph(100, 100));
+  const spans: LegendSpan[] = [
+    { text: "VALVE IN VERTICAL PIPING", x0: 220, y0: 145, x1: 450, y1: 165 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, isolated);
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].kind, "symbol");
+  assert.equal(glyphs[0].seedable, true);
+});
+
+test("findLegendGlyphs: a routed dashed swatch expands left from a compact end hook", () => {
+  const segs = flat([
+    seg(100, 110, 125, 110), seg(135, 110, 160, 110),
+    seg(180, 100, 200, 100), seg(200, 100, 200, 120),
+    seg(200, 120, 180, 120), seg(180, 120, 180, 100),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "CONDENSATE DRAIN LINE", x0: 220, y0: 100, x1: 430, y1: 120 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].kind, "line_style");
+  assert.ok(glyphs[0].rect[0][0] < 110, "the evidence covers the complete dashed swatch, not only its end hook");
+});
+
+test("findLegendGlyphs: a sparse physical device stays a symbol identity but cannot seed a sweep", () => {
+  const segs = flat([seg(100, 110, 125, 110), seg(135, 110, 160, 110)]);
+  const spans: LegendSpan[] = [
+    { text: "MOTORIZED DAMPER", x0: 220, y0: 100, x1: 390, y1: 120 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].kind, "symbol");
+  assert.equal(glyphs[0].seedable, false);
+  assert.match(glyphs[0].seed_warning || "", /sparse line fragment/i);
+});
+
+test("findLegendGlyphs: inline pipe devices may span eleven text heights without being clipped as oversized", () => {
+  const inlineDevice = (y: number): number[][] => [
+    seg(100, y + 20, 310, y + 20),
+    seg(200, y, 210, y), seg(210, y, 210, y + 40),
+    seg(210, y + 40, 200, y + 40), seg(200, y + 40, 200, y),
+  ];
+  const segs = flat([...inlineDevice(90), ...inlineDevice(190)]);
+  const spans: LegendSpan[] = [
+    { text: "CONTROL SYMBOLS", x0: 70, y0: 20, x1: 440, y1: 45 },
+    { text: "PIPE ANCHOR", x0: 340, y0: 100, x1: 470, y1: 120 },
+    { text: "PIPE GUIDE", x0: 340, y0: 200, x1: 460, y1: 220 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans);
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), ["PIPE ANCHOR", "PIPE GUIDE"]);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "symbol" && glyph.seedable));
 });
 
 test("findLegendGlyphs: BAS software and sequence functions are preserved but never become EA sweep seeds", () => {

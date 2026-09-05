@@ -359,6 +359,11 @@ type PairCandidate = {
   members: GlyphMember[];
   span: LegendSpan;
   caption: string;
+  /** Physical caption lines already owned by this row. Pairing starts at
+   * one; recovery/merge passes carry the count forward so the configured
+   * wrap cap remains real even when a glyph fragment initially stole one
+   * of those lines. */
+  captionLines: number;
   kind: "symbol" | "line_style";
 };
 
@@ -443,7 +448,34 @@ function isDirectiveProse(text: string): boolean {
  * never promote them to discrete Symbol Sweep seeds. */
 function isDraftingAnnotationCaption(text: string): boolean {
   const normalized = normalizedCaption(text).replace(/^[\s\-–—]+/, "");
-  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|MECHANICAL\s+EQUIPMENT)\s+CALLOUT|HOME\s+RUN|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|AIR\s+DISTRIBUTION\s+TAG|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|DEMOLISH\s+TO\s+POINT\s+INDICATED|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b)/i.test(normalized);
+  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|(?:MECHANICAL\s+)?EQUIPMENT)\s+CALLOUT|HOME\s+RUN|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|DUCTWORK\s+(?:BREAK|OR\s+PIPING\s+RISE)|INTAKE\s+OR\s+EXHAUST|(?:DIRECTION\s+OF\s+AIRFLOW|FLOW\s+DIRECTION)|(?:UPWARD|DOWNWARD)\s+DIRECTION\s+OF\s+SLOPED\s+PIPING|NEW\s+TO\s+EXISTING\s+CONNECTION\s+POINT|SLOPE\s+PIPE\s+IN\s+DIRECTION\s+OF\s+ARROW|AIR\s+DISTRIBUTION\s+TAG|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|DEMOLISH\s+TO\s+POINT\s+INDICATED|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b)/i.test(normalized);
+}
+
+/** Captions that name a routed medium or drafting line convention rather
+ * than one countable installed device. Geometry alone cannot distinguish a
+ * hooked/dashed piping swatch from a compact symbol because CAD line keys
+ * often contain end hooks and inline system codes. */
+function isRoutedSystemCaption(text: string): boolean {
+  const normalized = normalizedCaption(text);
+  // A caption may mention the medium only to locate a discrete device or
+  // describe a directional marker. The terminal word PIPING must not erase
+  // that stronger identity (e.g. VALVE IN VERTICAL PIPING). Do not exempt
+  // every caption containing DRAIN: CONDENSATE DRAIN PIPING and STORM DRAIN
+  // are themselves routed media.
+  if (/\bDIRECTION\b/i.test(normalized)
+    || /\b(?:ACTUATOR|CLEANOUT|DAMPER|DETECTOR|DIFFUSER|FAN|FILTER|GAUGE|GRILLE|LOUVER|METER|PANELBOARD|PUMP|REGISTER|REGULATOR|RELAY|SENSOR|STARTER|STRAINER|SWITCH|THERMOSTAT|TRANSMITTER|VALVE|VFD)\b\s+(?:IN|ON)\b.*\b(?:PIPING|LINE)$/i.test(normalized)) return false;
+  return /\b(?:PIPING|LINE|SEWER)$/i.test(normalized)
+    || /^(?:VENT|DUCTWORK|STORM\s+DRAIN)$/i.test(normalized)
+    || /\b(?:CHILLED|CONDENSER|HEATING|GEOTHERMAL|DOMESTIC|TEMPERED)\s+(?:(?:HOT|COLD)\s+)?WATER(?:\s+(?:SUPPLY|RETURN))?(?:\s*\([^)]*\))?$/i.test(normalized)
+    || /\b(?:LOW|MEDIUM|HIGH)\s+PRESSURE\s+NATURAL\s+GAS$/i.test(normalized);
+}
+
+/** A physical device can be drawn with almost no usable vector ink when its
+ * identifying letter is PDF text (motorized dampers and cleanout callouts
+ * are common). Preserve the installed-device identity as `symbol`, but keep
+ * the sparse line fragment out of Symbol Sweep by leaving it nonseedable. */
+function isDiscreteInstalledDeviceCaption(text: string): boolean {
+  return /\b(?:ACTUATOR|ARRESTOR|CLEANOUT|DAMPER|DETECTOR|DIFFUSER|DRAIN|FAN|FILTER|GAUGE|GRILLE|HUMIDISTAT|LOUVER|METER|PANELBOARD|PUMP|REGISTER|REGULATOR|RELAY|SENSOR|SINK|STARTER|STRAINER|SWITCH|THERMOSTAT|TRANSMITTER|VALVE|VFD)\b/i.test(normalizedCaption(text));
 }
 
 /** BAS legends also contain logical/sequence identities that matter to a
@@ -603,6 +635,7 @@ function pairCandidates(
       members: [{ rect: cand.rect, segments: cand.segments }],
       span: { ...span },
       caption: normalizedCaption(span.text),
+      captionLines: 1,
       kind: cand.kind,
     });
   }
@@ -618,7 +651,8 @@ function pairCandidates(
  * centers, compact union) and never depends on caption wording. */
 function mergeDownshiftedGlyphFragments(
   pairs: PairCandidate[], typicalTextHeight: number, maxGlyphDimPx: number,
-  gridPx: number, rawSpans: LegendSpan[],
+  gridPx: number, rawSpans: LegendSpan[], maxLineGapPx: number,
+  maxIndentDriftPx: number, maxWrapLines: number,
 ): PairCandidate[] {
   const sorted = [...pairs].sort((a, b) =>
     (a.span.y0 + a.span.y1) - (b.span.y0 + b.span.y1) || a.span.x0 - b.span.x0,
@@ -659,6 +693,28 @@ function mergeDownshiftedGlyphFragments(
       lower.segments += upper.segments;
       lower.members.push(...upper.members);
       lower.kind = glyphKind(union, gridPx, lower.segments, maxGlyphDimPx, rawSpans);
+      // Sometimes the alleged "preceding row" is actually line one of this
+      // row's own wrapped caption. Global one-to-one pairing can assign a
+      // disconnected fragment to that first line after the main component
+      // wins line two. When the text itself is wrap-contiguous, preserve it
+      // while reuniting the geometry. A genuine preceding text-only legend
+      // row remains separated by a full row gap and is still discarded by
+      // this fragment-recovery pass rather than promoted as a symbol.
+      const captionGap = lower.span.y0 - upper.span.y1;
+      const wrappedCaption = captionGap >= -1 && captionGap <= maxLineGapPx
+        && Math.abs(upper.span.x0 - lower.span.x0) <= maxIndentDriftPx
+        && upper.captionLines + lower.captionLines <= maxWrapLines;
+      if (wrappedCaption) {
+        lower.caption = normalizedCaption(`${upper.caption} ${lower.caption}`);
+        lower.captionLines += upper.captionLines;
+        lower.span = {
+          text: lower.caption,
+          x0: Math.min(upper.span.x0, lower.span.x0),
+          y0: Math.min(upper.span.y0, lower.span.y0),
+          x1: Math.max(upper.span.x1, lower.span.x1),
+          y1: Math.max(upper.span.y1, lower.span.y1),
+        };
+      }
       consumed.add(upperIndex);
       break;
     }
@@ -676,7 +732,7 @@ function mergeDownshiftedGlyphFragments(
 function expandLineStylePairs(
   pairs: PairCandidate[],
   candidates: GlyphCandidate[],
-  rawSpans: LegendSpan[], gridPx: number, typicalTextHeight: number, maxGlyphDimPx: number,
+  rawSpans: LegendSpan[], gridPx: number, typicalTextHeight: number, maxLineStyleDimPx: number,
 ): void {
   const maxGap = Math.max(gridPx * 3, typicalTextHeight * 1.5);
   const centerTolerance = Math.max(gridPx * 2, typicalTextHeight * 0.3);
@@ -687,8 +743,21 @@ function expandLineStylePairs(
     const pairW = pair.rect[1][0] - pair.rect[0][0];
     const pairH = pair.rect[1][1] - pair.rect[0][1];
     const pairIsLineFragment = pairW > pairH * 4 && pairH <= gridPx * 2.5;
-    if (pair.kind !== "line_style" && !pairIsLineFragment) continue;
     const horizontal = pair.rect[1][0] - pair.rect[0][0] >= pair.rect[1][1] - pair.rect[0][1];
+    const hasExternalLineMember = horizontal && candidates.some((candidate) => {
+      if (candidate.kind !== "line_style" || resemblesExtractedText(candidate.rect, rawSpans)) return false;
+      const centerDelta = Math.abs(
+        (candidate.rect[0][1] + candidate.rect[1][1]) / 2 - (pair.rect[0][1] + pair.rect[1][1]) / 2,
+      );
+      const gap = candidate.rect[1][0] < pair.rect[0][0]
+        ? pair.rect[0][0] - candidate.rect[1][0]
+        : pair.rect[1][0] < candidate.rect[0][0] ? candidate.rect[0][0] - pair.rect[1][0] : 0;
+      return centerDelta <= centerTolerance && gap <= maxGap
+        && (candidate.rect[0][0] < pair.rect[0][0] - typicalTextHeight * 0.5
+          || candidate.rect[1][0] > pair.rect[1][0] + typicalTextHeight * 0.5);
+    });
+    if (pair.kind !== "line_style" && !pairIsLineFragment
+      && !(isRoutedSystemCaption(pair.caption) && hasExternalLineMember)) continue;
     let rect: [Point, Point] = [[...pair.rect[0]], [...pair.rect[1]]];
     let segments = pair.segments;
     const included = new Set<number>();
@@ -728,7 +797,7 @@ function expandLineStylePairs(
           );
           unionSpan = Math.max(rect[1][1], candidate.rect[1][1]) - Math.min(rect[0][1], candidate.rect[0][1]);
         }
-        if (gap > maxGap || centerDelta > centerTolerance || unionSpan > maxGlyphDimPx) continue;
+        if (gap > maxGap || centerDelta > centerTolerance || unionSpan > maxLineStyleDimPx) continue;
         if (gap < bestGap) { best = i; bestGap = gap; }
       }
       if (best < 0) break;
@@ -845,7 +914,7 @@ function attachWrappedCaptions(
   maxLineGapPx: number, maxIndentDriftPx: number, maxWrapLines: number,
 ): void {
   for (const pair of pairs) {
-    for (let ownedLines = 1; ownedLines < maxWrapLines; ownedLines++) {
+    for (let ownedLines = pair.captionLines; ownedLines < maxWrapLines; ownedLines++) {
       let best = -1;
       let bestGap = Infinity;
       let prepend = false;
@@ -865,6 +934,7 @@ function attachWrappedCaptions(
       const continuation = spans[best];
       usedSpans.add(best);
       pair.caption = normalizedCaption(prepend ? `${continuation.text} ${pair.caption}` : `${pair.caption} ${continuation.text}`);
+      pair.captionLines++;
       pair.span = {
         text: pair.caption,
         x0: Math.min(pair.span.x0, continuation.x0),
@@ -897,11 +967,12 @@ function mergeOwnedWrapPairs(
       span: { ...sorted[i].span },
       rect: [[...sorted[i].rect[0]], [...sorted[i].rect[1]]] as [Point, Point],
     };
-    let ownedLines = 1;
+    let ownedLines = current.captionLines;
     for (let j = i + 1; j < sorted.length; j++) {
       if (ownedLines >= maxWrapLines) break;
       if (consumed.has(j)) continue;
       const next = sorted[j];
+      if (ownedLines + next.captionLines > maxWrapLines) continue;
       if (Math.abs(next.span.x0 - current.span.x0) > maxIndentDriftPx) continue;
       const lineGap = next.span.y0 - current.span.y1;
       if (lineGap < 0 || lineGap > maxLineGapPx) continue;
@@ -909,9 +980,10 @@ function mergeOwnedWrapPairs(
       const nx = (next.rect[0][0] + next.rect[1][0]) / 2;
       if (Math.abs(cx - nx) > maxGlyphDimPx) continue;
       consumed.add(j);
-      ownedLines++;
+      ownedLines += next.captionLines;
       current = {
         caption: normalizedCaption(`${current.caption} ${next.caption}`),
+        captionLines: ownedLines,
         segments: current.segments + next.segments,
         members: [...current.members, ...next.members],
         rect: [
@@ -1230,9 +1302,20 @@ export function findLegendGlyphs(
   // 80/150px bounds missed ordinary thermowells and dampers on a different
   // 5184px-wide export. Text height is the page-local ruler both the browser
   // and MCP possess, so scale the search from it with conservative caps.
-  const maxGlyphDimPx = opts.maxGlyphDimPx ?? Math.max(80, Math.min(220, typicalTextHeight * 10));
+  // Symbols drawn inline with pipe/duct stubs (anchors, guides, dampers)
+  // routinely span about eleven local text heights even though the device
+  // itself is compact. Keep the finite 220px ceiling, but allow that real
+  // row topology instead of clipping at the former ten-height bound.
+  const maxGlyphDimPx = opts.maxGlyphDimPx ?? Math.max(80, Math.min(220, typicalTextHeight * 12));
   const maxCaptionGapPx = opts.maxCaptionGapPx ?? Math.max(150, Math.min(320, typicalTextHeight * 14));
   const maxLineStyleDimPx = Math.max(maxGlyphDimPx * 1.6, typicalTextHeight * 20);
+  const maxWrapLines = Math.max(1, Math.floor(opts.maxWrapLines ?? 3));
+  // Wrapped CAD descriptions are often centered under their first line,
+  // not left-aligned. Cherry Point's reviewed damper rows indent line two
+  // by 19px and line three by 52px at a 25px text height. Scale both gates
+  // from the sheet's lettering, with finite caps far inside column spacing.
+  const maxWrapGapPx = opts.maxWrapGapPx ?? Math.max(8, Math.min(18, typicalTextHeight * 0.45));
+  const maxWrapIndentPx = opts.maxWrapIndentPx ?? Math.max(5, Math.min(64, typicalTextHeight * 2.5));
 
   const relevantSegs = segmentsNearCaptions(segs, spans, maxGlyphDimPx, maxCaptionGapPx);
   const { components: clusters, gridPx } = clusterSegments(relevantSegs, maxGlyphDimPx, maxLineStyleDimPx);
@@ -1265,16 +1348,10 @@ export function findLegendGlyphs(
   const paired = pairCandidates(candidates, spans, rawSpans, maxCaptionGapPx, typicalTextHeight);
   const reunitedPairs = mergeDownshiftedGlyphFragments(
     paired.pairs, typicalTextHeight, maxGlyphDimPx, gridPx, rawSpans,
+    maxWrapGapPx, maxWrapIndentPx, maxWrapLines,
   );
-  expandLineStylePairs(reunitedPairs, candidates, rawSpans, gridPx, typicalTextHeight, maxGlyphDimPx);
+  expandLineStylePairs(reunitedPairs, candidates, rawSpans, gridPx, typicalTextHeight, maxLineStyleDimPx);
   expandSymbolPairs(reunitedPairs, candidates, rawSpans, typicalTextHeight, maxGlyphDimPx);
-  const maxWrapLines = Math.max(1, Math.floor(opts.maxWrapLines ?? 3));
-  // Wrapped CAD descriptions are often centered under their first line,
-  // not left-aligned. Cherry Point's reviewed damper rows indent line two
-  // by 19px and line three by 52px at a 25px text height. Scale both gates
-  // from the sheet's lettering, with finite caps far inside column spacing.
-  const maxWrapGapPx = opts.maxWrapGapPx ?? Math.max(8, Math.min(18, typicalTextHeight * 0.45));
-  const maxWrapIndentPx = opts.maxWrapIndentPx ?? Math.max(5, Math.min(64, typicalTextHeight * 2.5));
   attachWrappedCaptions(reunitedPairs, spans, paired.usedSpans, maxWrapGapPx, maxWrapIndentPx, maxWrapLines);
   const mergedPairs = mergeOwnedWrapPairs(
     reunitedPairs,
@@ -1322,10 +1399,13 @@ export function findLegendGlyphs(
     if (!layoutEvidenceDisabled && (!heading || !isDomainHeading(heading)) && domainRows < domainFloor) continue;
     if (!layoutEvidenceDisabled && !heading && directiveRows / group.length > 0.15) continue;
     for (const pair of group) {
-      const kind: LegendGlyph["kind"] = pair.kind === "symbol" && isDraftingAnnotationCaption(pair.caption)
+      const kind: LegendGlyph["kind"] = isDraftingAnnotationCaption(pair.caption)
         ? "annotation"
-        : pair.kind === "symbol" && isControlFunctionCaption(pair.caption, heading) ? "control_function"
+        : isControlFunctionCaption(pair.caption, heading) ? "control_function"
+        : isRoutedSystemCaption(pair.caption) ? "line_style"
+        : pair.kind === "line_style" && isDiscreteInstalledDeviceCaption(pair.caption) ? "symbol"
         : hasMultipleSubstantialSymbols(pair, typicalTextHeight) ? "symbol_group" : pair.kind;
+      const seedable = kind === "symbol" && pair.kind === "symbol";
       accepted.push({
         caption: pair.caption,
         caption_bbox: [[pair.span.x0, pair.span.y0], [pair.span.x1, pair.span.y1]],
@@ -1334,9 +1414,10 @@ export function findLegendGlyphs(
         aligned_rows: group.length,
         heading,
         kind,
-        seedable: kind === "symbol",
+        seedable,
         ...(pair.members.length > 1 ? { member_rects: pair.members.map((member) => member.rect) } : {}),
         ...(kind === "line_style" ? { seed_warning: "Line-style legend keys describe routed systems, not discrete EA symbols; do not send this rect to a count sweep." } : {}),
+        ...(kind === "symbol" && !seedable ? { seed_warning: "This row names a physical installed-device symbol, but the usable vector evidence is only a sparse line fragment (often because its identifying letter is PDF text); preserve the identity and do not send this incomplete rect to a count sweep." } : {}),
         ...(kind === "annotation" ? { seed_warning: "Drafting/reference annotations are legend truth, not installed devices; do not send this rect to a count sweep." } : {}),
         ...(kind === "control_function" ? { seed_warning: "This row describes a BAS point, command, control-logic, or sequence function, not a physical installed-device symbol; keep it for controls reasoning and out of EA count sweeps." } : {}),
         ...(kind === "symbol_group" ? { seed_warning: "This legend row contains multiple substantial disconnected symbols or variants; anchor each intended identity separately on a real plan before counting." } : {}),
