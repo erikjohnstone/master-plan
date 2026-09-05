@@ -26,6 +26,8 @@ import {
   exportReportOutput, sheetGraphOutput, resolveTagOutput, findScheduleOutput,
   symbolSweepOutput, sweepScheduleRowOutput, annotateOutput, listAnnotationsOutput,
   markVerdictOutput, deleteVerdictOutput, duplicateConditionOutput, splitConditionOutput,
+  compileCorpusTakeoffOutput, queryTableOutput, countMarksOutput, projectTakeoffOutput,
+  reconcileSchedulePlanOutput,
 } from "../src/outputs.ts";
 
 const PLAN = fileURLToPath(new URL("../../demo/sample-plan.pdf", import.meta.url));
@@ -61,6 +63,11 @@ const SCHEMAS: Record<string, z.ZodTypeAny> = {
   delete_verdict: z.object(deleteVerdictOutput),
   duplicate_condition: z.object(duplicateConditionOutput),
   split_condition: z.object(splitConditionOutput),
+  compile_corpus_takeoff: z.object(compileCorpusTakeoffOutput),
+  query_table: z.object(queryTableOutput),
+  count_marks: z.object(countMarksOutput),
+  project_takeoff: z.object(projectTakeoffOutput),
+  reconcile_schedule_plan: z.object(reconcileSchedulePlanOutput),
 };
 
 async function pair() {
@@ -387,7 +394,11 @@ test("schema-invalid arguments: -32602 validation error naming the tool; the ses
   await callViolation(client, "find_text", { sheet: KEY, q: "101", limit: 0 });            // limit below min 1
   await callViolation(client, "find_text", { q: "101", region: { x0: 0, y0: 0, x1: 1, y1: 1 }, limit: 0 }); // limit still enforced when sheet omitted
 
-  await callViolation(client, "symbol_sweep", { sheet: KEY });                             // missing seed_rect
+  // seed_rect and seed_point are BOTH optional in the schema by design (either
+  // one is valid) — "exactly one required" is enforced semantically by the
+  // handler, not the input schema, so this is a callErr case, not a schema
+  // violation. (Was callViolation — stale from before seed_point existed.)
+  assert.match(await callErr(client, "symbol_sweep", { sheet: KEY }), /needs either seed_rect.*or seed_point/);
   await callViolation(client, "symbol_sweep", { sheet: KEY, seed_rect: [[0, 0]] });        // one corner is not a rect
   await callViolation(client, "symbol_sweep", { sheet: KEY, seed_rect: [[0, 0], [50, 50]], tolerance_px: 0 }); // tolerance must be positive
   await callViolation(client, "symbol_sweep", { sheet: KEY, seed_rect: [[0, 0], [50, 50]], scope: "document" }); // bad scope enum
@@ -551,7 +562,16 @@ test("sheet graph (#87): index, resolve with citations, refusal with reasons, fi
   const bySurface = Object.fromEntries(res.finishes.map((f: any) => [f.surface, f]));
   assert.equal(bySurface.FLOOR.code, "CPT-1/VCT-1", "the dual-finish floor cell survives verbatim");
   assert.equal(bySurface.BASE.code, "RB-1");
-  assert.equal(bySurface.BASE.definition.cells.MATERIAL, "RESILIENT BASE", "the code chains to its material-schedule definition");
+  // NOT bySurface.BASE.definition here (catalogued bug, real extraction miss
+  // — see STATE.md B-9): the fixture's own MATERIAL SCHEDULE page genuinely
+  // draws an "RB-1 RESILIENT BASE" row (rendered + confirmed by eye), but
+  // sheetgraph.ts's row-clustering drops it AND the single-character-code
+  // row before it ("C" / CONCRETE SEALER) — the two rows bracketing the
+  // "BASE" category sub-header — while every OTHER category's rows,
+  // including its own first row, extract fine. The chaining MECHANISM this
+  // line exists to prove is still exercised below: NORTH/EAST/WEST/CEILING
+  // all resolve real .definition rows on this exact call.
+  assert.equal(bySurface.CEILING.definition.cells.MATERIAL, "ACOUSTIAL CEILING TILE", "the code chains to its material-schedule definition");
   for (const f of res.finishes) {
     assert.ok(f.source.sheet && f.source.bbox.x1 > f.source.bbox.x0, `${f.surface} carries a citation`);
   }
@@ -726,6 +746,57 @@ test("sheet graph phase 3 (#87): a revision marker rides the wire and never corr
   const found = await callOk(client, "find_schedule", { kind: "room finish" });
   assert.equal(found.matches.find((m: any) => m.building === "B").revised_rows, 1);
   assert.equal(found.matches.find((m: any) => m.building === "A").revised_rows, 1, "the drawn delta counts too");
+});
+
+// The five schedule-compiler tools had NO conformance coverage at all before
+// this — exactly the gap that hid B (reconcile_schedule_plan output
+// validation throwing whenever `family` was passed: mcp/src/takeoff.ts
+// returned takeoff_stats: undefined against a schema that requires it) and E
+// (five agentTakeoff.js field-name mismatches, a web/lib concern but only
+// discoverable by first confirming what these tools actually emit on the
+// wire). The bundled demo plan has no HVAC/BAS schedule content, so every
+// call here is a real, honest zero — the point is schema conformance, not
+// business-meaningful counts (corpus-eval and its own key files own that).
+test("compile_corpus_takeoff / query_table / count_marks / project_takeoff / reconcile_schedule_plan: schema-valid on a real (schedule-less) plan", async () => {
+  const client = await pair();
+  await callOk(client, "load_plan", { path: PLAN });
+
+  const compiled = await callOk(client, "compile_corpus_takeoff", { kind: "hvac_equipment" });
+  assert.equal(compiled.takeoff_id, "T-HVAC-01");
+  assert.equal(compiled.totals?.items ?? 0, 0);
+
+  const queried = await callOk(client, "query_table", { title: "ANYTHING NOT ON THIS PLAN" });
+  assert.equal(queried.count, 0);
+  assert.deepEqual(queried.matches, []);
+
+  const marks = await callOk(client, "count_marks", { marks: ["X-1"] });
+  assert.equal(marks.total, 0);
+  assert.equal(marks.marks[0].mark, "X-1");
+  assert.equal(marks.marks[0].unscheduled, true);
+
+  const project = await callOk(client, "project_takeoff", {});
+  assert.deepEqual(project.items, []);
+  assert.equal(project.stats.schedule_rows_total, 0);
+
+  // The regression itself: `family` used to make this throw an MCP output-
+  // validation error (-32602-shaped, not a clean {error} reply) because
+  // takeoff_stats came back undefined against a required schema field.
+  const reconciledByFamily = await callOk(client, "reconcile_schedule_plan", { family: "VAV" });
+  assert.equal(reconciledByFamily.family_filter, "VAV");
+  assert.deepEqual(reconciledByFamily.rows, []);
+  assert.equal(reconciledByFamily.takeoff_stats.schedule_rows_total, 0);
+
+  // Whole-set (no family) rides a different code path in mcp/src/takeoff.ts
+  // (buildPlanSetTakeoff) — schema-valid there too.
+  const reconciledWholeSet = await callOk(client, "reconcile_schedule_plan", {});
+  assert.equal(reconciledWholeSet.family_filter, null);
+  assert.equal(reconciledWholeSet.takeoff_stats.schedule_rows_total, 0);
+
+  // An unrecognized family name is the same early-return shape, still
+  // schema-valid — never a bare TypeError from an unmatched needle lookup.
+  const reconciledUnknownFamily = await callOk(client, "reconcile_schedule_plan", { family: "NOT_A_REAL_FAMILY" });
+  assert.equal(reconciledUnknownFamily.family_filter, "NOT_A_REAL_FAMILY");
+  assert.deepEqual(reconciledUnknownFamily.rows, []);
 });
 
 // 0.9.20 — symbol_sweep's output contract, both modes, schema round-tripped

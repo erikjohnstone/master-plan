@@ -851,7 +851,14 @@ const reportMaterialLine = z.object({
 export const exportReportOutput = {
   schema: z.literal("opentakeoff.report.v1"),
   project_name: z.string().nullable(),
-  generated_with: z.string(),
+  // reportJson() (the one shared implementation both the web export button
+  // and Session.exportReport call) always emits null here — no caller,
+  // web or MCP, has ever stamped a real generator string. Found live: the
+  // non-nullable z.string() this used to be made the SDK's own output
+  // validation reject every export_report call with an internal
+  // "MCP error -32602" the tool handler never even saw. Nullable to match
+  // what the shared function actually, universally emits today.
+  generated_with: z.string().nullable(),
   sheets: z.array(z.object({ sheet_id: z.string(), sheet: z.string(), scale_source: z.string() }).passthrough()).describe("Scale provenance per sheet — how each scale was set"),
   conditions: z.array(summaryRow.extend({ materials: z.array(reportMaterialLine) }).passthrough()).describe("conditionTotals rows: gross + *_net quantities AND the computed materials buy list"),
   by_sheet: z.array(z.object({ sheet_id: z.string(), sheet: z.string(), rows: z.array(z.record(z.unknown())) }).passthrough()).describe("BASE per-sheet subtotals — multiplier NOT applied, no waste, no materials"),

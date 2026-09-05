@@ -58,7 +58,16 @@ const titleText = (title) => {
   return t || null;
 };
 
-/** Build one takeoff row. */
+/**
+ * Build one takeoff row.
+ * @param {{
+ *   workflow?: string, runId?: string|null, tag?: string|null,
+ *   field?: string, value?: unknown, unit?: string|null,
+ *   sheet_id?: string|null, table_title?: unknown, column?: string|null,
+ *   bbox_px?: number[]|null, table_bbox_px?: number[]|null, row_bbox_px?: number[]|null,
+ *   source_tool?: string|null, note?: string|null,
+ * }} [opts]
+ */
 export function makeTakeoffRow({
   workflow = "",
   runId = null,

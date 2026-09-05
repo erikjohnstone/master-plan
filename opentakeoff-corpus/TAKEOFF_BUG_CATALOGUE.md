@@ -38,6 +38,7 @@ every eval read 100%. Every bug below was invisible to that gate.
 | B-6 | A page drawing the same table twice at TWO SCALES (~0.83x) | 013_MO p23, 2 tables lost | fused scaled duplicate |
 | B-7 | Sheet-margin GRID REFERENCE labels (A-F at both page edges) qualify as header rows and stretch the x-band page-wide | 034_NC p42, 2 tables lost; **corpus-scale hazard** | strongly supported, trace pending |
 | B-8 | Side-by-side tables with NO empty gutter — seam-based banding cannot split them | 046_MI p22 + 044_NY p24 (rule 35a): 1 table lost, 19 of 27 rows lost | **same bug as GOAL.md rule 35(a)** |
+| B-9 | Two consecutive rows bracketing a category sub-header (a bare-single-character CODE row, then the row right after the header) silently dropped from an otherwise-fine multi-section table | `demo/sample-finish-plan.pdf` MATERIAL SCHEDULE: "C / CONCRETE SEALER" and "RB-1 / RESILIENT BASE" both missing; every OTHER section's own first row (CPT-1, P-1, PLAM-1, ACT-1, PR-1) extracts fine | row-clustering gap around an in-table category divider |
 
 ---
 
@@ -403,6 +404,48 @@ rather than mechanical. An HVAC/BAS takeoff arguably should not COUNT them —
 but silently not extracting them is different from disclosing them, and the
 domain map is explicit that a set without architectural sheets carries a
 fire/smoke damper undercount risk. Recall and scope are separate questions.
+
+### B-9 — two rows bracketing an in-table category sub-header dropped
+
+**Where:** `demo/sample-finish-plan.pdf#2`, the "MATERIAL SCHEDULE" table
+(headers `CODE / MATERIAL / MANUFACTURER / STYLE / COLOR / SIZE / REMARKS`,
+extracted `kind: "finish"`). Found live, not from the corpus: this is the
+repo's own bundled demo fixture, hit by `mcp/test/conformance.test.ts`'s
+"sheet graph (#87)" test asserting `resolve_tag("134")`'s BASE surface
+(code `RB-1`) chains to a material-schedule definition.
+
+**Confirmed by render** (`page.renderPng`, read by eye): the real page draws
+the table as six shaded category sub-headers — FLOORING, BASE, WALLS,
+MILLWORK, CEILINGS, MISC. FINISHES — each followed by its own rows, all in
+ONE continuous table (not six separate tables). Under "BASE" the real rows
+are `RB-1 | RESILIENT BASE | VPI FLOORING | RUBBER WALL BASE | 97 FAWN | 4"`
+then `CBT-1 | CARPET WALL BASE | ...`. Immediately above, under "FLOORING",
+the real last row is `C | CONCRETE SEALER | SHERWIN WILLIAMS | H&C
+DECORATIVE CONCRETE CONCRETE SEALER | CLEAR`.
+
+**Measured:** `graphForPipeline().tables` for this sheet returns the
+"MATERIAL SCHEDULE" table with 25 rows total, but neither the `C` row nor
+the `RB-1` row is among them — both vanish, while `CBT-1` (the row right
+after `RB-1`) extracts fine, and every OTHER category's own first row
+(`CPT-1` under FLOORING, `P-1` under WALLS, `PLAM-1` under MILLWORK, `ACT-1`
+under CEILINGS, `PR-1` under MISC. FINISHES) extracts fine too. So this is
+not "a category's first row is unreliable" — it is specifically the pair of
+rows immediately bracketing the "BASE" sub-header (one before it, one after
+it) in this one table.
+
+**Not yet root-caused.** Candidate: the `C` row's own CODE cell is a bare
+single character (every other row's CODE is letters-dash-digit, e.g.
+`CPT-1`) — narrower than this table's normal code-column band — which may
+throw off the row-clustering pass in a way that also swallows the header's
+next data row. Not confirmed; needs the same trace discipline as B-6/B-7/B-8
+before a fix is built (audit before you build, per standing rule 3).
+
+**Impact:** `resolve_tag`'s definition-chaining mechanism itself is sound —
+proven on the SAME call for NORTH/EAST/WEST/CEILING, which all chain to
+real material-schedule rows. This is a narrow, real row-extraction miss, not
+a mechanism failure — but the fixture-authored keys/tests should not assert
+around it silently; `conformance.test.ts` names this bug explicitly at the
+one assertion it affects rather than weakening the check.
 
 
 ## How these connect

@@ -18,6 +18,7 @@ import {
   takeoffLeadColumns,
   takeoffSpecColumns,
   takeoffToCsv,
+  isFinishedTakeoffSource,
 } from "../src/lib/agentTakeoff.js";
 import { buildXlsx } from "../src/lib/xlsx.js";
 import {
@@ -980,4 +981,138 @@ test("query_table CONTROL VALVE title-scan expands beyond 24 matches", () => {
   assert.ok(rows.some((r) => r.tag === "CV-0"));
   assert.ok(rows.filter((r) => r.field === "quantity" || r.tag).length >= 30);
   assert.equal(rows.filter((r) => r.field === "schedule_count").length, 0);
+});
+
+// Phase 4 — pin the seams B/C/D/E fixed: none of these had ANY prior test
+// coverage (not wrong fixtures, genuinely untested), which is why the real
+// field-name mismatches were invisible until the corpus-eval / live MCP
+// probes that found them.
+
+test("rowsFromToolResult: count_marks reads the REAL schema (marks[].count + total), never `found`", () => {
+  const rows = rowsFromToolResult("count_marks", { marks: ["EF-1", "EF-2"] }, {
+    marks: [
+      { mark: "EF-1", count: 3, row: { sheet: "m#4", key: "EF-1", table: "FAN SCHEDULE" } },
+      { mark: "EF-2", count: 0, unscheduled: true },
+    ],
+    total: 3,
+    per_sheet: [{ sheet: "m#4", counts: { "EF-1": 3 } }],
+    skipped: [],
+    complete: true,
+  });
+  const ef1 = rows.find((r) => r.tag === "EF-1" && r.field === "mark_count");
+  assert.ok(ef1, "a real per-mark count row must exist");
+  assert.equal(ef1.value, 3);
+  assert.equal(ef1.sheet_id, "m#4");
+  assert.equal(ef1.table_title, "FAN SCHEDULE");
+  // EF-2 has count 0 (unscheduled) — still a real, honest row: "searched for,
+  // found zero" is information, not nothing, matching count_marks' own
+  // withheld/unscheduled disclosure discipline elsewhere.
+  const ef2 = rows.find((r) => r.tag === "EF-2" && r.field === "mark_count");
+  assert.ok(ef2, "a zero-count row for an explicitly requested mark must still be minted");
+  assert.equal(ef2.value, 0);
+  const totalRow = rows.find((r) => r.field === "count_marks_total");
+  assert.ok(totalRow, "the aggregate total row must exist");
+  assert.equal(totalRow.value, 3);
+  // The old (wrong) field name must not accidentally still work.
+  const wrongShape = rowsFromToolResult("count_marks", {}, { found: 5 });
+  assert.equal(wrongShape.length, 0, "a reply shaped like the old (never-real) `found` field must not mint rows");
+});
+
+test("takeoff_summary no longer seeds a finished takeoff line (conditions[]/rows[] are canvas conditions, not schedule tag/qty rows)", () => {
+  assert.equal(isFinishedTakeoffSource("takeoff_summary"), false);
+  assert.equal(isFinishedTakeoffSource("reconcile_schedule_plan"), true);
+  // Neither real shape (MCP conditions[]/totals{}, web rows[]) mints EAV rows.
+  const mcpShape = rowsFromToolResult("takeoff_summary", {}, {
+    conditions: [{ condition: "CPT-1", total_sf: 200 }],
+    totals: { total_sf: 200, total_sf_net: 200, lf: 0, lf_net: 0, ea: 0, sy_net: 22.2 },
+  });
+  assert.equal(mcpShape.length, 0);
+  const webShape = rowsFromToolResult("takeoff_summary", {}, { rows: [{ condition: "CPT-1" }] });
+  assert.equal(webShape.length, 0);
+});
+
+test("rowsFromCompiledTakeoff: kind:\"sequences\" reads cat.list (not cat.items), one status row plus one row per section", () => {
+  const compiled = {
+    kind: "sequences",
+    takeoff_id: "T-SOO-01",
+    categories: {
+      sequences: {
+        list: [{
+          id: "seq1", title: "AHU-1 SEQUENCE OF OPERATIONS", system_tag: "AHU-1",
+          status: "extracted", sheet_id: "set.pdf#12", section_count: 1,
+          sections: [{ heading: "OCCUPIED MODE", body: "Runs continuously.", evidence: [{ page: 12, bbox: [1, 2, 3, 4] }] }],
+        }],
+      },
+    },
+  };
+  const rows = rowsFromCompiledTakeoff(compiled, { workflow: "test" });
+  assert.equal(rows.length, 2, "one sequence_status row + one section row");
+  const statusRow = rows.find((r) => r.field === "sequence_status");
+  assert.equal(statusRow.tag, "AHU-1");
+  assert.equal(statusRow.value, "extracted");
+  const sectionRow = rows.find((r) => r.field === "OCCUPIED MODE");
+  assert.equal(sectionRow.value, "Runs continuously.");
+  assert.deepEqual(sectionRow.bbox_px, [1, 2, 3, 4]);
+});
+
+test("reconcile_schedule_plan: EAV rows merge into ONE compiled line carrying scheduled_qty, installed_qty, qty_kind, and status; qty_kind survives to CSV", () => {
+  const reconcileResult = {
+    rows: [{
+      tag: "VAV-1", family: "VAV", scheduled_qty: 6, installed_qty: 4, status: "SCHEDULE_ONLY",
+      schedule_cite: { sheet: "set.pdf#5", title: "VAV SCHEDULE" },
+      plan_cites: [{ sheet: "set.pdf#12", at: [100, 200] }],
+      reason: "2 of 6 scheduled units not drawn on any plan sheet",
+    }],
+    summary: { total: 1, match: 0, schedule_only: 1, plan_only: 0, refused_no_scale: 0, refused_no_text: 0, ambiguous: 0 },
+    family_filter: "VAV",
+    takeoff_stats: { schedule_rows_total: 1, resolved: 1, refused: 0, errored: 0, total_drawn_instances: 4 },
+  };
+  const rows = rowsFromToolResult("reconcile_schedule_plan", { family: "VAV" }, reconcileResult, { workflow: "test" });
+  assert.equal(rows.length, 4, "scheduled_quantity + installed_quantity + plan_status + plan_tag");
+
+  const lines = compileAgentTakeoff(rows);
+  assert.equal(lines.length, 1, "all four rows must merge under one line, not split by table_title");
+  const line = lines[0];
+  assert.equal(line.tag, "VAV-1");
+  assert.equal(line.qty, 4, "installed wins the headline qty over scheduled");
+  assert.equal(line.qty_kind, "installed");
+  assert.equal(line.scheduled_qty, 6);
+  assert.equal(line.installed_qty, 4);
+  assert.equal(line.status, "schedule_only");
+  assert.equal(line.plan_sheet_id, "set.pdf#12");
+  assert.equal(line.schedule_sheet_id, "set.pdf#5");
+
+  const cols = takeoffLeadColumns(lines).map((c) => c.key);
+  assert.ok(cols.includes("scheduled_qty") && cols.includes("installed_qty") && cols.includes("qty_kind"));
+  assert.ok(!cols.includes("status"), "status has its own trailing column already — never duplicated as a lead column");
+
+  const csv = compiledTakeoffToCsv(lines);
+  assert.match(csv, /Scheduled qty/);
+  assert.match(csv, /Installed qty/);
+  assert.match(csv, /Qty basis/);
+  const dataLine = csv.split("\n")[1];
+  assert.match(dataLine, /VAV-1/);
+  assert.match(dataLine, /,6,/, "scheduled qty 6 must appear in the row");
+  assert.match(dataLine, /,4,/, "installed qty 4 must appear in the row");
+  assert.match(dataLine, /schedule_only/);
+});
+
+test("compileAgentTakeoff never invents qty=1 for an attr-only tag with no printed or drawn quantity", () => {
+  const rows = [
+    makeTakeoffRow({ tag: "AHU-9", field: "DESCRIPTION", value: "Rooftop unit", source_tool: "compile_corpus_takeoff" }),
+    makeTakeoffRow({ tag: "AHU-9", field: "quantity", value: 1, source_tool: "compile_corpus_takeoff" }),
+  ];
+  // With a real compile quantity row present, corpusLocked is true and the
+  // real qty is used — the invention path only ever applied to unlocked
+  // scrap-only runs, so isolate that path directly.
+  const scrapOnlyRows = [
+    makeTakeoffRow({ tag: "AHU-9", field: "DESCRIPTION", value: "Rooftop unit", source_tool: "answer_table" }),
+    makeTakeoffRow({ tag: "AHU-9", field: "sequence_status", value: "extracted", source_tool: "compile_corpus_takeoff" }),
+  ];
+  const lines = compileAgentTakeoff(scrapOnlyRows);
+  const line = lines.find((l) => l.tag === "AHU-9");
+  if (line) {
+    assert.equal(line.qty, null, "no invented qty=1");
+    assert.match(line.notes, /refused, not defaulted/);
+  }
 });

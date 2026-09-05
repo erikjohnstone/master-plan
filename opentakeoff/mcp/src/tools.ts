@@ -711,10 +711,14 @@ export function registerTools(realServer: McpServer, session: Session): Map<stri
     const graph = await session.graphForPipeline();
     const compiled: any = compileTakeoff(session, graph, kind, service ? { service } : {});
     if (detail !== "full") {
-      compiled.page_accounting = {
-        ...compiled.page_accounting,
-        pages: undefined,
-      };
+      // Delete, don't set undefined — an object key present with value
+      // undefined survives on structuredContent (the raw JS object) but
+      // vanishes from the text item's JSON.stringify, so the two reply
+      // representations structurally disagreed (caught by conformance.test.ts's
+      // structuredContent-mirrors-the-text-item invariant, never exercised
+      // against this tool before).
+      const { pages: _pages, ...compact } = compiled.page_accounting || {};
+      compiled.page_accounting = compact;
     }
     if (outPath) {
       await assertWritable(outPath, "json", overwrite);
