@@ -296,12 +296,91 @@ def cell_text(words: list) -> str:
             for k in sorted(lines)).strip()
 
     h = max((w[3] - w[1] for w in words), default=8.0) or 8.0
+    blocks = _side_by_side_blocks(words, h)
+    if len(blocks) > 1:
+        return " ".join(cell_text(b) for b in blocks).strip()
+
     lines = defaultdict(list)
     for w in words:
         lines[round(((w[1] + w[3]) / 2) / max(h * 0.6, 1.0))].append(w)
     return " ".join(
         " ".join(x[4] for x in sorted(lines[k], key=lambda x: x[0]))
         for k in sorted(lines)).strip()
+
+
+def _side_by_side_blocks(words: list, h: float) -> list:
+    """Split a cell's words where two COLUMNS OF PROSE stand next to each other.
+
+    One cell often holds two independent blocks of notes, set side by side with
+    nothing but white space between them, and reading such a cell line by line
+    splices one into the other. Measured on 014_MT#4's PUMP SCHEDULE, where the
+    cell holds a REMARKS list on the left and an ELECTRICAL DATA note on the
+    right, that produces
+
+        REMARKS: 1. PROVIDE 4" CONCRETE HOUSEKEEPING PAD UNDER EACH PUMP
+        ELECTRICAL DATA: 2. PROVIDE VFD BY T.C. CONTRACTOR, TYP. ...
+
+    — the second block spliced into the middle of the first list. 25 of the 175
+    multi-line cells in this corpus (14.3%) are set this way, among them
+    16_NV#3 where FOUR headings (GENERAL NOTES, UNIT FEATURES, AIR FILTER DATA,
+    UNIT OPTIONS) run together before any of their contents. A takeoff quoting
+    such a cell quotes nonsense.
+
+    This is the reading-order half of what split_unruled_columns does for
+    structure, and it is deliberately conservative, because most cells that
+    merely wrap must NOT be split: a gap only counts when at least three
+    distinct text lines stand on BOTH sides of it, so a heading that happens to
+    be short, or one wrapped line that stops early, cannot cut a cell. The gap
+    itself is measured against the type — 1.6 line heights — rather than a flat
+    number of points, so it holds on a sheet drawn at any scale.
+    """
+    if len(words) < 8:
+        return [words]
+    gut = max(h * 1.6, 6.0)
+    iv = sorted((w[0], w[2]) for w in words if (w[4] or "").strip())
+    if not iv:
+        return [words]
+    merged = [list(iv[0])]
+    for a, z in iv[1:]:
+        if a <= merged[-1][1] + 0.5:
+            merged[-1][1] = max(merged[-1][1], z)
+        else:
+            merged.append([a, z])
+    band = max(h * 0.6, 1.0)
+    cuts = []
+    for m, n in zip(merged, merged[1:]):
+        if n[0] - m[1] < gut:
+            continue
+        c = (m[1] + n[0]) / 2
+        left = {round(((w[1] + w[3]) / 2) / band) for w in words if (w[0] + w[2]) / 2 < c}
+        right = {round(((w[1] + w[3]) / 2) / band) for w in words if (w[0] + w[2]) / 2 > c}
+        if len(left) < 3 or len(right) < 3:
+            continue
+        # A LABEL/VALUE FORM IS NOT TWO BLOCKS, and reading it by block breaks
+        # it. 060_XX#75's panelboard header sets BUS ENTRY | B, FDR. BREAKER |
+        # 600, DATE INST. | 1970, LAST PM DATE: | 2015 — four labels down the
+        # left and their four values down the right. Line by line that pairs
+        # each label with its value; block by block it emits all four labels and
+        # then all four values, which is worse than what it replaced. Measured:
+        # splitting it cost 4 cells of agreement with the pixel judge.
+        #
+        # What separates the two is that a form's columns RUN TOGETHER — one
+        # line on the left for every line on the right — while two independent
+        # blocks of prose do not: 014_MT#4's REMARKS list is seven lines beside
+        # a three-line ELECTRICAL DATA note. So the split only stands where the
+        # line counts differ materially, which errs toward leaving a cell alone.
+        if min(len(left), len(right)) >= 0.8 * max(len(left), len(right)):
+            continue
+        cuts.append(c)
+    if not cuts:
+        return [words]
+    edges = [float("-inf")] + cuts + [float("inf")]
+    out = []
+    for lo, hi in zip(edges, edges[1:]):
+        part = [w for w in words if lo <= (w[0] + w[2]) / 2 < hi]
+        if part:
+            out.append(part)
+    return out
 
 
 def show(set_id: str, page: int) -> int:

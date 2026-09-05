@@ -1,0 +1,58 @@
+# # coverage: PUMP SCHEDULE | complete
+#
+# 014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.cells.csv — CELL-tier ground truth, HELD OUT.
+#
+# These tables were not chosen. They were drawn by seed 9051 from the 168 keyed
+# tables holding between 12 and 130 cells, so the sample cannot be the easy ones
+# or the ones already fixed. Every cell was then read off a render of the table
+# at 2-4x and checked, cell by cell, against what the extractor returned; where
+# the two differed the RENDER decided.
+#
+# It differed once, and that is what the tier is for: 014_MT#4 PUMP SCHEDULE
+# holds a REMARKS list beside an ELECTRICAL DATA note, and reading the cell line
+# by line spliced the second into the middle of the first —
+#   "... HOUSEKEEPING PAD UNDER EACH PUMP ELECTRICAL DATA: 2. PROVIDE VFD ..."
+# 25 of the 175 multi-line cells in this corpus are set that way. See
+# celltext._side_by_side_blocks.
+#
+# row/col are 0-based indices into the table AS DRAWN, a spanning cell counted
+# once at its top-left. Empty drawn cells are not recorded.
+sheet,table_title,row,col,text
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,0,0,PUMP SCHEDULE
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,1,0,MARK
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,1,1,SYSTEM
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,1,2,MANUFACTURER
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,1,3,MODEL NUMBER
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,1,4,TYPE
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,1,5,WORKING FLUID
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,1,6,FLOW RATE (GPM)
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,1,7,HEAD LOSS (FT)
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,1,8,MOTOR SPEED (RPM)
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,1,9,IMPELLER DIA. (IN)
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,1,10,VARIABLE SPEED
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,1,11,ADDITIONAL DETAILS
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,2,0,HWP-1
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,2,1,HOT WATER
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,2,2,TACO
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,2,3,FI 2510C
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,2,4,"BASE-MOUNTED, END-SUCTION"
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,2,5,40% PROPYLENE GLYCOL
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,2,6,162.5
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,2,7,50
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,2,8,1750
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,2,9,7
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,2,10,VFD
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,2,11,SEE BELOW
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,3,0,HWP-2
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,3,1,HOT WATER
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,3,2,TACO
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,3,3,FI 2510C
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,3,4,"BASE-MOUNTED, END-SUCTION"
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,3,5,40% PROPYLENE GLYCOL
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,3,6,162.5
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,3,7,50
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,3,8,1750
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,3,9,7
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,3,10,VFD
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,3,11,SEE BELOW
+014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf#4,PUMP SCHEDULE,4,0,"REMARKS: 1. PROVIDE 4"" CONCRETE HOUSEKEEPING PAD UNDER EACH PUMP 2. PROVIDE VFD BY T.C. CONTRACTOR, TYP. 2. MOUNT VFD'S WHERE ACCESSABLE ON WALL OR ON (E) VERTICAL SUPPORTS FOR CONDENSATE RECEIVER TANK. 3. E.C. SHALL PROVIDE CONDUIT AND WIRING BETWEEN PANELBOARD AND VFD, AND BETWEEN VFD AND MOTOR. COORDINATE W/ E.C. 4. PUMPS SHALL BE CONTRILLED BY DDC. SEE POINTS LIST & SEQUENCE OF OPERATION. 5. SEE CONNECTION DETAILS ON M9.3 & CONTROL DIAGRAM ON M9.7. ELECTRICAL DATA: SEE MEP COORDINATION SCHEDULE FOR STARTER/DISCONNECT AND ALL OTHER ELEC. DATA."

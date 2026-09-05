@@ -1,0 +1,102 @@
+# # coverage: FAN COIL UNIT SCHEDULE | complete
+#
+# 021_XX_Laboratory_building_mechanical_drawings_lab.cells.csv — CELL-tier ground truth, HELD OUT.
+#
+# These tables were not chosen. They were drawn by seed 9051 from the 168 keyed
+# tables holding between 12 and 130 cells, so the sample cannot be the easy ones
+# or the ones already fixed. Every cell was then read off a render of the table
+# at 2-4x and checked, cell by cell, against what the extractor returned; where
+# the two differed the RENDER decided.
+#
+# It differed once, and that is what the tier is for: 014_MT#4 PUMP SCHEDULE
+# holds a REMARKS list beside an ELECTRICAL DATA note, and reading the cell line
+# by line spliced the second into the middle of the first —
+#   "... HOUSEKEEPING PAD UNDER EACH PUMP ELECTRICAL DATA: 2. PROVIDE VFD ..."
+# 25 of the 175 multi-line cells in this corpus are set that way. See
+# celltext._side_by_side_blocks.
+#
+# row/col are 0-based indices into the table AS DRAWN, a spanning cell counted
+# once at its top-left. Empty drawn cells are not recorded.
+sheet,table_title,row,col,text
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,0,0,FAN COIL UNIT SCHEDULE
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,1,0,UNIT MARK
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,1,1,CFM
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,1,2,COOLING DATA
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,1,8,HEATING DATA
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,1,13,FAN MOTOR
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,1,18,REMARKS
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,2,EAT (DEG F)
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,4,EWT (DEG F)
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,5,TOTAL CAPACITY (MBH)
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,6,SENSIBLE CAPACITY (MBH)
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,7,FLOW (GPM)
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,8,PD (FT)
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,9,EAT
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,10,EWT
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,11,HEATING (MBH)
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,12,MAX GPM
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,13,EXT. SP (PA)
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,14,RPM
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,15,HP
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,16,VOLT
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,2,17,PH
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,3,2,DB
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,3,3,WB
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,0,FCU-1
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,1,922
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,2,80.6
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,3,66.2
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,4,44.6
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,5,31.5
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,6,23.7
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,7,6
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,8,5
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,9,55.4
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,10,149
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,11,38
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,12,2.73
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,13,0
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,14,1092
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,15,0.22
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,16,115
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,17,1
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,4,18,ALL
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,0,FCU-2
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,1,922
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,2,80.6
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,3,66.2
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,4,44.6
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,5,31.5
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,6,23.7
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,7,6
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,8,5
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,9,55.4
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,10,149
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,11,38
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,12,2.73
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,13,0
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,14,1092
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,15,0.22
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,16,115
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,17,1
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,5,18,ALL
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,0,FCU-3
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,1,339
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,2,80.6
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,3,66.2
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,4,44.6
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,5,10.7
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,6,8.2
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,7,1.75
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,8,3.5
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,9,55.4
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,10,149
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,11,12.6
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,12,0.95
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,13,0
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,14,1092
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,15,0.13
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,16,115
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,17,1
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,6,18,ALL
+021_XX_Laboratory_building_mechanical_drawings_lab.pdf#13,FAN COIL UNIT SCHEDULE,7,0,NOTES: 1. SEE DWGS FOR QUANTITY
