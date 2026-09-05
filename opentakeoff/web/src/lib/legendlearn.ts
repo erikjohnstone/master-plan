@@ -548,7 +548,22 @@ function pairCandidates(
       });
       if (shadowedByDescription) continue;
       const spanCenterY = (s.y0 + s.y1) / 2;
-      edges.push({ candidate: ci, span: si, gap, score: gap + Math.abs(spanCenterY - centerY) * 0.35 });
+      // Caption ownership is a row relationship, not merely whichever
+      // component ends farthest to the right. A component from the next
+      // row can be horizontally closer while only entering this row through
+      // the deliberately generous tall-glyph margin above. Measured on a
+      // real legend, the next row's actuator tag stole FLEXIBLE PIPE
+      // CONNECTOR from the compact hatched fitting directly beside it. Pay
+      // strongly for the caption center falling outside the component's
+      // actual vertical interval, while retaining a small center tie-break
+      // for two components that both genuinely occupy the row.
+      const rowMiss = Math.max(0, y0 - spanCenterY, spanCenterY - y1);
+      edges.push({
+        candidate: ci,
+        span: si,
+        gap,
+        score: gap + rowMiss * 2 + Math.abs(spanCenterY - centerY) * 0.1,
+      });
     }
   }
 

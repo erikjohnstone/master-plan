@@ -386,6 +386,27 @@ test("findLegendGlyphs: one caption is owned by the geometrically nearest eligib
   assert.ok(glyphs[0].rect[0][0] > 180, "the nearer right-hand glyph owns the caption");
 });
 
+test("findLegendGlyphs: a horizontally closer component from the next row cannot steal a caption from the glyph occupying its actual row", () => {
+  const box = (x0: number, y0: number, x1: number, y1: number): number[][] => [
+    seg(x0, y0, x1, y0), seg(x1, y0, x1, y1),
+    seg(x1, y1, x0, y1), seg(x0, y1, x0, y0),
+  ];
+  const segs = flat([
+    ...box(100, 100, 140, 120),
+    // The following row's component ends much closer to the caption x, but
+    // begins below the caption's own vertical band. The former gap-heavy
+    // score chose this wrong component and then dropped the legitimate row.
+    ...box(160, 136, 190, 176),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "FLEXIBLE PIPE CONNECTOR", x0: 200, y0: 98, x1: 430, y1: 122 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120, maxCaptionGapPx: 150 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].caption, "FLEXIBLE PIPE CONNECTOR");
+  assert.ok(glyphs[0].rect[1][0] < 150, "the component in the caption's actual row owns it");
+});
+
 test("findLegendGlyphs: an inner short qualifier cannot steal the fuller same-row description", () => {
   const segs = flat([...controlValveGlyph(100, 100), ...controlValveGlyph(100, 300)]);
   const spans: LegendSpan[] = [
