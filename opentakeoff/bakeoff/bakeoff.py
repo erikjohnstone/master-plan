@@ -210,7 +210,7 @@ def caption_boxes(pdf: Path, titles: list[str]) -> dict[str, tuple | None]:
         lines.setdefault(round(w["top"] / 3), []).append(w)
     out = {}
     for t in titles:
-        want, hit = norm(t), None
+        want, cands = norm(t), []
         for _, ws in lines.items():
             ws = sorted(ws, key=lambda w: w["x0"])
             # Match a CONTIGUOUS RUN of words, not "is this substring anywhere
@@ -219,20 +219,27 @@ def caption_boxes(pdf: Path, titles: list[str]) -> dict[str, tuple | None]:
             # right of 061_IA#58) — matching the whole line hands both titles
             # the same box, which is the left one's, so the right-hand table
             # can never match any region and scores a false miss.
+            whole = norm(" ".join(w["text"] for w in ws))
             for i in range(len(ws)):
                 for j in range(i + 1, len(ws) + 1):
-                    if norm(" ".join(w["text"] for w in ws[i:j])) == want:
-                        run = ws[i:j]
-                        hit = (min(w["x0"] for w in run), min(w["top"] for w in run),
-                               max(w["x1"] for w in run), max(w["bottom"] for w in run))
-                        break
-                if hit:
+                    if norm(" ".join(w["text"] for w in ws[i:j])) != want:
+                        continue
+                    run = ws[i:j]
+                    box = (min(w["x0"] for w in run), min(w["top"] for w in run),
+                           max(w["x1"] for w in run), max(w["bottom"] for w in run))
+                    # A TITLE THAT STANDS ALONE ON ITS LINE BEATS ONE BURIED IN A
+                    # LONGER LINE. 008_MO#16 prints ROOM FINISH SCHEDULE over its
+                    # table and ROOM FINISH SCHEDULE NOTES over the block below
+                    # it; the shorter title is a contiguous run inside the longer
+                    # one, so a first-match-wins locator put the caption 216pt
+                    # too low, the box landed on the notes, and boxfit scored it
+                    # a clean hit. Rank standalone first, then topmost.
+                    cands.append((0 if whole == want else 1, box[1], box))
                     break
-            if hit:
-                break
-        if hit is None:
-            hit = _wrapped_caption(lines, want)
-        out[t] = hit
+        if cands:
+            out[t] = min(cands)[2]
+        else:
+            out[t] = _wrapped_caption(lines, want)
     return out
 
 
