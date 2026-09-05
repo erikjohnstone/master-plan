@@ -370,6 +370,39 @@ def _split_at_title_bands(members, cells) -> list[list]:
     return pieces
 
 
+def _implied_edge_cells(bounds, bbox) -> list[tuple]:
+    """Cells for the parts of a row that lie outside the closed faces.
+
+    Widening a block to its row rules fixes the BOX but not the CELLS, and the
+    cells are the point. 08_ME…#1's drawing list rules every row across its
+    full 784pt but draws verticals only in the 197pt checkbox strip, so the
+    faces cover a quarter of the table and 1088 of its 1434 glyphs — every
+    sheet number, every sheet name — land in no cell at all.
+
+    A row rule bounds a row for its whole length. So the stretch of a divided
+    row between the block edge and its first face, or between its last face and
+    the block edge, IS a cell: the drawing simply did not rule its sides. Only
+    those two EDGE stretches are filled, never a gap between two faces — an
+    interior gap means faces are missing from the middle of a row, which is a
+    different fault and must not be papered over.
+    """
+    rows: dict = defaultdict(list)
+    for b in bounds:
+        rows[(round(b[1]), round(b[3]))].append(b)
+    gx0, _gy0, gx1, _gy1 = bbox
+    extra = []
+    for bs in rows.values():
+        if len(bs) < 2:                  # not a divided row — nothing to extend
+            continue
+        y0 = min(b[1] for b in bs); y1 = max(b[3] for b in bs)
+        lo = min(b[0] for b in bs); hi = max(b[2] for b in bs)
+        if lo - gx0 > MIN_LEN:
+            extra.append((gx0, y0, lo, y1))
+        if gx1 - hi > MIN_LEN:
+            extra.append((hi, y0, gx1, y1))
+    return extra
+
+
 def _border_weight(segs: list[tuple]) -> float | None:
     """The pen that draws table borders, if this sheet uses more than one.
 
@@ -604,10 +637,15 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
         bbox = _widen_along_col_rules(vmap, hmap, *bbox,
                                       sorted({round(cells[i].bounds[0]) for i in members} |
                                              {round(cells[i].bounds[2]) for i in members}))
+        face_bounds = [cells[i].bounds for i in members]
+        # Only when the box was actually widened along the row rules: that is
+        # the one situation where a row is known to continue past its faces.
+        if bbox[0] < min(xs0) - 1 or bbox[2] > max(xs1) + 1:
+            face_bounds += _implied_edge_cells(face_bounds, bbox)
         tables.append({
             "bbox": bbox,
-            "cells": [cells[i].bounds for i in members],
-            "n_cells": len(members),
+            "cells": face_bounds,
+            "n_cells": len(face_bounds),
         })
     # A raster region never overlaps a ruled one on the same table (there are no
     # rules inside a picture), but a picture pasted OVER linework can. Keep the
