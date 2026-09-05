@@ -407,6 +407,67 @@ test("findLegendGlyphs: a horizontally closer component from the next row cannot
   assert.ok(glyphs[0].rect[1][0] < 150, "the component in the caption's actual row owns it");
 });
 
+test("findLegendGlyphs: a thin baseline embedded in a richer same-row icon cannot turn the icon into a routed line style", () => {
+  const segs = flat([
+    seg(100, 90, 180, 90), seg(180, 90, 180, 100),
+    seg(180, 100, 100, 100), seg(100, 100, 100, 90),
+    // Disconnected baseline closer to the caption center than the richer
+    // component, as in transformer and panelboard legend glyphs.
+    seg(100, 106, 180, 106),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "TRANSFORMER", x0: 220, y0: 102, x1: 350, y1: 122 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].kind, "symbol");
+  assert.equal(glyphs[0].seedable, true);
+  assert.ok(glyphs[0].rect[1][1] > 105, "the thin baseline remains part of the complete icon evidence");
+});
+
+test("findLegendGlyphs: an indented qualifier using a nested glyph component is detail, not a duplicate symbol row", () => {
+  const outer = [
+    seg(100, 96, 150, 96), seg(150, 96, 150, 126),
+    seg(150, 126, 100, 126), seg(100, 126, 100, 96),
+  ];
+  const inner = [
+    seg(110, 100, 140, 100), seg(140, 100, 140, 120),
+    seg(140, 120, 110, 120), seg(110, 120, 110, 100),
+  ];
+  const spans: LegendSpan[] = [
+    { text: "SPECIAL PURPOSE RECEPTACLE", x0: 220, y0: 100, x1: 470, y1: 120 },
+    { text: "= TYPE", x0: 280, y0: 124, x1: 350, y1: 144 },
+  ];
+  const glyphs = findLegendGlyphs(flat([...outer, ...inner]), spans, { ...isolated, maxGlyphDimPx: 120 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), ["SPECIAL PURPOSE RECEPTACLE"]);
+});
+
+test("findLegendGlyphs: a glyphless option list bridges a tall parameterized row to the rest of its legend column", () => {
+  const box = (y: number): number[][] => [
+    seg(100, y, 140, y), seg(140, y, 140, y + 20),
+    seg(140, y + 20, 100, y + 20), seg(100, y + 20, 100, y),
+  ];
+  const segs = flat([...box(100), ...box(500), ...box(580), ...box(660)]);
+  const spans: LegendSpan[] = [
+    { text: "CONTROL SYMBOLS", x0: 70, y0: 20, x1: 390, y1: 45 },
+    { text: "WALL SWITCH", x0: 220, y0: 100, x1: 350, y1: 120 },
+    ...Array.from({ length: 9 }, (_, index) => ({
+      text: `X = OPTION ${index + 1}`,
+      x0: 250,
+      y0: 140 + index * 40,
+      x1: 390,
+      y1: 160 + index * 40,
+    })),
+    { text: "DAMPER ACTUATOR", x0: 220, y0: 500, x1: 390, y1: 520 },
+    { text: "PRESSURE SENSOR", x0: 220, y0: 580, x1: 390, y1: 600 },
+    { text: "CONTROL VALVE", x0: 220, y0: 660, x1: 370, y1: 680 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 120 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "WALL SWITCH", "DAMPER ACTUATOR", "PRESSURE SENSOR", "CONTROL VALVE",
+  ]);
+});
+
 test("findLegendGlyphs: an inner short qualifier cannot steal the fuller same-row description", () => {
   const segs = flat([...controlValveGlyph(100, 100), ...controlValveGlyph(100, 300)]);
   const spans: LegendSpan[] = [
@@ -785,6 +846,25 @@ test("findLegendGlyphs: drafting references and control-link tags remain auditab
   assert.equal(glyphs.length, 8);
   assert.ok(glyphs.every((glyph) => glyph.kind === "annotation" && glyph.seedable === false));
   assert.ok(glyphs.every((glyph) => /not installed devices/i.test(glyph.seed_warning || "")));
+});
+
+test("findLegendGlyphs: routing conventions and equipment callouts are annotations, not installed-device sweep seeds", () => {
+  const captions = [
+    "SHEET NOTE",
+    "CONDUIT, VERTICAL TRANSITION",
+    "CONDUIT CAPPED",
+    "HOME RUN",
+    "FEEDER CALLOUT",
+    "MECHANICAL EQUIPMENT CALLOUT",
+  ];
+  const segs = flat(captions.flatMap((_, index) => controlValveGlyph(100, 100 + index * 200)));
+  const spans: LegendSpan[] = [
+    { text: "CONTROL SYMBOLS", x0: 70, y0: 20, x1: 390, y1: 45 },
+    ...captions.map((text, index) => ({ text, x0: 220, y0: 145 + index * 200, x1: 500, y1: 165 + index * 200 })),
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 120 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), captions);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "annotation" && glyph.seedable === false));
 });
 
 test("findLegendGlyphs: BAS software and sequence functions are preserved but never become EA sweep seeds", () => {

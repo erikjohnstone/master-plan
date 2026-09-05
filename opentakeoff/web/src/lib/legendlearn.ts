@@ -443,7 +443,7 @@ function isDirectiveProse(text: string): boolean {
  * never promote them to discrete Symbol Sweep seeds. */
 function isDraftingAnnotationCaption(text: string): boolean {
   const normalized = normalizedCaption(text).replace(/^[\s\-–—]+/, "");
-  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE\s+(?:CALLOUT|TAG)|AIR\s+DISTRIBUTION\s+TAG|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|DEMOLISH\s+TO\s+POINT\s+INDICATED|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b)/i.test(normalized);
+  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|MECHANICAL\s+EQUIPMENT)\s+CALLOUT|HOME\s+RUN|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|AIR\s+DISTRIBUTION\s+TAG|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|DEMOLISH\s+TO\s+POINT\s+INDICATED|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b)/i.test(normalized);
 }
 
 /** BAS legends also contain logical/sequence identities that matter to a
@@ -548,6 +548,23 @@ function pairCandidates(
       });
       if (shadowedByDescription) continue;
       const spanCenterY = (s.y0 + s.y1) / 2;
+      // A discrete symbol can contain a thin horizontal baseline that is a
+      // disconnected component of the same row (parallel transformer coils
+      // and panelboard wedges are common examples). The baseline is closer
+      // to the caption center than the information-rich component, so a
+      // geometry-only nearest edge would incorrectly promote the baseline
+      // to a routed-system line style. When a compact, multi-edge symbol
+      // occupies the same horizontal envelope and the same caption row,
+      // make that richer component the anchor; the row expansion pass will
+      // reunite the thin members afterward.
+      const embeddedInDiscreteSymbol = cand.kind === "line_style" && candidates.some((other, oi) => {
+        if (oi === ci || other.kind !== "symbol" || other.segments < 2) return false;
+        const otherCenterY = (other.rect[0][1] + other.rect[1][1]) / 2;
+        return Math.abs(other.rect[0][0] - cand.rect[0][0]) <= typicalTextHeight * 0.5
+          && Math.abs(other.rect[1][0] - cand.rect[1][0]) <= typicalTextHeight * 0.5
+          && Math.abs(otherCenterY - spanCenterY) <= typicalTextHeight;
+      });
+      if (embeddedInDiscreteSymbol) continue;
       // Caption ownership is a row relationship, not merely whichever
       // component ends farthest to the right. A component from the next
       // row can be horizontally closer while only entering this row through
@@ -751,10 +768,19 @@ function expandSymbolPairs(
       let best: GlyphCandidate | null = null;
       let bestDistance = Infinity;
       for (const candidate of candidates) {
-        if (candidate.kind !== "symbol" || claimed.has(rectKey(candidate.rect))) continue;
+        if (claimed.has(rectKey(candidate.rect))) continue;
         if (candidate.rect[1][0] > pair.span.x0 || resemblesExtractedText(candidate.rect, rawSpans)) continue;
         const candidateY = (candidate.rect[0][1] + candidate.rect[1][1]) / 2;
         if (Math.abs(candidateY - captionY) > typicalTextHeight * 1.25) continue;
+        const pairW = pair.rect[1][0] - pair.rect[0][0];
+        const candidateW = candidate.rect[1][0] - candidate.rect[0][0];
+        const overlapW = Math.max(0,
+          Math.min(pair.rect[1][0], candidate.rect[1][0]) - Math.max(pair.rect[0][0], candidate.rect[0][0]),
+        );
+        const embeddedLineMember = candidate.kind === "line_style"
+          && pairW >= typicalTextHeight * 2
+          && overlapW >= Math.min(pairW, candidateW) * 0.8;
+        if (candidate.kind !== "symbol" && !embeddedLineMember) continue;
         const horizontalGap = candidate.rect[1][0] < pair.rect[0][0]
           ? pair.rect[0][0] - candidate.rect[1][0]
           : pair.rect[1][0] < candidate.rect[0][0] ? candidate.rect[0][0] - pair.rect[1][0] : 0;
@@ -908,6 +934,40 @@ function mergeOwnedWrapPairs(
   return out;
 }
 
+/** A qualifier line can acquire a second, smaller component from inside the
+ * row's actual glyph and masquerade as another legend identity. This happens
+ * in parameterized symbols such as a receptacle whose main description is
+ * followed by an indented "X = type" explanation. If the later pair's glyph
+ * is geometrically contained in the earlier row's glyph, remains on the same
+ * physical row, and its caption is an immediately adjacent indent, it is
+ * detail owned by the primary row rather than a countable second symbol. */
+function withoutContainedDetailPairs(
+  pairs: PairCandidate[], typicalTextHeight: number, maxLineGapPx: number,
+): PairCandidate[] {
+  return pairs.filter((detail, detailIndex) => !pairs.some((primary, primaryIndex) => {
+    if (primaryIndex === detailIndex || primary.span.y0 > detail.span.y0) return false;
+    const captionGap = detail.span.y0 - primary.span.y1;
+    const indent = detail.span.x0 - primary.span.x0;
+    if (captionGap < -1 || captionGap > maxLineGapPx || indent < typicalTextHeight * 0.5
+      || indent > typicalTextHeight * 4) return false;
+    const primaryCenterY = (primary.rect[0][1] + primary.rect[1][1]) / 2;
+    const detailCenterY = (detail.rect[0][1] + detail.rect[1][1]) / 2;
+    if (Math.abs(primaryCenterY - detailCenterY) > typicalTextHeight * 0.5) return false;
+    const slack = typicalTextHeight * 0.15;
+    const contained = detail.rect[0][0] >= primary.rect[0][0] - slack
+      && detail.rect[0][1] >= primary.rect[0][1] - slack
+      && detail.rect[1][0] <= primary.rect[1][0] + slack
+      && detail.rect[1][1] <= primary.rect[1][1] + slack;
+    const primaryArea = Math.max(1,
+      (primary.rect[1][0] - primary.rect[0][0]) * (primary.rect[1][1] - primary.rect[0][1]),
+    );
+    const detailArea = Math.max(1,
+      (detail.rect[1][0] - detail.rect[0][0]) * (detail.rect[1][1] - detail.rect[0][1]),
+    );
+    return contained && primaryArea >= detailArea * 1.2;
+  }));
+}
+
 function alignedGroups(pairs: PairCandidate[], glyphXTolerance: number, captionXTolerance: number): number[][] {
   // Do not use transitive union here. A network/controls diagram can contain
   // many locally similar columns whose x positions drift gradually across
@@ -1025,7 +1085,26 @@ function splitAlignedGroupVertically(
       && line.y1 < next.span.y0 - typicalTextHeight * 0.2
       && line.x1 >= x0 - typicalTextHeight * 2
       && line.x0 <= x1 + typicalTextHeight * 2);
-    if (centers[i] - centers[i - 1] > splitGap || boundaryBetween) out.push([]);
+    // A parameterized legend row can be physically tall: its main caption
+    // is followed by a glyphless option/key list before the next symbol.
+    // That is continuous section content, not the empty vertical break used
+    // to separate a legend from a notes table or diagram. Prove continuity
+    // with a local, gap-bounded chain in the same description column.
+    const bridgeMinX = Math.min(previous.span.x0, next.span.x0) - typicalTextHeight * 0.5;
+    const bridgeMaxX = Math.max(previous.span.x0, next.span.x0) + typicalTextHeight * 8;
+    const bridgeLines = lines.filter((line) => line.y0 > previous.span.y1 - 1
+      && line.y1 < next.span.y0 + 1
+      && line.x0 >= bridgeMinX && line.x0 <= bridgeMaxX
+      && !isSectionBoundaryText(line.text))
+      .sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
+    const maxBridgeStep = typicalTextHeight * 3;
+    let bridgeCursor = previous.span.y1;
+    for (const line of bridgeLines) {
+      if (line.y0 - bridgeCursor > maxBridgeStep) break;
+      bridgeCursor = Math.max(bridgeCursor, line.y1);
+    }
+    const hasLocalTextBridge = next.span.y0 - bridgeCursor <= maxBridgeStep;
+    if (boundaryBetween || (centers[i] - centers[i - 1] > splitGap && !hasLocalTextBridge)) out.push([]);
     out[out.length - 1].push(sorted[i]);
   }
   return out;
@@ -1197,7 +1276,7 @@ export function findLegendGlyphs(
   const maxWrapGapPx = opts.maxWrapGapPx ?? Math.max(8, Math.min(18, typicalTextHeight * 0.45));
   const maxWrapIndentPx = opts.maxWrapIndentPx ?? Math.max(5, Math.min(64, typicalTextHeight * 2.5));
   attachWrappedCaptions(reunitedPairs, spans, paired.usedSpans, maxWrapGapPx, maxWrapIndentPx, maxWrapLines);
-  const pairs = mergeOwnedWrapPairs(
+  const mergedPairs = mergeOwnedWrapPairs(
     reunitedPairs,
     maxWrapGapPx,
     maxWrapIndentPx,
@@ -1205,6 +1284,7 @@ export function findLegendGlyphs(
     maxWrapLines,
     rawSpans,
   );
+  const pairs = withoutContainedDetailPairs(mergedPairs, typicalTextHeight, maxWrapGapPx);
 
   // A nearest glyph+text coincidence is not yet a legend row. Require the
   // repeated two-column topology legends actually use. This is the guard
