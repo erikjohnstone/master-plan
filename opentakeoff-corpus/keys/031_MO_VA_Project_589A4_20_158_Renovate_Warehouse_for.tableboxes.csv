@@ -1,0 +1,3 @@
+sheet,table_title,x0,top,x1,bot,provenance
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39,DOOR SCHEDULE,209.2,116.7,1063.2,870.1,"verified by eye, whole-sheet overlay @0.8x (~4pt)"
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for.pdf#39,HEADER SECTION SCHEDULE,343.0,1705.0,587.0,1761.0,"MEASURED BY HAND off a 1.5x ruler render — title printed BELOW the table as detail F1, so no caption-above rule can own it; vectorgrid DOES find this table at (343,1707)-(586,1761)"

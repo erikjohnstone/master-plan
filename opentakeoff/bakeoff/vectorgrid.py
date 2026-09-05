@@ -237,6 +237,30 @@ def raster_regions(pdf_path: str, page_no: int = 1) -> list[tuple]:
                 if (px_w / w + px_h / h) / 2 < RASTER_MIN_PPP:
                     continue
                 out.append((rr.x0, rr.y0, rr.x1, rr.y1))
+
+    # ONE SCREENSHOT CAN BE PLACED AS SEVERAL IMAGES. 017_MD…#14 pastes
+    # ACU-A-5 as two 437x874 rects side by side at x 1016-1454 and 1453-1891,
+    # and ACU-A-3 likewise — so matching a caption to one rect claims half the
+    # table and silently drops half the schedule. Merge rects that abut and
+    # share their other extent: that is one picture, cut for placement.
+    merged = True
+    while merged:
+        merged = False
+        for i in range(len(out)):
+            for j in range(i + 1, len(out)):
+                a, b = out[i], out[j]
+                same_rows = abs(a[1] - b[1]) <= 2 and abs(a[3] - b[3]) <= 2
+                same_cols = abs(a[0] - b[0]) <= 2 and abs(a[2] - b[2]) <= 2
+                touch_x = min(a[2], b[2]) >= max(a[0], b[0]) - 3
+                touch_y = min(a[3], b[3]) >= max(a[1], b[1]) - 3
+                if (same_rows and touch_x) or (same_cols and touch_y):
+                    out[i] = (min(a[0], b[0]), min(a[1], b[1]),
+                              max(a[2], b[2]), max(a[3], b[3]))
+                    out.pop(j)
+                    merged = True
+                    break
+            if merged:
+                break
     return out
 
 
