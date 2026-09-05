@@ -126,9 +126,21 @@ def segments_from_page(page) -> list[tuple]:
             add((x0 + x1) / 2, t, (x0 + x1) / 2, b, max(lw, w))
         elif h <= THIN_RECT and w >= MIN_LEN:           # ... as a horizontal rule
             add(x0, (t + b) / 2, x1, (t + b) / 2, max(lw, h))
-        else:                                           # a real box: all four walls
+        elif r.get("stroke", True):                     # a real box: all four walls
             add(x0, t, x1, t, lw); add(x0, b, x1, b, lw)
             add(x0, t, x0, b, lw); add(x1, t, x1, b, lw)
+        # A FILLED, UNSTROKED, NON-THIN RECT IS A SHAPE, NOT FOUR WALLS.
+        # CAD masks the linework under a label with a white knockout box, and
+        # those boxes outnumber the real rules: 233 of the 241 rects on
+        # 001_NC…#49 are knockouts (stroke=False, fill=True, colour 1.0), each
+        # exactly the size of the text it hides — e.g. 1707.7-1764.2 x
+        # 339.6-353.6 behind the words "2109 COMM". Reading their four sides as
+        # rules polygonises a spurious face around every label, NESTED inside
+        # the real cell, so each glyph lands in two faces at once and any
+        # extractor reading the cells double-counts the value. All 250 straddle
+        # glyphs measured across the key set are this. A filled sliver is still
+        # a rule (that is the CAD line idiom, handled above); a filled BOX is
+        # not.
 
     # Curves are NOT optional, and skipping them is the single biggest way to
     # get this wrong. pdfminer types a path as LTLine only for 2 points and
