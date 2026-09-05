@@ -82,6 +82,7 @@ def slot(pdf: Path, table: dict) -> tuple[dict, int, int, int]:
     faces = [box(*b) for b in table["cells"]]
     tree = STRtree(faces)
     out: dict = defaultdict(list)
+    loose: list = []
     assigned = orphan = straddle = 0
     for c in inside:
         p = Point((c["x0"] + c["x1"]) / 2, (c["top"] + c["bottom"]) / 2)
@@ -89,12 +90,87 @@ def slot(pdf: Path, table: dict) -> tuple[dict, int, int, int]:
         ink = bool((c.get("text") or "").strip())
         if not hits:
             orphan += ink
+            loose.append(c)
         elif len(hits) > 1:
             straddle += ink
         else:
             assigned += ink
             out[table["cells"][hits[0]]].append(c)
-    return split_unruled_columns(out), assigned, orphan, straddle
+    out = split_unruled_columns(out)
+    out = place_loose_text(out, loose, table["bbox"])
+    return out, assigned, orphan, straddle
+
+
+def place_loose_text(cells: dict, loose: list, bbox: tuple) -> dict:
+    """Text inside the region that fell in no face is still the table's text.
+
+    A schedule's header band is often ruled on its sides and not across, so its
+    faces never close and its text lands nowhere: 08_ME#1's SHEET NUMBER /
+    SHEET NAME / SCALE row is exactly that, and the row simply did not appear
+    in the extraction. Corpus-wide that is 507 glyphs an extractor reading
+    these cells would silently drop, which is the worst kind of loss because
+    nothing signals it.
+
+    They are placed on the column structure the REST of the region already
+    establishes — never on a structure invented for them — so this can only put
+    loose text into columns the drawing itself defines. If the region has no
+    columns yet, the text is left alone rather than guessed at.
+    """
+    # Rotated glyphs are not row text. A drawing sets its issue-date column
+    # sideways, and placing those characters as cells produces rows reading
+    # "5", "2", "0".
+    ink = [c for c in loose
+           if (c.get("text") or "").strip() and c.get("upright", True)]
+    if not ink or not cells:
+        return cells
+    edges = sorted({round(b[0], 1) for b in cells} | {round(b[2], 1) for b in cells})
+    if len(edges) < 2:
+        return cells
+
+    lines: dict = defaultdict(list)
+    for c in ink:
+        lines[round(((c["top"] + c["bottom"]) / 2) / 6)].append(c)
+
+    # A header that WRAPS is still one row. "SHEET NUMBER" set on two lines was
+    # coming back as a row reading "SHEET" and another reading
+    # "NUMBER | SHEET NAME | SCALE". Merge consecutive bands whose gap is less
+    # than the leading — that is one block of text, not two rows.
+    bands, cur = [], None
+    for k in sorted(lines):
+        b = lines[k]
+        top, bot = min(c["top"] for c in b), max(c["bottom"] for c in b)
+        h = max(bot - top, 1.0)
+        if cur is not None and top - cur[1] < h * 0.7:
+            cur[0] = min(cur[0], top); cur[1] = max(cur[1], bot); cur[2] += b
+        else:
+            if cur is not None:
+                bands.append(cur)
+            cur = [top, bot, list(b)]
+    if cur is not None:
+        bands.append(cur)
+
+    for _t, _b, band in bands:
+        top = min(c["top"] for c in band)
+        bot = max(c["bottom"] for c in band)
+        # THE COLUMN GRID MAY NOT CUT A WORD. This is what separates a header
+        # row from the table's own caption: SHEET NUMBER / SHEET NAME / SCALE
+        # falls in three columns with the edges landing in the gaps between
+        # them, while "DRAWING LIST" centred over the table straddles an edge
+        # and came back as "DRAW" | "ING LIST". If an edge lands inside a run
+        # of ink, this band is not laid out on these columns and is left alone.
+        runs = []
+        for c in sorted(band, key=lambda c: c["x0"]):
+            if runs and c["x0"] <= runs[-1][1] + 2.0:
+                runs[-1][1] = max(runs[-1][1], c["x1"])
+            else:
+                runs.append([c["x0"], c["x1"]])
+        if any(a + 0.5 < e < z - 0.5 for a, z in runs for e in edges):
+            continue
+        for lo, hi in zip(edges, edges[1:]):
+            part = [c for c in band if lo <= (c["x0"] + c["x1"]) / 2 <= hi]
+            if part:
+                cells[(lo, top, hi, bot)] = part
+    return cells
 
 
 GUTTER_MIN = 6.0     # points of ink-free column inside a cell before it counts
