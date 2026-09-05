@@ -45,6 +45,7 @@ const JOBS = {
     expectMaxLines: 396,
     expectTakeoffId: "T-HVAC-01",
     expectEa: 396,
+    compileKind: "hvac_equipment",
   },
   bas: {
     label: "bas",
@@ -55,6 +56,7 @@ const JOBS = {
     expectMaxLines: 122,
     expectTakeoffId: "T-BAS-01",
     expectEa: 122,
+    compileKind: "bas_points",
   },
   valve: {
     label: "valve",
@@ -65,6 +67,7 @@ const JOBS = {
     expectMaxLines: 163,
     expectTakeoffId: "T-VALVE-01",
     expectEa: 163,
+    compileKind: "control_valves",
   },
 };
 
@@ -346,6 +349,59 @@ async function runOne(job) {
       await page.waitForSelector('[aria-label="Takeoff"]', { timeout: 15_000 });
       await page.waitForTimeout(500);
     }
+  }
+
+  // Phase 7 (foundation-cohesion plan): prove the one-takeoff-line contract
+  // actually reaches the panel and the export, and that the UI's own compile
+  // matches the CLI's — the same engine, two front doors, must agree.
+  if (!(await page.locator('[aria-label="Takeoff"]').count())) {
+    const reopen = page.locator("button", { hasText: /^Takeoff/ }).first();
+    if (await reopen.count()) await reopen.click();
+    await page.waitForSelector('[aria-label="Takeoff"]', { timeout: 15_000 });
+    await page.waitForTimeout(500);
+  }
+  const panelText = await page.locator('[aria-label="Takeoff"]').innerText();
+  for (const col of ["Scheduled qty", "Installed qty", "Status"]) {
+    if (!panelText.includes(col)) {
+      await page.screenshot({ path: resolve(artifacts, `${outBase}_FAIL.png`), fullPage: true });
+      throw new Error(`[${job.label}] Takeoff panel is missing the "${col}" column — reconcile_schedule_plan's line fields never reached it (contract requires a reconcile call after compile)`);
+    }
+  }
+  console.log(`[${job.label}] panel carries Scheduled qty / Installed qty / Status`);
+
+  console.log(`[${job.label}] export CSV and check qty_kind rides the header row`);
+  const [download] = await Promise.all([
+    page.waitForEvent("download", { timeout: 30_000 }),
+    page.locator('[aria-label="Takeoff"] button', { hasText: /^CSV$/ }).first().click(),
+  ]);
+  const csvPath = resolve(artifacts, `${outBase}.csv`);
+  await download.saveAs(csvPath);
+  const csvHeader = readFileSync(csvPath, "utf8").split(/\r?\n/, 1)[0];
+  if (!/qty_kind/i.test(csvHeader)) {
+    throw new Error(`[${job.label}] exported CSV header carries no qty_kind column: ${csvHeader}`);
+  }
+  console.log(`[${job.label}] CSV header OK: ${csvHeader.slice(0, 120)}`);
+
+  if (job.compileKind) {
+    console.log(`[${job.label}] cross-check UI compile totals against production-graph-cli.mjs --mode compile`);
+    const { execFileSync } = await import("node:child_process");
+    const cliScript = resolve(root, "mcp/scripts/production-graph-cli.mjs");
+    let cliTotals;
+    try {
+      const out = execFileSync(process.execPath, [
+        "--import", "tsx", cliScript, "--mode", "compile", "--kind", job.compileKind, "--pdf", pdf,
+      ], { cwd: resolve(root, "mcp"), encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+      cliTotals = JSON.parse(out).totals;
+    } catch (e) {
+      throw new Error(`[${job.label}] production-graph-cli.mjs --mode compile failed: ${String(e.message || e).slice(0, 500)}`);
+    }
+    if (cliTotals?.items !== job.expectEa) {
+      throw new Error(`[${job.label}] production-graph-cli.mjs compile totals.items=${cliTotals?.items} != anchor ${job.expectEa} — the CLI itself drifted from the locked truth`);
+    }
+    if (stats.meta?.totals?.items !== cliTotals.items) {
+      throw new Error(`[${job.label}] UI compile totals.items=${stats.meta?.totals?.items} != CLI compile totals.items=${cliTotals.items} — the two front doors disagree`);
+    }
+    console.log(`[${job.label}] UI/CLI compile totals agree: ${cliTotals.items} items`);
   }
 
   const wf = page.locator('[aria-label="Takeoff"] button', { hasText: /^Workflow data$/ });

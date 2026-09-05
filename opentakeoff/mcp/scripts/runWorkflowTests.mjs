@@ -6,9 +6,11 @@
 import { spawnSync } from "node:child_process";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { existsSync, readFileSync } from "node:fs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const MCP_ROOT = resolve(HERE, "..");
+const WEB_ROOT = resolve(MCP_ROOT, "..", "web");
 
 const TEST_FILES = [
   "test/crossCorpusWorkflow.test.mjs",
@@ -36,4 +38,31 @@ const result = spawnSync(process.execPath, args, {
   stdio: "inherit",
   env: process.env,
 });
-process.exit(result.status ?? 1);
+let status = result.status ?? 1;
+
+// Phase 7 (foundation-cohesion plan): the real end-to-end proof — a live
+// Cerebras-backed agent, in a real browser, driving compile → reconcile →
+// panel → CSV export on the anchor NAVFAC document, then cross-checked
+// against production-graph-cli.mjs's own compile. Key-present guard, not a
+// hard requirement: no key configured here (most local/CI runs) skips it
+// rather than failing the whole suite on missing credentials, but a shard
+// run skips it unconditionally too — sharding doesn't apply to a single
+// browser-driven script, and it must never run once per shard.
+const hasLiveKey = !!(process.env.CEREBRAS_API_KEY?.trim() || (existsSync("/tmp/cerebras_ui_key.txt") && readFileSync("/tmp/cerebras_ui_key.txt", "utf8").trim()));
+if (shard) {
+  console.error("test:workflows: TEST_SHARD set — skipping the playwright UI end-to-end proof (does not shard)");
+} else if (!hasLiveKey) {
+  console.error("test:workflows: no CEREBRAS_API_KEY (env or /tmp/cerebras_ui_key.txt) — skipping the playwright UI end-to-end proof");
+} else if (status !== 0) {
+  console.error("test:workflows: earlier tests failed — skipping the playwright UI end-to-end proof");
+} else {
+  console.error("test:workflows: running the playwright UI end-to-end proof (hvac anchor document)");
+  const uiResult = spawnSync(process.execPath, [resolve(WEB_ROOT, "scripts/playwright-takeoff-ui-demo.mjs"), "hvac"], {
+    cwd: WEB_ROOT,
+    stdio: "inherit",
+    env: process.env,
+  });
+  status = uiResult.status ?? 1;
+}
+
+process.exit(status);
