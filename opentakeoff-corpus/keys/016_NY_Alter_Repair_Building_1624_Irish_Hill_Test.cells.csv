@@ -1,0 +1,61 @@
+# coverage: AIR COOLED CONDENSING UNIT SCHEDULE | complete
+# 016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.cells.csv — CELL-tier ground truth, transcribed by eye from a 3.60x
+# render of the table's own bbox in two halves. row/col are 0-based indices into
+# the table AS DRAWN, a spanning cell counted once at its top-left. Empty drawn
+# cells are not recorded.
+#
+# Chosen for HP (EA) = 1/3. That cell is the one celltext.py cites for dropping
+# the text engine: pdfminer returns the characters 1 and 3 with no separator
+# between them, so a third of a horsepower silently becomes thirteen. It is the
+# reason the engine here is MuPDF, and it is worth having in the hand tier
+# rather than only in a comment.
+#
+# COMPRESSORS spans THREE columns — QTY, TYPE and # OF STAGES — not two. Read
+# off one half of the render it looks like two, with the fan QTY beneath it;
+# the two halves overlap by 8pt and the overlap settles it, as does the drawn
+# cell. Recorded here because it is the same trap as DIRECT DRIVE on 096_IN#19:
+# a header band read by eye rather than by ruling.
+sheet,table_title,row,col,text
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,0,0,AIR COOLED CONDENSING UNIT SCHEDULE
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,1,0,UNIT NO.
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,1,1,LOCATION
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,1,2,UNIT SERVED
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,1,3,REFRIGERANT TYPE
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,1,4,TOTAL HEAT REJECTION (MBH)
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,1,5,SATURATED SUCTION TEMP
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,1,6,SUCTION PRESSURE (PSIG)
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,1,7,AMBIENT TEMP (°F)
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,1,8,COMPRESSORS
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,1,11,FANS
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,1,13,ELECTRICAL
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,1,17,BASIS OF DESIGN YORK BY JOHNSON CONTROLS
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,1,18,REMARKS
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,2,8,QTY
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,2,9,TYPE
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,2,10,# OF STAGES
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,2,11,QTY
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,2,12,HP (EA)
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,2,13,VOLTS
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,2,14,PHASE
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,2,15,MCA
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,2,16,MOP
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,0,ACCU-1
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,1,OUTDOORS
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,2,AHU-1
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,3,R-410A
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,4,110.6
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,5,45
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,6,128.8
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,7,95
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,8,2
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,9,SCROLL
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,10,1
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,11,2
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,12,1/3
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,13,208
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,14,3
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,15,42.1
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,16,50.0
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,17,J10YDC00A2GLB4
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,3,18,"1,2,3,4"
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf#18,AIR COOLED CONDENSING UNIT SCHEDULE,4,0,(1) PROVIDE WITH SINGLE POINT POWER CONNECTION. (2) PROVIDE WITH FACTORY DISCONNECT SWITCH. (3) PROVIDE WITH ADJUSTABLE HIGH AND LOW PRESSURE SWITCHES. (4) PROVIDE WITH HOT GAS BYPASS.

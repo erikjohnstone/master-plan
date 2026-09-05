@@ -1,0 +1,93 @@
+# coverage: PUMP SCHEDULE | complete
+# 047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.cells.csv — CELL-tier ground truth, transcribed by eye from a 3.69x
+# render of the table's own bbox in two halves. row/col are 0-based indices into
+# the table AS DRAWN, a spanning cell counted once at its top-left. Empty drawn
+# cells are not recorded.
+#
+# What this table adds that the others do not:
+#   - a 17-column grid whose band row (FLUID DATA, PUMP DATA, PIPING DATA,
+#     ELECTRICAL DATA) spans 2, 3, 2 and 4 columns respectively, while MARK,
+#     SYSTEM, WEIGHT (LBS) and BASIS OF DESIGN span DOWNWARD through both header
+#     rows. Which of those two things a heading does was taken from the drawn
+#     cell, not from how it looks set — see the DIRECT DRIVE note in the 096_IN
+#     key for what happens when it is taken from the eye.
+#   - a degree sign in FLUID TEMP. (°F), which is where pdfminer and OCR both
+#     lose characters
+#   - INLINE SPLIT-COUPLED set on two lines inside one cell
+#   - a NOTES block of 380 characters as a single full-width cell, including a
+#     model number, ACH580-PDR-034A-4+B056, that a takeoff must not mangle
+sheet,table_title,row,col,text
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,0,0,PUMP SCHEDULE
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,1,0,MARK
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,1,1,SYSTEM
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,1,2,FLUID DATA
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,1,6,PUMP DATA
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,1,9,PIPING DATA
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,1,11,ELECTRICAL DATA
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,1,15,WEIGHT (LBS)
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,1,16,BASIS OF DESIGN
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,2,2,FLOW (GPM)
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,2,3,HEAD FT
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,2,4,FLUID TYPE
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,2,5,FLUID TEMP. (°F)
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,2,6,TYPE
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,2,7,IMPELLER SIZE
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,2,8,% EFF.
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,2,9,SUCT. SIZE (IN.)
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,2,10,DISCH. SIZE (IN.)
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,2,11,VFD YES/NO
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,2,12,MOTOR HP
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,2,13,MOTOR RPM
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,2,14,V/PH/HZ
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,0,P-1
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,1,CHILLED WATER
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,2,275
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,3,116
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,4,40% PROPYLENE GLYCOL
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,5,34
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,6,INLINE SPLIT-COUPLED
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,7,12
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,8,61.8
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,9,4
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,10,4
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,11,YES
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,12,25
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,13,1800
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,14,460/3/60
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,15,650
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,3,16,BELL & GOSSETT : E-80SC 4x4x13.5
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,0,P-2
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,1,CHILLED WATER
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,2,275
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,3,116
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,4,40% PROPYLENE GLYCOL
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,5,34
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,6,INLINE SPLIT-COUPLED
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,7,12
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,8,61.8
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,9,4
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,10,4
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,11,YES
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,12,25
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,13,1800
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,14,460/3/60
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,15,650
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,4,16,BELL & GOSSETT : E-80SC 4x4x13.5
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,0,P-3
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,1,CHILLED WATER
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,2,275
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,3,116
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,4,40% PROPYLENE GLYCOL
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,5,34
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,6,INLINE SPLIT-COUPLED
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,7,12
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,8,61.8
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,9,4
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,10,4
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,11,YES
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,12,25
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,13,1800
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,14,460/3/60
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,15,650
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,5,16,BELL & GOSSETT : E-80SC 4x4x13.5
+047_NC_VA_Project_558_22_172_Replace_Chillers_in_AHU.pdf#21,PUMP SCHEDULE,6,0,NOTES: 1. PUMP SHALL BE BRONZE OR STAINLESS STEEL CONSTRUCTION. 2. PUMPS TO BE PROVIDED WITH A SUCTION DIFFUSER ON INLET OF PUMP. CLEARANCE FOR SUCTION DIFFUSER TO BE ON THE END OF THE SUCTION DIFFUSER. 3. VFD IS FURNISHED BY MECHANICAL CONTRACTOR AND INSTALLED BY THE ELECTRICAL CONTRACTOR. VFD HAS INTEGRAL FUSED DISCONNECT SWITCH. DESIGN BASIS : ABB MODEL NO. ACH580-PDR-034A-4+B056.
