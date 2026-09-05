@@ -65,9 +65,36 @@ were verified additive-by-construction against this exact scored corpus.
 **A recall tier now exists alongside it** (`keys/<id>.tables.csv`,
 `mcp/scripts/table-recall-eval.mjs`), because every key above is scoped to
 tables the pipeline already found — none of them can catch a schedule table
-sheetgraph.ts never sees at all. One authored key so far (`bessemer.tables.csv`,
-sheets #2 and #8 only, rendered and read by eye): **9/11 tables found,
-81.8% recall**, and the 2 real misses it caught are B-9 below.
+sheetgraph.ts never sees at all.
+
+As of 2026-09-05 it covers **24 documents: 133 ground-truth tables** —
+`bessemer.tables.csv` (sheets #2 and #8, 11 tables, **9/11 = 81.8%** through
+the full Session) plus **23 bulk documents spanning both volumes** (9 from
+Vol1, 14 from Vol2, 122 tables on 24 sheets). Every row was authored the way
+this tier requires and no other way: render the sheet full page
+(`mcp/scripts/render-page-crop.mjs`) and list what a human sees, with the
+pipeline's own output never consulted. Each key's header records what was
+deliberately not counted (legends, ruled notes blocks, indented spec prose,
+untitled tables — this tier matches on title) so the number means one thing.
+
+What it found immediately, and what nothing else could have found:
+
+- **B-11** — the generic reader stands down for another kind's pass on
+  vocabulary alone, and that pass then extracts nothing. `13_MI…#28` draws six
+  schedule tables and yielded one.
+- **B-12** — a schedule with exactly one data row was refused, because "a real
+  table repeats". One row is ordinary drafting: 7 of 11 tables on `016_NY#18`,
+  9 of 15 on `067_CA#8`, 5 of 13 on `061_IA#58`.
+- **B-13** (open) — data rows whose cells wrap over several printed lines
+  never band into rows.
+
+B-11 and B-12 are fixed; measured over all 122 keyed tables on the text-layer
+extractor, **28 → 39 found (23.0% → 32.0%)**. Read that figure for exactly
+what it is: the text-layer path ALONE, with no sidecar/ODL/OCR layer. bessemer
+scores 81.8% through the full Session, so those layers carry most of today's
+recall — **32% is not the pipeline's recall number** and must not be quoted as
+one. The full-Session recall figure across all 24 keyed documents is the next
+measurement to run.
 
 ## 3. The other 112 documents
 
@@ -115,8 +142,20 @@ had zero coverage before this pass.
 | **B-8** | Side-by-side tables with no empty gutter cannot be split | 046_MI p22 + 044_NY p24 (19 of 27 rows lost) | `columnBandCandidates` |
 | **B-9** | Two consecutive rows bracketing an in-table category sub-header dropped | `demo/sample-finish-plan.pdf` MATERIAL SCHEDULE, 2 real rows missing | row-clustering, not yet root-caused |
 | **B-10** | A full-width section banner bands into a data column, polluting that row's cell | 028_TX p1: one QTY cell reads `"SECOND FLOOR 2"` (22 read of a printed 23, refused and disclosed) | data banding |
+| **B-13** | Data rows whose cells wrap over several printed lines never band into rows | `13_MI#28` FIRE ALARM DEVICES SCHEDULE: header accepted, `banded=0` | `bandGenericDataRows` |
 
 Full evidence, root causes and fix shapes: `TAKEOFF_BUG_CATALOGUE.md`.
+
+**Fixed 2026-09-05 — the same discriminator, now on whole-table recall.**
+B-11 and B-12 (§2) are the identical defect one level up: the pipeline decided
+what a block WAS — "another pass owns this", "this is not a table because it
+does not repeat" — without testing either claim. B-11 now stands down only
+where a kind pass actually produced a covering table; B-12 tests the drawn
+cell walls (a rule above the row, a rule below it, verticals at the header's
+own column anchors) instead of counting rows, and refuses when a sheet
+supplies no linework to judge, because an unanswerable question is not a yes.
+Both carry regression tests over real captured spans and linework, verified to
+fail on the pre-fix tree.
 
 **Fixed 2026-09-05 — the shared structural discriminator.** The bug
 catalogue's own "How these connect" synthesis named one defect behind several
@@ -154,16 +193,30 @@ the pre-fix tree.
 
 ## 6. What to do next, in order
 
-1. **B-6, B-8** — scaled-duplicate detection; splitting gutterless
+1. **Measure full-Session recall across all 24 keyed documents.** The 32%
+   figure in §2 is the text-layer extractor alone; the number that describes
+   the product is `table-recall-eval.mjs` over the whole set, and it does not
+   exist yet. Run it on the pre-B-11/B-12 tree and again after, and do not
+   edit `sheetgraph.ts` while it runs — the scorer spawns a child process per
+   set, so a mid-run edit silently mixes two code versions into one number.
+   Nothing below is correctly ranked until this exists.
+2. **B-13** — wrapped multi-line cells never band into rows. Found on the same
+   sheet as B-11 and blocking four more real tables there; it is the next
+   whole-table miss with a named cause.
+3. **B-6, B-8** — scaled-duplicate detection; splitting gutterless
    side-by-side tables by internal column structure rather than an empty
    corridor.
-2. **B-9, B-10** — the category-sub-header row-drop (not yet root-caused) and
+4. **B-9, B-10** — the category-sub-header row-drop (not yet root-caused) and
    the section banner that bands into a data column. Both are the same
-   "test the property, don't trust the position" shape as the three closed
+   "test the property, don't trust the position" shape as the entries closed
    on 2026-09-05.
-4. **Ground truth at scale** — recall-tier keys for the other 111 bulk sets
-   (the tier now exists, §2; one authored so far), which is ~10× cheaper than
+5. **Ground truth at scale** — recall-tier keys for the remaining ~89 bulk
+   sets (24 documents keyed so far, §2), which is ~10× cheaper than
    cell-level and the only tier that catches a whole-table miss.
+   `mcp/scripts/recall-gap-scan.mjs` ranks where to look: over 88 documents /
+   2,486 pages it found 949 extracted titles against 616 title-shaped
+   candidates the pipeline never built, in 74 of them. Read that as a floor on
+   real misses, never a total — its own header lists what it cannot see.
 5. **Run the product end-to-end, as a gate.** `web/scripts/playwright-takeoff-ui-demo.mjs`
    drives the real Cerebras-backed agent through compile → reconcile → panel
    → CSV export and cross-checks the UI's own compile against
