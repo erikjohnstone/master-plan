@@ -46,7 +46,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from PIL import Image, ImageDraw                                   # noqa: E402
 
-from bakeoff import CORPUS, caption_boxes, find_pdf, region_owners, single_page_pdf  # noqa: E402
+from bakeoff import detail_captions, CORPUS, caption_boxes, find_pdf, region_owners, single_page_pdf  # noqa: E402
 from boxfit import keyed_sheets                                    # noqa: E402
 from vectorgrid import find_tables                                 # noqa: E402
 
@@ -106,7 +106,7 @@ def do_sheet(set_id: str, page: int, scale: float) -> int:
     titles = next(t for s, p, t in keyed_sheets() if s == set_id and p == page)
     caps = caption_boxes(pdf, titles)
     tables = find_tables(str(pdf), 1)["tables"]
-    owners = region_owners([t["bbox"] for t in tables], caps)
+    owners = region_owners([t["bbox"] for t in tables], caps, detail_captions(pdf, caps))
 
     done = 0
     for i, t in enumerate(titles):
@@ -138,7 +138,7 @@ def do_full(set_id: str, page: int, scale: float) -> int:
     titles = next(t for s, p, t in keyed_sheets() if s == set_id and p == page)
     caps = caption_boxes(pdf, titles)
     tables = find_tables(str(pdf), 1)["tables"]
-    owners = region_owners([t["bbox"] for t in tables], caps)
+    owners = region_owners([t["bbox"] for t in tables], caps, detail_captions(pdf, caps))
     with pdfplumber.open(pdf) as doc:
         W, H = float(doc.pages[0].width), float(doc.pages[0].height)
     png = OUT / f"{set_id[:24]}_p{page}_FULL.png"
@@ -175,7 +175,7 @@ def screen() -> int:
         pdf = single_page_pdf(find_pdf(set_id), page)
         caps = caption_boxes(pdf, titles)
         tables = find_tables(str(pdf), 1)["tables"]
-        owners = region_owners([t["bbox"] for t in tables], caps)
+        owners = region_owners([t["bbox"] for t in tables], caps, detail_captions(pdf, caps))
         with pdfplumber.open(pdf) as doc:
             segs = segments_from_page(doc.pages[0])
         hs = [(x0, x1, y0) for x0, y0, x1, y1, _w in segs if y0 == y1]

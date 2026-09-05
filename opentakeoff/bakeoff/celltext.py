@@ -45,7 +45,7 @@ import pymupdf                                                # noqa: E402
 from shapely.geometry import Point, box                       # noqa: E402
 from shapely.strtree import STRtree                           # noqa: E402
 
-from bakeoff import caption_boxes, find_pdf, single_page_pdf, region_owners  # noqa: E402
+from bakeoff import detail_captions, caption_boxes, find_pdf, single_page_pdf, region_owners  # noqa: E402
 from boxfit import keyed_sheets                               # noqa: E402
 from vectorgrid import find_tables                            # noqa: E402
 
@@ -309,7 +309,7 @@ def show(set_id: str, page: int) -> int:
     titles = next(t for s, p, t in keyed_sheets() if s == set_id and p == page)
     caps = caption_boxes(pdf, titles)
     tables = find_tables(str(pdf), 1)["tables"]
-    owners = region_owners([t["bbox"] for t in tables], caps)
+    owners = region_owners([t["bbox"] for t in tables], caps, detail_captions(pdf, caps))
     for t in tables:
         title = owners.get(t["bbox"])
         if not title:
@@ -339,7 +339,7 @@ def main() -> int:
         pdf = single_page_pdf(find_pdf(set_id), page)
         caps = caption_boxes(pdf, titles)
         tables = find_tables(str(pdf), 1)["tables"]
-        owners = region_owners([t["bbox"] for t in tables], caps)
+        owners = region_owners([t["bbox"] for t in tables], caps, detail_captions(pdf, caps))
         sa = so = ss = n = 0
         for t in tables:
             if t["bbox"] not in owners:

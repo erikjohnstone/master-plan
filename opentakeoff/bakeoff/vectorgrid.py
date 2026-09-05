@@ -60,6 +60,7 @@ import sys
 from collections import defaultdict
 
 import pdfplumber
+import pymupdf
 from shapely import node, polygonize_full
 from shapely.geometry import MultiLineString
 
@@ -102,9 +103,8 @@ MAX_REGION_WFRAC = 0.92 # a REGION this wide is the sheet's own furniture, not a
 # silently returning nothing. Qualifying as one needs both tests, because
 # either alone matches ordinary page art:
 RASTER_MIN_AREA = 100_000.0  # pt^2 — roughly 5 x 4 inches placed; smaller is a logo
-RASTER_MIN_PPP = 4.0         # source pixels per placed point. A screenshot of a
-                             # spreadsheet is downsampled hard on placement (8-10
-                             # measured); a photo or a rendering sits near 1.
+RASTER_WHITE = 0.62          # a pasted table is mostly paper
+RASTER_RULES = 3             # ... crossed by at least this many full-width dark rules
 
 
 def _q(v: float) -> float:
@@ -244,13 +244,12 @@ def raster_regions(pdf_path: str, page_no: int = 1) -> list[tuple]:
         page = doc[page_no - 1]
         rot = page.rotation_matrix
         for im in page.get_images(full=True):
-            px_w, px_h = im[2], im[3]
             for r in page.get_image_rects(im[0]):
                 rr = r * rot            # image rects come back pre-rotation
                 w, h = rr.x1 - rr.x0, rr.y1 - rr.y0
                 if w <= 0 or h <= 0 or w * h < RASTER_MIN_AREA:
                     continue
-                if (px_w / w + px_h / h) / 2 < RASTER_MIN_PPP:
+                if not _image_is_a_table(doc, im[0]):
                     continue
                 out.append((rr.x0, rr.y0, rr.x1, rr.y1))
 
@@ -278,6 +277,53 @@ def raster_regions(pdf_path: str, page_no: int = 1) -> list[tuple]:
             if merged:
                 break
     return out
+
+
+def _image_is_a_table(doc, xref: int) -> bool:
+    """Does this embedded image LOOK like a table? Decide from its pixels.
+
+    The first version of this used source-pixels-per-placed-point as a proxy —
+    a spreadsheet screenshot is downsampled hard on placement (8-10 measured on
+    017_MD#14) while a photo sits near 1. That proxy is wrong, and 067_CA#8
+    proves it: its PCW RISER DIAGRAM SCHEDULE is a 645x659 image placed over
+    740x757 points, 0.87 px/pt, and it is unmistakably a ruled table. The
+    threshold was rejecting a real table for being low-resolution.
+
+    Pixels are the evidence, so read the pixels. A pasted table is mostly paper
+    and is crossed by long dark rules; a photograph or a rendered perspective is
+    neither. Cheap — these images are a few hundred pixels square — and it
+    generalises to any drawing instead of to one publisher's export settings.
+    """
+    try:
+        pix = pymupdf.Pixmap(doc, xref)
+        if pix.n > 1:
+            pix = pymupdf.Pixmap(pymupdf.csGRAY, pix)
+        w, h = pix.width, pix.height
+        if w < 40 or h < 40:
+            return False
+        # EVERY ROW, sampled columns. Sampling rows too was the bug: a rule three
+        # pixels thick in a 3,636-pixel image is invisible at one row in
+        # twenty-two, and 017_MD#14's spreadsheets — plainly ruled tables —
+        # scored 1 to 4 rules and were rejected. Rows are cheap read straight
+        # from the pixel buffer; it is columns that need thinning.
+        buf = pix.samples
+        stride = pix.stride
+        xs = list(range(0, w, max(1, w // 200)))
+        samples = dark = rules = 0
+        for y in range(h):
+            base = y * stride
+            run = 0
+            for x in xs:
+                if buf[base + x] < 128:
+                    run += 1
+            dark += run
+            samples += len(xs)
+            if run >= len(xs) * 0.6:
+                rules += 1
+        white = 1.0 - (dark / max(samples, 1))
+        return white >= RASTER_WHITE and rules >= RASTER_RULES
+    except Exception:
+        return False
 
 
 def _weight_index(segs: list[tuple]) -> dict:

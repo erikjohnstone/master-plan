@@ -53,7 +53,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 import pdfplumber                                                  # noqa: E402
 
-from bakeoff import caption_boxes, find_pdf, region_owners, single_page_pdf  # noqa: E402
+from bakeoff import detail_captions, caption_boxes, find_pdf, region_owners, single_page_pdf  # noqa: E402
 from boxfit import keyed_sheets                                    # noqa: E402
 from celltext import cell_text, slot                               # noqa: E402
 from vectorgrid import find_tables                                 # noqa: E402
@@ -111,7 +111,7 @@ def main() -> int:
         words = pdfminer_words(pdf)
         caps = caption_boxes(pdf, titles)
         tables = find_tables(str(pdf), 1)["tables"]
-        owners = region_owners([t["bbox"] for t in tables], caps)
+        owners = region_owners([t["bbox"] for t in tables], caps, detail_captions(pdf, caps))
 
         s_cells = s_agree = s_tables = 0
         for t in tables:

@@ -46,7 +46,7 @@ from pathlib import Path
 warnings.filterwarnings("ignore")
 sys.path.insert(0, str(Path(__file__).parent))
 
-from bakeoff import CORPUS, caption_boxes, find_pdf, region_owners, single_page_pdf  # noqa: E402
+from bakeoff import detail_captions, CORPUS, caption_boxes, find_pdf, region_owners, single_page_pdf  # noqa: E402
 from boxfit import keyed_sheets                                    # noqa: E402
 from celltext import cell_text, slot                               # noqa: E402
 from vectorgrid import find_tables                                 # noqa: E402
@@ -180,7 +180,7 @@ def main() -> int:
         pdf = single_page_pdf(find_pdf(set_id), page)
         caps = caption_boxes(pdf, titles)
         tables = find_tables(str(pdf), 1)["tables"]
-        owners = region_owners([t["bbox"] for t in tables], caps)
+        owners = region_owners([t["bbox"] for t in tables], caps, detail_captions(pdf, caps))
 
         for t in tables:
             title = owners.get(t["bbox"])

@@ -37,7 +37,7 @@ from pathlib import Path
 warnings.filterwarnings("ignore")
 sys.path.insert(0, str(Path(__file__).parent))
 
-from bakeoff import BACKENDS, CORPUS, caption_boxes, find_pdf, region_owners, single_page_pdf  # noqa: E402
+from bakeoff import detail_captions, BACKENDS, CORPUS, caption_boxes, find_pdf, region_owners, single_page_pdf  # noqa: E402
 from boxfit import keyed_sheets                                    # noqa: E402
 
 
@@ -89,7 +89,7 @@ def main() -> int:
         pdf = single_page_pdf(find_pdf(set_id), page)
         caps = caption_boxes(pdf, titles)
         regions, _ = fn(pdf)
-        owners = region_owners(regions, caps)
+        owners = region_owners(regions, caps, detail_captions(pdf, caps))
         by_title = {}
         for r, t in owners.items():
             by_title.setdefault(t, []).append(r)

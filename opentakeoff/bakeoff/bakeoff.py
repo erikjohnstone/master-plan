@@ -313,10 +313,51 @@ def score(regions, caps) -> list[str]:
     were scored SPLIT for it. Nothing that finishes before the title starts is
     that title's table.
     """
-    return sorted({t for t in region_owners(regions, caps).values()})
+    return sorted({t for t in region_owners(regions, caps, detail_captions(pdf, caps)).values()})
 
 
-def region_owners(regions, caps) -> dict:
+SCALE_LINE = re.compile(
+    r"^(N\.?T\.?S\.?|NOT TO SCALE|SCALE\s*[:=].*|.*=\s*\d+['\u2019]\s*-\s*\d+[\"\u201d].*"
+    r"|\d+(\s+\d+/\d+)?[\"\u201d]\s*=.*)$", re.I)
+
+
+def detail_captions(pdf: Path, caps: dict) -> set:
+    """Titles printed BELOW their table, as a detail callout.
+
+    A drawing labels a detail underneath it, with the scale on the next line:
+    067_CA#8 sets "PCW RISER DIAGRAM SCHEDULE - HUTCH 1.3" over "NTS" with a
+    detail bubble to its left, and 031_MO#39 sets "HEADER SECTION SCHEDULE"
+    over "1 1/2\" = 1'-0\"" the same way. Both tables sit ABOVE those titles,
+    and both were unmatchable for as long as every rule here assumed a caption
+    tops its table.
+
+    The SCALE LINE is what makes this safe to act on. It is a specific, near
+    universal drafting convention and it appears under nothing else — no
+    schedule's own title carries one. Loosening the caption rule generally, to
+    let any caption claim a region above it, would hand every backend false
+    matches across the corpus; keying on the scale line changes behaviour for
+    exactly the captions that are detail titles.
+    """
+    from celltext import page_words
+    words = page_words(pdf)
+    out = set()
+    for title, cp in caps.items():
+        if not cp:
+            continue
+        cx0, _ct, cx1, cbot = cp
+        near = [w for w in words if cx0 - 90 < w[0] < cx1 + 250 and cbot < w[1] < cbot + 34]
+        lines: dict = {}
+        for w in near:
+            lines.setdefault(round(w[1] / 5), []).append(w)
+        for band in lines.values():
+            txt = " ".join(x[4] for x in sorted(band, key=lambda x: x[0])).strip()
+            if txt and SCALE_LINE.match(txt):
+                out.add(title)
+                break
+    return out
+
+
+def region_owners(regions, caps, detail=frozenset()) -> dict:
     """Region -> the one caption it belongs to.
 
     ONE REGION HAS ONE OWNER. Stacked schedules sit close enough that the
@@ -335,6 +376,18 @@ def region_owners(regions, caps) -> dict:
                 continue
             cx0, ctop, cx1, cbot = cp
             cmid = (ctop + cbot) / 2
+            if title in detail:
+                # A detail title labels what is ABOVE it. Same shape of test as
+                # below, reflected: the region must end just under the title and
+                # share its band.
+                if not (bot - 40 <= ctop <= bot + 140):
+                    continue
+                if min(x1, cx1) - max(x0, cx0) < max(cx1 - cx0, 1) * 0.5:
+                    continue
+                d = abs(ctop - bot)
+                if best is None or d < best[0]:
+                    best = (d, title)
+                continue
             # REVERTED, and the reason is worth keeping. I widened this window
             # to 3x the caption's cap height, justified by 031_MO#39's HEADER
             # SECTION SCHEDULE "sitting perfectly extracted underneath" a 25pt
