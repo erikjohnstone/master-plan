@@ -320,7 +320,15 @@ def region_owners(regions, caps) -> dict:
                 continue
             cx0, ctop, cx1, cbot = cp
             cmid = (ctop + cbot) / 2
-            if cmid < top - 60 or cmid > top + 140:  # caption belongs to THIS region's top
+            # How far a title floats above its table is a function of the type
+            # it is set in, not a constant: 031_MO#39 sets HEADER SECTION
+            # SCHEDULE in 25pt and leaves 50pt of air, which a flat 60pt window
+            # missed by two points while its table sat perfectly extracted
+            # underneath. Proportional is both more forgiving to display type
+            # and STRICTER on the dense small-type sheets where a fixed 60pt
+            # reaches into a neighbouring table.
+            above = max(60.0, 3.0 * (cbot - ctop))
+            if cmid < top - above or cmid > top + 140:  # caption tops THIS region
                 continue
             if cmid > bot + 5:                       # ... and the region outlives it
                 continue

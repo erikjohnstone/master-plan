@@ -84,6 +84,9 @@ def ruled_row_below(hs, vs, region, limit):
     the frame's own left and right edges reach the rule under the notes, so
     without the interior test every correct region on that sheet reads SHORT.
     Requiring an interior wall means a genuine extra ROW, divided into columns.
+    "Interior" is proportional, not a flat couple of points: on that same sheet
+    ACU-A-5's pasted image sits 2.2pt left of the frame drawn around it, so the
+    frame's own edge cleared a 2pt test and the correct region read SHORT.
     (A single-column table's lost row is invisible to this test; there are none
     in the key set.)
     """
@@ -94,8 +97,9 @@ def ruled_row_below(hs, vs, region, limit):
             continue
         if min(hx1, x1) - max(hx0, x0) < w * 0.5:
             continue
+        margin = max(2.0, w * 0.05)
         for vy0, vy1, vx in vs:
-            if not (x0 + 2 < vx < x1 - 2):
+            if not (x0 + margin < vx < x1 - margin):
                 continue
             # The wall must CROSS the bottom edge, not merely exist below it.
             # Continuity is the whole point: a column wall straddling the cut is

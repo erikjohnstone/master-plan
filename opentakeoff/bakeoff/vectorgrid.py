@@ -27,9 +27,12 @@ All three are already vector-native and all three share one defect: they
 enumerate MINIMAL RECTANGLES and then group cells that share a corner. That
 (a) returns None for every spanning cell, and (b) fuses any two tables that
 share a ruling line — which is exactly the adjacency failure this corpus is
-full of (measured, 122 keyed tables, pdfplumber-lines_strict: 7 merged, 10
-fragmented, 5 overrunning, 68.0% clean, 80.3% recall — against 2, 4, 2, 89.3%
-and 95.9% here).
+full of. Measured on the same 122 hand-keyed tables, same ruler:
+
+                            CLEAN         recall        mrg  spl  ovr  sht
+    vectorgrid           121/122 99.2%  121/122 99.2%    0    0    0    0
+    pdfplumber-lines      99/122 81.1%  114/122 93.4%   10   10    5    0
+    pdfplumber-strict     89/122 73.0%  100/122 82.0%    7    7    4    0
 
 Two changes fix both:
 
@@ -45,8 +48,8 @@ Two changes fix both:
 And one thing the ruling graph cannot do anything about: a schedule pasted in
 as a PICTURE of a spreadsheet has no strokes at all. Those get their placement
 rectangle emitted instead — see raster_regions(). Six of the 122 keyed tables
-are of that kind, all on one sheet, which is what caps the vector path at
-116/122 before a single OCR call.
+are of that kind, all on one sheet: the ruling graph alone tops out at 116/122
+and the placement rectangles carry the rest, before a single OCR call.
 
     python3 vectorgrid.py <pdf> <page>            # inspect one sheet
     (or import find_tables() — bakeoff.py registers it as a backend)
