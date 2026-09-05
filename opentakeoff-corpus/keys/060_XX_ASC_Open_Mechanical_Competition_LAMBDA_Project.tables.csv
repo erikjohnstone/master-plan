@@ -1,3 +1,8 @@
+# KEY AUDIT 2026-09-05: sheet #75 draws FIVE tables all titled PANELBOARD SCHEDULE
+# (3 EXISTING across the top, 2 MODIFIED below). This key records ONE, so this
+# sheet's 1/1 is not a meaningful recall figure — the extractor in fact proposes
+# all five, at (108,44) (687,43) (105,789) (683,788) (1250,792). Left as one row
+# rather than silently changing the 122-table denominator mid-measurement.
 # 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project.tables.csv — RECALL-tier ground-truth key for
 # mcp/scripts/table-recall-eval.mjs.
 #

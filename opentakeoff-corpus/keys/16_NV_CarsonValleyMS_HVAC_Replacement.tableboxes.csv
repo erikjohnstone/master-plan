@@ -1,6 +1,6 @@
 sheet,table_title,x0,top,x1,bot,provenance
-16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",1042.9,90.0,2754.0,558.0,"verified by eye, whole-sheet overlay @0.8x (~4pt)"
-16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,642.5,717.5,1710.5,1354.3,"verified by eye, whole-sheet overlay @0.8x (~4pt)"
-16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,642.4,1381.3,2754.1,1511.8,"verified by eye, whole-sheet overlay @0.8x (~4pt)"
-16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,EVAPORATOR COIL SCHEDULE,1737.4,717.2,2754.1,1188.0,"verified by eye, whole-sheet overlay @0.8x (~4pt)"
-16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,1156.2,1719.1,2754.1,1867.7,"verified by eye, whole-sheet overlay @0.8x (~4pt)"
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,"2-STAGE, GAS FIRED FURNACE SCHEDULE",1042.9,90.0,2754.0,690.0,re-verified after the title-band/area-cap fix; bottoms confirmed at 1.6-2.2x — the NOTES row is INSIDE the table border and the earlier 0.8x acceptance had cut it off
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,CONDENSING UNIT SCHEDULE,642.5,717.5,1710.5,1354.3,re-verified after the title-band/area-cap fix; bottoms confirmed at 1.6-2.2x — the NOTES row is INSIDE the table border and the earlier 0.8x acceptance had cut it off
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,ENERGY RECOVERY VENTILATOR SCHEDULE,642.4,1381.3,2754.1,1511.8,re-verified after the title-band/area-cap fix; bottoms confirmed at 1.6-2.2x — the NOTES row is INSIDE the table border and the earlier 0.8x acceptance had cut it off
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,EVAPORATOR COIL SCHEDULE,1737.4,717.2,2754.1,1354.3,re-verified after the title-band/area-cap fix; bottoms confirmed at 1.6-2.2x — the NOTES row is INSIDE the table border and the earlier 0.8x acceptance had cut it off
+16_NV_CarsonValleyMS_HVAC_Replacement.pdf#3,OUTDOOR AIR UNIT SCHEDULE,1156.2,1719.1,2754.1,2010.5,re-verified after the title-band/area-cap fix; bottoms confirmed at 1.6-2.2x — the NOTES row is INSIDE the table border and the earlier 0.8x acceptance had cut it off

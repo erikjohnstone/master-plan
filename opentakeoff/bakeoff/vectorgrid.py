@@ -75,9 +75,25 @@ THIN_RECT = 1.6      # a filled rect thinner than this IS a line (CAD idiom)
 MIN_CELL_AREA = 12.0 # below this a face is a rounding artefact, not a cell
 MIN_CELL_SIDE = 2.0  # a face thinner than this in EITHER axis is a slot between two
                      # coincident rules, not a cell — and it BRIDGES what it lies between
-MAX_CELL_FRAC = 0.02  # above this share of the page a face is furniture, not a cell
 MAX_CELL_HFRAC = 0.10 # a face taller than this share of the page is blank sheet, not a row
+MAX_CELL_FRAC = 0.04  # ... and this share of its AREA is page furniture. Both are
+                      # needed and the threshold is measured, not guessed: at the
+                      # 0.02 it started at, it cut the TITLE BAND off every wide
+                      # table (09_ME#7's is 2043 x 49.5 = 101,128pt^2 = 2.26% of
+                      # the page, so both schedules there lost their title row and
+                      # began 50pt low). Removing it altogether let 067_CA#8's
+                      # title-block strip through — 3313 x 196, 96% of the page
+                      # wide and 7.2% of its area — as a table. 0.04 sits above
+                      # the largest real title band in the corpus and below the
+                      # smallest piece of furniture.
 MIN_FILL_RATIO = 0.20 # n_cells vs rows*cols — a table tessellates, a plan does not
+MAX_REGION_WFRAC = 0.92 # a REGION this wide is the sheet's own furniture, not a
+                      # schedule. A drawing has a border and margins, so nothing
+                      # is drawn edge to edge: the widest real table in the key
+                      # set is 85% of its page (016_NY#18's AHU schedule), while
+                      # 067_CA#8's title-block strip is 96% and was being handed
+                      # back as a table. Faces alone cannot catch this — the
+                      # strip is a GROUP of ordinary-sized faces.
 
 # A schedule pasted in as a PICTURE OF A SPREADSHEET has no strokes to read, so
 # no vector method can see it — but the placement rectangle of the image is
@@ -522,10 +538,9 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
     # at x 2356.4-2356.9 into a 65-face frame group spanning (180,46)-(2356,1683)
     # that the tessellation test then correctly rejects — 0/3 on a sheet whose
     # tables are drawn better than most. No cell holding text is 2pt across.
-    page_area = max(1.0, float(page_w) * float(page_h))
     cells = []
     for g in polys.geoms:
-        if not (MIN_CELL_AREA <= g.area <= page_area * MAX_CELL_FRAC):
+        if not (MIN_CELL_AREA <= g.area <= page_w * page_h * MAX_CELL_FRAC):
             continue
         gx0, gy0, gx1, gy1 = g.bounds
         if min(gx1 - gx0, gy1 - gy0) < MIN_CELL_SIDE:
@@ -691,6 +706,8 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
         if len(members) < len(rowset) * len(colset) * MIN_FILL_RATIO:
             continue
         xs0, ys0, xs1, ys1 = zip(*(cells[i].bounds for i in members))
+        if max(xs1) - min(xs0) > page_w * MAX_REGION_WFRAC:
+            continue
         bbox = _widen_along_row_rules(hmap, min(xs0), min(ys0), max(xs1), max(ys1),
                                       sorted({round(cells[i].bounds[1]) for i in members} |
                                              {round(cells[i].bounds[3]) for i in members}))
