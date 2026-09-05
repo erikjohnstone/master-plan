@@ -781,10 +781,41 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
                     continue
                 ax0, ay0, ax1, ay1 = vbounds(groups[ka])
                 bx0, by0, bx1, by1 = vbounds(groups[kb])
-                # vertically stacked and nearly touching
+                # Vertically stacked and nearly touching.
+                #
+                # A CONTINUATION IS ALLOWED A WIDER GAP, and only a
+                # continuation. 034_NC#2 sets a 200-row sheet index in three
+                # columns and breaks its ruled row groups with UNRULED section
+                # labels — BLDG 47, 01 - GENERAL, 07-STRUCTURAL — that leave a
+                # consistent 17pt of clear paper, three points past the flat
+                # threshold, so a human's one table arrives as thirteen blocks
+                # and the caption owns none of them.
+                #
+                # Simply raising the threshold in proportion to row height is
+                # what NOT to do: measured, it took the keyed set from 122/122
+                # to 119 and the held-out set from 89 to 86, because a gap of
+                # about a row separates plenty of things that are not one table.
+                # What makes this case safe is that the pieces are the SAME
+                # COLUMN of the sheet resumed — identical left edge, identical
+                # right edge, and effectively the same column set. Two different
+                # schedules that happen to sit one above the other in a margin
+                # agree on none of those. So the wider allowance is granted only
+                # to a piece that is the one above it continued, and is capped
+                # at four row heights; a genuine title band between two blocks is
+                # cut back out by _split_at_title_bands below, which reads type
+                # size and so knows a title when the geometry cannot.
                 gap = by0 - ay1 if by0 >= ay1 else ay0 - by1
                 if gap > 14:
-                    continue
+                    if abs(ax0 - bx0) > 2 or abs(ax1 - bx1) > 2:
+                        continue
+                    hs = sorted(cells[i].bounds[3] - cells[i].bounds[1]
+                                for i in groups[ka] + groups[kb])
+                    if gap > 4.0 * hs[len(hs) // 2]:
+                        continue
+                    ca_, cb_ = cols_of(groups[ka]), cols_of(groups[kb])
+                    same = len({c for c in ca_ if any(abs(c - d) <= 2 for d in cb_)})
+                    if same < 0.9 * max(len(ca_), len(cb_)):
+                        continue
                 overlap = min(ax1, bx1) - max(ax0, bx0)
                 if overlap < min(ax1 - ax0, bx1 - bx0) * 0.6:
                     continue
