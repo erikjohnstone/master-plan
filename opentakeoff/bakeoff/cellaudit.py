@@ -10,9 +10,20 @@ So this asks a different question that needs no transcription and still cannot
 be self-satisfied: DOES AN INDEPENDENT PDF TEXT ENGINE READ THE SAME STRING IN
 THE SAME RECTANGLE?
 
-  our cell text   pdfminer glyphs (via pdfplumber), assigned to faces by
-                  centre-point containment, spaces rebuilt in celltext
-  the oracle      MuPDF's own extractor, clipped to the same rectangle
+  our cell text   MuPDF words, assigned to faces by centre containment
+  the oracle      pdfminer's glyphs (via pdfplumber), clipped to the same
+                  rectangle and laid out by pdfplumber's own algorithm
+
+THE ORACLE AND THE ENGINE SWAPPED PLACES, and that is the point of having two.
+The first run of this judged a pdfminer-based extraction against MuPDF: 169 of
+9,603 cells disagreed, and reading them showed PDFMINER was the wrong one, in
+two ways a takeoff cannot survive — it silently drops glyphs ("208/3" came back
+"2083", a voltage/phase turned into a four-digit number; "1/3"->"13", "3/4"->
+"34") and it reads rotated column headers backwards one character at a time
+("Y T I T N A U Q" for QUANTITY, 97 cells on 061_IA#58 alone). So MuPDF became
+the engine and pdfminer became the judge. Disagreements in THIS direction are
+mostly the known pdfminer defects; what matters is any cell where the engine is
+the wrong one.
 
 They share no code. MuPDF has its own glyph decoding, its own word assembly and
 its own space heuristics, and it knows nothing about our faces. So agreement is
@@ -40,7 +51,7 @@ from pathlib import Path
 warnings.filterwarnings("ignore")
 sys.path.insert(0, str(Path(__file__).parent))
 
-import pymupdf                                                     # noqa: E402
+import pdfplumber                                                  # noqa: E402
 
 from bakeoff import caption_boxes, find_pdf, region_owners, single_page_pdf  # noqa: E402
 from boxfit import keyed_sheets                                    # noqa: E402
@@ -54,27 +65,26 @@ def norm(s: str) -> str:
     return re.sub(r"\s+", " ", s.upper()).strip()
 
 
-def mupdf_words(pdf: Path) -> list:
-    """(x0, top, x1, bottom, text) in the SAME space our cells use.
+def pdfminer_words(pdf: Path) -> list:
+    """(x0, top, x1, bottom, text) from pdfminer, in our coordinate space.
 
-    MuPDF normalises the MediaBox to (0,0,W,H) and reports words in the
-    unrotated space, so a rotated page needs the page's own rotation matrix
-    applied — the same correction raster_regions() makes. Without it every
-    comparison on the five rotated sheets in the key set would be nonsense.
+    pdfplumber reports raw MediaBox coordinates, so a page whose box does not
+    start at the origin needs the same normalisation the engine applies — see
+    vectorgrid.page_origin. Two sheets in the key set are offset by 1512pt.
     """
-    with pymupdf.open(pdf) as doc:
-        page = doc[0]
-        rot = page.rotation_matrix
+    from vectorgrid import page_origin
+    with pdfplumber.open(pdf) as doc:
+        page = doc.pages[0]
+        ox, oy = page_origin(page)
         out = []
-        for x0, y0, x1, y1, w, *_rest in page.get_text("words"):
-            r = pymupdf.Rect(x0, y0, x1, y1) * rot
-            out.append((min(r.x0, r.x1), min(r.y0, r.y1),
-                        max(r.x0, r.x1), max(r.y0, r.y1), w))
+        for w in page.extract_words(use_text_flow=False, keep_blank_chars=False):
+            out.append((w["x0"] - ox, w["top"] - oy,
+                        w["x1"] - ox, w["bottom"] - oy, w["text"]))
     return out
 
 
 def text_in(words: list, bbox: tuple) -> str:
-    """MuPDF words whose centre falls in the rectangle, in reading order."""
+    """Oracle words whose centre falls in the rectangle, in reading order."""
     x0, top, x1, bot = bbox
     got = [(wy0, wx0, t) for wx0, wy0, wx1, wy1, t in words
            if x0 <= (wx0 + wx1) / 2 <= x1 and top <= (wy0 + wy1) / 2 <= bot]
@@ -98,7 +108,7 @@ def main() -> int:
         if a.set and (set_id != a.set or (a.page and page != a.page)):
             continue
         pdf = single_page_pdf(find_pdf(set_id), page)
-        words = mupdf_words(pdf)
+        words = pdfminer_words(pdf)
         caps = caption_boxes(pdf, titles)
         tables = find_tables(str(pdf), 1)["tables"]
         owners = region_owners([t["bbox"] for t in tables], caps)
@@ -131,7 +141,7 @@ def main() -> int:
     print("\n" + "=" * 78)
     print(f"keyed tables audited      {tot['tables']}")
     print(f"non-empty cells           {tot['cells']}")
-    print(f"AGREE with MuPDF          {tot['agree']}/{tot['cells']}  ({100.0 * tot['agree'] / n:.2f}%)")
+    print(f"AGREE with the judge      {tot['agree']}/{tot['cells']}  ({100.0 * tot['agree'] / n:.2f}%)")
     print(f"DISAGREE                  {len(diffs)}")
 
     if diffs:
@@ -145,7 +155,7 @@ def main() -> int:
         for sid, pg, title, b, ours, theirs in diffs[: a.show]:
             print(f"  {sid[:22]} p{pg} {title[:26]}  ({b[0]:.0f},{b[1]:.0f})")
             print(f"      ours   {ours[:96]!r}")
-            print(f"      mupdf  {theirs[:96]!r}")
+            print(f"      judge  {theirs[:96]!r}")
     return 0
 
 

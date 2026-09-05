@@ -41,6 +41,7 @@ warnings.filterwarnings("ignore")
 sys.path.insert(0, str(Path(__file__).parent))
 
 import pdfplumber                                             # noqa: E402
+import pymupdf                                                # noqa: E402
 from shapely.geometry import Point, box                       # noqa: E402
 from shapely.strtree import STRtree                           # noqa: E402
 
@@ -49,33 +50,64 @@ from boxfit import keyed_sheets                               # noqa: E402
 from vectorgrid import find_tables                            # noqa: E402
 
 
-def slot(pdf: Path, table: dict) -> tuple[dict, int, int, int]:
-    """Chars of this table's region, dropped into its faces.
+def page_words(pdf: Path) -> list:
+    """Words in our coordinate space, in the document's own reading order.
 
-    -> (cell -> [chars], assigned, orphan, straddle)
+    THE TEXT ENGINE IS MuPDF, NOT PDFMINER, and the reason is measured. Judging
+    our pdfminer-derived cell text against MuPDF over 9,603 cells found 169
+    disagreements, and reading them showed pdfminer wrong in two systematic
+    ways that a takeoff cannot survive:
+
+      GLYPHS SILENTLY MISSING. 016_NY#18 reports the chars "1" and "3" with no
+      separator between them, where the drawing says "1/3". Same for "208/3"
+      -> "2083" (a voltage/phase becoming a four-digit number), "3/4" -> "34",
+      "4-1/4 X 4-1/4" -> "4-14 X 4-14". pdfminer drops the glyph; MuPDF reads
+      it. Nothing downstream could ever have noticed.
+
+      ROTATED TEXT READ BACKWARDS, one character at a time. Vertical column
+      headers are ordinary on a wide schedule, and 061_IA#58 returned
+      "Y T I T N A U Q" for QUANTITY and "E P Y T R O T O M" for MOTOR TYPE —
+      97 cells on that sheet alone.
+
+    MuPDF assembles words itself, in reading order, with rotation handled, so
+    both classes go away by using it. pdfminer stays as the JUDGE in
+    cellaudit.py: two engines that disagree still mean a cell worth looking at,
+    whichever one is wrong.
+
+    Geometry still comes from pdfplumber — vectorgrid reads lines, rects and
+    curves there — so this changes the text source only.
     """
-    from vectorgrid import page_origin
-    with pdfplumber.open(pdf) as doc:
-        chars = doc.pages[0].chars
-        ox, oy = page_origin(doc.pages[0])
-    if ox or oy:
-        chars = [dict(c, x0=c["x0"] - ox, x1=c["x1"] - ox,
-                      top=c["top"] - oy, bottom=c["bottom"] - oy) for c in chars]
+    with pymupdf.open(pdf) as doc:
+        page = doc[0]
+        rot = page.rotation_matrix
+        out = []
+        for x0, y0, x1, y1, w, blk, ln, wn in page.get_text("words"):
+            r = pymupdf.Rect(x0, y0, x1, y1) * rot
+            out.append((min(r.x0, r.x1), min(r.y0, r.y1),
+                        max(r.x0, r.x1), max(r.y0, r.y1), w, blk, ln, wn))
+    return out
 
+
+def slot(pdf: Path, table: dict) -> tuple[dict, int, int, int]:
+    """Words of this table's region, dropped into its faces.
+
+    -> (cell -> [words], assigned, orphan, straddle)
+
+    The unit is a WORD, not a glyph. A word is what the document itself says
+    belongs together, and using it removes a whole failure mode: 016_NY#18 was
+    putting the final T of REFRIGERANT into the cell next door, which then read
+    "TOTAL HEAT T REJECTION". A glyph can fall on the wrong side of a wall; a
+    word is placed by its own centre, once.
+    """
+    words = page_words(pdf)
     x0, top, x1, bot = table["bbox"]
-    # Keep SPACE glyphs. A PDF may or may not emit them; when it does, using
-    # them beats guessing from inter-glyph gaps, and dropping them was
-    # producing "HELICALPIER SCHEDULE" and "COLUMNSCHEDULE" on 073_MT#21 —
-    # content errors invisible to a containment metric, which only ever asked
-    # which face a glyph fell in. They are excluded from the containment counts
-    # below, because a space is not content.
-    inside = [c for c in chars
-              if x0 <= (c["x0"] + c["x1"]) / 2 <= x1
-              and top <= (c["top"] + c["bottom"]) / 2 <= bot
-              and (c.get("text") or "")]
+    inside = [w for w in words
+              if x0 <= (w[0] + w[2]) / 2 <= x1
+              and top <= (w[1] + w[3]) / 2 <= bot
+              and (w[4] or "").strip()]
     if not table["cells"]:
         # A raster region has no faces by construction — it is a picture, and
-        # its text is pixels. Counting its glyphs as orphans would punish the
+        # its text is pixels. Counting its words as orphans would punish the
         # one honest answer available for it.
         return {}, 0, 0, 0
 
@@ -84,18 +116,17 @@ def slot(pdf: Path, table: dict) -> tuple[dict, int, int, int]:
     out: dict = defaultdict(list)
     loose: list = []
     assigned = orphan = straddle = 0
-    for c in inside:
-        p = Point((c["x0"] + c["x1"]) / 2, (c["top"] + c["bottom"]) / 2)
+    for w in inside:
+        p = Point((w[0] + w[2]) / 2, (w[1] + w[3]) / 2)
         hits = [i for i in tree.query(p) if faces[i].covers(p)]
-        ink = bool((c.get("text") or "").strip())
         if not hits:
-            orphan += ink
-            loose.append(c)
+            orphan += 1
+            loose.append(w)
         elif len(hits) > 1:
-            straddle += ink
+            straddle += 1
         else:
-            assigned += ink
-            out[table["cells"][hits[0]]].append(c)
+            assigned += 1
+            out[table["cells"][hits[0]]].append(w)
     out = split_unruled_columns(out)
     out = place_loose_text(out, loose, table["bbox"])
     return out, assigned, orphan, straddle
@@ -119,8 +150,7 @@ def place_loose_text(cells: dict, loose: list, bbox: tuple) -> dict:
     # Rotated glyphs are not row text. A drawing sets its issue-date column
     # sideways, and placing those characters as cells produces rows reading
     # "5", "2", "0".
-    ink = [c for c in loose
-           if (c.get("text") or "").strip() and c.get("upright", True)]
+    ink = [w for w in loose if (w[4] or "").strip()]
     if not ink or not cells:
         return cells
     edges = sorted({round(b[0], 1) for b in cells} | {round(b[2], 1) for b in cells})
@@ -128,8 +158,8 @@ def place_loose_text(cells: dict, loose: list, bbox: tuple) -> dict:
         return cells
 
     lines: dict = defaultdict(list)
-    for c in ink:
-        lines[round(((c["top"] + c["bottom"]) / 2) / 6)].append(c)
+    for w in ink:
+        lines[round(((w[1] + w[3]) / 2) / 6)].append(w)
 
     # A header that WRAPS is still one row. "SHEET NUMBER" set on two lines was
     # coming back as a row reading "SHEET" and another reading
@@ -138,7 +168,7 @@ def place_loose_text(cells: dict, loose: list, bbox: tuple) -> dict:
     bands, cur = [], None
     for k in sorted(lines):
         b = lines[k]
-        top, bot = min(c["top"] for c in b), max(c["bottom"] for c in b)
+        top, bot = min(w[1] for w in b), max(w[3] for w in b)
         h = max(bot - top, 1.0)
         if cur is not None and top - cur[1] < h * 0.7:
             cur[0] = min(cur[0], top); cur[1] = max(cur[1], bot); cur[2] += b
@@ -150,8 +180,8 @@ def place_loose_text(cells: dict, loose: list, bbox: tuple) -> dict:
         bands.append(cur)
 
     for _t, _b, band in bands:
-        top = min(c["top"] for c in band)
-        bot = max(c["bottom"] for c in band)
+        top = min(w[1] for w in band)
+        bot = max(w[3] for w in band)
         # THE COLUMN GRID MAY NOT CUT A WORD. This is what separates a header
         # row from the table's own caption: SHEET NUMBER / SHEET NAME / SCALE
         # falls in three columns with the edges landing in the gaps between
@@ -159,15 +189,15 @@ def place_loose_text(cells: dict, loose: list, bbox: tuple) -> dict:
         # and came back as "DRAW" | "ING LIST". If an edge lands inside a run
         # of ink, this band is not laid out on these columns and is left alone.
         runs = []
-        for c in sorted(band, key=lambda c: c["x0"]):
-            if runs and c["x0"] <= runs[-1][1] + 2.0:
-                runs[-1][1] = max(runs[-1][1], c["x1"])
+        for w in sorted(band, key=lambda w: w[0]):
+            if runs and w[0] <= runs[-1][1] + 2.0:
+                runs[-1][1] = max(runs[-1][1], w[2])
             else:
-                runs.append([c["x0"], c["x1"]])
+                runs.append([w[0], w[2]])
         if any(a + 0.5 < e < z - 0.5 for a, z in runs for e in edges):
             continue
         for lo, hi in zip(edges, edges[1:]):
-            part = [c for c in band if lo <= (c["x0"] + c["x1"]) / 2 <= hi]
+            part = [w for w in band if lo <= (w[0] + w[2]) / 2 <= hi]
             if part:
                 cells[(lo, top, hi, bot)] = part
     return cells
@@ -205,11 +235,7 @@ def split_unruled_columns(cells: dict) -> dict:
             out.update({b: cells[b] for b in boxes})
             continue
         x0, x1 = float(key[0]), float(key[1])
-        ink = []
-        for b in boxes:
-            for c in cells[b]:
-                if (c.get("text") or "").strip():
-                    ink.append((c["x0"], c["x1"]))
+        ink = [(w[0], w[2]) for b in boxes for w in cells[b] if (w[4] or "").strip()]
         if not ink:
             out.update({b: cells[b] for b in boxes})
             continue
@@ -229,33 +255,53 @@ def split_unruled_columns(cells: dict) -> dict:
         edges = [x0] + cuts + [x1]
         for b in boxes:
             for lo, hi in zip(edges, edges[1:]):
-                part = [c for c in cells[b] if lo <= (c["x0"] + c["x1"]) / 2 <= hi]
+                part = [w for w in cells[b] if lo <= (w[0] + w[2]) / 2 <= hi]
                 if part:
                     out[(lo, b[1], hi, b[3])] = part
     return out
 
 
-def cell_text(chars: list) -> str:
-    """Reading order within one cell: lines top to bottom, glyphs left to
-    right. Cells wrap, and a wrapped value is one value."""
-    lines: dict = defaultdict(list)
-    for c in chars:
-        lines[round(c["top"] / 3)].append(c)
-    parts = []
-    for k in sorted(lines):
-        run, prev = [], None
-        for c in sorted(lines[k], key=lambda c: c["x0"]):
-            # A PDF carries no spaces — a space is a gap the drawing program
-            # left between two glyphs. Rebuild it from the gap, scaled to the
-            # type, or every cell comes back as one run-together word.
-            if prev is not None and not (c["text"] or " ").isspace() \
-                    and not (prev["text"] or " ").isspace() \
-                    and c["x0"] - prev["x1"] > 0.22 * float(prev.get("size") or 8):
-                run.append(" ")
-            run.append(c["text"])
-            prev = c
-        parts.append("".join(run))
-    return " ".join(p.strip() for p in parts).strip()
+def cell_text(words: list) -> str:
+    """A cell's text in the order a reader sees it, whatever way it is set.
+
+    ORIENTATION IS TAKEN FROM THE WORD'S OWN BOX, not from MuPDF's reported
+    line direction, because that direction is wrong on exactly the sheets that
+    need it: 061_IA#58's vertical column headers are reported dir=(1,0) while
+    their boxes are 10pt wide and 65pt tall. Geometry cannot lie about which
+    way a word runs.
+
+    A word taller than it is wide is vertical type. Schedule headers set that
+    way read BOTTOM TO TOP — the near-universal drafting convention, and what
+    the words themselves say here: "OPERATING" sits below "WEIGHT(LBS)" and the
+    header is OPERATING WEIGHT(LBS); "TOTAL" below "AIRFLOW" below "(CFM)" and
+    the header is TOTAL AIRFLOW (CFM). So vertical cells are read up the
+    column and across; horizontal cells along the line and down. Getting this
+    wrong returned "Y T I T N A U Q" under one scheme and "WEIGHT(LBS)
+    OPERATING" under the next.
+    """
+    if not words:
+        return ""
+
+    def vertical(w):
+        return (w[3] - w[1]) > (w[2] - w[0]) * 1.3 and len((w[4] or "")) > 1
+
+    tall = sum(1 for w in words if vertical(w))
+    if tall * 2 > len(words):                      # a vertical cell
+        h = max((w[2] - w[0] for w in words), default=8.0) or 8.0
+        lines: dict = defaultdict(list)
+        for w in words:
+            lines[round(((w[0] + w[2]) / 2) / max(h * 0.6, 1.0))].append(w)
+        return " ".join(
+            " ".join(x[4] for x in sorted(lines[k], key=lambda x: -(x[1] + x[3])))
+            for k in sorted(lines)).strip()
+
+    h = max((w[3] - w[1] for w in words), default=8.0) or 8.0
+    lines = defaultdict(list)
+    for w in words:
+        lines[round(((w[1] + w[3]) / 2) / max(h * 0.6, 1.0))].append(w)
+    return " ".join(
+        " ".join(x[4] for x in sorted(lines[k], key=lambda x: x[0]))
+        for k in sorted(lines)).strip()
 
 
 def show(set_id: str, page: int) -> int:
