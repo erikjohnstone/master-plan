@@ -316,6 +316,57 @@ def _widen_along_col_rules(vmap, hmap, gx0, gy0, gx1, gy1, cols) -> tuple:
     return (gx0, gy0, gx1, gy1)
 
 
+def _split_at_title_bands(members, cells) -> list[list]:
+    """Break a block wherever a SECOND title band begins.
+
+    A schedule opens with an undivided full-width row — the band its title is
+    printed in — and then divides into columns. So an undivided full-width row
+    part-way down a block is a second table's title, and the block is two
+    schedules that the stroke-weight cut failed to separate. This needs no text
+    and no font size: it is the shape of the ruling alone.
+
+    Measured on the two blocks that were still fusing tables:
+
+      008_MO#16  (1857,469)-(2308,666), rows undivided at 469-483 and 573-587,
+                 with 9-cell and 7-cell data rows between and after
+      073_MT#21  (2087,511)-(2356,676), HELICAL PIER over FOOTING, both drawn
+                 on the same 0.48 pen so no weight threshold can part them
+
+    A RUN of undivided rows is one title stack, not several — a title over a
+    spanning sub-header is routine — so only the first row of a run cuts.
+    """
+    if len(members) < 8:
+        return [members]
+    b = [cells[i].bounds for i in members]
+    width = max(max(x[2] for x in b) - min(x[0] for x in b), 1.0)
+    rows: dict = defaultdict(list)
+    for i in members:
+        rows[round(cells[i].bounds[1])].append(i)
+    keys = sorted(rows)
+
+    def undivided(k):
+        ms = rows[k]
+        if len(ms) != 1:
+            return False
+        x0, _y0, x1, _y1 = cells[ms[0]].bounds
+        return x1 - x0 >= width * 0.9
+
+    full = {k: undivided(k) for k in keys}
+    cuts = [k for idx, k in enumerate(keys)
+            if idx > 0 and full[k] and not full[keys[idx - 1]]]
+    if not cuts:
+        return [members]
+
+    pieces, edges = [], [keys[0]] + cuts + [float("inf")]
+    for lo, hi in zip(edges, edges[1:]):
+        pieces.append([i for i in members if lo <= round(cells[i].bounds[1]) < hi])
+    # Refuse the split unless every piece is still a table on its own — one
+    # stray undivided row must not shave two cells off a good block.
+    if any(len(p) < 4 or len({round(cells[i].bounds[1]) for i in p}) < 2 for p in pieces):
+        return [members]
+    return pieces
+
+
 def _border_weight(segs: list[tuple]) -> float | None:
     """The pen that draws table borders, if this sheet uses more than one.
 
@@ -511,7 +562,8 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
     import os as _os
     _dbg = _os.environ.get("VG_DEBUG")
     tables = []
-    for members in groups.values():
+    blocks = [p for m in groups.values() for p in _split_at_title_bands(m, cells)]
+    for members in blocks:
         if _dbg:
             _b = [cells[i].bounds for i in members]
             _rs = {round(x[1]) for x in _b}; _cs = {round(x[0]) for x in _b}

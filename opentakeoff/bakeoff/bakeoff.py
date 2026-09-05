@@ -298,22 +298,40 @@ def score(regions, caps) -> list[str]:
     were scored SPLIT for it. Nothing that finishes before the title starts is
     that title's table.
     """
-    hits = []
-    for title, cp in caps.items():
-        if not cp:
-            continue
-        cx0, ctop, cx1, cbot = cp
-        cw = max(cx1 - cx0, 1)
-        cmid = (ctop + cbot) / 2
-        for (x0, top, x1, bot) in regions:
-            if cmid < top - 60 or cmid > top + 140:      # caption belongs to THIS region's top
+    return sorted({t for t in region_owners(regions, caps).values()})
+
+
+def region_owners(regions, caps) -> dict:
+    """Region -> the one caption it belongs to.
+
+    ONE REGION HAS ONE OWNER. Stacked schedules sit close enough that the
+    windows overlap — on 073_MT#21 the FOOTING block's top is 42pt under the
+    HELICAL PIER caption and 34pt over its own, so both captions pass the test
+    for it and the sheet reads as a fragmented table when the extraction is
+    exactly right. The nearest caption above wins, which is also what a reader
+    does.
+    """
+    owners = {}
+    for r in regions:
+        x0, top, x1, bot = r
+        best = None
+        for title, cp in caps.items():
+            if not cp:
                 continue
-            if cmid > bot + 5:                           # ... and the region outlives it
+            cx0, ctop, cx1, cbot = cp
+            cmid = (ctop + cbot) / 2
+            if cmid < top - 60 or cmid > top + 140:  # caption belongs to THIS region's top
                 continue
-            if min(x1, cx1) - max(x0, cx0) >= cw * 0.5:   # and shares its band
-                hits.append(title)
-                break
-    return hits
+            if cmid > bot + 5:                       # ... and the region outlives it
+                continue
+            if min(x1, cx1) - max(x0, cx0) < max(cx1 - cx0, 1) * 0.5:   # shares its band
+                continue
+            d = abs(cmid - top)
+            if best is None or d < best[0]:
+                best = (d, title)
+        if best:
+            owners[r] = best[1]
+    return owners
 
 
 def main() -> int:

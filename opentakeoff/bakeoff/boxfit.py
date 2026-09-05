@@ -57,7 +57,8 @@ from pathlib import Path
 warnings.filterwarnings("ignore")
 sys.path.insert(0, str(Path(__file__).parent))
 
-from bakeoff import BACKENDS, CORPUS, caption_boxes, find_pdf, single_page_pdf  # noqa: E402
+from bakeoff import (BACKENDS, CORPUS, caption_boxes, find_pdf,  # noqa: E402
+                     region_owners, single_page_pdf)
 from vectorgrid import segments_from_page  # noqa: E402
 
 
@@ -149,18 +150,8 @@ def main() -> int:
 
         # caption -> regions whose TOP this caption sits at
         match = defaultdict(list)
-        for t, cp in caps.items():
-            if not cp:
-                continue
-            cx0, ctop, cx1, cbot = cp
-            cw = max(cx1 - cx0, 1)
-            cmid = (ctop + cbot) / 2
-            for r in regions:
-                x0, top, x1, bot = r
-                if cmid < top - 60 or cmid > top + 140 or cmid > bot + 5:
-                    continue
-                if min(x1, cx1) - max(x0, cx0) >= cw * 0.5:
-                    match[t].append(r)
+        for r, t in region_owners(regions, caps).items():
+            match[t].append(r)
 
         hit = sum(1 for t in match if match[t])
         split = sum(1 for t in match if len(match[t]) > 1)
