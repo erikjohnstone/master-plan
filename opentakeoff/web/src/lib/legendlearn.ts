@@ -425,7 +425,15 @@ type PairCandidate = {
    * wrap cap remains real even when a glyph fragment initially stole one
    * of those lines. */
   captionLines: number;
-  kind: "symbol" | "line_style";
+  kind: "symbol" | "line_style" | "text_symbol";
+  /** True when source row rules, not proximity alone, own this pair. */
+  structuredRow?: boolean;
+  /** Exact horizontal-rule band that owns a structured row. Internal only:
+   * it lets the structured pass repair one source row without replacing an
+   * already-correct heuristic row elsewhere in the same table. */
+  structuredBand?: [number, number];
+  /** Source text used only when a ruled row has no usable vector member. */
+  structuredTextSymbol?: string;
   /** Physical legend layout. Most legends put the caption to the glyph's
    * right; RCP/fire/electrical cell legends commonly center it below. */
   layout: "right" | "below";
@@ -482,7 +490,7 @@ function isLegendHeadingText(text: string): boolean {
     // Definition prose inside a legend routinely says "symbol indicates".
     // Even when that fragment is only eight words long, it is a caption
     // continuation rather than a nested heading.
-    && !/\b(?:SEE|REFER\s+TO|LEGEND\s+NOTES?|NOTE\s*\d+|INDICATES?)\b/i.test(normalized);
+    && !/\b(?:SEE|REFER\s+TO|LEGEND\s+NOTES?|POSITION\s+LEGEND|NOTE\s*\d+|INDICATES?|DENOTES)\b/i.test(normalized);
   return shortDeclarativeHeading
     || /^SYMBOL$/i.test(normalized)
     || /^(?:(?:CONTROL|HVAC|MECHANICAL|ELECTRICAL|SYSTEM|DEVICE|NETWORK)\s+)?COMPONENTS$/i.test(normalized)
@@ -544,7 +552,7 @@ function isSectionBoundaryText(text: string): boolean {
     // repeat the same glyph/text column cadence. They describe how a tag is
     // structured, not additional symbol identities, so their explicit title
     // ends the preceding legend section even though it does not begin one.
-    || /^(?:(?:AIR\s+DISTRIBUTION|CONTROL\s+DIAGRAM|DIFFUSER|DUCTWORK(?:\s+LINE)?|PIPING(?:\s+LINE)?)\s+CALLOUTS?)$/i.test(normalized);
+    || /^(?:(?:AIR\s+DISTRIBUTION|CONTROL\s+DIAGRAM|DIFFUSER|DUCTWORK(?:\s+LINE)?|PIPING(?:\s+LINE)?)\s+CALLOUTS?|ELECTRICAL\s+LINETYPES|FEEDER\s+DESIGNATION\s+LOGIC)$/i.test(normalized);
 }
 
 /** Sequence/general-note prose can form a perfectly regular numbered
@@ -595,7 +603,12 @@ function isDraftingAnnotationCaption(text: string): boolean {
   // routed-system rows such as "INDICATES EXISTING ITEM" retain their own
   // line-style classification.
   if (/^(?:INDICATES\s+(?:EQUIPMENT\s+ID|KEYED\s+SHEET\s+NOTE|\(N\)\s+OR\s+\(E\)\s+EQUIPMENT)\b|DENOTES\s+(?:TOP\s+OF\s+STEEL\s+ELEVATION|DIRECTION\s+OF\s+ROOF\s+SLOPE)\b|ARROW\s+INDICATES\s+DIRECTION\b|(?:FLOOR\s+MOUNTED\s+)?CONNECTION\s+POINT\b|(?:POSITIVE|NEGATIVE)\s+PRESSURE\s+DUCT\s+SECTION\b|DUCT\s+SIZE\b|BY\s+(?:ELECTRICAL|PLUMBING|MECHANICAL)\s+CONTRACTOR$|POINT\s+OF\s+(?:CONNECTION(?:\s+OF\s+NEW\s+TO\s+EXISTING\s+WORK)?|DISCONNECT)$|NEW\s+PIPE\s+CONNECTION$|DIRECTION\s+OF\s+PIPE\s+PITCH(?:,?\s+(?:DOWN|UP))?$|PIPE\s+(?:BREAK|CAP\s+OR\s+PLUG|DROP\s*\/\s*(?:PIPE\s+)?RISE|ELBOW(?:,?\s+(?:TURNED\s+)?(?:DOWN|UP))?|TEE(?:,?\s+(?:DOWN|HORIZONTAL|(?:TOP|BOTTOM)\s+CONNECTION(?:,.*)?))?|RISER|DROP|BRANCH,?\s+(?:TOP|BOTTOM)\s+CONNECTION)$|(?:GRILLE\s*\/\s*REGISTER\s*\/\s*DIFFUSER|EQUIPMENT)\s+TAG$|(?:RECTANGULAR\s+)?(?:EXHAUST\s*\/\s*RETURN|SUPPLY)\s+DUCTWORK\s+(?:DOWN|UP)$)/i.test(normalized)) return true;
-  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|(?:(?:MECHANICAL|KITCHEN)\s+)?EQUIPMENT)\s+CALL\s*OUT|HOME\s+RUN|HOMERUNS?\s+TO\s+PANEL(?:BOARD)?\b|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|DUCTWORK\s+(?:BREAK|OR\s+PIPING\s+RISE)|INTAKE\s+OR\s+EXHAUST|(?:DIRECTION\s+OF\s+(?:AIRFLOW|FLOW)|FLOW\s+DIRECTION)|(?:SUPPLY|RETURN,?\s+EXHAUST,?\s+OR\s+TRANSFER)\s+AIRFLOW|(?:INCLINED\s+RISE|DECLINED\s+DROP)\s+WITH\s+RESPECT\s+TO\s+AIRFLOW|(?:UPWARD|DOWNWARD)\s+DIRECTION\s+OF\s+SLOPED\s+PIPING|(?:PIPE\s+DROP\s*\/\s*PIPE\s+RISE|PIP(?:E|ING)\s+(?:UP|DOWN|CONTINUATION)|(?:SUPPLY|RETURN|EXHAUST)?\s*DUCT\s+(?:UP|DOWN)(?:\s*\([^)]*\))?)(?:\s*[.,;:])?$|NEW\s+TO\s+EXISTING\s+CONNECTION\s+POINT|SLOPE\s+PIPE\s+IN\s+DIRECTION\s+OF\s+ARROW|AIR\s+DISTRIBUTION\s+TAG|AIR\s+DEVICE\s+TYPE\.\s+REFER\s+TO\s+SCHEDULE\b.*\bAIR\s+DEVICE\s+WITH\s+(?:ROUND|RECTANGULAR)\s+NECK\s+TAG|(?:LIGHTING\s+FIXTURE|RECEPTACLE\s+DEVICE)\s+TAGS?\b|ELECTRICAL\s+EQUIPMENT\s+AND\s+TAGS\b|DEVIATIONS?\s+OF\s+(?:THE\s+)?ABOVE\s+RECEPTACLE\s+TYPES?\b|[•\-]?\s*INTERNAL\s+(?:GROUND|ARC)\s+FAULT\b|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|(?:DEMOLITION|CONSTRUCTION)\s+NOTE\s+IDENTIFICATION|PLAN\s+REFERENCE\s+NOTE\s+SYMBOL|POINT\s+OF\s+(?:DEMOLITION|CONNECTION,?\s+NEW-TO-EXISTING)\b|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|CONNECT\s+NEW\s+TO\s+EXISTING|(?:DISCONNECT|CONNECT)\s+CONDUCTORS\s+(?:FROM|TO)\s+EQUIPMENT|REMOVE\s+TO\s+THIS\s+POINT|DEMOLISH\s+TO\s+POINT\s+INDICATED|(?:EXTENTS?\s+OF\s+DEMOLITION|OBJECT\s+TO\s+BE\s+REMOVED)|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\s+(?:CONDUCTOR|STRUCTURE)\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b|EQUIPMENT\s+CONNECTION\s+AS\s+NOTED\b)/i.test(normalized);
+  // Electrical schematic legends also contain topology and notation keys
+  // beside real equipment/device identities. A connection dot, ground/bond
+  // termination, or fixture-type tag describes how to read the drawing; it
+  // is not another installed device to send into an EA sweep.
+  if (/^(?:[A-Z]{1,3}\s+CONNECTION|NODE\s+OR\s+CONNECTION|BOND\s+TO\b.*\b(?:PIPE|STEEL|STRUCTURE)|LIGHTING\s+FIXTURE\s+TYPE\b.*\bFIXTURE\s+SCHEDULE)\.?$/i.test(normalized)) return true;
+  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|DETAIL\s+VIEW\s+OR\s+MATCHING|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|(?:(?:MECHANICAL|KITCHEN)\s+)?EQUIPMENT)\s+CALL\s*OUT|HOME\s+RUN|HOMERUNS?\s+TO\s+PANEL(?:BOARD)?\b|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|CAPPED\s+UNDERGROUND\s+CONDUIT(?:\s+OR\s+STUB\s*UP)?|CONDUIT\s+(?:DROP|RISE|STUB\s*UP)|DEVICE\s+LOCATED\s+AT\s+REMOTE\s+LOCATION|HATCH\s+MARKS\s+IN\s+CONDUIT\s+RUN\b.*|DENOTES\s+EXISTING\s+(?:EQUIPMENT|DEVICES?)(?:\s+OR\s+(?:EQUIPMENT|DEVICES?))?|THIS\s+NOTATION\b.*\bDENOTES\b.*\bMOUNTING\s+HEIGHT\b.*|DUCTWORK\s+(?:BREAK|OR\s+PIPING\s+RISE)|INTAKE\s+OR\s+EXHAUST|(?:DIRECTION\s+OF\s+(?:AIRFLOW|FLOW)|FLOW\s+DIRECTION)|(?:SUPPLY|RETURN,?\s+EXHAUST,?\s+OR\s+TRANSFER)\s+AIRFLOW|(?:INCLINED\s+RISE|DECLINED\s+DROP)\s+WITH\s+RESPECT\s+TO\s+AIRFLOW|(?:UPWARD|DOWNWARD)\s+DIRECTION\s+OF\s+SLOPED\s+PIPING|(?:PIPE\s+DROP\s*\/\s*PIPE\s+RISE|PIP(?:E|ING)\s+(?:UP|DOWN|CONTINUATION)|(?:SUPPLY|RETURN|EXHAUST)?\s*DUCT\s+(?:UP|DOWN)(?:\s*\([^)]*\))?)(?:\s*[.,;:])?$|NEW\s+TO\s+EXISTING\s+CONNECTION\s+POINT|SLOPE\s+PIPE\s+IN\s+DIRECTION\s+OF\s+ARROW|AIR\s+DISTRIBUTION\s+TAG|AIR\s+DEVICE\s+TYPE\.\s+REFER\s+TO\s+SCHEDULE\b.*\bAIR\s+DEVICE\s+WITH\s+(?:ROUND|RECTANGULAR)\s+NECK\s+TAG|(?:LIGHTING\s+FIXTURE|RECEPTACLE\s+DEVICE)\s+TAGS?\b|ELECTRICAL\s+EQUIPMENT\s+AND\s+TAGS\b|DEVIATIONS?\s+OF\s+(?:THE\s+)?ABOVE\s+RECEPTACLE\s+TYPES?\b|[•\-]?\s*INTERNAL\s+(?:GROUND|ARC)\s+FAULT\b|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|(?:DEMOLITION|CONSTRUCTION)\s+NOTE\s+IDENTIFICATION|PLAN\s+REFERENCE\s+NOTE\s+SYMBOL|POINT\s+OF\s+(?:DEMOLITION|CONNECTION,?\s+NEW-TO-EXISTING)\b|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|CONNECT\s+NEW\s+TO\s+EXISTING|(?:DISCONNECT|CONNECT)\s+CONDUCTORS\s+(?:FROM|TO)\s+EQUIPMENT|REMOVE\s+TO\s+THIS\s+POINT|DEMOLISH\s+TO\s+POINT\s+INDICATED|(?:EXTENTS?\s+OF\s+DEMOLITION|OBJECT\s+TO\s+BE\s+REMOVED)|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\s+(?:CONDUCTOR|STRUCTURE)\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b|EQUIPMENT\s+CONNECTION\s+AS\s+NOTED\b)/i.test(normalized);
 }
 
 /** Captions that name a routed medium or drafting line convention rather
@@ -737,6 +750,46 @@ function explicitLegendHeadings(rawSpans: LegendSpan[]): LegendSpan[] {
   return headings;
 }
 
+type SymbolDescriptionHeader = {
+  symbol: LegendSpan;
+  description: LegendSpan;
+  symbolColumnEnd: number;
+};
+
+/** Exact paired field headers are stronger evidence than a generic SYMBOL
+ * word alone. They identify the two columns of a ruled legend table without
+ * relying on a firm title, sheet number, or drawing-specific vocabulary. */
+function symbolDescriptionHeaders(
+  lines: LegendSpan[], typicalTextHeight: number,
+): SymbolDescriptionHeader[] {
+  const headers: SymbolDescriptionHeader[] = [];
+  for (const symbol of lines) {
+    if (!/^SYMBOL$/i.test(normalizedCaption(symbol.text))) continue;
+    const symbolCenterY = (symbol.y0 + symbol.y1) / 2;
+    const description = lines.filter((candidate) =>
+      /^DESCRIPTION$/i.test(normalizedCaption(candidate.text))
+      && candidate.x0 > symbol.x1
+      && candidate.x0 - symbol.x1 <= typicalTextHeight * 32
+      && Math.abs((candidate.y0 + candidate.y1) / 2 - symbolCenterY) <= typicalTextHeight * 0.6)
+      .sort((a, b) => a.x0 - b.x0)[0];
+    if (description) {
+      const intermediateField = lines.filter((candidate) => {
+        const centerY = (candidate.y0 + candidate.y1) / 2;
+        return candidate.x0 > symbol.x1
+          && candidate.x0 < description.x0
+          && Math.abs(centerY - symbolCenterY) <= typicalTextHeight * 0.6
+          && /^(?:ABBR(?:EVIATION)?S?\.?|CODE|TAG|TYPE)$/i.test(normalizedCaption(candidate.text));
+      }).sort((a, b) => a.x0 - b.x0)[0];
+      headers.push({
+        symbol,
+        description,
+        symbolColumnEnd: intermediateField?.x0 ?? description.x0,
+      });
+    }
+  }
+  return headers;
+}
+
 /** A dimension string inside a duct/pipe sketch normally proves that the
  * sketch is a callout, not a standalone device symbol. In an explicitly
  * headed symbol legend, however, a same-row external description such as
@@ -871,6 +924,230 @@ function resemblesExtractedText(
   const onlyPunctuation = overlaps.every((s) => /^[#*]+$/.test(normalizedCaption(s.text)));
   return componentArea / unionArea <= (onlyPunctuation ? 2 : 1.5)
     && x0 >= ux0 - tol && x1 <= ux1 + tol && y0 >= uy0 - tol && y1 <= uy1 + tol;
+}
+
+type StructuredLegendTable = {
+  left: number;
+  right: number;
+  symbolRight: number;
+  descriptionX: number;
+  top: number;
+  bottom: number;
+  boundaries: number[];
+};
+
+/** Recover the finite row bands of a ruled SYMBOL / DESCRIPTION table.
+ * Long horizontal rules that cross both declared fields are source-level
+ * row evidence: they let one table cell own all of its wrapped prose while
+ * preventing adjacent cells from fusing. The bounds are inferred from the
+ * sheet's own text scale and geometry, never from a page or project token. */
+function structuredLegendTables(
+  segs: number[], lines: LegendSpan[], typicalTextHeight: number,
+): StructuredLegendTable[] {
+  const headers = symbolDescriptionHeaders(lines, typicalTextHeight);
+  if (!headers.length) return [];
+  const horizontalRules: RectBox[] = [];
+  const horizontalTolerance = Math.max(1.5, typicalTextHeight * 0.08);
+  for (let i = 0; i < segs.length; i += 4) {
+    const ax = segs[i], ay = segs[i + 1], bx = segs[i + 2], by = segs[i + 3];
+    if (Math.abs(ay - by) > horizontalTolerance) continue;
+    const x0 = Math.min(ax, bx), x1 = Math.max(ax, bx);
+    if (x1 - x0 < typicalTextHeight * 8) continue;
+    horizontalRules.push({ x0, x1, y0: (ay + by) / 2, y1: (ay + by) / 2 });
+  }
+  const tables: StructuredLegendTable[] = [];
+  for (let headerIndex = 0; headerIndex < headers.length; headerIndex++) {
+    const { symbol, description, symbolColumnEnd } = headers[headerIndex];
+    const localRules = horizontalRules.filter((rule) =>
+      rule.x0 <= symbol.x0 + typicalTextHeight * 1.5
+      && symbol.x0 - rule.x0 <= typicalTextHeight * 8
+      && rule.x1 >= description.x0 + typicalTextHeight * 4
+      && rule.x1 - description.x0 <= typicalTextHeight * 60);
+    if (localRules.length < 3) continue;
+    const centerY = (symbol.y0 + symbol.y1) / 2;
+    const firstBelowHeader = localRules.map((rule) => rule.y0)
+      .filter((y) => y > centerY + typicalTextHeight * 0.2)
+      .sort((a, b) => a - b)[0];
+    if (!Number.isFinite(firstBelowHeader)) continue;
+    const left = median(localRules.map((rule) => rule.x0));
+    const right = median(localRules.map((rule) => rule.x1));
+    const nextHeader = headers.slice(headerIndex + 1).filter((candidate) =>
+      candidate.symbol.y0 > symbol.y1
+      && Math.abs(candidate.symbol.x0 - symbol.x0) <= typicalTextHeight * 2
+      && Math.abs(candidate.description.x0 - description.x0) <= typicalTextHeight * 2)
+      .sort((a, b) => a.symbol.y0 - b.symbol.y0)[0];
+    const sectionEnd = lines.filter((line) => {
+      const height = line.y1 - line.y0;
+      const centerX = (line.x0 + line.x1) / 2;
+      return line.y0 > firstBelowHeader + typicalTextHeight * 0.5
+        && (!nextHeader || line.y0 < nextHeader.symbol.y0)
+        && centerX >= left && centerX <= right
+        && (isSectionBoundaryText(line.text)
+          // Large centered text in the DESCRIPTION side can introduce a
+          // new table section. Stacked text-only marks ($3, HOA, +0'-0")
+          // can be equally tall inside the SYMBOL cell and are not titles.
+          || (height >= typicalTextHeight * 1.5
+            && line.x0 >= description.x0 - typicalTextHeight * 0.75))
+        && !/^(?:SYMBOL|DESCRIPTION)$/i.test(normalizedCaption(line.text));
+    }).sort((a, b) => a.y0 - b.y0)[0];
+    const stopY = Math.min(
+      nextHeader?.symbol.y0 ?? Infinity,
+      sectionEnd?.y0 ?? Infinity,
+    );
+    const mergeTolerance = Math.max(1.8, typicalTextHeight * 0.12);
+    const ys = localRules.map((rule) => rule.y0)
+      .filter((y) => y >= firstBelowHeader - mergeTolerance && y <= stopY + mergeTolerance)
+      .sort((a, b) => a - b);
+    const boundaries: number[] = [];
+    for (const y of ys) {
+      const last = boundaries[boundaries.length - 1];
+      if (last === undefined || y - last > mergeTolerance) boundaries.push(y);
+      else boundaries[boundaries.length - 1] = (last + y) / 2;
+    }
+    if (boundaries.length < 2) continue;
+    tables.push({
+      left,
+      right,
+      symbolRight: symbolColumnEnd - typicalTextHeight * 0.2,
+      descriptionX: description.x0,
+      top: boundaries[0],
+      bottom: boundaries[boundaries.length - 1],
+      boundaries,
+    });
+  }
+  return tables;
+}
+
+function pairBelongsToStructuredTable(
+  pair: PairCandidate, table: StructuredLegendTable,
+): boolean {
+  const rectCenterX = (pair.rect[0][0] + pair.rect[1][0]) / 2;
+  const rectCenterY = (pair.rect[0][1] + pair.rect[1][1]) / 2;
+  const captionCenterX = (pair.span.x0 + pair.span.x1) / 2;
+  return rectCenterX >= table.left && rectCenterX <= table.symbolRight
+    && rectCenterY >= table.top && rectCenterY <= table.bottom
+    && captionCenterX >= table.descriptionX - (pair.span.y1 - pair.span.y0)
+    && captionCenterX <= table.right;
+}
+
+/** Build one auditable pair per ruled table row. Vector members are gathered
+ * only from that row's SYMBOL cell. When the visible mark is encoded solely
+ * as PDF text (common for switch and fixture-type keys), preserve the row as
+ * a nonseedable text-symbol identity for later plan-anchor corroboration. */
+function structuredTablePairs(
+  tables: StructuredLegendTable[], candidates: GlyphCandidate[], lines: LegendSpan[],
+  rawSpans: LegendSpan[], typicalTextHeight: number,
+): PairCandidate[] {
+  const out: PairCandidate[] = [];
+  const rectKey = (rect: [Point, Point]) => rect.flat().join(",");
+  for (const table of tables) {
+    const tableStart = out.length;
+    for (let boundaryIndex = 1; boundaryIndex < table.boundaries.length; boundaryIndex++) {
+      const top = table.boundaries[boundaryIndex - 1];
+      const bottom = table.boundaries[boundaryIndex];
+      if (bottom - top < typicalTextHeight * 0.4) continue;
+      const descriptionLines = lines.filter((line) => {
+        const centerY = (line.y0 + line.y1) / 2;
+        const centerX = (line.x0 + line.x1) / 2;
+        return centerY > top && centerY < bottom
+          && line.x0 >= table.descriptionX - typicalTextHeight * 0.75
+          && centerX < table.right
+          && meaningfulCaption(line.text)
+          && !isLegendHeadingText(line.text)
+          && !/^(?:SYMBOL|DESCRIPTION)$/i.test(normalizedCaption(line.text));
+      }).sort((a, b) => {
+        const ay = (a.y0 + a.y1) / 2, by = (b.y0 + b.y1) / 2;
+        return ay - by || a.x0 - b.x0;
+      });
+      if (!descriptionLines.length) continue;
+
+      const members = candidates.filter((candidate) => {
+        const centerX = (candidate.rect[0][0] + candidate.rect[1][0]) / 2;
+        const centerY = (candidate.rect[0][1] + candidate.rect[1][1]) / 2;
+        return centerX > table.left && centerX < table.symbolRight
+          && centerY > top && centerY < bottom
+          && !resemblesExtractedText(candidate.rect, rawSpans, candidate.segments);
+      }).map((candidate): GlyphMember & { kind: GlyphCandidate["kind"] } => ({
+        rect: candidate.rect,
+        segments: candidate.segments,
+        kind: candidate.kind,
+      })).filter((member, index, all) =>
+        all.findIndex((candidate) => rectKey(candidate.rect) === rectKey(member.rect)) === index)
+        .sort((a, b) => a.rect[0][1] - b.rect[0][1] || a.rect[0][0] - b.rect[0][0]);
+
+      const symbolText = rawSpans.filter((span) => {
+        const centerX = (span.x0 + span.x1) / 2;
+        const centerY = (span.y0 + span.y1) / 2;
+        return centerX > table.left && centerX < table.symbolRight
+          && centerY > top && centerY < bottom
+          && /[A-Z0-9$#()+\-'".]/i.test(normalizedCaption(span.text));
+      });
+      if (!members.length && !symbolText.length) continue;
+      const textSymbol = normalizedCaption(symbolText.map((span) => span.text).join(" "));
+
+      const fallbackRect: [Point, Point] | null = symbolText.length ? [[
+        Math.min(...symbolText.map((span) => span.x0)),
+        Math.min(...symbolText.map((span) => span.y0)),
+      ], [
+        Math.max(...symbolText.map((span) => span.x1)),
+        Math.max(...symbolText.map((span) => span.y1)),
+      ]] : null;
+      const pairMembers: GlyphMember[] = members.length
+        ? members.map(({ rect, segments }) => ({ rect, segments }))
+        : [{ rect: fallbackRect!, segments: 0 }];
+      const rect: [Point, Point] = [[
+        Math.min(...pairMembers.map((member) => member.rect[0][0])),
+        Math.min(...pairMembers.map((member) => member.rect[0][1])),
+      ], [
+        Math.max(...pairMembers.map((member) => member.rect[1][0])),
+        Math.max(...pairMembers.map((member) => member.rect[1][1])),
+      ]];
+      const caption = normalizedCaption(descriptionLines.map((line) => line.text).join(" "));
+      const span: LegendSpan = {
+        text: caption,
+        x0: Math.min(...descriptionLines.map((line) => line.x0)),
+        y0: Math.min(...descriptionLines.map((line) => line.y0)),
+        x1: Math.max(...descriptionLines.map((line) => line.x1)),
+        y1: Math.max(...descriptionLines.map((line) => line.y1)),
+      };
+      out.push({
+        rect,
+        segments: pairMembers.reduce((sum, member) => sum + member.segments, 0),
+        members: pairMembers,
+        span,
+        caption,
+        captionLines: descriptionLines.length,
+        kind: !members.length ? "text_symbol"
+          : ((rect[1][0] - rect[0][0]) >= typicalTextHeight * 3
+            && (rect[1][1] - rect[0][1]) <= typicalTextHeight * 0.35)
+            ? "line_style"
+            : members.some((member) => member.kind === "symbol") ? "symbol" : "line_style",
+        layout: "right",
+        structuredRow: true,
+        structuredBand: [top, bottom],
+        ...(!members.length ? { structuredTextSymbol: textSymbol } : {}),
+      });
+    }
+    const tableRows = out.splice(tableStart);
+    // A whole SYMBOL column made only from alphabetic PDF-text tokens is an
+    // abbreviation glossary, even if the drafter titled the panel LEGEND.
+    // Mixed symbol tables remain eligible: their $/F#/height marks may be
+    // text-encoded while neighboring rows provide real vector devices.
+    const acronymGlossary = tableRows.length >= 6
+      && tableRows.every((pair) => pair.kind === "text_symbol"
+        && /^[A-Z]{1,4}\.?$/i.test(pair.structuredTextSymbol || ""));
+    // Multi-letter alphabetic tokens are abbreviations or equipment tags
+    // rather than vector glyph evidence. Even in a mixed table, do not turn
+    // an APS/AFMS/etc. abbreviation cell into a learned symbol. A single
+    // letter is different: S/T/R are common visible drawing marks and remain
+    // auditable, nonseedable identities for real-plan corroboration.
+    // Punctuation-bearing drawing marks ($, $3, F#, +0'-0") remain auditable
+    // nonseedable identities because their visible notation is the symbol.
+    const auditableRows = tableRows.filter((pair) => pair.kind !== "text_symbol"
+      || !/^[A-Z]{2,4}\.?$/i.test(pair.structuredTextSymbol || ""));
+    if (!acronymGlossary) out.push(...auditableRows);
+  }
+  return out;
 }
 
 function pairCandidates(
@@ -1447,7 +1724,46 @@ function hasMultipleSubstantialSymbols(
     // rendition, and optional face/direction variants side by side under
     // one caption. Those are a vocabulary group, never one sweep template.
     || /\bINDICATES\s+BRACKET,?\s+WALL\s+MOUNTED\s+FIXTURES?\b/i.test(pair.caption)
-    || /\b(?:ARROW,?\s+WHEN\s+USED|QUADRANT\(S\)\s+OF\s+SYMBOL)\b/i.test(pair.caption);
+    || /^(?:ELAPSED\s+TIME\s+METER|FLUORESCENT\s+LIGHT\s+FIXTURE|EMERGENCY\s+LIGHTING)\b/i.test(pair.caption)
+    || /^CEILING-MOUNTED\s+EXIT\s+LIGHT\b/i.test(pair.caption)
+    || /\b(?:ARROW,?\s+WHEN\s+USED|QUADRANT\(S\)\s+OF\s+SYMBOL)\b/i.test(pair.caption)
+    || /\(\s*SINGLE\s*,\s*DOUBLE(?:\s*,\s*QUAD)?\s*\)/i.test(pair.caption);
+
+  // A ruled SYMBOL / DESCRIPTION row gives stronger physical ownership
+  // than a loose proximity pair. In those rows, two complete renditions
+  // may share one description without the prose explicitly saying "or"
+  // (elapsed-time meters and fixture plan/elevation variants are common).
+  // Require two box-scale members on the same display baseline with an
+  // actual horizontal gap. Nested or overlapping actuator/blade/carrier
+  // pieces are still one compound symbol, and tiny terminals/ticks cannot
+  // manufacture a variant group.
+  if (pair.structuredRow) {
+    const substantial = pair.members.filter((member) => {
+      const width = member.rect[1][0] - member.rect[0][0];
+      const height = member.rect[1][1] - member.rect[0][1];
+      return member.segments >= 2
+        && width >= typicalTextHeight * 0.65
+        && height >= typicalTextHeight * 0.65;
+    });
+    const enclosureSlack = typicalTextHeight * 0.1;
+    const oneCarrierEnclosesTheRest = substantial.some((container) =>
+      substantial.every((member) => member === container
+        || (member.rect[0][0] >= container.rect[0][0] - enclosureSlack
+          && member.rect[1][0] <= container.rect[1][0] + enclosureSlack
+          && member.rect[0][1] >= container.rect[0][1] - enclosureSlack
+          && member.rect[1][1] <= container.rect[1][1] + enclosureSlack)));
+    if (oneCarrierEnclosesTheRest) return false;
+    for (let i = 0; i < substantial.length; i++) {
+      for (let j = i + 1; j < substantial.length; j++) {
+        const a = substantial[i].rect, b = substantial[j].rect;
+        const horizontalGap = a[1][0] < b[0][0] ? b[0][0] - a[1][0]
+          : b[1][0] < a[0][0] ? a[0][0] - b[1][0] : 0;
+        const centerDy = Math.abs((a[0][1] + a[1][1] - b[0][1] - b[1][1]) / 2);
+        if (horizontalGap >= typicalTextHeight * 0.15
+          && centerDy <= typicalTextHeight * 1.5) return true;
+      }
+    }
+  }
   const hasExplicitVariantColumns = /^(?:DUCTWORK|PIPING)$/i.test(heading || "")
     || (!!heading && isSpecificDisciplineLegendHeading(heading));
   if (!declaresAlternatives && !hasExplicitVariantColumns) return false;
@@ -1525,10 +1841,21 @@ function attachWrappedCaptions(
           );
         const belowGap = continuation.y0 - pair.span.y1;
         const aboveGap = pair.span.y0 - continuation.y1;
-        const isBelow = belowGap >= -1;
+        // CAD/PDF font boxes can be taller than their baseline leading: two
+        // visibly consecutive description lines may overlap by several
+        // image pixels even though their centers advance by almost one full
+        // text height. Treat that bounded metric overlap as vertical order,
+        // not as an impossible wrap. Same-baseline fragments have little
+        // center advance and remain governed by sameLineContinuation.
+        const pairTextCenterY = (pair.span.y0 + pair.span.y1) / 2;
+        const metricOverlapSlack = typicalTextHeight * 0.25;
+        const isBelow = belowGap >= -1 || (belowGap >= -metricOverlapSlack
+          && lineCenterY - pairTextCenterY >= typicalTextHeight * 0.4);
+        const isAbove = aboveGap >= -1 || (aboveGap >= -metricOverlapSlack
+          && pairTextCenterY - lineCenterY >= typicalTextHeight * 0.4);
         const gap = sameLineContinuation ? horizontalGap
           : Math.max(0, isBelow ? belowGap : aboveGap);
-        if (!sameLineContinuation && !isBelow && aboveGap < -1) continue;
+        if (!sameLineContinuation && !isBelow && !isAbove) continue;
         const glyphMiss = Math.max(0, pair.rect[0][1] - lineCenterY, lineCenterY - pair.rect[1][1]);
         // Text boxes from the same CAD line family can differ by a fraction
         // of a pixel after font metrics and image-space conversion. Keep a
@@ -1561,7 +1888,7 @@ function attachWrappedCaptions(
           best = {
             pairIndex,
             spanIndex: si,
-            prepend: sameLineContinuation ? false : !isBelow,
+            prepend: sameLineContinuation ? false : isAbove,
             sameLine: sameLineContinuation,
             score,
           };
@@ -1645,7 +1972,12 @@ function mergeOwnedWrapPairs(
       if (ownedLines + next.captionLines > maxWrapLines) continue;
       if (Math.abs(next.span.x0 - current.span.x0) > maxIndentDriftPx) continue;
       const lineGap = next.span.y0 - current.span.y1;
-      if (lineGap < 0 || lineGap > maxLineGapPx) continue;
+      const textCenterAdvance = (next.span.y0 + next.span.y1
+        - current.span.y0 - current.span.y1) / 2;
+      const metricLineOverlap = lineGap < 0
+        && lineGap >= -typicalTextHeight * 0.25
+        && textCenterAdvance >= typicalTextHeight * 0.4;
+      if ((lineGap < 0 && !metricLineOverlap) || lineGap > maxLineGapPx) continue;
       const cx = (current.rect[0][0] + current.rect[1][0]) / 2;
       const nx = (next.rect[0][0] + next.rect[1][0]) / 2;
       if (Math.abs(cx - nx) > maxGlyphDimPx) continue;
@@ -1684,7 +2016,11 @@ function mergeOwnedWrapPairs(
       const joinedTallFragments = materiallyOverlapping
         || (glyphVerticalGap <= smallFragmentGap
           && (glyphVerticalGap > 0 || hasTallBody));
-      if (glyphVerticalGap > typicalTextHeight * 0.4
+      // Two disconnected strokes inside one schematic symbol can track the
+      // same slightly-overlapping pair of description baselines. Half a
+      // local text height still sits far inside the ordinary full-row
+      // cadence, while recovering those one-cell fragments deterministically.
+      if (glyphVerticalGap > typicalTextHeight * 0.5
         || unionW > maxGlyphDimPx
         || unionH > maxGlyphDimPx
         || (!compactUnion && !joinedTallFragments && !semanticContinuation)) continue;
@@ -2276,14 +2612,7 @@ export function findLegendGlyphs(
   // finite 320px ceiling; headerless pages retain the conservative 220px
   // bound so plan details and schedule graphics cannot widen themselves.
   const hasExplicitLegendHeading = lines.some((line) => isLegendHeadingText(line.text));
-  const hasSymbolDescriptionHeaderRow = lines.some((symbol) => {
-    if (!/^SYMBOL$/i.test(normalizedCaption(symbol.text))) return false;
-    const symbolCenterY = (symbol.y0 + symbol.y1) / 2;
-    return lines.some((description) => /^DESCRIPTION$/i.test(normalizedCaption(description.text))
-      && description.x0 > symbol.x1
-      && description.x0 - symbol.x1 <= typicalTextHeight * 32
-      && Math.abs((description.y0 + description.y1) / 2 - symbolCenterY) <= typicalTextHeight * 0.6);
-  });
+  const hasSymbolDescriptionHeaderRow = symbolDescriptionHeaders(lines, typicalTextHeight).length > 0;
   const conservativeMaxGlyphDimPx = opts.maxGlyphDimPx
     ?? Math.max(80, Math.min(220, typicalTextHeight * 12));
   const maxGlyphDimPx = opts.maxGlyphDimPx ?? (hasExplicitLegendHeading && hasSymbolDescriptionHeaderRow
@@ -2304,7 +2633,8 @@ export function findLegendGlyphs(
   // by 19px and line three by 52px at a 25px text height. Scale both gates
   // from the sheet's lettering, with finite caps far inside column spacing.
   const maxWrapGapPx = opts.maxWrapGapPx ?? Math.max(8, Math.min(18, typicalTextHeight * 0.45));
-  const maxWrapIndentPx = opts.maxWrapIndentPx ?? Math.max(5, Math.min(64, typicalTextHeight * 2.5));
+  const maxWrapIndentPx = opts.maxWrapIndentPx
+    ?? Math.max(5, Math.min(64, typicalTextHeight * 2.5));
 
   const hasBelowCaptionLegendHeading = lines.some((line) => isBelowCaptionLegendHeading(line.text));
   const relevantSegs = segmentsNearCaptions(
@@ -2340,6 +2670,10 @@ export function findLegendGlyphs(
     relevantSegs, spans, candidates, typicalTextHeight,
     maxCaptionGapPx, maxLineStyleDimPx, pad,
   ));
+  const structuredTables = structuredLegendTables(segs, lines, typicalTextHeight);
+  const ruledPairs = structuredTablePairs(
+    structuredTables, candidates, lines, rawSpans, typicalTextHeight,
+  );
 
   const paired = pairCandidates(
     candidates, spans, rawSpans, maxCaptionGapPx, typicalTextHeight,
@@ -2364,7 +2698,73 @@ export function findLegendGlyphs(
     maxWrapLines,
     rawSpans,
   );
-  const pairs = withoutContainedDetailPairs(mergedPairs, typicalTextHeight, maxWrapGapPx);
+  const heuristicPairs = withoutContainedDetailPairs(mergedPairs, typicalTextHeight, maxWrapGapPx);
+  const replacedHeuristicPairs = new Set<PairCandidate>();
+  const admittedRuledPairs: PairCandidate[] = [];
+  for (const ruled of ruledPairs) {
+    const table = structuredTables.find((candidate) => pairBelongsToStructuredTable(ruled, candidate));
+    const band = ruled.structuredBand;
+    if (!table || !band) continue;
+    const occupants = heuristicPairs.filter((pair) => {
+      if (!pairBelongsToStructuredTable(pair, table)) return false;
+      const materiallyOverlapsBand = (y0: number, y1: number): boolean => {
+        const overlap = Math.max(0, Math.min(y1, band[1]) - Math.max(y0, band[0]));
+        const smallerHeight = Math.max(0.001, Math.min(y1 - y0, band[1] - band[0]));
+        return overlap / smallerHeight >= 0.35;
+      };
+      // Center-only ownership misses a malformed heuristic pair whose glyph
+      // and caption span two adjacent ruled rows: its two centers can fall on
+      // the shared rule, leaving the duplicate alive beside both exact rows.
+      // Material overlap assigns that candidate to every row it contaminates;
+      // the exact single-band candidates then replace it deterministically.
+      return materiallyOverlapsBand(pair.rect[0][1], pair.rect[1][1])
+        && materiallyOverlapsBand(pair.span.y0, pair.span.y1);
+    });
+    const ruledCaption = canonicalLegendCaption(ruled.caption);
+    const otherRuledCaptions = ruledPairs.filter((candidate) => candidate !== ruled)
+      .map((candidate) => canonicalLegendCaption(candidate.caption))
+      .filter((caption) => caption.length >= 4);
+    const completeHeuristic = occupants.find((pair) => {
+      const heuristicCaption = canonicalLegendCaption(pair.caption);
+      const tolerance = typicalTextHeight * 0.2;
+      const geometryInsideRow = pair.rect[0][0] >= table.left - tolerance
+        && pair.rect[1][0] <= table.symbolRight + tolerance
+        && pair.rect[0][1] >= band[0] - tolerance
+        && pair.rect[1][1] <= band[1] + tolerance;
+      // A ruled cell is a stronger ownership boundary than proximity. When
+      // it contains additional disconnected vector components for the same
+      // caption, the heuristic fingerprint is incomplete (ground bars,
+      // dashed recessed-device rings, indicator strokes, etc.). Preserve the
+      // source-complete cell geometry instead of accepting a convenient
+      // subset merely because that subset already has the right label.
+      const structuredAddsGeometry = ruled.members.length > pair.members.length;
+      const exactAndComplete = heuristicCaption === ruledCaption
+        && geometryInsideRow
+        && pair.kind === ruled.kind
+        && !structuredAddsGeometry;
+      const containsAnotherRow = otherRuledCaptions.some((caption) =>
+        caption !== ruledCaption && heuristicCaption.includes(caption));
+      return exactAndComplete
+        // A row-band may end before centered or hanging source prose that
+        // the glyph/caption topology already owned correctly. Prefer that
+        // fuller existing identity over a strict-band prefix.
+        || (heuristicCaption.length > ruledCaption.length
+          && heuristicCaption.includes(ruledCaption)
+          && !containsAnotherRow);
+    });
+    if (completeHeuristic) {
+      for (const occupant of occupants) {
+        if (occupant !== completeHeuristic) replacedHeuristicPairs.add(occupant);
+      }
+      continue;
+    }
+    for (const occupant of occupants) replacedHeuristicPairs.add(occupant);
+    admittedRuledPairs.push(ruled);
+  }
+  const pairs = [
+    ...heuristicPairs.filter((pair) => !replacedHeuristicPairs.has(pair)),
+    ...admittedRuledPairs,
+  ];
   const belowPaired = hasBelowCaptionLegendHeading
     ? pairCandidatesBelow(
       candidates, spans, rawSpans, maxCaptionGapPx, typicalTextHeight,
@@ -2406,6 +2806,7 @@ export function findLegendGlyphs(
       : isControlFunctionCaption(pair.caption, heading) ? "control_function"
       : isRoutedSystemCaption(pair.caption) ? "line_style"
       : pair.kind === "line_style" && isDiscreteInstalledDeviceCaption(pair.caption) ? "symbol"
+      : pair.kind === "text_symbol" ? "symbol"
       : hasMultipleSubstantialSymbols(pair, typicalTextHeight, heading) ? "symbol_group" : pair.kind;
     // `seedable` means this is one physical symbol identity that may enter
     // the mandatory plan-anchor corroboration stage. It does NOT authorize

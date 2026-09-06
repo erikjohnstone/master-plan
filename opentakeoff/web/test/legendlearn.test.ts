@@ -2214,3 +2214,230 @@ test("findLegendGlyphs: independently drawn support, sensor, and monitoring alte
   assert.ok(glyphs.every((glyph) => glyph.kind === "symbol_group" && !glyph.seedable));
   assert.ok(glyphs.every((glyph) => glyph.member_rects?.length === 2));
 });
+
+test("findLegendGlyphs: consecutive caption baselines may overlap in PDF font metrics without losing a wrapped line", () => {
+  const box = (x0: number, y0: number, x1: number, y1: number): number[][] => [
+    seg(x0, y0, x1, y0), seg(x1, y0, x1, y1),
+    seg(x1, y1, x0, y1), seg(x0, y1, x0, y0),
+  ];
+  const glyphs = findLegendGlyphs(flat([
+    ...box(100, 100, 150, 150),
+    ...box(100, 205, 150, 255),
+  ]), [
+    { text: "ELECTRICAL SYMBOL LEGEND", x0: 70, y0: 20, x1: 520, y1: 45 },
+    // These two physical baselines advance by 22px, but their 25px PDF text
+    // boxes overlap vertically by 3px. The rendered page clearly shows two
+    // consecutive lines in the same table cell.
+    { text: "FULL VOLTAGE NONREVERSING MOTOR STARTER OR", x0: 220, y0: 98, x1: 670, y1: 123 },
+    { text: "CONTACTOR NUMBER DESIGNATES NEMA SIZE.", x0: 220, y0: 120, x1: 610, y1: 145 },
+    { text: "VARIABLE FREQUENCY DRIVE", x0: 220, y0: 215, x1: 480, y1: 240 },
+  ]);
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "FULL VOLTAGE NONREVERSING MOTOR STARTER OR CONTACTOR NUMBER DESIGNATES NEMA SIZE.",
+    "VARIABLE FREQUENCY DRIVE",
+  ]);
+});
+
+test("findLegendGlyphs: a ruled SYMBOL-DESCRIPTION cell keeps deeply indented explanation lines", () => {
+  const box = (x0: number, y0: number, x1: number, y1: number): number[][] => [
+    seg(x0, y0, x1, y0), seg(x1, y0, x1, y1),
+    seg(x1, y1, x0, y1), seg(x0, y1, x0, y0),
+  ];
+  const glyphs = findLegendGlyphs(flat([
+    ...[55, 85, 200, 240, 330].map((y) => seg(50, y, 700, y)),
+    ...box(100, 100, 150, 150),
+    ...box(100, 260, 150, 310),
+  ]), [
+    { text: "ELECTRICAL SYMBOL LEGEND", x0: 70, y0: 20, x1: 650, y1: 45 },
+    { text: "SYMBOL", x0: 100, y0: 60, x1: 175, y1: 84 },
+    { text: "DESCRIPTION", x0: 220, y0: 60, x1: 360, y1: 84 },
+    { text: "NOTC", x0: 105, y0: 76, x1: 150, y1: 101 },
+    { text: "MOTOR CONTROL CONTACT - TIME DELAY", x0: 220, y0: 100, x1: 550, y1: 125 },
+    { text: "NORMALLY OPEN WITH INSTANT CLOSING AND", x0: 220, y0: 122, x1: 620, y1: 147 },
+    { text: "TIME DELAY OPENING.", x0: 335, y0: 144, x1: 530, y1: 169 },
+    { text: "VARIABLE FREQUENCY DRIVE", x0: 220, y0: 270, x1: 490, y1: 295 },
+  ]);
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "MOTOR CONTROL CONTACT - TIME DELAY NORMALLY OPEN WITH INSTANT CLOSING AND TIME DELAY OPENING.",
+    "VARIABLE FREQUENCY DRIVE",
+  ]);
+});
+
+test("findLegendGlyphs: disconnected fragments that claim overlapping caption baselines reunite as one table row", () => {
+  const box = (x0: number, y0: number, x1: number, y1: number): number[][] => [
+    seg(x0, y0, x1, y0), seg(x1, y0, x1, y1),
+    seg(x1, y1, x0, y1), seg(x0, y1, x0, y0),
+  ];
+  const glyphs = findLegendGlyphs(flat([
+    seg(100, 110, 145, 110),
+    seg(100, 122, 145, 122),
+    ...box(100, 230, 150, 280),
+  ]), [
+    { text: "ELECTRICAL SYMBOL LEGEND", x0: 70, y0: 20, x1: 650, y1: 45 },
+    { text: "SYMBOL", x0: 100, y0: 60, x1: 175, y1: 84 },
+    { text: "DESCRIPTION", x0: 220, y0: 60, x1: 360, y1: 84 },
+    { text: "FULL VOLTAGE NONREVERSING MOTOR STARTER OR", x0: 220, y0: 98, x1: 670, y1: 123 },
+    { text: "CONTACTOR NUMBER DESIGNATES NEMA SIZE.", x0: 220, y0: 120, x1: 610, y1: 145 },
+    { text: "VARIABLE FREQUENCY DRIVE", x0: 220, y0: 240, x1: 490, y1: 265 },
+  ]);
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "FULL VOLTAGE NONREVERSING MOTOR STARTER OR CONTACTOR NUMBER DESIGNATES NEMA SIZE.",
+    "VARIABLE FREQUENCY DRIVE",
+  ]);
+});
+
+test("findLegendGlyphs: ruled table bands own one full description and preserve text-only symbol cells", () => {
+  const box = (x0: number, y0: number, x1: number, y1: number): number[][] => [
+    seg(x0, y0, x1, y0), seg(x1, y0, x1, y1),
+    seg(x1, y1, x0, y1), seg(x0, y1, x0, y0),
+  ];
+  const rules = [55, 85, 165, 245, 325, 405].map((y) => seg(50, y, 700, y));
+  const glyphs = findLegendGlyphs(flat([
+    ...rules,
+    ...box(100, 100, 150, 145),
+    ...box(100, 185, 150, 225),
+  ]), [
+    { text: "ELECTRICAL SYMBOL LEGEND", x0: 50, y0: 5, x1: 700, y1: 35 },
+    { text: "SYMBOL", x0: 90, y0: 56, x1: 170, y1: 80 },
+    { text: "DESCRIPTION", x0: 220, y0: 56, x1: 360, y1: 80 },
+    { text: "NOTC", x0: 105, y0: 95, x1: 150, y1: 120 },
+    { text: "MOTOR STARTER OR", x0: 220, y0: 95, x1: 410, y1: 120 },
+    { text: "CONTACTOR, NEMA SIZE 5", x0: 220, y0: 117, x1: 470, y1: 142 },
+    { text: "VARIABLE FREQUENCY DRIVE", x0: 220, y0: 190, x1: 490, y1: 215 },
+    { text: "$", x0: 110, y0: 270, x1: 122, y1: 295 },
+    { text: "SINGLE POLE SWITCH", x0: 220, y0: 270, x1: 430, y1: 295 },
+    { text: "APS", x0: 105, y0: 350, x1: 145, y1: 375 },
+    { text: "AIRFLOW PROVING SWITCH", x0: 220, y0: 350, x1: 470, y1: 375 },
+  ]);
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "MOTOR STARTER OR CONTACTOR, NEMA SIZE 5",
+    "VARIABLE FREQUENCY DRIVE",
+    "SINGLE POLE SWITCH",
+  ]);
+  assert.equal(glyphs[2].kind, "symbol");
+  assert.equal(glyphs[2].seedable, false);
+  assert.deepEqual(glyphs[2].rect, [[110, 270], [122, 295]]);
+});
+
+test("findLegendGlyphs: ruled cells retain disconnected components omitted by the nearest heuristic glyph", () => {
+  const box = (x0: number, y0: number, x1: number, y1: number): number[][] => [
+    seg(x0, y0, x1, y0), seg(x1, y0, x1, y1),
+    seg(x1, y1, x0, y1), seg(x0, y1, x0, y0),
+  ];
+  const glyphs = findLegendGlyphs(flat([
+    ...[55, 85, 200, 300].map((y) => seg(50, y, 700, y)),
+    ...box(100, 100, 150, 125),
+    seg(105, 140, 145, 140),
+    seg(112, 150, 138, 150),
+    seg(120, 160, 130, 160),
+    ...box(100, 220, 150, 260),
+  ]), [
+    { text: "ELECTRICAL SYMBOL LEGEND", x0: 50, y0: 5, x1: 700, y1: 35 },
+    { text: "SYMBOL", x0: 90, y0: 56, x1: 170, y1: 80 },
+    { text: "DESCRIPTION", x0: 220, y0: 56, x1: 360, y1: 80 },
+    { text: "GROUND CONNECTION", x0: 220, y0: 108, x1: 430, y1: 133 },
+    { text: "VARIABLE FREQUENCY DRIVE", x0: 220, y0: 228, x1: 490, y1: 253 },
+  ]);
+  assert.equal(glyphs.length, 2);
+  assert.equal(glyphs[0].caption, "GROUND CONNECTION");
+  assert.equal(glyphs[0].kind, "symbol");
+  assert.ok(glyphs[0].rect[0][0] <= 100 && glyphs[0].rect[0][1] <= 100);
+  assert.ok(glyphs[0].rect[1][0] >= 150 && glyphs[0].rect[1][1] >= 160);
+  assert.equal(glyphs[0].member_rects?.length, 4);
+});
+
+test("findLegendGlyphs: selector position legends and notation definitions do not terminate ruled tables", () => {
+  const box = (x0: number, y0: number, x1: number, y1: number): number[][] => [
+    seg(x0, y0, x1, y0), seg(x1, y0, x1, y1),
+    seg(x1, y1, x0, y1), seg(x0, y1, x0, y0),
+  ];
+  const rules = [55, 85, 165, 245, 345].map((y) => seg(50, y, 760, y));
+  const glyphs = findLegendGlyphs(flat([
+    ...rules,
+    ...box(100, 100, 150, 145),
+    ...box(100, 185, 150, 225),
+    ...box(100, 265, 150, 325),
+  ]), [
+    { text: "ELECTRICAL SYMBOL LEGEND", x0: 50, y0: 5, x1: 700, y1: 35 },
+    { text: "SYMBOL", x0: 90, y0: 56, x1: 170, y1: 80 },
+    { text: "DESCRIPTION", x0: 220, y0: 56, x1: 360, y1: 80 },
+    { text: "3 POSITION SELECTOR SWITCH HAND - OFF - AUTO,", x0: 220, y0: 95, x1: 670, y1: 120 },
+    { text: "POSITION LEGEND: X=CLOSED O=OPEN", x0: 220, y0: 117, x1: 560, y1: 142 },
+    { text: "VARIABLE FREQUENCY DRIVE", x0: 220, y0: 190, x1: 490, y1: 215 },
+    { text: "THIS NOTATION ADJACENT TO A DEVICE DENOTES", x0: 220, y0: 265, x1: 650, y1: 290 },
+    { text: "MOUNTING HEIGHT ABOVE FINISHED FLOOR.", x0: 220, y0: 287, x1: 610, y1: 312 },
+  ]);
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "3 POSITION SELECTOR SWITCH HAND - OFF - AUTO, POSITION LEGEND: X=CLOSED O=OPEN",
+    "VARIABLE FREQUENCY DRIVE",
+    "THIS NOTATION ADJACENT TO A DEVICE DENOTES MOUNTING HEIGHT ABOVE FINISHED FLOOR.",
+  ]);
+});
+
+test("findLegendGlyphs: ruled rows group independent same-baseline renditions but not nested compound parts", () => {
+  const box = (x0: number, y0: number, x1: number, y1: number): number[][] => [
+    seg(x0, y0, x1, y0), seg(x1, y0, x1, y1),
+    seg(x1, y1, x0, y1), seg(x0, y1, x0, y0),
+  ];
+  const rules = [55, 85, 165, 245, 325].map((y) => seg(50, y, 760, y));
+  const glyphs = findLegendGlyphs(flat([
+    ...rules,
+    ...box(90, 105, 125, 145),
+    ...box(150, 105, 190, 145),
+    ...box(90, 185, 125, 225),
+    ...box(150, 185, 190, 225),
+    ...box(100, 260, 170, 315),
+    ...box(108, 272, 132, 303),
+    ...box(138, 272, 162, 303),
+  ]), [
+    { text: "ELECTRICAL SYMBOL LEGEND", x0: 50, y0: 5, x1: 700, y1: 35 },
+    { text: "SYMBOL", x0: 90, y0: 56, x1: 170, y1: 80 },
+    { text: "DESCRIPTION", x0: 220, y0: 56, x1: 360, y1: 80 },
+    { text: "ELAPSED TIME METER", x0: 220, y0: 110, x1: 440, y1: 135 },
+    { text: "DATA OUTLET (SINGLE, DOUBLE)", x0: 220, y0: 190, x1: 520, y1: 215 },
+    { text: "EMERGENCY STOP PUSH BUTTON", x0: 220, y0: 275, x1: 520, y1: 300 },
+  ]);
+  assert.deepEqual(glyphs.map((glyph) => [glyph.caption, glyph.kind, glyph.seedable]), [
+    ["ELAPSED TIME METER", "symbol_group", false],
+    ["DATA OUTLET (SINGLE, DOUBLE)", "symbol_group", false],
+    ["EMERGENCY STOP PUSH BUTTON", "symbol", true],
+  ]);
+  assert.equal(glyphs[0].member_rects?.length, 2);
+  assert.equal(glyphs[1].member_rects?.length, 2);
+  assert.equal(glyphs[2].member_rects?.length, 3);
+});
+
+test("findLegendGlyphs: electrical routing and notation rows remain auditable annotations", () => {
+  const captions = [
+    "DEVICE LOCATED AT REMOTE LOCATION.",
+    "HATCH MARKS IN CONDUIT RUN DENOTES NUMBER OF CONDUCTORS.",
+    "DENOTES EXISTING EQUIPMENT OR DEVICES",
+    "THIS NOTATION ADJACENT TO WALL OUTLET SYMBOL DENOTES MOUNTING HEIGHT ABOVE FINISHED FLOOR.",
+    "CAPPED UNDERGROUND CONDUIT OR STUBBUP",
+    "CONDUIT DROP",
+    "CONDUIT RISE",
+    "DETAIL VIEW OR MATCHING",
+    "LTC CONNECTION",
+    "MC CONNECTION",
+    "NODE OR CONNECTION",
+    "BOND TO METALLIC WATER PIPE",
+    "BOND TO BUILDING STEEL",
+    "LIGHTING FIXTURE TYPE - SEE FIXTURE SCHEDULE.",
+  ];
+  const glyphs = findLegendGlyphs(flat(captions.flatMap((_, index) => {
+    const y = 100 + index * 60;
+    return [
+      seg(100, y, 150, y), seg(150, y, 150, y + 20),
+      seg(150, y + 20, 100, y + 20), seg(100, y + 20, 100, y),
+    ];
+  })), [
+    { text: "DEVICES", x0: 70, y0: 20, x1: 180, y1: 45 },
+    ...captions.map((text, index) => {
+      const y = 100 + index * 60;
+      return { text, x0: 220, y0: y + 2, x1: 760, y1: y + 22 };
+    }),
+  ]);
+  assert.equal(glyphs.length, captions.length);
+  assert.deepEqual(glyphs.map((glyph) => glyph.kind), captions.map(() => "annotation"));
+  assert.deepEqual(glyphs.map((glyph) => glyph.seedable), captions.map(() => false));
+});
