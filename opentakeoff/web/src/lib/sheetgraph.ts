@@ -7872,6 +7872,9 @@ export interface VectorPipelineReport {
     declined: number;
     rasters: number;
     refused: number;
+    /** Why the schedule classifier declined a region the reader had already
+     * read. A refusal is not a miss and the two need different fixes. */
+    declined_reasons?: Record<string, number>;
     ms: number;
   };
 }

@@ -207,6 +207,17 @@ async function runL2VectorGridForSheet(
   rec.tables += res.tables.length;
   rec.cells += res.cells;
   rec.declined += res.skipped;
+  // WHY it declined, not just how many. A region the reader got right and the
+  // classifier then refused is a different problem from a region never found,
+  // and the reasons are what say which refusal is worth changing.
+  for (const why of res.rejects) {
+    const reasons = rec.declined_reasons ?? (rec.declined_reasons = {});
+    const key = why.replace(/^\d+x\d+ at [-\d,]+: /, "")
+      .replace(/\(kind [a-z-]+, key column [^)]*\)/, "(kind/key)")
+      .replace(/: .*$/, "")
+      .slice(0, 60);
+    reasons[key] = (reasons[key] ?? 0) + 1;
+  }
   rec.rasters += res.rasters;
   if (mode === "shadow" || !res.tables.length) return;
   // Not mergeCandidates: vectorgrid is not one candidate among peers on a
