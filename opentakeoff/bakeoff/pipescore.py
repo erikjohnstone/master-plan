@@ -40,6 +40,34 @@ SCRATCH = Path(os.environ.get("PIPESCORE_TMP", "/tmp/pipescore"))
 N = lambda s: re.sub(r"\s+", " ", (s or "").upper()).strip().replace("Ø", "O")
 
 
+def lcs(a: list, b: list) -> int:
+    """Longest common SUBSEQUENCE, not a position-by-position comparison.
+
+    Strict position punishes one defect many times over. Measured on
+    03__vol1__27 page 15's INSTRUMENTATION SCHEDULE: the sheet rules a division
+    inside the connection column, so the pipeline returns 1/4" and MNPT as two
+    values where the human transcriber recorded 1/4" MNPT as one. Every value
+    after it then sits one place to the left, and a row that is otherwise
+    perfect scores near zero — 0 of 17 rows on a table read correctly.
+
+    A subsequence match still requires the right values in the right ORDER, so
+    a swap, a drop or a scrambled row cannot score full marks; it simply stops
+    charging a single split or merge to every column that follows it. The
+    reason the earlier token-set metric was not good enough was that it ignored
+    order entirely, which is a different and much weaker thing.
+    """
+    m, n = len(a), len(b)
+    if not m or not n:
+        return 0
+    prev = [0] * (n + 1)
+    for i in range(1, m + 1):
+        cur = [0] * (n + 1)
+        for j in range(1, n + 1):
+            cur[j] = prev[j - 1] + 1 if a[i - 1] == b[j - 1] else max(prev[j], cur[j - 1])
+        prev = cur
+    return prev[n]
+
+
 def one_page(pdf: Path, page: int) -> Path:
     SCRATCH.mkdir(parents=True, exist_ok=True)
     dst = SCRATCH / f"{pdf.stem[:40]}-p{page}.pdf"
@@ -62,10 +90,50 @@ def graph_for(one: Path) -> dict:
     return json.loads(out.read_text())
 
 
+def why_not_found(g: dict, ymid: float, gx0: float, gx1: float) -> list:
+    """What the pipeline says about the place the ground truth points at.
+
+    A table the truth records and the graph does not carry is one of two very
+    different things, and the counts alone cannot tell them apart:
+
+      * the reader never found a region there  -> a vectorgrid problem
+      * the reader found it and the schedule classifier then declined it
+        -> an interpreter problem, and the refusal reason names which rule
+
+    `declined_regions` keeps each refusal with its own coordinates, in the same
+    PDF points the ground truth uses, so a refusal can be matched to the region
+    the truth is asking about instead of guessed at from a binned tally.
+    """
+    vg = ((g.get("vector_pipeline") or {}).get("vectorgrid") or {})
+    out = []
+    for line in vg.get("declined_regions") or []:
+        m = re.search(r"(\d+)x(\d+) at (-?\d+),(-?\d+),(-?\d+),(-?\d+): (.*)$", line)
+        if not m:
+            continue
+        rows, cols = m.group(1), m.group(2)
+        x0, y0, x1, y1 = (float(m.group(i)) for i in (3, 4, 5, 6))
+        if not (y0 <= ymid <= y1):
+            continue
+        if max(0.0, min(x1, gx1) - max(x0, gx0)) / max(1.0, gx1 - gx0) <= 0.5:
+            continue
+        out.append(f"REFUSED {rows}x{cols} at {x0:.0f},{y0:.0f},{x1:.0f},{y1:.0f} -> {m.group(7)}")
+    if not out:
+        reasons = vg.get("declined_reasons") or {}
+        out.append("no refusal recorded at this region — the READER found nothing here"
+                   + (f" (sheet refused {sum(reasons.values())} other regions)" if reasons else ""))
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--doc")
     ap.add_argument("--limit", type=int)
+    ap.add_argument("--why", action="store_true",
+                    help="for every table that is refused or read imperfectly, print WHY: "
+                         "the classifier's own refusal reason for the region the ground "
+                         "truth says is there, or an aligned GT-vs-GOT row diff. This is "
+                         "what separates a reader defect from an interpreter defect, and "
+                         "the two need opposite fixes.")
     a = ap.parse_args()
 
     tot = defaultdict(int)
@@ -113,6 +181,9 @@ def main() -> int:
                             if N((tb.get("title") or {}).get("text") or "") == title), None)
             if hit is None:
                 print(f"{d['id'][:22]:22s} {t['page']:>4d} {(title or '(untitled)')[:34]:34s} {'NO':>5s}")
+                if a.why:
+                    for line in why_not_found(g, ymid, gx0, gx1):
+                        print(f"      {line}")
                 tot["rows"] += len(t.get("rows") or [])
                 tot["values"] += sum(len([v for v in r.split('|') if v.strip()]) for r in (t.get("rows") or []))
                 continue
@@ -126,7 +197,23 @@ def main() -> int:
                 best = 0
                 for gr in got:
                     seq = [x for x in gr if x]
-                    best = max(best, sum(1 for x, y in zip(nz, seq) if x == y))
+                    best = max(best, lcs(nz, seq))
+                # THE SAME COMPARISON, BLIND TO SPACES INSIDE A VALUE.
+                # A large part of the residual is neither engine being wrong
+                # about what the sheet says: the drawing prints "GREENHECK /
+                # SQ-95-VG" or wraps "B950A-VFD-" onto the line above
+                # "PCWP-1001", and the human transcriber wrote the value the
+                # way a person says it. No takeoff decision turns on that
+                # space, so scoring it as a miss overstates the gap. This is
+                # reported ALONGSIDE the strict number, never instead of it —
+                # the strict number stays the headline so the ruler cannot be
+                # quietly loosened to flatter the result.
+                loose = 0
+                nzs = [x.replace(" ", "") for x in nz]
+                for gr in got:
+                    seq = [x.replace(" ", "") for x in gr if x]
+                    loose = max(loose, lcs(nzs, seq))
+                tot["values_right_nospace"] += max(best, loose)
                 vals += len(nz)
                 right += best
                 if best == len(nz):
@@ -137,6 +224,23 @@ def main() -> int:
             tot["values_right"] += right
             print(f"{d['id'][:22]:22s} {t['page']:>4d} {(title or '(untitled)')[:34]:34s} {'YES':>5s} "
                   f"{ok_rows:>4d}/{len(t.get('rows') or []):<4d} {right:>5d}/{vals:<6d}", flush=True)
+            if a.why and right < vals:
+                shown = 0
+                for gt_row in (t.get("rows") or []):
+                    nz = [N(x) for x in gt_row.split("|") if x.strip()]
+                    if not nz:
+                        continue
+                    best, seq = 0, []
+                    for gr in got:
+                        cand = [x for x in gr if x]
+                        sc = lcs(nz, cand)
+                        if sc > best:
+                            best, seq = sc, cand
+                    if best == len(nz) or shown >= 3:
+                        continue
+                    shown += 1
+                    print(f"      GT : {nz[:9]}")
+                    print(f"      GOT: {seq[:9]}")
 
     print("\n" + "=" * 96)
     print("THE PRODUCTION PIPELINE, on ground truth it has never seen")
@@ -144,6 +248,9 @@ def main() -> int:
     print(f"  found                          {tot['found']}  ({100.0*tot['found']/max(1,tot['tables']):.1f}%)")
     print(f"  rows correct in EVERY column   {tot['rows_ok']}/{tot['rows']}  ({100.0*tot['rows_ok']/max(1,tot['rows']):.1f}%)")
     print(f"  values in the right column     {tot['values_right']}/{tot['values']}  ({100.0*tot['values_right']/max(1,tot['values']):.1f}%)")
+    print(f"  ... ignoring spaces INSIDE a value {tot['values_right_nospace']}/{tot['values']}  "
+          f"({100.0*tot['values_right_nospace']/max(1,tot['values']):.1f}%)  "
+          f"— {tot['values_right_nospace']-tot['values_right']} of the misses are a space, not a wrong value")
     if tot["pipeline_fail"]:
         print(f"  pipeline failures              {tot['pipeline_fail']}")
     print("PIPEDONE")
