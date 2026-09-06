@@ -521,7 +521,7 @@ function isHvacBasCaption(text: string): boolean {
 }
 
 function isDomainHeading(text: string): boolean {
-  return /\b(?:AIR|BAS|CONDUIT|CONNECTION|CONTROL|DATA|DDC|DAMPER|DEVICES?|DUCT|ELECTRICAL|EQUIPMENT|FIRE|GROUNDING|HVAC|LIGHTING|MECHANICAL|PIPING|POINT|POWER|RACEWAY|SENSING|TELEPHONE|VALVE|WIRE)\b/i.test(normalizedCaption(text));
+  return /\b(?:AIR|BAS|CONDUIT|CONNECTION|CONTROLS?|DATA|DDC|DAMPER|DEVICES?|DUCT|ELECTRICAL|EQUIPMENT|FIRE|GROUNDING|HVAC|LIGHTING|MECHANICAL|PIPING|POINT|POWER|RACEWAY|SENSING|TELEPHONE|VALVE|WIRE)\b/i.test(normalizedCaption(text));
 }
 
 function isSectionBoundaryText(text: string): boolean {
@@ -550,6 +550,22 @@ function isDirectiveProse(text: string): boolean {
   return (words >= 10 && signals >= 2) || (words >= 14 && signals >= 1);
 }
 
+/** Product drawings and controller pinouts can expose a dense, repeated
+ * glyph/text cadence even though every "row" is merely a terminal number,
+ * jumper setting, certification mark, or wiring specification printed
+ * inside one piece of hardware. These signals are used only to reject an
+ * otherwise-headerless group; an explicit legend heading still owns its
+ * real rows. */
+function isControllerPinoutCaption(text: string): boolean {
+  const normalized = normalizedCaption(text);
+  const terminalAssignments = normalized.match(/(?:\b\d+\s*-\s*(?:IN|COM|AI|AO|BI|BO|DATA|GND)\b|\b(?:AI|AO|BI|BO|COM|DATA|GND)\s*-\s*\d+\b)/gi)?.length ?? 0;
+  return terminalAssignments > 0
+    || /\b(?:INPUT|OUTPUT|AO)\s+SETUP(?:\s+JUMPERS?)?\b/i.test(normalized)
+    || /^(?:UL\s+LISTED|DRY\s+CONTACT)$/i.test(normalized)
+    || /\b(?:CLASS\s*2\s+CIRCUITS?|USE\s+COPPER\s+CONDUCTORS|FOR\s+INDOOR\s+USE\s+ONLY|BACNET\s+MS\s*\/\s*TP)\b/i.test(normalized)
+    || /^LBL-[A-Z0-9-]+$/i.test(normalized);
+}
+
 /** True legend rows can describe drawing-navigation/status conventions
  * rather than installed work. Preserve them as auditable legend truth, but
  * never promote them to discrete Symbol Sweep seeds. */
@@ -566,7 +582,7 @@ function isDraftingAnnotationCaption(text: string): boolean {
   // not separately countable installed objects. Keep the patterns narrow so
   // routed-system rows such as "INDICATES EXISTING ITEM" retain their own
   // line-style classification.
-  if (/^(?:INDICATES\s+(?:EQUIPMENT\s+ID|KEYED\s+SHEET\s+NOTE|\(N\)\s+OR\s+\(E\)\s+EQUIPMENT)\b|DENOTES\s+(?:TOP\s+OF\s+STEEL\s+ELEVATION|DIRECTION\s+OF\s+ROOF\s+SLOPE)\b|ARROW\s+INDICATES\s+DIRECTION\b|(?:FLOOR\s+MOUNTED\s+)?CONNECTION\s+POINT\b)/i.test(normalized)) return true;
+  if (/^(?:INDICATES\s+(?:EQUIPMENT\s+ID|KEYED\s+SHEET\s+NOTE|\(N\)\s+OR\s+\(E\)\s+EQUIPMENT)\b|DENOTES\s+(?:TOP\s+OF\s+STEEL\s+ELEVATION|DIRECTION\s+OF\s+ROOF\s+SLOPE)\b|ARROW\s+INDICATES\s+DIRECTION\b|(?:FLOOR\s+MOUNTED\s+)?CONNECTION\s+POINT\b|(?:POSITIVE|NEGATIVE)\s+PRESSURE\s+DUCT\s+SECTION\b|DUCT\s+SIZE\b|BY\s+(?:ELECTRICAL|PLUMBING|MECHANICAL)\s+CONTRACTOR$|POINT\s+OF\s+(?:CONNECTION|DISCONNECT)$|PIPE\s+(?:BREAK|CAP\s+OR\s+PLUG|ELBOW(?:\s+(?:DOWN|UP))?|TEE|RISER|DROP|BRANCH,?\s+(?:TOP|BOTTOM)\s+CONNECTION)$)/i.test(normalized)) return true;
   return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|(?:(?:MECHANICAL|KITCHEN)\s+)?EQUIPMENT)\s+CALL\s*OUT|HOME\s+RUN|HOMERUNS?\s+TO\s+PANEL(?:BOARD)?\b|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|DUCTWORK\s+(?:BREAK|OR\s+PIPING\s+RISE)|INTAKE\s+OR\s+EXHAUST|(?:DIRECTION\s+OF\s+(?:AIRFLOW|FLOW)|FLOW\s+DIRECTION)|(?:SUPPLY|RETURN,?\s+EXHAUST,?\s+OR\s+TRANSFER)\s+AIRFLOW|(?:INCLINED\s+RISE|DECLINED\s+DROP)\s+WITH\s+RESPECT\s+TO\s+AIRFLOW|(?:UPWARD|DOWNWARD)\s+DIRECTION\s+OF\s+SLOPED\s+PIPING|(?:PIPE\s+DROP\s*\/\s*PIPE\s+RISE|PIP(?:E|ING)\s+(?:UP|DOWN|CONTINUATION)|(?:SUPPLY|RETURN|EXHAUST)?\s*DUCT\s+(?:UP|DOWN)(?:\s*\([^)]*\))?)(?:\s*[.,;:])?$|NEW\s+TO\s+EXISTING\s+CONNECTION\s+POINT|SLOPE\s+PIPE\s+IN\s+DIRECTION\s+OF\s+ARROW|AIR\s+DISTRIBUTION\s+TAG|AIR\s+DEVICE\s+TYPE\.\s+REFER\s+TO\s+SCHEDULE\b.*\bAIR\s+DEVICE\s+WITH\s+(?:ROUND|RECTANGULAR)\s+NECK\s+TAG|(?:LIGHTING\s+FIXTURE|RECEPTACLE\s+DEVICE)\s+TAGS?\b|ELECTRICAL\s+EQUIPMENT\s+AND\s+TAGS\b|DEVIATIONS?\s+OF\s+(?:THE\s+)?ABOVE\s+RECEPTACLE\s+TYPES?\b|[•\-]?\s*INTERNAL\s+(?:GROUND|ARC)\s+FAULT\b|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|(?:DEMOLITION|CONSTRUCTION)\s+NOTE\s+IDENTIFICATION|PLAN\s+REFERENCE\s+NOTE\s+SYMBOL|POINT\s+OF\s+(?:DEMOLITION|CONNECTION,?\s+NEW-TO-EXISTING)\b|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|CONNECT\s+NEW\s+TO\s+EXISTING|(?:DISCONNECT|CONNECT)\s+CONDUCTORS\s+(?:FROM|TO)\s+EQUIPMENT|REMOVE\s+TO\s+THIS\s+POINT|DEMOLISH\s+TO\s+POINT\s+INDICATED|(?:EXTENTS?\s+OF\s+DEMOLITION|OBJECT\s+TO\s+BE\s+REMOVED)|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\s+(?:CONDUCTOR|STRUCTURE)\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b|EQUIPMENT\s+CONNECTION\s+AS\s+NOTED\b)/i.test(normalized);
 }
 
@@ -588,8 +604,8 @@ function isRoutedSystemCaption(text: string): boolean {
     || /^(?:LPS\s+(?:ROOF|MAIN\s+DOWN)\s+CONDUCTOR|GROUND\s+RING\b.*\bCONDUCTOR|BRANCH\s+CIRCUIT\s+OR\s+FEEDER\s+WIRING\s+IN\s+CONDUIT\b)/i.test(normalized)
     || /^PANEL,?\s+SWITCHBOARD,?\s+OR\s+BUSD?UCT\b/i.test(normalized)
     || /^(?:VENT|DUCTWORK|STORM\s+DRAIN)$/i.test(normalized)
-    || /^(?:(?:SUPPLY|RETURN|EXHAUST|TRANSFER|OUTDOOR)\s+AIR|CONDENSATE\s+DRAIN|REFRIGERANT\s+SUCTION\s*\/\s*LIQUID)$/i.test(normalized)
-    || /^(?:RECTANGULAR\s+DUCT(?:\s+RECTANGULAR\s+DUCT\s+WIDTH.*)?|ROUND\s+DUCT(?:\s+ROUND\s+DUCT\s+DIAMETER.*)?|PIPE(?:\s+PIPE\s*\(DIAMETER.*)?|FLEXIBLE\s+DUCT|ACOUSTICALLY\s+LINED\s+DUCTWORK)$/i.test(normalized)
+    || /^(?:(?:SUPPLY|RETURN|EXHAUST|TRANSFER|OUTDOOR|OUTSIDE)\s+AIR|CONDENSATE\s+DRAIN|REFRIGERANT\s+SUCTION\s*\/\s*LIQUID)$/i.test(normalized)
+    || /^(?:RECTANGULAR\s+DUCT(?:\s+RECTANGULAR\s+DUCT\s+WIDTH.*)?|ROUND\s+DUCT(?:\s+ROUND\s+DUCT\s+DIAMETER.*)?|PIPE(?:\s+PIPE\s*\(DIAMETER.*)?|FLEXIBLE\s+DUCT|(?:ACOUSTICALLY\s+)?LINED\s+DUCT(?:WORK)?)$/i.test(normalized)
     || /\b(?:CHILLED|CONDENSER|HEATING|GEOTHERMAL|DOMESTIC|TEMPERED)\s+(?:(?:HOT|COLD)\s+)?WATER(?:\s+(?:SUPPLY|RETURN))?(?:\s*\([^)]*\))?$/i.test(normalized)
     || /\b(?:LOW|MEDIUM|HIGH)\s+PRESSURE\s+NATURAL\s+GAS$/i.test(normalized);
 }
@@ -630,6 +646,42 @@ function isScheduleFieldHeaderText(text: string): boolean {
   return /^(?:AREA\s+SERVED|SYSTEM\s+LOCATION|SERVICE|PURPOSE|TYPE|CAPACITY|FLOW|HEAD|HP|RPM|VFD|VOLTAGE|FLUID|FUEL|EFFICIENCY|MANUFACTURER(?:\s+AND\s+MODEL)?|MODEL|OPERATING\s+WEIGHT|REMARKS?)$/i.test(normalizedCaption(text));
 }
 
+const explicitLegendHeadingsCache = new WeakMap<LegendSpan[], LegendSpan[]>();
+function explicitLegendHeadings(rawSpans: LegendSpan[]): LegendSpan[] {
+  const cached = explicitLegendHeadingsCache.get(rawSpans);
+  if (cached) return cached;
+  const headings = rawSpans.filter((span) => isLegendHeadingText(span.text));
+  explicitLegendHeadingsCache.set(rawSpans, headings);
+  return headings;
+}
+
+/** A dimension string inside a duct/pipe sketch normally proves that the
+ * sketch is a callout, not a standalone device symbol. In an explicitly
+ * headed symbol legend, however, a same-row external description such as
+ * "DUCT SIZE - FIRST SIZE IS SIDE SHOWN" is itself a legitimate drafting
+ * convention and must remain auditable (but nonseedable). */
+function isExplicitLegendDimensionConvention(
+  rect: [Point, Point], rawSpans: LegendSpan[],
+): boolean {
+  const headings = explicitLegendHeadings(rawSpans);
+  if (!headings.length) return false;
+  const [[x0, y0], [x1, y1]] = rect;
+  const cy = (y0 + y1) / 2;
+  const convention = rawSpans.find((span) => {
+    const sh = span.y1 - span.y0;
+    return /^(?:DUCT|PIPE|CONDUIT)\s+(?:SIZE|DIMENSIONS?)\b/i.test(normalizedCaption(span.text))
+      && span.x0 >= x1
+      && span.x0 - x1 <= Math.max(400, sh * 25)
+      && cy >= span.y0 - sh * 0.75
+      && cy <= span.y1 + sh * 0.75;
+  });
+  if (!convention) return false;
+  return headings.some((span) => span.y1 < convention.y0
+    && convention.y0 - span.y1 <= Math.max(800, (convention.y1 - convention.y0) * 45)
+    && span.x1 >= x0 - (convention.y1 - convention.y0) * 8
+    && span.x0 <= convention.x1);
+}
+
 /** CAD exports frequently expose the same visible lettering twice: once as
  * extractable text and once as short vector strokes. Without this guard, an
  * abbreviation's outlined letters become a fake "glyph" and the definition
@@ -639,6 +691,7 @@ function isScheduleFieldHeaderText(text: string): boolean {
 function resemblesExtractedText(
   rect: [Point, Point], rawSpans: LegendSpan[], segmentCount?: number,
 ): boolean {
+  if (isExplicitLegendDimensionConvention(rect, rawSpans)) return false;
   const [[x0, y0], [x1, y1]] = rect;
   const w = x1 - x0, h = y1 - y0;
   const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
@@ -759,6 +812,11 @@ function pairCandidates(
       if (gap > maxCaptionGapPx) continue;
       const short = normalizedCaption(s.text);
       const shortWords = short.split(/\s+/).length;
+      // A dimension value printed inside a headed legend sketch (20x10,
+      // 12Ø, etc.) describes the sketch; it is not the row caption. Leave
+      // the candidate available for the external DUCT/PIPE SIZE definition.
+      if (/^\d+(?:\.\d+)?\s*(?:[x×Ø]\s*\d+(?:\.\d+)?)?(?:\s*["'])?$/i.test(short)
+        && isExplicitLegendDimensionConvention(cand.rect, rawSpans)) continue;
       // Inner device qualifiers (CO, OC, AI, AO, CHWR...) often sit just
       // outside the main circle/line component and therefore look like the
       // nearest caption. When a real descriptive phrase continues on the
@@ -1278,6 +1336,7 @@ function hasMultipleSubstantialSymbols(
   // caption explicitly declares alternatives and at least two independent
   // (non-overlapping) members support that reading.
   const declaresAlternatives = /\b\d+\s*-\s*WAY\b.*\b\d+\s*-\s*WAY\b/i.test(pair.caption)
+    || /^PRESSURE\s+(?:GAUGE|SENSOR),\s*TEMPERATURE\s+(?:GAUGE|SENSOR)\b/i.test(pair.caption)
     || /\b(?:DOWN\s*\/\s*UP|UP\s*\/\s*DOWN)\b/i.test(pair.caption)
     || /\bRISE\b.*\bDROP\b/i.test(pair.caption)
     || /\bACCESS\s+DOOR\b.*\bACCESS\s+PANEL\b/i.test(pair.caption)
@@ -2215,6 +2274,7 @@ export function findLegendGlyphs(
     if (group.length < requiredRows) continue;
     const domainRows = group.filter((pair) => isHvacBasCaption(pair.caption)).length;
     const directiveRows = group.filter((pair) => isDirectiveProse(pair.caption)).length;
+    const controllerPinoutRows = group.filter((pair) => isControllerPinoutCaption(pair.caption)).length;
     const domainFloor = Math.max(2, Math.ceil(group.length * 0.2));
     // A domain-specific heading is enough context. Generic SYMBOL/LEGEND
     // headings and headerless repeated columns must prove that the rows are
@@ -2225,6 +2285,8 @@ export function findLegendGlyphs(
       && (!heading || !isDomainHeading(heading)) && domainRows < domainFloor) continue;
     if (!layoutEvidenceDisabled && generalSection && directiveRows / group.length > 0.15) continue;
     if (!layoutEvidenceDisabled && !heading && directiveRows / group.length > 0.15) continue;
+    if (!layoutEvidenceDisabled && !heading
+      && controllerPinoutRows >= Math.max(3, Math.ceil(group.length * 0.3))) continue;
     for (const pair of group) acceptPair(pair, group.length, heading);
   }
   for (const { group, heading } of headedBelowCaptionGroups(

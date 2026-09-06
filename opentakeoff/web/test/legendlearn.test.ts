@@ -1808,6 +1808,85 @@ test("findLegendGlyphs: a boxed duct dimension is a callout value, not a physica
   assert.deepEqual(findLegendGlyphs(segs, spans, { minAlignedRows: 1, minUnheadedRows: 1 }), []);
 });
 
+test("findLegendGlyphs: an explicitly headed duct-size convention remains auditable but cannot seed a sweep", () => {
+  const segs = flat([
+    // The left dimension arrow is its own compact component; the internal
+    // 20x10 value begins just to its right and used to steal caption ownership
+    // before the external DUCT SIZE description could pair.
+    seg(100, 100, 115, 100), seg(115, 100, 115, 120),
+    seg(115, 120, 100, 120), seg(100, 120, 100, 100),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "MECHANICAL SYMBOL LEGEND", x0: 70, y0: 20, x1: 500, y1: 45 },
+    { text: "20x10", x0: 120, y0: 101, x1: 175, y1: 119 },
+    { text: "DUCT SIZE - FIRST SIZE IS SIDE SHOWN", x0: 260, y0: 101, x1: 650, y1: 121 },
+  ];
+  const [glyph] = findLegendGlyphs(segs, spans, { minAlignedRows: 1 });
+  assert.ok(glyph);
+  assert.equal(glyph.caption, "DUCT SIZE - FIRST SIZE IS SIDE SHOWN");
+  assert.equal(glyph.kind, "annotation");
+  assert.equal(glyph.seedable, false);
+});
+
+test("findLegendGlyphs: a headerless controller product pinout is not a symbol legend", () => {
+  const captions = [
+    "1 - IN 0 / MSET 2 - COM 3 - IN 1",
+    "4 - IN 2 VLC-1188E BO 0 - 27",
+    "5 - COM 6 - IN 3 GND - 28",
+    "8 - 24 VDC NO BO'S - 10VA",
+    "24VAC LOADS @ 0.5A MAX GND - 33",
+    "FUSE: AGC-6 AMP FAST CLASS 2 CIRCUITS ONLY",
+    "9 - IN 4 10 - COM BO 4 - 34",
+    "11 - IN 5 12 - IN 6 BO 5 - 36",
+    "13 - COM 14 - IN 7 AO 0 - 40",
+    "INPUT SETUP JUMPERS",
+    "0 - 10VDC 0 - 5VDC OR 4-20mA",
+    "DRY CONTACT",
+    "UL LISTED",
+    "17 - IN 8 18 - COM AO 2 - 43",
+    "LBL-VLC-1188-A",
+  ];
+  const segs = flat(captions.flatMap((_, index) => [
+    seg(100, 100 + index * 40, 130, 100 + index * 40),
+    seg(130, 100 + index * 40, 130, 120 + index * 40),
+    seg(130, 120 + index * 40, 100, 120 + index * 40),
+    seg(100, 120 + index * 40, 100, 100 + index * 40),
+  ]));
+  const spans: LegendSpan[] = captions.map((text, index) => ({
+    text, x0: 220, y0: 101 + index * 40, x1: 620, y1: 121 + index * 40,
+  }));
+  assert.deepEqual(findLegendGlyphs(segs, spans), []);
+});
+
+test("findLegendGlyphs: contractor keys and pipe-topology conventions are annotations", () => {
+  const captions = [
+    "BY ELECTRICAL CONTRACTOR",
+    "BY PLUMBING CONTRACTOR",
+    "BY MECHANICAL CONTRACTOR",
+    "POINT OF CONNECTION",
+    "POINT OF DISCONNECT",
+    "PIPE BREAK",
+    "PIPE CAP OR PLUG",
+    "PIPE ELBOW DOWN",
+    "PIPE BRANCH, TOP CONNECTION",
+  ];
+  const box = (y: number): number[][] => [
+    seg(100, y, 140, y), seg(140, y, 140, y + 20),
+    seg(140, y + 20, 100, y + 20), seg(100, y + 20, 100, y),
+  ];
+  const glyphs = findLegendGlyphs(
+    flat(captions.flatMap((_, index) => box(100 + index * 40))),
+    [
+      { text: "CONTROLS SYMBOL LEGEND", x0: 70, y0: 20, x1: 450, y1: 45 },
+      ...captions.map((text, index): LegendSpan => ({
+        text, x0: 220, y0: 101 + index * 40, x1: 600, y1: 121 + index * 40,
+      })),
+    ],
+  );
+  assert.equal(glyphs.length, captions.length);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "annotation" && !glyph.seedable));
+});
+
 test("findLegendGlyphs: vector duplicate punctuation may overshoot PDF text metrics without becoming a symbol", () => {
   const segs = flat([
     seg(100, 100, 111, 100), seg(111, 100, 111, 125),
