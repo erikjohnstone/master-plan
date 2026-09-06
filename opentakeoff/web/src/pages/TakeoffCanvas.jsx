@@ -10549,7 +10549,12 @@ export default function TakeoffCanvas() {
         <div style={{ flex: 1 }} />
         </div>
         <span data-topbar-pinned style={{ display: "inline-flex", alignItems: "center", gap: 7, flexShrink: 0, paddingTop: 16 }}>
-        <button onClick={() => setShowTakeoffData(true)}
+        {/* name="open-takeoff", like sheet-file / agent-goal: the Playwright
+            driver used to reach for this with a text regex, which also matched
+            the rail's Takeoff button, picked the one the open Agent panel
+            covers, and hung 120s on click actionability before reporting the
+            Takeoff panel as broken. It was never broken. */}
+        <button onClick={() => setShowTakeoffData(true)} name="open-takeoff"
           title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export."
           style={{
             padding: "8px 14px", border: "none",

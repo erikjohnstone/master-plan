@@ -216,23 +216,46 @@ async function runOne(rec, wantTitle) {
       const meta = await page.evaluate(async (kind) => {
         try {
           const r = await window.__opentakeoff.compileCorpusTakeoff(kind, { download: false });
-          return { ok: true, rows: window.__opentakeoff.takeoffRowCount?.() ?? 0,
-                   meta: window.__opentakeoff.lastCorpusTakeoff?.() || null,
-                   full: r && typeof r === "object" ? JSON.stringify(r).slice(0, 1200) : String(r).slice(0, 400) };
+          return { ok: true, full: r && typeof r === "object" ? JSON.stringify(r).slice(0, 1200) : String(r).slice(0, 400) };
         } catch (e) { return { ok: false, error: String(e).slice(0, 300) }; }
       }, COMPILE);
-      say(`compile -> ${JSON.stringify(meta).slice(0, 300)}`);
-      result.compile = meta;
+      // takeoffRowCount()/lastCorpusTakeoff() ARE CLOSURES OVER THE LAST
+      // RENDER. Reading them in the same evaluate that awaited the compile
+      // read the state as it was BEFORE showCompiledTakeoff's setState
+      // flushed — so every run reported `rows: 0, meta: null` and this driver
+      // spent a week accusing the Takeoff panel of dropping the takeoff.
+      // Measured after the flush, the same compile is 305 rows / 21 lines.
       await page.waitForTimeout(2500);
+      Object.assign(meta, await page.evaluate(() => ({
+        rows: window.__opentakeoff.takeoffRowCount?.() ?? 0,
+        meta: window.__opentakeoff.lastCorpusTakeoff?.() || null,
+      })));
+      // rows/meta first: `full` is 1200 chars and say() slices at 300, so
+      // printing the payload ahead of the numbers hid the numbers.
+      say(`compile -> rows ${meta.rows} · ${JSON.stringify(meta.meta?.totals || null)} · ${JSON.stringify(meta.full || meta.error || "").slice(0, 180)}`);
+      result.compile = meta;
     }
 
     // The Takeoff panel is where a takeoff is actually READ. The driver only
     // ever opened the Agent, because it scored the graph rather than the view.
     try {
-      const btn = page.locator("button", { hasText: /^Takeoff/ }).first();
-      if (await btn.count()) await btn.click();
+      // button[name="open-takeoff"], not a /^Takeoff/ text match: that regex
+      // ALSO matched the rail's Takeoff button, .first() picked the one the
+      // open Agent panel covers, and the click sat on actionability for the
+      // full 120s default before failing. Bounded, with the programmatic open
+      // as the fallback — this step must never cost two minutes to learn
+      // nothing.
+      const btn = page.locator('button[name="open-takeoff"]').first();
+      if (await btn.count()) await btn.click({ timeout: 5_000 }).catch(() => page.evaluate(() => window.__opentakeoff.openTakeoff()));
       else await page.evaluate(() => window.__opentakeoff.openTakeoff());
       await page.waitForTimeout(2500);
+      // What the ESTIMATOR reads, from the panel's own header — the number
+      // this driver is actually here to check.
+      const panelLines = await page.evaluate(() => {
+        const m = /Project takeoff\s*(\d+)\s*lines?/.exec(document.body.innerText || "");
+        return m ? Number(m[1]) : null;
+      });
+      if (panelLines != null) { result.panelLines = panelLines; say(`takeoff panel: ${panelLines} lines`); }
       await shot("4-takeoff");
     } catch (e) { say(`takeoff panel FAILED ${String(e).slice(0, 90)}`); }
 
