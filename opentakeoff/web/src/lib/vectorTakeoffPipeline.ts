@@ -299,41 +299,49 @@ export async function runVectorTakeoffPipeline(
   const buildings = new Set(g.buildings);
   const sourceSpansBySheet = new Map<string, GraphSpan[]>();
 
-  // L2 ODL — skippable, so that "does ODL still earn its place" is a
-  // measurement rather than an argument. It was kept through the extractor
-  // retirement on a PRINCIPLE — it is the only engine that can read a table
-  // with no drawn ruling, which vectorgrid structurally cannot — but no
-  // measurement had ever shown it recovering a table vectorgrid missed, and a
-  // principle that has never been tested is a belief. It also costs a JVM
-  // spawn per document.
-  if ((process.env.OPENTAKEOFF_ODL || "").toLowerCase() !== "off") {
-    await hooks.runODL(g);
-    report.layers_run.push("L2:ODL");
-  } else {
-    report.layers_run.push("L2:ODL(off)");
-  }
-
   const contexts = hooks.getSheetContexts();
 
-  // L1.8 vectorgrid — after ODL, before every other fallback.
+  // L1.8 VECTORGRID RUNS FIRST, AND ODL ONLY WHERE IT CAME BACK EMPTY.
   //
-  // AFTER ODL, deliberately: ODL is the only engine that reads a table with no
-  // drawn ruling at all, and running vectorgrid second means its tables have to
-  // WIN on the existing merge bar (more headers, then more cells, never more
-  // duplicate keys) rather than simply pre-empting. A table ODL read better
-  // keeps its place. Demoting ODL to a fallback is a retirement decision that
-  // belongs after the A/B, not before it.
+  // The order used to be the other way round, so that vectorgrid's tables had
+  // to WIN on the merge bar rather than pre-empt. That was the cautious choice
+  // while nothing had been measured. It has been measured now: against the 905
+  // hand-transcribed cells, with vectorgrid on, ODL on and ODL off give
+  // identical results to the cell — 537/905, 522/527 data cells, the same
+  // tables. On a ruled schedule ODL is not adding anything; it is spawning a
+  // JVM to arrive at an answer vectorgrid already has.
   //
-  // BEFORE the rest, because every stage below returns early once a sheet has
-  // tables — so on the sheets vectorgrid wins, tiling, the line grid, the
-  // stream grid and the Python sidecar stop running on their own.
-  const vgMode = vectorGridMode();
+  // What ODL can still do is read a table with NO DRAWN RULING, which
+  // vectorgrid structurally cannot: no lines means no faces means no cells.
+  // That is a real capability and it is why ODL is a fallback rather than
+  // deleted. A fallback is what it should have been from the start — it now
+  // runs only for the sheets vectorgrid left without tables, which is exactly
+  // the set where an unruled table would be hiding.
+  //
+    const vgMode = vectorGridMode();
+  const contexts0 = contexts.filter((ctx) => isScheduleTarget(ctx, hooks));
   if (vgMode !== "off" && vectorGridAvailable()) {
     report.layers_run.push(`L1.8:vectorgrid(${vgMode})`);
-    for (const ctx of contexts) {
-      if (!isScheduleTarget(ctx, hooks)) continue;
+    for (const ctx of contexts0) {
       await runL2VectorGridForSheet(g, ctx, buildings, stats, touched, report, vgMode);
     }
+  }
+
+  // L2 ODL — the fallback. Skipped entirely when every schedule-target sheet
+  // already has tables, because then there is nothing for it to recover and a
+  // JVM spawn buys nothing. `shadow` merges nothing, so it must not suppress
+  // ODL either — a shadow run has to leave the graph exactly as `off` does.
+  const odlOff = (process.env.OPENTAKEOFF_ODL || "").toLowerCase() === "off";
+  const uncovered = vgMode === "on"
+    ? contexts0.filter((ctx) => sheetTableCount(g, ctx.key) === 0)
+    : contexts0;
+  if (odlOff) {
+    report.layers_run.push("L2:ODL(off)");
+  } else if (!uncovered.length) {
+    report.layers_run.push("L2:ODL(not needed)");
+  } else {
+    await hooks.runODL(g);
+    report.layers_run.push(`L2:ODL(fallback on ${uncovered.length}/${contexts0.length} sheets)`);
   }
 
   // L1.5 TILING, L2 LINE-GRID, L2 STREAM-GRID, L2 SIDECAR AND L2.5 PILLAR-GAP
