@@ -90,6 +90,38 @@ export function legendLearnStatus(
   const segmentCount = Math.floor(segs.length / 4);
   const textChars = rawSpans.reduce((sum, span) => sum + span.text.trim().length, 0);
   const declaresLegend = rawSpans.some((span) => isLegendHeadingText(span.text));
+  const typicalTextHeight = Math.max(6, median(rawSpans
+    .map((span) => span.y1 - span.y0)
+    .filter((height) => height > 2 && height <= 120)) || 12);
+  const belowCaptionHeadings = rawSpans.filter((span) => isBelowCaptionLegendHeading(span.text));
+  // A declared two-dimensional cell legend cannot truthfully become an
+  // "empty" legend merely because the export converted its local captions
+  // or symbols to non-extractable graphics. Measure the finite band beneath
+  // each heading instead of the whole sheet: a P&ID may contain thousands of
+  // perfectly extractable sequence-note characters elsewhere while nearly
+  // every legend-cell label itself is vector-outlined. Two stray surviving
+  // labels are insufficient evidence for a repeated grid.
+  if (belowCaptionHeadings.length && segmentCount >= 1000) {
+    const localDomainCaptions = belowCaptionHeadings.flatMap((heading) => rawSpans.filter((span) =>
+      span.y0 >= heading.y1
+      && span.y0 <= heading.y1 + typicalTextHeight * 30
+      && span.x1 >= heading.x0 - typicalTextHeight * 5
+      && span.y1 - span.y0 <= typicalTextHeight * 2.5
+      && meaningfulCaption(span.text)
+      && !isLegendHeadingText(span.text)
+      && isHvacBasCaption(span.text),
+    ));
+    if (localDomainCaptions.length < 3) {
+      return {
+        status: "unsupported_caption_text",
+        note: "This sheet declares a cell-style legend, but fewer than three local HVAC/BAS captions are present as usable PDF text while dense vector linework remains. The legend lettering is incomplete or outlined; use OCR/visual review and do not treat zero learned rows as an empty legend.",
+      };
+    }
+    return {
+      status: "unsupported_geometry",
+      note: "This sheet declares a cell-style legend with usable local captions, but its graphic cells did not yield structurally corroborated vector glyphs. Use visual review and do not treat zero learned rows as an empty legend.",
+    };
+  }
   // Some AutoCAD exports preserve tens of thousands of vector strokes but
   // convert almost all legend lettering to outlines. The few extractable
   // spans are title-block metadata, so "0 rows" would be a false assertion.
@@ -246,7 +278,7 @@ function looksLikeGlyph(
   // Many CAD legends draw the system abbreviation as outlined lettering
   // directly on the line. The connected component is then a long, shallow
   // swatch rather than a one-pixel stroke (real CHWR keys are ~7.4:1).
-  if (w / h >= 7) return w <= maxLineStyleDim;
+  if (w / h >= 6) return w <= maxLineStyleDim;
   if (w > maxDim || h > maxDim) return false;
   const aspect = Math.max(w, h) / Math.max(1, Math.min(w, h));
   if (aspect > 40 && segCount <= 2) return w > h;
@@ -448,7 +480,7 @@ function isLegendHeadingText(text: string): boolean {
     || /^(?:(?:CONTROL|HVAC|MECHANICAL|ELECTRICAL|SYSTEM|DEVICE|NETWORK)\s+)?COMPONENTS$/i.test(normalized)
     || /\bPOINT\s+FUNCTION(?:\s+SCHEDULE)?\b/i.test(normalized)
     || /^(?:GENERAL|LIGHTING|EQUIPMENT|ONE-LINE\s+DIAGRAM|POWER\s+DEVICES|POWER\s+DISTRIBUTION\s+EQUIPMENT|TELEPHONE\s*(?:&|AND)\s*DATA\s+SYSTEMS|FIRE\s+ALARM|LIGHTNING\s+PROTECTION\s+AND\s+GROUNDING|WIRE,?\s+CONDUIT\s+AND\s+RACEWAY|EQUIPMENT\s+CONNECTIONS)$/i.test(normalized)
-    || /^(?:DUCTWORK|PIPING|(?:DUCTWORK|PIPING)\s+SYSTEM\s+ABBREVIATIONS|VALVES?(?:\s+AND\s+PIPING\s+ACCESSORIES)?|DUCTWORK\s+ACCESSORIES|AIR\s+DISTRIBUTION\s+DEVICES|GRILLES?[,\s]+REGISTERS?\s*(?:&|AND)\s*DIFFUSERS?(?:\s+TAGS?)?|MECHANICAL\s+EQUIPMENT\s+TAGS?|DAMPER\s+TAGS?)$/i.test(normalized);
+    || /^(?:DUCTWORK|PIPING|(?:DUCTWORK|PIPING)\s+SYSTEM\s+ABBREVIATIONS|VALVES(?:\s+AND\s+PIPING\s+ACCESSORIES)?|DUCTWORK\s+ACCESSORIES|AIR\s+DISTRIBUTION\s+DEVICES|GRILLES?[,\s]+REGISTERS?\s*(?:&|AND)\s*DIFFUSERS?(?:\s+TAGS?)?|MECHANICAL\s+EQUIPMENT\s+TAGS?|DAMPER\s+TAGS?)$/i.test(normalized);
 }
 
 /** A named MEP discipline section is stronger ownership evidence than a
@@ -464,16 +496,20 @@ function isSpecificDisciplineLegendHeading(text: string): boolean {
  * sheets often have a conventional right-caption legend near the top and a
  * title block or control diagram elsewhere whose boxes happen to sit above
  * short text. Restricting this alternate orientation to semantic RCP
- * headings is document-general (not project/page keyed) and keeps those
+ * headings, plus explicit P&ID symbol-legend headings, is document-general
+ * (not project/page keyed) and keeps those
  * remote structures out of legend ownership. */
 function isBelowCaptionLegendHeading(text: string): boolean {
   const normalized = normalizedCaption(text);
   const namesReflectedCeiling = /\bRCP\b/i.test(normalized)
     || /\bREFLECTED\s+CEILING(?:\s+PLAN)?\b/i.test(normalized);
+  const namesPidSymbolLegend = /\bP\s*&\s*ID\b/i.test(normalized)
+    && /\bSYMBOL\s+LEGEND\b/i.test(normalized);
   // Notes such as "refer to architectural reflected ceiling plans" are
   // common on mechanical sheets. They name another drawing but do not
   // declare local legend ownership.
-  return namesReflectedCeiling && /\b(?:LEGEND|SYMBOLS?)\b/i.test(normalized);
+  return namesPidSymbolLegend
+    || (namesReflectedCeiling && /\b(?:LEGEND|SYMBOLS?)\b/i.test(normalized));
 }
 
 /** Domain evidence is required when a heading is generic (plain SYMBOLS)
@@ -495,7 +531,12 @@ function isSectionBoundaryText(text: string): boolean {
     // Mentions inside a row description are not boundaries: "see equipment
     // connection schedule" is a common legend caption. Require heading-like
     // text whose final phrase itself names the next section.
-    || /^(?:(?:[A-Z0-9&/,\-]+\s+){0,5})?(?:ABBREVIATIONS?|DESIGN\s+CRITERIA|GENERAL\s+(?:PROJECT|MECHANICAL|HVAC|CONTROL)\s+NOTES?|IDENTIFICATION|INDENTIFICATION|LEGEND\s+NOTES?|SCHEDULES?|SEQUENCES?(?:\s+OF\s+OPERATIONS?)?)$/i.test(normalized);
+    || /^(?:(?:[A-Z0-9&/,\-]+\s+){0,5})?(?:ABBREVIATIONS?|DESIGN\s+CRITERIA|GENERAL\s+(?:PROJECT|MECHANICAL|HVAC|CONTROL)\s+NOTES?|IDENTIFICATION|INDENTIFICATION|LEGEND\s+NOTES?|SCHEDULES?|SEQUENCES?(?:\s+OF\s+OPERATIONS?)?)$/i.test(normalized)
+    // Callout-key panels can sit directly beneath a real symbol legend and
+    // repeat the same glyph/text column cadence. They describe how a tag is
+    // structured, not additional symbol identities, so their explicit title
+    // ends the preceding legend section even though it does not begin one.
+    || /^(?:(?:AIR\s+DISTRIBUTION|CONTROL\s+DIAGRAM|DIFFUSER|DUCTWORK(?:\s+LINE)?|PIPING(?:\s+LINE)?)\s+CALLOUTS?)$/i.test(normalized);
 }
 
 /** Sequence/general-note prose can form a perfectly regular numbered
@@ -520,7 +561,13 @@ function isDraftingAnnotationCaption(text: string): boolean {
   if (/^INDICATES\s+BRACKET\b/i.test(normalized)
     || /^(?:CEILING\s+HEIGHT|EXPOSED\s+CEILING)$/i.test(normalized)
     || /^(?:(?:\d+(?:\.\d+)?\s*['"]?\s*[x×]\s*\d+(?:\.\d+)?\s*['"]?\s+)?ACOUSTICAL\s+(?:TILE|PANEL).*\bCEILING|(?:GWB|GYPSUM(?:\s+BOARD)?)\s+CEILING(?:\s*\/\s*SOFFIT)?|(?:EXT(?:ERIOR)?\s+)?EIFS\b.*\bCEILING)$/i.test(normalized)) return true;
-  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|(?:MECHANICAL\s+)?EQUIPMENT)\s+CALLOUT|HOME\s+RUN|HOMERUNS?\s+TO\s+PANEL(?:BOARD)?\b|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|DUCTWORK\s+(?:BREAK|OR\s+PIPING\s+RISE)|INTAKE\s+OR\s+EXHAUST|(?:DIRECTION\s+OF\s+(?:AIRFLOW|FLOW)|FLOW\s+DIRECTION)|(?:SUPPLY|RETURN,?\s+EXHAUST,?\s+OR\s+TRANSFER)\s+AIRFLOW|(?:INCLINED\s+RISE|DECLINED\s+DROP)\s+WITH\s+RESPECT\s+TO\s+AIRFLOW|(?:UPWARD|DOWNWARD)\s+DIRECTION\s+OF\s+SLOPED\s+PIPING|NEW\s+TO\s+EXISTING\s+CONNECTION\s+POINT|SLOPE\s+PIPE\s+IN\s+DIRECTION\s+OF\s+ARROW|AIR\s+DISTRIBUTION\s+TAG|AIR\s+DEVICE\s+TYPE\.\s+REFER\s+TO\s+SCHEDULE\b.*\bAIR\s+DEVICE\s+WITH\s+(?:ROUND|RECTANGULAR)\s+NECK\s+TAG|(?:LIGHTING\s+FIXTURE|RECEPTACLE\s+DEVICE)\s+TAGS?\b|ELECTRICAL\s+EQUIPMENT\s+AND\s+TAGS\b|DEVIATIONS?\s+OF\s+(?:THE\s+)?ABOVE\s+RECEPTACLE\s+TYPES?\b|[•\-]?\s*INTERNAL\s+(?:GROUND|ARC)\s+FAULT\b|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|(?:DEMOLITION|CONSTRUCTION)\s+NOTE\s+IDENTIFICATION|PLAN\s+REFERENCE\s+NOTE\s+SYMBOL|POINT\s+OF\s+(?:DEMOLITION|CONNECTION,?\s+NEW-TO-EXISTING)\b|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|CONNECT\s+NEW\s+TO\s+EXISTING|(?:DISCONNECT|CONNECT)\s+CONDUCTORS\s+(?:FROM|TO)\s+EQUIPMENT|REMOVE\s+TO\s+THIS\s+POINT|DEMOLISH\s+TO\s+POINT\s+INDICATED|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\s+(?:CONDUCTOR|STRUCTURE)\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b|EQUIPMENT\s+CONNECTION\s+AS\s+NOTED\b)/i.test(normalized);
+  // Structural and equipment-key legends use compact marks to explain how
+  // the drawing is annotated. These captions identify drafting semantics,
+  // not separately countable installed objects. Keep the patterns narrow so
+  // routed-system rows such as "INDICATES EXISTING ITEM" retain their own
+  // line-style classification.
+  if (/^(?:INDICATES\s+(?:EQUIPMENT\s+ID|KEYED\s+SHEET\s+NOTE|\(N\)\s+OR\s+\(E\)\s+EQUIPMENT)\b|DENOTES\s+(?:TOP\s+OF\s+STEEL\s+ELEVATION|DIRECTION\s+OF\s+ROOF\s+SLOPE)\b)/i.test(normalized)) return true;
+  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|(?:MECHANICAL\s+)?EQUIPMENT)\s+CALLOUT|HOME\s+RUN|HOMERUNS?\s+TO\s+PANEL(?:BOARD)?\b|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|DUCTWORK\s+(?:BREAK|OR\s+PIPING\s+RISE)|INTAKE\s+OR\s+EXHAUST|(?:DIRECTION\s+OF\s+(?:AIRFLOW|FLOW)|FLOW\s+DIRECTION)|(?:SUPPLY|RETURN,?\s+EXHAUST,?\s+OR\s+TRANSFER)\s+AIRFLOW|(?:INCLINED\s+RISE|DECLINED\s+DROP)\s+WITH\s+RESPECT\s+TO\s+AIRFLOW|(?:UPWARD|DOWNWARD)\s+DIRECTION\s+OF\s+SLOPED\s+PIPING|(?:PIPE\s+DROP\s*\/\s*PIPE\s+RISE|PIP(?:E|ING)\s+(?:UP|DOWN|CONTINUATION)|(?:SUPPLY|RETURN|EXHAUST)?\s*DUCT\s+(?:UP|DOWN)(?:\s*\([^)]*\))?)(?:\s*[.,;:])?$|NEW\s+TO\s+EXISTING\s+CONNECTION\s+POINT|SLOPE\s+PIPE\s+IN\s+DIRECTION\s+OF\s+ARROW|AIR\s+DISTRIBUTION\s+TAG|AIR\s+DEVICE\s+TYPE\.\s+REFER\s+TO\s+SCHEDULE\b.*\bAIR\s+DEVICE\s+WITH\s+(?:ROUND|RECTANGULAR)\s+NECK\s+TAG|(?:LIGHTING\s+FIXTURE|RECEPTACLE\s+DEVICE)\s+TAGS?\b|ELECTRICAL\s+EQUIPMENT\s+AND\s+TAGS\b|DEVIATIONS?\s+OF\s+(?:THE\s+)?ABOVE\s+RECEPTACLE\s+TYPES?\b|[•\-]?\s*INTERNAL\s+(?:GROUND|ARC)\s+FAULT\b|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|(?:DEMOLITION|CONSTRUCTION)\s+NOTE\s+IDENTIFICATION|PLAN\s+REFERENCE\s+NOTE\s+SYMBOL|POINT\s+OF\s+(?:DEMOLITION|CONNECTION,?\s+NEW-TO-EXISTING)\b|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|CONNECT\s+NEW\s+TO\s+EXISTING|(?:DISCONNECT|CONNECT)\s+CONDUCTORS\s+(?:FROM|TO)\s+EQUIPMENT|REMOVE\s+TO\s+THIS\s+POINT|DEMOLISH\s+TO\s+POINT\s+INDICATED|(?:EXTENTS?\s+OF\s+DEMOLITION|OBJECT\s+TO\s+BE\s+REMOVED)|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\s+(?:CONDUCTOR|STRUCTURE)\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b|EQUIPMENT\s+CONNECTION\s+AS\s+NOTED\b)/i.test(normalized);
 }
 
 /** Captions that name a routed medium or drafting line convention rather
@@ -537,6 +584,7 @@ function isRoutedSystemCaption(text: string): boolean {
   if (/\bDIRECTION\b/i.test(normalized)
     || /\b(?:ACTUATOR|CLEANOUT|DAMPER|DETECTOR|DIFFUSER|FAN|FILTER|GAUGE|GRILLE|LOUVER|METER|PANELBOARD|PUMP|REGISTER|REGULATOR|RELAY|SENSOR|STARTER|STRAINER|SWITCH|THERMOSTAT|TRANSMITTER|VALVE|VFD)\b\s+(?:IN|ON)\b.*\b(?:PIPING|LINE)$/i.test(normalized)) return false;
   return /\b(?:PIPING|LINE|SEWER)$/i.test(normalized)
+    || /^(?:(?:NEW|FUTURE|EXISTING)\s+)?(?:DUCTWORK|PIPING)(?:\s+(?:TO\s+(?:BE\s+)?(?:REMOVED|REMAIN)|WITH\s+(?:INSULATION|LINING)|DEMOLITION))?$/i.test(normalized)
     || /^(?:LPS\s+(?:ROOF|MAIN\s+DOWN)\s+CONDUCTOR|GROUND\s+RING\b.*\bCONDUCTOR|BRANCH\s+CIRCUIT\s+OR\s+FEEDER\s+WIRING\s+IN\s+CONDUIT\b)/i.test(normalized)
     || /^PANEL,?\s+SWITCHBOARD,?\s+OR\s+BUSD?UCT\b/i.test(normalized)
     || /^(?:VENT|DUCTWORK|STORM\s+DRAIN)$/i.test(normalized)
@@ -571,6 +619,10 @@ function meaningfulCaption(text: string): boolean {
   if (alnum < 2) return false;
   // A point matrix's repeated X marks are cell values, never descriptions.
   if (/^(?:X+)(?:\s+X+)*$/i.test(normalized)) return false;
+  // Ruled and unruled legend tables commonly label their two columns before
+  // the first real row. An underline or border immediately to the left can
+  // otherwise promote the field name itself as a fake symbol identity.
+  if (/^(?:SYMBOL|NAME|DESCRIPTION|DESIGNATION|TYPE|NUMBER|SIZE|QTY|QUANTITY)$/i.test(normalized)) return false;
   return true;
 }
 
@@ -594,12 +646,22 @@ function resemblesExtractedText(
     // ATS, DDC...) is the physical legend carrier, not outlined duplicate
     // lettering. PDF font metrics can protrude vertically beyond the box,
     // so require horizontal containment plus strong vertical overlap.
+    const tag = normalizedCaption(s.text);
+    const compactTag = /^[A-Z0-9][A-Z0-9./_-]{1,11}$/i.test(tag);
+    const containsWholeTag = x0 <= s.x0 - horizontalMargin && x1 >= s.x1 + horizontalMargin;
+    // Digit-bearing sensor/point tags such as CO2 can fill almost the whole
+    // carrier. Exact four-edge closure and containment still distinguish
+    // that box from one outlined letter inside a longer PDF-text run.
+    const nearEdgeDigitTag = /\d/.test(tag)
+      && /[A-Z]/i.test(tag)
+      && !/^\d+(?:\s*[x×]\s*\d+)+(?:\s*["'])?$/i.test(tag)
+      && x0 <= s.x0 + 0.75 && x1 >= s.x1 - 0.75;
     return segmentCount === 4
-      && /^[A-Z0-9][A-Z0-9./_-]{1,11}$/i.test(normalizedCaption(s.text))
+      && compactTag
       && w >= sh * 1.8
       && w <= sw + sh
       && Math.abs(cx - (s.x0 + s.x1) / 2) <= sh * 0.5
-      && x0 <= s.x0 - horizontalMargin && x1 >= s.x1 + horizontalMargin
+      && (containsWholeTag || nearEdgeDigitTag)
       && verticalOverlap >= Math.min(h, sh) * 0.65;
   };
   if (rawSpans.some((s) => {
@@ -667,7 +729,8 @@ function resemblesExtractedText(
   // Outline fonts can overshoot the PDF text metrics by several pixels,
   // especially across stacked runs. Relative area agreement distinguishes
   // that duplicate ink from a genuine circle/box surrounding a short tag.
-  return componentArea / unionArea <= 1.5
+  const onlyPunctuation = overlaps.every((s) => /^[#*]+$/.test(normalizedCaption(s.text)));
+  return componentArea / unionArea <= (onlyPunctuation ? 2 : 1.5)
     && x0 >= ux0 - tol && x1 <= ux1 + tol && y0 >= uy0 - tol && y1 <= uy1 + tol;
 }
 
@@ -1181,7 +1244,13 @@ function expandSymbolPairs(
 function hasMultipleSubstantialSymbols(
   pair: PairCandidate, typicalTextHeight: number, heading: string | null,
 ): boolean {
-  if (pair.kind !== "symbol" || pair.members.length < 2) return false;
+  if (pair.kind !== "symbol") return false;
+  // Some diagrammatic piping keys draw two fittings on one continuous pipe
+  // stub, so connectivity cannot separate the two identities. The caption's
+  // repeated, explicit fitting nouns still prove this is a vocabulary group
+  // rather than one seedable symbol.
+  if (/\bFLANGED\s+CONN(?:ECTION)?\.?\s*[\\/]\s*BLIND\s+FLANGE\b/i.test(pair.caption)) return true;
+  if (pair.members.length < 2) return false;
   // A below-caption cell conventionally presents side-by-side renditions
   // (fixture sizes, grille necks, strobe/horn variants) under one identity.
   // Preserve those as a non-seedable group whenever two information-rich
@@ -1672,6 +1741,7 @@ function nearbyLegendHeading(group: PairCandidate[], lines: LegendSpan[], typica
     }
     return firstY - cursor <= maxStep;
   };
+  const horizontalDistance = (s: LegendSpan) => s.x1 < gx0 ? gx0 - s.x1 : s.x0 > gx1 ? s.x0 - gx1 : 0;
   const candidates = lines.filter((s) => {
     if (!isLegendHeadingText(s.text) || s.y1 > firstY + typicalTextHeight) return false;
     // A heading identifies the section directly beneath it, not every
@@ -1692,11 +1762,14 @@ function nearbyLegendHeading(group: PairCandidate[], lines: LegendSpan[], typica
       && isSectionBoundaryText(other.text)
       && other.y0 > s.y1 + typicalTextHeight * 0.2
       && other.y1 < firstY - typicalTextHeight * 0.2
+      // A lower header in the adjacent table column must not steal this
+      // column from an explicit overlapping legend heading above it.
+      && horizontalDistance(other) <= horizontalDistance(s)
       && ((glyphCenterX >= other.x0 - margin && glyphCenterX <= other.x1 + margin)
         || (((other.x0 + other.x1) / 2) >= gx0 - margin && ((other.x0 + other.x1) / 2) <= gx1 + margin)));
   });
-  const horizontalDistance = (s: LegendSpan) => s.x1 < gx0 ? gx0 - s.x1 : s.x0 > gx1 ? s.x0 - gx1 : 0;
-  candidates.sort((a, b) => (firstY - a.y1) - (firstY - b.y1) || horizontalDistance(a) - horizontalDistance(b) || a.x0 - b.x0);
+  candidates.sort((a, b) => horizontalDistance(a) - horizontalDistance(b)
+    || (firstY - a.y1) - (firstY - b.y1) || a.x0 - b.x0);
   return candidates.length ? normalizedCaption(candidates[0].text) : null;
 }
 
@@ -2113,7 +2186,7 @@ export function findLegendGlyphs(
     group = withoutTrailingNetworkDiagram(group, heading, typicalTextHeight, minAlignedRows);
     completeSpecificSectionCaptions(group, lines, heading, typicalTextHeight);
     const specificDisciplineSection = !!heading && isSpecificDisciplineLegendHeading(heading);
-    const generalSection = heading === "GENERAL" && group.length >= 4;
+    const generalSection = /^GENERAL(?:\s+SYMBOLS?)?$/i.test(heading || "") && group.length >= 4;
     // The single word EQUIPMENT also appears as a label inside tag examples,
     // schedules, and abbreviation blocks. Unlike specific headings such as
     // FIRE ALARM or ONE-LINE DIAGRAM, it needs a substantial repeated row

@@ -131,7 +131,14 @@ export function extractSheetNumber(textContent: TextContentLike, viewport: Viewp
   let best: string | null = null, bestScore = 0;
   const consider = (raw: string, x: number, y: number, h: number) => {
     if (raw.length < 2 || raw.length > 8 || !SHEET_NO_RE.test(raw)) return;
-    const score = h + (x / W) * 4 + (y / H) * 4; // bigger + further to lower-right wins
+    // Many institutional title blocks put a large project code in the main
+    // drawing-title column and the actual sheet identifier in the narrow
+    // extreme-right sheet/revision column. Font size alone picked B950 over
+    // the real S3.1 on a reviewed structural sheet. Preserve the normal
+    // size/position ranking, but give the conventional rightmost column a
+    // bounded boost strong enough to beat a nearby project-code lookalike.
+    const rightmostSheetColumn = x >= W * 0.9 ? 16 : 0;
+    const score = h + (x / W) * 4 + (y / H) * 4 + rightmostSheetColumn;
     if (score > bestScore) { bestScore = score; best = raw; }
   };
 
