@@ -651,6 +651,32 @@ test("VARIANT GUARD: under variantGuard the richer variant demotes to withheld w
   assert.ok((demoted[0].extra ?? 0) > 0.30, `demoted row carries its extra (${demoted[0].extra})`);
 });
 
+// The agent surface used to spread each withheld row and then OVERWRITE
+// `reason` with one flat literal, so a near-miss and a variant demotion — two
+// different findings the estimator must act on differently — reached the model
+// reading identically. This pins the property that flattening destroyed: the
+// engine's reasons are distinguishable, and carry the numbers that make them so.
+test("REASONS ARE DISTINCT: a near-miss and a variant demotion never read the same", () => {
+  // the same perturbation the near-miss test above uses (diagonal endpoint off
+  // by 6px → ≈0.77, inside the withheld band), plus a richer variant that the
+  // guard demotes for extra ink
+  const perturbed = SYMBOL.map((s, i) => (i === 4 ? [0, 0, 26, 20] as [number, number, number, number] : s));
+  const segs = place([
+    { at: [0, 0] },
+    { at: [100, 0] },
+    { at: [200, 0], segs: perturbed },
+    { at: [300, 0], segs: [...SYMBOL, [0, 20, 20, 0], [0, 10, 20, 10]] as [number, number, number, number][] },
+  ]);
+  const r = sweepSymbols(segs, RECT, { variantGuard: true });
+  const reasons = r.withheld.map((w) => w.reason);
+  assert.ok(reasons.length >= 2, `expected two kinds of question, got ${reasons.length}`);
+  assert.equal(new Set(reasons).size, reasons.length, `each question states its OWN finding:\n${reasons.join("\n")}`);
+  assert.ok(reasons.some((x) => /commit bar/.test(x)), "the near-miss names the bar it fell under");
+  assert.ok(reasons.some((x) => /extra linework the seed lacks/.test(x)), "the variant names the extra ink");
+  // and every reason quantifies — a reason with no number is the flat literal
+  for (const x of reasons) assert.match(x, /\d+%/, `reason states a measured percentage: ${x}`);
+});
+
 test("EXTRA: coincident duplicate ink and background runs CROSSING the footprint trip neither mode", () => {
   const sq: [number, number, number, number][] = [[0, 0, 20, 0], [20, 0, 20, 20], [20, 20, 0, 20], [0, 20, 0, 0]];
   const segs = place([

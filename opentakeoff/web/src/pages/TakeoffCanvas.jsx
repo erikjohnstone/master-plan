@@ -310,6 +310,12 @@ const TOOL_VERB = {
   arrow: "arrow", dimension: "dimension", stamp: "stamp", bubble: "bubble",
 };
 
+// Only ever used when the engine hands back a withheld match with no reason of
+// its own. It is a floor, not the answer — symbolsweep writes a quantified
+// reason for every question it raises, and that one goes to the model and to
+// the estimator.
+const SWEEP_FALLBACK_REASON = "near-match — look before trusting (0.75-0.92 band)";
+
 // Pure geometry helpers (star/cloud paths, snap grid, angle lock, metrics,
 // hit-testing) live in lib/geometry.js — byte-identical with Spline's copy.
 
@@ -6601,8 +6607,17 @@ export default function TakeoffCanvas() {
     const nM = res.matches.length;
     return {
       seed: { at: norm(res.seed.center), label: L(0) },
-      matches: res.matches.map((m, i) => ({ at: norm(m.at), score: m.score, rotation: m.rotation, mirrored: m.mirrored, label: L(1 + i) })),
-      withheld: res.withheld.map((w, i) => ({ at: norm(w.at), score: w.score, reason: "near-match — look before trusting (0.75-0.92 band)", label: L(1 + nM + i) })),
+      // THE ENGINE ALREADY WROTE A BETTER REASON THAN THIS. symbolsweep computes
+      // one per withheld match, quantified and specific — "matched 84% of the
+      // seed's linework (commit bar 92%) — likely a variant or an overlapped
+      // instance", or the variant-guard's "carries ~31% extra linework the seed
+      // lacks". This line spread `w` and then overwrote `reason` with one flat
+      // literal, so every question reached the model reading identically and it
+      // could not tell a near-miss from a richer variant. It also dropped
+      // rotation/mirrored and `extra` — the very disclosure that says WHY the
+      // guard fired.
+      matches: res.matches.map((m, i) => ({ at: norm(m.at), score: m.score, rotation: m.rotation, mirrored: m.mirrored, ...(m.extra != null ? { extra: m.extra } : {}), label: L(1 + i) })),
+      withheld: res.withheld.map((w, i) => ({ at: norm(w.at), score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.extra != null ? { extra: w.extra } : {}), reason: w.reason || SWEEP_FALLBACK_REASON, label: L(1 + nM + i) })),
       rejected: (res.rejected || []).map((r) => ({ at: norm(r.at), reason: r.reason || "excluded" })),
       complete: res.complete,
       dropped: res.candidates?.dropped || 0,
@@ -6645,7 +6660,7 @@ export default function TakeoffCanvas() {
         name: r.name,
         found: r.result.matches.length,
         matches: r.result.matches.map((m) => ({ at: norm(m.at), score: m.score, rotation: m.rotation, mirrored: m.mirrored })),
-        withheld: r.result.withheld.map((w) => ({ at: norm(w.at), score: w.score, rotation: w.rotation, mirrored: w.mirrored, reason: "near-match — look before trusting (0.75-0.92 band)" })),
+        withheld: r.result.withheld.map((w) => ({ at: norm(w.at), score: w.score, rotation: w.rotation, mirrored: w.mirrored, ...(w.extra != null ? { extra: w.extra } : {}), reason: w.reason || SWEEP_FALLBACK_REASON })),
         complete: r.result.complete,
       })),
     };
@@ -12664,13 +12679,32 @@ export default function TakeoffCanvas() {
               )}
               {unlabeled > 0 && tagGroups.length <= 1 && <div style={{ fontSize: "var(--fs-s)", color: "var(--c-warning)" }}>{unlabeled} match(es) carry no label while this family is labeled — look at those first.</div>}
               <div><b style={{ fontFamily: "var(--f-display)", fontSize: "var(--fs-xl)", color: openQ ? "var(--c-warning)" : "var(--ink)" }}>{sweep.questions.length}</b> question(s){openQ ? <span style={{ color: "var(--ink-soft)" }}> — ↵ accept · X dismiss · → next</span> : <span style={{ color: "var(--ink-soft)" }}> — all answered</span>}</div>
+              {/* 150px fitted bare percentage rows; the selected question now
+                  carries its reason, which is ~3 lines. */}
               {sweep.questions.length > 0 && (
-                <div style={{ display: "flex", flexDirection: "column", gap: 4, maxHeight: 150, overflowY: "auto" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 4, maxHeight: 210, overflowY: "auto" }}>
+                  {/* THE SWEEP SAYS WHY, AND THIS LIST USED TO SWALLOW IT.
+                      symbolsweep writes a quantified reason for every question
+                      — "matched 84% of the seed's linework (commit bar 92%) —
+                      likely a variant or an overlapped instance" — and it has
+                      been sitting in `q.reason` all along (it rides the spread
+                      at runSymbolSweep). The row showed a bare percentage, so
+                      the estimator was asked to accept or dismiss a count with
+                      the engine's actual finding hidden from them.
+                      Shown for the SELECTED question only: the reasons run ~150
+                      chars and this panel is narrow, so all of them at once is
+                      a wall of text. The one you are deciding on is the one
+                      that matters. */}
                   {sweep.questions.map((q, i) => (
                     <button key={i} type="button" onClick={() => setSweep((s) => ({ ...s, qIndex: i }))}
-                      style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 8px", fontFamily: "var(--f-body)", fontSize: "var(--fs-s)", textAlign: "left", background: i === sweep.qIndex ? "var(--tint-select)" : "transparent", border: `1px solid ${i === sweep.qIndex ? "var(--c-warning)" : "var(--ink-faint)"}`, color: q.state === "dismissed" ? "var(--text-faint)" : "var(--ink)", textDecoration: q.state === "dismissed" ? "line-through" : "none", cursor: "pointer" }}>
-                      <span style={{ fontFamily: "var(--f-mono)", fontWeight: 700, color: q.state === "accepted" ? "var(--c-positive)" : q.state === "dismissed" ? "var(--text-faint)" : DS.symbol.question }}>{q.state === "accepted" ? "✓" : q.state === "dismissed" ? "×" : "?"}</span>
-                      <span>{Math.round(q.score * 100)}%{q.label ? ` · ${q.label.label}` : ""}{q.readings > 1 ? ` · read ${q.readings} ways` : ""}</span>
+                      style={{ display: "flex", flexDirection: "column", alignItems: "stretch", gap: 4, padding: "5px 8px", fontFamily: "var(--f-body)", fontSize: "var(--fs-s)", textAlign: "left", background: i === sweep.qIndex ? "var(--tint-select)" : "transparent", border: `1px solid ${i === sweep.qIndex ? "var(--c-warning)" : "var(--ink-faint)"}`, color: q.state === "dismissed" ? "var(--text-faint)" : "var(--ink)", cursor: "pointer" }}>
+                      <span style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: q.state === "dismissed" ? "line-through" : "none" }}>
+                        <span style={{ fontFamily: "var(--f-mono)", fontWeight: 700, color: q.state === "accepted" ? "var(--c-positive)" : q.state === "dismissed" ? "var(--text-faint)" : DS.symbol.question }}>{q.state === "accepted" ? "✓" : q.state === "dismissed" ? "×" : "?"}</span>
+                        <span>{Math.round(q.score * 100)}%{q.label ? ` · ${q.label.label}` : ""}{q.readings > 1 ? ` · read ${q.readings} ways` : ""}</span>
+                      </span>
+                      {i === sweep.qIndex && q.reason && (
+                        <span style={{ fontSize: "var(--fs-xs)", lineHeight: 1.45, color: "var(--ink-soft)", whiteSpace: "normal" }}>{q.reason}</span>
+                      )}
                     </button>
                   ))}
                 </div>
