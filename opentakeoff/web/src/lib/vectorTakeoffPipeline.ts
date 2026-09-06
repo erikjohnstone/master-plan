@@ -211,6 +211,15 @@ async function runL2VectorGridForSheet(
   // classifier then refused is a different problem from a region never found,
   // and the reasons are what say which refusal is worth changing.
   for (const why of res.rejects) {
+    // Keep the raw string too. The binned key below deliberately strips the
+    // region's coordinates so the counts group, but that also makes it
+    // impossible to say WHICH region was refused — and a scorer comparing the
+    // pipeline against independent ground truth needs exactly that, to tell a
+    // table the reader never found from one it found and the classifier then
+    // declined. 64 is well past any real sheet's refusal count.
+    if ((rec.declined_regions ?? (rec.declined_regions = [])).length < 64) {
+      rec.declined_regions.push(`${ctx.key}: ${why}`);
+    }
     const reasons = rec.declined_reasons ?? (rec.declined_reasons = {});
     const key = why.replace(/^\d+x\d+ at [-\d,]+: /, "")
       .replace(/\(kind [a-z-]+, key column [^)]*\)/, "(kind/key)")

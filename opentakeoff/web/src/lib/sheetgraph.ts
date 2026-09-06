@@ -7889,6 +7889,14 @@ export interface VectorPipelineReport {
     /** Why the schedule classifier declined a region the reader had already
      * read. A refusal is not a miss and the two need different fixes. */
     declined_reasons?: Record<string, number>;
+    /** The same refusals UNBINNED, each still carrying the region's own shape
+     * and coordinates: "16x9 at 214,880,1590,1180: no header block above the
+     * data". The binned counts above say which refusal is common; only these
+     * say WHICH TABLE was refused, which is what a scorer holding independent
+     * ground truth needs in order to line a refusal up against the table the
+     * truth says is there. Capped so a pathological sheet cannot bloat the
+     * graph. */
+    declined_regions?: string[];
     ms: number;
   };
 }
