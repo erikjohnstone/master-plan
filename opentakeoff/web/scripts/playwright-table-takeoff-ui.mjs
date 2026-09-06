@@ -42,6 +42,15 @@ if (!apiKey) throw new Error("no CEREBRAS_API_KEY (env or web/.env)");
 
 const args = process.argv.slice(2);
 const argOf = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : null; };
+/** --shots writes a full-page PNG at each moment worth looking at. Off by
+ * default: the sweep wants a score, not 120 images. */
+const SHOTS = args.includes("--shots");
+/** --compile <kind> calls compile_corpus_takeoff directly instead of waiting
+ * for the Agent to choose it. Same production tool the Agent invokes; the
+ * model's only job is deciding to call it, and in this container the model is
+ * unreachable (api.cerebras.ai is refused by the network policy). Everything
+ * the panel then shows is the real pipeline's own output. */
+const COMPILE = argOf("--compile");
 
 const norm = (s) => String(s || "").toUpperCase().replace(/\s+/g, " ").trim().replace(/Ø/g, "O");
 const toks = (s) => norm(s).split(/[\s,;|]+/).filter(Boolean);
@@ -114,6 +123,13 @@ async function runOne(rec, wantTitle) {
     localStorage.setItem("opentakeoff_ai_provider", "openai");
   }, { endpoint: "https://api.cerebras.ai", apiKey, model: process.env.CEREBRAS_MODEL || "gpt-oss-120b" });
 
+  const shot = async (name) => {
+    if (!SHOTS) return;
+    const file = resolve(OUT, `${rec.id}.${name}.png`);
+    try { await page.screenshot({ path: file, fullPage: false }); say(`shot ${name}`); }
+    catch (e) { say(`shot ${name} FAILED ${String(e).slice(0, 80)}`); }
+  };
+
   const t0 = Date.now();
   let result = { id: rec.id, title, page: table.page, wantRows: wantRows.length };
   try {
@@ -122,6 +138,8 @@ async function runOne(rec, wantTitle) {
     // for it to be ATTACHED, not visible. setInputFiles drives a hidden input
     // fine; waiting for visibility here just times out forever.
     await page.waitForSelector('input[name="sheet-file"]', { state: "attached", timeout: 60_000 });
+    await page.waitForTimeout(1200);
+    await shot("1-empty");
 
     say("upload blueprint");
     await page.locator('input[name="sheet-file"]').first().setInputFiles(pdf);
@@ -137,7 +155,8 @@ async function runOne(rec, wantTitle) {
     say(`indexed ${idx.done}/${idx.total} sheets in ${Math.round((Date.now() - t0) / 1000)}s`);
     result.sheets = idx.total;
     result.indexSeconds = Math.round((Date.now() - t0) / 1000);
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(2500);
+    await shot("2-indexed");
 
     say("open Agent");
     // NOT button[title*="Agent"] — the Takeoff button's own tooltip says
@@ -171,6 +190,8 @@ async function runOne(rec, wantTitle) {
       + `Do not summarise and do not skip rows.`;
     say(`goal: ${prompt.slice(0, 110)}…`);
     await page.locator('textarea[name="agent-goal"]').fill(prompt);
+    await page.waitForTimeout(600);
+    await shot("3-agent");
     await page.locator("button.btn-primary", { hasText: /^Run$/ }).click();
 
     const deadline = Date.now() + AGENT_TIMEOUT_MS;
@@ -187,6 +208,31 @@ async function runOne(rec, wantTitle) {
     }
     result.agentSeconds = Math.round((Date.now() - t0) / 1000);
     if (!sawRunning) say("WARNING: agent never entered running state");
+
+    if (COMPILE) {
+      say(`compile_corpus_takeoff(${COMPILE}) — the tool the Agent would call`);
+      const meta = await page.evaluate(async (kind) => {
+        try {
+          const r = await window.__opentakeoff.compileCorpusTakeoff(kind, { download: false });
+          return { ok: true, rows: window.__opentakeoff.takeoffRowCount?.() ?? 0,
+                   meta: window.__opentakeoff.lastCorpusTakeoff?.() || null,
+                   full: r && typeof r === "object" ? JSON.stringify(r).slice(0, 1200) : String(r).slice(0, 400) };
+        } catch (e) { return { ok: false, error: String(e).slice(0, 300) }; }
+      }, COMPILE);
+      say(`compile -> ${JSON.stringify(meta).slice(0, 300)}`);
+      result.compile = meta;
+      await page.waitForTimeout(2500);
+    }
+
+    // The Takeoff panel is where a takeoff is actually READ. The driver only
+    // ever opened the Agent, because it scored the graph rather than the view.
+    try {
+      const btn = page.locator("button", { hasText: /^Takeoff/ }).first();
+      if (await btn.count()) await btn.click();
+      else await page.evaluate(() => window.__opentakeoff.openTakeoff());
+      await page.waitForTimeout(2500);
+      await shot("4-takeoff");
+    } catch (e) { say(`takeoff panel FAILED ${String(e).slice(0, 90)}`); }
 
     const answer = await page.evaluate(() => {
       const panel = document.querySelector('[aria-label="Agent"]')
