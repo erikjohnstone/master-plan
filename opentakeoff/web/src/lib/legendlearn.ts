@@ -447,7 +447,7 @@ function isLegendHeadingText(text: string): boolean {
     || /^SYMBOL$/i.test(normalized)
     || /^(?:(?:CONTROL|HVAC|MECHANICAL|ELECTRICAL|SYSTEM|DEVICE|NETWORK)\s+)?COMPONENTS$/i.test(normalized)
     || /\bPOINT\s+FUNCTION(?:\s+SCHEDULE)?\b/i.test(normalized)
-    || /^(?:GENERAL|LIGHTING|POWER\s+DEVICES|POWER\s+DISTRIBUTION\s+EQUIPMENT|TELEPHONE\s*(?:&|AND)\s*DATA\s+SYSTEMS|FIRE\s+ALARM|LIGHTNING\s+PROTECTION\s+AND\s+GROUNDING|WIRE,?\s+CONDUIT\s+AND\s+RACEWAY|EQUIPMENT\s+CONNECTIONS)$/i.test(normalized)
+    || /^(?:GENERAL|LIGHTING|EQUIPMENT|ONE-LINE\s+DIAGRAM|POWER\s+DEVICES|POWER\s+DISTRIBUTION\s+EQUIPMENT|TELEPHONE\s*(?:&|AND)\s*DATA\s+SYSTEMS|FIRE\s+ALARM|LIGHTNING\s+PROTECTION\s+AND\s+GROUNDING|WIRE,?\s+CONDUIT\s+AND\s+RACEWAY|EQUIPMENT\s+CONNECTIONS)$/i.test(normalized)
     || /^(?:DUCTWORK|PIPING|(?:DUCTWORK|PIPING)\s+SYSTEM\s+ABBREVIATIONS|VALVES?(?:\s+AND\s+PIPING\s+ACCESSORIES)?|DUCTWORK\s+ACCESSORIES|AIR\s+DISTRIBUTION\s+DEVICES|GRILLES?[,\s]+REGISTERS?\s*(?:&|AND)\s*DIFFUSERS?(?:\s+TAGS?)?|MECHANICAL\s+EQUIPMENT\s+TAGS?|DAMPER\s+TAGS?)$/i.test(normalized);
 }
 
@@ -456,7 +456,7 @@ function isLegendHeadingText(text: string): boolean {
  * vocabulary and may legitimately contain only one row (for example one
  * wireless-access-point mark between adjacent ruled section headings). */
 function isSpecificDisciplineLegendHeading(text: string): boolean {
-  return /^(?:LIGHTING|POWER\s+DEVICES|POWER\s+DISTRIBUTION\s+EQUIPMENT|TELEPHONE\s*(?:&|AND)\s*DATA\s+SYSTEMS|FIRE\s+ALARM|LIGHTNING\s+PROTECTION\s+AND\s+GROUNDING|WIRE,?\s+CONDUIT\s+AND\s+RACEWAY|EQUIPMENT\s+CONNECTIONS)$/i.test(normalizedCaption(text));
+  return /^(?:LIGHTING|EQUIPMENT|ONE-LINE\s+DIAGRAM|POWER\s+DEVICES|POWER\s+DISTRIBUTION\s+EQUIPMENT|TELEPHONE\s*(?:&|AND)\s*DATA\s+SYSTEMS|FIRE\s+ALARM|LIGHTNING\s+PROTECTION\s+AND\s+GROUNDING|WIRE,?\s+CONDUIT\s+AND\s+RACEWAY|EQUIPMENT\s+CONNECTIONS)$/i.test(normalizedCaption(text));
 }
 
 /** Below-caption cell recovery is a specialized reflected-ceiling topology.
@@ -520,7 +520,7 @@ function isDraftingAnnotationCaption(text: string): boolean {
   if (/^INDICATES\s+BRACKET\b/i.test(normalized)
     || /^(?:CEILING\s+HEIGHT|EXPOSED\s+CEILING)$/i.test(normalized)
     || /^(?:(?:\d+(?:\.\d+)?\s*['"]?\s*[x×]\s*\d+(?:\.\d+)?\s*['"]?\s+)?ACOUSTICAL\s+(?:TILE|PANEL).*\bCEILING|(?:GWB|GYPSUM(?:\s+BOARD)?)\s+CEILING(?:\s*\/\s*SOFFIT)?|(?:EXT(?:ERIOR)?\s+)?EIFS\b.*\bCEILING)$/i.test(normalized)) return true;
-  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|(?:MECHANICAL\s+)?EQUIPMENT)\s+CALLOUT|HOME\s+RUN|HOMERUNS?\s+TO\s+PANEL\b|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|DUCTWORK\s+(?:BREAK|OR\s+PIPING\s+RISE)|INTAKE\s+OR\s+EXHAUST|(?:DIRECTION\s+OF\s+(?:AIRFLOW|FLOW)|FLOW\s+DIRECTION)|(?:SUPPLY|RETURN,?\s+EXHAUST,?\s+OR\s+TRANSFER)\s+AIRFLOW|(?:INCLINED\s+RISE|DECLINED\s+DROP)\s+WITH\s+RESPECT\s+TO\s+AIRFLOW|(?:UPWARD|DOWNWARD)\s+DIRECTION\s+OF\s+SLOPED\s+PIPING|NEW\s+TO\s+EXISTING\s+CONNECTION\s+POINT|SLOPE\s+PIPE\s+IN\s+DIRECTION\s+OF\s+ARROW|AIR\s+DISTRIBUTION\s+TAG|AIR\s+DEVICE\s+TYPE\.\s+REFER\s+TO\s+SCHEDULE\b.*\bAIR\s+DEVICE\s+WITH\s+(?:ROUND|RECTANGULAR)\s+NECK\s+TAG|(?:LIGHTING\s+FIXTURE|RECEPTACLE\s+DEVICE)\s+TAGS?\b|ELECTRICAL\s+EQUIPMENT\s+AND\s+TAGS\b|DEVIATIONS?\s+OF\s+(?:THE\s+)?ABOVE\s+RECEPTACLE\s+TYPES?\b|[•\-]?\s*INTERNAL\s+(?:GROUND|ARC)\s+FAULT\b|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|(?:DEMOLITION|CONSTRUCTION)\s+NOTE\s+IDENTIFICATION|POINT\s+OF\s+(?:DEMOLITION|CONNECTION,?\s+NEW-TO-EXISTING)\b|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|CONNECT\s+NEW\s+TO\s+EXISTING|REMOVE\s+TO\s+THIS\s+POINT|DEMOLISH\s+TO\s+POINT\s+INDICATED|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\s+(?:CONDUCTOR|STRUCTURE)\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b|EQUIPMENT\s+CONNECTION\s+AS\s+NOTED\b)/i.test(normalized);
+  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|(?:MECHANICAL\s+)?EQUIPMENT)\s+CALLOUT|HOME\s+RUN|HOMERUNS?\s+TO\s+PANEL(?:BOARD)?\b|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|DUCTWORK\s+(?:BREAK|OR\s+PIPING\s+RISE)|INTAKE\s+OR\s+EXHAUST|(?:DIRECTION\s+OF\s+(?:AIRFLOW|FLOW)|FLOW\s+DIRECTION)|(?:SUPPLY|RETURN,?\s+EXHAUST,?\s+OR\s+TRANSFER)\s+AIRFLOW|(?:INCLINED\s+RISE|DECLINED\s+DROP)\s+WITH\s+RESPECT\s+TO\s+AIRFLOW|(?:UPWARD|DOWNWARD)\s+DIRECTION\s+OF\s+SLOPED\s+PIPING|NEW\s+TO\s+EXISTING\s+CONNECTION\s+POINT|SLOPE\s+PIPE\s+IN\s+DIRECTION\s+OF\s+ARROW|AIR\s+DISTRIBUTION\s+TAG|AIR\s+DEVICE\s+TYPE\.\s+REFER\s+TO\s+SCHEDULE\b.*\bAIR\s+DEVICE\s+WITH\s+(?:ROUND|RECTANGULAR)\s+NECK\s+TAG|(?:LIGHTING\s+FIXTURE|RECEPTACLE\s+DEVICE)\s+TAGS?\b|ELECTRICAL\s+EQUIPMENT\s+AND\s+TAGS\b|DEVIATIONS?\s+OF\s+(?:THE\s+)?ABOVE\s+RECEPTACLE\s+TYPES?\b|[•\-]?\s*INTERNAL\s+(?:GROUND|ARC)\s+FAULT\b|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|(?:DEMOLITION|CONSTRUCTION)\s+NOTE\s+IDENTIFICATION|PLAN\s+REFERENCE\s+NOTE\s+SYMBOL|POINT\s+OF\s+(?:DEMOLITION|CONNECTION,?\s+NEW-TO-EXISTING)\b|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|CONNECT\s+NEW\s+TO\s+EXISTING|(?:DISCONNECT|CONNECT)\s+CONDUCTORS\s+(?:FROM|TO)\s+EQUIPMENT|REMOVE\s+TO\s+THIS\s+POINT|DEMOLISH\s+TO\s+POINT\s+INDICATED|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\s+(?:CONDUCTOR|STRUCTURE)\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b|EQUIPMENT\s+CONNECTION\s+AS\s+NOTED\b)/i.test(normalized);
 }
 
 /** Captions that name a routed medium or drafting line convention rather
@@ -538,6 +538,7 @@ function isRoutedSystemCaption(text: string): boolean {
     || /\b(?:ACTUATOR|CLEANOUT|DAMPER|DETECTOR|DIFFUSER|FAN|FILTER|GAUGE|GRILLE|LOUVER|METER|PANELBOARD|PUMP|REGISTER|REGULATOR|RELAY|SENSOR|STARTER|STRAINER|SWITCH|THERMOSTAT|TRANSMITTER|VALVE|VFD)\b\s+(?:IN|ON)\b.*\b(?:PIPING|LINE)$/i.test(normalized)) return false;
   return /\b(?:PIPING|LINE|SEWER)$/i.test(normalized)
     || /^(?:LPS\s+(?:ROOF|MAIN\s+DOWN)\s+CONDUCTOR|GROUND\s+RING\b.*\bCONDUCTOR|BRANCH\s+CIRCUIT\s+OR\s+FEEDER\s+WIRING\s+IN\s+CONDUIT\b)/i.test(normalized)
+    || /^PANEL,?\s+SWITCHBOARD,?\s+OR\s+BUSD?UCT\b/i.test(normalized)
     || /^(?:VENT|DUCTWORK|STORM\s+DRAIN)$/i.test(normalized)
     || /^(?:(?:SUPPLY|RETURN|EXHAUST|TRANSFER|OUTDOOR)\s+AIR|CONDENSATE\s+DRAIN|REFRIGERANT\s+SUCTION\s*\/\s*LIQUID)$/i.test(normalized)
     || /^(?:RECTANGULAR\s+DUCT(?:\s+RECTANGULAR\s+DUCT\s+WIDTH.*)?|ROUND\s+DUCT(?:\s+ROUND\s+DUCT\s+DIAMETER.*)?|PIPE(?:\s+PIPE\s*\(DIAMETER.*)?|FLEXIBLE\s+DUCT|ACOUSTICALLY\s+LINED\s+DUCTWORK)$/i.test(normalized)
@@ -579,14 +580,33 @@ function meaningfulCaption(text: string): boolean {
  * to their right becomes its caption; point-matrix X marks fail identically.
  * A real tagged symbol (circle-T, boxed-AI, etc.) extends materially outside
  * its inner text span, so it is retained. */
-function resemblesExtractedText(rect: [Point, Point], rawSpans: LegendSpan[]): boolean {
+function resemblesExtractedText(
+  rect: [Point, Point], rawSpans: LegendSpan[], segmentCount?: number,
+): boolean {
   const [[x0, y0], [x1, y1]] = rect;
   const w = x1 - x0, h = y1 - y0;
   const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+  const isTightTagCarrier = (s: LegendSpan): boolean => {
+    const sw = s.x1 - s.x0, sh = s.y1 - s.y0;
+    const horizontalMargin = Math.max(1.5, sh * 0.15);
+    const verticalOverlap = Math.min(y1, s.y1) - Math.max(y0, s.y0);
+    // A closed four-edge box around a compact PDF-text equipment tag (VFD,
+    // ATS, DDC...) is the physical legend carrier, not outlined duplicate
+    // lettering. PDF font metrics can protrude vertically beyond the box,
+    // so require horizontal containment plus strong vertical overlap.
+    return segmentCount === 4
+      && /^[A-Z0-9][A-Z0-9./_-]{1,11}$/i.test(normalizedCaption(s.text))
+      && w >= sh * 1.8
+      && w <= sw + sh
+      && Math.abs(cx - (s.x0 + s.x1) / 2) <= sh * 0.5
+      && x0 <= s.x0 - horizontalMargin && x1 >= s.x1 + horizontalMargin
+      && verticalOverlap >= Math.min(h, sh) * 0.65;
+  };
   if (rawSpans.some((s) => {
     const sw = s.x1 - s.x0, sh = s.y1 - s.y0;
     if (!s.text.trim() || sw <= 0 || sh <= 0) return false;
     if (cx < s.x0 || cx > s.x1 || cy < s.y0 - sh * 0.2 || cy > s.y1 + sh * 0.2) return false;
+    if (isTightTagCarrier(s)) return false;
     const tol = Math.max(1.8, Math.min(10, sh * 0.18));
     return x0 >= s.x0 - tol && x1 <= s.x1 + tol
       && y0 >= s.y0 - tol && y1 <= s.y1 + tol
@@ -602,6 +622,7 @@ function resemblesExtractedText(rect: [Point, Point], rawSpans: LegendSpan[]): b
     return s.x1 >= x0 && s.x0 <= x1 && s.y1 >= y0 && s.y0 <= y1;
   });
   if (!overlaps.length) return false;
+  if (overlaps.some(isTightTagCarrier)) return false;
   const ux0 = Math.min(...overlaps.map((s) => s.x0));
   const uy0 = Math.min(...overlaps.map((s) => s.y0));
   const ux1 = Math.max(...overlaps.map((s) => s.x1));
@@ -659,7 +680,7 @@ function pairCandidates(
   const edges: Edge[] = [];
   for (let ci = 0; ci < candidates.length; ci++) {
     const cand = candidates[ci];
-    if (resemblesExtractedText(cand.rect, rawSpans)) continue;
+    if (resemblesExtractedText(cand.rect, rawSpans, cand.segments)) continue;
     const [[x0, y0], [x1, y1]] = cand.rect;
     const centerY = (y0 + y1) / 2;
     const margin = Math.max((y1 - y0) * 0.5, typicalTextHeight * 0.75);
@@ -813,7 +834,7 @@ function pairCandidatesBelow(
 
   for (let ci = 0; ci < candidates.length; ci++) {
     const cand = candidates[ci];
-    if (claimedRects.has(rectKey(cand.rect)) || resemblesExtractedText(cand.rect, rawSpans)) continue;
+    if (claimedRects.has(rectKey(cand.rect)) || resemblesExtractedText(cand.rect, rawSpans, cand.segments)) continue;
     const [[x0, y0], [x1, y1]] = cand.rect;
     const cx = (x0 + x1) / 2;
     for (let si = 0; si < spans.length; si++) {
@@ -884,7 +905,7 @@ function expandBelowCaptionPairs(
       let best: GlyphCandidate | null = null;
       let bestDistance = Infinity;
       for (const candidate of candidates) {
-        if (claimed.has(rectKey(candidate.rect)) || resemblesExtractedText(candidate.rect, rawSpans)) continue;
+        if (claimed.has(rectKey(candidate.rect)) || resemblesExtractedText(candidate.rect, rawSpans, candidate.segments)) continue;
         if (candidate.rect[1][1] > pair.span.y0 + typicalTextHeight * 0.2) continue;
         const candidateCenterX = (candidate.rect[0][0] + candidate.rect[1][0]) / 2;
         const candidateCenterY = (candidate.rect[0][1] + candidate.rect[1][1]) / 2;
@@ -1025,7 +1046,7 @@ function expandLineStylePairs(
     const pairIsLineFragment = pairW > pairH * 4 && pairH <= gridPx * 2.5;
     const horizontal = pair.rect[1][0] - pair.rect[0][0] >= pair.rect[1][1] - pair.rect[0][1];
     const hasExternalLineMember = horizontal && candidates.some((candidate) => {
-      if (candidate.kind !== "line_style" || resemblesExtractedText(candidate.rect, rawSpans)) return false;
+      if (candidate.kind !== "line_style" || resemblesExtractedText(candidate.rect, rawSpans, candidate.segments)) return false;
       const centerDelta = Math.abs(
         (candidate.rect[0][1] + candidate.rect[1][1]) / 2 - (pair.rect[0][1] + pair.rect[1][1]) / 2,
       );
@@ -1052,7 +1073,7 @@ function expandLineStylePairs(
         const cw = candidate.rect[1][0] - candidate.rect[0][0];
         const ch = candidate.rect[1][1] - candidate.rect[0][1];
         const candidateIsLineFragment = cw > ch * 4 && ch <= gridPx * 2.5;
-        if ((candidate.kind !== "line_style" && !candidateIsLineFragment) || resemblesExtractedText(candidate.rect, rawSpans)) continue;
+        if ((candidate.kind !== "line_style" && !candidateIsLineFragment) || resemblesExtractedText(candidate.rect, rawSpans, candidate.segments)) continue;
         const candidateHorizontal = candidate.rect[1][0] - candidate.rect[0][0] >= candidate.rect[1][1] - candidate.rect[0][1];
         if (candidateHorizontal !== horizontal) continue;
 
@@ -1118,7 +1139,7 @@ function expandSymbolPairs(
       let bestDistance = Infinity;
       for (const candidate of candidates) {
         if (claimed.has(rectKey(candidate.rect))) continue;
-        if (candidate.rect[1][0] > pair.span.x0 || resemblesExtractedText(candidate.rect, rawSpans)) continue;
+        if (candidate.rect[1][0] > pair.span.x0 || resemblesExtractedText(candidate.rect, rawSpans, candidate.segments)) continue;
         const candidateY = (candidate.rect[0][1] + candidate.rect[1][1]) / 2;
         if (Math.abs(candidateY - captionY) > typicalTextHeight * 1.25) continue;
         const pairW = pair.rect[1][0] - pair.rect[0][0];
@@ -1403,6 +1424,10 @@ function mergeOwnedWrapPairs(
       const currentH = current.rect[1][1] - current.rect[0][1];
       const nextH = next.rect[1][1] - next.rect[0][1];
       const compactUnion = unionH <= Math.min(maxGlyphDimPx, typicalTextHeight * 2.25);
+      const semanticContinuation = isDraftingAnnotationCaption(current.caption)
+        && /\b(?:ASSIGNED|FOLLOWING|INCLUDING|WITH|AND|OR|TO|FROM|OF|FOR|THE)\s*[:;,(-]?\s*$/i.test(current.caption)
+        && unionH <= Math.min(maxGlyphDimPx, typicalTextHeight * 3.25)
+        && glyphVerticalGap <= typicalTextHeight * 0.5;
       // A tall legitimate symbol may already exceed the ordinary compact
       // wrap height before a tiny lower indicator wins line two (smoke-
       // damper bodies and VFD displays do this). Permit that only when the
@@ -1418,7 +1443,7 @@ function mergeOwnedWrapPairs(
       if (glyphVerticalGap > typicalTextHeight * 0.4
         || unionW > maxGlyphDimPx
         || unionH > maxGlyphDimPx
-        || (!compactUnion && !joinedTallFragments)) continue;
+        || (!compactUnion && !joinedTallFragments && !semanticContinuation)) continue;
       consumed.add(j);
       ownedLines += next.captionLines;
       current = {
@@ -2089,7 +2114,14 @@ export function findLegendGlyphs(
     completeSpecificSectionCaptions(group, lines, heading, typicalTextHeight);
     const specificDisciplineSection = !!heading && isSpecificDisciplineLegendHeading(heading);
     const generalSection = heading === "GENERAL" && group.length >= 4;
-    if (group.length < (specificDisciplineSection ? 1 : heading ? minAlignedRows : minUnheadedRows)) continue;
+    // The single word EQUIPMENT also appears as a label inside tag examples,
+    // schedules, and abbreviation blocks. Unlike specific headings such as
+    // FIRE ALARM or ONE-LINE DIAGRAM, it needs a substantial repeated row
+    // vocabulary before it can establish legend ownership on its own.
+    const requiredRows = heading === "EQUIPMENT"
+      ? Math.max(4, minAlignedRows)
+      : specificDisciplineSection ? 1 : heading ? minAlignedRows : minUnheadedRows;
+    if (group.length < requiredRows) continue;
     const domainRows = group.filter((pair) => isHvacBasCaption(pair.caption)).length;
     const directiveRows = group.filter((pair) => isDirectiveProse(pair.caption)).length;
     const domainFloor = Math.max(2, Math.ceil(group.length * 0.2));

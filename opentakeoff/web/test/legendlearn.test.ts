@@ -515,6 +515,24 @@ test("findLegendGlyphs: sparse PDF-text tags inside a vector carrier do not make
   assert.ok(glyphs[0].rect[0][1] <= 100 && glyphs[0].rect[1][1] >= 180);
 });
 
+test("findLegendGlyphs: a snug four-edge carrier around a PDF-text equipment tag remains a physical glyph", () => {
+  const segs = flat([
+    seg(100, 100, 160, 100), seg(160, 100, 160, 125),
+    seg(160, 125, 100, 125), seg(100, 125, 100, 100),
+  ]);
+  const spans: LegendSpan[] = [
+    // Font ascent protrudes above the carrier just as it does in CAD-exported
+    // boxed VFD/ATS tags; horizontal margins still prove an outer box.
+    { text: "VFD", x0: 108, y0: 96, x1: 152, y1: 124 },
+    { text: "VARIABLE FREQUENCY DRIVE", x0: 220, y0: 102, x1: 490, y1: 124 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 100 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].caption, "VARIABLE FREQUENCY DRIVE");
+  assert.equal(glyphs[0].kind, "symbol");
+  assert.equal(glyphs[0].seedable, true);
+});
+
 test("findLegendGlyphs: a dense point matrix's vector X marks never become glyph-caption rows", () => {
   const segs: number[][] = [];
   const spans: LegendSpan[] = [{ text: "BMS POINT FUNCTION SCHEDULE", x0: 60, y0: 20, x1: 450, y1: 45 }];
@@ -1444,6 +1462,49 @@ test("findLegendGlyphs: named electrical sections own their rows, including a bo
   ]);
 });
 
+test("findLegendGlyphs: compact EQUIPMENT and ONE-LINE DIAGRAM sections are bounded symbol vocabularies", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 30, y), seg(x + 30, y, x + 30, y + 30),
+    seg(x + 30, y + 30, x, y + 30), seg(x, y + 30, x, y),
+  ];
+  const segs = flat([
+    ...box(100, 100), ...box(100, 180), ...box(100, 260), ...box(100, 340),
+    ...box(500, 340), ...box(500, 420),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "EQUIPMENT", x0: 70, y0: 20, x1: 260, y1: 45 },
+    { text: "JUNCTION BOX", x0: 220, y0: 105, x1: 380, y1: 125 },
+    { text: "VARIABLE FREQUENCY DRIVE", x0: 220, y0: 185, x1: 500, y1: 205 },
+    { text: "PANELBOARD, BRANCH", x0: 220, y0: 265, x1: 450, y1: 285 },
+    { text: "DISCONNECT SWITCH", x0: 220, y0: 345, x1: 430, y1: 365 },
+    { text: "ONE-LINE DIAGRAM", x0: 470, y0: 260, x1: 760, y1: 285 },
+    { text: "CIRCUIT BREAKER", x0: 620, y0: 345, x1: 800, y1: 365 },
+    { text: "TRANSFORMER", x0: 620, y0: 425, x1: 760, y1: 445 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 80 });
+  assert.deepEqual(glyphs.map((glyph) => [glyph.caption, glyph.heading]), [
+    ["JUNCTION BOX", "EQUIPMENT"],
+    ["VARIABLE FREQUENCY DRIVE", "EQUIPMENT"],
+    ["PANELBOARD, BRANCH", "EQUIPMENT"],
+    ["DISCONNECT SWITCH", "EQUIPMENT"],
+    ["CIRCUIT BREAKER", "ONE-LINE DIAGRAM"],
+    ["TRANSFORMER", "ONE-LINE DIAGRAM"],
+  ]);
+});
+
+test("findLegendGlyphs: a bare EQUIPMENT label cannot bless a two-row tag example", () => {
+  const box = (y: number): number[][] => [
+    seg(100, y, 150, y), seg(150, y, 150, y + 20),
+    seg(150, y + 20, 100, y + 20), seg(100, y + 20, 100, y),
+  ];
+  const spans: LegendSpan[] = [
+    { text: "EQUIPMENT", x0: 70, y0: 20, x1: 260, y1: 45 },
+    { text: "VAV-XX TYPE", x0: 220, y0: 100, x1: 390, y1: 120 },
+    { text: "NUMBER", x0: 220, y0: 140, x1: 320, y1: 160 },
+  ];
+  assert.deepEqual(findLegendGlyphs(flat([...box(100), ...box(140)]), spans), []);
+});
+
 test("findLegendGlyphs: explanatory prose containing 'components' cannot impersonate a section heading", () => {
   const box = (y: number): number[][] => [
     seg(100, y, 130, y), seg(130, y, 130, y + 30),
@@ -1485,6 +1546,25 @@ test("findLegendGlyphs: a named equipment section retains a long wrapped definit
   assert.match(glyphs[0].caption, /SEE LEGEND NOTE 5/);
   assert.match(glyphs[0].caption, /FINAL EQUIPMENT CONNECTION\.$/);
   assert.equal(glyphs[1].caption, "JUNCTION BOX");
+});
+
+test("findLegendGlyphs: an incomplete drafting sentence reunites a tightly stacked tag fragment with its wrapped definition", () => {
+  const box = (y: number): number[][] => [
+    seg(100, y, 150, y), seg(150, y, 150, y + 20),
+    seg(150, y + 20, 100, y + 20), seg(100, y + 20, 100, y),
+  ];
+  const segs = flat([...box(100), ...box(128)]);
+  const spans: LegendSpan[] = [
+    { text: "EQUIPMENT CONNECTIONS", x0: 70, y0: 20, x1: 360, y1: 45 },
+    { text: "HOMERUN TO PANELBOARD. NUMERALS ADJACENT TO ARROW HEADS INDICATE ASSIGNED", x0: 220, y0: 100, x1: 760, y1: 120 },
+    { text: "PANEL AND CIRCUIT NUMBERS. SEE PANEL SCHEDULE.", x0: 220, y0: 124, x1: 610, y1: 144 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 100 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].caption,
+    "HOMERUN TO PANELBOARD. NUMERALS ADJACENT TO ARROW HEADS INDICATE ASSIGNED PANEL AND CIRCUIT NUMBERS. SEE PANEL SCHEDULE.");
+  assert.equal(glyphs[0].kind, "annotation");
+  assert.equal(glyphs[0].seedable, false);
 });
 
 test("findLegendGlyphs: neighboring cell tags cannot steal descriptive below captions, and RCP conventions stay nonseedable", () => {
