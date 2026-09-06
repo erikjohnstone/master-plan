@@ -9368,6 +9368,33 @@ export function scheduleTableFromODL(
     }
   }
 
+  // A ROW'S CELLS ARE KEYED BY HEADER STRING, so two columns sharing a label
+  // silently overwrite each other and the earlier one's data is gone.
+  //
+  // That is not a corner case. A header band drawn with NO vertical rules is
+  // one wide cell, so every column inherits the SAME compound label, and an
+  // 18-column table collapses to a handful of surviving cells. Measured,
+  // 03__vol1__27 page 16's HEAT EXCHANGERS: all 18 headers came back as the
+  // identical string "MANUFACTURER/ TAG FOOT PRINT SERVES MODEL TYPE HOT SIDE
+  // COLD SIDE ...", every data row kept 4 cells of its 18, and the table
+  // scored 0 of 72 values — while the reader had all 18 columns correctly
+  // separated, because the DATA rows are ruled even though the header band
+  // is not.
+  //
+  // Disambiguating costs nothing and loses nothing: the first column keeps the
+  // label exactly as read, so every existing lookup by header name still
+  // resolves, and later duplicates get a numeric suffix so their data survives
+  // instead of being overwritten by whichever column happened to come last.
+  {
+    const seen = new Map<string, number>();
+    for (let c = 0; c < headers.length; c++) {
+      const base = headers[c];
+      const n = seen.get(base) ?? 0;
+      seen.set(base, n + 1);
+      if (n > 0) headers[c] = `${base} ${n + 1}`;
+    }
+  }
+
   const keyColIdx = headers.findIndex((h) => /^(SYMBOL|TAG|ID|MARK|CODE|UNIT TAG|UNIT NO|EQUIP TAG|EQUIP\. TAG|DESIGNATION)$/.test(norm(h)));
   const rows: TableRow[] = [];
   // A TABLE CAN EVIDENCE ITS OWN BUILDING PREFIX.
