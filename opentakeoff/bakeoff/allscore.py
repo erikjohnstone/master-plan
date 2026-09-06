@@ -143,27 +143,42 @@ def gt_yspan(t: dict):
 
 
 def pick(regions: list, t: dict):
-    """The region that IS this ground-truth table: title first, geometry after.
-    `regions` is [(all-text, [row lines], bbox-in-points)]."""
+    """The region that IS this ground-truth table. GEOMETRY FIRST.
+
+    All 289 tables record x_edges and a y-span in the same space the engines
+    report, so where the table sits on the page identifies it without either
+    side having read a character — the most objective test available, and the
+    same test for both engines.
+
+    Title matching is the fallback, and it is a fallback for a reason: it
+    matched the WRONG region on 09__vol2__014 page 4, where the sheet's notes
+    block quotes "GAS-FIRED STEAM GENERATOR SCHEDULE" in its own text. Taking
+    the first substring hit scored that schedule 1 of 17 tokens per row while
+    the pipeline had in fact read it perfectly — a scorer reporting its own
+    matching bug as an extraction failure.
+
+    `regions` is [(all-text, [row lines], bbox-in-points)].
+    """
+    span, xe = gt_yspan(t), t.get("x_edges") or []
+    if span and len(xe) >= 2:
+        ymid = (span[0] + span[1]) / 2.0
+        gx0, gx1 = float(min(xe)), float(max(xe))
+        best, bestov = None, 0.0
+        for r in regions:
+            bx0, by0, bx1, by1 = r[2]
+            if not (by0 <= ymid <= by1):
+                continue
+            o = max(0.0, min(bx1, gx1) - max(bx0, gx0)) / max(1.0, gx1 - gx0)
+            if o > bestov:
+                best, bestov = r, o
+        if bestov >= 0.5:
+            return best
     title = norm(gt_title(t))
     if title:
         for r in regions:
             if title in r[0]:
                 return r
-    span, xe = gt_yspan(t), t.get("x_edges") or []
-    if not span or len(xe) < 2:
-        return None
-    ymid = (span[0] + span[1]) / 2.0
-    gx0, gx1 = float(min(xe)), float(max(xe))
-    best, bestov = None, 0.0
-    for r in regions:
-        bx0, by0, bx1, by1 = r[2]
-        if not (by0 <= ymid <= by1):
-            continue
-        o = max(0.0, min(bx1, gx1) - max(bx0, gx0)) / max(1.0, gx1 - gx0)
-        if o > bestov:
-            best, bestov = r, o
-    return best if bestov >= 0.5 else None
+    return None
 
 
 def reader_regions(pdf: Path, page: int) -> list:
