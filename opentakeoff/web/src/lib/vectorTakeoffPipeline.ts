@@ -288,20 +288,27 @@ async function runL45OcrAssist(
   report.notes.push(`${ctx.key}: L4.5 OCR assist recovered a schedule table (${ocr.words.length} words).`);
 }
 
+/** True when this sheet is one L3.5 would look at at all. */
+function topologyEligible(ctx: VectorSheetContext): boolean {
+  if (!ctx.segs?.length) return false;
+  return ctx.role === "plan" || ctx.role === "demolition" || ctx.role === "unknown";
+}
+
+/** Runs topology for one sheet and returns the milliseconds it cost. */
 function runL35Topology(
   g: SheetGraph,
   ctx: VectorSheetContext,
   report: VectorPipelineReport,
-): void {
-  if (!ctx.segs?.length) return;
-  if (ctx.role !== "plan" && ctx.role !== "demolition" && ctx.role !== "unknown") return;
+): number {
+  const segs = ctx.segs;
+  if (!segs?.length || !topologyEligible(ctx)) return 0;
   const t0 = Date.now();
   try {
-    const graph = buildMepGraph(ctx.segs, {});
+    const graph = buildMepGraph(segs, {});
     if (process.env.OPENTAKEOFF_GRAPH_TRACE) {
       process.stderr.write(
         `GRAPH_TRACE topology sheet=${ctx.key.split("#").pop()} role=${ctx.role}`
-        + ` segs=${ctx.segs.length / 4} ms=${Date.now() - t0}\n`,
+        + ` segs=${segs.length / 4} ms=${Date.now() - t0}\n`,
       );
     }
     if (graph.edges.length >= 2) {
@@ -317,6 +324,7 @@ function runL35Topology(
   } catch {
     /* best-effort */
   }
+  return Date.now() - t0;
 }
 
 /**
@@ -425,8 +433,58 @@ export async function runVectorTakeoffPipeline(
   }
 
   // L3.5 topology
+  // L3.5 TOPOLOGY IS BOUNDED. It was not, and that was the whole of the wait.
+  //
+  // Measured on 05__vol2__009 (31 sheets) uploaded cold through the UI: 45+
+  // minutes before a question could be asked, of which PDF parsing, vector
+  // extraction and the sheet graph are 47 SECONDS, vectorgrid about 2 minutes,
+  // and ODL near zero (OPENTAKEOFF_ODL=off took just as long). The rest is
+  // here. Per-sheet, traced:
+  //
+  //     segs=  2,854  ms=   482
+  //     segs= 42,311  ms=  2032
+  //     segs= 49,017  ms= 22814     <- 11x sheet 8 for a similar segment count
+  //     segs=?                ms= 17 MINUTES AND STILL RUNNING
+  //
+  // buildMepGraph's cost tracks JUNCTIONS, and junctions grow quadratically
+  // with crossing linework — measured directly on synthetic grids, 360
+  // segments 2.9s against 720 segments 18.0s. A dense mechanical or electrical
+  // sheet (this set has two above 350,000 segments) is unbounded work.
+  //
+  // What that work BUYS is one summary: `pipeline_topology` in the estimator
+  // document, a per-sheet node/edge count. Its only other reader,
+  // enrichSystemTags, uses it in a single branch that returns
+  // `{...item, systemTag: "UNKNOWN"}` when the tag is already "UNKNOWN" — a
+  // no-op. So this is a reporting nicety, and it must never be the reason an
+  // estimator waits 45 minutes to ask their first question.
+  //
+  // Bounded two ways, both deterministic and both recorded: a per-sheet
+  // segment ceiling that skips the pathological sheets outright, and a
+  // cumulative budget that stops the stage once it has spent its time. Sheets
+  // that are skipped are NAMED in the report rather than silently dropped —
+  // the same discipline the drawn-delta vector budget already uses.
   report.layers_run.push("L3.5:topology");
-  await timed("L3.5:topology", () => { for (const ctx of contexts) runL35Topology(g, ctx, report); });
+  await timed("L3.5:topology", () => {
+    const maxSegs = Number(process.env.OPENTAKEOFF_TOPOLOGY_MAX_SEGMENTS || 150_000);
+    const budgetMs = Number(process.env.OPENTAKEOFF_TOPOLOGY_BUDGET_MS || 30_000);
+    let spent = 0;
+    const skipped: string[] = [];
+    for (const ctx of contexts) {
+      if (!topologyEligible(ctx)) continue;
+      const segCount = (ctx.segs?.length ?? 0) / 4;
+      if (segCount > maxSegs) { skipped.push(`${ctx.key} (${Math.round(segCount)} segments)`); continue; }
+      if (spent >= budgetMs) { skipped.push(`${ctx.key} (topology budget spent)`); continue; }
+      spent += runL35Topology(g, ctx, report);
+    }
+    if (skipped.length) {
+      report.notes.push(
+        `L3.5: topology skipped on ${skipped.length} sheet(s) — linework too dense or the `
+        + `stage's time budget was spent. Tables, rows and every takeoff number are `
+        + `unaffected; only the pipeline_topology summary omits these sheets. `
+        + skipped.slice(0, 6).join(", ") + (skipped.length > 6 ? ", …" : ""),
+      );
+    }
+  });
 
   // L4 cross-source dedup + equivalent collapse
   report.layers_run.push("L4:reconcile-dedup");
