@@ -89,6 +89,9 @@ MAX_CELL_FRAC = 0.04  # ... and this share of its AREA is page furniture. Both a
                       # the largest real title band in the corpus and below the
                       # smallest piece of furniture.
 MIN_FILL_RATIO = 0.20 # n_cells vs rows*cols — a table tessellates, a plan does not
+EDGE_TOL = 4.0       # the tolerance the authored ground truth is measured to
+WIDEN_CONSENSUS = 0.80 # rows that must agree on an edge before it moves — see
+                       # _consensus_edge for the measurement that set it
 MAX_REGION_WFRAC = 0.92 # a REGION this wide is the sheet's own furniture, not a
                       # schedule. A drawing has a border and margins, so nothing
                       # is drawn edge to edge: the widest real table in the key
@@ -442,6 +445,26 @@ def _h_index(segs: list[tuple]) -> dict:
     return idx
 
 
+def _swallows_neighbour(bbox, tight, self_idx) -> bool:
+    """Would this widened box engulf another candidate block's own faces?
+
+    A widened edge is a claim that a drawn rule belongs to THIS table. When the
+    box it produces contains most of a different block's tessellating faces,
+    the claim is false: the rule was the neighbour's border, or a band shared
+    by both. Half of the neighbour's area inside is the bar — a schedule
+    legitimately abuts its neighbours and may clip a few points of one.
+    """
+    for j, (ox0, oy0, ox1, oy1) in enumerate(tight):
+        if j == self_idx:
+            continue
+        area = max(1.0, (ox1 - ox0) * (oy1 - oy0))
+        ix = max(0.0, min(bbox[2], ox1) - max(bbox[0], ox0))
+        iy = max(0.0, min(bbox[3], oy1) - max(bbox[1], oy0))
+        if ix * iy > area * 0.5:
+            return True
+    return False
+
+
 def _widen_along_row_rules(hmap, gx0, gy0, gx1, gy1, rows) -> tuple:
     """Widen a block to the true span of the row rules its cells sit on.
 
@@ -469,14 +492,58 @@ def _widen_along_row_rules(hmap, gx0, gy0, gx1, gy1, rows) -> tuple:
                     lo = min(lo, a); hi = max(hi, b)
         lo_votes.append(lo); hi_votes.append(hi)
 
-    n = max(1, len(rows))
-    ext = [v for v in lo_votes if v < gx0 - 4]
-    if len(ext) >= n * 0.6:
-        gx0 = sorted(ext)[len(ext) // 2]
-    ext = [v for v in hi_votes if v > gx1 + 4]
-    if len(ext) >= n * 0.6:
-        gx1 = sorted(ext)[len(ext) // 2]
+    gx0 = _consensus_edge(lo_votes, gx0, -1)
+    gx1 = _consensus_edge(hi_votes, gx1, +1)
     return (gx0, gy0, gx1, gy1)
+
+
+def _consensus_edge(votes, base, sign) -> float:
+    """Where the rows AGREE the edge is — or `base`, if they do not.
+
+    THE OLD RULE COUNTED VOTES AND TOOK A MEDIAN: if 60% of rows had a rule
+    reaching past the block, the edge moved to the median of those ends. That
+    tests the wrong thing, and measurement says so. Over the 32 keyed pages this
+    heuristic fires 31 times, and 30 of those firings are on blocks NO authored
+    box ever looks at — so a 137/137 score was compatible with a schedule
+    highlight that runs off into the notes block next door. Stock vs. this
+    function no-op'd: 137/137 against 136/137, i.e. the whole heuristic buys
+    exactly ONE keyed table (08_ME…#1 DRAWING LIST, which loses 454pt without
+    it).
+
+    The count does not discriminate at all — it is 1.00 for both the one good
+    case and the worst junk. What separates them is CONSENSUS AT THE CHOSEN
+    EDGE: the fraction of the block's rows whose own vote lands within
+    EDGE_TOL of the edge finally picked. Measured:
+
+        08_ME#1  DRAWING LIST (the keyed table)   0.86 / 1.00
+        24_IA#15 x18 (4-15pt faces grown 7-20x)   0.11 - 0.67
+        12_MT#25 x6                               0.12 - 0.71
+        042_VA#9 (a 17pt sliver -> 84pt)          1.00
+
+    so the clusters separate cleanly at ~0.8. Votes are clustered at EDGE_TOL
+    and the LARGEST cluster's representative is taken, rather than the median of
+    a scattered set: a median is a real edge only when the votes are agreeing
+    about one.
+    """
+    ext = [v for v in votes if (v < base - 4 if sign < 0 else v > base + 4)]
+    if not ext:
+        return base
+    ext.sort()
+    best, cur = [], [ext[0]]
+    for v in ext[1:]:
+        if v - cur[-1] <= EDGE_TOL:
+            cur.append(v)
+        else:
+            if len(cur) > len(best):
+                best = cur
+            cur = [v]
+    if len(cur) > len(best):
+        best = cur
+    rep = best[len(best) // 2]
+    agree = sum(1 for v in votes if abs(v - rep) <= EDGE_TOL)
+    if agree < max(1, len(votes)) * WIDEN_CONSENSUS:
+        return base
+    return rep
 
 
 def _v_index(segs: list[tuple]) -> dict:
@@ -912,6 +979,7 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
     import os as _os
     _dbg = _os.environ.get("VG_DEBUG")
     tables = []
+    cands = []
     blocks = [p for m in groups.values() for p in _split_at_title_bands(m, cells, chars)]
     for members in blocks:
         if _dbg:
@@ -947,16 +1015,40 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
         xs0, ys0, xs1, ys1 = zip(*(cells[i].bounds for i in members))
         if max(xs1) - min(xs0) > page_w * MAX_REGION_WFRAC:
             continue
-        bbox = _widen_along_row_rules(hmap, min(xs0), min(ys0), max(xs1), max(ys1),
+        cands.append((members, (min(xs0), min(ys0), max(xs1), max(ys1))))
+
+    # WIDEN SECOND, WITH THE OTHER BLOCKS IN SCOPE. The row/column extensions
+    # follow drawn rules past the faces that closed, which is right when the
+    # rule belongs to this table and catastrophic when it belongs to the
+    # bordered notes block beside it — the observed failure is a DOOR SCHEDULE
+    # highlight running into a NOTE: block and a ROOF TOP UNIT SCHEDULE running
+    # across a CONDENSATE DRAIN TRAP DETAIL. A block cannot know that alone, so
+    # nothing is widened until every candidate's own footprint is known.
+    tight = [b for _m, b in cands]
+    for gi, (members, base) in enumerate(cands):
+        xs0, ys0, xs1, ys1 = base
+        bbox = _widen_along_row_rules(hmap, xs0, ys0, xs1, ys1,
                                       sorted({round(cells[i].bounds[1]) for i in members} |
                                              {round(cells[i].bounds[3]) for i in members}))
         bbox = _widen_along_col_rules(vmap, hmap, *bbox,
                                       sorted({round(cells[i].bounds[0]) for i in members} |
                                              {round(cells[i].bounds[2]) for i in members}))
+        # DO NOT EAT YOUR NEIGHBOUR. If the widened box would swallow another
+        # candidate's own tessellating faces, the rule it followed was that
+        # block's, not this one's.
+        if _swallows_neighbour(bbox, tight, gi):
+            bbox = base
+        # RE-CHECK THE WIDTH AFTER WIDENING. The guard above tests the
+        # UNWIDENED face union and nothing re-tested the result, so a box the
+        # guard exists to reject could be reached in one step past it. Measured:
+        # the widest post-widening width fraction anywhere on the keyed corpus
+        # is 0.303, so this costs nothing there and is a pure backstop.
+        if bbox[2] - bbox[0] > page_w * MAX_REGION_WFRAC:
+            bbox = base
         face_bounds = [cells[i].bounds for i in members]
         # Only when the box was actually widened along the row rules: that is
         # the one situation where a row is known to continue past its faces.
-        if bbox[0] < min(xs0) - 1 or bbox[2] > max(xs1) + 1:
+        if bbox[0] < xs0 - 1 or bbox[2] > xs1 + 1:
             face_bounds += _implied_edge_cells(face_bounds, bbox)
         tables.append({
             "bbox": bbox,
