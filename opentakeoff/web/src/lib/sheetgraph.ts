@@ -9566,6 +9566,15 @@ export function scheduleTableFromODL(
       texts[c] = opts.sourceSpans ? preferLastOverprintedText(text, bbox, opts.sourceSpans) : text;
     }
     if (texts.every((s: string) => !s.trim())) continue; // blank spacer row
+    // On the printed-key path, a row must OWN its key cell. Without this the
+    // continuation rows that exist only to start a tall rowspan would each
+    // mint a second row under the key of the row above — the duplicate-key
+    // shape that becomes an AMBIGUOUS refusal downstream, manufactured here
+    // out of a cell the sheet drew once.
+    if (printedKeys) {
+      const keyCell = grid[r][keyCol];
+      if (!keyCell || keyCell["row number"] - 1 !== r) continue;
+    }
     const rawKey = texts[keyCol] || "";
     // GOAL.md rule 22: ODL already knows this row's own real column grid —
     // a far cleaner corroboration signal than the geometric extractor's own
@@ -9686,10 +9695,26 @@ export function scheduleTableFromODL(
     let evidenced = -1;
     if (dataRows.length >= 2) {
       for (let c = 0; c < C && evidenced < 0; c++) {
-        const vals = dataRows
-          .map((r) => (grid[r][c] ? norm(odlCellText(grid[r][c]!)).replace(/\s+/g, " ").trim() : ""))
-          .filter(Boolean);
-        if (vals.length < 2 || vals.length < dataRows.length * 0.8) continue;
+        // A VALUE COUNTS ONCE, ON THE ROW THAT OWNS IT. grid[r][c] returns the
+        // same cell for every row a rowspan covers, so reading it directly
+        // counts a two-row-tall value twice and the column fails its own
+        // distinctness test on a repeat that was never printed twice.
+        // Measured on 03__vol1__27 page 14's MODULAR HEAT RECOVERY CHILLER
+        // SCHEDULE, whose MODULE column reads 1,2,3,4,5 on the page and came
+        // back here as 1,1,2,3,4,5,5. Ownership is the rule the header loop
+        // and maxCovered already use above; use it here too.
+        const vals: string[] = [];
+        for (const r of dataRows) {
+          const cell = grid[r][c];
+          if (!cell || cell["row number"] - 1 !== r) continue;
+          const v = norm(odlCellText(cell)).replace(/\s+/g, " ").trim();
+          if (v) vals.push(v);
+        }
+        // …and a row that owns no cell here is a continuation of the row
+        // above, not a row missing its key, so the completeness bar has to
+        // leave room for them. Same schedule: 5 modules across 7 grid rows,
+        // two of which exist only to carry rowspan-5 cells that start there.
+        if (vals.length < 2 || vals.length < dataRows.length * 0.5) continue;
         if (!vals.every(printedKeyOk)) continue;
         if (new Set(vals).size !== vals.length) continue; // repeats: not a key
         evidenced = c;
