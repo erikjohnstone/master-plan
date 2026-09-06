@@ -9370,6 +9370,46 @@ export function scheduleTableFromODL(
 
   const keyColIdx = headers.findIndex((h) => /^(SYMBOL|TAG|ID|MARK|CODE|UNIT TAG|UNIT NO|EQUIP TAG|EQUIP\. TAG|DESIGNATION)$/.test(norm(h)));
   const rows: TableRow[] = [];
+  // A TABLE CAN EVIDENCE ITS OWN BUILDING PREFIX.
+  //
+  // rowKeyOf accepts a VA-style numbered-building prefix ("1-RH-1", "07-1-EU-1")
+  // only when THIS SHEET's own text already confirmed that building exists —
+  // deliberately, because a bare leading digit is otherwise indistinguishable
+  // from a stray dimension or callout number glued to the front of a cell.
+  //
+  // That guard is right about a LONE key and wrong about a COLUMN of them.
+  // Measured, 11__vol1__05 (St. Louis VA) page 39: the BUILDING STEAM TRAP
+  // SCHEDULE keys all 21 of its rows 1-TP28-1 .. 1-TP57-3, the sheet never
+  // prints "BUILDING 1", every key was refused, the table was declined for
+  // having no keyed data rows, and a 4-header geometric misread took its place
+  // in the graph — 273 values, all of which the extractor had read correctly
+  // (13 columns, 21 rows, exactly the ground truth).
+  //
+  // Twenty-one rows sharing one prefix before a valid code is not a stray
+  // number; a stray number does not repeat itself identically down a column.
+  // So the prefix is admitted when the COLUMN agrees on it: at least three
+  // rows, at least 80% of the non-empty keys, and every one of those keys a
+  // real code once the prefix is removed. The evidence is the table's own
+  // regularity, which is the same kind of evidence the rest of this file
+  // already trusts, and it never admits a prefix on the strength of one row.
+  const selfEvidenced = new Set<string>(opts.buildings ?? []);
+  {
+    const raws: string[] = [];
+    for (let r = headerEnd; r < R; r++) {
+      const cell = grid[r][keyColIdx >= 0 ? keyColIdx : 0];
+      if (cell && cell["row number"] - 1 === r) raws.push(norm(odlCellText(cell)));
+    }
+    const nonEmpty = raws.filter((x) => x.trim());
+    const counts = new Map<string, number>();
+    for (const raw of nonEmpty) {
+      const m = raw.replace(/\s+/g, "").match(/^(\d{1,2})-([A-Z].*)$/);
+      if (m && CODE_RE.test(m[2])) counts.set(m[1], (counts.get(m[1]) ?? 0) + 1);
+    }
+    for (const [b, n] of counts) {
+      if (n >= 3 && n >= nonEmpty.length * 0.8) selfEvidenced.add(b);
+    }
+  }
+
   for (let r = headerEnd; r < R; r++) {
     const seen = new Set<ODLTableCell>();
     const rowCellRef: (ODLTableCell | null)[] = new Array(C).fill(null);
@@ -9398,7 +9438,7 @@ export function scheduleTableFromODL(
     // "more complete" by the cross-check reconcile pass and silently
     // REPLACED the geometric extractor's own correct, fuller read.
     const filledCells = texts.filter((s: string) => s.trim()).length;
-    const keyRes = rowKeyOf(rawKey, kind === "room-finish" ? "room-finish" : kind === "equipment" ? "equipment" : "finish", opts.buildings, false, { inBand: filledCells, anchors: C });
+    const keyRes = rowKeyOf(rawKey, kind === "room-finish" ? "room-finish" : kind === "equipment" ? "equipment" : "finish", selfEvidenced, false, { inBand: filledCells, anchors: C });
     if (!keyRes) continue; // no recognizable row key — refuse rather than mint a fake row
     const cells: Record<string, TableCell> = {};
     for (let c = 0; c < C; c++) {
