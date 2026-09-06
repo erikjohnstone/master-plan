@@ -1702,6 +1702,22 @@ test("findLegendGlyphs: table field labels are never promoted as symbol identiti
   ]);
 });
 
+test("findLegendGlyphs: a schedule SYMBOL field cannot bless asset underlines as legend keys", () => {
+  const segs = flat(Array.from({ length: 6 }, (_, index) =>
+    seg(100, 140 + index * 60, 145, 140 + index * 60)));
+  const spans: LegendSpan[] = [
+    { text: "NEW PUMP SCHEDULE", x0: 70, y0: 20, x1: 520, y1: 45 },
+    { text: "SYMBOL", x0: 90, y0: 75, x1: 160, y1: 95 },
+    { text: "AREA SERVED", x0: 220, y0: 75, x1: 350, y1: 95 },
+    { text: "TYPE", x0: 420, y0: 75, x1: 470, y1: 95 },
+    ...Array.from({ length: 6 }, (_, index): LegendSpan => ({
+      text: index < 2 ? "HOT WATER LOOP" : index < 4 ? "BOILER PUMP" : "CHILLED WATER LOOP",
+      x0: 220, y0: 130 + index * 60, x1: 390, y1: 150 + index * 60,
+    })),
+  ];
+  assert.deepEqual(findLegendGlyphs(segs, spans), []);
+});
+
 test("findLegendGlyphs: a callout-key panel ends the symbol legend above it", () => {
   const box = (y: number): number[][] => [
     seg(100, y, 130, y), seg(130, y, 130, y + 25),
@@ -1860,6 +1876,33 @@ test("findLegendGlyphs: shallow elevation keys remain annotation rows in a struc
   const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 220 });
   assert.equal(glyphs.length, 5);
   assert.ok(glyphs.every((glyph) => glyph.kind === "annotation" && !glyph.seedable));
+});
+
+test("findLegendGlyphs: device-legend callouts stay annotations and surface raceway stays a routed key", () => {
+  const box = (y: number): number[][] => [
+    seg(100, y, 150, y), seg(150, y, 150, y + 20),
+    seg(150, y + 20, 100, y + 20), seg(100, y + 20, 100, y),
+  ];
+  const captions = [
+    "ARROW INDICATES DIRECTION TO BE SHOWN ON SIGN.",
+    "CONNECTION POINT TO EQUIPMENT SPECIFIED, ELECTRICAL CONTRACTOR TO MAKE FINAL CONNECTION.",
+    "FLOOR MOUNTED CONNECTION POINT, SEE NOTE ABOVE FOR REQUIREMENTS",
+    "MECHANICAL EQUIPMENT CALL OUT",
+    "KITCHEN EQUIPMENT CALLOUT",
+    "SURFACE MULTI-OUTLET RACEWAY",
+  ];
+  const segs = flat(captions.flatMap((_, index) => box(100 + index * 60)));
+  const spans: LegendSpan[] = [
+    { text: "DEVICES", x0: 70, y0: 20, x1: 180, y1: 45 },
+    ...captions.map((text, index): LegendSpan => ({
+      text, x0: 220, y0: 102 + index * 60, x1: 760, y1: 122 + index * 60,
+    })),
+  ];
+  const glyphs = findLegendGlyphs(segs, spans);
+  assert.equal(glyphs.length, 6);
+  assert.ok(glyphs.every((glyph) => glyph.heading === "DEVICES" && !glyph.seedable));
+  assert.ok(glyphs.slice(0, 5).every((glyph) => glyph.kind === "annotation"));
+  assert.equal(glyphs[5].kind, "line_style");
 });
 
 test("findLegendGlyphs: BAS software and sequence functions are preserved but never become EA sweep seeds", () => {

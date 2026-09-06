@@ -479,7 +479,7 @@ function isLegendHeadingText(text: string): boolean {
     || /^SYMBOL$/i.test(normalized)
     || /^(?:(?:CONTROL|HVAC|MECHANICAL|ELECTRICAL|SYSTEM|DEVICE|NETWORK)\s+)?COMPONENTS$/i.test(normalized)
     || /\bPOINT\s+FUNCTION(?:\s+SCHEDULE)?\b/i.test(normalized)
-    || /^(?:GENERAL|LIGHTING|EQUIPMENT|ONE-LINE\s+DIAGRAM|POWER\s+DEVICES|POWER\s+DISTRIBUTION\s+EQUIPMENT|TELEPHONE\s*(?:&|AND)\s*DATA\s+SYSTEMS|FIRE\s+ALARM|LIGHTNING\s+PROTECTION\s+AND\s+GROUNDING|WIRE,?\s+CONDUIT\s+AND\s+RACEWAY|EQUIPMENT\s+CONNECTIONS)$/i.test(normalized)
+    || /^(?:GENERAL|LIGHTING|EQUIPMENT|DEVICES|ONE-LINE\s+DIAGRAM|POWER\s+DEVICES|POWER\s+DISTRIBUTION\s+EQUIPMENT|TELEPHONE\s*(?:&|AND)\s*DATA\s+SYSTEMS|FIRE\s+ALARM|LIGHTNING\s+PROTECTION\s+AND\s+GROUNDING|WIRE,?\s+CONDUIT\s+AND\s+RACEWAY|EQUIPMENT\s+CONNECTIONS)$/i.test(normalized)
     || /^(?:DUCTWORK|PIPING|(?:DUCTWORK|PIPING)\s+SYSTEM\s+ABBREVIATIONS|VALVES(?:\s+AND\s+PIPING\s+ACCESSORIES)?|DUCTWORK\s+ACCESSORIES|AIR\s+DISTRIBUTION\s+DEVICES|GRILLES?[,\s]+REGISTERS?\s*(?:&|AND)\s*DIFFUSERS?(?:\s+TAGS?)?|MECHANICAL\s+EQUIPMENT\s+TAGS?|DAMPER\s+TAGS?)$/i.test(normalized);
 }
 
@@ -521,7 +521,7 @@ function isHvacBasCaption(text: string): boolean {
 }
 
 function isDomainHeading(text: string): boolean {
-  return /\b(?:AIR|BAS|CONDUIT|CONNECTION|CONTROL|DATA|DDC|DAMPER|DUCT|ELECTRICAL|EQUIPMENT|FIRE|GROUNDING|HVAC|LIGHTING|MECHANICAL|PIPING|POINT|POWER|RACEWAY|SENSING|TELEPHONE|VALVE|WIRE)\b/i.test(normalizedCaption(text));
+  return /\b(?:AIR|BAS|CONDUIT|CONNECTION|CONTROL|DATA|DDC|DAMPER|DEVICES?|DUCT|ELECTRICAL|EQUIPMENT|FIRE|GROUNDING|HVAC|LIGHTING|MECHANICAL|PIPING|POINT|POWER|RACEWAY|SENSING|TELEPHONE|VALVE|WIRE)\b/i.test(normalizedCaption(text));
 }
 
 function isSectionBoundaryText(text: string): boolean {
@@ -566,8 +566,8 @@ function isDraftingAnnotationCaption(text: string): boolean {
   // not separately countable installed objects. Keep the patterns narrow so
   // routed-system rows such as "INDICATES EXISTING ITEM" retain their own
   // line-style classification.
-  if (/^(?:INDICATES\s+(?:EQUIPMENT\s+ID|KEYED\s+SHEET\s+NOTE|\(N\)\s+OR\s+\(E\)\s+EQUIPMENT)\b|DENOTES\s+(?:TOP\s+OF\s+STEEL\s+ELEVATION|DIRECTION\s+OF\s+ROOF\s+SLOPE)\b)/i.test(normalized)) return true;
-  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|(?:MECHANICAL\s+)?EQUIPMENT)\s+CALLOUT|HOME\s+RUN|HOMERUNS?\s+TO\s+PANEL(?:BOARD)?\b|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|DUCTWORK\s+(?:BREAK|OR\s+PIPING\s+RISE)|INTAKE\s+OR\s+EXHAUST|(?:DIRECTION\s+OF\s+(?:AIRFLOW|FLOW)|FLOW\s+DIRECTION)|(?:SUPPLY|RETURN,?\s+EXHAUST,?\s+OR\s+TRANSFER)\s+AIRFLOW|(?:INCLINED\s+RISE|DECLINED\s+DROP)\s+WITH\s+RESPECT\s+TO\s+AIRFLOW|(?:UPWARD|DOWNWARD)\s+DIRECTION\s+OF\s+SLOPED\s+PIPING|(?:PIPE\s+DROP\s*\/\s*PIPE\s+RISE|PIP(?:E|ING)\s+(?:UP|DOWN|CONTINUATION)|(?:SUPPLY|RETURN|EXHAUST)?\s*DUCT\s+(?:UP|DOWN)(?:\s*\([^)]*\))?)(?:\s*[.,;:])?$|NEW\s+TO\s+EXISTING\s+CONNECTION\s+POINT|SLOPE\s+PIPE\s+IN\s+DIRECTION\s+OF\s+ARROW|AIR\s+DISTRIBUTION\s+TAG|AIR\s+DEVICE\s+TYPE\.\s+REFER\s+TO\s+SCHEDULE\b.*\bAIR\s+DEVICE\s+WITH\s+(?:ROUND|RECTANGULAR)\s+NECK\s+TAG|(?:LIGHTING\s+FIXTURE|RECEPTACLE\s+DEVICE)\s+TAGS?\b|ELECTRICAL\s+EQUIPMENT\s+AND\s+TAGS\b|DEVIATIONS?\s+OF\s+(?:THE\s+)?ABOVE\s+RECEPTACLE\s+TYPES?\b|[•\-]?\s*INTERNAL\s+(?:GROUND|ARC)\s+FAULT\b|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|(?:DEMOLITION|CONSTRUCTION)\s+NOTE\s+IDENTIFICATION|PLAN\s+REFERENCE\s+NOTE\s+SYMBOL|POINT\s+OF\s+(?:DEMOLITION|CONNECTION,?\s+NEW-TO-EXISTING)\b|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|CONNECT\s+NEW\s+TO\s+EXISTING|(?:DISCONNECT|CONNECT)\s+CONDUCTORS\s+(?:FROM|TO)\s+EQUIPMENT|REMOVE\s+TO\s+THIS\s+POINT|DEMOLISH\s+TO\s+POINT\s+INDICATED|(?:EXTENTS?\s+OF\s+DEMOLITION|OBJECT\s+TO\s+BE\s+REMOVED)|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\s+(?:CONDUCTOR|STRUCTURE)\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b|EQUIPMENT\s+CONNECTION\s+AS\s+NOTED\b)/i.test(normalized);
+  if (/^(?:INDICATES\s+(?:EQUIPMENT\s+ID|KEYED\s+SHEET\s+NOTE|\(N\)\s+OR\s+\(E\)\s+EQUIPMENT)\b|DENOTES\s+(?:TOP\s+OF\s+STEEL\s+ELEVATION|DIRECTION\s+OF\s+ROOF\s+SLOPE)\b|ARROW\s+INDICATES\s+DIRECTION\b|(?:FLOOR\s+MOUNTED\s+)?CONNECTION\s+POINT\b)/i.test(normalized)) return true;
+  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|(?:(?:MECHANICAL|KITCHEN)\s+)?EQUIPMENT)\s+CALL\s*OUT|HOME\s+RUN|HOMERUNS?\s+TO\s+PANEL(?:BOARD)?\b|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|DUCTWORK\s+(?:BREAK|OR\s+PIPING\s+RISE)|INTAKE\s+OR\s+EXHAUST|(?:DIRECTION\s+OF\s+(?:AIRFLOW|FLOW)|FLOW\s+DIRECTION)|(?:SUPPLY|RETURN,?\s+EXHAUST,?\s+OR\s+TRANSFER)\s+AIRFLOW|(?:INCLINED\s+RISE|DECLINED\s+DROP)\s+WITH\s+RESPECT\s+TO\s+AIRFLOW|(?:UPWARD|DOWNWARD)\s+DIRECTION\s+OF\s+SLOPED\s+PIPING|(?:PIPE\s+DROP\s*\/\s*PIPE\s+RISE|PIP(?:E|ING)\s+(?:UP|DOWN|CONTINUATION)|(?:SUPPLY|RETURN|EXHAUST)?\s*DUCT\s+(?:UP|DOWN)(?:\s*\([^)]*\))?)(?:\s*[.,;:])?$|NEW\s+TO\s+EXISTING\s+CONNECTION\s+POINT|SLOPE\s+PIPE\s+IN\s+DIRECTION\s+OF\s+ARROW|AIR\s+DISTRIBUTION\s+TAG|AIR\s+DEVICE\s+TYPE\.\s+REFER\s+TO\s+SCHEDULE\b.*\bAIR\s+DEVICE\s+WITH\s+(?:ROUND|RECTANGULAR)\s+NECK\s+TAG|(?:LIGHTING\s+FIXTURE|RECEPTACLE\s+DEVICE)\s+TAGS?\b|ELECTRICAL\s+EQUIPMENT\s+AND\s+TAGS\b|DEVIATIONS?\s+OF\s+(?:THE\s+)?ABOVE\s+RECEPTACLE\s+TYPES?\b|[•\-]?\s*INTERNAL\s+(?:GROUND|ARC)\s+FAULT\b|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|(?:DEMOLITION|CONSTRUCTION)\s+NOTE\s+IDENTIFICATION|PLAN\s+REFERENCE\s+NOTE\s+SYMBOL|POINT\s+OF\s+(?:DEMOLITION|CONNECTION,?\s+NEW-TO-EXISTING)\b|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|CONNECT\s+NEW\s+TO\s+EXISTING|(?:DISCONNECT|CONNECT)\s+CONDUCTORS\s+(?:FROM|TO)\s+EQUIPMENT|REMOVE\s+TO\s+THIS\s+POINT|DEMOLISH\s+TO\s+POINT\s+INDICATED|(?:EXTENTS?\s+OF\s+DEMOLITION|OBJECT\s+TO\s+BE\s+REMOVED)|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\s+(?:CONDUCTOR|STRUCTURE)\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b|EQUIPMENT\s+CONNECTION\s+AS\s+NOTED\b)/i.test(normalized);
 }
 
 /** Captions that name a routed medium or drafting line convention rather
@@ -583,7 +583,7 @@ function isRoutedSystemCaption(text: string): boolean {
   // are themselves routed media.
   if (/\bDIRECTION\b/i.test(normalized)
     || /\b(?:ACTUATOR|CLEANOUT|DAMPER|DETECTOR|DIFFUSER|FAN|FILTER|GAUGE|GRILLE|LOUVER|METER|PANELBOARD|PUMP|REGISTER|REGULATOR|RELAY|SENSOR|STARTER|STRAINER|SWITCH|THERMOSTAT|TRANSMITTER|VALVE|VFD)\b\s+(?:IN|ON)\b.*\b(?:PIPING|LINE)$/i.test(normalized)) return false;
-  return /\b(?:PIPING|LINE|SEWER)$/i.test(normalized)
+  return /\b(?:PIPING|LINE|SEWER|RACEWAY)$/i.test(normalized)
     || /^(?:(?:NEW|FUTURE|EXISTING)\s+)?(?:DUCTWORK|PIPING)(?:\s+(?:TO\s+(?:BE\s+)?(?:REMOVED|REMAIN)|WITH\s+(?:INSULATION|LINING)|DEMOLITION))?$/i.test(normalized)
     || /^(?:LPS\s+(?:ROOF|MAIN\s+DOWN)\s+CONDUCTOR|GROUND\s+RING\b.*\bCONDUCTOR|BRANCH\s+CIRCUIT\s+OR\s+FEEDER\s+WIRING\s+IN\s+CONDUIT\b)/i.test(normalized)
     || /^PANEL,?\s+SWITCHBOARD,?\s+OR\s+BUSD?UCT\b/i.test(normalized)
@@ -624,6 +624,10 @@ function meaningfulCaption(text: string): boolean {
   // otherwise promote the field name itself as a fake symbol identity.
   if (/^(?:SYMBOL|NAME|DESCRIPTION|DESIGNATION|TYPE|NUMBER|SIZE|QTY|QUANTITY)$/i.test(normalized)) return false;
   return true;
+}
+
+function isScheduleFieldHeaderText(text: string): boolean {
+  return /^(?:AREA\s+SERVED|SYSTEM\s+LOCATION|SERVICE|PURPOSE|TYPE|CAPACITY|FLOW|HEAD|HP|RPM|VFD|VOLTAGE|FLUID|FUEL|EFFICIENCY|MANUFACTURER(?:\s+AND\s+MODEL)?|MODEL|OPERATING\s+WEIGHT|REMARKS?)$/i.test(normalizedCaption(text));
 }
 
 /** CAD exports frequently expose the same visible lettering twice: once as
@@ -1744,6 +1748,20 @@ function nearbyLegendHeading(group: PairCandidate[], lines: LegendSpan[], typica
   const horizontalDistance = (s: LegendSpan) => s.x1 < gx0 ? gx0 - s.x1 : s.x0 > gx1 ? s.x0 - gx1 : 0;
   const candidates = lines.filter((s) => {
     if (!isLegendHeadingText(s.text) || s.y1 > firstY + typicalTextHeight) return false;
+    if (/^SYMBOL$/i.test(normalizedCaption(s.text))) {
+      // In equipment schedules, SYMBOL is one field among several peers on
+      // the same header row. Thin underlines beneath asset IDs otherwise pair
+      // with AREA SERVED values and manufacture a fake legend column. A real
+      // two-column SYMBOL/DESCRIPTION legend does not have two independent
+      // schedule-field peers, and a named legend title above remains eligible.
+      const centerY = (s.y0 + s.y1) / 2;
+      const schedulePeers = lines.filter((other) => other !== s
+        && isScheduleFieldHeaderText(other.text)
+        && Math.abs((other.y0 + other.y1) / 2 - centerY) <= typicalTextHeight * 0.6
+        && (other.x1 < s.x0 ? s.x0 - other.x1 : s.x1 < other.x0 ? other.x0 - s.x1 : 0)
+          <= typicalTextHeight * 30);
+      if (schedulePeers.length >= 2) return false;
+    }
     // A heading identifies the section directly beneath it, not every
     // aligned diagram cluster hundreds of text-heights later. Real reviewed
     // loose and bordered legends place their first row within ten local text
