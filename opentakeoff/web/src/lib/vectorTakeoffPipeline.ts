@@ -299,9 +299,19 @@ export async function runVectorTakeoffPipeline(
   const buildings = new Set(g.buildings);
   const sourceSpansBySheet = new Map<string, GraphSpan[]>();
 
-  // L2 ODL
-  await hooks.runODL(g);
-  report.layers_run.push("L2:ODL");
+  // L2 ODL — skippable, so that "does ODL still earn its place" is a
+  // measurement rather than an argument. It was kept through the extractor
+  // retirement on a PRINCIPLE — it is the only engine that can read a table
+  // with no drawn ruling, which vectorgrid structurally cannot — but no
+  // measurement had ever shown it recovering a table vectorgrid missed, and a
+  // principle that has never been tested is a belief. It also costs a JVM
+  // spawn per document.
+  if ((process.env.OPENTAKEOFF_ODL || "").toLowerCase() !== "off") {
+    await hooks.runODL(g);
+    report.layers_run.push("L2:ODL");
+  } else {
+    report.layers_run.push("L2:ODL(off)");
+  }
 
   const contexts = hooks.getSheetContexts();
 
