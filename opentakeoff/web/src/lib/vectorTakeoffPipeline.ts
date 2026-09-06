@@ -402,7 +402,24 @@ export async function runVectorTakeoffPipeline(
   } else if (!uncovered.length) {
     report.layers_run.push("L2:ODL(not needed)");
   } else {
+    // ODL is the one stage that does NOT go through mergeCandidates — it pushes
+    // straight into g.tables — so withStage cannot see it and every table it
+    // recovered used to land in the ledger as nothing at all. A box scorer that
+    // reports per-stage then has an unattributable column, which is the column
+    // a regression hides in. Diff the table list around the call instead: the
+    // identity is the object, so this cannot mistake a mutated incumbent for a
+    // new table.
+    const beforeOdl = new Set(g.tables);
     await timed("L2:ODL", () => hooks.runODL(g));
+    if (report) {
+      for (const t of g.tables) {
+        if (beforeOdl.has(t)) continue;
+        (report.stage_tables ?? (report.stage_tables = [])).push({
+          stage: "odl", sheet: t.sheet, title: t.title?.text ?? null,
+          kind: t.kind, headers: t.headers.length, rows: t.rows.length, region: t.region,
+        });
+      }
+    }
     report.layers_run.push(`L2:ODL(fallback on ${uncovered.length}/${contexts0.length} sheets)`);
   }
 
