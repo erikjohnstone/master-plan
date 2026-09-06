@@ -9123,14 +9123,27 @@ export function scheduleTableFromODL(
   // it covers as much as the widest row does. That is self-calibrating: it
   // needs no threshold, it cannot be broken by an empty column, and on a table
   // where every column really is filled it is exactly the old rule.
+  // The yardstick must come from rows that DO NOT SPAN, or it measures the
+  // wrong thing. A grouping tier spans, and spanning covers every column, so
+  // including tiers sets the bar at C and puts us straight back to "a data row
+  // must fill every column" — which is the rule this is replacing. Measured on
+  // the same FAN COIL UNIT SCHEDULE: its first tier owns 9 cells whose spans
+  // (1,1,3,1,8,4,5,1,1) cover all 25 columns, so the bar became 25 and the
+  // 24-column data rows failed exactly as before.
+  //
+  // A row with no spanning cell anywhere is, structurally, a row of
+  // independent per-column values — which is what a data row is. Taking the
+  // widest of those gives a yardstick a grouping tier cannot inflate.
   let maxCovered = 0;
   for (let r = bodyStart; r < R; r++) {
-    let n = 0;
+    const own = new Set<ODLTableCell>();
+    const cols = new Set<number>();
     for (let c = 0; c < C; c++) {
       const cell = grid[r][c];
-      if (cell && cell["row number"] - 1 === r) n++;
+      if (cell && cell["row number"] - 1 === r) { own.add(cell); cols.add(c); }
     }
-    if (n > maxCovered) maxCovered = n;
+    if ([...own].some((cl) => (cl["column span"] || 1) > 1 || (cl["row span"] || 1) > 1)) continue;
+    if (cols.size > maxCovered) maxCovered = cols.size;
   }
 
   let headerEnd = bodyStart;
@@ -9533,7 +9546,7 @@ export function scheduleTableFromODL(
     }
     rows.push({ key: keyRes.key, sheet: sheetKey, ...(keyRes.building ? { building: keyRes.building } : {}), cells });
   }
-  if (!rows.length) return refuse(`no keyed data rows (kind ${kind}, key column ${keyColIdx < 0 ? "col 0" : JSON.stringify(headers[keyColIdx])}, headers ${JSON.stringify(headers.slice(0, 3))})`);
+  if (!rows.length) return refuse(`no keyed data rows (kind ${kind}, key column ${keyColIdx < 0 ? "col 0" : JSON.stringify(headers[keyColIdx])})`);
   const promotedHeaders = promoteLeadingEngineeringUnits(headers, rows);
   headers.splice(0, headers.length, ...promotedHeaders);
   // Real, found-live gap (2026-09-03, 032_PA_Construct_EHRM_Infrastructure's
