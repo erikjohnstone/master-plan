@@ -240,10 +240,18 @@ export default function PlanNavigator({
     setSampleBusy(true);
     try {
       const base = import.meta.env.BASE_URL || "/";
-      const res = await fetch(`${base}demo/sample-finish-plan.pdf`);
+      // A MECHANICAL BID SET, NOT A FLOOR FINISH PLAN. The sample is the
+      // product's first impression and it was inherited whole from the
+      // upstream flooring tool — a 2-page medical-center finish plan with
+      // nothing an HVAC estimator recognises. This set is 8 sheets with 10
+      // real schedules (fan, diffuser/grille/register, ductwork insulation,
+      // piping insulation), and its EBB-1 / EWH-1 are the same instances the
+      // symbol-sweep tests are built on, so both headline capabilities have
+      // something to bite on within seconds of the first click.
+      const res = await fetch(`${base}demo/sample-mechanical-set.pdf`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const blob = await res.blob();
-      onAddFiles([new File([blob], "sample-finish-plan.pdf", { type: "application/pdf" })]);
+      onAddFiles([new File([blob], "sample-mechanical-set.pdf", { type: "application/pdf" })]);
     } catch {
       setSampleBusy(false);
     }
@@ -771,13 +779,14 @@ export default function PlanNavigator({
                 <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "18px auto 16px", color: "var(--text-faint)", fontFamily: "var(--f-mono)", fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase" }}>
                   <span style={{ flex: 1, height: 1, background: "var(--ink-faint)" }} />new here?<span style={{ flex: 1, height: 1, background: "var(--ink-faint)" }} />
                 </div>
-                <button onClick={loadSample} disabled={sampleBusy} title="Open a real floor finish plan and try a takeoff"
+                <button onClick={loadSample} disabled={sampleBusy} title="Open a real mechanical bid set and try a takeoff"
                   style={{ display: "inline-flex", alignItems: "center", gap: 9, padding: "13px 22px", border: "1px solid var(--ink)", background: "var(--cobalt)", color: "var(--paper-bright)", cursor: sampleBusy ? "default" : "pointer", opacity: sampleBusy ? 0.65 : 1, fontWeight: 700, fontSize: 14, fontFamily: "var(--f-body)" }}>
                   <Icon name="takeoff" size={16} />{sampleBusy ? "Loading sample…" : "Load sample plan"}
                 </button>
                 <div style={{ fontFamily: "var(--f-body)", fontSize: 12.5, color: "var(--ink-muted)", marginTop: 11, lineHeight: 1.6 }}>
-                  A real medical-center <strong style={{ color: "var(--ink)" }}>floor finish plan</strong> — the scale auto-detects;
-                  pick a finish and trace a flooring takeoff in seconds.
+                  A real 8-sheet <strong style={{ color: "var(--ink)" }}>mechanical bid set</strong> — the scale auto-detects and
+                  the schedules index themselves. Ask the Agent for a schedule, or marquee one
+                  symbol and sweep the sheet for every placement.
                 </div>
               </div>
             ) : enumerated ? (

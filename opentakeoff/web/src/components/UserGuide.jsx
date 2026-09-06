@@ -61,10 +61,11 @@ function Section({ title, children }) {
 }
 
 const START = [
-  ["Open a plan", "Drag a PDF, an image, or a whole .zip plan set onto the canvas — or click Load sample plan to use the bundled VA finish plan. Nothing leaves your machine."],
+  ["Open a plan", "Drag a PDF, an image, or a whole .zip plan set onto the canvas — or click Load sample plan for the bundled 8-sheet mechanical bid set. Nothing leaves your machine."],
   ["Set the scale first", "Every quantity depends on it. The Scale menu offers what the sheet's own title block states; hover it to preview a calibrated ruler on the drawing, or calibrate two points of a known dimension. Remembered per sheet."],
-  ["Add a condition", "A condition is a finish — CPT-1, LVT, base. Give it a tag, a waste %, and a colour. Press 1–9 to arm one."],
+  ["Add a condition", "A condition is whatever you are counting — VAV-1, EBB-1, a duct run, a finish. Give it a tag, a waste %, and a colour. Press 1–9 to arm one."],
   ["Measure", "One-Click a room and it selects itself; or trace by hand with Area, Rectangle, Linear or Count. In One-Click, ⏎ creates it."],
+  ["Sweep a symbol", "Y, then marquee ONE instance of a device. It fingerprints that symbol's linework and finds every other placement on the sheet — rotated and mirrored included — as a reviewable list before anything is counted."],
   ["Read the report", "REPORT totals every condition, applies waste, and gives you order quantities, a buy list, and CSV / Excel export."],
 ];
 
@@ -75,6 +76,7 @@ export const TOOLS = [
   [["D"], "Deduct shape (Cut Out)"], [["⇧", "D"], "Deduct rectangle"],
   [["H"], "Highlighter"], [["K"], "Check a dimension against what the drawing says"],
   [["N"], "Dimension line — a standalone length label at the sheet's scale (markup, never counted)"],
+  [["Y"], "Symbol sweep — marquee one device, count every placement"],
   [["V"], "Select"], [["G"], "Sheet gallery"],
   [["1", "–", "9"], "Arm condition N"],
   [["hold", "M"], "Push-to-talk dictation — release runs it, Esc discards"],
@@ -90,6 +92,17 @@ export const DRAW = [
   [["⌥", "click"], "In One-Click: carve a cutout inside a selected space"],
   [["⇧", "click"], "Insert a vertex at an edge midpoint, and drag it"],
   [["⌘", "C"], "Copy"], [["⌘", "V"], "Paste under the cursor"], [["⌘", "D"], "Duplicate"],
+];
+
+/** The review gate. A sweep proposes; nothing is counted until these keys say
+ *  so — and none of it appeared anywhere in the guide. */
+export const SWEEP = [
+  [["Y"], "Arm Symbol sweep, then marquee one instance of the device"],
+  [["⏎"], "Accept the match under review — the next open one comes up"],
+  [["X"], "Dismiss it"],
+  [["→"], "Next open match, without deciding this one"],
+  [["←"], "Previous open match"],
+  [["Esc"], "Discard the whole sweep — nothing is written"],
 ];
 
 export const VIEW = [
@@ -144,8 +157,9 @@ export default function UserGuide({ onClose }) {
             style={{ background: "none", border: "none", color: "var(--ink-soft)", fontSize: 18, cursor: "pointer", lineHeight: 1, padding: 4 }}>×</button>
         </div>
         <p style={{ fontSize: 12.5, color: "var(--ink-soft)", lineHeight: 1.5, margin: "0 0 22px" }}>
-          A takeoff canvas that runs entirely in your browser — no account, no upload, no install. Open a plan,
-          set the scale, measure the finishes, export a priced quantity report.
+          A takeoff canvas that runs entirely in your browser — no account, no upload, no install. Open a
+          mechanical set, set the scale, read its schedules, sweep its symbols, and export a priced
+          quantity report.
         </p>
 
         <Section title="Five minutes to a takeoff">
@@ -161,6 +175,16 @@ export default function UserGuide({ onClose }) {
 
         <Section title="Tools"><Table rows={TOOLS} /></Section>
         <Section title="Drawing & editing"><Table rows={DRAW} /></Section>
+        <Section title="Symbol sweep">
+          <p style={{ fontSize: 12.5, color: "var(--ink-soft)", lineHeight: 1.5, margin: "0 0 9px" }}>
+            Marquee one instance of a device and the sweep matches that symbol's linework across
+            the sheet, at any rotation or mirror. Confident matches are counted; anything it is
+            unsure of is <strong>withheld as a question</strong> with the reason it was unsure,
+            rather than quietly counted or quietly dropped. These keys walk those questions, and
+            Commit writes only what survives them.
+          </p>
+          <Table rows={SWEEP} />
+        </Section>
         <Section title="Getting around"><Table rows={VIEW} /></Section>
 
         <div style={{ borderTop: "1px solid var(--ink-faint)", paddingTop: 14, fontSize: 12.5, color: "var(--ink-soft)", lineHeight: 1.5 }}>

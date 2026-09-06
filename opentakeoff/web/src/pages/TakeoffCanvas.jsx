@@ -294,16 +294,20 @@ const PALETTE_MAX = 9;
 
 // status-bar verb column — the armed tool spoken as its MCP verb, so agent and
 // human activity read in the same instrument language.
+// WHAT THE ARMED TOOL IS DOING, IN THE ESTIMATOR'S WORDS. These were the
+// agent's internal tool names — the status bar told an estimator the armed
+// tool was "symbol_sweep" and "measure_polygon". The MCP tool names are
+// unchanged and still the agent's contract; this map is the human label.
 const TOOL_VERB = {
-  select: "select", area: "measure_polygon", rect: "measure_polygon",
-  deduct: "cut_out", "deduct-rect": "cut_out",
-  linear: "measure_line", surface: "measure_surface",
-  count: "place_count", oneclick: "one_click", calibrate: "set_scale",
-  symbol: "symbol_sweep",
-  check: "check_dimension", zone: "zone_check", "stitch-align": "stitch_align",
-  schedule: "find_schedule", highlighter: "annotate", cloud: "annotate",
-  callout: "annotate", text: "annotate", highlight: "annotate",
-  arrow: "annotate", dimension: "annotate", stamp: "annotate", bubble: "annotate",
+  select: "select", area: "area", rect: "rectangle",
+  deduct: "deduct", "deduct-rect": "deduct rect",
+  linear: "linear", surface: "wall area",
+  count: "count", oneclick: "one-click", calibrate: "set scale",
+  symbol: "symbol sweep",
+  check: "check dimension", zone: "zone check", "stitch-align": "align sheets",
+  schedule: "read schedule", highlighter: "highlight", cloud: "cloud",
+  callout: "callout", text: "text", highlight: "highlight",
+  arrow: "arrow", dimension: "dimension", stamp: "stamp", bubble: "bubble",
 };
 
 // Pure geometry helpers (star/cloud paths, snap grid, angle lock, metrics,

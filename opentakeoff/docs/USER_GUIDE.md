@@ -461,6 +461,34 @@ Under the condition total sits **MEASUREMENTS**—a numbered tally, in draw orde
 
 ---
 
+## 5a. Symbol sweep
+
+`Y`, then marquee **one** instance of a device—a VAV box, a baseboard heater, a
+diffuser. The sweep fingerprints that symbol's linework and finds every other
+placement of it on the sheet, including rotated and mirrored copies.
+
+It does not simply count what it finds. Matches it is confident about are
+counted; anything it is unsure of is **withheld as a question**, carrying the
+reason it was unsure—*"matched 84% of the seed's linework (commit bar 92%) —
+likely a variant or an overlapped instance"*. You walk those questions with the
+keys in [§15](#15-keyboard-reference), and **Commit** writes only what survives
+review. Nothing reaches the takeoff without a person saying yes.
+
+Two things worth knowing:
+
+- **A sweep belongs to its sheet.** Navigate away and it is discarded, and the
+  status bar says so. It never writes onto a sheet you are not looking at.
+- **It reads drawn linework.** On a scanned sheet with no vector geometry there
+  is nothing to fingerprint, and the sweep says that rather than returning
+  zero matches.
+
+The Agent can run the same engine as the `symbol_sweep` tool. It returns the
+matches instead of opening the review UI, and still has to propose them through
+the same human accept gate—the agent cannot count a symbol on its own authority
+either.
+
+---
+
 ## 6. One-Click Area
 
 <img src="img/one-click-area.gif" alt="One-Click Area tracing patient rooms wall to wall on the sample plan" width="820"/>
@@ -862,6 +890,7 @@ Every shortcut in the app, verified against the code. Letter keys are suppressed
 | `H` | Highlighter |
 | `N` | Dimension line—a standalone length label at the sheet's scale (markup, never counted) |
 | `K` | Check a dimension |
+| `Y` | Symbol sweep—marquee one device, count every placement (see [§5a](#5a-symbol-sweep)) |
 | `V` | Select |
 | `G` | Sheet gallery |
 | Hold `M` | Push-to-talk dictation—release runs the command, `Esc` discards (see [§17](#17-voice-and-the-command-box)) |
@@ -889,6 +918,19 @@ Every shortcut in the app, verified against the code. Letter keys are suppressed
 | `⌥`-click (Area / Cut Out / Line / Surface) | Place the *other* kind of point for one click—a bow point in Straight mode, a corner in Curve mode |
 | `⌥`-click (One-Click) | Carve a cutout inside a selected space |
 | `⇧`-click an edge | Insert a vertex at the edge midpoint (selected shape or One-Click proposal) and drag it |
+
+### Symbol sweep review
+
+While a sweep's questions are open these take priority over the tool keys.
+
+| Key | Action |
+|---|---|
+| `Y` | Arm Symbol sweep, then marquee one instance of the device |
+| `⏎` | Accept the match under review—the next open one comes up |
+| `X` | Dismiss it |
+| `→` | Next open match, without deciding this one |
+| `←` | Previous open match |
+| `Esc` | Discard the whole sweep—nothing is written |
 
 ### Selected shape or markup (Select tool)
 

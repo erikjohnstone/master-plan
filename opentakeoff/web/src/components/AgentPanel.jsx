@@ -281,9 +281,15 @@ export default function AgentPanel({
         <RunHistoryList runs={runHistory} />
       ) : !configured ? (
         <div style={{ padding: 14, fontSize: 13, lineHeight: 1.6, color: "var(--ink)" }}>
+          {/* THIS PANEL USED TO SAY "Nothing is configured, so it can't run"
+              — to everyone, always. ai.js falls back to PLATFORM_AI, so
+              isAiConfigured() is true out of the box and AiSettings itself
+              says "Platform default (no setup)". The only way to reach this
+              branch now is to have deliberately cleared the endpoint. */}
           <p style={{ marginTop: 0 }}>
-            The agent runs on a model <strong>you</strong> provide — your endpoint, your key, straight from this
-            browser. Nothing is configured, so it can't run.
+            The agent has no endpoint. It normally runs on the platform model with no setup at all —
+            this appears when the endpoint has been cleared in AI settings. Restore the platform
+            default there, or point it at your own endpoint and key.
           </p>
           <button className="btn-primary" onClick={onOpenSettings} style={{ marginTop: 4 }}>AI settings…</button>
         </div>

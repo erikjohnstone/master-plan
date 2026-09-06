@@ -31,7 +31,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { TOOLS, DRAW, VIEW } from "../src/components/UserGuide.jsx";
+import { TOOLS, DRAW, VIEW, SWEEP } from "../src/components/UserGuide.jsx";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const guide = readFileSync(join(here, "../../docs/USER_GUIDE.md"), "utf8");
@@ -64,7 +64,10 @@ function canonize(raw: string): Combo {
 
 // Overlay side: each row is [comboTokens[], description]; the combo is the
 // token array joined with spaces ("hold" and "M" are separate tokens).
-const overlayCombos: Combo[] = [...TOOLS, ...DRAW, ...VIEW].map((row) =>
+// SWEEP joins the set the moment the overlay grew a Symbol sweep section: the
+// overlay must never promise a key §15 does not stand behind, and the review
+// keys (⏎ / X / → / ←) are exactly the kind that drift.
+const overlayCombos: Combo[] = [...TOOLS, ...DRAW, ...VIEW, ...SWEEP].map((row) =>
   canonize((row[0] as string[]).join(" "))
 );
 
