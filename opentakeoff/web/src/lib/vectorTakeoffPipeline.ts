@@ -13,6 +13,7 @@ import {
 import { vectorGridAvailable, vectorGridMode } from "./vectorGridClient.ts";
 import { sheetHasPointsListTitleSpans, sheetHasScheduleLanguage } from "./scheduleLanguageScan.ts";
 import {
+  adoptVectorGridTables,
   collapseEquivalentPrimaryTables,
   dedupCrossSourceTables,
   mergeExtractedTable,
@@ -208,7 +209,23 @@ async function runL2VectorGridForSheet(
   rec.declined += res.skipped;
   rec.rasters += res.rasters;
   if (mode === "shadow" || !res.tables.length) return;
-  withStage("vectorgrid", () => mergeCandidates(g, res.tables, ctx.key, stats, touched, report));
+  // Not mergeCandidates: vectorgrid is not one candidate among peers on a
+  // sheet it read, it is the reading. See adoptVectorGridTables.
+  const { adopted, displaced } = adoptVectorGridTables(g, res.tables, ctx.key, touched);
+  stats.added += adopted;
+  if (report) {
+    const ledger = report.stage_contributions ?? (report.stage_contributions = {});
+    ledger.vectorgrid = (ledger.vectorgrid ?? 0) + adopted;
+    if (displaced) {
+      ledger["displaced-by-vectorgrid"] = (ledger["displaced-by-vectorgrid"] ?? 0) + displaced;
+    }
+    for (const t of res.tables) {
+      (report.stage_tables ?? (report.stage_tables = [])).push({
+        stage: "vectorgrid", sheet: ctx.key, title: t.title?.text ?? null,
+        kind: t.kind, headers: t.headers.length, rows: t.rows.length, region: t.region,
+      });
+    }
+  }
 }
 
 async function runL45OcrAssist(

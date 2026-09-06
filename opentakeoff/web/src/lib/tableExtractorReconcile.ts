@@ -99,6 +99,50 @@ export interface MergeExtractedStats {
   added: number;
 }
 
+/** VECTORGRID OWNS THE TABLE LAYER ON A SHEET IT READ.
+ *
+ * The merge bar was built when six extractors competed and none could be
+ * trusted alone: collect every candidate, pick a winner by counting headers and
+ * cells. That was the right design for six unreliable readers. It is the wrong
+ * one for a reader measured at 98.0% of values in the right column on documents
+ * it has never seen, because it lets a WEAKER source keep the slot.
+ *
+ * Measured, document 25 page 12: vectorgrid built 7 tables and only 5 reached
+ * the graph. Its AIR DEVICE SCHEDULE (EXHAUST) at [1791,129,2777,224] was
+ * claimed by the L2 geometric pass's SINGLE DUCT ATU SCHEDULE at
+ * [168,171,2595,311] — 0.45 of the candidate's area lies inside it, over the
+ * 0.4 bar — and then discarded for having fewer cells. Its two sibling
+ * schedules, RETURN and SUPPLY, survived and scored 100%.
+ *
+ * Across the benchmark that pattern costs 7 tables, 193 rows and 1,909 values
+ * the extractor had already read correctly: 98.0% at the reader, 83.6% at the
+ * pipeline.
+ *
+ * So on a sheet vectorgrid read, its tables are the answer. An incumbent that
+ * OVERLAPS one of them is a worse reading of the same ink and is dropped; an
+ * incumbent that overlaps nothing vectorgrid found is left alone, because
+ * vectorgrid not looking there is not the same as vectorgrid disagreeing. */
+export function adoptVectorGridTables(
+  g: SheetGraph,
+  built: ScheduleTable[],
+  sheetKey: string,
+  touchedSheets: Set<string>,
+): { adopted: number; displaced: number } {
+  if (!built.length) return { adopted: 0, displaced: 0 };
+  const overlapsAny = (t: ScheduleTable) =>
+    built.some((b) => {
+      const ix = Math.max(0, Math.min(t.region[2], b.region[2]) - Math.max(t.region[0], b.region[0]));
+      const iy = Math.max(0, Math.min(t.region[3], b.region[3]) - Math.max(t.region[1], b.region[1]));
+      return ix * iy > 0;
+    });
+  const before = g.tables.length;
+  const kept = g.tables.filter((t) => t.sheet !== sheetKey || !overlapsAny(t));
+  const displaced = before - kept.length;
+  g.tables.splice(0, g.tables.length, ...kept, ...built);
+  touchedSheets.add(sheetKey);
+  return { adopted: built.length, displaced };
+}
+
 /** Merge one newly extracted table into g.tables using the shared evidence bar. */
 export function mergeExtractedTable(
   g: SheetGraph,
