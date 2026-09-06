@@ -21,7 +21,7 @@ const UI_SPEC_MAX = 12;
 const th = {
   textAlign: "left",
   padding: "8px 10px",
-  fontSize: 10.5,
+  fontSize: "var(--fs-xs)",
   fontFamily: "var(--f-mono)",
   letterSpacing: "0.06em",
   textTransform: "uppercase",
@@ -35,7 +35,7 @@ const th = {
 };
 const td = {
   padding: "7px 10px",
-  fontSize: 13,
+  fontSize: "var(--fs-m)",
   color: "var(--ink)",
   borderBottom: "1px solid color-mix(in srgb, var(--ink-faint) 70%, transparent)",
   verticalAlign: "top",
@@ -49,7 +49,7 @@ const tabBtn = (active) => ({
   color: active ? "var(--ink)" : "var(--ink-muted)",
   cursor: "pointer",
   fontFamily: "var(--f-mono)",
-  fontSize: 11,
+  fontSize: "var(--fs-xs)",
   letterSpacing: "0.1em",
   textTransform: "uppercase",
   fontWeight: 650,
@@ -58,12 +58,12 @@ const tabBtn = (active) => ({
 const btnStyle = {
   padding: "8px 12px",
   border: "1px solid var(--ink-faint)",
-  borderRadius: 6,
+  borderRadius: "var(--r-1)",
   background: "var(--paper)",
   color: "var(--ink)",
   cursor: "pointer",
   fontFamily: "var(--f-mono)",
-  fontSize: 11,
+  fontSize: "var(--fs-xs)",
   letterSpacing: "0.08em",
   textTransform: "uppercase",
   fontWeight: 650,
@@ -208,7 +208,7 @@ export default function TakeoffDataPanel({
           width: "min(1520px, 100%)",
           background: "var(--paper-bright)",
           color: "var(--ink)",
-          borderRadius: 8,
+          borderRadius: "var(--r-1)",
           boxShadow: "0 24px 80px color-mix(in srgb, var(--ink) 35%, transparent)",
           display: "flex",
           flexDirection: "column",
@@ -221,17 +221,17 @@ export default function TakeoffDataPanel({
         }}>
           <div style={{ flex: 1, minWidth: 0, paddingBottom: 12 }}>
             <div style={{
-              fontFamily: "var(--f-mono)", fontSize: 11, letterSpacing: "0.14em",
+              fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)", letterSpacing: "0.14em",
               textTransform: "uppercase", color: "var(--ink-muted)",
             }}>
               {takeoffId || "Takeoff"}
             </div>
-            <div style={{ fontSize: 20, fontWeight: 650, marginTop: 2, letterSpacing: "-0.01em" }}>
+            <div style={{ fontSize: "var(--fs-2xl)", fontWeight: 650, marginTop: 2, letterSpacing: "-0.01em" }}>
               {projectName || "Project takeoff"}
             </div>
             <div style={{
               display: "flex", flexWrap: "wrap", gap: "6px 14px",
-              marginTop: 8, fontFamily: "var(--f-mono)", fontSize: 12,
+              marginTop: 8, fontFamily: "var(--f-mono)", fontSize: "var(--fs-s)",
               color: "var(--ink-muted)", letterSpacing: "0.02em",
             }}
               data-takeoff-stats
@@ -253,7 +253,7 @@ export default function TakeoffDataPanel({
               )}
               <span>{rows.length} evidence fields</span>
             </div>
-            <div style={{ fontSize: 12.5, color: "var(--ink-muted)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
+            <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-muted)", marginTop: 6, maxWidth: 760, lineHeight: 1.45 }}>
               {tab === "takeoff"
                 ? "Finished quantity takeoff — sections are Building · schedule when the set splits by building. Click Valve Mark / Unit Mark / Sheet to paint that whole schedule row on the drawings (one cite at a time)."
                 : "Workflow audit trail — every field the Agent gathered. Does not change the finished Takeoff totals."}
@@ -264,9 +264,9 @@ export default function TakeoffDataPanel({
             onChange={(e) => setFilter(e.target.value)}
             placeholder={tab === "takeoff" ? "Filter tag, schedule, field…" : "Filter tag, field, sheet…"}
             style={{
-              width: 220, padding: "9px 11px", borderRadius: 6, marginTop: 4,
+              width: 220, padding: "9px 11px", borderRadius: "var(--r-1)", marginTop: 4,
               border: "1px solid var(--ink-faint)", background: "var(--paper)",
-              font: "inherit", fontSize: 13,
+              font: "inherit", fontSize: "var(--fs-m)",
             }}
           />
           <button type="button" onClick={() => runExport("csv")} disabled={exportDisabled || !!busy}
@@ -297,7 +297,7 @@ export default function TakeoffDataPanel({
         </div>
 
         {err && (
-          <div style={{ padding: "8px 20px", color: "var(--c-danger)", fontSize: 12.5 }}>{err}</div>
+          <div style={{ padding: "8px 20px", color: "var(--c-danger)", fontSize: "var(--fs-s)" }}>{err}</div>
         )}
 
         {/* Family jump strip — contractor scanning by schedule */}
@@ -321,7 +321,7 @@ export default function TakeoffDataPanel({
                   style={{
                     ...btnStyle,
                     padding: "5px 9px",
-                    fontSize: 10.5,
+                    fontSize: "var(--fs-xs)",
                     background: active ? "var(--ink)" : "var(--paper-bright)",
                     color: active ? "var(--paper-bright)" : "var(--ink-muted)",
                     borderColor: active ? "var(--ink)" : "var(--ink-faint)",
@@ -343,7 +343,7 @@ export default function TakeoffDataPanel({
         <div style={{ flex: 1, overflow: "auto", padding: "0 12px 24px" }}>
           {tab === "takeoff" ? (
             !lines.length ? (
-              <div style={{ padding: "56px 24px", textAlign: "center", color: "var(--ink-muted)", fontSize: 14, lineHeight: 1.5 }}>
+              <div style={{ padding: "56px 24px", textAlign: "center", color: "var(--ink-muted)", fontSize: "var(--fs-l)", lineHeight: 1.5 }}>
                 No finished takeoff yet.<br />
                 Run Agent with a complete HVAC, BAS, or valve takeoff goal — compiled quantities land here.
               </div>
@@ -360,7 +360,7 @@ export default function TakeoffDataPanel({
                     style={{ marginTop: 20, scrollMarginTop: 12 }}
                   >
                     <h3 style={{
-                      margin: "0 8px 10px", fontSize: 13.5, fontWeight: 650,
+                      margin: "0 8px 10px", fontSize: "var(--fs-m)", fontWeight: 650,
                       color: "var(--ink)", display: "flex", gap: 12, alignItems: "baseline",
                       flexWrap: "wrap", letterSpacing: "-0.01em",
                     }}>
@@ -372,7 +372,7 @@ export default function TakeoffDataPanel({
                         title={`Open ${name} schedule table on the drawings`}
                       />
                       <span style={{
-                        fontFamily: "var(--f-mono)", fontSize: 11, fontWeight: 500,
+                        fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)", fontWeight: 500,
                         letterSpacing: "0.04em", color: "var(--ink-muted)",
                       }}>
                         {group.lines.length} line{group.lines.length === 1 ? "" : "s"}
@@ -385,7 +385,7 @@ export default function TakeoffDataPanel({
                     <div style={{
                       overflowX: "auto",
                       border: "1px solid var(--ink-faint)",
-                      borderRadius: 6,
+                      borderRadius: "var(--r-1)",
                       background: "var(--paper-bright)",
                     }}>
                       <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>
@@ -449,7 +449,7 @@ export default function TakeoffDataPanel({
                                 const v = lineSpecValue(line, c);
                                 return (
                                   <td key={c} style={{
-                                    ...td, fontSize: 12.5, fontVariantNumeric: "tabular-nums",
+                                    ...td, fontSize: "var(--fs-s)", fontVariantNumeric: "tabular-nums",
                                     whiteSpace: "nowrap",
                                     color: v ? "var(--ink)" : "var(--ink-faint)",
                                   }}>
@@ -458,7 +458,7 @@ export default function TakeoffDataPanel({
                                   </td>
                                 );
                               })}
-                              <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)", whiteSpace: "nowrap" }}
+                              <td style={{ ...td, fontSize: "var(--fs-s)", color: "var(--ink-muted)", whiteSpace: "nowrap" }}
                                 title={line.plan_sheet_id || line.schedule_sheet_id || line.sheet_id || ""}>
                                 <CiteValue
                                   text={shortSheet(line.plan_sheet_id || line.schedule_sheet_id || line.sheet_id)}
@@ -469,7 +469,7 @@ export default function TakeoffDataPanel({
                                 />
                               </td>
                               {showStatus ? (
-                                <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)" }}>
+                                <td style={{ ...td, fontSize: "var(--fs-s)", color: "var(--ink-muted)" }}>
                                   {line.status || "—"}
                                   {line.notes ? (
                                     <div style={{ marginTop: 2, maxWidth: 160, whiteSpace: "normal" }}>{line.notes}</div>
@@ -479,7 +479,7 @@ export default function TakeoffDataPanel({
                               <td style={{ ...td, whiteSpace: "nowrap" }}>
                                 {typeof onOpenCitation === "function" && line.sheet_id && (line.row_bbox_px || line.bbox_px) && (
                                   <button type="button" onClick={() => onOpenCitation(lineLeadCite(line, "tag"))}
-                                    style={{ ...btnStyle, padding: "4px 8px", fontSize: 11 }}>
+                                    style={{ ...btnStyle, padding: "4px 8px", fontSize: "var(--fs-xs)" }}>
                                     View
                                   </button>
                                 )}
@@ -487,7 +487,7 @@ export default function TakeoffDataPanel({
                                   <button type="button" onClick={() => onRemoveLine(line)}
                                     style={{
                                       border: "none", background: "transparent", cursor: "pointer",
-                                      color: "var(--ink-muted)", padding: "4px 6px", fontSize: 11,
+                                      color: "var(--ink-muted)", padding: "4px 6px", fontSize: "var(--fs-xs)",
                                     }}>
                                     Remove
                                   </button>
@@ -500,7 +500,7 @@ export default function TakeoffDataPanel({
                     </div>
                     {group.specTotal > specs.length && (
                       <div style={{
-                        margin: "6px 10px 0", fontSize: 11.5, color: "var(--ink-muted)",
+                        margin: "6px 10px 0", fontSize: "var(--fs-s)", color: "var(--ink-muted)",
                         fontFamily: "var(--f-mono)",
                       }}>
                         +{group.specTotal - specs.length} more fields in Excel / CSV export
@@ -512,25 +512,25 @@ export default function TakeoffDataPanel({
             )
           ) : (
             !rows.length ? (
-              <div style={{ padding: "56px 24px", textAlign: "center", color: "var(--ink-muted)", fontSize: 14 }}>
+              <div style={{ padding: "56px 24px", textAlign: "center", color: "var(--ink-muted)", fontSize: "var(--fs-l)" }}>
                 No workflow evidence yet. Field-level Agent results land here for audit.
               </div>
             ) : (
               bySchedule.map(([schedule, group]) => (
                 <section key={schedule} style={{ marginTop: 18 }}>
                   <h3 style={{
-                    margin: "0 8px 8px", fontSize: 13, fontWeight: 650,
+                    margin: "0 8px 8px", fontSize: "var(--fs-m)", fontWeight: 650,
                     color: "var(--ink-muted)", display: "flex", gap: 10, alignItems: "baseline",
                   }}>
                     <span>{schedule}</span>
-                    <span style={{ fontFamily: "var(--f-mono)", fontSize: 11, fontWeight: 500 }}>
+                    <span style={{ fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)", fontWeight: 500 }}>
                       {group.length} field{group.length === 1 ? "" : "s"}
                     </span>
                   </h3>
                   <div style={{
                     overflowX: "auto",
                     border: "1px solid var(--ink-faint)",
-                    borderRadius: 6,
+                    borderRadius: "var(--r-1)",
                   }}>
                     <table style={{ width: "100%", borderCollapse: "collapse" }}>
                       <thead>
@@ -547,25 +547,25 @@ export default function TakeoffDataPanel({
                       <tbody>
                         {group.map((r) => (
                           <tr key={r.id}>
-                            <td style={{ ...td, fontFamily: "var(--f-mono)", fontSize: 12 }}>{r.tag || "—"}</td>
-                            <td style={{ ...td, fontSize: 12.5 }}>{String(r.field ?? "")}</td>
-                            <td style={{ ...td, fontWeight: 600, fontSize: 12.5 }}>
+                            <td style={{ ...td, fontFamily: "var(--f-mono)", fontSize: "var(--fs-s)" }}>{r.tag || "—"}</td>
+                            <td style={{ ...td, fontSize: "var(--fs-s)" }}>{String(r.field ?? "")}</td>
+                            <td style={{ ...td, fontWeight: 600, fontSize: "var(--fs-s)" }}>
                               {typeof r.value === "object" && r.value != null
                                 ? String(r.value.text ?? r.value.value ?? "")
                                 : String(r.value ?? "")}
                             </td>
                             <td style={td}>{r.unit || "—"}</td>
-                            <td style={{ ...td, fontSize: 12, color: "var(--ink-muted)" }}
+                            <td style={{ ...td, fontSize: "var(--fs-s)", color: "var(--ink-muted)" }}
                               title={r.sheet_id || ""}>
                               {shortSheet(r.sheet_id)}
                             </td>
-                            <td style={{ ...td, fontSize: 11, fontFamily: "var(--f-mono)", color: "var(--ink-muted)" }}>
+                            <td style={{ ...td, fontSize: "var(--fs-xs)", fontFamily: "var(--f-mono)", color: "var(--ink-muted)" }}>
                               {r.source_tool || "—"}
                             </td>
                             <td style={{ ...td, whiteSpace: "nowrap" }}>
                               {typeof onOpenCitation === "function" && r.sheet_id && r.bbox_px && (
                                 <button type="button" onClick={() => onOpenCitation(r)}
-                                  style={{ ...btnStyle, padding: "4px 8px", fontSize: 11 }}>
+                                  style={{ ...btnStyle, padding: "4px 8px", fontSize: "var(--fs-xs)" }}>
                                   View
                                 </button>
                               )}
@@ -573,7 +573,7 @@ export default function TakeoffDataPanel({
                                 <button type="button" onClick={() => onRemove(r.id)}
                                   style={{
                                     border: "none", background: "transparent", cursor: "pointer",
-                                    color: "var(--ink-muted)", padding: "4px 6px", fontSize: 11,
+                                    color: "var(--ink-muted)", padding: "4px 6px", fontSize: "var(--fs-xs)",
                                   }}>
                                   Remove
                                 </button>

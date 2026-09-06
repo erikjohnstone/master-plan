@@ -21,11 +21,25 @@ export default function ToolMenu({ face, active = false, accent = "cobalt", titl
   const [flip, setFlip] = useState(false);
   const [flyAt, setFlyAt] = useState(null);   // {left, top} for flyout="right" — fixed, so ancestor overflow can't clip it (the rail)
   const rootRef = useRef(null);
+  // KEYBOARD USERS COULD OPEN THIS MENU AND THEN GO NOWHERE. It had no
+  // role, no aria-expanded, and no arrow keys — a screen reader announced a
+  // plain button, and Tab walked out of the panel instead of down it. `cursor`
+  // is the focused row; -1 means the menu was opened by pointer and nothing is
+  // focused yet, so hovering still behaves exactly as before.
+  const [cursor, setCursor] = useState(-1);
+  const itemRefs = useRef([]);
+  const menuId = useRef(`menu-${Math.random().toString(36).slice(2, 9)}`).current;
 
   useEffect(() => {
     if (!open) return;
     const onDown = (e) => { if (rootRef.current && !rootRef.current.contains(e.target)) setOpen(false); };
-    const onKey = (e) => { if (e.key === "Escape") setOpen(false); };
+    const onKey = (e) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      // Focus goes back to the trigger. Dropping it on <body> would strand a
+      // keyboard user at the top of the page after every dismissed menu.
+      rootRef.current?.querySelector("button")?.focus();
+    };
     document.addEventListener("pointerdown", onDown);
     document.addEventListener("keydown", onKey);
     return () => { document.removeEventListener("pointerdown", onDown); document.removeEventListener("keydown", onKey); };
@@ -41,6 +55,25 @@ export default function ToolMenu({ face, active = false, accent = "cobalt", titl
     onOpenChange?.(true);
     return () => onOpenChange?.(false);
   }, [open, onOpenChange]);
+
+  // Sections, dividers, notes and custom rows are not stops; a disabled item
+  // is not a stop either. The arrow keys walk THIS list, so they can never
+  // land somewhere Enter would do nothing.
+  const stops = items
+    .map((it, i) => ({ it, i }))
+    .filter(({ it }) => it && it !== "divider" && !it.section && !it.note && !it.custom && !it.disabled)
+    .map(({ i }) => i);
+
+  const step = (dir) => {
+    if (!stops.length) return;
+    const at = stops.indexOf(cursor);
+    const next = at < 0
+      ? (dir > 0 ? stops[0] : stops[stops.length - 1])
+      : stops[(at + dir + stops.length) % stops.length];
+    setCursor(next);
+    // focus the row itself, so the shared :focus-visible ring shows where you are
+    requestAnimationFrame(() => itemRefs.current[next]?.focus());
+  };
 
   const accentColor = accent === "danger" ? "var(--c-danger)" : "var(--cobalt)";
   const menuW = (menuStyle && parseInt(menuStyle.minWidth, 10)) || MENU_W;
@@ -65,11 +98,29 @@ export default function ToolMenu({ face, active = false, accent = "cobalt", titl
       }
     }
     setOpen((v) => !v);
+    setCursor(-1);
   };
 
   return (
     <span ref={rootRef} style={{ position: "relative", display: "inline-flex" }}>
-      <button type="button" onClick={toggle} title={title} disabled={disabled}
+      <button
+        type="button"
+        onClick={toggle}
+        title={title}
+        disabled={disabled}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-controls={open ? menuId : undefined}
+        // Down/Up open the menu ON the first/last item, the standard menu-button
+        // behaviour; Enter/Space already work because this is a real <button>.
+        onKeyDown={(e) => {
+          if (disabled) return;
+          if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+            e.preventDefault();
+            if (!open) { toggle(); setTimeout(() => step(e.key === "ArrowDown" ? 1 : -1), 0); }
+            else step(e.key === "ArrowDown" ? 1 : -1);
+          }
+        }}
         style={{
           display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 10px", cursor: disabled ? "default" : "pointer",
           border: `1px solid ${active ? accentColor : "var(--ink-faint)"}`,
@@ -83,7 +134,17 @@ export default function ToolMenu({ face, active = false, accent = "cobalt", titl
         <span style={{ display: "inline-flex", opacity: 0.7 }}><Icon name="chevronDown" size={11} /></span>
       </button>
       {open && (
-        <div style={{
+        <div
+          id={menuId}
+          role="menu"
+          aria-label={title || undefined}
+          onKeyDown={(e) => {
+            if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); step(e.key === "ArrowDown" ? 1 : -1); }
+            else if (e.key === "Home") { e.preventDefault(); setCursor(stops[0] ?? -1); requestAnimationFrame(() => itemRefs.current[stops[0]]?.focus()); }
+            else if (e.key === "End") { e.preventDefault(); const l = stops[stops.length - 1]; setCursor(l ?? -1); requestAnimationFrame(() => itemRefs.current[l]?.focus()); }
+            else if (e.key === "Tab") { setOpen(false); }   // Tab leaves the menu, it does not walk it
+          }}
+          style={{
           ...(flyAt
             ? { position: "fixed", left: flyAt.left, top: flyAt.top }
             : { position: "absolute", top: "calc(100% + 4px)", [flip ? "right" : "left"]: 0 }),
@@ -106,6 +167,10 @@ export default function ToolMenu({ face, active = false, accent = "cobalt", titl
             const fg = it.danger ? "var(--c-danger)" : "var(--ink)";
             return (
               <button key={it.id || i} type="button" disabled={dis} title={it.title || ""}
+                ref={(el) => { itemRefs.current[i] = el; }}
+                role={checkable ? "menuitemcheckbox" : "menuitem"}
+                {...(checkable ? { "aria-checked": !!it.checked } : {})}
+                tabIndex={cursor === i ? 0 : -1}
                 onClick={() => { if (!dis) { if (!it.stayOpen) setOpen(false); it.onSelect?.(); } }}
                 style={{
                   display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "8px 12px",

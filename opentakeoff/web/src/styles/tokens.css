@@ -73,6 +73,11 @@
 
   /* focus ring — translucent cobalt, sits outside the border */
   --ring: 0 0 0 3px rgba(31, 63, 199, .18);
+  /* The same ring as an OUTLINE colour. box-shadow cannot reach a control that
+     sets boxShadow inline, and this app draws ~1000 buttons with inline style;
+     outline is a property almost nothing sets by hand, costs no layout, and
+     survives whatever the element does to its own background. */
+  --ring-color: rgba(31, 63, 199, .85);
 
   /* ── instrument scales (2026-08 overhaul) ─────────────────────────── */
   /* spacing — strict 4px grid; 2px stays a literal for hairline nudges */
@@ -172,6 +177,7 @@
     --shadow-2: 0 0 0 1px #161c24, 0 14px 44px rgba(0, 0, 0, .85);
     --shadow-pop: 0 0 0 1px #161c24, 0 6px 22px rgba(0, 0, 0, .7);
     --ring: 0 0 0 3px rgba(63, 140, 255, .7);   /* the ring is the only focus indicator */
+    --ring-color: rgba(120, 175, 255, .95);
 
     --stage: #000000;
     --tint-08: rgba(63, 140, 255, .10);

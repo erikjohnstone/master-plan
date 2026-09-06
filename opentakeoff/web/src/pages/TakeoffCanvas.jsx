@@ -154,6 +154,7 @@ import StampPanel from "../components/StampPanel.jsx";
 import ImportSchedulePanel from "../components/ImportSchedulePanel.jsx";
 import SchedulesPanel from "../components/SchedulesPanel.jsx";
 import SweepReviewPanel from "../components/SweepReviewPanel.jsx";
+import Tip from "../components/Tip.jsx";
 import { tableTitleText as scheduleTitleText, rowSheet as scheduleRowSheet } from "../lib/scheduleBrowse.js";
 import { sha256Hex, remapGraphSheetKeys } from "../lib/graphKeys.js";
 import { normRect } from "../lib/sweepThumb.js";
@@ -9995,11 +9996,16 @@ export default function TakeoffCanvas() {
 
   // panel-toggle for the right-edge rail — square like the zoom cluster, count as a
   // tiny mono line under the icon. Lives on the canvas, costs the toolbar zero rows.
+  // The panel toggles carry the longest strings in the product — the Agent's is
+  // a full sentence — and they lived in native titles nobody could reach by
+  // keyboard. Placed bottom: this rail is on the right edge.
   const panelBtn = (onClick, iconName, label, isOn, count) => (
-    <button onClick={onClick} title={label}
+    <Tip text={label} placement="bottom" maxWidth={300}>
+    <button onClick={onClick} aria-label={label} aria-pressed={!!isOn}
       style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, width: 34, minHeight: 34, padding: "5px 0 4px", border: `1px solid ${isOn ? "var(--ink)" : "var(--ink-faint)"}`, background: isOn ? "var(--ink)" : "var(--paper-bright)", color: isOn ? "var(--paper-bright)" : "var(--ink)", cursor: "pointer", fontWeight: 600, lineHeight: 1 }}>
-      <Icon name={iconName} size={15} />{count ? <span style={{ fontFamily: "var(--f-mono)", fontSize: 9.5 }}>{count}</span> : null}
+      <Icon name={iconName} size={15} />{count ? <span style={{ fontFamily: "var(--f-mono)", fontSize: "var(--fs-2xs)" }}>{count}</span> : null}
     </button>
+    </Tip>
   );
   const vRule = <span style={{ width: 1, alignSelf: "stretch", background: "var(--ink-faint)", margin: "0 3px" }} />;
 
@@ -10248,7 +10254,7 @@ export default function TakeoffCanvas() {
   // ── two-deck toolbar (issue #61) ───────────────────────────────────────────
   // drafting-style group caption floated above a deck-2 cluster
   const cluster = (cap, children, style) => (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: 7, position: "relative", paddingTop: 2, ...style }}>
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 7, position: "relative", paddingTop: 2, minWidth: 0, ...style }}>
       <span style={{ position: "absolute", top: -13, left: 1, fontFamily: "var(--f-mono)", fontSize: 8, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink-muted)", whiteSpace: "nowrap", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>{cap}</span>
       {children}
     </span>
@@ -10259,13 +10265,19 @@ export default function TakeoffCanvas() {
   // filled cobalt (+ HUD glow) when armed. Tooltip = label · shortcut.
   const railTile = (id, iconName, label, shortcut, onArm, opts = {}) => {
     const armed = opts.armed ?? (tool === id);
+    // Tip, not a native title: the rail IS the toolset, and a native tooltip
+    // never appears on keyboard focus — so tabbing the rail told you nothing
+    // about any tool. Placed right, because the rail hugs the left edge.
+    const tip = shortcut ? keyText(`${label} · ${shortcut}`) : label;
     return (
-      <button key={id} type="button" onClick={onArm || (() => setTool(id))}
-        title={shortcut ? keyText(`${label} · ${shortcut}`) : label} aria-label={label} aria-pressed={armed}
+      <Tip key={id} text={tip} placement="right">
+      <button type="button" onClick={onArm || (() => setTool(id))}
+        aria-label={label} aria-pressed={armed}
         style={{ position: "relative", width: "var(--ctl-l)", height: "var(--ctl-l)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid transparent", borderRadius: "var(--r-1)", background: armed ? (opts.tint || "var(--cobalt)") : "transparent", color: armed ? "var(--accent-contrast)" : (opts.tint || "var(--ink)"), boxShadow: armed ? "var(--glow)" : "none", cursor: "pointer", lineHeight: 1 }}>
         <Icon name={iconName} size={17} />
         {shortcut && <span aria-hidden="true" style={{ position: "absolute", bottom: 1, right: 3, fontFamily: "var(--f-mono)", fontSize: 8, color: armed ? "var(--accent-contrast)" : "var(--ink-muted)", opacity: armed ? 0.75 : 1 }}>{keyText(shortcut)}</span>}
       </button>
+      </Tip>
     );
   };
   const railLabel = (text) => (
@@ -10613,7 +10625,10 @@ export default function TakeoffCanvas() {
               }
               Promise.resolve(onVoiceCommand(v)).then((ok) => { if (ok) el.value = ""; });
             }}
-            style={{ fontFamily: "var(--f-mono)", fontSize: 11.5, padding: "5px 6px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", width: 150 }}
+            // The one genuinely elastic control in the row: it may give up to
+            // 60px back before anything else is pushed off the edge, and it
+            // reads fine at 90px because what it holds is short ("cpt 1").
+            style={{ fontFamily: "var(--f-mono)", fontSize: 11.5, padding: "5px 6px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", flex: "0 1 150px", minWidth: 90 }}
           />
         )}
         {/* Push-to-talk (RFC #59 recognizer): hold the button (or M) to dictate

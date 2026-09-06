@@ -69,9 +69,9 @@ const natCompare = (a, b) => coll.compare(String(a), String(b));
 
 // shared style atoms — these were re-declared at every call site (one even
 // fresh per matLib row per render); hoisted so identical controls can't drift
-const ip = { padding: "3px 6px", borderRadius: 0, border: "1px solid var(--ink-faint)", fontSize: 12 };
-const btnAddFull = { width: "100%", padding: "6px 10px", borderRadius: 0, border: "1px dashed var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: 12 };
-const btnClearX = { border: "none", background: "none", color: "var(--ink-muted)", cursor: "pointer", fontSize: 13, padding: 0 };
+const ip = { padding: "3px 6px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", fontSize: "var(--fs-s)" };
+const btnAddFull = { width: "100%", padding: "6px 10px", borderRadius: "var(--r-0)", border: "1px dashed var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-s)" };
+const btnClearX = { border: "none", background: "none", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-m)", padding: 0 };
 
 // Per-material-kind coverage presets (adhesive trowel notches, mortar trowels)
 // and the grout-from-tile-geometry calculator live in lib/coverage.js —
@@ -131,7 +131,7 @@ function DimParamInput({ name, internal, units, kind, width, onCommit }) {
       value={draft ?? dimInputStr(internal, units, kind)}
       onChange={(e) => { setDraft(e.target.value); commit(e.target.value); }}
       onBlur={() => { if (draft != null) commit(draft); setDraft(null); }}
-      style={{ width, padding: "3px 5px", borderRadius: 0, border: "1px solid var(--ink-faint)", fontSize: 12 }} />
+      style={{ width, padding: "3px 5px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", fontSize: "var(--fs-s)" }} />
   );
 }
 
@@ -192,7 +192,7 @@ function MaterialsEditor({ materials, onAdd, onUpdate, onRemove, library, libByI
   const OV = "1px solid var(--c-warning)";
   const rv = (m, f) => (
     <button onClick={() => onRevert(m, f)} title="Revert this field to the library value"
-      style={{ padding: "0 3px", border: "none", background: "transparent", color: "var(--c-warning)", cursor: "pointer", fontSize: 11, lineHeight: 1 }}>↺</button>
+      style={{ padding: "0 3px", border: "none", background: "transparent", color: "var(--c-warning)", cursor: "pointer", fontSize: "var(--fs-xs)", lineHeight: 1 }}>↺</button>
   );
   return (
     <>
@@ -224,15 +224,15 @@ function MaterialsEditor({ materials, onAdd, onUpdate, onRemove, library, libByI
               <span title={m.inherited
                 ? `Following ${parentTag || "the family"} — edit any field here and this row stops following (the others keep following)`
                 : `This row is this condition's own${m.origin_id ? ` — it no longer follows ${parentTag || "the family"}` : ""}`}
-                style={{ fontSize: 10, lineHeight: 1, cursor: "default", padding: "2px 3px",
+                style={{ fontSize: "var(--fs-xs)", lineHeight: 1, cursor: "default", padding: "2px 3px",
                   color: m.inherited ? "var(--ink-faint)" : "var(--cobalt)",
                   border: `1px solid ${m.inherited ? "var(--ink-faint)" : "var(--cobalt)"}` }}>{m.inherited ? "↳" : "✎"}</span>
             )}
             {twin && !m.inherited && m.origin_id && onFollowFamilyRow && (
               <button onClick={() => onFollowFamilyRow(m.id)} title={`Follow the family again — take this row's values back from ${parentTag || "the original"}`}
-                style={{ padding: "1px 4px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: 10, lineHeight: 1.4 }}>↺ follow</button>
+                style={{ padding: "1px 4px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-xs)", lineHeight: 1.4 }}>↺ follow</button>
             )}
-            {lm && <span title={`Linked to “${lm.name}” in the material library — amber fields differ from the library values`} style={{ color: "var(--ink-muted)", fontSize: 11, cursor: "default" }}>⛓</span>}
+            {lm && <span title={`Linked to “${lm.name}” in the material library — amber fields differ from the library values`} style={{ color: "var(--ink-muted)", fontSize: "var(--fs-xs)", cursor: "default" }}>⛓</span>}
             <input name="material-name" value={m.name} onChange={(e) => onUpdate(m.id, { name: e.target.value })} placeholder="Material (e.g. Adhesive)" style={{ ...ip, width: 160, ...(ov("name") ? { border: OV } : {}) }} />
             {ov("name") && rv(m, "name")}
             <span style={{ color: "var(--ink-muted)" }}>1</span>
@@ -257,15 +257,15 @@ function MaterialsEditor({ materials, onAdd, onUpdate, onRemove, library, libByI
             {ov("note") && rv(m, "note")}
             {!lm && onPromote && (
               <button onClick={() => onPromote(m)} title="Save this material to the library (this line becomes linked)"
-                style={{ padding: "2px 7px", borderRadius: 0, border: "1px dashed var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: 11 }}>→ lib</button>
+                style={{ padding: "2px 7px", borderRadius: "var(--r-0)", border: "1px dashed var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>→ lib</button>
             )}
             <button onClick={() => onRemove(m.id)} title="Remove this material"
-              style={{ padding: "2px 7px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: 12 }}>✕</button>
+              style={{ padding: "2px 7px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: "var(--fs-s)" }}>✕</button>
             {/* the calculator renders ONLY when the line HAS geometry; a grout
                 line without it keeps its rate untouched behind an explicit
                 opt-in below — never a calculator backfilled with defaults */}
             {showsGroutCalc(m) && (
-              <div style={{ flexBasis: "100%", display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", paddingLeft: 14, color: "var(--ink-muted)", fontSize: 12 }}>
+              <div style={{ flexBasis: "100%", display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", paddingLeft: 14, color: "var(--ink-muted)", fontSize: "var(--fs-s)" }}>
                 {isLinearGrout(m) ? (
                   <>
                     <span>base</span>
@@ -308,7 +308,7 @@ function MaterialsEditor({ materials, onAdd, onUpdate, onRemove, library, libByI
                 {groutRateStale(m, heightFt) && (
                   <button onClick={() => setGrout({})}
                     title={`This line's rate (${m.per} per LF-basis unit) is not what its geometry and this condition's base height derive. A rate figured for a different base height — from a library entry or a hand edit — does not follow the height here. Click to re-derive.`}
-                    style={{ padding: "1px 6px", borderRadius: 0, border: "1px solid var(--c-warning)", background: "transparent", color: "var(--c-warning)", cursor: "pointer", fontSize: 11 }}>
+                    style={{ padding: "1px 6px", borderRadius: "var(--r-0)", border: "1px solid var(--c-warning)", background: "transparent", color: "var(--c-warning)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>
                     ⚠ rate ≠ geometry · re-derive
                   </button>
                 )}
@@ -320,7 +320,7 @@ function MaterialsEditor({ materials, onAdd, onUpdate, onRemove, library, libByI
                   title={isLinearGrout(m)
                     ? "Start the base-grout calculator with standard geometry (3/8″ thick @ 1/8″ joint, 25 lb bag) — the piece height comes from the condition. REPLACES this line's coverage rate and note"
                     : "Start the grout calculator with standard tile geometry (12×24×3/8″ @ 1/8″, 25 lb bag) — REPLACES this line's coverage rate and note with the derived values"}
-                  style={{ padding: "2px 7px", borderRadius: 0, border: "1px dashed var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: 11 }}>
+                  style={{ padding: "2px 7px", borderRadius: "var(--r-0)", border: "1px dashed var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>
                   {isLinearGrout(m) ? "derive from base geometry…" : "derive from tile geometry…"}
                 </button>
                 {ov("grout") && rv(m, "grout")}
@@ -337,13 +337,13 @@ function MaterialsEditor({ materials, onAdd, onUpdate, onRemove, library, libByI
           {dropped.map((k) => {
             const src = parentRows.find((r) => r.id === k);
             return (
-              <div key={k} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--ink-muted)" }}>
+              <div key={k} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "var(--fs-xs)", color: "var(--ink-muted)" }}>
                 <span style={{ color: "var(--c-danger)" }}>✕</span>
                 <span style={{ textDecoration: "line-through" }}>{src?.name || "(removed material)"}</span>
-                <span style={{ fontSize: 10 }}>removed here</span>
+                <span style={{ fontSize: "var(--fs-xs)" }}>removed here</span>
                 {src && onRestoreDroppedRow && (
                   <button onClick={() => onRestoreDroppedRow(k)} title={`Put it back — takes the row from ${parentTag || "the family"} again`}
-                    style={{ padding: "1px 4px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: 10, lineHeight: 1.4 }}>↺ restore</button>
+                    style={{ padding: "1px 4px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-xs)", lineHeight: 1.4 }}>↺ restore</button>
                 )}
               </div>
             );
@@ -351,7 +351,7 @@ function MaterialsEditor({ materials, onAdd, onUpdate, onRemove, library, libByI
         </div>
       )}
       <button onClick={onAdd}
-        style={{ marginTop: 2, padding: "4px 10px", borderRadius: 0, border: "1px dashed var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: 12 }}>+ add material</button>
+        style={{ marginTop: 2, padding: "4px 10px", borderRadius: "var(--r-0)", border: "1px dashed var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-s)" }}>+ add material</button>
       {onAttach && (library || []).length > 0 && (
         <select name="attach-material" value="" onChange={(e) => { if (e.target.value) onAttach(e.target.value); }}
           title="Attach a material from the library — the line copies the library values and stays linked"
@@ -395,7 +395,7 @@ function AddValueInput({ onAdd }) {
     <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
       <input name="column-add-value" value={v} onChange={(e) => setV(e.target.value)} onKeyDown={(e) => e.key === "Enter" && !e.nativeEvent.isComposing && commit()} placeholder="add value" style={{ ...ip, width: 90 }} />
       <button onClick={commit} title="Add this value to the list"
-        style={{ padding: "2px 7px", borderRadius: 0, border: "1px dashed var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: 12 }}>+</button>
+        style={{ padding: "2px 7px", borderRadius: "var(--r-0)", border: "1px dashed var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-s)" }}>+</button>
     </span>
   );
 }
@@ -429,23 +429,23 @@ export function ConditionAppearanceEditor({ cond: c, onUpdateCond, onSetCondPara
   const rule = () => <span aria-hidden style={{ width: 1, alignSelf: "stretch", background: "var(--ink-faint)", margin: "0 3px" }} />;
   return (
     <div style={isRow
-      ? { padding: "6px 2px 2px", display: "flex", flexDirection: "row", flexWrap: "wrap", alignItems: "center", columnGap: 10, rowGap: 8, fontSize: 11 }
-      : { padding: "4px 12px 10px", display: "flex", flexDirection: "column", gap: 7, fontSize: 11 }}>
+      ? { padding: "6px 2px 2px", display: "flex", flexDirection: "row", flexWrap: "wrap", alignItems: "center", columnGap: 10, rowGap: 8, fontSize: "var(--fs-xs)" }
+      : { padding: "4px 12px 10px", display: "flex", flexDirection: "column", gap: 7, fontSize: "var(--fs-xs)" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
         <input name="condition-finish-tag" value={c.finish_tag} onChange={(e) => onUpdateCond({ finish_tag: e.target.value })}
           title="Rename this condition / finish tag"
-          style={{ width: 88, padding: "3px 6px", borderRadius: 0, border: "1px solid var(--ink-faint)", fontFamily: "var(--f-mono)", fontWeight: 700, fontSize: 12, color: "var(--ink)" }} />
+          style={{ width: 88, padding: "3px 6px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", fontFamily: "var(--f-mono)", fontWeight: 700, fontSize: "var(--fs-s)", color: "var(--ink)" }} />
         <span style={{ display: "flex", alignItems: "center", gap: 4 }} title="Multiply this condition by N identical units (measure one, ×N)">
           <span style={{ color: "var(--ink-muted)" }}>×</span>
           <input name="condition-multiplier" type="number" min="1" step="1" value={c.multiplier || 1}
             onChange={(e) => onUpdateCond({ multiplier: Math.max(1, parseInt(e.target.value, 10) || 1) })}
-            style={{ width: 46, padding: "3px 5px", borderRadius: 0, border: "1px solid var(--ink-faint)", fontSize: 12 }} />
+            style={{ width: 46, padding: "3px 5px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", fontSize: "var(--fs-s)" }} />
         </span>
         <span style={{ display: "flex", alignItems: "center", gap: 4 }} title="Waste % — a flooring allowance added on top of the measured quantity in the Report. You choose it per condition (e.g. ~8% straight-lay LVP, ~15% diagonal, ~20% herringbone).">
           <span style={{ color: "var(--ink-muted)" }}>Waste</span>
           <input name="condition-waste-pct" type="number" min="0" step="1" value={c.waste_pct ?? 0}
             onChange={(e) => onUpdateCond({ waste_pct: Math.max(0, parseFloat(e.target.value) || 0) })}
-            style={{ width: 50, padding: "3px 5px", borderRadius: 0, border: "1px solid var(--ink-faint)", fontSize: 12 }} />
+            style={{ width: 50, padding: "3px 5px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", fontSize: "var(--fs-s)" }} />
           <span style={{ color: "var(--ink-muted)" }}>%</span>
         </span>
       </div>
@@ -454,28 +454,28 @@ export function ConditionAppearanceEditor({ cond: c, onUpdateCond, onSetCondPara
         <div ref={paletteRef} style={{ display: "flex", alignItems: "center", gap: 6, position: "relative" }}>
           <button data-testid="line-swatch" title={`Line color — ${c.color || "default"}`} aria-expanded={paletteOpen === "line"}
             onClick={() => setPaletteOpen((v) => (v === "line" ? null : "line"))}
-            style={{ display: "flex", alignItems: "center", gap: 5, padding: "2px 7px 2px 4px", borderRadius: 0, border: `1px solid ${paletteOpen === "line" ? "var(--ink)" : "var(--ink-faint)"}`, background: "var(--paper-bright)", cursor: "pointer", fontSize: 10.5, color: "var(--ink-muted)" }}>
-            <span aria-hidden style={{ width: 16, height: 16, display: "block", borderRadius: 4, border: "1px solid var(--ink-faint)", background: `linear-gradient(to top right, transparent calc(50% - 1.5px), ${activeColor} calc(50% - 1.5px), ${activeColor} calc(50% + 1.5px), transparent calc(50% + 1.5px))` }} />
+            style={{ display: "flex", alignItems: "center", gap: 5, padding: "2px 7px 2px 4px", borderRadius: "var(--r-0)", border: `1px solid ${paletteOpen === "line" ? "var(--ink)" : "var(--ink-faint)"}`, background: "var(--paper-bright)", cursor: "pointer", fontSize: "var(--fs-xs)", color: "var(--ink-muted)" }}>
+            <span aria-hidden style={{ width: 16, height: 16, display: "block", borderRadius: "var(--r-1)", border: "1px solid var(--ink-faint)", background: `linear-gradient(to top right, transparent calc(50% - 1.5px), ${activeColor} calc(50% - 1.5px), ${activeColor} calc(50% + 1.5px), transparent calc(50% + 1.5px))` }} />
             Line
           </button>
           <button data-testid="fill-swatch" title={`Fill color — ${c.fill === NO_FILL || !c.fill ? "none" : c.fill}`} aria-expanded={paletteOpen === "fill"}
             onClick={() => setPaletteOpen((v) => (v === "fill" ? null : "fill"))}
-            style={{ display: "flex", alignItems: "center", gap: 5, padding: "2px 7px 2px 4px", borderRadius: 0, border: `1px solid ${paletteOpen === "fill" ? "var(--ink)" : "var(--ink-faint)"}`, background: "var(--paper-bright)", cursor: "pointer", fontSize: 10.5, color: "var(--ink-muted)" }}>
+            style={{ display: "flex", alignItems: "center", gap: 5, padding: "2px 7px 2px 4px", borderRadius: "var(--r-0)", border: `1px solid ${paletteOpen === "fill" ? "var(--ink)" : "var(--ink-faint)"}`, background: "var(--paper-bright)", cursor: "pointer", fontSize: "var(--fs-xs)", color: "var(--ink-muted)" }}>
             {c.fill && c.fill !== NO_FILL
-              ? <span aria-hidden style={{ width: 16, height: 16, display: "block", borderRadius: 4, background: c.fill, opacity: 0.55, border: "1px solid var(--ink-faint)" }} />
-              : <span aria-hidden style={{ width: 16, height: 16, display: "block", borderRadius: 4, border: "1px solid var(--ink-faint)", fontSize: 9, lineHeight: "14px", textAlign: "center", color: "var(--c-danger)" }}>⦸</span>}
+              ? <span aria-hidden style={{ width: 16, height: 16, display: "block", borderRadius: "var(--r-1)", background: c.fill, opacity: 0.55, border: "1px solid var(--ink-faint)" }} />
+              : <span aria-hidden style={{ width: 16, height: 16, display: "block", borderRadius: "var(--r-1)", border: "1px solid var(--ink-faint)", fontSize: "var(--fs-2xs)", lineHeight: "14px", textAlign: "center", color: "var(--c-danger)" }}>⦸</span>}
             Fill
           </button>
           {paletteOpen && (
             <div role="dialog" aria-label={paletteOpen === "line" ? "Line color" : "Fill color"}
-              style={{ position: "absolute", top: 26, left: paletteOpen === "line" ? 0 : 62, zIndex: 30, display: "grid", gridTemplateColumns: "repeat(6, 16px)", gap: 4, padding: 8, background: "var(--paper-bright)", border: "1px solid var(--ink-faint)", borderRadius: 0, boxShadow: "var(--shadow-pop)" }}>
+              style={{ position: "absolute", top: 26, left: paletteOpen === "line" ? 0 : 62, zIndex: 30, display: "grid", gridTemplateColumns: "repeat(6, 16px)", gap: 4, padding: 8, background: "var(--paper-bright)", border: "1px solid var(--ink-faint)", borderRadius: "var(--r-0)", boxShadow: "var(--shadow-pop)" }}>
               {paletteOpen === "fill" && (
-                <button title="No fill" onClick={() => { onUpdateCond({ fill: NO_FILL }); setPaletteOpen(null); }} style={{ width: 16, height: 16, borderRadius: 4, padding: 0, background: "var(--paper-bright)", border: c.fill === NO_FILL ? "2px solid var(--ink)" : "1px solid var(--ink-faint)", cursor: "pointer", fontSize: 9, lineHeight: "12px", color: "var(--c-danger)" }}>⦸</button>
+                <button title="No fill" onClick={() => { onUpdateCond({ fill: NO_FILL }); setPaletteOpen(null); }} style={{ width: 16, height: 16, borderRadius: "var(--r-1)", padding: 0, background: "var(--paper-bright)", border: c.fill === NO_FILL ? "2px solid var(--ink)" : "1px solid var(--ink-faint)", cursor: "pointer", fontSize: "var(--fs-2xs)", lineHeight: "12px", color: "var(--c-danger)" }}>⦸</button>
               )}
               {PALETTE.map((p) => {
                 const on = paletteOpen === "line" ? c.color === p : c.fill === p;
                 return <button key={p} title={p} onClick={() => { onUpdateCond(paletteOpen === "line" ? { color: p } : { fill: p }); setPaletteOpen(null); }}
-                  style={{ width: 16, height: 16, borderRadius: 4, padding: 0, background: p, opacity: paletteOpen === "fill" ? 0.55 : 1, border: on ? "2px solid var(--ink)" : "1px solid var(--ink-faint)", cursor: "pointer" }} />;
+                  style={{ width: 16, height: 16, borderRadius: "var(--r-1)", padding: 0, background: p, opacity: paletteOpen === "fill" ? 0.55 : 1, border: on ? "2px solid var(--ink)" : "1px solid var(--ink-faint)", cursor: "pointer" }} />;
               })}
             </div>
           )}
@@ -484,12 +484,12 @@ export function ConditionAppearanceEditor({ cond: c, onUpdateCond, onSetCondPara
         <>
           <div style={{ display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
             <span style={{ color: "var(--ink-muted)", width: 26 }}>Line</span>
-            {PALETTE.map((p) => <button key={p} title={p} onClick={() => onUpdateCond({ color: p })} style={{ width: 16, height: 16, borderRadius: 4, background: p, border: c.color === p ? "2px solid var(--ink)" : "1px solid var(--ink-faint)", cursor: "pointer" }} />)}
+            {PALETTE.map((p) => <button key={p} title={p} onClick={() => onUpdateCond({ color: p })} style={{ width: 16, height: 16, borderRadius: "var(--r-1)", background: p, border: c.color === p ? "2px solid var(--ink)" : "1px solid var(--ink-faint)", cursor: "pointer" }} />)}
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
             <span style={{ color: "var(--ink-muted)", width: 26 }}>Fill</span>
-            <button title="No fill" onClick={() => onUpdateCond({ fill: NO_FILL })} style={{ width: 16, height: 16, borderRadius: 4, background: "var(--paper-bright)", border: c.fill === NO_FILL ? "2px solid var(--ink)" : "1px solid var(--ink-faint)", cursor: "pointer", fontSize: 9, lineHeight: "12px", color: "var(--c-danger)" }}>⦸</button>
-            {PALETTE.map((p) => <button key={p} title={p} onClick={() => onUpdateCond({ fill: p })} style={{ width: 16, height: 16, borderRadius: 4, background: p, opacity: 0.55, border: c.fill === p ? "2px solid var(--ink)" : "1px solid var(--ink-faint)", cursor: "pointer" }} />)}
+            <button title="No fill" onClick={() => onUpdateCond({ fill: NO_FILL })} style={{ width: 16, height: 16, borderRadius: "var(--r-1)", background: "var(--paper-bright)", border: c.fill === NO_FILL ? "2px solid var(--ink)" : "1px solid var(--ink-faint)", cursor: "pointer", fontSize: "var(--fs-2xs)", lineHeight: "12px", color: "var(--c-danger)" }}>⦸</button>
+            {PALETTE.map((p) => <button key={p} title={p} onClick={() => onUpdateCond({ fill: p })} style={{ width: 16, height: 16, borderRadius: "var(--r-1)", background: p, opacity: 0.55, border: c.fill === p ? "2px solid var(--ink)" : "1px solid var(--ink-faint)", cursor: "pointer" }} />)}
           </div>
         </>
       )}
@@ -497,15 +497,15 @@ export function ConditionAppearanceEditor({ cond: c, onUpdateCond, onSetCondPara
       <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
         <span style={{ display: "flex", alignItems: "center", gap: 4, position: "relative" }}>
           <button onClick={() => setHatchOpen((v) => !v)} title="Choose a hatch pattern"
-            style={{ display: "flex", alignItems: "center", gap: 5, padding: "2px 7px 2px 2px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "var(--paper-bright)", cursor: "pointer", lineHeight: 0 }}>
-            <span style={{ borderRadius: 4, overflow: "hidden", lineHeight: 0 }}><HatchSwatch type={c.hatch || "solid"} line={c.color} fill={c.fill} /></span>
-            <span style={{ fontSize: 10.5, color: "var(--ink-muted)", lineHeight: 1 }}>{(HATCHES.find((h) => h.id === (c.hatch || "solid")) || {}).label || "Solid"} ▾</span>
+            style={{ display: "flex", alignItems: "center", gap: 5, padding: "2px 7px 2px 2px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "var(--paper-bright)", cursor: "pointer", lineHeight: 0 }}>
+            <span style={{ borderRadius: "var(--r-1)", overflow: "hidden", lineHeight: 0 }}><HatchSwatch type={c.hatch || "solid"} line={c.color} fill={c.fill} /></span>
+            <span style={{ fontSize: "var(--fs-xs)", color: "var(--ink-muted)", lineHeight: 1 }}>{(HATCHES.find((h) => h.id === (c.hatch || "solid")) || {}).label || "Solid"} ▾</span>
           </button>
           {hatchOpen && (
-            <div style={{ position: "absolute", top: 26, left: 0, zIndex: 30, display: "grid", gridTemplateColumns: "repeat(6, auto)", gap: 4, padding: 8, background: "var(--paper-bright)", border: "1px solid var(--ink-faint)", borderRadius: 0, boxShadow: "var(--shadow-pop)" }}>
+            <div style={{ position: "absolute", top: 26, left: 0, zIndex: 30, display: "grid", gridTemplateColumns: "repeat(6, auto)", gap: 4, padding: 8, background: "var(--paper-bright)", border: "1px solid var(--ink-faint)", borderRadius: "var(--r-0)", boxShadow: "var(--shadow-pop)" }}>
               {HATCHES.map((h) => {
                 const hOn = (c.hatch || "solid") === h.id;
-                return <button key={h.id} title={h.label} onClick={() => { onUpdateCond({ hatch: h.id }); setHatchOpen(false); }} style={{ padding: 1, borderRadius: 0, border: hOn ? `2px solid ${activeColor}` : "1px solid var(--ink-faint)", background: "var(--paper-bright)", cursor: "pointer", lineHeight: 0 }}><HatchSwatch type={h.id} line={c.color} fill={c.fill} /></button>;
+                return <button key={h.id} title={h.label} onClick={() => { onUpdateCond({ hatch: h.id }); setHatchOpen(false); }} style={{ padding: 1, borderRadius: "var(--r-0)", border: hOn ? `2px solid ${activeColor}` : "1px solid var(--ink-faint)", background: "var(--paper-bright)", cursor: "pointer", lineHeight: 0 }}><HatchSwatch type={h.id} line={c.color} fill={c.fill} /></button>;
               })}
             </div>
           )}
@@ -513,7 +513,7 @@ export function ConditionAppearanceEditor({ cond: c, onUpdateCond, onSetCondPara
         <span style={{ display: "flex", alignItems: "center", gap: 4 }} title="Line style — the outline dash for this finish's floor-area and linear takeoffs (canvas + Marked Set PDF). Surface walls and deducts keep their own dashing.">
           <span style={{ color: "var(--ink-muted)" }}>Style</span>
           <select name="condition-line-style" value={c.line_style || "solid"} onChange={(e) => onUpdateCond({ line_style: e.target.value })}
-            style={{ fontSize: 11, border: "1px solid var(--ink-faint)", background: "var(--paper-bright)", padding: "1px 3px" }}>
+            style={{ fontSize: "var(--fs-xs)", border: "1px solid var(--ink-faint)", background: "var(--paper-bright)", padding: "1px 3px" }}>
             {LINE_STYLE_IDS.map((id) => <option key={id} value={id}>{LINE_STYLES[id].label}</option>)}
           </select>
         </span>
@@ -554,7 +554,7 @@ export function ConditionAppearanceEditor({ cond: c, onUpdateCond, onSetCondPara
           <select name="condition-roll-optin" value=""
             title="Make this condition a roll-goods material — its floor areas get figured into roll cuts (seams, order footage, a cut diagram)"
             onChange={(e) => { if (e.target.value) onUpdateCond({ roll_setup: mintRollSetup(e.target.value) }); }}
-            style={{ padding: "3px 6px", borderRadius: 0, border: "1px dashed var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", fontSize: 11.5, cursor: "pointer" }}>
+            style={{ padding: "3px 6px", borderRadius: "var(--r-0)", border: "1px dashed var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", fontSize: "var(--fs-s)", cursor: "pointer" }}>
             <option value="">+ roll goods…</option>
             <option value="carpet">Broadloom carpet</option>
             <option value="sheet_vinyl">Sheet vinyl</option>
@@ -568,19 +568,19 @@ export function ConditionAppearanceEditor({ cond: c, onUpdateCond, onSetCondPara
         const wFt = Math.floor(Number(rs.roll_width_ft) || 0);
         const wIn = Math.round(((Number(rs.roll_width_ft) || 0) - wFt) * 12);
         const setW = (ft, inch) => patch({ roll_width_ft: Math.max(0.5, (Number(ft) || 0) + (Number(inch) || 0) / 12) });
-        const numIp = { width: 46, padding: "3px 5px", borderRadius: 0, border: "1px solid var(--ink-faint)", fontSize: 12 };
-        const sel = { padding: "2px 4px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "var(--paper-bright)", fontSize: 11.5 };
+        const numIp = { width: 46, padding: "3px 5px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", fontSize: "var(--fs-s)" };
+        const sel = { padding: "2px 4px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "var(--paper-bright)", fontSize: "var(--fs-s)" };
         return (
           <div style={{ display: "flex", flexDirection: "column", gap: 5, paddingTop: 6, marginTop: 1, borderTop: "1px solid var(--ink-faint)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ color: "var(--ink-muted)", fontSize: 10, letterSpacing: 0.4, textTransform: "uppercase" }}
+              <span style={{ color: "var(--ink-muted)", fontSize: "var(--fs-xs)", letterSpacing: 0.4, textTransform: "uppercase" }}
                 title="Roll-goods setup — the engine figures seams, cuts, and order footage from this condition's floor areas">Roll goods</span>
               <select name="condition-roll-material" value={rs.material || "carpet"} onChange={(e) => patch({ material: e.target.value })} style={sel}
                 title="Material class — sets the cut overlay's material-true color">
                 {ROLL_FLOORING_TYPES.map((ft) => <option key={ft} value={ft}>{ft === "carpet" ? "carpet" : ft === "sheet_vinyl" ? "sheet vinyl" : "rubber"}</option>)}
               </select>
               <button onClick={() => onUpdateCond({ roll_setup: undefined })} title="Remove the roll-goods setup (cuts and order footage stop being figured; manual cut edits on shapes are kept but inert)"
-                style={{ marginLeft: "auto", padding: "1px 6px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: 11 }}>✕</button>
+                style={{ marginLeft: "auto", padding: "1px 6px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>✕</button>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap" }}>
               <span style={{ color: "var(--ink-muted)" }}>Roll</span>
@@ -623,7 +623,7 @@ export function ConditionAppearanceEditor({ cond: c, onUpdateCond, onSetCondPara
               </select>
             </div>
             {rollInfo && (
-              <div style={{ fontFamily: "var(--f-mono,monospace)", fontSize: 11, color: "var(--ink)" }}
+              <div style={{ fontFamily: "var(--f-mono,monospace)", fontSize: "var(--fs-xs)", color: "var(--ink)" }}
                 title="The figured order — how far down the roll the cuts reach (side-by-side cuts share length), rounded up to the inch. The Roll panel has the cut diagram.">
                 Figured: order {ftIn(rollInfo.orderFt)} · {rollInfo.qty} {rollInfo.unit.toUpperCase()}
                 {rollInfo.config.rollLengthFt > 0 ? ` · ${rollInfo.rollCount} roll${rollInfo.rollCount === 1 ? "" : "s"}` : ""}
@@ -635,14 +635,14 @@ export function ConditionAppearanceEditor({ cond: c, onUpdateCond, onSetCondPara
       })()}
       {!isRow && c.spec && typeof c.spec === "object" && !Array.isArray(c.spec) && (
         <div style={{ display: "flex", flexDirection: "column", gap: 4, paddingTop: 6, marginTop: 1, borderTop: "1px solid var(--ink-faint)" }}>
-          <span style={{ color: "var(--ink-muted)", fontSize: 10, letterSpacing: 0.4, textTransform: "uppercase" }}
+          <span style={{ color: "var(--ink-muted)", fontSize: "var(--fs-xs)", letterSpacing: 0.4, textTransform: "uppercase" }}
             title="Product spec imported from the finish schedule — editable; shown as read-only columns in the Report / CSV / XLSX">Spec</span>
           {SPEC_FIELDS.map(({ field, header }) => (
             <label key={field} style={{ display: "flex", alignItems: "center", gap: 6 }}>
               <span style={{ color: "var(--ink-muted)", width: 74, flexShrink: 0 }}>{header}</span>
               <input name={`condition-spec-${field}`} value={c.spec[field] || ""}
                 onChange={(e) => onUpdateCond({ spec: { ...c.spec, [field]: e.target.value } })}
-                style={{ flex: 1, minWidth: 0, padding: "3px 5px", borderRadius: 0, border: "1px solid var(--ink-faint)", fontSize: 12, color: "var(--ink)" }} />
+                style={{ flex: 1, minWidth: 0, padding: "3px 5px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", fontSize: "var(--fs-s)", color: "var(--ink)" }} />
             </label>
           ))}
         </div>
@@ -674,15 +674,15 @@ function TransitionsAction({ cond: c, sources, draft, setDraft, result, setResul
   const run = () => { if (ready) setResult(onDerive(draft.a, draft.b)); };
   const selStyle = { ...ip, background: "var(--paper-bright)", color: "var(--ink)", maxWidth: 110 };
   return (
-    <div style={{ padding: "7px 12px 9px", background: "var(--paper-cream)", borderTop: "1px solid var(--ink-faint)", fontSize: 11.5 }}>
+    <div style={{ padding: "7px 12px 9px", background: "var(--paper-cream)", borderTop: "1px solid var(--ink-faint)", fontSize: "var(--fs-s)" }}>
       {!open ? (
         <button onClick={() => { setDraft({ id: c.id, a: opts[0]?.id || "", b: opts[1]?.id || "" }); setResult(null); }}
           disabled={opts.length < 2}
           title={opts.length < 2
             ? "Two finishes with measured rooms on the open sheets are needed before anything can meet."
             : `Derive where two finishes meet onto ${c.finish_tag}. Runs where the rooms butt inside one open space commit dashed, pending Accept; runs across a wall are reported and never counted — that transition is a threshold in a doorway no trace can locate.`}
-          style={{ padding: "3px 9px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent",
-            color: opts.length < 2 ? "var(--ink-faint)" : "var(--ink)", cursor: opts.length < 2 ? "default" : "pointer", fontSize: 11.5 }}>
+          style={{ padding: "3px 9px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "transparent",
+            color: opts.length < 2 ? "var(--ink-faint)" : "var(--ink)", cursor: opts.length < 2 ? "default" : "pointer", fontSize: "var(--fs-s)" }}>
           ⟂ Transitions…
         </button>
       ) : (
@@ -699,9 +699,9 @@ function TransitionsAction({ cond: c, sources, draft, setDraft, result, setResul
               {opts.map((s) => <option key={s.id} value={s.id}>{s.finish_tag} ({s.rooms})</option>)}
             </select>
             <button name="transition-derive" onClick={run} disabled={!ready}
-              style={{ padding: "2px 9px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent",
-                color: ready ? "var(--ink)" : "var(--ink-faint)", cursor: ready ? "pointer" : "default", fontSize: 11 }}>Derive</button>
-            <button onClick={close} style={{ padding: "2px 6px", border: "none", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: 11 }}>Cancel</button>
+              style={{ padding: "2px 9px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "transparent",
+                color: ready ? "var(--ink)" : "var(--ink-faint)", cursor: ready ? "pointer" : "default", fontSize: "var(--fs-xs)" }}>Derive</button>
+            <button onClick={close} style={{ padding: "2px 6px", border: "none", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>Cancel</button>
           </div>
           {result?.error && (
             <div style={{ marginTop: 6, padding: "4px 6px", border: "1px solid var(--c-warning)", color: "var(--ink)", background: "var(--paper-bright)" }}>{result.error}</div>
@@ -715,7 +715,7 @@ function TransitionsAction({ cond: c, sources, draft, setDraft, result, setResul
               </div>
               {result.withheld?.length > 0 && (
                 <div style={{ marginTop: 5, paddingTop: 5, borderTop: "1px solid var(--ink-faint)" }}>
-                  <div style={{ color: "var(--ink-muted)", fontSize: 10.5, letterSpacing: 0.4, textTransform: "uppercase" }}
+                  <div style={{ color: "var(--ink-muted)", fontSize: "var(--fs-xs)", letterSpacing: 0.4, textTransform: "uppercase" }}
                     title="These rooms are adjacent across a partition. The transition is a threshold in the doorway, and nothing in the trace record says where the doorway is — so it is reported, never counted. Measure it at the door.">
                     Reported, never counted
                   </div>
@@ -726,7 +726,7 @@ function TransitionsAction({ cond: c, sources, draft, setDraft, result, setResul
                         <span style={{ color: "var(--ink-muted)" }}> — {w.between.join(" / ")}</span>
                         {onLocate2 && (
                           <button onClick={() => onLocate2(w.sheet_id, w.at)} title="Center the sheet on this run — find the door and measure the threshold there"
-                            style={{ marginLeft: 5, padding: 0, border: "none", background: "transparent", color: "var(--cobalt)", cursor: "pointer", fontSize: 11, textDecoration: "underline" }}>look</button>
+                            style={{ marginLeft: 5, padding: 0, border: "none", background: "transparent", color: "var(--cobalt)", cursor: "pointer", fontSize: "var(--fs-xs)", textDecoration: "underline" }}>look</button>
                         )}
                       </li>
                     ))}
@@ -946,8 +946,8 @@ function TakeoffsPanel({
           onDoubleClick={() => onLocate(c.id)}
           title={reassigning ? "Reassign selected shape to this condition" : keyText("Make this the active condition (double-click zooms to its takeoffs · ⌘-click / ⇧-click selects for bulk edit · drag to the top-bar palette for one-click access)")}
           style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 12px", cursor: "pointer", outline: reassigning ? "1px dashed var(--cobalt)" : "none", outlineOffset: -3, userSelect: "none" }}>
-          {hot && <span title={pinned ? `Palette shortcut — press ${hIdx + 1} to activate` : `Press ${hIdx + 1} to activate (pin to lock this number)`} style={{ fontSize: 9, fontFamily: "var(--f-mono,monospace)", color: pinned ? "var(--cobalt)" : "var(--ink-muted)", border: `1px solid ${pinned ? "var(--cobalt)" : "var(--ink-faint)"}`, borderRadius: 3, padding: "0 3px", flexShrink: 0 }}>{hIdx + 1}</span>}
-          <span style={{ borderRadius: 4, overflow: "hidden", lineHeight: 0, flexShrink: 0 }}><HatchSwatch type={c.hatch || "solid"} line={c.color} fill={c.fill} /></span>
+          {hot && <span title={pinned ? `Palette shortcut — press ${hIdx + 1} to activate` : `Press ${hIdx + 1} to activate (pin to lock this number)`} style={{ fontSize: "var(--fs-2xs)", fontFamily: "var(--f-mono,monospace)", color: pinned ? "var(--cobalt)" : "var(--ink-muted)", border: `1px solid ${pinned ? "var(--cobalt)" : "var(--ink-faint)"}`, borderRadius: "var(--r-1)", padding: "0 3px", flexShrink: 0 }}>{hIdx + 1}</span>}
+          <span style={{ borderRadius: "var(--r-1)", overflow: "hidden", lineHeight: 0, flexShrink: 0 }}><HatchSwatch type={c.hatch || "solid"} line={c.color} fill={c.fill} /></span>
           <div style={{ minWidth: 0, flex: 1 }}>
             <div style={{ fontWeight: on ? 700 : 600, color: "var(--ink)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               {/* a twin reads as one: whose it is, and how many of its rows have gone their own way */}
@@ -955,10 +955,10 @@ function TakeoffsPanel({
               {c.finish_tag}{mult > 1 ? <span style={{ color: "var(--ink-muted)", fontWeight: 500 }}> ×{mult}</span> : null}
               {c.variant_of && localCount(c) > 0 ? (
                 <span title={`${localCount(c)} material row${localCount(c) === 1 ? "" : "s"} no longer follow${localCount(c) === 1 ? "s" : ""} the family`}
-                  style={{ marginLeft: 5, fontFamily: "var(--f-mono,monospace)", fontSize: 9, fontWeight: 500, color: "var(--cobalt)", border: "1px solid var(--cobalt)", borderRadius: 3, padding: "0 3px" }}>{localCount(c)}</span>
+                  style={{ marginLeft: 5, fontFamily: "var(--f-mono,monospace)", fontSize: "var(--fs-2xs)", fontWeight: 500, color: "var(--cobalt)", border: "1px solid var(--cobalt)", borderRadius: "var(--r-1)", padding: "0 3px" }}>{localCount(c)}</span>
               ) : null}
             </div>
-            <div style={{ fontFamily: "var(--f-mono,monospace)", fontSize: 11, color: "var(--ink-muted)" }}>
+            <div style={{ fontFamily: "var(--f-mono,monospace)", fontSize: "var(--fs-xs)", color: "var(--ink-muted)" }}>
               {qtys({ sf, wsf, lf, ea })}{!sf && !wsf && !lf && !ea && !projDiff ? "—" : ""}
               {projDiff ? (
                 <span title="Σ = whole project, every sheet. The leading numbers count the open sheets only." style={{ color: "var(--ink-faint)" }}>
@@ -967,21 +967,21 @@ function TakeoffsPanel({
               ) : null}
             </div>
           </div>
-          <span style={{ fontFamily: "var(--f-mono,monospace)", fontSize: 10.5, color: "var(--ink-muted)", flexShrink: 0 }}>{shapeCount}▦</span>
+          <span style={{ fontFamily: "var(--f-mono,monospace)", fontSize: "var(--fs-xs)", color: "var(--ink-muted)", flexShrink: 0 }}>{shapeCount}▦</span>
           <button onClick={(e) => { e.stopPropagation(); onLocate(c.id); }} title="Zoom the canvas to this condition's takeoffs"
-            style={{ flexShrink: 0, padding: "2px 6px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: 12, lineHeight: 1 }}>⌖</button>
+            style={{ flexShrink: 0, padding: "2px 6px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-s)", lineHeight: 1 }}>⌖</button>
           <button onClick={(e) => { e.stopPropagation(); onSetActive(c.id); setPanelMatOpen((v) => (on ? !v : true)); }}
             title="Supporting Materials — labor, subfloor & materials for this condition"
-            style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 3, padding: "2px 6px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: matOn ? "var(--ink)" : "transparent", color: matOn ? "var(--paper-bright)" : "var(--ink-muted)", cursor: "pointer", fontSize: 11 }}>
+            style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", gap: 3, padding: "2px 6px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: matOn ? "var(--ink)" : "transparent", color: matOn ? "var(--paper-bright)" : "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>
             <Icon name="product" size={11} />{c.materials?.length ? c.materials.length : ""}
           </button>
           <button onClick={(e) => { e.stopPropagation(); onTogglePin(c.id); }}
             title={pinned ? "Unpin from the top-bar palette" : (palette.length >= 9 ? "Palette is full (9)" : "Pin to the top-bar palette for one-click access")}
-            style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", padding: "2px 5px", borderRadius: 0, border: `1px solid ${pinned ? "var(--cobalt)" : "var(--ink-faint)"}`, background: "transparent", color: pinned ? "var(--cobalt)" : (!pinned && palette.length >= 9 ? "var(--ink-faint)" : "var(--ink-muted)"), cursor: "pointer", lineHeight: 0 }}>
+            style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", padding: "2px 5px", borderRadius: "var(--r-0)", border: `1px solid ${pinned ? "var(--cobalt)" : "var(--ink-faint)"}`, background: "transparent", color: pinned ? "var(--cobalt)" : (!pinned && palette.length >= 9 ? "var(--ink-faint)" : "var(--ink-muted)"), cursor: "pointer", lineHeight: 0 }}>
             <Icon name="pin" size={12} />
           </button>
           <button onClick={(e) => { e.stopPropagation(); onDeleteCondition(c.id); }} title="Delete this condition (and its takeoffs)"
-            style={{ flexShrink: 0, padding: "2px 6px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: 12 }}>✕</button>
+            style={{ flexShrink: 0, padding: "2px 6px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: "var(--fs-s)" }}>✕</button>
         </div>
         {/* properties for the ACTIVE condition — the appearance editing that
             used to live in its own toolbar row above the canvas. Extracted to
@@ -991,7 +991,7 @@ function TakeoffsPanel({
         {on && onDeriveTransitions && <TransitionsAction cond={c} sources={transitionSources} draft={transDraft} setDraft={setTransDraft}
           result={transResult} setResult={setTransResult} onDerive={onDeriveTransitions} onLocate2={onLocateTransition} />}
         {matOn && (
-          <div style={{ padding: "8px 12px 10px", background: "var(--paper-cream)", borderTop: "1px solid var(--ink-faint)", fontSize: 11.5 }}>
+          <div style={{ padding: "8px 12px 10px", background: "var(--paper-cream)", borderTop: "1px solid var(--ink-faint)", fontSize: "var(--fs-s)" }}>
             <div style={{ marginBottom: 6, color: "var(--ink-muted)" }}>Supporting Materials — order qty = measured ÷ coverage, rounded up.</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 8 }}>
               <label style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -1012,7 +1012,7 @@ function TakeoffsPanel({
               const par = conditions.find((x) => x.id === c.variant_of);
               const n = localCount(c);
               return (
-                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, padding: "3px 6px", border: "1px solid var(--ink-faint)", background: "var(--paper-cream)", fontSize: 11 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, padding: "3px 6px", border: "1px solid var(--ink-faint)", background: "var(--paper-cream)", fontSize: "var(--fs-xs)" }}>
                   <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "var(--ink-muted)" }}
                     title={`These materials follow “${par?.finish_tag || "the original"}”. Edit a row and only that row stops following.`}>
                     ↳ twin of <b style={{ color: "var(--ink)" }}>{par?.finish_tag || "—"}</b>
@@ -1021,7 +1021,7 @@ function TakeoffsPanel({
                   {onSplitCondition && (
                     <button onClick={() => onSplitCondition(c.id)}
                       title={`Split out — freeze the following rows where they stand and stop following “${par?.finish_tag || "the original"}”. Keeps its name and still groups with the family.`}
-                      style={{ padding: "1px 6px", border: "1px solid var(--ink-faint)", background: "transparent", cursor: "pointer", fontSize: 10.5, color: "var(--ink)", flexShrink: 0 }}>⤴ Split out</button>
+                      style={{ padding: "1px 6px", border: "1px solid var(--ink-faint)", background: "transparent", cursor: "pointer", fontSize: "var(--fs-xs)", color: "var(--ink)", flexShrink: 0 }}>⤴ Split out</button>
                   )}
                 </div>
               );
@@ -1037,7 +1037,7 @@ function TakeoffsPanel({
                 CDP/automation-driven session dead, and this panel is scripted in demos. */}
             {onDuplicateCondition && (twinDraft.id === c.id ? (
               <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6, flexWrap: "wrap" }}>
-                <span style={{ color: "var(--ink-muted)", fontSize: 11 }}>Duplicate for</span>
+                <span style={{ color: "var(--ink-muted)", fontSize: "var(--fs-xs)" }}>Duplicate for</span>
                 <input name="twin-label" autoFocus value={twinDraft.label}
                   onChange={(e) => setTwinDraft({ id: c.id, label: e.target.value })}
                   onKeyDown={(e) => {
@@ -1045,19 +1045,19 @@ function TakeoffsPanel({
                     if (e.key === "Escape") setTwinDraft({ id: "", label: "" });
                   }}
                   placeholder="e.g. Level 2" style={{ ...ip, width: 120 }} />
-                <span style={{ color: "var(--ink-muted)", fontSize: 11 }}>
+                <span style={{ color: "var(--ink-muted)", fontSize: "var(--fs-xs)" }}>
                   → <b style={{ color: "var(--ink)" }}>{twinDraft.label.trim() ? `${baseTagOf(c.finish_tag)} – ${twinDraft.label.trim()}` : "…"}</b>
                 </span>
                 <button onClick={() => { if (twinDraft.label.trim()) { onDuplicateCondition(c.id, twinDraft.label.trim()); setTwinDraft({ id: "", label: "" }); } }}
                   disabled={!twinDraft.label.trim()}
-                  style={{ padding: "2px 8px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", color: twinDraft.label.trim() ? "var(--ink)" : "var(--ink-faint)", cursor: twinDraft.label.trim() ? "pointer" : "default", fontSize: 11 }}>Duplicate</button>
+                  style={{ padding: "2px 8px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "transparent", color: twinDraft.label.trim() ? "var(--ink)" : "var(--ink-faint)", cursor: twinDraft.label.trim() ? "pointer" : "default", fontSize: "var(--fs-xs)" }}>Duplicate</button>
                 <button onClick={() => setTwinDraft({ id: "", label: "" })}
-                  style={{ padding: "2px 6px", border: "none", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: 11 }}>Cancel</button>
+                  style={{ padding: "2px 6px", border: "none", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>Cancel</button>
               </div>
             ) : (
               <button onClick={() => setTwinDraft({ id: c.id, label: "" })}
                 title="Duplicate this condition — the same finish measured somewhere else, with its own materials. Name the area (e.g. Level 2); no takeoffs come along, you measure into it, and its materials keep following this condition until you change them there."
-                style={{ marginTop: 6, padding: "3px 9px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", fontSize: 11.5 }}>⎘ Duplicate for another area…</button>
+                style={{ marginTop: 6, padding: "3px 9px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", fontSize: "var(--fs-s)" }}>⎘ Duplicate for another area…</button>
             ))}
           </div>
         )}
@@ -1072,8 +1072,8 @@ function TakeoffsPanel({
     // phone (the panel was covering the whole screen). Desktop docked layout
     // is unchanged. The header's » collapse button is the close affordance.
     <div ref={rootRef} style={overlay
-      ? { position: "absolute", top: 0, right: 0, bottom: 0, width: "min(100%, 420px)", zIndex: Z.drawer, boxShadow: "var(--shadow-pop)", display: "flex", background: "var(--paper-bright)", borderLeft: "1px solid var(--ink-faint)", fontSize: 12.5 }
-      : { width, flexShrink: 0, display: "flex", background: "var(--paper-bright)", borderLeft: "1px solid var(--ink-faint)", fontSize: 12.5 }}>
+      ? { position: "absolute", top: 0, right: 0, bottom: 0, width: "min(100%, 420px)", zIndex: Z.drawer, boxShadow: "var(--shadow-pop)", display: "flex", background: "var(--paper-bright)", borderLeft: "1px solid var(--ink-faint)", fontSize: "var(--fs-s)" }
+      : { width, flexShrink: 0, display: "flex", background: "var(--paper-bright)", borderLeft: "1px solid var(--ink-faint)", fontSize: "var(--fs-s)" }}>
       {!overlay && <div onPointerDown={onResizeDown} onPointerMove={onResizeMove} onPointerUp={onResizeEnd}
         onPointerCancel={onResizeEnd} onLostPointerCapture={onResizeEnd}
         title="Drag to resize"
@@ -1083,15 +1083,15 @@ function TakeoffsPanel({
           <span style={{ display: "inline-flex", gap: 2 }}>
             {[["takeoffs", `Takeoffs · ${multiSheet ? "these sheets" : "this sheet"}`], ["library", `Library${templates.length ? ` (${templates.length})` : ""}`], ["materials", `Materials${matLib.length ? ` (${matLib.length})` : ""}`], ["columns", `Columns${conditionColumns.length ? ` (${conditionColumns.length})` : ""}`]].map(([id, label]) => (
               <button key={id} onClick={() => setPanelTab(id)}
-                style={{ padding: "3px 8px", border: "none", borderBottom: panelTab === id ? "2px solid var(--paper-cream)" : "2px solid transparent", background: "none", color: "var(--paper-cream)", opacity: panelTab === id ? 1 : 0.65, cursor: "pointer", fontWeight: 700, fontSize: 12.5 }}>{label}</button>
+                style={{ padding: "3px 8px", border: "none", borderBottom: panelTab === id ? "2px solid var(--paper-cream)" : "2px solid transparent", background: "none", color: "var(--paper-cream)", opacity: panelTab === id ? 1 : 0.65, cursor: "pointer", fontWeight: 700, fontSize: "var(--fs-s)" }}>{label}</button>
             ))}
           </span>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
             <button onClick={() => onPanelPrefs((p) => ({ ...p, strip: !p.strip }))}
               title="Compact strip — also show the conditions as a horizontal strip above the canvas (handy on small projects with the panel collapsed)"
-              style={{ background: panelPrefs.strip ? "var(--paper-cream)" : "none", border: "1px solid var(--paper-cream)", color: panelPrefs.strip ? "var(--ink)" : "var(--paper-cream)", fontSize: 9.5, fontFamily: "var(--f-mono)", letterSpacing: "0.08em", textTransform: "uppercase", cursor: "pointer", padding: "2px 6px", lineHeight: 1.4 }}>strip</button>
+              style={{ background: panelPrefs.strip ? "var(--paper-cream)" : "none", border: "1px solid var(--paper-cream)", color: panelPrefs.strip ? "var(--ink)" : "var(--paper-cream)", fontSize: "var(--fs-2xs)", fontFamily: "var(--f-mono)", letterSpacing: "0.08em", textTransform: "uppercase", cursor: "pointer", padding: "2px 6px", lineHeight: 1.4 }}>strip</button>
             <button onClick={onToggleCollapse} title="Collapse the panel (the ☰ button on the canvas edge brings it back)"
-              style={{ background: "none", border: "none", color: "var(--paper-cream)", fontSize: 15, cursor: "pointer", lineHeight: 1 }}>»</button>
+              style={{ background: "none", border: "none", color: "var(--paper-cream)", fontSize: "var(--fs-l)", cursor: "pointer", lineHeight: 1 }}>»</button>
           </span>
         </div>
         {panelTab === "takeoffs" && <>
@@ -1099,34 +1099,34 @@ function TakeoffsPanel({
             All VIEW-ONLY: the array order (hotkeys, payload) never changes. */}
         <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 10px", borderBottom: "1px solid var(--ink-faint)", flexShrink: 0 }}>
           <input name="condition-filter" value={condQuery} onChange={(e) => setCondQuery(e.target.value)} placeholder="filter conditions…"
-            style={{ flex: 1, minWidth: 0, padding: "4px 8px", borderRadius: 0, border: "1px solid var(--ink-faint)", fontSize: 12 }} />
+            style={{ flex: 1, minWidth: 0, padding: "4px 8px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", fontSize: "var(--fs-s)" }} />
           {condQuery && <button onClick={() => setCondQuery("")} title="Clear the filter" style={btnClearX}>×</button>}
           <button onClick={() => onPanelPrefs((p) => ({ ...p, az: !p.az }))}
             title="Natural sort by tag (CT-2 before CT-10) — a view; hotkeys 1–9 keep their original numbering"
-            style={{ padding: "3px 7px", borderRadius: 0, border: `1px solid ${panelPrefs.az ? "var(--cobalt)" : "var(--ink-faint)"}`, background: panelPrefs.az ? "var(--cobalt)" : "transparent", color: panelPrefs.az ? "var(--paper-bright)" : "var(--ink-muted)", cursor: "pointer", fontSize: 10.5, fontFamily: "var(--f-mono)", lineHeight: 1.4 }}>A→Z</button>
+            style={{ padding: "3px 7px", borderRadius: "var(--r-0)", border: `1px solid ${panelPrefs.az ? "var(--cobalt)" : "var(--ink-faint)"}`, background: panelPrefs.az ? "var(--cobalt)" : "transparent", color: panelPrefs.az ? "var(--paper-bright)" : "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-xs)", fontFamily: "var(--f-mono)", lineHeight: 1.4 }}>A→Z</button>
           <button onClick={() => onPanelPrefs((p) => ({ ...p, group: !p.group }))}
             title="Group by tag family (the text before the dash: CPT, LVT, CT…)"
-            style={{ padding: "3px 7px", borderRadius: 0, border: `1px solid ${panelPrefs.group ? "var(--cobalt)" : "var(--ink-faint)"}`, background: panelPrefs.group ? "var(--cobalt)" : "transparent", color: panelPrefs.group ? "var(--paper-bright)" : "var(--ink-muted)", cursor: "pointer", fontSize: 10.5, fontFamily: "var(--f-mono)", lineHeight: 1.4 }}>≡ grp</button>
+            style={{ padding: "3px 7px", borderRadius: "var(--r-0)", border: `1px solid ${panelPrefs.group ? "var(--cobalt)" : "var(--ink-faint)"}`, background: panelPrefs.group ? "var(--cobalt)" : "transparent", color: panelPrefs.group ? "var(--paper-bright)" : "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-xs)", fontFamily: "var(--f-mono)", lineHeight: 1.4 }}>≡ grp</button>
         </div>
         {/* bulk actions — appear while a ⌘/⇧ multi-selection is live
             (liveChecked: the count never claims ids the list lost) */}
         {liveChecked.length > 0 && (
-          <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "6px 10px", borderBottom: "1px solid var(--ink-faint)", background: "var(--tint-select)", flexShrink: 0, flexWrap: "wrap", fontSize: 11 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "6px 10px", borderBottom: "1px solid var(--ink-faint)", background: "var(--tint-select)", flexShrink: 0, flexWrap: "wrap", fontSize: "var(--fs-xs)" }}>
             <strong style={{ color: "var(--cobalt)" }}>{liveChecked.length} selected</strong>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 3 }} title="Set the waste % on every selected condition">
               <span style={{ color: "var(--ink-muted)" }}>Waste</span>
               <input name="bulk-waste" type="number" min="0" step="1" value={bulkWaste} onChange={(e) => setBulkWaste(e.target.value)} placeholder="%"
                 onKeyDown={(e) => e.key === "Enter" && applyBulkWaste()}
-                style={{ width: 44, padding: "2px 5px", borderRadius: 0, border: "1px solid var(--ink-faint)", fontSize: 11 }} />
-              <button onClick={applyBulkWaste} title="Apply waste % to the selection" style={{ padding: "2px 6px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", cursor: "pointer", fontSize: 11 }}>✓</button>
+                style={{ width: 44, padding: "2px 5px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", fontSize: "var(--fs-xs)" }} />
+              <button onClick={applyBulkWaste} title="Apply waste % to the selection" style={{ padding: "2px 6px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "transparent", cursor: "pointer", fontSize: "var(--fs-xs)" }}>✓</button>
             </span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 3 }} title="Set the line color on every selected condition">
-              {PALETTE.map((p) => <button key={p} title={p} onClick={() => onBulkColor(liveIds(), p)} style={{ width: 13, height: 13, borderRadius: 3, background: p, border: "1px solid var(--ink-faint)", cursor: "pointer", padding: 0 }} />)}
+              {PALETTE.map((p) => <button key={p} title={p} onClick={() => onBulkColor(liveIds(), p)} style={{ width: 13, height: 13, borderRadius: "var(--r-1)", background: p, border: "1px solid var(--ink-faint)", cursor: "pointer", padding: 0 }} />)}
             </span>
             <button onClick={bulkDelete} title="Delete every selected condition (and their takeoffs)"
-              style={{ padding: "2px 7px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: 11, fontWeight: 600 }}>Delete</button>
+              style={{ padding: "2px 7px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: "var(--fs-xs)", fontWeight: 600 }}>Delete</button>
             <button onClick={() => setCheckedConds(new Set())} title="Clear the selection"
-              style={{ marginLeft: "auto", padding: "2px 6px", border: "none", background: "none", color: "var(--ink-muted)", cursor: "pointer", fontSize: 12 }}>✕</button>
+              style={{ marginLeft: "auto", padding: "2px 6px", border: "none", background: "none", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-s)" }}>✕</button>
           </div>
         )}
         <div style={{ flex: 1, overflow: "auto" }}>
@@ -1136,7 +1136,7 @@ function TakeoffsPanel({
               {g.name != null && (
                 <div onClick={() => setClosedGroups((s) => { const n = new Set(s); if (n.has(g.name)) n.delete(g.name); else n.add(g.name); return n; })}
                   title="Collapse / expand this tag family"
-                  style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", borderTop: "1px solid var(--ink-faint)", background: "var(--paper-cream)", cursor: "pointer", fontFamily: "var(--f-mono,monospace)", fontSize: 10.5, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink-muted)", userSelect: "none" }}>
+                  style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", borderTop: "1px solid var(--ink-faint)", background: "var(--paper-cream)", cursor: "pointer", fontFamily: "var(--f-mono,monospace)", fontSize: "var(--fs-xs)", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink-muted)", userSelect: "none" }}>
                   <span style={{ width: 10 }}>{closedGroups.has(g.name) ? "▸" : "▾"}</span>
                   <span style={{ fontWeight: 700, color: "var(--ink)" }}>{g.name}</span>
                   <span>· {g.items.length}</span>
@@ -1149,9 +1149,9 @@ function TakeoffsPanel({
           ))}
           {searchMiss && <div style={{ padding: "12px", color: "var(--ink-muted)" }}>No conditions match “{condQuery}”.</div>}
           <div style={{ padding: "6px 12px", borderTop: "1px solid var(--ink-faint)" }}>
-            <button onClick={onAddCondition} style={{ width: "100%", padding: "6px 10px", borderRadius: 0, border: "1px dashed var(--ink-faint)", background: "transparent", cursor: "pointer", fontSize: 12.5, color: "var(--ink-muted)" }}>+ condition</button>
+            <button onClick={onAddCondition} style={{ width: "100%", padding: "6px 10px", borderRadius: "var(--r-0)", border: "1px dashed var(--ink-faint)", background: "transparent", cursor: "pointer", fontSize: "var(--fs-s)", color: "var(--ink-muted)" }}>+ condition</button>
           </div>
-          <div style={{ padding: "8px 12px", borderTop: "1px solid var(--ink-faint)", color: "var(--ink-muted)", fontSize: 10.5 }}>
+          <div style={{ padding: "8px 12px", borderTop: "1px solid var(--ink-faint)", color: "var(--ink-muted)", fontSize: "var(--fs-xs)" }}>
             {keyText("Select a shape on the plan, then ⧉ Copy / ⎘ Paste (⌘C / ⌘V) — it lands on the sheet under your cursor.")}
             <br />⌫ undo point · Esc cancel · scroll = zoom · pan mid-measure: press-and-drag (a click without dragging places the point).
           </div>
@@ -1160,32 +1160,32 @@ function TakeoffsPanel({
         {/* Library tab — reusable condition templates, browser-wide */}
         {panelTab === "library" && (
           <div style={{ flex: 1, overflow: "auto" }}>
-            <div style={{ padding: "8px 12px 4px", color: "var(--ink-muted)", fontSize: 11 }}>
+            <div style={{ padding: "8px 12px 4px", color: "var(--ink-muted)", fontSize: "var(--fs-xs)" }}>
               Reusable condition templates, shared across every plan in this browser. A fresh workspace seeds from this library (built-in flooring defaults when it's empty).
             </div>
             <div style={{ padding: "6px 12px 10px" }}>
               <button onClick={onSaveTemplate} disabled={!aCond}
                 title="Snapshot the active condition (appearance, waste, H/T, materials) into the library"
-                style={{ width: "100%", padding: "6px 10px", borderRadius: 0, border: "1px dashed var(--ink-faint)", background: "transparent", cursor: aCond ? "pointer" : "default", fontSize: 12, color: aCond ? "var(--ink)" : "var(--ink-faint)" }}>
+                style={{ width: "100%", padding: "6px 10px", borderRadius: "var(--r-0)", border: "1px dashed var(--ink-faint)", background: "transparent", cursor: aCond ? "pointer" : "default", fontSize: "var(--fs-s)", color: aCond ? "var(--ink)" : "var(--ink-faint)" }}>
                 + save {aCond?.finish_tag || "the active condition"} to the library
               </button>
             </div>
             {templates.length === 0 && <div style={{ padding: "2px 12px 12px", color: "var(--ink-muted)" }}>No templates yet — make a condition the way you like it, then save it here.</div>}
             {templates.map((t, idx) => (
               <div key={`${t.finish_tag}-${idx}`} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", borderTop: "1px solid var(--ink-faint)" }}>
-                <span style={{ borderRadius: 4, overflow: "hidden", lineHeight: 0, flexShrink: 0 }}><HatchSwatch type={t.hatch || "solid"} line={t.color} fill={t.fill} /></span>
+                <span style={{ borderRadius: "var(--r-1)", overflow: "hidden", lineHeight: 0, flexShrink: 0 }}><HatchSwatch type={t.hatch || "solid"} line={t.color} fill={t.fill} /></span>
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <div style={{ fontWeight: 600, color: "var(--ink)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{t.finish_tag}</div>
-                  <div style={{ fontFamily: "var(--f-mono,monospace)", fontSize: 10.5, color: "var(--ink-muted)" }}>
+                  <div style={{ fontFamily: "var(--f-mono,monospace)", fontSize: "var(--fs-xs)", color: "var(--ink-muted)" }}>
                     {t.waste_pct || 0}% waste{t.height_ft != null ? ` · H ${dimInputStr(t.height_ft, units, "height")}${units === "metric" ? " m" : "′"}` : ""}{t.thickness_in != null ? ` · T ${dimInputStr(t.thickness_in, units, "thickness")}${units === "metric" ? " mm" : "″"}` : ""}{t.materials?.length ? ` · ${t.materials.length} material${t.materials.length === 1 ? "" : "s"}` : ""}
                   </div>
                 </div>
                 <button onClick={() => { onApplyTemplate(t); setPanelTab("takeoffs"); }} title="Add a condition from this template to the takeoff"
-                  style={{ flexShrink: 0, padding: "3px 8px", borderRadius: 0, border: "1px solid var(--ink)", background: "var(--ink)", color: "var(--paper-bright)", cursor: "pointer", fontSize: 11, fontWeight: 600 }}>Apply</button>
+                  style={{ flexShrink: 0, padding: "3px 8px", borderRadius: "var(--r-0)", border: "1px solid var(--ink)", background: "var(--ink)", color: "var(--paper-bright)", cursor: "pointer", fontSize: "var(--fs-xs)", fontWeight: 600 }}>Apply</button>
                 <button onClick={() => onRenameTemplate(idx)} title="Rename this template"
-                  style={{ flexShrink: 0, padding: "3px 6px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: 11 }}>✎</button>
+                  style={{ flexShrink: 0, padding: "3px 6px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>✎</button>
                 <button onClick={() => onDeleteTemplate(idx)} title="Remove this template from the library"
-                  style={{ flexShrink: 0, padding: "3px 6px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: 11 }}>✕</button>
+                  style={{ flexShrink: 0, padding: "3px 6px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>✕</button>
               </div>
             ))}
           </div>
@@ -1195,13 +1195,13 @@ function TakeoffsPanel({
             COPY on attach (lib_id link); edits here never propagate unless
             explicitly pushed to linked lines. */}
         {panelTab === "materials" && (
-          <div style={{ flex: 1, overflow: "auto", fontSize: 11.5 }}>
-            <div style={{ padding: "8px 12px 4px", color: "var(--ink-muted)", fontSize: 11 }}>
+          <div style={{ flex: 1, overflow: "auto", fontSize: "var(--fs-s)" }}>
+            <div style={{ padding: "8px 12px 4px", color: "var(--ink-muted)", fontSize: "var(--fs-xs)" }}>
               Reusable materials, browser-wide. Attaching one to a condition copies its values and keeps a link — edits here only reach linked lines when you push them.
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 12px 8px" }}>
               <input name="material-library-filter" value={matLibQuery} onChange={(e) => setMatLibQuery(e.target.value)} placeholder="filter materials…"
-                style={{ flex: 1, minWidth: 0, padding: "4px 8px", borderRadius: 0, border: "1px solid var(--ink-faint)", fontSize: 12 }} />
+                style={{ flex: 1, minWidth: 0, padding: "4px 8px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", fontSize: "var(--fs-s)" }} />
               {matLibQuery && <button onClick={() => setMatLibQuery("")} title="Clear the filter" style={btnClearX}>×</button>}
             </div>
             {matLib.length === 0 && <div style={{ padding: "2px 12px 12px", color: "var(--ink-muted)" }}>No library materials yet — add one below, or use “→ lib” on a condition's material line.</div>}
@@ -1235,14 +1235,14 @@ function TakeoffsPanel({
                       onCommitText={(t) => onUpdateLibMaterial(lm.id, { note: t })} />
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 5 }}>
-                    <span style={{ fontFamily: "var(--f-mono,monospace)", fontSize: 10.5, color: "var(--ink-muted)" }}>{n ? `⛓ ${n} linked line${n === 1 ? "" : "s"}` : "not linked yet"}</span>
+                    <span style={{ fontFamily: "var(--f-mono,monospace)", fontSize: "var(--fs-xs)", color: "var(--ink-muted)" }}>{n ? `⛓ ${n} linked line${n === 1 ? "" : "s"}` : "not linked yet"}</span>
                     <div style={{ flex: 1 }} />
                     {n > 0 && (
                       <button onClick={() => onPushLibUpdate(lm.id)} title="Replace the values on every linked condition line with these library values (overrides included)"
-                        style={{ padding: "2px 8px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", fontSize: 11 }}>update linked ({n})</button>
+                        style={{ padding: "2px 8px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>update linked ({n})</button>
                     )}
                     <button onClick={() => onDeleteLibMaterial(lm.id)} title="Remove from the library — linked lines keep their values, only the link is removed"
-                      style={{ padding: "2px 8px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: 11 }}>✕</button>
+                      style={{ padding: "2px 8px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>✕</button>
                   </div>
                 </div>
               );
@@ -1256,31 +1256,31 @@ function TakeoffsPanel({
             vocabulary; per-condition assignment lives in the active row's
             properties on the Takeoffs tab */}
         {panelTab === "columns" && (
-          <div style={{ flex: 1, overflow: "auto", fontSize: 11.5 }}>
+          <div style={{ flex: 1, overflow: "auto", fontSize: "var(--fs-s)" }}>
             {/* Shape labels (#110) — a flat project-level vocabulary; each shape
                 carries at most one label. Lives here rather than a 5th panel tab:
                 it's the degenerate single-column case. */}
             <details open style={{ borderBottom: "2px solid var(--ink-faint)" }}>
-              <summary style={{ padding: "8px 12px 4px", cursor: "pointer", fontWeight: 600, fontSize: 11.5 }}>
+              <summary style={{ padding: "8px 12px 4px", cursor: "pointer", fontWeight: 600, fontSize: "var(--fs-s)" }}>
                 Shape labels{shapeLabels.length ? ` (${shapeLabels.length})` : ""}
               </summary>
-              <div style={{ padding: "0 12px 4px", color: "var(--ink-muted)", fontSize: 11 }}>
+              <div style={{ padding: "0 12px 4px", color: "var(--ink-muted)", fontSize: "var(--fs-xs)" }}>
                 Phase / area labels (e.g. Phase 1, East Wing) for grouping the Report by shape.
               </div>
               <div style={{ padding: "2px 12px 10px", display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
                 {shapeLabels.map((v) => (
-                  <span key={v} style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "2px 3px 2px 8px", border: "1px solid var(--ink-faint)", background: "var(--paper-bright)", fontSize: 11.5, color: "var(--ink)" }}>
+                  <span key={v} style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "2px 3px 2px 8px", border: "1px solid var(--ink-faint)", background: "var(--paper-bright)", fontSize: "var(--fs-s)", color: "var(--ink)" }}>
                     {v}
                     <button onClick={() => onRenameLabel(v)} title="Rename this label — labeled shapes follow"
-                      style={{ padding: "0 3px", border: "none", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: 11 }}>✎</button>
+                      style={{ padding: "0 3px", border: "none", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>✎</button>
                     <button onClick={() => onRemoveLabel(v)} title="Remove from the list — labeled shapes keep the value (shown ungrouped in the Report)"
-                      style={{ padding: "0 3px", border: "none", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: 11 }}>✕</button>
+                      style={{ padding: "0 3px", border: "none", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>✕</button>
                   </span>
                 ))}
                 <AddValueInput onAdd={onAddLabel} />
               </div>
             </details>
-            <div style={{ padding: "8px 12px 4px", color: "var(--ink-muted)", fontSize: 11 }}>
+            <div style={{ padding: "8px 12px 4px", color: "var(--ink-muted)", fontSize: "var(--fs-xs)" }}>
               Custom columns (e.g. CSI Division) classify conditions for report grouping and exports. Columns and values apply to the whole project; assign values on a condition in the Takeoffs tab.
             </div>
             {conditionColumns.length === 0 && <div style={{ padding: "2px 12px 8px", color: "var(--ink-muted)" }}>Add a column, e.g. CSI Division.</div>}
@@ -1288,18 +1288,18 @@ function TakeoffsPanel({
               <div key={cc.id} style={{ padding: "8px 12px", borderTop: "1px solid var(--ink-faint)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
                   <input name="column-name" value={cc.name} onChange={(e) => onRenameColumn(cc.id, e.target.value)} placeholder="Column name (e.g. CSI Division)"
-                    style={{ padding: "3px 6px", borderRadius: 0, border: "1px solid var(--ink-faint)", fontSize: 12, flex: 1, minWidth: 0 }} />
+                    style={{ padding: "3px 6px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", fontSize: "var(--fs-s)", flex: 1, minWidth: 0 }} />
                   <button onClick={() => onDeleteColumn(cc.id)} title="Delete this column (whole project)"
-                    style={{ flexShrink: 0, padding: "2px 7px", borderRadius: 0, border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: 12 }}>✕ column</button>
+                    style={{ flexShrink: 0, padding: "2px 7px", borderRadius: "var(--r-0)", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: "var(--fs-s)" }}>✕ column</button>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
                   {cc.values.map((v) => (
-                    <span key={v} style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "2px 3px 2px 8px", border: "1px solid var(--ink-faint)", background: "var(--paper-bright)", fontSize: 11.5, color: "var(--ink)" }}>
+                    <span key={v} style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "2px 3px 2px 8px", border: "1px solid var(--ink-faint)", background: "var(--paper-bright)", fontSize: "var(--fs-s)", color: "var(--ink)" }}>
                       {v}
                       <button onClick={() => onRenameColumnValue(cc.id, v)} title="Rename this value — assigned conditions follow"
-                        style={{ padding: "0 3px", border: "none", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: 11 }}>✎</button>
+                        style={{ padding: "0 3px", border: "none", background: "transparent", color: "var(--ink-muted)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>✎</button>
                       <button onClick={() => onRemoveColumnValue(cc.id, v)} title="Remove from the list — conditions keep the value, shown as (removed)"
-                        style={{ padding: "0 3px", border: "none", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: 11 }}>✕</button>
+                        style={{ padding: "0 3px", border: "none", background: "transparent", color: "var(--c-danger)", cursor: "pointer", fontSize: "var(--fs-xs)" }}>✕</button>
                     </span>
                   ))}
                   <AddValueInput onAdd={(v) => onAddColumnValue(cc.id, v)} />

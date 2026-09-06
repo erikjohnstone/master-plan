@@ -44,8 +44,28 @@ input, textarea { font-family: var(--f-body); }
 .btn-ghost:hover  { background: var(--paper-shadow); }
 .btn-ghost:active { transform: translateY(1px); }
 
+/* KEYBOARD USERS COULD NOT SEE WHERE THEY WERE.
+   Only the ~24 controls using .btn-primary/.btn-ghost had a focus ring; the
+   other ~1000 are inline-styled <button>s with nothing at all, so tabbing
+   through the toolbar, the rail, or any panel moved an invisible cursor.
+
+   One rule, every control, rather than converting a thousand call sites. It is
+   an OUTLINE, not a box-shadow: inline style wins over a stylesheet for the
+   same property, and this app sets boxShadow inline in plenty of places, while
+   almost nothing sets outline. Outline also costs no layout and does not care
+   what the element paints behind it — the dark status bar and the dark panel
+   headers get the same visible ring as the paper chrome. */
+:where(button, [role="button"], [role="menuitem"], a[href], input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--ring-color);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+/* The canvas stage takes focus for its own keyboard handling; a ring around
+   the whole drawing is noise, not information. */
+:where([data-stage], [data-agent-answer]):focus-visible { outline: none; }
+
 .btn-primary:focus-visible,
-.btn-ghost:focus-visible { outline: none; box-shadow: var(--ring); }
+.btn-ghost:focus-visible { box-shadow: var(--ring); }
 
 .btn-primary:disabled,
 .btn-ghost:disabled {
@@ -189,4 +209,27 @@ input, textarea { font-family: var(--f-body); }
     transition-duration: .001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+
+/* THE TOP BAR SCROLLS, AND NOTHING SAID SO.
+   The working controls are one horizontally scrolling region (issue #61: the
+   row must never wrap and nothing may shift position mid-work), with Report /
+   ⋯ / account pinned outside it. That is the right design — but on a 1440
+   laptop it overflows by ~148px with only a thin scrollbar as the clue, so
+   Scale and the unit toggle sit off the edge and simply look absent.
+
+   The classic two-layer scroll shadow, which costs no JS and no state: the
+   `local` cover gradients ride the content and hide the `scroll` shadows when
+   you are AT an edge, so a shadow appears on exactly the side that has more. */
+[data-topbar-scroll] {
+  background-image:
+    linear-gradient(to right,  var(--paper-bright) 40%, transparent),
+    linear-gradient(to left,   var(--paper-bright) 40%, transparent),
+    linear-gradient(to right,  color-mix(in srgb, var(--ink) 16%, transparent), transparent 14px),
+    linear-gradient(to left,   color-mix(in srgb, var(--ink) 16%, transparent), transparent 14px);
+  background-position: left center, right center, left center, right center;
+  background-repeat: no-repeat;
+  background-size: 30px 100%, 30px 100%, 14px 100%, 14px 100%;
+  background-attachment: local, local, scroll, scroll;
 }
