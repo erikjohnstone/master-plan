@@ -467,7 +467,7 @@
       "source_pdf": "pdf/13__vol2__017__NIST_Gaithersburg_Building_101_HVAC_Renovation.pdf",
       "source_sha256": "5821df0d298d0e51a6c20ba36b3cc5d2eb7bbece098f12eb1746c339b56a1533",
       "page": 15,
-      "sheet_number": "V3",
+      "sheet_number": "M-701",
       "page_size_px": [6048, 4320],
       "seed_rect": [[3865, 300], [3980, 465]],
       "seed": {
@@ -487,7 +487,8 @@
         "render": "ground_truth/reviews/13__vol2__017/p15-p15-full-poppler.png",
         "method": "Full-page controls-diagram review and exact fan-plus-VFD assembly comparison across all three ACU P&IDs.",
         "notes": [
-          "Three vertically stacked ACU control diagrams each contain one return-fan/VFD assembly and one supply-fan/VFD assembly, for six total; the upper return fan is the seed.",
+        "The page-15 title block explicitly identifies this sheet as M-701; the earlier V3 metadata value was a visually rechecked valve identifier inside the diagram, not the sheet number.",
+        "Three vertically stacked ACU control diagrams each contain one return-fan/VFD assembly and one supply-fan/VFD assembly, for six total; the upper return fan is the seed.",
           "The 98-segment seed isolates the fan scroll, motor hub, VFD box, and their internal connection while excluding the surrounding equipment casing and duct path.",
           "All five non-seed placements score 1.000. Supply-fan assemblies are mirrored export variants, and the lower supply fan is horizontally shifted within its ACU diagram.",
           "Each assembly owns a distinct literal VFD text run centered inside its local drive box. The exact six token boxes are frozen as positive one-to-one semantic truth; the earlier null-label baseline predated repeated device-class recognition.",

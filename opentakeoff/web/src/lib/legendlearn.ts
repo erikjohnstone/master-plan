@@ -299,22 +299,25 @@ function looksLikeGlyph(
  */
 function segmentsNearCaptions(
   segs: number[], spans: LegendSpan[], maxGlyphDimPx: number, maxCaptionGapPx: number,
-  includeBelowCaptions = false,
+  searchBelowCaption: ((span: LegendSpan) => boolean) | null = null,
+  rightCaptionGap: ((span: LegendSpan) => number) | null = null,
 ): number[] {
   const boxes = spans.flatMap((s) => {
+    const allowedRightGap = Math.max(maxCaptionGapPx, rightCaptionGap?.(s) ?? 0);
     const rightCaptionBox = {
-      x0: s.x0 - maxCaptionGapPx - maxGlyphDimPx,
+      x0: s.x0 - allowedRightGap - maxGlyphDimPx,
       x1: s.x0,
       y0: s.y0 - maxGlyphDimPx * 1.5,
       y1: s.y1 + maxGlyphDimPx * 1.5,
     };
-    if (!includeBelowCaptions) return [rightCaptionBox];
+    const boxesForSpan = [rightCaptionBox];
+    if (!searchBelowCaption?.(s)) return boxesForSpan;
     // RCP and device-cell legends center symbols ABOVE their descriptions.
     // Search only a finite page-scaled band above each text run. This is
     // enabled only on pages that actually declare a legend/symbol section,
     // preserving the narrow plan-sheet fast path and avoiding arbitrary
     // plan labels becoming candidate anchors.
-    return [rightCaptionBox, {
+    return [...boxesForSpan, {
       x0: s.x0 - maxGlyphDimPx,
       x1: s.x1 + maxGlyphDimPx,
       y0: s.y0 - maxGlyphDimPx - Math.min(maxCaptionGapPx, maxGlyphDimPx),
@@ -452,8 +455,9 @@ type PairCandidate = {
   /** Source text used only when a ruled row has no usable vector member. */
   structuredTextSymbol?: string;
   /** Physical legend layout. Most legends put the caption to the glyph's
-   * right; RCP/fire/electrical cell legends commonly center it below. */
-  layout: "right" | "below";
+   * right; RCP/fire/electrical cell legends commonly center it below;
+   * material legends commonly put the swatch to the caption's right. */
+  layout: "right" | "below" | "left";
 };
 
 function glyphKind(
@@ -516,7 +520,7 @@ function isLegendHeadingText(text: string): boolean {
     || /^SYMBOL$/i.test(normalized)
     || /^(?:(?:CONTROL|HVAC|MECHANICAL|ELECTRICAL|SYSTEM|DEVICE|NETWORK)\s+)?COMPONENTS$/i.test(normalized)
     || /\bPOINT\s+FUNCTION(?:\s+SCHEDULE)?\b/i.test(normalized)
-    || /^(?:GENERAL|LIGHTING|EQUIPMENT|DEVICES|ONE-LINE\s+DIAGRAM|POWER\s+DEVICES|POWER\s+DISTRIBUTION\s+EQUIPMENT|TELEPHONE\s*(?:&|AND)\s*DATA\s+SYSTEMS|FIRE\s+ALARM|LIGHTNING\s+PROTECTION\s+AND\s+GROUNDING|WIRE,?\s+CONDUIT\s+AND\s+RACEWAY|EQUIPMENT\s+CONNECTIONS)$/i.test(normalized)
+    || /^(?:GENERAL|LIGHTING|EQUIPMENT|DEVICES|ONE-LINE\s+DIAGRAM|POWER\s+DEVICES|POWER\s+DISTRIBUTION\s+EQUIPMENT|TELEPHONE\s*(?:&|AND)\s*DATA\s+SYSTEMS|FIRE\s+ALARM|GROUNDING\s+AND\s+LIGHTNING\s+PROTECTION|LIGHTNING\s+PROTECTION\s+AND\s+GROUNDING|ELECTRICAL\s+BOXES\s+AND\s+WIRING\s+DEVICES|ELECTRICAL\s+EQUIPMENT|LIGHT\s+CONTROLS|LIGHT\s+FIXTURES|TELECOMMUNICATIONS|SECURITY|CIRCUITING|FIRE\s+DETECTION\s+AND\s+NOTIFICATION|WIRE,?\s+CONDUIT\s+AND\s+RACEWAY|EQUIPMENT\s+CONNECTIONS)$/i.test(normalized)
     || /^(?:DUCTWORK|PIPING|(?:DUCTWORK|PIPING)\s+SYSTEM\s+ABBREVIATIONS|PIPE\s+ACCESSORY\s+TAGS?|VALVES(?:\s+AND\s+PIPING\s+ACCESSORIES)?|DUCTWORK\s+ACCESSORIES|AIR\s+DISTRIBUTION\s+DEVICES|GRILLES?[,\s]+REGISTERS?\s*(?:&|AND)\s*DIFFUSERS?(?:\s+TAGS?)?|MECHANICAL\s+EQUIPMENT\s+TAGS?|DAMPER\s+TAGS?)$/i.test(normalized);
 }
 
@@ -525,7 +529,7 @@ function isLegendHeadingText(text: string): boolean {
  * vocabulary and may legitimately contain only one row (for example one
  * wireless-access-point mark between adjacent ruled section headings). */
 function isSpecificDisciplineLegendHeading(text: string): boolean {
-  return /^(?:LIGHTING|EQUIPMENT|ONE-LINE\s+DIAGRAM|POWER\s+DEVICES|POWER\s+DISTRIBUTION\s+EQUIPMENT|TELEPHONE\s*(?:&|AND)\s*DATA\s+SYSTEMS|FIRE\s+ALARM|LIGHTNING\s+PROTECTION\s+AND\s+GROUNDING|WIRE,?\s+CONDUIT\s+AND\s+RACEWAY|EQUIPMENT\s+CONNECTIONS)$/i.test(normalizedCaption(text));
+  return /^(?:LIGHTING|EQUIPMENT|ONE-LINE\s+DIAGRAM|POWER\s+DEVICES|POWER\s+DISTRIBUTION\s+EQUIPMENT|TELEPHONE\s*(?:&|AND)\s*DATA\s+SYSTEMS|FIRE\s+ALARM|GROUNDING\s+AND\s+LIGHTNING\s+PROTECTION|LIGHTNING\s+PROTECTION\s+AND\s+GROUNDING|ELECTRICAL\s+BOXES\s+AND\s+WIRING\s+DEVICES|ELECTRICAL\s+EQUIPMENT|LIGHT\s+CONTROLS|LIGHT\s+FIXTURES|TELECOMMUNICATIONS|SECURITY|CIRCUITING|FIRE\s+DETECTION\s+AND\s+NOTIFICATION|WIRE,?\s+CONDUIT\s+AND\s+RACEWAY|EQUIPMENT\s+CONNECTIONS)$/i.test(normalizedCaption(text));
 }
 
 /** Below-caption cell recovery is a specialized reflected-ceiling topology.
@@ -559,6 +563,82 @@ function isHvacBasCaption(text: string): boolean {
 
 function isDomainHeading(text: string): boolean {
   return /\b(?:AIR|BAS|CONDUIT|CONNECTION|CONTROLS?|DATA|DDC|DAMPER|DEVICES?|DUCT|ELECTRICAL|EQUIPMENT|FIRE|GROUNDING|HVAC|LIGHTING|LINE|MECHANICAL|PIPING|POINT|POWER|RACEWAY|SENSING|TELEPHONE|VALVE|WIRE)\b/i.test(normalizedCaption(text));
+}
+
+/** Explicit general-drafting vocabularies are real legends even when their
+ * rows are not predominantly MEP terms. They still need repeated geometry
+ * and ordinary heading ownership; this predicate only removes the HVAC/BAS
+ * word-density requirement after that structural proof has succeeded. */
+function isGeneralDraftingLegendHeading(text: string): boolean {
+  return /^(?:GENERAL(?:\s+SYMBOLS?)?|STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?|STANDARD\s+MATERIALS\s+LEGEND)$/i.test(normalizedCaption(text));
+}
+
+function supportsUnderlinedMultiColumnJurisdiction(text: string): boolean {
+  // ARCHITECTURAL LEGEND commonly titles an abbreviation glossary. Only a
+  // title that explicitly declares SYMBOLS may waive the HVAC/BAS vocabulary
+  // gate for a general drafting panel.
+  return /^(?:STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?|STANDARD\s+MATERIALS\s+LEGEND)$/i.test(normalizedCaption(text));
+}
+
+function isMaterialLegendHeading(text: string | null): boolean {
+  return !!text && /\bMATERIALS?\s+LEGEND\b/i.test(normalizedCaption(text));
+}
+
+type UnderlinedLegendJurisdiction = { x0: number; x1: number; y: number };
+
+/** Some architectural legend titles are centered over several independent
+ * columns. Their real underline is the finite panel boundary: using the
+ * title text bbox alone loses the outer columns, while treating every long
+ * rule as jurisdiction lets an ordinary legend annex a neighboring panel. */
+function underlinedLegendJurisdiction(
+  heading: LegendSpan, segs: number[], typicalTextHeight: number,
+): UnderlinedLegendJurisdiction | null {
+  if (!supportsUnderlinedMultiColumnJurisdiction(heading.text)) return null;
+  const headingCenterX = (heading.x0 + heading.x1) / 2;
+  const minRuleLength = Math.max(
+    typicalTextHeight * 12,
+    (heading.x1 - heading.x0) * 1.5,
+  );
+  const horizontalTolerance = Math.max(1.5, typicalTextHeight * 0.08);
+  const candidates: UnderlinedLegendJurisdiction[] = [];
+  for (let i = 0; i < segs.length; i += 4) {
+    const ax = segs[i], ay = segs[i + 1], bx = segs[i + 2], by = segs[i + 3];
+    if (Math.abs(ay - by) > horizontalTolerance) continue;
+    const x0 = Math.min(ax, bx), x1 = Math.max(ax, bx);
+    const y = (ay + by) / 2;
+    if (x1 - x0 < minRuleLength
+      || headingCenterX < x0 - typicalTextHeight
+      || headingCenterX > x1 + typicalTextHeight
+      || y < heading.y1 - typicalTextHeight * 0.2
+      || y > heading.y1 + typicalTextHeight * 2.5) continue;
+    candidates.push({ x0, x1, y });
+  }
+  candidates.sort((a, b) => Math.abs(a.y - heading.y1) - Math.abs(b.y - heading.y1)
+    || (b.x1 - b.x0) - (a.x1 - a.x0) || a.x0 - b.x0);
+  return candidates[0] ?? null;
+}
+
+/** Material subsections are usually typography plus a long underline, not a
+ * material swatch. Detect that relation geometrically so headings such as
+ * WOOD or INSULATION never become rows, without maintaining a vocabulary of
+ * possible construction-material section names. */
+function isUnderlinedSubsectionHeading(
+  span: LegendSpan, segs: number[], typicalTextHeight: number,
+): boolean {
+  const width = span.x1 - span.x0;
+  const tolerance = Math.max(1.5, typicalTextHeight * 0.18);
+  for (let i = 0; i < segs.length; i += 4) {
+    const ax = segs[i], ay = segs[i + 1], bx = segs[i + 2], by = segs[i + 3];
+    if (Math.abs(ay - by) > tolerance) continue;
+    const x0 = Math.min(ax, bx), x1 = Math.max(ax, bx);
+    const y = (ay + by) / 2;
+    if (x1 - x0 < Math.max(typicalTextHeight * 5, width * 1.25)) continue;
+    if (Math.abs(y - span.y1) > typicalTextHeight * 0.45) continue;
+    if (x0 > span.x0 + typicalTextHeight * 0.75
+      || x1 < span.x1 + typicalTextHeight * 1.5) continue;
+    return true;
+  }
+  return false;
 }
 
 function isSectionBoundaryText(text: string): boolean {
@@ -608,7 +688,11 @@ function isControllerPinoutCaption(text: string): boolean {
  * never promote them to discrete Symbol Sweep seeds. */
 function isDraftingAnnotationCaption(text: string): boolean {
   const normalized = canonicalLegendCaption(text);
+  if (/^ANNOTATIONS?\b/i.test(normalized)) return true;
+  if (/^(?:ELECTRICAL\s+EQUIPMENT\s+FOOTPRINT\b|DUCTWORK\s+SHOWING\s+SIZE\s+AND\s+SYSTEM$|DUCT\s+SECTION\s*[-–—:]\s*(?:SUPPLY|RETURN|EXHAUST|OUTSIDE|RELIEF|TRANSFER)\b)/i.test(normalized)) return true;
+  if (/^(?:FEEDER\s+REFERENCE\s+TAG|POINT\s+OF\s+CONNECTION\s*[-–—:]\s*NEW\s+TO\s+EXISTING)$/i.test(normalized)) return true;
   if (/^(?:NUMBER\s+OF\s+DETAIL\s+ON\s+SHEET|NUMBER\s+OF\s+SHEET\s+WHERE\s+DETAIL\s+APPEARS|GENERAL\s+NOTE|PLAN\s+NOTE\s+LIST|(?:SQUARE|OVAL|ROUND)\s+DUCT\s+SIZE\s+TAG\b.*|EXISTING\s+DUCT\s+TAG|DUCT\s+BEING\s+DEMOLISHED|INSULATED\s+METAL\s+PANEL|PIPE\s+(?:SIZE|SLOPE|INVERT\s+ELEVATION|EXISTING)\s+TAG\b.*|EXISTING\s+PIPE\s+TAG|R\s*\(RISE\)\s*,?\s*D\s*\(DROP\)\s*.*|(?:RECTANGULAR|ROUND)\s+(?:SUPPLY\s*\/\s*OUTSIDE|RETURN\s*\/\s*TRANSFER|EXHAUST\s*\/\s*RELIEF)\s+AIR\s+DUCT\s+(?:RISE|DROP)|PIPE\s+(?:TURNED\s+(?:UP|DOWN)(?:\s*\([^)]*\))?|OUT\s+(?:TOP|BOTTOM)))$/i.test(normalized)) return true;
+  if (/^(?:SECTION\s+MARK\b.*|DETAIL\s+MARK\b.*|DRAWING\s+TITLE\b.*|DOOR\s+TAG|WINDOW\s+TAG|WALL\s+TYPE\s+TAG|SHEET\s+NOTE\s+MARK\b.*|KEY\s+NOTE\s+MARK\b.*|BREAK\s+LINES?|REVISION\s+BUBBLE\b.*|ELEVATION\s+MARK\b.*|DATUM\s+POINT|SPOT\s+ELEVATION|GRAPHICAL\s+SCALE)$/i.test(normalized)) return true;
   // Row-topology conventions describe how a routed system continues or is
   // oriented on the drawing. They are valid legend truth, but counting the
   // mark would count drafting grammar rather than an installed fitting.
@@ -646,11 +730,13 @@ function isRoutedSystemCaption(text: string): boolean {
   // are themselves routed media.
   if (/\bDIRECTION\b/i.test(normalized)
     || /\b(?:ACTUATOR|CLEANOUT|DAMPER|DETECTOR|DIFFUSER|FAN|FILTER|GAUGE|GRILLE|LOUVER|METER|PANELBOARD|PUMP|REGISTER|REGULATOR|RELAY|SENSOR|STARTER|STRAINER|SWITCH|THERMOSTAT|TRANSMITTER|VALVE|VFD)\b\s+(?:IN|ON)\b.*\b(?:PIPING|LINE)(?:\s*\([^)]*\))?$/i.test(normalized)) return false;
-  return /\b(?:PIPING|LINE)(?:\s*\([^)]*\))?$|\b(?:SEWER|RACEWAY)$/i.test(normalized)
+  return /^(?:EXISTING\s+)?ELECTRICAL\s+CIRCUITING\b/i.test(normalized)
+    || /\b(?:PIPING|LINE)(?:\s*\([^)]*\))?$|\b(?:SEWER|RACEWAY)$/i.test(normalized)
     || /^(?:(?:NEW|FUTURE|EXISTING)\s+)?(?:DUCTWORK|PIPING)(?:\s+(?:TO\s+(?:BE\s+)?(?:REMOVED|REMAIN)|WITH\s+(?:INSULATION|LINING)|DEMOLITION))?$/i.test(normalized)
     || /^(?:LPS\s+(?:ROOF|MAIN\s+DOWN)\s+CONDUCTOR|GROUND\s+RING\b.*\bCONDUCTOR|BRANCH\s+CIRCUIT\s+OR\s+FEEDER\s+WIRING\s+IN\s+CONDUIT\b)/i.test(normalized)
     || /^PANEL,?\s+SWITCHBOARD,?\s+OR\s+BUSD?UCT\b/i.test(normalized)
     || /^(?:VENT|DUCTWORK|STORM\s+DRAIN)$/i.test(normalized)
+    || /^(?:CABLE|CABLE\s+TRAY|UNDERFLOOR\s+DUCT|J-HOOK\s+COMMUNICATION\s+PATHWAY|MULTI-OUTLET\s+ASSEMBLY\s+WITH\s+(?:DATA|POWER|VOICE|COMMUNICATIONS?)\s+(?:RECEPTACLES?|OUTLETS?))$/i.test(normalized)
     || /^(?:(?:SUPPLY|RETURN|EXHAUST|TRANSFER|OUTDOOR|OUTSIDE|CONDITIONED\s+OUTSIDE|RELIEF|GREASE\s+EXHAUST|SMOKE\s+EXHAUST|COMBUSTION)\s+AIR|EXHAUST\s+GAS\s+FLUE|CONDENSATE\s+DRAIN|REFRIGERANT\s+SUCTION\s*\/\s*LIQUID|(?:OR\s+)?PNEUMATIC|ELECTRICAL\s+WIRING)$/i.test(normalized)
     // Duct cross-section keys describe a routed shape/size convention, not
     // one installed object. Firms use both terse labels ("ROUND DUCT") and
@@ -660,6 +746,11 @@ function isRoutedSystemCaption(text: string): boolean {
     || /^(?:NEW\s+DUCTWORK,?\s+FIRST\s+DIMENSION\b.*|DEMOLISHED\s*\/\s*REMOVED\s+DUCTWORK,?\s+PIPING\s+AND\s*\/\s*OR\s+EQUIPMENT)$/i.test(normalized)
     || /\b(?:CHILLED|CONDENSER|HEATING|GEOTHERMAL|DOMESTIC|TEMPERED)\s+(?:(?:HOT|COLD)\s+)?WATER(?:\s+(?:SUPPLY|RETURN))?(?:\s*\([^)]*\))?$/i.test(normalized)
     || /\b(?:LOW|MEDIUM|HIGH)\s+PRESSURE\s+NATURAL\s+GAS$/i.test(normalized);
+}
+
+function isRoutedSystemLegendHeading(text: string | null): boolean {
+  return !!text
+    && /^(?:DUCTWORK|PIPING)(?:\s+SYSTEM)?\s+ABBREVIATIONS$/i.test(normalizedCaption(text));
 }
 
 /** Recover a routed swatch made only from many disconnected, parallel
@@ -736,7 +827,9 @@ function disconnectedParallelStrokeCandidates(
  * are common). Preserve the installed-device identity as `symbol`, but keep
  * the sparse line fragment out of Symbol Sweep by leaving it nonseedable. */
 function isDiscreteInstalledDeviceCaption(text: string): boolean {
-  return /\b(?:ACTUATOR|ARRESTOR|CAP|CLEANOUT|DAMPER|DETECTOR|DIFFUSER|DRAIN|FAN|FILTER|GAUGE|GRILLE|GUIDE|HUMIDISTAT|LOUVER|METER|PANELBOARD|PUMP|REGISTER|REGULATOR|RELAY|SENSOR|SINK|SLEEVE|STARTER|STRAINER|SWITCH|THERMOSTAT|TRANSMITTER|VALVE|VFD)\b/i.test(canonicalLegendCaption(text));
+  const normalized = canonicalLegendCaption(text);
+  return /\b(?:ACTUATOR|ARRESTOR|CAP|CLEANOUT|DAMPER|DETECTOR|DIFFUSER|DRAIN|FAN|FILTER|GAUGE|GRILLE|GUIDE|HUMIDISTAT|LOUVER|METER|PANELBOARD|PUMP|PUSH\s*BUTTON|REGISTER|REGULATOR|RELAY|SENSOR|SINK|SLEEVE|STARTER|STRAINER|SWITCH|THERMOSTAT|TRANSMITTER|VALVE|VFD)\b/i.test(normalized)
+    || /\b(?:MONITORING|METERING)\s+EQUIPMENT\b/i.test(normalized);
 }
 
 /** BAS legends also contain logical/sequence identities that matter to a
@@ -848,7 +941,10 @@ function isExplicitLegendDimensionConvention(
  * 12x10, 20"X12", 20"X12"Ø, Ø18, and 18"Ø are all common. */
 function isInlineDimensionValue(text: string): boolean {
   const compact = normalizedCaption(text).replace(/\s+/g, "");
-  return /^Ø?(?:\d+(?:\.\d+)?|\d+\/\d+)(?:["'])?(?:(?:[X×](?:\d+(?:\.\d+)?|\d+\/\d+)(?:["'])?Ø?)|Ø)?$/i.test(compact);
+  return /^Ø?(?:\d+(?:\.\d+)?|\d+\/\d+)(?:["'])?(?:(?:[X×](?:\d+(?:\.\d+)?|\d+\/\d+)(?:["'])?Ø?)|Ø)?$/i.test(compact)
+    // Architectural elevations commonly use feet, inches, and an optional
+    // mixed fraction. Removing spaces turns 12' - 5 1/2" into 12'-51/2".
+    || /^\d+(?:\.\d+)?'(?:-\d+(?:\.\d+)?(?:-?\d+\/\d+)?")?$/.test(compact);
 }
 
 /** A long declared legend may place its dimension examples far below the
@@ -888,8 +984,15 @@ function isInternalLegendDimensionCaption(
  * to their right becomes its caption; point-matrix X marks fail identically.
  * A real tagged symbol (circle-T, boxed-AI, etc.) extends materially outside
  * its inner text span, so it is retained. */
+type TextResemblanceContext = {
+  /** Tight alphabetic device tags may fill their carrier, but this exception
+   * is safe only inside an explicitly bounded symbol panel. */
+  allowNearEdgeAlphaTag?: boolean;
+};
+
 function resemblesExtractedText(
   rect: [Point, Point], rawSpans: LegendSpan[], segmentCount?: number,
+  context: TextResemblanceContext = {},
 ): boolean {
   if (isExplicitLegendDimensionConvention(rect, rawSpans)) return false;
   const [[x0, y0], [x1, y1]] = rect;
@@ -913,12 +1016,15 @@ function resemblesExtractedText(
       && /[A-Z]/i.test(tag)
       && !isInlineDimensionValue(tag)
       && x0 <= s.x0 + 0.75 && x1 >= s.x1 - 0.75;
+    const nearEdgeAlphaTag = !!context.allowNearEdgeAlphaTag
+      && /^[A-Z]{2,4}$/i.test(tag)
+      && x0 <= s.x0 + 0.75 && x1 >= s.x1 - 0.75;
     return segmentCount === 4
       && compactTag
-      && w >= sh * 1.8
+      && (w >= sh * 1.8 || (nearEdgeAlphaTag && w >= sh * 1.2))
       && w <= sw + sh
       && Math.abs(cx - (s.x0 + s.x1) / 2) <= sh * 0.5
-      && (containsWholeTag || nearEdgeDigitTag)
+      && (containsWholeTag || nearEdgeDigitTag || nearEdgeAlphaTag)
       && verticalOverlap >= Math.min(h, sh) * 0.65;
   };
   if (rawSpans.some((s) => {
@@ -1711,14 +1817,19 @@ function structuredTablePairs(
 function pairCandidates(
   candidates: GlyphCandidate[],
   spans: LegendSpan[], rawSpans: LegendSpan[], maxCaptionGapPx: number,
-  typicalTextHeight: number, preferBelowCaptions = false,
+  typicalTextHeight: number,
+  preferBelowCaption: ((span: LegendSpan) => boolean) | null = null,
   sectionDividers: RectBox[] = [], declaredTableHeaders: SymbolDescriptionHeader[] = [],
+  rightCaptionGap: ((candidate: GlyphCandidate, span: LegendSpan) => number) | null = null,
+  textResemblanceContext: ((candidate: GlyphCandidate) => TextResemblanceContext) | null = null,
 ): { pairs: PairCandidate[]; usedSpans: Set<number> } {
   type Edge = { candidate: number; span: number; score: number; gap: number };
   const edges: Edge[] = [];
   for (let ci = 0; ci < candidates.length; ci++) {
     const cand = candidates[ci];
-    if (resemblesExtractedText(cand.rect, rawSpans, cand.segments)) continue;
+    if (resemblesExtractedText(
+      cand.rect, rawSpans, cand.segments, textResemblanceContext?.(cand),
+    )) continue;
     const [[x0, y0], [x1, y1]] = cand.rect;
     const centerY = (y0 + y1) / 2;
     const margin = Math.max((y1 - y0) * 0.5, typicalTextHeight * 0.75);
@@ -1727,7 +1838,8 @@ function pairCandidates(
       if (!meaningfulCaption(s.text) || s.x0 < x1) continue;
       if (s.y1 < y0 - margin || s.y0 > y1 + margin) continue;
       const gap = s.x0 - x1;
-      if (gap > maxCaptionGapPx) continue;
+      const allowedCaptionGap = Math.max(maxCaptionGapPx, rightCaptionGap?.(cand, s) ?? 0);
+      if (gap > allowedCaptionGap) continue;
       const spanCenterY = (s.y0 + s.y1) / 2;
       const crossesIndependentPanel = sectionDividers.some((divider) => {
         const x = divider.x0;
@@ -1746,6 +1858,21 @@ function pairCandidates(
       if (crossesIndependentPanel) continue;
       const short = normalizedCaption(s.text);
       const shortWords = short.split(/\s+/).length;
+      const shadowedDraftingPayload = (isInlineDimensionValue(short)
+        || /^[X#]+(?:[.\-/][X#]+)+$/i.test(short))
+        && spans.some((other, oi) => oi !== si
+          && other.x0 > s.x1
+          && other.x0 - x1 <= Math.max(
+            allowedCaptionGap, rightCaptionGap?.(cand, other) ?? 0,
+          )
+          && Math.abs((s.y0 + s.y1 - other.y0 - other.y1) / 2)
+            <= typicalTextHeight * 2
+          && isDraftingAnnotationCaption(other.text));
+      // Example values inside a drafting mark are not globally meaningless:
+      // they can be legitimate schedule/legend text elsewhere. Ignore one
+      // here only when a fuller drafting identity demonstrably continues on
+      // this same physical row to its right.
+      if (shadowedDraftingPayload) continue;
       // A dimension value printed inside a headed legend sketch (20x10,
       // 12Ø, etc.) describes the sketch; it is not the row caption. Leave
       // the candidate available for the external DUCT/PIPE SIZE definition.
@@ -1785,7 +1912,7 @@ function pairCandidates(
           if (otherCenterY < y0 - envelopeSlack || otherCenterY > y1 + envelopeSlack) return false;
         }
         return other.x0 - s.x0 <= Math.max(200, typicalTextHeight * 8)
-          && other.x0 - x1 <= maxCaptionGapPx;
+          && other.x0 - x1 <= allowedCaptionGap;
       });
       if (shadowedByDescription) continue;
       // A discrete symbol can contain a thin horizontal baseline that is a
@@ -1822,8 +1949,9 @@ function pairCandidates(
       // directly below it, let the below-caption path own the glyph. Normal
       // SYMBOL/DESCRIPTION columns have no horizontally overlapping text
       // under their glyphs and are unaffected.
-      const betterCaptionBelow = preferBelowCaptions && spans.some((other, oi) => {
-        if (oi === si || !meaningfulCaption(other.text) || isLegendHeadingText(other.text)) return false;
+      const betterCaptionBelow = !!preferBelowCaption && spans.some((other, oi) => {
+        if (oi === si || !meaningfulCaption(other.text)) return false;
+        if (!preferBelowCaption(other)) return false;
         const belowText = normalizedCaption(other.text);
         // A terse tag below the current row is often the identifying text
         // inside the NEXT row's carrier (CT/DP/AI), not this glyph's cell
@@ -1894,7 +2022,7 @@ function pairCandidates(
 function pairCandidatesBelow(
   candidates: GlyphCandidate[], spans: LegendSpan[], rawSpans: LegendSpan[],
   maxCaptionGapPx: number, typicalTextHeight: number,
-  alreadyClaimed: PairCandidate[],
+  alreadyClaimed: PairCandidate[], eligibleCaption: (span: LegendSpan) => boolean = () => true,
 ): { pairs: PairCandidate[]; usedSpans: Set<number> } {
   type Edge = { candidate: number; span: number; score: number; gap: number };
   const rectKey = (rect: [Point, Point]) => rect.flat().join(",");
@@ -1911,12 +2039,21 @@ function pairCandidatesBelow(
     const cx = (x0 + x1) / 2;
     for (let si = 0; si < spans.length; si++) {
       const span = spans[si];
-      if (!meaningfulCaption(span.text) || isLegendHeadingText(span.text)) continue;
+      if (!eligibleCaption(span) || !meaningfulCaption(span.text)) continue;
+      // A short object label can also be a legal section title (LIGHT
+      // FIXTURES is a common example). Inside an independently established
+      // below-caption legend grid, glyph-above/text-below geometry resolves
+      // that ambiguity. The later headed-grid gate still rejects pages with
+      // no explicit RCP/P&ID legend jurisdiction.
       // Vertical/rotated section labels and table dividers are context, not
       // below-glyph descriptions.
       if (span.y1 - span.y0 > typicalTextHeight * 2.2) continue;
       const gap = span.y0 - y1;
-      if (gap < -typicalTextHeight * 0.15 || gap > maxVerticalGap) continue;
+      // PDF text boxes can descend a fraction of one lettering height into
+      // the last tick/block of an otherwise visibly below-captioned cell.
+      // Keep the overlap bounded well inside one line so side-by-side text
+      // cannot masquerade as a below caption.
+      if (gap < -typicalTextHeight * 0.35 || gap > maxVerticalGap) continue;
       const horizontalMiss = Math.max(0, span.x0 - cx, cx - span.x1);
       if (horizontalMiss > horizontalSlack) continue;
       const spanCenterX = (span.x0 + span.x1) / 2;
@@ -1954,6 +2091,260 @@ function pairCandidatesBelow(
     });
   }
   return { pairs, usedSpans };
+}
+
+type MaterialLegendGroup = {
+  heading: string;
+  pairs: PairCandidate[];
+  zone: RectBox;
+};
+
+/** Pair a material/pattern description on the LEFT with its bordered hatch
+ * swatch on the RIGHT. This is intentionally not folded into the ordinary
+ * glyph-to-caption matcher: reversing that matcher globally makes one
+ * column's swatch steal the next column's caption. A real underlined
+ * materials heading, a repeated four-sided swatch family, row overlap, and
+ * one-to-one nearest ownership all have to agree before any row is emitted. */
+function materialLegendGroups(
+  lines: LegendSpan[], segs: number[], typicalTextHeight: number,
+  maxGlyphDimPx: number, maxCaptionGapPx: number, maxWrapGapPx: number,
+  maxWrapIndentPx: number, maxWrapLines: number,
+): MaterialLegendGroup[] {
+  const headings = lines.filter((line) => isMaterialLegendHeading(line.text));
+  const rectKey = (rect: [Point, Point]) => rect.flat().join(",");
+  const width = (candidate: GlyphCandidate) => candidate.rect[1][0] - candidate.rect[0][0];
+  const height = (candidate: GlyphCandidate) => candidate.rect[1][1] - candidate.rect[0][1];
+  const borderedSwatches = (
+    jurisdiction: UnderlinedLegendJurisdiction,
+  ): GlyphCandidate[] => {
+    type AxisSegment = { x0: number; y0: number; x1: number; y1: number };
+    const tolerance = Math.max(1.5, typicalTextHeight * 0.12);
+    const horizontal: AxisSegment[] = [];
+    const vertical: AxisSegment[] = [];
+    const verticalLimit = jurisdiction.y + Math.max(900, typicalTextHeight * 120);
+    for (let i = 0; i < segs.length; i += 4) {
+      const ax = segs[i], ay = segs[i + 1], bx = segs[i + 2], by = segs[i + 3];
+      const sx0 = Math.min(ax, bx), sx1 = Math.max(ax, bx);
+      const sy0 = Math.min(ay, by), sy1 = Math.max(ay, by);
+      if (sx1 < jurisdiction.x0 - typicalTextHeight || sx0 > jurisdiction.x1 + typicalTextHeight
+        || sy1 < jurisdiction.y || sy0 > verticalLimit) continue;
+      const length = Math.hypot(bx - ax, by - ay);
+      if (Math.abs(ay - by) <= tolerance
+        && length >= typicalTextHeight * 4 && length <= maxGlyphDimPx) {
+        const y = (ay + by) / 2;
+        horizontal.push({ x0: sx0, y0: y, x1: sx1, y1: y });
+      }
+      if (Math.abs(ax - bx) <= tolerance
+        && length >= typicalTextHeight * 1.4 && length <= maxGlyphDimPx) {
+        const x = (ax + bx) / 2;
+        vertical.push({ x0: x, y0: sy0, x1: x, y1: sy1 });
+      }
+    }
+    const unique = (entries: AxisSegment[]) => entries.filter((entry, index, all) => {
+      const key = [entry.x0, entry.y0, entry.x1, entry.y1]
+        .map((value) => Math.round(value / tolerance)).join(",");
+      return all.findIndex((candidate) => [candidate.x0, candidate.y0, candidate.x1, candidate.y1]
+        .map((value) => Math.round(value / tolerance)).join(",") === key) === index;
+    });
+    const hs = unique(horizontal).sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0 || a.x1 - b.x1);
+    const vs = unique(vertical).sort((a, b) => a.x0 - b.x0 || a.y0 - b.y0 || a.y1 - b.y1);
+    const coveredVerticalSide = (x: number, y0: number, y1: number): AxisSegment | null => {
+      const pieces = vs.filter((edge) => Math.abs(edge.x0 - x) <= tolerance
+        && edge.y1 >= y0 - tolerance && edge.y0 <= y1 + tolerance)
+        .sort((a, b) => a.y0 - b.y0 || a.y1 - b.y1);
+      let cursor = y0;
+      const used: AxisSegment[] = [];
+      for (const piece of pieces) {
+        if (piece.y0 > cursor + tolerance) break;
+        if (piece.y1 <= cursor - tolerance) continue;
+        used.push(piece);
+        cursor = Math.max(cursor, piece.y1);
+        if (cursor >= y1 - tolerance) {
+          return {
+            x0: median(used.map((edge) => edge.x0)),
+            y0,
+            x1: median(used.map((edge) => edge.x1)),
+            y1,
+          };
+        }
+      }
+      return null;
+    };
+    const boxes: GlyphCandidate[] = [];
+    for (let topIndex = 0; topIndex < hs.length; topIndex++) {
+      const top = hs[topIndex];
+      for (let bottomIndex = topIndex + 1; bottomIndex < hs.length; bottomIndex++) {
+        const bottom = hs[bottomIndex];
+        if (bottom.y0 <= top.y0
+          || Math.abs(bottom.x0 - top.x0) > tolerance
+          || Math.abs(bottom.x1 - top.x1) > tolerance) continue;
+        const w = (top.x1 - top.x0 + bottom.x1 - bottom.x0) / 2;
+        const h = bottom.y0 - top.y0;
+        if (h < typicalTextHeight * 1.4 || h > maxGlyphDimPx
+          || w / Math.max(1, h) > 12) continue;
+        // Pattern generators frequently split a swatch border exactly where
+        // an interior hatch stroke touches it. A contiguous collinear chain
+        // is the same closed-side evidence as one PDF segment; demanding one
+        // unsplit primitive silently lost legitimate batt/loop hatches.
+        const left = coveredVerticalSide(top.x0, top.y0, bottom.y0);
+        const right = coveredVerticalSide(top.x1, top.y0, bottom.y0);
+        if (!left || !right) continue;
+        const rect: [Point, Point] = [[
+          Math.min(top.x0, bottom.x0, left.x0), Math.min(top.y0, left.y0, right.y0),
+        ], [
+          Math.max(top.x1, bottom.x1, right.x0), Math.max(bottom.y0, left.y1, right.y1),
+        ]];
+        let segmentCount = 0;
+        for (let i = 0; i < segs.length; i += 4) {
+          const ax = segs[i], ay = segs[i + 1], bx = segs[i + 2], by = segs[i + 3];
+          if (ax >= rect[0][0] - tolerance && ax <= rect[1][0] + tolerance
+            && bx >= rect[0][0] - tolerance && bx <= rect[1][0] + tolerance
+            && ay >= rect[0][1] - tolerance && ay <= rect[1][1] + tolerance
+            && by >= rect[0][1] - tolerance && by <= rect[1][1] + tolerance) segmentCount++;
+        }
+        boxes.push({ rect, segments: segmentCount, kind: "symbol" });
+      }
+    }
+    return boxes.filter((candidate, index, all) => all.findIndex((other) =>
+      rectKey(other.rect) === rectKey(candidate.rect)) === index);
+  };
+
+  const out: MaterialLegendGroup[] = [];
+  for (const heading of headings) {
+    const jurisdiction = underlinedLegendJurisdiction(heading, segs, typicalTextHeight);
+    if (!jurisdiction) continue;
+    const bordered = borderedSwatches(jurisdiction);
+
+    // A materials panel is a repeated swatch vocabulary. Require a tight,
+    // page-scaled dimension family so one ordinary plan rectangle near a
+    // MATERIAL LEGEND note cannot establish this reversed orientation.
+    // Hatch strokes can themselves form smaller closed sub-boxes inside a
+    // true swatch. Prefer a containing box only when its dimensions have
+    // stronger repeated support across the panel; in a genuinely ruled
+    // table the repeated row cells therefore beat its one-off outer frame.
+    const familySupportCache = new Map<GlyphCandidate, number>();
+    const familySupport = (candidate: GlyphCandidate): number => {
+      const cached = familySupportCache.get(candidate);
+      if (cached !== undefined) return cached;
+      const support = bordered.filter((other) =>
+        Math.abs(width(other) - width(candidate)) <= Math.max(2, typicalTextHeight * 0.35, width(candidate) * 0.08)
+        && Math.abs(height(other) - height(candidate)) <= Math.max(2, typicalTextHeight * 0.35, height(candidate) * 0.08)).length;
+      familySupportCache.set(candidate, support);
+      return support;
+    };
+    const supported = bordered.filter((candidate) => familySupport(candidate) >= 3);
+    const swatches = supported.filter((candidate) => !supported.some((other) => {
+      if (other === candidate || familySupport(other) < familySupport(candidate)) return false;
+      const sameHorizontalBounds = Math.abs(other.rect[0][0] - candidate.rect[0][0]) <= typicalTextHeight * 0.12
+        && Math.abs(other.rect[1][0] - candidate.rect[1][0]) <= typicalTextHeight * 0.12;
+      const containsVertically = other.rect[0][1] <= candidate.rect[0][1] + typicalTextHeight * 0.12
+        && other.rect[1][1] >= candidate.rect[1][1] - typicalTextHeight * 0.12;
+      return sameHorizontalBounds && containsVertically
+        && height(other) > height(candidate) + typicalTextHeight * 0.12;
+    }))
+      .sort((a, b) => a.rect[0][1] - b.rect[0][1] || a.rect[0][0] - b.rect[0][0]);
+    if (swatches.length < 3) continue;
+
+    type Edge = { candidate: number; span: number; score: number };
+    const edges: Edge[] = [];
+    for (let ci = 0; ci < swatches.length; ci++) {
+      const candidate = swatches[ci];
+      const [[x0, y0], [, y1]] = candidate.rect;
+      const centerY = (y0 + y1) / 2;
+      for (let si = 0; si < lines.length; si++) {
+        const span = lines[si];
+        const spanCenterY = (span.y0 + span.y1) / 2;
+        if (!meaningfulCaption(span.text)
+          || isLegendHeadingText(span.text)
+          || isUnderlinedSubsectionHeading(span, segs, typicalTextHeight)
+          || span.x0 < jurisdiction.x0 - typicalTextHeight
+          || span.x1 > x0 + typicalTextHeight * 0.25
+          || x0 - span.x1 > Math.max(maxCaptionGapPx, typicalTextHeight * 18)
+          || spanCenterY < y0 - typicalTextHeight * 0.75
+          || spanCenterY > y1 + typicalTextHeight * 0.75) continue;
+        const horizontalGap = Math.max(0, x0 - span.x1);
+        edges.push({
+          candidate: ci,
+          span: si,
+          score: Math.abs(spanCenterY - centerY) * 4 + horizontalGap * 0.08,
+        });
+      }
+    }
+    edges.sort((a, b) => a.score - b.score || a.candidate - b.candidate || a.span - b.span);
+    const usedCandidates = new Set<number>();
+    const usedSpans = new Set<number>();
+    const pairs: PairCandidate[] = [];
+    for (const edge of edges) {
+      if (usedCandidates.has(edge.candidate) || usedSpans.has(edge.span)) continue;
+      usedCandidates.add(edge.candidate);
+      usedSpans.add(edge.span);
+      const candidate = swatches[edge.candidate];
+      const span = lines[edge.span];
+      pairs.push({
+        rect: candidate.rect,
+        segments: candidate.segments,
+        members: [{ rect: candidate.rect, segments: candidate.segments }],
+        span: { ...span },
+        caption: normalizedCaption(span.text),
+        captionLines: 1,
+        kind: candidate.kind,
+        layout: "left",
+      });
+    }
+    attachWrappedCaptions(
+      pairs, lines, usedSpans,
+      maxWrapGapPx, maxWrapIndentPx, maxWrapLines, typicalTextHeight,
+    );
+    // An interior full-width hatch stroke plus split border sides can make
+    // two nested candidates claim the two physical lines of one material
+    // name before the ordinary unclaimed-line wrapper runs. Reunite those
+    // overlapping fragments with the same bounded topology used by normal
+    // multi-component legend glyphs; separate swatch rows have a real row
+    // gap and remain independent.
+    const mergedPairs = mergeOwnedWrapPairs(
+      pairs, maxWrapGapPx, maxWrapIndentPx, maxGlyphDimPx,
+      typicalTextHeight, maxWrapLines, lines,
+    );
+    for (const pair of mergedPairs) {
+      const sameRowContainers = bordered.filter((candidate) => {
+        const tolerance = typicalTextHeight * 0.15;
+        const sameHorizontalBounds = Math.abs(candidate.rect[0][0] - pair.rect[0][0]) <= tolerance
+          && Math.abs(candidate.rect[1][0] - pair.rect[1][0]) <= tolerance;
+        const containsCurrentEvidence = candidate.rect[0][1] <= pair.rect[0][1] + tolerance
+          && candidate.rect[1][1] >= pair.rect[1][1] - tolerance;
+        if (!sameHorizontalBounds || !containsCurrentEvidence) return false;
+        // A closed frame spanning several material rows is table/panel
+        // structure, not one swatch. It cannot contain another independently
+        // owned caption baseline in this same description+swatch column.
+        return !mergedPairs.some((other) => other !== pair
+          && Math.abs(other.rect[0][0] - candidate.rect[0][0]) <= tolerance
+          && Math.abs(other.rect[1][0] - candidate.rect[1][0]) <= tolerance
+          && (other.span.y0 + other.span.y1) / 2 >= candidate.rect[0][1] - tolerance
+          && (other.span.y0 + other.span.y1) / 2 <= candidate.rect[1][1] + tolerance);
+      }).sort((a, b) => {
+        const areaA = width(a) * height(a);
+        const areaB = width(b) * height(b);
+        return areaB - areaA || a.rect[0][1] - b.rect[0][1];
+      });
+      const complete = sameRowContainers[0];
+      if (!complete) continue;
+      pair.rect = complete.rect;
+      pair.segments = complete.segments;
+      pair.members = [{ rect: complete.rect, segments: complete.segments }];
+    }
+    if (mergedPairs.length < 3) continue;
+    out.push({
+      heading: normalizedCaption(heading.text),
+      pairs: mergedPairs,
+      zone: {
+        x0: jurisdiction.x0 - typicalTextHeight,
+        x1: jurisdiction.x1 + typicalTextHeight,
+        y0: jurisdiction.y,
+        y1: Math.max(...swatches.map((candidate) => candidate.rect[1][1])) + typicalTextHeight * 2,
+      },
+    });
+  }
+  return out;
 }
 
 /** Collect side-by-side renditions inside one below-caption legend cell.
@@ -2341,6 +2732,93 @@ function expandSymbolPairs(
   }
 }
 
+/** Close a compact installed-device enclosure whose side wall misses both
+ * rails by a sub-grid PDF coordinate seam. The ordinary junction graph must
+ * keep that wall disconnected; snapping it globally would fuse unrelated
+ * plan linework. Here, two already-owned parallel rails plus one raw
+ * bridging side prove the local enclosure topology, so the evidence box can
+ * safely own that final stroke without weakening clustering elsewhere. */
+function closeSeamedDeviceEnclosures(
+  pairs: PairCandidate[], segs: number[], typicalTextHeight: number, gridPx: number,
+): void {
+  const pad = gridPx / 2;
+  const seam = Math.max(gridPx * 1.25, typicalTextHeight * 0.08);
+  const vertical: Array<[number, number, number, number]> = [];
+  for (let i = 0; i < segs.length; i += 4) {
+    const edge: [number, number, number, number] = [segs[i], segs[i + 1], segs[i + 2], segs[i + 3]];
+    const dx = Math.abs(edge[2] - edge[0]);
+    const dy = Math.abs(edge[3] - edge[1]);
+    if (dx <= seam * 0.4
+      && dy >= typicalTextHeight * 0.45
+      && dy <= typicalTextHeight * 2.5) vertical.push(edge);
+  }
+  const w = (member: GlyphMember) => member.rect[1][0] - member.rect[0][0];
+  const h = (member: GlyphMember) => member.rect[1][1] - member.rect[0][1];
+  const cy = (member: GlyphMember) => (member.rect[0][1] + member.rect[1][1]) / 2;
+  for (const pair of pairs) {
+    if (!isDiscreteInstalledDeviceCaption(pair.caption) || pair.members.length < 2) continue;
+    const rails = pair.members.filter((member) => member.segments <= 3
+      && w(member) >= typicalTextHeight * 0.55
+      && h(member) <= Math.max(gridPx * 2.5, typicalTextHeight * 0.2));
+    let closure: [number, number, number, number] | null = null;
+    for (let i = 0; i < rails.length && !closure; i++) {
+      for (let j = i + 1; j < rails.length && !closure; j++) {
+        const top = cy(rails[i]) <= cy(rails[j]) ? rails[i] : rails[j];
+        const bottom = top === rails[i] ? rails[j] : rails[i];
+        const separation = cy(bottom) - cy(top);
+        const overlap = Math.min(top.rect[1][0], bottom.rect[1][0])
+          - Math.max(top.rect[0][0], bottom.rect[0][0]);
+        if (separation < typicalTextHeight * 0.45
+          || separation > typicalTextHeight * 2.25
+          || overlap < Math.min(w(top), w(bottom)) * 0.75) continue;
+        const sides = [
+          (top.rect[0][0] + bottom.rect[0][0]) / 2,
+          (top.rect[1][0] + bottom.rect[1][0]) / 2,
+        ];
+        closure = vertical.filter((edge) => {
+          const x = (edge[0] + edge[2]) / 2;
+          const y0 = Math.min(edge[1], edge[3]);
+          const y1 = Math.max(edge[1], edge[3]);
+          const outsideCurrentEvidence = x < pair.rect[0][0] - gridPx * 0.25
+            || x > pair.rect[1][0] + gridPx * 0.25;
+          if (!outsideCurrentEvidence
+            || x >= pair.span.x0
+            || Math.min(...sides.map((side) => Math.abs(x - side))) > seam
+            || y0 > cy(top) + seam
+            || y1 < cy(bottom) - seam) return false;
+          const edgeCx = x;
+          const edgeCy = (y0 + y1) / 2;
+          return !pairs.some((other) => other !== pair
+            && edgeCx >= other.rect[0][0] && edgeCx <= other.rect[1][0]
+            && edgeCy >= other.rect[0][1] && edgeCy <= other.rect[1][1]);
+        }).sort((a, b) => {
+          const ax = (a[0] + a[2]) / 2, bx = (b[0] + b[2]) / 2;
+          return Math.min(...sides.map((side) => Math.abs(ax - side)))
+            - Math.min(...sides.map((side) => Math.abs(bx - side)));
+        })[0] ?? null;
+      }
+    }
+    if (!closure) continue;
+    const memberRect: [Point, Point] = [[
+      Math.min(closure[0], closure[2]) - pad,
+      Math.min(closure[1], closure[3]) - pad,
+    ], [
+      Math.max(closure[0], closure[2]) + pad,
+      Math.max(closure[1], closure[3]) + pad,
+    ]];
+    pair.members.push({ rect: memberRect, segments: 1 });
+    pair.segments++;
+    pair.kind = "symbol";
+    pair.rect = [[
+      Math.min(pair.rect[0][0], memberRect[0][0]),
+      Math.min(pair.rect[0][1], memberRect[0][1]),
+    ], [
+      Math.max(pair.rect[1][0], memberRect[1][0]),
+      Math.max(pair.rect[1][1], memberRect[1][1]),
+    ]];
+  }
+}
+
 /** A routed baseline can be one connected component with a nearby drafting
  * leader (slope/invert/tag examples commonly touch the line at an arrow
  * point). The routed row owns the baseline; the callout row must own its
@@ -2426,6 +2904,11 @@ function hasMultipleSubstantialSymbols(
   // repeated, explicit fitting nouns still prove this is a vocabulary group
   // rather than one seedable symbol.
   if (/\bFLANGED\s+CONN(?:ECTION)?\.?\s*[\\/]\s*BLIND\s+FLANGE\b/i.test(pair.caption)) return true;
+  // A mechanically interlocked N.O./N.C. pair can be one connected vector
+  // component because the interlock link physically joins both switches.
+  // The caption itself explicitly declares two installed identities, so it
+  // remains a reviewable group even when connectivity cannot split them.
+  if (/\bINTERLOCKED\b.*\bNORMALLY\s+OPEN\b.*\bNORMALLY\s+CLOSED\b.*\bSWITCHES\b/i.test(pair.caption)) return true;
   if (pair.members.length < 2) return false;
   // A below-caption cell conventionally presents side-by-side renditions
   // (fixture sizes, grille necks, strobe/horn variants) under one identity.
@@ -2469,6 +2952,8 @@ function hasMultipleSubstantialSymbols(
     || /^(?:ELAPSED\s+TIME\s+METER|FLUORESCENT\s+LIGHT\s+FIXTURE|EMERGENCY\s+LIGHTING)\b/i.test(pair.caption)
     || /^CEILING-MOUNTED\s+EXIT\s+LIGHT\b/i.test(pair.caption)
     || /\b(?:ARROW,?\s+WHEN\s+USED|QUADRANT\(S\)\s+OF\s+SYMBOL)\b/i.test(pair.caption)
+    || /^TYPICAL\s+FOR\s+ALL\b.*\b(?:SYMBOLS?|SIGNS?|FIXTURES?)\b/i.test(pair.caption)
+    || /\bARROW\s+INDICATES\s+AIRFLOW\s+DIREC(?:TION|ITON)\b/i.test(pair.caption)
     || /\(\s*SINGLE\s*,\s*DOUBLE(?:\s*,\s*QUAD)?\s*\)/i.test(pair.caption);
 
   // A ruled SYMBOL / DESCRIPTION row gives stronger physical ownership
@@ -2666,6 +3151,107 @@ function attachWrappedCaptions(
   }
 }
 
+/** Repair a compact legend column when a text-only continuation line is
+ * vertically closer to the next row's glyph than to the row it completes.
+ * The next glyph then owns that continuation and its real caption is left
+ * unclaimed. Rebalance only when grammar, repeated geometry, and an unused
+ * replacement line inside the next glyph's row all agree. */
+function rebalanceDownshiftedCaptionOwnership(
+  pairs: PairCandidate[], spans: LegendSpan[], usedSpans: Set<number>,
+  typicalTextHeight: number, maxWrapIndentPx: number,
+): void {
+  const ordered = [...pairs].sort((a, b) =>
+    (a.rect[0][1] + a.rect[1][1]) - (b.rect[0][1] + b.rect[1][1])
+    || a.rect[0][0] - b.rect[0][0]);
+  const rebalanced = new Set<PairCandidate>();
+  const completesUpper = (upper: string, continuation: string): boolean => {
+    const first = normalizedCaption(upper);
+    const second = normalizedCaption(continuation);
+    if (second.split(/\s+/).length > 6) return false;
+    return /\b(?:WITH|AND|OR|OF|FOR|THE|A|AN)\s*$/i.test(first)
+      || (/\b(?:ASSEMBLY|RACEWAY|SYSTEM)\s+WITH\s+(?:POWER|DATA|VOICE|CONTROL|COMMUNICATIONS?)\s*$/i.test(first)
+        && /^(?:RECEPTACLES?|OUTLETS?|CONDUCTORS?|CABLES?)$/i.test(second))
+      || (/[,;:]\s*$/.test(first)
+        && /^(?:ABOVE|BELOW|CEILING|FLOOR|UNDERFLOOR|WALL)\b/i.test(second))
+      || (/\b(?:WALL|FLOOR|CEILING|SURFACE|EQUIPMENT)\s*$/i.test(first)
+        && /^MOUNTED$/i.test(second))
+      || (/\(N\s*=\s*[^)]+\)\s*$/i.test(first)
+        && /^\(E\s*=\s*[^)]+\)$/i.test(second));
+  };
+  const ownedCaptionLines = (pair: PairCandidate): LegendSpan[] => spans.filter((span) => {
+    const text = normalizedCaption(span.text);
+    return !!text && pair.caption.includes(text)
+      && Math.abs(span.x0 - pair.span.x0) <= maxWrapIndentPx
+      && span.y0 >= pair.span.y0 - 1 && span.y1 <= pair.span.y1 + 1;
+  }).sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
+  for (const upper of ordered) {
+    const upperCx = (upper.rect[0][0] + upper.rect[1][0]) / 2;
+    const upperCy = (upper.rect[0][1] + upper.rect[1][1]) / 2;
+    const lower = ordered.filter((candidate) => {
+      const leading = ownedCaptionLines(candidate)[0];
+      if (candidate === upper || rebalanced.has(candidate) || !leading
+        || !completesUpper(upper.caption, leading.text)) return false;
+      const candidateCx = (candidate.rect[0][0] + candidate.rect[1][0]) / 2;
+      const candidateCy = (candidate.rect[0][1] + candidate.rect[1][1]) / 2;
+      return candidateCy > upperCy
+        && candidateCy - upperCy <= typicalTextHeight * 5
+        && Math.abs(upperCx - candidateCx) <= typicalTextHeight * 1.75
+        && Math.abs(upper.span.x0 - candidate.span.x0) <= maxWrapIndentPx;
+    }).sort((a, b) => (a.rect[0][1] + a.rect[1][1])
+      - (b.rect[0][1] + b.rect[1][1]))[0];
+    if (!lower) continue;
+    const lowerCy = (lower.rect[0][1] + lower.rect[1][1]) / 2;
+    const owned = ownedCaptionLines(lower);
+    if (owned.length > 1) {
+      const [continuation, ...remaining] = owned;
+      upper.caption = normalizedCaption(`${upper.caption} ${continuation.text}`);
+      upper.captionLines++;
+      upper.span = {
+        text: upper.caption,
+        x0: Math.min(upper.span.x0, continuation.x0),
+        y0: Math.min(upper.span.y0, continuation.y0),
+        x1: Math.max(upper.span.x1, continuation.x1),
+        y1: Math.max(upper.span.y1, continuation.y1),
+      };
+      lower.caption = normalizedCaption(remaining.map((line) => line.text).join(" "));
+      lower.captionLines = remaining.length;
+      lower.span = {
+        text: lower.caption,
+        x0: Math.min(...remaining.map((line) => line.x0)),
+        y0: Math.min(...remaining.map((line) => line.y0)),
+        x1: Math.max(...remaining.map((line) => line.x1)),
+        y1: Math.max(...remaining.map((line) => line.y1)),
+      };
+      rebalanced.add(lower);
+      continue;
+    }
+    const replacement = spans.map((span, index) => ({ span, index }))
+      .filter(({ span, index }) => !usedSpans.has(index)
+        && meaningfulCaption(span.text)
+        && !isLegendHeadingText(span.text)
+        && span.y0 >= lower.span.y0 - typicalTextHeight * 0.1
+        && span.y0 <= lower.rect[1][1] + typicalTextHeight
+        && Math.abs(span.x0 - lower.span.x0) <= maxWrapIndentPx
+        && Math.abs((span.y0 + span.y1) / 2 - lowerCy) <= typicalTextHeight * 1.5)
+      .sort((a, b) => a.span.y0 - b.span.y0 || a.index - b.index)[0];
+    if (!replacement) continue;
+    upper.caption = normalizedCaption(`${upper.caption} ${lower.caption}`);
+    upper.captionLines += lower.captionLines;
+    upper.span = {
+      text: upper.caption,
+      x0: Math.min(upper.span.x0, lower.span.x0),
+      y0: Math.min(upper.span.y0, lower.span.y0),
+      x1: Math.max(upper.span.x1, lower.span.x1),
+      y1: Math.max(upper.span.y1, lower.span.y1),
+    };
+    lower.caption = normalizedCaption(replacement.span.text);
+    lower.captionLines = 1;
+    lower.span = { ...replacement.span };
+    usedSpans.add(replacement.index);
+    rebalanced.add(lower);
+  }
+}
+
 /** A symbol can itself be drawn as several disconnected components (the
  * display and lower indicator inside a VFD box are a real example). When a
  * wrapped caption line was therefore claimed by a second component, reunite
@@ -2722,16 +3308,36 @@ function mergeOwnedWrapPairs(
         };
         continue;
       }
+      // A notation/definition block may own several tightly led prose
+      // lines, but it cannot absorb a following caption that independently
+      // names an installed device and already owns separate glyph evidence.
+      if (isDraftingAnnotationCaption(current.caption)
+        && isDiscreteInstalledDeviceCaption(next.caption)) continue;
       if (ownedLines >= maxWrapLines) break;
       if (ownedLines + next.captionLines > maxWrapLines) continue;
       if (Math.abs(next.span.x0 - current.span.x0) > maxIndentDriftPx) continue;
+      const semanticallyIncompleteCaption = /^ANNOTATIONS?\b/i.test(normalizedCaption(current.caption))
+        || /\b(?:ASSIGNED|FOLLOWING|INCLUDING|WITH|AND|OR|TO|FROM|OF|FOR|THE|A|AN|MOUNT|SHADED|ARROWS?)\s*[:;,(-]?\s*$/i.test(current.caption)
+        || /^(?:UNDER\s+CABINET)$/i.test(normalizedCaption(current.caption));
+      // A location/mounting modifier can be typeset as its own physical
+      // line and acquire a disconnected stroke from the same symbol. It is
+      // stronger evidence than a generic trailing conjunction, but still
+      // require the following line to name an actual legend object before
+      // allowing the slightly wider within-glyph vertical gap.
+      const nominalModifierContinuation = /^(?:UNDER|ABOVE|BELOW|SURFACE|RECESSED|SUSPENDED|WALL|CEILING|FLOOR)\b(?:\s+[A-Z0-9/-]+){0,3}$/i
+        .test(normalizedCaption(current.caption))
+        && /\b(?:FIXTURE|DEVICE|SENSOR|SWITCH|RECEPTACLE|OUTLET|DAMPER|VALVE|ACTUATOR|CONTROLLER|PANEL|UNIT|EQUIPMENT)\b/i
+          .test(normalizedCaption(next.caption));
       const lineGap = next.span.y0 - current.span.y1;
       const textCenterAdvance = (next.span.y0 + next.span.y1
         - current.span.y0 - current.span.y1) / 2;
       const metricLineOverlap = lineGap < 0
         && lineGap >= -typicalTextHeight * 0.25
         && textCenterAdvance >= typicalTextHeight * 0.4;
-      if ((lineGap < 0 && !metricLineOverlap) || lineGap > maxLineGapPx) continue;
+      const boundedSemanticLineGap = semanticallyIncompleteCaption
+        && lineGap <= typicalTextHeight * 1.25;
+      if ((lineGap < 0 && !metricLineOverlap)
+        || (lineGap > maxLineGapPx && !boundedSemanticLineGap)) continue;
       const cx = (current.rect[0][0] + current.rect[1][0]) / 2;
       const nx = (next.rect[0][0] + next.rect[1][0]) / 2;
       if (Math.abs(cx - nx) > maxGlyphDimPx) continue;
@@ -2754,10 +3360,9 @@ function mergeOwnedWrapPairs(
       const currentH = current.rect[1][1] - current.rect[0][1];
       const nextH = next.rect[1][1] - next.rect[0][1];
       const compactUnion = unionH <= Math.min(maxGlyphDimPx, typicalTextHeight * 2.25);
-      const semanticContinuation = isDraftingAnnotationCaption(current.caption)
-        && /\b(?:ASSIGNED|FOLLOWING|INCLUDING|WITH|AND|OR|TO|FROM|OF|FOR|THE)\s*[:;,(-]?\s*$/i.test(current.caption)
-        && unionH <= Math.min(maxGlyphDimPx, typicalTextHeight * 3.25)
-        && glyphVerticalGap <= typicalTextHeight * 0.5;
+      const semanticContinuation = semanticallyIncompleteCaption
+        && unionH <= Math.min(maxGlyphDimPx, typicalTextHeight * 3.6)
+        && glyphVerticalGap <= typicalTextHeight * (nominalModifierContinuation ? 0.75 : 0.5);
       // A tall legitimate symbol may already exceed the ordinary compact
       // wrap height before a tiny lower indicator wins line two (smoke-
       // damper bodies and VFD displays do this). Permit that only when the
@@ -2774,7 +3379,7 @@ function mergeOwnedWrapPairs(
       // same slightly-overlapping pair of description baselines. Half a
       // local text height still sits far inside the ordinary full-row
       // cadence, while recovering those one-cell fragments deterministically.
-      if (glyphVerticalGap > typicalTextHeight * 0.5
+      if (glyphVerticalGap > typicalTextHeight * (nominalModifierContinuation ? 0.75 : 0.5)
         || unionW > maxGlyphDimPx
         || unionH > maxGlyphDimPx
         || (!compactUnion && !joinedTallFragments && !semanticContinuation)) continue;
@@ -3028,12 +3633,23 @@ function splitAlignedGroupVertically(
   return out;
 }
 
-function nearbyLegendHeading(group: PairCandidate[], lines: LegendSpan[], typicalTextHeight: number): string | null {
+function nearbyLegendHeading(
+  group: PairCandidate[], lines: LegendSpan[], segs: number[], typicalTextHeight: number,
+): string | null {
   const gx0 = Math.min(...group.map((p) => p.rect[0][0]));
   const gx1 = Math.max(...group.map((p) => p.span.x1));
   const glyphCenterX = median(group.map((p) => (p.rect[0][0] + p.rect[1][0]) / 2));
   const captionColumnX = median(group.map((p) => p.span.x0));
   const firstY = Math.min(...group.map((p) => Math.min(p.rect[0][1], p.span.y0)));
+  const headingBounds = new Map<LegendSpan, { x0: number; x1: number }>();
+  const boundsFor = (heading: LegendSpan): { x0: number; x1: number } => {
+    const cached = headingBounds.get(heading);
+    if (cached) return cached;
+    const underline = underlinedLegendJurisdiction(heading, segs, typicalTextHeight);
+    const bounds = underline ?? { x0: heading.x0, x1: heading.x1 };
+    headingBounds.set(heading, bounds);
+    return bounds;
+  };
   const hasCaptionColumnBridge = (heading: LegendSpan): boolean => {
     const bridgeLines = lines.filter((line) => line !== heading
       && line.y0 > heading.y1
@@ -3052,7 +3668,10 @@ function nearbyLegendHeading(group: PairCandidate[], lines: LegendSpan[], typica
     }
     return firstY - cursor <= maxStep;
   };
-  const horizontalDistance = (s: LegendSpan) => s.x1 < gx0 ? gx0 - s.x1 : s.x0 > gx1 ? s.x0 - gx1 : 0;
+  const horizontalDistance = (s: LegendSpan) => {
+    const bounds = boundsFor(s);
+    return bounds.x1 < gx0 ? gx0 - bounds.x1 : bounds.x0 > gx1 ? bounds.x0 - gx1 : 0;
+  };
   const candidates = lines.filter((s) => {
     if (!isLegendHeadingText(s.text) || s.y1 > firstY + typicalTextHeight) return false;
     if (/^SYMBOL$/i.test(normalizedCaption(s.text))) {
@@ -3076,8 +3695,9 @@ function nearbyLegendHeading(group: PairCandidate[], lines: LegendSpan[], typica
     // separate network architecture diagram below it.
     if (firstY - s.y1 > Math.max(typicalTextHeight * 10, 120) && !hasCaptionColumnBridge(s)) return false;
     const margin = typicalTextHeight * 5;
+    const bounds = boundsFor(s);
     const headingCenterX = (s.x0 + s.x1) / 2;
-    const supportsGlyph = glyphCenterX >= s.x0 - margin && glyphCenterX <= s.x1 + margin;
+    const supportsGlyph = glyphCenterX >= bounds.x0 - margin && glyphCenterX <= bounds.x1 + margin;
     const supportsWholeColumn = headingCenterX >= gx0 - margin && headingCenterX <= gx1 + margin;
     if (!supportsGlyph && !supportsWholeColumn) return false;
     // A closer section title ends the preceding heading's jurisdiction.
@@ -3105,11 +3725,13 @@ function nearbyLegendHeading(group: PairCandidate[], lines: LegendSpan[], typica
  * reach, repeated cells, and HVAC/BAS domain density keeps arbitrary plan
  * labels, schedules, and nearby symbology panels out. */
 function headedBelowCaptionGroups(
-  pairs: PairCandidate[], rightPairs: PairCandidate[], lines: LegendSpan[], typicalTextHeight: number,
+  pairs: PairCandidate[], rightPairs: PairCandidate[], lines: LegendSpan[], segs: number[], typicalTextHeight: number,
   maxCaptionGapPx: number, minAlignedRows: number, layoutEvidenceDisabled: boolean,
 ): Array<{ group: PairCandidate[]; heading: string }> {
   const headings = lines.map((span, index) => ({ span, index }))
-    .filter(({ span }) => isLegendHeadingText(span.text));
+    .filter(({ span }) => isBelowCaptionLegendHeading(span.text)
+      || (/^(?:STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?)$/i.test(normalizedCaption(span.text))
+        && !!underlinedLegendJurisdiction(span, segs, typicalTextHeight)));
   const grouped = new Map<number, PairCandidate[]>();
   for (const pair of pairs) {
     const x0 = Math.min(pair.rect[0][0], pair.span.x0);
@@ -3117,6 +3739,12 @@ function headedBelowCaptionGroups(
     const top = Math.min(pair.rect[0][1], pair.span.y0);
     const supported = headings.filter(({ span }) => {
       if (span.y1 >= top) return false;
+      const underlined = underlinedLegendJurisdiction(span, segs, typicalTextHeight);
+      if (underlined) {
+        const margin = typicalTextHeight * 2;
+        if (x0 < underlined.x0 - margin || x1 > underlined.x1 + margin
+          || top - underlined.y > Math.max(900, typicalTextHeight * 100)) return false;
+      }
       const horizontalGap = span.x1 < x0 ? x0 - span.x1
         : x1 < span.x0 ? span.x0 - x1 : 0;
       return horizontalGap <= Math.max(maxCaptionGapPx, typicalTextHeight * 12);
@@ -3141,11 +3769,19 @@ function headedBelowCaptionGroups(
 
   const accepted: Array<{ group: PairCandidate[]; heading: string }> = [];
   for (const [headingIndex, group] of grouped) {
-    if (group.length < minAlignedRows) continue;
     const heading = normalizedCaption(lines[headingIndex].text);
+    const underlinedDraftingPanel = /^(?:STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?)$/i.test(heading)
+      && !!underlinedLegendJurisdiction(lines[headingIndex], segs, typicalTextHeight);
+    const singletonDraftingAnnotation = underlinedDraftingPanel
+      && group.length === 1
+      && isDraftingAnnotationCaption(group[0].caption);
+    if (group.length < minAlignedRows && !singletonDraftingAnnotation) continue;
     const domainRows = group.filter((pair) => isHvacBasCaption(pair.caption)).length;
     const domainFloor = Math.max(2, Math.ceil(group.length * 0.2));
-    if (!layoutEvidenceDisabled && !isDomainHeading(heading) && domainRows < domainFloor) continue;
+    if (!layoutEvidenceDisabled && !underlinedDraftingPanel
+      && !isDomainHeading(heading) && domainRows < domainFloor) continue;
+    if (!layoutEvidenceDisabled && underlinedDraftingPanel
+      && group.some((pair) => !isDraftingAnnotationCaption(pair.caption))) continue;
 
     // A two-dimensional legend can legitimately mix orientations inside the
     // same ruled panel. RCP material swatches, for example, put a large hatch
@@ -3366,13 +4002,17 @@ export function findLegendGlyphs(
   // finite 320px ceiling; headerless pages retain the conservative 220px
   // bound so plan details and schedule graphics cannot widen themselves.
   const hasExplicitLegendHeading = lines.some((line) => isLegendHeadingText(line.text));
+  const hasStandardDraftingLegendHeading = lines.some((line) =>
+    supportsUnderlinedMultiColumnJurisdiction(line.text));
   const declaredTableHeaders = symbolDescriptionHeaders(lines, typicalTextHeight);
   const hasSymbolDescriptionHeaderRow = declaredTableHeaders.length > 0;
   const conservativeMaxGlyphDimPx = opts.maxGlyphDimPx
     ?? Math.max(80, Math.min(220, typicalTextHeight * 12));
-  const maxGlyphDimPx = opts.maxGlyphDimPx ?? (hasExplicitLegendHeading && hasSymbolDescriptionHeaderRow
-    ? Math.max(80, Math.min(320, typicalTextHeight * 18))
-    : conservativeMaxGlyphDimPx);
+  const maxGlyphDimPx = opts.maxGlyphDimPx ?? (hasStandardDraftingLegendHeading
+    ? Math.max(conservativeMaxGlyphDimPx, Math.min(640, typicalTextHeight * 36))
+    : hasExplicitLegendHeading && hasSymbolDescriptionHeaderRow
+      ? Math.max(80, Math.min(320, typicalTextHeight * 18))
+      : conservativeMaxGlyphDimPx);
   const maxCaptionGapPx = opts.maxCaptionGapPx ?? Math.max(150, Math.min(320, typicalTextHeight * 14));
   const maxLineStyleDimPx = Math.max(maxGlyphDimPx * 1.6, typicalTextHeight * 20);
   // Named discipline sections often use one symbol beside a paragraph-sized
@@ -3392,8 +4032,88 @@ export function findLegendGlyphs(
     ?? Math.max(5, Math.min(64, typicalTextHeight * 2.5));
 
   const hasBelowCaptionLegendHeading = lines.some((line) => isBelowCaptionLegendHeading(line.text));
+  const underlinedDraftingBelowCaptionPanels = lines.map((heading) => ({
+    heading,
+    jurisdiction: /^(?:STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?)$/i.test(normalizedCaption(heading.text))
+      ? underlinedLegendJurisdiction(heading, segs, typicalTextHeight) : null,
+  })).filter((entry): entry is { heading: LegendSpan; jurisdiction: UnderlinedLegendJurisdiction } =>
+    !!entry.jurisdiction);
+  const hasUnderlinedDraftingBelowCaptionHeading = underlinedDraftingBelowCaptionPanels.length > 0;
+  const hasBelowCaptionSearch = hasBelowCaptionLegendHeading
+    || hasUnderlinedDraftingBelowCaptionHeading;
+  const spanInsideUnderlinedPanel = (
+    span: LegendSpan,
+    panels: Array<{ heading: LegendSpan; jurisdiction: UnderlinedLegendJurisdiction }>,
+  ): boolean => {
+    const centerX = (span.x0 + span.x1) / 2;
+    return panels.some(({ jurisdiction }) => centerX >= jurisdiction.x0 - typicalTextHeight
+      && centerX <= jurisdiction.x1 + typicalTextHeight
+      && span.y0 > jurisdiction.y
+      && span.y0 - jurisdiction.y <= Math.max(900, typicalTextHeight * 120));
+  };
+  const shouldSearchBelowCaption = (span: LegendSpan): boolean => hasBelowCaptionLegendHeading
+    // In a standard drafting panel the alternate orientation is earned by
+    // the one convention that is itself normally captioned below its
+    // horizontal bar. Other annotations are right-caption rows; opening a
+    // large search band above all of them can pull in a neighboring
+    // abbreviations panel before normal one-to-one pairing runs.
+    || (/^GRAPHICAL\s+SCALE$/i.test(normalizedCaption(span.text))
+      && spanInsideUnderlinedPanel(span, underlinedDraftingBelowCaptionPanels));
+  const draftingRightCaptionGap = (span: LegendSpan): number =>
+    isDraftingAnnotationCaption(span.text)
+      && spanInsideUnderlinedPanel(span, underlinedDraftingBelowCaptionPanels)
+      ? Math.max(maxCaptionGapPx, Math.min(420, typicalTextHeight * 18))
+      : maxCaptionGapPx;
+  const draftingRightCaptionGapForCandidate = (
+    candidate: GlyphCandidate, span: LegendSpan,
+  ): number => {
+    if (!isDraftingAnnotationCaption(span.text)) return maxCaptionGapPx;
+    const candidateCenterX = (candidate.rect[0][0] + candidate.rect[1][0]) / 2;
+    const candidateCenterY = (candidate.rect[0][1] + candidate.rect[1][1]) / 2;
+    const spanCenterX = (span.x0 + span.x1) / 2;
+    const samePanel = underlinedDraftingBelowCaptionPanels.some(({ jurisdiction }) =>
+      candidateCenterX >= jurisdiction.x0 - typicalTextHeight
+      && candidateCenterX <= jurisdiction.x1 + typicalTextHeight
+      && spanCenterX >= jurisdiction.x0 - typicalTextHeight
+      && spanCenterX <= jurisdiction.x1 + typicalTextHeight
+      && candidateCenterY > jurisdiction.y
+      && span.y0 > jurisdiction.y
+      && Math.max(candidateCenterY, span.y0) - jurisdiction.y
+        <= Math.max(900, typicalTextHeight * 120));
+    return samePanel
+      ? Math.max(maxCaptionGapPx, Math.min(420, typicalTextHeight * 18))
+      : maxCaptionGapPx;
+  };
+  const draftingTextResemblanceContext = (
+    candidate: GlyphCandidate,
+  ): TextResemblanceContext => {
+    const [[x0, y0], [x1, y1]] = candidate.rect;
+    const centerX = (x0 + x1) / 2;
+    const centerY = (y0 + y1) / 2;
+    const panel = underlinedDraftingBelowCaptionPanels.find(({ jurisdiction }) =>
+      centerX >= jurisdiction.x0 - typicalTextHeight
+      && centerX <= jurisdiction.x1 + typicalTextHeight
+      && centerY > jurisdiction.y
+      && centerY - jurisdiction.y <= Math.max(900, typicalTextHeight * 120));
+    if (!panel) return {};
+    const panelLines = lines.filter((line) => spanInsideUnderlinedPanel(line, [panel]));
+    const sameCandidateRow = (line: LegendSpan): boolean => {
+      const margin = Math.max((y1 - y0) * 0.5, typicalTextHeight * 0.75);
+      return line.y1 >= y0 - margin && line.y0 <= y1 + margin;
+    };
+    const externalIdentity = (predicate: (text: string) => boolean): boolean =>
+      panelLines.some((line) => line.x0 >= x1
+        && line.x0 - x1 <= Math.max(maxCaptionGapPx, Math.min(420, typicalTextHeight * 18))
+        && sameCandidateRow(line)
+        && predicate(line.text));
+    return {
+      allowNearEdgeAlphaTag: externalIdentity(isDiscreteInstalledDeviceCaption),
+    };
+  };
   const relevantSegs = segmentsNearCaptions(
-    segs, spans, maxGlyphDimPx, maxCaptionGapPx, hasBelowCaptionLegendHeading,
+    segs, spans, maxGlyphDimPx, maxCaptionGapPx,
+    shouldSearchBelowCaption,
+    draftingRightCaptionGap,
   );
   const { components: clusters, gridPx } = clusterSegments(relevantSegs, maxGlyphDimPx, maxLineStyleDimPx);
   // Real, measured bug (accuracy-hardening plan, this session): a cluster's
@@ -3434,10 +4154,15 @@ export function findLegendGlyphs(
   const ruledPairs = structuredTablePairs(
     structuredTables, candidates, lines, rawSpans, typicalTextHeight,
   );
+  const materialGroups = materialLegendGroups(
+    lines, segs, typicalTextHeight, maxGlyphDimPx, maxCaptionGapPx,
+    maxWrapGapPx, maxWrapIndentPx, maxWrapLines,
+  );
 
   const paired = pairCandidates(
     candidates, spans, rawSpans, maxCaptionGapPx, typicalTextHeight,
-    hasBelowCaptionLegendHeading, sectionDividers, declaredTableHeaders,
+    shouldSearchBelowCaption, sectionDividers, declaredTableHeaders,
+    draftingRightCaptionGapForCandidate, draftingTextResemblanceContext,
   );
   const reunitedPairs = mergeDownshiftedGlyphFragments(
     paired.pairs, typicalTextHeight, maxGlyphDimPx, gridPx, rawSpans,
@@ -3448,6 +4173,7 @@ export function findLegendGlyphs(
   );
   expandLineStylePairs(reunitedPairs, candidates, rawSpans, gridPx, typicalTextHeight, maxLineStyleDimPx);
   expandSymbolPairs(reunitedPairs, candidates, rawSpans, typicalTextHeight, maxGlyphDimPx);
+  closeSeamedDeviceEnclosures(reunitedPairs, segs, typicalTextHeight, gridPx);
   attachWrappedCaptions(
     reunitedPairs, spans, paired.usedSpans,
     maxWrapGapPx, maxWrapIndentPx, maxWrapLines, typicalTextHeight,
@@ -3460,6 +4186,13 @@ export function findLegendGlyphs(
     typicalTextHeight,
     maxWrapLines,
     rawSpans,
+  );
+  // Caption fragments can be owned by separate components of the same
+  // physical glyph. Consolidate those components first; only then can a
+  // downshift repair move the leading text line without duplicating or
+  // discarding the lower row's actual symbol geometry.
+  rebalanceDownshiftedCaptionOwnership(
+    mergedPairs, spans, paired.usedSpans, typicalTextHeight, maxWrapIndentPx,
   );
   const heuristicPairs = withoutContainedDetailPairs(mergedPairs, typicalTextHeight, maxWrapGapPx);
   const replacedHeuristicPairs = new Set<PairCandidate>();
@@ -3530,15 +4263,25 @@ export function findLegendGlyphs(
     return tagCallouts.some(({ zone }) => centerX >= zone.left && centerX <= zone.right
       && centerY >= zone.top && centerY <= zone.bottom);
   };
+  const insideMaterialLegendZone = (pair: PairCandidate): boolean => {
+    // Once a repeated material panel owns a caption, geometry outside that
+    // panel cannot steal the same text merely by pulling a combined midpoint
+    // across the boundary. Caption location defines row jurisdiction here;
+    // materialLegendGroups supplies the independently proven swatch.
+    const centerX = (pair.span.x0 + pair.span.x1) / 2;
+    const centerY = (pair.span.y0 + pair.span.y1) / 2;
+    return materialGroups.some(({ zone }) => centerX >= zone.x0 && centerX <= zone.x1
+      && centerY >= zone.y0 && centerY <= zone.y1);
+  };
   const pairs = [
     ...heuristicPairs.filter((pair) => !replacedHeuristicPairs.has(pair)),
     ...admittedRuledPairs,
-  ].filter((pair) => !insideTagCalloutZone(pair));
+  ].filter((pair) => !insideTagCalloutZone(pair) && !insideMaterialLegendZone(pair));
   trimRoutedBaselinesWithCallouts(pairs, segs, rawSpans, typicalTextHeight, gridPx);
-  const belowPaired = hasBelowCaptionLegendHeading
+  const belowPaired = hasBelowCaptionSearch
     ? pairCandidatesBelow(
       candidates, spans, rawSpans, maxCaptionGapPx, typicalTextHeight,
-      pairs,
+      pairs, shouldSearchBelowCaption,
     )
     : { pairs: [] as PairCandidate[], usedSpans: new Set<number>() };
   attachWrappedCaptions(
@@ -3571,9 +4314,12 @@ export function findLegendGlyphs(
   const accepted: LegendGlyph[] = [];
   const acceptPair = (pair: PairCandidate, alignedRows: number, heading: string | null) => {
     pair.caption = canonicalLegendCaption(pair.caption);
-    const kind: LegendGlyph["kind"] = isDraftingAnnotationCaption(pair.caption)
+    const kind: LegendGlyph["kind"] = isMaterialLegendHeading(heading)
+      ? "annotation"
+      : isDraftingAnnotationCaption(pair.caption)
       ? "annotation"
       : isControlFunctionCaption(pair.caption, heading) ? "control_function"
+      : isRoutedSystemLegendHeading(heading) ? "line_style"
       : isRoutedSystemCaption(pair.caption) ? "line_style"
       : pair.kind === "line_style" && isDiscreteInstalledDeviceCaption(pair.caption) ? "symbol"
       : pair.kind === "text_symbol" ? "symbol"
@@ -3627,11 +4373,15 @@ export function findLegendGlyphs(
       indices.map((i) => pairs[i]), typicalTextHeight, lines, pairs, maxCaptionGapPx,
     );
     if (!group.length) continue;
-    const heading = nearbyLegendHeading(group, lines, typicalTextHeight);
+    const heading = nearbyLegendHeading(group, lines, segs, typicalTextHeight);
     group = withoutTrailingNetworkDiagram(group, heading, typicalTextHeight, minAlignedRows);
     completeSpecificSectionCaptions(group, lines, heading, typicalTextHeight);
     const specificDisciplineSection = !!heading && isSpecificDisciplineLegendHeading(heading);
-    const generalSection = /^GENERAL(?:\s+SYMBOLS?)?$/i.test(heading || "") && group.length >= 4;
+    const generalSection = !!heading && isGeneralDraftingLegendHeading(heading)
+      && group.length >= Math.max(
+        minAlignedRows,
+        /^GENERAL(?:\s+SYMBOLS?)?$/i.test(heading) ? 4 : 2,
+      );
     // The single word EQUIPMENT also appears as a label inside tag examples,
     // schedules, and abbreviation blocks. Unlike specific headings such as
     // FIRE ALARM or ONE-LINE DIAGRAM, it needs a substantial repeated row
@@ -3650,12 +4400,18 @@ export function findLegendGlyphs(
     // design-criteria values. Headerless directive prose is notes/sequence
     // truth, never glyph-caption truth, even when its numbering is regular.
     if (!layoutEvidenceDisabled && !generalSection
-      && (!heading || !isDomainHeading(heading)) && domainRows < domainFloor) continue;
+      && (!heading || (!isDomainHeading(heading) && !specificDisciplineSection))
+      && domainRows < domainFloor) continue;
     if (!layoutEvidenceDisabled && generalSection && directiveRows / group.length > 0.15) continue;
     if (!layoutEvidenceDisabled && !heading && directiveRows / group.length > 0.15) continue;
     if (!layoutEvidenceDisabled && !heading
       && controllerPinoutRows >= Math.max(3, Math.ceil(group.length * 0.3))) continue;
     for (const pair of group) acceptPair(pair, group.length, heading);
+  }
+  for (const material of materialGroups) {
+    for (const pair of material.pairs) {
+      acceptPair(pair, material.pairs.length, material.heading);
+    }
   }
   for (const { zone, pairs: tagPairs } of tagCallouts) {
     if (!layoutEvidenceDisabled && tagPairs.length < minAlignedRows) continue;
@@ -3676,6 +4432,7 @@ export function findLegendGlyphs(
     segs, lines, rawSpans, typicalTextHeight, maxGlyphDimPx,
     maxLineStyleDimPx, sectionDividers,
     (text, span) => isLegendHeadingText(text) && !isTagCalloutHeading(text)
+      && !isMaterialLegendHeading(text)
       // Below-caption RCP/P&ID grids have a dedicated ownership path that
       // preserves multiple renditions in one cell. A generic callout pass
       // would claim one component first and collapse the later group.
@@ -3688,6 +4445,12 @@ export function findLegendGlyphs(
         || span.y1 - span.y0 >= typicalTextHeight * 1.5)
       && !accepted.some((glyph) => glyph.caption_bbox.flat().every((value, index) =>
         value === [span.x0, span.y0, span.x1, span.y1][index]))
+      // One text span cannot simultaneously be the centered caption of a
+      // proven glyph-above cell and a new callout-zone heading. This resolves
+      // object labels such as LIGHT FIXTURES without weakening ordinary
+      // section-title handling elsewhere on the sheet.
+      && !belowPaired.pairs.some((pair) => pair.span.x0 === span.x0
+        && pair.span.y0 === span.y0 && pair.span.x1 === span.x1 && pair.span.y1 === span.y1)
       && !tagCallouts.some(({ zone }) => {
         const centerX = (span.x0 + span.x1) / 2;
         const centerY = (span.y0 + span.y1) / 2;
@@ -3704,7 +4467,7 @@ export function findLegendGlyphs(
     }
   }
   for (const { group, heading } of headedBelowCaptionGroups(
-    belowPaired.pairs, pairs, lines, typicalTextHeight, maxCaptionGapPx,
+    belowPaired.pairs, pairs, lines, segs, typicalTextHeight, maxCaptionGapPx,
     minAlignedRows, layoutEvidenceDisabled,
   )) {
     for (const pair of group) acceptPair(pair, group.length, heading);
