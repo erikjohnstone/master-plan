@@ -295,8 +295,15 @@ function runL35Topology(
 ): void {
   if (!ctx.segs?.length) return;
   if (ctx.role !== "plan" && ctx.role !== "demolition" && ctx.role !== "unknown") return;
+  const t0 = Date.now();
   try {
     const graph = buildMepGraph(ctx.segs, {});
+    if (process.env.OPENTAKEOFF_GRAPH_TRACE) {
+      process.stderr.write(
+        `GRAPH_TRACE topology sheet=${ctx.key.split("#").pop()} role=${ctx.role}`
+        + ` segs=${ctx.segs.length / 4} ms=${Date.now() - t0}\n`,
+      );
+    }
     if (graph.edges.length >= 2) {
       report.topology_sheets++;
       if (!g.vector_topology) g.vector_topology = {};
