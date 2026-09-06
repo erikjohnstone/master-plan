@@ -237,11 +237,21 @@ async function runOne(rec, wantTitle) {
         let cands = (byTitle.get(gtt) || []).filter((c) => !claimed.has(c));
         let how = "title";
         if (!cands.length) {
-          // same page, unclaimed, row count within one — a titleless or
-          // differently-captioned read of the very table the truth means
-          const near = (bySheet.get(gt.page) || [])
-            .filter((c) => !claimed.has(c) && Math.abs(c.rows - want) <= 1);
-          if (near.length) { cands = near; how = "page+rows"; }
+          // Same page, unclaimed, row count within one — AND THE UI TABLE MUST
+          // BE UNTITLED. That last condition is the whole point: this fallback
+          // exists for a table the product extracted correctly but could not
+          // name (03__vol1__27 p13's SEISMIC AND VIBRATION CONTROL). Without
+          // it the fallback matches on row count alone, and it did: on
+          // 01__vol2__001 p43 it matched the truth's "PIPING CONSTRUCTION
+          // SCHEDULE - merged buried chilled water row" (1 row) to the UI's
+          // HUMIDIFIER SCHEDULE (1 row), claimed it, and left the real
+          // HUMIDIFIER SCHEDULE with nothing to match — one bad match
+          // cascading into three wrong lines. A titled UI table must only ever
+          // match its own name.
+          const near = (bySheet.get(gt.page) || []).filter(
+            (c) => !claimed.has(c) && !norm(c.title) && Math.abs(c.rows - want) <= 1,
+          );
+          if (near.length) { cands = near; how = "page+rows(untitled)"; }
         }
         if (!cands.length) { misses.push(`NOT FOUND: ${gtTitle(gt)} (p${gt.page}, ${want} rows)`); continue; }
         found++;
