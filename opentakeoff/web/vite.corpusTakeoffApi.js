@@ -360,33 +360,43 @@ async function handle(req, res, mode) {
   }
 }
 
+/** The five production endpoints, as one middleware.
+ *
+ *  Every route here is the SAME Session+ODL path MCP runs — the browser cannot
+ *  spawn the JVM OpenDataLoader CLI, so this is where that work happens.
+ */
+const OT_ROUTES = [
+  ["/__ot/sheet-graph", "graph"],
+  ["/__ot/compile-corpus-takeoff", "compile"],
+  ["/__ot/sweep-schedule-row", "sweep"],
+  ["/__ot/count-marks", "count_marks"],
+  ["/__ot/reconcile-schedule-plan", "reconcile"],
+];
+
+function otMiddleware(req, res, next) {
+  for (const [prefix, kind] of OT_ROUTES) {
+    if (!req.url?.startsWith(prefix)) continue;
+    if (req.method !== "POST") return sendJson(res, 405, { error: "POST only" });
+    return handle(req, res, kind);
+  }
+  return next();
+}
+
 export function corpusTakeoffApiPlugin() {
   return {
     name: "opentakeoff-production-graph-api",
     configureServer(server) {
-      server.middlewares.use(async (req, res, next) => {
-        if (req.url?.startsWith("/__ot/sheet-graph")) {
-          if (req.method !== "POST") return sendJson(res, 405, { error: "POST only" });
-          return handle(req, res, "graph");
-        }
-        if (req.url?.startsWith("/__ot/compile-corpus-takeoff")) {
-          if (req.method !== "POST") return sendJson(res, 405, { error: "POST only" });
-          return handle(req, res, "compile");
-        }
-        if (req.url?.startsWith("/__ot/sweep-schedule-row")) {
-          if (req.method !== "POST") return sendJson(res, 405, { error: "POST only" });
-          return handle(req, res, "sweep");
-        }
-        if (req.url?.startsWith("/__ot/count-marks")) {
-          if (req.method !== "POST") return sendJson(res, 405, { error: "POST only" });
-          return handle(req, res, "count_marks");
-        }
-        if (req.url?.startsWith("/__ot/reconcile-schedule-plan")) {
-          if (req.method !== "POST") return sendJson(res, 405, { error: "POST only" });
-          return handle(req, res, "reconcile");
-        }
-        return next();
-      });
+      server.middlewares.use(otMiddleware);
+    },
+    // PREVIEW IS THE REHEARSAL, SO IT HAS TO HAVE THE STAGE. This plugin used
+    // to register configureServer ONLY, so `vite preview` — the built bundle,
+    // the closest thing in this repo to production — served the app and then
+    // 404'd every /__ot/* call. Schedule indexing, compile_corpus_takeoff and
+    // sweep_schedule_row all failed there while working perfectly in dev, and
+    // the failure looked like a CORS problem rather than a missing route.
+    // (/cerebras-api was already proxied in both; this closes the other half.)
+    configurePreviewServer(server) {
+      server.middlewares.use(otMiddleware);
     },
   };
 }
