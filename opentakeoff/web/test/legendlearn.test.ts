@@ -79,6 +79,23 @@ test("findLegendGlyphs: a caption split into several real text runs on one line 
   assert.equal(glyphs[0].caption, "2-WAY ELECTRIC CONTROL VALVE");
 });
 
+test("findLegendGlyphs: a drawn inline mark may split one caption line without joining the next table column", () => {
+  const segs = flat([
+    ...controlValveGlyph(100, 100),
+    seg(386, 152, 400, 152), seg(400, 152, 400, 170),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "LIGHTING FIXTURE (", x0: 220, y0: 150, x1: 380, y1: 174 },
+    // The missing inline bracket is vector geometry; its text runs retain a
+    // bounded one-text-height gap on the same physical baseline.
+    { text: "INDICATES BRACKET, WALL MOUNTED FIXTURES)", x0: 410, y0: 150, x1: 790, y1: 174 },
+    { text: "UNRELATED TABLE COLUMN", x0: 900, y0: 150, x1: 1120, y1: 174 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].caption, "LIGHTING FIXTURE ( INDICATES BRACKET, WALL MOUNTED FIXTURES)");
+});
+
 test("findLegendGlyphs: sheet-scaled same-line joining preserves a separated network qualifier without crossing real columns", () => {
   const segs = flat([...controlValveGlyph(100, 100), ...controlValveGlyph(100, 300)]);
   const spans: LegendSpan[] = [
@@ -93,6 +110,30 @@ test("findLegendGlyphs: sheet-scaled same-line joining preserves a separated net
   const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 120 });
   assert.equal(glyphs[0].caption, "BACNET MS/TP-UUKL NETWORK");
   assert.equal(glyphs[1].caption, "GENERIC NETWORK");
+});
+
+test("findLegendGlyphs: separated bullet key and definition runs become one readable caption line", () => {
+  const segs = flat(controlValveGlyph(100, 100));
+  const spans: LegendSpan[] = [
+    { text: "POWER DEVICES", x0: 70, y0: 20, x1: 350, y1: 45 },
+    { text: "'GFI'", x0: 220, y0: 150, x1: 260, y1: 175 },
+    { text: "INDICATES GROUND-FAULT PROTECTION", x0: 284, y0: 150, x1: 610, y1: 175 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120 });
+  assert.equal(glyphs[0].caption, "'GFI' INDICATES GROUND-FAULT PROTECTION");
+});
+
+test("findLegendGlyphs: definition prose containing 'symbol indicates' remains caption text, not a heading", () => {
+  const segs = flat(controlValveGlyph(100, 100));
+  const spans: LegendSpan[] = [
+    { text: "LIGHTING", x0: 70, y0: 20, x1: 250, y1: 45 },
+    { text: "EXIT LIGHTING FIXTURE. FILLED IN", x0: 220, y0: 110, x1: 540, y1: 130 },
+    { text: "QUADRANT(S) OF SYMBOL INDICATES NUMBER AND ORIENTATION OF", x0: 220, y0: 134, x1: 760, y1: 154 },
+    { text: "ILLUMINATED FACES.", x0: 220, y0: 158, x1: 390, y1: 178 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120 });
+  assert.equal(glyphs[0].caption,
+    "EXIT LIGHTING FIXTURE. FILLED IN QUADRANT(S) OF SYMBOL INDICATES NUMBER AND ORIENTATION OF ILLUMINATED FACES.");
 });
 
 test("findLegendGlyphs: a caption WRAPPED across two physical lines (same left margin, small line gap) merges into one caption", () => {
@@ -1095,6 +1136,20 @@ test("findLegendGlyphs: routing conventions and equipment callouts are annotatio
     "DOWNWARD DIRECTION OF SLOPED PIPING",
     "NEW TO EXISTING CONNECTION POINT",
     "SLOPE PIPE IN DIRECTION OF ARROW",
+    "CONSTRUCTION NOTE IDENTIFICATION",
+    "POINT OF DEMOLITION",
+    "POINT OF CONNECTION, NEW-TO-EXISTING",
+    "LIGHTING FIXTURE TAGS. 'A' INDICATES FIXTURE TYPE.",
+    "RECEPTACLE DEVICE TAG: 'GFI' INDICATES PROTECTION.",
+    "DEVIATIONS OF THE ABOVE RECEPTACLE TYPES",
+    "• INTERNAL ARC FAULT (AFI) PROTECTION.",
+    "ELECTRICAL EQUIPMENT AND TAGS",
+    "CONNECTION TO CONDUCTOR",
+    "CONNECTION TO STRUCTURE",
+    "HOMERUNS TO PANEL. PANEL AND CIRCUIT DESIGNATIONS AS INDICATED.",
+    "EQUIPMENT CONNECTION AS NOTED. PROVIDE REQUIRED COMPONENTS.",
+    "REMOVE TO THIS POINT",
+    "CONNECT NEW TO EXISTING",
   ];
   const segs = flat(captions.flatMap((_, index) => controlValveGlyph(100, 100 + index * 200)));
   const spans: LegendSpan[] = [
@@ -1104,6 +1159,54 @@ test("findLegendGlyphs: routing conventions and equipment callouts are annotatio
   const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 120 });
   assert.deepEqual(glyphs.map((glyph) => glyph.caption), captions);
   assert.ok(glyphs.every((glyph) => glyph.kind === "annotation" && glyph.seedable === false));
+});
+
+test("findLegendGlyphs: electrical conductor keys remain learned but cannot seed installed-device counts", () => {
+  const captions = [
+    "LPS ROOF CONDUCTOR",
+    "LPS MAIN DOWN CONDUCTOR",
+    "GROUND RING (EARTH ELECTRODE SUBSYSTEM) CONDUCTOR",
+    "BRANCH CIRCUIT OR FEEDER WIRING IN CONDUIT. CONDUCTORS AS INDICATED.",
+  ];
+  const segs = flat(captions.flatMap((_, index) => [
+    seg(100, 100 + index * 100, 210, 100 + index * 100),
+  ]));
+  const spans: LegendSpan[] = captions.map((text, index) => ({
+    text, x0: 250, y0: 90 + index * 100, x1: 720, y1: 110 + index * 100,
+  }));
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 160 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), captions);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "line_style" && glyph.seedable === false));
+});
+
+test("findLegendGlyphs: named electrical sections preserve side-by-side physical variants as a nonseedable group", () => {
+  const segs = flat([
+    ...controlValveGlyph(100, 100),
+    ...controlValveGlyph(230, 100),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "LIGHTING", x0: 70, y0: 20, x1: 250, y1: 45 },
+    { text: "EMERGENCY LIGHTING FIXTURE", x0: 420, y0: 145, x1: 690, y1: 170 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 320 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].kind, "symbol_group");
+  assert.equal(glyphs[0].seedable, false);
+});
+
+test("findLegendGlyphs: a fixture caption that declares a bracket rendition cannot collapse its variants into one sweep seed", () => {
+  const segs = flat([
+    ...controlValveGlyph(100, 100),
+    ...controlValveGlyph(185, 100),
+  ]);
+  const spans: LegendSpan[] = [{
+    text: "LIGHTING FIXTURE (INDICATES BRACKET, WALL MOUNTED FIXTURES)",
+    x0: 330, y0: 145, x1: 810, y1: 170,
+  }];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 260 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].kind, "symbol_group");
+  assert.equal(glyphs[0].seedable, false);
 });
 
 test("findLegendGlyphs: routed-medium captions keep hooked solid swatches out of discrete EA sweeps", () => {
@@ -1318,6 +1421,70 @@ test("findLegendGlyphs: a generic mechanical legend heading cannot annex a remot
   assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
     "SUPPLY AIR SENSOR", "RETURN AIR SENSOR",
   ]);
+});
+
+test("findLegendGlyphs: named electrical sections own their rows, including a bounded one-row subsection", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 30, y), seg(x + 30, y, x + 30, y + 30),
+    seg(x + 30, y + 30, x, y + 30), seg(x, y + 30, x, y),
+  ];
+  const segs = flat([...box(100, 100), ...box(100, 180), ...box(500, 340)]);
+  const spans: LegendSpan[] = [
+    { text: "FIRE ALARM", x0: 70, y0: 20, x1: 300, y1: 45 },
+    { text: "DUCT SMOKE DETECTOR", x0: 220, y0: 105, x1: 430, y1: 125 },
+    { text: "SMOKE DETECTOR, CEILING MOUNTED", x0: 220, y0: 185, x1: 520, y1: 205 },
+    { text: "TELEPHONE & DATA SYSTEMS", x0: 470, y0: 260, x1: 850, y1: 285 },
+    { text: "WIRELESS ACCESS POINT LOCATION", x0: 620, y0: 345, x1: 900, y1: 365 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 80 });
+  assert.deepEqual(glyphs.map((glyph) => [glyph.caption, glyph.heading, glyph.aligned_rows]), [
+    ["DUCT SMOKE DETECTOR", "FIRE ALARM", 2],
+    ["SMOKE DETECTOR, CEILING MOUNTED", "FIRE ALARM", 2],
+    ["WIRELESS ACCESS POINT LOCATION", "TELEPHONE & DATA SYSTEMS", 1],
+  ]);
+});
+
+test("findLegendGlyphs: explanatory prose containing 'components' cannot impersonate a section heading", () => {
+  const box = (y: number): number[][] => [
+    seg(100, y, 130, y), seg(130, y, 130, y + 30),
+    seg(130, y + 30, 100, y + 30), seg(100, y + 30, 100, y),
+  ];
+  const segs = flat([...box(100), ...box(180)]);
+  const spans: LegendSpan[] = [
+    { text: "EQUIPMENT CONNECTIONS", x0: 70, y0: 20, x1: 400, y1: 45 },
+    { text: "EQUIPMENT MARK - SEE EQUIPMENT CONNECTION SCHEDULE SHEET EP701.", x0: 220, y0: 60, x1: 760, y1: 80 },
+    { text: "REQUIRED COMPONENTS FOR THE OPERATION OF THE EQUIPMENT MUST BE", x0: 220, y0: 105, x1: 760, y1: 125 },
+    { text: "JUNCTION BOX", x0: 220, y0: 185, x1: 350, y1: 205 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 80 });
+  assert.equal(glyphs.length, 2);
+  assert.ok(glyphs.every((glyph) => glyph.heading === "EQUIPMENT CONNECTIONS"));
+  assert.doesNotMatch(glyphs[0].caption, /EQUIPMENT MARK/);
+});
+
+test("findLegendGlyphs: a named equipment section retains a long wrapped definition without consuming the next symbol row", () => {
+  const box = (y: number): number[][] => [
+    seg(100, y, 130, y), seg(130, y, 130, y + 30),
+    seg(130, y + 30, 100, y + 30), seg(100, y + 30, 100, y),
+  ];
+  const segs = flat([...box(150), ...box(330)]);
+  const spans: LegendSpan[] = [
+    { text: "EQUIPMENT CONNECTIONS", x0: 70, y0: 20, x1: 400, y1: 45 },
+    { text: "EQUIPMENT CONNECTION AS NOTED.", x0: 300, y0: 80, x1: 600, y1: 100 },
+    { text: "DISCONNECT SWITCHES, STARTERS, AND OTHER", x0: 300, y0: 104, x1: 680, y1: 124 },
+    { text: "REQUIRED COMPONENTS FOR OPERATION MUST BE", x0: 220, y0: 128, x1: 610, y1: 148 },
+    { text: "FURNISHED BY THE MECHANICAL CONTRACTOR.", x0: 220, y0: 152, x1: 590, y1: 172 },
+    { text: "PROVIDE CONDUIT AND WIRING FROM SOURCE", x0: 220, y0: 176, x1: 590, y1: 196 },
+    { text: "RATING (SEE LEGEND NOTE 5).", x0: 220, y0: 200, x1: 500, y1: 220 },
+    { text: "TO THE FINAL EQUIPMENT CONNECTION.", x0: 220, y0: 224, x1: 540, y1: 244 },
+    { text: "JUNCTION BOX", x0: 220, y0: 335, x1: 350, y1: 355 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 80 });
+  assert.equal(glyphs.length, 2);
+  assert.match(glyphs[0].caption, /^EQUIPMENT CONNECTION AS NOTED\./);
+  assert.match(glyphs[0].caption, /SEE LEGEND NOTE 5/);
+  assert.match(glyphs[0].caption, /FINAL EQUIPMENT CONNECTION\.$/);
+  assert.equal(glyphs[1].caption, "JUNCTION BOX");
 });
 
 test("findLegendGlyphs: neighboring cell tags cannot steal descriptive below captions, and RCP conventions stay nonseedable", () => {

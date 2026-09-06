@@ -329,7 +329,8 @@ function segmentsNearCaptions(
  * fragment alone ("2") would mislabel it — merge same-row, tightly-adjacent
  * runs into one logical caption before pairing. `mergeGapPx` bounds how
  * close two runs on the same row must sit to be considered one caption
- * (small — real word spacing is far wider than a font-kerning seam). */
+ * The adaptive production bound also admits one missing inline notation or
+ * list-marker cell, while remaining well inside a real table-column gap. */
 function mergeCaptionLines(spans: LegendSpan[], mergeGapPx: number): LegendSpan[] {
   const sorted = [...spans].sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
   const used = new Array(sorted.length).fill(false);
@@ -348,14 +349,27 @@ function mergeCaptionLines(spans: LegendSpan[], mergeGapPx: number): LegendSpan[
         if (overlap <= 0) continue;
         const gap = s.x0 - cur.x1;
         if (gap < -1 || gap > mergeGapPx) continue;   // -1: tolerate 1px overlap/rounding
+        if (gap > 10) {
+          const left = normalizedCaption(cur.text);
+          const right = normalizedCaption(s.text);
+          const extendedInlineJoin = /[(:]\s*$/.test(left)
+            || /^•/.test(left)
+            || (/^INDICATES\b/i.test(right)
+              && /(?:^|\s)[+']?[A-Z0-9][A-Z0-9./_-]{0,7}'?$/i.test(left));
+          // A larger adaptive gap is reserved for an explicit inline-mark
+          // or bullet/key grammar. Do not merge a terse tag inside a glyph
+          // (CO) with the independent description column to its right.
+          if (!extendedInlineJoin) continue;
+        }
         next = j;
         break;
       }
       if (next < 0) break;
       const s = sorted[next];
       used[next] = true;
+      const separator = s.x0 - cur.x1 > 10 ? " " : "";
       cur = {
-        text: `${cur.text}${s.text}`,
+        text: `${cur.text}${separator}${s.text}`,
         x0: Math.min(cur.x0, s.x0), y0: Math.min(cur.y0, s.y0),
         x1: Math.max(cur.x1, s.x1), y1: Math.max(cur.y1, s.y1),
       };
@@ -422,13 +436,27 @@ function normalizedCaption(text: string): string {
 function isLegendHeadingText(text: string): boolean {
   const normalized = normalizedCaption(text);
   if (normalized.length > 80) return false;
-  return /\bLEGEND\b/i.test(normalized)
-    || /\bSYMBOLS\b/i.test(normalized)
+  const words = normalized.split(/\s+/).filter(Boolean).length;
+  const shortDeclarativeHeading = words <= 8
+    && /\b(?:LEGEND|SYMBOLS?|NOTATIONS?)\b/i.test(normalized)
+    // Definition prose inside a legend routinely says "symbol indicates".
+    // Even when that fragment is only eight words long, it is a caption
+    // continuation rather than a nested heading.
+    && !/\b(?:SEE|REFER\s+TO|LEGEND\s+NOTES?|NOTE\s*\d+|INDICATES?)\b/i.test(normalized);
+  return shortDeclarativeHeading
     || /^SYMBOL$/i.test(normalized)
-    || /\bNOTATIONS?\b/i.test(normalized)
-    || /\bCOMPONENTS\b/i.test(normalized)
+    || /^(?:(?:CONTROL|HVAC|MECHANICAL|ELECTRICAL|SYSTEM|DEVICE|NETWORK)\s+)?COMPONENTS$/i.test(normalized)
     || /\bPOINT\s+FUNCTION(?:\s+SCHEDULE)?\b/i.test(normalized)
+    || /^(?:GENERAL|LIGHTING|POWER\s+DEVICES|POWER\s+DISTRIBUTION\s+EQUIPMENT|TELEPHONE\s*(?:&|AND)\s*DATA\s+SYSTEMS|FIRE\s+ALARM|LIGHTNING\s+PROTECTION\s+AND\s+GROUNDING|WIRE,?\s+CONDUIT\s+AND\s+RACEWAY|EQUIPMENT\s+CONNECTIONS)$/i.test(normalized)
     || /^(?:DUCTWORK|PIPING|(?:DUCTWORK|PIPING)\s+SYSTEM\s+ABBREVIATIONS|VALVES?(?:\s+AND\s+PIPING\s+ACCESSORIES)?|DUCTWORK\s+ACCESSORIES|AIR\s+DISTRIBUTION\s+DEVICES|GRILLES?[,\s]+REGISTERS?\s*(?:&|AND)\s*DIFFUSERS?(?:\s+TAGS?)?|MECHANICAL\s+EQUIPMENT\s+TAGS?|DAMPER\s+TAGS?)$/i.test(normalized);
+}
+
+/** A named MEP discipline section is stronger ownership evidence than a
+ * generic SYMBOLS/GENERAL header. These labels describe a bounded symbol
+ * vocabulary and may legitimately contain only one row (for example one
+ * wireless-access-point mark between adjacent ruled section headings). */
+function isSpecificDisciplineLegendHeading(text: string): boolean {
+  return /^(?:LIGHTING|POWER\s+DEVICES|POWER\s+DISTRIBUTION\s+EQUIPMENT|TELEPHONE\s*(?:&|AND)\s*DATA\s+SYSTEMS|FIRE\s+ALARM|LIGHTNING\s+PROTECTION\s+AND\s+GROUNDING|WIRE,?\s+CONDUIT\s+AND\s+RACEWAY|EQUIPMENT\s+CONNECTIONS)$/i.test(normalizedCaption(text));
 }
 
 /** Below-caption cell recovery is a specialized reflected-ceiling topology.
@@ -453,18 +481,21 @@ function isBelowCaptionLegendHeading(text: string): boolean {
  * project token list: it separates HVAC/BAS legend captions from room-tag,
  * keynote, structural-material, design-criteria, and title-block columns. */
 function isHvacBasCaption(text: string): boolean {
-  return /\b(?:ACTUATOR|AIR|AIRFLOW|ALARM|ANALOG|BACNET|BAS|BOILER|CHILLER|COIL|CONTROL|CONTROLLER|DAMPER|DDC|DIFFUSER|DIGITAL|DUCT|EXHAUST|FAN|FILTER|FIRE|FLOW|GAUGE|GRILLE|HEAT|HUMIDITY|INPUT|LOUVER|MOTOR|NETWORK|OUTPUT|PIPE|PIPING|PNEUMATIC|POWER|PRESSURE|PUMP|REFRIGERANT|REGISTER|RELAY|RETURN|SENSOR|SIGNAL|SMOKE|STEAM|SUPPLY|SWITCH|TEMPERATURE|THERMOSTAT|TRANSMITTER|VALVE|VENT|VFD|VOLTAGE|WATER)\b/i.test(normalizedCaption(text));
+  return /\b(?:ACCESS\s+POINT|ACTUATOR|AIR|AIRFLOW|ALARM|ANALOG|BACNET|BAS|BOILER|BREAKER|CHILLER|CIRCUIT|COIL|CONDUCTOR|CONDUIT|CONNECTION|CONTROL|CONTROLLER|DAMPER|DDC|DIFFUSER|DIGITAL|DISCONNECT|DRIVE|DUCT|ELECTRICAL|EQUIPMENT|EXHAUST|FAN|FILTER|FIRE|FIXTURE|FLOW|GAUGE|GENERATOR|GRILLE|GROUND|GROUNDING|HEAT|HUMIDITY|INPUT|JUNCTION|LIGHTING|LOUVER|METER|MOTOR|NETWORK|OUTLET|OUTPUT|PANELBOARD|PIPE|PIPING|PNEUMATIC|POWER|PRESSURE|PUMP|RACEWAY|RECEPTACLE|REFRIGERANT|REGISTER|REGULATOR|RELAY|RETURN|SENSOR|SIGNAL|SMOKE|STEAM|SUPPLY|SWITCH|TEMPERATURE|TERMINAL|THERMOSTAT|TRANSFORMER|TRANSMITTER|VALVE|VENT|VFD|VOLTAGE|WATER|WIRE|WIRELESS)\b/i.test(normalizedCaption(text));
 }
 
 function isDomainHeading(text: string): boolean {
-  return /\b(?:AIR|BAS|CONTROL|DDC|DAMPER|DUCT|HVAC|MECHANICAL|PIPING|POINT|SENSING|VALVE)\b/i.test(normalizedCaption(text));
+  return /\b(?:AIR|BAS|CONDUIT|CONNECTION|CONTROL|DATA|DDC|DAMPER|DUCT|ELECTRICAL|EQUIPMENT|FIRE|GROUNDING|HVAC|LIGHTING|MECHANICAL|PIPING|POINT|POWER|RACEWAY|SENSING|TELEPHONE|VALVE|WIRE)\b/i.test(normalizedCaption(text));
 }
 
 function isSectionBoundaryText(text: string): boolean {
   const normalized = normalizedCaption(text);
   if (!normalized || normalized.length > 100) return false;
   return isLegendHeadingText(normalized)
-    || /\b(?:ABBREVIATIONS?|DESIGN\s+CRITERIA|GENERAL\s+(?:PROJECT|MECHANICAL|HVAC|CONTROL)\s+NOTES?|IDENTIFICATION|INDENTIFICATION|SCHEDULES?|SEQUENCES?)\b/i.test(normalized);
+    // Mentions inside a row description are not boundaries: "see equipment
+    // connection schedule" is a common legend caption. Require heading-like
+    // text whose final phrase itself names the next section.
+    || /^(?:(?:[A-Z0-9&/,\-]+\s+){0,5})?(?:ABBREVIATIONS?|DESIGN\s+CRITERIA|GENERAL\s+(?:PROJECT|MECHANICAL|HVAC|CONTROL)\s+NOTES?|IDENTIFICATION|INDENTIFICATION|LEGEND\s+NOTES?|SCHEDULES?|SEQUENCES?(?:\s+OF\s+OPERATIONS?)?)$/i.test(normalized);
 }
 
 /** Sequence/general-note prose can form a perfectly regular numbered
@@ -489,7 +520,7 @@ function isDraftingAnnotationCaption(text: string): boolean {
   if (/^INDICATES\s+BRACKET\b/i.test(normalized)
     || /^(?:CEILING\s+HEIGHT|EXPOSED\s+CEILING)$/i.test(normalized)
     || /^(?:(?:\d+(?:\.\d+)?\s*['"]?\s*[x×]\s*\d+(?:\.\d+)?\s*['"]?\s+)?ACOUSTICAL\s+(?:TILE|PANEL).*\bCEILING|(?:GWB|GYPSUM(?:\s+BOARD)?)\s+CEILING(?:\s*\/\s*SOFFIT)?|(?:EXT(?:ERIOR)?\s+)?EIFS\b.*\bCEILING)$/i.test(normalized)) return true;
-  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|(?:MECHANICAL\s+)?EQUIPMENT)\s+CALLOUT|HOME\s+RUN|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|DUCTWORK\s+(?:BREAK|OR\s+PIPING\s+RISE)|INTAKE\s+OR\s+EXHAUST|(?:DIRECTION\s+OF\s+(?:AIRFLOW|FLOW)|FLOW\s+DIRECTION)|(?:SUPPLY|RETURN,?\s+EXHAUST,?\s+OR\s+TRANSFER)\s+AIRFLOW|(?:INCLINED\s+RISE|DECLINED\s+DROP)\s+WITH\s+RESPECT\s+TO\s+AIRFLOW|(?:UPWARD|DOWNWARD)\s+DIRECTION\s+OF\s+SLOPED\s+PIPING|NEW\s+TO\s+EXISTING\s+CONNECTION\s+POINT|SLOPE\s+PIPE\s+IN\s+DIRECTION\s+OF\s+ARROW|AIR\s+DISTRIBUTION\s+TAG|AIR\s+DEVICE\s+TYPE\.\s+REFER\s+TO\s+SCHEDULE\b.*\bAIR\s+DEVICE\s+WITH\s+(?:ROUND|RECTANGULAR)\s+NECK\s+TAG|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|DEMOLISH\s+TO\s+POINT\s+INDICATED|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b)/i.test(normalized);
+  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|(?:MECHANICAL\s+)?EQUIPMENT)\s+CALLOUT|HOME\s+RUN|HOMERUNS?\s+TO\s+PANEL\b|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|DUCTWORK\s+(?:BREAK|OR\s+PIPING\s+RISE)|INTAKE\s+OR\s+EXHAUST|(?:DIRECTION\s+OF\s+(?:AIRFLOW|FLOW)|FLOW\s+DIRECTION)|(?:SUPPLY|RETURN,?\s+EXHAUST,?\s+OR\s+TRANSFER)\s+AIRFLOW|(?:INCLINED\s+RISE|DECLINED\s+DROP)\s+WITH\s+RESPECT\s+TO\s+AIRFLOW|(?:UPWARD|DOWNWARD)\s+DIRECTION\s+OF\s+SLOPED\s+PIPING|NEW\s+TO\s+EXISTING\s+CONNECTION\s+POINT|SLOPE\s+PIPE\s+IN\s+DIRECTION\s+OF\s+ARROW|AIR\s+DISTRIBUTION\s+TAG|AIR\s+DEVICE\s+TYPE\.\s+REFER\s+TO\s+SCHEDULE\b.*\bAIR\s+DEVICE\s+WITH\s+(?:ROUND|RECTANGULAR)\s+NECK\s+TAG|(?:LIGHTING\s+FIXTURE|RECEPTACLE\s+DEVICE)\s+TAGS?\b|ELECTRICAL\s+EQUIPMENT\s+AND\s+TAGS\b|DEVIATIONS?\s+OF\s+(?:THE\s+)?ABOVE\s+RECEPTACLE\s+TYPES?\b|[•\-]?\s*INTERNAL\s+(?:GROUND|ARC)\s+FAULT\b|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|(?:DEMOLITION|CONSTRUCTION)\s+NOTE\s+IDENTIFICATION|POINT\s+OF\s+(?:DEMOLITION|CONNECTION,?\s+NEW-TO-EXISTING)\b|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|CONNECT\s+NEW\s+TO\s+EXISTING|REMOVE\s+TO\s+THIS\s+POINT|DEMOLISH\s+TO\s+POINT\s+INDICATED|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\s+(?:CONDUCTOR|STRUCTURE)\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b|EQUIPMENT\s+CONNECTION\s+AS\s+NOTED\b)/i.test(normalized);
 }
 
 /** Captions that name a routed medium or drafting line convention rather
@@ -506,6 +537,7 @@ function isRoutedSystemCaption(text: string): boolean {
   if (/\bDIRECTION\b/i.test(normalized)
     || /\b(?:ACTUATOR|CLEANOUT|DAMPER|DETECTOR|DIFFUSER|FAN|FILTER|GAUGE|GRILLE|LOUVER|METER|PANELBOARD|PUMP|REGISTER|REGULATOR|RELAY|SENSOR|STARTER|STRAINER|SWITCH|THERMOSTAT|TRANSMITTER|VALVE|VFD)\b\s+(?:IN|ON)\b.*\b(?:PIPING|LINE)$/i.test(normalized)) return false;
   return /\b(?:PIPING|LINE|SEWER)$/i.test(normalized)
+    || /^(?:LPS\s+(?:ROOF|MAIN\s+DOWN)\s+CONDUCTOR|GROUND\s+RING\b.*\bCONDUCTOR|BRANCH\s+CIRCUIT\s+OR\s+FEEDER\s+WIRING\s+IN\s+CONDUIT\b)/i.test(normalized)
     || /^(?:VENT|DUCTWORK|STORM\s+DRAIN)$/i.test(normalized)
     || /^(?:(?:SUPPLY|RETURN|EXHAUST|TRANSFER|OUTDOOR)\s+AIR|CONDENSATE\s+DRAIN|REFRIGERANT\s+SUCTION\s*\/\s*LIQUID)$/i.test(normalized)
     || /^(?:RECTANGULAR\s+DUCT(?:\s+RECTANGULAR\s+DUCT\s+WIDTH.*)?|ROUND\s+DUCT(?:\s+ROUND\s+DUCT\s+DIAMETER.*)?|PIPE(?:\s+PIPE\s*\(DIAMETER.*)?|FLEXIBLE\s+DUCT|ACOUSTICALLY\s+LINED\s+DUCTWORK)$/i.test(normalized)
@@ -1154,8 +1186,14 @@ function hasMultipleSubstantialSymbols(
   const declaresAlternatives = /\b\d+\s*-\s*WAY\b.*\b\d+\s*-\s*WAY\b/i.test(pair.caption)
     || /\b(?:DOWN\s*\/\s*UP|UP\s*\/\s*DOWN)\b/i.test(pair.caption)
     || /\bRISE\b.*\bDROP\b/i.test(pair.caption)
-    || /\bACCESS\s+DOOR\b.*\bACCESS\s+PANEL\b/i.test(pair.caption);
-  const hasExplicitVariantColumns = /^(?:DUCTWORK|PIPING)$/i.test(heading || "");
+    || /\bACCESS\s+DOOR\b.*\bACCESS\s+PANEL\b/i.test(pair.caption)
+    // Fixture keys commonly draw the ceiling rendition, the wall/bracket
+    // rendition, and optional face/direction variants side by side under
+    // one caption. Those are a vocabulary group, never one sweep template.
+    || /\bINDICATES\s+BRACKET,?\s+WALL\s+MOUNTED\s+FIXTURES?\b/i.test(pair.caption)
+    || /\b(?:ARROW,?\s+WHEN\s+USED|QUADRANT\(S\)\s+OF\s+SYMBOL)\b/i.test(pair.caption);
+  const hasExplicitVariantColumns = /^(?:DUCTWORK|PIPING)$/i.test(heading || "")
+    || (!!heading && isSpecificDisciplineLegendHeading(heading));
   if (!declaresAlternatives && !hasExplicitVariantColumns) return false;
   const independent = pair.members.filter((member) => member.segments >= 2);
   for (let i = 0; i < independent.length; i++) {
@@ -1195,7 +1233,7 @@ function attachWrappedCaptions(
   // still permits two/three-line chains, but each physical line goes to the
   // geometrically best row under the same finite wrap/indent gates.
   for (;;) {
-    let best: { pairIndex: number; spanIndex: number; prepend: boolean; score: number } | null = null;
+    let best: { pairIndex: number; spanIndex: number; prepend: boolean; sameLine: boolean; score: number } | null = null;
     for (let si = 0; si < spans.length; si++) {
       if (usedSpans.has(si)) continue;
       const continuation = spans[si];
@@ -1203,11 +1241,29 @@ function attachWrappedCaptions(
       const lineCenterY = (continuation.y0 + continuation.y1) / 2;
       for (let pairIndex = 0; pairIndex < pairs.length; pairIndex++) {
         const pair = pairs[pairIndex];
+        const verticalOverlap = Math.min(continuation.y1, pair.span.y1)
+          - Math.max(continuation.y0, pair.span.y0);
+        const sameLine = verticalOverlap >= Math.min(
+          continuation.y1 - continuation.y0, pair.span.y1 - pair.span.y0,
+        ) * 0.6;
+        const horizontalGap = continuation.x0 > pair.span.x1
+          ? continuation.x0 - pair.span.x1
+          : pair.span.x0 > continuation.x1 ? pair.span.x0 - continuation.x1 : 0;
+        // Only append to the right. A terse PDF-text tag inside the glyph
+        // (CO, DP, AI) can sit on the same baseline to the left of the true
+        // description and must not be prepended as caption prose.
+        const sameLineContinuation = sameLine && continuation.x0 >= pair.span.x1
+          && horizontalGap <= Math.max(
+            8,
+            typicalTextHeight * 1.5,
+            Math.min(continuation.y1 - continuation.y0, pair.span.y1 - pair.span.y0) * 1.5,
+          );
         const belowGap = continuation.y0 - pair.span.y1;
         const aboveGap = pair.span.y0 - continuation.y1;
         const isBelow = belowGap >= -1;
-        const gap = Math.max(0, isBelow ? belowGap : aboveGap);
-        if (!isBelow && aboveGap < -1) continue;
+        const gap = sameLineContinuation ? horizontalGap
+          : Math.max(0, isBelow ? belowGap : aboveGap);
+        if (!sameLineContinuation && !isBelow && aboveGap < -1) continue;
         const glyphMiss = Math.max(0, pair.rect[0][1] - lineCenterY, lineCenterY - pair.rect[1][1]);
         // Text boxes from the same CAD line family can differ by a fraction
         // of a pixel after font metrics and image-space conversion. Keep a
@@ -1221,21 +1277,29 @@ function attachWrappedCaptions(
         const compactThirdLine = pair.captionLines > 1
           && gap <= typicalTextHeight * 1.1
           && glyphMiss <= typicalTextHeight * 0.9;
-        if ((gap > maxLineGapPx + 1 && !compactThirdLine)
-          || Math.abs(continuation.x0 - pair.span.x0) > maxIndentDriftPx) continue;
+        if ((!sameLineContinuation && gap > maxLineGapPx + 1 && !compactThirdLine)
+          || (!sameLineContinuation
+            && Math.abs(continuation.x0 - pair.span.x0) > maxIndentDriftPx)) continue;
         // Most captions remain capped at maxWrapLines. A compound symbol
         // with leader labels can legitimately use two additional lines, but
         // only while those extra line centers remain physically crossed by
         // (or immediately beside) that same glyph's evidence box.
         const compoundLineCap = glyphMiss <= typicalTextHeight * 0.5
           && gap <= typicalTextHeight ? maxWrapLines + 2 : maxWrapLines;
-        if (pair.captionLines >= compoundLineCap) continue;
+        if (!sameLineContinuation && pair.captionLines >= compoundLineCap) continue;
         const glyphCenterY = (pair.rect[0][1] + pair.rect[1][1]) / 2;
-        const score = glyphMiss * 2 + gap + Math.abs(lineCenterY - glyphCenterY) * 0.05;
+        const score = (sameLineContinuation ? 0 : glyphMiss * 2)
+          + gap + Math.abs(lineCenterY - glyphCenterY) * 0.05;
         if (!best || score < best.score
           || (score === best.score && (si < best.spanIndex
             || (si === best.spanIndex && pairIndex < best.pairIndex)))) {
-          best = { pairIndex, spanIndex: si, prepend: !isBelow, score };
+          best = {
+            pairIndex,
+            spanIndex: si,
+            prepend: sameLineContinuation ? false : !isBelow,
+            sameLine: sameLineContinuation,
+            score,
+          };
         }
       }
     }
@@ -1245,7 +1309,7 @@ function attachWrappedCaptions(
     usedSpans.add(best.spanIndex);
     pair.caption = normalizedCaption(best.prepend
       ? `${continuation.text} ${pair.caption}` : `${pair.caption} ${continuation.text}`);
-    pair.captionLines++;
+    if (!best.sameLine) pair.captionLines++;
     pair.span = {
       text: pair.caption,
       x0: Math.min(pair.span.x0, continuation.x0),
@@ -1280,9 +1344,39 @@ function mergeOwnedWrapPairs(
     };
     let ownedLines = current.captionLines;
     for (let j = i + 1; j < sorted.length; j++) {
-      if (ownedLines >= maxWrapLines) break;
       if (consumed.has(j)) continue;
       const next = sorted[j];
+      // A drawn notation inserted inside prose can acquire its own compact
+      // candidate and claim the text fragment after it. On the rendered
+      // page this is still one caption line: "LIGHTING FIXTURE ( [bracket]
+      // INDICATES ... )". Rejoin the right-hand text while leaving the
+      // inline explanatory mark out of the physical seed geometry. A real
+      // second legend column is separated by a much larger text gap.
+      const textLineOverlap = Math.min(current.span.y1, next.span.y1)
+        - Math.max(current.span.y0, next.span.y0);
+      const sameCaptionLine = textLineOverlap >= Math.min(
+        current.span.y1 - current.span.y0, next.span.y1 - next.span.y0,
+      ) * 0.6;
+      const textGap = next.span.x0 - current.span.x1;
+      const inlineMarkBetweenText = sameCaptionLine
+        && textGap >= 0
+        && textGap <= Math.max(8, typicalTextHeight * 1.5,
+          Math.min(current.span.y1 - current.span.y0, next.span.y1 - next.span.y0) * 1.5)
+        && next.rect[0][0] >= current.span.x0 - typicalTextHeight * 0.25
+        && next.rect[1][0] <= next.span.x0 + typicalTextHeight * 0.25;
+      if (inlineMarkBetweenText) {
+        consumed.add(j);
+        current.caption = normalizedCaption(`${current.caption} ${next.caption}`);
+        current.span = {
+          text: current.caption,
+          x0: Math.min(current.span.x0, next.span.x0),
+          y0: Math.min(current.span.y0, next.span.y0),
+          x1: Math.max(current.span.x1, next.span.x1),
+          y1: Math.max(current.span.y1, next.span.y1),
+        };
+        continue;
+      }
+      if (ownedLines >= maxWrapLines) break;
       if (ownedLines + next.captionLines > maxWrapLines) continue;
       if (Math.abs(next.span.x0 - current.span.x0) > maxIndentDriftPx) continue;
       const lineGap = next.span.y0 - current.span.y1;
@@ -1721,6 +1815,85 @@ function withoutTrailingNetworkDiagram(
   return prefix;
 }
 
+/** Complete paragraph-sized definitions inside a named MEP legend section.
+ * Nearest-line wrapping alone is insufficient when the glyph is vertically
+ * centered beside a 10-15 line tag definition: it can start in the middle
+ * and hit a line cap before reaching both ends. Once repeated geometry and a
+ * specific section heading have established ownership, neighboring symbol
+ * rows provide finite vertical boundaries. Collect only text in that learned
+ * description-column envelope and never reach across the next row. */
+function completeSpecificSectionCaptions(
+  group: PairCandidate[], lines: LegendSpan[], heading: string | null,
+  typicalTextHeight: number,
+): void {
+  if (!heading || !isSpecificDisciplineLegendHeading(heading) || !group.length) return;
+  const ordered = [...group].sort((a, b) => {
+    const ay = (a.rect[0][1] + a.rect[1][1]) / 2;
+    const by = (b.rect[0][1] + b.rect[1][1]) / 2;
+    return ay - by || a.span.x0 - b.span.x0;
+  });
+  const captionColumnX = median(ordered.map((pair) => pair.span.x0));
+  const firstTop = Math.min(...ordered.map((pair) => Math.min(pair.rect[0][1], pair.span.y0)));
+  const headingSpan = lines.filter((line) => normalizedCaption(line.text) === heading && line.y1 < firstTop)
+    .sort((a, b) => (firstTop - a.y1) - (firstTop - b.y1))[0];
+  const xMin = captionColumnX - typicalTextHeight * 0.5;
+  const xMax = captionColumnX + typicalTextHeight * 10;
+
+  for (let i = 0; i < ordered.length; i++) {
+    const pair = ordered[i];
+    const previousBottom = i ? Math.max(
+      ordered[i - 1].rect[1][1], ordered[i - 1].span.y1,
+    ) : (headingSpan?.y1 ?? pair.span.y0 - typicalTextHeight * 2);
+    const nextTop = i + 1 < ordered.length ? Math.min(
+      ordered[i + 1].rect[0][1], ordered[i + 1].span.y0,
+    ) : pair.span.y1 + typicalTextHeight * 3;
+    const yMin = previousBottom + (i ? typicalTextHeight * 0.2 : 0);
+    const yMax = nextTop - (i + 1 < ordered.length ? typicalTextHeight * 0.2 : 0);
+    const eligible = lines.filter((line) => {
+      const centerY = (line.y0 + line.y1) / 2;
+      return centerY >= yMin && centerY <= yMax
+        && line.x0 >= xMin && line.x0 <= xMax
+        && /[A-Z0-9]/i.test(normalizedCaption(line.text))
+        && normalizedCaption(line.text) !== heading
+        && !isSectionBoundaryText(line.text);
+    }).sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
+    // Start with the text the normal one-to-one pairing/wrap pass already
+    // owned, then walk across ordinary line leading in either direction.
+    // A separate glyphless legend row has a full row gap and stays outside.
+    let blockY0 = pair.span.y0;
+    let blockY1 = pair.span.y1;
+    const selected = new Set<number>();
+    const maxLeadingGap = Math.max(2, typicalTextHeight * 0.5);
+    for (;;) {
+      let changed = false;
+      for (let lineIndex = 0; lineIndex < eligible.length; lineIndex++) {
+        if (selected.has(lineIndex)) continue;
+        const line = eligible[lineIndex];
+        const gap = line.y0 > blockY1 ? line.y0 - blockY1
+          : blockY0 > line.y1 ? blockY0 - line.y1 : 0;
+        if (gap > maxLeadingGap) continue;
+        selected.add(lineIndex);
+        blockY0 = Math.min(blockY0, line.y0);
+        blockY1 = Math.max(blockY1, line.y1);
+        changed = true;
+      }
+      if (!changed) break;
+    }
+    const owned = eligible.filter((_, index) => selected.has(index));
+    if (!owned.length) continue;
+    pair.caption = normalizedCaption(owned.map((line) => line.text).join(" "));
+    pair.captionLines = new Set(owned.map((line) =>
+      Math.round(line.y0 / Math.max(1, typicalTextHeight * 0.25)))).size;
+    pair.span = {
+      text: pair.caption,
+      x0: Math.min(...owned.map((line) => line.x0)),
+      y0: Math.min(...owned.map((line) => line.y0)),
+      x1: Math.max(...owned.map((line) => line.x1)),
+      y1: Math.max(...owned.map((line) => line.y1)),
+    };
+  }
+}
+
 /** Find every (glyph, caption) row pair on a legend sheet. `maxGlyphDimPx`
  * bounds how big a single glyph's own bbox may be (default: a generous but
  * real bound, tunable per sheet resolution) — segments outside every
@@ -1746,11 +1919,13 @@ export function findLegendGlyphs(
     .map((s) => s.y1 - s.y0)
     .filter((height) => height > 2 && height <= 120)) || 12);
   // Font/kerning boundaries are not always sub-pixel. A reviewed 4896px
-  // CAD export split "BACNET MS/TP - UUKL NETWORK" into three same-line
-  // runs with 5.8px gaps. Scale the join allowance from local lettering,
-  // while the finite 10px cap remains well short of real table-column gaps.
+  // CAD exports split captions at font seams and at drawn inline marks. A
+  // reviewed electrical legend also emits each bullet, key, and definition
+  // as separate same-line runs with 18-28px gaps at 25px lettering. Scale
+  // from the local run height with a finite 32px ceiling; actual table
+  // columns remain materially farther apart.
   const captionMergeGapPx = opts.captionMergeGapPx
-    ?? Math.max(3, Math.min(10, rawTextHeight * 0.35));
+    ?? Math.max(3, Math.min(32, rawTextHeight * 1.5));
   const lines = mergeCaptionLines(rawSpans, captionMergeGapPx);
   const spans = lines;
   const typicalTextHeight = Math.max(6, median(lines
@@ -1767,7 +1942,14 @@ export function findLegendGlyphs(
   const maxGlyphDimPx = opts.maxGlyphDimPx ?? Math.max(80, Math.min(220, typicalTextHeight * 12));
   const maxCaptionGapPx = opts.maxCaptionGapPx ?? Math.max(150, Math.min(320, typicalTextHeight * 14));
   const maxLineStyleDimPx = Math.max(maxGlyphDimPx * 1.6, typicalTextHeight * 20);
-  const maxWrapLines = Math.max(1, Math.floor(opts.maxWrapLines ?? 3));
+  // Named discipline sections often use one symbol beside a paragraph-sized
+  // definition (equipment connections and receptacle-tag keys can run from
+  // five to fifteen physical lines). Their explicit bounded headings provide
+  // stronger ownership than an unheaded same-margin text column, so retain a
+  // larger but still finite block there. Callers can always override the cap.
+  const hasSpecificDisciplineSections = lines.some((line) => isSpecificDisciplineLegendHeading(line.text));
+  const maxWrapLines = Math.max(1, Math.floor(opts.maxWrapLines
+    ?? (hasSpecificDisciplineSections ? 16 : 3)));
   // Wrapped CAD descriptions are often centered under their first line,
   // not left-aligned. Cherry Point's reviewed damper rows indent line two
   // by 19px and line three by 52px at a 25px text height. Scale both gates
@@ -1904,7 +2086,10 @@ export function findLegendGlyphs(
     if (!group.length) continue;
     const heading = nearbyLegendHeading(group, lines, typicalTextHeight);
     group = withoutTrailingNetworkDiagram(group, heading, typicalTextHeight, minAlignedRows);
-    if (group.length < (heading ? minAlignedRows : minUnheadedRows)) continue;
+    completeSpecificSectionCaptions(group, lines, heading, typicalTextHeight);
+    const specificDisciplineSection = !!heading && isSpecificDisciplineLegendHeading(heading);
+    const generalSection = heading === "GENERAL" && group.length >= 4;
+    if (group.length < (specificDisciplineSection ? 1 : heading ? minAlignedRows : minUnheadedRows)) continue;
     const domainRows = group.filter((pair) => isHvacBasCaption(pair.caption)).length;
     const directiveRows = group.filter((pair) => isDirectiveProse(pair.caption)).length;
     const domainFloor = Math.max(2, Math.ceil(group.length * 0.2));
@@ -1913,7 +2098,9 @@ export function findLegendGlyphs(
     // actually HVAC/BAS identities, not room tags, keynotes, materials, or
     // design-criteria values. Headerless directive prose is notes/sequence
     // truth, never glyph-caption truth, even when its numbering is regular.
-    if (!layoutEvidenceDisabled && (!heading || !isDomainHeading(heading)) && domainRows < domainFloor) continue;
+    if (!layoutEvidenceDisabled && !generalSection
+      && (!heading || !isDomainHeading(heading)) && domainRows < domainFloor) continue;
+    if (!layoutEvidenceDisabled && generalSection && directiveRows / group.length > 0.15) continue;
     if (!layoutEvidenceDisabled && !heading && directiveRows / group.length > 0.15) continue;
     for (const pair of group) acceptPair(pair, group.length, heading);
   }
