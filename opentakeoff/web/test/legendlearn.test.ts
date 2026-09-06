@@ -1744,7 +1744,7 @@ test("findLegendGlyphs: routed demolition/status swatches and riser marks cannot
   ];
   const segs = flat([
     ...box(80), ...box(140), ...box(200), ...box(260),
-    ...box(320), ...box(380), ...box(440), ...box(500),
+    ...box(320), ...box(380), ...box(440), ...box(500), ...box(560),
   ]);
   const spans: LegendSpan[] = [
     { text: "DUCTWORK SYMBOLS", x0: 70, y0: 20, x1: 390, y1: 45 },
@@ -1752,17 +1752,18 @@ test("findLegendGlyphs: routed demolition/status swatches and riser marks cannot
     { text: "DUCTWORK TO REMAIN", x0: 220, y0: 142, x1: 440, y1: 162 },
     { text: "NEW DUCTWORK", x0: 220, y0: 202, x1: 380, y1: 222 },
     { text: "DUCTWORK WITH LINING", x0: 220, y0: 262, x1: 450, y1: 282 },
-    { text: "DUCT DOWN (SEE TAG FOR SYSTEM)", x0: 220, y0: 322, x1: 540, y1: 342 },
-    { text: "SUPPLY DUCT UP", x0: 220, y0: 382, x1: 390, y1: 402 },
-    { text: "PIPE DROP/PIPE RISE", x0: 220, y0: 442, x1: 430, y1: 462 },
-    { text: "PIPE CONTINUATION", x0: 220, y0: 502, x1: 420, y1: 522 },
+    { text: "DRAIN PIPING (CONDENSATE)", x0: 220, y0: 322, x1: 490, y1: 342 },
+    { text: "DUCT DOWN (SEE TAG FOR SYSTEM)", x0: 220, y0: 382, x1: 540, y1: 402 },
+    { text: "SUPPLY DUCT UP", x0: 220, y0: 442, x1: 390, y1: 462 },
+    { text: "PIPE DROP/PIPE RISE", x0: 220, y0: 502, x1: 430, y1: 522 },
+    { text: "PIPE CONTINUATION", x0: 220, y0: 562, x1: 420, y1: 582 },
   ];
   const glyphs = findLegendGlyphs(segs, spans);
-  assert.deepEqual(glyphs.slice(0, 4).map((glyph) => [glyph.kind, glyph.seedable]), [
+  assert.deepEqual(glyphs.slice(0, 5).map((glyph) => [glyph.kind, glyph.seedable]), [
     ["line_style", false], ["line_style", false],
-    ["line_style", false], ["line_style", false],
+    ["line_style", false], ["line_style", false], ["line_style", false],
   ]);
-  assert.ok(glyphs.slice(4).every((glyph) => glyph.kind === "annotation" && !glyph.seedable));
+  assert.ok(glyphs.slice(5).every((glyph) => glyph.kind === "annotation" && !glyph.seedable));
 });
 
 test("findLegendGlyphs: two named fittings on one continuous pipe stub are a nonseedable group", () => {
@@ -1777,6 +1778,21 @@ test("findLegendGlyphs: two named fittings on one continuous pipe stub are a non
   const [glyph] = findLegendGlyphs(segs, spans, { minAlignedRows: 1 });
   assert.ok(glyph);
   assert.equal(glyph.kind, "symbol_group");
+  assert.equal(glyph.seedable, false);
+});
+
+test("findLegendGlyphs: a sparse pipe-sleeve carrier stays a physical identity but cannot seed a sweep", () => {
+  const segs = flat([
+    seg(100, 110, 250, 110),
+    seg(165, 104, 185, 104),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "PIPING", x0: 70, y0: 20, x1: 170, y1: 45 },
+    { text: "PIPE SLEEVE", x0: 310, y0: 101, x1: 450, y1: 121 },
+  ];
+  const [glyph] = findLegendGlyphs(segs, spans, { minAlignedRows: 1 });
+  assert.ok(glyph);
+  assert.equal(glyph.kind, "symbol");
   assert.equal(glyph.seedable, false);
 });
 
@@ -1869,6 +1885,18 @@ test("findLegendGlyphs: contractor keys and pipe-topology conventions are annota
     "PIPE CAP OR PLUG",
     "PIPE ELBOW DOWN",
     "PIPE BRANCH, TOP CONNECTION",
+    "DIRECTION OF PIPE PITCH, DOWN",
+    "NEW PIPE CONNECTION",
+    "PIPE DROP/RISE",
+    "PIPE ELBOW, TURNED UP",
+    "PIPE TEE, BOTTOM CONNECTION, 45° OR 90° ELBOW",
+    "PIPE TEE, DOWN",
+    "PIPE TEE, HORIZONTAL",
+    "GRILLE/REGISTER/DIFFUSER TAG",
+    "RECTANGULAR EXHAUST/RETURN DUCTWORK DOWN",
+    "RECTANGULAR SUPPLY DUCTWORK UP",
+    "EQUIPMENT TAG",
+    "POINT OF CONNECTION OF NEW TO EXISTING WORK",
   ];
   const box = (y: number): number[][] => [
     seg(100, y, 140, y), seg(140, y, 140, y + 20),
