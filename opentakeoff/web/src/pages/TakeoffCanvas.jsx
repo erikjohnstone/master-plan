@@ -1925,7 +1925,27 @@ export default function TakeoffCanvas() {
   // leaving the stamp tool disarms the pending stamp — a stray click under a
   // measure/select tool must never drop a stamp
   useEffect(() => { if (tool !== "stamp") setArmedStamp(null); }, [tool]);
-  useEffect(() => { if (tool !== "image") setImageAnchor(null); }, [tool]);   // leaving the image marquee drops a half-set anchor (mirrors scheduleAnchor/symbolAnchor reset)
+  // Leaving a marquee tool drops its half-set anchor. This comment used to
+  // claim it "mirrors scheduleAnchor/symbolAnchor reset" — no such reset
+  // existed for either. The bug that made it real: arm Y, click once, press A,
+  // press Y again, and the next click completed a marquee from the corner you
+  // set two tools ago, sweeping a rectangle you never drew.
+  useEffect(() => { if (tool !== "image") setImageAnchor(null); }, [tool]);
+  useEffect(() => { if (tool !== "symbol") setSymbolAnchor(null); }, [tool]);
+  useEffect(() => { if (tool !== "schedule") setScheduleAnchor(null); }, [tool]);
+  // A SWEEP BELONGS TO ITS SHEET. Nothing cleared `sweep` when the open sheets
+  // changed, so navigating away left the review panel showing live counts for
+  // a sheet no longer on screen — its overlay silently gone (the glyph layer
+  // returns null when the panel is missing) — and Commit still wrote onto the
+  // ORIGINAL sheet. Counts you can see, ink you cannot, landing somewhere you
+  // are not looking.
+  useEffect(() => {
+    if (!sweep) return;
+    if (groupKeys.includes(sweep.key)) return;
+    setSweep(null);
+    setCommitMsg("Sweep discarded — its sheet is no longer open.", "refusal");
+  }, [groupSig, sweep?.key]);
+
   // A One-Click proposal is only actionable while One-Click is armed (Enter
   // already requires it) — discard it on tool switch, like the stamp above.
   // Also keeps Create out of the ACTION slot while Finish occupies it, so the
@@ -6485,8 +6505,17 @@ export default function TakeoffCanvas() {
         ...(Array.isArray(s.evidence.seed_norm) ? { seed_norm: s.evidence.seed_norm } : {}),
         ...(runId ? { run_id: runId } : {}),
         proposed_ts: nowIso(),
-        area_sf: +(ringArea(ringPx) * upp * upp).toFixed(2),
-        perim_lf: +(closedMetrics(ringPx).perim * upp).toFixed(2),
+        // A count is one placement, not a zero-area polygon. Its verts_norm is
+        // a single point, so ringArea/closedMetrics over it are 0 by
+        // construction — staging them made the panel print "· 0 SF" for a
+        // perfectly good count. Carry the same field the committed shape and
+        // the manual Count tool carry instead.
+        ...(s.measure_role === "count"
+          ? { count: 1 }
+          : {
+              area_sf: +(ringArea(ringPx) * upp * upp).toFixed(2),
+              perim_lf: +(closedMetrics(ringPx).perim * upp).toFixed(2),
+            }),
       };
     });
     setAgentProposals((ps) => [...ps, ...staged]);
@@ -7646,6 +7675,21 @@ export default function TakeoffCanvas() {
         agentGraphCacheKeyRef.current = "";
         wholeSetSpansRef.current = new Map();
       },
+      // PLAYWRIGHT ONLY — the proposal review path, without a model call.
+      // api.cerebras.ai is unreachable from CI, so the only way to verify what
+      // propose_shapes actually stages, what the panel row says about it, what
+      // the overlay paints, and what Accept writes is to drive those same
+      // functions directly. Every entry here is the REAL one the agent tools
+      // call; nothing here is a second implementation.
+      probe: {
+        sheets: () => panels.map((x) => ({ key: x.key, w: x.img?.w || 0 })),
+        setScale: (key, label) => agentSetScale(key, label),
+        mintCondition: (tag) => mintCondition(tag).id,
+        stageProposals: (list) => stageAgentProposals(list),
+        proposals: () => agentProposals,
+        acceptAll: () => acceptAllVisibleAgentProposals(),
+        shapes: () => shapes,
+      },
     };
   });
 
@@ -8695,7 +8739,13 @@ export default function TakeoffCanvas() {
       made.push({
         sheet_id: pr.sheet_id, condition_id: pr.condition_id, measure_role: pr.measure_role,
         verts_norm: pr.verts_norm.map((v) => [...v]),
-        computed: { area_sf: +(ringArea(ringPx) * upp * upp).toFixed(2), perimeter_lf: +(closedMetrics(ringPx).perim * upp).toFixed(2) },
+        // Same contract as commitSweep and the manual Count tool: a count
+        // shape carries computed.count. totals.js has a `cp.count || 1`
+        // fallback, but a shape that stores {area_sf:0, perimeter_lf:0} and
+        // relies on it is lying about what was measured.
+        computed: pr.measure_role === "count"
+          ? { count: 1 }
+          : { area_sf: +(ringArea(ringPx) * upp * upp).toFixed(2), perimeter_lf: +(closedMetrics(ringPx).perim * upp).toFixed(2) },
         origin: {
           method: "agent_v1", actor: "agent", reviewed: true,
           proposed_ts: pr.proposed_ts, accepted_ts: nowIso(),
@@ -11652,6 +11702,7 @@ export default function TakeoffCanvas() {
                       const s = tf.scale;
                       const pts = ap.verts_norm.map(([x, y]) => [x * p.img.w, y * p.img.h]);
                       const ded = ap.measure_role === "deduct";
+                      const cnt = ap.measure_role === "count";
                       const col = ded ? "#b03a26" : "#1f3fc7";
                       const clickable = tool === "select";
                       const ev = ap.evidence || {};
@@ -11664,11 +11715,23 @@ export default function TakeoffCanvas() {
                         <g key={ap.id} style={{ pointerEvents: clickable ? "auto" : "none", cursor: clickable ? "pointer" : undefined }}
                           onPointerDown={(e) => { if (clickable) e.stopPropagation(); }}
                           onClick={(e) => { if (clickable) { e.stopPropagation(); acceptAgentProposal(ap.id); } }}>
-                          <title>{`Agent proposal — ${condById[ap.condition_id]?.finish_tag || "?"}${ded ? " (deduct)" : ""}, ${fa(ap.area_sf)}. ${evBits ? `Evidence: ${evBits}. ` : ""}Click to accept (⏎ accepts all visible); reject from the Agent panel.`}</title>
-                          <polygon points={pts.map((q) => q.join(",")).join(" ")}
-                            fill={ded ? "rgba(176,58,38,.10)" : "rgba(31,63,199,.07)"}
-                            stroke={col} strokeOpacity={0.9} strokeWidth={2 / s}
-                            strokeDasharray={`${3.5 / s} ${3.5 / s}`} strokeLinejoin="round" />
+                          <title>{`Agent proposal — ${condById[ap.condition_id]?.finish_tag || "?"}${ded ? " (deduct)" : ""}, ${cnt ? `${ap.count ?? 1} EA` : fa(ap.area_sf)}. ${evBits ? `Evidence: ${evBits}. ` : ""}Click to accept (⏎ accepts all visible); reject from the Agent panel.`}</title>
+                          {cnt ? (
+                            /* A count's verts_norm is ONE point — a <polygon>
+                               over it paints nothing, so a proposed count was
+                               invisible on the sheet. Draw the same square
+                               marker the committed count draws (:11235),
+                               dashed to keep the proposed/committed
+                               distinction the outlines already make. */
+                            <rect x={pts[0][0] - 7 / s} y={pts[0][1] - 7 / s} width={14 / s} height={14 / s} rx={2 / s}
+                              fill={`${col}22`} stroke={col} strokeOpacity={0.9} strokeWidth={2 / s}
+                              strokeDasharray={`${3.5 / s} ${3.5 / s}`} />
+                          ) : (
+                            <polygon points={pts.map((q) => q.join(",")).join(" ")}
+                              fill={ded ? "rgba(176,58,38,.10)" : "rgba(31,63,199,.07)"}
+                              stroke={col} strokeOpacity={0.9} strokeWidth={2 / s}
+                              strokeDasharray={`${3.5 / s} ${3.5 / s}`} strokeLinejoin="round" />
+                          )}
                           {Array.isArray(ap.seed_norm) && (
                             <path d={starPath(ap.seed_norm[0] * p.img.w, ap.seed_norm[1] * p.img.h, 4.5 / s)}
                               fill={col} fillOpacity={0.85} stroke="#fff" strokeWidth={1 / s} />
@@ -12321,6 +12384,10 @@ export default function TakeoffCanvas() {
             onAccept={acceptAgentProposal}
             onReject={rejectAgentProposal}
             onAcceptAll={acceptAllVisibleAgentProposals}
+            /* How many "Accept all" can ACTUALLY take. A proposal on a sheet
+               that is not open cannot be committed, and the button used to
+               swallow that silently while the header kept counting it. */
+            acceptableCount={agentProposals.filter((p) => panelKeySet.has(p.sheet_id)).length}
             onRejectAll={rejectAllAgentProposals}
             onOpenSettings={() => setShowAiSettings(true)}
             onClose={() => setAgentOpen(false)}
@@ -12645,14 +12712,23 @@ export default function TakeoffCanvas() {
         {indexProgress.total > 0 && indexProgress.phase !== "idle" && (() => {
           const pct = Math.round((100 * indexProgress.done) / Math.max(1, indexProgress.total));
           const indexing = indexProgress.phase === "text";
+          // SCHEDULE INDEXING CAN FAIL, AND USED TO FAIL IN SILENCE.
+          // graphPrewarm stores {phase:"error", message} and nothing rendered
+          // it — so when the schedule pass died the estimator saw the same
+          // "Indexed" line as a healthy set and only found out when a takeoff
+          // came back empty. Schedules ARE the product; their failure is not a
+          // footnote.
+          const schedulesFailed = graphPrewarm.phase === "error";
           const tip = indexing
             ? `Indexing PDF text ${indexProgress.done}/${indexProgress.total} (${pct}%). Agent and schedule workflows may miss pages until this finishes — wait for Indexed before running a full-set takeoff.`
-            : `PDF text index ready (${indexProgress.total} page${indexProgress.total === 1 ? "" : "s"}). Agent / schedule workflows can search the whole set.`;
+            : schedulesFailed
+              ? `Schedule indexing failed${graphPrewarm.message ? `: ${graphPrewarm.message}` : ""}. The PDF text index is fine, so find_text and manual takeoff still work — schedule tables and a full-set takeoff will not until this succeeds.`
+              : `PDF text index ready (${indexProgress.total} page${indexProgress.total === 1 ? "" : "s"}). Agent / schedule workflows can search the whole set.`;
           // Status bar is dark (--status-bg). Do NOT use --ink / --c-positive
           // (those are for light paper chrome and wash out here).
-          const fg = indexing ? "var(--status-acc)" : "#9AF0C0";
+          const fg = schedulesFailed ? "#FF9E8A" : indexing ? "var(--status-acc)" : "#9AF0C0";
           const track = "rgba(232,238,248,0.22)";
-          const fill = indexing ? "var(--status-acc)" : "#9AF0C0";
+          const fill = schedulesFailed ? "#FF9E8A" : indexing ? "var(--status-acc)" : "#9AF0C0";
           return (
             <span
               title={tip}
@@ -12668,11 +12744,13 @@ export default function TakeoffCanvas() {
               <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
                 {indexing
                   ? `Indexing ${pct}% · ${indexProgress.done}/${indexProgress.total} pages`
-                  : graphPrewarm.phase === "warming"
-                    ? `Indexed · schedules indexing…`
-                    : graphPrewarm.phase === "ready"
-                      ? `Indexed · schedules ready`
-                      : `Indexed 100% · ${indexProgress.total} pages`}
+                  : schedulesFailed
+                    ? `Indexed · schedules FAILED`
+                    : graphPrewarm.phase === "warming"
+                      ? `Indexed · schedules indexing…`
+                      : graphPrewarm.phase === "ready"
+                        ? `Indexed · schedules ready`
+                        : `Indexed 100% · ${indexProgress.total} pages`}
               </span>
               <span
                 role="progressbar"

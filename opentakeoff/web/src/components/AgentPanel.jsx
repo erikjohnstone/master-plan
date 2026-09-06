@@ -198,7 +198,7 @@ function SourceCard({ citation, onOpen }) {
 
 export default function AgentPanel({
   configured, running, status = "", log, thread = [], citations = [], proposals, condById, sheetLabel, units,
-  fmtArea, onRun, onStop, onResetChat, onOpenCitation, onAccept, onReject, onAcceptAll, onRejectAll,
+  fmtArea, onRun, onStop, onResetChat, onOpenCitation, onAccept, onReject, onAcceptAll, acceptableCount, onRejectAll,
   onOpenSettings, onClose,
   onOpenTakeoff, takeoffRowCount = 0,
   runHistory = [], historyOpen = false, onToggleHistory,
@@ -497,8 +497,24 @@ export default function AgentPanel({
               <strong style={{ flex: 1, fontSize: 11.5 }}>Proposals · {proposals.length}</strong>
               {proposals.length > 0 && (
                 <>
-                  <button onClick={onAcceptAll} style={{ ...ctl, color: "var(--c-positive)", fontWeight: 600 }}>Accept all</button>
+                  {/* "Accept all" accepted only what was on an OPEN sheet and
+                      said nothing about the rest, while the header went on
+                      counting them as pending. Say the real number. */}
+                  <button
+                    onClick={onAcceptAll}
+                    disabled={acceptableCount === 0}
+                    style={{ ...ctl, color: "var(--c-positive)", fontWeight: 600, opacity: acceptableCount === 0 ? 0.45 : 1 }}
+                  >
+                    {acceptableCount != null && acceptableCount < proposals.length
+                      ? `Accept ${acceptableCount} here`
+                      : "Accept all"}
+                  </button>
                   <button onClick={onRejectAll} style={{ ...ctl, color: "var(--c-danger)" }}>Reject all</button>
+                  {acceptableCount != null && acceptableCount < proposals.length && (
+                    <span style={{ fontSize: 11, color: "var(--ink-muted)", alignSelf: "center" }}>
+                      {proposals.length - acceptableCount} on other sheets — open them to accept
+                    </span>
+                  )}
                 </>
               )}
             </div>
@@ -511,7 +527,9 @@ export default function AgentPanel({
                     <span style={{ flex: 1, minWidth: 0 }}>
                       <span style={{ fontWeight: 600 }}>{cond?.finish_tag || "?"}</span>
                       {p.measure_role === "deduct" ? " (deduct)" : ""}
-                      {p.area_sf != null ? ` · ${fmtArea(p.area_sf)}` : ""}
+                      {p.measure_role === "count"
+                        ? ` · ${p.count ?? 1} EA`
+                        : p.area_sf != null ? ` · ${fmtArea(p.area_sf)}` : ""}
                       <span style={{ display: "block", color: "var(--ink-muted)", fontSize: 10.5, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         {evidenceText(p.evidence) || "no evidence"}
                       </span>
