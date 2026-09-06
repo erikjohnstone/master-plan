@@ -20,6 +20,7 @@ import { createInterface } from "node:readline";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { existsSync } from "node:fs";
+import { resolveVectorGridMode } from "./vectorGridMode.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SERVER = resolve(HERE, "../../../sidecar/tables.py");
@@ -32,25 +33,17 @@ export type VectorGridMode = "off" | "shadow" | "on";
  * It earned it. Against the same hand-transcribed ground truth, placing each
  * engine's cells into the DRAWN grid by their own coordinates: 905/905 cells
  * against production's 336. Judged by an independent pixel-OCR pass over 33
- * sheets, which shares nothing with either engine's text path: 16,067 correct
- * cells against 7,077. Tables found on 8 HVAC sheets: 79/79 against 66/79.
- * Production's dominant failure is column fusion — "5 55.4 149" in one cell
- * where the sheet draws three — which is worse than a gap because it looks
- * like data.
+ * sheets: 16,067 correct cells against 7,077.
  *
- * `off` restores the previous behaviour exactly, byte for byte, and is the
- * rollback: one environment variable, no revert. `shadow` runs the engine and
- * discards its tables, for gathering a per-sheet comparison without changing
- * a single answer — verified byte-identical to `off`.
+ * `off` restores the previous behaviour exactly and is the rollback — one
+ * environment variable, no revert. `shadow` runs the engine and discards its
+ * tables, for gathering a per-sheet comparison without changing an answer.
  *
- * The mode is part of the sheet-graph cache key, so switching it can never
- * serve a graph the other mode built. */
-export function vectorGridMode(): VectorGridMode {
-  const v = (process.env.OPENTAKEOFF_VECTORGRID || "").toLowerCase();
-  if (v === "0" || v === "off") return "off";
-  if (v === "shadow") return "shadow";
-  return "on";
-}
+ * The RULE ITSELF lives in vectorGridMode.mjs so the sheet-graph cache can
+ * import the same function instead of restating it. See that file: restating
+ * it once already made a default run and an explicit `off` run share a cache
+ * key while producing different graphs. */
+export const vectorGridMode = (): VectorGridMode => resolveVectorGridMode() as VectorGridMode;
 
 export function vectorGridAvailable(): boolean {
   return vectorGridMode() !== "off" && existsSync(SERVER);

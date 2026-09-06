@@ -29,6 +29,7 @@ import { homedir } from "node:os";
 import { dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import cacache from "cacache";
+import { resolveVectorGridMode } from "../../web/src/lib/vectorGridMode.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const MCP_ROOT = resolve(HERE, "..");
@@ -36,7 +37,7 @@ const WEB_LIB = resolve(MCP_ROOT, "..", "web", "src", "lib");
 const SIDECAR = resolve(MCP_ROOT, "..", "sidecar");
 const BAKEOFF = resolve(MCP_ROOT, "..", "bakeoff");
 const CACHE_DIR = join(process.env.XDG_CACHE_HOME || join(homedir(), ".cache"), "opentakeoff-sheet-graph");
-const CACHE_VERSION = "sheet-graph-v2-vectorgrid";
+const CACHE_VERSION = "sheet-graph-v3-vectorgrid-mode";
 
 async function sourceFiles(root) {
   const out = [];
@@ -116,12 +117,14 @@ export async function cachedSheetGraph(pdfPath, opts) {
   const keyHash = createHash("sha256")
     .update(CACHE_VERSION)
     .update(await sourceDigest())
-    // THE ENGINE SELECTION IS PART OF THE KEY. off, shadow and on build
-    // genuinely different graphs from the same bytes and the same source, so
-    // without this a warm `off` graph is served to an `on` run — which would
-    // make an A/B compare a cached old answer against itself and report no
-    // difference. That failure is silent and total.
-    .update(`vg:${(process.env.OPENTAKEOFF_VECTORGRID || "off").toLowerCase()}`)
+    // THE ENGINE SELECTION IS PART OF THE KEY, resolved by the SAME function
+    // the engine itself uses. Restating the rule here is what broke it the
+    // first time: this line normalised an unset variable to "off" while the
+    // engine had been changed to default to "on", so a default run (engine ON)
+    // and an explicit OPENTAKEOFF_VECTORGRID=off run (engine OFF) shared one
+    // key and served each other's graphs. Every warm A/B after that compared
+    // an answer against itself and reported no difference — silent and total.
+    .update(`vg:${resolveVectorGridMode()}`)
     .update(await pdfIdentity(pdfPath, opts.expectedSha256));
   for (const value of opts.identity || []) keyHash.update(String(value));
   const key = keyHash.digest("hex");
