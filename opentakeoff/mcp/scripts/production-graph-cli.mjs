@@ -18,7 +18,7 @@
  */
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { basename, resolve } from "node:path";
 import { cachedSheetGraph } from "./sheetGraphCache.mjs";
 import { Session } from "../src/session.ts";
 import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
@@ -99,6 +99,9 @@ const shaOf = (p) => createHash("sha256").update(readFileSync(p)).digest("hex");
 const graph = await cachedSheetGraph(pdfs[0], {
   expectedSha256: shaOf(pdfs[0]),
   identity: pdfs.slice(1).map(shaOf),
+  // Every sheet key in the graph is `<basename>#<page>`, so the names are part
+  // of the answer and must be part of the key — see sheetGraphCache.mjs.
+  names: pdfs.slice(1).map((p) => basename(p)),
   compute: () => session.graphForPipeline(),
 });
 session.seedPipelineGraph?.(graph);

@@ -7772,7 +7772,11 @@ export default function TakeoffCanvas() {
       // functions directly. Every entry here is the REAL one the agent tools
       // call; nothing here is a second implementation.
       probe: {
-        sheets: () => panels.map((x) => ({ key: x.key, w: x.img?.w || 0 })),
+        // h and xOffset as well as w: playwright-highlight-geometry asserts that
+        // a painted rect lands on the region it was given, and it can only read
+        // the SVG's own user space as image px while exactly one panel is open
+        // (xOffset 0). Both facts have to be checkable, not assumed.
+        sheets: () => panels.map((x) => ({ key: x.key, w: x.img?.w || 0, h: x.img?.h || 0, xOffset: x.xOffset || 0 })),
         setScale: (key, label) => agentSetScale(key, label),
         mintCondition: (tag) => mintCondition(tag).id,
         stageProposals: (list) => stageAgentProposals(list),

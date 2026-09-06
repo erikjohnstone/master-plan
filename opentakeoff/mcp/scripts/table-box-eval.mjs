@@ -147,6 +147,7 @@ async function graphFor(files) {
   return cachedSheetGraph(files[0], {
     expectedSha256: shaOf(files[0]),
     identity: files.slice(1).map(shaOf),
+    names: files.slice(1).map((f) => basename(f)),
     compute: () => s.graphForPipeline(),
   });
 }
