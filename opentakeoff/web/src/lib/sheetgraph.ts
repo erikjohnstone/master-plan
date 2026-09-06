@@ -9106,6 +9106,33 @@ export function scheduleTableFromODL(
   // tracks "have we already reached the first non-blank, non-grouped,
   // full-coverage row" regardless of its own row index, so the same
   // one-shot vocab tie-break applies wherever that row actually lands.
+  // WHAT "FULL COVERAGE" MEANS HAS TO COME FROM THE TABLE, NOT FROM C.
+  //
+  // Requiring a data row to own a cell in EVERY column assumes every column
+  // carries data in every row, and one empty column breaks it completely.
+  // Measured, 02__vol2__015 page 18's FAN COIL UNIT SCHEDULE: 25 columns, data
+  // rows filling 24. Every data row failed the test, all four became header
+  // tiers, their values were concatenated into the column labels — header 2
+  // came back as "420 580 580 580", which are airflow figures — and the table
+  // was declined for having no data rows. The reader had it exactly right: 25
+  // columns, two clean header tiers, 24 cells per data row.
+  //
+  // The table's own best row is the honest yardstick. Data rows are the widest
+  // rows in a schedule by construction — a header tier groups and therefore
+  // spans, and spanning means owning FEWER cells. So a row covers "fully" when
+  // it covers as much as the widest row does. That is self-calibrating: it
+  // needs no threshold, it cannot be broken by an empty column, and on a table
+  // where every column really is filled it is exactly the old rule.
+  let maxCovered = 0;
+  for (let r = bodyStart; r < R; r++) {
+    let n = 0;
+    for (let c = 0; c < C; c++) {
+      const cell = grid[r][c];
+      if (cell && cell["row number"] - 1 === r) n++;
+    }
+    if (n > maxCovered) maxCovered = n;
+  }
+
   let headerEnd = bodyStart;
   let headerCandidateChecked = false;
   for (let r = bodyStart; r < R; r++) {
@@ -9126,7 +9153,7 @@ export function scheduleTableFromODL(
       if (cell && cell["row number"] - 1 === r) coveredCols.add(c);
     }
     const spanning = [...ownCells].filter((cl) => (cl["column span"] || 1) > 1 || (cl["row span"] || 1) > 1);
-    const fullCoverage = coveredCols.size >= C;
+    const fullCoverage = coveredCols.size >= Math.min(C, maxCovered);
     // A SPAN IN A DATA ROW IS RARE BUT REAL, and the claim above that it
     // "can never occur in a real per-item data row" is measurably false:
     // 096_IN_Vermillion_County_Jail#19's AHU SUPPLY FAN SCHEDULE prints
