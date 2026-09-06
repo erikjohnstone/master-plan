@@ -3446,6 +3446,20 @@ const ROOM_LETTER_MIN_ANCHORS = 4;
 // title fragment, a legend word); see findTableBoundary's own defense
 // against exactly that, on the far side of a wide fallback scan.
 const NAME_KEY_RE = /^[A-Z][A-Z0-9 '&()/-]{2,48}[A-Z0-9)]$/;
+/** Is this printed cell text usable as a row key AT ALL?
+ *
+ * Deliberately much weaker than CODE_RE or NAME_KEY_RE: it is not trying to
+ * recognise a tag or a room name, only to reject text that could not be any
+ * row's name — nothing, punctuation alone, or a paragraph. It is safe for it
+ * to be this weak because the only caller (scheduleTableFromODL's
+ * column-evidenced fallback) additionally requires the whole COLUMN to behave
+ * like a key: a value on nearly every row, and every value different. That
+ * structural test is what does the real work; this only keeps obvious
+ * non-labels out of it. */
+function printedKeyOk(raw: string): boolean {
+  const s = norm(raw).replace(/\s+/g, " ").trim();
+  return s.length >= 1 && s.length <= 64 && /[A-Z0-9]/.test(s);
+}
 
 /** `noForwardTierMerge`: internal-only — set by bandedSheets' own seam
  * probing (below), never by a real, final extraction pass. mergeForwardCo-
@@ -9215,6 +9229,34 @@ export function scheduleTableFromODL(
     }
     break; // first real data row
   }
+  // A TITLED SCHEDULE WITH DATA UNDER IT HAS A HEADER ROW — IT IS A SCHEDULE.
+  //
+  // The loop can reach its first candidate row and break there, leaving no
+  // header block at all, when that row's labels do not clear the 40%
+  // vocabulary bar. The bar exists because a full-coverage ungrouped row is
+  // shape-identical to a data row, and vocabulary is the only tie-break left.
+  // But when breaking there means refusing the whole table, vocabulary is
+  // being asked to decide something the table's own layout already answers:
+  // the row sits directly beneath a printed title cell that spans the table,
+  // and there are further rows beneath IT. That is a header, and calling it
+  // the first data row leaves a schedule with a title, values, and no column
+  // names — which is not a shape any real schedule has.
+  //
+  // Measured, both on 30 documents whose ground truth was authored
+  // independently of this code: 09__vol2__014 page 4's CONDENSING BOILER
+  // SCHEDULE (4x14 — title, headers, two boilers) and 15__vol2__067 page 8's
+  // PCW AIR SEPARATOR SCHEDULE (4x14 — title, headers, one separator, notes)
+  // were both read perfectly by the reader and refused here. The boiler
+  // schedule's 14 columns were then replaced in the graph by an older
+  // extractor's 5-column read: EFFICIENCY, MANUFACTURER and both flue sizes
+  // silently gone from a schedule an estimator prices off.
+  //
+  // Only fires where refusal is the alternative — a table that finds a header
+  // block today is untouched — and only with the title cell as corroboration,
+  // so a fragment with no title (a continuation band carved off the bottom of
+  // a schedule, real on 12__vol2__028 page 1) still refuses rather than eating
+  // its own first row of values.
+  if (headerEnd <= bodyStart && titleCell && R - bodyStart >= 2) headerEnd = bodyStart + 1;
   if (headerEnd <= bodyStart) return refuse("no header block above the data");
 
   // Compound per-column header label: concatenate each header row's OWN
@@ -9499,6 +9541,13 @@ export function scheduleTableFromODL(
     }
   }
 
+  // A SCHEDULE'S KEY COLUMN IS NOT ALWAYS A TAG COLUMN.
+  //
+  // The loop below is run twice at most: once with the strict, CODE_RE-shaped
+  // key rule every other caller of rowKeyOf uses, and — only if that yields
+  // nothing at all — once more against a key column the TABLE ITSELF
+  // evidences. See the fallback below the loop for why.
+  const buildRows = (keyCol: number, printedKeys: boolean): void => {
   for (let r = headerEnd; r < R; r++) {
     const seen = new Set<ODLTableCell>();
     const rowCellRef: (ODLTableCell | null)[] = new Array(C).fill(null);
@@ -9517,7 +9566,7 @@ export function scheduleTableFromODL(
       texts[c] = opts.sourceSpans ? preferLastOverprintedText(text, bbox, opts.sourceSpans) : text;
     }
     if (texts.every((s: string) => !s.trim())) continue; // blank spacer row
-    const rawKey = texts[keyColIdx >= 0 ? keyColIdx : 0] || "";
+    const rawKey = texts[keyCol] || "";
     // GOAL.md rule 22: ODL already knows this row's own real column grid —
     // a far cleaner corroboration signal than the geometric extractor's own
     // banded-token heuristic (see rowKeyOf's own comment) for the same bare
@@ -9527,7 +9576,9 @@ export function scheduleTableFromODL(
     // "more complete" by the cross-check reconcile pass and silently
     // REPLACED the geometric extractor's own correct, fuller read.
     const filledCells = texts.filter((s: string) => s.trim()).length;
-    const keyRes = rowKeyOf(rawKey, kind === "room-finish" ? "room-finish" : kind === "equipment" ? "equipment" : "finish", selfEvidenced, false, { inBand: filledCells, anchors: C });
+    const keyRes = printedKeys
+      ? (printedKeyOk(rawKey) ? { key: norm(rawKey).replace(/\s+/g, " ").trim() } : null)
+      : rowKeyOf(rawKey, kind === "room-finish" ? "room-finish" : kind === "equipment" ? "equipment" : "finish", selfEvidenced, false, { inBand: filledCells, anchors: C });
     if (!keyRes) continue; // no recognizable row key — refuse rather than mint a fake row
     const cells: Record<string, TableCell> = {};
     for (let c = 0; c < C; c++) {
@@ -9567,6 +9618,84 @@ export function scheduleTableFromODL(
       }
     }
     rows.push({ key: keyRes.key, sheet: sheetKey, ...(keyRes.building ? { building: keyRes.building } : {}), cells });
+  }
+  };
+  buildRows(keyColIdx >= 0 ? keyColIdx : 0, false);
+
+  // THE TABLE'S OWN KEY COLUMN, WHEN NO COLUMN HOLDS A TAG.
+  //
+  // rowKeyOf wants a catalog-tag-shaped key (CODE_RE: letters then digits) and
+  // returns null for anything else, and a table where every row returns null
+  // is refused whole. That rule is right for a schedule of marked equipment
+  // and it silently destroys a schedule that marks its rows any other way.
+  // Measured on the 30-document benchmark, whose ground truth was authored
+  // independently of this code — every one of the five tables the pipeline
+  // failed to carry was read correctly by the reader and then refused here:
+  //
+  //   01 p43 DUCT CONSTRUCTION     keys are system phrases, "SUPPLY AIR
+  //                                UPSTREAM OF VAV BOXES"
+  //   03 p13 GRILLES/REGISTERS     keys are digit-first, "1S" "2S" "1R" "1E"
+  //                                — the ordinary air-device convention, and
+  //                                CODE_RE is letter-first by design
+  //   03 p14 MODULAR HRC CHILLER   keys are bare module numbers, "1".."5"
+  //   04 p13 DIFFUSER              key cell holds the tag plus prose,
+  //                                'D-1 CFM 6"Ø'
+  //
+  // The cost is larger than five tables. On 12__vol2__028 page 1 the reader
+  // returns the NOISE CONTROL DUCT SILENCER SCHEDULE as a clean 16x11 grid;
+  // this refusal (its key column is QTY., holding "2","1","1"…) dropped it,
+  // and the older geometric extractor's own 16x8 read took its place in the
+  // graph — three whole columns of a real schedule gone, with nothing in the
+  // report to say a better read had been thrown away.
+  //
+  // So: when the strict pass keys NOTHING, let the table name its own key
+  // column. A column is a key column when it behaves like one — a value on
+  // (nearly) every data row, and every one of those values DIFFERENT. That
+  // second half is not a nicety: two rows sharing a key is exactly what turns
+  // a takeoff answer into an AMBIGUOUS refusal downstream, so a column that
+  // repeats itself is not admitted as a key at all. QTY. fails on that test
+  // and LOCATION & SERVES, one column to its right, passes — which is also
+  // the column a person reading the sheet would call the row's name.
+  //
+  // This runs ONLY after the strict pass came back empty, so no table that
+  // keys today can change, and it is confined to this function — rowKeyOf
+  // itself is untouched, and the geometric path and symbol sweep key exactly
+  // as they did.
+  if (!rows.length) {
+    const dataRows: number[] = [];
+    for (let r = headerEnd; r < R; r++) {
+      const own = new Set<ODLTableCell>();
+      for (let c = 0; c < C; c++) {
+        const cell = grid[r][c];
+        if (cell && cell["row number"] - 1 === r) own.add(cell);
+      }
+      if (!own.size) continue;
+      // A NUMBERED-NOTES BAND IS NOT A ROW OF THIS TABLE. It is drawn inside
+      // the same ruled box — one cell across nearly every column, below the
+      // data — and it holds a sentence, not a value. Counting it as a data row
+      // poisons EVERY column at once, because that one cell is what
+      // grid[r][c] returns for all of them: measured on 03__vol1__27 page 13,
+      // the GRILLES/REGISTERS/DIFFUSERS SCHEDULE's own "1. SEE FLOOR PLANS
+      // FOR..." band made column 0 (a clean 1S/2S/1R/2R/1E) fail the key test
+      // along with all eight others, and the table stayed refused. Same shape
+      // the header loop already recognises above; recognised the same way.
+      if (own.size === 1 && ([...own][0]["column span"] || 1) >= C - 1) continue;
+      if (![...own].some((cl) => odlCellText(cl).trim())) continue;
+      dataRows.push(r);
+    }
+    let evidenced = -1;
+    if (dataRows.length >= 2) {
+      for (let c = 0; c < C && evidenced < 0; c++) {
+        const vals = dataRows
+          .map((r) => (grid[r][c] ? norm(odlCellText(grid[r][c]!)).replace(/\s+/g, " ").trim() : ""))
+          .filter(Boolean);
+        if (vals.length < 2 || vals.length < dataRows.length * 0.8) continue;
+        if (!vals.every(printedKeyOk)) continue;
+        if (new Set(vals).size !== vals.length) continue; // repeats: not a key
+        evidenced = c;
+      }
+    }
+    if (evidenced >= 0) buildRows(evidenced, true);
   }
   if (!rows.length) return refuse(`no keyed data rows (kind ${kind}, key column ${keyColIdx < 0 ? "col 0" : JSON.stringify(headers[keyColIdx])})`);
   const promotedHeaders = promoteLeadingEngineeringUnits(headers, rows);
