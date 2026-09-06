@@ -16,7 +16,18 @@ pipeline in the same pass, on the same ruler, against the same rows.
   pipeline   the real SheetGraph the product builds, via
              production-graph-cli.mjs. Reader plus interpreter.
 
-RULER. A ground-truth row is a list of TOKENS — the pipe-delimited rows are
+RULER. Two of them, each matched to what its half of the truth actually
+claims. The 152 tables that record pipe-delimited column names assert an
+ORDER, so they are scored by longest common subsequence. The 137 that record a
+printed line do not — those lines were captured as a flat text dump and a
+multi-line cell has its lines interleaved with other columns, so a row that was
+read perfectly can appear scrambled (see `bag`, which carries the measured
+example). Those are scored by multiset containment: every value the human
+recorded must be present, duplicates counted, order not required. BOTH numbers
+are printed for BOTH halves, so the choice of ruler is visible rather than
+buried inside a headline.
+
+A ground-truth row is a list of TOKENS — the pipe-delimited rows are
 split on the pipe, the printed-line rows on whitespace, and both then tokenise
 identically, so the two halves of the corpus are measured the same way. Each
 ground-truth row is compared against the single best-matching extracted row by
@@ -59,6 +70,45 @@ def norm(s: str) -> str:
 
 def toks(s: str) -> list:
     return [t for t in re.split(r"[\s,;|]+", norm(s)) if t]
+
+
+def bag(a: list, b: list) -> int:
+    """How many of a's tokens b actually carries, counting duplicates.
+
+    The right ruler for the 137 tables whose ground truth records its columns
+    as a printed line rather than as names, because THOSE LINES ARE NOT IN
+    COLUMN ORDER. Measured, 22__vol2__012 page 19's PUMP SCHEDULE:
+
+      truth     CONDENSER CWP-1 BELL & GOSSETT e-1510 END SUCTION 6" 5" 80
+                900 1698 30 480 40 3 1-2 WATER
+      extracted CWP-1 BELL & GOSSETT e-1510 CONDENSER WATER END SUCTION 6" 5"
+                80 900 1698 30 480 40 3 1-2
+
+    Every value is present. The sheet prints CONDENSER WATER as one two-line
+    cell; the truth has CONDENSER at position 0 and WATER at position 18 with
+    the whole row in between, which no reading order produces — those lines
+    were captured as a flat text dump and a multi-line cell had its lines
+    interleaved with other columns. Scoring them by subsequence charges the
+    reader for an ordering the truth does not assert. Real, repeated:
+    13__vol2__017 p13's RETURN FAN (TWIN CITY at the front in the truth, in
+    its own column for us) and STEAM TRAP (FLOAT & ... THERMOSTATIC split
+    apart in the truth, read as one cell here).
+
+    Counting duplicates is what separates this from the set-membership test
+    benchscore.py used: a row printing 460 3 60 must produce all three, and a
+    row that dropped one cannot hide behind another cell holding the same
+    number. Order is the only thing given up, and only where the truth never
+    claimed it. The pipe-delimited half, whose truth DOES state its columns,
+    keeps the order-sensitive ruler.
+    """
+    from collections import Counter
+    have = Counter(b)
+    n = 0
+    for x in a:
+        if have[x] > 0:
+            have[x] -= 1
+            n += 1
+    return n
 
 
 def lcs(a: list, b: list) -> int:
@@ -202,16 +252,29 @@ def main() -> int:
                     tot[e]["tables"] += 1
                     if hit:
                         tot[e]["found"] += 1
+                    ordered = isinstance(t.get("columns"), str) and "|" in t["columns"]
+                    rule = lcs if ordered else bag
                     rows_ok = tk = tkall = 0
+                    alt_ok = alt_tk = 0
                     for wr in want:
                         wt = toks(wr)
                         tkall += len(wt)
                         if not hit or not wt:
                             continue
-                        best = max((lcs(wt, toks(ln)) for ln in hit[1]), default=0)
+                        cand = [toks(ln) for ln in hit[1]]
+                        best = max((rule(wt, c) for c in cand), default=0)
                         tk += best
                         if best == len(wt):
                             rows_ok += 1
+                        # the other ruler, reported alongside so the choice of
+                        # ruler is visible rather than buried
+                        other = bag if ordered else lcs
+                        b2 = max((other(wt, c) for c in cand), default=0)
+                        alt_tk += b2
+                        if b2 == len(wt):
+                            alt_ok += 1
+                    tot[e]["alt_rows_ok"] += alt_ok
+                    tot[e]["alt_tok"] += alt_tk
                     tot[e]["rows"] += len(want)
                     tot[e]["rows_ok"] += rows_ok
                     tot[e]["tok"] += tk
@@ -227,6 +290,8 @@ def main() -> int:
         print(f"    tables found            {s['found']}/{s['tables']}  ({100.0*s['found']/max(1,s['tables']):.1f}%)")
         print(f"    rows recovered WHOLE    {s['rows_ok']}/{s['rows']}  ({100.0*s['rows_ok']/max(1,s['rows']):.1f}%)")
         print(f"    values recovered        {s['tok']}/{s['tokall']}  ({100.0*s['tok']/max(1,s['tokall']):.1f}%)")
+        print(f"    (other ruler)           rows {s['alt_rows_ok']}/{s['rows']}"
+              f"  values {s['alt_tok']}/{s['tokall']}  ({100.0*s['alt_tok']/max(1,s['tokall']):.1f}%)")
         if s["engine_fail"]:
             print(f"    pages the engine could not process  {s['engine_fail']}")
     print("ALLDONE")
