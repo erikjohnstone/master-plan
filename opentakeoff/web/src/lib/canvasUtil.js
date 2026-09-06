@@ -53,6 +53,40 @@ export const clamp = (s) => Math.min(MAX_SCALE, Math.max(MIN_SCALE, s));
 // definition of "this message is bad news" for both readers
 export const isDangerMsg = (s) => s === STALE_TAB_MESSAGE || s.startsWith("Commit failed") || s.startsWith("Couldn't");
 
+/** A REFUSAL is not a failure and it is certainly not a success.
+ *
+ * "This sheet has no vector linework (likely a scan) — the Symbol tool reads
+ * drawn segments." and "The seed rect holds 47 segments — that is a region,
+ * not one symbol." both rendered in --c-positive, the SUCCESS green, because
+ * isDangerMsg only knows about "Couldn't"/"Commit failed"/the stale-tab
+ * message. The estimator was told, in the colour reserved for "it worked",
+ * that the thing did not work.
+ *
+ * These are instructional: the tool is telling you what to do differently.
+ * They get --c-warning, and — like danger — they do NOT age out on the 6s
+ * timer, because a message you have to act on must not vanish while you are
+ * reading it.
+ *
+ * The vocabulary below is taken from the strings the app actually sets, not
+ * invented: every entry was read out of TakeoffCanvas.jsx's setCommitMsg calls
+ * and symbolsweep.ts's thrown refusals. `tone` may also be passed explicitly
+ * at the call site, which always wins over this inference. */
+const REFUSAL_OPENERS = [
+  "The seed", "No vector segments", "No committed scale", "No scale set",
+  "This sheet has no vector linework", "Pick or add a condition",
+  "Pick a ", "Nothing to commit", "Open a sheet first", "Open that proposal",
+  "Select a takeoff", "Select an area", "Draw the box", "Drag a larger box",
+  "Capture a region", "Calibrate on one sheet", "Check on one sheet",
+  "Zone on one sheet", "No schedule found", "Name the material",
+  "Set a height for", "A space needs", "Tidy works on", "That image is too large",
+  "Too many/large images", "This markup can't", "This stamp has no",
+  "Those finishes already exist", "Sheet still loading", "Still reading",
+  "The library changed", "Sign in", "Your sign-in", "Voice isn't installed",
+  "Importing from scanned plans isn't enabled",
+];
+export const isRefusalMsg = (s) => !!s && !isDangerMsg(s)
+  && REFUSAL_OPENERS.some((o) => s.startsWith(o));
+
 // A template is a condition minus ids (finish_tag, colors, hatch, waste,
 // H/T params, materials) — instantiation mints fresh condition/material ids.
 export const instantiateTemplate = (t) => ({

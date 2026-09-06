@@ -22,8 +22,11 @@ const evidenceText = (ev) => {
 const LOG_STYLE = { status: "var(--ink-muted)", tool: "var(--cobalt)", text: "var(--ink)", error: "var(--c-danger)", progress: "var(--cobalt)" };
 const RUN_STATUS_STYLE = { running: "var(--cobalt)", done: "var(--c-positive)", error: "var(--c-danger)", aborted: "var(--ink-muted)" };
 
-const isGateOrCheck = (text) =>
-  /^\[(?:Evidence gate|Automated check):/i.test(String(text || "").trim());
+// AgentAnswer.jsx used a THIRD alternative here (Loop nudge) and this one did
+// not, so a loop nudge rendered inside an answer but vanished from the log.
+// One pattern, both readers.
+const META_LINE_RE = /^\[(?:Evidence gate|Automated check|Loop nudge|Workflow):/i;
+const isGateOrCheck = (text) => META_LINE_RE.test(String(text || "").trim());
 
 const runEventText = (ev) => {
   if (ev.type === "text") return ev.text;
@@ -84,12 +87,25 @@ function splitLog(log) {
   const steps = [];
   const meta = [];
   const progress = [];
+  const errors = [];
   for (const e of log) {
-    if (e.kind === "progress") progress.push(e);
-    else if (e.kind === "text" && isGateOrCheck(e.text)) meta.push(e);
-    else if (e.kind !== "text" || isGateOrCheck(e.text)) steps.push(e);
+    // FAILURES COME OUT OF THE DRAWER. Every error used to land in `steps`,
+    // which is collapsed by default AND auto-collapses the moment a run ends —
+    // so a transport failure, a CORS error or "✗ tool: error" left the panel
+    // looking like nothing had happened at all. Observed live: a run died at
+    // the model call and the UI said nothing.
+    if (e.kind === "error") { errors.push(e); steps.push(e); continue; }
+    if (e.kind === "progress") { progress.push(e); continue; }
+    if (e.kind === "text") {
+      // A plain text entry that is not a gate/check matched NO branch here and
+      // was silently discarded — which is exactly the shape of [Loop nudge: …]
+      // and [Workflow: …], so those never appeared anywhere in the UI.
+      (isGateOrCheck(e.text) ? meta : steps).push(e);
+      continue;
+    }
+    steps.push(e);
   }
-  return { steps, meta, progress };
+  return { steps, meta, progress, errors };
 }
 
 function citationCardTitle(citation) {
@@ -194,13 +210,15 @@ export default function AgentPanel({
   const [showSources, setShowSources] = useState(false);
   const threadRef = useRef(null);
   const logRef = useRef(null);
-  const { steps, meta, progress } = useMemo(() => splitLog(log), [log]);
+  const { steps, meta, progress, errors } = useMemo(() => splitLog(log), [log]);
   const hasAssistant = thread.some((m) => m.role === "assistant");
   const canFollowUp = hasAssistant && !running;
 
   useEffect(() => {
-    if (!running && hasAssistant) setShowSteps(false);
-  }, [running, hasAssistant]);
+    // Collapsing the drawer on a clean finish is right; doing it after a
+    // failure is how the failure became invisible.
+    if (!running && hasAssistant && !errors.length) setShowSteps(false);
+  }, [running, hasAssistant, errors.length]);
 
   useEffect(() => {
     const el = threadRef.current;
@@ -351,6 +369,35 @@ export default function AgentPanel({
                     ))}
                   </ol>
                 )}
+              </div>
+            )}
+            {/* A RUN THAT FAILED HAS TO SAY SO, IN THE THREAD.
+                Errors used to exist only inside the collapsed "Technical
+                steps" drawer, so the estimator's whole signal that a run had
+                died was the Run button coming back. */}
+            {!running && errors.length > 0 && (
+              <div
+                data-agent-error
+                role="alert"
+                style={{
+                  margin: "6px 0 10px",
+                  padding: "8px 10px",
+                  border: "1px solid var(--c-danger)",
+                  background: "color-mix(in srgb, var(--c-danger) 8%, transparent)",
+                  color: "var(--ink)",
+                  fontSize: 12,
+                  lineHeight: 1.45,
+                }}
+              >
+                <div style={{ fontWeight: 650, color: "var(--c-danger)", marginBottom: 4 }}>
+                  {errors.length === 1 ? "This run failed" : `This run failed — ${errors.length} errors`}
+                </div>
+                {errors.slice(-3).map((e, i) => (
+                  <div key={`err-${i}`} style={{ marginTop: i ? 4 : 0 }}>{e.text}</div>
+                ))}
+                <div style={{ marginTop: 6, color: "var(--ink-muted)" }}>
+                  Nothing was committed. Open Technical steps for the full trace.
+                </div>
               </div>
             )}
             {citations.length > 0 && (

@@ -193,7 +193,7 @@ import {
   MEASURE_TOOLS, CUT_TOOLS, MARKUP_TOOLS, MARKUP_IDS, HL_INKS, HL_SIZES,
   MARKUP_IMG_MAX, MAX_IMAGE_MARKUP_BYTES, MARKUP_UPLOAD_MAX_BYTES, MARKUP_DECODE_MAX_AREA,
 } from "../lib/canvasConstants.js";
-import { uid, clamp, isDangerMsg, instantiateTemplate, seedConditions } from "../lib/canvasUtil.js";
+import { uid, clamp, isDangerMsg, isRefusalMsg, instantiateTemplate, seedConditions } from "../lib/canvasUtil.js";
 // Tile-pyramid rendering (#86) — pure math in lib/tiles.ts (tested), worker
 // pool in lib/tilePool.ts, DOM/Worker orchestration glue here via one
 // long-lived compositor instance. Replaces the old single-raster base +
@@ -814,7 +814,11 @@ export default function TakeoffCanvas() {
   const graphPrewarmSigRef = useRef("");
   const graphPrewarmBusyRef = useRef(false);
   const commitMsg = commitMsgState.text;   // misnamed for history; just the message bar
-  const setCommitMsg = (text) => setCommitMsgState({ text });
+  // tone is optional and always wins over the inference in canvasUtil — pass it
+  // where the call site knows better than a string prefix ever could.
+  const setCommitMsg = (text, tone) => setCommitMsgState(tone ? { text, tone } : { text });
+  const commitTone = commitMsgState.tone
+    || (isDangerMsg(commitMsg) ? "danger" : isRefusalMsg(commitMsg) ? "refusal" : "ok");
   // transient means transient: every message dismisses itself after ~6s (a
   // repeat message restarts the clock — see above). Three things don't age
   // out on a timer: the stale-tab lockout (STALE_TAB_MESSAGE — sticky until
@@ -826,7 +830,10 @@ export default function TakeoffCanvas() {
   // grep setCommitMsg to see every message and confirm the convention holds).
   useEffect(() => {
     const text = commitMsgState.text;
-    if (!text || isDangerMsg(text) || text.endsWith("…")) return;
+    // A refusal is instructional — it tells you what to do differently — so it
+    // stays until the next message replaces it, exactly like a failure.
+    if (!text || isDangerMsg(text) || isRefusalMsg(text) || commitMsgState.tone === "danger"
+      || commitMsgState.tone === "refusal" || text.endsWith("…")) return;
     const t = setTimeout(() => setCommitMsg(""), 6000);
     return () => clearTimeout(t);
   }, [commitMsgState]);
@@ -4798,7 +4805,7 @@ export default function TakeoffCanvas() {
     const key = tp.key;
     const rect = [[a[0] - tp.xOffset, a[1]], [b[0] - tp.xOffset, b[1]]];
     const segs = vectorSegsRef.current.get(key);
-    if (!segs || !segs.length) { setCommitMsg("This sheet has no vector linework (likely a scan) — the Symbol tool reads drawn segments."); return; }
+    if (!segs || !segs.length) { setCommitMsg("This sheet has no vector linework (likely a scan) — the Symbol tool reads drawn segments.", "refusal"); return; }
     const lum = segLumRef.current.get(key);
     let res;
     let seedName = null;
@@ -4811,8 +4818,11 @@ export default function TakeoffCanvas() {
       res = sweepSymbols(segs, rect, { ...(lum ? { lum } : {}), ...(seedName ? { scoreLow: LABEL_CORROBORATION_SCORE_LOW } : {}) });
     } catch (e) {
       // the engine's refusals (empty marquee, region-sized marquee) are
-      // instructions, exactly as the MCP surfaces them
-      setCommitMsg(String((e && e.message) || e));
+      // instructions, exactly as the MCP surfaces them — and they are stated
+      // as refusals rather than left to a string-prefix guess, because EVERY
+      // throw out of fingerprintSymbol/assertDistinctiveSymbolSeed/sweepSymbols
+      // is one. These used to render in the success green.
+      setCommitMsg(String((e && e.message) || e), "refusal");
       return;
     }
     let labels = [];
@@ -11975,7 +11985,7 @@ export default function TakeoffCanvas() {
             <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--ink-muted)", fontSize: 15 }}>
               {status === "loading" && "Loading sheets…"}
               {status === "rendering" && "Rendering sheet…"}
-              {status === "empty" && "No PDFs yet — click “Open PDF” or drag a plan onto the canvas."}
+              {status === "empty" && "No plans open yet — click “Open” above, or drag a PDF onto the canvas."}
               {status === "error" && <span style={{ color: "var(--c-danger)" }}>Error: {err}</span>}
             </div>
           )}
@@ -12611,7 +12621,24 @@ export default function TakeoffCanvas() {
         <span style={{ opacity: 0.25 }} aria-hidden="true">|</span>
         <span>{scaleFace}</span>
         {commitMsg && (
-          <span title={commitMsg} style={{ marginLeft: 8, color: isDangerMsg(commitMsg) ? "var(--c-danger)" : "var(--c-positive)", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>
+          <span
+            title={commitMsg}
+            data-commit-tone={commitTone}
+            style={{
+              marginLeft: 8,
+              color: commitTone === "danger" ? "var(--c-danger)"
+                : commitTone === "refusal" ? "var(--c-warning)" : "var(--c-positive)",
+              // A refusal is usually a sentence of instruction ("The seed rect
+              // holds 47 segments — that is a region, not one symbol"). Give it
+              // the room the decorative coordinate readout was hogging rather
+              // than ellipsing the part that says what to do.
+              flex: commitTone === "ok" ? "0 1 auto" : "1 1 auto",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              minWidth: 0,
+            }}
+          >
             {commitMsg}
           </span>
         )}

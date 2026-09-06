@@ -206,6 +206,8 @@ async function runOne(rec, wantTitle) {
       if (sawRunning && !st.running) break;
       await page.waitForTimeout(2000);
     }
+    await page.waitForTimeout(1500);
+    await shot("3b-agent-after-run");
     result.agentSeconds = Math.round((Date.now() - t0) / 1000);
     if (!sawRunning) say("WARNING: agent never entered running state");
 
