@@ -9202,7 +9202,36 @@ export function scheduleTableFromODL(
       if (cell && cell["row number"] - 1 === r) coveredCols.add(c);
     }
     const spanning = [...ownCells].filter((cl) => (cl["column span"] || 1) > 1 || (cl["row span"] || 1) > 1);
-    const fullCoverage = coveredCols.size >= Math.min(C, maxCovered);
+    // A DATA ROW STATES ITS OWN MARK; A HEADER TIER INHERITS IT.
+    //
+    // Counting only a row's OWN cells makes a data row that shares a value
+    // with the rows below it look partial, and the loop eats it as a tier.
+    // Measured on 24__vol2__019 page 15's GRILLE, REGISTER, AND DIFFUSER
+    // SCHEDULE: rows S1-1..S1-4 and S3-1 share one SQUARE PLAQUE cell spanning
+    // five rows and one 24x24 spanning four, so each owns 10 of 14 columns.
+    // All five were absorbed into the header block and the table reached the
+    // graph starting at S2-1 — five real air devices gone from a schedule the
+    // reader had returned whole.
+    //
+    // Counting inherited coverage for EVERY row is not the fix and would undo
+    // a measured one: AHU-1's own real third header tier supplies 16 of its 47
+    // columns and inherits the rest, and treating it as full coverage puts it
+    // back on the vocabulary tie-break that was already proved wrong there
+    // (its DESIGN/ACTUAL/SENSIBLE/TOTAL labels name nothing in any header
+    // vocabulary, so it was read as the first data row and a phantom row was
+    // minted). The two cases differ in one visible way: the grille rows each
+    // print their own mark in column 0, while every one of those header tiers
+    // inherits column 0 from the tier above. So inherited coverage counts only
+    // for a row that states its own leftmost value.
+    let ownsLeadCell = false;
+    {
+      const lead = grid[r][0];
+      ownsLeadCell = !!lead && lead["row number"] - 1 === r && !!odlCellText(lead).trim();
+    }
+    let inheritedCols = 0;
+    if (ownsLeadCell) for (let c = 0; c < C; c++) if (grid[r][c]) inheritedCols++;
+    const bar = Math.min(C, maxCovered);
+    const fullCoverage = coveredCols.size >= bar || (ownsLeadCell && inheritedCols >= bar);
     // A SPAN IN A DATA ROW IS RARE BUT REAL, and the claim above that it
     // "can never occur in a real per-item data row" is measurably false:
     // 096_IN_Vermillion_County_Jail#19's AHU SUPPLY FAN SCHEDULE prints

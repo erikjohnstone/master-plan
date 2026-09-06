@@ -161,18 +161,32 @@ def pick(regions: list, t: dict):
     """
     span, xe = gt_yspan(t), t.get("x_edges") or []
     if span and len(xe) >= 2:
-        ymid = (span[0] + span[1]) / 2.0
+        gy0, gy1 = float(span[0]), float(span[1])
+        ymid = (gy0 + gy1) / 2.0
         gx0, gx1 = float(min(xe)), float(max(xe))
-        best, bestov = None, 0.0
+        # EVERY region that sits inside this table's own footprint, not just
+        # the best one. An engine may carry one printed schedule as several
+        # tables — 24__vol2__019 page 15's GRILLE, REGISTER, AND DIFFUSER
+        # SCHEDULE comes back from the pipeline split into sibling tables, and
+        # matching only the best-overlapping one scored its S1-1..S1-4 and
+        # S3-1 rows as lost when the product was in fact carrying them. The
+        # question this corpus asks is whether the rows were recovered, not
+        # whether they arrived in one object. Both engines get the same union.
+        parts, best, bestov = [], None, 0.0
         for r in regions:
             bx0, by0, bx1, by1 = r[2]
-            if not (by0 <= ymid <= by1):
+            xo = max(0.0, min(bx1, gx1) - max(bx0, gx0)) / max(1.0, gx1 - gx0)
+            if xo < 0.5:
                 continue
-            o = max(0.0, min(bx1, gx1) - max(bx0, gx0)) / max(1.0, gx1 - gx0)
-            if o > bestov:
-                best, bestov = r, o
-        if bestov >= 0.5:
-            return best
+            yo = max(0.0, min(by1, gy1) - max(by0, gy0)) / max(1.0, min(by1 - by0, gy1 - gy0))
+            if yo < 0.5 and not (by0 <= ymid <= by1):
+                continue
+            parts.append(r)
+            if xo > bestov:
+                best, bestov = r, xo
+        if parts:
+            lines = [ln for r in parts for ln in r[1]]
+            return (" ".join(r[0] for r in parts), lines, best[2] if best else parts[0][2])
     title = norm(gt_title(t))
     if title:
         for r in regions:
