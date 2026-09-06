@@ -2050,3 +2050,167 @@ test("findLegendGlyphs: BAS software and sequence functions are preserved but ne
   );
   assert.ok(glyphs.every((glyph) => /control logic|sequence function/i.test(glyph.seed_warning || "")));
 });
+
+test("findLegendGlyphs: a structured symbol-description legend admits bounded oversized assemblies without widening loose discovery", () => {
+  const assembly = (y: number): number[][] => [
+    seg(100, y, 370, y), seg(370, y, 370, y + 50),
+    seg(370, y + 50, 100, y + 50), seg(100, y + 50, 100, y),
+  ];
+  const segs = flat([...assembly(100), ...assembly(260)]);
+  const rows: LegendSpan[] = [
+    { text: "DUCTWORK SOUND ATTENUATOR", x0: 400, y0: 115, x1: 650, y1: 140 },
+    { text: "INLINE CENTRIFUGAL FAN", x0: 400, y0: 275, x1: 620, y1: 300 },
+  ];
+  const headed = findLegendGlyphs(segs, [
+    { text: "HVAC SYMBOL LEGEND", x0: 80, y0: 20, x1: 680, y1: 50 },
+    { text: "SYMBOL", x0: 100, y0: 60, x1: 175, y1: 82 },
+    { text: "DESCRIPTION", x0: 400, y0: 60, x1: 530, y1: 82 },
+    ...rows,
+  ]);
+  assert.deepEqual(headed.map((glyph) => glyph.caption), [
+    "DUCTWORK SOUND ATTENUATOR", "INLINE CENTRIFUGAL FAN",
+  ]);
+  assert.deepEqual(
+    findLegendGlyphs(segs, rows, { minUnheadedRows: 1 }),
+    [],
+    "the same 270px assemblies remain above the conservative headerless cap",
+  );
+  assert.deepEqual(
+    findLegendGlyphs(segs, [
+      { text: "HVAC SYMBOL LEGEND", x0: 80, y0: 20, x1: 680, y1: 50 },
+      ...rows,
+    ]),
+    [],
+    "a loose heading alone cannot enlarge every drawing component on the page",
+  );
+});
+
+test("findLegendGlyphs: a neighboring terse tag cannot release the wrong prior-row member", () => {
+  const box = (x0: number, y0: number, x1: number, y1: number): number[][] => [
+    seg(x0, y0, x1, y0), seg(x1, y0, x1, y1),
+    seg(x1, y1, x0, y1), seg(x0, y1, x0, y0),
+  ];
+  const glyphs = findLegendGlyphs(flat([
+    ...box(100, 100, 150, 140),
+    ...box(160, 88, 168, 152),
+    ...box(178, 100, 228, 140),
+    ...box(100, 180, 228, 220),
+  ]), [
+    { text: "MECHANICAL LEGEND", x0: 80, y0: 20, x1: 500, y1: 45 },
+    { text: "MANUAL BALANCE DAMPER", x0: 300, y0: 108, x1: 540, y1: 130 },
+    { text: "BD", x0: 170, y0: 148, x1: 195, y1: 168 },
+    { text: "BACKDRAFT DAMPER", x0: 300, y0: 188, x1: 490, y1: 210 },
+  ], { maxGlyphDimPx: 150 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "MANUAL BALANCE DAMPER", "BACKDRAFT DAMPER",
+  ]);
+  assert.ok(glyphs[0].rect[0][0] <= 100 && glyphs[0].rect[1][0] >= 228);
+  assert.ok(glyphs[0].rect[0][1] <= 88 && glyphs[0].rect[1][1] >= 152);
+  assert.equal(glyphs[0].member_rects?.length, 3);
+});
+
+test("findLegendGlyphs: disconnected parallel strokes recover one flexible-duct line key", () => {
+  const strokes = Array.from({ length: 8 }, (_, index) =>
+    seg(100 + index * 12, 100, 100 + index * 12, 124));
+  const [glyph] = findLegendGlyphs(flat(strokes), [
+    { text: "HVAC SYMBOL LEGEND", x0: 70, y0: 20, x1: 420, y1: 45 },
+    { text: "FLEXIBLE DUCT", x0: 250, y0: 102, x1: 390, y1: 124 },
+  ], { minAlignedRows: 1 });
+  assert.ok(glyph);
+  assert.equal(glyph.caption, "FLEXIBLE DUCT");
+  assert.equal(glyph.kind, "line_style");
+  assert.equal(glyph.seedable, false);
+  assert.equal(glyph.segments, 8);
+});
+
+test("findLegendGlyphs: lower internal controller tags cannot consume the next tall assembly's caption", () => {
+  const box = (x0: number, y0: number, x1: number, y1: number): number[][] => [
+    seg(x0, y0, x1, y0), seg(x1, y0, x1, y1),
+    seg(x1, y1, x0, y1), seg(x0, y1, x0, y0),
+  ];
+  const glyphs = findLegendGlyphs(flat([
+    ...box(100, 100, 200, 220),
+    ...box(100, 260, 160, 380),
+  ]), [
+    { text: "CONTROL SYMBOLS", x0: 70, y0: 20, x1: 500, y1: 45 },
+    { text: "VARIABLE FREQUENCY DRIVE", x0: 350, y0: 160, x1: 590, y1: 180 },
+    { text: "VFD", x0: 205, y0: 230, x1: 240, y1: 250 },
+    { text: "FM-", x0: 180, y0: 300, x1: 215, y1: 320 },
+    { text: "FLOW METER (FM)", x0: 350, y0: 300, x1: 520, y1: 320 },
+  ]);
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "VARIABLE FREQUENCY DRIVE", "FLOW METER (FM)",
+  ]);
+});
+
+test("findLegendGlyphs: table delimiters are removed only from completed captions", () => {
+  const segs = flat([...controlValveGlyph(100, 100), ...controlValveGlyph(100, 300)]);
+  const glyphs = findLegendGlyphs(segs, [
+    { text: "HVAC SYMBOL LEGEND", x0: 70, y0: 20, x1: 430, y1: 45 },
+    { text: "-FLOW METER", x0: 220, y0: 145, x1: 370, y1: 165 },
+    { text: "— CHILLED WATER SUPPLY", x0: 220, y0: 345, x1: 470, y1: 365 },
+  ], { maxGlyphDimPx: 120 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), ["FLOW METER", "CHILLED WATER SUPPLY"]);
+  assert.equal(glyphs[0].kind, "symbol");
+  assert.equal(glyphs[1].kind, "line_style");
+});
+
+test("findLegendGlyphs: pipe topology, duct-state keys, and BAS I/O receive nonseedable semantics", () => {
+  const annotations = [
+    "CHANGE IN PRESSURE",
+    "RECTANGULAR DUCT SECTION UP, EXHAUST",
+    "CONNECTION, TOP",
+    "ELBOW, 90°",
+    "TEE, OUTLET DOWN",
+    "45° PIPE RISE (R) / DROP (D)",
+  ];
+  const lineStyles = [
+    "1\" INTERNALLY LINED DUCTWORK",
+    "FLAT OVAL DUCT",
+    "NEW DUCTWORK, FIRST DIMENSION IS SIDE SHOWN",
+    "DEMOLISHED/REMOVED DUCTWORK, PIPING AND/OR EQUIPMENT",
+  ];
+  const controls = ["BINARY / DIGITAL INPUT", "BINARY / DIGITAL OUTPUT"];
+  const captions = [...annotations, ...lineStyles, ...controls];
+  const glyphs = findLegendGlyphs(
+    flat(captions.flatMap((_, index) => controlValveGlyph(100, 100 + index * 200))),
+    [
+      { text: "HVAC SYMBOL LEGEND", x0: 70, y0: 20, x1: 450, y1: 45 },
+      ...captions.map((text, index): LegendSpan => ({
+        text, x0: 220, y0: 145 + index * 200, x1: 700, y1: 165 + index * 200,
+      })),
+    ],
+    { maxGlyphDimPx: 120 },
+  );
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), captions);
+  assert.deepEqual(glyphs.map((glyph) => glyph.kind), [
+    ...annotations.map(() => "annotation"),
+    ...lineStyles.map(() => "line_style"),
+    ...controls.map(() => "control_function"),
+  ]);
+  assert.ok(glyphs.every((glyph) => !glyph.seedable));
+});
+
+test("findLegendGlyphs: independently drawn support, sensor, and monitoring alternatives remain symbol groups", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 45, y), seg(x + 45, y, x + 45, y + 45),
+    seg(x + 45, y + 45, x, y + 45), seg(x, y + 45, x, y),
+  ];
+  const captions = [
+    "PIPING/DUCTWORK SUPPORT",
+    "TEMPERATURE SENSOR IN WELL",
+    "AIR FLOW MONITORING STATION ALONE OR AIR FLOW MONITORING STATION WITH 2-POSITION MOTORIZED DAMPER",
+  ];
+  const segs = flat(captions.flatMap((_, index) => [
+    ...box(100, 100 + index * 180), ...box(220, 100 + index * 180),
+  ]));
+  const glyphs = findLegendGlyphs(segs, [
+    { text: "HVAC SYMBOL LEGEND", x0: 70, y0: 20, x1: 720, y1: 45 },
+    ...captions.map((text, index): LegendSpan => ({
+      text, x0: 340, y0: 112 + index * 180, x1: 1050, y1: 137 + index * 180,
+    })),
+  ], { maxGlyphDimPx: 280 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), captions);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "symbol_group" && !glyph.seedable));
+  assert.ok(glyphs.every((glyph) => glyph.member_rects?.length === 2));
+});

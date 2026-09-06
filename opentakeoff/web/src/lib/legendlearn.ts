@@ -465,6 +465,14 @@ function normalizedCaption(text: string): string {
   return text.trim().replace(/\s+/g, " ");
 }
 
+/** A leading dash in a SYMBOL / DESCRIPTION table is a visual column
+ * separator, not part of the learned identity. Keep raw normalization
+ * untouched because an isolated "-" can join split identifiers (MS/TP -
+ * UUKL); canonicalize only complete legend captions. */
+function canonicalLegendCaption(text: string): string {
+  return normalizedCaption(text).replace(/^[-–—]\s*/, "");
+}
+
 function isLegendHeadingText(text: string): boolean {
   const normalized = normalizedCaption(text);
   if (normalized.length > 80) return false;
@@ -517,7 +525,7 @@ function isBelowCaptionLegendHeading(text: string): boolean {
  * project token list: it separates HVAC/BAS legend captions from room-tag,
  * keynote, structural-material, design-criteria, and title-block columns. */
 function isHvacBasCaption(text: string): boolean {
-  return /\b(?:ACCESS\s+POINT|ACTUATOR|AIR|AIRFLOW|ALARM|ANALOG|BACNET|BAS|BOILER|BREAKER|CHILLER|CIRCUIT|COIL|CONDUCTOR|CONDUIT|CONNECTION|CONTROL|CONTROLLER|DAMPER|DDC|DIFFUSER|DIGITAL|DISCONNECT|DRIVE|DUCT|ELECTRICAL|EQUIPMENT|EXHAUST|FAN|FILTER|FIRE|FIXTURE|FLOW|GAUGE|GENERATOR|GRILLE|GROUND|GROUNDING|HEAT|HUMIDITY|INPUT|JUNCTION|LIGHTING|LOUVER|METER|MOTOR|NETWORK|OUTLET|OUTPUT|PANELBOARD|PIPE|PIPING|PNEUMATIC|POWER|PRESSURE|PUMP|RACEWAY|RECEPTACLE|REFRIGERANT|REGISTER|REGULATOR|RELAY|RETURN|SENSOR|SIGNAL|SMOKE|STEAM|SUPPLY|SWITCH|TEMPERATURE|TERMINAL|THERMOSTAT|TRANSFORMER|TRANSMITTER|VALVE|VENT|VFD|VOLTAGE|WATER|WIRE|WIRELESS)\b/i.test(normalizedCaption(text));
+  return /\b(?:ACCESS\s+POINT|ACTUATOR|AIR|AIRFLOW|ALARM|ANALOG|BACNET|BAS|BOILER|BREAKER|CHILLER|CIRCUIT|COIL|CONDUCTOR|CONDUIT|CONNECTION|CONTROL|CONTROLLER|DAMPER|DDC|DIFFUSER|DIGITAL|DISCONNECT|DRIVE|DUCT(?:WORK)?|ELECTRICAL|EQUIPMENT|EXHAUST|FAN|FILTER|FIRE|FIXTURE|FLOW|GAUGE|GENERATOR|GRILLE|GROUND|GROUNDING|HEAT|HUMIDITY|INPUT|JUNCTION|LIGHTING|LOUVER|METER|MOTOR|NETWORK|OUTLET|OUTPUT|PANELBOARD|PIPE|PIPING|PNEUMATIC|POWER|PRESSURE|PUMP|RACEWAY|RECEPTACLE|REFRIGERANT|REGISTER|REGULATOR|RELAY|RETURN|SENSOR|SIGNAL|SMOKE|STEAM|SUPPLY|SWITCH|TEMPERATURE|TERMINAL|THERMOSTAT|TRANSFORMER|TRANSMITTER|VALVE|VENT|VFD|VOLTAGE|WATER|WIRE|WIRELESS)\b/i.test(normalizedCaption(text));
 }
 
 function isDomainHeading(text: string): boolean {
@@ -570,7 +578,11 @@ function isControllerPinoutCaption(text: string): boolean {
  * rather than installed work. Preserve them as auditable legend truth, but
  * never promote them to discrete Symbol Sweep seeds. */
 function isDraftingAnnotationCaption(text: string): boolean {
-  const normalized = normalizedCaption(text).replace(/^[\s\-–—]+/, "");
+  const normalized = canonicalLegendCaption(text);
+  // Row-topology conventions describe how a routed system continues or is
+  // oriented on the drawing. They are valid legend truth, but counting the
+  // mark would count drafting grammar rather than an installed fitting.
+  if (/^(?:CHANGE\s+IN\s+(?:PRESSURE|TEMPERATURE)|CONNECTION,?\s*(?:BOTTOM|TOP)|SLOPE\s+DIRECTION\s*\((?:DOWN|UP)\)|ELBOW,?\s*(?:\d+(?:\.\d+)?°|TURNED\s+(?:DOWN|UP))|TEE,?\s*OUTLET\s+(?:DOWN|UP)|(?:\d+(?:\.\d+)?°\s+)?PIPE\s+RISE(?:\s*\([^)]*\))?\s*\/\s*DROP(?:\s*\([^)]*\))?|(?:RECTANGULAR|ROUND|FLAT\s+OVAL)\s+DUCT\s+SECTION\s+(?:DOWN|UP)(?:\s*,.*)?|DUCT\s+ELBOW\s+(?:DOWN|UP)\s+THROUGH\b.*|(?:EXHAUST|OUTSIDE\s+AIR)\s+DUCT\s+(?:DOWN|UP)\s+THROUGH\b.*\bFAN\b.*)$/i.test(normalized)) return true;
   // Reflected-ceiling legends also explain drawing conventions and finish
   // swatches. These rows are valuable legend truth, but they do not identify
   // discrete installed devices and must never become EA sweep seeds.
@@ -591,7 +603,7 @@ function isDraftingAnnotationCaption(text: string): boolean {
  * hooked/dashed piping swatch from a compact symbol because CAD line keys
  * often contain end hooks and inline system codes. */
 function isRoutedSystemCaption(text: string): boolean {
-  const normalized = normalizedCaption(text);
+  const normalized = canonicalLegendCaption(text);
   // A caption may mention the medium only to locate a discrete device or
   // describe a directional marker. The terminal word PIPING must not erase
   // that stronger identity (e.g. VALVE IN VERTICAL PIPING). Do not exempt
@@ -605,9 +617,79 @@ function isRoutedSystemCaption(text: string): boolean {
     || /^PANEL,?\s+SWITCHBOARD,?\s+OR\s+BUSD?UCT\b/i.test(normalized)
     || /^(?:VENT|DUCTWORK|STORM\s+DRAIN)$/i.test(normalized)
     || /^(?:(?:SUPPLY|RETURN|EXHAUST|TRANSFER|OUTDOOR|OUTSIDE)\s+AIR|CONDENSATE\s+DRAIN|REFRIGERANT\s+SUCTION\s*\/\s*LIQUID)$/i.test(normalized)
-    || /^(?:RECTANGULAR\s+DUCT(?:\s+RECTANGULAR\s+DUCT\s+WIDTH.*)?|ROUND\s+DUCT(?:\s+ROUND\s+DUCT\s+DIAMETER.*)?|PIPE(?:\s+PIPE\s*\(DIAMETER.*)?|FLEXIBLE\s+DUCT|(?:ACOUSTICALLY\s+)?LINED\s+DUCT(?:WORK)?)$/i.test(normalized)
+    || /^(?:RECTANGULAR\s+DUCT(?:\s+RECTANGULAR\s+DUCT\s+WIDTH.*)?|ROUND\s+DUCT(?:\s+ROUND\s+DUCT\s+DIAMETER.*)?|FLAT\s+OVAL\s+DUCT|PIPE(?:\s+PIPE\s*\(DIAMETER.*)?|FLEXIBLE\s+DUCT|(?:\d+(?:\.\d+)?\s*["']\s+)?(?:ACOUSTICALLY\s+|INTERNALLY\s+)?LINED\s+DUCT(?:WORK)?)$/i.test(normalized)
+    || /^(?:NEW\s+DUCTWORK,?\s+FIRST\s+DIMENSION\b.*|DEMOLISHED\s*\/\s*REMOVED\s+DUCTWORK,?\s+PIPING\s+AND\s*\/\s*OR\s+EQUIPMENT)$/i.test(normalized)
     || /\b(?:CHILLED|CONDENSER|HEATING|GEOTHERMAL|DOMESTIC|TEMPERED)\s+(?:(?:HOT|COLD)\s+)?WATER(?:\s+(?:SUPPLY|RETURN))?(?:\s*\([^)]*\))?$/i.test(normalized)
     || /\b(?:LOW|MEDIUM|HIGH)\s+PRESSURE\s+NATURAL\s+GAS$/i.test(normalized);
+}
+
+/** Recover a routed swatch made only from many disconnected, parallel
+ * strokes. Flexible-duct and flexible-pipe keys are commonly exported as a
+ * comb of vertical ticks; connectivity clustering correctly leaves every
+ * tick separate, but a single zero-width tick is not a glyph. A repeated,
+ * same-height run immediately left of a routed-system caption is one
+ * auditable line-style key. Requiring six similar strokes, a multi-letter
+ * horizontal extent, and an already meaningful routed caption keeps this
+ * path away from leaders, borders, ordinary hatch fills, and prose. */
+function disconnectedParallelStrokeCandidates(
+  segs: number[], spans: LegendSpan[], existing: GlyphCandidate[],
+  typicalTextHeight: number, maxCaptionGapPx: number, maxLineStyleDimPx: number,
+  pad: number,
+): GlyphCandidate[] {
+  type Stroke = { x0: number; y0: number; x1: number; y1: number; cx: number; cy: number; length: number };
+  const vertical: Stroke[] = [];
+  for (let i = 0; i < segs.length; i += 4) {
+    const ax = segs[i], ay = segs[i + 1], bx = segs[i + 2], by = segs[i + 3];
+    const dx = Math.abs(bx - ax), dy = Math.abs(by - ay);
+    if (dy < Math.max(4, dx * 4)) continue;
+    const length = Math.hypot(dx, dy);
+    if (length < typicalTextHeight * 0.4 || length > typicalTextHeight * 3.25) continue;
+    vertical.push({
+      x0: Math.min(ax, bx), y0: Math.min(ay, by),
+      x1: Math.max(ax, bx), y1: Math.max(ay, by),
+      cx: (ax + bx) / 2, cy: (ay + by) / 2, length,
+    });
+  }
+  const recovered: GlyphCandidate[] = [];
+  for (const span of spans) {
+    if (!isRoutedSystemCaption(span.text)) continue;
+    const captionY = (span.y0 + span.y1) / 2;
+    const nearby = vertical.filter((stroke) => {
+      const gap = span.x0 - stroke.x1;
+      return gap >= 0 && gap <= maxCaptionGapPx + maxLineStyleDimPx
+        && Math.abs(stroke.cy - captionY) <= typicalTextHeight * 1.25;
+    }).sort((a, b) => a.cx - b.cx);
+    const runs: Stroke[][] = [];
+    for (const stroke of nearby) {
+      const run = runs[runs.length - 1];
+      if (!run || stroke.cx - run[run.length - 1].cx > typicalTextHeight * 1.5
+        || Math.abs(stroke.cy - median(run.map((member) => member.cy))) > typicalTextHeight * 0.6
+        || Math.abs(stroke.length - median(run.map((member) => member.length))) > typicalTextHeight * 0.75) {
+        runs.push([stroke]);
+      } else run.push(stroke);
+    }
+    const viable = runs.filter((run) => run.length >= 6
+      && run[run.length - 1].x1 - run[0].x0 >= typicalTextHeight * 3
+      && run[run.length - 1].x1 - run[0].x0 <= maxLineStyleDimPx)
+      .sort((a, b) => (span.x0 - a[a.length - 1].x1) - (span.x0 - b[b.length - 1].x1));
+    const run = viable[0];
+    if (!run) continue;
+    const rect: [Point, Point] = [[
+      Math.min(...run.map((stroke) => stroke.x0)) - pad,
+      Math.min(...run.map((stroke) => stroke.y0)) - pad,
+    ], [
+      Math.max(...run.map((stroke) => stroke.x1)) + pad,
+      Math.max(...run.map((stroke) => stroke.y1)) + pad,
+    ]];
+    const alreadyRepresented = [...existing, ...recovered].some((candidate) => {
+      const overlapW = Math.min(candidate.rect[1][0], rect[1][0]) - Math.max(candidate.rect[0][0], rect[0][0]);
+      const overlapH = Math.min(candidate.rect[1][1], rect[1][1]) - Math.max(candidate.rect[0][1], rect[0][1]);
+      return overlapW > 0 && overlapH > 0
+        && overlapW * overlapH >= (rect[1][0] - rect[0][0]) * (rect[1][1] - rect[0][1]) * 0.6;
+    });
+    if (!alreadyRepresented) recovered.push({ rect, segments: run.length, kind: "line_style" });
+  }
+  return recovered;
 }
 
 /** A physical device can be drawn with almost no usable vector ink when its
@@ -615,7 +697,7 @@ function isRoutedSystemCaption(text: string): boolean {
  * are common). Preserve the installed-device identity as `symbol`, but keep
  * the sparse line fragment out of Symbol Sweep by leaving it nonseedable. */
 function isDiscreteInstalledDeviceCaption(text: string): boolean {
-  return /\b(?:ACTUATOR|ARRESTOR|CLEANOUT|DAMPER|DETECTOR|DIFFUSER|DRAIN|FAN|FILTER|GAUGE|GRILLE|HUMIDISTAT|LOUVER|METER|PANELBOARD|PUMP|REGISTER|REGULATOR|RELAY|SENSOR|SINK|SLEEVE|STARTER|STRAINER|SWITCH|THERMOSTAT|TRANSMITTER|VALVE|VFD)\b/i.test(normalizedCaption(text));
+  return /\b(?:ACTUATOR|ARRESTOR|CAP|CLEANOUT|DAMPER|DETECTOR|DIFFUSER|DRAIN|FAN|FILTER|GAUGE|GRILLE|HUMIDISTAT|LOUVER|METER|PANELBOARD|PUMP|REGISTER|REGULATOR|RELAY|SENSOR|SINK|SLEEVE|STARTER|STRAINER|SWITCH|THERMOSTAT|TRANSMITTER|VALVE|VFD)\b/i.test(canonicalLegendCaption(text));
 }
 
 /** BAS legends also contain logical/sequence identities that matter to a
@@ -623,9 +705,9 @@ function isDiscreteInstalledDeviceCaption(text: string): boolean {
  * point/sequence reasoning while explicitly barring their diagram marks
  * from an EA Symbol Sweep. */
 function isControlFunctionCaption(text: string, heading: string | null = null): boolean {
-  const normalized = normalizedCaption(text);
+  const normalized = canonicalLegendCaption(text);
   return /\b(?:SEE\s+SEQUENCE\s+OF\s+OPERATION|REMOTE\s+GRAPHICS\s+WORKSTATION|ENERGY\s+CONTROL\s+CENTER|CONTROLLING\s+EQUIPMENT\s+ON\s+A\s+SCHEDULE)\b/i.test(normalized)
-    || /^(?:AUXILIARY\s+CONTACT|(?:ANALOG|BINARY|DIGITAL|CURRENT|VOLTAGE)\s+(?:INPUT|OUTPUT)|ENABLE\s*\/\s*DISABLE|SET\s+POINT|START\s*\/\s*STOP)$/i.test(normalized)
+    || /^(?:AUXILIARY\s+CONTACT|(?:ANALOG|CURRENT|VOLTAGE|(?:BINARY|DIGITAL)(?:\s*\/\s*(?:BINARY|DIGITAL))?)\s+(?:INPUT|OUTPUT)|ENABLE\s*\/\s*DISABLE|SET\s+POINT|START\s*\/\s*STOP)$/i.test(normalized)
     || (/\bCONTROLS?\b/i.test(heading || "") && /^(?:RESET|DIFFERENTIAL\s+PRESSURE)$/i.test(normalized));
 }
 
@@ -835,7 +917,20 @@ function pairCandidates(
         // code while remaining unable to hide a genuine one-word caption.
         if (!meaningfulCaption(otherText) || otherText.length < short.length + 5 || otherText.split(/\s+/).length < 2) return false;
         const rowOverlap = Math.min(s.y1, other.y1) - Math.max(s.y0, other.y0);
-        if (rowOverlap <= 0 && Math.abs((s.y0 + s.y1 - other.y0 - other.y1) / 2) > typicalTextHeight * 0.6) return false;
+        // Tall controller/flow-meter assemblies can contain several internal
+        // tags on different baselines. Permit a description on another
+        // baseline only when the fuller caption is physically owned by this
+        // candidate's finite envelope. Mere nearby baselines let a BD tag
+        // shadow the fuller caption of the following damper row.
+        if (rowOverlap <= 0) {
+          const otherCenterY = (other.y0 + other.y1) / 2;
+          const envelopeSlack = typicalTextHeight * 0.25;
+          // The fuller description must actually cross the candidate. The
+          // terse tag may sit just outside it (for example a VFD label from
+          // the previous tall assembly), but a fuller caption that is also
+          // outside belongs to a neighboring row and cannot shadow the tag.
+          if (otherCenterY < y0 - envelopeSlack || otherCenterY > y1 + envelopeSlack) return false;
+        }
         return other.x0 - s.x0 <= Math.max(200, typicalTextHeight * 8)
           && other.x0 - x1 <= maxCaptionGapPx;
       });
@@ -1340,6 +1435,14 @@ function hasMultipleSubstantialSymbols(
     || /\b(?:DOWN\s*\/\s*UP|UP\s*\/\s*DOWN)\b/i.test(pair.caption)
     || /\bRISE\b.*\bDROP\b/i.test(pair.caption)
     || /\bACCESS\s+DOOR\b.*\bACCESS\s+PANEL\b/i.test(pair.caption)
+    // Some legends put two complete physical renditions beside one shared
+    // caption without literally calling them "symbols." The nouns/grammar
+    // still declare the alternatives; geometry below must independently
+    // prove two substantial, separated members before this can become a
+    // nonseedable group.
+    || /\bALONE\s+OR\b.*\bWITH\b/i.test(pair.caption)
+    || /^(?:PIPING|PIPE)\s*\/\s*DUCTWORK\s+SUPPORT$/i.test(pair.caption)
+    || /^TEMPERATURE\s+SENSOR\s+IN\s+WELL$/i.test(pair.caption)
     // Fixture keys commonly draw the ceiling rendition, the wall/bracket
     // rendition, and optional face/direction variants side by side under
     // one caption. Those are a vocabulary group, never one sweep template.
@@ -1392,8 +1495,17 @@ function attachWrappedCaptions(
       const continuation = spans[si];
       if (!meaningfulCaption(continuation.text)) continue;
       const lineCenterY = (continuation.y0 + continuation.y1) / 2;
+      const lineCenterX = (continuation.x0 + continuation.x1) / 2;
       for (let pairIndex = 0; pairIndex < pairs.length; pairIndex++) {
         const pair = pairs[pairIndex];
+        // Extracted text centered inside this row's own vector envelope is
+        // an internal tag/value (AI, AO, FM-, 24x12, UP), not a wrapped
+        // description. It may sit one physical text line below the real
+        // caption and satisfy the ordinary indent/gap gates, so exclude it
+        // before continuation scoring. Legitimate descriptions remain to
+        // the right of the glyph envelope even when they wrap or indent.
+        if (lineCenterX >= pair.rect[0][0] && lineCenterX <= pair.rect[1][0]
+          && lineCenterY >= pair.rect[0][1] && lineCenterY <= pair.rect[1][1]) continue;
         const verticalOverlap = Math.min(continuation.y1, pair.span.y1)
           - Math.max(continuation.y0, pair.span.y0);
         const sameLine = verticalOverlap >= Math.min(
@@ -1709,21 +1821,67 @@ function alignedGroups(pairs: PairCandidate[], glyphXTolerance: number, captionX
  * wide assembly may push its description farther RIGHT, while an embedded
  * tag is a terse token shifted materially LEFT into the group's glyph
  * envelope. Long captions and small alignment jitter are never rejected. */
-function withoutEmbeddedGlyphTags(group: PairCandidate[], typicalTextHeight: number): PairCandidate[] {
+function withoutEmbeddedGlyphTags(
+  group: PairCandidate[], typicalTextHeight: number, lines: LegendSpan[],
+  allPairs: PairCandidate[], maxCaptionGapPx: number,
+): PairCandidate[] {
   if (group.length < 3) return group;
   const captionStart = median(group.map((pair) => pair.span.x0));
   const glyphRights = group.map((pair) => pair.rect[1][0]).sort((a, b) => a - b);
   const glyphColumnRight = glyphRights[Math.floor((glyphRights.length - 1) * 0.9)];
   const materialLeftShift = Math.max(6, typicalTextHeight * 0.75);
-  const glyphEnvelopeSlack = typicalTextHeight * 0.25;
-  return group.filter((pair) => {
+  const glyphEnvelopeSlack = typicalTextHeight * 5;
+  const spanKey = (span: LegendSpan) => [span.x0, span.y0, span.x1, span.y1].join(",");
+  const claimedSpanKeys = new Set(allPairs.map((pair) => spanKey(pair.span)));
+  return group.flatMap((pair) => {
     const caption = normalizedCaption(pair.caption);
     const terseTag = caption.length <= 8
-      && /^[A-Z0-9][A-Z0-9./_-]*(?:\s+[A-Z0-9./_-]+)?$/.test(caption);
-    if (!terseTag) return true;
+      && /^[A-Z0-9][A-Z0-9./_-]*(?:\s+[A-Z0-9./_-]+)?$/i.test(caption);
+    const internalDimension = /^\d+(?:\.\d+)?\s*(?:[x×Ø]\s*\d+(?:\.\d+)?)?(?:\s*["'])?$/i.test(caption);
+    const internalDirection = /^(?:UP|DOWN)(?:\s+W\/?IN\s+FLOOR)?$/i.test(caption);
+    if (!terseTag && !internalDimension && !internalDirection) return [pair];
     const shiftedIntoGlyphColumn = pair.span.x0 < captionStart - materialLeftShift
       && pair.span.x0 <= glyphColumnRight + glyphEnvelopeSlack;
-    return !shiftedIntoGlyphColumn;
+    if (!shiftedIntoGlyphColumn) return [pair];
+
+    // The internal tag may have consumed the only candidate for this row.
+    // Give that geometry one bounded second chance to own an unclaimed,
+    // descriptive span in the learned DESCRIPTION column. If another
+    // component already owns that span, simply discard the inner duplicate.
+    const [[, y0], [x1, y1]] = pair.rect;
+    const margin = Math.max((y1 - y0) * 0.5, typicalTextHeight * 0.75);
+    const replacement = lines.filter((line) => {
+      const text = canonicalLegendCaption(line.text);
+      if (!meaningfulCaption(text) || isLegendHeadingText(text) || isScheduleFieldHeaderText(text)) return false;
+      if (line.x0 < captionStart - typicalTextHeight * 2 || line.x0 <= pair.span.x1) return false;
+      if (line.x0 - x1 > maxCaptionGapPx) return false;
+      if (line.y1 < y0 - margin || line.y0 > y1 + margin) return false;
+      return text.length > 8 || text.split(/\s+/).length >= 2;
+    }).sort((a, b) => {
+      const ay = Math.max(0, y0 - (a.y0 + a.y1) / 2, (a.y0 + a.y1) / 2 - y1);
+      const by = Math.max(0, y0 - (b.y0 + b.y1) / 2, (b.y0 + b.y1) / 2 - y1);
+      return ay - by || Math.abs(a.x0 - captionStart) - Math.abs(b.x0 - captionStart);
+    })[0];
+    if (!replacement || claimedSpanKeys.has(spanKey(replacement))) return [];
+    // Wrapped captions are represented by one enlarged synthetic span, so
+    // their first physical line does not have the same bbox key. Do not let
+    // an embedded tag create a duplicate row from that already-owned first
+    // line merely because its raw and merged y1 values differ.
+    const replacementText = canonicalLegendCaption(replacement.text);
+    const ownedByWrappedPair = allPairs.some((other) => other !== pair
+      && replacement.x0 >= other.span.x0 - 0.5
+      && replacement.x1 <= other.span.x1 + 0.5
+      && replacement.y0 >= other.span.y0 - 0.5
+      && replacement.y1 <= other.span.y1 + 0.5
+      && canonicalLegendCaption(other.caption).startsWith(replacementText));
+    if (ownedByWrappedPair) return [];
+    claimedSpanKeys.add(spanKey(replacement));
+    return [{
+      ...pair,
+      span: { ...replacement },
+      caption: canonicalLegendCaption(replacement.text),
+      captionLines: 1,
+    }];
   });
 }
 
@@ -2112,9 +2270,25 @@ export function findLegendGlyphs(
   // and MCP possess, so scale the search from it with conservative caps.
   // Symbols drawn inline with pipe/duct stubs (anchors, guides, dampers)
   // routinely span about eleven local text heights even though the device
-  // itself is compact. Keep the finite 220px ceiling, but allow that real
-  // row topology instead of clipping at the former ten-height bound.
-  const maxGlyphDimPx = opts.maxGlyphDimPx ?? Math.max(80, Math.min(220, typicalTextHeight * 12));
+  // itself is compact. Explicit symbol legends can also contain large
+  // transition/fan/tee assemblies spanning about seventeen local text
+  // heights. Their declared, repeated layout supports a larger but still
+  // finite 320px ceiling; headerless pages retain the conservative 220px
+  // bound so plan details and schedule graphics cannot widen themselves.
+  const hasExplicitLegendHeading = lines.some((line) => isLegendHeadingText(line.text));
+  const hasSymbolDescriptionHeaderRow = lines.some((symbol) => {
+    if (!/^SYMBOL$/i.test(normalizedCaption(symbol.text))) return false;
+    const symbolCenterY = (symbol.y0 + symbol.y1) / 2;
+    return lines.some((description) => /^DESCRIPTION$/i.test(normalizedCaption(description.text))
+      && description.x0 > symbol.x1
+      && description.x0 - symbol.x1 <= typicalTextHeight * 32
+      && Math.abs((description.y0 + description.y1) / 2 - symbolCenterY) <= typicalTextHeight * 0.6);
+  });
+  const conservativeMaxGlyphDimPx = opts.maxGlyphDimPx
+    ?? Math.max(80, Math.min(220, typicalTextHeight * 12));
+  const maxGlyphDimPx = opts.maxGlyphDimPx ?? (hasExplicitLegendHeading && hasSymbolDescriptionHeaderRow
+    ? Math.max(80, Math.min(320, typicalTextHeight * 18))
+    : conservativeMaxGlyphDimPx);
   const maxCaptionGapPx = opts.maxCaptionGapPx ?? Math.max(150, Math.min(320, typicalTextHeight * 14));
   const maxLineStyleDimPx = Math.max(maxGlyphDimPx * 1.6, typicalTextHeight * 20);
   // Named discipline sections often use one symbol beside a paragraph-sized
@@ -2162,6 +2336,10 @@ export function findLegendGlyphs(
     const rect: [Point, Point] = [[c.x0 - pad, c.y0 - pad], [c.x1 + pad, c.y1 + pad]];
     candidates.push({ rect, segments: c.edges, kind: glyphKind(rect, gridPx, c.edges, maxGlyphDimPx, rawSpans) });
   }
+  candidates.push(...disconnectedParallelStrokeCandidates(
+    relevantSegs, spans, candidates, typicalTextHeight,
+    maxCaptionGapPx, maxLineStyleDimPx, pad,
+  ));
 
   const paired = pairCandidates(
     candidates, spans, rawSpans, maxCaptionGapPx, typicalTextHeight,
@@ -2208,13 +2386,13 @@ export function findLegendGlyphs(
   // matrices that all contain locally adjacent geometry and text.
   const aligned = alignedGroups(
     pairs,
-    Math.max(maxGlyphDimPx, typicalTextHeight * 3),
+    Math.max(conservativeMaxGlyphDimPx, typicalTextHeight * 3),
     // A large assembly can occupy the normal description-column start and
     // force only its own caption farther right. Its glyph center still
     // belongs to the repeated symbol column. Permit bounded caption drift
     // proportional to the same adaptive glyph cap; separate legend columns
     // remain far beyond this window.
-    Math.max(8, typicalTextHeight * 1.25, maxGlyphDimPx * 0.5),
+    Math.max(8, typicalTextHeight * 1.25, conservativeMaxGlyphDimPx * 0.5),
   );
   const groups = aligned.flatMap((indices) => splitAlignedGroupVertically(indices, pairs, lines, typicalTextHeight));
   const minAlignedRows = Math.max(1, opts.minAlignedRows ?? 2);
@@ -2222,6 +2400,7 @@ export function findLegendGlyphs(
   const layoutEvidenceDisabled = minAlignedRows === 1 && minUnheadedRows === 1;
   const accepted: LegendGlyph[] = [];
   const acceptPair = (pair: PairCandidate, alignedRows: number, heading: string | null) => {
+    pair.caption = canonicalLegendCaption(pair.caption);
     const kind: LegendGlyph["kind"] = isDraftingAnnotationCaption(pair.caption)
       ? "annotation"
       : isControlFunctionCaption(pair.caption, heading) ? "control_function"
@@ -2257,7 +2436,9 @@ export function findLegendGlyphs(
     });
   };
   for (const indices of groups) {
-    let group = withoutEmbeddedGlyphTags(indices.map((i) => pairs[i]), typicalTextHeight);
+    let group = withoutEmbeddedGlyphTags(
+      indices.map((i) => pairs[i]), typicalTextHeight, lines, pairs, maxCaptionGapPx,
+    );
     if (!group.length) continue;
     const heading = nearbyLegendHeading(group, lines, typicalTextHeight);
     group = withoutTrailingNetworkDiagram(group, heading, typicalTextHeight, minAlignedRows);
