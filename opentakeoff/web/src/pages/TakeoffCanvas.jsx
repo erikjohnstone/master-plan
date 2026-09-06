@@ -153,8 +153,10 @@ import RfiPanel from "../components/RfiPanel.jsx";
 import StampPanel from "../components/StampPanel.jsx";
 import ImportSchedulePanel from "../components/ImportSchedulePanel.jsx";
 import SchedulesPanel from "../components/SchedulesPanel.jsx";
+import SweepReviewPanel from "../components/SweepReviewPanel.jsx";
 import { tableTitleText as scheduleTitleText, rowSheet as scheduleRowSheet } from "../lib/scheduleBrowse.js";
 import { sha256Hex, remapGraphSheetKeys } from "../lib/graphKeys.js";
+import { normRect } from "../lib/sweepThumb.js";
 // Roll goods (#136): lib/rollgoods.js is the pure packing engine (untouched
 // here), lib/rollTakeoff.js the pure shapes→engine bridge; RollPanel is the
 // docked diagram/reorder desk. Cut edits commit through the rollcut command.
@@ -4900,7 +4902,14 @@ export default function TakeoffCanvas() {
     }
     setSweep({
       key, img: tp.img,
-      seed: { center: res.seed.center, rect: res.seed.rect, segments: res.seed.segments, label: L(0) },
+      // THE MARQUEE, FOR REAL. This read `res.seed.rect`, and sweepSymbols
+      // returns seed as { segments, center, length_px } — so `sweep.seed.rect`
+      // has always been undefined. Nothing read it, so it cost nothing; but a
+      // match carries only its centroid, and the seed's own footprint is the
+      // only thing that says how big one instance IS. Thumbnails need it.
+      // (`segments` here is a COUNT, not geometry — the fragment warning uses
+      // it as a number.)
+      seed: { center: res.seed.center, rect: normRect(rect), segments: res.seed.segments, label: L(0) },
       matches: res.matches.map((m, i) => ({ ...m, label: L(1 + i) })),
       questions,
       complete: res.complete, dropped: res.candidates.dropped,
@@ -7768,6 +7777,25 @@ export default function TakeoffCanvas() {
         // real objects agentHighlightCitation produces; nothing here fakes the
         // jump, which still goes through openAgentCitation.
         cite: (args) => agentHighlightCitation(args),
+        // Run a real sweep from a seed rect in SHEET IMAGE PX — the frame the
+        // frozen symbol-sweep ground truth records its seed_rect in — so the
+        // review UI can be driven with the corpus's own fixtures instead of a
+        // synthetic marquee. runSymbolSweep takes stage points and subtracts
+        // the panel offset, so add it back here and the two cancel.
+        sweepRect: async (key, rect) => {
+          const pp = panels.find((x) => x.key === key);
+          if (!pp) return { error: `sheet ${key} is not open` };
+          try {
+            await runSymbolSweep(
+              [rect[0][0] + pp.xOffset, rect[0][1]],
+              [rect[1][0] + pp.xOffset, rect[1][1]],
+            );
+            return { ok: true };
+          } catch (e) { return { error: String(e?.message || e) }; }
+        },
+        sweep: () => sweep,
+        openSheets: (keys) => openSheets(keys, false),
+        segCount: (key) => (vectorSegsRef.current.get(key)?.length || 0) >> 2,
         seedAnswer: (text, cites = []) => {
           setAgentThread((t) => [...t, { role: "assistant", text: String(text || "") }]);
           if (cites.length) setAgentCitations((l) => [...l, ...cites]);
@@ -12717,113 +12745,19 @@ export default function TakeoffCanvas() {
           rule banner still floats, it has buttons). Print: the report-only
           visibility rules already hide this. */}
       {/* ── Symbol sweep review panel (#264) — floats while a sweep is live ── */}
-      {sweep && view === "canvas" && (() => {
-        const seedTag = sweep.seed.label?.label || null;
-        const mLine = sweepLabelLine(sweep.matches, seedTag);
-        const openQ = sweep.questions.filter((q) => q.state === "open").length;
-        const accQ = sweep.questions.filter((q) => q.state === "accepted").length;
-        // per-tag groups (#308 → commit-by-label): the drawing names the
-        // matches; a tag the estimator unticks is excluded from the commit —
-        // the sibling-fixture answer in one click, sweep_schedule_row's
-        // excluded-by-tag discipline brought to the canvas.
-        const tagKeyOf = (m) => (m.label && m.label.label) || "\u2205";
-        const tagGroups = [];
-        for (const m of sweep.matches) {
-          const k = tagKeyOf(m);
-          const g = tagGroups.find((x) => x.tag === k);
-          if (g) g.n += 1; else tagGroups.push({ tag: k, n: 1 });
-        }
-        tagGroups.sort((a, b) => b.n - a.n);
-        const offSet = new Set(sweep.excludedTags);
-        const matchN = sweep.matches.filter((m) => !offSet.has(tagKeyOf(m))).length;
-        const commitN = (sweep.includeSeed ? 1 : 0) + matchN + accQ;
-        const unlabeled = (seedTag || sweep.matches.some((m) => m.label)) ? sweep.matches.filter((m) => !m.label).length : 0;
-        return (
-          <div style={{ position: "fixed", right: 12, top: "calc(var(--topbar-h) + 12px)", width: 288, zIndex: Z.popover, background: "var(--paper-cream)", border: "1px solid var(--ink-faint)", boxShadow: "var(--shadow-pop)", display: "flex", flexDirection: "column", fontSize: "var(--fs-m)" }}>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 8, padding: "10px 12px", borderBottom: "1px solid var(--ink-faint)" }}>
-              <span className="field-label">SYMBOL SWEEP</span>
-              <span style={{ flex: 1 }} />
-              {sweep.complete
-                ? <span style={{ fontFamily: "var(--f-mono)", fontSize: "var(--fs-2xs)", letterSpacing: ".1em", color: "var(--c-positive)", border: "1px solid var(--c-positive)", padding: "2px 6px" }}>COMPLETE</span>
-                : <span style={{ fontFamily: "var(--f-mono)", fontSize: "var(--fs-2xs)", letterSpacing: ".1em", color: "#fff", background: "var(--c-warning)", padding: "3px 6px" }}>FLOOR — NOT A TOTAL</span>}
-            </div>
-            {sweep.seed.segments <= 3 && (
-              <div style={{ padding: "8px 12px", background: "var(--tint-select)", color: "var(--ink)", fontSize: "var(--fs-s)", lineHeight: 1.45 }}>
-                The seed is only {sweep.seed.segments} segment(s) — likely a FRAGMENT, and fragments match everywhere (every square corner reads as one). Marquee the whole symbol.
-              </div>
-            )}
-            {!sweep.complete && (
-              <div style={{ padding: "8px 12px", background: "var(--c-warning)", color: "#fff", fontSize: "var(--fs-s)", lineHeight: 1.45 }}>
-                {sweep.dropped} placement(s) were never scored — tighten the marquee around more distinctive linework before trusting this as a total.
-              </div>
-            )}
-            <div style={{ padding: "10px 12px", display: "flex", flexDirection: "column", gap: 8 }}>
-              <div><b style={{ fontFamily: "var(--f-display)", fontSize: "var(--fs-xl)" }}>{matchN}</b> of {sweep.matches.length} matched will commit{mLine && tagGroups.length <= 1 ? <span style={{ color: "var(--ink-soft)" }}> — {mLine}</span> : null}</div>
-              {tagGroups.length > 1 && (
-                <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                  <div className="field-label">BY LABEL — UNTICK A TAG TO EXCLUDE IT</div>
-                  {tagGroups.map((g) => {
-                    const isSeedTag = seedTag && g.tag === seedTag;
-                    const isOff = offSet.has(g.tag);
-                    return (
-                      <label key={g.tag} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "var(--fs-s)", cursor: "pointer", color: isOff ? "var(--text-faint)" : !isSeedTag && g.tag !== "\u2205" ? "var(--c-warning)" : "var(--ink)" }}>
-                        <input type="checkbox" checked={!isOff}
-                          onChange={() => setSweep((sw2) => ({ ...sw2, excludedTags: isOff ? sw2.excludedTags.filter((t) => t !== g.tag) : [...sw2.excludedTags, g.tag] }))} />
-                        <span style={{ fontFamily: "var(--f-mono)", fontWeight: 600 }}>{g.tag === "\u2205" ? "no label" : g.tag}</span>
-                        <span>×{g.n}</span>
-                        {isSeedTag && <span style={{ fontSize: "var(--fs-2xs)", color: "var(--ink-muted)" }}>seed's tag</span>}
-                        {!isSeedTag && g.tag !== "\u2205" && !isOff && <span style={{ fontSize: "var(--fs-2xs)" }}>different device?</span>}
-                      </label>
-                    );
-                  })}
-                </div>
-              )}
-              {unlabeled > 0 && tagGroups.length <= 1 && <div style={{ fontSize: "var(--fs-s)", color: "var(--c-warning)" }}>{unlabeled} match(es) carry no label while this family is labeled — look at those first.</div>}
-              <div><b style={{ fontFamily: "var(--f-display)", fontSize: "var(--fs-xl)", color: openQ ? "var(--c-warning)" : "var(--ink)" }}>{sweep.questions.length}</b> question(s){openQ ? <span style={{ color: "var(--ink-soft)" }}> — ↵ accept · X dismiss · → next</span> : <span style={{ color: "var(--ink-soft)" }}> — all answered</span>}</div>
-              {/* 150px fitted bare percentage rows; the selected question now
-                  carries its reason, which is ~3 lines. */}
-              {sweep.questions.length > 0 && (
-                <div style={{ display: "flex", flexDirection: "column", gap: 4, maxHeight: 210, overflowY: "auto" }}>
-                  {/* THE SWEEP SAYS WHY, AND THIS LIST USED TO SWALLOW IT.
-                      symbolsweep writes a quantified reason for every question
-                      — "matched 84% of the seed's linework (commit bar 92%) —
-                      likely a variant or an overlapped instance" — and it has
-                      been sitting in `q.reason` all along (it rides the spread
-                      at runSymbolSweep). The row showed a bare percentage, so
-                      the estimator was asked to accept or dismiss a count with
-                      the engine's actual finding hidden from them.
-                      Shown for the SELECTED question only: the reasons run ~150
-                      chars and this panel is narrow, so all of them at once is
-                      a wall of text. The one you are deciding on is the one
-                      that matters. */}
-                  {sweep.questions.map((q, i) => (
-                    <button key={i} type="button" onClick={() => setSweep((s) => ({ ...s, qIndex: i }))}
-                      style={{ display: "flex", flexDirection: "column", alignItems: "stretch", gap: 4, padding: "5px 8px", fontFamily: "var(--f-body)", fontSize: "var(--fs-s)", textAlign: "left", background: i === sweep.qIndex ? "var(--tint-select)" : "transparent", border: `1px solid ${i === sweep.qIndex ? "var(--c-warning)" : "var(--ink-faint)"}`, color: q.state === "dismissed" ? "var(--text-faint)" : "var(--ink)", cursor: "pointer" }}>
-                      <span style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: q.state === "dismissed" ? "line-through" : "none" }}>
-                        <span style={{ fontFamily: "var(--f-mono)", fontWeight: 700, color: q.state === "accepted" ? "var(--c-positive)" : q.state === "dismissed" ? "var(--text-faint)" : DS.symbol.question }}>{q.state === "accepted" ? "✓" : q.state === "dismissed" ? "×" : "?"}</span>
-                        <span>{Math.round(q.score * 100)}%{q.label ? ` · ${q.label.label}` : ""}{q.readings > 1 ? ` · read ${q.readings} ways` : ""}</span>
-                      </span>
-                      {i === sweep.qIndex && q.reason && (
-                        <span style={{ fontSize: "var(--fs-xs)", lineHeight: 1.45, color: "var(--ink-soft)", whiteSpace: "normal" }}>{q.reason}</span>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-              <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "var(--fs-s)", cursor: "pointer" }}>
-                <input type="checkbox" checked={sweep.includeSeed} onChange={(e) => setSweep((s) => ({ ...s, includeSeed: e.target.checked }))} />
-                <span>Count the seed{seedTag ? <span> — drawing says <b style={{ fontFamily: "var(--f-mono)" }}>{seedTag}</b></span> : null}</span>
-              </label>
-            </div>
-            <div style={{ padding: "10px 12px", borderTop: "1px solid var(--ink-faint)", display: "flex", flexDirection: "column", gap: 6 }}>
-              <button type="button" className="btn-primary" onClick={commitSweep} style={{ justifyContent: "center" }}>
-                Commit {commitN} as {condById[activeCond]?.finish_tag || "…"}
-              </button>
-              <button type="button" className="btn-ghost" onClick={() => setSweep(null)} style={{ justifyContent: "center" }}>Discard (Esc)</button>
-            </div>
-          </div>
-        );
-      })()}
+      {sweep && view === "canvas" && (
+        <SweepReviewPanel
+          sweep={sweep}
+          setSweep={setSweep}
+          /* the sheet's own linework, for the thumbnails — the same array the
+             sweep matched on, so a tile cannot disagree with a match */
+          segs={vectorSegsRef.current.get(sweep.key)}
+          sweepLabelLine={sweepLabelLine}
+          commitSweep={commitSweep}
+          activeCondTag={condById[activeCond]?.finish_tag}
+          DS={DS}
+        />
+      )}
       <footer className="ink-panel ticks"
         style={{ height: "var(--status-h)", flex: "0 0 auto", display: "flex", alignItems: "center", gap: 12, padding: "0 14px", fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap", overflow: "hidden", userSelect: "none" }}>
         <span style={{ color: "var(--status-acc)", textShadow: "var(--glow)" }}>{TOOL_VERB[tool] || tool}</span>
